@@ -7,3 +7,9 @@ XBRL_SETUP/*Backup.py
 
 # Jupyter notebooks
 XBRL_SETUP/*.ipynb
+
+# Python cache
+XBRL_SETUP/__pycache__/
+
+# Virtual environment
+venv/
