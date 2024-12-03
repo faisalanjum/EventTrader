@@ -195,6 +195,7 @@ class Report:
     
     # Core collections
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
+    periods: List[Period] = field(init=False, default_factory=list, repr=False)
     facts: List[Fact] = field(init=False, default_factory=list, repr=False)
     dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)
  
@@ -240,34 +241,41 @@ class Report:
             raise RuntimeError("XBRL model not loaded.")
         
         self._build_concepts()  # 1. Build concepts first
+        self._build_periods()  # 2. Build periods
         # self._build_facts()     # 3. Build facts with validation
         # self._build_networks()  # 2. Build networks and hierarchies
         # self._build_dimensions() # 4. Build dimensions
 
     def export_to_neo4j(self, testing: bool = False) -> None:
-            """Export selected node types to Neo4j"""
-            try:
-                if testing:
-                    self.neo4j.clear_db()
-                    self.neo4j.create_indexes()
+        """Export selected node types to Neo4j"""
+        try:
+            if testing:
+                self.neo4j.clear_db()
+                self.neo4j.create_indexes()
+            
+            print("\nExporting to Neo4j:") 
+            
+            nodes = []
+            collections = [self.concepts, self.periods]
+            
+            if not any(collections):
+                print("Warning: No nodes to export")
+                return
                 
-                nodes = []
-                # collections = [self.concepts, self.facts, self.dimensions]
-                collections = [self.concepts]
+            for collection in collections:
+                if collection:
+                    print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")  # Debug
+                    nodes.extend(collection)
+            
+            print(f"Total nodes to export: {len(nodes)}")  # Debug
+            
+            if nodes:
+                self.neo4j.merge_nodes(nodes)
+                print("Export completed successfully")
                 
-                if not any(collections):  # Check if all collections are empty
-                    print("Warning: No nodes to export")
-                    return
-                    
-                for collection in collections:
-                    if collection:  # Only extend if collection exists and has items
-                        nodes.extend(collection)
-                
-                if nodes:
-                    self.neo4j.merge_nodes(nodes)
-                    
-            except Exception as e:
-                raise RuntimeError(f"Export to Neo4j failed: {e}")
+        except Exception as e:
+            print(f"Export error: {str(e)}")  # Debug
+            raise RuntimeError(f"Export to Neo4j failed: {e}")
 
     def _build_concepts(self):
         """Build concept objects from the model."""
@@ -281,6 +289,54 @@ class Report:
         self.concepts = [Concept(concept) for concept in unique_concepts]
         
         print(f"Built {len(self.concepts)} concepts") 
+
+
+    def _build_periods(self) -> None:
+        """Build unique period objects from contexts"""
+        if not self.model_xbrl:
+            raise RuntimeError("XBRL model not loaded.")
+            
+        periods_dict = {}  # Use dict for uniqueness
+        
+        for ctxt_id, context in self.model_xbrl.contexts.items():
+            try:
+                # Determine period type
+                period_type = ("instant" if getattr(context, "isInstantPeriod", False)
+                            else "duration" if getattr(context, "isStartEndPeriod", False)
+                            else "forever")
+                
+                # Extract dates
+                start_date = None
+                end_date = None
+                
+                if period_type == "instant":
+                    start_date = context.instantDatetime.strftime('%Y-%m-%d')
+                elif period_type == "duration":
+                    start_date = context.startDatetime.strftime('%Y-%m-%d')
+                    end_date = context.endDatetime.strftime('%Y-%m-%d')
+                    
+                # Create period
+                period = Period(
+                    period_type=period_type,
+                    start_date=start_date,
+                    end_date=end_date,
+                    context_ids=[ctxt_id]
+                )
+                
+                # Add to dict using _id as key for uniqueness
+                if period._id in periods_dict:
+                    # periods_dict[period._id].merge_context(ctxt_id)
+                    # print(f"Merged context {ctxt_id} into existing period {period._id}")
+                    pass
+                else:
+                    periods_dict[period._id] = period
+                    
+            except Exception as e:
+                print(f"Error processing context {ctxt_id}: {e}")
+        
+        self.periods = list(periods_dict.values())
+        print(f"Built {len(self.periods)} unique periods")
+
 
     # TODO: Here its not able to find the concept for some facts
     def _build_facts(self):
@@ -909,75 +965,85 @@ class Neo4jManager:
         try:
             with self.driver.session() as session:
                 session.run("MATCH (n) DETACH DELETE n")
+                print("Database cleared: ")
+
         except Exception as e:
             raise RuntimeError(f"Failed to clear database: {e}")
             
     def create_indexes(self):
-        """Create indexes for all node types"""
+        """Create indexes and constraints for all node types"""
         try:
             with self.driver.session() as session:
                 for node_type in NodeType:
+                    # Create constraint for uniqueness
                     session.run(f"""
-                    CREATE INDEX IF NOT EXISTS FOR (n:`{node_type.value}`)
-                    ON (n.id)
+                    CREATE CONSTRAINT IF NOT EXISTS FOR (n:`{node_type.value}`)
+                    REQUIRE n.id IS UNIQUE
                     """)
         except Exception as e:
             raise RuntimeError(f"Failed to create indexes: {e}")
         
     def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 1000) -> None:
+        """Merge nodes into Neo4j database with batching and null handling"""
         if not nodes:
             return
-                
-        if batch_size <= 0:
-            raise ValueError("Batch size must be positive")
-        
+            
         try:
-            for i in range(0, len(nodes), batch_size):
-                batch = nodes[i:i + batch_size]
-                node_label = batch[0].node_type.value
-                
-                # Convert None to null in properties
-                batch_data = [{
-                    "id": node.id,
-                    "properties": {
-                        k: (v if v is not None else "null") 
-                        for k, v in node.properties.items()
-                    }
-                } for node in batch]
-                
-                query = """
-                UNWIND $batch as node
-                MERGE (n {id: node.id})
-                SET n:%s
-                SET n += node.properties
-                """ % node_label
-                
-                with self.driver.session() as session:
-                    session.run(query, batch=batch_data)
+            with self.driver.session() as session:
+                for i in range(0, len(nodes), batch_size):
+                    batch = nodes[i:i + batch_size]
+                    
+                    for node in batch:
+                        # Convert None to "null" for Neo4j compatibility
+                        properties = {
+                            k: (v if v is not None else "null")
+                            for k, v in node.properties.items()
+                        }
+                        
+                        query = f"""
+                        MERGE (n:{node.node_type.value} {{id: $id}})
+                        SET n += $properties
+                        """
+                        session.run(query, {
+                            "id": node.id,
+                            "properties": properties
+                        })
+                        
         except Exception as e:
             raise RuntimeError(f"Failed to merge nodes: {e}")
 
 
     def get_node_counts(self) -> Dict[str, int]:
-        """Get count of nodes by type"""
+        """Get count of nodes by type and validate against NodeType enum"""
         try:
             with self.driver.session() as session:
+                # Get counts for all node types
                 query = """
                 MATCH (n)
-                RETURN labels(n)[0] as node_type, count(n) as count
+                WITH labels(n)[0] as node_type, count(n) as count
+                RETURN node_type, count
+                ORDER BY count DESC
                 """
                 result = session.run(query)
                 counts = {row["node_type"]: row["count"] for row in result}
                 
+                # Create a complete report including zero counts for missing node types
+                complete_counts = {node_type.value: counts.get(node_type.value, 0) 
+                                for node_type in NodeType}
+                
                 # Print summary
                 print("\nNode counts in Neo4j:")
-                for node_type, count in counts.items():
-                    print(f"{node_type}: {count} nodes")
-                    
-                return counts
+                print("-" * 40)
+                for node_type, count in complete_counts.items():
+                    print(f"{node_type:<15} : {count:>8,d} nodes")
+                print("-" * 40)
+                print(f"{'Total':<15} : {sum(complete_counts.values()):>8,d} nodes")
+                        
+                return complete_counts
+                
         except Exception as e:
             print(f"Error getting node counts: {e}")
-            return {}
+            return {node_type.value: 0 for node_type in NodeType}
 
 
 ######################### Neo4j Setup END #####################################################
@@ -1357,19 +1423,38 @@ class Unit:
     measures: List[str]  # E.g., ["iso4217:USD"]
 
 
-@dataclass
+# @dataclass
 # class Context:
 #     id: str
 #     period: Period
-#     entity: Entity
+#     entity: Entityƒç
 #     dimensions: Dict[Dimension, Member] = field(default_factory=dict)
 
 
+
 @dataclass
-class Period:
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
-    instant_date: Optional[date] = None
+class Period(Neo4jNode):
+    period_type: str  # Required field, no default
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    # context_ids: List[str] = field(default_factory=list)
+    context_ids: Optional[List[str]] = field(default_factory=list)  # Optional, defaults to an empty list
+    _id: str = field(init=False)
+
+    def __post_init__(self):
+        if self.period_type == "duration" and not (self.start_date and self.end_date):
+            raise ValueError("Duration periods must have both start and end dates")
+        if self.period_type == "instant" and not self.start_date:
+            raise ValueError("Instant periods must have a start date")
+        self.generate_id()
+
+    def __hash__(self):
+        return hash(self._id)
+
+    def __eq__(self, other):
+        if isinstance(other, Period):
+            return self._id == other._id
+        return False
 
     @property
     def is_duration(self) -> bool:
@@ -1377,8 +1462,39 @@ class Period:
 
     @property
     def is_instant(self) -> bool:
-        return self.instant_date is not None
+        return self.start_date is not None and self.end_date is None
 
+    def generate_id(self):
+        """Generate a unique ID for the period."""
+        id_parts = [self.period_type]
+        if self.start_date:
+            id_parts.append(self.start_date)
+        if self.end_date:
+            id_parts.append(self.end_date)
+        self._id = "_".join(id_parts)
+
+    # Neo4j Node Properties
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.PERIOD
+        
+    @property
+    def id(self) -> str:
+        return self._id
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            "period_type": self.period_type,
+            "start_date": self.start_date,
+            "end_date": self.end_date
+            # "context_ids": self.context_ids # TODO: Add this back in relation to Facts but after adding report_metadata
+        }
+
+    def merge_context(self, context_id: str) -> None:
+        """Add a context ID if it's not already present"""
+        if context_id not in self.context_ids:
+            self.context_ids.append(context_id)
 
 ######################### OTHER CLASSES (TO consider) END ####################################################
 
@@ -1473,12 +1589,6 @@ class RelationshipManager:
 
 
 
-# UTILITIES
-
-# Global Export Function - A utility to convert all dataclass objects into Neo4j-compatible Cypher queries:
-def export_to_neo4j(nodes: List[object], relationships: List[FactRelationship]) -> str:
-    # return "\n".join(node.to_cypher() for node in nodes + relationships if hasattr(node, "to_cypher")for fact in facts:)
-    return None
 
 
 
