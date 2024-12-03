@@ -1,4 +1,9 @@
-venv/
-__pycache__/
-*.pyc
-.DS_Store
+# Log files
+XBRL_SETUP/ErrorLog.txt
+XBRL_SETUP/logfile.txt
+
+# Backup files
+XBRL_SETUP/*Backup.py
+
+# Jupyter notebooks
+XBRL_SETUP/*.ipynb
