@@ -3,7 +3,7 @@ from __future__ import annotations  # Enable forward references
 # dataclasses and typing imports
 from dataclasses import dataclass, field, fields
 from typing import List, Dict, Optional, Any, Union, Set
-from abc import ABC, abstractmethod 
+from abc import ABC, abstractmethod
 from neo4j import GraphDatabase, Driver
 
 # Python imports
@@ -24,10 +24,158 @@ from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 
 
-class CypherMixin:
-    def to_cypher(self, label: str, properties: Dict[str, str]) -> str:
-        props = ", ".join([f"{k}: '{v}'" for k, v in properties.items() if v])
-        return f"CREATE (:{label} {{{props}}})"
+
+
+class NodeType(Enum):
+    """XBRL node types in Neo4j"""
+    COMPANY = "Company"
+    FACT = "Fact"
+    CONCEPT = "Concept"
+    DIMENSION = "Dimension"
+    MEMBER = "Member"
+    HYPERCUBE = "Hypercube"
+    CONTEXT = "Context"
+    PERIOD = "Period"
+    UNIT = "Unit"           # Added for numeric facts
+    NAMESPACE = "Namespace" # Added for prefix management
+    LINKBASE = "Linkbase"  # Added for relationships
+    RESOURCE = "Resource"  # Added for labels, references
+
+class RelationType(Enum):
+    """XBRL relationship types"""
+    HAS_FACT = "HAS_FACT"
+    HAS_CONCEPT = "HAS_CONCEPT"
+    HAS_DIMENSION = "HAS_DIMENSION"
+    HAS_MEMBER = "HAS_MEMBER"
+    REPORTS = "REPORTS"
+    BELONGS_TO = "BELONGS_TO"
+    IN_CONTEXT = "IN_CONTEXT"      # Fact to Context
+    HAS_PERIOD = "HAS_PERIOD"      # Context to Period
+    HAS_UNIT = "HAS_UNIT"         # Fact to Unit
+    PARENT_CHILD = "PARENT_CHILD" # Presentation hierarchy
+    CALCULATION = "CALCULATION"    # Calculation relationships
+    DEFINITION = "DEFINITION"      # Definition relationships
+    HAS_LABEL = "HAS_LABEL"       # Concept to Label
+    HAS_REFERENCE = "HAS_REFERENCE" # Concept to Reference
+
+
+class Neo4jNode(ABC):
+    """Abstract base class for Neo4j nodes"""
+    
+    @property
+    @abstractmethod
+    def node_type(self) -> NodeType:
+        """Node type for Neo4j categorization"""
+        pass
+        
+    @property
+    @abstractmethod
+    def id(self) -> str:
+        """Unique identifier for MERGE operations"""
+        pass
+        
+    @property
+    @abstractmethod
+    def properties(self) -> Dict[str, Any]:
+        """Node properties (excluding id)"""
+        pass
+
+
+
+
+######################### CONCEPTS START ####################################################
+
+
+@dataclass
+class Concept(Neo4jNode):
+    model_concept: ModelConcept # The original ModelConcept object
+    qname: str = field(init=False) # Unique ID
+
+    # Properties
+    concept_type: str = field(init=False) # self.model_concept.niceType is short but clubs multiple types (dtr_types, dtr_types1)
+    period_type: str = field(init=False)  
+    namespace: str = field(init=False)
+    label: Optional[str] = field(init=False, default=None)
+    balance: Optional[str] = field(init=False, default=None)
+    type_local: Optional[str] = field(init=False, default=None)    
+    
+    # TODO:
+    # facts: List[Fact] = field(init=False, default_factory=list)
+    # hypercubes: Optional[List[str]] = field(default_factory=list)  # Hypercubes associated in the Definition Network
+    # presentation_parents: Dict[str, 'Concept'] = field(init=False, default_factory=dict)
+    # presentation_children: Dict[str, List['Concept']] = field(init=False, default_factory=dict)
+    # presentation_level: Dict[str, int] = field(init=False, default_factory=dict)
+    # presentation_order: Dict[str, float] = field(init=False, default_factory=dict)
+
+
+    def __post_init__(self):        
+        self.qname = str(self.model_concept.qname) # Unique ID
+
+        # Properties
+        self.concept_type = str(self.model_concept.typeQname) if self.model_concept.typeQname else "N/A"
+        self.period_type = self.model_concept.periodType or "N/A"
+        self.namespace = self.model_concept.qname.namespaceURI.strip()
+        self.label = self.model_concept.label(lang="en")            
+        self.balance = self.model_concept.balance
+        self.type_local = self.model_concept.baseXsdType
+        
+    def __hash__(self):
+        # Use a unique attribute for hashing, such as qname
+        return hash(self.qname)
+
+    def __eq__(self, other):
+        # Ensure equality is based on the same attribute used for hashing
+        if isinstance(other, Concept):
+            return self.qname == other.qname
+        return False
+
+    def add_fact(self, fact: Fact) -> None:
+        """Add fact reference to concept"""
+        self.facts.append(fact)
+
+    # def __repr__(self) -> str:
+    #     """Match ModelObject's repr format"""
+    #     return f"Concept[{self.qname}, {self.category}, line {self.source_line}]"
+
+    @property
+    def is_numeric(self) -> bool:
+        return self.model_concept.isNumeric
+        
+    @property
+    def is_monetary(self) -> bool:
+        return self.model_concept.isMonetary
+        
+    @property
+    def is_text_block(self) -> bool:
+        return self.model_concept.isTextBlock
+    
+    # Neo4j Node Properties
+    @property
+    def node_type(self) -> NodeType:
+        """Used for Neo4j node labeling"""
+        return NodeType.CONCEPT
+        
+    @property
+    def id(self) -> str:
+        """Unique identifier for Neo4j MERGE"""
+        return self.qname
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """Actual node properties in Neo4j"""
+        return {
+            "concept_type": self.concept_type,
+            "period_type": self.period_type,
+            "namespace": self.namespace,
+            "label": self.label,
+            "balance": self.balance, # To be used later in Relationships
+            "type_local": self.type_local
+        }
+        
+
+   
+
+######################### CONCEPTS END ####################################################
 
 
 ############################### Report Class START #######################################################
@@ -38,30 +186,29 @@ class Report:
     # Add Other Report Elements
 
     instance_file: str
+    neo4j: Neo4jManager
     log_file: str = field(default='ErrorLog.txt', repr=False)
-    model_xbrl: object = field(init=False, repr=False)
+    testing: bool = field(default=False)  # Add testing flag as configurable
 
+    model_xbrl: ModelXbrl = field(init=False, repr=False)
     report_metadata: Dict[str, object] = field(init=False, default_factory=dict)
     
-    # networks: Dict[str, Network] = field(init=False, default_factory=dict, repr=False)
-    networks: List[Network] = field(init=False, default_factory=list, repr=False)
-
-
     # Core collections
-    facts: List[Fact] = field(init=False, default_factory=list, repr=False)
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
+    facts: List[Fact] = field(init=False, default_factory=list, repr=False)
     dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)
  
-     # Lookups
-    _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False)
-
+     # TODO
+     # networks: List[Network] = field(init=False, default_factory=list, repr=False)
+    # _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False)
 
     def __post_init__(self):
         self.load_xbrl()
         self.extract_report_metadata()
-        self.populate_fields()
-        # self.build_relationships()
+        self.populate_fields()        
+        self.export_to_neo4j(self.testing)  # Use instance testing flag
 
+        # self.build_relationships()
 
     def load_xbrl(self):
         # Initialize the controller
@@ -73,7 +220,6 @@ class Report:
             self.model_xbrl = controller.modelManager.load(filesource=FileSource.FileSource(self.instance_file), discover=True)
         except Exception as e: 
             raise RuntimeError(f"Error loading XBRL model: {e}")
-
 
     # Review it - See Notes.txt
     def extract_report_metadata(self):
@@ -94,13 +240,35 @@ class Report:
             raise RuntimeError("XBRL model not loaded.")
         
         self._build_concepts()  # 1. Build concepts first
-        self._build_networks()  # 2. Build networks and hierarchies
-        self._build_facts()     # 3. Build facts with validation
-
+        # self._build_facts()     # 3. Build facts with validation
+        # self._build_networks()  # 2. Build networks and hierarchies
         # self._build_dimensions() # 4. Build dimensions
 
-    # Core collections
-    concepts: List[Concept] = field(init=False, default_factory=list, repr=False) 
+    def export_to_neo4j(self, testing: bool = False) -> None:
+            """Export selected node types to Neo4j"""
+            try:
+                if testing:
+                    self.neo4j.clear_db()
+                    self.neo4j.create_indexes()
+                
+                nodes = []
+                # collections = [self.concepts, self.facts, self.dimensions]
+                collections = [self.concepts]
+                
+                if not any(collections):  # Check if all collections are empty
+                    print("Warning: No nodes to export")
+                    return
+                    
+                for collection in collections:
+                    if collection:  # Only extend if collection exists and has items
+                        nodes.extend(collection)
+                
+                if nodes:
+                    self.neo4j.merge_nodes(nodes)
+                    
+            except Exception as e:
+                raise RuntimeError(f"Export to Neo4j failed: {e}")
+
     def _build_concepts(self):
         """Build concept objects from the model."""
         if not self.model_xbrl:
@@ -114,7 +282,7 @@ class Report:
         
         print(f"Built {len(self.concepts)} concepts") 
 
-
+    # TODO: Here its not able to find the concept for some facts
     def _build_facts(self):
         """Build facts with two-way concept relationships"""
         for model_fact in self.model_xbrl.factsInInstance:
@@ -129,10 +297,6 @@ class Report:
             concept.add_fact(fact)
             
             self.facts.append(fact)
-
-    # def build_relationships(self):
-    #     self.presentation_links = self.relationship_manager.generate_presentation_links(self.facts, self.concepts)
-    #     self.relationship_manager.validate_presentation_links(self.presentation_links)
 
 
     # 1. Build networks - Also builds hypercubes in networks with isDefinition = True
@@ -198,242 +362,8 @@ class Report:
                 hypercube._link_concepts(self.concepts)
 
 
-    def collect_all_instance_concepts(self) -> List[ModelConcept]:
-        """Collect all concepts (facts, networks, footnotes) referenced in the XBRL instance."""
-        # Collect QNames from facts
-        fact_qnames = {fact.qname for fact in self.model_xbrl.facts}
-
-        # Collect QNames from all relationship networks
-        network_qnames = {
-            qname
-            for rel_set in self.model_xbrl.relationshipSets.values() if rel_set
-            for rel in rel_set.modelRelationships
-            for qname in (rel.fromModelObject.qname, rel.toModelObject.qname) if qname
-        }
-
-        # Collect QNames from footnotes
-        footnote_qnames = {
-            qname
-            for rel in getattr(self.model_xbrl, "footnotes", {}).values()
-            for qname in (rel.fromModelObject.qname, rel.toModelObject.qname) if qname
-        }
-
-        # Combine QNames from all sources
-        all_qnames = fact_qnames | network_qnames | footnote_qnames
-
-        # Retrieve corresponding ModelConcepts
-        return [
-            self.model_xbrl.qnameConcepts[qname]
-            for qname in all_qnames
-            if qname in self.model_xbrl.qnameConcepts
-        ]
-
-
-
-
-    # Just for checking, can be removed
-    def _build_concepts_dataframe(self):
-        """Convert concepts to DataFrame with proper type handling"""
-        concept_data = []
-        for concept in self.concepts:
-            concept_dict = concept.to_dict()
-            # Convert complex types to strings
-            for key, value in concept_dict.items():
-                if key != 'Facts':  # Skip facts conversion
-                    if isinstance(value, dict):
-                        concept_dict[key] = str(value)
-                    elif isinstance(value, (list, set)):
-                        concept_dict[key] = ','.join(map(str, value))
-            concept_data.append(concept_dict)
-        
-        self.concepts_df = pd.DataFrame(concept_data)
-        
-        # Optimize DataFrame - only for non-complex columns
-        for col in self.concepts_df.select_dtypes(['object']).columns:
-            try:
-                if self.concepts_df[col].nunique() < len(self.concepts_df) * 0.5:
-                    self.concepts_df[col] = self.concepts_df[col].astype('category')
-            except TypeError:
-                continue
-                
-        return self.concepts_df  # Return the DataFrame
-
-    # Just for checking, can be removed
-    def _build_facts_dataframe(self):
-        """Convert facts to DataFrame with proper type handling and concept relationships"""
-        facts_data = []
-        for fact in self.facts:
-            fact_dict = fact.to_dict()
-            
-            # Remove redundant concept string representation
-            # fact_dict.pop('Concept', None)
-            
-            # Add concept properties with clear prefix
-            if fact.concept:
-                # Core concept identifiers
-                fact_dict['qname'] = str(fact.concept.qname)
-                fact_dict['C_id'] = fact.concept.id
-                
-                # Add all concept properties
-                concept_dict = fact.concept.to_dict()
-                fact_dict.update({
-                    f'C_{k}': v 
-                    for k, v in concept_dict.items()
-                    if k not in ['qname', 'id']  # Skip duplicates
-                })
-            
-            # Handle complex types
-            for key, value in fact_dict.items():
-                if isinstance(value, dict):
-                    fact_dict[key] = str(value)
-                elif isinstance(value, (list, set)):
-                    fact_dict[key] = ','.join(map(str, value))
-            
-            facts_data.append(fact_dict)
-        
-        self.facts_df = pd.DataFrame(facts_data)
-        
-        # Optimize DataFrame
-        for col in self.facts_df.select_dtypes(['object']).columns:
-            try:
-                if self.facts_df[col].nunique() < len(self.facts_df) * 0.5:
-                    self.facts_df[col] = self.facts_df[col].astype('category')
-            except TypeError:
-                continue
-        
-        return self.facts_df
 
 ############################### Report Class END #######################################################
-
-
-
-@dataclass
-class Concept:
-    """Represents a single XBRL concept with all its properties and categorization"""
-    
-    model_concept: ModelConcept # The original ModelConcept object
-    facts: List[Fact] = field(init=False, default_factory=list) 
-    hypercubes: Optional[List[str]] = field(default_factory=list)  # Hypercubes associated in the Definition Network
-
-    presentation_parents: Dict[str, 'Concept'] = field(init=False, default_factory=dict)
-    presentation_children: Dict[str, List['Concept']] = field(init=False, default_factory=dict)
-    presentation_level: Dict[str, int] = field(init=False, default_factory=dict)
-    presentation_order: Dict[str, float] = field(init=False, default_factory=dict)
-
-
-    # presentation_parents: Maps network URIs to parent concept QNames
-    # presentation_children: Maps network URIs to lists of child concept QNames
-    # presentation_order: Maps network URIs to presentation orders
-    # presentation_level: Maps network URIs to hierarchy levels
-
-    # Base properties
-    qname: str = field(init=False)
-    id: str = field(init=False)
-    is_abstract: bool = field(init=False)
-    substitution_group: str = field(init=False)
-    concept_type: str = field(init=False)
-    period_type: str = field(init=False)
-    # category: ElementCategory = field(init=False)  
-    namespace: str = field(init=False)
-    nillable: bool = field(init=False)
-    prefix: str = field(init=False)
-    
-    # Extended properties
-    balance: Optional[str] = field(init=False, default=None)
-    type_local: Optional[str] = field(init=False, default=None)
-    facets: Optional[Dict] = field(init=False, default=None)
-    nice_type: Optional[str] = field(init=False, default=None)
-    label: Optional[str] = field(init=False, default=None)
-
-    # Is properties
-    is_numeric: bool = field(init=False, default=False)
-    is_monetary: bool = field(init=False, default=False)
-    is_text_block: bool = field(init=False, default=False)
-    is_item: bool = field(init=False, default=False)
-    is_tuple: bool = field(init=False, default=False)
-    
-    # Type properties
-    is_primary_item: bool = field(init=False, default=False)
-    is_domain_member: bool = field(init=False, default=False)
-    is_hypercube_item: bool = field(init=False, default=False)
-    is_dimension_item: bool = field(init=False, default=False)
-    is_typed_dimension: bool = field(init=False, default=False)
-    is_explicit_dimension: bool = field(init=False, default=False)
-
-    # other properties
-    source_line: Optional[int] = field(init=False, default=None)
-    base_xsd_type: Optional[str] = field(init=False, default=None)
-    element_namespace_uri: Optional[str] = field(init=False, default=None)
-    element_qname: Optional[str] = field(init=False, default=None)
-    parent_qname: Optional[str] = field(init=False, default=None)
-    previous: Optional[str] = field(init=False, default=None)
-    next: Optional[str] = field(init=False, default=None)
-
-    def __post_init__(self):
-        """Initialize all fields from the model_concept after dataclass creation"""
-        # Validate model_concept
-        if not isinstance(self.model_concept, ModelConcept):
-            raise TypeError("model_concept must be ModelConcept type")
-
-        # Base properties
-        self.qname = str(self.model_concept.qname)
-        self.id = self.model_concept.id or "N/A"
-        self.is_abstract = self.model_concept.isAbstract
-        # self.substitution_group = ReportElementClassifier.get_substitution_group(self.model_concept)
-        self.concept_type = str(self.model_concept.typeQname) if self.model_concept.typeQname else "N/A"
-        self.period_type = self.model_concept.periodType or "N/A"
-        # self.category = ReportElementClassifier.classify(self.model_concept)  # Get string value
-        self.namespace = self.model_concept.qname.namespaceURI.strip()
-        # self.nillable = ReportElementClassifier.check_nillable(self.model_concept)
-        self.prefix = self.model_concept.qname.prefix
-        self.label = self.model_concept.label(lang="en")
-            
-        # Extended properties
-        self.balance = self.model_concept.balance
-        self.type_local = self.model_concept.baseXsdType
-        self.facets = self.model_concept.facets
-        self.nice_type = self.model_concept.niceType
-        
-        # Is properties
-        self.is_numeric = self.model_concept.isNumeric
-        self.is_monetary = self.model_concept.isMonetary
-        self.is_text_block = self.model_concept.isTextBlock
-        self.is_item = self.model_concept.isItem
-        self.is_tuple = self.model_concept.isTuple
-        
-        # Type properties
-        self.is_primary_item = self.model_concept.isPrimaryItem
-        self.is_domain_member = self.model_concept.isDomainMember
-        self.is_hypercube_item = self.model_concept.isHypercubeItem
-        self.is_dimension_item = self.model_concept.isDimensionItem
-        self.is_typed_dimension = self.model_concept.isTypedDimension
-        self.is_explicit_dimension = self.model_concept.isExplicitDimension
-
-        # other properties
-        self.source_line = self.model_concept.sourceline
-        self.element_namespace_uri = self.model_concept.elementNamespaceURI
-        self.element_qname = str(self.model_concept.elementQname)
-        self.parent_qname = str(self.model_concept.parentQname) if self.model_concept.parentQname else None
-
-        self.previous = str(self.model_concept.getprevious().qname) if self.model_concept.getprevious() is not None else None
-        self.next = str(self.model_concept.getnext().qname) if self.model_concept.getnext() is not None else None
-    
-    def __hash__(self):
-        # Use a unique attribute for hashing, such as qname
-        return hash(self.qname)
-
-    def __eq__(self, other):
-        # Ensure equality is based on the same attribute used for hashing
-        if isinstance(other, Concept):
-            return self.qname == other.qname
-        return False
-
-    def add_fact(self, fact: Fact) -> None:
-        """Add fact reference to concept"""
-        self.facts.append(fact)
-
-
-
 
 
 
@@ -684,11 +614,6 @@ class Network:
             if from_obj is None or to_obj is None:
                 continue
                 
-            # Debug print
-            print(f"\nProcessing relationship:")
-            print(f"From: {from_obj.qname}")
-            print(f"To: {to_obj.qname}")
-            
             # Find concepts and add to network
             from_concept = next(
                 (c for c in report_concepts if str(c.qname) == str(from_obj.qname)), 
@@ -697,9 +622,6 @@ class Network:
                 (c for c in report_concepts if str(c.qname) == str(to_obj.qname)), 
                 None)
                 
-            # Debug print
-            print(f"Found from_concept: {from_concept is not None}")
-            print(f"Found to_concept: {to_concept is not None}")
             
             if from_concept and to_concept:
                 try:
@@ -954,359 +876,118 @@ class Dimension:
 
 ######################### Neo4j Setup START #####################################################
 
-
-class XBRLNodeType(Enum):
-    """XBRL node types in Neo4j"""
-    COMPANY = "Company"
-    FACT = "Fact"
-    CONCEPT = "Concept"
-    DIMENSION = "Dimension"
-    MEMBER = "Member"
-    HYPERCUBE = "Hypercube"
-    CONTEXT = "Context"
-    PERIOD = "Period"
-    UNIT = "Unit"           # Added for numeric facts
-    NAMESPACE = "Namespace" # Added for prefix management
-    LINKBASE = "Linkbase"  # Added for relationships
-    RESOURCE = "Resource"  # Added for labels, references
-
-class XBRLRelationType(Enum):
-    """XBRL relationship types"""
-    HAS_FACT = "HAS_FACT"
-    HAS_CONCEPT = "HAS_CONCEPT"
-    HAS_DIMENSION = "HAS_DIMENSION"
-    HAS_MEMBER = "HAS_MEMBER"
-    REPORTS = "REPORTS"
-    BELONGS_TO = "BELONGS_TO"
-    IN_CONTEXT = "IN_CONTEXT"      # Fact to Context
-    HAS_PERIOD = "HAS_PERIOD"      # Context to Period
-    HAS_UNIT = "HAS_UNIT"         # Fact to Unit
-    PARENT_CHILD = "PARENT_CHILD" # Presentation hierarchy
-    CALCULATION = "CALCULATION"    # Calculation relationships
-    DEFINITION = "DEFINITION"      # Definition relationships
-    HAS_LABEL = "HAS_LABEL"       # Concept to Label
-    HAS_REFERENCE = "HAS_REFERENCE" # Concept to Reference
-
-class XBRLNeo4jConnector:
-    """Handles Neo4j database operations for XBRL data"""
+@dataclass
+class Neo4jManager:
+    uri: str
+    username: str
+    password: str
+    driver: Driver = field(init=False)
     
-    def __init__(self, uri: str, username: str, password: str):
-        """Initialize Neo4j connection"""
-        self.driver: Driver = GraphDatabase.driver(uri, auth=(username, password))
-        self.verify_connection()
-        
-    def verify_connection(self) -> None:
-        """Verify Neo4j connection is active"""
+    def test_connection(self) -> bool:
+        """Test Neo4j connection"""
         try:
             with self.driver.session() as session:
                 session.run("RETURN 1")
+            return True
+        except Exception:
+            return False
+    
+    def __post_init__(self):
+        try:
+            self.driver = GraphDatabase.driver(self.uri, auth=(self.username, self.password))
+            if not self.test_connection():
+                raise ConnectionError("Failed to connect to Neo4j")
         except Exception as e:
-            self.close()
-            raise ConnectionError(f"Failed to connect to Neo4j: {e}")
-            
-    def close(self) -> None:
-        """Close Neo4j connection"""
-        if self.driver:
+            raise ConnectionError(f"Neo4j initialization failed: {e}")
+    
+    def close(self):
+        if hasattr(self, 'driver'):
             self.driver.close()
             
-    def __enter__(self):
-        return self
+    def clear_db(self):
+        """Development only: Clear database"""
+        try:
+            with self.driver.session() as session:
+                session.run("MATCH (n) DETACH DELETE n")
+        except Exception as e:
+            raise RuntimeError(f"Failed to clear database: {e}")
+            
+    def create_indexes(self):
+        """Create indexes for all node types"""
+        try:
+            with self.driver.session() as session:
+                for node_type in NodeType:
+                    session.run(f"""
+                    CREATE INDEX IF NOT EXISTS FOR (n:`{node_type.value}`)
+                    ON (n.id)
+                    """)
+        except Exception as e:
+            raise RuntimeError(f"Failed to create indexes: {e}")
         
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()
-        
-    def initialize_database(self) -> None:
-        """Initialize database with constraints and indexes"""
-        with self.driver.session() as session:
-            # Create constraints for each node type
-            constraints = [
-                f"CREATE CONSTRAINT IF NOT EXISTS FOR (n:{node_type.value}) REQUIRE n.id IS UNIQUE"
-                for node_type in XBRLNodeType
-            ]
-            for constraint in constraints:
-                session.run(constraint)
+    def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 1000) -> None:
+        if not nodes:
+            return
                 
-    def create_node(self, node_type: XBRLNodeType, properties: Dict[str, Any]) -> None:
-        """Create a node of specified type with given properties"""
-        with self.driver.session() as session:
-            session.execute_write(self._create_node_tx, node_type.value, properties)
-    
-
-    
-    def create_simple_node(self, node_type: XBRLNodeType, node_name: str, properties: Dict[str, Any] = None) -> None:
-        """
-        Simple function to create a node with a name and optional properties
+        if batch_size <= 0:
+            raise ValueError("Batch size must be positive")
         
-        Args:
-            node_type: Type of node from XBRLNodeType enum
-            node_name: Name of the node (will be used as id)
-            properties: Optional dictionary of additional properties
-        
-        Example:
-            db.create_simple_node(
-                XBRLNodeType.COMPANY, 
-                "Apple Inc",
-                {"cik": "0000320193", "industry": "Technology"}
-            )
-        """
-        node_properties = {
-            "id": node_name,
-            "name": node_name
-        }
-        
-        if properties:
-            node_properties.update(properties)
-            
-        self.create_node(node_type, node_properties)
-
-
-    @staticmethod
-    def _create_node_tx(tx, node_type: str, properties: Dict[str, Any]) -> None:
-        """Transaction to create a node"""
-        query = f"""
-        MERGE (n:{node_type} {{id: $properties.id}})
-        SET n += $properties
-        RETURN n
-        """
-        tx.run(query, properties=properties)
-
-    def delete_all(self) -> None:
-        """Delete all nodes and relationships"""
-        with self.driver.session() as session:
-            session.run("MATCH (n) DETACH DELETE n")
-
-    def print_database_stats(self) -> None:
-        """Print database statistics"""
-        with self.driver.session() as session:
-            # Count nodes by type
-            for node_type in XBRLNodeType:
-                result = session.run(f"MATCH (n:{node_type.value}) RETURN count(n) as count")
-                count = result.single()["count"]
-                print(f"{node_type.value}: {count} nodes")
-
-
-    def print_all_nodes_and_relationships(self) -> None:
-        """Print all nodes and relationships in a readable format"""
-        with self.driver.session() as session:
-            # Fetch all nodes
-            nodes_query = "MATCH (n) RETURN n"
-            nodes = session.run(nodes_query)
-            
-            # Fetch all relationships
-            relationships_query = """
-            MATCH (n)-[r]->(m)
-            RETURN n, type(r) AS relationship, m
-            """
-            relationships = session.run(relationships_query)
-            
-            # Print nodes
-            print("\n=== Nodes ===")
-            print("{:<20} {:<20} {:<40}".format("Label", "ID", "Properties"))
-            print("-" * 80)
-            for record in nodes:
-                node = record["n"]
-                labels = list(node.labels)[0]  # Get first label
-                node_id = node.get("id", "N/A")
-                # Remove id from properties display
-                props = dict(node)
-                if "id" in props:
-                    del props["id"]
-                print("{:<20} {:<20} {:<40}".format(
-                    labels,
-                    str(node_id),
-                    str(props)
-                ))
+        try:
+            for i in range(0, len(nodes), batch_size):
+                batch = nodes[i:i + batch_size]
+                node_label = batch[0].node_type.value
                 
-            # Print relationships
-            print("\n=== Relationships ===")
-            print("{:<20} {:<20} {:<20}".format("From", "Relationship", "To"))
-            print("-" * 60)
-            for record in relationships:
-                start_node = record["n"]
-                end_node = record["m"]
-                relationship = record["relationship"]
-                print("{:<20} {:<20} {:<20}".format(
-                    start_node.get("id", "N/A"),
-                    relationship,
-                    end_node.get("id", "N/A")
-                ))
+                # Convert None to null in properties
+                batch_data = [{
+                    "id": node.id,
+                    "properties": {
+                        k: (v if v is not None else "null") 
+                        for k, v in node.properties.items()
+                    }
+                } for node in batch]
+                
+                query = """
+                UNWIND $batch as node
+                MERGE (n {id: node.id})
+                SET n:%s
+                SET n += node.properties
+                """ % node_label
+                
+                with self.driver.session() as session:
+                    session.run(query, batch=batch_data)
+        except Exception as e:
+            raise RuntimeError(f"Failed to merge nodes: {e}")
 
+
+    def get_node_counts(self) -> Dict[str, int]:
+        """Get count of nodes by type"""
+        try:
+            with self.driver.session() as session:
+                query = """
+                MATCH (n)
+                RETURN labels(n)[0] as node_type, count(n) as count
+                """
+                result = session.run(query)
+                counts = {row["node_type"]: row["count"] for row in result}
+                
+                # Print summary
+                print("\nNode counts in Neo4j:")
+                for node_type, count in counts.items():
+                    print(f"{node_type}: {count} nodes")
+                    
+                return counts
+        except Exception as e:
+            print(f"Error getting node counts: {e}")
+            return {}
 
 
 ######################### Neo4j Setup END #####################################################
 
 
 
-######################### CONCEPTS START ####################################################
-
-
-@dataclass
-class Concept:
-    """Represents a single XBRL concept with all its properties and categorization"""
-    
-    model_concept: ModelConcept # The original ModelConcept object
-    facts: List[Fact] = field(init=False, default_factory=list) 
-    hypercubes: Optional[List[str]] = field(default_factory=list)  # Hypercubes associated in the Definition Network
-
-    presentation_parents: Dict[str, 'Concept'] = field(init=False, default_factory=dict)
-    presentation_children: Dict[str, List['Concept']] = field(init=False, default_factory=dict)
-    presentation_level: Dict[str, int] = field(init=False, default_factory=dict)
-    presentation_order: Dict[str, float] = field(init=False, default_factory=dict)
-
-
-    # presentation_parents: Maps network URIs to parent concept QNames
-    # presentation_children: Maps network URIs to lists of child concept QNames
-    # presentation_order: Maps network URIs to presentation orders
-    # presentation_level: Maps network URIs to hierarchy levels
-
-    # Base properties
-    qname: str = field(init=False)
-    id: str = field(init=False)
-    is_abstract: bool = field(init=False)
-    substitution_group: str = field(init=False)
-    concept_type: str = field(init=False)
-    period_type: str = field(init=False)
-    category: ElementCategory = field(init=False)  
-    namespace: str = field(init=False)
-    nillable: bool = field(init=False)
-    prefix: str = field(init=False)
-    
-    # Extended properties
-    balance: Optional[str] = field(init=False, default=None)
-    type_local: Optional[str] = field(init=False, default=None)
-    facets: Optional[Dict] = field(init=False, default=None)
-    nice_type: Optional[str] = field(init=False, default=None)
-    label: Optional[str] = field(init=False, default=None)
-
-    # Is properties
-    is_numeric: bool = field(init=False, default=False)
-    is_monetary: bool = field(init=False, default=False)
-    is_text_block: bool = field(init=False, default=False)
-    is_item: bool = field(init=False, default=False)
-    is_tuple: bool = field(init=False, default=False)
-    
-    # Type properties
-    is_primary_item: bool = field(init=False, default=False)
-    is_domain_member: bool = field(init=False, default=False)
-    is_hypercube_item: bool = field(init=False, default=False)
-    is_dimension_item: bool = field(init=False, default=False)
-    is_typed_dimension: bool = field(init=False, default=False)
-    is_explicit_dimension: bool = field(init=False, default=False)
-
-    # other properties
-    source_line: Optional[int] = field(init=False, default=None)
-    base_xsd_type: Optional[str] = field(init=False, default=None)
-    element_namespace_uri: Optional[str] = field(init=False, default=None)
-    element_qname: Optional[str] = field(init=False, default=None)
-    parent_qname: Optional[str] = field(init=False, default=None)
-    previous: Optional[str] = field(init=False, default=None)
-    next: Optional[str] = field(init=False, default=None)
-
-    def __post_init__(self):
-        """Initialize all fields from the model_concept after dataclass creation"""
-        # Validate model_concept
-        if not isinstance(self.model_concept, ModelConcept):
-            raise TypeError("model_concept must be ModelConcept type")
-
-        # Base properties
-        self.qname = str(self.model_concept.qname)
-        self.id = self.model_concept.id or "N/A"
-        self.is_abstract = self.model_concept.isAbstract
-        self.substitution_group = ReportElementClassifier.get_substitution_group(self.model_concept)
-        self.concept_type = str(self.model_concept.typeQname) if self.model_concept.typeQname else "N/A"
-        self.period_type = self.model_concept.periodType or "N/A"
-        self.category = ReportElementClassifier.classify(self.model_concept)  # Get string value
-        self.namespace = self.model_concept.qname.namespaceURI.strip()
-        self.nillable = ReportElementClassifier.check_nillable(self.model_concept)
-        self.prefix = self.model_concept.qname.prefix
-        self.label = self.model_concept.label(lang="en")
-            
-        # Extended properties
-        self.balance = self.model_concept.balance
-        self.type_local = self.model_concept.baseXsdType
-        self.facets = self.model_concept.facets
-        self.nice_type = self.model_concept.niceType
-        
-        # Is properties
-        self.is_numeric = self.model_concept.isNumeric
-        self.is_monetary = self.model_concept.isMonetary
-        self.is_text_block = self.model_concept.isTextBlock
-        self.is_item = self.model_concept.isItem
-        self.is_tuple = self.model_concept.isTuple
-        
-        # Type properties
-        self.is_primary_item = self.model_concept.isPrimaryItem
-        self.is_domain_member = self.model_concept.isDomainMember
-        self.is_hypercube_item = self.model_concept.isHypercubeItem
-        self.is_dimension_item = self.model_concept.isDimensionItem
-        self.is_typed_dimension = self.model_concept.isTypedDimension
-        self.is_explicit_dimension = self.model_concept.isExplicitDimension
-
-        # other properties
-        self.source_line = self.model_concept.sourceline
-        self.element_namespace_uri = self.model_concept.elementNamespaceURI
-        self.element_qname = str(self.model_concept.elementQname)
-        self.parent_qname = str(self.model_concept.parentQname) if self.model_concept.parentQname else None
-
-        self.previous = str(self.model_concept.getprevious().qname) if self.model_concept.getprevious() is not None else None
-        self.next = str(self.model_concept.getnext().qname) if self.model_concept.getnext() is not None else None
-    
-    def __hash__(self):
-        # Use a unique attribute for hashing, such as qname
-        return hash(self.qname)
-
-    def __eq__(self, other):
-        # Ensure equality is based on the same attribute used for hashing
-        if isinstance(other, Concept):
-            return self.qname == other.qname
-        return False
-
-    def add_fact(self, fact: Fact) -> None:
-        """Add fact reference to concept"""
-        self.facts.append(fact)
-
-
-    # def __repr__(self) -> str:
-    #     """Match ModelObject's repr format"""
-    #     return f"Concept[{self.qname}, {self.category}, line {self.source_line}]"
-
-    def to_dict(self) -> Dict:
-        """Convert concept to dictionary format matching DataFrame version"""
-        return {
-            "QName": self.qname,
-            "ID": self.id,
-            "Abstract": self.is_abstract,
-            "SubstitutionGroup": self.substitution_group,
-            "ConceptType": self.concept_type,
-            "PeriodType": self.period_type,
-            "Category": self.category,
-            "Namespace": self.namespace,
-            "Nillable": self.nillable,
-            "Prefix": self.prefix,
-            "Balance": self.balance,
-            "TypeLocal": self.type_local,
-            "Facets": self.facets,
-            "NiceType": self.nice_type,
-            "IsNumeric": self.is_numeric,
-            "IsMonetary": self.is_monetary,
-            "IsTextBlock": self.is_text_block,
-            "IsItem": self.is_item,
-            "IsTuple": self.is_tuple,
-            "IsPrimaryItem": self.is_primary_item,
-            "IsDomainMember": self.is_domain_member,
-            "IsHypercubeItem": self.is_hypercube_item,
-            "IsDimensionItem": self.is_dimension_item,
-            "IsTypedDimension": self.is_typed_dimension,
-            "IsExplicitDimension": self.is_explicit_dimension,
-            'Facts': self.facts  
-        }
-    
-######################### CONCEPTS END ####################################################
-
 
 #############################FACT CLASS START########################################
 @dataclass
-class Fact(CypherMixin):
+class Fact:
     model_fact: ModelFact
     concept: 'Concept' = field(init=False)  # Reference to concept instance - One-way reference
     
@@ -1707,7 +1388,7 @@ class Period:
 
 
 @dataclass
-class FactRelationship(CypherMixin):
+class FactRelationship:
     """Represents validated relationship between facts"""
     source_fact_id: str
     target_fact_id: str
