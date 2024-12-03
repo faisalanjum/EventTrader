@@ -196,6 +196,8 @@ class Report:
     # Core collections
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
     periods: List[Period] = field(init=False, default_factory=list, repr=False)
+    units: List[Unit] = field(init=False, default_factory=list, repr=False)
+
     facts: List[Fact] = field(init=False, default_factory=list, repr=False)
     dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)
  
@@ -242,7 +244,8 @@ class Report:
         
         self._build_concepts()  # 1. Build concepts first
         self._build_periods()  # 2. Build periods
-        # self._build_facts()     # 3. Build facts with validation
+        self._build_units()    # 3. Build units
+        self._build_facts()     # 4. Build facts with validation
         # self._build_networks()  # 2. Build networks and hierarchies
         # self._build_dimensions() # 4. Build dimensions
 
@@ -256,7 +259,7 @@ class Report:
             print("\nExporting to Neo4j:") 
             
             nodes = []
-            collections = [self.concepts, self.periods]
+            collections = [self.concepts, self.periods, self.units]
             
             if not any(collections):
                 print("Warning: No nodes to export")
@@ -289,6 +292,30 @@ class Report:
         self.concepts = [Concept(concept) for concept in unique_concepts]
         
         print(f"Built {len(self.concepts)} concepts") 
+
+
+    def _build_units(self):
+        """Build unique unit objects from the model."""
+        if not self.model_xbrl:
+            raise RuntimeError("XBRL model not loaded.")
+                
+        units_dict = {}  # Use dict for uniqueness
+        processed_facts = 0
+        
+        for fact in self.model_xbrl.factsInInstance:
+            processed_facts += 1
+            if hasattr(fact, 'unitID') and fact.unitID:  # Only check for unitID
+                try:
+                    unit = Unit(model_fact=fact)
+                    if unit.string_value or unit.unit_reference:  # Only add if we have some identifying info
+                        units_dict[unit.id] = unit
+                except Exception as e:
+                    print(f"Error processing unit for fact {fact.id}: {e}")
+        
+        self.units = list(units_dict.values())
+        print(f"\nUnit processing summary:")
+        print(f"- Total facts processed: {processed_facts}")
+        print(f"- Unique units built: {len(self.units)}")
 
 
     def _build_periods(self) -> None:
@@ -343,14 +370,16 @@ class Report:
         """Build facts with two-way concept relationships"""
         for model_fact in self.model_xbrl.factsInInstance:
             fact = Fact(model_fact=model_fact)
-            concept = self._concept_lookup.get(fact.qname)
-            if not concept: 
-                print(f"Warning: No concept found for fact {fact.fact_id}")
-                continue
+
+            # TODO: Figure out this 2 way linking
+            # concept = self._concept_lookup.get(fact.qname)
+            # if not concept: 
+            #     print(f"Warning: No concept found for fact {fact.fact_id}")
+            #     continue
                 
-            # Two-way linking
-            fact.concept = concept
-            concept.add_fact(fact)
+            # # Two-way linking
+            # fact.concept = concept
+            # concept.add_fact(fact)
             
             self.facts.append(fact)
 
@@ -1057,7 +1086,6 @@ class Fact:
     model_fact: ModelFact
     concept: 'Concept' = field(init=False)  # Reference to concept instance - One-way reference
     
-
     # Fact properties
     fact_id: str = field(init=False)
     qname: str = field(init=False)  # Changed from 'concept' to 'qname' for clarity
@@ -1094,6 +1122,10 @@ class Fact:
         # Core properties
         self.fact_id = self.model_fact.id or "N/A"
         self.qname = str(self.model_fact.qname)
+
+        # TODO: Instead of linking to XBRL concept, link to actual Concept class
+        self.concept = self.model_fact.concept 
+
         self.context_id = self.model_fact.contextID
         self.unit_id = self.model_fact.unitID
         self.value = self._extract_text(self.model_fact.value)
@@ -1118,6 +1150,8 @@ class Fact:
         
         # Context properties
         self._set_period()
+
+        # TODO: Looks like its only fetching 1 member per dimensions
         self._set_dimensions()
         self._set_enumeration_types()
 
@@ -1190,31 +1224,6 @@ class Fact:
                 self.members.append(member)
 
 
-    def to_dict(self) -> Dict:
-        """Convert fact to dictionary format matching original DataFrame"""
-        return {
-            "FactID": self.fact_id,
-            "Concept": self.concept,
-            "ContextID": self.context_id,
-            "UnitID": self.unit_id,
-            "Value": self.value,
-            "UnitRef": self.unit_ref,
-            "UnitSymbol": self.unit_symbol,
-            "Unit": self.unit_measures,
-            "UtrEntries": self.utr_entries,
-            "Decimals": self.decimals,
-            "IsNumeric": self.is_numeric,
-            "IsNil": self.is_nil,
-            "Period": self.period,
-            "Dimensions": self.dimensions,
-            "Members": self.members,
-            "EnumerationTypes": self.enumeration_types
-        }
-
-    def to_cypher(self):
-        """Generate Cypher query from fact"""
-        return super().to_cypher("Fact", self.to_dict())
-    
 
 #############################FACT CLASS END########################################    
 
@@ -1417,10 +1426,6 @@ class Entity:
     identifier: str
     scheme: str  # E.g., "http://www.sec.gov/CIK"
 
-@dataclass
-class Unit:
-    id: str
-    measures: List[str]  # E.g., ["iso4217:USD"]
 
 
 # @dataclass
@@ -1500,7 +1505,124 @@ class Period(Neo4jNode):
 
 
 
+######################### Unit Class START ####################################################
 
+
+@dataclass
+class Unit(Neo4jNode):
+    """ Units are uniquely identified by their string_value (e.g. 'iso4217:USD', 'shares').
+    Non-numeric facts have no unit information and as such excluded from Unit nodes."""
+        
+    model_fact: ModelFact
+    _id: str = field(init=False)
+    
+    # All these will be set in post_init
+    string_value: str = field(init=False)
+    is_divide: Optional[bool] = field(init=False)
+    unit_reference: Optional[str] = field(init=False)
+    registry_id: Optional[str] = field(init=False)
+    is_simple_unit: Optional[bool] = field(init=False)
+    item_type: Optional[str] = field(init=False)
+    namespace: Optional[str] = field(init=False)
+    status: Optional[str] = field(init=False)
+
+    def __post_init__(self):
+        """Process the model_fact to initialize all unit attributes"""
+        # Extract unit details without strict validation
+        unit = getattr(self.model_fact, 'unit', None)
+        self.is_divide = getattr(unit, "isDivide", None)
+        self.string_value = getattr(unit, "stringValue", None)
+        self.unit_reference = self.normalize_unit_id(self.model_fact.unitID)
+        
+        # Process UTR entries
+        utr_entry = next(iter(self.model_fact.utrEntries), None) if self.model_fact.utrEntries else None
+        self.registry_id = getattr(utr_entry, "id", None)
+        self.is_simple_unit = getattr(utr_entry, "isSimple", None)
+        self.item_type = getattr(utr_entry, "itemType", None)
+        self.namespace = getattr(utr_entry, "nsUnit", None)
+        self.status = getattr(utr_entry, "status", None)
+        
+        # Set ID - use unit_reference if string_value is not available
+        self._id = self.string_value or self.unit_reference or str(hash(self.model_fact))
+
+    def __hash__(self):
+        """Enable using Unit objects in sets and as dict keys"""
+        return hash(self._id)
+
+    def __eq__(self, other):
+        """Enable comparison between Unit objects"""
+        if isinstance(other, Unit):
+            return self._id == other._id
+        return False
+
+    @staticmethod
+    def normalize_unit_id(unit_id: Any) -> Optional[str]:
+        """
+        Normalize unit ID to standard format
+        
+        Args:
+            unit_id: The unit identifier to normalize
+            
+        Returns:
+            Optional[str]: Normalized unit ID in format 'u-{id}' or None
+        """
+        if not unit_id:
+            return None
+        if isinstance(unit_id, str) and unit_id.startswith("u-"):
+            return unit_id
+        if hasattr(unit_id, "id"):
+            return f"u-{unit_id.id}"
+        return f"u-{abs(hash(str(unit_id))) % 10000}"
+
+    @property
+    def is_simple(self) -> bool:
+        """Check if the unit is a simple unit based on registry data"""
+        return bool(self.is_simple_unit)
+    
+    @property
+    def is_registered(self) -> bool:
+        """Check if the unit is registered in UTR"""
+        return self.registry_id is not None
+    
+    @property
+    def is_active(self) -> bool:
+        """Check if the unit is active based on status"""
+        return self.status == "active" if self.status else False
+
+    # Neo4j Node Properties
+    @property
+    def node_type(self) -> NodeType:
+        """Define the Neo4j node type"""
+        return NodeType.UNIT
+        
+    @property
+    def id(self) -> str:
+        """Unique identifier for Neo4j"""
+        return self._id
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """
+        Define Neo4j node properties
+        
+        Returns:
+            Dict containing all properties for Neo4j node creation
+        """
+        return {
+            "is_divide": self.is_divide,
+            "unit_reference": self.unit_reference,
+            "registry_id": self.registry_id,
+            "is_simple_unit": self.is_simple_unit,
+            "item_type": self.item_type,
+            "namespace": self.namespace,
+            "status": self.status,
+            "name": self.item_type or self.string_value  # For Neo4j visualization
+        }
+
+    def __repr__(self) -> str:
+        """String representation of the Unit"""
+        return f"Unit(id={self._id}, type={self.item_type or 'unknown'})"
+######################### Unit Class END ####################################################
 
 
 @dataclass
