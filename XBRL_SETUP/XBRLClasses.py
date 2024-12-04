@@ -2,7 +2,7 @@ from __future__ import annotations  # Enable forward references
 
 # dataclasses and typing imports
 from dataclasses import dataclass, field, fields
-from typing import List, Dict, Optional, Any, Union, Set
+from typing import List, Dict, Optional, Any, Union, Set, Type
 from abc import ABC, abstractmethod
 from neo4j import GraphDatabase, Driver
 
@@ -65,22 +65,36 @@ class Neo4jNode(ABC):
     @property
     @abstractmethod
     def node_type(self) -> NodeType:
-        """Node type for Neo4j categorization"""
         pass
         
     @property
     @abstractmethod
     def id(self) -> str:
-        """u_id for MERGE operations"""
         pass
         
     @property
     @abstractmethod
     def properties(self) -> Dict[str, Any]:
-        """Node properties (excluding id)"""
         pass
 
-
+    @classmethod
+    def from_neo4j(cls, properties: Dict[str, Any]):
+        """Create instance from Neo4j properties"""
+        # Clean properties and convert "null" to None
+        cleaned_props = {
+            k: None if v == "null" else v
+            for k, v in properties.items()
+            if k not in {'id', 'elementId'} and not k.startswith('_')
+        }
+        
+        # Get the constructor parameters
+        init_params = {
+            k: cleaned_props.get(k)
+            for k in cls.__init__.__code__.co_varnames[1:]  # Skip 'self'
+            if k in cleaned_props
+        }
+        
+        return cls(**init_params)
 
 
 ######################### CONCEPTS START ####################################################
@@ -88,18 +102,19 @@ class Neo4jNode(ABC):
 
 @dataclass
 class Concept(Neo4jNode):
-    model_concept: ModelConcept # The original ModelConcept object
-    u_id: str = field(init=False)
-
-    # Properties
-    qname: str = field(init=False)
-    concept_type: str = field(init=False) # self.model_concept.niceType is short but clubs multiple types (dtr_types, dtr_types1)
-    period_type: str = field(init=False)  
-    namespace: str = field(init=False)
-    label: Optional[str] = field(init=False, default=None)
-    balance: Optional[str] = field(init=False, default=None)
-    type_local: Optional[str] = field(init=False, default=None)    
+    model_concept: Optional[ModelConcept] = None # The original ModelConcept object
+    u_id: Optional[str] = None
     
+    # Change init=False to have defaults for Neo4j loading
+    qname: Optional[str] = None
+    concept_type: Optional[str] = None
+    period_type: Optional[str] = None
+    namespace: Optional[str] = None
+    label: Optional[str] = None
+    balance: Optional[str] = None
+    type_local: Optional[str] = None    
+    
+    # Keep commented TODO items as is
     # TODO:
     # facts: List[Fact] = field(init=False, default_factory=list)
     # hypercubes: Optional[List[str]] = field(default_factory=list)  # Hypercubes associated in the Definition Network
@@ -108,19 +123,21 @@ class Concept(Neo4jNode):
     # presentation_level: Dict[str, int] = field(init=False, default_factory=dict)
     # presentation_order: Dict[str, float] = field(init=False, default_factory=dict)
 
+    def __post_init__(self):
+        if self.model_concept is not None:
+            # Initialize from XBRL source
+            self.u_id = f"{self.model_concept.qname.namespaceURI}:{self.model_concept.qname}"
+            self.qname = str(self.model_concept.qname)
+            self.concept_type = str(self.model_concept.typeQname) if self.model_concept.typeQname else "N/A"
+            self.period_type = self.model_concept.periodType or "N/A"
+            self.namespace = self.model_concept.qname.namespaceURI.strip()
+            self.label = self.model_concept.label(lang="en")            
+            self.balance = self.model_concept.balance
+            self.type_local = self.model_concept.baseXsdType
+        elif not self.u_id:
+            raise ValueError("Either model_concept or properties must be provided")
 
-    def __post_init__(self):        
-        self.u_id = f"{self.model_concept.qname.namespaceURI}:{self.model_concept.qname}"
-        
-        # Properties
-        self.qname = str(self.model_concept.qname)
-        self.concept_type = str(self.model_concept.typeQname) if self.model_concept.typeQname else "N/A"
-        self.period_type = self.model_concept.periodType or "N/A"
-        self.namespace = self.model_concept.qname.namespaceURI.strip()
-        self.label = self.model_concept.label(lang="en")            
-        self.balance = self.model_concept.balance
-        self.type_local = self.model_concept.baseXsdType
-        
+
     def __hash__(self):
         # Use a unique attribute for hashing, such as qname
         return hash(self.u_id)
@@ -212,10 +229,8 @@ class Report:
     def __post_init__(self):
         self.load_xbrl()
         self.extract_report_metadata()
-        self.populate_fields()        
-        self._export_to_neo4j(self.testing)  # Use instance testing flag
-
-        # self.build_relationships()
+        self.populate_common_nodes()  # First handle common nodes
+        self.populate_report_nodes()  # Then handle report-specific nodes
 
     def load_xbrl(self):
         # Initialize the controller
@@ -242,47 +257,109 @@ class Report:
             "period_type": "duration" if ctx.isStartEndPeriod else "instant" if ctx.isInstantPeriod else "forever" }
 
 
-    def populate_fields(self):
+    def populate_common_nodes(self):
+        """Build and sync common nodes (Concepts, Periods, Units) with Neo4j"""
         if not self.model_xbrl:
             raise RuntimeError("XBRL model not loaded.")
+            
+        # Build common nodes from XBRL
+        self._build_concepts()
+        self._build_periods()
+        self._build_units()
         
-        self._build_concepts()  # 1. Build concepts first
-        self._build_periods()  # 2. Build periods
-        self._build_units()    # 3. Build units
-        self._build_facts()     # 4. Build facts with validation
+        # Export only common nodes
+        self._export_nodes([self.concepts, self.periods, self.units], testing=False)
+        
+        # Load complete set from Neo4j
+        self.concepts = self.neo4j.load_nodes_as_instances(NodeType.CONCEPT, Concept)
+        self.periods = self.neo4j.load_nodes_as_instances(NodeType.PERIOD, Period)
+        self.units = self.neo4j.load_nodes_as_instances(NodeType.UNIT, Unit)
+        
+        print(f"Loaded common nodes from Neo4j: {len(self.concepts)} concepts, {len(self.periods)} periods, {len(self.units)} units")
+
+
+
+    def populate_report_nodes(self):
+        """Build and export report-specific nodes (Facts, Dimensions)"""
+        if not self.model_xbrl:
+            raise RuntimeError("XBRL model not loaded.")
+  
+        self._build_facts()
+        # self._build_networks()
+        
+        # Export report-specific nodes - # Testing=False since otherwise it will clear the db
+        self._export_nodes([self.facts], testing=False) 
+        
+        print(f"Built report nodes: {len(self.facts)} facts")
+
+
+    # def populate_fields(self):
+    #     if not self.model_xbrl:
+    #         raise RuntimeError("XBRL model not loaded.")
+    #     # Common Nodes: Concepts, Periods, Units
+    #     self._build_concepts()  # 1. Build concepts first
+    #     self._build_periods()  # 2. Build periods
+    #     self._build_units()    # 3. Build units
+
+        # IMPORTANT: Here we reload all common nodes from Neo4j
+
+        # Report Nodes: Facts, Dimensions, Members, Networks
+        # self._build_facts()     # 4. Build facts with validation
         # self._build_networks()  # 2. Build networks and hierarchies
         # self._build_dimensions() # 4. Build dimensions
 
-    def _export_to_neo4j(self, testing: bool = False) -> None:
-        """Export selected node types to Neo4j"""
+    def _export_nodes(self, collections: List[List[Neo4jNode]], testing: bool = False):
+        """Export specified collections of nodes to Neo4j"""
         try:
             if testing:
                 self.neo4j.clear_db()
-                self.neo4j.create_indexes()
             
-            print("\nExporting to Neo4j:") 
+            # Always ensure indexes/constraints exist
+            self.neo4j.create_indexes()
             
             nodes = []
-            collections = [self.concepts, self.periods, self.units, self.facts]
-            
-            if not any(collections):
-                print("Warning: No nodes to export")
-                return
-                
             for collection in collections:
                 if collection:
-                    print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")  # Debug
+                    print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")
                     nodes.extend(collection)
-            
-            print(f"Total nodes to export: {len(nodes)}")  # Debug
             
             if nodes:
                 self.neo4j.merge_nodes(nodes)
                 print("Export completed successfully")
                 
         except Exception as e:
-            print(f"Export error: {str(e)}")  # Debug
             raise RuntimeError(f"Export to Neo4j failed: {e}")
+
+    # def _export_to_neo4j(self, testing: bool = False) -> None:
+    #     """Export selected node types to Neo4j"""
+    #     try:
+    #         if testing:
+    #             self.neo4j.clear_db()
+    #             self.neo4j.create_indexes()
+            
+    #         print("\nExporting to Neo4j:") 
+            
+    #         nodes = []
+    #         collections = [self.concepts, self.periods, self.units, self.facts]
+            
+    #         if not any(collections):
+    #             print("Warning: No nodes to export")
+    #             return
+                
+    #         for collection in collections:
+    #             if collection:
+    #                 print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")  # Debug
+    #                 nodes.extend(collection)
+            
+    #         print(f"Total nodes to export: {len(nodes)}")  # Debug
+            
+    #         if nodes:
+    #             self.neo4j.merge_nodes(nodes)
+    #             print("Export completed successfully")
+                
+    #     except Exception as e:
+    #         print(f"Export error: {str(e)}")  # Debug
+    #         raise RuntimeError(f"Export to Neo4j failed: {e}")
 
     def _build_concepts(self):
         """Build concept objects from the model."""
@@ -728,7 +805,9 @@ class Network:
                 except Exception as e:
                     print(f"Error linking concepts: {e}")
             else:
+                #TODO: Link concepts to hypercubes
                 print(f"Concepts not found in report_concepts")
+                pass
                 
             processed_rels += 1
         
@@ -991,7 +1070,7 @@ class Neo4jManager:
     def close(self):
         if hasattr(self, 'driver'):
             self.driver.close()
-                    
+                        
     def clear_db(self):
         """Development only: Clear database and verify it's empty"""
         try:
@@ -999,12 +1078,12 @@ class Neo4jManager:
                 # Get and drop all constraints
                 constraints = session.run("SHOW CONSTRAINTS").data()
                 for constraint in constraints:
-                    session.run(f"DROP CONSTRAINT {constraint['name']}")
+                    session.run(f"DROP CONSTRAINT {constraint['name']} IF EXISTS")
                 
                 # Get and drop all indexes
                 indexes = session.run("SHOW INDEXES").data()
                 for index in indexes:
-                    session.run(f"DROP INDEX {index['name']}")
+                    session.run(f"DROP INDEX {index['name']} IF EXISTS")
                 
                 # Delete all nodes and relationships
                 session.run("MATCH (n) DETACH DELETE n")
@@ -1022,43 +1101,75 @@ class Neo4jManager:
             raise RuntimeError(f"Failed to clear database: {e}")
             
     def create_indexes(self):
-        """Create indexes and constraints for all node types"""
+        """Create indexes and constraints for all node types if they don't exist"""
         try:
             with self.driver.session() as session:
+                # Get existing constraints
+                existing_constraints = {
+                    constraint['name']: constraint['labelsOrTypes'][0]
+                    for constraint in session.run("SHOW CONSTRAINTS").data()
+                }
+                
+                # Create missing constraints
                 for node_type in NodeType:
-                    # Create constraint for uniqueness
-                    session.run(f"""
-                    CREATE CONSTRAINT IF NOT EXISTS FOR (n:`{node_type.value}`)
-                    REQUIRE n.id IS UNIQUE
-                    """)
+                    constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
+                    
+                    # Only create if it doesn't exist
+                    if constraint_name not in existing_constraints:
+                        session.run(f"""
+                        CREATE CONSTRAINT {constraint_name}
+                        FOR (n:`{node_type.value}`)
+                        REQUIRE n.id IS UNIQUE
+                        """)
+                        # print(f"Created constraint for {node_type.value}")
+                    else:
+                        # print(f"Constraint for {node_type.value} already exists")
+                        pass
+                        
         except Exception as e:
             raise RuntimeError(f"Failed to create indexes: {e}")
-        
+            
     def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 1000) -> None:
-        """Merge nodes into Neo4j database with batching and null handling"""
+        """Merge nodes into Neo4j database with batching"""
         if not nodes:
             return
             
         try:
             with self.driver.session() as session:
+                skipped_nodes = []
+                
                 for i in range(0, len(nodes), batch_size):
                     batch = nodes[i:i + batch_size]
                     
                     for node in batch:
-                        # Convert None to "null" for Neo4j compatibility
+                        # Skip nodes with null IDs
+                        if node.id is None:  # This is correct - uses the property
+                            skipped_nodes.append(node)
+                            continue
+                            
+                        # Exclude id from properties
                         properties = {
                             k: (v if v is not None else "null")
                             for k, v in node.properties.items()
+                            if k != 'id'
                         }
                         
                         query = f"""
                         MERGE (n:{node.node_type.value} {{id: $id}})
-                        SET n += $properties
+                        ON CREATE SET n += $properties
+                        ON MATCH SET n += $properties
                         """
+                        
                         session.run(query, {
-                            "id": node.id,
+                            "id": node.id,  # This is correct - uses the property
                             "properties": properties
                         })
+                
+                if skipped_nodes:
+                    print(f"Warning: Skipped {len(skipped_nodes)} nodes with null IDs")
+                    print("First few skipped nodes:")
+                    for node in skipped_nodes[:3]:
+                        print(f"Node type: {node.node_type.value}, Properties: {node.properties}")
                         
         except Exception as e:
             raise RuntimeError(f"Failed to merge nodes: {e}")
@@ -1094,6 +1205,19 @@ class Neo4jManager:
         except Exception as e:
             print(f"Error getting node counts: {e}")
             return {node_type.value: 0 for node_type in NodeType}
+
+    def load_nodes_as_instances(self, node_type: NodeType, class_type: Type[Neo4jNode]) -> List[Neo4jNode]:
+        """Load Neo4j nodes as class instances"""
+        try:
+            with self.driver.session() as session:
+                query = f"MATCH (n:{node_type.value}) RETURN n"
+                result = session.run(query)
+                instances = [class_type.from_neo4j(dict(record["n"].items())) 
+                            for record in result]
+                print(f"Loaded {len(instances)} {node_type.value} instances from Neo4j")
+                return instances
+        except Exception as e:
+            raise RuntimeError(f"Failed to load {node_type.value} nodes: {e}")
 
 
 ######################### Neo4j Setup END #####################################################
@@ -1147,7 +1271,6 @@ class Fact(Neo4jNode):
         self._set_period()
         self._set_dimensions() # TODO: Looks like its only fetching 1 member per dimensions
 
-
     @property
     def is_nil(self) -> bool:
         """Check if the fact is nil."""
@@ -1160,10 +1283,14 @@ class Fact(Neo4jNode):
 
     def _generate_unique_fact_id(self) -> str:
         components = [
-            str(self.model_fact.modelDocument.uri),    # Full document URI
-            str(self.model_fact.uniqueUUID)            # UUID of the fact
+            str(self.model_fact.modelDocument.uri),    # Which report
+            str(self.model_fact.qname),                # Which concept
+            str(self.model_fact.contextID),            # When (period) and who (entity)
+            str(self.model_fact.unitID) if hasattr(self.model_fact, 'unitID') else None,  # In what unit (if numeric)
+            str(self.model_fact.id)                    # Original fact ID to handle duplicates within same report
         ]
         return "_".join(filter(None, components))
+
 
     @staticmethod
     def _extract_text(value: str) -> str:
@@ -1217,7 +1344,8 @@ class Fact(Neo4jNode):
     def properties(self) -> Dict[str, Any]:
         """Properties for Neo4j node"""
         return {
-            "u_id": self.id,
+            "id": self.id,  # Add this line to ensure id is used for MERGE
+            "u_id": self.u_id,  # Keep this for reference
             "qname": self.qname,
             "fact_id": self.fact_id,
             "value": self.value,
@@ -1526,23 +1654,24 @@ class Unit(Neo4jNode):
     """ Units are uniquely identified by their string_value (e.g. 'iso4217:USD', 'shares').
     Non-numeric facts have no unit information and as such excluded from Unit nodes."""
         
-    model_fact: ModelFact
-    u_id: str = field(init=False)
+    model_fact: Optional[ModelFact] = None
+    u_id: Optional[str] = None
     
     # All these will be set in post_init
-    string_value: str = field(init=False)
-    is_divide: Optional[bool] = field(init=False)
-    unit_reference: Optional[str] = field(init=False)
-    registry_id: Optional[str] = field(init=False)
-    is_simple_unit: Optional[bool] = field(init=False)
-    item_type: Optional[str] = field(init=False)
-    namespace: Optional[str] = field(init=False)
-    status: Optional[str] = field(init=False)
+    string_value: Optional[str] = None
+    is_divide: Optional[bool] = None
+    unit_reference: Optional[str] = None
+    registry_id: Optional[str] = None
+    is_simple_unit: Optional[bool] = None
+    item_type: Optional[str] = None
+    namespace: Optional[str] = None
+    status: Optional[str] = None
 
     def __post_init__(self):
         """Process the model_fact to initialize all unit attributes"""
+        if self.model_fact is None:  # Skip if loading from Neo4j
+            return
         
-
         unit = getattr(self.model_fact, 'unit', None)
         self.is_divide = getattr(unit, "isDivide", None)
         self.string_value = getattr(unit, "stringValue", None)
