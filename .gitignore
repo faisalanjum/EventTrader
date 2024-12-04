@@ -1,15 +1,18 @@
 # Log files
-XBRL_SETUP/ErrorLog.txt
-XBRL_SETUP/logfile.txt
+XBRL_Setup/ErrorLog.txt
+XBRL_Setup/logfile.txt
 
 # Backup files
-XBRL_SETUP/*Backup.py
+XBRL_Setup/*Backup.py
 
 # Jupyter notebooks
-XBRL_SETUP/*.ipynb
+XBRL_Setup/*.ipynb
 
 # Python cache
-XBRL_SETUP/__pycache__/
+XBRL_Setup/__pycache__/
 
 # Virtual environment
 venv/
+
+# macOS system files
+.DS_Store
