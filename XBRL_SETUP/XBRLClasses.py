@@ -71,7 +71,7 @@ class Neo4jNode(ABC):
     @property
     @abstractmethod
     def id(self) -> str:
-        """Unique identifier for MERGE operations"""
+        """u_id for MERGE operations"""
         pass
         
     @property
@@ -89,9 +89,10 @@ class Neo4jNode(ABC):
 @dataclass
 class Concept(Neo4jNode):
     model_concept: ModelConcept # The original ModelConcept object
-    qname: str = field(init=False) # Unique ID
+    u_id: str = field(init=False)
 
     # Properties
+    qname: str = field(init=False)
     concept_type: str = field(init=False) # self.model_concept.niceType is short but clubs multiple types (dtr_types, dtr_types1)
     period_type: str = field(init=False)  
     namespace: str = field(init=False)
@@ -109,9 +110,10 @@ class Concept(Neo4jNode):
 
 
     def __post_init__(self):        
-        self.qname = str(self.model_concept.qname) # Unique ID
-
+        self.u_id = f"{self.model_concept.qname.namespaceURI}:{self.model_concept.qname}"
+        
         # Properties
+        self.qname = str(self.model_concept.qname)
         self.concept_type = str(self.model_concept.typeQname) if self.model_concept.typeQname else "N/A"
         self.period_type = self.model_concept.periodType or "N/A"
         self.namespace = self.model_concept.qname.namespaceURI.strip()
@@ -121,12 +123,12 @@ class Concept(Neo4jNode):
         
     def __hash__(self):
         # Use a unique attribute for hashing, such as qname
-        return hash(self.qname)
+        return hash(self.u_id)
 
     def __eq__(self, other):
         # Ensure equality is based on the same attribute used for hashing
         if isinstance(other, Concept):
-            return self.qname == other.qname
+            return self.u_id == other.u_id
         return False
 
     def add_fact(self, fact: Fact) -> None:
@@ -157,13 +159,15 @@ class Concept(Neo4jNode):
         
     @property
     def id(self) -> str:
-        """Unique identifier for Neo4j MERGE"""
-        return self.qname
+        """u_id for Neo4j MERGE"""
+        return self.u_id
         
     @property
     def properties(self) -> Dict[str, Any]:
         """Actual node properties in Neo4j"""
         return {
+            "qname": self.qname,
+            "u_id": self.id, # this returns the u_id
             "concept_type": self.concept_type,
             "period_type": self.period_type,
             "namespace": self.namespace,
@@ -188,7 +192,7 @@ class Report:
     instance_file: str
     neo4j: Neo4jManager
     log_file: str = field(default='ErrorLog.txt', repr=False)
-    testing: bool = field(default=False)  # Add testing flag as configurable
+    testing: bool = field(default=True)  # Add testing flag as configurable
 
     model_xbrl: ModelXbrl = field(init=False, repr=False)
     report_metadata: Dict[str, object] = field(init=False, default_factory=dict)
@@ -209,7 +213,7 @@ class Report:
         self.load_xbrl()
         self.extract_report_metadata()
         self.populate_fields()        
-        self.export_to_neo4j(self.testing)  # Use instance testing flag
+        self._export_to_neo4j(self.testing)  # Use instance testing flag
 
         # self.build_relationships()
 
@@ -249,7 +253,7 @@ class Report:
         # self._build_networks()  # 2. Build networks and hierarchies
         # self._build_dimensions() # 4. Build dimensions
 
-    def export_to_neo4j(self, testing: bool = False) -> None:
+    def _export_to_neo4j(self, testing: bool = False) -> None:
         """Export selected node types to Neo4j"""
         try:
             if testing:
@@ -259,7 +263,7 @@ class Report:
             print("\nExporting to Neo4j:") 
             
             nodes = []
-            collections = [self.concepts, self.periods, self.units]
+            collections = [self.concepts, self.periods, self.units, self.facts]
             
             if not any(collections):
                 print("Warning: No nodes to export")
@@ -291,7 +295,7 @@ class Report:
         unique_concepts = {fact.concept for fact in self.model_xbrl.factsInInstance if fact.concept.qname in self.model_xbrl.factsByQname.keys()}
         self.concepts = [Concept(concept) for concept in unique_concepts]
         
-        print(f"Built {len(self.concepts)} concepts") 
+        print(f"Built {len(self.concepts)} unique concepts") 
 
 
     def _build_units(self):
@@ -300,10 +304,10 @@ class Report:
             raise RuntimeError("XBRL model not loaded.")
                 
         units_dict = {}  # Use dict for uniqueness
-        processed_facts = 0
+        # processed_facts = 0
         
         for fact in self.model_xbrl.factsInInstance:
-            processed_facts += 1
+            # processed_facts += 1
             if hasattr(fact, 'unitID') and fact.unitID:  # Only check for unitID
                 try:
                     unit = Unit(model_fact=fact)
@@ -313,9 +317,7 @@ class Report:
                     print(f"Error processing unit for fact {fact.id}: {e}")
         
         self.units = list(units_dict.values())
-        print(f"\nUnit processing summary:")
-        print(f"- Total facts processed: {processed_facts}")
-        print(f"- Unique units built: {len(self.units)}")
+        print(f"Built {len(self.units)} unique units") 
 
 
     def _build_periods(self) -> None:
@@ -351,12 +353,12 @@ class Report:
                 )
                 
                 # Add to dict using _id as key for uniqueness
-                if period._id in periods_dict:
-                    # periods_dict[period._id].merge_context(ctxt_id)
-                    # print(f"Merged context {ctxt_id} into existing period {period._id}")
-                    pass
+                if period.u_id in periods_dict:
+                    # periods_dict[period.u_id].merge_context(ctxt_id)
+                    # print(f"Merged context {ctxt_id} into existing period {period.u_id}")
+                    pass        
                 else:
-                    periods_dict[period._id] = period
+                    periods_dict[period.u_id] = period
                     
             except Exception as e:
                 print(f"Error processing context {ctxt_id}: {e}")
@@ -382,6 +384,7 @@ class Report:
             # concept.add_fact(fact)
             
             self.facts.append(fact)
+        print(f"Built {len(self.facts)} unique facts")    
 
 
     # 1. Build networks - Also builds hypercubes in networks with isDefinition = True
@@ -988,13 +991,32 @@ class Neo4jManager:
     def close(self):
         if hasattr(self, 'driver'):
             self.driver.close()
-            
+                    
     def clear_db(self):
-        """Development only: Clear database"""
+        """Development only: Clear database and verify it's empty"""
         try:
             with self.driver.session() as session:
+                # Get and drop all constraints
+                constraints = session.run("SHOW CONSTRAINTS").data()
+                for constraint in constraints:
+                    session.run(f"DROP CONSTRAINT {constraint['name']}")
+                
+                # Get and drop all indexes
+                indexes = session.run("SHOW INDEXES").data()
+                for index in indexes:
+                    session.run(f"DROP INDEX {index['name']}")
+                
+                # Delete all nodes and relationships
                 session.run("MATCH (n) DETACH DELETE n")
-                print("Database cleared: ")
+                
+                # Verify database is empty
+                result = session.run("MATCH (n) RETURN count(n) as count").single()
+                node_count = result["count"]
+                
+                if node_count > 0:
+                    raise RuntimeError(f"Database not fully cleared. {node_count} nodes remaining.")
+                    
+                print("Database cleared successfully")
 
         except Exception as e:
             raise RuntimeError(f"Failed to clear database: {e}")
@@ -1068,7 +1090,6 @@ class Neo4jManager:
                 print("-" * 40)
                 print(f"{'Total':<15} : {sum(complete_counts.values()):>8,d} nodes")
                         
-                return complete_counts
                 
         except Exception as e:
             print(f"Error getting node counts: {e}")
@@ -1082,99 +1103,74 @@ class Neo4jManager:
 
 #############################FACT CLASS START########################################
 @dataclass
-class Fact:
+class Fact(Neo4jNode):
     model_fact: ModelFact
-    concept: 'Concept' = field(init=False)  # Reference to concept instance - One-way reference
     
+    # Globally unique fact identifier
+    u_id: str = field(init=False)        # Globally u_id (URI + UUID)
+
     # Fact properties
-    fact_id: str = field(init=False)
-    qname: str = field(init=False)  # Changed from 'concept' to 'qname' for clarity
-
-    context_id: str = field(init=False)
-    unit_id: Optional[str] = field(init=False, default=None)
-    value: str = field(init=False)
-    
-    # Unit properties
-    unit_ref: Optional[str] = field(init=False, default=None)
-    unit_symbol: Optional[str] = field(init=False, default=None)
-    unit_measures: Optional[str] = field(init=False, default=None)
-    utr_entries: Optional[List[str]] = field(init=False, default=None)  # Changed to List
-    
-    # Numeric properties
+    qname: str = field(init=False)  # Its 'concept' name
+    fact_id: str = field(init=False)   # Original fact ID from the XBRL document (e.g., f-32)
+    value: str = field(init=False)    
+    context_id: str = field(init=False)    
     decimals: Optional[int] = field(init=False, default=None)
-    is_numeric: bool = field(init=False, default=False)
-    is_nil: bool = field(init=False, default=False)
+            
+    # To Link:
+    concept: Concept = field(init=False)  # Reference to concept instance (Not working yet)
+    unit: Optional[Unit] = field(init=False, default=None)
+    period: Optional[Period] = field(init=False, default=None)
+ 
+    # TODO: Dimension properties - These are all likley incorrect - need to check
+    dimensions: Optional[List[Dimension]] = field(init=False, default_factory=list)
+    members: Optional[List[Member]] = field(init=False, default_factory=list)
     
-    # Context properties
-    period: Optional[str] = field(init=False, default=None)
-    
-    # Dimension properties - These are all likley incorrect - need to check
-    dimensions: List[str] = field(init=False, default_factory=list)
-    members: List[str] = field(init=False, default_factory=list)
-    enumeration_types: Optional[Dict] = field(init=False, default=None)
-    
-
     def __post_init__(self):
         """Initialize all fields from model_fact after dataclass creation"""
         if not isinstance(self.model_fact, ModelFact):
             raise TypeError("model_fact must be ModelFact type")
             
-        # Core properties
-        self.fact_id = self.model_fact.id or "N/A"
+        # Globally unique fact identifier
+        self.u_id = self._generate_unique_fact_id()
+
+        # Fact properties
         self.qname = str(self.model_fact.qname)
-
-        # TODO: Instead of linking to XBRL concept, link to actual Concept class
+        self.fact_id = self.model_fact.id # Only specific to this report like f-32
+        self.value = None if self.model_fact.isNil else (self.model_fact.sValue if self.model_fact.isNumeric else self._extract_text(self.model_fact.value))
+        self.context_id = self.model_fact.contextID                        
+        self.decimals = self.model_fact.decimals        
+ 
+        # All Links to other Nodes
+        # TODO: Instead of linking to XBRL concept, link to actual  class
         self.concept = self.model_fact.concept 
-
-        self.context_id = self.model_fact.contextID
-        self.unit_id = self.model_fact.unitID
-        self.value = self._extract_text(self.model_fact.value)
-        
-        # Unit properties
-        self.unit_ref = self._normalize_unit_id(self.model_fact.unitID)
-        self.unit_symbol = self.model_fact.unitSymbol() if hasattr(self.model_fact, 'unitSymbol') else None
-        # self.unit_measures = (
-        #     ', '.join([str(measure) for measure in self.model_fact.unit.measures[0]]) 
-        #     if self.model_fact.unit and hasattr(self.model_fact.unit, 'measures') 
-        #     and self.model_fact.unit.measures else None
-        # )
-
-        self.unit_measures = ', '.join(str(measure) for measure in self.model_fact.unit.measures[0]) if getattr(self.model_fact.unit, 'measures', None) else None
-
-        self.utr_entries = ", ".join(map(str, self.model_fact.utrEntries)) if self.model_fact.utrEntries else None
-        
-        # Numeric properties
-        self.decimals = self.model_fact.decimals
-        self.is_numeric = self.model_fact.isNumeric
-        self.is_nil = self.model_fact.isNil
-        
-        # Context properties
+        self.unit = self.model_fact.unitID
         self._set_period()
+        self._set_dimensions() # TODO: Looks like its only fetching 1 member per dimensions
 
-        # TODO: Looks like its only fetching 1 member per dimensions
-        self._set_dimensions()
-        self._set_enumeration_types()
 
-    def __repr__(self) -> str:
-        """Match ModelObject's repr format"""
-        return f"Fact[{self.concept}, {self.value}, context {self.context_id}]"
+    @property
+    def is_nil(self) -> bool:
+        """Check if the fact is nil."""
+        return self.model_fact.isNil
+    
+    @property
+    def is_numeric(self) -> bool:
+        """Check if the fact is numeric."""
+        return self.model_fact.isNumeric    
 
-    @staticmethod
-    def _normalize_unit_id(unit_id: str) -> Optional[str]:
-        """Convert unit IDs to standard format"""
-        if not unit_id:
-            return None
-        if isinstance(unit_id, str) and unit_id.startswith('u-'):
-            return unit_id
-        if hasattr(unit_id, 'id'):
-            return f"u-{unit_id.id}"
-        return f"u-{abs(hash(str(unit_id))) % 10000}"
+    def _generate_unique_fact_id(self) -> str:
+        components = [
+            str(self.model_fact.modelDocument.uri),    # Full document URI
+            str(self.model_fact.uniqueUUID)            # UUID of the fact
+        ]
+        return "_".join(filter(None, components))
 
     @staticmethod
     def _extract_text(value: str) -> str:
         """Extract text from HTML/XML content"""
         return re.sub('<[^>]+>', '', html.unescape(value)) if '<' in value and '>' in value else value
 
+    # To be Used when Linking to Period Node
     def _set_period(self) -> None:
         """Set the period property based on context"""
         context = self.model_fact.context
@@ -1189,28 +1185,7 @@ class Fact:
         else:
             self.period = "Forever"
 
-    # INCORRECTLY Fetching values - Also doesn;t contain all as in sheet
-    # "EnumerationTypes": ", ".join([f"{k}={getattr(v, 'value', str(v))}" for k, v in concept.facets.items()]) if concept.facets else None,
-    def _set_enumeration_types(self) -> None:
-        """Set enumeration types using same logic as original"""
-        concept = self.model_fact.concept
-        if concept.facets:
-            self.enumeration_types = {
-                k: [str(v).split('[')[0].strip() for v in vals] 
-                if isinstance(vals, (list, tuple)) 
-                else {
-                    str(enum_val).split('[')[0].strip() 
-                    for enum_val in vals.enumeration.values()
-                } if hasattr(vals, 'enumeration') else str(vals)
-                for k, vals in concept.facets.items()
-            }
-        elif concept.isEnumeration and concept.enumeration:
-            self.enumeration_types = [str(m).split('[')[0].strip() 
-                                    for m in concept.enumeration]
-        else:
-            self.enumeration_types = None
-
-
+    # To be Used when Linking to Dimension and Member Nodes
     def _set_dimensions(self) -> None:
         """Set dimensions and members using same logic as original"""
         if hasattr(self.model_fact.context, 'qnameDims'):
@@ -1223,9 +1198,46 @@ class Fact:
                 )
                 self.members.append(member)
 
+    # def __repr__(self) -> str:
+    #     """Match ModelObject's repr format"""
+    #     return f"Fact[{self.concept}, {self.value}, context {self.context_id}]"
+
+    # Neo4j Node Properties
+    @property
+    def node_type(self) -> NodeType:
+        """Define the Neo4j node type"""
+        return NodeType.FACT
+        
+    @property
+    def id(self) -> str:
+        """Unique identifier for Neo4j"""
+        return self.u_id
+            
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """Properties for Neo4j node"""
+        return {
+            "u_id": self.id,
+            "qname": self.qname,
+            "fact_id": self.fact_id,
+            "value": self.value,
+            "context_id": self.context_id,
+            "decimals": self.decimals,
+            "is_nil": self.is_nil,
+            "is_numeric": self.is_numeric,
+            # References to other nodes (will be used for relationships)
+            "concept_ref": str(self.model_fact.concept.qname) if self.model_fact.concept is not None else None,
+            "unit_ref": self.unit if self.unit is not None else None,
+            "period_ref": self.period if self.period is not None else None,
+            # Optional dimension info
+            "dimensions": self.dimensions if self.dimensions is not None else None,
+            "members": self.members if self.members is not None else None
+        }
 
 
 #############################FACT CLASS END########################################    
+
+
 
 
 
@@ -1444,7 +1456,7 @@ class Period(Neo4jNode):
     end_date: Optional[str] = None
     # context_ids: List[str] = field(default_factory=list)
     context_ids: Optional[List[str]] = field(default_factory=list)  # Optional, defaults to an empty list
-    _id: str = field(init=False)
+    u_id: str = field(init=False)
 
     def __post_init__(self):
         if self.period_type == "duration" and not (self.start_date and self.end_date):
@@ -1454,11 +1466,11 @@ class Period(Neo4jNode):
         self.generate_id()
 
     def __hash__(self):
-        return hash(self._id)
+        return hash(self.u_id)
 
     def __eq__(self, other):
         if isinstance(other, Period):
-            return self._id == other._id
+            return self.u_id == other.u_id
         return False
 
     @property
@@ -1476,7 +1488,7 @@ class Period(Neo4jNode):
             id_parts.append(self.start_date)
         if self.end_date:
             id_parts.append(self.end_date)
-        self._id = "_".join(id_parts)
+        self.u_id = "_".join(id_parts)
 
     # Neo4j Node Properties
     @property
@@ -1485,11 +1497,12 @@ class Period(Neo4jNode):
         
     @property
     def id(self) -> str:
-        return self._id
+        return self.u_id
         
     @property
     def properties(self) -> Dict[str, Any]:
         return {
+            "u_id": self.id,# This returns u_id
             "period_type": self.period_type,
             "start_date": self.start_date,
             "end_date": self.end_date
@@ -1514,7 +1527,7 @@ class Unit(Neo4jNode):
     Non-numeric facts have no unit information and as such excluded from Unit nodes."""
         
     model_fact: ModelFact
-    _id: str = field(init=False)
+    u_id: str = field(init=False)
     
     # All these will be set in post_init
     string_value: str = field(init=False)
@@ -1528,11 +1541,12 @@ class Unit(Neo4jNode):
 
     def __post_init__(self):
         """Process the model_fact to initialize all unit attributes"""
-        # Extract unit details without strict validation
+        
+
         unit = getattr(self.model_fact, 'unit', None)
         self.is_divide = getattr(unit, "isDivide", None)
         self.string_value = getattr(unit, "stringValue", None)
-        self.unit_reference = self.normalize_unit_id(self.model_fact.unitID)
+        self.unit_reference = self._normalize_unit_id(self.model_fact.unitID)
         
         # Process UTR entries
         utr_entry = next(iter(self.model_fact.utrEntries), None) if self.model_fact.utrEntries else None
@@ -1542,30 +1556,35 @@ class Unit(Neo4jNode):
         self.namespace = getattr(utr_entry, "nsUnit", None)
         self.status = getattr(utr_entry, "status", None)
         
-        # Set ID - use unit_reference if string_value is not available
-        self._id = self.string_value or self.unit_reference or str(hash(self.model_fact))
+        self.u_id = self.generate_uid() # UTR ID + String Value
+
+    def generate_uid(self):
+        # Defensive cleaning - handle any possible input
+        clean_ns = str(self.namespace).strip() if self.namespace is not None else ""
+        clean_val = str(self.string_value).strip() if self.string_value is not None else ""
+        
+        # If we have both, combine them
+        if clean_ns and clean_val:
+            return f"{clean_ns}_{clean_val}"
+        # If we only have value, return it
+        elif clean_val:
+            return clean_val
+        # If neither, return None
+        return None
+            
 
     def __hash__(self):
         """Enable using Unit objects in sets and as dict keys"""
-        return hash(self._id)
+        return hash(self.u_id)
 
     def __eq__(self, other):
         """Enable comparison between Unit objects"""
         if isinstance(other, Unit):
-            return self._id == other._id
+            return self.u_id == other.u_id
         return False
 
     @staticmethod
-    def normalize_unit_id(unit_id: Any) -> Optional[str]:
-        """
-        Normalize unit ID to standard format
-        
-        Args:
-            unit_id: The unit identifier to normalize
-            
-        Returns:
-            Optional[str]: Normalized unit ID in format 'u-{id}' or None
-        """
+    def _normalize_unit_id(unit_id: Any) -> Optional[str]:
         if not unit_id:
             return None
         if isinstance(unit_id, str) and unit_id.startswith("u-"):
@@ -1597,27 +1616,27 @@ class Unit(Neo4jNode):
         
     @property
     def id(self) -> str:
-        """Unique identifier for Neo4j"""
-        return self._id
+        """u_id for Neo4j"""
+        return self.u_id
         
     @property
     def properties(self) -> Dict[str, Any]:
-        """
-        Define Neo4j node properties
-        
-        Returns:
-            Dict containing all properties for Neo4j node creation
-        """
+        """Actual node properties in Neo4j"""
         return {
+            "id": self.id,
+            "name": self.string_value,  # Using string_value as name
             "is_divide": self.is_divide,
-            "unit_reference": self.unit_reference,
-            "registry_id": self.registry_id,
             "is_simple_unit": self.is_simple_unit,
             "item_type": self.item_type,
             "namespace": self.namespace,
+            "registry_id": self.registry_id,
             "status": self.status,
-            "name": self.item_type or self.string_value  # For Neo4j visualization
+            # "string_value": self.string_value,
+            "u_id": self.u_id,
+            "unit_reference": self.unit_reference
         }
+
+ 
 
     def __repr__(self) -> str:
         """String representation of the Unit"""
