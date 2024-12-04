@@ -2,7 +2,7 @@ from __future__ import annotations  # Enable forward references
 
 # dataclasses and typing imports
 from dataclasses import dataclass, field, fields
-from typing import List, Dict, Optional, Any, Union, Set, Type
+from typing import List, Dict, Optional, Any, Union, Set, Type, Tuple
 from abc import ABC, abstractmethod
 from neo4j import GraphDatabase, Driver
 
@@ -24,7 +24,11 @@ from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 
 
-
+@dataclass
+class Neo4jRelationship:
+    source: Neo4jNode
+    target: Neo4jNode
+    rel_type: RelationType
 
 class NodeType(Enum):
     """XBRL node types in Neo4j"""
@@ -33,13 +37,21 @@ class NodeType(Enum):
     CONCEPT = "Concept"
     DIMENSION = "Dimension"
     MEMBER = "Member"
-    HYPERCUBE = "Hypercube"
+    HYPERCUBE = "HyperCube"
     CONTEXT = "Context"
     PERIOD = "Period"
     UNIT = "Unit"           # Added for numeric facts
     NAMESPACE = "Namespace" # Added for prefix management
     LINKBASE = "Linkbase"  # Added for relationships
     RESOURCE = "Resource"  # Added for labels, references
+    ABSTRACT = "Abstract"
+    LINE_ITEMS = "LineItems"
+    GUIDANCE = "Guidance"
+    DEPRECATED = "deprecated"
+    DATE = "DateElement"
+    OTHER = "Other"
+
+
 
 class RelationType(Enum):
     """XBRL relationship types"""
@@ -218,7 +230,6 @@ class Report:
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
     periods: List[Period] = field(init=False, default_factory=list, repr=False)
     units: List[Unit] = field(init=False, default_factory=list, repr=False)
-
     facts: List[Fact] = field(init=False, default_factory=list, repr=False)
     dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)
  
@@ -263,11 +274,11 @@ class Report:
             raise RuntimeError("XBRL model not loaded.")
             
         # Build common nodes from XBRL
-        self._build_concepts()
-        self._build_periods()
-        self._build_units()
+        self._build_concepts() # 1. Build concepts first
+        self._build_periods()   # 2. Build periods
+        self._build_units()    # 3. Build units
         
-        # Export only common nodes
+        # Upload to Neo4j only common nodes first
         self._export_nodes([self.concepts, self.periods, self.units], testing=False)
         
         # Load complete set from Neo4j
@@ -284,82 +295,16 @@ class Report:
         if not self.model_xbrl:
             raise RuntimeError("XBRL model not loaded.")
   
-        self._build_facts()
-        # self._build_networks()
+        self._build_facts()         # 4. Build facts
+        # self._build_networks()    # 5. Build networks and hierarchies
+        # self._build_dimensions()  # 6. Build dimensions
         
-        # Export report-specific nodes - # Testing=False since otherwise it will clear the db
+        # Upload to Neo4j report-specific nodes - # Testing=False since otherwise it will clear the db
         self._export_nodes([self.facts], testing=False) 
+        self._export_relationships([(Fact, Concept), (Fact, Unit), (Fact, Period)])
         
         print(f"Built report nodes: {len(self.facts)} facts")
 
-
-    # def populate_fields(self):
-    #     if not self.model_xbrl:
-    #         raise RuntimeError("XBRL model not loaded.")
-    #     # Common Nodes: Concepts, Periods, Units
-    #     self._build_concepts()  # 1. Build concepts first
-    #     self._build_periods()  # 2. Build periods
-    #     self._build_units()    # 3. Build units
-
-        # IMPORTANT: Here we reload all common nodes from Neo4j
-
-        # Report Nodes: Facts, Dimensions, Members, Networks
-        # self._build_facts()     # 4. Build facts with validation
-        # self._build_networks()  # 2. Build networks and hierarchies
-        # self._build_dimensions() # 4. Build dimensions
-
-    def _export_nodes(self, collections: List[List[Neo4jNode]], testing: bool = False):
-        """Export specified collections of nodes to Neo4j"""
-        try:
-            if testing:
-                self.neo4j.clear_db()
-            
-            # Always ensure indexes/constraints exist
-            self.neo4j.create_indexes()
-            
-            nodes = []
-            for collection in collections:
-                if collection:
-                    print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")
-                    nodes.extend(collection)
-            
-            if nodes:
-                self.neo4j.merge_nodes(nodes)
-                print("Export completed successfully")
-                
-        except Exception as e:
-            raise RuntimeError(f"Export to Neo4j failed: {e}")
-
-    # def _export_to_neo4j(self, testing: bool = False) -> None:
-    #     """Export selected node types to Neo4j"""
-    #     try:
-    #         if testing:
-    #             self.neo4j.clear_db()
-    #             self.neo4j.create_indexes()
-            
-    #         print("\nExporting to Neo4j:") 
-            
-    #         nodes = []
-    #         collections = [self.concepts, self.periods, self.units, self.facts]
-            
-    #         if not any(collections):
-    #             print("Warning: No nodes to export")
-    #             return
-                
-    #         for collection in collections:
-    #             if collection:
-    #                 print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")  # Debug
-    #                 nodes.extend(collection)
-            
-    #         print(f"Total nodes to export: {len(nodes)}")  # Debug
-            
-    #         if nodes:
-    #             self.neo4j.merge_nodes(nodes)
-    #             print("Export completed successfully")
-                
-    #     except Exception as e:
-    #         print(f"Export error: {str(e)}")  # Debug
-    #         raise RuntimeError(f"Export to Neo4j failed: {e}")
 
     def _build_concepts(self):
         """Build concept objects from the model."""
@@ -381,10 +326,7 @@ class Report:
             raise RuntimeError("XBRL model not loaded.")
                 
         units_dict = {}  # Use dict for uniqueness
-        # processed_facts = 0
-        
         for fact in self.model_xbrl.factsInInstance:
-            # processed_facts += 1
             if hasattr(fact, 'unitID') and fact.unitID:  # Only check for unitID
                 try:
                     unit = Unit(model_fact=fact)
@@ -527,6 +469,66 @@ class Report:
                 hypercube._link_concepts(self.concepts)
 
 
+    def _export_nodes(self, collections: List[List[Neo4jNode]], testing: bool = False):
+        """Export specified collections of nodes to Neo4j"""
+        try:
+            if testing:
+                self.neo4j.clear_db()
+            
+            # Always ensure indexes/constraints exist
+            self.neo4j.create_indexes()
+            
+            nodes = []
+            for collection in collections:
+                if collection:
+                    print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")
+                    nodes.extend(collection)
+            
+            if nodes:
+                self.neo4j.merge_nodes(nodes)
+                print("Export completed successfully")
+                
+        except Exception as e:
+            raise RuntimeError(f"Export to Neo4j failed: {e}")
+        
+
+    def _export_relationships(self, rel_types: List[Tuple[Type[Neo4jNode], Type[Neo4jNode]]]) -> None:
+        """Export relationships based on node type pairs"""
+        relationships = []
+        
+        node_collections = {
+            Concept: (self.concepts, RelationType.HAS_CONCEPT),
+            Unit: (self.units, RelationType.HAS_UNIT),
+            Period: (self.periods, RelationType.HAS_PERIOD)
+        }
+        
+        def create_temp_target(fact, target_type):
+            """Helper function to create temporary target instances"""
+            if target_type == Concept:
+                return Concept(model_concept=fact.model_fact.concept)
+            elif target_type == Unit:
+                return Unit(model_fact=fact.model_fact)
+            elif target_type == Period:
+                return Period(
+                    period_type="instant" if fact.model_fact.context.isInstantPeriod else "duration",
+                    start_date=fact.model_fact.context.instantDatetime.strftime('%Y-%m-%d') if fact.model_fact.context.isInstantPeriod 
+                        else fact.model_fact.context.startDatetime.strftime('%Y-%m-%d'),
+                    end_date=fact.model_fact.context.endDatetime.strftime('%Y-%m-%d') if fact.model_fact.context.isStartEndPeriod else None
+                )
+            return None
+        
+        for source_type, target_type in rel_types:
+            if source_type == Fact and target_type in node_collections:
+                target_nodes, rel_type = node_collections[target_type]
+                target_lookup = {node.id: node for node in target_nodes}
+                
+                for fact in self.facts:
+                    temp_target = create_temp_target(fact, target_type)
+                    if temp_target and (target := target_lookup.get(temp_target.id)):
+                        relationships.append((fact, target, rel_type))
+                        setattr(fact, target_type.__name__.lower(), target)
+        
+        self.neo4j.merge_relationships(relationships)
 
 ############################### Report Class END #######################################################
 
@@ -1175,36 +1177,68 @@ class Neo4jManager:
             raise RuntimeError(f"Failed to merge nodes: {e}")
 
 
-    def get_node_counts(self) -> Dict[str, int]:
-        """Get count of nodes by type and validate against NodeType enum"""
+    def merge_relationships(self, relationships: List[Tuple[Neo4jNode, Neo4jNode, RelationType]]) -> None:
+        """Export relationships to Neo4j"""
+        with self.driver.session() as session:
+            for source, target, rel_type in relationships:
+                session.run(f"""
+                    MATCH (s {{id: $source_id}})
+                    MATCH (t {{id: $target_id}})
+                    MERGE (s)-[r:{rel_type.value}]->(t)
+                """, {
+                    "source_id": source.id,
+                    "target_id": target.id
+                })
+
+    def get_neo4j_db_counts(self) -> Dict[str, Dict[str, int]]:
+        """Get count of nodes and relationships by type."""
         try:
             with self.driver.session() as session:
-                # Get counts for all node types
-                query = """
+                # Node counts
+                node_query = """
                 MATCH (n)
-                WITH labels(n)[0] as node_type, count(n) as count
-                RETURN node_type, count
+                RETURN labels(n)[0] as node_type, count(n) as count
                 ORDER BY count DESC
                 """
-                result = session.run(query)
-                counts = {row["node_type"]: row["count"] for row in result}
+                node_counts = {row["node_type"]: row["count"] for row in session.run(node_query)}
+                complete_node_counts = {nt.value: node_counts.get(nt.value, 0) for nt in NodeType}
                 
-                # Create a complete report including zero counts for missing node types
-                complete_counts = {node_type.value: counts.get(node_type.value, 0) 
-                                for node_type in NodeType}
+                # Relationship counts
+                rel_query = """
+                MATCH ()-[r]->()
+                RETURN type(r) as rel_type, count(r) as count
+                ORDER BY count DESC
+                """
+                rel_counts = {row["rel_type"]: row["count"] for row in session.run(rel_query)}
+                complete_rel_counts = {rt.value: rel_counts.get(rt.value, 0) for rt in RelationType}
                 
-                # Print summary
+                # Print node counts
                 print("\nNode counts in Neo4j:")
                 print("-" * 40)
-                for node_type, count in complete_counts.items():
+                for node_type, count in complete_node_counts.items():
                     print(f"{node_type:<15} : {count:>8,d} nodes")
                 print("-" * 40)
-                print(f"{'Total':<15} : {sum(complete_counts.values()):>8,d} nodes")
-                        
+                print(f"{'Total':<15} : {sum(complete_node_counts.values()):>8,d} nodes")
+                
+                # Print relationship counts
+                print("\nRelationship counts in Neo4j:")
+                print("-" * 40)
+                for rel_type, count in complete_rel_counts.items():
+                    print(f"{rel_type:<15} : {count:>8,d} relationships")
+                print("-" * 40)
+                print(f"{'Total':<15} : {sum(complete_rel_counts.values()):>8,d} relationships")
+                
+                # return {
+                #     "nodes": complete_node_counts,
+                #     "relationships": complete_rel_counts
+                # }
                 
         except Exception as e:
-            print(f"Error getting node counts: {e}")
-            return {node_type.value: 0 for node_type in NodeType}
+            print(f"Error getting node and relationship counts: {e}")
+            return {
+                "nodes": {nt.value: 0 for nt in NodeType},
+                "relationships": {rt.value: 0 for rt in RelationType}
+            }
 
     def load_nodes_as_instances(self, node_type: NodeType, class_type: Type[Neo4jNode]) -> List[Neo4jNode]:
         """Load Neo4j nodes as class instances"""
@@ -1241,7 +1275,7 @@ class Fact(Neo4jNode):
     decimals: Optional[int] = field(init=False, default=None)
             
     # To Link:
-    concept: Concept = field(init=False)  # Reference to concept instance (Not working yet)
+    concept: Optional[Concept] = field(init=False, default=None)
     unit: Optional[Unit] = field(init=False, default=None)
     period: Optional[Period] = field(init=False, default=None)
  
@@ -1576,6 +1610,7 @@ class Entity:
 #     dimensions: Dict[Dimension, Member] = field(default_factory=dict)
 
 
+######################### Period Class START ####################################################
 
 @dataclass
 class Period(Neo4jNode):
@@ -1642,7 +1677,7 @@ class Period(Neo4jNode):
         if context_id not in self.context_ids:
             self.context_ids.append(context_id)
 
-######################### OTHER CLASSES (TO consider) END ####################################################
+######################### Period END ####################################################
 
 
 
@@ -1766,102 +1801,12 @@ class Unit(Neo4jNode):
         }
 
  
-
     def __repr__(self) -> str:
         """String representation of the Unit"""
-        return f"Unit(id={self._id}, type={self.item_type or 'unknown'})"
+        return f"Unit(id={self.id}, type={self.item_type or 'unknown'})"  # Changed self._id to self.id
+    
+    
 ######################### Unit Class END ####################################################
-
-
-@dataclass
-class FactRelationship:
-    """Represents validated relationship between facts"""
-    source_fact_id: str
-    target_fact_id: str
-    relationship_type: str
-    network_role: str  # Non-default argument
-    context_id: str  # Non-default argument
-    order: float  # Non-default argument
-    details: Dict[str, str] = field(default_factory=dict)  # Default argument
-    validation_details: Dict[str, Any] = field(default_factory=dict)  # Default argument
-
-    def to_dict(self):
-        return {
-            "source_fact_id": self.source_fact_id,
-            "target_fact_id": self.target_fact_id,
-            "relationship_type": self.relationship_type,
-            **self.details,
-        }
-    
-    def to_cypher(self):
-        return super().to_cypher("Fact", self.to_dict())
-
-
-
-# A relationship class to capture the dynamic relationship between a Concept and a Hypercube.
-
-@dataclass
-class ConceptToHypercube:
-    concept: Concept
-    # hypercube: Hypercube
-    network_id: str  # Network this relationship is valid in
-
-
-@dataclass
-class Relationship:
-    source_concept: Concept
-    target_concept: Concept
-    arcrole: str  # E.g., "parent-child", "summation-item"
-    order: Optional[float] = None
-    weight: Optional[float] = None  # For calculation relationships
-    preferred_label: Optional[str] = None  # For presentation relationships
-    # Definition-specific properties:
-    # hypercube: Optional[Hypercube] = None
-    context_element: Optional[str] = None  # "segment" or "scenario"
-    closed: Optional[bool] = None
-    usable: Optional[bool] = None
-
-
-
-# RELATIONSHIP MANAGER 
-@dataclass
-class RelationshipManager:
-    
-    @staticmethod
-    def build_presentation_map(facts: List[Fact]) -> Dict[str, List[str]]:
-        """Dynamically create a presentation map from facts."""
-        presentation_map = defaultdict(list)
-        # for fact in facts:
-        #     parent_dimension = fact.dimensions.get("parent", "root")
-        #     presentation_map[parent_dimension].append(fact.id)
-        return dict(presentation_map)
-
-    @staticmethod
-    def generate_presentation_links(facts: List[Fact], concepts: List[Concept]) -> List[FactRelationship]:
-        """Generate presentation links using the dynamic presentation map."""
-        presentation_map = RelationshipManager.build_presentation_map(facts)
-        links = [
-            FactRelationship(source_fact_id=parent_id, target_fact_id=child_id, relationship_type="presentation")
-            for parent_id, child_ids in presentation_map.items()
-            for child_id in child_ids
-        ]
-        return links
-
-    @staticmethod
-    def validate_presentation_links(relationships: List[FactRelationship]) -> List[FactRelationship]:
-        """Mark relationships as validated."""
-        for rel in relationships:
-            rel.details["validated"] = True
-        return relationships
-
-
-######################### OTHER CLASSES (TO consider) START ####################################################
-
-
-
-
-
-
 
 
 ######################### Other Report Elements START ####################################################
