@@ -126,14 +126,8 @@ class Concept(Neo4jNode):
     balance: Optional[str] = None
     type_local: Optional[str] = None    
     
-    # Keep commented TODO items as is
-    # TODO:
     facts: List[Fact] = field(init=False, default_factory=list)
     # hypercubes: Optional[List[str]] = field(default_factory=list)  # Hypercubes associated in the Definition Network
-    presentation_parents: Dict[str, 'Concept'] = field(init=False, default_factory=dict)
-    presentation_children: Dict[str, List['Concept']] = field(init=False, default_factory=dict)
-    presentation_level: Dict[str, int] = field(init=False, default_factory=dict)
-    presentation_order: Dict[str, float] = field(init=False, default_factory=dict)
 
     def __post_init__(self):
         if self.model_concept is not None:
@@ -234,14 +228,12 @@ class Report:
     facts: List[Fact] = field(init=False, default_factory=list, repr=False)
     dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)
 
+    _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False)
+    _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False)
     
      # TODO
      # networks: List[Network] = field(init=False, default_factory=list, repr=False)
-    _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False)
-    
-    # Not sure if this is needed
-    _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False)
-
+     
     def __post_init__(self):
         self.load_xbrl()
         self.extract_report_metadata()
@@ -410,7 +402,7 @@ class Report:
                 continue
             else:
                # Only linking concept.facts since fact.concept = concept done in export_            
-               # # Also this is not done for Neo4j nodes but for interna classes only                  
+               # # Also this is not done for Neo4j nodes but for internal classes only                  
                 concept.add_fact(fact) 
             
             self.facts.append(fact)
@@ -471,7 +463,6 @@ class Report:
         for network in self.networks:
             # Create Presentation Class
             if network.isPresentation:
-                # network._link_presentation_concepts(self.concepts)
                 network.presentation = Presentation(
                     network_uri=network.network_uri,
                     model_xbrl=self.model_xbrl,
@@ -573,6 +564,7 @@ class PresentationNode:
     order: float
     level: int
     children: List[str] = field(default_factory=list)  # List of child concept_ids
+    concept: Optional[Union[Concept, AbstractConcept]] = None  # Actual Concept Instance (Concept or AbstractConcept)
     
     def __hash__(self) -> int:
         return hash(self.concept_id)
@@ -606,8 +598,8 @@ class Presentation:
         parent_child_map: Dict[str, List[tuple[str, float]]] = {}  # parent_id -> [(child_id, order)]
         
         for rel in rel_set.modelRelationships:
-            parent_id = str(rel.fromModelObject.qname)
-            child_id = str(rel.toModelObject.qname)
+            parent_id = f"{rel.fromModelObject.qname.namespaceURI}:{rel.fromModelObject.qname}"
+            child_id = f"{rel.toModelObject.qname.namespaceURI}:{rel.toModelObject.qname}"
             
             # Handle abstract concepts
             for model_obj in (rel.fromModelObject, rel.toModelObject):
@@ -624,53 +616,58 @@ class Presentation:
     
     def _ensure_abstract_exists(self, model_concept: ModelConcept) -> None:
         """Create AbstractConcept if not already exists"""
-        concept_id = str(model_concept.qname)
+        concept_id = f"{model_concept.qname.namespaceURI}:{model_concept.qname}"
+
         if (concept_id not in self.report._concept_lookup and 
             concept_id not in self.report._abstract_lookup):
             try:
                 abstract = AbstractConcept(model_concept)
                 self.report.abstracts.append(abstract)
-                self.report._abstract_lookup[concept_id] = abstract
+                self.report._abstract_lookup[abstract.id] = abstract  # Using .id property
             except Exception as e:
                 raise ValueError(f"Failed to create AbstractConcept {concept_id}: {e}")
-    
+        
     def _build_nodes(self, parent_child_map: Dict[str, List[tuple[str, float]]]) -> None:
         """Build nodes with correct levels and children"""
-        # Find root nodes (parents that are not children)
-        all_parents = set(parent_child_map.keys())
-        all_children = {child for children in parent_child_map.values() 
-                       for child, _ in children}
-        root_ids = all_parents - all_children
-        
-        # Build nodes starting from roots
         def build_node(concept_id: str, level: int) -> None:
             if concept_id not in self.nodes:
                 children = parent_child_map.get(concept_id, [])
-                # Sort children by order
                 children.sort(key=lambda x: x[1])
-                # Create node
+                
+                # Get concept instance from report
+                concept_instance = self.get_concept(concept_id)
+                
+                # Create node with concept instance
                 self.nodes[concept_id] = PresentationNode(
                     concept_id=concept_id,
-                    order=1,  # Default order, will be updated if needed
+                    order=1,
                     level=level,
-                    children=[child_id for child_id, _ in children]
+                    children=[child_id for child_id, _ in children],
+                    concept=concept_instance  # Add concept instance
                 )
+                
                 # Process children
                 for child_id, order in children:
                     build_node(child_id, level + 1)
                     self.nodes[child_id].order = order
         
-        # Build from each root
+        # Find and process root nodes
+        all_parents = set(parent_child_map.keys())
+        all_children = {child for children in parent_child_map.values() 
+                    for child, _ in children}
+        root_ids = all_parents - all_children
+        
         for i, root_id in enumerate(sorted(root_ids), 1):
             build_node(root_id, 1)
             self.nodes[root_id].order = i
-    
+
+
     def get_node(self, concept_id: str) -> Optional[PresentationNode]:
         """Get presentation node by concept_id"""
         return self.nodes.get(concept_id)
     
     def get_concept(self, concept_id: str) -> Optional[Union[Concept, AbstractConcept]]:
-        """Get concept instance for a node"""
+        """Get concept instance for a node using u_id"""
         return (self.report._concept_lookup.get(concept_id) or 
                 self.report._abstract_lookup.get(concept_id))
     
@@ -880,117 +877,6 @@ class Network:
             else:
                 return 'FootNotes'
         return 'Other'
-
-    # def _link_presentation_concepts(self, report_concepts: List[Concept]) -> None:
-    #     """Link concepts in presentation networks and build hierarchy"""
-    #     if not self.isPresentation:
-    #         return
-                
-    #     rel_set = self.model_xbrl.relationshipSet(XbrlConst.parentChild, self.network_uri)
-    #     if not rel_set:
-    #         return
-
-    #     # Process all relationships instead of trying to find roots
-    #     for rel in rel_set.modelRelationships:
-    #         from_obj = rel.fromModelObject
-    #         to_obj = rel.toModelObject
-            
-    #         # Process both source and target concepts
-    #         for model_object in (from_obj, to_obj):
-    #             if model_object is None:
-    #                 continue
-                    
-    #             # Find matching concept
-    #             current = next(
-    #                 (c for c in report_concepts if str(c.qname) == str(model_object.qname)), 
-    #                 None)
-                
-    #             if current and current not in self.concepts:
-    #                 self.concepts.append(current)
-                    
-    #         # Set parent-child relationship if both concepts exist
-    #         if from_obj is not None and to_obj is not None:
-    #             from_concept = next(
-    #                 (c for c in report_concepts if str(c.qname) == str(from_obj.qname)), 
-    #                 None)
-    #             to_concept = next(
-    #                 (c for c in report_concepts if str(c.qname) == str(to_obj.qname)), 
-    #                 None)
-                
-    #             # if from_concept and to_concept:
-    #             #     to_concept.presentation_parents[self.network_uri] = from_concept.qname
-    #             #     from_concept.presentation_children.setdefault(self.network_uri, []).append(to_concept.qname)
-    #             #     to_concept.presentation_level[self.network_uri] = rel.order
-
-    #                 # Store the actual Concept objects instead of just qnames
-    #             if from_concept and to_concept: 
-    #                 to_concept.presentation_parents[self.network_uri] = from_concept
-    #                 from_concept.presentation_children.setdefault(self.network_uri, []).append(to_concept)
-                    
-    #                 # Calculate proper level based on parent's level
-    #                 parent_level = from_concept.presentation_level.get(self.network_uri, 0)
-    #                 to_concept.presentation_level[self.network_uri] = parent_level + 1
-    #                 to_concept.presentation_order[self.network_uri] = float(rel.order)
-
-
-    def _link_presentation_concepts(self, report_concepts: List[Concept]) -> None:
-        """Link concepts in presentation networks and build hierarchy"""
-        if not self.isPresentation:
-            print(f"Network {self.network_uri} is not a presentation network")
-            return
-                
-        rel_set = self.model_xbrl.relationshipSet(XbrlConst.parentChild, self.network_uri)
-        if not rel_set:
-            print(f"No relationship set found for network {self.network_uri}")
-            return
-
-        # Debug counters
-        processed_rels = 0
-        linked_concepts = 0
-
-        # Process all relationships
-        for rel in rel_set.modelRelationships:
-            from_obj = rel.fromModelObject
-            to_obj = rel.toModelObject
-            
-            if from_obj is None or to_obj is None:
-                continue
-                
-            # Find concepts and add to network
-            from_concept = next(
-                (c for c in report_concepts if str(c.qname) == str(from_obj.qname)), 
-                None)
-            to_concept = next(
-                (c for c in report_concepts if str(c.qname) == str(to_obj.qname)), 
-                None)
-                
-            
-            if from_concept and to_concept:
-                try:
-                    # Set relationships
-                    to_concept.presentation_parents[self.network_uri] = from_concept
-                    from_concept.presentation_children.setdefault(self.network_uri, []).append(to_concept)
-                    
-                    # Set level and order
-                    parent_level = from_concept.presentation_level.get(self.network_uri, 0)
-                    to_concept.presentation_level[self.network_uri] = parent_level + 1
-                    to_concept.presentation_order[self.network_uri] = float(rel.order)
-                    
-                    linked_concepts += 1
-                    print(f"Successfully linked concepts")
-                    
-                except Exception as e:
-                    print(f"Error linking concepts: {e}")
-            else:
-                #TODO: Link concepts to hypercubes
-                print(f"Concepts not found in report_concepts")
-                pass
-                
-            processed_rels += 1
-        
-        print(f"\nNetwork {self.network_uri}:")
-        print(f"- Processed {processed_rels} relationships")
-        print(f"- Linked {linked_concepts} concept pairs")
 
 ######################### Network Class END #######################################################
 
@@ -2097,7 +1983,6 @@ def validate_report_hierarchy(report: Report) -> None:
     print(f"├→ Concepts → Facts: {sum(len(concept.facts) for concept in report.concepts)}")
     print(f"├→ Concepts → Networks: {sum(1 for concept in report.concepts if any(concept in network.concepts for network in report.networks))}")
     print(f"├→ Concepts → Hypercubes: {sum(1 for concept in report.concepts if any(concept in hypercube.concepts for network in report.networks for hypercube in network.hypercubes))}")
-    print(f"├→ Concepts → Parents: {sum(1 for concept in report.concepts if concept.presentation_parents)}")
-    print(f"└→ Concepts → Children: {sum(len(concept.presentation_children) for concept in report.concepts)}")
+
 
 ######################### VALIDATION FUNCTIONS END #####################################################
