@@ -128,12 +128,12 @@ class Concept(Neo4jNode):
     
     # Keep commented TODO items as is
     # TODO:
-    # facts: List[Fact] = field(init=False, default_factory=list)
+    facts: List[Fact] = field(init=False, default_factory=list)
     # hypercubes: Optional[List[str]] = field(default_factory=list)  # Hypercubes associated in the Definition Network
-    # presentation_parents: Dict[str, 'Concept'] = field(init=False, default_factory=dict)
-    # presentation_children: Dict[str, List['Concept']] = field(init=False, default_factory=dict)
-    # presentation_level: Dict[str, int] = field(init=False, default_factory=dict)
-    # presentation_order: Dict[str, float] = field(init=False, default_factory=dict)
+    presentation_parents: Dict[str, 'Concept'] = field(init=False, default_factory=dict)
+    presentation_children: Dict[str, List['Concept']] = field(init=False, default_factory=dict)
+    presentation_level: Dict[str, int] = field(init=False, default_factory=dict)
+    presentation_order: Dict[str, float] = field(init=False, default_factory=dict)
 
     def __post_init__(self):
         if self.model_concept is not None:
@@ -228,14 +228,19 @@ class Report:
     
     # Core collections
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
+    abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class
     periods: List[Period] = field(init=False, default_factory=list, repr=False)
     units: List[Unit] = field(init=False, default_factory=list, repr=False)
     facts: List[Fact] = field(init=False, default_factory=list, repr=False)
     dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)
- 
+
+    
      # TODO
      # networks: List[Network] = field(init=False, default_factory=list, repr=False)
-    # _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False)
+    _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False)
+    
+    # Not sure if this is needed
+    _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False)
 
     def __post_init__(self):
         self.load_xbrl()
@@ -287,7 +292,7 @@ class Report:
         self.units = self.neo4j.load_nodes_as_instances(NodeType.UNIT, Unit)
         
         print(f"Loaded common nodes from Neo4j: {len(self.concepts)} concepts, {len(self.periods)} periods, {len(self.units)} units")
-
+        self._concept_lookup = {node.id: node for node in self.concepts} 
 
 
     def populate_report_nodes(self):
@@ -296,13 +301,18 @@ class Report:
             raise RuntimeError("XBRL model not loaded.")
   
         self._build_facts()         # 4. Build facts
-        # self._build_networks()    # 5. Build networks and hierarchies
+        self._build_networks()    # 5. Build networks and hierarchies
         # self._build_dimensions()  # 6. Build dimensions
         
         # Upload to Neo4j report-specific nodes - # Testing=False since otherwise it will clear the db
         self._export_nodes([self.facts], testing=False) 
-        self._export_relationships([(Fact, Concept), (Fact, Unit), (Fact, Period)])
+
+        # Define relationship types to export
+        rel_types = [(Fact, Concept, RelationType.HAS_CONCEPT),
+                     (Fact, Unit, RelationType.HAS_UNIT),
+                     (Fact, Period, RelationType.HAS_PERIOD)]
         
+        self._export_relationships(rel_types)        
         print(f"Built report nodes: {len(self.facts)} facts")
 
 
@@ -392,15 +402,16 @@ class Report:
         for model_fact in self.model_xbrl.factsInInstance:
             fact = Fact(model_fact=model_fact)
 
-            # TODO: Figure out this 2 way linking
-            # concept = self._concept_lookup.get(fact.qname)
-            # if not concept: 
-            #     print(f"Warning: No concept found for fact {fact.fact_id}")
-            #     continue
-                
-            # # Two-way linking
-            # fact.concept = concept
-            # concept.add_fact(fact)
+            model_concept = model_fact.concept
+            concept_id = f"{model_concept.qname.namespaceURI}:{model_concept.qname}"
+            concept = self._concept_lookup.get(concept_id)
+            if not concept: 
+                print(f"Warning: No concept found for fact {fact.fact_id}")
+                continue
+            else:
+               # Only linking concept.facts since fact.concept = concept done in export_            
+               # # Also this is not done for Neo4j nodes but for interna classes only                  
+                concept.add_fact(fact) 
             
             self.facts.append(fact)
         print(f"Built {len(self.facts)} unique facts")    
@@ -458,15 +469,24 @@ class Report:
 
         # 2. Link presentation concepts first
         for network in self.networks:
+            # Create Presentation Class
             if network.isPresentation:
-                network._link_presentation_concepts(self.concepts)
-
+                # network._link_presentation_concepts(self.concepts)
+                network.presentation = Presentation(
+                    network_uri=network.network_uri,
+                    model_xbrl=self.model_xbrl,
+                    report=self  # Pass report reference to access/create concepts and abstracts
+            )
+            
                 
         # 3. Adding hypercubes after networks are complete which in turn builds dimensions
         for network in self.networks:
             network.add_hypercubes(self.model_xbrl)
             for hypercube in network.hypercubes:
                 hypercube._link_concepts(self.concepts)
+
+
+        
 
 
     def _export_nodes(self, collections: List[List[Neo4jNode]], testing: bool = False):
@@ -492,47 +512,198 @@ class Report:
             raise RuntimeError(f"Export to Neo4j failed: {e}")
         
 
-    def _export_relationships(self, rel_types: List[Tuple[Type[Neo4jNode], Type[Neo4jNode]]]) -> None:
-        """Export relationships based on node type pairs"""
+    def _export_relationships(self, rel_types: List[Tuple[Type[Neo4jNode], Type[Neo4jNode], RelationType]]) -> None:
+        """Export relationships based on node type pairs and explicit relationship types"""
         relationships = []
         
-        node_collections = {
-            Concept: (self.concepts, RelationType.HAS_CONCEPT),
-            Unit: (self.units, RelationType.HAS_UNIT),
-            Period: (self.periods, RelationType.HAS_PERIOD)
-        }
-        
-        def create_temp_target(fact, target_type):
-            """Helper function to create temporary target instances"""
+        # Here source is always assumed to be a Fact instance
+        def create_temp_target(source, target_type):
+            """Create a temporary target instance based on the source instance and target type."""
             if target_type == Concept:
-                return Concept(model_concept=fact.model_fact.concept)
+                return Concept(model_concept=source.model_fact.concept)
             elif target_type == Unit:
-                return Unit(model_fact=fact.model_fact)
+                return Unit(model_fact=source.model_fact)
             elif target_type == Period:
+                context = source.model_fact.context
+                # Use exact same logic as _build_periods
+                period_type = ("instant" if getattr(context, "isInstantPeriod", False)
+                            else "duration" if getattr(context, "isStartEndPeriod", False)
+                            else "forever")
                 return Period(
-                    period_type="instant" if fact.model_fact.context.isInstantPeriod else "duration",
-                    start_date=fact.model_fact.context.instantDatetime.strftime('%Y-%m-%d') if fact.model_fact.context.isInstantPeriod 
-                        else fact.model_fact.context.startDatetime.strftime('%Y-%m-%d'),
-                    end_date=fact.model_fact.context.endDatetime.strftime('%Y-%m-%d') if fact.model_fact.context.isStartEndPeriod else None
+                    period_type=period_type,
+                    start_date=context.instantDatetime.strftime('%Y-%m-%d') if context.isInstantPeriod 
+                        else context.startDatetime.strftime('%Y-%m-%d'),
+                    end_date=context.endDatetime.strftime('%Y-%m-%d') 
+                        if context.isStartEndPeriod else None
                 )
             return None
-        
-        for source_type, target_type in rel_types:
-            if source_type == Fact and target_type in node_collections:
-                target_nodes, rel_type = node_collections[target_type]
-                target_lookup = {node.id: node for node in target_nodes}
+
+        for source_type, target_type, rel_type in rel_types:
+            try:
+                collection = getattr(self, f"{target_type.__name__.lower()}s") # such as self.concepts, self.units etc - note lower()
+                target_lookup = {node.id: node for node in collection} # Mapping of actual class instances
                 
-                for fact in self.facts:
-                    temp_target = create_temp_target(fact, target_type)
-                    if temp_target and (target := target_lookup.get(temp_target.id)):
-                        relationships.append((fact, target, rel_type))
-                        setattr(fact, target_type.__name__.lower(), target)
+                for source in getattr(self, f"{source_type.__name__.lower()}s"):
+                    if temp_target := create_temp_target(source, target_type):
+                        
+                        # target is the actual class instances
+                        if target := target_lookup.get(temp_target.id):
+                            relationships.append((source, target, rel_type))
+                            # Sets Fact instance to point to the corresponding target instance ((e.g., concept, unit, period))
+                            setattr(source, target_type.__name__.lower(), target) # Like fact.concept etc
+                            
+            except (AttributeError, KeyError) as e:
+                print(f"Skipping {source_type.__name__} -> {target_type.__name__}: {e}")
         
-        self.neo4j.merge_relationships(relationships)
+        if relationships:
+            self.neo4j.merge_relationships(relationships)
+                        
 
 ############################### Report Class END #######################################################
 
+############################### Presentation Class START #######################################################
 
+@dataclass
+class PresentationNode:
+    """
+    Node in the presentation hierarchy.
+    Stores structural information without duplicating concept data.
+    """
+    concept_id: str
+    order: float
+    level: int
+    children: List[str] = field(default_factory=list)  # List of child concept_ids
+    
+    def __hash__(self) -> int:
+        return hash(self.concept_id)
+
+@dataclass
+class Presentation:
+    """
+    Manages presentation relationships between concepts using a flat dictionary structure.
+    Links to existing Concept/AbstractConcept instances in Report.
+    """
+    network_uri: str
+    model_xbrl: ModelXbrl
+    report: Report
+    
+    nodes: Dict[str, PresentationNode] = field(init=False, default_factory=dict)
+    
+    def __post_init__(self) -> None:
+        """Initialize presentation hierarchy"""
+        try:
+            self._build_hierarchy()
+        except Exception as e:
+            raise ValueError(f"Failed to build presentation hierarchy: {e}")
+    
+    def _build_hierarchy(self) -> None:
+        """Build presentation hierarchy and create abstract concepts as needed"""
+        rel_set = self.model_xbrl.relationshipSet(XbrlConst.parentChild, self.network_uri)
+        if not rel_set:
+            return
+            
+        # First pass: Create nodes and track parent-child relationships
+        parent_child_map: Dict[str, List[tuple[str, float]]] = {}  # parent_id -> [(child_id, order)]
+        
+        for rel in rel_set.modelRelationships:
+            parent_id = str(rel.fromModelObject.qname)
+            child_id = str(rel.toModelObject.qname)
+            
+            # Handle abstract concepts
+            for model_obj in (rel.fromModelObject, rel.toModelObject):
+                if model_obj.isAbstract:
+                    self._ensure_abstract_exists(model_obj)
+            
+            # Track parent-child relationship with order
+            if parent_id not in parent_child_map:
+                parent_child_map[parent_id] = []
+            parent_child_map[parent_id].append((child_id, rel.order or 0))
+        
+        # Second pass: Build nodes with correct levels
+        self._build_nodes(parent_child_map)
+    
+    def _ensure_abstract_exists(self, model_concept: ModelConcept) -> None:
+        """Create AbstractConcept if not already exists"""
+        concept_id = str(model_concept.qname)
+        if (concept_id not in self.report._concept_lookup and 
+            concept_id not in self.report._abstract_lookup):
+            try:
+                abstract = AbstractConcept(model_concept)
+                self.report.abstracts.append(abstract)
+                self.report._abstract_lookup[concept_id] = abstract
+            except Exception as e:
+                raise ValueError(f"Failed to create AbstractConcept {concept_id}: {e}")
+    
+    def _build_nodes(self, parent_child_map: Dict[str, List[tuple[str, float]]]) -> None:
+        """Build nodes with correct levels and children"""
+        # Find root nodes (parents that are not children)
+        all_parents = set(parent_child_map.keys())
+        all_children = {child for children in parent_child_map.values() 
+                       for child, _ in children}
+        root_ids = all_parents - all_children
+        
+        # Build nodes starting from roots
+        def build_node(concept_id: str, level: int) -> None:
+            if concept_id not in self.nodes:
+                children = parent_child_map.get(concept_id, [])
+                # Sort children by order
+                children.sort(key=lambda x: x[1])
+                # Create node
+                self.nodes[concept_id] = PresentationNode(
+                    concept_id=concept_id,
+                    order=1,  # Default order, will be updated if needed
+                    level=level,
+                    children=[child_id for child_id, _ in children]
+                )
+                # Process children
+                for child_id, order in children:
+                    build_node(child_id, level + 1)
+                    self.nodes[child_id].order = order
+        
+        # Build from each root
+        for i, root_id in enumerate(sorted(root_ids), 1):
+            build_node(root_id, 1)
+            self.nodes[root_id].order = i
+    
+    def get_node(self, concept_id: str) -> Optional[PresentationNode]:
+        """Get presentation node by concept_id"""
+        return self.nodes.get(concept_id)
+    
+    def get_concept(self, concept_id: str) -> Optional[Union[Concept, AbstractConcept]]:
+        """Get concept instance for a node"""
+        return (self.report._concept_lookup.get(concept_id) or 
+                self.report._abstract_lookup.get(concept_id))
+    
+    def get_children(self, node: PresentationNode) -> List[PresentationNode]:
+        """Get child nodes for a given node"""
+        return [self.nodes[child_id] for child_id in node.children]
+    
+    @property
+    def roots(self) -> Set[PresentationNode]:
+        """Get root nodes (parents that are not children of any other concept)"""
+        all_parents = {concept_id for concept_id, node in self.nodes.items() 
+                      if node.children}
+        all_children = {child_id for node in self.nodes.values() 
+                       for child_id in node.children}
+        root_ids = all_parents - all_children
+        return {self.nodes[concept_id] for concept_id in root_ids}
+
+############################### Presentation Class END #######################################################
+
+############################### Abstract Class START #######################################################
+
+@dataclass
+class AbstractConcept(Concept):
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.model_concept.isAbstract:
+            raise ValueError("Cannot create AbstractConcept from non-abstract concept")
+    
+    @property
+    def is_abstract(self) -> bool:
+        return True
+
+############################### Abstract Class END #######################################################
 
 
 ############################### Hypercube Class START #######################################################
@@ -644,9 +815,12 @@ class Network:
     network_uri: str
     id: str
     category: str
-    relationship_sets: List[str] = field(default_factory=list)
+    concepts: List[Concept] = field(init=False, default_factory=list) 
+
+    relationship_sets: List[str] = field(default_factory=list) # check if this is needed
     hypercubes: List[Hypercube] = field(init=False, default_factory=list)
-    concepts: List[Concept] = field(init=False, default_factory=list)  # This was missing
+    presentation: Optional[Presentation] = field(init=False, default=None)
+
     
     def add_hypercubes(self, model_xbrl) -> None:
         """Add hypercubes if this is a definition network"""
@@ -665,6 +839,7 @@ class Network:
                     network_uri=self.network_uri
                 )
                 self.hypercubes.append(hypercube)
+    
 
     @property
     def isPresentation(self) -> bool:
@@ -1212,26 +1387,30 @@ class Neo4jManager:
                 rel_counts = {row["rel_type"]: row["count"] for row in session.run(rel_query)}
                 complete_rel_counts = {rt.value: rel_counts.get(rt.value, 0) for rt in RelationType}
                 
-                # Print node counts
-                print("\nNode counts in Neo4j:")
-                print("-" * 40)
-                for node_type, count in complete_node_counts.items():
-                    print(f"{node_type:<15} : {count:>8,d} nodes")
-                print("-" * 40)
-                print(f"{'Total':<15} : {sum(complete_node_counts.values()):>8,d} nodes")
+                # Ensure printing only occurs if there are non-zero nodes or relationships
+                total_nodes = sum(complete_node_counts.values())
+                total_relationships = sum(complete_rel_counts.values())
                 
-                # Print relationship counts
-                print("\nRelationship counts in Neo4j:")
-                print("-" * 40)
-                for rel_type, count in complete_rel_counts.items():
-                    print(f"{rel_type:<15} : {count:>8,d} relationships")
-                print("-" * 40)
-                print(f"{'Total':<15} : {sum(complete_rel_counts.values()):>8,d} relationships")
-                
-                # return {
-                #     "nodes": complete_node_counts,
-                #     "relationships": complete_rel_counts
-                # }
+                if total_nodes > 0 or total_relationships > 0:
+                    # Print node counts
+                    if total_nodes > 0:
+                        print("\nNode counts in Neo4j:")
+                        print("-" * 40)
+                        for node_type, count in complete_node_counts.items():
+                            if count > 0:  # Only print non-zero nodes
+                                print(f"{node_type:<15} : {count:>8,d} nodes")
+                        print("-" * 40)
+                        print(f"{'Total':<15} : {total_nodes:>8,d} nodes")
+                    
+                    # Print relationship counts
+                    if total_relationships > 0:
+                        print("\nRelationship counts in Neo4j:")
+                        print("-" * 40)
+                        for rel_type, count in complete_rel_counts.items():
+                            if count > 0:  # Only print non-zero relationships
+                                print(f"{rel_type:<15} : {count:>8,d} relationships")
+                        print("-" * 40)
+                        print(f"{'Total':<15} : {total_relationships:>8,d} relationships")
                 
         except Exception as e:
             print(f"Error getting node and relationship counts: {e}")
@@ -1300,10 +1479,10 @@ class Fact(Neo4jNode):
  
         # All Links to other Nodes
         # TODO: Instead of linking to XBRL concept, link to actual  class
-        self.concept = self.model_fact.concept 
-        self.unit = self.model_fact.unitID
-        self._set_period()
-        self._set_dimensions() # TODO: Looks like its only fetching 1 member per dimensions
+        # self.concept = self.model_fact.concept 
+        # self.unit = self.model_fact.unitID
+        # self._set_period()
+        # self._set_dimensions() # TODO: Looks like its only fetching 1 member per dimensions
 
     @property
     def is_nil(self) -> bool:
