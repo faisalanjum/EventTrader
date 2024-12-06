@@ -293,8 +293,7 @@ class Report:
             raise RuntimeError("XBRL model not loaded.")
   
         self._build_facts()         # 4. Build facts
-        self._build_networks()    # 5. Build networks and hierarchies
-        # self._build_dimensions()  # 6. Build dimensions
+        self._build_networks()    # 5. Build networks, dimensions and hierarchies
         
         # Upload to Neo4j report-specific nodes - # Testing=False since otherwise it will clear the db
         self._export_nodes([self.facts], testing=False) 
@@ -387,8 +386,6 @@ class Report:
         self.periods = list(periods_dict.values())
         print(f"Built {len(self.periods)} unique periods")
 
-
-    # TODO: Here its not able to find the concept for some facts
     def _build_facts(self):
         """Build facts with two-way concept relationships"""
         for model_fact in self.model_xbrl.factsInInstance:
@@ -411,7 +408,7 @@ class Report:
 
     # 1. Build networks - Also builds hypercubes in networks with isDefinition = True
     def _build_networks(self):
-        """Build all networks from the model_xbrl"""
+        """Builds networks specific to this filing instance. Networks are report-specific sections."""
         
         # Define relationship types to check
         relationship_sets = [
@@ -428,11 +425,12 @@ class Report:
         # linkrole: 'http://strongholddigitalmining.com/role/CONSOLIDATEDBALANCESHEETS'
         # role_name: (0000003 - Statement - CONSOLIDATED BALANCE SHEETS)
     
-        # Use a list comprehension to create Network instances
+        # Create networks for each section of this specific report (e.g., Balance Sheet, Income Statement, Notes)
         self.networks = [
             Network(
                 model_xbrl = self.model_xbrl,
-                name =' - '.join(parts[2:]), network_uri=uri,
+                name =' - '.join(parts[2:]), 
+                network_uri=uri,
                 id=parts[0],
                 category=parts[1],
                 relationship_sets=[rel_set]
@@ -473,12 +471,8 @@ class Report:
         # 3. Adding hypercubes after networks are complete which in turn builds dimensions
         for network in self.networks:
             network.add_hypercubes(self.model_xbrl)
-            for hypercube in network.hypercubes:
-                hypercube._link_concepts(self.concepts)
-
-
-        
-
+            for hypercube in network.hypercubes:                
+                hypercube._link_hypercube_concepts(self.concepts, self.abstracts)
 
     def _export_nodes(self, collections: List[List[Neo4jNode]], testing: bool = False):
         """Export specified collections of nodes to Neo4j"""
@@ -614,6 +608,7 @@ class Presentation:
         # Second pass: Build nodes with correct levels
         self._build_nodes(parent_child_map)
     
+    # Not sure what purpose it solves?
     def _ensure_abstract_exists(self, model_concept: ModelConcept) -> None:
         """Create AbstractConcept if not already exists"""
         concept_id = f"{model_concept.qname.namespaceURI}:{model_concept.qname}"
@@ -709,10 +704,31 @@ class AbstractConcept(Concept):
 class Hypercube:
     """Represents a hypercube (table) in an XBRL definition network"""
     model_xbrl: ModelXbrl
-    hypercube_item: Any  # The ModelObject representing the hypercube
+    hypercube_item: Any  # hypercube modelConcept, ends with 'Table' (Target of 'all' relationship)    
     network_uri: str     # Reference back to parent network
     dimensions: List[Dimension] = field(init=False) # Dimensions related to the hypercube
     concepts: List[Concept] = field(init=False)  # Concepts related to the hypercube
+    abstracts: List[Concept] = field(init=False)  # These are Lineitems, abstracts typically used to organize concepts
+    lineitems: List[Concept] = field(init=False)  # These are Lineitems, abstracts typically used to organize concepts
+    is_all: bool = field(init=False)  # True for 'all', False for 'notAll'
+    closed: bool = field(init=False)  # Value of closed attribute
+
+    def _get_hypercube_properties(self) -> tuple[bool, bool]:
+        """Get hypercube relationship type (is_all) and closed attribute.
+        Returns: (is_all, closed)"""
+        # Check for 'all' relationship
+        all_rels = self.model_xbrl.relationshipSet(XbrlConst.all, self.network_uri).modelRelationships
+        for rel in all_rels:
+            if rel.toModelObject is not None and rel.toModelObject == self.hypercube_item:
+                return True, getattr(rel, 'closed', 'false').lower() == 'true'  # Convert to bool
+        
+        # Check for 'notAll' relationship
+        not_all_rels = self.model_xbrl.relationshipSet(XbrlConst.notAll, self.network_uri).modelRelationships
+        for rel in not_all_rels:
+            if rel.toModelObject is not None and rel.toModelObject == self.hypercube_item:
+                return False, getattr(rel, 'closed', 'false').lower() == 'true'  # Convert to bool
+        
+        raise ValueError(f"Hypercube {self.hypercube_item.qname} has neither 'all' nor 'notAll' relationship")    
 
     def __post_init__(self):
         """Initialize derived attributes from hypercube_item"""
@@ -723,6 +739,10 @@ class Hypercube:
         self.qname = self.hypercube_item.qname
         self.dimensions = [] 
         self.concepts = []  # Initialize concepts list here
+        self.abstracts = []  # Initialize abstracts list here
+        self.lineitems = []  # Initialize lineitems list here
+
+        self.is_all, self.closed = self._get_hypercube_properties()
         self._build_dimensions()
 
 
@@ -730,16 +750,12 @@ class Hypercube:
         """Build dimension objects from model_xbrl matching this hypercube"""
         
         hc_dim_rel_set = self.model_xbrl.relationshipSet(XbrlConst.hypercubeDimension, self.network_uri)
-        if not hc_dim_rel_set:
-            return
+        if not hc_dim_rel_set: return
             
         relationships = hc_dim_rel_set.fromModelObject(self.hypercube_item)
-        
-        if not relationships:
-            print("No dimension relationships found")
-            return
+        if not relationships: return
             
-        # Debug the relationships
+        # Get Target of 'hypercubeDimension' relationship
         for rel in relationships:
             dim_object = rel.toModelObject
             if dim_object is None: continue
@@ -748,13 +764,12 @@ class Hypercube:
                 dimension = Dimension(
                     model_xbrl=self.model_xbrl,
                     dimension=dim_object)
-                
                 self.dimensions.append(dimension)
             
             except Exception as e: continue
 
-    # Get all concepts related to a hypercube
-    def _link_concepts(self, report_concepts: List[Concept]) -> None:
+    # Get all concepts related to a hypercube: All dimensions in a hypercube apply to all concepts in that hypercube (as per the specification)
+    def _link_hypercube_concepts(self, report_concepts: List[Concept], report_abstracts: List[AbstractConcept]) -> None:
         all_set = self.model_xbrl.relationshipSet(XbrlConst.all, self.network_uri)
         not_all_set = self.model_xbrl.relationshipSet(XbrlConst.notAll, self.network_uri)
         domain_member = self.model_xbrl.relationshipSet(XbrlConst.domainMember, self.network_uri)
@@ -763,17 +778,26 @@ class Hypercube:
             if concept is not None:
                 if not concept.isAbstract:
                     # Find matching concept in report_concepts
-                    concept_qname = str(concept.qname)
-                    matching_concept = next(
-                        (c for c in report_concepts if str(c.qname) == concept_qname), 
-                        None )
+                    concept_id = f"{concept.qname.namespaceURI}:{concept.qname}"
+                    matching_concept = next( (c for c in report_concepts if c.id == concept_id), None)
                     
                     if matching_concept:
                         self.concepts.append(matching_concept)
-                
+                else:
+                    # Abstracts found in this Hypercube; storing it here in case it is needed
+                    abstract_id = f"{concept.qname.namespaceURI}:{concept.qname}"
+                    matching_abstract = next( (a for a in report_abstracts if a.id == abstract_id), None)
+                    if matching_abstract:
+                        self.abstracts.append(matching_abstract)
+                    else:
+                        # Lineitems found in this Hypercube; storing it here in case it is needed
+                        self.lineitems.append(concept)
+                        # Here we could instead add it to report.abstracts but those are for Presentation network and not this hypercube
+
                 # Recursively collect domain members
                 for member_rel in domain_member.fromModelObject(concept):
                     collect_domain_members(member_rel.toModelObject)
+                
         
         # Process 'all' relationships
         if all_set:
@@ -781,13 +805,16 @@ class Hypercube:
                 if (rel.toModelObject is not None and 
                     rel.toModelObject == self.hypercube_item):
                     collect_domain_members(rel.fromModelObject)
+
+        # Process 'notAll' relationships - Not 100% sure about this logic but SEC anyway forbids negative (notAll) hypercubes        
         
-        # Process 'notAll' relationships
         if not_all_set:
             for rel in not_all_set.modelRelationships:
-                if (rel.fromModelObject is not None and 
-                    rel.fromModelObject == self.hypercube_item):
-                    collect_domain_members(rel.toModelObject)
+                if (rel.toModelObject is not None and 
+                    rel.toModelObject == self.hypercube_item):  # Check hypercube as target
+                    collect_domain_members(rel.fromModelObject)  # Process from primary item
+
+
     @property
     def name(self) -> str:
         """Human-readable name of the hypercube"""
@@ -807,11 +834,14 @@ class Hypercube:
 @dataclass
 class Network:
     """Represents a single network (extended link role) in the XBRL document"""
+    """Represents a specific section of the report (e.g., 'Balance Sheet', 'Income Statement', 'Notes').
+    Each network has a unique URI like 'http://company.com/role/BALANCESHEET'"""
+
     model_xbrl: ModelXbrl
     name: str
     network_uri: str
     id: str
-    category: str
+    category: str # Note you can simply use "network.networkType" to get type of network
     concepts: List[Concept] = field(init=False, default_factory=list) 
 
     relationship_sets: List[str] = field(default_factory=list) # check if this is needed
@@ -860,6 +890,7 @@ class Network:
             XbrlConst.hypercubeDimension
         ])
 
+    
     @property
     def networkType(self) -> str:
         """Returns the detailed category type of the network"""
@@ -1895,12 +1926,11 @@ class ReportElement:
 
 
 
+######################### Counting Function START #####################################################
 
-######################### VALIDATION FUNCTIONS START #####################################################
-
-def validate_report_hierarchy(report: Report) -> None:
+def count_report_hierarchy(report: Report) -> None:
     """Exhaustive validation of the report hierarchy."""
-    print("\nEXHAUSTIVE REPORT HIERARCHY VALIDATION")
+    print("\nREPORT ELEMENT COUNT BY HIERARCHY")
     print("=" * 50)
 
     # Base Report Stats
@@ -1908,81 +1938,149 @@ def validate_report_hierarchy(report: Report) -> None:
     print(f"├→ Report Metadata Keys: {len(report.report_metadata)}")
     print(f"├→ Facts: {len(report.facts)}")
     print(f"├→ Concepts: {len(report.concepts)}")
+    print(f"├→ Abstracts: {len(report.abstracts)}")
+    print(f"├→ Periods: {len(report.periods)}")
+    print(f"├→ Units: {len(report.units)}")
     print(f"└→ Networks: {len(report.networks)}")
 
-    # Networks
+
+    # Networks by Category
+    print("\nReport → Networks → Categories")
+    network_categories = {}
+    for network in report.networks:
+        network_categories[network.category] = network_categories.get(network.category, 0) + 1
+    for category, count in sorted(network_categories.items()):
+        print(f"├→ {category}: {count}")
+    print(f"└→ Total Categories: {len(network_categories)}")
+
+    # Networks by Type (network.network_type)
+    print("\nReport → Networks → Types")
+    network_types = {}
+    for network in report.networks:
+        network_types[network.networkType] = network_types.get(network.networkType, 0) + 1
+    for network_type, count in sorted(network_types.items()):
+        print(f"├→ {network_type}: {count}")
+    print(f"└→ Total Types: {len(network_types)}")
+
+    # DifferentNetworks (.isPresentation, .isCalculation, .isDefinition)
     print("\nReport → Networks")
     total_networks = len(report.networks)
-    unique_networks = len(set(network.network_uri for network in report.networks))
+    presentation_networks = sum(1 for network in report.networks if network.isPresentation)
+    calculation_networks = sum(1 for network in report.networks if network.isCalculation)
+    definition_networks = sum(1 for network in report.networks if network.isDefinition)
     print(f"├→ Total Networks: {total_networks}")
-    print(f"└→ Unique Network Names: {unique_networks}")
+    print(f"├→ Presentation Networks: {presentation_networks}")
+    print(f"├→ Calculation Networks: {calculation_networks}")
+    print(f"└→ Definition Networks: {definition_networks}")
+
+
+
+
+    # Presentation Hierarchies
+    print("\nReport → Networks → Presentations")
+    presentations = [network.presentation for network in report.networks if network.presentation]
+    total_presentation_nodes = sum(len(p.nodes) for p in presentations)
+    root_nodes = sum(len(p.roots) for p in presentations)
+    print(f"├→ Total Presentations: {len(presentations)}")
+    print(f"├→ Total Nodes: {total_presentation_nodes}")
+    print(f"└→ Root Nodes: {root_nodes}")
 
     # Networks → Hypercubes
     print("\nReport → Networks → Hypercubes")
     total_hypercubes = sum(len(network.hypercubes) for network in report.networks)
-    unique_hypercubes = len(set(hypercube.qname for network in report.networks for hypercube in network.hypercubes))
+    unique_hypercubes = len({hypercube.qname for network in report.networks 
+                            for hypercube in network.hypercubes})
     print(f"├→ Total Hypercubes: {total_hypercubes}")
     print(f"└→ Unique Hypercube Names: {unique_hypercubes}")
 
-    # Networks → Hypercubes → Dimensions
-    print("\nReport → Networks → Hypercubes → Dimensions")
-    total_dimensions = sum(len(hypercube.dimensions) for network in report.networks for hypercube in network.hypercubes)
-    unique_dimensions = len(set(dimension.qname for network in report.networks for hypercube in network.hypercubes for dimension in hypercube.dimensions))
-    print(f"├→ Total Dimensions: {total_dimensions}")
-    print(f"└→ Unique Dimensions: {unique_dimensions}")
-
     # Networks → Hypercubes → Concepts
     print("\nReport → Networks → Hypercubes → Concepts")
-    total_hypercube_concepts = sum(len(hypercube.concepts) for network in report.networks for hypercube in network.hypercubes)
-    unique_hypercube_concepts = len(set(concept.qname for network in report.networks for hypercube in network.hypercubes for concept in hypercube.concepts))
+    total_hypercube_concepts = sum(len(hypercube.concepts) for network in report.networks 
+                                 for hypercube in network.hypercubes)
+    unique_hypercube_concepts = len({concept.qname for network in report.networks 
+                                   for hypercube in network.hypercubes 
+                                   for concept in hypercube.concepts})
     print(f"├→ Total Hypercube Concepts: {total_hypercube_concepts}")
     print(f"└→ Unique Hypercube Concepts: {unique_hypercube_concepts}")
 
+    # Networks → Hypercubes → Concepts → Abstracts
+    print("\nReport → Networks → Hypercubes → Abstracts")
+    total_hypercube_abstracts = sum(len(hypercube.abstracts) for network in report.networks 
+                                 for hypercube in network.hypercubes)
+    unique_hypercube_abstracts = len({abstract.qname for network in report.networks 
+                                   for hypercube in network.hypercubes 
+                                   for abstract in hypercube.abstracts})
+    print(f"├→ Total Hypercube Abstracts: {total_hypercube_abstracts}")
+    print(f"└→ Unique Hypercube Abstracts: {unique_hypercube_abstracts}")
+
+    # Networks → Hypercubes → Concepts → Lineitems
+    print("\nReport → Networks → Hypercubes → Lineitems")
+    total_hypercube_lineitems = sum(len(hypercube.lineitems) for network in report.networks 
+                                 for hypercube in network.hypercubes)
+    unique_hypercube_lineitems = len({lineitem.qname for network in report.networks 
+                                   for hypercube in network.hypercubes 
+                                   for lineitem in hypercube.lineitems})
+    print(f"├→ Total Hypercube Lineitems: {total_hypercube_lineitems}")
+    print(f"└→ Unique Hypercube Lineitems: {unique_hypercube_lineitems}")
+
+    # Networks → Hypercubes → Dimensions
+    print("\nReport → Networks → Hypercubes → Dimensions")
+    total_dimensions = sum(len(hypercube.dimensions) for network in report.networks 
+                         for hypercube in network.hypercubes)
+    unique_dimensions = len({dimension.qname for network in report.networks 
+                           for hypercube in network.hypercubes 
+                           for dimension in hypercube.dimensions})
+    print(f"├→ Total Dimensions: {total_dimensions}")
+    print(f"└→ Unique Dimensions: {unique_dimensions}")
+
     # Networks → Hypercubes → Dimensions → Members
     print("\nReport → Networks → Hypercubes → Dimensions → Members")
-    total_members = sum(len(dimension.members_dict) for network in report.networks for hypercube in network.hypercubes for dimension in hypercube.dimensions)
-    unique_members = len(set(member.qname for network in report.networks for hypercube in network.hypercubes for dimension in hypercube.dimensions for member in dimension.members))
-    print(f"├→ Total Dimension Members: {total_members}")
-    print(f"└→ Unique Dimension Members: {unique_members}")
+    total_members = sum(len(dimension.members_dict) for network in report.networks 
+                       for hypercube in network.hypercubes 
+                       for dimension in hypercube.dimensions)
+    unique_members = len({member.qname for network in report.networks 
+                         for hypercube in network.hypercubes 
+                         for dimension in hypercube.dimensions 
+                         for member in dimension.members})
+    print(f"├→ Total Members: {total_members}")
+    print(f"└→ Unique Members: {unique_members}")
 
     # Networks → Hypercubes → Dimensions → Default Members
     print("\nReport → Networks → Hypercubes → Dimensions → Default Members")
     default_members = set()
+    total_default_members = 0
     for network in report.networks:
         for hypercube in network.hypercubes:
             for dimension in hypercube.dimensions:
                 if dimension.default_member:
+                    total_default_members += 1
                     default_members.add(dimension.default_member.qname)
-    print(f"├→ Total Default Members: {len(default_members)}")
+    print(f"├→ Total Default Members: {total_default_members}")
     print(f"└→ Unique Default Members: {len(default_members)}")
 
     # Networks → Hypercubes → Dimensions → Domains
     print("\nReport → Networks → Hypercubes → Dimensions → Domains")
-    total_domains = sum(1 for network in report.networks for hypercube in network.hypercubes for dimension in hypercube.dimensions if dimension.domain)
-    unique_domains = len(set(dimension.domain.qname for network in report.networks for hypercube in network.hypercubes for dimension in hypercube.dimensions if dimension.domain))
+    total_domains = sum(1 for network in report.networks 
+                       for hypercube in network.hypercubes 
+                       for dimension in hypercube.dimensions 
+                       if dimension.domain)
+    unique_domains = len({dimension.domain.qname for network in report.networks 
+                         for hypercube in network.hypercubes 
+                         for dimension in hypercube.dimensions 
+                         if dimension.domain})
     print(f"├→ Total Domains: {total_domains}")
     print(f"└→ Unique Domains: {unique_domains}")
-
-    # Networks → Concepts
-    print("\nReport → Networks → Concepts")
-    total_network_concepts = sum(len(network.concepts) for network in report.networks)
-    unique_network_concepts = len(set(concept.qname for network in report.networks for concept in network.concepts))
-    print(f"├→ Total Concepts in Networks: {total_network_concepts}")
-    print(f"└→ Unique Concepts in Networks: {unique_network_concepts}")
 
     # Facts → Relationships
     print("\nReport → Facts → Relationships")
     print(f"├→ Facts → Concepts: {sum(1 for fact in report.facts if fact.concept)}")
-    print(f"├→ Facts → Units: {sum(1 for fact in report.facts if fact.unit_id)}")
-    print(f"├→ Facts → Dimensions: {sum(1 for fact in report.facts if fact.dimensions)}")
-    print(f"├→ Facts → Context: {sum(1 for fact in report.facts if fact.context_id)}")
-    print(f"└→ Facts → Period: {sum(1 for fact in report.facts if fact.period)}")
+    print(f"├→ Facts → Units: {sum(1 for fact in report.facts if fact.unit)}")
+    print(f"├→ Facts → Periods: {sum(1 for fact in report.facts if fact.period)}")
+    print(f"└→ Facts → Context IDs: {sum(1 for fact in report.facts if fact.context_id)}")
 
-    # Concept Relationships
-    print("\nReport → Concept Relationships")
-    print(f"├→ Concepts → Facts: {sum(len(concept.facts) for concept in report.concepts)}")
-    print(f"├→ Concepts → Networks: {sum(1 for concept in report.concepts if any(concept in network.concepts for network in report.networks))}")
-    print(f"├→ Concepts → Hypercubes: {sum(1 for concept in report.concepts if any(concept in hypercube.concepts for network in report.networks for hypercube in network.hypercubes))}")
+    # Neo4j Stats (if available)
+    # if hasattr(report.neo4j, 'get_neo4j_db_counts'):
+    #     print("\nNeo4j Database Stats")
+    #     report.neo4j.get_neo4j_db_counts()
 
-
-######################### VALIDATION FUNCTIONS END #####################################################
+######################### Counting Function END #####################################################

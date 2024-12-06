@@ -19,6 +19,11 @@
 
 
 
+**Fact Validation Notes:**
+    - The closed attribute is set once at the top-level has-hypercube relationship and all descendant concepts inherit this same value through domain-member relationships - they cannot have different values for the same hypercube
+
+
+
 
 
 
