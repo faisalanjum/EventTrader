@@ -291,9 +291,9 @@ class Report:
         """Build and export report-specific nodes (Facts, Dimensions)"""
         if not self.model_xbrl:
             raise RuntimeError("XBRL model not loaded.")
-  
-        self._build_facts()         # 4. Build facts
-        self._build_networks()    # 5. Build networks, dimensions and hierarchies
+
+        self._build_networks()    # 4. Build networks, dimensions and hierarchies
+        self._build_facts()       # 5. Build facts
         
         # Upload to Neo4j report-specific nodes - # Testing=False since otherwise it will clear the db
         self._export_nodes([self.facts], testing=False) 
@@ -680,6 +680,7 @@ class Presentation:
         root_ids = all_parents - all_children
         return {self.nodes[concept_id] for concept_id in root_ids}
 
+
 ############################### Presentation Class END #######################################################
 
 ############################### Abstract Class START #######################################################
@@ -763,7 +764,9 @@ class Hypercube:
             try:
                 dimension = Dimension(
                     model_xbrl=self.model_xbrl,
-                    dimension=dim_object)
+                    dimension=dim_object,
+                    network_uri=self.network_uri
+                )
                 self.dimensions.append(dimension)
             
             except Exception as e: continue
@@ -908,6 +911,22 @@ class Network:
             else:
                 return 'FootNotes'
         return 'Other'
+    
+
+    def validate_facts(self) -> List[Fact]:
+        # Step1: Get all facts (W/O Dims)for concepts in this presentation that are not in any hypercubes of this network
+        # node.concept.__class__ != AbstractConcept
+
+        # Each node_value has : 'children', 'concept', 'concept_id', 'level', 'order'
+
+        fact_list = set([
+            fact.u_id 
+            for node in self.presentation.nodes.values() 
+            for fact in node.concept.facts 
+            if node.concept.__class__ != AbstractConcept and node.concept not in [concept for hypercube in self.hypercubes for concept in hypercube.concepts]
+        ])
+
+        return fact_list
 
 ######################### Network Class END #######################################################
 
@@ -951,7 +970,7 @@ class Dimension:
     """Dimension with its domain and members"""
     model_xbrl: ModelXbrl
     dimension: ModelConcept
-
+    network_uri: str
     
     # Core properties
     name: str = field(init=False)
@@ -972,7 +991,6 @@ class Dimension:
     # facts: List[Fact] = field(init=False, default_factory=list)
     # concepts: List[Concept] = field(init=False, default_factory=list)
     # hypercubes: List[str] = field(default_factory=list)
-    
     # network: str = field(init=False, default="")
 
 
@@ -981,6 +999,7 @@ class Dimension:
         """Get unique members sorted by level"""
         return sorted(self.members_dict.values(), key=lambda x: x.level)
 
+    # Returns a dictionary grouping members by their hierarchical depth (levels). - works only for explicit dimensions
     @property
     def members_by_level(self) -> Dict[int, List[Member]]:
         """Get members organized by their hierarchy level"""
@@ -991,6 +1010,7 @@ class Dimension:
             levels[member.level].append(member)
         return levels
     
+    # Returns a dictionary of parent-to-child member relationships for hierarchical lineage analysis.- applies only to explicit dimensions since typed dimensions don't have predefined member relationships.
     @property
     def member_hierarchy(self) -> Dict[str, List[str]]:
         """Get parent-child relationships between members"""
@@ -1022,12 +1042,11 @@ class Dimension:
             self._build_members()
             self._set_default_member()
 
-
     def _build_domain(self) -> None:
         """Build domain relationship for this dimension"""        
         if not self.is_explicit: return
                 
-        dim_dom_rel_set = self.model_xbrl.relationshipSet(XbrlConst.dimensionDomain)
+        dim_dom_rel_set = self.model_xbrl.relationshipSet(XbrlConst.dimensionDomain, self.network_uri)
         if not dim_dom_rel_set: return
                 
         relationships = dim_dom_rel_set.fromModelObject(self.dimension)
@@ -1038,7 +1057,7 @@ class Dimension:
             domain_object = rel.toModelObject
             
             if domain_object is None: continue
-                
+            
             try:
                 self.domain = Domain(
                     model_xbrl=self.model_xbrl,
@@ -1059,38 +1078,25 @@ class Dimension:
     def _build_members(self) -> None:
         """Build hierarchical member relationships"""
         
-        if not self.is_explicit:return
-                
+        if not self.is_explicit:return                
         if not self.domain: return
                 
-        dom_mem_rel_set = self.model_xbrl.relationshipSet(XbrlConst.domainMember)
+        dom_mem_rel_set = self.model_xbrl.relationshipSet(XbrlConst.domainMember, self.network_uri)
+        # dom_mem_rel_set = self.model_xbrl.relationshipSet(XbrlConst.domainMember)
         if not dom_mem_rel_set: return
         
         def add_members_recursive(source_object: ModelConcept, parent_qname: Optional[str] = None, level: int = 0) -> None:
-            
-            relationships = dom_mem_rel_set.fromModelObject(source_object)
-            
-            
+
+            relationships = dom_mem_rel_set.fromModelObject(source_object)            
             for rel in relationships:
                 member_object = rel.toModelObject
-
                 
-                if member_object is None:
-                    continue
-                    
-                if not hasattr(member_object, 'isDomainMember'):
-                    continue
+                if member_object is None: continue                    
+                if not hasattr(member_object, 'isDomainMember'): continue
                     
                 try:
-                    member = Member(
-                        model_xbrl=self.model_xbrl,
-                        member=member_object,
-                        parent_qname=parent_qname,
-                        level=level
-                    )
-                    
-                    self.add_member(member)
-                    
+                    member = Member( model_xbrl=self.model_xbrl, member=member_object, parent_qname=parent_qname, level=level)                    
+                    self.add_member(member)                    
                     # Process children
                     add_members_recursive(member_object, str(member_object.qname), level + 1)
                         
@@ -1100,9 +1106,80 @@ class Dimension:
         
         add_members_recursive(self.domain.domain)
 
+    # def _build_members(self) -> None:
+    #     """Build hierarchical member relationships for specific network"""
+    #     if not self.is_explicit: return
+        
+    #     print(f"\nProcessing dimension: {self.dimension.qname} in network: {self.network_uri}")
+        
+    #     # Get dimension-domain relationships for THIS network
+    #     dim_dom_rel_set = self.model_xbrl.relationshipSet(
+    #         XbrlConst.dimensionDomain,
+    #         self.network_uri
+    #     )
+    #     if not dim_dom_rel_set:
+    #         print(f"No dimension-domain relationships for {self.dimension.qname}")
+    #         return
+        
+    #     # Get domain-member relationships for THIS network
+    #     dom_mem_rel_set = self.model_xbrl.relationshipSet(
+    #         XbrlConst.domainMember,
+    #         self.network_uri
+    #     )
+        
+    #     # Debug relationship sets
+    #     dim_rels = list(dim_dom_rel_set.fromModelObject(self.dimension))
+    #     print(f"Found {len(dim_rels)} dimension-domain relationships")
+    #     for rel in dim_rels:
+    #         print(f"  Dimension-Domain: {self.dimension.qname} -> {rel.toModelObject.qname if rel.toModelObject else 'None'}")
+        
+    #     def add_members_recursive(source_object: ModelConcept, parent_qname: Optional[str] = None, level: int = 0) -> None:
+    #         # First add the source object itself
+    #         try:
+    #             member = Member(
+    #                 model_xbrl=self.model_xbrl,
+    #                 member=source_object,
+    #                 parent_qname=parent_qname,
+    #                 level=level
+    #             )
+    #             self.add_member(member)
+    #             print(f"  Added member {source_object.qname} at level {level}")
+                
+    #             # Get child relationships in THIS network
+    #             if dom_mem_rel_set:
+    #                 child_rels = list(dom_mem_rel_set.fromModelObject(source_object))
+    #                 print(f"  Found {len(child_rels)} child relationships for {source_object.qname}")
+                    
+    #                 for rel in child_rels:
+    #                     member_object = rel.toModelObject
+    #                     if member_object is None: 
+    #                         print(f"    Skipping: member object is None")
+    #                         continue
+    #                     if not hasattr(member_object, 'isDomainMember'): 
+    #                         print(f"    Skipping: {member_object.qname} is not a domain member")
+    #                         continue
+                        
+    #                     print(f"    Processing child: {member_object.qname}")
+    #                     add_members_recursive(
+    #                         member_object,
+    #                         str(source_object.qname),
+    #                         level + 1
+    #                     )
+                        
+    #         except Exception as e:
+    #             print(f"Error creating member {source_object.qname}: {str(e)}")
+        
+    #     # Process dimension-domain relationships
+    #     for dim_rel in dim_dom_rel_set.fromModelObject(self.dimension):
+    #         if dim_rel.toModelObject:
+    #             print(f"\nProcessing primary member: {dim_rel.toModelObject.qname}")
+    #             add_members_recursive(dim_rel.toModelObject)
+        
+    #     print(f"Final member count for dimension {self.dimension.qname}: {len(self.members)}\n")
+
     def _set_default_member(self) -> None:
         """Set default member if exists"""
-        default_rel_set = self.model_xbrl.relationshipSet(XbrlConst.dimensionDefault)
+        default_rel_set = self.model_xbrl.relationshipSet(XbrlConst.dimensionDefault, self.network_uri)
         if not default_rel_set: return
             
         # Get relationships using fromModelObject
@@ -1110,7 +1187,7 @@ class Dimension:
         if not relationships: return
         
         # Debug: Print all relationships for this dimension
-        rel_list = list(relationships)
+        # rel_list = list(relationships)
         # for rel in rel_list:
         #     print(f"Default relationship - From: {rel.fromModelObject.qname} -> To: {rel.toModelObject.qname}")
             
@@ -1374,10 +1451,9 @@ class Fact(Neo4jNode):
     concept: Optional[Concept] = field(init=False, default=None)
     unit: Optional[Unit] = field(init=False, default=None)
     period: Optional[Period] = field(init=False, default=None)
- 
-    # TODO: Dimension properties - These are all likley incorrect - need to check
-    dimensions: Optional[List[Dimension]] = field(init=False, default_factory=list)
-    members: Optional[List[Member]] = field(init=False, default_factory=list)
+
+    # dims_members: Optional[List[Tuple[Dimension, Member]]] = field(init=False, default_factory=list)
+    dims_members: Optional[List[Tuple[ModelConcept, ModelConcept]]] = field(init=False, default_factory=list)
     
     def __post_init__(self):
         """Initialize all fields from model_fact after dataclass creation"""
@@ -1399,7 +1475,7 @@ class Fact(Neo4jNode):
         # self.concept = self.model_fact.concept 
         # self.unit = self.model_fact.unitID
         # self._set_period()
-        # self._set_dimensions() # TODO: Looks like its only fetching 1 member per dimensions
+        self._set_dimensions() # Facts can have only 1 member per dimension although can be linked to many dimensions
 
     @property
     def is_nil(self) -> bool:
@@ -1442,18 +1518,62 @@ class Fact(Neo4jNode):
         else:
             self.period = "Forever"
 
-    # To be Used when Linking to Dimension and Member Nodes
+
+# According to the XBRL Dimensions 1.0 specification:
+# For Explicit Dimensions:
+    # A dimension MUST have at least one domain
+    # The domain is declared using dimension-domain relationships
+    # The domain can have child members (using domain-member relationships)
+# For Typed Dimensions: 
+    # No domain is required
+    # Values are defined by an XML Schema type
+
     def _set_dimensions(self) -> None:
-        """Set dimensions and members using same logic as original"""
-        if hasattr(self.model_fact.context, 'qnameDims'):
-            for dim_qname, dim_value in self.model_fact.context.qnameDims.items():
-                self.dimensions.append(str(dim_qname))
-                member = (
-                    str(dim_value.memberQname) if dim_value.isExplicit
-                    else dim_value.typedMember.stringValue if dim_value.isTyped
-                    else "Unknown"
-                )
-                self.members.append(member)
+        """Set dimensions and members using ModelConcept objects for explicit dims
+        and typed values for typed dims"""
+        # Check both segDimValues and scenDimValues as per XBRL spec
+        dim_values = getattr(self.model_fact.context, 'segDimValues', {})
+        dim_values.update(getattr(self.model_fact.context, 'scenDimValues', {}))
+        
+        if not dim_values:
+            # print(f"No dimensions found for fact {self.u_id}")
+            return
+            
+        for dim_concept, dim_value in dim_values.items():
+            try:
+                # For explicit dimensions, use the member ModelConcept
+                if hasattr(dim_value, 'isExplicit') and dim_value.isExplicit:
+                    if hasattr(dim_value, 'member') and dim_value.member is not None:
+                        self.dims_members.append((dim_concept, dim_value.member))
+                        # print(f"Added explicit dimension: {dim_concept.qname}, member: {dim_value.member.qname}")
+                        
+                # For typed dimensions, use the typed value
+                elif hasattr(dim_value, 'isTyped') and dim_value.isTyped:
+                    if hasattr(dim_value, 'typedMember') and dim_value.typedMember is not None:
+                        self.dims_members.append((dim_concept, dim_value.typedMember.stringValue))
+                        print(f"Added typed dimension: {dim_concept.qname}, value: {dim_value.typedMember.stringValue}")
+                        
+                else:
+                    print(f"Dimension {dim_concept.qname} is neither explicit nor typed")
+                    
+            except AttributeError as e:
+                print(f"Warning: Could not process dimension value for {dim_concept.qname}: {e}")
+
+
+    # # To be Used when Linking to Dimension and Member Nodes
+    # def _set_dimensions(self) -> None:
+    #     """Set dimensions and members using same logic as original"""
+    #     if hasattr(self.model_fact.context, 'qnameDims') and self.model_fact.context.qnameDims:
+    #         for dim_qname, dim_value in self.model_fact.context.qnameDims.items():            
+                
+    #             #TODO: For now going ahead with qname as ID for both Dimension and Member
+    #             #  but change it to match unique identifier so we can map to exact node in neo4j,
+    #             #  just like we did with other nodes
+    #             self.dims_members.append((str(dim_qname), 
+    #                 str(dim_value.memberQname) if dim_value.isExplicit
+    #                 else dim_value.typedMember.stringValue if dim_value.isTyped
+    #                 else "Unknown"
+    #             ))
 
     # def __repr__(self) -> str:
     #     """Match ModelObject's repr format"""
@@ -1487,69 +1607,14 @@ class Fact(Neo4jNode):
             "concept_ref": str(self.model_fact.concept.qname) if self.model_fact.concept is not None else None,
             "unit_ref": self.unit if self.unit is not None else None,
             "period_ref": self.period if self.period is not None else None,
-            # Optional dimension info
-            "dimensions": self.dimensions if self.dimensions is not None else None,
-            "members": self.members if self.members is not None else None
+
+            # Collections containing collections can not be stored in properties.
+            # 'dims_members': self.dims_members if self.dims_members is not None else None,
         }
 
 
 #############################FACT CLASS END########################################    
 
-
-
-
-
-#  ###########THIS VALIDATION LOGIC INSIDE FACT CLASS IS ARBITRARY - NEEDS TO BE FIXED#########################
-
-    def validate(self, network: Network) -> bool:
-        """Validate the Fact against its Concept within the given Network."""
-        # Step 1: Check if the Concept is part of the Network
-        if self.concept not in [rel.target_concept for rel in network.relationships]:
-            return False  # Concept not in Network
-
-        # Step 2: If Network is Definition, perform dimensional validation
-        if network.network_type == NetworkType.DEFINITION:
-            # Find the Hypercube associated with the Concept
-            hypercube = self._find_hypercube(network)
-            if hypercube:
-                return self._validate_dimensions(hypercube)
-            else:
-                # No Hypercube found; validation depends on your rules
-                pass
-
-        # Step 3: Additional validations for other Network types if necessary
-
-        return True  # If all validations pass
-
-    def _find_hypercube(self, network: Network) -> Optional[Hypercube]:
-        """Find the Hypercube associated with the Concept in the Network."""
-        for rel in network.relationships:
-            if rel.source_concept == self.concept and rel.hypercube:
-                return rel.hypercube
-        return None
-
-    def _validate_dimensions(self, hypercube: Hypercube) -> bool:
-        """Validate the Fact's Dimensions against the Hypercube."""
-        # Implement your validation logic here
-        # For example, check if all required Dimensions are present
-        required_dims = set(dim.id for dim in hypercube.dimensions)
-        fact_dims = set(dim.id for dim in self.context.dimensions.keys())
-
-        if hypercube.is_closed:
-            # Closed Hypercube: Fact must not have Dimensions outside the Hypercube
-            if not fact_dims <= required_dims:
-                return False
-
-        # Check for "all" or "notAll" arcroles
-        if hypercube.all_arcrole == "all":
-            # Fact must have all Dimensions in the Hypercube
-            if not required_dims <= fact_dims:
-                return False
-
-        # Additional dimension/member validation as needed
-
-        return True
-    
 
 
 
