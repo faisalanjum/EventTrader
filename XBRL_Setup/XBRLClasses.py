@@ -10,8 +10,9 @@ from neo4j import GraphDatabase, Driver
 import pandas as pd
 import re
 import html
+import sys
 from collections import defaultdict
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 
 
 # Arelle imports
@@ -23,54 +24,7 @@ from arelle.ModelInstanceObject import ModelFact, ModelContext, ModelUnit
 from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 
-
-@dataclass
-class Neo4jRelationship:
-    source: Neo4jNode
-    target: Neo4jNode
-    rel_type: RelationType
-
-class NodeType(Enum):
-    """XBRL node types in Neo4j"""
-    COMPANY = "Company"
-    FACT = "Fact"
-    CONCEPT = "Concept"
-    DIMENSION = "Dimension"
-    MEMBER = "Member"
-    HYPERCUBE = "HyperCube"
-    CONTEXT = "Context"
-    PERIOD = "Period"
-    UNIT = "Unit"           # Added for numeric facts
-    NAMESPACE = "Namespace" # Added for prefix management
-    LINKBASE = "Linkbase"  # Added for relationships
-    RESOURCE = "Resource"  # Added for labels, references
-    ABSTRACT = "Abstract"
-    LINE_ITEMS = "LineItems"
-    GUIDANCE = "Guidance"
-    DEPRECATED = "deprecated"
-    DATE = "DateElement"
-    OTHER = "Other"
-
-
-
-class RelationType(Enum):
-    """XBRL relationship types"""
-    HAS_FACT = "HAS_FACT"
-    HAS_CONCEPT = "HAS_CONCEPT"
-    HAS_DIMENSION = "HAS_DIMENSION"
-    HAS_MEMBER = "HAS_MEMBER"
-    REPORTS = "REPORTS"
-    BELONGS_TO = "BELONGS_TO"
-    IN_CONTEXT = "IN_CONTEXT"      # Fact to Context
-    HAS_PERIOD = "HAS_PERIOD"      # Context to Period
-    HAS_UNIT = "HAS_UNIT"         # Fact to Unit
-    PARENT_CHILD = "PARENT_CHILD" # Presentation hierarchy
-    CALCULATION = "CALCULATION"    # Calculation relationships
-    DEFINITION = "DEFINITION"      # Definition relationships
-    HAS_LABEL = "HAS_LABEL"       # Concept to Label
-    HAS_REFERENCE = "HAS_REFERENCE" # Concept to Reference
-
-
+# region Generic Classes
 class Neo4jNode(ABC):
     """Abstract base class for Neo4j nodes"""
     
@@ -109,106 +63,188 @@ class Neo4jNode(ABC):
         return cls(**init_params)
 
 
-######################### CONCEPTS START ####################################################
+class NodeType(Enum):
+    """XBRL node types in Neo4j"""
+    
+    LINE_ITEMS = "LineItems"
+    CONCEPT = "Concept"
+    ABSTRACT = "Abstract"
+    
+    COMPANY = "Company"
+    ENTITY = "Entity" # Not using this for now
+    REPORT = "Report"
+
+    FACT = "Fact"
+    CONTEXT = "Context"
+    PERIOD = "Period"
+    UNIT = "Unit"           
+    
+    HYPERCUBE = "HyperCube"
+    DIMENSION = "Dimension"
+    DOMAIN = "Domain"
+    MEMBER = "Member"
+    
+    NAMESPACE = "Namespace" 
+    LINKBASE = "Linkbase"  
+    RESOURCE = "Resource"  
+
+    GUIDANCE = "Guidance"
+    DEPRECATED = "deprecated"
+    DATE = "Date"
+    OTHER = "Other"
+    ADMIN_REPORT = "AdminReport"
+
+
+
+class RelationType(Enum):
+    """XBRL relationship types"""
+    HAS_FACT = "HAS_FACT"
+    HAS_CONCEPT = "HAS_CONCEPT"
+    HAS_DIMENSION = "HAS_DIMENSION"
+    HAS_MEMBER = "HAS_MEMBER"       # Domain/Dimension -> Member
+    HAS_DOMAIN = "HAS_DOMAIN"       # Dimension -> Domain
+    PARENT_OF = "PARENT_OF"         # Parent Member -> Child Member
+    HAS_DEFAULT = "HAS_DEFAULT"     # Dimension -> Default Member
+    MEMBER_OF = "MEMBER_OF"         # Member to Parent Member
+    IN_TAXONOMY = "IN_TAXONOMY"     # Dimension/Member to Taxonomy
+    REPORTS = "REPORTS"
+    BELONGS_TO = "BELONGS_TO"
+    IN_CONTEXT = "IN_CONTEXT"       # Fact to Context
+    HAS_PERIOD = "HAS_PERIOD"       # Context to Period
+    HAS_UNIT = "HAS_UNIT"           # Fact to Unit
+    PARENT_CHILD = "PARENT_CHILD"   # Presentation hierarchy
+    CALCULATION = "CALCULATION"     # Calculation relationships
+    DEFINITION = "DEFINITION"       # Definition relationships
+    HAS_LABEL = "HAS_LABEL"         # Concept to Label
+    HAS_REFERENCE = "HAS_REFERENCE" # Concept to Reference
+    NEXT = "NEXT"                   # Next date
+    HAS_PRICE = "HAS_PRICE"         # from Date to Entity/Company
+    HAS_SUB_REPORT = "HAS_SUB_REPORT"  # For 10-K -> FYE and 10-Q -> Quarters relationships
+    REPORTED_ON = "REPORTED_ON"     # From DateNode to ReportNode
+    
+
+
+
+class ReportElementClassifier:
+    LINKBASE_ELEMENTS = [
+        'link:part', 'xl:extended', 'xl:arc', 'xl:simple', 
+        'xl:resource', 'xl:documentation', 'xl:locator', 
+        'link:linkbase', 'link:definition', 'link:usedOn', 
+        'link:roleType', 'link:arcroleType'
+    ]
+    
+    DATE_ELEMENTS = [
+        'xbrli:instant', 'xbrli:startDate', 'xbrli:endDate', 
+        'dei:eventDateTime', 'xbrli:forever'
+    ]
+
+    @staticmethod
+    def get_substitution_group(concept: Any) -> str:
+        return (str(concept.substitutionGroupQname) 
+                if concept.substitutionGroupQname else "N/A")
+
+    @staticmethod
+    def get_local_type(concept: Any) -> str:
+        return (str(concept.typeQname.localName) 
+                if concept.typeQname else '')
+
+    @staticmethod
+    def check_nillable(concept: Any) -> bool:
+        return (concept.nillable == 'true')
+
+    @staticmethod
+    def check_duration(concept: Any) -> bool:
+        return (concept.periodType == 'duration')
+
+    @classmethod
+    def classify(cls, concept: Any) -> NodeType:
+        qname_str = str(concept.qname)
+        sub_group = cls.get_substitution_group(concept)
+        local_type = cls.get_local_type(concept)
+        nillable = cls.check_nillable(concept)
+        duration = cls.check_duration(concept)
+
+        # Initial classification
+        category = cls._initial_classify(concept, qname_str, sub_group, 
+                                      local_type, nillable, duration)
+        
+        # Integrated post-classification
+        if category == NodeType.OTHER:
+            category = cls._post_classify_single(concept, qname_str, sub_group)
+        
+        return category
+
+    @classmethod
+    def _initial_classify(cls, concept, qname_str, sub_group, local_type, 
+                         nillable, duration) -> NodeType:
+        # 1. Basic Concept
+        if not concept.isAbstract and sub_group == 'xbrli:item':
+            return NodeType.CONCEPT
+        
+        # 2. Hypercube [Table]
+        if (concept.isAbstract and 
+            sub_group == 'xbrldt:hypercubeItem' and
+            duration and nillable):
+            return NodeType.HYPERCUBE
+        
+        # 3. Dimension [Axis]
+        if (concept.isAbstract and 
+            sub_group == 'xbrldt:dimensionItem' and 
+            duration and nillable):
+            return NodeType.DIMENSION
+        
+        # 4. Member [Domain/Member]
+        if ((any(qname_str.endswith(suffix) for suffix in ["Domain", "domain", "Member"]) or 
+             local_type == 'domainItemType') and 
+            duration and nillable):
+            return NodeType.MEMBER
+        
+        # 5. Abstract
+        if any(qname_str.endswith(suffix) for suffix in [
+            "Abstract", "Hierarchy", "RollUp", 
+            "RollForward", "Rollforward"
+        ]) and concept.isAbstract:
+            return NodeType.ABSTRACT
+        
+        # 6. LineItems
+        if "LineItems" in qname_str and duration and nillable:
+            return NodeType.LINE_ITEMS
+        
+        # 7. Guidance
+        if local_type == 'guidanceItemType' or "guidance" in qname_str.lower():
+            return NodeType.GUIDANCE
+        
+        # 8. Deprecated
+        if "deprecated" in qname_str.lower() or "deprecated" in local_type.lower():
+            return NodeType.DEPRECATED
+
+        return NodeType.OTHER
+
+    @classmethod
+    def _post_classify_single(cls, concept, qname_str, sub_group) -> NodeType:
+        # Rule 1: IsDomainMember -> *Member
+        if concept.isDomainMember:
+            return NodeType.MEMBER
+            
+        # Rule 2: Abstract -> *Abstract
+        if concept.isAbstract:
+            return NodeType.ABSTRACT
+            
+        # Rule 3: LinkbaseElement SubstitutionGroups
+        if sub_group in cls.LINKBASE_ELEMENTS:
+            return NodeType.LINKBASE
+            
+        # Rule 4: Date Elements
+        if qname_str in cls.DATE_ELEMENTS:
+            return NodeType.DATE
+            
+        return NodeType.OTHER
+
+# endregion
 
 
 @dataclass
-class Concept(Neo4jNode):
-    model_concept: Optional[ModelConcept] = None # The original ModelConcept object
-    u_id: Optional[str] = None
-    
-    # Change init=False to have defaults for Neo4j loading
-    qname: Optional[str] = None
-    concept_type: Optional[str] = None
-    period_type: Optional[str] = None
-    namespace: Optional[str] = None
-    label: Optional[str] = None
-    balance: Optional[str] = None
-    type_local: Optional[str] = None    
-    
-    facts: List[Fact] = field(init=False, default_factory=list)
-    # hypercubes: Optional[List[str]] = field(default_factory=list)  # Hypercubes associated in the Definition Network
-
-    def __post_init__(self):
-        if self.model_concept is not None:
-            # Initialize from XBRL source
-            self.u_id = f"{self.model_concept.qname.namespaceURI}:{self.model_concept.qname}"
-            self.qname = str(self.model_concept.qname)
-            self.concept_type = str(self.model_concept.typeQname) if self.model_concept.typeQname else "N/A"
-            self.period_type = self.model_concept.periodType or "N/A"
-            self.namespace = self.model_concept.qname.namespaceURI.strip()
-            self.label = self.model_concept.label(lang="en")            
-            self.balance = self.model_concept.balance
-            self.type_local = self.model_concept.baseXsdType
-        elif not self.u_id:
-            raise ValueError("Either model_concept or properties must be provided")
-
-
-    def __hash__(self):
-        # Use a unique attribute for hashing, such as qname
-        return hash(self.u_id)
-
-    def __eq__(self, other):
-        # Ensure equality is based on the same attribute used for hashing
-        if isinstance(other, Concept):
-            return self.u_id == other.u_id
-        return False
-
-    def add_fact(self, fact: Fact) -> None:
-        """Add fact reference to concept"""
-        self.facts.append(fact)
-
-    # def __repr__(self) -> str:
-    #     """Match ModelObject's repr format"""
-    #     return f"Concept[{self.qname}, {self.category}, line {self.source_line}]"
-
-    @property
-    def is_numeric(self) -> bool:
-        return self.model_concept.isNumeric
-        
-    @property
-    def is_monetary(self) -> bool:
-        return self.model_concept.isMonetary
-        
-    @property
-    def is_text_block(self) -> bool:
-        return self.model_concept.isTextBlock
-    
-    # Neo4j Node Properties
-    @property
-    def node_type(self) -> NodeType:
-        """Used for Neo4j node labeling"""
-        return NodeType.CONCEPT
-        
-    @property
-    def id(self) -> str:
-        """u_id for Neo4j MERGE"""
-        return self.u_id
-        
-    @property
-    def properties(self) -> Dict[str, Any]:
-        """Actual node properties in Neo4j"""
-        return {
-            "qname": self.qname,
-            "u_id": self.id, # this returns the u_id
-            "concept_type": self.concept_type,
-            "period_type": self.period_type,
-            "namespace": self.namespace,
-            "label": self.label,
-            "balance": self.balance, # To be used later in Relationships
-            "type_local": self.type_local
-        }
-        
-
-   
-
-######################### CONCEPTS END ####################################################
-
-
-############################### Report Class START #######################################################
-
-@dataclass
-class Report:
+class process_report:
 
     # Add Other Report Elements
 
@@ -227,18 +263,157 @@ class Report:
     units: List[Unit] = field(init=False, default_factory=list, repr=False)
     facts: List[Fact] = field(init=False, default_factory=list, repr=False)
     dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)
+    taxonomy: Taxonomy = field(init=False)
+
+
+    dates: List[DateNode] = field(init=False, default_factory=list)
+    admin_reports: List[AdminReportNode] = field(init=False, default_factory=list)
+
 
     _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False)
     _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False)
+    
     
      # TODO
      # networks: List[Network] = field(init=False, default_factory=list, repr=False)
      
     def __post_init__(self):
-        self.load_xbrl()
-        self.extract_report_metadata()
+        
+        # Later remove these from process_report 
+        self.initialize_date_nodes(start_dt = "2024-12-01")
+        
+        self.load_xbrl()                    # Required to fetch Company node
+        self.initialize_entity_node()       # Company Node Creation
+        self.initialize_admin_reports()     # Admin Reports Node Creation   
+
+        self.initialize_report_node(cik = self.entity.cik)       # Report Node Creation
+
+        # self.extract_report_metadata()
+
         self.populate_common_nodes()  # First handle common nodes
+        self.populate_company_nodes() # Then handle company-specific nodes
         self.populate_report_nodes()  # Then handle report-specific nodes
+
+    def initialize_date_nodes(self, start_dt: str):
+        """One-time initialization of date nodes"""
+        try:
+            self.dates = create_date_range(start_dt)
+            relationships = create_date_relationships(self.dates)
+            self.neo4j.merge_nodes(self.dates)
+            self.neo4j.merge_relationships(relationships)
+            
+        except Exception as e:
+            print(f"Error initializing date nodes: {e}")
+
+
+    def initialize_entity_node(self):
+        """Initialize company node and create relationships with dates"""
+        try:
+            # Get company info and create entity
+            cik, name, fiscal_year_end = get_company_info(self.model_xbrl)        
+            self.entity = CompanyNode(cik=cik, name=name, fiscal_year_end=fiscal_year_end)
+
+            # Create/Merge company node
+            self.neo4j.merge_nodes([self.entity])
+
+            # Create relationships between dates and company with price data
+            date_entity_relationships = []
+            
+            # Assuming self.dates contains all date nodes
+            for date_node in self.dates:
+                
+                # TODO: Replace with actual price data source
+                price_data = {'price': 100.0,  'returns': 0.01, 'session': 'Close','time': '12:01:52'} # placeholder
+                
+                # Create relationship from date to company with price properties
+                date_entity_relationships.append(
+                    (date_node, self.entity, RelationType.HAS_PRICE, price_data))
+
+            # Merge relationships with properties
+            self.neo4j.merge_relationships(date_entity_relationships)
+            # print(f"Created {len(date_entity_relationships)} {RelationType.HAS_PRICE.value} relationships from {self.dates[0].__class__.__name__} to {self.entity.__class__.__name__}")
+                
+        except Exception as e:
+            print(f"Error initializing company node: {e}")
+
+
+    def initialize_admin_reports(self):
+        """Initialize admin report hierarchy"""
+        
+        # Store admin report nodes in class
+        self.admin_reports = [
+            # Parent nodes
+            *[AdminReportNode(code=t, label=l, category=t) 
+            for t, l in {
+                "10-K": "10-K Reports",
+                "10-Q": "10-Q Reports", 
+                "8-K": "8-K Reports"
+            }.items()],
+            
+            # Child nodes
+            *[AdminReportNode(code=f"10-K_FYE-{m}31", label=f"FYE {m}/31", category="10-K") 
+            for m in ['03', '06', '09', '12']],
+            *[AdminReportNode(code=f"10-Q_Q{q}", label=f"Q{q} Filing", category="10-Q") 
+            for q in range(1, 5)]
+        ]
+        
+        # Create parent-child relationships
+        rels = [(p, c, RelationType.HAS_SUB_REPORT) 
+                for p in self.admin_reports[:3]  # Parent nodes
+                for c in self.admin_reports[3:]  # Child nodes
+                if p.code == c.category]
+        
+        self.neo4j.merge_nodes(self.admin_reports)
+        self.neo4j.merge_relationships(rels)
+
+
+    def initialize_report_node(self, cik: str):
+        """Initialize report node and link to admin report and date"""
+        doc_type, period_end_date, is_amendment = get_report_info(self.model_xbrl)
+        
+        # Strip "/A" from doc_type if present
+        doc_type = doc_type.split('/')[0]  # Convert "10-Q/A" to "10-Q"
+
+
+        print(f"Processing {doc_type} report for {period_end_date}")
+        
+        # Create report node
+        self.report = ReportNode(formType=doc_type, periodEnd=period_end_date,
+                            isAmendment=is_amendment, instanceFile=self.instance_file, cik=cik)
+        
+        month = datetime.strptime(period_end_date, '%Y-%m-%d').month
+        
+        # Find matching admin report
+        if doc_type == "8-K":
+            target = next(n for n in self.admin_reports if n.code == "8-K")
+        else:
+            sub_reports = [n for n in self.admin_reports if n.category == doc_type]
+            if doc_type == "10-K":
+                # Find closest FYE month
+                target = min(sub_reports, 
+                            key=lambda n: abs(int(n.code[-4:-2]) - month))
+            else:  # 10-Q
+                # Find closest quartermerge_relationships
+                report_quarter = (month - 1) // 3 + 1
+                target = min(sub_reports,
+                            key=lambda n: abs(int(n.code[-1]) if n.code[-1].isdigit() else 0 - report_quarter))
+        
+        # Find closest date node
+        filed_date = datetime.strptime(self.report.filedAt[:10], '%Y-%m-%d')
+        date_node = min(self.dates, key=lambda d: abs((datetime(d.year, d.month, d.day) - filed_date).days))
+        
+        # Merge nodes and relationships
+        self.neo4j.merge_nodes([self.report])
+        self.neo4j.merge_relationships([
+            (self.report, target, RelationType.BELONGS_TO),
+            (date_node, self.report, RelationType.REPORTED_ON, {
+                'price': 100.0, # Place Holder Values - change later
+                'returns': 0.01,
+                'session': 'Close',
+                'time': '12:01:52'
+            }) ])
+
+
 
     def load_xbrl(self):
         # Initialize the controller
@@ -287,12 +462,47 @@ class Report:
         self._concept_lookup = {node.id: node for node in self.concepts} 
 
 
+
+    def populate_company_nodes(self):
+        """Build and sync company-specific nodes (Dimensions, Members) with Neo4j"""        
+        if not self.model_xbrl:
+            raise RuntimeError("XBRL model not loaded.")
+
+        # Build taxonomy-wide dimensions
+        self.taxonomy = Taxonomy(self.model_xbrl)
+        self.taxonomy.build_dimensions()
+
+        # Collect all nodes
+        all_members = [member for dim in self.taxonomy.dimensions 
+                    if dim.members_dict 
+                    for member in dim.members_dict.values()]
+        all_domains = [dim.domain for dim in self.taxonomy.dimensions if dim.domain is not None]
+
+        # Export nodes to Neo4j
+        self._export_nodes([
+            self.taxonomy.dimensions,  # Dimensions
+            all_domains,              # Domains
+            all_members               # Members
+        ], testing=False)
+
+        # Export relationships
+        relationships = []
+        relationships.extend(self.taxonomy.get_dimension_domain_relationships())
+        relationships.extend(self.taxonomy.get_dimension_member_relationships())
+        relationships.extend(self.taxonomy.get_member_hierarchy_relationships())
+        
+        if relationships:
+            self.neo4j.merge_relationships(relationships)
+        
+        self._build_networks()
+
+
+
     def populate_report_nodes(self):
         """Build and export report-specific nodes (Facts, Dimensions)"""
         if not self.model_xbrl:
             raise RuntimeError("XBRL model not loaded.")
 
-        self._build_networks()    # 4. Build networks, dimensions and hierarchies
         self._build_facts()       # 5. Build facts
         
         # Upload to Neo4j report-specific nodes - # Testing=False since otherwise it will clear the db
@@ -465,9 +675,8 @@ class Report:
                     network_uri=network.network_uri,
                     model_xbrl=self.model_xbrl,
                     report=self  # Pass report reference to access/create concepts and abstracts
-            )
-            
-                
+                )
+                            
         # 3. Adding hypercubes after networks are complete which in turn builds dimensions
         for network in self.networks:
             network.add_hypercubes(self.model_xbrl)
@@ -544,9 +753,615 @@ class Report:
             self.neo4j.merge_relationships(relationships)
                         
 
-############################### Report Class END #######################################################
 
-############################### Presentation Class START #######################################################
+# region : Common/Macro Nodes ########################
+
+@dataclass
+class Taxonomy:
+    model_xbrl: ModelXbrl
+    dimensions: List[Dimension] = field(default_factory=list)
+    _dimension_lookup: Dict[str, Dimension] = field(default_factory=dict)
+    
+    def build_dimensions(self):
+        """Build taxonomy-wide dimensions and their hierarchies"""
+        # Get dimension-domain relationships first
+        dim_dom_rel_set = self.model_xbrl.relationshipSet(XbrlConst.dimensionDomain)
+        
+        # Find all dimensions in taxonomy
+        for concept in self.model_xbrl.qnameConcepts.values():
+            if concept.isDimensionItem:
+                try:
+                    dimension = Dimension(
+                        model_xbrl=self.model_xbrl,
+                        dimension=concept,
+                        network_uri=None  # Indicates taxonomy-wide context
+                    )
+                    
+                    # Set domain first (important!)
+                    if dim_dom_rel_set:
+                        for rel in dim_dom_rel_set.fromModelObject(concept):
+                            if rel.toModelObject:
+                                dimension.domain = Member(
+                                    model_xbrl=self.model_xbrl,
+                                    member=rel.toModelObject,
+                                    parent_qname=None,
+                                    level=0
+                                )
+                                break
+                    
+                    # Build members only after domain is potentially set
+                    dimension._build_members()
+                    
+                    self.dimensions.append(dimension)
+                    self._dimension_lookup[dimension.qname] = dimension
+                    
+                except Exception as e:
+                    print(f"Error creating dimension {concept.qname}: {str(e)}")
+
+    def get_dimension_member_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+        """Get all dimension-member relationships"""
+        relationships = []
+        
+        for dimension in self.dimensions:
+            if dimension.domain:
+                # Connect members to domain
+                for member in dimension.members_dict.values():
+                    relationships.append((dimension.domain, member, RelationType.HAS_MEMBER))
+        
+        return relationships                    
+           
+
+    def get_dimension_domain_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+        """Get all dimension-domain relationships"""
+        relationships = []
+        for dimension in self.dimensions:
+            if dimension.domain:
+                # Connect dimension to domain
+                relationships.append((dimension, dimension.domain, RelationType.HAS_DOMAIN))
+        return relationships
+
+    def get_member_hierarchy_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+        """Get member-to-member hierarchy relationships"""
+        relationships = []
+        for dimension in self.dimensions:
+            if dimension.members_dict:
+                for member in dimension.members_dict.values():
+                    if member.parent_qname:
+                        parent = dimension.members_dict.get(member.parent_qname)
+                        if parent:
+                            relationships.append((parent, member, RelationType.PARENT_OF))
+        return relationships
+    
+    def get_all_members(self) -> List[Member]:
+        """Get all members across all dimensions"""
+        return [
+            member 
+            for dim in self.dimensions 
+            if dim.members_dict
+            for member in dim.members_dict.values()
+        ]
+
+    def get_dimension_members(self, dimension_qname: str) -> List[Member]:
+        """Get members for a specific dimension"""
+        dimension = self._dimension_lookup.get(dimension_qname)
+        if dimension and dimension.members_dict:
+            return list(dimension.members_dict.values())
+        return []    
+
+@dataclass
+class Concept(Neo4jNode):
+    model_concept: Optional[ModelConcept] = None # The original ModelConcept object
+    u_id: Optional[str] = None
+    
+    # Change init=False to have defaults for Neo4j loading
+    qname: Optional[str] = None
+    concept_type: Optional[str] = None
+    period_type: Optional[str] = None
+    namespace: Optional[str] = None
+    label: Optional[str] = None
+    balance: Optional[str] = None
+    type_local: Optional[str] = None    
+    
+    facts: List[Fact] = field(init=False, default_factory=list)
+    # hypercubes: Optional[List[str]] = field(default_factory=list)  # Hypercubes associated in the Definition Network
+
+    def __post_init__(self):
+        if self.model_concept is not None:
+            # Initialize from XBRL source
+            self.u_id = f"{self.model_concept.qname.namespaceURI}:{self.model_concept.qname}"
+            self.qname = str(self.model_concept.qname)
+            self.concept_type = str(self.model_concept.typeQname) if self.model_concept.typeQname else "N/A"
+            self.period_type = self.model_concept.periodType or "N/A"
+            self.namespace = self.model_concept.qname.namespaceURI.strip()
+            self.label = self.model_concept.label(lang="en")            
+            self.balance = self.model_concept.balance
+            self.type_local = self.model_concept.baseXsdType
+        elif not self.u_id:
+            raise ValueError("Either model_concept or properties must be provided")
+
+
+    def __hash__(self):
+        # Use a unique attribute for hashing, such as qname
+        return hash(self.u_id)
+
+    def __eq__(self, other):
+        # Ensure equality is based on the same attribute used for hashing
+        if isinstance(other, Concept):
+            return self.u_id == other.u_id
+        return False
+
+    def add_fact(self, fact: Fact) -> None:
+        """Add fact reference to concept"""
+        self.facts.append(fact)
+
+    # def __repr__(self) -> str:
+    #     """Match ModelObject's repr format"""
+    #     return f"Concept[{self.qname}, {self.category}, line {self.source_line}]"
+
+    @property
+    def is_numeric(self) -> bool:
+        return self.model_concept.isNumeric
+        
+    @property
+    def is_monetary(self) -> bool:
+        return self.model_concept.isMonetary
+        
+    @property
+    def is_text_block(self) -> bool:
+        return self.model_concept.isTextBlock
+    
+    # Neo4j Node Properties
+    @property
+    def node_type(self) -> NodeType:
+        """Used for Neo4j node labeling"""
+        return NodeType.CONCEPT
+        
+    @property
+    def id(self) -> str:
+        """u_id for Neo4j MERGE"""
+        return self.u_id
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """Actual node properties in Neo4j"""
+        return {
+            "qname": self.qname,
+            "u_id": self.id, # this returns the u_id
+            "concept_type": self.concept_type,
+            "period_type": self.period_type,
+            "namespace": self.namespace,
+            "label": self.label,
+            "balance": self.balance, # To be used later in Relationships
+            "type_local": self.type_local
+        }        
+
+@dataclass
+class AbstractConcept(Concept):
+    def __post_init__(self):
+        super().__post_init__()
+        if not self.model_concept.isAbstract:
+            raise ValueError("Cannot create AbstractConcept from non-abstract concept")
+    
+    @property
+    def is_abstract(self) -> bool:
+        return True
+
+@dataclass
+class Period(Neo4jNode):
+    period_type: str  # Required field, no default
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    # context_ids: List[str] = field(default_factory=list)
+    context_ids: Optional[List[str]] = field(default_factory=list)  # Optional, defaults to an empty list
+    u_id: str = field(init=False)
+
+    def __post_init__(self):
+        if self.period_type == "duration" and not (self.start_date and self.end_date):
+            raise ValueError("Duration periods must have both start and end dates")
+        if self.period_type == "instant" and not self.start_date:
+            raise ValueError("Instant periods must have a start date")
+        self.generate_id()
+
+    def __hash__(self):
+        return hash(self.u_id)
+
+    def __eq__(self, other):
+        if isinstance(other, Period):
+            return self.u_id == other.u_id
+        return False
+
+    @property
+    def is_duration(self) -> bool:
+        return self.start_date is not None and self.end_date is not None
+
+    @property
+    def is_instant(self) -> bool:
+        return self.start_date is not None and self.end_date is None
+
+    def generate_id(self):
+        """Generate a unique ID for the period."""
+        id_parts = [self.period_type]
+        if self.start_date:
+            id_parts.append(self.start_date)
+        if self.end_date:
+            id_parts.append(self.end_date)
+        self.u_id = "_".join(id_parts)
+
+    # Neo4j Node Properties
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.PERIOD
+        
+    @property
+    def id(self) -> str:
+        return self.u_id
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            "u_id": self.id,# This returns u_id
+            "period_type": self.period_type,
+            "start_date": self.start_date,
+            "end_date": self.end_date
+            # "context_ids": self.context_ids # TODO: Add this back in relation to Facts but after adding report_metadata
+        }
+
+    def merge_context(self, context_id: str) -> None:
+        """Add a context ID if it's not already present"""
+        if context_id not in self.context_ids:
+            self.context_ids.append(context_id)
+
+@dataclass
+class Unit(Neo4jNode):
+    """ Units are uniquely identified by their string_value (e.g. 'iso4217:USD', 'shares').
+    Non-numeric facts have no unit information and as such excluded from Unit nodes."""
+        
+    model_fact: Optional[ModelFact] = None
+    u_id: Optional[str] = None
+    
+    # All these will be set in post_init
+    string_value: Optional[str] = None
+    is_divide: Optional[bool] = None
+    unit_reference: Optional[str] = None
+    registry_id: Optional[str] = None
+    is_simple_unit: Optional[bool] = None
+    item_type: Optional[str] = None
+    namespace: Optional[str] = None
+    status: Optional[str] = None
+
+    def __post_init__(self):
+        """Process the model_fact to initialize all unit attributes"""
+        if self.model_fact is None:  # Skip if loading from Neo4j
+            return
+        
+        unit = getattr(self.model_fact, 'unit', None)
+        self.is_divide = getattr(unit, "isDivide", None)
+        self.string_value = getattr(unit, "stringValue", None)
+        self.unit_reference = self._normalize_unit_id(self.model_fact.unitID)
+        
+        # Process UTR entries
+        utr_entry = next(iter(self.model_fact.utrEntries), None) if self.model_fact.utrEntries else None
+        self.registry_id = getattr(utr_entry, "id", None)
+        self.is_simple_unit = getattr(utr_entry, "isSimple", None)
+        self.item_type = getattr(utr_entry, "itemType", None)
+        self.namespace = getattr(utr_entry, "nsUnit", None)
+        self.status = getattr(utr_entry, "status", None)
+        
+        self.u_id = self.generate_uid() # UTR ID + String Value
+
+    def generate_uid(self):
+        # Defensive cleaning - handle any possible input
+        clean_ns = str(self.namespace).strip() if self.namespace is not None else ""
+        clean_val = str(self.string_value).strip() if self.string_value is not None else ""
+        
+        # If we have both, combine them
+        if clean_ns and clean_val:
+            return f"{clean_ns}_{clean_val}"
+        # If we only have value, return it
+        elif clean_val:
+            return clean_val
+        # If neither, return None
+        return None
+            
+
+    def __hash__(self):
+        """Enable using Unit objects in sets and as dict keys"""
+        return hash(self.u_id)
+
+    def __eq__(self, other):
+        """Enable comparison between Unit objects"""
+        if isinstance(other, Unit):
+            return self.u_id == other.u_id
+        return False
+
+    @staticmethod
+    def _normalize_unit_id(unit_id: Any) -> Optional[str]:
+        if not unit_id:
+            return None
+        if isinstance(unit_id, str) and unit_id.startswith("u-"):
+            return unit_id
+        if hasattr(unit_id, "id"):
+            return f"u-{unit_id.id}"
+        return f"u-{abs(hash(str(unit_id))) % 10000}"
+
+    @property
+    def is_simple(self) -> bool:
+        """Check if the unit is a simple unit based on registry data"""
+        return bool(self.is_simple_unit)
+    
+    @property
+    def is_registered(self) -> bool:
+        """Check if the unit is registered in UTR"""
+        return self.registry_id is not None
+    
+    @property
+    def is_active(self) -> bool:
+        """Check if the unit is active based on status"""
+        return self.status == "active" if self.status else False
+
+    # Neo4j Node Properties
+    @property
+    def node_type(self) -> NodeType:
+        """Define the Neo4j node type"""
+        return NodeType.UNIT
+        
+    @property
+    def id(self) -> str:
+        """u_id for Neo4j"""
+        return self.u_id
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """Actual node properties in Neo4j"""
+        return {
+            "id": self.id,
+            "name": self.string_value,  # Using string_value as name
+            "is_divide": self.is_divide,
+            "is_simple_unit": self.is_simple_unit,
+            "item_type": self.item_type,
+            "namespace": self.namespace,
+            "registry_id": self.registry_id,
+            "status": self.status,
+            # "string_value": self.string_value,
+            "u_id": self.u_id,
+            "unit_reference": self.unit_reference
+        }
+
+ 
+    def __repr__(self) -> str:
+        """String representation of the Unit"""
+        return f"Unit(id={self.id}, type={self.item_type or 'unknown'})"  # Changed self._id to self.id
+    
+
+# endregion : Common/Macro Nodes ########################
+
+
+@dataclass
+class AdminReportNode(Neo4jNode):
+    code: str          # e.g., "10-K_FYE-1231", "10-Q_Q1", "8-K"
+    label: str         # e.g., "Annual Report (December)", "Q1 Report"
+    category: str      # e.g., "10-K", "10-Q", "8-K"
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.ADMIN_REPORT
+        
+    @property
+    def id(self) -> str:
+        return self.code
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            "code": self.code,
+            "label": self.label,
+            "category": self.category,
+            "displayLabel": self.label
+        }
+
+# region : Company Nodes ########################
+
+
+# TODO: Once we have sec-api subscription, can remove Optional from fields. 
+
+@dataclass
+class CompanyNode(Neo4jNode):
+    cik: str
+    name: str
+    ticker: Optional[str] = None
+    exchange: Optional[str] = None
+    sector: Optional[str] = None
+    industry: Optional[str] = None
+    fiscal_year_end: Optional[str] = None
+
+    def __post_init__(self):
+        # Ensure CIK is properly formatted (10 digits with leading zeros)
+        self.cik = self.cik.zfill(10)
+        
+    def display(self):
+        """Returns display name for the entity"""
+        if self.ticker:
+            return f"{self.name} ({self.ticker})"
+        return self.name
+
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.COMPANY
+
+    @property
+    def id(self) -> str:
+        """Use CIK as unique identifier"""
+        return self.cik
+
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """
+        Returns properties for Neo4j node
+        Filters out None values to keep the node clean
+        """
+        props = {
+            'id': self.id,
+            'cik': self.cik,
+            'name': self.name,
+            'displayLabel': self.display()
+        }
+        
+        # Add optional properties if they exist
+        optional_props = {
+            'ticker': self.ticker,
+            'exchange': self.exchange,
+            'sector': self.sector,
+            'industry': self.industry,
+            'fiscal_year_end': self.fiscal_year_end
+        }
+        
+        # Only include non-None optional properties
+        props.update({k: v for k, v in optional_props.items() if v is not None})
+        
+        return props
+
+
+@dataclass
+class DateNode(Neo4jNode):
+    year: int
+    month: int
+    day: int
+
+    def __post_init__(self):
+        self.date = datetime(self.year, self.month, self.day)
+
+    def display(self):
+        return self.date.strftime("%Y-%m-%d")
+        
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.DATE
+        
+    @property
+    def id(self) -> str:
+        return self.display()
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            'id': self.display(),
+            'year': self.year,
+            'month': self.month,
+            'day': self.day,
+            'quarter': f"Q{(self.month-1)//3 + 1}",
+            'displayLabel': self.display() 
+        }
+
+
+@dataclass
+class Network:
+    """Represents a single network (extended link role) in the XBRL document"""
+    """Represents a specific section of the report (e.g., 'Balance Sheet', 'Income Statement', 'Notes').
+    Each network has a unique URI like 'http://company.com/role/BALANCESHEET'"""
+
+    model_xbrl: ModelXbrl
+    name: str
+    network_uri: str
+    id: str
+    category: str # Note you can simply use "network.networkType" to get type of network
+    concepts: List[Concept] = field(init=False, default_factory=list) 
+
+    relationship_sets: List[str] = field(default_factory=list) # check if this is needed
+    hypercubes: List[Hypercube] = field(init=False, default_factory=list)
+    presentation: Optional[Presentation] = field(init=False, default=None)
+
+    
+    def add_hypercubes(self, model_xbrl) -> None:
+        """Add hypercubes if this is a definition network"""
+        if not self.isDefinition:
+            return
+            
+        # for rel in model_xbrl.relationshipSet(XbrlConst.all).modelRelationships:
+        #     if (rel.linkrole == self.network_uri and 
+        #         rel.toModelObject is not None and 
+        #         hasattr(rel.toModelObject, 'isHypercubeItem') and 
+        #         rel.toModelObject.isHypercubeItem):
+                
+        #         hypercube = Hypercube(
+        #             model_xbrl = self.model_xbrl,
+        #             hypercube_item=rel.toModelObject,
+        #             network_uri=self.network_uri
+        #         )
+        #         self.hypercubes.append(hypercube)
+
+        # Check both 'all' and 'notAll' relationships
+        for rel_type in [XbrlConst.all, XbrlConst.notAll]:
+            for rel in model_xbrl.relationshipSet(rel_type).modelRelationships:
+                if (rel.linkrole == self.network_uri and 
+                    rel.toModelObject is not None and 
+                    hasattr(rel.toModelObject, 'isHypercubeItem') and 
+                    rel.toModelObject.isHypercubeItem):
+                    
+                    hypercube = Hypercube(
+                        model_xbrl = self.model_xbrl,
+                        hypercube_item=rel.toModelObject,
+                        network_uri=self.network_uri
+                    )
+                    self.hypercubes.append(hypercube)
+    
+
+    @property
+    def isPresentation(self) -> bool:
+        """Indicates if network contains presentation relationships"""
+        return XbrlConst.parentChild in self.relationship_sets
+
+    @property
+    def isCalculation(self) -> bool:
+        """Indicates if network contains calculation relationships"""
+        return XbrlConst.summationItem in self.relationship_sets
+
+    @property 
+    def isDefinition(self) -> bool:
+        """Indicates if network contains definition relationships"""
+        return any(rel in self.relationship_sets for rel in [
+            XbrlConst.all,
+            XbrlConst.notAll,
+            XbrlConst.dimensionDefault,
+            XbrlConst.dimensionDomain,
+            XbrlConst.domainMember,
+            XbrlConst.hypercubeDimension
+        ])
+
+    
+    @property
+    def networkType(self) -> str:
+        """Returns the detailed category type of the network"""
+        if self.category == 'Statement':
+            return 'Statement'
+        elif self.category == 'Document':
+            return 'Document'
+        elif self.category == 'Disclosure':
+            if '(Tables)' in self.name:
+                return 'Tables'
+            elif '(Policies)' in self.name:
+                return 'Policies'
+            elif '(Details)' in self.name:
+                return 'Details'
+            else:
+                return 'FootNotes'
+        return 'Other'
+    
+
+    def validate_facts(self) -> List[Fact]:
+        # Step1: Get all facts (W/O Dims)for concepts in this presentation that are not in any hypercubes of this network
+        # node.concept.__class__ != AbstractConcept
+
+        # Each node_value has : 'children', 'concept', 'concept_id', 'level', 'order'
+
+        fact_list = set([
+            fact.u_id 
+            for node in self.presentation.nodes.values() 
+            for fact in node.concept.facts 
+            if node.concept.__class__ != AbstractConcept and node.concept not in [concept for hypercube in self.hypercubes for concept in hypercube.concepts]
+        ])
+
+        return fact_list
+
 
 @dataclass
 class PresentationNode:
@@ -571,7 +1386,7 @@ class Presentation:
     """
     network_uri: str
     model_xbrl: ModelXbrl
-    report: Report
+    report: process_report
     
     nodes: Dict[str, PresentationNode] = field(init=False, default_factory=dict)
     
@@ -680,26 +1495,6 @@ class Presentation:
         root_ids = all_parents - all_children
         return {self.nodes[concept_id] for concept_id in root_ids}
 
-
-############################### Presentation Class END #######################################################
-
-############################### Abstract Class START #######################################################
-
-@dataclass
-class AbstractConcept(Concept):
-    def __post_init__(self):
-        super().__post_init__()
-        if not self.model_concept.isAbstract:
-            raise ValueError("Cannot create AbstractConcept from non-abstract concept")
-    
-    @property
-    def is_abstract(self) -> bool:
-        return True
-
-############################### Abstract Class END #######################################################
-
-
-############################### Hypercube Class START #######################################################
 
 @dataclass
 class Hypercube:
@@ -828,155 +1623,18 @@ class Hypercube:
         """ID attribute of the hypercube"""
         return self.hypercube_item.id if hasattr(self.hypercube_item, 'id') else None
 
-############################### Hypercube Class END #######################################################
-
-
-############################### Network Class START #######################################################
-
-
 @dataclass
-class Network:
-    """Represents a single network (extended link role) in the XBRL document"""
-    """Represents a specific section of the report (e.g., 'Balance Sheet', 'Income Statement', 'Notes').
-    Each network has a unique URI like 'http://company.com/role/BALANCESHEET'"""
-
-    model_xbrl: ModelXbrl
-    name: str
-    network_uri: str
-    id: str
-    category: str # Note you can simply use "network.networkType" to get type of network
-    concepts: List[Concept] = field(init=False, default_factory=list) 
-
-    relationship_sets: List[str] = field(default_factory=list) # check if this is needed
-    hypercubes: List[Hypercube] = field(init=False, default_factory=list)
-    presentation: Optional[Presentation] = field(init=False, default=None)
-
-    
-    def add_hypercubes(self, model_xbrl) -> None:
-        """Add hypercubes if this is a definition network"""
-        if not self.isDefinition:
-            return
-            
-        for rel in model_xbrl.relationshipSet(XbrlConst.all).modelRelationships:
-            if (rel.linkrole == self.network_uri and 
-                rel.toModelObject is not None and 
-                hasattr(rel.toModelObject, 'isHypercubeItem') and 
-                rel.toModelObject.isHypercubeItem):
-                
-                hypercube = Hypercube(
-                    model_xbrl = self.model_xbrl,
-                    hypercube_item=rel.toModelObject,
-                    network_uri=self.network_uri
-                )
-                self.hypercubes.append(hypercube)
-    
-
-    @property
-    def isPresentation(self) -> bool:
-        """Indicates if network contains presentation relationships"""
-        return XbrlConst.parentChild in self.relationship_sets
-
-    @property
-    def isCalculation(self) -> bool:
-        """Indicates if network contains calculation relationships"""
-        return XbrlConst.summationItem in self.relationship_sets
-
-    @property 
-    def isDefinition(self) -> bool:
-        """Indicates if network contains definition relationships"""
-        return any(rel in self.relationship_sets for rel in [
-            XbrlConst.all,
-            XbrlConst.notAll,
-            XbrlConst.dimensionDefault,
-            XbrlConst.dimensionDomain,
-            XbrlConst.domainMember,
-            XbrlConst.hypercubeDimension
-        ])
-
-    
-    @property
-    def networkType(self) -> str:
-        """Returns the detailed category type of the network"""
-        if self.category == 'Statement':
-            return 'Statement'
-        elif self.category == 'Document':
-            return 'Document'
-        elif self.category == 'Disclosure':
-            if '(Tables)' in self.name:
-                return 'Tables'
-            elif '(Policies)' in self.name:
-                return 'Policies'
-            elif '(Details)' in self.name:
-                return 'Details'
-            else:
-                return 'FootNotes'
-        return 'Other'
-    
-
-    def validate_facts(self) -> List[Fact]:
-        # Step1: Get all facts (W/O Dims)for concepts in this presentation that are not in any hypercubes of this network
-        # node.concept.__class__ != AbstractConcept
-
-        # Each node_value has : 'children', 'concept', 'concept_id', 'level', 'order'
-
-        fact_list = set([
-            fact.u_id 
-            for node in self.presentation.nodes.values() 
-            for fact in node.concept.facts 
-            if node.concept.__class__ != AbstractConcept and node.concept not in [concept for hypercube in self.hypercubes for concept in hypercube.concepts]
-        ])
-
-        return fact_list
-
-######################### Network Class END #######################################################
-
-
-
-
-######################### Definitions Classes START #######################################################
-
-
-@dataclass
-class Member:
-    """Represents a dimension member in a hierarchical structure"""
-    model_xbrl: ModelXbrl
-    member: ModelConcept
-    qname: str = field(init=False)
-    label: str = field(init=False)
-    parent_qname: Optional[str] = None
-    level: int = 0
-    
-    def __post_init__(self):
-        self.qname = str(self.member.qname)
-        self.label = self.member.label() if hasattr(self.member, 'label') else None
-
-@dataclass
-class Domain:
-    """Represents a dimension domain"""
-    model_xbrl: ModelXbrl
-    domain: ModelConcept
-    qname: str = field(init=False)
-    label: str = field(init=False)
-    type: str = field(init=False)
-    
-    def __post_init__(self):
-        self.qname = str(self.domain.qname)
-        self.label = self.domain.label() if hasattr(self.domain, 'label') else None
-        self.type = self.domain.typeQname.localName if hasattr(self.domain, 'typeQname') else None
-
-
-@dataclass
-class Dimension:
+class Dimension(Neo4jNode):
     """Dimension with its domain and members"""
     model_xbrl: ModelXbrl
     dimension: ModelConcept
-    network_uri: str
+    network_uri: Optional[str] = None
     
     # Core properties
     name: str = field(init=False)
     qname: str = field(init=False)
-    id: str = field(init=False)
     label: str = field(init=False)
+    u_id: Optional[str] = field(init=False, default=None)
     
     # Dimension type
     is_explicit: bool = field(init=False)
@@ -995,6 +1653,27 @@ class Dimension:
 
 
     @property
+    def id(self) -> str:
+        """For Neo4j MERGE"""
+        return self.u_id
+        
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.DIMENSION
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            "qname": self.qname,
+            "name": self.name,
+            "label": self.label,
+            "is_explicit": self.is_explicit,
+            "is_typed": self.is_typed,
+            "network_uri": self.network_uri
+        }
+
+
+    @property
     def members(self) -> List[Member]:
         """Get unique members sorted by level"""
         return sorted(self.members_dict.values(), key=lambda x: x.level)
@@ -1009,7 +1688,7 @@ class Dimension:
                 levels[member.level] = []
             levels[member.level].append(member)
         return levels
-    
+
     # Returns a dictionary of parent-to-child member relationships for hierarchical lineage analysis.- applies only to explicit dimensions since typed dimensions don't have predefined member relationships.
     @property
     def member_hierarchy(self) -> Dict[str, List[str]]:
@@ -1023,11 +1702,20 @@ class Dimension:
         return hierarchy
 
     def __post_init__(self):
+        
+        # TODO: Also need to add Entity ID/CIK/name to this ID since dimensions will be specific to a company
+        # Set id first
+        if self.dimension is not None:            
+            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  # Gets CIK from URL
+            self.u_id = f"{company_id}:{self.dimension.qname.namespaceURI}:{self.dimension.qname}"
+
+
         # Core properties
         self.name = str(self.dimension.qname.localName)
         self.qname = str(self.dimension.qname)
-        self.id = str(self.dimension.objectId())
+        # self.id = str(self.dimension.objectId())
         self.label = self.dimension.label() if hasattr(self.dimension, 'label') else None
+            
         
         # Dimension type
         self.is_explicit = bool(getattr(self.dimension, 'isExplicitDimension', False))
@@ -1046,7 +1734,12 @@ class Dimension:
         """Build domain relationship for this dimension"""        
         if not self.is_explicit: return
                 
-        dim_dom_rel_set = self.model_xbrl.relationshipSet(XbrlConst.dimensionDomain, self.network_uri)
+        dim_dom_rel_set = (
+            self.model_xbrl.relationshipSet(XbrlConst.dimensionDomain, self.network_uri)
+            if self.network_uri else
+            self.model_xbrl.relationshipSet(XbrlConst.dimensionDomain)
+        )
+
         if not dim_dom_rel_set: return
                 
         relationships = dim_dom_rel_set.fromModelObject(self.dimension)
@@ -1105,81 +1798,14 @@ class Dimension:
                     continue
         
         add_members_recursive(self.domain.domain)
-
-    # def _build_members(self) -> None:
-    #     """Build hierarchical member relationships for specific network"""
-    #     if not self.is_explicit: return
-        
-    #     print(f"\nProcessing dimension: {self.dimension.qname} in network: {self.network_uri}")
-        
-    #     # Get dimension-domain relationships for THIS network
-    #     dim_dom_rel_set = self.model_xbrl.relationshipSet(
-    #         XbrlConst.dimensionDomain,
-    #         self.network_uri
-    #     )
-    #     if not dim_dom_rel_set:
-    #         print(f"No dimension-domain relationships for {self.dimension.qname}")
-    #         return
-        
-    #     # Get domain-member relationships for THIS network
-    #     dom_mem_rel_set = self.model_xbrl.relationshipSet(
-    #         XbrlConst.domainMember,
-    #         self.network_uri
-    #     )
-        
-    #     # Debug relationship sets
-    #     dim_rels = list(dim_dom_rel_set.fromModelObject(self.dimension))
-    #     print(f"Found {len(dim_rels)} dimension-domain relationships")
-    #     for rel in dim_rels:
-    #         print(f"  Dimension-Domain: {self.dimension.qname} -> {rel.toModelObject.qname if rel.toModelObject else 'None'}")
-        
-    #     def add_members_recursive(source_object: ModelConcept, parent_qname: Optional[str] = None, level: int = 0) -> None:
-    #         # First add the source object itself
-    #         try:
-    #             member = Member(
-    #                 model_xbrl=self.model_xbrl,
-    #                 member=source_object,
-    #                 parent_qname=parent_qname,
-    #                 level=level
-    #             )
-    #             self.add_member(member)
-    #             print(f"  Added member {source_object.qname} at level {level}")
-                
-    #             # Get child relationships in THIS network
-    #             if dom_mem_rel_set:
-    #                 child_rels = list(dom_mem_rel_set.fromModelObject(source_object))
-    #                 print(f"  Found {len(child_rels)} child relationships for {source_object.qname}")
-                    
-    #                 for rel in child_rels:
-    #                     member_object = rel.toModelObject
-    #                     if member_object is None: 
-    #                         print(f"    Skipping: member object is None")
-    #                         continue
-    #                     if not hasattr(member_object, 'isDomainMember'): 
-    #                         print(f"    Skipping: {member_object.qname} is not a domain member")
-    #                         continue
-                        
-    #                     print(f"    Processing child: {member_object.qname}")
-    #                     add_members_recursive(
-    #                         member_object,
-    #                         str(source_object.qname),
-    #                         level + 1
-    #                     )
-                        
-    #         except Exception as e:
-    #             print(f"Error creating member {source_object.qname}: {str(e)}")
-        
-    #     # Process dimension-domain relationships
-    #     for dim_rel in dim_dom_rel_set.fromModelObject(self.dimension):
-    #         if dim_rel.toModelObject:
-    #             print(f"\nProcessing primary member: {dim_rel.toModelObject.qname}")
-    #             add_members_recursive(dim_rel.toModelObject)
-        
-    #     print(f"Final member count for dimension {self.dimension.qname}: {len(self.members)}\n")
-
     def _set_default_member(self) -> None:
         """Set default member if exists"""
-        default_rel_set = self.model_xbrl.relationshipSet(XbrlConst.dimensionDefault, self.network_uri)
+        default_rel_set = (
+            self.model_xbrl.relationshipSet(XbrlConst.dimensionDefault, self.network_uri)
+            if self.network_uri else
+            self.model_xbrl.relationshipSet(XbrlConst.dimensionDefault)
+        )
+
         if not default_rel_set: return
             
         # Get relationships using fromModelObject
@@ -1210,235 +1836,183 @@ class Dimension:
         except Exception as e:
             print(f"Error setting default member for {self.qname}: {str(e)}")
 
-######################### Definitions Classes END #######################################################
-
-######################### Neo4j Setup START #####################################################
-
 @dataclass
-class Neo4jManager:
-    uri: str
-    username: str
-    password: str
-    driver: Driver = field(init=False)
-    
-    def test_connection(self) -> bool:
-        """Test Neo4j connection"""
-        try:
-            with self.driver.session() as session:
-                session.run("RETURN 1")
-            return True
-        except Exception:
-            return False
+class Domain(Neo4jNode): 
+    """Represents a dimension domain"""
+    model_xbrl: ModelXbrl
+    domain: ModelConcept
+    qname: str = field(init=False)
+    label: str = field(init=False)
+    type: str = field(init=False)
+    u_id: Optional[str] = field(init=False, default=None)
+
     
     def __post_init__(self):
-        try:
-            self.driver = GraphDatabase.driver(self.uri, auth=(self.username, self.password))
-            if not self.test_connection():
-                raise ConnectionError("Failed to connect to Neo4j")
-        except Exception as e:
-            raise ConnectionError(f"Neo4j initialization failed: {e}")
+        
+        #TODO: Also need to add Entity ID/CIK/name to this ID since domains will be specific to a company
+        if self.domain is not None:
+            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  # Gets CIK from URL
+            self.u_id = f"{company_id}:{self.domain.qname.namespaceURI}:{self.domain.qname}"
+
+        self.qname = str(self.domain.qname)
+        self.label = self.domain.label() if hasattr(self.domain, 'label') else None
+        self.type = self.domain.typeQname.localName if hasattr(self.domain, 'typeQname') else None
+
+    @property
+    def id(self) -> str:
+        """For Neo4j MERGE"""
+        return self.u_id
+        
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.DOMAIN
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            "qname": self.qname,
+            "label": self.label,
+            "type": self.type
+        }
+
+@dataclass
+class Member(Neo4jNode):
+    """Represents a dimension member in a hierarchical structure"""
+    model_xbrl: ModelXbrl
+    member: ModelConcept
+    qname: str = field(init=False)
+    label: str = field(init=False)
+    parent_qname: Optional[str] = None
+    level: int = 0
+    u_id: Optional[str] = None
     
-    def close(self):
-        if hasattr(self, 'driver'):
-            self.driver.close()
-                        
-    def clear_db(self):
-        """Development only: Clear database and verify it's empty"""
-        try:
-            with self.driver.session() as session:
-                # Get and drop all constraints
-                constraints = session.run("SHOW CONSTRAINTS").data()
-                for constraint in constraints:
-                    session.run(f"DROP CONSTRAINT {constraint['name']} IF EXISTS")
-                
-                # Get and drop all indexes
-                indexes = session.run("SHOW INDEXES").data()
-                for index in indexes:
-                    session.run(f"DROP INDEX {index['name']} IF EXISTS")
-                
-                # Delete all nodes and relationships
-                session.run("MATCH (n) DETACH DELETE n")
-                
-                # Verify database is empty
-                result = session.run("MATCH (n) RETURN count(n) as count").single()
-                node_count = result["count"]
-                
-                if node_count > 0:
-                    raise RuntimeError(f"Database not fully cleared. {node_count} nodes remaining.")
-                    
-                print("Database cleared successfully")
+    def __post_init__(self):
+        self.qname = str(self.member.qname)
+        self.label = self.member.label() if hasattr(self.member, 'label') else None
+        
+        # TODO: Also need to add Entity ID/CIK/name to this ID since members will be specific to a company
+        if self.member is not None:
+            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  # Gets CIK from URL
+            self.u_id = f"{company_id}:{self.member.qname.namespaceURI}:{self.member.qname}"
 
-        except Exception as e:
-            raise RuntimeError(f"Failed to clear database: {e}")
-            
-    def create_indexes(self):
-        """Create indexes and constraints for all node types if they don't exist"""
-        try:
-            with self.driver.session() as session:
-                # Get existing constraints
-                existing_constraints = {
-                    constraint['name']: constraint['labelsOrTypes'][0]
-                    for constraint in session.run("SHOW CONSTRAINTS").data()
-                }
-                
-                # Create missing constraints
-                for node_type in NodeType:
-                    constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
-                    
-                    # Only create if it doesn't exist
-                    if constraint_name not in existing_constraints:
-                        session.run(f"""
-                        CREATE CONSTRAINT {constraint_name}
-                        FOR (n:`{node_type.value}`)
-                        REQUIRE n.id IS UNIQUE
-                        """)
-                        # print(f"Created constraint for {node_type.value}")
-                    else:
-                        # print(f"Constraint for {node_type.value} already exists")
-                        pass
-                        
-        except Exception as e:
-            raise RuntimeError(f"Failed to create indexes: {e}")
-            
-    def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 1000) -> None:
-        """Merge nodes into Neo4j database with batching"""
-        if not nodes:
-            return
-            
-        try:
-            with self.driver.session() as session:
-                skipped_nodes = []
-                
-                for i in range(0, len(nodes), batch_size):
-                    batch = nodes[i:i + batch_size]
-                    
-                    for node in batch:
-                        # Skip nodes with null IDs
-                        if node.id is None:  # This is correct - uses the property
-                            skipped_nodes.append(node)
-                            continue
-                            
-                        # Exclude id from properties
-                        properties = {
-                            k: (v if v is not None else "null")
-                            for k, v in node.properties.items()
-                            if k != 'id'
-                        }
-                        
-                        query = f"""
-                        MERGE (n:{node.node_type.value} {{id: $id}})
-                        ON CREATE SET n += $properties
-                        ON MATCH SET n += $properties
-                        """
-                        
-                        session.run(query, {
-                            "id": node.id,  # This is correct - uses the property
-                            "properties": properties
-                        })
-                
-                if skipped_nodes:
-                    print(f"Warning: Skipped {len(skipped_nodes)} nodes with null IDs")
-                    print("First few skipped nodes:")
-                    for node in skipped_nodes[:3]:
-                        print(f"Node type: {node.node_type.value}, Properties: {node.properties}")
-                        
-        except Exception as e:
-            raise RuntimeError(f"Failed to merge nodes: {e}")
+    @property
+    def id(self) -> str:
+        return self.u_id
+        
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.MEMBER
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            "qname": self.qname,
+            "label": self.label,
+            "level": self.level,
+            "parent_qname": self.parent_qname
+        }
 
 
-    def merge_relationships(self, relationships: List[Tuple[Neo4jNode, Neo4jNode, RelationType]]) -> None:
-        """Export relationships to Neo4j"""
-        with self.driver.session() as session:
-            for source, target, rel_type in relationships:
-                session.run(f"""
-                    MATCH (s {{id: $source_id}})
-                    MATCH (t {{id: $target_id}})
-                    MERGE (s)-[r:{rel_type.value}]->(t)
-                """, {
-                    "source_id": source.id,
-                    "target_id": target.id
-                })
-
-    def get_neo4j_db_counts(self) -> Dict[str, Dict[str, int]]:
-        """Get count of nodes and relationships by type."""
-        try:
-            with self.driver.session() as session:
-                # Node counts
-                node_query = """
-                MATCH (n)
-                RETURN labels(n)[0] as node_type, count(n) as count
-                ORDER BY count DESC
-                """
-                node_counts = {row["node_type"]: row["count"] for row in session.run(node_query)}
-                complete_node_counts = {nt.value: node_counts.get(nt.value, 0) for nt in NodeType}
-                
-                # Relationship counts
-                rel_query = """
-                MATCH ()-[r]->()
-                RETURN type(r) as rel_type, count(r) as count
-                ORDER BY count DESC
-                """
-                rel_counts = {row["rel_type"]: row["count"] for row in session.run(rel_query)}
-                complete_rel_counts = {rt.value: rel_counts.get(rt.value, 0) for rt in RelationType}
-                
-                # Ensure printing only occurs if there are non-zero nodes or relationships
-                total_nodes = sum(complete_node_counts.values())
-                total_relationships = sum(complete_rel_counts.values())
-                
-                if total_nodes > 0 or total_relationships > 0:
-                    # Print node counts
-                    if total_nodes > 0:
-                        print("\nNode counts in Neo4j:")
-                        print("-" * 40)
-                        for node_type, count in complete_node_counts.items():
-                            if count > 0:  # Only print non-zero nodes
-                                print(f"{node_type:<15} : {count:>8,d} nodes")
-                        print("-" * 40)
-                        print(f"{'Total':<15} : {total_nodes:>8,d} nodes")
-                    
-                    # Print relationship counts
-                    if total_relationships > 0:
-                        print("\nRelationship counts in Neo4j:")
-                        print("-" * 40)
-                        for rel_type, count in complete_rel_counts.items():
-                            if count > 0:  # Only print non-zero relationships
-                                print(f"{rel_type:<15} : {count:>8,d} relationships")
-                        print("-" * 40)
-                        print(f"{'Total':<15} : {total_relationships:>8,d} relationships")
-                
-        except Exception as e:
-            print(f"Error getting node and relationship counts: {e}")
-            return {
-                "nodes": {nt.value: 0 for nt in NodeType},
-                "relationships": {rt.value: 0 for rt in RelationType}
-            }
-
-    def load_nodes_as_instances(self, node_type: NodeType, class_type: Type[Neo4jNode]) -> List[Neo4jNode]:
-        """Load Neo4j nodes as class instances"""
-        try:
-            with self.driver.session() as session:
-                query = f"MATCH (n:{node_type.value}) RETURN n"
-                result = session.run(query)
-                instances = [class_type.from_neo4j(dict(record["n"].items())) 
-                            for record in result]
-                print(f"Loaded {len(instances)} {node_type.value} instances from Neo4j")
-                return instances
-        except Exception as e:
-            raise RuntimeError(f"Failed to load {node_type.value} nodes: {e}")
-
-
-######################### Neo4j Setup END #####################################################
+# endregion : Company Nodes ########################
 
 
 
+# region : Instance/Report Nodes ########################
 
-#############################FACT CLASS START########################################
+
+@dataclass
+class ReportNode(Neo4jNode):
+    # source: https://sec-api.io/docs/query-api
+    formType: str
+    periodEnd: str          # event date for 8-K, period end for 10-K/Q
+    isAmendment: bool
+    instanceFile: str       # instance file name - sec_api - maybe able to get it from dataFiles field in sec_api 
+    cik: str                                             # Change this to Ticker when moving to sec_api
+    
+    # TODO: Will be supplied by sec-api 
+    filedAt: Optional[str] = "2024-12-02T16:06:24-04:00"
+
+    # TODO: Will be supplied by sec-api 
+    accessionNo: Optional[str] = None
+    periodOfReport: Optional[str] = None     # official filing period date
+
+    # for admin purposes
+    insertedAt: Optional[str] = field(default_factory=lambda: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    status: Optional[bool] = False           # Once a report has been uploaded, make this True
+
+    def __post_init__(self):
+        self.cik = self.cik.zfill(10)
+        self.period_date = datetime.strptime(self.periodEnd, '%Y-%m-%d')
+    
+    def get_fiscal_period(self) -> str:
+        """Get fiscal period (Q1-Q4 or FYE MM/DD)"""
+        month = self.period_date.month
+        if self.formType == "10-K":
+            return f"FYE {month:02d}/31"
+        return f"Q{(month-1)//3 + 1}"
+    
+    def find_matching_sub_report(self, parent: AdminReportNode) -> AdminReportNode:
+        """Find matching sub-report based on period end date"""
+        sub_reports = [n for n in self.admin_reports 
+                      if n.category == parent.code]
+        return min(sub_reports, 
+                  key=lambda x: abs(x.get_date() - self.period_date))
+
+        
+    def display(self) -> str:
+        """Returns display name for the report"""
+        date = datetime.strptime(self.periodEnd, '%Y-%m-%d')
+        amendment = "A" if self.isAmendment else ""
+        period = ("8K" if self.formType == "8-K" else
+                 f"Q{(date.month - 1) // 3 + 1}" if self.formType == "10-Q" 
+                 else f"FY{date.year}")
+        # return f"{self.cik}_{date.year}_{period}{amendment}" # Later use Ticker when we have sec-api
+        return f"{date.year}_{period}{amendment}" # Later use Ticker when we have sec-api
+        
+        
+    @property
+    def node_type(self) -> NodeType:
+        """Returns node type for Neo4j"""
+        return NodeType.REPORT
+        
+    @property
+    def id(self) -> str:
+        """Use instanceFile as unique identifier"""
+        return self.instanceFile
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """Returns properties for Neo4j node"""
+        props = {
+            'id': self.id,
+            'formType': self.formType,
+            'periodEnd': self.periodEnd,
+            'isAmendment': self.isAmendment,
+            'instanceFile': self.instanceFile,
+            'filedAt': self.filedAt,
+            'cik': self.cik,
+            'displayLabel': self.display(),
+            'insertedAt': self.insertedAt,
+            'status': self.status
+        }
+        
+        # Add optional properties if they exist
+        optional_props = {
+            'accessionNo': self.accessionNo,
+            'periodOfReport': self.periodOfReport
+        }
+        
+        # Only include non-None optional properties
+        props.update({k: v for k, v in optional_props.items() if v is not None})
+        
+        return props    
+
 @dataclass
 class Fact(Neo4jNode):
     model_fact: ModelFact
     
     # Globally unique fact identifier
-    u_id: str = field(init=False)        # Globally u_id (URI + UUID)
+    u_id: str = field(init=False)        # Globally u_id (see _generate_unique_fact_id)
 
     # Fact properties
     qname: str = field(init=False)  # Its 'concept' name
@@ -1612,388 +2186,279 @@ class Fact(Neo4jNode):
             # 'dims_members': self.dims_members if self.dims_members is not None else None,
         }
 
-
-#############################FACT CLASS END########################################    
-
+# endregion : Instance/Report Nodes ########################
 
 
 
+# region : Neo4j Manager ########################
 
-
-######################### ReportElementCategorization START ################################
-
-class ElementCategory(Enum):
-    CONCEPT = "Concept"
-    HYPERCUBE = "HyperCube"
-    DIMENSION = "Dimension"
-    MEMBER = "*Member"
-    ABSTRACT = "*Abstract"
-    LINE_ITEMS = "*LineItems"
-    GUIDANCE = "*Guidance"
-    DEPRECATED = "deprecated"
-    LINKBASE = "LinkbaseElement"
-    DATE = "DateElement"
-    OTHER = "Other"
-
-class ReportElementClassifier:
-    LINKBASE_ELEMENTS = [
-        'link:part', 'xl:extended', 'xl:arc', 'xl:simple', 
-        'xl:resource', 'xl:documentation', 'xl:locator', 
-        'link:linkbase', 'link:definition', 'link:usedOn', 
-        'link:roleType', 'link:arcroleType'
-    ]
+@dataclass
+class Neo4jManager:
+    uri: str
+    username: str
+    password: str
+    driver: Driver = field(init=False)
     
-    DATE_ELEMENTS = [
-        'xbrli:instant', 'xbrli:startDate', 'xbrli:endDate', 
-        'dei:eventDateTime', 'xbrli:forever'
-    ]
-
-    @staticmethod
-    def get_substitution_group(concept: Any) -> str:
-        return (str(concept.substitutionGroupQname) 
-                if concept.substitutionGroupQname else "N/A")
-
-    @staticmethod
-    def get_local_type(concept: Any) -> str:
-        return (str(concept.typeQname.localName) 
-                if concept.typeQname else '')
-
-    @staticmethod
-    def check_nillable(concept: Any) -> bool:
-        return (concept.nillable == 'true')
-
-    @staticmethod
-    def check_duration(concept: Any) -> bool:
-        return (concept.periodType == 'duration')
-
-    @classmethod
-    def classify(cls, concept: Any) -> ElementCategory:
-        qname_str = str(concept.qname)
-        sub_group = cls.get_substitution_group(concept)
-        local_type = cls.get_local_type(concept)
-        nillable = cls.check_nillable(concept)
-        duration = cls.check_duration(concept)
-
-        # Initial classification
-        category = cls._initial_classify(concept, qname_str, sub_group, 
-                                      local_type, nillable, duration)
-        
-        # Integrated post-classification
-        if category == ElementCategory.OTHER:
-            category = cls._post_classify_single(concept, qname_str, sub_group)
-        
-        return category
-
-    @classmethod
-    def _initial_classify(cls, concept, qname_str, sub_group, local_type, 
-                         nillable, duration) -> ElementCategory:
-        # 1. Basic Concept
-        if not concept.isAbstract and sub_group == 'xbrli:item':
-            return ElementCategory.CONCEPT
-        
-        # 2. Hypercube [Table]
-        if (concept.isAbstract and 
-            sub_group == 'xbrldt:hypercubeItem' and
-            duration and nillable):
-            return ElementCategory.HYPERCUBE
-        
-        # 3. Dimension [Axis]
-        if (concept.isAbstract and 
-            sub_group == 'xbrldt:dimensionItem' and 
-            duration and nillable):
-            return ElementCategory.DIMENSION
-        
-        # 4. Member [Domain/Member]
-        if ((any(qname_str.endswith(suffix) for suffix in ["Domain", "domain", "Member"]) or 
-             local_type == 'domainItemType') and 
-            duration and nillable):
-            return ElementCategory.MEMBER
-        
-        # 5. Abstract
-        if any(qname_str.endswith(suffix) for suffix in [
-            "Abstract", "Hierarchy", "RollUp", 
-            "RollForward", "Rollforward"
-        ]) and concept.isAbstract:
-            return ElementCategory.ABSTRACT
-        
-        # 6. LineItems
-        if "LineItems" in qname_str and duration and nillable:
-            return ElementCategory.LINE_ITEMS
-        
-        # 7. Guidance
-        if local_type == 'guidanceItemType' or "guidance" in qname_str.lower():
-            return ElementCategory.GUIDANCE
-        
-        # 8. Deprecated
-        if "deprecated" in qname_str.lower() or "deprecated" in local_type.lower():
-            return ElementCategory.DEPRECATED
-
-        return ElementCategory.OTHER
-
-    @classmethod
-    def _post_classify_single(cls, concept, qname_str, sub_group) -> ElementCategory:
-        # Rule 1: IsDomainMember -> *Member
-        if concept.isDomainMember:
-            return ElementCategory.MEMBER
-            
-        # Rule 2: Abstract -> *Abstract
-        if concept.isAbstract:
-            return ElementCategory.ABSTRACT
-            
-        # Rule 3: LinkbaseElement SubstitutionGroups
-        if sub_group in cls.LINKBASE_ELEMENTS:
-            return ElementCategory.LINKBASE
-            
-        # Rule 4: Date Elements
-        if qname_str in cls.DATE_ELEMENTS:
-            return ElementCategory.DATE
-            
-        return ElementCategory.OTHER
-
-
-
-######################### ReportElementCategorization END ################################
-
-######################### OTHER CLASSES (TO consider) START ####################################################
-
-@dataclass
-class Entity:
-    identifier: str
-    scheme: str  # E.g., "http://www.sec.gov/CIK"
-
-
-
-# @dataclass
-# class Context:
-#     id: str
-#     period: Period
-#     entity: Entityƒç
-#     dimensions: Dict[Dimension, Member] = field(default_factory=dict)
-
-
-######################### Period Class START ####################################################
-
-@dataclass
-class Period(Neo4jNode):
-    period_type: str  # Required field, no default
-    start_date: Optional[str] = None
-    end_date: Optional[str] = None
-    # context_ids: List[str] = field(default_factory=list)
-    context_ids: Optional[List[str]] = field(default_factory=list)  # Optional, defaults to an empty list
-    u_id: str = field(init=False)
-
+    def test_connection(self) -> bool:
+        """Test Neo4j connection"""
+        try:
+            with self.driver.session() as session:
+                session.run("RETURN 1")
+            return True
+        except Exception:
+            return False
+    
     def __post_init__(self):
-        if self.period_type == "duration" and not (self.start_date and self.end_date):
-            raise ValueError("Duration periods must have both start and end dates")
-        if self.period_type == "instant" and not self.start_date:
-            raise ValueError("Instant periods must have a start date")
-        self.generate_id()
-
-    def __hash__(self):
-        return hash(self.u_id)
-
-    def __eq__(self, other):
-        if isinstance(other, Period):
-            return self.u_id == other.u_id
-        return False
-
-    @property
-    def is_duration(self) -> bool:
-        return self.start_date is not None and self.end_date is not None
-
-    @property
-    def is_instant(self) -> bool:
-        return self.start_date is not None and self.end_date is None
-
-    def generate_id(self):
-        """Generate a unique ID for the period."""
-        id_parts = [self.period_type]
-        if self.start_date:
-            id_parts.append(self.start_date)
-        if self.end_date:
-            id_parts.append(self.end_date)
-        self.u_id = "_".join(id_parts)
-
-    # Neo4j Node Properties
-    @property
-    def node_type(self) -> NodeType:
-        return NodeType.PERIOD
-        
-    @property
-    def id(self) -> str:
-        return self.u_id
-        
-    @property
-    def properties(self) -> Dict[str, Any]:
-        return {
-            "u_id": self.id,# This returns u_id
-            "period_type": self.period_type,
-            "start_date": self.start_date,
-            "end_date": self.end_date
-            # "context_ids": self.context_ids # TODO: Add this back in relation to Facts but after adding report_metadata
-        }
-
-    def merge_context(self, context_id: str) -> None:
-        """Add a context ID if it's not already present"""
-        if context_id not in self.context_ids:
-            self.context_ids.append(context_id)
-
-######################### Period END ####################################################
-
-
-
-######################### Unit Class START ####################################################
-
-
-@dataclass
-class Unit(Neo4jNode):
-    """ Units are uniquely identified by their string_value (e.g. 'iso4217:USD', 'shares').
-    Non-numeric facts have no unit information and as such excluded from Unit nodes."""
-        
-    model_fact: Optional[ModelFact] = None
-    u_id: Optional[str] = None
+        try:
+            self.driver = GraphDatabase.driver(self.uri, auth=(self.username, self.password))
+            if not self.test_connection():
+                raise ConnectionError("Failed to connect to Neo4j")
+        except Exception as e:
+            raise ConnectionError(f"Neo4j initialization failed: {e}")
     
-    # All these will be set in post_init
-    string_value: Optional[str] = None
-    is_divide: Optional[bool] = None
-    unit_reference: Optional[str] = None
-    registry_id: Optional[str] = None
-    is_simple_unit: Optional[bool] = None
-    item_type: Optional[str] = None
-    namespace: Optional[str] = None
-    status: Optional[str] = None
+    def close(self):
+        if hasattr(self, 'driver'):
+            self.driver.close()
+                        
+    def clear_db(self):
+        """Development only: Clear database and verify it's empty"""
+        try:
+            with self.driver.session() as session:
+                # Get and drop all constraints
+                constraints = session.run("SHOW CONSTRAINTS").data()
+                for constraint in constraints:
+                    session.run(f"DROP CONSTRAINT {constraint['name']} IF EXISTS")
+                
+                # Get and drop all indexes
+                indexes = session.run("SHOW INDEXES").data()
+                for index in indexes:
+                    session.run(f"DROP INDEX {index['name']} IF EXISTS")
+                
+                # Delete all nodes and relationships
+                session.run("MATCH (n) DETACH DELETE n")
+                
+                # Verify database is empty
+                result = session.run("MATCH (n) RETURN count(n) as count").single()
+                node_count = result["count"]
+                
+                if node_count > 0:
+                    raise RuntimeError(f"Database not fully cleared. {node_count} nodes remaining.")
+                    
+                print("Database cleared successfully")
 
-    def __post_init__(self):
-        """Process the model_fact to initialize all unit attributes"""
-        if self.model_fact is None:  # Skip if loading from Neo4j
-            return
-        
-        unit = getattr(self.model_fact, 'unit', None)
-        self.is_divide = getattr(unit, "isDivide", None)
-        self.string_value = getattr(unit, "stringValue", None)
-        self.unit_reference = self._normalize_unit_id(self.model_fact.unitID)
-        
-        # Process UTR entries
-        utr_entry = next(iter(self.model_fact.utrEntries), None) if self.model_fact.utrEntries else None
-        self.registry_id = getattr(utr_entry, "id", None)
-        self.is_simple_unit = getattr(utr_entry, "isSimple", None)
-        self.item_type = getattr(utr_entry, "itemType", None)
-        self.namespace = getattr(utr_entry, "nsUnit", None)
-        self.status = getattr(utr_entry, "status", None)
-        
-        self.u_id = self.generate_uid() # UTR ID + String Value
-
-    def generate_uid(self):
-        # Defensive cleaning - handle any possible input
-        clean_ns = str(self.namespace).strip() if self.namespace is not None else ""
-        clean_val = str(self.string_value).strip() if self.string_value is not None else ""
-        
-        # If we have both, combine them
-        if clean_ns and clean_val:
-            return f"{clean_ns}_{clean_val}"
-        # If we only have value, return it
-        elif clean_val:
-            return clean_val
-        # If neither, return None
-        return None
+        except Exception as e:
+            raise RuntimeError(f"Failed to clear database: {e}")
             
+    def create_indexes(self):
+        """Create indexes and constraints for all node types if they don't exist"""
+        try:
+            with self.driver.session() as session:
+                # Get existing constraints
+                existing_constraints = {
+                    constraint['name']: constraint['labelsOrTypes'][0]
+                    for constraint in session.run("SHOW CONSTRAINTS").data()
+                }
+                
+                # Create missing constraints
+                for node_type in NodeType:
+                    constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
+                    
+                    # Only create if it doesn't exist
+                    if constraint_name not in existing_constraints:
+                        session.run(f"""
+                        CREATE CONSTRAINT {constraint_name}
+                        FOR (n:`{node_type.value}`)
+                        REQUIRE n.id IS UNIQUE
+                        """)
+                        # print(f"Created constraint for {node_type.value}")
+                    else:
+                        # print(f"Constraint for {node_type.value} already exists")
+                        pass
+                        
+        except Exception as e:
+            raise RuntimeError(f"Failed to create indexes: {e}")
+            
+    def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 1000) -> None:
+        """Merge nodes into Neo4j database with batching"""
+        if not nodes: return
+            
+        try:
+            with self.driver.session() as session:
+                skipped_nodes = []
+                
+                for i in range(0, len(nodes), batch_size):
+                    batch = nodes[i:i + batch_size]
+                    
+                    for node in batch:
+                        # Skip nodes with null IDs
+                        if node.id is None: 
+                            skipped_nodes.append(node)
+                            continue
+                            
+                        # Exclude id from properties
+                        properties = {
+                            k: (v if v is not None else "null")
+                            for k, v in node.properties.items()
+                            if k != 'id'
+                        }
+                        
+                        query = f"""
+                        MERGE (n:{node.node_type.value} {{id: $id}})
+                        ON CREATE SET n += $properties
+                        ON MATCH SET n += $properties
+                        """
+                        
+                        session.run(query, { "id": node.id, "properties": properties })
+                
+                print(f"Created {len(nodes)} {nodes[0].__class__.__name__} nodes")
 
-    def __hash__(self):
-        """Enable using Unit objects in sets and as dict keys"""
-        return hash(self.u_id)
+                if skipped_nodes:
+                    print(f"Warning: Skipped {len(skipped_nodes)} nodes with null IDs")
+                    print("First few skipped nodes:")
+                    for node in skipped_nodes[:3]:
+                        print(f"Node type: {node.node_type.value}, Properties: {node.properties}")
+                        
+        except Exception as e:
+            raise RuntimeError(f"Failed to merge nodes: {e}")
 
-    def __eq__(self, other):
-        """Enable comparison between Unit objects"""
-        if isinstance(other, Unit):
-            return self.u_id == other.u_id
-        return False
 
-    @staticmethod
-    def _normalize_unit_id(unit_id: Any) -> Optional[str]:
-        if not unit_id:
-            return None
-        if isinstance(unit_id, str) and unit_id.startswith("u-"):
-            return unit_id
-        if hasattr(unit_id, "id"):
-            return f"u-{unit_id.id}"
-        return f"u-{abs(hash(str(unit_id))) % 10000}"
-
-    @property
-    def is_simple(self) -> bool:
-        """Check if the unit is a simple unit based on registry data"""
-        return bool(self.is_simple_unit)
-    
-    @property
-    def is_registered(self) -> bool:
-        """Check if the unit is registered in UTR"""
-        return self.registry_id is not None
-    
-    @property
-    def is_active(self) -> bool:
-        """Check if the unit is active based on status"""
-        return self.status == "active" if self.status else False
-
-    # Neo4j Node Properties
-    @property
-    def node_type(self) -> NodeType:
-        """Define the Neo4j node type"""
-        return NodeType.UNIT
+    def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
+        counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
         
-    @property
-    def id(self) -> str:
-        """u_id for Neo4j"""
-        return self.u_id
+        with self.driver.session() as session:
+            for rel in relationships:
+                source, target, rel_type, *props = rel
+                properties = props[0] if props else {}
+                
+                session.run(f"""
+                    MATCH (s {{id: $source_id}})
+                    MATCH (t {{id: $target_id}})
+                    MERGE (s)-[r:{rel_type.value}]->(t)
+                    SET r += $properties
+                """, {
+                    "source_id": source.id,
+                    "target_id": target.id,
+                    "properties": properties
+                })
+                counts[rel_type.value].update({'count': counts[rel_type.value]['count'] + 1, 
+                                            'source': source.__class__.__name__, 
+                                            'target': target.__class__.__name__})
         
-    @property
-    def properties(self) -> Dict[str, Any]:
-        """Actual node properties in Neo4j"""
-        return {
-            "id": self.id,
-            "name": self.string_value,  # Using string_value as name
-            "is_divide": self.is_divide,
-            "is_simple_unit": self.is_simple_unit,
-            "item_type": self.item_type,
-            "namespace": self.namespace,
-            "registry_id": self.registry_id,
-            "status": self.status,
-            # "string_value": self.string_value,
-            "u_id": self.u_id,
-            "unit_reference": self.unit_reference
-        }
+        for rel_type, info in counts.items():
+            print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
 
- 
-    def __repr__(self) -> str:
-        """String representation of the Unit"""
-        return f"Unit(id={self.id}, type={self.item_type or 'unknown'})"  # Changed self._id to self.id
+    def get_neo4j_db_counts(self) -> Dict[str, Dict[str, int]]:
+        """Get count of nodes and relationships by type."""
+        try:
+            with self.driver.session() as session:
+                # Node counts
+                node_query = """
+                MATCH (n)
+                RETURN labels(n)[0] as node_type, count(n) as count
+                ORDER BY count DESC
+                """
+                node_counts = {row["node_type"]: row["count"] for row in session.run(node_query)}
+                complete_node_counts = {nt.value: node_counts.get(nt.value, 0) for nt in NodeType}
+                
+                # Relationship counts
+                rel_query = """
+                MATCH ()-[r]->()
+                RETURN type(r) as rel_type, count(r) as count
+                ORDER BY count DESC
+                """
+                rel_counts = {row["rel_type"]: row["count"] for row in session.run(rel_query)}
+                complete_rel_counts = {rt.value: rel_counts.get(rt.value, 0) for rt in RelationType}
+                
+                # Ensure printing only occurs if there are non-zero nodes or relationships
+                total_nodes = sum(complete_node_counts.values())
+                total_relationships = sum(complete_rel_counts.values())
+                
+                if total_nodes > 0 or total_relationships > 0:
+                    # Print node counts
+                    if total_nodes > 0:
+                        print("\nNode counts in Neo4j:")
+                        print("-" * 40)
+                        for node_type, count in complete_node_counts.items():
+                            if count > 0:  # Only print non-zero nodes
+                                print(f"{node_type:<15} : {count:>8,d} nodes")
+                        print("-" * 40)
+                        print(f"{'Total':<15} : {total_nodes:>8,d} nodes")
+                    
+                    # Print relationship counts
+                    if total_relationships > 0:
+                        print("\nRelationship counts in Neo4j:")
+                        print("-" * 40)
+                        for rel_type, count in complete_rel_counts.items():
+                            if count > 0:  # Only print non-zero relationships
+                                print(f"{rel_type:<15} : {count:>8,d} relationships")
+                        print("-" * 40)
+                        print(f"{'Total':<15} : {total_relationships:>8,d} relationships")
+                
+        except Exception as e:
+            print(f"Error getting node and relationship counts: {e}")
+            return {
+                "nodes": {nt.value: 0 for nt in NodeType},
+                "relationships": {rt.value: 0 for rt in RelationType}
+            }
+
+    def load_nodes_as_instances(self, node_type: NodeType, class_type: Type[Neo4jNode]) -> List[Neo4jNode]:
+        """Load Neo4j nodes as class instances"""
+        try:
+            with self.driver.session() as session:
+                query = f"MATCH (n:{node_type.value}) RETURN n"
+                result = session.run(query)
+                instances = [class_type.from_neo4j(dict(record["n"].items())) 
+                            for record in result]
+                print(f"Loaded {len(instances)} {node_type.value} instances from Neo4j")
+                return instances
+        except Exception as e:
+            raise RuntimeError(f"Failed to load {node_type.value} nodes: {e}")
+
+
+
+# endregion : Neo4j Manager ########################
+
+
+
+# region : Admin/Helpers ########################
+
+# TODO: This is temporary - later take dateNode creation outside 
+def create_date_range(start: str, end: str = None) -> List[DateNode]:
+    s = datetime.strptime(start, "%Y-%m-%d").date()  # Convert to date
+    e = datetime.now().date() if end is None else datetime.strptime(end, "%Y-%m-%d").date()  # Convert to date
+    return [DateNode(d.year, d.month, d.day) 
+            for d in (s + timedelta(days=i) for i in range((e-s).days + 1))]
+
+# TODO: This is temporary - later take dateNode creation outside 
+def create_date_relationships(dates: List[DateNode]) -> List[Tuple[DateNode, DateNode, RelationType]]:
+    relationships = []
+    for i in range(len(dates) - 1):
+        relationships.append((dates[i], dates[i + 1], RelationType.NEXT)) 
+    return relationships
+
+
+# TODO: To be replaced later by actual sec-api - This is temporary
+def get_company_info(model_xbrl):
+    # model_xbrl = get_model_xbrl(instance_url)
+    cik = next((context.entityIdentifier[1].lstrip('0') 
+                for context in model_xbrl.contexts.values() 
+                if context.entityIdentifier and 'cik' in context.entityIdentifier[0].lower()), None)
+    name = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'EntityRegistrantName'), None)
+    fiscal_year_end = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'CurrentFiscalYearEndDate'), None)
+    return cik, name, fiscal_year_end
+
+# TODO: To be replaced later by actual sec-api - This is temporary
+def get_report_info(model_xbrl):
+    doc_type = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'DocumentType'), None)
+    period_end_date = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'DocumentPeriodEndDate'), None)
+    is_amendment = next((fact.value.lower() == 'true' for fact in model_xbrl.facts 
+                        if fact.qname.localName == 'AmendmentFlag'), False)
     
-    
-######################### Unit Class END ####################################################
-
-
-######################### Other Report Elements START ####################################################
-
-class ReportElement:
-    """Represents a single report element with all its properties and categorization"""
-    pass
-# Category
-# Concept            12355
-# *Abstract           2607
-# *Member             2510
-# HyperCube            371
-# *LineItems           367
-# Dimension            298
-# LinkbaseElement       42
-# Other                 30
-# *Guidance              6
-# DateElement            5
-# deprecated             2
-######################### Other Report Elements END ####################################################
+    return doc_type, period_end_date, is_amendment  
 
 
 
-######################### Counting Function START #####################################################
-
-def count_report_hierarchy(report: Report) -> None:
+def count_report_hierarchy(report: process_report) -> None:
     """Exhaustive validation of the report hierarchy."""
     print("\nREPORT ELEMENT COUNT BY HIERARCHY")
     print("=" * 50)
@@ -2037,9 +2502,6 @@ def count_report_hierarchy(report: Report) -> None:
     print(f"├→ Presentation Networks: {presentation_networks}")
     print(f"├→ Calculation Networks: {calculation_networks}")
     print(f"└→ Definition Networks: {definition_networks}")
-
-
-
 
     # Presentation Hierarchies
     print("\nReport → Networks → Presentations")
@@ -2148,4 +2610,4 @@ def count_report_hierarchy(report: Report) -> None:
     #     print("\nNeo4j Database Stats")
     #     report.neo4j.get_neo4j_db_counts()
 
-######################### Counting Function END #####################################################
+# endregion : Admin/Helpers ########################
