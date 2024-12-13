@@ -102,6 +102,8 @@ class RelationType(Enum):
     HAS_CONCEPT = "HAS_CONCEPT"
     HAS_DIMENSION = "HAS_DIMENSION"
     HAS_MEMBER = "HAS_MEMBER"       # Domain/Dimension -> Member
+    FACT_MEMBER = "FACT_MEMBER"     # Fact -> Member
+    FACT_DIMENSION = "FACT_DIMENSION" # Fact -> Dimension
     HAS_DOMAIN = "HAS_DOMAIN"       # Dimension -> Domain
     PARENT_OF = "PARENT_OF"         # Parent Member -> Child Member
     HAS_DEFAULT = "HAS_DEFAULT"     # Dimension -> Default Member
@@ -187,7 +189,7 @@ class ReportElementClassifier:
             duration and nillable):
             return NodeType.HYPERCUBE
         
-        # 3. Dimension [Axis]
+        # 3. Dimension [Axis] - here we could also just use "concept.isDimensionItem"
         if (concept.isAbstract and 
             sub_group == 'xbrldt:dimensionItem' and 
             duration and nillable):
@@ -246,31 +248,31 @@ class ReportElementClassifier:
 @dataclass
 class process_report:
 
-    # Add Other Report Elements
-
+    # Config 
     instance_file: str
     neo4j: Neo4jManager
     log_file: str = field(default='ErrorLog.txt', repr=False)
     testing: bool = field(default=True)  # Add testing flag as configurable
-
     model_xbrl: ModelXbrl = field(init=False, repr=False)
+
+    # TODO: Can remove this later
     report_metadata: Dict[str, object] = field(init=False, default_factory=dict)
     
-    # Core collections
+    # Common Nodes
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
     abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class
     periods: List[Period] = field(init=False, default_factory=list, repr=False)
     units: List[Unit] = field(init=False, default_factory=list, repr=False)
-    facts: List[Fact] = field(init=False, default_factory=list, repr=False)
-    dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)
-    taxonomy: Taxonomy = field(init=False)
-
-
     dates: List[DateNode] = field(init=False, default_factory=list)
     admin_reports: List[AdminReportNode] = field(init=False, default_factory=list)
 
+    # Report-specific Nodes
+    facts: List[Fact] = field(init=False, default_factory=list, repr=False)    
+    dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)    
+    taxonomy: Taxonomy = field(init=False)
 
-    _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False)
+    # Lookup Tables - TODO: Can we remove this?
+    _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False) # Used in Linking Fact to Concept
     _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False)
     
     
@@ -279,16 +281,12 @@ class process_report:
      
     def __post_init__(self):
         
-        # Later remove these from process_report 
-        self.initialize_date_nodes(start_dt = "2024-12-01")
-        
-        self.load_xbrl()                    # Required to fetch Company node
-        self.initialize_entity_node()       # Company Node Creation
-        self.initialize_admin_reports()     # Admin Reports Node Creation   
-
-        self.initialize_report_node(cik = self.entity.cik)       # Report Node Creation
-
-        # self.extract_report_metadata()
+        self.initialize_date_nodes(start_dt = "2024-12-01")     # Later remove these from process_report 
+        self.load_xbrl()                                        # Required to fetch Company node
+        self.initialize_entity_node()                           # Company Node Creation
+        self.initialize_admin_reports()                         # Admin Reports Node Creation   
+        self.initialize_report_node(cik = self.entity.cik)      # Report Node Creation
+        # self.extract_report_metadata()                         # TODO: Remove this later
 
         self.populate_common_nodes()  # First handle common nodes
         self.populate_company_nodes() # Then handle company-specific nodes
@@ -299,12 +297,11 @@ class process_report:
         try:
             self.dates = create_date_range(start_dt)
             relationships = create_date_relationships(self.dates)
-            self.neo4j.merge_nodes(self.dates)
+            self.neo4j._export_nodes([self.dates])
             self.neo4j.merge_relationships(relationships)
             
         except Exception as e:
             print(f"Error initializing date nodes: {e}")
-
 
     def initialize_entity_node(self):
         """Initialize company node and create relationships with dates"""
@@ -314,7 +311,7 @@ class process_report:
             self.entity = CompanyNode(cik=cik, name=name, fiscal_year_end=fiscal_year_end)
 
             # Create/Merge company node
-            self.neo4j.merge_nodes([self.entity])
+            self.neo4j._export_nodes([self.entity])
 
             # Create relationships between dates and company with price data
             date_entity_relationships = []
@@ -363,7 +360,7 @@ class process_report:
                 for c in self.admin_reports[3:]  # Child nodes
                 if p.code == c.category]
         
-        self.neo4j.merge_nodes(self.admin_reports)
+        self.neo4j._export_nodes([self.admin_reports])
         self.neo4j.merge_relationships(rels)
 
 
@@ -403,7 +400,7 @@ class process_report:
         date_node = min(self.dates, key=lambda d: abs((datetime(d.year, d.month, d.day) - filed_date).days))
         
         # Merge nodes and relationships
-        self.neo4j.merge_nodes([self.report])
+        self.neo4j._export_nodes([self.report])
         self.neo4j.merge_relationships([
             (self.report, target, RelationType.BELONGS_TO),
             (date_node, self.report, RelationType.REPORTED_ON, {
@@ -451,7 +448,7 @@ class process_report:
         self._build_units()    # 3. Build units
         
         # Upload to Neo4j only common nodes first
-        self._export_nodes([self.concepts, self.periods, self.units], testing=False)
+        self.neo4j._export_nodes([self.concepts, self.periods, self.units], testing=False)
         
         # Load complete set from Neo4j
         self.concepts = self.neo4j.load_nodes_as_instances(NodeType.CONCEPT, Concept)
@@ -472,14 +469,17 @@ class process_report:
         self.taxonomy = Taxonomy(self.model_xbrl)
         self.taxonomy.build_dimensions()
 
+        # Here we should load_nodes_as_instances from both self.taxonomy.dimensions, self.taxonomy.members, domains as well as member hierarchies
+
         # Collect all nodes
+        all_domains = [dim.domain for dim in self.taxonomy.dimensions if dim.domain is not None]
         all_members = [member for dim in self.taxonomy.dimensions 
                     if dim.members_dict 
                     for member in dim.members_dict.values()]
-        all_domains = [dim.domain for dim in self.taxonomy.dimensions if dim.domain is not None]
+        
 
         # Export nodes to Neo4j
-        self._export_nodes([
+        self.neo4j._export_nodes([
             self.taxonomy.dimensions,  # Dimensions
             all_domains,              # Domains
             all_members               # Members
@@ -506,7 +506,7 @@ class process_report:
         self._build_facts()       # 5. Build facts
         
         # Upload to Neo4j report-specific nodes - # Testing=False since otherwise it will clear the db
-        self._export_nodes([self.facts], testing=False) 
+        self.neo4j._export_nodes([self.facts], testing=False) 
 
         # Define relationship types to export
         rel_types = [(Fact, Concept, RelationType.HAS_CONCEPT),
@@ -514,6 +514,12 @@ class process_report:
                      (Fact, Period, RelationType.HAS_PERIOD)]
         
         self._export_relationships(rel_types)        
+            # Export fact-dimension relationships
+        fact_dim_relationships = self._build_fact_dimension_relationships()
+        if fact_dim_relationships:
+            self.neo4j.merge_relationships(fact_dim_relationships)
+
+            
         print(f"Built report nodes: {len(self.facts)} facts")
 
 
@@ -616,6 +622,92 @@ class process_report:
         print(f"Built {len(self.facts)} unique facts")    
 
 
+
+    def _build_fact_dimension_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+        """Build relationships between facts and their dimensions/members"""
+        relationships = []
+
+        # Create lookup dictionaries using QName objects
+        dim_lookup = {dim.u_id: dim for dim in self.taxonomy.dimensions}
+        member_lookup = {}
+
+        for dim in self.taxonomy.dimensions:
+            for member_qname_str, member in dim.members_dict.items():
+                member_lookup[member.u_id] = member 
+
+        # Process each fact's dimensions
+        for fact in self.facts:
+            if not fact.dims_members:
+                continue
+
+            for dim_concept, member_concept in fact.dims_members:
+                if not dim_concept:
+                    continue
+
+                taxonomy_dim = dim_lookup.get(dim_concept.u_id)
+                if not taxonomy_dim:
+                    continue
+
+                # If we have a member, try to link through it
+                if member_concept:
+                    member = member_lookup.get(member_concept.u_id)
+                    if member:
+                        relationships.append((fact, member, RelationType.FACT_MEMBER))
+                        continue  # Proceed to next dimension-member pair
+
+                # If no member or member not found, link directly to dimension
+                relationships.append((fact, taxonomy_dim, RelationType.FACT_DIMENSION))
+                
+        return relationships
+
+
+
+    # def _build_fact_dimension_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+    #     """Build relationships between facts and their dimensions/members"""
+    #     relationships = []
+    #     dim_count = 0
+    #     member_count = 0
+
+    #     # Create lookup dictionaries using QName objects
+    #     dim_lookup = {dim.item.qname: dim for dim in self.taxonomy.dimensions}
+    #     member_lookup = {}
+
+    #     for dim in self.taxonomy.dimensions:
+    #         for member_qname_str, member in dim.members_dict.items():
+    #             member_qname = member.item.qname  # Assuming member.item has qname
+    #             member_lookup[member_qname] = member
+
+    #     # Process each fact's dimensions
+    #     for fact in self.facts:
+    #         if not fact.dims_members:
+    #             continue
+
+    #         for dim_concept, member_concept in fact.dims_members:
+    #             if not dim_concept:
+    #                 continue
+
+    #             dim_qname = dim_concept.qname
+    #             taxonomy_dim = dim_lookup.get(dim_qname)
+    #             if not taxonomy_dim:
+    #                 continue
+
+    #             # If we have a member, try to link through it
+    #             if member_concept:
+    #                 member_qname = member_concept.qname
+    #                 member = member_lookup.get(member_qname)
+    #                 if member:
+    #                     relationships.append((fact, member, RelationType.HAS_MEMBER))
+    #                     member_count += 1
+    #                     continue  # Proceed to next dimension-member pair
+
+    #             # If no member or member not found, link directly to dimension
+    #             relationships.append((fact, taxonomy_dim, RelationType.HAS_DIMENSION))
+    #             dim_count += 1
+
+    #     print(f"\nBuilt fact relationships: {dim_count} direct dimensions, {member_count} members")
+    #     print(f"Facts with dimension relationships: {len(set(r[0].u_id for r in relationships))}")
+    #     return relationships
+
     # 1. Build networks - Also builds hypercubes in networks with isDefinition = True
     def _build_networks(self):
         """Builds networks specific to this filing instance. Networks are report-specific sections."""
@@ -674,7 +766,7 @@ class process_report:
                 network.presentation = Presentation(
                     network_uri=network.network_uri,
                     model_xbrl=self.model_xbrl,
-                    report=self  # Pass report reference to access/create concepts and abstracts
+                    process_report=self  # Pass report reference to access/create concepts and abstracts
                 )
                             
         # 3. Adding hypercubes after networks are complete which in turn builds dimensions
@@ -683,28 +775,6 @@ class process_report:
             for hypercube in network.hypercubes:                
                 hypercube._link_hypercube_concepts(self.concepts, self.abstracts)
 
-    def _export_nodes(self, collections: List[List[Neo4jNode]], testing: bool = False):
-        """Export specified collections of nodes to Neo4j"""
-        try:
-            if testing:
-                self.neo4j.clear_db()
-            
-            # Always ensure indexes/constraints exist
-            self.neo4j.create_indexes()
-            
-            nodes = []
-            for collection in collections:
-                if collection:
-                    print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")
-                    nodes.extend(collection)
-            
-            if nodes:
-                self.neo4j.merge_nodes(nodes)
-                print("Export completed successfully")
-                
-        except Exception as e:
-            raise RuntimeError(f"Export to Neo4j failed: {e}")
-        
 
     def _export_relationships(self, rel_types: List[Tuple[Type[Neo4jNode], Type[Neo4jNode], RelationType]]) -> None:
         """Export relationships based on node type pairs and explicit relationship types"""
@@ -764,39 +834,42 @@ class Taxonomy:
     
     def build_dimensions(self):
         """Build taxonomy-wide dimensions and their hierarchies"""
-        # Get dimension-domain relationships first
-        dim_dom_rel_set = self.model_xbrl.relationshipSet(XbrlConst.dimensionDomain)
         
-        # Find all dimensions in taxonomy
-        for concept in self.model_xbrl.qnameConcepts.values():
-            if concept.isDimensionItem:
+        dim_dom_rel_set = self.model_xbrl.relationshipSet(XbrlConst.dimensionDomain) # Get dimension-domain relationships first                
+        
+        for concept in self.model_xbrl.qnameConcepts.values():                       # Find all dimensions in taxonomy
+            if concept.isDimensionItem: 
                 try:
-                    dimension = Dimension(
-                        model_xbrl=self.model_xbrl,
-                        dimension=concept,
-                        network_uri=None  # Indicates taxonomy-wide context
-                    )
+                    # Indicates taxonomy-wide context
+                    dimension = Dimension(model_xbrl=self.model_xbrl, item=concept, network_uri=None)
                     
-                    # Set domain first (important!)
+                    # Get domain first - Note: Typically Domain qname ends with 'Domain' but sometimes it ends with 'Member'
                     if dim_dom_rel_set:
                         for rel in dim_dom_rel_set.fromModelObject(concept):
-                            if rel.toModelObject:
-                                dimension.domain = Member(
-                                    model_xbrl=self.model_xbrl,
-                                    member=rel.toModelObject,
-                                    parent_qname=None,
-                                    level=0
-                                )
+                            if rel.toModelObject is not None:
+                                dimension.domain = Domain(model_xbrl=self.model_xbrl,item=rel.toModelObject)
                                 break
                     
                     # Build members only after domain is potentially set
                     dimension._build_members()
                     
-                    self.dimensions.append(dimension)
-                    self._dimension_lookup[dimension.qname] = dimension
+                    self.dimensions.append(dimension)                    
+                    self._dimension_lookup[dimension.qname] = dimension     # Building lookup table for dimensions
                     
                 except Exception as e:
                     print(f"Error creating dimension {concept.qname}: {str(e)}")
+
+
+
+    def get_dimension_domain_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+        """Get all dimension-domain relationships"""
+        relationships = []
+        for dimension in self.dimensions: 
+            if dimension.domain:
+                # Connect dimension to domain
+                relationships.append((dimension, dimension.domain, RelationType.HAS_DOMAIN))
+        return relationships
+    
 
     def get_dimension_member_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
         """Get all dimension-member relationships"""
@@ -804,20 +877,12 @@ class Taxonomy:
         
         for dimension in self.dimensions:
             if dimension.domain:
-                # Connect members to domain
+                # Connect only top-level members to domain
                 for member in dimension.members_dict.values():
-                    relationships.append((dimension.domain, member, RelationType.HAS_MEMBER))
+                    # Only connect members that don't have a parent (top-level members)
+                    if not member.parent_qname:
+                        relationships.append((dimension.domain, member, RelationType.HAS_MEMBER))
         
-        return relationships                    
-           
-
-    def get_dimension_domain_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
-        """Get all dimension-domain relationships"""
-        relationships = []
-        for dimension in self.dimensions:
-            if dimension.domain:
-                # Connect dimension to domain
-                relationships.append((dimension, dimension.domain, RelationType.HAS_DOMAIN))
         return relationships
 
     def get_member_hierarchy_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
@@ -826,12 +891,14 @@ class Taxonomy:
         for dimension in self.dimensions:
             if dimension.members_dict:
                 for member in dimension.members_dict.values():
-                    if member.parent_qname:
+                    # This leaves Domain out of the hierarchy since no parent_qname, in anycase build_members fills members_dict only with members
+                    if member.parent_qname:                                 
                         parent = dimension.members_dict.get(member.parent_qname)
                         if parent:
                             relationships.append((parent, member, RelationType.PARENT_OF))
         return relationships
     
+    # Not used anywhere
     def get_all_members(self) -> List[Member]:
         """Get all members across all dimensions"""
         return [
@@ -841,9 +908,10 @@ class Taxonomy:
             for member in dim.members_dict.values()
         ]
 
+    # Not used anywhere
     def get_dimension_members(self, dimension_qname: str) -> List[Member]:
         """Get members for a specific dimension"""
-        dimension = self._dimension_lookup.get(dimension_qname)
+        dimension = self._dimension_lookup.get(dimension_qname)         # Using lookup table to get Dimension Instance
         if dimension and dimension.members_dict:
             return list(dimension.members_dict.values())
         return []    
@@ -1386,7 +1454,7 @@ class Presentation:
     """
     network_uri: str
     model_xbrl: ModelXbrl
-    report: process_report
+    process_report: process_report
     
     nodes: Dict[str, PresentationNode] = field(init=False, default_factory=dict)
     
@@ -1428,12 +1496,12 @@ class Presentation:
         """Create AbstractConcept if not already exists"""
         concept_id = f"{model_concept.qname.namespaceURI}:{model_concept.qname}"
 
-        if (concept_id not in self.report._concept_lookup and 
-            concept_id not in self.report._abstract_lookup):
+        if (concept_id not in self.process_report._concept_lookup and 
+            concept_id not in self.process_report._abstract_lookup):
             try:
                 abstract = AbstractConcept(model_concept)
-                self.report.abstracts.append(abstract)
-                self.report._abstract_lookup[abstract.id] = abstract  # Using .id property
+                self.process_report.abstracts.append(abstract)
+                self.process_report._abstract_lookup[abstract.id] = abstract  # Using .id property
             except Exception as e:
                 raise ValueError(f"Failed to create AbstractConcept {concept_id}: {e}")
         
@@ -1478,8 +1546,8 @@ class Presentation:
     
     def get_concept(self, concept_id: str) -> Optional[Union[Concept, AbstractConcept]]:
         """Get concept instance for a node using u_id"""
-        return (self.report._concept_lookup.get(concept_id) or 
-                self.report._abstract_lookup.get(concept_id))
+        return (self.process_report._concept_lookup.get(concept_id) or 
+                self.process_report._abstract_lookup.get(concept_id))
     
     def get_children(self, node: PresentationNode) -> List[PresentationNode]:
         """Get child nodes for a given node"""
@@ -1559,7 +1627,7 @@ class Hypercube:
             try:
                 dimension = Dimension(
                     model_xbrl=self.model_xbrl,
-                    dimension=dim_object,
+                    item=dim_object,
                     network_uri=self.network_uri
                 )
                 self.dimensions.append(dimension)
@@ -1627,7 +1695,7 @@ class Hypercube:
 class Dimension(Neo4jNode):
     """Dimension with its domain and members"""
     model_xbrl: ModelXbrl
-    dimension: ModelConcept
+    item: ModelConcept
     network_uri: Optional[str] = None
     
     # Core properties
@@ -1664,12 +1732,13 @@ class Dimension(Neo4jNode):
     @property
     def properties(self) -> Dict[str, Any]:
         return {
+            "u_id": self.id, # this returns the u_id    
             "qname": self.qname,
             "name": self.name,
             "label": self.label,
             "is_explicit": self.is_explicit,
             "is_typed": self.is_typed,
-            "network_uri": self.network_uri
+            "network_uri": self.network_uri,            
         }
 
 
@@ -1705,21 +1774,23 @@ class Dimension(Neo4jNode):
         
         # TODO: Also need to add Entity ID/CIK/name to this ID since dimensions will be specific to a company
         # Set id first
-        if self.dimension is not None:            
-            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  # Gets CIK from URL
-            self.u_id = f"{company_id}:{self.dimension.qname.namespaceURI}:{self.dimension.qname}"
+        if self.item is not None: 
+            # TODO: company_id(Gets CIK from URL) is a workaround, ideally get it from report.entity.cik 
+            # but need to pass process_report it all the way here
+            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  
+            self.u_id = f"{company_id}:{self.item.qname.namespaceURI}:{self.item.qname}"
 
 
         # Core properties
-        self.name = str(self.dimension.qname.localName)
-        self.qname = str(self.dimension.qname)
+        self.name = str(self.item.qname.localName)
+        self.qname = str(self.item.qname)
         # self.id = str(self.dimension.objectId())
-        self.label = self.dimension.label() if hasattr(self.dimension, 'label') else None
+        self.label = self.item.label() if hasattr(self.item, 'label') else None
             
         
         # Dimension type
-        self.is_explicit = bool(getattr(self.dimension, 'isExplicitDimension', False))
-        self.is_typed = bool(getattr(self.dimension, 'isTypedDimension', False))
+        self.is_explicit = bool(getattr(self.item, 'isExplicitDimension', False))
+        self.is_typed = bool(getattr(self.item, 'isTypedDimension', False))
         
         self._build_relationships()
     
@@ -1740,9 +1811,10 @@ class Dimension(Neo4jNode):
             self.model_xbrl.relationshipSet(XbrlConst.dimensionDomain)
         )
 
+
         if not dim_dom_rel_set: return
                 
-        relationships = dim_dom_rel_set.fromModelObject(self.dimension)
+        relationships = dim_dom_rel_set.fromModelObject(self.item)
         if not relationships: return
                 
         # Process first domain relationship
@@ -1754,28 +1826,29 @@ class Dimension(Neo4jNode):
             try:
                 self.domain = Domain(
                     model_xbrl=self.model_xbrl,
-                    domain=domain_object
+                    item=domain_object
                 )
                 break  # Take the first valid domain
             except Exception as e:
                 print(f"Error creating domain for {self.qname}: {str(e)}")
                 continue
-
-    def add_member(self, member: Member) -> None:
-        """Add member if not already present"""
-        if member.qname not in self.members_dict:
-            self.members_dict[member.qname] = member
-        else:
-            pass
     
     def _build_members(self) -> None:
         """Build hierarchical member relationships"""
         
         if not self.is_explicit:return                
         if not self.domain: return
-                
-        dom_mem_rel_set = self.model_xbrl.relationshipSet(XbrlConst.domainMember, self.network_uri)
+
+
+        dom_mem_rel_set = (
+            self.model_xbrl.relationshipSet(XbrlConst.domainMember, self.network_uri)
+            if self.network_uri else
+            self.model_xbrl.relationshipSet(XbrlConst.domainMember)
+        )
+
+        # dom_mem_rel_set = self.model_xbrl.relationshipSet(XbrlConst.domainMember, self.network_uri)
         # dom_mem_rel_set = self.model_xbrl.relationshipSet(XbrlConst.domainMember)
+
         if not dom_mem_rel_set: return
         
         def add_members_recursive(source_object: ModelConcept, parent_qname: Optional[str] = None, level: int = 0) -> None:
@@ -1788,7 +1861,7 @@ class Dimension(Neo4jNode):
                 if not hasattr(member_object, 'isDomainMember'): continue
                     
                 try:
-                    member = Member( model_xbrl=self.model_xbrl, member=member_object, parent_qname=parent_qname, level=level)                    
+                    member = Member( model_xbrl=self.model_xbrl, item=member_object, parent_qname=parent_qname, level=level)                    
                     self.add_member(member)                    
                     # Process children
                     add_members_recursive(member_object, str(member_object.qname), level + 1)
@@ -1797,7 +1870,18 @@ class Dimension(Neo4jNode):
                     print(f"Error creating member {member_object.qname}: {str(e)}")
                     continue
         
-        add_members_recursive(self.domain.domain)
+        # Start with domain being the source object
+        add_members_recursive(self.domain.item)
+
+    # Exclude domain itself from members
+    def add_member(self, member: Member) -> None:
+        """Add member if not already present and not the domain itself""" 
+        if member.qname not in self.members_dict and member.qname != self.domain.qname:
+            self.members_dict[member.qname] = member
+        else:
+            pass
+
+
     def _set_default_member(self) -> None:
         """Set default member if exists"""
         default_rel_set = (
@@ -1809,7 +1893,7 @@ class Dimension(Neo4jNode):
         if not default_rel_set: return
             
         # Get relationships using fromModelObject
-        relationships = default_rel_set.fromModelObject(self.dimension)
+        relationships = default_rel_set.fromModelObject(self.item)
         if not relationships: return
         
         # Debug: Print all relationships for this dimension
@@ -1826,7 +1910,7 @@ class Dimension(Neo4jNode):
             # Create Member object from the domain that's set as default
             self.default_member = Member(
                 model_xbrl=self.model_xbrl,
-                member=default_domain_obj,
+                item=default_domain_obj,
                 parent_qname=None,
                 level=0)
             
@@ -1836,50 +1920,12 @@ class Dimension(Neo4jNode):
         except Exception as e:
             print(f"Error setting default member for {self.qname}: {str(e)}")
 
-@dataclass
-class Domain(Neo4jNode): 
-    """Represents a dimension domain"""
-    model_xbrl: ModelXbrl
-    domain: ModelConcept
-    qname: str = field(init=False)
-    label: str = field(init=False)
-    type: str = field(init=False)
-    u_id: Optional[str] = field(init=False, default=None)
-
-    
-    def __post_init__(self):
-        
-        #TODO: Also need to add Entity ID/CIK/name to this ID since domains will be specific to a company
-        if self.domain is not None:
-            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  # Gets CIK from URL
-            self.u_id = f"{company_id}:{self.domain.qname.namespaceURI}:{self.domain.qname}"
-
-        self.qname = str(self.domain.qname)
-        self.label = self.domain.label() if hasattr(self.domain, 'label') else None
-        self.type = self.domain.typeQname.localName if hasattr(self.domain, 'typeQname') else None
-
-    @property
-    def id(self) -> str:
-        """For Neo4j MERGE"""
-        return self.u_id
-        
-    @property
-    def node_type(self) -> NodeType:
-        return NodeType.DOMAIN
-        
-    @property
-    def properties(self) -> Dict[str, Any]:
-        return {
-            "qname": self.qname,
-            "label": self.label,
-            "type": self.type
-        }
 
 @dataclass
 class Member(Neo4jNode):
     """Represents a dimension member in a hierarchical structure"""
     model_xbrl: ModelXbrl
-    member: ModelConcept
+    item: ModelConcept
     qname: str = field(init=False)
     label: str = field(init=False)
     parent_qname: Optional[str] = None
@@ -1887,13 +1933,19 @@ class Member(Neo4jNode):
     u_id: Optional[str] = None
     
     def __post_init__(self):
-        self.qname = str(self.member.qname)
-        self.label = self.member.label() if hasattr(self.member, 'label') else None
+        self.qname = str(self.item.qname)
+        # self.label = self.member.label() if hasattr(self.member, 'label') else None
+        # self.label = self.member.qname.localName if hasattr(self.member, 'qname') else None
+        self.label = self.item.qname.localName.replace('Member', '') if hasattr(self.item, 'qname') else None
+
         
         # TODO: Also need to add Entity ID/CIK/name to this ID since members will be specific to a company
-        if self.member is not None:
-            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  # Gets CIK from URL
-            self.u_id = f"{company_id}:{self.member.qname.namespaceURI}:{self.member.qname}"
+        if self.item is not None:
+
+            # TODO: company_id(Gets CIK from URL) is a workaround, ideally get it from report.entity.cik 
+            # but need to pass process_report it all the way here
+            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  
+            self.u_id = f"{company_id}:{self.item.qname.namespaceURI}:{self.item.qname}"
 
     @property
     def id(self) -> str:
@@ -1906,11 +1958,81 @@ class Member(Neo4jNode):
     @property
     def properties(self) -> Dict[str, Any]:
         return {
+            "u_id": self.id, # this returns the u_id
             "qname": self.qname,
             "label": self.label,
             "level": self.level,
             "parent_qname": self.parent_qname
         }
+
+
+
+@dataclass
+class Domain(Member):
+    """Represents a dimension domain"""
+
+    def __post_init__(self):
+        # Call Member's __post_init__ to initialize shared attributes
+        super().__post_init__()
+
+        # Remove 'Domain' from the label if present
+        if self.label:
+            self.label = self.label.replace('Domain', '')
+
+        # Set parent_qname to None and level to 0 for Domain
+        self.parent_qname = None
+        self.level = 0
+
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.DOMAIN
+
+
+
+
+
+
+# @dataclass
+# class Domain(Neo4jNode): 
+#     """Represents a dimension domain"""
+#     model_xbrl: ModelXbrl
+#     domain: ModelConcept
+#     qname: str = field(init=False)
+#     label: str = field(init=False)
+#     type: str = field(init=False)
+#     u_id: Optional[str] = field(init=False, default=None)
+
+    
+#     def __post_init__(self):
+        
+#         #TODO: Also need to add Entity ID/CIK/name to this ID since domains will be specific to a company
+#         if self.domain is not None:
+
+#             # TODO: company_id(Gets CIK from URL) is a workaround, ideally get it from report.entity.cik 
+#             # but need to pass process_report it all the way here
+#             company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  
+#             self.u_id = f"{company_id}:{self.domain.qname.namespaceURI}:{self.domain.qname}"
+
+#         self.qname = str(self.domain.qname)
+#         self.label = self.domain.label() if hasattr(self.domain, 'label') else None
+#         self.type = self.domain.typeQname.localName if hasattr(self.domain, 'typeQname') else None
+
+#     @property
+#     def id(self) -> str:
+#         """For Neo4j MERGE"""
+#         return self.u_id
+        
+#     @property
+#     def node_type(self) -> NodeType:
+#         return NodeType.DOMAIN
+        
+#     @property
+#     def properties(self) -> Dict[str, Any]:
+#         return {
+#             "qname": self.qname,
+#             "label": self.label,
+#             "type": self.type
+#         }
 
 
 # endregion : Company Nodes ########################
@@ -2027,6 +2149,7 @@ class Fact(Neo4jNode):
     period: Optional[Period] = field(init=False, default=None)
 
     # dims_members: Optional[List[Tuple[Dimension, Member]]] = field(init=False, default_factory=list)
+    # Note: In fact, for each dimension, there can be only one member 
     dims_members: Optional[List[Tuple[ModelConcept, ModelConcept]]] = field(init=False, default_factory=list)
     
     def __post_init__(self):
@@ -2115,23 +2238,29 @@ class Fact(Neo4jNode):
             
         for dim_concept, dim_value in dim_values.items():
             try:
+                fact_dimension = Dimension(model_xbrl=self.model_fact.modelXbrl, item=dim_concept, network_uri=None)
                 # For explicit dimensions, use the member ModelConcept
                 if hasattr(dim_value, 'isExplicit') and dim_value.isExplicit:
                     if hasattr(dim_value, 'member') and dim_value.member is not None:
-                        self.dims_members.append((dim_concept, dim_value.member))
+                        fact_member = Member(model_xbrl=self.model_fact.modelXbrl, item = dim_value.member, parent_qname=None, level=0) 
+                        # self.dims_members.append((dim_concept, dim_value.member))
+                        self.dims_members.append((fact_dimension, fact_member))
                         # print(f"Added explicit dimension: {dim_concept.qname}, member: {dim_value.member.qname}")
                         
                 # For typed dimensions, use the typed value
                 elif hasattr(dim_value, 'isTyped') and dim_value.isTyped:
                     if hasattr(dim_value, 'typedMember') and dim_value.typedMember is not None:
-                        self.dims_members.append((dim_concept, dim_value.typedMember.stringValue))
-                        print(f"Added typed dimension: {dim_concept.qname}, value: {dim_value.typedMember.stringValue}")
+                        typed_concept = dim_value.dimension  # Use the dimension's concept as base
+                        fact_member = Member(model_xbrl=self.model_fact.modelXbrl, item = typed_concept, parent_qname=None, level=0) 
+                        # self.dims_members.append((dim_concept, dim_value.typedMember.stringValue))
+                        self.dims_members.append((fact_dimension, fact_member))
+                        # print(f"Added typed dimension: {dim_concept.qname}, value: {dim_value.typedMember.stringValue}")
                         
                 else:
                     print(f"Dimension {dim_concept.qname} is neither explicit nor typed")
                     
             except AttributeError as e:
-                print(f"Warning: Could not process dimension value for {dim_concept.qname}: {e}")
+                print(f"Warning: Could not process dimension value for {dim_concept}: {e}")
 
 
     # # To be Used when Linking to Dimension and Member Nodes
@@ -2320,6 +2449,34 @@ class Neo4jManager:
                         
         except Exception as e:
             raise RuntimeError(f"Failed to merge nodes: {e}")
+
+
+    def _export_nodes(self, collections: List[Union[Neo4jNode, List[Neo4jNode]]], testing: bool = False):
+        """Export specified collections of nodes to Neo4j"""
+        try:
+            if testing:
+                self.clear_db()
+            
+            # Always ensure indexes/constraints exist
+            self.create_indexes()
+            
+            nodes = []
+            for collection in collections:
+                if collection:
+                    # Handle both single nodes and collections
+                    if isinstance(collection, list):
+                        print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")
+                        nodes.extend(collection)
+                    else:
+                        print(f"Adding single {type(collection).__name__} node")
+                        nodes.append(collection)
+            
+            if nodes:
+                self.merge_nodes(nodes)
+                print("Export completed successfully")
+                
+        except Exception as e:
+            raise RuntimeError(f"Export to Neo4j failed: {e}")
 
 
     def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:

@@ -16,3 +16,12 @@ venv/
 
 # macOS system files
 .DS_Store
+
+# Entire XBRL_Setup Folder
+XBRL_Setup/
+
+# Project requirements
+requirements.txt
+
+# Old XBRLClasses.py
+XBRL_Setup/XBRLClasses.py

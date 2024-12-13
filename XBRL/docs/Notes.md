@@ -23,6 +23,10 @@
 2. **Unit Node:** namespace_stringvalue (http://www.xbrl.org/2003/iso4217_iso4217:USD)
 3. **Concept Node:** namespaceURI:conceptqname (http://xbrl.sec.gov/dei/2023:dei:EntityAddressStateOrProvince, http://fasb.org/us-gaap/2023:us-gaap:OperatingLeasePayments)
 4. **Fact Node:** Documenturi_conceptqname_contextID_unitID_factID (https://www.sec.gov/Archives/edgar/data/3545/000000354524000128/alco-20240930_htm.xml_us-gaap:CommonStockParOrStatedValuePerShare_c-4_usdPerShare_f-90)
+5. **Member Node:**     company_id:namespaceURI:qname (id: 3545:http://fasb.org/us-gaap/2023:us-gaap:OperatingSegmentsMember)
+6. **Domain Node:**     company_id:namespaceURI:qname (id: 3545:http://fasb.org/us-gaap/2023:us-gaap:SubsequentEventTypeDomain)
+7. **Dimension Node:**  company_id:namespaceURI:qname (id: 3545:http://fasb.org/us-gaap/2023:us-gaap:SubsequentEventTypeAxis)
+
 
 
 
