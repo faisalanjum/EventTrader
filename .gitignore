@@ -1,15 +1,17 @@
-# Log files
-XBRL_Setup/ErrorLog.txt
-XBRL_Setup/logfile.txt
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+XBRL/__pycache__/
 
-# Backup files
-XBRL_Setup/*Backup.py
+# Log files
+*.log
+**/ErrorLog.txt
+**/logfile.txt
 
 # Jupyter notebooks
-XBRL_Setup/*.ipynb
-
-# Python cache
-XBRL_Setup/__pycache__/
+*.ipynb
+.ipynb_checkpoints/
 
 # Virtual environment
 venv/
@@ -17,11 +19,8 @@ venv/
 # macOS system files
 .DS_Store
 
-# Entire XBRL_Setup Folder
-XBRL_Setup/
-
 # Project requirements
 requirements.txt
 
-# Old XBRLClasses.py
-XBRL_Setup/XBRLClasses.py
+# Backup files
+*Backup.py

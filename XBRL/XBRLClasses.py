@@ -1,4 +1,6 @@
-from __future__ import annotations  # Enable forward references
+from __future__ import annotations
+from XBRL.validation import ValidationMixin  # Use absolute import
+
 
 # dataclasses and typing imports
 from dataclasses import dataclass, field, fields
@@ -410,7 +412,23 @@ class process_report:
                 'time': '12:01:52'
             }) ])
 
-
+    def validate_all_facts(self) -> Dict[str, List[Fact]]:
+        """Validate facts across all definition networks"""
+        validated_facts = {}
+        
+        for network in self.networks:
+            
+            # if network.isDefinition:
+            
+            # Ensure network has access to report/taxonomy
+            network.report = self
+            network.taxonomy = self.taxonomy
+            
+            # Validate facts for this network
+            validated_facts[network.id] = network.validate_facts()
+            print(f"Network {network.id}: {len(validated_facts[network.id])} validated facts")
+                
+        return validated_facts
 
     def load_xbrl(self):
         # Initialize the controller
@@ -1322,7 +1340,7 @@ class DateNode(Neo4jNode):
 
 
 @dataclass
-class Network:
+class Network(ValidationMixin):
     """Represents a single network (extended link role) in the XBRL document"""
     """Represents a specific section of the report (e.g., 'Balance Sheet', 'Income Statement', 'Notes').
     Each network has a unique URI like 'http://company.com/role/BALANCESHEET'"""
@@ -1337,40 +1355,72 @@ class Network:
     relationship_sets: List[str] = field(default_factory=list) # check if this is needed
     hypercubes: List[Hypercube] = field(init=False, default_factory=list)
     presentation: Optional[Presentation] = field(init=False, default=None)
-
     
+    report: Optional['process_report'] = None # Inorder to validate facts, we need to pass the report
+
+    # Add field to store validated facts
+    validated_facts: List[Fact] = field(init=False, default_factory=list)
+
+
+
     def add_hypercubes(self, model_xbrl) -> None:
         """Add hypercubes if this is a definition network"""
         if not self.isDefinition:
             return
-            
-        # for rel in model_xbrl.relationshipSet(XbrlConst.all).modelRelationships:
-        #     if (rel.linkrole == self.network_uri and 
-        #         rel.toModelObject is not None and 
-        #         hasattr(rel.toModelObject, 'isHypercubeItem') and 
-        #         rel.toModelObject.isHypercubeItem):
                 
-        #         hypercube = Hypercube(
-        #             model_xbrl = self.model_xbrl,
-        #             hypercube_item=rel.toModelObject,
-        #             network_uri=self.network_uri
-        #         )
-        #         self.hypercubes.append(hypercube)
-
-        # Check both 'all' and 'notAll' relationships
+        # 1. Get the specific definition network relationships
         for rel_type in [XbrlConst.all, XbrlConst.notAll]:
-            for rel in model_xbrl.relationshipSet(rel_type).modelRelationships:
-                if (rel.linkrole == self.network_uri and 
-                    rel.toModelObject is not None and 
+            # Important: Specify the network_uri when getting relationships
+            rel_set = model_xbrl.relationshipSet(rel_type, self.network_uri)
+            if not rel_set:
+                continue
+                
+            # 2. Process relationships in this specific network
+            for rel in rel_set.modelRelationships:
+                if (rel.toModelObject is not None and 
                     hasattr(rel.toModelObject, 'isHypercubeItem') and 
                     rel.toModelObject.isHypercubeItem):
                     
                     hypercube = Hypercube(
-                        model_xbrl = self.model_xbrl,
+                        model_xbrl=self.model_xbrl,
                         hypercube_item=rel.toModelObject,
                         network_uri=self.network_uri
                     )
                     self.hypercubes.append(hypercube)
+
+
+    # def add_hypercubes(self, model_xbrl) -> None:
+    #     """Add hypercubes if this is a definition network"""
+    #     if not self.isDefinition:
+    #         return
+            
+    #     # for rel in model_xbrl.relationshipSet(XbrlConst.all).modelRelationships:
+    #     #     if (rel.linkrole == self.network_uri and 
+    #     #         rel.toModelObject is not None and 
+    #     #         hasattr(rel.toModelObject, 'isHypercubeItem') and 
+    #     #         rel.toModelObject.isHypercubeItem):
+                
+    #     #         hypercube = Hypercube(
+    #     #             model_xbrl = self.model_xbrl,
+    #     #             hypercube_item=rel.toModelObject,
+    #     #             network_uri=self.network_uri
+    #     #         )
+    #     #         self.hypercubes.append(hypercube)
+
+    #     # Check both 'all' and 'notAll' relationships
+    #     for rel_type in [XbrlConst.all, XbrlConst.notAll]:
+    #         for rel in model_xbrl.relationshipSet(rel_type).modelRelationships:
+    #             if (rel.linkrole == self.network_uri and 
+    #                 rel.toModelObject is not None and 
+    #                 hasattr(rel.toModelObject, 'isHypercubeItem') and 
+    #                 rel.toModelObject.isHypercubeItem):
+                    
+    #                 hypercube = Hypercube(
+    #                     model_xbrl = self.model_xbrl,
+    #                     hypercube_item=rel.toModelObject,
+    #                     network_uri=self.network_uri
+    #                 )
+    #                 self.hypercubes.append(hypercube)
     
 
     @property
@@ -1415,20 +1465,33 @@ class Network:
         return 'Other'
     
 
-    def validate_facts(self) -> List[Fact]:
-        # Step1: Get all facts (W/O Dims)for concepts in this presentation that are not in any hypercubes of this network
-        # node.concept.__class__ != AbstractConcept
+    # def validate_facts(self) -> List[Fact]:
+    #     """Validates facts according to presentation network definition algorithm"""
 
-        # Each node_value has : 'children', 'concept', 'concept_id', 'level', 'order'
+    #     print(f"\nNetwork {self.name}:")
 
-        fact_list = set([
-            fact.u_id 
-            for node in self.presentation.nodes.values() 
-            for fact in node.concept.facts 
-            if node.concept.__class__ != AbstractConcept and node.concept not in [concept for hypercube in self.hypercubes for concept in hypercube.concepts]
-        ])
+    #     # Step 1: Facts -> Concepts -> PN
+    #     facts_in_pn = self._get_facts_in_presentation_network()        
+    #     print(f"Found {len(facts_in_pn)} facts in presentation network")
+        
+    #     # Split facts based on hypercube presence
+    #     facts_not_in_hc = self._get_facts_not_in_hypercubes(facts_in_pn) or set()
+    #     facts_in_hc = self._get_facts_in_hypercubes(facts_in_pn) or set()
+    #     print(f"Split facts: {len(facts_not_in_hc)} not in hypercubes, {len(facts_in_hc)} in hypercubes")
 
-        return fact_list
+    #     # Process facts not in hypercubes
+    #     filtered_non_hc_facts = self._filter_facts_without_dimensions(facts_not_in_hc) or set()
+    #     print(f"Filtered non-hypercube facts: {len(filtered_non_hc_facts)}")
+        
+    #     # Process facts in hypercubes
+    #     filtered_hc_facts = self._process_hypercube_facts(facts_in_hc) or set()
+    #     print(f"Filtered hypercube facts: {len(filtered_hc_facts)}")
+        
+    #     # Validation checks
+    #     all_validated_facts = self._perform_validation_checks(filtered_non_hc_facts, filtered_hc_facts)
+    #     print(f"Final validated facts: {len(all_validated_facts)}\n")
+        
+    #     return all_validated_facts
 
 
 @dataclass
@@ -1610,6 +1673,88 @@ class Hypercube:
         self._build_dimensions()
 
 
+    # def _build_dimensions(self) -> None:
+    #     """Build dimension objects from model_xbrl matching this hypercube"""
+        
+    #     # 1. Get hypercube-dimension relationships for specific network
+    #     # print(f"Fetching hypercube-dimension relationships for network: {self.network_uri}")
+    #     hc_dim_rel_set = self.model_xbrl.relationshipSet(
+    #         XbrlConst.hypercubeDimension, 
+    #         self.network_uri
+    #     )
+    #     if not hc_dim_rel_set:
+    #         # print("No hypercube-dimension relationships found.")
+    #         return
+
+    #     # print(f"Total relationships in hypercube-dimension set: {len(hc_dim_rel_set.modelRelationships)}")
+            
+    #     # 2. Get relationships FROM this hypercube
+    #     # print(f"Fetching relationships from hypercube: {self.hypercube_item.qname}")
+    #     relationships = hc_dim_rel_set.fromModelObject(self.hypercube_item)
+    #     if not relationships:
+    #         # print(f"No relationships found from hypercube: {self.hypercube_item.qname}")
+    #         return
+
+    #     # print(f"Total relationships from hypercube {self.hypercube_item.qname}: {len(relationships)}")
+            
+    #     # 3. Process each dimension relationship
+    #     for rel in relationships:
+    #         dim_object = rel.toModelObject
+    #         # print(f"Processing relationship: from {rel.fromModelObject.qname} to {rel.toModelObject.qname if rel.toModelObject else 'None'}")
+            
+    #         if dim_object is None:
+    #             # print("Dimension object is None. Skipping this relationship.")
+    #             continue
+            
+    #         if not dim_object.isDimensionItem:
+    #             # print(f"{dim_object.qname} is not a dimension item. Skipping.")
+    #             continue
+                
+    #         try:
+    #             # Create dimension with network context
+    #             # print(f"Creating Dimension object for: {dim_object.qname}")
+    #             dimension = Dimension(
+    #                 model_xbrl=self.model_xbrl,
+    #                 item=dim_object,
+    #                 network_uri=self.network_uri
+    #             )
+                
+    #             # Add validation to ensure dimension is properly connected
+    #             if self._validate_dimension_connection(dim_object):
+    #                 # print(f"Dimension {dim_object.qname} validated and added.")
+    #                 self.dimensions.append(dimension)
+    #             else:
+    #                 # print(f"Dimension {dim_object.qname} failed validation. Skipping.")
+    #                 pass
+
+    #         except Exception as e:
+    #             # print(f"Error processing dimension {dim_object.qname}: {e}")
+    #             continue
+
+    # def _validate_dimension_connection(self, dim_object) -> bool:
+    #     """Validate that dimension is properly connected in this network"""
+    #     # print(f"Validating connection for dimension: {dim_object.qname}")
+
+    #     # Check if dimension is directly connected to this hypercube
+    #     hc_dim_rels = self.model_xbrl.relationshipSet(
+    #         XbrlConst.hypercubeDimension, 
+    #         self.network_uri
+    #     )
+
+    #     if not hc_dim_rels:
+    #         # print(f"No hypercube-dimension relationships found for validation in network: {self.network_uri}")
+    #         return False
+
+    #     for rel in hc_dim_rels.modelRelationships:
+    #         # print(f"Checking relationship: from {rel.fromModelObject.qname} to {rel.toModelObject.qname}")
+    #         if rel.fromModelObject == self.hypercube_item and rel.toModelObject == dim_object:
+    #             # print(f"Dimension {dim_object.qname} is properly connected to hypercube {self.hypercube_item.qname}.")
+    #             return True
+
+    #     # print(f"Dimension {dim_object.qname} is NOT connected to hypercube {self.hypercube_item.qname}.")
+    #     return False
+
+
     def _build_dimensions(self) -> None:
         """Build dimension objects from model_xbrl matching this hypercube"""
         
@@ -1741,6 +1886,17 @@ class Dimension(Neo4jNode):
             "network_uri": self.network_uri,            
         }
 
+
+    def __hash__(self):
+        """Use u_id for hashing since it's unique"""
+        # return hash(self.u_id) if self.u_id is not None else 0
+        return hash(self.u_id)
+        
+    def __eq__(self, other):
+        """Compare dimensions based on their u_id"""
+        if not isinstance(other, Dimension):
+            return NotImplemented
+        return self.u_id == other.u_id
 
     @property
     def members(self) -> List[Member]:
@@ -1965,6 +2121,13 @@ class Member(Neo4jNode):
             "parent_qname": self.parent_qname
         }
 
+    def __hash__(self):
+        return hash(self.u_id)
+        
+    def __eq__(self, other):
+        if not isinstance(other, Member):
+            return NotImplemented
+        return self.u_id == other.u_id
 
 
 @dataclass
@@ -1987,6 +2150,13 @@ class Domain(Member):
     def node_type(self) -> NodeType:
         return NodeType.DOMAIN
 
+    def __hash__(self):
+        return hash(self.u_id) if self.u_id is not None else 0
+        
+    def __eq__(self, other):
+        if not isinstance(other, Domain):
+            return NotImplemented
+        return self.u_id == other.u_id
 
 
 
@@ -2263,6 +2433,8 @@ class Fact(Neo4jNode):
                 print(f"Warning: Could not process dimension value for {dim_concept}: {e}")
 
 
+
+
     # # To be Used when Linking to Dimension and Member Nodes
     # def _set_dimensions(self) -> None:
     #     """Set dimensions and members using same logic as original"""
@@ -2314,6 +2486,11 @@ class Fact(Neo4jNode):
             # Collections containing collections can not be stored in properties.
             # 'dims_members': self.dims_members if self.dims_members is not None else None,
         }
+
+
+    def __hash__(self):
+        return hash(self.u_id)
+
 
 # endregion : Instance/Report Nodes ########################
 

@@ -26,6 +26,7 @@
 5. **Member Node:**     company_id:namespaceURI:qname (id: 3545:http://fasb.org/us-gaap/2023:us-gaap:OperatingSegmentsMember)
 6. **Domain Node:**     company_id:namespaceURI:qname (id: 3545:http://fasb.org/us-gaap/2023:us-gaap:SubsequentEventTypeDomain)
 7. **Dimension Node:**  company_id:namespaceURI:qname (id: 3545:http://fasb.org/us-gaap/2023:us-gaap:SubsequentEventTypeAxis)
+8  **Network**   
 
 
 
