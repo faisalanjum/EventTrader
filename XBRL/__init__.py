@@ -1,0 +1,1 @@
+from XBRL.XBRLClasses import *  # Use absolute import
