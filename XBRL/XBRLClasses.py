@@ -26,6 +26,31 @@ from arelle.ModelInstanceObject import ModelFact, ModelContext, ModelUnit
 from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 
+def detect_duplicate_facts(facts: List[Fact]) -> Tuple[Dict[str, Fact], Dict[str, str]]:
+    """Detect duplicate facts and return primary facts and duplicate mapping"""
+    primary_facts = {}
+    duplicate_map = {}
+    
+    for fact in facts:
+        canonical_key = f"{fact.concept.qname}:{fact.context_id}:{fact.unit}"
+        
+        if canonical_key in primary_facts:
+            primary = primary_facts[canonical_key]
+            # Compare precision
+            if (fact.decimals is not None and primary.decimals is not None and 
+                fact.decimals > primary.decimals):
+                # New fact has better precision - update primary
+                duplicate_map[primary.u_id] = fact.u_id
+                primary_facts[canonical_key] = fact
+            else:
+                # Keep existing primary
+                duplicate_map[fact.u_id] = primary.u_id
+        else:
+            primary_facts[canonical_key] = fact
+            
+    return primary_facts, duplicate_map
+
+
 # region Generic Classes
 class Neo4jNode(ABC):
     """Abstract base class for Neo4j nodes"""
@@ -125,6 +150,7 @@ class RelationType(Enum):
     HAS_PRICE = "HAS_PRICE"         # from Date to Entity/Company
     HAS_SUB_REPORT = "HAS_SUB_REPORT"  # For 10-K -> FYE and 10-Q -> Quarters relationships
     REPORTED_ON = "REPORTED_ON"     # From DateNode to ReportNode
+    PRESENTATION_EDGE = "PRESENTATION_EDGE" # From Fact to Fact
     
 
 
@@ -283,6 +309,9 @@ class process_report:
      
     def __post_init__(self):
         
+        self._primary_facts: Dict[str, Fact] = {}  # canonical_key -> primary fact
+        self._duplicate_map: Dict[str, str] = {}   # duplicate_uid -> primary_uid
+        
         self.initialize_date_nodes(start_dt = "2024-12-01")     # Later remove these from process_report 
         self.load_xbrl()                                        # Required to fetch Company node
         self.initialize_entity_node()                           # Company Node Creation
@@ -293,6 +322,7 @@ class process_report:
         self.populate_common_nodes()  # First handle common nodes
         self.populate_company_nodes() # Then handle company-specific nodes
         self.populate_report_nodes()  # Then handle report-specific nodes
+        self.validate_all_facts()
 
     def initialize_date_nodes(self, start_dt: str):
         """One-time initialization of date nodes"""
@@ -412,23 +442,82 @@ class process_report:
                 'time': '12:01:52'
             }) ])
 
+
+
     def validate_all_facts(self) -> Dict[str, List[Fact]]:
-        """Validate facts across all definition networks"""
+        """Validate facts and create presentation relationships"""
+        relationships = []
         validated_facts = {}
         
         for network in self.networks:
-            
-            # if network.isDefinition:
-            
-            # Ensure network has access to report/taxonomy
-            network.report = self
-            network.taxonomy = self.taxonomy
-            
-            # Validate facts for this network
-            validated_facts[network.id] = network.validate_facts()
-            print(f"Network {network.id}: {len(validated_facts[network.id])} validated facts")
+            if network.isPresentation:
+                # Ensure network has access to report/taxonomy
+                network.report = self  # This line was important!
+                network.taxonomy = self.taxonomy  # This too!
+
+                # Get validated facts with their metadata
+                facts, enhanced_facts = network.validate_facts()
+                validated_facts[network.network_uri] = facts
                 
+                # Group by period first
+                facts_by_period = defaultdict(list)
+                for fact, meta in enhanced_facts:
+                    period_id = meta['period_id']
+                    if period_id:  # Only group facts with valid periods
+                        facts_by_period[period_id].append((fact, meta))
+                
+                # Create relationships within each period group
+                for period_id, period_facts in facts_by_period.items():
+                    # Sort facts within this period by level and order
+                    sorted_facts = sorted(period_facts, 
+                                    key=lambda x: (x[1]['level'], x[1]['order']))
+                    
+                    # Create relationships between consecutive facts in same period
+                    for i in range(len(sorted_facts) - 1):
+                        fact1, meta1 = sorted_facts[i]
+                        fact2, meta2 = sorted_facts[i + 1]
+                        
+                        # Ensure both facts have valid u_ids
+                        if fact1.u_id and fact2.u_id:
+                            relationships.append((
+                                fact1,
+                                fact2,
+                                RelationType.PRESENTATION_EDGE,
+                                {
+                                    'network_name': network.name,
+                                    'network_id': network.id,
+                                    'from_level': meta1['level'],
+                                    'to_level': meta2['level'],
+                                    'from_order': meta1['order'],
+                                    'to_order': meta2['order'],
+                                    'period_id': period_id  # Add period context
+                                }
+                            ))
+        
+        if relationships:
+            self.neo4j.merge_relationships(relationships)
+            
         return validated_facts
+
+
+
+    # def validate_all_facts(self) -> Dict[str, List[Fact]]:
+    #     """Validate facts across all definition networks"""
+    #     validated_facts = {}
+        
+    #     for network in self.networks:
+            
+    #         # if network.isDefinition:
+            
+    #         # Ensure network has access to report/taxonomy
+    #         network.report = self
+    #         network.taxonomy = self.taxonomy
+            
+    #         # Validate facts for this network
+    #         validated_facts[network.network_uri] = network.validate_facts()
+    #         print(f"Network {network.network_uri}: {len(validated_facts[network.network_uri])} validated facts")
+                
+    #     return validated_facts
 
     def load_xbrl(self):
         # Initialize the controller
@@ -536,7 +625,6 @@ class process_report:
         fact_dim_relationships = self._build_fact_dimension_relationships()
         if fact_dim_relationships:
             self.neo4j.merge_relationships(fact_dim_relationships)
-
             
         print(f"Built report nodes: {len(self.facts)} facts")
 
@@ -620,24 +708,70 @@ class process_report:
         self.periods = list(periods_dict.values())
         print(f"Built {len(self.periods)} unique periods")
 
+
     def _build_facts(self):
         """Build facts with two-way concept relationships"""
-        for model_fact in self.model_xbrl.factsInInstance:
-            fact = Fact(model_fact=model_fact)
+        valid_facts = [fact for fact in self.model_xbrl.factsInInstance 
+                    if not (fact.id and fact.id.startswith('hidden-fact'))]
+                    
+        for model_fact in valid_facts:
+            fact = Fact(model_fact=model_fact, _report=self)  # Pass self as report reference
 
             model_concept = model_fact.concept
             concept_id = f"{model_concept.qname.namespaceURI}:{model_concept.qname}"
             concept = self._concept_lookup.get(concept_id)
+            
             if not concept: 
                 print(f"Warning: No concept found for fact {fact.fact_id}")
                 continue
-            else:
-               # Only linking concept.facts since fact.concept = concept done in export_            
-               # # Also this is not done for Neo4j nodes but for internal classes only                  
-                concept.add_fact(fact) 
+                
+            # Create canonical key using model_concept
+            canonical_key = f"{model_concept.qname}:{fact.context_id}:{fact.unit}"
             
+            # Check for duplicates
+            if canonical_key in self._primary_facts:
+                primary = self._primary_facts[canonical_key]
+                fact_decimals = fact.decimals if fact.decimals is not None else float('-inf')
+                primary_decimals = primary.decimals if primary.decimals is not None else float('-inf')
+                if fact_decimals > primary_decimals:
+
+                    self._duplicate_map[primary.u_id] = fact.u_id
+                    self._primary_facts[canonical_key] = fact
+                else:
+                    self._duplicate_map[fact.u_id] = primary.u_id
+            else:
+                self._primary_facts[canonical_key] = fact
+            
+            concept.add_fact(fact)
             self.facts.append(fact)
-        print(f"Built {len(self.facts)} unique facts")    
+            
+        print(f"Built {len(self.facts)} facts ({len(self._primary_facts)} unique)")
+
+    # def _build_facts(self):
+    #     """Build facts with two-way concept relationships"""
+    #     # Filter out hidden facts right at the source
+    #     valid_facts = [fact for fact in self.model_xbrl.factsInInstance 
+    #                 if not (fact.id and fact.id.startswith('hidden-fact'))]
+                    
+
+    #     for model_fact in valid_facts:
+    #         fact = Fact(model_fact=model_fact)
+
+    #         model_concept = model_fact.concept
+    #         concept_id = f"{model_concept.qname.namespaceURI}:{model_concept.qname}"
+    #         concept = self._concept_lookup.get(concept_id)
+    #         if not concept: 
+    #             print(f"Warning: No concept found for fact {fact.fact_id}")
+    #             continue
+    #         else:
+    #            # Only linking concept.facts since fact.concept = concept done in export_            
+    #            # # Also this is not done for Neo4j nodes but for internal classes only                  
+    #             concept.add_fact(fact) 
+            
+    #         self.facts.append(fact)
+    #     print(f"Built {len(self.facts)} unique facts")    
+
+
 
 
 
@@ -1360,7 +1494,6 @@ class Network(ValidationMixin):
 
     # Add field to store validated facts
     validated_facts: List[Fact] = field(init=False, default_factory=list)
-
 
 
     def add_hypercubes(self, model_xbrl) -> None:
@@ -2302,7 +2435,9 @@ class ReportNode(Neo4jNode):
 @dataclass
 class Fact(Neo4jNode):
     model_fact: ModelFact
-    
+    _report: 'process_report' = field(repr=False, default=None)  # Add this line
+    refers_to: Optional[Fact] = None  # 
+
     # Globally unique fact identifier
     u_id: str = field(init=False)        # Globally u_id (see _generate_unique_fact_id)
 
@@ -2322,11 +2457,17 @@ class Fact(Neo4jNode):
     # Note: In fact, for each dimension, there can be only one member 
     dims_members: Optional[List[Tuple[ModelConcept, ModelConcept]]] = field(init=False, default_factory=list)
     
+
+    def __getattr__(self, name):
+        """Automatically redirect any attribute access to the actual fact"""
+        return getattr(self.model_fact, name)
+
+
     def __post_init__(self):
-        """Initialize all fields from model_fact after dataclass creation"""
+        """Initialize all fields from model_fact after dataclass creation"""            
         if not isinstance(self.model_fact, ModelFact):
             raise TypeError("model_fact must be ModelFact type")
-            
+
         # Globally unique fact identifier
         self.u_id = self._generate_unique_fact_id()
 
@@ -2334,6 +2475,8 @@ class Fact(Neo4jNode):
         self.qname = str(self.model_fact.qname)
         self.fact_id = self.model_fact.id # Only specific to this report like f-32
         self.value = None if self.model_fact.isNil else (self.model_fact.sValue if self.model_fact.isNumeric else self._extract_text(self.model_fact.value))
+        # self.value = self.model_fact.sValue if self.model_fact.isNumeric else self._extract_text(self.model_fact.value)
+
         self.context_id = self.model_fact.contextID                        
         self.decimals = self.model_fact.decimals        
  
@@ -2353,8 +2496,24 @@ class Fact(Neo4jNode):
     def is_numeric(self) -> bool:
         """Check if the fact is numeric."""
         return self.model_fact.isNumeric    
+    
 
-    def _generate_unique_fact_id(self) -> str:
+    @property
+    def is_primary(self) -> bool:
+        """Check if this is a primary fact"""
+        return self.u_id not in self._report._duplicate_map
+        
+    @property
+    def primary_fact(self) -> 'Fact':
+        """Get primary version of this fact"""
+        if not self.is_primary:
+            primary_uid = self._report._duplicate_map[self.u_id]
+            return next(f for f in self._report.facts 
+                       if f.u_id == primary_uid)
+        return self
+
+    def _generate_unique_fact_id(self) -> str:        
+
         components = [
             str(self.model_fact.modelDocument.uri),    # Which report
             str(self.model_fact.qname),                # Which concept
@@ -2468,6 +2627,7 @@ class Fact(Neo4jNode):
     @property
     def properties(self) -> Dict[str, Any]:
         """Properties for Neo4j node"""
+        
         return {
             "id": self.id,  # Add this line to ensure id is used for MERGE
             "u_id": self.u_id,  # Keep this for reference
@@ -2587,7 +2747,7 @@ class Neo4jManager:
     def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 1000) -> None:
         """Merge nodes into Neo4j database with batching"""
         if not nodes: return
-            
+
         try:
             with self.driver.session() as session:
                 skipped_nodes = []
@@ -2627,6 +2787,12 @@ class Neo4jManager:
         except Exception as e:
             raise RuntimeError(f"Failed to merge nodes: {e}")
 
+    def _filter_duplicate_facts(self, nodes: List[Neo4jNode]) -> List[Neo4jNode]:
+        """Filter out duplicate facts, keeping only primary facts"""
+        if nodes and isinstance(nodes[0], Fact):
+            return [node for node in nodes if node.is_primary]
+        return nodes
+
 
     def _export_nodes(self, collections: List[Union[Neo4jNode, List[Neo4jNode]]], testing: bool = False):
         """Export specified collections of nodes to Neo4j"""
@@ -2642,8 +2808,11 @@ class Neo4jManager:
                 if collection:
                     # Handle both single nodes and collections
                     if isinstance(collection, list):
-                        print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")
-                        nodes.extend(collection)
+                        # print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")
+                        # nodes.extend(collection)
+                        filtered = self._filter_duplicate_facts(collection)
+                        print(f"Adding {len(filtered)} {type(filtered[0]).__name__} nodes")
+                        nodes.extend(filtered)
                     else:
                         print(f"Adding single {type(collection).__name__} node")
                         nodes.append(collection)
@@ -2656,9 +2825,37 @@ class Neo4jManager:
             raise RuntimeError(f"Export to Neo4j failed: {e}")
 
 
+    def _process_fact_relationships(self, relationships: List[Tuple]) -> List[Tuple]:
+        """Pre-process relationships to handle fact duplicates"""
+        # Quick check if any facts involved
+        if not any(isinstance(source, Fact) or isinstance(target, Fact) 
+                for source, target, *_ in relationships):
+            return relationships
+            
+        processed = []
+        for rel in relationships:
+            source, target, rel_type, *props = rel
+            
+            # Convert facts to primary versions
+            if isinstance(source, Fact):
+                source = source.primary_fact
+            if isinstance(target, Fact):
+                target = target.primary_fact
+            
+            # Skip self-referential relationships
+            if source.id == target.id: continue
+
+            processed.append((source, target, rel_type, *props))
+        
+        return processed
+
+
     def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
         counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
         
+        relationships = self._process_fact_relationships(relationships)
+
+
         with self.driver.session() as session:
             for rel in relationships:
                 source, target, rel_type, *props = rel
