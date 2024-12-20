@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Set, List, Optional, Dict, TYPE_CHECKING, Any, Union
+from typing import Set, List, Optional, Dict, TYPE_CHECKING, Any, Union, Tuple
 from datetime import datetime, timedelta
 import copy
 
@@ -27,14 +27,16 @@ class ValidationMixin:
     def validate_facts(self) -> List[Fact]:
         """Validates facts according to presentation network definition algorithm"""
         
+    
         # Step 1: Facts -> Concepts -> PN (Presentation Network)
         facts_in_pn = self._get_facts_in_presentation_network()
-        print(f"Found {len(facts_in_pn)} facts in presentation network")
+
+        # print(f"Found {len(facts_in_pn)} facts in presentation network")
         
         # Split into two paths based on hypercube presence
         facts_not_in_hc = self._get_facts_not_in_hypercubes(facts_in_pn)
         facts_in_hc = self._get_facts_in_hypercubes(facts_in_pn)
-        print(f"Split facts: {len(facts_not_in_hc)} not in hypercubes, {len(facts_in_hc)} in hypercubes")
+        # print(f"Split facts: {len(facts_not_in_hc)} not in hypercubes, {len(facts_in_hc)} in hypercubes")
 
         # Process facts not in hypercubes and ignore facts without dimensions which are not in hypercubes
         filtered_non_hc_facts = self._filter_facts_without_dimensions(facts_not_in_hc)
@@ -52,7 +54,8 @@ class ValidationMixin:
 
         """Get all facts from concepts in the presentation network"""
         print(f"\nDEBUG - Before getting facts for network: {self.name}")
-        print(f"Total presentation nodes: {len(getattr(self.presentation, 'nodes', {}))}")
+        print(f"\nDEBUG - Before getting facts for network: {self.network_uri}")
+        # print(f"Total presentation nodes: {len(getattr(self.presentation, 'nodes', {}))}")
 
         from XBRL.XBRLClasses import AbstractConcept  # Use absolute import
 
@@ -64,6 +67,7 @@ class ValidationMixin:
         }
         
         print(f"DEBUG - Presentation Network Fact collection:")
+        print(f"\n****** - Network ID: {getattr(self, 'id', 'Unknown')}")
         print(f"Node concepts with facts: {len([node for node in getattr(self.presentation, 'nodes', {}).values() if node.concept and node.concept.__class__ != AbstractConcept and node.concept.facts])}")
 
         return facts
@@ -73,7 +77,7 @@ class ValidationMixin:
         """Filter facts whose concepts are not in any hypercubes"""
         hypercube_concepts = { concept for hypercube in self.hypercubes for concept in hypercube.concepts}    
         filtered = { fact for fact in facts if fact.concept not in hypercube_concepts }
-        print(f"Facts not in hypercubes - Concepts: {[f.concept.qname for f in filtered]}")
+        # print(f"Facts not in hypercubes - Concepts: {[f.concept.qname for f in filtered]}")
         return filtered
 
     def _get_facts_in_hypercubes(self, facts: Set[Fact]) -> Set[Fact]:
@@ -91,8 +95,7 @@ class ValidationMixin:
         # Extra filter: Match Period with Report Period (& prev)
 
         filtered = {fact for fact in facts if not fact.dims_members} # No dimensions
-        print(f"Facts without dimensions - IDs: {[f.id for f in filtered]}")
-        # return self._filter_by_period(filtered)
+        # print(f"Facts without dimensions - IDs: {[f.id for f in filtered]}")
         return filtered
 
 
@@ -150,7 +153,7 @@ class ValidationMixin:
                 if member is None:
                     default_member = dimension.default_member
                     if default_member is None:
-                        print(f"Warning: No default member for dimension {dimension.qname}")
+                        # print(f"Warning: No default member for dimension {dimension.qname}")
                         return None
                     new_dims_members.append((dimension, default_member))
                 else:
@@ -213,8 +216,8 @@ class ValidationMixin:
                     
                     # If fact doesn't have all hypercube dimensions, it's invalid
                     if not hypercube_dimensions.issubset(fact_dimensions):
-                        print(f"Fact {fact.id} failed dimension presence check:")
-                        print(f"  - Missing dimensions: {[d.qname for d in hypercube_dimensions - fact_dimensions]}")
+                        # print(f"Fact {fact.id} failed dimension presence check:")
+                        # print(f"  - Missing dimensions: {[d.qname for d in hypercube_dimensions - fact_dimensions]}")
                         is_valid = False
 
                         break
@@ -225,32 +228,67 @@ class ValidationMixin:
         return valid_facts
 
 
+    def _enhance_facts_with_hierarchy(self, facts: Set[Fact]) -> List[Tuple[Fact, Dict]]:
+        """Enhance facts with hierarchy metadata using existing traversal logic"""
+        enhanced_facts = []
+        fact_concept_ids = {fact.concept.id for fact in facts}
+        
+        def traverse_hierarchy(node_id: str, visited: set):
+            if node_id in visited:
+                return
+            visited.add(node_id)
+            
+            node = self.presentation.nodes[node_id]
+            if node.concept and node.concept.id in fact_concept_ids:
+                concept_facts = [f for f in facts if f.concept.id == node.concept.id]
+                for fact in concept_facts:
+                    period = fact.period
+                    if period:
+                        # Get end date based on period type
+                        end_date = period.start_date if period.is_instant else period.end_date
+                        enhanced_facts.append((
+                            fact,
+                            {
+                                'u_id': fact.u_id,
+                                'level': node.level,
+                                'order': node.order,
+                                'period_id': period.u_id,
+                                'period_end': end_date,
+                                'period_type': period.period_type,  # Use period_type directly from Period class
+                                'network_id': self.id,
+                                'network_name': self.name
+                            }
+                        ))
+            
+            for child_id in sorted(node.children, 
+                                key=lambda cid: self.presentation.nodes[cid].order):
+                traverse_hierarchy(child_id, visited)
 
-    # def _perform_validation_checks(self, non_hc_facts: Set[Fact], hc_facts: Set[Fact]) -> List[Fact]:
-    #         """Perform validation checks with detailed logging"""
-    #         non_hc_facts = non_hc_facts or set()
-    #         hc_facts = hc_facts or set()
-            
-    #         combined_facts = non_hc_facts.union(hc_facts)
-    #         print(f"Combined facts before validation: {len(combined_facts)}")
-            
-    #         # CHECK1: Closed validation
-    #         after_check1 = self._check_clos`ed_validation(combined_facts) or set()
-    #         print(f"Facts after closed validation: {len(after_check1)}")
-            
-    #         # CHECK2: All dimensions present
-    #         after_check2 = self._check_all_dimensions_present(after_check1) or set()
-    #         print(f"Facts after dimension presence check: {len(after_check2)}")
-            
-    #         # CHECK3: Dimension-member match
-    #         validated_facts = self._check_dimension_member_match(after_check2) or set()
-    #         print(f"Facts after dimension-member match: {len(validated_facts)}")
+        root_nodes = [node_id for node_id, node in self.presentation.nodes.items() 
+                    if node.level == 1]
+        root_nodes.sort(key=lambda nid: self.presentation.nodes[nid].order)
+        
+        visited = set()
+        for root_id in root_nodes:
+            traverse_hierarchy(root_id, visited)
 
-    #         # Group and display facts by period with concepts as row labels
-    #         self._filter_by_period(validated_facts)  # Just display, don't filter           
-            
-    #         return list(validated_facts)
+        # Group by period end date and type
+        period_groups = {}
+        for fact, meta in enhanced_facts:
+            key = (meta['period_end'], meta['period_type'])
+            if key not in period_groups:
+                period_groups[key] = []
+            period_groups[key].append((fact, meta))
 
+        # Sort periods by end date (most recent first) and select top 5
+        sorted_periods = sorted(period_groups.keys(), reverse=True)[:5]
+        
+        # Filter facts to include only selected periods
+        filtered_facts = []
+        for period_key in sorted_periods:
+            filtered_facts.extend(period_groups[period_key])
+                
+        return filtered_facts
 
 
     def _perform_validation_checks(self, non_hc_facts: Set[Fact], hc_facts: Set[Fact]) -> List[Fact]:
@@ -278,16 +316,29 @@ class ValidationMixin:
         validated_hc_facts = self._check_dimension_member_match(after_check2) or set()
         print(f"Facts after dimension-member match: {len(validated_hc_facts)}")
 
-        # Combine all valid facts:
+        # Combine all valid facts from:
         # 1. Non-hypercube facts without dimensions (already valid)
         # 2. Hypercube facts without dimensions (valid by default)
         # 3. Validated hypercube facts with dimensions
         combined_valid_facts = non_hc_facts.union(hc_facts_without_dims).union(validated_hc_facts)
 
-        # Group and display facts by period with concepts as row labels
-        self._filter_by_period(combined_valid_facts)  # Just display, don't filter           
-        
-        return list(combined_valid_facts)
+        # Display facts in tabular format:
+        # - Groups facts by period
+        # - Shows concept labels as rows
+        # - Shows values across different periods
+        # - Uses presentation hierarchy for ordering
+        # Note: This is for visualization only, doesn't affect data structure
+        self._filter_by_period(combined_valid_facts)
+
+        # Create Neo4j relationship structure:
+        # - Enhances facts with presentation hierarchy metadata
+        # - Includes level, order for structural relationships
+        # - Adds network context (network_id, network_name)
+        # - Preserves period information for temporal relationships
+        # Note: This data will be used to create Neo4j relationships
+        return list(combined_valid_facts), self._enhance_facts_with_hierarchy(combined_valid_facts)
+
+
 
 
 
@@ -500,7 +551,6 @@ class ValidationMixin:
                 period_groups[period_id] = []
             period_groups[period_id].append(fact)
 
-        # Use new _group_periods method
         periods = self._group_periods(period_groups)
         fact_concept_ids = {fact.concept.id for fact in facts}
 
