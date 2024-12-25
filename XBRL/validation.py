@@ -1,4 +1,5 @@
 from __future__ import annotations
+from collections import defaultdict
 from typing import Set, List, Optional, Dict, TYPE_CHECKING, Any, Union, Tuple
 from datetime import datetime, timedelta
 import copy
@@ -24,10 +25,9 @@ class ValidationMixin:
             print(*args, **kwargs)
 
 
-    def validate_facts(self) -> List[Fact]:
+    def validate_facts(self) -> Tuple[List[Fact], List[Tuple[Fact, Dict]]]:
         """Validates facts according to presentation network definition algorithm"""
         
-    
         # Step 1: Facts -> Concepts -> PN (Presentation Network)
         facts_in_pn = self._get_facts_in_presentation_network()
 
@@ -48,7 +48,7 @@ class ValidationMixin:
         all_validated_facts = self._perform_validation_checks(filtered_non_hc_facts, filtered_hc_facts)
         
         return all_validated_facts
-
+        
 
     def _get_facts_in_presentation_network(self) -> Set[Fact]:
 
@@ -228,6 +228,288 @@ class ValidationMixin:
         return valid_facts
 
 
+    def _perform_validation_checks(self, non_hc_facts: Set[Fact], hc_facts: Set[Fact]) -> List[Fact]:
+        """Perform validation checks with detailed logging"""
+        non_hc_facts = non_hc_facts or set()
+        hc_facts = hc_facts or set()
+        
+        # Split hypercube facts into with/without dimensions
+        hc_facts_with_dims = {fact for fact in hc_facts if fact.dims_members}
+        hc_facts_without_dims = {fact for fact in hc_facts if not fact.dims_members}
+        
+        # print(f"Hypercube facts before validation: {len(hc_facts)}")
+        # print(f"  - With dimensions: {len(hc_facts_with_dims)}")
+        # print(f"  - Without dimensions: {len(hc_facts_without_dims)}")
+    
+        # CHECK1: Closed validation - Only apply validation checks to facts WITH dimensions
+        after_check1 = self._check_closed_validation(hc_facts_with_dims) or set()
+        # print(f"Facts after closed validation: {len(after_check1)}")
+        
+        # CHECK2: All dimensions present
+        after_check2 = self._check_all_dimensions_present(after_check1) or set()
+        # print(f"Facts after dimension presence check: {len(after_check2)}")
+        
+        # CHECK3: Dimension-member match
+        validated_hc_facts = self._check_dimension_member_match(after_check2) or set()
+        # print(f"Facts after dimension-member match: {len(validated_hc_facts)}")
+
+        # Combine all valid facts from:
+        # 1. Non-hypercube facts without dimensions (already valid)
+        # 2. Hypercube facts without dimensions (valid by default)
+        # 3. Validated hypercube facts with dimensions
+        combined_valid_facts = non_hc_facts.union(hc_facts_without_dims).union(validated_hc_facts)
+
+        # Display facts in tabular format:
+        # - Groups facts by period
+        # - Shows concept labels as rows
+        # - Shows values across different periods
+        # - Uses presentation hierarchy for ordering
+        # Note: This is for visualization only, doesn't affect data structure
+        
+        # Optional: Display facts in tabular format for debugging/visualization
+
+        # if self.debug:
+        self._filter_by_period(combined_valid_facts)
+
+        # Create Neo4j relationship structure:
+        # - Enhances facts with presentation hierarchy metadata
+        # - Includes level, order for structural relationships
+        # - Adds network context (network_id, network_name)
+        # - Preserves period information for temporal relationships
+        # Note: This data will be used to create Neo4j relationships
+
+        # return list(combined_valid_facts), self._enhance_facts_with_hierarchy(combined_valid_facts)
+
+        # Build hierarchical structure and organize facts
+        # hierarchical_facts = self._build_concept_hierarchy(combined_valid_facts)
+        # hierarchical_facts = self.organize_facts_hierarchy(combined_valid_facts)
+        # return hierarchical_facts
+
+        return combined_valid_facts
+    
+        # return list(), hierarchical_facts
+        # return list(combined_valid_facts)
+
+        # organized_facts = self._organize_facts_hierarchically(combined_valid_facts)
+        
+        # return list(organized_facts), hierarchical_facts
+        
+
+
+
+
+
+    def _check_dimension_member_match(self, facts: Set[Fact]) -> Set[Fact]:
+        """CHECK3: Match facts' dimensions/members with hypercube"""
+        valid_facts = set()
+        taxonomy = self.report.taxonomy if hasattr(self, 'report') else None
+
+
+        for fact in facts:
+            is_valid = True
+            fact_dims_members = dict(fact.dims_members)  # Convert to dict for easier lookup
+            
+            for hypercube in self.hypercubes:
+
+                fact_dims_members = dict(fact.dims_members)
+                # print(f"Dimension-member check - Fact {fact.id}:")
+                # print(f"  Fact dim-members: {[(d.qname, m.qname if m else 'None') for d,m in fact_dims_members.items()]}")
+                # print(f"  Hypercube dims: {[d.qname for d in hypercube.dimensions]}")
+
+                # Get hypercube dimensions and their members
+                hypercube_dims_members = {
+                    dim: dim.members_dict
+                    for dim in hypercube.dimensions
+                }
+                
+                # Check each fact dimension-member pair
+                for fact_dim, fact_member in fact_dims_members.items():
+                    if fact_dim in hypercube_dims_members:
+                        # Case 1: Dimension exists in hypercube
+                        # Validate member against hypercube's dimension members
+                        if fact_member not in hypercube_dims_members[fact_dim].values():
+                            is_valid = False
+                            break
+                    else:
+                        # Case 2: Extra dimension in fact
+                        # Validate member against taxonomy-wide dimension members
+                        taxonomy_dim = next(
+                            (dim for dim in self.taxonomy.dimensions 
+                            if dim.qname == fact_dim.qname),
+                            None
+                        )
+                        
+                        if not taxonomy_dim or fact_member not in taxonomy_dim.members_dict.values():
+                            is_valid = False
+                            break
+                
+                if not is_valid:
+                    break
+                    
+            if is_valid:
+                valid_facts.add(fact)
+        
+        return valid_facts
+
+
+########################### Display Facts ###########################
+
+    def organize_facts_hierarchy(self, facts: Set[Fact]) -> List[Tuple[Fact, Dict]]:
+        """
+        Organizes facts using presentation hierarchy, handling abstract concepts
+        and maintaining proper order through traversal
+        """
+        organized_facts = []
+        fact_concept_ids = {fact.concept.id for fact in facts}
+        
+        # Build parent mapping once at the start
+        parent_map = {}
+        for parent_id, node in self.presentation.nodes.items():
+            for child_id in node.children:
+                parent_map[child_id] = parent_id
+
+        def traverse_hierarchy(node_id: str, visited: set):
+            if node_id in visited:
+                return
+            visited.add(node_id)
+            
+            node = self.presentation.nodes[node_id]
+            if node.concept and node.concept.id in fact_concept_ids:
+                matching_facts = [f for f in facts if f.concept.id == node.concept.id]
+                
+                # Find nearest non-abstract parent
+                current_id = node_id
+                parent_id = None
+                while current_id in parent_map:
+                    parent = self.presentation.nodes[parent_map[current_id]]
+                    if parent.concept and parent.concept.model_concept and not parent.concept.model_concept.isAbstract:
+                        parent_id = parent.concept.u_id
+                        break
+                    current_id = parent_map[current_id]
+                
+                for fact in matching_facts:
+                    organized_facts.append((fact, {
+                        'context_id': fact.context_id,
+                        'parent_id': parent_id,
+                        'level': node.level,
+                        'order': node.order,
+                        'period_id': fact.period.u_id if fact.period else None
+                    }))
+            
+            for child_id in sorted(node.children, 
+                                key=lambda cid: self.presentation.nodes[cid].order):
+                traverse_hierarchy(child_id, visited)
+
+        # Start from root nodes
+        root_nodes = sorted(
+            [nid for nid, node in self.presentation.nodes.items() if node.level == 1],
+            key=lambda nid: self.presentation.nodes[nid].order
+        )
+            
+        visited = set()
+        for root_id in root_nodes:
+            traverse_hierarchy(root_id, visited)
+        
+        # Then handle any facts that weren't in the presentation hierarchy
+        processed_facts = {f[0] for f in organized_facts}
+        remaining_facts = facts - processed_facts
+        
+        for fact in remaining_facts:
+            organized_facts.append((fact, {
+                'context_id': fact.context_id,
+                'parent_id': None,  # No parent since not in presentation
+                'level': 0,        # Default level
+                'order': 0,        # Default order
+                'period_id': fact.period.u_id if fact.period else None
+            }))
+        
+        return organized_facts
+    
+
+
+
+
+    
+
+    def _build_concept_hierarchy(self, facts: Set[Fact]) -> List[Tuple[Fact, Dict]]:
+        """Build hierarchical relationships between facts using presentation structure"""
+        # Build parent mapping from children relationships
+        parent_map = {
+            child_id: node.concept_id 
+            for node in self.presentation.nodes.values()
+            for child_id in node.children
+        }
+        
+        hierarchical_facts = []
+        for fact in facts:
+            node = self.presentation.nodes.get(fact.concept.u_id)
+            if not node or not node.concept:
+                continue
+                
+            # Get parent chain
+            parent_chain = []
+            current_id = fact.concept.u_id
+            while current_id in parent_map:
+                parent_id = parent_map[current_id]
+                parent_node = self.presentation.nodes.get(parent_id)
+                if (parent_node and parent_node.concept and 
+                    parent_node.concept.model_concept and 
+                    not parent_node.concept.model_concept.isAbstract):
+                    parent_chain.append({
+                        'id': parent_id,
+                        'level': parent_node.level,
+                        'order': parent_node.order
+                    })
+                current_id = parent_id
+                
+            # Get non-abstract siblings
+            siblings = []
+            if fact.concept.u_id in parent_map:
+                parent_node = self.presentation.nodes.get(parent_map[fact.concept.u_id])
+                if parent_node and parent_node.children:
+                    siblings = [
+                        child_id for child_id in parent_node.children
+                        if (child_id != fact.concept.u_id and 
+                            self.presentation.nodes.get(child_id) and 
+                            self.presentation.nodes[child_id].concept and
+                            self.presentation.nodes[child_id].concept.model_concept and
+                            not self.presentation.nodes[child_id].concept.model_concept.isAbstract)
+                    ]
+
+            hierarchical_facts.append((fact, {
+                'context_id': fact.context_id,
+                'period_id': fact.period.u_id if fact.period else None,
+                'parents': parent_chain,
+                'siblings': siblings,
+                'level': node.level,
+                'order': node.order
+            }))
+
+        return sorted(hierarchical_facts, key=lambda x: (x[1]['level'], x[1]['order']))
+
+
+
+    def _organize_facts_hierarchically(self, facts: Set[Fact]) -> Set[Fact]:
+        """Organize facts based on their hierarchical relationships"""
+        if not facts:
+            return set()
+            
+        # Group by context and sort by hierarchy
+        context_groups = defaultdict(list)
+        for fact, hierarchy in self._build_concept_hierarchy(facts):
+            context_groups[fact.context_id].append((fact, hierarchy))
+            
+        return {
+            fact for context_facts in context_groups.values()
+            for fact, _ in sorted(context_facts, key=lambda x: (x[1]['level'], x[1]['order']))
+        }
+
+
+
+
+
+
+
     def _enhance_facts_with_hierarchy(self, facts: Set[Fact]) -> List[Tuple[Fact, Dict]]:
         """Enhance facts with hierarchy metadata using existing traversal logic"""
         enhanced_facts = []
@@ -288,115 +570,9 @@ class ValidationMixin:
         for period_key in sorted_periods:
             filtered_facts.extend(period_groups[period_key])
                 
-        return filtered_facts
+        return filtered_facts    
 
 
-    def _perform_validation_checks(self, non_hc_facts: Set[Fact], hc_facts: Set[Fact]) -> List[Fact]:
-        """Perform validation checks with detailed logging"""
-        non_hc_facts = non_hc_facts or set()
-        hc_facts = hc_facts or set()
-        
-        # Split hypercube facts into with/without dimensions
-        hc_facts_with_dims = {fact for fact in hc_facts if fact.dims_members}
-        hc_facts_without_dims = {fact for fact in hc_facts if not fact.dims_members}
-        
-        print(f"Hypercube facts before validation: {len(hc_facts)}")
-        print(f"  - With dimensions: {len(hc_facts_with_dims)}")
-        print(f"  - Without dimensions: {len(hc_facts_without_dims)}")
-    
-        # CHECK1: Closed validation - Only apply validation checks to facts WITH dimensions
-        after_check1 = self._check_closed_validation(hc_facts_with_dims) or set()
-        print(f"Facts after closed validation: {len(after_check1)}")
-        
-        # CHECK2: All dimensions present
-        after_check2 = self._check_all_dimensions_present(after_check1) or set()
-        print(f"Facts after dimension presence check: {len(after_check2)}")
-        
-        # CHECK3: Dimension-member match
-        validated_hc_facts = self._check_dimension_member_match(after_check2) or set()
-        print(f"Facts after dimension-member match: {len(validated_hc_facts)}")
-
-        # Combine all valid facts from:
-        # 1. Non-hypercube facts without dimensions (already valid)
-        # 2. Hypercube facts without dimensions (valid by default)
-        # 3. Validated hypercube facts with dimensions
-        combined_valid_facts = non_hc_facts.union(hc_facts_without_dims).union(validated_hc_facts)
-
-        # Display facts in tabular format:
-        # - Groups facts by period
-        # - Shows concept labels as rows
-        # - Shows values across different periods
-        # - Uses presentation hierarchy for ordering
-        # Note: This is for visualization only, doesn't affect data structure
-        self._filter_by_period(combined_valid_facts)
-
-        # Create Neo4j relationship structure:
-        # - Enhances facts with presentation hierarchy metadata
-        # - Includes level, order for structural relationships
-        # - Adds network context (network_id, network_name)
-        # - Preserves period information for temporal relationships
-        # Note: This data will be used to create Neo4j relationships
-        return list(combined_valid_facts), self._enhance_facts_with_hierarchy(combined_valid_facts)
-
-
-
-
-
-    def _check_dimension_member_match(self, facts: Set[Fact]) -> Set[Fact]:
-        """CHECK3: Match facts' dimensions/members with hypercube"""
-        valid_facts = set()
-        taxonomy = self.report.taxonomy if hasattr(self, 'report') else None
-
-
-        for fact in facts:
-            is_valid = True
-            fact_dims_members = dict(fact.dims_members)  # Convert to dict for easier lookup
-            
-            for hypercube in self.hypercubes:
-
-                fact_dims_members = dict(fact.dims_members)
-                # print(f"Dimension-member check - Fact {fact.id}:")
-                # print(f"  Fact dim-members: {[(d.qname, m.qname if m else 'None') for d,m in fact_dims_members.items()]}")
-                # print(f"  Hypercube dims: {[d.qname for d in hypercube.dimensions]}")
-
-                # Get hypercube dimensions and their members
-                hypercube_dims_members = {
-                    dim: dim.members_dict
-                    for dim in hypercube.dimensions
-                }
-                
-                # Check each fact dimension-member pair
-                for fact_dim, fact_member in fact_dims_members.items():
-                    if fact_dim in hypercube_dims_members:
-                        # Case 1: Dimension exists in hypercube
-                        # Validate member against hypercube's dimension members
-                        if fact_member not in hypercube_dims_members[fact_dim].values():
-                            is_valid = False
-                            break
-                    else:
-                        # Case 2: Extra dimension in fact
-                        # Validate member against taxonomy-wide dimension members
-                        taxonomy_dim = next(
-                            (dim for dim in self.taxonomy.dimensions 
-                            if dim.qname == fact_dim.qname),
-                            None
-                        )
-                        
-                        if not taxonomy_dim or fact_member not in taxonomy_dim.members_dict.values():
-                            is_valid = False
-                            break
-                
-                if not is_valid:
-                    break
-                    
-            if is_valid:
-                valid_facts.add(fact)
-        
-        return valid_facts
-    
-
-
-########################### Display Facts ###########################
 
 
     def _format_period(self, period_id: str) -> str:

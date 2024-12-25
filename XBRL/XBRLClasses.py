@@ -26,6 +26,11 @@ from arelle.ModelInstanceObject import ModelFact, ModelContext, ModelUnit
 from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 
+
+class GroupingType(Enum):
+    CONTEXT = "context"
+    PERIOD = "period"
+
 def detect_duplicate_facts(facts: List[Fact]) -> Tuple[Dict[str, Fact], Dict[str, str]]:
     """Detect duplicate facts and return primary facts and duplicate mapping"""
     primary_facts = {}
@@ -151,6 +156,7 @@ class RelationType(Enum):
     HAS_SUB_REPORT = "HAS_SUB_REPORT"  # For 10-K -> FYE and 10-Q -> Quarters relationships
     REPORTED_ON = "REPORTED_ON"     # From DateNode to ReportNode
     PRESENTATION_EDGE = "PRESENTATION_EDGE" # From Fact to Fact
+
     
 
 
@@ -270,6 +276,89 @@ class ReportElementClassifier:
             
         return NodeType.OTHER
 
+
+
+    # For first figuring out the category of ReportElements and then wrapping them in the appropriate class
+    @classmethod
+    def wrap_concept(cls, concept: Any, model_xbrl: ModelXbrl, network_uri: str) -> Union[Dimension, AbstractConcept, Member, Domain, None]:
+        """Wrap ModelConcept in appropriate class based on its category"""
+        if not concept:
+            print("DEBUG - Received None concept")
+            return None
+            
+        print(f"\nDEBUG - wrap_concept called for: {getattr(concept, 'qname', 'No qname')}")
+        print(f"DEBUG - Original type: {type(concept)}")
+        
+        # Store the qname before any transformations
+        original_qname = getattr(concept, 'qname', None)
+        
+        # Get the ModelConcept depending on what type we received
+        if isinstance(concept, (AbstractConcept, Concept)):
+            model_concept = getattr(concept, 'model_concept', None)
+            if model_concept is None:
+                print(f"DEBUG - No model_concept found in {type(concept).__name__}")
+                return None
+                
+            # Only try to set qname if model_concept exists
+            if not hasattr(model_concept, 'qname') and original_qname:
+                try:
+                    setattr(model_concept, 'qname', original_qname)
+                except AttributeError:
+                    print(f"DEBUG - Could not set qname on model_concept")
+                    return None
+                    
+            print(f"DEBUG - Getting model_concept from {type(concept).__name__}")
+        else:
+            model_concept = concept
+            print(f"DEBUG - Using original concept")
+
+        # Verify we have a valid concept with qname
+        if not hasattr(model_concept, 'qname'):
+            print(f"DEBUG - Missing qname, attempting to restore from original")
+            if original_qname:
+                try:
+                    setattr(model_concept, 'qname', original_qname)
+                except AttributeError:
+                    print(f"DEBUG - Cannot restore qname")
+                    return None
+            else:
+                print(f"DEBUG - No qname available")
+                return None
+
+        if isinstance(model_concept, ModelConcept):
+            category = cls.classify(model_concept)
+            print(f"DEBUG - Classified as: {category}")
+            
+            # Rest of the wrapping logic remains the same
+            if category == NodeType.DIMENSION:
+                return Dimension(
+                    model_xbrl=model_xbrl,
+                    item=model_concept,
+                    network_uri=network_uri
+                )
+            elif category == NodeType.MEMBER:
+                return Member(
+                    model_xbrl=model_xbrl,
+                    item=model_concept,
+                    parent_qname=None,
+                    level=0
+                )
+            elif category == NodeType.DOMAIN:
+                return Domain(
+                    model_xbrl=model_xbrl,
+                    item=model_concept
+                )
+            elif category in [NodeType.ABSTRACT, NodeType.LINE_ITEMS]:
+                return AbstractConcept(model_concept)
+            elif category == NodeType.HYPERCUBE:
+                return AbstractConcept(model_concept)
+                
+            print(f"DEBUG - No wrapper created for category: {category}")
+        else:
+            print(f"DEBUG - Invalid concept: missing qname")
+        return None
+    
+
 # endregion
 
 
@@ -288,7 +377,11 @@ class process_report:
     
     # Common Nodes
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
+    contexts: List[Context] = field(init=False, default_factory=list, repr=False)
+
+    # abstracts includes Abstracts, LineItems, Hypercube, Axis (Dimensions), Members
     abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class
+    pure_abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class
     periods: List[Period] = field(init=False, default_factory=list, repr=False)
     units: List[Unit] = field(init=False, default_factory=list, repr=False)
     dates: List[DateNode] = field(init=False, default_factory=list)
@@ -320,9 +413,10 @@ class process_report:
         # self.extract_report_metadata()                         # TODO: Remove this later
 
         self.populate_common_nodes()  # First handle common nodes
-        self.populate_company_nodes() # Then handle company-specific nodes
+        self.populate_company_nodes() # Also creates Abstract Nodes in Neo4j
         self.populate_report_nodes()  # Then handle report-specific nodes
-        self.validate_all_facts()
+        # self.validate_all_facts(group_by=GroupingType.CONTEXT) # choose between GroupingType.CONTEXT or GroupingType.PERIOD
+        self.link_validated_facts()
 
     def initialize_date_nodes(self, start_dt: str):
         """One-time initialization of date nodes"""
@@ -444,80 +538,246 @@ class process_report:
 
 
 
-    def validate_all_facts(self) -> Dict[str, List[Fact]]:
-        """Validate facts and create presentation relationships"""
+    # def link_validated_facts(self) -> None:
+    #     """Link validated facts using presentation network hierarchy"""
+    #     relationships = []
+    #     dimensional_nodes = []  # New: collect dimensional nodes for merging
+    #     debug_counts = defaultdict(int)
+        
+    #     for network in self.networks:
+    #         if not network.isPresentation:
+    #             continue
+                
+    #         network.report = self
+    #         network.taxonomy = self.taxonomy
+    #         validated_facts = network.validate_facts()
+
+    #         fact_lookup: Dict[str, List[Fact]] = defaultdict(list)
+    #         for fact in validated_facts:
+    #             fact_lookup[fact.concept.u_id].append(fact)
+            
+    #         abstract_lookup = {abstract.u_id: abstract for abstract in self.pure_abstracts}
+            
+    #         for node in network.presentation.nodes.values():
+    #             parent_concept = node.concept
+    #             if not parent_concept:
+    #                 continue
+                    
+    #             # Wrap parent in appropriate class
+    #             print(f"Processing parent: {parent_concept.qname}")
+    #             parent_node = ReportElementClassifier.wrap_concept(parent_concept, self.model_xbrl, network.network_uri)
+    #             print(f"Wrapped as: {type(parent_node).__name__}")
+                
+    #             if isinstance(parent_node, (Dimension, Member, Domain)):
+    #                 print(f"Adding to dimensional_nodes")
+    #                 dimensional_nodes.append(parent_node)
+    #             elif not parent_node:
+    #                 parent_node = abstract_lookup.get(parent_concept.u_id)
+    #                 print(f"Falling back to abstract_lookup")
+    #             if not parent_node:
+    #                 continue
+                    
+    #             for child_id in node.children:
+    #                 child_node = network.presentation.nodes[child_id]
+    #                 child_concept = child_node.concept
+    #                 if not child_concept:
+    #                     continue
+                        
+    #                 # Wrap child in appropriate class
+    #                 wrapped_child = ReportElementClassifier.wrap_concept(child_concept, self.model_xbrl, network.network_uri)
+    #                 if isinstance(wrapped_child, (Dimension, Member, Domain)):
+    #                     dimensional_nodes.append(wrapped_child)
+    #                 elif not wrapped_child:
+    #                     wrapped_child = abstract_lookup.get(child_concept.u_id)
+    #                 if not wrapped_child and child_concept.u_id not in fact_lookup:
+    #                     continue
+
+    #                 # Rest of the code remains exactly the same
+    #                 rel_props = {
+    #                     'network_uri': network.network_uri,
+    #                     'network_name': network.name,
+    #                     'report_instance': self.report.instanceFile,
+    #                     'parent_level': node.level,
+    #                     'parent_order': node.order,
+    #                     'child_level': child_node.level,
+    #                     'child_order': child_node.order
+    #                 }
+
+    #                 if wrapped_child:
+    #                     relationships.append((parent_node, wrapped_child, RelationType.PRESENTATION_EDGE, rel_props))
+    #                     debug_counts['abstract_to_abstract'] += 1
+
+    #                 if child_concept.u_id in fact_lookup:
+    #                     for fact in fact_lookup[child_concept.u_id]:
+    #                         relationships.append((parent_node, fact, RelationType.PRESENTATION_EDGE, rel_props))
+    #                         debug_counts['abstract_to_fact'] += 1
+
+    #     # Merge dimensional nodes first
+    #     if dimensional_nodes:
+    #         self.neo4j.merge_nodes(dimensional_nodes)
+            
+    #     # Then merge relationships
+    #     if relationships:
+    #         self.neo4j.merge_relationships(relationships)
+
+
+
+    def link_validated_facts(self) -> None:
+        """Link validated facts using presentation network hierarchy"""
         relationships = []
-        validated_facts = {}
+        debug_counts = defaultdict(int)
         
         for network in self.networks:
-            if network.isPresentation:
-                # Ensure network has access to report/taxonomy
-                network.report = self  # This line was important!
-                network.taxonomy = self.taxonomy  # This too!
+            if not network.isPresentation:
+                continue
 
-                # Get validated facts with their metadata
-                facts, enhanced_facts = network.validate_facts()
-                validated_facts[network.network_uri] = facts
-                
-                # Group by period first
-                facts_by_period = defaultdict(list)
-                for fact, meta in enhanced_facts:
-                    period_id = meta['period_id']
-                    if period_id:  # Only group facts with valid periods
-                        facts_by_period[period_id].append((fact, meta))
-                
-                # Create relationships within each period group
-                for period_id, period_facts in facts_by_period.items():
-                    # Sort facts within this period by level and order
-                    sorted_facts = sorted(period_facts, 
-                                    key=lambda x: (x[1]['level'], x[1]['order']))
+            print(f"\nProcessing network: {network.name}")
+            relationships_before = len(relationships)
+
+
+            network.report = self
+            network.taxonomy = self.taxonomy
+            validated_facts = network.validate_facts()
+
+            # Debug print for StockholdersEquity facts
+            stockholders_equity_facts = [f for f in validated_facts if f.qname == 'us-gaap:StockholdersEquity']
+            if stockholders_equity_facts:
+                print("\nFound StockholdersEquity facts in validated_facts:")
+                for fact in stockholders_equity_facts:
+                    print(f"Value: {fact.value}, Context: {fact.context_id}, Primary: {fact.is_primary}")
+
+
+            # Debug print to understand fact structure
+            # for fact in validated_facts:
+            #     print("*"*100)
+            #     print(f"Network: {network.name}")
+            #     print(f"Fact: {fact.qname}")
+            #     print(f"Context: {fact.context_id}")
+            #     if fact.context:
+            #         print(f"Dimensions: {fact.context.qnameDims}")
+            
+
+            # Group facts by concept, maintaining all facts for each concept
+            fact_lookup: Dict[str, List[Fact]] = defaultdict(list)
+            for fact in validated_facts:
+                fact_lookup[fact.concept.u_id].append(fact)
+
+
+                # Debug if this is StockholdersEquity
+                if fact.qname == 'us-gaap:StockholdersEquity':
+                    print(f"\nAdding to fact_lookup:")
+                    print(f"Concept u_id: {fact.concept.u_id}")
+                    print(f"Fact value: {fact.value}")
+                    print(f"Is primary: {fact.is_primary}")
+
+
+            abstract_lookup = {abstract.u_id: abstract for abstract in self.pure_abstracts}
+            
+            for node in network.presentation.nodes.values():
+                # if not node.children:
+                #     continue
                     
-                    # Create relationships between consecutive facts in same period
-                    for i in range(len(sorted_facts) - 1):
-                        fact1, meta1 = sorted_facts[i]
-                        fact2, meta2 = sorted_facts[i + 1]
+                parent_node = node.concept
+                parent_u_id = parent_node.u_id if parent_node else None
+                if not parent_u_id:
+                    continue
+                    
+                for child_id in node.children:
+                    child_node = network.presentation.nodes[child_id]
+                    child_u_id = child_node.concept.u_id if child_node.concept else None
+                    
+                    if not child_u_id:
+                        continue
+
+                # Debug for StockholdersEquity - safely check concept qname
+                    if (child_node.concept is not None and 
+                        hasattr(child_node.concept, 'qname') and 
+                        child_node.concept.qname == 'us-gaap:StockholdersEquity'):
+                        print(f"\nProcessing StockholdersEquity node:")
+                        print(f"Child u_id: {child_u_id}")
+                        print(f"Facts in lookup: {[f.value for f in fact_lookup.get(child_u_id, [])]}")
+                        print(f"Parent in abstract_lookup: {parent_u_id in abstract_lookup}")
+                        print(f"Child in fact_lookup: {child_u_id in fact_lookup}")
+
+                    # Additional debug for all nodes
+                    if child_node.concept is None:
+                        print(f"\nFound node with None concept:")
+                        print(f"Node ID: {child_id}")
+                        print(f"Parent node qname: {parent_node.qname if parent_node else 'None'}")
+
                         
-                        # Ensure both facts have valid u_ids
-                        if fact1.u_id and fact2.u_id:
+                    rel_props = {
+                        'network_uri': network.network_uri,
+                        'network_name': network.name,
+                        'company_cik': self.entity.cik,
+                        'report_instance': self.report.instanceFile,
+                        'parent_level': node.level,
+                        'parent_order': node.order,
+                        'child_level': child_node.level,
+                        'child_order': child_node.order
+                    }
+                    
+
+                    # print(f"Checking parent: {parent_node.qname}, child: {child_node.concept.qname}")
+                    # print(f"Fact: {fact}")
+                    # print(f"Parent in abstract_lookup: {parent_u_id in abstract_lookup}, Child in abstract_lookup: {child_u_id in abstract_lookup}")
+
+                    # Link Abstract -> Abstract
+                    if parent_u_id in abstract_lookup and child_u_id in abstract_lookup:
+                        relationships.append((
+                            abstract_lookup[parent_u_id],
+                            abstract_lookup[child_u_id],
+                            RelationType.PRESENTATION_EDGE,
+                            rel_props
+                        ))
+                        debug_counts['abstract_to_abstract'] += 1
+
+                    # Link Abstract -> Facts (now handling multiple facts per concept)
+                    if parent_u_id in abstract_lookup and child_u_id in fact_lookup:
+                        for fact in fact_lookup[child_u_id]:
+
+                            # DEBUG for StockholdersEquity
+                            if fact.qname == 'us-gaap:StockholdersEquity':
+                                print(f"\nCreating StockholdersEquity relationship:")
+                                print(f"Network: {network.name}")
+                                print(f"Parent: {abstract_lookup[parent_u_id].qname}")
+                                print(f"Fact value: {fact.value}")
+                                print(f"Fact context: {fact.context_id}")
+                                print(f"Is primary: {fact.is_primary}")
+
+
                             relationships.append((
-                                fact1,
-                                fact2,
+                                abstract_lookup[parent_u_id],
+                                fact,
                                 RelationType.PRESENTATION_EDGE,
-                                {
-                                    'network_name': network.name,
-                                    'network_id': network.id,
-                                    'from_level': meta1['level'],
-                                    'to_level': meta2['level'],
-                                    'from_order': meta1['order'],
-                                    'to_order': meta2['order'],
-                                    'period_id': period_id  # Add period context
-                                }
+                                rel_props
                             ))
-        
+                            debug_counts['abstract_to_fact'] += 1
+
+
+            relationships_added = len(relationships) - relationships_before
+            print(f"Relationships added in this network: {relationships_added}")
+            if network.name == "Condensed Consolidated Balance Sheets (Unaudited)":
+                print("\nBalance Sheet Network Details:")
+                print(f"Abstract concepts count: {len(abstract_lookup)}")
+                print(f"Facts count: {len(fact_lookup)}")
+                # Print a few example relationships being created
+                for rel in relationships[-5:]:  # Last 5 relationships
+                    if isinstance(rel[1], Fact) and rel[1].qname == 'us-gaap:StockholdersEquity':
+                        print(f"Relationship: {rel[0].qname} -> {rel[1].qname} ({rel[1].value})")
+
+
+        # Create relationships in Neo4j
         if relationships:
             self.neo4j.merge_relationships(relationships)
             
-        return validated_facts
+        print("\nRelationship Creation Summary:")
+        print(f"Total relationships created: {len(relationships)}")
+        for rel_type, count in debug_counts.items():
+            print(f"{rel_type}: {count}")
 
 
 
-    # def validate_all_facts(self) -> Dict[str, List[Fact]]:
-    #     """Validate facts across all definition networks"""
-    #     validated_facts = {}
-        
-    #     for network in self.networks:
-            
-    #         # if network.isDefinition:
-            
-    #         # Ensure network has access to report/taxonomy
-    #         network.report = self
-    #         network.taxonomy = self.taxonomy
-            
-    #         # Validate facts for this network
-    #         validated_facts[network.network_uri] = network.validate_facts()
-    #         print(f"Network {network.network_uri}: {len(validated_facts[network.network_uri])} validated facts")
-                
-    #     return validated_facts
 
     def load_xbrl(self):
         # Initialize the controller
@@ -553,9 +813,13 @@ class process_report:
         self._build_concepts() # 1. Build concepts first
         self._build_periods()   # 2. Build periods
         self._build_units()    # 3. Build units
+
+        # contexts are company-specific 
+        self._build_contexts()  # 4. Build contexts - but only nodes, not relationships
         
+
         # Upload to Neo4j only common nodes first
-        self.neo4j._export_nodes([self.concepts, self.periods, self.units], testing=False)
+        self.neo4j._export_nodes([self.concepts, self.periods, self.units, self.contexts], testing=False)
         
         # Load complete set from Neo4j
         self.concepts = self.neo4j.load_nodes_as_instances(NodeType.CONCEPT, Concept)
@@ -564,8 +828,7 @@ class process_report:
         
         print(f"Loaded common nodes from Neo4j: {len(self.concepts)} concepts, {len(self.periods)} periods, {len(self.units)} units")
         self._concept_lookup = {node.id: node for node in self.concepts} 
-
-
+        
 
     def populate_company_nodes(self):
         """Build and sync company-specific nodes (Dimensions, Members) with Neo4j"""        
@@ -603,6 +866,13 @@ class process_report:
         
         self._build_networks()
 
+        # populate_company_nodes calls _build_hierarchy which inturn calls _build_abstracts (which are common nodes & not company-specific) & fills self.abstracts
+        abstracts_lineItems = [abs for abs in self.abstracts if abs.category in ['Abstract', 'LineItems']]
+
+        self.neo4j._export_nodes([abstracts_lineItems], testing=False) # Only export Abstracts & LineItems 
+        # self.neo4j._export_nodes([self.abstracts], testing=False) # Only export Abstracts & LineItems 
+
+        self.pure_abstracts = self.neo4j.load_nodes_as_instances(NodeType.ABSTRACT, AbstractConcept)
 
 
     def populate_report_nodes(self):
@@ -621,11 +891,24 @@ class process_report:
                      (Fact, Period, RelationType.HAS_PERIOD)]
         
         self._export_relationships(rel_types)        
-            # Export fact-dimension relationships
+        
+        # Export fact-dimension relationships
         fact_dim_relationships = self._build_fact_dimension_relationships()
         if fact_dim_relationships:
             self.neo4j.merge_relationships(fact_dim_relationships)
-            
+
+
+        # Export context relationships
+        context_relationships = self._build_context_relationships()
+        if context_relationships:
+            self.neo4j.merge_relationships(context_relationships)
+
+
+        # Export fact-context relationships
+        fact_context_relationships = self._build_fact_context_relationships()
+        if fact_context_relationships:
+            self.neo4j.merge_relationships(fact_context_relationships)
+
         print(f"Built report nodes: {len(self.facts)} facts")
 
 
@@ -772,8 +1055,103 @@ class process_report:
     #     print(f"Built {len(self.facts)} unique facts")    
 
 
+    def _build_contexts(self):
+        """Build context objects from the model"""
+        if not self.model_xbrl:
+            raise RuntimeError("XBRL model not loaded.")
+            
+        contexts_dict = {}
+        
+        for model_context in self.model_xbrl.contexts.values():
+            try:
+                # Period handling
+                if model_context.isInstantPeriod:
+                    period_type = "instant"
+                    start_date = model_context.instantDatetime.strftime('%Y-%m-%d')
+                    end_date = None
+                elif model_context.isStartEndPeriod:
+                    period_type = "duration"
+                    start_date = model_context.startDatetime.strftime('%Y-%m-%d')
+                    end_date = model_context.endDatetime.strftime('%Y-%m-%d')
+                else:
+                    period_type = "forever"
+                    start_date = None
+                    end_date = None
+                
+                period = Period(
+                    period_type=period_type,
+                    start_date=start_date,
+                    end_date=end_date
+                )
+                
+                # Get CIK from entity identifier
+                _, identifier = model_context.entityIdentifier
+                cik = identifier.lstrip('0')  # Remove leading zeros as per CompanyNode
+                
+                # Get dimensions and members
+                dimension_u_ids = []
+                member_u_ids = []
+                if model_context.qnameDims:
+                    for dim_qname, member in model_context.qnameDims.items():
+                        # Get company_id from the same source as Dimension class
+                        company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]
+                        
+                        # Create dimension u_id matching Dimension class format
+                        dim_u_id = f"{company_id}:{dim_qname.namespaceURI}:{dim_qname}"
+
+                        dimension_u_ids.append(dim_u_id)
+                        
+                        if hasattr(member, 'memberQname'):
+                            # Create member u_id matching Member class format
+                            mem_u_id = f"{company_id}:{member.memberQname.namespaceURI}:{member.memberQname}"
+                            member_u_ids.append(mem_u_id)
+
+                context = Context(
+                    context_id=model_context.id,
+                    cik=cik,
+                    period_u_id=period.u_id,
+                    dimension_u_ids=dimension_u_ids,
+                    member_u_ids=member_u_ids
+                )
+                
+                contexts_dict[context.u_id] = context
+                    
+            except Exception as e:
+                print(f"Error processing context {model_context.id}: {e}")
+        
+        self.contexts = list(contexts_dict.values())
+        print(f"Built {len(self.contexts)} unique contexts")
 
 
+
+    def _build_context_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+        """Build relationships between contexts and their related nodes"""
+        context_relationships = []
+        
+        for context in self.contexts:
+            # Context -> Period
+            period = next((p for p in self.periods if p.u_id == context.period_u_id), None)
+            if period:
+                context_relationships.append((context, period, RelationType.HAS_PERIOD))
+            
+            # Context -> Company
+            context_relationships.append((context, self.entity, RelationType.BELONGS_TO))
+            
+            # Context -> Dimensions
+            for dim_id in context.dimension_u_ids:
+                dim = next((d for d in self.taxonomy.dimensions if d.u_id == dim_id), None)
+                if dim:
+                    context_relationships.append((context, dim, RelationType.HAS_DIMENSION))
+            
+            # Context -> Members
+            for mem_id in context.member_u_ids:
+                for dim in self.taxonomy.dimensions:
+                    member = next((m for m in dim.members_dict.values() if m.u_id == mem_id), None)
+                    if member:
+                        context_relationships.append((context, member, RelationType.HAS_MEMBER))
+                        break
+                        
+        return context_relationships
 
     def _build_fact_dimension_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
         """Build relationships between facts and their dimensions/members"""
@@ -812,7 +1190,19 @@ class process_report:
                 
         return relationships
 
-
+    def _build_fact_context_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+        """Build relationships between facts and their contexts"""
+        fact_context_relationships = []
+        
+        for fact in self.facts:
+            # Find matching context using context_id
+            context = next((ctx for ctx in self.contexts 
+                        if ctx.context_id == fact.context_id), None)
+            if context:
+                fact_context_relationships.append((fact, context, RelationType.IN_CONTEXT))
+        
+        print(f"Built {len(fact_context_relationships)} fact-context relationships")
+        return fact_context_relationships
 
     # def _build_fact_dimension_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
     #     """Build relationships between facts and their dimensions/members"""
@@ -911,7 +1301,7 @@ class process_report:
         
         self.networks = list(unique_networks.values())
 
-        # 2. Link presentation concepts first
+        # 2. Link presentation concepts first - also _build_abstracts in build_hierarchy
         for network in self.networks:
             # Create Presentation Class
             if network.isPresentation:
@@ -974,6 +1364,77 @@ class process_report:
         if relationships:
             self.neo4j.merge_relationships(relationships)
                         
+
+
+
+@dataclass
+class Context(Neo4jNode):
+    context_id: str
+    cik: str  # This should match CompanyNode's cik
+    period_u_id: str
+    dimension_u_ids: List[str] = field(default_factory=list)
+    member_u_ids: List[str] = field(default_factory=list)
+    u_id: str = field(init=False)
+
+    def __post_init__(self):
+        self.generate_id()
+
+    def __hash__(self):
+        return hash(self.u_id)
+
+    def __eq__(self, other):
+        if isinstance(other, Context):
+            return self.u_id == other.u_id
+        return False
+
+
+    def generate_id(self):
+        """Generate a unique ID for the context based on company, period, and dimensional qualifiers"""
+        # Clean and prepare components that define context's semantic identity
+        components = [
+            # str(self.context_id).strip(),             # Removed ID as it's report-specific but we are making context company-specific
+            str(self.cik).strip(),                    # Company identifier
+            str(self.period_u_id).strip(),            # Period identifier
+            "_".join(sorted(self.dimension_u_ids)) if self.dimension_u_ids else "no_dims",  # Dimensional qualifiers
+            "_".join(sorted(self.member_u_ids)) if self.member_u_ids else "no_mems"        # Member values
+        ]
+        
+        # Join components and create hash
+        unique_key = "_".join(filter(None, components))
+        self.u_id = str(abs(hash(unique_key)))  # Using abs() to avoid negative numbers
+        
+        # Debug print
+        # print(f"\nContext ID Components:")
+        # print(f"1. CIK: {self.cik}")
+        # print(f"2. Period ID: {self.period_u_id}")
+        # print(f"3. Dimensions: {self.dimension_u_ids or 'no_dims'}")
+        # print(f"4. Members: {self.member_u_ids or 'no_mems'}")
+        # print(f"Final u_id: {self.u_id}")
+
+
+    # Neo4j Node Properties
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.CONTEXT
+
+    @property
+    def id(self) -> str:
+        return self.u_id
+
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            "u_id": self.id,
+            "context_id": self.context_id,
+            "cik": self.cik,
+            "period_u_id": self.period_u_id,
+            "dimension_u_ids": self.dimension_u_ids,
+            "member_u_ids": self.member_u_ids
+        }
+
+
+
+
 
 
 # region : Common/Macro Nodes ########################
@@ -1068,6 +1529,8 @@ class Taxonomy:
             return list(dimension.members_dict.values())
         return []    
 
+
+
 @dataclass
 class Concept(Neo4jNode):
     model_concept: Optional[ModelConcept] = None # The original ModelConcept object
@@ -1081,7 +1544,7 @@ class Concept(Neo4jNode):
     label: Optional[str] = None
     balance: Optional[str] = None
     type_local: Optional[str] = None    
-    
+    category: Optional[str] = None
     facts: List[Fact] = field(init=False, default_factory=list)
     # hypercubes: Optional[List[str]] = field(default_factory=list)  # Hypercubes associated in the Definition Network
 
@@ -1096,6 +1559,8 @@ class Concept(Neo4jNode):
             self.label = self.model_concept.label(lang="en")            
             self.balance = self.model_concept.balance
             self.type_local = self.model_concept.baseXsdType
+            self.category = ReportElementClassifier.classify(self.model_concept).value
+
         elif not self.u_id:
             raise ValueError("Either model_concept or properties must be provided")
 
@@ -1152,19 +1617,38 @@ class Concept(Neo4jNode):
             "namespace": self.namespace,
             "label": self.label,
             "balance": self.balance, # To be used later in Relationships
-            "type_local": self.type_local
+            "type_local": self.type_local,
+            "category": self.category
         }        
+
+
+# TODO: Already using Category in Concept so remove it from AbstractConcept
 
 @dataclass
 class AbstractConcept(Concept):
+    category: Optional[str] = None
+
     def __post_init__(self):
         super().__post_init__()
-        if not self.model_concept.isAbstract:
-            raise ValueError("Cannot create AbstractConcept from non-abstract concept")
-    
+        if self.model_concept is not None:  # Only validate if creating from XBRL
+            if not self.model_concept.isAbstract:
+                raise ValueError("Cannot create AbstractConcept from non-abstract concept")
+            self.category = ReportElementClassifier.classify(self.model_concept).value
+        # When loading from Neo4j, category will be set directly from properties
+
     @property
     def is_abstract(self) -> bool:
         return True
+
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.ABSTRACT
+
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = super().properties
+        props['category'] = self.category
+        return props
 
 @dataclass
 class Period(Neo4jNode):
@@ -1677,7 +2161,7 @@ class Presentation:
             # Handle abstract concepts
             for model_obj in (rel.fromModelObject, rel.toModelObject):
                 if model_obj.isAbstract:
-                    self._ensure_abstract_exists(model_obj)
+                    self._build_abstracts(model_obj)
             
             # Track parent-child relationship with order
             if parent_id not in parent_child_map:
@@ -1687,8 +2171,8 @@ class Presentation:
         # Second pass: Build nodes with correct levels
         self._build_nodes(parent_child_map)
     
-    # Not sure what purpose it solves?
-    def _ensure_abstract_exists(self, model_concept: ModelConcept) -> None:
+
+    def _build_abstracts(self, model_concept: ModelConcept) -> None:
         """Create AbstractConcept if not already exists"""
         concept_id = f"{model_concept.qname.namespaceURI}:{model_concept.qname}"
 
@@ -2483,8 +2967,8 @@ class Fact(Neo4jNode):
         # All Links to other Nodes
         # TODO: Instead of linking to XBRL concept, link to actual  class
         # self.concept = self.model_fact.concept 
-        # self.unit = self.model_fact.unitID
-        # self._set_period()
+        self.unit = self.model_fact.unitID
+        self._set_period()
         self._set_dimensions() # Facts can have only 1 member per dimension although can be linked to many dimensions
 
     @property
@@ -2533,16 +3017,33 @@ class Fact(Neo4jNode):
     def _set_period(self) -> None:
         """Set the period property based on context"""
         context = self.model_fact.context
-        if context is None or len(context) == 0:
+        if not context:
             self.period = None
             return
             
-        if getattr(context, 'isInstantPeriod', False):
-            self.period = context.instantDatetime.strftime('%Y-%m-%d')
-        elif getattr(context, 'isStartEndPeriod', False):
-            self.period = f"{context.startDatetime.strftime('%Y-%m-%d')} to {context.endDatetime.strftime('%Y-%m-%d')}"
-        else:
-            self.period = "Forever"
+        period_parts = ['instant' if context.isInstantPeriod else 'duration' if context.isStartEndPeriod else 'forever']
+        if context.isInstantPeriod:
+            period_parts.append(context.instantDatetime.strftime('%Y-%m-%d'))
+        elif context.isStartEndPeriod:
+            period_parts.extend([context.startDatetime.strftime('%Y-%m-%d'), context.endDatetime.strftime('%Y-%m-%d')])
+        
+        self.period = '_'.join(period_parts)
+
+
+
+    # def _set_period(self) -> None:
+    #     """Set the period property based on context"""
+    #     context = self.model_fact.context
+    #     if context is None or len(context) == 0:
+    #         self.period = None
+    #         return
+            
+    #     if getattr(context, 'isInstantPeriod', False):
+    #         self.period = context.instantDatetime.strftime('%Y-%m-%d')
+    #     elif getattr(context, 'isStartEndPeriod', False):
+    #         self.period = f"{context.startDatetime.strftime('%Y-%m-%d')} to {context.endDatetime.strftime('%Y-%m-%d')}"
+    #     else:
+    #         self.period = "Forever"
 
 
 # According to the XBRL Dimensions 1.0 specification:
@@ -2715,8 +3216,38 @@ class Neo4jManager:
         except Exception as e:
             raise RuntimeError(f"Failed to clear database: {e}")
             
+    # def create_indexes(self):
+    #     """Create indexes and constraints for all node types if they don't exist"""
+    #     try:
+    #         with self.driver.session() as session:
+    #             # Get existing constraints
+    #             existing_constraints = {
+    #                 constraint['name']: constraint['labelsOrTypes'][0]
+    #                 for constraint in session.run("SHOW CONSTRAINTS").data()
+    #             }
+                
+    #             # Create missing constraints
+    #             for node_type in NodeType:
+    #                 constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
+                    
+    #                 # Only create if it doesn't exist
+    #                 if constraint_name not in existing_constraints:
+    #                     session.run(f"""
+    #                     CREATE CONSTRAINT {constraint_name}
+    #                     FOR (n:`{node_type.value}`)
+    #                     REQUIRE n.id IS UNIQUE
+    #                     """)
+    #                     # print(f"Created constraint for {node_type.value}")
+    #                 else:
+    #                     # print(f"Constraint for {node_type.value} already exists")
+    #                     pass
+                        
+    #     except Exception as e:
+    #         raise RuntimeError(f"Failed to create indexes: {e}")
+        
+
     def create_indexes(self):
-        """Create indexes and constraints for all node types if they don't exist"""
+        """Create indexes and constraints for both nodes and relationships"""
         try:
             with self.driver.session() as session:
                 # Get existing constraints
@@ -2725,24 +3256,30 @@ class Neo4jManager:
                     for constraint in session.run("SHOW CONSTRAINTS").data()
                 }
                 
-                # Create missing constraints
+                # Create node constraints
                 for node_type in NodeType:
                     constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
-                    
-                    # Only create if it doesn't exist
                     if constraint_name not in existing_constraints:
                         session.run(f"""
                         CREATE CONSTRAINT {constraint_name}
                         FOR (n:`{node_type.value}`)
                         REQUIRE n.id IS UNIQUE
                         """)
-                        # print(f"Created constraint for {node_type.value}")
-                    else:
-                        # print(f"Constraint for {node_type.value} already exists")
-                        pass
-                        
+                
+                # Create relationship constraints
+                rel_constraint_name = "constraint_presentation_edge_unique"
+                if rel_constraint_name not in existing_constraints:
+                    session.run("""
+                    CREATE CONSTRAINT constraint_presentation_edge_unique
+                    FOR ()-[r:PRESENTATION_EDGE]-()
+                    REQUIRE (r.source_id, r.target_id, r.network_id) IS UNIQUE
+                    """)
+                    print(f"Created constraint for PRESENTATION_EDGE relationships")
+                    
         except Exception as e:
             raise RuntimeError(f"Failed to create indexes: {e}")
+
+
             
     def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 1000) -> None:
         """Merge nodes into Neo4j database with batching"""
@@ -2760,10 +3297,16 @@ class Neo4jManager:
                         if node.id is None: 
                             skipped_nodes.append(node)
                             continue
-                            
+
+                        # Format numeric value property
+                        def format_value(v):
+                            if isinstance(v, (int, float)):
+                                return f"{v:,.3f}".rstrip('0').rstrip('.') if isinstance(v, float) else f"{v:,}"
+                            return v
+
                         # Exclude id from properties
                         properties = {
-                            k: (v if v is not None else "null")
+                            k: (format_value(v) if v is not None else "null")
                             for k, v in node.properties.items()
                             if k != 'id'
                         }
@@ -2835,7 +3378,24 @@ class Neo4jManager:
         processed = []
         for rel in relationships:
             source, target, rel_type, *props = rel
-            
+
+
+            # Debug for StockholdersEquity facts
+            if isinstance(target, Fact) and target.qname == 'us-gaap:StockholdersEquity':
+                print("\nProcessing StockholdersEquity relationship:")
+                print(f"Network: {props[0].get('network_name', 'Unknown')}")  # Add network name
+                print(f"Original value: {target.value}")
+                print(f"Original context: {target.context_id}")
+                print(f"Is primary: {target.is_primary}")
+                print(f"Primary fact value: {target.primary_fact.value}")
+                print(f"Primary fact context: {target.primary_fact.context_id}")
+                print(f"Source type: {type(source).__name__}")
+                print(f"Source ID: {source.id if hasattr(source, 'id') else 'N/A'}")
+
+
+
+
+
             # Convert facts to primary versions
             if isinstance(source, Fact):
                 source = source.primary_fact
@@ -2850,33 +3410,162 @@ class Neo4jManager:
         return processed
 
 
+
+    # def merge_relationships(self, relationships: List[Tuple]) -> None:
+    #     """Merge relationships into Neo4j database.
+        
+    #     Creates unique relationship types for fact-based relationships in different networks
+    #     to prevent overwriting of identical facts that appear in multiple networks.
+        
+    #     Args:
+    #         relationships: List of tuples containing (source, target, rel_type, properties)
+    #     """
+    #     counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
+        
+    #     relationships = self._process_fact_relationships(relationships)
+
+    #     with self.driver.session() as session:
+    #         for rel in relationships:
+    #             source, target, rel_type, *props = rel
+    #             properties = props[0] if props else {}
+                
+    #             # Determine if this is a network-specific relationship
+    #             is_network_relationship = (
+    #                 ('network_name' in properties or 'network_uri' in properties) and 
+    #                 isinstance(target, Fact)
+    #             )
+                
+    #             if is_network_relationship:
+    #                 # For network-based fact relationships, create network-specific type
+    #                 # Use network_uri for unique identification, falling back to network_name if URI not available
+    #                 network_id = (properties.get('network_uri', '') or properties.get('network_name', '')).split('/')[-1]
+    #                 network_rel_type = f"{rel_type.value}_NET_{network_id}"
+                    
+    #                 # Debug logging for network relationships
+    #                 if target.qname == 'us-gaap:StockholdersEquity':
+    #                     print(f"\nCreating network-specific relationship:")
+    #                     print(f"Network: {properties.get('network_name', 'Unknown')}")
+    #                     print(f"Relationship type: {network_rel_type}")
+    #                     print(f"Fact value: {target.value}")
+    #             else:
+    #                 # For non-network relationships (abstract-to-abstract or other types),
+    #                 # use the original relationship type
+    #                 network_rel_type = rel_type.value
+                
+    #             # Create or merge the relationship in Neo4j
+    #             session.run(f"""
+    #                 MATCH (s {{id: $source_id}})
+    #                 MATCH (t {{id: $target_id}})
+    #                 MERGE (s)-[r:{network_rel_type}]->(t)
+    #                 SET r += $properties
+    #             """, {
+    #                 "source_id": source.id,
+    #                 "target_id": target.id,
+    #                 "properties": properties
+    #             })
+                
+    #             # Update counts for logging
+    #             counts[network_rel_type].update({
+    #                 'count': counts[network_rel_type]['count'] + 1, 
+    #                 'source': source.__class__.__name__, 
+    #                 'target': target.__class__.__name__
+    #             })
+        
+    #     # Log relationship creation summary
+    #     print("\nRelationship Creation Summary:")
+    #     for rel_type, info in counts.items():
+    #         print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
+
+
+
+
     def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
         counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
         
         relationships = self._process_fact_relationships(relationships)
-
 
         with self.driver.session() as session:
             for rel in relationships:
                 source, target, rel_type, *props = rel
                 properties = props[0] if props else {}
                 
-                session.run(f"""
-                    MATCH (s {{id: $source_id}})
-                    MATCH (t {{id: $target_id}})
-                    MERGE (s)-[r:{rel_type.value}]->(t)
-                    SET r += $properties
-                """, {
-                    "source_id": source.id,
-                    "target_id": target.id,
-                    "properties": properties
-                })
+                # Only addition: Special handling for PRESENTATION_EDGE with network info
+                if (rel_type == RelationType.PRESENTATION_EDGE and 
+                    isinstance(target, Fact) and 
+                    ('network_uri' in properties or 'network_name' in properties)):
+                    
+                    network_id = properties.get('network_uri', properties.get('network_name', '')).split('/')[-1]
+                    company_cik = properties.get('company_cik')  # Get CIK from properties
+                    
+                    # Changed: Pass merge criteria as parameters instead of inline
+                    session.run("""
+                        MATCH (s {id: $source_id})
+                        MATCH (t {id: $target_id})
+                        MERGE (s)-[r:PRESENTATION_EDGE {source_id: $merge_source_id, 
+                                target_id: $merge_target_id, 
+                                network_id: $merge_network_id,
+                                company_cik: $company_cik
+                            }]->(t)
+                        SET r += $properties
+                    """, {
+                        "source_id": source.id,
+                        "target_id": target.id,
+                        "merge_source_id": source.id,
+                        "merge_target_id": target.id,
+                        "merge_network_id": network_id,
+                        "company_cik": company_cik,
+                        "properties": properties
+                    })
+                else:
+                    # Original code unchanged for all other cases
+                    session.run(f"""
+                        MATCH (s {{id: $source_id}})
+                        MATCH (t {{id: $target_id}})
+                        MERGE (s)-[r:{rel_type.value}]->(t)
+                        SET r += $properties
+                    """, {
+                        "source_id": source.id,
+                        "target_id": target.id,
+                        "properties": properties
+                    })
+                
                 counts[rel_type.value].update({'count': counts[rel_type.value]['count'] + 1, 
-                                            'source': source.__class__.__name__, 
-                                            'target': target.__class__.__name__})
+                                        'source': source.__class__.__name__, 
+                                        'target': target.__class__.__name__})
         
         for rel_type, info in counts.items():
             print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
+
+
+
+    # def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
+        
+    #     counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
+        
+    #     relationships = self._process_fact_relationships(relationships)
+
+
+    #     with self.driver.session() as session:
+    #         for rel in relationships:
+    #             source, target, rel_type, *props = rel
+    #             properties = props[0] if props else {}
+                
+    #             session.run(f"""
+    #                 MATCH (s {{id: $source_id}})
+    #                 MATCH (t {{id: $target_id}})
+    #                 MERGE (s)-[r:{rel_type.value}]->(t)
+    #                 SET r += $properties
+    #             """, {
+    #                 "source_id": source.id,
+    #                 "target_id": target.id,
+    #                 "properties": properties
+    #             })
+    #             counts[rel_type.value].update({'count': counts[rel_type.value]['count'] + 1, 
+    #                                         'source': source.__class__.__name__, 
+    #                                         'target': target.__class__.__name__})
+        
+    #     for rel_type, info in counts.items():
+    #         print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
 
     def get_neo4j_db_counts(self) -> Dict[str, Dict[str, int]]:
         """Get count of nodes and relationships by type."""
