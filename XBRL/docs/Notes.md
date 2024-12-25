@@ -42,4 +42,5 @@
 
 
 
-    
+**Presentation Networks:**
+    - Note when displaying Presentation Networks, first groupby Period_id and then inside that groupby Context_id and show the facts by Period_id (inside each context_id)
