@@ -31,8 +31,6 @@ class ValidationMixin:
         # Step 1: Facts -> Concepts -> PN (Presentation Network)
         facts_in_pn = self._get_facts_in_presentation_network()
 
-        # print(f"Found {len(facts_in_pn)} facts in presentation network")
-        
         # Split into two paths based on hypercube presence
         facts_not_in_hc = self._get_facts_not_in_hypercubes(facts_in_pn)
         facts_in_hc = self._get_facts_in_hypercubes(facts_in_pn)
@@ -52,11 +50,6 @@ class ValidationMixin:
 
     def _get_facts_in_presentation_network(self) -> Set[Fact]:
 
-        """Get all facts from concepts in the presentation network"""
-        print(f"\nDEBUG - Before getting facts for network: {self.name}")
-        print(f"\nDEBUG - Before getting facts for network: {self.network_uri}")
-        # print(f"Total presentation nodes: {len(getattr(self.presentation, 'nodes', {}))}")
-
         from XBRL.XBRLClasses import AbstractConcept  # Use absolute import
 
         facts = {
@@ -66,10 +59,6 @@ class ValidationMixin:
             for fact in node.concept.facts
         }
         
-        print(f"DEBUG - Presentation Network Fact collection:")
-        print(f"\n****** - Network ID: {getattr(self, 'id', 'Unknown')}")
-        print(f"Node concepts with facts: {len([node for node in getattr(self.presentation, 'nodes', {}).values() if node.concept and node.concept.__class__ != AbstractConcept and node.concept.facts])}")
-
         return facts
 
 
@@ -91,11 +80,7 @@ class ValidationMixin:
         if not facts:
             return set()
         
-        # TODO: Group by Period
-        # Extra filter: Match Period with Report Period (& prev)
-
         filtered = {fact for fact in facts if not fact.dims_members} # No dimensions
-        # print(f"Facts without dimensions - IDs: {[f.id for f in filtered]}")
         return filtered
 
 
@@ -177,21 +162,11 @@ class ValidationMixin:
             for hypercube in self.hypercubes:
                 if hypercube.closed:
                     
-                    # Only for debugging
-                    # fact_dims = {dim.qname for dim, _ in fact.dims_members}
-                    # hc_dims = {dim.qname for dim in hypercube.dimensions}
-                    # print(f"Closed validation - Fact {fact.id}:")
-                    # print(f"  Fact dimensions: {fact_dims}")
-                    # print(f"  Hypercube dimensions: {hc_dims}")
-
                     hypercube_dimensions = {dim for dim in hypercube.dimensions} # Get all dimensions in this hypercube
                     fact_dimensions = {dim for dim, _ in fact.dims_members} # Get fact's dimensions
                     
                     # If fact has any dimension not in hypercube, it's invalid for this hypercube
                     if not fact_dimensions.issubset(hypercube_dimensions):
-                        # print(f"Fact ID:{fact.id} failed closed validation:")
-                        # print(f"  - Fact dimensions: {[d.qname for d in fact_dimensions]}")
-                        # print(f"  - Hypercube dimensions: {[d.qname for d in hypercube_dimensions]}")
                         is_valid_for_all_hypercubes = False
                         break
             
@@ -216,8 +191,6 @@ class ValidationMixin:
                     
                     # If fact doesn't have all hypercube dimensions, it's invalid
                     if not hypercube_dimensions.issubset(fact_dimensions):
-                        # print(f"Fact {fact.id} failed dimension presence check:")
-                        # print(f"  - Missing dimensions: {[d.qname for d in hypercube_dimensions - fact_dimensions]}")
                         is_valid = False
 
                         break
@@ -237,21 +210,15 @@ class ValidationMixin:
         hc_facts_with_dims = {fact for fact in hc_facts if fact.dims_members}
         hc_facts_without_dims = {fact for fact in hc_facts if not fact.dims_members}
         
-        # print(f"Hypercube facts before validation: {len(hc_facts)}")
-        # print(f"  - With dimensions: {len(hc_facts_with_dims)}")
-        # print(f"  - Without dimensions: {len(hc_facts_without_dims)}")
     
         # CHECK1: Closed validation - Only apply validation checks to facts WITH dimensions
         after_check1 = self._check_closed_validation(hc_facts_with_dims) or set()
-        # print(f"Facts after closed validation: {len(after_check1)}")
         
         # CHECK2: All dimensions present
         after_check2 = self._check_all_dimensions_present(after_check1) or set()
-        # print(f"Facts after dimension presence check: {len(after_check2)}")
         
         # CHECK3: Dimension-member match
         validated_hc_facts = self._check_dimension_member_match(after_check2) or set()
-        # print(f"Facts after dimension-member match: {len(validated_hc_facts)}")
 
         # Combine all valid facts from:
         # 1. Non-hypercube facts without dimensions (already valid)
@@ -259,44 +226,7 @@ class ValidationMixin:
         # 3. Validated hypercube facts with dimensions
         combined_valid_facts = non_hc_facts.union(hc_facts_without_dims).union(validated_hc_facts)
 
-        # Display facts in tabular format:
-        # - Groups facts by period
-        # - Shows concept labels as rows
-        # - Shows values across different periods
-        # - Uses presentation hierarchy for ordering
-        # Note: This is for visualization only, doesn't affect data structure
-        
-        # Optional: Display facts in tabular format for debugging/visualization
-
-        # if self.debug:
-        self._filter_by_period(combined_valid_facts)
-
-        # Create Neo4j relationship structure:
-        # - Enhances facts with presentation hierarchy metadata
-        # - Includes level, order for structural relationships
-        # - Adds network context (network_id, network_name)
-        # - Preserves period information for temporal relationships
-        # Note: This data will be used to create Neo4j relationships
-
-        # return list(combined_valid_facts), self._enhance_facts_with_hierarchy(combined_valid_facts)
-
-        # Build hierarchical structure and organize facts
-        # hierarchical_facts = self._build_concept_hierarchy(combined_valid_facts)
-        # hierarchical_facts = self.organize_facts_hierarchy(combined_valid_facts)
-        # return hierarchical_facts
-
         return combined_valid_facts
-    
-        # return list(), hierarchical_facts
-        # return list(combined_valid_facts)
-
-        # organized_facts = self._organize_facts_hierarchically(combined_valid_facts)
-        
-        # return list(organized_facts), hierarchical_facts
-        
-
-
-
 
 
     def _check_dimension_member_match(self, facts: Set[Fact]) -> Set[Fact]:
@@ -312,9 +242,6 @@ class ValidationMixin:
             for hypercube in self.hypercubes:
 
                 fact_dims_members = dict(fact.dims_members)
-                # print(f"Dimension-member check - Fact {fact.id}:")
-                # print(f"  Fact dim-members: {[(d.qname, m.qname if m else 'None') for d,m in fact_dims_members.items()]}")
-                # print(f"  Hypercube dims: {[d.qname for d in hypercube.dimensions]}")
 
                 # Get hypercube dimensions and their members
                 hypercube_dims_members = {
@@ -351,520 +278,3 @@ class ValidationMixin:
         
         return valid_facts
 
-
-########################### Display Facts ###########################
-
-    def organize_facts_hierarchy(self, facts: Set[Fact]) -> List[Tuple[Fact, Dict]]:
-        """
-        Organizes facts using presentation hierarchy, handling abstract concepts
-        and maintaining proper order through traversal
-        """
-        organized_facts = []
-        fact_concept_ids = {fact.concept.id for fact in facts}
-        
-        # Build parent mapping once at the start
-        parent_map = {}
-        for parent_id, node in self.presentation.nodes.items():
-            for child_id in node.children:
-                parent_map[child_id] = parent_id
-
-        def traverse_hierarchy(node_id: str, visited: set):
-            if node_id in visited:
-                return
-            visited.add(node_id)
-            
-            node = self.presentation.nodes[node_id]
-            if node.concept and node.concept.id in fact_concept_ids:
-                matching_facts = [f for f in facts if f.concept.id == node.concept.id]
-                
-                # Find nearest non-abstract parent
-                current_id = node_id
-                parent_id = None
-                while current_id in parent_map:
-                    parent = self.presentation.nodes[parent_map[current_id]]
-                    if parent.concept and parent.concept.model_concept and not parent.concept.model_concept.isAbstract:
-                        parent_id = parent.concept.u_id
-                        break
-                    current_id = parent_map[current_id]
-                
-                for fact in matching_facts:
-                    organized_facts.append((fact, {
-                        'context_id': fact.context_id,
-                        'parent_id': parent_id,
-                        'level': node.level,
-                        'order': node.order,
-                        'period_id': fact.period.u_id if fact.period else None
-                    }))
-            
-            for child_id in sorted(node.children, 
-                                key=lambda cid: self.presentation.nodes[cid].order):
-                traverse_hierarchy(child_id, visited)
-
-        # Start from root nodes
-        root_nodes = sorted(
-            [nid for nid, node in self.presentation.nodes.items() if node.level == 1],
-            key=lambda nid: self.presentation.nodes[nid].order
-        )
-            
-        visited = set()
-        for root_id in root_nodes:
-            traverse_hierarchy(root_id, visited)
-        
-        # Then handle any facts that weren't in the presentation hierarchy
-        processed_facts = {f[0] for f in organized_facts}
-        remaining_facts = facts - processed_facts
-        
-        for fact in remaining_facts:
-            organized_facts.append((fact, {
-                'context_id': fact.context_id,
-                'parent_id': None,  # No parent since not in presentation
-                'level': 0,        # Default level
-                'order': 0,        # Default order
-                'period_id': fact.period.u_id if fact.period else None
-            }))
-        
-        return organized_facts
-    
-
-
-
-
-    
-
-    def _build_concept_hierarchy(self, facts: Set[Fact]) -> List[Tuple[Fact, Dict]]:
-        """Build hierarchical relationships between facts using presentation structure"""
-        # Build parent mapping from children relationships
-        parent_map = {
-            child_id: node.concept_id 
-            for node in self.presentation.nodes.values()
-            for child_id in node.children
-        }
-        
-        hierarchical_facts = []
-        for fact in facts:
-            node = self.presentation.nodes.get(fact.concept.u_id)
-            if not node or not node.concept:
-                continue
-                
-            # Get parent chain
-            parent_chain = []
-            current_id = fact.concept.u_id
-            while current_id in parent_map:
-                parent_id = parent_map[current_id]
-                parent_node = self.presentation.nodes.get(parent_id)
-                if (parent_node and parent_node.concept and 
-                    parent_node.concept.model_concept and 
-                    not parent_node.concept.model_concept.isAbstract):
-                    parent_chain.append({
-                        'id': parent_id,
-                        'level': parent_node.level,
-                        'order': parent_node.order
-                    })
-                current_id = parent_id
-                
-            # Get non-abstract siblings
-            siblings = []
-            if fact.concept.u_id in parent_map:
-                parent_node = self.presentation.nodes.get(parent_map[fact.concept.u_id])
-                if parent_node and parent_node.children:
-                    siblings = [
-                        child_id for child_id in parent_node.children
-                        if (child_id != fact.concept.u_id and 
-                            self.presentation.nodes.get(child_id) and 
-                            self.presentation.nodes[child_id].concept and
-                            self.presentation.nodes[child_id].concept.model_concept and
-                            not self.presentation.nodes[child_id].concept.model_concept.isAbstract)
-                    ]
-
-            hierarchical_facts.append((fact, {
-                'context_id': fact.context_id,
-                'period_id': fact.period.u_id if fact.period else None,
-                'parents': parent_chain,
-                'siblings': siblings,
-                'level': node.level,
-                'order': node.order
-            }))
-
-        return sorted(hierarchical_facts, key=lambda x: (x[1]['level'], x[1]['order']))
-
-
-
-    def _organize_facts_hierarchically(self, facts: Set[Fact]) -> Set[Fact]:
-        """Organize facts based on their hierarchical relationships"""
-        if not facts:
-            return set()
-            
-        # Group by context and sort by hierarchy
-        context_groups = defaultdict(list)
-        for fact, hierarchy in self._build_concept_hierarchy(facts):
-            context_groups[fact.context_id].append((fact, hierarchy))
-            
-        return {
-            fact for context_facts in context_groups.values()
-            for fact, _ in sorted(context_facts, key=lambda x: (x[1]['level'], x[1]['order']))
-        }
-
-
-
-
-
-
-
-    def _enhance_facts_with_hierarchy(self, facts: Set[Fact]) -> List[Tuple[Fact, Dict]]:
-        """Enhance facts with hierarchy metadata using existing traversal logic"""
-        enhanced_facts = []
-        fact_concept_ids = {fact.concept.id for fact in facts}
-        
-        def traverse_hierarchy(node_id: str, visited: set):
-            if node_id in visited:
-                return
-            visited.add(node_id)
-            
-            node = self.presentation.nodes[node_id]
-            if node.concept and node.concept.id in fact_concept_ids:
-                concept_facts = [f for f in facts if f.concept.id == node.concept.id]
-                for fact in concept_facts:
-                    period = fact.period
-                    if period:
-                        # Get end date based on period type
-                        end_date = period.start_date if period.is_instant else period.end_date
-                        enhanced_facts.append((
-                            fact,
-                            {
-                                'u_id': fact.u_id,
-                                'level': node.level,
-                                'order': node.order,
-                                'period_id': period.u_id,
-                                'period_end': end_date,
-                                'period_type': period.period_type,  # Use period_type directly from Period class
-                                'network_id': self.id,
-                                'network_name': self.name
-                            }
-                        ))
-            
-            for child_id in sorted(node.children, 
-                                key=lambda cid: self.presentation.nodes[cid].order):
-                traverse_hierarchy(child_id, visited)
-
-        root_nodes = [node_id for node_id, node in self.presentation.nodes.items() 
-                    if node.level == 1]
-        root_nodes.sort(key=lambda nid: self.presentation.nodes[nid].order)
-        
-        visited = set()
-        for root_id in root_nodes:
-            traverse_hierarchy(root_id, visited)
-
-        # Group by period end date and type
-        period_groups = {}
-        for fact, meta in enhanced_facts:
-            key = (meta['period_end'], meta['period_type'])
-            if key not in period_groups:
-                period_groups[key] = []
-            period_groups[key].append((fact, meta))
-
-        # Sort periods by end date (most recent first) and select top 5
-        sorted_periods = sorted(period_groups.keys(), reverse=True)[:5]
-        
-        # Filter facts to include only selected periods
-        filtered_facts = []
-        for period_key in sorted_periods:
-            filtered_facts.extend(period_groups[period_key])
-                
-        return filtered_facts    
-
-
-
-
-    def _format_period(self, period_id: str) -> str:
-        """Format period display based on period type and context"""
-        if not period_id:
-            return ""
-            
-        try:
-            from datetime import datetime
-            
-            # Parse period components
-            period_type = "instant" if "instant" in period_id.lower() else "duration"
-            dates = period_id.split("_")
-            
-            if period_type == "duration" and len(dates) >= 3:
-                start_date = datetime.strptime(dates[-2], "%Y-%m-%d")
-                # end_date = datetime.strptime(dates[-1], "%Y-%m-%d")
-                
-                end_date = datetime.strptime(dates[-1], "%Y-%m-%d")
-                months = (end_date.year - start_date.year) * 12 + (end_date.month - start_date.month) # Calculate duration in months
-                if end_date.day == 1: # Subtract 1 day from end date if it's the first day of the month
-                    end_date = end_date - timedelta(days=1)
-
-                
-                # Only show month and year for end date to make it more compact
-                date_display = end_date.strftime("%d_%b'%y")  # Will show like "Sep'24"
-                
-                # Handle special cases
-                if months == 0:
-                    return end_date.strftime("%d_%b'%y")  # Just show the date for instant/very short periods
-                else:
-                    return f"{months}M {date_display}"
-                    
-            elif period_type == "instant":
-                # date = datetime.strptime(dates[-1], "%Y-%m-%d")
-                # # return date.strftime("%b'%y")
-                # return date.strftime("%b %d, %Y")  # New format: "Oct 31, 2024"
-                
-                date = datetime.strptime(dates[-1], "%Y-%m-%d")
-
-                # Subtract 1 day from date if it's the first day of the month
-                if date.day == 1:
-                    date = date - timedelta(days=1)
-                return date.strftime("%b %d, %Y")
-                
-        except Exception as e:
-            print(f"Error formatting period {period_id}: {str(e)}")
-            return period_id
-
-
-    def _format_duration_date(self, date_parts: List[str]) -> str:
-        """Format duration period date"""
-        try:
-            from datetime import datetime
-            year = date_parts[0]
-            month = int(date_parts[1])
-            day = int(date_parts[2])
-            date = datetime(int(year), month, day)
-            return date.strftime("%b. %d, %Y")
-        except:
-            return "-".join(date_parts)
-        
-
-    def _format_instant_date(self, date_parts: List[str]) -> str:
-        """Format instant period date"""
-        try:
-            year = date_parts[0]
-            month = int(date_parts[1])
-            day = int(date_parts[2])
-            from datetime import datetime
-            date = datetime(int(year), month, day)
-            return date.strftime("%b. %d, %Y")
-        except:
-            return "-".join(date_parts)
-
-    
-
-    def _format_display_row(self, label: str, values: list, widths: dict) -> str:
-        """Format row with proper alignment and indentation"""
-        # Preserve existing indentation
-        indent = ''.join(' ' for c in label if c == ' ')
-        label = label.lstrip()
-        
-        # Format the row
-        row = [f"{indent}{label}".ljust(widths['concept'])]
-        
-        # Right-align numeric values, clean up text blocks
-        for p, v in values:
-            width = widths[p]
-            if 'TextBlock' in label:
-                # Simple text block cleanup - just normalize spaces
-                v = ' '.join(v.split())
-            elif v.replace(',', '').replace('.', '').replace('(', '').replace(')', '').replace('$', '').replace('-', '').isdigit():
-                row.append(v.rjust(width))
-                continue
-            row.append(v.ljust(width))
-                
-        return " | ".join(row)
-
-
-    
-        
-    # def _format_display_row(self, label: str, values: list, widths: dict) -> str:
-    #     """Format row with proper alignment and indentation"""
-    #     # Preserve existing indentation
-    #     indent = ''.join(' ' for c in label if c == ' ')
-    #     label = label.lstrip()
-        
-    #     # Format the row
-    #     row = [f"{indent}{label}".ljust(widths['concept'])]
-        
-    #     # Right-align numeric values
-    #     for p, v in values:
-    #         width = widths[p]
-    #         if v.replace(',', '').replace('.', '').replace('(', '').replace(')', '').replace('$', '').replace('-', '').isdigit():
-    #             row.append(v.rjust(width))
-    #         else:
-    #             row.append(v.ljust(width))
-                
-    #     return " | ".join(row)
-
-
-    def _calculate_widths(self, nodes: dict, facts: Set[Fact], periods: List[str], period_groups: dict) -> dict:
-        """Calculate display widths for all columns"""
-        try:
-            concept_width = max(
-                len(f"{node.concept.qname} [{node.concept.balance}]" if node.concept.balance else f"{node.concept.qname}")
-                for node in nodes.values()
-                if node.concept
-            ) + 10  # Extra space for indentation
-
-            period_widths = {
-                period: max(
-                    len(str(fact.value)) for fact in period_groups[period]
-                ) + 5 for period in periods
-            }
-            
-            return {'concept': concept_width, **period_widths}
-        except ValueError:  # Handle empty sequences
-            return {'concept': 50, **{p: 20 for p in periods}}  # Default fallback
-
-    def _filter_by_period(self, facts: Set[Fact]) -> Set[Fact]:
-        """Group and display facts by period with concepts ordered by presentation hierarchy"""
-        if not facts:
-            return set()
-
-        # Group facts by period u_id
-        period_groups: Dict[str, List[Fact]] = {}
-        for fact in facts:
-            period_id = fact.period.u_id if fact.period else "No Period"
-            if period_id not in period_groups:
-                period_groups[period_id] = []
-            period_groups[period_id].append(fact)
-
-        periods = self._group_periods(period_groups)
-        fact_concept_ids = {fact.concept.id for fact in facts}
-
-        # Calculate display widths
-        widths = self._calculate_widths(self.presentation.nodes, facts, periods, period_groups)
-
-        # Create header using the working version's format
-        header = "Concept [Balance]".ljust(widths['concept']) + " | " + " | ".join(
-            self._format_period(p).ljust(widths[p]) for p in periods)
-
-        print("\nConcept-Period Value Matrix:")
-        print("-" * len(header))
-        print(header)
-        print("-" * len(header))
-
-        def traverse_hierarchy(node_id: str, visited: set):
-            if node_id in visited:
-                return
-            visited.add(node_id)
-            
-            node = self.presentation.nodes[node_id]
-            if node.concept and node.concept.id in fact_concept_ids:
-                indent = self._get_indent_level(node)
-                label = indent + self._format_concept_label(node)
-                
-                # Add minimal debug print
-                # print(f"\nProcessing concept: {node.concept.qname}")
-                
-                values = [
-                    (period, self._format_value(
-                        next((f.value for f in period_groups[period] 
-                            if f.concept.id == node.concept.id), None)))
-                    for period in periods
-                ]
-                
-                print(self._format_display_row(label, values, widths))
-            
-            for child_id in sorted(node.children, 
-                                key=lambda cid: self.presentation.nodes[cid].order):
-                traverse_hierarchy(child_id, visited)
-
-        if hasattr(self, 'presentation'):
-            root_nodes = [node_id for node_id, node in self.presentation.nodes.items() 
-                        if node.level == 1]
-            root_nodes.sort(key=lambda nid: self.presentation.nodes[nid].order)
-            
-            visited = set()
-            for root_id in root_nodes:
-                traverse_hierarchy(root_id, visited)
-
-        print("-" * len(header))
-        print(f"Total Facts: {len(facts)}, Unique Concepts: {len(fact_concept_ids)}, Periods: {len(periods)}")
-
-        return facts
-
-
-
-    def _group_periods(self, period_groups: Dict[str, List[Fact]]) -> List[str]:
-        """Group periods by period ID and fact patterns"""
-        # Create list of period info
-        periods = []
-        
-        for period_id, facts in period_groups.items():
-            if not facts:
-                continue
-                
-            # Extract date from period ID
-            try:
-                date_parts = [part for part in period_id.split('_')[-1].split('-') if part.isdigit()]
-                if len(date_parts) >= 3:
-                    year, month, day = date_parts[-3:]
-                    date = (int(year), int(month), int(day))
-                else:
-                    continue
-                    
-                # Create unique identifier for this period
-                period_key = (
-                    date,  # Date tuple (year, month, day)
-                    '_'.join(period_id.split('_')[:-1]),  # Context type/scenario
-                    len(facts)  # Fact count
-                )
-                
-                periods.append({
-                    'id': period_id,
-                    'date': date,
-                    'key': period_key,
-                    'fact_count': len(facts)
-                })
-                    
-            except Exception as e:
-                continue
-        
-        # Sort by date and fact count
-        periods.sort(key=lambda x: (x['date'], -x['fact_count']), reverse=True)
-        
-        # Select unique periods
-        seen_keys = set()
-        selected = []
-        
-        for period in periods:
-            if period['key'] not in seen_keys:
-                seen_keys.add(period['key'])
-                selected.append(period['id'])
-                if len(selected) >= 5:  # Limit to 5 periods
-                    break
-                    
-        return selected
-
-
-    def _format_value(self, value: Union[int, float, str, None]) -> str:
-        """Format numeric values with dollar signs and parentheses for negatives"""
-        if value is None:
-            return "-"
-            
-        try:
-            if isinstance(value, (int, float)):
-                abs_value = abs(float(value))
-                formatted = f"${abs_value:,.0f}" if abs_value.is_integer() else f"${abs_value:,.2f}"
-                return f"({formatted})" if value < 0 else formatted
-            return str(value)
-        except:
-            return str(value)
-
-    def _get_indent_level(self, node: PresentationNode) -> str:
-        """Get proper indentation based on node level"""
-        base_indent = 2  # Base spaces per level
-        return " " * (node.level * base_indent)        
-    
-
-    def _format_concept_label(self, node: PresentationNode) -> str:
-        """Format concept label with balance type"""
-        if not node.concept:
-            return ""
-        
-        label = f"{node.concept.qname}"
-        if node.concept.balance:
-            label += f" [{node.concept.balance}]"
-        
-        return label
-
-########################### Display Facts END ###########################
