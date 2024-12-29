@@ -9,7 +9,6 @@ if TYPE_CHECKING:
 
 
 # Based on the algorithm in the presentation network definition (See schema)
-
 class ValidationMixin:
     """Mixin providing validation methods for Network class"""
 
@@ -25,15 +24,17 @@ class ValidationMixin:
             print(*args, **kwargs)
 
 
-    def validate_facts(self) -> Tuple[List[Fact], List[Tuple[Fact, Dict]]]:
-        """Validates facts according to presentation network definition algorithm"""
-        
-        # Step 1: Facts -> Concepts -> PN (Presentation Network)
-        facts_in_pn = self._get_facts_in_presentation_network()
+    def validate_facts(self, network_type: str = 'presentation') -> Tuple[List[Fact], List[Tuple[Fact, Dict]]]:
+        """Validates facts according to network type"""
+        # Step 1: Get initial facts based on network type
+        if network_type == 'presentation':
+            initial_facts = self._get_facts_in_presentation_network()
+        else:  # calculation
+            initial_facts = self._get_facts_from_calculation()
 
         # Split into two paths based on hypercube presence
-        facts_not_in_hc = self._get_facts_not_in_hypercubes(facts_in_pn)
-        facts_in_hc = self._get_facts_in_hypercubes(facts_in_pn)
+        facts_not_in_hc = self._get_facts_not_in_hypercubes(initial_facts)
+        facts_in_hc = self._get_facts_in_hypercubes(initial_facts)
         # print(f"Split facts: {len(facts_not_in_hc)} not in hypercubes, {len(facts_in_hc)} in hypercubes")
 
         # Process facts not in hypercubes and ignore facts without dimensions which are not in hypercubes
@@ -60,6 +61,17 @@ class ValidationMixin:
         }
         
         return facts
+
+    def _get_facts_from_calculation(self) -> Set[Fact]:
+        facts = {
+            fact
+            for node in getattr(self.calculation, 'nodes', {}).values()
+            if node.concept  # No need to check for AbstractConcept
+            for fact in node.concept.facts
+        }
+
+        return facts
+
 
 
     def _get_facts_not_in_hypercubes(self, facts: Set[Fact]) -> Set[Fact]:
