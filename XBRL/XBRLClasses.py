@@ -31,6 +31,28 @@ from arelle.ModelInstanceObject import ModelFact, ModelContext, ModelUnit
 from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 
+
+PRESENTATION_EDGE_UNIQUE_PROPS = [
+    'cik',           # Company identifier
+    'report_id',     # Filing identifier
+    'network_name',  # Network context
+    'parent_id',     # Parent concept
+    'child_id',      # Child concept
+    'parent_level',  # Position in hierarchy
+    'child_level'    # Position in hierarchy
+]
+
+CALCULATION_EDGE_UNIQUE_PROPS = [
+    'cik',           # Company identifier
+    'report_id',     # Filing identifier
+    'network_name',  # Network context
+    'parent_id',     # Parent concept
+    'child_id',      # Child concept
+    'context_id'     # Shared context including dimensions
+]
+
+
+
 # region Generic Classes
 class GroupingType(Enum):
     CONTEXT = "context"
@@ -109,7 +131,7 @@ class NodeType(Enum):
     ADMIN_REPORT = "AdminReport"
 
 
-
+# Reconcile with Neo4j and remove rest 
 class RelationType(Enum):
     """XBRL relationship types"""
     HAS_FACT = "HAS_FACT"
@@ -349,7 +371,7 @@ class process_report:
     instance_file: str
     neo4j: Neo4jManager
     log_file: str = field(default='ErrorLog.txt', repr=False)
-    testing: bool = field(default=True)  # Add testing flag as configurable
+    testing: bool = field(default=True)  # Add testing flag as configurable (set to False in later calls for now)
     model_xbrl: ModelXbrl = field(init=False, repr=False)
 
     # TODO: Can remove this later
@@ -357,20 +379,23 @@ class process_report:
     
     # Common Nodes
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
-    contexts: List[Context] = field(init=False, default_factory=list, repr=False)
-
-    # abstracts includes Abstracts, LineItems, Hypercube, Axis (Dimensions), Members
-    abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class
-    pure_abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class
+    abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class (Abstracts, LineItems, Table (Hypercube), Axis (Dimensions), Members, Domain)
+    pure_abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class (only Abstracts, LineItems)
+    
     periods: List[Period] = field(init=False, default_factory=list, repr=False)
     units: List[Unit] = field(init=False, default_factory=list, repr=False)
     dates: List[DateNode] = field(init=False, default_factory=list)
     admin_reports: List[AdminReportNode] = field(init=False, default_factory=list)
 
+    # Company Nodes (company-specific)
+    company: CompanyNode = field(init=False)  # Single company per report
+    contexts: List[Context] = field(init=False, default_factory=list, repr=False)
+    dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)        
+    # members are inside dimensions but are also company-specific
+
     # Report-specific Nodes
     facts: List[Fact] = field(init=False, default_factory=list, repr=False)    
-    dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)    
-    taxonomy: Taxonomy = field(init=False)
+    taxonomy: Taxonomy = field(init=False) # Although this is company-specific, we load it for each report
 
     # Lookup Tables
     _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False) # Used in Linking Fact to Concept
@@ -384,9 +409,9 @@ class process_report:
         
         self.initialize_date_nodes(start_dt = "2024-12-01")     # Later remove these from process_report 
         self.load_xbrl()                                        # Required to fetch Company node
-        self.initialize_entity_node()                           # Company Node Creation
+        self.initialize_company_node()                           # Company Node Creation
         self.initialize_admin_reports()                         # Admin Reports Node Creation   
-        self.initialize_report_node(cik = self.entity.cik)      # Report Node Creation
+        self.initialize_report_node(cik = self.company.cik)      # Report Node Creation
         # self.extract_report_metadata()                         # TODO: Remove this later
 
         self.populate_common_nodes()  # First handle common nodes
@@ -443,12 +468,11 @@ class process_report:
             return network.calculation.fact_lookup
         
         # Fallback: Create lookup from all facts
-        # fact_lookup = defaultdict(list)
-        # for fact in self.facts:
-        #     fact_lookup[fact.concept.u_id].append(fact)
-        # return fact_lookup if fact_lookup else None
+        fact_lookup = defaultdict(list)
+        for fact in self.facts:
+            fact_lookup[fact.concept.u_id].append(fact)
+        return fact_lookup if fact_lookup else None
 
-        return None
 
 
 
@@ -485,8 +509,8 @@ class process_report:
                     rel_props = {
                         'network_uri': network.network_uri,
                         'network_name': network.name,
-                        'company_cik': self.entity.cik,
-                        'report_instance': self.report.instanceFile,
+                        'company_cik': self.company.cik,
+                        'report_id': self.report.instanceFile,
                         'parent_level': node.level,
                         'parent_order': node.order,
                         'child_level': child_node.level,
@@ -617,10 +641,11 @@ class process_report:
                                 {
                                     'network_uri': network.network_uri,
                                     'network_name': network.name,
-                                    'context_id': context_id,  # Add context ID for traceability
+                                    'context_id': context_id,
                                     'weight': rel.weight,
                                     'order': rel.order,
-                                    'company_cik': self.entity.cik,
+                                    'company_cik': self.company.cik,
+                                    'report_id': self.report.instanceFile, 
                                     'report_instance': self.report.instanceFile
                                 }
                             ))
@@ -661,7 +686,13 @@ class process_report:
         # Group by network just for organized output
         network_groups = defaultdict(list)
         for rel in relationships:
-            network_uri = rel[3]['network_uri']
+            attrs = rel[3]
+            required_props = {'company_cik', 'report_id', 'network_uri', 'context_id'}
+            missing_props = required_props - set(attrs.keys())
+            if missing_props:
+                raise ValueError(f"Missing required properties: {missing_props}")
+                
+            network_uri = attrs['network_uri']
             network_groups[network_uri].append(rel)
             debug_counts['total_relationships'] += 1
         
@@ -676,12 +707,17 @@ class process_report:
                     parent_groups[parent_fact] = {}
                     debug_counts['unique_parents'] += 1
 
+                network_name = attrs['network_uri'].split('/')[-1]
                 # Deduplicate using same keys as Neo4j MERGE
                 child_key = (
+                    attrs.get('company_cik'),
+                    attrs.get('report_id'),
+                    network_name,
+                    parent_fact.id,
                     child_fact.id,
-                    attrs['network_uri'].split('/')[-1],
-                    attrs.get('company_cik')
+                    attrs.get('context_id')
                 )
+
                 parent_groups[parent_fact][child_key] = (child_fact, attrs['weight'])
                 debug_counts['child_facts_processed'] += 1
             
@@ -755,8 +791,6 @@ class process_report:
             print(f"Match Rate: {matches/(matches+non_matches)*100:.1f}%")
 
 
-
-
     def initialize_date_nodes(self, start_dt: str):
         """One-time initialization of date nodes"""
         try:
@@ -768,15 +802,15 @@ class process_report:
         except Exception as e:
             print(f"Error initializing date nodes: {e}")
 
-    def initialize_entity_node(self):
+    def initialize_company_node(self):
         """Initialize company node and create relationships with dates"""
         try:
             # Get company info and create entity
             cik, name, fiscal_year_end = get_company_info(self.model_xbrl)        
-            self.entity = CompanyNode(cik=cik, name=name, fiscal_year_end=fiscal_year_end)
+            self.company = CompanyNode(cik=cik, name=name, fiscal_year_end=fiscal_year_end)
 
             # Create/Merge company node
-            self.neo4j._export_nodes([self.entity])
+            self.neo4j._export_nodes([self.company])
 
             # Create relationships between dates and company with price data
             date_entity_relationships = []
@@ -789,7 +823,7 @@ class process_report:
                 
                 # Create relationship from date to company with price properties
                 date_entity_relationships.append(
-                    (date_node, self.entity, RelationType.HAS_PRICE, price_data))
+                    (date_node, self.company, RelationType.HAS_PRICE, price_data))
 
             # Merge relationships with properties
             self.neo4j.merge_relationships(date_entity_relationships)
@@ -906,16 +940,6 @@ class process_report:
                     print(f"Found iXBRL footnote reference in fact: {fact.concept.qname}")
         
         print("\n" + "="*80)
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1257,7 +1281,7 @@ class process_report:
                 context_relationships.append((context, period, RelationType.HAS_PERIOD))
             
             # Context -> Company
-            context_relationships.append((context, self.entity, RelationType.BELONGS_TO))
+            context_relationships.append((context, self.company, RelationType.BELONGS_TO))
             
             # Context -> Dimensions
             for dim_id in context.dimension_u_ids:
@@ -2373,88 +2397,6 @@ class Hypercube:
 
         self.is_all, self.closed = self._get_hypercube_properties()
         self._build_dimensions()
-
-
-    # def _build_dimensions(self) -> None:
-    #     """Build dimension objects from model_xbrl matching this hypercube"""
-        
-    #     # 1. Get hypercube-dimension relationships for specific network
-    #     # print(f"Fetching hypercube-dimension relationships for network: {self.network_uri}")
-    #     hc_dim_rel_set = self.model_xbrl.relationshipSet(
-    #         XbrlConst.hypercubeDimension, 
-    #         self.network_uri
-    #     )
-    #     if not hc_dim_rel_set:
-    #         # print("No hypercube-dimension relationships found.")
-    #         return
-
-    #     # print(f"Total relationships in hypercube-dimension set: {len(hc_dim_rel_set.modelRelationships)}")
-            
-    #     # 2. Get relationships FROM this hypercube
-    #     # print(f"Fetching relationships from hypercube: {self.hypercube_item.qname}")
-    #     relationships = hc_dim_rel_set.fromModelObject(self.hypercube_item)
-    #     if not relationships:
-    #         # print(f"No relationships found from hypercube: {self.hypercube_item.qname}")
-    #         return
-
-    #     # print(f"Total relationships from hypercube {self.hypercube_item.qname}: {len(relationships)}")
-            
-    #     # 3. Process each dimension relationship
-    #     for rel in relationships:
-    #         dim_object = rel.toModelObject
-    #         # print(f"Processing relationship: from {rel.fromModelObject.qname} to {rel.toModelObject.qname if rel.toModelObject else 'None'}")
-            
-    #         if dim_object is None:
-    #             # print("Dimension object is None. Skipping this relationship.")
-    #             continue
-            
-    #         if not dim_object.isDimensionItem:
-    #             # print(f"{dim_object.qname} is not a dimension item. Skipping.")
-    #             continue
-                
-    #         try:
-    #             # Create dimension with network context
-    #             # print(f"Creating Dimension object for: {dim_object.qname}")
-    #             dimension = Dimension(
-    #                 model_xbrl=self.model_xbrl,
-    #                 item=dim_object,
-    #                 network_uri=self.network_uri
-    #             )
-                
-    #             # Add validation to ensure dimension is properly connected
-    #             if self._validate_dimension_connection(dim_object):
-    #                 # print(f"Dimension {dim_object.qname} validated and added.")
-    #                 self.dimensions.append(dimension)
-    #             else:
-    #                 # print(f"Dimension {dim_object.qname} failed validation. Skipping.")
-    #                 pass
-
-    #         except Exception as e:
-    #             # print(f"Error processing dimension {dim_object.qname}: {e}")
-    #             continue
-
-    # def _validate_dimension_connection(self, dim_object) -> bool:
-    #     """Validate that dimension is properly connected in this network"""
-    #     # print(f"Validating connection for dimension: {dim_object.qname}")
-
-    #     # Check if dimension is directly connected to this hypercube
-    #     hc_dim_rels = self.model_xbrl.relationshipSet(
-    #         XbrlConst.hypercubeDimension, 
-    #         self.network_uri
-    #     )
-
-    #     if not hc_dim_rels:
-    #         # print(f"No hypercube-dimension relationships found for validation in network: {self.network_uri}")
-    #         return False
-
-    #     for rel in hc_dim_rels.modelRelationships:
-    #         # print(f"Checking relationship: from {rel.fromModelObject.qname} to {rel.toModelObject.qname}")
-    #         if rel.fromModelObject == self.hypercube_item and rel.toModelObject == dim_object:
-    #             # print(f"Dimension {dim_object.qname} is properly connected to hypercube {self.hypercube_item.qname}.")
-    #             return True
-
-    #     # print(f"Dimension {dim_object.qname} is NOT connected to hypercube {self.hypercube_item.qname}.")
-    #     return False
 
 
     def _build_dimensions(self) -> None:
