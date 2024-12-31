@@ -1,6 +1,11 @@
+from __future__ import annotations
 from typing import List, Tuple, TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from .XBRLClasses import Neo4jNode
 
+
+    
 def process_fact_relationships(relationships: List[Tuple]) -> List[Tuple]:
     """Pre-process relationships to handle fact duplicates"""
     # Quick check if any facts involved
