@@ -3,13 +3,14 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Any, Union, Tuple, Type, TYPE_CHECKING
 from collections import defaultdict
 from neo4j import GraphDatabase, Driver
-
+import pandas as pd
 # Split imports: TYPE_CHECKING for type hints, direct imports for runtime needs
 if TYPE_CHECKING:
     from .XBRLClasses import Neo4jNode
 
 # Import needed classes and enums for runtime
-from .XBRLClasses import NodeType, RelationType, Fact
+from .XBRLClasses import (PRESENTATION_EDGE_UNIQUE_PROPS, CALCULATION_EDGE_UNIQUE_PROPS, NodeType, RelationType, Fact)
+
 from .utils import process_fact_relationships
 
 
@@ -21,7 +22,11 @@ class Neo4jManager:
     username: str
     password: str
     driver: Driver = field(init=False)
-    
+
+    PRESENTATION_CONSTRAINT_NAME = "constraint_presentation_edge_unique"
+    CALCULATION_CONSTRAINT_NAME = "constraint_calculation_edge_unique"
+
+
     def test_connection(self) -> bool:
         """Test Neo4j connection"""
         try:
@@ -71,36 +76,9 @@ class Neo4jManager:
 
         except Exception as e:
             raise RuntimeError(f"Failed to clear database: {e}")
-            
-    # def create_indexes(self):
-    #     """Create indexes and constraints for all node types if they don't exist"""
-    #     try:
-    #         with self.driver.session() as session:
-    #             # Get existing constraints
-    #             existing_constraints = {
-    #                 constraint['name']: constraint['labelsOrTypes'][0]
-    #                 for constraint in session.run("SHOW CONSTRAINTS").data()
-    #             }
-                
-    #             # Create missing constraints
-    #             for node_type in NodeType:
-    #                 constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
-                    
-    #                 # Only create if it doesn't exist
-    #                 if constraint_name not in existing_constraints:
-    #                     session.run(f"""
-    #                     CREATE CONSTRAINT {constraint_name}
-    #                     FOR (n:`{node_type.value}`)
-    #                     REQUIRE n.id IS UNIQUE
-    #                     """)
-    #                     # print(f"Created constraint for {node_type.value}")
-    #                 else:
-    #                     # print(f"Constraint for {node_type.value} already exists")
-    #                     pass
-                        
-    #     except Exception as e:
-    #         raise RuntimeError(f"Failed to create indexes: {e}")
-        
+
+
+
 
     def create_indexes(self):
         """Create indexes and constraints for both nodes and relationships"""
@@ -122,18 +100,65 @@ class Neo4jManager:
                         REQUIRE n.id IS UNIQUE
                         """)
                 
-                # Create relationship constraints
+                # Presentation Edge constraint
                 rel_constraint_name = "constraint_presentation_edge_unique"
                 if rel_constraint_name not in existing_constraints:
-                    session.run("""
-                    CREATE CONSTRAINT constraint_presentation_edge_unique
+                    props = ", ".join(f"r.{prop}" for prop in PRESENTATION_EDGE_UNIQUE_PROPS)
+                    session.run(f"""
+                    CREATE CONSTRAINT {rel_constraint_name} IF NOT EXISTS
                     FOR ()-[r:PRESENTATION_EDGE]-()
-                    REQUIRE (r.source_id, r.target_id, r.network_id) IS UNIQUE
+                    REQUIRE ({props}) IS UNIQUE
                     """)
                     print(f"Created constraint for PRESENTATION_EDGE relationships")
                     
+                # Calculation Edge constraint
+                rel_constraint_name = "constraint_calculation_edge_unique"
+                if rel_constraint_name not in existing_constraints:
+                    props = ", ".join(f"r.{prop}" for prop in CALCULATION_EDGE_UNIQUE_PROPS)
+                    session.run(f"""
+                    CREATE CONSTRAINT {rel_constraint_name} IF NOT EXISTS
+                    FOR ()-[r:CALCULATION_EDGE]-()
+                    REQUIRE ({props}) IS UNIQUE
+                    """)
+                    print(f"Created constraint for CALCULATION_EDGE relationships")
+
         except Exception as e:
             raise RuntimeError(f"Failed to create indexes: {e}")
+
+
+
+    # def create_indexes(self):
+    #     """Create indexes and constraints for both nodes and relationships"""
+    #     try:
+    #         with self.driver.session() as session:
+    #             # Get existing constraints
+    #             existing_constraints = {
+    #                 constraint['name']: constraint['labelsOrTypes'][0]
+    #                 for constraint in session.run("SHOW CONSTRAINTS").data()
+    #             }
+                
+    #             # Create node constraints
+    #             for node_type in NodeType:
+    #                 constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
+    #                 if constraint_name not in existing_constraints:
+    #                     session.run(f"""
+    #                     CREATE CONSTRAINT {constraint_name}
+    #                     FOR (n:`{node_type.value}`)
+    #                     REQUIRE n.id IS UNIQUE
+    #                     """)
+                
+    #             # Create relationship constraints
+    #             rel_constraint_name = "constraint_presentation_edge_unique"
+    #             if rel_constraint_name not in existing_constraints:
+    #                 session.run("""
+    #                 CREATE CONSTRAINT constraint_presentation_edge_unique
+    #                 FOR ()-[r:PRESENTATION_EDGE]-()
+    #                 REQUIRE (r.source_id, r.target_id, r.network_id) IS UNIQUE
+    #                 """)
+    #                 print(f"Created constraint for PRESENTATION_EDGE relationships")
+                    
+    #     except Exception as e:
+    #         raise RuntimeError(f"Failed to create indexes: {e}")
 
 
             
@@ -185,6 +210,7 @@ class Neo4jManager:
                         
         except Exception as e:
             raise RuntimeError(f"Failed to merge nodes: {e}")
+
 
     def _filter_duplicate_facts(self, nodes: List[Neo4jNode]) -> List[Neo4jNode]:
         """Filter out duplicate facts, keeping only primary facts"""
@@ -363,8 +389,9 @@ class Neo4jManager:
             raise RuntimeError(f"Failed to load {node_type.value} nodes: {e}")
 
 
-
-
+    # This function first loads all Calculation_EDGE relationships into memory, then checks the sum of the child facts against the parent fact.
+    # It then prints the number of matches and non-matches, and the overall match rate.
+    # It also prints the breakdown by network, and the match rate for each network.
     def validate_neo4j_calculations(self) -> None:
         """Validates all calculation relationships stored in Neo4j by checking summations."""
         
@@ -462,5 +489,87 @@ class Neo4jManager:
             raise RuntimeError(f"Failed to validate calculations: {e}")
 
 
+    def get_relationship_properties(self, source_id: str, target_id: str, properties: Dict) -> Dict[str, Any]:
+        """Prepare relationship properties ensuring uniqueness"""
+        # Verify required properties
+        if not all(key in properties for key in ['company_cik', 'report_id']):
+            raise ValueError("Missing required properties: company_cik and report_id")
+            
+        base_props = {
+            "cik": properties['company_cik'],
+            "report_id": properties['report_id'],
+            "network_name": properties.get('network_uri', '').split('/')[-1],
+            "parent_id": source_id,
+            "child_id": target_id
+        }
+        
+        if properties.get('rel_type') == RelationType.PRESENTATION_EDGE:
+            if not all(key in properties for key in ['parent_level', 'child_level']):
+                raise ValueError("Missing required properties for presentation edge")
+            return {
+                **base_props,
+                "parent_level": int(properties['parent_level']),
+                "child_level": int(properties['child_level'])
+            }
+        else:  # CALCULATION_EDGE
+            if 'context_id' not in properties:
+                raise ValueError("Missing required context_id for calculation edge")
+            return {
+                **base_props,
+                "context_id": properties['context_id']
+            }
+
+
+    # Usage: 
+    # calc_df = report.neo4j.fetch_relationships(RelationType.CALCULATION_EDGE)
+    # pres_df = report.neo4j.fetch_relationships(RelationType.PRESENTATION_EDGE)    
+    def fetch_relationships(self, edge_type: RelationType) -> pd.DataFrame:
+        """Fetches relationships with all properties"""
+        calc_props = """
+            r.weight as weight, 
+            r.order as order, 
+            r.context_id as context_id
+        """
+        pres_props = """
+            r.parent_level as parent_level,
+            r.child_level as child_level,
+            r.parent_order as parent_order,
+            r.child_order as child_order
+        """
+        
+        base_props = """
+            r.cik as cik,
+            r.report_id as report_id,
+            r.network_name as network_name,
+            r.network_uri as network_uri,
+            r.network_role as network_role,
+            p.id as parent_id,
+            c.id as child_id
+        """
+        
+        query = f"""
+        MATCH (p)-[r:{edge_type.value}]->(c)
+        RETURN 
+            {base_props},
+            {calc_props if edge_type == RelationType.CALCULATION_EDGE else pres_props}
+        """
+        
+        return pd.DataFrame([dict(r) for r in self.driver.session().run(query)])
+
+    # def fetch_relationships(self, edge_type: RelationType) -> pd.DataFrame:
+    #     """Fetches relationships from Neo4j as DataFrame."""
+    #     calc_props = "r.weight as weight, r.order as order, r.context_id as context_id"
+    #     pres_props = "r.parent_level as parent_level, r.parent_order as parent_order, r.child_level as child_level, r.child_order as child_order"
+        
+    #     query = f"""
+    #     MATCH (p)-[r:{edge_type.value}]->(c)
+    #     RETURN p.id as parent_id, p.qname as parent_qname, p.value as parent_value,
+    #         c.id as child_id, c.qname as child_qname, c.value as child_value,
+    #         r.network_uri as network_uri, r.network_name as network_name,
+    #         r.company_cik as cik, r.report_instance as report_instance,
+    #         {calc_props if edge_type == RelationType.CALCULATION_EDGE else pres_props}
+    #     """
+        
+    #     return pd.DataFrame([dict(r) for r in self.driver.session().run(query)])
 
 # endregion : Neo4j Manager ########################
