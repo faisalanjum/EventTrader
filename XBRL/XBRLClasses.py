@@ -1,6 +1,6 @@
 from __future__ import annotations
 from XBRL.validation import ValidationMixin  # Use absolute import
-
+from XBRL.utils import *
 
 # dataclasses and typing imports
 from dataclasses import dataclass, field, fields
@@ -368,14 +368,11 @@ class process_report:
     dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)    
     taxonomy: Taxonomy = field(init=False)
 
-    # Lookup Tables - TODO: Can we remove this?
+    # Lookup Tables
     _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False) # Used in Linking Fact to Concept
     _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False)
     
     
-     # TODO
-     # networks: List[Network] = field(init=False, default_factory=list, repr=False)
-     
     def __post_init__(self):
         
         self._primary_facts: Dict[str, Fact] = {}  # canonical_key -> primary fact
@@ -392,60 +389,66 @@ class process_report:
         self.populate_company_nodes() # Also creates Abstract Nodes in Neo4j
         self.populate_report_nodes()  # Then handle report-specific nodes
 
-
         self._validate_and_link_networks()
-
-        self.link_fact_footnotes()      # Add this line to process footnotes
-
+        # self.link_fact_footnotes()      
 
 
     def _validate_and_link_networks(self) -> None:
         """Validate facts and create relationships for all networks"""
         print("\nStarting network validation and linking...")
         
-        # First validate all facts in networks
         for network in self.networks:
             network.report = self
             network.taxonomy = self.taxonomy
 
-            print(f"\nProcessing network: {network.name}")
-            print(f"IsPresentation: {network.isPresentation}")
-            print(f"IsCalculation: {network.isCalculation}")
+            # print(f"IsPresentation: {network.isPresentation}, IsCalculation: {network.isCalculation}, Network: {network.name}")
             
+            # Always validate presentation first if available
             if network.isPresentation and hasattr(network, 'presentation'):
-                # Validate presentation facts
                 validated_facts = network.validate_facts(network_type='presentation')
                 network.presentation.validated_facts = validated_facts
                 network.presentation.fact_lookup = defaultdict(list)
                 for fact in validated_facts:
                     network.presentation.fact_lookup[fact.concept.u_id].append(fact)
                     
-            elif network.isCalculation and hasattr(network, 'calculation'):
-                # Only validate calculation if no presentation facts exist
-                has_presentation = (
-                    hasattr(network, 'presentation') and 
-                    network.presentation is not None and 
-                    hasattr(network.presentation, 'validated_facts') and 
-                    network.presentation.validated_facts
-                )
-                if not has_presentation:
-                    validated_facts = network.validate_facts(network_type='calculation')
-
-                    network.calculation.validated_facts = validated_facts
-                    network.calculation.fact_lookup = defaultdict(list)
-                    for fact in validated_facts:
-                        network.calculation.fact_lookup[fact.concept.u_id].append(fact)
-
-                    print(f"DEBUG - Calculation facts11: {len(validated_facts)}")
-                    print(f"DEBUG - Calculation facts12: {network.calculation.fact_lookup}")
+            # Only validate calculation if it exists and no presentation facts
+            elif (network.isCalculation and 
+                hasattr(network, 'calculation') and 
+                not (hasattr(network, 'presentation') and 
+                    getattr(network.presentation, 'fact_lookup', None))):
+                
+                validated_facts = network.validate_facts(network_type='calculation')
+                network.calculation.validated_facts = validated_facts
+                network.calculation.fact_lookup = defaultdict(list)
+                for fact in validated_facts:
+                    network.calculation.fact_lookup[fact.concept.u_id].append(fact)
         
         # Create relationships
-        self.link_validated_facts()
+        self.link_presentation_facts()
         self.link_calculation_facts()
 
+    def get_network_fact_lookup(self, network) -> Optional[Dict[str, List[Fact]]]:
+        
+        # """Get fact lookup for a network, preferring presentation over calculation"""
+        if (hasattr(network, 'presentation') and 
+            getattr(network.presentation, 'fact_lookup', None)):
+            return network.presentation.fact_lookup
+        
+        if (hasattr(network, 'calculation') and 
+            getattr(network.calculation, 'fact_lookup', None)):
+            return network.calculation.fact_lookup
+        
+        # Fallback: Create lookup from all facts
+        # fact_lookup = defaultdict(list)
+        # for fact in self.facts:
+        #     fact_lookup[fact.concept.u_id].append(fact)
+        # return fact_lookup if fact_lookup else None
+
+        return None
 
 
-    def link_validated_facts(self) -> None:
+
+    def link_presentation_facts(self) -> None:
         """Create presentation relationships using stored validated facts"""
         print("\nCreating presentation relationships...")
         relationships = []
@@ -455,13 +458,11 @@ class process_report:
             if not network.isPresentation:
                 continue
                 
-            print(f"\nProcessing presentation network: {network.name}")
             if not hasattr(network, 'presentation') or not hasattr(network.presentation, 'fact_lookup'):
                 print(f"Warning: Missing presentation or fact_lookup for network {network.name}")
                 continue
                 
             fact_lookup = network.presentation.fact_lookup
-            print(f"Facts in lookup: {sum(len(facts) for facts in fact_lookup.values())}")
             abstract_lookup = {abstract.u_id: abstract for abstract in self.pure_abstracts}
             
             for node in network.presentation.nodes.values():
@@ -521,37 +522,25 @@ class process_report:
         print(f"Total relationships created: {len(relationships)}")
         for rel_type, count in debug_counts.items():
             print(f"{rel_type}: {count}")
-                
+
+
 
 
     def link_calculation_facts(self) -> None:
-        """Create calculation relationships using validated facts"""
-        print("\nStarting calculation relationship creation...")
+        """Creates calculation relationships in Neo4j.
+        Facts are grouped by context (period, entity, dimensions) and unit
+        as per XBRL 2.1 and Dimensions 1.0 specifications.
+        """
+        
         relationships = []
         context_lookup = {ctx.context_id: ctx for ctx in self.contexts}
         debug_counts = defaultdict(int)
         
         for network in self.networks:
-            if not network.isCalculation:
-                continue
+            if not network.isCalculation: continue
                 
-            print(f"\nProcessing calculation network: {network.name}")
-            
-            # First try to get facts from presentation network
-            fact_lookup = None
-            if (hasattr(network, 'presentation') and 
-                hasattr(network.presentation, 'fact_lookup') and 
-                network.presentation.fact_lookup):  # Check for non-empty fact_lookup
-                print("Using presentation facts for calculation relationships")
-                fact_lookup = network.presentation.fact_lookup
-                debug_counts['using_presentation_facts'] += 1
-            elif (hasattr(network, 'calculation') and 
-                hasattr(network.calculation, 'fact_lookup') and 
-                network.calculation.fact_lookup):  # Check for non-empty fact_lookup
-                print("Falling back to calculation facts")
-                fact_lookup = network.calculation.fact_lookup
-                debug_counts['using_calculation_facts'] += 1
-            
+            # Get validated facts from presentation network if available
+            fact_lookup = self.get_network_fact_lookup(network)
             if not fact_lookup:
                 print(f"No valid fact lookup available for network: {network.name}")
                 debug_counts['missing_fact_lookup'] += 1
@@ -562,18 +551,13 @@ class process_report:
                 print(f"No calculation relationships in network: {network.name}")
                 debug_counts['no_calc_relationships'] += 1
                 continue
-                
-            fact_count = sum(len(facts) for facts in fact_lookup.values())
-            print(f"Facts in lookup: {fact_count}")
-            debug_counts['total_facts'] += fact_count
             
-            # Create calculation relationships
+            # Group facts by context and unit
             for rel in calc_rel_set.modelRelationships:
                 try:
                     parent_id = f"{rel.fromModelObject.qname.namespaceURI}:{rel.fromModelObject.qname}"
                     child_id = f"{rel.toModelObject.qname.namespaceURI}:{rel.toModelObject.qname}"
                 except AttributeError:
-                    print(f"Invalid relationship in network: {network.name}")
                     debug_counts['invalid_relationships'] += 1
                     continue
                 
@@ -581,36 +565,47 @@ class process_report:
                 child_facts = fact_lookup.get(child_id, [])
                 
                 if not parent_facts or not child_facts:
-                    print(f"Missing facts for relationship: {parent_id} -> {child_id}")
                     debug_counts['missing_facts'] += 1
                     continue
                 
-                for parent_fact in parent_facts:
-                    if parent_fact.value is None:
+                # Group parent facts by context and unit
+                parent_groups = defaultdict(list)
+                for p_fact in parent_facts:
+                    if p_fact.value is None: 
                         debug_counts['null_parent_values'] += 1
                         continue
                         
-                    parent_context = context_lookup.get(parent_fact.context_id)
-                    if not parent_context:
+                    p_context = context_lookup.get(p_fact.context_id)
+                    if not p_context:
                         debug_counts['missing_parent_context'] += 1
                         continue
-                        
-                    for child_fact in child_facts:
-                        if child_fact.value is None:
-                            debug_counts['null_child_values'] += 1
-                            continue
+                    
+                    # Context inherently includes period, entity, and dimensions
+                    group_key = (p_context.context_id, p_fact.unit)
+                    parent_groups[group_key].append(p_fact)
+                
+                # Match child facts to parent groups
+                for group_key, group_parents in parent_groups.items():
+                    context_id, unit = group_key
+                    parent_context = context_lookup[context_id]
+                    
+                    matching_children = [
+                        c_fact for c_fact in child_facts
+                        if (c_fact.value is not None and
+                            c_fact.unit == unit and
+                            context_lookup.get(c_fact.context_id) and
+                            context_lookup[c_fact.context_id].context_id == context_id 
                             
-                        child_context = context_lookup.get(child_fact.context_id)
-                        if not child_context:
-                            debug_counts['missing_child_context'] += 1
-                            continue
-                        
-                        # Match contexts using same rules as validation
-                        period_match = parent_context.period_u_id == child_context.period_u_id
-                        cik_match = parent_context.cik == child_context.cik
-                        unit_match = parent_fact.unit == child_fact.unit
-                        
-                        if period_match and cik_match and unit_match:
+                            # Not useful
+                            # or any(c_fact.concept.qname == rel.toModelObject.qname 
+                            #     for rel in calc_rel_set.fromModelObject(group_parents[0].concept))
+
+                        ) 
+                    ]
+                    
+                    # Create relationships for matching facts
+                    for parent_fact in group_parents:
+                        for child_fact in matching_children:
                             relationships.append((
                                 parent_fact,
                                 child_fact,
@@ -618,6 +613,7 @@ class process_report:
                                 {
                                     'network_uri': network.network_uri,
                                     'network_name': network.name,
+                                    'context_id': context_id,  # Add context ID for traceability
                                     'weight': rel.weight,
                                     'order': rel.order,
                                     'company_cik': self.entity.cik,
@@ -625,7 +621,8 @@ class process_report:
                                 }
                             ))
                             debug_counts['relationships_created'] += 1
-        
+
+
         # Print debug summary
         print("\nCalculation Relationship Summary:")
         print(f"Total relationships created: {len(relationships)}")
@@ -633,88 +630,342 @@ class process_report:
             print(f"{count_type}: {count}")
         
         if relationships:
-            print("Validating calculations...")
-            self.validate_calculation(relationships, context_lookup)
-            print("Creating relationships in Neo4j...")
-            self.neo4j.merge_relationships(relationships)
+            print("Checking calculation steps...")
+            # Get valid relationships from check_calculation_steps
+            valid_relationships = []
+            self.check_calculation_steps(relationships, context_lookup, valid_relationships) 
 
-    def validate_calculation(self, relationships, context_lookup) -> None:
+            if valid_relationships:  # Only create valid relationships
+                # print("Creating relationships in Neo4j...")
+                self.neo4j.merge_relationships(valid_relationships)
+
+                # print("\nValidating Neo4j calculations...")
+                self.neo4j.validate_neo4j_calculations()
+
+
+    def check_calculation_steps(self, relationships, context_lookup, valid_relationships=None) -> None:
+        """Validates summation consistency of pre-grouped calculation relationships.
+        Processes relationships the same way as Neo4j storage to ensure exact matching."""
+        
+        print("\nStarting calculation validation...")
+        debug_counts = defaultdict(int)
+        
+        relationships = process_fact_relationships(relationships)
+        matches = 0
+        non_matches = 0
+        
+        # Group by network just for organized output
         network_groups = defaultdict(list)
         for rel in relationships:
             network_uri = rel[3]['network_uri']
             network_groups[network_uri].append(rel)
-        
-        matches = 0
-        non_matches = 0
+            debug_counts['total_relationships'] += 1
         
         for network_uri, network_rels in network_groups.items():
-            print(f"\nNetwork: {network_rels[0][3]['network_name']}")
+            # print(f"\nNetwork: {network_rels[0][3]['network_name']}")
+            debug_counts['networks_processed'] += 1
             
-            parent_groups = defaultdict(list)
+            # Group by parent fact for summation checking
+            parent_groups = {} 
             for parent_fact, child_fact, _, attrs in network_rels:
-                parent_context = context_lookup.get(parent_fact.context_id)
-                if not parent_context: continue
-                
-                group_key = (parent_fact, parent_context.period_u_id, parent_context.cik, parent_fact.unit)
-                parent_groups[group_key].append((child_fact, attrs['weight']))
+                if parent_fact not in parent_groups:
+                    parent_groups[parent_fact] = {}
+                    debug_counts['unique_parents'] += 1
+
+                # Deduplicate using same keys as Neo4j MERGE
+                child_key = (
+                    child_fact.id,
+                    attrs['network_uri'].split('/')[-1],
+                    attrs.get('company_cik')
+                )
+                parent_groups[parent_fact][child_key] = (child_fact, attrs['weight'])
+                debug_counts['child_facts_processed'] += 1
             
-            for (parent_fact, period_id, cik, unit), children in parent_groups.items():
-                print(f"\nCalculation Group:")
-                print(f"net: {network_rels[0][3]['network_name']}")
-                print(f"Parent: {parent_fact.concept.qname} ({parent_fact.concept.balance}) = {parent_fact.value}")
+            # Check summations for each parent
+            for parent_fact, unique_children in parent_groups.items():
+                parent_context = context_lookup.get(parent_fact.context_id)
+                debug_counts['calculations_checked'] += 1
                 
-                # Deduplicate children based on core attributes
-                unique_children = {}
-                for child_fact, weight in children:
-                    child_context = context_lookup.get(child_fact.context_id)
-                    if not child_context: continue
-                    
-                    key = (
-                        child_fact.concept.qname,          # concept
-                        child_fact.value,                  # value
-                        child_context.period_u_id,         # period
-                        child_context.cik,                 # entity
-                        child_fact.unit                    # unit
-                    )
-                    unique_children[key] = (child_fact, weight)
-                
+                # Calculate total sum
                 total_sum = 0
-                print("\nChildren:")
-                for (_, _, _, _, _), (child_fact, weight) in unique_children.items():
-                    if child_fact.value is None: continue
+                for child_fact, weight in unique_children.values():
                     weighted_value = float(child_fact.value) * weight
                     total_sum += weighted_value
-                    if child_fact.concept.balance == 'credit':
-                        print(f"Credit: {child_fact.concept.qname} = {child_fact.value} × {weight} = {weighted_value}")
-                    else:
-                        print(f"Debit: {child_fact.concept.qname} = {child_fact.value} × {weight} = {weighted_value}")
+                    debug_counts['children_processed'] += 1
                 
-                print(f"\nTotal Sum: {total_sum}")
-                
+                # Validate summation
                 parent_value = float(parent_fact.value)
-                is_match = abs(parent_value - total_sum) < 0.01
+                percent_diff = abs(parent_value - total_sum) if parent_value == 0 else abs(parent_value - total_sum) / abs(parent_value)
+                is_match = percent_diff < 0.01
                 
-                if is_match:
-                    matches += 1
+                matches += 1 if is_match else 0
+                non_matches += 1 if not is_match else 0
+                debug_counts['matches'] = matches
+                debug_counts['non_matches'] = non_matches
+                
+                # Handle valid/invalid cases
+                if is_match and valid_relationships is not None:
+                    valid_relationships.extend([rel for rel in network_rels if rel[0] == parent_fact])
                 else:
-                    non_matches += 1
+                    # Print details for invalid summations
+                    print(f"\nInvalid Calculation Group:")
+                    print(f"net: {network_rels[0][3]['network_name']}, {network_rels[0][3]['network_uri']}")
+                    print(f"Parent: {parent_fact.concept.qname} ({parent_fact.concept.balance}) = {parent_fact.value}, "
+                        f"{parent_context.period_u_id}, "
+                        f"{parent_context.cik}, "
+                        f"{parent_fact.unit.id.split('/')[-1]}, "
+                        f"{parent_fact.context_id}")
                     
-                print(f"\nCalculated Value: {total_sum}")
-                print(f"Parent Value: {parent_value}")
-                print(f"Match: {'Yes' if is_match else 'No'}")
-                print("="*80)
+                    print("\nChildren:")
+                    for child_fact, weight in unique_children.values():
+                        weighted_value = float(child_fact.value) * weight
+                        balance_type = "Credit" if child_fact.concept.balance == 'credit' else "Debit"
+                        child_context = context_lookup.get(child_fact.context_id)
+                        
+                        print(f"{balance_type}: {child_fact.concept.qname} = {child_fact.value} × {weight} = {weighted_value}, "
+                            f"{child_context.period_u_id}, "
+                            f"{child_context.cik}, "
+                            f"{child_fact.unit.id.split('/')[-1]}, "
+                            f"{child_fact.context_id}")
+                        
+                        if hasattr(child_context, 'dimensions'):
+                            print(f"    Dimensions: {child_context.dimensions}")
+                    
+                    print(f"\nTotal Sum: {total_sum}")
+                    print(f"Calculated Value: {total_sum}")
+                    print(f"Parent Value: {parent_value}")
+                    print(f"Match: No")
+                    print("="*80)
+        
+        # Print summaries
+        print("\nCalculation Validation Summary:")
+        for count_type, count in debug_counts.items():
+            print(f"{count_type}: {count}")
         
         print(f"\nSummary:")
         print(f"Total Matches: {matches}")
         print(f"Total Non-Matches: {non_matches}")
-        if matches+non_matches > 0:
+        if matches + non_matches > 0:
             print(f"Match Rate: {matches/(matches+non_matches)*100:.1f}%")
 
 
+    # def link_calculation_facts(self) -> None:
+    #     """Creates calculation relationships in Neo4j.
+    #     Facts are grouped by context (period, entity, dimensions) and unit
+    #     as per XBRL 2.1 and Dimensions 1.0 specifications.
+    #     """
+        
+    #     print("\nStarting calculation relationship creation...")
+    #     relationships = []
+    #     context_lookup = {ctx.context_id: ctx for ctx in self.contexts}
+    #     debug_counts = defaultdict(int)
+        
+    #     for network in self.networks:
+    #         if not network.isCalculation: continue
+                
+    #         # Get validated facts from presentation network if available
+    #         fact_lookup = self.get_network_fact_lookup(network)
+    #         if not fact_lookup:
+    #             print(f"No valid fact lookup available for network: {network.name}")
+    #             debug_counts['missing_fact_lookup'] += 1
+    #             continue
+                
+    #         calc_rel_set = network.model_xbrl.relationshipSet(XbrlConst.summationItem, network.network_uri)
+    #         if not calc_rel_set:
+    #             print(f"No calculation relationships in network: {network.name}")
+    #             debug_counts['no_calc_relationships'] += 1
+    #             continue
+            
+    #         # Group facts by context and unit
+    #         for rel in calc_rel_set.modelRelationships:
+    #             try:
+    #                 parent_id = f"{rel.fromModelObject.qname.namespaceURI}:{rel.fromModelObject.qname}"
+    #                 child_id = f"{rel.toModelObject.qname.namespaceURI}:{rel.toModelObject.qname}"
+    #             except AttributeError:
+    #                 debug_counts['invalid_relationships'] += 1
+    #                 continue
+                
+    #             parent_facts = fact_lookup.get(parent_id, [])
+    #             child_facts = fact_lookup.get(child_id, [])
+                
+    #             if not parent_facts or not child_facts:
+    #                 debug_counts['missing_facts'] += 1
+    #                 continue
+                
+    #             # Group parent facts by context and unit
+    #             parent_groups = defaultdict(list)
+    #             for p_fact in parent_facts:
+    #                 if p_fact.value is None: 
+    #                     debug_counts['null_parent_values'] += 1
+    #                     continue
+                        
+    #                 p_context = context_lookup.get(p_fact.context_id)
+    #                 if not p_context:
+    #                     debug_counts['missing_parent_context'] += 1
+    #                     continue
+                    
+    #                 # Context inherently includes period, entity, and dimensions
+    #                 group_key = (p_context.context_id, p_fact.unit)
+    #                 parent_groups[group_key].append(p_fact)
+                
+    #             # Match child facts to parent groups
+    #             for group_key, group_parents in parent_groups.items():
+    #                 context_id, unit = group_key
+    #                 parent_context = context_lookup[context_id]
+                    
+    #                 matching_children = [
+    #                     c_fact for c_fact in child_facts
+    #                     if (c_fact.value is not None and
+    #                         c_fact.unit == unit and
+    #                         context_lookup.get(c_fact.context_id) and
+    #                         context_lookup[c_fact.context_id].context_id == context_id 
+                            
+    #                         # Not useful
+    #                         # or any(c_fact.concept.qname == rel.toModelObject.qname 
+    #                         #     for rel in calc_rel_set.fromModelObject(group_parents[0].concept))
+
+    #                     ) 
+    #                 ]
+                    
+    #                 # Create relationships for matching facts
+    #                 for parent_fact in group_parents:
+    #                     for child_fact in matching_children:
+    #                         relationships.append((
+    #                             parent_fact,
+    #                             child_fact,
+    #                             RelationType.CALCULATION_EDGE,
+    #                             {
+    #                                 'network_uri': network.network_uri,
+    #                                 'network_name': network.name,
+    #                                 'context_id': context_id,  # Add context ID for traceability
+    #                                 'weight': rel.weight,
+    #                                 'order': rel.order,
+    #                                 'company_cik': self.entity.cik,
+    #                                 'report_instance': self.report.instanceFile
+    #                             }
+    #                         ))
+    #                         debug_counts['relationships_created'] += 1
+
+    #     # Print debug summary
+    #     print("\nCalculation Relationship Summary:")
+    #     print(f"Total relationships created: {len(relationships)}")
+    #     for count_type, count in debug_counts.items():
+    #         print(f"{count_type}: {count}")
+        
+    #     if relationships:
+    #         print("Checking calculation steps...")
+    #         self.check_calculation_steps(relationships, context_lookup) 
+
+    #         print("Creating relationships in Neo4j...")
+    #         self.neo4j.merge_relationships(relationships)
+
+    #         print("\nValidating Neo4j calculations...")
+    #         self.neo4j.validate_neo4j_calculations()  
 
 
+    # # Old function to check summation validity and print debug info (now done in link_calculation_facts)
+    # def check_calculation_steps(self, relationships, context_lookup) -> None:
+    #     """Validates summation consistency of pre-grouped calculation relationships.
+    #     Processes relationships the same way as Neo4j storage to ensure exact matching."""
+        
+    #     # Pre-process relationships to match Neo4j storage
+    #     print("\nStarting calculation validation...")
+    #     debug_counts = defaultdict(int)  # Added from old version
+        
+    #     relationships = process_fact_relationships(relationships)
+        
+    #     matches = 0
+    #     non_matches = 0
+        
+    #     # Group by network just for organized output
+    #     network_groups = defaultdict(list)
+    #     for rel in relationships:
+    #         network_uri = rel[3]['network_uri']
+    #         network_groups[network_uri].append(rel)
+    #         debug_counts['total_relationships'] += 1  # Added from old version
+        
+    #     for network_uri, network_rels in network_groups.items():
+    #         print(f"\nNetwork: {network_rels[0][3]['network_name']}")
+    #         debug_counts['networks_processed'] += 1  # Added from old version
+            
+    #         # Group by parent fact for summation checking
+    #         parent_groups = {} 
+    #         for parent_fact, child_fact, _, attrs in network_rels:
+    #             if parent_fact not in parent_groups:
+    #                 parent_groups[parent_fact] = {}
+    #                 debug_counts['unique_parents'] += 1  # Added from old version
+
+    #             # Deduplicate using same keys as Neo4j MERGE
+    #             child_key = (
+    #                 child_fact.id,  # fact.id used in Neo4j MATCH
+    #                 attrs['network_uri'].split('/')[-1],  # network_id in MERGE
+    #                 attrs.get('company_cik')  # company_cik in MERGE
+    #             )
+    #             parent_groups[parent_fact][child_key] = (child_fact, attrs['weight'])
+    #             debug_counts['child_facts_processed'] += 1  # Added from old version
+            
+    #         # Check summations for each parent
+    #         for parent_fact, unique_children in parent_groups.items():
+    #             parent_context = context_lookup.get(parent_fact.context_id)
+    #             debug_counts['calculations_checked'] += 1  # Added from old version
+                
+    #             # Print parent info
+    #             print(f"\nCalculation Group:")
+    #             print(f"net: {network_rels[0][3]['network_name']}, {network_rels[0][3]['network_uri']}")
+    #             print(f"Parent: {parent_fact.concept.qname} ({parent_fact.concept.balance}) = {parent_fact.value}, "
+    #                 f"{parent_context.period_u_id}, "
+    #                 f"{parent_context.cik}, "
+    #                 f"{parent_fact.unit.id.split('/')[-1]}, "
+    #                 f"{parent_fact.context_id}")
+                
+    #             # Print children and calculate sum
+    #             total_sum = 0
+    #             print("\nChildren:")
+    #             for child_fact, weight in unique_children.values():
+    #                 weighted_value = float(child_fact.value) * weight
+    #                 total_sum += weighted_value
+    #                 balance_type = "Credit" if child_fact.concept.balance == 'credit' else "Debit"
+    #                 child_context = context_lookup.get(child_fact.context_id)
+    #                 debug_counts['children_processed'] += 1  # Added from old version
+                    
+    #                 print(f"{balance_type}: {child_fact.concept.qname} = {child_fact.value} × {weight} = {weighted_value}, "
+    #                     f"{child_context.period_u_id}, "
+    #                     f"{child_context.cik}, "
+    #                     f"{child_fact.unit.id.split('/')[-1]}, "
+    #                     f"{child_fact.context_id}")
+                    
+    #                 if hasattr(child_context, 'dimensions'):
+    #                     print(f"    Dimensions: {child_context.dimensions}")
+                
+    #             # Check if summation is valid
+    #             print(f"\nTotal Sum: {total_sum}")
+    #             parent_value = float(parent_fact.value)
+    #             percent_diff = abs(parent_value - total_sum) if parent_value == 0 else abs(parent_value - total_sum) / abs(parent_value)
+    #             is_match = percent_diff < 0.01
+                
+    #             matches += 1 if is_match else 0
+    #             non_matches += 1 if not is_match else 0
+    #             debug_counts['matches'] = matches  # Added from old version
+    #             debug_counts['non_matches'] = non_matches  # Added from old version
+                
+    #             print(f"Calculated Value: {total_sum}")
+    #             print(f"Parent Value: {parent_value}")
+    #             print(f"Match: {'Yes' if is_match else 'No'}")
+    #             print("="*80)
+        
+    #     # Print debug summary from old version
+    #     print("\nCalculation Validation Summary:")
+    #     for count_type, count in debug_counts.items():
+    #         print(f"{count_type}: {count}")
+        
+    #     print(f"\nSummary:")
+    #     print(f"Total Matches: {matches}")
+    #     print(f"Total Non-Matches: {non_matches}")
+    #     if matches + non_matches > 0:
+    #         print(f"Match Rate: {matches/(matches+non_matches)*100:.1f}%")
 
 
+        
 
 
     def initialize_date_nodes(self, start_dt: str):
@@ -1342,23 +1593,14 @@ class process_report:
         for network in self.networks:
             # Create Presentation Class
             if network.isPresentation:
-                network.presentation = Presentation(
-                    network_uri=network.network_uri,
-                    model_xbrl=self.model_xbrl,
-                    process_report=self  # Pass report reference to access/create concepts and abstracts
-                )
+                # Pass report reference to access/create concepts and abstracts
+                network.presentation = Presentation(network_uri=network.network_uri, model_xbrl=self.model_xbrl, process_report=self)
+
 
             # Create Calculation Class
             if network.isCalculation:
-                print(f"\nInitializing Calculation network: {network.name}")  # Debug
-                network.calculation = Calculation(
-                    network_uri=network.network_uri,
-                    name=network.name,
-                    model_xbrl=self.model_xbrl,
-                    process_report=self
-                )
-                print(f"Calculation instance created: {network.calculation is not None}")  # Debug
-
+                network.calculation = Calculation( network_uri=network.network_uri, 
+                                                  name=network.name, model_xbrl=self.model_xbrl, process_report=self)
                             
         # 3. Adding hypercubes after networks are complete which in turn builds dimensions
         for network in self.networks:
@@ -2095,13 +2337,12 @@ class Network(ValidationMixin):
         return 'Other'
     
 
-
 @dataclass
 class CalculationNode:
     concept_id: str
     weight: float
     order: float
-    level: int  # Add this field
+    level: int
     concept: Optional[Concept] = None
     children: List[str] = field(default_factory=list)
     
@@ -2117,248 +2358,186 @@ class Calculation:
     
     nodes: Dict[str, CalculationNode] = field(init=False, default_factory=dict)
     validated_facts: List[Fact] = field(init=False, default_factory=list)
-    fact_lookup: Dict[str, List[Fact]] = field(init=False, default_factory=lambda: defaultdict(list))
+    fact_lookup: Dict[str, List[Fact]] = field(init=False, 
+                                              default_factory=lambda: defaultdict(list))
     
     def __post_init__(self) -> None:
-        """Initialize calculation hierarchy"""
         try:
             self._build_hierarchy()
         except Exception as e:
             raise ValueError(f"Failed to build calculation hierarchy: {e}")
-    
-    # parent_id -> [(child_id, weight, order)]
 
     def _build_hierarchy(self) -> None:
-        """Build calculation hierarchy"""
         rel_set = self.model_xbrl.relationshipSet(XbrlConst.summationItem, self.network_uri)
         if not rel_set:
             return
                 
-        # First pass: Create nodes and track parent-child relationships
         parent_child_map: Dict[str, List[tuple[str, float, float]]] = {}
-        
-        print(f"DEBUG - Number of relationships: {len(rel_set.modelRelationships)}")
         
         for rel in rel_set.modelRelationships:
             try:
                 parent_id = f"{rel.fromModelObject.qname.namespaceURI}:{rel.fromModelObject.qname}"
                 child_id = f"{rel.toModelObject.qname.namespaceURI}:{rel.toModelObject.qname}"
-                
-                print(f"DEBUG - Processing relationship: {parent_id} -> {child_id}")
-                
-                # Track parent-child relationship with weight and order
+                # parent_child_map[parent_id].append((child_id, rel.weight, rel.order or 1.0))
                 if parent_id not in parent_child_map:
                     parent_child_map[parent_id] = []
                 parent_child_map[parent_id].append((child_id, rel.weight, rel.order or 1.0))
-                
+
+
             except AttributeError as e:
                 print(f"DEBUG - Error processing relationship: {e}")
-                continue
         
-        print(f"DEBUG - Parent-child map: {parent_child_map}")
-        
-        # Second pass: Build nodes with correct levels
         self._build_nodes(parent_child_map)
-    
 
     def _build_nodes(self, parent_child_map: Dict[str, List[tuple[str, float, float]]]) -> None:
-        """Build nodes with correct levels and children"""
-        print(f"DEBUG - Starting _build_nodes with parent_child_map: {parent_child_map}")  # See what we're starting with
         
         def build_node(concept_id: str, level: int) -> None:
             if concept_id not in self.nodes:
-                children = parent_child_map.get(concept_id, [])
-                children.sort(key=lambda x: x[2])  # Sort by order
-                
-                # Get concept instance from report
-                concept_instance = self.get_concept(concept_id)
-                
-                # Create node with concept instance
+                children = sorted(parent_child_map.get(concept_id, []), key=lambda x: x[2])
                 self.nodes[concept_id] = CalculationNode(
                     concept_id=concept_id,
-                    weight=1.0,  # Parent nodes have weight 1
+                    weight=1.0,
                     order=1.0,
                     level=level,
                     children=[child_id for child_id, _, _ in children],
-                    concept=concept_instance
+                    concept=self.get_concept(concept_id)
                 )
                 
-                # Process children
                 for child_id, weight, order in children:
                     build_node(child_id, level + 1)
                     child_node = self.nodes[child_id]
                     child_node.weight = weight
                     child_node.order = order
         
-        # Find and process root nodes
-        all_parents = set(parent_child_map.keys())
-        all_children = {child for children in parent_child_map.values() 
-                    for child, _, _ in children}
-        root_ids = all_parents - all_children
+        root_ids = (set(parent_child_map.keys()) - 
+                   {child for children in parent_child_map.values() 
+                    for child, _, _ in children})
         
         for i, root_id in enumerate(sorted(root_ids), 1):
             build_node(root_id, 1)
             self.nodes[root_id].order = i
 
-        print(f"DEBUG - Calculation _build_nodes final nodes: {self.nodes}")    
 
     def get_concept(self, concept_id: str) -> Optional[Concept]:
-        """Get concept instance for a node"""
         return self.process_report._concept_lookup.get(concept_id)
     
     def get_node(self, concept_id: str) -> Optional[CalculationNode]:
-        """Get calculation node by concept_id"""
         return self.nodes.get(concept_id)
     
     def get_children(self, node: CalculationNode) -> List[CalculationNode]:
-        """Get child nodes for a given node"""
         return [self.nodes[child_id] for child_id in node.children]
     
     @property
     def roots(self) -> Set[CalculationNode]:
-        """Get root nodes (parents that are not children of any other concept)"""
         all_parents = {concept_id for concept_id, node in self.nodes.items() 
                       if node.children}
         all_children = {child_id for node in self.nodes.values() 
                        for child_id in node.children}
-        root_ids = all_parents - all_children
-        return {self.nodes[concept_id] for concept_id in root_ids}
-
+        return {self.nodes[concept_id] for concept_id in all_parents - all_children}
 
 @dataclass
 class PresentationNode:
-    """
-    Node in the presentation hierarchy.
-    Stores structural information without duplicating concept data.
-    """
     concept_id: str
     order: float
     level: int
-    children: List[str] = field(default_factory=list)  # List of child concept_ids
-    concept: Optional[Union[Concept, AbstractConcept]] = None  # Actual Concept Instance (Concept or AbstractConcept)
+    children: List[str] = field(default_factory=list)
+    concept: Optional[Union[Concept, AbstractConcept]] = None
     
     def __hash__(self) -> int:
         return hash(self.concept_id)
 
 @dataclass
 class Presentation:
-    """
-    Manages presentation relationships between concepts using a flat dictionary structure.
-    Links to existing Concept/AbstractConcept instances in Report.
-    """
     network_uri: str
     model_xbrl: ModelXbrl
     process_report: process_report
     
     nodes: Dict[str, PresentationNode] = field(init=False, default_factory=dict)
     validated_facts: List[Fact] = field(init=False, default_factory=list)
-    fact_lookup: Dict[str, List[Fact]] = field(init=False, default_factory=lambda: defaultdict(list))
-    
+    fact_lookup: Dict[str, List[Fact]] = field(init=False, 
+                                              default_factory=lambda: defaultdict(list))
     
     def __post_init__(self) -> None:
-        """Initialize presentation hierarchy"""
         try:
             self._build_hierarchy()
         except Exception as e:
             raise ValueError(f"Failed to build presentation hierarchy: {e}")
     
     def _build_hierarchy(self) -> None:
-        """Build presentation hierarchy and create abstract concepts as needed"""
         rel_set = self.model_xbrl.relationshipSet(XbrlConst.parentChild, self.network_uri)
         if not rel_set:
             return
             
-        # First pass: Create nodes and track parent-child relationships
-        parent_child_map: Dict[str, List[tuple[str, float]]] = {}  # parent_id -> [(child_id, order)]
+        parent_child_map: Dict[str, List[tuple[str, float]]] = {}
         
         for rel in rel_set.modelRelationships:
             parent_id = f"{rel.fromModelObject.qname.namespaceURI}:{rel.fromModelObject.qname}"
             child_id = f"{rel.toModelObject.qname.namespaceURI}:{rel.toModelObject.qname}"
             
-            # Handle abstract concepts
             for model_obj in (rel.fromModelObject, rel.toModelObject):
                 if model_obj.isAbstract:
                     self._build_abstracts(model_obj)
             
-            # Track parent-child relationship with order
+
             if parent_id not in parent_child_map:
                 parent_child_map[parent_id] = []
             parent_child_map[parent_id].append((child_id, rel.order or 0))
         
-        # Second pass: Build nodes with correct levels
         self._build_nodes(parent_child_map)
-    
 
     def _build_abstracts(self, model_concept: ModelConcept) -> None:
-        """Create AbstractConcept if not already exists"""
         concept_id = f"{model_concept.qname.namespaceURI}:{model_concept.qname}"
-
+        
         if (concept_id not in self.process_report._concept_lookup and 
             concept_id not in self.process_report._abstract_lookup):
             try:
                 abstract = AbstractConcept(model_concept)
                 self.process_report.abstracts.append(abstract)
-                self.process_report._abstract_lookup[abstract.id] = abstract  # Using .id property
+                self.process_report._abstract_lookup[abstract.id] = abstract
             except Exception as e:
                 raise ValueError(f"Failed to create AbstractConcept {concept_id}: {e}")
-        
+    
     def _build_nodes(self, parent_child_map: Dict[str, List[tuple[str, float]]]) -> None:
-        """Build nodes with correct levels and children"""
         def build_node(concept_id: str, level: int) -> None:
             if concept_id not in self.nodes:
-                children = parent_child_map.get(concept_id, [])
-                children.sort(key=lambda x: x[1])
-                
-                # Get concept instance from report
-                concept_instance = self.get_concept(concept_id)
-                
-                # Create node with concept instance
+                children = sorted(parent_child_map.get(concept_id, []), key=lambda x: x[1])
                 self.nodes[concept_id] = PresentationNode(
                     concept_id=concept_id,
                     order=1,
                     level=level,
                     children=[child_id for child_id, _ in children],
-                    concept=concept_instance  # Add concept instance
+                    concept=self.get_concept(concept_id)
                 )
                 
-                # Process children
                 for child_id, order in children:
                     build_node(child_id, level + 1)
                     self.nodes[child_id].order = order
         
-        # Find and process root nodes
-        all_parents = set(parent_child_map.keys())
-        all_children = {child for children in parent_child_map.values() 
-                    for child, _ in children}
-        root_ids = all_parents - all_children
+        root_ids = (set(parent_child_map.keys()) - 
+                   {child for children in parent_child_map.values() 
+                    for child, _ in children})
         
         for i, root_id in enumerate(sorted(root_ids), 1):
             build_node(root_id, 1)
             self.nodes[root_id].order = i
 
-
-    def get_node(self, concept_id: str) -> Optional[PresentationNode]:
-        """Get presentation node by concept_id"""
-        return self.nodes.get(concept_id)
-    
     def get_concept(self, concept_id: str) -> Optional[Union[Concept, AbstractConcept]]:
-        """Get concept instance for a node using u_id"""
         return (self.process_report._concept_lookup.get(concept_id) or 
                 self.process_report._abstract_lookup.get(concept_id))
     
+    def get_node(self, concept_id: str) -> Optional[PresentationNode]:
+        return self.nodes.get(concept_id)
+    
     def get_children(self, node: PresentationNode) -> List[PresentationNode]:
-        """Get child nodes for a given node"""
         return [self.nodes[child_id] for child_id in node.children]
     
     @property
     def roots(self) -> Set[PresentationNode]:
-        """Get root nodes (parents that are not children of any other concept)"""
         all_parents = {concept_id for concept_id, node in self.nodes.items() 
                       if node.children}
         all_children = {child_id for node in self.nodes.values() 
                        for child_id in node.children}
-        root_ids = all_parents - all_children
-        return {self.nodes[concept_id] for concept_id in root_ids}
+        return {self.nodes[concept_id] for concept_id in all_parents - all_children}
 
 
 @dataclass
@@ -2990,7 +3169,7 @@ class ReportNode(Neo4jNode):
 @dataclass
 class Fact(Neo4jNode):
     model_fact: ModelFact
-    _report: 'process_report' = field(repr=False, default=None)  # Add this line
+    _report: 'process_report' = field(repr=False, default=None) 
     refers_to: Optional[Fact] = None  # 
 
     # Globally unique fact identifier
@@ -3101,22 +3280,6 @@ class Fact(Neo4jNode):
         self.period = '_'.join(period_parts)
 
 
-
-    # def _set_period(self) -> None:
-    #     """Set the period property based on context"""
-    #     context = self.model_fact.context
-    #     if context is None or len(context) == 0:
-    #         self.period = None
-    #         return
-            
-    #     if getattr(context, 'isInstantPeriod', False):
-    #         self.period = context.instantDatetime.strftime('%Y-%m-%d')
-    #     elif getattr(context, 'isStartEndPeriod', False):
-    #         self.period = f"{context.startDatetime.strftime('%Y-%m-%d')} to {context.endDatetime.strftime('%Y-%m-%d')}"
-    #     else:
-    #         self.period = "Forever"
-
-
 # According to the XBRL Dimensions 1.0 specification:
 # For Explicit Dimensions:
     # A dimension MUST have at least one domain
@@ -3163,27 +3326,6 @@ class Fact(Neo4jNode):
             except AttributeError as e:
                 print(f"Warning: Could not process dimension value for {dim_concept}: {e}")
 
-
-
-
-    # # To be Used when Linking to Dimension and Member Nodes
-    # def _set_dimensions(self) -> None:
-    #     """Set dimensions and members using same logic as original"""
-    #     if hasattr(self.model_fact.context, 'qnameDims') and self.model_fact.context.qnameDims:
-    #         for dim_qname, dim_value in self.model_fact.context.qnameDims.items():            
-                
-    #             #TODO: For now going ahead with qname as ID for both Dimension and Member
-    #             #  but change it to match unique identifier so we can map to exact node in neo4j,
-    #             #  just like we did with other nodes
-    #             self.dims_members.append((str(dim_qname), 
-    #                 str(dim_value.memberQname) if dim_value.isExplicit
-    #                 else dim_value.typedMember.stringValue if dim_value.isTyped
-    #                 else "Unknown"
-    #             ))
-
-    # def __repr__(self) -> str:
-    #     """Match ModelObject's repr format"""
-    #     return f"Fact[{self.concept}, {self.value}, context {self.context_id}]"
 
     # Neo4j Node Properties
     @property
@@ -3245,7 +3387,7 @@ class Neo4jManager:
             return True
         except Exception:
             return False
-    
+
     def __post_init__(self):
         try:
             self.driver = GraphDatabase.driver(self.uri, auth=(self.username, self.password))
@@ -3439,102 +3581,11 @@ class Neo4jManager:
             raise RuntimeError(f"Export to Neo4j failed: {e}")
 
 
-    def _process_fact_relationships(self, relationships: List[Tuple]) -> List[Tuple]:
-        """Pre-process relationships to handle fact duplicates"""
-        # Quick check if any facts involved
-        if not any(isinstance(source, Fact) or isinstance(target, Fact) 
-                for source, target, *_ in relationships):
-            return relationships
-            
-        processed = []
-        for rel in relationships:
-            source, target, rel_type, *props = rel
-
-            # Convert facts to primary versions
-            if isinstance(source, Fact):
-                source = source.primary_fact
-            if isinstance(target, Fact):
-                target = target.primary_fact
-            
-            # Skip self-referential relationships
-            if source.id == target.id: continue
-
-            processed.append((source, target, rel_type, *props))
-        
-        return processed
-
-
-
-    # def merge_relationships(self, relationships: List[Tuple]) -> None:
-    #     """Merge relationships into Neo4j database.
-        
-    #     Creates unique relationship types for fact-based relationships in different networks
-    #     to prevent overwriting of identical facts that appear in multiple networks.
-        
-    #     Args:
-    #         relationships: List of tuples containing (source, target, rel_type, properties)
-    #     """
-    #     counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
-        
-    #     relationships = self._process_fact_relationships(relationships)
-
-    #     with self.driver.session() as session:
-    #         for rel in relationships:
-    #             source, target, rel_type, *props = rel
-    #             properties = props[0] if props else {}
-                
-    #             # Determine if this is a network-specific relationship
-    #             is_network_relationship = (
-    #                 ('network_name' in properties or 'network_uri' in properties) and 
-    #                 isinstance(target, Fact)
-    #             )
-                
-    #             if is_network_relationship:
-    #                 # For network-based fact relationships, create network-specific type
-    #                 # Use network_uri for unique identification, falling back to network_name if URI not available
-    #                 network_id = (properties.get('network_uri', '') or properties.get('network_name', '')).split('/')[-1]
-    #                 network_rel_type = f"{rel_type.value}_NET_{network_id}"
-                    
-    #                 # Debug logging for network relationships
-    #                 if target.qname == 'us-gaap:StockholdersEquity':
-    #                     print(f"\nCreating network-specific relationship:")
-    #                     print(f"Network: {properties.get('network_name', 'Unknown')}")
-    #                     print(f"Relationship type: {network_rel_type}")
-    #                     print(f"Fact value: {target.value}")
-    #             else:
-    #                 # For non-network relationships (abstract-to-abstract or other types),
-    #                 # use the original relationship type
-    #                 network_rel_type = rel_type.value
-                
-    #             # Create or merge the relationship in Neo4j
-    #             session.run(f"""
-    #                 MATCH (s {{id: $source_id}})
-    #                 MATCH (t {{id: $target_id}})
-    #                 MERGE (s)-[r:{network_rel_type}]->(t)
-    #                 SET r += $properties
-    #             """, {
-    #                 "source_id": source.id,
-    #                 "target_id": target.id,
-    #                 "properties": properties
-    #             })
-                
-    #             # Update counts for logging
-    #             counts[network_rel_type].update({
-    #                 'count': counts[network_rel_type]['count'] + 1, 
-    #                 'source': source.__class__.__name__, 
-    #                 'target': target.__class__.__name__
-    #             })
-        
-    #     # Log relationship creation summary
-    #     print("\nRelationship Creation Summary:")
-    #     for rel_type, info in counts.items():
-    #         print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
-
 
 
     def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
         counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
-        relationships = self._process_fact_relationships(relationships)
+        relationships = process_fact_relationships(relationships)
 
         network_specific_relationships = {
             RelationType.PRESENTATION_EDGE,
@@ -3600,35 +3651,6 @@ class Neo4jManager:
             print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
 
 
-
-    # def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
-        
-    #     counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
-        
-    #     relationships = self._process_fact_relationships(relationships)
-
-
-    #     with self.driver.session() as session:
-    #         for rel in relationships:
-    #             source, target, rel_type, *props = rel
-    #             properties = props[0] if props else {}
-                
-    #             session.run(f"""
-    #                 MATCH (s {{id: $source_id}})
-    #                 MATCH (t {{id: $target_id}})
-    #                 MERGE (s)-[r:{rel_type.value}]->(t)
-    #                 SET r += $properties
-    #             """, {
-    #                 "source_id": source.id,
-    #                 "target_id": target.id,
-    #                 "properties": properties
-    #             })
-    #             counts[rel_type.value].update({'count': counts[rel_type.value]['count'] + 1, 
-    #                                         'source': source.__class__.__name__, 
-    #                                         'target': target.__class__.__name__})
-        
-    #     for rel_type, info in counts.items():
-    #         print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
 
     def get_neo4j_db_counts(self) -> Dict[str, Dict[str, int]]:
         """Get count of nodes and relationships by type."""
@@ -3696,6 +3718,110 @@ class Neo4jManager:
                 return instances
         except Exception as e:
             raise RuntimeError(f"Failed to load {node_type.value} nodes: {e}")
+
+
+
+
+    def validate_neo4j_calculations(self) -> None:
+        """Validates all calculation relationships stored in Neo4j by checking summations."""
+        
+        def clean_number(value: str) -> float:
+            """Convert string number with commas to float"""
+            if isinstance(value, (int, float)):
+                return float(value)
+            return float(value.replace(',', ''))
+        
+        query = """        
+        MATCH (parent:Fact)-[r:CALCULATION_EDGE]->(child:Fact) 
+        WITH 
+            parent,
+            r.network_uri as network_uri,
+            r.context_id as context_id,
+            r.network_name as network_name,
+            COLLECT({
+                child: child,
+                weight: r.weight,
+                order: r.order
+            }) as children
+        ORDER BY network_uri, context_id, parent.id
+        RETURN 
+            parent,
+            network_uri,
+            network_name,
+            context_id,
+            children
+        """
+        
+        matches = 0
+        non_matches = 0
+        network_stats = defaultdict(lambda: {'matches': 0, 'non_matches': 0})
+        
+        try:
+            with self.driver.session() as session:
+                results = session.run(query)
+                
+                for record in results:
+                    parent = record['parent']
+                    network_uri = record['network_uri']
+                    network_name = record['network_name']
+                    context_id = record['context_id']
+                    children = record['children']
+                    
+                    # print(f"\nCalculation Group:")
+                    # print(f"Network: {network_name}")
+                    # print(f"Network URI: {network_uri}")
+                    # print(f"Context ID: {context_id}")
+                    # print(f"Parent: {parent['qname']} = {parent['value']}")
+                    
+                    total_sum = 0
+                    # print("\nChildren:")
+                    for child in sorted(children, key=lambda x: float(x['order'] or 0)):
+                        child_fact = child['child']
+                        weight = float(child['weight'])
+                        value = clean_number(child_fact['value'])
+                        weighted_value = value * weight
+                        total_sum += weighted_value
+                        
+                        # print(f"{child_fact['qname']} = {child_fact['value']} × {weight} = {weighted_value:,.2f}")
+                    
+                    parent_value = clean_number(parent['value'])
+                    percent_diff = abs(parent_value - total_sum) if parent_value == 0 else abs(parent_value - total_sum) / abs(parent_value)
+                    is_match = percent_diff < 0.01  # 1% tolerance
+                    
+                    # print(f"\nTotal Sum: {total_sum:,.2f}")
+                    # print(f"Parent Value: {parent_value:,.2f}")
+                    # print(f"Difference: {abs(parent_value - total_sum):,.2f} ({percent_diff:.2%})")
+                    # print(f"Match: {'Yes' if is_match else 'No'}")
+                    # print("="*80)
+                    
+                    matches += 1 if is_match else 0
+                    non_matches += 1 if not is_match else 0
+                    network_stats[network_name]['matches'] += 1 if is_match else 0
+                    network_stats[network_name]['non_matches'] += 1 if not is_match else 0
+                
+                print(f"\nNeo4j Calculation Summary:")
+                print(f"Total Matches: {matches}")
+                print(f"Total Non-Matches: {non_matches}")
+                if matches + non_matches > 0:
+                    print(f"Overall Match Rate: {matches/(matches+non_matches)*100:.1f}%")
+                    
+                    # print("\nBreakdown by Network:")
+                    for network, stats in network_stats.items():
+                        total = stats['matches'] + stats['non_matches']
+                        if total > 0:
+                            match_rate = stats['matches']/total * 100
+                            # print(f"\n{network}:")
+                            # print(f"Matches: {stats['matches']}")
+                            # print(f"Non-Matches: {stats['non_matches']}")
+                            # print(f"Match Rate: {match_rate:.1f}%")
+                    
+        except Exception as e:
+            raise RuntimeError(f"Failed to validate calculations: {e}")
+
+
+
+
+
 
 
 
