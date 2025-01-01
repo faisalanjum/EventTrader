@@ -52,7 +52,7 @@
 ## 3. Instance/Report-Specific Nodes
 | Node Type  | Generic Format                                | Example                                                    |
 |------------|----------------------------------------------|-------------------------------------------------------------|
-| Report     | `cik_doctype_date`                           | `0000003545_10-K_2024-01-28`                                |
+| Report     | `cik_doctype_date`      (??InstanceFile??)   | `0000003545_10-K_2024-01-28`                                |
 | Fact       | `documenturi_conceptqname_contextID_unitID_factID` | `alco-20240930.htm_us-gaap:CommonStock_c-4_usd_f-90`  |
 
 ## Notes:
