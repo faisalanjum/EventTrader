@@ -145,7 +145,8 @@ class RelationType(Enum):
     HAS_DEFAULT = "HAS_DEFAULT"     # Dimension -> Default Member
     MEMBER_OF = "MEMBER_OF"         # Member to Parent Member
     IN_TAXONOMY = "IN_TAXONOMY"     # Dimension/Member to Taxonomy
-    REPORTS = "REPORTS"
+    CONTAINS = "CONTAINS"          # For Report->Fact relationships
+    REPORTS = "REPORTS"            # For Fact->Report relationships
     BELONGS_TO = "BELONGS_TO"
     IN_CONTEXT = "IN_CONTEXT"       # Fact to Context
     HAS_PERIOD = "HAS_PERIOD"       # Context to Period
@@ -161,7 +162,9 @@ class RelationType(Enum):
     REPORTED_ON = "REPORTED_ON"     # From DateNode to ReportNode
     PRESENTATION_EDGE = "PRESENTATION_EDGE" # From Fact to Fact
     CALCULATION_EDGE = "CALCULATION_EDGE" # From Fact to Fact
-
+    FILED_BY = "FILED_BY"           # From Report to Company
+    HAS_CATEGORY = "HAS_CATEGORY"   # Report -> AdminReport
+    FOR_COMPANY = "FOR_COMPANY"       # Context -> Company
     
 
 class ReportElementClassifier:
@@ -367,8 +370,8 @@ class ReportElementClassifier:
 @dataclass
 class process_report:
 
-    # Config 
-    instance_file: str
+    # Config - passed at init
+    instance_file: str 
     neo4j: Neo4jManager
     log_file: str = field(default='ErrorLog.txt', repr=False)
     testing: bool = field(default=True)  # Add testing flag as configurable (set to False in later calls for now)
@@ -419,7 +422,7 @@ class process_report:
         self.populate_report_nodes()  # Then handle report-specific nodes
 
         self._validate_and_link_networks()
-        # self.link_fact_footnotes()      
+        # self.link_fact_footnotes()   # Doesn't work properly yet    
 
 
     def _validate_and_link_networks(self) -> None:
@@ -867,9 +870,8 @@ class process_report:
         """Initialize report node and link to admin report and date"""
         doc_type, period_end_date, is_amendment = get_report_info(self.model_xbrl)
         
-        # Strip "/A" from doc_type if present
+        # Strip "/A" from doc_type if present - But then what about 10-Q/A?
         doc_type = doc_type.split('/')[0]  # Convert "10-Q/A" to "10-Q"
-
 
         print(f"Processing {doc_type} report for {period_end_date}")
         
@@ -901,14 +903,19 @@ class process_report:
         # Merge nodes and relationships
         self.neo4j._export_nodes([self.report])
         self.neo4j.merge_relationships([
-            (self.report, target, RelationType.BELONGS_TO),
+            (self.report, target, RelationType.HAS_CATEGORY),
             (date_node, self.report, RelationType.REPORTED_ON, {
                 'price': 100.0, # Place Holder Values - change later
                 'returns': 0.01,
                 'session': 'Close',
                 'time': '12:01:52'
-            }) ])
+            }),
 
+        ])
+
+        self.neo4j.merge_relationships([
+            (self.report, self.company, RelationType.FILED_BY),
+        ])
 
 
 
@@ -992,7 +999,7 @@ class process_report:
         self.units = self.neo4j.load_nodes_as_instances(NodeType.UNIT, Unit)
         
         print(f"Loaded common nodes from Neo4j: {len(self.concepts)} concepts, {len(self.periods)} periods, {len(self.units)} units")
-        self._concept_lookup = {node.id: node for node in self.concepts} 
+        self._concept_lookup = {concept.id: concept for concept in self.concepts} 
         
 
     def populate_company_nodes(self):
@@ -1016,8 +1023,8 @@ class process_report:
         # Export nodes to Neo4j
         self.neo4j._export_nodes([
             self.taxonomy.dimensions,  # Dimensions
-            all_domains,              # Domains
-            all_members               # Members
+            all_domains,               # Domains
+            all_members                # Members
         ], testing=False)
 
         # Export relationships
@@ -1054,21 +1061,27 @@ class process_report:
         # Define relationship types to export
         rel_types = [(Fact, Concept, RelationType.HAS_CONCEPT),
                      (Fact, Unit, RelationType.HAS_UNIT),
-                     (Fact, Period, RelationType.HAS_PERIOD)]
+                     (Fact, Period, RelationType.HAS_PERIOD)
+                     ]
         
         self._export_relationships(rel_types)        
+
+        # Later we can even combine all below in 1 but need to understand merge_relationships better
         
-        # Export fact-dimension relationships
+        # Add report-fact relationships
+        fact_report_relationships = self._build_report_fact_relationships()
+        if fact_report_relationships:
+            self.neo4j.merge_relationships(fact_report_relationships)
+
+        # Export fact-dimension relationships (first looks for Fact-Member relationships, if not found then Fact-Dimension)
         fact_dim_relationships = self._build_fact_dimension_relationships()
         if fact_dim_relationships:
             self.neo4j.merge_relationships(fact_dim_relationships)
-
 
         # Export context relationships
         context_relationships = self._build_context_relationships()
         if context_relationships:
             self.neo4j.merge_relationships(context_relationships)
-
 
         # Export fact-context relationships
         fact_context_relationships = self._build_fact_context_relationships()
@@ -1163,7 +1176,8 @@ class process_report:
 
          # Filter out hidden facts right at the source
         valid_facts = [fact for fact in self.model_xbrl.factsInInstance 
-                    if not (fact.id and fact.id.startswith('hidden-fact'))]
+                    if not (fact.id and fact.id.startswith('hidden-fact'))
+                    and fact.context.id]
                     
         for model_fact in valid_facts:
             fact = Fact(model_fact=model_fact, _report=self)  # Pass self as report reference
@@ -1239,18 +1253,24 @@ class process_report:
                 member_u_ids = []
                 if model_context.qnameDims:
                     for dim_qname, member in model_context.qnameDims.items():
-                        # Get company_id from the same source as Dimension class
-                        company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]
-                        
-                        # Create dimension u_id matching Dimension class format
-                        dim_u_id = f"{company_id}:{dim_qname.namespaceURI}:{dim_qname}"
+                        try:
+                            # Get company_id from the same source as Dimension class
+                            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]
+                            
+                            # Create dimension u_id matching Dimension class format
+                            dim_u_id = f"{company_id}:{dim_qname.namespaceURI}:{dim_qname}"
+                            dimension_u_ids.append(dim_u_id)
+                        except AttributeError:
+                            continue
 
-                        dimension_u_ids.append(dim_u_id)
-                        
-                        if hasattr(member, 'memberQname'):
-                            # Create member u_id matching Member class format
-                            mem_u_id = f"{company_id}:{member.memberQname.namespaceURI}:{member.memberQname}"
-                            member_u_ids.append(mem_u_id)
+                        try:
+                            if hasattr(member, 'memberQname'):
+                                # Create member u_id matching Member class format
+                                mem_u_id = f"{company_id}:{member.memberQname.namespaceURI}:{member.memberQname}"
+                                member_u_ids.append(mem_u_id)
+                        except AttributeError:
+                            continue
+
 
                 context = Context(
                     context_id=model_context.id,
@@ -1281,7 +1301,7 @@ class process_report:
                 context_relationships.append((context, period, RelationType.HAS_PERIOD))
             
             # Context -> Company
-            context_relationships.append((context, self.company, RelationType.BELONGS_TO))
+            context_relationships.append((context, self.company, RelationType.FOR_COMPANY))
             
             # Context -> Dimensions
             for dim_id in context.dimension_u_ids:
@@ -1298,6 +1318,19 @@ class process_report:
                         break
                         
         return context_relationships
+
+
+    def _build_report_fact_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+        """Build relationships between report and its facts"""
+        report_fact_relationships = []
+        
+        for fact in self.facts:
+            report_fact_relationships.append((self.report, fact, RelationType.CONTAINS))
+                
+        print(f"Built {len(report_fact_relationships)} report-fact relationships")
+        return report_fact_relationships
+
+
 
     def _build_fact_dimension_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
         """Build relationships between facts and their dimensions/members"""
@@ -1340,13 +1373,24 @@ class process_report:
         """Build relationships between facts and their contexts"""
         fact_context_relationships = []
         
+        # Create a lookup dictionary for faster access
+        context_lookup = {ctx.context_id: ctx for ctx in self.contexts}
+        missing_contexts = set()  # For debugging
+
         for fact in self.facts:
             # Find matching context using context_id
-            context = next((ctx for ctx in self.contexts 
-                        if ctx.context_id == fact.context_id), None)
+            # context = next((ctx for ctx in self.contexts 
+            #             if ctx.context_id == fact.context_id), None)
+
+            context = context_lookup.get(fact.context_id)
             if context:
                 fact_context_relationships.append((fact, context, RelationType.IN_CONTEXT))
-        
+            else:
+                missing_contexts.add(fact.context_id)
+            
+            
+        if missing_contexts:
+            print(f"Warning: {len(missing_contexts)} facts have missing contexts: {missing_contexts}")
         print(f"Built {len(fact_context_relationships)} fact-context relationships")
         return fact_context_relationships
 
@@ -2951,6 +2995,7 @@ class Fact(Neo4jNode):
         self.unit = self.model_fact.unitID
         self._set_period()
         self._set_dimensions() # Facts can have only 1 member per dimension although can be linked to many dimensions
+
 
     @property
     def is_nil(self) -> bool:
