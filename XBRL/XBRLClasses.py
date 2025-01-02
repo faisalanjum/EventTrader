@@ -676,11 +676,12 @@ class process_report:
             valid_relationships = []
             self.check_calculation_steps(relationships, context_lookup, valid_relationships) 
 
-            if valid_relationships:  # Only create valid relationships
-                # print("Creating relationships in Neo4j...")
-                self.neo4j.merge_relationships(valid_relationships)
+            # self.neo4j.merge_relationships(relationships)
+            # self.neo4j.validate_neo4j_calculations()
 
-                # print("\nValidating Neo4j calculations...")
+            # Creating relationships in Neo4j
+            if valid_relationships:  # Only create valid relationships
+                self.neo4j.merge_relationships(valid_relationships)
                 self.neo4j.validate_neo4j_calculations()
 
 

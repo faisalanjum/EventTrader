@@ -408,6 +408,17 @@ class Neo4jManager:
                             }}]->(t)
                             SET r += param.properties
                         """, {"params": batch_params})
+                    
+                    else:
+                        # for non-network relationships
+                        session.run(f"""
+                            UNWIND $params AS param
+                            MATCH (s {{id: param.source_id}})
+                            MATCH (t {{id: param.target_id}})
+                            MERGE (s)-[r:{rel_type.value}]->(t)
+                            SET r += param.properties
+                        """, {"params": batch_params})
+
 
                 counts[rel_type.value].update({
                     'count': len(rels),
@@ -418,9 +429,6 @@ class Neo4jManager:
         # With this:
         for rel_type, info in counts.items():
             print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
-
-
-
 
 
     def get_neo4j_db_counts(self) -> Dict[str, Dict[str, int]]:
