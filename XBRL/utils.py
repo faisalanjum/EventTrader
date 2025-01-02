@@ -40,4 +40,3 @@ def count_facts_in_relationships(relationships):
         source_facts.add(rel[0])
         target_facts.add(rel[1])
     return len(source_facts), len(target_facts)
-

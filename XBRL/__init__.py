@@ -1,1 +1,1 @@
-from XBRL.XBRLClasses import *  # Use absolute import
+from .XBRLClasses import *  # Use relative import instead of absolute
