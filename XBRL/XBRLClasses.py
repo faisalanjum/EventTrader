@@ -1,5 +1,6 @@
 from __future__ import annotations
 from XBRL.validation import ValidationMixin  # Use absolute import
+# from validation import ValidationMixin
 from XBRL.utils import *
 
 # dataclasses and typing imports
@@ -283,7 +284,7 @@ class ReportElementClassifier:
         return NodeType.OTHER
 
 
-
+    # Not used - but functionaility may be useful?
     # For first figuring out the category of ReportElements and then wrapping them in the appropriate class
     @classmethod
     def wrap_concept(cls, concept: Any, model_xbrl: ModelXbrl, network_uri: str) -> Union[Dimension, AbstractConcept, Member, Domain, None]:
@@ -370,11 +371,16 @@ class ReportElementClassifier:
 @dataclass
 class process_report:
 
-    # Config - passed at init
+    # passed at init
     instance_file: str 
     neo4j: Neo4jManager
+
+    # Defaults
     log_file: str = field(default='ErrorLog.txt', repr=False)
     testing: bool = field(default=True)  # Add testing flag as configurable (set to False in later calls for now)
+
+    # Initialized in post_init (load_xbrl), used in initialize_company_node, initialize_report_node, _build_concepts, _build_networks, link_calculation_facts, 
+    # passed to Taxonomy, Network, Presentation, Calculation
     model_xbrl: ModelXbrl = field(init=False, repr=False)
 
     # TODO: Can remove this later
@@ -383,15 +389,15 @@ class process_report:
     # Common Nodes
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
     abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class (Abstracts, LineItems, Table (Hypercube), Axis (Dimensions), Members, Domain)
-    pure_abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class (only Abstracts, LineItems)
-    
+    pure_abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class (only Abstracts, LineItems)    
     periods: List[Period] = field(init=False, default_factory=list, repr=False)
     units: List[Unit] = field(init=False, default_factory=list, repr=False)
-    dates: List[DateNode] = field(init=False, default_factory=list)
-    admin_reports: List[AdminReportNode] = field(init=False, default_factory=list)
+    
+    dates: List[DateNode] = field(init=False, default_factory=list) # To be done from outside (XBRLManager)
+    admin_reports: List[AdminReportNode] = field(init=False, default_factory=list) # To be done from outside (XBRLManager)
 
     # Company Nodes (company-specific)
-    company: CompanyNode = field(init=False)  # Single company per report
+    company: CompanyNode = field(init=False)  # Single company per report - # To be done from outside (XBRLManager)
     contexts: List[Context] = field(init=False, default_factory=list, repr=False)
     dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)        
     # members are inside dimensions but are also company-specific
@@ -401,8 +407,13 @@ class process_report:
     taxonomy: Taxonomy = field(init=False) # Although this is company-specific, we load it for each report
 
     # Lookup Tables
-    _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False) # Used in Linking Fact to Concept
-    _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False)
+
+    # Populated in populate_common_nodes, used for linking concept to fact (in _build_facts -> concept.add_fact), 
+    # used in (get_concept) in both Presentation & Calculation Class
+    _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False) # Used in Linking Fact to Concept (concept.id: concept)
+    
+    # Populated in Presentation Class (_build_abstracts), used in Presentation Class (get_concept)
+    _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False) # Used in Presentation (abstract.id: abstract)
     
     
     def __post_init__(self):
@@ -411,12 +422,12 @@ class process_report:
         self._duplicate_map: Dict[str, str] = {}   # duplicate_uid -> primary_uid
         
         self.initialize_date_nodes(start_dt = "2024-12-01")     # Later remove these from process_report 
-        self.load_xbrl()                                        # Required to fetch Company node
-        self.initialize_company_node()                           # Company Node Creation
+        self.load_xbrl()                                        # pupulates model_xbrl - see comment above 
+        self.initialize_company_node()                          # Company Node Creation
         self.initialize_admin_reports()                         # Admin Reports Node Creation   
-        self.initialize_report_node(cik = self.company.cik)      # Report Node Creation
-        # self.extract_report_metadata()                         # TODO: Remove this later
-
+        self.initialize_report_node(cik = self.company.cik)     # Report Node Creation
+        # self.extract_report_metadata()                        # TODO: Remove this later
+  
         self.populate_common_nodes()  # First handle common nodes
         self.populate_company_nodes() # Also creates Abstract Nodes in Neo4j
         self.populate_report_nodes()  # Then handle report-specific nodes
@@ -475,8 +486,6 @@ class process_report:
         for fact in self.facts:
             fact_lookup[fact.concept.u_id].append(fact)
         return fact_lookup if fact_lookup else None
-
-
 
 
     def link_presentation_facts(self) -> None:
@@ -994,9 +1003,9 @@ class process_report:
         self.neo4j._export_nodes([self.concepts, self.periods, self.units, self.contexts], testing=False)
         
         # Load complete set from Neo4j
-        self.concepts = self.neo4j.load_nodes_as_instances(NodeType.CONCEPT, Concept)
-        self.periods = self.neo4j.load_nodes_as_instances(NodeType.PERIOD, Period)
-        self.units = self.neo4j.load_nodes_as_instances(NodeType.UNIT, Unit)
+        # self.concepts = self.neo4j.load_nodes_as_instances(NodeType.CONCEPT, Concept)
+        # self.periods = self.neo4j.load_nodes_as_instances(NodeType.PERIOD, Period)
+        # self.units = self.neo4j.load_nodes_as_instances(NodeType.UNIT, Unit)
         
         print(f"Loaded common nodes from Neo4j: {len(self.concepts)} concepts, {len(self.periods)} periods, {len(self.units)} units")
         self._concept_lookup = {concept.id: concept for concept in self.concepts} 
@@ -1044,7 +1053,8 @@ class process_report:
         self.neo4j._export_nodes([abstracts_lineItems], testing=False) # Only export Abstracts & LineItems 
         # self.neo4j._export_nodes([self.abstracts], testing=False) # Only export Abstracts & LineItems 
 
-        self.pure_abstracts = self.neo4j.load_nodes_as_instances(NodeType.ABSTRACT, AbstractConcept)
+        self.pure_abstracts = abstracts_lineItems
+        # self.pure_abstracts = self.neo4j.load_nodes_as_instances(NodeType.ABSTRACT, AbstractConcept)
 
 
 
@@ -1058,13 +1068,16 @@ class process_report:
         # Upload to Neo4j report-specific nodes - # Testing=False since otherwise it will clear the db
         self.neo4j._export_nodes([self.facts], testing=False) 
 
-        # Define relationship types to export
-        rel_types = [(Fact, Concept, RelationType.HAS_CONCEPT),
-                     (Fact, Unit, RelationType.HAS_UNIT),
-                     (Fact, Period, RelationType.HAS_PERIOD)
-                     ]
+        #  Get relationships from mapping Fact to its corresponding target instances (Concept, Unit, Period)
+        fact_relationships = self._map_fact_relationships([
+            (Fact, Concept, RelationType.HAS_CONCEPT),
+            (Fact, Unit, RelationType.HAS_UNIT),
+            (Fact, Period, RelationType.HAS_PERIOD)
+        ])
         
-        self._export_relationships(rel_types)        
+        # Create relationships in Neo4j
+        if fact_relationships: self.neo4j.merge_relationships(fact_relationships)
+
 
         # Later we can even combine all below in 1 but need to understand merge_relationships better
         
@@ -1190,15 +1203,20 @@ class process_report:
                 print(f"Warning: No concept found for fact {fact.fact_id}")
                 continue
                 
-            # Create canonical key using model_concept
+            # Create canonical key using model_concept - sort of makes the key unique (concept, context, unit)
             canonical_key = f"{model_concept.qname}:{fact.context_id}:{fact.unit}"
             
-            # Check for duplicates
+            # Check for duplicates & picks primary fact based on precision & significant digits:
             if canonical_key in self._primary_facts:
                 primary = self._primary_facts[canonical_key]
                 fact_decimals = fact.decimals if fact.decimals is not None else float('-inf')
                 primary_decimals = primary.decimals if primary.decimals is not None else float('-inf')
-                if fact_decimals > primary_decimals:
+                if fact_decimals > primary_decimals or (
+                    # Selects higher precision or, if equal, the fact with more significant digits (ex 339 vs 340 or 341 vs 340).
+                        fact_decimals == primary_decimals and 
+                        len(str(fact.value).lstrip('0').replace('.', '').replace('-', '')) > 
+                        len(str(primary.value).lstrip('0').replace('.', '').replace('-', ''))
+                    ):
 
                     self._duplicate_map[primary.u_id] = fact.u_id
                     self._primary_facts[canonical_key] = fact
@@ -1369,6 +1387,7 @@ class process_report:
                 
         return relationships
 
+    # Need to check if we can remove this?
     def _build_fact_context_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
         """Build relationships between facts and their contexts"""
         fact_context_relationships = []
@@ -1466,8 +1485,8 @@ class process_report:
                 hypercube._link_hypercube_concepts(self.concepts, self.abstracts)
 
 
-    def _export_relationships(self, rel_types: List[Tuple[Type[Neo4jNode], Type[Neo4jNode], RelationType]]) -> None:
-        """Export relationships based on node type pairs and explicit relationship types"""
+    def _map_fact_relationships(self, rel_types: List[Tuple[Type[Neo4jNode], Type[Neo4jNode], RelationType]]) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+        """Maps Facts to their corresponding target instances (Concept, Unit, Period) and returns relationships"""
         relationships = []
         
         # Here source is always assumed to be a Fact instance
@@ -1479,7 +1498,7 @@ class process_report:
                 return Unit(model_fact=source.model_fact)
             elif target_type == Period:
                 context = source.model_fact.context
-                # Use exact same logic as _build_periods
+                # Uses exact same logic as _build_periods
                 period_type = ("instant" if getattr(context, "isInstantPeriod", False)
                             else "duration" if getattr(context, "isStartEndPeriod", False)
                             else "forever")
@@ -1509,8 +1528,8 @@ class process_report:
             except (AttributeError, KeyError) as e:
                 print(f"Skipping {source_type.__name__} -> {target_type.__name__}: {e}")
         
-        if relationships:
-            self.neo4j.merge_relationships(relationships)
+        return relationships
+            
                         
 
 @dataclass
@@ -3339,5 +3358,3 @@ def count_report_hierarchy(report: process_report) -> None:
     #     report.neo4j.get_neo4j_db_counts()
 
 # endregion : Admin/Helpers ########################
-
-

@@ -289,4 +289,3 @@ class ValidationMixin:
                 valid_facts.add(fact)
         
         return valid_facts
-

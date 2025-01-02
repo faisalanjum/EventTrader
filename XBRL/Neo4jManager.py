@@ -250,8 +250,6 @@ class Neo4jManager:
             raise RuntimeError(f"Export to Neo4j failed: {e}")
 
 
-
-
     def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
         counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
         relationships = process_fact_relationships(relationships)
