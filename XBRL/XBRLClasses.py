@@ -691,7 +691,7 @@ class process_report:
         print("\nStarting calculation validation...")
         debug_counts = defaultdict(int)
         
-        relationships = process_fact_relationships(relationships)
+        relationships = resolve_primary_fact_relationships(relationships)
         matches = 0
         non_matches = 0
         
@@ -746,7 +746,7 @@ class process_report:
                     debug_counts['children_processed'] += 1
                 
                 # Validate summation
-                parent_value = float(parent_fact.value)
+                parent_value = clean_number(parent_fact.value)
                 percent_diff = abs(parent_value - total_sum) if parent_value == 0 else abs(parent_value - total_sum) / abs(parent_value)
                 is_match = percent_diff < 0.01
                 
@@ -1007,7 +1007,7 @@ class process_report:
         # self.periods = self.neo4j.load_nodes_as_instances(NodeType.PERIOD, Period)
         # self.units = self.neo4j.load_nodes_as_instances(NodeType.UNIT, Unit)
         
-        print(f"Loaded common nodes from Neo4j: {len(self.concepts)} concepts, {len(self.periods)} periods, {len(self.units)} units")
+        # print(f"Loaded common nodes from Neo4j: {len(self.concepts)} concepts, {len(self.periods)} periods, {len(self.units)} units")
         self._concept_lookup = {concept.id: concept for concept in self.concepts} 
         
 

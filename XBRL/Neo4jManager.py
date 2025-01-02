@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 # Import needed classes and enums for runtime
 from .XBRLClasses import (PRESENTATION_EDGE_UNIQUE_PROPS, CALCULATION_EDGE_UNIQUE_PROPS, NodeType, RelationType, Fact)
 
-from .utils import process_fact_relationships
+from .utils import resolve_primary_fact_relationships, clean_number
 
 
 # region : Neo4j Manager ########################
@@ -250,10 +250,90 @@ class Neo4jManager:
             raise RuntimeError(f"Export to Neo4j failed: {e}")
 
 
-    def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
-        counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
-        relationships = process_fact_relationships(relationships)
 
+
+
+    # def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
+    #     counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
+    #     relationships = resolve_primary_fact_relationships(relationships)
+
+    #     network_specific_relationships = {
+    #         RelationType.PRESENTATION_EDGE,
+    #         RelationType.CALCULATION_EDGE,
+    #     }
+
+    #     def get_network_merge_props(source_id: str, target_id: str, properties: Dict) -> Dict[str, Any]:
+    #         """Get core network relationship properties maintaining uniqueness"""
+    #         return {
+    #             "merge_source_id": source_id,
+    #             "merge_target_id": target_id,
+    #             "merge_network_id": properties.get('network_uri', properties.get('network_name', '')).split('/')[-1],
+    #             "company_cik": properties.get('company_cik')
+    #         }
+
+    #     with self.driver.session() as session:
+    #         for rel in relationships:
+    #             source, target, rel_type, *props = rel
+    #             properties = props[0] if props else {}
+                
+    #             if (rel_type in network_specific_relationships and 
+    #                 isinstance(target, Fact) and 
+    #                 ('network_uri' in properties or 'network_name' in properties)):
+
+    #                 merge_props = get_network_merge_props(source.id, target.id, properties)
+                    
+    #                 # Keep the critical MERGE structure explicit
+    #                 session.run(f"""
+    #                     MATCH (s {{id: $source_id}})
+    #                     MATCH (t {{id: $target_id}})
+    #                     MERGE (s)-[r:{rel_type.value} {{
+    #                         source_id: $merge_source_id,
+    #                         target_id: $merge_target_id,
+    #                         network_id: $merge_network_id,
+    #                         company_cik: $company_cik
+    #                     }}]->(t)
+    #                     SET r += $properties
+    #                 """, {
+    #                     "source_id": source.id,
+    #                     "target_id": target.id,
+    #                     **merge_props,
+    #                     "properties": properties
+    #                 })
+    #             else:
+    #                 session.run(f"""
+    #                     MATCH (s {{id: $source_id}})
+    #                     MATCH (t {{id: $target_id}})
+    #                     MERGE (s)-[r:{rel_type.value}]->(t)
+    #                     SET r += $properties
+    #                 """, {
+    #                     "source_id": source.id,
+    #                     "target_id": target.id,
+    #                     "properties": properties
+    #                 })
+                
+    #             counts[rel_type.value].update({
+    #                 'count': counts[rel_type.value]['count'] + 1, 
+    #                 'source': source.__class__.__name__, 
+    #                 'target': target.__class__.__name__
+    #             })
+        
+    #     for rel_type, info in counts.items():
+    #         print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
+
+
+
+
+
+    def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
+
+        # Original structure maintained
+        counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
+        relationships = resolve_primary_fact_relationships(relationships)
+        # print(f"Total relationships after resolution: {len(relationships)}")
+
+        # Group relationships by type for batch processing
+        grouped_rels = defaultdict(list)
+        
         network_specific_relationships = {
             RelationType.PRESENTATION_EDGE,
             RelationType.CALCULATION_EDGE,
@@ -261,61 +341,85 @@ class Neo4jManager:
 
         def get_network_merge_props(source_id: str, target_id: str, properties: Dict) -> Dict[str, Any]:
             """Get core network relationship properties maintaining uniqueness"""
+            network_id = properties.get('network_uri', properties.get('network_name', '')).split('/')[-1]
+            company_cik = properties.get('company_cik')
+            
             return {
                 "merge_source_id": source_id,
                 "merge_target_id": target_id,
-                "merge_network_id": properties.get('network_uri', properties.get('network_name', '')).split('/')[-1],
-                "company_cik": properties.get('company_cik')
+                "merge_network_id": network_id,
+                "company_cik": company_cik
             }
 
-        with self.driver.session() as session:
-            for rel in relationships:
-                source, target, rel_type, *props = rel
-                properties = props[0] if props else {}
-                
-                if (rel_type in network_specific_relationships and 
-                    isinstance(target, Fact) and 
-                    ('network_uri' in properties or 'network_name' in properties)):
+        # First pass: collect statistics and group relationships
+        for rel in relationships:
+            source, target, rel_type, *props = rel
+            properties = props[0] if props else {}
 
-                    merge_props = get_network_merge_props(source.id, target.id, properties)
-                    
-                    # Keep the critical MERGE structure explicit
-                    session.run(f"""
-                        MATCH (s {{id: $source_id}})
-                        MATCH (t {{id: $target_id}})
-                        MERGE (s)-[r:{rel_type.value} {{
-                            source_id: $merge_source_id,
-                            target_id: $merge_target_id,
-                            network_id: $merge_network_id,
-                            company_cik: $company_cik
-                        }}]->(t)
-                        SET r += $properties
-                    """, {
-                        "source_id": source.id,
-                        "target_id": target.id,
-                        **merge_props,
-                        "properties": properties
-                    })
-                else:
-                    session.run(f"""
-                        MATCH (s {{id: $source_id}})
-                        MATCH (t {{id: $target_id}})
-                        MERGE (s)-[r:{rel_type.value}]->(t)
-                        SET r += $properties
-                    """, {
-                        "source_id": source.id,
-                        "target_id": target.id,
-                        "properties": properties
-                    })
-                
-                counts[rel_type.value].update({
-                    'count': counts[rel_type.value]['count'] + 1, 
-                    'source': source.__class__.__name__, 
-                    'target': target.__class__.__name__
-                })
+            # Group relationships by type
+            grouped_rels[rel_type].append((source, target, properties))
+
         
+        # Second pass: batch process relationships
+        with self.driver.session() as session:
+            for rel_type, rels in grouped_rels.items():
+                batch_params = []
+                for source, target, properties in rels:
+                    if (rel_type in network_specific_relationships and 
+                        isinstance(target, Fact) and 
+                        ('network_uri' in properties or 'network_name' in properties)):
+                        
+                        merge_props = get_network_merge_props(source.id, target.id, properties)
+                        batch_params.append({
+                            "source_id": source.id,
+                            "target_id": target.id,
+                            **merge_props,
+                            "properties": properties
+                        })
+                    else:
+                        batch_params.append({
+                            "source_id": source.id,
+                            "target_id": target.id,
+                            "properties": properties
+                        })
+
+                if batch_params:
+                    if rel_type in network_specific_relationships:
+                        session.run(f"""
+                            UNWIND $params AS param
+                            MATCH (s {{id: param.source_id}})
+                            MATCH (t {{id: param.target_id}})
+                            WITH s, t, param
+                            WHERE param.properties.company_cik IS NOT NULL 
+                            AND param.properties.report_id IS NOT NULL
+                            AND param.properties.network_uri IS NOT NULL
+                            AND ('{rel_type.value}' <> 'CALCULATION_EDGE' OR param.properties.context_id IS NOT NULL)
+                            MERGE (s)-[r:{rel_type.value} {{
+                                cik: param.properties.company_cik,
+                                report_id: param.properties.report_id,
+                                network_name: param.properties.network_uri,
+                                parent_id: param.source_id,
+                                child_id: param.target_id,
+                                context_id: CASE 
+                                    WHEN '{rel_type.value}' = 'CALCULATION_EDGE' 
+                                    THEN param.properties.context_id 
+                                    ELSE coalesce(param.properties.context_id, 'default')
+                                END
+                            }}]->(t)
+                            SET r += param.properties
+                        """, {"params": batch_params})
+
+                counts[rel_type.value].update({
+                    'count': len(rels),
+                    'source': rels[0][0].__class__.__name__,
+                    'target': rels[0][1].__class__.__name__
+                })
+
+        # With this:
         for rel_type, info in counts.items():
             print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
+
+
 
 
 
@@ -420,6 +524,7 @@ class Neo4jManager:
             children
         """
         
+                
         matches = 0
         non_matches = 0
         network_stats = defaultdict(lambda: {'matches': 0, 'non_matches': 0})

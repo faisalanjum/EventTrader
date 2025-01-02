@@ -1,12 +1,17 @@
 from __future__ import annotations
-from typing import List, Tuple, TYPE_CHECKING
+from typing import List, Tuple, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from .XBRLClasses import Neo4jNode
 
 
+def clean_number(value: Union[str, int, float]) -> float:
+    """Convert number to float, handling string formatting"""
+    if isinstance(value, (int, float)):
+        return float(value)
+    return float(value.replace(',', ''))
     
-def process_fact_relationships(relationships: List[Tuple]) -> List[Tuple]:
+def resolve_primary_fact_relationships(relationships: List[Tuple]) -> List[Tuple]:
     """Pre-process relationships to handle fact duplicates"""
     # Quick check if any facts involved
     from XBRL.XBRLClasses import Fact 
