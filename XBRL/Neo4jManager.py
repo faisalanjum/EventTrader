@@ -162,7 +162,7 @@ class Neo4jManager:
 
 
             
-    def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 1000) -> None:
+    def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 2000) -> None:
         """Merge nodes into Neo4j database with batching"""
         if not nodes: return
 
@@ -321,16 +321,12 @@ class Neo4jManager:
     #         print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
 
 
-
-
-
+    # FASTER VERSION
     def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
 
-        # Original structure maintained
         counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
         relationships = resolve_primary_fact_relationships(relationships)
-        # print(f"Total relationships after resolution: {len(relationships)}")
-
+        
         # Group relationships by type for batch processing
         grouped_rels = defaultdict(list)
         
@@ -431,6 +427,11 @@ class Neo4jManager:
             print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
 
 
+
+
+
+
+
     def get_neo4j_db_counts(self) -> Dict[str, Dict[str, int]]:
         """Get count of nodes and relationships by type."""
         try:
@@ -499,24 +500,38 @@ class Neo4jManager:
             raise RuntimeError(f"Failed to load {node_type.value} nodes: {e}")
 
 
-    # This function first loads all Calculation_EDGE relationships into memory, then checks the sum of the child facts against the parent fact.
-    # It then prints the number of matches and non-matches, and the overall match rate.
-    # It also prints the breakdown by network, and the match rate for each network.
+
     def validate_neo4j_calculations(self) -> None:
         """Validates all calculation relationships stored in Neo4j by checking summations."""
         
-        def clean_number(value: str) -> float:
-            """Convert string number with commas to float"""
-            if isinstance(value, (int, float)):
-                return float(value)
-            return float(value.replace(',', ''))
+        # query = """        
+        # MATCH (parent:Fact)-[r:CALCULATION_EDGE]->(child:Fact) 
+        # WITH 
+        #     parent,
+        #     r.network_uri as network_uri,
+        #     r.context_id as context_id,
+        #     r.network_name as network_name,
+        #     COLLECT({
+        #         child: child,
+        #         weight: r.weight,
+        #         order: r.order
+        #     }) as children
+        # ORDER BY network_uri, context_id, parent.id
+        # RETURN 
+        #     parent,
+        #     network_uri,
+        #     network_name,
+        #     context_id,
+        #     children
+        # """
+        
         
         query = """        
         MATCH (parent:Fact)-[r:CALCULATION_EDGE]->(child:Fact) 
         WITH 
             parent,
             r.network_uri as network_uri,
-            r.context_id as context_id,
+            COALESCE(r.context_id, r.period_ref) as context_id,
             r.network_name as network_name,
             COLLECT({
                 child: child,
@@ -531,8 +546,6 @@ class Neo4jManager:
             context_id,
             children
         """
-        
-                
         matches = 0
         non_matches = 0
         network_stats = defaultdict(lambda: {'matches': 0, 'non_matches': 0})
@@ -568,6 +581,7 @@ class Neo4jManager:
                     parent_value = clean_number(parent['value'])
                     percent_diff = abs(parent_value - total_sum) if parent_value == 0 else abs(parent_value - total_sum) / abs(parent_value)
                     is_match = percent_diff < 0.01  # 1% tolerance
+                    # is_match = percent_diff < 0.001  # 0.1% tolerance
                     
                     # print(f"\nTotal Sum: {total_sum:,.2f}")
                     # print(f"Parent Value: {parent_value:,.2f}")
@@ -598,6 +612,9 @@ class Neo4jManager:
                     
         except Exception as e:
             raise RuntimeError(f"Failed to validate calculations: {e}")
+
+
+
 
 
     def get_relationship_properties(self, source_id: str, target_id: str, properties: Dict) -> Dict[str, Any]:
