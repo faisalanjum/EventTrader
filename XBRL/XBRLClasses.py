@@ -676,12 +676,11 @@ class process_report:
             valid_relationships = []
             self.check_calculation_steps(relationships, context_lookup, valid_relationships) 
 
-            # self.neo4j.merge_relationships(relationships)
-            # self.neo4j.validate_neo4j_calculations()
-
-            # Creating relationships in Neo4j
             if valid_relationships:  # Only create valid relationships
+                # print("Creating relationships in Neo4j...")
                 self.neo4j.merge_relationships(valid_relationships)
+
+                # print("\nValidating Neo4j calculations...")
                 self.neo4j.validate_neo4j_calculations()
 
 
@@ -749,7 +748,8 @@ class process_report:
                 # Validate summation
                 parent_value = clean_number(parent_fact.value)
                 percent_diff = abs(parent_value - total_sum) if parent_value == 0 else abs(parent_value - total_sum) / abs(parent_value)
-                is_match = percent_diff < 0.01
+                is_match = percent_diff < 0.01 # 1% tolerance
+                # is_match = percent_diff < 0.001  # 0.1% tolerance
                 
                 matches += 1 if is_match else 0
                 non_matches += 1 if not is_match else 0
