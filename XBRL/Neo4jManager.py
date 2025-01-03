@@ -580,8 +580,8 @@ class Neo4jManager:
                     
                     parent_value = clean_number(parent['value'])
                     percent_diff = abs(parent_value - total_sum) if parent_value == 0 else abs(parent_value - total_sum) / abs(parent_value)
-                    is_match = percent_diff < 0.01  # 1% tolerance
-                    # is_match = percent_diff < 0.001  # 0.1% tolerance
+                    # is_match = percent_diff < 0.01  # 1% tolerance
+                    is_match = percent_diff < 0.001  # 0.1% tolerance
                     
                     # print(f"\nTotal Sum: {total_sum:,.2f}")
                     # print(f"Parent Value: {parent_value:,.2f}")

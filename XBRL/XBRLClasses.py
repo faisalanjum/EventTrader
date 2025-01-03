@@ -99,7 +99,7 @@ class Neo4jNode(ABC):
         return cls(**init_params)
 
 
-
+# Commenting out unused types here so they don't create unneccessary nodes in create_indexes
 class NodeType(Enum):
     """XBRL node types in Neo4j"""
     
@@ -115,20 +115,23 @@ class NodeType(Enum):
     CONTEXT = "Context"
     PERIOD = "Period"
     UNIT = "Unit"           
+    OTHER = "Other" # Keep this as it's used as default fallback - 'Other' NodeType is created in create_indexes
+    HYPERCUBE = "HyperCube" # Keep this as it's used for table structures determination in presentation hierarchy
+
+    # NAMESPACE = "Namespace"  # Commenting out unused types
+    # LINKBASE = "Linkbase"   # that appear in schema but 
+    # RESOURCE = "Resource"   # have no actual nodes
+    # GUIDANCE = "Guidance"
+    # DEPRECATED = "deprecated"
     
-    HYPERCUBE = "HyperCube"
+
+    
     DIMENSION = "Dimension"
     DOMAIN = "Domain"
     MEMBER = "Member"
     
-    NAMESPACE = "Namespace" 
-    LINKBASE = "Linkbase"  
-    RESOURCE = "Resource"  
-
-    GUIDANCE = "Guidance"
-    DEPRECATED = "deprecated"
     DATE = "Date"
-    OTHER = "Other"
+    
     ADMIN_REPORT = "AdminReport"
 
 
@@ -166,6 +169,8 @@ class RelationType(Enum):
     FILED_BY = "FILED_BY"           # From Report to Company
     HAS_CATEGORY = "HAS_CATEGORY"   # Report -> AdminReport
     FOR_COMPANY = "FOR_COMPANY"       # Context -> Company
+    PROVIDES_GUIDANCE = "PROVIDES_GUIDANCE"  # From Guidance concept to related concept
+    HAS_GUIDANCE = "HAS_GUIDANCE"           # From concept to its guidance
     
 
 class ReportElementClassifier:
@@ -748,8 +753,8 @@ class process_report:
                 # Validate summation
                 parent_value = clean_number(parent_fact.value)
                 percent_diff = abs(parent_value - total_sum) if parent_value == 0 else abs(parent_value - total_sum) / abs(parent_value)
-                is_match = percent_diff < 0.01 # 1% tolerance
-                # is_match = percent_diff < 0.001  # 0.1% tolerance
+                # is_match = percent_diff < 0.01 # 1% tolerance
+                is_match = percent_diff < 0.001  # 0.1% tolerance
                 
                 matches += 1 if is_match else 0
                 non_matches += 1 if not is_match else 0
@@ -1724,6 +1729,12 @@ class Concept(Neo4jNode):
             self.balance = self.model_concept.balance
             self.type_local = self.model_concept.baseXsdType
             self.category = ReportElementClassifier.classify(self.model_concept).value
+            
+            # Special handling for guidance concepts
+            if self.category == NodeType.GUIDANCE.value:
+                self.is_guidance = True
+                # Guidance concepts often have documentation text
+                self.guidance_text = self.model_concept.get('documentation', '')
 
         elif not self.u_id:
             raise ValueError("Either model_concept or properties must be provided")
