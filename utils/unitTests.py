@@ -8,7 +8,7 @@ def test_get_market_session():
     """Test market session calculations against known values from NewsQC.csv"""
     
     # Load and prepare the data
-    df = pd.read_csv('../News/NewsQC.csv', low_memory=False, on_bad_lines='warn', 
+    df = pd.read_csv('News/NewsQC.csv', low_memory=False, on_bad_lines='warn', 
                      thousands=',', index_col=0)
     
     # Fix index
@@ -312,8 +312,8 @@ def test_get_trading_hours():
     else:
         print("\n✅ All tests passed!")
 
-# This Tests get_trading_hours from MarketSessionClassifier against QuantConnect sample data
 
+# This Tests get_trading_hours from MarketSessionClassifier against QuantConnect sample data
 def test_get_trading_hours_qc():
     """Compare our market session outputs with QuantConnect's outputs"""
     

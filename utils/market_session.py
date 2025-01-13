@@ -11,7 +11,7 @@ class MarketSessionClassifier:
     def __init__(self):
         self.calendar = xcals.get_calendar("XNYS")
         self.eastern = pytz.timezone('US/Eastern')
-
+        self.add_minutes_to_open = 5
 
     def get_market_session(self, timestamp):
         """Get the market session for a given timestamp"""
@@ -162,3 +162,94 @@ class MarketSessionClassifier:
         return input_value
 
 
+
+    def extract_times(self, trading_hours_tuple):
+
+        previous_day, current_day, next_day = trading_hours_tuple  # Direct unpacking
+        
+        # Handle market closed days
+        if current_day == 'market_closed':
+            current_day = (None, None, None, None)
+        
+        times = {
+            'pre_market_current_day': current_day[0],
+            'market_open_current_day': current_day[1],
+            'market_close_current_day': current_day[2],
+            'post_market_current_day': current_day[3],
+
+            'pre_market_previous_day': previous_day[0],
+            'market_open_previous_day': previous_day[1],
+            'market_close_previous_day': previous_day[2],
+            'post_market_previous_day': previous_day[3],
+            
+            'pre_market_next_day': next_day[0],
+            'market_open_next_day': next_day[1],
+            'market_close_next_day': next_day[2],
+            'post_market_next_day': next_day[3]
+        }
+        
+        return times
+
+
+
+    # # Example usage in your workflow:
+    # def process_event(self, event_date):
+    #     """Process a single event date"""
+    #     trading_hours = self.get_trading_hours(event_date)
+    #     times = self.extract_times(trading_hours)
+    #     return times
+
+    # def process_multiple_events(self, event_dates):
+    #     """Process multiple event dates efficiently"""
+    #     return {date: self.process_event(date) for date in event_dates}
+    
+
+    def get_start_time(self, timestamp, market_session, is_trading_day, times):
+        
+        timestamp = self._convert_to_eastern_timestamp(timestamp)
+        after_4_pm = timestamp.hour >= 16
+        
+        if market_session == 'market_closed':
+            if is_trading_day and after_4_pm:
+                return times['post_market_current_day']
+            else:
+                return times['post_market_previous_day']
+        return timestamp  # Actual release time for all the rest
+    
+
+    def get_end_time(self, timestamp, market_session, is_trading_day, times):
+        
+        timestamp = self._convert_to_eastern_timestamp(timestamp)        
+        after_4_pm = timestamp.hour >= 16
+        
+        if market_session == 'market_closed':
+            if is_trading_day and not after_4_pm:  # market_closed is before pre_market open
+                return times['market_open_current_day'] + pd.Timedelta(minutes=self.add_minutes_to_open)
+            else:
+                return times['market_open_next_day'] + pd.Timedelta(minutes=self.add_minutes_to_open)
+                
+        elif market_session == 'in_market':
+            return times['market_close_current_day']
+            
+        elif market_session == 'pre_market':
+            return times['market_open_current_day'] + pd.Timedelta(minutes=self.add_minutes_to_open)
+            
+        else:  # This is post_market
+            return times['market_open_next_day'] + pd.Timedelta(minutes=self.add_minutes_to_open)    
+            
+
+    def get_interval_start_time(self, timestamp, market_session, is_trading_day, times):
+        """
+        The horizon may extend beyond stated market session so for example 
+        horizon return for pre_market may include end prices from next session
+        """
+
+        timestamp = self._convert_to_eastern_timestamp(timestamp)        
+        after_4_pm = timestamp.hour >= 16
+        
+        if market_session == 'market_closed':
+            if is_trading_day and not after_4_pm:  # Essentially means this market_closed is before pre_market open
+                return times['pre_market_current_day']
+            else:
+                return times['pre_market_next_day']
+        return timestamp  # Actual Release Time for all rest
