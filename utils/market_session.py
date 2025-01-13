@@ -1,0 +1,164 @@
+import pandas as pd
+import exchange_calendars as xcals
+from datetime import datetime, date, timedelta
+import pytz
+
+
+""" Handles market session classification with timezone awareness. Exchange calendar returns UTC times,
+while market hours are defined in ET (e.g., 9:30 AM - 4:00 PM ET), requiring consistent timezone handling. """
+
+class MarketSessionClassifier:
+    def __init__(self):
+        self.calendar = xcals.get_calendar("XNYS")
+        self.eastern = pytz.timezone('US/Eastern')
+
+
+    def get_market_session(self, timestamp):
+        """Get the market session for a given timestamp"""
+        if pd.isna(timestamp):
+            return 'market_closed'
+        
+        timestamp = self._convert_to_eastern_timestamp(timestamp)
+        date = timestamp.date()
+        
+        if not self.calendar.is_session(date):
+            return 'market_closed'
+        
+        try:
+            session = self.calendar.date_to_session(date, direction='previous')
+            schedule = self.calendar.schedule.loc[session]
+            
+            utc_timestamp = timestamp.tz_convert('UTC')
+            session_open = schedule['open']
+            session_close = schedule['close']
+            
+            is_early_close = session in self.calendar.early_closes
+            
+            pre_market_start = session_open - pd.Timedelta(hours=5.5)
+            post_market_end = session_close if is_early_close else session_close + pd.Timedelta(hours=4)
+            
+            if utc_timestamp < pre_market_start or utc_timestamp >= post_market_end:
+                return 'market_closed'
+            elif utc_timestamp < session_open:
+                return 'pre_market'
+            elif utc_timestamp <= session_close:
+                return 'in_market'
+            else:
+                return 'market_closed' if is_early_close else 'post_market'
+                
+        except (xcals.errors.NotSessionError, ValueError):
+            return 'market_closed'
+
+
+
+    def get_trading_hours(self, date_input):
+        """
+        Get trading hours for previous, current, and next trading days.
+        
+        1. Convert input to date using timezone-aware conversion
+        2. Check if current date is trading day using calendar.is_session
+        3. Find previous trading day using calendar.previous_session
+        4. Find next trading day using calendar.next_session
+        5. Return ((prev_times, current_times, next_times), is_trading_day)
+        """
+
+        # 1. Convert input to date
+        # Handle all possible invalid inputs
+        try:
+            if pd.isna(date_input) or date_input is None:
+                return None, False
+                
+            # Try to convert, catch any conversion errors
+            try:
+                date = self._convert_to_eastern_timestamp(date_input)
+                if date is None:
+                    return None, False
+                date = date.date()
+            except (ValueError, TypeError, pd.errors.OutOfBoundsDatetime):
+                return None, False
+        
+            # 2. Check if it's a trading day
+            is_trading_day = self.calendar.is_session(date)
+        
+
+            # 3. Get sessions
+            # For current, get the actual date's session (not previous)
+            current_session = self.calendar.date_to_session(date) if is_trading_day else date
+            # For previous, start from input date and go backwards
+            prev_session = self.calendar.date_to_session(date - pd.Timedelta(days=1), direction='previous')
+            # For next, start from input date and go forwards
+            next_session = self.calendar.date_to_session(date + pd.Timedelta(days=1), direction='next')
+            
+            def create_session_times(session_date):
+                schedule = self.calendar.schedule.loc[session_date]
+                is_early = session_date in self.calendar.early_closes
+                
+                session_open = schedule['open']  # UTC
+                session_close = schedule['close']  # UTC
+                pre_market_start = session_open - pd.Timedelta(hours=5.5)
+
+                # Actual behavior maybe postmarket closes around 5 pm  on early close days (not sure)
+                # post_market_end = (session_close + pd.Timedelta(hours=4) if is_early 
+                #                 else session_close + pd.Timedelta(hours=4))
+                
+                # going with this for now (postmarket closes at session close on early close days)
+                post_market_end = (session_close if is_early 
+                                else session_close + pd.Timedelta(hours=4))
+                
+                return tuple(t.tz_convert('US/Eastern') for t in 
+                            (pre_market_start, session_open, session_close, post_market_end))
+            
+            # 4. Create session times
+            prev_times = create_session_times(prev_session)
+            curr_times = 'market_closed' if not is_trading_day else create_session_times(current_session)
+            next_times = create_session_times(next_session)
+            
+            return (prev_times, curr_times, next_times), is_trading_day
+            
+        except Exception as e:
+            print(f"Error in get_trading_hours: {str(e)}")
+            return None, False
+
+
+
+    def _convert_to_eastern_timestamp(self, input_value):
+        """
+        Converts various date/time inputs to a timezone-aware timestamp in US/Eastern.
+        
+        Handles:
+        - str ('YYYY-MM-DD' or full datetime string)
+        - datetime
+        - date
+        - pd.Timestamp
+        """
+
+        if pd.isna(input_value) or input_value is None:
+            return None
+        
+        
+        if isinstance(input_value, str):
+            try:
+                # Try parsing as date first
+                input_value = datetime.strptime(input_value, '%Y-%m-%d')
+            except ValueError:
+                # If that fails, parse as full timestamp
+                input_value = pd.Timestamp(input_value)
+        elif isinstance(input_value, date) and not isinstance(input_value, datetime):
+            # Convert date to datetime
+            input_value = datetime.combine(input_value, datetime.min.time())
+        
+        if not isinstance(input_value, pd.Timestamp):
+            input_value = pd.Timestamp(input_value)
+        
+        # Ensure timezone is US/Eastern
+        if input_value.tzinfo is None:
+            try:
+                input_value = input_value.tz_localize('US/Eastern', ambiguous='raise', nonexistent='raise')
+            except (pytz.AmbiguousTimeError, pytz.NonExistentTimeError):
+                input_value = input_value.tz_localize('UTC').tz_convert('US/Eastern')
+        elif input_value.tzinfo != self.eastern:
+            input_value = input_value.tz_convert('US/Eastern')
+        
+        return input_value
+
+

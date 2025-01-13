@@ -121,7 +121,7 @@ class NodeType(Enum):
     # NAMESPACE = "Namespace"  # Commenting out unused types
     # LINKBASE = "Linkbase"   # that appear in schema but 
     # RESOURCE = "Resource"   # have no actual nodes
-    # GUIDANCE = "Guidance"
+    GUIDANCE = "Guidance"    # Keep this for guidance/documentation elements
     # DEPRECATED = "deprecated"
     
 
@@ -131,7 +131,6 @@ class NodeType(Enum):
     MEMBER = "Member"
     
     DATE = "Date"
-    
     ADMIN_REPORT = "AdminReport"
 
 
@@ -170,7 +169,7 @@ class RelationType(Enum):
     HAS_CATEGORY = "HAS_CATEGORY"   # Report -> AdminReport
     FOR_COMPANY = "FOR_COMPANY"       # Context -> Company
     PROVIDES_GUIDANCE = "PROVIDES_GUIDANCE"  # From Guidance concept to related concept
-    HAS_GUIDANCE = "HAS_GUIDANCE"           # From concept to its guidance
+
     
 
 class ReportElementClassifier:
@@ -261,31 +260,17 @@ class ReportElementClassifier:
         # 7. Guidance
         if local_type == 'guidanceItemType' or "guidance" in qname_str.lower():
             return NodeType.GUIDANCE
-        
-        # 8. Deprecated
-        if "deprecated" in qname_str.lower() or "deprecated" in local_type.lower():
-            return NodeType.DEPRECATED
 
+        # Return OTHER for everything else
         return NodeType.OTHER
 
     @classmethod
     def _post_classify_single(cls, concept, qname_str, sub_group) -> NodeType:
-        # Rule 1: IsDomainMember -> *Member
-        if concept.isDomainMember:
-            return NodeType.MEMBER
-            
-        # Rule 2: Abstract -> *Abstract
-        if concept.isAbstract:
-            return NodeType.ABSTRACT
-            
-        # Rule 3: LinkbaseElement SubstitutionGroups
-        if sub_group in cls.LINKBASE_ELEMENTS:
-            return NodeType.LINKBASE
-            
-        # Rule 4: Date Elements
-        if qname_str in cls.DATE_ELEMENTS:
-            return NodeType.DATE
-            
+        """Additional classification checks for special cases"""
+        # Remove LINKBASE check since we commented it out
+        # if sub_group in cls.LINKBASE_ELEMENTS:
+        #     return NodeType.LINKBASE
+        
         return NodeType.OTHER
 
 
@@ -420,6 +405,8 @@ class process_report:
     # Populated in Presentation Class (_build_abstracts), used in Presentation Class (get_concept)
     _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False) # Used in Presentation (abstract.id: abstract)
     
+    # Add new field for guidance concepts
+    guidance_concepts: List[GuidanceConcept] = field(init=False, default_factory=list)
     
     def __post_init__(self):
         
@@ -439,6 +426,41 @@ class process_report:
 
         self._validate_and_link_networks()
         # self.link_fact_footnotes()   # Doesn't work properly yet    
+
+        self._link_guidance_concepts()
+
+
+
+    def _link_guidance_concepts(self):
+        """Create relationships between guidance concepts and their targets"""
+        relationships = []
+        
+        for guidance in self.guidance_concepts:
+            print(f"\nProcessing guidance: {guidance.qname}")
+            print(f"Guidance text: {guidance.guidance_text}")
+            
+            for target_qname in guidance.target_concepts:
+                target_concept = next(
+                    (c for c in self.concepts if str(c.qname) == target_qname), 
+                    None
+                )
+                if target_concept:
+                    relationships.append((
+                        guidance,
+                        target_concept,
+                        RelationType.PROVIDES_GUIDANCE,
+                        {
+                            'guidance_text': guidance.guidance_text,
+                            'concept_type': guidance.concept_type,
+                            'namespace': guidance.namespace
+                        }
+                    ))
+                    print(f"Created guidance relationship to: {target_concept.qname}")
+        
+        if relationships:
+            self.neo4j.merge_relationships(relationships)
+            print(f"\nCreated {len(relationships)} guidance relationships")
+
 
 
     def _validate_and_link_networks(self) -> None:
@@ -992,13 +1014,13 @@ class process_report:
 
 
     def populate_common_nodes(self):
-        """Build and sync common nodes (Concepts, Periods, Units) with Neo4j"""
+        """Populate common nodes in Neo4j."""
         if not self.model_xbrl:
             raise RuntimeError("XBRL model not loaded.")
             
         # Build common nodes from XBRL
-        self._build_concepts() # 1. Build concepts first
-        self._build_periods()   # 2. Build periods
+        self._build_concepts() # 1. Build concepts first (includes guidance concepts)
+        self._build_periods()  # 2. Build periods
         self._build_units()    # 3. Build units
 
         # contexts are company-specific 
@@ -1006,16 +1028,16 @@ class process_report:
         
 
         # Upload to Neo4j only common nodes first
-        self.neo4j._export_nodes([self.concepts, self.periods, self.units, self.contexts], testing=False)
-        
-        # Load complete set from Neo4j
-        # self.concepts = self.neo4j.load_nodes_as_instances(NodeType.CONCEPT, Concept)
-        # self.periods = self.neo4j.load_nodes_as_instances(NodeType.PERIOD, Period)
-        # self.units = self.neo4j.load_nodes_as_instances(NodeType.UNIT, Unit)
-        
-        # print(f"Loaded common nodes from Neo4j: {len(self.concepts)} concepts, {len(self.periods)} periods, {len(self.units)} units")
-        self._concept_lookup = {concept.id: concept for concept in self.concepts} 
-        
+        self.neo4j._export_nodes([
+            self.concepts,
+            self.guidance_concepts,  # Add guidance concepts here
+            self.periods, 
+            self.units, 
+            self.contexts
+        ], testing=False)
+
+        self._concept_lookup = {concept.id: concept for concept in [*self.concepts, *self.guidance_concepts]}
+
 
     def populate_company_nodes(self):
         """Build and sync company-specific nodes (Dimensions, Members) with Neo4j"""        
@@ -1116,12 +1138,31 @@ class process_report:
             raise RuntimeError("XBRL model not loaded.")
             
         self.concepts = []
+        self.guidance_concepts = []
+        type_counts = defaultdict(int)
         
-        # Explanation: 'model_xbrl.factsByQname.keys()' has concepts' qnames so we use fact.concept from model_xbrl.factsInInstance to fetch the concepts
-        unique_concepts = {fact.concept for fact in self.model_xbrl.factsInInstance if fact.concept.qname in self.model_xbrl.factsByQname.keys()}
-        self.concepts = [Concept(concept) for concept in unique_concepts]
+        # Get all concepts from the model, not just those with facts
+        all_concepts = set(self.model_xbrl.qnameConcepts.values())
         
-        print(f"Built {len(self.concepts)} unique concepts") 
+        # Also get concepts with facts
+        fact_concepts = {fact.concept for fact in self.model_xbrl.factsInInstance 
+                        if fact.concept.qname in self.model_xbrl.factsByQname.keys()}
+        
+        # Process all concepts
+        for concept in all_concepts:
+            node_type = ReportElementClassifier.classify(concept)
+            type_counts[node_type] += 1
+            
+            if node_type == NodeType.GUIDANCE:
+                guidance = GuidanceConcept(concept)
+                self.guidance_concepts.append(guidance)
+            elif concept in fact_concepts:  # Only create Concept nodes for those with facts
+                self.concepts.append(Concept(concept))
+        
+        print("\nConcept types:")
+        for node_type, count in type_counts.items():
+            print(f"{node_type.value}: {count}")
+        
 
 
     def _build_units(self):
@@ -1729,12 +1770,6 @@ class Concept(Neo4jNode):
             self.balance = self.model_concept.balance
             self.type_local = self.model_concept.baseXsdType
             self.category = ReportElementClassifier.classify(self.model_concept).value
-            
-            # Special handling for guidance concepts
-            if self.category == NodeType.GUIDANCE.value:
-                self.is_guidance = True
-                # Guidance concepts often have documentation text
-                self.guidance_text = self.model_concept.get('documentation', '')
 
         elif not self.u_id:
             raise ValueError("Either model_concept or properties must be provided")
@@ -3370,3 +3405,68 @@ def count_report_hierarchy(report: process_report) -> None:
     #     report.neo4j.get_neo4j_db_counts()
 
 # endregion : Admin/Helpers ########################
+
+@dataclass
+class GuidanceConcept(Concept):
+    """Represents a guidance concept that provides documentation/instructions"""
+    guidance_text: Optional[str] = None
+    target_concepts: List[str] = field(default_factory=list)
+    
+    def __post_init__(self):
+        super().__post_init__()
+        if self.model_concept is not None:
+            self.guidance_text = self._extract_guidance_text()
+            self.target_concepts = self._find_target_concepts()
+    
+    def _extract_guidance_text(self) -> Optional[str]:
+        """Extract guidance text from concept documentation"""
+        if hasattr(self.model_concept, 'documentation'):
+            return self.model_concept.documentation
+        return None
+        
+    def _find_target_concepts(self) -> List[str]:
+        """Find concepts this guidance applies to based on concept properties"""
+        target_concepts = []
+        
+        if not self.model_concept:
+            return target_concepts
+
+        qname = str(self.model_concept.qname)
+        
+        # Handle specific guidance types based on their purpose
+        if "UseNameOfCryptoAssetAsValueForMemberUnderCryptoAssetDomainGuidance" in qname:
+            # Look for crypto asset domain and its members
+            for concept in self.model_concept.modelXbrl.qnameConcepts.values():
+                if "CryptoAssetDomain" in str(concept.qname):
+                    target_concepts.append(str(concept.qname))
+                    
+        elif "UseFinancialStatementLineItemElementsWithDimensionElementsForBalancesOfVariableInterestEntityVieGuidance" in qname:
+            # Look for VIE-related concepts
+            for concept in self.model_concept.modelXbrl.qnameConcepts.values():
+                concept_name = str(concept.qname)
+                if any(term in concept_name for term in ["VariableInterestEntity", "VIE"]):
+                    target_concepts.append(concept_name)
+                    
+        elif "ElementNameAndStandardLabelInMaturityNumericLowerEndToNumericHigherEndDateMeasureMember" in qname:
+            # Look for maturity-related concepts
+            for concept in self.model_concept.modelXbrl.qnameConcepts.values():
+                concept_name = str(concept.qname)
+                if any(term in concept_name for term in ["Maturity", "DateMeasure"]):
+                    target_concepts.append(concept_name)
+                    
+        elif "ForInformationOnModelingAccountingChangesSeeImplementationGuide" in qname:
+            # Look for accounting change related concepts
+            for concept in self.model_concept.modelXbrl.qnameConcepts.values():
+                concept_name = str(concept.qname)
+                if "AccountingChange" in concept_name:
+                    target_concepts.append(concept_name)
+        
+        print(f"\nGuidance concept: {qname}")
+        if target_concepts:
+            print(f"Found {len(target_concepts)} target concepts:")
+            for target in target_concepts:
+                print(f"  - {target}")
+        else:
+            print("No target concepts found")
+        
+        return target_concepts
