@@ -1,6 +1,96 @@
 import pandas as pd
 from utils.market_session import MarketSessionClassifier
 from datetime import datetime, date
+from concurrent.futures import ThreadPoolExecutor
+import time
+
+
+
+# To Test all time calculations (such as start_time, end_time, interval_start_time in one go inside NewsQC.csv)
+def run_unit_tests_for_time_calculations():
+    """
+    Runs unit tests for calculating start_time, end_time, and interval_start_time
+    using multithreaded execution for efficiency.
+    """
+
+    # Define the column-function pairs for time calculations
+    tasks = [
+        ('start_time', 'get_start_time'),
+        ('end_time', 'get_end_time'),
+        ('interval_start_time', 'get_interval_start_time')
+    ]
+
+    print("Starting unit tests for time calculations...\n")
+    start_time = time.time()
+    
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(test_calculated_time, column, func) for column, func in tasks]
+        for future in futures:
+            future.result()  # Wait for each test to complete
+    
+    end_time = time.time()
+    print(f"Total runtime for unit tests: {end_time - start_time:.2f} seconds\n")
+    print("Unit tests completed successfully!")
+
+
+
+# Same function can run for start_time, end_time, interval_start_time by passing the appropriate column name & function
+def test_calculated_time(column_name, function_name):
+    """
+    Test calculated time (e.g., start_time, end_time, interval_start_time, etc.) against known values from NewsQC.csv.
+
+    Parameters:
+    - column_name: The column in the CSV to compare against (e.g., 'start_time').
+    - function_name: The name of the function from MarketSessionClassifier to calculate the value (e.g., 'get_start_time').
+    """
+    
+    # Load and prepare the data
+    df = pd.read_csv('News/NewsQC.csv', low_memory=False, on_bad_lines='warn', 
+                     thousands=',', index_col=0)
+    
+    # Fix index
+    df.index = pd.to_numeric(df.index, errors='coerce').fillna(-1).astype(int)
+    
+    # Convert time and calculate market sessions
+    df['time'] = pd.to_datetime(df['originalTime'], errors='coerce')
+    df = df.dropna(subset=['time'])  # Remove rows where 'time' is invalid
+    
+    # Dynamically call the specified function from MarketSessionClassifier
+    classifier = MarketSessionClassifier()
+    calculated_column = f"calculated_{column_name}"
+
+    # Applying ceil for comparison purposes - otherwise our code is correct as it doesn't round of seconds
+    df[calculated_column] = df['time'].apply(lambda t: getattr(classifier, function_name)(t).ceil('min'))
+
+    
+    # Get non-empty rows and calculate mismatches
+    valid_mask = df[[column_name, calculated_column]].notnull().all(axis=1)
+    valid_df = df[valid_mask]
+    
+    mismatches = valid_df[valid_df[column_name] != valid_df[calculated_column]]
+    
+    # Print statistics using valid rows only
+    total = len(valid_df)
+    diff_count = len(mismatches)
+    print(f"Total valid rows: {total:,}")
+    print(f"Mismatches: {diff_count:,}")
+    print(f"Accuracy: {((total - diff_count) / total) * 100:.2f}%\n")
+    
+    # Print mismatches if any
+    if diff_count > 0:
+        print("Mismatches:")
+        for _, row in mismatches.iterrows():
+            print(f"Original Time: {row['time']}, Expected: {row[column_name]}, Got: {row[calculated_column]}")
+
+# Above function Example usage:
+# test_calculated_time('start_time', 'get_start_time') # To test start_time with get_start_time
+# test_calculated_time('end_time', 'get_end_time')  # To test end_time with get_end_time
+# test_calculated_time('interval_start_time', 'get_interval_start_time') # To test interval_start_time with get_interval_start_time
+
+
+
+
+
 
 #### Unit Tests FOR MarketSessionClassifier Functions ####
 # This Tests get_session_times_et from MarketSessionClassifier (first loads QC news csv)

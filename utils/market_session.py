@@ -13,6 +13,49 @@ class MarketSessionClassifier:
         self.eastern = pytz.timezone('US/Eastern')
         self.add_minutes_to_open = 5
 
+    # Helper Functions
+    def _convert_to_eastern_timestamp(self, input_value):
+        """
+        Converts various date/time inputs to a timezone-aware timestamp in US/Eastern.
+        
+        Handles:
+        - str ('YYYY-MM-DD' or full datetime string)
+        - datetime
+        - date
+        - pd.Timestamp
+        """
+
+        if pd.isna(input_value) or input_value is None:
+            return None
+        
+        
+        if isinstance(input_value, str):
+            try:
+                # Try parsing as date first
+                input_value = datetime.strptime(input_value, '%Y-%m-%d')
+            except ValueError:
+                # If that fails, parse as full timestamp
+                input_value = pd.Timestamp(input_value)
+        elif isinstance(input_value, date) and not isinstance(input_value, datetime):
+            # Convert date to datetime
+            input_value = datetime.combine(input_value, datetime.min.time())
+        
+        if not isinstance(input_value, pd.Timestamp):
+            input_value = pd.Timestamp(input_value)
+        
+        # Ensure timezone is US/Eastern
+        if input_value.tzinfo is None:
+            try:
+                input_value = input_value.tz_localize('US/Eastern', ambiguous='raise', nonexistent='raise')
+            except (pytz.AmbiguousTimeError, pytz.NonExistentTimeError):
+                input_value = input_value.tz_localize('UTC').tz_convert('US/Eastern')
+        elif input_value.tzinfo != self.eastern:
+            input_value = input_value.tz_convert('US/Eastern')
+        
+        return input_value
+
+
+    # Market Session
     def get_market_session(self, timestamp):
         """Get the market session for a given timestamp"""
         if pd.isna(timestamp):
@@ -51,6 +94,7 @@ class MarketSessionClassifier:
 
 
 
+    # Trading Hours
     def get_trading_hours(self, date_input):
         """
         Get trading hours for previous, current, and next trading days.
@@ -121,48 +165,7 @@ class MarketSessionClassifier:
 
 
 
-    def _convert_to_eastern_timestamp(self, input_value):
-        """
-        Converts various date/time inputs to a timezone-aware timestamp in US/Eastern.
-        
-        Handles:
-        - str ('YYYY-MM-DD' or full datetime string)
-        - datetime
-        - date
-        - pd.Timestamp
-        """
-
-        if pd.isna(input_value) or input_value is None:
-            return None
-        
-        
-        if isinstance(input_value, str):
-            try:
-                # Try parsing as date first
-                input_value = datetime.strptime(input_value, '%Y-%m-%d')
-            except ValueError:
-                # If that fails, parse as full timestamp
-                input_value = pd.Timestamp(input_value)
-        elif isinstance(input_value, date) and not isinstance(input_value, datetime):
-            # Convert date to datetime
-            input_value = datetime.combine(input_value, datetime.min.time())
-        
-        if not isinstance(input_value, pd.Timestamp):
-            input_value = pd.Timestamp(input_value)
-        
-        # Ensure timezone is US/Eastern
-        if input_value.tzinfo is None:
-            try:
-                input_value = input_value.tz_localize('US/Eastern', ambiguous='raise', nonexistent='raise')
-            except (pytz.AmbiguousTimeError, pytz.NonExistentTimeError):
-                input_value = input_value.tz_localize('UTC').tz_convert('US/Eastern')
-        elif input_value.tzinfo != self.eastern:
-            input_value = input_value.tz_convert('US/Eastern')
-        
-        return input_value
-
-
-
+    # Trading Hours
     def extract_times(self, trading_hours_tuple):
 
         previous_day, current_day, next_day = trading_hours_tuple  # Direct unpacking
@@ -191,34 +194,49 @@ class MarketSessionClassifier:
         return times
 
 
+    # Helper Functions
+    def get_session_data_structure(self, timestamp_str):
+        trading_hours, is_trading_day = self.get_trading_hours(timestamp_str)
+        times = self.extract_times(trading_hours)
+        market_session = self.get_market_session(timestamp_str)
+        return market_session, is_trading_day, times
 
-    # # Example usage in your workflow:
-    # def process_event(self, event_date):
-    #     """Process a single event date"""
-    #     trading_hours = self.get_trading_hours(event_date)
-    #     times = self.extract_times(trading_hours)
-    #     return times
 
-    # def process_multiple_events(self, event_dates):
-    #     """Process multiple event dates efficiently"""
-    #     return {date: self.process_event(date) for date in event_dates}
-    
 
-    def get_start_time(self, timestamp, market_session, is_trading_day, times):
+
+    # Session Returns - Start Time
+    def get_start_time(self, timestamp):
         
+        market_session, is_trading_day, times = self.get_session_data_structure(timestamp)
+
         timestamp = self._convert_to_eastern_timestamp(timestamp)
         after_4_pm = timestamp.hour >= 16
         
         if market_session == 'market_closed':
             if is_trading_day and after_4_pm:
-                return times['post_market_current_day']
+                return times['post_market_current_day'] # change to 'market_close_current_day
             else:
-                return times['post_market_previous_day']
-        return timestamp  # Actual release time for all the rest
-    
+                return times['post_market_previous_day'] # change to 'market_close_previous_day'
+        return timestamp  # Actual release time for all the rest    
 
-    def get_end_time(self, timestamp, market_session, is_trading_day, times):
+    # def get_start_time(self, timestamp, market_session, is_trading_day, times):
         
+        # market_session, is_trading_day, times = self.get_session_data_structure(timestamp)
+    #     timestamp = self._convert_to_eastern_timestamp(timestamp)
+    #     after_4_pm = timestamp.hour >= 16
+        
+    #     if market_session == 'market_closed':
+    #         if is_trading_day and after_4_pm:
+    #             return times['market_close_current_day'] # In QC this was 'post_market_current_day'
+    #         else:
+    #             return times['market_close_previous_day'] # In QC this was 'post_market_previous_day'
+    #     return timestamp  # Actual release time for all the rest
+
+    
+    # Session Returns - End Time
+    def get_end_time(self, timestamp):
+        
+        market_session, is_trading_day, times = self.get_session_data_structure(timestamp)
         timestamp = self._convert_to_eastern_timestamp(timestamp)        
         after_4_pm = timestamp.hour >= 16
         
@@ -234,16 +252,18 @@ class MarketSessionClassifier:
         elif market_session == 'pre_market':
             return times['market_open_current_day'] + pd.Timedelta(minutes=self.add_minutes_to_open)
             
-        else:  # This is post_market
+        else:  # This is post_market - we could also mesure pre-market activity for events that happened during post-market previous day
             return times['market_open_next_day'] + pd.Timedelta(minutes=self.add_minutes_to_open)    
             
 
-    def get_interval_start_time(self, timestamp, market_session, is_trading_day, times):
+    # Inorder to ensure that the returns are calculated correctly, we need to understand if the horizon extends beyond stated market session
+    # For example, horizon return for pre_market may include end prices from next session - see QC Code
+    def get_interval_start_time(self, timestamp):
         """
         The horizon may extend beyond stated market session so for example 
         horizon return for pre_market may include end prices from next session
         """
-
+        market_session, is_trading_day, times = self.get_session_data_structure(timestamp)
         timestamp = self._convert_to_eastern_timestamp(timestamp)        
         after_4_pm = timestamp.hour >= 16
         
@@ -253,3 +273,50 @@ class MarketSessionClassifier:
             else:
                 return times['pre_market_next_day']
         return timestamp  # Actual Release Time for all rest
+    
+    
+
+    # 1D Impact Returns - previous day's close to current day's close
+    def get_1d_impact_times(self, timestamp):
+        
+        """ The 1D impact function compares two trading day closing prices based on when the event occurs: 
+            if before 4 PM, it uses previous to current day's close; 
+            if after 4 PM or on non-trading days, it uses current to next day's close.  """
+        
+        market_session, is_trading_day, times = self.get_session_data_structure(timestamp)
+
+        timestamp = self._convert_to_eastern_timestamp(timestamp)
+        after_4_pm = timestamp.hour >= 16
+        
+        # Handle non-trading days first
+        if not is_trading_day:
+            return (times['market_close_previous_day'], times['market_close_next_day'])
+        
+        # For trading days, maintain existing logic
+        if market_session in ['pre_market', 'in_market']:
+            return (times['market_close_previous_day'], times['market_close_current_day'])
+        elif market_session == 'post_market':
+            return (times['market_close_current_day'], times['market_close_next_day'])
+        elif market_session == 'market_closed':
+            if not after_4_pm:
+                return (times['market_close_previous_day'], times['market_close_current_day'])
+            else:
+                return (times['market_close_current_day'], times['market_close_next_day'])
+                
+        raise ValueError(f"Invalid market session: {market_session}")
+    
+
+
+
+# TO REMOVE
+
+    # # Example usage in your workflow:
+    # def process_event(self, event_date):
+    #     """Process a single event date"""
+    #     trading_hours = self.get_trading_hours(event_date)
+    #     times = self.extract_times(trading_hours)
+    #     return times
+
+    # def process_multiple_events(self, event_dates):
+    #     """Process multiple event dates efficiently"""
+    #     return {date: self.process_event(date) for date in event_dates}
