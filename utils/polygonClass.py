@@ -1,5 +1,5 @@
 from polygon.rest import RESTClient
-from typing import List, Dict, Tuple, Optional, Union
+from typing import List, Dict, Tuple, Optional, Union, Generator
 from dataclasses import dataclass
 import pandas as pd
 import numpy as np
@@ -8,6 +8,79 @@ from concurrent.futures import ThreadPoolExecutor
 import concurrent.futures 
 from tqdm import tqdm
 import requests
+import time
+
+
+
+# ETF Lists - Can put in a separate file
+SECTOR_INDUSTRY_ETFS = {
+    # Sector ETFs (SPDR)
+    'SPY',  # S&P 500
+    'QQQ',  # Nasdaq 100
+    'XLC',  # Communication Services
+    'XLV',  # Healthcare
+    'XLI',  # Industrials
+    'XLK',  # Technology
+    'XLY',  # Consumer Discretionary
+    'XLE',  # Energy
+    'XLP',  # Consumer Staples
+    'XLRE', # Real Estate
+    'XLF',  # Financials
+    'XLU',  # Utilities
+    'XLB',  # Materials
+    
+    # Industry ETFs
+    'PNQI', # Internet
+    'IBB',  # Biotech
+    'IHF',  # Healthcare Providers
+    'IGV',  # Software
+    'XRT',  # Retail
+    'PEJ',  # Leisure & Entertainment
+    'IHI',  # Medical Devices
+    'XSD',  # Semiconductor
+    'CRAK', # Oil & Gas
+    'PJP',  # Pharmaceuticals
+    'PKB',  # Building & Construction
+    'ITA',  # Aerospace & Defense
+    'EDUT', # Education
+    'IYR',  # Real Estate
+    'SMH',  # Semiconductor
+    'CARZ', # Auto
+    'VGT',  # Technology
+    'KCE',  # Capital Markets
+    'IYT',  # Transportation
+    'TAN',  # Solar
+    'QCLN', # Clean Energy
+    'KIE',  # Insurance
+    'XOP',  # Oil & Gas Exploration
+    'PBJ',  # Food & Beverage
+    'RTH',  # Retail
+    'XHB',  # Homebuilders
+    'IYF',  # Financial
+    'GAMR', # Gaming
+    'IYC',  # Consumer Services
+    'SEA',  # Shipping
+    'MOO',  # Agriculture
+    'AMLP', # MLP
+    'JETS', # Airlines
+    'ITB',  # Home Construction
+    'XME',  # Metals & Mining
+    'XES',  # Oil & Gas Equipment
+    'SLX',  # Steel
+    'IAI',  # Broker-Dealers
+    'MORT', # Mortgage Finance
+    'GLD',  # Gold
+    'XTL',  # Telecom
+    'EVX',  # Environmental Services
+    'HACK', # Cybersecurity
+    'TOKE', # Cannabis
+    'VNQ',  # Real Estate
+    'IYJ',  # Industrial
+    'PHO'   # Water
+}
+
+
+
 
 @dataclass
 class Polygon:
@@ -21,7 +94,6 @@ class Polygon:
         self.executor = ThreadPoolExecutor(max_workers=220)
         self.last_error = {}
         self.ticker_validation_cache = {}  # Add validation cache
-
 
 
     def validate_ticker(self, ticker: str) -> Tuple[bool, str]:
@@ -76,13 +148,16 @@ class Polygon:
         
 
 
-    def get_last_trade(self, ticker: str, timestamp: datetime, max_days_back: int = 3) -> float:
-        # Validate ticker first
-        is_valid, error_message = self.validate_ticker(ticker)
-        if not is_valid:
-            # print(f"Warning: {error_message}\n")
-            self.last_error[ticker] = error_message  # Store the error message
-            return np.nan
+    def get_last_trade(self, ticker: str, timestamp: datetime, asset_type: str = "stock", max_days_back: int = 3) -> float:
+        
+        
+        # Skip validation for known ETFs
+        if ticker not in SECTOR_INDUSTRY_ETFS:
+            # Only validate non-ETF tickers
+            is_valid, error_message = self.validate_ticker(ticker)
+            if not is_valid:
+                self.last_error[ticker] = error_message
+                return np.nan
 
         timestamp = self.market_session._convert_to_eastern_timestamp(timestamp)
         if timestamp is None:
@@ -153,15 +228,15 @@ class Polygon:
                     
                 continue
         
-        print(f"No price found for {ticker} in the last {max_days_back} days before {timestamp}")
+        # print(f"No price found for {ticker} in the last {max_days_back} days before {timestamp}")
         return np.nan
 
 
-
-    def get_last_trades(self, tickers: List[str], timestamp: datetime, max_days_back: int = 3, pbar=None) -> Dict[str, float]:
+    # Using it for Batch or Historical Data
+    def get_last_trades(self, ticker_timestamp_pairs: List[Tuple[str, datetime]], max_days_back: int = 1, pbar=None) -> Dict[str, float]:
         futures = {
             ticker: self.executor.submit(self.get_last_trade, ticker, timestamp, max_days_back)
-            for ticker in tickers
+            for ticker, timestamp in ticker_timestamp_pairs  # Unpack pairs here
         }
         
         results = {}
@@ -208,26 +283,12 @@ class Polygon:
             if not any(msg in error_msg for msg in ["not found", "not in the stocks market", "not a common stock", "is an ETF"]):
                 filtered_results[ticker] = price
 
-
-        # print(f"\nComplete Summary:")
-        # print(f"Total tickers processed: {total_tickers}")
-        # print(f"Valid prices found: {valid_prices}")
-        # print(f"NaN prices (including validation failures): {nan_prices}")
-        # print(f"Exceptions during processing: {exception_count}")
-        # print(f"Success rate: {(valid_prices/total_tickers*100):.1f}%")
-        # print(f"\nFailure Breakdown:")
-        # print(f"Tickers not found: {len(not_found_tickers)}")
-        # print(f"Tickers not in stocks market: {len(wrong_market_tickers)}")
-        # print(f"Tickers not common stock: {len(not_common_stock)}")
-        # print(f"Tickers with no price data: {len(no_price_tickers)}, -> {no_price_tickers}")
-
         # Calculate valid symbols (total minus validation failures)
         validation_failures = len(not_found_tickers) + len(wrong_market_tickers) + len(not_common_stock)
         valid_symbols = total_tickers - validation_failures
         
-        # Calculate true success rate based on valid symbols only
+        # Calculate success rate based on valid symbols only
         success_rate = (valid_prices/valid_symbols*100) if valid_symbols > 0 else 0
-
 
         print("\n" + "="*60)
         print("COMPLETE SUMMARY".center(60))
@@ -258,10 +319,314 @@ class Polygon:
         return filtered_results
         
 
+    # Calculates Returns inside
+    # Takes in a list of tuples with index, ticker, start_time, end_time and returns a dictionary with index and return value - using it for QC df Returns
+    def get_returns_indexed(self, index_ticker_times: List[Tuple[int, str, datetime, datetime]], pbar=None, debug: bool = False) -> Dict[int, float]:
+        
+        """
+        Get returns with index tracking using concurrent futures
+        Args: index_ticker_times: List of (index, ticker, start_time, end_time)
+        Returns: Dict[index, return_value] """
 
-
+        TIMEOUT = 30  # seconds
+        
+        # Create futures for start and end prices (unchanged)
+        start_futures = {
+            (idx, ticker): self.executor.submit(self.get_last_trade, ticker, start_time)
+            for idx, ticker, start_time, _ in index_ticker_times
+        }
+        
+        end_futures = {
+            (idx, ticker): self.executor.submit(self.get_last_trade, ticker, end_time)
+            for idx, ticker, _, end_time in index_ticker_times
+        }
+        
+        # Collect results maintaining index association
+        start_prices = {}
+        end_prices = {}
+        
+        # Create O(1) lookups
+        start_future_to_key = {f: k for k, f in start_futures.items()}
+        
+        # Process start prices with O(1) lookup
+        for future in concurrent.futures.as_completed(start_futures.values()):
+            if pbar: pbar.update(1)
+            idx, ticker = start_future_to_key[future]
+            try:
+                start_prices[(idx, ticker)] = future.result(timeout=TIMEOUT)
+            except concurrent.futures.TimeoutError:
+                print(f"Timeout getting start price for {ticker}")
+                start_prices[(idx, ticker)] = np.nan
+            except Exception as e:
+                print(f"Error getting start price for {ticker}: {str(e)}")
+                start_prices[(idx, ticker)] = np.nan
+        
+        # Create O(1) lookup for end futures
+        end_future_to_key = {f: k for k, f in end_futures.items()}
+        
+        # Process end prices with O(1) lookup
+        for future in concurrent.futures.as_completed(end_futures.values()):
+            if pbar: pbar.update(1)
+            idx, ticker = end_future_to_key[future]
+            try:
+                end_prices[(idx, ticker)] = future.result(timeout=TIMEOUT)
+            except concurrent.futures.TimeoutError:
+                print(f"Timeout getting end price for {ticker}")
+                end_prices[(idx, ticker)] = np.nan
+            except Exception as e:
+                print(f"Error getting end price for {ticker}: {str(e)}")
+                end_prices[(idx, ticker)] = np.nan
+        
+        # Calculate returns (unchanged from original)
+        returns = {}
+        for idx, ticker, start_time, end_time in index_ticker_times:
+            s_price = start_prices.get((idx, ticker))
+            e_price = end_prices.get((idx, ticker))
+            
+            if not (np.isnan(s_price) or np.isnan(e_price)):
+                ret = (e_price - s_price) / s_price * 100
+                if debug:
+                    print(f"Index[{idx}] {ticker:<6}: ${s_price:>7.2f} -> ${e_price:>7.2f} = {ret:>6.2f}%")
+                returns[idx] = ret
+            else:
+                returns[idx] = np.nan
+                    
+        return returns
 
 
     def __del__(self):
         """Cleanup executor on deletion"""
         self.executor.shutdown(wait=False)
+
+
+    # https://polygon.io/docs/stocks?utm_source=chatgpt.com/get_v3_reference_tickers__ticker
+    def get_ticker_details(self, ticker: str) -> Optional[Dict]:
+
+        try:
+            # Make API request using the client
+            details = self.client.get_ticker_details(ticker)
+            
+            if not details:
+                return None
+                
+            # Return the results portion of the response
+            return details
+            
+        except Exception as e:
+            print(f"Error fetching ticker details for {ticker}: {str(e)}")
+            return None
+        
+
+
+    # https://polygon.io/docs/stocks?utm_source=chatgpt.com/get_v1_related-companies__ticker
+    def get_related_companies(self, tickers: List[str], pbar=None) -> Dict[str, List[str]]:
+        
+        def _fetch_single_ticker(ticker: str) -> Tuple[str, List[str]]:
+            try:
+                url = f"https://api.polygon.io/v1/related-companies/{ticker}"
+                params = {'apiKey': self.api_key}
+                response = requests.get(url, params=params)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    if data.get('status') == 'OK':
+                        related_tickers = [r['ticker'] for r in data.get('results', [])]
+                        return ticker, related_tickers
+                return ticker, []
+                
+            except Exception as e:
+                print(f"Error fetching related companies for {ticker}: {str(e)}")
+                return ticker, []
+
+        # Submit all requests to the thread pool
+        futures = {
+            ticker: self.executor.submit(_fetch_single_ticker, ticker)
+            for ticker in tickers
+        }
+        
+        # Process results
+        results = {}
+        for future in concurrent.futures.as_completed(futures.values()):
+            if pbar:
+                pbar.update(1)
+            for ticker, f in futures.items():
+                if f == future:
+                    try:
+                        original_ticker, related_tickers = future.result()
+                        results[original_ticker] = related_tickers
+                    except Exception as e:
+                        print(f"Error processing {ticker}: {str(e)}")
+                        results[ticker] = []
+                    break
+        
+        # Print summary
+        total_tickers = len(results)
+        tickers_with_related = sum(1 for related in results.values() if related)
+        
+        print("\n" + "="*60)
+        print("RELATED COMPANIES SUMMARY".center(60))
+        print("="*60)
+        print(f"Total Tickers Processed: {total_tickers}")
+        print(f"Tickers with Related Companies: {tickers_with_related}")
+        print(f"Success Rate: {(tickers_with_related/total_tickers*100):.1f}%")
+        
+        return results
+
+    # Useful for single event returns
+    # Returns : {'stock': 0.67, 'sector': 0.05, 'industry': -0.6, 'macro': 0.045}
+    # return_type == 'session', '1d_impact', 'horizon'
+    # pass stock, its associated ETFs and event timestamp and return type.
+    def get_event_returns(
+        self,
+        ticker: str,
+        sector_etf: str,
+        industry_etf: str,
+        event_timestamp: str,
+        return_type: str,
+        horizon_minutes: Optional[List[int]] = None,
+        debug: bool = False
+    ) -> Dict[str, Union[float, List[float]]]:
+        """
+        Calculate returns for stock, sector ETF, industry ETF, and SPY based on event timestamp.
+        Returns dictionary with keys: 'stock', 'sector', 'industry', 'macro'.
+        For horizon returns, each value is a list corresponding to horizon_minutes.
+        """
+        # Validate only the stock ticker
+        is_valid, error_msg = self.validate_ticker(ticker)
+        if not is_valid:
+            return {k: np.nan for k in ['stock', 'sector', 'industry', 'macro']}
+
+        # Get time window based on return type
+        if return_type == 'session':
+            start_time = self.market_session.get_start_time(event_timestamp)
+            end_time = self.market_session.get_end_time(event_timestamp)
+            time_pairs = [
+                (0, ticker, start_time, end_time),
+                (1, sector_etf, start_time, end_time),
+                (2, industry_etf, start_time, end_time),
+                (3, 'SPY', start_time, end_time)
+            ]
+        
+        elif return_type == '1d_impact':
+            start_time, end_time = self.market_session.get_1d_impact_times(event_timestamp)
+            time_pairs = [
+                (0, ticker, start_time, end_time),
+                (1, sector_etf, start_time, end_time),
+                (2, industry_etf, start_time, end_time),
+                (3, 'SPY', start_time, end_time)
+            ]
+        
+        elif return_type == 'horizon':
+            if not horizon_minutes:
+                return {k: [] for k in ['stock', 'sector', 'industry', 'macro']}
+            
+            interval_start = self.market_session.get_interval_start_time(event_timestamp)
+            time_pairs = []
+            for idx, minutes in enumerate(horizon_minutes):
+                horizon_time = interval_start + timedelta(minutes=minutes)
+                time_pairs.extend([
+                    (idx*4, ticker, interval_start, horizon_time),
+                    (idx*4+1, sector_etf, interval_start, horizon_time),
+                    (idx*4+2, industry_etf, interval_start, horizon_time),
+                    (idx*4+3, 'SPY', interval_start, horizon_time)
+                ])
+        
+        else:
+            raise ValueError("return_type must be one of: 'session', '1d_impact', 'horizon'")
+
+        # Calculate returns using concurrent execution
+        returns_dict = self.get_returns_indexed(time_pairs, debug=debug)
+        
+        # Organize results based on return type
+        if return_type in ['session', '1d_impact']:
+            return {
+                'stock': returns_dict.get(0),
+                'sector': returns_dict.get(1),
+                'industry': returns_dict.get(2),
+                'macro': returns_dict.get(3)
+            }
+        else:  # horizon returns
+            return {
+                'stock': [returns_dict.get(i*4) for i in range(len(horizon_minutes))],
+                'sector': [returns_dict.get(i*4+1) for i in range(len(horizon_minutes))],
+                'industry': [returns_dict.get(i*4+2) for i in range(len(horizon_minutes))],
+                'macro': [returns_dict.get(i*4+3) for i in range(len(horizon_minutes))]
+            }
+
+
+
+
+    # This is a function that prepares time pairs for batch processing.
+    # It takes in a news_df, return_type and horizon_minutes and returns a list of tuples ready for get_returns_indexed
+    # news_df is a dataframe with columns [symbol, originalTime, sector_etf, industry_etf]
+    def prepare_time_pairs(
+        self,
+        news_df: pd.DataFrame,
+        return_type: str,
+        horizon_minutes: Optional[List[int]] = None
+    ) -> Dict[str, List[Tuple[int, str, datetime, datetime]]]:
+        """Prepare (index, ticker, start_time, end_time) pairs organized by asset type."""
+        
+        timestamps = pd.to_datetime(news_df['originalTime'])
+        asset_types = {
+            'stock': news_df['symbol'],
+            'sector': news_df['sector_etf'],
+            'industry': news_df['industry_etf'],
+            'macro': pd.Series('SPY', index=news_df.index)
+        }
+        
+        if return_type == 'session':
+            starts = timestamps.map(self.market_session.get_start_time)
+            ends = timestamps.map(self.market_session.get_end_time)
+            
+            return {
+                asset_type: [
+                    (int(idx), str(ticker), start, end)
+                    for idx, ticker, start, end 
+                    in zip(news_df.index, tickers, starts, ends)
+                ]
+                for asset_type, tickers in asset_types.items()
+            }
+        
+        elif return_type == '1d_impact':
+            times = timestamps.map(self.market_session.get_1d_impact_times)
+            
+            return {
+                asset_type: [
+                    (int(idx), str(ticker), t[0], t[1])
+                    for idx, ticker, t 
+                    in zip(news_df.index, tickers, times)
+                ]
+                for asset_type, tickers in asset_types.items()
+            }
+        
+        elif return_type == 'horizon':
+            if not horizon_minutes:
+                raise ValueError("horizon_minutes required for horizon return type")
+                    
+            starts = timestamps.map(self.market_session.get_interval_start_time)
+            
+            return {
+                h: {
+                    asset_type: [
+                        (int(idx), str(ticker), 
+                        min(start, start + pd.Timedelta(minutes=h)),  # Earlier time becomes start
+                        max(start, start + pd.Timedelta(minutes=h)))  # Later time becomes end
+                        for idx, ticker, start in zip(news_df.index, tickers, starts)
+                    ]
+                    for asset_type, tickers in asset_types.items()
+                }
+                for h in horizon_minutes
+            }
+        
+
+
+    def get_structured_returns(self, news_df: pd.DataFrame, return_type: str = 'session', horizon_minutes: Optional[List[int]] = None) -> pd.DataFrame:
+        """Returns DataFrame of asset returns indexed by news_df rows.
+        Columns are named 'asset{h}' for horizon or 'asset_return_type' for session/1d_impact.
+        news_df needs columns: [symbol, originalTime, sector_etf, industry_etf]"""        
+        pairs = self.prepare_time_pairs(news_df, return_type, horizon_minutes)
+        returns = {f"{asset}{h}" if return_type == 'horizon' else f"{asset}_{return_type}": self.get_returns_indexed(pairs[h][asset] if return_type == 'horizon' else pairs[asset])
+                for h in (pairs.keys() if return_type == 'horizon' else [''])
+                for asset in ['stock', 'sector', 'industry', 'macro']}
+        return pd.DataFrame.from_dict(returns, orient='columns')
