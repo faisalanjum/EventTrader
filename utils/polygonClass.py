@@ -566,7 +566,8 @@ class Polygon:
         horizon_minutes: Optional[List[int]] = None
     ) -> Dict[str, List[Tuple[int, str, datetime, datetime]]]:
         """Prepare (index, ticker, start_time, end_time) pairs organized by asset type."""
-        
+
+        news_df.index = news_df.index.map(lambda x: int(str(x).replace(',', '')))
         timestamps = pd.to_datetime(news_df['originalTime'])
         asset_types = {
             'stock': news_df['symbol'],
