@@ -4,11 +4,18 @@
 
 
 
+
 Historical News - Rest API
 Current News    - WebSocket
-
 - WebSocket has Action (either Created or Updated)
 - Rest API has Created and Updated fields only no Action
+
+
+BzWebSocketNews -> to_unified() -> UnifiedNews
+BzRestAPINews  -> to_unified() -> UnifiedNews
+
+
+
 
 Classification:
   - News can be broadly classified in 2 categories:
@@ -166,7 +173,7 @@ Coding Pipeline:
     - Remove news without symbols/id/timestamps
     - Keep raw content & symbols format
     - Keep news with missing body/title/teaser
-    - Let Pydantic handle JSON serialization (ensure it’s lightweight no heay load before redis)
+    - Let Pydantic handle JSON serialization (ensure it's lightweight no heay load before redis)
 
 3. Redis Queue
     - Single queue, two prefixes (historical:, websocket:)
@@ -185,3 +192,44 @@ Coding Pipeline:
 5. Neo4j Processing
     - Execute Cypher query for storage
     - Handle updates/embeddings as designed
+
+# Benzinga News API Implementation Notes
+
+## Error Tracking System
+
+The system implements detailed error tracking to maintain data quality and monitor API behavior:
+
+### Error Categories
+1. **JSON Errors**
+   - Failed JSON parsing
+   - Malformed responses
+
+2. **Validation Errors**
+   - Missing Stocks: News items without stock symbols
+   - Missing ID: Items without valid identifiers
+   - Invalid Created: Malformed creation timestamps
+   - Invalid Updated: Malformed update timestamps
+   - Other: Unexpected schema violations
+
+3. **Unexpected Errors**
+   - Connection issues
+   - API failures
+   - Other runtime errors
+
+### Purpose
+- Monitor data quality
+- Identify API changes
+- Debug issues
+- Track error patterns
+- Improve reliability
+
+### Usage
+Error statistics are available through:
+- Real-time logging
+- Summary reports
+- Error count tracking
+
+
+
+REST API: - Raw JSON → BzRestAPINews (with nested RestAPIStock/Channel/Tag) → UnifiedNews
+WebSocket: - Raw JSON → BzWebSocketNews → Content (with nested Security) → UnifiedNews
