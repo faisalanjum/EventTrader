@@ -5,6 +5,9 @@ import pandas as pd
 from io import StringIO
 import os
 from datetime import datetime
+from typing import List
+from benzinga.bz_news_schemas import UnifiedNews
+
 
 # Create logs directory if it doesn't exist
 log_dir = "logs"
@@ -136,6 +139,30 @@ class RedisClient:
         except redis.ConnectionError as e:
             logging.error(f"Redis connection failed: {e}")
             raise
+
+
+    def set_news(self, news_item: UnifiedNews, ex=None):
+        """Store single unified news item"""
+        try:
+            key = f"{self.prefix}{news_item.id}"
+            json_str = news_item.model_dump_json()
+            return self.client.set(key, json_str, ex=ex)
+        except Exception as e:
+            logging.error(f"Failed to store news item: {e}")
+            return False
+
+    def set_news_batch(self, news_items: List[UnifiedNews], ex=None):
+        """Store batch of unified news items"""
+        pipe = self.client.pipeline(transaction=True)
+        try:
+            for item in news_items:
+                pipe.set(f"{self.prefix}{item.id}", 
+                        item.model_dump_json(), 
+                        ex=ex)
+            return pipe.execute()
+        except Exception as e:
+            logging.error(f"Failed to store batch: {e}")
+            return False
 
     def set(self, key, value, ex=None):
         """Set key-value pair with optional expiration in seconds"""

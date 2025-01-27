@@ -8,13 +8,16 @@ from pydantic import ValidationError
 from eventtrader.keys import BENZINGANEWS_API_KEY
 from benzinga.bz_news_schemas import BzWebSocketNews, UnifiedNews
 from benzinga.bz_news_errors import NewsErrorHandler
+from utils.redisClasses import RedisClient
 import random
 
 
 class BenzingaNewsWebSocket:
     """WebSocket client for Benzinga news data"""
     
-    def __init__(self):
+    def __init__(self, redis_client: RedisClient, ttl: int = 3600):
+        self.redis_client = redis_client
+        self.ttl = ttl  # Store TTL as instance variable
         self.url = f"wss://api.benzinga.com/api/v1/news/stream?token={BENZINGANEWS_API_KEY}"
         self.error_handler = NewsErrorHandler()
         self.connected = False
@@ -37,8 +40,6 @@ class BenzingaNewsWebSocket:
     def print_news_item(item: Union[BzWebSocketNews, UnifiedNews], raw: bool = False):
         """Print news item in raw or unified format"""
         item.print()
-
-
 
     def print_error_stats(self):
         """Print current error statistics"""
@@ -107,9 +108,9 @@ class BenzingaNewsWebSocket:
         }
         ws.send(json.dumps(subscription))
 
+
     def _on_message(self, ws, message: str):
         """Handle incoming WebSocket message"""
-    
         self.last_message_time = time.time()
         self.current_retry = 0  # Reset retry counter on successful message
 
@@ -123,13 +124,15 @@ class BenzingaNewsWebSocket:
             
             data = json.loads(message)
             
-            # Use centralized processing
+            # Process item based on raw setting for display
             processed_item = self.error_handler.process_news_item(data, self.raw)
             if processed_item:
-                self.print_news_item(processed_item)
-                self.stats['messages_processed'] += 1  # Count successful processing
+                # Always store unified version in Redis
+                unified_item = self.error_handler.process_news_item(data, raw=False)
+                if self.redis_client.set_news(unified_item, ex=self.ttl):
+                    self.print_news_item(processed_item)
+                    self.stats['messages_processed'] += 1
             
-            # Always print stats regardless of raw mode
             self.print_stats()
             
         except json.JSONDecodeError as je:
@@ -137,6 +140,7 @@ class BenzingaNewsWebSocket:
             self.error_handler.handle_json_error(je, message)
         except Exception as e:
             self.error_handler.handle_unexpected_error(e)
+
 
     def _on_error(self, ws, error):
         """Handle WebSocket error"""

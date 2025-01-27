@@ -52,11 +52,14 @@ from typing import Dict, List, Any, Optional, Union
 
 from benzinga.bz_news_errors import NewsErrorHandler
 from benzinga.bz_news_schemas import BzRestAPINews, UnifiedNews  # We'll need this for validation & unified format
+from utils.redisClasses import RedisClient
 
 class BenzingaNewsRestAPI:
     """Simple class to fetch and print Benzinga news data"""
     
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, redis_client: RedisClient, ttl: int = 3600):
+        self.redis_client = redis_client
+        self.ttl = ttl 
         self.api_url = "https://api.benzinga.com/api/v2/news"
         self.api_key = api_key
         self.headers = {"accept": "application/json"}
@@ -95,21 +98,22 @@ class BenzingaNewsRestAPI:
             
         return params
 
-    def _fetch_news(self, updated_since: Optional[int] = None,
-                   date_from: Optional[str] = None, 
-                   date_to: Optional[str] = None,
-                   tickers: Optional[List[str]] = None,
-                   raw: bool = False) -> List[Union[BzRestAPINews, UnifiedNews]]:
-        """Internal method to fetch news from API"""
 
-        # Reset error stats at start of each fetch
+    def _fetch_news(self, updated_since: Optional[int] = None,
+                date_from: Optional[str] = None, 
+                date_to: Optional[str] = None,
+                tickers: Optional[List[str]] = None,
+                raw: bool = False) -> List[Union[BzRestAPINews, UnifiedNews]]:
+        """Internal method to fetch news from API"""
         self.error_handler.reset_stats()
         
         all_items = []
         current_page = 0
         total_items_received = 0
+        current_batch = []  # For Redis batch storage
+        BATCH_SIZE = 1000   # Explicit constant
         
-        # Print initial params once
+        # Original logging
         print("\nStarting API Request:")
         print(f"- date_from: {date_from}")
         print(f"- date_to: {date_to}")
@@ -118,6 +122,7 @@ class BenzingaNewsRestAPI:
         
         while current_page < self.MAX_PAGE_LIMIT:
             try:
+                # Original pagination params
                 params = self._build_params(
                     page=current_page,
                     updated_since=updated_since,
@@ -126,34 +131,39 @@ class BenzingaNewsRestAPI:
                     tickers=tickers
                 )
                 
-                # Just print page progress
                 print(f"Fetching page {current_page}...", end='\r')
                 
+                # Original API call and validation
                 response = requests.get(self.api_url, headers=self.headers, params=params)
-                try:
-                    response.raise_for_status()
-                except requests.exceptions.HTTPError as e:
-                    self.error_handler.handle_http_error(e)
-                    break
+                response.raise_for_status()
                 
                 news_items = response.json()
                 total_items_received += len(news_items)
                 
-                # Process items
+                # Process items (maintaining original logic while adding Redis)
                 current_page_items = []
                 for raw_item in news_items:
                     item_id = raw_item.get('id', 'unknown')
                     self.error_handler.handle_news_item(item_id, "received", {})
                     
-                    # Use centralized processing
+                    # Original processing for return value
                     processed_item = self.error_handler.process_news_item(raw_item, raw)
                     if processed_item:
                         current_page_items.append(processed_item)
+                        # Additional Redis processing (always unified)
+                        unified_item = self.error_handler.process_news_item(raw_item, raw=False)
+                        current_batch.append(unified_item)
                         self.error_handler.handle_news_item(item_id, "processed", {})
+                        
+                        # Batch Redis storage
+                        if len(current_batch) >= BATCH_SIZE:
+                            self.redis_client.set_news_batch(current_batch, ex=self.ttl)
+                            current_batch = []
                 
+                # Original item collection
                 all_items.extend(current_page_items)
                 
-                # Check pagination using raw response size
+                # Original pagination check
                 if len(news_items) < self.ITEMS_PER_PAGE:
                     print(f"\nReached end of data at page {current_page}")
                     break
@@ -167,10 +177,11 @@ class BenzingaNewsRestAPI:
                 self.error_handler.handle_connection_error(e)
                 break
         
-        # Clear progress line
-        print("\n")
+        # Store final batch if any
+        if current_batch:
+            self.redis_client.set_news_batch(current_batch, ex=3600)
         
-        # Print final summary with error stats in both cases
+        # Original summary logging
         print("\nFetch Summary:")
         print(f"Pages processed: {current_page + 1}")
         print(f"Total items received: {total_items_received}")
