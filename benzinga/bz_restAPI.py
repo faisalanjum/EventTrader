@@ -189,51 +189,9 @@ class BenzingaNewsRestAPI:
 
     @staticmethod
     def print_news_item(item: Union[BzRestAPINews, UnifiedNews]):
-        """Print news item in appropriate format based on type"""
-        if isinstance(item, BzRestAPINews):
-            BenzingaNewsRestAPI._print_raw_news(item)
-        elif isinstance(item, UnifiedNews):
-            BenzingaNewsRestAPI._print_unified_news(item)
-        # Remove unreachable else clause
+        """Print news item in appropriate format"""
+        item.print()
 
-
-    @staticmethod
-    def _print_unified_news(news: UnifiedNews):
-        """Print unified news format"""
-        news.print()
-
-
-    @staticmethod
-    def _print_raw_news(news: BzRestAPINews):
-        """Print raw REST API format"""
-        print("\n" + "="*80)
-        print(f"ID: {news.id}")
-        print(f"Title: {news.title}")
-        print(f"Author: {news.author}")
-        print(f"Created: {news.created}")
-        print(f"Updated: {news.updated}")
-        print(f"URL: {news.url}")
-        
-        # Print all stocks
-        stocks = [stock.name for stock in news.stocks] if news.stocks else []
-        print(f"\nStocks: {', '.join(stocks)}")
-        
-        # Print all channels
-        channels = [channel.name for channel in news.channels] if news.channels else []
-        print(f"Channels: {', '.join(channels)}")
-        
-        # Print all tags
-        tags = [tag.name for tag in news.tags] if news.tags else []
-        print(f"Tags: {', '.join(tags)}")
-        
-        print(f"\nTeaser: {news.teaser}")
-        print(f"\nBody: {news.body}")
-        
-        # Print any additional fields
-        if news.image:
-            print(f"\nImage: {news.image}")
-            
-        print("="*80 + "\n")
 
     def get_historical_data(self,
                            date_from: str,

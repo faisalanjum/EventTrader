@@ -19,9 +19,14 @@ class BenzingaNewsWebSocket:
         self.error_handler = NewsErrorHandler()
         self.connected = False
         self.ws = None
-        self.base_delay = 2   # Base delay in seconds
-        self.max_delay = 300  # Maximum delay between retries (5 minutes)
+        
+        self.should_run = True
+        self.base_delay = 2
+        self.max_delay = 300  # 5 minutes max between retries
+        self.current_retry = 0
         self.raw = False
+        self.last_message_time = None
+
         self.stats = {
             'messages_received': 0,
             'messages_processed': 0,
@@ -31,96 +36,27 @@ class BenzingaNewsWebSocket:
     @staticmethod
     def print_news_item(item: Union[BzWebSocketNews, UnifiedNews], raw: bool = False):
         """Print news item in raw or unified format"""
-        if isinstance(item, BzWebSocketNews) and raw:
-            BenzingaNewsWebSocket._print_raw_news(item)
-        elif isinstance(item, UnifiedNews):
-            BenzingaNewsWebSocket._print_unified_news(item)
+        item.print()
 
-    @staticmethod
-    def _print_unified_news(news: UnifiedNews):
-        """Print unified news format"""
-        news.print()
 
-    # @staticmethod
-    # def _print_unified_news(news: UnifiedNews):
-    #     """Print unified news format"""
-    #     print("\n" + "="*80)
-    #     print(f"ID: {news.id}")
-    #     print(f"Title: {news.title}")
-    #     print(f"Authors: {', '.join(news.authors)}")
-    #     print(f"Created: {news.created}")
-    #     print(f"Updated: {news.updated}")
-    #     print(f"URL: {news.url}")
-    #     print(f"\nStocks: {', '.join(news.symbols)}")
-    #     print(f"Channels: {', '.join(news.channels)}")
-    #     print(f"Tags: {', '.join(news.tags)}")
-    #     print(f"\nTeaser: {news.teaser}")
-    #     print(f"\nBody: {news.body}")
-    #     print("="*80 + "\n")
-
-    @staticmethod
-    def _print_raw_news(news: BzWebSocketNews):
-        """Print raw WebSocket format"""
-        print("\n" + "="*80)
-        print(f"API Version: {news.api_version}")
-        print(f"Kind: {news.kind}")
-        
-        # Data level
-        print(f"\nData:")
-        print(f"Action: {news.data.action}")
-        print(f"ID: {news.data.id}")
-        print(f"Timestamp: {news.data.timestamp}")
-        
-        # Content level
-        content = news.data.content
-        print(f"\nContent:")
-        print(f"ID: {content.id}")
-        print(f"Title: {content.title}")
-        print(f"Authors: {', '.join(content.authors)}")
-        print(f"Created: {content.created_at}")
-        print(f"Updated: {content.updated_at}")
-        print(f"URL: {content.url}")
-        
-        # Securities with all details
-        print("\nSecurities:")
-        for sec in content.securities:
-            print(f"  - Symbol: {sec.symbol}")
-            print(f"    Exchange: {sec.exchange}")
-            print(f"    Primary: {sec.primary}")
-        
-        print(f"\nChannels: {', '.join(content.channels)}")
-        print(f"Tags: {', '.join(content.tags) if content.tags else ''}")
-        print(f"\nTeaser: {content.teaser}")
-        print(f"\nBody: {content.body}")
-        
-        if content.image:
-            print(f"\nImage: {content.image}")
-            
-        print("="*80 + "\n")
 
     def print_error_stats(self):
         """Print current error statistics"""
         print(self.error_handler.get_summary())
 
     def connect(self, raw: bool = False, enable_trace: bool = False):
-        """Start WebSocket connection with retry logic
-        
-        Args:
-            raw: If True, returns news in original WebSocket format (BzWebSocketNews)
-                 If False, converts to unified format with additional validation (UnifiedNews)
-                 Basic WebSocket format validation happens in both cases
-            enable_trace: Enable WebSocket trace logging
-        """
+        """Start WebSocket connection with retry logic"""
         self.raw = raw
-        # Reset error stats at start of connection
+        self.should_run = True
         self.error_handler.reset_stats()
         
-        websocket.enableTrace(enable_trace)
         print(f"Starting WebSocket connection (format: {'raw' if raw else 'unified'})...")
         
-        retries = 1  # For logging purposes only
-        while True:  # Infinite retry loop
+        while self.should_run:
             try:
+                if enable_trace:
+                    websocket.enableTrace(True)
+                    
                 self.ws = websocket.WebSocketApp(
                     self.url,
                     header={"accept": "application/json"},
@@ -130,29 +66,31 @@ class BenzingaNewsWebSocket:
                     on_close=self._on_close
                 )
                 
-                print(f"Connection attempt {retries}")
-                
+                # Run with ping/pong for connection health
                 self.ws.run_forever(
-                    sslopt={"cert_reqs": ssl.CERT_NONE},
                     ping_interval=30,
-                    ping_timeout=10
+                    ping_timeout=10,
+                    sslopt={"cert_reqs": ssl.CERT_NONE}
                 )
                 
-                # If we get here and connected is True, break the retry loop
-                if self.connected:
+                if not self.should_run:
                     break
                     
             except Exception as e:
-                print(f"Connection error: {e}")
-            
-            # Calculate delay with exponential backoff and jitter
-            delay = min(self.max_delay, self.base_delay * (2 ** (retries % 10)))  # Reset exponent every 10 retries
-            jitter = random.uniform(0, 0.1 * delay)  # Add 0-10% jitter
-            total_delay = delay + jitter
-            
-            print(f"Connection attempt {retries} failed. Retrying in {total_delay:.1f} seconds...")
-            time.sleep(total_delay)
-            retries += 1
+                self.error_handler.handle_connection_error(e)
+                if not self.should_run:
+                    break
+                    
+                delay = min(self.base_delay * (2 ** self.current_retry), self.max_delay)
+                self.current_retry += 1
+                print(f"Connection failed. Retrying in {delay:.1f} seconds...")
+                time.sleep(delay)
+    
+    def disconnect(self):
+        """Clean shutdown"""
+        self.should_run = False
+        if self.ws:
+            self.ws.close()
 
     def _on_open(self, ws):
         """Handle WebSocket connection open"""
@@ -171,6 +109,10 @@ class BenzingaNewsWebSocket:
 
     def _on_message(self, ws, message: str):
         """Handle incoming WebSocket message"""
+    
+        self.last_message_time = time.time()
+        self.current_retry = 0  # Reset retry counter on successful message
+
         try:
             self.stats['messages_received'] += 1
             self.stats['last_message_time'] = datetime.now(timezone.utc)
@@ -207,11 +149,27 @@ class BenzingaNewsWebSocket:
         print(f"Status code: {close_status_code}")
         print(f"Close message: {close_msg}")
         self.connected = False
-        
+
+        if not self.should_run:
+            return
+            
+        # Check status code first
         if close_status_code == 503:
             print("Service temporarily unavailable. Will retry with backoff.")
         
+        # Print error stats before attempting reconnection
         self.print_error_stats()
+            
+        # Calculate delay and attempt reconnection
+        delay = min(self.base_delay * (2 ** self.current_retry), self.max_delay)
+        self.current_retry += 1
+        
+        print(f"Reconnecting in {delay:.1f} seconds...")
+        time.sleep(delay)
+        
+        # Attempt reconnection
+        self.connect(raw=self.raw)     
+
 
     def print_stats(self):
         """Print WebSocket statistics"""

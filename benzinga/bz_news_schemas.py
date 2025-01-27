@@ -70,7 +70,9 @@ class UnifiedNews(BaseModel):
         return values
 
     @field_validator('url')
-    def validate_url(cls, v: str) -> str:
+    def validate_url(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:  
+            return None
         if not v.startswith(('http://', 'https://')):
             raise ValueError("Invalid URL format")
         return v
@@ -118,6 +120,41 @@ class BzRestAPINews(BaseModel):
         "extra": "forbid",  # Still forbid other unknown fields
         "str_strip_whitespace": True
     }
+
+
+    def print(self):
+        """Print raw REST API format"""
+        print("\n" + "="*80)
+        print(f"ID: {self.id}")
+        print(f"Title: {self.title}")
+        print(f"Author: {self.author}")
+        print(f"Created: {self.created}")
+        print(f"Updated: {self.updated}")
+        print(f"URL: {self.url}")
+        
+        print("\nStocks:")
+        for stock in self.stocks:
+            print(f"  - {stock.name}")
+        
+        print("\nChannels:")
+        for channel in self.channels:
+            print(f"  - {channel.name}")
+        
+        print("\nTags:")
+        for tag in self.tags:
+            print(f"  - {tag.name}")
+        
+        print(f"\nTeaser: {self.teaser}")
+        print(f"\nBody: {self.body}")
+        
+        if self.image:
+            print("\nImages:")
+            for img in self.image:
+                print(f"  - Size: {img.size}")
+                print(f"    URL: {img.url}")
+                
+        print("="*80 + "\n")
+
 
 
     def to_unified(self) -> UnifiedNews:
@@ -192,6 +229,49 @@ class BzWebSocketNews(BaseModel):
     kind: str
     data: NewsData
 
+
+    def print(self):
+        """Print raw WebSocket format"""
+        print("\n" + "="*80)
+        print(f"API Version: {self.api_version}")
+        print(f"Kind: {self.kind}")
+        
+        # Data level
+        print(f"\nData:")
+        print(f"Action: {self.data.action}")
+        print(f"ID: {self.data.id}")
+        print(f"Timestamp: {self.data.timestamp}")
+        
+        # Content level
+        content = self.data.content
+        print(f"\nContent:")
+        print(f"ID: {content.id}")
+        print(f"Title: {content.title}")
+        print(f"Authors: {', '.join(content.authors)}")
+        print(f"Created: {content.created_at}")
+        print(f"Updated: {content.updated_at}")
+        print(f"URL: {content.url}")
+        
+        print("\nSecurities:")
+        for sec in content.securities:
+            print(f"  - Symbol: {sec.symbol}")
+            print(f"    Exchange: {sec.exchange}")
+            print(f"    Primary: {sec.primary}")
+        
+        print(f"\nChannels: {', '.join(content.channels)}")
+        print(f"Tags: {', '.join(content.tags) if content.tags else ''}")
+        print(f"\nTeaser: {content.teaser}")
+        print(f"\nBody: {content.body}")
+        
+        if content.image:
+            print("\nImages:")
+            for img in content.image:
+                print(f"  - Size: {img.size}")
+                print(f"    URL: {img.url}")
+                
+        print("="*80 + "\n")
+
+
     def to_unified(self) -> UnifiedNews:
         """Convert to unified format"""
         content = self.data.content
@@ -220,11 +300,13 @@ def normalize_date(date_str: str) -> str:
     # Handle REST API format: "Tue, 23 Jan 2024 13:30:00 -0400"
     try:
         dt = datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %z")
+    
     except ValueError:
-        try:
-            # Handle WebSocket format: "2024-01-23T04:03:09.000Z"
-            dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
-        except ValueError:
-            raise ValueError(f"Invalid timestamp format: {date_str}")
+            try:
+                # Handle naive datetime as UTC
+                dt = datetime.fromisoformat(date_str)
+                dt = dt.replace(tzinfo=pytz.UTC)
+            except ValueError:
+                raise ValueError(f"Invalid timestamp format: {date_str}")
     
     return dt.astimezone(pytz.UTC).isoformat()
