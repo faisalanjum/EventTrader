@@ -1,3 +1,6 @@
+
+# https://docs.benzinga.com/benzinga-apis/newsfeed-v2/newsService-get
+
 """
 Benzinga News REST API Client
 
@@ -40,15 +43,15 @@ Implementation Details:
 For more details: https://docs.benzinga.com/benzinga-apis/newsfeed-v2/newsService-get
 """
 
-import requests
+
+import time
 import json
+import requests
 from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Union
-import time
+
 from benzinga.bz_news_errors import NewsErrorHandler
-from pydantic import ValidationError
-from benzinga.bz_news_schemas import BzWebSocketNews, BzRestAPINews  # We'll need this for validation
-from benzinga.bz_news_schemas import UnifiedNews  # We'll need this for unified format
+from benzinga.bz_news_schemas import BzRestAPINews, UnifiedNews  # We'll need this for validation & unified format
 
 class BenzingaNewsRestAPI:
     """Simple class to fetch and print Benzinga news data"""
@@ -57,7 +60,7 @@ class BenzingaNewsRestAPI:
         self.api_url = "https://api.benzinga.com/api/v2/news"
         self.api_key = api_key
         self.headers = {"accept": "application/json"}
-        self.MAX_PAGE_LIMIT = 100000  # API's maximum page offset
+        self.MAX_PAGE_LIMIT = 100     # API limit is 100 pages
         self.ITEMS_PER_PAGE = 100     # API's maximum items per page
         self.error_handler = NewsErrorHandler()  # Add error handler
 
@@ -98,6 +101,7 @@ class BenzingaNewsRestAPI:
                    tickers: Optional[List[str]] = None,
                    raw: bool = False) -> List[Union[BzRestAPINews, UnifiedNews]]:
         """Internal method to fetch news from API"""
+
         # Reset error stats at start of each fetch
         self.error_handler.reset_stats()
         
@@ -126,7 +130,11 @@ class BenzingaNewsRestAPI:
                 print(f"Fetching page {current_page}...", end='\r')
                 
                 response = requests.get(self.api_url, headers=self.headers, params=params)
-                response.raise_for_status()
+                try:
+                    response.raise_for_status()
+                except requests.exceptions.HTTPError as e:
+                    self.error_handler.handle_http_error(e)
+                    break
                 
                 news_items = response.json()
                 total_items_received += len(news_items)
@@ -154,6 +162,9 @@ class BenzingaNewsRestAPI:
                 
             except json.JSONDecodeError as je:
                 self.error_handler.handle_json_error(je, response.text)
+                break
+            except requests.exceptions.RequestException as e:
+                self.error_handler.handle_connection_error(e)
                 break
         
         # Clear progress line
@@ -183,25 +194,14 @@ class BenzingaNewsRestAPI:
             BenzingaNewsRestAPI._print_raw_news(item)
         elif isinstance(item, UnifiedNews):
             BenzingaNewsRestAPI._print_unified_news(item)
-        else:
-            print("Error: Unknown news format")
+        # Remove unreachable else clause
+
 
     @staticmethod
     def _print_unified_news(news: UnifiedNews):
         """Print unified news format"""
-        print("\n" + "="*80)
-        print(f"ID: {news.id}")
-        print(f"Title: {news.title}")
-        print(f"Authors: {', '.join(news.authors)}")
-        print(f"Created: {news.created}")
-        print(f"Updated: {news.updated}")
-        print(f"URL: {news.url}")
-        print(f"\nStocks: {', '.join(news.symbols)}")
-        print(f"Channels: {', '.join(news.channels)}")
-        print(f"Tags: {', '.join(news.tags)}")
-        print(f"\nTeaser: {news.teaser}")
-        print(f"\nBody: {news.body}")
-        print("="*80 + "\n")
+        news.print()
+
 
     @staticmethod
     def _print_raw_news(news: BzRestAPINews):
@@ -259,6 +259,7 @@ class BenzingaNewsRestAPI:
             raw=raw
         )
 
+    # Instead using websocket
     def stream_news(self, interval: int = 5, tickers: Optional[List[str]] = None, raw: bool = False):
         """Stream news in real-time"""
         last_updated = int(datetime.now(timezone.utc).timestamp()) - 5

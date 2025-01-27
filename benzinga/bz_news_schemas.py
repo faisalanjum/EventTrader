@@ -5,10 +5,10 @@ import pytz
 
 class UnifiedNews(BaseModel):
     """Unified news model for both REST API and WebSocket data"""
-    id: str
-    symbols: List[str]
-    created: str
-    updated: str
+    id: str                # Required by model
+    symbols: List[str]     # Required by model
+    created: str           # Required by model
+    updated: str           # Required by model
     
     # Optional fields
     title: Optional[str] = None
@@ -19,6 +19,25 @@ class UnifiedNews(BaseModel):
     tags: List[str] = []
     url: Optional[str] = None
 
+
+    # Add print method
+    def print(self):
+        """Print unified news format"""
+        print("\n" + "="*80)
+        print(f"ID: {self.id}")
+        print(f"Title: {self.title}")
+        print(f"Authors: {', '.join(self.authors)}")
+        print(f"Created: {self.created}")
+        print(f"Updated: {self.updated}")
+        print(f"URL: {self.url}")
+        print(f"\nStocks: {', '.join(self.symbols)}")
+        print(f"Channels: {', '.join(self.channels)}")
+        print(f"Tags: {', '.join(self.tags)}")
+        print(f"\nTeaser: {self.teaser}")
+        print(f"\nBody: {self.body}")
+        print("="*80 + "\n")
+
+
     @field_validator('created', 'updated')
     def normalize_dates(cls, v: str) -> str:
         return normalize_date(v)
@@ -28,18 +47,24 @@ class UnifiedNews(BaseModel):
         """Single place for all business rules"""
         errors = []
         
-        # Check ID
+        # ID validation
         if not values.id:
             errors.append("News must have an ID")
-            
-        # Check symbols not empty
+        
+        # Symbols validation    
         if not values.symbols:
             errors.append("News must have at least one symbol")
+        
+        # Date validation
+        if not values.created:
+            errors.append("News must have created timestamp")
+        if not values.updated:
+            errors.append("News must have updated timestamp")
             
-        # Check content exists
+        # Content validation
         if not any([values.title, values.teaser, values.body]):
             errors.append("News must have content")
-            
+        
         if errors:
             raise ValueError(", ".join(errors))
         return values
@@ -94,15 +119,15 @@ class BzRestAPINews(BaseModel):
         "str_strip_whitespace": True
     }
 
+
     def to_unified(self) -> UnifiedNews:
         """Convert to unified format"""
-        symbols = [s.name for s in self.stocks] if self.stocks else []
         
         return UnifiedNews(
             id=str(self.id),
-            symbols=symbols,  # This triggers validation if empty
-            created=self.created,  # Will be normalized by UnifiedNews validator
-            updated=self.updated,  # Will be normalized by UnifiedNews validator
+            symbols=[s.name for s in self.stocks],  # This triggers validation if empty
+            created=self.created,  # Already normalized
+            updated=self.updated,  # Already normalized
             title=self.title if self.title else None,
             teaser=self.teaser if self.teaser else None,
             body=self.body if self.body else None,
@@ -121,28 +146,30 @@ class Security(BaseModel):
 
 class Content(BaseModel):
     """Content section of WebSocket message"""
-    id: int
+    id: int                    # Required by model  
     title: str
     body: str
     authors: List[str]
     teaser: Optional[str]
     url: str
-    securities: List[Security]
+    securities: List[Security]  # Required by model
     channels: List[str]
     tags: List[str]
-    created_at: str
-    updated_at: str
+    created_at: str             # Required by model
+    updated_at: str             # Required by model
     revision_id: Optional[int]
     type: Optional[str]
     image: Optional[List[ImageInfo]] = None
 
+
     def to_unified(self) -> UnifiedNews:
         """Convert to unified format"""
+
         return UnifiedNews(
             id=str(self.id),
             symbols=[sec.symbol for sec in self.securities],
-            created=self.created_at,
-            updated=self.updated_at,
+            created=self.created_at,                            # Already normalized
+            updated=self.updated_at,                            # Already normalized
             title=self.title if self.title else None,
             teaser=self.teaser if self.teaser else None,
             body=self.body if self.body else None,
@@ -187,11 +214,17 @@ class BzWebSocketNews(BaseModel):
 
 def normalize_date(date_str: str) -> str:
     """Convert any date format to ISO format in UTC"""
+    if not date_str:
+        raise ValueError("Timestamp cannot be empty")
+    
     # Handle REST API format: "Tue, 23 Jan 2024 13:30:00 -0400"
     try:
         dt = datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %z")
     except ValueError:
-        # Handle WebSocket format: "2024-01-23T04:03:09.000Z"
-        dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        try:
+            # Handle WebSocket format: "2024-01-23T04:03:09.000Z"
+            dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        except ValueError:
+            raise ValueError(f"Invalid timestamp format: {date_str}")
     
     return dt.astimezone(pytz.UTC).isoformat()

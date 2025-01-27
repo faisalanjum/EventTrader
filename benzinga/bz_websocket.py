@@ -19,8 +19,8 @@ class BenzingaNewsWebSocket:
         self.error_handler = NewsErrorHandler()
         self.connected = False
         self.ws = None
-        self.max_retries = 5
-        self.base_delay = 1
+        self.base_delay = 2   # Base delay in seconds
+        self.max_delay = 300  # Maximum delay between retries (5 minutes)
         self.raw = False
         self.stats = {
             'messages_received': 0,
@@ -39,19 +39,24 @@ class BenzingaNewsWebSocket:
     @staticmethod
     def _print_unified_news(news: UnifiedNews):
         """Print unified news format"""
-        print("\n" + "="*80)
-        print(f"ID: {news.id}")
-        print(f"Title: {news.title}")
-        print(f"Authors: {', '.join(news.authors)}")
-        print(f"Created: {news.created}")
-        print(f"Updated: {news.updated}")
-        print(f"URL: {news.url}")
-        print(f"\nStocks: {', '.join(news.symbols)}")
-        print(f"Channels: {', '.join(news.channels)}")
-        print(f"Tags: {', '.join(news.tags)}")
-        print(f"\nTeaser: {news.teaser}")
-        print(f"\nBody: {news.body}")
-        print("="*80 + "\n")
+        news.print()
+
+    # @staticmethod
+    # def _print_unified_news(news: UnifiedNews):
+    #     """Print unified news format"""
+    #     print("\n" + "="*80)
+    #     print(f"ID: {news.id}")
+    #     print(f"Title: {news.title}")
+    #     print(f"Authors: {', '.join(news.authors)}")
+    #     print(f"Created: {news.created}")
+    #     print(f"Updated: {news.updated}")
+    #     print(f"URL: {news.url}")
+    #     print(f"\nStocks: {', '.join(news.symbols)}")
+    #     print(f"Channels: {', '.join(news.channels)}")
+    #     print(f"Tags: {', '.join(news.tags)}")
+    #     print(f"\nTeaser: {news.teaser}")
+    #     print(f"\nBody: {news.body}")
+    #     print("="*80 + "\n")
 
     @staticmethod
     def _print_raw_news(news: BzWebSocketNews):
@@ -113,8 +118,8 @@ class BenzingaNewsWebSocket:
         websocket.enableTrace(enable_trace)
         print(f"Starting WebSocket connection (format: {'raw' if raw else 'unified'})...")
         
-        retries = 0
-        while retries < self.max_retries:
+        retries = 1  # For logging purposes only
+        while True:  # Infinite retry loop
             try:
                 self.ws = websocket.WebSocketApp(
                     self.url,
@@ -125,7 +130,7 @@ class BenzingaNewsWebSocket:
                     on_close=self._on_close
                 )
                 
-                print(f"Attempt {retries + 1} of {self.max_retries}")
+                print(f"Connection attempt {retries}")
                 
                 self.ws.run_forever(
                     sslopt={"cert_reqs": ssl.CERT_NONE},
@@ -140,18 +145,14 @@ class BenzingaNewsWebSocket:
             except Exception as e:
                 print(f"Connection error: {e}")
             
-            # If we get here, connection failed
+            # Calculate delay with exponential backoff and jitter
+            delay = min(self.max_delay, self.base_delay * (2 ** (retries % 10)))  # Reset exponent every 10 retries
+            jitter = random.uniform(0, 0.1 * delay)  # Add 0-10% jitter
+            total_delay = delay + jitter
+            
+            print(f"Connection attempt {retries} failed. Retrying in {total_delay:.1f} seconds...")
+            time.sleep(total_delay)
             retries += 1
-            if retries < self.max_retries:
-                delay = min(300, self.base_delay * (2 ** retries))  # Exponential backoff, max 5 minutes
-                jitter = random.uniform(0, 0.1 * delay)  # Add 0-10% jitter
-                total_delay = delay + jitter
-                
-                print(f"Retrying in {total_delay:.1f} seconds...")
-                time.sleep(total_delay)
-            else:
-                print("Max retries reached. Please check the service status and try again later.")
-                break
 
     def _on_open(self, ws):
         """Handle WebSocket connection open"""
