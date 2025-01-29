@@ -1,7 +1,28 @@
 
 
+Final Keys:
+    - id
+    - symbols
+    - created
+    - updated
+    - title
+    - teaser
+    - body
+    - authors
+    - channels
+    - tags
+    - url
+
+WebSocket/REST API -> RAW_QUEUE -> NewsProcessor -> CLEAN_QUEUE -> Neo4j
+
 **Source → Pydantic (validation) → Redis (raw) → Processing → Neo4j**
 
+raw_news_queue → clean_news_queue → returns_queue → neo4j_queue
+    - Keep it minimal (don't over-engineer with too many queues)
+    - Embedding generation happens in Neo4j
+
+# Under the current structure:
+    1.in Redis, appending ID with updated timestamp which will allow de duplicated IDs to be ingested - This means each news item is being stored with a unique updated timestamp, allowing you to keep multiple versions/updates of the same news ID. The data inside each key still maintains its original ID and structure.
 
 
 
@@ -13,8 +34,6 @@ Current News    - WebSocket
 
 BzWebSocketNews -> to_unified() -> UnifiedNews
 BzRestAPINews  -> to_unified() -> UnifiedNews
-
-
 
 
 Classification:
@@ -93,7 +112,6 @@ Classification:
         "WHEN $updated > n.updated AND apoc.text.levenshteinSimilarity(n.content, $content) < 0.8"
         but the issue is its only recommended for short strings like up to 200 characters (and only surface level not semantic)
         Also, simple character difference approach for contentIsSimilar() might be too basic for news - Consider using cosine similarity between embeddings themselves
-
 
 
         Start simple: Check if content difference is > X characters:

@@ -63,8 +63,8 @@ class BenzingaNewsRestAPI:
         self.api_url = "https://api.benzinga.com/api/v2/news"
         self.api_key = api_key
         self.headers = {"accept": "application/json"}
-        self.MAX_PAGE_LIMIT = 100     # API limit is 100 pages
-        self.ITEMS_PER_PAGE = 100     # API's maximum items per page
+        self.MAX_PAGE_LIMIT = 100000  # API supports up to 100,000 pages
+        self.ITEMS_PER_PAGE = 99     # API requires pageSize < 100
         self.error_handler = NewsErrorHandler()  # Add error handler
 
     def _build_params(self, 
@@ -78,7 +78,7 @@ class BenzingaNewsRestAPI:
             "token": self.api_key,
             "page": page,
             "pageSize": self.ITEMS_PER_PAGE,
-            "displayOutput": "full",
+            "displayOutput": "full", # full, abstract, headline
             "sort": "updated:desc"
         }
         
@@ -179,7 +179,7 @@ class BenzingaNewsRestAPI:
         
         # Store final batch if any
         if current_batch:
-            self.redis_client.set_news_batch(current_batch, ex=3600)
+            self.redis_client.set_news_batch(current_batch, ex=self.ttl)
         
         # Original summary logging
         print("\nFetch Summary:")

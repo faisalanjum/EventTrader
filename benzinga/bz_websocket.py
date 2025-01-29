@@ -5,7 +5,6 @@ import ssl
 from datetime import datetime, timezone
 from typing import Optional, Union
 from pydantic import ValidationError
-from eventtrader.keys import BENZINGANEWS_API_KEY
 from benzinga.bz_news_schemas import BzWebSocketNews, UnifiedNews
 from benzinga.bz_news_errors import NewsErrorHandler
 from utils.redisClasses import RedisClient
@@ -15,10 +14,11 @@ import random
 class BenzingaNewsWebSocket:
     """WebSocket client for Benzinga news data"""
     
-    def __init__(self, redis_client: RedisClient, ttl: int = 3600):
+    def __init__(self, api_key: str,  redis_client: RedisClient, ttl: int = 3600):
         self.redis_client = redis_client
         self.ttl = ttl  # Store TTL as instance variable
-        self.url = f"wss://api.benzinga.com/api/v1/news/stream?token={BENZINGANEWS_API_KEY}"
+        self.api_key = api_key
+        self.url = f"wss://api.benzinga.com/api/v1/news/stream?token={self.api_key}"
         self.error_handler = NewsErrorHandler()
         self.connected = False
         self.ws = None
