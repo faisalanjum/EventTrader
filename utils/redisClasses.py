@@ -203,3 +203,21 @@ class RedisClient:
         except Exception as e:
             logging.error(f"Clear failed: {e}")
             return False
+        
+    def set_json(self, key: str, value: dict) -> bool:
+        """Store JSON data in Redis"""
+        try:
+            return self.client.set(key, json.dumps(value))
+        except Exception as e:
+            logging.error(f"Error storing JSON in Redis: {e}")
+            return False
+            
+    def get_json(self, key: str) -> dict:
+        """Retrieve JSON data from Redis"""
+        try:
+            data = self.client.get(key)
+            return json.loads(data) if data else None
+        except Exception as e:
+            logging.error(f"Error retrieving JSON from Redis: {e}")
+            return None        
+            
