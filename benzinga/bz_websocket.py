@@ -9,6 +9,7 @@ from benzinga.bz_news_schemas import BzWebSocketNews, UnifiedNews
 from benzinga.bz_news_errors import NewsErrorHandler
 from utils.redisClasses import RedisClient
 import random
+import threading
 
 
 class BenzingaNewsWebSocket:
@@ -35,6 +36,10 @@ class BenzingaNewsWebSocket:
             'messages_received': 0,
             'messages_processed': 0,
         }
+
+        self.heartbeat_thread = None
+        self._lock = threading.Lock()  # Add thread lock
+        self._stats_lock = threading.Lock()  # Separate lock for stats
     
     @staticmethod
     def print_news_item(item: Union[BzWebSocketNews, UnifiedNews], raw: bool = False):
@@ -45,11 +50,25 @@ class BenzingaNewsWebSocket:
         """Print current error statistics"""
         print(self.error_handler.get_summary())
 
+    def _check_heartbeat(self):
+        """Active connection monitoring"""
+        while self.should_run:
+            if not self.check_connection_health():
+                print("Heartbeat check failed, initiating reconnect...")
+                if self.ws:
+                    self.ws.close()
+            time.sleep(10)  # Check every 10 seconds
+
     def connect(self, raw: bool = False, enable_trace: bool = False):
         """Start WebSocket connection with retry logic"""
         self.raw = raw
         self.should_run = True
         self.error_handler.reset_stats()
+        
+        # Start heartbeat thread
+        self.heartbeat_thread = threading.Thread(target=self._check_heartbeat)
+        self.heartbeat_thread.daemon = True
+        self.heartbeat_thread.start()
         
         print(f"Starting WebSocket connection (format: {'raw' if raw else 'unified'})...")
         
@@ -90,9 +109,13 @@ class BenzingaNewsWebSocket:
     
     def disconnect(self):
         """Clean shutdown"""
-        self.should_run = False # Sets flag to stop reconnection attempts
+        self.should_run = False
         if self.ws:
-            self.ws.close() # This still triggers _on_close and _log_downtime
+            self.ws.close()
+        
+        # Wait for heartbeat thread to finish
+        if self.heartbeat_thread and self.heartbeat_thread.is_alive():
+            self.heartbeat_thread.join(timeout=5)
 
     def _on_open(self, ws):
         """Handle WebSocket connection open"""
@@ -111,41 +134,35 @@ class BenzingaNewsWebSocket:
 
     def _on_message(self, ws, message: str):
         """Handle incoming WebSocket message"""
-        self.last_message_time = datetime.now(timezone.utc)
-        self.current_retry = 0  # Reset retry counter on successful message
+        with self._stats_lock:
+            self.last_message_time = datetime.now(timezone.utc)
+            self.current_retry = 0  # Reset retry counter on successful message
 
-        try:
-            self.stats['messages_received'] += 1
-            
-            if message.isdigit():
-                print(f"Heartbeat: {message}")
-                return
-            
-            data = json.loads(message)
-            
-            # Process item based on raw setting for display
-            processed_item = self.error_handler.process_news_item(data, self.raw)
-            if processed_item:
-                # Always store unified version in Redis
-                unified_item = self.error_handler.process_news_item(data, raw=False)
-                if self.redis_client.set_news(unified_item, ex=self.ttl):
-                    self.print_news_item(processed_item)
-                    self.stats['messages_processed'] += 1
-            
-            self.print_stats()
-            
-        except json.JSONDecodeError as je:
-            print(f"Failed to parse message: {message[:100]}...")
-            self.error_handler.handle_json_error(je, message)
-        except Exception as e:
-            self.error_handler.handle_unexpected_error(e)
-
-
-        # Actively check connection health
-        if not self.check_connection_health():
-            print("Connection appears unhealthy, initiating reconnect...")
-            self.ws.close()        
-
+            try:
+                self.stats['messages_received'] += 1
+                
+                if message.isdigit():
+                    print(f"Heartbeat: {message}")
+                    return
+                
+                data = json.loads(message)
+                
+                # Process item based on raw setting for display
+                processed_item = self.error_handler.process_news_item(data, self.raw)
+                if processed_item:
+                    # Always store unified version in Redis
+                    unified_item = self.error_handler.process_news_item(data, raw=False)
+                    if self.redis_client.set_news(unified_item, ex=self.ttl):
+                        self.print_news_item(processed_item)
+                        self.stats['messages_processed'] += 1
+                
+                self.print_stats()
+                
+            except json.JSONDecodeError as je:
+                print(f"Failed to parse message: {message[:100]}...")
+                self.error_handler.handle_json_error(je, message)
+            except Exception as e:
+                self.error_handler.handle_unexpected_error(e)
 
 
     def _on_error(self, ws, error):
@@ -155,8 +172,6 @@ class BenzingaNewsWebSocket:
 
     def _on_close(self, ws, close_status_code, close_msg):
         """Handle WebSocket connection close"""
-
-        self._log_downtime(close_status_code)
         self.connected = False
         
         print(f"Status code: {close_status_code}")
@@ -180,7 +195,7 @@ class BenzingaNewsWebSocket:
         time.sleep(delay)
         
         # Attempt reconnection
-        self.connect(raw=self.raw)     
+        self.connect(raw=self.raw)
 
 
     def print_stats(self):
@@ -195,13 +210,14 @@ class BenzingaNewsWebSocket:
 
 
     def check_connection_health(self):
-        """Check if connection is healthy based on ping/pong"""
-        if self.last_pong_time:
-            time_since_pong = datetime.now(timezone.utc) - self.last_pong_time
-            if time_since_pong.seconds > 20:  # No pong in 20s (ping interval is 15s)
-                print(f"\nWARNING: No pong response in {time_since_pong.seconds} seconds")
-                self._log_downtime(status_code=408)  # 408 = Request Timeout
-                return False
+        """Thread-safe connection health check"""
+        with self._lock:
+            if self.last_pong_time:
+                time_since_pong = datetime.now(timezone.utc) - self.last_pong_time
+                if time_since_pong.seconds > 20:
+                    print(f"\nWARNING: No pong response in {time_since_pong.seconds} seconds")
+                    self._log_downtime(status_code=408)
+                    return False
         return True
     
 

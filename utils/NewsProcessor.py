@@ -112,21 +112,41 @@ class NewsProcessor:
             return False
 
     def _clean_news(self, news: dict) -> dict:
-        """Clean news content"""
-        cleaned = news.copy()
+        """Clean news content.
+        
+        Process order:
+        1. Clean text content (title, teaser, body)
+        2. Convert timestamps to Eastern
+        3. Limit body word count
+        
+        Args:
+            news (dict): Raw news dictionary
+        Returns:
+            dict: Processed news dictionary
+        """
+        try:
+            cleaned = news.copy()
 
-        # Clean content
-        for field in ['title', 'teaser', 'body']:
-            if field in cleaned:
-                cleaned[field] = self._clean_content(cleaned[field])
+            # 1. Clean text content
+            for field in ['title', 'teaser', 'body']:
+                if field in cleaned:
+                    cleaned[field] = self._clean_content(cleaned[field])
 
-        # Convert timestamps
-        for field in ['created', 'updated']:
-            if field in cleaned:
-                cleaned[field] = self.convert_to_eastern(cleaned[field])
-    
-                
-        return cleaned
+            # 2. Convert timestamps
+            for field in ['created', 'updated']:
+                if field in cleaned:
+                    cleaned[field] = self.convert_to_eastern(cleaned[field])
+
+            # 3. Apply word limit on body
+            cleaned = self._limit_body_word_count(cleaned)
+
+            return cleaned
+            
+        except Exception as e:
+            logging.error(f"Error in _clean_news: {e}")
+            return news  # Return original if cleaning fails
+
+
 
     @staticmethod
     def convert_to_eastern(utc_time_str: str) -> str:
@@ -178,6 +198,37 @@ class NewsProcessor:
             logging.error(f"Error cleaning content: {e}")
             return content  # Return original if cleaning fails
         
+
+
+    def _limit_body_word_count(self, news: dict, max_words: int = 1000) -> dict:
+        """Limit word count of the 'body' key in the news dictionary.
+        
+        Args:
+            news (dict): The news dictionary
+            max_words (int): Maximum allowed words in the 'body' field (default: 800)
+        
+        Returns:
+            dict: News dictionary with truncated 'body' if necessary
+        """
+        try:
+            if 'body' not in news or not isinstance(news['body'], str):
+                return news
+            
+            words = [w for w in news['body'].split() if w.strip()]
+            
+            if len(words) <= max_words:  # Skip processing if already within limit
+                return news
+            
+            news['body'] = ' '.join(words[:max_words]).strip() + "..."
+            logging.debug(f"Truncated body from {len(words)} to {max_words} words")
+            
+            return news
+        
+        except Exception as e:
+            logging.error(f"Error limiting body word count: {e}")
+            return news  # Return original if processing fails
+
+
 
     def stop(self):
         """Stop processing"""
