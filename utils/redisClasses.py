@@ -92,9 +92,14 @@ class EventTraderRedis:
 
 class RedisClient:
     # Queue names (shared between live and hist)
-    RAW_QUEUE = "news:benzinga:raw:queue"     
-    PROCESSED_QUEUE = "news:benzinga:processed:queue"
-    FAILED_QUEUE = "news:benzinga:failed:queue"
+    # RAW_QUEUE = "news:benzinga:raw:queue"     
+    # PROCESSED_QUEUE = "news:benzinga:processed:queue"
+    # FAILED_QUEUE = "news:benzinga:failed:queue"
+
+    # Queue names organized under queues/ directory
+    RAW_QUEUE = "news:benzinga:queues:raw"     
+    PROCESSED_QUEUE = "news:benzinga:queues:processed"
+    FAILED_QUEUE = "news:benzinga:queues:failed"    
 
     def __init__(self, host='localhost', port=6379, db=0, prefix=''):
         self.host = host
