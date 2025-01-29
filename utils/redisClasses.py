@@ -36,6 +36,8 @@ class EventTraderRedis:
         self.clear()
         self.initialize_stock_universe(clear_config=clear_config)
 
+
+
     def initialize_stock_universe(self, clear_config=False, file_path='../StocksUniverse/final_symbols_filtered.csv'):
         try:
             if clear_config:
@@ -49,14 +51,15 @@ class EventTraderRedis:
             df = df[df['symbol'].str.len() > 0]
             df = df.drop_duplicates(subset=['symbol'])
             
-            universe_success = self.config.set('stock_universe', df.to_json())
+            symbols = sorted(df['symbol'].unique().tolist())  # Define symbols here
             
-            symbols = sorted(df['symbol'].unique().tolist())
-            symbols_str = ','.join(symbols)
-            symbols_success = self.config.set('symbols', symbols_str)
+            # Use config: prefix consistently
+            universe_success = self.config.set('config:stock_universe', df.to_json())
+            symbols_success = self.config.set('config:symbols', ','.join(symbols))
             
-            verify_universe = self.config.get('stock_universe')
-            verify_symbols = self.config.get('symbols')
+            # Update verification keys too
+            verify_universe = self.config.get('config:stock_universe')
+            verify_symbols = self.config.get('config:symbols')
             
             if not (verify_universe and verify_symbols):
                 logging.error("Failed to verify config storage")
@@ -69,12 +72,13 @@ class EventTraderRedis:
             logging.error(f"Error initializing stock universe: {e}")
             return False
 
+
     def get_symbols(self):
-        symbols_str = self.config.get('symbols')
+        symbols_str = self.config.get('config:symbols')  # Match the prefix
         return symbols_str.split(',') if symbols_str else []
 
     def get_stock_universe(self):
-        universe_json = self.config.get('stock_universe')
+        universe_json = self.config.get('config:stock_universe')  # Match the prefix
         return pd.read_json(StringIO(universe_json)) if universe_json else None
 
     def clear(self):
