@@ -1,0 +1,145 @@
+# news_processor.py
+import html
+import threading
+import logging
+from typing import Optional
+import pandas as pd
+from bs4 import BeautifulSoup
+import re
+from benzinga.bz_news_schemas import UnifiedNews
+from utils.redisClasses import RedisClient
+import json
+from utils.redisClasses import EventTraderRedis
+import time
+import unicodedata
+
+
+ # Using any client for shared queues
+
+class NewsProcessor:
+    def __init__(self, event_trader_redis: EventTraderRedis, delete_raw: bool = False):
+        self.redis_client = event_trader_redis.bz_livenews
+        self.hist_client = event_trader_redis.bz_histnews
+        self.queue_client = self.redis_client  # Dedicated client for queue operations
+        self.should_run = True
+        self._lock = threading.Lock()
+        self.delete_raw = delete_raw
+
+    def process_all_news(self):
+        """Continuously process news from RAW_QUEUE"""
+        logging.info(f"Starting news processing from {RedisClient.RAW_QUEUE}")
+        consecutive_errors = 0
+        while self.should_run:
+            try:
+                result = self.queue_client.pop_from_queue(RedisClient.RAW_QUEUE, timeout=1)
+                if not result:
+                    continue
+
+                _, raw_key = result
+                success = self._process_news_item(raw_key)
+                if success:
+                    consecutive_errors = 0
+                else:
+                    consecutive_errors += 1
+                    if consecutive_errors > 10:  # Reset after too many errors
+                        logging.error("Too many consecutive errors, reconnecting...")
+                        self._reconnect()
+                        consecutive_errors = 0
+
+            except Exception as e:
+                logging.error(f"Processing error: {e}")
+                time.sleep(1)
+                consecutive_errors += 1
+
+    def _reconnect(self):
+        """Reconnect to Redis"""
+        try:
+            self.redis_client = self.redis_client.__class__(
+                prefix=self.redis_client.prefix
+            )
+            self.hist_client = self.hist_client.__class__(
+                prefix=self.hist_client.prefix
+            )
+            self.queue_client = self.redis_client
+        except Exception as e:
+            logging.error(f"Reconnection failed: {e}")
+
+    def _process_news_item(self, raw_key: str) -> bool:
+        try:
+            client = (self.hist_client if ':hist:' in raw_key else self.redis_client)
+            
+            raw_content = client.get(raw_key)
+            if not raw_content:
+                logging.error(f"Raw content not found: {raw_key}")
+                return False
+
+            news_dict = json.loads(raw_content)
+            processed_dict = self._clean_news(news_dict)
+            
+            processed_key = raw_key.replace(":raw:", ":processed:")
+            
+            pipe = client.client.pipeline(transaction=True)
+            # Check both if key exists AND if it's already in processed queue
+            if not client.get(processed_key):
+                # Check if already in processed queue
+                queue_items = client.client.lrange(RedisClient.PROCESSED_QUEUE, 0, -1)
+                if processed_key not in queue_items:  # Only add if not already in queue
+                    pipe.set(processed_key, json.dumps(processed_dict))
+                    pipe.lpush(RedisClient.PROCESSED_QUEUE, processed_key)
+
+                    if self.delete_raw:
+                        pipe.delete(raw_key)
+
+                    return all(pipe.execute())
+            return True  # Already processed
+
+
+
+        except Exception as e:
+            logging.error(f"Failed to process {raw_key}: {e}")
+            client = (self.hist_client if ':hist:' in raw_key else self.redis_client)
+            client.push_to_queue(RedisClient.FAILED_QUEUE, raw_key)
+            return False
+
+    def _clean_news(self, news: dict) -> dict:
+        """Clean news content"""
+        cleaned = news.copy()
+        for field in ['title', 'teaser', 'body']:
+            if field in cleaned:
+                cleaned[field] = self._clean_content(cleaned[field])
+        return cleaned
+
+
+    def stop(self):
+        """Stop processing"""
+        self.should_run = False
+
+    def _clean_content(self, content: str) -> str:
+        """Clean individual text content"""
+        if content is None or not isinstance(content, str):
+            return content
+
+        if content.startswith(('http://', 'https://', '/')):
+            return content
+                
+        try:
+            cleaned_text = BeautifulSoup(content, 'html.parser').get_text(' ')
+            
+            # Convert HTML entities like &quot; to "
+            cleaned_text = html.unescape(cleaned_text)
+
+            # Detect if content is code (basic heuristic)
+            is_code = re.search(r"def |print\(|\{.*?\}|=", cleaned_text)
+
+            # Normalize Unicode (fix \u201c, \u201d, etc.) ONLY if it's not code
+            if not is_code:
+                cleaned_text = unicodedata.normalize("NFKC", cleaned_text)
+
+            cleaned_text = cleaned_text.replace('\xa0', ' ')
+            cleaned_text = re.sub(r'\s+([.,;?!])', r'\1', cleaned_text)
+            cleaned_text = re.sub(r'([.,;?!])\s+', r'\1 ', cleaned_text)
+            cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
+            return cleaned_text.strip()
+        except Exception as e:
+            logging.error(f"Error cleaning content: {e}")
+            return content  # Return original if cleaning fails
