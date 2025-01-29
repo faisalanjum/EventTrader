@@ -12,12 +12,14 @@ import json
 from utils.redisClasses import EventTraderRedis
 import time
 import unicodedata
-
+from datetime import datetime
+import pytz
+from dateutil import parser
 
  # Using any client for shared queues
 
 class NewsProcessor:
-    def __init__(self, event_trader_redis: EventTraderRedis, delete_raw: bool = False):
+    def __init__(self, event_trader_redis: EventTraderRedis, delete_raw: bool = True):
         self.redis_client = event_trader_redis.bz_livenews
         self.hist_client = event_trader_redis.bz_histnews
         self.queue_client = self.redis_client  # Dedicated client for queue operations
@@ -76,9 +78,17 @@ class NewsProcessor:
             news_dict = json.loads(raw_content)
             processed_dict = self._clean_news(news_dict)
             
-            processed_key = raw_key.replace(":raw:", ":processed:")
-            
+            processed_key = raw_key.replace(":raw:", ":processed:")            
             pipe = client.client.pipeline(transaction=True)
+
+            # If processed exists, just delete raw if needed
+            if client.get(processed_key):
+                if self.delete_raw:
+                    pipe.delete(raw_key)
+                    return all(pipe.execute())
+                return True
+
+            # If not in processed queue, process it
             # Check both if key exists AND if it's already in processed queue
             if not client.get(processed_key):
                 # Check if already in processed queue
@@ -91,7 +101,7 @@ class NewsProcessor:
                         pipe.delete(raw_key)
 
                     return all(pipe.execute())
-            return True  # Already processed
+            return True  # Already processed/ # Already in queue
 
 
 
@@ -104,15 +114,39 @@ class NewsProcessor:
     def _clean_news(self, news: dict) -> dict:
         """Clean news content"""
         cleaned = news.copy()
+
+        # Clean content
         for field in ['title', 'teaser', 'body']:
             if field in cleaned:
                 cleaned[field] = self._clean_content(cleaned[field])
+
+        # Convert timestamps
+        for field in ['created', 'updated']:
+            if field in cleaned:
+                cleaned[field] = self.convert_to_eastern(cleaned[field])
+    
+                
         return cleaned
 
+    @staticmethod
+    def convert_to_eastern(utc_time_str: str) -> str:
+        """Convert UTC ISO 8601 timestamp to US/Eastern timezone.
+        
+        Args:
+            utc_time_str: ISO 8601 string (handles both "+00:00" and "Z" formats)
+        Returns:
+            str: Eastern timezone ISO 8601 string
+        """
+        try:
+            utc_time = parser.isoparse(utc_time_str)
+            eastern_zone = pytz.timezone("America/New_York")
+            eastern_time = utc_time.astimezone(eastern_zone)
+            return eastern_time.isoformat()
+        except Exception as e:
+            logging.error(f"Failed to parse timestamp {utc_time_str}: {e}")
+            return utc_time_str
 
-    def stop(self):
-        """Stop processing"""
-        self.should_run = False
+
 
     def _clean_content(self, content: str) -> str:
         """Clean individual text content"""
@@ -143,3 +177,8 @@ class NewsProcessor:
         except Exception as e:
             logging.error(f"Error cleaning content: {e}")
             return content  # Return original if cleaning fails
+        
+
+    def stop(self):
+        """Stop processing"""
+        self.should_run = False        

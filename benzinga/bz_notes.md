@@ -1,10 +1,27 @@
 
 
+"""Redis News Storage Logic
+
+1. preserve_processed (RedisClient.clear())
+   - TRUE:  On restart → Keep processed news, delete raw
+   - FALSE: On restart → Delete everything (fresh start)
+
+2. delete_raw (NewsProcessor)
+   - TRUE:  After processing → Move raw → processed
+   - FALSE: After processing → Copy raw → processed (keep both)
+
+Best Practice: preserve_processed=True, delete_raw=True
+- Prevents duplicate processing
+- Single source of truth
+- Efficient storage
+"""
+
+
 Final Keys:
     - id
     - symbols
-    - created
-    - updated
+    - created (datetime)
+    - updated (datetime)
     - title
     - teaser
     - body
@@ -12,6 +29,15 @@ Final Keys:
     - channels
     - tags
     - url
+
+
+created & updated:
+- example: "2024-01-01T19:33:06+00:00"
+ - ISO 8601 datetime format
+ - T → Separator between date and time
+ - +00:00 for UTC
+ - Time in 24-hour format (e.g., 19:33:06)
+
 
 WebSocket/REST API -> RAW_QUEUE -> NewsProcessor -> CLEAN_QUEUE -> Neo4j
 

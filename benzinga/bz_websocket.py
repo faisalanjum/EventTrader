@@ -90,9 +90,9 @@ class BenzingaNewsWebSocket:
     
     def disconnect(self):
         """Clean shutdown"""
-        self.should_run = False
+        self.should_run = False # Sets flag to stop reconnection attempts
         if self.ws:
-            self.ws.close()
+            self.ws.close() # This still triggers _on_close and _log_downtime
 
     def _on_open(self, ws):
         """Handle WebSocket connection open"""
@@ -218,7 +218,7 @@ class BenzingaNewsWebSocket:
                 'start': self.last_pong_time.isoformat(),  # Changed from last_message_time
                 'end': disconnect_time.isoformat(),
                 'duration': duration,
-                'status': status_code or 'unknown'
+                'status': str(status_code) if status_code is not None else 'unknown'
             }
             
             try:

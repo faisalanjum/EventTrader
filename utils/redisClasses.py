@@ -26,14 +26,19 @@ logging.basicConfig(
     ]
 )
 
+
+# preserve_processed=True by default to maintain both historical and live processed news between runs,
+# preventing duplicate processing while allowing new incoming news (both historical and live) to be 
+# checked against existing processed entries
+
 class EventTraderRedis:
 
-    def __init__(self, clear_config=False):
+    def __init__(self, clear_config=False, preserve_processed=True):
         self.bz_livenews = RedisClient(prefix='news:benzinga:live:')
         self.bz_histnews = RedisClient(prefix='news:benzinga:hist:')
         self.config = RedisClient(prefix='config:')
         
-        self.clear()
+        self.clear(preserve_processed)
         self.initialize_stock_universe(clear_config=clear_config)
 
 
@@ -81,10 +86,10 @@ class EventTraderRedis:
         universe_json = self.config.get('config:stock_universe')  # Match the prefix
         return pd.read_json(StringIO(universe_json)) if universe_json else None
 
-    def clear(self):
+    def clear(self, preserve_processed=True): 
         try:
-            self.bz_livenews.clear()
-            self.bz_histnews.clear()
+            self.bz_livenews.clear(preserve_processed)
+            self.bz_histnews.clear(preserve_processed)
             return True
         except Exception as e:
             logging.error(f"Error during clear: {e}")
@@ -192,10 +197,14 @@ class RedisClient:
             logging.error(f"Queue pop failed: {e}")
             return None
 
-    def clear(self):
-        """Clear all keys with prefix"""
+    def clear(self, preserve_processed=True):  # Same default as EventTraderRedis
+        """Clear keys with prefix, optionally preserving processed news"""
         try:
-            pattern = f"{self.prefix}*" if self.prefix else "*"
+            if preserve_processed:
+                pattern = f"{self.prefix}raw:*"  # Only clear raw keys
+            else:
+                pattern = f"{self.prefix}*" if self.prefix else "*"  # Clear all keys
+                
             keys = self.client.keys(pattern)
             if keys:
                 return self.client.delete(*keys)
