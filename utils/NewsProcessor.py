@@ -88,22 +88,15 @@ class NewsProcessor:
                     return all(pipe.execute())
                 return True
 
-            # If not in processed queue, process it
-            # Check both if key exists AND if it's already in processed queue
-            if not client.get(processed_key):
-                # Check if already in processed queue
-                queue_items = client.client.lrange(RedisClient.PROCESSED_QUEUE, 0, -1)
-                if processed_key not in queue_items:  # Only add if not already in queue
-                    pipe.set(processed_key, json.dumps(processed_dict))
-                    pipe.lpush(RedisClient.PROCESSED_QUEUE, processed_key)
-
-                    if self.delete_raw:
-                        pipe.delete(raw_key)
-
-                    return all(pipe.execute())
-            return True  # Already processed/ # Already in queue
-
-
+            # Not processed yet, check queue and process
+            queue_items = client.client.lrange(RedisClient.PROCESSED_QUEUE, 0, -1)
+            if processed_key not in queue_items:  # Only add if not already in queue
+                pipe.set(processed_key, json.dumps(processed_dict))
+                pipe.lpush(RedisClient.PROCESSED_QUEUE, processed_key)
+                if self.delete_raw:
+                    pipe.delete(raw_key)
+                return all(pipe.execute())
+            return True  # Already in queue
 
         except Exception as e:
             logging.error(f"Failed to process {raw_key}: {e}")
