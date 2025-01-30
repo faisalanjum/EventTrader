@@ -43,7 +43,7 @@ class EventTraderRedis:
 
 
 
-    def initialize_stock_universe(self, clear_config=False, file_path='../StocksUniverse/final_symbols_filtered.csv'):
+    def initialize_stock_universe(self, clear_config=False, file_path='../StocksUniverse/final_symbols.csv'):
         try:
             if clear_config:
                 self.config.clear()
@@ -230,3 +230,10 @@ class RedisClient:
             logging.error(f"Error retrieving JSON from Redis: {e}")
             return None        
             
+    def delete(self, key: str) -> bool:
+        """Delete a key from Redis"""
+        try:
+            return bool(self.client.delete(key))
+        except Exception as e:
+            logging.error(f"Delete failed for key {key}: {e}")
+            return False

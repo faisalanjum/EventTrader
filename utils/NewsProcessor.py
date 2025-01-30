@@ -20,12 +20,16 @@ from dateutil import parser
 
 class NewsProcessor:
     def __init__(self, event_trader_redis: EventTraderRedis, delete_raw: bool = True):
+                
         self.redis_client = event_trader_redis.bz_livenews
         self.hist_client = event_trader_redis.bz_histnews
         self.queue_client = self.redis_client  # Dedicated client for queue operations
         self.should_run = True
         self._lock = threading.Lock()
         self.delete_raw = delete_raw
+
+        # Cache the allowed symbols list as a set for O(1) lookups
+        self.allowed_symbols = {s.strip().upper() for s in event_trader_redis.get_symbols()}
 
     def process_all_news(self):
         """Continuously process news from RAW_QUEUE"""
@@ -76,6 +80,14 @@ class NewsProcessor:
                 return False
 
             news_dict = json.loads(raw_content)
+
+            # Check if news has valid symbols
+            if not self._has_valid_symbols(news_dict):
+                logging.debug(f"Dropping {raw_key} - no matching symbols in universe")
+                client.delete(raw_key)  # Delete invalid item from raw storage
+                return True  # Continue processing without error
+
+
             processed_dict = self._clean_news(news_dict)
             
             processed_key = raw_key.replace(":raw:", ":processed:")            
@@ -221,6 +233,15 @@ class NewsProcessor:
             logging.error(f"Error limiting body word count: {e}")
             return news  # Return original if processing fails
 
+
+    def _has_valid_symbols(self, news: dict) -> bool:
+        """Check if news item has at least one valid symbol from stock universe."""
+        try:
+            news_symbols = {s.strip().upper() for s in news.get('symbols', [])}
+            return bool(news_symbols & self.allowed_symbols)  # Set intersection
+        except Exception as e:
+            logging.error(f"Error checking symbols: {e}")
+            return False
 
 
     def stop(self):

@@ -1,4 +1,12 @@
 
+**Rule for News Item Symbol Validation:**
+    "Any news item that doesn't contain at least one symbol matching our stocks universe is completely removed from the system. This means:
+
+    - The raw content is deleted from storage (hist/live)
+    - The item naturally exits the raw queue when popped
+    - The item never enters the processed queue
+    - No record or tracking of these invalid items is maintained"
+
 
 """Redis News Storage Logic
 
