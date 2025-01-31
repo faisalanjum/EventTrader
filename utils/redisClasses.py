@@ -88,7 +88,7 @@ class EventTraderRedis:
 
     def clear(self, preserve_processed=True): 
         try:
-            self.bz_livenews.clear(preserve_processed)
+            self.bz_livenews.clear(preserve_processed) # If True, Only clear raw keys, not processed keys else clear all keys
             self.bz_histnews.clear(preserve_processed)
             return True
         except Exception as e:
@@ -112,16 +112,11 @@ class RedisClient:
         self.db = db
         self.prefix = prefix  # Will be 'news:benzinga:live:' or 'news:benzinga:hist:'
 
-        self.pool = redis.ConnectionPool(
-        host=host, 
-        port=port, 
-        db=db,
-        decode_responses=True)
-
+        self.pool = redis.ConnectionPool( host=host, port=port, db=db, decode_responses=True)
         self._connect_to_redis()
 
     def _connect_to_redis(self):
-        max_retries = 3
+        max_retries = 10
         retry_delay = 1
         
         for attempt in range(max_retries):
@@ -137,14 +132,18 @@ class RedisClient:
                 logging.warning(f"Redis connection attempt {attempt + 1} failed, retrying...")
                 time.sleep(retry_delay)
 
+    # Used in bz_websocket.py
     def set_news(self, news_item: UnifiedNews, ex=None):
         """For live news ingestion from WebSocket"""
         try:
+            # Replace colons in updated timestamp with dots
+            updated_key = news_item.updated.replace(':', '.')
+
             # Store as news:benzinga:live:raw:{id}:{updated}
-            storage_key = f"{self.prefix}raw:{news_item.id}:{news_item.updated}"
+            storage_key = f"{self.prefix}raw:{news_item.id}.{updated_key}"
             
             pipe = self.client.pipeline(transaction=True)
-            pipe.set(storage_key, news_item.model_dump_json(), ex=ex)
+            pipe.set(storage_key, news_item.model_dump_json(), ex=ex) # stores the news content in Redis
             pipe.lpush(self.RAW_QUEUE, storage_key)
             return all(pipe.execute())
                 
@@ -158,7 +157,9 @@ class RedisClient:
             pipe = self.client.pipeline(transaction=True)
             
             for item in news_items:
-                storage_key = f"{self.prefix}raw:{item.id}:{item.updated}"
+                # Replace colons in updated timestamp with dots
+                updated_key = item.updated.replace(':', '.')
+                storage_key = f"{self.prefix}raw:{item.id}.{updated_key}"
                 pipe.set(storage_key, item.model_dump_json(), ex=ex)
                 pipe.lpush(self.RAW_QUEUE, storage_key)
             

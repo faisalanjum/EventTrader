@@ -16,6 +16,11 @@ from datetime import datetime
 import pytz
 from dateutil import parser
 
+from eventtrader.keys import POLYGON_API_KEY
+from utils.polygonClass import Polygon
+from utils.market_session import MarketSessionClassifier
+from datetime import timedelta
+
  # Using any client for shared queues
 
 class NewsProcessor:
@@ -30,6 +35,20 @@ class NewsProcessor:
 
         # Cache the allowed symbols list as a set for O(1) lookups
         self.allowed_symbols = {s.strip().upper() for s in event_trader_redis.get_symbols()}
+
+        # Cache the stock universe as a DataFrame for O(1) lookups
+        self.stock_universe = event_trader_redis.get_stock_universe()
+
+        # Initialize Polygon client
+        self.polygon = Polygon( api_key=POLYGON_API_KEY)
+            # pool_connections=25,     # Base number of connection pools
+            # pool_maxsize=50,         # Maximum connections in the pool
+            # max_retries=3,           # Number of retries for failed requests
+            # timeout=30               # Request timeout in seconds
+            # )
+
+        self.market_session = MarketSessionClassifier()
+
 
     def process_all_news(self):
         """Continuously process news from RAW_QUEUE"""
@@ -81,16 +100,34 @@ class NewsProcessor:
 
             news_dict = json.loads(raw_content)
 
-            # Check if news has valid symbols
+            # RULE IMPLEMENTATION:
+            # 1. Check if ANY valid symbols exist
             if not self._has_valid_symbols(news_dict):
                 logging.debug(f"Dropping {raw_key} - no matching symbols in universe")
-                client.delete(raw_key)  # Delete invalid item from raw storage
-                return True  # Continue processing without error
+                client.delete(raw_key)  # Delete news item from "raw" storage (hist/live)
+                return True  # Item exits raw queue naturally
+                # No tracking maintained, never enters processed queue
 
-
+            # If we get here, at least one valid symbol exists
             processed_dict = self._clean_news(news_dict)
             
-            processed_key = raw_key.replace(":raw:", ":processed:")            
+            # Filter to keep only valid symbols
+            valid_symbols = {s.strip().upper() for s in processed_dict.get('symbols', [])} & self.allowed_symbols
+            processed_dict['symbols'] = list(valid_symbols)
+
+            # **********************************************************************
+            # Calculate returns
+            returns_data = self._calculate_returns(processed_dict, raw_key)
+            if returns_data is None:                
+                client.push_to_queue(RedisClient.FAILED_QUEUE, raw_key)
+                return False
+                
+            # Add returns to processed_dict
+            processed_dict['returns'] = returns_data            
+
+            # **********************************************************************
+            # Move to processed queue
+            processed_key = raw_key.replace(":raw:", ":processed:")   
             pipe = client.client.pipeline(transaction=True)
 
             # If processed exists, just delete raw if needed
@@ -115,6 +152,80 @@ class NewsProcessor:
             client = (self.hist_client if ':hist:' in raw_key else self.redis_client)
             client.push_to_queue(RedisClient.FAILED_QUEUE, raw_key)
             return False
+
+
+    def _calculate_returns(self, processed_dict: dict, raw_key: str) -> Optional[dict]:
+            # Extract fields for returns calculation
+
+
+        try:
+            # Here is where we should:
+            # 1. Get symbols and created from processed_dict
+            # 2. Calculate returns
+            # 3. If returns calculation successful:
+            #    - Add returns to processed_dict
+            #    - Move to processed queue (raw_key -> processed_key)
+            # 4. If returns calculation fails:
+            #    - Move to failed queue
+            #    - Log the failure reason
+
+
+            # Skip historical news
+            # if ':hist:' in raw_key:
+                # logging.info("Skipping returns calculation for historical news")
+                # return {}
+
+            returns_data = {'timing': {}, 'symbols': {}}
+            created = processed_dict.get('created')
+            
+            market_session = self.market_session.get_market_session(created)
+            end_time = self.market_session.get_end_time(created)
+            interval_start_time = self.market_session.get_interval_start_time(created)                        
+            interval_end_time = interval_start_time + timedelta(minutes=60)
+            one_day_impact_times = self.market_session.get_1d_impact_times(created)
+            oneday_impact_end_time = one_day_impact_times[1]
+            
+            # Add timing data
+            returns_data['timing'].update({
+                'session_end_time': end_time.isoformat(),
+                '1d_impact_end_time': oneday_impact_end_time.isoformat(),
+                'interval_end_time': interval_end_time.isoformat(),
+                'market_session': market_session
+            })
+
+
+            for symbol in processed_dict.get('symbols', []):
+                symbol = symbol.strip().upper()
+                sector_etf = self.get_etf(symbol, 'sector_etf')
+                industry_etf = self.get_etf(symbol, 'industry_etf')
+
+                while True:
+                    try:
+                        returns = self.polygon.get_event_returns(
+                            ticker=symbol,
+                            sector_etf=sector_etf,
+                            industry_etf=industry_etf,
+                            event_timestamp=created,
+                            return_type='session'
+                        )
+
+                        returns_data['symbols'][symbol] = returns
+                        break
+                        
+                    except Exception as e:
+                        if "Connection pool is full" in str(e):
+                            time.sleep(1)
+                            continue
+                        logging.error(f"Error calculating returns for {symbol}: {e}")
+                        return None
+                        
+            return returns_data
+                
+        except Exception as e:
+            logging.error(f"Returns calculation failed: {e} for: {processed_dict}")
+            return None
+            
+
 
     def _clean_news(self, news: dict) -> dict:
         """Clean news content.
@@ -247,3 +358,12 @@ class NewsProcessor:
     def stop(self):
         """Stop processing"""
         self.should_run = False        
+
+
+    def get_etf(self, ticker: str, col='industry_etf'):  # sector_etf, industry_etf        
+        """Get sector or industry ETF for a ticker with consistent formatting"""
+        ticker = ticker.strip().upper()
+        matches = self.stock_universe[self.stock_universe.symbol == ticker]
+        if matches.empty:
+            raise ValueError(f"Symbol {ticker} not found in stock universe")
+        return matches[col].values[0]   

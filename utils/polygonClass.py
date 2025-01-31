@@ -91,7 +91,7 @@ class Polygon:
         from .market_session import MarketSessionClassifier
         self.market_session = MarketSessionClassifier()
         self.client = RESTClient(self.api_key)
-        self.executor = ThreadPoolExecutor(max_workers=220)
+        self.executor = ThreadPoolExecutor(max_workers=1)
         self.last_error = {}
         self.ticker_validation_cache = {}  # Add validation cache
 

@@ -1,11 +1,78 @@
 
+************************************************************************************************
+**PROBLEM:**
+    Need to calculate stock returns for news items at specific future times (e.g., 24h after news). Must handle thousands of items, system restarts, and work reliably on local development.
+    WHY REDIS ZSET:
+    - Simple but production-ready for moderate scale
+    - Redis persistence means no data loss on restarts
+    - ZSET (Sorted Set) provides time-based indexing
+    - More reliable than Redis expiry notifications
+    - Simpler than full message queue systems
+
+
+**specific workflow:**
+1. When news arrives:
+        a. Store full news data in Redis:
+        news:{id} -> {
+            content: "news text",
+            ticker: "AAPL",
+            timestamp: "2024-01-30:10:00",
+            calc_time: "2024-01-31:10:00"  # 24h later
+        }
+
+        b. Add to ZSET for time tracking:
+        pending_news -> {news_id: unix_timestamp_for_calc_time}
+
+        c. Store in Neo4j with null returns:
+        CREATE (n:News {id: id, content: "...", returns: null})
+
+2. Processing flow:
+    a. Continuous script checks Redis ZSET:
+    - Get current_timestamp
+    - ZRANGEBYSCORE pending_news 0 current_timestamp
+    
+    b. For each ready news:
+    - Calculate returns
+    - Update Neo4j with returns
+    - Remove from pending_news ZSET
+    - Update news:{id} status to 'processed'
+
+    c. Sleep 30 seconds, repeat
+
+
+3. Recovery scenario:
+
+    - System restarts
+    - Script starts
+    - Checks ZSET for any items <= current_time
+    - Processes missed items
+    - Continues normal operation
+
+This ensures no news items are missed, efficient time-based processing, and automatic recovery after restarts.
+
+************************************************************************************************
+
+
+
+
 **Rule for News Item Symbol Validation:**
     "Any news item that doesn't contain at least one symbol matching our stocks universe is completely removed from the system. This means:
 
-    - The raw content is deleted from storage (hist/live)
-    - The item naturally exits the raw queue when popped
-    - The item never enters the processed queue
-    - No record or tracking of these invalid items is maintained"
+    1. Initial Validation:
+    - Check if ANY valid symbols exist using _has_valid_symbols()
+    - If none exist:
+        - The raw content is deleted from storage (hist/live)
+        - The item naturally exits the raw queue when popped
+        - The item never enters the processed queue
+        - No record or tracking of these invalid items is maintained
+
+    2. Symbol Filtering (if passed initial validation):
+    - After cleaning the news item
+    - Keep only those symbols that exist in allowed_symbols set
+    - Update processed_dict['symbols'] with filtered list
+    - These filtered symbols will be used for ETF lookups and returns calculation
+
+    This ensures we only process news items with valid symbols and maintain only the relevant symbols for each news item."
 
 
 """Redis News Storage Logic
