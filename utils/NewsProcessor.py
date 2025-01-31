@@ -155,11 +155,9 @@ class NewsProcessor:
 
 
     def _calculate_returns(self, processed_dict: dict, raw_key: str) -> Optional[dict]:
-            # Extract fields for returns calculation
-
 
         try:
-            # Here is where we should:
+            # Steps:
             # 1. Get symbols and created from processed_dict
             # 2. Calculate returns
             # 3. If returns calculation successful:
@@ -175,50 +173,67 @@ class NewsProcessor:
                 # logging.info("Skipping returns calculation for historical news")
                 # return {}
 
-            returns_data = {'timing': {}, 'symbols': {}}
+            returns_data = {'timeforReturns': {}, 'symbols': {}, 'metadata': {}}
+
             created = processed_dict.get('created')
             
             market_session = self.market_session.get_market_session(created)
             end_time = self.market_session.get_end_time(created)
             interval_start_time = self.market_session.get_interval_start_time(created)                        
-            interval_end_time = interval_start_time + timedelta(minutes=60)
+            interval_end_time = interval_start_time + timedelta(minutes=60) # One hour
             one_day_impact_times = self.market_session.get_1d_impact_times(created)
             oneday_impact_end_time = one_day_impact_times[1]
             
-            # Add timing data
-            returns_data['timing'].update({
+            # Required to check if time for returns calculation 
+            returns_data['timeforReturns'].update({
+                '1h_end_time': interval_end_time.isoformat(),
                 'session_end_time': end_time.isoformat(),
-                '1d_impact_end_time': oneday_impact_end_time.isoformat(),
-                'interval_end_time': interval_end_time.isoformat(),
-                'market_session': market_session
+                '1d_end_time': oneday_impact_end_time.isoformat()                                
             })
 
+            # metadata (to be stored in Neo4j): - Add more metadata as needed
+            returns_data['metadata'].update({'market_session': market_session,})
 
+            # Calculate returns for each symbol
             for symbol in processed_dict.get('symbols', []):
                 symbol = symbol.strip().upper()
                 sector_etf = self.get_etf(symbol, 'sector_etf')
                 industry_etf = self.get_etf(symbol, 'industry_etf')
+                                
+                returns_data['symbols'][symbol] = { 'session': {}, '1d_impact': {}, '1h_impact': {}}
+                return_types = [
+                    ('session', 'session', None),
+                    ('1d_impact', '1d_impact', None),
+                    ('1h_impact', 'horizon', [60])]
 
-                while True:
-                    try:
-                        returns = self.polygon.get_event_returns(
-                            ticker=symbol,
-                            sector_etf=sector_etf,
-                            industry_etf=industry_etf,
-                            event_timestamp=created,
-                            return_type='session'
-                        )
+                for return_key, return_type, horizon in return_types:
+                    while True:
+                        try:
+                            returns = self.polygon.get_event_returns(
+                                ticker=symbol,
+                                sector_etf=sector_etf,
+                                industry_etf=industry_etf,
+                                event_timestamp=created,
+                                return_type=return_type,
+                                horizon_minutes=horizon)
 
-                        returns_data['symbols'][symbol] = returns
-                        break
-                        
-                    except Exception as e:
-                        if "Connection pool is full" in str(e):
-                            time.sleep(1)
-                            continue
-                        logging.error(f"Error calculating returns for {symbol}: {e}")
-                        return None
-                        
+                            # Fix for horizon returns (1h_impact) - later once we have modified the code, we could change it
+                            if return_type == 'horizon':
+                                returns = {k: v[0] for k, v in returns.items()}
+
+                            # Then round all returns to 2 decimal places
+                            returns = {k: round(v, 2) for k, v in returns.items()}
+
+                            returns_data['symbols'][symbol][return_key] = returns
+                            break
+
+                        except Exception as e:
+                            if "Connection pool is full" in str(e):
+                                time.sleep(1)
+                                continue
+                            logging.error(f"Error calculating {return_key} returns for {symbol}: {e}")
+                            return None
+
             return returns_data
                 
         except Exception as e:
