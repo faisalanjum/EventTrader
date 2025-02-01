@@ -1,4 +1,13 @@
 
+
+**Before storing any news in hist:raw or live:raw, check if {prefix}processed:{id}.{updated} exists in news:benzinga:queues:processed. If found, skip storing; if not, proceed with storage.**
+    - Why Important:
+        - Prevents duplicate processing of already handled news
+        - Must preserve processed queue as it's our history record
+        - Applies to both live and historical ingestion points
+
+The processed queue is preserved by default and only cleared if explicitly set preserve_processed=False in RedisClient.clear() or EventTraderRedis initialization. 
+
 ************************************************************************************************
 **PROBLEM:**
     Need to calculate stock returns for news items at specific future times (e.g., 24h after news). Must handle thousands of items, system restarts, and work reliably on local development.

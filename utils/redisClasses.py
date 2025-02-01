@@ -138,6 +138,12 @@ class RedisClient:
             # Replace colons in updated timestamp with dots
             updated_key = news_item.updated.replace(':', '.')
 
+            # Checks if the news item is already in the processed queue to avoid duplicates
+            processed_key = f"{self.prefix}processed:{news_item.id}.{updated_key}"            
+            if processed_key in self.client.lrange(self.PROCESSED_QUEUE, 0, -1):
+                logging.info(f"Skipping duplicate news: {processed_key}")
+                return True
+
             # Store as news:benzinga:live:raw:{id}:{updated}
             storage_key = f"{self.prefix}raw:{news_item.id}.{updated_key}"
             
@@ -153,11 +159,22 @@ class RedisClient:
     def set_news_batch(self, news_items: List[UnifiedNews], ex=None):
         """For historical news ingestion"""
         try:
+        
+            # Get processed queue items once for efficiency since will compare with each newsitem to avoid duplicates
+            processed_items = self.client.lrange(self.PROCESSED_QUEUE, 0, -1)
+
             pipe = self.client.pipeline(transaction=True)
             
             for item in news_items:
                 # Replace colons in updated timestamp with dots
                 updated_key = item.updated.replace(':', '.')
+                processed_key = f"{self.prefix}processed:{item.id}.{updated_key}"
+
+                # Skip if already in processed queue
+                if processed_key in processed_items:
+                    logging.info(f"Skipping duplicate news: {processed_key}")
+                    continue
+
                 storage_key = f"{self.prefix}raw:{item.id}.{updated_key}"
                 pipe.set(storage_key, item.model_dump_json(), ex=ex)
                 pipe.lpush(self.RAW_QUEUE, storage_key)
