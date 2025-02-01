@@ -42,7 +42,6 @@ class EventTraderRedis:
         self.initialize_stock_universe(clear_config=clear_config)
 
 
-
     def initialize_stock_universe(self, clear_config=False, file_path='../StocksUniverse/final_symbols.csv'):
         try:
             if clear_config:
@@ -144,7 +143,7 @@ class RedisClient:
             
             pipe = self.client.pipeline(transaction=True)
             pipe.set(storage_key, news_item.model_dump_json(), ex=ex) # stores the news content in Redis
-            pipe.lpush(self.RAW_QUEUE, storage_key)
+            pipe.lpush(self.RAW_QUEUE, storage_key) 
             return all(pipe.execute())
                 
         except Exception as e:

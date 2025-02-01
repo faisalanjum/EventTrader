@@ -10,6 +10,14 @@
     - Simpler than full message queue systems
 
 
+{"timeforReturns": {"1h_end_time": "2025-01-02T05:00:00-05:00", "session_end_time": "2025-01-02T09:35:00-05:00", "1d_end_time": "2025-01-02T16:00:00-05:00"}, 
+
+"metadata": {"market_session": "market_closed"}, 
+
+"symbolsData": [{"symbol": "AMD", "sector_etf": "XLK", "industry_etf": "XSD"}, {"symbol": "NVDA", "sector_etf": "XLK", "industry_etf": "XSD"}, {"symbol": "AMZN", "sector_etf": "XLY", "industry_etf": "XRT"}]}}
+
+
+
 **specific workflow:**
 1. When news arrives:
         a. Store full news data in Redis:

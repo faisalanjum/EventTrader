@@ -66,6 +66,8 @@ class NewsProcessor:
                     consecutive_errors = 0
                 else:
                     consecutive_errors += 1
+
+                    
                     if consecutive_errors > 10:  # Reset after too many errors
                         logging.error("Too many consecutive errors, reconnecting...")
                         self._reconnect()
@@ -91,8 +93,9 @@ class NewsProcessor:
 
     def _process_news_item(self, raw_key: str) -> bool:
         try:
-            client = (self.hist_client if ':hist:' in raw_key else self.redis_client)
-            
+
+            # 1. Initial Setup and Validation
+            client = (self.hist_client if ':hist:' in raw_key else self.redis_client)            
             raw_content = client.get(raw_key)
             if not raw_content:
                 logging.error(f"Raw content not found: {raw_key}")
@@ -100,30 +103,29 @@ class NewsProcessor:
 
             news_dict = json.loads(raw_content)
 
-            # RULE IMPLEMENTATION:
-            # 1. Check if ANY valid symbols exist
+            # 2. Check if any valid symbols exist
             if not self._has_valid_symbols(news_dict):
                 logging.debug(f"Dropping {raw_key} - no matching symbols in universe")
                 client.delete(raw_key)  # Delete news item from "raw" storage (hist/live)
                 return True  # Item exits raw queue naturally
                 # No tracking maintained, never enters processed queue
 
-            # If we get here, at least one valid symbol exists
+            # 3. Clean news content - If we get here, at least one valid symbol exists
             processed_dict = self._clean_news(news_dict)
             
-            # Filter to keep only valid symbols
+            # 4. Filter to keep only valid symbols
             valid_symbols = {s.strip().upper() for s in processed_dict.get('symbols', [])} & self.allowed_symbols
             processed_dict['symbols'] = list(valid_symbols)
 
             # **********************************************************************
-            # Calculate returns
-            returns_data = self._calculate_returns(processed_dict, raw_key)
-            if returns_data is None:                
-                client.push_to_queue(RedisClient.FAILED_QUEUE, raw_key)
+            # Get Metadata
+            metadata = self._add_metadata(processed_dict)
+            if metadata is None:                
+                client.push_to_queue(RedisClient.FAILED_QUEUE)
                 return False
                 
             # Add returns to processed_dict
-            processed_dict['returns'] = returns_data            
+            processed_dict['metadata'] = metadata            
 
             # **********************************************************************
             # Move to processed queue
@@ -154,6 +156,47 @@ class NewsProcessor:
             return False
 
 
+    def _add_metadata(self, processed_dict: dict) -> Optional[dict]:
+
+        try:
+            metadata = {'timeforReturns': {}, 'metadata': {}, 'symbolsData': []}
+
+            created = processed_dict.get('created')
+            
+            market_session = self.market_session.get_market_session(created)
+            end_time = self.market_session.get_end_time(created)
+            interval_start_time = self.market_session.get_interval_start_time(created)                        
+            interval_end_time = interval_start_time + timedelta(minutes=60) # One hour
+            one_day_impact_times = self.market_session.get_1d_impact_times(created)
+            oneday_impact_end_time = one_day_impact_times[1]
+            
+            # Required to check if time for returns calculation 
+            metadata['timeforReturns'].update({
+                '1h_end_time': interval_end_time.isoformat(),
+                'session_end_time': end_time.isoformat(),
+                '1d_end_time': oneday_impact_end_time.isoformat()                                
+            })
+
+            # metadata (to be stored in Neo4j): - Add more metadata as needed
+            metadata['metadata'].update({'market_session': market_session,})
+
+
+            for symbol in processed_dict.get('symbols', []):
+                symbol = symbol.strip().upper()
+                sector_etf = self.get_etf(symbol, 'sector_etf')
+                industry_etf = self.get_etf(symbol, 'industry_etf')
+                                
+                metadata['symbolsData'].append({ 'symbol': symbol, 'sector_etf': sector_etf, 'industry_etf': industry_etf})
+
+
+            return metadata
+                
+        except Exception as e:
+            logging.error(f"Returns calculation failed: {e} for: {processed_dict}")
+            return None
+
+
+
     def _calculate_returns(self, processed_dict: dict, raw_key: str) -> Optional[dict]:
 
         try:
@@ -173,26 +216,9 @@ class NewsProcessor:
                 # logging.info("Skipping returns calculation for historical news")
                 # return {}
 
-            returns_data = {'timeforReturns': {}, 'symbols': {}, 'metadata': {}}
+            returns_data = {'symbols': {}}
 
             created = processed_dict.get('created')
-            
-            market_session = self.market_session.get_market_session(created)
-            end_time = self.market_session.get_end_time(created)
-            interval_start_time = self.market_session.get_interval_start_time(created)                        
-            interval_end_time = interval_start_time + timedelta(minutes=60) # One hour
-            one_day_impact_times = self.market_session.get_1d_impact_times(created)
-            oneday_impact_end_time = one_day_impact_times[1]
-            
-            # Required to check if time for returns calculation 
-            returns_data['timeforReturns'].update({
-                '1h_end_time': interval_end_time.isoformat(),
-                'session_end_time': end_time.isoformat(),
-                '1d_end_time': oneday_impact_end_time.isoformat()                                
-            })
-
-            # metadata (to be stored in Neo4j): - Add more metadata as needed
-            returns_data['metadata'].update({'market_session': market_session,})
 
             # Calculate returns for each symbol
             for symbol in processed_dict.get('symbols', []):
@@ -239,7 +265,9 @@ class NewsProcessor:
         except Exception as e:
             logging.error(f"Returns calculation failed: {e} for: {processed_dict}")
             return None
-            
+    
+
+
 
 
     def _clean_news(self, news: dict) -> dict:
