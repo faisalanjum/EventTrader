@@ -1,4 +1,13 @@
 
+# Returns Processor
+    So the complete flow is:
+    ✓ News starts in processed namespace
+    ✓ Moves to withoutreturns (or withreturns if immediate)
+    ✓ Future returns scheduled in pending_returns ZSET
+    ✓ When returns ready, updates news in withoutreturns
+    ✓ When all returns complete, moves to withreturns
+
+
 
 **Before storing any news in hist:raw or live:raw, check if {prefix}processed:{id}.{updated} exists in news:benzinga:queues:processed. If found, skip storing; if not, proceed with storage.**
     - Why Important:

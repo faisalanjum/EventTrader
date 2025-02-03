@@ -123,7 +123,8 @@ class NewsProcessor:
             if metadata is None:                
                 client.push_to_queue(RedisClient.FAILED_QUEUE)
                 return False
-                
+
+
             # Add returns to processed_dict
             processed_dict['metadata'] = metadata            
 
@@ -165,8 +166,11 @@ class NewsProcessor:
             
             market_session = self.market_session.get_market_session(created)
             end_time = self.market_session.get_end_time(created)
-            interval_start_time = self.market_session.get_interval_start_time(created)                        
+            interval_start_time = self.market_session.get_interval_start_time(created)     
+
+            # This is Incorrect - look at the function where we calcute returns for interval start and end_time                   
             interval_end_time = interval_start_time + timedelta(minutes=60) # One hour
+            
             one_day_impact_times = self.market_session.get_1d_impact_times(created)
             oneday_impact_end_time = one_day_impact_times[1]
             
