@@ -39,14 +39,6 @@ class NewsProcessor:
         # Cache the stock universe as a DataFrame for O(1) lookups
         self.stock_universe = event_trader_redis.get_stock_universe()
 
-        # Initialize Polygon client
-        self.polygon = Polygon( api_key=POLYGON_API_KEY)
-            # pool_connections=25,     # Base number of connection pools
-            # pool_maxsize=50,         # Maximum connections in the pool
-            # max_retries=3,           # Number of retries for failed requests
-            # timeout=30               # Request timeout in seconds
-            # )
-
         self.market_session = MarketSessionClassifier()
         
         self.logger = logging.getLogger(__name__)

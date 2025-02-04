@@ -16,7 +16,7 @@ class ReturnsProcessor:
     def __init__(self, event_trader_redis: EventTraderRedis):
         self.live_client = event_trader_redis.bz_livenews
         self.hist_client = event_trader_redis.bz_histnews
-        self.queue_client = self.live_client
+        self.queue_client = self.live_client.create_new_connection() # create new connection for queue checks
         self.should_run = True
         self._lock = threading.Lock()
         
@@ -29,8 +29,16 @@ class ReturnsProcessor:
         # Configure logging
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
-        self.pending_zset = "news:benzinga:pending_returns"         
+        
+        self.pending_zset = "news:benzinga:pending_news_returns"         
         self.ny_tz = pytz.timezone("America/New_York")
+
+    def _has_unprocessed_news(self, client):
+        """Check for unprocessed news"""
+        pattern = f"{client.prefix}processed:*"
+        keys = client.client.scan(0, pattern, 1)[1]
+        self.logger.info(f"Checking pattern: {pattern}, Found keys: {keys}")  # More detailed logging
+        return bool(keys)
 
     def process_all_returns(self):
         """Main processing loop to handle returns calculation"""
@@ -39,15 +47,19 @@ class ReturnsProcessor:
         
         while self.should_run:
             try:
-                # 1. Process both hist and live processed queues
-                for client in [self.hist_client, self.live_client]:
-                    self._process_returns_for_client(client)
-                    consecutive_errors = 0
+                # Process Live News
+                self._process_live_news(self.live_client)
+                consecutive_errors = 0
+
+                # Process Hist News
+                self._process_hist_news(self.hist_client)
+                consecutive_errors = 0
 
                 # 2. Process any pending returns that are now ready
                 self._process_pending_returns()
 
-                time.sleep(1)  # Prevent tight loop
+                # time.sleep(0.1)  # Prevent tight loop
+                self._sleep_until_next_return(default_sleep_time=1)
                 
             except Exception as e:
                 self.logger.error(f"Returns processing error: {e}")
@@ -59,7 +71,27 @@ class ReturnsProcessor:
                 time.sleep(1)
 
 
-    def _process_returns_for_client(self, client):
+    def _sleep_until_next_return(self, default_sleep_time=5):
+        """Sleep until next scheduled return time in ZSET"""
+        # Use queue_client directly since it's a Redis instance
+        next_item = self.queue_client.zrange(self.pending_zset, 0, 0, withscores=True)
+        
+        if next_item:
+            self.logger.info(f"Found next item: {next_item}")
+            # zrange with withscores=True returns [(member, score)]
+            _, next_timestamp = next_item[0]  # Correctly unpack tuple of (member, score)
+            now_timestamp = datetime.now(timezone.utc).timestamp()
+            sleep_time = max(0, next_timestamp - now_timestamp)  # Sleep only until next return is due
+            self.logger.info(f"Sleeping for {sleep_time} seconds until next return")
+        else:
+            sleep_time = default_sleep_time  # Default sleep time if no pending returns
+            self.logger.info(f"No pending returns, sleeping for {sleep_time} seconds")
+        time.sleep(sleep_time)
+        return
+
+
+
+    def _process_live_news(self, client):
         """Process returns for a specific client (hist/live)"""
         pattern = f"{client.prefix}processed:*"
         for key in client.client.scan_iter(pattern):
@@ -69,6 +101,19 @@ class ReturnsProcessor:
                     self.logger.error(f"Failed to process returns for {key}")
             except Exception as e:
                 self.logger.error(f"Failed to process returns for {key}: {e}")
+
+
+    def _process_hist_news(self, client):
+        """Process returns for a specific client (hist/live)"""
+        pattern = f"{client.prefix}processed:*"
+        for key in client.client.scan_iter(pattern):
+            try:
+                success = self._process_single_item(key, client)
+                if not success:
+                    self.logger.error(f"Failed to process returns for {key}")
+            except Exception as e:
+                self.logger.error(f"Failed to process returns for {key}: {e}")
+
 
 
     def _process_single_item(self, key: str, client) -> bool:
@@ -115,7 +160,7 @@ class ReturnsProcessor:
         """Calculate returns based on available timestamps"""
         timefor_returns = processed_dict.get('metadata', {}).get('timeforReturns', {})
         
-        # Convert current time to NY timezone
+        # Get timezone-aware NY time by first getting UTC (to avoid server timezone issues) then converting
         current_time = datetime.now(timezone.utc).astimezone(self.ny_tz)
         
         returns_data = {'symbols': {}}
@@ -243,11 +288,11 @@ class ReturnsProcessor:
             current_time = datetime.now(timezone.utc).astimezone(self.ny_tz).timestamp()
 
             for return_type, time_str in timefor_returns.items():
-                # Convert scheduled time to NY timestamp
+                # Convert scheduled time to NY timestamp for comparison, but .timestamp() always stores as UTC
                 calc_time = parser.parse(time_str).astimezone(self.ny_tz).timestamp()
                 
                 if calc_time > current_time:
-                    # Adds to ZSET: "news:benzinga:pending_returns" : # Format: "43420311:1h_end_time" -> timestamp
+                    # Adds to ZSET: "news:benzinga:pending_news_returns" : # Format: "43420311:1h_end_time" -> timestamp
                     pipe.zadd(self.pending_zset, {f"{news_id}:{return_type}": calc_time})
                     self.logger.debug(f"Scheduled {return_type} for {datetime.fromtimestamp(calc_time, self.ny_tz)}")
             
@@ -264,10 +309,7 @@ class ReturnsProcessor:
             current_time = datetime.now(timezone.utc).astimezone(self.ny_tz).timestamp()
             
             # Continuously checks ZSET for ready returns
-            ready_items = self.live_client.client.zrangebyscore(
-                self.pending_zset, 
-                0, current_time
-            )
+            ready_items = self.live_client.client.zrangebyscore(self.pending_zset, 0, current_time )
 
             if ready_items:
                 ny_time = datetime.fromtimestamp(current_time, self.ny_tz)

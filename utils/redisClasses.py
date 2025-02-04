@@ -18,7 +18,7 @@ if not os.path.exists(log_dir):
 
 # Configure logging
 logging.basicConfig(
-    level=logging.DEBUG, # for production, use INFO
+    level=logging.INFO, # for production, use INFO, DEBUG for development
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler(os.path.join(log_dir, f"redis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")),
@@ -130,6 +130,17 @@ class RedisClient:
                     raise
                 logging.warning(f"Redis connection attempt {attempt + 1} failed, retrying...")
                 time.sleep(retry_delay)
+
+
+
+    def create_new_connection(self):
+        """Creates a new Redis client with same configuration"""
+        return redis.Redis(
+            host=self.host,
+            port=self.port,
+            db=self.db,
+            decode_responses=True
+        )
 
     # Used in bz_websocket.py
     def set_news(self, news_item: UnifiedNews, ex=None):
@@ -254,3 +265,12 @@ class RedisClient:
         except Exception as e:
             logging.error(f"Delete failed for key {key}: {e}")
             return False
+        
+
+    def get_queue_length(self, queue_name: str) -> int:
+        """Get the length of a queue"""
+        try:
+            return self.client.llen(queue_name)
+        except Exception as e:
+            logging.error(f"Error getting queue length for {queue_name}: {e}")
+            return 0
