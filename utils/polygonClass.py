@@ -90,10 +90,27 @@ class Polygon:
         """Initialize market session classifier and client"""
         from .market_session import MarketSessionClassifier
         self.market_session = MarketSessionClassifier()
-        self.client = RESTClient(self.api_key)
-        self.executor = ThreadPoolExecutor(max_workers=1)
+        self.client = self.get_rest_client()
+        self.executor = ThreadPoolExecutor(max_workers=220)
         self.last_error = {}
-        self.ticker_validation_cache = {}  # Add validation cache
+        self.ticker_validation_cache = {}
+        
+        # Add connection pooling configuration
+        self.session = requests.Session()
+        adapter = requests.adapters.HTTPAdapter(
+            pool_connections=100,
+            pool_maxsize=100,
+            max_retries=3,
+            pool_block=False
+        )
+        self.session.mount('https://', adapter)
+
+
+    def get_rest_client(self):
+        """Return a new RESTClient instance per request."""
+        return RESTClient(self.api_key)
+
+
 
 
     def validate_ticker(self, ticker: str) -> Tuple[bool, str]:
@@ -103,7 +120,7 @@ class Polygon:
             return self.ticker_validation_cache[ticker]
             
         try:
-            ticker_details = self.client.get_ticker_details(ticker)
+            ticker_details = self.get_rest_client().get_ticker_details(ticker)
             if not ticker_details:
                 result = (False, f"Invalid ticker: {ticker}")
                 self.ticker_validation_cache[ticker] = result
@@ -150,7 +167,8 @@ class Polygon:
 
     def get_last_trade(self, ticker: str, timestamp: datetime, asset_type: str = "stock", max_days_back: int = 3) -> float:
         
-        
+        client = self.get_rest_client()
+
         # Skip validation for known ETFs
         if ticker not in SECTOR_INDUSTRY_ETFS:
             # Only validate non-ETF tickers
@@ -184,7 +202,7 @@ class Polygon:
                 else:
                     limit = 49998  # Max limit for larger windows
 
-                aggs = self.client.get_aggs(
+                aggs = client.get_aggs(
                     ticker=ticker,
                     multiplier=1,
                     timespan="second",
@@ -232,12 +250,26 @@ class Polygon:
         return np.nan
 
 
+    def _get_last_trade_worker(self, ticker: str, timestamp: datetime, max_days_back: int) -> float:
+        """Worker function that creates a new Polygon instance per thread"""
+        # Create new instance with its own connection pool
+        polygon = Polygon(api_key=self.api_key)
+        try:
+            return polygon.get_last_trade(ticker, timestamp, max_days_back=max_days_back)
+        finally:
+            # Ensure cleanup
+            polygon.__del__()
+
     # Using it for Batch or Historical Data
     def get_last_trades(self, ticker_timestamp_pairs: List[Tuple[str, datetime]], max_days_back: int = 1, pbar=None) -> Dict[str, float]:
+        # Submit work to thread pool with dedicated worker function
         futures = {
-            ticker: self.executor.submit(self.get_last_trade, ticker, timestamp, max_days_back)
-            for ticker, timestamp in ticker_timestamp_pairs  # Unpack pairs here
+            ticker: self.executor.submit(
+                self._get_last_trade_worker, ticker, timestamp, max_days_back
+            )
+            for ticker, timestamp in ticker_timestamp_pairs
         }
+
         
         results = {}
         exception_count = 0
@@ -319,6 +351,15 @@ class Polygon:
         return filtered_results
         
 
+    def _get_price_worker(self, ticker: str, timestamp: datetime) -> float:
+        """Worker function for getting prices with dedicated Polygon instance"""
+        polygon = Polygon(api_key=self.api_key)
+        try:
+            return polygon.get_last_trade(ticker, timestamp)
+        finally:
+            polygon.__del__()
+
+
     # Calculates Returns inside
     # Takes in a list of tuples with index, ticker, start_time, end_time and returns a dictionary with index and return value - using it for QC df Returns
     def get_returns_indexed(self, index_ticker_times: List[Tuple[int, str, datetime, datetime]], pbar=None, debug: bool = False) -> Dict[int, float]:
@@ -330,14 +371,14 @@ class Polygon:
 
         TIMEOUT = 30  # seconds
         
-        # Create futures for start and end prices (unchanged)
+        # Create futures for start and end prices with dedicated instances
         start_futures = {
-            (idx, ticker): self.executor.submit(self.get_last_trade, ticker, start_time)
+            (idx, ticker): self.executor.submit(self._get_price_worker, ticker, start_time)
             for idx, ticker, start_time, _ in index_ticker_times
         }
         
         end_futures = {
-            (idx, ticker): self.executor.submit(self.get_last_trade, ticker, end_time)
+            (idx, ticker): self.executor.submit(self._get_price_worker, ticker, end_time)
             for idx, ticker, _, end_time in index_ticker_times
         }
         
@@ -404,7 +445,7 @@ class Polygon:
 
         try:
             # Make API request using the client
-            details = self.client.get_ticker_details(ticker)
+            details = self.get_rest_client().get_ticker_details(ticker)
             
             if not details:
                 return None
@@ -415,7 +456,24 @@ class Polygon:
         except Exception as e:
             print(f"Error fetching ticker details for {ticker}: {str(e)}")
             return None
-        
+
+
+    def _fetch_related_companies_worker(self, ticker: str) -> Tuple[str, List[str]]:
+        """Worker function for fetching related companies with dedicated instance"""
+        polygon = Polygon(api_key=self.api_key)
+        try:
+            url = f"https://api.polygon.io/v1/related-companies/{ticker}"
+            params = {'apiKey': polygon.api_key}
+            response = requests.get(url, params=params)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('status') == 'OK':
+                    related_tickers = [r['ticker'] for r in data.get('results', [])]
+                    return ticker, related_tickers
+            return ticker, []
+        finally:
+            polygon.__del__()
 
 
     # https://polygon.io/docs/stocks?utm_source=chatgpt.com/get_v1_related-companies__ticker
@@ -440,7 +498,7 @@ class Polygon:
 
         # Submit all requests to the thread pool
         futures = {
-            ticker: self.executor.submit(_fetch_single_ticker, ticker)
+            ticker: self.executor.submit(self._fetch_related_companies_worker, ticker)
             for ticker in tickers
         }
         
@@ -631,3 +689,13 @@ class Polygon:
                 for h in (pairs.keys() if return_type == 'horizon' else [''])
                 for asset in ['stock', 'sector', 'industry', 'macro']}
         return pd.DataFrame.from_dict(returns, orient='columns')
+    
+
+
+    def __del__(self):
+        """Cleanup resources on deletion"""
+        try:
+            self.executor.shutdown(wait=False)
+            self.session.close()
+        except:
+            pass
