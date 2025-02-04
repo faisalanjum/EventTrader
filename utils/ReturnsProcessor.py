@@ -17,6 +17,10 @@ class ReturnsProcessor:
         self.live_client = event_trader_redis.bz_livenews
         self.hist_client = event_trader_redis.bz_histnews
         self.queue_client = self.live_client.create_new_connection() # create new connection for queue checks
+        self.pubsub_client = self.live_client.create_pubsub_connection()
+        self.pubsub_client.subscribe('news:benzinga:live:processed')
+
+
         self.should_run = True
         self._lock = threading.Lock()
         
@@ -73,21 +77,33 @@ class ReturnsProcessor:
 
     def _sleep_until_next_return(self, default_sleep_time=5):
         """Sleep until next scheduled return time in ZSET"""
-        # Use queue_client directly since it's a Redis instance
-        next_item = self.queue_client.zrange(self.pending_zset, 0, 0, withscores=True)
-        
-        if next_item:
-            self.logger.info(f"Found next item: {next_item}")
-            # zrange with withscores=True returns [(member, score)]
-            _, next_timestamp = next_item[0]  # Correctly unpack tuple of (member, score)
-            now_timestamp = datetime.now(timezone.utc).timestamp()
-            sleep_time = max(0, next_timestamp - now_timestamp)  # Sleep only until next return is due
-            self.logger.info(f"Sleeping for {sleep_time} seconds until next return")
-        else:
-            sleep_time = default_sleep_time  # Default sleep time if no pending returns
-            self.logger.info(f"No pending returns, sleeping for {sleep_time} seconds")
-        time.sleep(sleep_time)
-        return
+        try:
+            # Use queue_client directly since it's a Redis instance
+            next_item = self.queue_client.zrange(self.pending_zset, 0, 0, withscores=True)
+            
+            if next_item:
+                self.logger.info(f"Found next item: {next_item}")
+                # zrange with withscores=True returns [(member, score)]
+                _, next_timestamp = next_item[0]  # Correctly unpack tuple of (member, score)
+                now_timestamp = datetime.now(timezone.utc).timestamp()
+                sleep_time = max(0, next_timestamp - now_timestamp)  # Sleep only until next return is due
+                self.logger.info(f"Sleeping for {sleep_time} seconds until next return")
+            else:
+                sleep_time = default_sleep_time  # Default sleep time if no pending returns
+                self.logger.info(f"No pending returns, sleeping for {sleep_time} seconds")
+
+            # Check for new messages while sleeping
+            message = self.pubsub_client.get_message(timeout=sleep_time)
+            if message and message['type'] == 'message':
+                self.logger.info(f"Woke up due to new processed message: {message['data']}")
+                return
+
+            return
+
+        except Exception as e:
+            self.logger.error(f"Error in sleep/pubsub operation: {e}")
+            time.sleep(0.1)  # Minimal sleep on error
+            return
 
 
 
@@ -274,8 +290,13 @@ class ReturnsProcessor:
         return matches[col].values[0]
 
     def stop(self):
-        """Stop processing"""
+        """Stop processing and cleanup"""
         self.should_run = False
+        try:
+            self.pubsub_client.unsubscribe()
+            self.pubsub_client.close()
+        except Exception as e:
+            self.logger.error(f"Error cleaning up pubsub: {e}")
 
 
     # ZSET Scheduling

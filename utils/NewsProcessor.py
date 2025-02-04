@@ -141,6 +141,13 @@ class NewsProcessor:
             if processed_key not in queue_items:  # Only add if not already in queue
                 pipe.set(processed_key, json.dumps(processed_dict))
                 pipe.lpush(RedisClient.PROCESSED_QUEUE, processed_key)
+
+                try:
+                    pipe.publish('news:benzinga:live:processed', processed_key)
+                    self.logger.info(f"Published processed message: {processed_key}")
+                except Exception as e:
+                    self.logger.error(f"Failed to publish message: {e}")
+
                 if self.delete_raw:
                     pipe.delete(raw_key)
                 return all(pipe.execute())

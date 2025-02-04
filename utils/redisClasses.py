@@ -274,3 +274,11 @@ class RedisClient:
         except Exception as e:
             logging.error(f"Error getting queue length for {queue_name}: {e}")
             return 0
+        
+
+    def create_pubsub_connection(self):
+        """Creates a new Redis pubsub connection"""
+        return redis.Redis(host=self.host, 
+                           port=self.port, 
+                           db=self.db, 
+                           decode_responses=True).pubsub()        
