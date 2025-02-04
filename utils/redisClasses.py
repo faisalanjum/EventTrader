@@ -18,7 +18,7 @@ if not os.path.exists(log_dir):
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG, # for production, use INFO
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler(os.path.join(log_dir, f"redis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")),

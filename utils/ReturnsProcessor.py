@@ -14,9 +14,9 @@ import pytz
 
 class ReturnsProcessor:
     def __init__(self, event_trader_redis: EventTraderRedis):
-        self.redis_client = event_trader_redis.bz_livenews
+        self.live_client = event_trader_redis.bz_livenews
         self.hist_client = event_trader_redis.bz_histnews
-        self.queue_client = self.redis_client
+        self.queue_client = self.live_client
         self.should_run = True
         self._lock = threading.Lock()
         
@@ -40,7 +40,7 @@ class ReturnsProcessor:
         while self.should_run:
             try:
                 # 1. Process both hist and live processed queues
-                for client in [self.hist_client, self.redis_client]:
+                for client in [self.hist_client, self.live_client]:
                     self._process_returns_for_client(client)
                     consecutive_errors = 0
 
@@ -238,7 +238,7 @@ class ReturnsProcessor:
         """Schedule future return calculations"""
         try:
             timefor_returns = processed_dict.get('metadata', {}).get('timeforReturns', {})
-            pipe = self.redis_client.client.pipeline()
+            pipe = self.live_client.client.pipeline()
             
             current_time = datetime.now(timezone.utc).astimezone(self.ny_tz).timestamp()
 
@@ -264,7 +264,7 @@ class ReturnsProcessor:
             current_time = datetime.now(timezone.utc).astimezone(self.ny_tz).timestamp()
             
             # Continuously checks ZSET for ready returns
-            ready_items = self.redis_client.client.zrangebyscore(
+            ready_items = self.live_client.client.zrangebyscore(
                 self.pending_zset, 
                 0, current_time
             )
@@ -283,7 +283,7 @@ class ReturnsProcessor:
                 if self._update_return(key, return_type):
 
                     # Remove from ZSET after successful processing
-                    self.redis_client.client.zrem(self.pending_zset, item)
+                    self.live_client.client.zrem(self.pending_zset, item)
                     self.logger.debug(f"Successfully processed pending return: {item}")
                     
         except Exception as e:
@@ -296,7 +296,7 @@ class ReturnsProcessor:
         try:
 
             # 1. Gets news from withoutreturns
-            news_data = json.loads(self.redis_client.get(key))
+            news_data = json.loads(self.live_client.get(key))
             if not news_data:
                 return True  # Key no longer exists, remove from pending
                 
@@ -323,7 +323,7 @@ class ReturnsProcessor:
                 for symbol_returns in news_data['returns']['symbols'].values()
             )
             
-            pipe = self.redis_client.client.pipeline(transaction=True)
+            pipe = self.live_client.client.pipeline(transaction=True)
             if all_complete:
                 new_key = key.replace('withoutreturns', 'withreturns')
                 pipe.set(new_key, json.dumps(news_data))
@@ -378,9 +378,9 @@ class ReturnsProcessor:
     def _reconnect(self):
         """Reconnect to Redis"""
         try:
-            self.redis_client = self.redis_client.__class__(prefix=self.redis_client.prefix)
+            self.live_client = self.live_client.__class__(prefix=self.live_client.prefix)
             self.hist_client = self.hist_client.__class__(prefix=self.hist_client.prefix)
-            self.queue_client = self.redis_client
+            self.queue_client = self.live_client
             
         except Exception as e:
             self.logger.error(f"Reconnection failed: {e}")

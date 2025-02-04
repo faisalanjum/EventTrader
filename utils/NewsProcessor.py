@@ -26,9 +26,9 @@ from datetime import timedelta
 class NewsProcessor:
     def __init__(self, event_trader_redis: EventTraderRedis, delete_raw: bool = True):
                 
-        self.redis_client = event_trader_redis.bz_livenews
+        self.live_client = event_trader_redis.bz_livenews
         self.hist_client = event_trader_redis.bz_histnews
-        self.queue_client = self.redis_client  # Dedicated client for queue operations
+        self.queue_client = self.live_client  # Dedicated client for queue operations
         self.should_run = True
         self._lock = threading.Lock()
         self.delete_raw = delete_raw
@@ -48,11 +48,14 @@ class NewsProcessor:
             # )
 
         self.market_session = MarketSessionClassifier()
+        
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
 
 
     def process_all_news(self):
         """Continuously process news from RAW_QUEUE"""
-        logging.info(f"Starting news processing from {RedisClient.RAW_QUEUE}")
+        self.logger.info(f"Starting news processing from {RedisClient.RAW_QUEUE}")
         consecutive_errors = 0
         while self.should_run:
             try:
@@ -69,43 +72,44 @@ class NewsProcessor:
 
                     
                     if consecutive_errors > 10:  # Reset after too many errors
-                        logging.error("Too many consecutive errors, reconnecting...")
+                        self.logger.error("Too many consecutive errors, reconnecting...")
                         self._reconnect()
                         consecutive_errors = 0
 
             except Exception as e:
-                logging.error(f"Processing error: {e}")
+                self.logger.error(f"Processing error: {e}")
                 time.sleep(1)
                 consecutive_errors += 1
 
     def _reconnect(self):
         """Reconnect to Redis"""
         try:
-            self.redis_client = self.redis_client.__class__(
-                prefix=self.redis_client.prefix
+            self.live_client = self.live_client.__class__(
+                prefix=self.live_client.prefix
             )
             self.hist_client = self.hist_client.__class__(
                 prefix=self.hist_client.prefix
             )
-            self.queue_client = self.redis_client
+            self.queue_client = self.live_client
         except Exception as e:
-            logging.error(f"Reconnection failed: {e}")
+            self.logger.error(f"Reconnection failed: {e}")
 
     def _process_news_item(self, raw_key: str) -> bool:
         try:
 
             # 1. Initial Setup and Validation
-            client = (self.hist_client if ':hist:' in raw_key else self.redis_client)            
+            # client = (self.hist_client if ':hist:' in raw_key else self.live_client)         # Instead of searching for hist/live in the key, is there a better way?    
+            client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
             raw_content = client.get(raw_key)
             if not raw_content:
-                logging.error(f"Raw content not found: {raw_key}")
+                self.logger.error(f"Raw content not found: {raw_key}")
                 return False
 
             news_dict = json.loads(raw_content)
 
             # 2. Check if any valid symbols exist
             if not self._has_valid_symbols(news_dict):
-                logging.debug(f"Dropping {raw_key} - no matching symbols in universe")
+                self.logger.debug(f"Dropping {raw_key} - no matching symbols in universe")
                 client.delete(raw_key)  # Delete news item from "raw" storage (hist/live)
                 return True  # Item exits raw queue naturally
                 # No tracking maintained, never enters processed queue
@@ -151,8 +155,9 @@ class NewsProcessor:
             return True  # Already in queue
 
         except Exception as e:
-            logging.error(f"Failed to process {raw_key}: {e}")
-            client = (self.hist_client if ':hist:' in raw_key else self.redis_client)
+            self.logger.error(f"Failed to process {raw_key}: {e}")
+            # client = (self.hist_client if ':hist:' in raw_key else self.live_client)
+            client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
             client.push_to_queue(RedisClient.FAILED_QUEUE, raw_key)
             return False
 
@@ -184,7 +189,6 @@ class NewsProcessor:
             # metadata (to be stored in Neo4j): - Add more metadata as needed
             metadata['metadata'].update({'market_session': market_session,})
 
-
             for symbol in processed_dict.get('symbols', []):
                 symbol = symbol.strip().upper()
                 sector_etf = self.get_etf(symbol, 'sector_etf')
@@ -196,81 +200,8 @@ class NewsProcessor:
             return metadata
                 
         except Exception as e:
-            logging.error(f"Returns calculation failed: {e} for: {processed_dict}")
+            self.logger.error(f"Returns calculation failed: {e} for: {processed_dict}")
             return None
-
-
-
-    def _calculate_returns(self, processed_dict: dict, raw_key: str) -> Optional[dict]:
-
-        try:
-            # Steps:
-            # 1. Get symbols and created from processed_dict
-            # 2. Calculate returns
-            # 3. If returns calculation successful:
-            #    - Add returns to processed_dict
-            #    - Move to processed queue (raw_key -> processed_key)
-            # 4. If returns calculation fails:
-            #    - Move to failed queue
-            #    - Log the failure reason
-
-
-            # Skip historical news
-            # if ':hist:' in raw_key:
-                # logging.info("Skipping returns calculation for historical news")
-                # return {}
-
-            returns_data = {'symbols': {}}
-
-            created = processed_dict.get('created')
-
-            # Calculate returns for each symbol
-            for symbol in processed_dict.get('symbols', []):
-                symbol = symbol.strip().upper()
-                sector_etf = self.get_etf(symbol, 'sector_etf')
-                industry_etf = self.get_etf(symbol, 'industry_etf')
-                                
-                returns_data['symbols'][symbol] = { 'session': {}, '1d_impact': {}, '1h_impact': {}}
-                return_types = [
-                    ('session', 'session', None),
-                    ('1d_impact', '1d_impact', None),
-                    ('1h_impact', 'horizon', [60])]
-
-                for return_key, return_type, horizon in return_types:
-                    while True:
-                        try:
-                            returns = self.polygon.get_event_returns(
-                                ticker=symbol,
-                                sector_etf=sector_etf,
-                                industry_etf=industry_etf,
-                                event_timestamp=created,
-                                return_type=return_type,
-                                horizon_minutes=horizon)
-
-                            # Fix for horizon returns (1h_impact) - later once we have modified the code, we could change it
-                            if return_type == 'horizon':
-                                returns = {k: v[0] for k, v in returns.items()}
-
-                            # Then round all returns to 2 decimal places
-                            returns = {k: round(v, 2) for k, v in returns.items()}
-
-                            returns_data['symbols'][symbol][return_key] = returns
-                            break
-
-                        except Exception as e:
-                            if "Connection pool is full" in str(e):
-                                time.sleep(1)
-                                continue
-                            logging.error(f"Error calculating {return_key} returns for {symbol}: {e}")
-                            return None
-
-            return returns_data
-                
-        except Exception as e:
-            logging.error(f"Returns calculation failed: {e} for: {processed_dict}")
-            return None
-    
-
 
 
 
@@ -306,7 +237,7 @@ class NewsProcessor:
             return cleaned
             
         except Exception as e:
-            logging.error(f"Error in _clean_news: {e}")
+            self.logger.error(f"Error in _clean_news: {e}")
             return news  # Return original if cleaning fails
 
 
@@ -326,7 +257,7 @@ class NewsProcessor:
             eastern_time = utc_time.astimezone(eastern_zone)
             return eastern_time.isoformat()
         except Exception as e:
-            logging.error(f"Failed to parse timestamp {utc_time_str}: {e}")
+            self.logger.error(f"Failed to parse timestamp {utc_time_str}: {e}")
             return utc_time_str
 
 
@@ -358,12 +289,12 @@ class NewsProcessor:
             cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
             return cleaned_text.strip()
         except Exception as e:
-            logging.error(f"Error cleaning content: {e}")
+            self.logger.error(f"Error cleaning content: {e}")
             return content  # Return original if cleaning fails
         
 
 
-    def _limit_body_word_count(self, news: dict, max_words: int = 1000) -> dict:
+    def _limit_body_word_count(self, news: dict, max_words: int = 3000) -> dict:
         """Limit word count of the 'body' key in the news dictionary.
         
         Args:
@@ -375,20 +306,22 @@ class NewsProcessor:
         """
         try:
             if 'body' not in news or not isinstance(news['body'], str):
+                self.logger.info(f"Body not found in news: {news}")
                 return news
             
             words = [w for w in news['body'].split() if w.strip()]
             
             if len(words) <= max_words:  # Skip processing if already within limit
+                self.logger.debug(f"Body already within limit: {len(words)} words")
                 return news
             
             news['body'] = ' '.join(words[:max_words]).strip() + "..."
-            logging.debug(f"Truncated body from {len(words)} to {max_words} words")
+            self.logger.debug(f"Truncated body from {len(words)} to {max_words} words")
             
             return news
         
         except Exception as e:
-            logging.error(f"Error limiting body word count: {e}")
+            self.logger.error(f"Error limiting body word count: {e}")
             return news  # Return original if processing fails
 
 
@@ -398,7 +331,7 @@ class NewsProcessor:
             news_symbols = {s.strip().upper() for s in news.get('symbols', [])}
             return bool(news_symbols & self.allowed_symbols)  # Set intersection
         except Exception as e:
-            logging.error(f"Error checking symbols: {e}")
+            self.logger.error(f"Error checking symbols: {e}")
             return False
 
 
