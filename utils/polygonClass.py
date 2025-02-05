@@ -9,78 +9,9 @@ import concurrent.futures
 from tqdm import tqdm
 import requests
 import time
-
-
-
-# ETF Lists - Can put in a separate file
-SECTOR_INDUSTRY_ETFS = {
-    # Sector ETFs (SPDR)
-    'SPY',  # S&P 500
-    'QQQ',  # Nasdaq 100
-    'XLC',  # Communication Services
-    'XLV',  # Healthcare
-    'XLI',  # Industrials
-    'XLK',  # Technology
-    'XLY',  # Consumer Discretionary
-    'XLE',  # Energy
-    'XLP',  # Consumer Staples
-    'XLRE', # Real Estate
-    'XLF',  # Financials
-    'XLU',  # Utilities
-    'XLB',  # Materials
-    
-    # Industry ETFs
-    'PNQI', # Internet
-    'IBB',  # Biotech
-    'IHF',  # Healthcare Providers
-    'IGV',  # Software
-    'XRT',  # Retail
-    'PEJ',  # Leisure & Entertainment
-    'IHI',  # Medical Devices
-    'XSD',  # Semiconductor
-    'CRAK', # Oil & Gas
-    'PJP',  # Pharmaceuticals
-    'PKB',  # Building & Construction
-    'ITA',  # Aerospace & Defense
-    'EDUT', # Education
-    'IYR',  # Real Estate
-    'SMH',  # Semiconductor
-    'CARZ', # Auto
-    'VGT',  # Technology
-    'KCE',  # Capital Markets
-    'IYT',  # Transportation
-    'TAN',  # Solar
-    'QCLN', # Clean Energy
-    'KIE',  # Insurance
-    'XOP',  # Oil & Gas Exploration
-    'PBJ',  # Food & Beverage
-    'RTH',  # Retail
-    'XHB',  # Homebuilders
-    'IYF',  # Financial
-    'GAMR', # Gaming
-    'IYC',  # Consumer Services
-    'SEA',  # Shipping
-    'MOO',  # Agriculture
-    'AMLP', # MLP
-    'JETS', # Airlines
-    'ITB',  # Home Construction
-    'XME',  # Metals & Mining
-    'XES',  # Oil & Gas Equipment
-    'SLX',  # Steel
-    'IAI',  # Broker-Dealers
-    'MORT', # Mortgage Finance
-    'GLD',  # Gold
-    'XTL',  # Telecom
-    'EVX',  # Environmental Services
-    'HACK', # Cybersecurity
-    'TOKE', # Cannabis
-    'VNQ',  # Real Estate
-    'IYJ',  # Industrial
-    'PHO'   # Water
-}
-
-
-
+from .ETF_mappings import Sector_Industry_ETFs
+from .market_session import MarketSessionClassifier
+from utils.metadata_fields import MetadataFields  
 
 @dataclass
 class Polygon:
@@ -88,7 +19,7 @@ class Polygon:
     
     def __post_init__(self):
         """Initialize market session classifier and client"""
-        from .market_session import MarketSessionClassifier
+        
         self.market_session = MarketSessionClassifier()
         self.client = self.get_rest_client()
         self.executor = ThreadPoolExecutor(max_workers=220)
@@ -109,8 +40,6 @@ class Polygon:
     def get_rest_client(self):
         """Return a new RESTClient instance per request."""
         return RESTClient(self.api_key)
-
-
 
 
     def validate_ticker(self, ticker: str) -> Tuple[bool, str]:
@@ -170,7 +99,7 @@ class Polygon:
         client = self.get_rest_client()
 
         # Skip validation for known ETFs
-        if ticker not in SECTOR_INDUSTRY_ETFS:
+        if ticker not in Sector_Industry_ETFs:
             # Only validate non-ETF tickers
             is_valid, error_message = self.validate_ticker(ticker)
             if not is_valid:
@@ -546,8 +475,12 @@ class Polygon:
     ) -> Dict[str, Union[float, List[float]]]:
         """
         Calculate returns for stock, sector ETF, industry ETF, and SPY based on event timestamp.
-        Returns dictionary with keys: 'stock', 'sector', 'industry', 'macro'.
-        For horizon returns, each value is a list corresponding to horizon_minutes.
+        Args:
+            return_type: One of MetadataFields.SESSION, DAILY, or HOURLY
+            horizon_minutes: Required for HOURLY returns, list of minutes for horizons
+        Returns:
+            Dictionary with keys: 'stock', 'sector', 'industry', 'macro'.
+            For HOURLY returns, each value is a list corresponding to horizon_minutes.
         """
         # Validate only the stock ticker
         is_valid, error_msg = self.validate_ticker(ticker)
@@ -555,7 +488,7 @@ class Polygon:
             return {k: np.nan for k in ['stock', 'sector', 'industry', 'macro']}
 
         # Get time window based on return type
-        if return_type == 'session':
+        if return_type == MetadataFields.SESSION:
             start_time = self.market_session.get_start_time(event_timestamp)
             end_time = self.market_session.get_end_time(event_timestamp)
             time_pairs = [
@@ -565,7 +498,7 @@ class Polygon:
                 (3, 'SPY', start_time, end_time)
             ]
         
-        elif return_type == '1d_impact':
+        elif return_type == MetadataFields.DAILY:
             start_time, end_time = self.market_session.get_1d_impact_times(event_timestamp)
             time_pairs = [
                 (0, ticker, start_time, end_time),
@@ -574,9 +507,10 @@ class Polygon:
                 (3, 'SPY', start_time, end_time)
             ]
         
-        elif return_type == 'horizon':
+        elif return_type == MetadataFields.HOURLY:
             if not horizon_minutes:
-                return {k: [] for k in ['stock', 'sector', 'industry', 'macro']}
+                horizon_minutes = [60]
+                # return {k: [] for k in ['stock', 'sector', 'industry', 'macro']}
             
             interval_start = self.market_session.get_interval_start_time(event_timestamp)
             time_pairs = []
@@ -590,13 +524,13 @@ class Polygon:
                 ])
         
         else:
-            raise ValueError("return_type must be one of: 'session', '1d_impact', 'horizon'")
-
+            raise ValueError(f"return_type must be one of: {MetadataFields.SESSION}, {MetadataFields.DAILY}, {MetadataFields.HOURLY}")
+        
         # Calculate returns using concurrent execution
         returns_dict = self.get_returns_indexed(time_pairs, debug=debug)
         
         # Organize results based on return type
-        if return_type in ['session', '1d_impact']:
+        if return_type in [MetadataFields.SESSION, MetadataFields.DAILY]:
             return {
                 'stock': returns_dict.get(0),
                 'sector': returns_dict.get(1),
@@ -634,7 +568,7 @@ class Polygon:
             'macro': pd.Series('SPY', index=news_df.index)
         }
         
-        if return_type == 'session':
+        if return_type == MetadataFields.SESSION:
             starts = timestamps.map(self.market_session.get_start_time)
             ends = timestamps.map(self.market_session.get_end_time)
             
@@ -647,7 +581,7 @@ class Polygon:
                 for asset_type, tickers in asset_types.items()
             }
         
-        elif return_type == '1d_impact':
+        elif return_type == MetadataFields.DAILY:
             times = timestamps.map(self.market_session.get_1d_impact_times)
             
             return {
@@ -659,9 +593,10 @@ class Polygon:
                 for asset_type, tickers in asset_types.items()
             }
         
-        elif return_type == 'horizon':
-            if not horizon_minutes:
-                raise ValueError("horizon_minutes required for horizon return type")
+        elif return_type == MetadataFields.HOURLY:
+            horizon_minutes = horizon_minutes or [60]
+            # if not horizon_minutes:
+            #     raise ValueError("horizon_minutes required for horizon return type")
                     
             starts = timestamps.map(self.market_session.get_interval_start_time)
             
@@ -680,14 +615,15 @@ class Polygon:
         
 
 
-    def get_structured_returns(self, news_df: pd.DataFrame, return_type: str = 'session', horizon_minutes: Optional[List[int]] = None) -> pd.DataFrame:
-        """Returns DataFrame of asset returns indexed by news_df rows.
-        Columns are named 'asset{h}' for horizon or 'asset_return_type' for session/1d_impact.
-        news_df needs columns: [symbol, originalTime, sector_etf, industry_etf]"""        
+    def get_structured_returns(self, news_df: pd.DataFrame, return_type: str = MetadataFields.SESSION, horizon_minutes: Optional[List[int]] = None) -> pd.DataFrame:
+        """Returns DataFrame of asset returns indexed by news_df rows."""        
         pairs = self.prepare_time_pairs(news_df, return_type, horizon_minutes)
-        returns = {f"{asset}{h}" if return_type == 'horizon' else f"{asset}_{return_type}": self.get_returns_indexed(pairs[h][asset] if return_type == 'horizon' else pairs[asset])
-                for h in (pairs.keys() if return_type == 'horizon' else [''])
-                for asset in ['stock', 'sector', 'industry', 'macro']}
+        returns = {
+            f"{asset}{h}" if return_type == MetadataFields.HOURLY else f"{asset}_{return_type}": 
+            self.get_returns_indexed(pairs[h][asset] if return_type == MetadataFields.HOURLY else pairs[asset])
+            for h in (pairs.keys() if return_type == MetadataFields.HOURLY else [''])
+            for asset in ['stock', 'sector', 'industry', 'macro']
+        }
         return pd.DataFrame.from_dict(returns, orient='columns')
     
 

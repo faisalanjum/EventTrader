@@ -7,6 +7,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 import re
 from benzinga.bz_news_schemas import UnifiedNews
+from utils.EventReturnsManager import EventReturnsManager
 from utils.redisClasses import RedisClient
 import json
 from utils.redisClasses import EventTraderRedis
@@ -20,6 +21,9 @@ from eventtrader.keys import POLYGON_API_KEY
 from utils.polygonClass import Polygon
 from utils.market_session import MarketSessionClassifier
 from datetime import timedelta
+from utils.EventReturnsManager import EventReturnsManager
+from utils.metadata_fields import MetadataFields  
+
 
  # Using any client for shared queues
 
@@ -114,15 +118,14 @@ class NewsProcessor:
             processed_dict['symbols'] = list(valid_symbols)
 
             # **********************************************************************
-            # Get Metadata
+            # Get Metadata- Needs to be changed - properly formatted metadata
             metadata = self._add_metadata(processed_dict)
             if metadata is None:                
                 client.push_to_queue(RedisClient.FAILED_QUEUE)
                 return False
 
-
-            # Add returns to processed_dict
-            processed_dict['metadata'] = metadata            
+            # Add metadata to processed_dict
+            processed_dict['metadata'] = metadata      
 
             # **********************************************************************
             # Move to processed queue
@@ -161,46 +164,92 @@ class NewsProcessor:
             return False
 
 
+
     def _add_metadata(self, processed_dict: dict) -> Optional[dict]:
-
+        """Add metadata including return timing and symbol information"""
         try:
-            metadata = {'timeforReturns': {}, 'metadata': {}, 'symbolsData': []}
-
-            created = processed_dict.get('created')
+            # Parse event time
+            event_time = parser.parse(processed_dict.get('created'))
+            symbols = processed_dict.get('symbols', [])
             
-            market_session = self.market_session.get_market_session(created)
-            end_time = self.market_session.get_end_time(created)
-            interval_start_time = self.market_session.get_interval_start_time(created)     
-
-            # This is Incorrect - look at the function where we calcute returns for interval start and end_time                   
-            interval_end_time = interval_start_time + timedelta(minutes=60) # One hour
+            # Use EventReturnsManager to generate metadata
+            event_manager = EventReturnsManager(self.stock_universe)
+            metadata = event_manager.process_event_metadata(
+                event_time=event_time,
+                symbols=symbols
+            )
             
-            one_day_impact_times = self.market_session.get_1d_impact_times(created)
-            oneday_impact_end_time = one_day_impact_times[1]
+            if metadata is None:
+                self.logger.info(f"Failed to generate metadata for: {processed_dict}")
+                return None
             
-            # Required to check if time for returns calculation 
-            metadata['timeforReturns'].update({
-                '1h_end_time': interval_end_time.isoformat(),
-                'session_end_time': end_time.isoformat(),
-                '1d_end_time': oneday_impact_end_time.isoformat()                                
-            })
-
-            # metadata (to be stored in Neo4j): - Add more metadata as needed
-            metadata['metadata'].update({'market_session': market_session,})
-
-            for symbol in processed_dict.get('symbols', []):
-                symbol = symbol.strip().upper()
-                sector_etf = self.get_etf(symbol, 'sector_etf')
-                industry_etf = self.get_etf(symbol, 'industry_etf')
-                                
-                metadata['symbolsData'].append({ 'symbol': symbol, 'sector_etf': sector_etf, 'industry_etf': industry_etf})
-
-
-            return metadata
+            # Validate metadata structure
+            required_fields = [
+                MetadataFields.EVENT,
+                MetadataFields.RETURNS_SCHEDULE,
+                MetadataFields.INSTRUMENTS
+            ]
+            
+            if not all(field in metadata['metadata'] for field in required_fields):
+                self.logger.error(f"Missing required metadata fields in: {metadata}")
+                return None
                 
+            return metadata['metadata']
+
         except Exception as e:
-            self.logger.error(f"Returns calculation failed: {e} for: {processed_dict}")
+            self.logger.info(f"Metadata generation failed: {e} for: {processed_dict}")
             return None
+
+
+            # The metadata structure is now:
+            # {
+            #     'metadata': {
+            #         'event': {'market_session': '...', 'created': '...'},
+            #         'returns_schedule': {'hourly': '...', 'session': '...', 'daily': '...'},
+            #         'instruments': [{'symbol': '...', 'benchmarks': {'sector': '...', 'industry': '...'}}]
+            #     }
+            # }
+
+    # def _add_metadata(self, processed_dict: dict) -> Optional[dict]:
+
+    #     try:
+    #         metadata = {'timeforReturns': {}, 'metadata': {}, 'symbolsData': []}
+
+    #         created = processed_dict.get('created')
+            
+    #         market_session = self.market_session.get_market_session(created)
+    #         end_time = self.market_session.get_end_time(created)
+    #         interval_start_time = self.market_session.get_interval_start_time(created)     
+
+    #         # This is Incorrect - look at the function where we calcute returns for interval start and end_time                   
+    #         interval_end_time = interval_start_time + timedelta(minutes=60) # One hour
+            
+    #         one_day_impact_times = self.market_session.get_1d_impact_times(created)
+    #         oneday_impact_end_time = one_day_impact_times[1]
+            
+    #         # Required to check if time for returns calculation 
+    #         metadata['timeforReturns'].update({
+    #             '1h_end_time': interval_end_time.isoformat(),
+    #             'session_end_time': end_time.isoformat(),
+    #             '1d_end_time': oneday_impact_end_time.isoformat()                                
+    #         })
+
+    #         # metadata (to be stored in Neo4j): - Add more metadata as needed
+    #         metadata['metadata'].update({'market_session': market_session,})
+
+    #         for symbol in processed_dict.get('symbols', []):
+    #             symbol = symbol.strip().upper()
+    #             sector_etf = self.get_etf(symbol, 'sector_etf')
+    #             industry_etf = self.get_etf(symbol, 'industry_etf')
+                                
+    #             metadata['symbolsData'].append({ 'symbol': symbol, 'sector_etf': sector_etf, 'industry_etf': industry_etf})
+
+
+    #         return metadata
+                
+    #     except Exception as e:
+    #         self.logger.error(f"Returns calculation failed: {e} for: {processed_dict}")
+    #         return None
 
 
 
@@ -256,7 +305,8 @@ class NewsProcessor:
             eastern_time = utc_time.astimezone(eastern_zone)
             return eastern_time.isoformat()
         except Exception as e:
-            self.logger.error(f"Failed to parse timestamp {utc_time_str}: {e}")
+            # self.logger.error(f"Failed to parse timestamp {utc_time_str}: {e}")
+            logging.getLogger(__name__).error(f"Failed to parse timestamp {utc_time_str}: {e}")  # ✅ Use global logger
             return utc_time_str
 
 
