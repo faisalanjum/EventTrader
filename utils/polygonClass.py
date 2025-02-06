@@ -461,7 +461,7 @@ class Polygon:
 
     # Useful for single event returns
     # Returns : {'stock': 0.67, 'sector': 0.05, 'industry': -0.6, 'macro': 0.045}
-    # return_type == 'session', '1d_impact', 'horizon'
+    # return_type # One of MetadataFields.SESSION, DAILY, or HOURLY
     # pass stock, its associated ETFs and event timestamp and return type.
     def get_event_returns(
         self,
@@ -482,46 +482,32 @@ class Polygon:
             Dictionary with keys: 'stock', 'sector', 'industry', 'macro'.
             For HOURLY returns, each value is a list corresponding to horizon_minutes.
         """
-        # Validate only the stock ticker
+        # Validate ticker
         is_valid, error_msg = self.validate_ticker(ticker)
         if not is_valid:
             return {k: np.nan for k in ['stock', 'sector', 'industry', 'macro']}
 
+        # Define asset order
+        assets = [(0, ticker), (1, sector_etf), (2, industry_etf), (3, 'SPY')]
+        
         # Get time window based on return type
         if return_type == MetadataFields.SESSION:
             start_time = self.market_session.get_start_time(event_timestamp)
             end_time = self.market_session.get_end_time(event_timestamp)
-            time_pairs = [
-                (0, ticker, start_time, end_time),
-                (1, sector_etf, start_time, end_time),
-                (2, industry_etf, start_time, end_time),
-                (3, 'SPY', start_time, end_time)
-            ]
+            time_pairs = [(idx, ticker, start_time, end_time) for idx, ticker in assets]
         
         elif return_type == MetadataFields.DAILY:
             start_time, end_time = self.market_session.get_1d_impact_times(event_timestamp)
-            time_pairs = [
-                (0, ticker, start_time, end_time),
-                (1, sector_etf, start_time, end_time),
-                (2, industry_etf, start_time, end_time),
-                (3, 'SPY', start_time, end_time)
-            ]
+            time_pairs = [(idx, ticker, start_time, end_time) for idx, ticker in assets]
         
         elif return_type == MetadataFields.HOURLY:
-            if not horizon_minutes:
-                horizon_minutes = [60]
-                # return {k: [] for k in ['stock', 'sector', 'industry', 'macro']}
-            
+            horizon_minutes = horizon_minutes or [60]
             interval_start = self.market_session.get_interval_start_time(event_timestamp)
-            time_pairs = []
-            for idx, minutes in enumerate(horizon_minutes):
-                horizon_time = interval_start + timedelta(minutes=minutes)
-                time_pairs.extend([
-                    (idx*4, ticker, interval_start, horizon_time),
-                    (idx*4+1, sector_etf, interval_start, horizon_time),
-                    (idx*4+2, industry_etf, interval_start, horizon_time),
-                    (idx*4+3, 'SPY', interval_start, horizon_time)
-                ])
+            time_pairs = [
+                (idx*4 + asset_idx, asset_ticker, interval_start, interval_start + timedelta(minutes=minutes))
+                for idx, minutes in enumerate(horizon_minutes)
+                for asset_idx, asset_ticker in assets
+            ]
         
         else:
             raise ValueError(f"return_type must be one of: {MetadataFields.SESSION}, {MetadataFields.DAILY}, {MetadataFields.HOURLY}")
@@ -531,18 +517,11 @@ class Polygon:
         
         # Organize results based on return type
         if return_type in [MetadataFields.SESSION, MetadataFields.DAILY]:
+            return {asset: returns_dict.get(idx) for idx, asset in enumerate(['stock', 'sector', 'industry', 'macro'])}
+        else:
             return {
-                'stock': returns_dict.get(0),
-                'sector': returns_dict.get(1),
-                'industry': returns_dict.get(2),
-                'macro': returns_dict.get(3)
-            }
-        else:  # horizon returns
-            return {
-                'stock': [returns_dict.get(i*4) for i in range(len(horizon_minutes))],
-                'sector': [returns_dict.get(i*4+1) for i in range(len(horizon_minutes))],
-                'industry': [returns_dict.get(i*4+2) for i in range(len(horizon_minutes))],
-                'macro': [returns_dict.get(i*4+3) for i in range(len(horizon_minutes))]
+                asset: [returns_dict.get(i*4 + idx) for i in range(len(horizon_minutes))]
+                for idx, asset in enumerate(['stock', 'sector', 'industry', 'macro'])
             }
 
 

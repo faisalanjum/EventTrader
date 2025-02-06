@@ -11,6 +11,7 @@ from utils.redisClasses import EventTraderRedis
 from utils.polygonClass import Polygon
 from eventtrader.keys import POLYGON_API_KEY
 from utils.metadata_fields import MetadataFields
+from utils.EventReturnsManager import EventReturnsManager
 import pytz
 
 class ReturnsProcessor:
@@ -38,6 +39,9 @@ class ReturnsProcessor:
         self.pending_zset = "news:benzinga:pending_news_returns"         
         self.ny_tz = pytz.timezone("America/New_York")
 
+        self.event_returns_manager = EventReturnsManager(self.stock_universe)
+        self.BATCH_SIZE = 100 
+
 
     def process_all_returns(self):
         """Main processing loop to handle returns calculation"""
@@ -52,6 +56,7 @@ class ReturnsProcessor:
 
                 # Process Hist News
                 self._process_hist_news(self.hist_client)
+                # self._process_live_news(self.hist_client)
                 consecutive_errors = 0
 
                 # 2. Process any pending returns that are now ready
@@ -114,16 +119,75 @@ class ReturnsProcessor:
                 self.logger.error(f"Failed to process returns for {key}: {e}")
 
 
+
+
+
+
+
     def _process_hist_news(self, client):
-        """Process returns for a specific client (hist/live)"""
+        
+        """Process returns for historical news in batches"""
         pattern = f"{client.prefix}processed:*"
+        
+        events = []
+        successful_returns = 0
+        failed_returns = 0
+        
+
+        # Collect all events first
         for key in client.client.scan_iter(pattern):
             try:
-                success = self._process_single_item(key, client)
-                if not success:
-                    self.logger.error(f"Failed to process returns for {key}")
+                content = client.get(key)
+                if not content:
+                    continue
+                    
+                news_dict = json.loads(content)
+                event = {
+                    'event_id': news_dict['id'],
+                    'created': news_dict['metadata']['event']['created'],
+                    'symbols': news_dict['symbols'],
+                    'metadata': news_dict['metadata']
+                }
+                events.append(event)
+                    
             except Exception as e:
-                self.logger.error(f"Failed to process returns for {key}: {e}")
+                self.logger.error(f"Failed to process {key}: {e}")
+        
+        if events:
+            self.logger.info(f"Processing batch of {len(events)} events")
+            event_returns = self.event_returns_manager.process_events(events)
+            
+            # Count successes and failures
+            for result in event_returns:
+                if result.returns:
+                    successful_returns += 1
+                else:
+                    failed_returns += 1
+            
+            # Print summary
+            self.logger.info(f"\nReturns Calculation Summary:")
+            self.logger.info(f"Total Events: {len(events)}")
+            self.logger.info(f"Successful Returns: {successful_returns}")
+            self.logger.info(f"Failed Returns: {failed_returns}")
+            
+            # Log the result
+            # self.logger.info(f"Event returns (First): {event_returns[0]}")  
+            # self.logger.info(f"Event returns (Last): {event_returns[-1]}")
+
+        # This is wrong but temporary to check
+        # pattern = f"{client.prefix}processed:*"
+        
+        # # Collect all events first
+        # for key in client.client.scan_iter(pattern):
+        #     news_id = key.split(':')[-1]  # Get the ID portion- Extract ID and create new unified namespace key
+        #     new_key = f"news:benzinga:withreturns:{news_id}"
+        #     # self.logger.info(f"Moving to withreturns: {new_key}")
+        #     # 6. Atomic update using pipeline
+        #     pipe = client.client.pipeline(transaction=True)
+        #     pipe.set(new_key, json.dumps(processed_dict))
+        #     pipe.delete(key)
+        #     return all(pipe.execute())
+
 
 
     def _process_single_item(self, key: str, client) -> bool:
@@ -144,7 +208,7 @@ class ReturnsProcessor:
             self._schedule_pending_returns(news_id, processed_dict)
             self.logger.info(f"All complete: {returns_info['all_complete']}")
             
-            # 4. Moves to appropriate namespace
+            # 4. Determine destination namespace based on completion
             if returns_info['all_complete']:
                 new_key = f"news:benzinga:withreturns:{news_id}"
                 self.logger.info(f"Moving to withreturns: {new_key}")
@@ -169,35 +233,38 @@ class ReturnsProcessor:
     def _calculate_available_returns(self, processed_dict: dict) -> dict:
         """Calculate returns based on available timestamps"""
         try:
+            # 1. Extract metadata and setup
             metadata = processed_dict.get('metadata', {})
             returns_schedule = metadata.get(MetadataFields.RETURNS_SCHEDULE, {})
             instruments = metadata.get(MetadataFields.INSTRUMENTS, [])
             current_time = datetime.now(timezone.utc).astimezone(self.ny_tz)
             
+            # 2. Initialize return structure
             returns_data = {'symbols': {}}
             all_complete = True
 
-            # Initialize returns structure for each instrument
+            # 3. Setup empty return structure for each symbol
             for instrument in instruments:
                 symbol = instrument['symbol']
+                # Initialize all return types as None
                 returns_data['symbols'][symbol] = {
-                    MetadataFields.HOURLY_RETURN: None,
-                    MetadataFields.SESSION_RETURN: None,
-                    MetadataFields.DAILY_RETURN: None
-                }
+                    f"{rt}_return": None 
+                    for rt in [MetadataFields.HOURLY, MetadataFields.SESSION, MetadataFields.DAILY]}
 
-            # Process each return type
+            # 4. Process each return type (hourly, session, daily)
             for return_type in [MetadataFields.HOURLY, MetadataFields.SESSION, MetadataFields.DAILY]:
                 schedule_time = returns_schedule.get(return_type)
                 if schedule_time:
                     schedule_dt = parser.parse(schedule_time).astimezone(self.ny_tz)
                     
-                    if current_time >= schedule_dt:  # Changed back to original logic
+                    # 5. If scheduled time has passed, calculate returns
+                    if current_time >= schedule_dt:  
                         for instrument in instruments:
                             try:
                                 symbol = instrument['symbol']
                                 benchmarks = instrument['benchmarks']
                                 
+                                # 6. Calculate returns using Polygon
                                 calc_returns = self.polygon.get_event_returns(
                                     ticker=symbol,
                                     sector_etf=benchmarks['sector'],
@@ -207,10 +274,11 @@ class ReturnsProcessor:
                                     horizon_minutes=[60] if return_type == MetadataFields.HOURLY else None
                                 )
                                 
+                                # 7. Special handling for hourly returns
                                 if return_type == MetadataFields.HOURLY:
                                     calc_returns = {k: v[0] for k, v in calc_returns.items()}
                                 
-                                
+                                # 8. Store calculated returns
                                 return_field = MetadataFields.RETURN_TYPE_MAP[return_type]
                                 returns_data['symbols'][symbol][return_field] = {
                                     k: round(v, 2) for k, v in calc_returns.items()
@@ -219,7 +287,7 @@ class ReturnsProcessor:
                                 self.logger.error(f"Error processing {return_field} for {symbol}: {e}")
                                 all_complete = False
 
-            # Check if all returns are complete (keeping original check)
+            # 9. Check if all returns are complete
             for symbol_returns in returns_data['symbols'].values():
                 if any(ret is None for ret in symbol_returns.values()):
                     all_complete = False
@@ -244,50 +312,48 @@ class ReturnsProcessor:
         
         self.logger.info(f"\nProcessing returns for {symbol}")
         self.logger.info(f"Current time (NY): {current_time}")
-        self.logger.info(f"Available timefor_returns keys: {timefor_returns.keys()}")  # Debug line
 
-        # Initialize returns using MetadataFields constants
-        returns = {
-            MetadataFields.SESSION_RETURN: None,
-            MetadataFields.DAILY_RETURN: None,
-            MetadataFields.HOURLY_RETURN: None
+        # Initialize returns dict with all return types set to None
+        returns = {f"{rt}_return": None for rt in [MetadataFields.SESSION, MetadataFields.DAILY, MetadataFields.HOURLY]}
+
+        # Define return configurations
+        return_configs = {
+            MetadataFields.SESSION: (None, timefor_returns.get(MetadataFields.SESSION)),
+            MetadataFields.DAILY: (None, timefor_returns.get(MetadataFields.DAILY)),
+            MetadataFields.HOURLY: ([60], timefor_returns.get(MetadataFields.HOURLY))
         }
 
-        # Define return types using MetadataFields constants
-        return_types = [
-            (MetadataFields.SESSION, 'session', None, timefor_returns.get(MetadataFields.SESSION)),
-            (MetadataFields.DAILY, 'daily', None, timefor_returns.get(MetadataFields.DAILY)),
-            (MetadataFields.HOURLY, 'horizon', [60], timefor_returns.get(MetadataFields.HOURLY))
-        ]
-
-        for return_key, return_type, horizon, end_time in return_types:
-            if end_time:
-                end_time_dt = parser.parse(end_time).astimezone(self.ny_tz)
-                self.logger.info(f"{return_key}: End time = {end_time_dt}, Should calculate = {current_time >= end_time_dt}")
-
-                if current_time >= end_time_dt:  
-                    try:
-                        calc_returns = self.polygon.get_event_returns(
-                            ticker=symbol,
-                            sector_etf=sector_etf,
-                            industry_etf=industry_etf,
-                            event_timestamp=created,
-                            return_type=return_type,
-                            horizon_minutes=horizon
-                        )
-                        
-                        if return_type == 'horizon':
-                            calc_returns = {k: v[0] for k, v in calc_returns.items()}
-                        
-                        returns[return_key] = {k: round(v, 2) for k, v in calc_returns.items()}
-                        self.logger.info(f"✓ Calculated {return_key} returns")
-                    except Exception as e:
-                        self.logger.error(f"Error calculating {return_key} returns for {symbol}: {e}")
-                        returns[return_key] = None
-                else:
-                    self.logger.info(f"✗ Skipping {return_key} - time not reached")
-            else:
+        for return_type, (horizon, end_time) in return_configs.items():
+            return_key = MetadataFields.RETURN_TYPE_MAP[return_type]
+            
+            if not end_time:
                 self.logger.info(f"✗ Skipping {return_key} - no end time")
+                continue
+
+            end_time_dt = parser.parse(end_time).astimezone(self.ny_tz)
+            self.logger.info(f"{return_key}: End time = {end_time_dt}, Should calculate = {current_time >= end_time_dt}")
+
+            if current_time >= end_time_dt:
+                try:
+                    calc_returns = self.polygon.get_event_returns(
+                        ticker=symbol,
+                        sector_etf=sector_etf,
+                        industry_etf=industry_etf,
+                        event_timestamp=created,
+                        return_type=return_type,
+                        horizon_minutes=horizon
+                    )
+                    
+                    if return_type == MetadataFields.HOURLY:
+                        calc_returns = {k: v[0] for k, v in calc_returns.items()}
+                    
+                    returns[return_key] = {k: round(v, 2) for k, v in calc_returns.items()}
+                    self.logger.info(f"✓ Calculated {return_key} returns")
+                except Exception as e:
+                    self.logger.error(f"Error calculating {return_key} returns for {symbol}: {e}")
+                    returns[return_key] = None
+            else:
+                self.logger.info(f"✗ Skipping {return_key} - time not reached")
 
         return returns
 
@@ -302,11 +368,8 @@ class ReturnsProcessor:
             current_time = datetime.now(timezone.utc).astimezone(self.ny_tz).timestamp()
 
             # Map the new schedule fields to timestamps
-            schedule_mapping = {
-                MetadataFields.HOURLY: returns_schedule.get(MetadataFields.HOURLY),
-                MetadataFields.SESSION: returns_schedule.get(MetadataFields.SESSION),
-                MetadataFields.DAILY: returns_schedule.get(MetadataFields.DAILY)
-            }
+            schedule_mapping = {return_type: returns_schedule.get(return_type)
+                for return_type in [MetadataFields.HOURLY, MetadataFields.SESSION, MetadataFields.DAILY]}
 
             for return_type, time_str in schedule_mapping.items():
                 if time_str:
@@ -432,43 +495,6 @@ class ReturnsProcessor:
         except Exception as e:
             self.logger.error(f"Error calculating specific return {return_type}: {e}")
             return None
-
-
-    # def _calculate_specific_return(self, news_data: dict, return_type: str) -> dict:
-    #     """Calculate a specific return type for all symbols"""
-    #     try:
-    #         current_time = datetime.now(timezone.utc).astimezone(self.ny_tz)
-    #         timefor_returns = news_data.get('metadata', {}).get('timeforReturns', {})
-            
-    #         # Create a dict with only the specific return type we want to calculate
-    #         specific_timefor_returns = {return_type: timefor_returns.get(return_type)}
-            
-    #         self.logger.info(f"Processing {return_type} with time: {specific_timefor_returns}")
-            
-    #         returns = {}
-    #         for symbol in news_data.get('symbols', []):
-    #             symbol_returns = self._calculate_symbol_returns(
-    #                 symbol,
-    #                 news_data['created'],
-    #                 specific_timefor_returns,  # Only pass the specific return type we want to calculate
-    #                 current_time
-    #             )
-                
-    #             # Map ZSET return type to returns structure
-    #             return_key = {
-    #                 '1h_end_time': '1h_impact',
-    #                 'session_end_time': 'session',
-    #                 '1d_end_time': '1d_impact'
-    #             }[return_type]
-                
-    #             returns[symbol] = symbol_returns.get(return_key)
-
-    #         return returns
-    #     except Exception as e:
-    #         self.logger.error(f"Error calculating specific return {return_type}: {e}")
-    #         return None
-
-
 
 
     def get_etf(self, ticker: str, col='industry_etf'):
