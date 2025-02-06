@@ -147,7 +147,7 @@ class NewsProcessor:
 
                 try:
                     pipe.publish('news:benzinga:live:processed', processed_key)
-                    self.logger.info(f"Published processed message: {processed_key}")
+                    # self.logger.info(f"Published processed message: {processed_key}")
                 except Exception as e:
                     self.logger.error(f"Failed to publish message: {e}")
 
@@ -172,7 +172,7 @@ class NewsProcessor:
             event_time = parser.parse(processed_dict.get('created'))
             symbols = processed_dict.get('symbols', [])
             
-            # Use EventReturnsManager to generate metadata
+            # Use EventReturnsManager to generate metadata - shouldn't we create a Global instance of EventReturnsManager?
             event_manager = EventReturnsManager(self.stock_universe)
             metadata = event_manager.process_event_metadata(
                 event_time=event_time,

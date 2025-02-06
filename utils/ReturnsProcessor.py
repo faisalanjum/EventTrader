@@ -1,7 +1,7 @@
 # returns_processor.py
 import threading
 import logging
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List, Tuple
 import json
 from datetime import datetime, timezone
 from dateutil import parser
@@ -120,21 +120,16 @@ class ReturnsProcessor:
 
 
 
-
-
-
-
     def _process_hist_news(self, client):
-        
-        """Process returns for historical news in batches"""
+        """Process historical news in batches while maintaining live processing logic"""
         pattern = f"{client.prefix}processed:*"
+        self.logger.info(f"Starting historical news processing with pattern: {pattern}")
         
+        # 1. Collection Phase
         events = []
-        successful_returns = 0
-        failed_returns = 0
-        
+        original_news = {}  # event_id -> (news_dict, original_key)
 
-        # Collect all events first
+        # Collect events for batch processing
         for key in client.client.scan_iter(pattern):
             try:
                 content = client.get(key)
@@ -142,51 +137,146 @@ class ReturnsProcessor:
                     continue
                     
                 news_dict = json.loads(content)
+                updated_time = news_dict['updated'].replace(':', '.')
+                event_id = f"{news_dict['id']}.{updated_time}"
+
+                # Store original news and key
+                original_news[event_id] = (news_dict, key)
+
+                # Create event object for batch processing
                 event = {
-                    'event_id': news_dict['id'],
+                    'event_id': event_id,
                     'created': news_dict['metadata']['event']['created'],
                     'symbols': news_dict['symbols'],
                     'metadata': news_dict['metadata']
                 }
                 events.append(event)
-                    
+
             except Exception as e:
                 self.logger.error(f"Failed to process {key}: {e}")
-        
-        if events:
+                continue
+
+        if not events:
+            return
+
+        # 2. Batch Processing Phase
+        try:
             self.logger.info(f"Processing batch of {len(events)} events")
             event_returns = self.event_returns_manager.process_events(events)
-            
-            # Count successes and failures
-            for result in event_returns:
-                if result.returns:
-                    successful_returns += 1
-                else:
-                    failed_returns += 1
-            
-            # Print summary
-            self.logger.info(f"\nReturns Calculation Summary:")
-            self.logger.info(f"Total Events: {len(events)}")
-            self.logger.info(f"Successful Returns: {successful_returns}")
-            self.logger.info(f"Failed Returns: {failed_returns}")
-            
-            # Log the result
-            # self.logger.info(f"Event returns (First): {event_returns[0]}")  
-            # self.logger.info(f"Event returns (Last): {event_returns[-1]}")
 
-        # This is wrong but temporary to check
-        # pattern = f"{client.prefix}processed:*"
+            # 3. Individual Processing Phase
+            for event_return in event_returns:
+                try:
+                    orig_news, orig_key = original_news[event_return.event_id]
+                    
+                    # Calculate available returns (following live logic)
+                    returns_info = self._calculate_available_returns_batch(
+                        orig_news,
+                        event_return.returns
+                    )
+                    
+                    # Schedule any pending returns (using same function as live)
+                    news_id = orig_key.split(':')[-1]
+                    self._schedule_pending_returns(news_id, orig_news)
+
+                    # Update news with calculated returns
+                    orig_news['returns'] = returns_info['returns']
+
+                    # Determine destination based on completion (same as live)
+                    if returns_info['all_complete']:
+                        new_key = f"news:benzinga:withreturns:{news_id}"
+                        self.logger.info(f"Moving to withreturns: {new_key}")
+                    else:
+                        new_key = f"news:benzinga:withoutreturns:{news_id}"
+                        self.logger.info(f"Moving to withoutreturns: {new_key}")
+
+                    # Atomic update
+                    pipe = client.client.pipeline(transaction=True)
+                    pipe.set(new_key, json.dumps(orig_news))
+                    pipe.delete(orig_key)
+                    pipe.execute()
+
+                except Exception as e:
+                    self.logger.error(f"Failed to process returns for {event_return.event_id}: {e}")
+
+        except Exception as e:
+            self.logger.error(f"Batch processing failed: {e}")
+
+    # def _process_hist_news(self, client):
         
-        # # Collect all events first
-        # for key in client.client.scan_iter(pattern):
-        #     news_id = key.split(':')[-1]  # Get the ID portion- Extract ID and create new unified namespace key
-        #     new_key = f"news:benzinga:withreturns:{news_id}"
-        #     # self.logger.info(f"Moving to withreturns: {new_key}")
-        #     # 6. Atomic update using pipeline
-        #     pipe = client.client.pipeline(transaction=True)
-        #     pipe.set(new_key, json.dumps(processed_dict))
-        #     pipe.delete(key)
-        #     return all(pipe.execute())
+    #     """Process returns for historical news in batches"""
+    #     pattern = f"{client.prefix}processed:*"        
+    #     events = []
+    #     successful_returns = 0
+    #     failed_returns = 0
+
+    #     # Store original news content with keys for later merging
+    #     original_news = {}  # key -> original news dict (Key here is the "news_id.updated_time")
+
+    #     self.logger.info(f"Starting historical news processing with pattern: {pattern}")
+
+    #     # Collect all events first
+    #     for key in client.client.scan_iter(pattern):
+    #         try:
+    #             content = client.get(key)
+    #             if not content: continue
+                    
+    #             news_dict = json.loads(content)
+    #             updated_time = news_dict['updated'].replace(':', '.')
+    #             event_id = f"{news_dict['id']}.{updated_time}"  # Using dot for safer concatenation
+
+    #             # Store original news: key saved inorder to delete it later (refered to as orig_key)
+    #             original_news[event_id] = (news_dict, key) 
+
+    #             # Create event objectfor returns calculation
+    #             event = {
+    #                 'event_id': event_id,
+    #                 'created': news_dict['metadata']['event']['created'],
+    #                 'symbols': news_dict['symbols'],
+    #                 'metadata': news_dict['metadata']
+    #             }
+    #             events.append(event)
+                    
+    #         except Exception as e:
+    #             self.logger.error(f"Failed to process {key}: {e}")
+        
+    #     if events:
+
+    #         # Relying on Redis automatic batching since manual batching did not work completely as expected
+    #         self.logger.info(f"Processing {len(events)} total events")
+    #         event_returns = self.event_returns_manager.process_events(events)
+
+    #         # Merge returns back into original news events
+    #         for event_return in event_returns:
+    #             try:
+    #                 orig_news, orig_key = original_news[event_return.event_id]  # Unpack tuple
+    #                 # Add returns to original news dictionary
+    #                 orig_news['returns'] = event_return.returns
+                    
+    #                 # Update in Redis with new key based on completion
+    #                 updated_time = orig_news['updated'].replace(':', '.')
+    #                 if event_return.returns:  # If returns were calculated
+    #                     new_key = f"news:benzinga:withreturns:{orig_news['id']}.{updated_time}"
+    #                     successful_returns += 1
+    #                 else:
+    #                     new_key = f"news:benzinga:withoutreturns:{orig_news['id']}.{updated_time}"
+    #                     failed_returns += 1
+                        
+    #                 # Atomic update
+    #                 pipe = client.client.pipeline(transaction=True)
+    #                 pipe.set(new_key, json.dumps(orig_news))
+    #                 pipe.delete(orig_key)
+    #                 pipe.execute()
+                    
+    #             except Exception as e:
+    #                 self.logger.error(f"Failed to merge returns for {event_return.event_id}: {e}")
+            
+    #         # # Print summary
+    #         self.logger.info(f"\nReturns Calculation Summary:")
+    #         self.logger.info(f"Total Events: {len(events)}")
+    #         self.logger.info(f"Successful Returns: {successful_returns}")
+    #         self.logger.info(f"Failed Returns: {failed_returns}")
+            
 
 
 
@@ -301,6 +391,75 @@ class ReturnsProcessor:
         except Exception as e:
             self.logger.error(f"Failed to calculate returns: {e}")
             return {'returns': {'symbols': {}}, 'all_complete': False}
+
+
+
+    def _calculate_available_returns_batch(self, news_dict: dict, batch_returns: dict) -> dict:
+        """Calculate returns based on available timestamps (batch version)"""
+        try:
+            # 1. Extract metadata and setup (same as live)
+            metadata = news_dict.get('metadata', {})
+            returns_schedule = metadata.get(MetadataFields.RETURNS_SCHEDULE, {})
+            instruments = metadata.get(MetadataFields.INSTRUMENTS, [])
+            current_time = datetime.now(timezone.utc).astimezone(self.ny_tz)
+            
+            # 2. Initialize return structure (same as live)
+            returns_data = {'symbols': {}}
+            all_complete = True
+
+            # 3. Setup empty return structure for each symbol
+            for instrument in instruments:
+                symbol = instrument['symbol']
+                returns_data['symbols'][symbol] = {
+                    f"{rt}_return": None 
+                    for rt in [MetadataFields.HOURLY, MetadataFields.SESSION, MetadataFields.DAILY]
+                }
+
+            # 4. Process each return type
+            for return_type in [MetadataFields.HOURLY, MetadataFields.SESSION, MetadataFields.DAILY]:
+                schedule_time = returns_schedule.get(return_type)
+                if schedule_time:
+                    schedule_dt = parser.parse(schedule_time).astimezone(self.ny_tz)
+                    
+                    # 5. Check if scheduled time has passed (same as live)
+                    if current_time >= schedule_dt:
+                        for instrument in instruments:
+                            try:
+                                symbol = instrument['symbol']
+                                
+                                # Get returns from batch results instead of calculating
+                                if batch_returns and symbol in batch_returns.get('symbols', {}):
+                                    return_field = MetadataFields.RETURN_TYPE_MAP[return_type]
+                                    calc_returns = batch_returns['symbols'][symbol].get(return_field)
+                                    
+                                    if calc_returns:
+                                        returns_data['symbols'][symbol][return_field] = calc_returns
+                                    else:
+                                        all_complete = False
+                                else:
+                                    all_complete = False
+                                    
+                            except Exception as e:
+                                self.logger.error(f"Error processing {return_type} for {symbol}: {e}")
+                                all_complete = False
+                    else:
+                        all_complete = False  # Time hasn't passed yet
+
+            # 6. Final completion check (same as live)
+            for symbol_returns in returns_data['symbols'].values():
+                if any(ret is None for ret in symbol_returns.values()):
+                    all_complete = False
+                    break
+
+            return {
+                'returns': returns_data,
+                'all_complete': all_complete
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Failed to calculate batch returns: {e}")
+            return {'returns': {'symbols': {}}, 'all_complete': False}
+
 
 
 
