@@ -10,7 +10,7 @@ while market hours are defined in ET (e.g., 9:30 AM - 4:00 PM ET), requiring con
 class MarketSessionClassifier:
     def __init__(self):
         self.calendar = xcals.get_calendar("XNYS")
-        self.eastern = pytz.timezone('US/Eastern')
+        self.eastern = pytz.timezone('America/New_York')
         self.add_minutes_to_open = 5
 
     # Helper Functions
@@ -46,11 +46,11 @@ class MarketSessionClassifier:
         # Ensure timezone is US/Eastern
         if input_value.tzinfo is None:
             try:
-                input_value = input_value.tz_localize('US/Eastern', ambiguous='raise', nonexistent='raise')
+                input_value = input_value.tz_localize('America/New_York', ambiguous='raise', nonexistent='raise')
             except (pytz.AmbiguousTimeError, pytz.NonExistentTimeError):
-                input_value = input_value.tz_localize('UTC').tz_convert('US/Eastern')
+                input_value = input_value.tz_localize('UTC').tz_convert('America/New_York')
         elif input_value.tzinfo != self.eastern:
-            input_value = input_value.tz_convert('US/Eastern')
+            input_value = input_value.tz_convert('America/New_York')
         
         return input_value
 
@@ -149,7 +149,7 @@ class MarketSessionClassifier:
                 post_market_end = (session_close if is_early 
                                 else session_close + pd.Timedelta(hours=4))
                 
-                return tuple(t.tz_convert('US/Eastern') for t in 
+                return tuple(t.tz_convert('America/New_York') for t in 
                             (pre_market_start, session_open, session_close, post_market_end))
             
             # 4. Create session times
@@ -275,6 +275,35 @@ class MarketSessionClassifier:
         return timestamp  # Actual Release Time for all rest
     
     
+    # Respects Session Boundaries - Only works for forward time. so do not use -timedelta in interval_minutes
+    def get_interval_end_time(self, timestamp, interval_minutes=60, respect_session_boundary=False):
+        if isinstance(timestamp, str):
+            timestamp = pd.to_datetime(timestamp)
+        market_session, is_trading_day, times = self.get_session_data_structure(timestamp)
+        interval_start = self.get_interval_start_time(timestamp)
+        proposed_end = interval_start + pd.Timedelta(minutes=interval_minutes)
+        after_4_pm = timestamp.hour >= 16
+
+        if not respect_session_boundary:
+            return proposed_end
+
+        if market_session == 'market_closed':
+            if is_trading_day and not after_4_pm:  # Before Pre (0:00-4:00)
+                # Starting from 4:00 AM current day
+                # Should end at min(5:00 AM, market_open)
+                return min(proposed_end, times['market_open_current_day'])
+            else:  # After Post or Weekend
+                # Starting from 4:00 AM next day
+                # Should end at min(5:00 AM next day, market_open_next_day)
+                return min(proposed_end, times['market_open_next_day'])
+                
+        # For active sessions:
+        return min(proposed_end, 
+                times['market_open_current_day'] if market_session == 'pre_market'
+                else times['market_close_current_day'] if market_session == 'in_market'
+                else times['post_market_current_day'])
+
+
 
     # 1D Impact Returns - previous day's close to current day's close
     def get_1d_impact_times(self, timestamp):

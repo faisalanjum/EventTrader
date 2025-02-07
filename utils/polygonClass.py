@@ -500,11 +500,21 @@ class Polygon:
             start_time, end_time = self.market_session.get_1d_impact_times(event_timestamp)
             time_pairs = [(idx, ticker, start_time, end_time) for idx, ticker in assets]
         
+        # elif return_type == MetadataFields.HOURLY:
+        #     horizon_minutes = horizon_minutes or [60]
+        #     interval_start = self.market_session.get_interval_start_time(event_timestamp)
+        #     time_pairs = [
+        #         (idx*4 + asset_idx, asset_ticker, interval_start, interval_start + timedelta(minutes=minutes))
+        #         for idx, minutes in enumerate(horizon_minutes)
+        #         for asset_idx, asset_ticker in assets
+        #     ]
+
         elif return_type == MetadataFields.HOURLY:
             horizon_minutes = horizon_minutes or [60]
-            interval_start = self.market_session.get_interval_start_time(event_timestamp)
             time_pairs = [
-                (idx*4 + asset_idx, asset_ticker, interval_start, interval_start + timedelta(minutes=minutes))
+                (idx*4 + asset_idx, asset_ticker, 
+                interval_start := self.market_session.get_interval_start_time(event_timestamp),
+                self.market_session.get_interval_end_time(event_timestamp, minutes, respect_session_boundary=False))
                 for idx, minutes in enumerate(horizon_minutes)
                 for asset_idx, asset_ticker in assets
             ]
@@ -572,26 +582,42 @@ class Polygon:
                 for asset_type, tickers in asset_types.items()
             }
         
+        # elif return_type == MetadataFields.HOURLY:
+        #     horizon_minutes = horizon_minutes or [60]
+        #     # if not horizon_minutes:
+        #     #     raise ValueError("horizon_minutes required for horizon return type")
+                    
+        #     starts = timestamps.map(self.market_session.get_interval_start_time)
+            
+        #     return {
+        #         h: {
+        #             asset_type: [
+        #                 (int(idx), str(ticker), 
+        #                 min(start, start + pd.Timedelta(minutes=h)),  # Earlier time becomes start
+        #                 max(start, start + pd.Timedelta(minutes=h)))  # Later time becomes end
+        #                 for idx, ticker, start in zip(news_df.index, tickers, starts)
+        #             ]
+        #             for asset_type, tickers in asset_types.items()
+        #         }
+        #         for h in horizon_minutes
+        #     }
+        
+        # only works for forward time. so do not use -timedelta in interval_minutes unlike above commented out code
         elif return_type == MetadataFields.HOURLY:
             horizon_minutes = horizon_minutes or [60]
-            # if not horizon_minutes:
-            #     raise ValueError("horizon_minutes required for horizon return type")
-                    
-            starts = timestamps.map(self.market_session.get_interval_start_time)
-            
             return {
                 h: {
                     asset_type: [
                         (int(idx), str(ticker), 
-                        min(start, start + pd.Timedelta(minutes=h)),  # Earlier time becomes start
-                        max(start, start + pd.Timedelta(minutes=h)))  # Later time becomes end
-                        for idx, ticker, start in zip(news_df.index, tickers, starts)
+                        interval_start := self.market_session.get_interval_start_time(timestamp),
+                        self.market_session.get_interval_end_time(timestamp, h, respect_session_boundary=False))
+                        for idx, ticker, timestamp in zip(news_df.index, tickers, timestamps)
                     ]
                     for asset_type, tickers in asset_types.items()
                 }
                 for h in horizon_minutes
             }
-        
+                
 
 
     def get_structured_returns(self, news_df: pd.DataFrame, return_type: str = MetadataFields.SESSION, horizon_minutes: Optional[List[int]] = None) -> pd.DataFrame:

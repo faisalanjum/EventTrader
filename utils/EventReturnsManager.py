@@ -150,7 +150,7 @@ class EventReturnsManager:
         """
         try:
             interval_start = self.market_session.get_interval_start_time(event_time)
-            interval_end = interval_start + timedelta(minutes=60)
+            interval_end = self.market_session.get_interval_end_time(event_time, 60, respect_session_boundary=False)
             session_end = self.market_session.get_end_time(event_time)
             one_day_impact_times = self.market_session.get_1d_impact_times(event_time)
             
@@ -345,7 +345,7 @@ class EventReturnsManager:
             if return_type not in returns['symbols'][symbol]:
                 returns['symbols'][symbol][return_type] = {}
                 
-            returns['symbols'][symbol][return_type][asset_type] = value
+            returns['symbols'][symbol][return_type][asset_type] = round(value, 2)
 
         return returns
     

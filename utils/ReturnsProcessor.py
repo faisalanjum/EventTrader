@@ -434,6 +434,11 @@ class ReturnsProcessor:
                                     
                                     if calc_returns:
                                         returns_data['symbols'][symbol][return_field] = calc_returns
+                                        
+                                        # Round here to match live flow
+                                        # returns_data['symbols'][symbol][return_field] = {
+                                        #     k: round(v, 2) for k, v in calc_returns.items()}
+                                        
                                     else:
                                         all_complete = False
                                 else:
@@ -563,6 +568,7 @@ class ReturnsProcessor:
             for item in ready_items:
                 news_id, return_type = item.split(':')
 
+
                 # Gets news from withoutreturns namespace
                 key = f"news:benzinga:withoutreturns:{news_id}"
                 
@@ -583,10 +589,15 @@ class ReturnsProcessor:
         try:
 
             # 1. Gets news from withoutreturns
-            news_data = json.loads(self.live_client.get(key))
-            if not news_data:
+            raw_data = self.live_client.get(key)
+            if raw_data is None:
+                self.logger.info(f"News no longer in withoutreturns: {key} - cleaning up pending return")
                 return True  # Key no longer exists, remove from pending
                 
+            news_data = json.loads(raw_data)
+            if not news_data:  # Empty dict case
+                return True
+            
             # 2. Calculates specific return
             updated_returns = self._calculate_specific_return(news_data, return_type)
             if not updated_returns:
