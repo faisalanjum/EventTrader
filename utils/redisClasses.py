@@ -10,7 +10,7 @@ from typing import List, Optional
 from benzinga.bz_news_schemas import UnifiedNews
 from datetime import timezone
 import time
-from utils.redis_constants import RedisKeys
+from utils.redis_constants import RedisKeys, RedisQueues
 
 # Create logs directory if it doesn't exist
 log_dir = "logs"
@@ -34,14 +34,24 @@ logging.basicConfig(
 
 class EventTraderRedis:
 
-    def __init__(self, clear_config=False, preserve_processed=True, source=RedisKeys.SOURCE_NEWS):
+    def __init__(self, source=RedisKeys.SOURCE_NEWS, clear_config=False, preserve_processed=True):
         self.source = source
-        self.bz_livenews = RedisClient(prefix=RedisKeys.get_prefixes(self.source)['live'])
-        self.bz_histnews = RedisClient(prefix=RedisKeys.get_prefixes(self.source)['hist'])
+        prefixes = RedisKeys.get_prefixes(self.source)
+        
+        # Initialize Redis clients with source-specific prefixes
+        self.bz_livenews = RedisClient(
+            prefix=prefixes['live'],
+            source_type=self.source
+        )
+        self.bz_histnews = RedisClient(
+            prefix=prefixes['hist'],
+            source_type=self.source)
+        
         self.config = RedisClient(prefix='config:')
         
         self.clear(preserve_processed)
         self.initialize_stock_universe(clear_config=clear_config)
+
 
 
     def initialize_stock_universe(self, clear_config=False, file_path='../StocksUniverse/final_symbols.csv'):
@@ -103,15 +113,25 @@ class RedisClient:
     # FAILED_QUEUE = "news:benzinga:failed:queue"
 
     # Queue names organized under queues/ directory
-    RAW_QUEUE = "news:benzinga:queues:raw"     
-    PROCESSED_QUEUE = "news:benzinga:queues:processed"
-    FAILED_QUEUE = "news:benzinga:queues:failed"    
+    # RAW_QUEUE = "news:benzinga:queues:raw"     
+    # PROCESSED_QUEUE = "news:benzinga:queues:processed"
+    # FAILED_QUEUE = "news:benzinga:queues:failed"    
 
-    def __init__(self, host='localhost', port=6379, db=0, prefix=''):
+    def __init__(self, host='localhost', port=6379, db=0, prefix='', source_type=None):
+
         self.host = host
         self.port = port
         self.db = db
         self.prefix = prefix  # Will be 'news:benzinga:live:' or 'news:benzinga:hist:'
+
+        # Get source-specific queue names
+        if source_type:
+            queues = RedisQueues.get_queues(source_type)
+            self.RAW_QUEUE = queues['RAW_QUEUE']
+            self.PROCESSED_QUEUE = queues['PROCESSED_QUEUE']
+            self.FAILED_QUEUE = queues['FAILED_QUEUE']
+
+
 
         self.pool = redis.ConnectionPool( host=host, port=port, db=db, decode_responses=True)
         self._connect_to_redis()

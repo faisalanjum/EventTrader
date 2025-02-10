@@ -51,11 +51,11 @@ class NewsProcessor:
 
     def process_all_news(self):
         """Continuously process news from RAW_QUEUE"""
-        self.logger.info(f"Starting news processing from {RedisClient.RAW_QUEUE}")
+        self.logger.info(f"Starting news processing from {self.queue_client.RAW_QUEUE}")
         consecutive_errors = 0
         while self.should_run:
             try:
-                result = self.queue_client.pop_from_queue(RedisClient.RAW_QUEUE, timeout=1)
+                result = self.queue_client.pop_from_queue(self.queue_client.RAW_QUEUE, timeout=1)
                 if not result:
                     continue
 
@@ -121,7 +121,7 @@ class NewsProcessor:
             # Get Metadata- Needs to be changed - properly formatted metadata
             metadata = self._add_metadata(processed_dict)
             if metadata is None:                
-                client.push_to_queue(RedisClient.FAILED_QUEUE)
+                client.push_to_queue(client.FAILED_QUEUE)
                 return False
 
             # Add metadata to processed_dict
@@ -140,10 +140,10 @@ class NewsProcessor:
                 return True
 
             # Not processed yet, check queue and process
-            queue_items = client.client.lrange(RedisClient.PROCESSED_QUEUE, 0, -1)
+            queue_items = client.client.lrange(client.PROCESSED_QUEUE, 0, -1)
             if processed_key not in queue_items:  # Only add if not already in queue
                 pipe.set(processed_key, json.dumps(processed_dict))
-                pipe.lpush(RedisClient.PROCESSED_QUEUE, processed_key)
+                pipe.lpush(client.PROCESSED_QUEUE, processed_key)
 
                 try:
                     pipe.publish('news:benzinga:live:processed', processed_key)
@@ -160,7 +160,7 @@ class NewsProcessor:
             self.logger.error(f"Failed to process {raw_key}: {e}")
             # client = (self.hist_client if ':hist:' in raw_key else self.live_client)
             client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
-            client.push_to_queue(RedisClient.FAILED_QUEUE, raw_key)
+            client.push_to_queue(client.FAILED_QUEUE, raw_key)
             return False
 
 

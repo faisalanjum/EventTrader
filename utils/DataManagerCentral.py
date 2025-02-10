@@ -14,6 +14,8 @@ from eventtrader.keys import BENZINGANEWS_API_KEY
 # Primary Source
 news_source = RedisKeys.SOURCE_NEWS
 
+
+
 class DataManager:
     def __init__(
         self, 
