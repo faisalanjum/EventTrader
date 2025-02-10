@@ -10,6 +10,7 @@ from typing import List, Optional
 from benzinga.bz_news_schemas import UnifiedNews
 from datetime import timezone
 import time
+from utils.redis_constants import RedisKeys
 
 # Create logs directory if it doesn't exist
 log_dir = "logs"
@@ -33,9 +34,10 @@ logging.basicConfig(
 
 class EventTraderRedis:
 
-    def __init__(self, clear_config=False, preserve_processed=True):
-        self.bz_livenews = RedisClient(prefix='news:benzinga:live:')
-        self.bz_histnews = RedisClient(prefix='news:benzinga:hist:')
+    def __init__(self, clear_config=False, preserve_processed=True, source=RedisKeys.SOURCE_NEWS):
+        self.source = source
+        self.bz_livenews = RedisClient(prefix=RedisKeys.get_prefixes(self.source)['live'])
+        self.bz_histnews = RedisClient(prefix=RedisKeys.get_prefixes(self.source)['hist'])
         self.config = RedisClient(prefix='config:')
         
         self.clear(preserve_processed)
