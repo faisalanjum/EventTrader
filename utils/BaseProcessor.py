@@ -9,10 +9,27 @@ from datetime import datetime
 import pytz
 from dateutil import parser
 from utils.metadata_fields import MetadataFields
+
+
 class BaseProcessor(ABC):
     """Base class for all processors (news, reports, transcripts)"""
     
     def __init__(self, event_trader_redis, delete_raw: bool = True):
+
+
+        # Core fields needed across system
+        self.REQUIRED_FIELDS = {
+            'id',          # Used for unique identification in ReturnsProcessor
+            'created',     # Used in EventReturnsManager for timing/returns
+            'updated',     # Used in ReturnsProcessor for key generation
+            'symbols',     # Used everywhere for symbol processing
+            'metadata',    # Added by _add_metadata, used in returns processing
+            'returns',     # Added by ReturnsProcessor
+            'formType',    # Source-specific but used in filtering/processing
+        }
+
+
+
         # Direct copy from NewsProcessor.__init__
         self.live_client = event_trader_redis.live_client
         self.hist_client = event_trader_redis.history_client
@@ -85,21 +102,26 @@ class BaseProcessor(ABC):
 
             content_dict = json.loads(raw_content)
 
-            # 2. Check if any valid symbols exist
-            if not self._has_valid_symbols(content_dict):
+            # 2. First standardize fields
+            standardized_dict = self._standardize_fields(content_dict)
+
+
+            # 3. Check if any valid symbols exist
+            if not self._has_valid_symbols(standardized_dict):
                 self.logger.debug(f"Dropping {raw_key} - no matching symbols in universe")
                 client.delete(raw_key)
                 return True  # Item exits raw queue naturally
                 # No tracking maintained, never enters processed queue
 
-            # 3. Clean content - Source specific
-            processed_dict = self._clean_content(content_dict)
+
+            # 4. Clean content - Source specific
+            processed_dict = self._clean_content(standardized_dict)
             
-            # 4. Filter to keep only valid symbols
+            # 5. Filter to keep only valid symbols
             valid_symbols = {s.strip().upper() for s in processed_dict.get('symbols', [])} & self.allowed_symbols
             processed_dict['symbols'] = list(valid_symbols)
 
-            # 5. Add metadata
+            # 6. Add metadata
             metadata = self._add_metadata(processed_dict)
             if metadata is None:
                 client.push_to_queue(client.FAILED_QUEUE)
@@ -191,6 +213,12 @@ class BaseProcessor(ABC):
     def stop(self):
         """Stop processing"""
         self.should_run = False
+
+
+    @abstractmethod
+    def _standardize_fields(self, content: dict) -> dict:
+        """Transform source-specific fields to standard format"""
+        pass
 
     @abstractmethod
     def _clean_content(self, content: dict) -> dict:

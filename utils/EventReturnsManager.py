@@ -189,7 +189,7 @@ class EventReturnsManager:
         if matches.empty:
             raise ValueError(f"Symbol {symbol} not found in stock universe")
         return matches[etf_type].values[0]
-    
+
 ########################################################################################
 # For Returns Calculation
 

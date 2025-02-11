@@ -5,11 +5,13 @@ from typing import Dict, Optional
 from datetime import datetime
 
 from eventtrader.keys import BENZINGANEWS_API_KEY
+from utils.ReportProcessor import ReportProcessor
 from utils.redisClasses import EventTraderRedis, RedisKeys
 from benzinga.bz_restAPI import BenzingaNewsRestAPI
 from benzinga.bz_websocket import BenzingaNewsWebSocket
 from utils.NewsProcessor import NewsProcessor
 from utils.ReturnsProcessor import ReturnsProcessor
+from eventtrader.keys import SEC_API_KEY
 
 class DataSourceManager:
     """Base class for managing different data sources"""
@@ -18,6 +20,7 @@ class DataSourceManager:
         source_type: str,
         historical_range: Dict[str, str],  # {'from': 'YYYY-MM-DD', 'to': 'YYYY-MM-DD'}
         api_key: str,
+        processor_class=None,
         ttl: int = 7 * 24 * 3600
     ):
         self.source_type = source_type
@@ -28,7 +31,8 @@ class DataSourceManager:
 
         # Initialize Redis and processors
         self.redis = EventTraderRedis(source=self.source_type)        # ex: source_type = news:benzinga
-        self.processor = NewsProcessor(self.redis, delete_raw=True)
+        # self.processor = NewsProcessor(self.redis, delete_raw=True)
+        self.processor = processor_class(self.redis, delete_raw=True) if processor_class else None
         self.returns_processor = ReturnsProcessor(self.redis)
         
         # Thread management
@@ -47,7 +51,8 @@ class BenzingaNewsManager(DataSourceManager):
         super().__init__(
             source_type=RedisKeys.SOURCE_NEWS,
             historical_range=historical_range,
-            api_key=BENZINGANEWS_API_KEY
+            api_key=BENZINGANEWS_API_KEY,
+            processor_class=NewsProcessor
         )
         
         # Initialize API clients
@@ -126,6 +131,16 @@ class BenzingaNewsManager(DataSourceManager):
             logging.error(f"Error stopping {self.source_type}: {e}")
             return False
 
+    
+class ReportsManager(DataSourceManager):
+    def __init__(self, historical_range: Dict[str, str]):
+        super().__init__(
+            source_type=RedisKeys.SOURCE_REPORTS,
+            historical_range=historical_range,
+            api_key=SEC_API_KEY, 
+            processor_class=ReportProcessor
+        )
+        
 
 class DataManager:
     """Central manager for all data sources"""
@@ -136,8 +151,8 @@ class DataManager:
 
     def initialize_sources(self):
         self.sources['news'] = BenzingaNewsManager(self.historical_range)
-        # Add other sources as needed:
         # self.sources['reports'] = ReportsManager(self.historical_range)
+        # Add other sources as needed:
         # self.sources['transcripts'] = TranscriptsManager(self.historical_range)
 
     def start(self):
@@ -152,7 +167,6 @@ class DataManager:
     def get_source(self, name: str):
         return self.sources.get(name)
     
-
 
 
 

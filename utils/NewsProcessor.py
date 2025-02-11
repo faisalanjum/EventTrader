@@ -12,11 +12,16 @@ class NewsProcessor(BaseProcessor):
     def __init__(self, event_trader_redis, delete_raw: bool = True):
         super().__init__(event_trader_redis, delete_raw)
         # Any news-specific initialization can go here
-        self.market_session = MarketSessionClassifier() 
+        # self.market_session = MarketSessionClassifier() 
 
     def process_all_news(self):
         """Maintain original method name for backward compatibility"""
         return self.process_all_items()
+
+    def _standardize_fields(self, content: dict) -> dict:
+        """News already has standard fields"""
+        return content  # Already standardized
+    
 
     def _clean_content(self, content: dict) -> dict:
         """Implement abstract method with news-specific cleaning"""
