@@ -49,6 +49,12 @@ class RedisKeys:
         return f"{source_type}:{key_type}:{identifier}".rstrip(':')
 
 
+    @staticmethod
+    def get_pubsub_channel(source_type: str) -> str:
+        """Get pubsub channel name for a source"""
+        return f"{source_type}:{RedisKeys.PREFIX_LIVE}:{RedisKeys.SUFFIX_PROCESSED}"
+
+
 class RedisQueues:
     """Cached queue paths for each source type"""
     _source_queues = {}

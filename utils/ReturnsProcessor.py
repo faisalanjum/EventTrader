@@ -23,12 +23,15 @@ class ReturnsProcessor:
         self.queue_client = self.live_client.create_new_connection() # create new connection for queue checks
         self.pubsub_client = self.live_client.create_pubsub_connection()
         self.source_type = event_trader_redis.source
-                
-        self.processed_channel = RedisKeys.get_key(
-            source_type=self.source_type,
-            key_type=RedisKeys.SUFFIX_PROCESSED,
-            prefix_type=RedisKeys.PREFIX_LIVE)
+                                
+        # self.processed_channel = RedisKeys.get_key(
+        #     source_type=self.source_type,
+        #     key_type=RedisKeys.SUFFIX_PROCESSED,
+        #     prefix_type=RedisKeys.PREFIX_LIVE)
         
+        self.processed_channel = RedisKeys.get_pubsub_channel(self.source_type)
+        
+        # Subscribe to LIVE processed channel                
         self.pubsub_client.subscribe(self.processed_channel)
         # self.pubsub_client.subscribe('news:benzinga:live:processed')
 
@@ -45,8 +48,8 @@ class ReturnsProcessor:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
         
-        # self.pending_zset = "news:benzinga:pending_news_returns"  
-        self.pending_zset = RedisKeys.get_returns_keys(self.source_type)['pending']       
+        # self.pending_zset = "news:benzinga:pending_returns"  
+        self.pending_zset = RedisKeys.get_returns_keys(self.source_type)['pending']       # 'pending': 'news:pending_returns'
         self.ny_tz = pytz.timezone("America/New_York")
 
         self.event_returns_manager = EventReturnsManager(self.stock_universe)
@@ -119,7 +122,7 @@ class ReturnsProcessor:
 
     def _process_live_news(self, client):
         """Process returns for a specific client (hist/live)"""
-        pattern = f"{client.prefix}processed:*"
+        pattern = f"{client.prefix}processed:*" 
         for key in client.client.scan_iter(pattern):
             try:
                 success = self._process_single_item(key, client)
