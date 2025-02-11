@@ -27,7 +27,7 @@ class DataSourceManager:
         self.running = True
 
         # Initialize Redis and processors
-        self.redis = EventTraderRedis(source=self.source_type)
+        self.redis = EventTraderRedis(source=self.source_type)        # ex: source_type = news:benzinga
         self.processor = NewsProcessor(self.redis, delete_raw=True)
         self.returns_processor = ReturnsProcessor(self.redis)
         
@@ -53,12 +53,12 @@ class BenzingaNewsManager(DataSourceManager):
         # Initialize API clients
         self.rest_client = BenzingaNewsRestAPI(
             api_key=self.api_key,
-            redis_client=self.redis.bz_histnews,
+            redis_client=self.redis.history_client,
             ttl=self.ttl
         )
         self.ws_client = BenzingaNewsWebSocket(
             api_key=self.api_key,
-            redis_client=self.redis.bz_livenews,
+            redis_client=self.redis.live_client,
             ttl=self.ttl
         )
 
@@ -102,9 +102,9 @@ class BenzingaNewsManager(DataSourceManager):
                     "last_message": self.ws_client.stats.get('last_message_time')
                 },
                 "redis": {
-                    "live_count": len(self.redis.bz_livenews.client.keys(f"{live_prefix}raw:*")),
-                    "raw_queue": len(self.redis.bz_livenews.client.lrange(self.redis.bz_livenews.RAW_QUEUE, 0, -1)),
-                    "processed_queue": len(self.redis.bz_livenews.client.lrange(self.redis.bz_livenews.PROCESSED_QUEUE, 0, -1))
+                    "live_count": len(self.redis.live_client.client.keys(f"{live_prefix}raw:*")),
+                    "raw_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.RAW_QUEUE, 0, -1)),
+                    "processed_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.PROCESSED_QUEUE, 0, -1))
                 }
             }
         except Exception as e:
@@ -138,6 +138,7 @@ class DataManager:
         self.sources['news'] = BenzingaNewsManager(self.historical_range)
         # Add other sources as needed:
         # self.sources['reports'] = ReportsManager(self.historical_range)
+        # self.sources['transcripts'] = TranscriptsManager(self.historical_range)
 
     def start(self):
         return {name: manager.start() for name, manager in self.sources.items()}
@@ -150,3 +151,50 @@ class DataManager:
 
     def get_source(self, name: str):
         return self.sources.get(name)
+    
+
+
+
+
+"""
+class ReportsManager(DataSourceManager):
+    def __init__(self, historical_range: Dict[str, str]):
+        super().__init__(
+            source_type=RedisKeys.SOURCE_REPORTS,
+            historical_range=historical_range,
+            api_key=REPORTS_API_KEY  # You would define this
+        )
+        
+        # Initialize API clients
+        self.rest_client = ReportsRestAPI(
+            api_key=self.api_key,
+            redis_client=self.redis.bz_histnews,
+            ttl=self.ttl
+        )
+        self.ws_client = ReportsWebSocket(
+            api_key=self.api_key,
+            redis_client=self.redis.bz_livenews,
+            ttl=self.ttl
+        )
+
+    # Rest of implementation matches BenzingaNewsManager
+    def start(self): ...
+    def _run_websocket(self): ...
+    def check_status(self): ...
+    def stop(self): ...
+
+
+class TranscriptsManager(DataSourceManager):
+    def __init__(self, historical_range: Dict[str, str]):
+        super().__init__(
+            source_type=RedisKeys.SOURCE_TRANSCRIPTS,
+            historical_range=historical_range,
+            api_key=TRANSCRIPTS_API_KEY  # You would define this
+        )
+        
+        # Initialize API clients
+        self.rest_client = TranscriptsRestAPI(...)
+        self.ws_client = TranscriptsWebSocket(...)
+
+    # Rest of implementation matches BenzingaNewsManager
+"""

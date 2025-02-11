@@ -36,14 +36,14 @@ class EventTraderRedis:
 
     def __init__(self, source=RedisKeys.SOURCE_NEWS, clear_config=False, preserve_processed=True):
         self.source = source
-        prefixes = RedisKeys.get_prefixes(self.source)
+        prefixes = RedisKeys.get_prefixes(self.source) # {'live': 'news:benzinga:live:', 'hist': 'news:benzinga:hist:'}
         
         # Initialize Redis clients with source-specific prefixes
-        self.bz_livenews = RedisClient(
+        self.live_client = RedisClient(
             prefix=prefixes['live'],
             source_type=self.source
         )
-        self.bz_histnews = RedisClient(
+        self.history_client = RedisClient(
             prefix=prefixes['hist'],
             source_type=self.source)
         
@@ -99,8 +99,8 @@ class EventTraderRedis:
 
     def clear(self, preserve_processed=True): 
         try:
-            self.bz_livenews.clear(preserve_processed) # If True, Only clear raw keys, not processed keys else clear all keys
-            self.bz_histnews.clear(preserve_processed)
+            self.live_client.clear(preserve_processed) # If True, Only clear raw keys, not processed keys else clear all keys
+            self.history_client.clear(preserve_processed)
             return True
         except Exception as e:
             logging.error(f"Error during clear: {e}")
@@ -126,11 +126,10 @@ class RedisClient:
 
         # Get source-specific queue names
         if source_type:
-            queues = RedisQueues.get_queues(source_type)
+            queues = RedisQueues.get_queues(source_type) # {'RAW_QUEUE': 'news:benzinga:queues:raw', 'PROCESSED_QUEUE': 'news:benzinga:queues:processed'
             self.RAW_QUEUE = queues['RAW_QUEUE']
             self.PROCESSED_QUEUE = queues['PROCESSED_QUEUE']
             self.FAILED_QUEUE = queues['FAILED_QUEUE']
-
 
 
         self.pool = redis.ConnectionPool( host=host, port=port, db=db, decode_responses=True)

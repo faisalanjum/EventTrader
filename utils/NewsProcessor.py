@@ -22,7 +22,8 @@ from utils.polygonClass import Polygon
 from utils.market_session import MarketSessionClassifier
 from datetime import timedelta
 from utils.EventReturnsManager import EventReturnsManager
-from utils.metadata_fields import MetadataFields  
+from utils.metadata_fields import MetadataFields
+from utils.redis_constants import RedisKeys  
 
 
  # Using any client for shared queues
@@ -30,8 +31,8 @@ from utils.metadata_fields import MetadataFields
 class NewsProcessor:
     def __init__(self, event_trader_redis: EventTraderRedis, delete_raw: bool = True):
                 
-        self.live_client = event_trader_redis.bz_livenews
-        self.hist_client = event_trader_redis.bz_histnews
+        self.live_client = event_trader_redis.live_client
+        self.hist_client = event_trader_redis.history_client
         self.queue_client = self.live_client  # Dedicated client for queue operations
         self.should_run = True
         self._lock = threading.Lock()
@@ -48,6 +49,15 @@ class NewsProcessor:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
 
+
+        self.source_type = event_trader_redis.source
+        
+        # Get pubsub channel using RedisKeys
+        self.processed_channel = RedisKeys.get_key(
+            source_type=self.source_type,
+            key_type=RedisKeys.SUFFIX_PROCESSED,
+            prefix_type=RedisKeys.PREFIX_LIVE
+        )
 
     def process_all_news(self):
         """Continuously process news from RAW_QUEUE"""
@@ -129,7 +139,7 @@ class NewsProcessor:
 
             # **********************************************************************
             # Move to processed queue
-            processed_key = raw_key.replace(":raw:", ":processed:")   
+            processed_key = raw_key.replace(":raw:", ":processed:")  # Maybe later use RedisKeys 
             pipe = client.client.pipeline(transaction=True)
 
             # If processed exists, just delete raw if needed
@@ -146,7 +156,7 @@ class NewsProcessor:
                 pipe.lpush(client.PROCESSED_QUEUE, processed_key)
 
                 try:
-                    pipe.publish('news:benzinga:live:processed', processed_key)
+                    pipe.publish(self.processed_channel, processed_key)
                     # self.logger.info(f"Published processed message: {processed_key}")
                 except Exception as e:
                     self.logger.error(f"Failed to publish message: {e}")

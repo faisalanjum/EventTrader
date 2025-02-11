@@ -14,14 +14,23 @@ from utils.metadata_fields import MetadataFields
 from utils.EventReturnsManager import EventReturnsManager
 import pytz
 
+from utils.redis_constants import RedisKeys
+
 class ReturnsProcessor:
     def __init__(self, event_trader_redis: EventTraderRedis):
-        self.live_client = event_trader_redis.bz_livenews
-        self.hist_client = event_trader_redis.bz_histnews
+        self.live_client = event_trader_redis.live_client
+        self.hist_client = event_trader_redis.history_client
         self.queue_client = self.live_client.create_new_connection() # create new connection for queue checks
         self.pubsub_client = self.live_client.create_pubsub_connection()
-        self.pubsub_client.subscribe('news:benzinga:live:processed')
-
+        self.source_type = event_trader_redis.source
+                
+        self.processed_channel = RedisKeys.get_key(
+            source_type=self.source_type,
+            key_type=RedisKeys.SUFFIX_PROCESSED,
+            prefix_type=RedisKeys.PREFIX_LIVE)
+        
+        self.pubsub_client.subscribe(self.processed_channel)
+        # self.pubsub_client.subscribe('news:benzinga:live:processed')
 
         self.should_run = True
         self._lock = threading.Lock()
@@ -36,7 +45,8 @@ class ReturnsProcessor:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
         
-        self.pending_zset = "news:benzinga:pending_news_returns"         
+        # self.pending_zset = "news:benzinga:pending_news_returns"  
+        self.pending_zset = RedisKeys.get_returns_keys(self.source_type)['pending']       
         self.ny_tz = pytz.timezone("America/New_York")
 
         self.event_returns_manager = EventReturnsManager(self.stock_universe)
@@ -184,10 +194,17 @@ class ReturnsProcessor:
 
                     # Determine destination based on completion (same as live)
                     if returns_info['all_complete']:
-                        new_key = f"news:benzinga:withreturns:{news_id}"
+
+                        # new_key = f"news:benzinga:withreturns:{news_id}"
+                        new_key = RedisKeys.get_key(source_type=self.source_type,
+                            key_type=RedisKeys.SUFFIX_WITHRETURNS,identifier=news_id)
+                        
                         self.logger.info(f"Moving to withreturns: {new_key}")
                     else:
-                        new_key = f"news:benzinga:withoutreturns:{news_id}"
+                        # new_key = f"news:benzinga:withoutreturns:{news_id}"
+
+                        new_key = RedisKeys.get_key(source_type=self.source_type,
+                            key_type=RedisKeys.SUFFIX_WITHOUTRETURNS,identifier=news_id)                        
                         self.logger.info(f"Moving to withoutreturns: {new_key}")
 
                     # Atomic update
@@ -300,10 +317,12 @@ class ReturnsProcessor:
             
             # 4. Determine destination namespace based on completion
             if returns_info['all_complete']:
-                new_key = f"news:benzinga:withreturns:{news_id}"
+                # new_key = f"news:benzinga:withreturns:{news_id}"
+                new_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHRETURNS,identifier=news_id)
                 self.logger.info(f"Moving to withreturns: {new_key}")
             else:
-                new_key = f"news:benzinga:withoutreturns:{news_id}"
+                # new_key = f"news:benzinga:withoutreturns:{news_id}"
+                new_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHOUTRETURNS,identifier=news_id)
                 self.logger.info(f"Moving to withoutreturns: {new_key}")
 
             # 5. Update processed_dict with returns
@@ -570,7 +589,8 @@ class ReturnsProcessor:
 
 
                 # Gets news from withoutreturns namespace
-                key = f"news:benzinga:withoutreturns:{news_id}"
+                # key = f"news:benzinga:withoutreturns:{news_id}"
+                key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHOUTRETURNS, identifier=news_id)
                 
                 # Return Updates
                 if self._update_return(key, return_type):
@@ -694,7 +714,8 @@ class ReturnsProcessor:
             self.queue_client = self.live_client.create_new_connection()
 
             self.pubsub_client = self.live_client.create_pubsub_connection()
-            self.pubsub_client.subscribe('news:benzinga:live:processed')
+            # self.pubsub_client.subscribe('news:benzinga:live:processed')
+            self.pubsub_client.subscribe(self.processed_channel)
             self.logger.debug("Reconnected to Redis")
 
         except Exception as e:
