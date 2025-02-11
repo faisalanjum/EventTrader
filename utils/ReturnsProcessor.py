@@ -607,6 +607,9 @@ class ReturnsProcessor:
     def _update_return(self, key: str, return_type: str) -> bool:
         """Update returns for a specific return type"""
         try:
+            
+            identifier = key.split(':')[-1]
+
 
             # 1. Gets news from withoutreturns
             raw_data = self.live_client.get(key)
@@ -639,7 +642,12 @@ class ReturnsProcessor:
             
             pipe = self.live_client.client.pipeline(transaction=True)
             if all_complete:
-                new_key = key.replace('withoutreturns', 'withreturns')
+
+                # new_key = key.replace('withoutreturns', 'withreturns')
+                # Generate new key using RedisKeys
+                new_key = RedisKeys.get_key(source_type=self.source_type,
+                    key_type=RedisKeys.SUFFIX_WITHRETURNS, identifier=identifier)
+
                 pipe.set(new_key, json.dumps(news_data))
                 pipe.delete(key)
                 self.logger.info(f"Moving to withreturns: {new_key}")

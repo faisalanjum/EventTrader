@@ -106,6 +106,12 @@ class NewsProcessor:
             # 1. Initial Setup and Validation
             # client = (self.hist_client if ':hist:' in raw_key else self.live_client)         # Instead of searching for hist/live in the key, is there a better way?    
             client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
+            
+            # Get prefix type and identifier from raw key
+            prefix_type = RedisKeys.PREFIX_HIST if raw_key.startswith(self.hist_client.prefix) else RedisKeys.PREFIX_LIVE
+            identifier = raw_key.split(':')[-1]  # Gets the UUID/identifier
+
+
             raw_content = client.get(raw_key)
             if not raw_content:
                 self.logger.error(f"Raw content not found: {raw_key}")
@@ -139,9 +145,14 @@ class NewsProcessor:
 
             # **********************************************************************
             # Move to processed queue
-            processed_key = raw_key.replace(":raw:", ":processed:")  # Maybe later use RedisKeys 
-            pipe = client.client.pipeline(transaction=True)
+            # processed_key = raw_key.replace(":raw:", ":processed:")  # Maybe later use RedisKeys 
+            
+            # Generate processed key using RedisKeys
+            processed_key = RedisKeys.get_key(source_type=self.source_type,key_type=RedisKeys.SUFFIX_PROCESSED, 
+                                prefix_type=prefix_type, identifier=identifier)
 
+
+            pipe = client.client.pipeline(transaction=True)
             # If processed exists, just delete raw if needed
             if client.get(processed_key):
                 if self.delete_raw:
