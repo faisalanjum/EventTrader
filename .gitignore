@@ -28,3 +28,8 @@ venv/
 
 # Backup files
 # *Backup.py
+
+
+Returns/*.csv
+benzinga/logs/*.log
+News/*.csv
