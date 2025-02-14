@@ -9,12 +9,12 @@ __pycache__/
 XBRL/__pycache__/
 
 # Log files
-*.log
-**/ErrorLog.txt
-**/logfile.txt
+# *.log
+# **/ErrorLog.txt
+# **/logfile.txt
 
 # Jupyter notebooks
-*.ipynb
+# *.ipynb
 .ipynb_checkpoints/
 
 # Virtual environment
@@ -24,7 +24,7 @@ venv/
 .DS_Store
 
 # Project requirements
-requirements.txt
+# requirements.txt
 
 # Backup files
-*Backup.py
+# *Backup.py
