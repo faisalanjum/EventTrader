@@ -4,14 +4,28 @@ import time
 from typing import Dict, Optional
 from datetime import datetime
 
-from eventtrader.keys import BENZINGANEWS_API_KEY
-from utils.ReportProcessor import ReportProcessor
 from utils.redisClasses import EventTraderRedis, RedisKeys
+
 from benzinga.bz_restAPI import BenzingaNewsRestAPI
 from benzinga.bz_websocket import BenzingaNewsWebSocket
+from eventtrader.keys import BENZINGANEWS_API_KEY
+
 from utils.NewsProcessor import NewsProcessor
+from utils.ReportProcessor import ReportProcessor
 from utils.ReturnsProcessor import ReturnsProcessor
+
 from eventtrader.keys import SEC_API_KEY
+
+# Change these to absolute imports
+import sys
+sys.path.append('/Users/macowne/Desktop/Faisal/EventTrader')  # Add project root to path
+
+from sec_api.sec_websocket import SECWebSocket
+from sec_api.sec_restAPI import SECRestAPI
+
+
+
+
 
 class DataSourceManager:
     """Base class for managing different data sources"""
@@ -133,13 +147,90 @@ class BenzingaNewsManager(DataSourceManager):
 
     
 class ReportsManager(DataSourceManager):
+    """Manager for SEC filing reports"""
     def __init__(self, historical_range: Dict[str, str]):
         super().__init__(
             source_type=RedisKeys.SOURCE_REPORTS,
             historical_range=historical_range,
-            api_key=SEC_API_KEY, 
+            api_key=SEC_API_KEY,
             processor_class=ReportProcessor
         )
+        
+        # Initialize API clients (similar to BenzingaNewsManager)
+        self.rest_client = SECRestAPI(  # We'll need to create this later
+            api_key=self.api_key,
+            redis_client=self.redis.history_client,
+            ttl=self.ttl
+        )
+        self.ws_client = SECWebSocket(
+            api_key=self.api_key,
+            redis_client=self.redis.live_client,
+            ttl=self.ttl
+        )
+
+    def start(self):
+        try:
+            # Fetch historical data
+            historical_data = self.rest_client.get_historical_data(
+                date_from=self.date_range['from'],
+                date_to=self.date_range['to'],
+                raw=False
+            )
+            print(f"Fetched {len(historical_data)} historical SEC filings")
+
+            # Start all components in threads
+            self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
+            self.processor_thread = threading.Thread(target=self.processor.process_all_reports, daemon=True)
+            self.returns_thread = threading.Thread(target=self.returns_processor.process_all_returns, daemon=True)
+            
+            for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
+                thread.start()
+            return True
+            
+        except Exception as e:
+            logging.error(f"Error starting {self.source_type}: {e}")
+            return False
+
+    def _run_websocket(self):
+        while self.running:
+            try:
+                self.ws_client.connect(raw=False)
+            except Exception as e:
+                logging.error(f"SEC WebSocket error: {e}")
+                time.sleep(5)
+
+    def check_status(self):
+        try:
+            live_prefix = RedisKeys.get_prefixes(self.source_type)['live']
+            return {
+                "websocket": {
+                    "connected": self.ws_client.connected,
+                    "last_message": self.ws_client.stats.get('last_message_time')
+                },
+                "redis": {
+                    "live_count": len(self.redis.live_client.client.keys(f"{live_prefix}raw:*")),
+                    "raw_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.RAW_QUEUE, 0, -1)),
+                    "processed_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.PROCESSED_QUEUE, 0, -1))
+                }
+            }
+        except Exception as e:
+            logging.error(f"Error checking status: {e}")
+            return None
+
+    def stop(self):
+        try:
+            self.running = False
+            self.ws_client.disconnect()
+            
+            for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
+                if thread and thread.is_alive():
+                    thread.join(timeout=5)
+            
+            self.redis.clear(preserve_processed=True)
+            return True
+        except Exception as e:
+            logging.error(f"Error stopping {self.source_type}: {e}")
+            return False
         
 
 class DataManager:
@@ -151,7 +242,7 @@ class DataManager:
 
     def initialize_sources(self):
         self.sources['news'] = BenzingaNewsManager(self.historical_range)
-        # self.sources['reports'] = ReportsManager(self.historical_range)
+        self.sources['reports'] = ReportsManager(self.historical_range)
         # Add other sources as needed:
         # self.sources['transcripts'] = TranscriptsManager(self.historical_range)
 

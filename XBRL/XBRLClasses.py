@@ -872,10 +872,10 @@ class process_report:
         except Exception as e:
             print(f"Error initializing company node: {e}")
 
-
+    
     def initialize_admin_reports(self):
         """Initialize admin report hierarchy"""
-        
+           
         # Store admin report nodes in class
         self.admin_reports = [
             # Parent nodes
@@ -902,7 +902,7 @@ class process_report:
         self.neo4j._export_nodes([self.admin_reports])
         self.neo4j.merge_relationships(rels)
 
-
+    ### Need to Add and further classify if it is Sequqnce 1 or 2 etc
     def initialize_report_node(self, cik: str):
         """Initialize report node and link to admin report and date"""
         doc_type, period_end_date, is_amendment = get_report_info(self.model_xbrl)

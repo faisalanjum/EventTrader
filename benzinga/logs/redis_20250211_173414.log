@@ -1,0 +1,10 @@
+2025-02-11 17:34:14,984 - root - INFO - Connected to Redis (prefix=news:live:)
+2025-02-11 17:34:14,986 - root - INFO - Connected to Redis (prefix=news:hist:)
+2025-02-11 17:34:14,987 - root - INFO - Connected to Redis (prefix=config:)
+2025-02-11 17:34:15,000 - root - INFO - Successfully read CSV with 825 rows
+2025-02-11 17:34:15,010 - root - INFO - Successfully initialized stock universe with 825 symbols
+2025-02-11 17:34:15,487 - root - INFO - Connected to Redis (prefix=reports:live:)
+2025-02-11 17:34:15,494 - root - INFO - Connected to Redis (prefix=reports:hist:)
+2025-02-11 17:34:15,504 - root - INFO - Connected to Redis (prefix=config:)
+2025-02-11 17:34:15,514 - root - INFO - Successfully read CSV with 825 rows
+2025-02-11 17:34:15,545 - root - INFO - Successfully initialized stock universe with 825 symbols

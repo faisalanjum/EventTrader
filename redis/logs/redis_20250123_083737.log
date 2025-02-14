@@ -1,0 +1,22 @@
+2025-01-23 08:37:37,820 - root - INFO - Connected to Redis
+2025-01-23 08:37:37,822 - root - INFO - Connected to Redis
+2025-01-23 08:37:37,826 - root - INFO - Connected to Redis
+2025-01-23 08:37:37,828 - root - INFO - Connected to Redis
+2025-01-23 08:37:37,832 - root - INFO - Connected to Redis
+2025-01-23 08:37:37,833 - root - INFO - Attempting to initialize stock universe
+2025-01-23 08:37:37,854 - root - INFO - Successfully read CSV with 40 rows
+2025-01-23 08:37:37,866 - root - INFO - After cleaning and removing duplicates: 38 rows
+2025-01-23 08:37:37,869 - root - INFO - Stored stock universe in Redis. Success: True
+2025-01-23 08:37:37,873 - root - INFO - Stored 38 unique symbols in Redis. Success: True
+2025-01-23 08:37:37,875 - root - INFO - Verification - Universe exists: True, Symbols exist: True
+2025-01-23 08:37:43,129 - root - INFO - Connected to Redis
+2025-01-23 08:37:43,132 - root - INFO - Connected to Redis
+2025-01-23 08:37:43,135 - root - INFO - Connected to Redis
+2025-01-23 08:37:43,138 - root - INFO - Connected to Redis
+2025-01-23 08:37:43,140 - root - INFO - Connected to Redis
+2025-01-23 08:37:43,143 - root - INFO - Attempting to initialize stock universe
+2025-01-23 08:37:43,148 - root - INFO - Successfully read CSV with 40 rows
+2025-01-23 08:37:43,154 - root - INFO - After cleaning and removing duplicates: 38 rows
+2025-01-23 08:37:43,156 - root - INFO - Stored stock universe in Redis. Success: True
+2025-01-23 08:37:43,157 - root - INFO - Stored 38 unique symbols in Redis. Success: True
+2025-01-23 08:37:43,159 - root - INFO - Verification - Universe exists: True, Symbols exist: True
