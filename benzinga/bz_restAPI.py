@@ -228,7 +228,7 @@ class BenzingaNewsRestAPI:
             raw=raw
         )
 
-    # Instead using websocket
+    # Using websocket instead of this
     def stream_news(self, interval: int = 5, tickers: Optional[List[str]] = None, raw: bool = False):
         """Stream news in real-time"""
         last_updated = int(datetime.now(timezone.utc).timestamp()) - 5

@@ -6,11 +6,14 @@ import pandas as pd
 from io import StringIO
 import os
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 from benzinga.bz_news_schemas import UnifiedNews
 from datetime import timezone
 import time
 from utils.redis_constants import RedisKeys, RedisQueues
+from SEC_API_Files.sec_schemas import SECFilingSchema, UnifiedReport
+
+
 
 # Create logs directory if it doesn't exist
 log_dir = "logs"
@@ -164,7 +167,7 @@ class RedisClient:
         )
 
     # Used in bz_websocket.py
-    def set_news(self, news_item: UnifiedNews, ex=None):
+    def set_news(self, news_item: UnifiedNews, ex: int = None) -> bool: 
         """For live news ingestion from WebSocket"""
         try:
             # Replace colons in updated timestamp with dots
@@ -174,7 +177,7 @@ class RedisClient:
             processed_key = f"{self.prefix}processed:{news_item.id}.{updated_key}"            
             if processed_key in self.client.lrange(self.PROCESSED_QUEUE, 0, -1):
                 logging.info(f"Skipping duplicate news (WebSocket): {processed_key}")
-                return True
+                return False
 
             # Store as news:benzinga:live:raw:{id}:{updated}
             storage_key = f"{self.prefix}raw:{news_item.id}.{updated_key}"
@@ -187,6 +190,78 @@ class RedisClient:
         except Exception as e:
             logging.error(f"Live news storage failed: {e}")
             return False
+
+    def set_filing(self, filing: UnifiedReport, ex: int = None) -> bool:
+        """Store SEC filing with proper namespace handling"""
+        try:
+            filed_at = filing.filedAt.replace(':', '.') # 2025-02-13T08:07:15-05:00 -> 2025-02-13T08.07.15-05.00
+
+            # Check processed queue for duplicates
+            processed_key = f"{self.prefix}processed:{filing.accessionNo}.{filed_at}"
+            processed_items = self.client.lrange(self.PROCESSED_QUEUE, 0, -1)
+            print(f"[Redis Debug] Items in PROCESSED_QUEUE: {len(processed_items)}")
+        
+            if processed_key in processed_items:
+                logging.info(f"Skipping duplicate filing: {processed_key}")
+                return False  # ✅ Clearly indicates "not processed"
+            
+            storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"   
+            # print(f"[Redis Debug] Storage key: {storage_key}")
+
+            pipe = self.client.pipeline(transaction=True)
+            pipe.set(storage_key, filing.model_dump_json(), ex=ex)
+            pipe.lpush(self.RAW_QUEUE, storage_key)  # ✅ LPUSH matches LPOP in processor
+            return all(pipe.execute())
+                
+        except Exception as e:
+            logging.error(f"Filing storage failed: {e}")
+            return False
+
+    # def set_filing(self, filing, ex: int = None, raw: bool = False) -> bool:
+    #     """Store filing with proper namespace handling and queue management
+    #     Args:
+    #         filing: SECWebSocketFiling or UnifiedReport instance
+    #         ex: Expiration time in seconds
+    #         raw: If True, store raw filing, else store unified
+    #     Returns:
+    #         bool: Success status
+    #     """
+    #     try:
+    #         # Get filed_at timestamp and format it for key
+    #         filed_at = filing.filedAt.replace(':', '.')
+            
+    #         # Generate storage key based on type
+    #         if raw:
+    #             if not isinstance(filing, SECWebSocketFiling):
+    #                 raise ValueError("Raw filing must be SECWebSocketFiling instance")
+    #             # Store as sec:filings:live:raw:{accessionNo}:{filedAt}
+    #             storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"
+    #             data = filing.model_dump_json()
+    #             queue = self.RAW_QUEUE
+    #         else:
+    #             if not isinstance(filing, UnifiedReport):
+    #                 if not isinstance(filing, SECWebSocketFiling):
+    #                     raise ValueError("Filing must be UnifiedReport or SECWebSocketFiling instance")
+    #                 filing = filing.to_unified()
+    #             # Check for duplicates in processed queue
+    #             processed_key = f"{self.prefix}processed:{filing.accessionNo}.{filed_at}"
+    #             if processed_key in self.client.lrange(self.PROCESSED_QUEUE, 0, -1):
+    #                 logging.info(f"Skipping duplicate filing: {processed_key}")
+    #                 return True
+                    
+    #             storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"
+    #             data = filing.model_dump_json()
+    #             queue = self.RAW_QUEUE
+
+    #         # Store using pipeline for atomicity
+    #         pipe = self.client.pipeline(transaction=True)
+    #         pipe.set(storage_key, data, ex=ex)  # stores the filing content in Redis
+    #         pipe.lpush(queue, storage_key)  # add to appropriate queue
+    #         return all(pipe.execute())
+            
+    #     except Exception as e:
+    #         logging.error(f"Filing storage failed: {e}")
+    #         return False
 
     def set_news_batch(self, news_items: List[UnifiedNews], ex=None):
         """For historical news ingestion"""

@@ -1,0 +1,11 @@
+2025-02-19 06:40:16,312 - root - INFO - Connected to Redis (prefix=)
+2025-02-19 06:40:16,315 - sec_filings - ERROR - Validation error (invalid_form_type): Invalid form type: 4
+2025-02-19 06:40:17,802 - websocket - ERROR - error from callback <bound method SECWebSocket._on_error of <sec_api.sec_websocket.SECWebSocket object at 0x11a71d110>>: 'FilingErrorHandler' object has no attribute 'handle_connection_error'
+2025-02-19 06:40:17,803 - websocket - INFO - tearing down on exception 'FilingErrorHandler' object has no attribute 'handle_connection_error'
+2025-02-19 06:40:17,803 - websocket - ERROR - error from callback <bound method SECWebSocket._on_close of <sec_api.sec_websocket.SECWebSocket object at 0x11a71d110>>: 'FilingErrorHandler' object has no attribute 'print_summary'
+2025-02-19 06:40:21,145 - websocket - ERROR - error from callback <bound method SECWebSocket._on_error of <sec_api.sec_websocket.SECWebSocket object at 0x11a71d110>>: 'FilingErrorHandler' object has no attribute 'handle_connection_error'
+2025-02-19 06:40:21,146 - websocket - INFO - tearing down on exception 'FilingErrorHandler' object has no attribute 'handle_connection_error'
+2025-02-19 06:40:21,146 - websocket - ERROR - error from callback <bound method SECWebSocket._on_close of <sec_api.sec_websocket.SECWebSocket object at 0x11a71d110>>: 'FilingErrorHandler' object has no attribute 'print_summary'
+2025-02-19 06:40:26,299 - websocket - ERROR - error from callback <bound method SECWebSocket._on_error of <sec_api.sec_websocket.SECWebSocket object at 0x11a71d110>>: 'FilingErrorHandler' object has no attribute 'handle_connection_error'
+2025-02-19 06:40:26,300 - websocket - INFO - tearing down on exception 'FilingErrorHandler' object has no attribute 'handle_connection_error'
+2025-02-19 06:40:26,300 - websocket - ERROR - error from callback <bound method SECWebSocket._on_close of <sec_api.sec_websocket.SECWebSocket object at 0x11a71d110>>: 'FilingErrorHandler' object has no attribute 'print_summary'

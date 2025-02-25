@@ -136,7 +136,7 @@ class ReturnsProcessor:
     def _process_hist_news(self, client):
         """Process historical news in batches while maintaining live processing logic"""
         pattern = f"{client.prefix}processed:*"
-        self.logger.info(f"Starting historical news processing with pattern: {pattern}")
+        # self.logger.info(f"Starting historical news processing with pattern: {pattern}")
         
         # 1. Collection Phase
         events = []

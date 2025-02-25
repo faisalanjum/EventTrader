@@ -1,0 +1,1926 @@
+[WebSocket Debug] Received message #30
+[WebSocket Debug] Parsed 1 filings from message
+
+[WebSocket Debug] Processing filing 1/1
+[WebSocket Debug] Form Type: 20-F/A
+[WebSocket Debug] Accession No: 0001140465-25-000042
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: 20-F/A
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+
+Error details: [{'type': 'value_error', 'loc': ('formType',), 'msg': "Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']", 'input': '20-F/A', 'ctx': {'error': ValueError("Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']")}, 'url': 'https://errors.pydantic.dev/2.10/v/value_error'}]
+[WebSocket Debug] ❌ Failed to create UnifiedReport
+[WebSocket Debug] Original filing data: {
+  "id": "89ff61128478ee3fcd2fe7d2d38a36f5",
+  "accessionNo": "0001140465-25-000042",
+  "cik": "1140465",
+  "ticker": "",
+  "companyName": "HSBC BANK PLC",
+  "companyNameLong": "HSBC BANK PLC (Filer)",
+  "formType": "20-F/A",
+  "description": "Form 20-F/A - Annual and transition report of foreign private issuers [Sections 13 or 15(d)]: [Amend]",
+  "filedAt": "2025-02-21T13:25:12-05:00",
+  "linkToTxt": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/0001140465-25-000042.txt",
+  "linkToHtml": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/0001140465-25-000042-index.htm",
+  "linkToXbrl": "",
+  "linkToFilingDetails": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/hbeu-20241231.htm",
+  "entities": [
+    {
+      "companyName": "HSBC BANK PLC (Filer)",
+      "cik": "1140465",
+      "irsNo": "000000000",
+      "stateOfIncorporation": "X0",
+      "fiscalYearEnd": "1231",
+      "type": "20-F/A",
+      "act": "34",
+      "fileNo": "001-12364",
+      "filmNo": "25650368",
+      "sic": "6029 Commercial Banks, NEC",
+      "undefined": "02 Finance)"
+    }
+  ],
+  "documentFormatFiles": [
+    {
+      "sequence": "1",
+      "description": "20-F/A",
+      "documentUrl": "https://www.sec.gov/ix?doc=/Archives/edgar/data/1140465/000114046525000042/hbeu-20241231.htm",
+      "type": "20-F/A",
+      "size": "68315"
+    },
+    {
+      "sequence": "2",
+      "description": "EX-11.1",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun.htm",
+      "type": "EX-11.1",
+      "size": "401508"
+    },
+    {
+      "sequence": "3",
+      "description": "EX-12.1",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit121ceo20-fa.htm",
+      "type": "EX-12.1",
+      "size": "4309"
+    },
+    {
+      "sequence": "4",
+      "description": "EX-12.2",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit122cfo20-fa.htm",
+      "type": "EX-12.2",
+      "size": "4312"
+    },
+    {
+      "sequence": "5",
+      "description": "EX-13.1",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit131sox20-fa.htm",
+      "type": "EX-13.1",
+      "size": "1760"
+    },
+    {
+      "sequence": "10",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun001.jpg",
+      "type": "GRAPHIC",
+      "size": "40806"
+    },
+    {
+      "sequence": "11",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun002.jpg",
+      "type": "GRAPHIC",
+      "size": "152226"
+    },
+    {
+      "sequence": "12",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun003.jpg",
+      "type": "GRAPHIC",
+      "size": "174358"
+    },
+    {
+      "sequence": "13",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun004.jpg",
+      "type": "GRAPHIC",
+      "size": "180318"
+    },
+    {
+      "sequence": "14",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun005.jpg",
+      "type": "GRAPHIC",
+      "size": "186718"
+    },
+    {
+      "sequence": "15",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun006.jpg",
+      "type": "GRAPHIC",
+      "size": "179185"
+    },
+    {
+      "sequence": "16",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun007.jpg",
+      "type": "GRAPHIC",
+      "size": "87240"
+    },
+    {
+      "sequence": "17",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun008.jpg",
+      "type": "GRAPHIC",
+      "size": "201654"
+    },
+    {
+      "sequence": "18",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun009.jpg",
+      "type": "GRAPHIC",
+      "size": "227107"
+    },
+    {
+      "sequence": "19",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun010.jpg",
+      "type": "GRAPHIC",
+      "size": "221505"
+    },
+    {
+      "sequence": "20",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun011.jpg",
+      "type": "GRAPHIC",
+      "size": "228795"
+    },
+    {
+      "sequence": "21",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun012.jpg",
+      "type": "GRAPHIC",
+      "size": "236010"
+    },
+    {
+      "sequence": "22",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun013.jpg",
+      "type": "GRAPHIC",
+      "size": "209312"
+    },
+    {
+      "sequence": "23",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun014.jpg",
+      "type": "GRAPHIC",
+      "size": "209750"
+    },
+    {
+      "sequence": "24",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun015.jpg",
+      "type": "GRAPHIC",
+      "size": "186861"
+    },
+    {
+      "sequence": "25",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun016.jpg",
+      "type": "GRAPHIC",
+      "size": "210638"
+    },
+    {
+      "sequence": "26",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun017.jpg",
+      "type": "GRAPHIC",
+      "size": "251755"
+    },
+    {
+      "sequence": "27",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun018.jpg",
+      "type": "GRAPHIC",
+      "size": "204738"
+    },
+    {
+      "sequence": "28",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun019.jpg",
+      "type": "GRAPHIC",
+      "size": "216528"
+    },
+    {
+      "sequence": "29",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun020.jpg",
+      "type": "GRAPHIC",
+      "size": "228802"
+    },
+    {
+      "sequence": "30",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun021.jpg",
+      "type": "GRAPHIC",
+      "size": "231185"
+    },
+    {
+      "sequence": "31",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun022.jpg",
+      "type": "GRAPHIC",
+      "size": "165140"
+    },
+    {
+      "sequence": "32",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun023.jpg",
+      "type": "GRAPHIC",
+      "size": "190641"
+    },
+    {
+      "sequence": "33",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun024.jpg",
+      "type": "GRAPHIC",
+      "size": "231968"
+    },
+    {
+      "sequence": "34",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun025.jpg",
+      "type": "GRAPHIC",
+      "size": "199820"
+    },
+    {
+      "sequence": "35",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun026.jpg",
+      "type": "GRAPHIC",
+      "size": "242959"
+    },
+    {
+      "sequence": "36",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun027.jpg",
+      "type": "GRAPHIC",
+      "size": "204387"
+    },
+    {
+      "sequence": "37",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun028.jpg",
+      "type": "GRAPHIC",
+      "size": "184035"
+    },
+    {
+      "sequence": "38",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun029.jpg",
+      "type": "GRAPHIC",
+      "size": "168982"
+    },
+    {
+      "sequence": "39",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun030.jpg",
+      "type": "GRAPHIC",
+      "size": "212545"
+    },
+    {
+      "sequence": "40",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun031.jpg",
+      "type": "GRAPHIC",
+      "size": "228083"
+    },
+    {
+      "sequence": "41",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun032.jpg",
+      "type": "GRAPHIC",
+      "size": "230416"
+    },
+    {
+      "sequence": "42",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun033.jpg",
+      "type": "GRAPHIC",
+      "size": "205561"
+    },
+    {
+      "sequence": "43",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun034.jpg",
+      "type": "GRAPHIC",
+      "size": "173980"
+    },
+    {
+      "sequence": "44",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun035.jpg",
+      "type": "GRAPHIC",
+      "size": "239937"
+    },
+    {
+      "sequence": "45",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun036.jpg",
+      "type": "GRAPHIC",
+      "size": "238298"
+    },
+    {
+      "sequence": "46",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun037.jpg",
+      "type": "GRAPHIC",
+      "size": "236371"
+    },
+    {
+      "sequence": "47",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun038.jpg",
+      "type": "GRAPHIC",
+      "size": "180608"
+    },
+    {
+      "sequence": "48",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun039.jpg",
+      "type": "GRAPHIC",
+      "size": "203177"
+    },
+    {
+      "sequence": "49",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun040.jpg",
+      "type": "GRAPHIC",
+      "size": "240483"
+    },
+    {
+      "sequence": "50",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun041.jpg",
+      "type": "GRAPHIC",
+      "size": "223484"
+    },
+    {
+      "sequence": "51",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun042.jpg",
+      "type": "GRAPHIC",
+      "size": "206813"
+    },
+    {
+      "sequence": "52",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun043.jpg",
+      "type": "GRAPHIC",
+      "size": "247188"
+    },
+    {
+      "sequence": "53",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun044.jpg",
+      "type": "GRAPHIC",
+      "size": "225508"
+    },
+    {
+      "sequence": "54",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun045.jpg",
+      "type": "GRAPHIC",
+      "size": "226154"
+    },
+    {
+      "sequence": "55",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun046.jpg",
+      "type": "GRAPHIC",
+      "size": "239999"
+    },
+    {
+      "sequence": "56",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun047.jpg",
+      "type": "GRAPHIC",
+      "size": "252454"
+    },
+    {
+      "sequence": "57",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun048.jpg",
+      "type": "GRAPHIC",
+      "size": "219144"
+    },
+    {
+      "sequence": "58",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun049.jpg",
+      "type": "GRAPHIC",
+      "size": "247247"
+    },
+    {
+      "sequence": "59",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun050.jpg",
+      "type": "GRAPHIC",
+      "size": "234602"
+    },
+    {
+      "sequence": "60",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun051.jpg",
+      "type": "GRAPHIC",
+      "size": "239942"
+    },
+    {
+      "sequence": "61",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun052.jpg",
+      "type": "GRAPHIC",
+      "size": "256186"
+    },
+    {
+      "sequence": "62",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun053.jpg",
+      "type": "GRAPHIC",
+      "size": "216694"
+    },
+    {
+      "sequence": "63",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun054.jpg",
+      "type": "GRAPHIC",
+      "size": "224753"
+    },
+    {
+      "sequence": "64",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun055.jpg",
+      "type": "GRAPHIC",
+      "size": "231913"
+    },
+    {
+      "sequence": "65",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun056.jpg",
+      "type": "GRAPHIC",
+      "size": "229284"
+    },
+    {
+      "sequence": "66",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun057.jpg",
+      "type": "GRAPHIC",
+      "size": "137679"
+    },
+    {
+      "sequence": "67",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun058.jpg",
+      "type": "GRAPHIC",
+      "size": "246256"
+    },
+    {
+      "sequence": "68",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun059.jpg",
+      "type": "GRAPHIC",
+      "size": "259400"
+    },
+    {
+      "sequence": "69",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun060.jpg",
+      "type": "GRAPHIC",
+      "size": "187469"
+    },
+    {
+      "sequence": "70",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun061.jpg",
+      "type": "GRAPHIC",
+      "size": "227900"
+    },
+    {
+      "sequence": "71",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun062.jpg",
+      "type": "GRAPHIC",
+      "size": "237234"
+    },
+    {
+      "sequence": "72",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun063.jpg",
+      "type": "GRAPHIC",
+      "size": "247366"
+    },
+    {
+      "sequence": "73",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun064.jpg",
+      "type": "GRAPHIC",
+      "size": "228883"
+    },
+    {
+      "sequence": "74",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun065.jpg",
+      "type": "GRAPHIC",
+      "size": "235379"
+    },
+    {
+      "sequence": "75",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun066.jpg",
+      "type": "GRAPHIC",
+      "size": "197012"
+    },
+    {
+      "sequence": "76",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun067.jpg",
+      "type": "GRAPHIC",
+      "size": "238778"
+    },
+    {
+      "sequence": "77",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun068.jpg",
+      "type": "GRAPHIC",
+      "size": "233712"
+    },
+    {
+      "sequence": "78",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun069.jpg",
+      "type": "GRAPHIC",
+      "size": "228204"
+    },
+    {
+      "sequence": "79",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun070.jpg",
+      "type": "GRAPHIC",
+      "size": "236209"
+    },
+    {
+      "sequence": "80",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun071.jpg",
+      "type": "GRAPHIC",
+      "size": "197448"
+    },
+    {
+      "sequence": "81",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun072.jpg",
+      "type": "GRAPHIC",
+      "size": "179063"
+    },
+    {
+      "sequence": "82",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun073.jpg",
+      "type": "GRAPHIC",
+      "size": "216069"
+    },
+    {
+      "sequence": "83",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun074.jpg",
+      "type": "GRAPHIC",
+      "size": "202772"
+    },
+    {
+      "sequence": "84",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun075.jpg",
+      "type": "GRAPHIC",
+      "size": "186751"
+    },
+    {
+      "sequence": "85",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun076.jpg",
+      "type": "GRAPHIC",
+      "size": "226274"
+    },
+    {
+      "sequence": "86",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun077.jpg",
+      "type": "GRAPHIC",
+      "size": "248727"
+    },
+    {
+      "sequence": "87",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun078.jpg",
+      "type": "GRAPHIC",
+      "size": "260104"
+    },
+    {
+      "sequence": "88",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun079.jpg",
+      "type": "GRAPHIC",
+      "size": "225277"
+    },
+    {
+      "sequence": "89",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun080.jpg",
+      "type": "GRAPHIC",
+      "size": "221502"
+    },
+    {
+      "sequence": "90",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun081.jpg",
+      "type": "GRAPHIC",
+      "size": "207171"
+    },
+    {
+      "sequence": "91",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun082.jpg",
+      "type": "GRAPHIC",
+      "size": "201060"
+    },
+    {
+      "sequence": "92",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun083.jpg",
+      "type": "GRAPHIC",
+      "size": "222628"
+    },
+    {
+      "sequence": "93",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun084.jpg",
+      "type": "GRAPHIC",
+      "size": "243542"
+    },
+    {
+      "sequence": "94",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun085.jpg",
+      "type": "GRAPHIC",
+      "size": "220966"
+    },
+    {
+      "sequence": "95",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun086.jpg",
+      "type": "GRAPHIC",
+      "size": "219709"
+    },
+    {
+      "sequence": "96",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun087.jpg",
+      "type": "GRAPHIC",
+      "size": "211829"
+    },
+    {
+      "sequence": "97",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun088.jpg",
+      "type": "GRAPHIC",
+      "size": "194527"
+    },
+    {
+      "sequence": "98",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun089.jpg",
+      "type": "GRAPHIC",
+      "size": "227628"
+    },
+    {
+      "sequence": "99",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun090.jpg",
+      "type": "GRAPHIC",
+      "size": "190900"
+    },
+    {
+      "sequence": "100",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun091.jpg",
+      "type": "GRAPHIC",
+      "size": "216403"
+    },
+    {
+      "sequence": "101",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun092.jpg",
+      "type": "GRAPHIC",
+      "size": "240750"
+    },
+    {
+      "sequence": "102",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun093.jpg",
+      "type": "GRAPHIC",
+      "size": "234269"
+    },
+    {
+      "sequence": "103",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun094.jpg",
+      "type": "GRAPHIC",
+      "size": "247452"
+    },
+    {
+      "sequence": "104",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun095.jpg",
+      "type": "GRAPHIC",
+      "size": "240233"
+    },
+    {
+      "sequence": "105",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun096.jpg",
+      "type": "GRAPHIC",
+      "size": "190527"
+    },
+    {
+      "sequence": "106",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun097.jpg",
+      "type": "GRAPHIC",
+      "size": "213116"
+    },
+    {
+      "sequence": "107",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun098.jpg",
+      "type": "GRAPHIC",
+      "size": "222908"
+    },
+    {
+      "sequence": "108",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun099.jpg",
+      "type": "GRAPHIC",
+      "size": "89489"
+    },
+    {
+      "sequence": "109",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun100.jpg",
+      "type": "GRAPHIC",
+      "size": "229235"
+    },
+    {
+      "sequence": "110",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun101.jpg",
+      "type": "GRAPHIC",
+      "size": "262704"
+    },
+    {
+      "sequence": "111",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun102.jpg",
+      "type": "GRAPHIC",
+      "size": "258292"
+    },
+    {
+      "sequence": "112",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun103.jpg",
+      "type": "GRAPHIC",
+      "size": "258995"
+    },
+    {
+      "sequence": "113",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun104.jpg",
+      "type": "GRAPHIC",
+      "size": "281992"
+    },
+    {
+      "sequence": "114",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun105.jpg",
+      "type": "GRAPHIC",
+      "size": "256576"
+    },
+    {
+      "sequence": "115",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun106.jpg",
+      "type": "GRAPHIC",
+      "size": "273386"
+    },
+    {
+      "sequence": "116",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun107.jpg",
+      "type": "GRAPHIC",
+      "size": "268600"
+    },
+    {
+      "sequence": "117",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun108.jpg",
+      "type": "GRAPHIC",
+      "size": "239869"
+    },
+    {
+      "sequence": "118",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun109.jpg",
+      "type": "GRAPHIC",
+      "size": "287088"
+    },
+    {
+      "sequence": "119",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun110.jpg",
+      "type": "GRAPHIC",
+      "size": "269710"
+    },
+    {
+      "sequence": "120",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun111.jpg",
+      "type": "GRAPHIC",
+      "size": "35422"
+    },
+    {
+      "sequence": "121",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun112.jpg",
+      "type": "GRAPHIC",
+      "size": "30351"
+    },
+    {
+      "sequence": "122",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun113.jpg",
+      "type": "GRAPHIC",
+      "size": "233058"
+    },
+    {
+      "sequence": "123",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun114.jpg",
+      "type": "GRAPHIC",
+      "size": "267799"
+    },
+    {
+      "sequence": "124",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun115.jpg",
+      "type": "GRAPHIC",
+      "size": "255717"
+    },
+    {
+      "sequence": "125",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun116.jpg",
+      "type": "GRAPHIC",
+      "size": "248102"
+    },
+    {
+      "sequence": "126",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun117.jpg",
+      "type": "GRAPHIC",
+      "size": "273391"
+    },
+    {
+      "sequence": "127",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun118.jpg",
+      "type": "GRAPHIC",
+      "size": "254281"
+    },
+    {
+      "sequence": "128",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun119.jpg",
+      "type": "GRAPHIC",
+      "size": "278871"
+    },
+    {
+      "sequence": "129",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun120.jpg",
+      "type": "GRAPHIC",
+      "size": "272160"
+    },
+    {
+      "sequence": "130",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun121.jpg",
+      "type": "GRAPHIC",
+      "size": "254102"
+    },
+    {
+      "sequence": "131",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun122.jpg",
+      "type": "GRAPHIC",
+      "size": "248989"
+    },
+    {
+      "sequence": "132",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun123.jpg",
+      "type": "GRAPHIC",
+      "size": "249294"
+    },
+    {
+      "sequence": "133",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit11aoaadopted11jun124.jpg",
+      "type": "GRAPHIC",
+      "size": "193584"
+    },
+    {
+      "sequence": "134",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit121ceo20-fa001.jpg",
+      "type": "GRAPHIC",
+      "size": "194988"
+    },
+    {
+      "sequence": "135",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit121ceo20-fa002.jpg",
+      "type": "GRAPHIC",
+      "size": "68193"
+    },
+    {
+      "sequence": "136",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit122cfo20-fa001.jpg",
+      "type": "GRAPHIC",
+      "size": "194974"
+    },
+    {
+      "sequence": "137",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit122cfo20-fa002.jpg",
+      "type": "GRAPHIC",
+      "size": "68046"
+    },
+    {
+      "sequence": "138",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/exhibit131sox20-fa001.jpg",
+      "type": "GRAPHIC",
+      "size": "99672"
+    },
+    {
+      "sequence": "\u00a0",
+      "description": "Complete submission text file",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/0001140465-25-000042.txt",
+      "type": "\u00a0",
+      "size": "39014926"
+    }
+  ],
+  "dataFiles": [
+    {
+      "sequence": "6",
+      "description": "XBRL TAXONOMY EXTENSION SCHEMA DOCUMENT",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/hbeu-20241231.xsd",
+      "type": "EX-101.SCH",
+      "size": "2015"
+    },
+    {
+      "sequence": "7",
+      "description": "XBRL TAXONOMY EXTENSION DEFINITION LINKBASE DOCUMENT",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/hbeu-20241231_def.xml",
+      "type": "EX-101.DEF",
+      "size": "21787"
+    },
+    {
+      "sequence": "8",
+      "description": "XBRL TAXONOMY EXTENSION LABEL LINKBASE DOCUMENT",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/hbeu-20241231_lab.xml",
+      "type": "EX-101.LAB",
+      "size": "38887"
+    },
+    {
+      "sequence": "9",
+      "description": "XBRL TAXONOMY EXTENSION PRESENTATION LINKBASE DOCUMENT",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/hbeu-20241231_pre.xml",
+      "type": "EX-101.PRE",
+      "size": "23273"
+    },
+    {
+      "sequence": "149",
+      "description": "EXTRACTED XBRL INSTANCE DOCUMENT",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1140465/000114046525000042/hbeu-20241231_htm.xml",
+      "type": "XML",
+      "size": "5445"
+    }
+  ],
+  "seriesAndClassesContractsInformation": [],
+  "periodOfReport": "2024-12-31"
+}
+
+SEC WebSocket Statistics:
+Messages Received: 30
+Filings Processed: 31
+Last Message: 2025-02-21T18:26:10.901178+00:00
+Success Rate: 103.3%
+
+[WebSocket Debug] Received message #31
+[WebSocket Debug] Parsed 1 filings from message
+
+[WebSocket Debug] Processing filing 1/1
+[WebSocket Debug] Form Type: 4
+[WebSocket Debug] Accession No: 0000089089-25-000017
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: 4
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ✅ Successfully created UnifiedReport
+[WebSocket Debug] ✅ Successfully created UnifiedReport
+
+[Redis Debug] Processing filing: 0000089089-25-000017
+[Redis Debug] Filed at: 2025-02-21T18.26.21+00.00
+[Redis Debug] Form Type: 4
+[Redis Debug] Checking for duplicate: reports:live:processed:0000089089-25-000017.2025-02-21T18.26.21+00.00
+[Redis Debug] Current items in processed queue: 0
+[Redis Debug] Processed queue items: []
+[Redis Debug] Storing in raw namespace: reports:live:raw:0000089089-25-000017.2025-02-21T18.26.21+00.00
+[Redis Debug] Filing content preview:
+  - Form Type: 4
+  - CIK: 1966996
+  - Company: Spilde Lori
+[Redis Debug] Current RAW_QUEUE items: []
+[Redis Debug] Storage results:
+  - Set operation: ✅
+  - Queue push: ✅
+[Redis Debug] Overall success: ✅
+[Redis Debug] ✅ Verified storage success
+[Redis Debug] Queue length after push: 0
+[WebSocket Debug] ✅ Successfully stored in Redis
+
+================================================================================
+Form Type: 4
+CIK: 1966996
+Filed At: 2025-02-21T18:26:21+00:00
+Company: Spilde Lori
+Ticker: 
+
+Primary Document URL: https://www.sec.gov/Archives/edgar/data/1966996/000008908925000017/0000089089-25-000017.txt
+================================================================================
+
+
+SEC WebSocket Statistics:
+Messages Received: 31
+Filings Processed: 32
+Last Message: 2025-02-21T18:26:43.180410+00:00
+Success Rate: 103.2%
+
+[WebSocket Debug] Received message #32
+[WebSocket Debug] Parsed 2 filings from message
+
+[WebSocket Debug] Processing filing 1/2
+[WebSocket Debug] Form Type: 4
+[WebSocket Debug] Accession No: 0000089089-25-000017
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: 4
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ✅ Successfully created UnifiedReport
+[WebSocket Debug] ✅ Successfully created UnifiedReport
+
+[Redis Debug] Processing filing: 0000089089-25-000017
+[Redis Debug] Filed at: 2025-02-21T18.26.21+00.00
+[Redis Debug] Form Type: 4
+[Redis Debug] Checking for duplicate: reports:live:processed:0000089089-25-000017.2025-02-21T18.26.21+00.00
+[Redis Debug] Current items in processed queue: 0
+[Redis Debug] Processed queue items: []
+[Redis Debug] Storing in raw namespace: reports:live:raw:0000089089-25-000017.2025-02-21T18.26.21+00.00
+[Redis Debug] Filing content preview:
+  - Form Type: 4
+  - CIK: 89089
+  - Company: SERVICE CORP INTERNATIONAL
+[Redis Debug] Current RAW_QUEUE items: []
+[Redis Debug] Storage results:
+  - Set operation: ✅
+  - Queue push: ✅
+[Redis Debug] Overall success: ✅
+[Redis Debug] ✅ Verified storage success
+[Redis Debug] Queue length after push: 0
+[WebSocket Debug] ✅ Successfully stored in Redis
+
+================================================================================
+Form Type: 4
+CIK: 89089
+Filed At: 2025-02-21T18:26:21+00:00
+Company: SERVICE CORP INTERNATIONAL
+Ticker: SCI
+
+Primary Document URL: https://www.sec.gov/Archives/edgar/data/89089/000008908925000017/0000089089-25-000017.txt
+================================================================================
+
+
+[WebSocket Debug] Processing filing 2/2
+[WebSocket Debug] Form Type: 8-K
+[WebSocket Debug] Accession No: 0001575965-25-000011
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: 8-K
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ✅ Successfully created UnifiedReport
+[WebSocket Debug] ✅ Successfully created UnifiedReport
+
+[Redis Debug] Processing filing: 0001575965-25-000011
+[Redis Debug] Filed at: 2025-02-21T18.26.17+00.00
+[Redis Debug] Form Type: 8-K
+[Redis Debug] Checking for duplicate: reports:live:processed:0001575965-25-000011.2025-02-21T18.26.17+00.00
+[Redis Debug] Current items in processed queue: 0
+[Redis Debug] Processed queue items: []
+[Redis Debug] Storing in raw namespace: reports:live:raw:0001575965-25-000011.2025-02-21T18.26.17+00.00
+[Redis Debug] Filing content preview:
+  - Form Type: 8-K
+  - CIK: 1575965
+  - Company: Gaming & Leisure Properties, Inc.
+[Redis Debug] Current RAW_QUEUE items: []
+[Redis Debug] Storage results:
+  - Set operation: ✅
+  - Queue push: ✅
+[Redis Debug] Overall success: ✅
+[Redis Debug] ✅ Verified storage success
+[Redis Debug] Queue length after push: 0
+[WebSocket Debug] ✅ Successfully stored in Redis
+
+================================================================================
+Form Type: 8-K
+CIK: 1575965
+Filed At: 2025-02-21T18:26:17+00:00
+Company: Gaming & Leisure Properties, Inc.
+Ticker: GLPI
+
+Primary Document URL: https://www.sec.gov/Archives/edgar/data/1575965/000157596525000011/glpi-20250220_htm.xml
+
+Exhibits:
+  EX-99.1: https://www.sec.gov/Archives/edgar/data/1575965/000157596525000011/glpi-20241231ex991.htm
+================================================================================
+
+
+SEC WebSocket Statistics:
+Messages Received: 32
+Filings Processed: 34
+Last Message: 2025-02-21T18:26:43.765650+00:00
+Success Rate: 106.2%
+2025-02-21 23:56:50,624 - sec_filings - ERROR - Validation error (invalid_form_type): 1 validation error for UnifiedReport
+formType
+  Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA'] [type=value_error, input_value='ABS-EE', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+
+[WebSocket Debug] Received message #33
+[WebSocket Debug] Parsed 1 filings from message
+
+[WebSocket Debug] Processing filing 1/1
+[WebSocket Debug] Form Type: ABS-EE
+[WebSocket Debug] Accession No: 0001888524-25-002056
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: ABS-EE
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ❌ UnifiedReport validation failed:
+Error details: [{'type': 'value_error', 'loc': ('formType',), 'msg': "Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']", 'input': 'ABS-EE', 'ctx': {'error': ValueError("Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']")}, 'url': 'https://errors.pydantic.dev/2.10/v/value_error'}]
+[WebSocket Debug] ❌ Failed to create UnifiedReport
+[WebSocket Debug] Original filing data: {
+  "id": "5d80f13888d38600d14ee8a6f5084b78",
+  "accessionNo": "0001888524-25-002056",
+  "cik": "1704459",
+  "ticker": "",
+  "companyName": "GS Mortgage Securities Trust 2017-GS6",
+  "companyNameLong": "GS Mortgage Securities Trust 2017-GS6 (Filer)",
+  "formType": "ABS-EE",
+  "description": "Form ABS-EE - Asset-Backed Electronic Exhibits",
+  "filedAt": "2025-02-21T13:26:25-05:00",
+  "linkToTxt": "https://www.sec.gov/Archives/edgar/data/1704459/000188852425002056/0001888524-25-002056.txt",
+  "linkToHtml": "https://www.sec.gov/Archives/edgar/data/1704459/000188852425002056/0001888524-25-002056-index.htm",
+  "linkToXbrl": "",
+  "linkToFilingDetails": "https://www.sec.gov/Archives/edgar/data/1704459/000188852425002056/gsm17gs6_absee-202502.htm",
+  "entities": [
+    {
+      "companyName": "GS Mortgage Securities Trust 2017-GS6 (Filer)",
+      "cik": "1704459",
+      "stateOfIncorporation": "DE",
+      "fiscalYearEnd": "1231",
+      "type": "ABS-EE",
+      "act": "34",
+      "fileNo": "333-207677-05",
+      "filmNo": "25650371",
+      "sic": "6189 Asset-Backed Securities",
+      "undefined": "Office of Structured Finance)"
+    }
+  ],
+  "documentFormatFiles": [
+    {
+      "sequence": "1",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1704459/000188852425002056/gsm17gs6_absee-202502.htm",
+      "type": "ABS-EE",
+      "size": "4625"
+    },
+    {
+      "sequence": "2",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1704459/000188852425002056/exh_102.xml",
+      "type": "EX-102",
+      "size": "305322"
+    },
+    {
+      "sequence": "3",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1704459/000188852425002056/exh_103.xml",
+      "type": "EX-103",
+      "size": "7376"
+    },
+    {
+      "sequence": "\u00a0",
+      "description": "Complete submission text file",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1704459/000188852425002056/0001888524-25-002056.txt",
+      "type": "\u00a0",
+      "size": "318660"
+    }
+  ],
+  "dataFiles": [],
+  "seriesAndClassesContractsInformation": [],
+  "periodOfReport": "2025-02-12"
+}
+
+SEC WebSocket Statistics:
+Messages Received: 33
+Filings Processed: 34
+Last Message: 2025-02-21T18:26:50.623189+00:00
+Success Rate: 103.0%
+2025-02-21 23:56:52,553 - sec_filings - ERROR - Validation error (invalid_form_type): 1 validation error for UnifiedReport
+formType
+  Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA'] [type=value_error, input_value='FWP', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+
+[WebSocket Debug] Received message #34
+[WebSocket Debug] Parsed 1 filings from message
+
+[WebSocket Debug] Processing filing 1/1
+[WebSocket Debug] Form Type: FWP
+[WebSocket Debug] Accession No: 0001104659-25-016026
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: FWP
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ❌ UnifiedReport validation failed:
+Error details: [{'type': 'value_error', 'loc': ('formType',), 'msg': "Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']", 'input': 'FWP', 'ctx': {'error': ValueError("Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']")}, 'url': 'https://errors.pydantic.dev/2.10/v/value_error'}]
+[WebSocket Debug] ❌ Failed to create UnifiedReport
+[WebSocket Debug] Original filing data: {
+  "id": "12762483c405285997f4d3e26442f025",
+  "accessionNo": "0001104659-25-016026",
+  "cik": "1129987",
+  "ticker": "",
+  "companyName": "FORD CREDIT AUTO RECEIVABLES TWO LLC",
+  "companyNameLong": "FORD CREDIT AUTO RECEIVABLES TWO LLC (Filed by)",
+  "formType": "FWP",
+  "description": "Form FWP - Filing under Securities Act Rules 163/433 of free writing prospectuses",
+  "filedAt": "2025-02-21T13:26:32-05:00",
+  "linkToTxt": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/0001104659-25-016026.txt",
+  "linkToHtml": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/0001104659-25-016026-index.htm",
+  "linkToXbrl": "",
+  "linkToFilingDetails": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwp.htm",
+  "entities": [
+    {
+      "companyName": "FORD CREDIT AUTO RECEIVABLES TWO LLC (Filed by)",
+      "cik": "1129987",
+      "irsNo": "383574956",
+      "fiscalYearEnd": "1231",
+      "type": "FWP",
+      "sic": "6189 Asset-Backed Securities",
+      "undefined": "Office of Structured Finance)"
+    },
+    {
+      "companyName": "FORD CREDIT AUTO RECEIVABLES TWO LLC (Subject)",
+      "cik": "1129987",
+      "irsNo": "383574956",
+      "fiscalYearEnd": "1231",
+      "type": "FWP",
+      "act": "34",
+      "fileNo": "333-281130",
+      "filmNo": "25650372",
+      "sic": "6189 Asset-Backed Securities",
+      "undefined": "Office of Structured Finance)"
+    }
+  ],
+  "documentFormatFiles": [
+    {
+      "sequence": "1",
+      "description": "FWP",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwp.htm",
+      "type": "FWP",
+      "size": "17921"
+    },
+    {
+      "sequence": "2",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg001.jpg",
+      "type": "GRAPHIC",
+      "size": "55240"
+    },
+    {
+      "sequence": "3",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg002.jpg",
+      "type": "GRAPHIC",
+      "size": "129575"
+    },
+    {
+      "sequence": "4",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg003.jpg",
+      "type": "GRAPHIC",
+      "size": "131626"
+    },
+    {
+      "sequence": "5",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg004.jpg",
+      "type": "GRAPHIC",
+      "size": "101622"
+    },
+    {
+      "sequence": "6",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg005.jpg",
+      "type": "GRAPHIC",
+      "size": "135150"
+    },
+    {
+      "sequence": "7",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg006.jpg",
+      "type": "GRAPHIC",
+      "size": "165922"
+    },
+    {
+      "sequence": "8",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg007.jpg",
+      "type": "GRAPHIC",
+      "size": "159044"
+    },
+    {
+      "sequence": "9",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg008.jpg",
+      "type": "GRAPHIC",
+      "size": "157205"
+    },
+    {
+      "sequence": "10",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg009.jpg",
+      "type": "GRAPHIC",
+      "size": "153498"
+    },
+    {
+      "sequence": "11",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg010.jpg",
+      "type": "GRAPHIC",
+      "size": "71125"
+    },
+    {
+      "sequence": "12",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg011.jpg",
+      "type": "GRAPHIC",
+      "size": "186801"
+    },
+    {
+      "sequence": "13",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg012.jpg",
+      "type": "GRAPHIC",
+      "size": "214471"
+    },
+    {
+      "sequence": "14",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/tm257267d1_fwpimg013.jpg",
+      "type": "GRAPHIC",
+      "size": "193330"
+    },
+    {
+      "sequence": "\u00a0",
+      "description": "Complete submission text file",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/1129987/000110465925016026/0001104659-25-016026.txt",
+      "type": "\u00a0",
+      "size": "2575321"
+    }
+  ],
+  "dataFiles": [],
+  "seriesAndClassesContractsInformation": []
+}
+
+SEC WebSocket Statistics:
+Messages Received: 34
+Filings Processed: 34
+Last Message: 2025-02-21T18:26:52.552867+00:00
+Success Rate: 100.0%
+
+[WebSocket Debug] Received message #35
+[WebSocket Debug] Parsed 1 filings from message
+
+[WebSocket Debug] Processing filing 1/1
+[WebSocket Debug] Form Type: DFAN14A
+[WebSocket Debug] Accession No: 0001437749-25-004707
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: DFAN14A
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ✅ Successfully created UnifiedReport
+[WebSocket Debug] ✅ Successfully created UnifiedReport
+
+[Redis Debug] Processing filing: 0001437749-25-004707
+[Redis Debug] Filed at: 2025-02-21T18.26.38+00.00
+[Redis Debug] Form Type: DFAN14A
+[Redis Debug] Checking for duplicate: reports:live:processed:0001437749-25-004707.2025-02-21T18.26.38+00.00
+[Redis Debug] Current items in processed queue: 0
+[Redis Debug] Processed queue items: []
+[Redis Debug] Storing in raw namespace: reports:live:raw:0001437749-25-004707.2025-02-21T18.26.38+00.00
+[Redis Debug] Filing content preview:
+  - Form Type: DFAN14A
+  - CIK: 89140
+  - Company: SERVOTRONICS INC /DE/
+[Redis Debug] Current RAW_QUEUE items: []
+[Redis Debug] Storage results:
+  - Set operation: ✅
+  - Queue push: ✅
+[Redis Debug] Overall success: ✅
+[Redis Debug] ✅ Verified storage success
+[Redis Debug] Queue length after push: 0
+[WebSocket Debug] ✅ Successfully stored in Redis
+
+================================================================================
+Form Type: DFAN14A
+CIK: 89140
+Filed At: 2025-02-21T18:26:38+00:00
+Company: SERVOTRONICS INC /DE/
+Ticker: SVT
+
+Primary Document URL: https://www.sec.gov/Archives/edgar/data/89140/000143774925004707/0001437749-25-004707.txt
+================================================================================
+
+
+SEC WebSocket Statistics:
+Messages Received: 35
+Filings Processed: 35
+Last Message: 2025-02-21T18:27:06.247164+00:00
+Success Rate: 100.0%
+
+[WebSocket Debug] Received message #36
+[WebSocket Debug] Parsed 1 filings from message
+
+[WebSocket Debug] Processing filing 1/1
+[WebSocket Debug] Form Type: DFAN14A
+[WebSocket Debug] Accession No: 0001437749-25-004707
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: DFAN14A
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ✅ Successfully created UnifiedReport
+[WebSocket Debug] ✅ Successfully created UnifiedReport
+
+[Redis Debug] Processing filing: 0001437749-25-004707
+[Redis Debug] Filed at: 2025-02-21T18.26.38+00.00
+[Redis Debug] Form Type: DFAN14A
+[Redis Debug] Checking for duplicate: reports:live:processed:0001437749-25-004707.2025-02-21T18.26.38+00.00
+[Redis Debug] Current items in processed queue: 0
+[Redis Debug] Processed queue items: []
+[Redis Debug] Storing in raw namespace: reports:live:raw:0001437749-25-004707.2025-02-21T18.26.38+00.00
+[Redis Debug] Filing content preview:
+  - Form Type: DFAN14A
+  - CIK: 1956975
+  - Company: Beaver Hollow Wellness, LLC
+[Redis Debug] Current RAW_QUEUE items: []
+[Redis Debug] Storage results:
+  - Set operation: ✅
+  - Queue push: ✅
+[Redis Debug] Overall success: ✅
+[Redis Debug] ✅ Verified storage success
+[Redis Debug] Queue length after push: 0
+[WebSocket Debug] ✅ Successfully stored in Redis
+
+================================================================================
+Form Type: DFAN14A
+CIK: 1956975
+Filed At: 2025-02-21T18:26:38+00:00
+Company: Beaver Hollow Wellness, LLC
+Ticker: 
+
+Primary Document URL: https://www.sec.gov/Archives/edgar/data/1956975/000143774925004707/0001437749-25-004707.txt
+================================================================================
+
+
+SEC WebSocket Statistics:
+Messages Received: 36
+Filings Processed: 36
+Last Message: 2025-02-21T18:27:07.265787+00:00
+Success Rate: 100.0%
+
+[WebSocket Debug] Received message #37
+[WebSocket Debug] Parsed 1 filings from message
+
+[WebSocket Debug] Processing filing 1/1
+[WebSocket Debug] Form Type: D
+[WebSocket Debug] Accession No: 0001104659-25-016027
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: D
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ✅ Successfully created UnifiedReport
+[WebSocket Debug] ✅ Successfully created UnifiedReport
+
+[Redis Debug] Processing filing: 0001104659-25-016027
+[Redis Debug] Filed at: 2025-02-21T18.26.48+00.00
+[Redis Debug] Form Type: D
+[Redis Debug] Checking for duplicate: reports:live:processed:0001104659-25-016027.2025-02-21T18.26.48+00.00
+[Redis Debug] Current items in processed queue: 0
+[Redis Debug] Processed queue items: []
+[Redis Debug] Storing in raw namespace: reports:live:raw:0001104659-25-016027.2025-02-21T18.26.48+00.00
+[Redis Debug] Filing content preview:
+  - Form Type: D
+  - CIK: 2057301
+  - Company: Sunbelt MOB 1 Buligo LP
+[Redis Debug] Current RAW_QUEUE items: []
+[Redis Debug] Storage results:
+  - Set operation: ✅
+  - Queue push: ✅
+[Redis Debug] Overall success: ✅
+[Redis Debug] ✅ Verified storage success
+[Redis Debug] Queue length after push: 0
+[WebSocket Debug] ✅ Successfully stored in Redis
+
+================================================================================
+Form Type: D
+CIK: 2057301
+Filed At: 2025-02-21T18:26:48+00:00
+Company: Sunbelt MOB 1 Buligo LP
+Ticker: 
+
+Primary Document URL: https://www.sec.gov/Archives/edgar/data/2057301/000110465925016027/0001104659-25-016027.txt
+================================================================================
+
+
+SEC WebSocket Statistics:
+Messages Received: 37
+Filings Processed: 37
+Last Message: 2025-02-21T18:27:07.787572+00:00
+Success Rate: 100.0%
+
+[WebSocket Debug] Received message #38
+[WebSocket Debug] Parsed 0 filings from message
+
+SEC WebSocket Statistics:
+Messages Received: 38
+Filings Processed: 37
+Last Message: 2025-02-21T18:27:08.295942+00:00
+Success Rate: 97.4%
+2025-02-21 23:57:30,681 - sec_filings - ERROR - Validation error (invalid_form_type): 1 validation error for UnifiedReport
+formType
+  Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA'] [type=value_error, input_value='424B2', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2025-02-21 23:57:30,683 - sec_filings - ERROR - Validation error (invalid_form_type): 1 validation error for UnifiedReport
+formType
+  Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA'] [type=value_error, input_value='424B2', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+
+[WebSocket Debug] Received message #39
+[WebSocket Debug] Parsed 2 filings from message
+
+[WebSocket Debug] Processing filing 1/2
+[WebSocket Debug] Form Type: 424B2
+[WebSocket Debug] Accession No: 0001839882-25-010288
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: 424B2
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ❌ UnifiedReport validation failed:
+Error details: [{'type': 'value_error', 'loc': ('formType',), 'msg': "Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']", 'input': '424B2', 'ctx': {'error': ValueError("Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']")}, 'url': 'https://errors.pydantic.dev/2.10/v/value_error'}]
+[WebSocket Debug] ❌ Failed to create UnifiedReport
+[WebSocket Debug] Original filing data: {
+  "id": "ba6742dcc5e141b6bfaad43b5766e207",
+  "accessionNo": "0001839882-25-010288",
+  "cik": "1666268",
+  "ticker": "",
+  "companyName": "Morgan Stanley Finance LLC",
+  "companyNameLong": "Morgan Stanley Finance LLC (Filer)",
+  "formType": "424B2",
+  "description": "Form 424B2 - Prospectus [Rule 424(b)(2)]",
+  "filedAt": "2025-02-21T13:27:11-05:00",
+  "linkToTxt": "https://www.sec.gov/Archives/edgar/data/1666268/000183988225010288/0001839882-25-010288.txt",
+  "linkToHtml": "https://www.sec.gov/Archives/edgar/data/1666268/000183988225010288/0001839882-25-010288-index.htm",
+  "linkToXbrl": "",
+  "linkToFilingDetails": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/ms6669_424b2-05318.htm",
+  "entities": [
+    {
+      "companyName": "MORGAN STANLEY (Filer)",
+      "cik": "895421",
+      "irsNo": "363145972",
+      "stateOfIncorporation": "DE",
+      "fiscalYearEnd": "1231",
+      "type": "424B2",
+      "act": "33",
+      "fileNo": "333-275587",
+      "filmNo": "25650375",
+      "sic": "6211 Security Brokers, Dealers &amp; Flotation Companies",
+      "undefined": "02 Finance)"
+    },
+    {
+      "companyName": "Morgan Stanley Finance LLC (Filer)",
+      "cik": "1666268",
+      "irsNo": "363145972",
+      "stateOfIncorporation": "DE",
+      "fiscalYearEnd": "1231",
+      "type": "424B2",
+      "act": "33",
+      "fileNo": "333-275587-01",
+      "filmNo": "25650376",
+      "sic": "6189 Asset-Backed Securities",
+      "undefined": "Office of Structured Finance)"
+    }
+  ],
+  "documentFormatFiles": [
+    {
+      "sequence": "1",
+      "description": "PRELIMINARY PRICING SUPPLEMENT NO. 6,669",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/ms6669_424b2-05318.htm",
+      "type": "424B2",
+      "size": "184488"
+    },
+    {
+      "sequence": "2",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/image1.gif",
+      "type": "GRAPHIC",
+      "size": "28714"
+    },
+    {
+      "sequence": "3",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/image2.gif",
+      "type": "GRAPHIC",
+      "size": "91958"
+    },
+    {
+      "sequence": "4",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/image3.gif",
+      "type": "GRAPHIC",
+      "size": "81002"
+    },
+    {
+      "sequence": "\u00a0",
+      "description": "Complete submission text file",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/0001839882-25-010288.txt",
+      "type": "\u00a0",
+      "size": "464107"
+    }
+  ],
+  "dataFiles": [],
+  "seriesAndClassesContractsInformation": []
+}
+
+[WebSocket Debug] Processing filing 2/2
+[WebSocket Debug] Form Type: 424B2
+[WebSocket Debug] Accession No: 0001839882-25-010288
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: 424B2
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ❌ UnifiedReport validation failed:
+Error details: [{'type': 'value_error', 'loc': ('formType',), 'msg': "Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']", 'input': '424B2', 'ctx': {'error': ValueError("Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']")}, 'url': 'https://errors.pydantic.dev/2.10/v/value_error'}]
+[WebSocket Debug] ❌ Failed to create UnifiedReport
+[WebSocket Debug] Original filing data: {
+  "id": "8f2d95f66eaf625d0721e8179df2ea98",
+  "accessionNo": "0001839882-25-010288",
+  "cik": "895421",
+  "ticker": "MS",
+  "companyName": "MORGAN STANLEY",
+  "companyNameLong": "MORGAN STANLEY (Filer)",
+  "formType": "424B2",
+  "description": "Form 424B2 - Prospectus [Rule 424(b)(2)]",
+  "filedAt": "2025-02-21T13:27:11-05:00",
+  "linkToTxt": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/0001839882-25-010288.txt",
+  "linkToHtml": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/0001839882-25-010288-index.htm",
+  "linkToXbrl": "",
+  "linkToFilingDetails": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/ms6669_424b2-05318.htm",
+  "entities": [
+    {
+      "companyName": "MORGAN STANLEY (Filer)",
+      "cik": "895421",
+      "irsNo": "363145972",
+      "stateOfIncorporation": "DE",
+      "fiscalYearEnd": "1231",
+      "type": "424B2",
+      "act": "33",
+      "fileNo": "333-275587",
+      "filmNo": "25650375",
+      "sic": "6211 Security Brokers, Dealers &amp; Flotation Companies",
+      "undefined": "02 Finance)"
+    },
+    {
+      "companyName": "Morgan Stanley Finance LLC (Filer)",
+      "cik": "1666268",
+      "irsNo": "363145972",
+      "stateOfIncorporation": "DE",
+      "fiscalYearEnd": "1231",
+      "type": "424B2",
+      "act": "33",
+      "fileNo": "333-275587-01",
+      "filmNo": "25650376",
+      "sic": "6189 Asset-Backed Securities",
+      "undefined": "Office of Structured Finance)"
+    }
+  ],
+  "documentFormatFiles": [
+    {
+      "sequence": "1",
+      "description": "PRELIMINARY PRICING SUPPLEMENT NO. 6,669",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/ms6669_424b2-05318.htm",
+      "type": "424B2",
+      "size": "184488"
+    },
+    {
+      "sequence": "2",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/image1.gif",
+      "type": "GRAPHIC",
+      "size": "28714"
+    },
+    {
+      "sequence": "3",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/image2.gif",
+      "type": "GRAPHIC",
+      "size": "91958"
+    },
+    {
+      "sequence": "4",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/image3.gif",
+      "type": "GRAPHIC",
+      "size": "81002"
+    },
+    {
+      "sequence": "\u00a0",
+      "description": "Complete submission text file",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/895421/000183988225010288/0001839882-25-010288.txt",
+      "type": "\u00a0",
+      "size": "464107"
+    }
+  ],
+  "dataFiles": [],
+  "seriesAndClassesContractsInformation": []
+}
+
+SEC WebSocket Statistics:
+Messages Received: 39
+Filings Processed: 37
+Last Message: 2025-02-21T18:27:30.680869+00:00
+Success Rate: 94.9%
+2025-02-21 23:57:44,508 - sec_filings - ERROR - Validation error (invalid_form_type): 1 validation error for UnifiedReport
+formType
+  Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA'] [type=value_error, input_value='424B2', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+
+[WebSocket Debug] Received message #40
+[WebSocket Debug] Parsed 1 filings from message
+
+[WebSocket Debug] Processing filing 1/1
+[WebSocket Debug] Form Type: 424B2
+[WebSocket Debug] Accession No: 0000950170-25-024705
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: 424B2
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ❌ UnifiedReport validation failed:
+Error details: [{'type': 'value_error', 'loc': ('formType',), 'msg': "Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']", 'input': '424B2', 'ctx': {'error': ValueError("Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']")}, 'url': 'https://errors.pydantic.dev/2.10/v/value_error'}]
+[WebSocket Debug] ❌ Failed to create UnifiedReport
+[WebSocket Debug] Original filing data: {
+  "id": "73c9e924cc852f6291649322bfc264a6",
+  "accessionNo": "0000950170-25-024705",
+  "cik": "886982",
+  "ticker": "GS",
+  "companyName": "GOLDMAN SACHS GROUP INC",
+  "companyNameLong": "GOLDMAN SACHS GROUP INC (Filer)",
+  "formType": "424B2",
+  "description": "Form 424B2 - Prospectus [Rule 424(b)(2)]",
+  "filedAt": "2025-02-21T13:27:19-05:00",
+  "linkToTxt": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/0000950170-25-024705.txt",
+  "linkToHtml": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/0000950170-25-024705-index.htm",
+  "linkToXbrl": "",
+  "linkToFilingDetails": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/avtrca01_prelim.htm",
+  "entities": [
+    {
+      "companyName": "GOLDMAN SACHS GROUP INC (Filer)",
+      "cik": "886982",
+      "irsNo": "134019460",
+      "stateOfIncorporation": "DE",
+      "fiscalYearEnd": "1231",
+      "type": "424B2",
+      "act": "33",
+      "fileNo": "333-284538",
+      "filmNo": "25650377",
+      "sic": "6211 Security Brokers, Dealers &amp; Flotation Companies",
+      "undefined": "02 Finance)"
+    },
+    {
+      "companyName": "GS Finance Corp. (Filer)",
+      "cik": "1419828",
+      "irsNo": "260785112",
+      "stateOfIncorporation": "DE",
+      "fiscalYearEnd": "1130",
+      "sic": "6211 Security Brokers, Dealers &amp; Flotation Companies",
+      "undefined": "02 Finance)"
+    }
+  ],
+  "documentFormatFiles": [
+    {
+      "sequence": "1",
+      "description": "424B2",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/avtrca01_prelim.htm",
+      "type": "424B2",
+      "size": "479543"
+    },
+    {
+      "sequence": "2",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/img51442458_0.jpg",
+      "type": "GRAPHIC",
+      "size": "26162"
+    },
+    {
+      "sequence": "3",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/img51442458_1.jpg",
+      "type": "GRAPHIC",
+      "size": "89892"
+    },
+    {
+      "sequence": "4",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/img51442458_2.jpg",
+      "type": "GRAPHIC",
+      "size": "6872"
+    },
+    {
+      "sequence": "\u00a0",
+      "description": "Complete submission text file",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/0000950170-25-024705.txt",
+      "type": "\u00a0",
+      "size": "651089"
+    }
+  ],
+  "dataFiles": [],
+  "seriesAndClassesContractsInformation": []
+}
+
+SEC WebSocket Statistics:
+Messages Received: 40
+Filings Processed: 37
+Last Message: 2025-02-21T18:27:44.506477+00:00
+Success Rate: 92.5%
+2025-02-21 23:57:45,929 - sec_filings - ERROR - Validation error (invalid_form_type): 1 validation error for UnifiedReport
+formType
+  Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA'] [type=value_error, input_value='424B2', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+
+[WebSocket Debug] Received message #41
+[WebSocket Debug] Parsed 1 filings from message
+
+[WebSocket Debug] Processing filing 1/1
+[WebSocket Debug] Form Type: 424B2
+[WebSocket Debug] Accession No: 0000950170-25-024705
+
+[Filing Debug] Attempting to create SECWebSocketFiling
+[Filing Debug] Form Type: 424B2
+[Filing Debug] Required fields present:
+  - accessionNo: True
+  - cik: True
+  - filedAt: True
+[Filing Debug] Converting to UnifiedReport
+[Filing Debug] ❌ UnifiedReport validation failed:
+Error details: [{'type': 'value_error', 'loc': ('formType',), 'msg': "Value error, Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']", 'input': '424B2', 'ctx': {'error': ValueError("Form type must be one of ['4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8', 'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G', '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR', 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC 13D', 'SC 13D/A', 'SC TO-I', 'SC TO-I/A', 'SC 14D9', 'SC 14D9/A', 'DEF 14A', 'DEFA14A', 'DEFM14A', 'DEFR14A', '40-17G', '40-17G/A', 'N-1A', 'N-1A/A', 'N-2', 'N-2/A', 'N-14', 'N-14/A', 'POS EX', 'S-3ASR', 'S-8 POS', 'CORRESP', 'UPLOAD', 'ATS-N', 'ATS-N/MA']")}, 'url': 'https://errors.pydantic.dev/2.10/v/value_error'}]
+[WebSocket Debug] ❌ Failed to create UnifiedReport
+[WebSocket Debug] Original filing data: {
+  "id": "2affc67cfc9ea2b6bf39b50be3a15fd4",
+  "accessionNo": "0000950170-25-024705",
+  "cik": "1419828",
+  "ticker": "",
+  "companyName": "GS Finance Corp.",
+  "companyNameLong": "GS Finance Corp. (Filer)",
+  "formType": "424B2",
+  "description": "Form 424B2 - Prospectus [Rule 424(b)(2)]",
+  "filedAt": "2025-02-21T13:27:19-05:00",
+  "linkToTxt": "https://www.sec.gov/Archives/edgar/data/1419828/000095017025024705/0000950170-25-024705.txt",
+  "linkToHtml": "https://www.sec.gov/Archives/edgar/data/1419828/000095017025024705/0000950170-25-024705-index.htm",
+  "linkToXbrl": "",
+  "linkToFilingDetails": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/avtrca01_prelim.htm",
+  "entities": [
+    {
+      "companyName": "GOLDMAN SACHS GROUP INC (Filer)",
+      "cik": "886982",
+      "irsNo": "134019460",
+      "stateOfIncorporation": "DE",
+      "fiscalYearEnd": "1231",
+      "type": "424B2",
+      "act": "33",
+      "fileNo": "333-284538",
+      "filmNo": "25650377",
+      "sic": "6211 Security Brokers, Dealers &amp; Flotation Companies",
+      "undefined": "02 Finance)"
+    },
+    {
+      "companyName": "GS Finance Corp. (Filer)",
+      "cik": "1419828",
+      "irsNo": "260785112",
+      "stateOfIncorporation": "DE",
+      "fiscalYearEnd": "1130",
+      "type": "424B2",
+      "act": "33",
+      "fileNo": "333-284538-03",
+      "filmNo": "25650378",
+      "sic": "6211 Security Brokers, Dealers &amp; Flotation Companies",
+      "undefined": "02 Finance)"
+    }
+  ],
+  "documentFormatFiles": [
+    {
+      "sequence": "1",
+      "description": "424B2",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/avtrca01_prelim.htm",
+      "type": "424B2",
+      "size": "479543"
+    },
+    {
+      "sequence": "2",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/img51442458_0.jpg",
+      "type": "GRAPHIC",
+      "size": "26162"
+    },
+    {
+      "sequence": "3",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/img51442458_1.jpg",
+      "type": "GRAPHIC",
+      "size": "89892"
+    },
+    {
+      "sequence": "4",
+      "description": "GRAPHIC",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/img51442458_2.jpg",
+      "type": "GRAPHIC",
+      "size": "6872"
+    },
+    {
+      "sequence": "\u00a0",
+      "description": "Complete submission text file",
+      "documentUrl": "https://www.sec.gov/Archives/edgar/data/886982/000095017025024705/0000950170-25-024705.txt",
+      "type": "\u00a0",
+      "size": "651089"
+    }
+  ],
+  "dataFiles": [],
+  "seriesAndClassesContractsInformation": []
+}
+
+SEC WebSocket Statistics:
+Messages Received: 41
+Filings Processed: 37
+Last Message: 2025-02-21T18:27:45.927613+00:00
+Success Rate: 90.2%

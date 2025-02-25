@@ -1,1 +1,1 @@
-from .bz_websocket import BenzingaWebSocket
+from .bz_news_schemas import UnifiedNews, BzWebSocketNews

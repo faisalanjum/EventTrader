@@ -10,7 +10,6 @@ import pytz
 from dateutil import parser
 from utils.metadata_fields import MetadataFields
 
-
 class BaseProcessor(ABC):
     """Base class for all processors (news, reports, transcripts)"""
     
@@ -61,10 +60,24 @@ class BaseProcessor(ABC):
         """Generic version of process_all_news"""
         self.logger.info(f"Starting processing for {self.source_type} from {self.queue_client.RAW_QUEUE}")
         consecutive_errors = 0
-        
+
+        print(f"\n[Processor Debug] Starting processor")
+        print(f"[Processor Debug] Source type: {self.source_type}")
+        print(f"[Processor Debug] Queue client prefix: {self.queue_client.prefix}")
+        print(f"[Processor Debug] Watching queue: {self.queue_client.RAW_QUEUE}")
+
+
         while self.should_run:
             try:
                 result = self.queue_client.pop_from_queue(self.queue_client.RAW_QUEUE, timeout=1)
+                
+
+                if result:
+                    print(f"[Processor Debug] Popped item: {result}")
+                else:
+                    print(f"[Processor Debug] No items in queue after timeout")
+
+
                 if not result:
                     continue
 
@@ -102,9 +115,10 @@ class BaseProcessor(ABC):
 
             content_dict = json.loads(raw_content)
 
-            # 2. First standardize fields
+            # 2. First standardize fields - Important to do this before checking symbols
             standardized_dict = self._standardize_fields(content_dict)
 
+            print(f"[^BASE Processor Debug] Standardized dict: {standardized_dict}")
 
             # 3. Check if any valid symbols exist
             if not self._has_valid_symbols(standardized_dict):
@@ -112,7 +126,6 @@ class BaseProcessor(ABC):
                 client.delete(raw_key)
                 return True  # Item exits raw queue naturally
                 # No tracking maintained, never enters processed queue
-
 
             # 4. Clean content - Source specific
             processed_dict = self._clean_content(standardized_dict)

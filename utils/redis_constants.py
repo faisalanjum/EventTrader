@@ -4,7 +4,7 @@ class RedisKeys:
     # Source Types
     # SOURCE_NEWS = 'news:benzinga'
     SOURCE_NEWS = 'news'
-    SOURCE_REPORTS = 'reports'
+    SOURCE_REPORTS = 'reports' # Used for SEC filings
     SOURCE_TRANSCRIPTS = 'transcripts'
     
     # Key Suffixes
