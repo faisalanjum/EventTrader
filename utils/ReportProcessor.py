@@ -5,9 +5,9 @@ import html
 import unicodedata
 import time
 from typing import Optional, Dict, List
-from SEC_API_Files.sec_schemas import UnifiedReport, VALID_FORM_TYPES, FORM_TYPES_REQUIRING_SECTIONS
+from SEC_API_Files.sec_schemas import UnifiedReport, VALID_FORM_TYPES, FORM_TYPES_REQUIRING_SECTIONS, FORM_TYPES_REQUIRING_XML
 from SEC_API_Files.reportSections import ten_k_sections, ten_q_sections, eight_k_sections
-from sec_api import ExtractorApi
+from sec_api import ExtractorApi, XbrlApi
 from eventtrader.keys import SEC_API_KEY
 from multiprocessing import Pool
 
@@ -70,6 +70,7 @@ class ReportProcessor(BaseProcessor):
         # Pass all parameters to parent class
         super().__init__(event_trader_redis, delete_raw)
         self.extractor = ExtractorApi(SEC_API_KEY) if SEC_API_KEY else None
+        self.xbrl_api = XbrlApi(SEC_API_KEY) if SEC_API_KEY else None
 
 
 
@@ -234,6 +235,35 @@ class ReportProcessor(BaseProcessor):
 
 
 
+    def _get_financial_statements(self, accession_no: str, cik: str) -> Optional[Dict]:
+        """Extract financial statements from XBRL data"""
+        try:
+            if not self.xbrl_api:
+                self.logger.warning("SEC XBRL API not initialized - missing API key")
+                return None
+
+            xbrl_json = self.xbrl_api.xbrl_to_json(accession_no=accession_no)
+            
+            # Normalize CIK format by removing leading zeros and converting to string
+            xbrl_cik = str(int(xbrl_json.get('CoverPage', {}).get('EntityCentralIndexKey', '0')))
+            input_cik = str(int(cik)) if cik else '0'
+            
+            # Compare normalized CIKs
+            if xbrl_cik != input_cik:
+                self.logger.warning(f"CIK mismatch in XBRL data for accession {accession_no}. Input CIK: {input_cik}, XBRL CIK: {xbrl_cik}")
+                return None
+                
+            financial_statements = {}
+            for statement in ['BalanceSheets', 'StatementsOfIncome', 'StatementsOfShareholdersEquity', 'StatementsOfCashFlows']:
+                if statement_data := xbrl_json.get(statement):
+                    financial_statements[statement] = statement_data
+                    
+            return financial_statements if financial_statements else None
+                    
+        except Exception as e:
+            self.logger.error(f"Error extracting XBRL data for accession {accession_no}: {e}")
+            return None
+
     def _standardize_fields(self, content: dict) -> dict:
         """Transform SEC fields while preserving original data.
         Note: If primary ticker (from cik) not in allowed_symbols, it's set to None but filing 
@@ -283,23 +313,33 @@ class ReportProcessor(BaseProcessor):
                 'updated': content.get('filedAt'),
                 'symbols': list(symbols),  # Convert set to list
                 'formType': content.get('formType'),
+                'extracted_sections': None,  # Initialize with None by default
+                'financial_statements': None  # Initialize with None by default
             })
 
-            # Extract sections if URL available
+            # Extract sections if URL available and form type requires it
             if url := content.get('primaryDocumentUrl'):
-                if content['formType'] not in FORM_TYPES_REQUIRING_SECTIONS:
+                if content['formType'] in FORM_TYPES_REQUIRING_SECTIONS:
+                    self.logger.info(f"Found primaryDocumentUrl: {url}, attempting to extract sections")
+                    if extracted_sections := self._extract_sections(
+                        url=url,
+                        form_type=content['formType'],
+                        items=content.get('items')
+                    ):
+                        standardized['extracted_sections'] = extracted_sections
+                        self.logger.info(f"Successfully extracted sections for {content['formType']}")
+                else:
                     self.logger.info(f"Skipping section extraction for form type: {content['formType']}")
-                    return standardized
 
-                self.logger.info(f"Found primaryDocumentUrl: {url}, attempting to extract sections")
-                extracted_sections = self._extract_sections(
-                    url=url,
-                    form_type=content['formType'],
-                    items=content.get('items')
-                )
-                
-                if extracted_sections:
-                    standardized['extracted_sections'] = extracted_sections
+            # Extract financial statements for forms requiring XML
+            if content['formType'] in FORM_TYPES_REQUIRING_XML:
+                self.logger.info(f"Form type {content['formType']} requires XBRL processing")
+                if financial_statements := self._get_financial_statements(
+                    accession_no=content.get('accessionNo'),
+                    cik=str(content.get('cik'))
+                ):
+                    standardized['financial_statements'] = financial_statements
+                    self.logger.info(f"Successfully extracted financial statements")
 
             return standardized
 

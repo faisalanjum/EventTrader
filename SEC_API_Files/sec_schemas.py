@@ -1,5 +1,5 @@
 VALID_FORM_TYPES = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', 
-                    'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC TO-I', '425', 'SC 14D9']
+                    'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC TO-I', '425', 'SC 14D9', '6-K']
 
 
 FORM_TYPES_REQUIRING_XML = ['10-K', '10-Q', '10-K/A', '10-Q/A']

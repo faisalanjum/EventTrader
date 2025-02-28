@@ -88,5 +88,5 @@ eight_k_sections = {
     '7-1': 'RegulationFDDisclosure',
     '8-1': 'OtherEvents',
     '9-1': 'FinancialStatementsandExhibits',
-    'signature': 'Signature'
+    # 'signature': 'Signature'
 }
