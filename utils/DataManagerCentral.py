@@ -287,7 +287,7 @@ class DataManager:
         self.initialize_sources()
 
     def initialize_sources(self):
-        self.sources['news'] = BenzingaNewsManager(self.historical_range)
+        # self.sources['news'] = BenzingaNewsManager(self.historical_range)
         self.sources['reports'] = ReportsManager(self.historical_range)
         # Add other sources as needed:
         # self.sources['transcripts'] = TranscriptsManager(self.historical_range)

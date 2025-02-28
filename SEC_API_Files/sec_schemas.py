@@ -3,39 +3,39 @@ VALID_FORM_TYPES = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A',
 
 
 FORM_TYPES_REQUIRING_XML = ['10-K', '10-Q', '10-K/A', '10-Q/A']
-
+FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A']
 # ✅ Earnings & Major Business Updates → 8-K, 10-K, 10-Q
 # ✅ Activist Investor Stakes & Hostile Takeovers → SCHEDULE 13D, 13D/A
 # ✅ Buybacks & Tender Offers → SC TO-I
 # ✅ M&A & Takeover Battles → 425, SC 14D9
 
 # TO BE REMOVED - JUST FOR DEBUGGING
-VALID_FORM_TYPES = [
-    # Existing types
-    '4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', 
-    '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 
-    'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8','10-D/A','10-D',
-    # Previously added types
-    'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G',
-    '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 
-    'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 
-    'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR',
-    # New types from latest logs
-    'SCHEDULE 13D', 'SCHEDULE 13D/A',  # Schedule 13D forms
-    'SC 13D', 'SC 13D/A',             # Alternative Schedule 13D notation
-    'SC TO-I', 'SC TO-I/A',           # Tender offer forms
-    'SC 14D9', 'SC 14D9/A',           # Solicitation/recommendation forms
-    'DEF 14A', 'DEFA14A',             # Proxy statement forms
-    'DEFM14A', 'DEFR14A',             # More proxy forms
-    '40-17G', '40-17G/A',             # Investment company forms
-    'N-1A', 'N-1A/A',                 # Registration forms
-    'N-2', 'N-2/A',                   # More registration forms
-    'N-14', 'N-14/A',                 # Investment company forms
-    'POS EX',                         # Post-effective amendments
-    'S-3ASR', 'S-8 POS',              # Automatic shelf registration
-    'CORRESP', 'UPLOAD',              # Correspondence and uploads
-    'ATS-N', 'ATS-N/MA'               # Alternative trading system forms
-]
+# VALID_FORM_TYPES = [
+#     # Existing types
+#     '4', '8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', '6-K', 
+#     '13F-HR', '424B3', 'D', 'CERT', '485BXT', 'D/A', 'SCHEDULE 13G', 
+#     'N-CSRS', '13F-NT', 'S-1/A', 'SCHEDULE 13G/A', 'S-8','10-D/A','10-D',
+#     # Previously added types
+#     'SC TO-T/A', 'DFAN14A', 'POS AM', 'S-8 POS', 'TA-2', '15-12G',
+#     '425', '24F-2NT', 'TA-1/A', 'SC TO-C', '20-F', 'F-1', 'F-1/A', 
+#     'S-1', 'F-3', 'F-3/A', 'F-4', 'F-4/A', 'S-3', 'S-3/A', 'S-4', 
+#     'S-4/A', '40-F', '6-K/A', 'POS AM', '485BPOS', 'N-CSR',
+#     # New types from latest logs
+#     'SCHEDULE 13D', 'SCHEDULE 13D/A',  # Schedule 13D forms
+#     'SC 13D', 'SC 13D/A',             # Alternative Schedule 13D notation
+#     'SC TO-I', 'SC TO-I/A',           # Tender offer forms
+#     'SC 14D9', 'SC 14D9/A',           # Solicitation/recommendation forms
+#     'DEF 14A', 'DEFA14A',             # Proxy statement forms
+#     'DEFM14A', 'DEFR14A',             # More proxy forms
+#     '40-17G', '40-17G/A',             # Investment company forms
+#     'N-1A', 'N-1A/A',                 # Registration forms
+#     'N-2', 'N-2/A',                   # More registration forms
+#     'N-14', 'N-14/A',                 # Investment company forms
+#     'POS EX',                         # Post-effective amendments
+#     'S-3ASR', 'S-8 POS',              # Automatic shelf registration
+#     'CORRESP', 'UPLOAD',              # Correspondence and uploads
+#     'ATS-N', 'ATS-N/MA'               # Alternative trading system forms
+# ]
 
 
 
@@ -70,7 +70,8 @@ class UnifiedReport(BaseModel):
     formType: str
     cik: str
     filedAt: str
-    primary_document_url: str
+    # primary_document_url: str
+    primaryDocumentUrl: str
     accessionNo: str
     is_xml: bool
 
@@ -91,6 +92,7 @@ class UnifiedReport(BaseModel):
     linkToHtml: Optional[str] = None
     linkToFilingDetails: Optional[str] = None
     exhibits: Dict[str, str] = {}  # Only EX-10.* and EX-99.*
+    items: Optional[List[str]] = None  # For 8-K items
     
 
     
@@ -102,7 +104,7 @@ class UnifiedReport(BaseModel):
         print(f"Filed At: {self.filedAt}")
         print(f"Company: {self.companyName}")
         print(f"Ticker: {self.ticker}")
-        print(f"\nPrimary Document URL: {self.primary_document_url}")
+        print(f"\nPrimary Document URL: {self.primaryDocumentUrl}")
         if self.exhibits:
             print("\nExhibits:")
             for ex_type, url in self.exhibits.items():
@@ -169,7 +171,7 @@ class SECFilingSchema(BaseModel):
     effectivenessDate: Optional[str] = None
 
     # Add these fields
-    # items: Optional[List[str]] = None  # For 8-K items
+    items: Optional[List[str]] = None  # For 8-K items
     # groupMembers: Optional[List[str]] = None  # For SC 13G/D filings
     # registrationForm: Optional[str] = None
     # referenceAccessionNo: Optional[str] = None
@@ -274,7 +276,7 @@ class SECFilingSchema(BaseModel):
             formType=self.formType,
             cik=self.cik, # Primary filing issuer
             filedAt=self.filedAt,
-            primary_document_url=primary_url,
+            primaryDocumentUrl=primary_url,
             accessionNo=self.accessionNo,
             is_xml=is_xml,
             
@@ -296,7 +298,8 @@ class SECFilingSchema(BaseModel):
             linkToHtml=self.linkToHtml,
             linkToFilingDetails=self.linkToFilingDetails,
             exhibits=exhibits,
-            
+            # 8-K items
+            items=self.items,  # Add this line
         )
     
 

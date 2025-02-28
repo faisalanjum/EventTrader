@@ -110,7 +110,7 @@ class BaseProcessor(ABC):
 
             raw_content = client.get(raw_key)
             if not raw_content:
-                self.logger.error(f"Raw content not found: {raw_key}")
+                self.logger.debug(f"Raw content not found: {raw_key}")  # Change from error to debug
                 return False
 
             content_dict = json.loads(raw_content)
