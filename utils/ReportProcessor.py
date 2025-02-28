@@ -10,6 +10,8 @@ from SEC_API_Files.reportSections import ten_k_sections, ten_q_sections, eight_k
 from sec_api import ExtractorApi, XbrlApi
 from eventtrader.keys import SEC_API_KEY
 from multiprocessing import Pool
+import requests
+from inscriptis import get_text
 
 
 # Move this outside the class
@@ -232,9 +234,6 @@ class ReportProcessor(BaseProcessor):
             return None
 
 
-
-
-
     def _get_financial_statements(self, accession_no: str, cik: str) -> Optional[Dict]:
         """Extract financial statements from XBRL data"""
         try:
@@ -253,16 +252,65 @@ class ReportProcessor(BaseProcessor):
                 self.logger.warning(f"CIK mismatch in XBRL data for accession {accession_no}. Input CIK: {input_cik}, XBRL CIK: {xbrl_cik}")
                 return None
                 
-            financial_statements = {}
-            for statement in ['BalanceSheets', 'StatementsOfIncome', 'StatementsOfShareholdersEquity', 'StatementsOfCashFlows']:
+            # Initialize all expected statements with None
+            financial_statements = {
+                'BalanceSheets': None,
+                'StatementsOfIncome': None,
+                'StatementsOfShareholdersEquity': None,
+                'StatementsOfCashFlows': None
+            }
+            
+            # Update with available data
+            for statement in financial_statements.keys():
                 if statement_data := xbrl_json.get(statement):
                     financial_statements[statement] = statement_data
+                    self.logger.debug(f"Found data for {statement}")
+                else:
+                    self.logger.debug(f"No data found for {statement}")
                     
-            return financial_statements if financial_statements else None
+            # Only return if at least one statement has data
+            return financial_statements if any(v is not None for v in financial_statements.values()) else None
                     
         except Exception as e:
             self.logger.error(f"Error extracting XBRL data for accession {accession_no}: {e}")
             return None
+
+    def _download_exhibit(self, url: str) -> Optional[str]:
+        """Download and extract exhibit content with proper SEC rate limiting"""
+        headers = {
+            'User-Agent': 'EventTrader research.bot@example.com',
+            'Accept-Encoding': 'gzip, deflate',
+            'Host': 'www.sec.gov'
+        }
+
+        try:
+            # Respect SEC's rate limit
+            time.sleep(0.1)
+            
+            # Download with proper headers
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            
+            # Extract text using inscriptis
+            text = get_text(response.text)
+            return text
+            
+        except Exception as e:
+            self.logger.error(f"Error processing exhibit {url}: {str(e)}")
+            return None
+
+    def _process_exhibits(self, exhibits: Dict[str, str]) -> Dict[str, Dict[str, str]]:
+        """Process all exhibits in a filing"""
+        exhibit_content = {}
+        
+        for exhibit_id, url in exhibits.items():
+            if content := self._download_exhibit(url):
+                exhibit_content[exhibit_id] = {
+                    'text': content,
+                    'url': url
+                }
+            
+        return exhibit_content
 
     def _standardize_fields(self, content: dict) -> dict:
         """Transform SEC fields while preserving original data.
@@ -314,7 +362,8 @@ class ReportProcessor(BaseProcessor):
                 'symbols': list(symbols),  # Convert set to list
                 'formType': content.get('formType'),
                 'extracted_sections': None,  # Initialize with None by default
-                'financial_statements': None  # Initialize with None by default
+                'financial_statements': None,  # Initialize with None by default
+                'exhibit_contents': None  # Initialize exhibits with None by default
             })
 
             # Extract sections if URL available and form type requires it
@@ -340,6 +389,13 @@ class ReportProcessor(BaseProcessor):
                 ):
                     standardized['financial_statements'] = financial_statements
                     self.logger.info(f"Successfully extracted financial statements")
+
+            # Process exhibits if available
+            if exhibits := content.get('exhibits'):
+                self.logger.info(f"Found {len(exhibits)} exhibits, attempting to extract content")
+                if exhibit_contents := self._process_exhibits(exhibits):
+                    standardized['exhibit_contents'] = exhibit_contents
+                    self.logger.info(f"Successfully extracted {len(exhibit_contents)} exhibits")
 
             return standardized
 
