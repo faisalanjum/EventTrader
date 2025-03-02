@@ -1,3 +1,4 @@
+import logging
 import websocket
 import json
 import time
@@ -40,7 +41,23 @@ class BenzingaNewsWebSocket:
         self.heartbeat_thread = None
         self._lock = threading.Lock()  # Add thread lock
         self._stats_lock = threading.Lock()  # Separate lock for stats
-    
+
+
+
+        # Add this logger setup
+        self.logger = logging.getLogger("news_websocket")  
+        self.logger.setLevel(logging.INFO)
+        if not self.logger.handlers:
+            handler = logging.StreamHandler()
+            handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+            self.logger.addHandler(handler)
+        
+        print("=== BENZINGA NEWS WEBSOCKET INITIALIZED ===")
+        self.logger.info("=== BENZINGA NEWS WEBSOCKET INITIALIZED ===")
+
+
+
+
     @staticmethod
     def print_news_item(item: Union[BzWebSocketNews, UnifiedNews], raw: bool = False):
         """Print news item in raw or unified format"""
@@ -124,7 +141,15 @@ class BenzingaNewsWebSocket:
         
         print(f"Connected to Benzinga WebSocket at {datetime.now()}")
         self.connected = True
-        
+        self._connection_time = datetime.now(timezone.utc)  # Add this
+        self._disconnection_logged = False  # Add this
+
+        # Add this standard connected message
+        print("=== BENZINGA NEWS WEBSOCKET CONNECTED ===")
+        self.logger.info("=== BENZINGA NEWS WEBSOCKET CONNECTED ===")
+
+
+
         subscription = {
             "action": "subscribe",
             "data": {"streams": ["news"]}
@@ -165,10 +190,20 @@ class BenzingaNewsWebSocket:
                 self.error_handler.handle_unexpected_error(e)
 
 
+
     def _on_error(self, ws, error):
         """Handle WebSocket error"""
         self.connected = False
         self.error_handler.handle_connection_error(error)
+        
+        # Add this - log downtime
+        error_str = str(error)
+        if any(msg in error_str.lower() for msg in ["closed", "lost", "timed out", "refused", "reset"]):
+            print(f"Network error detected: {error}")
+            self._log_downtime(status_code=1001)  # Going Away
+        else:
+            self._log_downtime(status_code=1006)  # Abnormal Closure
+
 
     def _on_close(self, ws, close_status_code, close_msg):
         """Handle WebSocket connection close"""
@@ -176,10 +211,15 @@ class BenzingaNewsWebSocket:
         
         print(f"Status code: {close_status_code}")
         print(f"Close message: {close_msg}")
+        
+        # Add this - log downtime
+        status = close_status_code if close_status_code else 1006
+        self._log_downtime(status_code=status)
 
+        # Rest of the method unchanged
         if not self.should_run:
             return
-            
+        
         # Check status code first
         if close_status_code == 503:
             print("Service temporarily unavailable. Will retry with backoff.")
@@ -210,36 +250,50 @@ class BenzingaNewsWebSocket:
 
 
     def check_connection_health(self):
-        """Thread-safe connection health check"""
-        with self._lock:
-            if self.last_pong_time:
-                time_since_pong = datetime.now(timezone.utc) - self.last_pong_time
-                if time_since_pong.seconds > 20:
-                    print(f"\nWARNING: No pong response in {time_since_pong.seconds} seconds")
-                    self._log_downtime(status_code=408)
-                    return False
-        return True
+        """Simplest possible connection check that won't false positive"""
+        # Only consider a connection down if the socket itself is gone or we've 
+        # received an explicit error/close event
+        if self.connected and self.ws:
+            # The WebSocket is still connected as far as we know
+            # Don't log any downtime based on message timing
+            return True
+        return True  # Always return True - let _on_error and _on_close handle actual disconnects
     
 
     def _on_pong(self, ws, message):
         """Handle pong response"""
         self.last_pong_time = datetime.now(timezone.utc)
 
+
+
     def _log_downtime(self, status_code):
-        """Log connection downtime to Redis"""
-        disconnect_time = datetime.now(timezone.utc)
-        if self.last_pong_time:  # Changed from last_message_time
-            duration = (disconnect_time - self.last_pong_time).total_seconds()
-            downtime = {
-                'start': self.last_pong_time.isoformat(),  # Changed from last_message_time
-                'end': disconnect_time.isoformat(),
-                'duration': duration,
-                'status': str(status_code) if status_code is not None else 'unknown'
-            }
-            
-            try:
-                key = f"admin:websocket_downtime:{disconnect_time.timestamp()}"
-                self.redis_client.set_json(key, downtime)
-                print(f"Connection lost after {duration:.2f}s. Recorded at {key}")
-            except Exception as e:
-                print(f"Failed to record downtime: {e}")
+        """Log connection downtime to Redis - only called from _on_error and _on_close"""
+        # Only log one downtime entry per disconnection
+        with self._lock:
+            # Check if we already logged this disconnection
+            if not hasattr(self, '_disconnection_logged') or not self._disconnection_logged:
+                disconnect_time = datetime.now(timezone.utc)
+                reference_time = self._connection_time
+                
+                if reference_time:
+                    duration = (disconnect_time - reference_time).total_seconds()
+                    
+                    downtime = {
+                        'start': reference_time.isoformat(),
+                        'end': disconnect_time.isoformat(),
+                        'duration': duration,
+                        'status': str(status_code),
+                        'source': 'news',  # Hardcode to 'news' for Benzinga
+                    }
+                    
+                    try:
+                        key = f"admin:websocket_downtime:{downtime['source']}:{disconnect_time.timestamp()}"
+                        success = self.redis_client.set_json(key, downtime)
+                        
+                        log_msg = f"{downtime['source'].upper()} connection lost. Status: {status_code}. Key: {key}"
+                        print(f"DOWNTIME LOGGED: {log_msg}")
+                        
+                        # Mark that we logged this disconnection
+                        self._disconnection_logged = True
+                    except Exception as e:
+                        print(f"ERROR LOGGING DOWNTIME: {e}")

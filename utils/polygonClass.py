@@ -1,3 +1,4 @@
+import logging
 from polygon.rest import RESTClient
 from typing import List, Dict, Tuple, Optional, Union, Generator
 from dataclasses import dataclass
@@ -12,6 +13,8 @@ import time
 from .ETF_mappings import Sector_Industry_ETFs
 from .market_session import MarketSessionClassifier
 from utils.metadata_fields import MetadataFields  
+from datetime import datetime, timezone, timedelta
+import pytz
 
 @dataclass
 class Polygon:
@@ -19,13 +22,20 @@ class Polygon:
     
     def __post_init__(self):
         """Initialize market session classifier and client"""
-        
+
+        # Initialize logger
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
+
+
         self.market_session = MarketSessionClassifier()
         self.client = self.get_rest_client()
         self.executor = ThreadPoolExecutor(max_workers=220)
         self.last_error = {}
         self.ticker_validation_cache = {}
         
+
+
         # Add connection pooling configuration
         self.session = requests.Session()
         adapter = requests.adapters.HTTPAdapter(
@@ -94,6 +104,7 @@ class Polygon:
         
 
 
+
     def get_last_trade(self, ticker: str, timestamp: datetime, asset_type: str = "stock", max_days_back: int = 3) -> float:
         
         client = self.get_rest_client()
@@ -109,6 +120,13 @@ class Polygon:
         timestamp = self.market_session._convert_to_eastern_timestamp(timestamp)
         if timestamp is None:
             raise ValueError("Timestamp cannot be None or NaN")
+            
+        # Check if timestamp is in the future
+        current_time = datetime.now(timezone.utc).astimezone(pytz.timezone('America/New_York'))
+        if timestamp > current_time:
+            self.logger.info(f"Cannot fetch price for {ticker} at {timestamp} as it is in the future (current time: {current_time})")
+            
+            return np.nan
         
         # Define initial window and growth factor
         window_size = 300  # Start with 10 seconds
@@ -177,6 +195,7 @@ class Polygon:
         
         # print(f"No price found for {ticker} in the last {max_days_back} days before {timestamp}")
         return np.nan
+
 
 
     def _get_last_trade_worker(self, ticker: str, timestamp: datetime, max_days_back: int) -> float:

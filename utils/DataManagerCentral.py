@@ -120,6 +120,20 @@ class BenzingaNewsManager(DataSourceManager):
                 logging.error(f"WebSocket error: {e}")
                 time.sleep(5)
 
+
+    # def _run_websocket(self):
+    #     """Manage WebSocket connection with proper retry logic"""
+    #     while self.running:
+    #         try:
+    #             if not self.ws_client.connected:
+    #                 print(f"Starting {self.source_type} WebSocket connection...")
+    #                 # Direct call to connect - don't wrap in another thread
+    #                 self.ws_client.connect(raw=False)
+    #             time.sleep(2)  # Brief check interval
+    #         except Exception as e:
+    #             logging.error(f"{self.source_type} WebSocket error: {e}")
+    #             time.sleep(5)    
+
     def check_status(self):
         try:
             live_prefix = RedisKeys.get_prefixes(self.source_type)['live']
@@ -229,20 +243,31 @@ class ReportsManager(DataSourceManager):
     #         logging.error(f"Error starting {self.source_type}: {e}")
     #         return False
 
-    def _run_websocket(self):
-        """Manage WebSocket connection with proper retry logic"""
-        retry_delay = 5
-        max_retries = 3
+    # def _run_websocket(self):
+    #     """Manage WebSocket connection with proper retry logic"""
+    #     retry_delay = 5
+    #     max_retries = 3
         
+    #     while self.running:
+    #         try:
+    #             if not self.ws_client.connected:
+    #                 self.ws_client.connect(raw=False)
+    #             time.sleep(1)  # Check connection status periodically
+                
+    #         except Exception as e:
+    #             logging.error(f"SEC WebSocket error: {e}")
+    #             time.sleep(retry_delay)
+
+
+    def _run_websocket(self):
         while self.running:
             try:
-                if not self.ws_client.connected:
-                    self.ws_client.connect(raw=False)
-                time.sleep(1)  # Check connection status periodically
-                
+                # Direct call without checking - connect() should block until disconnected
+                self.ws_client.connect(raw=False)
             except Exception as e:
                 logging.error(f"SEC WebSocket error: {e}")
-                time.sleep(retry_delay)
+                time.sleep(5)
+
 
     def check_status(self):
         try:
@@ -287,7 +312,7 @@ class DataManager:
         self.initialize_sources()
 
     def initialize_sources(self):
-        # self.sources['news'] = BenzingaNewsManager(self.historical_range)
+        self.sources['news'] = BenzingaNewsManager(self.historical_range)
         self.sources['reports'] = ReportsManager(self.historical_range)
         # Add other sources as needed:
         # self.sources['transcripts'] = TranscriptsManager(self.historical_range)

@@ -202,13 +202,13 @@ class ReturnsProcessor:
                         new_key = RedisKeys.get_key(source_type=self.source_type,
                             key_type=RedisKeys.SUFFIX_WITHRETURNS,identifier=news_id)
                         
-                        self.logger.info(f"Moving to withreturns: {new_key}")
+                        # self.logger.info(f"Moving to withreturns: {new_key}")
                     else:
                         # new_key = f"news:benzinga:withoutreturns:{news_id}"
 
                         new_key = RedisKeys.get_key(source_type=self.source_type,
                             key_type=RedisKeys.SUFFIX_WITHOUTRETURNS,identifier=news_id)                        
-                        self.logger.info(f"Moving to withoutreturns: {new_key}")
+                        # self.logger.info(f"Moving to withoutreturns: {new_key}")
 
                     # Atomic update
                     pipe = client.client.pipeline(transaction=True)
@@ -322,11 +322,11 @@ class ReturnsProcessor:
             if returns_info['all_complete']:
                 # new_key = f"news:benzinga:withreturns:{news_id}"
                 new_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHRETURNS,identifier=news_id)
-                self.logger.info(f"Moving to withreturns: {new_key}")
+                # self.logger.info(f"Moving to withreturns: {new_key}")
             else:
                 # new_key = f"news:benzinga:withoutreturns:{news_id}"
                 new_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHOUTRETURNS,identifier=news_id)
-                self.logger.info(f"Moving to withoutreturns: {new_key}")
+                # self.logger.info(f"Moving to withoutreturns: {new_key}")
 
             # 5. Update processed_dict with returns
             processed_dict['returns'] = returns_info['returns']
@@ -342,9 +342,35 @@ class ReturnsProcessor:
             return False
 
 
+
+
+    def _get_return_type_end_time(self, return_type: str, created_timestamp: str) -> datetime:
+        end_time = None
+        if return_type == MetadataFields.SESSION:
+            end_time = self.event_returns_manager.market_session.get_end_time(created_timestamp)
+        elif return_type == MetadataFields.DAILY:
+            _, end_time = self.event_returns_manager.market_session.get_1d_impact_times(created_timestamp)
+        elif return_type == MetadataFields.HOURLY:
+            end_time = self.event_returns_manager.market_session.get_interval_end_time(
+                created_timestamp, 60, respect_session_boundary=False)
+        
+        # Add debug logging
+        current_time = datetime.now(timezone.utc).astimezone(self.ny_tz)
+        self.logger.info(f"""
+            Return type: {return_type}
+            Created timestamp: {created_timestamp}
+            End time: {end_time} ({end_time.tzinfo if end_time else 'No tzinfo'})
+            Current time: {current_time} ({current_time.tzinfo})
+            Is end time > current: {end_time > current_time if end_time else 'N/A'}
+        """)
+        
+        return end_time
+
+
     def _calculate_available_returns(self, processed_dict: dict) -> dict:
         """Calculate returns based on available timestamps"""
         try:
+            self.logger.info("Starting _calculate_available_returns")  # Add this line
             # 1. Extract metadata and setup
             metadata = processed_dict.get('metadata', {})
             returns_schedule = metadata.get(MetadataFields.RETURNS_SCHEDULE, {})
@@ -368,9 +394,25 @@ class ReturnsProcessor:
                 schedule_time = returns_schedule.get(return_type)
                 if schedule_time:
                     schedule_dt = parser.parse(schedule_time).astimezone(self.ny_tz)
-                    
+
+                    self.logger.info(f"""
+                        Return type: {return_type}
+                        Current time: {current_time}
+                        Schedule time: {schedule_dt}
+                        Proceeding with calculation: {current_time >= schedule_dt}
+                    """)
+
                     # 5. If scheduled time has passed, calculate returns
                     if current_time >= schedule_dt:  
+                        # Get the end time for this return type
+                        end_time = self._get_return_type_end_time(return_type, processed_dict['created'])
+                        
+                        # Skip if end time is in the future
+                        if end_time > current_time:
+                            self.logger.info(f"Skipping {return_type} returns calculation as end time {end_time} is in the future")                            
+                            all_complete = False
+                            continue
+
                         for instrument in instruments:
                             try:
                                 symbol = instrument['symbol']
@@ -413,6 +455,7 @@ class ReturnsProcessor:
         except Exception as e:
             self.logger.error(f"Failed to calculate returns: {e}")
             return {'returns': {'symbols': {}}, 'all_complete': False}
+
 
 
 
@@ -653,7 +696,7 @@ class ReturnsProcessor:
 
                 pipe.set(new_key, json.dumps(news_data))
                 pipe.delete(key)
-                self.logger.info(f"Moving to withreturns: {new_key}")
+                # self.logger.info(f"Moving to withreturns: {new_key}")
             else:
                 pipe.set(key, json.dumps(news_data))
                 

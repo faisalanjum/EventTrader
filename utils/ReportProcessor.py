@@ -202,8 +202,8 @@ class ReportProcessor(BaseProcessor):
 
     def process_all_reports(self):
         """Maintain consistent naming with NewsProcessor"""
-        print(f"[Processor Debug] Starting ReportProcessor")
-        print(f"[Processor Debug] Queue to watch: {self.queue_client.RAW_QUEUE}")
+        # print(f"[Processor Debug] Starting ReportProcessor")
+        # print(f"[Processor Debug] Queue to watch: {self.queue_client.RAW_QUEUE}")
         return self.process_all_items()
 
 

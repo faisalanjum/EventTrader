@@ -63,8 +63,8 @@ class BaseProcessor(ABC):
 
         print(f"\n[Processor Debug] Starting processor")
         print(f"[Processor Debug] Source type: {self.source_type}")
-        print(f"[Processor Debug] Queue client prefix: {self.queue_client.prefix}")
-        print(f"[Processor Debug] Watching queue: {self.queue_client.RAW_QUEUE}")
+        # print(f"[Processor Debug] Queue client prefix: {self.queue_client.prefix}")
+        # print(f"[Processor Debug] Watching queue: {self.queue_client.RAW_QUEUE}")
 
 
         while self.should_run:
@@ -73,9 +73,11 @@ class BaseProcessor(ABC):
                 
 
                 if result:
-                    print(f"[Processor Debug] Popped item: {result}")
+                    # print(f"[Processor Debug] Popped item: {result}")
+                    pass
                 else:
-                    print(f"[Processor Debug] No items in queue after timeout")
+                    # print(f"[Processor Debug] No items in queue after timeout")
+                    pass
 
 
                 if not result:
@@ -118,7 +120,7 @@ class BaseProcessor(ABC):
             # 2. First standardize fields - Important to do this before checking symbols
             standardized_dict = self._standardize_fields(content_dict)
 
-            print(f"[^BASE Processor Debug] Standardized dict: {standardized_dict}")
+            # print(f"[^BASE Processor Debug] Standardized dict: {standardized_dict}")
 
             # 3. Check if any valid symbols exist
             if not self._has_valid_symbols(standardized_dict):
