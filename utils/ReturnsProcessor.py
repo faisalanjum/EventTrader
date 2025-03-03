@@ -3,7 +3,7 @@ import threading
 import logging
 from typing import Optional, Dict, Any, List, Tuple
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from dateutil import parser
 import time
 
@@ -17,12 +17,13 @@ import pytz
 from utils.redis_constants import RedisKeys
 
 class ReturnsProcessor:
-    def __init__(self, event_trader_redis: EventTraderRedis):
+    def __init__(self, event_trader_redis: EventTraderRedis, polygon_subscription_delay):
         self.live_client = event_trader_redis.live_client
         self.hist_client = event_trader_redis.history_client
         self.queue_client = self.live_client.create_new_connection() # create new connection for queue checks
         self.pubsub_client = self.live_client.create_pubsub_connection()
         self.source_type = event_trader_redis.source
+        self.polygon_subscription_delay = polygon_subscription_delay # Lower tier subscription has 15 delayed data
                                 
         # self.processed_channel = RedisKeys.get_key(
         #     source_type=self.source_type,
@@ -343,30 +344,6 @@ class ReturnsProcessor:
 
 
 
-
-    def _get_return_type_end_time(self, return_type: str, created_timestamp: str) -> datetime:
-        end_time = None
-        if return_type == MetadataFields.SESSION:
-            end_time = self.event_returns_manager.market_session.get_end_time(created_timestamp)
-        elif return_type == MetadataFields.DAILY:
-            _, end_time = self.event_returns_manager.market_session.get_1d_impact_times(created_timestamp)
-        elif return_type == MetadataFields.HOURLY:
-            end_time = self.event_returns_manager.market_session.get_interval_end_time(
-                created_timestamp, 60, respect_session_boundary=False)
-        
-        # Add debug logging
-        current_time = datetime.now(timezone.utc).astimezone(self.ny_tz)
-        self.logger.info(f"""
-            Return type: {return_type}
-            Created timestamp: {created_timestamp}
-            End time: {end_time} ({end_time.tzinfo if end_time else 'No tzinfo'})
-            Current time: {current_time} ({current_time.tzinfo})
-            Is end time > current: {end_time > current_time if end_time else 'N/A'}
-        """)
-        
-        return end_time
-
-
     def _calculate_available_returns(self, processed_dict: dict) -> dict:
         """Calculate returns based on available timestamps"""
         try:
@@ -403,15 +380,8 @@ class ReturnsProcessor:
                     """)
 
                     # 5. If scheduled time has passed, calculate returns
-                    if current_time >= schedule_dt:  
-                        # Get the end time for this return type
-                        end_time = self._get_return_type_end_time(return_type, processed_dict['created'])
-                        
-                        # Skip if end time is in the future
-                        if end_time > current_time:
-                            self.logger.info(f"Skipping {return_type} returns calculation as end time {end_time} is in the future")                            
-                            all_complete = False
-                            continue
+                    # if current_time >= schedule_dt:  
+                    if current_time > (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
 
                         for instrument in instruments:
                             try:
@@ -458,7 +428,6 @@ class ReturnsProcessor:
 
 
 
-
     def _calculate_available_returns_batch(self, news_dict: dict, batch_returns: dict) -> dict:
         """Calculate returns based on available timestamps (batch version)"""
         try:
@@ -487,33 +456,41 @@ class ReturnsProcessor:
                     schedule_dt = parser.parse(schedule_time).astimezone(self.ny_tz)
                     
                     # 5. Check if scheduled time has passed (same as live)
-                    if current_time >= schedule_dt:
-                        for instrument in instruments:
-                            try:
-                                symbol = instrument['symbol']
+                    # if current_time >= schedule_dt:
+                    # by the time this check happens, we've already tried to fetch the future data in EventReturnsManager.process_events
+                    
+                    # Simpler check - if time hasn't passed, don't use return
+                    if current_time < (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
+                        all_complete = False
+                        continue
+
+                    for instrument in instruments:
+                        try:
+                            symbol = instrument['symbol']
+                            
+                            # Get returns from batch results instead of calculating
+                            if batch_returns and symbol in batch_returns.get('symbols', {}):
+                                return_field = MetadataFields.RETURN_TYPE_MAP[return_type]
+                                calc_returns = batch_returns['symbols'][symbol].get(return_field)
                                 
-                                # Get returns from batch results instead of calculating
-                                if batch_returns and symbol in batch_returns.get('symbols', {}):
-                                    return_field = MetadataFields.RETURN_TYPE_MAP[return_type]
-                                    calc_returns = batch_returns['symbols'][symbol].get(return_field)
+                                if calc_returns:
+                                    returns_data['symbols'][symbol][return_field] = calc_returns
                                     
-                                    if calc_returns:
-                                        returns_data['symbols'][symbol][return_field] = calc_returns
-                                        
-                                        # Round here to match live flow
-                                        # returns_data['symbols'][symbol][return_field] = {
-                                        #     k: round(v, 2) for k, v in calc_returns.items()}
-                                        
-                                    else:
-                                        all_complete = False
+                                    # Round here to match live flow
+                                    # returns_data['symbols'][symbol][return_field] = {
+                                    #     k: round(v, 2) for k, v in calc_returns.items()}
+                                    
                                 else:
                                     all_complete = False
-                                    
-                            except Exception as e:
-                                self.logger.error(f"Error processing {return_type} for {symbol}: {e}")
+                            else:
                                 all_complete = False
-                    else:
-                        all_complete = False  # Time hasn't passed yet
+                                
+                        except Exception as e:
+                            self.logger.error(f"Error processing {return_type} for {symbol}: {e}")
+                            all_complete = False
+                    
+                    # else:
+                    #     all_complete = False  # Time hasn't passed yet
 
             # 6. Final completion check (same as live)
             for symbol_returns in returns_data['symbols'].values():

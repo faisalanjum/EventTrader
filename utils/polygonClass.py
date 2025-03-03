@@ -124,8 +124,7 @@ class Polygon:
         # Check if timestamp is in the future
         current_time = datetime.now(timezone.utc).astimezone(pytz.timezone('America/New_York'))
         if timestamp > current_time:
-            self.logger.info(f"Cannot fetch price for {ticker} at {timestamp} as it is in the future (current time: {current_time})")
-            
+            # self.logger.info(f"Cannot fetch price for {ticker} at {timestamp} as it is in the future (current time: {current_time})")            
             return np.nan
         
         # Define initial window and growth factor
