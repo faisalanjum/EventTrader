@@ -104,8 +104,6 @@ class Polygon:
             return result
         
 
-
-
     def get_last_trade(self, ticker: str, timestamp: datetime, asset_type: str = "stock", max_days_back: int = 3) -> float:
         
         client = self.get_rest_client()
@@ -144,11 +142,11 @@ class Polygon:
         # self.logger.info(f"  Is too old? {timestamp < min_allowed_end}")
         # self.logger.info(f"--------------------------------")
 
-
+        # Ideally this should code block never be reached since all filtering should be applied before this
         current_time_with_delay = current_time - timedelta(seconds=self.polygon_subscription_delay)
-        if timestamp > current_time_with_delay + timedelta(seconds=11):
+        if timestamp > current_time_with_delay:
             self.logger.info(f"--------------------------------")
-            self.logger.info(f"Cannot fetch price for {ticker} at {timestamp} as it is in the future, current time: {current_time}, delayed time: {current_time_with_delay}, delay: {self.polygon_subscription_delay} seconds")
+            self.logger.info(f"Cannot fetch price for {ticker} at {timestamp} as it is in the future, current time + delay: {current_time_with_delay}, delay: {self.polygon_subscription_delay} seconds")
             self.logger.info(f"--------------------------------")
             return np.nan
         
@@ -328,7 +326,7 @@ class Polygon:
 
 
     # Calculates Returns inside
-    # Takes in a list of tuples with index, ticker, start_time, end_time and returns a dictionary with index and return value - using it for QC df Returns
+    # Takes in a list of tuples with index, ticker, start_time, end_time and returns a dictionary with index and return value - from QC df Returns
     def get_returns_indexed(self, index_ticker_times: List[Tuple[int, str, datetime, datetime]], pbar=None, debug: bool = False) -> Dict[int, float]:
         
         """

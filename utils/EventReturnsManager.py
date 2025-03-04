@@ -1,6 +1,6 @@
 from dataclasses import dataclass, asdict
 from typing import Dict, List, Union, Optional, Tuple, Any
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import pandas as pd
 import pytz
 import logging
@@ -76,6 +76,7 @@ class EventReturnsManager:
     def __init__(self, stock_universe_df, polygon_subscription_delay: int):
         self.stock_universe = stock_universe_df
         self.ny_tz          = pytz.timezone("America/New_York")
+        self.polygon_subscription_delay = polygon_subscription_delay
 
         self.market_session = MarketSessionClassifier()
         self.polygon  = Polygon(api_key=POLYGON_API_KEY, polygon_subscription_delay=polygon_subscription_delay)
@@ -302,8 +303,17 @@ class EventReturnsManager:
             )
         }
 
+        # Get current time with delay adjustment for filtering future timestamps
+        current_time = datetime.now(timezone.utc).astimezone(pytz.timezone('America/New_York'))
+        current_time_with_delay = current_time - timedelta(seconds=self.polygon_subscription_delay)
+
         for instr_idx, instrument in enumerate(metadata.instruments):
             for return_type, (start, end) in return_windows.items():
+                # Skip this return window if the end time is in the future
+                if end > current_time_with_delay:
+                    self.logger.info(f"Skipping {return_type} for {instrument.symbol} - end time {end} is in the future (current time + delay: {current_time_with_delay})")
+                    continue
+                    
                 base_idx = f"{event_id}:{return_type}:{instr_idx}"
                 assets = [
                     ('stock', instrument.symbol),

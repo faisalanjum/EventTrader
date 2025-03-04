@@ -601,12 +601,16 @@ class ReturnsProcessor:
             # Convert current time to NY timestamp
             current_time = datetime.now(timezone.utc).astimezone(self.ny_tz).timestamp()
             
-            # Continuously checks ZSET for ready returns
-            ready_items = self.live_client.client.zrangebyscore(self.pending_zset, 0, current_time )
+            # Adjust current time to account for data delay
+            adjusted_current_time = current_time - self.polygon_subscription_delay
+            
+            # Continuously checks ZSET for ready returns - only process returns that should have data available
+            ready_items = self.live_client.client.zrangebyscore(self.pending_zset, 0, adjusted_current_time)
 
             if ready_items:
                 ny_time = datetime.fromtimestamp(current_time, self.ny_tz)
-                self.logger.info(f"Processing {len(ready_items)} pending returns (NY Time: {ny_time})")
+                adjusted_ny_time = datetime.fromtimestamp(adjusted_current_time, self.ny_tz)
+                self.logger.info(f"Processing {len(ready_items)} pending returns (NY Time: {ny_time}, Adjusted for data delay: {adjusted_ny_time})")
 
             for item in ready_items:
                 news_id, return_type = item.split(':')
