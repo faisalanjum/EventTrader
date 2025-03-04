@@ -8,6 +8,7 @@ from dateutil import parser
 import time
 
 from utils.redisClasses import EventTraderRedis
+from utils.redisClasses import RedisClient
 from utils.polygonClass import Polygon
 from eventtrader.keys import POLYGON_API_KEY
 from utils.metadata_fields import MetadataFields
@@ -17,13 +18,13 @@ import pytz
 from utils.redis_constants import RedisKeys
 
 class ReturnsProcessor:
-    def __init__(self, event_trader_redis: EventTraderRedis, polygon_subscription_delay):
+    def __init__(self, event_trader_redis: EventTraderRedis, polygon_subscription_delay: int):
         self.live_client = event_trader_redis.live_client
         self.hist_client = event_trader_redis.history_client
         self.queue_client = self.live_client.create_new_connection() # create new connection for queue checks
         self.pubsub_client = self.live_client.create_pubsub_connection()
         self.source_type = event_trader_redis.source
-        self.polygon_subscription_delay = polygon_subscription_delay # Lower tier subscription has 15 delayed data
+        self.polygon_subscription_delay = polygon_subscription_delay # Lower tier subscription has 15 min delayed data
                                 
         # self.processed_channel = RedisKeys.get_key(
         #     source_type=self.source_type,
@@ -40,7 +41,7 @@ class ReturnsProcessor:
         self._lock = threading.Lock()
         
         # Initialize Polygon client
-        self.polygon = Polygon(api_key=POLYGON_API_KEY)
+        self.polygon = Polygon(api_key=POLYGON_API_KEY, polygon_subscription_delay=self.polygon_subscription_delay) 
         
         # Cache the stock universe for ETF lookups
         self.stock_universe = event_trader_redis.get_stock_universe()
@@ -53,7 +54,7 @@ class ReturnsProcessor:
         self.pending_zset = RedisKeys.get_returns_keys(self.source_type)['pending']       # 'pending': 'news:pending_returns'
         self.ny_tz = pytz.timezone("America/New_York")
 
-        self.event_returns_manager = EventReturnsManager(self.stock_universe)
+        self.event_returns_manager = EventReturnsManager(self.stock_universe, polygon_subscription_delay=self.polygon_subscription_delay)
         self.BATCH_SIZE = 100 
 
 
@@ -736,18 +737,48 @@ class ReturnsProcessor:
             self.logger.error(f"Error cleaning up pubsub: {e}")
 
 
-    # Is this enough?
+    # # Is this enough?
+    # def _reconnect(self):
+    #     """Reconnect to Redis"""
+    #     try:
+    #         self.live_client = self.live_client.__class__(prefix=self.live_client.prefix)
+    #         self.hist_client = self.hist_client.__class__(prefix=self.hist_client.prefix)
+    #         self.queue_client = self.live_client.create_new_connection()
+
+    #         self.pubsub_client = self.live_client.create_pubsub_connection()
+    #         # self.pubsub_client.subscribe('news:benzinga:live:processed')
+    #         self.pubsub_client.subscribe(self.processed_channel)
+    #         self.logger.debug("Reconnected to Redis")
+
+    #     except Exception as e:
+    #         self.logger.error(f"Reconnection failed: {e}")
+
+
     def _reconnect(self):
         """Reconnect to Redis"""
         try:
-            self.live_client = self.live_client.__class__(prefix=self.live_client.prefix)
-            self.hist_client = self.hist_client.__class__(prefix=self.hist_client.prefix)
+            # Store the original configuration before reconnecting
+            live_prefix = self.live_client.prefix
+            hist_prefix = self.hist_client.prefix
+            
+            # Create new client instances with the same parameters
+            self.live_client = RedisClient(
+                prefix=live_prefix,
+                source_type=self.source_type
+            )
+            
+            self.hist_client = RedisClient(
+                prefix=hist_prefix,
+                source_type=self.source_type
+            )
+            
+            # Reset queue_client to live_client
             self.queue_client = self.live_client.create_new_connection()
-
+            
+            # Recreate pubsub connection
             self.pubsub_client = self.live_client.create_pubsub_connection()
-            # self.pubsub_client.subscribe('news:benzinga:live:processed')
             self.pubsub_client.subscribe(self.processed_channel)
+            
             self.logger.debug("Reconnected to Redis")
-
         except Exception as e:
-            self.logger.error(f"Reconnection failed: {e}")
+            self.logger.error(f"Reconnection failed: {e}")    

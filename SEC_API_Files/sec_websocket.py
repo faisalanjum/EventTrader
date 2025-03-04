@@ -11,12 +11,20 @@ from SEC_API_Files.sec_errors import FilingErrorHandler
 import logging
 
 class SECWebSocket:
-    def __init__(self, api_key: str, redis_client: RedisClient, ttl: int = 7*24*3600):
+    def __init__(self, api_key: str, redis_client: RedisClient, ttl: int = 7*24*3600, log_level: int = logging.INFO):
         # Core configuration
         self.redis_client = redis_client
         self.ttl = ttl
         self.api_key = api_key
         self.url = f"wss://stream.sec-api.io?apiKey={self.api_key}"
+        
+        # Set up logging first to avoid initialization errors
+        self.logger = logging.getLogger("reports_websocket")
+        self.logger.setLevel(log_level)
+        if not self.logger.handlers:
+            handler = logging.StreamHandler()
+            handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+            self.logger.addHandler(handler)
         
         # State tracking
         self.connected = False
@@ -27,7 +35,15 @@ class SECWebSocket:
         # Timing tracking
         self.last_message_time = None
         self.last_pong_time = None
-        self._connection_time = None
+        
+        # Try to load the last message time from Redis
+        try:
+            last_time = self.redis_client.get_json("admin:reports:last_message_time")
+            if last_time and 'timestamp' in last_time:
+                self.last_message_time = datetime.fromisoformat(last_time['timestamp'])
+                self.logger.info(f"Loaded last message time from Redis: {self.last_message_time.isoformat()}")
+        except Exception as e:
+            self.logger.warning(f"Could not load last message time: {e}")
         
         # Reconnection parameters
         self.base_delay = 2
@@ -49,15 +65,12 @@ class SECWebSocket:
         # Error handling
         self.error_handler = FilingErrorHandler()
         
-        # Logging setup
-        self.logger = logging.getLogger("reports_websocket")
-        self.logger.setLevel(logging.INFO)
-        if not self.logger.handlers:
-            handler = logging.StreamHandler()
-            handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-            self.logger.addHandler(handler)
+        # Downtime tracking
+        self._connection_time = None
+        self._disconnect_time = None
+        self._downtime_logged = False
+        self._current_downtime_key = None
             
-        print("=== SEC REPORTS WEBSOCKET INITIALIZED ===")
         self.logger.info("=== SEC REPORTS WEBSOCKET INITIALIZED ===")
 
     def connect(self, raw: bool = False, enable_trace: bool = False):
@@ -66,21 +79,28 @@ class SECWebSocket:
         self.should_run = True
         self.error_handler.reset_stats()
         
+        # Check for previous shutdown state
+        try:
+            shutdown_state = self.redis_client.get_json("admin:sec:shutdown_state")
+            if shutdown_state and 'timestamp' in shutdown_state:
+                last_msg_time = shutdown_state.get('timestamp')
+                self.logger.info(f"Previous shutdown detected. Last message time: {last_msg_time}")
+                # Could add gap-filling logic here in the future
+        except Exception as e:
+            self.logger.warning(f"Could not check previous shutdown state: {e}")
+        
         # Start heartbeat thread if not already running
         if not self.heartbeat_thread or not self.heartbeat_thread.is_alive():
             self.heartbeat_thread = threading.Thread(target=self._check_heartbeat)
             self.heartbeat_thread.daemon = True
             self.heartbeat_thread.start()
-            print("Started heartbeat monitoring thread")
             self.logger.info("Started heartbeat monitoring thread")
         
-        print("Starting SEC WebSocket connection...")
         self.logger.info("Starting SEC WebSocket connection...")
         
         while self.should_run:
             try:
                 self.stats['connection_attempts'] += 1
-                print(f"Connection attempt #{self.stats['connection_attempts']}")
                 self.logger.info(f"Connection attempt #{self.stats['connection_attempts']}")
                 
                 if enable_trace:
@@ -111,13 +131,11 @@ class SECWebSocket:
                 delay = min(self.base_delay * (2 ** self.current_retry), self.max_delay)
                 self.current_retry += 1
                 
-                print(f"Reconnecting in {delay:.1f} seconds...")
                 self.logger.info(f"Reconnecting in {delay:.1f} seconds...")
                 time.sleep(delay)
                 
             except Exception as e:
                 self.logger.error(f"Connection error: {str(e)}")
-                print(f"Connection error: {str(e)}")
                 
                 if not self.should_run:
                     break
@@ -130,13 +148,11 @@ class SECWebSocket:
     def _check_heartbeat(self):
         """Active connection monitoring"""
         self.logger.info("Heartbeat monitoring started")
-        print("Heartbeat monitoring started")
         
         while self.should_run:
             try:
                 if not self.check_connection_health():
                     self.logger.warning("Heartbeat check failed, initiating reconnect...")
-                    print("Heartbeat check failed, initiating reconnect...")
                     if self.ws:
                         self.ws.close()
                 time.sleep(10)  # Check every 10 seconds
@@ -146,17 +162,29 @@ class SECWebSocket:
     
     def check_connection_health(self):
         """Simplest possible connection check that won't false positive"""
-        # Only consider a connection down if the socket itself is gone or we've 
-        # received an explicit error/close event
         if self.connected and self.ws:
-            # The WebSocket is still connected as far as we know
-            # Don't log any downtime based on message timing
             return True
-        return True  # Always return True - let _on_error and _on_close handle actual disconnects
-
+        return True  # Let _on_error and _on_close handle actual disconnects
 
     def disconnect(self):
         """Clean shutdown"""
+        # Mark as intentional disconnect to avoid logging downtime
+        self._downtime_logged = True
+        
+        # Store final state before shutdown
+        if self.last_message_time:
+            try:
+                current_state = {
+                    'timestamp': self.last_message_time.isoformat(),
+                    'shutdown_time': datetime.now(timezone.utc).isoformat(),
+                    'is_clean_shutdown': True,
+                    'filings_processed': self.stats['messages_processed']
+                }
+                self.redis_client.set_json("admin:sec:shutdown_state", current_state)
+                self.logger.info(f"Saved shutdown state to Redis. Last message: {self.last_message_time.isoformat()}")
+            except Exception as e:
+                self.logger.error(f"Failed to save shutdown state: {e}")
+        
         self.logger.info("Initiating WebSocket shutdown...")
         self.should_run = False
         if self.ws:
@@ -168,19 +196,42 @@ class SECWebSocket:
 
     def _on_open(self, ws):
         """Handle WebSocket connection open"""
-        self.connected = True
-        self._connection_time = datetime.now(timezone.utc)
-        self.current_retry = 0
-        self._disconnection_logged = False 
+        now = datetime.now(timezone.utc)
+        
+        # Complete any pending downtime record if exists
+        with self._lock:
+            if self._disconnect_time and self._current_downtime_key:
+                try:
+                    # Calculate downtime duration
+                    downtime_seconds = (now - self._disconnect_time).total_seconds()
+                    
+                    # Update the existing record with end time
+                    downtime_record = self.redis_client.get_json(self._current_downtime_key)
+                    if downtime_record:
+                        downtime_record['end'] = now.isoformat()
+                        downtime_record['downtime_seconds'] = downtime_seconds
+                        self.redis_client.set_json(self._current_downtime_key, downtime_record)
+                        
+                        self.logger.info(f"Downtime ended - Duration: {downtime_seconds:.1f}s - Key: {self._current_downtime_key}")
+                except Exception as e:
+                    self.logger.error(f"Failed to update downtime record: {e}")
+            
+            # Reset connection tracking state
+            self.connected = True
+            self._connection_time = now
+            self._disconnect_time = None
+            self._downtime_logged = False
+            self._current_downtime_key = None
+            self.current_retry = 0
         
         self.logger.info("=== SEC REPORTS WEBSOCKET CONNECTED ===")
-        print("=== SEC REPORTS WEBSOCKET CONNECTED ===")
 
     def _on_message(self, ws, message: str):
         """Handle incoming WebSocket message"""
         with self._stats_lock:
             # Always update message time, even for heartbeats
-            self.last_message_time = datetime.now(timezone.utc)
+            now = datetime.now(timezone.utc)
+            self.last_message_time = now
             self.current_retry = 0  # Reset retry counter on successful message
             
             try:
@@ -188,42 +239,64 @@ class SECWebSocket:
                 
                 # Consider numeric messages as heartbeats
                 if message.isdigit():
-                    self.logger.info(f"Heartbeat: {message}")
+                    if int(message) % 100 == 0:  # Log only occasionally to reduce noise
+                        self.logger.debug(f"Heartbeat: {message}")
                     return
                     
                 filings = json.loads(message)
                 self.logger.info(f"Parsed {len(filings)} filings from message")
                 
+                processed_count = 0
                 for idx, filing in enumerate(filings, 1):
                     self.logger.info(f"Processing filing {idx}/{len(filings)}")
-                    self.logger.info(f"Form Type: {filing.get('formType')}")
-                    self.logger.info(f"Accession No: {filing.get('accessionNo')}")
+                    self.logger.debug(f"Form Type: {filing.get('formType')}")
+                    self.logger.debug(f"Accession No: {filing.get('accessionNo')}")
                     
                     # First attempt to process filing
                     unified_filing = self.error_handler.process_filing(filing, raw=False)
                     if unified_filing:
-                        self.logger.info(f"Successfully created UnifiedReport")
+                        self.logger.debug(f"Successfully created UnifiedReport")
                         
                         # Attempt to store in Redis
                         if self.redis_client.set_filing(unified_filing, ex=self.ttl):
-                            self.logger.info(f"Successfully stored in Redis")
+                            self.logger.debug(f"Successfully stored in Redis")
                             
                             # If raw display needed, get raw version
-                            if self.raw:
+                            if self.raw and self.logger.isEnabledFor(logging.DEBUG):
                                 display_filing = self.error_handler.process_filing(filing, raw=True)
                                 if display_filing:
                                     display_filing.print()
-                            else:
+                            elif self.logger.isEnabledFor(logging.DEBUG):
                                 unified_filing.print()
                                 
-                            self.stats['messages_processed'] += 1
+                            processed_count += 1
                         else:
                             self.logger.error(f"Failed to store in Redis")
                     else:
                         self.logger.error(f"Failed to create UnifiedReport")
                         self.logger.error(f"Original filing data: {json.dumps(filing, indent=2)}")
                 
-                self.print_stats()
+                # Update stats
+                self.stats['messages_processed'] += processed_count
+                
+                # Persist the last message time to Redis after successful processing
+                if processed_count > 0:
+                    try:
+                        accession_no = filings[-1].get('accessionNo', 'unknown') if filings else 'unknown'
+                        message_data = {
+                            'timestamp': now.isoformat(),
+                            'accession_no': accession_no,
+                            'filings_count': len(filings),
+                            'updated_at': datetime.now(timezone.utc).isoformat()
+                        }
+                        self.redis_client.set_json("admin:sec:last_message_time", message_data)
+                        self.logger.debug(f"Updated last message time in Redis: {accession_no}")
+                    except Exception as e:
+                        self.logger.warning(f"Failed to update last message time in Redis: {e}")
+                
+                # Only log stats occasionally to reduce noise
+                if self.stats['messages_processed'] % 5 == 0 or processed_count > 0:
+                    self._log_stats()
                 
             except json.JSONDecodeError as je:
                 self.logger.error(f"JSON decode error: {str(je)}")
@@ -232,38 +305,48 @@ class SECWebSocket:
                 self.logger.error(f"Unexpected error: {str(e)}")
                 self.error_handler.handle_unexpected_error(e)
 
+
     def _on_error(self, ws, error):
-        """Handle WebSocket error"""
         self.connected = False
         self.logger.error(f"WebSocket error: {error}")
-        print(f"WebSocket error: {error}")
         
-        # Log network-related errors as disconnections
-        error_str = str(error)
-        if any(msg in error_str.lower() for msg in ["closed", "lost", "timed out", "refused", "reset"]):
-            self.logger.warning(f"Network error detected: {error}")
-            self._log_downtime(status_code=1001)  # Going Away
+        # Set the flag BEFORE logging to prevent race conditions with _on_close
+        with self._lock:
+            was_already_logged = self._downtime_logged
+            self._downtime_logged = True
         
-        # Rate limiting
-        elif "429" in error_str:
-            self.logger.warning("Rate limit hit - using exponential backoff")
-            self.current_retry = max(self.current_retry, 3)
-            self._log_downtime(status_code=429)
-        
-        # Other errors
-        else:
-            self._log_downtime(status_code=1006)  # Abnormal Closure
+        # Only log if we haven't already logged this disconnect
+        if not was_already_logged:
+            # Log network-related errors as disconnections
+            error_str = str(error)
+            if any(msg in error_str.lower() for msg in ["closed", "lost", "timed out", "refused", "reset"]):
+                self.logger.warning(f"Network error detected: {error}")
+                self._log_downtime(status_code=1001, reason="Network error")
+            
+            # Rate limiting
+            elif "429" in error_str:
+                self.logger.warning("Rate limit hit - using exponential backoff")
+                self.current_retry = max(self.current_retry, 3)
+                self._log_downtime(status_code=429, reason="Rate limit exceeded")
+            
+            # Other errors
+            else:
+                self._log_downtime(status_code=1006, reason=f"Error: {error_str}")
 
     def _on_close(self, ws, close_status_code, close_msg):
         """Handle WebSocket connection close"""
         self.connected = False
         self.logger.info(f"=== SEC REPORTS WEBSOCKET DISCONNECTED ===")
-        print(f"=== SEC REPORTS WEBSOCKET DISCONNECTED ===")
         self.logger.info(f"WebSocket closed: {close_status_code} - {close_msg}")
         
-        # Log downtime with appropriate status code
-        status = close_status_code if close_status_code else 1006
-        self._log_downtime(status_code=status)
+        # Only log downtime if it wasn't already logged in _on_error
+        if not self._downtime_logged:
+            status = close_status_code if close_status_code else 1006
+            self._log_downtime(status_code=status, reason=close_msg or "Connection closed")
+        
+        # Don't attempt to reconnect if this was an intentional shutdown
+        if not self.should_run:
+            return
 
     def _on_pong(self, ws, message):
         """Handle pong response"""
@@ -271,61 +354,82 @@ class SECWebSocket:
             self.last_pong_time = datetime.now(timezone.utc)
             self.logger.debug(f"Received pong at {self.last_pong_time.isoformat()}")
 
+    def _log_stats(self):
+        """Log WebSocket statistics (internal use)"""
+        stats_summary = (
+            f"SEC WebSocket Stats: "
+            f"Received: {self.stats['messages_received']}, "
+            f"Processed: {self.stats['messages_processed']}"
+        )
+        
+        if self.last_message_time:
+            stats_summary += f", Last Message: {self.last_message_time.isoformat()}"
+            
+        success_rate = 0
+        if self.stats['messages_received'] > 0:
+            success_rate = (self.stats['messages_processed']/self.stats['messages_received'])*100
+        
+        stats_summary += f", Success Rate: {success_rate:.1f}%"
+        
+        self.logger.info(stats_summary)
+        
+        # Periodically update stats in Redis (every 10 messages)
+        if self.stats['messages_processed'] % 10 == 0 and self.last_message_time:
+            try:
+                self.redis_client.set_json("admin:sec:stats", { # Not sure 
+                    'last_message_time': self.last_message_time.isoformat(),
+                    'messages_received': self.stats['messages_received'],
+                    'messages_processed': self.stats['messages_processed'],
+                    'success_rate': success_rate,
+                    'updated_at': datetime.now(timezone.utc).isoformat()
+                })
+            except Exception:
+                pass  # Silently fail for periodic updates
 
+    def print_stats(self):
+        """Print WebSocket statistics (for external calls)"""
+        self._log_stats()
+        
+        # Detailed stats for debug level
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self.error_handler.print_stats()
 
-    def _log_downtime(self, status_code):
-        """Log connection downtime to Redis - only called from _on_error and _on_close"""
-        # Only log one downtime entry per disconnection
+    def _log_downtime(self, status_code, reason=""):
+        """Log connection downtime to Redis - start of downtime period"""
         with self._lock:
-            # Check if we already logged this disconnection
-            if not hasattr(self, '_disconnection_logged') or not self._disconnection_logged:
-                disconnect_time = datetime.now(timezone.utc)
-                reference_time = self._connection_time
+            # Only log one downtime entry per disconnection
+            if not self._downtime_logged:
+                now = datetime.now(timezone.utc)
                 
-                if reference_time:
-                    duration = (disconnect_time - reference_time).total_seconds()
+                if self._connection_time:
+                    # Store disconnect time for later update when connection is restored
+                    self._disconnect_time = now
                     
+                    # Create initial downtime record - will be updated when reconnected
                     downtime = {
-                        'start': reference_time.isoformat(),
-                        'end': disconnect_time.isoformat(),
-                        'duration': duration,
+                        'start': now.isoformat(),  # When the disconnect occurred
+                        'connection_start': self._connection_time.isoformat(),  # When connection started
+                        'uptime_seconds': (now - self._connection_time).total_seconds(),
                         'status': str(status_code),
+                        'reason': reason,
                         'source': 'reports',  # Hardcode to 'reports' for SEC
+                        'end': None,  # Will be filled when reconnected
+                        'downtime_seconds': None  # Will be filled when reconnected
                     }
                     
                     try:
-                        # Simple key format that works for news without duplicates
-                        key = f"admin:websocket_downtime:{downtime['source']}:{disconnect_time.timestamp()}"
+                        key = f"admin:websocket_downtime:reports:{now.timestamp()}"
                         success = self.redis_client.set_json(key, downtime)
                         
                         if success:
-                            log_msg = f"{downtime['source'].upper()} connection lost. Status: {status_code}. Key: {key}"
-                            self.logger.warning(log_msg)
-                            print(f"DOWNTIME LOGGED: {log_msg}")
+                            self._current_downtime_key = key
+                            self.logger.warning(f"Connection lost at {now.isoformat()}. Status: {status_code}. Key: {key}")
                             
                             # Mark that we logged this disconnection
-                            self._disconnection_logged = True
+                            self._downtime_logged = True
                         else:
                             self.logger.error(f"Failed to save downtime to Redis: {key}")
                     except Exception as e:
                         self.logger.error(f"ERROR LOGGING DOWNTIME: {e}")
-                        print(f"ERROR LOGGING DOWNTIME: {e}")
-
-
-                    
-
-    def print_stats(self):
-        """Print WebSocket statistics"""
-        stats_summary = (
-            f"\nSEC WebSocket Statistics:\n"
-            f"Messages Received: {self.stats['messages_received']}\n"
-            f"Filings Processed: {self.stats['messages_processed']}\n"
-        )
-        
-        if self.last_message_time:
-            stats_summary += f"Last Message: {self.last_message_time.isoformat()}\n"
-            
-        stats_summary += f"Success Rate: {(self.stats['messages_processed']/max(1, self.stats['messages_received']))*100:.1f}%"
-        
-        self.logger.info(stats_summary)
-        print(stats_summary)
+                else:
+                    self.logger.warning("Connection lost but no connection start time recorded. Skipping downtime logging.")

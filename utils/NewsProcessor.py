@@ -9,8 +9,8 @@ from utils.market_session import MarketSessionClassifier
 class NewsProcessor(BaseProcessor):
     """News-specific processor implementation"""
     
-    def __init__(self, event_trader_redis, delete_raw: bool = True):
-        super().__init__(event_trader_redis, delete_raw)
+    def __init__(self, event_trader_redis, delete_raw: bool = True, polygon_subscription_delay: int = None):
+        super().__init__(event_trader_redis, delete_raw, polygon_subscription_delay)
         # Any news-specific initialization can go here
         # self.market_session = MarketSessionClassifier() 
 

@@ -19,6 +19,8 @@ import pytz
 @dataclass
 class Polygon:
     api_key: str
+    polygon_subscription_delay: int
+
     
     def __post_init__(self):
         """Initialize market session classifier and client"""
@@ -34,7 +36,6 @@ class Polygon:
         self.last_error = {}
         self.ticker_validation_cache = {}
         
-
 
         # Add connection pooling configuration
         self.session = requests.Session()
@@ -109,6 +110,12 @@ class Polygon:
         
         client = self.get_rest_client()
 
+        
+        # Define initial window and growth factor
+        window_size = 300  # Start with 10 seconds
+        growth_factor = 2  
+        max_window = 86400 * max_days_back  # Convert max_days to seconds        
+
         # Skip validation for known ETFs
         if ticker not in Sector_Industry_ETFs:
             # Only validate non-ETF tickers
@@ -123,18 +130,29 @@ class Polygon:
             
         # Check if timestamp is in the future
         current_time = datetime.now(timezone.utc).astimezone(pytz.timezone('America/New_York'))
-        if timestamp > current_time:
-            # self.logger.info(f"Cannot fetch price for {ticker} at {timestamp} as it is in the future (current time: {current_time})")            
+        min_allowed_end = timestamp - timedelta(seconds=max_window)
+        current_end = timestamp
+
+        # self.logger.info(f"--------------------------------")
+        # self.logger.info(f"Timestamp check for {ticker}:")
+        # self.logger.info(f"  Requested timestamp: {timestamp} ({timestamp.tzname()})")
+        # self.logger.info(f"  Current time: {current_time} ({current_time.tzname()})")
+        # self.logger.info(f"  Window size: {window_size}s")
+        # self.logger.info(f"  Max window: {max_window}s")
+        # self.logger.info(f"  Min allowed end: {min_allowed_end}")
+        # self.logger.info(f"  Is future? {timestamp > current_time}")
+        # self.logger.info(f"  Is too old? {timestamp < min_allowed_end}")
+        # self.logger.info(f"--------------------------------")
+
+
+        current_time_with_delay = current_time - timedelta(seconds=self.polygon_subscription_delay)
+        if timestamp > current_time_with_delay + timedelta(seconds=11):
+            self.logger.info(f"--------------------------------")
+            self.logger.info(f"Cannot fetch price for {ticker} at {timestamp} as it is in the future, current time: {current_time}, delayed time: {current_time_with_delay}, delay: {self.polygon_subscription_delay} seconds")
+            self.logger.info(f"--------------------------------")
             return np.nan
         
-        # Define initial window and growth factor
-        window_size = 300  # Start with 10 seconds
-        growth_factor = 2  
-        max_window = 86400 * max_days_back  # Convert max_days to seconds
-        min_allowed_end = timestamp - timedelta(seconds=max_window)
 
-        current_end = timestamp
-        
         while window_size <= max_window:
             if current_end < min_allowed_end:
                 print(f"No price found for {ticker} between {min_allowed_end} and {timestamp}")
@@ -176,12 +194,14 @@ class Polygon:
 
                 if "NOT_AUTHORIZED" in error_msg:
                     # To be Removed
-                    print(f"Ticker: {ticker}")
-                    print(f"Window size: {window_size}s")
-                    print(f"Max window: {max_window}s")
-                    print(f"Current end: {current_end}")
-                    print(f"Current start: {current_start}")
-                    print(f"Error message: {error_msg}")
+                    self.logger.info(f"NOT AUTHORIZED in error_msg")
+                    self.logger.info(f"Ticker: {ticker}")
+                    self.logger.info(f"Window size: {window_size}s")
+                    self.logger.info(f"Max window: {max_window}s")
+                    self.logger.info(f"Current end: {current_end}")
+                    self.logger.info(f"Current start: {current_start}")
+                    self.logger.info(f"Error message: {error_msg}")
+                    self.logger.info(f"--------------------------------")
 
                     window_size = max(window_size // 2, 10)                    
                     # if current_end < min_allowed_end: return np.nan # Safety check for NOT_AUTHORIZED
@@ -200,7 +220,7 @@ class Polygon:
     def _get_last_trade_worker(self, ticker: str, timestamp: datetime, max_days_back: int) -> float:
         """Worker function that creates a new Polygon instance per thread"""
         # Create new instance with its own connection pool
-        polygon = Polygon(api_key=self.api_key)
+        polygon = Polygon(api_key=self.api_key, polygon_subscription_delay=self.polygon_subscription_delay)
         try:
             return polygon.get_last_trade(ticker, timestamp, max_days_back=max_days_back)
         finally:
@@ -300,7 +320,7 @@ class Polygon:
 
     def _get_price_worker(self, ticker: str, timestamp: datetime) -> float:
         """Worker function for getting prices with dedicated Polygon instance"""
-        polygon = Polygon(api_key=self.api_key)
+        polygon = Polygon(api_key=self.api_key, polygon_subscription_delay=self.polygon_subscription_delay)
         try:
             return polygon.get_last_trade(ticker, timestamp)
         finally:
@@ -407,7 +427,7 @@ class Polygon:
 
     def _fetch_related_companies_worker(self, ticker: str) -> Tuple[str, List[str]]:
         """Worker function for fetching related companies with dedicated instance"""
-        polygon = Polygon(api_key=self.api_key)
+        polygon = Polygon(api_key=self.api_key, polygon_subscription_delay=self.polygon_subscription_delay)
         try:
             url = f"https://api.polygon.io/v1/related-companies/{ticker}"
             params = {'apiKey': polygon.api_key}

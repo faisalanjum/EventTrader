@@ -73,12 +73,12 @@ class EventReturnsManager:
     Manages event metadata and return calculations for both news and reports.
     Provides a unified interface regardless of number of symbols.
     """
-    def __init__(self, stock_universe_df):
+    def __init__(self, stock_universe_df, polygon_subscription_delay: int):
         self.stock_universe = stock_universe_df
         self.ny_tz          = pytz.timezone("America/New_York")
 
         self.market_session = MarketSessionClassifier()
-        self.polygon        = Polygon(api_key=POLYGON_API_KEY)
+        self.polygon  = Polygon(api_key=POLYGON_API_KEY, polygon_subscription_delay=polygon_subscription_delay)
 
         self.logger         = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)

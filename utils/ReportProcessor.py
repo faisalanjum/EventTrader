@@ -68,9 +68,9 @@ def _extract_section_worker(args):
 class ReportProcessor(BaseProcessor):
     """Report-specific processor implementation"""
     
-    def __init__(self, event_trader_redis, delete_raw: bool = True):
+    def __init__(self, event_trader_redis, delete_raw: bool = True, polygon_subscription_delay: int = None):
         # Pass all parameters to parent class
-        super().__init__(event_trader_redis, delete_raw)
+        super().__init__(event_trader_redis, delete_raw, polygon_subscription_delay)
         self.extractor = ExtractorApi(SEC_API_KEY) if SEC_API_KEY else None
         self.xbrl_api = XbrlApi(SEC_API_KEY) if SEC_API_KEY else None
 

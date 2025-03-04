@@ -46,16 +46,16 @@ class DataSourceManager:
         # Initialize Redis and processors
         self.redis = EventTraderRedis(source=self.source_type)        # ex: source_type = news:benzinga
         # self.processor = NewsProcessor(self.redis, delete_raw=True)
-        self.polygon_subscription_delay = 15 * 60 # (in seconds) Lower tier subscription has 15 delayed data
+        self.polygon_subscription_delay = (15 * 60)  # (in seconds) Lower tier subscription has 15 delayed data
 
         print(f"[Manager Debug] Initializing {source_type} manager")
         print(f"[Manager Debug] Processor class: {processor_class}")
 
-        self.processor = processor_class(self.redis, delete_raw=True,) if processor_class else None
+        self.processor = processor_class(self.redis, delete_raw=True,polygon_subscription_delay=self.polygon_subscription_delay) if processor_class else None
 
         print(f"[Manager Debug] Processor initialized: {self.processor is not None}")
 
-        self.returns_processor = ReturnsProcessor(self.redis, self.polygon_subscription_delay)
+        self.returns_processor = ReturnsProcessor(self.redis, polygon_subscription_delay=self.polygon_subscription_delay)
         
         # Thread management
         self.ws_thread = None
@@ -313,7 +313,7 @@ class DataManager:
 
     def initialize_sources(self):
         self.sources['news'] = BenzingaNewsManager(self.historical_range)
-        # self.sources['reports'] = ReportsManager(self.historical_range)
+        self.sources['reports'] = ReportsManager(self.historical_range)
         # Add other sources as needed:
         # self.sources['transcripts'] = TranscriptsManager(self.historical_range)
 

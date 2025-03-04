@@ -4,6 +4,7 @@ import logging
 import json
 from typing import Optional, Dict, Any
 from utils.redis_constants import RedisKeys
+from utils.redisClasses import RedisClient
 from utils.EventReturnsManager import EventReturnsManager
 from datetime import datetime
 import pytz
@@ -13,8 +14,9 @@ from utils.metadata_fields import MetadataFields
 class BaseProcessor(ABC):
     """Base class for all processors (news, reports, transcripts)"""
     
-    def __init__(self, event_trader_redis, delete_raw: bool = True):
+    def __init__(self, event_trader_redis, delete_raw: bool = True, polygon_subscription_delay: int = None):
 
+        self.polygon_subscription_delay = polygon_subscription_delay
 
         # Core fields needed across system
         self.REQUIRED_FIELDS = {
@@ -73,10 +75,10 @@ class BaseProcessor(ABC):
                 
 
                 if result:
-                    # print(f"[Processor Debug] Popped item: {result}")
+                    print(f"[Processor Debug] Popped item: {result}")
                     pass
                 else:
-                    # print(f"[Processor Debug] No items in queue after timeout")
+                    print(f"[Processor Debug] No items in queue after timeout")
                     pass
 
 
@@ -216,14 +218,61 @@ class BaseProcessor(ABC):
             logging.getLogger(__name__).error(f"Failed to parse timestamp {utc_time_str}: {e}")
             return utc_time_str
 
+    # def _reconnect(self):
+    #     """Reconnect to Redis"""
+    #     try:
+    #         self.live_client = self.live_client.__class__(prefix=self.live_client.prefix)
+    #         self.hist_client = self.hist_client.__class__(prefix=self.hist_client.prefix)
+    #         self.queue_client = self.live_client
+    #     except Exception as e:
+    #         self.logger.error(f"Reconnection failed: {e}")
+
     def _reconnect(self):
         """Reconnect to Redis"""
         try:
-            self.live_client = self.live_client.__class__(prefix=self.live_client.prefix)
-            self.hist_client = self.hist_client.__class__(prefix=self.hist_client.prefix)
+            # Store the original configuration before reconnecting
+            live_prefix = self.live_client.prefix
+            hist_prefix = self.hist_client.prefix
+            
+            # Store the original queue configurations
+            live_raw_queue = self.live_client.RAW_QUEUE if hasattr(self.live_client, 'RAW_QUEUE') else None
+            live_processed_queue = self.live_client.PROCESSED_QUEUE if hasattr(self.live_client, 'PROCESSED_QUEUE') else None
+            live_failed_queue = self.live_client.FAILED_QUEUE if hasattr(self.live_client, 'FAILED_QUEUE') else None
+            
+            hist_raw_queue = self.hist_client.RAW_QUEUE if hasattr(self.hist_client, 'RAW_QUEUE') else None
+            hist_processed_queue = self.hist_client.PROCESSED_QUEUE if hasattr(self.hist_client, 'PROCESSED_QUEUE') else None
+            hist_failed_queue = self.hist_client.FAILED_QUEUE if hasattr(self.hist_client, 'FAILED_QUEUE') else None
+            
+            # Create new client instances with the same parameters
+            self.live_client = RedisClient(
+                prefix=live_prefix,
+                source_type=self.source_type
+            )
+            
+            self.hist_client = RedisClient(
+                prefix=hist_prefix,
+                source_type=self.source_type
+            )
+            
+            # Restore queue configurations if they weren't properly set
+            if not hasattr(self.live_client, 'RAW_QUEUE') and live_raw_queue:
+                self.live_client.RAW_QUEUE = live_raw_queue
+                self.live_client.PROCESSED_QUEUE = live_processed_queue
+                self.live_client.FAILED_QUEUE = live_failed_queue
+                
+            if not hasattr(self.hist_client, 'RAW_QUEUE') and hist_raw_queue:
+                self.hist_client.RAW_QUEUE = hist_raw_queue
+                self.hist_client.PROCESSED_QUEUE = hist_processed_queue
+                self.hist_client.FAILED_QUEUE = hist_failed_queue
+            
+            # Reset queue_client to live_client
             self.queue_client = self.live_client
+            
+            self.logger.info("Successfully reconnected to Redis clients")
         except Exception as e:
             self.logger.error(f"Reconnection failed: {e}")
+
+
 
     def stop(self):
         """Stop processing"""
@@ -249,7 +298,7 @@ class BaseProcessor(ABC):
             symbols = processed_dict.get('symbols', [])
             
             # Use EventReturnsManager to generate metadata - shouldn't we create a Global instance of EventReturnsManager?
-            event_manager = EventReturnsManager(self.stock_universe)
+            event_manager = EventReturnsManager(self.stock_universe, polygon_subscription_delay=self.polygon_subscription_delay)
             metadata = event_manager.process_event_metadata(
                 event_time=event_time,
                 symbols=symbols
