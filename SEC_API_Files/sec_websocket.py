@@ -9,6 +9,7 @@ import threading
 from SEC_API_Files.sec_schemas import SECFilingSchema, UnifiedReport
 from SEC_API_Files.sec_errors import FilingErrorHandler
 import logging
+from utils.log_config import get_logger, setup_logging
 
 class SECWebSocket:
     def __init__(self, api_key: str, redis_client: RedisClient, ttl: int = 7*24*3600, log_level: int = logging.INFO):
@@ -18,13 +19,8 @@ class SECWebSocket:
         self.api_key = api_key
         self.url = f"wss://stream.sec-api.io?apiKey={self.api_key}"
         
-        # Set up logging first to avoid initialization errors
-        self.logger = logging.getLogger("reports_websocket")
-        self.logger.setLevel(log_level)
-        if not self.logger.handlers:
-            handler = logging.StreamHandler()
-            handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-            self.logger.addHandler(handler)
+        # Set up logging using centralized system
+        self.logger = get_logger("reports_websocket", log_level)
         
         # State tracking
         self.connected = False

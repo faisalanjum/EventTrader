@@ -9,6 +9,7 @@ from utils.redisClasses import RedisClient, EventTraderRedis
 from SEC_API_Files.sec_errors import FilingErrorHandler
 from SEC_API_Files.sec_schemas import VALID_FORM_TYPES
 from sec_api import QueryApi
+from utils.log_config import get_logger, setup_logging
 
 class SECRestAPI:
     """REST API client for historical SEC filing data"""
@@ -21,6 +22,7 @@ class SECRestAPI:
         self.ttl = ttl
         self.error_handler = FilingErrorHandler()
         self.query_api = QueryApi(api_key=api_key)
+        self.logger = get_logger("sec_rest_api")  # Add centralized logger
         
         # API Limits
         self.MAX_QUERY_LENGTH = 3500  # Maximum query string length
@@ -55,7 +57,8 @@ class SECRestAPI:
         base=2,
         factor=1,
         jitter=None,
-        logger=logging.getLogger('sec_filings')
+        # We'll get the logger dynamically inside the method to avoid using root logger
+        logger=None
     )
 
     def get_historical_data(self, date_from: str, date_to: str, raw: bool = False) -> List[Dict]:
@@ -65,7 +68,7 @@ class SECRestAPI:
             tickers = symbols_str.split(',') if symbols_str else []
             total_tickers = len(tickers)
             
-            logging.info(f"Fetching SEC filings from {date_from} to {date_to} for {total_tickers} tickers")
+            self.logger.info(f"Fetching SEC filings from {date_from} to {date_to} for {total_tickers} tickers")
             
             processed_filings = []
             for ticker in tickers:
@@ -79,7 +82,7 @@ class SECRestAPI:
                         
                 except Exception as e:
                     self.stats['errors'] += 1
-                    logging.error(f"Error processing ticker {ticker}: {str(e)}")
+                    self.logger.error(f"Error processing ticker {ticker}: {str(e)}")
                     continue
                 
                 time.sleep(self.RATE_LIMIT_DELAY)
@@ -88,7 +91,7 @@ class SECRestAPI:
             return processed_filings
             
         except Exception as e:
-            logging.error(f"Error in get_historical_data: {str(e)}")
+            self.logger.error(f"Error in get_historical_data: {str(e)}")
             return []
 
 
@@ -102,18 +105,18 @@ class SECRestAPI:
                 # Process each filing (matching WebSocket pattern)
                 for filing in filings:
                     self.stats['messages_received'] += 1
-                    logging.info(f"\nProcessing filing #{self.stats['messages_received']}")
-                    logging.info(f"Form Type: {filing.get('formType')}")
-                    logging.info(f"Accession No: {filing.get('accessionNo')}")
+                    self.logger.info(f"\nProcessing filing #{self.stats['messages_received']}")
+                    self.logger.info(f"Form Type: {filing.get('formType')}")
+                    self.logger.info(f"Accession No: {filing.get('accessionNo')}")
                     
                     # First process to unified format
                     unified_filing = self.error_handler.process_filing(filing, raw=False)
                     if unified_filing:
-                        logging.info("✅ Successfully created UnifiedReport")
+                        self.logger.info("✅ Successfully created UnifiedReport")
                         
                         # Store in Redis
                         if self.redis_client.set_filing(unified_filing, ex=self.ttl):
-                            logging.info("✅ Successfully stored in Redis")
+                            self.logger.info("✅ Successfully stored in Redis")
                             
                             # Handle raw display if needed
                             if raw:
@@ -127,21 +130,21 @@ class SECRestAPI:
                                 
                             self.stats['messages_processed'] += 1
                         else:
-                            logging.error("❌ Failed to store in Redis")
+                            self.logger.error("❌ Failed to store in Redis")
                     else:
-                        logging.error("❌ Failed to create UnifiedReport")
-                        logging.error(f"Original filing data: {json.dumps(filing, indent=2)}")
+                        self.logger.error("❌ Failed to create UnifiedReport")
+                        self.logger.error(f"Original filing data: {json.dumps(filing, indent=2)}")
                 
                 if len(filings) >= self.MAX_RESULTS:
                     self.stats['pagination_limits_hit'] += 1
-                    logging.warning(
+                    self.logger.warning(
                         f"Retrieved maximum {self.MAX_RESULTS} filings for "
                         f"{ticker} {form_type} from {date_from} to {date_to}"
                     )
                 
             except Exception as e:
                 self.stats['errors'] += 1
-                logging.error(f"Error processing {ticker} {form_type}: {str(e)}")
+                self.logger.error(f"Error processing {ticker} {form_type}: {str(e)}")
                 continue
                 
             time.sleep(self.RATE_LIMIT_DELAY)
@@ -162,7 +165,7 @@ class SECRestAPI:
                 )
                 
                 if len(search_query) > self.MAX_QUERY_LENGTH:
-                    logging.error(f"Query too long for {ticker} {form_type}")
+                    self.logger.error(f"Query too long for {ticker} {form_type}")
                     break
                 
                 parameters = {
@@ -181,7 +184,7 @@ class SECRestAPI:
                 if 'total' in response_data:
                     total = response_data['total']
                     if total.get('relation') == 'gte' and total.get('value', 0) >= self.MAX_RESULTS:
-                        logging.warning(f"Query for {ticker} {form_type} has more than {self.MAX_RESULTS} results")
+                        self.logger.warning(f"Query for {ticker} {form_type} has more than {self.MAX_RESULTS} results")
                         self.stats['pagination_limits_hit'] += 1
                 
                 # Get filings array
@@ -200,7 +203,7 @@ class SECRestAPI:
                     
             except Exception as e:
                 self.stats['errors'] += 1
-                logging.error(f"Error fetching {ticker} {form_type} at index {from_index}: {str(e)}")
+                self.logger.error(f"Error fetching {ticker} {form_type} at index {from_index}: {str(e)}")
                 break
                 
             time.sleep(self.RATE_LIMIT_DELAY)
@@ -209,11 +212,11 @@ class SECRestAPI:
 
     def _log_stats(self):
         """Log current processing statistics"""
-        logging.info("\nSEC REST API Statistics:")
-        logging.info(f"Tickers Processed: {self.stats['tickers_processed']}")
-        logging.info(f"Messages Received: {self.stats['messages_received']}")
-        logging.info(f"Messages Processed: {self.stats['messages_processed']}")
-        logging.info(f"Queries Made: {self.stats['queries_made']}")
-        logging.info(f"Filings Found: {self.stats['filings_found']}")
-        logging.info(f"Pagination Limits Hit: {self.stats['pagination_limits_hit']}")
-        logging.info(f"Errors: {self.stats['errors']}")
+        self.logger.info("\nSEC REST API Statistics:")
+        self.logger.info(f"Tickers Processed: {self.stats['tickers_processed']}")
+        self.logger.info(f"Messages Received: {self.stats['messages_received']}")
+        self.logger.info(f"Messages Processed: {self.stats['messages_processed']}")
+        self.logger.info(f"Queries Made: {self.stats['queries_made']}")
+        self.logger.info(f"Filings Found: {self.stats['filings_found']}")
+        self.logger.info(f"Pagination Limits Hit: {self.stats['pagination_limits_hit']}")
+        self.logger.info(f"Errors: {self.stats['errors']}")

@@ -8,6 +8,7 @@ from typing import Union
 from benzinga.bz_news_schemas import BzWebSocketNews, UnifiedNews
 from benzinga.bz_news_errors import NewsErrorHandler
 from utils.redisClasses import RedisClient
+from utils.log_config import get_logger, setup_logging
 import threading
 
 
@@ -25,7 +26,8 @@ class BenzingaNewsWebSocket:
             ttl: TTL for news items in Redis (seconds)
             log_level: Logging level (default: logging.INFO)
         """
-        self._setup_logger(log_level)
+        # Set up logger using centralized logging
+        self.logger = get_logger("benzinga_news_websocket", log_level)
         self.redis_client = redis_client
         self.ttl = ttl
         self.api_key = api_key
@@ -70,16 +72,6 @@ class BenzingaNewsWebSocket:
         self._current_downtime_key = None
         
         self.logger.info("=== BENZINGA NEWS WEBSOCKET INITIALIZED ===")
-
-    def _setup_logger(self, log_level):
-        """Set up logger with appropriate configuration"""
-        self.logger = logging.getLogger("benzinga_news_websocket")  
-        self.logger.setLevel(log_level)
-        if not self.logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            handler.setFormatter(formatter)
-            self.logger.addHandler(handler)
 
     @staticmethod
     def print_news_item(item: Union[BzWebSocketNews, UnifiedNews], raw: bool = False):

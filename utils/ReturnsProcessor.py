@@ -6,6 +6,7 @@ import json
 from datetime import datetime, timezone, timedelta
 from dateutil import parser
 import time
+from zoneinfo import ZoneInfo
 
 from utils.redisClasses import EventTraderRedis
 from utils.redisClasses import RedisClient
@@ -16,9 +17,19 @@ from utils.EventReturnsManager import EventReturnsManager
 import pytz
 
 from utils.redis_constants import RedisKeys
+from utils.log_config import get_logger, setup_logging
 
 class ReturnsProcessor:
+    """Processor for calculating returns after news events"""
     def __init__(self, event_trader_redis: EventTraderRedis, polygon_subscription_delay: int):
+        """
+        Initialize the returns processor
+        
+        Args:
+            event_trader_redis: EventTraderRedis instance
+            polygon_subscription_delay: Delay for Polygon data subscription in seconds
+        """
+        self.event_trader_redis = event_trader_redis
         self.live_client = event_trader_redis.live_client
         self.hist_client = event_trader_redis.history_client
         self.queue_client = self.live_client.create_new_connection() # create new connection for queue checks
@@ -46,9 +57,8 @@ class ReturnsProcessor:
         # Cache the stock universe for ETF lookups
         self.stock_universe = event_trader_redis.get_stock_universe()
 
-        # Configure logging
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
+        # Configure centralized logging
+        self.logger = get_logger(__name__)
         
         # self.pending_zset = "news:benzinga:pending_returns"  
         self.pending_zset = RedisKeys.get_returns_keys(self.source_type)['pending']       # 'pending': 'news:pending_returns'

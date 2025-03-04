@@ -15,6 +15,7 @@ from .market_session import MarketSessionClassifier
 from utils.metadata_fields import MetadataFields  
 from datetime import datetime, timezone, timedelta
 import pytz
+from utils.log_config import get_logger, setup_logging
 
 @dataclass
 class Polygon:
@@ -25,9 +26,8 @@ class Polygon:
     def __post_init__(self):
         """Initialize market session classifier and client"""
 
-        # Initialize logger
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
+        # Initialize logger using centralized logging
+        self.logger = get_logger(__name__)
 
 
         self.market_session = MarketSessionClassifier()

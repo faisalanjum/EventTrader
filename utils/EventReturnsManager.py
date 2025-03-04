@@ -1,5 +1,5 @@
 from dataclasses import dataclass, asdict
-from typing import Dict, List, Union, Optional, Tuple, Any
+from typing import Dict, List, Union, Optional, Tuple, Any, cast
 from datetime import datetime, timedelta, timezone
 import pandas as pd
 import pytz
@@ -8,6 +8,8 @@ from eventtrader.keys import POLYGON_API_KEY
 from utils.polygonClass import Polygon
 from utils.market_session import MarketSessionClassifier
 from utils.metadata_fields import MetadataFields 
+from utils.log_config import get_logger, setup_logging
+from zoneinfo import ZoneInfo
 
 
 @dataclass
@@ -65,9 +67,6 @@ class EventReturn:
     returns: Optional[Dict[str, Any]] = None
 
 
-
-
-
 class EventReturnsManager:
     """
     Manages event metadata and return calculations for both news and reports.
@@ -81,8 +80,7 @@ class EventReturnsManager:
         self.market_session = MarketSessionClassifier()
         self.polygon  = Polygon(api_key=POLYGON_API_KEY, polygon_subscription_delay=polygon_subscription_delay)
 
-        self.logger         = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
+        self.logger = get_logger(__name__)
 
 
     def process_event_metadata(self, 

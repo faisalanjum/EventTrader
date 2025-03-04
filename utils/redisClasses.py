@@ -12,24 +12,10 @@ from datetime import timezone
 import time
 from utils.redis_constants import RedisKeys, RedisQueues
 from SEC_API_Files.sec_schemas import SECFilingSchema, UnifiedReport
+from utils.log_config import get_logger, setup_logging
 
-
-
-# Create logs directory if it doesn't exist
-log_dir = "logs"
-if not os.path.exists(log_dir):
-    os.makedirs(log_dir)
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO, # for production, use INFO, DEBUG for development
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(os.path.join(log_dir, f"redis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")),
-        logging.StreamHandler()
-    ]
-)
-
+# Set up logger
+logger = get_logger("redis_classes")
 
 # preserve_processed=True by default to maintain both historical and live processed news between runs,
 # preventing duplicate processing while allowing new incoming news (both historical and live) to be 
@@ -40,6 +26,7 @@ class EventTraderRedis:
     def __init__(self, source=RedisKeys.SOURCE_NEWS, clear_config=False, preserve_processed=True):
         self.source = source
         prefixes = RedisKeys.get_prefixes(self.source) # {'live': 'news:benzinga:live:', 'hist': 'news:benzinga:hist:'}
+        self.logger = get_logger(f"{self.__class__.__name__}")
         
         # Initialize Redis clients with source-specific prefixes
         self.live_client = RedisClient(
@@ -58,12 +45,13 @@ class EventTraderRedis:
 
 
     def initialize_stock_universe(self, clear_config=False, file_path='../StocksUniverse/final_symbols.csv'):
+        """Initialize stock universe from CSV file"""
         try:
             if clear_config:
                 self.config.clear()
-                
+
             df = pd.read_csv(file_path)
-            logging.info(f"Successfully read CSV with {len(df)} rows")
+            self.logger.info(f"Successfully read CSV with {len(df)} rows")
             
             df['symbol'] = df['symbol'].astype(str).str.strip()
             df = df[df['symbol'].str.lower() != 'nan']
@@ -79,16 +67,16 @@ class EventTraderRedis:
             # Update verification keys too
             verify_universe = self.config.get('config:stock_universe')
             verify_symbols = self.config.get('config:symbols')
-            
+                
             if not (verify_universe and verify_symbols):
-                logging.error("Failed to verify config storage")
+                self.logger.error("Failed to verify config storage")
                 return False
                 
-            logging.info(f"Successfully initialized stock universe with {len(symbols)} symbols")
+            self.logger.info(f"Successfully initialized stock universe with {len(symbols)} symbols")
             return True
             
         except Exception as e:
-            logging.error(f"Error initializing stock universe: {e}")
+            self.logger.error(f"Error initializing stock universe: {e}")
             return False
 
 
@@ -102,11 +90,11 @@ class EventTraderRedis:
 
     def clear(self, preserve_processed=True): 
         try:
-            self.live_client.clear(preserve_processed) # If True, Only clear raw keys, not processed keys else clear all keys
+            self.live_client.clear(preserve_processed)
             self.history_client.clear(preserve_processed)
             return True
         except Exception as e:
-            logging.error(f"Error during clear: {e}")
+            self.logger.error(f"Error during clear: {e}")
             return False
 
 class RedisClient:
@@ -126,6 +114,7 @@ class RedisClient:
         self.port = port
         self.db = db
         self.prefix = prefix  # Will be 'news:benzinga:live:' or 'news:benzinga:hist:'
+        self.logger = get_logger(f"{self.__class__.__name__}")
 
         # Get source-specific queue names
         if source_type:
@@ -146,13 +135,13 @@ class RedisClient:
             try:
                 self.client = redis.Redis(connection_pool=self.pool)
                 self.client.ping()
-                logging.info(f"Connected to Redis (prefix={self.prefix})")
+                self.logger.info(f"Connected to Redis (prefix={self.prefix})")
                 return
             except redis.ConnectionError as e:
                 if attempt == max_retries - 1:
-                    logging.error(f"Failed to connect to Redis after {max_retries} attempts")
+                    self.logger.error(f"Failed to connect to Redis after {max_retries} attempts")
                     raise
-                logging.warning(f"Redis connection attempt {attempt + 1} failed, retrying...")
+                self.logger.warning(f"Redis connection attempt {attempt + 1} failed, retrying...")
                 time.sleep(retry_delay)
 
 
@@ -176,7 +165,7 @@ class RedisClient:
             # Checks if the news item is already in the processed queue to avoid duplicates
             processed_key = f"{self.prefix}processed:{news_item.id}.{updated_key}"            
             if processed_key in self.client.lrange(self.PROCESSED_QUEUE, 0, -1):
-                logging.info(f"Skipping duplicate news (WebSocket): {processed_key}")
+                self.logger.info(f"Skipping duplicate news (WebSocket): {processed_key}")
                 return False
 
             # Store as news:benzinga:live:raw:{id}:{updated}
@@ -188,7 +177,7 @@ class RedisClient:
             return all(pipe.execute())
                 
         except Exception as e:
-            logging.error(f"Live news storage failed: {e}")
+            self.logger.error(f"Live news storage failed: {e}")
             return False
 
     def set_filing(self, filing: UnifiedReport, ex: int = None) -> bool:
@@ -202,7 +191,7 @@ class RedisClient:
             print(f"[Redis Debug] Items in PROCESSED_QUEUE: {len(processed_items)}")
         
             if processed_key in processed_items:
-                logging.info(f"Skipping duplicate filing: {processed_key}")
+                self.logger.info(f"Skipping duplicate filing: {processed_key}")
                 return False  # ✅ Clearly indicates "not processed"
             
             storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"   
@@ -214,7 +203,7 @@ class RedisClient:
             return all(pipe.execute())
                 
         except Exception as e:
-            logging.error(f"Filing storage failed: {e}")
+            self.logger.error(f"Filing storage failed: {e}")
             return False
 
     # def set_filing(self, filing, ex: int = None, raw: bool = False) -> bool:
@@ -279,7 +268,7 @@ class RedisClient:
 
                 # Skip if already in processed queue
                 if processed_key in processed_items:
-                    logging.info(f"Skipping duplicate news (RestAPI): {processed_key}")
+                    self.logger.info(f"Skipping duplicate news (RestAPI): {processed_key}")
                     continue
 
                 storage_key = f"{self.prefix}raw:{item.id}.{updated_key}"
@@ -288,21 +277,21 @@ class RedisClient:
             
             return all(pipe.execute())
         except Exception as e:
-            logging.error(f"Historical news batch storage failed: {e}")
+            self.logger.error(f"Historical news batch storage failed: {e}")
             return False
 
     def get(self, key: str) -> Optional[str]:
         try:
             return self.client.get(key)
         except Exception as e:
-            logging.error(f"Get failed for key {key}: {e}")
+            self.logger.error(f"Get failed for key {key}: {e}")
             return None
 
     def set(self, key: str, value: str, ex=None) -> bool:
         try:
             return bool(self.client.set(key, value, ex=ex))
         except Exception as e:
-            logging.error(f"Set failed for key {key}: {e}")
+            self.logger.error(f"Set failed for key {key}: {e}")
             return False
 
     def push_to_queue(self, queue_name: str, value: str) -> bool:
@@ -310,7 +299,7 @@ class RedisClient:
         try:
             return bool(self.client.lpush(queue_name, value))
         except Exception as e:
-            logging.error(f"Queue push failed: {e}")
+            self.logger.error(f"Queue push failed: {e}")
             return False
 
     def pop_from_queue(self, queue_name: str, timeout: int = 1) -> Optional[tuple]:
@@ -318,7 +307,7 @@ class RedisClient:
         try:
             return self.client.brpop(queue_name, timeout)
         except Exception as e:
-            logging.error(f"Queue pop failed: {e}")
+            self.logger.error(f"Queue pop failed: {e}")
             return None
 
     def clear(self, preserve_processed=True):  # Same default as EventTraderRedis
@@ -334,7 +323,7 @@ class RedisClient:
                 return self.client.delete(*keys)
             return True
         except Exception as e:
-            logging.error(f"Clear failed: {e}")
+            self.logger.error(f"Clear failed: {e}")
             return False
         
     def set_json(self, key: str, value: dict) -> bool:
@@ -342,7 +331,7 @@ class RedisClient:
         try:
             return self.client.set(key, json.dumps(value))
         except Exception as e:
-            logging.error(f"Error storing JSON in Redis: {e}")
+            self.logger.error(f"Error storing JSON in Redis: {e}")
             return False
             
     def get_json(self, key: str) -> dict:
@@ -351,7 +340,7 @@ class RedisClient:
             data = self.client.get(key)
             return json.loads(data) if data else None
         except Exception as e:
-            logging.error(f"Error retrieving JSON from Redis: {e}")
+            self.logger.error(f"Error retrieving JSON from Redis: {e}")
             return None        
             
     def delete(self, key: str) -> bool:
@@ -359,7 +348,7 @@ class RedisClient:
         try:
             return bool(self.client.delete(key))
         except Exception as e:
-            logging.error(f"Delete failed for key {key}: {e}")
+            self.logger.error(f"Delete failed for key {key}: {e}")
             return False
         
 
@@ -368,7 +357,7 @@ class RedisClient:
         try:
             return self.client.llen(queue_name)
         except Exception as e:
-            logging.error(f"Error getting queue length for {queue_name}: {e}")
+            self.logger.error(f"Error getting queue length for {queue_name}: {e}")
             return 0
         
 

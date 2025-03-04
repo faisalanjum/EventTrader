@@ -5,6 +5,7 @@ from typing import Dict, Optional
 from datetime import datetime
 
 from utils.redisClasses import EventTraderRedis, RedisKeys
+from utils.log_config import get_logger, setup_logging
 
 from benzinga.bz_restAPI import BenzingaNewsRestAPI
 from benzinga.bz_websocket import BenzingaNewsWebSocket
@@ -42,18 +43,21 @@ class DataSourceManager:
         self.ttl = ttl
         self.date_range = historical_range
         self.running = True
+        
+        # Set up logger
+        self.logger = get_logger(f"{self.__class__.__name__}")
 
         # Initialize Redis and processors
         self.redis = EventTraderRedis(source=self.source_type)        # ex: source_type = news:benzinga
         # self.processor = NewsProcessor(self.redis, delete_raw=True)
         self.polygon_subscription_delay = (15 * 60)  # (in seconds) Lower tier subscription has 15 delayed data
 
-        print(f"[Manager Debug] Initializing {source_type} manager")
-        print(f"[Manager Debug] Processor class: {processor_class}")
+        self.logger.debug(f"Initializing {source_type} manager")
+        self.logger.debug(f"Processor class: {processor_class}")
 
         self.processor = processor_class(self.redis, delete_raw=True,polygon_subscription_delay=self.polygon_subscription_delay) if processor_class else None
 
-        print(f"[Manager Debug] Processor initialized: {self.processor is not None}")
+        self.logger.debug(f"Processor initialized: {self.processor is not None}")
 
         self.returns_processor = ReturnsProcessor(self.redis, polygon_subscription_delay=self.polygon_subscription_delay)
         
@@ -97,7 +101,7 @@ class BenzingaNewsManager(DataSourceManager):
                 date_to=self.date_range['to'],
                 raw=False
             )
-            print(f"Fetched {len(historical_data)} historical items")
+            self.logger.info(f"Fetched {len(historical_data)} historical items")
 
             # Start all components
             self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
@@ -109,7 +113,7 @@ class BenzingaNewsManager(DataSourceManager):
             return True
             
         except Exception as e:
-            logging.error(f"Error starting {self.source_type}: {e}")
+            self.logger.error(f"Error starting {self.source_type}: {e}")
             return False
 
     def _run_websocket(self):
@@ -117,7 +121,7 @@ class BenzingaNewsManager(DataSourceManager):
             try:
                 self.ws_client.connect(raw=False)
             except Exception as e:
-                logging.error(f"WebSocket error: {e}")
+                self.logger.error(f"WebSocket error: {e}")
                 time.sleep(5)
 
 
@@ -149,7 +153,7 @@ class BenzingaNewsManager(DataSourceManager):
                 }
             }
         except Exception as e:
-            logging.error(f"Error checking status: {e}")
+            self.logger.error(f"Error checking status: {e}")
             return None
 
     def stop(self):
@@ -164,7 +168,7 @@ class BenzingaNewsManager(DataSourceManager):
             self.redis.clear(preserve_processed=True)
             return True
         except Exception as e:
-            logging.error(f"Error stopping {self.source_type}: {e}")
+            self.logger.error(f"Error stopping {self.source_type}: {e}")
             return False
 
     
@@ -206,16 +210,16 @@ class ReportsManager(DataSourceManager):
                 daemon=True
             )
             
-            print(f"[Manager Debug] Starting threads:")
+            self.logger.debug(f"[Manager Debug] Starting threads:")
             # Start all threads including historical
             for thread in [self.ws_thread, self.processor_thread, self.returns_thread, self.historical_thread]:
                 thread.start()
-                print(f"[Manager Debug] Thread {thread.name} started: {thread.is_alive()}")
+                self.logger.debug(f"[Manager Debug] Thread {thread.name} started: {thread.is_alive()}")
             
             return True
 
         except Exception as e:
-            logging.error(f"Error starting {self.source_type}: {e}")
+            self.logger.error(f"Error starting {self.source_type}: {e}")
             return False
 
     # def start(self):
@@ -265,7 +269,7 @@ class ReportsManager(DataSourceManager):
                 # Direct call without checking - connect() should block until disconnected
                 self.ws_client.connect(raw=False)
             except Exception as e:
-                logging.error(f"SEC WebSocket error: {e}")
+                self.logger.error(f"SEC WebSocket error: {e}")
                 time.sleep(5)
 
 
@@ -285,7 +289,7 @@ class ReportsManager(DataSourceManager):
                 }
             }
         except Exception as e:
-            logging.error(f"Error checking status: {e}")
+            self.logger.error(f"Error checking status: {e}")
             return None
 
     def stop(self):
@@ -300,13 +304,17 @@ class ReportsManager(DataSourceManager):
             self.redis.clear(preserve_processed=True)
             return True
         except Exception as e:
-            logging.error(f"Error stopping {self.source_type}: {e}")
+            self.logger.error(f"Error stopping {self.source_type}: {e}")
             return False
         
 
 class DataManager:
     """Central manager for all data sources"""
     def __init__(self, date_from: str, date_to: str):
+        # Initialize centralized logging first, before any threads are created
+        setup_logging()
+        self.logger = get_logger(__name__)
+        
         self.historical_range = {'from': date_from, 'to': date_to}
         self.sources = {}
         self.initialize_sources()

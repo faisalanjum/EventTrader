@@ -4,10 +4,12 @@ from datetime import datetime
 import json
 import logging
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from collections import Counter
 from benzinga.bz_news_schemas import BzRestAPINews, BzWebSocketNews, UnifiedNews
 import requests
+from utils.log_config import get_logger, setup_logging
+import traceback
 
 @dataclass
 class ErrorStats:
@@ -41,23 +43,8 @@ class NewsErrorHandler:
     """Handles and tracks different types of errors in news processing"""
     
     def __init__(self):
-        # Setup logging
-        self.logger = logging.getLogger('benzinga_news')
-        self.logger.setLevel(logging.ERROR)
-        
-        # Get the directory where bz_news_errors.py is located
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        
-        # Create log file path in the same directory
-        log_file_path = os.path.join(current_dir, 'benzinga_news_errors.log')
-        
-        # Add file handler with the correct path
-        fh = logging.FileHandler(log_file_path)
-        
-        fh.setFormatter(logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        ))
-        self.logger.addHandler(fh)
+        # Setup centralized logging
+        self.logger = get_logger('benzinga_news')
         
         self.reset_stats()  # Initialize stats
         self.debug = False  # Add debug flag
@@ -71,8 +58,6 @@ class NewsErrorHandler:
             connection_errors=0,
             unexpected_errors=0
         )
-
-
 
     def print_skipped_news(self, data: Dict[str, Any], error: Exception) -> None:
         BODY_PREVIEW_LENGTH = 50

@@ -6,6 +6,7 @@ from typing import Optional, Dict, Any
 from utils.redis_constants import RedisKeys
 from utils.redisClasses import RedisClient
 from utils.EventReturnsManager import EventReturnsManager
+from utils.log_config import get_logger, setup_logging
 from datetime import datetime
 import pytz
 from dateutil import parser
@@ -44,9 +45,8 @@ class BaseProcessor(ABC):
         self.stock_universe = event_trader_redis.get_stock_universe()
         self.source_type = event_trader_redis.source
         
-        # Logging setup
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
+        # Logging setup using centralized system
+        self.logger = get_logger(__name__)
 
         # PubSub channel
         self.processed_channel = RedisKeys.get_pubsub_channel(self.source_type)
@@ -215,7 +215,8 @@ class BaseProcessor(ABC):
             eastern_time = utc_time.astimezone(eastern_zone)
             return eastern_time.isoformat()
         except Exception as e:
-            logging.getLogger(__name__).error(f"Failed to parse timestamp {utc_time_str}: {e}")
+            logger = get_logger(__name__)
+            logger.error(f"Failed to parse timestamp {utc_time_str}: {e}")
             return utc_time_str
 
     # def _reconnect(self):

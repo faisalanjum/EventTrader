@@ -1,5 +1,5 @@
 from pydantic import ValidationError
-from typing import Optional, Dict, Any, Union
+from typing import Optional, Dict, Any, Union, List
 from datetime import datetime
 import json
 import logging
@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from collections import Counter
 from SEC_API_Files.sec_schemas import SECFilingSchema, UnifiedReport
 from SEC_API_Files.sec_schemas import FORM_TYPES_REQUIRING_XML
+from utils.log_config import get_logger, setup_logging
 
 @dataclass
 class FilingErrorStats:
@@ -39,17 +40,8 @@ class FilingErrorHandler:
     """Handles and tracks different types of errors in SEC filing processing"""
     
     def __init__(self):
-        self.logger = logging.getLogger('sec_filings')
-        self.logger.setLevel(logging.ERROR)
-        
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        log_file_path = os.path.join(current_dir, 'sec_filing_errors.log')
-        
-        fh = logging.FileHandler(log_file_path)
-        fh.setFormatter(logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        ))
-        self.logger.addHandler(fh)
+        # Setup centralized logging
+        self.logger = get_logger('sec_filings')
         
         self.stats = FilingErrorStats(
             validation_errors=Counter(),

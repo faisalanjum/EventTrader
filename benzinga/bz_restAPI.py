@@ -1,4 +1,3 @@
-
 # https://docs.benzinga.com/benzinga-apis/newsfeed-v2/newsService-get
 
 """
@@ -53,6 +52,7 @@ from typing import Dict, List, Any, Optional, Union
 from benzinga.bz_news_errors import NewsErrorHandler
 from benzinga.bz_news_schemas import BzRestAPINews, UnifiedNews  # We'll need this for validation & unified format
 from utils.redisClasses import RedisClient
+from utils.log_config import get_logger, setup_logging
 
 class BenzingaNewsRestAPI:
     """Simple class to fetch and print Benzinga news data"""
@@ -66,6 +66,7 @@ class BenzingaNewsRestAPI:
         self.MAX_PAGE_LIMIT = 100000  # API supports up to 100,000 pages
         self.ITEMS_PER_PAGE = 99     # API requires pageSize < 100
         self.error_handler = NewsErrorHandler()  # Add error handler
+        self.logger = get_logger("benzinga_rest_api")  # Add centralized logger
 
     def _build_params(self, 
                      page: int = 0,
@@ -114,11 +115,11 @@ class BenzingaNewsRestAPI:
         BATCH_SIZE = 1000   # Explicit constant
         
         # Original logging
-        print("\nStarting API Request:")
-        print(f"- date_from: {date_from}")
-        print(f"- date_to: {date_to}")
-        print(f"- updated_since: {updated_since}")
-        print(f"- tickers: {tickers}")
+        self.logger.info("\nStarting API Request:")
+        self.logger.info(f"- date_from: {date_from}")
+        self.logger.info(f"- date_to: {date_to}")
+        self.logger.info(f"- updated_since: {updated_since}")
+        self.logger.info(f"- tickers: {tickers}")
         
         while current_page < self.MAX_PAGE_LIMIT:
             try:
@@ -131,7 +132,8 @@ class BenzingaNewsRestAPI:
                     tickers=tickers
                 )
                 
-                print(f"Fetching page {current_page}...", end='\r')
+                # Log progress but don't use end='\r' with logger
+                self.logger.info(f"Fetching page {current_page}...")
                 
                 # Original API call and validation
                 response = requests.get(self.api_url, headers=self.headers, params=params)
@@ -165,7 +167,7 @@ class BenzingaNewsRestAPI:
                 
                 # Original pagination check
                 if len(news_items) < self.ITEMS_PER_PAGE:
-                    print(f"\nReached end of data at page {current_page}")
+                    self.logger.info(f"\nReached end of data at page {current_page}")
                     break
                 
                 current_page += 1
@@ -182,15 +184,15 @@ class BenzingaNewsRestAPI:
             self.redis_client.set_news_batch(current_batch, ex=self.ttl)
         
         # Original summary logging
-        print("\nFetch Summary:")
-        print(f"Pages processed: {current_page + 1}")
-        print(f"Total items received: {total_items_received}")
-        print(f"Items processed successfully: {len(all_items)}")
+        self.logger.info("\nFetch Summary:")
+        self.logger.info(f"Pages processed: {current_page + 1}")
+        self.logger.info(f"Total items received: {total_items_received}")
+        self.logger.info(f"Items processed successfully: {len(all_items)}")
         if total_items_received > 0:
-            print(f"Success rate: {(len(all_items)/total_items_received)*100:.1f}%")
+            self.logger.info(f"Success rate: {(len(all_items)/total_items_received)*100:.1f}%")
         else:
-            print("Success rate: N/A (no items received)")
-        print(self.error_handler.get_summary())
+            self.logger.info("Success rate: N/A (no items received)")
+        self.logger.info(self.error_handler.get_summary())
         
         return all_items
 
