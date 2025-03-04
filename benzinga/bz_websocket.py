@@ -250,6 +250,8 @@ class BenzingaNewsWebSocket:
                     # Heartbeat message, no need to process
                     if int(message) % 100 == 0:  # Log only occasionally to reduce noise
                         self.logger.debug(f"Heartbeat received: {message}")
+                    
+                    # Removing heartbeat Redis update to ensure last_message_time only shows actual news
                     return
                 
                 data = json.loads(message)

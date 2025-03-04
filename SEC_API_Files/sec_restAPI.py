@@ -63,8 +63,8 @@ class SECRestAPI:
 
     def get_historical_data(self, date_from: str, date_to: str, raw: bool = False) -> List[Dict]:
         try:
-            config_client = RedisClient(prefix='config:')
-            symbols_str = config_client.get('config:symbols')
+            admin_client = RedisClient(prefix='admin:')
+            symbols_str = admin_client.get('admin:symbols')
             tickers = symbols_str.split(',') if symbols_str else []
             total_tickers = len(tickers)
             

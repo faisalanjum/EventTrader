@@ -75,9 +75,14 @@ class SECWebSocket:
         self.should_run = True
         self.error_handler.reset_stats()
         
+        # Initialize connection time if first connection
+        if self._connection_time is None:
+            self._connection_time = datetime.now(timezone.utc)
+            self.logger.info(f"Initializing first connection time: {self._connection_time.isoformat()}")
+        
         # Check for previous shutdown state
         try:
-            shutdown_state = self.redis_client.get_json("admin:sec:shutdown_state")
+            shutdown_state = self.redis_client.get_json("admin:reports:shutdown_state")
             if shutdown_state and 'timestamp' in shutdown_state:
                 last_msg_time = shutdown_state.get('timestamp')
                 self.logger.info(f"Previous shutdown detected. Last message time: {last_msg_time}")
@@ -176,7 +181,7 @@ class SECWebSocket:
                     'is_clean_shutdown': True,
                     'filings_processed': self.stats['messages_processed']
                 }
-                self.redis_client.set_json("admin:sec:shutdown_state", current_state)
+                self.redis_client.set_json("admin:reports:shutdown_state", current_state)
                 self.logger.info(f"Saved shutdown state to Redis. Last message: {self.last_message_time.isoformat()}")
             except Exception as e:
                 self.logger.error(f"Failed to save shutdown state: {e}")
@@ -192,35 +197,41 @@ class SECWebSocket:
 
     def _on_open(self, ws):
         """Handle WebSocket connection open"""
-        now = datetime.now(timezone.utc)
-        
-        # Complete any pending downtime record if exists
-        with self._lock:
-            if self._disconnect_time and self._current_downtime_key:
-                try:
-                    # Calculate downtime duration
-                    downtime_seconds = (now - self._disconnect_time).total_seconds()
-                    
-                    # Update the existing record with end time
-                    downtime_record = self.redis_client.get_json(self._current_downtime_key)
-                    if downtime_record:
-                        downtime_record['end'] = now.isoformat()
-                        downtime_record['downtime_seconds'] = downtime_seconds
-                        self.redis_client.set_json(self._current_downtime_key, downtime_record)
-                        
-                        self.logger.info(f"Downtime ended - Duration: {downtime_seconds:.1f}s - Key: {self._current_downtime_key}")
-                except Exception as e:
-                    self.logger.error(f"Failed to update downtime record: {e}")
+        try:
+            # Reset stats on each successful connection
+            self.error_handler.reset_stats()
             
-            # Reset connection tracking state
-            self.connected = True
-            self._connection_time = now
-            self._disconnect_time = None
-            self._downtime_logged = False
-            self._current_downtime_key = None
-            self.current_retry = 0
-        
-        self.logger.info("=== SEC REPORTS WEBSOCKET CONNECTED ===")
+            now = datetime.now(timezone.utc)
+            
+            # Complete any pending downtime record if exists
+            with self._lock:
+                if self._disconnect_time and self._current_downtime_key:
+                    try:
+                        # Calculate downtime duration
+                        downtime_seconds = (now - self._disconnect_time).total_seconds()
+                        
+                        # Update the existing record with end time
+                        downtime_record = self.redis_client.get_json(self._current_downtime_key)
+                        if downtime_record:
+                            downtime_record['end'] = now.isoformat()
+                            downtime_record['downtime_seconds'] = downtime_seconds
+                            self.redis_client.set_json(self._current_downtime_key, downtime_record)
+                            
+                            self.logger.info(f"Downtime ended - Duration: {downtime_seconds:.1f}s - Key: {self._current_downtime_key}")
+                    except Exception as e:
+                        self.logger.error(f"Failed to update downtime record: {e}")
+                
+                # Reset connection tracking state
+                self.connected = True
+                self._connection_time = now
+                self._disconnect_time = None
+                self._downtime_logged = False
+                self._current_downtime_key = None
+                self.current_retry = 0
+            
+            self.logger.info("=== SEC REPORTS WEBSOCKET CONNECTED ===")
+        except Exception as e:
+            self.logger.error(f"Error in on_open: {e}")
 
     def _on_message(self, ws, message: str):
         """Handle incoming WebSocket message"""
@@ -237,6 +248,8 @@ class SECWebSocket:
                 if message.isdigit():
                     if int(message) % 100 == 0:  # Log only occasionally to reduce noise
                         self.logger.debug(f"Heartbeat: {message}")
+                    
+                    # Removing heartbeat Redis update to ensure last_message_time only shows actual filings
                     return
                     
                 filings = json.loads(message)
@@ -285,7 +298,7 @@ class SECWebSocket:
                             'filings_count': len(filings),
                             'updated_at': datetime.now(timezone.utc).isoformat()
                         }
-                        self.redis_client.set_json("admin:sec:last_message_time", message_data)
+                        self.redis_client.set_json("admin:reports:last_message_time", message_data)
                         self.logger.debug(f"Updated last message time in Redis: {accession_no}")
                     except Exception as e:
                         self.logger.warning(f"Failed to update last message time in Redis: {e}")
@@ -301,46 +314,36 @@ class SECWebSocket:
                 self.logger.error(f"Unexpected error: {str(e)}")
                 self.error_handler.handle_unexpected_error(e)
 
-
     def _on_error(self, ws, error):
+        """Handle WebSocket error"""
         self.connected = False
         self.logger.error(f"WebSocket error: {error}")
+        self.error_handler.handle_connection_error(error)
         
-        # Set the flag BEFORE logging to prevent race conditions with _on_close
-        with self._lock:
-            was_already_logged = self._downtime_logged
-            self._downtime_logged = True
-        
-        # Only log if we haven't already logged this disconnect
-        if not was_already_logged:
-            # Log network-related errors as disconnections
-            error_str = str(error)
-            if any(msg in error_str.lower() for msg in ["closed", "lost", "timed out", "refused", "reset"]):
-                self.logger.warning(f"Network error detected: {error}")
-                self._log_downtime(status_code=1001, reason="Network error")
-            
-            # Rate limiting
-            elif "429" in error_str:
-                self.logger.warning("Rate limit hit - using exponential backoff")
-                self.current_retry = max(self.current_retry, 3)
-                self._log_downtime(status_code=429, reason="Rate limit exceeded")
-            
-            # Other errors
-            else:
-                self._log_downtime(status_code=1006, reason=f"Error: {error_str}")
+        # Log downtime with appropriate error code
+        error_str = str(error)
+        if any(msg in error_str.lower() for msg in ["closed", "lost", "timed out", "refused", "reset"]):
+            self.logger.warning(f"Network error detected: {error}")
+            self._log_downtime(status_code=1001)  # Going Away
+        elif "429" in error_str:
+            self.logger.warning("Rate limit hit - using exponential backoff")
+            self.current_retry = max(self.current_retry, 3)
+            self._log_downtime(status_code=429)  # Rate limit exceeded
+        else:
+            self._log_downtime(status_code=1006)  # Abnormal Closure
 
     def _on_close(self, ws, close_status_code, close_msg):
         """Handle WebSocket connection close"""
         self.connected = False
+        
         self.logger.info(f"=== SEC REPORTS WEBSOCKET DISCONNECTED ===")
         self.logger.info(f"WebSocket closed: {close_status_code} - {close_msg}")
         
-        # Only log downtime if it wasn't already logged in _on_error
-        if not self._downtime_logged:
-            status = close_status_code if close_status_code else 1006
-            self._log_downtime(status_code=status, reason=close_msg or "Connection closed")
-        
-        # Don't attempt to reconnect if this was an intentional shutdown
+        # Log downtime
+        status = close_status_code if close_status_code else 1006
+        self._log_downtime(status_code=status)
+
+        # Exit if shutdown requested
         if not self.should_run:
             return
 
@@ -369,19 +372,6 @@ class SECWebSocket:
         
         self.logger.info(stats_summary)
         
-        # Periodically update stats in Redis (every 10 messages)
-        if self.stats['messages_processed'] % 10 == 0 and self.last_message_time:
-            try:
-                self.redis_client.set_json("admin:sec:stats", { # Not sure 
-                    'last_message_time': self.last_message_time.isoformat(),
-                    'messages_received': self.stats['messages_received'],
-                    'messages_processed': self.stats['messages_processed'],
-                    'success_rate': success_rate,
-                    'updated_at': datetime.now(timezone.utc).isoformat()
-                })
-            except Exception:
-                pass  # Silently fail for periodic updates
-
     def print_stats(self):
         """Print WebSocket statistics (for external calls)"""
         self._log_stats()
@@ -390,10 +380,11 @@ class SECWebSocket:
         if self.logger.isEnabledFor(logging.DEBUG):
             self.error_handler.print_stats()
 
-    def _log_downtime(self, status_code, reason=""):
-        """Log connection downtime to Redis - start of downtime period"""
+    def _log_downtime(self, status_code):
+        """Log connection downtime to Redis - only called from _on_error and _on_close"""
+        # Only log one downtime entry per disconnection
         with self._lock:
-            # Only log one downtime entry per disconnection
+            self.logger.debug(f"_log_downtime called with status_code={status_code}, _downtime_logged={self._downtime_logged}, _connection_time={self._connection_time}")
             if not self._downtime_logged:
                 now = datetime.now(timezone.utc)
                 
@@ -407,7 +398,6 @@ class SECWebSocket:
                         'connection_start': self._connection_time.isoformat(),  # When connection started
                         'uptime_seconds': (now - self._connection_time).total_seconds(),
                         'status': str(status_code),
-                        'reason': reason,
                         'source': 'reports',  # Hardcode to 'reports' for SEC
                         'end': None,  # Will be filled when reconnected
                         'downtime_seconds': None  # Will be filled when reconnected
@@ -426,6 +416,8 @@ class SECWebSocket:
                         else:
                             self.logger.error(f"Failed to save downtime to Redis: {key}")
                     except Exception as e:
-                        self.logger.error(f"ERROR LOGGING DOWNTIME: {e}")
+                        self.logger.error(f"Error logging downtime: {e}")
                 else:
                     self.logger.warning("Connection lost but no connection start time recorded. Skipping downtime logging.")
+            else:
+                self.logger.debug(f"Skipping duplicate downtime logging for status_code={status_code}")
