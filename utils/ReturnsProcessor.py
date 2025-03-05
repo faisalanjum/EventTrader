@@ -392,8 +392,10 @@ class ReturnsProcessor:
 
                     # 5. If scheduled time has passed, calculate returns
                     # if current_time >= schedule_dt:  
+                    
                     if current_time > (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
-
+                        self.logger.info(f"Data is available for {return_type}, proceeding with calculation")
+    
                         for instrument in instruments:
                             try:
                                 symbol = instrument['symbol']
@@ -421,6 +423,10 @@ class ReturnsProcessor:
                             except Exception as e:
                                 self.logger.error(f"Error processing {return_field} for {symbol}: {e}")
                                 all_complete = False
+
+                    else:
+                        self.logger.info(f"Data not yet available for {return_type}, will process later at {schedule_dt + timedelta(seconds=self.polygon_subscription_delay)}")
+                        all_complete = False
 
             # 9. Check if all returns are complete
             for symbol_returns in returns_data['symbols'].values():
@@ -471,7 +477,9 @@ class ReturnsProcessor:
                     # by the time this check happens, we've already tried to fetch the future data in EventReturnsManager.process_events
                     
                     # Simpler check - if time hasn't passed, don't use return
-                    if current_time < (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
+                    if current_time <= (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
+
+                        self.logger.info(f"Data not yet available for batch {return_type}, will process later")
                         all_complete = False
                         continue
 
@@ -611,16 +619,17 @@ class ReturnsProcessor:
             # Convert current time to NY timestamp
             current_time = datetime.now(timezone.utc).astimezone(self.ny_tz).timestamp()
             
-            # Adjust current time to account for data delay
+            # Adjust current time backward to account for data delay (15 min)
+            # This ensures we only process items where data is actually available
             adjusted_current_time = current_time - self.polygon_subscription_delay
             
-            # Continuously checks ZSET for ready returns - only process returns that should have data available
+            # Get items where the data should be available (based on adjusted time)
             ready_items = self.live_client.client.zrangebyscore(self.pending_zset, 0, adjusted_current_time)
 
             if ready_items:
                 ny_time = datetime.fromtimestamp(current_time, self.ny_tz)
                 adjusted_ny_time = datetime.fromtimestamp(adjusted_current_time, self.ny_tz)
-                self.logger.info(f"Processing {len(ready_items)} pending returns (NY Time: {ny_time}, Adjusted for data delay: {adjusted_ny_time})")
+                self.logger.info(f"Processing {len(ready_items)} pending returns (NY Time: {ny_time}, Data available as of: {adjusted_ny_time})")
 
             for item in ready_items:
                 news_id, return_type = item.split(':')
@@ -657,6 +666,7 @@ class ReturnsProcessor:
                 
             news_data = json.loads(raw_data)
             if not news_data:  # Empty dict case
+                self.logger.info(f"Empty News Data")
                 return True
             
             # 2. Calculates specific return

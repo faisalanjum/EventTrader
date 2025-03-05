@@ -301,15 +301,17 @@ class EventReturnsManager:
             )
         }
 
-        # Get current time with delay adjustment for filtering future timestamps
+        # Get current time for data availability checks
         current_time = datetime.now(timezone.utc).astimezone(pytz.timezone('America/New_York'))
-        current_time_with_delay = current_time - timedelta(seconds=self.polygon_subscription_delay)
+        # Calculate the time when data would be available (accounting for 15-min delay)
+        data_available_time = current_time - timedelta(seconds=self.polygon_subscription_delay)
+
 
         for instr_idx, instrument in enumerate(metadata.instruments):
             for return_type, (start, end) in return_windows.items():
-                # Skip this return window if the end time is in the future
-                if end > current_time_with_delay:
-                    self.logger.info(f"Skipping {return_type} for {instrument.symbol} - end time {end} is in the future (current time + delay: {current_time_with_delay})")
+                # Skip if data isn't available yet due to Polygon's 15-min delay
+                if end > data_available_time:
+                    self.logger.info(f"Skipping {return_type} for {instrument.symbol} - data not yet available. End time: {end}, Data available as of: {data_available_time}")
                     continue
                     
                 base_idx = f"{event_id}:{return_type}:{instr_idx}"
