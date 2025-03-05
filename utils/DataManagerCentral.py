@@ -311,8 +311,7 @@ class ReportsManager(DataSourceManager):
 class DataManager:
     """Central manager for all data sources"""
     def __init__(self, date_from: str, date_to: str):
-        # Initialize centralized logging first, before any threads are created
-        setup_logging()
+        # Use existing logger instead of setting up a new one
         self.logger = get_logger(__name__)
         
         self.historical_range = {'from': date_from, 'to': date_to}

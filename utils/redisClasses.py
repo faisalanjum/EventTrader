@@ -44,12 +44,19 @@ class EventTraderRedis:
 
 
 
-    def initialize_stock_universe(self, clear_config=False, file_path='../StocksUniverse/final_symbols.csv'):
+    def initialize_stock_universe(self, clear_config=False, file_path=None):
         """Initialize stock universe from CSV file"""
         try:
             if clear_config:
                 self.config.clear()
-
+            
+            # Use absolute path resolution with project root
+            if file_path is None:
+                # Get the project root directory (assuming this file is in utils/)
+                project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                file_path = os.path.join(project_root, 'StocksUniverse', 'final_symbols.csv')
+            
+            self.logger.info(f"Loading stock universe from: {file_path}")
             df = pd.read_csv(file_path)
             self.logger.info(f"Successfully read CSV with {len(df)} rows")
             
