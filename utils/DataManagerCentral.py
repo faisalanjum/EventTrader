@@ -318,6 +318,9 @@ class DataManager:
         self.historical_range = {'from': date_from, 'to': date_to}
         self.sources = {}
         self.initialize_sources()
+        
+        # Set up signal handlers for graceful shutdown
+        self._setup_signal_handlers()
 
     def initialize_sources(self):
         self.sources['news'] = BenzingaNewsManager(self.historical_range)
@@ -337,6 +340,22 @@ class DataManager:
     def get_source(self, name: str):
         return self.sources.get(name)
     
+    def _setup_signal_handlers(self):
+        """Set up signal handlers for graceful shutdown"""
+        import signal
+        import sys
+        
+        def signal_handler(sig, frame):
+            self.logger.info("Shutdown signal received. Stopping all components gracefully...")
+            self.stop()
+            self.logger.info("Shutdown complete. Exiting.")
+            sys.exit(0)
+            
+        # Register for SIGINT (Ctrl+C) and SIGTERM
+        signal.signal(signal.SIGINT, signal_handler)
+        signal.signal(signal.SIGTERM, signal_handler)
+        self.logger.info("Signal handlers registered for graceful shutdown")
+
 
 
 

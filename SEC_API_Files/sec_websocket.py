@@ -66,6 +66,7 @@ class SECWebSocket:
         self._disconnect_time = None
         self._downtime_logged = False
         self._current_downtime_key = None
+        self._had_successful_connection = False
             
         self.logger.info("=== SEC REPORTS WEBSOCKET INITIALIZED ===")
 
@@ -87,6 +88,25 @@ class SECWebSocket:
                 last_msg_time = shutdown_state.get('timestamp')
                 self.logger.info(f"Previous shutdown detected. Last message time: {last_msg_time}")
                 # Could add gap-filling logic here in the future
+                
+                # Add restart detection logic
+                if 'shutdown_time' in shutdown_state:
+                    last_shutdown = datetime.fromisoformat(shutdown_state['shutdown_time'])
+                    now = datetime.now(timezone.utc)
+                    offline_duration = (now - last_shutdown).total_seconds()
+                    
+                    # Log the restart gap
+                    self.logger.info(f"System restart detected. Offline for {offline_duration:.1f} seconds")
+                    
+                    # Flag this information for backfill system to use later
+                    self.redis_client.set_json("admin:backfill:reports_restart_gap", {
+                        'source': 'reports',
+                        'last_shutdown': shutdown_state['shutdown_time'],
+                        'restart_time': now.isoformat(),
+                        'offline_seconds': offline_duration,
+                        'last_message_time': shutdown_state.get('timestamp'),
+                        'requires_backfill': offline_duration > 30  # Simple threshold
+                    })
         except Exception as e:
             self.logger.warning(f"Could not check previous shutdown state: {e}")
         
@@ -172,28 +192,30 @@ class SECWebSocket:
         # Mark as intentional disconnect to avoid logging downtime
         self._downtime_logged = True
         
-        # Store final state before shutdown
-        if self.last_message_time:
-            try:
-                current_state = {
-                    'timestamp': self.last_message_time.isoformat(),
-                    'shutdown_time': datetime.now(timezone.utc).isoformat(),
-                    'is_clean_shutdown': True,
-                    'filings_processed': self.stats['messages_processed']
-                }
-                self.redis_client.set_json("admin:reports:shutdown_state", current_state)
-                self.logger.info(f"Saved shutdown state to Redis. Last message: {self.last_message_time.isoformat()}")
-            except Exception as e:
-                self.logger.error(f"Failed to save shutdown state: {e}")
+        # Always store final state before shutdown
+        try:
+            current_state = {
+                'timestamp': self.last_message_time.isoformat() if self.last_message_time else None,
+                'shutdown_time': datetime.now(timezone.utc).isoformat(),
+                'is_clean_shutdown': True,
+                'filings_processed': self.stats['messages_processed']
+            }
+            self.redis_client.set_json("admin:reports:shutdown_state", current_state)
+            self.logger.info("Saved shutdown state to Redis.")
+        except Exception as e:
+            self.logger.error(f"Failed to save shutdown state: {e}")
         
         self.logger.info("Initiating WebSocket shutdown...")
         self.should_run = False
+        
         if self.ws:
             self.ws.close()
-        
-        # Wait for heartbeat thread to finish
+            
+        # Wait for heartbeat thread to complete
         if self.heartbeat_thread and self.heartbeat_thread.is_alive():
             self.heartbeat_thread.join(timeout=5)
+            
+        self.logger.info("=== SEC REPORTS WEBSOCKET DISCONNECTED ===")
 
     def _on_open(self, ws):
         """Handle WebSocket connection open"""
@@ -223,6 +245,7 @@ class SECWebSocket:
                 
                 # Reset connection tracking state
                 self.connected = True
+                self._had_successful_connection = True
                 self._connection_time = now
                 self._disconnect_time = None
                 self._downtime_logged = False
@@ -388,7 +411,8 @@ class SECWebSocket:
             if not self._downtime_logged:
                 now = datetime.now(timezone.utc)
                 
-                if self._connection_time:
+                # Only log downtime if we've ever had a successful connection
+                if self._connection_time and self._had_successful_connection:
                     # Store disconnect time for later update when connection is restored
                     self._disconnect_time = now
                     
@@ -400,7 +424,8 @@ class SECWebSocket:
                         'status': str(status_code),
                         'source': 'reports',  # Hardcode to 'reports' for SEC
                         'end': None,  # Will be filled when reconnected
-                        'downtime_seconds': None  # Will be filled when reconnected
+                        'downtime_seconds': None,  # Will be filled when reconnected
+                        'backfilled': False  # Flag to indicate whether data for this period has been backfilled
                     }
                     
                     try:
@@ -418,6 +443,9 @@ class SECWebSocket:
                     except Exception as e:
                         self.logger.error(f"Error logging downtime: {e}")
                 else:
-                    self.logger.warning("Connection lost but no connection start time recorded. Skipping downtime logging.")
+                    if self._had_successful_connection:
+                        self.logger.warning("Connection lost but no connection start time recorded. Skipping downtime logging.")
+                    else:
+                        self.logger.warning("Connection lost but no successful connection has been established yet. Skipping downtime logging.")
             else:
                 self.logger.debug(f"Skipping duplicate downtime logging for status_code={status_code}")

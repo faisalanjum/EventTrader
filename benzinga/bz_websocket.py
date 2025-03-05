@@ -26,8 +26,18 @@ class BenzingaNewsWebSocket:
             ttl: TTL for news items in Redis (seconds)
             log_level: Logging level (default: logging.INFO)
         """
+
         # Set up logger using centralized logging
         self.logger = get_logger("benzinga_news_websocket", log_level)
+
+        # Downtime tracking 
+        self._connection_time = None
+        self._disconnect_time = None
+        self._downtime_logged = False
+        self._current_downtime_key = None
+        self._had_successful_connection = False
+
+
         self.redis_client = redis_client
         self.ttl = ttl
         self.api_key = api_key
@@ -65,12 +75,6 @@ class BenzingaNewsWebSocket:
         self._lock = threading.Lock()
         self._stats_lock = threading.Lock()
 
-        # Downtime tracking 
-        self._connection_time = None
-        self._disconnect_time = None
-        self._downtime_logged = False
-        self._current_downtime_key = None
-        
         self.logger.info("=== BENZINGA NEWS WEBSOCKET INITIALIZED ===")
 
     @staticmethod
@@ -102,6 +106,10 @@ class BenzingaNewsWebSocket:
         self.raw = raw
         self.should_run = True
         self.error_handler.reset_stats()
+
+        # Initialize connection time when attempting to connect
+        self._connection_time = datetime.now(timezone.utc)
+    
         
         # Check for previous shutdown state
         try:
@@ -110,6 +118,25 @@ class BenzingaNewsWebSocket:
                 last_msg_time = shutdown_state.get('timestamp')
                 self.logger.info(f"Previous shutdown detected. Last message time: {last_msg_time}")
                 # Could add gap-filling logic here in the future
+                
+                # Add restart detection logic
+                if 'shutdown_time' in shutdown_state:
+                    last_shutdown = datetime.fromisoformat(shutdown_state['shutdown_time'])
+                    now = datetime.now(timezone.utc)
+                    offline_duration = (now - last_shutdown).total_seconds()
+                    
+                    # Log the restart gap
+                    self.logger.info(f"System restart detected. Offline for {offline_duration:.1f} seconds")
+                    
+                    # Flag this information for backfill system to use later
+                    self.redis_client.set_json("admin:backfill:news_restart_gap", {
+                        'source': 'news',
+                        'last_shutdown': shutdown_state['shutdown_time'],
+                        'restart_time': now.isoformat(),
+                        'offline_seconds': offline_duration,
+                        'last_message_time': shutdown_state.get('timestamp'),
+                        'requires_backfill': offline_duration > 30  # Simple threshold
+                    })
         except Exception as e:
             self.logger.warning(f"Could not check previous shutdown state: {e}")
         
@@ -162,18 +189,17 @@ class BenzingaNewsWebSocket:
         self._downtime_logged = True
         
         # Store final state before shutdown
-        if self.last_message_time:
-            try:
-                current_state = {
-                    'timestamp': self.last_message_time.isoformat(),
-                    'shutdown_time': datetime.now(timezone.utc).isoformat(),
-                    'is_clean_shutdown': True,
-                    'messages_processed': self.stats['messages_processed']
-                }
-                self.redis_client.set_json("admin:news:shutdown_state", current_state)
-                self.logger.info(f"Saved shutdown state to Redis. Last message: {self.last_message_time.isoformat()}")
-            except Exception as e:
-                self.logger.error(f"Failed to save shutdown state: {e}")
+        try:
+            current_state = {
+                'timestamp': self.last_message_time.isoformat() if self.last_message_time else None,
+                'shutdown_time': datetime.now(timezone.utc).isoformat(),
+                'is_clean_shutdown': True,
+                'messages_processed': self.stats['messages_processed']
+            }
+            self.redis_client.set_json("admin:news:shutdown_state", current_state)
+            self.logger.info("Saved shutdown state to Redis.")
+        except Exception as e:
+            self.logger.error(f"Failed to save shutdown state: {e}")
             
         self.should_run = False
         if self.ws:
@@ -208,15 +234,19 @@ class BenzingaNewsWebSocket:
                             self.redis_client.set_json(self._current_downtime_key, downtime_record)
                             
                             self.logger.info(f"Downtime ended - Duration: {downtime_seconds:.1f}s - Key: {self._current_downtime_key}")
+
+                    
                     except Exception as e:
                         self.logger.error(f"Failed to update downtime record: {e}")
-                
+
                 # Reset connection tracking state
                 self.connected = True
+                self._had_successful_connection = True  # Mark that we've had at least one successful connection
                 self._connection_time = now
                 self._disconnect_time = None
                 self._downtime_logged = False
                 self._current_downtime_key = None
+                                            
 
             self.logger.info("=== BENZINGA NEWS WEBSOCKET CONNECTED ===")
             
@@ -382,6 +412,7 @@ class BenzingaNewsWebSocket:
         # Only log at debug level to reduce noise
         self.logger.debug(f"Pong received at {self.last_pong_time.isoformat()}")
 
+
     def _log_downtime(self, status_code):
         """Log connection downtime to Redis - only called from _on_error and _on_close"""
         # Only log one downtime entry per disconnection
@@ -389,7 +420,8 @@ class BenzingaNewsWebSocket:
             if not self._downtime_logged:
                 now = datetime.now(timezone.utc)
                 
-                if self._connection_time:
+                # Only log downtime if we've had at least one successful connection
+                if self._connection_time and self._had_successful_connection:
                     # Store disconnect time for later update when connection is restored
                     self._disconnect_time = now
                     
@@ -401,7 +433,8 @@ class BenzingaNewsWebSocket:
                         'status': str(status_code),
                         'source': 'news',
                         'end': None,  # Will be filled when reconnected
-                        'downtime_seconds': None  # Will be filled when reconnected
+                        'downtime_seconds': None,  # Will be filled when reconnected
+                        'backfilled': False  # Flag to indicate whether data for this period has been backfilled
                     }
                     
                     try:
@@ -416,4 +449,7 @@ class BenzingaNewsWebSocket:
                     except Exception as e:
                         self.logger.error(f"Error logging downtime: {e}")
                 else:
-                    self.logger.warning("Connection lost but no connection start time recorded. Skipping downtime logging.")
+                    if self._had_successful_connection:
+                        self.logger.warning("Connection lost but no connection start time recorded. Skipping downtime logging.")
+                    else:
+                        self.logger.warning("Connection lost but no successful connection has been established yet. Skipping downtime logging.")

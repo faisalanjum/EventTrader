@@ -61,12 +61,12 @@ class EventTraderRedis:
             symbols = sorted(df['symbol'].unique().tolist())  # Define symbols here
             
             # Use self.config directly since it now has admin: prefix
-            universe_success = self.config.set('admin:stock_universe', df.to_json())
-            symbols_success = self.config.set('admin:symbols', ','.join(symbols))
+            universe_success = self.config.set('admin:tradable_universe:stock_universe', df.to_json())
+            symbols_success = self.config.set('admin:tradable_universe:symbols', ','.join(symbols))
             
             # Update verification keys too
-            verify_universe = self.config.get('admin:stock_universe')
-            verify_symbols = self.config.get('admin:symbols')
+            verify_universe = self.config.get('admin:tradable_universe:stock_universe')
+            verify_symbols = self.config.get('admin:tradable_universe:symbols')
                 
             if not (verify_universe and verify_symbols):
                 self.logger.error("Failed to verify config storage")
@@ -81,11 +81,11 @@ class EventTraderRedis:
 
 
     def get_symbols(self):
-        symbols_str = self.config.get('admin:symbols')
+        symbols_str = self.config.get('admin:tradable_universe:symbols')
         return symbols_str.split(',') if symbols_str else []
 
     def get_stock_universe(self):
-        universe_json = self.config.get('admin:stock_universe')
+        universe_json = self.config.get('admin:tradable_universe:stock_universe')
         return pd.read_json(StringIO(universe_json)) if universe_json else None
 
     def clear(self, preserve_processed=True): 
