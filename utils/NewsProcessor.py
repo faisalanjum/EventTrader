@@ -47,7 +47,7 @@ class NewsProcessor(BaseProcessor):
             # 1. Clean text content
             for field in ['title', 'teaser', 'body']:
                 if field in cleaned:
-                    cleaned[field] = self._clean_content(cleaned[field])
+                    cleaned[field] = self._clean_text_content(cleaned[field])
 
             # 2. Convert timestamps
             for field in ['created', 'updated']:
@@ -64,8 +64,7 @@ class NewsProcessor(BaseProcessor):
             return news  # Return original if cleaning fails
 
 
-
-    def _clean_content(self, content: str) -> str:
+    def _clean_text_content(self, content: str) -> str:
         """Clean individual text content"""
         if content is None or not isinstance(content, str):
             return content

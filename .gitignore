@@ -29,7 +29,7 @@ venv/
 # Backup files
 # *Backup.py
 
-
+logs/
 Returns/*.csv
 benzinga/logs/*.log
 News/*.csv

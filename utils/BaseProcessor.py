@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import threading
 import logging
 import json
+import time  # Import time for sleep
 from typing import Optional, Dict, Any
 from utils.redis_constants import RedisKeys
 from utils.redisClasses import RedisClient
@@ -97,8 +98,18 @@ class BaseProcessor(ABC):
                         self._reconnect()
                         consecutive_errors = 0
 
+            except OSError as io_error:
+                # Specific handling for I/O errors
+                self.logger.error(f"Redis I/O error: {io_error}")
+                time.sleep(1)  # Add sleep on I/O error
+                consecutive_errors += 1
+                if consecutive_errors > 3:  # Be more aggressive with reconnection for I/O errors
+                    self.logger.warning("Multiple I/O errors, reconnecting...")
+                    self._reconnect()
+                    consecutive_errors = 0
             except Exception as e:
                 self.logger.error(f"Processing error: {e}")
+                time.sleep(0.5)  # Add sleep to prevent rapid error loops
                 consecutive_errors += 1
                 if consecutive_errors > 10:
                     self._reconnect()
@@ -219,14 +230,8 @@ class BaseProcessor(ABC):
             logger.error(f"Failed to parse timestamp {utc_time_str}: {e}")
             return utc_time_str
 
-    # def _reconnect(self):
-    #     """Reconnect to Redis"""
-    #     try:
-    #         self.live_client = self.live_client.__class__(prefix=self.live_client.prefix)
-    #         self.hist_client = self.hist_client.__class__(prefix=self.hist_client.prefix)
-    #         self.queue_client = self.live_client
-    #     except Exception as e:
-    #         self.logger.error(f"Reconnection failed: {e}")
+
+
 
     def _reconnect(self):
         """Reconnect to Redis"""
@@ -234,15 +239,26 @@ class BaseProcessor(ABC):
             # Store the original configuration before reconnecting
             live_prefix = self.live_client.prefix
             hist_prefix = self.hist_client.prefix
+
+            # # Store the original queue configurations
+            # live_raw_queue = self.live_client.RAW_QUEUE if hasattr(self.live_client, 'RAW_QUEUE') else None
+            # live_processed_queue = self.live_client.PROCESSED_QUEUE if hasattr(self.live_client, 'PROCESSED_QUEUE') else None
+            # live_failed_queue = self.live_client.FAILED_QUEUE if hasattr(self.live_client, 'FAILED_QUEUE') else None
             
+            # hist_raw_queue = self.hist_client.RAW_QUEUE if hasattr(self.hist_client, 'RAW_QUEUE') else None
+            # hist_processed_queue = self.hist_client.PROCESSED_QUEUE if hasattr(self.hist_client, 'PROCESSED_QUEUE') else None
+            # hist_failed_queue = self.hist_client.FAILED_QUEUE if hasattr(self.hist_client, 'FAILED_QUEUE') else None
+            
+
+
             # Store the original queue configurations
-            live_raw_queue = self.live_client.RAW_QUEUE if hasattr(self.live_client, 'RAW_QUEUE') else None
-            live_processed_queue = self.live_client.PROCESSED_QUEUE if hasattr(self.live_client, 'PROCESSED_QUEUE') else None
-            live_failed_queue = self.live_client.FAILED_QUEUE if hasattr(self.live_client, 'FAILED_QUEUE') else None
+            live_raw_queue = self.live_client.RAW_QUEUE
+            live_processed_queue = self.live_client.PROCESSED_QUEUE
+            live_failed_queue = self.live_client.FAILED_QUEUE
             
-            hist_raw_queue = self.hist_client.RAW_QUEUE if hasattr(self.hist_client, 'RAW_QUEUE') else None
-            hist_processed_queue = self.hist_client.PROCESSED_QUEUE if hasattr(self.hist_client, 'PROCESSED_QUEUE') else None
-            hist_failed_queue = self.hist_client.FAILED_QUEUE if hasattr(self.hist_client, 'FAILED_QUEUE') else None
+            hist_raw_queue = self.hist_client.RAW_QUEUE
+            hist_processed_queue = self.hist_client.PROCESSED_QUEUE
+            hist_failed_queue = self.hist_client.FAILED_QUEUE
             
             # Create new client instances with the same parameters
             self.live_client = RedisClient(
@@ -254,17 +270,27 @@ class BaseProcessor(ABC):
                 prefix=hist_prefix,
                 source_type=self.source_type
             )
-            
-            # Restore queue configurations if they weren't properly set
-            if not hasattr(self.live_client, 'RAW_QUEUE') and live_raw_queue:
-                self.live_client.RAW_QUEUE = live_raw_queue
-                self.live_client.PROCESSED_QUEUE = live_processed_queue
-                self.live_client.FAILED_QUEUE = live_failed_queue
+
+
+            # # Restore queue configurations if they weren't properly set
+            # if not hasattr(self.live_client, 'RAW_QUEUE') and live_raw_queue:
+            #     self.live_client.RAW_QUEUE = live_raw_queue
+            #     self.live_client.PROCESSED_QUEUE = live_processed_queue
+            #     self.live_client.FAILED_QUEUE = live_failed_queue
                 
-            if not hasattr(self.hist_client, 'RAW_QUEUE') and hist_raw_queue:
-                self.hist_client.RAW_QUEUE = hist_raw_queue
-                self.hist_client.PROCESSED_QUEUE = hist_processed_queue
-                self.hist_client.FAILED_QUEUE = hist_failed_queue
+            # if not hasattr(self.hist_client, 'RAW_QUEUE') and hist_raw_queue:
+            #     self.hist_client.RAW_QUEUE = hist_raw_queue
+            #     self.hist_client.PROCESSED_QUEUE = hist_processed_queue
+            #     self.hist_client.FAILED_QUEUE = hist_failed_queue
+
+            # Always restore queue configurations - no conditional checks
+            self.live_client.RAW_QUEUE = live_raw_queue
+            self.live_client.PROCESSED_QUEUE = live_processed_queue
+            self.live_client.FAILED_QUEUE = live_failed_queue
+            
+            self.hist_client.RAW_QUEUE = hist_raw_queue
+            self.hist_client.PROCESSED_QUEUE = hist_processed_queue
+            self.hist_client.FAILED_QUEUE = hist_failed_queue
             
             # Reset queue_client to live_client
             self.queue_client = self.live_client

@@ -10,6 +10,34 @@ PID_FILE="$WORKSPACE_DIR/event_trader.pid"
 MONITOR_PID_FILE="$WORKSPACE_DIR/event_trader_monitor.pid"
 LOG_RETENTION_DAYS=7  # Days to keep logs before cleaning
 
+# Find the appropriate Python executable
+detect_python() {
+  # Check for virtual environment in the workspace (most reliable)
+  if [ -f "$WORKSPACE_DIR/venv/bin/python" ]; then
+    PYTHON_CMD="$WORKSPACE_DIR/venv/bin/python"
+  # Check if running in a virtual environment
+  elif [ -n "$VIRTUAL_ENV" ]; then
+    PYTHON_CMD="$VIRTUAL_ENV/bin/python"
+  # Try python3 command
+  elif command -v python3 > /dev/null 2>&1; then
+    PYTHON_CMD="python3"
+  # Try python command
+  elif command -v python > /dev/null 2>&1; then
+    PYTHON_CMD="python"
+  # Look for Python in typical locations
+  elif [ -f "/usr/bin/python3" ]; then
+    PYTHON_CMD="/usr/bin/python3"
+  elif [ -f "/usr/local/bin/python3" ]; then
+    PYTHON_CMD="/usr/local/bin/python3"
+  else
+    echo "ERROR: Python interpreter not found. Please install Python or activate your virtual environment."
+    exit 1
+  fi
+  
+  echo "Using Python interpreter: $PYTHON_CMD"
+  return 0
+}
+
 # Parse command line flags
 RUN_BACKGROUND=false
 ARGS=()
@@ -121,16 +149,19 @@ start() {
     return
   fi
   
+  # Detect Python before starting
+  detect_python
+  
   echo "Starting EventTrader ($FROM_DATE to $TO_DATE)..."
   cd "$WORKSPACE_DIR"
   
   if [ "$RUN_BACKGROUND" = true ]; then
     # Start in background - logging handled by log_config.py
-    python "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" > /dev/null 2>&1 &
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" > /dev/null 2>&1 &
     PID=$!
   else
     # Start in foreground with output to terminal
-    python "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" &
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" &
     PID=$!
   fi
   
