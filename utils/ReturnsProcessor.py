@@ -387,13 +387,11 @@ class ReturnsProcessor:
                         Return type: {return_type}
                         Current time: {current_time}
                         Schedule time: {schedule_dt}
-                        Proceeding with calculation: {current_time >= schedule_dt}
+                        Proceeding with calculation: {current_time >= (schedule_dt + timedelta(seconds=self.polygon_subscription_delay))}
                     """)
 
                     # 5. If scheduled time has passed, calculate returns
-                    # if current_time >= schedule_dt:  
-                    
-                    if current_time > (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
+                    if current_time >= (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
                         self.logger.info(f"Data is available for {return_type}, proceeding with calculation")
     
                         for instrument in instruments:
@@ -473,13 +471,12 @@ class ReturnsProcessor:
                     schedule_dt = parser.parse(schedule_time).astimezone(self.ny_tz)
                     
                     # 5. Check if scheduled time has passed (same as live)
-                    # if current_time >= schedule_dt:
-                    # by the time this check happens, we've already tried to fetch the future data in EventReturnsManager.process_events
-                    
-                    # Simpler check - if time hasn't passed, don't use return
-                    if current_time <= (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
-
-                        self.logger.info(f"Data not yet available for batch {return_type}, will process later")
+                    if current_time < (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
+                        # Data not yet available
+                        # self.logger.info(f"Data not yet available for batch {return_type}, will process later")
+                        
+                        data_available_at = schedule_dt + timedelta(seconds=self.polygon_subscription_delay)
+                        self.logger.info(f"Skipping {return_type} for batch - data not available until {data_available_at}")
                         all_complete = False
                         continue
 
@@ -558,7 +555,7 @@ class ReturnsProcessor:
             end_time_dt = parser.parse(end_time).astimezone(self.ny_tz)
             self.logger.info(f"{return_key}: End time = {end_time_dt}, Should calculate = {current_time >= end_time_dt}")
 
-            if current_time >= end_time_dt:
+            if current_time >= (end_time_dt + timedelta(seconds=self.polygon_subscription_delay)):
                 try:
                     calc_returns = self.polygon.get_event_returns(
                         ticker=symbol,
@@ -599,11 +596,10 @@ class ReturnsProcessor:
             for return_type, time_str in schedule_mapping.items():
                 if time_str:
                     calc_time = parser.parse(time_str).astimezone(self.ny_tz).timestamp()
-                    
-                    if calc_time > current_time:
-                    # Adds to ZSET: "news:benzinga:pending_news_returns" : # Format: "43420311:1h_end_time" -> timestamp
-                        pipe.zadd(self.pending_zset, {f"{news_id}:{return_type}": calc_time})
-                        self.logger.debug(f"Scheduled {return_type} for {datetime.fromtimestamp(calc_time, self.ny_tz)}")
+                    # Add subscription delay to the scheduled time
+                    data_available_time = calc_time + self.polygon_subscription_delay
+                    pipe.zadd(self.pending_zset, {f"{news_id}:{return_type}": data_available_time})
+                    self.logger.debug(f"Scheduled {return_type} for {datetime.fromtimestamp(data_available_time, self.ny_tz)}")
             
             pipe.execute()
             
@@ -619,17 +615,12 @@ class ReturnsProcessor:
             # Convert current time to NY timestamp
             current_time = datetime.now(timezone.utc).astimezone(self.ny_tz).timestamp()
             
-            # Adjust current time backward to account for data delay (15 min)
-            # This ensures we only process items where data is actually available
-            adjusted_current_time = current_time - self.polygon_subscription_delay
-            
             # Get items where the data should be available (based on adjusted time)
-            ready_items = self.live_client.client.zrangebyscore(self.pending_zset, 0, adjusted_current_time)
+            ready_items = self.live_client.client.zrangebyscore(self.pending_zset, 0, current_time)
 
             if ready_items:
                 ny_time = datetime.fromtimestamp(current_time, self.ny_tz)
-                adjusted_ny_time = datetime.fromtimestamp(adjusted_current_time, self.ny_tz)
-                self.logger.info(f"Processing {len(ready_items)} pending returns (NY Time: {ny_time}, Data available as of: {adjusted_ny_time})")
+                self.logger.info(f"Processing {len(ready_items)} pending returns (NY Time: {ny_time})")
 
             for item in ready_items:
                 news_id, return_type = item.split(':')
@@ -709,7 +700,6 @@ class ReturnsProcessor:
             return False
         
 
-
     def _calculate_specific_return(self, news_data: dict, return_type: str) -> dict:
         """Calculate a specific return type for all symbols"""
         try:
@@ -719,7 +709,15 @@ class ReturnsProcessor:
             # Create schedule dict with only the specific return type
             specific_schedule = {return_type: returns_schedule.get(return_type)}
             self.logger.info(f"Processing {return_type} with time: {specific_schedule}")
-            
+
+            # Add safety check - verify data is actually available
+            schedule_time = specific_schedule.get(return_type)
+            if schedule_time:
+                schedule_dt = parser.parse(schedule_time).astimezone(self.ny_tz)
+                if current_time < (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
+                    self.logger.warning(f"Data for {return_type} not yet available - scheduled too early")
+                    return None
+
             returns = {}
             # Get symbols from instruments list
             instruments = news_data.get('metadata', {}).get(MetadataFields.INSTRUMENTS, [])
