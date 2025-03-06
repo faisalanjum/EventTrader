@@ -597,9 +597,14 @@ class ReturnsProcessor:
                 if time_str:
                     calc_time = parser.parse(time_str).astimezone(self.ny_tz).timestamp()
                     # Add subscription delay to the scheduled time
+                    self.logger.info(f"polygon_subscription_delay: {self.polygon_subscription_delay}")
+                    self.logger.info(f"calc_time: {calc_time}")
+                    self.logger.info(f"current_time: {current_time}")
+                    
                     data_available_time = calc_time + self.polygon_subscription_delay
+                    self.logger.info(f"data_available_time: {data_available_time}")
                     pipe.zadd(self.pending_zset, {f"{news_id}:{return_type}": data_available_time})
-                    self.logger.debug(f"Scheduled {return_type} for {datetime.fromtimestamp(data_available_time, self.ny_tz)}")
+                    self.logger.info(f"Scheduled {return_type} for {datetime.fromtimestamp(data_available_time, self.ny_tz)}")
             
             pipe.execute()
             
@@ -711,12 +716,12 @@ class ReturnsProcessor:
             self.logger.info(f"Processing {return_type} with time: {specific_schedule}")
 
             # Add safety check - verify data is actually available
-            schedule_time = specific_schedule.get(return_type)
-            if schedule_time:
-                schedule_dt = parser.parse(schedule_time).astimezone(self.ny_tz)
-                if current_time < (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
-                    self.logger.warning(f"Data for {return_type} not yet available - scheduled too early")
-                    return None
+            # schedule_time = specific_schedule.get(return_type)
+            # if schedule_time:
+            #     schedule_dt = parser.parse(schedule_time).astimezone(self.ny_tz)
+            #     if current_time < (schedule_dt + timedelta(seconds=self.polygon_subscription_delay)):
+            #         self.logger.warning(f"Data for {return_type} not yet available - scheduled too early")
+            #         return None
 
             returns = {}
             # Get symbols from instruments list

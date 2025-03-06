@@ -50,7 +50,7 @@ class DataSourceManager:
         # Initialize Redis and processors
         self.redis = EventTraderRedis(source=self.source_type)        # ex: source_type = news:benzinga
         # self.processor = NewsProcessor(self.redis, delete_raw=True)
-        self.polygon_subscription_delay = (15 * 60)  # (in seconds) Lower tier subscription has 15 delayed data
+        self.polygon_subscription_delay = (17 * 60)  # (in seconds) Lower tier subscription has 15 delayed data
 
         self.logger.debug(f"Initializing {source_type} manager")
         self.logger.debug(f"Processor class: {processor_class}")
