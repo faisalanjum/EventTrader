@@ -311,7 +311,7 @@ class EventReturnsManager:
             for return_type, (start, end) in return_windows.items():
                 # Skip if data isn't available yet due to Polygon's 15-min delay
                 if end > data_available_time:
-                    self.logger.info(f"Skipping {return_type} for {instrument.symbol} - data not yet available. End time: {end}, Data available as of: {data_available_time}")
+                    # self.logger.info(f"Skipping {return_type} for {instrument.symbol} - data not yet available. End time: {end}, Data available as of: {data_available_time}")
                     continue
                     
                 base_idx = f"{event_id}:{return_type}:{instr_idx}"

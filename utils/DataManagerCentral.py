@@ -18,6 +18,7 @@ from utils.ReturnsProcessor import ReturnsProcessor
 from eventtrader.keys import BENZINGANEWS_API_KEY
 from eventtrader.keys import SEC_API_KEY
 
+from utils.Neo4jProcessor import Neo4jProcessor
 
 # Change these to absolute imports
 import sys
@@ -321,6 +322,8 @@ class DataManager:
         # Set up signal handlers for graceful shutdown
         self._setup_signal_handlers()
 
+        self.neo4j_processor = None
+
     def initialize_sources(self):
         self.sources['news'] = BenzingaNewsManager(self.historical_range)
         self.sources['reports'] = ReportsManager(self.historical_range)
@@ -356,8 +359,7 @@ class DataManager:
         self.logger.info("Signal handlers registered for graceful shutdown")
 
 
-
-
+    
 """
 class TranscriptsManager(DataSourceManager):
     def __init__(self, historical_range: Dict[str, str]):

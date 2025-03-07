@@ -107,20 +107,20 @@ class ReturnsProcessor:
             next_item = self.queue_client.zrange(self.pending_zset, 0, 0, withscores=True)
             
             if next_item:
-                self.logger.info(f"Found next item: {next_item}")
+                # self.logger.info(f"Found next item: {next_item}")
                 # zrange with withscores=True returns [(member, score)]
                 _, next_timestamp = next_item[0]  # Correctly unpack tuple of (member, score)
                 now_timestamp = datetime.now(timezone.utc).timestamp()
                 sleep_time = max(0, next_timestamp - now_timestamp)  # Sleep only until next return is due
-                self.logger.info(f"Sleeping for {sleep_time} seconds until next return")
+                # self.logger.info(f"Sleeping for {sleep_time} seconds until next return")
             else:
                 sleep_time = default_sleep_time  # Default sleep time if no pending returns
-                self.logger.debug(f"No pending returns, sleeping for {sleep_time} seconds")
+                # self.logger.debug(f"No pending returns, sleeping for {sleep_time} seconds")
 
             # Check for new messages while sleeping
             message = self.pubsub_client.get_message(timeout=sleep_time)
             if message and message['type'] == 'message':
-                self.logger.info(f"Woke up due to new processed message: {message['data']}")
+                # self.logger.info(f"Woke up due to new processed message: {message['data']}")
                 return
 
             return
@@ -476,7 +476,7 @@ class ReturnsProcessor:
                         # self.logger.info(f"Data not yet available for batch {return_type}, will process later")
                         
                         data_available_at = schedule_dt + timedelta(seconds=self.polygon_subscription_delay)
-                        self.logger.info(f"Skipping {return_type} for batch - data not available until {data_available_at}")
+                        # self.logger.info(f"Skipping {return_type} for batch - data not available until {data_available_at}")
                         all_complete = False
                         continue
 
@@ -597,14 +597,14 @@ class ReturnsProcessor:
                 if time_str:
                     calc_time = parser.parse(time_str).astimezone(self.ny_tz).timestamp()
                     # Add subscription delay to the scheduled time
-                    self.logger.info(f"polygon_subscription_delay: {self.polygon_subscription_delay}")
-                    self.logger.info(f"calc_time: {calc_time}")
-                    self.logger.info(f"current_time: {current_time}")
+                    # self.logger.info(f"polygon_subscription_delay: {self.polygon_subscription_delay}")
+                    # self.logger.info(f"calc_time: {calc_time}")
+                    # self.logger.info(f"current_time: {current_time}")
                     
                     data_available_time = calc_time + self.polygon_subscription_delay
-                    self.logger.info(f"data_available_time: {data_available_time}")
+                    # self.logger.info(f"data_available_time: {data_available_time}")
                     pipe.zadd(self.pending_zset, {f"{news_id}:{return_type}": data_available_time})
-                    self.logger.info(f"Scheduled {return_type} for {datetime.fromtimestamp(data_available_time, self.ny_tz)}")
+                    # self.logger.info(f"Scheduled {return_type} for {datetime.fromtimestamp(data_available_time, self.ny_tz)}")
             
             pipe.execute()
             
@@ -657,7 +657,7 @@ class ReturnsProcessor:
             # 1. Gets news from withoutreturns
             raw_data = self.live_client.get(key)
             if raw_data is None:
-                self.logger.info(f"News no longer in withoutreturns: {key} - cleaning up pending return")
+                # self.logger.info(f"News no longer in withoutreturns: {key} - cleaning up pending return")
                 return True  # Key no longer exists, remove from pending
                 
             news_data = json.loads(raw_data)

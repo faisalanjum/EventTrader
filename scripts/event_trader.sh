@@ -1,6 +1,6 @@
 #!/bin/bash
 # EventTrader Control Script
-# Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health} [options] [from-date] [to-date]
+# Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j} [options] [from-date] [to-date]
 
 # Configuration
 WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -377,6 +377,25 @@ clean_logs() {
   echo "Cleaned $count log files"
 }
 
+# Initialize Neo4j database
+init_neo4j() {
+  # Detect Python before starting
+  detect_python
+  
+  echo "Initializing Neo4j database..."
+  cd "$WORKSPACE_DIR"
+  
+  # Use run_event_trader.py with our Neo4j flag
+  if [ "$RUN_BACKGROUND" = true ]; then
+    # Run in background
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" --neo4j-init-only > /dev/null 2>&1 &
+    echo "Neo4j initialization started in background"
+  else
+    # Run in foreground
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" --neo4j-init-only
+  fi
+}
+
 # Process command
 case "$COMMAND" in
   start)
@@ -432,6 +451,10 @@ case "$COMMAND" in
     # Clean old log files
     clean_logs
     ;;
+  init-neo4j)
+    # Initialize Neo4j database
+    init_neo4j
+    ;;
   *)
     echo "Usage: $0 [--background] {command} [options] [from-date] [to-date]"
     echo ""
@@ -448,6 +471,7 @@ case "$COMMAND" in
     echo "  stop-monitor                 # Stop the watchdog"
     echo "  stop-all                     # Stop both watchdog and EventTrader"
     echo "  clean-logs [days]            # Clean log files older than specified days"
+    echo "  init-neo4j                   # Initialize Neo4j database"
     echo ""
     echo "Options:"
     echo "  --background                 # Run commands in background mode"
