@@ -3,8 +3,10 @@ import logging
 import time
 from typing import Dict, Optional
 from datetime import datetime
+from utils.Neo4jProcessor import Neo4jProcessor
 
-from utils.redisClasses import EventTraderRedis, RedisKeys
+
+from utils.redisClasses import EventTraderRedis, RedisKeys, RedisClient
 from utils.log_config import get_logger, setup_logging
 
 from benzinga.bz_restAPI import BenzingaNewsRestAPI
@@ -330,11 +332,53 @@ class DataManager:
         # Add other sources as needed:
         # self.sources['transcripts'] = TranscriptsManager(self.historical_range)
 
+    def initialize_neo4j(self):
+        """Initialize Neo4j processor"""
+        self.logger.info("Initializing Neo4j processor")
+        
+        try:
+            # Get Redis client if available
+            event_trader_redis = None
+            if hasattr(self, 'sources') and 'news' in self.sources:
+                source_manager = self.sources['news']
+                if hasattr(source_manager, 'redis'):
+                    event_trader_redis = source_manager.redis
+                    self.logger.info("Using Redis client from news source")
+            
+            # Create Neo4j processor with default connection settings
+            self.neo4j_processor = Neo4jProcessor(event_trader_redis=event_trader_redis)
+            
+            # Connect and initialize
+            if not self.neo4j_processor.connect():
+                self.logger.error("Failed to connect to Neo4j")
+                return False
+            
+            if not self.neo4j_processor.initialize():
+                self.logger.error("Failed to initialize Neo4j database")
+                return False
+                
+            self.logger.info("Neo4j processor initialized successfully")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error initializing Neo4j processor: {e}")
+            return False
+
     def start(self):
         return {name: manager.start() for name, manager in self.sources.items()}
 
     def stop(self):
-        return {name: manager.stop() for name, manager in self.sources.items()}
+        results = {name: manager.stop() for name, manager in self.sources.items()}
+        
+        # Close Neo4j connection if initialized
+        if self.neo4j_processor:
+            try:
+                self.neo4j_processor.close()
+                self.logger.info("Neo4j processor closed")
+            except Exception as e:
+                self.logger.error(f"Error closing Neo4j processor: {e}")
+                
+        return results
 
     def check_status(self):
         return {name: manager.check_status() for name, manager in self.sources.items()}

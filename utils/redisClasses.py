@@ -172,7 +172,7 @@ class RedisClient:
             # Checks if the news item is already in the processed queue to avoid duplicates
             processed_key = f"{self.prefix}processed:{news_item.id}.{updated_key}"            
             if processed_key in self.client.lrange(self.PROCESSED_QUEUE, 0, -1):
-                self.logger.info(f"Skipping duplicate news (WebSocket): {processed_key}")
+                # self.logger.info(f"Skipping duplicate news (WebSocket): {processed_key}")
                 return False
 
             # Store as news:benzinga:live:raw:{id}:{updated}

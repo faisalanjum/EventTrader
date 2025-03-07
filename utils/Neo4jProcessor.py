@@ -18,19 +18,36 @@ class Neo4jProcessor:
     initialization and functionality.
     """
     
-    def __init__(self, uri="bolt://localhost:7687", username="neo4j", password="Next2020#"):
-        """Initialize with Neo4j connection parameters"""
+    def __init__(self, event_trader_redis=None, uri="bolt://localhost:7687", username="neo4j", password="Next2020#"):
+        """
+        Initialize with Neo4j connection parameters and optional EventTrader Redis client
+        
+        Args:
+            event_trader_redis: EventTraderRedis instance (optional)
+            uri: Neo4j database URI
+            username: Neo4j username
+            password: Neo4j password
+        """
         # Override with environment variables if available
         self.uri = os.environ.get("NEO4J_URI", uri)
         self.username = os.environ.get("NEO4J_USERNAME", username)
         self.password = os.environ.get("NEO4J_PASSWORD", password)
         self.manager = None  # Will hold Neo4jManager instance
-        self.logger = logger
+        
+        # Initialize Redis clients if provided
+        if event_trader_redis:
+            self.event_trader_redis = event_trader_redis
+            self.live_client = event_trader_redis.live_client
+            self.hist_client = event_trader_redis.history_client
+            self.source_type = event_trader_redis.source
+            logger.info(f"Initialized Redis clients for source: {self.source_type}")
+            
+            # Test Redis access
+            self._test_redis_access()
     
     def connect(self):
         """Connect to Neo4j using Neo4jManager"""
         try:
-            # Initialize Neo4jManager (which automatically connects)
             self.manager = Neo4jManager(
                 uri=self.uri,
                 username=self.username,
@@ -42,14 +59,6 @@ class Neo4jProcessor:
             logger.error(f"Failed to connect to Neo4j: {e}")
             return False
     
-    def test_connection(self):
-        """Test Neo4j connection using Neo4jManager"""
-        if not self.manager:
-            if not self.connect():
-                return False
-        
-        return self.manager.test_connection()
-    
     def close(self):
         """Close Neo4j connection"""
         if self.manager:
@@ -57,9 +66,8 @@ class Neo4jProcessor:
     
     def is_initialized(self):
         """Check if Neo4j database is already initialized with EventTrader nodes"""
-        if not self.manager:
-            if not self.connect():
-                return False
+        if not self.manager and not self.connect():
+            return False
         
         try:
             with self.manager.driver.session() as session:
@@ -69,11 +77,7 @@ class Neo4jProcessor:
                 )
                 is_init = result.single()["count"] > 0
                 
-                if is_init:
-                    logger.info("Neo4j database is already initialized")
-                else:
-                    logger.info("Neo4j database needs initialization")
-                    
+                logger.info("Neo4j database is " + ("already initialized" if is_init else "not initialized"))
                 return is_init
                 
         except Exception as e:
@@ -81,108 +85,181 @@ class Neo4jProcessor:
             return False
     
     def initialize(self):
-        """Create initialization marker node and minimal EventTrader data structure"""
+        """
+        Initialize Neo4j database with required structure.
+        Uses MERGE to ensure idempotent operation.
+        """
         # First check if already initialized
         if self.is_initialized():
             return True
             
-        if not self.manager:
-            if not self.connect():
-                return False
+        if not self.manager and not self.connect():
+            return False
         
         try:
             with self.manager.driver.session() as session:
-                # Create initialization marker node
+                # Create initialization structure
                 session.run(
                     """
+                    // Initialization marker
                     MERGE (i:Initialization {id: 'neo4j_init'})
-                    SET i.status = 'complete',
-                        i.timestamp = $timestamp,
-                        i.version = '1.0'
+                    ON CREATE SET i.status = 'complete',
+                        i.timestamp = $timestamp
+                        
+                    // Basic reference data
+                    MERGE (k:AdminReport {code: '10-K'})
+                    ON CREATE SET k.label = '10-K Reports',
+                        k.displayLabel = '10-K Reports'
+                    
+                    MERGE (q:AdminReport {code: '10-Q'})  
+                    ON CREATE SET q.label = '10-Q Reports',
+                        q.displayLabel = '10-Q Reports'
                     """,
                     timestamp=datetime.now().isoformat()
                 )
                 
-                # Create test company node
-                session.run(
-                    """
-                    MERGE (c:Company {id: '0000320193'})
-                    SET c.cik = '0000320193', 
-                        c.name = 'Apple Inc', 
-                        c.ticker = 'AAPL',
-                        c.displayLabel = 'Apple Inc (AAPL)'
-                    """
-                )
+                # Get tradable universe symbols
+                symbols = self.get_tradable_universe()
+                if symbols:
+                    logger.info(f"Found {len(symbols)} symbols in tradable universe")
+                else:
+                    logger.warning("No symbols found in tradable universe")
                 
-                # Create single test date node
-                session.run(
-                    """
-                    MERGE (d:Date {id: '2023-01-01'})
-                    SET d.year = 2023,
-                        d.month = 1,
-                        d.day = 1,
-                        d.quarter = 'Q1',
-                        d.displayLabel = '2023-01-01'
-                    """
-                )
-                
-                # Create single admin report node structure
-                session.run(
-                    """
-                    MERGE (k:AdminReport {code: '10-K'})
-                    SET k.label = '10-K Reports',
-                        k.category = '10-K',
-                        k.displayLabel = '10-K Reports'
-                    
-                    MERGE (q:AdminReport {code: '10-Q'})  
-                    SET q.label = '10-Q Reports',
-                        q.category = '10-Q',
-                        q.displayLabel = '10-Q Reports'
-                    """
-                )
-                
-                logger.info("Neo4j database initialized with minimal test data")
+                logger.info("Neo4j database initialized with basic structure")
                 return True
                 
         except Exception as e:
             logger.error(f"Error during Neo4j initialization: {e}")
             return False
 
-    def clear_db(self):
-        """Development only: Clear database using Neo4jManager"""
-        if not self.manager:
-            if not self.connect():
-                return False
-                
+    def get_tradable_universe(self):
+        """
+        Simple method to fetch tradable universe symbols from Redis
+        
+        Returns:
+            list: List of tradable symbols, or empty list if not available
+        """
+        if not hasattr(self, 'hist_client') or not self.hist_client:
+            logger.warning("No Redis client available to fetch tradable universe")
+            return []
+            
         try:
-            self.manager.clear_db()
-            logger.info("Database cleared successfully")
-            return True
+            # Fetch tradable universe from Redis using exact key
+            if hasattr(self.hist_client, 'client'):
+                key = "admin:tradable_universe:stock_universe"
+                result = self.hist_client.client.get(key)
+                
+                if result:
+                    # Parse JSON result
+                    import json
+                    universe = json.loads(result)
+                    logger.info(f"Retrieved {len(universe)} symbols from tradable universe")
+                    # Return just the list of symbols
+                    return list(universe.keys())
+                else:
+                    logger.warning(f"Tradable universe key '{key}' not found in Redis")
+                    return []
+            else:
+                logger.warning("Redis client doesn't have expected 'client' attribute")
+                return []
+                
         except Exception as e:
-            logger.error(f"Failed to clear database: {e}")
+            logger.error(f"Error fetching tradable universe: {e}")
+            return []
+            
+    def _test_redis_access(self):
+        """A simple diagnostic test to verify Redis access for all available sources"""
+        if not hasattr(self, 'hist_client') or not self.hist_client:
+            logger.warning("No Redis client available for testing")
+            return False
+            
+        try:
+            from utils.redisClasses import RedisKeys
+            
+            # Get all available source types
+            all_sources = []
+            try:
+                # Try to get all sources from RedisKeys constants
+                for attr in dir(RedisKeys):
+                    if attr.startswith('SOURCE_') and not attr.startswith('__'):
+                        source = getattr(RedisKeys, attr)
+                        if isinstance(source, str):
+                            all_sources.append(source)
+                
+                # Add current source if it's not already in the list
+                if hasattr(self, 'source_type') and self.source_type not in all_sources:
+                    all_sources.append(self.source_type)
+                    
+                if not all_sources:
+                    # Fallback to at least testing the current source
+                    all_sources = [self.source_type]
+            except:
+                # Fallback to current source
+                all_sources = [self.source_type]
+                
+            logger.info(f"Testing Redis access for sources: {all_sources}")
+            
+            # Test key patterns for each source
+            success = False
+            for source in all_sources:
+                try:
+                    # Get key patterns for current source
+                    keys_dict = RedisKeys.get_returns_keys(source)
+                    withreturns_key = keys_dict.get('withreturns', f"{source}:withreturns")
+                    withoutreturns_key = keys_dict.get('withoutreturns', f"{source}:withoutreturns")
+                    
+                    # Test withreturns keys
+                    pattern = f"{withreturns_key}:*"
+                    keys = self.hist_client.client.keys(pattern)
+                    logger.info(f"Redis test - found {len(keys)} keys matching {pattern}")
+                    if len(keys) > 0:
+                        success = True
+                        
+                    # Test withoutreturns keys
+                    pattern = f"{withoutreturns_key}:*"
+                    keys = self.hist_client.client.keys(pattern)
+                    logger.info(f"Redis test - found {len(keys)} keys matching {pattern}")
+                    if len(keys) > 0:
+                        success = True
+                except Exception as e:
+                    logger.warning(f"Error testing Redis for source {source}: {e}")
+            
+            return success
+                
+        except Exception as e:
+            logger.warning(f"Redis access test failed: {e}")
             return False
 
+    def populate_company_nodes(self):
+        """
+        Simple placeholder for populating Neo4j with company data
+        This will be implemented in more detail later
+        """
+        symbols = self.get_tradable_universe()
+        if not symbols:
+            logger.warning("No symbols found for company node creation")
+            return False
+            
+        logger.info(f"Retrieved {len(symbols)} symbols for future company node creation")
+        # Placeholder for actual implementation
+        return True
+
 # Simple function to run initialization
-def init_neo4j(force=False):
-    """Initialize Neo4j with minimal required nodes"""
+def init_neo4j():
+    """Initialize Neo4j with required nodes"""
     processor = Neo4jProcessor()
     try:
-        if processor.connect():
-            if force:
-                # Force reinitialization by clearing the database first
-                processor.clear_db()
-                
-            result = processor.initialize()
-            processor.close()
-            return result
+        if processor.connect() and processor.initialize():
+            logger.info("Neo4j initialization successful")
+            return True
+        logger.error("Neo4j initialization failed")
         return False
     except Exception as e:
-        logger.error(f"Neo4j initialization failed: {e}")
-        processor.close()
+        logger.error(f"Neo4j initialization error: {e}")
         return False
+    finally:
+        processor.close()
 
 if __name__ == "__main__":
-    # For direct testing from command line
-    logging.basicConfig(level=logging.INFO)
-    success = init_neo4j()
-    print(f"Neo4j initialization {'succeeded' if success else 'failed'}") 
+    # Run initialization directly if this script is executed
+    init_neo4j() 
