@@ -2087,10 +2087,22 @@ class CompanyNode(Neo4jNode):
     sector: Optional[str] = None
     industry: Optional[str] = None
     fiscal_year_end: Optional[str] = None
+    # Add fields that may not be in the class definition but are accessed in properties method
+    cusip: Optional[str] = None
+    figi: Optional[str] = None
+    class_figi: Optional[str] = None
+    sic: Optional[str] = None
+    sic_name: Optional[str] = None
+    sector_etf: Optional[str] = None
+    industry_etf: Optional[str] = None
+    mkt_cap: Optional[float] = None
+    employees: Optional[int] = None
+    shares_out: Optional[float] = None
+    ipo_date: Optional[str] = None
 
     def __post_init__(self):
         # Ensure CIK is properly formatted (10 digits with leading zeros)
-        self.cik = self.cik.zfill(10)
+        self.cik = str(self.cik).zfill(10)
         
     def display(self):
         """Returns display name for the entity"""
@@ -2126,6 +2138,17 @@ class CompanyNode(Neo4jNode):
             'exchange': self.exchange,
             'sector': self.sector,
             'industry': self.industry,
+            'cusip': self.cusip,
+            'figi': self.figi,
+            'class_figi': self.class_figi,
+            'sic': self.sic,
+            'sic_name': self.sic_name,
+            'sector_etf': self.sector_etf,
+            'industry_etf': self.industry_etf,
+            'mkt_cap': self.mkt_cap,
+            'employees': self.employees,
+            'shares_out': self.shares_out,
+            'ipo_date': self.ipo_date,
             'fiscal_year_end': self.fiscal_year_end
         }
         
