@@ -110,7 +110,6 @@ class NodeType(Enum):
     COMPANY = "Company"
     ENTITY = "Entity" # Not using this for now
     REPORT = "Report"
-    NEWS = "News"     # News node type
 
     FACT = "Fact"
     CONTEXT = "Context"
@@ -125,7 +124,7 @@ class NodeType(Enum):
     GUIDANCE = "Guidance"    # Keep this for guidance/documentation elements
     # DEPRECATED = "deprecated"
     
-
+    NEWS = "News"  # Added for NewsNode support
     
     DIMENSION = "Dimension"
     DOMAIN = "Domain"
@@ -171,8 +170,7 @@ class RelationType(Enum):
     FOR_COMPANY = "FOR_COMPANY"       # Context -> Company
     PROVIDES_GUIDANCE = "PROVIDES_GUIDANCE"  # From Guidance concept to related concept
     MENTIONS = "MENTIONS"           # News -> Company relationship
-    RELATED_TO = "RELATED_TO"       # Company -> Company relationship for co-occurrence
-
+    RELATED_TO = "RELATED_TO"       # Company -> Company relationship as defined by related field in polygon
     
 
 class ReportElementClassifier:
@@ -2084,12 +2082,13 @@ class AdminReportNode(Neo4jNode):
 @dataclass
 class CompanyNode(Neo4jNode):
     cik: str
-    name: Optional[str] = None
+    name: Optional[str] = None  # Check if it matters to make it Optional
     ticker: Optional[str] = None
     exchange: Optional[str] = None
     sector: Optional[str] = None
     industry: Optional[str] = None
     fiscal_year_end: Optional[str] = None
+
     # Add fields that may not be in the class definition but are accessed in properties method
     cusip: Optional[str] = None
     figi: Optional[str] = None
@@ -2103,9 +2102,10 @@ class CompanyNode(Neo4jNode):
     shares_out: Optional[float] = None
     ipo_date: Optional[str] = None
 
+
     def __post_init__(self):
         # Ensure CIK is properly formatted (10 digits with leading zeros)
-        self.cik = str(self.cik).zfill(10)
+        self.cik = self.cik.zfill(10)
         
     def display(self):
         """Returns display name for the entity"""
@@ -2159,6 +2159,78 @@ class CompanyNode(Neo4jNode):
         props.update({k: v for k, v in optional_props.items() if v is not None})
         
         return props
+        
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'CompanyNode':
+        """Create CompanyNode from Neo4j properties"""
+        # Required field
+        if 'cik' not in props:
+            raise ValueError("Missing required field 'cik' for CompanyNode")
+        
+        # Initialize with required fields
+        company = cls(cik=props['cik'])
+        
+        # Map neo4j properties to attributes
+        field_mappings = {
+            'name': 'name',
+            'ticker': 'ticker',
+            'exchange': 'exchange',
+            'sector': 'sector',
+            'industry': 'industry',
+            'fiscal_year_end': 'fiscal_year_end',
+            'cusip': 'cusip',
+            'figi': 'figi',
+            'class_figi': 'class_figi',
+            'sic': 'sic',
+            'sic_name': 'sic_name',
+            'sector_etf': 'sector_etf',
+            'industry_etf': 'industry_etf',
+            'ipo_date': 'ipo_date'
+        }
+        
+        # Set string and simple fields
+        for neo4j_field, attr_name in field_mappings.items():
+            if neo4j_field in props and props[neo4j_field] not in (None, "", "null"):
+                setattr(company, attr_name, props[neo4j_field])
+        
+        # Handle numeric fields with special parsing
+        if 'mkt_cap' in props and props['mkt_cap'] not in (None, "", "null"):
+            try:
+                mkt_cap_value = props['mkt_cap']
+                if isinstance(mkt_cap_value, (int, float)):
+                    company.mkt_cap = float(mkt_cap_value)
+                else:
+                    # Try to clean the string if it contains commas, etc.
+                    clean_val = str(mkt_cap_value).replace(',', '').replace('$', '').strip()
+                    company.mkt_cap = float(clean_val)
+            except (ValueError, TypeError):
+                pass
+        
+        if 'employees' in props and props['employees'] not in (None, "", "null"):
+            try:
+                employees_value = props['employees']
+                if isinstance(employees_value, (int, float)):
+                    company.employees = int(employees_value)
+                else:
+                    # Try to clean the string if it contains commas, etc.
+                    clean_val = str(employees_value).replace(',', '').strip()
+                    company.employees = int(float(clean_val))
+            except (ValueError, TypeError):
+                pass
+        
+        if 'shares_out' in props and props['shares_out'] not in (None, "", "null"):
+            try:
+                shares_value = props['shares_out']
+                if isinstance(shares_value, (int, float)):
+                    company.shares_out = float(shares_value)
+                else:
+                    # Try to clean the string if it contains commas, etc.
+                    clean_val = str(shares_value).replace(',', '').strip()
+                    company.shares_out = float(clean_val)
+            except (ValueError, TypeError):
+                pass
+        
+        return company
 
 
 @dataclass

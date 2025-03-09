@@ -3,17 +3,22 @@ import os
 import sys
 import json
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 import argparse
 from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
+import time
+from typing import Dict, List, Optional, Any, Set, Tuple
+from neo4j import GraphDatabase
+from neo4j.exceptions import ServiceUnavailable, DatabaseUnavailable
+from utils.redisClasses import EventTraderRedis
+from utils.EventTraderNodes import NewsNode, CompanyNode
+from utils.date_utils import parse_news_dates  # Import our new date parsing utility
 
 # Add XBRL module to path if needed
-sys.path.append(str(Path(__file__).parent.parent))
+# sys.path.append(str(Path(__file__).parent.parent))
 from XBRL.Neo4jManager import Neo4jManager
 from XBRL.XBRLClasses import NodeType, RelationType
-from utils.EventTraderNodes import NewsNode
-from datetime import datetime
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -143,6 +148,19 @@ class Neo4jProcessor:
                 logger.error("Required columns 'symbol' and 'cik' must be in CSV")
                 return {}
             
+            # Log available columns to help diagnose missing fields
+            logger.info(f"CSV columns available: {list(df.columns)}")
+            
+            # Check for our critical fields - CORRECTED to match CSV column names
+            critical_fields = ['mkt_cap', 'employees', 'shares_out']
+            for field in critical_fields:
+                if field not in df.columns:
+                    logger.warning(f"Critical field '{field}' is missing in CSV")
+                else:
+                    # Check how many non-null values we have
+                    non_null_count = df[field].notna().sum()
+                    logger.info(f"Field '{field}' has {non_null_count} non-null values out of {len(df)} rows ({non_null_count/len(df)*100:.1f}%)")
+            
             # Clean up dataframe
             df = df[df['symbol'].astype(str).str.strip().str.len() > 0]
             df = df.drop_duplicates(subset=['symbol'])
@@ -259,8 +277,16 @@ class Neo4jProcessor:
                 
             logger.info(f"Creating Company nodes for {len(universe_data)} companies")
             
+            # Check if critical fields exist in the data
+            first_company = next(iter(universe_data.values()))
+            # Update the critical field names to match what's in the CSV
+            critical_fields = ['mkt_cap', 'employees', 'shares_out']
+            missing_fields = [field for field in critical_fields if field not in first_company]
+            if missing_fields:
+                logger.warning(f"Warning: The following critical fields are missing in the company data: {missing_fields}")
+                logger.info(f"Available fields: {list(first_company.keys())}")
+            
             # Prepare company nodes with all fields
-            from XBRL.XBRLClasses import CompanyNode
             valid_nodes = []
             
             # Build a ticker-to-CIK lookup dictionary for relationships
@@ -270,6 +296,12 @@ class Neo4jProcessor:
                 if cik and cik.lower() not in ['nan', 'none', '']:
                     formatted_cik = str(cik).zfill(10)
                     ticker_to_cik[symbol.upper()] = formatted_cik
+            
+            # Statistics for reporting
+            processed_count = 0
+            had_mkt_cap = 0
+            had_employees = 0
+            had_shares_out = 0
             
             # Process and create company nodes with all fields
             for symbol, data in universe_data.items():
@@ -289,26 +321,26 @@ class Neo4jProcessor:
                     )
                     
                     # Specifically handle the three critical financial fields we need
-                    # Process market_cap
+                    # Process market_cap - CORRECTED field name to match CSV 
                     try:
-                        if 'market_cap' in data and data['market_cap'] and str(data['market_cap']).lower() not in ['nan', 'none', '']:
-                            mkt_cap_value = data['market_cap']
+                        if 'mkt_cap' in data and data['mkt_cap'] and str(data['mkt_cap']).lower() not in ['nan', 'none', '']:
+                            mkt_cap_value = data['mkt_cap']
                             try:
                                 # First try direct float conversion
                                 mkt_cap_float = float(mkt_cap_value)
                                 company_node.mkt_cap = mkt_cap_float
-                                # logger.info(f"Set {symbol} market cap = {mkt_cap_float}")
+                                had_mkt_cap += 1
                             except (ValueError, TypeError) as e:
                                 # Try to clean the string if it contains commas, etc.
                                 try:
                                     clean_val = str(mkt_cap_value).replace(',', '').replace('$', '').strip()
                                     mkt_cap_float = float(clean_val)
                                     company_node.mkt_cap = mkt_cap_float
-                                    # logger.info(f"Set {symbol} market cap = {mkt_cap_float} (after cleaning)")
+                                    had_mkt_cap += 1
                                 except Exception as e2:
-                                    logger.warning(f"Could not convert market_cap value '{mkt_cap_value}' to float for {symbol}: {e2}")
+                                    logger.warning(f"Could not convert mkt_cap value '{mkt_cap_value}' to float for {symbol}: {e2}")
                     except Exception as e:
-                        logger.error(f"Error processing market_cap for {symbol}: {e}")
+                        logger.error(f"Error processing mkt_cap for {symbol}: {e}")
                     
                     # Process employees
                     try:
@@ -319,39 +351,39 @@ class Neo4jProcessor:
                                 # Convert through float first to handle decimal representations
                                 employees_int = int(float(employees_value))
                                 company_node.employees = employees_int
-                                logger.info(f"Set {symbol} employees = {employees_int}")
+                                had_employees += 1
                             except (ValueError, TypeError) as e:
                                 # Try to clean the string if it contains commas, etc.
                                 try:
                                     clean_val = str(employees_value).replace(',', '').strip()
                                     employees_int = int(float(clean_val))
                                     company_node.employees = employees_int
-                                    logger.info(f"Set {symbol} employees = {employees_int} (after cleaning)")
+                                    had_employees += 1
                                 except Exception as e2:
                                     logger.warning(f"Could not convert employees value '{employees_value}' to int for {symbol}: {e2}")
                     except Exception as e:
                         logger.error(f"Error processing employees for {symbol}: {e}")
                     
-                    # Process shares_outstanding
+                    # Process shares_outstanding - CORRECTED field name to match CSV
                     try:
-                        if 'shares_outstanding' in data and data['shares_outstanding'] and str(data['shares_outstanding']).lower() not in ['nan', 'none', '']:
-                            shares_value = data['shares_outstanding']
+                        if 'shares_out' in data and data['shares_out'] and str(data['shares_out']).lower() not in ['nan', 'none', '']:
+                            shares_value = data['shares_out']
                             try:
                                 # First try direct float conversion
                                 shares_float = float(shares_value)
                                 company_node.shares_out = shares_float
-                                logger.info(f"Set {symbol} shares_out = {shares_float}")
+                                had_shares_out += 1
                             except (ValueError, TypeError) as e:
                                 # Try to clean the string if it contains commas, etc.
                                 try:
                                     clean_val = str(shares_value).replace(',', '').strip()
                                     shares_float = float(clean_val)
                                     company_node.shares_out = shares_float
-                                    logger.info(f"Set {symbol} shares_out = {shares_float} (after cleaning)")
+                                    had_shares_out += 1
                                 except Exception as e2:
-                                    logger.warning(f"Could not convert shares_outstanding value '{shares_value}' to float for {symbol}: {e2}")
+                                    logger.warning(f"Could not convert shares_out value '{shares_value}' to float for {symbol}: {e2}")
                     except Exception as e:
-                        logger.error(f"Error processing shares_outstanding for {symbol}: {e}")
+                        logger.error(f"Error processing shares_out for {symbol}: {e}")
                     
                     # Process other fields using the normal flow
                     field_mappings = {
@@ -374,47 +406,39 @@ class Neo4jProcessor:
                         if source_field in data and data[source_field] and str(data[source_field]).lower() not in ['nan', 'none', '']:
                             setattr(company_node, target_field, data[source_field])
                     
-                    # Verify properties method includes our values
-                    props = company_node.properties
-                    # if company_node.mkt_cap is not None:
-                    #     logger.info(f"Verify {symbol} market_cap in properties: {props.get('mkt_cap')}")
-                    # if company_node.employees is not None:
-                    #     logger.info(f"Verify {symbol} employees in properties: {props.get('employees')}")
-                    # if company_node.shares_out is not None:
-                    #     logger.info(f"Verify {symbol} shares_out in properties: {props.get('shares_out')}")
-                    
                     valid_nodes.append(company_node)
+                    processed_count += 1
+                    
                 except Exception as e:
-                    logger.debug(f"Skipping {symbol}: {e}")
+                    logger.error(f"Error creating CompanyNode for {symbol}: {e}")
             
-            if not valid_nodes:
-                logger.warning("No valid company nodes to create")
+            # Create all nodes in Neo4j
+            if valid_nodes:
+                self.manager.merge_nodes(valid_nodes)
+                
+                # Report statistics
+                logger.info(f"Company node statistics:")
+                logger.info(f"  - Processed: {processed_count} companies")
+                logger.info(f"  - With market cap: {had_mkt_cap} ({had_mkt_cap/processed_count*100:.1f}%)")
+                logger.info(f"  - With employees: {had_employees} ({had_employees/processed_count*100:.1f}%)")
+                logger.info(f"  - With shares outstanding: {had_shares_out} ({had_shares_out/processed_count*100:.1f}%)")
+                
+                # Report on CIK coverage
+                logger.info(f"  - CIK coverage: {len(ticker_to_cik)} companies")
+                
+                # Create relationships between companies
+                if self._create_company_relationships(universe_data, valid_nodes, ticker_to_cik):
+                    logger.info("Successfully created company relationships")
+                    
+                return True
+            else:
+                logger.warning("No valid company nodes were created")
                 return False
-            
-            # Use Neo4jManager's _export_nodes method to create nodes efficiently
-            self.manager._export_nodes([valid_nodes])
-            logger.info(f"Created {len(valid_nodes)} company nodes in Neo4j")
-            
-            # Verify company nodes exist
-            with self.manager.driver.session() as session:
-                verify_result = session.run("MATCH (c:Company) RETURN count(c) as count")
-                company_count = verify_result.single()["count"]
                 
-                if company_count == 0:
-                    logger.error("No company nodes found after creation attempt")
-                    return False
-                
-                logger.info(f"Verified {company_count} company nodes in Neo4j database")
-            
-            # Create relationships between companies
-            self._create_company_relationships(universe_data, valid_nodes, ticker_to_cik)
-            
-            return True
-            
         except Exception as e:
-            logger.error(f"Error creating company nodes: {e}")
+            logger.error(f"Error populating company nodes: {e}")
             return False
-            
+
     def _create_company_relationships(self, universe_data, company_nodes, ticker_to_cik):
         """
         Create RELATED_TO relationships between related companies.
@@ -575,27 +599,8 @@ class Neo4jProcessor:
                         body = news_item.get('body', '')
                         teaser = news_item.get('teaser', '')
                         
-                        # Parse datetime fields
-                        created_at = None
-                        updated_at = None
-                        
-                        if 'created' in news_item and news_item['created']:
-                            try:
-                                created_at = datetime.fromisoformat(news_item['created'].replace('Z', '+00:00'))
-                            except Exception as e:
-                                logger.warning(f"Error parsing created_at: {e}")
-                                
-                        if 'updated' in news_item and news_item['updated']:
-                            try:
-                                updated_at = datetime.fromisoformat(news_item['updated'].replace('Z', '+00:00'))
-                            except Exception as e:
-                                logger.warning(f"Error parsing updated_at: {e}")
-                        
-                        # If dates are missing, use current time as fallback
-                        if not created_at:
-                            created_at = datetime.now()
-                        if not updated_at:
-                            updated_at = created_at
+                        # Get creation and update timestamps using our new utility function
+                        created_at, updated_at = parse_news_dates(news_item)
                         
                         # Get market session
                         market_session = ""
@@ -604,10 +609,27 @@ class Neo4jProcessor:
                         
                         # Extract list fields
                         authors = news_item.get('authors', [])
+                        if isinstance(authors, str):
+                            try:
+                                authors = json.loads(authors)
+                            except:
+                                authors = [authors] if authors else []
+                                
                         channels = news_item.get('channels', [])
+                        if isinstance(channels, str):
+                            try:
+                                channels = json.loads(channels)
+                            except:
+                                channels = [channels] if channels else []
+                                
                         tags = news_item.get('tags', [])
+                        if isinstance(tags, str):
+                            try:
+                                tags = json.loads(tags)
+                            except:
+                                tags = [tags] if tags else []
                         
-                        # Create NewsNode object
+                        # Create NewsNode object with all properties
                         news_node = NewsNode(
                             news_id=news_id,
                             title=title,
@@ -648,82 +670,115 @@ class Neo4jProcessor:
                                     # Fallback parsing
                                     try:
                                         clean_str = symbol_raw.strip('[]').replace("'", "").replace('"', "")
-                                        symbol_candidates = [s.strip() for s in clean_str.split(',')]
-                                        symbols = [s.upper() for s in symbol_candidates if s]
-                                    except:
-                                        pass
+                                        symbols = [s.strip().upper() for s in clean_str.split(',') if s.strip()]
+                                    except Exception as e2:
+                                        logger.warning(f"Could not parse symbols: {symbol_raw}")
                         
+                        # If no symbols found, log and continue
                         if not symbols:
+                            logger.debug(f"No symbols for news item {news_id}")
                             symbol_missing_count += 1
-                            logger.warning(f"No symbols extracted for news {news_id}")
                             continue
-                            
-                        logger.info(f"News {news_id} symbols: {symbols}")
                         
-                        # Create relationships
-                        for symbol in symbols:
-                            symbol_upper = symbol.upper()
+                        # Process many-to-many relationships between news and all mentioned companies
+                        logger.debug(f"News {news_id} mentions {len(symbols)} symbols: {symbols}")
+                        
+                        # Create a list of company nodes for this news item
+                        news_company_nodes = []
+                        
+                        for symbol_upper in symbols:
+                            # Get CIK for this symbol if available
                             cik = ticker_to_cik.get(symbol_upper)
-                            
                             if not cik:
                                 cik_missing_count += 1
+                                logger.debug(f"No CIK for symbol {symbol_upper}")
                                 continue
-                                
-                            # Get return metrics for this symbol
-                            return_metrics = {}
                             
-                            # Extract return metrics if available
-                            if 'returns' in news_item and 'symbols' in news_item['returns'] and symbol_upper in news_item['returns']['symbols']:
-                                symbol_returns = news_item['returns']['symbols'][symbol_upper]
+                            # Get return metrics for this symbol/news item
+                            return_metrics = {}
+                            if 'returns' in news_item:
+                                # Different possible structures for returns data
+                                symbol_returns = None
                                 
-                                # Get hourly returns
-                                if 'hourly_return' in symbol_returns:
-                                    for metric, value in symbol_returns['hourly_return'].items():
-                                        if value is not None and not (isinstance(value, str) and value.lower() == 'nan'):
-                                            return_metrics[f'hourly_{metric}'] = value
+                                # Structure 1: {'returns': {'AAPL': {...}}}
+                                if symbol_upper in news_item['returns']:
+                                    symbol_returns = news_item['returns'][symbol_upper]
                                 
-                                # Get session returns
-                                if 'session_return' in symbol_returns:
-                                    for metric, value in symbol_returns['session_return'].items():
-                                        if value is not None and not (isinstance(value, str) and value.lower() == 'nan'):
-                                            return_metrics[f'session_{metric}'] = value
-                                
-                                # Get daily returns
-                                if 'daily_return' in symbol_returns:
-                                    for metric, value in symbol_returns['daily_return'].items():
-                                        if value is not None and not (isinstance(value, str) and value.lower() == 'nan'):
-                                            return_metrics[f'daily_{metric}'] = value
+                                # Structure 2: {'returns': {'symbols': {'AAPL': {...}}}}
+                                elif 'symbols' in news_item['returns'] and symbol_upper in news_item['returns']['symbols']:
+                                    symbol_returns = news_item['returns']['symbols'][symbol_upper]
+                                    
+                                if symbol_returns:
+                                    # Get hourly returns
+                                    if 'hourly_return' in symbol_returns:
+                                        for metric, value in symbol_returns['hourly_return'].items():
+                                            if value is not None and not (isinstance(value, str) and value.lower() == 'nan'):
+                                                return_metrics[f'hourly_{metric}'] = value
+                                    
+                                    # Get session returns
+                                    if 'session_return' in symbol_returns:
+                                        for metric, value in symbol_returns['session_return'].items():
+                                            if value is not None and not (isinstance(value, str) and value.lower() == 'nan'):
+                                                return_metrics[f'session_{metric}'] = value
+                                    
+                                    # Get daily returns
+                                    if 'daily_return' in symbol_returns:
+                                        for metric, value in symbol_returns['daily_return'].items():
+                                            if value is not None and not (isinstance(value, str) and value.lower() == 'nan'):
+                                                return_metrics[f'daily_{metric}'] = value
                             
                             # Create the relationship with return metrics
-                            from XBRL.XBRLClasses import CompanyNode
+                            # Use EventTraderNodes.CompanyNode instead of XBRLClasses.CompanyNode
                             
                             # Look up company data from universe if available
                             company_data = universe_data.get(symbol_upper, {})
                             company_name = company_data.get('company_name', company_data.get('name', 'Unknown Company'))
                             
-                            # Create company node with additional fields if available
-                            company_node = CompanyNode(
-                                cik=cik,
-                                name=company_name,
-                                ticker=symbol_upper
-                            )
+                            # Try to find existing company node in Neo4j by CIK
+                            company_node = None
+                            company_query = """
+                            MATCH (c:Company {id: $cik})
+                            RETURN c
+                            """
                             
-                            # Add market cap, employees, and shares outstanding if available
-                            if 'market_cap' in company_data and company_data['market_cap']:
-                                company_node.mkt_cap = company_data['market_cap']
-                            if 'employees' in company_data and company_data['employees']:
-                                company_node.employees = company_data['employees']
-                            if 'shares_outstanding' in company_data and company_data['shares_outstanding']:
-                                company_node.shares_out = company_data['shares_outstanding']
-                            
-                            # Add relationship properties
+                            # Use manager's driver directly instead of run_query
+                            with self.manager.driver.session() as session:
+                                company_result = session.run(company_query, {"cik": cik})
+                                company_record = company_result.single()
+                                
+                                if company_record:
+                                    # Use existing company node
+                                    logger.debug(f"Found existing company node for {symbol_upper} (CIK: {cik})")
+                                    company_props = dict(company_record['c'])
+                                    company_node = CompanyNode.from_neo4j(company_props)
+                                else:
+                                    # Create a simple company node with basic info
+                                    logger.debug(f"Creating new company node for {symbol_upper} (CIK: {cik})")
+                                    company_node = CompanyNode(
+                                        cik=cik,
+                                        name=company_name,
+                                        ticker=symbol_upper
+                                    )
+                                    
+                                    # Add other fields if available
+                                    if 'exchange' in company_data:
+                                        company_node.exchange = company_data.get('exchange')
+                                    if 'sector' in company_data:
+                                        company_node.sector = company_data.get('sector')
+                                    if 'industry' in company_data:
+                                        company_node.industry = company_data.get('industry')
+                                    
+                                    # Create the company node in Neo4j
+                                    self.manager.merge_nodes([company_node])
+                                
+                            # Add relationship properties - include symbol for clarity in graph
                             rel_props = {
                                 'symbol': symbol_upper,
                                 'created_at': datetime.now().isoformat(),
                                 **return_metrics
                             }
                             
-                            # Add to relationships list
+                            # Add to relationships list for this news-company pair
                             relationships.append((news_node, company_node, RelationType.MENTIONS, rel_props))
                         
                         batch_processed += 1
@@ -739,12 +794,41 @@ class Neo4jProcessor:
             # Export News nodes to Neo4j using Neo4jManager
             if news_nodes:
                 logger.info(f"Exporting {len(news_nodes)} News nodes to Neo4j")
-                self.manager._export_nodes([news_nodes])
+                # Use a direct Cypher query to create News nodes without NodeType restriction
+                with self.manager.driver.session() as session:
+                    for node in news_nodes:
+                        properties = node.properties
+                        news_id = node.id
+                        query = """
+                        MERGE (n:News {id: $id})
+                        ON CREATE SET n += $properties
+                        ON MATCH SET n += $properties
+                        """
+                        session.run(query, {"id": news_id, "properties": properties})
+                logger.info(f"Created {len(news_nodes)} News nodes directly")
             
-            # Create relationships
+            # Create relationships similarly with direct Cypher query
             if relationships:
                 logger.info(f"Creating {len(relationships)} News-Company relationships")
-                self.manager.merge_relationships(relationships)
+                with self.manager.driver.session() as session:
+                    for rel in relationships:
+                        source, target, rel_type, props = rel
+                        # Handle properties
+                        props_dict = props if props else {}
+                        
+                        # Execute the merge
+                        query = f"""
+                        MATCH (s:News {{id: $source_id}})
+                        MATCH (t:Company {{id: $target_id}})
+                        MERGE (s)-[r:{rel_type.value}]->(t)
+                        SET r += $properties
+                        """
+                        session.run(query, {
+                            "source_id": source.id, 
+                            "target_id": target.id,
+                            "properties": props_dict
+                        })
+                logger.info(f"Created {len(relationships)} relationships directly")
             
             # Get database stats
             self.manager.get_neo4j_db_counts()
@@ -763,6 +847,51 @@ class Neo4jProcessor:
             logger.error(f"Error processing news data: {e}")
             return False
 
+    def get_node_by_id(self, node_id, node_type):
+        """
+        Get a node by its ID and type from Neo4j
+        
+        Args:
+            node_id: The ID of the node
+            node_type: The type of the node (NodeType enum)
+            
+        Returns:
+            Node object if found, None otherwise
+        """
+        try:
+            neo4j_manager = self._get_neo4j_manager()
+            query = f"""
+            MATCH (n:{node_type.value} {{id: $id}})
+            RETURN n
+            """
+            params = {"id": node_id}
+            
+            # Use driver's session to execute query instead of run_query
+            with neo4j_manager.driver.session() as session:
+                result = session.run(query, params)
+                record = result.single()
+                
+                if record:
+                    # Get node properties
+                    node_props = dict(record['n'])
+                    
+                    # Handle different node types
+                    if node_type == NodeType.COMPANY:
+                        # Use EventTraderNodes.CompanyNode instead of XBRLClasses.CompanyNode
+                        return CompanyNode.from_neo4j(node_props)
+                    elif node_type == NodeType.NEWS:
+                        return NewsNode.from_neo4j(node_props)
+                    
+            return None
+        except Exception as e:
+            logger.error(f"Error getting node by ID: {e}")
+            return None
+
+    def _get_neo4j_manager(self):
+        """Get or create a Neo4jManager instance"""
+        if not hasattr(self, 'neo4j_manager'):
+            self.neo4j_manager = Neo4jManager(uri=self.uri, username=self.username, password=self.password)
+        return self.neo4j_manager
 
 # Function to initialize Neo4j database
 def init_neo4j():
