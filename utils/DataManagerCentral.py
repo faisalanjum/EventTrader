@@ -20,8 +20,6 @@ from utils.ReturnsProcessor import ReturnsProcessor
 from eventtrader.keys import BENZINGANEWS_API_KEY
 from eventtrader.keys import SEC_API_KEY
 
-from utils.Neo4jProcessor import Neo4jProcessor
-
 # Change these to absolute imports
 import sys
 sys.path.append('/Users/macowne/Desktop/Faisal/EventTrader')  # Add project root to path
@@ -312,20 +310,25 @@ class ReportsManager(DataSourceManager):
         
 
 class DataManager:
-    """Central manager for all data sources"""
+    """Central data manager that coordinates all data sources and processors"""
+    
     def __init__(self, date_from: str, date_to: str):
         # Use existing logger instead of setting up a new one
-        self.logger = get_logger(__name__)
+        self.logger = get_logger("utils.DataManagerCentral")
         
+        # Store settings
         self.historical_range = {'from': date_from, 'to': date_to}
         self.sources = {}
+        
+        # Initialize sources first
         self.initialize_sources()
+        
+        # Initialize Neo4j processor
+        self.initialize_neo4j()
         
         # Set up signal handlers for graceful shutdown
         self._setup_signal_handlers()
-
-        self.neo4j_processor = None
-
+        
     def initialize_sources(self):
         self.sources['news'] = BenzingaNewsManager(self.historical_range)
         self.sources['reports'] = ReportsManager(self.historical_range)
@@ -348,21 +351,58 @@ class DataManager:
             # Create Neo4j processor with default connection settings
             self.neo4j_processor = Neo4jProcessor(event_trader_redis=event_trader_redis)
             
-            # Connect and initialize
+            # Connect to Neo4j
             if not self.neo4j_processor.connect():
                 self.logger.error("Failed to connect to Neo4j")
                 return False
+                
+            # Check if Neo4j is already initialized
+            if self.neo4j_processor.is_initialized():
+                self.logger.info("Neo4j already initialized, skipping initialization")
+                # Even if initialized, process news data
+                self.process_news_data()
+                return True
             
+            # Initialize Neo4j if not already initialized
+            self.logger.info("Neo4j not initialized, initializing database")
             if not self.neo4j_processor.initialize():
                 self.logger.error("Failed to initialize Neo4j database")
                 return False
                 
-            self.logger.info("Neo4j processor initialized successfully")
+            self.logger.info("Neo4j initialization completed successfully")
+            
+            # Process news data after successful initialization
+            self.process_news_data()
+            
             return True
             
         except Exception as e:
-            self.logger.error(f"Error initializing Neo4j processor: {e}")
+            self.logger.error(f"Error initializing Neo4j: {e}")
             return False
+            
+    def process_news_data(self, batch_size=100, max_items=1000):
+        """Process news data into Neo4j from the news:withreturns:* Redis namespace"""
+        if not hasattr(self, 'neo4j_processor') or not self.neo4j_processor:
+            self.logger.error("Neo4j processor not initialized, cannot process news")
+            return False
+            
+        try:
+            self.logger.info(f"Processing news data to Neo4j (batch_size={batch_size}, max_items={max_items})...")
+            success = self.neo4j_processor.process_news_to_neo4j(batch_size, max_items)
+            
+            if success:
+                self.logger.info("News data processing completed successfully")
+            else:
+                self.logger.warning("News data processing returned with errors")
+                
+            return success
+        except Exception as e:
+            self.logger.error(f"Error processing news data: {e}")
+            return False
+            
+    def has_neo4j(self):
+        """Check if Neo4j processor is available and initialized"""
+        return hasattr(self, 'neo4j_processor') and self.neo4j_processor is not None
 
     def start(self):
         return {name: manager.start() for name, manager in self.sources.items()}

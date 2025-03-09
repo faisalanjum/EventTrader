@@ -27,7 +27,6 @@
     - Footnote (ToDo)
 
 
-
 # Node Unique Identifiers (u_id)
 
 ## 1. Common/Macro Nodes
@@ -39,6 +38,8 @@
 | Period      | `period_type_startdate_enddate`| `duration_2023-10-01_2024-10-01` or `instant_2024-01-28` or forever    
 | Date        | `YYYY-MM-DD`                   | `2024-01-28`                                                  |
 | AdminReport | `report_code`                  | `10-K` or `10-Q`                                              |
+| News | ``                  | ``                                              |
+
 
 ## 2. Company-Specific Nodes
 | Node Type  | Generic Format                                   | Example                                                             |
@@ -48,12 +49,17 @@
 | Dimension  | `company_id:namespaceURI:qname`                  | `3545:http://fasb.org/us-gaap/2023:us-gaap:SubsequentEventTypeAxis` |
 | Member     | `company_id:namespaceURI:qname`                  | `3545:http://fasb.org/us-gaap/2023:us-gaap:OperatingSegmentsMember` |
 | Domain     | `company_id:namespaceURI:qname`                  | `3545:http://fasb.org/us-gaap/2023:us-gaap:SubsequentEventTypeDomain` |
+| Report     | ``                  | `` |
+
 
 ## 3. Instance/Report-Specific Nodes
 | Node Type  | Generic Format                                | Example                                                    |
 |------------|----------------------------------------------|-------------------------------------------------------------|
 | Report     | `cik_doctype_date`      (??InstanceFile??)   | `0000003545_10-K_2024-01-28`                                |
 | Fact       | `documenturi_conceptqname_contextID_unitID_factID` | `alco-20240930.htm_us-gaap:CommonStock_c-4_usd_f-90`  |
+
+
+## 4. 
 
 ## Notes:
 1. All namespace URIs are consistent within a taxonomy version

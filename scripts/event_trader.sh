@@ -396,6 +396,29 @@ init_neo4j() {
   fi
 }
 
+# Process news data into Neo4j
+process_news() {
+  # Detect Python before starting
+  detect_python
+  
+  echo "Processing news data into Neo4j..."
+  cd "$WORKSPACE_DIR"
+  
+  # Get batch size and max items from arguments
+  batch_size=${ARGS[0]:-100}
+  max_items=${ARGS[1]:-1000}
+  
+  # Run the Neo4jProcessor directly
+  if [ "$RUN_BACKGROUND" = true ]; then
+    # Run in background
+    $PYTHON_CMD -c "from utils.Neo4jProcessor import process_news_data; process_news_data($batch_size, $max_items, True)" > /dev/null 2>&1 &
+    echo "News processing started in background"
+  else
+    # Run in foreground
+    $PYTHON_CMD -c "from utils.Neo4jProcessor import process_news_data; process_news_data($batch_size, $max_items, True)"
+  fi
+}
+
 # Process command
 case "$COMMAND" in
   start)
@@ -455,6 +478,10 @@ case "$COMMAND" in
     # Initialize Neo4j database
     init_neo4j
     ;;
+  process-news)
+    # Process news data into Neo4j
+    process_news
+    ;;
   *)
     echo "Usage: $0 [--background] {command} [options] [from-date] [to-date]"
     echo ""
@@ -472,6 +499,7 @@ case "$COMMAND" in
     echo "  stop-all                     # Stop both watchdog and EventTrader"
     echo "  clean-logs [days]            # Clean log files older than specified days"
     echo "  init-neo4j                   # Initialize Neo4j database"
+    echo "  process-news                 # Process news data into Neo4j"
     echo ""
     echo "Options:"
     echo "  --background                 # Run commands in background mode"

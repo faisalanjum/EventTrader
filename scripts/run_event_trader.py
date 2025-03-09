@@ -16,8 +16,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.DataManagerCentral import DataManager
 from utils.log_config import setup_logging, get_logger
-# Import Neo4jProcessor - used in all workflows now
-from utils.Neo4jProcessor import Neo4jProcessor
 
 # Make sure logs directory exists
 logs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs")
@@ -33,49 +31,7 @@ def parse_args():
                         help='Log file path (default: auto-generated in logs directory)')
     parser.add_argument('--check-interval', type=int, default=300,
                         help='Interval in seconds to check system status (default: 300)')
-    # Keep Neo4j init flag for testing purposes
-    parser.add_argument('--neo4j-init-only', action='store_true',
-                        help='Only initialize Neo4j database and exit')
-    # Add flag to skip Neo4j initialization if needed
-    parser.add_argument('--skip-neo4j', action='store_true',
-                        help='Skip Neo4j initialization check')
     return parser.parse_args()
-
-def initialize_neo4j(logger, manager=None):
-    """Initialize Neo4j database
-    
-    Args:
-        logger: Logger instance
-        manager: Optional DataManager instance
-        
-    Returns:
-        bool: True if initialization was successful, False otherwise
-    """
-    logger.info("Initializing Neo4j database...")
-    
-    # If DataManager is provided, use its initialize_neo4j method
-    if manager:
-        logger.info("Using DataManager to initialize Neo4j")
-        return manager.initialize_neo4j()
-        
-    # Fallback for direct initialization when manager not available
-    from utils.Neo4jProcessor import Neo4jProcessor
-    neo4j = Neo4jProcessor()
-    
-    try:
-        if not neo4j.connect():
-            logger.error("Failed to connect to Neo4j database")
-            return False
-            
-        # Initialize the database (idempotent)
-        success = neo4j.initialize()
-        return success
-    except Exception as e:
-        logger.error(f"Neo4j initialization failed: {e}")
-        return False
-    finally:
-        # Ensure connection is closed even if an error occurs
-        neo4j.close()
 
 def main():
     try:
@@ -101,27 +57,15 @@ def main():
         logger.info(f"Starting EventTrader for dates: {args.from_date} to {args.to_date}")
         logger.info(f"Logs will be written to: {log_path}")
         
-        # Handle Neo4j initialization only mode
-        if args.neo4j_init_only:
-            # Just initialize Neo4j and exit (for testing)
-            success = initialize_neo4j(logger)
-            print(f"Neo4j initialization {'successful' if success else 'failed'}")
-            sys.exit(0 if success else 1)
-        
-        # Create DataManager before Neo4j initialization
+        # Create and initialize DataManager
+        logger.info("Creating DataManager...")
         manager = DataManager(date_from=args.from_date, date_to=args.to_date)
         
-        # Initialize Neo4j as part of regular workflow (unless skipped)
-        if not args.skip_neo4j:
-            logger.info("Initializing Neo4j using DataManager...")
-            neo4j_success = initialize_neo4j(logger, manager)
-            if neo4j_success:
-                logger.info("Neo4j initialization completed successfully")
-            else:
-                logger.error("Neo4j initialization failed. EventTrader requires Neo4j to function properly.")
-                logger.error("Use --skip-neo4j flag if you want to proceed without Neo4j (some features may not work).")
-                print("Neo4j initialization failed. See logs for details. Exiting.")
-                sys.exit(1)
+        # Check if Neo4j was initialized properly
+        if not manager.has_neo4j():
+            logger.error("Neo4j initialization failed. EventTrader requires Neo4j to function properly.")
+            print("Neo4j initialization failed. See logs for details. Exiting.")
+            sys.exit(1)
         
         # Set up signal handlers for clean shutdown
         def signal_handler(sig, frame):
@@ -133,7 +77,7 @@ def main():
         signal.signal(signal.SIGINT, signal_handler)  # Ctrl+C
         signal.signal(signal.SIGTERM, signal_handler) # kill command
         
-        # Start manager (exactly like in the notebook)
+        # Start manager
         logger.info("EventTrader is now running")
         manager.start()
         

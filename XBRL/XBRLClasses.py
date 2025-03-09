@@ -110,6 +110,7 @@ class NodeType(Enum):
     COMPANY = "Company"
     ENTITY = "Entity" # Not using this for now
     REPORT = "Report"
+    NEWS = "News"     # News node type
 
     FACT = "Fact"
     CONTEXT = "Context"
@@ -169,6 +170,8 @@ class RelationType(Enum):
     HAS_CATEGORY = "HAS_CATEGORY"   # Report -> AdminReport
     FOR_COMPANY = "FOR_COMPANY"       # Context -> Company
     PROVIDES_GUIDANCE = "PROVIDES_GUIDANCE"  # From Guidance concept to related concept
+    MENTIONS = "MENTIONS"           # News -> Company relationship
+    RELATED_TO = "RELATED_TO"       # Company -> Company relationship for co-occurrence
 
     
 
@@ -2081,7 +2084,7 @@ class AdminReportNode(Neo4jNode):
 @dataclass
 class CompanyNode(Neo4jNode):
     cik: str
-    name: str
+    name: Optional[str] = None
     ticker: Optional[str] = None
     exchange: Optional[str] = None
     sector: Optional[str] = None
