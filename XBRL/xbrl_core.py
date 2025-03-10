@@ -74,6 +74,9 @@ class NodeType(Enum):
     # DEPRECATED = "deprecated"
     
     NEWS = "News"  # Added for NewsNode support
+    SECTOR = "Sector"  # Added for SectorNode support
+    INDUSTRY = "Industry"  # Added for IndustryNode support
+    MARKET_INDEX = "MarketIndex"  # Added for MarketIndex support
     
     DIMENSION = "Dimension"
     DOMAIN = "Domain"

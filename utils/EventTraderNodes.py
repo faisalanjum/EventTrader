@@ -4,7 +4,7 @@ from typing import List, Dict, Optional, Any, Type
 from datetime import datetime
 import json
 from enum import Enum
-from utils.date_utils import parse_date  # Import our new date parsing utility
+from utils.date_utils import parse_date  # Import our date parsing utility
 
 # Import node types from XBRLClasses
 from XBRL.XBRLClasses import NodeType, RelationType, CompanyNode as XBRLCompanyNode
@@ -34,7 +34,7 @@ class Neo4jNode:
         raise NotImplementedError("Subclasses must implement from_neo4j")
 
 @dataclass
-class CompanyNode(XBRLCompanyNode):
+class CompanyNode(XBRLCompanyNode): 
     """
     EventTrader-specific extension of CompanyNode.
     Inherits from XBRLClasses.CompanyNode to maintain compatibility while allowing
@@ -42,19 +42,17 @@ class CompanyNode(XBRLCompanyNode):
     """
     
     # No need to redefine fields as they're inherited from the parent class
-    
-    # We could override any methods that need different behavior
-    # For example, we could enhance the from_neo4j method if needed:
+    # The parent class already defines:
+    # cik: str
+    # name: Optional[str] = None
+    # ticker: Optional[str] = None
+    # etc.
     
     @classmethod
     def from_neo4j(cls, props: Dict[str, Any]) -> 'CompanyNode':
         """
         Enhanced version of from_neo4j with EventTrader-specific handling
         """
-        # We don't need to call super().from_neo4j() since it already uses cls()
-        # which will create an instance of our class (EventTrader's CompanyNode)
-        # Just use the original implementation
-        
         # Required field
         if 'cik' not in props:
             raise ValueError("Missing required field 'cik' for CompanyNode")
@@ -122,24 +120,131 @@ class CompanyNode(XBRLCompanyNode):
             except (ValueError, TypeError):
                 pass
         
-        # Add any EventTrader-specific enhancements here
-        
         return company
+
+@dataclass
+class MarketIndexNode(Neo4jNode):
+    """Market Index node in Neo4j (e.g., S&P 500 'SPY')"""
+    ticker: str  # ETF ticker (unique identifier)
+    name: Optional[str] = None  # Full name 
+    description: Optional[str] = None
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.MARKET_INDEX
+    
+    @property
+    def id(self) -> str:
+        return self.ticker
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {
+            'id': self.ticker
+        }
+        if self.name is not None:
+            props['name'] = self.name
+        if self.description is not None:
+            props['description'] = self.description
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'MarketIndexNode':
+        ticker = props.get('id', '')
+        return cls(
+            ticker=ticker,
+            name=props.get('name', None),
+            description=props.get('description', None)
+        )
+
+@dataclass
+class SectorNode(Neo4jNode):
+    """
+    Sector node in Neo4j
+    Example: XLF = "Financials"
+    """
+    node_id: str  # ETF ticker (e.g. 'XLF')
+    name: Optional[str] = None  # Sector name (e.g. 'Financials')
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.SECTOR
+    
+    @property
+    def id(self) -> str:
+        return self.node_id
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {'id': self.id}
+        if self.name is not None:
+            props['name'] = self.name
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'SectorNode':
+        sector_id = props.get('id', '')
+        if not sector_id:
+            raise ValueError("Missing required id field for SectorNode")
+            
+        return cls(
+            node_id=sector_id,
+            name=props.get('name', None)
+        )
+
+@dataclass
+class IndustryNode(Neo4jNode):
+    """
+    Industry node in Neo4j
+    Example: KIE = "Insurance", sector_id = "XLF"
+    """
+    node_id: str  # Industry ETF ticker (e.g. 'KIE')
+    name: Optional[str] = None  # Industry name (e.g. 'Insurance')
+    sector_id: Optional[str] = None  # Parent sector ETF (e.g. 'XLF')
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.INDUSTRY
+    
+    @property
+    def id(self) -> str:
+        return self.node_id
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {'id': self.id}
+        if self.name is not None:
+            props['name'] = self.name
+        if self.sector_id is not None:
+            props['sector_id'] = self.sector_id
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'IndustryNode':
+        industry_id = props.get('id', '')
+        if not industry_id:
+            raise ValueError("Missing required id field for IndustryNode")
+            
+        return cls(
+            node_id=industry_id,
+            name=props.get('name', None),
+            sector_id=props.get('sector_id', None)
+        )
 
 @dataclass
 class NewsNode(Neo4jNode):
     """News node in Neo4j"""
     news_id: str  # Unique identifier
-    title: str = ""
-    body: str = ""
+    title: Optional[str] = None
+    body: Optional[str] = None
     teaser: Optional[str] = None
     created_at: Optional[datetime] = None  # Creation timestamp
     updated_at: Optional[datetime] = None  # Update timestamp
-    url: str = ""
+    url: Optional[str] = None
     authors: List[str] = field(default_factory=list)
     channels: List[str] = field(default_factory=list)
     tags: List[str] = field(default_factory=list)
-    market_session: str = ""  # e.g., "market_open", "market_closed"
+    market_session: Optional[str] = None  # e.g., "market_open", "market_closed"
     
     @property
     def node_type(self) -> NodeType:
@@ -156,13 +261,16 @@ class NewsNode(Neo4jNode):
         """Return node properties for Neo4j"""
         # Always include all fields, even if empty
         props = {
-            'id': self.news_id,
-            'title': self.title,
-            'body': self.body,
-            'teaser': self.teaser or "",  # Ensure teaser is never None
-            'url': self.url,
-            'market_session': self.market_session
+            'id': self.news_id
         }
+        
+        # Add optional string fields
+        for field in ['title', 'body', 'teaser', 'url', 'market_session']:
+            value = getattr(self, field)
+            if value is not None:
+                props[field] = value
+            else:
+                props[field] = ""
         
         # Convert datetime to string for Neo4j
         if self.created_at:
@@ -213,14 +321,14 @@ class NewsNode(Neo4jNode):
         
         return cls(
             news_id=props.get('id', ''),
-            title=props.get('title', ''),
-            body=props.get('body', ''),
-            teaser=props.get('teaser'),
+            title=props.get('title', None),
+            body=props.get('body', None),
+            teaser=props.get('teaser', None),
             created_at=created_at,
             updated_at=updated_at,
-            url=props.get('url', ''),
+            url=props.get('url', None),
             authors=authors,
             channels=channels,
             tags=tags,
-            market_session=props.get('market_session', '')
+            market_session=props.get('market_session', None)
         ) 
