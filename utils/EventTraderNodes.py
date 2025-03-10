@@ -245,6 +245,7 @@ class NewsNode(Neo4jNode):
     channels: List[str] = field(default_factory=list)
     tags: List[str] = field(default_factory=list)
     market_session: Optional[str] = None  # e.g., "market_open", "market_closed"
+    returns_schedule: Dict[str, str] = field(default_factory=dict)  # Schedule for returns calculation
     
     @property
     def node_type(self) -> NodeType:
@@ -288,6 +289,9 @@ class NewsNode(Neo4jNode):
         props['channels'] = json.dumps(self.channels or [])
         props['tags'] = json.dumps(self.tags or [])
         
+        # Add returns_schedule as JSON string
+        props['returns_schedule'] = json.dumps(self.returns_schedule or {})
+        
         return props
     
     @classmethod
@@ -319,6 +323,14 @@ class NewsNode(Neo4jNode):
             except:
                 pass
         
+        # Parse returns_schedule
+        returns_schedule = {}
+        if 'returns_schedule' in props and props['returns_schedule']:
+            try:
+                returns_schedule = json.loads(props['returns_schedule'])
+            except:
+                pass
+        
         return cls(
             news_id=props.get('id', ''),
             title=props.get('title', None),
@@ -330,5 +342,6 @@ class NewsNode(Neo4jNode):
             authors=authors,
             channels=channels,
             tags=tags,
-            market_session=props.get('market_session', None)
+            market_session=props.get('market_session', None),
+            returns_schedule=returns_schedule
         ) 

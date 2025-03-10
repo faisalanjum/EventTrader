@@ -12,8 +12,25 @@ logger = logging.getLogger(__name__)
 
 class Neo4jInitializer:
     """
-    Dedicated class for initializing Neo4j database with market hierarchy:
+    Initializes Neo4j database with basic structure for EventTrader.
+    
+    Creates a hierarchical structure with:
     MarketIndex -> Sector -> Industry -> Company
+    
+    Relationship structure:
+    - Sectors BELONGS_TO MarketIndex (SPY)
+    - Industries BELONGS_TO their Sector
+    - Companies BELONGS_TO their Industry
+    - Companies can be RELATED_TO other Companies
+    - News INFLUENCES Companies
+    
+    This maintains a clean hierarchical structure:
+    1. Companies only directly belong to Industries
+    2. Industries only directly belong to Sectors
+    3. Sectors only directly belong to the MarketIndex
+    
+    Note: The Neo4j schema visualization may show transitive relationships
+    (e.g., it might appear companies "belong to" the MarketIndex directly).
     """
     
     def __init__(self, uri: str, username: str, password: str, universe_data: Optional[Dict] = None):
@@ -97,32 +114,51 @@ class Neo4jInitializer:
             
     def extract_mappings(self):
         """Extract sector and industry mappings from universe data"""
-        # Extract sector ETF mappings
+        # Extract sector ETF mappings and create normalized names
         for data in self.universe_data.values():
             sector = data.get('sector', '').strip()
             sector_etf = data.get('sector_etf', '').strip()
             industry = data.get('industry', '').strip()
             industry_etf = data.get('industry_etf', '').strip()
             
-            # Process sectors
+            # Process sectors - use normalized name (without spaces) as ID
             if sector and sector.lower() not in ['nan', 'none', '']:
-                if sector_etf and sector_etf.lower() not in ['nan', 'none', '']:
-                    # Only add if we have a valid ETF
-                    self.sector_mapping[sector] = sector_etf
+                # Create normalized sector name (no spaces) as ID
+                sector_id = sector.replace(" ", "")
+                self.sector_mapping[sector] = sector_id
             
-            # Process industries
+            # Process industries - use normalized name (without spaces) as ID
             if industry and industry.lower() not in ['nan', 'none', '']:
-                if industry_etf and industry_etf.lower() not in ['nan', 'none', '']:
-                    # Store industry with its sector ETF
-                    current_sector_etf = ''
-                    if sector in self.sector_mapping:
-                        current_sector_etf = self.sector_mapping[sector]
-                    elif sector_etf:
-                        current_sector_etf = sector_etf
+                # Create normalized industry name (no spaces) as ID
+                industry_id = industry.replace(" ", "")
+                
+                # Store industry with its sector ID
+                sector_id = ""
+                if sector in self.sector_mapping:
+                    sector_id = self.sector_mapping[sector]
                         
-                    self.industry_mapping[industry] = (industry_etf, current_sector_etf)
+                self.industry_mapping[industry] = (industry_id, sector_id)
         
-        logger.info(f"Extracted {len(self.sector_mapping)} sector ETFs and {len(self.industry_mapping)} industry ETFs")
+        logger.info(f"Extracted {len(self.sector_mapping)} sectors and {len(self.industry_mapping)} industries with normalized name IDs")
+        
+        # Create a mapping from ETFs to normalized names for news processing
+        self.etf_to_sector_id = {}
+        self.etf_to_industry_id = {}
+        
+        for data in self.universe_data.values():
+            sector = data.get('sector', '').strip()
+            sector_etf = data.get('sector_etf', '').strip()
+            industry = data.get('industry', '').strip()
+            industry_etf = data.get('industry_etf', '').strip()
+            
+            # Map ETFs to normalized names
+            if sector_etf and sector_etf.lower() not in ['nan', 'none', ''] and sector:
+                self.etf_to_sector_id[sector_etf] = self.sector_mapping.get(sector, "")
+                
+            if industry_etf and industry_etf.lower() not in ['nan', 'none', ''] and industry:
+                self.etf_to_industry_id[industry_etf] = self.industry_mapping.get(industry, ("", ""))[0]
+                
+        logger.info(f"Created ETF to name mappings: {len(self.etf_to_sector_id)} sectors, {len(self.etf_to_industry_id)} industries")
             
     def _create_ticker_to_cik_mapping(self):
         """Create a mapping from ticker symbols to CIK for relationship creation"""
@@ -155,14 +191,14 @@ class Neo4jInitializer:
         return ticker
     
     def create_sectors(self) -> bool:
-        """Create Sector nodes with ETF tickers as IDs"""
-        sectors = {}  # {sector_id: sector_name}
+        """Create Sector nodes using normalized names (without spaces) as IDs"""
+        sectors = {}  # {normalized_sector_id: sector_name}
         
-        # First use mappings from CSV
-        for sector_name, sector_etf in self.sector_mapping.items():
-            sectors[sector_etf] = sector_name
+        # Use sector mapping (normalized names) from extraction
+        for sector_name, sector_id in self.sector_mapping.items():
+            sectors[sector_id] = sector_name
         
-        # Then process any sectors that don't have ETFs in the mapping
+        # Then process any sectors not already in the mapping
         for data in self.universe_data.values():
             sector_name = data.get('sector', '').strip()
             if not sector_name or sector_name.lower() in ['nan', 'none', '']:
@@ -172,8 +208,8 @@ class Neo4jInitializer:
             if sector_name in self.sector_mapping:
                 continue
                 
-            # Generate ticker for sectors without ETFs
-            sector_id = self.generate_ticker_id(sector_name)
+            # Generate normalized sector ID
+            sector_id = sector_name.replace(" ", "")
             sectors[sector_id] = sector_name
             
             # Add to mapping for future use
@@ -192,25 +228,28 @@ class Neo4jInitializer:
         self.manager.merge_nodes(sector_nodes)
         
         # Link sectors to SPY
+        # This establishes the top level of our hierarchy: Sectors belong to MarketIndex
+        # We don't create direct relationships from Industry or Company to MarketIndex
         with self.manager.driver.session() as session:
             session.run("""
             MATCH (s:Sector)
+            WHERE NOT (s)-[:BELONGS_TO]->(:MarketIndex)
             MATCH (m:MarketIndex {id: 'SPY'})
             MERGE (s)-[:BELONGS_TO]->(m)
             """)
             
-        logger.info(f"Created {len(sector_nodes)} Sector nodes")
+        logger.info(f"Created {len(sector_nodes)} Sector nodes using normalized name IDs")
         return True
     
     def create_industries(self) -> bool:
-        """Create Industry nodes with ETF-like IDs"""
-        industries = {}  # {industry_id: (name, sector_id)}
+        """Create Industry nodes using normalized names (without spaces) as IDs"""
+        industries = {}  # {normalized_industry_id: (name, sector_id)}
         
-        # First use mappings from CSV
-        for industry_name, (industry_etf, sector_etf) in self.industry_mapping.items():
-            industries[industry_etf] = (industry_name, sector_etf)
+        # Use industry mapping (normalized names) from extraction
+        for industry_name, (industry_id, sector_id) in self.industry_mapping.items():
+            industries[industry_id] = (industry_name, sector_id)
         
-        # Then process any industries that don't have ETFs in the mapping
+        # Then process any industries not already in the mapping
         for data in self.universe_data.values():
             industry_name = data.get('industry', '').strip()
             sector_name = data.get('sector', '').strip()
@@ -225,8 +264,8 @@ class Neo4jInitializer:
             # Get sector ID from our mapping
             sector_id = self.sector_mapping.get(sector_name, '')
             
-            # Generate industry ID
-            industry_id = self.generate_ticker_id(industry_name)
+            # Generate normalized industry ID
+            industry_id = industry_name.replace(" ", "")
             
             # Ensure uniqueness
             base_id = industry_id
@@ -257,12 +296,13 @@ class Neo4jInitializer:
         with self.manager.driver.session() as session:
             session.run("""
             MATCH (i:Industry)
-            WHERE i.sector_id IS NOT NULL
+            WHERE i.sector_id IS NOT NULL AND i.sector_id <> ''
+            AND NOT (i)-[:BELONGS_TO]->(:Sector)
             MATCH (s:Sector {id: i.sector_id})
             MERGE (i)-[:BELONGS_TO]->(s)
             """)
         
-        logger.info(f"Created {len(industry_nodes)} Industry nodes")
+        logger.info(f"Created {len(industry_nodes)} Industry nodes using normalized name IDs")
         return True
     
     def create_companies(self) -> bool:
@@ -315,20 +355,27 @@ class Neo4jInitializer:
         return True
     
     def link_companies(self) -> bool:
-        """Connect companies to their industries using ETF fields from CSV data"""
+        """Connect companies to their industries using normalized industry names"""
         with self.manager.driver.session() as session:
-            # Link companies to industries directly using industry_etf
-            direct_etf_result = session.run("""
+            # Prepare company records with normalized industry names
+            session.run("""
             MATCH (c:Company)
-            WHERE c.industry_etf IS NOT NULL AND c.industry_etf <> ''
-            MATCH (i:Industry {id: c.industry_etf})
+            WHERE c.industry IS NOT NULL AND c.industry <> ''
+            SET c.industry_normalized = replace(c.industry, " ", "")
+            """)
+            
+            # Link companies to industries using normalized industry names
+            direct_result = session.run("""
+            MATCH (c:Company)
+            WHERE c.industry_normalized IS NOT NULL AND c.industry_normalized <> ''
+            MATCH (i:Industry {id: c.industry_normalized})
             MERGE (c)-[:BELONGS_TO]->(i)
             RETURN count(*) as connected
             """)
-            etf_connected = direct_etf_result.single()["connected"]
-            logger.info(f"Connected {etf_connected} companies to industries using industry_etf")
+            direct_connected = direct_result.single()["connected"]
+            logger.info(f"Connected {direct_connected} companies to industries using normalized industry names")
             
-            # Link companies by industry name
+            # Link companies by case-insensitive industry name for any that didn't match exactly
             name_result = session.run("""
             MATCH (c:Company)
             WHERE c.industry IS NOT NULL AND c.industry <> ''
@@ -347,7 +394,7 @@ class Neo4jInitializer:
             WHERE NOT (c)-[:BELONGS_TO]->(:Industry)
             AND c.industry IS NOT NULL AND c.industry <> ''
             RETURN c.id as id, c.ticker as ticker, c.industry as industry, 
-                   c.sector as sector, c.industry_etf as industry_etf, c.sector_etf as sector_etf
+                   c.sector as sector
             """).data()
             
             logger.info(f"Found {len(orphaned)} companies needing industry nodes")
@@ -357,14 +404,15 @@ class Neo4jInitializer:
             for company in orphaned:
                 company_id = company["id"]
                 industry_name = company["industry"]
-                industry_etf = company.get("industry_etf")
-                sector_etf = company.get("sector_etf")
+                sector_name = company.get("sector", "")
                 
-                # Determine industry ID (use industry_etf if available, otherwise generate one)
-                industry_id = industry_etf if industry_etf and industry_etf.strip() else self.generate_ticker_id(industry_name)
+                # Generate normalized industry ID
+                industry_id = industry_name.replace(" ", "")
                 
-                # Determine sector ID (use sector_etf if available)
-                sector_id = sector_etf if sector_etf and sector_etf.strip() else ""
+                # Determine sector ID
+                sector_id = ""
+                if sector_name:
+                    sector_id = sector_name.replace(" ", "")
                 
                 # Create industry node with proper sector relationship
                 session.run("""
@@ -382,10 +430,13 @@ class Neo4jInitializer:
                 })
                 created_count += 1
             
-            # Link industries to sectors (both existing and new)
+            # Link industries to sectors (for newly created industries)
+            # Note: We only link sectors to MarketIndex and industries to sectors, not all to MarketIndex.
+            # The schema visualization may show transitive relationships which is why it appears all belong to MarketIndex
             session.run("""
             MATCH (i:Industry)
             WHERE i.sector_id IS NOT NULL AND i.sector_id <> ''
+            AND NOT (i)-[:BELONGS_TO]->(:Sector)
             MATCH (s:Sector {id: i.sector_id})
             MERGE (i)-[:BELONGS_TO]->(s)
             """)
@@ -396,7 +447,7 @@ class Neo4jInitializer:
             DELETE r
             """)
             
-            total_connected = etf_connected + name_connected + created_count
+            total_connected = direct_connected + name_connected + created_count
             logger.info(f"Connected total of {total_connected} companies to industries")
             
             return True

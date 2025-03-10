@@ -13,7 +13,7 @@ from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable, DatabaseUnavailable
 from utils.redisClasses import EventTraderRedis
 from utils.EventTraderNodes import NewsNode, CompanyNode, SectorNode, IndustryNode, MarketIndexNode
-from utils.date_utils import parse_news_dates  # Import our new date parsing utility
+from utils.date_utils import parse_news_dates, parse_date  # Import our new date parsing utility
 
 
 from XBRL.Neo4jManager import Neo4jManager
@@ -43,8 +43,15 @@ class Neo4jProcessor:
         self.uri = uri
         self.username = username
         self.password = password
-        self.manager = None  # Will hold Neo4jManager instance
+        self.manager = None  # Will be initialized when needed
         self.universe_data = None
+        
+        # Initialize ETF to name ID mappings
+        self.etf_to_sector_id = {}
+        self.etf_to_industry_id = {}
+        
+        # These will be populated from database when needed
+        self._load_etf_mappings = False
         
         # Initialize Redis clients if provided
         if event_trader_redis:
@@ -569,6 +576,9 @@ class Neo4jProcessor:
             logger.info("Skipping news processing - Redis client required")
             return True  # Return success as this is not a fatal error
         
+        # Load ETF to name mappings
+        self._load_etf_to_name_mappings()
+        
         try:
             logger.info("Processing news from Redis to Neo4j...")
             
@@ -596,6 +606,9 @@ class Neo4jProcessor:
             error_count = 0
             symbol_missing_count = 0
             cik_missing_count = 0
+            sector_ref_count = 0
+            industry_ref_count = 0
+            market_index_ref_count = 0
             
             # Main processing loop
             for i in range(0, len(news_keys), batch_size):
@@ -638,6 +651,18 @@ class Neo4jProcessor:
                         channels = self._parse_list_field(news_item.get('channels', []))
                         tags = self._parse_list_field(news_item.get('tags', []))
                         
+                        # Extract returns_schedule
+                        returns_schedule = {}
+                        if 'metadata' in news_item and 'returns_schedule' in news_item['metadata']:
+                            raw_schedule = news_item['metadata']['returns_schedule']
+                            # Parse each date in the schedule
+                            for key in ['hourly', 'session', 'daily']:
+                                if key in raw_schedule and raw_schedule[key]:
+                                    # Parse the date string to ensure it's valid, then convert back to string
+                                    date_obj = parse_date(raw_schedule[key])
+                                    if date_obj:
+                                        returns_schedule[key] = date_obj.isoformat()
+                        
                         # Create NewsNode
                         news_node = NewsNode(
                             news_id=news_id,
@@ -650,7 +675,8 @@ class Neo4jProcessor:
                             authors=authors,
                             channels=channels,
                             tags=tags,
-                            market_session=market_session
+                            market_session=market_session,
+                            returns_schedule=returns_schedule
                         )
                         
                         batch_nodes.append(news_node)
@@ -673,18 +699,106 @@ class Neo4jProcessor:
                             # Get return metrics for this symbol
                             return_metrics = self._extract_return_metrics(news_item, symbol_upper)
                             
-                            # Create relationship properties
-                            rel_props = {
+                            # Create company node reference and relationship with ONLY stock metrics
+                            company_rel_props = {
                                 'symbol': symbol_upper,
-                                'created_at': datetime.now().isoformat(),
-                                **return_metrics
+                                'created_at': datetime.now().isoformat()
                             }
                             
-                            # Create company node reference
-                            company_node = CompanyNode(cik=cik)
+                            # Add only stock-specific metrics
+                            for timeframe in ['hourly', 'session', 'daily']:
+                                metric_key = f"{timeframe}_stock"
+                                if metric_key in return_metrics:
+                                    company_rel_props[metric_key] = return_metrics[metric_key]
                             
-                            # Add to relationships batch
-                            batch_relationships.append((news_node, company_node, RelationType.MENTIONS, rel_props))
+                            company_node = CompanyNode(cik=cik)
+                            batch_relationships.append((news_node, company_node, RelationType.INFLUENCES, company_rel_props))
+                            
+                            try:
+                                # Look for benchmarks in the instruments array
+                                sector_id = None
+                                industry_id = None
+                                has_macro_metrics = False
+                                
+                                if 'metadata' in news_item and 'instruments' in news_item['metadata']:
+                                    for instrument in news_item['metadata']['instruments']:
+                                        if instrument.get('symbol') == symbol_upper and 'benchmarks' in instrument:
+                                            benchmarks = instrument['benchmarks']
+                                            sector_etf = benchmarks.get('sector')
+                                            industry_etf = benchmarks.get('industry')
+                                            
+                                            # Map ETFs to normalized name IDs
+                                            # Try to get from our mappings first
+                                            if sector_etf in self.etf_to_sector_id:
+                                                sector_id = self.etf_to_sector_id.get(sector_etf)
+                                            else:
+                                                # Fallback: directly use the ETF as ID
+                                                sector_id = sector_etf
+                                                
+                                            if industry_etf in self.etf_to_industry_id:
+                                                industry_id = self.etf_to_industry_id.get(industry_etf)
+                                            else:
+                                                # Fallback: directly use the ETF as ID
+                                                industry_id = industry_etf
+                                                
+                                            break
+                                
+                                # Create sector relationship if sector_id exists - with ONLY sector metrics
+                                if sector_id:
+                                    sector_rel_props = {
+                                        'symbol': symbol_upper,
+                                        'created_at': datetime.now().isoformat()
+                                    }
+                                    
+                                    # Add only sector-specific metrics
+                                    for timeframe in ['hourly', 'session', 'daily']:
+                                        metric_key = f"{timeframe}_sector"
+                                        if metric_key in return_metrics:
+                                            sector_rel_props[metric_key] = return_metrics[metric_key]
+                                    
+                                    sector_node = SectorNode(node_id=sector_id)
+                                    batch_relationships.append((news_node, sector_node, RelationType.INFLUENCES, sector_rel_props))
+                                    sector_ref_count += 1
+                                
+                                # Create industry relationship if industry_id exists - with ONLY industry metrics
+                                if industry_id:
+                                    industry_rel_props = {
+                                        'symbol': symbol_upper,
+                                        'created_at': datetime.now().isoformat()
+                                    }
+                                    
+                                    # Add only industry-specific metrics
+                                    for timeframe in ['hourly', 'session', 'daily']:
+                                        metric_key = f"{timeframe}_industry"
+                                        if metric_key in return_metrics:
+                                            industry_rel_props[metric_key] = return_metrics[metric_key]
+                                    
+                                    industry_node = IndustryNode(node_id=industry_id)
+                                    batch_relationships.append((news_node, industry_node, RelationType.INFLUENCES, industry_rel_props))
+                                    industry_ref_count += 1
+                                
+                                # Check if there are any macro metrics
+                                has_macro_metrics = any(f"{timeframe}_macro" in return_metrics for timeframe in ['hourly', 'session', 'daily'])
+                                
+                                # Create relationship to SPY (macro index) if macro metrics exist - with ONLY macro metrics
+                                if has_macro_metrics:
+                                    macro_rel_props = {
+                                        'symbol': symbol_upper,
+                                        'created_at': datetime.now().isoformat()
+                                    }
+                                    
+                                    # Add only macro-specific metrics
+                                    for timeframe in ['hourly', 'session', 'daily']:
+                                        metric_key = f"{timeframe}_macro"
+                                        if metric_key in return_metrics:
+                                            macro_rel_props[metric_key] = return_metrics[metric_key]
+                                    
+                                    market_index_node = MarketIndexNode(ticker="SPY")
+                                    batch_relationships.append((news_node, market_index_node, RelationType.INFLUENCES, macro_rel_props))
+                                    market_index_ref_count += 1
+                            except Exception as e:
+                                logger.warning(f"Error creating sector/industry relationships for {symbol_upper}: {e}")
+                                # Continue processing - we at least created the company relationship
                         
                         processed_count += 1
                             
@@ -704,7 +818,15 @@ class Neo4jProcessor:
                 if batch_relationships:
                     try:
                         self.manager.merge_relationships(batch_relationships)
-                        logger.info(f"Created {len(batch_relationships)} news-company relationships")
+                        # Count relationship types
+                        company_rels = sum(1 for r in batch_relationships if isinstance(r[1], CompanyNode))
+                        sector_rels = sum(1 for r in batch_relationships if isinstance(r[1], SectorNode))
+                        industry_rels = sum(1 for r in batch_relationships if isinstance(r[1], IndustryNode))
+                        
+                        logger.info(f"Created {len(batch_relationships)} total relationships:")
+                        logger.info(f"  - News→Company: {company_rels}")
+                        logger.info(f"  - News→Sector: {sector_rels}")
+                        logger.info(f"  - News→Industry: {industry_rels}")
                     except Exception as e:
                         logger.error(f"Error creating relationships: {e}")
             
@@ -720,6 +842,9 @@ class Neo4jProcessor:
             logger.info(f"  - Errors: {error_count}")
             logger.info(f"  - Without symbols: {symbol_missing_count}")
             logger.info(f"  - Symbol-CIK mapping failures: {cik_missing_count}")
+            logger.info(f"  - Sector references: {sector_ref_count}")
+            logger.info(f"  - Industry references: {industry_ref_count}")
+            logger.info(f"  - Market index references: {market_index_ref_count}")
             
             return True
             
@@ -844,6 +969,50 @@ class Neo4jProcessor:
                         metrics[f"{timeframe.split('_')[0]}_{metric}"] = value
         
         return metrics
+
+    def _load_etf_to_name_mappings(self):
+        """Load ETF to normalized name mappings from the database"""
+        if self._load_etf_mappings:
+            return  # Already loaded
+            
+        try:
+            if not self.connect():
+                logger.error("Cannot connect to Neo4j")
+                return
+                
+            with self.manager.driver.session() as session:
+                # Get mappings from company nodes with ETF fields
+                result = session.run("""
+                MATCH (c:Company)
+                WHERE c.sector_etf IS NOT NULL AND c.sector_etf <> ''
+                AND c.sector IS NOT NULL AND c.sector <> ''
+                RETURN DISTINCT c.sector_etf as etf, replace(c.sector, " ", "") as normalized_name
+                """)
+                
+                for record in result:
+                    etf = record["etf"]
+                    normalized_name = record["normalized_name"]
+                    self.etf_to_sector_id[etf] = normalized_name
+                
+                # Get industry mappings
+                result = session.run("""
+                MATCH (c:Company)
+                WHERE c.industry_etf IS NOT NULL AND c.industry_etf <> ''
+                AND c.industry IS NOT NULL AND c.industry <> ''
+                RETURN DISTINCT c.industry_etf as etf, replace(c.industry, " ", "") as normalized_name
+                """)
+                
+                for record in result:
+                    etf = record["etf"]
+                    normalized_name = record["normalized_name"]
+                    self.etf_to_industry_id[etf] = normalized_name
+                    
+            self._load_etf_mappings = True
+            logger.info(f"Loaded ETF to name mappings: {len(self.etf_to_sector_id)} sectors, {len(self.etf_to_industry_id)} industries")
+            
+        except Exception as e:
+            logger.error(f"Error loading ETF to name mappings: {e}")
+            return False
 
 # Function to initialize Neo4j database
 def init_neo4j():
