@@ -209,24 +209,23 @@ class ReturnsProcessor:
 
                     # Determine destination based on completion (same as live)
                     if returns_info['all_complete']:
-
-                        # new_key = f"news:benzinga:withreturns:{news_id}"
+                        namespace = "withreturns"
                         new_key = RedisKeys.get_key(source_type=self.source_type,
-                            key_type=RedisKeys.SUFFIX_WITHRETURNS,identifier=news_id)
-                        
-                        # self.logger.info(f"Moving to withreturns: {new_key}")
+                            key_type=RedisKeys.SUFFIX_WITHRETURNS, identifier=news_id)
                     else:
-                        # new_key = f"news:benzinga:withoutreturns:{news_id}"
-
+                        namespace = "withoutreturns"
                         new_key = RedisKeys.get_key(source_type=self.source_type,
-                            key_type=RedisKeys.SUFFIX_WITHOUTRETURNS,identifier=news_id)                        
-                        # self.logger.info(f"Moving to withoutreturns: {new_key}")
+                            key_type=RedisKeys.SUFFIX_WITHOUTRETURNS, identifier=news_id)                        
 
                     # Atomic update
                     pipe = client.client.pipeline(transaction=True)
                     pipe.set(new_key, json.dumps(orig_news))
                     pipe.delete(orig_key)
-                    pipe.execute()
+                    success = all(pipe.execute())
+                    
+                    # Add publishing step - THIS IS THE CRITICAL FIX
+                    if success:
+                        self._publish_news_update(namespace, news_id)
 
                 except Exception as e:
                     self.logger.error(f"Failed to process returns for {event_return.event_id}: {e}")
@@ -312,6 +311,17 @@ class ReturnsProcessor:
 
 
 
+    def _publish_news_update(self, namespace, news_id):
+        """Publish a news update to the appropriate channel"""
+        try:
+            channel = f"{self.source_type}:{namespace}"
+            self.logger.debug(f"Publishing to channel {channel}: {news_id}")
+            self.live_client.client.publish(channel, news_id)
+            return True
+        except Exception as e:
+            self.logger.error(f"Error publishing to {channel}: {e}")
+            return False
+
     def _process_single_item(self, key: str, client) -> bool:
         """Process returns for a single news item"""
         try:
@@ -335,10 +345,12 @@ class ReturnsProcessor:
                 # new_key = f"news:benzinga:withreturns:{news_id}"
                 new_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHRETURNS,identifier=news_id)
                 # self.logger.info(f"Moving to withreturns: {new_key}")
+                namespace = "withreturns"
             else:
                 # new_key = f"news:benzinga:withoutreturns:{news_id}"
                 new_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHOUTRETURNS,identifier=news_id)
                 # self.logger.info(f"Moving to withoutreturns: {new_key}")
+                namespace = "withoutreturns"
 
             # 5. Update processed_dict with returns
             processed_dict['returns'] = returns_info['returns']
@@ -347,7 +359,17 @@ class ReturnsProcessor:
             pipe = client.client.pipeline(transaction=True)
             pipe.set(new_key, json.dumps(processed_dict))
             pipe.delete(key)
-            return all(pipe.execute())
+            success = all(pipe.execute())
+            
+            # 7. Publish to PubSub if successful
+            if success:
+                self._publish_news_update(namespace, news_id)
+                
+            return success
+
+
+
+
 
         except Exception as e:
             self.logger.error(f"Error processing returns for {key}: {e}")
@@ -695,10 +717,20 @@ class ReturnsProcessor:
                 pipe.set(new_key, json.dumps(news_data))
                 pipe.delete(key)
                 # self.logger.info(f"Moving to withreturns: {new_key}")
+                success = all(pipe.execute())
+                
+                # Publish to withreturns channel if successful
+                if success:
+                    self._publish_news_update("withreturns", identifier)
             else:
                 pipe.set(key, json.dumps(news_data))
+                success = all(pipe.execute())
                 
-            return all(pipe.execute())
+                # Publish to withoutreturns channel if successful
+                if success:
+                    self._publish_news_update("withoutreturns", identifier)
+                
+            return success
                 
         except Exception as e:
             self.logger.error(f"Failed to update return {return_type} for {key}: {e}")

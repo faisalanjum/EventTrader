@@ -1309,6 +1309,105 @@ class Neo4jProcessor:
         return metrics
 
 
+
+    def process_with_pubsub(self):
+        """
+        Process news from Redis to Neo4j using PubSub for immediate notification.
+        Non-blocking and highly efficient compared to polling.
+        """
+        logger.info("Starting event-driven Neo4j processing")
+        
+        if not hasattr(self, 'event_trader_redis') or not self.event_trader_redis:
+            logger.error("No Redis client available for event-driven processing")
+            return
+        
+        # Ensure Neo4j connection is established
+        if not self.manager:
+            if not self.connect():
+                logger.error("Failed to connect to Neo4j, cannot proceed with processing")
+                return
+        
+        # Create a dedicated PubSub client
+        pubsub = self.event_trader_redis.live_client.create_pubsub_connection()
+        
+        # Subscribe to both withreturns and withoutreturns channels
+        withreturns_channel = f"{self.event_trader_redis.source}:withreturns"
+        withoutreturns_channel = f"{self.event_trader_redis.source}:withoutreturns"
+        pubsub.subscribe(withreturns_channel, withoutreturns_channel)
+        
+        # Control flag
+        self.pubsub_running = True
+        
+        # Process any existing items first (one-time batch processing)
+        self.process_news_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
+        
+        # Event-driven processing loop
+        while self.pubsub_running:
+            try:
+                # Non-blocking message check with 0.1s timeout
+                message = pubsub.get_message(timeout=0.1)
+                
+                if message and message['type'] == 'message':
+                    channel = message['channel']
+                    news_id = message.get('data')
+                    
+                    if not news_id:
+                        continue
+                    
+                    # Determine if this is from withreturns or withoutreturns
+                    is_withreturns = 'withreturns' in channel
+                    
+                    # Get the news data
+                    key_prefix = "withreturns" if is_withreturns else "withoutreturns"
+                    key = f"{self.event_trader_redis.source}:{key_prefix}:{news_id}"
+                    
+                    try:
+                        # Get and process the news item
+                        raw_data = self.event_trader_redis.history_client.client.get(key)
+                        if raw_data:
+                            news_data = json.loads(raw_data)
+                            success = self._process_deduplicated_news(
+                                news_id=f"bzNews_{news_id.split('.')[0]}", 
+                                news_data=news_data
+                            )
+                            
+                            # Delete from withreturns after successful processing
+                            if success and is_withreturns:
+                                self.event_trader_redis.history_client.client.delete(key)
+                                logger.debug(f"Deleted processed item: {key}")
+                    except Exception as e:
+                        logger.error(f"Error processing {key}: {e}")
+                
+                # Periodically check for items that might have been missed (every 60 seconds)
+                # This is a safety net, not the primary mechanism
+                current_time = int(time.time())
+                if current_time % 60 == 0:
+                    self.process_news_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
+                    time.sleep(1)  # Prevent repeated execution in the same second
+                    
+            except Exception as e:
+                logger.error(f"Error in PubSub processing: {e}")
+                # Try to reconnect to Neo4j if connection appears to be lost
+                if not self.manager or "Neo4j" in str(e) or "Connection" in str(e):
+                    logger.warning("Attempting to reconnect to Neo4j")
+                    self.connect()
+                time.sleep(1)
+        
+        # Clean up
+        try:
+            pubsub.unsubscribe()
+            pubsub.close()
+        except:
+            pass
+            
+        logger.info("Stopped event-driven Neo4j processing")
+        
+    def stop_pubsub_processing(self):
+        """Stop the PubSub processing loop"""
+        self.pubsub_running = False
+
+
+
 # Function to initialize Neo4j database
 def init_neo4j():
     """Initialize Neo4j database with required structure and company data"""
@@ -1391,6 +1490,10 @@ def process_news_data(batch_size=100, max_items=None, verbose=False, include_wit
         if processor:
             processor.close()
         logger.info("News processing completed")
+
+
+
+
 
 
 

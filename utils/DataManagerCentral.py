@@ -361,18 +361,25 @@ class DataManager:
                 self.logger.info("Neo4j already initialized, skipping initialization")
                 # Even if initialized, process news data
                 self.process_news_data()
-                return True
-            
-            # Initialize Neo4j if not already initialized
-            self.logger.info("Neo4j not initialized, initializing database")
-            if not self.neo4j_processor.initialize():
-                self.logger.error("Failed to initialize Neo4j database")
-                return False
+            else:
+                # Initialize Neo4j if not already initialized
+                self.logger.info("Neo4j not initialized, initializing database")
+                if not self.neo4j_processor.initialize():
+                    self.logger.error("Failed to initialize Neo4j database")
+                    return False
+                    
+                self.logger.info("Neo4j initialization completed successfully")
                 
-            self.logger.info("Neo4j initialization completed successfully")
+                # Process news data after successful initialization
+                self.process_news_data()
             
-            # Process news data after successful initialization
-            self.process_news_data()
+            # Start the PubSub-based continuous processing thread
+            self.neo4j_thread = threading.Thread(
+                target=self.neo4j_processor.process_with_pubsub,
+                daemon=True
+            )
+            self.neo4j_thread.start()
+            self.logger.info("Started Neo4j event-driven processing thread")
             
             return True
             
@@ -419,8 +426,13 @@ class DataManager:
         results = {name: manager.stop() for name, manager in self.sources.items()}
         
         # Close Neo4j connection if initialized
-        if self.neo4j_processor:
+        if hasattr(self, 'neo4j_processor'):
             try:
+                # Stop the PubSub processing thread if running
+                if hasattr(self, 'neo4j_thread') and self.neo4j_thread.is_alive():
+                    self.neo4j_processor.stop_pubsub_processing()
+                    self.neo4j_thread.join(timeout=5)
+                    
                 self.neo4j_processor.close()
                 self.logger.info("Neo4j processor closed")
             except Exception as e:
