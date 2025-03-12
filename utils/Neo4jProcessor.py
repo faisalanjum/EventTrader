@@ -935,8 +935,19 @@ class Neo4jProcessor:
                 if market_params:
                     market_result = session.run("""
                     MATCH (n:News {id: $news_id})
-                    MERGE (m:MarketIndex {ticker: 'SPY'})
-                    SET m.etf = 'SPY', m.name = 'S&P 500 ETF'
+                    MERGE (m:MarketIndex {id: 'SPY'})
+                    ON CREATE SET
+                        m.name = 'S&P 500 ETF',
+                        m.ticker = 'SPY',
+                        m.etf = 'SPY'
+                    SET
+                        m.ticker = 'SPY',
+                        m.etf = 'SPY',
+                        m.name = CASE
+                            WHEN m.name IS NULL OR m.name = ''
+                            THEN 'S&P 500 ETF'
+                            ELSE m.name
+                        END
                     WITH n, m
                     UNWIND $market_params AS param
                     MERGE (n)-[r:INFLUENCES]->(m)
@@ -1138,6 +1149,8 @@ class Neo4jProcessor:
                                     logger.debug(f"Deleted processed key: {key}")
                                 except Exception as e:
                                     logger.warning(f"Error deleting key {key}: {e}")
+
+                            
                         else:
                             error_count += 1
                             
