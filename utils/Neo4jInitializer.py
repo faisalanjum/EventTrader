@@ -115,6 +115,9 @@ class Neo4jInitializer:
     def extract_mappings(self):
         """Extract sector and industry mappings from universe data"""
         # Extract sector ETF mappings and create normalized names
+        sector_etfs = {}  # {sector_name: sector_etf}
+        industry_etfs = {}  # {industry_name: industry_etf}
+        
         for data in self.universe_data.values():
             sector = data.get('sector', '').strip()
             sector_etf = data.get('sector_etf', '').strip()
@@ -126,6 +129,10 @@ class Neo4jInitializer:
                 # Create normalized sector name (no spaces) as ID
                 sector_id = sector.replace(" ", "")
                 self.sector_mapping[sector] = sector_id
+                
+                # Store sector ETF if available
+                if sector_etf and sector_etf.lower() not in ['nan', 'none', '']:
+                    sector_etfs[sector] = sector_etf
             
             # Process industries - use normalized name (without spaces) as ID
             if industry and industry.lower() not in ['nan', 'none', '']:
@@ -138,8 +145,17 @@ class Neo4jInitializer:
                     sector_id = self.sector_mapping[sector]
                         
                 self.industry_mapping[industry] = (industry_id, sector_id)
+                
+                # Store industry ETF if available
+                if industry_etf and industry_etf.lower() not in ['nan', 'none', '']:
+                    industry_etfs[industry] = industry_etf
+        
+        # Store ETF mappings for later use
+        self.sector_etfs = sector_etfs
+        self.industry_etfs = industry_etfs
         
         logger.info(f"Extracted {len(self.sector_mapping)} sectors and {len(self.industry_mapping)} industries with normalized name IDs")
+        logger.info(f"Found {len(sector_etfs)} sector ETFs and {len(industry_etfs)} industry ETFs")
         
         # Create a mapping from ETFs to normalized names for news processing
         self.etf_to_sector_id = {}
@@ -192,15 +208,19 @@ class Neo4jInitializer:
     
     def create_sectors(self) -> bool:
         """Create Sector nodes using normalized names (without spaces) as IDs"""
-        sectors = {}  # {normalized_sector_id: sector_name}
+        sectors = {}  # {normalized_sector_id: (sector_name, sector_etf)}
         
         # Use sector mapping (normalized names) from extraction
         for sector_name, sector_id in self.sector_mapping.items():
-            sectors[sector_id] = sector_name
+            # Get ETF for this sector if available
+            sector_etf = self.sector_etfs.get(sector_name)
+            sectors[sector_id] = (sector_name, sector_etf)
         
         # Then process any sectors not already in the mapping
         for data in self.universe_data.values():
             sector_name = data.get('sector', '').strip()
+            sector_etf = data.get('sector_etf', '').strip()
+            
             if not sector_name or sector_name.lower() in ['nan', 'none', '']:
                 continue
                 
@@ -210,15 +230,15 @@ class Neo4jInitializer:
                 
             # Generate normalized sector ID
             sector_id = sector_name.replace(" ", "")
-            sectors[sector_id] = sector_name
+            sectors[sector_id] = (sector_name, sector_etf if sector_etf else None)
             
             # Add to mapping for future use
             self.sector_mapping[sector_name] = sector_id
         
         # Create sector nodes
         sector_nodes = [
-            SectorNode(node_id=sector_id, name=sector_name)
-            for sector_id, sector_name in sectors.items()
+            SectorNode(node_id=sector_id, name=sector_name, etf=sector_etf)
+            for sector_id, (sector_name, sector_etf) in sectors.items()
         ]
         
         if not sector_nodes:
@@ -243,16 +263,19 @@ class Neo4jInitializer:
     
     def create_industries(self) -> bool:
         """Create Industry nodes using normalized names (without spaces) as IDs"""
-        industries = {}  # {normalized_industry_id: (name, sector_id)}
+        industries = {}  # {normalized_industry_id: (name, sector_id, industry_etf)}
         
         # Use industry mapping (normalized names) from extraction
         for industry_name, (industry_id, sector_id) in self.industry_mapping.items():
-            industries[industry_id] = (industry_name, sector_id)
+            # Get ETF for this industry if available
+            industry_etf = self.industry_etfs.get(industry_name)
+            industries[industry_id] = (industry_name, sector_id, industry_etf)
         
         # Then process any industries not already in the mapping
         for data in self.universe_data.values():
             industry_name = data.get('industry', '').strip()
             sector_name = data.get('sector', '').strip()
+            industry_etf = data.get('industry_etf', '').strip()
             
             if not industry_name or industry_name.lower() in ['nan', 'none', '']:
                 continue
@@ -274,15 +297,15 @@ class Neo4jInitializer:
                 industry_id = f"{base_id}{counter}"
                 counter += 1
             
-            industries[industry_id] = (industry_name, sector_id)
+            industries[industry_id] = (industry_name, sector_id, industry_etf if industry_etf else None)
             
             # Add to mapping for future use
             self.industry_mapping[industry_name] = (industry_id, sector_id)
         
         # Create industry nodes
         industry_nodes = [
-            IndustryNode(node_id=ind_id, name=name, sector_id=sector_id)
-            for ind_id, (name, sector_id) in industries.items()
+            IndustryNode(node_id=ind_id, name=name, sector_id=sector_id, etf=industry_etf)
+            for ind_id, (name, sector_id, industry_etf) in industries.items()
             if sector_id  # Only include industries with a sector
         ]
         

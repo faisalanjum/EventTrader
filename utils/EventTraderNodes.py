@@ -165,6 +165,7 @@ class SectorNode(Neo4jNode):
     """
     node_id: str  # ETF ticker (e.g. 'XLF')
     name: Optional[str] = None  # Sector name (e.g. 'Financials')
+    etf: Optional[str] = None  # ETF ticker associated with this sector
     
     @property
     def node_type(self) -> NodeType:
@@ -179,6 +180,8 @@ class SectorNode(Neo4jNode):
         props = {'id': self.id}
         if self.name is not None:
             props['name'] = self.name
+        if self.etf is not None:
+            props['etf'] = self.etf
         return props
     
     @classmethod
@@ -189,7 +192,8 @@ class SectorNode(Neo4jNode):
             
         return cls(
             node_id=sector_id,
-            name=props.get('name', None)
+            name=props.get('name', None),
+            etf=props.get('etf', None)
         )
 
 @dataclass
@@ -201,6 +205,7 @@ class IndustryNode(Neo4jNode):
     node_id: str  # Industry ETF ticker (e.g. 'KIE')
     name: Optional[str] = None  # Industry name (e.g. 'Insurance')
     sector_id: Optional[str] = None  # Parent sector ETF (e.g. 'XLF')
+    etf: Optional[str] = None  # ETF ticker associated with this industry
     
     @property
     def node_type(self) -> NodeType:
@@ -217,6 +222,8 @@ class IndustryNode(Neo4jNode):
             props['name'] = self.name
         if self.sector_id is not None:
             props['sector_id'] = self.sector_id
+        if self.etf is not None:
+            props['etf'] = self.etf
         return props
     
     @classmethod
@@ -228,7 +235,8 @@ class IndustryNode(Neo4jNode):
         return cls(
             node_id=industry_id,
             name=props.get('name', None),
-            sector_id=props.get('sector_id', None)
+            sector_id=props.get('sector_id', None),
+            etf=props.get('etf', None)
         )
 
 @dataclass
@@ -236,10 +244,10 @@ class NewsNode(Neo4jNode):
     """News node in Neo4j"""
     news_id: str  # Unique identifier
     title: Optional[str] = None
-    body: Optional[str] = None
+    body: Optional[str] = None  # Primary content field
     teaser: Optional[str] = None
-    created_at: Optional[datetime] = None  # Creation timestamp
-    updated_at: Optional[datetime] = None  # Update timestamp
+    created: Optional[datetime] = None  # Creation timestamp
+    updated: Optional[datetime] = None  # Update timestamp
     url: Optional[str] = None
     authors: List[str] = field(default_factory=list)
     channels: List[str] = field(default_factory=list)
@@ -259,30 +267,27 @@ class NewsNode(Neo4jNode):
     
     @property
     def properties(self) -> Dict[str, Any]:
-        """Return node properties for Neo4j"""
+        """Return node properties for Neo4j with standardized field names"""
         # Always include all fields, even if empty
         props = {
-            'id': self.news_id
+            'id': self.news_id,
+            'title': self.title or "",
+            'body': self.body or "",
+            'teaser': self.teaser or "",
+            'url': self.url or "",
+            'market_session': self.market_session or ""
         }
         
-        # Add optional string fields
-        for field in ['title', 'body', 'teaser', 'url', 'market_session']:
-            value = getattr(self, field)
-            if value is not None:
-                props[field] = value
-            else:
-                props[field] = ""
-        
         # Convert datetime to string for Neo4j
-        if self.created_at:
-            props['created_at'] = self.created_at.isoformat()
+        if self.created:
+            props['created'] = self.created.isoformat()
         else:
-            props['created_at'] = ""
+            props['created'] = ""
             
-        if self.updated_at:
-            props['updated_at'] = self.updated_at.isoformat()
+        if self.updated:
+            props['updated'] = self.updated.isoformat()
         else:
-            props['updated_at'] = ""
+            props['updated'] = ""
         
         # Convert lists to JSON strings - always include even if empty
         props['authors'] = json.dumps(self.authors or [])
@@ -296,10 +301,10 @@ class NewsNode(Neo4jNode):
     
     @classmethod
     def from_neo4j(cls, props: Dict[str, Any]) -> 'NewsNode':
-        """Create NewsNode from Neo4j properties"""
-        # Parse datetime fields using our new utility
-        created_at = parse_date(props.get('created_at', '')) if 'created_at' in props else None
-        updated_at = parse_date(props.get('updated_at', '')) if 'updated_at' in props else None
+        """Create NewsNode from Neo4j properties with standardized field handling"""
+        # Parse datetime fields using our utility
+        created = parse_date(props.get('created', ''))
+        updated = parse_date(props.get('updated', ''))
         
         # Parse JSON list fields
         authors = []
@@ -336,12 +341,12 @@ class NewsNode(Neo4jNode):
             title=props.get('title', None),
             body=props.get('body', None),
             teaser=props.get('teaser', None),
-            created_at=created_at,
-            updated_at=updated_at,
+            created=created,
+            updated=updated,
             url=props.get('url', None),
             authors=authors,
             channels=channels,
             tags=tags,
             market_session=props.get('market_session', None),
             returns_schedule=returns_schedule
-        ) 
+        )

@@ -1,26 +1,46 @@
-import logging
+# Standard Library Imports
 import os
 import sys
 import json
-import pandas as pd
+import time
+import logging
+import argparse
 from datetime import datetime, timezone
 from pathlib import Path
-import argparse
-from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
-import time
 from typing import Dict, List, Optional, Any, Set, Tuple
+
+# Third-Party Imports
+import pandas as pd
 from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable, DatabaseUnavailable
-from utils.redisClasses import EventTraderRedis
-from utils.EventTraderNodes import NewsNode, CompanyNode, SectorNode, IndustryNode, MarketIndexNode
-from utils.date_utils import parse_news_dates, parse_date  # Import our new date parsing utility
 
+# Internal Imports - Configuration and Keys
+from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
+from utils.log_config import get_logger, setup_logging
 
+# Internal Imports - Redis Utilities
+from utils.redisClasses import EventTraderRedis, RedisClient
+
+# Internal Imports - EventTrader Node Classes
+from utils.EventTraderNodes import (
+    NewsNode, CompanyNode, SectorNode, 
+    IndustryNode, MarketIndexNode
+)
+
+# Internal Imports - Date Utilities
+from utils.date_utils import parse_news_dates, parse_date  
+
+# Internal Imports - Metadata Fields
+from utils.metadata_fields import MetadataFields
+
+# Internal Imports - XBRL Processing
 from XBRL.Neo4jManager import Neo4jManager
 from XBRL.XBRLClasses import NodeType, RelationType
 
+
+
 # Set up logger
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class Neo4jProcessor:
     """
@@ -51,7 +71,7 @@ class Neo4jProcessor:
         self.etf_to_industry_id = {}
         
         # These will be populated from database when needed
-        self._load_etf_mappings = False
+        self._loaded_etf_mappings = False
         
         # Initialize Redis clients if provided
         if event_trader_redis:
@@ -62,7 +82,7 @@ class Neo4jProcessor:
             logger.info(f"Initialized Redis clients for source: {self.source_type}")
             
             # Test Redis access
-            self._test_redis_access()
+            self._collect_redis_key_counts()
     
     def connect(self):
         """Connect to Neo4j using Neo4jManager"""
@@ -211,57 +231,34 @@ class Neo4jProcessor:
             logger.error(f"Error loading tradable universe: {e}")
             return {}
 
-    def _test_redis_access(self):
-        """Diagnostic test to verify Redis access"""
+    def _collect_redis_key_counts(self):
+        """Test access to Redis to ensure the sources are accessible"""
+
+
+        # If no Redis client is available, just return early
         if not hasattr(self, 'hist_client') or not self.hist_client:
             logger.warning("No Redis client available for testing")
             return False
-            
-        try:
-            from utils.redisClasses import RedisKeys
-            
-            # Determine sources to test
-            sources = []
-            if hasattr(self, 'source_type'):
-                sources.append(self.source_type)
+        
+        patterns = {
+            "news": ["news:withreturns:*", "news:withoutreturns:*"],
+            "reports": ["reports:withreturns:*", "reports:withoutreturns:*"],
+            "transcripts": ["transcripts:withreturns:*", "transcripts:withoutreturns:*"],
+        }
+        
+        logger.info(f"Getting keys count across Redis namespaces for all sources: {list(patterns.keys())}")
+        results = {}
+        
+        for source, source_patterns in patterns.items():
                 
-            # Add common sources if available
-            try:
-                common_sources = ['news', 'reports', 'transcripts']
-                for src in common_sources:
-                    if src not in sources:
-                        sources.append(src)
-            except:
-                pass
+            for pattern in source_patterns:
+                keys = self.hist_client.client.keys(pattern)
+                results[pattern] = len(keys)
+                logger.info(f"Redis db: found {len(keys)} keys matching {pattern}")
                 
-            if not sources:
-                logger.warning("No sources available for Redis testing")
-                return False
-                
-            logger.info(f"Testing Redis access for sources: {sources}")
-            
-            # Test each source for keys
-            success = False
-            for source in sources:
-                try:
-                    # Test withreturns and withoutreturns patterns
-                    for pattern_type in ['withreturns', 'withoutreturns']:
-                        pattern = f"{source}:{pattern_type}:*"
-                        try:
-                            keys = self.hist_client.client.keys(pattern)
-                            logger.info(f"Redis test: found {len(keys)} keys matching {pattern}")
-                            if keys:
-                                success = True
-                        except Exception:
-                            continue
-                except Exception as e:
-                    logger.debug(f"Redis test error for {source}: {e}")
-            
-            return success
-                
-        except Exception as e:
-            logger.warning(f"Redis access test failed: {e}")
-            return False
+        return results
+    
+
 
     def populate_company_nodes(self):
         """
@@ -555,34 +552,23 @@ class Neo4jProcessor:
             # Continue anyway - relationships aren't critical
             return False
 
-    def process_news_to_neo4j(self, batch_size=100, max_items=1000) -> bool:
+
+    def _process_deduplicated_news(self, news_id, news_data):
         """
-        Process news data from Redis withreturns namespace and upload to Neo4j.
-        Connect news nodes to company nodes based on symbols.
+        Process news data with deduplication, standardized fields, and efficient symbol relationships.
+        Uses a hash-based MERGE pattern with conditional updates based on timestamps.
         
         Args:
-            batch_size: Number of news items to process in each batch
-            max_items: Maximum number of news items to process in total
+            news_id: Unique identifier for the news
+            news_data: Dictionary containing news data
             
         Returns:
             bool: Success status
         """
-        if not self.connect():
-            logger.error("Cannot connect to Neo4j")
-            return False
-        
-        if not hasattr(self, 'hist_client') or not self.hist_client:
-            logger.warning("No Redis history client available for news processing")
-            logger.info("Skipping news processing - Redis client required")
-            return True  # Return success as this is not a fatal error
-        
-        # Load ETF to name mappings
-        self._load_etf_to_name_mappings()
+        logger.debug(f"Processing deduplicated news {news_id}")
         
         try:
-            logger.info("Processing news from Redis to Neo4j...")
-            
-            # Get ticker-to-CIK mapping
+            # Get ticker to CIK mappings from universe data
             universe_data = self.get_tradable_universe()
             ticker_to_cik = {}
             for symbol, data in universe_data.items():
@@ -590,39 +576,542 @@ class Neo4jProcessor:
                 if cik and cik.lower() not in ['nan', 'none', '']:
                     ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
             
-            logger.info(f"Created ticker-to-CIK mapping for {len(ticker_to_cik)} symbols")
+            # We don't need ETF mappings anymore
+            # Completely removed ETF fallback logic
             
-            # Pattern for news keys in Redis
+            # Extract timestamps with proper parsing
+            created_at, updated_at = parse_news_dates(news_data)
+            created_str = created_at.isoformat() if created_at else datetime.now().isoformat()
+            updated_str = updated_at.isoformat() if updated_at else created_str
+            
+            # Extract basic properties - standardize field names
+            title = news_data.get('title', '')
+            body = news_data.get('body', news_data.get('content', ''))  # Fallback to content if body not available
+            teaser = news_data.get('teaser', '')
+            url = news_data.get('url', '')
+            
+            # Extract and prepare list fields - standardize JSON format
+            authors = json.dumps(self._parse_list_field(news_data.get('authors', [])))
+            tags = json.dumps(self._parse_list_field(news_data.get('tags', [])))
+            channels = json.dumps(self._parse_list_field(news_data.get('channels', [])))
+            
+            # Extract market session - always include even if empty
+            market_session = ""
+            if 'metadata' in news_data and 'event' in news_data['metadata']:
+                market_session = news_data['metadata']['event'].get('market_session', '')
+                
+            # Extract returns schedule - always include even if empty
+            returns_schedule = {}
+            if 'metadata' in news_data and 'returns_schedule' in news_data['metadata']:
+                raw_schedule = news_data['metadata']['returns_schedule']
+                # Parse each date in the schedule
+                for key in ['hourly', 'session', 'daily']:
+                    if key in raw_schedule and raw_schedule[key]:
+                        # Parse the date string to ensure it's valid, then convert back to string
+                        date_obj = parse_date(raw_schedule[key])
+                        if date_obj:
+                            returns_schedule[key] = date_obj.isoformat()
+            returns_schedule_json = json.dumps(returns_schedule)
+            
+            # Extract symbols mentioned in news
+            symbols = self._extract_symbols(news_data.get('symbols', []))
+            
+            # Create a mapping of symbol to benchmarks from the instruments array - only for ETF properties
+            symbol_benchmarks = {}
+            if 'metadata' in news_data and 'instruments' in news_data['metadata']:
+                for instrument in news_data['metadata']['instruments']:
+                    symbol = instrument.get('symbol', '')
+                    if symbol and 'benchmarks' in instrument:
+                        symbol_benchmarks[symbol.upper()] = {
+                            'sector': instrument['benchmarks'].get('sector', ''),
+                            'industry': instrument['benchmarks'].get('industry', '')
+                        }
+            
+            # Prepare data structures for batch symbol processing
+            valid_symbols = []
+            symbol_data = {}
+            
+            # Preprocess symbols to collect metrics and filter valid ones
+            for symbol in symbols:
+                symbol_upper = symbol.upper()
+                cik = ticker_to_cik.get(symbol_upper)
+                if not cik:
+                    logger.warning(f"No CIK found for symbol {symbol_upper}")
+                    continue  # Skip symbols without CIK
+                
+                # Get return metrics for this symbol
+                metrics = self._extract_return_metrics(news_data, symbol_upper)
+                
+                # Get sector and industry information - ONLY from company data
+                company_data = universe_data.get(symbol_upper, {})
+                sector = company_data.get('sector')
+                industry = company_data.get('industry')
+                
+                # Skip symbol processing if missing sector or industry data
+                if not sector or not industry:
+                    logger.warning(f"Symbol {symbol_upper} is missing sector or industry data - skipping relationship creation")
+                    continue
+                    
+                # Only add to valid symbols if it passed all checks
+                valid_symbols.append(symbol_upper)
+                
+                # Store data for later batch processing
+                symbol_data[symbol_upper] = {
+                    'cik': cik,
+                    'metrics': metrics,
+                    'timestamp': datetime.now().isoformat(),
+                    'sector': sector,
+                    'industry': industry
+                }
+            
+            # Prepare parameters for each relationship type
+            company_params = []
+            sector_params = []
+            industry_params = []
+            market_params = []
+
+            # Prepare company relationship parameters
+            for symbol in valid_symbols:
+                symbol_data_item = symbol_data[symbol]
+                # Prepare metrics as property
+                props = {
+                    'symbol': symbol,
+                    'created_at': symbol_data_item['timestamp']
+                }
+                
+                # Add stock metrics
+                for timeframe in ['hourly', 'session', 'daily']:
+                    metric_key = f"{timeframe}_stock"
+                    if metric_key in symbol_data_item['metrics']:
+                        props[metric_key] = symbol_data_item['metrics'][metric_key]
+                
+                company_params.append({
+                    'cik': symbol_data_item['cik'],
+                    'properties': props
+                })
+            
+            # Prepare sector relationship parameters
+            for symbol in valid_symbols:
+                symbol_data_item = symbol_data[symbol]
+                sector = symbol_data_item['sector']
+                
+                # Prepare metrics as property
+                props = {
+                    'symbol': symbol,
+                    'created_at': symbol_data_item['timestamp']
+                }
+                
+                # Add sector metrics
+                for timeframe in ['hourly', 'session', 'daily']:
+                    metric_key = f"{timeframe}_sector"
+                    if metric_key in symbol_data_item['metrics']:
+                        props[metric_key] = symbol_data_item['metrics'][metric_key]
+                
+                # Get sector_etf for property only - not for identification
+                sector_etf = None
+                company_data = universe_data.get(symbol, {})
+                
+                # Get ETF info from company data
+                if 'sector_etf' in company_data and company_data['sector_etf']:
+                    sector_etf = company_data['sector_etf']
+                # Fallback to benchmark data for ETF property only if needed
+                elif symbol in symbol_benchmarks and symbol_benchmarks[symbol]['sector']:
+                    sector_etf = symbol_benchmarks[symbol]['sector']
+                
+                # Normalize sector ID and ensure it's not just the ETF ticker
+                sector_id = sector.replace(" ", "")
+                
+                # Protection against using ETF as ID - for sectors
+                if sector_etf and sector_id == sector_etf:
+                    # Instead of warning, use concrete prevention
+                    logger.error(f"Sector ID {sector_id} matches ETF ticker {sector_etf} - using prefixed format to prevent this")
+                    # Use prefixed format to avoid this issue
+                    sector_id = f"Sector_{sector.replace(' ', '_')}"
+                
+                sector_params.append({
+                    'sector_id': sector_id,
+                    'sector_name': sector,
+                    'sector_etf': sector_etf,
+                    'properties': props
+                })
+            
+            # Prepare industry relationship parameters
+            for symbol in valid_symbols:
+                symbol_data_item = symbol_data[symbol]
+                industry = symbol_data_item['industry']
+                
+                # Prepare metrics as property
+                props = {
+                    'symbol': symbol,
+                    'created_at': symbol_data_item['timestamp']
+                }
+                
+                # Add industry metrics
+                for timeframe in ['hourly', 'session', 'daily']:
+                    metric_key = f"{timeframe}_industry"
+                    if metric_key in symbol_data_item['metrics']:
+                        props[metric_key] = symbol_data_item['metrics'][metric_key]
+                
+                # Get industry_etf for property only - not for identification
+                industry_etf = None
+                company_data = universe_data.get(symbol, {})
+                
+                # Get ETF info from company data
+                if 'industry_etf' in company_data and company_data['industry_etf']:
+                    industry_etf = company_data['industry_etf']
+                # Fallback to benchmark data for ETF property only if needed
+                elif symbol in symbol_benchmarks and symbol_benchmarks[symbol]['industry']:
+                    industry_etf = symbol_benchmarks[symbol]['industry']
+                
+                # Normalize industry ID and ensure it's not just the ETF ticker
+                industry_id = industry.replace(" ", "")
+                
+                # Protection against using ETF as ID - for industries
+                if industry_etf and industry_id == industry_etf:
+                    # Instead of warning, use concrete prevention
+                    logger.error(f"Industry ID {industry_id} matches ETF ticker {industry_etf} - using prefixed format to prevent this")
+                    # Use prefixed format to avoid this issue
+                    industry_id = f"Industry_{industry.replace(' ', '_')}"
+                
+                industry_params.append({
+                    'industry_id': industry_id,
+                    'industry_name': industry,
+                    'industry_etf': industry_etf,
+                    'properties': props
+                })
+            
+            # Prepare market index relationship parameters
+            for symbol in valid_symbols:
+                symbol_data_item = symbol_data[symbol]
+                has_macro_metrics = False
+                
+                # Prepare metrics as property
+                props = {
+                    'symbol': symbol,
+                    'created_at': symbol_data_item['timestamp']
+                }
+                
+                # Add macro metrics
+                for timeframe in ['hourly', 'session', 'daily']:
+                    metric_key = f"{timeframe}_macro"
+                    if metric_key in symbol_data_item['metrics']:
+                        props[metric_key] = symbol_data_item['metrics'][metric_key]
+                        has_macro_metrics = True
+                
+                if has_macro_metrics:
+                    market_params.append({
+                        'properties': props
+                    })
+            
+            # Execute deduplication and conditional update logic with direct Cypher
+            # KEEP ALL DATABASE OPERATIONS INSIDE THIS SINGLE SESSION CONTEXT
+            with self.manager.driver.session() as session:
+                # Create/update news node with conditional updates
+                # This follows the pattern from the deduplication notes
+                result = session.run("""
+                MERGE (n:News {id: $id})
+                ON CREATE SET 
+                    n.id = $id,
+                    n.title = $title,
+                    n.body = $body,
+                    n.teaser = $teaser,
+                    n.created = $created,
+                    n.updated = $updated,
+                    n.url = $url,
+                    n.authors = $authors,
+                    n.tags = $tags,
+                    n.channels = $channels,
+                    n.market_session = $market_session,
+                    n.returns_schedule = $returns_schedule
+                ON MATCH SET 
+                    // Only update content-related fields if this is newer
+                    n.title = CASE WHEN $updated > n.updated THEN $title ELSE n.title END,
+                    n.body = CASE WHEN $updated > n.updated THEN $body ELSE n.body END,
+                    n.teaser = CASE WHEN $updated > n.updated THEN $teaser ELSE n.teaser END,
+                    n.updated = CASE WHEN $updated > n.updated THEN $updated ELSE n.updated END,
+                    // Always update these fields even if not newer (additive properties)
+                    n.url = $url,
+                    n.authors = $authors,
+                    n.tags = $tags,
+                    n.channels = $channels,
+                    n.market_session = $market_session,
+                    n.returns_schedule = $returns_schedule
+                RETURN n
+                """, {
+                    "id": news_id,
+                    "title": title,
+                    "body": body,
+                    "teaser": teaser,
+                    "created": created_str,
+                    "updated": updated_str, 
+                    "url": url,
+                    "authors": authors,
+                    "tags": tags,
+                    "channels": channels,
+                    "market_session": market_session,
+                    "returns_schedule": returns_schedule_json
+                })
+                
+                # Process the result
+                record = result.single()
+                if not record:
+                    logger.error(f"Failed to create or update news node {news_id}")
+                    return False
+                    
+                # Skip processing if no symbols found
+                if not valid_symbols:
+                    logger.warning(f"No valid symbols found for news {news_id}")
+                    return True
+            
+                # ----- Use UNWIND pattern for efficient batch processing of relationships -----
+                
+                # 1. Create Company INFLUENCES relationships using UNWIND pattern
+                if company_params:
+                    company_result = session.run("""
+                    MATCH (n:News {id: $news_id})
+                    UNWIND $company_params AS param
+                    MATCH (c:Company {cik: param.cik})
+                    MERGE (n)-[r:INFLUENCES]->(c)
+                    SET r += param.properties
+                    RETURN count(r) as relationship_count
+                    """, {
+                        "news_id": news_id,
+                        "company_params": company_params
+                    })
+                    for record in company_result:
+                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to companies")
+                
+                # 2. Create Sector INFLUENCES relationships using UNWIND pattern
+                if sector_params:
+                    sector_result = session.run("""
+                    MATCH (n:News {id: $news_id})
+                    UNWIND $sector_params AS param
+                    MERGE (s:Sector {id: param.sector_id})
+                    ON CREATE SET 
+                        s.name = param.sector_name,
+                        s.etf = param.sector_etf
+                    SET
+                        s.etf = CASE 
+                            WHEN param.sector_etf IS NOT NULL AND (s.etf IS NULL OR s.etf = '') 
+                            THEN param.sector_etf 
+                            ELSE s.etf 
+                        END
+                    MERGE (n)-[r:INFLUENCES]->(s)
+                    SET r += param.properties
+                    RETURN count(r) as relationship_count
+                    """, {
+                        "news_id": news_id,
+                        "sector_params": sector_params
+                    })
+                    for record in sector_result:
+                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to sectors")
+                
+                # 3. Create Industry INFLUENCES relationships using UNWIND pattern
+                if industry_params:
+                    industry_result = session.run("""
+                    MATCH (n:News {id: $news_id})
+                    UNWIND $industry_params AS param
+                    MERGE (i:Industry {id: param.industry_id})
+                    ON CREATE SET 
+                        i.name = param.industry_name,
+                        i.etf = param.industry_etf
+                    SET
+                        i.etf = CASE 
+                            WHEN param.industry_etf IS NOT NULL AND (i.etf IS NULL OR i.etf = '') 
+                            THEN param.industry_etf 
+                            ELSE i.etf 
+                        END
+                    MERGE (n)-[r:INFLUENCES]->(i)
+                    SET r += param.properties
+                    RETURN count(r) as relationship_count
+                    """, {
+                        "news_id": news_id,
+                        "industry_params": industry_params
+                    })
+                    for record in industry_result:
+                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to industries")
+                
+                # 4. Create Market Index INFLUENCES relationships using UNWIND pattern
+                if market_params:
+                    market_result = session.run("""
+                    MATCH (n:News {id: $news_id})
+                    MERGE (m:MarketIndex {ticker: 'SPY'})
+                    SET m.etf = 'SPY', m.name = 'S&P 500 ETF'
+                    WITH n, m
+                    UNWIND $market_params AS param
+                    MERGE (n)-[r:INFLUENCES]->(m)
+                    SET r += param.properties
+                    RETURN count(r) as relationship_count
+                    """, {
+                        "news_id": news_id,
+                        "market_params": market_params
+                    })
+                    for record in market_result:
+                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to market index")
+                
+                logger.info(f"Successfully processed news {news_id} with {len(valid_symbols)} symbols")
+                return True
+                
+        except Exception as e:
+            logger.error(f"Error processing news {news_id}: {e}")
+            return False
+
+    def _load_etf_mappings(self):
+        """
+        Load ETF mappings for informational purposes only.
+        These are not used for node identification, only for tracking ETF properties.
+        """
+        if self._loaded_etf_mappings:
+            return True
+        
+        # Initialize mappings
+        self.etf_to_sector_id = {}
+        self.etf_to_industry_id = {}
+        
+        # Track many-to-one mappings for detailed reporting
+        self.etf_to_sectors = {}  # {etf: [sector_names]}
+        self.etf_to_industries = {}  # {etf: [industry_names]}
+
+        try:
+            with self.manager.driver.session() as session:
+                # Get all ETF mappings from sectors
+                result = session.run("""
+                    MATCH (s:Sector) 
+                    WHERE s.etf IS NOT NULL AND s.etf <> ""
+                    RETURN s.etf as etf, s.id as id, s.name as name
+                """)
+                
+                # Process sector mappings
+                for record in result:
+                    etf = record["etf"]
+                    sector_id = record["id"]
+                    sector_name = record["name"]
+                    
+                    # Track for many-to-one mapping detection
+                    if etf not in self.etf_to_sectors:
+                        self.etf_to_sectors[etf] = []
+                    self.etf_to_sectors[etf].append(sector_name)
+                    
+                    # Store the last one encountered as the default (not ideal but consistent)
+                    self.etf_to_sector_id[etf] = sector_id
+                
+                # Get all ETF mappings from industries
+                result = session.run("""
+                    MATCH (i:Industry) 
+                    WHERE i.etf IS NOT NULL AND i.etf <> ""
+                    RETURN i.etf as etf, i.id as id, i.name as name
+                """)
+                
+                # Process industry mappings
+                for record in result:
+                    etf = record["etf"]
+                    industry_id = record["id"]
+                    industry_name = record["name"]
+                    
+                    # Track for many-to-one mapping detection
+                    if etf not in self.etf_to_industries:
+                        self.etf_to_industries[etf] = []
+                    self.etf_to_industries[etf].append(industry_name)
+                    
+                    # Store the last one encountered as the default (not ideal but consistent)
+                    self.etf_to_industry_id[etf] = industry_id
+                
+                # Log multi-mapping situations
+                for etf, sectors in self.etf_to_sectors.items():
+                    if len(sectors) > 1:
+                        sector_list = ", ".join(sectors)
+                        logger.warning(f"Multiple sectors map to the same ETF: {etf} -> {sector_list}")
+                
+                for etf, industries in self.etf_to_industries.items():
+                    if len(industries) > 1:
+                        industry_list = ", ".join(industries)
+                        logger.warning(f"Multiple industries map to the same ETF: {etf} -> {industry_list}")
+                
+                self._loaded_etf_mappings = True
+                logger.info(f"Loaded ETF mappings: {len(self.etf_to_sector_id)} sectors, {len(self.etf_to_industry_id)} industries")
+                
+                # Since we only use company data for identification, these mappings are just FYI
+                logger.info("Note: ETF mappings are only used for properties, not for node identification")
+                return True
+        except Exception as e:
+            logger.error(f"Error loading ETF mappings: {e}")
+            return False
+
+    def process_news_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
+        """
+        Process news from Redis to Neo4j with deduplication.
+        
+        Args:
+            batch_size: Number of items to process in each batch
+            max_items: Maximum number of items to process (for debugging)
+            include_without_returns: Whether to process news from the withoutreturns namespace
+            
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        try:
+            if not self.manager:
+                if not self.connect():
+                    logger.error("Cannot connect to Neo4j")
+                    return False
+            
+            if not hasattr(self, 'hist_client') or not self.hist_client:
+                logger.warning("No Redis history client available for news processing")
+                return False
+                
+            # Get keys for withreturns first (these have return data)
             pattern = "news:withreturns:*"
-            news_keys = self.hist_client.client.keys(pattern)
-            logger.info(f"Found {len(news_keys)} news keys in Redis")
+            withreturns_keys = self.hist_client.client.keys(pattern)
+            logger.info(f"Found {len(withreturns_keys)} news keys matching {pattern}")
+            
+            # Get keys for withoutreturns if requested
+            withoutreturns_keys = []
+            if include_without_returns:
+                pattern = "news:withoutreturns:*"
+                withoutreturns_keys = self.hist_client.client.keys(pattern)
+                logger.info(f"Found {len(withoutreturns_keys)} news keys matching {pattern}")
+            
+            # Combine and sort keys by ID (process newer items first)
+            news_keys = withreturns_keys + withoutreturns_keys
+            # Sort by ID if needed (optional)
             
             # Limit the number of items to process
-            if max_items and len(news_keys) > max_items:
+            if max_items is not None and len(news_keys) > max_items:
                 news_keys = news_keys[:max_items]
+                
+            logger.info(f"Processing {len(news_keys)} news keys")
+            
+            # Load universe data for ticker-to-CIK mapping
+            universe_data = self.get_tradable_universe()
+            ticker_to_cik = {}
+            ticker_to_name = {}
+            
+            for symbol, data in universe_data.items():
+                cik = data.get('cik', '').strip()
+                if cik and cik.lower() not in ['nan', 'none', '']:
+                    ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
+                    ticker_to_name[symbol.upper()] = data.get('company_name', data.get('name', symbol)).strip()
             
             # Process in batches
             processed_count = 0
             error_count = 0
-            symbol_missing_count = 0
-            cik_missing_count = 0
-            sector_ref_count = 0
-            industry_ref_count = 0
-            market_index_ref_count = 0
             
-            # Main processing loop
             for i in range(0, len(news_keys), batch_size):
                 batch_keys = news_keys[i:i+batch_size]
-                batch_nodes = []
-                batch_relationships = []
-                
-                logger.info(f"Processing batch {i//batch_size + 1}/{(len(news_keys) + batch_size - 1)//batch_size}")
                 
                 # Process each news item in the batch
                 for key in batch_keys:
                     try:
-                        # Extract ID from Redis key
-                        news_id = key.replace("news:withreturns:", "")
+                        # Extract ID and namespace from Redis key
+                        parts = key.split(':')
+                        namespace = parts[1] if len(parts) > 1 else "unknown"
+                        concat_id = parts[2] if len(parts) > 2 else key
+                        
+                        # Extract just the base ID (part before the period)
+                        base_id = concat_id.split('.')[0] if '.' in concat_id else concat_id
+                        
+                        # Add source prefix for future multi-source compatibility
+                        news_id = f"bzNews_{base_id}"
                         
                         # Get news data from Redis
                         news_data = self.hist_client.client.get(key)
@@ -633,221 +1122,37 @@ class Neo4jProcessor:
                         # Parse JSON data
                         news_item = json.loads(news_data)
                         
-                        # Extract basic properties
-                        title = news_item.get('title', '')
-                        body = news_item.get('body', '')
-                        teaser = news_item.get('teaser', '')
+                        # Process news data
+                        success = self._process_deduplicated_news(news_id, news_item)
                         
-                        # Get timestamps and clean them
-                        created_at, updated_at = parse_news_dates(news_item)
-                        
-                        # Get market session
-                        market_session = ""
-                        if 'metadata' in news_item and 'event' in news_item['metadata']:
-                            market_session = news_item['metadata']['event'].get('market_session', '')
-                        
-                        # Extract list fields
-                        authors = self._parse_list_field(news_item.get('authors', []))
-                        channels = self._parse_list_field(news_item.get('channels', []))
-                        tags = self._parse_list_field(news_item.get('tags', []))
-                        
-                        # Extract returns_schedule
-                        returns_schedule = {}
-                        if 'metadata' in news_item and 'returns_schedule' in news_item['metadata']:
-                            raw_schedule = news_item['metadata']['returns_schedule']
-                            # Parse each date in the schedule
-                            for key in ['hourly', 'session', 'daily']:
-                                if key in raw_schedule and raw_schedule[key]:
-                                    # Parse the date string to ensure it's valid, then convert back to string
-                                    date_obj = parse_date(raw_schedule[key])
-                                    if date_obj:
-                                        returns_schedule[key] = date_obj.isoformat()
-                        
-                        # Create NewsNode
-                        news_node = NewsNode(
-                            news_id=news_id,
-                            title=title,
-                            body=body,
-                            teaser=teaser,
-                            created_at=created_at,
-                            updated_at=updated_at,
-                            url=news_item.get('url', ''),
-                            authors=authors,
-                            channels=channels,
-                            tags=tags,
-                            market_session=market_session,
-                            returns_schedule=returns_schedule
-                        )
-                        
-                        batch_nodes.append(news_node)
-                        
-                        # Get symbols mentioned in news
-                        symbols = self._extract_symbols(news_item.get('symbols', []))
-                        
-                        if not symbols:
-                            symbol_missing_count += 1
-                            continue
-                        
-                        # Process each symbol for relationships
-                        for symbol in symbols:
-                            symbol_upper = symbol.upper()
-                            cik = ticker_to_cik.get(symbol_upper)
-                            if not cik:
-                                cik_missing_count += 1
-                                continue
+                        if success:
+                            processed_count += 1
                             
-                            # Get return metrics for this symbol
-                            return_metrics = self._extract_return_metrics(news_item, symbol_upper)
-                            
-                            # Create company node reference and relationship with ONLY stock metrics
-                            company_rel_props = {
-                                'symbol': symbol_upper,
-                                'created_at': datetime.now().isoformat()
-                            }
-                            
-                            # Add only stock-specific metrics
-                            for timeframe in ['hourly', 'session', 'daily']:
-                                metric_key = f"{timeframe}_stock"
-                                if metric_key in return_metrics:
-                                    company_rel_props[metric_key] = return_metrics[metric_key]
-                            
-                            company_node = CompanyNode(cik=cik)
-                            batch_relationships.append((news_node, company_node, RelationType.INFLUENCES, company_rel_props))
-                            
-                            try:
-                                # Look for benchmarks in the instruments array
-                                sector_id = None
-                                industry_id = None
-                                has_macro_metrics = False
-                                
-                                if 'metadata' in news_item and 'instruments' in news_item['metadata']:
-                                    for instrument in news_item['metadata']['instruments']:
-                                        if instrument.get('symbol') == symbol_upper and 'benchmarks' in instrument:
-                                            benchmarks = instrument['benchmarks']
-                                            sector_etf = benchmarks.get('sector')
-                                            industry_etf = benchmarks.get('industry')
-                                            
-                                            # Map ETFs to normalized name IDs
-                                            # Try to get from our mappings first
-                                            if sector_etf in self.etf_to_sector_id:
-                                                sector_id = self.etf_to_sector_id.get(sector_etf)
-                                            else:
-                                                # Fallback: directly use the ETF as ID
-                                                sector_id = sector_etf
-                                                
-                                            if industry_etf in self.etf_to_industry_id:
-                                                industry_id = self.etf_to_industry_id.get(industry_etf)
-                                            else:
-                                                # Fallback: directly use the ETF as ID
-                                                industry_id = industry_etf
-                                                
-                                            break
-                                
-                                # Create sector relationship if sector_id exists - with ONLY sector metrics
-                                if sector_id:
-                                    sector_rel_props = {
-                                        'symbol': symbol_upper,
-                                        'created_at': datetime.now().isoformat()
-                                    }
-                                    
-                                    # Add only sector-specific metrics
-                                    for timeframe in ['hourly', 'session', 'daily']:
-                                        metric_key = f"{timeframe}_sector"
-                                        if metric_key in return_metrics:
-                                            sector_rel_props[metric_key] = return_metrics[metric_key]
-                                    
-                                    sector_node = SectorNode(node_id=sector_id)
-                                    batch_relationships.append((news_node, sector_node, RelationType.INFLUENCES, sector_rel_props))
-                                    sector_ref_count += 1
-                                
-                                # Create industry relationship if industry_id exists - with ONLY industry metrics
-                                if industry_id:
-                                    industry_rel_props = {
-                                        'symbol': symbol_upper,
-                                        'created_at': datetime.now().isoformat()
-                                    }
-                                    
-                                    # Add only industry-specific metrics
-                                    for timeframe in ['hourly', 'session', 'daily']:
-                                        metric_key = f"{timeframe}_industry"
-                                        if metric_key in return_metrics:
-                                            industry_rel_props[metric_key] = return_metrics[metric_key]
-                                    
-                                    industry_node = IndustryNode(node_id=industry_id)
-                                    batch_relationships.append((news_node, industry_node, RelationType.INFLUENCES, industry_rel_props))
-                                    industry_ref_count += 1
-                                
-                                # Check if there are any macro metrics
-                                has_macro_metrics = any(f"{timeframe}_macro" in return_metrics for timeframe in ['hourly', 'session', 'daily'])
-                                
-                                # Create relationship to SPY (macro index) if macro metrics exist - with ONLY macro metrics
-                                if has_macro_metrics:
-                                    macro_rel_props = {
-                                        'symbol': symbol_upper,
-                                        'created_at': datetime.now().isoformat()
-                                    }
-                                    
-                                    # Add only macro-specific metrics
-                                    for timeframe in ['hourly', 'session', 'daily']:
-                                        metric_key = f"{timeframe}_macro"
-                                        if metric_key in return_metrics:
-                                            macro_rel_props[metric_key] = return_metrics[metric_key]
-                                    
-                                    market_index_node = MarketIndexNode(ticker="SPY")
-                                    batch_relationships.append((news_node, market_index_node, RelationType.INFLUENCES, macro_rel_props))
-                                    market_index_ref_count += 1
-                            except Exception as e:
-                                logger.warning(f"Error creating sector/industry relationships for {symbol_upper}: {e}")
-                                # Continue processing - we at least created the company relationship
-                        
-                        processed_count += 1
+                            # Delete processed keys from withreturns namespace only
+                            # We keep withoutreturns keys as they may get returns later
+
+
+                            if namespace == "withreturns":
+                                try:
+                                    self.hist_client.client.delete(key)
+                                    logger.debug(f"Deleted processed key: {key}")
+                                except Exception as e:
+                                    logger.warning(f"Error deleting key {key}: {e}")
+                        else:
+                            error_count += 1
                             
                     except Exception as e:
-                        logger.error(f"Error processing news item {key}: {e}")
+                        logger.error(f"Error processing news key {key}: {e}")
                         error_count += 1
                 
-                # Create all news nodes in this batch using Neo4jManager
-                if batch_nodes:
-                    try:
-                        self.manager.merge_nodes(batch_nodes)
-                        logger.info(f"Created {len(batch_nodes)} news nodes")
-                    except Exception as e:
-                        logger.error(f"Error creating news nodes: {e}")
+                logger.info(f"Processed batch {i//batch_size + 1}/{(len(news_keys) + batch_size - 1)//batch_size}")
                 
-                # Create all relationships in this batch
-                if batch_relationships:
-                    try:
-                        self.manager.merge_relationships(batch_relationships)
-                        # Count relationship types
-                        company_rels = sum(1 for r in batch_relationships if isinstance(r[1], CompanyNode))
-                        sector_rels = sum(1 for r in batch_relationships if isinstance(r[1], SectorNode))
-                        industry_rels = sum(1 for r in batch_relationships if isinstance(r[1], IndustryNode))
-                        
-                        logger.info(f"Created {len(batch_relationships)} total relationships:")
-                        logger.info(f"  - News→Company: {company_rels}")
-                        logger.info(f"  - News→Sector: {sector_rels}")
-                        logger.info(f"  - News→Industry: {industry_rels}")
-                    except Exception as e:
-                        logger.error(f"Error creating relationships: {e}")
+            # Summary and status
+            logger.info(f"Finished processing news to Neo4j. Processed: {processed_count}, Errors: {error_count}")
             
-            # Get database stats to verify results
-            try:
-                self.manager.get_neo4j_db_counts()
-            except:
-                pass
-            
-            # Detailed summary
-            logger.info(f"News processing complete:")
-            logger.info(f"  - Processed: {processed_count} news items")
-            logger.info(f"  - Errors: {error_count}")
-            logger.info(f"  - Without symbols: {symbol_missing_count}")
-            logger.info(f"  - Symbol-CIK mapping failures: {cik_missing_count}")
-            logger.info(f"  - Sector references: {sector_ref_count}")
-            logger.info(f"  - Industry references: {industry_ref_count}")
-            logger.info(f"  - Market index references: {market_index_ref_count}")
-            
-            return True
-            
+            # Remove batch deletion approach in favor of immediate deletion
+            return processed_count > 0 or error_count == 0
+                
         except Exception as e:
             logger.error(f"Error processing news data: {e}")
             return False
@@ -963,56 +1268,33 @@ class Neo4jProcessor:
         
         # Process different return timeframes
         for timeframe in ['hourly_return', 'session_return', 'daily_return']:
-            if timeframe in symbol_returns:
-                for metric, value in symbol_returns[timeframe].items():
-                    if value is not None and not (isinstance(value, str) and value.lower() == 'nan'):
-                        metrics[f"{timeframe.split('_')[0]}_{metric}"] = value
+            if timeframe not in symbol_returns:
+                continue
+                
+            if not isinstance(symbol_returns[timeframe], dict):
+                logger.warning(f"Expected dictionary for {timeframe} but got {type(symbol_returns[timeframe])} for symbol {symbol}")
+                continue
+            
+            short_timeframe = timeframe.split('_')[0]  # hourly, session, daily
+            
+            # Extract stock metrics
+            if 'stock' in symbol_returns[timeframe]:
+                metrics[f"{short_timeframe}_stock"] = symbol_returns[timeframe]['stock']
+            
+            # Extract sector metrics
+            if 'sector' in symbol_returns[timeframe]:
+                metrics[f"{short_timeframe}_sector"] = symbol_returns[timeframe]['sector']
+            
+            # Extract industry metrics
+            if 'industry' in symbol_returns[timeframe]:
+                metrics[f"{short_timeframe}_industry"] = symbol_returns[timeframe]['industry']
+            
+            # Extract macro metrics
+            if 'macro' in symbol_returns[timeframe]:
+                metrics[f"{short_timeframe}_macro"] = symbol_returns[timeframe]['macro']
         
         return metrics
 
-    def _load_etf_to_name_mappings(self):
-        """Load ETF to normalized name mappings from the database"""
-        if self._load_etf_mappings:
-            return  # Already loaded
-            
-        try:
-            if not self.connect():
-                logger.error("Cannot connect to Neo4j")
-                return
-                
-            with self.manager.driver.session() as session:
-                # Get mappings from company nodes with ETF fields
-                result = session.run("""
-                MATCH (c:Company)
-                WHERE c.sector_etf IS NOT NULL AND c.sector_etf <> ''
-                AND c.sector IS NOT NULL AND c.sector <> ''
-                RETURN DISTINCT c.sector_etf as etf, replace(c.sector, " ", "") as normalized_name
-                """)
-                
-                for record in result:
-                    etf = record["etf"]
-                    normalized_name = record["normalized_name"]
-                    self.etf_to_sector_id[etf] = normalized_name
-                
-                # Get industry mappings
-                result = session.run("""
-                MATCH (c:Company)
-                WHERE c.industry_etf IS NOT NULL AND c.industry_etf <> ''
-                AND c.industry IS NOT NULL AND c.industry <> ''
-                RETURN DISTINCT c.industry_etf as etf, replace(c.industry, " ", "") as normalized_name
-                """)
-                
-                for record in result:
-                    etf = record["etf"]
-                    normalized_name = record["normalized_name"]
-                    self.etf_to_industry_id[etf] = normalized_name
-                    
-            self._load_etf_mappings = True
-            logger.info(f"Loaded ETF to name mappings: {len(self.etf_to_sector_id)} sectors, {len(self.etf_to_industry_id)} industries")
-            
-        except Exception as e:
-            logger.error(f"Error loading ETF to name mappings: {e}")
-            return False
 
 # Function to initialize Neo4j database
 def init_neo4j():
@@ -1043,8 +1325,16 @@ def init_neo4j():
         return False
 
 # Function to process news data into Neo4j
-def process_news_data(batch_size=100, max_items=1000, verbose=False):
-    """Process news data from Redis into Neo4j"""
+def process_news_data(batch_size=100, max_items=None, verbose=False, include_without_returns=True):
+    """
+    Process news data from Redis into Neo4j
+    
+    Args:
+        batch_size: Number of news items to process in each batch
+        max_items: Maximum number of news items to process. If None, process all items.
+        verbose: Whether to enable verbose logging
+        include_without_returns: Whether to process news from the withoutreturns namespace
+    """
     processor = None
     try:
         # Set up logging for this run
@@ -1072,8 +1362,8 @@ def process_news_data(batch_size=100, max_items=1000, verbose=False):
                 return False
         
         # Process news data
-        logger.info(f"Processing news data to Neo4j with batch_size={batch_size}, max_items={max_items}...")
-        success = processor.process_news_to_neo4j(batch_size, max_items)
+        logger.info(f"Processing news data to Neo4j with batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns}...")
+        success = processor.process_news_to_neo4j(batch_size, max_items, include_without_returns)
         
         if success:
             logger.info("News data processing completed successfully")
@@ -1091,6 +1381,7 @@ def process_news_data(batch_size=100, max_items=1000, verbose=False):
 
 
 
+
 if __name__ == "__main__":
     import sys
     import argparse
@@ -1101,12 +1392,14 @@ if __name__ == "__main__":
                         help="Mode: 'init' (initialize Neo4j), 'news' (process news), 'all' (both)")
     parser.add_argument("--batch", type=int, default=10, 
                         help="Number of news items to process in each batch")
-    parser.add_argument("--max", type=int, default=100, 
-                        help="Maximum number of news items to process")
+    parser.add_argument("--max", type=int, default=0, 
+                        help="Maximum number of news items to process (0 for all items)")
     parser.add_argument("--verbose", "-v", action="store_true", 
                         help="Enable verbose logging")
     parser.add_argument("--force", "-f", action="store_true",
                         help="Force process even if errors occur")
+    parser.add_argument("--skip-without-returns", action="store_true",
+                        help="Skip processing news from the withoutreturns namespace")
     
     args = parser.parse_args()
     
@@ -1121,14 +1414,20 @@ if __name__ == "__main__":
         init_neo4j()
     elif args.mode == "news":
         # Process news data
-        logger.info(f"Processing news data with batch_size={args.batch}, max_items={args.max}")
-        process_news_data(args.batch, args.max, args.verbose)
+        include_without_returns = not args.skip_without_returns
+        # Convert 0 to None to process all items
+        max_items = None if args.max == 0 else args.max
+        logger.info(f"Processing news data with batch_size={args.batch}, max_items={max_items}, include_without_returns={include_without_returns}")
+        process_news_data(args.batch, max_items, args.verbose, include_without_returns)
     elif args.mode == "all":
         # Run both initialization and news processing
-        logger.info(f"Running complete Neo4j setup (batch_size={args.batch}, max_items={args.max})...")
+        include_without_returns = not args.skip_without_returns
+        # Convert 0 to None to process all items
+        max_items = None if args.max == 0 else args.max
+        logger.info(f"Running complete Neo4j setup (batch_size={args.batch}, max_items={max_items}, include_without_returns={include_without_returns})...")
         if init_neo4j():
             logger.info("Initialization successful, now processing news...")
-            process_news_data(args.batch, args.max, args.verbose)
+            process_news_data(args.batch, max_items, args.verbose, include_without_returns)
         else:
             logger.error("Initialization failed, skipping news processing")
     else:
@@ -1136,4 +1435,4 @@ if __name__ == "__main__":
         print("Usage: python Neo4jProcessor.py [mode] [batch_size] [max_items]")
         print("  mode: 'init' (default), 'news', or 'all'")
         print("  batch_size: Number of news items to process in each batch (default: 10)")
-        print("  max_items: Maximum number of news items to process (default: 100)") 
+        print("  max_items: Maximum number of news items to process (default: 0)") 

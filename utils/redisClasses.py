@@ -358,6 +358,26 @@ class RedisClient:
             self.logger.error(f"Delete failed for key {key}: {e}")
             return False
         
+    def batch_delete_keys(self, keys: list) -> int:
+        """
+        Delete multiple keys from Redis in a single operation
+        
+        Args:
+            keys: List of keys to delete
+            
+        Returns:
+            int: Number of keys that were actually deleted
+        """
+        if not keys or len(keys) == 0:
+            return 0
+            
+        try:
+            # Redis DEL command can take multiple keys at once
+            result = self.client.delete(*keys)
+            return result
+        except Exception as e:
+            self.logger.error(f"Batch delete failed: {e}")
+            return 0
 
     def get_queue_length(self, queue_name: str) -> int:
         """Get the length of a queue"""

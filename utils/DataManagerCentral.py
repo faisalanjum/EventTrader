@@ -380,15 +380,22 @@ class DataManager:
             self.logger.error(f"Error initializing Neo4j: {e}")
             return False
             
-    def process_news_data(self, batch_size=100, max_items=1000):
-        """Process news data into Neo4j from the news:withreturns:* Redis namespace"""
+    def process_news_data(self, batch_size=100, max_items=1000, include_without_returns=True):
+        """
+        Process news data into Neo4j from Redis
+        
+        Args:
+            batch_size: Number of items to process in each batch
+            max_items: Maximum number of items to process
+            include_without_returns: Whether to process news from the withoutreturns namespace
+        """
         if not hasattr(self, 'neo4j_processor') or not self.neo4j_processor:
             self.logger.error("Neo4j processor not initialized, cannot process news")
             return False
             
         try:
-            self.logger.info(f"Processing news data to Neo4j (batch_size={batch_size}, max_items={max_items})...")
-            success = self.neo4j_processor.process_news_to_neo4j(batch_size, max_items)
+            self.logger.info(f"Processing news data to Neo4j (batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns})...")
+            success = self.neo4j_processor.process_news_to_neo4j(batch_size, max_items, include_without_returns)
             
             if success:
                 self.logger.info("News data processing completed successfully")
@@ -396,6 +403,7 @@ class DataManager:
                 self.logger.warning("News data processing returned with errors")
                 
             return success
+        
         except Exception as e:
             self.logger.error(f"Error processing news data: {e}")
             return False
