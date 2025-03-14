@@ -1143,12 +1143,12 @@ class Neo4jProcessor:
                             # We keep withoutreturns keys as they may get returns later
 
 
-                            if namespace == "withreturns":
-                                try:
-                                    self.hist_client.client.delete(key)
-                                    logger.debug(f"Deleted processed key: {key}")
-                                except Exception as e:
-                                    logger.warning(f"Error deleting key {key}: {e}")
+                            # if namespace == "withreturns":
+                            #     try:
+                            #         self.hist_client.client.delete(key)
+                            #         logger.debug(f"Deleted processed key: {key}")
+                            #     except Exception as e:
+                            #         logger.warning(f"Error deleting key {key}: {e}")
 
                             
                         else:
@@ -1372,9 +1372,11 @@ class Neo4jProcessor:
                             )
                             
                             # Delete from withreturns after successful processing
-                            if success and is_withreturns:
-                                self.event_trader_redis.history_client.client.delete(key)
-                                logger.debug(f"Deleted processed item: {key}")
+                            # if success and is_withreturns:
+                            #     self.event_trader_redis.history_client.client.delete(key)
+                            #     logger.debug(f"Deleted processed item: {key}")
+
+
                     except Exception as e:
                         logger.error(f"Error processing {key}: {e}")
                 

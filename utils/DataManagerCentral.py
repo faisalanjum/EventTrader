@@ -386,7 +386,8 @@ class DataManager:
         except Exception as e:
             self.logger.error(f"Error initializing Neo4j: {e}")
             return False
-            
+
+
     def process_news_data(self, batch_size=100, max_items=1000, include_without_returns=True):
         """
         Process news data into Neo4j from Redis
@@ -414,13 +415,16 @@ class DataManager:
         except Exception as e:
             self.logger.error(f"Error processing news data: {e}")
             return False
-            
+
+
     def has_neo4j(self):
         """Check if Neo4j processor is available and initialized"""
         return hasattr(self, 'neo4j_processor') and self.neo4j_processor is not None
 
+
     def start(self):
         return {name: manager.start() for name, manager in self.sources.items()}
+
 
     def stop(self):
         results = {name: manager.stop() for name, manager in self.sources.items()}
@@ -440,11 +444,14 @@ class DataManager:
                 
         return results
 
+
     def check_status(self):
         return {name: manager.check_status() for name, manager in self.sources.items()}
 
+
     def get_source(self, name: str):
         return self.sources.get(name)
+
     
     def _setup_signal_handlers(self):
         """Set up signal handlers for graceful shutdown"""

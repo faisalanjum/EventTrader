@@ -299,6 +299,72 @@ class ReportProcessor(BaseProcessor):
             self.logger.error(f"Error processing exhibit {url}: {str(e)}")
             return None
 
+    # These are specifically for 6-K, 13D etc (Non FORM_TYPES_REQUIRING_SECTIONS)
+    def _extract_primary_document_content(self, url: str) -> Optional[str]:
+        """Extract clean text from any SEC filing format with minimal dependencies"""
+        headers = {
+            'User-Agent': 'EventTrader research.bot@example.com',
+            'Accept-Encoding': 'gzip, deflate',
+            'Host': 'www.sec.gov'
+        }
+        
+        try:
+            # Respect SEC's rate limit
+            time.sleep(0.1)
+            
+            # Download with proper headers
+            self.logger.info(f"Downloading primary document from {url}")
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            content = response.text
+            
+            # PHASE 1: Format-specific extraction
+            raw_text = ""
+            
+            # SGML format with TEXT tags
+            if "<TEXT>" in content:
+                self.logger.info(f"Detected SGML format with <TEXT> tags")
+                text_blocks = re.findall(r'<TEXT>(.*?)</TEXT>', content, re.DOTALL)
+                for block in text_blocks:
+                    # HTML content inside TEXT tags
+                    if re.search(r'<(html|body|div|p|table)', block, re.I):
+                        self.logger.info(f"HTML content detected inside TEXT tags")
+                        raw_text += get_text(block) + "\n\n"
+                    elif block.strip().startswith("<?xml") or block.strip().startswith("<XML>"):
+                        self.logger.info(f"XML content detected in document")
+                        raw_text += block + "\n\n"
+                    else:
+                        # Plain text inside TEXT tags
+                        raw_text += block + "\n\n"
+            # Pure HTML format
+            elif re.search(r'<(html|body)', content, re.I):
+                self.logger.info(f"Detected HTML format, extracting text")
+                raw_text = get_text(content)
+            # Unknown format - use as-is
+            else:
+                self.logger.info(f"Unknown document format, using raw content")
+                raw_text = content
+            
+            if not raw_text.strip():
+                self.logger.warning(f"No text extracted from {url}")
+                return None
+            
+            # PHASE 2: Universal text cleaning pipeline
+            self.logger.info(f"Cleaning and normalizing extracted text ({len(raw_text)} chars)")
+            
+            # Remove remaining tags, clean entities, normalize whitespace
+            clean_text = re.sub(r'<[^>]*>', ' ', raw_text)
+            clean_text = re.sub(r'&[a-zA-Z0-9#]+;', ' ', clean_text)
+            clean_text = re.sub(r'\s+', ' ', clean_text)
+            clean_text = re.sub(r'\n\s*\n', '\n\n', clean_text)
+            
+            self.logger.info(f"Successfully extracted clean text from primary document ({len(clean_text)} chars)")
+            return clean_text.strip()
+            
+        except Exception as e:
+            self.logger.error(f"Error extracting text from primary document {url}: {e}")
+            return None
+
     def _process_exhibits(self, exhibits: Dict[str, str]) -> Dict[str, Dict[str, str]]:
         """Process all exhibits in a filing"""
         exhibit_content = {}
@@ -363,10 +429,12 @@ class ReportProcessor(BaseProcessor):
                 'formType': content.get('formType'),
                 'extracted_sections': None,  # Initialize with None by default
                 'financial_statements': None,  # Initialize with None by default
-                'exhibit_contents': None  # Initialize exhibits with None by default
+                'exhibit_contents': None,  # Initialize exhibits with None by default
+                'primary_document_content': None  # Initialize primary document content with None
             })
 
             # Extract sections if URL available and form type requires it
+            # Extract content from primary document URL if available
             if url := content.get('primaryDocumentUrl'):
                 if content['formType'] in FORM_TYPES_REQUIRING_SECTIONS:
                     self.logger.info(f"Found primaryDocumentUrl: {url}, attempting to extract sections")
@@ -378,7 +446,11 @@ class ReportProcessor(BaseProcessor):
                         standardized['extracted_sections'] = extracted_sections
                         self.logger.info(f"Successfully extracted sections for {content['formType']}")
                 else:
-                    self.logger.info(f"Skipping section extraction for form type: {content['formType']}")
+                    # For forms that don't require sections, extract the full text
+                    self.logger.info(f"Form type {content['formType']} doesn't require sections, extracting primary document content")
+                    if primary_content := self._extract_primary_document_content(url):
+                        standardized['primary_document_content'] = primary_content
+                        self.logger.info(f"Successfully extracted primary document content for {content['formType']}")
 
             # Extract financial statements for forms requiring XML
             if content['formType'] in FORM_TYPES_REQUIRING_XML:
