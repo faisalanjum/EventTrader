@@ -14,6 +14,17 @@ import requests
 from inscriptis import get_text
 
 
+# Notes:
+# 1. The primaryDocumentUrl is XML (XBRL link) if available , else linkToTxt.
+# 2. secondary_filing_content is populated only when form type is NOT in FORM_TYPES_REQUIRING_SECTIONS (so only for 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC TO-I', '425', 'SC 14D9', '6-K') 
+# 3. The items tells the system which specific sections are present in an 8-K filing (e.g., "Item 1.01: Entry into a Material Agreement"), unlike 10-K/10-Q which have standardized structures. 
+
+
+
+
+ 
+    
+
 # Move this outside the class
 def _extract_section_worker(args):
     """Standalone worker function for multiprocessing with proper retry logic"""
@@ -290,17 +301,47 @@ class ReportProcessor(BaseProcessor):
             # Download with proper headers
             response = requests.get(url, headers=headers)
             response.raise_for_status()
+            content = response.text
             
-            # Extract text using inscriptis
-            text = get_text(response.text)
-            return text
+            # Format detection and appropriate text extraction
+            raw_text = ""
+            
+            # SGML format with TEXT tags
+            if "<TEXT>" in content:
+                text_blocks = re.findall(r'<TEXT>(.*?)</TEXT>', content, re.DOTALL)
+                for block in text_blocks:
+                    # HTML content inside TEXT tags
+                    if re.search(r'<(html|body|div|p|table)', block, re.I):
+                        raw_text += get_text(block) + "\n\n"
+                    elif block.strip().startswith("<?xml") or block.strip().startswith("<XML>"):
+                        raw_text += block + "\n\n"
+                    else:
+                        # Plain text inside TEXT tags
+                        raw_text += block + "\n\n"
+            # Pure HTML format
+            elif re.search(r'<(html|body)', content, re.I):
+                raw_text = get_text(content)
+            # Unknown format - use as is
+            else:
+                raw_text = content
+            
+            if not raw_text.strip():
+                return None
+            
+            # Apply cleaning just like in _extract_secondary_filing_content
+            clean_text = re.sub(r'<[^>]*>', ' ', raw_text)
+            clean_text = re.sub(r'&[a-zA-Z0-9#]+;', ' ', clean_text)
+            clean_text = re.sub(r'\s+', ' ', clean_text)
+            clean_text = re.sub(r'\n\s*\n', '\n\n', clean_text)
+            
+            return clean_text.strip()
             
         except Exception as e:
             self.logger.error(f"Error processing exhibit {url}: {str(e)}")
             return None
 
     # These are specifically for 6-K, 13D etc (Non FORM_TYPES_REQUIRING_SECTIONS)
-    def _extract_primary_document_content(self, url: str) -> Optional[str]:
+    def _extract_secondary_filing_content(self, url: str) -> Optional[str]:
         """Extract clean text from any SEC filing format with minimal dependencies"""
         headers = {
             'User-Agent': 'EventTrader research.bot@example.com',
@@ -313,7 +354,7 @@ class ReportProcessor(BaseProcessor):
             time.sleep(0.1)
             
             # Download with proper headers
-            self.logger.info(f"Downloading primary document from {url}")
+            self.logger.info(f"Downloading secondary filing from {url}")
             response = requests.get(url, headers=headers)
             response.raise_for_status()
             content = response.text
@@ -358,11 +399,11 @@ class ReportProcessor(BaseProcessor):
             clean_text = re.sub(r'\s+', ' ', clean_text)
             clean_text = re.sub(r'\n\s*\n', '\n\n', clean_text)
             
-            self.logger.info(f"Successfully extracted clean text from primary document ({len(clean_text)} chars)")
+            self.logger.info(f"Successfully extracted clean text from secondary filing ({len(clean_text)} chars)")
             return clean_text.strip()
             
         except Exception as e:
-            self.logger.error(f"Error extracting text from primary document {url}: {e}")
+            self.logger.error(f"Error extracting text from secondary filing {url}: {e}")
             return None
 
     def _process_exhibits(self, exhibits: Dict[str, str]) -> Dict[str, Dict[str, str]]:
@@ -430,13 +471,14 @@ class ReportProcessor(BaseProcessor):
                 'extracted_sections': None,  # Initialize with None by default
                 'financial_statements': None,  # Initialize with None by default
                 'exhibit_contents': None,  # Initialize exhibits with None by default
-                'primary_document_content': None  # Initialize primary document content with None
+                'secondary_filing_content': None  # Initialize secondary document content with None
             })
 
             # Extract sections if URL available and form type requires it
-            # Extract content from primary document URL if available
+            # Extract content from document URL if available
             if url := content.get('primaryDocumentUrl'):
                 if content['formType'] in FORM_TYPES_REQUIRING_SECTIONS:
+                    # For forms like 8-K, 10-K, 10-Q: extract specific sections
                     self.logger.info(f"Found primaryDocumentUrl: {url}, attempting to extract sections")
                     if extracted_sections := self._extract_sections(
                         url=url,
@@ -446,11 +488,11 @@ class ReportProcessor(BaseProcessor):
                         standardized['extracted_sections'] = extracted_sections
                         self.logger.info(f"Successfully extracted sections for {content['formType']}")
                 else:
-                    # For forms that don't require sections, extract the full text
-                    self.logger.info(f"Form type {content['formType']} doesn't require sections, extracting primary document content")
-                    if primary_content := self._extract_primary_document_content(url):
-                        standardized['primary_document_content'] = primary_content
-                        self.logger.info(f"Successfully extracted primary document content for {content['formType']}")
+                    # For forms like SCHEDULE 13D/A: extract full document content
+                    self.logger.info(f"Form type {content['formType']} doesn't require sections, extracting secondary filing content")
+                    if secondary_content := self._extract_secondary_filing_content(url):
+                        standardized['secondary_filing_content'] = secondary_content
+                        self.logger.info(f"Successfully extracted secondary filing content for {content['formType']}")
 
             # Extract financial statements for forms requiring XML
             if content['formType'] in FORM_TYPES_REQUIRING_XML:
