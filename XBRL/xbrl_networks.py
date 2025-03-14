@@ -287,10 +287,16 @@ class Network(ValidationMixin):
                     hasattr(rel.toModelObject, 'isHypercubeItem') and 
                     rel.toModelObject.isHypercubeItem):
                     
+                    # Get company CIK from the process_report
+                    company_id = self.report.company.cik if self.report and self.report.company else None
+                    if not company_id:
+                        continue
+                        
                     hypercube = Hypercube(
                         model_xbrl=self.model_xbrl,
                         hypercube_item=rel.toModelObject,
-                        network_uri=self.network_uri
+                        network_uri=self.network_uri,
+                        company_id=company_id
                     )
                     self.hypercubes.append(hypercube)
 

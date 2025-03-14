@@ -54,6 +54,7 @@ from enum import Enum
 @dataclass
 class Taxonomy:
     model_xbrl: ModelXbrl
+    company_id: str  # Company CIK or ID passed from process_report
     dimensions: List['Dimension'] = field(default_factory=list)
     _dimension_lookup: Dict[str, 'Dimension'] = field(default_factory=dict)
     
@@ -66,13 +67,22 @@ class Taxonomy:
             if concept.isDimensionItem: 
                 try:
                     # Indicates taxonomy-wide context
-                    dimension = Dimension(model_xbrl=self.model_xbrl, item=concept, network_uri=None)
+                    dimension = Dimension(
+                        model_xbrl=self.model_xbrl, 
+                        item=concept, 
+                        company_id=self.company_id,
+                        network_uri=None
+                    )
                     
                     # Get domain first - Note: Typically Domain qname ends with 'Domain' but sometimes it ends with 'Member'
                     if dim_dom_rel_set:
                         for rel in dim_dom_rel_set.fromModelObject(concept):
                             if rel.toModelObject is not None:
-                                dimension.domain = Domain(model_xbrl=self.model_xbrl,item=rel.toModelObject)
+                                dimension.domain = Domain(
+                                    model_xbrl=self.model_xbrl,
+                                    item=rel.toModelObject,
+                                    company_id=self.company_id
+                                )
                                 break
                     
                     # Build members only after domain is potentially set

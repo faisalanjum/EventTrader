@@ -167,13 +167,29 @@ class Fact(Neo4jNode):
             # print(f"No dimensions found for fact {self.u_id}")
             return
             
+        # Get company CIK from the report
+        company_id = self._report.company.cik if self._report and hasattr(self._report, 'company') else None
+        if not company_id:
+            raise ValueError("No company_id available for dimension creation")
+        
         for dim_concept, dim_value in dim_values.items():
             try:
-                fact_dimension = Dimension(model_xbrl=self.model_fact.modelXbrl, item=dim_concept, network_uri=None)
+                fact_dimension = Dimension(
+                    model_xbrl=self.model_fact.modelXbrl, 
+                    item=dim_concept, 
+                    company_id=company_id,
+                    network_uri=None
+                )
                 # For explicit dimensions, use the member ModelConcept
                 if hasattr(dim_value, 'isExplicit') and dim_value.isExplicit:
                     if hasattr(dim_value, 'member') and dim_value.member is not None:
-                        fact_member = Member(model_xbrl=self.model_fact.modelXbrl, item = dim_value.member, parent_qname=None, level=0) 
+                        fact_member = Member(
+                            model_xbrl=self.model_fact.modelXbrl, 
+                            item=dim_value.member, 
+                            company_id=company_id,
+                            parent_qname=None, 
+                            level=0
+                        ) 
                         # self.dims_members.append((dim_concept, dim_value.member))
                         self.dims_members.append((fact_dimension, fact_member))
                         # print(f"Added explicit dimension: {dim_concept.qname}, member: {dim_value.member.qname}")
@@ -182,7 +198,13 @@ class Fact(Neo4jNode):
                 elif hasattr(dim_value, 'isTyped') and dim_value.isTyped:
                     if hasattr(dim_value, 'typedMember') and dim_value.typedMember is not None:
                         typed_concept = dim_value.dimension  # Use the dimension's concept as base
-                        fact_member = Member(model_xbrl=self.model_fact.modelXbrl, item = typed_concept, parent_qname=None, level=0) 
+                        fact_member = Member(
+                            model_xbrl=self.model_fact.modelXbrl, 
+                            item=typed_concept, 
+                            company_id=company_id,
+                            parent_qname=None, 
+                            level=0
+                        ) 
                         # self.dims_members.append((dim_concept, dim_value.typedMember.stringValue))
                         self.dims_members.append((fact_dimension, fact_member))
                         # print(f"Added typed dimension: {dim_concept.qname}, value: {dim_value.typedMember.stringValue}")

@@ -715,7 +715,10 @@ class process_report:
             raise RuntimeError("XBRL model not loaded.")
 
         # Build taxonomy-wide dimensions
-        self.taxonomy = Taxonomy(self.model_xbrl)
+        self.taxonomy = Taxonomy(
+            model_xbrl=self.model_xbrl,
+            company_id=self.company.cik
+        )
         self.taxonomy.build_dimensions()
 
         # Here we should load_nodes_as_instances from both self.taxonomy.dimensions, self.taxonomy.members, domains as well as member hierarchies

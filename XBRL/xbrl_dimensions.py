@@ -58,6 +58,7 @@ class Member(Neo4jNode):
     
     model_xbrl: ModelXbrl
     item: ModelConcept
+    company_id: str  # Company CIK or ID passed from process_report
     qname: str = field(init=False)
     label: str = field(init=False)
     parent_qname: Optional[str] = None
@@ -71,13 +72,9 @@ class Member(Neo4jNode):
         self.label = self.item.qname.localName.replace('Member', '') if hasattr(self.item, 'qname') else None
 
         
-        # TODO: Also need to add Entity ID/CIK/name to this ID since members will be specific to a company
+        # Company ID is now passed explicitly from process_report
         if self.item is not None:
-
-            # TODO: company_id(Gets CIK from URL) is a workaround, ideally get it from report.entity.cik 
-            # but need to pass process_report it all the way here
-            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  
-            self.u_id = f"{company_id}:{self.item.qname.namespaceURI}:{self.item.qname}"
+            self.u_id = f"{self.company_id}:{self.item.qname.namespaceURI}:{self.item.qname}"
 
     @property
     def id(self) -> str:
@@ -142,6 +139,7 @@ class Dimension(Neo4jNode):
     
     model_xbrl: ModelXbrl
     item: ModelConcept
+    company_id: str  # Company CIK or ID passed from process_report
     network_uri: Optional[str] = None
     
     # Core properties
@@ -228,14 +226,9 @@ class Dimension(Neo4jNode):
 
     def __post_init__(self):
         
-        # TODO: Also need to add Entity ID/CIK/name to this ID since dimensions will be specific to a company
-        # Set id first
+        # Set id using the company_id that's explicitly passed
         if self.item is not None: 
-            # TODO: company_id(Gets CIK from URL) is a workaround, ideally get it from report.entity.cik 
-            # but need to pass process_report it all the way here
-            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]  
-            self.u_id = f"{company_id}:{self.item.qname.namespaceURI}:{self.item.qname}"
-
+            self.u_id = f"{self.company_id}:{self.item.qname.namespaceURI}:{self.item.qname}"
 
         # Core properties
         self.name = str(self.item.qname.localName)
@@ -282,7 +275,8 @@ class Dimension(Neo4jNode):
             try:
                 self.domain = Domain(
                     model_xbrl=self.model_xbrl,
-                    item=domain_object
+                    item=domain_object,
+                    company_id=self.company_id
                 )
                 break  # Take the first valid domain
             except Exception as e:
@@ -317,7 +311,7 @@ class Dimension(Neo4jNode):
                 if not hasattr(member_object, 'isDomainMember'): continue
                     
                 try:
-                    member = Member( model_xbrl=self.model_xbrl, item=member_object, parent_qname=parent_qname, level=level)                    
+                    member = Member( model_xbrl=self.model_xbrl, item=member_object, parent_qname=parent_qname, level=level, company_id=self.company_id)                    
                     self.add_member(member)                    
                     # Process children
                     add_members_recursive(member_object, str(member_object.qname), level + 1)
@@ -368,7 +362,8 @@ class Dimension(Neo4jNode):
                 model_xbrl=self.model_xbrl,
                 item=default_domain_obj,
                 parent_qname=None,
-                level=0)
+                level=0,
+                company_id=self.company_id)
             
             # Add to members collection
             self.add_member(self.default_member)
@@ -385,6 +380,7 @@ class Hypercube:
     model_xbrl: ModelXbrl
     hypercube_item: Any  # hypercube modelConcept, ends with 'Table' (Target of 'all' relationship)    
     network_uri: str     # Reference back to parent network
+    company_id: str      # Company CIK or ID passed from process_report
     dimensions: List[Dimension] = field(init=False) # Dimensions related to the hypercube
     concepts: List['Concept'] = field(init=False)  # Concepts related to the hypercube
     abstracts: List['Concept'] = field(init=False)  # These are Lineitems, abstracts typically used to organize concepts
@@ -443,6 +439,7 @@ class Hypercube:
                 dimension = Dimension(
                     model_xbrl=self.model_xbrl,
                     item=dim_object,
+                    company_id=self.company_id,
                     network_uri=self.network_uri
                 )
                 self.dimensions.append(dimension)
