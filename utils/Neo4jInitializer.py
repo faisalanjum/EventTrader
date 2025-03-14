@@ -2,10 +2,11 @@ import logging
 import os
 from typing import Dict, List, Optional, Any, Tuple
 from neo4j import GraphDatabase
+import re
 
 from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode
 from XBRL.Neo4jManager import Neo4jManager
-from XBRL.XBRLClasses import RelationType
+from XBRL.xbrl_core import RelationType
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -103,6 +104,9 @@ class Neo4jInitializer:
             # Create company-to-company relationships
             self.create_company_relationships()
             
+            # Create admin reports hierarchy
+            self.create_admin_reports()
+            
             logger.info("Market hierarchy initialization complete")
             return True
             
@@ -197,6 +201,46 @@ class Neo4jInitializer:
         except Exception as e:
             logger.error(f"Error creating market index: {e}")
             return False
+
+    def create_admin_reports(self) -> bool:
+        """Create admin report hierarchy for SEC filings."""
+        try:
+            from XBRL.xbrl_core import RelationType
+            from XBRL.xbrl_basic_nodes import AdminReportNode
+            
+            # Create admin report nodes
+            admin_reports = [
+                # Parent nodes
+                *[AdminReportNode(code=t, label=l, category=t) 
+                for t, l in {
+                    "10-K": "10-K Reports",
+                    "10-Q": "10-Q Reports", 
+                    "8-K": "8-K Reports"
+                }.items()],
+                
+                # Child nodes
+                *[AdminReportNode(code=f"10-K_FYE-{m}31", label=f"FYE {m}/31", category="10-K") 
+                for m in ['03', '06', '09', '12']],
+                *[AdminReportNode(code=f"10-Q_Q{q}", label=f"Q{q} Filing", category="10-Q") 
+                for q in range(1, 5)]
+            ]
+            
+            # Create parent-child relationships
+            relationships = [(p, c, RelationType.HAS_SUB_REPORT) 
+                    for p in admin_reports[:3]  # Parent nodes
+                    for c in admin_reports[3:]  # Child nodes
+                    if p.code == c.category]
+            
+            # Export nodes and relationships to Neo4j
+            self.manager._export_nodes([admin_reports])
+            self.manager.merge_relationships(relationships)
+            
+            logger.info(f"Created admin report hierarchy with {len(admin_reports)} nodes and {len(relationships)} relationships")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error creating admin report hierarchy: {e}")
+            return False
     
     def generate_ticker_id(self, name: str) -> str:
         """Generate ETF-like ticker from a name"""
@@ -205,7 +249,7 @@ class Neo4jInitializer:
         if len(ticker) < 3:
             ticker = (ticker + name.replace(' ', '')[:3-len(ticker)]).upper()
         return ticker
-    
+            
     def create_sectors(self) -> bool:
         """Create Sector nodes using normalized names (without spaces) as IDs"""
         sectors = {}  # {normalized_sector_id: (sector_name, sector_etf)}

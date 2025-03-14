@@ -532,59 +532,37 @@ class process_report:
             print("Fallback date node created")
 
     def initialize_company_node(self):
-        """Initialize company node using the externally provided node"""
-        try:
-            if not self.external_company:
-                raise ValueError("External company node is required but none was provided")
-            
-            self.company = self.external_company
-            print(f"Using company node: {self.company.name} (CIK: {self.company.cik})")
-            
-            # Create relationships between dates and company with price data
-            date_entity_relationships = []
-            
-            # Assuming self.dates contains all date nodes
-            for date_node in self.dates:
-                # TODO: Replace with actual price data source
-                price_data = {'price': 100.0, 'returns': 0.01, 'session': 'Close', 'time': '12:01:52'} # placeholder
-                date_entity_relationships.append(
-                    (date_node, self.company, RelationType.HAS_PRICE, price_data))
-
-            # Merge relationships with properties
-            self.neo4j.merge_relationships(date_entity_relationships)
-                
-        except Exception as e:
-            print(f"Error initializing company node: {e}")
+        """Set the company node from the externally provided company (minimal version)"""
+        if not self.external_company:
+            raise ValueError("External company node is required but none was provided")
+        
+        # Simply set the company reference - no Neo4j operations
+        self.company = self.external_company
+        print(f"Using company node: {self.company.name} (CIK: {self.company.cik})")
 
     
     def initialize_admin_reports(self):
-        """Initialize admin report hierarchy"""
-           
-        # Store admin report nodes in class
-        self.admin_reports = [
-            # Parent nodes
-            *[AdminReportNode(code=t, label=l, category=t) 
-            for t, l in {
-                "10-K": "10-K Reports",
-                "10-Q": "10-Q Reports", 
-                "8-K": "8-K Reports"
-            }.items()],
+        """Retrieve admin report hierarchy from Neo4j"""
+        # Retrieve admin report nodes from Neo4j
+        with self.neo4j.driver.session() as session:
+            # Query for all admin report nodes
+            result = session.run("MATCH (r:AdminReport) RETURN r")
             
-            # Child nodes
-            *[AdminReportNode(code=f"10-K_FYE-{m}31", label=f"FYE {m}/31", category="10-K") 
-            for m in ['03', '06', '09', '12']],
-            *[AdminReportNode(code=f"10-Q_Q{q}", label=f"Q{q} Filing", category="10-Q") 
-            for q in range(1, 5)]
-        ]
-        
-        # Create parent-child relationships
-        rels = [(p, c, RelationType.HAS_SUB_REPORT) 
-                for p in self.admin_reports[:3]  # Parent nodes
-                for c in self.admin_reports[3:]  # Child nodes
-                if p.code == c.category]
-        
-        self.neo4j._export_nodes([self.admin_reports])
-        self.neo4j.merge_relationships(rels)
+            # Convert Neo4j nodes to AdminReportNode objects
+            self.admin_reports = []
+            for record in result:
+                node = record["r"]
+                admin_report = AdminReportNode(
+                    code=node["code"],
+                    label=node["label"],
+                    category=node["category"]
+                )
+                self.admin_reports.append(admin_report)
+            
+        if not self.admin_reports:
+            raise ValueError("No admin reports found in Neo4j database. Please initialize Neo4j database first with Neo4jInitializer.")
+            
+        print(f"Retrieved {len(self.admin_reports)} admin report nodes from Neo4j")
 
     ### Need to Add and further classify if it is Sequqnce 1 or 2 etc
     def initialize_report_node(self, cik: str):
@@ -680,7 +658,6 @@ class process_report:
 
 
 
-
     def load_xbrl(self):
         # Initialize the controller
         controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
@@ -692,7 +669,7 @@ class process_report:
         except Exception as e: 
             raise RuntimeError(f"Error loading XBRL model: {e}")
 
-    # Review it - See Notes.txt
+    # Review it - See Notes.txt - Not used
     def extract_report_metadata(self):
         ctx = list(self.model_xbrl.contexts.values())[0]  # First context for metadata
         self.report_metadata = {
