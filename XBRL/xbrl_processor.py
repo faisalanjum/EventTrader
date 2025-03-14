@@ -44,7 +44,8 @@ class process_report:
     # passed at init
     instance_file: str 
     neo4j: 'Neo4jManager'
-
+    external_company: CompanyNode  # Required parameter
+    
     # Defaults
     log_file: str = field(default='ErrorLog.txt', repr=False)
     testing: bool = field(default=True)  # Add testing flag as configurable (set to False in later calls for now)
@@ -531,31 +532,26 @@ class process_report:
             print("Fallback date node created")
 
     def initialize_company_node(self):
-        """Initialize company node and create relationships with dates"""
+        """Initialize company node using the externally provided node"""
         try:
-            # Get company info and create entity
-            cik, name, fiscal_year_end = get_company_info(self.model_xbrl)        
-            self.company = CompanyNode(cik=cik, name=name, fiscal_year_end=fiscal_year_end)
-
-            # Create/Merge company node
-            self.neo4j._export_nodes([self.company])
-
+            if not self.external_company:
+                raise ValueError("External company node is required but none was provided")
+            
+            self.company = self.external_company
+            print(f"Using company node: {self.company.name} (CIK: {self.company.cik})")
+            
             # Create relationships between dates and company with price data
             date_entity_relationships = []
             
             # Assuming self.dates contains all date nodes
             for date_node in self.dates:
-                
                 # TODO: Replace with actual price data source
-                price_data = {'price': 100.0,  'returns': 0.01, 'session': 'Close','time': '12:01:52'} # placeholder
-                
-                # Create relationship from date to company with price properties
+                price_data = {'price': 100.0, 'returns': 0.01, 'session': 'Close', 'time': '12:01:52'} # placeholder
                 date_entity_relationships.append(
                     (date_node, self.company, RelationType.HAS_PRICE, price_data))
 
             # Merge relationships with properties
             self.neo4j.merge_relationships(date_entity_relationships)
-            # print(f"Created {len(date_entity_relationships)} {RelationType.HAS_PRICE.value} relationships from {self.dates[0].__class__.__name__} to {self.entity.__class__.__name__}")
                 
         except Exception as e:
             print(f"Error initializing company node: {e}")

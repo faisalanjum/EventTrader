@@ -323,8 +323,7 @@ class Neo4jManager:
 
     # FASTER VERSION
     def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
-
-        counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
+        counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': '', 'skipped': 0})
         relationships = resolve_primary_fact_relationships(relationships)
         
         # Group relationships by type for batch processing
@@ -359,72 +358,80 @@ class Neo4jManager:
         # Second pass: batch process relationships
         with self.driver.session() as session:
             for rel_type, rels in grouped_rels.items():
-                batch_params = []
+                success_count = 0
+                skipped_count = 0
+                
                 for source, target, properties in rels:
-                    if (rel_type in network_specific_relationships and 
-                        isinstance(target, Fact) and 
-                        ('network_uri' in properties or 'network_name' in properties)):
+                    try:
+                        if (rel_type in network_specific_relationships and 
+                            isinstance(target, Fact) and 
+                            ('network_uri' in properties or 'network_name' in properties)):
+                            
+                            merge_props = get_network_merge_props(source.id, target.id, properties)
+                            
+                            # Use individual MERGE to handle constraints better
+                            session.run(f"""
+                                MATCH (s {{id: $source_id}})
+                                MATCH (t {{id: $target_id}})
+                                WITH s, t
+                                WHERE $props.company_cik IS NOT NULL 
+                                AND $props.report_id IS NOT NULL
+                                AND $props.network_uri IS NOT NULL
+                                AND ('{rel_type.value}' <> 'CALCULATION_EDGE' OR $props.context_id IS NOT NULL)
+                                MERGE (s)-[r:{rel_type.value} {{
+                                    cik: $props.company_cik,
+                                    report_id: $props.report_id,
+                                    network_name: $props.network_uri,
+                                    parent_id: $source_id,
+                                    child_id: $target_id,
+                                    context_id: CASE 
+                                        WHEN '{rel_type.value}' = 'CALCULATION_EDGE' 
+                                        THEN $props.context_id 
+                                        ELSE coalesce($props.context_id, 'default')
+                                    END
+                                }}]->(t)
+                                SET r += $props
+                            """, {
+                                "source_id": source.id,
+                                "target_id": target.id,
+                                "props": properties
+                            })
                         
-                        merge_props = get_network_merge_props(source.id, target.id, properties)
-                        batch_params.append({
-                            "source_id": source.id,
-                            "target_id": target.id,
-                            **merge_props,
-                            "properties": properties
-                        })
-                    else:
-                        batch_params.append({
-                            "source_id": source.id,
-                            "target_id": target.id,
-                            "properties": properties
-                        })
-
-                if batch_params:
-                    if rel_type in network_specific_relationships:
-                        session.run(f"""
-                            UNWIND $params AS param
-                            MATCH (s {{id: param.source_id}})
-                            MATCH (t {{id: param.target_id}})
-                            WITH s, t, param
-                            WHERE param.properties.company_cik IS NOT NULL 
-                            AND param.properties.report_id IS NOT NULL
-                            AND param.properties.network_uri IS NOT NULL
-                            AND ('{rel_type.value}' <> 'CALCULATION_EDGE' OR param.properties.context_id IS NOT NULL)
-                            MERGE (s)-[r:{rel_type.value} {{
-                                cik: param.properties.company_cik,
-                                report_id: param.properties.report_id,
-                                network_name: param.properties.network_uri,
-                                parent_id: param.source_id,
-                                child_id: param.target_id,
-                                context_id: CASE 
-                                    WHEN '{rel_type.value}' = 'CALCULATION_EDGE' 
-                                    THEN param.properties.context_id 
-                                    ELSE coalesce(param.properties.context_id, 'default')
-                                END
-                            }}]->(t)
-                            SET r += param.properties
-                        """, {"params": batch_params})
-                    
-                    else:
-                        # for non-network relationships
-                        session.run(f"""
-                            UNWIND $params AS param
-                            MATCH (s {{id: param.source_id}})
-                            MATCH (t {{id: param.target_id}})
-                            MERGE (s)-[r:{rel_type.value}]->(t)
-                            SET r += param.properties
-                        """, {"params": batch_params})
-
+                        else:
+                            # For non-network relationships
+                            session.run(f"""
+                                MATCH (s {{id: $source_id}})
+                                MATCH (t {{id: $target_id}})
+                                MERGE (s)-[r:{rel_type.value}]->(t)
+                                SET r += $props
+                            """, {
+                                "source_id": source.id,
+                                "target_id": target.id,
+                                "props": properties
+                            })
+                        
+                        success_count += 1
+                        
+                    except Exception as e:
+                        # Skip constraint violations and continue
+                        if "ConstraintValidationFailed" in str(e):
+                            skipped_count += 1
+                        else:
+                            # Re-raise for other errors
+                            raise
 
                 counts[rel_type.value].update({
-                    'count': len(rels),
+                    'count': success_count,
+                    'skipped': skipped_count,
                     'source': rels[0][0].__class__.__name__,
                     'target': rels[0][1].__class__.__name__
                 })
 
-        # With this:
+        # Print results
         for rel_type, info in counts.items():
             print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
+            if info['skipped'] > 0:
+                print(f"  Skipped {info['skipped']} existing relationships")
 
 
 

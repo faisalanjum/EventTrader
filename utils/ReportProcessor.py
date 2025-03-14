@@ -21,10 +21,6 @@ from inscriptis import get_text
 
 
 
-
- 
-    
-
 # Move this outside the class
 def _extract_section_worker(args):
     """Standalone worker function for multiprocessing with proper retry logic"""
