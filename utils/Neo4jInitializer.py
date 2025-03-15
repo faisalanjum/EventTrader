@@ -107,6 +107,15 @@ class Neo4jInitializer:
             # Create admin reports hierarchy
             self.create_admin_reports()
             
+            # Create section hierarchies (10-K, 10-Q, 8-K)
+            self.create_section_hierarchies()
+            
+            # Create financial statement hierarchies
+            self.create_financial_statement_hierarchies()
+            
+            # Create exhibit hierarchies
+            self.create_exhibit_hierarchies()
+            
             logger.info("Market hierarchy initialization complete")
             return True
             
@@ -215,7 +224,12 @@ class Neo4jInitializer:
                 for t, l in {
                     "10-K": "10-K Reports",
                     "10-Q": "10-Q Reports", 
-                    "8-K": "8-K Reports"
+                    "8-K": "8-K Reports",
+                    "SCHEDULE 13D": "Schedule 13D Reports",
+                    "SC TO-I": "SC TO-I Reports",
+                    "425": "425 Reports",
+                    "SC 14D9": "SC 14D9 Reports",
+                    "6-K": "6-K Reports"
                 }.items()],
                 
                 # Child nodes
@@ -227,8 +241,8 @@ class Neo4jInitializer:
             
             # Create parent-child relationships
             relationships = [(p, c, RelationType.HAS_SUB_REPORT) 
-                    for p in admin_reports[:3]  # Parent nodes
-                    for c in admin_reports[3:]  # Child nodes
+                    for p in admin_reports[:8]  # Parent nodes (now includes the new report types)
+                    for c in admin_reports[8:]  # Child nodes
                     if p.code == c.category]
             
             # Export nodes and relationships to Neo4j
@@ -621,6 +635,153 @@ class Neo4jInitializer:
                 
         except Exception as e:
             logger.error(f"Error creating company relationships: {e}")
+            return False
+
+    def create_section_hierarchies(self) -> bool:
+        """Create section hierarchies for 10-K, 10-Q, and 8-K filings."""
+        try:
+            from XBRL.xbrl_core import RelationType
+            from utils.EventTraderNodes import SectionNode
+            from SEC_API_Files.reportSections import ten_k_sections, ten_q_sections, eight_k_sections
+            
+            # Create parent section nodes
+            parent_sections = [
+                SectionNode(code="10-K-SECTIONS", label="10-K Sections", category="SECTIONS"),
+                SectionNode(code="10-Q-SECTIONS", label="10-Q Sections", category="SECTIONS"),
+                SectionNode(code="8-K-SECTIONS", label="8-K Sections", category="SECTIONS")
+            ]
+            
+            # Create child section nodes for 10-K
+            ten_k_section_nodes = [
+                SectionNode(code=f"10-K-{section_code}", label=section_label, category="10-K-SECTIONS")
+                for section_code, section_label in ten_k_sections.items()
+            ]
+            
+            # Create child section nodes for 10-Q
+            ten_q_section_nodes = [
+                SectionNode(code=f"10-Q-{section_code}", label=section_label, category="10-Q-SECTIONS")
+                for section_code, section_label in ten_q_sections.items()
+            ]
+            
+            # Create child section nodes for 8-K
+            eight_k_section_nodes = [
+                SectionNode(code=f"8-K-{section_code}", label=section_label, category="8-K-SECTIONS")
+                for section_code, section_label in eight_k_sections.items()
+            ]
+            
+            # Combine all nodes
+            all_section_nodes = parent_sections + ten_k_section_nodes + ten_q_section_nodes + eight_k_section_nodes
+            
+            # Create parent-child relationships
+            relationships = []
+            
+            # 10-K sections relationships
+            relationships.extend([
+                (parent_sections[0], child, RelationType.HAS_SUB_SECTION)
+                for child in ten_k_section_nodes
+            ])
+            
+            # 10-Q sections relationships
+            relationships.extend([
+                (parent_sections[1], child, RelationType.HAS_SUB_SECTION)
+                for child in ten_q_section_nodes
+            ])
+            
+            # 8-K sections relationships
+            relationships.extend([
+                (parent_sections[2], child, RelationType.HAS_SUB_SECTION)
+                for child in eight_k_section_nodes
+            ])
+            
+            # Export nodes and relationships to Neo4j
+            self.manager._export_nodes([all_section_nodes])
+            self.manager.merge_relationships(relationships)
+            
+            logger.info(f"Created section hierarchies with {len(all_section_nodes)} nodes and {len(relationships)} relationships")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error creating section hierarchies: {e}")
+            return False
+
+    def create_financial_statement_hierarchies(self) -> bool:
+        """Create financial statement hierarchies with parent and child nodes."""
+        try:
+            from XBRL.xbrl_core import RelationType
+            from utils.EventTraderNodes import SectionNode
+            
+            # Create parent financial statements node
+            parent_node = SectionNode(
+                code="FINANCIAL-STATEMENTS", 
+                label="Financial Statements", 
+                category="SECTIONS"
+            )
+            
+            # Create child nodes for each financial statement type
+            child_nodes = [
+                SectionNode(code="BALANCE-SHEETS", label="Balance Sheets", category="FINANCIAL-STATEMENTS"),
+                SectionNode(code="STATEMENTS-OF-INCOME", label="Statements of Income", category="FINANCIAL-STATEMENTS"),
+                SectionNode(code="STATEMENTS-OF-SHAREHOLDERS-EQUITY", label="Statements of Shareholders Equity", category="FINANCIAL-STATEMENTS"),
+                SectionNode(code="STATEMENTS-OF-CASH-FLOWS", label="Statements of Cash Flows", category="FINANCIAL-STATEMENTS")
+            ]
+            
+            # Combine all nodes
+            all_nodes = [parent_node] + child_nodes
+            
+            # Create parent-child relationships
+            relationships = [
+                (parent_node, child, RelationType.HAS_SUB_SECTION) 
+                for child in child_nodes
+            ]
+            
+            # Export nodes and relationships to Neo4j
+            self.manager._export_nodes([all_nodes])
+            self.manager.merge_relationships(relationships)
+            
+            logger.info(f"Created financial statement hierarchy with {len(all_nodes)} nodes and {len(relationships)} relationships")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error creating financial statement hierarchy: {e}")
+            return False
+
+    def create_exhibit_hierarchies(self) -> bool:
+        """Create exhibit hierarchies with parent and child nodes."""
+        try:
+            from XBRL.xbrl_core import RelationType
+            from utils.EventTraderNodes import SectionNode
+            
+            # Create parent exhibits node
+            parent_node = SectionNode(
+                code="EXHIBITS", 
+                label="Exhibits", 
+                category="SECTIONS"
+            )
+            
+            # Create child nodes for specific exhibit types
+            child_nodes = [
+                SectionNode(code="EX-10", label="Material Contracts (EX-10.x)", category="EXHIBITS"),
+                SectionNode(code="EX-99", label="Additional Exhibits (EX-99.x)", category="EXHIBITS")
+            ]
+            
+            # Combine all nodes
+            all_nodes = [parent_node] + child_nodes
+            
+            # Create parent-child relationships
+            relationships = [
+                (parent_node, child, RelationType.HAS_SUB_SECTION) 
+                for child in child_nodes
+            ]
+            
+            # Export nodes and relationships to Neo4j
+            self.manager._export_nodes([all_nodes])
+            self.manager.merge_relationships(relationships)
+            
+            logger.info(f"Created exhibit hierarchy with {len(all_nodes)} nodes and {len(relationships)} relationships")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error creating exhibit hierarchy: {e}")
             return False
 
 

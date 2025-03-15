@@ -240,6 +240,44 @@ class IndustryNode(Neo4jNode):
         )
 
 @dataclass
+class SectionNode(Neo4jNode):
+    """
+    Section node in Neo4j for SEC filing sections
+    Example: "10-K-1" = "Business"
+    """
+    code: str          # e.g., "10-K-1", "10-Q-part1item1", "8-K-1-1"
+    label: str         # e.g., "Business", "Financial Statements", "Entry into Material Agreement"
+    category: str      # e.g., "10-K-SECTIONS", "10-Q-SECTIONS", "8-K-SECTIONS"
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.SECTION
+        
+    @property
+    def id(self) -> str:
+        return self.code
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            "code": self.code,
+            "label": self.label,
+            "category": self.category,
+            "displayLabel": self.label
+        }
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'SectionNode':
+        code = props.get('code', '')
+        if not code:
+            raise ValueError("Missing required code field for SectionNode")
+            
+        return cls(
+            code=code,
+            label=props.get('label', ''),
+            category=props.get('category', '')
+        )
+
 class NewsNode(Neo4jNode):
     """News node in Neo4j"""
     news_id: str  # Unique identifier
@@ -349,4 +387,76 @@ class NewsNode(Neo4jNode):
             tags=tags,
             market_session=props.get('market_session', None),
             returns_schedule=returns_schedule
+        )
+
+class ReportNode(Neo4jNode):
+    """Node representing an SEC report/filing in Neo4j"""
+    
+    def __init__(self, id, form_type=None, description=None, primary_document_url=None, 
+                 accession_no=None, cik=None, company_name=None, filed_at=None, 
+                 created=None, updated=None, period_of_report=None, is_xml=None,
+                 link_to_txt=None, link_to_html=None, link_to_filing_details=None):
+        super().__init__()
+        self.form_type = form_type
+        self.description = description
+        self.primary_document_url = primary_document_url
+        self.accession_no = accession_no
+        self.cik = cik
+        self.company_name = company_name
+        self.filed_at = filed_at
+        self.created = created
+        self.updated = updated
+        self.period_of_report = period_of_report
+        self.is_xml = is_xml
+        self.link_to_txt = link_to_txt
+        self.link_to_html = link_to_html
+        self.link_to_filing_details = link_to_filing_details
+        
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.REPORT
+    
+    @property
+    def id(self) -> str:
+        return self.accession_no
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {
+            'id': self.accession_no,
+            'form_type': self.form_type,
+            'description': self.description,
+            'primary_document_url': self.primary_document_url,
+            'accession_no': self.accession_no,
+            'cik': self.cik,
+            'company_name': self.company_name,
+            'filed_at': self.filed_at,
+            'created': self.created.isoformat() if self.created else "",
+            'updated': self.updated.isoformat() if self.updated else "",
+            'period_of_report': self.period_of_report,
+            'is_xml': self.is_xml,
+            'link_to_txt': self.link_to_txt,
+            'link_to_html': self.link_to_html,
+            'link_to_filing_details': self.link_to_filing_details
+        }
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'ReportNode':
+        return cls(
+            id=props.get('accession_no'),
+            form_type=props.get('form_type'),
+            description=props.get('description'),
+            primary_document_url=props.get('primary_document_url'),
+            accession_no=props.get('accession_no'),
+            cik=props.get('cik'),
+            company_name=props.get('company_name'),
+            filed_at=props.get('filed_at'),
+            created=parse_date(props.get('created', '')),
+            updated=parse_date(props.get('updated', '')),
+            period_of_report=props.get('period_of_report'),
+            is_xml=props.get('is_xml'),
+            link_to_txt=props.get('link_to_txt'),
+            link_to_html=props.get('link_to_html'),
+            link_to_filing_details=props.get('link_to_filing_details')
         )

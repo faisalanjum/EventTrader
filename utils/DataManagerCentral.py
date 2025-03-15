@@ -336,11 +336,11 @@ class DataManager:
         # self.sources['transcripts'] = TranscriptsManager(self.historical_range)
 
     def initialize_neo4j(self):
-        """Initialize Neo4j processor"""
-        self.logger.info("Initializing Neo4j processor")
-        
+        """Initialize the Neo4j processor and start processing threads"""
         try:
-            # Get Redis client if available
+            self.logger.info("Initializing Neo4j processor")
+            
+            # Get Redis client from news source if available
             event_trader_redis = None
             if hasattr(self, 'sources') and 'news' in self.sources:
                 source_manager = self.sources['news']
@@ -348,45 +348,41 @@ class DataManager:
                     event_trader_redis = source_manager.redis
                     self.logger.info("Using Redis client from news source")
             
-            # Create Neo4j processor with default connection settings
-            self.neo4j_processor = Neo4jProcessor(event_trader_redis=event_trader_redis)
-            
-            # Connect to Neo4j
-            if not self.neo4j_processor.connect():
-                self.logger.error("Failed to connect to Neo4j")
-                return False
+            # Create Neo4j processor with Redis client
+            if not hasattr(self, 'neo4j_processor') or not self.neo4j_processor:
+                self.neo4j_processor = Neo4jProcessor(event_trader_redis=event_trader_redis)
                 
-            # Check if Neo4j is already initialized
-            if self.neo4j_processor.is_initialized():
-                self.logger.info("Neo4j already initialized, skipping initialization")
-                # Even if initialized, process news data
-                self.process_news_data()
-            else:
-                # Initialize Neo4j if not already initialized
-                self.logger.info("Neo4j not initialized, initializing database")
-                if not self.neo4j_processor.initialize():
-                    self.logger.error("Failed to initialize Neo4j database")
+                # Connect to Neo4j
+                if not self.neo4j_processor.connect():
+                    self.logger.error("Failed to connect to Neo4j")
                     return False
                     
-                self.logger.info("Neo4j initialization completed successfully")
-                
-                # Process news data after successful initialization
-                self.process_news_data()
+                # Check if Neo4j is already initialized
+                if self.neo4j_processor.is_initialized():
+                    self.logger.info("Neo4j already initialized, skipping initialization")
+                else:
+                    # Initialize Neo4j if not already initialized
+                    self.logger.info("Neo4j not initialized, initializing database")
+                    if not self.neo4j_processor.initialize():
+                        self.logger.error("Failed to initialize Neo4j database")
+                        return False
+                    self.logger.info("Neo4j initialization completed successfully")
             
-            # Start the PubSub-based continuous processing thread
+            # Create a single thread for processing all content types
             self.neo4j_thread = threading.Thread(
-                target=self.neo4j_processor.process_with_pubsub,
-                daemon=True
+                target=self.neo4j_processor.process_all_content_types,
+                name="neo4j_processing_thread"
             )
+            self.neo4j_thread.daemon = True
             self.neo4j_thread.start()
-            self.logger.info("Started Neo4j event-driven processing thread")
+            
+            self.logger.info("Started unified Neo4j processing thread for all content types")
             
             return True
             
         except Exception as e:
             self.logger.error(f"Error initializing Neo4j: {e}")
             return False
-
 
     def process_news_data(self, batch_size=100, max_items=1000, include_without_returns=True):
         """
@@ -417,6 +413,35 @@ class DataManager:
             return False
 
 
+    def process_reports_data(self, batch_size=100, max_items=1000, include_without_returns=True):
+        """
+        Process reports data into Neo4j from Redis
+        
+        Args:
+            batch_size: Number of items to process in each batch
+            max_items: Maximum number of items to process
+            include_without_returns: Whether to process reports from the withoutreturns namespace
+        """
+        if not hasattr(self, 'neo4j_processor') or not self.neo4j_processor:
+            self.logger.error("Neo4j processor not initialized, cannot process reports")
+            return False
+            
+        try:
+            self.logger.info(f"Processing reports data to Neo4j (batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns})...")
+            success = self.neo4j_processor.process_reports_to_neo4j(batch_size, max_items, include_without_returns)
+            
+            if success:
+                self.logger.info("Reports data processing completed successfully")
+            else:
+                self.logger.warning("Reports data processing returned with errors")
+                
+            return success
+        
+        except Exception as e:
+            self.logger.error(f"Error processing reports data: {e}")
+            return False
+
+
     def has_neo4j(self):
         """Check if Neo4j processor is available and initialized"""
         return hasattr(self, 'neo4j_processor') and self.neo4j_processor is not None
@@ -427,22 +452,44 @@ class DataManager:
 
 
     def stop(self):
-        results = {name: manager.stop() for name, manager in self.sources.items()}
+        """Stop all processing threads and close connections"""
+        self.logger.info("Stopping DataManagerCentral components")
         
-        # Close Neo4j connection if initialized
-        if hasattr(self, 'neo4j_processor'):
-            try:
-                # Stop the PubSub processing thread if running
-                if hasattr(self, 'neo4j_thread') and self.neo4j_thread.is_alive():
-                    self.neo4j_processor.stop_pubsub_processing()
-                    self.neo4j_thread.join(timeout=5)
-                    
-                self.neo4j_processor.close()
-                self.logger.info("Neo4j processor closed")
-            except Exception as e:
-                self.logger.error(f"Error closing Neo4j processor: {e}")
+        # First, stop source managers to ensure no more data is being processed
+        source_results = {}
+        try:
+            source_results = {name: manager.stop() for name, manager in self.sources.items()}
+            self.logger.info("All source managers stopped")
+        except Exception as e:
+            self.logger.error(f"Error stopping source managers: {e}")
+        
+        # Then stop Neo4j processing thread (if exists)
+        try:
+            if hasattr(self, 'neo4j_processor') and self.neo4j_processor:
+                self.logger.info("Stopping Neo4j processing thread")
+                self.neo4j_processor.stop_pubsub_processing()
                 
-        return results
+                # Wait for thread to terminate (with timeout)
+                if hasattr(self, 'neo4j_thread') and self.neo4j_thread and self.neo4j_thread.is_alive():
+                    self.logger.info("Waiting for Neo4j thread to terminate...")
+                    self.neo4j_thread.join(timeout=5)
+                    if self.neo4j_thread.is_alive():
+                        self.logger.warning("Neo4j processing thread did not terminate cleanly")
+                    else:
+                        self.logger.info("Neo4j thread terminated successfully")
+        except Exception as e:
+            self.logger.error(f"Error stopping Neo4j processing thread: {e}")
+        
+        # Finally close Neo4j connection
+        try:
+            if hasattr(self, 'neo4j_processor') and self.neo4j_processor:
+                self.neo4j_processor.close()
+                self.logger.info("Closed Neo4j connection")
+        except Exception as e:
+            self.logger.error(f"Error closing Neo4j connection: {e}")
+        
+        self.logger.info("DataManagerCentral shutdown complete")
+        return source_results
 
 
     def check_status(self):
@@ -459,12 +506,11 @@ class DataManager:
         import sys
         
         def signal_handler(sig, frame):
-            self.logger.info("Shutdown signal received. Stopping all components gracefully...")
+            self.logger.info(f"Received signal {sig}, shutting down gracefully")
             self.stop()
-            self.logger.info("Shutdown complete. Exiting.")
             sys.exit(0)
             
-        # Register for SIGINT (Ctrl+C) and SIGTERM
+        # Register signal handlers
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
         self.logger.info("Signal handlers registered for graceful shutdown")
