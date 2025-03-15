@@ -900,10 +900,12 @@ class Neo4jProcessor:
             # Get ticker to CIK mappings from universe data
             universe_data = self.get_tradable_universe()
             ticker_to_cik = {}
+            cik_to_ticker = {}
             for symbol, data in universe_data.items():
                 cik = data.get('cik', '').strip()
                 if cik and cik.lower() not in ['nan', 'none', '']:
                     ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
+                    cik_to_ticker[str(cik).zfill(10)] = symbol.upper()
             
             # Extract timestamps with proper parsing
             created_at = None
@@ -931,9 +933,12 @@ class Neo4jProcessor:
             link_to_html = report_data.get('linkToHtml', '')
             link_to_filing_details = report_data.get('linkToFilingDetails', '')
             
-            # Extract primary CIK and company name
-            cik = report_data.get('cik', '')
+            # Extract primary CIK and company name for identifying the primary filer
+            primary_cik = report_data.get('cik', '')
             company_name = report_data.get('companyName', '')
+            
+            # Try to get primary ticker if it exists
+            primary_ticker = report_data.get('ticker', '')
             
             # Extract filing date information
             period_of_report = report_data.get('periodOfReport', '')
@@ -974,6 +979,23 @@ class Neo4jProcessor:
             # Prepare data structures for batch symbol processing
             valid_symbols = []
             symbol_data = {}
+            primary_filer_cik = None
+            
+            # If we have a primary CIK directly, use it
+            if primary_cik and primary_cik.strip():
+                primary_filer_cik = str(primary_cik).zfill(10)
+                # If we have a primary ticker but no match in our universe, add it anyway
+                if primary_filer_cik not in cik_to_ticker and primary_ticker:
+                    primary_ticker_upper = primary_ticker.upper()
+                    logger.info(f"Adding primary filer {primary_ticker_upper} with CIK {primary_filer_cik} that's not in our universe")
+            # Otherwise, try to find primary filer by ticker
+            elif primary_ticker and primary_ticker.strip():
+                primary_ticker_upper = primary_ticker.upper()
+                if primary_ticker_upper in ticker_to_cik:
+                    primary_filer_cik = ticker_to_cik[primary_ticker_upper]
+                    logger.info(f"Found primary filer CIK {primary_filer_cik} for ticker {primary_ticker_upper}")
+            
+            logger.info(f"Report {report_id} has primary filer CIK: {primary_filer_cik}")
             
             # Preprocess symbols to collect metrics and filter valid ones
             for symbol in symbols:
@@ -1005,16 +1027,18 @@ class Neo4jProcessor:
                     'metrics': metrics,
                     'timestamp': datetime.now().isoformat(),
                     'sector': sector,
-                    'industry': industry
+                    'industry': industry,
+                    'is_primary_filer': cik_from_universe == primary_filer_cik
                 }
             
             # Prepare parameters for each relationship type
-            company_params = []
+            primary_filer_params = []  # For FILED_BY relationship
+            referenced_company_params = []  # For REFERENCED_IN relationship
             sector_params = []
             industry_params = []
             market_params = []
             
-            # Prepare company relationship parameters
+            # Prepare company relationship parameters - separate primary filer from referenced companies
             for symbol in valid_symbols:
                 symbol_data_item = symbol_data[symbol]
                 # Prepare metrics as property
@@ -1029,10 +1053,17 @@ class Neo4jProcessor:
                     if metric_key in symbol_data_item['metrics']:
                         props[metric_key] = symbol_data_item['metrics'][metric_key]
                 
-                company_params.append({
-                    'cik': symbol_data_item['cik'],
-                    'properties': props
-                })
+                # Determine if this is the primary filer or a referenced company
+                if symbol_data_item['is_primary_filer']:
+                    primary_filer_params.append({
+                        'cik': symbol_data_item['cik'],
+                        'properties': props
+                    })
+                else:
+                    referenced_company_params.append({
+                        'cik': symbol_data_item['cik'],
+                        'properties': props
+                    })
             
             # Prepare sector relationship parameters
             for symbol in valid_symbols:
@@ -1185,7 +1216,7 @@ class Neo4jProcessor:
                     "description": description,
                     "primary_document_url": primary_document_url,
                     "accession_no": accession_no,
-                    "cik": cik,
+                    "cik": primary_cik,
                     "company_name": company_name,
                     "filed_at": filed_at,
                     "created": created_str,
@@ -1212,8 +1243,8 @@ class Neo4jProcessor:
             
                 # ----- Use UNWIND pattern for efficient batch processing of relationships -----
                 
-                # 1. Create Company FILED_BY relationships using UNWIND pattern
-                if company_params:
+                # 1. Create Primary Filer FILED_BY relationships using UNWIND pattern
+                if primary_filer_params:
                     company_result = session.run("""
                     MATCH (r:Report {id: $report_id})
                     UNWIND $company_params AS param
@@ -1223,12 +1254,30 @@ class Neo4jProcessor:
                     RETURN count(rel) as relationship_count
                     """, {
                         "report_id": report_id,
-                        "company_params": company_params
+                        "company_params": primary_filer_params
                     })
                     for record in company_result:
-                        logger.info(f"Created {record['relationship_count']} FILED_BY relationships to companies")
+                        logger.info(f"Created {record['relationship_count']} FILED_BY relationships to primary filer")
+                else:
+                    logger.warning(f"No primary filer found for report {report_id}")
                 
-                # 2. Create Sector INFLUENCES relationships using UNWIND pattern
+                # 2. Create Referenced Companies REFERENCED_IN relationships using UNWIND pattern
+                if referenced_company_params:
+                    company_result = session.run("""
+                    MATCH (r:Report {id: $report_id})
+                    UNWIND $company_params AS param
+                    MATCH (c:Company {cik: param.cik})
+                    MERGE (r)-[rel:REFERENCED_IN]->(c)
+                    SET rel += param.properties
+                    RETURN count(rel) as relationship_count
+                    """, {
+                        "report_id": report_id,
+                        "company_params": referenced_company_params
+                    })
+                    for record in company_result:
+                        logger.info(f"Created {record['relationship_count']} REFERENCED_IN relationships to companies")
+                
+                # 3. Create Sector INFLUENCES relationships using UNWIND pattern
                 if sector_params:
                     sector_result = session.run("""
                     MATCH (r:Report {id: $report_id})
@@ -1253,7 +1302,7 @@ class Neo4jProcessor:
                     for record in sector_result:
                         logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to sectors")
                 
-                # 3. Create Industry INFLUENCES relationships using UNWIND pattern
+                # 4. Create Industry INFLUENCES relationships using UNWIND pattern
                 if industry_params:
                     industry_result = session.run("""
                     MATCH (r:Report {id: $report_id})
@@ -1278,7 +1327,7 @@ class Neo4jProcessor:
                     for record in industry_result:
                         logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to industries")
                 
-                # 4. Create Market Index INFLUENCES relationships using UNWIND pattern
+                # 5. Create Market Index INFLUENCES relationships using UNWIND pattern
                 if market_params:
                     market_result = session.run("""
                     MATCH (r:Report {id: $report_id})
