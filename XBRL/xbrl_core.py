@@ -84,6 +84,7 @@ class NodeType(Enum):
     
     DATE = "Date"
     ADMIN_REPORT = "AdminReport"
+    SECTION = "Section"  # Added for report section hierarchies
 
 
 
@@ -125,6 +126,7 @@ class RelationType(Enum):
     PROVIDES_GUIDANCE = "PROVIDES_GUIDANCE"  # From Guidance concept to related concept
     INFLUENCES = "INFLUENCES"           # News -> Company relationship
     RELATED_TO = "RELATED_TO"       # Company -> Company relationship as defined by related field in polygon
+    HAS_SUB_SECTION = "HAS_SUB_SECTION"  # For Section hierarchies (10-K Sections -> Business, etc.)
     
 
 

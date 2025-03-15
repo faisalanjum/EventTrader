@@ -1,6 +1,6 @@
 #!/bin/bash
 # EventTrader Control Script
-# Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j} [options] [from-date] [to-date]
+# Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j|process-news|reset-all} [options] [from-date] [to-date]
 
 # Configuration
 WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -482,6 +482,56 @@ case "$COMMAND" in
     # Process news data into Neo4j
     process_news
     ;;
+  reset-all)
+    # Stop all processes, clear Redis and Neo4j databases
+    echo "Stopping all EventTrader processes..."
+    stop_monitor
+    stop
+    
+    # Clear Redis database
+    echo "Clearing Redis database..."
+    if command -v redis-cli >/dev/null 2>&1; then
+      redis-cli FLUSHALL
+      echo "Redis database cleared."
+    else
+      echo "ERROR: redis-cli not found. Please install Redis CLI tools to clear Redis database."
+    fi
+    
+    # Clear Neo4j database
+    echo "Clearing Neo4j database..."
+    # First stop the Neo4j service to avoid conflicts
+    if command -v neo4j >/dev/null 2>&1; then
+      neo4j stop || true
+      sleep 2
+    fi
+    
+    # Detect Python before using it
+    detect_python
+    
+    # Use Cypher to clear the database
+    cd "$WORKSPACE_DIR"
+    $PYTHON_CMD -c "
+from neo4j import GraphDatabase
+from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
+print('Connecting to Neo4j at', NEO4J_URI)
+try:
+  driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD))
+  with driver.session() as session:
+    print('Clearing all data from Neo4j...')
+    session.run('MATCH (n) DETACH DELETE n')
+    print('Neo4j database cleared successfully.')
+  driver.close()
+except Exception as e:
+  print(f'Error clearing Neo4j database: {e}')
+"
+    
+    # Restart Neo4j if it was running
+    if command -v neo4j >/dev/null 2>&1; then
+      neo4j start || true
+    fi
+    
+    echo "Reset complete. All processes stopped and databases cleared."
+    ;;
   *)
     echo "Usage: $0 [--background] {command} [options] [from-date] [to-date]"
     echo ""
@@ -500,6 +550,7 @@ case "$COMMAND" in
     echo "  clean-logs [days]            # Clean log files older than specified days"
     echo "  init-neo4j                   # Initialize Neo4j database"
     echo "  process-news                 # Process news data into Neo4j"
+    echo "  reset-all                    # Stop all processes and clear all databases"
     echo ""
     echo "Options:"
     echo "  --background                 # Run commands in background mode"

@@ -240,6 +240,45 @@ class IndustryNode(Neo4jNode):
         )
 
 @dataclass
+class SectionNode(Neo4jNode):
+    """
+    Section node in Neo4j for SEC filing sections
+    Example: "10-K-1" = "Business"
+    """
+    code: str          # e.g., "10-K-1", "10-Q-part1item1", "8-K-1-1"
+    label: str         # e.g., "Business", "Financial Statements", "Entry into Material Agreement"
+    category: str      # e.g., "10-K-SECTIONS", "10-Q-SECTIONS", "8-K-SECTIONS"
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.SECTION
+        
+    @property
+    def id(self) -> str:
+        return self.code
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            "code": self.code,
+            "label": self.label,
+            "category": self.category,
+            "displayLabel": self.label
+        }
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'SectionNode':
+        code = props.get('code', '')
+        if not code:
+            raise ValueError("Missing required code field for SectionNode")
+            
+        return cls(
+            code=code,
+            label=props.get('label', ''),
+            category=props.get('category', '')
+        )
+
+@dataclass
 class NewsNode(Neo4jNode):
     """News node in Neo4j"""
     news_id: str  # Unique identifier

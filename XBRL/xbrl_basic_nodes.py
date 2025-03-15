@@ -296,7 +296,6 @@ class AdminReportNode(Neo4jNode):
         }
 
 
-
 @dataclass
 class CompanyNode(Neo4jNode):
     cik: str
