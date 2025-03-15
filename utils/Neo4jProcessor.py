@@ -38,9 +38,14 @@ from XBRL.Neo4jManager import Neo4jManager
 from XBRL.XBRLClasses import NodeType, RelationType
 
 
-
 # Set up logger
 logger = get_logger(__name__)
+
+class ContentType:
+    """Enum for content types - improves code readability and prevents string errors"""
+    NEWS = "news"
+    REPORT = "reports"
+    TRANSCRIPT = "transcripts"  # Future-proofing
 
 class Neo4jProcessor:
     """
@@ -233,8 +238,6 @@ class Neo4jProcessor:
 
     def _collect_redis_key_counts(self):
         """Test access to Redis to ensure the sources are accessible"""
-
-
         # If no Redis client is available, just return early
         if not hasattr(self, 'hist_client') or not self.hist_client:
             logger.warning("No Redis client available for testing")
@@ -258,300 +261,212 @@ class Neo4jProcessor:
                 
         return results
     
-
-
-    def populate_company_nodes(self):
+    def _process_message(self, message, content_type):
         """
-        Create Company nodes in Neo4j with all required fields and relationships.
-        Returns True if successful, False otherwise.
-        """
-        if not self.connect():
-            logger.error("Cannot connect to Neo4j")
-            return False
-            
-        try:
-            # Ensure we have universe data
-            if self.universe_data is None:
-                self.universe_data = self.get_tradable_universe()
-                if not self.universe_data:
-                    logger.warning("No company data found")
-                    return False
-                    
-            logger.info(f"Creating Company nodes for {len(self.universe_data)} companies")
-            
-            # Check if critical fields exist in the data
-            first_company = next(iter(self.universe_data.values()))
-            # Update the critical field names to match what's in the CSV
-            critical_fields = ['mkt_cap', 'employees', 'shares_out']
-            missing_fields = [field for field in critical_fields if field not in first_company]
-            if missing_fields:
-                logger.warning(f"Warning: The following critical fields are missing in the company data: {missing_fields}")
-                logger.info(f"Available fields: {list(first_company.keys())}")
-            
-            # Prepare company nodes with all fields
-            valid_nodes = []
-            
-            # Build a ticker-to-CIK lookup dictionary for relationships
-            ticker_to_cik = {}
-            for symbol, data in self.universe_data.items():
-                cik = data.get('cik', '').strip()
-                if cik and cik.lower() not in ['nan', 'none', '']:
-                    formatted_cik = str(cik).zfill(10)
-                    ticker_to_cik[symbol.upper()] = formatted_cik
-            
-            # Statistics for reporting
-            processed_count = 0
-            had_mkt_cap = 0
-            had_employees = 0
-            had_shares_out = 0
-            
-            # Process and create company nodes with all fields
-            for symbol, data in self.universe_data.items():
-                cik = data.get('cik', '').strip()
-                if not cik or cik.lower() in ['nan', 'none', '']:
-                    continue
-                    
-                try:
-                    cik = str(cik).zfill(10)
-                    name = data.get('company_name', data.get('name', symbol)).strip()
-                    
-                    # Create CompanyNode with required fields
-                    company_node = CompanyNode(
-                        cik=cik,
-                        name=name,
-                        ticker=symbol
-                    )
-                    
-                    # Specifically handle the three critical financial fields we need
-                    # Process market_cap - CORRECTED field name to match CSV 
-                    try:
-                        if 'mkt_cap' in data and data['mkt_cap'] and str(data['mkt_cap']).lower() not in ['nan', 'none', '']:
-                            mkt_cap_value = data['mkt_cap']
-                            try:
-                                # First try direct float conversion
-                                mkt_cap_float = float(mkt_cap_value)
-                                company_node.mkt_cap = mkt_cap_float
-                                had_mkt_cap += 1
-                            except (ValueError, TypeError) as e:
-                                # Try to clean the string if it contains commas, etc.
-                                try:
-                                    clean_val = str(mkt_cap_value).replace(',', '').replace('$', '').strip()
-                                    mkt_cap_float = float(clean_val)
-                                    company_node.mkt_cap = mkt_cap_float
-                                    had_mkt_cap += 1
-                                except Exception as e2:
-                                    logger.warning(f"Could not convert mkt_cap value '{mkt_cap_value}' to float for {symbol}: {e2}")
-                    except Exception as e:
-                        logger.error(f"Error processing mkt_cap for {symbol}: {e}")
-                    
-                    # Process employees
-                    try:
-                        if 'employees' in data and data['employees'] and str(data['employees']).lower() not in ['nan', 'none', '']:
-                            employees_value = data['employees']
-                            try:
-                                # First try direct int conversion
-                                # Convert through float first to handle decimal representations
-                                employees_int = int(float(employees_value))
-                                company_node.employees = employees_int
-                                had_employees += 1
-                            except (ValueError, TypeError) as e:
-                                # Try to clean the string if it contains commas, etc.
-                                try:
-                                    clean_val = str(employees_value).replace(',', '').strip()
-                                    employees_int = int(float(clean_val))
-                                    company_node.employees = employees_int
-                                    had_employees += 1
-                                except Exception as e2:
-                                    logger.warning(f"Could not convert employees value '{employees_value}' to int for {symbol}: {e2}")
-                    except Exception as e:
-                        logger.error(f"Error processing employees for {symbol}: {e}")
-                    
-                    # Process shares_outstanding - CORRECTED field name to match CSV
-                    try:
-                        if 'shares_out' in data and data['shares_out'] and str(data['shares_out']).lower() not in ['nan', 'none', '']:
-                            shares_value = data['shares_out']
-                            try:
-                                # First try direct float conversion
-                                shares_float = float(shares_value)
-                                company_node.shares_out = shares_float
-                                had_shares_out += 1
-                            except (ValueError, TypeError) as e:
-                                # Try to clean the string if it contains commas, etc.
-                                try:
-                                    clean_val = str(shares_value).replace(',', '').strip()
-                                    shares_float = float(clean_val)
-                                    company_node.shares_out = shares_float
-                                    had_shares_out += 1
-                                except Exception as e2:
-                                    logger.warning(f"Could not convert shares_out value '{shares_value}' to float for {symbol}: {e2}")
-                    except Exception as e:
-                        logger.error(f"Error processing shares_out for {symbol}: {e}")
-                    
-                    # Process other fields using the normal flow
-                    field_mappings = {
-                        'exchange': 'exchange',
-                        'sector': 'sector',
-                        'industry': 'industry',
-                        'fiscal_year_end': 'fiscal_year_end',
-                        'cusip': 'cusip',
-                        'figi': 'figi',
-                        'class_figi': 'class_figi',
-                        'sic': 'sic',
-                        'sic_name': 'sic_name',
-                        'sector_etf': 'sector_etf',
-                        'industry_etf': 'industry_etf',
-                        'ipo_date': 'ipo_date'
-                    }
-                    
-                    # Set attributes if they exist in data
-                    for source_field, target_field in field_mappings.items():
-                        if source_field in data and data[source_field] and str(data[source_field]).lower() not in ['nan', 'none', '']:
-                            setattr(company_node, target_field, data[source_field])
-                    
-                    valid_nodes.append(company_node)
-                    processed_count += 1
-                    
-                except Exception as e:
-                    logger.error(f"Error creating CompanyNode for {symbol}: {e}")
-            
-            # Create all nodes in Neo4j
-            if valid_nodes:
-                self.manager.merge_nodes(valid_nodes)
-                
-                # Report statistics
-                logger.info(f"Company node statistics:")
-                logger.info(f"  - Processed: {processed_count} companies")
-                logger.info(f"  - With market cap: {had_mkt_cap} ({had_mkt_cap/processed_count*100:.1f}%)")
-                logger.info(f"  - With employees: {had_employees} ({had_employees/processed_count*100:.1f}%)")
-                logger.info(f"  - With shares outstanding: {had_shares_out} ({had_shares_out/processed_count*100:.1f}%)")
-                
-                # Report on CIK coverage
-                logger.info(f"  - CIK coverage: {len(ticker_to_cik)} companies")
-                
-                # Create relationships between companies
-                if self._create_company_relationships(self.universe_data, valid_nodes, ticker_to_cik):
-                    logger.info("Successfully created company relationships")
-                    
-                return True
-            else:
-                logger.warning("No valid company nodes were created")
-                return False
-                
-        except Exception as e:
-            logger.error(f"Error populating company nodes: {e}")
-            return False
-
-    def _create_company_relationships(self, universe_data, company_nodes, ticker_to_cik):
-        """
-        Create bidirectional RELATED_TO relationships between related companies.
-        This creates a single relationship between each pair of companies.
+        Generic method to process a message from PubSub for any content type.
+        
+        Args:
+            message: PubSub message dictionary
+            content_type: ContentType value indicating the type of content
         """
         try:
-            from XBRL.XBRLClasses import RelationType
+            # Validate input
+            if not message or not isinstance(message, dict):
+                logger.warning(f"Invalid {content_type} message format")
+                return
             
-            # Define RELATED_TO relationship using the proper enum
+            channel = message.get('channel')
+            item_id = message.get('data')
+            
+            if not channel or not item_id:
+                logger.warning(f"Missing channel or item_id in message: {message}")
+                return
+            
+            # Determine if this is from withreturns or withoutreturns
+            is_withreturns = 'withreturns' in channel
+            
+            # Get the item data
+            key_prefix = "withreturns" if is_withreturns else "withoutreturns"
+            key = f"{content_type}:{key_prefix}:{item_id}"
+            
+            # Ensure Redis history client is available
+            if not hasattr(self, 'event_trader_redis') or not self.event_trader_redis or \
+               not hasattr(self.event_trader_redis, 'history_client') or not self.event_trader_redis.history_client:
+                logger.error(f"No Redis history client available for processing {content_type} message")
+                return
+            
+            # Get and process the item
             try:
-                # Try using the actual enum if available
-                RELATED_TO = RelationType.RELATED_TO
-            except AttributeError:
-                # Fallback to a mock with same interface if needed
-                class CustomRelationType:
-                    def __init__(self, value):
-                        self.value = value
+                raw_data = self.event_trader_redis.history_client.client.get(key)
+                if not raw_data:
+                    logger.warning(f"No data found for key: {key}")
+                    return
                 
-                RELATED_TO = CustomRelationType("RELATED_TO")
-            
-            # Create a lookup for CompanyNode by CIK
-            node_by_cik = {node.cik: node for node in company_nodes}
-            
-            # Use a set to track unique company pairs (regardless of direction)
-            relationship_pairs = set()
-            relationships = []
-            
-            # Process each company's related tickers
-            for symbol, data in universe_data.items():
-                source_cik = ticker_to_cik.get(symbol.upper())
-                if not source_cik or source_cik not in node_by_cik:
-                    continue
-                    
-                source_node = node_by_cik[source_cik]
+                item_data = json.loads(raw_data)
                 
-                # Parse the related field
-                related_tickers = data.get('related', [])
-                if related_tickers is None:
-                    continue
-                    
-                if isinstance(related_tickers, str):
-                    if related_tickers.startswith('[') and related_tickers.endswith(']'):
-                        try:
-                            content = related_tickers.strip('[]')
-                            if content:
-                                content = content.replace("'", "").replace('"', "")
-                                related_tickers = [item.strip() for item in content.split(',') if item.strip()]
-                            else:
-                                related_tickers = []
-                        except:
-                            related_tickers = []
-                    else:
-                        related_tickers = []
+                # Set correct ID prefix and processing function based on content type
+                if content_type == ContentType.NEWS:
+                    prefix = "bzNews_"
+                    processor = self._process_deduplicated_news
+                elif content_type == ContentType.REPORT:
+                    prefix = "secReport_"
+                    processor = self._process_deduplicated_report
+                else:
+                    logger.error(f"Unsupported content type: {content_type}")
+                    return
                 
-                # Create relationships
-                for related_ticker in related_tickers:
-                    related_cik = ticker_to_cik.get(related_ticker.upper())
-                    if not related_cik or related_cik not in node_by_cik:
-                        continue
+                # Extract the base ID and process
+                base_id = item_id.split('.')[0] if '.' in item_id else item_id
+                full_id = f"{prefix}{base_id}"
+                
+                success = processor(full_id, item_data)
+                
+                if success:
+                    logger.info(f"Successfully processed {content_type} message: {full_id}")
                     
-                    # Only process each company pair once (regardless of direction)
-                    # Sort CIKs to ensure same pair is recognized regardless of order
-                    company_pair = tuple(sorted([source_cik, related_cik]))
-                    if company_pair in relationship_pairs:
-                        continue
-                    
-                    relationship_pairs.add(company_pair)
-                    target_node = node_by_cik[related_cik]
-                    
-                    relationships.append((
-                        source_node,
-                        target_node,
-                        RELATED_TO,
-                        {
-                            "source_ticker": symbol,
-                            "target_ticker": related_ticker,
-                            "relationship_type": "news_co_occurrence",
-                            "bidirectional": True  # Flag to indicate bidirectional relationship
-                        }
-                    ))
+                    # Delete from withreturns after successful processing (commented out)
+                    # if is_withreturns:
+                    #     self.event_trader_redis.history_client.client.delete(key)
+                    #     logger.debug(f"Deleted processed item: {key}")
+                else:
+                    logger.warning(f"Failed to process {content_type} message: {full_id}")
+            except Exception as e:
+                logger.error(f"Error processing {content_type} data for key {key}: {e}")
+        except Exception as e:
+            logger.error(f"Error processing {content_type} message: {e}")
+
+    def _process_news_message(self, message):
+        """Process a single news message from PubSub (wrapper)"""
+        return self._process_message(message, ContentType.NEWS)
+
+    def _process_report_message(self, message):
+        """Process a single report message from PubSub (wrapper)"""
+        return self._process_message(message, ContentType.REPORT)
+
+    def _process_content_batch(self, content_type, batch_size=100, max_items=None, include_without_returns=True):
+        """
+        Generic method to process a batch of content from Redis to Neo4j.
+        
+        Args:
+            content_type: ContentType value indicating the type of content
+            batch_size: Number of items to process in each batch
+            max_items: Maximum number of items to process (for debugging)
+            include_without_returns: Whether to process items from withoutreturns namespace
             
-            if relationships:
-                # Use a Cypher query directly to create undirected relationships
-                with self.manager.driver.session() as session:
-                    batch_size = 100  # Process in batches for better performance
-                    for i in range(0, len(relationships), batch_size):
-                        batch = relationships[i:i+batch_size]
-                        for source, target, rel_type, props in batch:
-                            # Use undirected relationship syntax (no directional arrow)
-                            session.run("""
-                            MATCH (a:Company {id: $source_id})
-                            MATCH (b:Company {id: $target_id})
-                            MERGE (a)-[r:RELATED_TO]-(b)
-                            SET r += $properties
-                            """, {
-                                "source_id": source.cik,
-                                "target_id": target.cik,
-                                "properties": props
-                            })
+        Returns:
+            bool: Success status
+        """
+        try:
+            if not self.manager:
+                if not self.connect():
+                    logger.error(f"Cannot connect to Neo4j for {content_type} processing")
+                    return False
+            
+            if not hasattr(self, 'hist_client') or not self.hist_client:
+                logger.warning(f"No Redis history client available for {content_type} processing")
+                return False
+            
+            # Get keys for withreturns first (these have return data)
+            pattern = f"{content_type}:withreturns:*"
+            withreturns_keys = self.hist_client.client.keys(pattern)
+            logger.info(f"Found {len(withreturns_keys)} {content_type} keys matching {pattern}")
+            
+            # Get keys for withoutreturns if requested
+            withoutreturns_keys = []
+            if include_without_returns:
+                pattern = f"{content_type}:withoutreturns:*"
+                withoutreturns_keys = self.hist_client.client.keys(pattern)
+                logger.info(f"Found {len(withoutreturns_keys)} {content_type} keys matching {pattern}")
+            
+            # Combine keys
+            all_keys = withreturns_keys + withoutreturns_keys
+            
+            # Limit the number of items to process
+            if max_items is not None and len(all_keys) > max_items:
+                all_keys = all_keys[:max_items]
                 
-                logger.info(f"Created {len(relationships)} bidirectional RELATED_TO relationships between companies")
+            logger.info(f"Processing {len(all_keys)} {content_type} keys")
+            
+            # Set correct processing function and ID prefix based on content type
+            if content_type == ContentType.NEWS:
+                processor = self._process_deduplicated_news
+                prefix = "bzNews_"
+            elif content_type == ContentType.REPORT:
+                processor = self._process_deduplicated_report
+                prefix = "secReport_"
             else:
-                logger.info("No company relationships to create")
+                logger.error(f"Unsupported content type: {content_type}")
+                return False
+            
+            # Process in batches
+            processed_count = 0
+            error_count = 0
+            
+            for i in range(0, len(all_keys), batch_size):
+                batch_keys = all_keys[i:i+batch_size]
                 
-            return True
+                # Process each item in the batch
+                for key in batch_keys:
+                    try:
+                        # Extract ID and namespace from Redis key
+                        parts = key.split(':')
+                        namespace = parts[1] if len(parts) > 1 else "unknown"
+                        concat_id = parts[2] if len(parts) > 2 else key
+                        
+                        # Extract just the base ID (part before the period)
+                        base_id = concat_id.split('.')[0] if '.' in concat_id else concat_id
+                        
+                        # Add source prefix for future multi-source compatibility
+                        item_id = f"{prefix}{base_id}"
+                        
+                        # Get item data from Redis
+                        item_data_raw = self.hist_client.client.get(key)
+                        if not item_data_raw:
+                            logger.warning(f"No data found for key: {key}")
+                            continue
+                            
+                        # Parse JSON data
+                        item_data = json.loads(item_data_raw)
+                        
+                        # Process item data with appropriate processor
+                        success = processor(item_id, item_data)
+                        
+                        if success:
+                            processed_count += 1
+                            
+                            # Delete processed keys from withreturns namespace only (commented out)
+                            # We keep withoutreturns keys as they may get returns later
+                            # if namespace == "withreturns":
+                            #     try:
+                            #         self.hist_client.client.delete(key)
+                            #         logger.debug(f"Deleted processed key: {key}")
+                            #     except Exception as e:
+                            #         logger.warning(f"Error deleting key {key}: {e}")
+                        else:
+                            error_count += 1
+                            
+                    except Exception as e:
+                        logger.error(f"Error processing {content_type} key {key}: {e}")
+                        error_count += 1
+                
+                logger.info(f"Processed batch {i//batch_size + 1}/{(len(all_keys) + batch_size - 1)//batch_size}")
+                
+            # Summary and status
+            logger.info(f"Finished processing {content_type} to Neo4j. Processed: {processed_count}, Errors: {error_count}")
+            
+            return processed_count > 0 or error_count == 0
                 
         except Exception as e:
-            logger.warning(f"Error creating company relationships: {e}")
-            # Continue anyway - relationships aren't critical
+            logger.error(f"Error processing {content_type} batch: {e}")
             return False
 
+    def process_news_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True):
+        """Process news from Redis to Neo4j (wrapper)"""
+        return self._process_content_batch(ContentType.NEWS, batch_size, max_items, include_without_returns)
+
+    def process_reports_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True):
+        """Process reports from Redis to Neo4j (wrapper)"""
+        return self._process_content_batch(ContentType.REPORT, batch_size, max_items, include_without_returns)
 
     def _process_deduplicated_news(self, news_id, news_data):
         """
@@ -967,208 +882,541 @@ class Neo4jProcessor:
             logger.error(f"Error processing news {news_id}: {e}")
             return False
 
-    def _load_etf_mappings(self):
+    def _process_deduplicated_report(self, report_id, report_data):
         """
-        Load ETF mappings for informational purposes only.
-        These are not used for node identification, only for tracking ETF properties.
-        """
-        if self._loaded_etf_mappings:
-            return True
-        
-        # Initialize mappings
-        self.etf_to_sector_id = {}
-        self.etf_to_industry_id = {}
-        
-        # Track many-to-one mappings for detailed reporting
-        self.etf_to_sectors = {}  # {etf: [sector_names]}
-        self.etf_to_industries = {}  # {etf: [industry_names]}
-
-        try:
-            with self.manager.driver.session() as session:
-                # Get all ETF mappings from sectors
-                result = session.run("""
-                    MATCH (s:Sector) 
-                    WHERE s.etf IS NOT NULL AND s.etf <> ""
-                    RETURN s.etf as etf, s.id as id, s.name as name
-                """)
-                
-                # Process sector mappings
-                for record in result:
-                    etf = record["etf"]
-                    sector_id = record["id"]
-                    sector_name = record["name"]
-                    
-                    # Track for many-to-one mapping detection
-                    if etf not in self.etf_to_sectors:
-                        self.etf_to_sectors[etf] = []
-                    self.etf_to_sectors[etf].append(sector_name)
-                    
-                    # Store the last one encountered as the default (not ideal but consistent)
-                    self.etf_to_sector_id[etf] = sector_id
-                
-                # Get all ETF mappings from industries
-                result = session.run("""
-                    MATCH (i:Industry) 
-                    WHERE i.etf IS NOT NULL AND i.etf <> ""
-                    RETURN i.etf as etf, i.id as id, i.name as name
-                """)
-                
-                # Process industry mappings
-                for record in result:
-                    etf = record["etf"]
-                    industry_id = record["id"]
-                    industry_name = record["name"]
-                    
-                    # Track for many-to-one mapping detection
-                    if etf not in self.etf_to_industries:
-                        self.etf_to_industries[etf] = []
-                    self.etf_to_industries[etf].append(industry_name)
-                    
-                    # Store the last one encountered as the default (not ideal but consistent)
-                    self.etf_to_industry_id[etf] = industry_id
-                
-                # Log multi-mapping situations
-                for etf, sectors in self.etf_to_sectors.items():
-                    if len(sectors) > 1:
-                        sector_list = ", ".join(sectors)
-                        logger.warning(f"Multiple sectors map to the same ETF: {etf} -> {sector_list}")
-                
-                for etf, industries in self.etf_to_industries.items():
-                    if len(industries) > 1:
-                        industry_list = ", ".join(industries)
-                        logger.warning(f"Multiple industries map to the same ETF: {etf} -> {industry_list}")
-                
-                self._loaded_etf_mappings = True
-                logger.info(f"Loaded ETF mappings: {len(self.etf_to_sector_id)} sectors, {len(self.etf_to_industry_id)} industries")
-                
-                # Since we only use company data for identification, these mappings are just FYI
-                logger.info("Note: ETF mappings are only used for properties, not for node identification")
-                return True
-        except Exception as e:
-            logger.error(f"Error loading ETF mappings: {e}")
-            return False
-
-    def process_news_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
-        """
-        Process news from Redis to Neo4j with deduplication.
+        Process report data with deduplication, standardized fields, and efficient symbol relationships.
+        Uses a hash-based MERGE pattern with conditional updates based on timestamps.
         
         Args:
-            batch_size: Number of items to process in each batch
-            max_items: Maximum number of items to process (for debugging)
-            include_without_returns: Whether to process news from the withoutreturns namespace
+            report_id: Unique identifier for the report
+            report_data: Dictionary containing report data
             
         Returns:
-            bool: True if successful, False otherwise
+            bool: Success status
         """
+        logger.debug(f"Processing deduplicated report {report_id}")
+        
         try:
-            if not self.manager:
-                if not self.connect():
-                    logger.error("Cannot connect to Neo4j")
-                    return False
-            
-            if not hasattr(self, 'hist_client') or not self.hist_client:
-                logger.warning("No Redis history client available for news processing")
-                return False
-                
-            # Get keys for withreturns first (these have return data)
-            pattern = "news:withreturns:*"
-            withreturns_keys = self.hist_client.client.keys(pattern)
-            logger.info(f"Found {len(withreturns_keys)} news keys matching {pattern}")
-            
-            # Get keys for withoutreturns if requested
-            withoutreturns_keys = []
-            if include_without_returns:
-                pattern = "news:withoutreturns:*"
-                withoutreturns_keys = self.hist_client.client.keys(pattern)
-                logger.info(f"Found {len(withoutreturns_keys)} news keys matching {pattern}")
-            
-            # Combine and sort keys by ID (process newer items first)
-            news_keys = withreturns_keys + withoutreturns_keys
-            # Sort by ID if needed (optional)
-            
-            # Limit the number of items to process
-            if max_items is not None and len(news_keys) > max_items:
-                news_keys = news_keys[:max_items]
-                
-            logger.info(f"Processing {len(news_keys)} news keys")
-            
-            # Load universe data for ticker-to-CIK mapping
+            # Get ticker to CIK mappings from universe data
             universe_data = self.get_tradable_universe()
             ticker_to_cik = {}
-            ticker_to_name = {}
-            
             for symbol, data in universe_data.items():
                 cik = data.get('cik', '').strip()
                 if cik and cik.lower() not in ['nan', 'none', '']:
                     ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
-                    ticker_to_name[symbol.upper()] = data.get('company_name', data.get('name', symbol)).strip()
             
-            # Process in batches
-            processed_count = 0
-            error_count = 0
+            # Extract timestamps with proper parsing
+            created_at = None
+            updated_at = None
             
-            for i in range(0, len(news_keys), batch_size):
-                batch_keys = news_keys[i:i+batch_size]
-                
-                # Process each news item in the batch
-                for key in batch_keys:
-                    try:
-                        # Extract ID and namespace from Redis key
-                        parts = key.split(':')
-                        namespace = parts[1] if len(parts) > 1 else "unknown"
-                        concat_id = parts[2] if len(parts) > 2 else key
-                        
-                        # Extract just the base ID (part before the period)
-                        base_id = concat_id.split('.')[0] if '.' in concat_id else concat_id
-                        
-                        # Add source prefix for future multi-source compatibility
-                        news_id = f"bzNews_{base_id}"
-                        
-                        # Get news data from Redis
-                        news_data = self.hist_client.client.get(key)
-                        if not news_data:
-                            logger.warning(f"No data found for key {key}")
-                            continue
-                            
-                        # Parse JSON data
-                        news_item = json.loads(news_data)
-                        
-                        # Process news data
-                        success = self._process_deduplicated_news(news_id, news_item)
-                        
-                        if success:
-                            processed_count += 1
-                            
-                            # Delete processed keys from withreturns namespace only
-                            # We keep withoutreturns keys as they may get returns later
-
-
-                            # if namespace == "withreturns":
-                            #     try:
-                            #         self.hist_client.client.delete(key)
-                            #         logger.debug(f"Deleted processed key: {key}")
-                            #     except Exception as e:
-                            #         logger.warning(f"Error deleting key {key}: {e}")
-
-                            
-                        else:
-                            error_count += 1
-                            
-                    except Exception as e:
-                        logger.error(f"Error processing news key {key}: {e}")
-                        error_count += 1
-                
-                logger.info(f"Processed batch {i//batch_size + 1}/{(len(news_keys) + batch_size - 1)//batch_size}")
-                
-            # Summary and status
-            logger.info(f"Finished processing news to Neo4j. Processed: {processed_count}, Errors: {error_count}")
+            if 'created' in report_data:
+                created_at = parse_date(report_data['created'])
+            if 'updated' in report_data:
+                updated_at = parse_date(report_data['updated'])
+            elif 'filedAt' in report_data:
+                updated_at = parse_date(report_data['filedAt'])
             
-            # Remove batch deletion approach in favor of immediate deletion
-            return processed_count > 0 or error_count == 0
+            created_str = created_at.isoformat() if created_at else datetime.now().isoformat()
+            updated_str = updated_at.isoformat() if updated_at else created_str
+            
+            # Extract basic properties - standardize field names
+            form_type = report_data.get('formType', '')
+            description = report_data.get('description', '')
+            primary_document_url = report_data.get('primaryDocumentUrl', '')
+            accession_no = report_data.get('accessionNo', '')
+            is_xml = report_data.get('is_xml', False)
+            
+            # Extract filing links
+            link_to_txt = report_data.get('linkToTxt', '')
+            link_to_html = report_data.get('linkToHtml', '')
+            link_to_filing_details = report_data.get('linkToFilingDetails', '')
+            
+            # Extract primary CIK and company name
+            cik = report_data.get('cik', '')
+            company_name = report_data.get('companyName', '')
+            
+            # Extract filing date information
+            period_of_report = report_data.get('periodOfReport', '')
+            filed_at = report_data.get('filedAt', '')
+            
+            # Extract market session - always include even if empty
+            market_session = ""
+            if 'metadata' in report_data and 'event' in report_data['metadata']:
+                market_session = report_data['metadata']['event'].get('market_session', '')
+            
+            # Extract returns schedule - always include even if empty
+            returns_schedule = {}
+            if 'metadata' in report_data and 'returns_schedule' in report_data['metadata']:
+                raw_schedule = report_data['metadata']['returns_schedule']
+                # Parse each date in the schedule
+                for key in ['hourly', 'session', 'daily']:
+                    if key in raw_schedule and raw_schedule[key]:
+                        # Parse the date string to ensure it's valid, then convert back to string
+                        date_obj = parse_date(raw_schedule[key])
+                        if date_obj:
+                            returns_schedule[key] = date_obj.isoformat()
+            returns_schedule_json = json.dumps(returns_schedule)
+            
+            # Extract symbols mentioned in report
+            symbols = self._extract_symbols(report_data.get('symbols', []))
+            
+            # Create a mapping of symbol to benchmarks from the instruments array
+            symbol_benchmarks = {}
+            if 'metadata' in report_data and 'instruments' in report_data['metadata']:
+                for instrument in report_data['metadata']['instruments']:
+                    symbol = instrument.get('symbol', '')
+                    if symbol and 'benchmarks' in instrument:
+                        symbol_benchmarks[symbol.upper()] = {
+                            'sector': instrument['benchmarks'].get('sector', ''),
+                            'industry': instrument['benchmarks'].get('industry', '')
+                        }
+            
+            # Prepare data structures for batch symbol processing
+            valid_symbols = []
+            symbol_data = {}
+            
+            # Preprocess symbols to collect metrics and filter valid ones
+            for symbol in symbols:
+                symbol_upper = symbol.upper()
+                cik_from_universe = ticker_to_cik.get(symbol_upper)
+                if not cik_from_universe:
+                    logger.warning(f"No CIK found for symbol {symbol_upper}")
+                    continue  # Skip symbols without CIK
+                
+                # Get return metrics for this symbol
+                metrics = self._extract_return_metrics(report_data, symbol_upper)
+                
+                # Get sector and industry information
+                company_data = universe_data.get(symbol_upper, {})
+                sector = company_data.get('sector')
+                industry = company_data.get('industry')
+                
+                # Skip symbol processing if missing sector or industry data
+                if not sector or not industry:
+                    logger.warning(f"Symbol {symbol_upper} is missing sector or industry data - skipping relationship creation")
+                    continue
+                
+                # Only add to valid symbols if it passed all checks
+                valid_symbols.append(symbol_upper)
+                
+                # Store data for later batch processing
+                symbol_data[symbol_upper] = {
+                    'cik': cik_from_universe,
+                    'metrics': metrics,
+                    'timestamp': datetime.now().isoformat(),
+                    'sector': sector,
+                    'industry': industry
+                }
+            
+            # Prepare parameters for each relationship type
+            company_params = []
+            sector_params = []
+            industry_params = []
+            market_params = []
+            
+            # Prepare company relationship parameters
+            for symbol in valid_symbols:
+                symbol_data_item = symbol_data[symbol]
+                # Prepare metrics as property
+                props = {
+                    'symbol': symbol,
+                    'created_at': symbol_data_item['timestamp']
+                }
+                
+                # Add stock metrics
+                for timeframe in ['hourly', 'session', 'daily']:
+                    metric_key = f"{timeframe}_stock"
+                    if metric_key in symbol_data_item['metrics']:
+                        props[metric_key] = symbol_data_item['metrics'][metric_key]
+                
+                company_params.append({
+                    'cik': symbol_data_item['cik'],
+                    'properties': props
+                })
+            
+            # Prepare sector relationship parameters
+            for symbol in valid_symbols:
+                symbol_data_item = symbol_data[symbol]
+                sector = symbol_data_item['sector']
+                
+                # Prepare metrics as property
+                props = {
+                    'symbol': symbol,
+                    'created_at': symbol_data_item['timestamp']
+                }
+                
+                # Add sector metrics
+                for timeframe in ['hourly', 'session', 'daily']:
+                    metric_key = f"{timeframe}_sector"
+                    if metric_key in symbol_data_item['metrics']:
+                        props[metric_key] = symbol_data_item['metrics'][metric_key]
+                
+                # Get sector_etf for property only
+                sector_etf = None
+                company_data = universe_data.get(symbol, {})
+                
+                # Get ETF info from company data
+                if 'sector_etf' in company_data and company_data['sector_etf']:
+                    sector_etf = company_data['sector_etf']
+                # Fallback to benchmark data if needed
+                elif symbol in symbol_benchmarks and symbol_benchmarks[symbol]['sector']:
+                    sector_etf = symbol_benchmarks[symbol]['sector']
+                
+                # Normalize sector ID
+                sector_id = sector.replace(" ", "")
+                
+                # Protection against using ETF as ID
+                if sector_etf and sector_id == sector_etf:
+                    logger.error(f"Sector ID {sector_id} matches ETF ticker {sector_etf} - using prefixed format")
+                    sector_id = f"Sector_{sector.replace(' ', '_')}"
+                
+                sector_params.append({
+                    'sector_id': sector_id,
+                    'sector_name': sector,
+                    'sector_etf': sector_etf,
+                    'properties': props
+                })
+            
+            # Prepare industry relationship parameters
+            for symbol in valid_symbols:
+                symbol_data_item = symbol_data[symbol]
+                industry = symbol_data_item['industry']
+                
+                # Prepare metrics as property
+                props = {
+                    'symbol': symbol,
+                    'created_at': symbol_data_item['timestamp']
+                }
+                
+                # Add industry metrics
+                for timeframe in ['hourly', 'session', 'daily']:
+                    metric_key = f"{timeframe}_industry"
+                    if metric_key in symbol_data_item['metrics']:
+                        props[metric_key] = symbol_data_item['metrics'][metric_key]
+                
+                # Get industry_etf for property only
+                industry_etf = None
+                company_data = universe_data.get(symbol, {})
+                
+                # Get ETF info from company data
+                if 'industry_etf' in company_data and company_data['industry_etf']:
+                    industry_etf = company_data['industry_etf']
+                # Fallback to benchmark data if needed
+                elif symbol in symbol_benchmarks and symbol_benchmarks[symbol]['industry']:
+                    industry_etf = symbol_benchmarks[symbol]['industry']
+                
+                # Normalize industry ID
+                industry_id = industry.replace(" ", "")
+                
+                # Protection against using ETF as ID
+                if industry_etf and industry_id == industry_etf:
+                    logger.error(f"Industry ID {industry_id} matches ETF ticker {industry_etf} - using prefixed format")
+                    industry_id = f"Industry_{industry.replace(' ', '_')}"
+                
+                industry_params.append({
+                    'industry_id': industry_id,
+                    'industry_name': industry,
+                    'industry_etf': industry_etf,
+                    'properties': props
+                })
+            
+            # Prepare market index relationship parameters
+            for symbol in valid_symbols:
+                symbol_data_item = symbol_data[symbol]
+                has_macro_metrics = False
+                
+                # Prepare metrics as property
+                props = {
+                    'symbol': symbol,
+                    'created_at': symbol_data_item['timestamp']
+                }
+                
+                # Add macro metrics
+                for timeframe in ['hourly', 'session', 'daily']:
+                    metric_key = f"{timeframe}_macro"
+                    if metric_key in symbol_data_item['metrics']:
+                        props[metric_key] = symbol_data_item['metrics'][metric_key]
+                        has_macro_metrics = True
+                
+                if has_macro_metrics:
+                    market_params.append({
+                        'properties': props
+                    })
+            
+            # Execute deduplication and conditional update logic with direct Cypher
+            with self.manager.driver.session() as session:
+                # Create/update report node with conditional updates
+                result = session.run("""
+                MERGE (r:Report {id: $id})
+                ON CREATE SET 
+                    r.id = $id,
+                    r.form_type = $form_type,
+                    r.description = $description,
+                    r.primary_document_url = $primary_document_url,
+                    r.accession_no = $accession_no,
+                    r.cik = $cik,
+                    r.company_name = $company_name,
+                    r.filed_at = $filed_at,
+                    r.created = $created,
+                    r.updated = $updated,
+                    r.period_of_report = $period_of_report,
+                    r.is_xml = $is_xml,
+                    r.link_to_txt = $link_to_txt,
+                    r.link_to_html = $link_to_html,
+                    r.link_to_filing_details = $link_to_filing_details,
+                    r.market_session = $market_session,
+                    r.returns_schedule = $returns_schedule
+                ON MATCH SET 
+                    // Only update content-related fields if this is newer
+                    r.form_type = CASE WHEN $updated > r.updated THEN $form_type ELSE r.form_type END,
+                    r.description = CASE WHEN $updated > r.updated THEN $description ELSE r.description END,
+                    r.updated = CASE WHEN $updated > r.updated THEN $updated ELSE r.updated END,
+                    // Always update these fields even if not newer (additive properties)
+                    r.primary_document_url = $primary_document_url,
+                    r.link_to_txt = $link_to_txt,
+                    r.link_to_html = $link_to_html,
+                    r.link_to_filing_details = $link_to_filing_details,
+                    r.market_session = $market_session,
+                    r.returns_schedule = $returns_schedule
+                RETURN r
+                """, {
+                    "id": report_id,
+                    "form_type": form_type,
+                    "description": description,
+                    "primary_document_url": primary_document_url,
+                    "accession_no": accession_no,
+                    "cik": cik,
+                    "company_name": company_name,
+                    "filed_at": filed_at,
+                    "created": created_str,
+                    "updated": updated_str,
+                    "period_of_report": period_of_report,
+                    "is_xml": is_xml,
+                    "link_to_txt": link_to_txt,
+                    "link_to_html": link_to_html,
+                    "link_to_filing_details": link_to_filing_details,
+                    "market_session": market_session,
+                    "returns_schedule": returns_schedule_json
+                })
+                
+                # Process the result
+                record = result.single()
+                if not record:
+                    logger.error(f"Failed to create or update report node {report_id}")
+                    return False
+                
+                # Skip processing if no symbols found
+                if not valid_symbols:
+                    logger.warning(f"No valid symbols found for report {report_id}")
+                    return True
+            
+                # ----- Use UNWIND pattern for efficient batch processing of relationships -----
+                
+                # 1. Create Company FILED_BY relationships using UNWIND pattern
+                if company_params:
+                    company_result = session.run("""
+                    MATCH (r:Report {id: $report_id})
+                    UNWIND $company_params AS param
+                    MATCH (c:Company {cik: param.cik})
+                    MERGE (r)-[rel:FILED_BY]->(c)
+                    SET rel += param.properties
+                    RETURN count(rel) as relationship_count
+                    """, {
+                        "report_id": report_id,
+                        "company_params": company_params
+                    })
+                    for record in company_result:
+                        logger.info(f"Created {record['relationship_count']} FILED_BY relationships to companies")
+                
+                # 2. Create Sector INFLUENCES relationships using UNWIND pattern
+                if sector_params:
+                    sector_result = session.run("""
+                    MATCH (r:Report {id: $report_id})
+                    UNWIND $sector_params AS param
+                    MERGE (s:Sector {id: param.sector_id})
+                    ON CREATE SET 
+                        s.name = param.sector_name,
+                        s.etf = param.sector_etf
+                    SET
+                        s.etf = CASE 
+                            WHEN param.sector_etf IS NOT NULL AND (s.etf IS NULL OR s.etf = '') 
+                            THEN param.sector_etf 
+                            ELSE s.etf 
+                        END
+                    MERGE (r)-[rel:INFLUENCES]->(s)
+                    SET rel += param.properties
+                    RETURN count(rel) as relationship_count
+                    """, {
+                        "report_id": report_id,
+                        "sector_params": sector_params
+                    })
+                    for record in sector_result:
+                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to sectors")
+                
+                # 3. Create Industry INFLUENCES relationships using UNWIND pattern
+                if industry_params:
+                    industry_result = session.run("""
+                    MATCH (r:Report {id: $report_id})
+                    UNWIND $industry_params AS param
+                    MERGE (i:Industry {id: param.industry_id})
+                    ON CREATE SET 
+                        i.name = param.industry_name,
+                        i.etf = param.industry_etf
+                    SET
+                        i.etf = CASE 
+                            WHEN param.industry_etf IS NOT NULL AND (i.etf IS NULL OR i.etf = '') 
+                            THEN param.industry_etf 
+                            ELSE i.etf 
+                        END
+                    MERGE (r)-[rel:INFLUENCES]->(i)
+                    SET rel += param.properties
+                    RETURN count(rel) as relationship_count
+                    """, {
+                        "report_id": report_id,
+                        "industry_params": industry_params
+                    })
+                    for record in industry_result:
+                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to industries")
+                
+                # 4. Create Market Index INFLUENCES relationships using UNWIND pattern
+                if market_params:
+                    market_result = session.run("""
+                    MATCH (r:Report {id: $report_id})
+                    MERGE (m:MarketIndex {id: 'SPY'})
+                    ON CREATE SET
+                        m.name = 'S&P 500 ETF',
+                        m.ticker = 'SPY',
+                        m.etf = 'SPY'
+                    SET
+                        m.ticker = 'SPY',
+                        m.etf = 'SPY',
+                        m.name = CASE
+                            WHEN m.name IS NULL OR m.name = ''
+                            THEN 'S&P 500 ETF'
+                            ELSE m.name
+                        END
+                    WITH r, m
+                    UNWIND $market_params AS param
+                    MERGE (r)-[rel:INFLUENCES]->(m)
+                    SET rel += param.properties
+                    RETURN count(rel) as relationship_count
+                    """, {
+                        "report_id": report_id,
+                        "market_params": market_params
+                    })
+                    for record in market_result:
+                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to market index")
+                
+                logger.info(f"Successfully processed report {report_id} with {len(valid_symbols)} symbols")
+                
+                # Delete withreturns key from Redis after successful processing (commented out)
+                # Note: This would be used if we wanted to delete the Redis key after processing
+                # if hasattr(self, 'hist_client') and self.hist_client:
+                #     try:
+                #         # Extract report ID without prefix to form the Redis key
+                #         base_id = report_id.replace("secReport_", "")
+                #         key = f"reports:withreturns:{base_id}"
+                #         # self.hist_client.client.delete(key)
+                #         # logger.debug(f"Deleted processed report key: {key}")
+                #     except Exception as e:
+                #         logger.warning(f"Error deleting report key for {report_id}: {e}")
+                
+                return True
                 
         except Exception as e:
-            logger.error(f"Error processing news data: {e}")
+            logger.error(f"Error processing report {report_id}: {e}")
             return False
+
+    def process_all_content_types(self):
+        """
+        Process all content types (news and reports) from Redis to Neo4j using a single thread.
+        Handles both news and reports in a unified way for efficiency.
+        """
+        logger.info("Starting unified event-driven Neo4j processing for all content types")
+        
+        # Validate Redis client
+        if not hasattr(self, 'event_trader_redis') or not self.event_trader_redis:
+            logger.error("No Redis client available for event-driven processing")
+            return
+        
+        # Validate that we have required Redis client attributes
+        if not hasattr(self.event_trader_redis, 'live_client') or not self.event_trader_redis.live_client:
+            logger.error("No Redis live client available for event-driven processing")
+            return
+        
+        if not hasattr(self.event_trader_redis, 'history_client') or not self.event_trader_redis.history_client:
+            logger.error("No Redis history client available for event-driven processing")
+            return
+        
+        # Ensure Neo4j connection is established
+        if not self.manager:
+            if not self.connect():
+                logger.error("Failed to connect to Neo4j, cannot proceed with processing")
+                return
+        
+        try:
+            # Initial batch processing of existing data for each content type
+            logger.info("Processing initial batch of news data")
+            self.process_news_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
+            
+            logger.info("Processing initial batch of report data")
+            self.process_reports_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
+            
+            # Create PubSub connections for each content type
+            pubsub_connections = {}
+            
+            for content_type in [ContentType.NEWS, ContentType.REPORT]:
+                pubsub = self.event_trader_redis.live_client.create_pubsub_connection()
+                pubsub.subscribe(f"{content_type}:withreturns", f"{content_type}:withoutreturns")
+                pubsub_connections[content_type] = pubsub
+        
+            # Control flag
+            self.pubsub_running = True
+            
+            # Event-driven processing loop
+            while self.pubsub_running:
+                try:
+                    # Check for messages for each content type (non-blocking)
+                    for content_type, pubsub in pubsub_connections.items():
+                        message = pubsub.get_message(timeout=0.05)
+                        if message and message['type'] == 'message':
+                            if content_type == ContentType.NEWS:
+                                self._process_news_message(message)
+                            elif content_type == ContentType.REPORT:
+                                self._process_report_message(message)
+                    
+                    # Periodic batch processing
+                    current_time = int(time.time())
+                    if current_time % 60 == 0:
+                        # Process small batches of each content type
+                        self.process_news_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
+                        self.process_reports_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
+                        time.sleep(1)  # Prevent repeated execution in the same second
+                    
+                except Exception as e:
+                    logger.error(f"Error in unified processing: {e}")
+                    # Try to reconnect to Neo4j if connection appears to be lost
+                    if not self.manager or "Neo4j" in str(e) or "Connection" in str(e):
+                        logger.warning("Attempting to reconnect to Neo4j")
+                        self.connect()
+                    time.sleep(1)
+        except Exception as e:
+            logger.error(f"Error in process_all_content_types: {e}")
+        finally:
+            # Clean up
+            try:
+                for pubsub in pubsub_connections.values():
+                    pubsub.unsubscribe()
+                    pubsub.close()
+            except Exception as e:
+                logger.error(f"Error cleaning up PubSub connections: {e}")
+        
+            logger.info("Stopped unified Neo4j processing")
+
+    def stop_pubsub_processing(self):
+        """Stop the PubSub processing loop for all content types"""
+        logger.info("Stopping PubSub processing for all content types")
+        self.pubsub_running = False
 
     def get_node_by_id(self, node_id, node_type):
         """
@@ -1310,103 +1558,6 @@ class Neo4jProcessor:
 
 
 
-    def process_with_pubsub(self):
-        """
-        Process news from Redis to Neo4j using PubSub for immediate notification.
-        Non-blocking and highly efficient compared to polling.
-        """
-        logger.info("Starting event-driven Neo4j processing")
-        
-        if not hasattr(self, 'event_trader_redis') or not self.event_trader_redis:
-            logger.error("No Redis client available for event-driven processing")
-            return
-        
-        # Ensure Neo4j connection is established
-        if not self.manager:
-            if not self.connect():
-                logger.error("Failed to connect to Neo4j, cannot proceed with processing")
-                return
-        
-        # Create a dedicated PubSub client
-        pubsub = self.event_trader_redis.live_client.create_pubsub_connection()
-        
-        # Subscribe to both withreturns and withoutreturns channels
-        withreturns_channel = f"{self.event_trader_redis.source}:withreturns"
-        withoutreturns_channel = f"{self.event_trader_redis.source}:withoutreturns"
-        pubsub.subscribe(withreturns_channel, withoutreturns_channel)
-        
-        # Control flag
-        self.pubsub_running = True
-        
-        # Process any existing items first (one-time batch processing)
-        self.process_news_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
-        
-        # Event-driven processing loop
-        while self.pubsub_running:
-            try:
-                # Non-blocking message check with 0.1s timeout
-                message = pubsub.get_message(timeout=0.1)
-                
-                if message and message['type'] == 'message':
-                    channel = message['channel']
-                    news_id = message.get('data')
-                    
-                    if not news_id:
-                        continue
-                    
-                    # Determine if this is from withreturns or withoutreturns
-                    is_withreturns = 'withreturns' in channel
-                    
-                    # Get the news data
-                    key_prefix = "withreturns" if is_withreturns else "withoutreturns"
-                    key = f"{self.event_trader_redis.source}:{key_prefix}:{news_id}"
-                    
-                    try:
-                        # Get and process the news item
-                        raw_data = self.event_trader_redis.history_client.client.get(key)
-                        if raw_data:
-                            news_data = json.loads(raw_data)
-                            success = self._process_deduplicated_news(
-                                news_id=f"bzNews_{news_id.split('.')[0]}", 
-                                news_data=news_data
-                            )
-                            
-                            # Delete from withreturns after successful processing
-                            # if success and is_withreturns:
-                            #     self.event_trader_redis.history_client.client.delete(key)
-                            #     logger.debug(f"Deleted processed item: {key}")
-
-
-                    except Exception as e:
-                        logger.error(f"Error processing {key}: {e}")
-                
-                # Periodically check for items that might have been missed (every 60 seconds)
-                # This is a safety net, not the primary mechanism
-                current_time = int(time.time())
-                if current_time % 60 == 0:
-                    self.process_news_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
-                    time.sleep(1)  # Prevent repeated execution in the same second
-                    
-            except Exception as e:
-                logger.error(f"Error in PubSub processing: {e}")
-                # Try to reconnect to Neo4j if connection appears to be lost
-                if not self.manager or "Neo4j" in str(e) or "Connection" in str(e):
-                    logger.warning("Attempting to reconnect to Neo4j")
-                    self.connect()
-                time.sleep(1)
-        
-        # Clean up
-        try:
-            pubsub.unsubscribe()
-            pubsub.close()
-        except:
-            pass
-            
-        logger.info("Stopped event-driven Neo4j processing")
-        
-    def stop_pubsub_processing(self):
-        """Stop the PubSub processing loop"""
-        self.pubsub_running = False
 
 
 

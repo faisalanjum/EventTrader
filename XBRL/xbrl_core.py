@@ -85,6 +85,7 @@ class NodeType(Enum):
     DATE = "Date"
     ADMIN_REPORT = "AdminReport"
     SECTION = "Section"  # Added for report section hierarchies
+    FILING = "Filing"  # Added for FILING node type support
 
 
 
