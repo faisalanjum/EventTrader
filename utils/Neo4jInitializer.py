@@ -215,7 +215,12 @@ class Neo4jInitializer:
                 for t, l in {
                     "10-K": "10-K Reports",
                     "10-Q": "10-Q Reports", 
-                    "8-K": "8-K Reports"
+                    "8-K": "8-K Reports",
+                    "SCHEDULE 13D": "Schedule 13D Reports",
+                    "SC TO-I": "SC TO-I Reports",
+                    "425": "425 Reports",
+                    "SC 14D9": "SC 14D9 Reports",
+                    "6-K": "6-K Reports"
                 }.items()],
                 
                 # Child nodes
@@ -227,8 +232,8 @@ class Neo4jInitializer:
             
             # Create parent-child relationships
             relationships = [(p, c, RelationType.HAS_SUB_REPORT) 
-                    for p in admin_reports[:3]  # Parent nodes
-                    for c in admin_reports[3:]  # Child nodes
+                    for p in admin_reports[:8]  # Parent nodes (increased from 3 to 8)
+                    for c in admin_reports[8:]  # Child nodes (starting index changed from 3 to 8)
                     if p.code == c.category]
             
             # Export nodes and relationships to Neo4j

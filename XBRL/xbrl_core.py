@@ -123,7 +123,7 @@ class RelationType(Enum):
     HAS_CATEGORY = "HAS_CATEGORY"   # Report -> AdminReport
     FOR_COMPANY = "FOR_COMPANY"       # Context -> Company
     PROVIDES_GUIDANCE = "PROVIDES_GUIDANCE"  # From Guidance concept to related concept
-    INFLUENCES = "INFLUENCES"           # News -> Company relationship
+    INFLUENCES = "INFLUENCES"       # Report/News -> Company relationships
     RELATED_TO = "RELATED_TO"       # Company -> Company relationship as defined by related field in polygon
     
 

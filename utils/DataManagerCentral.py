@@ -359,8 +359,9 @@ class DataManager:
             # Check if Neo4j is already initialized
             if self.neo4j_processor.is_initialized():
                 self.logger.info("Neo4j already initialized, skipping initialization")
-                # Even if initialized, process news data
+                # Even if initialized, process news and report data
                 self.process_news_data()
+                self.process_report_data()
             else:
                 # Initialize Neo4j if not already initialized
                 self.logger.info("Neo4j not initialized, initializing database")
@@ -370,8 +371,9 @@ class DataManager:
                     
                 self.logger.info("Neo4j initialization completed successfully")
                 
-                # Process news data after successful initialization
+                # Process news and report data after successful initialization
                 self.process_news_data()
+                self.process_report_data()
             
             # Start the PubSub-based continuous processing thread
             self.neo4j_thread = threading.Thread(
@@ -386,7 +388,6 @@ class DataManager:
         except Exception as e:
             self.logger.error(f"Error initializing Neo4j: {e}")
             return False
-
 
     def process_news_data(self, batch_size=100, max_items=1000, include_without_returns=True):
         """
@@ -416,6 +417,33 @@ class DataManager:
             self.logger.error(f"Error processing news data: {e}")
             return False
 
+    def process_report_data(self, batch_size=100, max_items=1000, include_without_returns=True):
+        """
+        Process SEC report data into Neo4j from Redis
+        
+        Args:
+            batch_size: Number of items to process in each batch
+            max_items: Maximum number of items to process
+            include_without_returns: Whether to process reports without returns
+        """
+        if not hasattr(self, 'neo4j_processor') or not self.neo4j_processor:
+            self.logger.error("Neo4j processor not initialized, cannot process reports")
+            return False
+            
+        try:
+            self.logger.info(f"Processing SEC report data to Neo4j (batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns})...")
+            success = self.neo4j_processor.process_reports_to_neo4j(batch_size, max_items, include_without_returns)
+            
+            if success:
+                self.logger.info("SEC report data processing completed successfully")
+            else:
+                self.logger.warning("SEC report data processing returned with errors")
+                
+            return success
+        
+        except Exception as e:
+            self.logger.error(f"Error processing SEC report data: {e}")
+            return False
 
     def has_neo4j(self):
         """Check if Neo4j processor is available and initialized"""

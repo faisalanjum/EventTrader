@@ -24,7 +24,7 @@ from utils.redisClasses import EventTraderRedis, RedisClient
 # Internal Imports - EventTrader Node Classes
 from utils.EventTraderNodes import (
     NewsNode, CompanyNode, SectorNode, 
-    IndustryNode, MarketIndexNode
+    IndustryNode, MarketIndexNode, ReportNode
 )
 
 # Internal Imports - Date Utilities
@@ -37,7 +37,8 @@ from utils.metadata_fields import MetadataFields
 from XBRL.Neo4jManager import Neo4jManager
 from XBRL.XBRLClasses import NodeType, RelationType
 
-
+# Internal Imports - Redis Constants
+from utils.redis_constants import RedisKeys
 
 # Set up logger
 logger = get_logger(__name__)
@@ -1050,15 +1051,15 @@ class Neo4jProcessor:
 
     def process_news_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
         """
-        Process news from Redis to Neo4j with deduplication.
+        Process news items from Redis to Neo4j
         
         Args:
-            batch_size: Number of items to process in each batch
-            max_items: Maximum number of items to process (for debugging)
-            include_without_returns: Whether to process news from the withoutreturns namespace
+            batch_size: Number of news items to process in each batch
+            max_items: Maximum number of news items to process
+            include_without_returns: Whether to include news items without returns
             
         Returns:
-            bool: True if successful, False otherwise
+            bool: True if processing completed without errors
         """
         try:
             if not self.manager:
@@ -1170,6 +1171,498 @@ class Neo4jProcessor:
             logger.error(f"Error processing news data: {e}")
             return False
 
+    def process_reports_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
+        """
+        Process SEC reports from Redis to Neo4j
+        Similar to process_news_to_neo4j but for SEC reports
+        
+        Args:
+            batch_size: Number of records to process at once
+            max_items: Maximum number of items to process (None for all)
+            include_without_returns: Whether to include reports without returns
+            
+        Returns:
+            bool: True if processing is complete, False if it was interrupted
+        """
+        from utils.EventTraderNodes import ReportNode, CompanyNode
+        from utils.redis_constants import RedisKeys
+        
+        # Get Redis instance if available
+        if not self.event_trader_redis:
+            print("No Redis instance available, cannot process reports")
+            return False
+            
+        # Process reports with returns
+        withreturns_keys = []
+        try:
+            # Get report keys with returns
+            withreturns_namespace = RedisKeys.get_key(
+                source_type=RedisKeys.SOURCE_REPORTS, 
+                key_type=RedisKeys.SUFFIX_WITHRETURNS
+            )
+            withreturns_pattern = f"{withreturns_namespace}*"
+            withreturns_keys = list(self.event_trader_redis.history_client.client.scan_iter(match=withreturns_pattern))
+            
+            if max_items is not None:
+                withreturns_keys = withreturns_keys[:max_items]
+                
+            print(f"Found {len(withreturns_keys)} reports with returns")
+        except Exception as e:
+            print(f"Error getting withreturns keys: {e}")
+            
+        # Process reports without returns if requested
+        withoutreturns_keys = []
+        if include_without_returns:
+            try:
+                # Get report keys without returns
+                withoutreturns_namespace = RedisKeys.get_key(
+                    source_type=RedisKeys.SOURCE_REPORTS, 
+                    key_type=RedisKeys.SUFFIX_WITHOUTRETURNS
+                )
+                withoutreturns_pattern = f"{withoutreturns_namespace}*"
+                withoutreturns_keys = list(self.event_trader_redis.history_client.client.scan_iter(match=withoutreturns_pattern))
+                
+                if max_items is not None:
+                    withoutreturns_keys = withoutreturns_keys[:max_items]
+                    
+                print(f"Found {len(withoutreturns_keys)} reports without returns")
+            except Exception as e:
+                print(f"Error getting withoutreturns keys: {e}")
+                
+        # Combine both key sets
+        all_keys = withreturns_keys + withoutreturns_keys
+        if not all_keys:
+            print("No report keys found to process")
+            return True
+            
+        total_reports = len(all_keys)
+        print(f"Processing {total_reports} total reports")
+        
+        # Process in batches
+        for batch_start in range(0, len(all_keys), batch_size):
+            batch_keys = all_keys[batch_start:batch_start + batch_size]
+            batch_size_actual = len(batch_keys)
+            
+            print(f"Processing batch {batch_start//batch_size + 1}, items {batch_start+1}-{batch_start+batch_size_actual} of {total_reports}")
+            
+            # Get report data for the batch
+            batch_reports = []
+            company_nodes = {}
+            
+            # Retrieve and process report data
+            for key in batch_keys:
+                try:
+                    report_data = self.event_trader_redis.history_client.get(key)
+                    if not report_data:
+                        continue
+                        
+                    report_json = json.loads(report_data)
+                    
+                    # Create ReportNode from Redis data
+                    report_node = ReportNode.from_redis(report_json)
+                    batch_reports.append(report_node)
+                    
+                    # Process company information
+                    self._process_report_companies(report_json, company_nodes)
+                    
+                except Exception as e:
+                    print(f"Error processing report {key}: {e}")
+                    continue
+            
+            # Create nodes and relationships in Neo4j
+            if batch_reports:
+                # Create company nodes first
+                if company_nodes:
+                    self.manager._export_nodes([list(company_nodes.values())], testing=False)
+                
+                # Create report nodes
+                self.manager._export_nodes([batch_reports], testing=False)
+                
+                # Create relationships
+                self._create_report_relationships(batch_reports, company_nodes)
+                
+        return True
+
+    def _process_report_companies(self, report_json: Dict[str, Any], company_nodes: Dict[str, 'CompanyNode']):
+        """
+        Extract and create company nodes from report data
+        
+        Args:
+            report_json: The report JSON data
+            company_nodes: Dictionary to store company nodes (cik -> node)
+        """
+        from utils.EventTraderNodes import CompanyNode
+        
+        # Get universe data for mapping
+        universe_data = self.get_tradable_universe()
+        ticker_to_cik = {}
+        for symbol, data in universe_data.items():
+            cik = data.get('cik', '').strip()
+            if cik and cik.lower() not in ['nan', 'none', '']:
+                ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
+        
+        # Extract symbols from metadata - use the same approach as news processing
+        symbols = []
+        if 'metadata' in report_json and 'instruments' in report_json['metadata']:
+            for instrument in report_json['metadata']['instruments']:
+                symbol = instrument.get('symbol', '')
+                if symbol:
+                    symbols.append(symbol.upper())
+        
+        # If no symbols in metadata but we have a company symbol, try to use it
+        if not symbols and 'symbols' in report_json and report_json['symbols']:
+            symbols.extend([s.upper() for s in report_json['symbols']])
+            
+        # Create company nodes for all symbols
+        for symbol in symbols:
+            symbol_upper = symbol.upper()
+            cik = ticker_to_cik.get(symbol_upper)
+            if not cik:
+                logger.warning(f"No CIK found for symbol {symbol_upper}")
+                continue
+                
+            # Skip if we already processed this company
+            if cik in company_nodes:
+                continue
+                
+            # Get company data
+            company_data = universe_data.get(symbol_upper, {})
+            name = company_data.get('company_name', company_data.get('name', symbol_upper))
+                
+            # Create company node
+            company = CompanyNode(
+                cik=cik,
+                name=name,
+                ticker=symbol_upper
+            )
+                
+            # Add additional fields if available
+            for field in ['exchange', 'sector', 'industry', 'sic', 'sic_name']:
+                if field in company_data:
+                    setattr(company, field, company_data[field])
+                
+            company_nodes[cik] = company
+        
+        # Legacy CIK approach - commented out to use symbol-based approach consistently
+        # Format CIK properly
+        # def format_cik(cik):
+        #     if not cik:
+        #         return None
+        #     # Make sure CIK is a string with leading zeros to 10 digits
+        #     return str(cik).zfill(10)
+        
+        # # Process entities if available
+        # entities = report_json.get('entities', [])
+        # for entity in entities:
+        #     cik = format_cik(entity.get('cik'))
+        #     if not cik:
+        #         continue
+        #         
+        #     # Skip if we already processed this company
+        #     if cik in company_nodes:
+        #         continue
+        #         
+        #     # Create company node
+        #     company = CompanyNode(
+        #         cik=cik,
+        #         name=entity.get('companyName', ''),
+        #         sic=entity.get('sic', '').split(' ')[0] if entity.get('sic') else None,
+        #         sic_name=entity.get('sic', '').replace(entity.get('sic', '').split(' ')[0], '').strip() if entity.get('sic') else None
+        #     )
+        #     
+        #     company_nodes[cik] = company
+        
+        # # Also check main company info
+        # main_cik = format_cik(report_json.get('cik'))
+        # main_name = report_json.get('companyName')
+        # 
+        # if main_cik and main_cik not in company_nodes and main_name:
+        #     company = CompanyNode(
+        #         cik=main_cik,
+        #         name=main_name
+        #     )
+        #     company_nodes[main_cik] = company
+
+    def _create_report_relationships(self, report_nodes, company_nodes):
+        """
+        Create relationships between Report nodes and Company nodes
+        
+        Args:
+            report_nodes: List of ReportNode objects
+            company_nodes: Dictionary of CompanyNode objects keyed by CIK
+        """
+        try:
+            if not report_nodes:
+                logger.warning("No report nodes to create relationships for")
+                return False
+                
+            # Load universe data for metadata if needed
+            universe_data = self.get_tradable_universe()
+            ticker_to_cik = {}
+            for symbol, data in universe_data.items():
+                cik = data.get('cik', '').strip()
+                if cik and cik.lower() not in ['nan', 'none', '']:
+                    ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
+            
+            # Create relationships in Neo4j
+            with self.manager.driver.session() as session:
+                for report_node in report_nodes:
+                    # Get report data and extract symbols
+                    report_json = None
+                    if hasattr(report_node, '_original_data') and report_node._original_data:
+                        report_json = report_node._original_data
+                    else:
+                        logger.warning(f"No original data found for report {report_node.accessionNo}")
+                        continue
+                    
+                    # Process symbols from metadata if available
+                    symbols = []
+                    symbol_metrics = {}
+                    timestamp = datetime.now().isoformat()
+                    
+                    # Try to extract symbols and metrics
+                    if 'metadata' in report_json and 'instruments' in report_json['metadata']:
+                        for instrument in report_json['metadata']['instruments']:
+                            symbol = instrument.get('symbol', '')
+                            if symbol:
+                                symbols.append(symbol.upper())
+                                
+                                # Extract metrics for this symbol
+                                metrics = self._extract_return_metrics(report_json, symbol.upper())
+                                if metrics:
+                                    symbol_metrics[symbol.upper()] = metrics
+                    
+                    # If no symbols in metadata but we have a symbols field, use those
+                    if not symbols and 'symbols' in report_json and report_json['symbols']:
+                        symbols.extend([s.upper() for s in report_json['symbols']])
+                    
+                    # If still no symbols but we know the report is for a specific CIK,
+                    # try to find that company's ticker
+                    if not symbols and report_node.cik:
+                        for symbol, cik in ticker_to_cik.items():
+                            if cik == str(report_node.cik).zfill(10):
+                                symbols.append(symbol.upper())
+                                break
+                    
+                    if not symbols:
+                        logger.warning(f"No symbols found for report {report_node.accessionNo}")
+                        continue
+                    
+                    # Prepare data structures for batch relationship processing
+                    company_params = []
+                    sector_params = []
+                    industry_params = []
+                    market_params = []
+                    
+                    # Preprocess symbols to collect metrics and prepare relationship parameters
+                    for symbol in symbols:
+                        symbol_upper = symbol.upper()
+                        cik = ticker_to_cik.get(symbol_upper)
+                        if not cik:
+                            logger.warning(f"No CIK found for symbol {symbol_upper}")
+                            continue
+                        
+                        # Skip if company node doesn't exist
+                        if cik not in company_nodes:
+                            logger.warning(f"No company node found for CIK {cik} (symbol {symbol_upper})")
+                            continue
+                        
+                        # Get metrics for this symbol
+                        metrics = symbol_metrics.get(symbol_upper, {})
+                        
+                        # Prepare company relationship properties
+                        company_props = {
+                            'symbol': symbol_upper,
+                            'created_at': timestamp
+                        }
+                        
+                        # Add stock metrics
+                        for timeframe in ['hourly', 'session', 'daily']:
+                            metric_key = f"{timeframe}_stock"
+                            if metric_key in metrics:
+                                company_props[metric_key] = metrics[metric_key]
+                        
+                        company_params.append({
+                            'cik': cik,
+                            'properties': company_props
+                        })
+                        
+                        # Get sector and industry information from universe data
+                        company_data = universe_data.get(symbol_upper, {})
+                        sector = company_data.get('sector')
+                        industry = company_data.get('industry')
+                        
+                        # Prepare sector relationship properties
+                        if sector:
+                            sector_id = sector.replace(" ", "")
+                            sector_props = {
+                                'symbol': symbol_upper,
+                                'created_at': timestamp
+                            }
+                            
+                            # Add sector metrics
+                            for timeframe in ['hourly', 'session', 'daily']:
+                                metric_key = f"{timeframe}_sector"
+                                if metric_key in metrics:
+                                    sector_props[metric_key] = metrics[metric_key]
+                            
+                            # Get sector_etf for property only
+                            sector_etf = company_data.get('sector_etf')
+                            
+                            sector_params.append({
+                                'sector_id': sector_id,
+                                'sector_name': sector,
+                                'sector_etf': sector_etf,
+                                'properties': sector_props
+                            })
+                        
+                        # Prepare industry relationship properties
+                        if industry:
+                            industry_id = industry.replace(" ", "")
+                            industry_props = {
+                                'symbol': symbol_upper,
+                                'created_at': timestamp
+                            }
+                            
+                            # Add industry metrics
+                            for timeframe in ['hourly', 'session', 'daily']:
+                                metric_key = f"{timeframe}_industry"
+                                if metric_key in metrics:
+                                    industry_props[metric_key] = metrics[metric_key]
+                            
+                            # Get industry_etf for property only
+                            industry_etf = company_data.get('industry_etf')
+                            
+                            industry_params.append({
+                                'industry_id': industry_id,
+                                'industry_name': industry,
+                                'industry_etf': industry_etf,
+                                'properties': industry_props
+                            })
+                        
+                        # Prepare market index properties
+                        market_props = {
+                            'symbol': symbol_upper,
+                            'created_at': timestamp
+                        }
+                        
+                        # Add macro metrics
+                        has_macro_metrics = False
+                        for timeframe in ['hourly', 'session', 'daily']:
+                            metric_key = f"{timeframe}_macro"
+                            if metric_key in metrics:
+                                market_props[metric_key] = metrics[metric_key]
+                                has_macro_metrics = True
+                        
+                        if has_macro_metrics:
+                            market_params.append({
+                                'properties': market_props
+                            })
+                    
+                    # Create all relationships using the exact same pattern as news processing
+                    
+                    # 1. Create Company INFLUENCES relationships
+                    if company_params:
+                        company_result = session.run("""
+                        MATCH (r:Report {id: $report_id})
+                        UNWIND $company_params AS param
+                        MATCH (c:Company {cik: param.cik})
+                        MERGE (r)-[rel:INFLUENCES]->(c)
+                        SET rel += param.properties
+                        RETURN count(rel) as relationship_count
+                        """, {
+                            "report_id": report_node.accessionNo,
+                            "company_params": company_params
+                        })
+                        for record in company_result:
+                            logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to companies")
+                    
+                    # 2. Create Sector INFLUENCES relationships
+                    if sector_params:
+                        sector_result = session.run("""
+                        MATCH (r:Report {id: $report_id})
+                        UNWIND $sector_params AS param
+                        MERGE (s:Sector {id: param.sector_id})
+                        ON CREATE SET 
+                            s.name = param.sector_name,
+                            s.etf = param.sector_etf
+                        SET
+                            s.etf = CASE 
+                                WHEN param.sector_etf IS NOT NULL AND (s.etf IS NULL OR s.etf = '') 
+                                THEN param.sector_etf 
+                                ELSE s.etf 
+                            END
+                        MERGE (r)-[rel:INFLUENCES]->(s)
+                        SET rel += param.properties
+                        RETURN count(rel) as relationship_count
+                        """, {
+                            "report_id": report_node.accessionNo,
+                            "sector_params": sector_params
+                        })
+                        for record in sector_result:
+                            logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to sectors")
+                    
+                    # 3. Create Industry INFLUENCES relationships
+                    if industry_params:
+                        industry_result = session.run("""
+                        MATCH (r:Report {id: $report_id})
+                        UNWIND $industry_params AS param
+                        MERGE (i:Industry {id: param.industry_id})
+                        ON CREATE SET 
+                            i.name = param.industry_name,
+                            i.etf = param.industry_etf
+                        SET
+                            i.etf = CASE 
+                                WHEN param.industry_etf IS NOT NULL AND (i.etf IS NULL OR i.etf = '') 
+                                THEN param.industry_etf 
+                                ELSE i.etf 
+                            END
+                        MERGE (r)-[rel:INFLUENCES]->(i)
+                        SET rel += param.properties
+                        RETURN count(rel) as relationship_count
+                        """, {
+                            "report_id": report_node.accessionNo,
+                            "industry_params": industry_params
+                        })
+                        for record in industry_result:
+                            logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to industries")
+                    
+                    # 4. Create Market Index INFLUENCES relationships
+                    if market_params:
+                        market_result = session.run("""
+                        MATCH (r:Report {id: $report_id})
+                        MERGE (m:MarketIndex {id: 'SPY'})
+                        ON CREATE SET
+                            m.name = 'S&P 500 ETF',
+                            m.ticker = 'SPY',
+                            m.etf = 'SPY'
+                        SET
+                            m.ticker = 'SPY',
+                            m.etf = 'SPY',
+                            m.name = CASE
+                                WHEN m.name IS NULL OR m.name = ''
+                                THEN 'S&P 500 ETF'
+                                ELSE m.name
+                            END
+                        WITH r, m
+                        UNWIND $market_params AS param
+                        MERGE (r)-[rel:INFLUENCES]->(m)
+                        SET rel += param.properties
+                        RETURN count(rel) as relationship_count
+                        """, {
+                            "report_id": report_node.accessionNo,
+                            "market_params": market_params
+                        })
+                        for record in market_result:
+                            logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to market index")
+                
+                logger.info(f"Created relationships for {len(report_nodes)} report nodes")
+            
+            return True
+        except Exception as e:
+            logger.error(f"Error creating report relationships: {e}")
+            return False
+
     def get_node_by_id(self, node_id, node_type):
         """
         Get a node by its ID and type from Neo4j
@@ -1204,6 +1697,8 @@ class Neo4jProcessor:
                         return CompanyNode.from_neo4j(node_props)
                     elif node_type == NodeType.NEWS:
                         return NewsNode.from_neo4j(node_props)
+                    elif node_type == NodeType.REPORT:
+                        return ReportNode.from_neo4j(node_props)
                     
             return None
         except Exception as e:
@@ -1312,7 +1807,7 @@ class Neo4jProcessor:
 
     def process_with_pubsub(self):
         """
-        Process news from Redis to Neo4j using PubSub for immediate notification.
+        Process news and reports from Redis to Neo4j using PubSub for immediate notification.
         Non-blocking and highly efficient compared to polling.
         """
         logger.info("Starting event-driven Neo4j processing")
@@ -1330,16 +1825,24 @@ class Neo4jProcessor:
         # Create a dedicated PubSub client
         pubsub = self.event_trader_redis.live_client.create_pubsub_connection()
         
-        # Subscribe to both withreturns and withoutreturns channels
+        # Subscribe to news channels
         withreturns_channel = f"{self.event_trader_redis.source}:withreturns"
         withoutreturns_channel = f"{self.event_trader_redis.source}:withoutreturns"
         pubsub.subscribe(withreturns_channel, withoutreturns_channel)
+        logger.info(f"Subscribed to news channels: {withreturns_channel}, {withoutreturns_channel}")
+        
+        # Subscribe to report channels
+        report_withreturns_channel = f"{RedisKeys.SOURCE_REPORTS}:withreturns"
+        report_withoutreturns_channel = f"{RedisKeys.SOURCE_REPORTS}:withoutreturns"
+        pubsub.subscribe(report_withreturns_channel, report_withoutreturns_channel)
+        logger.info(f"Subscribed to report channels: {report_withreturns_channel}, {report_withoutreturns_channel}")
         
         # Control flag
         self.pubsub_running = True
         
         # Process any existing items first (one-time batch processing)
         self.process_news_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
+        self.process_reports_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
         
         # Event-driven processing loop
         while self.pubsub_running:
@@ -1349,36 +1852,18 @@ class Neo4jProcessor:
                 
                 if message and message['type'] == 'message':
                     channel = message['channel']
-                    news_id = message.get('data')
+                    item_id = message.get('data')
                     
-                    if not news_id:
+                    if not item_id:
                         continue
                     
-                    # Determine if this is from withreturns or withoutreturns
-                    is_withreturns = 'withreturns' in channel
-                    
-                    # Get the news data
-                    key_prefix = "withreturns" if is_withreturns else "withoutreturns"
-                    key = f"{self.event_trader_redis.source}:{key_prefix}:{news_id}"
-                    
-                    try:
-                        # Get and process the news item
-                        raw_data = self.event_trader_redis.history_client.client.get(key)
-                        if raw_data:
-                            news_data = json.loads(raw_data)
-                            success = self._process_deduplicated_news(
-                                news_id=f"bzNews_{news_id.split('.')[0]}", 
-                                news_data=news_data
-                            )
-                            
-                            # Delete from withreturns after successful processing
-                            # if success and is_withreturns:
-                            #     self.event_trader_redis.history_client.client.delete(key)
-                            #     logger.debug(f"Deleted processed item: {key}")
-
-
-                    except Exception as e:
-                        logger.error(f"Error processing {key}: {e}")
+                    # Determine content type and process accordingly
+                    if channel.startswith(self.event_trader_redis.source):
+                        # Process news
+                        self._process_pubsub_item(channel, item_id, 'news')
+                    elif channel.startswith(f"{RedisKeys.SOURCE_REPORTS}"):
+                        # Process report
+                        self._process_pubsub_item(channel, item_id, 'report')
                 
                 # Periodically check for items that might have been missed (every 60 seconds)
                 # This is a safety net, not the primary mechanism
@@ -1403,10 +1888,69 @@ class Neo4jProcessor:
             pass
             
         logger.info("Stopped event-driven Neo4j processing")
+    
+    def _process_pubsub_item(self, channel, item_id, content_type='news'):
+        """
+        Process an item update from PubSub (works for both news and reports)
         
-    def stop_pubsub_processing(self):
-        """Stop the PubSub processing loop"""
-        self.pubsub_running = False
+        Args:
+            channel: The Redis channel the message came from
+            item_id: The ID of the item to process
+            content_type: 'news' or 'report'
+        """
+        try:
+            logger.info(f"Processing {content_type} update from {channel}: {item_id}")
+            
+            # Determine namespace from channel
+            namespace = "withreturns" if "withreturns" in channel else "withoutreturns"
+            
+            # Process based on content type
+            if content_type == 'news':
+                # Get the news data
+                key = f"{self.event_trader_redis.source}:{namespace}:{item_id}"
+                
+                # Get and process the news item
+                raw_data = self.event_trader_redis.history_client.client.get(key)
+                if raw_data:
+                    news_data = json.loads(raw_data)
+                    success = self._process_deduplicated_news(
+                        news_id=f"bzNews_{item_id.split('.')[0]}", 
+                        news_data=news_data
+                    )
+                    logger.info(f"Successfully processed news {item_id}")
+                else:
+                    logger.warning(f"No data found for news {item_id}")
+            else:  # report
+                # Get the report data
+                key = f"{RedisKeys.SOURCE_REPORTS}:{namespace}:{item_id}"
+                
+                # Get and process the report
+                raw_data = self.event_trader_redis.history_client.client.get(key)
+                if raw_data:
+                    report_json = json.loads(raw_data)
+                    
+                    # Create report and company nodes
+                    report_node = ReportNode.from_redis(report_json)
+                    company_nodes = {}
+                    
+                    # Process company information
+                    self._process_report_companies(report_json, company_nodes)
+                    
+                    # Create nodes in Neo4j
+                    if company_nodes:
+                        self.manager._export_nodes([list(company_nodes.values())], testing=False)
+                        
+                    self.manager._export_nodes([report_node], testing=False)
+                    
+                    # Create relationships
+                    self._create_report_relationships([report_node], company_nodes)
+                    
+                    logger.info(f"Successfully processed report {item_id}")
+                else:
+                    logger.warning(f"No data found for report {item_id}")
+                
+        except Exception as e:
+            logger.error(f"Error processing {content_type} update for {item_id}: {e}")
 
 
 

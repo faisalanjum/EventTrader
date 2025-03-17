@@ -32,7 +32,7 @@ class Polygon:
 
         self.market_session = MarketSessionClassifier()
         self.client = self.get_rest_client()
-        self.executor = ThreadPoolExecutor(max_workers=80)
+        self.executor = ThreadPoolExecutor(max_workers=180)
         self.last_error = {}
         self.ticker_validation_cache = {}
         
@@ -42,7 +42,7 @@ class Polygon:
         adapter = requests.adapters.HTTPAdapter(
             pool_connections=100,
             pool_maxsize=100,
-            max_retries=3,
+            max_retries=5,
             pool_block=False
         )
         self.session.mount('https://', adapter)

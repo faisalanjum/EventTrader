@@ -7,7 +7,7 @@ from enum import Enum
 from utils.date_utils import parse_date  # Import our date parsing utility
 
 # Import node types from XBRLClasses
-from XBRL.XBRLClasses import NodeType, RelationType, CompanyNode as XBRLCompanyNode
+from XBRL.XBRLClasses import NodeType, RelationType, CompanyNode as XBRLCompanyNode, ReportNode as XBRLReportNode
 
 @dataclass
 class Neo4jNode:
@@ -32,6 +32,237 @@ class Neo4jNode:
     def from_neo4j(cls, props: Dict[str, Any]) -> Neo4jNode:
         """Create instance from Neo4j properties"""
         raise NotImplementedError("Subclasses must implement from_neo4j")
+
+
+
+
+@dataclass
+class ReportNode(XBRLReportNode):
+    """
+    EventTrader-specific extension of ReportNode.
+    Inherits from XBRLClasses.ReportNode to maintain compatibility while allowing
+    for EventTrader-specific extensions or overrides.
+    
+    Fields are mapped from SEC API and Redis data to the XBRL structure.
+    """
+    
+    # No need to redefine core fields as they're inherited from the parent class
+    # The parent class already defines:
+    # formType: str
+    # periodEnd: str
+    # isAmendment: bool
+    # instanceFile: str
+    # cik: str
+    # etc.
+    
+    # Additional fields from SEC API/Redis not in XBRL base class
+    primaryDocumentUrl: Optional[str] = None
+    description: Optional[str] = None
+    is_xml: Optional[bool] = None
+    companyName: Optional[str] = None
+    linkToTxt: Optional[str] = None
+    linkToHtml: Optional[str] = None
+    linkToFilingDetails: Optional[str] = None
+    effectivenessDate: Optional[str] = None
+    exhibits: Optional[Dict[str, Any]] = field(default_factory=dict)
+    items: Optional[List[str]] = field(default_factory=list)
+    symbols: Optional[List[str]] = field(default_factory=list)
+    entities: Optional[List[Dict[str, Any]]] = field(default_factory=list)
+    extracted_sections: Optional[Dict[str, Any]] = field(default_factory=dict)
+    financial_statements: Optional[Dict[str, Any]] = field(default_factory=dict)
+    exhibit_contents: Optional[Dict[str, Any]] = field(default_factory=dict)
+    created: Optional[str] = None
+    updated: Optional[str] = None
+    
+    # Override id property to use accessionNo as the unique identifier
+    @property
+    def id(self) -> str:
+        """Use accessionNo as unique identifier"""
+        if not self.accessionNo:
+            raise ValueError("Missing required accessionNo for ReportNode")
+        return self.accessionNo
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'ReportNode':
+        """Create ReportNode from Neo4j properties"""
+        # Check required fields
+        required_fields = ['formType', 'accessionNo']
+        missing_fields = [field for field in required_fields if field not in props]
+        if missing_fields:
+            raise ValueError(f"Missing required fields: {', '.join(missing_fields)}")
+        
+        # Map fields from Neo4j properties to ReportNode fields
+        # First set required fields
+        report = cls(
+            formType=props.get('formType', ''),
+            periodEnd=props.get('periodEnd', ''),
+            isAmendment=props.get('isAmendment', False),
+            instanceFile=props.get('instanceFile', ''),
+            cik=props.get('cik', '')
+        )
+        
+        # Make sure accessionNo is set
+        report.accessionNo = props.get('accessionNo', '')
+        
+        # Map optional fields directly
+        optional_fields = [
+            'filedAt', 'periodOfReport', 'insertedAt', 'status',
+            'primaryDocumentUrl', 'description', 'is_xml', 'companyName',
+            'linkToTxt', 'linkToHtml', 'linkToFilingDetails', 'effectivenessDate',
+            'created', 'updated'
+        ]
+        
+        for field in optional_fields:
+            if field in props and props[field] not in (None, "", "null"):
+                setattr(report, field, props[field])
+        
+        # Handle complex fields (lists and dictionaries)
+        # These need special handling because they're stored as JSON strings in Neo4j
+        json_fields = {
+            'exhibits': dict,
+            'items': list,
+            'symbols': list,
+            'entities': list,
+            'extracted_sections': dict,
+            'financial_statements': dict,
+            'exhibit_contents': dict
+        }
+        
+        for field, default_type in json_fields.items():
+            if field in props and props[field]:
+                try:
+                    if isinstance(props[field], str):
+                        setattr(report, field, json.loads(props[field]))
+                    else:
+                        # Already the right type
+                        setattr(report, field, props[field])
+                except json.JSONDecodeError:
+                    # Fallback to default if JSON parsing fails
+                    setattr(report, field, default_type())
+        
+        return report
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """
+        Returns enhanced properties for Neo4j node with EventTrader-specific fields
+        Overrides the base class method to include additional fields
+        """
+        # Get base properties from parent class
+        props = super().properties
+        
+        # Override id with accessionNo
+        props['id'] = self.id
+        
+        # Add EventTrader-specific properties
+        additional_props = {
+            'primaryDocumentUrl': self.primaryDocumentUrl,
+            'description': self.description,
+            'is_xml': self.is_xml,
+            'companyName': self.companyName,
+            'linkToTxt': self.linkToTxt,
+            'linkToHtml': self.linkToHtml,
+            'linkToFilingDetails': self.linkToFilingDetails,
+            'effectivenessDate': self.effectivenessDate,
+            'created': self.created,
+            'updated': self.updated
+        }
+        
+        # Add non-None additional properties
+        props.update({k: v for k, v in additional_props.items() if v is not None})
+        
+        # Handle complex fields by serializing to JSON
+        if self.exhibits:
+            props['exhibits'] = json.dumps(self.exhibits)
+        if self.items:
+            props['items'] = json.dumps(self.items)
+        if self.symbols:
+            props['symbols'] = json.dumps(self.symbols)
+        if self.entities:
+            props['entities'] = json.dumps(self.entities)
+        if self.extracted_sections:
+            props['extracted_sections'] = json.dumps(self.extracted_sections)
+        if self.financial_statements:
+            props['financial_statements'] = json.dumps(self.financial_statements)
+        if self.exhibit_contents:
+            props['exhibit_contents'] = json.dumps(self.exhibit_contents)
+        
+        return props
+    
+    @classmethod
+    def from_redis(cls, redis_data: Dict[str, Any]) -> 'ReportNode':
+        """
+        Create a ReportNode from a Redis report item
+        Maps SEC API/Redis fields to ReportNode fields
+        """
+        # Check required fields
+        if 'accessionNo' not in redis_data or not redis_data['accessionNo']:
+            raise ValueError("Missing required accessionNo in Redis data")
+        
+        # Map required fields with reasonable defaults
+        instance_file = redis_data.get('primaryDocumentUrl', '')
+        if not instance_file:
+            instance_file = redis_data.get('linkToFilingDetails', '')
+            
+        # Handle CIK (from entities if available)
+        cik = redis_data.get('cik', '')
+        if not cik and redis_data.get('entities'):
+            # Try to get subject company CIK from entities
+            for entity in redis_data.get('entities', []):
+                if '(Subject)' in entity.get('companyName', ''):
+                    cik = entity.get('cik', '')
+                    break
+            # If no subject found, use first entity's CIK
+            if not cik and redis_data.get('entities'):
+                cik = redis_data['entities'][0].get('cik', '')
+        
+        # Create instance with required fields
+        report = cls(
+            formType=redis_data.get('formType', 'UNKNOWN'),
+            # Map periodEnd - use periodOfReport if available, otherwise use filedAt
+            periodEnd=redis_data.get('periodOfReport', redis_data.get('filedAt', '')[:10]),
+            isAmendment=('/A' in redis_data.get('formType', '') or '[Amend]' in redis_data.get('description', '')),
+            instanceFile=instance_file,
+            cik=cik
+        )
+        
+        # Set accessionNo explicitly as it's our primary identifier
+        report.accessionNo = redis_data.get('accessionNo', '')
+        
+        # Map direct field equivalents
+        field_mappings = {
+            'filedAt': 'filedAt',
+            'periodOfReport': 'periodOfReport',
+            'primaryDocumentUrl': 'primaryDocumentUrl',
+            'description': 'description',
+            'is_xml': 'is_xml',
+            'companyName': 'companyName',
+            'linkToTxt': 'linkToTxt',
+            'linkToHtml': 'linkToHtml',
+            'linkToFilingDetails': 'linkToFilingDetails',
+            'effectivenessDate': 'effectivenessDate',
+            'exhibits': 'exhibits',
+            'items': 'items',
+            'symbols': 'symbols',
+            'entities': 'entities',
+            'extracted_sections': 'extracted_sections',
+            'financial_statements': 'financial_statements',
+            'exhibit_contents': 'exhibit_contents',
+            'created': 'created',
+            'updated': 'updated'
+        }
+        
+        # Set mapped fields
+        for redis_field, report_field in field_mappings.items():
+            if redis_field in redis_data and redis_data[redis_field] is not None:
+                setattr(report, report_field, redis_data[redis_field])
+        
+        # Store the original Redis data for later access to metadata and returns
+        report._original_data = redis_data
+        
+        return report
+
+
 
 @dataclass
 class CompanyNode(XBRLCompanyNode): 
