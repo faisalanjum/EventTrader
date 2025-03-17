@@ -314,12 +314,13 @@ class ReturnsProcessor:
     def _publish_news_update(self, namespace, news_id):
         """Publish a news update to the appropriate channel"""
         try:
-            channel = f"{self.source_type}:{namespace}"
+            # Use RedisKeys method to get the correct channel
+            channel = RedisKeys.get_returns_keys(self.source_type)[namespace]
             self.logger.debug(f"Publishing to channel {channel}: {news_id}")
             self.live_client.client.publish(channel, news_id)
             return True
         except Exception as e:
-            self.logger.error(f"Error publishing to {channel}: {e}")
+            self.logger.error(f"Error publishing to channel: {e}")
             return False
 
     def _process_single_item(self, key: str, client) -> bool:

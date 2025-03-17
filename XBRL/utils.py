@@ -91,9 +91,32 @@ def get_company_info(model_xbrl):
 
 # TODO: To be replaced later by actual sec-api - This is temporary
 def get_report_info(model_xbrl):
-    doc_type = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'DocumentType'), None)
-    period_end_date = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'DocumentPeriodEndDate'), None)
+    """
+    Extract report metadata from model_xbrl.
+    Returns a dictionary with all the fields needed for creating a ReportNode.
+    """
+    # Basic report info
+    doc_type = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'DocumentType'), 'Unknown')
+    period_end_date = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'DocumentPeriodEndDate'), 
+                          datetime.now().strftime('%Y-%m-%d'))
     is_amendment = next((fact.value.lower() == 'true' for fact in model_xbrl.facts 
                         if fact.qname.localName == 'AmendmentFlag'), False)
     
-    return doc_type, period_end_date, is_amendment  
+    # Additional metadata
+    period_of_report = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'PeriodOfReport'), None)
+    filed_at = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'DocumentEffectiveDate'), None)
+    accession_number = next((fact.value for fact in model_xbrl.facts if fact.qname.localName == 'AccessionNumber'), None)
+    
+    # Remove '/A' from form type if present but preserve the amendment flag
+    if doc_type and '/' in doc_type:
+        doc_type = doc_type.split('/')[0]
+    
+    # Return a dictionary with all fields
+    return {
+        'form_type': doc_type,
+        'period_end': period_end_date,
+        'is_amendment': is_amendment,
+        'period_of_report': period_of_report,
+        'filed_at': filed_at,
+        'accession_number': accession_number
+    }  

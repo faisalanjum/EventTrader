@@ -41,10 +41,11 @@ from enum import Enum
 @dataclass
 class process_report:
 
-    # passed at init
-    instance_file: str 
-    neo4j: 'Neo4jManager'
-    external_company: CompanyNode  # Required parameter
+    # passed at init - modified to make instance_file optional
+    instance_file: Optional[str] = None
+    neo4j: 'Neo4jManager' = None
+    external_company: CompanyNode = None  # Required parameter
+    report_node: Optional['ReportNode'] = None  # New parameter to accept a ReportNode object
     
     # Defaults
     log_file: str = field(default='ErrorLog.txt', repr=False)
@@ -90,6 +91,27 @@ class process_report:
     guidance_concepts: List[GuidanceConcept] = field(init=False, default_factory=list)
     
     def __post_init__(self):
+        # Validation: either instance_file or report_node must be provided
+        if not self.instance_file and not self.report_node:
+            raise ValueError("Either instance_file or report_node must be provided")
+            
+        # If report_node is provided, extract instance_file from it
+        if self.report_node:
+            if hasattr(self.report_node, 'primaryDocumentUrl') and self.report_node.primaryDocumentUrl:
+                self.instance_file = self.report_node.primaryDocumentUrl
+            elif hasattr(self.report_node, 'instanceFile') and self.report_node.instanceFile:
+                self.instance_file = self.report_node.instanceFile
+                # Update primaryDocumentUrl if it's missing but instanceFile exists
+                if hasattr(self.report_node, 'primaryDocumentUrl'):
+                    self.report_node.primaryDocumentUrl = self.instance_file
+            else:
+                raise ValueError("Report node must have either primaryDocumentUrl or instanceFile attribute")
+            
+        # Ensure neo4j and external_company are provided
+        if not self.neo4j:
+            raise ValueError("Neo4j manager is required")
+        if not self.external_company:
+            raise ValueError("External company node is required")
         
         self._primary_facts: Dict[str, Fact] = {}  # canonical_key -> primary fact
         self._duplicate_map: Dict[str, str] = {}   # duplicate_uid -> primary_uid
@@ -98,8 +120,13 @@ class process_report:
         self.load_xbrl()                                        # pupulates model_xbrl - see comment above 
         self.initialize_company_node()                          # Company Node Creation
         self.initialize_admin_reports()                         # Admin Reports Node Creation   
-        self.initialize_report_node(cik = self.company.cik)     # Report Node Creation
-        # self.extract_report_metadata()                        # TODO: Remove this later
+        
+        # Use either the provided report_node or initialize a new one
+        if self.report_node:
+            self.report = self.report_node
+            print(f"Using provided report node: {self.report.formType} ({self.report.id})")
+        else:
+            self.initialize_report_node(cik = self.company.cik)     # Report Node Creation
   
         self.populate_common_nodes()  # First handle common nodes
         self.populate_company_nodes() # Also creates Abstract Nodes in Neo4j
@@ -354,6 +381,10 @@ class process_report:
                     # Create relationships for matching facts
                     for parent_fact in group_parents:
                         for child_fact in matching_children:
+                            # Use the primaryDocumentUrl attribute if available, otherwise fall back to instanceFile
+                            report_doc_url = getattr(self.report, 'primaryDocumentUrl', 
+                                                  getattr(self.report, 'instanceFile', None))
+                            
                             relationships.append((
                                 parent_fact,
                                 child_fact,
@@ -365,8 +396,8 @@ class process_report:
                                     'weight': rel.weight,
                                     'order': rel.order,
                                     'company_cik': self.company.cik,
-                                    'report_id': self.report.instanceFile, 
-                                    'report_instance': self.report.instanceFile
+                                    'report_id': report_doc_url, 
+                                    'report_instance': report_doc_url
                                 }
                             ))
                             debug_counts['relationships_created'] += 1
@@ -564,66 +595,49 @@ class process_report:
             
         print(f"Retrieved {len(self.admin_reports)} admin report nodes from Neo4j")
 
-    ### Need to Add and further classify if it is Sequqnce 1 or 2 etc
     def initialize_report_node(self, cik: str):
-        """Initialize report node and link to admin report and date"""
-        doc_type, period_end_date, is_amendment = get_report_info(self.model_xbrl)
+        """Initialize report node with metadata from the XBRL instance"""
+        if hasattr(self, 'report') and self.report:
+            print(f"Report node already initialized: {self.report.formType} ({self.report.id})")
+            return
         
-        # Strip "/A" from doc_type if present - But then what about 10-Q/A?
-        doc_type = doc_type.split('/')[0]  # Convert "10-Q/A" to "10-Q"
-
-        print(f"Processing {doc_type} report for {period_end_date}")
-        
-        # Create report node
-        self.report = ReportNode(formType=doc_type, periodEnd=period_end_date,
-                            isAmendment=is_amendment, instanceFile=self.instance_file, cik=cik)
-        
-        month = datetime.strptime(period_end_date, '%Y-%m-%d').month
-        
-        # Find matching admin report
-        if doc_type == "8-K":
-            target = next(n for n in self.admin_reports if n.code == "8-K")
-        else:
-            sub_reports = [n for n in self.admin_reports if n.category == doc_type]
-            if doc_type == "10-K":
-                # Find closest FYE month
-                target = min(sub_reports, 
-                            key=lambda n: abs(int(n.code[-4:-2]) - month))
-            else:  # 10-Q
-                # Find closest quartermerge_relationships
-                report_quarter = (month - 1) // 3 + 1
-                target = min(sub_reports,
-                            key=lambda n: abs(int(n.code[-1]) if n.code[-1].isdigit() else 0 - report_quarter))
-        
-        # Find closest date node
-        filed_date = datetime.strptime(self.report.filedAt[:10], '%Y-%m-%d')
-        
-        # Check if self.dates is empty (shouldn't happen with our fallback system, but just in case)
-        if not self.dates:
-            print("Warning: No date nodes found. Creating a date node for the filing date.")
-            # Create a date node specifically for this filing date
-            date_node = DateNode(filed_date.year, filed_date.month, filed_date.day)
-            self.dates = [date_node]
-            self.neo4j._export_nodes([date_node])
-        else:
-            date_node = min(self.dates, key=lambda d: abs((datetime(d.year, d.month, d.day) - filed_date).days))
-        
-        # Merge nodes and relationships
-        self.neo4j._export_nodes([self.report])
-        self.neo4j.merge_relationships([
-            (self.report, target, RelationType.HAS_CATEGORY),
-            (date_node, self.report, RelationType.REPORTED_ON, {
-                'price': 100.0, # Place Holder Values - change later
-                'returns': 0.01,
-                'session': 'Close',
-                'time': '12:01:52'
-            }),
-
-        ])
-
-        self.neo4j.merge_relationships([
-            (self.report, self.company, RelationType.FILED_BY),
-        ])
+        try:
+            # Extract report metadata from model_xbrl
+            report_info = get_report_info(self.model_xbrl)
+            
+            # Create a ReportNode to represent this XBRL instance
+            self.report = ReportNode(
+                formType=report_info.get('form_type', 'Unknown'),
+                periodEnd=report_info.get('period_end', '2024-01-01'),
+                isAmendment=report_info.get('is_amendment', False),
+                primaryDocumentUrl=self.instance_file,  # Use primaryDocumentUrl instead of instanceFile
+                cik=cik,
+                filedAt=report_info.get('filed_at', datetime.now().strftime('%Y-%m-%dT%H:%M:%S%z')),
+                accessionNo=report_info.get('accession_number'),
+                periodOfReport=report_info.get('period_of_report')
+            )
+            
+            # Log report creation
+            print(f"Created report node: {self.report.formType} ({self.report.id})")
+            
+            # Export the report node to Neo4j
+            self.neo4j._export_nodes([self.report], testing=False)
+            
+            # Create report-company relationship
+            relationships = [(self.report, self.company, RelationType.FILED_BY)]
+            self.neo4j.merge_relationships(relationships)
+            
+        except Exception as e:
+            print(f"Error initializing report node: {e}")
+            # Create a minimal report node as fallback
+            self.report = ReportNode(
+                formType="Unknown",
+                periodEnd=datetime.now().strftime('%Y-%m-%d'),
+                isAmendment=False,
+                primaryDocumentUrl=self.instance_file,  # Use primaryDocumentUrl instead of instanceFile
+                cik=cik
+            )
+            self.neo4j._export_nodes([self.report], testing=False)
 
 
 

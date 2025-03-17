@@ -51,12 +51,10 @@ class ReportNode(XBRLReportNode):
     # formType: str
     # periodEnd: str
     # isAmendment: bool
-    # instanceFile: str
+    # primaryDocumentUrl: str
     # cik: str
-    # etc.
     
     # Additional fields from SEC API/Redis not in XBRL base class
-    primaryDocumentUrl: Optional[str] = None
     description: Optional[str] = None
     is_xml: Optional[bool] = None
     companyName: Optional[str] = None
@@ -97,7 +95,7 @@ class ReportNode(XBRLReportNode):
             formType=props.get('formType', ''),
             periodEnd=props.get('periodEnd', ''),
             isAmendment=props.get('isAmendment', False),
-            instanceFile=props.get('instanceFile', ''),
+            primaryDocumentUrl=props.get('primaryDocumentUrl', props.get('instanceFile', '')),
             cik=props.get('cik', '')
         )
         
@@ -107,7 +105,7 @@ class ReportNode(XBRLReportNode):
         # Map optional fields directly
         optional_fields = [
             'filedAt', 'periodOfReport', 'insertedAt', 'status',
-            'primaryDocumentUrl', 'description', 'is_xml', 'companyName',
+            'description', 'is_xml', 'companyName',
             'linkToTxt', 'linkToHtml', 'linkToFilingDetails', 'effectivenessDate',
             'created', 'updated'
         ]
@@ -222,7 +220,7 @@ class ReportNode(XBRLReportNode):
             # Map periodEnd - use periodOfReport if available, otherwise use filedAt
             periodEnd=redis_data.get('periodOfReport', redis_data.get('filedAt', '')[:10]),
             isAmendment=('/A' in redis_data.get('formType', '') or '[Amend]' in redis_data.get('description', '')),
-            instanceFile=instance_file,
+            primaryDocumentUrl=instance_file,
             cik=cik
         )
         

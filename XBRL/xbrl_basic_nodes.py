@@ -492,8 +492,8 @@ class ReportNode(Neo4jNode):
     formType: str
     periodEnd: str          # event date for 8-K, period end for 10-K/Q
     isAmendment: bool
-    instanceFile: str       # instance file name - sec_api - maybe able to get it from dataFiles field in sec_api 
-    cik: str                                             # Change this to Ticker when moving to sec_api
+    primaryDocumentUrl: str  # URL to the primary document (instanceFile renamed)
+    cik: str                # Change this to Ticker when moving to sec_api
     
     # TODO: Will be supplied by sec-api 
     filedAt: Optional[str] = "2024-12-02T16:06:24-04:00"
@@ -501,6 +501,9 @@ class ReportNode(Neo4jNode):
     # TODO: Will be supplied by sec-api 
     accessionNo: Optional[str] = None
     periodOfReport: Optional[str] = None     # official filing period date
+    
+    # Backwards compatibility - instanceFile is now an alias for primaryDocumentUrl
+    instanceFile: Optional[str] = None
 
     # for admin purposes
     insertedAt: Optional[str] = field(default_factory=lambda: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -509,6 +512,13 @@ class ReportNode(Neo4jNode):
     def __post_init__(self):
         self.cik = self.cik.zfill(10)
         self.period_date = datetime.strptime(self.periodEnd, '%Y-%m-%d')
+        
+        # For backwards compatibility
+        if self.instanceFile is None:
+            self.instanceFile = self.primaryDocumentUrl
+        elif self.primaryDocumentUrl != self.instanceFile:
+            # Update instanceFile to match primaryDocumentUrl if they're different
+            self.instanceFile = self.primaryDocumentUrl
     
     def get_fiscal_period(self) -> str:
         """Get fiscal period (Q1-Q4 or FYE MM/DD)"""
@@ -543,8 +553,8 @@ class ReportNode(Neo4jNode):
         
     @property
     def id(self) -> str:
-        """Use instanceFile as unique identifier"""
-        return self.instanceFile
+        """Use primaryDocumentUrl as unique identifier"""
+        return self.primaryDocumentUrl
         
     @property
     def properties(self) -> Dict[str, Any]:
@@ -554,7 +564,7 @@ class ReportNode(Neo4jNode):
             'formType': self.formType,
             'periodEnd': self.periodEnd,
             'isAmendment': self.isAmendment,
-            'instanceFile': self.instanceFile,
+            'primaryDocumentUrl': self.primaryDocumentUrl,
             'filedAt': self.filedAt,
             'cik': self.cik,
             'displayLabel': self.display(),
@@ -565,7 +575,8 @@ class ReportNode(Neo4jNode):
         # Add optional properties if they exist
         optional_props = {
             'accessionNo': self.accessionNo,
-            'periodOfReport': self.periodOfReport
+            'periodOfReport': self.periodOfReport,
+            'instanceFile': self.instanceFile  # Keep for backwards compatibility
         }
         
         # Only include non-None optional properties
