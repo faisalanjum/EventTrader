@@ -1,6 +1,6 @@
 #!/bin/bash
 # EventTrader Control Script
-# Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j} [options] [from-date] [to-date]
+# Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j|reset-all} [options] [from-date] [to-date]
 
 # Configuration
 WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -441,6 +441,81 @@ case "$COMMAND" in
     sleep 2
     start_all
     ;;
+  reset-all)
+    # Stop all processes first
+    echo "Stopping all processes..."
+    stop_monitor
+    stop
+    sleep 2
+    
+    # Reset Redis databases
+    echo "Clearing Redis databases..."
+    detect_python
+    
+    # Use direct Redis commands to clear databases
+    echo "Executing Redis reset..."
+    if command -v redis-cli >/dev/null 2>&1; then
+      redis-cli flushall
+      echo "Redis databases cleared successfully"
+    else
+      echo "Redis CLI not found. Attempting Python fallback..."
+      $PYTHON_CMD -c "
+from utils.redisClasses import EventTraderRedis, RedisKeys
+# Clear news Redis
+news_redis = EventTraderRedis(source=RedisKeys.SOURCE_NEWS)
+news_redis.clear(preserve_processed=False)
+# Clear reports Redis
+reports_redis = EventTraderRedis(source=RedisKeys.SOURCE_REPORTS)
+reports_redis.clear(preserve_processed=False)
+print('Redis databases cleared successfully via Python')
+"
+    fi
+    
+    # Reset Neo4j database
+    echo "Clearing Neo4j database..."
+    # Change to workspace directory first to ensure correct path
+    cd "$WORKSPACE_DIR"
+    $PYTHON_CMD -c "
+from XBRL.Neo4jManager import Neo4jManager
+import os
+from dotenv import load_dotenv
+
+# Load environment variables - use absolute path to workspace .env
+dotenv_path = os.path.abspath('.env')
+print(f'Loading .env from: {dotenv_path}')
+load_dotenv(dotenv_path)
+
+# Initialize Neo4j manager with credentials from env
+try:
+    neo4j = Neo4jManager(
+        uri=os.getenv('NEO4J_URI', 'bolt://localhost:7687'),
+        username=os.getenv('NEO4J_USERNAME', 'neo4j'),
+        password=os.getenv('NEO4J_PASSWORD', 'password')
+    )
+
+    # Clear the database
+    try:
+        neo4j.clear_db()
+        print('Neo4j database cleared successfully')
+    except Exception as e:
+        print(f'Error clearing Neo4j database: {e}')
+        print('Using direct Cypher query as fallback...')
+        # Try direct Cypher query as fallback
+        try:
+            with neo4j.driver.session() as session:
+                session.run('MATCH (n) DETACH DELETE n')
+                print('Neo4j database cleared using direct query')
+        except Exception as e2:
+            print(f'Failed to clear Neo4j database: {e2}')
+    finally:
+        neo4j.close()
+except Exception as e:
+    print(f'Neo4j connection failed: {e}')
+    print('Could not clear Neo4j database')
+"
+    
+    echo "Reset complete. All databases have been cleared."
+    ;;
   status)
     status
     ;;
@@ -491,6 +566,7 @@ case "$COMMAND" in
     echo "  stop                         # Stop EventTrader"
     echo "  restart                      # Restart EventTrader"
     echo "  restart-all                  # Restart both EventTrader and watchdog"
+    echo "  reset-all                    # Reset all processes and clear databases"
     echo "  status                       # Show status and recent logs"
     echo "  health                       # Show detailed system health information"
     echo "  logs                         # Show more detailed logs"
@@ -510,6 +586,7 @@ case "$COMMAND" in
     echo "  $0 --background start-all       # Start everything in background"
     echo "  $0 monitor 10 120               # Start watchdog with 10 max restarts, 120s check interval"
     echo "  $0 clean-logs 14                # Clean logs older than 14 days"
+    echo "  $0 --background reset-all       # Reset all processes and clear Redis and Neo4j databases"
     exit 1
     ;;
 esac

@@ -32,7 +32,7 @@ class Polygon:
 
         self.market_session = MarketSessionClassifier()
         self.client = self.get_rest_client()
-        self.executor = ThreadPoolExecutor(max_workers=220)
+        self.executor = ThreadPoolExecutor(max_workers=80)
         self.last_error = {}
         self.ticker_validation_cache = {}
         
@@ -145,9 +145,7 @@ class Polygon:
         # Ideally this should code block never be reached since all filtering should be applied before this
         current_time_with_delay = current_time - timedelta(seconds=self.polygon_subscription_delay)
         if timestamp > current_time_with_delay:
-            self.logger.info(f"--------------------------------")
             self.logger.info(f"Cannot fetch price for {ticker} at {timestamp} as it is in the future, current time + delay: {current_time_with_delay}, delay: {self.polygon_subscription_delay} seconds")
-            self.logger.info(f"--------------------------------")
             return np.nan
         
 
