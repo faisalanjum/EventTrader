@@ -467,7 +467,7 @@ class ReportProcessor(BaseProcessor):
                 'extracted_sections': None,  # Initialize with None by default
                 'financial_statements': None,  # Initialize with None by default
                 'exhibit_contents': None,  # Initialize exhibits with None by default
-                'secondary_filing_content': None  # Initialize secondary document content with None
+                'filing_text_content': None  # Full document text content
             })
 
             # Extract sections if URL available and form type requires it
@@ -485,10 +485,18 @@ class ReportProcessor(BaseProcessor):
                         self.logger.info(f"Successfully extracted sections for {content['formType']}")
                 else:
                     # For forms like SCHEDULE 13D/A: extract full document content
-                    self.logger.info(f"Form type {content['formType']} doesn't require sections, extracting secondary filing content")
-                    if secondary_content := self._extract_secondary_filing_content(url):
-                        standardized['secondary_filing_content'] = secondary_content
-                        self.logger.info(f"Successfully extracted secondary filing content for {content['formType']}")
+                    self.logger.info(f"Form type {content['formType']} doesn't require sections, extracting document text")
+                    if text_content := self._extract_secondary_filing_content(url):
+                        standardized['filing_text_content'] = text_content
+                        self.logger.info(f"Successfully extracted document text from primaryDocumentUrl")
+
+            # Logically since we are not saving xbrl content when cik is nul, we do below fallback to capture text content instead
+            # If text content is still empty and we have a null CIK with XML filing, try extracting from linkToTxt
+            if standardized['filing_text_content'] is None and standardized['cik'] is None and content.get('is_xml') is True and content.get('linkToTxt'):
+                self.logger.info(f"Document text not available, CIK is null with XML filing, attempting to extract from text link")
+                if fallback_content := self._extract_secondary_filing_content(content['linkToTxt']):
+                    standardized['filing_text_content'] = fallback_content
+                    self.logger.info(f"Successfully extracted document text from linkToTxt (fallback)")
 
             # Extract financial statements for forms requiring XML
             if content['formType'] in FORM_TYPES_REQUIRING_XML:
