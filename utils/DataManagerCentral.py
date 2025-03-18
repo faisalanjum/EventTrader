@@ -4,6 +4,7 @@ import time
 from typing import Dict, Optional
 from datetime import datetime
 from utils.Neo4jProcessor import Neo4jProcessor
+from utils.Neo4jInitializer import Neo4jInitializer
 
 
 from utils.redisClasses import EventTraderRedis, RedisKeys, RedisClient

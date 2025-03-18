@@ -32,6 +32,35 @@
    ./scripts/event_trader.sh restart-all # Restart both EventTrader and watchdog
    ```
 
+
+4. Running Neo4jProcessor Independently:
+
+'''
+# Initialize database
+./scripts/neo4j_processor.sh init                    # Initialize Neo4j database
+./scripts/neo4j_processor.sh init --verbose          # Initialize with detailed logging
+
+# Process news items
+./scripts/neo4j_processor.sh news --max 10           # Process up to 10 news items
+./scripts/neo4j_processor.sh news --batch 20         # Process in batches of 20 items
+
+# Process SEC reports
+./scripts/neo4j_processor.sh reports --max 10        # Process up to 10 report items
+./scripts/neo4j_processor.sh reports --verbose       # Process reports with detailed logging
+
+# Combined operations
+./scripts/neo4j_processor.sh all                     # Initialize and process all data
+./scripts/neo4j_processor.sh all --max 5             # Process only 5 items of each type
+./scripts/neo4j_processor.sh all --skip-news         # Process only reports
+./scripts/neo4j_processor.sh all --skip-reports      # Process only news
+
+
+--verbose, -v                  # Enable detailed logging
+--batch N                      # Set batch size (default: 10)
+--max N                        # Limit number of items to process (0 for all)
+--skip-without-returns         # Process only items with returns data
+--force, -f                    # Continue despite non-critical errors
+
 ## Watchdog Management
 
 The watchdog monitors EventTrader and automatically restarts it if it crashes.

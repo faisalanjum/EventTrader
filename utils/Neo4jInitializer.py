@@ -3,6 +3,8 @@ import os
 from typing import Dict, List, Optional, Any, Tuple
 from neo4j import GraphDatabase
 import re
+import pandas as pd
+import json
 
 from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode
 from XBRL.Neo4jManager import Neo4jManager
@@ -71,6 +73,77 @@ class Neo4jInitializer:
         if self.manager:
             self.manager.close()
     
+    @staticmethod
+    def get_tradable_universe(cached_data=None):
+        """
+        Load tradable universe directly from CSV file to avoid Redis dependency.
+        
+        Args:
+            cached_data: Optional pre-loaded universe data
+            
+        Returns:
+            dict: Dictionary where each symbol is a key, with company data as values.
+        """
+        # Return cached data if available
+        if cached_data is not None:
+            return cached_data
+            
+        try:
+            # Get the project root directory and file path
+            project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            file_path = os.path.join(project_root, 'StocksUniverse', 'final_symbols.csv')
+            
+            if not os.path.exists(file_path):
+                logger.error(f"Stock universe file not found: {file_path}")
+                return {}
+            
+            # Read CSV file and perform basic validation
+            try:
+                df = pd.read_csv(file_path, on_bad_lines='warn')
+                if 'symbol' not in df.columns or 'cik' not in df.columns:
+                    logger.error("Required columns 'symbol' and 'cik' must be in CSV")
+                    return {}
+            except Exception as e:
+                logger.error(f"Error reading CSV file: {e}")
+                return {}
+            
+            # Clean up dataframe - remove empty symbols and duplicates
+            df = df[df['symbol'].astype(str).str.strip().str.len() > 0]
+            df = df.drop_duplicates(subset=['symbol'])
+            
+            logger.info(f"Loaded stock universe with {len(df)} companies")
+            
+            # Convert DataFrame to dictionary
+            universe_data = {}
+            for _, row in df.iterrows():
+                symbol = str(row['symbol']).strip()
+                company_data = {}
+                
+                # Process each column
+                for col in df.columns:
+                    if col != 'symbol' and pd.notnull(row.get(col, '')):
+                        # Special handling for related field (string list conversion)
+                        if col == 'related' and isinstance(row[col], str):
+                            try:
+                                if row[col].startswith('[') and row[col].endswith(']'):
+                                    content = row[col].strip('[]').replace("'", "").replace('"', "")
+                                    related_list = [item.strip() for item in content.split(',') if item.strip()]
+                                    company_data[col] = related_list
+                                else:
+                                    company_data[col] = []
+                            except Exception:
+                                company_data[col] = []
+                        else:
+                            company_data[col] = str(row[col]).strip()
+                
+                universe_data[symbol] = company_data
+            
+            return universe_data
+            
+        except Exception as e:
+            logger.error(f"Error loading tradable universe: {e}")
+            return {}
+    
     def initialize_all(self) -> bool:
         """Run full initialization of Neo4j database with market hierarchy."""
         if not self.connect():
@@ -79,9 +152,7 @@ class Neo4jInitializer:
         try:
             # Load universe data if not provided
             if not self.universe_data:
-                from utils.Neo4jProcessor import Neo4jProcessor
-                processor = Neo4jProcessor(uri=self.uri, username=self.username, password=self.password)
-                self.universe_data = processor.get_tradable_universe()
+                self.universe_data = self.get_tradable_universe()
                 if not self.universe_data:
                     logger.error("Failed to load universe data")
                     return False

@@ -97,12 +97,13 @@ class process_report:
             
         # If report_node is provided, extract instance_file from it
         if self.report_node:
+            # Fast path: just use the primaryDocumentUrl directly
             if hasattr(self.report_node, 'primaryDocumentUrl') and self.report_node.primaryDocumentUrl:
                 self.instance_file = self.report_node.primaryDocumentUrl
             elif hasattr(self.report_node, 'instanceFile') and self.report_node.instanceFile:
                 self.instance_file = self.report_node.instanceFile
-                # Update primaryDocumentUrl if it's missing but instanceFile exists
-                if hasattr(self.report_node, 'primaryDocumentUrl'):
+                # Avoid modifying the report node unnecessarily
+                if hasattr(self.report_node, 'primaryDocumentUrl') and not self.report_node.primaryDocumentUrl:
                     self.report_node.primaryDocumentUrl = self.instance_file
             else:
                 raise ValueError("Report node must have either primaryDocumentUrl or instanceFile attribute")
@@ -112,6 +113,17 @@ class process_report:
             raise ValueError("Neo4j manager is required")
         if not self.external_company:
             raise ValueError("External company node is required")
+        
+        # Create constraints directly like in ground truth
+        with self.neo4j.driver.session() as session:
+            try:
+                session.run("CREATE CONSTRAINT FOR ()-[r:PRESENTATION_EDGE]->() REQUIRE r.order IS NOT NULL")
+                print("Created constraint for PRESENTATION_EDGE relationships")
+                session.run("CREATE CONSTRAINT FOR ()-[r:CALCULATION_EDGE]->() REQUIRE r.weight IS NOT NULL")
+                print("Created constraint for CALCULATION_EDGE relationships")
+            except Exception as e:
+                # Continue even if constraint creation fails (might already exist)
+                print(f"Note: Constraint creation message: {e}")
         
         self._primary_facts: Dict[str, Fact] = {}  # canonical_key -> primary fact
         self._duplicate_map: Dict[str, str] = {}   # duplicate_uid -> primary_uid
@@ -124,7 +136,7 @@ class process_report:
         # Use either the provided report_node or initialize a new one
         if self.report_node:
             self.report = self.report_node
-            print(f"Using provided report node: {self.report.formType} ({self.report.id})")
+            print(f"Using provided report node: {self.report.formType} ({self.instance_file})")
         else:
             self.initialize_report_node(cik = self.company.cik)     # Report Node Creation
   
@@ -136,8 +148,6 @@ class process_report:
         # self.link_fact_footnotes()   # Doesn't work properly yet    
 
         self._link_guidance_concepts()
-
-
 
     def _link_guidance_concepts(self):
         """Create relationships between guidance concepts and their targets"""

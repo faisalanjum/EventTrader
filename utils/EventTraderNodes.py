@@ -82,12 +82,22 @@ class ReportNode(XBRLReportNode):
     
     @classmethod
     def from_neo4j(cls, props: Dict[str, Any]) -> 'ReportNode':
-        """Create ReportNode from Neo4j properties"""
-        # Check required fields
-        required_fields = ['formType', 'accessionNo']
+        """
+        Create a ReportNode from Neo4j properties
+        """
+        # Check for required fields
+        required_fields = ['formType', 'periodEnd', 'isAmendment', 'cik']
+        
         missing_fields = [field for field in required_fields if field not in props]
         if missing_fields:
             raise ValueError(f"Missing required fields: {', '.join(missing_fields)}")
+        
+        # Ensure we have either primaryDocumentUrl or instanceFile
+        if 'primaryDocumentUrl' not in props and 'instanceFile' not in props:
+            raise ValueError("Either primaryDocumentUrl or instanceFile is required")
+            
+        # Performance optimization: use primaryDocumentUrl directly if available, otherwise use instanceFile
+        primary_document_url = props.get('primaryDocumentUrl', props.get('instanceFile', ''))
         
         # Map fields from Neo4j properties to ReportNode fields
         # First set required fields
@@ -95,7 +105,7 @@ class ReportNode(XBRLReportNode):
             formType=props.get('formType', ''),
             periodEnd=props.get('periodEnd', ''),
             isAmendment=props.get('isAmendment', False),
-            primaryDocumentUrl=props.get('primaryDocumentUrl', props.get('instanceFile', '')),
+            primaryDocumentUrl=primary_document_url,
             cik=props.get('cik', '')
         )
         
@@ -111,12 +121,11 @@ class ReportNode(XBRLReportNode):
         ]
         
         for field in optional_fields:
-            if field in props and props[field] not in (None, "", "null"):
+            if field in props and props[field] is not None:
                 setattr(report, field, props[field])
-        
-        # Handle complex fields (lists and dictionaries)
-        # These need special handling because they're stored as JSON strings in Neo4j
-        json_fields = {
+                
+        # Handle serialized complex fields
+        complex_fields = {
             'exhibits': dict,
             'items': list,
             'symbols': list,
@@ -126,18 +135,18 @@ class ReportNode(XBRLReportNode):
             'exhibit_contents': dict
         }
         
-        for field, default_type in json_fields.items():
+        for field, field_type in complex_fields.items():
             if field in props and props[field]:
+                # Try to deserialize if stored as JSON
                 try:
                     if isinstance(props[field], str):
                         setattr(report, field, json.loads(props[field]))
                     else:
-                        # Already the right type
                         setattr(report, field, props[field])
-                except json.JSONDecodeError:
-                    # Fallback to default if JSON parsing fails
-                    setattr(report, field, default_type())
-        
+                except (json.JSONDecodeError, TypeError):
+                    # If deserializing fails, keep as is
+                    setattr(report, field, props[field])
+                        
         return report
     
     @property
@@ -190,30 +199,38 @@ class ReportNode(XBRLReportNode):
     @classmethod
     def from_redis(cls, redis_data: Dict[str, Any]) -> 'ReportNode':
         """
-        Create a ReportNode from a Redis report item
-        Maps SEC API/Redis fields to ReportNode fields
+        Create a ReportNode from Redis data
+        Mainly used for SEC filings and reports
         """
-        # Check required fields
-        if 'accessionNo' not in redis_data or not redis_data['accessionNo']:
-            raise ValueError("Missing required accessionNo in Redis data")
+        # Required checks
+        required_fields = ['formType', 'filedAt']
+        missing_fields = [field for field in required_fields if field not in redis_data]
+        if missing_fields:
+            raise ValueError(f"Missing required fields: {', '.join(missing_fields)}")
         
-        # Map required fields with reasonable defaults
-        instance_file = redis_data.get('primaryDocumentUrl', '')
-        if not instance_file:
-            instance_file = redis_data.get('linkToFilingDetails', '')
+        # Determine instance file (primaryDocumentUrl)
+        instance_file = ''
+        instance_field = 'primaryDocumentUrl'
+        
+        # Try different possible field names for instance file
+        for field in ['primaryDocumentUrl', 'instanceFile', 'linkToFilingDetails']:
+            if redis_data.get(field):
+                instance_file = redis_data[field]
+                instance_field = field
+                break
             
-        # Handle CIK (from entities if available)
-        cik = redis_data.get('cik', '')
-        if not cik and redis_data.get('entities'):
-            # Try to get subject company CIK from entities
-            for entity in redis_data.get('entities', []):
-                if '(Subject)' in entity.get('companyName', ''):
-                    cik = entity.get('cik', '')
-                    break
-            # If no subject found, use first entity's CIK
-            if not cik and redis_data.get('entities'):
-                cik = redis_data['entities'][0].get('cik', '')
+        # If we have a sourceHTML, use that as a fallback
+        if not instance_file and redis_data.get('sourceHTML'):
+            instance_file = redis_data['sourceHTML']
         
+        # Extract CIK from cik or entities
+        cik = redis_data.get('cik', '')
+        
+        # If no CIK directly, try to extract from entities
+        if not cik and redis_data.get('entities'):
+            cik = redis_data['entities'][0].get('cik', '')
+        
+        # Performance optimization: create the instance directly with all required fields
         # Create instance with required fields
         report = cls(
             formType=redis_data.get('formType', 'UNKNOWN'),
@@ -224,39 +241,11 @@ class ReportNode(XBRLReportNode):
             cik=cik
         )
         
+        # Store the original data for later access to metadata and returns
+        report._original_data = redis_data
+        
         # Set accessionNo explicitly as it's our primary identifier
         report.accessionNo = redis_data.get('accessionNo', '')
-        
-        # Map direct field equivalents
-        field_mappings = {
-            'filedAt': 'filedAt',
-            'periodOfReport': 'periodOfReport',
-            'primaryDocumentUrl': 'primaryDocumentUrl',
-            'description': 'description',
-            'is_xml': 'is_xml',
-            'companyName': 'companyName',
-            'linkToTxt': 'linkToTxt',
-            'linkToHtml': 'linkToHtml',
-            'linkToFilingDetails': 'linkToFilingDetails',
-            'effectivenessDate': 'effectivenessDate',
-            'exhibits': 'exhibits',
-            'items': 'items',
-            'symbols': 'symbols',
-            'entities': 'entities',
-            'extracted_sections': 'extracted_sections',
-            'financial_statements': 'financial_statements',
-            'exhibit_contents': 'exhibit_contents',
-            'created': 'created',
-            'updated': 'updated'
-        }
-        
-        # Set mapped fields
-        for redis_field, report_field in field_mappings.items():
-            if redis_field in redis_data and redis_data[redis_field] is not None:
-                setattr(report, report_field, redis_data[redis_field])
-        
-        # Store the original Redis data for later access to metadata and returns
-        report._original_data = redis_data
         
         return report
 
