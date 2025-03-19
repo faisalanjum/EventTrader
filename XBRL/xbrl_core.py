@@ -59,6 +59,7 @@ class NodeType(Enum):
     COMPANY = "Company"
     ENTITY = "Entity" # Not using this for now
     REPORT = "Report"
+    XBRL = "XBRL"  # Add new node type
 
     FACT = "Fact"
     CONTEXT = "Context"
@@ -102,8 +103,8 @@ class RelationType(Enum):
     HAS_DEFAULT = "HAS_DEFAULT"     # Dimension -> Default Member
     MEMBER_OF = "MEMBER_OF"         # Member to Parent Member
     IN_TAXONOMY = "IN_TAXONOMY"     # Dimension/Member to Taxonomy
-    CONTAINS = "CONTAINS"          # For Report->Fact relationships
-    REPORTS = "REPORTS"            # For Fact->Report relationships
+    CONTAINS = "CONTAINS"          # For XBRL->Fact relationships (changed from Report->Fact)
+    REPORTS = "REPORTS"            # For Fact->XBRL relationships (changed from Fact->Report)
     BELONGS_TO = "BELONGS_TO"
     IN_CONTEXT = "IN_CONTEXT"       # Fact to Context
     HAS_PERIOD = "HAS_PERIOD"       # Context to Period
@@ -121,11 +122,12 @@ class RelationType(Enum):
     CALCULATION_EDGE = "CALCULATION_EDGE" # From Fact to Fact
     FILED_BY = "FILED_BY"           # From Report to Company
     HAS_CATEGORY = "HAS_CATEGORY"   # Report -> AdminReport
-    FOR_COMPANY = "FOR_COMPANY"       # Context -> Company
+    FOR_COMPANY = "FOR_COMPANY"     # Context -> Company
     PROVIDES_GUIDANCE = "PROVIDES_GUIDANCE"  # From Guidance concept to related concept
-    INFLUENCES = "INFLUENCES"       # Report/News -> Company relationships
-    RELATED_TO = "RELATED_TO"       # Company -> Company relationship as defined by related field in polygon
-    
+    INFLUENCES = "INFLUENCES"
+    RELATED_TO = "RELATED_TO"       # Company -> Company relationship
+    PROCESSES = "PROCESSES"         # XBRLNode -> ReportNode relationship
+    PROCESSED_BY = "PROCESSED_BY"   # ReportNode -> XBRLNode relationship
 
 
 class ReportElementClassifier:
@@ -352,3 +354,32 @@ class Neo4jNode(ABC):
         }
         
         return cls(**init_params)
+
+@dataclass
+class XBRLNode(Neo4jNode):
+    """
+    An intermediary node that handles all XBRL processing.
+    This node sits between ReportNode and all other XBRL components.
+    """
+    primaryDocumentUrl: str  # Primary identifier matching ReportNode
+    cik: str                # Company identifier 
+    report_id: str          # Reference to original ReportNode id
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.XBRL
+        
+    @property
+    def id(self) -> str:
+        """Use primaryDocumentUrl as unique identifier"""
+        return self.primaryDocumentUrl
+        
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """Properties for Neo4j node"""
+        return {
+            'id': self.id,
+            'primaryDocumentUrl': self.primaryDocumentUrl,
+            'cik': self.cik,
+            'report_id': self.report_id
+        }
