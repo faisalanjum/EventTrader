@@ -60,9 +60,7 @@ This document describes the refactoring process of the XBRL module and the steps
    - `Context`: Represents an XBRL context that provides dimensional qualifiers for facts
    - `Period`: Represents a time period in XBRL (instant or duration)
    - `Unit`: Represents a unit of measure used in XBRL facts
-   - `AdminReportNode`: Represents a type of report filing (e.g., 10-K, 10-Q, 8-K)
    - `CompanyNode`: Represents a company (issuer) in the XBRL database
-   - `DateNode`: Represents a calendar date for use in the Neo4j graph
    - `ReportNode`: Represents a specific SEC filing report
 
 2. Added extensive documentation to all classes, including:

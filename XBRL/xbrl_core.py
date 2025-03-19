@@ -13,7 +13,7 @@ from .common_imports import *
 # Type checking imports
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from .xbrl_basic_nodes import Context, Period, Unit, AdminReportNode, CompanyNode, DateNode, ReportNode
+    from .xbrl_basic_nodes import Context, Period, Unit, CompanyNode, ReportNode
     from .xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
     from .xbrl_taxonomy import Taxonomy
     from .xbrl_dimensions import Dimension, Domain, Member, Hypercube
@@ -82,8 +82,8 @@ class NodeType(Enum):
     DOMAIN = "Domain"
     MEMBER = "Member"
     
-    DATE = "Date"
-    ADMIN_REPORT = "AdminReport"
+    # DATE = "Date"
+    # ADMIN_REPORT = "AdminReport"
 
 
 
@@ -116,7 +116,7 @@ class RelationType(Enum):
     NEXT = "NEXT"                   # Next date
     HAS_PRICE = "HAS_PRICE"         # from Date to Entity/Company
     HAS_SUB_REPORT = "HAS_SUB_REPORT"  # For 10-K -> FYE and 10-Q -> Quarters relationships
-    REPORTED_ON = "REPORTED_ON"     # From DateNode to ReportNode
+    REPORTED_ON = "REPORTED_ON"     # Between date and report (deprecated)
     PRESENTATION_EDGE = "PRESENTATION_EDGE" # From Fact to Fact
     CALCULATION_EDGE = "CALCULATION_EDGE" # From Fact to Fact
     FILED_BY = "FILED_BY"           # From Report to Company

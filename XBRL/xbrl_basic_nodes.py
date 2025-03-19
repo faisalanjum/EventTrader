@@ -273,31 +273,6 @@ class Unit(Neo4jNode):
 
 
 @dataclass
-class AdminReportNode(Neo4jNode):
-    code: str          # e.g., "10-K_FYE-1231", "10-Q_Q1", "8-K"
-    label: str         # e.g., "Annual Report (December)", "Q1 Report"
-    category: str      # e.g., "10-K", "10-Q", "8-K"
-    
-    @property
-    def node_type(self) -> NodeType:
-        return NodeType.ADMIN_REPORT
-        
-    @property
-    def id(self) -> str:
-        return self.code
-        
-    @property
-    def properties(self) -> Dict[str, Any]:
-        return {
-            "code": self.code,
-            "label": self.label,
-            "category": self.category,
-            "displayLabel": self.label
-        }
-
-
-
-@dataclass
 class CompanyNode(Neo4jNode):
     cik: str
     name: Optional[str] = None  # Check if it matters to make it Optional
@@ -454,39 +429,6 @@ class CompanyNode(Neo4jNode):
 
 
 @dataclass
-class DateNode(Neo4jNode):
-    year: int
-    month: int
-    day: int
-
-    def __post_init__(self):
-        self.date = datetime(self.year, self.month, self.day)
-
-    def display(self):
-        return self.date.strftime("%Y-%m-%d")
-        
-    @property
-    def node_type(self) -> NodeType:
-        return NodeType.DATE
-        
-    @property
-    def id(self) -> str:
-        return self.display()
-        
-    @property
-    def properties(self) -> Dict[str, Any]:
-        return {
-            'id': self.display(),
-            'year': self.year,
-            'month': self.month,
-            'day': self.day,
-            'quarter': f"Q{(self.month-1)//3 + 1}",
-            'displayLabel': self.display() 
-        }
-
-
-
-@dataclass
 class ReportNode(Neo4jNode):
     # source: https://sec-api.io/docs/query-api
     formType: str
@@ -526,14 +468,6 @@ class ReportNode(Neo4jNode):
         if self.formType == "10-K":
             return f"FYE {month:02d}/31"
         return f"Q{(month-1)//3 + 1}"
-    
-    def find_matching_sub_report(self, parent: AdminReportNode) -> AdminReportNode:
-        """Find matching sub-report based on period end date"""
-        sub_reports = [n for n in self.admin_reports 
-                      if n.category == parent.code]
-        return min(sub_reports, 
-                  key=lambda x: abs(x.get_date() - self.period_date))
-
         
     def display(self) -> str:
         """Returns display name for the report"""
@@ -582,4 +516,4 @@ class ReportNode(Neo4jNode):
         # Only include non-None optional properties
         props.update({k: v for k, v in optional_props.items() if v is not None})
         
-        return props    
+        return props

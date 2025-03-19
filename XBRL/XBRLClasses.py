@@ -5,7 +5,7 @@ from XBRL.utils import *
 
 # Import classes that have been moved to other modules
 from XBRL.xbrl_core import Neo4jNode, NodeType, RelationType, GroupingType, PRESENTATION_EDGE_UNIQUE_PROPS, CALCULATION_EDGE_UNIQUE_PROPS, ReportElementClassifier
-from XBRL.xbrl_basic_nodes import Context, Period, Unit, AdminReportNode, CompanyNode, DateNode, ReportNode
+from XBRL.xbrl_basic_nodes import Context, Period, Unit, CompanyNode, ReportNode
 from XBRL.xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
 from XBRL.xbrl_taxonomy import Taxonomy
 from XBRL.xbrl_dimensions import Dimension, Domain, Member, Hypercube
@@ -47,14 +47,11 @@ from enum import Enum
 # Context class has been moved to xbrl_basic_nodes.py and is imported from there
 # Period class has been moved to xbrl_basic_nodes.py and is imported from there
 # Unit class has been moved to xbrl_basic_nodes.py and is imported from there
-# AdminReportNode class has been moved to xbrl_basic_nodes.py and is imported from there
-# CompanyNode class has been moved to xbrl_basic_nodes.py and is imported from there
-# DateNode class has been moved to xbrl_basic_nodes.py and is imported from there
 # ReportNode class has been moved to xbrl_basic_nodes.py and is imported from there
 # Fact class has been moved to xbrl_reporting.py and is imported from there
 
 # These utility functions have been moved to utils.py
-# create_date_range, create_date_relationships, get_company_info, get_report_info
+# create_date_range, create_date_relationships were removed
 
 
 def count_report_hierarchy(report: process_report) -> None:

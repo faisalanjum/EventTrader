@@ -27,13 +27,13 @@ from .xbrl_core import (
 # Import utility functions
 from .utils import (
     clean_number, 
-    get_company_info, get_report_info, resolve_primary_fact_relationships
+    resolve_primary_fact_relationships
 )
 
 # Import basic node implementations first
 from .xbrl_basic_nodes import (
-    Context, Period, Unit, AdminReportNode, 
-    CompanyNode, DateNode, ReportNode
+    Context, Period, Unit, 
+    CompanyNode, ReportNode
 )
 
 # Import concept node implementations
@@ -41,11 +41,6 @@ from .xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
 
 # Import dimension-related classes
 from .xbrl_dimensions import Dimension, Domain, Member, Hypercube
-
-# Import utility functions that depend on the above classes
-from .utils import (
-    create_date_range, create_date_relationships
-)
 
 # Import taxonomy
 from .xbrl_taxonomy import Taxonomy
@@ -66,8 +61,8 @@ __all__ = [
     'PRESENTATION_EDGE_UNIQUE_PROPS', 'CALCULATION_EDGE_UNIQUE_PROPS',
     
     # Basic node implementations
-    'Context', 'Period', 'Unit', 'AdminReportNode', 
-    'CompanyNode', 'DateNode', 'ReportNode',
+    'Context', 'Period', 'Unit',
+    'CompanyNode', 'ReportNode',
     
     # Concept node implementations
     'Concept', 'GuidanceConcept', 'AbstractConcept',
@@ -85,8 +80,8 @@ __all__ = [
     'Fact',
     
     # Utility functions
-    'clean_number', 'create_date_range', 'create_date_relationships',
-    'get_company_info', 'get_report_info', 'resolve_primary_fact_relationships',
+    'clean_number',
+    'resolve_primary_fact_relationships',
     
     # Process report class
     'process_report',

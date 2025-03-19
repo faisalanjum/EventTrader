@@ -11,10 +11,10 @@ from datetime import datetime, timedelta
 from .xbrl_core import Neo4jNode, NodeType, RelationType, ReportElementClassifier
 
 # Import utility functions
-from .utils import clean_number, create_date_range, create_date_relationships, get_company_info, get_report_info, resolve_primary_fact_relationships
+from .utils import clean_number, resolve_primary_fact_relationships
 
 # Import basic and concept nodes
-from .xbrl_basic_nodes import Context, Period, Unit, AdminReportNode, CompanyNode, DateNode, ReportNode
+from .xbrl_basic_nodes import Context, Period, Unit, CompanyNode
 from .xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
 
 # Import specialized modules
@@ -61,9 +61,6 @@ class process_report:
     periods: List[Period] = field(init=False, default_factory=list, repr=False)
     units: List[Unit] = field(init=False, default_factory=list, repr=False)
     
-    dates: List[DateNode] = field(init=False, default_factory=list) # To be done from outside (XBRLManager)
-    admin_reports: List[AdminReportNode] = field(init=False, default_factory=list) # To be done from outside (XBRLManager)
-
     # Company Nodes (company-specific)
     company: CompanyNode = field(init=False)  # Single company per report - # To be done from outside (XBRLManager)
     contexts: List[Context] = field(init=False, default_factory=list, repr=False)
@@ -119,10 +116,8 @@ class process_report:
         self.report = self.report_node
         print(f"Using provided report node: id={self.report.id} ({self.report.primaryDocumentUrl})")
         
-        self.initialize_date_nodes(start_dt = "2024-12-01")     # Later remove these from process_report 
         self.load_xbrl()                                        # populates model_xbrl - see comment above 
         self.initialize_company_node()                          # Company Node Creation
-        self.initialize_admin_reports()                         # Admin Reports Node Creation   
         
         self.populate_common_nodes()  # First handle common nodes
         self.populate_company_nodes() # Also creates Abstract Nodes in Neo4j
@@ -536,25 +531,6 @@ class process_report:
             print(f"Match Rate: {matches/(matches+non_matches)*100:.1f}%")
 
 
-    def initialize_date_nodes(self, start_dt: str):
-        """One-time initialization of date nodes"""
-        try:
-            self.dates = create_date_range(start_dt)
-            relationships = create_date_relationships(self.dates)
-            self.neo4j._export_nodes([self.dates])
-            self.neo4j.merge_relationships(relationships)
-            print(f"Created {len(self.dates)} date nodes")
-            
-        except Exception as e:
-            print(f"Error initializing date nodes: {e}")
-            # Create at least one date node as a fallback
-            print("Creating a single fallback date node")
-            today = datetime.now()
-            fallback_date = DateNode(today.year, today.month, today.day)
-            self.dates = [fallback_date]
-            self.neo4j._export_nodes([fallback_date])
-            print("Fallback date node created")
-
     def initialize_company_node(self):
         """Set the company node from the externally provided company (minimal version)"""
         if not self.external_company:
@@ -565,29 +541,6 @@ class process_report:
         print(f"Using company node: {self.company.name} (CIK: {self.company.cik})")
 
     
-    def initialize_admin_reports(self):
-        """Retrieve admin report hierarchy from Neo4j"""
-        # Retrieve admin report nodes from Neo4j
-        with self.neo4j.driver.session() as session:
-            # Query for all admin report nodes
-            result = session.run("MATCH (r:AdminReport) RETURN r")
-            
-            # Convert Neo4j nodes to AdminReportNode objects
-            self.admin_reports = []
-            for record in result:
-                node = record["r"]
-                admin_report = AdminReportNode(
-                    code=node["code"],
-                    label=node["label"],
-                    category=node["category"]
-                )
-                self.admin_reports.append(admin_report)
-            
-        if not self.admin_reports:
-            raise ValueError("No admin reports found in Neo4j database. Please initialize Neo4j database first with Neo4jInitializer.")
-            
-        print(f"Retrieved {len(self.admin_reports)} admin report nodes from Neo4j")
-
     def link_fact_footnotes(self) -> None:
         """Debug version to understand fact-footnote relationships"""
         print("\n" + "="*80)
