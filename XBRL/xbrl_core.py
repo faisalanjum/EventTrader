@@ -103,8 +103,8 @@ class RelationType(Enum):
     HAS_DEFAULT = "HAS_DEFAULT"     # Dimension -> Default Member
     MEMBER_OF = "MEMBER_OF"         # Member to Parent Member
     IN_TAXONOMY = "IN_TAXONOMY"     # Dimension/Member to Taxonomy
-    CONTAINS = "CONTAINS"          # For XBRL->Fact relationships (changed from Report->Fact)
-    REPORTS = "REPORTS"            # For Fact->XBRL relationships (changed from Fact->Report)
+    CONTAINS = "CONTAINS"          # For XBRL->Fact relationships
+    REPORTS = "REPORTS"            # For Fact->XBRL relationships
     BELONGS_TO = "BELONGS_TO"
     IN_CONTEXT = "IN_CONTEXT"       # Fact to Context
     HAS_PERIOD = "HAS_PERIOD"       # Context to Period
@@ -126,8 +126,7 @@ class RelationType(Enum):
     PROVIDES_GUIDANCE = "PROVIDES_GUIDANCE"  # From Guidance concept to related concept
     INFLUENCES = "INFLUENCES"
     RELATED_TO = "RELATED_TO"       # Company -> Company relationship
-    PROCESSES = "PROCESSES"         # XBRLNode -> ReportNode relationship
-    PROCESSED_BY = "PROCESSED_BY"   # ReportNode -> XBRLNode relationship
+    HAS_XBRL = "HAS_XBRL"          # ReportNode -> XBRLNode relationship (single direction)
 
 
 class ReportElementClassifier:

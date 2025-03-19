@@ -114,22 +114,7 @@ class process_report:
         self._primary_facts: Dict[str, Fact] = {}  # canonical_key -> primary fact
         self._duplicate_map: Dict[str, str] = {}   # duplicate_uid -> primary_uid
         
-        # Create XBRLNode and link it with ReportNode
-        self.xbrl_node = XBRLNode(
-            primaryDocumentUrl=self.report_node.primaryDocumentUrl,
-            cik=self.report_node.cik,
-            report_id=self.report_node.id
-        )
-        
-        # Export XBRLNode and create relationships
-        self.neo4j._export_nodes([self.xbrl_node])
-        self.neo4j.merge_relationships([
-            (self.xbrl_node, self.report_node, RelationType.PROCESSES),
-            (self.report_node, self.xbrl_node, RelationType.PROCESSED_BY)
-        ])
-        
-        print(f"Created XBRL processing node for report: {self.report_node.id}")
-        
+        self.initialize_xbrl_node()
         self.load_xbrl()
         self.initialize_company_node()
         
@@ -1168,5 +1153,24 @@ class process_report:
         print(f"Built {len(report_fact_relationships)} report-fact relationships")    
         
         return report_fact_relationships
+
+    def initialize_xbrl_node(self):
+        """Create XBRLNode and link it with ReportNode"""
+        # Create XBRLNode
+        self.xbrl_node = XBRLNode(
+            primaryDocumentUrl=self.report_node.primaryDocumentUrl,
+            cik=self.report_node.cik,
+            report_id=self.report_node.id
+        )
+        
+        # Export XBRLNode to Neo4j
+        self.neo4j._export_nodes([self.xbrl_node], testing=False)
+        
+        # Create relationship between ReportNode and XBRLNode
+        self.neo4j.merge_relationships([
+            (self.report_node, self.xbrl_node, RelationType.HAS_XBRL)
+        ])
+        
+        print(f"Created XBRL processing node for report: {self.report_node.id}")
 
 
