@@ -375,11 +375,23 @@ class XBRLNode(Neo4jNode):
         return self.primaryDocumentUrl
         
     @property
+    def display(self) -> str:
+        """Returns display name for the XBRL node"""
+        # Extract accession number from primaryDocumentUrl
+        # Example URL: https://www.sec.gov/Archives/edgar/data/1856028/000162828024010049/sdig-20231231_htm.xml
+        try:
+            accession_no = self.primaryDocumentUrl.split('/')[7]  # Get the accession number part
+            return f"XBRL_{accession_no}"
+        except (IndexError, AttributeError):
+            return f"XBRL_{self.report_id}"  # Fallback to report_id if URL parsing fails
+        
+    @property
     def properties(self) -> Dict[str, Any]:
         """Properties for Neo4j node"""
         return {
             'id': self.id,
             'primaryDocumentUrl': self.primaryDocumentUrl,
             'cik': self.cik,
-            'report_id': self.report_id
+            'report_id': self.report_id,
+            'displayLabel': self.display
         }

@@ -48,7 +48,7 @@ class process_report:
     
     # Defaults
     log_file: str = field(default='ErrorLog.txt', repr=False)
-    testing: bool = field(default=True)  # Add testing flag as configurable
+    testing: bool = field(default=True)  # Add testing flag as configurable (set to False in later calls for now)
 
     # XBRL processing node
     xbrl_node: XBRLNode = field(init=False)  # The XBRL processing node
@@ -58,23 +58,29 @@ class process_report:
 
     # Common Nodes
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
-    abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False)
-    pure_abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False)
+    abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class (Abstracts, LineItems, Table (Hypercube), Axis (Dimensions), Members, Domain)
+    pure_abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class (only Abstracts, LineItems)    
     periods: List[Period] = field(init=False, default_factory=list, repr=False)
     units: List[Unit] = field(init=False, default_factory=list, repr=False)
     
     # Company Nodes
     company: CompanyNode = field(init=False)
     contexts: List[Context] = field(init=False, default_factory=list, repr=False)
-    dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)
+    dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)        
+    # members are inside dimensions but are also company-specific
 
     # Report-specific Nodes
     facts: List[Fact] = field(init=False, default_factory=list, repr=False)    
-    taxonomy: Taxonomy = field(init=False)
+    taxonomy: Taxonomy = field(init=False) # Although this is company-specific, we load it for each report
 
     # Lookup Tables
-    _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False)
-    _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False)
+
+    # Populated in populate_common_nodes, used for linking concept to fact (in _build_facts -> concept.add_fact), 
+    # used in (get_concept) in both Presentation & Calculation Class
+    _concept_lookup: Dict[str, Concept] = field(init=False, default_factory=dict, repr=False) # Used in Linking Fact to Concept (concept.id: concept)
+    
+    # Populated in Presentation Class (_build_abstracts), used in Presentation Class (get_concept)
+    _abstract_lookup: Dict[str, AbstractConcept] = field(init=False, default_factory=dict, repr=False) # Used in Presentation (abstract.id: abstract)
     
     # Add new field for guidance concepts
     guidance_concepts: List[GuidanceConcept] = field(init=False, default_factory=list)
@@ -219,7 +225,8 @@ class process_report:
 
 
     def link_presentation_facts(self) -> None:
-        """Create presentation relationships in Neo4j"""
+        """Create presentation relationships using stored validated facts"""
+        print("\nCreating presentation relationships...")
         relationships = []
         debug_counts = defaultdict(int)
         
@@ -375,9 +382,6 @@ class process_report:
                     # Create relationships for matching facts
                     for parent_fact in group_parents:
                         for child_fact in matching_children:
-                            # Get report identifier from primaryDocumentUrl
-                            report_doc_url = self.report_node.primaryDocumentUrl
-                            
                             relationships.append((
                                 parent_fact,
                                 child_fact,
@@ -389,8 +393,8 @@ class process_report:
                                     'weight': rel.weight,
                                     'order': rel.order,
                                     'company_cik': self.company.cik,
-                                    'report_id': report_doc_url, 
-                                    'report_instance': report_doc_url
+                                    'report_id': self.xbrl_node.id,  # Use XBRLNode id
+                                    'report_instance': self.xbrl_node.id  # Use XBRLNode id
                                 }
                             ))
                             debug_counts['relationships_created'] += 1
@@ -562,7 +566,7 @@ class process_report:
         
         # Check for footnotes in the instance document
         print("\nChecking Instance Document:")
-        print(f"Instance URL: {self.report_node.primaryDocumentUrl}")
+        print(f"Instance URL: {self.xbrl_node.primaryDocumentUrl}")
         print(f"Has Footnote Links: {'Yes' if footnote_rel_set else 'No'}")
         print(f"Has Explanatory Facts: {'Yes' if explanatory_rel_set else 'No'}")
         
@@ -582,10 +586,10 @@ class process_report:
         controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
         controller.modelManager.formulaOptions = FormulaOptions()
 
-        # Load the model_xbrl directly from the report's primaryDocumentUrl
+        # Load the model_xbrl directly from the XBRLNode's primaryDocumentUrl
         try:
             self.model_xbrl = controller.modelManager.load(
-                filesource=FileSource.FileSource(self.report_node.primaryDocumentUrl), 
+                filesource=FileSource.FileSource(self.xbrl_node.primaryDocumentUrl), 
                 discover=True
             )
         except Exception as e: 
@@ -683,17 +687,17 @@ class process_report:
         ])
         
         # Create relationships in Neo4j
-        if fact_relationships: self.neo4j.merge_relationships(fact_relationships)
+        if fact_relationships: 
+            self.neo4j.merge_relationships(fact_relationships)
 
-
-        # Later we can even combine all below in 1 but need to understand merge_relationships better
+        # Build report-fact relationships
+        report_fact_relationships = self._build_report_fact_relationships()
         
-        # Add report-fact relationships
-        fact_report_relationships = self._build_report_fact_relationships()
-        if fact_report_relationships:
-            self.neo4j.merge_relationships(fact_report_relationships)
+        # Merge fact relationships
+        if report_fact_relationships:
+            self.neo4j.merge_relationships(report_fact_relationships)
 
-        # Export fact-dimension relationships (first looks for Fact-Member relationships, if not found then Fact-Dimension)
+        # Export fact-dimension relationships
         fact_dim_relationships = self._build_fact_dimension_relationships()
         if fact_dim_relationships:
             self.neo4j.merge_relationships(fact_dim_relationships)
@@ -964,18 +968,6 @@ class process_report:
         return context_relationships
 
 
-    def _build_report_fact_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
-        """Build relationships between XBRL node and its facts"""
-        report_fact_relationships = []
-        
-        for fact in self.facts:
-            report_fact_relationships.append((self.xbrl_node, fact, RelationType.CONTAINS))
-                
-        print(f"Built {len(report_fact_relationships)} XBRL-fact relationships")
-        return report_fact_relationships
-
-
-
     def _build_fact_dimension_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
         """Build relationships between facts and their dimensions/members"""
         relationships = []
@@ -1156,5 +1148,25 @@ class process_report:
         
         return relationships
             
+
+    def _build_report_fact_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
+        """Build relationships between facts and their dimensions/members"""
+        report_fact_relationships = []
+        
+        for fact in self.facts:
+            # Add relationship between fact and report
+            report_fact_relationships.append((
+                fact, 
+                self.xbrl_node,  # Use XBRLNode instead of ReportNode
+                RelationType.REPORTS,
+                {
+                    'report_id': self.xbrl_node.id,  # Use XBRLNode id
+                    'company_cik': self.company.cik
+                }
+            ))
+
+        print(f"Built {len(report_fact_relationships)} report-fact relationships")    
+        
+        return report_fact_relationships
 
 
