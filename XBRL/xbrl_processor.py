@@ -41,11 +41,10 @@ from enum import Enum
 @dataclass
 class process_report:
 
-    # passed at init - modified to make instance_file optional
-    instance_file: Optional[str] = None
-    neo4j: 'Neo4jManager' = None
-    external_company: CompanyNode = None  # Required parameter
-    report_node: Optional['ReportNode'] = None  # New parameter to accept a ReportNode object
+    # Required parameters
+    report_node: 'ReportNode'  # The externally created ReportNode object to use
+    neo4j: 'Neo4jManager'  # Neo4j connection manager
+    external_company: CompanyNode  # The company node to use
     
     # Defaults
     log_file: str = field(default='ErrorLog.txt', repr=False)
@@ -55,9 +54,6 @@ class process_report:
     # passed to Taxonomy, Network, Presentation, Calculation
     model_xbrl: ModelXbrl = field(init=False, repr=False)
 
-    # TODO: Can remove this later
-    report_metadata: Dict[str, object] = field(init=False, default_factory=dict)
-    
     # Common Nodes
     concepts: List[Concept] = field(init=False, default_factory=list, repr=False)
     abstracts: List[AbstractConcept] = field(init=False, default_factory=list, repr=False) # Used in Presentation Class (Abstracts, LineItems, Table (Hypercube), Axis (Dimensions), Members, Domain)
@@ -91,22 +87,13 @@ class process_report:
     guidance_concepts: List[GuidanceConcept] = field(init=False, default_factory=list)
     
     def __post_init__(self):
-        # Validation: either instance_file or report_node must be provided
-        if not self.instance_file and not self.report_node:
-            raise ValueError("Either instance_file or report_node must be provided")
+        # Validation: report_node must be provided
+        if not self.report_node:
+            raise ValueError("report_node must be provided")
             
-        # If report_node is provided, extract instance_file from it
-        if self.report_node:
-            # Fast path: just use the primaryDocumentUrl directly
-            if hasattr(self.report_node, 'primaryDocumentUrl') and self.report_node.primaryDocumentUrl:
-                self.instance_file = self.report_node.primaryDocumentUrl
-            elif hasattr(self.report_node, 'instanceFile') and self.report_node.instanceFile:
-                self.instance_file = self.report_node.instanceFile
-                # Avoid modifying the report node unnecessarily
-                if hasattr(self.report_node, 'primaryDocumentUrl') and not self.report_node.primaryDocumentUrl:
-                    self.report_node.primaryDocumentUrl = self.instance_file
-            else:
-                raise ValueError("Report node must have either primaryDocumentUrl or instanceFile attribute")
+        # Verify the report_node has primaryDocumentUrl
+        if not hasattr(self.report_node, 'primaryDocumentUrl') or not self.report_node.primaryDocumentUrl:
+            raise ValueError("Report node must have primaryDocumentUrl attribute")
             
         # Ensure neo4j and external_company are provided
         if not self.neo4j:
@@ -128,18 +115,15 @@ class process_report:
         self._primary_facts: Dict[str, Fact] = {}  # canonical_key -> primary fact
         self._duplicate_map: Dict[str, str] = {}   # duplicate_uid -> primary_uid
         
+        # Use the provided report_node
+        self.report = self.report_node
+        print(f"Using provided report node: id={self.report.id} ({self.report.primaryDocumentUrl})")
+        
         self.initialize_date_nodes(start_dt = "2024-12-01")     # Later remove these from process_report 
-        self.load_xbrl()                                        # pupulates model_xbrl - see comment above 
+        self.load_xbrl()                                        # populates model_xbrl - see comment above 
         self.initialize_company_node()                          # Company Node Creation
         self.initialize_admin_reports()                         # Admin Reports Node Creation   
         
-        # Use either the provided report_node or initialize a new one
-        if self.report_node:
-            self.report = self.report_node
-            print(f"Using provided report node: {self.report.formType} ({self.instance_file})")
-        else:
-            self.initialize_report_node(cik = self.company.cik)     # Report Node Creation
-  
         self.populate_common_nodes()  # First handle common nodes
         self.populate_company_nodes() # Also creates Abstract Nodes in Neo4j
         self.populate_report_nodes()  # Then handle report-specific nodes
@@ -267,7 +251,7 @@ class process_report:
                         'network_uri': network.network_uri,
                         'network_name': network.name,
                         'company_cik': self.company.cik,
-                        'report_id': self.report.instanceFile,
+                        'report_id': self.report.primaryDocumentUrl,
                         'parent_level': node.level,
                         'parent_order': node.order,
                         'child_level': child_node.level,
@@ -391,9 +375,8 @@ class process_report:
                     # Create relationships for matching facts
                     for parent_fact in group_parents:
                         for child_fact in matching_children:
-                            # Use the primaryDocumentUrl attribute if available, otherwise fall back to instanceFile
-                            report_doc_url = getattr(self.report, 'primaryDocumentUrl', 
-                                                  getattr(self.report, 'instanceFile', None))
+                            # Get report identifier from primaryDocumentUrl
+                            report_doc_url = self.report.primaryDocumentUrl
                             
                             relationships.append((
                                 parent_fact,
@@ -605,52 +588,6 @@ class process_report:
             
         print(f"Retrieved {len(self.admin_reports)} admin report nodes from Neo4j")
 
-    def initialize_report_node(self, cik: str):
-        """Initialize report node with metadata from the XBRL instance"""
-        if hasattr(self, 'report') and self.report:
-            print(f"Report node already initialized: {self.report.formType} ({self.report.id})")
-            return
-        
-        try:
-            # Extract report metadata from model_xbrl
-            report_info = get_report_info(self.model_xbrl)
-            
-            # Create a ReportNode to represent this XBRL instance
-            self.report = ReportNode(
-                formType=report_info.get('form_type', 'Unknown'),
-                periodEnd=report_info.get('period_end', '2024-01-01'),
-                isAmendment=report_info.get('is_amendment', False),
-                primaryDocumentUrl=self.instance_file,  # Use primaryDocumentUrl instead of instanceFile
-                cik=cik,
-                filedAt=report_info.get('filed_at', datetime.now().strftime('%Y-%m-%dT%H:%M:%S%z')),
-                accessionNo=report_info.get('accession_number'),
-                periodOfReport=report_info.get('period_of_report')
-            )
-            
-            # Log report creation
-            print(f"Created report node: {self.report.formType} ({self.report.id})")
-            
-            # Export the report node to Neo4j
-            self.neo4j._export_nodes([self.report], testing=False)
-            
-            # Create report-company relationship
-            relationships = [(self.report, self.company, RelationType.FILED_BY)]
-            self.neo4j.merge_relationships(relationships)
-            
-        except Exception as e:
-            print(f"Error initializing report node: {e}")
-            # Create a minimal report node as fallback
-            self.report = ReportNode(
-                formType="Unknown",
-                periodEnd=datetime.now().strftime('%Y-%m-%d'),
-                isAmendment=False,
-                primaryDocumentUrl=self.instance_file,  # Use primaryDocumentUrl instead of instanceFile
-                cik=cik
-            )
-            self.neo4j._export_nodes([self.report], testing=False)
-
-
-
     def link_fact_footnotes(self) -> None:
         """Debug version to understand fact-footnote relationships"""
         print("\n" + "="*80)
@@ -667,7 +604,7 @@ class process_report:
         
         # Check for footnotes in the instance document
         print("\nChecking Instance Document:")
-        print(f"Instance URL: {self.report.instanceFile}")
+        print(f"Instance URL: {self.report.primaryDocumentUrl}")
         print(f"Has Footnote Links: {'Yes' if footnote_rel_set else 'No'}")
         print(f"Has Explanatory Facts: {'Yes' if explanatory_rel_set else 'No'}")
         
@@ -687,24 +624,14 @@ class process_report:
         controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
         controller.modelManager.formulaOptions = FormulaOptions()
 
-        # Load the model_xbrl
+        # Load the model_xbrl directly from the report's primaryDocumentUrl
         try:
-            self.model_xbrl = controller.modelManager.load(filesource=FileSource.FileSource(self.instance_file), discover=True)
+            self.model_xbrl = controller.modelManager.load(
+                filesource=FileSource.FileSource(self.report.primaryDocumentUrl), 
+                discover=True
+            )
         except Exception as e: 
             raise RuntimeError(f"Error loading XBRL model: {e}")
-
-    # Review it - See Notes.txt - Not used
-    def extract_report_metadata(self):
-        ctx = list(self.model_xbrl.contexts.values())[0]  # First context for metadata
-        self.report_metadata = {
-            # "company_name": ctx.entityIdentifier[1],
-            "file_name": self.model_xbrl.modelDocument.basename,
-            "entity_id": ctx.entityIdentifier[1],
-            "start_date": ctx.startDatetime.date() if ctx.isStartEndPeriod else None,
-            "end_date": (ctx.endDatetime - timedelta(days=1)).date() if ctx.isStartEndPeriod else ctx.endDatetime.date() if ctx.isInstantPeriod else None,
-            "period_start": ctx.period[0].stringValue if ctx.isStartEndPeriod else None,
-            "period_end": ctx.period[1].stringValue if ctx.isStartEndPeriod else ctx.period[0].stringValue if ctx.isInstantPeriod else None,
-            "period_type": "duration" if ctx.isStartEndPeriod else "instant" if ctx.isInstantPeriod else "forever" }
 
 
     def populate_common_nodes(self):
