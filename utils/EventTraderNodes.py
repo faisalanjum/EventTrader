@@ -6,9 +6,10 @@ import json
 from enum import Enum
 from utils.date_utils import parse_date  # Import our date parsing utility
 
-# Import node types from XBRLClasses
-from XBRL.XBRLClasses import NodeType, RelationType, CompanyNode as XBRLCompanyNode, ReportNode as XBRLReportNode
+# Import node types from XBRLClasses but avoid circular imports
+from XBRL.xbrl_core import NodeType, RelationType
 
+# Base Neo4jNode class definition
 @dataclass
 class Neo4jNode:
     """Base class for Neo4j nodes"""
@@ -33,223 +34,54 @@ class Neo4jNode:
         """Create instance from Neo4j properties"""
         raise NotImplementedError("Subclasses must implement from_neo4j")
 
-
-
-
 @dataclass
-class ReportNode(XBRLReportNode):
+class ReportNode(Neo4jNode):
     """
-    EventTrader-specific extension of ReportNode.
-    Inherits from XBRLClasses.ReportNode to maintain compatibility while allowing
-    for EventTrader-specific extensions or overrides.
-    
-    Fields are mapped from SEC API and Redis data to the XBRL structure.
+    A simplified ReportNode class with just the essential fields needed for XBRL processing.
+    This class is designed to be created outside the XBRL processor and passed in.
     """
+    accessionNo: str
+    primaryDocumentUrl: str
+    cik: str
     
-    # No need to redefine core fields as they're inherited from the parent class
-    # The parent class already defines:
-    # formType: str
-    # periodEnd: str
-    # isAmendment: bool
-    # primaryDocumentUrl: str
-    # cik: str
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.REPORT
     
-    # Additional fields from SEC API/Redis not in XBRL base class
-    description: Optional[str] = None
-    is_xml: Optional[bool] = None
-    companyName: Optional[str] = None
-    linkToTxt: Optional[str] = None
-    linkToHtml: Optional[str] = None
-    linkToFilingDetails: Optional[str] = None
-    effectivenessDate: Optional[str] = None
-    exhibits: Optional[Dict[str, Any]] = field(default_factory=dict)
-    items: Optional[List[str]] = field(default_factory=list)
-    symbols: Optional[List[str]] = field(default_factory=list)
-    entities: Optional[List[Dict[str, Any]]] = field(default_factory=list)
-    extracted_sections: Optional[Dict[str, Any]] = field(default_factory=dict)
-    financial_statements: Optional[Dict[str, Any]] = field(default_factory=dict)
-    exhibit_contents: Optional[Dict[str, Any]] = field(default_factory=dict)
-    created: Optional[str] = None
-    updated: Optional[str] = None
-    
-    # Override id property to use accessionNo as the unique identifier
     @property
     def id(self) -> str:
-        """Use accessionNo as unique identifier"""
-        if not self.accessionNo:
-            raise ValueError("Missing required accessionNo for ReportNode")
+        """Use accessionNo as the unique identifier"""
         return self.accessionNo
-    
-    @classmethod
-    def from_neo4j(cls, props: Dict[str, Any]) -> 'ReportNode':
-        """
-        Create a ReportNode from Neo4j properties
-        """
-        # Check for required fields
-        required_fields = ['formType', 'periodEnd', 'isAmendment', 'cik']
-        
-        missing_fields = [field for field in required_fields if field not in props]
-        if missing_fields:
-            raise ValueError(f"Missing required fields: {', '.join(missing_fields)}")
-        
-        # Ensure we have either primaryDocumentUrl or instanceFile
-        if 'primaryDocumentUrl' not in props and 'instanceFile' not in props:
-            raise ValueError("Either primaryDocumentUrl or instanceFile is required")
-            
-        # Performance optimization: use primaryDocumentUrl directly if available, otherwise use instanceFile
-        primary_document_url = props.get('primaryDocumentUrl', props.get('instanceFile', ''))
-        
-        # Map fields from Neo4j properties to ReportNode fields
-        # First set required fields
-        report = cls(
-            formType=props.get('formType', ''),
-            periodEnd=props.get('periodEnd', ''),
-            isAmendment=props.get('isAmendment', False),
-            primaryDocumentUrl=primary_document_url,
-            cik=props.get('cik', '')
-        )
-        
-        # Make sure accessionNo is set
-        report.accessionNo = props.get('accessionNo', '')
-        
-        # Map optional fields directly
-        optional_fields = [
-            'filedAt', 'periodOfReport', 'insertedAt', 'status',
-            'description', 'is_xml', 'companyName',
-            'linkToTxt', 'linkToHtml', 'linkToFilingDetails', 'effectivenessDate',
-            'created', 'updated'
-        ]
-        
-        for field in optional_fields:
-            if field in props and props[field] is not None:
-                setattr(report, field, props[field])
-                
-        # Handle serialized complex fields
-        complex_fields = {
-            'exhibits': dict,
-            'items': list,
-            'symbols': list,
-            'entities': list,
-            'extracted_sections': dict,
-            'financial_statements': dict,
-            'exhibit_contents': dict
-        }
-        
-        for field, field_type in complex_fields.items():
-            if field in props and props[field]:
-                # Try to deserialize if stored as JSON
-                try:
-                    if isinstance(props[field], str):
-                        setattr(report, field, json.loads(props[field]))
-                    else:
-                        setattr(report, field, props[field])
-                except (json.JSONDecodeError, TypeError):
-                    # If deserializing fails, keep as is
-                    setattr(report, field, props[field])
-                        
-        return report
     
     @property
     def properties(self) -> Dict[str, Any]:
-        """
-        Returns enhanced properties for Neo4j node with EventTrader-specific fields
-        Overrides the base class method to include additional fields
-        """
-        # Get base properties from parent class
-        props = super().properties
-        
-        # Override id with accessionNo
-        props['id'] = self.id
-        
-        # Add EventTrader-specific properties
-        additional_props = {
-            'primaryDocumentUrl': self.primaryDocumentUrl,
-            'description': self.description,
-            'is_xml': self.is_xml,
-            'companyName': self.companyName,
-            'linkToTxt': self.linkToTxt,
-            'linkToHtml': self.linkToHtml,
-            'linkToFilingDetails': self.linkToFilingDetails,
-            'effectivenessDate': self.effectivenessDate,
-            'created': self.created,
-            'updated': self.updated
+        """Return node properties for Neo4j"""
+        return {
+            "accessionNo": self.accessionNo,
+            "primaryDocumentUrl": self.primaryDocumentUrl,
+            "cik": self.cik,
+            # Neo4j requirements
+            "id": self.id
         }
-        
-        # Add non-None additional properties
-        props.update({k: v for k, v in additional_props.items() if v is not None})
-        
-        # Handle complex fields by serializing to JSON
-        if self.exhibits:
-            props['exhibits'] = json.dumps(self.exhibits)
-        if self.items:
-            props['items'] = json.dumps(self.items)
-        if self.symbols:
-            props['symbols'] = json.dumps(self.symbols)
-        if self.entities:
-            props['entities'] = json.dumps(self.entities)
-        if self.extracted_sections:
-            props['extracted_sections'] = json.dumps(self.extracted_sections)
-        if self.financial_statements:
-            props['financial_statements'] = json.dumps(self.financial_statements)
-        if self.exhibit_contents:
-            props['exhibit_contents'] = json.dumps(self.exhibit_contents)
-        
-        return props
     
     @classmethod
-    def from_redis(cls, redis_data: Dict[str, Any]) -> 'ReportNode':
-        """
-        Create a ReportNode from Redis data
-        Mainly used for SEC filings and reports
-        """
-        # Required checks
-        required_fields = ['formType', 'filedAt']
-        missing_fields = [field for field in required_fields if field not in redis_data]
-        if missing_fields:
-            raise ValueError(f"Missing required fields: {', '.join(missing_fields)}")
-        
-        # Determine instance file (primaryDocumentUrl)
-        instance_file = ''
-        instance_field = 'primaryDocumentUrl'
-        
-        # Try different possible field names for instance file
-        for field in ['primaryDocumentUrl', 'instanceFile', 'linkToFilingDetails']:
-            if redis_data.get(field):
-                instance_file = redis_data[field]
-                instance_field = field
-                break
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'ReportNode':
+        """Create a ReportNode instance from Neo4j properties"""
+        if 'accessionNo' not in props:
+            raise ValueError("Missing required accessionNo for ReportNode")
             
-        # If we have a sourceHTML, use that as a fallback
-        if not instance_file and redis_data.get('sourceHTML'):
-            instance_file = redis_data['sourceHTML']
-        
-        # Extract CIK from cik or entities
-        cik = redis_data.get('cik', '')
-        
-        # If no CIK directly, try to extract from entities
-        if not cik and redis_data.get('entities'):
-            cik = redis_data['entities'][0].get('cik', '')
-        
-        # Performance optimization: create the instance directly with all required fields
-        # Create instance with required fields
-        report = cls(
-            formType=redis_data.get('formType', 'UNKNOWN'),
-            # Map periodEnd - use periodOfReport if available, otherwise use filedAt
-            periodEnd=redis_data.get('periodOfReport', redis_data.get('filedAt', '')[:10]),
-            isAmendment=('/A' in redis_data.get('formType', '') or '[Amend]' in redis_data.get('description', '')),
-            primaryDocumentUrl=instance_file,
-            cik=cik
+        # Ensure we have primaryDocumentUrl
+        if 'primaryDocumentUrl' not in props:
+            raise ValueError("Missing required primaryDocumentUrl for ReportNode")
+            
+        return cls(
+            accessionNo=props['accessionNo'],
+            primaryDocumentUrl=props['primaryDocumentUrl'],
+            cik=props.get('cik', '')
         )
-        
-        # Store the original data for later access to metadata and returns
-        report._original_data = redis_data
-        
-        # Set accessionNo explicitly as it's our primary identifier
-        report.accessionNo = redis_data.get('accessionNo', '')
-        
-        return report
 
-
+# Import XBRLCompanyNode for CompanyNode subclass after our base definitions
+from XBRL.XBRLClasses import CompanyNode as XBRLCompanyNode
 
 @dataclass
 class CompanyNode(XBRLCompanyNode): 
