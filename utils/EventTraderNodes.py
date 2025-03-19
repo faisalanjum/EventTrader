@@ -80,29 +80,90 @@ class ReportNode(Neo4jNode):
             cik=props.get('cik', '')
         )
 
-# Import XBRLCompanyNode for CompanyNode subclass after our base definitions
-from XBRL.XBRLClasses import CompanyNode as XBRLCompanyNode
-
+# Direct implementation of CompanyNode without inheritance
 @dataclass
-class CompanyNode(XBRLCompanyNode): 
-    """
-    EventTrader-specific extension of CompanyNode.
-    Inherits from XBRLClasses.CompanyNode to maintain compatibility while allowing
-    for EventTrader-specific extensions or overrides.
-    """
+class CompanyNode(Neo4jNode):
+    cik: str
+    name: Optional[str] = None  # Check if it matters to make it Optional
+    ticker: Optional[str] = None
+    exchange: Optional[str] = None
+    sector: Optional[str] = None
+    industry: Optional[str] = None
+    fiscal_year_end: Optional[str] = None
+
+    # Add fields that may not be in the class definition but are accessed in properties method
+    cusip: Optional[str] = None
+    figi: Optional[str] = None
+    class_figi: Optional[str] = None
+    sic: Optional[str] = None
+    sic_name: Optional[str] = None
+    sector_etf: Optional[str] = None
+    industry_etf: Optional[str] = None
+    mkt_cap: Optional[float] = None
+    employees: Optional[int] = None
+    shares_out: Optional[float] = None
+    ipo_date: Optional[str] = None
     
-    # No need to redefine fields as they're inherited from the parent class
-    # The parent class already defines:
-    # cik: str
-    # name: Optional[str] = None
-    # ticker: Optional[str] = None
-    # etc.
-    
+    def __post_init__(self):
+        # Ensure CIK is properly formatted (10 digits with leading zeros)
+        self.cik = self.cik.zfill(10)
+        
+    def display(self):
+        """Returns display name for the entity"""
+        if self.ticker:
+            return f"{self.name} ({self.ticker})"
+        return self.name
+
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.COMPANY
+
+    @property
+    def id(self) -> str:
+        """Use CIK as unique identifier"""
+        return self.cik
+
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """
+        Returns properties for Neo4j node
+        Filters out None values to keep the node clean
+        """
+        props = {
+            'id': self.id,
+            'cik': self.cik,
+            'name': self.name,
+            'displayLabel': self.display()
+        }
+        
+        # Add optional properties if they exist
+        optional_props = {
+            'ticker': self.ticker,
+            'exchange': self.exchange,
+            'sector': self.sector,
+            'industry': self.industry,
+            'cusip': self.cusip,
+            'figi': self.figi,
+            'class_figi': self.class_figi,
+            'sic': self.sic,
+            'sic_name': self.sic_name,
+            'sector_etf': self.sector_etf,
+            'industry_etf': self.industry_etf,
+            'mkt_cap': self.mkt_cap,
+            'employees': self.employees,
+            'shares_out': self.shares_out,
+            'ipo_date': self.ipo_date,
+            'fiscal_year_end': self.fiscal_year_end
+        }
+        
+        # Only include non-None optional properties
+        props.update({k: v for k, v in optional_props.items() if v is not None})
+        
+        return props
+        
     @classmethod
     def from_neo4j(cls, props: Dict[str, Any]) -> 'CompanyNode':
-        """
-        Enhanced version of from_neo4j with EventTrader-specific handling
-        """
+        """Create CompanyNode from Neo4j properties"""
         # Required field
         if 'cik' not in props:
             raise ValueError("Missing required field 'cik' for CompanyNode")
