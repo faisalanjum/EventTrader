@@ -1195,16 +1195,41 @@ class process_report:
         self.xbrl_node = XBRLNode(
             primaryDocumentUrl=self.report_node.primaryDocumentUrl,
             cik=self.report_node.cik,
-            report_id=self.report_node.id
+            report_id=self.report_node.id,
+            accessionNo=self.report_node.accessionNo  # Add accessionNo to ensure matching
         )
         
-        # Export XBRLNode to Neo4j
-        self.neo4j._export_nodes([self.xbrl_node], testing=False)
+        print(f"XBRLNode created with id: {self.xbrl_node.id}, report_id: {self.report_node.id}, accessionNo: {self.report_node.accessionNo}")
         
-        # Create relationship between ReportNode and XBRLNode
-        self.neo4j.merge_relationships([
-            (self.report_node, self.xbrl_node, RelationType.HAS_XBRL)
-        ])
+        # Create relationship between ReportNode and XBRLNode directly with Cypher
+        # Use a single transaction to both ensure node exists and create relationship
+        with self.neo4j.driver.session() as session:
+            result = session.run("""
+            MATCH (r:Report {accessionNo: $accessionNo})
+            MERGE (x:XBRLNode {id: $xbrl_id})
+            ON CREATE SET 
+                x.primaryDocumentUrl = $url,
+                x.cik = $cik,
+                x.report_id = $report_id,
+                x.accessionNo = $accessionNo,
+                x.displayLabel = $display_label
+            MERGE (r)-[rel:HAS_XBRL]->(x)
+            RETURN r, x
+            """, {
+                "accessionNo": self.report_node.accessionNo,
+                "xbrl_id": self.xbrl_node.id,
+                "url": self.xbrl_node.primaryDocumentUrl,
+                "cik": self.xbrl_node.cik,
+                "report_id": self.xbrl_node.report_id,
+                "display_label": self.xbrl_node.display
+            })
+            
+            records = list(result)
+            if records:
+                print(f"Created HAS_XBRL relationship from ReportNode to XBRLNode")
+            else:
+                print(f"WARNING: Failed to create HAS_XBRL relationship")
+                print(f"Report accessionNo: {self.report_node.accessionNo}")
         
         print(f"Created XBRL processing node for report: {self.report_node.id}")
 

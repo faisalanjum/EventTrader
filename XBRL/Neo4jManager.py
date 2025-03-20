@@ -6,10 +6,11 @@ from neo4j import GraphDatabase, Driver
 import pandas as pd
 # Split imports: TYPE_CHECKING for type hints, direct imports for runtime needs
 if TYPE_CHECKING:
-    from .XBRLClasses import Neo4jNode
+    from .xbrl_core import Neo4jNode
 
 # Import needed classes and enums for runtime
-from .XBRLClasses import (PRESENTATION_EDGE_UNIQUE_PROPS, CALCULATION_EDGE_UNIQUE_PROPS, NodeType, RelationType, Fact)
+from .xbrl_core import NodeType, RelationType, PRESENTATION_EDGE_UNIQUE_PROPS, CALCULATION_EDGE_UNIQUE_PROPS
+from .xbrl_reporting import Fact
 
 from .utils import resolve_primary_fact_relationships, clean_number
 

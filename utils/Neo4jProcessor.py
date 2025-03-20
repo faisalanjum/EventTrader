@@ -35,7 +35,7 @@ from utils.metadata_fields import MetadataFields
 
 # Internal Imports - XBRL Processing
 from XBRL.Neo4jManager import Neo4jManager
-from XBRL.XBRLClasses import NodeType, RelationType
+from XBRL.xbrl_core import NodeType, RelationType
 
 # Internal Imports - Redis Constants
 from utils.redis_constants import RedisKeys

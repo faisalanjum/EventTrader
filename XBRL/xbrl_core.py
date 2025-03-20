@@ -51,21 +51,20 @@ class GroupingType(Enum):
 
 # Commenting out unused types here so they don't create unneccessary nodes in create_indexes
 class NodeType(Enum):
-    """XBRL node types in Neo4j"""
-    
-    LINE_ITEMS = "LineItems"
+    """XBRL node types"""
     CONCEPT = "Concept"
     ABSTRACT = "Abstract"
-    
-    COMPANY = "Company"
-    ENTITY = "Entity" # Not using this for now
-    REPORT = "Report"
-    XBRL = "XBRL"  # Add new node type
-
     FACT = "Fact"
-    CONTEXT = "Context"
     PERIOD = "Period"
-    UNIT = "Unit"           
+    UNIT = "Unit"
+    CONTEXT = "Context" # Includes dimensions & members?
+    REPORT = "Report"    # Filing
+    COMPANY = "Company"  # Entity
+    XBRLNODE = "XBRLNode"  # Changed from XBRL to XBRLNODE
+    
+    # Table structures - used in presentation hierarchy
+    LINE_ITEMS = "LineItems"
+    
     OTHER = "Other" # Keep this as it's used as default fallback - 'Other' NodeType is created in create_indexes
     HYPERCUBE = "HyperCube" # Keep this as it's used for table structures determination in presentation hierarchy
 
@@ -364,10 +363,11 @@ class XBRLNode(Neo4jNode):
     primaryDocumentUrl: str  # Primary identifier matching ReportNode
     cik: str                # Company identifier 
     report_id: str          # Reference to original ReportNode id
+    accessionNo: Optional[str] = None  # Match ReportNode accessionNo for relationship creation
     
     @property
     def node_type(self) -> NodeType:
-        return NodeType.XBRL
+        return NodeType.XBRLNODE
         
     @property
     def id(self) -> str:
@@ -380,7 +380,7 @@ class XBRLNode(Neo4jNode):
         # Extract accession number from primaryDocumentUrl
         # Example URL: https://www.sec.gov/Archives/edgar/data/1856028/000162828024010049/sdig-20231231_htm.xml
         try:
-            accession_no = self.primaryDocumentUrl.split('/')[7]  # Get the accession number part
+            accession_no = self.accessionNo or self.primaryDocumentUrl.split('/')[7]  # Get the accession number part
             return f"XBRL_{accession_no}"
         except (IndexError, AttributeError):
             return f"XBRL_{self.report_id}"  # Fallback to report_id if URL parsing fails
@@ -388,10 +388,16 @@ class XBRLNode(Neo4jNode):
     @property
     def properties(self) -> Dict[str, Any]:
         """Properties for Neo4j node"""
-        return {
+        props = {
             'id': self.id,
             'primaryDocumentUrl': self.primaryDocumentUrl,
             'cik': self.cik,
             'report_id': self.report_id,
             'displayLabel': self.display
         }
+        
+        # Add accessionNo if available (for newer nodes)
+        if self.accessionNo:
+            props['accessionNo'] = self.accessionNo
+            
+        return props
