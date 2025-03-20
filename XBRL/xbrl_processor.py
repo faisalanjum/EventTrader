@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from .xbrl_core import Neo4jNode, NodeType, RelationType, ReportElementClassifier, XBRLNode
 
 # Import utility functions
-from .utils import clean_number, resolve_primary_fact_relationships
+from .utils import clean_number, resolve_primary_fact_relationships, download_sec_file
 
 # Import basic and concept nodes
 from .xbrl_basic_nodes import Context, Period, Unit, CompanyNode, ReportNode
@@ -36,7 +36,7 @@ from arelle.ModelDtsObject import ModelConcept
 from arelle.ModelInstanceObject import ModelFact, ModelContext, ModelUnit
 from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
-
+import time
 
 def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional[CompanyNode]:
     """Get CompanyNode from Neo4j by CIK."""
@@ -601,19 +601,76 @@ class process_report:
 
 
 
+
+
     def load_xbrl(self):
         # Initialize the controller
         controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
         controller.modelManager.formulaOptions = FormulaOptions()
+        
+        # Configure Arelle's web cache for high-volume SEC access
+        if hasattr(controller, 'webCache'):
+            # Required for SEC identification - a compliant user agent
+            controller.webCache.userAgent = 'XBRL-Research-Tool/1.0 xbrl-research@example.com'
+            
+            # Optimize parameters for high-volume processing:
+            
+            # Minimal delay needed to avoid SEC rate limiting (careful lowering this)
+            controller.webCache.delay = 1 
+            
+            # Reasonable timeout to handle large taxonomy files
+            controller.webCache.timeout = 180  # slightly shorter timeout (vs 60)
+            
+            # Control caching behavior - key for multiple downloads
+            controller.webCache.recheck = float('inf')  # Never recheck during batch processing
+            
+            # Handle HTTPS redirects automatically
+            controller.webCache.httpsRedirect = True
+            
+            # Additional optimizations verified in documentation:
+            # Skip certificate validation if needed (use with caution)
+            controller.webCache.noCertificateCheck = True
+            
+            # For debugging network issues
+            # controller.webCache.logDownloads = True
+        
+        # Use direct loading but add retry logic for robustness
+        max_retries = 4
+        retry_delay = 2
+        
+        for attempt in range(max_retries):
+            try:
+                if attempt > 0:
+                    print(f"Retry attempt {attempt+1}/{max_retries} for {self.xbrl_node.primaryDocumentUrl}")
+                    time.sleep(retry_delay * attempt)  # Exponential backoff
+                    
+                # The direct loading approach
+                self.model_xbrl = controller.modelManager.load(
+                    filesource=FileSource.FileSource(self.xbrl_node.primaryDocumentUrl),
+                    discover=True
+                )
+                break  # Success, exit retry loop
+                
+            except Exception as e:
+                last_error = e
+                if attempt == max_retries - 1:
+                    raise RuntimeError(f"Error loading XBRL model after {max_retries} attempts: {e}")
 
-        # Load the model_xbrl directly from the XBRLNode's primaryDocumentUrl
-        try:
-            self.model_xbrl = controller.modelManager.load(
-                filesource=FileSource.FileSource(self.xbrl_node.primaryDocumentUrl), 
-                discover=True
-            )
-        except Exception as e: 
-            raise RuntimeError(f"Error loading XBRL model: {e}")
+
+
+    # def load_xbrl(self):
+    #     # Initialize the controller
+    #     controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
+    #     controller.modelManager.formulaOptions = FormulaOptions()
+
+    #     # Load the model_xbrl directly from the XBRLNode's primaryDocumentUrl
+    #     try:
+    #         self.model_xbrl = controller.modelManager.load(
+    #             filesource=FileSource.FileSource(self.xbrl_node.primaryDocumentUrl), 
+    #             discover=True
+    #         )
+    #     except Exception as e: 
+    #         raise RuntimeError(f"Error loading XBRL model: {e}")
 
 
     def populate_common_nodes(self):

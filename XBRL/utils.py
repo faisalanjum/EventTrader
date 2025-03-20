@@ -1,6 +1,15 @@
 from __future__ import annotations
-from typing import List, Tuple, TYPE_CHECKING, Union
+from typing import List, Tuple, TYPE_CHECKING, Union, Optional
 from datetime import datetime, timedelta
+
+
+
+import logging
+import requests
+import time
+import tempfile
+
+
 
 # Runtime imports needed for functions
 # Moving DateNode import inside functions to break circular dependency
@@ -53,6 +62,85 @@ def count_facts_in_relationships(relationships):
         target_facts.add(rel[1])
     return len(source_facts), len(target_facts)
 
+
+
+
+
+
+import requests
+import time
+import random
+import os
+from urllib.parse import urlparse
+
+def download_sec_file(url, max_retries=5, base_delay=1.0):
+    """Download a file from SEC with proper headers and retry logic.
+    
+    Args:
+        url: The URL to download
+        max_retries: Maximum number of retry attempts
+        base_delay: Base delay between retries (will be increased exponentially)
+        
+    Returns:
+        Tuple of (content, temp_file_path) or None if download fails
+    """
+    # Parse URL to extract filename
+    parsed_url = urlparse(url)
+    filename = os.path.basename(parsed_url.path)
+    
+    # Create a temporary file
+    import tempfile
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=f"_{filename}")
+    
+    # Define SEC-friendly headers (required to avoid 403)
+    headers = {
+        'User-Agent': 'XBRL-Research-Tool/1.0 xbrl-research@example.com',  # Replace with appropriate details
+        'Accept-Encoding': 'gzip, deflate',
+        'Host': parsed_url.netloc
+    }
+    
+    # Implement exponential backoff
+    for attempt in range(max_retries):
+        try:
+            # Add jitter to delay to avoid thundering herd problem
+            delay = (base_delay * (2 ** attempt)) + (random.random() * 0.5)
+            
+            # Wait before making request (important for rate limiting)
+            if attempt > 0:
+                print(f"Retry attempt {attempt} after {delay:.2f}s delay...")
+                time.sleep(delay)
+            
+            response = requests.get(url, headers=headers, stream=True, timeout=30)
+            
+            # Check for rate limiting or other errors
+            if response.status_code == 403:
+                print(f"SEC rate limit hit (403), retrying in {delay:.2f}s...")
+                continue
+                
+            # Raise for other status codes
+            response.raise_for_status()
+            
+            # Save content to temp file - THIS IS THE KEY CHANGE:
+            # Don't return the response.content, just save it to the file
+            with open(temp_file.name, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+                    
+            # Return None for content since we've already streamed it to file
+            return None, temp_file.name
+            
+        except (requests.RequestException, IOError) as e:
+            print(f"Download attempt {attempt+1} failed: {str(e)}")
+            
+            # On last attempt, cleanup and return None
+            if attempt == max_retries - 1:
+                try:
+                    os.unlink(temp_file.name)
+                except:
+                    pass
+                return None
+    
+    return None
 
 
 # TODO: To be replaced later by actual sec-api - This is temporary
