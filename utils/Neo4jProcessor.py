@@ -990,9 +990,10 @@ class Neo4jProcessor:
                 # Create/update report node with conditional updates
                 # This follows the same pattern as news deduplication
                 result = session.run("""
-                MERGE (r:Report {id: $id})
+                MERGE (r:Report {accessionNo: $id})
                 ON CREATE SET 
                     r.id = $id,
+                    r.accessionNo = $id,
                     r.formType = $formType,
                     r.description = $description,
                     r.cik = $cik,
@@ -1023,7 +1024,9 @@ class Neo4jProcessor:
                     r.exhibits = $exhibits,
                     r.entities = $entities,
                     r.items = $items,
-                    r.symbols = $symbols
+                    r.symbols = $symbols,
+                    r.accessionNo = $id,
+                    r.id = $id
                 RETURN r
                 """, {
                     "id": report_id,
@@ -1301,7 +1304,7 @@ class Neo4jProcessor:
                 )
                 
                 # Get and process the news item
-                raw_data = self.event_trader_redis.history_client.client.get(key)
+                raw_data = self.event_trader_redis.history_client.get(key)
                 if raw_data:
                     news_data = json.loads(raw_data)
                     success = self._process_deduplicated_news(
@@ -1320,7 +1323,7 @@ class Neo4jProcessor:
                 )
                 
                 # Get and process the report
-                raw_data = self.event_trader_redis.history_client.client.get(key)
+                raw_data = self.event_trader_redis.history_client.get(key)
                 if raw_data:
                     report_data = json.loads(raw_data)
                     

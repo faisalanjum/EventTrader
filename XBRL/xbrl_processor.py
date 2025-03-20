@@ -14,7 +14,7 @@ from .xbrl_core import Neo4jNode, NodeType, RelationType, ReportElementClassifie
 from .utils import clean_number, resolve_primary_fact_relationships
 
 # Import basic and concept nodes
-from .xbrl_basic_nodes import Context, Period, Unit, CompanyNode
+from .xbrl_basic_nodes import Context, Period, Unit, CompanyNode, ReportNode
 from .xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
 
 # Import specialized modules
@@ -38,18 +38,54 @@ from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 
 
+def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional[CompanyNode]:
+    """Get CompanyNode from Neo4j by CIK."""
+    try:
+        with neo4j.driver.session() as session:
+            result = session.run(
+                "MATCH (c:Company {cik: $cik}) RETURN c",
+                {"cik": cik}
+            ).single()
+            if result:
+                return CompanyNode.from_neo4j(dict(result["c"].items()))
+            return None
+    except Exception as e:
+        print(f"Error retrieving company with CIK {cik}: {e}")
+        return None
+
+
+def get_report_by_accessionNo(neo4j: 'Neo4jManager', accessionNo: str) -> Optional[ReportNode]:
+    """Get ReportNode from Neo4j by accession number."""
+    try:
+        with neo4j.driver.session() as session:
+            result = session.run(
+                "MATCH (r:Report {accessionNo: $accessionNo}) RETURN r",
+                {"accessionNo": accessionNo}
+            ).single()
+            if result:
+                return ReportNode.from_neo4j(dict(result["r"].items()))
+            return None
+    except Exception as e:
+        print(f"Error retrieving report with accession number {accessionNo}: {e}")
+        return None
+
+
 @dataclass
 class process_report:
 
     # Required parameters
-    report_node: 'ReportNode'  # The externally created ReportNode object to use
     neo4j: 'Neo4jManager'  # Neo4j connection manager
-    external_company: CompanyNode  # The company node to use
+    cik: str              # Company CIK
+    accessionNo: str      # Report accession number
     
     # Defaults
     log_file: str = field(default='ErrorLog.txt', repr=False)
     testing: bool = field(default=True)  # Add testing flag as configurable (set to False in later calls for now)
 
+    # These will be loaded in post_init
+    report_node: ReportNode = field(init=False)
+    external_company: CompanyNode = field(init=False)
+    
     # XBRL processing node
     xbrl_node: XBRLNode = field(init=False)  # The XBRL processing node
     
@@ -86,19 +122,18 @@ class process_report:
     guidance_concepts: List[GuidanceConcept] = field(init=False, default_factory=list)
     
     def __post_init__(self):
-        # Validation: report_node must be provided
+        # Get company node and report node
+        self.external_company = get_company_by_cik(self.neo4j, self.cik)
+        if not self.external_company:
+            raise ValueError(f"No company found with CIK {self.cik}")
+            
+        self.report_node = get_report_by_accessionNo(self.neo4j, self.accessionNo)
         if not self.report_node:
-            raise ValueError("report_node must be provided")
+            raise ValueError(f"No report found with accession number {self.accessionNo}")
             
         # Verify the report_node has primaryDocumentUrl
         if not hasattr(self.report_node, 'primaryDocumentUrl') or not self.report_node.primaryDocumentUrl:
             raise ValueError("Report node must have primaryDocumentUrl attribute")
-            
-        # Ensure neo4j and external_company are provided
-        if not self.neo4j:
-            raise ValueError("Neo4j manager is required")
-        if not self.external_company:
-            raise ValueError("External company node is required")
         
         # Create constraints directly like in ground truth
         with self.neo4j.driver.session() as session:

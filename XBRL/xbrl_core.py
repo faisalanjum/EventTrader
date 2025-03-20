@@ -14,6 +14,7 @@ from .common_imports import *
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .xbrl_basic_nodes import Context, Period, Unit, CompanyNode, ReportNode
+    # from utils.EventTraderNodes import AdminReportNode
     from .xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
     from .xbrl_taxonomy import Taxonomy
     from .xbrl_dimensions import Dimension, Domain, Member, Hypercube
@@ -83,8 +84,8 @@ class NodeType(Enum):
     DOMAIN = "Domain"
     MEMBER = "Member"
     
-    # DATE = "Date"
-    # ADMIN_REPORT = "AdminReport"
+    DATE = "Date"
+    ADMIN_REPORT = "AdminReport"
 
 
 

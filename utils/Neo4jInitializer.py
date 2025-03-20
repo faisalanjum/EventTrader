@@ -6,7 +6,7 @@ import re
 import pandas as pd
 import json
 
-from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode
+from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode
 from XBRL.Neo4jManager import Neo4jManager
 from XBRL.xbrl_core import RelationType
 
@@ -277,7 +277,7 @@ class Neo4jInitializer:
         """Create admin report hierarchy for SEC filings."""
         try:
             from XBRL.xbrl_core import RelationType
-            from XBRL.xbrl_basic_nodes import AdminReportNode
+            from utils.EventTraderNodes import AdminReportNode
             
             # Create admin report nodes
             admin_reports = [

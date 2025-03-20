@@ -80,6 +80,8 @@ class ReportNode(Neo4jNode):
             cik=props.get('cik', '')
         )
 
+
+
 # Direct implementation of CompanyNode without inheritance
 @dataclass
 class CompanyNode(Neo4jNode):
@@ -232,6 +234,69 @@ class CompanyNode(Neo4jNode):
                 pass
         
         return company
+
+@dataclass
+class AdminReportNode(Neo4jNode):
+    """
+    Admin report node for categorizing SEC filings.
+    Used in the report hierarchy. 
+    
+    Args:
+        code: Unique code (e.g., '10-K', '10-K_FYE-0331')
+        label: Display label (e.g., '10-K Reports', 'FYE 03/31')
+        category: Category for grouping (e.g., '10-K')
+    """
+    code: str      # Unique identifier
+    label: str     # Display label
+    category: str  # Category for grouping
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.ADMIN_REPORT
+    
+    @property
+    def id(self) -> str:
+        """Use code as unique identifier"""
+        return self.code
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            'id': self.id,
+            'code': self.code,
+            'label': self.label,
+            'category': self.category,
+            'displayLabel': self.label
+        }
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'AdminReportNode':
+        """Create AdminReportNode from Neo4j properties"""
+        # Required fields
+        if 'code' not in props:
+            raise ValueError("Missing required field 'code' for AdminReportNode")
+        
+        return cls(
+            code=props['code'],
+            label=props.get('label', ''),
+            category=props.get('category', '')
+        )
+    
+    def get_date(self) -> Optional[datetime]:
+        """Extract date from code for comparison"""
+        try:
+            if "_FYE-" in self.code:
+                month_day = self.code.split("_FYE-")[1]
+                month = int(month_day[:2])
+                day = int(month_day[2:])
+                return datetime(2000, month, day)  # Year doesn't matter for comparison
+            elif "_Q" in self.code:
+                quarter = int(self.code.split("_Q")[1])
+                month = (quarter * 3) - 2  # Q1 -> 1, Q2 -> 4, Q3 -> 7, Q4 -> 10
+                return datetime(2000, month, 1)  # Year doesn't matter for comparison
+        except Exception:
+            pass
+        return None
 
 @dataclass
 class MarketIndexNode(Neo4jNode):
