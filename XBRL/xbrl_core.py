@@ -13,7 +13,8 @@ from .common_imports import *
 # Type checking imports
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from .xbrl_basic_nodes import Context, Period, Unit, CompanyNode, ReportNode
+    from .xbrl_basic_nodes import Context, Period, Unit
+    from utils.EventTraderNodes import CompanyNode, ReportNode
     # from utils.EventTraderNodes import AdminReportNode
     from .xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
     from .xbrl_taxonomy import Taxonomy

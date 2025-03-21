@@ -5,7 +5,8 @@ from XBRL.utils import *
 
 # Import classes that have been moved to other modules
 from XBRL.xbrl_core import Neo4jNode, NodeType, RelationType, GroupingType, PRESENTATION_EDGE_UNIQUE_PROPS, CALCULATION_EDGE_UNIQUE_PROPS, ReportElementClassifier
-from XBRL.xbrl_basic_nodes import Context, Period, Unit, CompanyNode, ReportNode
+from XBRL.xbrl_basic_nodes import Context, Period, Unit
+from utils.EventTraderNodes import CompanyNode, ReportNode
 from XBRL.xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
 from XBRL.xbrl_taxonomy import Taxonomy
 from XBRL.xbrl_dimensions import Dimension, Domain, Member, Hypercube

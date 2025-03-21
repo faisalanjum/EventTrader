@@ -701,4 +701,59 @@ class Neo4jManager:
         
     #     return pd.DataFrame([dict(r) for r in self.driver.session().run(query)])
 
+    def create_relationships(self, source_label, source_id_field, source_id_value, 
+                            target_label, target_match_clause, rel_type, params,
+                            target_create_properties=None, target_set_properties=None):
+        """
+        Generic method to create relationships between nodes with UNWIND batching.
+        
+        Args:
+            source_label: Label of the source node (e.g., 'Report')
+            source_id_field: Field name for the source ID (e.g., 'id')
+            source_id_value: Value of the source ID
+            target_label: Label of the target node (e.g., 'Company')
+            target_match_clause: Cypher to match/create target nodes (e.g., '{cik: param.cik}')
+            rel_type: Relationship type (e.g., 'INFLUENCES')
+            params: List of parameter dictionaries for the UNWIND operation
+            target_create_properties: Optional ON CREATE SET properties for target nodes
+            target_set_properties: Optional SET properties for target nodes
+            
+        Returns:
+            Count of relationships created
+        """
+        if not params:
+            return 0
+            
+        # Build target node creation/update logic
+        target_creation = f"MERGE (target:{target_label} {target_match_clause})"
+        
+        if target_create_properties:
+            target_creation += f"\nON CREATE SET {target_create_properties}"
+            
+        if target_set_properties:
+            target_creation += f"\nSET {target_set_properties}"
+        
+        # Build the query
+        query = f"""
+        MATCH (source:{source_label} {{{source_id_field}: $source_id}})
+        UNWIND $params AS param
+        {target_creation}
+        MERGE (source)-[rel:{rel_type}]->(target)
+        SET rel += param.properties
+        RETURN count(rel) as relationship_count
+        """
+        
+        # Execute the query
+        with self.driver.session() as session:
+            result = session.run(query, {
+                "source_id": source_id_value,
+                "params": params
+            })
+            
+            # Get the count of relationships created
+            record = result.single()
+            count = record["relationship_count"] if record else 0
+            
+            return count
+
 # endregion : Neo4j Manager ########################

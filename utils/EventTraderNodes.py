@@ -34,15 +34,47 @@ class Neo4jNode:
         """Create instance from Neo4j properties"""
         raise NotImplementedError("Subclasses must implement from_neo4j")
 
+
 @dataclass
 class ReportNode(Neo4jNode):
     """
-    A simplified ReportNode class with just the essential fields needed for XBRL processing.
-    This class is designed to be created outside the XBRL processor and passed in.
+    ReportNode class representing SEC filings with extended metadata.
+    
+    This class is used for storing, processing, and retrieving SEC filing information.
+    It maintains compatibility with the XBRL processor while adding additional fields
+    from SEC API and other sources.
     """
-    accessionNo: str
-    primaryDocumentUrl: str
-    cik: str
+    # Required fields - these must always be present
+    accessionNo: str                      # UniqueIdentifier/id – prevents duplicate reports
+    primaryDocumentUrl: str               # URL to the primary document (either xml or txt)
+    cik: str                              # Company CIK
+    
+    # Important fields that may be empty but should be included
+    formType: str = ""                    # e.g., "10-K", "10-Q", "8-K"
+    created: str = ""                     # Same as filedAt but in New York Time
+    is_xml: bool = False                  # Indicates if primary doc is XML
+    
+    # Fields that might be missing in some records
+    market_session: Optional[str] = None  # Taken from metadata.event.market_session
+    returns_schedule: Dict[str, str] = field(default_factory=dict)  # Schedule for returns calculation
+    
+    # Optional fields
+    xbrl_status: Optional[bool] = False   # Processing status flag for XBRL data
+    isAmendment: Optional[bool] = None    # Whether the report is an amendment
+    description: Optional[str] = None     # Brief description of the report
+    periodOfReport: Optional[str] = None  # Period the report covers
+    linkToTxt: Optional[str] = None       # Link to text version
+    linkToHtml: Optional[str] = None      # Link to HTML version
+    linkToFilingDetails: Optional[str] = None  # Link to filing details
+    effectivenessDate: Optional[str] = None    # Effectiveness date if applicable
+    exhibits: Optional[Dict[str, Any]] = None  # Exhibits included in the filing
+    items: Optional[List[str]] = None     # Items covered in the filing
+    symbols: Optional[List[str]] = None   # Stock symbols mentioned
+    entities: Optional[List[Dict[str, Any]]] = None  # Related entities
+    extracted_sections: Optional[Dict[str, str]] = None  # Extracted sections from filing
+    financial_statements: Optional[Any] = None  # Extracted financial statements
+    exhibit_contents: Optional[Any] = None      # Contents of exhibits
+    filing_text_content: Optional[str] = None   # Full text content of filing
     
     @property
     def node_type(self) -> NodeType:
@@ -56,29 +88,132 @@ class ReportNode(Neo4jNode):
     @property
     def properties(self) -> Dict[str, Any]:
         """Return node properties for Neo4j"""
-        return {
+        # Start with required properties
+        props = {
+            "id": self.id,
             "accessionNo": self.accessionNo,
             "primaryDocumentUrl": self.primaryDocumentUrl,
             "cik": self.cik,
-            # Neo4j requirements
-            "id": self.id
+            "formType": self.formType,
+            "created": self.created,
+            "is_xml": self.is_xml,
+            "xbrl_status": self.xbrl_status
         }
+        
+        # Add market_session if present
+        if self.market_session is not None:
+            props["market_session"] = self.market_session
+        
+        # Add returns_schedule as JSON string if it has items
+        if self.returns_schedule:
+            props["returns_schedule"] = json.dumps(self.returns_schedule)
+        
+        # Add optional properties if they exist
+        optional_props = {
+            "isAmendment": self.isAmendment,
+            "description": self.description,
+            "periodOfReport": self.periodOfReport,
+            "linkToTxt": self.linkToTxt,
+            "linkToHtml": self.linkToHtml,
+            "linkToFilingDetails": self.linkToFilingDetails,
+            "effectivenessDate": self.effectivenessDate
+        }
+        
+        # Only include non-None optional properties
+        props.update({k: v for k, v in optional_props.items() if v is not None})
+        
+        # Handle complex types - serialize to JSON strings
+        if self.exhibits is not None:
+            props["exhibits"] = json.dumps(self.exhibits)
+        if self.items is not None:
+            props["items"] = json.dumps(self.items)
+        if self.symbols is not None:
+            props["symbols"] = json.dumps(self.symbols)
+        if self.entities is not None:
+            props["entities"] = json.dumps(self.entities)
+        if self.extracted_sections is not None:
+            props["extracted_sections"] = json.dumps(self.extracted_sections)
+            
+        # Skip storing large binary/text content directly in Neo4j
+        # These fields should be separately stored or referenced
+        # financial_statements, exhibit_contents, filing_text_content
+        
+        return props
     
     @classmethod
     def from_neo4j(cls, props: Dict[str, Any]) -> 'ReportNode':
         """Create a ReportNode instance from Neo4j properties"""
+        # Check required fields for backward compatibility
         if 'accessionNo' not in props:
             raise ValueError("Missing required accessionNo for ReportNode")
             
-        # Ensure we have primaryDocumentUrl
         if 'primaryDocumentUrl' not in props:
             raise ValueError("Missing required primaryDocumentUrl for ReportNode")
             
-        return cls(
+        # Create instance with required fields
+        instance = cls(
             accessionNo=props['accessionNo'],
             primaryDocumentUrl=props['primaryDocumentUrl'],
-            cik=props.get('cik', '')
+            cik=props.get('cik', ''),
+            formType=props.get('formType', ''),
+            created=props.get('created', ''),
+            is_xml=props.get('is_xml', False)
         )
+        
+        # Handle boolean conversion for is_xml
+        if isinstance(instance.is_xml, str):
+            instance.is_xml = instance.is_xml.lower() == 'true'
+        
+        # Set market_session if available
+        if 'market_session' in props and props['market_session']:
+            instance.market_session = props['market_session']
+            
+        # Parse returns_schedule
+        if 'returns_schedule' in props and props['returns_schedule']:
+            try:
+                returns_schedule = json.loads(props['returns_schedule'])
+                instance.returns_schedule = returns_schedule
+            except:
+                pass
+        
+        # Set optional fields
+        if 'xbrl_status' in props:
+            xbrl_status = props['xbrl_status']
+            if isinstance(xbrl_status, str):
+                xbrl_status = xbrl_status.lower() == 'true'
+            instance.xbrl_status = xbrl_status
+        
+        # Set string fields
+        string_fields = ['description', 'periodOfReport', 'linkToTxt', 'linkToHtml', 
+                         'linkToFilingDetails', 'effectivenessDate']
+        for field in string_fields:
+            if field in props and props[field]:
+                setattr(instance, field, props[field])
+                
+        # Set boolean fields
+        if 'isAmendment' in props:
+            isAmendment = props['isAmendment']
+            if isinstance(isAmendment, str):
+                isAmendment = isAmendment.lower() == 'true'
+            instance.isAmendment = isAmendment
+        
+        # Parse JSON fields
+        json_fields = [
+            ('exhibits', {}), 
+            ('items', []), 
+            ('symbols', []), 
+            ('entities', []),
+            ('extracted_sections', {})
+        ]
+        
+        for field_name, default_value in json_fields:
+            if field_name in props and props[field_name]:
+                try:
+                    setattr(instance, field_name, json.loads(props[field_name]))
+                except:
+                    setattr(instance, field_name, default_value)
+        
+        return instance
 
 
 

@@ -276,7 +276,6 @@ class Neo4jInitializer:
     def create_admin_reports(self) -> bool:
         """Create admin report hierarchy for SEC filings."""
         try:
-            from XBRL.xbrl_core import RelationType
             from utils.EventTraderNodes import AdminReportNode
             
             # Create admin report nodes
@@ -308,8 +307,11 @@ class Neo4jInitializer:
                     if p.code == c.category]
             
             # Export nodes and relationships to Neo4j
+            print("Adding", len(admin_reports), "AdminReportNode nodes")
             self.manager._export_nodes([admin_reports])
+            print("Created", len(admin_reports), "AdminReportNode nodes")
             self.manager.merge_relationships(relationships)
+            print("Export completed successfully")
             
             logger.info(f"Created admin report hierarchy with {len(admin_reports)} nodes and {len(relationships)} relationships")
             return True

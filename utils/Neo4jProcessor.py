@@ -742,11 +742,280 @@ class Neo4jProcessor:
             logger.error(f"Error processing news data: {e}")
             return False
 
+    def _extract_report_symbols(self, report_data, symbols_list):
+        """Extract and normalize symbols from report data"""
+        symbols = []
+        
+        # Process symbols list
+        if isinstance(symbols_list, list):
+            symbols = [s.upper() for s in symbols_list if s]
+        elif isinstance(symbols_list, str):
+            try:
+                if symbols_list.startswith('[') and symbols_list.endswith(']'):
+                    content = symbols_list.replace("'", '"')  # Make JSON-compatible
+                    symbols = [s.upper() for s in json.loads(content) if s]
+                else:
+                    symbols = [symbols_list.upper()]  # Single item
+            except:
+                symbols = []
+        
+        # Extract symbols from metadata if available
+        if 'metadata' in report_data and 'instruments' in report_data['metadata']:
+            for instrument in report_data['metadata']['instruments']:
+                symbol = instrument.get('symbol', '')
+                if symbol and symbol.upper() not in symbols:
+                    symbols.append(symbol.upper())
+                    
+        return symbols
+    
+    def _prepare_report_relationships(self, report_data, symbols, universe_data, ticker_to_cik):
+        """Prepare relationship parameters for symbols"""
+        valid_symbols = []
+        symbol_data = {}
+        
+        # Preprocess symbols to collect metrics and filter valid ones
+        for symbol in symbols:
+            symbol_upper = symbol.upper()
+            cik = ticker_to_cik.get(symbol_upper)
+            if not cik:
+                logger.warning(f"No CIK found for symbol {symbol_upper}")
+                continue  # Skip symbols without CIK
+            
+            # Get return metrics for this symbol
+            metrics = self._extract_return_metrics(report_data, symbol_upper)
+            
+            # Get sector and industry information
+            company_data = universe_data.get(symbol_upper, {})
+            sector = company_data.get('sector')
+            industry = company_data.get('industry')
+            
+            # Skip symbol processing if missing sector or industry data
+            if not sector or not industry:
+                logger.warning(f"Symbol {symbol_upper} is missing sector or industry data - skipping relationship creation")
+                continue
+                
+            # Only add to valid symbols if it passed all checks
+            valid_symbols.append(symbol_upper)
+            
+            # Store data for later batch processing
+            symbol_data[symbol_upper] = {
+                'cik': cik,
+                'metrics': metrics,
+                'timestamp': datetime.now().isoformat(),
+                'sector': sector,
+                'industry': industry
+            }
+            
+        # Prepare parameters for each relationship type
+        company_params = []
+        sector_params = []
+        industry_params = []
+        market_params = []
+        
+        # Prepare company relationship parameters
+        for symbol in valid_symbols:
+            symbol_data_item = symbol_data[symbol]
+            # Prepare metrics as property
+            props = {
+                'symbol': symbol,
+                'created_at': symbol_data_item['timestamp']
+            }
+            
+            # Add stock metrics
+            for timeframe in ['hourly', 'session', 'daily']:
+                metric_key = f"{timeframe}_stock"
+                if metric_key in symbol_data_item['metrics']:
+                    props[metric_key] = symbol_data_item['metrics'][metric_key]
+            
+            company_params.append({
+                'cik': symbol_data_item['cik'],
+                'properties': props
+            })
+        
+        # Prepare sector relationship parameters
+        for symbol in valid_symbols:
+            symbol_data_item = symbol_data[symbol]
+            sector = symbol_data_item['sector']
+            
+            # Prepare metrics as property
+            props = {
+                'symbol': symbol,
+                'created_at': symbol_data_item['timestamp']
+            }
+            
+            # Add sector metrics
+            for timeframe in ['hourly', 'session', 'daily']:
+                metric_key = f"{timeframe}_sector"
+                if metric_key in symbol_data_item['metrics']:
+                    props[metric_key] = symbol_data_item['metrics'][metric_key]
+            
+            # Get sector_etf for property only - not for identification
+            sector_etf = None
+            company_data = universe_data.get(symbol, {})
+            
+            # Get ETF info from company data
+            if 'sector_etf' in company_data and company_data['sector_etf']:
+                sector_etf = company_data['sector_etf']
+            
+            # Normalize sector ID
+            sector_id = sector.replace(" ", "")
+            
+            # Protection against using ETF as ID - for sectors
+            if sector_etf and sector_id == sector_etf:
+                logger.error(f"Sector ID {sector_id} matches ETF ticker {sector_etf} - using prefixed format to prevent this")
+                sector_id = f"Sector_{sector.replace(' ', '_')}"
+            
+            sector_params.append({
+                'sector_id': sector_id,
+                'sector_name': sector,
+                'sector_etf': sector_etf,
+                'properties': props
+            })
+        
+        # Prepare industry relationship parameters
+        for symbol in valid_symbols:
+            symbol_data_item = symbol_data[symbol]
+            industry = symbol_data_item['industry']
+            
+            # Prepare metrics as property
+            props = {
+                'symbol': symbol,
+                'created_at': symbol_data_item['timestamp']
+            }
+            
+            # Add industry metrics
+            for timeframe in ['hourly', 'session', 'daily']:
+                metric_key = f"{timeframe}_industry"
+                if metric_key in symbol_data_item['metrics']:
+                    props[metric_key] = symbol_data_item['metrics'][metric_key]
+            
+            # Get industry_etf for property only - not for identification
+            industry_etf = None
+            company_data = universe_data.get(symbol, {})
+            
+            # Get ETF info from company data
+            if 'industry_etf' in company_data and company_data['industry_etf']:
+                industry_etf = company_data['industry_etf']
+            
+            # Normalize industry ID
+            industry_id = industry.replace(" ", "")
+            
+            # Protection against using ETF as ID - for industries
+            if industry_etf and industry_id == industry_etf:
+                logger.error(f"Industry ID {industry_id} matches ETF ticker {industry_etf} - using prefixed format to prevent this")
+                industry_id = f"Industry_{industry.replace(' ', '_')}"
+            
+            industry_params.append({
+                'industry_id': industry_id,
+                'industry_name': industry,
+                'industry_etf': industry_etf,
+                'properties': props
+            })
+        
+        # Prepare market index relationship parameters
+        for symbol in valid_symbols:
+            symbol_data_item = symbol_data[symbol]
+            has_macro_metrics = False
+            
+            # Prepare metrics as property
+            props = {
+                'symbol': symbol,
+                'created_at': symbol_data_item['timestamp']
+            }
+            
+            # Add macro metrics
+            for timeframe in ['hourly', 'session', 'daily']:
+                metric_key = f"{timeframe}_macro"
+                if metric_key in symbol_data_item['metrics']:
+                    props[metric_key] = symbol_data_item['metrics'][metric_key]
+                    has_macro_metrics = True
+            
+            if has_macro_metrics:
+                market_params.append({
+                    'properties': props
+                })
+                
+        return valid_symbols, company_params, sector_params, industry_params, market_params
+    
+    def _create_report_node_from_data(self, report_id, report_data):
+        """Create a ReportNode instance from report data"""
+        from utils.EventTraderNodes import ReportNode
+        
+        # Process required fields
+        cik = report_data.get('cik', '')
+        if cik:
+            cik = str(cik).zfill(10)
+            
+        primary_document_url = report_data.get('primaryDocumentUrl', '')
+        
+        # Create report node with required fields
+        report_node = ReportNode(
+            accessionNo=report_id,
+            primaryDocumentUrl=primary_document_url,
+            cik=cik
+        )
+        
+        # Extract timestamps with proper parsing
+        filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
+        updated_at = parse_date(report_data.get('updated')) if report_data.get('updated') else None
+        
+        # Process basic fields
+        form_type = report_data.get('formType', '')
+        
+        # Derive isAmendment from formType if not explicitly set
+        is_amendment = report_data.get('isAmendment', False)
+        if not is_amendment and form_type and '/A' in form_type:
+            is_amendment = True
+            
+        # Set basic fields
+        report_node.formType = form_type
+        report_node.created = report_data.get('created', '')
+        report_node.is_xml = bool(report_data.get('is_xml', False))
+        report_node.isAmendment = is_amendment
+        report_node.description = report_data.get('description', '')
+        report_node.periodOfReport = report_data.get('periodOfReport', '')
+        report_node.effectivenessDate = report_data.get('effectivenessDate', '')
+        report_node.linkToHtml = report_data.get('linkToHtml', '')
+        report_node.linkToTxt = report_data.get('linkToTxt', '')
+        report_node.linkToFilingDetails = report_data.get('linkToFilingDetails', '')
+        
+        # Set complex fields - these will be serialized by ReportNode properties method
+        report_node.exhibits = report_data.get('exhibits', {})
+        report_node.entities = report_data.get('entities', [])
+        report_node.items = report_data.get('items', [])
+        report_node.symbols = report_data.get('symbols', [])
+        report_node.extracted_sections = report_data.get('extracted_sections', {})
+        report_node.financial_statements = report_data.get('financial_statements', {})
+        report_node.exhibit_contents = report_data.get('exhibit_contents', {})
+        report_node.filing_text_content = report_data.get('filing_text_content', None)
+        
+        # Set xbrl_status flag
+        report_node.xbrl_status = bool(report_data.get('xbrl_status', False))
+        
+        # Extract market_session from metadata
+        if 'metadata' in report_data and 'event' in report_data['metadata']:
+            report_node.market_session = report_data['metadata']['event'].get('market_session', '')
+            
+        # Extract returns_schedule from metadata
+        if 'metadata' in report_data and 'returns_schedule' in report_data['metadata']:
+            raw_schedule = report_data['metadata']['returns_schedule']
+            returns_schedule = {}
+            for key, time_str in raw_schedule.items():
+                # Parse date and convert to ISO format
+                try:
+                    date_obj = parse_date(time_str)
+                    if date_obj:
+                        returns_schedule[key] = date_obj.isoformat()
+                except:
+                    pass
+            report_node.returns_schedule = returns_schedule
+            
+        return report_node
+    
     def _process_deduplicated_report(self, report_id, report_data):
         """
         Process report data with deduplication, standardized fields, and efficient symbol relationships.
         Uses a hash-based MERGE pattern with conditional updates based on timestamps.
-        Similar to _process_deduplicated_news but for SEC reports.
         
         Args:
             report_id: Unique identifier for the report (accessionNo)
@@ -766,287 +1035,100 @@ class Neo4jProcessor:
                 if cik and cik.lower() not in ['nan', 'none', '']:
                     ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
             
-            # Extract timestamps with proper parsing
+            # 1. Create ReportNode from report data
+            report_node = self._create_report_node_from_data(report_id, report_data)
+            
+            # 2. Extract and process symbols
+            symbols = self._extract_report_symbols(report_data, report_data.get('symbols', []))
+            symbols_json = json.dumps(symbols)
+            
+            # 3. Prepare relationship parameters
+            valid_symbols, company_params, sector_params, industry_params, market_params = \
+                self._prepare_report_relationships(report_data, symbols, universe_data, ticker_to_cik)
+            
+            # 4. Get node properties from ReportNode
+            node_properties = report_node.properties
+            
+            # Get timestamps for Cypher conditions
             filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
             updated_at = parse_date(report_data.get('updated')) if report_data.get('updated') else None
             
             filed_str = filed_at.isoformat() if filed_at else datetime.now().isoformat()
             updated_str = updated_at.isoformat() if updated_at else filed_str
             
-            # Extract basic properties
-            form_type = report_data.get('formType', '')
-            description = report_data.get('description', '')
-            cik = report_data.get('cik', '')
-            if cik:
-                cik = str(cik).zfill(10)
-            company_name = report_data.get('companyName', '')
-            period_end = report_data.get('periodEnd', report_data.get('periodOfReport', ''))
-            is_amendment = report_data.get('isAmendment', False)
-            
-            # Extract URL fields
-            primary_document_url = report_data.get('primaryDocumentUrl', '')
-            link_to_html = report_data.get('linkToHtml', '')
-            link_to_txt = report_data.get('linkToTxt', '')
-            link_to_filing_details = report_data.get('linkToFilingDetails', '')
-            
-            # Process complex fields
-            exhibits = json.dumps(report_data.get('exhibits', {}))
-            entities = json.dumps(report_data.get('entities', []))
-            items = json.dumps(report_data.get('items', []))
-            symbols_list = report_data.get('symbols', [])
-            
-            # Extract and prepare symbols list
-            symbols = []
-            if isinstance(symbols_list, list):
-                symbols = [s.upper() for s in symbols_list if s]
-            elif isinstance(symbols_list, str):
-                try:
-                    if symbols_list.startswith('[') and symbols_list.endswith(']'):
-                        content = symbols_list.replace("'", '"')  # Make JSON-compatible
-                        symbols = [s.upper() for s in json.loads(content) if s]
-                    else:
-                        symbols = [symbols_list.upper()]  # Single item
-                except:
-                    symbols = []
-            
-            # Extract symbols from metadata if available
-            if 'metadata' in report_data and 'instruments' in report_data['metadata']:
-                for instrument in report_data['metadata']['instruments']:
-                    symbol = instrument.get('symbol', '')
-                    if symbol and symbol.upper() not in symbols:
-                        symbols.append(symbol.upper())
-            
-            symbols_json = json.dumps(symbols)
-            
-            # Prepare data structures for batch symbol processing
-            valid_symbols = []
-            symbol_data = {}
-            
-            # Preprocess symbols to collect metrics and filter valid ones
-            for symbol in symbols:
-                symbol_upper = symbol.upper()
-                cik = ticker_to_cik.get(symbol_upper)
-                if not cik:
-                    logger.warning(f"No CIK found for symbol {symbol_upper}")
-                    continue  # Skip symbols without CIK
-                
-                # Get return metrics for this symbol
-                metrics = self._extract_return_metrics(report_data, symbol_upper)
-                
-                # Get sector and industry information
-                company_data = universe_data.get(symbol_upper, {})
-                sector = company_data.get('sector')
-                industry = company_data.get('industry')
-                
-                # Skip symbol processing if missing sector or industry data
-                if not sector or not industry:
-                    logger.warning(f"Symbol {symbol_upper} is missing sector or industry data - skipping relationship creation")
-                    continue
-                    
-                # Only add to valid symbols if it passed all checks
-                valid_symbols.append(symbol_upper)
-                
-                # Store data for later batch processing
-                symbol_data[symbol_upper] = {
-                    'cik': cik,
-                    'metrics': metrics,
-                    'timestamp': datetime.now().isoformat(),
-                    'sector': sector,
-                    'industry': industry
-                }
-            
-            # Prepare parameters for each relationship type
-            company_params = []
-            sector_params = []
-            industry_params = []
-            market_params = []
-            
-            # Prepare company relationship parameters
-            for symbol in valid_symbols:
-                symbol_data_item = symbol_data[symbol]
-                # Prepare metrics as property
-                props = {
-                    'symbol': symbol,
-                    'created_at': symbol_data_item['timestamp']
-                }
-                
-                # Add stock metrics
-                for timeframe in ['hourly', 'session', 'daily']:
-                    metric_key = f"{timeframe}_stock"
-                    if metric_key in symbol_data_item['metrics']:
-                        props[metric_key] = symbol_data_item['metrics'][metric_key]
-                
-                company_params.append({
-                    'cik': symbol_data_item['cik'],
-                    'properties': props
-                })
-            
-            # Prepare sector relationship parameters
-            for symbol in valid_symbols:
-                symbol_data_item = symbol_data[symbol]
-                sector = symbol_data_item['sector']
-                
-                # Prepare metrics as property
-                props = {
-                    'symbol': symbol,
-                    'created_at': symbol_data_item['timestamp']
-                }
-                
-                # Add sector metrics
-                for timeframe in ['hourly', 'session', 'daily']:
-                    metric_key = f"{timeframe}_sector"
-                    if metric_key in symbol_data_item['metrics']:
-                        props[metric_key] = symbol_data_item['metrics'][metric_key]
-                
-                # Get sector_etf for property only - not for identification
-                sector_etf = None
-                company_data = universe_data.get(symbol, {})
-                
-                # Get ETF info from company data
-                if 'sector_etf' in company_data and company_data['sector_etf']:
-                    sector_etf = company_data['sector_etf']
-                
-                # Normalize sector ID
-                sector_id = sector.replace(" ", "")
-                
-                # Protection against using ETF as ID - for sectors
-                if sector_etf and sector_id == sector_etf:
-                    logger.error(f"Sector ID {sector_id} matches ETF ticker {sector_etf} - using prefixed format to prevent this")
-                    sector_id = f"Sector_{sector.replace(' ', '_')}"
-                
-                sector_params.append({
-                    'sector_id': sector_id,
-                    'sector_name': sector,
-                    'sector_etf': sector_etf,
-                    'properties': props
-                })
-            
-            # Prepare industry relationship parameters
-            for symbol in valid_symbols:
-                symbol_data_item = symbol_data[symbol]
-                industry = symbol_data_item['industry']
-                
-                # Prepare metrics as property
-                props = {
-                    'symbol': symbol,
-                    'created_at': symbol_data_item['timestamp']
-                }
-                
-                # Add industry metrics
-                for timeframe in ['hourly', 'session', 'daily']:
-                    metric_key = f"{timeframe}_industry"
-                    if metric_key in symbol_data_item['metrics']:
-                        props[metric_key] = symbol_data_item['metrics'][metric_key]
-                
-                # Get industry_etf for property only - not for identification
-                industry_etf = None
-                company_data = universe_data.get(symbol, {})
-                
-                # Get ETF info from company data
-                if 'industry_etf' in company_data and company_data['industry_etf']:
-                    industry_etf = company_data['industry_etf']
-                
-                # Normalize industry ID
-                industry_id = industry.replace(" ", "")
-                
-                # Protection against using ETF as ID - for industries
-                if industry_etf and industry_id == industry_etf:
-                    logger.error(f"Industry ID {industry_id} matches ETF ticker {industry_etf} - using prefixed format to prevent this")
-                    industry_id = f"Industry_{industry.replace(' ', '_')}"
-                
-                industry_params.append({
-                    'industry_id': industry_id,
-                    'industry_name': industry,
-                    'industry_etf': industry_etf,
-                    'properties': props
-                })
-            
-            # Prepare market index relationship parameters
-            for symbol in valid_symbols:
-                symbol_data_item = symbol_data[symbol]
-                has_macro_metrics = False
-                
-                # Prepare metrics as property
-                props = {
-                    'symbol': symbol,
-                    'created_at': symbol_data_item['timestamp']
-                }
-                
-                # Add macro metrics
-                for timeframe in ['hourly', 'session', 'daily']:
-                    metric_key = f"{timeframe}_macro"
-                    if metric_key in symbol_data_item['metrics']:
-                        props[metric_key] = symbol_data_item['metrics'][metric_key]
-                        has_macro_metrics = True
-                
-                if has_macro_metrics:
-                    market_params.append({
-                        'properties': props
-                    })
-            
-            # Execute deduplication and conditional update logic with direct Cypher
-            # KEEP ALL DATABASE OPERATIONS INSIDE THIS SINGLE SESSION CONTEXT
+            # 5. Execute deduplication and conditional update logic with direct Cypher
             with self.manager.driver.session() as session:
-                # Create/update report node with conditional updates
-                # This follows the same pattern as news deduplication
-                result = session.run("""
-                MERGE (r:Report {accessionNo: $id})
-                ON CREATE SET 
-                    r.id = $id,
-                    r.accessionNo = $id,
-                    r.formType = $formType,
-                    r.description = $description,
-                    r.cik = $cik,
-                    r.companyName = $companyName,
-                    r.periodEnd = $periodEnd,
-                    r.filedAt = $filedAt,
-                    r.updated = $updated,
-                    r.isAmendment = $isAmendment,
-                    r.primaryDocumentUrl = $primaryDocumentUrl,
-                    r.linkToHtml = $linkToHtml,
-                    r.linkToTxt = $linkToTxt,
-                    r.linkToFilingDetails = $linkToFilingDetails,
-                    r.exhibits = $exhibits,
-                    r.entities = $entities, 
-                    r.items = $items,
-                    r.symbols = $symbols
-                ON MATCH SET 
-                    // Only update content-related fields if this is newer
-                    r.description = CASE WHEN $updated > r.updated THEN $description ELSE r.description END,
-                    r.formType = CASE WHEN $updated > r.updated THEN $formType ELSE r.formType END,
-                    r.periodEnd = CASE WHEN $updated > r.updated THEN $periodEnd ELSE r.periodEnd END,
-                    r.updated = CASE WHEN $updated > r.updated THEN $updated ELSE r.updated END,
-                    // Always update these fields even if not newer (additive properties)
-                    r.primaryDocumentUrl = $primaryDocumentUrl,
-                    r.linkToHtml = $linkToHtml,
-                    r.linkToTxt = $linkToTxt,
-                    r.linkToFilingDetails = $linkToFilingDetails,
-                    r.exhibits = $exhibits,
-                    r.entities = $entities,
-                    r.items = $items,
-                    r.symbols = $symbols,
-                    r.accessionNo = $id,
-                    r.id = $id
+                # Build Cypher query for fields
+                on_create_parts = []
+                
+                # Add all properties from node_properties
+                for key, value in node_properties.items():
+                    on_create_parts.append(f"r.{key} = ${key}")
+                
+                # Build ON MATCH SET parts with conditional updates for content fields
+                on_match_parts = [
+                    "r.description = CASE WHEN $updated > r.updated THEN $description ELSE r.description END",
+                    "r.formType = CASE WHEN $updated > r.updated THEN $formType ELSE r.formType END",
+                    "r.periodOfReport = CASE WHEN $updated > r.updated THEN $periodOfReport ELSE r.periodOfReport END",
+                    "r.effectivenessDate = CASE WHEN $updated > r.updated THEN $effectivenessDate ELSE r.effectivenessDate END",
+                    "r.updated = CASE WHEN $updated > r.updated THEN $updated ELSE r.updated END",
+                    "r.primaryDocumentUrl = $primaryDocumentUrl",
+                    "r.linkToHtml = $linkToHtml",
+                    "r.linkToTxt = $linkToTxt",
+                    "r.linkToFilingDetails = $linkToFilingDetails",
+                    "r.exhibits = $exhibits",
+                    "r.entities = $entities",
+                    "r.items = $items",
+                    "r.symbols = $symbols",
+                    "r.is_xml = $is_xml",
+                    "r.isAmendment = $isAmendment",
+                    "r.accessionNo = $id",
+                    "r.id = $id",
+                    "r.market_session = $market_session",
+                    "r.returns_schedule = $returns_schedule",
+                    "r.extracted_sections = CASE WHEN $updated > r.updated THEN $extracted_sections ELSE r.extracted_sections END",
+                    "r.financial_statements = CASE WHEN $updated > r.updated THEN $financial_statements ELSE r.financial_statements END",
+                    "r.exhibit_contents = CASE WHEN $updated > r.updated THEN $exhibit_contents ELSE r.exhibit_contents END",
+                    "r.filing_text_content = CASE WHEN $updated > r.updated THEN $filing_text_content ELSE r.filing_text_content END",
+                    "r.xbrl_status = CASE WHEN $updated > r.updated THEN $xbrl_status ELSE r.xbrl_status END",
+                    "r.created = $created"
+                ]
+                
+                # Create parameter dictionary from node_properties
+                query_params = {
+                    "updated": updated_str,  # For conditional updates
+                }
+                
+                # Add all node properties to query params
+                for key, value in node_properties.items():
+                    query_params[key] = value
+                
+                # Ensure all referenced parameters exist (even if they weren't in node_properties)
+                required_params = ["effectivenessDate", "financial_statements", "exhibit_contents", 
+                                 "extracted_sections", "market_session", "returns_schedule", "filing_text_content"]
+                
+                for param in required_params:
+                    if param not in query_params:
+                        if param in ["financial_statements", "exhibit_contents", "extracted_sections", "returns_schedule"]:
+                            # These need to be JSON strings
+                            query_params[param] = json.dumps({})
+                        elif param == "filing_text_content":
+                            # This is a text field that can be null
+                            query_params[param] = None
+                        else:
+                            # Default to empty string for other fields
+                            query_params[param] = ""
+                
+                # Construct the complete Cypher query
+                cypher_query = f"""
+                MERGE (r:Report {{accessionNo: $id}})
+                ON CREATE SET {', '.join(on_create_parts)}
+                ON MATCH SET {', '.join(on_match_parts)}
                 RETURN r
-                """, {
-                    "id": report_id,
-                    "formType": form_type,
-                    "description": description,
-                    "cik": cik,
-                    "companyName": company_name,
-                    "periodEnd": period_end,
-                    "filedAt": filed_str,
-                    "updated": updated_str,
-                    "isAmendment": is_amendment,
-                    "primaryDocumentUrl": primary_document_url,
-                    "linkToHtml": link_to_html,
-                    "linkToTxt": link_to_txt,
-                    "linkToFilingDetails": link_to_filing_details,
-                    "exhibits": exhibits,
-                    "entities": entities,
-                    "items": items,
-                    "symbols": symbols_json
-                })
+                """
+                
+                # Execute the query
+                result = session.run(cypher_query, query_params)
                 
                 # Process the result
                 record = result.single()
@@ -1059,104 +1141,32 @@ class Neo4jProcessor:
                     logger.warning(f"No valid symbols found for report {report_id}")
                     return True
             
-                # ----- Use UNWIND pattern for efficient batch processing of relationships -----
+                # ----- Use helper method for efficient batch processing of relationships -----
                 
-                # 1. Create Company INFLUENCES relationships using UNWIND pattern
-                if company_params:
-                    company_result = session.run("""
+                # 1. Create Company INFLUENCES relationships
+                self._create_influences_relationships(session, report_id, "Company", company_params)
+                
+                # 2. Create Sector INFLUENCES relationships
+                self._create_influences_relationships(session, report_id, "Sector", sector_params)
+                
+                # 3. Create Industry INFLUENCES relationships
+                self._create_influences_relationships(session, report_id, "Industry", industry_params)
+                
+                # 4. Create Market Index INFLUENCES relationships
+                self._create_influences_relationships(session, report_id, "MarketIndex", market_params)
+                
+                # 5. Create Report Category relationships
+                form_type = report_data.get('formType', '').split('/')[0]  # Extract base form type without amendments
+                if form_type:
+                    admin_result = session.run("""
                     MATCH (r:Report {id: $report_id})
-                    UNWIND $company_params AS param
-                    MATCH (c:Company {cik: param.cik})
-                    MERGE (r)-[rel:INFLUENCES]->(c)
-                    SET rel += param.properties
-                    RETURN count(rel) as relationship_count
+                    MATCH (a:AdminReport {code: $form_type})
+                    MERGE (r)-[:IN_CATEGORY]->(a)
                     """, {
                         "report_id": report_id,
-                        "company_params": company_params
+                        "form_type": form_type
                     })
-                    for record in company_result:
-                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to companies")
                 
-                # 2. Create Sector INFLUENCES relationships using UNWIND pattern
-                if sector_params:
-                    sector_result = session.run("""
-                    MATCH (r:Report {id: $report_id})
-                    UNWIND $sector_params AS param
-                    MERGE (s:Sector {id: param.sector_id})
-                    ON CREATE SET 
-                        s.name = param.sector_name,
-                        s.etf = param.sector_etf
-                    SET
-                        s.etf = CASE 
-                            WHEN param.sector_etf IS NOT NULL AND (s.etf IS NULL OR s.etf = '') 
-                            THEN param.sector_etf 
-                            ELSE s.etf 
-                        END
-                    MERGE (r)-[rel:INFLUENCES]->(s)
-                    SET rel += param.properties
-                    RETURN count(rel) as relationship_count
-                    """, {
-                        "report_id": report_id,
-                        "sector_params": sector_params
-                    })
-                    for record in sector_result:
-                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to sectors")
-                
-                # 3. Create Industry INFLUENCES relationships using UNWIND pattern
-                if industry_params:
-                    industry_result = session.run("""
-                    MATCH (r:Report {id: $report_id})
-                    UNWIND $industry_params AS param
-                    MERGE (i:Industry {id: param.industry_id})
-                    ON CREATE SET 
-                        i.name = param.industry_name,
-                        i.etf = param.industry_etf
-                    SET
-                        i.etf = CASE 
-                            WHEN param.industry_etf IS NOT NULL AND (i.etf IS NULL OR i.etf = '') 
-                            THEN param.industry_etf 
-                            ELSE i.etf 
-                        END
-                    MERGE (r)-[rel:INFLUENCES]->(i)
-                    SET rel += param.properties
-                    RETURN count(rel) as relationship_count
-                    """, {
-                        "report_id": report_id,
-                        "industry_params": industry_params
-                    })
-                    for record in industry_result:
-                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to industries")
-                
-                # 4. Create Market Index INFLUENCES relationships using UNWIND pattern
-                if market_params:
-                    market_result = session.run("""
-                    MATCH (r:Report {id: $report_id})
-                    MERGE (m:MarketIndex {id: 'SPY'})
-                    ON CREATE SET
-                        m.name = 'S&P 500 ETF',
-                        m.ticker = 'SPY',
-                        m.etf = 'SPY'
-                    SET
-                        m.ticker = 'SPY',
-                        m.etf = 'SPY',
-                        m.name = CASE
-                            WHEN m.name IS NULL OR m.name = ''
-                            THEN 'S&P 500 ETF'
-                            ELSE m.name
-                        END
-                    WITH r, m
-                    UNWIND $market_params AS param
-                    MERGE (r)-[rel:INFLUENCES]->(m)
-                    SET rel += param.properties
-                    RETURN count(rel) as relationship_count
-                    """, {
-                        "report_id": report_id,
-                        "market_params": market_params
-                    })
-                    for record in market_result:
-                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to market index")
-                
-                logger.info(f"Successfully processed report {report_id} with {len(valid_symbols)} symbols")
                 return True
                 
         except Exception as e:
@@ -1271,7 +1281,7 @@ class Neo4jProcessor:
                 except Exception as e:
                     logger.error(f"Error processing report key {key}: {e}")
                     error_count += 1
-            
+                
             logger.info(f"Processed batch {batch_start//batch_size + 1}/{(len(all_keys) + batch_size - 1)//batch_size}")
             
         # Summary and status
@@ -1438,6 +1448,7 @@ class Neo4jProcessor:
         return metrics
 
 
+
     # ToDo: is designed to run indefinitely, so it will block the main thread. You need to handle this appropriately.
     def process_with_pubsub(self):
         """
@@ -1586,6 +1597,109 @@ class Neo4jProcessor:
                 
             company_nodes[cik] = company
         
+    def _create_influences_relationships(self, session, report_id, entity_type, params, create_node_cypher=None):
+        """
+        Generic method to create INFLUENCES relationships between a Report and various entity types.
+        Uses Neo4jManager.create_relationships for the actual implementation.
+        
+        Args:
+            session: Neo4j session (not used directly but kept for interface compatibility)
+            report_id: ID of the report
+            entity_type: Type of entity to connect (Company, Sector, Industry, MarketIndex)
+            params: List of parameter dictionaries for the UNWIND operation
+            create_node_cypher: Optional custom Cypher for node creation/update (not used)
+            
+        Returns:
+            Number of relationships created
+        """
+        if not params:
+            return 0
+            
+        # Import here to avoid circular imports
+        from XBRL.Neo4jManager import Neo4jManager
+        
+        # Create Neo4jManager instance if we don't already have one
+        # This is a temporary instance just for this operation
+        neo4j_manager = self.manager if hasattr(self, 'manager') and isinstance(self.manager, Neo4jManager) else Neo4jManager(
+            uri=self.uri,
+            username=self.username,
+            password=self.password
+        )
+        
+        try:
+            count = 0
+            if entity_type == "Company":
+                count = neo4j_manager.create_relationships(
+                    source_label="Report", 
+                    source_id_field="id", 
+                    source_id_value=report_id,
+                    target_label="Company", 
+                    target_match_clause="{cik: param.cik}", 
+                    rel_type="INFLUENCES", 
+                    params=params
+                )
+            elif entity_type == "Sector":
+                count = neo4j_manager.create_relationships(
+                    source_label="Report", 
+                    source_id_field="id", 
+                    source_id_value=report_id,
+                    target_label="Sector", 
+                    target_match_clause="{id: param.sector_id}", 
+                    rel_type="INFLUENCES", 
+                    params=params,
+                    target_create_properties="target.name = param.sector_name, target.etf = param.sector_etf",
+                    target_set_properties="""
+                        target.etf = CASE 
+                            WHEN param.sector_etf IS NOT NULL AND (target.etf IS NULL OR target.etf = '') 
+                            THEN param.sector_etf ELSE target.etf 
+                        END
+                    """
+                )
+            elif entity_type == "Industry":
+                count = neo4j_manager.create_relationships(
+                    source_label="Report", 
+                    source_id_field="id", 
+                    source_id_value=report_id,
+                    target_label="Industry", 
+                    target_match_clause="{id: param.industry_id}", 
+                    rel_type="INFLUENCES", 
+                    params=params,
+                    target_create_properties="target.name = param.industry_name, target.etf = param.industry_etf",
+                    target_set_properties="""
+                        target.etf = CASE 
+                            WHEN param.industry_etf IS NOT NULL AND (target.etf IS NULL OR target.etf = '') 
+                            THEN param.industry_etf ELSE target.etf 
+                        END
+                    """
+                )
+            elif entity_type == "MarketIndex":
+                count = neo4j_manager.create_relationships(
+                    source_label="Report", 
+                    source_id_field="id", 
+                    source_id_value=report_id,
+                    target_label="MarketIndex", 
+                    target_match_clause="{id: 'SPY'}", 
+                    rel_type="INFLUENCES", 
+                    params=params,
+                    target_create_properties="target.name = 'S&P 500 ETF', target.ticker = 'SPY', target.etf = 'SPY'",
+                    target_set_properties="""
+                        target.ticker = 'SPY', target.etf = 'SPY',
+                        target.name = CASE 
+                            WHEN target.name IS NULL OR target.name = '' 
+                            THEN 'S&P 500 ETF' ELSE target.name 
+                        END
+                    """
+                )
+            
+            if count > 0:
+                logger.info(f"Created {count} INFLUENCES relationships to {entity_type.lower()}s")
+                
+            return count
+        finally:
+            # Close the temporary manager if we created one
+            if neo4j_manager is not self.manager and hasattr(neo4j_manager, 'close'):
+                neo4j_manager.close()
+
 
 
 # Function to initialize Neo4j database

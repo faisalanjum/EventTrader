@@ -14,7 +14,7 @@ from .xbrl_core import Neo4jNode, NodeType, RelationType, ReportElementClassifie
 from .utils import clean_number, resolve_primary_fact_relationships, download_sec_file
 
 # Import basic and concept nodes
-from .xbrl_basic_nodes import Context, Period, Unit, CompanyNode, ReportNode
+from .xbrl_basic_nodes import Context, Period, Unit
 from .xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
 
 # Import specialized modules
@@ -27,6 +27,7 @@ from .xbrl_reporting import Fact
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .Neo4jManager import Neo4jManager
+    from utils.EventTraderNodes import CompanyNode, ReportNode
 
 # Arelle imports
 from arelle import Cntlr, ModelDocument, FileSource, XbrlConst
@@ -38,8 +39,11 @@ from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 import time
 
-def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional[CompanyNode]:
+def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional['CompanyNode']:
     """Get CompanyNode from Neo4j by CIK."""
+    # Import inside function to avoid circular imports
+    from utils.EventTraderNodes import CompanyNode
+    
     try:
         with neo4j.driver.session() as session:
             result = session.run(
@@ -51,11 +55,14 @@ def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional[CompanyNode]
             return None
     except Exception as e:
         print(f"Error retrieving company with CIK {cik}: {e}")
-        return None
+    return None
 
 
-def get_report_by_accessionNo(neo4j: 'Neo4jManager', accessionNo: str) -> Optional[ReportNode]:
+def get_report_by_accessionNo(neo4j: 'Neo4jManager', accessionNo: str) -> Optional['ReportNode']:
     """Get ReportNode from Neo4j by accession number."""
+    # Import inside function to avoid circular imports  
+    from utils.EventTraderNodes import ReportNode
+    
     try:
         with neo4j.driver.session() as session:
             result = session.run(
@@ -67,7 +74,7 @@ def get_report_by_accessionNo(neo4j: 'Neo4jManager', accessionNo: str) -> Option
             return None
     except Exception as e:
         print(f"Error retrieving report with accession number {accessionNo}: {e}")
-        return None
+    return None
 
 
 @dataclass
@@ -82,9 +89,9 @@ class process_report:
     log_file: str = field(default='ErrorLog.txt', repr=False)
     testing: bool = field(default=True)  # Add testing flag as configurable (set to False in later calls for now)
 
-    # These will be loaded in post_init
-    report_node: ReportNode = field(init=False)
-    external_company: CompanyNode = field(init=False)
+    # These will be loaded in post_init - use string annotations for forward references
+    report_node: 'ReportNode' = field(init=False)  
+    external_company: 'CompanyNode' = field(init=False)
     
     # XBRL processing node
     xbrl_node: XBRLNode = field(init=False)  # The XBRL processing node
@@ -100,7 +107,7 @@ class process_report:
     units: List[Unit] = field(init=False, default_factory=list, repr=False)
     
     # Company Nodes
-    company: CompanyNode = field(init=False)
+    company: 'CompanyNode' = field(init=False)  # Forward reference
     contexts: List[Context] = field(init=False, default_factory=list, repr=False)
     dimensions: List[Dimension] = field(init=False, default_factory=list, repr=False)        
     # members are inside dimensions but are also company-specific

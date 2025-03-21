@@ -32,8 +32,8 @@ from .utils import (
 
 # Import basic node implementations first
 from .xbrl_basic_nodes import (
-    Context, Period, Unit, 
-    CompanyNode, ReportNode
+    Context, Period, Unit
+    # CompanyNode and ReportNode are imported directly from utils.EventTraderNodes where needed
 )
 
 # Import concept node implementations
@@ -62,7 +62,8 @@ __all__ = [
     
     # Basic node implementations
     'Context', 'Period', 'Unit',
-    'CompanyNode', 'ReportNode',
+    # We don't include 'CompanyNode' and 'ReportNode' here - 
+    # They should always be imported directly from utils.EventTraderNodes
     
     # Concept node implementations
     'Concept', 'GuidanceConcept', 'AbstractConcept',
