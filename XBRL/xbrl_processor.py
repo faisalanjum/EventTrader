@@ -38,6 +38,7 @@ from arelle.ModelInstanceObject import ModelFact, ModelContext, ModelUnit
 from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 import time
+import urllib.request
 
 def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional['CompanyNode']:
     """Get CompanyNode from Neo4j by CIK."""
@@ -611,45 +612,63 @@ class process_report:
 
 
     def load_xbrl(self):
+        """
+        Load the XBRL file from the SEC EDGAR database.
+        Follow SEC guidelines: https://www.sec.gov/developer
+        """
         # Initialize the controller
         controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
         controller.modelManager.formulaOptions = FormulaOptions()
         
-        # Configure Arelle's web cache for high-volume SEC access
+        # Following SEC guidelines for automated access
+        # https://www.sec.gov/os/accessing-edgar-data
+        company_name = "EventTrader"
+        contact_email = "info@eventtrader.app"  # Use your actual email
+        user_agent = f"{company_name} XBRL Parser 1.0 {contact_email}"
+        
+        # Configure Arelle's web cache
         if hasattr(controller, 'webCache'):
-            # Required for SEC identification - a compliant user agent
-            controller.webCache.userAgent = 'XBRL-Research-Tool/1.0 xbrl-research@example.com'
+            # Set SEC-compliant user agent
+            controller.webCache.userAgent = user_agent
             
-            # Optimize parameters for high-volume processing:
+            # Ensure rate limit compliance (10 requests per second max according to SEC)
+            controller.webCache.delay = 0.5  # 2 requests per second (conservative)
             
-            # Minimal delay needed to avoid SEC rate limiting (careful lowering this)
-            controller.webCache.delay = 1 
+            # Reasonable timeout for large taxonomy files
+            controller.webCache.timeout = 300
             
-            # Reasonable timeout to handle large taxonomy files
-            controller.webCache.timeout = 180  # slightly shorter timeout (vs 60)
-            
-            # Control caching behavior - key for multiple downloads
+            # Control caching behavior - prevent unnecessary rechecking
             controller.webCache.recheck = float('inf')  # Never recheck during batch processing
             
             # Handle HTTPS redirects automatically
             controller.webCache.httpsRedirect = True
             
-            # Additional optimizations verified in documentation:
             # Skip certificate validation if needed (use with caution)
             controller.webCache.noCertificateCheck = True
             
-            # For debugging network issues
-            # controller.webCache.logDownloads = True
+            # Enable logging
+            controller.webCache.logDownloads = True
+            
+            # Set up standard headers
+            import urllib.request
+            opener = urllib.request.build_opener()
+            opener.addheaders = [
+                ('User-Agent', user_agent),
+                ('Accept', 'text/html,application/xml,application/xhtml+xml'),
+                ('Accept-Language', 'en-US,en;q=0.5')
+            ]
+            urllib.request.install_opener(opener)
         
-        # Use direct loading but add retry logic for robustness
+        # Use direct loading with retry logic
         max_retries = 4
         retry_delay = 2
         
         for attempt in range(max_retries):
             try:
                 if attempt > 0:
+                    delay = retry_delay * (2 ** attempt)  # Exponential backoff
                     print(f"Retry attempt {attempt+1}/{max_retries} for {self.xbrl_node.primaryDocumentUrl}")
-                    time.sleep(retry_delay * attempt)  # Exponential backoff
+                    time.sleep(delay)
                     
                 # The direct loading approach
                 self.model_xbrl = controller.modelManager.load(
@@ -659,25 +678,9 @@ class process_report:
                 break  # Success, exit retry loop
                 
             except Exception as e:
-                last_error = e
                 if attempt == max_retries - 1:
                     raise RuntimeError(f"Error loading XBRL model after {max_retries} attempts: {e}")
 
-
-
-    # def load_xbrl(self):
-    #     # Initialize the controller
-    #     controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
-    #     controller.modelManager.formulaOptions = FormulaOptions()
-
-    #     # Load the model_xbrl directly from the XBRLNode's primaryDocumentUrl
-    #     try:
-    #         self.model_xbrl = controller.modelManager.load(
-    #             filesource=FileSource.FileSource(self.xbrl_node.primaryDocumentUrl), 
-    #             discover=True
-    #         )
-    #     except Exception as e: 
-    #         raise RuntimeError(f"Error loading XBRL model: {e}")
 
 
     def populate_common_nodes(self):
@@ -1294,6 +1297,7 @@ class process_report:
             else:
                 print(f"WARNING: Failed to create HAS_XBRL relationship")
                 print(f"Report accessionNo: {self.report_node.accessionNo}")
+        
         
         print(f"Created XBRL processing node for report: {self.report_node.id}")
 

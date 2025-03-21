@@ -70,6 +70,12 @@ class Neo4jProcessor:
         self.manager = None  # Will be initialized when needed
         self.universe_data = None
         
+        # Flag to track if we've processed an XBRL report
+        self.xbrl_processed = False
+        
+        # SEC API rate limiting settings
+        self.sec_request_interval = 0.1  # 10 requests per second
+        self.sec_user_agent = "EventTrader-XBRL/1.0 (yourapp@example.com)"  # Default user agent
         
         # Initialize Redis clients if provided
         if event_trader_redis:
@@ -134,6 +140,9 @@ class Neo4jProcessor:
         if self.is_initialized():
             logger.info("Neo4j database already initialized")
             return True
+        
+        # Configure SEC user agent
+        # self.c(email="yourapp@example.com")
         
         # Load universe data if needed
         if not self.universe_data:
@@ -1135,6 +1144,24 @@ class Neo4jProcessor:
                 if not record:
                     logger.error(f"Failed to create or update report node {report_id}")
                     return False
+                
+                # Get the created/updated report
+                report_props = dict(record["r"].items())
+                
+                # Check if this report is eligible for XBRL processing and we haven't processed one yet
+                if (not self.xbrl_processed and
+                    report_props.get('is_xml') == True and
+                    report_props.get('cik') and
+                    report_props.get('xbrl_status') != 'COMPLETED' and
+                    report_props.get('xbrl_status') != 'PROCESSING'):
+                    
+                    # Process XBRL data
+                    self._process_xbrl(
+                        session=session,
+                        report_id=report_props["id"],
+                        cik=report_props["cik"],
+                        accessionNo=report_props["accessionNo"]
+                    )
                     
                 # Skip processing if no symbols found
                 if not valid_symbols:
@@ -1699,6 +1726,68 @@ class Neo4jProcessor:
             # Close the temporary manager if we created one
             if neo4j_manager is not self.manager and hasattr(neo4j_manager, 'close'):
                 neo4j_manager.close()
+
+        
+    def _process_xbrl(self, session, report_id, cik, accessionNo):
+        """
+        Process a single XBRL report.
+        
+        Args:
+            session: Neo4j session
+            report_id: Report ID
+            cik: Company CIK
+            accessionNo: Report accession number
+            
+        Returns:
+            bool: Success status
+        """
+        try:
+            # Update status to PROCESSING
+            session.run(
+                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status",
+                id=report_id, status="PROCESSING"
+            )
+            
+            # Import needed components
+            from XBRL.xbrl_processor import process_report
+            from XBRL.Neo4jManager import Neo4jManager
+            
+            # Create Neo4j manager using the exact same approach that worked in the test
+            neo4j_manager = Neo4jManager(
+                uri=self.uri,
+                username=self.username,
+                password=self.password
+            )
+            
+            # Process the report directly - keep it simple
+            logger.info(f"Processing XBRL for report {report_id}")
+            process_report(
+                neo4j=neo4j_manager,
+                cik=cik,
+                accessionNo=accessionNo,
+                testing=False
+            )
+            
+            # Update status to COMPLETED
+            session.run(
+                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status",
+                id=report_id, status="COMPLETED"
+            )
+            
+            logger.info(f"XBRL processing completed for report {report_id}")
+            self.xbrl_processed = True
+            return True
+            
+        except Exception as e:
+            error_msg = str(e)[:255]  # Limit error message length
+            logger.error(f"Error processing XBRL for report {report_id}: {error_msg}")
+            
+            # Update status to FAILED
+            session.run(
+                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
+                id=report_id, status="FAILED", error=error_msg
+            )
+            return False
 
 
 
