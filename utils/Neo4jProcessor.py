@@ -351,7 +351,7 @@ class Neo4jProcessor:
         with self.manager.driver.session() as session:
             # Create/update news node with conditional updates
             # This follows the pattern from the deduplication notes
-            result = session.run("""
+            news_merge_query = """
             MERGE (n:News {id: $id})
             ON CREATE SET 
                 n.id = $id,
@@ -380,7 +380,10 @@ class Neo4jProcessor:
                 n.market_session = $market_session,
                 n.returns_schedule = $returns_schedule
             RETURN n
-            """, {
+            """
+            
+            # Prepare parameters
+            query_params = {
                 "id": news_id,
                 "title": news_node.title or "",
                 "body": news_node.body or "",
@@ -393,10 +396,12 @@ class Neo4jProcessor:
                 "channels": json.dumps(news_node.channels or []),
                 "market_session": news_node.market_session or "",
                 "returns_schedule": json.dumps(news_node.returns_schedule or {})
-            })
+            }
+            
+            # Execute the query using Neo4jManager
+            record = self.manager.execute_cypher_query(news_merge_query, query_params)
             
             # Process the result
-            record = result.single()
             if not record:
                 logger.error(f"Failed to create or update news node {news_id}")
                 return False
@@ -800,85 +805,83 @@ class Neo4jProcessor:
         """
         filed_at, updated_at, filed_str, updated_str = report_timestamps
         
-        # 5. Execute deduplication and conditional update logic with direct Cypher
+        # Build Cypher query for fields
+        on_create_parts = []
+        
+        # Add all properties from node_properties
+        for key, value in node_properties.items():
+            on_create_parts.append(f"r.{key} = ${key}")
+        
+        # Build ON MATCH SET parts with conditional updates for content fields
+        on_match_parts = [
+            "r.description = CASE WHEN $updated > r.updated THEN $description ELSE r.description END",
+            "r.formType = CASE WHEN $updated > r.updated THEN $formType ELSE r.formType END",
+            "r.periodOfReport = CASE WHEN $updated > r.updated THEN $periodOfReport ELSE r.periodOfReport END",
+            "r.effectivenessDate = CASE WHEN $updated > r.updated THEN $effectivenessDate ELSE r.effectivenessDate END",
+            "r.updated = CASE WHEN $updated > r.updated THEN $updated ELSE r.updated END",
+            "r.primaryDocumentUrl = $primaryDocumentUrl",
+            "r.linkToHtml = $linkToHtml",
+            "r.linkToTxt = $linkToTxt",
+            "r.linkToFilingDetails = $linkToFilingDetails",
+            "r.exhibits = $exhibits",
+            "r.entities = $entities",
+            "r.items = $items",
+            "r.symbols = $symbols",
+            "r.is_xml = $is_xml",
+            "r.isAmendment = $isAmendment",
+            "r.accessionNo = $id",
+            "r.id = $id",
+            "r.market_session = $market_session",
+            "r.returns_schedule = $returns_schedule",
+            "r.extracted_sections = CASE WHEN $updated > r.updated THEN $extracted_sections ELSE r.extracted_sections END",
+            "r.financial_statements = CASE WHEN $updated > r.updated THEN $financial_statements ELSE r.financial_statements END",
+            "r.exhibit_contents = CASE WHEN $updated > r.updated THEN $exhibit_contents ELSE r.exhibit_contents END",
+            "r.filing_text_content = CASE WHEN $updated > r.updated THEN $filing_text_content ELSE r.filing_text_content END",
+            "r.xbrl_status = CASE WHEN $updated > r.updated THEN $xbrl_status ELSE r.xbrl_status END",
+            "r.created = $created"
+        ]
+        
+        # Create parameter dictionary from node_properties
+        query_params = {
+            "updated": updated_str,  # For conditional updates
+        }
+        
+        # Add all node properties to query params
+        for key, value in node_properties.items():
+            query_params[key] = value
+        
+        # Ensure all referenced parameters exist (even if they weren't in node_properties)
+        required_params = ["effectivenessDate", "financial_statements", "exhibit_contents", 
+                         "extracted_sections", "market_session", "returns_schedule", "filing_text_content", "items"]
+        
+        for param in required_params:
+            if param not in query_params:
+                if param in ["financial_statements", "exhibit_contents", "extracted_sections", "returns_schedule"]:
+                    # These need to be JSON strings
+                    query_params[param] = json.dumps({})
+                elif param == "filing_text_content":
+                    # This is a text field that can be null
+                    query_params[param] = None
+                elif param == "items":
+                    # Default items to empty array as JSON string
+                    query_params[param] = json.dumps([])
+                else:
+                    # Default to empty string for other fields
+                    query_params[param] = ""
+        
+        # Construct the complete Cypher query
+        report_merge_query = f"""
+        MERGE (r:Report {{accessionNo: $id}})
+        ON CREATE SET {', '.join(on_create_parts)}
+        ON MATCH SET {', '.join(on_match_parts)}
+        RETURN r
+        """
+        
         with self.manager.driver.session() as session:
-            # Build Cypher query for fields
-            on_create_parts = []
-            
-            # Add all properties from node_properties
-            for key, value in node_properties.items():
-                on_create_parts.append(f"r.{key} = ${key}")
-            
-            # Build ON MATCH SET parts with conditional updates for content fields
-            on_match_parts = [
-                "r.description = CASE WHEN $updated > r.updated THEN $description ELSE r.description END",
-                "r.formType = CASE WHEN $updated > r.updated THEN $formType ELSE r.formType END",
-                "r.periodOfReport = CASE WHEN $updated > r.updated THEN $periodOfReport ELSE r.periodOfReport END",
-                "r.effectivenessDate = CASE WHEN $updated > r.updated THEN $effectivenessDate ELSE r.effectivenessDate END",
-                "r.updated = CASE WHEN $updated > r.updated THEN $updated ELSE r.updated END",
-                "r.primaryDocumentUrl = $primaryDocumentUrl",
-                "r.linkToHtml = $linkToHtml",
-                "r.linkToTxt = $linkToTxt",
-                "r.linkToFilingDetails = $linkToFilingDetails",
-                "r.exhibits = $exhibits",
-                "r.entities = $entities",
-                "r.items = $items",
-                "r.symbols = $symbols",
-                "r.is_xml = $is_xml",
-                "r.isAmendment = $isAmendment",
-                "r.accessionNo = $id",
-                "r.id = $id",
-                "r.market_session = $market_session",
-                "r.returns_schedule = $returns_schedule",
-                "r.extracted_sections = CASE WHEN $updated > r.updated THEN $extracted_sections ELSE r.extracted_sections END",
-                "r.financial_statements = CASE WHEN $updated > r.updated THEN $financial_statements ELSE r.financial_statements END",
-                "r.exhibit_contents = CASE WHEN $updated > r.updated THEN $exhibit_contents ELSE r.exhibit_contents END",
-                "r.filing_text_content = CASE WHEN $updated > r.updated THEN $filing_text_content ELSE r.filing_text_content END",
-                "r.xbrl_status = CASE WHEN $updated > r.updated THEN $xbrl_status ELSE r.xbrl_status END",
-                "r.created = $created"
-            ]
-            
-            # Create parameter dictionary from node_properties
-            query_params = {
-                "updated": updated_str,  # For conditional updates
-            }
-            
-            # Add all node properties to query params
-            for key, value in node_properties.items():
-                query_params[key] = value
-            
-            # Ensure all referenced parameters exist (even if they weren't in node_properties)
-            required_params = ["effectivenessDate", "financial_statements", "exhibit_contents", 
-                             "extracted_sections", "market_session", "returns_schedule", "filing_text_content", "items"]
-            
-            for param in required_params:
-                if param not in query_params:
-                    if param in ["financial_statements", "exhibit_contents", "extracted_sections", "returns_schedule"]:
-                        # These need to be JSON strings
-                        query_params[param] = json.dumps({})
-                    elif param == "filing_text_content":
-                        # This is a text field that can be null
-                        query_params[param] = None
-                    elif param == "items":
-                        # Default items to empty array as JSON string
-                        query_params[param] = json.dumps([])
-                    else:
-                        # Default to empty string for other fields
-                        query_params[param] = ""
-            
-            # Construct the complete Cypher query
-            cypher_query = f"""
-            MERGE (r:Report {{accessionNo: $id}})
-            ON CREATE SET {', '.join(on_create_parts)}
-            ON MATCH SET {', '.join(on_match_parts)}
-            RETURN r
-            """
-            
-            # Execute the query
-            result = session.run(cypher_query, query_params)
+            # Execute the query using Neo4jManager
+            record = self.manager.execute_cypher_query(report_merge_query, query_params)
             
             # Process the result
-            record = result.single()
             if not record:
                 logger.error(f"Failed to create or update report node {report_id}")
                 return False
@@ -918,14 +921,8 @@ class Neo4jProcessor:
             # Extract form type from report_node instead of report_data
             form_type = report_node.formType.split('/')[0] if report_node.formType else ""  # Extract base form type without amendments
             if form_type:
-                admin_result = session.run("""
-                MATCH (r:Report {id: $report_id})
-                MATCH (a:AdminReport {code: $form_type})
-                MERGE (r)-[:IN_CATEGORY]->(a)
-                """, {
-                    "report_id": report_id,
-                    "form_type": form_type
-                })
+                # Here we are linking to ADMIN Nodes
+                self.manager.create_report_category_relationship(report_id, form_type)
             
             return True
 

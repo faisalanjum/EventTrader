@@ -756,4 +756,46 @@ class Neo4jManager:
             
             return count
 
+    def execute_cypher_query(self, query, parameters):
+        """
+        Execute a Cypher query with the given parameters.
+        
+        Args:
+            query (str): The complete Cypher query to execute
+            parameters (dict): Parameters for the query
+            
+        Returns:
+            The single record result or None
+        """
+        with self.driver.session() as session:
+            result = session.run(query, parameters)
+            return result.single()
+
+    def create_report_category_relationship(self, report_id, form_type):
+        """
+        Create an IN_CATEGORY relationship between a report and its category.
+        
+        Args:
+            report_id (str): The report ID
+            form_type (str): The form type code (e.g., "10-K")
+            
+        Returns:
+            bool: Whether the relationship was created
+        """
+        query = """
+        MATCH (r:Report {id: $report_id})
+        MATCH (a:AdminReport {code: $form_type})
+        MERGE (r)-[:IN_CATEGORY]->(a)
+        RETURN count(*) as count
+        """
+        
+        with self.driver.session() as session:
+            result = session.run(query, {
+                "report_id": report_id,
+                "form_type": form_type
+            })
+            
+            record = result.single()
+            return record and record["count"] > 0
+
 # endregion : Neo4j Manager ########################
