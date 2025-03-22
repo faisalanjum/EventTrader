@@ -284,6 +284,137 @@ class Neo4jProcessor:
         
         return news_node
     
+    def _prepare_news_data(self, news_id, news_data):
+        """
+        Prepare news data for processing, extracting all necessary information.
+        
+        Args:
+            news_id: Unique identifier for the news
+            news_data: Dictionary containing news data
+            
+        Returns:
+            tuple: (news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps)
+                where timestamps is a tuple of (created_at, updated_at, timestamp)
+        """
+        # Get ticker to CIK mappings from universe data
+        universe_data = self._get_universe()
+        ticker_to_cik = {}
+        for symbol, data in universe_data.items():
+            cik = data.get('cik', '').strip()
+            if cik and cik.lower() not in ['nan', 'none', '']:
+                ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
+        
+        # Create NewsNode from news data
+        news_node = self._create_news_node_from_data(news_id, news_data)
+        
+        # Extract symbols mentioned in news using the unified method
+        symbols = self._extract_symbols_from_data(news_data)
+        
+        # Extract timestamps with proper parsing
+        created_at, updated_at = parse_news_dates(news_data)
+        timestamp = created_at.isoformat() if created_at else ""
+        
+        # Use the common method to prepare relationship parameters
+        valid_symbols, company_params, sector_params, industry_params, market_params = self._prepare_entity_relationship_params(
+            data_item=news_data,
+            symbols=symbols,
+            universe_data=universe_data,
+            ticker_to_cik=ticker_to_cik,
+            timestamp=timestamp
+        )
+        
+        # Return all prepared data
+        timestamps = (created_at, updated_at, timestamp)
+        return (news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps)
+
+    def _execute_news_database_operations(self, news_id, news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps):
+        """
+        Execute all database operations for a news item.
+        
+        Args:
+            news_id: Unique identifier for the news
+            news_node: NewsNode object
+            valid_symbols: List of valid symbols
+            company_params: Parameters for company relationships
+            sector_params: Parameters for sector relationships
+            industry_params: Parameters for industry relationships
+            market_params: Parameters for market index relationships
+            timestamps: Tuple of (created_at, updated_at, timestamp)
+            
+        Returns:
+            bool: Success status
+        """
+        created_at, updated_at, timestamp = timestamps
+        
+        # Execute deduplication and conditional update logic with direct Cypher
+        # KEEP ALL DATABASE OPERATIONS INSIDE THIS SINGLE SESSION CONTEXT
+        with self.manager.driver.session() as session:
+            # Create/update news node with conditional updates
+            # This follows the pattern from the deduplication notes
+            result = session.run("""
+            MERGE (n:News {id: $id})
+            ON CREATE SET 
+                n.id = $id,
+                n.title = $title,
+                n.body = $body,
+                n.teaser = $teaser,
+                n.created = $created,
+                n.updated = $updated,
+                n.url = $url,
+                n.authors = $authors,
+                n.tags = $tags,
+                n.channels = $channels,
+                n.market_session = $market_session,
+                n.returns_schedule = $returns_schedule
+            ON MATCH SET 
+                // Only update content-related fields if this is newer
+                n.title = CASE WHEN $updated > n.updated THEN $title ELSE n.title END,
+                n.body = CASE WHEN $updated > n.updated THEN $body ELSE n.body END,
+                n.teaser = CASE WHEN $updated > n.updated THEN $teaser ELSE n.teaser END,
+                n.updated = CASE WHEN $updated > n.updated THEN $updated ELSE n.updated END,
+                // Always update these fields even if not newer (additive properties)
+                n.url = $url,
+                n.authors = $authors,
+                n.tags = $tags,
+                n.channels = $channels,
+                n.market_session = $market_session,
+                n.returns_schedule = $returns_schedule
+            RETURN n
+            """, {
+                "id": news_id,
+                "title": news_node.title or "",
+                "body": news_node.body or "",
+                "teaser": news_node.teaser or "",
+                "created": news_node.created.isoformat() if news_node.created else "",
+                "updated": news_node.updated.isoformat() if news_node.updated else (news_node.created.isoformat() if news_node.created else ""),
+                "url": news_node.url or "",
+                "authors": json.dumps(news_node.authors or []),
+                "tags": json.dumps(news_node.tags or []),
+                "channels": json.dumps(news_node.channels or []),
+                "market_session": news_node.market_session or "",
+                "returns_schedule": json.dumps(news_node.returns_schedule or {})
+            })
+            
+            # Process the result
+            record = result.single()
+            if not record:
+                logger.error(f"Failed to create or update news node {news_id}")
+                return False
+                
+            # Skip processing if no symbols found
+            if not valid_symbols:
+                logger.warning(f"No valid symbols found for news {news_id}")
+                return True
+        
+            # ----- Use UNWIND pattern for efficient batch processing of relationships -----
+
+            # 1. Create Company, Sector, Industry, MarketIndex INFLUENCES relationships
+            self._create_influences_relationships(session, news_id, "News", "Company", company_params)
+            self._create_influences_relationships(session, news_id, "News", "Sector", sector_params)
+            self._create_influences_relationships(session, news_id, "News", "Industry", industry_params)
+            self._create_influences_relationships(session, news_id, "News", "MarketIndex", market_params)
+            logger.info(f"Successfully processed news {news_id} with {len(valid_symbols)} symbols")
+            return True
 
     def _process_deduplicated_news(self, news_id, news_data):
         """
@@ -300,109 +431,18 @@ class Neo4jProcessor:
         logger.debug(f"Processing deduplicated news {news_id}")
         
         try:
-            # Get ticker to CIK mappings from universe data
-            universe_data = self._get_universe()
-            ticker_to_cik = {}
-            for symbol, data in universe_data.items():
-                cik = data.get('cik', '').strip()
-                if cik and cik.lower() not in ['nan', 'none', '']:
-                    ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
+            # Prepare all news data
+            news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps = self._prepare_news_data(news_id, news_data)
             
-            # Create NewsNode from news data
-            news_node = self._create_news_node_from_data(news_id, news_data)
-            
-            # Extract symbols mentioned in news using the unified method
-            symbols = self._extract_symbols_from_data(news_data)
-            
-            # Extract timestamps with proper parsing
-            created_at, updated_at = parse_news_dates(news_data)
-            timestamp = created_at.isoformat() if created_at else ""
-            
-            # Use the common method to prepare relationship parameters
-            valid_symbols, company_params, sector_params, industry_params, market_params = self._prepare_entity_relationship_params(
-                data_item=news_data,
-                symbols=symbols,
-                universe_data=universe_data,
-                ticker_to_cik=ticker_to_cik,
-                timestamp=timestamp
+            # Execute all database operations
+            return self._execute_news_database_operations(
+                news_id, news_node, valid_symbols, company_params, 
+                sector_params, industry_params, market_params, timestamps
             )
-            
-            # Execute deduplication and conditional update logic with direct Cypher
-            # KEEP ALL DATABASE OPERATIONS INSIDE THIS SINGLE SESSION CONTEXT
-            with self.manager.driver.session() as session:
-                # Create/update news node with conditional updates
-                # This follows the pattern from the deduplication notes
-                result = session.run("""
-                MERGE (n:News {id: $id})
-                ON CREATE SET 
-                    n.id = $id,
-                    n.title = $title,
-                    n.body = $body,
-                    n.teaser = $teaser,
-                    n.created = $created,
-                    n.updated = $updated,
-                    n.url = $url,
-                    n.authors = $authors,
-                    n.tags = $tags,
-                    n.channels = $channels,
-                    n.market_session = $market_session,
-                    n.returns_schedule = $returns_schedule
-                ON MATCH SET 
-                    // Only update content-related fields if this is newer
-                    n.title = CASE WHEN $updated > n.updated THEN $title ELSE n.title END,
-                    n.body = CASE WHEN $updated > n.updated THEN $body ELSE n.body END,
-                    n.teaser = CASE WHEN $updated > n.updated THEN $teaser ELSE n.teaser END,
-                    n.updated = CASE WHEN $updated > n.updated THEN $updated ELSE n.updated END,
-                    // Always update these fields even if not newer (additive properties)
-                    n.url = $url,
-                    n.authors = $authors,
-                    n.tags = $tags,
-                    n.channels = $channels,
-                    n.market_session = $market_session,
-                    n.returns_schedule = $returns_schedule
-                RETURN n
-                """, {
-                    "id": news_id,
-                    "title": news_node.title or "",
-                    "body": news_node.body or "",
-                    "teaser": news_node.teaser or "",
-                    "created": news_node.created.isoformat() if news_node.created else "",
-                    "updated": news_node.updated.isoformat() if news_node.updated else (news_node.created.isoformat() if news_node.created else ""),
-                    "url": news_node.url or "",
-                    "authors": json.dumps(news_node.authors or []),
-                    "tags": json.dumps(news_node.tags or []),
-                    "channels": json.dumps(news_node.channels or []),
-                    "market_session": news_node.market_session or "",
-                    "returns_schedule": json.dumps(news_node.returns_schedule or {})
-                })
-                
-                # Process the result
-                record = result.single()
-                if not record:
-                    logger.error(f"Failed to create or update news node {news_id}")
-                    return False
-                    
-                # Skip processing if no symbols found
-                if not valid_symbols:
-                    logger.warning(f"No valid symbols found for news {news_id}")
-                    return True
-            
-                # ----- Use UNWIND pattern for efficient batch processing of relationships -----
-
-                # 1. Create Company, Sector, Industry, MarketIndex INFLUENCES relationships
-                self._create_influences_relationships(session, news_id, "News", "Company", company_params)
-                self._create_influences_relationships(session, news_id, "News", "Sector", sector_params)
-                self._create_influences_relationships(session, news_id, "News", "Industry", industry_params)
-                self._create_influences_relationships(session, news_id, "News", "MarketIndex", market_params)
-                logger.info(f"Successfully processed news {news_id} with {len(valid_symbols)} symbols")
-                return True
                 
         except Exception as e:
             logger.error(f"Error processing news {news_id}: {e}")
             return False
-
-
-
 
     def process_news_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
         """
@@ -625,20 +665,57 @@ class Neo4jProcessor:
         
         return metrics
 
-    def _prepare_report_relationships(self, report_data, symbols, universe_data, ticker_to_cik):
-        """Prepare relationship parameters for symbols"""
-        # Extract timestamps with proper parsing
-        filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
-        filed_str = filed_at.isoformat() if filed_at else ""
+    def _prepare_report_data(self, report_id, report_data):
+        """
+        Prepare report data for processing, extracting all necessary information.
         
-        # Delegate to the common method
-        return self._prepare_entity_relationship_params(
+        Args:
+            report_id: Unique identifier for the report (accessionNo)
+            report_data: Dictionary containing report data
+            
+        Returns:
+            tuple: (report_node, node_properties, valid_symbols, company_params, sector_params, 
+                   industry_params, market_params, report_timestamps)
+                where report_timestamps is a tuple of (filed_at, updated_at, filed_str, updated_str)
+        """
+        # Get universe data for ticker-to-CIK mappings
+        universe_data = self._get_universe()
+        ticker_to_cik = {}
+        for symbol, data in universe_data.items():
+            cik = data.get('cik', '').strip()
+            if cik and cik.lower() not in ['nan', 'none', '']:
+                ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
+        
+        # 1. Create ReportNode from report data
+        report_node = self._create_report_node_from_data(report_id, report_data)
+        
+        # 2. Extract and process symbols using the unified method
+        symbols = self._extract_symbols_from_data(report_data)
+        symbols_json = json.dumps(symbols)
+        
+        # Get timestamps for parameters and conditional updates
+        filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
+        updated_at = parse_date(report_data.get('updated')) if report_data.get('updated') else None
+        
+        filed_str = filed_at.isoformat() if filed_at else ""
+        updated_str = updated_at.isoformat() if updated_at else filed_str
+        
+        # 3. Use the common method to prepare relationship parameters
+        valid_symbols, company_params, sector_params, industry_params, market_params = self._prepare_entity_relationship_params(
             data_item=report_data,
             symbols=symbols,
             universe_data=universe_data,
             ticker_to_cik=ticker_to_cik,
             timestamp=filed_str
         )
+        
+        # 4. Get node properties from ReportNode
+        node_properties = report_node.properties
+        
+        # Return all prepared data
+        report_timestamps = (filed_at, updated_at, filed_str, updated_str)
+        return (report_node, node_properties, valid_symbols, company_params, 
+                sector_params, industry_params, market_params, report_timestamps)
 
     def _create_report_node_from_data(self, report_id, report_data):
         """Create a ReportNode instance from report data"""
@@ -700,7 +777,158 @@ class Neo4jProcessor:
         report_node.returns_schedule = self._extract_returns_schedule(report_data)
             
         return report_node
-     
+
+    def _execute_report_database_operations(self, report_id, report_node, node_properties, valid_symbols, 
+                                           company_params, sector_params, industry_params, market_params, 
+                                           report_timestamps):
+        """
+        Execute all database operations for a report.
+        
+        Args:
+            report_id: Unique identifier for the report
+            report_node: ReportNode object
+            node_properties: Dictionary of node properties
+            valid_symbols: List of valid symbols
+            company_params: Parameters for company relationships
+            sector_params: Parameters for sector relationships
+            industry_params: Parameters for industry relationships
+            market_params: Parameters for market index relationships
+            report_timestamps: Tuple of (filed_at, updated_at, filed_str, updated_str)
+            
+        Returns:
+            bool: Success status
+        """
+        filed_at, updated_at, filed_str, updated_str = report_timestamps
+        
+        # 5. Execute deduplication and conditional update logic with direct Cypher
+        with self.manager.driver.session() as session:
+            # Build Cypher query for fields
+            on_create_parts = []
+            
+            # Add all properties from node_properties
+            for key, value in node_properties.items():
+                on_create_parts.append(f"r.{key} = ${key}")
+            
+            # Build ON MATCH SET parts with conditional updates for content fields
+            on_match_parts = [
+                "r.description = CASE WHEN $updated > r.updated THEN $description ELSE r.description END",
+                "r.formType = CASE WHEN $updated > r.updated THEN $formType ELSE r.formType END",
+                "r.periodOfReport = CASE WHEN $updated > r.updated THEN $periodOfReport ELSE r.periodOfReport END",
+                "r.effectivenessDate = CASE WHEN $updated > r.updated THEN $effectivenessDate ELSE r.effectivenessDate END",
+                "r.updated = CASE WHEN $updated > r.updated THEN $updated ELSE r.updated END",
+                "r.primaryDocumentUrl = $primaryDocumentUrl",
+                "r.linkToHtml = $linkToHtml",
+                "r.linkToTxt = $linkToTxt",
+                "r.linkToFilingDetails = $linkToFilingDetails",
+                "r.exhibits = $exhibits",
+                "r.entities = $entities",
+                "r.items = $items",
+                "r.symbols = $symbols",
+                "r.is_xml = $is_xml",
+                "r.isAmendment = $isAmendment",
+                "r.accessionNo = $id",
+                "r.id = $id",
+                "r.market_session = $market_session",
+                "r.returns_schedule = $returns_schedule",
+                "r.extracted_sections = CASE WHEN $updated > r.updated THEN $extracted_sections ELSE r.extracted_sections END",
+                "r.financial_statements = CASE WHEN $updated > r.updated THEN $financial_statements ELSE r.financial_statements END",
+                "r.exhibit_contents = CASE WHEN $updated > r.updated THEN $exhibit_contents ELSE r.exhibit_contents END",
+                "r.filing_text_content = CASE WHEN $updated > r.updated THEN $filing_text_content ELSE r.filing_text_content END",
+                "r.xbrl_status = CASE WHEN $updated > r.updated THEN $xbrl_status ELSE r.xbrl_status END",
+                "r.created = $created"
+            ]
+            
+            # Create parameter dictionary from node_properties
+            query_params = {
+                "updated": updated_str,  # For conditional updates
+            }
+            
+            # Add all node properties to query params
+            for key, value in node_properties.items():
+                query_params[key] = value
+            
+            # Ensure all referenced parameters exist (even if they weren't in node_properties)
+            required_params = ["effectivenessDate", "financial_statements", "exhibit_contents", 
+                             "extracted_sections", "market_session", "returns_schedule", "filing_text_content", "items"]
+            
+            for param in required_params:
+                if param not in query_params:
+                    if param in ["financial_statements", "exhibit_contents", "extracted_sections", "returns_schedule"]:
+                        # These need to be JSON strings
+                        query_params[param] = json.dumps({})
+                    elif param == "filing_text_content":
+                        # This is a text field that can be null
+                        query_params[param] = None
+                    elif param == "items":
+                        # Default items to empty array as JSON string
+                        query_params[param] = json.dumps([])
+                    else:
+                        # Default to empty string for other fields
+                        query_params[param] = ""
+            
+            # Construct the complete Cypher query
+            cypher_query = f"""
+            MERGE (r:Report {{accessionNo: $id}})
+            ON CREATE SET {', '.join(on_create_parts)}
+            ON MATCH SET {', '.join(on_match_parts)}
+            RETURN r
+            """
+            
+            # Execute the query
+            result = session.run(cypher_query, query_params)
+            
+            # Process the result
+            record = result.single()
+            if not record:
+                logger.error(f"Failed to create or update report node {report_id}")
+                return False
+            
+            # Get the created/updated report
+            report_props = dict(record["r"].items())
+            
+            # Check if this report is eligible for XBRL processing and we haven't processed one yet
+            if (not self.xbrl_processed and
+                report_props.get('is_xml') == True and
+                report_props.get('cik') and
+                report_props.get('xbrl_status') != 'COMPLETED' and
+                report_props.get('xbrl_status') != 'PROCESSING'):
+                
+                # Process XBRL data
+                self._process_xbrl(
+                    session=session,
+                    report_id=report_props["id"],
+                    cik=report_props["cik"],
+                    accessionNo=report_props["accessionNo"]
+                )
+                
+            # Skip processing if no symbols found
+            if not valid_symbols:
+                logger.warning(f"No valid symbols found for report {report_id}")
+                return True
+        
+            # ----- Use helper method for efficient batch processing of relationships -----
+            
+            # Use the common method to create all relationships
+            self._create_influences_relationships(session, report_id, "Report", "Company", company_params)
+            self._create_influences_relationships(session, report_id, "Report", "Sector", sector_params)
+            self._create_influences_relationships(session, report_id, "Report", "Industry", industry_params)
+            self._create_influences_relationships(session, report_id, "Report", "MarketIndex", market_params)
+            
+            # 5. Create Report Category relationships
+            # Extract form type from report_node instead of report_data
+            form_type = report_node.formType.split('/')[0] if report_node.formType else ""  # Extract base form type without amendments
+            if form_type:
+                admin_result = session.run("""
+                MATCH (r:Report {id: $report_id})
+                MATCH (a:AdminReport {code: $form_type})
+                MERGE (r)-[:IN_CATEGORY]->(a)
+                """, {
+                    "report_id": report_id,
+                    "form_type": form_type
+                })
+            
+            return True
+
     def _process_deduplicated_report(self, report_id, report_data):
         """
         Process report data with deduplication, standardized fields, and efficient symbol relationships.
@@ -716,164 +944,15 @@ class Neo4jProcessor:
         logger.debug(f"Processing deduplicated report {report_id}")
         
         try:
-            # Get universe data for ticker-to-CIK mappings
-            universe_data = self._get_universe()
-            ticker_to_cik = {}
-            for symbol, data in universe_data.items():
-                cik = data.get('cik', '').strip()
-                if cik and cik.lower() not in ['nan', 'none', '']:
-                    ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
+            # Prepare all report data
+            report_node, node_properties, valid_symbols, company_params, sector_params, industry_params, market_params, report_timestamps = self._prepare_report_data(report_id, report_data)
             
-            # 1. Create ReportNode from report data
-            report_node = self._create_report_node_from_data(report_id, report_data)
-            
-            # 2. Extract and process symbols using the unified method
-            symbols = self._extract_symbols_from_data(report_data)
-            symbols_json = json.dumps(symbols)
-            
-            # Get timestamps for parameters and conditional updates
-            filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
-            updated_at = parse_date(report_data.get('updated')) if report_data.get('updated') else None
-            
-            filed_str = filed_at.isoformat() if filed_at else ""
-            updated_str = updated_at.isoformat() if updated_at else filed_str
-            
-            # 3. Use the common method to prepare relationship parameters
-            valid_symbols, company_params, sector_params, industry_params, market_params = self._prepare_entity_relationship_params(
-                data_item=report_data,
-                symbols=symbols,
-                universe_data=universe_data,
-                ticker_to_cik=ticker_to_cik,
-                timestamp=filed_str
+            # Execute all database operations
+            return self._execute_report_database_operations(
+                report_id, report_node, node_properties, valid_symbols,
+                company_params, sector_params, industry_params, market_params,
+                report_timestamps
             )
-            
-            # 4. Get node properties from ReportNode
-            node_properties = report_node.properties
-            
-            # 5. Execute deduplication and conditional update logic with direct Cypher
-            with self.manager.driver.session() as session:
-                # Build Cypher query for fields
-                on_create_parts = []
-                
-                # Add all properties from node_properties
-                for key, value in node_properties.items():
-                    on_create_parts.append(f"r.{key} = ${key}")
-                
-                # Build ON MATCH SET parts with conditional updates for content fields
-                on_match_parts = [
-                    "r.description = CASE WHEN $updated > r.updated THEN $description ELSE r.description END",
-                    "r.formType = CASE WHEN $updated > r.updated THEN $formType ELSE r.formType END",
-                    "r.periodOfReport = CASE WHEN $updated > r.updated THEN $periodOfReport ELSE r.periodOfReport END",
-                    "r.effectivenessDate = CASE WHEN $updated > r.updated THEN $effectivenessDate ELSE r.effectivenessDate END",
-                    "r.updated = CASE WHEN $updated > r.updated THEN $updated ELSE r.updated END",
-                    "r.primaryDocumentUrl = $primaryDocumentUrl",
-                    "r.linkToHtml = $linkToHtml",
-                    "r.linkToTxt = $linkToTxt",
-                    "r.linkToFilingDetails = $linkToFilingDetails",
-                    "r.exhibits = $exhibits",
-                    "r.entities = $entities",
-                    "r.items = $items",
-                    "r.symbols = $symbols",
-                    "r.is_xml = $is_xml",
-                    "r.isAmendment = $isAmendment",
-                    "r.accessionNo = $id",
-                    "r.id = $id",
-                    "r.market_session = $market_session",
-                    "r.returns_schedule = $returns_schedule",
-                    "r.extracted_sections = CASE WHEN $updated > r.updated THEN $extracted_sections ELSE r.extracted_sections END",
-                    "r.financial_statements = CASE WHEN $updated > r.updated THEN $financial_statements ELSE r.financial_statements END",
-                    "r.exhibit_contents = CASE WHEN $updated > r.updated THEN $exhibit_contents ELSE r.exhibit_contents END",
-                    "r.filing_text_content = CASE WHEN $updated > r.updated THEN $filing_text_content ELSE r.filing_text_content END",
-                    "r.xbrl_status = CASE WHEN $updated > r.updated THEN $xbrl_status ELSE r.xbrl_status END",
-                    "r.created = $created"
-                ]
-                
-                # Create parameter dictionary from node_properties
-                query_params = {
-                    "updated": updated_str,  # For conditional updates
-                }
-                
-                # Add all node properties to query params
-                for key, value in node_properties.items():
-                    query_params[key] = value
-                
-                # Ensure all referenced parameters exist (even if they weren't in node_properties)
-                required_params = ["effectivenessDate", "financial_statements", "exhibit_contents", 
-                                 "extracted_sections", "market_session", "returns_schedule", "filing_text_content"]
-                
-                for param in required_params:
-                    if param not in query_params:
-                        if param in ["financial_statements", "exhibit_contents", "extracted_sections", "returns_schedule"]:
-                            # These need to be JSON strings
-                            query_params[param] = json.dumps({})
-                        elif param == "filing_text_content":
-                            # This is a text field that can be null
-                            query_params[param] = None
-                        else:
-                            # Default to empty string for other fields
-                            query_params[param] = ""
-                
-                # Construct the complete Cypher query
-                cypher_query = f"""
-                MERGE (r:Report {{accessionNo: $id}})
-                ON CREATE SET {', '.join(on_create_parts)}
-                ON MATCH SET {', '.join(on_match_parts)}
-                RETURN r
-                """
-                
-                # Execute the query
-                result = session.run(cypher_query, query_params)
-                
-                # Process the result
-                record = result.single()
-                if not record:
-                    logger.error(f"Failed to create or update report node {report_id}")
-                    return False
-                
-                # Get the created/updated report
-                report_props = dict(record["r"].items())
-                
-                # Check if this report is eligible for XBRL processing and we haven't processed one yet
-                if (not self.xbrl_processed and
-                    report_props.get('is_xml') == True and
-                    report_props.get('cik') and
-                    report_props.get('xbrl_status') != 'COMPLETED' and
-                    report_props.get('xbrl_status') != 'PROCESSING'):
-                    
-                    # Process XBRL data
-                    self._process_xbrl(
-                        session=session,
-                        report_id=report_props["id"],
-                        cik=report_props["cik"],
-                        accessionNo=report_props["accessionNo"]
-                    )
-                    
-                # Skip processing if no symbols found
-                if not valid_symbols:
-                    logger.warning(f"No valid symbols found for report {report_id}")
-                    return True
-            
-                # ----- Use helper method for efficient batch processing of relationships -----
-                
-                # Use the common method to create all relationships
-                self._create_influences_relationships(session, report_id, "Report", "Company", company_params)
-                self._create_influences_relationships(session, report_id, "Report", "Sector", sector_params)
-                self._create_influences_relationships(session, report_id, "Report", "Industry", industry_params)
-                self._create_influences_relationships(session, report_id, "Report", "MarketIndex", market_params)
-                
-                # 5. Create Report Category relationships
-                form_type = report_data.get('formType', '').split('/')[0]  # Extract base form type without amendments
-                if form_type:
-                    admin_result = session.run("""
-                    MATCH (r:Report {id: $report_id})
-                    MATCH (a:AdminReport {code: $form_type})
-                    MERGE (r)-[:IN_CATEGORY]->(a)
-                    """, {
-                        "report_id": report_id,
-                        "form_type": form_type
-                    })
-                
-                return True
                 
         except Exception as e:
             logger.error(f"Error processing report {report_id}: {e}")
@@ -1587,6 +1666,21 @@ class Neo4jProcessor:
                 })
                 
         return valid_symbols, company_params, sector_params, industry_params, market_params
+
+    def _prepare_report_relationships(self, report_data, symbols, universe_data, ticker_to_cik):
+        """Prepare relationship parameters for symbols"""
+        # Extract timestamps with proper parsing
+        filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
+        filed_str = filed_at.isoformat() if filed_at else ""
+        
+        # Delegate to the common method
+        return self._prepare_entity_relationship_params(
+            data_item=report_data,
+            symbols=symbols,
+            universe_data=universe_data,
+            ticker_to_cik=ticker_to_cik,
+            timestamp=filed_str
+        )
 
 
 
