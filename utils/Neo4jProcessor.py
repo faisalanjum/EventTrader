@@ -256,7 +256,8 @@ class Neo4jProcessor:
         news_node = NewsNode(
             news_id=news_id,
             title=news_data.get('title', ''),
-            body=news_data.get('body', news_data.get('content', '')),  # Fallback to content if body not available
+            # body=news_data.get('body', news_data.get('content', '')),  # Fallback to content if body not available
+            body=news_data.get('body', ''),
             teaser=news_data.get('teaser', ''),
             url=news_data.get('url', '')
         )
@@ -264,13 +265,13 @@ class Neo4jProcessor:
         # Set datetime fields
         if created_at:
             news_node.created = created_at
-        else:
-            news_node.created = datetime.now(timezone.utc)  # Use UTC for consistency
+        # Removed fallback to current datetime
             
         if updated_at:
             news_node.updated = updated_at
-        else:
-            news_node.updated = news_node.created  # Default to created time
+        elif created_at:
+            news_node.updated = created_at  # Use created_at as fallback for updated_at
+        # Removed fallback to current datetime
         
         # Set list fields
         news_node.authors = self._parse_list_field(news_data.get('authors', []))
@@ -283,6 +284,7 @@ class Neo4jProcessor:
         
         return news_node
     
+
     def _process_deduplicated_news(self, news_id, news_data):
         """
         Process news data with deduplication, standardized fields, and efficient symbol relationships.
@@ -323,6 +325,9 @@ class Neo4jProcessor:
                             'industry': instrument['benchmarks'].get('industry', '')
                         }
             
+            # Extract timestamps with proper parsing
+            created_at, updated_at = parse_news_dates(news_data)
+            
             # Prepare data structures for batch symbol processing
             valid_symbols = []
             symbol_data = {}
@@ -355,7 +360,7 @@ class Neo4jProcessor:
                 symbol_data[symbol_upper] = {
                     'cik': cik,
                     'metrics': metrics,
-                    'timestamp': datetime.now().isoformat(),
+                    'timestamp': created_at.isoformat() if created_at else "",
                     'sector': sector,
                     'industry': industry
                 }
@@ -538,8 +543,8 @@ class Neo4jProcessor:
                     "title": news_node.title or "",
                     "body": news_node.body or "",
                     "teaser": news_node.teaser or "",
-                    "created": news_node.created.isoformat() if news_node.created else datetime.now().isoformat(),
-                    "updated": news_node.updated.isoformat() if news_node.updated else datetime.now().isoformat(),
+                    "created": news_node.created.isoformat() if news_node.created else "",
+                    "updated": news_node.updated.isoformat() if news_node.updated else (news_node.created.isoformat() if news_node.created else ""),
                     "url": news_node.url or "",
                     "authors": json.dumps(news_node.authors or []),
                     "tags": json.dumps(news_node.tags or []),
@@ -560,102 +565,12 @@ class Neo4jProcessor:
                     return True
             
                 # ----- Use UNWIND pattern for efficient batch processing of relationships -----
-                
-                # 1. Create Company INFLUENCES relationships using UNWIND pattern
-                if company_params:
-                    company_result = session.run("""
-                    MATCH (n:News {id: $news_id})
-                    UNWIND $company_params AS param
-                    MATCH (c:Company {cik: param.cik})
-                    MERGE (n)-[r:INFLUENCES]->(c)
-                    SET r += param.properties
-                    RETURN count(r) as relationship_count
-                    """, {
-                        "news_id": news_id,
-                        "company_params": company_params
-                    })
-                    for record in company_result:
-                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to companies")
-                
-                # 2. Create Sector INFLUENCES relationships using UNWIND pattern
-                if sector_params:
-                    sector_result = session.run("""
-                    MATCH (n:News {id: $news_id})
-                    UNWIND $sector_params AS param
-                    MERGE (s:Sector {id: param.sector_id})
-                    ON CREATE SET 
-                        s.name = param.sector_name,
-                        s.etf = param.sector_etf
-                    SET
-                        s.etf = CASE 
-                            WHEN param.sector_etf IS NOT NULL AND (s.etf IS NULL OR s.etf = '') 
-                            THEN param.sector_etf 
-                            ELSE s.etf 
-                        END
-                    MERGE (n)-[r:INFLUENCES]->(s)
-                    SET r += param.properties
-                    RETURN count(r) as relationship_count
-                    """, {
-                        "news_id": news_id,
-                        "sector_params": sector_params
-                    })
-                    for record in sector_result:
-                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to sectors")
-                
-                # 3. Create Industry INFLUENCES relationships using UNWIND pattern
-                if industry_params:
-                    industry_result = session.run("""
-                    MATCH (n:News {id: $news_id})
-                    UNWIND $industry_params AS param
-                    MERGE (i:Industry {id: param.industry_id})
-                    ON CREATE SET 
-                        i.name = param.industry_name,
-                        i.etf = param.industry_etf
-                    SET
-                        i.etf = CASE 
-                            WHEN param.industry_etf IS NOT NULL AND (i.etf IS NULL OR i.etf = '') 
-                            THEN param.industry_etf 
-                            ELSE i.etf 
-                        END
-                    MERGE (n)-[r:INFLUENCES]->(i)
-                    SET r += param.properties
-                    RETURN count(r) as relationship_count
-                    """, {
-                        "news_id": news_id,
-                        "industry_params": industry_params
-                    })
-                    for record in industry_result:
-                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to industries")
-                
-                # 4. Create Market Index INFLUENCES relationships using UNWIND pattern
-                if market_params:
-                    market_result = session.run("""
-                    MATCH (n:News {id: $news_id})
-                    MERGE (m:MarketIndex {id: 'SPY'})
-                    ON CREATE SET
-                        m.name = 'S&P 500 ETF',
-                        m.ticker = 'SPY',
-                        m.etf = 'SPY'
-                    SET
-                        m.ticker = 'SPY',
-                        m.etf = 'SPY',
-                        m.name = CASE
-                            WHEN m.name IS NULL OR m.name = ''
-                            THEN 'S&P 500 ETF'
-                            ELSE m.name
-                        END
-                    WITH n, m
-                    UNWIND $market_params AS param
-                    MERGE (n)-[r:INFLUENCES]->(m)
-                    SET r += param.properties
-                    RETURN count(r) as relationship_count
-                    """, {
-                        "news_id": news_id,
-                        "market_params": market_params
-                    })
-                    for record in market_result:
-                        logger.info(f"Created {record['relationship_count']} INFLUENCES relationships to market index")
-                
+
+                # 1. Create Company, Sector, Industry, MarketIndex INFLUENCES relationships
+                self._create_influences_relationships(session, news_id, "News", "Company", company_params)
+                self._create_influences_relationships(session, news_id, "News", "Sector", sector_params)
+                self._create_influences_relationships(session, news_id, "News", "Industry", industry_params)
+                self._create_influences_relationships(session, news_id, "News", "MarketIndex", market_params)
                 logger.info(f"Successfully processed news {news_id} with {len(valid_symbols)} symbols")
                 return True
                 
@@ -892,6 +807,9 @@ class Neo4jProcessor:
         valid_symbols = []
         symbol_data = {}
         
+        # Extract timestamps with proper parsing
+        filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
+        
         # Preprocess symbols to collect metrics and filter valid ones
         for symbol in symbols:
             symbol_upper = symbol.upper()
@@ -920,7 +838,7 @@ class Neo4jProcessor:
             symbol_data[symbol_upper] = {
                 'cik': cik,
                 'metrics': metrics,
-                'timestamp': datetime.now().isoformat(),
+                'timestamp': filed_at.isoformat() if filed_at else "",
                 'sector': sector,
                 'industry': industry
             }
@@ -1158,7 +1076,7 @@ class Neo4jProcessor:
             filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
             updated_at = parse_date(report_data.get('updated')) if report_data.get('updated') else None
             
-            filed_str = filed_at.isoformat() if filed_at else datetime.now().isoformat()
+            filed_str = filed_at.isoformat() if filed_at else ""
             updated_str = updated_at.isoformat() if updated_at else filed_str
             
             # 5. Execute deduplication and conditional update logic with direct Cypher
@@ -1266,17 +1184,11 @@ class Neo4jProcessor:
             
                 # ----- Use helper method for efficient batch processing of relationships -----
                 
-                # 1. Create Company INFLUENCES relationships
-                self._create_influences_relationships(session, report_id, "Company", company_params)
-                
-                # 2. Create Sector INFLUENCES relationships
-                self._create_influences_relationships(session, report_id, "Sector", sector_params)
-                
-                # 3. Create Industry INFLUENCES relationships
-                self._create_influences_relationships(session, report_id, "Industry", industry_params)
-                
-                # 4. Create Market Index INFLUENCES relationships
-                self._create_influences_relationships(session, report_id, "MarketIndex", market_params)
+                # Use the common method to create all relationships
+                self._create_influences_relationships(session, report_id, "Report", "Company", company_params)
+                self._create_influences_relationships(session, report_id, "Report", "Sector", sector_params)
+                self._create_influences_relationships(session, report_id, "Report", "Industry", industry_params)
+                self._create_influences_relationships(session, report_id, "Report", "MarketIndex", market_params)
                 
                 # 5. Create Report Category relationships
                 form_type = report_data.get('formType', '').split('/')[0]  # Extract base form type without amendments
@@ -1447,14 +1359,15 @@ class Neo4jProcessor:
                 
             company_nodes[cik] = company
 
-    def _create_influences_relationships(self, session, report_id, entity_type, params, create_node_cypher=None):
+    def _create_influences_relationships(self, session, source_id, source_label, entity_type, params, create_node_cypher=None):
         """
-        Generic method to create INFLUENCES relationships between a Report and various entity types.
+        Generic method to create INFLUENCES relationships between a source node (News or Report) and various entity types.
         Uses Neo4jManager.create_relationships for the actual implementation.
         
         Args:
             session: Neo4j session (not used directly but kept for interface compatibility)
-            report_id: ID of the report
+            source_id: ID of the source node (report or news)
+            source_label: Label of the source node ("News" or "Report")
             entity_type: Type of entity to connect (Company, Sector, Industry, MarketIndex)
             params: List of parameter dictionaries for the UNWIND operation
             create_node_cypher: Optional custom Cypher for node creation/update (not used)
@@ -1480,9 +1393,9 @@ class Neo4jProcessor:
             count = 0
             if entity_type == "Company":
                 count = neo4j_manager.create_relationships(
-                    source_label="Report", 
+                    source_label=source_label, 
                     source_id_field="id", 
-                    source_id_value=report_id,
+                    source_id_value=source_id,
                     target_label="Company", 
                     target_match_clause="{cik: param.cik}", 
                     rel_type="INFLUENCES", 
@@ -1490,9 +1403,9 @@ class Neo4jProcessor:
                 )
             elif entity_type == "Sector":
                 count = neo4j_manager.create_relationships(
-                    source_label="Report", 
+                    source_label=source_label, 
                     source_id_field="id", 
-                    source_id_value=report_id,
+                    source_id_value=source_id,
                     target_label="Sector", 
                     target_match_clause="{id: param.sector_id}", 
                     rel_type="INFLUENCES", 
@@ -1507,9 +1420,9 @@ class Neo4jProcessor:
                 )
             elif entity_type == "Industry":
                 count = neo4j_manager.create_relationships(
-                    source_label="Report", 
+                    source_label=source_label, 
                     source_id_field="id", 
-                    source_id_value=report_id,
+                    source_id_value=source_id,
                     target_label="Industry", 
                     target_match_clause="{id: param.industry_id}", 
                     rel_type="INFLUENCES", 
@@ -1524,9 +1437,9 @@ class Neo4jProcessor:
                 )
             elif entity_type == "MarketIndex":
                 count = neo4j_manager.create_relationships(
-                    source_label="Report", 
+                    source_label=source_label, 
                     source_id_field="id", 
-                    source_id_value=report_id,
+                    source_id_value=source_id,
                     target_label="MarketIndex", 
                     target_match_clause="{id: 'SPY'}", 
                     rel_type="INFLUENCES", 
