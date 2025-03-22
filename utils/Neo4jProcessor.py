@@ -1384,6 +1384,18 @@ class Neo4jProcessor:
             
         logger.info("Stopped event-driven Neo4j processing")
     
+    def stop_pubsub_processing(self):
+        """
+        Stop the PubSub processing loop gracefully.
+        Called by DataManagerCentral during shutdown.
+        """
+        logger.info("Stopping PubSub processing...")
+        self.pubsub_running = False
+        # Give time for the thread to exit gracefully
+        time.sleep(0.5)
+        logger.info("PubSub processing flag set to stop")
+        return True
+    
     def _process_report_companies(self, report_json: Dict[str, Any], company_nodes: Dict[str, 'CompanyNode']):
         """
         Extract and create company nodes from report data
