@@ -53,6 +53,12 @@ class Neo4jProcessor:
     initialization and functionality.
     """
     
+
+
+# region: Initialization and Core Infrastructure - # Methods like connect, close, is_initialized, initialize, _get_universe, _collect_redis_key_counts
+
+
+
     def __init__(self, event_trader_redis=None, uri=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD):
 
         # Override with environment variables if available - Save it in .env file
@@ -79,7 +85,7 @@ class Neo4jProcessor:
             
             # Test Redis access
             self._collect_redis_key_counts()
-    
+
     def connect(self):
         """Connect to Neo4j using Neo4jManager"""
         try:
@@ -197,257 +203,11 @@ class Neo4jProcessor:
                 
         return results
     
-    def _extract_market_session(self, data_item):
-        """
-            str: Market session value (e.g., 'pre_market', 'in_market', 'post_market') or empty string
-        """
-        if 'metadata' in data_item and 'event' in data_item['metadata']:
-            return data_item['metadata']['event'].get('market_session', '')
-        return ''
-    
-    def _extract_returns_schedule(self, data_item):
-        """
-        Extract and parse returns schedule from data item.
-        
-        Args:
-            data_item (dict): News or report data dictionary
-            
-        Returns:
-            dict: Dictionary with parsed return schedule dates in ISO format
-        """
-        returns_schedule = {}
-        
-        if 'metadata' in data_item and 'returns_schedule' in data_item['metadata']:
-            raw_schedule = data_item['metadata']['returns_schedule']
-            
-            # Parse each date in the schedule
-            for key, time_str in raw_schedule.items():
-                if time_str:
-                    try:
-                        date_obj = parse_date(time_str)
-                        if date_obj:
-                            returns_schedule[key] = date_obj.isoformat()
-                    except Exception as e:
-                        logger.warning(f"Error parsing returns schedule date '{time_str}': {e}")
-        
-        return returns_schedule
-    
-    def _create_news_node_from_data(self, news_id, news_data):
-        """
-        Create a NewsNode instance from raw news data.
-        
-        Args:
-            news_id (str): Unique identifier for the news
-            news_data (dict): Dictionary containing news data from Redis or API
-        
-        Returns:
-            NewsNode: An instance of NewsNode with all available fields populated
-        
-        Note:
-            This method handles data parsing, validation, and standardization
-            to ensure the NewsNode has consistent field values.
-        """
-        from utils.EventTraderNodes import NewsNode
-        
-        # Extract timestamps with proper parsing
-        created_at, updated_at = parse_news_dates(news_data)
-        
-        # Create news node with required fields
-        news_node = NewsNode(
-            news_id=news_id,
-            title=news_data.get('title', ''),
-            # body=news_data.get('body', news_data.get('content', '')),  # Fallback to content if body not available
-            body=news_data.get('body', ''),
-            teaser=news_data.get('teaser', ''),
-            url=news_data.get('url', '')
-        )
-        
-        # Set datetime fields
-        if created_at:
-            news_node.created = created_at
-        # Removed fallback to current datetime
-            
-        if updated_at:
-            news_node.updated = updated_at
-        elif created_at:
-            news_node.updated = created_at  # Use created_at as fallback for updated_at
-        # Removed fallback to current datetime
-        
-        # Set list fields
-        news_node.authors = self._parse_list_field(news_data.get('authors', []))
-        news_node.tags = self._parse_list_field(news_data.get('tags', []))
-        news_node.channels = self._parse_list_field(news_data.get('channels', []))
-        
-        # Extract market session and returns schedule using helper methods
-        news_node.market_session = self._extract_market_session(news_data)
-        news_node.returns_schedule = self._extract_returns_schedule(news_data)
-        
-        return news_node
-    
-    def _prepare_news_data(self, news_id, news_data):
-        """
-        Prepare news data for processing, extracting all necessary information.
-        
-        Args:
-            news_id: Unique identifier for the news
-            news_data: Dictionary containing news data
-            
-        Returns:
-            tuple: (news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps)
-                where timestamps is a tuple of (created_at, updated_at, timestamp)
-        """
-        # Get ticker to CIK mappings from universe data
-        universe_data = self._get_universe()
-        ticker_to_cik = {}
-        for symbol, data in universe_data.items():
-            cik = data.get('cik', '').strip()
-            if cik and cik.lower() not in ['nan', 'none', '']:
-                ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
-        
-        # Create NewsNode from news data
-        news_node = self._create_news_node_from_data(news_id, news_data)
-        
-        # Extract symbols mentioned in news using the unified method
-        symbols = self._extract_symbols_from_data(news_data)
-        
-        # Extract timestamps with proper parsing
-        created_at, updated_at = parse_news_dates(news_data)
-        timestamp = created_at.isoformat() if created_at else ""
-        
-        # Use the common method to prepare relationship parameters
-        valid_symbols, company_params, sector_params, industry_params, market_params = self._prepare_entity_relationship_params(
-            data_item=news_data,
-            symbols=symbols,
-            universe_data=universe_data,
-            ticker_to_cik=ticker_to_cik,
-            timestamp=timestamp
-        )
-        
-        # Return all prepared data
-        timestamps = (created_at, updated_at, timestamp)
-        return (news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps)
 
-    def _execute_news_database_operations(self, news_id, news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps):
-        """
-        Execute all database operations for a news item.
-        
-        Args:
-            news_id: Unique identifier for the news
-            news_node: NewsNode object
-            valid_symbols: List of valid symbols
-            company_params: Parameters for company relationships
-            sector_params: Parameters for sector relationships
-            industry_params: Parameters for industry relationships
-            market_params: Parameters for market index relationships
-            timestamps: Tuple of (created_at, updated_at, timestamp)
-            
-        Returns:
-            bool: Success status
-        """
-        created_at, updated_at, timestamp = timestamps
-        
-        # Execute deduplication and conditional update logic with direct Cypher
-        # KEEP ALL DATABASE OPERATIONS INSIDE THIS SINGLE SESSION CONTEXT
-        with self.manager.driver.session() as session:
-            # Create/update news node with conditional updates
-            # This follows the pattern from the deduplication notes
-            news_merge_query = """
-            MERGE (n:News {id: $id})
-            ON CREATE SET 
-                n.id = $id,
-                n.title = $title,
-                n.body = $body,
-                n.teaser = $teaser,
-                n.created = $created,
-                n.updated = $updated,
-                n.url = $url,
-                n.authors = $authors,
-                n.tags = $tags,
-                n.channels = $channels,
-                n.market_session = $market_session,
-                n.returns_schedule = $returns_schedule
-            ON MATCH SET 
-                // Only update content-related fields if this is newer
-                n.title = CASE WHEN $updated > n.updated THEN $title ELSE n.title END,
-                n.body = CASE WHEN $updated > n.updated THEN $body ELSE n.body END,
-                n.teaser = CASE WHEN $updated > n.updated THEN $teaser ELSE n.teaser END,
-                n.updated = CASE WHEN $updated > n.updated THEN $updated ELSE n.updated END,
-                // Always update these fields even if not newer (additive properties)
-                n.url = $url,
-                n.authors = $authors,
-                n.tags = $tags,
-                n.channels = $channels,
-                n.market_session = $market_session,
-                n.returns_schedule = $returns_schedule
-            RETURN n
-            """
-            
-            # Prepare parameters
-            query_params = {
-                "id": news_id,
-                "title": news_node.title or "",
-                "body": news_node.body or "",
-                "teaser": news_node.teaser or "",
-                "created": news_node.created.isoformat() if news_node.created else "",
-                "updated": news_node.updated.isoformat() if news_node.updated else (news_node.created.isoformat() if news_node.created else ""),
-                "url": news_node.url or "",
-                "authors": json.dumps(news_node.authors or []),
-                "tags": json.dumps(news_node.tags or []),
-                "channels": json.dumps(news_node.channels or []),
-                "market_session": news_node.market_session or "",
-                "returns_schedule": json.dumps(news_node.returns_schedule or {})
-            }
-            
-            # Execute the query using Neo4jManager
-            record = self.manager.execute_cypher_query(news_merge_query, query_params)
-            
-            # Process the result
-            if not record:
-                logger.error(f"Failed to create or update news node {news_id}")
-                return False
-                
-            # Skip processing if no symbols found
-            if not valid_symbols:
-                logger.warning(f"No valid symbols found for news {news_id}")
-                return True
-        
-            # ----- Use UNWIND pattern for efficient batch processing of relationships -----
+# endregion
 
-            # 1. Create Company, Sector, Industry, MarketIndex INFLUENCES relationships
-            self._create_influences_relationships(session, news_id, "News", "Company", company_params)
-            self._create_influences_relationships(session, news_id, "News", "Sector", sector_params)
-            self._create_influences_relationships(session, news_id, "News", "Industry", industry_params)
-            self._create_influences_relationships(session, news_id, "News", "MarketIndex", market_params)
-            logger.info(f"Successfully processed news {news_id} with {len(valid_symbols)} symbols")
-            return True
 
-    def _process_deduplicated_news(self, news_id, news_data):
-        """
-        Process news data with deduplication, standardized fields, and efficient symbol relationships.
-        Uses a hash-based MERGE pattern with conditional updates based on timestamps.
-        
-        Args:
-            news_id: Unique identifier for the news
-            news_data: Dictionary containing news data
-            
-        Returns:
-            bool: Success status
-        """
-        logger.debug(f"Processing deduplicated news {news_id}")
-        
-        try:
-            # Prepare all news data
-            news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps = self._prepare_news_data(news_id, news_data)
-            
-            # Execute all database operations
-            return self._execute_news_database_operations(
-                news_id, news_node, valid_symbols, company_params, 
-                sector_params, industry_params, market_params, timestamps
-            )
-                
-        except Exception as e:
-            logger.error(f"Error processing news {news_id}: {e}")
-            return False
+# region: Primary Public Methods - # Methods like process_news_to_neo4j, process_reports_to_neo4j, process_pubsub_item, process_with_pubsub, stop_pubsub_processing
 
     def process_news_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
         """
@@ -571,104 +331,527 @@ class Neo4jProcessor:
             logger.error(f"Error processing news data: {e}")
             return False
 
-    def _extract_symbols_from_data(self, data_item, symbols_list=None):
+
+
+    def process_reports_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
         """
-        Extract and normalize symbols from data item (news or report).
-        Handles both direct symbols list and metadata.instruments sources.
+        Process SEC reports from Redis to Neo4j
+        Similar to process_news_to_neo4j but for SEC reports
         
         Args:
-            data_item (dict): News or report data dictionary
-            symbols_list (list or str, optional): Explicit symbols list to process
-                                                 (if None, will use data_item.get('symbols'))
+            batch_size: Number of records to process at once
+            max_items: Maximum number of items to process (None for all)
+            include_without_returns: Whether to include reports without returns
+            
+        Returns:
+            bool: True if processing is complete, False if it was interrupted
+        """
+        from utils.EventTraderNodes import ReportNode
+        from utils.redis_constants import RedisKeys
+        
+        # Get Redis instance if available
+        if not self.event_trader_redis:
+            logger.error("No Redis instance available, cannot process reports")
+            return False
+            
+        # Process reports with returns
+        withreturns_keys = []
+        try:
+            # Get report keys with returns
+            withreturns_namespace = RedisKeys.get_key(
+                source_type=RedisKeys.SOURCE_REPORTS, 
+                key_type=RedisKeys.SUFFIX_WITHRETURNS
+            )
+            withreturns_pattern = f"{withreturns_namespace}*"
+            withreturns_keys = list(self.event_trader_redis.history_client.client.scan_iter(match=withreturns_pattern))
+            
+            if max_items is not None:
+                withreturns_keys = withreturns_keys[:max_items]
+                
+            logger.info(f"Found {len(withreturns_keys)} reports with returns")
+        except Exception as e:
+            logger.error(f"Error getting withreturns keys: {e}")
+            
+        # Process reports without returns if requested
+        withoutreturns_keys = []
+        if include_without_returns:
+            try:
+                # Get report keys without returns
+                withoutreturns_namespace = RedisKeys.get_key(
+                    source_type=RedisKeys.SOURCE_REPORTS, 
+                    key_type=RedisKeys.SUFFIX_WITHOUTRETURNS
+                )
+                withoutreturns_pattern = f"{withoutreturns_namespace}*"
+                withoutreturns_keys = list(self.event_trader_redis.history_client.client.scan_iter(match=withoutreturns_pattern))
+                
+                if max_items is not None:
+                    withoutreturns_keys = withoutreturns_keys[:max_items]
+                    
+                logger.info(f"Found {len(withoutreturns_keys)} reports without returns")
+            except Exception as e:
+                logger.error(f"Error getting withoutreturns keys: {e}")
+                
+        # Combine both key sets
+        all_keys = withreturns_keys + withoutreturns_keys
+        if not all_keys:
+            logger.info("No report keys found to process")
+            return True
+            
+        total_reports = len(all_keys)
+        logger.info(f"Processing {total_reports} total reports")
+        
+        # Process in batches
+        processed_count = 0
+        error_count = 0
+        
+        for batch_start in range(0, len(all_keys), batch_size):
+            batch_keys = all_keys[batch_start:batch_start + batch_size]
+            batch_size_actual = len(batch_keys)
+            
+            logger.info(f"Processing batch {batch_start//batch_size + 1}, items {batch_start+1}-{batch_start+batch_size_actual} of {total_reports}")
+            
+            # Process each report in the batch
+            for key in batch_keys:
+                try:
+                    # Extract key parts
+                    parts = key.split(':')
+                    report_id = parts[-1] if len(parts) > 0 else key
+                    
+                    # Get report data from Redis
+                    raw_data = self.event_trader_redis.history_client.get(key)
+                    if not raw_data:
+                        logger.warning(f"No data found for key {key}")
+                        continue
+                        
+                    # Parse JSON data
+                    report_data = json.loads(raw_data)
+                    
+                    # Use accessionNo as report ID if available
+                    if 'accessionNo' in report_data:
+                        report_id = report_data['accessionNo']
+                    
+                    # Process report data with deduplication
+                    success = self._process_deduplicated_report(report_id, report_data)
+                    
+                    if success:
+                        processed_count += 1
+                    else:
+                        error_count += 1
+                        
+                except Exception as e:
+                    logger.error(f"Error processing report key {key}: {e}")
+                    error_count += 1
+                
+            logger.info(f"Processed batch {batch_start//batch_size + 1}/{(len(all_keys) + batch_size - 1)//batch_size}")
+            
+        # Summary and status
+        logger.info(f"Finished processing reports to Neo4j. Processed: {processed_count}, Errors: {error_count}")
+        
+        return processed_count > 0 or error_count == 0
+    
+
+
+        
+    def _process_pubsub_item(self, channel, item_id, content_type='news'):
+        """
+        Process an item update from PubSub (works for both news and reports)
+        
+        Args:
+            channel: The Redis channel the message came from
+            item_id: The ID of the item to process
+            content_type: 'news' or 'report'
+        """
+        try:
+            logger.info(f"Processing {content_type} update from {channel}: {item_id}")
+            
+            # Determine namespace from channel
+            namespace = RedisKeys.SUFFIX_WITHRETURNS if RedisKeys.SUFFIX_WITHRETURNS in channel else RedisKeys.SUFFIX_WITHOUTRETURNS
+            
+            # Process based on content type
+            if content_type == 'news':
+                # Get the news data using standard key format
+                key = RedisKeys.get_key(
+                    source_type=self.event_trader_redis.source,
+                    key_type=namespace,
+                    identifier=item_id
+                )
+                
+                # Get and process the news item
+                raw_data = self.event_trader_redis.history_client.get(key)
+                if raw_data:
+                    news_data = json.loads(raw_data)
+                    success = self._process_deduplicated_news(
+                        news_id=f"bzNews_{item_id.split('.')[0]}", 
+                        news_data=news_data
+                    )
+                    logger.info(f"Successfully processed news {item_id}")
+                else:
+                    logger.warning(f"No data found for news {item_id}")
+            else:  # report
+                # Get the report data using standard key format
+                key = RedisKeys.get_key(
+                    source_type=RedisKeys.SOURCE_REPORTS,
+                    key_type=namespace,
+                    identifier=item_id
+                )
+                
+                # Get and process the report
+                raw_data = self.event_trader_redis.history_client.get(key)
+                if raw_data:
+                    report_data = json.loads(raw_data)
+                    
+                    # Use accessionNo as report ID if available
+                    report_id = report_data.get('accessionNo', item_id)
+                    
+                    # Process report with deduplication (same approach as news)
+                    success = self._process_deduplicated_report(
+                        report_id=report_id,
+                        report_data=report_data
+                    )
+                    
+                    logger.info(f"Successfully processed report {item_id}")
+                else:
+                    logger.warning(f"No data found for report {item_id}")
+                
+        except Exception as e:
+            logger.error(f"Error processing {content_type} update for {item_id}: {e}")
+
+
+
+
+    # ToDo: is designed to run indefinitely, so it will block the main thread. You need to handle this appropriately.
+    def process_with_pubsub(self):
+        """
+        Process news and reports from Redis to Neo4j using PubSub for immediate notification.
+        Non-blocking and highly efficient compared to polling.
+        """
+        logger.info("Starting event-driven Neo4j processing")
+        
+        if not hasattr(self, 'event_trader_redis') or not self.event_trader_redis:
+            logger.error("No Redis client available for event-driven processing")
+            return
+        
+        # Ensure Neo4j connection is established
+        if not self.manager:
+            if not self.connect():
+                logger.error("Failed to connect to Neo4j, cannot proceed with processing")
+                return
+        
+        # Create a dedicated PubSub client
+        pubsub = self.event_trader_redis.live_client.create_pubsub_connection()
+        
+        # Subscribe to news channels using consistent RedisKeys methods
+        news_returns_keys = RedisKeys.get_returns_keys(self.event_trader_redis.source)
+        withreturns_channel = news_returns_keys['withreturns']
+        withoutreturns_channel = news_returns_keys['withoutreturns']
+        pubsub.subscribe(withreturns_channel, withoutreturns_channel)
+        logger.info(f"Subscribed to news channels: {withreturns_channel}, {withoutreturns_channel}")
+        
+        # Subscribe to report channels using the same RedisKeys methods
+        report_returns_keys = RedisKeys.get_returns_keys(RedisKeys.SOURCE_REPORTS)
+        report_withreturns_channel = report_returns_keys['withreturns']
+        report_withoutreturns_channel = report_returns_keys['withoutreturns']
+        pubsub.subscribe(report_withreturns_channel, report_withoutreturns_channel)
+        logger.info(f"Subscribed to report channels: {report_withreturns_channel}, {report_withoutreturns_channel}")
+        
+        # Control flag
+        self.pubsub_running = True
+        
+        # Process any existing items first (one-time batch processing)
+        self.process_news_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
+        self.process_reports_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
+        
+        # Event-driven processing loop
+        while self.pubsub_running:
+            try:
+                # Non-blocking message check with 0.1s timeout
+                message = pubsub.get_message(timeout=0.1)
+                
+                if message and message['type'] == 'message':
+                    channel = message['channel']
+                    item_id = message.get('data')
+                    
+                    if not item_id:
+                        continue
+                    
+                    # Determine content type based on channel prefix
+                    if channel.startswith(self.event_trader_redis.source):
+                        # Process news
+                        self._process_pubsub_item(channel, item_id, 'news')
+                    elif channel.startswith(RedisKeys.SOURCE_REPORTS):
+                        # Process report
+                        self._process_pubsub_item(channel, item_id, 'report')
+                
+                # Periodically check for items that might have been missed (every 60 seconds)
+                # This is a safety net, not the primary mechanism
+                current_time = int(time.time())
+                if current_time % 60 == 0:
+                    self.process_news_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
+                    self.process_reports_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
+                    time.sleep(1)  # Prevent repeated execution in the same second
+                    
+            except Exception as e:
+                logger.error(f"Error in PubSub processing: {e}")
+                # Try to reconnect to Neo4j if connection appears to be lost
+                if not self.manager or "Neo4j" in str(e) or "Connection" in str(e):
+                    logger.warning("Attempting to reconnect to Neo4j")
+                    self.connect()
+                time.sleep(1)
+        
+        # Clean up
+        try:
+            pubsub.unsubscribe()
+            pubsub.close()
+        except:
+            pass
+            
+        logger.info("Stopped event-driven Neo4j processing")
+    
+    def stop_pubsub_processing(self):
+        """
+        Stop the PubSub processing loop gracefully.
+        Called by DataManagerCentral during shutdown.
+        """
+        logger.info("Stopping PubSub processing...")
+        self.pubsub_running = False
+        # Give time for the thread to exit gracefully
+        time.sleep(0.5)
+        logger.info("PubSub processing flag set to stop")
+        return True
+
+
+# endregion
+    
+
+# region: News Processing Pipeline - # Methods like _prepare_news_data, _process_deduplicated_news, _execute_news_database_operations, _create_news_node_from_data
+
+    def _prepare_news_data(self, news_id, news_data):
+        """
+        Prepare news data for processing, extracting all necessary information.
+        
+        Args:
+            news_id: Unique identifier for the news
+            news_data: Dictionary containing news data
+            
+        Returns:
+            tuple: (news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps)
+                where timestamps is a tuple of (created_at, updated_at, timestamp)
+        """
+        # Get ticker to CIK mappings from universe data
+        universe_data = self._get_universe()
+        ticker_to_cik = {}
+        for symbol, data in universe_data.items():
+            cik = data.get('cik', '').strip()
+            if cik and cik.lower() not in ['nan', 'none', '']:
+                ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
+        
+        # Create NewsNode from news data
+        news_node = self._create_news_node_from_data(news_id, news_data)
+        
+        # Extract symbols mentioned in news using the unified method
+        symbols = self._extract_symbols_from_data(news_data)
+        
+        # Extract timestamps with proper parsing
+        created_at, updated_at = parse_news_dates(news_data)
+        timestamp = created_at.isoformat() if created_at else ""
+        
+        # Use the common method to prepare relationship parameters
+        valid_symbols, company_params, sector_params, industry_params, market_params = self._prepare_entity_relationship_params(
+            data_item=news_data,
+            symbols=symbols,
+            universe_data=universe_data,
+            ticker_to_cik=ticker_to_cik,
+            timestamp=timestamp
+        )
+        
+        # Return all prepared data
+        timestamps = (created_at, updated_at, timestamp)
+        return (news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps)
+
+
+    def _process_deduplicated_news(self, news_id, news_data):
+        """
+        Process news data with deduplication, standardized fields, and efficient symbol relationships.
+        Uses a hash-based MERGE pattern with conditional updates based on timestamps.
+        
+        Args:
+            news_id: Unique identifier for the news
+            news_data: Dictionary containing news data
+            
+        Returns:
+            bool: Success status
+        """
+        logger.debug(f"Processing deduplicated news {news_id}")
+        
+        try:
+            # Prepare all news data
+            news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps = self._prepare_news_data(news_id, news_data)
+            
+            # Execute all database operations
+            return self._execute_news_database_operations(
+                news_id, news_node, valid_symbols, company_params, 
+                sector_params, industry_params, market_params, timestamps
+            )
+                
+        except Exception as e:
+            logger.error(f"Error processing news {news_id}: {e}")
+            return False
+        
+
+
+    def _execute_news_database_operations(self, news_id, news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps):
+        """
+        Execute all database operations for a news item.
+        
+        Args:
+            news_id: Unique identifier for the news
+            news_node: NewsNode object
+            valid_symbols: List of valid symbols
+            company_params: Parameters for company relationships
+            sector_params: Parameters for sector relationships
+            industry_params: Parameters for industry relationships
+            market_params: Parameters for market index relationships
+            timestamps: Tuple of (created_at, updated_at, timestamp)
+            
+        Returns:
+            bool: Success status
+        """
+        created_at, updated_at, timestamp = timestamps
+        
+        # Execute deduplication and conditional update logic with direct Cypher
+        # KEEP ALL DATABASE OPERATIONS INSIDE THIS SINGLE SESSION CONTEXT
+        with self.manager.driver.session() as session:
+            # Create/update news node with conditional updates
+            # This follows the pattern from the deduplication notes
+            news_merge_query = """
+            MERGE (n:News {id: $id})
+            ON CREATE SET 
+                n.id = $id,
+                n.title = $title,
+                n.body = $body,
+                n.teaser = $teaser,
+                n.created = $created,
+                n.updated = $updated,
+                n.url = $url,
+                n.authors = $authors,
+                n.tags = $tags,
+                n.channels = $channels,
+                n.market_session = $market_session,
+                n.returns_schedule = $returns_schedule
+            ON MATCH SET 
+                // Only update content-related fields if this is newer
+                n.title = CASE WHEN $updated > n.updated THEN $title ELSE n.title END,
+                n.body = CASE WHEN $updated > n.updated THEN $body ELSE n.body END,
+                n.teaser = CASE WHEN $updated > n.updated THEN $teaser ELSE n.teaser END,
+                n.updated = CASE WHEN $updated > n.updated THEN $updated ELSE n.updated END,
+                // Always update these fields even if not newer (additive properties)
+                n.url = $url,
+                n.authors = $authors,
+                n.tags = $tags,
+                n.channels = $channels,
+                n.market_session = $market_session,
+                n.returns_schedule = $returns_schedule
+            RETURN n
+            """
+            
+            # Prepare parameters
+            query_params = {
+                "id": news_id,
+                "title": news_node.title or "",
+                "body": news_node.body or "",
+                "teaser": news_node.teaser or "",
+                "created": news_node.created.isoformat() if news_node.created else "",
+                "updated": news_node.updated.isoformat() if news_node.updated else (news_node.created.isoformat() if news_node.created else ""),
+                "url": news_node.url or "",
+                "authors": json.dumps(news_node.authors or []),
+                "tags": json.dumps(news_node.tags or []),
+                "channels": json.dumps(news_node.channels or []),
+                "market_session": news_node.market_session or "",
+                "returns_schedule": json.dumps(news_node.returns_schedule or {})
+            }
+            
+            # Execute the query using Neo4jManager
+            record = self.manager.execute_cypher_query(news_merge_query, query_params)
+            
+            # Process the result
+            if not record:
+                logger.error(f"Failed to create or update news node {news_id}")
+                return False
+                
+            # Skip processing if no symbols found
+            if not valid_symbols:
+                logger.warning(f"No valid symbols found for news {news_id}")
+                return True
+        
+            # ----- Use UNWIND pattern for efficient batch processing of relationships -----
+
+            # 1. Create Company, Sector, Industry, MarketIndex INFLUENCES relationships
+            self._create_influences_relationships(session, news_id, "News", "Company", company_params)
+            self._create_influences_relationships(session, news_id, "News", "Sector", sector_params)
+            self._create_influences_relationships(session, news_id, "News", "Industry", industry_params)
+            self._create_influences_relationships(session, news_id, "News", "MarketIndex", market_params)
+            logger.info(f"Successfully processed news {news_id} with {len(valid_symbols)} symbols")
+            return True
+
+
+
+    def _create_news_node_from_data(self, news_id, news_data):
+        """
+        Create a NewsNode instance from raw news data.
+        
+        Args:
+            news_id (str): Unique identifier for the news
+            news_data (dict): Dictionary containing news data from Redis or API
         
         Returns:
-            list: List of uppercase symbol strings
+            NewsNode: An instance of NewsNode with all available fields populated
+        
+        Note:
+            This method handles data parsing, validation, and standardization
+            to ensure the NewsNode has consistent field values.
         """
-        symbols = []
+        from utils.EventTraderNodes import NewsNode
         
-        # If no explicit symbols_list provided, try to get from data_item
-        if symbols_list is None:
-            symbols_list = data_item.get('symbols', [])
+        # Extract timestamps with proper parsing
+        created_at, updated_at = parse_news_dates(news_data)
         
-        # Process symbols list
-        if isinstance(symbols_list, list):
-            symbols = [s.upper() for s in symbols_list if s]
-        elif isinstance(symbols_list, str):
-            try:
-                # Try JSON parsing for array-like strings
-                if symbols_list.startswith('[') and symbols_list.endswith(']'):
-                    content = symbols_list.replace("'", '"')  # Make JSON-compatible
-                    symbols = [s.upper() for s in json.loads(content) if s]
-                # Try comma-separated string
-                elif ',' in symbols_list:
-                    symbols = [s.strip().upper() for s in symbols_list.split(',') if s.strip()]
-                else:
-                    # Single symbol
-                    symbols = [symbols_list.upper()]
-            except:
-                # Last resort parsing for malformed strings
-                clean = symbols_list.strip('[]').replace("'", "").replace('"', "")
-                symbols = [s.strip().upper() for s in clean.split(',') if s.strip()]
+        # Create news node with required fields
+        news_node = NewsNode(
+            news_id=news_id,
+            title=news_data.get('title', ''),
+            # body=news_data.get('body', news_data.get('content', '')),  # Fallback to content if body not available
+            body=news_data.get('body', ''),
+            teaser=news_data.get('teaser', ''),
+            url=news_data.get('url', '')
+        )
         
-        # Extract additional symbols from metadata if available
-        if 'metadata' in data_item and 'instruments' in data_item['metadata']:
-            for instrument in data_item['metadata']['instruments']:
-                symbol = instrument.get('symbol', '')
-                if symbol and symbol.upper() not in symbols:
-                    symbols.append(symbol.upper())
-                    
-        return symbols
+        # Set datetime fields
+        if created_at:
+            news_node.created = created_at
+        # Removed fallback to current datetime
+            
+        if updated_at:
+            news_node.updated = updated_at
+        elif created_at:
+            news_node.updated = created_at  # Use created_at as fallback for updated_at
+        # Removed fallback to current datetime
+        
+        # Set list fields
+        news_node.authors = self._parse_list_field(news_data.get('authors', []))
+        news_node.tags = self._parse_list_field(news_data.get('tags', []))
+        news_node.channels = self._parse_list_field(news_data.get('channels', []))
+        
+        # Extract market session and returns schedule using helper methods
+        news_node.market_session = self._extract_market_session(news_data)
+        news_node.returns_schedule = self._extract_returns_schedule(news_data)
+        
+        return news_node
 
-    def _extract_return_metrics(self, news_item, symbol) -> Dict:
-        """Extract return metrics for a symbol from news data"""
-        metrics = {}
-        symbol_upper = symbol.upper()
-        
-        if 'returns' not in news_item:
-            return metrics
-        
-        # Find symbol returns data
-        symbol_returns = None
-        
-        # Structure 1: {'returns': {'AAPL': {...}}}
-        if symbol_upper in news_item['returns']:
-            symbol_returns = news_item['returns'][symbol_upper]
-        
-        # Structure 2: {'returns': {'symbols': {'AAPL': {...}}}}
-        elif 'symbols' in news_item['returns'] and symbol_upper in news_item['returns']['symbols']:
-            symbol_returns = news_item['returns']['symbols'][symbol_upper]
-        
-        if not symbol_returns:
-            return metrics
-        
-        # Process different return timeframes
-        for timeframe in ['hourly_return', 'session_return', 'daily_return']:
-            if timeframe not in symbol_returns:
-                continue
-                
-            if not isinstance(symbol_returns[timeframe], dict):
-                logger.warning(f"Expected dictionary for {timeframe} but got {type(symbol_returns[timeframe])} for symbol {symbol}")
-                continue
-            
-            short_timeframe = timeframe.split('_')[0]  # hourly, session, daily
-            
-            # Extract stock metrics
-            if 'stock' in symbol_returns[timeframe]:
-                metrics[f"{short_timeframe}_stock"] = symbol_returns[timeframe]['stock']
-            
-            # Extract sector metrics
-            if 'sector' in symbol_returns[timeframe]:
-                metrics[f"{short_timeframe}_sector"] = symbol_returns[timeframe]['sector']
-            
-            # Extract industry metrics
-            if 'industry' in symbol_returns[timeframe]:
-                metrics[f"{short_timeframe}_industry"] = symbol_returns[timeframe]['industry']
-            
-            # Extract macro metrics
-            if 'macro' in symbol_returns[timeframe]:
-                metrics[f"{short_timeframe}_macro"] = symbol_returns[timeframe]['macro']
-        
-        return metrics
+
+# endregion
+
+
+# region: Report Processing Pipeline - # Methods _prepare_report_data, _process_deduplicated_report, _execute_report_database_operations, _create_report_node_from_data, _process_report_companies
 
     def _prepare_report_data(self, report_id, report_data):
         """
@@ -722,66 +905,40 @@ class Neo4jProcessor:
         return (report_node, node_properties, valid_symbols, company_params, 
                 sector_params, industry_params, market_params, report_timestamps)
 
-    def _create_report_node_from_data(self, report_id, report_data):
-        """Create a ReportNode instance from report data"""
-        from utils.EventTraderNodes import ReportNode
+
+
+
+    def _process_deduplicated_report(self, report_id, report_data):
+        """
+        Process report data with deduplication, standardized fields, and efficient symbol relationships.
+        Uses a hash-based MERGE pattern with conditional updates based on timestamps.
         
-        # Process required fields
-        cik = report_data.get('cik', '')
-        if cik:
-            cik = str(cik).zfill(10)
+        Args:
+            report_id: Unique identifier for the report (accessionNo)
+            report_data: Dictionary containing report data
             
-        primary_document_url = report_data.get('primaryDocumentUrl', '')
+        Returns:
+            bool: Success status
+        """
+        logger.debug(f"Processing deduplicated report {report_id}")
         
-        # Create report node with required fields
-        report_node = ReportNode(
-            accessionNo=report_id,
-            primaryDocumentUrl=primary_document_url,
-            cik=cik
-        )
-        
-        # Extract timestamps with proper parsing
-        filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
-        updated_at = parse_date(report_data.get('updated')) if report_data.get('updated') else None
-        
-        # Process basic fields
-        form_type = report_data.get('formType', '')
-        
-        # Derive isAmendment from formType if not explicitly set
-        is_amendment = report_data.get('isAmendment', False)
-        if not is_amendment and form_type and '/A' in form_type:
-            is_amendment = True
+        try:
+            # Prepare all report data
+            report_node, node_properties, valid_symbols, company_params, sector_params, industry_params, market_params, report_timestamps = self._prepare_report_data(report_id, report_data)
             
-        # Set basic fields
-        report_node.formType = form_type
-        report_node.created = report_data.get('created', '')
-        report_node.is_xml = bool(report_data.get('is_xml', False))
-        report_node.isAmendment = is_amendment
-        report_node.description = report_data.get('description', '')
-        report_node.periodOfReport = report_data.get('periodOfReport', '')
-        report_node.effectivenessDate = report_data.get('effectivenessDate', '')
-        report_node.linkToHtml = report_data.get('linkToHtml', '')
-        report_node.linkToTxt = report_data.get('linkToTxt', '')
-        report_node.linkToFilingDetails = report_data.get('linkToFilingDetails', '')
-        
-        # Set complex fields - these will be serialized by ReportNode properties method
-        report_node.exhibits = report_data.get('exhibits', {})
-        report_node.entities = report_data.get('entities', [])
-        report_node.items = report_data.get('items', [])
-        report_node.symbols = report_data.get('symbols', [])
-        report_node.extracted_sections = report_data.get('extracted_sections', {})
-        report_node.financial_statements = report_data.get('financial_statements', {})
-        report_node.exhibit_contents = report_data.get('exhibit_contents', {})
-        report_node.filing_text_content = report_data.get('filing_text_content', None)
-        
-        # Set xbrl_status flag
-        report_node.xbrl_status = bool(report_data.get('xbrl_status', False))
-        
-        # Extract market session and returns schedule using helper methods
-        report_node.market_session = self._extract_market_session(report_data)
-        report_node.returns_schedule = self._extract_returns_schedule(report_data)
-            
-        return report_node
+            # Execute all database operations
+            return self._execute_report_database_operations(
+                report_id, report_node, node_properties, valid_symbols,
+                company_params, sector_params, industry_params, market_params,
+                report_timestamps
+            )
+                
+        except Exception as e:
+            logger.error(f"Error processing report {report_id}: {e}")
+            return False
+
+
+
 
     def _execute_report_database_operations(self, report_id, report_node, node_properties, valid_symbols, 
                                            company_params, sector_params, industry_params, market_params, 
@@ -926,134 +1083,70 @@ class Neo4jProcessor:
             
             return True
 
-    def _process_deduplicated_report(self, report_id, report_data):
-        """
-        Process report data with deduplication, standardized fields, and efficient symbol relationships.
-        Uses a hash-based MERGE pattern with conditional updates based on timestamps.
-        
-        Args:
-            report_id: Unique identifier for the report (accessionNo)
-            report_data: Dictionary containing report data
-            
-        Returns:
-            bool: Success status
-        """
-        logger.debug(f"Processing deduplicated report {report_id}")
-        
-        try:
-            # Prepare all report data
-            report_node, node_properties, valid_symbols, company_params, sector_params, industry_params, market_params, report_timestamps = self._prepare_report_data(report_id, report_data)
-            
-            # Execute all database operations
-            return self._execute_report_database_operations(
-                report_id, report_node, node_properties, valid_symbols,
-                company_params, sector_params, industry_params, market_params,
-                report_timestamps
-            )
-                
-        except Exception as e:
-            logger.error(f"Error processing report {report_id}: {e}")
-            return False
 
-    # ToDo: is designed to run indefinitely, so it will block the main thread. You need to handle this appropriately.
-    def process_with_pubsub(self):
-        """
-        Process news and reports from Redis to Neo4j using PubSub for immediate notification.
-        Non-blocking and highly efficient compared to polling.
-        """
-        logger.info("Starting event-driven Neo4j processing")
+    def _create_report_node_from_data(self, report_id, report_data):
+        """Create a ReportNode instance from report data"""
+        from utils.EventTraderNodes import ReportNode
         
-        if not hasattr(self, 'event_trader_redis') or not self.event_trader_redis:
-            logger.error("No Redis client available for event-driven processing")
-            return
-        
-        # Ensure Neo4j connection is established
-        if not self.manager:
-            if not self.connect():
-                logger.error("Failed to connect to Neo4j, cannot proceed with processing")
-                return
-        
-        # Create a dedicated PubSub client
-        pubsub = self.event_trader_redis.live_client.create_pubsub_connection()
-        
-        # Subscribe to news channels using consistent RedisKeys methods
-        news_returns_keys = RedisKeys.get_returns_keys(self.event_trader_redis.source)
-        withreturns_channel = news_returns_keys['withreturns']
-        withoutreturns_channel = news_returns_keys['withoutreturns']
-        pubsub.subscribe(withreturns_channel, withoutreturns_channel)
-        logger.info(f"Subscribed to news channels: {withreturns_channel}, {withoutreturns_channel}")
-        
-        # Subscribe to report channels using the same RedisKeys methods
-        report_returns_keys = RedisKeys.get_returns_keys(RedisKeys.SOURCE_REPORTS)
-        report_withreturns_channel = report_returns_keys['withreturns']
-        report_withoutreturns_channel = report_returns_keys['withoutreturns']
-        pubsub.subscribe(report_withreturns_channel, report_withoutreturns_channel)
-        logger.info(f"Subscribed to report channels: {report_withreturns_channel}, {report_withoutreturns_channel}")
-        
-        # Control flag
-        self.pubsub_running = True
-        
-        # Process any existing items first (one-time batch processing)
-        self.process_news_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
-        self.process_reports_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
-        
-        # Event-driven processing loop
-        while self.pubsub_running:
-            try:
-                # Non-blocking message check with 0.1s timeout
-                message = pubsub.get_message(timeout=0.1)
-                
-                if message and message['type'] == 'message':
-                    channel = message['channel']
-                    item_id = message.get('data')
-                    
-                    if not item_id:
-                        continue
-                    
-                    # Determine content type based on channel prefix
-                    if channel.startswith(self.event_trader_redis.source):
-                        # Process news
-                        self._process_pubsub_item(channel, item_id, 'news')
-                    elif channel.startswith(RedisKeys.SOURCE_REPORTS):
-                        # Process report
-                        self._process_pubsub_item(channel, item_id, 'report')
-                
-                # Periodically check for items that might have been missed (every 60 seconds)
-                # This is a safety net, not the primary mechanism
-                current_time = int(time.time())
-                if current_time % 60 == 0:
-                    self.process_news_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
-                    self.process_reports_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
-                    time.sleep(1)  # Prevent repeated execution in the same second
-                    
-            except Exception as e:
-                logger.error(f"Error in PubSub processing: {e}")
-                # Try to reconnect to Neo4j if connection appears to be lost
-                if not self.manager or "Neo4j" in str(e) or "Connection" in str(e):
-                    logger.warning("Attempting to reconnect to Neo4j")
-                    self.connect()
-                time.sleep(1)
-        
-        # Clean up
-        try:
-            pubsub.unsubscribe()
-            pubsub.close()
-        except:
-            pass
+        # Process required fields
+        cik = report_data.get('cik', '')
+        if cik:
+            cik = str(cik).zfill(10)
             
-        logger.info("Stopped event-driven Neo4j processing")
-    
-    def stop_pubsub_processing(self):
-        """
-        Stop the PubSub processing loop gracefully.
-        Called by DataManagerCentral during shutdown.
-        """
-        logger.info("Stopping PubSub processing...")
-        self.pubsub_running = False
-        # Give time for the thread to exit gracefully
-        time.sleep(0.5)
-        logger.info("PubSub processing flag set to stop")
-        return True
+        primary_document_url = report_data.get('primaryDocumentUrl', '')
+        
+        # Create report node with required fields
+        report_node = ReportNode(
+            accessionNo=report_id,
+            primaryDocumentUrl=primary_document_url,
+            cik=cik
+        )
+        
+        # Extract timestamps with proper parsing
+        filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
+        updated_at = parse_date(report_data.get('updated')) if report_data.get('updated') else None
+        
+        # Process basic fields
+        form_type = report_data.get('formType', '')
+        
+        # Derive isAmendment from formType if not explicitly set
+        is_amendment = report_data.get('isAmendment', False)
+        if not is_amendment and form_type and '/A' in form_type:
+            is_amendment = True
+            
+        # Set basic fields
+        report_node.formType = form_type
+        report_node.created = report_data.get('created', '')
+        report_node.is_xml = bool(report_data.get('is_xml', False))
+        report_node.isAmendment = is_amendment
+        report_node.description = report_data.get('description', '')
+        report_node.periodOfReport = report_data.get('periodOfReport', '')
+        report_node.effectivenessDate = report_data.get('effectivenessDate', '')
+        report_node.linkToHtml = report_data.get('linkToHtml', '')
+        report_node.linkToTxt = report_data.get('linkToTxt', '')
+        report_node.linkToFilingDetails = report_data.get('linkToFilingDetails', '')
+        
+        # Set complex fields - these will be serialized by ReportNode properties method
+        report_node.exhibits = report_data.get('exhibits', {})
+        report_node.entities = report_data.get('entities', [])
+        report_node.items = report_data.get('items', [])
+        report_node.symbols = report_data.get('symbols', [])
+        report_node.extracted_sections = report_data.get('extracted_sections', {})
+        report_node.financial_statements = report_data.get('financial_statements', {})
+        report_node.exhibit_contents = report_data.get('exhibit_contents', {})
+        report_node.filing_text_content = report_data.get('filing_text_content', None)
+        
+        # Set xbrl_status flag
+        report_node.xbrl_status = bool(report_data.get('xbrl_status', False))
+        
+        # Extract market session and returns schedule using helper methods
+        report_node.market_session = self._extract_market_session(report_data)
+        report_node.returns_schedule = self._extract_returns_schedule(report_data)
+            
+        return report_node
+
+
+
     
     def _process_report_companies(self, report_json: Dict[str, Any], company_nodes: Dict[str, 'CompanyNode']):
         """
@@ -1106,171 +1199,149 @@ class Neo4jProcessor:
                 
             company_nodes[cik] = company
 
-    def _create_influences_relationships(self, session, source_id, source_label, entity_type, params, create_node_cypher=None):
-        """
-        Generic method to create INFLUENCES relationships between a source node (News or Report) and various entity types.
-        Uses Neo4jManager.create_relationships for the actual implementation.
-        
-        Args:
-            session: Neo4j session (not used directly but kept for interface compatibility)
-            source_id: ID of the source node (report or news)
-            source_label: Label of the source node ("News" or "Report")
-            entity_type: Type of entity to connect (Company, Sector, Industry, MarketIndex)
-            params: List of parameter dictionaries for the UNWIND operation
-            create_node_cypher: Optional custom Cypher for node creation/update (not used)
-            
-        Returns:
-            Number of relationships created
-        """
-        if not params:
-            return 0
-            
-        # Import here to avoid circular imports
-        from XBRL.Neo4jManager import Neo4jManager
-        
-        # Create Neo4jManager instance if we don't already have one
-        # This is a temporary instance just for this operation
-        neo4j_manager = self.manager if hasattr(self, 'manager') and isinstance(self.manager, Neo4jManager) else Neo4jManager(
-            uri=self.uri,
-            username=self.username,
-            password=self.password
-        )
-        
-        try:
-            count = 0
-            if entity_type == "Company":
-                count = neo4j_manager.create_relationships(
-                    source_label=source_label, 
-                    source_id_field="id", 
-                    source_id_value=source_id,
-                    target_label="Company", 
-                    target_match_clause="{cik: param.cik}", 
-                    rel_type="INFLUENCES", 
-                    params=params
-                )
-            elif entity_type == "Sector":
-                count = neo4j_manager.create_relationships(
-                    source_label=source_label, 
-                    source_id_field="id", 
-                    source_id_value=source_id,
-                    target_label="Sector", 
-                    target_match_clause="{id: param.sector_id}", 
-                    rel_type="INFLUENCES", 
-                    params=params,
-                    target_create_properties="target.name = param.sector_name, target.etf = param.sector_etf",
-                    target_set_properties="""
-                        target.etf = CASE 
-                            WHEN param.sector_etf IS NOT NULL AND (target.etf IS NULL OR target.etf = '') 
-                            THEN param.sector_etf ELSE target.etf 
-                        END
-                    """
-                )
-            elif entity_type == "Industry":
-                count = neo4j_manager.create_relationships(
-                    source_label=source_label, 
-                    source_id_field="id", 
-                    source_id_value=source_id,
-                    target_label="Industry", 
-                    target_match_clause="{id: param.industry_id}", 
-                    rel_type="INFLUENCES", 
-                    params=params,
-                    target_create_properties="target.name = param.industry_name, target.etf = param.industry_etf",
-                    target_set_properties="""
-                        target.etf = CASE 
-                            WHEN param.industry_etf IS NOT NULL AND (target.etf IS NULL OR target.etf = '') 
-                            THEN param.industry_etf ELSE target.etf 
-                        END
-                    """
-                )
-            elif entity_type == "MarketIndex":
-                count = neo4j_manager.create_relationships(
-                    source_label=source_label, 
-                    source_id_field="id", 
-                    source_id_value=source_id,
-                    target_label="MarketIndex", 
-                    target_match_clause="{id: 'SPY'}", 
-                    rel_type="INFLUENCES", 
-                    params=params,
-                    target_create_properties="target.name = 'S&P 500 ETF', target.ticker = 'SPY', target.etf = 'SPY'",
-                    target_set_properties="""
-                        target.ticker = 'SPY', target.etf = 'SPY',
-                        target.name = CASE 
-                            WHEN target.name IS NULL OR target.name = '' 
-                            THEN 'S&P 500 ETF' ELSE target.name 
-                        END
-                    """
-                )
-            
-            if count > 0:
-                logger.info(f"Created {count} INFLUENCES relationships to {entity_type.lower()}s")
-                
-            return count
-        finally:
-            # Close the temporary manager if we created one
-            if neo4j_manager is not self.manager and hasattr(neo4j_manager, 'close'):
-                neo4j_manager.close()
 
-        
-    def _process_xbrl(self, session, report_id, cik, accessionNo):
+# endregion
+
+
+# region: Common Utilities & Helpers : _extract_symbols_from_data, _extract_market_session, _extract_returns_schedule, _extract_return_metrics, _parse_list_field, _prepare_entity_relationship_params, _prepare_report_relationships
+
+
+    def _extract_symbols_from_data(self, data_item, symbols_list=None):
         """
-        Process a single XBRL report.
+        Extract and normalize symbols from data item (news or report).
+        Handles both direct symbols list and metadata.instruments sources.
         
         Args:
-            session: Neo4j session
-            report_id: Report ID
-            cik: Company CIK
-            accessionNo: Report accession number
+            data_item (dict): News or report data dictionary
+            symbols_list (list or str, optional): Explicit symbols list to process
+                                                 (if None, will use data_item.get('symbols'))
+        
+        Returns:
+            list: List of uppercase symbol strings
+        """
+        symbols = []
+        
+        # If no explicit symbols_list provided, try to get from data_item
+        if symbols_list is None:
+            symbols_list = data_item.get('symbols', [])
+        
+        # Process symbols list
+        if isinstance(symbols_list, list):
+            symbols = [s.upper() for s in symbols_list if s]
+        elif isinstance(symbols_list, str):
+            try:
+                # Try JSON parsing for array-like strings
+                if symbols_list.startswith('[') and symbols_list.endswith(']'):
+                    content = symbols_list.replace("'", '"')  # Make JSON-compatible
+                    symbols = [s.upper() for s in json.loads(content) if s]
+                # Try comma-separated string
+                elif ',' in symbols_list:
+                    symbols = [s.strip().upper() for s in symbols_list.split(',') if s.strip()]
+                else:
+                    # Single symbol
+                    symbols = [symbols_list.upper()]
+            except:
+                # Last resort parsing for malformed strings
+                clean = symbols_list.strip('[]').replace("'", "").replace('"', "")
+                symbols = [s.strip().upper() for s in clean.split(',') if s.strip()]
+        
+        # Extract additional symbols from metadata if available
+        if 'metadata' in data_item and 'instruments' in data_item['metadata']:
+            for instrument in data_item['metadata']['instruments']:
+                symbol = instrument.get('symbol', '')
+                if symbol and symbol.upper() not in symbols:
+                    symbols.append(symbol.upper())
+                    
+        return symbols
+
+
+
+    def _extract_market_session(self, data_item):
+        """
+            str: Market session value (e.g., 'pre_market', 'in_market', 'post_market') or empty string
+        """
+        if 'metadata' in data_item and 'event' in data_item['metadata']:
+            return data_item['metadata']['event'].get('market_session', '')
+        return ''
+    
+    def _extract_returns_schedule(self, data_item):
+        """
+        Extract and parse returns schedule from data item.
+        
+        Args:
+            data_item (dict): News or report data dictionary
             
         Returns:
-            bool: Success status
+            dict: Dictionary with parsed return schedule dates in ISO format
         """
-        try:
-            # Update status to PROCESSING
-            session.run(
-                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status",
-                id=report_id, status="PROCESSING"
-            )
+        returns_schedule = {}
+        
+        if 'metadata' in data_item and 'returns_schedule' in data_item['metadata']:
+            raw_schedule = data_item['metadata']['returns_schedule']
             
-            # Import needed components
-            from XBRL.xbrl_processor import process_report
-            from XBRL.Neo4jManager import Neo4jManager
+            # Parse each date in the schedule
+            for key, time_str in raw_schedule.items():
+                if time_str:
+                    try:
+                        date_obj = parse_date(time_str)
+                        if date_obj:
+                            returns_schedule[key] = date_obj.isoformat()
+                    except Exception as e:
+                        logger.warning(f"Error parsing returns schedule date '{time_str}': {e}")
+        
+        return returns_schedule
+
+
+    def _extract_return_metrics(self, news_item, symbol) -> Dict:
+        """Extract return metrics for a symbol from news data"""
+        metrics = {}
+        symbol_upper = symbol.upper()
+        
+        if 'returns' not in news_item:
+            return metrics
+        
+        # Find symbol returns data
+        symbol_returns = None
+        
+        # Structure 1: {'returns': {'AAPL': {...}}}
+        if symbol_upper in news_item['returns']:
+            symbol_returns = news_item['returns'][symbol_upper]
+        
+        # Structure 2: {'returns': {'symbols': {'AAPL': {...}}}}
+        elif 'symbols' in news_item['returns'] and symbol_upper in news_item['returns']['symbols']:
+            symbol_returns = news_item['returns']['symbols'][symbol_upper]
+        
+        if not symbol_returns:
+            return metrics
+        
+        # Process different return timeframes
+        for timeframe in ['hourly_return', 'session_return', 'daily_return']:
+            if timeframe not in symbol_returns:
+                continue
+                
+            if not isinstance(symbol_returns[timeframe], dict):
+                logger.warning(f"Expected dictionary for {timeframe} but got {type(symbol_returns[timeframe])} for symbol {symbol}")
+                continue
             
-            # Create Neo4j manager using the exact same approach that worked in the test
-            neo4j_manager = Neo4jManager(
-                uri=self.uri,
-                username=self.username,
-                password=self.password
-            )
+            short_timeframe = timeframe.split('_')[0]  # hourly, session, daily
             
-            # Process the report directly - keep it simple
-            logger.info(f"Processing XBRL for report {report_id}")
-            process_report(
-                neo4j=neo4j_manager,
-                cik=cik,
-                accessionNo=accessionNo,
-                testing=False
-            )
+            # Extract stock metrics
+            if 'stock' in symbol_returns[timeframe]:
+                metrics[f"{short_timeframe}_stock"] = symbol_returns[timeframe]['stock']
             
-            # Update status to COMPLETED
-            session.run(
-                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status",
-                id=report_id, status="COMPLETED"
-            )
+            # Extract sector metrics
+            if 'sector' in symbol_returns[timeframe]:
+                metrics[f"{short_timeframe}_sector"] = symbol_returns[timeframe]['sector']
             
-            logger.info(f"XBRL processing completed for report {report_id}")
-            self.xbrl_processed = True
-            return True
+            # Extract industry metrics
+            if 'industry' in symbol_returns[timeframe]:
+                metrics[f"{short_timeframe}_industry"] = symbol_returns[timeframe]['industry']
             
-        except Exception as e:
-            error_msg = str(e)[:255]  # Limit error message length
-            logger.error(f"Error processing XBRL for report {report_id}: {error_msg}")
-            
-            # Update status to FAILED
-            session.run(
-                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
-                id=report_id, status="FAILED", error=error_msg
-            )
-            return False
+            # Extract macro metrics
+            if 'macro' in symbol_returns[timeframe]:
+                metrics[f"{short_timeframe}_macro"] = symbol_returns[timeframe]['macro']
+        
+        return metrics
 
     def _parse_list_field(self, field_value) -> List:
         """Parse a field that could be a list or string representation of a list"""
@@ -1288,185 +1359,7 @@ class Neo4jProcessor:
             
         return []
 
-    def process_reports_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
-        """
-        Process SEC reports from Redis to Neo4j
-        Similar to process_news_to_neo4j but for SEC reports
-        
-        Args:
-            batch_size: Number of records to process at once
-            max_items: Maximum number of items to process (None for all)
-            include_without_returns: Whether to include reports without returns
-            
-        Returns:
-            bool: True if processing is complete, False if it was interrupted
-        """
-        from utils.EventTraderNodes import ReportNode
-        from utils.redis_constants import RedisKeys
-        
-        # Get Redis instance if available
-        if not self.event_trader_redis:
-            logger.error("No Redis instance available, cannot process reports")
-            return False
-            
-        # Process reports with returns
-        withreturns_keys = []
-        try:
-            # Get report keys with returns
-            withreturns_namespace = RedisKeys.get_key(
-                source_type=RedisKeys.SOURCE_REPORTS, 
-                key_type=RedisKeys.SUFFIX_WITHRETURNS
-            )
-            withreturns_pattern = f"{withreturns_namespace}*"
-            withreturns_keys = list(self.event_trader_redis.history_client.client.scan_iter(match=withreturns_pattern))
-            
-            if max_items is not None:
-                withreturns_keys = withreturns_keys[:max_items]
-                
-            logger.info(f"Found {len(withreturns_keys)} reports with returns")
-        except Exception as e:
-            logger.error(f"Error getting withreturns keys: {e}")
-            
-        # Process reports without returns if requested
-        withoutreturns_keys = []
-        if include_without_returns:
-            try:
-                # Get report keys without returns
-                withoutreturns_namespace = RedisKeys.get_key(
-                    source_type=RedisKeys.SOURCE_REPORTS, 
-                    key_type=RedisKeys.SUFFIX_WITHOUTRETURNS
-                )
-                withoutreturns_pattern = f"{withoutreturns_namespace}*"
-                withoutreturns_keys = list(self.event_trader_redis.history_client.client.scan_iter(match=withoutreturns_pattern))
-                
-                if max_items is not None:
-                    withoutreturns_keys = withoutreturns_keys[:max_items]
-                    
-                logger.info(f"Found {len(withoutreturns_keys)} reports without returns")
-            except Exception as e:
-                logger.error(f"Error getting withoutreturns keys: {e}")
-                
-        # Combine both key sets
-        all_keys = withreturns_keys + withoutreturns_keys
-        if not all_keys:
-            logger.info("No report keys found to process")
-            return True
-            
-        total_reports = len(all_keys)
-        logger.info(f"Processing {total_reports} total reports")
-        
-        # Process in batches
-        processed_count = 0
-        error_count = 0
-        
-        for batch_start in range(0, len(all_keys), batch_size):
-            batch_keys = all_keys[batch_start:batch_start + batch_size]
-            batch_size_actual = len(batch_keys)
-            
-            logger.info(f"Processing batch {batch_start//batch_size + 1}, items {batch_start+1}-{batch_start+batch_size_actual} of {total_reports}")
-            
-            # Process each report in the batch
-            for key in batch_keys:
-                try:
-                    # Extract key parts
-                    parts = key.split(':')
-                    report_id = parts[-1] if len(parts) > 0 else key
-                    
-                    # Get report data from Redis
-                    raw_data = self.event_trader_redis.history_client.get(key)
-                    if not raw_data:
-                        logger.warning(f"No data found for key {key}")
-                        continue
-                        
-                    # Parse JSON data
-                    report_data = json.loads(raw_data)
-                    
-                    # Use accessionNo as report ID if available
-                    if 'accessionNo' in report_data:
-                        report_id = report_data['accessionNo']
-                    
-                    # Process report data with deduplication
-                    success = self._process_deduplicated_report(report_id, report_data)
-                    
-                    if success:
-                        processed_count += 1
-                    else:
-                        error_count += 1
-                        
-                except Exception as e:
-                    logger.error(f"Error processing report key {key}: {e}")
-                    error_count += 1
-                
-            logger.info(f"Processed batch {batch_start//batch_size + 1}/{(len(all_keys) + batch_size - 1)//batch_size}")
-            
-        # Summary and status
-        logger.info(f"Finished processing reports to Neo4j. Processed: {processed_count}, Errors: {error_count}")
-        
-        return processed_count > 0 or error_count == 0
-        
-    def _process_pubsub_item(self, channel, item_id, content_type='news'):
-        """
-        Process an item update from PubSub (works for both news and reports)
-        
-        Args:
-            channel: The Redis channel the message came from
-            item_id: The ID of the item to process
-            content_type: 'news' or 'report'
-        """
-        try:
-            logger.info(f"Processing {content_type} update from {channel}: {item_id}")
-            
-            # Determine namespace from channel
-            namespace = RedisKeys.SUFFIX_WITHRETURNS if RedisKeys.SUFFIX_WITHRETURNS in channel else RedisKeys.SUFFIX_WITHOUTRETURNS
-            
-            # Process based on content type
-            if content_type == 'news':
-                # Get the news data using standard key format
-                key = RedisKeys.get_key(
-                    source_type=self.event_trader_redis.source,
-                    key_type=namespace,
-                    identifier=item_id
-                )
-                
-                # Get and process the news item
-                raw_data = self.event_trader_redis.history_client.get(key)
-                if raw_data:
-                    news_data = json.loads(raw_data)
-                    success = self._process_deduplicated_news(
-                        news_id=f"bzNews_{item_id.split('.')[0]}", 
-                        news_data=news_data
-                    )
-                    logger.info(f"Successfully processed news {item_id}")
-                else:
-                    logger.warning(f"No data found for news {item_id}")
-            else:  # report
-                # Get the report data using standard key format
-                key = RedisKeys.get_key(
-                    source_type=RedisKeys.SOURCE_REPORTS,
-                    key_type=namespace,
-                    identifier=item_id
-                )
-                
-                # Get and process the report
-                raw_data = self.event_trader_redis.history_client.get(key)
-                if raw_data:
-                    report_data = json.loads(raw_data)
-                    
-                    # Use accessionNo as report ID if available
-                    report_id = report_data.get('accessionNo', item_id)
-                    
-                    # Process report with deduplication (same approach as news)
-                    success = self._process_deduplicated_report(
-                        report_id=report_id,
-                        report_data=report_data
-                    )
-                    
-                    logger.info(f"Successfully processed report {item_id}")
-                else:
-                    logger.warning(f"No data found for report {item_id}")
-                
-        except Exception as e:
-            logger.error(f"Error processing {content_type} update for {item_id}: {e}")
+
 
     def _prepare_entity_relationship_params(self, data_item, symbols, universe_data, ticker_to_cik, timestamp):
         """
@@ -1678,6 +1571,186 @@ class Neo4jProcessor:
             ticker_to_cik=ticker_to_cik,
             timestamp=filed_str
         )
+
+
+# endregion
+
+
+# region: Database Operation Helpers : _create_influences_relationships, _process_xbrl
+
+
+    def _create_influences_relationships(self, session, source_id, source_label, entity_type, params, create_node_cypher=None):
+        """
+        Generic method to create INFLUENCES relationships between a source node (News or Report) and various entity types.
+        Uses Neo4jManager.create_relationships for the actual implementation.
+        
+        Args:
+            session: Neo4j session (not used directly but kept for interface compatibility)
+            source_id: ID of the source node (report or news)
+            source_label: Label of the source node ("News" or "Report")
+            entity_type: Type of entity to connect (Company, Sector, Industry, MarketIndex)
+            params: List of parameter dictionaries for the UNWIND operation
+            create_node_cypher: Optional custom Cypher for node creation/update (not used)
+            
+        Returns:
+            Number of relationships created
+        """
+        if not params:
+            return 0
+            
+        # Import here to avoid circular imports
+        from XBRL.Neo4jManager import Neo4jManager
+        
+        # Create Neo4jManager instance if we don't already have one
+        # This is a temporary instance just for this operation
+        neo4j_manager = self.manager if hasattr(self, 'manager') and isinstance(self.manager, Neo4jManager) else Neo4jManager(
+            uri=self.uri,
+            username=self.username,
+            password=self.password
+        )
+        
+        try:
+            count = 0
+            if entity_type == "Company":
+                count = neo4j_manager.create_relationships(
+                    source_label=source_label, 
+                    source_id_field="id", 
+                    source_id_value=source_id,
+                    target_label="Company", 
+                    target_match_clause="{cik: param.cik}", 
+                    rel_type="INFLUENCES", 
+                    params=params
+                )
+            elif entity_type == "Sector":
+                count = neo4j_manager.create_relationships(
+                    source_label=source_label, 
+                    source_id_field="id", 
+                    source_id_value=source_id,
+                    target_label="Sector", 
+                    target_match_clause="{id: param.sector_id}", 
+                    rel_type="INFLUENCES", 
+                    params=params,
+                    target_create_properties="target.name = param.sector_name, target.etf = param.sector_etf",
+                    target_set_properties="""
+                        target.etf = CASE 
+                            WHEN param.sector_etf IS NOT NULL AND (target.etf IS NULL OR target.etf = '') 
+                            THEN param.sector_etf ELSE target.etf 
+                        END
+                    """
+                )
+            elif entity_type == "Industry":
+                count = neo4j_manager.create_relationships(
+                    source_label=source_label, 
+                    source_id_field="id", 
+                    source_id_value=source_id,
+                    target_label="Industry", 
+                    target_match_clause="{id: param.industry_id}", 
+                    rel_type="INFLUENCES", 
+                    params=params,
+                    target_create_properties="target.name = param.industry_name, target.etf = param.industry_etf",
+                    target_set_properties="""
+                        target.etf = CASE 
+                            WHEN param.industry_etf IS NOT NULL AND (target.etf IS NULL OR target.etf = '') 
+                            THEN param.industry_etf ELSE target.etf 
+                        END
+                    """
+                )
+            elif entity_type == "MarketIndex":
+                count = neo4j_manager.create_relationships(
+                    source_label=source_label, 
+                    source_id_field="id", 
+                    source_id_value=source_id,
+                    target_label="MarketIndex", 
+                    target_match_clause="{id: 'SPY'}", 
+                    rel_type="INFLUENCES", 
+                    params=params,
+                    target_create_properties="target.name = 'S&P 500 ETF', target.ticker = 'SPY', target.etf = 'SPY'",
+                    target_set_properties="""
+                        target.ticker = 'SPY', target.etf = 'SPY',
+                        target.name = CASE 
+                            WHEN target.name IS NULL OR target.name = '' 
+                            THEN 'S&P 500 ETF' ELSE target.name 
+                        END
+                    """
+                )
+            
+            if count > 0:
+                logger.info(f"Created {count} INFLUENCES relationships to {entity_type.lower()}s")
+                
+            return count
+        finally:
+            # Close the temporary manager if we created one
+            if neo4j_manager is not self.manager and hasattr(neo4j_manager, 'close'):
+                neo4j_manager.close()
+
+        
+    def _process_xbrl(self, session, report_id, cik, accessionNo):
+        """
+        Process a single XBRL report.
+        
+        Args:
+            session: Neo4j session
+            report_id: Report ID
+            cik: Company CIK
+            accessionNo: Report accession number
+            
+        Returns:
+            bool: Success status
+        """
+        try:
+            # Update status to PROCESSING
+            session.run(
+                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status",
+                id=report_id, status="PROCESSING"
+            )
+            
+            # Import needed components
+            from XBRL.xbrl_processor import process_report
+            from XBRL.Neo4jManager import Neo4jManager
+            
+            # Create Neo4j manager using the exact same approach that worked in the test
+            neo4j_manager = Neo4jManager(
+                uri=self.uri,
+                username=self.username,
+                password=self.password
+            )
+            
+            # Process the report directly - keep it simple
+            logger.info(f"Processing XBRL for report {report_id}")
+            process_report(
+                neo4j=neo4j_manager,
+                cik=cik,
+                accessionNo=accessionNo,
+                testing=False
+            )
+            
+            # Update status to COMPLETED
+            session.run(
+                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status",
+                id=report_id, status="COMPLETED"
+            )
+            
+            logger.info(f"XBRL processing completed for report {report_id}")
+            self.xbrl_processed = True
+            return True
+            
+        except Exception as e:
+            error_msg = str(e)[:255]  # Limit error message length
+            logger.error(f"Error processing XBRL for report {report_id}: {error_msg}")
+            
+            # Update status to FAILED
+            session.run(
+                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
+                id=report_id, status="FAILED", error=error_msg
+            )
+            return False
+
+
+# endregion
+
+
+
+
 
 
 
