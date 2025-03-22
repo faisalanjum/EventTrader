@@ -314,195 +314,18 @@ class Neo4jProcessor:
             # Extract symbols mentioned in news using the unified method
             symbols = self._extract_symbols_from_data(news_data)
             
-            # Create a mapping of symbol to benchmarks from the instruments array - only for ETF properties
-            symbol_benchmarks = {}
-            if 'metadata' in news_data and 'instruments' in news_data['metadata']:
-                for instrument in news_data['metadata']['instruments']:
-                    symbol = instrument.get('symbol', '')
-                    if symbol and 'benchmarks' in instrument:
-                        symbol_benchmarks[symbol.upper()] = {
-                            'sector': instrument['benchmarks'].get('sector', ''),
-                            'industry': instrument['benchmarks'].get('industry', '')
-                        }
-            
             # Extract timestamps with proper parsing
             created_at, updated_at = parse_news_dates(news_data)
+            timestamp = created_at.isoformat() if created_at else ""
             
-            # Prepare data structures for batch symbol processing
-            valid_symbols = []
-            symbol_data = {}
-            
-            # Preprocess symbols to collect metrics and filter valid ones
-            for symbol in symbols:
-                symbol_upper = symbol.upper()
-                cik = ticker_to_cik.get(symbol_upper)
-                if not cik:
-                    logger.warning(f"No CIK found for symbol {symbol_upper}")
-                    continue  # Skip symbols without CIK
-                
-                # Get return metrics for this symbol
-                metrics = self._extract_return_metrics(news_data, symbol_upper)
-                
-                # Get sector and industry information - ONLY from company data
-                company_data = universe_data.get(symbol_upper, {})
-                sector = company_data.get('sector')
-                industry = company_data.get('industry')
-                
-                # Skip symbol processing if missing sector or industry data
-                if not sector or not industry:
-                    logger.warning(f"Symbol {symbol_upper} is missing sector or industry data - skipping relationship creation")
-                    continue
-                    
-                # Only add to valid symbols if it passed all checks
-                valid_symbols.append(symbol_upper)
-                
-                # Store data for later batch processing
-                symbol_data[symbol_upper] = {
-                    'cik': cik,
-                    'metrics': metrics,
-                    'timestamp': created_at.isoformat() if created_at else "",
-                    'sector': sector,
-                    'industry': industry
-                }
-            
-            # Prepare parameters for each relationship type
-            company_params = []
-            sector_params = []
-            industry_params = []
-            market_params = []
-
-            # Prepare company relationship parameters
-            for symbol in valid_symbols:
-                symbol_data_item = symbol_data[symbol]
-                # Prepare metrics as property
-                props = {
-                    'symbol': symbol,
-                    'created_at': symbol_data_item['timestamp']
-                }
-                
-                # Add stock metrics
-                for timeframe in ['hourly', 'session', 'daily']:
-                    metric_key = f"{timeframe}_stock"
-                    if metric_key in symbol_data_item['metrics']:
-                        props[metric_key] = symbol_data_item['metrics'][metric_key]
-                
-                company_params.append({
-                    'cik': symbol_data_item['cik'],
-                    'properties': props
-                })
-            
-            # Prepare sector relationship parameters
-            for symbol in valid_symbols:
-                symbol_data_item = symbol_data[symbol]
-                sector = symbol_data_item['sector']
-                
-                # Prepare metrics as property
-                props = {
-                    'symbol': symbol,
-                    'created_at': symbol_data_item['timestamp']
-                }
-                
-                # Add sector metrics
-                for timeframe in ['hourly', 'session', 'daily']:
-                    metric_key = f"{timeframe}_sector"
-                    if metric_key in symbol_data_item['metrics']:
-                        props[metric_key] = symbol_data_item['metrics'][metric_key]
-                
-                # Get sector_etf for property only - not for identification
-                sector_etf = None
-                company_data = universe_data.get(symbol, {})
-                
-                # Get ETF info from company data
-                if 'sector_etf' in company_data and company_data['sector_etf']:
-                    sector_etf = company_data['sector_etf']
-                # Fallback to benchmark data for ETF property only if needed
-                elif symbol in symbol_benchmarks and symbol_benchmarks[symbol]['sector']:
-                    sector_etf = symbol_benchmarks[symbol]['sector']
-                
-                # Normalize sector ID and ensure it's not just the ETF ticker
-                sector_id = sector.replace(" ", "")
-                
-                # Protection against using ETF as ID - for sectors
-                if sector_etf and sector_id == sector_etf:
-                    # Instead of warning, use concrete prevention
-                    logger.error(f"Sector ID {sector_id} matches ETF ticker {sector_etf} - using prefixed format to prevent this")
-                    # Use prefixed format to avoid this issue
-                    sector_id = f"Sector_{sector.replace(' ', '_')}"
-                
-                sector_params.append({
-                    'sector_id': sector_id,
-                    'sector_name': sector,
-                    'sector_etf': sector_etf,
-                    'properties': props
-                })
-            
-            # Prepare industry relationship parameters
-            for symbol in valid_symbols:
-                symbol_data_item = symbol_data[symbol]
-                industry = symbol_data_item['industry']
-                
-                # Prepare metrics as property
-                props = {
-                    'symbol': symbol,
-                    'created_at': symbol_data_item['timestamp']
-                }
-                
-                # Add industry metrics
-                for timeframe in ['hourly', 'session', 'daily']:
-                    metric_key = f"{timeframe}_industry"
-                    if metric_key in symbol_data_item['metrics']:
-                        props[metric_key] = symbol_data_item['metrics'][metric_key]
-                
-                # Get industry_etf for property only - not for identification
-                industry_etf = None
-                company_data = universe_data.get(symbol, {})
-                
-                # Get ETF info from company data
-                if 'industry_etf' in company_data and company_data['industry_etf']:
-                    industry_etf = company_data['industry_etf']
-                # Fallback to benchmark data for ETF property only if needed
-                elif symbol in symbol_benchmarks and symbol_benchmarks[symbol]['industry']:
-                    industry_etf = symbol_benchmarks[symbol]['industry']
-                
-                # Normalize industry ID and ensure it's not just the ETF ticker
-                industry_id = industry.replace(" ", "")
-                
-                # Protection against using ETF as ID - for industries
-                if industry_etf and industry_id == industry_etf:
-                    # Instead of warning, use concrete prevention
-                    logger.error(f"Industry ID {industry_id} matches ETF ticker {industry_etf} - using prefixed format to prevent this")
-                    # Use prefixed format to avoid this issue
-                    industry_id = f"Industry_{industry.replace(' ', '_')}"
-                
-                industry_params.append({
-                    'industry_id': industry_id,
-                    'industry_name': industry,
-                    'industry_etf': industry_etf,
-                    'properties': props
-                })
-            
-            # Prepare market index relationship parameters
-            for symbol in valid_symbols:
-                symbol_data_item = symbol_data[symbol]
-                has_macro_metrics = False
-                
-                # Prepare metrics as property
-                props = {
-                    'symbol': symbol,
-                    'created_at': symbol_data_item['timestamp']
-                }
-                
-                # Add macro metrics
-                for timeframe in ['hourly', 'session', 'daily']:
-                    metric_key = f"{timeframe}_macro"
-                    if metric_key in symbol_data_item['metrics']:
-                        props[metric_key] = symbol_data_item['metrics'][metric_key]
-                        has_macro_metrics = True
-                
-                if has_macro_metrics:
-                    market_params.append({
-                        'properties': props
-                    })
+            # Use the common method to prepare relationship parameters
+            valid_symbols, company_params, sector_params, industry_params, market_params = self._prepare_entity_relationship_params(
+                data_item=news_data,
+                symbols=symbols,
+                universe_data=universe_data,
+                ticker_to_cik=ticker_to_cik,
+                timestamp=timestamp
+            )
             
             # Execute deduplication and conditional update logic with direct Cypher
             # KEEP ALL DATABASE OPERATIONS INSIDE THIS SINGLE SESSION CONTEXT
@@ -804,175 +627,18 @@ class Neo4jProcessor:
 
     def _prepare_report_relationships(self, report_data, symbols, universe_data, ticker_to_cik):
         """Prepare relationship parameters for symbols"""
-        valid_symbols = []
-        symbol_data = {}
-        
         # Extract timestamps with proper parsing
         filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
+        filed_str = filed_at.isoformat() if filed_at else ""
         
-        # Preprocess symbols to collect metrics and filter valid ones
-        for symbol in symbols:
-            symbol_upper = symbol.upper()
-            cik = ticker_to_cik.get(symbol_upper)
-            if not cik:
-                logger.warning(f"No CIK found for symbol {symbol_upper}")
-                continue  # Skip symbols without CIK
-            
-            # Get return metrics for this symbol
-            metrics = self._extract_return_metrics(report_data, symbol_upper)
-            
-            # Get sector and industry information
-            company_data = universe_data.get(symbol_upper, {})
-            sector = company_data.get('sector')
-            industry = company_data.get('industry')
-            
-            # Skip symbol processing if missing sector or industry data
-            if not sector or not industry:
-                logger.warning(f"Symbol {symbol_upper} is missing sector or industry data - skipping relationship creation")
-                continue
-                
-            # Only add to valid symbols if it passed all checks
-            valid_symbols.append(symbol_upper)
-            
-            # Store data for later batch processing
-            symbol_data[symbol_upper] = {
-                'cik': cik,
-                'metrics': metrics,
-                'timestamp': filed_at.isoformat() if filed_at else "",
-                'sector': sector,
-                'industry': industry
-            }
-            
-        # Prepare parameters for each relationship type
-        company_params = []
-        sector_params = []
-        industry_params = []
-        market_params = []
-        
-        # Prepare company relationship parameters
-        for symbol in valid_symbols:
-            symbol_data_item = symbol_data[symbol]
-            # Prepare metrics as property
-            props = {
-                'symbol': symbol,
-                'created_at': symbol_data_item['timestamp']
-            }
-            
-            # Add stock metrics
-            for timeframe in ['hourly', 'session', 'daily']:
-                metric_key = f"{timeframe}_stock"
-                if metric_key in symbol_data_item['metrics']:
-                    props[metric_key] = symbol_data_item['metrics'][metric_key]
-            
-            company_params.append({
-                'cik': symbol_data_item['cik'],
-                'properties': props
-            })
-        
-        # Prepare sector relationship parameters
-        for symbol in valid_symbols:
-            symbol_data_item = symbol_data[symbol]
-            sector = symbol_data_item['sector']
-            
-            # Prepare metrics as property
-            props = {
-                'symbol': symbol,
-                'created_at': symbol_data_item['timestamp']
-            }
-            
-            # Add sector metrics
-            for timeframe in ['hourly', 'session', 'daily']:
-                metric_key = f"{timeframe}_sector"
-                if metric_key in symbol_data_item['metrics']:
-                    props[metric_key] = symbol_data_item['metrics'][metric_key]
-            
-            # Get sector_etf for property only - not for identification
-            sector_etf = None
-            company_data = universe_data.get(symbol, {})
-            
-            # Get ETF info from company data
-            if 'sector_etf' in company_data and company_data['sector_etf']:
-                sector_etf = company_data['sector_etf']
-            
-            # Normalize sector ID
-            sector_id = sector.replace(" ", "")
-            
-            # Protection against using ETF as ID - for sectors
-            if sector_etf and sector_id == sector_etf:
-                logger.error(f"Sector ID {sector_id} matches ETF ticker {sector_etf} - using prefixed format to prevent this")
-                sector_id = f"Sector_{sector.replace(' ', '_')}"
-            
-            sector_params.append({
-                'sector_id': sector_id,
-                'sector_name': sector,
-                'sector_etf': sector_etf,
-                'properties': props
-            })
-        
-        # Prepare industry relationship parameters
-        for symbol in valid_symbols:
-            symbol_data_item = symbol_data[symbol]
-            industry = symbol_data_item['industry']
-            
-            # Prepare metrics as property
-            props = {
-                'symbol': symbol,
-                'created_at': symbol_data_item['timestamp']
-            }
-            
-            # Add industry metrics
-            for timeframe in ['hourly', 'session', 'daily']:
-                metric_key = f"{timeframe}_industry"
-                if metric_key in symbol_data_item['metrics']:
-                    props[metric_key] = symbol_data_item['metrics'][metric_key]
-            
-            # Get industry_etf for property only - not for identification
-            industry_etf = None
-            company_data = universe_data.get(symbol, {})
-            
-            # Get ETF info from company data
-            if 'industry_etf' in company_data and company_data['industry_etf']:
-                industry_etf = company_data['industry_etf']
-            
-            # Normalize industry ID
-            industry_id = industry.replace(" ", "")
-            
-            # Protection against using ETF as ID - for industries
-            if industry_etf and industry_id == industry_etf:
-                logger.error(f"Industry ID {industry_id} matches ETF ticker {industry_etf} - using prefixed format to prevent this")
-                industry_id = f"Industry_{industry.replace(' ', '_')}"
-            
-            industry_params.append({
-                'industry_id': industry_id,
-                'industry_name': industry,
-                'industry_etf': industry_etf,
-                'properties': props
-            })
-        
-        # Prepare market index relationship parameters
-        for symbol in valid_symbols:
-            symbol_data_item = symbol_data[symbol]
-            has_macro_metrics = False
-            
-            # Prepare metrics as property
-            props = {
-                'symbol': symbol,
-                'created_at': symbol_data_item['timestamp']
-            }
-            
-            # Add macro metrics
-            for timeframe in ['hourly', 'session', 'daily']:
-                metric_key = f"{timeframe}_macro"
-                if metric_key in symbol_data_item['metrics']:
-                    props[metric_key] = symbol_data_item['metrics'][metric_key]
-                    has_macro_metrics = True
-            
-            if has_macro_metrics:
-                market_params.append({
-                    'properties': props
-                })
-                
-        return valid_symbols, company_params, sector_params, industry_params, market_params
+        # Delegate to the common method
+        return self._prepare_entity_relationship_params(
+            data_item=report_data,
+            symbols=symbols,
+            universe_data=universe_data,
+            ticker_to_cik=ticker_to_cik,
+            timestamp=filed_str
+        )
 
     def _create_report_node_from_data(self, report_id, report_data):
         """Create a ReportNode instance from report data"""
@@ -1065,19 +731,24 @@ class Neo4jProcessor:
             symbols = self._extract_symbols_from_data(report_data)
             symbols_json = json.dumps(symbols)
             
-            # 3. Prepare relationship parameters
-            valid_symbols, company_params, sector_params, industry_params, market_params = \
-                self._prepare_report_relationships(report_data, symbols, universe_data, ticker_to_cik)
-            
-            # 4. Get node properties from ReportNode
-            node_properties = report_node.properties
-            
-            # Get timestamps for Cypher conditions
+            # Get timestamps for parameters and conditional updates
             filed_at = parse_date(report_data.get('filedAt')) if report_data.get('filedAt') else None
             updated_at = parse_date(report_data.get('updated')) if report_data.get('updated') else None
             
             filed_str = filed_at.isoformat() if filed_at else ""
             updated_str = updated_at.isoformat() if updated_at else filed_str
+            
+            # 3. Use the common method to prepare relationship parameters
+            valid_symbols, company_params, sector_params, industry_params, market_params = self._prepare_entity_relationship_params(
+                data_item=report_data,
+                symbols=symbols,
+                universe_data=universe_data,
+                ticker_to_cik=ticker_to_cik,
+                timestamp=filed_str
+            )
+            
+            # 4. Get node properties from ReportNode
+            node_properties = report_node.properties
             
             # 5. Execute deduplication and conditional update logic with direct Cypher
             with self.manager.driver.session() as session:
@@ -1720,6 +1391,202 @@ class Neo4jProcessor:
                 
         except Exception as e:
             logger.error(f"Error processing {content_type} update for {item_id}: {e}")
+
+    def _prepare_entity_relationship_params(self, data_item, symbols, universe_data, ticker_to_cik, timestamp):
+        """
+        Prepare relationship parameters for different entity types based on symbols.
+        Common method used by both news and reports processing.
+        
+        Args:
+            data_item (dict): The news or report data
+            symbols (list): List of symbols to process
+            universe_data (dict): Universe data mapping
+            ticker_to_cik (dict): Mapping of tickers to CIKs
+            timestamp (str): ISO-formatted timestamp for created_at field
+            
+        Returns:
+            tuple: (valid_symbols, company_params, sector_params, industry_params, market_params)
+        """
+        valid_symbols = []
+        symbol_data = {}
+        
+        # Preprocess symbols to collect metrics and filter valid ones
+        for symbol in symbols:
+            symbol_upper = symbol.upper()
+            cik = ticker_to_cik.get(symbol_upper)
+            if not cik:
+                logger.warning(f"No CIK found for symbol {symbol_upper}")
+                continue  # Skip symbols without CIK
+            
+            # Get return metrics for this symbol
+            metrics = self._extract_return_metrics(data_item, symbol_upper)
+            
+            # Get sector and industry information
+            company_data = universe_data.get(symbol_upper, {})
+            sector = company_data.get('sector')
+            industry = company_data.get('industry')
+            
+            # Skip symbol processing if missing sector or industry data
+            if not sector or not industry:
+                logger.warning(f"Symbol {symbol_upper} is missing sector or industry data - skipping relationship creation")
+                continue
+                
+            # Only add to valid symbols if it passed all checks
+            valid_symbols.append(symbol_upper)
+            
+            # Store data for later batch processing
+            symbol_data[symbol_upper] = {
+                'cik': cik,
+                'metrics': metrics,
+                'timestamp': timestamp,
+                'sector': sector,
+                'industry': industry
+            }
+        
+        # Prepare parameters for each relationship type
+        company_params = []
+        sector_params = []
+        industry_params = []
+        market_params = []
+
+        # Prepare company relationship parameters
+        for symbol in valid_symbols:
+            symbol_data_item = symbol_data[symbol]
+            # Prepare metrics as property
+            props = {
+                'symbol': symbol,
+                'created_at': symbol_data_item['timestamp']
+            }
+            
+            # Add stock metrics
+            for timeframe in ['hourly', 'session', 'daily']:
+                metric_key = f"{timeframe}_stock"
+                if metric_key in symbol_data_item['metrics']:
+                    props[metric_key] = symbol_data_item['metrics'][metric_key]
+            
+            company_params.append({
+                'cik': symbol_data_item['cik'],
+                'properties': props
+            })
+        
+        # Prepare sector relationship parameters
+        for symbol in valid_symbols:
+            symbol_data_item = symbol_data[symbol]
+            sector = symbol_data_item['sector']
+            
+            # Prepare metrics as property
+            props = {
+                'symbol': symbol,
+                'created_at': symbol_data_item['timestamp']
+            }
+            
+            # Add sector metrics
+            for timeframe in ['hourly', 'session', 'daily']:
+                metric_key = f"{timeframe}_sector"
+                if metric_key in symbol_data_item['metrics']:
+                    props[metric_key] = symbol_data_item['metrics'][metric_key]
+            
+            # Get sector_etf for property only - not for identification
+            sector_etf = None
+            company_data = universe_data.get(symbol, {})
+            
+            # Get ETF info from company data
+            if 'sector_etf' in company_data and company_data['sector_etf']:
+                sector_etf = company_data['sector_etf']
+            
+            # Check for benchmark data in data_item for ETF property (only for news items)
+            if ('metadata' in data_item and 'instruments' in data_item['metadata']):
+                for instrument in data_item['metadata']['instruments']:
+                    if instrument.get('symbol', '').upper() == symbol and 'benchmarks' in instrument:
+                        if not sector_etf and 'sector' in instrument['benchmarks']:
+                            sector_etf = instrument['benchmarks']['sector']
+            
+            # Normalize sector ID
+            sector_id = sector.replace(" ", "")
+            
+            # Protection against using ETF as ID - for sectors
+            if sector_etf and sector_id == sector_etf:
+                logger.error(f"Sector ID {sector_id} matches ETF ticker {sector_etf} - using prefixed format to prevent this")
+                sector_id = f"Sector_{sector.replace(' ', '_')}"
+            
+            sector_params.append({
+                'sector_id': sector_id,
+                'sector_name': sector,
+                'sector_etf': sector_etf,
+                'properties': props
+            })
+        
+        # Prepare industry relationship parameters
+        for symbol in valid_symbols:
+            symbol_data_item = symbol_data[symbol]
+            industry = symbol_data_item['industry']
+            
+            # Prepare metrics as property
+            props = {
+                'symbol': symbol,
+                'created_at': symbol_data_item['timestamp']
+            }
+            
+            # Add industry metrics
+            for timeframe in ['hourly', 'session', 'daily']:
+                metric_key = f"{timeframe}_industry"
+                if metric_key in symbol_data_item['metrics']:
+                    props[metric_key] = symbol_data_item['metrics'][metric_key]
+            
+            # Get industry_etf for property only - not for identification
+            industry_etf = None
+            company_data = universe_data.get(symbol, {})
+            
+            # Get ETF info from company data
+            if 'industry_etf' in company_data and company_data['industry_etf']:
+                industry_etf = company_data['industry_etf']
+            
+            # Check for benchmark data in data_item for ETF property (only for news items)
+            if ('metadata' in data_item and 'instruments' in data_item['metadata']):
+                for instrument in data_item['metadata']['instruments']:
+                    if instrument.get('symbol', '').upper() == symbol and 'benchmarks' in instrument:
+                        if not industry_etf and 'industry' in instrument['benchmarks']:
+                            industry_etf = instrument['benchmarks']['industry']
+            
+            # Normalize industry ID
+            industry_id = industry.replace(" ", "")
+            
+            # Protection against using ETF as ID - for industries
+            if industry_etf and industry_id == industry_etf:
+                logger.error(f"Industry ID {industry_id} matches ETF ticker {industry_etf} - using prefixed format to prevent this")
+                industry_id = f"Industry_{industry.replace(' ', '_')}"
+            
+            industry_params.append({
+                'industry_id': industry_id,
+                'industry_name': industry,
+                'industry_etf': industry_etf,
+                'properties': props
+            })
+        
+        # Prepare market index relationship parameters
+        for symbol in valid_symbols:
+            symbol_data_item = symbol_data[symbol]
+            has_macro_metrics = False
+            
+            # Prepare metrics as property
+            props = {
+                'symbol': symbol,
+                'created_at': symbol_data_item['timestamp']
+            }
+            
+            # Add macro metrics
+            for timeframe in ['hourly', 'session', 'daily']:
+                metric_key = f"{timeframe}_macro"
+                if metric_key in symbol_data_item['metrics']:
+                    props[metric_key] = symbol_data_item['metrics'][metric_key]
+                    has_macro_metrics = True
+            
+            if has_macro_metrics:
+                market_params.append({
+                    'properties': props
+                })
+                
+        return valid_symbols, company_params, sector_params, industry_params, market_params
 
 
 
