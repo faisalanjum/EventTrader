@@ -126,6 +126,8 @@ class RelationType(Enum):
     FOR_COMPANY = "FOR_COMPANY"     # Context -> Company
     PROVIDES_GUIDANCE = "PROVIDES_GUIDANCE"  # From Guidance concept to related concept
     INFLUENCES = "INFLUENCES"
+    PRIMARY_FILER = "PRIMARY_FILER"   # Report -> Company (primary filer)
+    REFERENCED_IN = "REFERENCED_IN"   # Report -> Company (mentioned in the report)
     RELATED_TO = "RELATED_TO"       # Company -> Company relationship
     HAS_XBRL = "HAS_XBRL"          # ReportNode -> XBRLNode relationship (single direction)
 

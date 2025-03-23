@@ -1068,8 +1068,48 @@ class Neo4jProcessor:
         
             # ----- Use helper method for efficient batch processing of relationships -----
             
-            # Use the common method to create all relationships
-            self._create_influences_relationships(session, report_id, "Report", "Company", company_params)
+            # Split company parameters into primary filer and referenced companies
+            primary_filer_params = []
+            referenced_in_params = []
+            report_cik = report_props.get("cik")
+            
+            for param in company_params:
+                if report_cik and param['cik'] == report_cik:
+                    primary_filer_params.append(param)
+                else:
+                    referenced_in_params.append(param)
+            
+            # Deduplicate both lists by CIK to prevent any possibility of duplicate relationships
+            primary_filer_params = list({param['cik']: param for param in primary_filer_params}.values())
+            referenced_in_params = list({param['cik']: param for param in referenced_in_params}.values())
+            
+            # Create PRIMARY_FILER relationships directly using Neo4jManager
+            if primary_filer_params:
+                self.manager.create_relationships(
+                    source_label="Report", 
+                    source_id_field="id", 
+                    source_id_value=report_id,
+                    target_label="Company", 
+                    target_match_clause="{cik: param.cik}", 
+                    rel_type=RelationType.PRIMARY_FILER.value, 
+                    params=primary_filer_params
+                )
+                logger.info(f"Created {len(primary_filer_params)} PRIMARY_FILER relationships to companies")
+            
+            # Create REFERENCED_IN relationships directly using Neo4jManager
+            if referenced_in_params:
+                self.manager.create_relationships(
+                    source_label="Report", 
+                    source_id_field="id", 
+                    source_id_value=report_id,
+                    target_label="Company", 
+                    target_match_clause="{cik: param.cik}", 
+                    rel_type=RelationType.REFERENCED_IN.value, 
+                    params=referenced_in_params
+                )
+                logger.info(f"Created {len(referenced_in_params)} REFERENCED_IN relationships to companies")
+            
+            # Create other INFLUENCES relationships as before
             self._create_influences_relationships(session, report_id, "Report", "Sector", sector_params)
             self._create_influences_relationships(session, report_id, "Report", "Industry", industry_params)
             self._create_influences_relationships(session, report_id, "Report", "MarketIndex", market_params)
@@ -1576,7 +1616,7 @@ class Neo4jProcessor:
 # endregion
 
 
-# region: Database Operation Helpers : _create_influences_relationships, _process_xbrl
+# region: Database Operation Helpers : _create_influences_relationships, _reclassify_report_company_relationships, _process_xbrl
 
 
     def _create_influences_relationships(self, session, source_id, source_label, entity_type, params, create_node_cypher=None):
@@ -1683,7 +1723,14 @@ class Neo4jProcessor:
             if neo4j_manager is not self.manager and hasattr(neo4j_manager, 'close'):
                 neo4j_manager.close()
 
-        
+
+
+
+
+
+
+
+
     def _process_xbrl(self, session, report_id, cik, accessionNo):
         """
         Process a single XBRL report.
