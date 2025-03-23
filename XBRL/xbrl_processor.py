@@ -990,7 +990,8 @@ class process_report:
                     for dim_qname, member in model_context.qnameDims.items():
                         try:
                             # Get company_id from the same source as Dimension class
-                            company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]
+                            # company_id = self.model_xbrl.modelDocument.uri.split('/')[-3]
+                            company_id = self.company.cik
                             
                             # Create dimension u_id matching Dimension class format
                             dim_u_id = f"{company_id}:{dim_qname.namespaceURI}:{dim_qname}"

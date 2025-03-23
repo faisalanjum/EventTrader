@@ -241,6 +241,60 @@ class ReportProcessor(BaseProcessor):
             return None
 
 
+
+    def _fetch_primary_cik(self, xbrl_json):
+        """
+        Returns the primary CIK for the financial statements.
+        It first attempts to use the CoverPage field (as per sec-api.io docs).
+        If that fails, it scans for a default context (without dimensions).
+        """
+        # Preferred method: use CoverPage's EntityCentralIndexKey
+        cover = xbrl_json.get("CoverPage", {})
+        cik = cover.get("EntityCentralIndexKey")
+        
+        # Handle list values (as we've seen in some filings)
+        if isinstance(cik, list):
+            cik = cik[0] if cik else None
+        
+        if cik:
+            try:
+                # Ensure it is numeric and return as a 10-digit string
+                return str(int(cik)).zfill(10)
+            except (ValueError, TypeError):
+                pass  # fall through to secondary method
+
+        # Secondary method: if the JSON includes contexts, pick the one without dimensions
+        contexts = xbrl_json.get("Contexts", [])
+        default_contexts = [ctx for ctx in contexts if not ctx.get("Dimensions")]
+        if len(default_contexts) == 1:
+            candidate = default_contexts[0].get("EntityCentralIndexKey")
+            if candidate:
+                try:
+                    return str(int(candidate)).zfill(10)
+                except (ValueError, TypeError):
+                    pass
+
+        # If ambiguity remains or no candidate is found, raise an error so you can handle it explicitly
+        raise ValueError("Unable to determine a unique primary CIK from the filing data.")
+
+
+
+    def _add_normalized_cik(self, cik_value, cik_set):
+        """Helper to add normalized CIKs to a set, handling both single values and lists"""
+        if isinstance(cik_value, list):
+            for cik in cik_value:
+                if cik:
+                    try:
+                        cik_set.add(str(int(cik)).zfill(10))
+                    except (ValueError, TypeError):
+                        pass
+        elif cik_value:
+            try:
+                cik_set.add(str(int(cik_value)).zfill(10))
+            except (ValueError, TypeError):
+                pass
+
+
     def _get_financial_statements(self, accession_no: str, cik: str) -> Optional[Dict]:
         """Extract financial statements from XBRL data"""
         try:
@@ -250,13 +304,40 @@ class ReportProcessor(BaseProcessor):
 
             xbrl_json = self.xbrl_api.xbrl_to_json(accession_no=accession_no)
             
-            # Normalize CIK format by removing leading zeros and converting to string
-            xbrl_cik = str(int(xbrl_json.get('CoverPage', {}).get('EntityCentralIndexKey', '0')))
-            input_cik = str(int(cik)) if cik else '0'
+            # Normalize input CIK
+            input_cik = str(int(cik)).zfill(10) if cik else '0'.zfill(10)
+            match_found = False
             
-            # Compare normalized CIKs
-            if xbrl_cik != input_cik:
-                self.logger.warning(f"CIK mismatch in XBRL data for accession {accession_no}. Input CIK: {input_cik}, XBRL CIK: {xbrl_cik}")
+            # First try primary CIK method
+            try:
+                primary_cik = self._fetch_primary_cik(xbrl_json)
+                if input_cik == primary_cik:
+                    self.logger.info(f"Input CIK {input_cik} matches primary financial statement CIK for {accession_no}")
+                    match_found = True
+                else:
+                    self.logger.warning(f"Input CIK {input_cik} doesn't match primary CIK {primary_cik}, trying fallback")
+            except ValueError:
+                self.logger.info(f"Couldn't determine primary CIK, trying fallback verification for {accession_no}")
+            
+            # If primary method didn't find a match, try fallback
+            if not match_found:
+                xbrl_ciks = set()  # Use set to avoid duplicates
+                
+                # Check CoverPage (the documented location for CIK)
+                cover_cik = xbrl_json.get('CoverPage', {}).get('EntityCentralIndexKey', '0')
+                self._add_normalized_cik(cover_cik, xbrl_ciks)
+                
+                # Convert back to list and check for match
+                xbrl_ciks = list(xbrl_ciks)
+                if not xbrl_ciks or input_cik not in xbrl_ciks:
+                    self.logger.warning(f"No CIK match for {accession_no}: input CIK {input_cik} not in {xbrl_ciks}")
+                    return None
+                else:
+                    self.logger.info(f"Input CIK {input_cik} matches one of the XBRL CIKs {xbrl_ciks} for {accession_no}")
+                    match_found = True
+            
+            # Only continue if we found a match
+            if not match_found:
                 return None
                 
             # Initialize all expected statements with None
@@ -281,6 +362,7 @@ class ReportProcessor(BaseProcessor):
         except Exception as e:
             self.logger.error(f"Error extracting XBRL data for accession {accession_no}: {e}")
             return None
+
 
     def _download_exhibit(self, url: str) -> Optional[str]:
         """Download and extract exhibit content with proper SEC rate limiting"""
@@ -420,6 +502,14 @@ class ReportProcessor(BaseProcessor):
         Note: If primary ticker (from cik) not in allowed_symbols, it's set to None but filing 
         will still process if other valid tickers exist in entities."""
         try:
+
+
+            # Check for missing or empty CIK at the very beginning - Meaning we only keep if primaryfiler CIK is present
+            # if not content.get('cik') or content.get('cik') == '':
+            #     self.logger.info(f"Skipping report with missing primary filer CIK: {content.get('accessionNo', 'unknown')}")
+            #     return {}  # Return empty dict to signal skip
+
+
             if content['formType'] not in VALID_FORM_TYPES:
                 self.logger.info(f"Invalid form type so Skipping: {content['formType']}")
                 return {}

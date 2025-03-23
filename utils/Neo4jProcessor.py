@@ -1705,7 +1705,7 @@ class Neo4jProcessor:
             )
             
             # Import needed components
-            from XBRL.xbrl_processor import process_report
+            from XBRL.xbrl_processor import process_report, get_company_by_cik, get_report_by_accessionNo
             from XBRL.Neo4jManager import Neo4jManager
             
             # Create Neo4j manager using the exact same approach that worked in the test
@@ -1715,12 +1715,28 @@ class Neo4jProcessor:
                 password=self.password
             )
             
+            # Use the existing helper functions to get Report and Company nodes
+            report_node = get_report_by_accessionNo(neo4j_manager, accessionNo)
+            if not report_node:
+                logger.error(f"Report with accessionNo {accessionNo} not found in Neo4j")
+                return False
+                
+            company_node = get_company_by_cik(neo4j_manager, report_node.cik)
+            if not company_node:
+                logger.error(f"Company with CIK {report_node.cik} not found in Neo4j")
+                return False
+            
+            # Use the properly formatted values from the Neo4j nodes
+            processed_cik = company_node.cik
+            processed_accessionNo = report_node.accessionNo
+            
+            logger.info(f"Processing XBRL for report {report_id} (CIK: {processed_cik}, AccessionNo: {processed_accessionNo})")
+            
             # Process the report directly - keep it simple
-            logger.info(f"Processing XBRL for report {report_id}")
             process_report(
                 neo4j=neo4j_manager,
-                cik=cik,
-                accessionNo=accessionNo,
+                cik=processed_cik,
+                accessionNo=processed_accessionNo,
                 testing=False
             )
             
@@ -1731,17 +1747,17 @@ class Neo4jProcessor:
             )
             
             logger.info(f"XBRL processing completed for report {report_id}")
-            self.xbrl_processed = True
+            # We've removed the 'self.xbrl_processed = True' flag to allow processing multiple reports
             return True
             
         except Exception as e:
             error_msg = str(e)[:255]  # Limit error message length
             logger.error(f"Error processing XBRL for report {report_id}: {error_msg}")
             
-            # Update status to FAILED
+            # Update status to FAILED with full error message for debugging
             session.run(
                 "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
-                id=report_id, status="FAILED", error=error_msg
+                id=report_id, status="FAILED", error=str(e)
             )
             return False
 
