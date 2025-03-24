@@ -1466,12 +1466,16 @@ class Neo4jProcessor:
                 'symbol': symbol,
                 'created_at': symbol_data_item['timestamp']
             }
-            
+
             # Add stock metrics
-            for timeframe in ['hourly', 'session', 'daily']:
-                metric_key = f"{timeframe}_stock"
-                if metric_key in symbol_data_item['metrics']:
-                    props[metric_key] = symbol_data_item['metrics'][metric_key]
+            # for timeframe in ['hourly', 'session', 'daily']:
+            #     metric_key = f"{timeframe}_stock"
+            #     if metric_key in symbol_data_item['metrics']:
+            #         props[metric_key] = symbol_data_item['metrics'][metric_key]
+
+            # Add ALL metrics: stock, sector, industry, macro
+            for metric_key, metric_value in symbol_data_item['metrics'].items():
+                props[metric_key] = metric_value
             
             company_params.append({
                 'cik': symbol_data_item['cik'],
