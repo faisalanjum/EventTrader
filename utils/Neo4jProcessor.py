@@ -479,7 +479,7 @@ class Neo4jProcessor:
                     if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
                         try:
                             self.event_trader_redis.history_client.client.delete(key)
-                            logger.debug(f"Deleted processed withreturns key: {key}")
+                            logger.info(f"Deleted processed withreturns key: {key}")
                         except Exception as e:
                             logger.warning(f"Error deleting key {key}: {e}")
 
@@ -513,7 +513,7 @@ class Neo4jProcessor:
                     if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
                         try:
                             self.event_trader_redis.history_client.client.delete(key)
-                            logger.debug(f"Deleted processed withreturns key: {key}")
+                            logger.info(f"Deleted processed withreturns key: {key}")
                         except Exception as e:
                             logger.warning(f"Error deleting key {key}: {e}")
 

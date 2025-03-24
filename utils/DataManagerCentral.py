@@ -38,7 +38,8 @@ class DataSourceManager:
         historical_range: Dict[str, str],  # {'from': 'YYYY-MM-DD', 'to': 'YYYY-MM-DD'}
         api_key: str,
         processor_class=None,
-        ttl: int = 7 * 24 * 3600
+        # ttl: int = 7 * 24 * 3600
+        ttl: int = 2 * 24 * 3600
     ):
         self.source_type = source_type
         self.api_key = api_key
