@@ -481,6 +481,59 @@ class AdminSectionNode(Neo4jNode):
         )
 
 @dataclass
+class FinancialStatementNode(Neo4jNode):
+    """
+    Financial statement node for SEC filing financial statements.
+    Used to categorize financial statement types for analysis.
+    
+    Args:
+        code: Unique code (e.g., 'BalanceSheets', 'StatementsOfIncome')
+        label: Display label (e.g., 'Balance Sheets', 'Statements of Income')
+        category: Category for grouping (e.g., 'Financial Statements')
+        description: Optional description of the statement type
+    """
+    code: str                    # Unique identifier (statement type code)
+    label: str                   # Display label (statement type name)
+    category: str                # Category for grouping
+    description: Optional[str] = None  # Optional description
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.FINANCIAL_STATEMENT
+    
+    @property
+    def id(self) -> str:
+        """Use code as unique identifier"""
+        return self.code
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {
+            'id': self.id,
+            'code': self.code,
+            'label': self.label,
+            'category': self.category,
+            'displayLabel': self.label
+        }
+        if self.description:
+            props['description'] = self.description
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'FinancialStatementNode':
+        """Create FinancialStatementNode from Neo4j properties"""
+        # Required fields
+        if 'code' not in props:
+            raise ValueError("Missing required field 'code' for FinancialStatementNode")
+        
+        return cls(
+            code=props['code'],
+            label=props.get('label', ''),
+            category=props.get('category', ''),
+            description=props.get('description', None)
+        )
+
+@dataclass
 class MarketIndexNode(Neo4jNode):
     """Market Index node in Neo4j (e.g., S&P 500 'SPY')"""
     ticker: str  # ETF ticker (unique identifier)

@@ -4,7 +4,7 @@ from typing import Dict, List, Optional, Any, Tuple
 from neo4j import GraphDatabase
 import pandas as pd
 
-from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, AdminSectionNode
+from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, AdminSectionNode, FinancialStatementNode
 from XBRL.Neo4jManager import Neo4jManager
 from XBRL.xbrl_core import RelationType
 
@@ -167,8 +167,11 @@ class Neo4jInitializer:
             # 4. Create administrative entities (SEC filing report types)
             self.create_admin_reports()
             
-            # 5. Create administrative section hierarchy (new)
+            # 5. Create administrative section hierarchy
             self.create_admin_sections()
+            
+            # 6. Create financial statement hierarchy
+            self.create_financial_statements()
             
             logger.info("Market hierarchy initialization complete")
             return True
@@ -669,6 +672,79 @@ class Neo4jInitializer:
             
         except Exception as e:
             logger.error(f"Error creating admin section hierarchy: {e}")
+            return False
+
+    def create_financial_statements(self) -> bool:
+        """Create financial statement hierarchy for SEC filings."""
+        try:
+            # Define financial statement types
+            financial_statements = {
+                "FinancialStatements": "Financial Statements",
+            }
+            
+            # Define statement subtypes
+            statement_types = {
+                "BalanceSheets": "Balance Sheets",
+                "StatementsOfIncome": "Statements of Income",
+                "StatementsOfShareholdersEquity": "Statements of Shareholders Equity",
+                "StatementsOfCashFlows": "Statements of Cash Flows"
+            }
+            
+            # Add descriptions for each statement type
+            statement_descriptions = {
+                "BalanceSheets": "Reports the company's assets, liabilities, and shareholders' equity at a specific point in time",
+                "StatementsOfIncome": "Reports the company's financial performance over a specific accounting period",
+                "StatementsOfShareholdersEquity": "Reports the changes in equity for a company during a specific period",
+                "StatementsOfCashFlows": "Reports the cash generated and used during a specific period"
+            }
+            
+            # Create parent category node
+            parent_nodes = [
+                FinancialStatementNode(
+                    code=code, 
+                    label=label, 
+                    category=code,
+                    description="Container for all standard financial statement types"
+                )
+                for code, label in financial_statements.items()
+            ]
+            
+            # Create child statement nodes
+            child_nodes = []
+            
+            # Process statement types
+            for statement_code, statement_label in statement_types.items():
+                child_nodes.append(
+                    FinancialStatementNode(
+                        code=statement_code,
+                        label=statement_label,
+                        category="FinancialStatements",
+                        description=statement_descriptions.get(statement_code, "")
+                    )
+                )
+            
+            # Combine all nodes for efficient batch creation
+            all_nodes = parent_nodes + child_nodes
+            
+            # Create nodes in a single batch operation
+            self.manager._export_nodes([all_nodes])
+            logger.info(f"Created {len(all_nodes)} financial statement nodes")
+            
+            # Create parent-child relationships in a single batch
+            relationships = [
+                (parent, child, RelationType.HAS_SUB_STATEMENT)
+                for parent in parent_nodes
+                for child in child_nodes
+                if child.category == parent.code
+            ]
+            
+            self.manager.merge_relationships(relationships)
+            logger.info(f"Created {len(relationships)} financial statement hierarchical relationships")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error creating financial statement hierarchy: {e}")
             return False
 
 
