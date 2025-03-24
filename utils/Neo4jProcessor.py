@@ -300,17 +300,6 @@ class Neo4jProcessor:
                         if success:
                             processed_count += 1
                             
-                            # Delete processed keys from withreturns namespace only
-                            # We keep withoutreturns keys as they may get returns later
-
-
-                            # if namespace == "withreturns":
-                            #     try:
-                            #         self.hist_client.client.delete(key)
-                            #         logger.debug(f"Deleted processed key: {key}")
-                            #     except Exception as e:
-                            #         logger.warning(f"Error deleting key {key}: {e}")
-
                             
                         else:
                             error_count += 1
@@ -485,6 +474,15 @@ class Neo4jProcessor:
                         news_data=news_data
                     )
                     logger.info(f"Successfully processed news {item_id}")
+
+                    # Delete key if it's from withreturns namespace
+                    if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
+                        try:
+                            self.event_trader_redis.history_client.client.delete(key)
+                            logger.debug(f"Deleted processed withreturns key: {key}")
+                        except Exception as e:
+                            logger.warning(f"Error deleting key {key}: {e}")
+
                 else:
                     logger.warning(f"No data found for news {item_id}")
             else:  # report
@@ -510,6 +508,16 @@ class Neo4jProcessor:
                     )
                     
                     logger.info(f"Successfully processed report {item_id}")
+
+                    # Delete key if it's from withreturns namespace
+                    if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
+                        try:
+                            self.event_trader_redis.history_client.client.delete(key)
+                            logger.debug(f"Deleted processed withreturns key: {key}")
+                        except Exception as e:
+                            logger.warning(f"Error deleting key {key}: {e}")
+
+
                 else:
                     logger.warning(f"No data found for report {item_id}")
                 
@@ -556,7 +564,12 @@ class Neo4jProcessor:
         
         # Control flag
         self.pubsub_running = True
-        
+
+
+        # [NEW CODE]: Track reconciliation time
+        last_reconciliation = 0
+        reconciliation_interval = 3600  # Run once per hour
+
         # Process any existing items first (one-time batch processing)
         self.process_news_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
         self.process_reports_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
@@ -584,12 +597,20 @@ class Neo4jProcessor:
                 
                 # Periodically check for items that might have been missed (every 60 seconds)
                 # This is a safety net, not the primary mechanism
+                # current_time = int(time.time())
+                # if current_time % 60 == 0:
+                #     self.process_news_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
+                #     self.process_reports_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
+                #     time.sleep(1)  # Prevent repeated execution in the same second
+
+                # [NEW CODE]: Hourly reconciliation
                 current_time = int(time.time())
-                if current_time % 60 == 0:
-                    self.process_news_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
-                    self.process_reports_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
-                    time.sleep(1)  # Prevent repeated execution in the same second
-                    
+                if current_time - last_reconciliation >= reconciliation_interval:
+                    logger.info("Starting hourly reconciliation...")
+                    self.reconcile_missing_items()
+                    last_reconciliation = current_time
+
+
             except Exception as e:
                 logger.error(f"Error in PubSub processing: {e}")
                 # Try to reconnect to Neo4j if connection appears to be lost
@@ -607,6 +628,8 @@ class Neo4jProcessor:
             
         logger.info("Stopped event-driven Neo4j processing")
     
+
+
     def stop_pubsub_processing(self):
         """
         Stop the PubSub processing loop gracefully.
@@ -1243,7 +1266,10 @@ class Neo4jProcessor:
 # endregion
 
 
-# region: Common Utilities & Helpers : _extract_symbols_from_data, _extract_market_session, _extract_returns_schedule, _extract_return_metrics, _parse_list_field, _prepare_entity_relationship_params, _prepare_report_relationships
+# region: Common Utilities & Helpers : _extract_symbols_from_data, _extract_market_session, _extract_returns_schedule, 
+#                                       _extract_return_metrics, _parse_list_field, _prepare_entity_relationship_params, 
+#                                       _prepare_report_relationships, reconcile_missing_items
+
 
 
     def _extract_symbols_from_data(self, data_item, symbols_list=None):
@@ -1615,6 +1641,121 @@ class Neo4jProcessor:
             ticker_to_cik=ticker_to_cik,
             timestamp=filed_str
         )
+
+
+
+
+    def reconcile_missing_items(self, max_items_per_type=1000):
+        """
+        Identify and process items in Redis that are missing from Neo4j.
+        """
+        results = {"news": 0, "reports": 0}
+        
+        try:
+            with self.manager.driver.session() as session:
+                # 1. NEWS RECONCILIATION
+                for namespace in ['withreturns', 'withoutreturns']:
+                    pattern = RedisKeys.get_key(source_type=self.event_trader_redis.source, 
+                                            key_type=namespace, identifier="*")
+                    
+                    # Get news IDs from Redis
+                    redis_news_ids = set()
+                    for key in self.event_trader_redis.history_client.client.scan_iter(pattern):
+                        news_id = key.split(':')[-1].split('.')[0]  # Extract base ID
+                        redis_news_ids.add(f"bzNews_{news_id}")
+                    
+                    if not redis_news_ids:
+                        continue
+                        
+                    # Process in batches of 1000
+                    for batch in [list(redis_news_ids)[i:i+1000] for i in range(0, len(redis_news_ids), 1000)]:
+                        # Query Neo4j for these news IDs
+                        cypher = "MATCH (n:News) WHERE n.id IN $ids RETURN n.id as id"
+                        result = session.run(cypher, ids=batch)
+                        neo4j_news_ids = {record["id"] for record in result}
+                        
+                        # Find missing news IDs
+                        missing_ids = set(batch) - neo4j_news_ids
+                        
+                        # Process missing items
+                        for news_id in list(missing_ids)[:max_items_per_type]:
+                            original_id = news_id[7:]  # Remove "bzNews_" prefix
+                            
+                            # Try both namespaces
+                            for ns in ['withreturns', 'withoutreturns']:
+                                key = RedisKeys.get_key(source_type=self.event_trader_redis.source,
+                                                    key_type=ns, identifier=original_id)
+                                raw_data = self.event_trader_redis.history_client.get(key)
+                                if raw_data:
+                                    news_data = json.loads(raw_data)
+                                    success = self._process_deduplicated_news(news_id, news_data)
+                                    results["news"] += 1
+
+                                    # Delete key if it's from withreturns namespace
+                                    if success and ns == 'withreturns':
+                                        try:
+                                            self.event_trader_redis.history_client.client.delete(key)
+                                            logger.debug(f"Deleted reconciled withreturns key: {key}")
+                                        except Exception as e:
+                                            logger.warning(f"Error deleting key {key}: {e}")
+
+
+                                    break
+                
+                # 2. REPORTS RECONCILIATION
+                for namespace in ['withreturns', 'withoutreturns']:
+                    pattern = RedisKeys.get_key(source_type=RedisKeys.SOURCE_REPORTS, 
+                                            key_type=namespace, identifier="*")
+                    
+                    # Get report IDs from Redis
+                    redis_report_ids = set()
+                    for key in self.event_trader_redis.history_client.client.scan_iter(pattern):
+                        report_id = key.split(':')[-1]
+                        redis_report_ids.add(report_id)
+                    
+                    if not redis_report_ids:
+                        continue
+                        
+                    # Process in batches of 1000
+                    for batch in [list(redis_report_ids)[i:i+1000] for i in range(0, len(redis_report_ids), 1000)]:
+                        # Query Neo4j for these report IDs
+                        cypher = "MATCH (r:Report) WHERE r.accessionNo IN $ids RETURN r.accessionNo as id"
+                        result = session.run(cypher, ids=batch)
+                        neo4j_report_ids = {record["id"] for record in result}
+                        
+                        # Find missing report IDs
+                        missing_ids = set(batch) - neo4j_report_ids
+                        
+                        # Process missing items
+                        for report_id in list(missing_ids)[:max_items_per_type]:
+                            # Try both namespaces
+                            for ns in ['withreturns', 'withoutreturns']:
+                                key = RedisKeys.get_key(source_type=RedisKeys.SOURCE_REPORTS,
+                                                    key_type=ns, identifier=report_id)
+                                raw_data = self.event_trader_redis.history_client.get(key)
+                                if raw_data:
+                                    report_data = json.loads(raw_data)
+                                    success = self._process_deduplicated_report(report_id, report_data)
+                                    results["reports"] += 1
+
+                                    # Delete key if it's from withreturns namespace
+                                    if success and ns == 'withreturns':
+                                        try:
+                                            self.event_trader_redis.history_client.client.delete(key)
+                                            logger.debug(f"Deleted reconciled withreturns key: {key}")
+                                        except Exception as e:
+                                            logger.warning(f"Error deleting key {key}: {e}")
+
+
+                                    break
+            
+            logger.info(f"Reconciliation completed: {results}")
+            return results
+            
+        except Exception as e:
+            logger.error(f"Error during reconciliation: {e}")
+            return results
+
 
 
 # endregion
