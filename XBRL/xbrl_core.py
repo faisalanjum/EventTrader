@@ -88,6 +88,12 @@ class NodeType(Enum):
     ADMIN_REPORT = "AdminReport"
     ADMIN_SECTION = "AdminSection"  # Added for SEC filing sections
     FINANCIAL_STATEMENT = "FinancialStatement"  # Added for financial statement types
+    
+    # Content nodes for SEC filings
+    EXTRACTED_SECTION = "ExtractedSectionContent"  # Section content from SEC filings
+    EXHIBIT = "ExhibitContent"  # Exhibit content from SEC filings
+    FINANCIAL_DATA = "FinancialStatementContent"  # Financial statement data points
+    FILING_TEXT = "FilingTextContent"  # Full filing text content
 
 
 

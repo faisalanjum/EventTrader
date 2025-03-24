@@ -60,8 +60,8 @@ class Neo4jProcessor:
         "Sector", 
         "Industry", 
         "AdminReport", 
-        "AdminSection", 
-        "FinancialStatement"
+        # "AdminSection", 
+        # "FinancialStatement"
     ]
     # Add more node types here as needed
 

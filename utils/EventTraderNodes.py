@@ -761,3 +761,200 @@ class NewsNode(Neo4jNode):
             market_session=props.get('market_session', None),
             returns_schedule=returns_schedule
         )
+
+# New content nodes for SEC filing data
+@dataclass
+class ExtractedSectionContent(Neo4jNode):
+    """Node for SEC filing extracted section content."""
+    content_id: str            # Unique identifier
+    filing_id: str             # Related filing accession number
+    form_type: str             # 10-K, 10-Q, 8-K
+    section_code: str          # Section code (Item1, Item1A, etc.)
+    content: str               # Actual text content
+    filer_cik: Optional[str] = None  # Company CIK
+    filed_at: Optional[str] = None   # Filing date
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.EXTRACTED_SECTION
+    
+    @property
+    def id(self) -> str:
+        return self.content_id
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {
+            'id': self.id,
+            'filing_id': self.filing_id,
+            'form_type': self.form_type,
+            'section_code': self.section_code,
+            'content': self.content
+        }
+        if self.filer_cik:
+            props['filer_cik'] = self.filer_cik
+        if self.filed_at:
+            props['filed_at'] = self.filed_at
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'ExtractedSectionContent':
+        if 'id' not in props:
+            raise ValueError("Missing required field 'id' for ExtractedSectionContent")
+        return cls(
+            content_id=props['id'],
+            filing_id=props.get('filing_id', ''),
+            form_type=props.get('form_type', ''),
+            section_code=props.get('section_code', ''),
+            content=props.get('content', ''),
+            filer_cik=props.get('filer_cik'),
+            filed_at=props.get('filed_at')
+        )
+
+@dataclass
+class ExhibitContent(Neo4jNode):
+    """Node for SEC filing exhibit content."""
+    content_id: str            # Unique identifier
+    filing_id: str             # Related filing accession number
+    form_type: str             # 10-K, 10-Q, 8-K
+    exhibit_number: str        # EX-10.1, EX-99.1, etc.
+    content: str               # Actual text content or URL
+    filer_cik: Optional[str] = None  # Company CIK
+    filed_at: Optional[str] = None   # Filing date
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.EXHIBIT
+    
+    @property
+    def id(self) -> str:
+        return self.content_id
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {
+            'id': self.id,
+            'filing_id': self.filing_id,
+            'form_type': self.form_type,
+            'exhibit_number': self.exhibit_number,
+            'content': self.content
+        }
+        if self.filer_cik:
+            props['filer_cik'] = self.filer_cik
+        if self.filed_at:
+            props['filed_at'] = self.filed_at
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'ExhibitContent':
+        if 'id' not in props:
+            raise ValueError("Missing required field 'id' for ExhibitContent")
+        return cls(
+            content_id=props['id'],
+            filing_id=props.get('filing_id', ''),
+            form_type=props.get('form_type', ''),
+            exhibit_number=props.get('exhibit_number', ''),
+            content=props.get('content', ''),
+            filer_cik=props.get('filer_cik'),
+            filed_at=props.get('filed_at')
+        )
+
+@dataclass
+class FinancialStatementContent(Neo4jNode):
+    """Node for financial statement data point."""
+    content_id: str            # Unique identifier
+    filing_id: str             # Related filing accession number
+    form_type: str             # 10-K, 10-Q
+    statement_type: str        # BalanceSheets, StatementsOfIncome, etc.
+    metric_name: str           # Name of financial metric
+    value: str                 # Actual value
+    filer_cik: Optional[str] = None  # Company CIK
+    filed_at: Optional[str] = None   # Filing date
+    period_end: Optional[str] = None # Period end date
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.FINANCIAL_DATA
+    
+    @property
+    def id(self) -> str:
+        return self.content_id
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {
+            'id': self.id,
+            'filing_id': self.filing_id,
+            'form_type': self.form_type,
+            'statement_type': self.statement_type,
+            'metric_name': self.metric_name,
+            'value': self.value
+        }
+        if self.filer_cik:
+            props['filer_cik'] = self.filer_cik
+        if self.filed_at:
+            props['filed_at'] = self.filed_at
+        if self.period_end:
+            props['period_end'] = self.period_end
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'FinancialStatementContent':
+        if 'id' not in props:
+            raise ValueError("Missing required field 'id' for FinancialStatementContent")
+        return cls(
+            content_id=props['id'],
+            filing_id=props.get('filing_id', ''),
+            form_type=props.get('form_type', ''),
+            statement_type=props.get('statement_type', ''),
+            metric_name=props.get('metric_name', ''),
+            value=props.get('value', ''),
+            filer_cik=props.get('filer_cik'),
+            filed_at=props.get('filed_at'),
+            period_end=props.get('period_end')
+        )
+
+@dataclass
+class FilingTextContent(Neo4jNode):
+    """Node for full filing text content."""
+    content_id: str            # Unique identifier
+    filing_id: str             # Related filing accession number
+    form_type: str             # 10-K, 10-Q, 8-K, SCHEDULE 13D, etc.
+    content: str               # Full text content
+    filer_cik: Optional[str] = None  # Company CIK
+    filed_at: Optional[str] = None   # Filing date
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.FILING_TEXT
+    
+    @property
+    def id(self) -> str:
+        return self.content_id
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {
+            'id': self.id,
+            'filing_id': self.filing_id,
+            'form_type': self.form_type,
+            'content': self.content
+        }
+        if self.filer_cik:
+            props['filer_cik'] = self.filer_cik
+        if self.filed_at:
+            props['filed_at'] = self.filed_at
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'FilingTextContent':
+        if 'id' not in props:
+            raise ValueError("Missing required field 'id' for FilingTextContent")
+        return cls(
+            content_id=props['id'],
+            filing_id=props.get('filing_id', ''),
+            form_type=props.get('form_type', ''),
+            content=props.get('content', ''),
+            filer_cik=props.get('filer_cik'),
+            filed_at=props.get('filed_at')
+        )

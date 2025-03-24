@@ -168,10 +168,13 @@ class Neo4jInitializer:
             self.create_admin_reports()
             
             # 5. Create administrative section hierarchy
-            self.create_admin_sections()
+            # self.create_admin_sections()
             
             # 6. Create financial statement hierarchy
-            self.create_financial_statements()
+            # self.create_financial_statements()
+            
+            # 7. Create exhibit section hierarchy
+            # self.create_exhibit_sections()
             
             logger.info("Market hierarchy initialization complete")
             return True
@@ -745,6 +748,44 @@ class Neo4jInitializer:
             
         except Exception as e:
             logger.error(f"Error creating financial statement hierarchy: {e}")
+            return False
+
+    def create_exhibit_sections(self) -> bool:
+        """Create exhibit section hierarchy for SEC filing exhibits."""
+        try:
+            # Define nodes structure - parent and children
+            parent_node = AdminSectionNode(
+                code="ExhibitSections",
+                label="Exhibit Sections",
+                category="ExhibitSections"
+            )
+            
+            # Define the two exhibit types we process
+            child_nodes = [
+                AdminSectionNode(code="EX-10", label="Material Contracts", category="ExhibitSections"),
+                AdminSectionNode(code="EX-99", label="Additional Exhibits", category="ExhibitSections")
+            ]
+            
+            # Create FilingTextContent as a separate top-level node
+            filing_text_node = AdminSectionNode(
+                code="FilingTextContent",
+                label="Full Filing Text",
+                category="FilingTextContent"
+            )
+            
+            # Create all nodes in one batch
+            all_nodes = [parent_node] + child_nodes + [filing_text_node]
+            self.manager._export_nodes([all_nodes])
+            logger.info(f"Created {len(all_nodes)} exhibit section nodes")
+            
+            # Create parent-child relationships
+            relationships = [(parent_node, child, RelationType.HAS_SUB_SECTION) for child in child_nodes]
+            self.manager.merge_relationships(relationships)
+            logger.info(f"Created {len(relationships)} exhibit section hierarchical relationships")
+            
+            return True
+        except Exception as e:
+            logger.error(f"Error creating exhibit section hierarchy: {e}")
             return False
 
 
