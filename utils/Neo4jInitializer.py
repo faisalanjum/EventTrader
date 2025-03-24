@@ -2,9 +2,7 @@ import logging
 import os
 from typing import Dict, List, Optional, Any, Tuple
 from neo4j import GraphDatabase
-import re
 import pandas as pd
-import json
 
 from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode
 from XBRL.Neo4jManager import Neo4jManager
@@ -26,14 +24,6 @@ class Neo4jInitializer:
     - Companies BELONGS_TO their Industry
     - Companies can be RELATED_TO other Companies
     - News INFLUENCES Companies
-    
-    This maintains a clean hierarchical structure:
-    1. Companies only directly belong to Industries
-    2. Industries only directly belong to Sectors
-    3. Sectors only directly belong to the MarketIndex
-    
-    Note: The Neo4j schema visualization may show transitive relationships
-    (e.g., it might appear companies "belong to" the MarketIndex directly).
     """
     
     def __init__(self, uri: str, username: str, password: str, universe_data: Optional[Dict] = None):
@@ -51,9 +41,15 @@ class Neo4jInitializer:
         self.password = password
         self.universe_data = universe_data
         self.manager = None  # Will hold Neo4jManager instance
-        self.sector_mapping = {}  # {sector_name: sector_etf}
-        self.industry_mapping = {}  # {industry_name: (industry_etf, sector_etf)}
-        self.ticker_to_cik = {}  # {ticker: cik} mapping for creating relationships
+        
+        # Mappings that will be populated during initialization
+        self.sector_mapping = {}      # {sector_name: sector_id}
+        self.industry_mapping = {}    # {industry_name: (industry_id, sector_id)}
+        self.ticker_to_cik = {}       # {ticker: cik} mapping
+        self.sector_etfs = {}         # {sector_name: sector_etf}
+        self.industry_etfs = {}       # {industry_name: industry_etf}
+        self.etf_to_sector_id = {}    # {sector_etf: sector_id}
+        self.etf_to_industry_id = {}  # {industry_etf: industry_id}
         
     def connect(self) -> bool:
         """Connect to Neo4j using Neo4jManager"""
@@ -159,23 +155,16 @@ class Neo4jInitializer:
             
             logger.info("Initializing Neo4j market hierarchy")
             
-            # Extract mappings from universe data
-            self.extract_mappings()
+            # 1. Data preparation - extract all mappings once
+            self.prepare_universe_data()
             
-            # Create company ticker to CIK mappings
-            self._create_ticker_to_cik_mapping()
+            # 2. Node creation - create all nodes in hierarchical order
+            self.create_market_nodes()
             
-            # Build the hierarchy top-down
-            self.create_market_index()      # MarketIndex (SPY)
-            self.create_sectors()           # Sectors → MarketIndex
-            self.create_industries()        # Industries → Sectors
-            self.create_companies()         # Companies (basic nodes)
-            self.link_companies()           # Companies → Industries
+            # 3. Relationship creation - create all relationships
+            self.create_market_relationships()
             
-            # Create company-to-company relationships
-            self.create_company_relationships()
-            
-            # Create admin reports hierarchy
+            # 4. Create administrative entities (SEC filing report types)
             self.create_admin_reports()
             
             logger.info("Market hierarchy initialization complete")
@@ -186,70 +175,53 @@ class Neo4jInitializer:
             return False
         finally:
             self.close()
-            
-    def extract_mappings(self):
-        """Extract sector and industry mappings from universe data"""
-        # Extract sector ETF mappings and create normalized names
-        sector_etfs = {}  # {sector_name: sector_etf}
-        industry_etfs = {}  # {industry_name: industry_etf}
+    
+    def prepare_universe_data(self):
+        """Process universe data once, creating all required mappings."""
+        # Process sectors, industries, and ETFs
+        self._extract_market_mappings()
         
+        # Create ticker to CIK mapping for relationship creation
+        self._create_ticker_to_cik_mapping()
+        
+        logger.info(f"Processed universe data: {len(self.sector_mapping)} sectors, {len(self.industry_mapping)} industries")
+            
+    def _extract_market_mappings(self):
+        """Extract sector and industry mappings from universe data"""
+        # Process each company's data in a single pass
         for data in self.universe_data.values():
             sector = data.get('sector', '').strip()
             sector_etf = data.get('sector_etf', '').strip()
             industry = data.get('industry', '').strip()
             industry_etf = data.get('industry_etf', '').strip()
             
-            # Process sectors - use normalized name (without spaces) as ID
+            # Process sectors
             if sector and sector.lower() not in ['nan', 'none', '']:
                 # Create normalized sector name (no spaces) as ID
                 sector_id = sector.replace(" ", "")
                 self.sector_mapping[sector] = sector_id
                 
-                # Store sector ETF if available
+                # Store sector ETF and create ETF-to-ID mapping in one step
                 if sector_etf and sector_etf.lower() not in ['nan', 'none', '']:
-                    sector_etfs[sector] = sector_etf
+                    self.sector_etfs[sector] = sector_etf
+                    self.etf_to_sector_id[sector_etf] = sector_id
             
-            # Process industries - use normalized name (without spaces) as ID
+            # Process industries
             if industry and industry.lower() not in ['nan', 'none', '']:
                 # Create normalized industry name (no spaces) as ID
                 industry_id = industry.replace(" ", "")
                 
                 # Store industry with its sector ID
-                sector_id = ""
-                if sector in self.sector_mapping:
-                    sector_id = self.sector_mapping[sector]
-                        
+                sector_id = self.sector_mapping.get(sector, "")
                 self.industry_mapping[industry] = (industry_id, sector_id)
                 
-                # Store industry ETF if available
+                # Store industry ETF and create ETF-to-ID mapping in one step
                 if industry_etf and industry_etf.lower() not in ['nan', 'none', '']:
-                    industry_etfs[industry] = industry_etf
-        
-        # Store ETF mappings for later use
-        self.sector_etfs = sector_etfs
-        self.industry_etfs = industry_etfs
-        
-        logger.info(f"Extracted {len(self.sector_mapping)} sectors and {len(self.industry_mapping)} industries with normalized name IDs")
-        logger.info(f"Found {len(sector_etfs)} sector ETFs and {len(industry_etfs)} industry ETFs")
-        
-        # Create a mapping from ETFs to normalized names for news processing
-        self.etf_to_sector_id = {}
-        self.etf_to_industry_id = {}
-        
-        for data in self.universe_data.values():
-            sector = data.get('sector', '').strip()
-            sector_etf = data.get('sector_etf', '').strip()
-            industry = data.get('industry', '').strip()
-            industry_etf = data.get('industry_etf', '').strip()
-            
-            # Map ETFs to normalized names
-            if sector_etf and sector_etf.lower() not in ['nan', 'none', ''] and sector:
-                self.etf_to_sector_id[sector_etf] = self.sector_mapping.get(sector, "")
+                    self.industry_etfs[industry] = industry_etf
+                    self.etf_to_industry_id[industry_etf] = industry_id
                 
-            if industry_etf and industry_etf.lower() not in ['nan', 'none', ''] and industry:
-                self.etf_to_industry_id[industry_etf] = self.industry_mapping.get(industry, ("", ""))[0]
-                
-        logger.info(f"Created ETF to name mappings: {len(self.etf_to_sector_id)} sectors, {len(self.etf_to_industry_id)} industries")
+        logger.info(f"Extracted {len(self.sector_mapping)} sectors, {len(self.industry_mapping)} industries")
+        logger.info(f"Found {len(self.sector_etfs)} sector ETFs, {len(self.industry_etfs)} industry ETFs")
             
     def _create_ticker_to_cik_mapping(self):
         """Create a mapping from ticker symbols to CIK for relationship creation"""
@@ -257,8 +229,38 @@ class Neo4jInitializer:
             cik = data.get('cik', '').strip()
             if cik and cik.lower() not in ['nan', 'none', '']:
                 self.ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
-            
-    def create_market_index(self) -> bool:
+                
+        logger.info(f"Created ticker to CIK mapping for {len(self.ticker_to_cik)} companies")
+    
+    def create_market_nodes(self):
+        """Create all market structure nodes in hierarchy order"""
+        # 1. Create MarketIndex (SPY)
+        self._create_market_index()
+        
+        # 2. Create Sectors
+        self._create_sectors()
+        
+        # 3. Create Industries
+        self._create_industries()
+        
+        # 4. Create Companies (basic nodes)
+        self._create_companies()
+        
+    def create_market_relationships(self):
+        """Create all market structure relationships"""
+        # 1. Link Sectors to MarketIndex
+        self._link_sectors_to_market_index()
+        
+        # 2. Link Industries to Sectors
+        self._link_industries_to_sectors()
+        
+        # 3. Link Companies to Industries
+        self._link_companies_to_industries()
+        
+        # 4. Create Company-to-Company relationships
+        self._create_company_relationships()
+
+    def _create_market_index(self) -> bool:
         """Create MarketIndex node (SPY)"""
         try:
             spy_node = MarketIndexNode(
@@ -273,89 +275,14 @@ class Neo4jInitializer:
             logger.error(f"Error creating market index: {e}")
             return False
 
-    def create_admin_reports(self) -> bool:
-        """Create admin report hierarchy for SEC filings."""
-        try:
-            from utils.EventTraderNodes import AdminReportNode
-            
-            # Create admin report nodes
-            admin_reports = [
-                # Parent nodes
-                *[AdminReportNode(code=t, label=l, category=t) 
-                for t, l in {
-                    "10-K": "10-K Reports",
-                    "10-Q": "10-Q Reports", 
-                    "8-K": "8-K Reports",
-                    "SCHEDULE 13D": "Schedule 13D Reports",
-                    "SC TO-I": "SC TO-I Reports",
-                    "425": "425 Reports",
-                    "SC 14D9": "SC 14D9 Reports",
-                    "6-K": "6-K Reports"
-                }.items()],
-                
-                # Child nodes
-                *[AdminReportNode(code=f"10-K_FYE-{m}31", label=f"FYE {m}/31", category="10-K") 
-                for m in ['03', '06', '09', '12']],
-                *[AdminReportNode(code=f"10-Q_Q{q}", label=f"Q{q} Filing", category="10-Q") 
-                for q in range(1, 5)]
-            ]
-            
-            # Create parent-child relationships
-            relationships = [(p, c, RelationType.HAS_SUB_REPORT) 
-                    for p in admin_reports[:8]  # Parent nodes (increased from 3 to 8)
-                    for c in admin_reports[8:]  # Child nodes (starting index changed from 3 to 8)
-                    if p.code == c.category]
-            
-            # Export nodes and relationships to Neo4j
-            print("Adding", len(admin_reports), "AdminReportNode nodes")
-            self.manager._export_nodes([admin_reports])
-            print("Created", len(admin_reports), "AdminReportNode nodes")
-            self.manager.merge_relationships(relationships)
-            print("Export completed successfully")
-            
-            logger.info(f"Created admin report hierarchy with {len(admin_reports)} nodes and {len(relationships)} relationships")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Error creating admin report hierarchy: {e}")
-            return False
-    
-    def generate_ticker_id(self, name: str) -> str:
-        """Generate ETF-like ticker from a name"""
-        # Use first letters of words + add chars to ensure 3+ chars
-        ticker = ''.join(word[0] for word in name.split()[:3]).upper()
-        if len(ticker) < 3:
-            ticker = (ticker + name.replace(' ', '')[:3-len(ticker)]).upper()
-        return ticker
-            
-    def create_sectors(self) -> bool:
-        """Create Sector nodes using normalized names (without spaces) as IDs"""
+    def _create_sectors(self) -> bool:
+        """Create Sector nodes using normalized names as IDs"""
         sectors = {}  # {normalized_sector_id: (sector_name, sector_etf)}
         
-        # Use sector mapping (normalized names) from extraction
+        # Use sector mapping from extraction
         for sector_name, sector_id in self.sector_mapping.items():
-            # Get ETF for this sector if available
             sector_etf = self.sector_etfs.get(sector_name)
             sectors[sector_id] = (sector_name, sector_etf)
-        
-        # Then process any sectors not already in the mapping
-        for data in self.universe_data.values():
-            sector_name = data.get('sector', '').strip()
-            sector_etf = data.get('sector_etf', '').strip()
-            
-            if not sector_name or sector_name.lower() in ['nan', 'none', '']:
-                continue
-                
-            # Skip if already processed
-            if sector_name in self.sector_mapping:
-                continue
-                
-            # Generate normalized sector ID
-            sector_id = sector_name.replace(" ", "")
-            sectors[sector_id] = (sector_name, sector_etf if sector_etf else None)
-            
-            # Add to mapping for future use
-            self.sector_mapping[sector_name] = sector_id
         
         # Create sector nodes
         sector_nodes = [
@@ -368,61 +295,17 @@ class Neo4jInitializer:
             return False
             
         self.manager.merge_nodes(sector_nodes)
-        
-        # Link sectors to SPY
-        # This establishes the top level of our hierarchy: Sectors belong to MarketIndex
-        # We don't create direct relationships from Industry or Company to MarketIndex
-        with self.manager.driver.session() as session:
-            session.run("""
-            MATCH (s:Sector)
-            WHERE NOT (s)-[:BELONGS_TO]->(:MarketIndex)
-            MATCH (m:MarketIndex {id: 'SPY'})
-            MERGE (s)-[:BELONGS_TO]->(m)
-            """)
-            
-        logger.info(f"Created {len(sector_nodes)} Sector nodes using normalized name IDs")
+        logger.info(f"Created {len(sector_nodes)} Sector nodes")
         return True
     
-    def create_industries(self) -> bool:
-        """Create Industry nodes using normalized names (without spaces) as IDs"""
+    def _create_industries(self) -> bool:
+        """Create Industry nodes using normalized names as IDs"""
         industries = {}  # {normalized_industry_id: (name, sector_id, industry_etf)}
         
-        # Use industry mapping (normalized names) from extraction
+        # Use industry mapping from extraction
         for industry_name, (industry_id, sector_id) in self.industry_mapping.items():
-            # Get ETF for this industry if available
             industry_etf = self.industry_etfs.get(industry_name)
             industries[industry_id] = (industry_name, sector_id, industry_etf)
-        
-        # Then process any industries not already in the mapping
-        for data in self.universe_data.values():
-            industry_name = data.get('industry', '').strip()
-            sector_name = data.get('sector', '').strip()
-            industry_etf = data.get('industry_etf', '').strip()
-            
-            if not industry_name or industry_name.lower() in ['nan', 'none', '']:
-                continue
-                
-            # Skip if already processed
-            if industry_name in self.industry_mapping:
-                continue
-                
-            # Get sector ID from our mapping
-            sector_id = self.sector_mapping.get(sector_name, '')
-            
-            # Generate normalized industry ID
-            industry_id = industry_name.replace(" ", "")
-            
-            # Ensure uniqueness
-            base_id = industry_id
-            counter = 1
-            while industry_id in industries and industries[industry_id][1] != sector_id:
-                industry_id = f"{base_id}{counter}"
-                counter += 1
-            
-            industries[industry_id] = (industry_name, sector_id, industry_etf if industry_etf else None)
-            
-            # Add to mapping for future use
-            self.industry_mapping[industry_name] = (industry_id, sector_id)
         
         # Create industry nodes
         industry_nodes = [
@@ -436,21 +319,10 @@ class Neo4jInitializer:
             return False
             
         self.manager.merge_nodes(industry_nodes)
-        
-        # Link industries to sectors
-        with self.manager.driver.session() as session:
-            session.run("""
-            MATCH (i:Industry)
-            WHERE i.sector_id IS NOT NULL AND i.sector_id <> ''
-            AND NOT (i)-[:BELONGS_TO]->(:Sector)
-            MATCH (s:Sector {id: i.sector_id})
-            MERGE (i)-[:BELONGS_TO]->(s)
-            """)
-        
-        logger.info(f"Created {len(industry_nodes)} Industry nodes using normalized name IDs")
+        logger.info(f"Created {len(industry_nodes)} Industry nodes")
         return True
     
-    def create_companies(self) -> bool:
+    def _create_companies(self) -> bool:
         """Create basic Company nodes"""
         valid_nodes = []
         
@@ -499,124 +371,94 @@ class Neo4jInitializer:
         logger.info(f"Created {len(valid_nodes)} Company nodes")
         return True
     
-    def link_companies(self) -> bool:
+    def _link_sectors_to_market_index(self) -> bool:
+        """Link sectors to the MarketIndex (SPY)"""
+        try:
+            # Use the new consolidated hierarchical relationship function
+            count = self.manager.create_hierarchical_relationships(
+                child_label="Sector",
+                parent_label="MarketIndex",
+                relationship_type="BELONGS_TO",
+                child_condition="NOT (c)-[:BELONGS_TO]->(:MarketIndex)",
+                parent_id_property="id",
+                parent_id_value="SPY"  # Specify SPY as the parent MarketIndex
+            )
+            
+            logger.info(f"Linked {count} Sectors to MarketIndex")
+            return True
+        except Exception as e:
+            logger.error(f"Error linking sectors to market index: {e}")
+            return False
+        
+    def _link_industries_to_sectors(self) -> bool:
+        """Link industries to their sectors"""
+        try:
+            # Use the new consolidated hierarchical relationship function
+            count = self.manager.create_hierarchical_relationships(
+                child_label="Industry",
+                parent_label="Sector",
+                relationship_type="BELONGS_TO",
+                match_property="sector_id",
+                parent_id_property="id"
+            )
+            
+            logger.info(f"Linked {count} Industries to Sectors")
+            return True
+        except Exception as e:
+            logger.error(f"Error linking industries to sectors: {e}")
+            return False
+    
+    def _link_companies_to_industries(self) -> bool:
         """Connect companies to their industries using normalized industry names"""
-        with self.manager.driver.session() as session:
-            # Prepare company records with normalized industry names
-            session.run("""
-            MATCH (c:Company)
-            WHERE c.industry IS NOT NULL AND c.industry <> ''
-            SET c.industry_normalized = replace(c.industry, " ", "")
-            """)
+        try:
+            # Use the new specialized function that implements the entire logic
+            results = self.manager.link_companies_to_industries()
             
-            # Link companies to industries using normalized industry names
-            direct_result = session.run("""
-            MATCH (c:Company)
-            WHERE c.industry_normalized IS NOT NULL AND c.industry_normalized <> ''
-            MATCH (i:Industry {id: c.industry_normalized})
-            MERGE (c)-[:BELONGS_TO]->(i)
-            RETURN count(*) as connected
-            """)
-            direct_connected = direct_result.single()["connected"]
-            logger.info(f"Connected {direct_connected} companies to industries using normalized industry names")
+            # Log results
+            direct_match = results.get("direct_match", 0)
+            name_match = results.get("name_match", 0)
+            created_count = results.get("created_for_orphans", 0)
             
-            # Link companies by case-insensitive industry name for any that didn't match exactly
-            name_result = session.run("""
-            MATCH (c:Company)
-            WHERE c.industry IS NOT NULL AND c.industry <> ''
-            AND NOT (c)-[:BELONGS_TO]->(:Industry)
-            MATCH (i:Industry)
-            WHERE toLower(trim(i.name)) = toLower(trim(c.industry))
-            MERGE (c)-[:BELONGS_TO]->(i)
-            RETURN count(*) as connected
-            """)
-            name_connected = name_result.single()["connected"]
-            logger.info(f"Connected additional {name_connected} companies using industry name")
+            logger.info(f"Connected {direct_match} companies to industries using normalized industry names")
+            logger.info(f"Connected additional {name_match} companies using industry name")
+            logger.info(f"Created {created_count} industries for orphaned companies")
             
-            # Find remaining companies without industry links
-            orphaned = session.run("""
-            MATCH (c:Company)
-            WHERE NOT (c)-[:BELONGS_TO]->(:Industry)
-            AND c.industry IS NOT NULL AND c.industry <> ''
-            RETURN c.id as id, c.ticker as ticker, c.industry as industry, 
-                   c.sector as sector
-            """).data()
-            
-            logger.info(f"Found {len(orphaned)} companies needing industry nodes")
-            
-            # Create industries for orphaned companies
-            created_count = 0
-            for company in orphaned:
-                company_id = company["id"]
-                industry_name = company["industry"]
-                sector_name = company.get("sector", "")
-                
-                # Generate normalized industry ID
-                industry_id = industry_name.replace(" ", "")
-                
-                # Determine sector ID
-                sector_id = ""
-                if sector_name:
-                    sector_id = sector_name.replace(" ", "")
-                
-                # Create industry node with proper sector relationship
-                session.run("""
-                MERGE (i:Industry {id: $industry_id})
-                ON CREATE SET i.name = $industry_name,
-                             i.sector_id = $sector_id
-                WITH i
-                MATCH (c:Company {id: $company_id})
-                MERGE (c)-[:BELONGS_TO]->(i)
-                """, {
-                    "industry_id": industry_id,
-                    "industry_name": industry_name,
-                    "sector_id": sector_id,
-                    "company_id": company_id
-                })
-                created_count += 1
-            
-            # Link industries to sectors (for newly created industries)
-            # Note: We only link sectors to MarketIndex and industries to sectors, not all to MarketIndex.
-            # The schema visualization may show transitive relationships which is why it appears all belong to MarketIndex
-            session.run("""
-            MATCH (i:Industry)
-            WHERE i.sector_id IS NOT NULL AND i.sector_id <> ''
-            AND NOT (i)-[:BELONGS_TO]->(:Sector)
-            MATCH (s:Sector {id: i.sector_id})
-            MERGE (i)-[:BELONGS_TO]->(s)
-            """)
-            
-            # Remove any direct company->sector links (they should go through industries)
-            session.run("""
-            MATCH (c:Company)-[r:BELONGS_TO]->(s:Sector)
-            DELETE r
-            """)
-            
-            total_connected = direct_connected + name_connected + created_count
+            total_connected = direct_match + name_match + created_count
             logger.info(f"Connected total of {total_connected} companies to industries")
             
             return True
+        except Exception as e:
+            logger.error(f"Error linking companies to industries: {e}")
+            return False
     
-    def create_company_relationships(self) -> bool:
+    def _create_company_relationships(self) -> bool:
         """Create bidirectional RELATED_TO relationships between companies"""
         try:
+            # Get all existing companies using execute_cypher_query
+            result = self.manager.execute_cypher_query(
+                "MATCH (c:Company) RETURN c.id as cik, c.ticker as ticker",
+                {}
+            )
+            
+            if not result:
+                logger.warning("No companies found for relationship creation")
+                return False
+                
             # Create a lookup for Company by CIK
             node_by_cik = {}
-            with self.manager.driver.session() as session:
-                result = session.run("MATCH (c:Company) RETURN c.id as cik, c.ticker as ticker")
-                for record in result:
-                    cik = record["cik"]
-                    ticker = record["ticker"]
-                    if cik and ticker:
-                        node_by_cik[cik] = ticker
-                
+            for record in self.manager.driver.session().run("MATCH (c:Company) RETURN c.id as cik, c.ticker as ticker"):
+                cik = record["cik"]
+                ticker = record["ticker"]
+                if cik and ticker:
+                    node_by_cik[cik] = ticker
+            
             if not node_by_cik:
                 logger.warning("No companies found for relationship creation")
                 return False
             
-            # Use a set to track unique company pairs (regardless of direction)
+            # The rest of the method remains unchanged
             relationship_pairs = set()
-            relationships = []
+            relationship_batch = []
             
             # Process each company's related tickers
             for symbol, data in self.universe_data.items():
@@ -660,38 +502,22 @@ class Neo4jInitializer:
                     
                     relationship_pairs.add(company_pair)
                     
-                    # Add to relationship list
-                    relationships.append((
+                    # Add to relationship batch
+                    relationship_batch.append((
                         source_cik,
                         related_cik,
                         {
                             "source_ticker": symbol,
                             "target_ticker": related_ticker,
                             "relationship_type": "news_co_occurrence",
-                            "bidirectional": True  # Flag to indicate bidirectional relationship
+                            "bidirectional": True
                         }
                     ))
             
-            # Create the relationships in Neo4j
-            if relationships:
-                with self.manager.driver.session() as session:
-                    batch_size = 100  # Process in batches for better performance
-                    for i in range(0, len(relationships), batch_size):
-                        batch = relationships[i:i+batch_size]
-                        for source_cik, target_cik, props in batch:
-                            # Use undirected relationship syntax (no directional arrow)
-                            session.run("""
-                            MATCH (source:Company {id: $source_cik})
-                            MATCH (target:Company {id: $target_cik})
-                            MERGE (source)-[r:RELATED_TO]-(target)
-                            ON CREATE SET r += $props
-                            """, {
-                                "source_cik": source_cik,
-                                "target_cik": target_cik,
-                                "props": props
-                            })
-            
-                logger.info(f"Created {len(relationships)} bidirectional RELATED_TO relationships between companies")
+            # Create the relationships in Neo4j using the batch function
+            if relationship_batch:
+                count = self.manager.create_company_relationships_batch(relationship_batch)
+                logger.info(f"Created {count} bidirectional RELATED_TO relationships between companies")
                 return True
             else:
                 logger.info("No company relationships to create")
@@ -699,6 +525,72 @@ class Neo4jInitializer:
                 
         except Exception as e:
             logger.error(f"Error creating company relationships: {e}")
+            return False
+
+    def create_admin_reports(self) -> bool:
+        """Create admin report hierarchy for SEC filings."""
+        try:
+            # Define report categories and subcategories
+            report_categories = {
+                "10-K": "10-K Reports",
+                "10-Q": "10-Q Reports", 
+                "8-K": "8-K Reports",
+                "SCHEDULE 13D": "Schedule 13D Reports",
+                "SC TO-I": "SC TO-I Reports",
+                "425": "425 Reports",
+                "SC 14D9": "SC 14D9 Reports",
+                "6-K": "6-K Reports"
+            }
+            
+            # Define subcategories with their parent categories
+            subcategories = [
+                # 10-K subcategories for fiscal year ends
+                *[{"code": f"10-K_FYE-{m}31", "label": f"FYE {m}/31", "category": "10-K"} 
+                 for m in ['03', '06', '09', '12']],
+                
+                # 10-Q subcategories for quarters
+                *[{"code": f"10-Q_Q{q}", "label": f"Q{q} Filing", "category": "10-Q"} 
+                 for q in range(1, 5)]
+            ]
+            
+            # Create parent nodes
+            parent_nodes = [
+                AdminReportNode(code=code, label=label, category=code)
+                for code, label in report_categories.items()
+            ]
+            
+            # Create child nodes
+            child_nodes = [
+                AdminReportNode(
+                    code=item["code"], 
+                    label=item["label"], 
+                    category=item["category"]
+                )
+                for item in subcategories
+            ]
+            
+            # Combine all nodes for efficient batch creation
+            all_nodes = parent_nodes + child_nodes
+            
+            # Create nodes in a single batch operation
+            self.manager._export_nodes([all_nodes])
+            logger.info(f"Created {len(all_nodes)} admin report nodes")
+            
+            # Create parent-child relationships in a single batch
+            relationships = [
+                (parent, child, RelationType.HAS_SUB_REPORT)
+                for parent in parent_nodes
+                for child in child_nodes
+                if parent.code == child.category
+            ]
+            
+            self.manager.merge_relationships(relationships)
+            logger.info(f"Created {len(relationships)} admin report hierarchical relationships")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error creating admin report hierarchy: {e}")
             return False
 
 

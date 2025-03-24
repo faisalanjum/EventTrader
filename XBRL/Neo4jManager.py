@@ -798,4 +798,241 @@ class Neo4jManager:
             record = result.single()
             return record and record["count"] > 0
 
+    def create_hierarchical_relationships(self, child_label, parent_label, relationship_type="BELONGS_TO", 
+                                          match_property=None, parent_id_property="id", child_condition=None, parent_id_value=None):
+        """
+        Create hierarchical relationships between child and parent nodes efficiently.
+        
+        Args:
+            child_label: Label of child nodes (e.g., 'Sector', 'Industry')
+            parent_label: Label of parent nodes (e.g., 'MarketIndex', 'Sector')
+            relationship_type: Type of relationship (default: 'BELONGS_TO')
+            match_property: Property on child that references parent ID (default: None)
+            parent_id_property: Property on parent for matching (default: 'id')
+            child_condition: Additional WHERE condition for child nodes (default: None)
+            parent_id_value: Specific value for parent ID (e.g., 'SPY' for MarketIndex)
+        
+        Returns:
+            int: Number of relationships created
+        """
+        try:
+            # Construct WHERE clause
+            conditions = [f"NOT (c)-[:{relationship_type}]->(:{parent_label})"]
+            
+            if match_property:
+                conditions.append(f"c.{match_property} IS NOT NULL AND c.{match_property} <> ''")
+                
+            if child_condition:
+                conditions.append(child_condition)
+            
+            # Construct parent matching
+            params = {}
+            if match_property:
+                parent_match = f"{{{parent_id_property}: c.{match_property}}}"
+            elif parent_id_value:
+                parent_match = f"{{{parent_id_property}: $parent_id_value}}"
+                params["parent_id_value"] = parent_id_value
+            else:
+                parent_match = ""
+            
+            # Complete query
+            query = f"""
+            MATCH (c:{child_label})
+            WHERE {" AND ".join(conditions)}
+            MATCH (p:{parent_label} {parent_match})
+            MERGE (c)-[r:{relationship_type}]->(p)
+            RETURN count(r) AS count
+            """
+            
+            # Execute
+            with self.driver.session() as session:
+                result = session.run(query, params)
+                record = result.single()
+                return record["count"] if record else 0
+                
+        except Exception as e:
+            raise RuntimeError(f"Failed to create hierarchical relationships: {e}")
+
+    def link_companies_to_industries(self):
+        """
+        Specialized function to link companies to industries using multiple strategies:
+        1. Normalize industry names and link by exact match
+        2. Link by case-insensitive name match
+        3. Create missing industries for orphans and link them
+        4. Link new industries to their sectors
+        5. Remove direct company->sector links
+        
+        Returns:
+            dict: Counts of relationships created by each strategy
+        """
+        # Define queries as constants for better readability
+        NORMALIZE_QUERY = """
+        MATCH (c:Company)
+        WHERE c.industry IS NOT NULL AND c.industry <> ''
+        SET c.industry_normalized = replace(c.industry, " ", "")
+        """
+        
+        DIRECT_MATCH_QUERY = """
+        MATCH (c:Company)
+        WHERE c.industry_normalized IS NOT NULL AND c.industry_normalized <> ''
+        MATCH (i:Industry {id: c.industry_normalized})
+        MERGE (c)-[:BELONGS_TO]->(i)
+        RETURN count(*) as connected
+        """
+        
+        NAME_MATCH_QUERY = """
+        MATCH (c:Company)
+        WHERE c.industry IS NOT NULL AND c.industry <> ''
+        AND NOT (c)-[:BELONGS_TO]->(:Industry)
+        MATCH (i:Industry)
+        WHERE toLower(trim(i.name)) = toLower(trim(c.industry))
+        MERGE (c)-[:BELONGS_TO]->(i)
+        RETURN count(*) as connected
+        """
+        
+        FIND_ORPHANS_QUERY = """
+        MATCH (c:Company)
+        WHERE NOT (c)-[:BELONGS_TO]->(:Industry)
+        AND c.industry IS NOT NULL AND c.industry <> ''
+        RETURN c.id as id, c.ticker as ticker, c.industry as industry, 
+               c.sector as sector
+        """
+        
+        CREATE_INDUSTRY_QUERY = """
+        MERGE (i:Industry {id: $industry_id})
+        ON CREATE SET i.name = $industry_name,
+                     i.sector_id = $sector_id
+        WITH i
+        MATCH (c:Company {id: $company_id})
+        MERGE (c)-[:BELONGS_TO]->(i)
+        """
+        
+        LINK_INDUSTRIES_QUERY = """
+        MATCH (i:Industry)
+        WHERE i.sector_id IS NOT NULL AND i.sector_id <> ''
+        AND NOT (i)-[:BELONGS_TO]->(:Sector)
+        MATCH (s:Sector {id: i.sector_id})
+        MERGE (i)-[:BELONGS_TO]->(s)
+        RETURN count(*) as linked
+        """
+        
+        REMOVE_DIRECT_LINKS_QUERY = """
+        MATCH (c:Company)-[r:BELONGS_TO]->(s:Sector)
+        DELETE r
+        RETURN count(r) as removed
+        """
+        
+        try:
+            results = {}
+            
+            with self.driver.session() as session:
+                # Step 1: Normalize company industry names
+                session.run(NORMALIZE_QUERY)
+                
+                # Step 2: Link by exact normalized match
+                direct_result = session.run(DIRECT_MATCH_QUERY)
+                direct_connected = direct_result.single()["connected"]
+                results["direct_match"] = direct_connected
+                
+                # Step 3: Link by case-insensitive name match
+                name_result = session.run(NAME_MATCH_QUERY)
+                name_connected = name_result.single()["connected"]
+                results["name_match"] = name_connected
+                
+                # Step 4: Find orphaned companies
+                orphaned = session.run(FIND_ORPHANS_QUERY).data()
+                
+                # Step 5: Create industries for orphaned companies
+                created_count = 0
+                for company in orphaned:
+                    company_id = company["id"]
+                    industry_name = company["industry"]
+                    sector_name = company.get("sector", "")
+                    
+                    # Generate normalized industry ID
+                    industry_id = industry_name.replace(" ", "")
+                    
+                    # Determine sector ID
+                    sector_id = sector_name.replace(" ", "") if sector_name else ""
+                    
+                    # Create industry node with proper sector relationship
+                    session.run(CREATE_INDUSTRY_QUERY, {
+                        "industry_id": industry_id,
+                        "industry_name": industry_name,
+                        "sector_id": sector_id,
+                        "company_id": company_id
+                    })
+                    created_count += 1
+                
+                results["created_for_orphans"] = created_count
+                
+                # Step 6: Link new industries to sectors
+                industry_sector_result = session.run(LINK_INDUSTRIES_QUERY)
+                industry_sector_linked = industry_sector_result.single()["linked"]
+                results["industries_linked_to_sectors"] = industry_sector_linked
+                
+                # Step 7: Remove direct company->sector links
+                removed_result = session.run(REMOVE_DIRECT_LINKS_QUERY)
+                direct_links_removed = removed_result.single()["removed"]
+                results["direct_company_sector_links_removed"] = direct_links_removed
+                
+                return results
+                
+        except Exception as e:
+            raise RuntimeError(f"Failed to link companies to industries: {e}")
+
+    def create_company_relationships_batch(self, relationship_pairs, relationship_type="RELATED_TO", batch_size=100):
+        """
+        Create bidirectional relationships between companies efficiently in batches.
+        
+        Args:
+            relationship_pairs: List of (source_cik, target_cik, properties) tuples
+            relationship_type: Type of relationship (default: 'RELATED_TO')
+            batch_size: Size of batches for processing
+            
+        Returns:
+            int: Number of relationships created
+        """
+        if not relationship_pairs:
+            return 0
+            
+        try:
+            # Single query with UNWIND for better performance
+            query = f"""
+            UNWIND $batch_params AS param
+            MATCH (source:Company {{id: param.source_cik}})
+            MATCH (target:Company {{id: param.target_cik}})
+            MERGE (source)-[r:{relationship_type}]-(target)
+            ON CREATE SET r += param.props
+            RETURN count(r) as count
+            """
+            
+            total_count = 0
+            
+            # Process in batches to avoid transaction size limits
+            with self.driver.session() as session:
+                for i in range(0, len(relationship_pairs), batch_size):
+                    batch = relationship_pairs[i:i+batch_size]
+                    
+                    # Prepare batch parameters in one format
+                    batch_params = [
+                        {
+                            "source_cik": source_cik,
+                            "target_cik": target_cik,
+                            "props": props
+                        }
+                        for source_cik, target_cik, props in batch
+                    ]
+                    
+                    # Execute batch creation
+                    result = session.run(query, {"batch_params": batch_params})
+                    record = result.single()
+                    if record:
+                        total_count += record["count"]
+            
+            return total_count
+                
+        except Exception as e:
+            raise RuntimeError(f"Failed to create company relationships: {e}")
+
 # endregion : Neo4j Manager ########################
