@@ -53,6 +53,17 @@ class Neo4jProcessor:
     initialization and functionality.
     """
     
+    # Complete list of node types initialized in Neo4jInitializer
+    REQUIRED_NODES = [
+        "Company", 
+        "MarketIndex", 
+        "Sector", 
+        "Industry", 
+        "AdminReport", 
+        "AdminSection", 
+        "FinancialStatement"
+    ]
+    # Add more node types here as needed
 
 
 # region: Initialization and Core Infrastructure - # Methods like connect, close, is_initialized, initialize, _get_universe, _collect_redis_key_counts
@@ -107,40 +118,54 @@ class Neo4jProcessor:
     
     def is_initialized(self):
         """
-        Check if Neo4j database is initialized by verifying Company nodes exist.
+        Check if Neo4j database is initialized with all required node types.
+        
+        Args:
+            test_mode: If True, simulate that a node type is missing (for testing)
         """
         if not self.connect():
             return False
             
         try:
+            # Use a simple query approach - faster and more reliable
+            missing = []
+            node_status = {}
+            
+            # Check each required node type with a separate query
             with self.manager.driver.session() as session:
-                # Check for Company nodes - minimalistic approach
-                result = session.run("MATCH (c:Company) RETURN count(c) as count")
-                company_count = result.single()["count"]
-                
-                # Database is initialized if it has company nodes
-                initialized = company_count > 0
-                
-                if initialized:
-                    logger.info(f"Neo4j database already initialized with {company_count} companies")
-                else:
-                    logger.info("Neo4j database needs initialization (no companies found)")
+                for node_type in self.REQUIRED_NODES:
+                    result = session.run(f"MATCH (n:{node_type}) RETURN COUNT(n) > 0 AS exists").single()
+                    exists = result["exists"]
                     
-                return initialized
+                    node_status[node_type] = exists
+                    
+                    if not exists:
+                        missing.append(node_type)
+                    
+            # Database is initialized if no required nodes are missing
+            initialized = len(missing) == 0
+            
+            if initialized:
+                logger.info("Neo4j database fully initialized")
+                logger.info(f"Node status: {node_status}")
+            else:
+                logger.info(f"Neo4j database needs initialization (missing: {', '.join(missing)})")
+                logger.info(f"Node status: {node_status}")
+                
+            return initialized
                 
         except Exception as e:
             logger.error(f"Error checking Neo4j initialization: {e}")
             return False
     
     def initialize(self):
-        """Initialize Neo4j with market hierarchy using the dedicated initializer."""
+        """
+        Minimalistic initialization of Neo4j database.
+        """
         # Skip if already initialized
         if self.is_initialized():
             logger.info("Neo4j database already initialized")
             return True
-        
-        # Configure SEC user agent
-        # self.c(email="yourapp@example.com")
         
         # Load universe data if needed
         if not self.universe_data:
@@ -149,7 +174,7 @@ class Neo4jProcessor:
                 logger.warning("No company data found")
                 return False
         
-        # Use the dedicated initializer class
+        # Initialize using Neo4jInitializer
         initializer = Neo4jInitializer(
             uri=self.uri,
             username=self.username,
@@ -157,14 +182,20 @@ class Neo4jProcessor:
             universe_data=self.universe_data
         )
         
-        # Run the initialization process
-        success = initializer.initialize_all()
-        if success:
-            logger.info("Neo4j initialization complete")
-        else:
-            logger.error("Neo4j initialization failed")
+        # One-time connection and initialization
+        if not initializer.connect():
+            logger.error("Failed to connect to Neo4j")
+            return False
         
-        return success
+        try:
+            success = initializer.initialize_all()
+            logger.info("Initialization " + ("succeeded" if success else "failed"))
+            return success
+        except Exception as e:
+            logger.error(f"Error during initialization: {e}")
+            return False
+        finally:
+            initializer.close()
 
     def _get_universe(self):
 
@@ -1966,10 +1997,26 @@ class Neo4jProcessor:
 
 
 # Function to initialize Neo4j database
-def init_neo4j():
-    """Initialize Neo4j database with required structure and company data"""
+def init_neo4j(check_only=False):
+    """
+    Initialize Neo4j database with required structure and company data
+    
+    Args:
+        check_only: If True, only check if initialization is needed without actually performing it
+    """
     try:
-        # Use the dedicated initializer class
+        # First check if database is already initialized
+        processor = Neo4jProcessor()
+        if processor.is_initialized():
+            logger.info("Neo4j database is already fully initialized. Skipping initialization.")
+            return True
+            
+        # At this point, we know initialization is needed
+        if check_only:
+            logger.info("Neo4j database needs initialization, but check_only flag is set")
+            return False
+            
+        # Database needs initialization, use the dedicated initializer class
         from utils.Neo4jInitializer import Neo4jInitializer
         from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
         
@@ -2190,3 +2237,40 @@ if __name__ == "__main__":
         print("  --skip-without-returns: Skip processing items without returns")
         print("  --skip-news: Skip processing news in 'all' mode")
         print("  --skip-reports: Skip processing reports in 'all' mode") 
+
+# Testing function for initialization with custom required nodes
+def test_initialization_with_custom_nodes(required_nodes=None, run_init=False):
+    """
+    Test function to simulate initialization with custom required nodes
+    
+    Args:
+        required_nodes: Custom list of required node types
+        run_init: Whether to actually run the initialization
+        
+    Returns:
+        True if the database is considered initialized with the given requirements
+    """
+    original_nodes = Neo4jProcessor.REQUIRED_NODES
+    
+    try:
+        if required_nodes:
+            Neo4jProcessor.REQUIRED_NODES = required_nodes
+            
+        # Check initialization status
+        processor = Neo4jProcessor()
+        is_init = processor.is_initialized()
+        
+        # Run initialization if requested
+        if not is_init and run_init:
+            logger.info("Database not initialized with custom nodes, running initialization...")
+            init_result = init_neo4j()
+            logger.info(f"Initialization result: {init_result}")
+            
+            # Check again after initialization
+            is_init = processor.is_initialized()
+            
+        return is_init
+        
+    finally:
+        # Restore original required nodes
+        Neo4jProcessor.REQUIRED_NODES = original_nodes
