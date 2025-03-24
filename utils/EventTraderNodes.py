@@ -434,6 +434,53 @@ class AdminReportNode(Neo4jNode):
         return None
 
 @dataclass
+class AdminSectionNode(Neo4jNode):
+    """
+    Admin section node for SEC filing sections.
+    Used to categorize document sections for analysis.
+    
+    Args:
+        code: Unique code (e.g., '1', '1A', '1-1')
+        label: Display label (e.g., 'Business', 'EntryintoaMaterialDefinitiveAgreement')
+        category: Category for grouping (e.g., '10-K', '10-Q', '8-K')
+    """
+    code: str      # Unique identifier (section number/code)
+    label: str     # Display label (section name)
+    category: str  # Category for grouping (report type)
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.ADMIN_SECTION
+    
+    @property
+    def id(self) -> str:
+        """Use code and category as unique identifier"""
+        return f"{self.category}_{self.code}"
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        return {
+            'id': self.id,
+            'code': self.code,
+            'label': self.label,
+            'category': self.category,
+            'displayLabel': self.label
+        }
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'AdminSectionNode':
+        """Create AdminSectionNode from Neo4j properties"""
+        # Required fields
+        if 'code' not in props:
+            raise ValueError("Missing required field 'code' for AdminSectionNode")
+        
+        return cls(
+            code=props['code'],
+            label=props.get('label', ''),
+            category=props.get('category', '')
+        )
+
+@dataclass
 class MarketIndexNode(Neo4jNode):
     """Market Index node in Neo4j (e.g., S&P 500 'SPY')"""
     ticker: str  # ETF ticker (unique identifier)

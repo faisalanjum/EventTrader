@@ -4,7 +4,7 @@ from typing import Dict, List, Optional, Any, Tuple
 from neo4j import GraphDatabase
 import pandas as pd
 
-from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode
+from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, AdminSectionNode
 from XBRL.Neo4jManager import Neo4jManager
 from XBRL.xbrl_core import RelationType
 
@@ -166,6 +166,9 @@ class Neo4jInitializer:
             
             # 4. Create administrative entities (SEC filing report types)
             self.create_admin_reports()
+            
+            # 5. Create administrative section hierarchy (new)
+            self.create_admin_sections()
             
             logger.info("Market hierarchy initialization complete")
             return True
@@ -591,6 +594,81 @@ class Neo4jInitializer:
             
         except Exception as e:
             logger.error(f"Error creating admin report hierarchy: {e}")
+            return False
+
+    def create_admin_sections(self) -> bool:
+        """Create administrative section hierarchy for SEC filing sections."""
+        try:
+            from SEC_API_Files.reportSections import ten_k_sections, ten_q_sections, eight_k_sections
+            
+            # Define top-level section categories
+            section_categories = {
+                "10-K": "10-K Sections",
+                "10-Q": "10-Q Sections",
+                "8-K": "8-K Sections"
+            }
+            
+            # Create parent category nodes
+            parent_nodes = [
+                AdminSectionNode(code=code, label=label, category=code)
+                for code, label in section_categories.items()
+            ]
+            
+            # Create child section nodes
+            child_nodes = []
+            
+            # Process 10-K sections
+            for section_code, section_label in ten_k_sections.items():
+                child_nodes.append(
+                    AdminSectionNode(
+                        code=section_code,
+                        label=section_label,
+                        category="10-K"
+                    )
+                )
+            
+            # Process 10-Q sections
+            for section_code, section_label in ten_q_sections.items():
+                child_nodes.append(
+                    AdminSectionNode(
+                        code=section_code,
+                        label=section_label,
+                        category="10-Q"
+                    )
+                )
+            
+            # Process 8-K sections
+            for section_code, section_label in eight_k_sections.items():
+                child_nodes.append(
+                    AdminSectionNode(
+                        code=section_code,
+                        label=section_label,
+                        category="8-K"
+                    )
+                )
+            
+            # Combine all nodes for efficient batch creation
+            all_nodes = parent_nodes + child_nodes
+            
+            # Create nodes in a single batch operation
+            self.manager._export_nodes([all_nodes])
+            logger.info(f"Created {len(all_nodes)} admin section nodes")
+            
+            # Create parent-child relationships in a single batch
+            relationships = [
+                (parent, child, RelationType.HAS_SUB_SECTION)
+                for parent in parent_nodes
+                for child in child_nodes
+                if parent.code == child.category
+            ]
+            
+            self.manager.merge_relationships(relationships)
+            logger.info(f"Created {len(relationships)} admin section hierarchical relationships")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error creating admin section hierarchy: {e}")
             return False
 
 

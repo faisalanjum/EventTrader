@@ -86,6 +86,7 @@ class NodeType(Enum):
     
     DATE = "Date"
     ADMIN_REPORT = "AdminReport"
+    ADMIN_SECTION = "AdminSection"  # Added for SEC filing sections
 
 
 
@@ -118,6 +119,7 @@ class RelationType(Enum):
     NEXT = "NEXT"                   # Next date
     HAS_PRICE = "HAS_PRICE"         # from Date to Entity/Company
     HAS_SUB_REPORT = "HAS_SUB_REPORT"  # For 10-K -> FYE and 10-Q -> Quarters relationships
+    HAS_SUB_SECTION = "HAS_SUB_SECTION"  # For section categories to individual sections
     REPORTED_ON = "REPORTED_ON"     # Between date and report (deprecated)
     PRESENTATION_EDGE = "PRESENTATION_EDGE" # From Fact to Fact
     CALCULATION_EDGE = "CALCULATION_EDGE" # From Fact to Fact
