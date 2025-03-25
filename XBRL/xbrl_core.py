@@ -142,6 +142,8 @@ class RelationType(Enum):
     HAS_XBRL = "HAS_XBRL"          # ReportNode -> XBRLNode relationship (single direction)
     HAS_SECTION = "HAS_SECTION"     # Report -> ExtractedSectionContent relationship
     HAS_EXHIBIT = "HAS_EXHIBIT"     # Report -> ExhibitContent relationship
+    HAS_FINANCIAL_STATEMENT = "HAS_FINANCIAL_STATEMENT"  # Report -> FinancialStatementContent relationship
+    HAS_FILING_TEXT = "HAS_FILING_TEXT"  # Report -> FilingTextContent relationship
 
 
 class ReportElementClassifier:

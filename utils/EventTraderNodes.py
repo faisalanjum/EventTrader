@@ -929,8 +929,7 @@ class FinancialStatementContent(Neo4jNode):
     filing_id: str             # Related filing accession number
     form_type: str             # 10-K, 10-Q
     statement_type: str        # BalanceSheets, StatementsOfIncome, etc.
-    metric_name: str           # Name of financial metric
-    value: str                 # Actual value
+    value: str                 # Actual value (contains entire statement data as JSON)
     filer_cik: Optional[str] = None  # Company CIK
     filed_at: Optional[str] = None   # Filing date
     period_end: Optional[str] = None # Period end date
@@ -950,7 +949,6 @@ class FinancialStatementContent(Neo4jNode):
             'filing_id': self.filing_id,
             'form_type': self.form_type,
             'statement_type': self.statement_type,
-            'metric_name': self.metric_name,
             'value': self.value
         }
         if self.filer_cik:
@@ -970,7 +968,6 @@ class FinancialStatementContent(Neo4jNode):
             filing_id=props.get('filing_id', ''),
             form_type=props.get('form_type', ''),
             statement_type=props.get('statement_type', ''),
-            metric_name=props.get('metric_name', ''),
             value=props.get('value', ''),
             filer_cik=props.get('filer_cik'),
             filed_at=props.get('filed_at'),

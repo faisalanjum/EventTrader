@@ -28,7 +28,7 @@ from utils.redisClasses import EventTraderRedis, RedisClient
 from utils.EventTraderNodes import (
     NewsNode, CompanyNode, SectorNode, 
     IndustryNode, MarketIndexNode, ReportNode,
-    ExtractedSectionContent, ExhibitContent
+    ExtractedSectionContent, ExhibitContent, FinancialStatementContent, FilingTextContent
 )
 
 # Internal Imports - Date Utilities
@@ -1137,6 +1137,26 @@ class Neo4jProcessor:
                 }
                 self._create_exhibit_nodes_from_report(report_id, exhibit_data)
             
+            # Process financial statements if present
+            if report_node.financial_statements:
+                financial_data = {
+                    'financial_statements': report_node.financial_statements,
+                    'formType': report_node.formType,
+                    'cik': report_node.cik,
+                    'created': report_node.created
+                }
+                self._create_financial_statement_nodes_from_report(report_id, financial_data)
+            
+            # Process filing text content if present
+            if report_node.filing_text_content:
+                filing_text_data = {
+                    'filing_text_content': report_node.filing_text_content,
+                    'formType': report_node.formType,
+                    'cik': report_node.cik,
+                    'created': report_node.created
+                }
+                self._create_filing_text_content_nodes_from_report(report_id, filing_text_data)
+            
             # Check if this report is eligible for XBRL processing and we haven't processed one yet
             if (not self.xbrl_processed and
                 report_props.get('is_xml') == True and
@@ -1428,6 +1448,147 @@ class Neo4jProcessor:
         
         except Exception as e:
             logger.error(f"Error creating exhibit nodes for report {report_id}: {e}")
+            return []
+
+
+    def _create_filing_text_content_nodes_from_report(self, report_id, report_data):
+        """
+        Create filing text content node from report filing_text_content and link it to the report
+        
+        Args:
+            report_id: Report accession number
+            report_data: Report data with filing_text_content, formType, cik, and created
+        
+        Returns:
+            List containing the created filing text content node, or empty list if none created
+        """
+        from utils.EventTraderNodes import FilingTextContent, ReportNode
+        from XBRL.xbrl_core import RelationType
+        
+        # Skip if no filing text content
+        filing_text_content = report_data.get('filing_text_content')
+        if not filing_text_content:
+            return []
+        
+        try:
+            # Get report information needed for the filing text content node
+            form_type = report_data.get('formType', '')
+            cik = report_data.get('cik', '')
+            filed_at = report_data.get('created', '')
+            
+            # Create unique ID for this filing text content
+            content_id = f"{report_id}_text"
+            
+            # Create filing text content node
+            filing_text_node = FilingTextContent(
+                content_id=content_id,
+                filing_id=report_id,
+                form_type=form_type,
+                content=filing_text_content,
+                filer_cik=cik,
+                filed_at=filed_at
+            )
+            
+            # Create the node using Neo4jManager's merge_nodes method
+            self.manager.merge_nodes([filing_text_node])
+            logger.info(f"Created filing text content node for report {report_id}")
+            
+            # Create relationship using Neo4jManager's merge_relationships method
+            relationship = [(
+                ReportNode(accessionNo=report_id, primaryDocumentUrl='', cik=''),
+                filing_text_node,
+                RelationType.HAS_FILING_TEXT
+            )]
+            
+            self.manager.merge_relationships(relationship)
+            logger.info(f"Created HAS_FILING_TEXT relationship for report {report_id}")
+            
+            return [filing_text_node]
+        
+        except Exception as e:
+            logger.error(f"Error creating filing text content node for report {report_id}: {e}")
+            return []
+
+
+    def _create_financial_statement_nodes_from_report(self, report_id, report_data):
+        """
+        Create financial statement nodes from report financial_statements and link them to the report.
+        Creates at most 4 nodes - one for each statement type (BalanceSheets, StatementsOfIncome, etc.)
+        
+        Args:
+            report_id: Report accession number
+            report_data: Report data with financial_statements, formType, cik, and created
+    
+        Returns:
+            List of created financial statement nodes
+        """
+        from utils.EventTraderNodes import FinancialStatementContent, ReportNode
+        from XBRL.xbrl_core import RelationType
+        
+        # Skip if no financial statements
+        financial_statements = report_data.get('financial_statements')
+        if not financial_statements:
+            return []
+        
+        try:
+            # Make sure financial_statements is a dictionary if it's a JSON string
+            if isinstance(financial_statements, str):
+                financial_statements = json.loads(financial_statements)
+            
+            # Get report information needed for financial statement nodes
+            form_type = report_data.get('formType', '')
+            cik = report_data.get('cik', '')
+            filed_at = report_data.get('created', '')
+            
+            # Create financial statement nodes - one for each statement type
+            financial_nodes = []
+            
+            # Process each statement type (BalanceSheets, StatementsOfIncome, etc.)
+            for statement_type, metrics in financial_statements.items():
+                if not metrics:
+                    continue
+                
+                # Create unique ID for this statement type
+                content_id = f"{report_id}_{statement_type}"
+                
+                # Store the entire content as JSON
+                content_json = json.dumps(metrics)
+                
+                # Create financial statement content node
+                financial_node = FinancialStatementContent(
+                    content_id=content_id,
+                    filing_id=report_id,
+                    form_type=form_type,
+                    statement_type=statement_type,
+                    value=content_json,  # Store the entire content as JSON
+                    filer_cik=cik,
+                    filed_at=filed_at
+                )
+                
+                financial_nodes.append(financial_node)
+            
+            # Create the nodes using Neo4jManager's merge_nodes method
+            if financial_nodes:
+                self.manager.merge_nodes(financial_nodes)
+                logger.info(f"Created {len(financial_nodes)} financial statement content nodes for report {report_id}")
+                
+                # Create relationships using Neo4jManager's merge_relationships method
+                relationships = []
+                for financial_node in financial_nodes:
+                    relationships.append((
+                        ReportNode(accessionNo=report_id, primaryDocumentUrl='', cik=''),
+                        financial_node,
+                        RelationType.HAS_FINANCIAL_STATEMENT
+                    ))
+                
+                if relationships:
+                    self.manager.merge_relationships(relationships)
+                    logger.info(f"Created {len(relationships)} HAS_FINANCIAL_STATEMENT relationships for report {report_id}")
+            
+            return financial_nodes
+        
+        except Exception as e:
+            logger.error(f"Error creating financial statement nodes for report {report_id}: {e}")
             return []
 
 
