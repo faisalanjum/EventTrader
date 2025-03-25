@@ -28,7 +28,7 @@ from utils.redisClasses import EventTraderRedis, RedisClient
 from utils.EventTraderNodes import (
     NewsNode, CompanyNode, SectorNode, 
     IndustryNode, MarketIndexNode, ReportNode,
-    ExtractedSectionContent
+    ExtractedSectionContent, ExhibitContent
 )
 
 # Internal Imports - Date Utilities
@@ -1127,6 +1127,16 @@ class Neo4jProcessor:
                 }
                 self._create_section_nodes_from_report(report_id, section_data)
             
+            # Process exhibit contents if present
+            if report_node.exhibit_contents:
+                exhibit_data = {
+                    'exhibit_contents': report_node.exhibit_contents,
+                    'formType': report_node.formType,
+                    'cik': report_node.cik,
+                    'created': report_node.created
+                }
+                self._create_exhibit_nodes_from_report(report_id, exhibit_data)
+            
             # Check if this report is eligible for XBRL processing and we haven't processed one yet
             if (not self.xbrl_processed and
                 report_props.get('is_xml') == True and
@@ -1334,6 +1344,90 @@ class Neo4jProcessor:
         
         except Exception as e:
             logger.error(f"Error creating section nodes for report {report_id}: {e}")
+            return []
+
+
+    def _create_exhibit_nodes_from_report(self, report_id, report_data):
+        """
+        Create exhibit nodes from report exhibit_contents and link them to the report
+        
+        Args:
+            report_id: Report accession number
+            report_data: Report data with exhibit_contents, formType, cik, and created
+        
+        Returns:
+            List of created exhibit nodes
+        """
+        from utils.EventTraderNodes import ExhibitContent, ReportNode
+        from XBRL.xbrl_core import RelationType
+        
+        # Skip if no exhibit contents
+        exhibit_contents = report_data.get('exhibit_contents')
+        if not exhibit_contents:
+            return []
+        
+        try:
+            # Make sure exhibit_contents is a dictionary if it's a JSON string
+            if isinstance(exhibit_contents, str):
+                exhibit_contents = json.loads(exhibit_contents)
+            
+            # Get report information needed for exhibit nodes
+            form_type = report_data.get('formType', '')
+            cik = report_data.get('cik', '')
+            filed_at = report_data.get('created', '')
+            
+            # Create exhibit nodes
+            exhibit_nodes = []
+            
+            for exhibit_number, content in exhibit_contents.items():
+                if not content:
+                    continue
+                
+                # Create unique ID from report ID and exhibit number
+                content_id = f"{report_id}_EX-{exhibit_number}"
+                
+                # Handle different content formats
+                content_str = content
+                if isinstance(content, dict) and 'text' in content:
+                    content_str = content['text']
+                elif not isinstance(content, str):
+                    content_str = str(content)
+                
+                # Create exhibit content node
+                exhibit_node = ExhibitContent(
+                    content_id=content_id,
+                    filing_id=report_id,
+                    form_type=form_type,
+                    exhibit_number=exhibit_number,
+                    content=content_str,
+                    filer_cik=cik,
+                    filed_at=filed_at
+                )
+                
+                exhibit_nodes.append(exhibit_node)
+            
+            # Create the nodes
+            if exhibit_nodes:
+                self.manager.merge_nodes(exhibit_nodes)
+                logger.info(f"Created {len(exhibit_nodes)} exhibit content nodes for report {report_id}")
+                
+                # Create relationships
+                relationships = []
+                for exhibit_node in exhibit_nodes:
+                    relationships.append((
+                        ReportNode(accessionNo=report_id, primaryDocumentUrl='', cik=''),
+                        exhibit_node,
+                        RelationType.HAS_EXHIBIT
+                    ))
+                
+                if relationships:
+                    self.manager.merge_relationships(relationships)
+                    logger.info(f"Created {len(relationships)} HAS_EXHIBIT relationships for report {report_id}")
+            
+            return exhibit_nodes
+        
+        except Exception as e:
+            logger.error(f"Error creating exhibit nodes for report {report_id}: {e}")
             return []
 
 

@@ -133,10 +133,14 @@ class ReportNode(Neo4jNode):
             props["entities"] = json.dumps(self.entities)
         if self.extracted_sections is not None:
             props["extracted_sections"] = json.dumps(self.extracted_sections)
+        if self.exhibit_contents is not None:
+            props["exhibit_contents"] = json.dumps(self.exhibit_contents)
+        if self.financial_statements is not None:
+            props["financial_statements"] = json.dumps(self.financial_statements)
             
         # Skip storing large binary/text content directly in Neo4j
         # These fields should be separately stored or referenced
-        # financial_statements, exhibit_contents, filing_text_content
+        # filing_text_content
         
         return props
     
