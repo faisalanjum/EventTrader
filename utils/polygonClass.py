@@ -16,6 +16,7 @@ from utils.metadata_fields import MetadataFields
 from datetime import datetime, timezone, timedelta
 import pytz
 from utils.log_config import get_logger, setup_logging
+import threading
 
 @dataclass
 class Polygon:
@@ -29,6 +30,8 @@ class Polygon:
         # Initialize logger using centralized logging
         self.logger = get_logger(__name__)
 
+        # Add semaphore for HTTP request concurrency control
+        self.http_semaphore = threading.BoundedSemaphore(50)  # Balance between speed and stability
 
         self.market_session = MarketSessionClassifier()
         self.client = self.get_rest_client()
@@ -106,110 +109,106 @@ class Polygon:
 
     def get_last_trade(self, ticker: str, timestamp: datetime, asset_type: str = "stock", max_days_back: int = 3) -> float:
         
-        client = self.get_rest_client()
-
-        
-        # Define initial window and growth factor
-        window_size = 300  # Start with 10 seconds
-        growth_factor = 2  
-        max_window = 86400 * max_days_back  # Convert max_days to seconds        
-
-        # Skip validation for known ETFs
-        if ticker not in Sector_Industry_ETFs:
-            # Only validate non-ETF tickers
-            is_valid, error_message = self.validate_ticker(ticker)
-            if not is_valid:
-                self.last_error[ticker] = error_message
-                return np.nan
-
-        timestamp = self.market_session._convert_to_eastern_timestamp(timestamp)
-        if timestamp is None:
-            raise ValueError("Timestamp cannot be None or NaN")
+        acquired = False
+        try:
+            # Try to acquire semaphore with short timeout
+            acquired = self.http_semaphore.acquire(timeout=2)
+            # If can't acquire, continue without semaphore (less ideal but prevents slowdown)
             
-        # Check if timestamp is in the future
-        current_time = datetime.now(timezone.utc).astimezone(pytz.timezone('America/New_York'))
-        min_allowed_end = timestamp - timedelta(seconds=max_window)
-        current_end = timestamp
+            client = self.get_rest_client()
 
-        # self.logger.info(f"--------------------------------")
-        # self.logger.info(f"Timestamp check for {ticker}:")
-        # self.logger.info(f"  Requested timestamp: {timestamp} ({timestamp.tzname()})")
-        # self.logger.info(f"  Current time: {current_time} ({current_time.tzname()})")
-        # self.logger.info(f"  Window size: {window_size}s")
-        # self.logger.info(f"  Max window: {max_window}s")
-        # self.logger.info(f"  Min allowed end: {min_allowed_end}")
-        # self.logger.info(f"  Is future? {timestamp > current_time}")
-        # self.logger.info(f"  Is too old? {timestamp < min_allowed_end}")
-        # self.logger.info(f"--------------------------------")
+            # Define initial window and growth factor
+            window_size = 300  # Start with 10 seconds
+            growth_factor = 2  
+            max_window = 86400 * max_days_back  # Convert max_days to seconds        
 
-        # Ideally this should code block never be reached since all filtering should be applied before this
-        current_time_with_delay = current_time - timedelta(seconds=self.polygon_subscription_delay)
-        if timestamp > current_time_with_delay:
-            self.logger.info(f"Cannot fetch price for {ticker} at {timestamp} as it is in the future, current time + delay: {current_time_with_delay}, delay: {self.polygon_subscription_delay} seconds")
-            return np.nan
-        
+            # Skip validation for known ETFs
+            if ticker not in Sector_Industry_ETFs:
+                # Only validate non-ETF tickers
+                is_valid, error_message = self.validate_ticker(ticker)
+                if not is_valid:
+                    self.last_error[ticker] = error_message
+                    return np.nan
 
-        while window_size <= max_window:
-            if current_end < min_allowed_end:
-                print(f"No price found for {ticker} between {min_allowed_end} and {timestamp}")
+            timestamp = self.market_session._convert_to_eastern_timestamp(timestamp)
+            if timestamp is None:
+                raise ValueError("Timestamp cannot be None or NaN")
+            
+            # Check if timestamp is in the future
+            current_time = datetime.now(timezone.utc).astimezone(pytz.timezone('America/New_York'))
+            min_allowed_end = timestamp - timedelta(seconds=max_window)
+            current_end = timestamp
+
+            # Ideally this should code block never be reached since all filtering should be applied before this
+            current_time_with_delay = current_time - timedelta(seconds=self.polygon_subscription_delay)
+            if timestamp > current_time_with_delay:
+                self.logger.info(f"Cannot fetch price for {ticker} at {timestamp} as it is in the future, current time + delay: {current_time_with_delay}, delay: {self.polygon_subscription_delay} seconds")
                 return np.nan
-            try:
-                current_start = current_end - timedelta(seconds=window_size)
+            
+            while window_size <= max_window:
+                if current_end < min_allowed_end:
+                    print(f"No price found for {ticker} between {min_allowed_end} and {timestamp}")
+                    return np.nan
+                try:
+                    current_start = current_end - timedelta(seconds=window_size)
 
-                # Use smaller limit for small windows, larger for bigger windows
-                if window_size <= 300:  # 5 minutes or less
-                    limit = 5000  # Default limit for small windows
-                else:
-                    limit = 49998  # Max limit for larger windows
+                    # Use smaller limit for small windows, larger for bigger windows
+                    if window_size <= 300:  # 5 minutes or less
+                        limit = 5000  # Default limit for small windows
+                    else:
+                        limit = 49998  # Max limit for larger windows
 
-                aggs = client.get_aggs(
-                    ticker=ticker,
-                    multiplier=1,
-                    timespan="second",
-                    from_=int(current_start.timestamp() * 1000),
-                    to=int(current_end.timestamp() * 1000),
-                    adjusted=True,
-                    sort="desc",
-                    limit=limit
-                )
-                
-                if aggs and len(aggs) > 0:
-                    for agg in aggs:
-                        agg_timestamp = pd.Timestamp(agg.timestamp, unit='ms', tz='US/Eastern')
-                        if agg_timestamp <= timestamp:
-                            # print(f"Found price at: {agg_timestamp} using {window_size}s window")
-                            return agg.close
-                
-                current_end = current_end - timedelta(seconds=window_size)
-                window_size = min(window_size * growth_factor, max_window)
-                
-            except Exception as e:
-                error_msg = str(e)
-
-                print(f"Exact error for {ticker}: {error_msg}")
-
-                if "NOT_AUTHORIZED" in error_msg:
-                    # To be Removed
-                    self.logger.info(f"NOT AUTHORIZED in error_msg")
-                    self.logger.info(f"Ticker: {ticker}")
-                    self.logger.info(f"Window size: {window_size}s")
-                    self.logger.info(f"Max window: {max_window}s")
-                    self.logger.info(f"Current end: {current_end}")
-                    self.logger.info(f"Current start: {current_start}")
-                    self.logger.info(f"Error message: {error_msg}")
-                    self.logger.info(f"--------------------------------")
-
-                    window_size = max(window_size // 2, 10)                    
-                    # if current_end < min_allowed_end: return np.nan # Safety check for NOT_AUTHORIZED
-
-                else:
-                    window_size = min(window_size * growth_factor, max_window)
-                    # if current_end < min_allowed_end: return np.nan  # Add safety check here too
+                    aggs = client.get_aggs(
+                        ticker=ticker,
+                        multiplier=1,
+                        timespan="second",
+                        from_=int(current_start.timestamp() * 1000),
+                        to=int(current_end.timestamp() * 1000),
+                        adjusted=True,
+                        sort="desc",
+                        limit=limit
+                    )
                     
-                continue
-        
-        # print(f"No price found for {ticker} in the last {max_days_back} days before {timestamp}")
-        return np.nan
+                    if aggs and len(aggs) > 0:
+                        for agg in aggs:
+                            agg_timestamp = pd.Timestamp(agg.timestamp, unit='ms', tz='US/Eastern')
+                            if agg_timestamp <= timestamp:
+                                # print(f"Found price at: {agg_timestamp} using {window_size}s window")
+                                return agg.close
+                    
+                    current_end = current_end - timedelta(seconds=window_size)
+                    window_size = min(window_size * growth_factor, max_window)
+                    
+                except Exception as e:
+                    error_msg = str(e)
+
+                    print(f"Exact error for {ticker}: {error_msg}")
+
+                    if "NOT_AUTHORIZED" in error_msg:
+                        # To be Removed
+                        self.logger.info(f"NOT AUTHORIZED in error_msg")
+                        self.logger.info(f"Ticker: {ticker}")
+                        self.logger.info(f"Window size: {window_size}s")
+                        self.logger.info(f"Max window: {max_window}s")
+                        self.logger.info(f"Current end: {current_end}")
+                        self.logger.info(f"Current start: {current_start}")
+                        self.logger.info(f"Error message: {error_msg}")
+                        self.logger.info(f"--------------------------------")
+
+                        window_size = max(window_size // 2, 10)                    
+                        # if current_end < min_allowed_end: return np.nan # Safety check for NOT_AUTHORIZED
+
+                    else:
+                        window_size = min(window_size * growth_factor, max_window)
+                        # if current_end < min_allowed_end: return np.nan  # Add safety check here too
+                        
+                    continue
+            
+            # print(f"No price found for {ticker} in the last {max_days_back} days before {timestamp}")
+            return np.nan
+        finally:
+            if acquired:
+                self.http_semaphore.release()
 
 
 
@@ -318,6 +317,7 @@ class Polygon:
         """Worker function for getting prices with dedicated Polygon instance"""
         polygon = Polygon(api_key=self.api_key, polygon_subscription_delay=self.polygon_subscription_delay)
         try:
+            # Use the semaphore from the new polygon instance
             return polygon.get_last_trade(ticker, timestamp)
         finally:
             polygon.__del__()
@@ -425,16 +425,24 @@ class Polygon:
         """Worker function for fetching related companies with dedicated instance"""
         polygon = Polygon(api_key=self.api_key, polygon_subscription_delay=self.polygon_subscription_delay)
         try:
-            url = f"https://api.polygon.io/v1/related-companies/{ticker}"
-            params = {'apiKey': polygon.api_key}
-            response = requests.get(url, params=params)
-            
-            if response.status_code == 200:
-                data = response.json()
-                if data.get('status') == 'OK':
-                    related_tickers = [r['ticker'] for r in data.get('results', [])]
-                    return ticker, related_tickers
-            return ticker, []
+            acquired = False
+            try:
+                # Try to acquire semaphore with short timeout
+                acquired = polygon.http_semaphore.acquire(timeout=2)
+                
+                url = f"https://api.polygon.io/v1/related-companies/{ticker}"
+                params = {'apiKey': polygon.api_key}
+                response = requests.get(url, params=params)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    if data.get('status') == 'OK':
+                        related_tickers = [r['ticker'] for r in data.get('results', [])]
+                        return ticker, related_tickers
+                return ticker, []
+            finally:
+                if acquired:
+                    polygon.http_semaphore.release()
         finally:
             polygon.__del__()
 

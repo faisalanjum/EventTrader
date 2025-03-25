@@ -633,8 +633,8 @@ class process_report:
         Follow SEC guidelines: https://www.sec.gov/developer
         """
         # Initialize the controller
-        controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
-        controller.modelManager.formulaOptions = FormulaOptions()
+        self.controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
+        self.controller.modelManager.formulaOptions = FormulaOptions()
         
         # Following SEC guidelines for automated access
         # https://www.sec.gov/os/accessing-edgar-data
@@ -644,28 +644,28 @@ class process_report:
 
         
         # Configure Arelle's web cache
-        if hasattr(controller, 'webCache'):
+        if hasattr(self.controller, 'webCache'):
             # Set SEC-compliant user agent
-            controller.webCache.userAgent = user_agent
+            self.controller.webCache.userAgent = user_agent
             
             import random
             # Ensure rate limit compliance (10 requerandomr second max according to SEC)
-            controller.webCache.delay = 0.25 + random.uniform(0, 0.2)  # 4 req/sec with jitter
+            self.controller.webCache.delay = 0.25 + random.uniform(0, 0.2)  # 4 req/sec with jitter
             
             # Reasonable timeout for large taxonomy files
-            controller.webCache.timeout = 300
+            self.controller.webCache.timeout = 300
             
             # Control caching behavior - prevent unnecessary rechecking
-            controller.webCache.recheck = float('inf')  # Never recheck during batch processing
+            self.controller.webCache.recheck = float('inf')  # Never recheck during batch processing
             
             # Handle HTTPS redirects automatically
-            controller.webCache.httpsRedirect = True
+            self.controller.webCache.httpsRedirect = True
             
             # Skip certificate validation if needed (use with caution)
-            controller.webCache.noCertificateCheck = True
+            self.controller.webCache.noCertificateCheck = True
             
             # Enable logging
-            controller.webCache.logDownloads = True
+            self.controller.webCache.logDownloads = True
             
             # Set up standard headers
             import urllib.request
@@ -697,7 +697,7 @@ class process_report:
                     time.sleep(delay)
                     
                 # The direct loading approach
-                self.model_xbrl = controller.modelManager.load(
+                self.model_xbrl = self.controller.modelManager.load(
                     filesource=FileSource.FileSource(self.xbrl_node.primaryDocumentUrl),
                     discover=True
                 )
@@ -716,7 +716,56 @@ class process_report:
                 if attempt == max_retries - 1:
                     raise RuntimeError(f"Error loading XBRL model after {max_retries} attempts: {e}")
 
+    def close_resources(self):
+        """
+        Explicitly close all resources used by the XBRL processing.
+        This helps prevent file handle leaks when processing multiple reports.
+        """
+        try:
+            # Close the model_xbrl if it exists
+            if hasattr(self, 'model_xbrl') and self.model_xbrl:
+                try:
+                    # Try to close the model if it has a close method
+                    if hasattr(self.model_xbrl, 'close'):
+                        self.model_xbrl.close()
+                    
+                    # If it has a modelDocument with a close method, close that too
+                    if (hasattr(self.model_xbrl, 'modelDocument') and 
+                        self.model_xbrl.modelDocument and
+                        hasattr(self.model_xbrl.modelDocument, 'close')):
+                        self.model_xbrl.modelDocument.close()
+                    
+                    # Remove the reference
+                    self.model_xbrl = None
+                except Exception as e:
+                    print(f"Error closing model_xbrl: {e}")
+            
+            # Close the controller if it exists
+            if hasattr(self, 'controller') and self.controller:
+                try:
+                    # Close the web cache first
+                    if hasattr(self.controller, 'webCache'):
+                        self.controller.webCache.close()
+                    
+                    # Close the controller itself
+                    if hasattr(self.controller, 'close'):
+                        self.controller.close()
+                    
+                    # Remove the reference
+                    self.controller = None
+                except Exception as e:
+                    print(f"Error closing controller: {e}")
+                
+            # Force garbage collection to clean up any remaining resources
+            import gc
+            gc.collect()
+            
+        except Exception as e:
+            print(f"Error during resource cleanup: {e}")
 
+    def __del__(self):
+        """Ensure resources are cleaned up when the object is deleted"""
+        self.close_resources()
 
     def populate_common_nodes(self):
         """Populate common nodes in Neo4j."""

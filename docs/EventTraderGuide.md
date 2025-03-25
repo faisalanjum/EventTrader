@@ -61,6 +61,14 @@
 --skip-without-returns         # Process only items with returns data
 --force, -f                    # Continue despite non-critical errors
 
+
+5. XBRL Status by Report Type
+
+./scripts/xbrl_status_report.py
+
+
+
+
 ## Watchdog Management
 
 The watchdog monitors EventTrader and automatically restarts it if it crashes.

@@ -502,13 +502,16 @@ class ReportProcessor(BaseProcessor):
         Note: If primary ticker (from cik) not in allowed_symbols, it's set to None but filing 
         will still process if other valid tickers exist in entities."""
         try:
+            # Flag reports with missing CIKs but still process them
+            # Reports with missing CIKs will be marked as ineligible for XBRL processing later
+            # but their content can still be used for other purposes
+            if not content.get('cik') or content.get('cik') == '':
+                self.logger.info(f"Report with missing primary filer CIK: {content.get('accessionNo', 'unknown')}")
+                content['cik'] = ''  # Ensure CIK is an empty string not None
 
-
-            # Check for missing or empty CIK at the very beginning - Meaning we only keep if primaryfiler CIK is present
-            # if not content.get('cik') or content.get('cik') == '':
-            #     self.logger.info(f"Skipping report with missing primary filer CIK: {content.get('accessionNo', 'unknown')}")
-            #     return {}  # Return empty dict to signal skip
-
+                # Inorder to skip it return empty dict to signal skip
+                # return {}
+            
 
             if content['formType'] not in VALID_FORM_TYPES:
                 self.logger.info(f"Invalid form type so Skipping: {content['formType']}")

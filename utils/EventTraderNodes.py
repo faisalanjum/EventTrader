@@ -59,7 +59,7 @@ class ReportNode(Neo4jNode):
     returns_schedule: Dict[str, str] = field(default_factory=dict)  # Schedule for returns calculation
     
     # Optional fields
-    xbrl_status: Optional[bool] = False   # Processing status flag for XBRL data
+    xbrl_status: Optional[str] = None   # Processing status flag for XBRL data (QUEUED, PROCESSING, COMPLETED, FAILED)
     isAmendment: Optional[bool] = None    # Whether the report is an amendment
     description: Optional[str] = None     # Brief description of the report
     periodOfReport: Optional[str] = None  # Period the report covers
@@ -178,10 +178,7 @@ class ReportNode(Neo4jNode):
         
         # Set optional fields
         if 'xbrl_status' in props:
-            xbrl_status = props['xbrl_status']
-            if isinstance(xbrl_status, str):
-                xbrl_status = xbrl_status.lower() == 'true'
-            instance.xbrl_status = xbrl_status
+            instance.xbrl_status = props['xbrl_status']
         
         # Set string fields
         string_fields = ['description', 'periodOfReport', 'linkToTxt', 'linkToHtml', 
