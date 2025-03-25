@@ -4,7 +4,8 @@ from typing import Dict, List, Optional, Any, Tuple
 from neo4j import GraphDatabase
 import pandas as pd
 
-from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, AdminSectionNode, FinancialStatementNode
+from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode
+# , AdminSectionNode, FinancialStatementNode
 from XBRL.Neo4jManager import Neo4jManager
 from XBRL.xbrl_core import RelationType
 

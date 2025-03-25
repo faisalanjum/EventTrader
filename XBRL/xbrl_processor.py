@@ -4,6 +4,7 @@ This is the entry point for XBRL processing functionality.
 """
 
 # Import common dependencies
+import random
 from .common_imports import *
 from datetime import datetime, timedelta
 
@@ -609,6 +610,21 @@ class process_report:
 
 
 
+    # def load_xbrl(self):
+    #     """
+    #     Load the XBRL file from the SEC EDGAR database.
+    #     Follow SEC guidelines: https://www.sec.gov/developer
+    #     """
+    #     # Initialize the controller
+    #     controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
+    #     controller.modelManager.formulaOptions = FormulaOptions()
+        
+    #     # The direct loading approach
+    #     self.model_xbrl = controller.modelManager.load(
+    #         filesource=FileSource.FileSource(self.xbrl_node.primaryDocumentUrl),
+    #         discover=True
+    #     )
+
 
 
     def load_xbrl(self):
@@ -623,16 +639,18 @@ class process_report:
         # Following SEC guidelines for automated access
         # https://www.sec.gov/os/accessing-edgar-data
         company_name = "EventTrader"
-        contact_email = "info@eventtrader.app"  # Use your actual email
-        user_agent = f"{company_name} XBRL Parser 1.0 {contact_email}"
+        contact_email = "faianjum@gmail.com"  
+        user_agent = f"{company_name} {contact_email}"
+
         
         # Configure Arelle's web cache
         if hasattr(controller, 'webCache'):
             # Set SEC-compliant user agent
             controller.webCache.userAgent = user_agent
             
-            # Ensure rate limit compliance (10 requests per second max according to SEC)
-            controller.webCache.delay = 0.5  # 2 requests per second (conservative)
+            import random
+            # Ensure rate limit compliance (10 requerandomr second max according to SEC)
+            controller.webCache.delay = 0.25 + random.uniform(0, 0.2)  # 4 req/sec with jitter
             
             # Reasonable timeout for large taxonomy files
             controller.webCache.timeout = 300
@@ -660,13 +678,21 @@ class process_report:
             urllib.request.install_opener(opener)
         
         # Use direct loading with retry logic
-        max_retries = 4
+        max_retries = 6
         retry_delay = 2
         
         for attempt in range(max_retries):
             try:
                 if attempt > 0:
                     delay = retry_delay * (2 ** attempt)  # Exponential backoff
+
+                    # Add longer pauses on later retries
+                    if attempt >= 3:
+                        extra_delay = 30  # 30 seconds additional for later attempts
+                        print(f"Adding extra {extra_delay}s delay for attempt {attempt+1}")
+                        delay += extra_delay
+
+
                     print(f"Retry attempt {attempt+1}/{max_retries} for {self.xbrl_node.primaryDocumentUrl}")
                     time.sleep(delay)
                     
@@ -678,6 +704,15 @@ class process_report:
                 break  # Success, exit retry loop
                 
             except Exception as e:
+                error_message = str(e).lower()
+                print(f"Error on attempt {attempt+1}: {e}")
+                
+                # Special handling for 403 errors
+                if "403" in error_message or "forbidden" in error_message:
+                    cooldown = 60 * (attempt + 1)  # Progressive cooldown
+                    print(f"Received 403 Forbidden, cooling down for {cooldown} seconds")
+                    time.sleep(cooldown)
+                    
                 if attempt == max_retries - 1:
                     raise RuntimeError(f"Error loading XBRL model after {max_retries} attempts: {e}")
 
