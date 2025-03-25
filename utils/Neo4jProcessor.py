@@ -27,7 +27,8 @@ from utils.redisClasses import EventTraderRedis, RedisClient
 # Internal Imports - EventTrader Node Classes
 from utils.EventTraderNodes import (
     NewsNode, CompanyNode, SectorNode, 
-    IndustryNode, MarketIndexNode, ReportNode
+    IndustryNode, MarketIndexNode, ReportNode,
+    ExtractedSectionContent
 )
 
 # Internal Imports - Date Utilities
@@ -551,6 +552,8 @@ class Neo4jProcessor:
                         report_id=report_id,
                         report_data=report_data
                     )
+                    
+                    # Note: No need to process extracted sections here as it's already handled in _execute_report_database_operations
                     
                     logger.info(f"Successfully processed report {item_id}")
 
@@ -1114,6 +1117,16 @@ class Neo4jProcessor:
             # Get the created/updated report
             report_props = dict(record["r"].items())
             
+            # Process extracted sections if present
+            if report_node.extracted_sections:
+                section_data = {
+                    'extracted_sections': report_node.extracted_sections,
+                    'formType': report_node.formType,
+                    'cik': report_node.cik,
+                    'created': report_node.created
+                }
+                self._create_section_nodes_from_report(report_id, section_data)
+            
             # Check if this report is eligible for XBRL processing and we haven't processed one yet
             if (not self.xbrl_processed and
                 report_props.get('is_xml') == True and
@@ -1245,13 +1258,83 @@ class Neo4jProcessor:
         report_node.filing_text_content = report_data.get('filing_text_content', None)
         
         # Set xbrl_status flag
-        report_node.xbrl_status = bool(report_data.get('xbrl_status', False))
+        report_node.xbrl_status = report_data.get('xbrl_status', None)
         
         # Extract market session and returns schedule using helper methods
         report_node.market_session = self._extract_market_session(report_data)
         report_node.returns_schedule = self._extract_returns_schedule(report_data)
             
         return report_node
+
+
+    def _create_section_nodes_from_report(self, report_id, report_data):
+        """
+        Create section nodes from report extracted_sections and link them to the report
+        
+        Args:
+            report_id: Report accession number
+            report_data: Report data with extracted_sections, formType, cik, and created
+        
+        Returns:
+            List of created section nodes
+        """
+        from utils.EventTraderNodes import ExtractedSectionContent, ReportNode
+        from XBRL.xbrl_core import RelationType
+        
+        # Skip if no extracted sections
+        extracted_sections = report_data.get('extracted_sections')
+        if not extracted_sections:
+            return []
+        
+        try:
+            # Get report information needed for section nodes
+            form_type = report_data.get('formType', '')
+            cik = report_data.get('cik', '')
+            filed_at = report_data.get('created', '')
+            
+            # Create section nodes
+            section_nodes = []
+            
+            for section_name, content in extracted_sections.items():
+                # Create unique ID from report ID and section name
+                content_id = f"{report_id}_{section_name}"
+                
+                # Create section content node
+                section_node = ExtractedSectionContent(
+                    content_id=content_id,
+                    filing_id=report_id,
+                    form_type=form_type,
+                    section_name=section_name,
+                    content=content,
+                    filer_cik=cik,
+                    filed_at=filed_at
+                )
+                
+                section_nodes.append(section_node)
+            
+            # Create the nodes
+            if section_nodes:
+                self.manager.merge_nodes(section_nodes)
+                logger.info(f"Created {len(section_nodes)} section content nodes for report {report_id}")
+                
+                # Create relationships
+                relationships = []
+                for section_node in section_nodes:
+                    relationships.append((
+                        ReportNode(accessionNo=report_id, primaryDocumentUrl='', cik=''),
+                        section_node,
+                        RelationType.HAS_SECTION
+                    ))
+                
+                if relationships:
+                    self.manager.merge_relationships(relationships)
+                    logger.info(f"Created {len(relationships)} HAS_SECTION relationships for report {report_id}")
+            
+            return section_nodes
+        
+        except Exception as e:
+            logger.error(f"Error creating section nodes for report {report_id}: {e}")
+            return []
 
 
 
