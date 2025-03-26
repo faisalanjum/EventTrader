@@ -367,7 +367,10 @@ class DataManager:
             else:
                 # Initialize Neo4j if not already initialized
                 self.logger.info("Neo4j not initialized, initializing database")
-                if not self.neo4j_processor.initialize():
+                # Pass the start date from historical range
+                start_date = self.historical_range.get('from')
+                self.logger.info(f"Using start date for date nodes: {start_date}")
+                if not self.neo4j_processor.initialize(start_date=start_date):
                     self.logger.error("Failed to initialize Neo4j database")
                     return False
                     

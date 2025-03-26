@@ -173,9 +173,12 @@ class Neo4jProcessor:
             logger.error(f"Error checking Neo4j initialization: {e}")
             return False
     
-    def initialize(self):
+    def initialize(self, start_date=None):
         """
         Minimalistic initialization of Neo4j database.
+        
+        Args:
+            start_date: Optional start date for date nodes in format 'YYYY-MM-DD'
         """
         # Skip if already initialized
         if self.is_initialized():
@@ -203,7 +206,8 @@ class Neo4jProcessor:
             return False
         
         try:
-            success = initializer.initialize_all()
+            # Initialize all nodes and relationships, including dates with the provided start date
+            success = initializer.initialize_all(start_date=start_date)
             logger.info("Initialization " + ("succeeded" if success else "failed"))
             return success
         except Exception as e:
@@ -2527,12 +2531,13 @@ class Neo4jProcessor:
 
 
 # Function to initialize Neo4j database
-def init_neo4j(check_only=False):
+def init_neo4j(check_only=False, start_date=None):
     """
     Initialize Neo4j database with required structure and company data
     
     Args:
         check_only: If True, only check if initialization is needed without actually performing it
+        start_date: Optional start date for date nodes in format 'YYYY-MM-DD'
     """
     try:
         # First check if database is already initialized
@@ -2558,14 +2563,27 @@ def init_neo4j(check_only=False):
             password=NEO4J_PASSWORD
         )
         
-        success = initializer.initialize_all()
+        # Connect to Neo4j
+        if not initializer.connect():
+            logger.error("Failed to connect to Neo4j")
+            return False
         
-        if success:
-            logger.info("Neo4j database initialization completed successfully")
-        else:
-            logger.error("Neo4j database initialization failed")
+        try:
+            # Initialize all nodes and relationships, including dates with the provided start date
+            success = initializer.initialize_all(start_date=start_date)
             
-        return success
+            if success:
+                logger.info("Neo4j database initialization completed successfully")
+            else:
+                logger.error("Neo4j database initialization failed")
+                
+            return success
+        except Exception as e:
+            logger.error(f"Neo4j initialization error: {str(e)}")
+            return False
+        finally:
+            initializer.close()
+            
     except Exception as e:
         logger.error(f"Neo4j initialization error: {str(e)}")
         return False
@@ -2662,6 +2680,7 @@ def process_report_data(batch_size=100, max_items=None, verbose=False, include_w
                 logger.error("Neo4j initialization failed, cannot process reports")
                 return False
         
+        
         # Process report data
         logger.info(f"Processing report data to Neo4j with batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns}...")
         success = processor.process_reports_to_neo4j(batch_size, max_items, include_without_returns)
@@ -2703,6 +2722,8 @@ if __name__ == "__main__":
                         help="Skip processing news in 'all' mode")
     parser.add_argument("--skip-reports", action="store_true",
                         help="Skip processing reports in 'all' mode")
+    parser.add_argument("--start-date", type=str, default="2017-09-01",
+                        help="Start date for date nodes in format 'YYYY-MM-DD'")
     
     args = parser.parse_args()
     
@@ -2718,8 +2739,8 @@ if __name__ == "__main__":
     
     if args.mode == "init":
         # Run initialization 
-        logger.info("Running Neo4j initialization...")
-        init_neo4j()
+        logger.info(f"Running Neo4j initialization with start date {args.start_date}...")
+        init_neo4j(start_date=args.start_date)
     
     elif args.mode == "news":
         # Process news data
@@ -2736,8 +2757,9 @@ if __name__ == "__main__":
         logger.info(f"Running complete Neo4j setup (batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns})...")
         
         # Initialize Neo4j first
-        if init_neo4j():
+        if init_neo4j(start_date=args.start_date):
             logger.info("Initialization successful, now processing data...")
+            
             
             # Process news data if not skipped
             if not args.skip_news:

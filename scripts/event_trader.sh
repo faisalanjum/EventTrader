@@ -181,6 +181,10 @@ start() {
 
 # Start both EventTrader and monitor
 start_all() {
+  # Initialize Neo4j first to ensure date nodes exist
+  init_neo4j
+  
+  # Now start the main process
   start
   
   # Only start monitor if EventTrader started successfully
@@ -382,7 +386,7 @@ init_neo4j() {
   # Detect Python before starting
   detect_python
   
-  echo "Initializing Neo4j database..."
+  echo "Initializing Neo4j database (with date range: $FROM_DATE to $TO_DATE)..."
   cd "$WORKSPACE_DIR"
   
   # Use run_event_trader.py with our Neo4j flag
@@ -393,6 +397,18 @@ init_neo4j() {
   else
     # Run in foreground
     $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" --neo4j-init-only
+  fi
+  
+  # Also directly initialize date nodes with Neo4jInitializer to ensure they're created
+  echo "Ensuring date nodes are created (from $FROM_DATE)..."
+  if [ "$RUN_BACKGROUND" = true ]; then
+    # Run in background
+    $PYTHON_CMD -m utils.Neo4jInitializer --start_date "$FROM_DATE" > /dev/null 2>&1 &
+    # Wait briefly to allow initialization to start
+    sleep 2
+  else
+    # Run in foreground
+    $PYTHON_CMD -m utils.Neo4jInitializer --start_date "$FROM_DATE"
   fi
 }
 

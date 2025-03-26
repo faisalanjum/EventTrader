@@ -5,6 +5,7 @@ from datetime import datetime
 import json
 from enum import Enum
 from utils.date_utils import parse_date  # Import our date parsing utility
+import pandas as pd
 
 # Import node types from XBRLClasses but avoid circular imports
 from XBRL.xbrl_core import NodeType, RelationType
@@ -973,3 +974,124 @@ class FinancialStatementContent(Neo4jNode):
             filed_at=props.get('filed_at'),
             period_end=props.get('period_end')
         )
+
+@dataclass
+class DateNode(Neo4jNode):
+    """
+    Date node in Neo4j representing a market date with session information.
+    Contains market session times for current, previous, and next trading days.
+    """
+    date_str: str  # Date in string format YYYY-MM-DD
+    is_trading_day: bool = True  # Whether the date is a trading day
+    
+    # Time dictionary values as strings (for storage)
+    pre_market_current_day: Optional[str] = None
+    market_open_current_day: Optional[str] = None
+    market_close_current_day: Optional[str] = None
+    post_market_current_day: Optional[str] = None
+
+    pre_market_previous_day: Optional[str] = None
+    market_open_previous_day: Optional[str] = None
+    market_close_previous_day: Optional[str] = None
+    post_market_previous_day: Optional[str] = None
+    
+    pre_market_next_day: Optional[str] = None
+    market_open_next_day: Optional[str] = None
+    market_close_next_day: Optional[str] = None
+    post_market_next_day: Optional[str] = None
+    
+    @staticmethod
+    def _extract_date_from_timestamp(timestamp: Optional[str]) -> Optional[str]:
+        """Extract date part (YYYY-MM-DD) from a timestamp string"""
+        if not timestamp:
+            return None
+            
+        # Use pandas for reliable date extraction
+        try:
+            return pd.Timestamp(timestamp).strftime('%Y-%m-%d')
+        except:
+            return None
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.DATE
+    
+    @property
+    def id(self) -> str:
+        """Use date as the unique identifier"""
+        return self.date_str
+    
+    @property
+    def previous_trading_date(self) -> Optional[str]:
+        """Extract previous trading date from market_close_previous_day"""
+        return self._extract_date_from_timestamp(self.market_close_previous_day)
+    
+    @property
+    def next_trading_date(self) -> Optional[str]:
+        """Extract next trading date from market_close_next_day"""
+        return self._extract_date_from_timestamp(self.market_close_next_day)
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """Return node properties for Neo4j"""
+        props = {
+            'id': self.id,
+            'date': self.date_str,
+            'is_trading_day': self.is_trading_day
+        }
+        
+        # Add previous and next trading dates if available
+        prev_date = self.previous_trading_date
+        if prev_date:
+            props['previous_trading_date'] = prev_date
+            
+        next_date = self.next_trading_date
+        if next_date:
+            props['next_trading_date'] = next_date
+        
+        # Add all time properties if they exist
+        time_props = {
+            'pre_market_current_day': self.pre_market_current_day,
+            'market_open_current_day': self.market_open_current_day,
+            'market_close_current_day': self.market_close_current_day,
+            'post_market_current_day': self.post_market_current_day,
+            'pre_market_previous_day': self.pre_market_previous_day,
+            'market_open_previous_day': self.market_open_previous_day,
+            'market_close_previous_day': self.market_close_previous_day,
+            'post_market_previous_day': self.post_market_previous_day,
+            'pre_market_next_day': self.pre_market_next_day,
+            'market_open_next_day': self.market_open_next_day,
+            'market_close_next_day': self.market_close_next_day,
+            'post_market_next_day': self.post_market_next_day
+        }
+        
+        # Only include non-None time properties
+        props.update({k: v for k, v in time_props.items() if v is not None})
+        
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'DateNode':
+        """Create DateNode from Neo4j properties"""
+        # Required fields
+        if 'date' not in props:
+            raise ValueError("Missing required field 'date' for DateNode")
+            
+        # Create instance with required fields
+        date_node = cls(
+            date_str=props['date'],
+            is_trading_day=props.get('is_trading_day', True)
+        )
+        
+        # Set time properties
+        time_fields = [
+            'pre_market_current_day', 'market_open_current_day', 'market_close_current_day', 'post_market_current_day',
+            'pre_market_previous_day', 'market_open_previous_day', 'market_close_previous_day', 'post_market_previous_day',
+            'pre_market_next_day', 'market_open_next_day', 'market_close_next_day', 'post_market_next_day'
+        ]
+        
+        for field in time_fields:
+            if field in props and props[field] not in (None, "", "null"):
+                setattr(date_node, field, props[field])
+                
+        return date_node

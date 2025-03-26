@@ -1,13 +1,15 @@
+from datetime import datetime, timedelta
 import logging
 import os
 from typing import Dict, List, Optional, Any, Tuple
 from neo4j import GraphDatabase
 import pandas as pd
 
-from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode
+from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, DateNode
 # , AdminSectionNode, FinancialStatementNode
+from utils.market_session import MarketSessionClassifier
 from XBRL.Neo4jManager import Neo4jManager
-from XBRL.xbrl_core import RelationType
+from XBRL.xbrl_core import RelationType, NodeType
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -141,8 +143,13 @@ class Neo4jInitializer:
             logger.error(f"Error loading tradable universe: {e}")
             return {}
     
-    def initialize_all(self) -> bool:
-        """Run full initialization of Neo4j database with market hierarchy."""
+    def initialize_all(self, start_date=None) -> bool:
+        """
+        Run full initialization of Neo4j database with market hierarchy.
+        
+        Args:
+            start_date: Optional start date for date nodes in format 'YYYY-MM-DD'
+        """
         if not self.connect():
             return False
             
@@ -176,6 +183,9 @@ class Neo4jInitializer:
             
             # 7. Create exhibit section hierarchy
             # self.create_exhibit_sections()
+            
+            # 8. Create date nodes and relationships
+            self.create_dates(start_date=start_date)
             
             logger.info("Market hierarchy initialization complete")
             return True
@@ -789,6 +799,138 @@ class Neo4jInitializer:
             logger.error(f"Error creating exhibit section hierarchy: {e}")
             return False
 
+    def _prepare_date_node(self, date_str):
+        """
+        Prepare a date node with all required properties.
+        
+        Args:
+            date_str: Date in format 'YYYY-MM-DD'
+            
+        Returns:
+            DateNode: Prepared date node
+        """
+        market_classifier = MarketSessionClassifier()
+        timestamp = pd.Timestamp(f"{date_str} 12:00:00-04:00")  # Noon used to check trading day status
+        trading_hours, is_trading_day = market_classifier.get_trading_hours(timestamp)
+        times = market_classifier.extract_times(trading_hours)
+        
+        date_node = DateNode(
+            date_str=date_str,
+            is_trading_day=is_trading_day
+        )
+        
+        for key, time_val in times.items():
+            if time_val is not None:
+                setattr(date_node, key, time_val.strftime("%Y-%m-%d %H:%M:%S%z"))
+                
+        return date_node
+
+    def create_dates(self, start_date=None, batch_size=1000):
+        """
+        Create date nodes and their NEXT relationships in one efficient batch operation.
+        
+        Args:
+            start_date: Start date in format 'YYYY-MM-DD', defaults to 1 year ago
+            batch_size: Number of nodes to create in one batch
+            
+        Returns:
+            bool: Success status
+        """
+        try:
+            # Default to a year ago if not specified
+            if start_date is None:
+                start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+                
+            end_date = datetime.now().strftime('%Y-%m-%d')
+            logger.info(f"Creating date nodes from {start_date} to {end_date}")
+            
+            # Generate dates efficiently using pandas
+            date_range = pd.date_range(start=start_date, end=end_date)
+            date_strings = [date.strftime('%Y-%m-%d') for date in date_range]
+            
+            # Early exit if no dates to process
+            if not date_strings:
+                logger.warning("No dates to process")
+                return True
+                
+            # Prepare all nodes in one pass
+            date_nodes = []
+            dates_by_id = {}
+            
+            for date_str in date_strings:
+                date_node = self._prepare_date_node(date_str)
+                date_nodes.append(date_node)
+                dates_by_id[date_str] = date_node
+            
+            # Create all nodes in one batch operation
+            self.manager.merge_nodes(date_nodes, batch_size)
+            logger.info(f"Created {len(date_nodes)} date nodes")
+            
+            # Create all relationships in one batch operation
+            if len(date_strings) > 1:
+                relationships = []
+                sorted_dates = sorted(date_strings)
+                
+                for i in range(len(sorted_dates) - 1):
+                    source = dates_by_id[sorted_dates[i]]
+                    target = dates_by_id[sorted_dates[i+1]]
+                    relationships.append((source, target, RelationType.NEXT))
+                
+                self.manager.merge_relationships(relationships)
+                logger.info(f"Created {len(relationships)} date relationships")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error creating date nodes: {e}")
+            return False
+            
+    def create_single_date(self, date_str=None):
+        """
+        Create a single date node and link it to the previous date.
+        Optimal for daily updates.
+        
+        Args:
+            date_str: Date in format 'YYYY-MM-DD', defaults to today
+            
+        Returns:
+            bool: Success status
+        """
+        try:
+            # Default to today if not specified
+            if date_str is None:
+                date_str = datetime.now().strftime('%Y-%m-%d')
+                
+            logger.info(f"Creating date node for {date_str}")
+            
+            # Prepare and save the node
+            date_node = self._prepare_date_node(date_str)
+            self.manager.merge_nodes([date_node])
+            
+            # Find previous date node
+            prev_date = (pd.Timestamp(date_str) - pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+            prev_query = "MATCH (d:Date {date: $date}) RETURN d"
+            prev_result = self.manager.execute_cypher_query(prev_query, {"date": prev_date})
+            
+            if prev_result and "d" in prev_result:
+                # Use manager.merge_relationships to create the relationship
+                prev_node_props = dict(prev_result["d"].items())
+                prev_date_node = DateNode.from_neo4j(prev_node_props)
+                
+                # Create NEXT relationship
+                self.manager.merge_relationships([
+                    (prev_date_node, date_node, RelationType.NEXT)
+                ])
+                
+                logger.info(f"Linked date {date_str} to previous date")
+            else:
+                logger.warning(f"Could not link date {date_str} to previous date (which may not exist)")
+            
+            return True
+        except Exception as e:
+            logger.error(f"Error creating single date node: {e}")
+            return False
+
 
 # Standalone execution support
 if __name__ == "__main__":
@@ -797,6 +939,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description="Initialize Neo4j database with market hierarchy")
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging")
+    parser.add_argument("--start_date", help="Start date for date nodes (YYYY-MM-DD format)", default="2023-01-01")
     args = parser.parse_args()
     
     if args.verbose:
@@ -812,8 +955,8 @@ if __name__ == "__main__":
         password=NEO4J_PASSWORD
     )
     
-    success = initializer.initialize_all()
+    success = initializer.initialize_all(start_date=args.start_date)
     if success:
-        print("Neo4j initialization completed successfully")
+        print(f"Neo4j initialization completed successfully from {args.start_date} to today")
     else:
         print("Neo4j initialization failed") 
