@@ -168,9 +168,13 @@ class BenzingaNewsRestAPI:
                 # Original pagination check
                 if len(news_items) < self.ITEMS_PER_PAGE:
                     self.logger.info(f"\nReached end of data at page {current_page}")
+                    is_complete = True
                     break
                 
                 current_page += 1
+                
+                # Add a small delay to prevent API rate limiting
+                time.sleep(0.2)
                 
             except json.JSONDecodeError as je:
                 self.error_handler.handle_json_error(je, response.text)
@@ -183,9 +187,24 @@ class BenzingaNewsRestAPI:
         if current_batch:
             self.redis_client.set_news_batch(current_batch, ex=self.ttl)
         
+        # Verify if there's more data only if we need to (exact page size edge case)
+        is_complete = False
+        if 'news_items' in locals():
+            if len(news_items) < self.ITEMS_PER_PAGE:
+                is_complete = True
+            elif current_page < self.MAX_PAGE_LIMIT and len(news_items) == self.ITEMS_PER_PAGE:
+                # Check one page ahead to confirm if there's more data (only for the edge case)
+                try:
+                    verify_response = requests.get(self.api_url, headers=self.headers, params=self._build_params(
+                        page=current_page + 1, updated_since=updated_since, date_from=date_from, 
+                        date_to=date_to, tickers=tickers))
+                    is_complete = len(verify_response.json()) == 0 
+                except Exception:
+                    is_complete = False
+        
         # Original summary logging
         self.logger.info("\nFetch Summary:")
-        self.logger.info(f"Pages processed: {current_page + 1}")
+        self.logger.info(f"Pages processed: {current_page + 1}" + (" (COMPLETE - all pages fetched)" if is_complete else " (INCOMPLETE - more pages available)"))
         self.logger.info(f"Total items received: {total_items_received}")
         self.logger.info(f"Items processed successfully: {len(all_items)}")
         if total_items_received > 0:

@@ -243,7 +243,11 @@ class Neo4jManager:
                         ON MATCH SET n += $properties
                         """
                         
-                        session.run(query, { "id": node.id, "properties": properties })
+                        # Use execute_write for automatic retry on deadlocks
+                        def merge_node_tx(tx):
+                            return tx.run(query, {"id": node.id, "properties": properties})
+                        
+                        session.execute_write(merge_node_tx)
                 
                 print(f"Created {len(nodes)} {nodes[0].__class__.__name__} nodes")
 
@@ -451,41 +455,45 @@ class Neo4jManager:
                         })
 
                 if batch_params:
-                    if rel_type in network_specific_relationships:
-                        session.run(f"""
-                            UNWIND $params AS param
-                            MATCH (s {{id: param.source_id}})
-                            MATCH (t {{id: param.target_id}})
-                            WITH s, t, param
-                            WHERE param.properties.company_cik IS NOT NULL 
-                            AND param.properties.report_id IS NOT NULL
-                            AND param.properties.network_uri IS NOT NULL
-                            AND ('{rel_type.value}' <> 'CALCULATION_EDGE' OR param.properties.context_id IS NOT NULL)
-                            MERGE (s)-[r:{rel_type.value} {{
-                                cik: param.properties.company_cik,
-                                report_id: param.properties.report_id,
-                                network_name: param.properties.network_uri,
-                                parent_id: param.source_id,
-                                child_id: param.target_id,
-                                context_id: CASE 
-                                    WHEN '{rel_type.value}' = 'CALCULATION_EDGE' 
-                                    THEN param.properties.context_id 
-                                    ELSE coalesce(param.properties.context_id, 'default')
-                                END
-                            }}]->(t)
-                            SET r += param.properties
-                        """, {"params": batch_params})
+                    # Define transaction function for automatic retry on deadlocks
+                    def create_relationships_tx(tx, rel_type=rel_type, batch_params=batch_params, 
+                                            network_specific=network_specific_relationships):
+                        if rel_type in network_specific:
+                            tx.run(f"""
+                                UNWIND $params AS param
+                                MATCH (s {{id: param.source_id}})
+                                MATCH (t {{id: param.target_id}})
+                                WITH s, t, param
+                                WHERE param.properties.company_cik IS NOT NULL 
+                                AND param.properties.report_id IS NOT NULL
+                                AND param.properties.network_uri IS NOT NULL
+                                AND ('{rel_type.value}' <> 'CALCULATION_EDGE' OR param.properties.context_id IS NOT NULL)
+                                MERGE (s)-[r:{rel_type.value} {{
+                                    cik: param.properties.company_cik,
+                                    report_id: param.properties.report_id,
+                                    network_name: param.properties.network_uri,
+                                    parent_id: param.source_id,
+                                    child_id: param.target_id,
+                                    context_id: CASE 
+                                        WHEN '{rel_type.value}' = 'CALCULATION_EDGE' 
+                                        THEN param.properties.context_id 
+                                        ELSE coalesce(param.properties.context_id, 'default')
+                                    END
+                                }}]->(t)
+                                SET r += param.properties
+                            """, {"params": batch_params})
+                        else:
+                            # For non-network relationships
+                            tx.run(f"""
+                                UNWIND $params AS param
+                                MATCH (s {{id: param.source_id}})
+                                MATCH (t {{id: param.target_id}})
+                                MERGE (s)-[r:{rel_type.value}]->(t)
+                                SET r += param.properties
+                            """, {"params": batch_params})
                     
-                    else:
-                        # for non-network relationships
-                        session.run(f"""
-                            UNWIND $params AS param
-                            MATCH (s {{id: param.source_id}})
-                            MATCH (t {{id: param.target_id}})
-                            MERGE (s)-[r:{rel_type.value}]->(t)
-                            SET r += param.properties
-                        """, {"params": batch_params})
-
+                    # Execute with automatic retry for deadlocks
+                    session.execute_write(create_relationships_tx)
 
                 counts[rel_type.value].update({
                     'count': len(rels),
@@ -493,7 +501,7 @@ class Neo4jManager:
                     'target': rels[0][1].__class__.__name__
                 })
 
-        # With this:
+        # Print summary
         for rel_type, info in counts.items():
             print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
 
@@ -753,7 +761,12 @@ class Neo4jManager:
             {calc_props if edge_type == RelationType.CALCULATION_EDGE else pres_props}
         """
         
-        return pd.DataFrame([dict(r) for r in self.driver.session().run(query)])
+        # Use a with-statement to properly close the session
+        with self.driver.session() as session:
+            result = session.run(query)
+            # Convert to list first and then to DataFrame to ensure the cursor is consumed
+            # before the session closes
+            return pd.DataFrame([dict(r) for r in result])
 
     # def fetch_relationships(self, edge_type: RelationType) -> pd.DataFrame:
     #     """Fetches relationships from Neo4j as DataFrame."""
@@ -813,15 +826,16 @@ class Neo4jManager:
         RETURN count(rel) as relationship_count
         """
         
-        # Execute the query
+        # Execute the query with retry logic for deadlocks
         with self.driver.session() as session:
-            result = session.run(query, {
-                "source_id": source_id_value,
-                "params": params
-            })
+            def create_relationships_tx(tx):
+                return tx.run(query, {
+                    "source_id": source_id_value,
+                    "params": params
+                }).single()
             
-            # Get the count of relationships created
-            record = result.single()
+            # Get the count of relationships created using execute_write for automatic retry
+            record = session.execute_write(create_relationships_tx)
             count = record["relationship_count"] if record else 0
             
             return count

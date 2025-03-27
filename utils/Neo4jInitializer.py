@@ -466,11 +466,12 @@ class Neo4jInitializer:
                 
             # Create a lookup for Company by CIK
             node_by_cik = {}
-            for record in self.manager.driver.session().run("MATCH (c:Company) RETURN c.id as cik, c.ticker as ticker"):
-                cik = record["cik"]
-                ticker = record["ticker"]
-                if cik and ticker:
-                    node_by_cik[cik] = ticker
+            with self.manager.driver.session() as session:
+                for record in session.run("MATCH (c:Company) RETURN c.id as cik, c.ticker as ticker"):
+                    cik = record["cik"]
+                    ticker = record["ticker"]
+                    if cik and ticker:
+                        node_by_cik[cik] = ticker
             
             if not node_by_cik:
                 logger.warning("No companies found for relationship creation")

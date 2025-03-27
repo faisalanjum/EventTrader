@@ -48,10 +48,13 @@ def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional['CompanyNode
     
     try:
         with neo4j.driver.session() as session:
-            result = session.run(
-                "MATCH (c:Company {cik: $cik}) RETURN c",
-                {"cik": cik}
-            ).single()
+            def get_company_tx(tx):
+                return tx.run(
+                    "MATCH (c:Company {cik: $cik}) RETURN c",
+                    {"cik": cik}
+                ).single()
+            
+            result = session.execute_read(get_company_tx)
             if result:
                 return CompanyNode.from_neo4j(dict(result["c"].items()))
     except Exception as e:
@@ -66,10 +69,13 @@ def get_report_by_accessionNo(neo4j: 'Neo4jManager', accessionNo: str) -> Option
     
     try:
         with neo4j.driver.session() as session:
-            result = session.run(
-                "MATCH (r:Report {accessionNo: $accessionNo}) RETURN r",
-                {"accessionNo": accessionNo}
-            ).single()
+            def get_report_tx(tx):
+                return tx.run(
+                    "MATCH (r:Report {accessionNo: $accessionNo}) RETURN r",
+                    {"accessionNo": accessionNo}
+                ).single()
+            
+            result = session.execute_read(get_report_tx)
             if result:
                 return ReportNode.from_neo4j(dict(result["r"].items()))
     except Exception as e:
@@ -1398,10 +1404,10 @@ class process_report:
         # Create relationship between ReportNode and XBRLNode directly with Cypher
         try:
             with self.neo4j.driver.session() as session:
-                # Use a transaction to ensure atomicity
-                with session.begin_transaction() as tx:
-                    result = tx.run("""
-                    MATCH (r:Report {accessionNo: $accessionNo})
+                # Use execute_write for automatic retry on deadlocks
+                def create_xbrl_relationship(tx):
+                    # First create/update the XBRLNode
+                    tx.run("""
                     MERGE (x:XBRLNode {id: $xbrl_id})
                     ON CREATE SET 
                         x.primaryDocumentUrl = $url,
@@ -1409,22 +1415,32 @@ class process_report:
                         x.report_id = $report_id,
                         x.accessionNo = $accessionNo,
                         x.displayLabel = $display_label
-                    MERGE (r)-[rel:HAS_XBRL]->(x)
-                    RETURN r, x
                     """, {
-                        "accessionNo": self.report_node.accessionNo,
                         "xbrl_id": self.xbrl_node.id,
                         "url": self.xbrl_node.primaryDocumentUrl,
                         "cik": self.xbrl_node.cik,
                         "report_id": self.xbrl_node.report_id,
+                        "accessionNo": self.xbrl_node.accessionNo,
                         "display_label": self.xbrl_node.display
                     })
                     
-                    records = list(result)
-                    if records:
-                        print(f"Created HAS_XBRL relationship from ReportNode to XBRLNode")
-                    else:
-                        print(f"WARNING: Failed to create HAS_XBRL relationship")
+                    # Then create the relationship only if it doesn't exist
+                    return tx.run("""
+                    MATCH (r:Report {accessionNo: $accessionNo})
+                    MATCH (x:XBRLNode {id: $xbrl_id})
+                    WHERE NOT EXISTS((r)-[:HAS_XBRL]->(x))
+                    CREATE (r)-[:HAS_XBRL]->(x)
+                    RETURN r, x
+                    """, {
+                        "accessionNo": self.report_node.accessionNo,
+                        "xbrl_id": self.xbrl_node.id
+                    })
+                
+                records = session.execute_write(create_xbrl_relationship)
+                if records:
+                    print(f"Created HAS_XBRL relationship from ReportNode to XBRLNode")
+                else:
+                    print(f"WARNING: Failed to create HAS_XBRL relationship")
         except Exception as e:
             print(f"Error creating XBRLNode relationship: {e}")
             # Continue execution - the relationship will be missing but processing can continue

@@ -92,7 +92,16 @@ is_running() {
   if [ -f "$PID_FILE" ]; then
     pid=$(cat "$PID_FILE")
     if ps -p "$pid" > /dev/null 2>&1; then
-      return 0  # Running from PID file
+      # Verify this is our process
+      if ps -p "$pid" -o command= | grep -q "run_event_trader.py"; then
+        return 0  # Running
+      else
+        # Not our process - remove stale PID file
+        rm -f "$PID_FILE"
+      fi
+    else
+      # Process not running - remove stale PID file
+      rm -f "$PID_FILE"
     fi
   fi
   
