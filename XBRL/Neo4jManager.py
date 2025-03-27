@@ -4,6 +4,7 @@ from typing import List, Dict, Any, Union, Tuple, Type, TYPE_CHECKING
 from collections import defaultdict
 from neo4j import GraphDatabase, Driver
 import pandas as pd
+import time
 # Split imports: TYPE_CHECKING for type hints, direct imports for runtime needs
 if TYPE_CHECKING:
     from .xbrl_core import Neo4jNode
@@ -84,44 +85,72 @@ class Neo4jManager:
     def create_indexes(self):
         """Create indexes and constraints for both nodes and relationships"""
         try:
-            with self.driver.session() as session:
-                # Get existing constraints
-                existing_constraints = {
-                    constraint['name']: constraint['labelsOrTypes'][0]
-                    for constraint in session.run("SHOW CONSTRAINTS").data()
-                }
-                
-                # Create node constraints
-                for node_type in NodeType:
-                    constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
-                    if constraint_name not in existing_constraints:
-                        session.run(f"""
-                        CREATE CONSTRAINT {constraint_name}
-                        FOR (n:`{node_type.value}`)
-                        REQUIRE n.id IS UNIQUE
-                        """)
-                
-                # Presentation Edge constraint
-                rel_constraint_name = "constraint_presentation_edge_unique"
-                if rel_constraint_name not in existing_constraints:
-                    props = ", ".join(f"r.{prop}" for prop in PRESENTATION_EDGE_UNIQUE_PROPS)
-                    session.run(f"""
-                    CREATE CONSTRAINT {rel_constraint_name} IF NOT EXISTS
-                    FOR ()-[r:PRESENTATION_EDGE]-()
-                    REQUIRE ({props}) IS UNIQUE
-                    """)
-                    print(f"Created constraint for PRESENTATION_EDGE relationships")
+            # Use a retry pattern specifically for schema operations
+            max_attempts = 3
+            backoff_time = 0.5
+            
+            for attempt in range(max_attempts):
+                try:
+                    with self.driver.session() as session:
+                        # Get existing constraints
+                        existing_constraints = {
+                            constraint['name']: constraint['labelsOrTypes'][0]
+                            for constraint in session.run("SHOW CONSTRAINTS").data()
+                        }
+                        
+                        # Create node constraints
+                        for node_type in NodeType:
+                            constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
+                            if constraint_name not in existing_constraints:
+                                session.run(f"""
+                                CREATE CONSTRAINT {constraint_name}
+                                FOR (n:`{node_type.value}`)
+                                REQUIRE n.id IS UNIQUE
+                                """)
+                        
+                        # Presentation Edge constraint
+                        rel_constraint_name = "constraint_presentation_edge_unique"
+                        if rel_constraint_name not in existing_constraints:
+                            props = ", ".join(f"r.{prop}" for prop in PRESENTATION_EDGE_UNIQUE_PROPS)
+                            session.run(f"""
+                            CREATE CONSTRAINT {rel_constraint_name} IF NOT EXISTS
+                            FOR ()-[r:PRESENTATION_EDGE]-()
+                            REQUIRE ({props}) IS UNIQUE
+                            """)
+                            print(f"Created constraint for PRESENTATION_EDGE relationships")
+                            
+                        # Calculation Edge constraint
+                        rel_constraint_name = "constraint_calculation_edge_unique"
+                        if rel_constraint_name not in existing_constraints:
+                            props = ", ".join(f"r.{prop}" for prop in CALCULATION_EDGE_UNIQUE_PROPS)
+                            session.run(f"""
+                            CREATE CONSTRAINT {rel_constraint_name} IF NOT EXISTS
+                            FOR ()-[r:CALCULATION_EDGE]-()
+                            REQUIRE ({props}) IS UNIQUE
+                            """)
+                            print(f"Created constraint for CALCULATION_EDGE relationships")
                     
-                # Calculation Edge constraint
-                rel_constraint_name = "constraint_calculation_edge_unique"
-                if rel_constraint_name not in existing_constraints:
-                    props = ", ".join(f"r.{prop}" for prop in CALCULATION_EDGE_UNIQUE_PROPS)
-                    session.run(f"""
-                    CREATE CONSTRAINT {rel_constraint_name} IF NOT EXISTS
-                    FOR ()-[r:CALCULATION_EDGE]-()
-                    REQUIRE ({props}) IS UNIQUE
-                    """)
-                    print(f"Created constraint for CALCULATION_EDGE relationships")
+                    # If we get here without exception, we're done
+                    break
+                    
+                except Exception as e:
+                    error_message = str(e)
+                    
+                    # Don't retry if constraint already exists - this is normal in concurrent environment
+                    if "EquivalentSchemaRuleAlreadyExists" in error_message:
+                        print("Some constraints already exist, continuing...")
+                        break
+                        
+                    # Only retry on specific transient errors
+                    if "TransientError" in error_message or "DeadlockDetected" in error_message:
+                        if attempt < max_attempts - 1:
+                            sleep_time = backoff_time * (2 ** attempt)
+                            print(f"Transient error creating indexes, retrying in {sleep_time:.2f} seconds...")
+                            time.sleep(sleep_time)
+                            continue
+                    
+                    # Otherwise re-raise the exception
+                    raise
 
         except Exception as e:
             raise RuntimeError(f"Failed to create indexes: {e}")
@@ -185,13 +214,28 @@ class Neo4jManager:
                             if isinstance(v, (int, float)):
                                 return f"{v:,.3f}".rstrip('0').rstrip('.') if isinstance(v, float) else f"{v:,}"
                             return v
+                        
+                        # Sanitize collections to remove null values
+                        def sanitize_value(v):
+                            # Handle lists - remove any None/null values
+                            if isinstance(v, list):
+                                return [item for item in v if item is not None]
+                            # Handle dictionaries - remove entries with None/null values
+                            elif isinstance(v, dict):
+                                return {k: val for k, val in v.items() if val is not None}
+                            # Return the value as is for non-collections
+                            return v
 
-                        # Exclude id from properties
-                        properties = {
-                            k: (format_value(v) if v is not None else "null")
-                            for k, v in node.properties.items()
-                            if k != 'id'
-                        }
+                        # Exclude id from properties and sanitize collections
+                        properties = {}
+                        for k, v in node.properties.items():
+                            if k != 'id':
+                                if v is None:
+                                    properties[k] = "null"
+                                else:
+                                    # First sanitize collections, then format values
+                                    sanitized_value = sanitize_value(v)
+                                    properties[k] = format_value(sanitized_value)
                         
                         query = f"""
                         MERGE (n:{node.node_type.value} {{id: $id}})
@@ -226,8 +270,34 @@ class Neo4jManager:
             if testing:
                 self.clear_db()
             
-            # Always ensure indexes/constraints exist
-            self.create_indexes()
+            # Check if indexes exist before creating them
+            with self.driver.session() as session:
+                # Use a transaction to ensure atomicity
+                indexes_needed = False
+                with session.begin_transaction() as tx:
+                    # Get existing constraints
+                    existing_constraints = {
+                        constraint['name']: constraint['labelsOrTypes'][0]
+                        for constraint in tx.run("SHOW CONSTRAINTS").data()
+                    }
+                    
+                    # Check if we need to create any indexes
+                    for node_type in NodeType:
+                        constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
+                        if constraint_name not in existing_constraints:
+                            indexes_needed = True
+                            break
+                
+                # Only create indexes if necessary, outside the transaction
+                if indexes_needed:
+                    try:
+                        self.create_indexes()
+                    except Exception as e:
+                        # If indexes already exist (from a concurrent process), just continue
+                        if "EquivalentSchemaRuleAlreadyExists" in str(e):
+                            print("Indexes already exist, continuing with node creation")
+                        else:
+                            raise
             
             nodes = []
             for collection in collections:

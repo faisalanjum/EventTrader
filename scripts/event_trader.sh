@@ -492,7 +492,7 @@ print('Redis databases cleared successfully via Python')
     # Change to workspace directory first to ensure correct path
     cd "$WORKSPACE_DIR"
     $PYTHON_CMD -c "
-from XBRL.Neo4jManager import Neo4jManager
+from XBRL.Neo4jConnection import get_manager
 import os
 from dotenv import load_dotenv
 
@@ -501,13 +501,9 @@ dotenv_path = os.path.abspath('.env')
 print(f'Loading .env from: {dotenv_path}')
 load_dotenv(dotenv_path)
 
-# Initialize Neo4j manager with credentials from env
+# Use the singleton manager
 try:
-    neo4j = Neo4jManager(
-        uri=os.getenv('NEO4J_URI', 'bolt://localhost:7687'),
-        username=os.getenv('NEO4J_USERNAME', 'neo4j'),
-        password=os.getenv('NEO4J_PASSWORD', 'password')
-    )
+    neo4j = get_manager()
 
     # Clear the database
     try:
@@ -523,8 +519,7 @@ try:
                 print('Neo4j database cleared using direct query')
         except Exception as e2:
             print(f'Failed to clear Neo4j database: {e2}')
-    finally:
-        neo4j.close()
+    # Don't close the singleton manager
 except Exception as e:
     print(f'Neo4j connection failed: {e}')
     print('Could not clear Neo4j database')

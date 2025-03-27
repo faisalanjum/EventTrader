@@ -108,14 +108,14 @@ class Neo4jProcessor:
             self._collect_redis_key_counts()
 
     def connect(self):
-        """Connect to Neo4j using Neo4jManager"""
+        """Connect to Neo4j using Neo4jManager singleton"""
         try:
-            self.manager = Neo4jManager(
-                uri=self.uri,
-                username=self.username,
-                password=self.password
-            )
-            logger.info("Connected to Neo4j database")
+            # Import here to avoid circular imports
+            from XBRL.Neo4jConnection import get_manager
+            
+            # Use the singleton manager
+            self.manager = get_manager()
+            logger.info("Connected to Neo4j database using singleton manager")
             return True
         except Exception as e:
             logger.error(f"Failed to connect to Neo4j: {e}")
@@ -1330,6 +1330,11 @@ class Neo4jProcessor:
             section_nodes = []
             
             for section_name, content in extracted_sections.items():
+                # Skip sections with null content
+                if content is None:
+                    logger.warning(f"Skipping section {section_name} with null content for report {report_id}")
+                    continue
+                
                 # Create unique ID from report ID and section name
                 content_id = f"{report_id}_{section_name}"
                 
@@ -2171,15 +2176,10 @@ class Neo4jProcessor:
             return 0
             
         # Import here to avoid circular imports
-        from XBRL.Neo4jManager import Neo4jManager
+        from XBRL.Neo4jConnection import get_manager
         
-        # Create Neo4jManager instance if we don't already have one
-        # This is a temporary instance just for this operation
-        neo4j_manager = self.manager if hasattr(self, 'manager') and isinstance(self.manager, Neo4jManager) else Neo4jManager(
-            uri=self.uri,
-            username=self.username,
-            password=self.password
-        )
+        # Get the singleton Neo4j manager
+        neo4j_manager = self.manager if hasattr(self, 'manager') else get_manager()
         
         try:
             count = 0
@@ -2251,9 +2251,8 @@ class Neo4jProcessor:
                 
             return count
         finally:
-            # Close the temporary manager if we created one
-            if neo4j_manager is not self.manager and hasattr(neo4j_manager, 'close'):
-                neo4j_manager.close()
+            # Don't close the singleton manager
+            pass
 
 
 
@@ -2337,14 +2336,10 @@ class Neo4jProcessor:
                     
                     # Import needed components
                     from XBRL.xbrl_processor import process_report, get_company_by_cik, get_report_by_accessionNo
-                    from XBRL.Neo4jManager import Neo4jManager
+                    from XBRL.Neo4jConnection import get_manager
                     
-                    # Create a dedicated Neo4j connection for this task
-                    neo4j_manager = Neo4jManager(
-                        uri=self.uri,
-                        username=self.username,
-                        password=self.password
-                    )
+                    # Use the singleton Neo4j manager
+                    neo4j_manager = get_manager()
                     
                     # Track the XBRL processor instance for proper cleanup
                     xbrl_processor = None
@@ -2405,8 +2400,8 @@ class Neo4jProcessor:
                             except Exception as e:
                                 logger.warning(f"Failed to clean up XBRL resources for report {report_id}: {e}")
                         
-                        # Always close the manager
-                        neo4j_manager.close()
+                        # Don't close the singleton manager
+                        pass
                         
                 except Exception as e:
                     # Log error with timing

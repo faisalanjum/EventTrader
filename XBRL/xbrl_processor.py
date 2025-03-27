@@ -54,7 +54,6 @@ def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional['CompanyNode
             ).single()
             if result:
                 return CompanyNode.from_neo4j(dict(result["c"].items()))
-            return None
     except Exception as e:
         print(f"Error retrieving company with CIK {cik}: {e}")
     return None
@@ -73,7 +72,6 @@ def get_report_by_accessionNo(neo4j: 'Neo4jManager', accessionNo: str) -> Option
             ).single()
             if result:
                 return ReportNode.from_neo4j(dict(result["r"].items()))
-            return None
     except Exception as e:
         print(f"Error retrieving report with accession number {accessionNo}: {e}")
     return None
@@ -81,6 +79,30 @@ def get_report_by_accessionNo(neo4j: 'Neo4jManager', accessionNo: str) -> Option
 
 @dataclass
 class process_report:
+    """
+    Main class for processing XBRL reports and storing data in Neo4j.
+    
+    This class handles the entire XBRL processing workflow:
+    1. Retrieving company and report nodes from Neo4j
+    2. Loading and parsing XBRL documents
+    3. Building and storing nodes (concepts, facts, contexts, etc.)
+    4. Creating relationships between nodes
+    
+    Important Notes:
+    - Requires a singleton Neo4jManager instance to be passed in
+    - Assumes company and report nodes already exist in Neo4j
+    - Manages its own resources and will close them properly on completion
+    - Uses retry logic for external HTTP requests to comply with SEC rate limits
+    - Does not directly create Neo4j constraints (uses the singleton manager)
+    
+    Usage:
+        processor = process_report(
+            neo4j=neo4j_manager,  # Singleton Neo4jManager
+            cik="0000123456",     # 10-digit CIK with leading zeros
+            accessionNo="123456789", # SEC accession number
+            testing=False         # Set to False for production
+        )
+    """
 
     # Required parameters
     neo4j: 'Neo4jManager'  # Neo4j connection manager
@@ -132,42 +154,47 @@ class process_report:
     
     def __post_init__(self):
         # Get company node and report node
-        self.external_company = get_company_by_cik(self.neo4j, self.cik)
-        if not self.external_company:
-            raise ValueError(f"No company found with CIK {self.cik}")
+        try:
+            # Retrieve company node
+            self.external_company = get_company_by_cik(self.neo4j, self.cik)
+            if not self.external_company:
+                raise ValueError(f"No company found with CIK {self.cik}")
             
-        self.report_node = get_report_by_accessionNo(self.neo4j, self.accessionNo)
-        if not self.report_node:
-            raise ValueError(f"No report found with accession number {self.accessionNo}")
+            # Retrieve report node    
+            self.report_node = get_report_by_accessionNo(self.neo4j, self.accessionNo)
+            if not self.report_node:
+                raise ValueError(f"No report found with accession number {self.accessionNo}")
+                
+            # Verify the report_node has primaryDocumentUrl
+            if not hasattr(self.report_node, 'primaryDocumentUrl') or not self.report_node.primaryDocumentUrl:
+                raise ValueError("Report node must have primaryDocumentUrl attribute")
             
-        # Verify the report_node has primaryDocumentUrl
-        if not hasattr(self.report_node, 'primaryDocumentUrl') or not self.report_node.primaryDocumentUrl:
-            raise ValueError("Report node must have primaryDocumentUrl attribute")
-        
-        # Create constraints directly like in ground truth
-        with self.neo4j.driver.session() as session:
-            try:
-                session.run("CREATE CONSTRAINT FOR ()-[r:PRESENTATION_EDGE]->() REQUIRE r.order IS NOT NULL")
-                print("Created constraint for PRESENTATION_EDGE relationships")
-                session.run("CREATE CONSTRAINT FOR ()-[r:CALCULATION_EDGE]->() REQUIRE r.weight IS NOT NULL")
-                print("Created constraint for CALCULATION_EDGE relationships")
-            except Exception as e:
-                # Continue even if constraint creation fails (might already exist)
-                print(f"Note: Constraint creation message: {e}")
-        
-        self._primary_facts: Dict[str, Fact] = {}  # canonical_key -> primary fact
-        self._duplicate_map: Dict[str, str] = {}   # duplicate_uid -> primary_uid
-        
-        self.initialize_xbrl_node()
-        self.load_xbrl()
-        self.initialize_company_node()
-        
-        self.populate_common_nodes()
-        self.populate_company_nodes()
-        self.populate_report_nodes()
+            # Skip direct constraint creation - now handled by the singleton Neo4j manager
+            # This avoids concurrent schema operations which caused:
+            # Neo.ClientError.Schema.EquivalentSchemaRuleAlreadyExists
+            
+            self._primary_facts: Dict[str, Fact] = {}  # canonical_key -> primary fact
+            self._duplicate_map: Dict[str, str] = {}   # duplicate_uid -> primary_uid
+            
+            # Initialize nodes and process XBRL data
+            self.initialize_xbrl_node()
+            self.load_xbrl()
+            self.initialize_company_node()
+            
+            self.populate_common_nodes()
+            self.populate_company_nodes()
+            self.populate_report_nodes()
 
-        self._validate_and_link_networks()
-        self._link_guidance_concepts()
+            self._validate_and_link_networks()
+            self._link_guidance_concepts()
+            
+        except Exception as e:
+            # Log the error
+            print(f"Error in XBRL processing initialization: {e}")
+            # Close any open resources
+            self.close_resources()
+            # Re-raise to signal failure
+            raise
 
     def _link_guidance_concepts(self):
         """Create relationships between guidance concepts and their targets"""
@@ -340,6 +367,8 @@ class process_report:
         relationships = []
         context_lookup = {ctx.context_id: ctx for ctx in self.contexts}
         debug_counts = defaultdict(int)
+        # Track seen relationships to prevent duplicates
+        seen_relationships = set()
         
         for network in self.networks:
             if not network.isCalculation: continue
@@ -399,34 +428,37 @@ class process_report:
                         if (c_fact.value is not None and
                             c_fact.unit == unit and
                             context_lookup.get(c_fact.context_id) and
-                            context_lookup[c_fact.context_id].context_id == context_id 
-                            
-                            # Not useful
-                            # or any(c_fact.concept.qname == rel.toModelObject.qname 
-                            #     for rel in calc_rel_set.fromModelObject(group_parents[0].concept))
-
-                        ) 
+                            context_lookup[c_fact.context_id].context_id == context_id)
                     ]
                     
                     # Create relationships for matching facts
                     for parent_fact in group_parents:
                         for child_fact in matching_children:
-                            relationships.append((
-                                parent_fact,
-                                child_fact,
-                                RelationType.CALCULATION_EDGE,
-                                {
-                                    'network_uri': network.network_uri,
-                                    'network_name': network.name,
-                                    'context_id': context_id,
-                                    'weight': rel.weight,
-                                    'order': rel.order,
-                                    'company_cik': self.company.cik,
-                                    'report_id': self.xbrl_node.id,  # Use XBRLNode id
-                                    'report_instance': self.xbrl_node.id  # Use XBRLNode id
-                                }
-                            ))
-                            debug_counts['relationships_created'] += 1
+                            # Safe property values to prevent nulls
+                            weight = rel.weight if hasattr(rel, 'weight') else 0
+                            order = rel.order if hasattr(rel, 'order') else 0
+                            
+                            # Create a unique key to prevent duplicate relationships
+                            rel_key = f"{parent_fact.id}|{child_fact.id}|{context_id}|{network.network_uri}"
+                            
+                            if rel_key not in seen_relationships:
+                                seen_relationships.add(rel_key)
+                                relationships.append((
+                                    parent_fact,
+                                    child_fact,
+                                    RelationType.CALCULATION_EDGE,
+                                    {
+                                        'network_uri': network.network_uri or '',
+                                        'network_name': network.name or '',
+                                        'context_id': context_id or '',
+                                        'weight': weight,
+                                        'order': order,
+                                        'company_cik': self.company.cik or '',
+                                        'report_id': self.xbrl_node.id or '',
+                                        'report_instance': self.xbrl_node.id or ''
+                                    }
+                                ))
+                                debug_counts['relationships_created'] += 1
 
 
         # Print debug summary
@@ -442,11 +474,12 @@ class process_report:
             self.check_calculation_steps(relationships, context_lookup, valid_relationships) 
 
             if valid_relationships:  # Only create valid relationships
-                # print("Creating relationships in Neo4j...")
-                self.neo4j.merge_relationships(valid_relationships)
-
-                # print("\nValidating Neo4j calculations...")
-                self.neo4j.validate_neo4j_calculations()
+                try:
+                    self.neo4j.merge_relationships(valid_relationships)
+                    self.neo4j.validate_neo4j_calculations()
+                except Exception as e:
+                    print(f"Error creating calculation relationships: {e}")
+                    # Continue execution - calculations will be missing but processing can continue
 
 
     def check_calculation_steps(self, relationships, context_lookup, valid_relationships=None) -> None:
@@ -755,6 +788,15 @@ class process_report:
                     self.controller = None
                 except Exception as e:
                     print(f"Error closing controller: {e}")
+            
+            # Note: Don't close Neo4j driver here as it's managed by the singleton
+            # Just clear any local session objects if they exist
+            if hasattr(self, '_session') and self._session:
+                try:
+                    self._session.close()
+                    self._session = None
+                except Exception as e:
+                    print(f"Error closing Neo4j session: {e}")
                 
             # Force garbage collection to clean up any remaining resources
             import gc
@@ -1354,35 +1396,38 @@ class process_report:
         print(f"XBRLNode created with id: {self.xbrl_node.id}, report_id: {self.report_node.id}, accessionNo: {self.report_node.accessionNo}")
         
         # Create relationship between ReportNode and XBRLNode directly with Cypher
-        # Use a single transaction to both ensure node exists and create relationship
-        with self.neo4j.driver.session() as session:
-            result = session.run("""
-            MATCH (r:Report {accessionNo: $accessionNo})
-            MERGE (x:XBRLNode {id: $xbrl_id})
-            ON CREATE SET 
-                x.primaryDocumentUrl = $url,
-                x.cik = $cik,
-                x.report_id = $report_id,
-                x.accessionNo = $accessionNo,
-                x.displayLabel = $display_label
-            MERGE (r)-[rel:HAS_XBRL]->(x)
-            RETURN r, x
-            """, {
-                "accessionNo": self.report_node.accessionNo,
-                "xbrl_id": self.xbrl_node.id,
-                "url": self.xbrl_node.primaryDocumentUrl,
-                "cik": self.xbrl_node.cik,
-                "report_id": self.xbrl_node.report_id,
-                "display_label": self.xbrl_node.display
-            })
-            
-            records = list(result)
-            if records:
-                print(f"Created HAS_XBRL relationship from ReportNode to XBRLNode")
-            else:
-                print(f"WARNING: Failed to create HAS_XBRL relationship")
-                print(f"Report accessionNo: {self.report_node.accessionNo}")
-        
+        try:
+            with self.neo4j.driver.session() as session:
+                # Use a transaction to ensure atomicity
+                with session.begin_transaction() as tx:
+                    result = tx.run("""
+                    MATCH (r:Report {accessionNo: $accessionNo})
+                    MERGE (x:XBRLNode {id: $xbrl_id})
+                    ON CREATE SET 
+                        x.primaryDocumentUrl = $url,
+                        x.cik = $cik,
+                        x.report_id = $report_id,
+                        x.accessionNo = $accessionNo,
+                        x.displayLabel = $display_label
+                    MERGE (r)-[rel:HAS_XBRL]->(x)
+                    RETURN r, x
+                    """, {
+                        "accessionNo": self.report_node.accessionNo,
+                        "xbrl_id": self.xbrl_node.id,
+                        "url": self.xbrl_node.primaryDocumentUrl,
+                        "cik": self.xbrl_node.cik,
+                        "report_id": self.xbrl_node.report_id,
+                        "display_label": self.xbrl_node.display
+                    })
+                    
+                    records = list(result)
+                    if records:
+                        print(f"Created HAS_XBRL relationship from ReportNode to XBRLNode")
+                    else:
+                        print(f"WARNING: Failed to create HAS_XBRL relationship")
+        except Exception as e:
+            print(f"Error creating XBRLNode relationship: {e}")
+            # Continue execution - the relationship will be missing but processing can continue
         
         print(f"Created XBRL processing node for report: {self.report_node.id}")
 

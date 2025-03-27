@@ -55,13 +55,13 @@ class Neo4jInitializer:
         self.etf_to_industry_id = {}  # {industry_etf: industry_id}
         
     def connect(self) -> bool:
-        """Connect to Neo4j using Neo4jManager"""
+        """Connect to Neo4j using Neo4jManager singleton"""
         try:
-            self.manager = Neo4jManager(
-                uri=self.uri,
-                username=self.username,
-                password=self.password
-            )
+            # Import here to avoid circular imports
+            from XBRL.Neo4jConnection import get_manager
+            
+            # Use the singleton manager
+            self.manager = get_manager()
             return True
         except Exception as e:
             logger.error(f"Failed to connect to Neo4j: {e}")
@@ -613,191 +613,193 @@ class Neo4jInitializer:
             logger.error(f"Error creating admin report hierarchy: {e}")
             return False
 
-    def create_admin_sections(self) -> bool:
-        """Create administrative section hierarchy for SEC filing sections."""
-        try:
-            from SEC_API_Files.reportSections import ten_k_sections, ten_q_sections, eight_k_sections
+    # def create_admin_sections(self) -> bool:
+    #     """Create administrative section hierarchy for SEC filing sections."""
+    #     try:
+    #         from SEC_API_Files.reportSections import ten_k_sections, ten_q_sections, eight_k_sections
             
-            # Define top-level section categories
-            section_categories = {
-                "10-K": "10-K Sections",
-                "10-Q": "10-Q Sections",
-                "8-K": "8-K Sections"
-            }
+    #         # Define top-level section categories
+    #         section_categories = {
+    #             "10-K": "10-K Sections",
+    #             "10-Q": "10-Q Sections",
+    #             "8-K": "8-K Sections"
+    #         }
             
-            # Create parent category nodes
-            parent_nodes = [
-                AdminSectionNode(code=code, label=label, category=code)
-                for code, label in section_categories.items()
-            ]
+    #         # Create parent category nodes
+    #         parent_nodes = [
+    #             AdminSectionNode(code=code, label=label, category=code)
+    #             for code, label in section_categories.items()
+    #         ]
             
-            # Create child section nodes
-            child_nodes = []
+    #         # Create child section nodes
+    #         child_nodes = []
             
-            # Process 10-K sections
-            for section_code, section_label in ten_k_sections.items():
-                child_nodes.append(
-                    AdminSectionNode(
-                        code=section_code,
-                        label=section_label,
-                        category="10-K"
-                    )
-                )
+    #         # Process 10-K sections
+    #         for section_code, section_label in ten_k_sections.items():
+    #             child_nodes.append(
+    #                 AdminSectionNode(
+    #                     code=section_code,
+    #                     label=section_label,
+    #                     category="10-K"
+    #                 )
+    #             )
             
-            # Process 10-Q sections
-            for section_code, section_label in ten_q_sections.items():
-                child_nodes.append(
-                    AdminSectionNode(
-                        code=section_code,
-                        label=section_label,
-                        category="10-Q"
-                    )
-                )
+    #         # Process 10-Q sections
+    #         for section_code, section_label in ten_q_sections.items():
+    #             child_nodes.append(
+    #                 AdminSectionNode(
+    #                     code=section_code,
+    #                     label=section_label,
+    #                     category="10-Q"
+    #                 )
+    #             )
             
-            # Process 8-K sections
-            for section_code, section_label in eight_k_sections.items():
-                child_nodes.append(
-                    AdminSectionNode(
-                        code=section_code,
-                        label=section_label,
-                        category="8-K"
-                    )
-                )
+    #         # Process 8-K sections
+    #         for section_code, section_label in eight_k_sections.items():
+    #             child_nodes.append(
+    #                 AdminSectionNode(
+    #                     code=section_code,
+    #                     label=section_label,
+    #                     category="8-K"
+    #                 )
+    #             )
             
-            # Combine all nodes for efficient batch creation
-            all_nodes = parent_nodes + child_nodes
+    #         # Combine all nodes for efficient batch creation
+    #         all_nodes = parent_nodes + child_nodes
             
-            # Create nodes in a single batch operation
-            self.manager._export_nodes([all_nodes])
-            logger.info(f"Created {len(all_nodes)} admin section nodes")
+    #         # Create nodes in a single batch operation
+    #         self.manager._export_nodes([all_nodes])
+    #         logger.info(f"Created {len(all_nodes)} admin section nodes")
             
-            # Create parent-child relationships in a single batch
-            relationships = [
-                (parent, child, RelationType.HAS_SUB_SECTION)
-                for parent in parent_nodes
-                for child in child_nodes
-                if parent.code == child.category
-            ]
+    #         # Create parent-child relationships in a single batch
+    #         relationships = [
+    #             (parent, child, RelationType.HAS_SUB_SECTION)
+    #             for parent in parent_nodes
+    #             for child in child_nodes
+    #             if parent.code == child.category
+    #         ]
             
-            self.manager.merge_relationships(relationships)
-            logger.info(f"Created {len(relationships)} admin section hierarchical relationships")
+    #         self.manager.merge_relationships(relationships)
+    #         logger.info(f"Created {len(relationships)} admin section hierarchical relationships")
             
-            return True
+    #         return True
             
-        except Exception as e:
-            logger.error(f"Error creating admin section hierarchy: {e}")
-            return False
+    #     except Exception as e:
+    #         logger.error(f"Error creating admin section hierarchy: {e}")
+    #         return False
 
-    def create_financial_statements(self) -> bool:
-        """Create financial statement hierarchy for SEC filings."""
-        try:
-            # Define financial statement types
-            financial_statements = {
-                "FinancialStatements": "Financial Statements",
-            }
+    # def create_financial_statements(self) -> bool:
+    #     """Create financial statement hierarchy for SEC filings."""
+    #     try:
+    #         # Define financial statement types
+    #         financial_statements = {
+    #             "FinancialStatements": "Financial Statements",
+    #         }
             
-            # Define statement subtypes
-            statement_types = {
-                "BalanceSheets": "Balance Sheets",
-                "StatementsOfIncome": "Statements of Income",
-                "StatementsOfShareholdersEquity": "Statements of Shareholders Equity",
-                "StatementsOfCashFlows": "Statements of Cash Flows"
-            }
+    #         # Define statement subtypes
+    #         statement_types = {
+    #             "BalanceSheets": "Balance Sheets",
+    #             "StatementsOfIncome": "Statements of Income",
+    #             "StatementsOfShareholdersEquity": "Statements of Shareholders Equity",
+    #             "StatementsOfCashFlows": "Statements of Cash Flows"
+    #         }
             
-            # Add descriptions for each statement type
-            statement_descriptions = {
-                "BalanceSheets": "Reports the company's assets, liabilities, and shareholders' equity at a specific point in time",
-                "StatementsOfIncome": "Reports the company's financial performance over a specific accounting period",
-                "StatementsOfShareholdersEquity": "Reports the changes in equity for a company during a specific period",
-                "StatementsOfCashFlows": "Reports the cash generated and used during a specific period"
-            }
+    #         # Add descriptions for each statement type
+    #         statement_descriptions = {
+    #             "BalanceSheets": "Reports the company's assets, liabilities, and shareholders' equity at a specific point in time",
+    #             "StatementsOfIncome": "Reports the company's financial performance over a specific accounting period",
+    #             "StatementsOfShareholdersEquity": "Reports the changes in equity for a company during a specific period",
+    #             "StatementsOfCashFlows": "Reports the cash generated and used during a specific period"
+    #         }
             
-            # Create parent category node
-            parent_nodes = [
-                FinancialStatementNode(
-                    code=code, 
-                    label=label, 
-                    category=code,
-                    description="Container for all standard financial statement types"
-                )
-                for code, label in financial_statements.items()
-            ]
+    #         # Create parent category node
+    #         parent_nodes = [
+    #             FinancialStatementNode(
+    #                 code=code, 
+    #                 label=label, 
+    #                 category=code,
+    #                 description="Container for all standard financial statement types"
+    #             )
+    #             for code, label in financial_statements.items()
+    #         ]
             
-            # Create child statement nodes
-            child_nodes = []
+    #         # Create child statement nodes
+    #         child_nodes = []
             
-            # Process statement types
-            for statement_code, statement_label in statement_types.items():
-                child_nodes.append(
-                    FinancialStatementNode(
-                        code=statement_code,
-                        label=statement_label,
-                        category="FinancialStatements",
-                        description=statement_descriptions.get(statement_code, "")
-                    )
-                )
+    #         # Process statement types
+    #         for statement_code, statement_label in statement_types.items():
+    #             child_nodes.append(
+    #                 FinancialStatementNode(
+    #                     code=statement_code,
+    #                     label=statement_label,
+    #                     category="FinancialStatements",
+    #                     description=statement_descriptions.get(statement_code, "")
+    #                 )
+    #             )
             
-            # Combine all nodes for efficient batch creation
-            all_nodes = parent_nodes + child_nodes
+    #         # Combine all nodes for efficient batch creation
+    #         all_nodes = parent_nodes + child_nodes
             
-            # Create nodes in a single batch operation
-            self.manager._export_nodes([all_nodes])
-            logger.info(f"Created {len(all_nodes)} financial statement nodes")
+    #         # Create nodes in a single batch operation
+    #         self.manager._export_nodes([all_nodes])
+    #         logger.info(f"Created {len(all_nodes)} financial statement nodes")
             
-            # Create parent-child relationships in a single batch
-            relationships = [
-                (parent, child, RelationType.HAS_SUB_STATEMENT)
-                for parent in parent_nodes
-                for child in child_nodes
-                if child.category == parent.code
-            ]
+    #         # Create parent-child relationships in a single batch
+    #         relationships = [
+    #             (parent, child, RelationType.HAS_SUB_STATEMENT)
+    #             for parent in parent_nodes
+    #             for child in child_nodes
+    #             if child.category == parent.code
+    #         ]
             
-            self.manager.merge_relationships(relationships)
-            logger.info(f"Created {len(relationships)} financial statement hierarchical relationships")
+    #         self.manager.merge_relationships(relationships)
+    #         logger.info(f"Created {len(relationships)} financial statement hierarchical relationships")
             
-            return True
+    #         return True
             
-        except Exception as e:
-            logger.error(f"Error creating financial statement hierarchy: {e}")
-            return False
+    #     except Exception as e:
+    #         logger.error(f"Error creating financial statement hierarchy: {e}")
+    #         return False
 
-    def create_exhibit_sections(self) -> bool:
-        """Create exhibit section hierarchy for SEC filing exhibits."""
-        try:
-            # Define nodes structure - parent and children
-            parent_node = AdminSectionNode(
-                code="ExhibitSections",
-                label="Exhibit Sections",
-                category="ExhibitSections"
-            )
+    # def create_exhibit_sections(self) -> bool:
+    #     """Create exhibit section hierarchy for SEC filing exhibits."""
+    #     try:
+    #         # Define nodes structure - parent and children
+    #         parent_node = AdminSectionNode(
+    #             code="ExhibitSections",
+    #             label="Exhibit Sections",
+    #             category="ExhibitSections"
+    #         )
             
-            # Define the two exhibit types we process
-            child_nodes = [
-                AdminSectionNode(code="EX-10", label="Material Contracts", category="ExhibitSections"),
-                AdminSectionNode(code="EX-99", label="Additional Exhibits", category="ExhibitSections")
-            ]
+    #         # Define the two exhibit types we process
+    #         child_nodes = [
+    #             AdminSectionNode(code="EX-10", label="Material Contracts", category="ExhibitSections"),
+    #             AdminSectionNode(code="EX-99", label="Additional Exhibits", category="ExhibitSections")
+    #         ]
             
-            # Create FilingTextContent as a separate top-level node
-            filing_text_node = AdminSectionNode(
-                code="FilingTextContent",
-                label="Full Filing Text",
-                category="FilingTextContent"
-            )
+    #         # Create FilingTextContent as a separate top-level node
+    #         filing_text_node = AdminSectionNode(
+    #             code="FilingTextContent",
+    #             label="Full Filing Text",
+    #             category="FilingTextContent"
+    #         )
             
-            # Create all nodes in one batch
-            all_nodes = [parent_node] + child_nodes + [filing_text_node]
-            self.manager._export_nodes([all_nodes])
-            logger.info(f"Created {len(all_nodes)} exhibit section nodes")
+    #         # Create all nodes in one batch
+    #         all_nodes = [parent_node] + child_nodes + [filing_text_node]
+    #         self.manager._export_nodes([all_nodes])
+    #         logger.info(f"Created {len(all_nodes)} exhibit section nodes")
             
-            # Create parent-child relationships
-            relationships = [(parent_node, child, RelationType.HAS_SUB_SECTION) for child in child_nodes]
-            self.manager.merge_relationships(relationships)
-            logger.info(f"Created {len(relationships)} exhibit section hierarchical relationships")
+    #         # Create parent-child relationships
+    #         relationships = [(parent_node, child, RelationType.HAS_SUB_SECTION) for child in child_nodes]
+    #         self.manager.merge_relationships(relationships)
+    #         logger.info(f"Created {len(relationships)} exhibit section hierarchical relationships")
             
-            return True
-        except Exception as e:
-            logger.error(f"Error creating exhibit section hierarchy: {e}")
-            return False
+    #         return True
+    #     except Exception as e:
+    #         logger.error(f"Error creating exhibit section hierarchy: {e}")
+    #         return False
+
+
 
     def _prepare_date_node(self, date_str):
         """
