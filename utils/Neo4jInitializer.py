@@ -992,10 +992,23 @@ class Neo4jInitializer:
                 sorted_dates = sorted_dates[:-1]
             
             # Get all entity nodes with a single query using Neo4jManager
+            # Use UNION to properly match different node types with correct properties
             entity_query = """
-            MATCH (e) 
-            WHERE (e:Company OR e:Sector OR e:Industry OR e:MarketIndex) AND e.ticker IN $symbols
-            RETURN e.id as id, e.ticker as ticker
+            MATCH (e:Company) 
+            WHERE e.ticker IN $symbols
+            RETURN e.id as id, e.ticker as ticker, 'Company' as type
+            UNION
+            MATCH (e:Sector) 
+            WHERE e.etf IN $symbols
+            RETURN e.id as id, e.etf as ticker, 'Sector' as type
+            UNION
+            MATCH (e:Industry) 
+            WHERE e.etf IN $symbols
+            RETURN e.id as id, e.etf as ticker, 'Industry' as type
+            UNION
+            MATCH (e:MarketIndex) 
+            WHERE e.id IN $symbols
+            RETURN e.id as id, e.id as ticker, 'MarketIndex' as type
             """
             
             # Use session with explicit transaction to avoid deadlocks
@@ -1011,8 +1024,12 @@ class Neo4jInitializer:
                 logger.warning("No entity nodes found for price relationships")
                 return 0
                 
-            # Create ticker to entity ID mapping
-            ticker_to_id = {r["ticker"]: r["id"] for r in entity_results}
+            # Create simple ticker to entity ID mapping
+            ticker_to_id = {}
+            for r in entity_results:
+                ticker = r["ticker"]
+                if ticker:
+                    ticker_to_id[ticker] = r["id"]
             
             today = datetime.now().strftime('%Y-%m-%d')
             total_rels = 0
