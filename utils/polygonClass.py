@@ -17,6 +17,38 @@ from datetime import datetime, timezone, timedelta
 import pytz
 from utils.log_config import get_logger, setup_logging
 import threading
+import socket
+from contextlib import contextmanager
+
+_DNS_CACHE = {}
+_original_getaddrinfo = socket.getaddrinfo
+
+def _patched_getaddrinfo(*args, **kwargs):
+    host = args[0]
+    if host in _DNS_CACHE:
+        return _DNS_CACHE[host]
+    result = _original_getaddrinfo(*args, **kwargs)
+    _DNS_CACHE[host] = result
+    return result
+
+
+def safe_dns_resolve(host: str):
+    try:
+        socket.getaddrinfo(host, 443, socket.AF_INET, socket.SOCK_STREAM)
+    except Exception as e:
+        print(f"DNS resolution failed for {host}: {e}")
+
+
+@contextmanager
+def dns_patch():
+    socket.getaddrinfo = _patched_getaddrinfo
+    try:
+        yield
+    finally:
+        socket.getaddrinfo = _original_getaddrinfo
+
+
+
 
 @dataclass
 class Polygon:
@@ -30,12 +62,15 @@ class Polygon:
         # Initialize logger using centralized logging
         self.logger = get_logger(__name__)
 
+        with dns_patch():
+            safe_dns_resolve("api.polygon.io")
+
         # Add semaphore for HTTP request concurrency control
         self.http_semaphore = threading.BoundedSemaphore(50)  # Balance between speed and stability
 
         self.market_session = MarketSessionClassifier()
         self.client = self.get_rest_client()
-        self.executor = ThreadPoolExecutor(max_workers=180)
+        self.executor = ThreadPoolExecutor(max_workers=100)
         self.last_error = {}
         self.ticker_validation_cache = {}
         
@@ -43,8 +78,8 @@ class Polygon:
         # Add connection pooling configuration
         self.session = requests.Session()
         adapter = requests.adapters.HTTPAdapter(
-            pool_connections=100,
-            pool_maxsize=100,
+            pool_connections=50,
+            pool_maxsize=50,
             max_retries=5,
             pool_block=False
         )
@@ -63,7 +98,9 @@ class Polygon:
             return self.ticker_validation_cache[ticker]
             
         try:
-            ticker_details = self.get_rest_client().get_ticker_details(ticker)
+            with dns_patch():
+                ticker_details = self.get_rest_client().get_ticker_details(ticker)
+
             if not ticker_details:
                 result = (False, f"Invalid ticker: {ticker}")
                 self.ticker_validation_cache[ticker] = result
@@ -158,16 +195,19 @@ class Polygon:
                     else:
                         limit = 49998  # Max limit for larger windows
 
-                    aggs = client.get_aggs(
-                        ticker=ticker,
-                        multiplier=1,
-                        timespan="second",
-                        from_=int(current_start.timestamp() * 1000),
-                        to=int(current_end.timestamp() * 1000),
-                        adjusted=True,
-                        sort="desc",
-                        limit=limit
-                    )
+
+                    with dns_patch():
+                        # aggs = client.get_aggs(
+                        aggs = self.get_rest_client().get_aggs(
+                            ticker=ticker,
+                            multiplier=1,
+                            timespan="second",
+                            from_=int(current_start.timestamp() * 1000),
+                            to=int(current_end.timestamp() * 1000),
+                            adjusted=True,
+                            sort="desc",
+                            limit=limit
+                        )
                     
                     if aggs and len(aggs) > 0:
                         for agg in aggs:
@@ -408,7 +448,9 @@ class Polygon:
 
         try:
             # Make API request using the client
-            details = self.get_rest_client().get_ticker_details(ticker)
+            with dns_patch():
+                details = self.get_rest_client().get_ticker_details(ticker)
+
             
             if not details:
                 return None
@@ -432,8 +474,11 @@ class Polygon:
                 
                 url = f"https://api.polygon.io/v1/related-companies/{ticker}"
                 params = {'apiKey': polygon.api_key}
-                response = requests.get(url, params=params)
-                
+                with dns_patch():
+                    response = requests.get(url, params=params)
+
+
+
                 if response.status_code == 200:
                     data = response.json()
                     if data.get('status') == 'OK':
