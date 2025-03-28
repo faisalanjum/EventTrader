@@ -727,3 +727,65 @@ class Polygon:
             self.session.close()
         except:
             pass
+
+    def get_daily_market_summary(self, date_str, previous_date_str, all_symbols=None):
+        """
+        Get daily market summary for specified date and symbols.
+        
+        Args:
+            date_str: Date string in 'YYYY-MM-DD' format
+            previous_date_str: Previous date string for return calculation
+            all_symbols: List of symbols to include (only process these)
+            
+        Returns:
+            DataFrame with price data including daily returns
+        """
+        try:
+            # Use REST client from the class
+            client = self.get_rest_client()
+            
+            # Helper for converting API response to DataFrame
+            df_converter = lambda aggs: pd.DataFrame([a.__dict__ for a in aggs]).set_index('ticker') if aggs else pd.DataFrame()
+            
+            # Get data for both days
+            df_latest = df_converter(client.get_grouped_daily_aggs(date_str, adjusted="true", include_otc="false"))
+            df_prev = df_converter(client.get_grouped_daily_aggs(previous_date_str, adjusted="true", include_otc="false"))
+            
+            # Skip if we have empty data
+            if df_latest.empty or df_prev.empty:
+                self.logger.warning(f"Missing market data for dates {date_str} or {previous_date_str}")
+                return None
+            
+            # Filter by symbols first to reduce processing
+            if all_symbols is not None:
+                df_latest = df_latest[df_latest.index.isin(all_symbols)]
+                df_prev = df_prev[df_prev.index.isin(all_symbols)]
+            
+            # If filtering results in empty dataframes, return None
+            if df_latest.empty or df_prev.empty:
+                self.logger.warning(f"No requested symbols found for dates {date_str} or {previous_date_str}")
+                return None
+            
+            # Process timestamps
+            for d in [df_latest, df_prev]:
+                if 'timestamp' in d.columns:
+                    d['timestamp'] = pd.to_datetime(d['timestamp'], unit='ms').dt.tz_localize('UTC').dt.tz_convert('America/New_York')
+            
+            # Calculate daily returns using only symbols present in both days
+            common_symbols = df_latest.index.intersection(df_prev.index)
+            df_latest = df_latest.loc[common_symbols]
+            df_prev = df_prev.loc[common_symbols]
+            
+            # Skip if no common symbols
+            if df_latest.empty:
+                self.logger.warning(f"No common symbols between {date_str} and {previous_date_str}")
+                return None
+            
+            # Calculate daily returns
+            df_latest['daily_return'] = round((df_latest['close'] - df_prev['close']) / df_prev['close'] * 100, 2)
+            
+            return df_latest.drop(columns=['otc'], errors='ignore')
+        
+        except Exception as e:
+            self.logger.error(f"Error getting market data for {date_str}: {e}")
+            return None

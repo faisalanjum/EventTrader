@@ -7,7 +7,7 @@ import threading
 import time
 import logging
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Set, Tuple
 import concurrent.futures
@@ -2040,10 +2040,22 @@ class Neo4jProcessor:
     def reconcile_missing_items(self, max_items_per_type=1000):
         """
         Identify and process items in Redis that are missing from Neo4j.
+        Also checks for date node creation once after midnight.
+        
+        Returns:
+            dict: results keyed by item type with counts
         """
-        results = {"news": 0, "reports": 0}
+        results = {"news": 0, "reports": 0, "dates": 0}
         
         try:
+            # Run date node reconciliation only between midnight and 1 AM
+            current_hour = datetime.now().hour
+            if current_hour == 0:
+                date_nodes_created = self.reconcile_date_nodes()
+                results["dates"] = date_nodes_created
+                if date_nodes_created > 0:
+                    logger.info(f"Created {date_nodes_created} date node(s) during reconciliation")
+            
             with self.manager.driver.session() as session:
                 # 1. NEWS RECONCILIATION
                 for namespace in ['withreturns', 'withoutreturns']:
@@ -2143,9 +2155,9 @@ class Neo4jProcessor:
             
             logger.info(f"Reconciliation completed: {results}")
             return results
-            
+        
         except Exception as e:
-            logger.error(f"Error during reconciliation: {e}")
+            logger.error(f"Error reconciling missing items: {e}")
             return results
 
 
@@ -2283,6 +2295,9 @@ class Neo4jProcessor:
                     id=report_id, status="QUEUED"
                 )
             session.execute_write(update_queued_status)
+            
+            # Add a small delay before submitting to reduce contention
+            time.sleep(0.1)  # 100ms delay to stagger job submissions
             
             # Submit task to thread pool and return immediately
             self.xbrl_executor.submit(
@@ -2437,7 +2452,66 @@ class Neo4jProcessor:
             if acquired:
                 self.xbrl_semaphore.release()
 
+
+
+    def reconcile_date_nodes(self):
+        """Check for yesterday's date node and create it with price relationships if needed"""
+        try:
+            yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+            day_before = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
+            
+            # Check both nodes and price relationships in a single query
+            query = """
+            MATCH (yesterday:Date {date: $yesterday}) 
+            OPTIONAL MATCH (yesterday)-[r:HAS_PRICE]->()
+            OPTIONAL MATCH (previous:Date {date: $day_before})
+            RETURN count(yesterday) as yesterday_exists, 
+                   count(r) as has_prices, 
+                   count(previous) as previous_exists
+            """
+            result = self.manager.execute_cypher_query(query, 
+                                                      {"yesterday": yesterday, 
+                                                       "day_before": day_before})
+            
+            # Skip if everything is in place
+            if (result and result["yesterday_exists"] > 0 and 
+                result["has_prices"] > 0):
+                return 0
                 
+            # Initialize needed components
+            if not self.universe_data:
+                self.universe_data = self._get_universe()
+                if not self.universe_data:
+                    return 0
+            
+            # Create initializer and connect
+            from utils.Neo4jInitializer import Neo4jInitializer
+            initializer = Neo4jInitializer(
+                uri=self.uri, 
+                username=self.username,
+                password=self.password,
+                universe_data=self.universe_data
+            )
+            
+            if initializer.connect():
+                try:
+                    initializer.prepare_universe_data()
+                    
+                    # Create previous date first if needed
+                    if not result or result["previous_exists"] == 0:
+                        initializer.create_single_date(day_before)
+                    
+                    # Create yesterday with price relationships
+                    return 1 if initializer.create_single_date(yesterday) else 0
+                finally:
+                    initializer.close()
+            
+            return 0
+        except Exception as e:
+            logger.error(f"Error reconciling date nodes: {e}")
+            return 0
+
+
 
     # def _xbrl_worker_task(self, report_id, cik, accessionNo):
     #     """Process a single XBRL report in background"""
@@ -2715,6 +2789,9 @@ def process_report_data(batch_size=100, max_items=None, verbose=False, include_w
         logger.info("Report processing completed")
 
 
+
+
+
 if __name__ == "__main__":
     import sys
     import argparse
@@ -2841,3 +2918,4 @@ def test_initialization_with_custom_nodes(required_nodes=None, run_init=False):
     finally:
         # Restore original required nodes
         Neo4jProcessor.REQUIRED_NODES = original_nodes
+

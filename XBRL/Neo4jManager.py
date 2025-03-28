@@ -1119,4 +1119,44 @@ class Neo4jManager:
         except Exception as e:
             raise RuntimeError(f"Failed to create company relationships: {e}")
 
+    def create_price_relationships_batch(self, batch_params):
+        """
+        Create HAS_PRICE relationships between Date nodes and entity nodes.
+        Uses proper transaction management to prevent deadlocks.
+        
+        Args:
+            batch_params: List of dictionaries with date_id, entity_id, and properties
+            
+        Returns:
+            int: Number of relationships created
+        """
+        if not batch_params:
+            return 0
+            
+        # Create the query to execute
+        query = """
+        UNWIND $params AS param
+        MATCH (d:Date {id: param.date_id})
+        MATCH (e) WHERE e.id = param.entity_id
+        MERGE (d)-[r:HAS_PRICE]->(e)
+        SET r += param.properties
+        RETURN count(r) as count
+        """
+        
+        # Use session with write transaction for proper deadlock handling
+        with self.driver.session() as session:
+            def create_rels_tx(tx):
+                result = tx.run(query, {"params": batch_params})
+                record = result.single()
+                return record["count"] if record else 0
+                
+            try:
+                # execute_write automatically retries on deadlock
+                count = session.execute_write(create_rels_tx)
+                return count
+            except Exception as e:
+                import logging
+                logging.getLogger('Neo4jManager').error(f"Error creating price relationships: {e}")
+                return 0
+
 # endregion : Neo4j Manager ########################

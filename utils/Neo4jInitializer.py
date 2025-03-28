@@ -4,6 +4,7 @@ import os
 from typing import Dict, List, Optional, Any, Tuple
 from neo4j import GraphDatabase
 import pandas as pd
+import json
 
 from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, DateNode
 # , AdminSectionNode, FinancialStatementNode
@@ -204,8 +205,17 @@ class Neo4jInitializer:
         # Create ticker to CIK mapping for relationship creation
         self._create_ticker_to_cik_mapping()
         
+        # Create a unique list of all symbols (companies, sector ETFs, industry ETFs, and SPY)
+        all_symbols_array = pd.unique([*self.universe_data, 
+                                   *[v.get('sector_etf') for v in self.universe_data.values()], 
+                                   *[v.get('industry_etf') for v in self.universe_data.values()], 
+                                   'SPY'])
+        
+        # Convert numpy array to list immediately to avoid boolean context errors later
+        self.all_symbols = all_symbols_array.tolist() if hasattr(all_symbols_array, 'tolist') else list(all_symbols_array)
+        
         logger.info(f"Processed universe data: {len(self.sector_mapping)} sectors, {len(self.industry_mapping)} industries")
-            
+    
     def _extract_market_mappings(self):
         """Extract sector and industry mappings from universe data"""
         # Process each company's data in a single pass
@@ -828,66 +838,68 @@ class Neo4jInitializer:
                 
         return date_node
 
-    def create_dates(self, start_date=None, batch_size=1000):
+    def create_dates(self, start_date=None, batch_size=1000, add_prices=True):
         """
-        Create date nodes and their NEXT relationships in one efficient batch operation.
-        
+        Create a batch of date nodes from start_date to today.
+        Optimal for initial population or catching up after long gaps.
+
         Args:
-            start_date: Start date in format 'YYYY-MM-DD', defaults to 1 year ago
-            batch_size: Number of nodes to create in one batch
+            start_date: String in format 'YYYY-MM-DD' to start from
+            batch_size: Number of nodes to process in a batch
+            add_prices: Whether to add price relationships to created dates
             
         Returns:
-            bool: Success status
+            int: Number of date nodes created
         """
         try:
             # Default to a year ago if not specified
             if start_date is None:
                 start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
-                
+
+            # Generate date range from start_date to today
             end_date = datetime.now().strftime('%Y-%m-%d')
-            logger.info(f"Creating date nodes from {start_date} to {end_date}")
-            
-            # Generate dates efficiently using pandas
             date_range = pd.date_range(start=start_date, end=end_date)
-            date_strings = [date.strftime('%Y-%m-%d') for date in date_range]
-            
-            # Early exit if no dates to process
+            date_strings = [d.strftime('%Y-%m-%d') for d in date_range]
+
             if not date_strings:
-                logger.warning("No dates to process")
-                return True
+                logger.warning(f"No dates to create between {start_date} and {end_date}")
+                return 0
+
+            # Process in batches to avoid memory issues
+            total_created = 0
+            for i in range(0, len(date_strings), batch_size):
+                batch = date_strings[i:i+batch_size]
+                date_nodes = [self._prepare_date_node(date_str) for date_str in batch]
                 
-            # Prepare all nodes in one pass
-            date_nodes = []
-            dates_by_id = {}
-            
-            for date_str in date_strings:
-                date_node = self._prepare_date_node(date_str)
-                date_nodes.append(date_node)
-                dates_by_id[date_str] = date_node
-            
-            # Create all nodes in one batch operation
-            self.manager.merge_nodes(date_nodes, batch_size)
-            logger.info(f"Created {len(date_nodes)} date nodes")
-            
-            # Create all relationships in one batch operation
-            if len(date_strings) > 1:
-                relationships = []
-                sorted_dates = sorted(date_strings)
+                # Store dates by date_str for relationship creation
+                dates_by_id = {node.date_str: node for node in date_nodes}
                 
-                for i in range(len(sorted_dates) - 1):
-                    source = dates_by_id[sorted_dates[i]]
-                    target = dates_by_id[sorted_dates[i+1]]
-                    relationships.append((source, target, RelationType.NEXT))
+                # Merge nodes into Neo4j
+                self.manager.merge_nodes(date_nodes)
+                total_created += len(date_nodes)
                 
-                self.manager.merge_relationships(relationships)
-                logger.info(f"Created {len(relationships)} date relationships")
-            
-            return True
-            
+                # Create NEXT relationships (requires the nodes to exist first)
+                next_rels = []
+                for j in range(len(batch) - 1):
+                    curr_date = batch[j]
+                    next_date = batch[j + 1]
+                    next_rels.append((dates_by_id[curr_date], dates_by_id[next_date], RelationType.NEXT))
+                
+                if next_rels:
+                    self.manager.merge_relationships(next_rels)
+                    
+                # Add price relationships if requested and we have multiple dates
+                if add_prices and len(batch) > 1 and hasattr(self, 'all_symbols'):
+                    self.add_price_relationships_to_dates(dates_by_id)
+                    logger.info(f"Added price relationships for batch of {len(batch)} dates")
+                    
+                logger.info(f"Created batch of {len(batch)} date nodes with relationships")
+                
+            return total_created
         except Exception as e:
             logger.error(f"Error creating date nodes: {e}")
-            return False
-            
+            return 0
+
     def create_single_date(self, date_str=None):
         """
         Create a single date node and link it to the previous date.
@@ -926,6 +938,17 @@ class Neo4jInitializer:
                 ])
                 
                 logger.info(f"Linked date {date_str} to previous date")
+                
+                # Add price relationships if it's not today and is a trading day
+                today = datetime.now().strftime('%Y-%m-%d')
+                if date_str < today and hasattr(self, 'all_symbols') and date_node.is_trading_day:
+                    # Create a dictionary with just this date
+                    date_dict = {date_str: date_node}
+                    # Use the batch method with a dictionary containing only this date
+                    self.add_price_relationships_to_dates(date_dict, skip_latest=False)
+                    logger.info(f"Added price relationships for {date_str}")
+                elif not date_node.is_trading_day:
+                    logger.info(f"Skipping price relationships for non-trading day {date_str}")
             else:
                 logger.warning(f"Could not link date {date_str} to previous date (which may not exist)")
             
@@ -933,6 +956,126 @@ class Neo4jInitializer:
         except Exception as e:
             logger.error(f"Error creating single date node: {e}")
             return False
+
+    def add_price_relationships_to_dates(self, dates_by_id, skip_latest=True, batch_size=500):
+        """
+        Add HAS_PRICE relationships from Date nodes to entity nodes with Polygon API data.
+        
+        Args:
+            dates_by_id: Dictionary mapping date strings to DateNode objects
+            skip_latest: Whether to skip the latest date (typically today)
+            batch_size: Number of relationships to create in a single transaction
+            
+        Returns:
+            int: Number of price relationships created
+        """
+        if not dates_by_id or not hasattr(self, 'all_symbols') or not self.all_symbols:
+            return 0
+
+        try:
+            # Get API key and initialize polygon
+            polygon_api_key = os.environ.get('POLYGON_API_KEY')
+            if not polygon_api_key:
+                logger.error("Missing POLYGON_API_KEY environment variable")
+                return 0
+            
+            from utils.polygonClass import Polygon
+            polygon = Polygon(api_key=polygon_api_key, polygon_subscription_delay=0)
+            
+            # Sort dates for processing
+            sorted_dates = sorted(dates_by_id.keys())
+            if not sorted_dates:
+                return 0
+            
+            # Skip latest date if requested
+            if skip_latest and len(sorted_dates) > 1:
+                sorted_dates = sorted_dates[:-1]
+            
+            # Get all entity nodes with a single query using Neo4jManager
+            entity_query = """
+            MATCH (e) 
+            WHERE (e:Company OR e:Sector OR e:Industry OR e:MarketIndex) AND e.ticker IN $symbols
+            RETURN e.id as id, e.ticker as ticker
+            """
+            
+            # Use session with explicit transaction to avoid deadlocks
+            entity_results = []
+            with self.manager.driver.session() as session:
+                def get_entities_tx(tx):
+                    result = tx.run(entity_query, {"symbols": self.all_symbols})
+                    return [record.data() for record in result]
+                    
+                entity_results = session.execute_read(get_entities_tx)
+                
+            if not entity_results:
+                logger.warning("No entity nodes found for price relationships")
+                return 0
+                
+            # Create ticker to entity ID mapping
+            ticker_to_id = {r["ticker"]: r["id"] for r in entity_results}
+            
+            today = datetime.now().strftime('%Y-%m-%d')
+            total_rels = 0
+            
+            # Process each date
+            for date_str in sorted_dates:
+                # Skip future dates and non-trading days
+                date_node = dates_by_id[date_str]
+                if date_str > today or not date_node.is_trading_day:
+                    continue
+                    
+                # Check for previous_trading_date property
+                if not hasattr(date_node, 'previous_trading_date') or not date_node.previous_trading_date:
+                    continue
+                    
+                # Get market data with one API call
+                price_data = polygon.get_daily_market_summary(
+                    date_str, date_node.previous_trading_date, self.all_symbols)
+                
+                if price_data is None or (hasattr(price_data, 'empty') and price_data.empty):
+                    continue
+                    
+                # Prepare batch params
+                batch_params = []
+                
+                # Process all tickers at once
+                for ticker, row in price_data.iterrows():
+                    if ticker not in ticker_to_id:
+                        continue
+                        
+                    props = row.to_dict()
+                    
+                    # Format timestamp
+                    if 'timestamp' in props and pd.notnull(props['timestamp']):
+                        props['timestamp'] = props['timestamp'].strftime('%Y-%m-%d %H:%M:%S%z')
+                    
+                    batch_params.append({
+                        "date_id": date_node.id,
+                        "entity_id": ticker_to_id[ticker],
+                        "properties": props
+                    })
+                    
+                    # Execute batch when size reached
+                    if len(batch_params) >= batch_size:
+                        count = self.manager.create_price_relationships_batch(batch_params)
+                        total_rels += len(batch_params)
+                        batch_params = []
+                
+                # Process remaining items
+                if batch_params:
+                    count = self.manager.create_price_relationships_batch(batch_params)
+                    total_rels += len(batch_params)
+                    
+                logger.info(f"Added price relationships for date {date_str}")
+                
+            if total_rels > 0:
+                logger.info(f"Created {total_rels} HAS_PRICE relationships total")
+                
+            return total_rels
+            
+        except Exception as e:
+            logger.error(f"Error adding price relationships: {e}")
+            return 0
 
 
 # Standalone execution support
