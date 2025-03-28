@@ -70,7 +70,7 @@ class Polygon:
 
         self.market_session = MarketSessionClassifier()
         self.client = self.get_rest_client()
-        self.executor = ThreadPoolExecutor(max_workers=100)
+        self.executor = ThreadPoolExecutor(max_workers=95)
         self.last_error = {}
         self.ticker_validation_cache = {}
         

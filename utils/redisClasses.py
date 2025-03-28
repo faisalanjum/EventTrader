@@ -115,6 +115,15 @@ class RedisClient:
     # PROCESSED_QUEUE = "news:benzinga:queues:processed"
     # FAILED_QUEUE = "news:benzinga:queues:failed"    
 
+    # Redis connection settings
+    REDIS_CONN_SETTINGS = {
+        'socket_keepalive': True,
+        'socket_timeout': 30.0,          # Increased from 15.0 to allow more time for operations
+        'socket_connect_timeout': 5.0,   # Increased from 3.0 for more reliable connections
+        'health_check_interval': 60,
+        'retry_on_timeout': True         # Added to automatically retry on timeout errors
+    }
+
     def __init__(self, host='localhost', port=6379, db=0, prefix='', source_type=None):
 
         self.host = host
@@ -131,7 +140,13 @@ class RedisClient:
             self.FAILED_QUEUE = queues['FAILED_QUEUE']
 
 
-        self.pool = redis.ConnectionPool( host=host, port=port, db=db, decode_responses=True)
+        self.pool = redis.ConnectionPool(
+            host=host, 
+            port=port, 
+            db=db, 
+            decode_responses=True,
+            **self.REDIS_CONN_SETTINGS
+        )
         self._connect_to_redis()
 
     def _connect_to_redis(self):
@@ -159,7 +174,8 @@ class RedisClient:
             host=self.host,
             port=self.port,
             db=self.db,
-            decode_responses=True
+            decode_responses=True,
+            **self.REDIS_CONN_SETTINGS
         )
 
     # Used in bz_websocket.py
@@ -189,29 +205,42 @@ class RedisClient:
 
     def set_filing(self, filing: UnifiedReport, ex: int = None) -> bool:
         """Store SEC filing with proper namespace handling"""
-        try:
-            filed_at = filing.filedAt.replace(':', '.') # 2025-02-13T08:07:15-05:00 -> 2025-02-13T08.07.15-05.00
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                filed_at = filing.filedAt.replace(':', '.') # 2025-02-13T08:07:15-05:00 -> 2025-02-13T08.07.15-05.00
 
-            # Check processed queue for duplicates
-            processed_key = f"{self.prefix}processed:{filing.accessionNo}.{filed_at}"
-            processed_items = self.client.lrange(self.PROCESSED_QUEUE, 0, -1)
-            print(f"[Redis Debug] Items in PROCESSED_QUEUE: {len(processed_items)}")
-        
-            if processed_key in processed_items:
-                self.logger.info(f"Skipping duplicate filing: {processed_key}")
-                return False  # ✅ Clearly indicates "not processed"
+                # Check processed queue for duplicates
+                processed_key = f"{self.prefix}processed:{filing.accessionNo}.{filed_at}"
+                processed_items = self.client.lrange(self.PROCESSED_QUEUE, 0, -1)
+                print(f"[Redis Debug] Items in PROCESSED_QUEUE: {len(processed_items)}")
             
-            storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"   
-            # print(f"[Redis Debug] Storage key: {storage_key}")
-
-            pipe = self.client.pipeline(transaction=True)
-            pipe.set(storage_key, filing.model_dump_json(), ex=ex)
-            pipe.lpush(self.RAW_QUEUE, storage_key)  # ✅ LPUSH matches LPOP in processor
-            return all(pipe.execute())
+                if processed_key in processed_items:
+                    self.logger.info(f"Skipping duplicate filing: {processed_key}")
+                    return False  # ✅ Clearly indicates "not processed"
                 
-        except Exception as e:
-            self.logger.error(f"Filing storage failed: {e}")
-            return False
+                storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"   
+                # print(f"[Redis Debug] Storage key: {storage_key}")
+
+                pipe = self.client.pipeline(transaction=True)
+                pipe.set(storage_key, filing.model_dump_json(), ex=ex)
+                pipe.lpush(self.RAW_QUEUE, storage_key)  # ✅ LPUSH matches LPOP in processor
+                return all(pipe.execute())
+                    
+            except Exception as e:
+                self.logger.error(f"Filing storage attempt {attempt+1}/{max_retries} failed: {e}")
+                if attempt < max_retries - 1:
+                    # Try to reconnect on connection errors
+                    try:
+                        self.client = redis.Redis(connection_pool=self.pool)
+                    except:
+                        pass
+                    time.sleep(1)  # Wait before retry
+                else:
+                    self.logger.error(f"Filing storage failed after {max_retries} attempts")
+                    return False
+                
+        return False  # Should never reach here, but just in case
 
     # def set_filing(self, filing, ex: int = None, raw: bool = False) -> bool:
     #     """Store filing with proper namespace handling and queue management
