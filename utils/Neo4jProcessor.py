@@ -2156,14 +2156,12 @@ class Neo4jProcessor:
             return results
 
     def _handle_midnight_operations(self, results):
-        """Handle operations that should only run during midnight hour (12:00 AM - 12:59 AM)"""
-        # Run date node reconciliation only between midnight and 1 AM
-        current_hour = datetime.now().hour
-        if current_hour == 0:
-            date_nodes_created = self.reconcile_date_nodes()
-            results["dates"] = date_nodes_created
-            if date_nodes_created > 0:
-                logger.info(f"Created {date_nodes_created} date node(s) during reconciliation")
+        """Check for and create yesterday's date node if missing, regardless of current time"""
+        # Run date node reconciliation regardless of hour
+        date_nodes_created = self.reconcile_date_nodes()
+        results["dates"] = date_nodes_created
+        if date_nodes_created > 0:
+            logger.info(f"Created {date_nodes_created} date node(s) during reconciliation")
         return results
 
 
