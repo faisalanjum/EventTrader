@@ -924,8 +924,8 @@ class Neo4jInitializer:
             
             # Find previous date node
             prev_date = (pd.Timestamp(date_str) - pd.Timedelta(days=1)).strftime('%Y-%m-%d')
-            prev_query = "MATCH (d:Date {date: $date}) RETURN d"
-            prev_result = self.manager.execute_cypher_query(prev_query, {"date": prev_date})
+            prev_query = "MATCH (d:Date {date: $prev_date}) RETURN d"
+            prev_result = self.manager.execute_cypher_query(prev_query, {"prev_date": prev_date})
             
             if prev_result and "d" in prev_result:
                 # Use manager.merge_relationships to create the relationship
@@ -938,19 +938,19 @@ class Neo4jInitializer:
                 ])
                 
                 logger.info(f"Linked date {date_str} to previous date")
-                
-                # Add price relationships if it's not today and is a trading day
-                today = datetime.now().strftime('%Y-%m-%d')
-                if date_str < today and hasattr(self, 'all_symbols') and date_node.is_trading_day:
-                    # Create a dictionary with just this date
-                    date_dict = {date_str: date_node}
-                    # Use the batch method with a dictionary containing only this date
-                    self.add_price_relationships_to_dates(date_dict, skip_latest=False)
-                    logger.info(f"Added price relationships for {date_str}")
-                elif not date_node.is_trading_day:
-                    logger.info(f"Skipping price relationships for non-trading day {date_str}")
             else:
                 logger.warning(f"Could not link date {date_str} to previous date (which may not exist)")
+            
+            # Add price relationships if it's not today and is a trading day
+            today = datetime.now().strftime('%Y-%m-%d')
+            if date_str < today and hasattr(self, 'all_symbols') and date_node.is_trading_day:
+                # Create a dictionary with just this date
+                date_dict = {date_str: date_node}
+                # Use the batch method with a dictionary containing only this date
+                self.add_price_relationships_to_dates(date_dict, skip_latest=False)
+                logger.info(f"Added price relationships for {date_str}")
+            elif not date_node.is_trading_day:
+                logger.info(f"Skipping price relationships for non-trading day {date_str}")
             
             return True
         except Exception as e:

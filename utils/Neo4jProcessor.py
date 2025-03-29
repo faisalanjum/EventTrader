@@ -2048,13 +2048,8 @@ class Neo4jProcessor:
         results = {"news": 0, "reports": 0, "dates": 0}
         
         try:
-            # Run date node reconciliation only between midnight and 1 AM
-            current_hour = datetime.now().hour
-            if current_hour == 0:
-                date_nodes_created = self.reconcile_date_nodes()
-                results["dates"] = date_nodes_created
-                if date_nodes_created > 0:
-                    logger.info(f"Created {date_nodes_created} date node(s) during reconciliation")
+            # Extract midnight operations to separate method
+            self._handle_midnight_operations(results)
             
             with self.manager.driver.session() as session:
                 # 1. NEWS RECONCILIATION
@@ -2159,6 +2154,17 @@ class Neo4jProcessor:
         except Exception as e:
             logger.error(f"Error reconciling missing items: {e}")
             return results
+
+    def _handle_midnight_operations(self, results):
+        """Handle operations that should only run during midnight hour (12:00 AM - 12:59 AM)"""
+        # Run date node reconciliation only between midnight and 1 AM
+        current_hour = datetime.now().hour
+        if current_hour == 0:
+            date_nodes_created = self.reconcile_date_nodes()
+            results["dates"] = date_nodes_created
+            if date_nodes_created > 0:
+                logger.info(f"Created {date_nodes_created} date node(s) during reconciliation")
+        return results
 
 
 
