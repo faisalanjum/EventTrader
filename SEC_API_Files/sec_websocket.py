@@ -67,6 +67,9 @@ class SECWebSocket:
         self._downtime_logged = False
         self._current_downtime_key = None
         self._had_successful_connection = False
+        
+        # Feature flag logging state
+        self._feature_flag_logged = False
             
         self.logger.info("=== SEC REPORTS WEBSOCKET INITIALIZED ===")
 
@@ -75,7 +78,10 @@ class SECWebSocket:
         # Check feature flag
         from utils.feature_flags import ENABLE_LIVE_DATA
         if not ENABLE_LIVE_DATA:
-            self.logger.info("SEC live data ingestion disabled by feature flag")
+            # Only log the message once
+            if not self._feature_flag_logged:
+                self.logger.info("SEC live data ingestion disabled by feature flag")
+                self._feature_flag_logged = True
             return
         
         self.raw = raw
@@ -264,6 +270,12 @@ class SECWebSocket:
 
     def _on_message(self, ws, message: str):
         """Handle incoming WebSocket message"""
+        # Check feature flag to avoid unnecessary processing
+        from utils.feature_flags import ENABLE_LIVE_DATA
+        if not ENABLE_LIVE_DATA:
+            # Don't log this message for every message received
+            return
+            
         with self._stats_lock:
             # Always update message time, even for heartbeats
             now = datetime.now(timezone.utc)

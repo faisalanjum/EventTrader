@@ -890,8 +890,33 @@ class Neo4jInitializer:
                     
                 # Add price relationships if requested and we have multiple dates
                 if add_prices and len(batch) > 1 and hasattr(self, 'all_symbols'):
-                    self.add_price_relationships_to_dates(dates_by_id)
-                    logger.info(f"Added price relationships for batch of {len(batch)} dates")
+                    # First check if any date nodes already have price relationships
+                    date_ids = [node.id for node in date_nodes]
+                    with self.manager.driver.session() as session:
+                        check_query = """
+                        MATCH (d:Date)-[r:HAS_PRICE]->(e)
+                        WHERE d.id IN $date_ids
+                        WITH d.id AS date_id, count(r) AS rel_count
+                        WHERE rel_count > 0
+                        RETURN collect(date_id) AS dates_with_relationships
+                        """
+                        result = session.run(check_query, {"date_ids": date_ids}).single()
+                        dates_with_rels = result["dates_with_relationships"] if result else []
+                        
+                        # Filter out dates that already have relationships
+                        if dates_with_rels:
+                            filtered_dates = {date_str: node for date_str, node in dates_by_id.items() 
+                                             if node.id not in dates_with_rels}
+                            
+                            if not filtered_dates:
+                                logger.info(f"All {len(dates_by_id)} dates already have price relationships, skipping")
+                            else:
+                                logger.info(f"Found {len(dates_with_rels)} dates with existing price relationships, processing {len(filtered_dates)} remaining dates")
+                                self.add_price_relationships_to_dates(filtered_dates)
+                        else:
+                            # No dates have relationships yet, process all
+                            self.add_price_relationships_to_dates(dates_by_id)
+                            logger.info(f"Added price relationships for batch of {len(batch)} dates")
                     
                 logger.info(f"Created batch of {len(batch)} date nodes with relationships")
                 
@@ -1044,6 +1069,20 @@ class Neo4jInitializer:
                 # Check for previous_trading_date property
                 if not hasattr(date_node, 'previous_trading_date') or not date_node.previous_trading_date:
                     continue
+                
+                # First check if we already have price relationships for this date
+                with self.manager.driver.session() as session:
+                    check_query = """
+                    MATCH (d:Date {id: $date_id})-[:HAS_PRICE]->(e)
+                    RETURN count(e) as count
+                    """
+                    result = session.run(check_query, {"date_id": date_node.id}).single()
+                    existing_count = result["count"] if result else 0
+                    
+                    # If we already have price relationships for this date, skip it
+                    if existing_count > 0:
+                        logger.info(f"Date {date_str} already has {existing_count} price relationships, skipping")
+                        continue
                     
                 # Get market data with one API call
                 price_data = polygon.get_daily_market_summary(

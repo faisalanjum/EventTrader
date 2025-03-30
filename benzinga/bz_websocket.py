@@ -75,6 +75,9 @@ class BenzingaNewsWebSocket:
         self._lock = threading.Lock()
         self._stats_lock = threading.Lock()
 
+        # Feature flag logging state
+        self._feature_flag_logged = False
+
         self.logger.info("=== BENZINGA NEWS WEBSOCKET INITIALIZED ===")
 
     @staticmethod
@@ -106,7 +109,10 @@ class BenzingaNewsWebSocket:
         # Check feature flag
         from utils.feature_flags import ENABLE_LIVE_DATA
         if not ENABLE_LIVE_DATA:
-            self.logger.info("Benzinga live data ingestion disabled by feature flag")
+            # Only log the message once
+            if not self._feature_flag_logged:
+                self.logger.info("Benzinga live data ingestion disabled by feature flag")
+                self._feature_flag_logged = True
             return
         
         self.raw = raw
@@ -287,7 +293,12 @@ class BenzingaNewsWebSocket:
                     if int(message) % 100 == 0:  # Log only occasionally to reduce noise
                         self.logger.debug(f"Heartbeat received: {message}")
                     
-                    # Removing heartbeat Redis update to ensure last_message_time only shows actual news
+                    return  # Skip processing for heartbeat messages
+                
+                # Check feature flag to avoid unnecessary processing
+                from utils.feature_flags import ENABLE_LIVE_DATA
+                if not ENABLE_LIVE_DATA:
+                    # Don't log this message for every message received
                     return
                 
                 data = json.loads(message)

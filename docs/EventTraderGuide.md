@@ -16,6 +16,9 @@
    ```
    ## -historical - Enable only historical data (disable live data)
    ./scripts/event_trader.sh --background start-all -historical 2025-02-01 2025-02-10
+   
+   ## - live - the start date is only for neo4j initialization
+   ./scripts/event_trader.sh --background start-all -live 2025-03-25  
 
 2. Monitoring:
 
@@ -64,7 +67,7 @@
 --force, -f                    # Continue despite non-critical errors
 
 
-5. XBRL Status by Report Type
+5. ## XBRL Status by Report Type
 
 ./scripts/xbrl_status_report.py
 

@@ -7,7 +7,7 @@ import backoff
 import requests
 from utils.redisClasses import RedisClient, EventTraderRedis
 from SEC_API_Files.sec_errors import FilingErrorHandler
-from SEC_API_Files.sec_schemas import VALID_FORM_TYPES
+from utils.feature_flags import VALID_FORM_TYPES
 from sec_api import QueryApi
 from utils.log_config import get_logger, setup_logging
 

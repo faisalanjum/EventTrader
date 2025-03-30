@@ -36,6 +36,8 @@ def parse_args():
                         help='Log file path (default: auto-generated in logs directory)')
     parser.add_argument('--check-interval', type=int, default=300,
                         help='Interval in seconds to check system status (default: 300)')
+    parser.add_argument('--neo4j-init-only', action='store_true',
+                        help='Initialize Neo4j database only without running the full system')
     return parser.parse_args()
 
 def main():
@@ -84,6 +86,13 @@ def main():
             logger.error("Neo4j initialization failed. EventTrader requires Neo4j to function properly.")
             print("Neo4j initialization failed. See logs for details. Exiting.")
             sys.exit(1)
+        
+        # If neo4j-init-only flag is set, exit after initialization
+        if args.neo4j_init_only:
+            logger.info("Neo4j initialization completed successfully. Exiting as requested.")
+            print("Neo4j initialization completed successfully.")
+            manager.stop()  # Clean up any open connections
+            sys.exit(0)
         
         # Set up signal handlers for clean shutdown
         def signal_handler(sig, frame):

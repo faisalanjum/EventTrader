@@ -7,7 +7,7 @@ import os
 from dataclasses import dataclass
 from collections import Counter
 from SEC_API_Files.sec_schemas import SECFilingSchema, UnifiedReport
-from SEC_API_Files.sec_schemas import FORM_TYPES_REQUIRING_XML
+from utils.feature_flags import FORM_TYPES_REQUIRING_XML
 from utils.log_config import get_logger, setup_logging
 
 @dataclass
