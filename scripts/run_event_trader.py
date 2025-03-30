@@ -27,6 +27,11 @@ def parse_args():
                         help='Start date in YYYY-MM-DD format')
     parser.add_argument('--to-date', type=str, required=True, 
                         help='End date in YYYY-MM-DD format')
+    # Simplified flags (default is both enabled)
+    parser.add_argument('-historical', action='store_true',
+                        help='Enable historical data only (disables live)')
+    parser.add_argument('-live', action='store_true',
+                        help='Enable live data only (disables historical)')
     parser.add_argument('--log-file', type=str, default=None,
                         help='Log file path (default: auto-generated in logs directory)')
     parser.add_argument('--check-interval', type=int, default=300,
@@ -37,6 +42,18 @@ def main():
     try:
         # Parse command line args
         args = parse_args()
+        
+        # Set feature flags based on arguments
+        import utils.feature_flags as feature_flags
+        
+        # If neither flag is set, enable both (default behavior)
+        if not args.historical and not args.live:
+            feature_flags.ENABLE_HISTORICAL_DATA = True
+            feature_flags.ENABLE_LIVE_DATA = True
+        else:
+            # Enable only what was specifically requested
+            feature_flags.ENABLE_HISTORICAL_DATA = args.historical
+            feature_flags.ENABLE_LIVE_DATA = args.live
         
         # Setup logging using the existing log_config.py
         if args.log_file:
@@ -55,6 +72,7 @@ def main():
         
         # Log startup information
         logger.info(f"Starting EventTrader for dates: {args.from_date} to {args.to_date}")
+        logger.info(f"Data sources: Historical={feature_flags.ENABLE_HISTORICAL_DATA}, Live={feature_flags.ENABLE_LIVE_DATA}")
         logger.info(f"Logs will be written to: {log_path}")
         
         # Create and initialize DataManager

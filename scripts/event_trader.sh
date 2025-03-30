@@ -10,6 +10,62 @@ PID_FILE="$WORKSPACE_DIR/event_trader.pid"
 MONITOR_PID_FILE="$WORKSPACE_DIR/event_trader_monitor.pid"
 LOG_RETENTION_DAYS=7  # Days to keep logs before cleaning
 
+# Default dates (if not provided)
+DEFAULT_FROM_DATE=$(date -v-3d "+%Y-%m-%d" 2>/dev/null || date -d "3 days ago" "+%Y-%m-%d" 2>/dev/null || date "+%Y-%m-%d")
+DEFAULT_TO_DATE=$(date "+%Y-%m-%d")
+
+# Help text
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: ./scripts/event_trader.sh [options]"
+    echo ""
+    echo "Commands:"
+    echo "  start                   Start EventTrader only"
+    echo "  start-all               Start EventTrader and watchdog together"
+    echo "  stop                    Stop EventTrader"
+    echo "  status                  Check status of EventTrader components"
+    echo "  restart                 Restart EventTrader"
+    echo "  logs                    View recent logs"
+    echo "  monitor                 Start the watchdog monitor"
+    echo "  stop-monitor            Stop only the watchdog monitor"
+    echo "  stop-all                Stop both EventTrader and watchdog"
+    echo "  clean-logs              Remove old log files"
+    echo "  health                  Check system health"
+    echo "  init-neo4j              Initialize Neo4j database"
+    echo "  reset-all               Stop all components and clear data"
+    echo ""
+    echo "Options:"
+    echo "  --background            Run in background mode"
+    echo "  --from-date YYYY-MM-DD  Start date for historical data (default: 3 days ago)"
+    echo "  --to-date YYYY-MM-DD    End date for historical data (default: today)"
+    echo "  -historical             Enable historical data only (disables live)"
+    echo "  -live                   Enable live data only (disables historical)"
+    echo "  --log-file PATH         Custom log file path"
+    echo "  --help, -h              Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  ./scripts/event_trader.sh start                    # Start EventTrader only (uses 3 days ago to today)"
+    echo "  ./scripts/event_trader.sh start-all               # Start EventTrader and watchdog together"
+    echo "  ./scripts/event_trader.sh --background start-all  # Run everything in background"
+    echo ""
+    echo "  With date ranges:"
+    echo "  ./scripts/event_trader.sh start 2025-03-04 2025-03-05"
+    echo ""
+    echo "By default, both historical and live data processing are enabled."
+    exit 0
+fi
+
+# Check for custom dates
+FROM_DATE="$DEFAULT_FROM_DATE"
+TO_DATE="$DEFAULT_TO_DATE"
+
+# Process all arguments first for options like --background
+for arg in "$@"; do
+  if [[ "$arg" == "--background" ]]; then
+    RUN_BACKGROUND=true
+    break
+  fi
+done
+
 # Find the appropriate Python executable
 detect_python() {
   # Check for virtual environment in the workspace (most reliable)
@@ -38,27 +94,50 @@ detect_python() {
   return 0
 }
 
-# Parse command line flags
-RUN_BACKGROUND=false
+# Parse command line flags - process all arguments
 ARGS=()
 DATE_ARGS=()
 
 # Process all arguments
 for arg in "$@"; do
   if [[ "$arg" == "--background" ]]; then
-    RUN_BACKGROUND=true
+    # Already handled above
+    continue
+  elif [[ "$arg" == "-historical" ]]; then
+    HISTORICAL_FLAG="-historical"
+  elif [[ "$arg" == "-live" ]]; then
+    LIVE_FLAG="-live"
   elif [[ "$arg" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
     # This looks like a date
     DATE_ARGS+=("$arg")
   else
-    # Regular argument
-    ARGS+=("$arg")
+    # Regular argument - but don't include start-all or other commands here
+    if [[ "$arg" != "start" && "$arg" != "start-all" && "$arg" != "stop" && "$arg" != "status" && "$arg" != "restart" && "$arg" != "reset-all" ]]; then
+      ARGS+=("$arg")
+    fi
   fi
 done
 
 # Set command and extract it from args
-COMMAND=${ARGS[0]}
-ARGS=("${ARGS[@]:1}")  # Remove first element
+if [[ ${#ARGS[@]} -gt 0 ]]; then
+  COMMAND=${ARGS[0]}
+  ARGS=("${ARGS[@]:1}")  # Remove first element
+fi
+
+# Determine the command based on positional arguments if not already set
+if [[ -z "$COMMAND" ]]; then
+  for arg in "$@"; do
+    if [[ "$arg" == "start" || "$arg" == "start-all" || "$arg" == "stop" || "$arg" == "status" || "$arg" == "restart" || "$arg" == "reset-all" || "$arg" == "reset-all" ]]; then
+      COMMAND="$arg"
+      break
+    fi
+  done
+fi
+
+# If still no command, default to start
+if [[ -z "$COMMAND" ]]; then
+  COMMAND="start"
+fi
 
 # Handle date arguments correctly
 if [[ ${#DATE_ARGS[@]} -eq 1 ]]; then
@@ -70,16 +149,30 @@ elif [[ ${#DATE_ARGS[@]} -eq 2 ]]; then
   FROM_DATE="${DATE_ARGS[0]}"
   TO_DATE="${DATE_ARGS[1]}"
 else
-  # Default dates (yesterday to today)
-  FROM_DATE="$(date -v-1d +%Y-%m-%d)"
-  TO_DATE="$(date +%Y-%m-%d)"
+  # Use the default dates set earlier (3 days ago to today)
+  FROM_DATE="$DEFAULT_FROM_DATE"
+  TO_DATE="$DEFAULT_TO_DATE"
 fi
+
+# Log settings after all arguments have been processed
+log_settings() {
+  echo "==============================================="
+  echo "EventTrader Command: $COMMAND"
+  echo "Settings:"
+  echo "  Date range: $FROM_DATE to $TO_DATE"
+  mode="Historical and Live"; [ -n "$HISTORICAL_FLAG" ] && mode="Historical only"; [ -n "$LIVE_FLAG" ] && mode="Live only"; echo "  Mode:      $mode"
+  echo "  Background: $([ "$RUN_BACKGROUND" = true ] && echo "Yes" || echo "No")"
+  echo "==============================================="
+}
 
 # Ensure log directory exists
 mkdir -p "$LOGS_DIR"
 
 # Make Python script executable 
 chmod +x "$SCRIPT_PATH"
+
+# Log settings before starting
+log_settings
 
 # Find most recent log file
 get_latest_log() {
@@ -115,6 +208,43 @@ is_running() {
   
   # Not running
   return 1
+}
+
+# Kill all related EventTrader processes
+kill_all_related_processes() {
+  echo "Finding and killing all related processes..."
+  
+  # Kill Neo4jInitializer processes
+  neo4j_pids=$(pgrep -f "Neo4jInitializer")
+  if [ -n "$neo4j_pids" ]; then
+    echo "Killing Neo4jInitializer processes: $neo4j_pids"
+    for pid in $neo4j_pids; do
+      kill -9 $pid 2>/dev/null
+    done
+  fi
+  
+  # Kill run_event_trader.py processes
+  event_pids=$(pgrep -f "run_event_trader.py")
+  if [ -n "$event_pids" ]; then
+    echo "Killing EventTrader processes: $event_pids"
+    for pid in $event_pids; do
+      kill -9 $pid 2>/dev/null
+    done
+  fi
+  
+  # Kill watchdog processes
+  watchdog_pids=$(pgrep -f "watchdog.sh")
+  if [ -n "$watchdog_pids" ]; then
+    echo "Killing watchdog processes: $watchdog_pids"
+    for pid in $watchdog_pids; do
+      kill -9 $pid 2>/dev/null
+    done
+  fi
+  
+  # Remove PID files
+  rm -f "$PID_FILE" "$MONITOR_PID_FILE" 2>/dev/null
+  
+  echo "All related processes have been terminated"
 }
 
 # Check if monitor/watchdog is running
@@ -161,16 +291,15 @@ start() {
   # Detect Python before starting
   detect_python
   
-  echo "Starting EventTrader ($FROM_DATE to $TO_DATE)..."
   cd "$WORKSPACE_DIR"
   
   if [ "$RUN_BACKGROUND" = true ]; then
     # Start in background - logging handled by log_config.py
-    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" > /dev/null 2>&1 &
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG > /dev/null 2>&1 &
     PID=$!
   else
     # Start in foreground with output to terminal
-    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" &
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG &
     PID=$!
   fi
   
@@ -234,6 +363,13 @@ stop() {
     echo "Force killing EventTrader process..."
     kill -9 $(cat "$PID_FILE") 2>/dev/null
     rm -f "$PID_FILE" 2>/dev/null
+    
+    # Check one more time and use kill_all_related_processes if needed
+    sleep 1
+    if pgrep -f "python.*run_event_trader.py" > /dev/null 2>&1; then
+      echo "Some EventTrader processes still running, performing forced cleanup..."
+      kill_all_related_processes
+    fi
   fi
 }
 
@@ -327,17 +463,20 @@ monitor() {
     return
   fi
   
+  # Pass through date range and feature flags to watchdog
+  WATCHDOG_ARGS="$FROM_DATE $TO_DATE $HISTORICAL_FLAG $LIVE_FLAG"
+  
   echo "Starting EventTrader Watchdog (Max restarts: $MAX_RESTARTS, Check interval: ${CHECK_INTERVAL}s)..."
   cd "$WORKSPACE_DIR"
   
   if [ "$RUN_BACKGROUND" = true ]; then
     # Start watchdog in the background without output
-    "$WORKSPACE_DIR/scripts/watchdog.sh" $MAX_RESTARTS $CHECK_INTERVAL > /dev/null 2>&1 &
+    "$WORKSPACE_DIR/scripts/watchdog.sh" $MAX_RESTARTS $CHECK_INTERVAL $WATCHDOG_ARGS > /dev/null 2>&1 &
     WATCHDOG_PID=$!
     echo "Watchdog started in background with PID $WATCHDOG_PID"
   else
     # Start watchdog in the background but with output visible
-    "$WORKSPACE_DIR/scripts/watchdog.sh" $MAX_RESTARTS $CHECK_INTERVAL &
+    "$WORKSPACE_DIR/scripts/watchdog.sh" $MAX_RESTARTS $CHECK_INTERVAL $WATCHDOG_ARGS &
     WATCHDOG_PID=$!
     echo "Watchdog started with PID $WATCHDOG_PID"
   fi
@@ -395,21 +534,21 @@ init_neo4j() {
   # Detect Python before starting
   detect_python
   
-  echo "Initializing Neo4j database (with date range: $FROM_DATE to $TO_DATE)..."
+  echo "Initializing Neo4j database..."
   cd "$WORKSPACE_DIR"
   
   # Use run_event_trader.py with our Neo4j flag
   if [ "$RUN_BACKGROUND" = true ]; then
     # Run in background
-    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" --neo4j-init-only > /dev/null 2>&1 &
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG --neo4j-init-only > /dev/null 2>&1 &
     echo "Neo4j initialization started in background"
   else
     # Run in foreground
-    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" --neo4j-init-only
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG --neo4j-init-only
   fi
   
   # Also directly initialize date nodes with Neo4jInitializer to ensure they're created
-  echo "Ensuring date nodes are created (from $FROM_DATE)..."
+  echo "Ensuring date nodes are created..."
   if [ "$RUN_BACKGROUND" = true ]; then
     # Run in background
     $PYTHON_CMD -m utils.Neo4jInitializer --start_date "$FROM_DATE" > /dev/null 2>&1 &
@@ -467,11 +606,17 @@ case "$COMMAND" in
     start_all
     ;;
   reset-all)
+    # Before running reset, show what we're working with
+    log_settings
+    
     # Stop all processes first
     echo "Stopping all processes..."
     stop_monitor
     stop
     sleep 2
+    
+    # Force kill any remaining related processes
+    kill_all_related_processes
     
     # Reset Redis databases
     echo "Clearing Redis databases..."
@@ -507,8 +652,8 @@ from dotenv import load_dotenv
 
 # Load environment variables - use absolute path to workspace .env
 dotenv_path = os.path.abspath('.env')
-print(f'Loading .env from: {dotenv_path}')
-load_dotenv(dotenv_path)
+# Suppress environment loading message
+load_dotenv(dotenv_path, verbose=False)
 
 # Use the singleton manager
 try:
@@ -517,7 +662,7 @@ try:
     # Clear the database
     try:
         neo4j.clear_db()
-        print('Neo4j database cleared successfully')
+        print('Database cleared successfully')
     except Exception as e:
         print(f'Error clearing Neo4j database: {e}')
         print('Using direct Cypher query as fallback...')
@@ -533,6 +678,10 @@ except Exception as e:
     print(f'Neo4j connection failed: {e}')
     print('Could not clear Neo4j database')
 "
+    
+    # Wait a moment to ensure Neo4j reset completes fully
+    echo "Waiting for Neo4j reset to complete..."
+    sleep 5
     
     echo "Reset complete. All databases have been cleared."
     ;;
@@ -564,6 +713,13 @@ except Exception as e:
     # Stop both watchdog and main process
     stop_monitor
     stop
+    
+    # Verify everything is really stopped
+    sleep 1
+    if pgrep -f "python.*run_event_trader.py" > /dev/null 2>&1 || pgrep -f "Neo4jInitializer" > /dev/null 2>&1 || pgrep -f "watchdog.sh" > /dev/null 2>&1; then
+      echo "Some processes are still running, performing forced cleanup..."
+      kill_all_related_processes
+    fi
     ;;
   clean-logs)
     # Clean old log files
@@ -599,11 +755,15 @@ except Exception as e:
     echo ""
     echo "Options:"
     echo "  --background                 # Run commands in background mode"
+    echo "  -historical                  # Enable historical data only (disables live)"
+    echo "  -live                        # Enable live data only (disables historical)"
     echo ""
     echo "Examples:"
     echo "  $0 start                        # Start with yesterday to today"
     echo "  $0 start 2025-03-04 2025-03-05  # Start with specific dates" 
     echo "  $0 --background start-all       # Start everything in background"
+    echo "  $0 start -historical            # Start with historical data only"
+    echo "  $0 start -live                  # Start with live data only"
     echo "  $0 monitor 10 120               # Start watchdog with 10 max restarts, 120s check interval"
     echo "  $0 clean-logs 14                # Clean logs older than 14 days"
     echo "  $0 --background reset-all       # Reset all processes and clear Redis and Neo4j databases"

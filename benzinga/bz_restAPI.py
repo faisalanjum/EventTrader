@@ -231,6 +231,13 @@ class BenzingaNewsRestAPI:
                            tickers: Optional[List[str]] = None,
                            raw: bool = False) -> List[Union[BzRestAPINews, UnifiedNews]]:
         """Get historical news data between dates"""
+        # Check feature flag with local import
+        from utils.feature_flags import ENABLE_HISTORICAL_DATA
+        if not ENABLE_HISTORICAL_DATA:
+            self.logger.info("Benzinga historical data ingestion disabled by feature flag")
+            return []
+            
+        # Continue with original implementation
         return self._fetch_news(
             date_from=date_from,
             date_to=date_to,

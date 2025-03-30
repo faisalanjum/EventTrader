@@ -62,6 +62,15 @@ class SECRestAPI:
     )
 
     def get_historical_data(self, date_from: str, date_to: str, raw: bool = False) -> List[Dict]:
+        """Get historical SEC filings data between dates"""
+        # Local import to avoid module-level dependencies
+        from utils.feature_flags import ENABLE_HISTORICAL_DATA
+        
+        # Check feature flag
+        if not ENABLE_HISTORICAL_DATA:
+            self.logger.info("SEC historical data ingestion disabled by feature flag")
+            return []
+        
         try:
             admin_client = RedisClient(prefix='admin:')
             symbols_str = admin_client.get('admin:tradable_universe:symbols')

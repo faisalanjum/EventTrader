@@ -1,7 +1,7 @@
 #!/bin/bash
 # EventTrader Watchdog
 # This script monitors the EventTrader system and restarts it if it crashes
-# Usage: ./scripts/watchdog.sh [max_restarts] [check_interval]
+# Usage: ./scripts/watchdog.sh [max_restarts] [check_interval] [from_date] [to_date] [flags...]
 
 # Get workspace directory
 WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -12,9 +12,34 @@ LOG_FILE="$WORKSPACE_DIR/logs/watchdog.log"
 # Parameters
 MAX_RESTARTS=${1:-5}  # Default to 5 restart attempts
 CHECK_INTERVAL=${2:-60}  # Default to checking every 60 seconds (1 minute)
+FROM_DATE=${3:-""}  # From date for historical data
+TO_DATE=${4:-""}  # To date for historical data
+
+# Collect any additional flags passed (like -historical or -live)
+shift 4 2>/dev/null || true  # Shift past the first 4 params, ignore errors if fewer params
+ADDITIONAL_FLAGS="$@"
 
 # Ensure log directory exists
 mkdir -p "$WORKSPACE_DIR/logs"
+
+# Construct the start command with proper arguments
+get_start_cmd() {
+  CMD="$CONTROL_SCRIPT start"
+  
+  # Add date range if provided
+  if [ -n "$FROM_DATE" ] && [ -n "$TO_DATE" ]; then
+    CMD="$CMD $FROM_DATE $TO_DATE"
+  elif [ -n "$FROM_DATE" ]; then
+    CMD="$CMD $FROM_DATE"
+  fi
+  
+  # Add any additional flags
+  if [ -n "$ADDITIONAL_FLAGS" ]; then
+    CMD="$CMD $ADDITIONAL_FLAGS"
+  fi
+  
+  echo "$CMD"
+}
 
 # Log with timestamp
 log() {
@@ -45,7 +70,9 @@ is_running() {
 
 # Main watchdog function
 watchdog() {
+  START_CMD=$(get_start_cmd)
   log "Starting EventTrader Watchdog (Max restarts: $MAX_RESTARTS, Check interval: ${CHECK_INTERVAL}s)"
+  log "Using command: $START_CMD"
   
   # Initialize counters
   restart_count=0
@@ -54,7 +81,7 @@ watchdog() {
   # If EventTrader is not running, start it
   if ! is_running; then
     log "EventTrader not running. Starting it..."
-    $CONTROL_SCRIPT start
+    $START_CMD
   else
     log "EventTrader already running (PID: $(cat $PID_FILE 2>/dev/null || pgrep -f "python.*run_event_trader.py"))"
   fi
@@ -68,7 +95,7 @@ watchdog() {
       if [ $restart_count -lt $MAX_RESTARTS ]; then
         restart_count=$((restart_count + 1))
         log "Attempting restart $restart_count of $MAX_RESTARTS"
-        $CONTROL_SCRIPT start
+        $START_CMD
         
         # Give it a moment to start
         sleep 5

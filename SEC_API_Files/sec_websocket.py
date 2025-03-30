@@ -72,6 +72,12 @@ class SECWebSocket:
 
     def connect(self, raw: bool = False, enable_trace: bool = False):
         """Start WebSocket connection"""
+        # Check feature flag
+        from utils.feature_flags import ENABLE_LIVE_DATA
+        if not ENABLE_LIVE_DATA:
+            self.logger.info("SEC live data ingestion disabled by feature flag")
+            return
+        
         self.raw = raw
         self.should_run = True
         self.error_handler.reset_stats()

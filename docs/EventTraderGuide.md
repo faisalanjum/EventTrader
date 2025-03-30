@@ -14,6 +14,8 @@
    ```bash
    ./scripts/event_trader.sh start 2025-03-04 2025-03-05
    ```
+   ## -historical - Enable only historical data (disable live data)
+   ./scripts/event_trader.sh --background start-all -historical 2025-02-01 2025-02-10
 
 2. Monitoring:
 

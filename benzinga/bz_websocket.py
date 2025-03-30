@@ -103,6 +103,12 @@ class BenzingaNewsWebSocket:
             raw: Whether to use raw format (default: False)
             enable_trace: Enable websocket trace for debugging (default: False)
         """
+        # Check feature flag
+        from utils.feature_flags import ENABLE_LIVE_DATA
+        if not ENABLE_LIVE_DATA:
+            self.logger.info("Benzinga live data ingestion disabled by feature flag")
+            return
+        
         self.raw = raw
         self.should_run = True
         self.error_handler.reset_stats()
