@@ -86,15 +86,23 @@ class Neo4jProcessor:
         # Flag to track if we've processed an XBRL report
         self.xbrl_processed = False
         
+        # Import feature flag
+        from utils.feature_flags import ENABLE_XBRL_PROCESSING, XBRL_WORKER_THREADS
+        self.enable_xbrl = ENABLE_XBRL_PROCESSING
         
-        # Add semaphore to limit concurrent XBRL operations
-        self.xbrl_semaphore = threading.BoundedSemaphore(4)
-        
-        # Existing thread pool executor code remains unchanged
-        self.xbrl_executor = concurrent.futures.ThreadPoolExecutor(
-            max_workers=8,  
-            thread_name_prefix="xbrl_worker"
-        )
+        # Only initialize XBRL resources if feature flag is enabled
+        if self.enable_xbrl:
+            # Add semaphore to limit concurrent XBRL operations
+            self.xbrl_semaphore = threading.BoundedSemaphore(4)
+            
+            # Thread pool executor for XBRL processing
+            self.xbrl_executor = concurrent.futures.ThreadPoolExecutor(
+                max_workers=XBRL_WORKER_THREADS,  
+                thread_name_prefix="xbrl_worker"
+            )
+            logger.info(f"XBRL processing is enabled with {XBRL_WORKER_THREADS} worker threads")
+        else:
+            logger.info("XBRL processing is disabled via feature flag")
         
         # Initialize Redis clients if provided
         if event_trader_redis:
@@ -126,8 +134,8 @@ class Neo4jProcessor:
         if self.manager:
             self.manager.close()
             
-        # Shutdown the thread pool executor if it exists
-        if hasattr(self, 'xbrl_executor'):
+        # Shutdown the thread pool executor if XBRL is enabled and executor exists
+        if self.enable_xbrl and hasattr(self, 'xbrl_executor'):
             self.xbrl_executor.shutdown(wait=False)
             logger.info("Shut down XBRL thread pool executor")
     
@@ -1083,7 +1091,7 @@ class Neo4jProcessor:
             query_params[key] = value
         
         # Ensure all referenced parameters exist (even if they weren't in node_properties)
-        required_params = ["effectivenessDate", "financial_statements", "exhibit_contents", 
+        required_params = ["periodOfReport", "effectivenessDate", "financial_statements", "exhibit_contents", 
                          "extracted_sections", "market_session", "returns_schedule", "filing_text_content", "items"]
         
         for param in required_params:
@@ -1162,11 +1170,13 @@ class Neo4jProcessor:
                 self._create_filing_text_content_nodes_from_report(report_id, filing_text_data)
             
             # Check if this report is eligible for XBRL processing and we haven't processed one yet
-            if (not self.xbrl_processed and
+            if (self.enable_xbrl and  # Only if XBRL processing is enabled in feature flags
+                not self.xbrl_processed and
                 report_props.get('is_xml') == True and
                 report_props.get('cik') and
                 report_props.get('xbrl_status') != 'COMPLETED' and
-                report_props.get('xbrl_status') != 'PROCESSING'):
+                report_props.get('xbrl_status') != 'PROCESSING' and
+                report_props.get('xbrl_status') != 'SKIPPED'):
                 
                 # Process XBRL data
                 self._process_xbrl(
@@ -2291,6 +2301,17 @@ class Neo4jProcessor:
         Returns:
             bool: Success status for queueing (not processing)
         """
+        # If XBRL processing is disabled, skip processing and update the report status
+        if not self.enable_xbrl:
+            logger.info(f"XBRL processing is disabled via feature flag - skipping report {report_id}")
+            def update_skipped_status(tx):
+                tx.run(
+                    "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
+                    id=report_id, status="SKIPPED", error="XBRL processing disabled by feature flag"
+                )
+            session.execute_write(update_skipped_status)
+            return True
+            
         try:
             # Update status to QUEUED - using transaction function for automatic retry
             def update_queued_status(tx):

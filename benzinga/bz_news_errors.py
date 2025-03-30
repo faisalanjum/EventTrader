@@ -246,6 +246,21 @@ class NewsErrorHandler:
     def process_news_item(self, raw_item: Dict[str, Any], raw: bool = False) -> Optional[Union[BzRestAPINews, UnifiedNews]]:
         """Centralized processing with error handling for both REST and WebSocket"""
         try:
+            # Import feature flag locally
+            from utils.feature_flags import REJECT_MULTIPLE_SYMBOLS
+            
+            # Only check symbol count if feature flag is enabled
+            if REJECT_MULTIPLE_SYMBOLS:
+                # Count symbols based on format
+                if 'data' in raw_item:  # WebSocket format
+                    securities = raw_item.get('data', {}).get('content', {}).get('securities', [])
+                    if len(securities) > 1:
+                        return None
+                else:  # REST API format
+                    stocks = raw_item.get('stocks', [])
+                    if len(stocks) > 1:
+                        return None
+            
             if 'data' in raw_item:  # WebSocket format
                 news = BzWebSocketNews(**raw_item)
                 # WebSocket validation - all fields required by model
