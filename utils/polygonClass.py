@@ -66,11 +66,11 @@ class Polygon:
             safe_dns_resolve("api.polygon.io")
 
         # Add semaphore for HTTP request concurrency control
-        self.http_semaphore = threading.BoundedSemaphore(40)  # Balance between speed and stability
+        self.http_semaphore = threading.BoundedSemaphore(35)  # Balance between speed and stability
 
         self.market_session = MarketSessionClassifier()
         self.client = self.get_rest_client()
-        self.executor = ThreadPoolExecutor(max_workers=80)
+        self.executor = ThreadPoolExecutor(max_workers=70)
         self.last_error = {}
         self.ticker_validation_cache = {}
         
@@ -78,8 +78,8 @@ class Polygon:
         # Add connection pooling configuration
         self.session = requests.Session()
         adapter = requests.adapters.HTTPAdapter(
-            pool_connections=40,
-            pool_maxsize=40,
+            pool_connections=35,
+            pool_maxsize=35,
             max_retries=5,
             pool_block=False
         )
