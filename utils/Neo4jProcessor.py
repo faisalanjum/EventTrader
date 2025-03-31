@@ -18,7 +18,7 @@ from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable, DatabaseUnavailable
 
 # Internal Imports - Configuration and Keys
-from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
+from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD, OPENAI_API_KEY
 from utils.log_config import get_logger, setup_logging
 
 # Internal Imports - Redis Utilities
@@ -50,6 +50,11 @@ from utils.Neo4jInitializer import Neo4jInitializer
 # Set up logger
 logger = get_logger(__name__)
 
+import chromadb
+from chromadb.config import Settings
+from hashlib import sha256
+import openai
+
 class Neo4jProcessor:
     """
     A wrapper around Neo4jManager that provides integration with EventTrader workflow.
@@ -63,19 +68,20 @@ class Neo4jProcessor:
         "MarketIndex", 
         "Sector", 
         "Industry", 
-        "AdminReport", 
-        # "AdminSection", 
-        # "FinancialStatement"
+        "AdminReport"
     ]
     # Add more node types here as needed
-
-
-# region: Initialization and Core Infrastructure - # Methods like connect, close, is_initialized, initialize, _get_universe, _collect_redis_key_counts
-
-
-
+    
     def __init__(self, event_trader_redis=None, uri=NEO4J_URI, username=NEO4J_USERNAME, password=NEO4J_PASSWORD):
-
+        """
+        Initialize Neo4jProcessor with connection parameters and optional Redis client
+        
+        Args:
+            event_trader_redis: Optional EventTraderRedis instance
+            uri: Neo4j database URI
+            username: Neo4j username
+            password: Neo4j password
+        """
         # Override with environment variables if available - Save it in .env file
         self.uri = uri
         self.username = username
@@ -114,6 +120,45 @@ class Neo4jProcessor:
             
             # Test Redis access
             self._collect_redis_key_counts()
+            
+        # Initialize ChromaDB for embedding storage/caching
+        try:
+            from utils.feature_flags import ENABLE_NEWS_EMBEDDINGS, CHROMADB_PERSIST_DIRECTORY
+            
+            # Only initialize ChromaDB if embedding generation is enabled
+            if ENABLE_NEWS_EMBEDDINGS:
+                try:
+                    # Ensure the persistence directory exists
+                    import os
+                    if not os.path.exists(CHROMADB_PERSIST_DIRECTORY):
+                        os.makedirs(CHROMADB_PERSIST_DIRECTORY, exist_ok=True)
+                    
+                    # Initialize client with persistent storage
+                    self.chroma_client = chromadb.Client(Settings(
+                        is_persistent=True,
+                        persist_directory=CHROMADB_PERSIST_DIRECTORY
+                    ))
+                    
+                    # Get or create collection for news embeddings
+                    self.chroma_collection = self.chroma_client.get_or_create_collection(
+                        name="news",
+                        metadata={"hnsw:space": "cosine"}
+                    )
+                    
+                    logger.info(f"ChromaDB initialized with {self.chroma_collection.count()} cached embeddings")
+                    
+                except Exception as e:
+                    logger.warning(f"Error initializing ChromaDB: {e}")
+                    self.chroma_client = None
+                    self.chroma_collection = None
+            else:
+                self.chroma_client = None
+                self.chroma_collection = None
+                logger.info("ChromaDB not initialized as ENABLE_NEWS_EMBEDDINGS is False")
+        except Exception as e:
+            logger.warning(f"Could not initialize ChromaDB: {e}. Continuing without embedding caching.")
+            self.chroma_client = None
+            self.chroma_collection = None
 
     def connect(self):
         """Connect to Neo4j using Neo4jManager singleton"""
@@ -262,9 +307,6 @@ class Neo4jProcessor:
         return results
     
 
-# endregion
-
-
 # region: Primary Public Methods - # Methods like process_news_to_neo4j, process_reports_to_neo4j, process_pubsub_item, process_with_pubsub, stop_pubsub_processing
 
     def process_news_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
@@ -357,8 +399,6 @@ class Neo4jProcessor:
                         
                         if success:
                             processed_count += 1
-                            
-                            
                         else:
                             error_count += 1
                             
@@ -370,6 +410,34 @@ class Neo4jProcessor:
                 
             # Summary and status
             logger.info(f"Finished processing news to Neo4j. Processed: {processed_count}, Errors: {error_count}")
+            
+            # Check if we should generate embeddings based on feature flag
+            if processed_count > 0:
+                from utils.feature_flags import ENABLE_NEWS_EMBEDDINGS
+                if ENABLE_NEWS_EMBEDDINGS:
+                    try:
+                        from eventtrader.keys import OPENAI_API_KEY
+                        if OPENAI_API_KEY:
+                            logger.info("Auto-generating embeddings based on feature flag...")
+                            
+                            # Ensure vector index exists
+                            self._create_news_vector_index()
+                            
+                            # Initialize OpenAI client
+                            import openai
+                            # Clean the API key
+                            api_key = self._clean_api_key(OPENAI_API_KEY)
+                            
+                            client = openai.OpenAI(api_key=api_key)
+                            
+                            # Process embeddings for all news at once
+                            embedding_results = self.generate_news_embeddings(
+                                batch_size=batch_size, 
+                                openai_api_key=client
+                            )
+                            logger.info(f"Auto embedding generation results: {embedding_results}")
+                    except Exception as e:
+                        logger.warning(f"Could not auto-generate embeddings: {e}")
             
             # Remove batch deletion approach in favor of immediate deletion
             return processed_count > 0 or error_count == 0
@@ -527,11 +595,41 @@ class Neo4jProcessor:
                 raw_data = self.event_trader_redis.history_client.get(key)
                 if raw_data:
                     news_data = json.loads(raw_data)
+                    news_id = f"bzNews_{item_id.split('.')[0]}"
                     success = self._process_deduplicated_news(
-                        news_id=f"bzNews_{item_id.split('.')[0]}", 
+                        news_id=news_id, 
                         news_data=news_data
                     )
                     logger.info(f"Successfully processed news {item_id}")
+
+                    # Generate embeddings if feature flag is enabled
+                    if success:
+                        # Import feature flag when needed
+                        from utils.feature_flags import ENABLE_NEWS_EMBEDDINGS
+                        if ENABLE_NEWS_EMBEDDINGS:
+                            try:
+                                # Only import the key if we need it
+                                from eventtrader.keys import OPENAI_API_KEY
+                                if OPENAI_API_KEY:
+                                    logger.info(f"Generating embedding for news {item_id}...")
+                                    
+                                    # Ensure vector index exists
+                                    self._create_news_vector_index()
+                                    
+                                    # Initialize OpenAI client
+                                    import openai
+                                    # Clean the API key
+                                    api_key = self._clean_api_key(OPENAI_API_KEY)
+                                    
+                                    client = openai.OpenAI(api_key=api_key)
+                                    
+                                    # Generate embedding using the dedicated method
+                                    if self._generate_embedding_for_news(news_id, client):
+                                        logger.info(f"Generated embedding for news {item_id}")
+                                    else:
+                                        logger.warning(f"No embedding generated for news {item_id}")
+                            except Exception as e:
+                                logger.warning(f"Could not generate embedding for news {item_id}: {e}")
 
                     # Delete key if it's from withreturns namespace
                     if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
@@ -708,6 +806,113 @@ class Neo4jProcessor:
 
 # region: News Processing Pipeline - # Methods like _prepare_news_data, _process_deduplicated_news, _execute_news_database_operations, _create_news_node_from_data
 
+    def _generate_embedding_for_news(self, news_id, api_key):
+        """
+        Generate embedding for a single news item by ID.
+        Uses ChromaDB to cache embeddings to avoid duplicate OpenAI API calls.
+        
+        Args:
+            news_id: News ID in format 'bzNews_XXXX'
+            api_key: OpenAI API key
+            
+        Returns:
+            bool: True if embedding generated, False otherwise
+        """
+        if not self.manager or not api_key:
+            return False
+            
+        try:
+            # First, get the content for this news item
+            content_query = """
+            MATCH (n:News {id: $news_id})
+            WHERE n.embedding IS NULL 
+            WITH n, CASE WHEN n.title IS NULL THEN '' ELSE n.title END + ' ' + 
+                 CASE WHEN n.teaser IS NULL THEN '' ELSE n.teaser END + ' ' +
+                 CASE WHEN n.body IS NULL THEN '' ELSE n.body END AS content
+            WHERE trim(content) <> ''
+            RETURN content
+            """
+            
+            result = self.manager.execute_cypher_query(content_query, {
+                "news_id": news_id
+            })
+            
+            if not result or not result.get("content"):
+                logger.debug(f"No content found for news {news_id}")
+                return False
+            
+            content = result.get("content")
+            content_hash = sha256(content.encode()).hexdigest()
+            
+            # Try to get embedding from ChromaDB if available
+            embedding = None
+            if self.chroma_collection is not None:
+                try:
+                    # Check if we have this embedding in ChromaDB
+                    logger.debug(f"Checking ChromaDB for key: {content_hash[:8]}...")
+                    chroma_result = self.chroma_collection.get(ids=[content_hash])
+                    
+                    if chroma_result and chroma_result["ids"] and len(chroma_result["ids"]) > 0:
+                        # We found an existing embedding in ChromaDB
+                        embedding = chroma_result["embeddings"][0]
+                        logger.info(f"Retrieved embedding from ChromaDB: {content_hash[:8]}")
+                    else:
+                        logger.debug(f"No cached embedding found: {content_hash[:8]}")
+                except Exception as e:
+                    logger.warning(f"Error checking ChromaDB: {e}")
+            
+            # Generate new embedding if we don't have one
+            if embedding is None:
+                try:
+                    # Use OpenAI to generate embedding with new API format
+                    import openai
+                    # Handle either string API key or existing client object
+                    if isinstance(api_key, str):
+                        cleaned_key = self._clean_api_key(api_key)
+                        client = openai.OpenAI(api_key=cleaned_key)
+                    else:
+                        client = api_key  # Assume it's already an OpenAI client
+                        
+                    embedding_response = client.embeddings.create(
+                        input=[content], 
+                        model="text-embedding-3-large"
+                    )
+                    embedding = embedding_response.data[0].embedding
+                    
+                    # Store in ChromaDB for future reuse
+                    if self.chroma_collection is not None:
+                        try:
+                            self.chroma_collection.add(
+                                ids=[content_hash],
+                                documents=[content],
+                                embeddings=[embedding]
+                            )
+                            logger.info(f"Stored new embedding in ChromaDB: {content_hash[:8]}")
+                        except Exception as e:
+                            logger.warning(f"Failed to store in ChromaDB: {e}")
+                except Exception as e:
+                    logger.error(f"Error generating embedding: {e}")
+                    return False
+            
+            # Store the embedding in Neo4j
+            store_query = """
+            MATCH (n:News {id: $news_id})
+            WHERE n.embedding IS NULL 
+            SET n.embedding = $embedding
+            RETURN count(n) AS processed
+            """
+            
+            result = self.manager.execute_cypher_query(store_query, {
+                "news_id": news_id,
+                "embedding": embedding
+            })
+            
+            return result and result["processed"] > 0
+            
+        except Exception as e:
+            logger.error(f"Error processing embedding for news {news_id}: {e}")
+            return False
+
     def _prepare_news_data(self, news_id, news_data):
         """
         Prepare news data for processing, extracting all necessary information.
@@ -875,6 +1080,262 @@ class Neo4jProcessor:
             self._create_influences_relationships(session, news_id, "News", "MarketIndex", market_params)
             logger.info(f"Successfully processed news {news_id} with {len(valid_symbols)} symbols")
             return True
+
+    def _create_news_vector_index(self):
+        """
+        Create a vector index for News nodes if it doesn't already exist.
+        Uses Neo4jManager for transaction management.
+        
+        Returns:
+            bool: True if the index was created or already exists, False on error
+        """
+        try:
+            if not self.manager:
+                if not self.connect():
+                    logger.error("Cannot connect to Neo4j")
+                    return False
+            
+            # Check if index exists using a direct session query
+            with self.manager.driver.session() as session:
+                # Check if the index exists
+                result = session.run("SHOW VECTOR INDEXES WHERE name = 'news_vector_index'").value()
+                if result and len(result) > 0:
+                    logger.info("Vector index for News nodes already exists")
+                    return True
+                
+                # Create the index
+                try:
+                    def create_index_tx(tx):
+                        tx.run("""
+                        CREATE VECTOR INDEX news_vector_index 
+                        FOR (n:News) 
+                        ON (n.embedding)
+                        OPTIONS {indexConfig: {
+                          `vector.dimensions`: 3072,
+                          `vector.similarity_function`: 'cosine'
+                        }}
+                        """)
+                    
+                    session.execute_write(create_index_tx)
+                    logger.info("Vector index for News nodes created successfully")
+                    return True
+                except Exception as e:
+                    error_message = str(e)
+                    if "EquivalentSchemaRuleAlreadyExists" in error_message:
+                        logger.info("Vector index already exists (concurrent creation)")
+                        return True
+                    logger.error(f"Failed to create vector index: {e}")
+                    return False
+                
+        except Exception as e:
+            logger.error(f"Error creating vector index: {e}")
+            return False
+
+    def generate_news_embeddings(self, batch_size=50, openai_api_key=None, create_index=True):
+        """
+        Generate embeddings for News nodes using OpenAI's text-embedding-3-large model.
+        Uses ChromaDB for caching to avoid duplicate API calls.
+        
+        Args:
+            batch_size: Number of news nodes to process in each batch
+            openai_api_key: OpenAI API key for embedding generation
+            create_index: Whether to create a vector index if it doesn't exist
+            
+        Returns:
+            dict: Results with counts of processed and skipped nodes
+        """
+        if not openai_api_key:
+            logger.error("No OpenAI API key provided. Cannot generate embeddings.")
+            return {"error": "No OpenAI API key provided", "processed": 0, "skipped": 0, "cached": 0}
+        
+        results = {"processed": 0, "skipped": 0, "error": 0, "cached": 0}
+        
+        try:
+            if not self.manager:
+                if not self.connect():
+                    logger.error("Cannot connect to Neo4j")
+                    return {"error": "Failed to connect to Neo4j", "processed": 0, "skipped": 0, "cached": 0}
+            
+            # Create vector index if needed
+            if create_index and not self._create_news_vector_index():
+                logger.warning("Failed to ensure vector index exists, but continuing with embedding generation")
+            
+            # Find news items needing embeddings
+            query = """
+            MATCH (n:News)
+            WHERE n.embedding IS NULL
+            WITH n.id as id, 
+                 CASE WHEN n.title IS NULL THEN '' ELSE n.title END + ' ' + 
+                 CASE WHEN n.teaser IS NULL THEN '' ELSE n.teaser END + ' ' +
+                 CASE WHEN n.body IS NULL THEN '' ELSE n.body END AS content
+            WHERE trim(content) <> ''
+            RETURN id, content
+            LIMIT $batch_size
+            """
+            
+            # Set up OpenAI client
+            import openai
+            if isinstance(openai_api_key, str):
+                cleaned_key = self._clean_api_key(openai_api_key)
+                client = openai.OpenAI(api_key=cleaned_key)
+            else:
+                client = openai_api_key  # Assume it's already an OpenAI client
+            
+            while True:
+                # Get batch of news items needing embeddings
+                batch = self.manager.execute_cypher_query(query, {"batch_size": batch_size})
+                
+                # Convert result to a list of dictionaries if it's not already
+                if batch and not isinstance(batch, list):
+                    batch = [batch]
+                
+                if not batch or len(batch) == 0:
+                    break
+                
+                # Process the batch
+                embed_batch = []  # Items that need new embeddings
+                cached_embeddings = {}  # Items that have cached embeddings
+                
+                # Check ChromaDB for cached embeddings
+                if self.chroma_collection is not None:
+                    for item in batch:
+                        news_id = item["id"]
+                        content = item["content"]
+                        content_hash = sha256(content.encode()).hexdigest()
+                        
+                        # Check if we have this embedding in ChromaDB
+                        try:
+                            chroma_result = self.chroma_collection.get(ids=[content_hash])
+                            
+                            if chroma_result and chroma_result["ids"] and len(chroma_result["ids"]) > 0:
+                                # Found cached embedding
+                                cached_embeddings[news_id] = {
+                                    "embedding": chroma_result["embeddings"][0],
+                                    "content_hash": content_hash
+                                }
+                                results["cached"] += 1
+                            else:
+                                # Need to generate new embedding
+                                embed_batch.append({
+                                    "id": news_id,
+                                    "content": content,
+                                    "content_hash": content_hash
+                                })
+                        except Exception as e:
+                            logger.warning(f"Error checking ChromaDB for {news_id}: {e}. Will generate new embedding.")
+                            embed_batch.append({
+                                "id": news_id,
+                                "content": content,
+                                "content_hash": content_hash
+                            })
+                else:
+                    # ChromaDB not available, generate all embeddings
+                    for item in batch:
+                        embed_batch.append({
+                            "id": item["id"],
+                            "content": item["content"],
+                            "content_hash": sha256(item["content"].encode()).hexdigest()
+                        })
+                
+                # First, apply cached embeddings
+                if cached_embeddings:
+                    for news_id, data in cached_embeddings.items():
+                        try:
+                            # Store the cached embedding in Neo4j
+                            store_query = """
+                            MATCH (n:News {id: $news_id})
+                            WHERE n.embedding IS NULL 
+                            SET n.embedding = $embedding
+                            RETURN count(n) AS processed
+                            """
+                            
+                            result = self.manager.execute_cypher_query(store_query, {
+                                "news_id": news_id,
+                                "embedding": data["embedding"]
+                            })
+                            
+                            if result and result["processed"] > 0:
+                                results["processed"] += 1
+                        except Exception as e:
+                            logger.error(f"Error storing cached embedding for {news_id}: {e}")
+                            results["error"] += 1
+                
+                # Then, generate new embeddings in smaller sub-batches to avoid API limitations
+                if embed_batch:
+                    # Process in sub-batches of 20 (OpenAI recommends smaller batches)
+                    for i in range(0, len(embed_batch), 20):
+                        sub_batch = embed_batch[i:i+20]
+                        try:
+                            # Generate embeddings
+                            texts = [item["content"] for item in sub_batch]
+                            response = client.embeddings.create(
+                                input=texts,
+                                model="text-embedding-3-large"
+                            )
+                            
+                            # Store embeddings to Neo4j and ChromaDB
+                            for j, item in enumerate(sub_batch):
+                                news_id = item["id"]
+                                embedding = response.data[j].embedding
+                                content_hash = item["content_hash"]
+                                
+                                # Store in Neo4j
+                                store_query = """
+                                MATCH (n:News {id: $news_id})
+                                WHERE n.embedding IS NULL 
+                                SET n.embedding = $embedding
+                                RETURN count(n) AS processed
+                                """
+                                
+                                result = self.manager.execute_cypher_query(store_query, {
+                                    "news_id": news_id,
+                                    "embedding": embedding
+                                })
+                                
+                                # Store in ChromaDB if available
+                                if result and result["processed"] > 0 and self.chroma_collection is not None:
+                                    try:
+                                        self.chroma_collection.add(
+                                            ids=[content_hash],
+                                            documents=[item["content"]],
+                                            embeddings=[embedding]
+                                        )
+                                        logger.info(f"Stored new embedding in ChromaDB with hash {content_hash[:8]}...")
+                                    except Exception as e:
+                                        logger.warning(f"Failed to store embedding in ChromaDB: {e}")
+                                
+                                if result and result["processed"] > 0:
+                                    results["processed"] += 1
+                                
+                        except Exception as e:
+                            logger.error(f"Error generating batch embeddings: {e}")
+                            results["error"] += len(sub_batch)
+                
+                # Log progress
+                logger.info(f"Embedding generation batch complete. "
+                            f"Generated: {results['processed']}, "
+                            f"Cached: {results['cached']}, "
+                            f"Errors: {results['error']}")
+                
+                # If we processed fewer than batch_size, we're done
+                if len(batch) < batch_size:
+                    break
+            
+            # Get count of skipped nodes (have content but no embedding)
+            skipped_query = """
+            MATCH (n:News)
+            WHERE n.embedding IS NULL AND (n.title IS NOT NULL OR n.body IS NOT NULL OR n.teaser IS NOT NULL)
+            RETURN count(n) as count
+            """
+            skipped_count = self.manager.execute_cypher_query(skipped_query, {})
+            results["skipped"] = skipped_count["count"] if skipped_count else 0
+            
+            logger.info(f"Embedding generation complete. Results: {results}")
+            return results
+                
+        except Exception as e:
+            logger.error(f"Error generating embeddings: {e}")
+            return {"error": str(e), "processed": results["processed"], "skipped": results["skipped"], "cached": results["cached"]}
 
 
 
@@ -2283,11 +2744,6 @@ class Neo4jProcessor:
 
 
 
-
-
-
-
-
     def _process_xbrl(self, session, report_id, cik, accessionNo):
         """
         Queue an XBRL report for background processing.
@@ -2476,6 +2932,174 @@ class Neo4jProcessor:
             # Release semaphore if acquired
             if acquired:
                 self.xbrl_semaphore.release()
+
+
+
+    def _clean_api_key(self, api_key):
+            """
+            Clean an API key to remove any prefixes or formatting issues.
+            
+            Args:
+                api_key: The API key to clean
+                
+            Returns:
+                str: The cleaned API key
+            """
+            if not api_key:
+                logger.warning("API key is None or empty")
+                return None
+                
+            # Convert to string if needed
+            api_key = str(api_key)
+            
+            # Log safely (without revealing full key)
+            key_type = type(api_key).__name__
+            key_start = api_key[:4] if len(api_key) > 4 else ""
+            key_end = api_key[-4:] if len(api_key) > 4 else ""
+            logger.debug(f"Cleaning API key: type={key_type}, format={key_start}...{key_end}")
+            
+            # Remove 'openai.' prefix if present
+            orig_key = api_key
+            if api_key.startswith("openai."):
+                api_key = api_key.split(".", 1)[1]
+                logger.debug("Removed 'openai.' prefix")
+                
+            # Remove any quotes or whitespace
+            if api_key != api_key.strip('\'"').strip():
+                api_key = api_key.strip('\'"').strip()
+                logger.debug("Removed quotes or whitespace")
+            
+            # Remove any object notation if present
+            if api_key.startswith("<") and ">" in api_key:
+                # Extract the key from something like <openai.*****8d0>
+                start = api_key.find(".")
+                end = api_key.rfind(">")
+                if start > 0 and end > start:
+                    api_key = api_key[start+1:end]
+                    logger.debug("Extracted key from object notation")
+            
+            # Log the change (safely)
+            if api_key != orig_key:
+                key_start = api_key[:4] if len(api_key) > 4 else ""
+                key_end = api_key[-4:] if len(api_key) > 4 else ""
+                logger.debug(f"Cleaned API key: {key_start}...{key_end}")
+                
+            return api_key
+
+
+    def check_chromadb_status(self):
+        """
+        Check the status of ChromaDB configuration and data persistence
+        
+        Returns:
+            dict: Status information about ChromaDB configuration
+        """
+        if not hasattr(self, 'chroma_client') or self.chroma_client is None:
+            return {
+                "initialized": False,
+                "reason": "ChromaDB client not initialized"
+            }
+            
+        import os
+        from utils.feature_flags import CHROMADB_PERSIST_DIRECTORY
+        
+        # Get absolute path
+        abs_persist_dir = os.path.abspath(CHROMADB_PERSIST_DIRECTORY)
+        
+        # Check directory existence and permissions
+        dir_exists = os.path.exists(abs_persist_dir)
+        dir_is_writable = os.access(abs_persist_dir, os.W_OK) if dir_exists else False
+        
+        # Check directory contents for debugging
+        dir_contents = os.listdir(abs_persist_dir) if dir_exists else []
+        
+        # Get more detailed listing with ls -la if directory exists but appears empty
+        detailed_listing = None
+        if dir_exists and not dir_contents:
+            try:
+                import subprocess
+                result = subprocess.run(['ls', '-la', abs_persist_dir], capture_output=True, text=True)
+                detailed_listing = result.stdout
+            except Exception as e:
+                detailed_listing = f"Error getting detailed listing: {e}"
+        
+        # Get ChromaDB version for debugging
+        chromadb_version = None
+        try:
+            import pkg_resources
+            chromadb_version = pkg_resources.get_distribution("chromadb").version
+        except Exception:
+            chromadb_version = "unknown"
+        
+        # Check for collections in database
+        collections = []
+        collection_count = {}
+        try:
+            collections = self.chroma_client.list_collections()
+            collection_names = [c.name for c in collections]
+            
+            # Get item count in each collection
+            for collection in collections:
+                try:
+                    count = collection.count()
+                    collection_count[collection.name] = count
+                except Exception as e:
+                    collection_count[collection.name] = f"Error: {str(e)}"
+        except Exception as e:
+            collections = [f"Error listing collections: {e}"]
+        
+        # Check if we have a news collection specifically
+        news_collection_exists = False
+        news_collection_count = 0
+        
+        if hasattr(self, 'chroma_collection') and self.chroma_collection is not None:
+            news_collection_exists = True
+            try:
+                news_collection_count = self.chroma_collection.count()
+            except Exception as e:
+                news_collection_count = f"Error: {str(e)}"
+        
+        # Determine client type - PersistentClient or regular Client with settings
+        client_type = type(self.chroma_client).__name__
+        
+        # Check persistence implementation
+        persistence_impl = None
+        if client_type == "Client" and hasattr(self.chroma_client, "_settings"):
+            try:
+                settings = self.chroma_client._settings
+                
+                if hasattr(settings, "chroma_db_impl"):
+                    persistence_impl = settings.chroma_db_impl
+                elif hasattr(settings, "values") and "chroma_db_impl" in settings.values:
+                    persistence_impl = settings.values["chroma_db_impl"]
+                else:
+                    persistence_impl = "unknown"
+            except Exception as e:
+                persistence_impl = f"Error checking implementation: {e}"
+                
+        return {
+            "initialized": True,
+            "chromadb_version": chromadb_version,
+            "client_type": client_type,
+            "persistence_impl": persistence_impl,
+            "persist_directory": {
+                "path": abs_persist_dir,
+                "exists": dir_exists,
+                "writable": dir_is_writable,
+                "contents": dir_contents[:10] if len(dir_contents) > 10 else dir_contents,
+                "total_files": len(dir_contents),
+                "detailed_listing": detailed_listing
+            },
+            "collections": {
+                "names": [c.name for c in collections] if isinstance(collections, list) else collections,
+                "count": len(collections) if isinstance(collections, list) else 0,
+                "items_per_collection": collection_count
+            },
+            "news_collection": {
+                "exists": news_collection_exists,
+                "count": news_collection_count
+            }
+        }
 
 
 
@@ -2704,7 +3328,6 @@ def init_neo4j(check_only=False, start_date=None):
         logger.error(f"Neo4j initialization error: {str(e)}")
         return False
 
-# Function to process news data into Neo4j
 def process_news_data(batch_size=100, max_items=None, verbose=False, include_without_returns=True):
     """
     Process news data from Redis into Neo4j
@@ -2732,7 +3355,7 @@ def process_news_data(batch_size=100, max_items=None, verbose=False, include_wit
         if not processor.connect():
             logger.error("Cannot connect to Neo4j")
             return False
-            
+        
         # Make sure Neo4j is initialized first
         if not processor.is_initialized():
             logger.warning("Neo4j not initialized. Initializing now...")
@@ -2741,7 +3364,7 @@ def process_news_data(batch_size=100, max_items=None, verbose=False, include_wit
                 logger.error("Neo4j initialization failed, cannot process news")
                 return False
         
-        # Process news data
+        # Process news data with embedding generation handled internally
         logger.info(f"Processing news data to Neo4j with batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns}...")
         success = processor.process_news_to_neo4j(batch_size, max_items, include_without_returns)
         
@@ -2759,7 +3382,6 @@ def process_news_data(batch_size=100, max_items=None, verbose=False, include_wit
             processor.close()
         logger.info("News processing completed")
 
-# Function to process report data into Neo4j
 def process_report_data(batch_size=100, max_items=None, verbose=False, include_without_returns=True):
     """
     Process SEC report data from Redis into Neo4j
@@ -2814,6 +3436,7 @@ def process_report_data(batch_size=100, max_items=None, verbose=False, include_w
         if processor:
             processor.close()
         logger.info("Report processing completed")
+
 
 
 
@@ -2946,3 +3569,4 @@ def test_initialization_with_custom_nodes(required_nodes=None, run_init=False):
         # Restore original required nodes
         Neo4jProcessor.REQUIRED_NODES = original_nodes
 
+    

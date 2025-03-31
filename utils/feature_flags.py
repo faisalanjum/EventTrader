@@ -68,3 +68,11 @@ XBRL_WORKER_THREADS = 8
 # When True, reject news items that have more than one symbol
 REJECT_MULTIPLE_SYMBOLS = True
 
+# When True, generate embeddings using OpenAI for News nodes
+# This creates vector embeddings for semantic search capabilities
+ENABLE_NEWS_EMBEDDINGS = True
+
+# Configuration for ChromaDB persistence
+import os
+CHROMADB_PERSIST_DIRECTORY = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "chroma_db"))
+
