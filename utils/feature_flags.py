@@ -1,4 +1,5 @@
-"""Minimal EventTrader feature flags"""
+"""Minimal EventTrader feature flags""" 
+# Don't change these here - pass Flags in command line -live or -historical
 ENABLE_HISTORICAL_DATA = True
 ENABLE_LIVE_DATA = True
 

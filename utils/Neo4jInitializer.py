@@ -952,7 +952,7 @@ class Neo4jInitializer:
             prev_query = "MATCH (d:Date {date: $prev_date}) RETURN d"
             prev_result = self.manager.execute_cypher_query(prev_query, {"prev_date": prev_date})
             
-            if prev_result and "d" in prev_result:
+            if prev_result and hasattr(prev_result, 'get') and prev_result.get('d'):
                 # Use manager.merge_relationships to create the relationship
                 prev_node_props = dict(prev_result["d"].items())
                 prev_date_node = DateNode.from_neo4j(prev_node_props)

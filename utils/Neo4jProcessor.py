@@ -2490,9 +2490,11 @@ class Neo4jProcessor:
             MATCH (yesterday:Date {date: $yesterday}) 
             OPTIONAL MATCH (yesterday)-[r:HAS_PRICE]->()
             OPTIONAL MATCH (previous:Date {date: $day_before})
-            RETURN count(yesterday) as yesterday_exists, 
-                   count(r) as has_prices, 
-                   count(previous) as previous_exists
+            WITH yesterday, collect(r) as rels, previous
+            RETURN 
+                1 as yesterday_exists,
+                size(rels) as has_prices,
+                CASE WHEN previous IS NOT NULL THEN 1 ELSE 0 END as previous_exists
             """
             result = self.manager.execute_cypher_query(query, 
                                                       {"yesterday": yesterday, 
