@@ -38,6 +38,8 @@ def parse_args():
                         help='Interval in seconds to check system status (default: 300)')
     parser.add_argument('--neo4j-init-only', action='store_true',
                         help='Initialize Neo4j database only without running the full system')
+    parser.add_argument('--ensure-neo4j-initialized', action='store_true',
+                        help='Ensure Neo4j is initialized but continue running the system')
     return parser.parse_args()
 
 def main():
@@ -93,6 +95,12 @@ def main():
             print("Neo4j initialization completed successfully.")
             manager.stop()  # Clean up any open connections
             sys.exit(0)
+            
+        # If ensure-neo4j-initialized flag is set, check and log but don't exit
+        if args.ensure_neo4j_initialized:
+            logger.info("Neo4j initialization check completed successfully. Continuing with system startup.")
+            print("Neo4j initialization check completed successfully.")
+            # Do NOT call manager.stop() here - continue with the regular process
         
         # Set up signal handlers for clean shutdown
         def signal_handler(sig, frame):

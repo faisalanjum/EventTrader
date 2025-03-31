@@ -293,13 +293,20 @@ start() {
   
   cd "$WORKSPACE_DIR"
   
+  # Check if initialization flag should be added
+  INIT_FLAG=""
+  if [ "${1:-}" = "with_init" ]; then
+    INIT_FLAG="--ensure-neo4j-initialized"
+    echo "Running with Neo4j initialization check..."
+  fi
+  
   if [ "$RUN_BACKGROUND" = true ]; then
     # Start in background - logging handled by log_config.py
-    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG > /dev/null 2>&1 &
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG $INIT_FLAG > /dev/null 2>&1 &
     PID=$!
   else
     # Start in foreground with output to terminal
-    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG &
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG $INIT_FLAG &
     PID=$!
   fi
   
@@ -319,11 +326,8 @@ start() {
 
 # Start both EventTrader and monitor
 start_all() {
-  # Initialize Neo4j first to ensure date nodes exist
-  init_neo4j
-  
-  # Now start the main process
-  start
+  # Start the main process with initialization flag
+  start "with_init"
   
   # Only start monitor if EventTrader started successfully
   if is_running; then
