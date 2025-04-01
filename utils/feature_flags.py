@@ -72,6 +72,15 @@ REJECT_MULTIPLE_SYMBOLS = True
 # This creates vector embeddings for semantic search capabilities
 ENABLE_NEWS_EMBEDDINGS = True
 
+# OpenAI embedding model and dimensions
+OPENAI_EMBEDDING_MODEL = "text-embedding-3-large"
+OPENAI_EMBEDDING_DIMENSIONS = 3072
+NEWS_VECTOR_INDEX_NAME = "news_vector_index"
+
+# When True, check ChromaDB for existing embeddings before generating new ones
+# This saves API calls during development but can be disabled in production for performance
+USE_CHROMADB_CACHING = True
+
 # Configuration for ChromaDB persistence
 import os
 CHROMADB_PERSIST_DIRECTORY = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "chroma_db"))
