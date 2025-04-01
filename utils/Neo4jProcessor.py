@@ -837,15 +837,21 @@ class Neo4jProcessor:
             if USE_CHROMADB_CACHING and self.chroma_collection is not None:
                 try:
                     content_hash = sha256(content.encode()).hexdigest()
-                    logger.info(f"Checking ChromaDB for news {news_id} with content hash {content_hash}")
-                    chroma_result = self.chroma_collection.get(ids=[content_hash])
-                    logger.info(f"ChromaDB lookup result: {chroma_result.get('ids', [])} with {len(chroma_result.get('embeddings', [])) if chroma_result and 'embeddings' in chroma_result else 0} embeddings")
+                    logger.debug(f"Checking ChromaDB for news {news_id} with content hash {content_hash}")
+                    # Always include embeddings parameter
+                    chroma_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
                     
-                    # ChromaDB returns dict with empty lists if no match
-                    if chroma_result and "embeddings" in chroma_result and chroma_result["embeddings"] and len(chroma_result["embeddings"]) > 0:
+                    # Simple, robust check for valid embeddings
+                    if (chroma_result and 
+                        'ids' in chroma_result and 
+                        len(chroma_result['ids']) > 0 and
+                        'embeddings' in chroma_result and 
+                        chroma_result['embeddings'] is not None and 
+                        len(chroma_result['embeddings']) > 0):
+                        
                         # We found an existing embedding in ChromaDB
-                        embedding = chroma_result["embeddings"][0]
-                        logger.info(f"✅ Retrieved embedding from ChromaDB for news {news_id}")
+                        embedding = chroma_result['embeddings'][0]
+                        logger.info(f"Retrieved embedding from ChromaDB for news {news_id}")
                         
                         # Store the cached embedding in Neo4j
                         store_query = """
@@ -894,10 +900,15 @@ class Neo4jProcessor:
                     content_hash = sha256(content.encode()).hexdigest()
                     
                     # Check if this embedding already exists in ChromaDB before adding
-                    check_result = self.chroma_collection.get(ids=[content_hash])
-                    if check_result and "embeddings" in check_result and check_result["embeddings"] and len(check_result["embeddings"]) > 0:
+                    check_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
+                    if (check_result and 
+                        'ids' in check_result and 
+                        len(check_result['ids']) > 0 and
+                        'embeddings' in check_result and 
+                        check_result['embeddings'] is not None and 
+                        len(check_result['embeddings']) > 0):
                         # Already exists, no need to add again
-                        logger.debug(f"Embedding already exists in ChromaDB for news {news_id}")
+                        logger.debug(f"Embedding already exists in ChromaDB for {news_id}")
                     else:
                         # Doesn't exist, add it - Use upsert to prevent race condition issues
                         try:
@@ -1264,17 +1275,21 @@ class Neo4jProcessor:
                     content = item["content"]
                     
                     try:
-                        # Check ChromaDB for existing embedding
+                        # Check ChromaDB for existing embedding - always include embeddings
                         content_hash = sha256(content.encode()).hexdigest()
-                        logger.info(f"Checking ChromaDB for node {node_id} with content hash {content_hash}")
-                        chroma_result = self.chroma_collection.get(ids=[content_hash])
+                        chroma_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
                         
-                        logger.info(f"ChromaDB lookup result for {node_id}: {chroma_result.get('ids', [])} with {len(chroma_result.get('embeddings', [])) if chroma_result and 'embeddings' in chroma_result else 0} embeddings")
-                        
-                        if chroma_result and "embeddings" in chroma_result and chroma_result["embeddings"] and len(chroma_result["embeddings"]) > 0:
+                        # Simple, robust check for valid embeddings
+                        if (chroma_result and 
+                            'ids' in chroma_result and 
+                            len(chroma_result['ids']) > 0 and
+                            'embeddings' in chroma_result and 
+                            chroma_result['embeddings'] is not None and 
+                            len(chroma_result['embeddings']) > 0):
+                            
                             # Found cached embedding
                             cached_embeddings[node_id] = {
-                                "embedding": chroma_result["embeddings"][0],
+                                "embedding": chroma_result['embeddings'][0],
                                 "content": content
                             }
                             logger.info(f"✅ Found existing embedding in ChromaDB for {node_id}")
@@ -1396,8 +1411,13 @@ class Neo4jProcessor:
                                         content_hash = sha256(node_data["content"].encode()).hexdigest()
                                         
                                         # Check if this embedding already exists in ChromaDB before adding
-                                        check_result = self.chroma_collection.get(ids=[content_hash])
-                                        if check_result and "embeddings" in check_result and check_result["embeddings"] and len(check_result["embeddings"]) > 0:
+                                        check_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
+                                        if (check_result and 
+                                            'ids' in check_result and 
+                                            len(check_result['ids']) > 0 and
+                                            'embeddings' in check_result and 
+                                            check_result['embeddings'] is not None and 
+                                            len(check_result['embeddings']) > 0):
                                             # Already exists, no need to add again
                                             logger.debug(f"Embedding already exists in ChromaDB for {node_id}")
                                         else:
