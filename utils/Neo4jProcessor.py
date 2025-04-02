@@ -23,6 +23,7 @@ import openai
 
 # Internal Imports - Configuration and Keys
 from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD, OPENAI_API_KEY
+from utils.feature_flags import NEWS_VECTOR_INDEX_NAME
 from utils.log_config import get_logger, setup_logging
 
 # Internal Imports - Redis Utilities
@@ -1147,7 +1148,7 @@ class Neo4jProcessor:
                 
             # Create vector index
             create_query = f"""
-            CREATE VECTOR INDEX {index_name}
+            CREATE VECTOR INDEX {index_name}  IF NOT EXISTS
             FOR (n:{label}) ON (n.{property_name})
             OPTIONS {{indexConfig: {{
               `vector.dimensions`: {dimensions},
@@ -1182,65 +1183,135 @@ class Neo4jProcessor:
             dimensions=OPENAI_EMBEDDING_DIMENSIONS
         )
 
-    def generate_embeddings_for_nodes(self, label, id_property, content_property, embedding_property="embedding", 
-                                       batch_size=50, max_items=None, create_index=True, check_chromadb=True):
+    def _batch_chromadb_lookup(self, all_items, batch_size=100):
         """
-        Generate embeddings for any node type using Neo4j's GenAI integration
-        
-        Args:
-            label (str): Node label (e.g., 'News', 'Report', 'Company')
-            id_property (str): Property to use as the node identifier
-            content_property (str): Property to use for the content to embed
-            embedding_property (str): Property to store the embedding in
-            batch_size (int): Number of items to process in each batch
-            max_items (int, optional): Maximum number of items to process
-            create_index (bool): Whether to create a vector index if it doesn't exist
-            check_chromadb (bool): Whether to check ChromaDB for cached embeddings
-            
-        Returns:
-            dict: Results of the embedding process
+        Perform batch lookups in ChromaDB for cached embeddings.
         """
-        # Import all needed modules in one statement
-        from eventtrader.keys import OPENAI_API_KEY
-        from utils.feature_flags import (
-            ENABLE_NEWS_EMBEDDINGS, 
-            OPENAI_EMBEDDING_MODEL,
-            USE_CHROMADB_CACHING,
-            OPENAI_EMBEDDING_DIMENSIONS
-        )
+        from hashlib import sha256
         
-        # Initialize results early to avoid reference errors
-        results = {"processed": 0, "error": 0, "cached": 0}
-        
-        if not ENABLE_NEWS_EMBEDDINGS:
-            return {"status": "skipped", "reason": "embeddings disabled", **results}
-            
-        if not OPENAI_API_KEY:
-            return {"status": "error", "reason": "missing API key", **results}
+        cached_embeddings = {}
+        nodes_needing_embeddings = []
         
         try:
-            if not self.manager and not self.connect():
-                return {"status": "error", "reason": "Neo4j connection failed", **results}
+            for batch_start in range(0, len(all_items), batch_size):
+                batch = all_items[batch_start:batch_start + batch_size]
+                
+                # Create batch data
+                content_hashes = []
+                hash_to_item = {}
+                
+                for item in batch:
+                    node_id = item["id"]
+                    content = item["content"]
+                    content_hash = sha256(content.encode()).hexdigest()
+                    content_hashes.append(content_hash)
+                    hash_to_item[content_hash] = {"id": node_id, "content": content}
+                
+                # Batch lookup in ChromaDB
+                chroma_result = self.chroma_collection.get(ids=content_hashes, include=['embeddings'])
+                
+                # Process results
+                if (chroma_result and 'ids' in chroma_result and 
+                    len(chroma_result['ids']) > 0 and 'embeddings' in chroma_result):
+                    
+                    found_hashes = set()
+                    for i, hash_id in enumerate(chroma_result['ids']):
+                        if i < len(chroma_result['embeddings']):
+                            item_data = hash_to_item[hash_id]
+                            cached_embeddings[item_data["id"]] = {
+                                "embedding": chroma_result['embeddings'][i],
+                                "content": item_data["content"]
+                            }
+                            found_hashes.add(hash_id)
+                
+                    # Add items not found to nodes_needing_embeddings
+                    for hash_id, item_data in hash_to_item.items():
+                        if hash_id not in found_hashes:
+                            nodes_needing_embeddings.append(item_data)
+            else:
+                # If batch lookup failed, add all items to nodes_needing_embeddings
+                for item_data in hash_to_item.values():
+                    nodes_needing_embeddings.append(item_data)
+        
+        except Exception as e:
+            logger.warning(f"Error in batch ChromaDB lookup: {e}")
+            # Add all remaining items to nodes_needing_embeddings
+            for item in all_items:
+                if item["id"] not in cached_embeddings:
+                    nodes_needing_embeddings.append({"id": item["id"], "content": item["content"]})
+        
+        return cached_embeddings, nodes_needing_embeddings
+
+    def _batch_update_cached_embeddings(self, label, id_property, embedding_property, cached_embeddings, batch_size=100):
+        """
+        Update Neo4j nodes with cached embeddings in batch.
+        """
+        if not cached_embeddings:
+            return 0
             
-            # Check if ChromaDB collection is initialized when needed
+        total_cached = 0
+        
+        try:
+            batch_params = [{"id": node_id, "embedding": data["embedding"]} 
+                           for node_id, data in cached_embeddings.items()]
+            
+            # Process in sub-batches
+            for i in range(0, len(batch_params), batch_size):
+                sub_batch = batch_params[i:i + batch_size]
+                
+                try:
+                    store_query = f"""
+                    UNWIND $batch AS item
+                    MATCH (n:{label} {{{id_property}: item.id}})
+                    WHERE n.{embedding_property} IS NULL 
+                    CALL db.create.setNodeVectorProperty(n, "{embedding_property}", item.embedding)
+                    RETURN count(n) AS processed
+                    """
+                    
+                    result = self.manager.execute_cypher_query(store_query, {"batch": sub_batch})
+                    processed = result.get("processed", 0) if result else 0
+                    total_cached += processed
+                except Exception as e:
+                    logger.error(f"Error applying cached embeddings batch: {e}")
+        
+        except Exception as e:
+            logger.error(f"Error in batch update: {e}")
+        
+        return total_cached
+
+    def generate_embeddings_for_nodes(self, label, id_property, content_property, embedding_property="embedding", 
+                                       batch_size=50, max_items=None, create_index=True, check_chromadb=True):
+        """Generate embeddings for any node type using Neo4j's GenAI integration"""
+        from eventtrader.keys import OPENAI_API_KEY
+        from utils.feature_flags import (ENABLE_NEWS_EMBEDDINGS, OPENAI_EMBEDDING_MODEL,
+                                        USE_CHROMADB_CACHING, OPENAI_EMBEDDING_DIMENSIONS)
+        from hashlib import sha256
+        
+        results = {"processed": 0, "error": 0, "cached": 0}
+        
+        # Early exit checks
+        if not ENABLE_NEWS_EMBEDDINGS:
+            return {"status": "skipped", "reason": "embeddings disabled", **results}
+        if not OPENAI_API_KEY:
+            return {"status": "error", "reason": "missing API key", **results}
+        if not self.manager and not self.connect():
+            return {"status": "error", "reason": "Neo4j connection failed", **results}
+        
+        try:
+            # Configure ChromaDB usage
             use_chromadb = check_chromadb and USE_CHROMADB_CACHING
             if use_chromadb and self.chroma_collection is None:
-                # Try initializing ChromaDB if not done already
                 self._initialize_chroma_db()
-                # If still not initialized, log but continue without caching
                 if self.chroma_collection is None:
-                    logger.warning("ChromaDB collection is not initialized, continuing without caching")
                     use_chromadb = False
+                    logger.warning("ChromaDB collection is not initialized, continuing without caching")
             
             # Create vector index if needed
             if create_index:
-                self.create_vector_index(
-                    label=label, 
-                    property_name=embedding_property,
-                    dimensions=OPENAI_EMBEDDING_DIMENSIONS
-                )
+                self.create_vector_index(label=label, property_name=embedding_property,
+                                        dimensions=OPENAI_EMBEDDING_DIMENSIONS)
             
-            # First, process the entire set to identify items that need embeddings
+            # Find nodes needing embeddings
             query = f"""
             MATCH (n:{label})
             WHERE n.{embedding_property} IS NULL AND n.{content_property} IS NOT NULL
@@ -1248,117 +1319,55 @@ class Neo4jProcessor:
             WHERE trim(content) <> ''
             RETURN n.{id_property} as id, content
             """
-            
             if max_items:
                 query += f" LIMIT {max_items}"
             
-            # Get all items needing embeddings
             all_items = self.manager.execute_cypher_query(query, {})
             
-            # Convert to list if needed
-            if all_items and not isinstance(all_items, list):
+            # Handle empty results
+            if not all_items:
+                return {"status": "completed", "reason": "no items needed embeddings", **results}
+            if not isinstance(all_items, list):
                 all_items = [all_items]
-            
-            if not all_items or len(all_items) == 0:
+            if len(all_items) == 0:
                 return {"status": "completed", "reason": "no items needed embeddings", **results}
             
             logger.info(f"Found {len(all_items)} {label} nodes needing embeddings")
             
-            # If ChromaDB caching is enabled, check for existing embeddings
+            # Get cached embeddings and nodes needing embeddings
             cached_embeddings = {}
-            nodes_needing_embeddings = []
-            
             if use_chromadb:
-                logger.info(f"ChromaDB caching enabled, checking for existing embeddings in collection with {self.chroma_collection.count() if self.chroma_collection else 0} items")
-                for item in all_items:
-                    node_id = item["id"]
-                    content = item["content"]
-                    
-                    try:
-                        # Check ChromaDB for existing embedding - always include embeddings
-                        content_hash = sha256(content.encode()).hexdigest()
-                        chroma_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
-                        
-                        # Simple, robust check for valid embeddings
-                        if (chroma_result and 
-                            'ids' in chroma_result and 
-                            len(chroma_result['ids']) > 0 and
-                            'embeddings' in chroma_result and 
-                            chroma_result['embeddings'] is not None and 
-                            len(chroma_result['embeddings']) > 0):
-                            
-                            # Found cached embedding
-                            cached_embeddings[node_id] = {
-                                "embedding": chroma_result['embeddings'][0],
-                                "content": content
-                            }
-                            logger.info(f"✅ Found existing embedding in ChromaDB for {node_id}")
-                        else:
-                            # Need to generate new embedding
-                            logger.info(f"⚠️ No existing embedding found in ChromaDB for {node_id}")
-                            nodes_needing_embeddings.append({"id": node_id, "content": content})
-                    except Exception as e:
-                        logger.warning(f"Error checking ChromaDB for {node_id}: {e}")
-                        nodes_needing_embeddings.append({"id": node_id, "content": content})
+                cached_embeddings, nodes_needing_embeddings = self._batch_chromadb_lookup(all_items, batch_size=100)
+                logger.info(f"Found {len(cached_embeddings)} cached embeddings in ChromaDB")
             else:
-                # No ChromaDB caching, all nodes need embeddings
-                for item in all_items:
-                    nodes_needing_embeddings.append({"id": item["id"], "content": item["content"]})
+                nodes_needing_embeddings = [{"id": item["id"], "content": item["content"]} for item in all_items]
             
-            # Apply cached embeddings first
+            # Apply cached embeddings in batch
             if cached_embeddings:
-                for node_id, data in cached_embeddings.items():
-                    try:
-                        store_query = f"""
-                        MATCH (n:{label} {{{id_property}: $node_id}})
-                        WHERE n.{embedding_property} IS NULL 
-                        CALL db.create.setNodeVectorProperty(n, "{embedding_property}", $embedding)
-                        RETURN count(n) AS processed
-                        """
-                        
-                        result = self.manager.execute_cypher_query(store_query, {
-                            "node_id": node_id,
-                            "embedding": data["embedding"]
-                        })
-                        
-                        if result and result.get("processed", 0) > 0:
-                            results["cached"] += 1
-                            logger.info(f"Used cached embedding for {label} {node_id}")
-                    except Exception as e:
-                        logger.error(f"Error applying cached embedding for {node_id}: {e}")
-                        results["error"] += 1
-                
-                logger.info(f"Applied {results['cached']} cached embeddings from ChromaDB")
+                total_cached = self._batch_update_cached_embeddings(
+                    label=label, id_property=id_property, embedding_property=embedding_property,
+                    cached_embeddings=cached_embeddings
+                )
+                results["cached"] = total_cached
+                logger.info(f"Applied {total_cached} cached embeddings from ChromaDB")
             
-            # If there are nodes that need new embeddings, use concurrent transaction approach
+            # Generate new embeddings for remaining nodes
             if nodes_needing_embeddings:
-                logger.info(f"Generating embeddings for {len(nodes_needing_embeddings)} {label} nodes using concurrent transactions")
+                logger.info(f"Generating embeddings for {len(nodes_needing_embeddings)} {label} nodes")
                 
-                # Prepare a list of nodes and contents for processing
-                all_nodes = []
-                all_contents = []
+                # Prepare lists for batch processing
+                all_nodes = [node["id"] for node in nodes_needing_embeddings]
+                all_contents = [node["content"] for node in nodes_needing_embeddings]
                 
-                for node in nodes_needing_embeddings:
-                    all_nodes.append(node["id"])
-                    all_contents.append(node["content"])
-                
-                # Use the concurrent transactions approach for efficiency
+                # Use concurrent transactions for batch processing
                 concurrent_query = f"""
-                WITH $nodes AS nodes,
-                     $contents AS contents,
-                     count(*) AS total,
-                     $batch_size AS batchSize
+                WITH $nodes AS nodes, $contents AS contents, count(*) AS total, $batch_size AS batchSize
                 UNWIND range(0, total-1, batchSize) AS batchStart
                 CALL {{
-                    WITH batchStart, 
-                         batchStart + batchSize AS batchEnd,
-                         nodes, 
-                         contents
-                    
+                    WITH batchStart, batchStart + batchSize AS batchEnd, nodes, contents
                     WITH [content IN contents[batchStart..batchEnd] | content] AS batchContents,
                          [node IN nodes[batchStart..batchEnd] | node] AS batchNodes,
-                         nodes, 
-                         contents
+                         nodes, contents
                     
                     WITH batchContents, batchNodes, $config AS config
                     CALL genai.vector.encodeBatch(batchContents, 'OpenAI', config) YIELD index, vector
@@ -1373,81 +1382,57 @@ class Neo4jProcessor:
                 """
                 
                 try:
-                    # Execute with concurrent transactions
                     result = self.manager.execute_cypher_query(concurrent_query, {
-                        "nodes": all_nodes,
-                        "contents": all_contents,
-                        "batch_size": batch_size,
+                        "nodes": all_nodes, "contents": all_contents, "batch_size": batch_size,
                         "config": {"token": OPENAI_API_KEY, "model": OPENAI_EMBEDDING_MODEL}
                     })
                     
                     processed = result.get("processed", 0) if result else 0
                     results["processed"] = processed
                     
-                    # Now we need to store the generated embeddings in ChromaDB for future reuse
+                    # Store new embeddings in ChromaDB if enabled
                     if use_chromadb and processed > 0:
-                        # Get newly created embeddings to store in ChromaDB
                         fetch_query = f"""
                         MATCH (n:{label})
                         WHERE n.{id_property} IN $nodes AND n.{embedding_property} IS NOT NULL
                         RETURN n.{id_property} as id, n.{embedding_property} as embedding
+                        LIMIT 1000
                         """
                         
                         embeddings_result = self.manager.execute_cypher_query(fetch_query, {"nodes": all_nodes})
-                        
-                        # Convert to list if needed
-                        if embeddings_result and not isinstance(embeddings_result, list):
-                            embeddings_result = [embeddings_result]
-                        
-                        # Store in ChromaDB
                         if embeddings_result:
+                            if not isinstance(embeddings_result, list):
+                                embeddings_result = [embeddings_result]
+                            
                             for item in embeddings_result:
                                 try:
                                     node_id = item["id"]
                                     embedding = item["embedding"]
-                                    # Find the original content
                                     node_data = next((n for n in nodes_needing_embeddings if n["id"] == node_id), None)
+                                    
                                     if node_data and embedding:
                                         content_hash = sha256(node_data["content"].encode()).hexdigest()
-                                        
-                                        # Check if this embedding already exists in ChromaDB before adding
-                                        check_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
-                                        if (check_result and 
-                                            'ids' in check_result and 
-                                            len(check_result['ids']) > 0 and
-                                            'embeddings' in check_result and 
-                                            check_result['embeddings'] is not None and 
-                                            len(check_result['embeddings']) > 0):
-                                            # Already exists, no need to add again
-                                            logger.debug(f"Embedding already exists in ChromaDB for {node_id}")
-                                        else:
-                                            # Doesn't exist, add it - Use try/except to handle race conditions
-                                            try:
-                                                self.chroma_collection.add(
-                                                    ids=[content_hash],
-                                                    documents=[node_data["content"]],
-                                                    embeddings=[embedding]
-                                                )
-                                                logger.info(f"Stored new embedding in ChromaDB for {node_id}")
-                                            except Exception as inner_e:
-                                                if "Insert of existing embedding ID" in str(inner_e):
-                                                    logger.debug(f"Embedding already exists in ChromaDB - concurrent insert detected")
-                                                else:
-                                                    raise inner_e
+                                        try:
+                                            self.chroma_collection.add(
+                                                ids=[content_hash],
+                                                documents=[node_data["content"]],
+                                                embeddings=[embedding]
+                                            )
+                                        except Exception as inner_e:
+                                            if "Insert of existing embedding ID" not in str(inner_e):
+                                                raise
                                 except Exception as e:
-                                    if not "Insert of existing embedding ID" in str(e):
-                                        logger.warning(f"Failed to store in ChromaDB: {e}")
-                    
+                                    logger.warning(f"Error storing embedding in ChromaDB for {node_id}: {e}")
+                
                 except Exception as e:
-                    logger.error(f"Error in concurrent transactions processing: {e}")
-                    results["error"] += len(nodes_needing_embeddings)
+                    logger.error(f"Error generating embeddings: {e}")
+                    results["error"] += 1
             
-            logger.info(f"Embedding generation completed - Generated: {results['processed']}, Cached: {results['cached']}, Errors: {results['error']}")
-            return {"status": "completed", **results}
-            
+            return {"status": "completed", **results, "total": len(all_items)}
+        
         except Exception as e:
-            logger.error(f"Error generating embeddings: {e}")
-            return {"status": "error", "reason": str(e), "processed": results["processed"]}
+            logger.error(f"Error in generate_embeddings_for_nodes: {e}")
+            return {"status": "error", "reason": str(e), **results}
 
     def generate_news_embeddings(self, batch_size=50, create_index=True, max_items=None):
         """
@@ -3751,13 +3736,34 @@ if __name__ == "__main__":
             ORDER BY score DESC
             LIMIT $limit
             """
-            
+
             results = self.manager.execute_cypher_query(search_query, {
                 "query_embedding": query_embedding,
                 "min_score": min_score,
                 "limit": limit
             })
-            
+
+
+            # Should be faster than above but check if it works: Perform vector similarity search
+            # search_query = f"""
+            # CALL db.index.vector.queryNodes($index_name, $query_embedding, $limit)
+            # YIELD node, score
+            # WHERE score >= $min_score
+            # RETURN node.{id_property} AS id, {", ".join([f"node.{prop} AS {prop}" for prop in return_properties])}, score
+            # ORDER BY score DESC
+            # """
+
+            # from utils.feature_flags import NEWS_VECTOR_INDEX_NAME
+
+            # results = self.manager.execute_cypher_query(search_query, {
+            #     "index_name": NEWS_VECTOR_INDEX_NAME,
+            #     "query_embedding": query_embedding,
+            #     "min_score": min_score,
+            #     "limit": limit
+            # })
+
+
+
             # Ensure results is a list
             if results and not isinstance(results, list):
                 results = [results]
