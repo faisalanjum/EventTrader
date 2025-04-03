@@ -426,7 +426,7 @@ class Neo4jProcessor:
                 if ENABLE_NEWS_EMBEDDINGS:
                     try:
                         logger.info("Auto-generating embeddings based on feature flag...")
-                        embedding_results = self.generate_news_embeddings(batch_size=batch_size)
+                        embedding_results = self.batch_process_news_embeddings(batch_size=batch_size)
                         logger.info(f"Auto embedding generation results: {embedding_results}")
                     except Exception as e:
                         logger.warning(f"Could not auto-generate embeddings: {e}")
@@ -666,7 +666,7 @@ class Neo4jProcessor:
             logger.warning(f"Failed to create vector index for news {news_id}")
             
         # Generate embedding
-        return self._generate_embedding_for_news(news_id)
+        return self._create_news_embedding(news_id)
 
 
 
@@ -792,7 +792,7 @@ class Neo4jProcessor:
 
 # region: News Processing Pipeline - # Methods like _prepare_news_data, _process_deduplicated_news, _execute_news_database_operations, _create_news_node_from_data
 
-    def _generate_embedding_for_news(self, news_id):
+    def _create_news_embedding(self, news_id):
         """Generate embedding for a single news item using Neo4j's GenAI function"""
         if not self.manager and not self.connect():
             return False
@@ -1183,7 +1183,7 @@ class Neo4jProcessor:
             dimensions=OPENAI_EMBEDDING_DIMENSIONS
         )
 
-    def _batch_chromadb_lookup(self, all_items, batch_size=100):
+    def _fetch_chromadb_embeddings(self, all_items, batch_size=100):
         """
         Perform batch lookups in ChromaDB for cached embeddings.
         """
@@ -1242,7 +1242,7 @@ class Neo4jProcessor:
         
         return cached_embeddings, nodes_needing_embeddings
 
-    def _batch_update_cached_embeddings(self, label, id_property, embedding_property, cached_embeddings, batch_size=100):
+    def _store_cached_embeddings_in_neo4j(self, label, id_property, embedding_property, cached_embeddings, batch_size=100):
         """
         Update Neo4j nodes with cached embeddings in batch.
         """
@@ -1279,7 +1279,7 @@ class Neo4jProcessor:
         
         return total_cached
 
-    def generate_embeddings_for_nodes(self, label, id_property, content_property, embedding_property="embedding", 
+    def batch_embeddings_for_nodes(self, label, id_property, content_property, embedding_property="embedding", 
                                        batch_size=50, max_items=None, create_index=True, check_chromadb=True):
         """Generate embeddings for any node type using Neo4j's GenAI integration"""
         from eventtrader.keys import OPENAI_API_KEY
@@ -1337,14 +1337,14 @@ class Neo4jProcessor:
             # Get cached embeddings and nodes needing embeddings
             cached_embeddings = {}
             if use_chromadb:
-                cached_embeddings, nodes_needing_embeddings = self._batch_chromadb_lookup(all_items, batch_size=100)
+                cached_embeddings, nodes_needing_embeddings = self._fetch_chromadb_embeddings(all_items, batch_size=100)
                 logger.info(f"Found {len(cached_embeddings)} cached embeddings in ChromaDB")
             else:
                 nodes_needing_embeddings = [{"id": item["id"], "content": item["content"]} for item in all_items]
             
             # Apply cached embeddings in batch
             if cached_embeddings:
-                total_cached = self._batch_update_cached_embeddings(
+                total_cached = self._store_cached_embeddings_in_neo4j(
                     label=label, id_property=id_property, embedding_property=embedding_property,
                     cached_embeddings=cached_embeddings
                 )
@@ -1431,13 +1431,13 @@ class Neo4jProcessor:
             return {"status": "completed", **results, "total": len(all_items)}
         
         except Exception as e:
-            logger.error(f"Error in generate_embeddings_for_nodes: {e}")
+            logger.error(f"Error in batch_embeddings_for_nodes: {e}")
             return {"status": "error", "reason": str(e), **results}
 
-    def generate_news_embeddings(self, batch_size=50, create_index=True, max_items=None):
+    def batch_process_news_embeddings(self, batch_size=50, create_index=True, max_items=None):
         """
         Generate embeddings for News nodes using Neo4j's GenAI integration.
-        This is a specialized wrapper around generate_embeddings_for_nodes just for News nodes.
+        This is a specialized wrapper around batch_embeddings_for_nodes just for News nodes.
         
         Args:
             batch_size (int): Number of items to process in each batch
@@ -1502,7 +1502,7 @@ class Neo4jProcessor:
             self.manager.execute_cypher_query(save_query, {"id": item["id"], "content": item["content"]})
         
         # Use the generic method with the temporary property
-        results = self.generate_embeddings_for_nodes(
+        results = self.batch_embeddings_for_nodes(
             label="News",
             id_property="id",
             content_property="_temp_content",
@@ -3187,7 +3187,8 @@ class Neo4jProcessor:
         news_collection_exists = False
         news_collection_count = 0
         
-        if hasattr(self, 'chroma_collection') and self.chroma_collection is not None:
+        # if hasattr(self, 'chroma_collection') and self.chroma_collection is not None:
+        if self.chroma_collection is not None:
             news_collection_exists = True
             try:
                 news_collection_count = self.chroma_collection.count()
