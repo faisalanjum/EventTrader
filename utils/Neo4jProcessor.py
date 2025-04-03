@@ -316,6 +316,9 @@ class Neo4jProcessor:
 
 # endregion
 
+
+#### ISSUE IS None of Batch processing is working since data from resis queue comes in as single items!
+
 # region: Primary Public Methods - # Methods like process_news_to_neo4j, process_reports_to_neo4j, process_pubsub_item, process_with_pubsub, stop_pubsub_processing
 
     def process_news_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
@@ -804,6 +807,8 @@ class Neo4jProcessor:
             if not OPENAI_API_KEY:
                 return False
             
+            logger.info(f"[EMBED-FLOW] Creating single news embedding for news_id={news_id}")
+            
             # First, get the content for this news item
             content_query = """
             MATCH (n:News {id: $news_id})
@@ -867,12 +872,15 @@ class Neo4jProcessor:
                             "embedding": embedding
                         })
                         
+                        logger.info(f"[EMBED-FLOW] Successfully generated embedding for news {news_id}")
                         return result and result.get("processed", 0) > 0
+                        
                 except Exception as e:
                     logger.warning(f"Error checking ChromaDB: {e}")
             
             # If we didn't find an embedding in ChromaDB, generate a new one
             # Use Neo4j's genai.vector.encodeBatch to generate embedding and set it directly
+            logger.info(f"[EMBED-FLOW] Executing Neo4j encodeBatch for single news item {news_id}")
             query = """
             MATCH (n:News {id: $news_id})
             WHERE n.embedding IS NULL
@@ -885,7 +893,7 @@ class Neo4jProcessor:
             """
             
             result = self.manager.execute_cypher_query(query, {
-                "news_id": news_id,
+                "news_id": news_id, 
                 "content": content,
                 "config": {
                     "token": OPENAI_API_KEY,
@@ -931,11 +939,13 @@ class Neo4jProcessor:
                         logger.warning(f"Failed to store embedding in ChromaDB: {e}")
             
             if success:
-                logger.info(f"Generated embedding for news {news_id}")
+                logger.info(f"[EMBED-FLOW] Successfully generated embedding for news {news_id}")
+            else:
+                logger.warning(f"[EMBED-FLOW] Failed to generate embedding for news {news_id}, result: {result}")
                 
             return success
         except Exception as e:
-            logger.error(f"Error generating embedding: {e}")
+            logger.error(f"[EMBED-FLOW] Exception in batch_embeddings_for_nodes: {str(e)}")
             return False
 
     def _prepare_news_data(self, news_id, news_data):
@@ -1193,6 +1203,8 @@ class Neo4jProcessor:
         nodes_needing_embeddings = []
         
         try:
+            logger.info(f"[EMBED-FLOW] Starting ChromaDB batch lookup for {len(all_items)} items")
+            
             for batch_start in range(0, len(all_items), batch_size):
                 batch = all_items[batch_start:batch_start + batch_size]
                 
@@ -1233,6 +1245,8 @@ class Neo4jProcessor:
                 for item_data in hash_to_item.values():
                     nodes_needing_embeddings.append(item_data)
         
+            logger.info(f"[EMBED-FLOW] ChromaDB batch returned {len(cached_embeddings)}/{len(all_items)} cached embeddings")
+            
         except Exception as e:
             logger.warning(f"Error in batch ChromaDB lookup: {e}")
             # Add all remaining items to nodes_needing_embeddings
@@ -1304,7 +1318,7 @@ class Neo4jProcessor:
                 self._initialize_chroma_db()
                 if self.chroma_collection is None:
                     use_chromadb = False
-                    logger.warning("ChromaDB collection is not initialized, continuing without caching")
+                    logger.warning("[EMBED-FLOW] ChromaDB collection is not initialized, continuing without caching")
             
             # Create vector index if needed
             if create_index:
@@ -1326,19 +1340,20 @@ class Neo4jProcessor:
             
             # Handle empty results
             if not all_items:
+                logger.info(f"[EMBED-FLOW] No {label} items found needing embeddings")
                 return {"status": "completed", "reason": "no items needed embeddings", **results}
             if not isinstance(all_items, list):
                 all_items = [all_items]
             if len(all_items) == 0:
+                logger.info(f"[EMBED-FLOW] No {label} items found needing embeddings")
                 return {"status": "completed", "reason": "no items needed embeddings", **results}
             
-            logger.info(f"Found {len(all_items)} {label} nodes needing embeddings")
+            logger.info(f"[EMBED-FLOW] Found {len(all_items)} {label} nodes needing embeddings")
             
             # Get cached embeddings and nodes needing embeddings
             cached_embeddings = {}
             if use_chromadb:
                 cached_embeddings, nodes_needing_embeddings = self._fetch_chromadb_embeddings(all_items, batch_size=100)
-                logger.info(f"Found {len(cached_embeddings)} cached embeddings in ChromaDB")
             else:
                 nodes_needing_embeddings = [{"id": item["id"], "content": item["content"]} for item in all_items]
             
@@ -1359,25 +1374,38 @@ class Neo4jProcessor:
                 all_nodes = [node["id"] for node in nodes_needing_embeddings]
                 all_contents = [node["content"] for node in nodes_needing_embeddings]
                 
-                # Use concurrent transactions for batch processing
+                # Updated query that works around Neo4j's limitations with complex expressions in WITH clauses
                 concurrent_query = f"""
-                WITH $nodes AS nodes, $contents AS contents, count(*) AS total, $batch_size AS batchSize
+                // First, pre-compute the batch indices
+                WITH $nodes AS nodes, $contents AS contents, $batch_size AS batchSize
+                WITH nodes, contents, batchSize, size(nodes) AS total
                 UNWIND range(0, total-1, batchSize) AS batchStart
+                WITH batchStart, 
+                     CASE WHEN batchStart + batchSize > size(nodes) THEN size(nodes) ELSE batchStart + batchSize END AS batchEnd,
+                     nodes, contents
+
+                // Now process each batch with concurrent transactions
                 CALL {{
-                    WITH batchStart, batchStart + batchSize AS batchEnd, nodes, contents
-                    WITH [content IN contents[batchStart..batchEnd] | content] AS batchContents,
-                         [node IN nodes[batchStart..batchEnd] | node] AS batchNodes,
-                         nodes, contents
+                    WITH batchStart, batchEnd, nodes, contents
+                    UNWIND range(batchStart, batchEnd-1) AS i
+                    WITH i, nodes[i] AS nodeId, contents[i] AS content, collect(i) AS indices, collect(contents[i]) AS batchContents
+                    WITH indices, batchContents, collect(nodeId) AS batchNodes, $config AS config
                     
-                    WITH batchContents, batchNodes, $config AS config
-                    CALL genai.vector.encodeBatch(batchContents, 'OpenAI', config) YIELD index, vector
+                    // Process the whole batch at once for efficiency
+                    CALL genai.vector.encodeBatch(batchContents, 'OpenAI', config)
+                    YIELD index, vector
                     
+                    // Map back to the right node
                     WITH batchNodes[index] AS nodeId, vector
+                    
+                    // Apply to Neo4j node
                     MATCH (n:{label} {{{id_property}: nodeId}})
                     WHERE n.{embedding_property} IS NULL
                     CALL db.create.setNodeVectorProperty(n, "{embedding_property}", vector)
-                    RETURN nodeId, vector
-                }} IN CONCURRENT TRANSACTIONS OF 1 ROW
+                    RETURN nodeId
+                }} IN TRANSACTIONS OF 1 ROW
+
+                // Count total processed nodes
                 RETURN count(*) as processed
                 """
                 
@@ -1389,6 +1417,13 @@ class Neo4jProcessor:
                     
                     processed = result.get("processed", 0) if result else 0
                     results["processed"] = processed
+                    
+                    if processed > 0:
+                        # Log successful embedding generation
+                        logger.info(f"[EMBED-FLOW] Neo4j encodeBatch generated {processed}/{len(nodes_needing_embeddings)} embeddings successfully")
+                    else:
+                        # 6. Embedding Generation Failure Path
+                        logger.warning(f"[EMBED-FLOW] Neo4j encodeBatch FAILED to generate any embeddings for {len(nodes_needing_embeddings)} items")
                     
                     # Store new embeddings in ChromaDB if enabled
                     if use_chromadb and processed > 0:
@@ -1425,13 +1460,17 @@ class Neo4jProcessor:
                                     logger.warning(f"Error storing embedding in ChromaDB for {node_id}: {e}")
                 
                 except Exception as e:
-                    logger.error(f"Error generating embeddings: {e}")
+                    # 6. Embedding Generation Failure Path
+                    logger.error(f"[EMBED-FLOW] Failed to generate embeddings: {str(e)}")
                     results["error"] += 1
             
+            # Log completion of batch embedding generation
+            logger.info(f"[EMBED-FLOW] Completed batch embedding generation: {results}")
             return {"status": "completed", **results, "total": len(all_items)}
         
         except Exception as e:
-            logger.error(f"Error in batch_embeddings_for_nodes: {e}")
+            # 6. Embedding Generation Failure Path
+            logger.error(f"[EMBED-FLOW] Exception in batch_embeddings_for_nodes: {str(e)}")
             return {"status": "error", "reason": str(e), **results}
 
     def batch_process_news_embeddings(self, batch_size=50, create_index=True, max_items=None):
@@ -1451,8 +1490,14 @@ class Neo4jProcessor:
         # So first, we'll get all news records without embeddings using a custom query
         from utils.feature_flags import ENABLE_NEWS_EMBEDDINGS
         
+        # 1. Batch News Processing Path - initialization
+        logger.info(f"[EMBED-FLOW] Starting auto embedding generation via batch_process_news_embeddings")
+        
         if not ENABLE_NEWS_EMBEDDINGS:
             return {"status": "skipped", "reason": "embeddings disabled", "processed": 0, "error": 0, "cached": 0}
+        
+        # Log batch parameters at the beginning of actual processing
+        logger.info(f"[EMBED-FLOW] Batch process news embeddings started with batch_size={batch_size}, max_items={max_items}")
         
         # Create vector index if needed
         if create_index:
@@ -1490,8 +1535,13 @@ class Neo4jProcessor:
         if all_items and not isinstance(all_items, list):
             all_items = [all_items]
         
+        # 4. No Embeddings Needed Path
         if not all_items or len(all_items) == 0:
+            logger.info(f"[EMBED-FLOW] No news items found needing embeddings")
             return {"status": "completed", "reason": "no items needed embeddings", "processed": 0, "error": 0, "cached": 0}
+        
+        # Log the number of items found    
+        logger.info(f"[EMBED-FLOW] Found {len(all_items)} news items needing embeddings")
             
         # For each news item, save the content to a temporary property so we can use the generic method
         for item in all_items:
@@ -1502,6 +1552,7 @@ class Neo4jProcessor:
             self.manager.execute_cypher_query(save_query, {"id": item["id"], "content": item["content"]})
         
         # Use the generic method with the temporary property
+        logger.info(f"[EMBED-FLOW] Calling batch_embeddings_for_nodes with prepared content")
         results = self.batch_embeddings_for_nodes(
             label="News",
             id_property="id",
@@ -1521,6 +1572,8 @@ class Neo4jProcessor:
         """
         self.manager.execute_cypher_query(cleanup_query, {})
         
+        # Log completion with results
+        logger.info(f"[EMBED-FLOW] batch_process_news_embeddings completed with results: {results}")
         return results
 
 
@@ -3713,7 +3766,8 @@ if __name__ == "__main__":
             })
             
             if not result or not result.get("query_embedding"):
-                logger.error("Failed to generate embedding for query")
+                # 8. Vector Similarity Search Failure Path
+                logger.error("[EMBED-FLOW] Failed to generate embedding for search query")
                 return []
             
             query_embedding = result["query_embedding"]
@@ -3724,6 +3778,9 @@ if __name__ == "__main__":
             
             return_clause = ", ".join([f"node.{prop} AS {prop}" for prop in return_properties])
             return_clause = f"node.{id_property} AS id, {return_clause}, score"
+            
+            # 7. Vector Similarity Search Path
+            logger.info(f"[EMBED-FLOW] Successfully encoded search query, searching for {limit} results with min_score={min_score}")
             
             # Perform vector similarity search
             search_query = f"""
@@ -3768,7 +3825,9 @@ if __name__ == "__main__":
             # Ensure results is a list
             if results and not isinstance(results, list):
                 results = [results]
-                
+            
+            # 7. Vector Similarity Search Path - results
+            logger.info(f"[EMBED-FLOW] Vector similarity search returned {len(results) if results else 0} results")
             return results or []
             
         except Exception as e:
