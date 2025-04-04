@@ -379,7 +379,9 @@ class Neo4jInitializer:
                 for field, converter in {
                     'mkt_cap': float,
                     'employees': lambda x: int(float(x)),
-                    'shares_out': float
+                    'shares_out': float,
+                    'fiscal_year_end_month': lambda x: int(float(x)),
+                    'fiscal_year_end_day': lambda x: int(float(x))
                 }.items():
                     if field in data and data[field]:
                         try:

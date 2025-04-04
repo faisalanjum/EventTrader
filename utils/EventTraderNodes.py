@@ -228,7 +228,6 @@ class CompanyNode(Neo4jNode):
     exchange: Optional[str] = None
     sector: Optional[str] = None
     industry: Optional[str] = None
-    fiscal_year_end: Optional[str] = None
 
     # Add fields that may not be in the class definition but are accessed in properties method
     cusip: Optional[str] = None
@@ -242,6 +241,10 @@ class CompanyNode(Neo4jNode):
     employees: Optional[int] = None
     shares_out: Optional[float] = None
     ipo_date: Optional[str] = None
+    
+    # New fiscal year end fields
+    fiscal_year_end_month: Optional[int] = None
+    fiscal_year_end_day: Optional[int] = None
     
     def __post_init__(self):
         # Ensure CIK is properly formatted (10 digits with leading zeros)
@@ -292,7 +295,8 @@ class CompanyNode(Neo4jNode):
             'employees': self.employees,
             'shares_out': self.shares_out,
             'ipo_date': self.ipo_date,
-            'fiscal_year_end': self.fiscal_year_end
+            'fiscal_year_end_month': self.fiscal_year_end_month,
+            'fiscal_year_end_day': self.fiscal_year_end_day
         }
         
         # Only include non-None optional properties
@@ -317,7 +321,6 @@ class CompanyNode(Neo4jNode):
             'exchange': 'exchange',
             'sector': 'sector',
             'industry': 'industry',
-            'fiscal_year_end': 'fiscal_year_end',
             'cusip': 'cusip',
             'figi': 'figi',
             'class_figi': 'class_figi',
@@ -325,7 +328,9 @@ class CompanyNode(Neo4jNode):
             'sic_name': 'sic_name',
             'sector_etf': 'sector_etf',
             'industry_etf': 'industry_etf',
-            'ipo_date': 'ipo_date'
+            'ipo_date': 'ipo_date',
+            'fiscal_year_end_month': 'fiscal_year_end_month',
+            'fiscal_year_end_day': 'fiscal_year_end_day'
         }
         
         # Set string and simple fields

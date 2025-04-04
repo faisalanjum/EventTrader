@@ -85,3 +85,7 @@ USE_CHROMADB_CACHING = True
 import os
 CHROMADB_PERSIST_DIRECTORY = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "chroma_db"))
 
+
+# When equal to or greater than this number, use OpenAI Parallel Embeddings (with rate limiting) for news items instead of Neo4j Internal function 
+OPENAI_EMBED_CUTOFF = 10
+

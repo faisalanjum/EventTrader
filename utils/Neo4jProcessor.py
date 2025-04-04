@@ -1298,7 +1298,7 @@ class Neo4jProcessor:
         """Generate embeddings for any node type using Neo4j's GenAI integration"""
         from eventtrader.keys import OPENAI_API_KEY
         from utils.feature_flags import (ENABLE_NEWS_EMBEDDINGS, OPENAI_EMBEDDING_MODEL,
-                                        USE_CHROMADB_CACHING, OPENAI_EMBEDDING_DIMENSIONS)
+                                        USE_CHROMADB_CACHING, OPENAI_EMBEDDING_DIMENSIONS, OPENAI_EMBED_CUTOFF)
         from hashlib import sha256
         
         results = {"processed": 0, "error": 0, "cached": 0}
@@ -1373,6 +1373,60 @@ class Neo4jProcessor:
                 # Prepare lists for batch processing
                 all_nodes = [node["id"] for node in nodes_needing_embeddings]
                 all_contents = [node["content"] for node in nodes_needing_embeddings]
+                
+                # NEW CODE: Use parallel OpenAI implementation for larger batches
+                if len(nodes_needing_embeddings) >= OPENAI_EMBED_CUTOFF:
+                    try:
+                        from utils.openai_parallel_embeddings import process_embeddings_in_parallel
+                        import asyncio
+                        
+                        logger.info(f"[EMBED-FLOW] Using parallel OpenAI embeddings for {len(nodes_needing_embeddings)} items")
+                        embeddings = asyncio.run(process_embeddings_in_parallel(
+                            texts=all_contents,
+                            model=OPENAI_EMBEDDING_MODEL,
+                            api_key=OPENAI_API_KEY
+                        ))
+                        
+                        # Process results
+                        processed = 0
+                        for i, embedding in enumerate(embeddings):
+                            if embedding:
+                                # Store in Neo4j
+                                set_query = f"""
+                                MATCH (n:{label} {{{id_property}: $nodeId}})
+                                WHERE n.{embedding_property} IS NULL
+                                CALL db.create.setNodeVectorProperty(n, "{embedding_property}", $embedding)
+                                RETURN count(n) AS updated
+                                """
+                                result = self.manager.execute_cypher_query(set_query, {
+                                    "nodeId": all_nodes[i],
+                                    "embedding": embedding
+                                })
+                                if result and result.get("updated", 0) > 0:
+                                    processed += 1
+                                    
+                                    # Store in ChromaDB if enabled
+                                    if use_chromadb:
+                                        try:
+                                            content_hash = sha256(all_contents[i].encode()).hexdigest()
+                                            self.chroma_collection.add(
+                                                ids=[content_hash],
+                                                documents=[all_contents[i]],
+                                                embeddings=[embedding]
+                                            )
+                                        except Exception as e:
+                                            if "Insert of existing embedding ID" not in str(e):
+                                                logger.warning(f"Error storing in ChromaDB: {e}")
+                        
+                        # After processing all embeddings, update results and return
+                        results["processed"] = processed
+                        logger.info(f"[EMBED-FLOW] Completed parallel OpenAI embedding: {results}")
+                        return {"status": "completed", **results, "total": len(all_items)}
+                        
+                    except Exception as e:
+                        # Fall back to Neo4j approach on error
+                        logger.warning(f"[EMBED-FLOW] Parallel OpenAI embedding failed, falling back to Neo4j integration: {e}")
+                        # Continue to original code below
                 
                 # Updated query that works around Neo4j's limitations with complex expressions in WITH clauses
                 concurrent_query = f"""
