@@ -1944,7 +1944,7 @@ class Neo4jProcessor:
             # Skip processing if no symbols found
             if not valid_symbols:
                 logger.warning(f"No valid symbols found for report {report_id}")
-            return True
+                return True
                 
             # ----- Use helper method for efficient batch processing of relationships -----
             
