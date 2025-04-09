@@ -1,8 +1,9 @@
 import threading
 import logging
 import time
+import pytz
 from typing import Dict, Optional
-from datetime import datetime
+from datetime import datetime, timedelta
 from utils.Neo4jProcessor import Neo4jProcessor
 from utils.Neo4jInitializer import Neo4jInitializer
 
@@ -130,47 +131,89 @@ class TranscriptsManager(DataSourceManager):
         except Exception as e:
             self.logger.error(f"Error starting {self.source_type}: {e}")
             return False
-    
+
+
+
+
     def _fetch_historical_data(self):
         """Process historical transcripts"""
         try:
             self.logger.info(f"Fetching historical transcripts from {self.date_range['from']} to {self.date_range['to']}")
             
-            # Get a limited set of symbols for testing
-            # symbols = self.redis.get_symbols()[:10]  # Limit to 10 for testing
-            symbols = ['NVDA']
+            # Convert date_range to list of individual dates
+            start_date = datetime.strptime(self.date_range['from'], "%Y-%m-%d").date()
+            end_date = datetime.strptime(self.date_range['to'], "%Y-%m-%d").date()
             
-            for symbol in symbols:
+            # Iterate through each date in range
+            current_date = start_date
+            while current_date <= end_date:
                 try:
-                    self.logger.info(f"Fetching transcripts for {symbol}")
-                    transcripts = self.earnings_call_client.get_transcripts_by_date_range(
-                        ticker=symbol,
-                        start_date=self.date_range['from'],
-                        end_date=self.date_range['to']
-                    )
+                    self.logger.info(f"Fetching transcripts for date {current_date}")
+                    transcripts = self.earnings_call_client.get_transcripts_for_single_date(current_date)
                     
                     if not transcripts:
+                        self.logger.info(f"No transcripts found for {current_date}")
+                        current_date += timedelta(days=1)
                         continue
                         
-                    self.logger.info(f"Found {len(transcripts)} transcripts for {symbol}")
+                    self.logger.info(f"Found {len(transcripts)} transcripts for {current_date}")
                     
-                    # Store each transcript in historical Redis
+                    # Store each transcript in historical Redis immediately
                     for transcript in transcripts:
                         self.earnings_call_client.store_transcript_in_redis(transcript, is_live=False)
                         
+                    # Add a small delay to respect API rate limits between date calls
+                    time.sleep(1)
+                        
                 except Exception as e:
-                    self.logger.error(f"Error processing transcripts for {symbol}: {e}")
-                    continue
+                    self.logger.error(f"Error processing transcripts for {current_date}: {e}")
+                    # Add a longer delay after errors
+                    time.sleep(5)
+                
+                # Move to next day
+                current_date += timedelta(days=1)
                     
         except Exception as e:
             self.logger.error(f"Error in historical transcript processing: {e}")
+
+
+    # def _fetch_historical_data(self):
+    #     """Process historical transcripts"""
+    #     try:
+    #         self.logger.info(f"Fetching historical transcripts from {self.date_range['from']} to {self.date_range['to']}")
+            
+    #         # Get a limited set of symbols for testing
+    #         # symbols = self.redis.get_symbols()[:10]  # Limit to 10 for testing
+    #         symbols = ['NVDA']
+            
+    #         for symbol in symbols:
+    #             try:
+    #                 self.logger.info(f"Fetching transcripts for {symbol}")
+    #                 transcripts = self.earnings_call_client.get_transcripts_by_date_range(
+    #                     ticker=symbol,
+    #                     start_date=self.date_range['from'],
+    #                     end_date=self.date_range['to']
+    #                 )
+                    
+    #                 if not transcripts:
+    #                     continue
+                        
+    #                 self.logger.info(f"Found {len(transcripts)} transcripts for {symbol}")
+                    
+    #                 # Store each transcript in historical Redis
+    #                 for transcript in transcripts:
+    #                     self.earnings_call_client.store_transcript_in_redis(transcript, is_live=False)
+                        
+    #             except Exception as e:
+    #                 self.logger.error(f"Error processing transcripts for {symbol}: {e}")
+    #                 continue
+                    
+    #     except Exception as e:
+    #         self.logger.error(f"Error in historical transcript processing: {e}")
     
     def fetch_live_transcripts(self, target_date=None):
         """Public method to manually fetch 'live' transcripts for a date"""
         try:
-            from datetime import datetime
-            import pytz
-            
             # Use current date if none provided
             if target_date is None:
                 target_date = datetime.now(pytz.timezone('America/New_York')).date()

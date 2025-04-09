@@ -91,33 +91,76 @@ class EarningsCallProcessor:
     # Get Transcripts for a single date - Includes many companies 
     def get_transcripts_for_single_date(self, target_date):
         """Get transcripts for a single date."""
-        # Parse the date with parser function
         target_date = self._parse_dates_fn(target_date)
+        target_date_events = get_calendar(target_date)
+        self.logger.info(f"Found {len(target_date_events)} calendar events for {target_date}")
         
-        target_date_events = self.get_earnings_events(target_date)
+        # Log stats on events in our database and ready status
+        db_count = sum(1 for e in target_date_events if e.symbol.upper() in self.company_dict)
+        ready_count = sum(1 for e in target_date_events if e.symbol.upper() in self.company_dict and e.transcript_ready)
+        self.logger.info(f"Stats: {db_count}/{len(target_date_events)} in database, {ready_count}/{db_count} ready")
+        
         final_events = []
-
+        
         for calendar_event in target_date_events:
-            if calendar_event.symbol.upper() in self.company_dict:
-                company_obj = self.company_dict[calendar_event.symbol.upper()].company_obj
-                self.logger.info(f"Found company_obj for {calendar_event.symbol}")
-            
-            else:
+            if calendar_event.symbol.upper() not in self.company_dict:
                 self.logger.info(f"{calendar_event.symbol} Not in the database")
-                company_obj = get_company(calendar_event.symbol)
-                self.logger.info(f"Did not find company_obj for {calendar_event.symbol}, getting from earningscall") 
-
-            earnings_event = next((e for e in company_obj.events() if e.conference_date == calendar_event.conference_date), None)
-
+                continue
+            
+            company_obj = self.company_dict[calendar_event.symbol.upper()].company_obj
+            
+            # Process only if transcript is ready
             if calendar_event.transcript_ready:
-                final_events.append(self.get_single_event(company_obj, earnings_event))
-
+                # Create EarningsEvent directly from calendar data
+                from earningscall.event import EarningsEvent
+                earnings_event = EarningsEvent(year=calendar_event.year,quarter=calendar_event.quarter,conference_date=calendar_event.conference_date)
+                
+                try:
+                    result = self.get_single_event(company_obj, earnings_event)
+                    if result:
+                        final_events.extend(result)
+                    else:
+                        self.logger.info(f"No transcript returned for {calendar_event.symbol}")
+                except Exception as e:
+                    self.logger.error(f"Error processing transcript for {calendar_event.symbol}: {e}")
             else:
-                self.logger.info(f"Transcript not ready for {calendar_event.company_name} on {calendar_event.conference_date}")
+                self.logger.info(f"Transcript not ready for {calendar_event.symbol}")
+        
+        return final_events
 
-       
 
-        return final_events            
+
+
+    # def get_transcripts_for_single_date(self, target_date):
+    #     """Get transcripts for a single date."""
+    #     # Parse the date with parser function
+    #     target_date = self._parse_dates_fn(target_date)
+        
+    #     target_date_events = get_calendar(target_date)
+    #     final_events = []
+
+    #     for calendar_event in target_date_events:
+
+    #         if calendar_event.symbol.upper() not in self.company_dict:
+    #             # company_obj = get_company(calendar_event.symbol)
+    #             # self.logger.info(f"Did not find company_obj for {calendar_event.symbol}, getting from earningscall") 
+    #             self.logger.info(f"{calendar_event.symbol} Not in the database")
+    #             continue
+            
+    #         company_obj = self.company_dict[calendar_event.symbol.upper()].company_obj
+    #         self.logger.info(f"Found company_obj for {calendar_event.symbol}")
+            
+            
+    #         earnings_event = next((e for e in company_obj.events() if e.conference_date == calendar_event.conference_date), None)
+
+    #         if earnings_event is not None and calendar_event.transcript_ready:
+    #             final_events.extend(self.get_single_event(company_obj, earnings_event))
+
+    #         else:
+    #             self.logger.info(f"No matching event or transcript not ready for calendar_event:{calendar_event}, earnings_event:{earnings_event}, company_obj:{company_obj}, on {calendar_event.conference_date}")
+
+
+    #     return final_events            
 
 
 
