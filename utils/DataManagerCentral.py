@@ -93,16 +93,13 @@ class TranscriptsManager(DataSourceManager):
             processor_class=TranscriptProcessor
         )
         
-        # Get symbols from Redis
-        symbols = self.redis.get_symbols()
-        
-        # Initialize the EarningsCall client with symbols from Redis
+        # Initialize the EarningsCall client with Redis client for accessing universe data
         self.earnings_call_client = EarningsCallProcessor(
-            api_key=self.api_key, 
-            symbols_list=symbols
+            api_key=self.api_key,
+            redis_client=self.redis
         )
         
-        # For live data polling (placeholder - will implement later)
+        # For live data polling
         self.last_poll_time = None
     
     def start(self):
@@ -165,8 +162,13 @@ class TranscriptsManager(DataSourceManager):
                         # Convert datetime objects to ISO format strings before serializing
                         if 'conference_datetime' in transcript and hasattr(transcript['conference_datetime'], 'isoformat'):
                             transcript['conference_datetime'] = transcript['conference_datetime'].isoformat()
+                        
+                        transcript_id = f"{transcript['symbol']}_{transcript['fiscal_year']}_{transcript['fiscal_quarter']}"
+                        raw_key = f"{self.redis.history_client.prefix}raw:{transcript_id}"
+                        
+                        # Log transcript being added to historical raw queue
+                        self.logger.info(f"Adding transcript to historical raw queue: {transcript_id}")
                             
-                        raw_key = f"{self.redis.history_client.prefix}raw:{transcript['symbol']}_{transcript['fiscal_year']}_{transcript['fiscal_quarter']}"
                         self.redis.history_client.set(raw_key, json.dumps(transcript), ex=self.ttl)
                         self.redis.history_client.push_to_queue(self.redis.history_client.RAW_QUEUE, raw_key)
                         

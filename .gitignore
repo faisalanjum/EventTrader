@@ -5,6 +5,7 @@
 # Python cache
 __pycache__/
 *.py[cod]
+*.pyc
 *$py.class
 XBRL/__pycache__/
 
