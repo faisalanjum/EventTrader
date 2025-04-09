@@ -8,18 +8,21 @@ import threading
 import time
 import logging
 import json
-from types import SimpleNamespace
 from typing import Dict, List, Union, Set
 from earningscall import get_company
 from eventtrader.keys import OPENAI_API_KEY, EARNINGS_CALL_API_KEY
+from utils.log_config import get_logger, setup_logging
+from transcripts.transcript_schemas import UnifiedTranscript
+
 
 # Initialize OpenAI with API key using new client pattern
 from openai import OpenAI
 import earningscall
+import numpy as np
 
 
 class EarningsCallProcessor:
-    def __init__(self, api_key=None, redis_client=None):
+    def __init__(self, api_key=None, redis_client=None, ttl=None):
 
         #EarningsCall API Configuration
         if api_key: earningscall.api_key = api_key # Only set if provided
@@ -27,6 +30,7 @@ class EarningsCallProcessor:
         earningscall.retry_strategy = {"strategy": "exponential",  "base_delay": 2,   "max_attempts": 10,}
 
         self.ny_tz = pytz.timezone('America/New_York')
+        self.logger = get_logger("transcripts.EarningsCallProcessor")
 
         self.openai_client = OpenAI(api_key=OPENAI_API_KEY)
         self.rate_limiter = ModelRateLimiter()
@@ -35,27 +39,40 @@ class EarningsCallProcessor:
             self.redis_client = redis_client
             self.universe_data = redis_client.get_stock_universe()
             self.symbols = redis_client.get_symbols() 
-
         else:
-            print("No redis client provided") # change with logger
+            self.logger.warning("No redis client provided")
 
         self.company_dict = {}
+        self.ttl = ttl  # Store TTL for Redis entries
 
         self.load_companies()
         
 
     
     def load_companies(self):
-        
+        # Verify universe data is available
+        if not hasattr(self, 'universe_data') or self.universe_data is None:
+            self.logger.error("Stock universe data not available - fiscal year end dates may be incorrect")
+            
         # This fetches the company object for each symbol from the EarningsCall API 
         for ticker in self.symbols:
             company_obj = get_company(ticker)
 
-            # IMPORTANT: Get fiscal year end month and day from Neo4j Company Nodes
+            # Get fiscal year end data from universe
+            fiscal_data = {'fiscal_year_end_month': 12, 'fiscal_year_end_day': 31}
+            
+            if hasattr(self, 'universe_data') and self.universe_data is not None:
+                ticker_data = self.universe_data[self.universe_data['symbol'] == ticker]
+                if not ticker_data.empty:
+                    for field in fiscal_data:
+                        if field in ticker_data.columns:
+                            # Convert to native Python int to avoid NumPy int64 serialization issues
+                            fiscal_data[field] = int(ticker_data[field].iloc[0])
+
             self.company_dict[ticker] = SimpleNamespace( 
                 company_obj=company_obj,     # company_obj.events() requires seperate API calls for each symbol
-                fiscal_year_end_month=12, 
-                fiscal_year_end_day=31
+                fiscal_year_end_month=fiscal_data['fiscal_year_end_month'], 
+                fiscal_year_end_day=fiscal_data['fiscal_year_end_day']
             )
 
 
@@ -83,12 +100,12 @@ class EarningsCallProcessor:
         for calendar_event in target_date_events:
             if calendar_event.symbol.upper() in self.company_dict:
                 company_obj = self.company_dict[calendar_event.symbol.upper()].company_obj
-                print(f"Found company_obj for {calendar_event.symbol}")
+                self.logger.info(f"Found company_obj for {calendar_event.symbol}")
             
             else:
-                print(f"{calendar_event.symbol} Not in the database")
+                self.logger.info(f"{calendar_event.symbol} Not in the database")
                 company_obj = get_company(calendar_event.symbol)
-                print(f"Did not find company_obj for {calendar_event.symbol}, getting from earningscall") 
+                self.logger.info(f"Did not find company_obj for {calendar_event.symbol}, getting from earningscall") 
 
             earnings_event = next((e for e in company_obj.events() if e.conference_date == calendar_event.conference_date), None)
 
@@ -96,7 +113,7 @@ class EarningsCallProcessor:
                 final_events.append(self.get_single_event(company_obj, earnings_event))
 
             else:
-                print(f"Transcript not ready for {calendar_event.company_name} on {calendar_event.conference_date}")
+                self.logger.info(f"Transcript not ready for {calendar_event.company_name} on {calendar_event.conference_date}")
 
        
 
@@ -123,10 +140,10 @@ class EarningsCallProcessor:
             end_date = self.ny_tz.localize(end_date.replace(hour=23, minute=59, second=59))
         
         if ticker in self.company_dict:
-            print(f"DEBUG: Using locally stored company object for {ticker}")
+            self.logger.debug(f"Using locally stored company object for {ticker}")
             company_obj = self.company_dict[ticker].company_obj  # Fetch locally stored company object
         else:
-            print(f"DEBUG: Fetching company object from EarningsCall API for {ticker}")
+            self.logger.debug(f"Fetching company object from EarningsCall API for {ticker}")
             company_obj = get_company(ticker)
 
         results = []
@@ -198,7 +215,7 @@ class EarningsCallProcessor:
             
             # Debug: print all analysts
             analysts = [name for name, role in speaker_roles.items() if role == "ANALYST"]
-            print(f"Analysts found: {analysts} for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+            self.logger.info(f"Analysts found: {analysts} for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
             
             # Create segments
             segments = []
@@ -215,13 +232,15 @@ class EarningsCallProcessor:
                     segments.append((start_time, formatted_text, text))
             
             # Debug: print number of segments
-            print(f"Number of segments: {len(segments)} for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+            self.logger.info(f"Number of segments: {len(segments)} for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
             
             # If no segments, handle specially
             if not segments:
-                print(f"No segments found for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+                self.logger.warning(f"No segments found for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
                 result["prepared_remarks"] = []
                 result["questions_and_answers"] = []
+                # Validate and append result
+                result = self._validate_transcript(result)
                 results.append(result)
                 return results
             
@@ -230,18 +249,18 @@ class EarningsCallProcessor:
             try:
                 transcript_level4 = company_obj.get_transcript(event=event, level=4)
                 if transcript_level4:
-                    print(f"Level 4 transcript found for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+                    self.logger.info(f"Level 4 transcript found for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
                     # Validate level 4 transcript content
                     if not hasattr(transcript_level4, "prepared_remarks") or not hasattr(transcript_level4, "questions_and_answers"):
-                        print(f"Level 4 transcript missing required attributes for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+                        self.logger.warning(f"Level 4 transcript missing required attributes for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
                         transcript_level4 = None
                     elif transcript_level4.prepared_remarks is None or transcript_level4.questions_and_answers is None:
-                        print(f"Level 4 transcript has None content for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+                        self.logger.warning(f"Level 4 transcript has None content for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
                         transcript_level4 = None
                 else:
-                    print(f"Level 4 transcript NOT available for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+                    self.logger.info(f"Level 4 transcript NOT available for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
             except Exception as e:
-                print(f"Error getting level 4 transcript: {e}")
+                self.logger.error(f"Error getting level 4 transcript: {e}")
                 transcript_level4 = None
             
             # Detect Q&A boundary
@@ -254,7 +273,7 @@ class EarningsCallProcessor:
                 
                 # Sanity check for qa_text
                 if not qa_text or qa_text.strip() == "":
-                    print(f"Empty Q&A text in level 4 transcript for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+                    self.logger.warning(f"Empty Q&A text in level 4 transcript for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
                     # Fall back to analyst detection method
                     for i, (_, formatted_text, _) in enumerate(segments):
                         if "[" in formatted_text:
@@ -276,7 +295,7 @@ class EarningsCallProcessor:
                     
                     # If no match found with level 4, fall back to analyst detection
                     if not qa_match_found:
-                        print(f"No Q&A match found in level 4 for {company_obj.company_info.symbol} Q{event.quarter} {event.year}, falling back to analyst detection")
+                        self.logger.warning(f"No Q&A match found in level 4 for {company_obj.company_info.symbol} Q{event.quarter} {event.year}, falling back to analyst detection")
                         for i, (_, formatted_text, _) in enumerate(segments):
                             if "[" in formatted_text:
                                 parts = formatted_text.split("[", 1)
@@ -299,13 +318,13 @@ class EarningsCallProcessor:
                             break
             
             if qa_start_index is None:
-                print(f"No Q&A boundary found for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+                self.logger.warning(f"No Q&A boundary found for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
                 prepared_part = segments
                 qa_part = []
                 # Also store as full_transcript when boundary can't be determined for better semantic accuracy
                 result["full_transcript"] = "\n".join([t[2] for t in sorted(segments, key=lambda x: x[0])])
             else:
-                print(f"Q&A boundary found at position {qa_start_index} for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+                self.logger.info(f"Q&A boundary found at position {qa_start_index} for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
                 prepared_part = segments[:qa_start_index]
                 qa_part = segments[qa_start_index:]
             
@@ -314,24 +333,20 @@ class EarningsCallProcessor:
 
             # Form Q&A pairs using speaker roles if there are Q&A parts
             if qa_part:
-                print(f"Forming {len(qa_part)} Q&A pairs for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
+                self.logger.info(f"Forming {len(qa_part)} Q&A pairs for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
                 try:
                     self.form_qa_pairs(qa_part, speaker_roles, result)
                 except Exception as e:
-                    print(f"Error in form_qa_pairs: {e}")
+                    self.logger.error(f"Error in form_qa_pairs: {e}")
                     result["qa_pairs"] = []
             else:
                 result["qa_pairs"] = []  # Initialize with empty list if no Q&A
                 
 
             # Add calendar year and quarter
-            # IMPORTANT: This is to be supplied from Neo4j Company Node
+            symbol_upper = result['symbol'].upper()
+            fiscal_month_end = self.company_dict.get(symbol_upper, SimpleNamespace(fiscal_year_end_month=12)).fiscal_year_end_month
             
-            # TO BE CHANGES once we have the fiscal_year_end_month from the Neo4j Company Node
-            fiscal_month_end = 12
-            # fiscal_month_end = getattr(self.company_dict[company_obj.company_info.symbol], 'fiscal_year_end_month', 12)
-
-
             cal_year, cal_quarter = self.fiscal_to_calendar(result['fiscal_year'], result['fiscal_quarter'], fiscal_month_end)
             result["calendar_year"] = cal_year
             result["calendar_quarter"] = cal_quarter
@@ -348,10 +363,16 @@ class EarningsCallProcessor:
                 if basic_transcript and hasattr(basic_transcript, "text") and basic_transcript.text:
                     result["full_transcript"] = basic_transcript.text
                     
+            # Ensure conference_datetime is properly serialized
+            if hasattr(result['conference_datetime'], 'isoformat'):
+                result['conference_datetime'] = result['conference_datetime'].isoformat()
+            
+            # Validate transcript against schema and add to results
+            result = self._validate_transcript(result)        
             results.append(result)
         
         except Exception as e:
-            print(f"Error processing transcript for Q{event.quarter} {event.year}: {e}")
+            self.logger.error(f"Error processing transcript for Q{event.quarter} {event.year}: {e}")
             
             try:
                 # First try getting speakers if needed
@@ -370,22 +391,43 @@ class EarningsCallProcessor:
                     result["full_transcript"] = basic_transcript.text
                     result["qa_pairs"] = []  # Ensure qa_pairs is always initialized
                     
-                    # IMPORTANT: This is to be supplied from Neo4j Company Node
-
-                    # TO BE CHANGES once we have the fiscal_year_end_month from the Neo4j Company Node
-                    fiscal_month_end = 12
-                    # fiscal_month_end = getattr(self.company_dict[company_obj.company_info.symbol], 'fiscal_year_end_month', 12)
-
+                    # Get fiscal year end month from company_dict if available
+                    symbol_upper = result['symbol'].upper()
+                    fiscal_month_end = self.company_dict.get(symbol_upper, SimpleNamespace(fiscal_year_end_month=12)).fiscal_year_end_month
+                    
                     cal_year, cal_quarter = self.fiscal_to_calendar(result['fiscal_year'], result['fiscal_quarter'], fiscal_month_end)
                     result["calendar_year"] = cal_year
                     result["calendar_quarter"] = cal_quarter
                     
+                    # Ensure conference_datetime is properly serialized
+                    if hasattr(result['conference_datetime'], 'isoformat'):
+                        result['conference_datetime'] = result['conference_datetime'].isoformat()
+                    
+                    # Validate the fallback transcript
+                    result = self._validate_transcript(result)
                     results.append(result)
             except Exception as inner_e:
-                print(f"Error in fallback processing: {inner_e}")
+                self.logger.error(f"Error in fallback processing: {inner_e}")
                 pass
             
         return results
+
+
+    def _validate_transcript(self, transcript_dict):
+        """
+        Silently validate transcript against schema without changing the data
+        Returns the original dictionary regardless of validation result
+        """
+        try:
+            # Validate against schema but don't convert the return value
+            UnifiedTranscript(**transcript_dict)
+            self.logger.debug(f"Transcript validated successfully: {transcript_dict['symbol']} Q{transcript_dict['fiscal_quarter']} {transcript_dict['fiscal_year']}")
+        except Exception as e:
+            # Just log error but don't disrupt the flow
+            self.logger.warning(f"Transcript validation failed: {e}")
+        
+        # Always return the original dict to maintain backward compatibility
+        return transcript_dict
 
 
     def classify_speakers(self, speakers: Dict[str, str], model="gpt-4o") -> Dict[str, str]:
@@ -437,7 +479,7 @@ class EarningsCallProcessor:
                 # Check for refusal
                 for item in response.output[0].content:
                     if item.type in ["response.refusal.delta", "response.refusal.done"]:
-                        print(f"Model refused the classification request for {list(speakers.keys())}")
+                        self.logger.warning(f"Model refused the classification request for {list(speakers.keys())}")
                         return {}
                     
                 # Find the content item of type "output_text"
@@ -455,7 +497,7 @@ class EarningsCallProcessor:
             return {}
         
         except Exception as e:
-            print(f"Error during speaker classification: {e}")
+            self.logger.error(f"Error during speaker classification: {e}")
             return {}
 
 
@@ -570,7 +612,7 @@ class EarningsCallProcessor:
             # Add to result
             result["qa_pairs"] = qa_pairs
         except Exception as e:
-            print(f"Error in form_qa_pairs: {e}")
+            self.logger.error(f"Error in form_qa_pairs: {e}")
             result["qa_pairs"] = []
 
     # Final Functions for Mapping Calendar to Fiscal and vice versa
@@ -621,12 +663,48 @@ class EarningsCallProcessor:
         return date_input  # Assume it's already a date object
 
 
+    def store_transcript_in_redis(self, transcript, is_live=True):
+        """
+        Store transcript in Redis and add to appropriate queue
+        This method exactly mimics the current behavior in TranscriptsManager
+        
+        Args:
+            transcript (dict): The transcript to store
+            is_live (bool): Whether to store in live Redis (True) or historical Redis (False)
+        """
+        if not self.redis_client:
+            self.logger.warning("No Redis client available, skipping Redis storage")
+            return False
+            
+        try:
+            # Use the appropriate Redis client based on is_live flag
+            client = self.redis_client.live_client if is_live else self.redis_client.history_client
+            
+            # Create the key in the exact same format as the current implementation
+            transcript_id = f"{transcript['symbol']}_{transcript['fiscal_year']}_{transcript['fiscal_quarter']}"
+            raw_key = f"{client.prefix}raw:{transcript_id}"
+            
+            # Log the operation
+            if is_live:
+                self.logger.info(f"Adding transcript to live raw queue: {transcript_id}")
+            else:
+                self.logger.info(f"Adding transcript to historical raw queue: {transcript_id}")
+                
+            # Store in Redis exactly as done in current implementation
+            # Use default=str to handle any non-serializable types
+            client.set(raw_key, json.dumps(transcript, default=str), ex=self.ttl)
+            client.push_to_queue(client.RAW_QUEUE, raw_key)
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error storing transcript in Redis: {e}")
+            return False
 
-import time
-import logging
-from typing import Dict
 
-logger = logging.getLogger(__name__)
+
+
+
+
 
 class ModelRateLimiter:
     """Rate limiter for different LLM models"""
@@ -639,6 +717,7 @@ class ModelRateLimiter:
         }
         self.model_requests = {model: [] for model in self.model_limits}
         self._lock = threading.Lock()
+        self.logger = get_logger("transcripts.ModelRateLimiter")
         
     
     def wait_if_needed(self, model):
@@ -656,12 +735,9 @@ class ModelRateLimiter:
             # Wait if needed
             if len(self.model_requests[model]) >= rpm_limit:
                 wait_time = 60 - (now - self.model_requests[model][0]) + 0.1
-                logger.info(f"Rate limit for {model} approaching, waiting {wait_time:.2f}s")
+                self.logger.info(f"Rate limit for {model} approaching, waiting {wait_time:.2f}s")
                 time.sleep(wait_time)
                 
             # Record request
             self.model_requests[model].append(time.time())
-
-
-
 

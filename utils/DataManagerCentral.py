@@ -79,10 +79,6 @@ class DataSourceManager:
     def stop(self): raise NotImplementedError
 
 
-
-
-
-
 class TranscriptsManager(DataSourceManager):
     """Manager for earnings call transcripts"""
     def __init__(self, historical_range: Dict[str, str]):
@@ -96,7 +92,8 @@ class TranscriptsManager(DataSourceManager):
         # Initialize the EarningsCall client with Redis client for accessing universe data
         self.earnings_call_client = EarningsCallProcessor(
             api_key=self.api_key,
-            redis_client=self.redis
+            redis_client=self.redis,
+            ttl=self.ttl
         )
         
         # For live data polling
@@ -157,20 +154,9 @@ class TranscriptsManager(DataSourceManager):
                         
                     self.logger.info(f"Found {len(transcripts)} transcripts for {symbol}")
                     
-                    # Store in Redis
+                    # Store each transcript in historical Redis
                     for transcript in transcripts:
-                        # Convert datetime objects to ISO format strings before serializing
-                        if 'conference_datetime' in transcript and hasattr(transcript['conference_datetime'], 'isoformat'):
-                            transcript['conference_datetime'] = transcript['conference_datetime'].isoformat()
-                        
-                        transcript_id = f"{transcript['symbol']}_{transcript['fiscal_year']}_{transcript['fiscal_quarter']}"
-                        raw_key = f"{self.redis.history_client.prefix}raw:{transcript_id}"
-                        
-                        # Log transcript being added to historical raw queue
-                        self.logger.info(f"Adding transcript to historical raw queue: {transcript_id}")
-                            
-                        self.redis.history_client.set(raw_key, json.dumps(transcript), ex=self.ttl)
-                        self.redis.history_client.push_to_queue(self.redis.history_client.RAW_QUEUE, raw_key)
+                        self.earnings_call_client.store_transcript_in_redis(transcript, is_live=False)
                         
                 except Exception as e:
                     self.logger.error(f"Error processing transcripts for {symbol}: {e}")
@@ -201,13 +187,8 @@ class TranscriptsManager(DataSourceManager):
             # Store in Redis live queue
             count = 0
             for transcript in transcripts:
-                # Convert datetime objects to ISO format strings before serializing
-                if 'conference_datetime' in transcript and hasattr(transcript['conference_datetime'], 'isoformat'):
-                    transcript['conference_datetime'] = transcript['conference_datetime'].isoformat()
-                    
-                raw_key = f"{self.redis.live_client.prefix}raw:{transcript['symbol']}_{transcript['fiscal_year']}_{transcript['fiscal_quarter']}"
-                self.redis.live_client.set(raw_key, json.dumps(transcript), ex=self.ttl)
-                self.redis.live_client.push_to_queue(self.redis.live_client.RAW_QUEUE, raw_key)
+                # Store transcript in live Redis
+                self.earnings_call_client.store_transcript_in_redis(transcript, is_live=True)
                 count += 1
                 
             self.last_poll_time = datetime.now(pytz.timezone('America/New_York'))
@@ -526,15 +507,28 @@ class DataManager:
         
         try:
             # Get Redis client if available
+            # event_trader_redis = None
+            # if hasattr(self, 'sources') and 'news' in self.sources:
+            #     source_manager = self.sources['news']
+            #     if hasattr(source_manager, 'redis'):
+            #         event_trader_redis = source_manager.redis
+            #         self.logger.info("Using Redis client from news source")
+
+
+            # Find first available Redis client
             event_trader_redis = None
-            if hasattr(self, 'sources') and 'news' in self.sources:
-                source_manager = self.sources['news']
-                if hasattr(source_manager, 'redis'):
-                    event_trader_redis = source_manager.redis
-                    self.logger.info("Using Redis client from news source")
+            for source_name in self.sources:
+                if hasattr(self.sources[source_name], 'redis'):
+                    event_trader_redis = self.sources[source_name].redis
+                    self.logger.info(f"Using Redis client from {source_name}")
+                    break
             
+            if event_trader_redis:
+                self.neo4j_processor = Neo4jProcessor(event_trader_redis)
+
+
             # Create Neo4j processor with default connection settings
-            self.neo4j_processor = Neo4jProcessor(event_trader_redis=event_trader_redis)
+            # self.neo4j_processor = Neo4jProcessor(event_trader_redis=event_trader_redis)
             
             # Connect to Neo4j
             if not self.neo4j_processor.connect():
