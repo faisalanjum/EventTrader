@@ -66,7 +66,7 @@ class EarningsCallProcessor:
         return events
 
 
-
+    # Live Function
     # Get Transcripts for a single date - Includes many companies 
     def get_transcripts_for_single_date(self, target_date):
         """Get transcripts for a single date."""
@@ -100,7 +100,7 @@ class EarningsCallProcessor:
 
 
 
-
+    # Historical Function
     # Pass ticker & start/end dates to fetch all transcripts
     def get_transcripts_by_date_range(self, ticker: str, start_date: Union[datetime, str], end_date: Union[datetime, str]) -> List[Dict]:
 

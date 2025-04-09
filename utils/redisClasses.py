@@ -242,6 +242,40 @@ class RedisClient:
                 
         return False  # Should never reach here, but just in case
 
+
+    # Add to utils/redisClasses.py only if strictly necessary
+    def store_transcript(self, transcript, ex=None):
+        """Store transcript in Redis raw queue"""
+        try:
+            # Create identifier from transcript data
+            id_str = f"{transcript['symbol']}_{transcript['fiscal_year']}_{transcript['fiscal_quarter']}"
+            
+            # Format datetime for key
+            if isinstance(transcript['conference_datetime'], str):
+                dt_str = transcript['conference_datetime'].replace(':', '.')
+            else:
+                dt_str = transcript['conference_datetime'].isoformat().replace(':', '.')
+                
+            # Generate storage key
+            storage_key = f"{self.prefix}raw:{id_str}.{dt_str}"
+            
+            # Check if already processed
+            processed_key = f"{self.prefix}processed:{id_str}.{dt_str}"
+            if processed_key in self.client.lrange(self.PROCESSED_QUEUE, 0, -1):
+                self.logger.info(f"Skipping duplicate transcript: {id_str}")
+                return False
+                
+            # Store in Redis
+            pipe = self.client.pipeline(transaction=True)
+            pipe.set(storage_key, json.dumps(transcript), ex=ex)
+            pipe.lpush(self.RAW_QUEUE, storage_key)
+            return all(pipe.execute())
+        except Exception as e:
+            self.logger.error(f"Error storing transcript: {e}")
+            return False
+
+
+
     # def set_filing(self, filing, ex: int = None, raw: bool = False) -> bool:
     #     """Store filing with proper namespace handling and queue management
     #     Args:

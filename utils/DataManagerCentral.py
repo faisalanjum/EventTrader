@@ -13,6 +13,11 @@ from utils.log_config import get_logger, setup_logging
 from benzinga.bz_restAPI import BenzingaNewsRestAPI
 from benzinga.bz_websocket import BenzingaNewsWebSocket
 
+from transcripts.EarningsCallTranscripts import EarningsCallProcessor
+from utils.TranscriptProcessor import TranscriptProcessor
+from eventtrader.keys import EARNINGS_CALL_API_KEY
+import json
+
 
 from utils.NewsProcessor import NewsProcessor
 from utils.ReportProcessor import ReportProcessor
@@ -72,6 +77,183 @@ class DataSourceManager:
     def start(self): raise NotImplementedError
     def check_status(self): raise NotImplementedError
     def stop(self): raise NotImplementedError
+
+
+
+
+
+
+class TranscriptsManager(DataSourceManager):
+    """Manager for earnings call transcripts"""
+    def __init__(self, historical_range: Dict[str, str]):
+        super().__init__(
+            source_type=RedisKeys.SOURCE_TRANSCRIPTS,
+            historical_range=historical_range,
+            api_key=EARNINGS_CALL_API_KEY,
+            processor_class=TranscriptProcessor
+        )
+        
+        # Get symbols from Redis
+        symbols = self.redis.get_symbols()
+        
+        # Initialize the EarningsCall client with symbols from Redis
+        self.earnings_call_client = EarningsCallProcessor(
+            api_key=self.api_key, 
+            symbols_list=symbols
+        )
+        
+        # For live data polling (placeholder - will implement later)
+        self.last_poll_time = None
+    
+    def start(self):
+        try:
+            # Start processor thread
+            self.processor_thread = threading.Thread(
+                target=self.processor.process_all_transcripts, 
+                daemon=True
+            )
+            
+            # Start returns processor thread
+            self.returns_thread = threading.Thread(
+                target=self.returns_processor.process_all_returns, 
+                daemon=True
+            )
+            
+            # Start historical data processing in background
+            self.historical_thread = threading.Thread(
+                target=self._fetch_historical_data,
+                daemon=True
+            )
+            
+            # Start threads
+            self.processor_thread.start()
+            self.returns_thread.start()
+            self.historical_thread.start()
+            
+            self.logger.info(f"Started transcript processing threads")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error starting {self.source_type}: {e}")
+            return False
+    
+    def _fetch_historical_data(self):
+        """Process historical transcripts"""
+        try:
+            self.logger.info(f"Fetching historical transcripts from {self.date_range['from']} to {self.date_range['to']}")
+            
+            # Get a limited set of symbols for testing
+            # symbols = self.redis.get_symbols()[:10]  # Limit to 10 for testing
+            symbols = ['NVDA']
+            
+            for symbol in symbols:
+                try:
+                    self.logger.info(f"Fetching transcripts for {symbol}")
+                    transcripts = self.earnings_call_client.get_transcripts_by_date_range(
+                        ticker=symbol,
+                        start_date=self.date_range['from'],
+                        end_date=self.date_range['to']
+                    )
+                    
+                    if not transcripts:
+                        continue
+                        
+                    self.logger.info(f"Found {len(transcripts)} transcripts for {symbol}")
+                    
+                    # Store in Redis
+                    for transcript in transcripts:
+                        # Convert datetime objects to ISO format strings before serializing
+                        if 'conference_datetime' in transcript and hasattr(transcript['conference_datetime'], 'isoformat'):
+                            transcript['conference_datetime'] = transcript['conference_datetime'].isoformat()
+                            
+                        raw_key = f"{self.redis.history_client.prefix}raw:{transcript['symbol']}_{transcript['fiscal_year']}_{transcript['fiscal_quarter']}"
+                        self.redis.history_client.set(raw_key, json.dumps(transcript), ex=self.ttl)
+                        self.redis.history_client.push_to_queue(self.redis.history_client.RAW_QUEUE, raw_key)
+                        
+                except Exception as e:
+                    self.logger.error(f"Error processing transcripts for {symbol}: {e}")
+                    continue
+                    
+        except Exception as e:
+            self.logger.error(f"Error in historical transcript processing: {e}")
+    
+    def fetch_live_transcripts(self, target_date=None):
+        """Public method to manually fetch 'live' transcripts for a date"""
+        try:
+            from datetime import datetime
+            import pytz
+            
+            # Use current date if none provided
+            if target_date is None:
+                target_date = datetime.now(pytz.timezone('America/New_York')).date()
+                
+            self.logger.info(f"Manually fetching transcripts for {target_date}")
+            
+            # Fetch transcripts for the date
+            transcripts = self.earnings_call_client.get_transcripts_for_single_date(target_date)
+            
+            if not transcripts:
+                self.logger.info(f"No transcripts found for {target_date}")
+                return 0
+                
+            # Store in Redis live queue
+            count = 0
+            for transcript in transcripts:
+                # Convert datetime objects to ISO format strings before serializing
+                if 'conference_datetime' in transcript and hasattr(transcript['conference_datetime'], 'isoformat'):
+                    transcript['conference_datetime'] = transcript['conference_datetime'].isoformat()
+                    
+                raw_key = f"{self.redis.live_client.prefix}raw:{transcript['symbol']}_{transcript['fiscal_year']}_{transcript['fiscal_quarter']}"
+                self.redis.live_client.set(raw_key, json.dumps(transcript), ex=self.ttl)
+                self.redis.live_client.push_to_queue(self.redis.live_client.RAW_QUEUE, raw_key)
+                count += 1
+                
+            self.last_poll_time = datetime.now(pytz.timezone('America/New_York'))
+            self.logger.info(f"Added {count} transcripts to live queue")
+            return count
+            
+        except Exception as e:
+            self.logger.error(f"Error fetching live transcripts: {e}")
+            return 0
+    
+    def check_status(self):
+        """Check system status"""
+        try:
+            live_prefix = RedisKeys.get_prefixes(self.source_type)['live']
+            
+            return {
+                "live_data": {
+                    "last_poll": self.last_poll_time.isoformat() if self.last_poll_time else None,
+                    "processor_running": self.processor_thread.is_alive() if hasattr(self, 'processor_thread') else False
+                },
+                "redis": {
+                    "live_count": len(self.redis.live_client.client.keys(f"{live_prefix}raw:*")),
+                    "raw_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.RAW_QUEUE, 0, -1)),
+                    "processed_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.PROCESSED_QUEUE, 0, -1))
+                }
+            }
+        except Exception as e:
+            self.logger.error(f"Error checking status: {e}")
+            return None
+    
+    def stop(self):
+        """Stop all processing"""
+        try:
+            # Signal threads to stop
+            self.running = False
+            
+            # Wait for threads to finish
+            for thread in [self.processor_thread, self.returns_thread, self.historical_thread]:
+                if thread and thread.is_alive():
+                    thread.join(timeout=5)
+            
+            self.redis.clear(preserve_processed=True)
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error stopping {self.source_type}: {e}")
+            return False
+
 
 
 class BenzingaNewsManager(DataSourceManager):
@@ -334,8 +516,7 @@ class DataManager:
     def initialize_sources(self):
         self.sources['news'] = BenzingaNewsManager(self.historical_range)
         self.sources['reports'] = ReportsManager(self.historical_range)
-        # Add other sources as needed:
-        # self.sources['transcripts'] = TranscriptsManager(self.historical_range)
+        self.sources['transcripts'] = TranscriptsManager(self.historical_range)
 
     def initialize_neo4j(self):
         """Initialize Neo4j processor"""
