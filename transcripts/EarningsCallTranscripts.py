@@ -79,11 +79,11 @@ class EarningsCallProcessor:
     # Same as inbuilt get_calendar() except conference_date is converted to America/New_York
     def get_earnings_events(self, target_date):
         calendar = get_calendar(target_date)
-        events = []
+        events = []        
         for event in calendar:
-            event.conference_date = event.conference_date.astimezone(ZoneInfo("America/New_York"))
-            # events.append(event.to_dict())
+            event.conference_date = event.conference_date.astimezone(self.ny_tz)
             events.append(event)
+        
         return events
 
 

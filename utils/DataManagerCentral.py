@@ -102,6 +102,10 @@ class TranscriptsManager(DataSourceManager):
     
     def start(self):
         try:
+
+            # Initialize schedule at startup
+            self._initialize_transcript_schedule()
+
             # Start processor thread
             self.processor_thread = threading.Thread(
                 target=self.processor.process_all_transcripts, 
@@ -132,6 +136,50 @@ class TranscriptsManager(DataSourceManager):
             self.logger.error(f"Error starting {self.source_type}: {e}")
             return False
 
+    def _initialize_transcript_schedule(self):
+        """Schedule transcripts for today"""
+        try:
+            # Use Eastern timezone consistently
+            eastern_tz = pytz.timezone('America/New_York')
+            today = datetime.now(eastern_tz).date()
+            
+            # Get events (already in Eastern time) and filter to our universe
+            events = self.earnings_call_client.get_earnings_events(today)
+            universe = set(s.upper() for s in self.redis.get_symbols())
+            relevant = [e for e in events if e.symbol.upper() in universe]
+            
+            if not relevant:
+                return
+                
+            # Set up Redis pipeline and clear previous schedule
+            pipe = self.redis.live_client.client.pipeline()
+            notification_channel = "admin:transcripts:notifications"
+            pipe.delete("admin:transcripts:schedule")
+            
+            # Schedule each relevant event
+            for event in relevant:
+                # Add 30 minutes to conference time for the processing schedule
+                # No timezone conversion needed since events are already in Eastern time
+                conf_date_eastern = event.conference_date
+                process_time = int(conf_date_eastern.timestamp() + 1800)
+                
+                # Create event key and add to schedule
+                event_key = f"{event.symbol}_{event.year}_{event.quarter}"
+                pipe.zadd("admin:transcripts:schedule", {event_key: process_time})
+                
+                # Log with clear human-readable times
+                self.logger.info(f"Scheduled {event_key} - Conference: {conf_date_eastern.strftime('%Y-%m-%d %H:%M:%S %Z')}, Processing: {datetime.fromtimestamp(process_time, eastern_tz).strftime('%Y-%m-%d %H:%M:%S %Z')}")
+                
+                # Publish notification
+                pipe.publish(notification_channel, event_key)
+            
+            # Execute all Redis commands and send final notification
+            pipe.execute()
+            self.redis.live_client.client.publish(notification_channel, "schedule_updated")
+            
+            self.logger.info(f"Scheduled {len(relevant)} transcripts for {today}")
+        except Exception as e:
+            self.logger.error(f"Error scheduling transcripts: {e}")
 
 
 
