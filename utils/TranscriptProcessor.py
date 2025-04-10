@@ -7,15 +7,16 @@ import threading
 from transcripts.EarningsCallTranscripts import EarningsCallProcessor
 from eventtrader.keys import EARNINGS_CALL_API_KEY
 from utils.redis_constants import RedisKeys
+from utils.feature_flags import MAX_TRANSCRIPT_SLEEP_SECONDS
 
 
 class TranscriptProcessor(BaseProcessor):
     """Transcript-specific processor implementation"""
     
-    def __init__(self, event_trader_redis, delete_raw=True, polygon_subscription_delay=None):
+    def __init__(self, event_trader_redis, delete_raw=True, polygon_subscription_delay=None, ttl=None):
         super().__init__(event_trader_redis, delete_raw, polygon_subscription_delay)
         self.event_trader_redis = event_trader_redis
-        
+        self.ttl = ttl or 2 * 24 * 3600  # default to 2 days if not provided
         # Initialize transcript-specific attributes
         self.schedule_key = "admin:transcripts:schedule"
         self.notification_channel = "admin:transcripts:notifications"
@@ -33,10 +34,9 @@ class TranscriptProcessor(BaseProcessor):
         
         # Start scheduling thread
         self.scheduling_thread_running = True
-        self.scheduling_thread = threading.Thread(
-            target=self._run_transcript_scheduling,
-            daemon=True             # Daemon thread exits when main thread exits
-        )
+        
+        # Daemon thread exits when main thread exits
+        self.scheduling_thread = threading.Thread(target=self._run_transcript_scheduling, daemon=True)
         self.scheduling_thread.start()
         self.logger.info("Started transcript scheduling thread")
         
@@ -111,18 +111,73 @@ class TranscriptProcessor(BaseProcessor):
         except Exception as e:
             self.logger.error(f"Error processing due transcripts: {e}")
 
+
+    # Checks if transcript exists either in raw storage (fetched but not processed)
+    # or in the processed queue (already processed and published)
+    def _transcript_exists(self, symbol, conference_datetime):
+        """Check if transcript exists in raw or processed Redis structures"""
+        # Standardize format (safe fallback)
+        if " " in conference_datetime and "T" not in conference_datetime:
+            conference_datetime = conference_datetime.replace(" ", "T")
+
+        key_id = f"{symbol}_{conference_datetime.replace(':', '.')}"
+
+        try:
+            # Raw namespace (live only)
+            raw_ns = RedisKeys.get_key(
+                source_type=RedisKeys.SOURCE_TRANSCRIPTS,
+                key_type=RedisKeys.SUFFIX_RAW,
+                prefix_type=RedisKeys.PREFIX_LIVE
+            )
+            raw_keys = self.live_client.client.keys(f"{raw_ns}*{key_id}*")
+
+            # Processed queues (both live and hist)
+            live_processed = self.live_client.client.lrange(self.live_client.PROCESSED_QUEUE, 0, -1)
+            hist_processed = self.event_trader_redis.history_client.client.lrange(
+                self.event_trader_redis.history_client.PROCESSED_QUEUE, 0, -1
+            )
+
+            found_in_processed = any(k.endswith(key_id) for k in live_processed) or \
+                                any(k.endswith(key_id) for k in hist_processed)
+
+            return len(raw_keys) > 0 or found_in_processed
+        except Exception as e:
+            self.logger.error(f"Error checking transcript existence: {e}")
+            return False # Safer to say it doesn't exist if we can't verify
+
+
+    # def _transcript_exists(self, symbol, conference_datetime):
+    #     """Check if transcript exists in raw or processed Redis structures"""
+    #     key_id = f"{symbol}_{conference_datetime.replace(':', '.')}"
+
+    #     raw_ns = RedisKeys.get_key(
+    #         source_type=RedisKeys.SOURCE_TRANSCRIPTS, 
+    #         key_type=RedisKeys.SUFFIX_RAW,
+    #         prefix_type=RedisKeys.PREFIX_LIVE
+    #     )
+
+    #     raw_keys = self.live_client.client.keys(f"{raw_ns}*{key_id}*")
+
+    #     processed_queue = self.live_client.PROCESSED_QUEUE
+    #     processed_items = self.live_client.client.lrange(processed_queue, 0, -1)
+    #     matching_processed = [k for k in processed_items if k.endswith(key_id)]
+
+    #     return len(raw_keys) > 0 or len(matching_processed) > 0
+
+
+
     def _fetch_and_process_transcript(self, event_key, now_ts):
         """Fetch and process a single transcript"""
         try:
             # Parse event key
-            parts = event_key.split('_')
-            if len(parts) != 3:
+            parts = event_key.split('_', 1)
+            if len(parts) != 2:
                 self.logger.error(f"Invalid event key format: {event_key}")
                 self.live_client.client.zrem(self.schedule_key, event_key)
                 return
             
-            symbol, year, quarter = parts
-            self.logger.info(f"Fetching transcript for {symbol} Q{quarter} {year}")
+            symbol, conference_datetime = parts
+            self.logger.info(f"Fetching transcript for {symbol} at {conference_datetime}")
             
             # Get our universe of companies
             universe_symbols = set(s.upper() for s in self.event_trader_redis.get_symbols())
@@ -132,64 +187,69 @@ class TranscriptProcessor(BaseProcessor):
                 return
             
             # Initialize API client
-            ttl = 2 * 24 * 3600  # 2 days
+            
             earnings_call_client = EarningsCallProcessor(
                 api_key=EARNINGS_CALL_API_KEY,
                 redis_client=self.event_trader_redis,
-                ttl=ttl
+                ttl=self.ttl
             )
-            
-            # Use RedisKeys to properly generate the processed namespace
-            processed_ns = RedisKeys.get_key(
-                source_type=RedisKeys.SOURCE_TRANSCRIPTS, 
-                key_type=RedisKeys.SUFFIX_PROCESSED
-            )
-            processed_pattern = f"{processed_ns}*{symbol}_{year}_{quarter}*"
-            
-            # Count transcripts before fetch
-            transcript_count_before = len(self.live_client.client.keys(processed_pattern))
             
             # Fetch transcript using today's date
-            today = datetime.now(self.ny_tz).date()
-            earnings_call_client.get_transcripts_for_single_date(today)
-            
-            # Check if transcript was found by comparing counts
-            transcript_count_after = len(self.live_client.client.keys(processed_pattern))
-            transcript_found = transcript_count_after > transcript_count_before
-            
+            # today = datetime.now(self.ny_tz).date()
+            # transcripts = earnings_call_client.get_transcripts_for_single_date(today)
+
+            from dateutil import parser as dateutil_parser
+
+            try:
+                conf_date = dateutil_parser.parse(conference_datetime.replace('.', ':')).date()
+                transcripts = earnings_call_client.get_transcripts_for_single_date(conf_date)
+                if not transcripts:
+                    transcripts = earnings_call_client.get_transcripts_for_single_date(datetime.now(self.ny_tz).date())
+            except Exception:
+                transcripts = earnings_call_client.get_transcripts_for_single_date(datetime.now(self.ny_tz).date())
+
+            # Store each transcript in historical Redis immediately
+            if transcripts:
+                for transcript in transcripts:
+                    earnings_call_client.store_transcript_in_redis(transcript, is_live=True)
+
+            transcript_found = self._transcript_exists(symbol, conference_datetime)
+
             if transcript_found:
-                self._handle_transcript_found(event_key, symbol, year, quarter)
+                self._handle_transcript_found(event_key, symbol, conference_datetime)
             else:
-                self._schedule_transcript_retry(event_key, symbol, year, quarter, now_ts)
+                self._schedule_transcript_retry(event_key, symbol, conference_datetime, now_ts)
                 
         except Exception as e:
             self.logger.error(f"Error fetching transcript {event_key}: {e}")
-            # Reschedule with 30-min delay on error (same as original)
+            # Reschedule with 30-min delay on error
             reschedule_time = now_ts + 1800  # 30 minutes later
             self.live_client.client.zadd(self.schedule_key, {event_key: reschedule_time})
 
-    def _handle_transcript_found(self, event_key, symbol, year, quarter):
+
+    def _handle_transcript_found(self, event_key, symbol, conference_datetime):
         """Handle when transcript is successfully found and processed"""
-        self.logger.info(f"Successfully fetched transcript for {symbol} Q{quarter} {year}")
+        self.logger.info(f"Successfully fetched transcript for {symbol} at {conference_datetime}")
         
         # Remove from schedule
         self.live_client.client.zrem(self.schedule_key, event_key)
         
         # Mark as processed
         self.live_client.client.sadd(self.processed_set, event_key)
-        self.live_client.client.expire(self.processed_set, 86400)  # 24 hours TTL
+        self.live_client.client.expire(self.processed_set, self.ttl)  # 2 days default TTL
         
-        # Publish notification (same as original)
+        # Publish notification
         self.live_client.client.publish(self.notification_channel, f"processed:{event_key}")
 
-    def _schedule_transcript_retry(self, event_key, symbol, year, quarter, now_ts):
+
+    def _schedule_transcript_retry(self, event_key, symbol, conference_datetime, now_ts):
         """Schedule transcript for retry when not found"""
-        self.logger.info(f"Transcript not ready for {symbol} Q{quarter} {year}, will retry in 5 minutes")
+        self.logger.info(f"Transcript not ready for {symbol} at {conference_datetime}, will retry in 5 minutes")
         
-        # Use first retry with 5 minutes (as requested)
+        # Use first retry with 5 minutes
         reschedule_time = now_ts + 300  # 5 minutes later
         
-        # Add to schedule (same pattern as _schedule_pending_returns)
+        # Add to schedule
         self.live_client.client.zadd(self.schedule_key, {event_key: reschedule_time})
         
         # Publish notification
@@ -204,7 +264,7 @@ class TranscriptProcessor(BaseProcessor):
             if next_item:
                 # Get exact timestamp when the next transcript is due
                 event_key, next_timestamp = next_item[0]
-                sleep_time = max(0, min(60, next_timestamp - now_ts))  # Cap at 60 seconds
+                sleep_time = max(0, min(MAX_TRANSCRIPT_SLEEP_SECONDS, next_timestamp - now_ts))
                 
                 # Debug log for timestamp conversion
                 scheduled_time = datetime.fromtimestamp(next_timestamp, self.ny_tz)

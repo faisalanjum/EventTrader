@@ -243,36 +243,35 @@ class RedisClient:
         return False  # Should never reach here, but just in case
 
 
-    # Add to utils/redisClasses.py only if strictly necessary
-    def store_transcript(self, transcript, ex=None):
-        """Store transcript in Redis raw queue"""
-        try:
-            # Create identifier from transcript data
-            id_str = f"{transcript['symbol']}_{transcript['fiscal_year']}_{transcript['fiscal_quarter']}"
+    # def store_transcript(self, transcript, ex=None):
+    #     """Store transcript in Redis raw queue"""
+    #     try:
+    #         # Use standardized key generation
+    #         from utils.redis_constants import RedisKeys
             
-            # Format datetime for key
-            if isinstance(transcript['conference_datetime'], str):
-                dt_str = transcript['conference_datetime'].replace(':', '.')
-            else:
-                dt_str = transcript['conference_datetime'].isoformat().replace(':', '.')
+    #         # Create key using RedisKeys utility - just pass whatever's in conference_datetime
+    #         transcript_key = RedisKeys.get_transcript_key_id(
+    #             transcript['symbol'], 
+    #             transcript.get('conference_datetime', '')
+    #         )
                 
-            # Generate storage key
-            storage_key = f"{self.prefix}raw:{id_str}.{dt_str}"
+    #         # Generate storage key
+    #         storage_key = f"{self.prefix}raw:{transcript_key}"
             
-            # Check if already processed
-            processed_key = f"{self.prefix}processed:{id_str}.{dt_str}"
-            if processed_key in self.client.lrange(self.PROCESSED_QUEUE, 0, -1):
-                self.logger.info(f"Skipping duplicate transcript: {id_str}")
-                return False
+    #         # Check if already processed
+    #         processed_key = f"{self.prefix}processed:{transcript_key}"
+    #         if processed_key in self.client.lrange(self.PROCESSED_QUEUE, 0, -1):
+    #             self.logger.info(f"Skipping duplicate transcript: {transcript_key}")
+    #             return False
                 
-            # Store in Redis
-            pipe = self.client.pipeline(transaction=True)
-            pipe.set(storage_key, json.dumps(transcript), ex=ex)
-            pipe.lpush(self.RAW_QUEUE, storage_key)
-            return all(pipe.execute())
-        except Exception as e:
-            self.logger.error(f"Error storing transcript: {e}")
-            return False
+    #         # Store in Redis
+    #         pipe = self.client.pipeline(transaction=True)
+    #         pipe.set(storage_key, json.dumps(transcript), ex=ex)
+    #         pipe.lpush(self.RAW_QUEUE, storage_key)
+    #         return all(pipe.execute())
+    #     except Exception as e:
+    #         self.logger.error(f"Error storing transcript: {e}")
+    #         return False
 
 
 

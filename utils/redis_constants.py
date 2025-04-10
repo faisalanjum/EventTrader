@@ -53,6 +53,35 @@ class RedisKeys:
     def get_pubsub_channel(source_type: str) -> str:
         """Get pubsub channel name for a source"""
         return f"{source_type}:{RedisKeys.PREFIX_LIVE}:{RedisKeys.SUFFIX_PROCESSED}"
+    
+
+    # Only used for transcripts
+    @staticmethod
+    def get_transcript_key_id(symbol: str, conference_datetime) -> str:
+        """Create standardized transcript ID from symbol and datetime"""
+        # Simple string conversion and replace colons with dots
+        dt_str = str(conference_datetime).replace(':', '.')
+        return f"{symbol}_{dt_str}"
+    
+    # Only used for transcripts
+    @staticmethod
+    def parse_transcript_key_id(key_id: str) -> dict:
+        """Parse transcript key ID into symbol and whatever's after the first underscore"""
+        # Split at first underscore
+        parts = key_id.split('_', 1)
+        if len(parts) != 2:
+            return {"symbol": key_id, "conference_datetime": None}
+            
+        symbol = parts[0]
+        dt_str = parts[1]
+        
+        # Replace dots back to colons in case someone needs to parse it
+        dt_str_readable = dt_str.replace('.', ':')
+        
+        return {
+            "symbol": symbol,
+            "conference_datetime": dt_str_readable
+        }
 
 
 class RedisQueues:

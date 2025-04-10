@@ -89,3 +89,7 @@ CHROMADB_PERSIST_DIRECTORY = os.path.abspath(os.path.join(os.path.dirname(__file
 # When equal to or greater than this number, use OpenAI Parallel Embeddings (with rate limiting) for news items instead of Neo4j Internal function 
 OPENAI_EMBED_CUTOFF = 10
 
+# Maximum sleep time (in seconds) for transcript processing thread
+# Higher values reduce CPU usage but may slightly delay processing new notifications
+MAX_TRANSCRIPT_SLEEP_SECONDS = 300  # 5 minutes
+

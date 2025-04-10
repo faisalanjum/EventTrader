@@ -709,7 +709,6 @@ class EarningsCallProcessor:
     def store_transcript_in_redis(self, transcript, is_live=True):
         """
         Store transcript in Redis and add to appropriate queue
-        This method exactly mimics the current behavior in TranscriptsManager
         
         Args:
             transcript (dict): The transcript to store
@@ -723,8 +722,12 @@ class EarningsCallProcessor:
             # Use the appropriate Redis client based on is_live flag
             client = self.redis_client.live_client if is_live else self.redis_client.history_client
             
-            # Create the key in the exact same format as the current implementation
-            transcript_id = f"{transcript['symbol']}_{transcript['fiscal_year']}_{transcript['fiscal_quarter']}"
+            # Generate key using the RedisKeys utility - just pass whatever is in conference_datetime
+            from utils.redis_constants import RedisKeys
+            transcript_id = RedisKeys.get_transcript_key_id(
+                transcript['symbol'], 
+                transcript.get('conference_datetime', '')
+            )
             raw_key = f"{client.prefix}raw:{transcript_id}"
             
             # Log the operation
@@ -733,8 +736,7 @@ class EarningsCallProcessor:
             else:
                 self.logger.info(f"Adding transcript to historical raw queue: {transcript_id}")
                 
-            # Store in Redis exactly as done in current implementation
-            # Use default=str to handle any non-serializable types
+            # Store in Redis
             client.set(raw_key, json.dumps(transcript, default=str), ex=self.ttl)
             client.push_to_queue(client.RAW_QUEUE, raw_key)
             return True

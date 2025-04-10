@@ -45,26 +45,31 @@ class DataSourceManager:
         api_key: str,
         processor_class=None,
         # ttl: int = 7 * 24 * 3600
-        ttl: int = 2 * 24 * 3600
+        ttl: int = 2 * 24 * 3600 # 2 days - Adding this to all 3 processors as well: News, Reports, Transcripts
     ):
         self.source_type = source_type
         self.api_key = api_key
         self.ttl = ttl
         self.date_range = historical_range
         self.running = True
-        
+
         # Set up logger
         self.logger = get_logger(f"{self.__class__.__name__}")
 
         # Initialize Redis and processors
         self.redis = EventTraderRedis(source=self.source_type)        # ex: source_type = news:benzinga
+
+        # Set TTL for all queues for both live and historical clients AFTER Redis init
+        [client.client.expire(queue, self.ttl) for client in [self.redis.live_client, self.redis.history_client] 
+        for queue in [client.RAW_QUEUE, client.PROCESSED_QUEUE, client.FAILED_QUEUE]]
+
         # self.processor = NewsProcessor(self.redis, delete_raw=True)
         self.polygon_subscription_delay = (17 * 60)  # (in seconds) Lower tier subscription has 15 mins delayed data
 
         self.logger.debug(f"Initializing {source_type} manager")
         self.logger.debug(f"Processor class: {processor_class}")
 
-        self.processor = processor_class(self.redis, delete_raw=True,polygon_subscription_delay=self.polygon_subscription_delay) if processor_class else None
+        self.processor = processor_class(self.redis, delete_raw=True,polygon_subscription_delay=self.polygon_subscription_delay, ttl=self.ttl) if processor_class else None
 
         self.logger.debug(f"Processor initialized: {self.processor is not None}")
 
@@ -163,8 +168,8 @@ class TranscriptsManager(DataSourceManager):
                 conf_date_eastern = event.conference_date
                 process_time = int(conf_date_eastern.timestamp() + 1800)
                 
-                # Create event key and add to schedule
-                event_key = f"{event.symbol}_{event.year}_{event.quarter}"
+                # Create event key using the simple string conversion approach
+                event_key = f"{event.symbol}_{str(conf_date_eastern).replace(':', '.')}"
                 pipe.zadd("admin:transcripts:schedule", {event_key: process_time})
                 
                 # Log with clear human-readable times

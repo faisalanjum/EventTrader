@@ -9,11 +9,12 @@ from utils.market_session import MarketSessionClassifier
 class NewsProcessor(BaseProcessor):
     """News-specific processor implementation"""
     
-    def __init__(self, event_trader_redis, delete_raw: bool = True, polygon_subscription_delay: int = None):
+    def __init__(self, event_trader_redis, delete_raw: bool = True, polygon_subscription_delay: int = None, ttl=None):
         super().__init__(event_trader_redis, delete_raw, polygon_subscription_delay)
         # Any news-specific initialization can go here
         # self.market_session = MarketSessionClassifier() 
-
+        self.ttl = ttl
+        
     def process_all_news(self):
         """Maintain original method name for backward compatibility"""
         return self.process_all_items()
