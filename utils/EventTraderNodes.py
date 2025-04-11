@@ -9,28 +9,33 @@ import pandas as pd
 
 # Import node types from XBRLClasses but avoid circular imports
 from XBRL.xbrl_core import NodeType, RelationType
+from abc import ABC, abstractmethod
+
 
 # Base Neo4jNode class definition
-@dataclass
-class Neo4jNode:
+class Neo4jNode(ABC):
     """Base class for Neo4j nodes"""
     
     @property
+    @abstractmethod
     def node_type(self) -> NodeType:
         """Return node type"""
         raise NotImplementedError("Subclasses must implement node_type")
     
     @property
+    @abstractmethod
     def id(self) -> str:
         """Return node ID"""
         raise NotImplementedError("Subclasses must implement id")
     
     @property
+    @abstractmethod
     def properties(self) -> Dict[str, Any]:
         """Return node properties"""
         raise NotImplementedError("Subclasses must implement properties")
     
     @classmethod
+    @abstractmethod
     def from_neo4j(cls, props: Dict[str, Any]) -> Neo4jNode:
         """Create instance from Neo4j properties"""
         raise NotImplementedError("Subclasses must implement from_neo4j")
@@ -1100,3 +1105,220 @@ class DateNode(Neo4jNode):
                 setattr(date_node, field, props[field])
                 
         return date_node
+    
+
+
+#### Transcripts related classes
+
+@dataclass
+class TranscriptNodeData:
+    """Data container for transcript node data"""
+    
+    # Required fields
+    id: str                           # Unique transcript ID (e.g., "DAL_2025_1")
+    symbol: str                       # Ticker symbol
+    company_name: str                 # Full company name
+    conference_datetime: str          # ISO format datetime
+    fiscal_quarter: int               # Required fiscal quarter
+    fiscal_year: int                  # Required fiscal year
+    
+    # Optional fields
+    formType: str = ""                # Type of transcript (e.g., "TRANSCRIPT_Q1") 
+    calendar_quarter: Optional[int] = None
+    calendar_year: Optional[int] = None
+    created: Optional[str] = None     # ISO datetime for creation
+    updated: Optional[str] = None     # ISO datetime for update
+    speakers: Dict[str, str] = field(default_factory=dict)
+
+
+class TranscriptNode(Neo4jNode):
+    """Transcript node for earnings call transcripts"""
+    
+    def __init__(self, id, symbol, company_name, conference_datetime, fiscal_quarter, fiscal_year, 
+                 formType="", calendar_quarter=None, calendar_year=None, created=None, updated=None, speakers=None):
+        # Create data container
+        self.data = TranscriptNodeData(
+            id=id,
+            symbol=symbol,
+            company_name=company_name,
+            conference_datetime=conference_datetime,
+            fiscal_quarter=fiscal_quarter,
+            fiscal_year=fiscal_year,
+            formType=formType,
+            calendar_quarter=calendar_quarter,
+            calendar_year=calendar_year,
+            created=created,
+            updated=updated,
+            speakers=speakers or {}
+        )
+    
+    @property
+    def id(self) -> str:
+        return self.data.id
+        
+    @property
+    def symbol(self) -> str:
+        return self.data.symbol
+        
+    @property
+    def company_name(self) -> str:
+        return self.data.company_name
+        
+    @property
+    def conference_datetime(self) -> str:
+        return self.data.conference_datetime
+        
+    @property
+    def fiscal_quarter(self) -> int:
+        return self.data.fiscal_quarter
+        
+    @property
+    def fiscal_year(self) -> int:
+        return self.data.fiscal_year
+        
+    @property
+    def formType(self) -> str:
+        return self.data.formType
+        
+    @formType.setter
+    def formType(self, value):
+        self.data.formType = value
+        
+    @property
+    def calendar_quarter(self) -> Optional[int]:
+        return self.data.calendar_quarter
+        
+    @calendar_quarter.setter
+    def calendar_quarter(self, value):
+        self.data.calendar_quarter = value
+        
+    @property
+    def calendar_year(self) -> Optional[int]:
+        return self.data.calendar_year
+        
+    @calendar_year.setter
+    def calendar_year(self, value):
+        self.data.calendar_year = value
+        
+    @property
+    def created(self) -> Optional[str]:
+        return self.data.created
+        
+    @created.setter
+    def created(self, value):
+        self.data.created = value
+        
+    @property
+    def updated(self) -> Optional[str]:
+        return self.data.updated
+        
+    @updated.setter
+    def updated(self, value):
+        self.data.updated = value
+        
+    @property
+    def speakers(self) -> Dict[str, str]:
+        return self.data.speakers
+        
+    @speakers.setter
+    def speakers(self, value):
+        self.data.speakers = value
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.TRANSCRIPT
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {
+            "id": self.id,
+            "symbol": self.symbol,
+            "company_name": self.company_name,
+            "conference_datetime": self.conference_datetime,
+            "fiscal_quarter": self.fiscal_quarter,
+            "fiscal_year": self.fiscal_year
+        }
+        
+        # Add optional string fields if they exist
+        if self.formType:
+            props["formType"] = self.formType
+            
+        # Add optional integer fields if they exist    
+        if self.calendar_quarter is not None:
+            props["calendar_quarter"] = self.calendar_quarter
+        if self.calendar_year is not None:
+            props["calendar_year"] = self.calendar_year
+            
+        # Add datetime fields if present
+        if self.created:
+            props["created"] = self.created
+        if self.updated:
+            props["updated"] = self.updated
+            
+        # Add complex fields as JSON strings
+        if self.speakers:
+            props["speakers"] = json.dumps(self.speakers)
+            
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'TranscriptNode':
+        # Check required fields
+        required_fields = ['id', 'symbol', 'company_name', 'conference_datetime', 'fiscal_quarter', 'fiscal_year']
+        for field in required_fields:
+            if field not in props:
+                raise ValueError(f"Missing required field '{field}' for TranscriptNode")
+        
+        # Convert integer fields if they're stored as strings
+        fiscal_quarter = props['fiscal_quarter']
+        fiscal_year = props['fiscal_year']
+        
+        if isinstance(fiscal_quarter, str):
+            fiscal_quarter = int(fiscal_quarter)
+        if isinstance(fiscal_year, str):
+            fiscal_year = int(fiscal_year)
+            
+        # Create instance with required fields
+        instance = cls(
+            id=props["id"],
+            symbol=props["symbol"],
+            company_name=props["company_name"],
+            conference_datetime=props["conference_datetime"],
+            fiscal_quarter=fiscal_quarter,
+            fiscal_year=fiscal_year
+        )
+        
+        # Set optional string fields
+        if "formType" in props:
+            instance.formType = props["formType"]
+            
+        # Set optional integer fields with proper conversion
+        int_fields = ['calendar_quarter', 'calendar_year']
+        for field in int_fields:
+            if field in props and props[field] is not None:
+                try:
+                    # Convert to int if it's a string
+                    if isinstance(props[field], str):
+                        setattr(instance, field, int(props[field]))
+                    else:
+                        setattr(instance, field, props[field])
+                except (ValueError, TypeError):
+                    # Skip if conversion fails
+                    pass
+                    
+        # Set string fields
+        for field in ['created', 'updated']:
+            if field in props and props[field]:
+                setattr(instance, field, props[field])
+                
+        # Parse speakers JSON if available
+        if "speakers" in props and props["speakers"]:
+            try:
+                instance.speakers = json.loads(props["speakers"])
+            except:
+                instance.speakers = {}
+                
+        return instance
+
+print("✅ TranscriptNode definition at line 1109 loaded.")
+

@@ -95,6 +95,14 @@ class NodeType(Enum):
     FINANCIAL_DATA = "FinancialStatementContent"  # Financial statement data points
     FILING_TEXT = "FilingTextContent"  # Full filing text content
 
+    # Transcript nodes
+    TRANSCRIPT = "Transcript"  # Earnings call transcript
+    PREPARED_REMARK = "PreparedRemark"  # Prepared remarks section of transcript
+    QUESTION_ANSWER = "QuestionAnswer"  # Q&A section of transcript
+    QA_EXCHANGE = "QAExchange"  # Individual Q&A exchange
+    FULL_TRANSCRIPT_TEXT = "FullTranscriptText"  # Full text of transcript
+
+
 
 
 
@@ -144,6 +152,14 @@ class RelationType(Enum):
     HAS_EXHIBIT = "HAS_EXHIBIT"     # Report -> ExhibitContent relationship
     HAS_FINANCIAL_STATEMENT = "HAS_FINANCIAL_STATEMENT"  # Report -> FinancialStatementContent relationship
     HAS_FILING_TEXT = "HAS_FILING_TEXT"  # Report -> FilingTextContent relationship
+
+        # Transcript relationships
+    HAS_TRANSCRIPT = "HAS_TRANSCRIPT"  # Company -> Transcript relationship
+    HAS_PREPARED_REMARKS = "HAS_PREPARED_REMARKS"  # Transcript -> PreparedRemark relationship
+    HAS_QA_SECTION = "HAS_QA_SECTION"  # Transcript -> QuestionAnswer relationship
+    HAS_QA_EXCHANGE = "HAS_QA_EXCHANGE"  # Transcript/QuestionAnswer -> QAExchange relationship
+    HAS_FULL_TEXT = "HAS_FULL_TEXT"  # Transcript -> FullTranscriptText relationship
+
 
 
 class ReportElementClassifier:

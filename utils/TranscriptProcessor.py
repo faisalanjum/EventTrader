@@ -140,7 +140,11 @@ class TranscriptProcessor(BaseProcessor):
             found_in_processed = any(k.endswith(key_id) for k in live_processed) or \
                                 any(k.endswith(key_id) for k in hist_processed)
 
-            return len(raw_keys) > 0 or found_in_processed
+            # return len(raw_keys) > 0 or found_in_processed
+
+            # Only check processed queue since we also need to remove from raw queue
+            return found_in_processed
+            
         except Exception as e:
             self.logger.error(f"Error checking transcript existence: {e}")
             return False # Safer to say it doesn't exist if we can't verify
@@ -178,7 +182,14 @@ class TranscriptProcessor(BaseProcessor):
             
             symbol, conference_datetime = parts
             self.logger.info(f"Fetching transcript for {symbol} at {conference_datetime}")
-            
+
+            # First check if transcript already exists in processed queue
+            transcript_found = self._transcript_exists(symbol, conference_datetime)
+            if transcript_found:
+                self.logger.info(f"Transcript {event_key} for {symbol} at {conference_datetime} already exists in processed queue, sending to _handle_transcript_found")
+                self._handle_transcript_found(event_key, symbol, conference_datetime)                
+                return
+
             # Get our universe of companies
             universe_symbols = set(s.upper() for s in self.event_trader_redis.get_symbols())
             if symbol.upper() not in universe_symbols:
@@ -237,9 +248,41 @@ class TranscriptProcessor(BaseProcessor):
         # Mark as processed
         self.live_client.client.sadd(self.processed_set, event_key)
         self.live_client.client.expire(self.processed_set, self.ttl)  # 2 days default TTL
-        
+
+        # NOT WORKING - but since ttl is 2 days, it will be removed eventually
+        # Remove any lingering raw keys if they exist
+        if " " in conference_datetime and "T" not in conference_datetime:
+            conference_datetime = conference_datetime.replace(" ", "T")
+
+        key_id = f"{symbol}_{conference_datetime.replace(':', '.')}"
+
+        try:
+            # Raw namespace (live only)
+            raw_ns = RedisKeys.get_key(
+                source_type=RedisKeys.SOURCE_TRANSCRIPTS,
+                key_type=RedisKeys.SUFFIX_RAW,
+                prefix_type=RedisKeys.PREFIX_LIVE
+            )
+
+
+            # Try exact match first
+            raw_key = f"{raw_ns}:{key_id}"
+            if self.live_client.client.exists(raw_key):
+                self.live_client.client.delete(raw_key)
+                self.logger.info(f"Removed raw key for {symbol} at {conference_datetime}")
+            else:
+                # Fall back to pattern matching if exact match not found
+                raw_keys = self.live_client.client.keys(f"{raw_ns}:{key_id}*")
+                if raw_keys:
+                    self.live_client.client.delete(*raw_keys)
+                    self.logger.info(f"Removed {len(raw_keys)} raw keys with pattern matching for {symbol} at {conference_datetime}")
+        except Exception as e:
+            self.logger.error(f"Error removing raw keys: {e}")
+
+
         # Publish notification
         self.live_client.client.publish(self.notification_channel, f"processed:{event_key}")
+
 
 
     def _schedule_transcript_retry(self, event_key, symbol, conference_datetime, now_ts):

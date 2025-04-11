@@ -310,7 +310,7 @@ class ReturnsProcessor:
             
 
 
-
+    # I think this is working for both news and reports
     def _publish_news_update(self, namespace, news_id):
         """Publish a news update to the appropriate channel"""
         try:
@@ -318,6 +318,17 @@ class ReturnsProcessor:
             channel = RedisKeys.get_returns_keys(self.source_type)[namespace]
             self.logger.debug(f"Publishing to channel {channel}: {news_id}")
             self.live_client.client.publish(channel, news_id)
+            return True
+        except Exception as e:
+            self.logger.error(f"Error publishing to channel: {e}")
+            return False
+
+    def publish_transcript_update(self, namespace, transcript_id):
+        """Publish a transcript update to the appropriate channel"""
+        try:
+            channel = RedisKeys.get_returns_keys(RedisKeys.SOURCE_TRANSCRIPTS)[namespace]
+            self.logger.debug(f"Publishing to channel {channel}: {transcript_id}")
+            self.live_client.client.publish(channel, transcript_id)
             return True
         except Exception as e:
             self.logger.error(f"Error publishing to channel: {e}")

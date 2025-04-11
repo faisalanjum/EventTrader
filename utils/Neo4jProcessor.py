@@ -33,7 +33,8 @@ from utils.redisClasses import EventTraderRedis, RedisClient
 from utils.EventTraderNodes import (
     NewsNode, CompanyNode, SectorNode, 
     IndustryNode, MarketIndexNode, ReportNode,
-    ExtractedSectionContent, ExhibitContent, FinancialStatementContent, FilingTextContent
+    ExtractedSectionContent, ExhibitContent, FinancialStatementContent, FilingTextContent,
+    TranscriptNode
 )
 
 # Internal Imports - Date Utilities
@@ -317,7 +318,7 @@ class Neo4jProcessor:
 # endregion
 
 
-#### ISSUE IS None of Batch processing is working since data from resis queue comes in as single items!
+#### ISSUE IS None of Batch processing is working since data from redis queue comes in as single items- Not entirely True sometimes when you restart the system and there are items lined up, it uses batch processing.
 
 # region: Primary Public Methods - # Methods like process_news_to_neo4j, process_reports_to_neo4j, process_pubsub_item, process_with_pubsub, stop_pubsub_processing
 
@@ -615,7 +616,8 @@ class Neo4jProcessor:
 
                 else:
                     logger.warning(f"No data found for news {item_id}")
-            else:  # report
+            
+            elif content_type == 'report':    
                 # Get the report data using standard key format
                 key = RedisKeys.get_key(
                     source_type=RedisKeys.SOURCE_REPORTS,
@@ -652,7 +654,40 @@ class Neo4jProcessor:
 
                 else:
                     logger.warning(f"No data found for report {item_id}")
+
+
+            elif content_type == 'transcript':
+                # Get the transcript data using standard key format
+                key = RedisKeys.get_key(
+                    source_type=RedisKeys.SOURCE_TRANSCRIPTS,
+                    key_type=namespace,
+                    identifier=item_id
+                )
                 
+                # Get and process the transcript
+                raw_data = self.event_trader_redis.history_client.get(key)
+                if raw_data:
+                    transcript_data = json.loads(raw_data)
+                    
+                    # Process transcript with deduplication
+                    success = self._process_deduplicated_transcript(
+                        transcript_id=item_id,
+                        transcript_data=transcript_data
+                    )
+                    
+                    logger.info(f"Successfully processed transcript {item_id}")
+
+                    # Delete key if it's from withreturns namespace
+                    if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
+                        try:
+                            self.event_trader_redis.history_client.client.delete(key)
+                            logger.info(f"Deleted processed withreturns key: {key}")
+                        except Exception as e:
+                            logger.warning(f"Error deleting key {key}: {e}")
+
+                else:
+                    logger.warning(f"No data found for transcript {item_id}")
+
         except Exception as e:
             logger.error(f"Error processing {content_type} update for {item_id}: {e}")
 
@@ -677,7 +712,7 @@ class Neo4jProcessor:
     # ToDo: is designed to run indefinitely, so it will block the main thread. You need to handle this appropriately.
     def process_with_pubsub(self):
         """
-        Process news and reports from Redis to Neo4j using PubSub for immediate notification.
+        Process news, reports, and transcripts from Redis to Neo4j using PubSub for immediate notification.
         Non-blocking and highly efficient compared to polling.
         """
         logger.info("Starting event-driven Neo4j processing")
@@ -708,7 +743,14 @@ class Neo4jProcessor:
         report_withoutreturns_channel = report_returns_keys['withoutreturns']
         pubsub.subscribe(report_withreturns_channel, report_withoutreturns_channel)
         logger.info(f"Subscribed to report channels: {report_withreturns_channel}, {report_withoutreturns_channel}")
-        
+
+        # Subscribe to transcript channels using the same RedisKeys methods
+        transcript_returns_keys = RedisKeys.get_returns_keys(RedisKeys.SOURCE_TRANSCRIPTS)
+        transcript_withreturns_channel = transcript_returns_keys['withreturns']
+        transcript_withoutreturns_channel = transcript_returns_keys['withoutreturns']
+        pubsub.subscribe(transcript_withreturns_channel, transcript_withoutreturns_channel)
+        logger.info(f"Subscribed to transcript channels: {transcript_withreturns_channel}, {transcript_withoutreturns_channel}")
+
         # Control flag
         self.pubsub_running = True
 
@@ -720,6 +762,8 @@ class Neo4jProcessor:
         # Process any existing items first (one-time batch processing)
         self.process_news_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
         self.process_reports_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
+        self.process_transcripts_to_neo4j(batch_size=5, max_items=None, include_without_returns=True)
+
         
         # Event-driven processing loop
         while self.pubsub_running:
@@ -741,6 +785,9 @@ class Neo4jProcessor:
                     elif channel.startswith(RedisKeys.SOURCE_REPORTS):
                         # Process report
                         self._process_pubsub_item(channel, item_id, 'report')
+                    elif channel.startswith(RedisKeys.SOURCE_TRANSCRIPTS):
+                        # Process transcript
+                        self._process_pubsub_item(channel, item_id, 'transcript')
                 
                 # Periodically check for items that might have been missed (every 60 seconds)
                 # This is a safety net, not the primary mechanism
@@ -2810,7 +2857,8 @@ class Neo4jProcessor:
         Returns:
             dict: results keyed by item type with counts
         """
-        results = {"news": 0, "reports": 0, "dates": 0}
+        results = {"news": 0, "reports": 0, "transcripts": 0, "dates": 0}
+
         
         try:
             # Extract midnight operations to separate method
@@ -2912,6 +2960,61 @@ class Neo4jProcessor:
 
 
                                     break
+            
+                # 3. TRANSCRIPTS RECONCILIATION
+                try:
+                    for namespace in ['withreturns', 'withoutreturns']:
+                        pattern = RedisKeys.get_key(
+                            source_type=RedisKeys.SOURCE_TRANSCRIPTS,
+                            key_type=namespace,
+                            identifier="*"
+                        )
+                        
+                        # Get transcript IDs from Redis
+                        redis_transcript_ids = set()
+                        for key in self.event_trader_redis.history_client.client.scan_iter(pattern):
+                            transcript_id = key.split(':')[-1]  # Get the entire ID portion
+                            redis_transcript_ids.add(transcript_id)
+                        
+                        if not redis_transcript_ids:
+                            continue
+                            
+                        # Process in batches of 1000
+                        for batch in [list(redis_transcript_ids)[i:i+1000] for i in range(0, len(redis_transcript_ids), 1000)]:
+                            # Query Neo4j for these transcript IDs
+                            cypher = "MATCH (t:Transcript) WHERE t.id IN $ids RETURN t.id as id"
+                            result = session.run(cypher, ids=batch)
+                            neo4j_transcript_ids = {record["id"] for record in result}
+                            
+                            # Find missing transcript IDs
+                            missing_ids = set(batch) - neo4j_transcript_ids
+                            
+                            # Process missing items
+                            for transcript_id in list(missing_ids)[:max_items_per_type]:
+                                # Try both namespaces
+                                for ns in ['withreturns', 'withoutreturns']:
+                                    key = RedisKeys.get_key(
+                                        source_type=RedisKeys.SOURCE_TRANSCRIPTS,
+                                        key_type=ns,
+                                        identifier=transcript_id
+                                    )
+                                    raw_data = self.event_trader_redis.history_client.get(key)
+                                    if raw_data:
+                                        transcript_data = json.loads(raw_data)
+                                        success = self._process_deduplicated_transcript(transcript_id, transcript_data)
+                                        results["transcripts"] += 1
+
+                                        # Delete key if it's from withreturns namespace
+                                        if success and ns == 'withreturns':
+                                            try:
+                                                self.event_trader_redis.history_client.client.delete(key)
+                                                logger.debug(f"Deleted reconciled withreturns key: {key}")
+                                            except Exception as e:
+                                                logger.warning(f"Failed to delete key {key}: {e}")
+
+                                        break
+                except Exception as e:
+                    logger.error(f"Error during transcript reconciliation: {e}")
             
             logger.info(f"Reconciliation completed: {results}")
             return results
@@ -3506,7 +3609,228 @@ class Neo4jProcessor:
 
 
 
+########################### Transcripts Related Functions ##################################
+    def process_transcripts_to_neo4j(self, batch_size=5, max_items=None, include_without_returns=True) -> bool:
+        """
+        Process transcript items from Redis to Neo4j.
+        Minimal v1 implementation following news/report pattern.
+        """
+        from utils.redis_constants import RedisKeys
 
+        try:
+            if not self.manager:
+                if not self.connect():
+                    logger.error("Cannot connect to Neo4j")
+                    return False
+
+            if not hasattr(self, 'event_trader_redis') or not self.event_trader_redis or not self.event_trader_redis.history_client:
+                logger.warning("No Redis history client available for transcript processing")
+                return False
+
+            # Get withreturns keys
+            withreturns_pattern = RedisKeys.get_key(
+                source_type=RedisKeys.SOURCE_TRANSCRIPTS,
+                key_type=RedisKeys.SUFFIX_WITHRETURNS,
+                identifier="*"
+            )
+            withreturns_keys = list(self.event_trader_redis.history_client.client.scan_iter(match=withreturns_pattern))
+            logger.info(f"Found {len(withreturns_keys)} transcripts with returns")
+
+            # Get withoutreturns keys
+            withoutreturns_keys = []
+            if include_without_returns:
+                withoutreturns_pattern = RedisKeys.get_key(
+                    source_type=RedisKeys.SOURCE_TRANSCRIPTS,
+                    key_type=RedisKeys.SUFFIX_WITHOUTRETURNS,
+                    identifier="*"
+                )
+                withoutreturns_keys = list(self.event_trader_redis.history_client.client.scan_iter(match=withoutreturns_pattern))
+                logger.info(f"Found {len(withoutreturns_keys)} transcripts without returns")
+
+            # Combine keys
+            all_keys = withreturns_keys + withoutreturns_keys
+            if not all_keys:
+                logger.info("No transcript keys found to process")
+                return True
+
+            if max_items:
+                all_keys = all_keys[:max_items]
+
+            total = len(all_keys)
+            processed = 0
+            failed = 0
+
+            for i in range(0, total, batch_size):
+                batch = all_keys[i:i + batch_size]
+                logger.info(f"Processing batch {i // batch_size + 1}, items {i + 1}–{i + len(batch)} of {total}")
+
+                for key in batch:
+                    try:
+                        raw = self.event_trader_redis.history_client.get(key)
+                        if not raw:
+                            logger.warning(f"No data found for key {key}")
+                            continue
+
+                        data = json.loads(raw)
+                        transcript_id = data.get("id") or key.split(":")[-1]
+                        namespace = key.split(":")[1] if "withreturns" in key else ""
+
+                        success = self._process_deduplicated_transcript(transcript_id, data)
+                        if success:
+                            processed += 1
+                            if namespace == "withreturns":
+                                try:
+                                    self.event_trader_redis.history_client.client.delete(key)
+                                    logger.info(f"Deleted processed withreturns key: {key}")
+                                except Exception as e:
+                                    logger.warning(f"Failed to delete key {key}: {e}")
+                        else:
+                            failed += 1
+                    except Exception as e:
+                        logger.error(f"Failed to process key {key}: {e}")
+                        failed += 1
+
+            logger.info(f"Transcript processing complete: {processed} success, {failed} failed")
+            return processed > 0 or failed == 0
+
+        except Exception as e:
+            logger.error(f"Critical error in process_transcripts_to_neo4j: {e}")
+            return False
+
+
+
+    def _process_deduplicated_transcript(self, transcript_id, transcript_data):
+        """
+        Process transcript data with deduplication and relationship generation.
+        """
+        logger.debug(f"Processing deduplicated transcript {transcript_id}")
+        try:
+            transcript_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps = \
+                self._prepare_transcript_data(transcript_id, transcript_data)
+
+            return self._execute_transcript_database_operations(
+                transcript_id, transcript_node, valid_symbols,
+                company_params, sector_params, industry_params, market_params, timestamps
+            )
+        except Exception as e:
+            logger.error(f"Error processing transcript {transcript_id}: {e}")
+            return False
+
+
+
+    def _prepare_transcript_data(self, transcript_id, transcript_data):
+        """
+        Prepare transcript data for processing, extracting necessary information.
+
+        Returns:
+            tuple: (transcript_node, valid_symbols, company_params, sector_params, 
+                    industry_params, market_params, timestamps)
+        """
+        # Get ticker to CIK mappings from universe data
+        universe_data = self._get_universe()
+        ticker_to_cik = {}
+        for symbol, data in universe_data.items():
+            cik = data.get('cik', '').strip()
+            if cik and cik.lower() not in ['nan', 'none', '']:
+                ticker_to_cik[symbol.upper()] = str(cik).zfill(10)
+
+        # Create TranscriptNode
+        transcript_node = self._create_transcript_node_from_data(transcript_id, transcript_data)
+
+        # Extract symbols
+        symbols = self._extract_symbols_from_data(transcript_data)
+
+        # Timestamps
+        created_at = parse_date(transcript_data.get('created')) if transcript_data.get('created') else None
+        updated_at = parse_date(transcript_data.get('updated')) if transcript_data.get('updated') else None
+        filed_str = created_at.isoformat() if created_at else ""
+        updated_str = updated_at.isoformat() if updated_at else filed_str
+
+        # Prepare relationship params
+        valid_symbols, company_params, sector_params, industry_params, market_params = self._prepare_entity_relationship_params(
+            data_item=transcript_data,
+            symbols=symbols,
+            universe_data=universe_data,
+            ticker_to_cik=ticker_to_cik,
+            timestamp=filed_str
+        )
+
+        timestamps = (created_at, updated_at, filed_str, updated_str)
+        return transcript_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps
+
+
+    def _execute_transcript_database_operations(self, transcript_id, transcript_node, valid_symbols,
+                                                company_params, sector_params, industry_params, market_params, timestamps):
+        """
+        Execute all database operations for a transcript.
+        """
+        try:
+            # 1. Merge the Transcript node
+            self.manager.merge_nodes([transcript_node])
+            logger.info(f"Merged transcript node: {transcript_id}")
+
+            # 2. Create HAS_TRANSCRIPT relationship from Company to Transcript
+            primary_symbol = transcript_node.symbol.upper()
+            universe_data = self._get_universe()
+            cik = universe_data.get(primary_symbol, {}).get("cik", "").strip().zfill(10)
+
+            if cik:
+                self.manager.create_relationships(
+                    source_label="Company",
+                    source_id_field="cik",
+                    source_id_value=cik,
+                    target_label="Transcript",
+                    target_match_clause="{id: '" + transcript_id + "'}",
+                    rel_type="HAS_TRANSCRIPT",
+                    params=[{"properties": {}}]
+                )
+                logger.info(f"Created HAS_TRANSCRIPT relationship for {primary_symbol} ({cik})")
+
+            # 3. Create INFLUENCES relationships
+            with self.manager.driver.session() as session:
+                self._create_influences_relationships(session, transcript_id, "Transcript", "Company", company_params)
+                self._create_influences_relationships(session, transcript_id, "Transcript", "Sector", sector_params)
+                self._create_influences_relationships(session, transcript_id, "Transcript", "Industry", industry_params)
+                self._create_influences_relationships(session, transcript_id, "Transcript", "MarketIndex", market_params)
+
+            return True
+
+        except Exception as e:
+            logger.error(f"Error executing DB ops for transcript {transcript_id}: {e}")
+            return False
+
+
+    def _create_transcript_node_from_data(self, transcript_id, transcript_data):
+        # TranscriptNode is now imported at the top of the file
+        
+        def safe_int(val, default=0):
+            try:
+                return int(val)
+            except (ValueError, TypeError):
+                return default
+
+        def safe_dict(val):
+            if isinstance(val, dict):
+                return val
+            try:
+                return json.loads(val)
+            except:
+                return {}
+
+        return TranscriptNode(
+            id=transcript_id,
+            symbol=transcript_data.get("symbol", ""),
+            company_name=transcript_data.get("company_name", ""),
+            conference_datetime=transcript_data.get("conference_datetime", ""),
+            fiscal_quarter=safe_int(transcript_data.get("fiscal_quarter")),
+            fiscal_year=safe_int(transcript_data.get("fiscal_year")),
+            formType=transcript_data.get("formType", ""),
+            calendar_quarter=transcript_data.get("calendar_quarter"),
+            calendar_year=transcript_data.get("calendar_year"),
+            created=transcript_data.get("created"),
+            updated=transcript_data.get("updated"),
+            speakers=safe_dict(transcript_data.get("speakers", {}))
+        )
 
 
 
@@ -3681,8 +4005,63 @@ def process_report_data(batch_size=100, max_items=None, verbose=False, include_w
         logger.info("Report processing completed")
 
 
+def process_transcript_data(batch_size=5, max_items=None, verbose=False, include_without_returns=True):
+    """
+    Process transcript data from Redis into Neo4j
+    
+    Args:
+        batch_size: Number of transcript items to process in each batch
+        max_items: Maximum number of transcript items to process. If None, process all items.
+        verbose: Whether to enable verbose logging
+        include_without_returns: Whether to process transcripts from the withoutreturns namespace
+    """
+    processor = None
+    try:
+        # Set up logging for this run
+        if verbose:
+            logging.basicConfig(level=logging.INFO, 
+                               format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        
+        # Initialize Redis client for transcript data (uses the same Redis as news/reports)
+        from utils.redisClasses import EventTraderRedis
+        redis_client = EventTraderRedis(source='news')
+        logger.info("Initialized Redis client for transcript data")
+        
+        # Initialize Neo4j processor with the Redis client
+        processor = Neo4jProcessor(event_trader_redis=redis_client)
+        if not processor.connect():
+            logger.error("Cannot connect to Neo4j")
+            return False
+            
+        # Make sure Neo4j is initialized first
+        if not processor.is_initialized():
+            logger.warning("Neo4j not initialized. Initializing now...")
+            # Use the dedicated initializer to ensure market hierarchy is created
+            if not init_neo4j():
+                logger.error("Neo4j initialization failed, cannot process transcripts")
+                return False
+        
+        # Process transcript data
+        logger.info(f"Processing transcript data to Neo4j with batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns}...")
+        success = processor.process_transcripts_to_neo4j(batch_size, max_items, include_without_returns)
+        
+        if success:
+            logger.info("Transcript data processing completed successfully")
+        else:
+            logger.error("Transcript data processing failed")
+            
+        return success
+        
+    except Exception as e:
+        logger.error(f"Transcript data processing error: {str(e)}")
+        return False
+    
+    finally:
+        if processor:
+            processor.close()
+        logger.info("Transcript processing completed")
 
-
+        
 
 
 if __name__ == "__main__":
