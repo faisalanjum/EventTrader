@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional, Any, Type
+from typing import List, Dict, Optional, Any, Type, Union
 from datetime import datetime
 import json
 from enum import Enum
@@ -1320,5 +1320,147 @@ class TranscriptNode(Neo4jNode):
                 
         return instance
 
-print("✅ TranscriptNode definition at line 1109 loaded.")
+
+class PreparedRemarkNode(Neo4jNode):
+    """Node for prepared remarks section of a transcript"""
+    
+    def __init__(self, id: str, content: Optional[Union[str, List[str]]] = None):
+        self._id = id
+        self.content = content
+
+    @property
+    def id(self) -> str:
+        """Return node ID"""
+        return self._id
+
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.PREPARED_REMARK
+
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {"id": self.id}
+        if self.content:
+            try:
+                if isinstance(self.content, (list, dict)):
+                    props["content"] = json.dumps(self.content)
+                else:
+                    props["content"] = self.content
+            except Exception as e:
+                # Fallback to string representation if JSON serialization fails
+                props["content"] = str(self.content)
+        return props
+
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'PreparedRemarkNode':
+        if "id" not in props:
+            raise ValueError("Missing required field 'id' for PreparedRemarkNode")
+            
+        content = None
+        if "content" in props and props["content"]:
+            try:
+                content = json.loads(props["content"])
+            except:
+                content = props["content"]
+        return cls(id=props["id"], content=content)
+
+
+class FullTranscriptTextNode(Neo4jNode):
+    """Node for full transcript text content"""
+    
+    def __init__(self, id: str, content: Optional[str] = None):
+        self._id = id
+        self.content = content
+
+    @property
+    def id(self) -> str:
+        """Return node ID"""
+        return self._id
+
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.FULL_TRANSCRIPT
+
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {"id": self.id}
+        if self.content:
+            # For very long content, consider truncation if needed
+            if len(self.content) > 1000000:  # Arbitrary limit of 1MB
+                props["content"] = self.content[:1000000] + "... [truncated]"
+            else:
+                props["content"] = self.content
+        return props
+
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'FullTranscriptTextNode':
+        if "id" not in props:
+            raise ValueError("Missing required field 'id' for FullTranscriptTextNode")
+            
+        return cls(id=props["id"], content=props.get("content"))
+
+
+class QuestionAnswerNode(Neo4jNode):
+    """Node for question and answer section of a transcript"""
+    
+    def __init__(self, id: str, content: Optional[Union[str, List[str]]] = None, 
+                 speaker_roles: Optional[Dict[str, str]] = None):
+        self._id = id
+        self.content = content
+        self.speaker_roles = speaker_roles
+
+    @property
+    def id(self) -> str:
+        """Return node ID"""
+        return self._id
+
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.QUESTION_ANSWER
+
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {"id": self.id}
+        
+        if self.content:
+            try:
+                if isinstance(self.content, (list, dict)):
+                    props["content"] = json.dumps(self.content)
+                else:
+                    props["content"] = self.content
+            except Exception as e:
+                # Fallback to string representation if JSON serialization fails
+                props["content"] = str(self.content)
+        
+        if self.speaker_roles:
+            try:
+                props["speaker_roles"] = json.dumps(self.speaker_roles)
+            except Exception as e:
+                # Fallback if JSON serialization fails
+                props["speaker_roles"] = str(self.speaker_roles)
+        
+        return props
+
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'QuestionAnswerNode':
+        if "id" not in props:
+            raise ValueError("Missing required field 'id' for QuestionAnswerNode")
+            
+        content = None
+        speaker_roles = None
+        
+        if "content" in props and props["content"]:
+            try:
+                content = json.loads(props["content"])
+            except:
+                content = props["content"]
+        
+        if "speaker_roles" in props and props["speaker_roles"]:
+            try:
+                speaker_roles = json.loads(props["speaker_roles"])
+            except:
+                speaker_roles = None
+                
+        return cls(id=props["id"], content=content, speaker_roles=speaker_roles)
+
 

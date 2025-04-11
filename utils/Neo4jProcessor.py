@@ -34,7 +34,7 @@ from utils.EventTraderNodes import (
     NewsNode, CompanyNode, SectorNode, 
     IndustryNode, MarketIndexNode, ReportNode,
     ExtractedSectionContent, ExhibitContent, FinancialStatementContent, FilingTextContent,
-    TranscriptNode
+    TranscriptNode, PreparedRemarkNode, QuestionAnswerNode, FullTranscriptTextNode
 )
 
 # Internal Imports - Date Utilities
@@ -3710,7 +3710,8 @@ class Neo4jProcessor:
 
             return self._execute_transcript_database_operations(
                 transcript_id, transcript_node, valid_symbols,
-                company_params, sector_params, industry_params, market_params, timestamps
+                company_params, sector_params, industry_params, market_params, timestamps,
+                transcript_data
             )
         except Exception as e:
             logger.error(f"Error processing transcript {transcript_id}: {e}")
@@ -3760,7 +3761,8 @@ class Neo4jProcessor:
 
 
     def _execute_transcript_database_operations(self, transcript_id, transcript_node, valid_symbols,
-                                                company_params, sector_params, industry_params, market_params, timestamps):
+                                               company_params, sector_params, industry_params, market_params, timestamps,
+                                               transcript_data=None):
         """
         Execute all database operations for a transcript.
         """
@@ -3793,14 +3795,85 @@ class Neo4jProcessor:
                 self._create_influences_relationships(session, transcript_id, "Transcript", "Industry", industry_params)
                 self._create_influences_relationships(session, transcript_id, "Transcript", "MarketIndex", market_params)
 
+            # 4. Create and link additional transcript content nodes
+            if transcript_data:
+                self._process_transcript_content(transcript_id, transcript_data)
+
             return True
 
         except Exception as e:
             logger.error(f"Error executing DB ops for transcript {transcript_id}: {e}")
             return False
+            
+            
+    def _process_transcript_content(self, transcript_id, transcript_data):
+        """Process additional transcript content nodes"""
+        from utils.EventTraderNodes import PreparedRemarkNode, QuestionAnswerNode, FullTranscriptTextNode
+        
+        nodes_to_create = []
+        relationships = []
+        
+        # Create PreparedRemarkNode if data exists
+        if prepared_remarks := transcript_data.get("prepared_remarks"):
+            pr_id = f"{transcript_id}_pr"
+            nodes_to_create.append(PreparedRemarkNode(id=pr_id, content=prepared_remarks))
+            relationships.append({
+                "source_label": "Transcript",
+                "source_id": transcript_id,
+                "target_label": "PreparedRemark",
+                "target_id": pr_id,
+                "rel_type": "HAS_PREPARED_REMARKS"
+            })
+            
+        # Create QuestionAnswerNode if data exists
+        if qa_section := transcript_data.get("questions_and_answers"):
+            qa_id = f"{transcript_id}_qa"
+            nodes_to_create.append(QuestionAnswerNode(
+                id=qa_id, 
+                content=qa_section,
+                speaker_roles=transcript_data.get("speaker_roles_LLM")
+            ))
+            relationships.append({
+                "source_label": "Transcript",
+                "source_id": transcript_id,
+                "target_label": "QuestionAnswer",
+                "target_id": qa_id,
+                "rel_type": "HAS_QA_SECTION"
+            })
+            
+        # Create FullTranscriptTextNode if data exists
+        if full_text := transcript_data.get("full_transcript"):
+            full_id = f"{transcript_id}_full"
+            nodes_to_create.append(FullTranscriptTextNode(id=full_id, content=full_text))
+            relationships.append({
+                "source_label": "Transcript",
+                "source_id": transcript_id,
+                "target_label": "FullTranscriptText",
+                "target_id": full_id,
+                "rel_type": "HAS_FULL_TEXT"
+            })
+        
+        # Save nodes and create relationships if any were created
+        if nodes_to_create:
+            # Merge all nodes in one batch
+            self.manager.merge_nodes(nodes_to_create)
+            
+            # Create relationships
+            for rel in relationships:
+                self.manager.create_relationships(
+                    source_label=rel["source_label"],
+                    source_id_field="id",
+                    source_id_value=rel["source_id"],
+                    target_label=rel["target_label"],
+                    target_match_clause=f"{{id: '{rel['target_id']}'}}",
+                    rel_type=rel["rel_type"],
+                    params=[{"properties": {}}]
+                )
+                logger.info(f"Created {rel['rel_type']} relationship for transcript {transcript_id}")
 
 
     def _create_transcript_node_from_data(self, transcript_id, transcript_data):
+        """Create a TranscriptNode from transcript data"""
         # TranscriptNode is now imported at the top of the file
         
         def safe_int(val, default=0):
@@ -4070,8 +4143,8 @@ if __name__ == "__main__":
     
     # Set up command line arguments
     parser = argparse.ArgumentParser(description="Neo4j processor for EventTrader")
-    parser.add_argument("mode", choices=["init", "news", "reports", "all"], default="init", nargs="?",
-                        help="Mode: 'init' (initialize Neo4j), 'news' (process news), 'reports' (process reports), 'all' (all of the above)")
+    parser.add_argument("mode", choices=["init", "news", "reports", "transcripts", "all"], default="init", nargs="?",
+                        help="Mode: 'init' (initialize Neo4j), 'news' (process news), 'reports' (process reports), 'transcripts' (process transcripts), 'all' (all of the above)")
     parser.add_argument("--batch", type=int, default=10, 
                         help="Number of items to process in each batch")
     parser.add_argument("--max", type=int, default=0, 
@@ -4086,6 +4159,8 @@ if __name__ == "__main__":
                         help="Skip processing news in 'all' mode")
     parser.add_argument("--skip-reports", action="store_true",
                         help="Skip processing reports in 'all' mode")
+    parser.add_argument("--skip-transcripts", action="store_true",
+                        help="Skip processing transcripts in 'all' mode")
     parser.add_argument("--start-date", type=str, default="2017-09-01",
                         help="Start date for date nodes in format 'YYYY-MM-DD'")
     
@@ -4116,6 +4191,11 @@ if __name__ == "__main__":
         logger.info(f"Processing report data with batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns}")
         process_report_data(batch_size, max_items, args.verbose, include_without_returns)
     
+    elif args.mode == "transcripts":
+        # Process transcript data
+        logger.info(f"Processing transcript data with batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns}")
+        process_transcript_data(batch_size, max_items, args.verbose, include_without_returns)
+    
     elif args.mode == "all":
         # Run initialization and all processing modes
         logger.info(f"Running complete Neo4j setup (batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns})...")
@@ -4139,20 +4219,28 @@ if __name__ == "__main__":
             else:
                 logger.info("Skipping report processing (--skip-reports flag used)")
                 
+            # Process transcript data if not skipped
+            if not args.skip_transcripts:
+                logger.info("Processing transcript data...")
+                process_transcript_data(batch_size, max_items, args.verbose, include_without_returns)
+            else:
+                logger.info("Skipping transcript processing (--skip-transcripts flag used)")
+                
             logger.info("All processing completed.")
         else:
             logger.error("Initialization failed, skipping data processing")
     
     else:
-        logger.error(f"Unknown mode: {args.mode}. Use 'init', 'news', 'reports', or 'all'")
+        logger.error(f"Unknown mode: {args.mode}. Use 'init', 'news', 'reports', 'transcripts', or 'all'")
         print("Usage: python Neo4jProcessor.py [mode] [options]")
-        print("  mode: 'init' (default), 'news', 'reports', or 'all'")
+        print("  mode: 'init' (default), 'news', 'reports', 'transcripts', or 'all'")
         print("  --batch N: Number of items to process in each batch (default: 10)")
         print("  --max N: Maximum number of items to process (0 for all, default: 0)")
         print("  --verbose/-v: Enable verbose logging")
         print("  --skip-without-returns: Skip processing items without returns")
         print("  --skip-news: Skip processing news in 'all' mode")
-        print("  --skip-reports: Skip processing reports in 'all' mode") 
+        print("  --skip-reports: Skip processing reports in 'all' mode")
+        print("  --skip-transcripts: Skip processing transcripts in 'all' mode")
 
 
     

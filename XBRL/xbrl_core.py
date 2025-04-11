@@ -157,8 +157,8 @@ class RelationType(Enum):
     HAS_TRANSCRIPT = "HAS_TRANSCRIPT"  # Company -> Transcript relationship
     HAS_PREPARED_REMARKS = "HAS_PREPARED_REMARKS"  # Transcript -> PreparedRemark relationship
     HAS_QA_SECTION = "HAS_QA_SECTION"  # Transcript -> QuestionAnswer relationship
-    HAS_QA_EXCHANGE = "HAS_QA_EXCHANGE"  # Transcript/QuestionAnswer -> QAExchange relationship
     HAS_FULL_TEXT = "HAS_FULL_TEXT"  # Transcript -> FullTranscriptText relationship
+    HAS_QA_EXCHANGE = "HAS_QA_EXCHANGE"  # Transcript/QuestionAnswer -> QAExchange relationship
 
 
 
