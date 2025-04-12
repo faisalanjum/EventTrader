@@ -36,7 +36,7 @@ duckdb==0.7.1
 durationpy==0.9
 earningscall==1.2.1
 et_xmlfile==2.0.0
--e git+https://github.com/faisalanjum/EventTrader.git@0da95cc46cbd715eb07cfcf61cdbbf45453ea102#egg=eventtrader
+-e git+https://github.com/faisalanjum/EventTrader.git@4f4fbf1fe3e189766ac111cab6e81f3f3ccc2019#egg=eventtrader
 exchange_calendars==4.10
 executing==2.2.0
 fastapi==0.115.12
@@ -99,7 +99,7 @@ nest-asyncio==1.6.0
 numpy==2.2.4
 oauthlib==3.2.2
 onnxruntime==1.21.0
-openai==1.69.0
+openai==1.70.0
 openpyxl==3.1.5
 opentelemetry-api==1.31.1
 opentelemetry-exporter-otlp-proto-common==1.31.1
