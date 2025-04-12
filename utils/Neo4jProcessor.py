@@ -34,7 +34,8 @@ from utils.EventTraderNodes import (
     NewsNode, CompanyNode, SectorNode, 
     IndustryNode, MarketIndexNode, ReportNode,
     ExtractedSectionContent, ExhibitContent, FinancialStatementContent, FilingTextContent,
-    TranscriptNode, PreparedRemarkNode, QuestionAnswerNode, FullTranscriptTextNode
+    TranscriptNode, PreparedRemarkNode, QuestionAnswerNode, FullTranscriptTextNode,
+    QAExchangeNode
 )
 
 # Internal Imports - Date Utilities
@@ -313,7 +314,6 @@ class Neo4jProcessor:
             logger.warning(f"❌ ChromaDB initialization error: {e}")
             self.chroma_client = None
             self.chroma_collection = None
-
 
 # endregion
 
@@ -651,11 +651,6 @@ class Neo4jProcessor:
                         except Exception as e:
                             logger.warning(f"Error deleting key {key}: {e}")
 
-
-                else:
-                    logger.warning(f"No data found for report {item_id}")
-
-
             elif content_type == 'transcript':
                 # Get the transcript data using standard key format
                 key = RedisKeys.get_key(
@@ -676,6 +671,29 @@ class Neo4jProcessor:
                     )
                     
                     logger.info(f"Successfully processed transcript {item_id}")
+
+                    # After successful processing, generate QAExchange embeddings
+                    if success:
+                        try:
+                            # Get ALL QAExchange nodes for this transcript
+                            query = f"""
+                            MATCH (t:Transcript {{id: '{item_id}'}})-[:HAS_QA_EXCHANGE]->(q:QAExchange)
+                            WHERE q.embedding IS NULL
+                            RETURN q.id as id
+                            """
+                            results = self.manager.execute_cypher_query(query, {})
+                            
+                            # Process each QAExchange node for this transcript
+                            if results:
+                                qa_nodes = results if isinstance(results, list) else [results]
+                                for qa_node in qa_nodes:
+                                    try:
+                                        # Process this specific QAExchange node
+                                        self._create_qaexchange_embedding(qa_node["id"])
+                                    except Exception as inner_e:
+                                        logger.warning(f"Failed to generate embedding for QAExchange {qa_node['id']}: {inner_e}")
+                        except Exception as e:
+                            logger.warning(f"Failed to generate QAExchange embeddings for transcript {item_id}: {e}")
 
                     # Delete key if it's from withreturns namespace
                     if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
@@ -995,6 +1013,169 @@ class Neo4jProcessor:
             logger.error(f"[EMBED-FLOW] Exception in batch_embeddings_for_nodes: {str(e)}")
             return False
 
+
+
+    
+    def _create_qaexchange_embedding(self, qa_id):
+        """Generate embedding for a single QAExchange item"""
+        if not self.manager and not self.connect():
+            return False
+            
+        try:
+            from utils.feature_flags import ENABLE_QAEXCHANGE_EMBEDDINGS, OPENAI_EMBEDDING_MODEL, USE_CHROMADB_CACHING
+            from eventtrader.keys import OPENAI_API_KEY
+            
+            if not OPENAI_API_KEY or not ENABLE_QAEXCHANGE_EMBEDDINGS:
+                return False
+            
+            logger.info(f"Creating single QAExchange embedding for qa_id={qa_id}")
+            
+            # Get the content for this QAExchange item
+            content_query = """
+            MATCH (q:QAExchange {id: $qa_id})
+            WHERE q.embedding IS NULL AND q.exchanges IS NOT NULL
+            RETURN q.id AS id, q.exchanges AS raw_exchanges
+            """
+
+            
+            result = self.manager.execute_cypher_query(content_query, {"qa_id": qa_id})
+            
+            if not result:
+                return False
+            
+            # Parse the exchanges JSON in Python
+            try:
+                exchanges = json.loads(result.get("raw_exchanges", "[]"))
+            except Exception:
+                logger.warning(f"Failed to parse exchanges for {qa_id}: {e}")
+                exchanges = []
+            
+            # Extract text from exchanges based on role
+            content = " ".join(
+                entry.get("text", "")
+                for entry in exchanges
+                if entry.get("role") in {"question", "answer"}
+            ).strip()
+            
+            if not content:
+                return False
+            
+            embedding = None
+            
+            # Check if we should try to get embedding from ChromaDB first
+            if USE_CHROMADB_CACHING and self.chroma_collection is not None:
+                try:
+                    from hashlib import sha256
+                    content_hash = sha256(content.encode()).hexdigest()
+                    logger.debug(f"Checking ChromaDB for QAExchange {qa_id} with content hash {content_hash}")
+                    # Always include embeddings parameter
+                    chroma_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
+                    
+                    # Simple, robust check for valid embeddings
+                    if (chroma_result and 
+                        'ids' in chroma_result and 
+                        len(chroma_result['ids']) > 0 and
+                        'embeddings' in chroma_result and 
+                        chroma_result['embeddings'] is not None and 
+                        len(chroma_result['embeddings']) > 0):
+                        
+                        # We found an existing embedding in ChromaDB
+                        embedding = chroma_result['embeddings'][0]
+                        logger.info(f"Retrieved embedding from ChromaDB for QAExchange {qa_id}")
+                        
+                        # Store the cached embedding in Neo4j
+                        store_query = """
+                        MATCH (q:QAExchange {id: $qa_id})
+                        WHERE q.embedding IS NULL 
+                        CALL db.create.setNodeVectorProperty(q, "embedding", $embedding)
+                        RETURN count(q) AS processed
+                        """
+                        
+                        result = self.manager.execute_cypher_query(store_query, {
+                            "qa_id": qa_id,
+                            "embedding": embedding
+                        })
+                        
+                        logger.info(f"Successfully applied cached embedding for QAExchange {qa_id}")
+                        return result and result.get("processed", 0) > 0
+                        
+                except Exception as e:
+                    logger.warning(f"Error checking ChromaDB: {e}")
+            
+            # If we didn't find an embedding in ChromaDB, generate a new one
+            # Use Neo4j's genai.vector.encodeBatch to generate embedding and set it directly
+            logger.info(f"Executing Neo4j encodeBatch for single QAExchange item {qa_id}")
+            query = """
+            MATCH (q:QAExchange {id: $qa_id})
+            WHERE q.embedding IS NULL
+            WITH q, $content AS content, $config AS config
+            CALL genai.vector.encodeBatch([content], "OpenAI", config) 
+            YIELD index, vector
+            WITH q, vector
+            CALL db.create.setNodeVectorProperty(q, "embedding", vector)
+            RETURN count(q) AS processed, vector AS embedding
+            """
+            
+            result = self.manager.execute_cypher_query(query, {
+                "qa_id": qa_id, 
+                "content": content,
+                "config": {
+                    "token": OPENAI_API_KEY,
+                    "model": OPENAI_EMBEDDING_MODEL
+                }
+            })
+            
+            success = result and result.get("processed", 0) > 0
+            
+            # Store in ChromaDB for future reuse if successful
+            if success and self.chroma_collection is not None and result.get("embedding"):
+                try:
+                    from hashlib import sha256
+                    content_hash = sha256(content.encode()).hexdigest()
+                    
+                    # Check if this embedding already exists in ChromaDB before adding
+                    check_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
+                    if (check_result and 
+                        'ids' in check_result and 
+                        len(check_result['ids']) > 0 and
+                        'embeddings' in check_result and 
+                        check_result['embeddings'] is not None and 
+                        len(check_result['embeddings']) > 0):
+                        # Already exists, no need to add again
+                        logger.debug(f"Embedding already exists in ChromaDB for {qa_id}")
+                    else:
+                        # Doesn't exist, add it - Use upsert to prevent race condition issues
+                        try:
+                            self.chroma_collection.add(
+                                ids=[content_hash],
+                                documents=[content],
+                                embeddings=[result["embedding"]]
+                            )
+                            logger.info(f"Stored new embedding in ChromaDB for QAExchange {qa_id}")
+                        except Exception as inner_e:
+                            if "Insert of existing embedding ID" in str(inner_e):
+                                logger.debug(f"Embedding already exists in ChromaDB - concurrent insert detected")
+                            else:
+                                raise inner_e
+                except Exception as e:
+                    if "Insert of existing embedding ID" in str(e):
+                        logger.debug(f"Embedding already exists in ChromaDB")
+                    else:
+                        logger.warning(f"Failed to store embedding in ChromaDB: {e}")
+            
+            if success:
+                logger.info(f"Successfully generated embedding for QAExchange {qa_id}")
+            else:
+                logger.warning(f"Failed to generate embedding for QAExchange {qa_id}, result: {result}")
+                
+            return success
+        except Exception as e:
+            logger.error(f"Exception in _create_qaexchange_embedding: {str(e)}")
+            return False
+    
+
+
+
     def _prepare_news_data(self, news_id, news_data):
         """
         Prepare news data for processing, extracting all necessary information.
@@ -1239,6 +1420,19 @@ class Neo4jProcessor:
             index_name=NEWS_VECTOR_INDEX_NAME,
             dimensions=OPENAI_EMBEDDING_DIMENSIONS
         )
+    
+
+    def _create_qaexchange_vector_index(self):
+       """Create a vector index for QAExchange nodes if it doesn't exist"""
+       from utils.feature_flags import QAEXCHANGE_VECTOR_INDEX_NAME, OPENAI_EMBEDDING_DIMENSIONS
+       return self.create_vector_index(
+           label="QAExchange", 
+           property_name="embedding", 
+           index_name=QAEXCHANGE_VECTOR_INDEX_NAME,
+           dimensions=OPENAI_EMBEDDING_DIMENSIONS
+       )
+
+
 
     def _fetch_chromadb_embeddings(self, all_items, batch_size=100):
         """
@@ -1675,6 +1869,91 @@ class Neo4jProcessor:
         
         # Log completion with results
         logger.info(f"[EMBED-FLOW] batch_process_news_embeddings completed with results: {results}")
+        return results
+
+
+    def batch_process_qaexchange_embeddings(self, batch_size=50, create_index=True, max_items=None):
+        """Generate embeddings for QAExchange nodes using existing infrastructure"""
+        from utils.feature_flags import ENABLE_QAEXCHANGE_EMBEDDINGS
+        
+        if not ENABLE_QAEXCHANGE_EMBEDDINGS:
+            return {"status": "skipped", "reason": "embeddings disabled", "processed": 0, "error": 0, "cached": 0}
+        
+        logger.info(f"Starting QAExchange embedding generation with batch_size={batch_size}, max_items={max_items}")
+        
+        # Create vector index if needed
+        if create_index:
+            self._create_qaexchange_vector_index()
+            
+        # Custom Cypher query to find nodes and extract text from exchanges property
+        query = """
+        MATCH (q:QAExchange)
+        WHERE q.embedding IS NULL AND q.exchanges IS NOT NULL
+        RETURN q.id AS id, q.exchanges AS raw_exchanges
+        """
+
+
+        
+        if max_items:
+            query += f" LIMIT {max_items}"
+        
+        # Get nodes needing embeddings
+        all_items = self.manager.execute_cypher_query(query, {})
+        
+        # Handle empty results
+        if all_items and not isinstance(all_items, list):
+            all_items = [all_items]
+        
+        if not all_items or len(all_items) == 0:
+            logger.info("No QAExchange nodes found needing embeddings")
+            return {"status": "completed", "reason": "no items needed embeddings", "processed": 0, "error": 0, "cached": 0}
+        
+        logger.info(f"Found {len(all_items)} QAExchange nodes needing embeddings")
+        
+        # Store content in temporary property
+        for item in all_items:
+            try:
+                exchanges = json.loads(item.get("raw_exchanges", "[]"))
+            except Exception:
+                exchanges = []
+
+            content = " ".join(
+                entry.get("text", "")
+                for entry in exchanges
+                if entry.get("role") in {"question", "answer"}
+            ).strip()
+
+            if not content:
+                continue  # Skip empty ones
+
+            save_query = """
+            MATCH (q:QAExchange {id: $id})
+            SET q._temp_content = $content
+            """
+            self.manager.execute_cypher_query(save_query, {"id": item["id"], "content": content})
+
+        
+        # Use generic batch_embeddings_for_nodes with the temporary property
+        results = self.batch_embeddings_for_nodes(
+            label="QAExchange",
+            id_property="id",
+            content_property="_temp_content",
+            embedding_property="embedding",
+            batch_size=batch_size,
+            max_items=max_items,
+            create_index=False,
+            check_chromadb=True
+        )
+        
+        # Clean up temporary property
+        cleanup_query = """
+        MATCH (q:QAExchange)
+        WHERE q._temp_content IS NOT NULL
+        REMOVE q._temp_content
+        """
+        self.manager.execute_cypher_query(cleanup_query, {})
+        
+        logger.info(f"QAExchange embedding processing completed with results: {results}")
         return results
 
 
@@ -3686,6 +3965,7 @@ class Neo4jProcessor:
                                     logger.warning(f"Failed to delete key {key}: {e}")
                         else:
                             failed += 1
+                            
                     except Exception as e:
                         logger.error(f"Failed to process key {key}: {e}")
                         failed += 1
@@ -3839,7 +4119,31 @@ class Neo4jProcessor:
         if has_qa_pairs:
             exchange_ids = []
             for idx, pair in enumerate(transcript_data["qa_pairs"]):
-                exchanges = pair.get("exchanges", [])
+                exchanges_raw = pair.get("exchanges", [])
+                if isinstance(exchanges_raw, str):
+                    try:
+                        exchanges_raw = json.loads(exchanges_raw)
+                    except Exception:
+                        exchanges_raw = []
+                
+                # Flatten exchanges to avoid nested maps that Neo4j can't store
+                def flatten_exchanges(raw_exchanges):
+                    flat = []
+                    for entry in raw_exchanges:
+                        if "question" in entry and isinstance(entry["question"], dict):
+                            flat.append({
+                                "role": "question",
+                                **entry["question"]
+                            })
+                        elif "answer" in entry and isinstance(entry["answer"], dict):
+                            flat.append({
+                                "role": "answer",
+                                **entry["answer"]
+                            })
+                    return flat
+                
+                exchanges = flatten_exchanges(exchanges_raw)
+                
                 if exchanges:
                     exch_id = f"{transcript_id}_qa__{idx}"
                     exchange_ids.append(exch_id)
@@ -4162,7 +4466,7 @@ def process_report_data(batch_size=100, max_items=None, verbose=False, include_w
         logger.info("Report processing completed")
 
 
-def process_transcript_data(batch_size=5, max_items=None, verbose=False, include_without_returns=True):
+def process_transcript_data(batch_size=5, max_items=None, verbose=False, include_without_returns=True, process_embeddings=True):
     """
     Process transcript data from Redis into Neo4j
     
@@ -4201,7 +4505,11 @@ def process_transcript_data(batch_size=5, max_items=None, verbose=False, include
         # Process transcript data
         logger.info(f"Processing transcript data to Neo4j with batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns}...")
         success = processor.process_transcripts_to_neo4j(batch_size, max_items, include_without_returns)
-        
+
+        if success and processor and process_embeddings:
+            processor.batch_process_qaexchange_embeddings(batch_size=batch_size, max_items=max_items)
+
+
         if success:
             logger.info("Transcript data processing completed successfully")
         else:
@@ -4278,7 +4586,7 @@ if __name__ == "__main__":
     elif args.mode == "transcripts":
         # Process transcript data
         logger.info(f"Processing transcript data with batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns}")
-        process_transcript_data(batch_size, max_items, args.verbose, include_without_returns)
+        process_transcript_data(batch_size, max_items, args.verbose, include_without_returns, process_embeddings=True)
     
     elif args.mode == "all":
         # Run initialization and all processing modes
@@ -4306,7 +4614,7 @@ if __name__ == "__main__":
             # Process transcript data if not skipped
             if not args.skip_transcripts:
                 logger.info("Processing transcript data...")
-                process_transcript_data(batch_size, max_items, args.verbose, include_without_returns)
+                process_transcript_data(batch_size, max_items, args.verbose, include_without_returns, process_embeddings=True)
             else:
                 logger.info("Skipping transcript processing (--skip-transcripts flag used)")
                 
@@ -4438,4 +4746,4 @@ if __name__ == "__main__":
         except Exception as e:
             logger.error(f"Error in vector similarity search: {e}")
             return []
-    
+

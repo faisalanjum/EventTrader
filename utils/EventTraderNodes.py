@@ -1474,6 +1474,7 @@ class QAExchangeNodeData:
     questioner_title: Optional[str] = None
     responders: Optional[str] = None
     responder_title: Optional[str] = None
+    embedding: Optional[List[float]] = None  # ✅ NEW
 
 
 class QAExchangeNode(Neo4jNode):
@@ -1501,15 +1502,24 @@ class QAExchangeNode(Neo4jNode):
             props["responders"] = self.data.responders
         if self.data.responder_title:
             props["responder_title"] = self.data.responder_title
+        if self.data.embedding is not None:
+            props["embedding"] = self.data.embedding
         return props
 
     @classmethod
     def from_neo4j(cls, props: Dict[str, Any]) -> 'QAExchangeNode':
+        exchanges_data = props.get("exchanges", [])
         exchanges = []
-        if "exchanges" in props and props["exchanges"]:
-            try: exchanges = json.loads(props["exchanges"])
-            except: pass
-
+        
+        if exchanges_data:
+            try:
+                if isinstance(exchanges_data, str):
+                    exchanges = json.loads(exchanges_data)
+                else:
+                    exchanges = exchanges_data
+            except:
+                exchanges = []
+            
         return cls(
             id=props["id"],
             transcript_id=props["transcript_id"],
@@ -1518,5 +1528,6 @@ class QAExchangeNode(Neo4jNode):
             questioner=props.get("questioner"),
             questioner_title=props.get("questioner_title"),
             responders=props.get("responders"),
-            responder_title=props.get("responder_title")
+            responder_title=props.get("responder_title"),
+            embedding=props.get("embedding")
         )

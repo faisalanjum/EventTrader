@@ -77,6 +77,13 @@ OPENAI_EMBEDDING_MODEL = "text-embedding-3-large"
 OPENAI_EMBEDDING_DIMENSIONS = 3072
 NEWS_VECTOR_INDEX_NAME = "news_vector_index"
 
+# When True, generate embeddings using OpenAI for QAExchange nodes
+# This creates vector embeddings for semantic search capabilities
+ENABLE_QAEXCHANGE_EMBEDDINGS = True
+QAEXCHANGE_VECTOR_INDEX_NAME = "qaexchange_embedding_vector_idx"
+
+
+
 # When True, check ChromaDB for existing embeddings before generating new ones
 # This saves API calls during development but can be disabled in production for performance
 USE_CHROMADB_CACHING = True
