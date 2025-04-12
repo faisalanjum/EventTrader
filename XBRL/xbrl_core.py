@@ -159,6 +159,7 @@ class RelationType(Enum):
     HAS_QA_SECTION = "HAS_QA_SECTION"  # Transcript -> QuestionAnswer relationship
     HAS_FULL_TEXT = "HAS_FULL_TEXT"  # Transcript -> FullTranscriptText relationship
     HAS_QA_EXCHANGE = "HAS_QA_EXCHANGE"  # Transcript/QuestionAnswer -> QAExchange relationship
+    NEXT_EXCHANGE = "NEXT_EXCHANGE"  # QAExchange -> Next QAExchange relationship
 
 
 

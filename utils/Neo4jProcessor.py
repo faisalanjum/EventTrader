@@ -3804,61 +3804,79 @@ class Neo4jProcessor:
         except Exception as e:
             logger.error(f"Error executing DB ops for transcript {transcript_id}: {e}")
             return False
-            
-            
+
+
     def _process_transcript_content(self, transcript_id, transcript_data):
-        """Process additional transcript content nodes"""
-        from utils.EventTraderNodes import PreparedRemarkNode, QuestionAnswerNode, FullTranscriptTextNode
-        
+        from utils.EventTraderNodes import (
+            PreparedRemarkNode, QuestionAnswerNode,
+            FullTranscriptTextNode, QAExchangeNode
+        )
+
         nodes_to_create = []
         relationships = []
-        
-        # Create PreparedRemarkNode if data exists
-        if prepared_remarks := transcript_data.get("prepared_remarks"):
-            pr_id = f"{transcript_id}_pr"
-            nodes_to_create.append(PreparedRemarkNode(id=pr_id, content=prepared_remarks))
+
+        def add_rel(source_label, source_id, target_label, target_id, rel_type):
             relationships.append({
-                "source_label": "Transcript",
-                "source_id": transcript_id,
-                "target_label": "PreparedRemark",
-                "target_id": pr_id,
-                "rel_type": "HAS_PREPARED_REMARKS"
+                "source_label": source_label,
+                "source_id": source_id,
+                "target_label": target_label,
+                "target_id": target_id,
+                "rel_type": rel_type
             })
-            
-        # Create QuestionAnswerNode if data exists
-        if qa_section := transcript_data.get("questions_and_answers"):
+
+        has_pr = bool(transcript_data.get("prepared_remarks"))
+        has_qa_pairs = bool(transcript_data.get("qa_pairs"))
+        has_qa = bool(transcript_data.get("questions_and_answers"))
+        has_full = bool(transcript_data.get("full_transcript"))
+
+        # Level 1: Prepared Remarks
+        if has_pr:
+            pr_id = f"{transcript_id}_pr"
+            nodes_to_create.append(PreparedRemarkNode(id=pr_id, content=transcript_data["prepared_remarks"]))
+            add_rel("Transcript", transcript_id, "PreparedRemark", pr_id, "HAS_PREPARED_REMARKS")
+
+        # Level 2: QAExchangeNode from qa_pairs
+        if has_qa_pairs:
+            exchange_ids = []
+            for idx, pair in enumerate(transcript_data["qa_pairs"]):
+                exchanges = pair.get("exchanges", [])
+                if exchanges:
+                    exch_id = f"{transcript_id}_qa__{idx}"
+                    exchange_ids.append(exch_id)
+                    nodes_to_create.append(QAExchangeNode(
+                        id=exch_id,
+                        transcript_id=transcript_id,
+                        exchanges=exchanges,
+                        questioner=pair.get("questioner"),
+                        questioner_title=pair.get("questioner_title"),
+                        responders=pair.get("responders"),
+                        responder_title=pair.get("responder_title"),
+                        sequence=idx
+                    ))
+                    add_rel("Transcript", transcript_id, "QAExchange", exch_id, "HAS_QA_EXCHANGE")
+
+            for i in range(len(exchange_ids) - 1):
+                add_rel("QAExchange", exchange_ids[i], "QAExchange", exchange_ids[i + 1], "NEXT_EXCHANGE")
+
+        # Level 2 fallback: QuestionAnswerNode (used if no qa_pairs)
+        elif has_qa:
             qa_id = f"{transcript_id}_qa"
             nodes_to_create.append(QuestionAnswerNode(
-                id=qa_id, 
-                content=qa_section,
+                id=qa_id,
+                content=transcript_data["questions_and_answers"],
                 speaker_roles=transcript_data.get("speaker_roles_LLM")
             ))
-            relationships.append({
-                "source_label": "Transcript",
-                "source_id": transcript_id,
-                "target_label": "QuestionAnswer",
-                "target_id": qa_id,
-                "rel_type": "HAS_QA_SECTION"
-            })
-            
-        # Create FullTranscriptTextNode if data exists
-        if full_text := transcript_data.get("full_transcript"):
+            add_rel("Transcript", transcript_id, "QuestionAnswer", qa_id, "HAS_QA_SECTION")
+
+        # Level 3 fallback: FullTranscriptTextNode
+        elif has_full:
             full_id = f"{transcript_id}_full"
-            nodes_to_create.append(FullTranscriptTextNode(id=full_id, content=full_text))
-            relationships.append({
-                "source_label": "Transcript",
-                "source_id": transcript_id,
-                "target_label": "FullTranscriptText",
-                "target_id": full_id,
-                "rel_type": "HAS_FULL_TEXT"
-            })
-        
-        # Save nodes and create relationships if any were created
+            nodes_to_create.append(FullTranscriptTextNode(id=full_id, content=transcript_data["full_transcript"]))
+            add_rel("Transcript", transcript_id, "FullTranscriptText", full_id, "HAS_FULL_TEXT")
+
+        # Save all nodes and relationships
         if nodes_to_create:
-            # Merge all nodes in one batch
             self.manager.merge_nodes(nodes_to_create)
-            
-            # Create relationships
             for rel in relationships:
                 self.manager.create_relationships(
                     source_label=rel["source_label"],
@@ -3870,6 +3888,72 @@ class Neo4jProcessor:
                     params=[{"properties": {}}]
                 )
                 logger.info(f"Created {rel['rel_type']} relationship for transcript {transcript_id}")
+
+            
+    # def _process_transcript_content(self, transcript_id, transcript_data):
+    #     """Process additional transcript content nodes"""
+    #     from utils.EventTraderNodes import PreparedRemarkNode, QuestionAnswerNode, FullTranscriptTextNode
+        
+    #     nodes_to_create = []
+    #     relationships = []
+        
+    #     # Create PreparedRemarkNode if data exists
+    #     if prepared_remarks := transcript_data.get("prepared_remarks"):
+    #         pr_id = f"{transcript_id}_pr"
+    #         nodes_to_create.append(PreparedRemarkNode(id=pr_id, content=prepared_remarks))
+    #         relationships.append({
+    #             "source_label": "Transcript",
+    #             "source_id": transcript_id,
+    #             "target_label": "PreparedRemark",
+    #             "target_id": pr_id,
+    #             "rel_type": "HAS_PREPARED_REMARKS"
+    #         })
+            
+    #     # Create QuestionAnswerNode if data exists
+    #     if qa_section := transcript_data.get("questions_and_answers"):
+    #         qa_id = f"{transcript_id}_qa"
+    #         nodes_to_create.append(QuestionAnswerNode(
+    #             id=qa_id, 
+    #             content=qa_section,
+    #             speaker_roles=transcript_data.get("speaker_roles_LLM")
+    #         ))
+    #         relationships.append({
+    #             "source_label": "Transcript",
+    #             "source_id": transcript_id,
+    #             "target_label": "QuestionAnswer",
+    #             "target_id": qa_id,
+    #             "rel_type": "HAS_QA_SECTION"
+    #         })
+            
+    #     # Create FullTranscriptTextNode if data exists
+    #     if full_text := transcript_data.get("full_transcript"):
+    #         full_id = f"{transcript_id}_full"
+    #         nodes_to_create.append(FullTranscriptTextNode(id=full_id, content=full_text))
+    #         relationships.append({
+    #             "source_label": "Transcript",
+    #             "source_id": transcript_id,
+    #             "target_label": "FullTranscriptText",
+    #             "target_id": full_id,
+    #             "rel_type": "HAS_FULL_TEXT"
+    #         })
+        
+    #     # Save nodes and create relationships if any were created
+    #     if nodes_to_create:
+    #         # Merge all nodes in one batch
+    #         self.manager.merge_nodes(nodes_to_create)
+            
+    #         # Create relationships
+    #         for rel in relationships:
+    #             self.manager.create_relationships(
+    #                 source_label=rel["source_label"],
+    #                 source_id_field="id",
+    #                 source_id_value=rel["source_id"],
+    #                 target_label=rel["target_label"],
+    #                 target_match_clause=f"{{id: '{rel['target_id']}'}}",
+    #                 rel_type=rel["rel_type"],
+    #                 params=[{"properties": {}}]
+    #             )
+    #             logger.info(f"Created {rel['rel_type']} relationship for transcript {transcript_id}")
 
 
     def _create_transcript_node_from_data(self, transcript_id, transcript_data):

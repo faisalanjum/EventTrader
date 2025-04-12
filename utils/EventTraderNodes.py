@@ -1464,3 +1464,59 @@ class QuestionAnswerNode(Neo4jNode):
         return cls(id=props["id"], content=content, speaker_roles=speaker_roles)
 
 
+@dataclass
+class QAExchangeNodeData:
+    id: str
+    transcript_id: str
+    sequence: int = 0
+    exchanges: List[Dict[str, Any]] = field(default_factory=list)
+    questioner: Optional[str] = None
+    questioner_title: Optional[str] = None
+    responders: Optional[str] = None
+    responder_title: Optional[str] = None
+
+
+class QAExchangeNode(Neo4jNode):
+    def __init__(self, **kwargs):
+        self.data = QAExchangeNodeData(**kwargs)
+
+    @property
+    def id(self): return self.data.id
+    @property
+    def node_type(self): return NodeType.QA_EXCHANGE
+
+    @property
+    def properties(self) -> Dict[str, Any]:
+        props = {
+            "id": self.data.id,
+            "transcript_id": self.data.transcript_id,
+            "sequence": self.data.sequence,
+            "exchanges": json.dumps(self.data.exchanges),
+        }
+        if self.data.questioner:
+            props["questioner"] = self.data.questioner
+        if self.data.questioner_title:
+            props["questioner_title"] = self.data.questioner_title
+        if self.data.responders:
+            props["responders"] = self.data.responders
+        if self.data.responder_title:
+            props["responder_title"] = self.data.responder_title
+        return props
+
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'QAExchangeNode':
+        exchanges = []
+        if "exchanges" in props and props["exchanges"]:
+            try: exchanges = json.loads(props["exchanges"])
+            except: pass
+
+        return cls(
+            id=props["id"],
+            transcript_id=props["transcript_id"],
+            sequence=int(props.get("sequence", 0)),
+            exchanges=exchanges,
+            questioner=props.get("questioner"),
+            questioner_title=props.get("questioner_title"),
+            responders=props.get("responders"),
+            responder_title=props.get("responder_title")
+        )
