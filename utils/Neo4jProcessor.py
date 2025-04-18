@@ -813,7 +813,10 @@ class Neo4jProcessor:
                 
                 if message and message['type'] == 'message':
                     channel = message['channel']
+                    
                     item_id = message.get('data')
+                    if isinstance(item_id, bytes):
+                        item_id = item_id.decode()
                     
                     if not item_id:
                         continue
