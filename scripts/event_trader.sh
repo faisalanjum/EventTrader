@@ -555,12 +555,12 @@ init_neo4j() {
   echo "Ensuring date nodes are created..."
   if [ "$RUN_BACKGROUND" = true ]; then
     # Run in background
-    $PYTHON_CMD -m utils.Neo4jInitializer --start_date "$FROM_DATE" > /dev/null 2>&1 &
+    $PYTHON_CMD -m neograph.Neo4jInitializer --start_date "$FROM_DATE" > /dev/null 2>&1 &
     # Wait briefly to allow initialization to start
     sleep 2
   else
     # Run in foreground
-    $PYTHON_CMD -m utils.Neo4jInitializer --start_date "$FROM_DATE"
+    $PYTHON_CMD -m neograph.Neo4jInitializer --start_date "$FROM_DATE"
   fi
 }
 
@@ -579,11 +579,11 @@ process_news() {
   # Run the Neo4jProcessor directly
   if [ "$RUN_BACKGROUND" = true ]; then
     # Run in background
-    $PYTHON_CMD -c "from utils.Neo4jProcessor import process_news_data; process_news_data($batch_size, $max_items, True)" > /dev/null 2>&1 &
+    $PYTHON_CMD -c "from neograph.Neo4jProcessor import process_news_data; process_news_data($batch_size, $max_items, True)" > /dev/null 2>&1 &
     echo "News processing started in background"
   else
     # Run in foreground
-    $PYTHON_CMD -c "from utils.Neo4jProcessor import process_news_data; process_news_data($batch_size, $max_items, True)"
+    $PYTHON_CMD -c "from neograph.Neo4jProcessor import process_news_data; process_news_data($batch_size, $max_items, True)"
   fi
 }
 

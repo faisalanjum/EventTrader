@@ -52,7 +52,7 @@ from XBRL.xbrl_core import NodeType, RelationType
 from utils.redis_constants import RedisKeys
 
 # Internal Imports - Neo4j Initializer
-from utils.Neo4jInitializer import Neo4jInitializer
+from neograph.Neo4jInitializer import Neo4jInitializer
 
 # Set up logger
 logger = get_logger(__name__)
@@ -3792,7 +3792,7 @@ class Neo4jProcessor:
                     return 0
             
             # Create initializer and connect
-            from utils.Neo4jInitializer import Neo4jInitializer
+            from neograph.Neo4jInitializer import Neo4jInitializer
             initializer = Neo4jInitializer(
                 uri=self.uri, 
                 username=self.username,
@@ -4355,7 +4355,7 @@ def init_neo4j(check_only=False, start_date=None):
             return False
             
         # Database needs initialization, use the dedicated initializer class
-        from utils.Neo4jInitializer import Neo4jInitializer
+        from neograph.Neo4jInitializer import Neo4jInitializer
         from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
         
         logger.info("Starting Neo4j database initialization...")
