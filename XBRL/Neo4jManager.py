@@ -855,6 +855,25 @@ class Neo4jManager:
             result = session.run(query, parameters)
             return result.single()
 
+
+    # ----------------- BEGIN PATCH -----------------
+    def execute_cypher_query_all(self,
+                                 query: str,
+                                 parameters: dict | None = None):
+        """
+        Run a Cypher statement and **always** return the full result‑set as
+        list[dict].
+
+        (Keeps execute_cypher_query() pristine and backward‑compatible.)
+        """
+        parameters = parameters or {}
+        with self.driver.session() as session:
+            result = session.run(query, parameters)
+            return [r.data() for r in result]
+    # ----------------- END PATCH -----------------
+
+
+
     def create_report_category_relationship(self, report_id, form_type):
         """
         Create an IN_CATEGORY relationship between a report and its category.

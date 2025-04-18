@@ -1379,7 +1379,7 @@ class FullTranscriptTextNode(Neo4jNode):
 
     @property
     def node_type(self) -> NodeType:
-        return NodeType.FULL_TRANSCRIPT
+        return NodeType.FULL_TRANSCRIPT_TEXT
 
     @property
     def properties(self) -> Dict[str, Any]:

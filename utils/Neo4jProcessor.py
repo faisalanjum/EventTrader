@@ -76,6 +76,22 @@ class Neo4jProcessor:
     ]
     # Add more node types here as needed
  
+
+    # ----------------- BEGIN PATCH -----------------
+    # add once, anywhere inside Neo4jProcessor (private util)
+    def _coerce_record(self, rec):
+        """
+        Accept neo4j.Record | dict | list[Record|dict]  ➜  dict | list[dict]
+        """
+        from collections.abc import Iterable
+        if rec is None:
+            return rec
+        if isinstance(rec, list):
+            return [dict(r) if not isinstance(r, dict) else r for r in rec]
+        return dict(rec) if not isinstance(rec, dict) else rec
+    # ----------------- END PATCH -----------------
+
+
  # region: Initialization and Core Infrastructure - # Methods like connect, close, is_initialized, initialize, 
  # _get_universe, _collect_redis_key_counts, _initialize_chroma_db
 
@@ -681,15 +697,21 @@ class Neo4jProcessor:
                             WHERE q.embedding IS NULL
                             RETURN q.id as id
                             """
-                            results = self.manager.execute_cypher_query(query, {})
+                            # results = self.manager.execute_cypher_query(query, {})
                             
-                            # Process each QAExchange node for this transcript
-                            if results:
-                                qa_nodes = results if isinstance(results, list) else [results]
-                                for qa_node in qa_nodes:
+                            # # Process each QAExchange node for this transcript
+                            # if results:
+                            #     qa_nodes = results if isinstance(results, list) else [results]
+                            #     for qa_node in qa_nodes:
+                            qa_nodes = self.manager.execute_cypher_query_all(query, {})
+                            for qa_node in qa_nodes:
                                     try:
                                         # Process this specific QAExchange node
                                         self._create_qaexchange_embedding(qa_node["id"])
+
+
+
+                                        
                                     except Exception as inner_e:
                                         logger.warning(f"Failed to generate embedding for QAExchange {qa_node['id']}: {inner_e}")
                         except Exception as e:
@@ -897,6 +919,7 @@ class Neo4jProcessor:
             """
             
             result = self.manager.execute_cypher_query(content_query, {"news_id": news_id})
+            result = self._coerce_record(result)
             
             if not result or not result.get("content"):
                 return False
@@ -1039,6 +1062,7 @@ class Neo4jProcessor:
 
             
             result = self.manager.execute_cypher_query(content_query, {"qa_id": qa_id})
+            result = self._coerce_record(result)
             
             if not result:
                 return False
@@ -1577,7 +1601,8 @@ class Neo4jProcessor:
             if max_items:
                 query += f" LIMIT {max_items}"
             
-            all_items = self.manager.execute_cypher_query(query, {})
+            # all_items = self.manager.execute_cypher_query(query, {})
+            all_items = self.manager.execute_cypher_query_all(query, {})
             
             # Handle empty results
             if not all_items:
@@ -1824,7 +1849,9 @@ class Neo4jProcessor:
             query += f" LIMIT {max_items}"
         
         # Get all news items needing embeddings
-        all_items = self.manager.execute_cypher_query(query, {})
+        # all_items = self.manager.execute_cypher_query(query, {})
+        all_items = self.manager.execute_cypher_query_all(query, {})
+        all_items = self._coerce_record(all_items)
         
         # Convert to list if needed and handle empty results
         if all_items and not isinstance(all_items, list):
@@ -1898,8 +1925,9 @@ class Neo4jProcessor:
             query += f" LIMIT {max_items}"
         
         # Get nodes needing embeddings
-        all_items = self.manager.execute_cypher_query(query, {})
-        
+        # all_items = self.manager.execute_cypher_query(query, {})
+        all_items = self.manager.execute_cypher_query_all(query, {})
+        all_items = self._coerce_record(all_items)
         # Handle empty results
         if all_items and not isinstance(all_items, list):
             all_items = [all_items]
@@ -4094,6 +4122,9 @@ class Neo4jProcessor:
 
         nodes_to_create = []
         relationships = []
+        
+        # Create QAExchange vector-index once before generating embeddings
+        self._create_qaexchange_vector_index()
 
         def add_rel(source_label, source_id, target_label, target_id, rel_type):
             relationships.append({
@@ -4194,6 +4225,42 @@ class Neo4jProcessor:
                 logger.info(f"Created {rel['rel_type']} relationship for transcript {transcript_id}")
 
             
+
+    def _create_transcript_node_from_data(self, transcript_id, transcript_data):
+        """Create a TranscriptNode from transcript data"""
+        # TranscriptNode is now imported at the top of the file
+        
+        def safe_int(val, default=0):
+            try:
+                return int(val)
+            except (ValueError, TypeError):
+                return default
+
+        def safe_dict(val):
+            if isinstance(val, dict):
+                return val
+            try:
+                return json.loads(val)
+            except:
+                return {}
+
+        return TranscriptNode(
+            id=transcript_id,
+            symbol=transcript_data.get("symbol", ""),
+            company_name=transcript_data.get("company_name", ""),
+            conference_datetime=transcript_data.get("conference_datetime", ""),
+            fiscal_quarter=safe_int(transcript_data.get("fiscal_quarter")),
+            fiscal_year=safe_int(transcript_data.get("fiscal_year")),
+            formType=transcript_data.get("formType", ""),
+            calendar_quarter=transcript_data.get("calendar_quarter"),
+            calendar_year=transcript_data.get("calendar_year"),
+            created=transcript_data.get("created"),
+            updated=transcript_data.get("updated"),
+            speakers=safe_dict(transcript_data.get("speakers", {}))
+        )
+
+
+
     # def _process_transcript_content(self, transcript_id, transcript_data):
     #     """Process additional transcript content nodes"""
     #     from utils.EventTraderNodes import PreparedRemarkNode, QuestionAnswerNode, FullTranscriptTextNode
@@ -4258,41 +4325,6 @@ class Neo4jProcessor:
     #                 params=[{"properties": {}}]
     #             )
     #             logger.info(f"Created {rel['rel_type']} relationship for transcript {transcript_id}")
-
-
-    def _create_transcript_node_from_data(self, transcript_id, transcript_data):
-        """Create a TranscriptNode from transcript data"""
-        # TranscriptNode is now imported at the top of the file
-        
-        def safe_int(val, default=0):
-            try:
-                return int(val)
-            except (ValueError, TypeError):
-                return default
-
-        def safe_dict(val):
-            if isinstance(val, dict):
-                return val
-            try:
-                return json.loads(val)
-            except:
-                return {}
-
-        return TranscriptNode(
-            id=transcript_id,
-            symbol=transcript_data.get("symbol", ""),
-            company_name=transcript_data.get("company_name", ""),
-            conference_datetime=transcript_data.get("conference_datetime", ""),
-            fiscal_quarter=safe_int(transcript_data.get("fiscal_quarter")),
-            fiscal_year=safe_int(transcript_data.get("fiscal_year")),
-            formType=transcript_data.get("formType", ""),
-            calendar_quarter=transcript_data.get("calendar_quarter"),
-            calendar_year=transcript_data.get("calendar_year"),
-            created=transcript_data.get("created"),
-            updated=transcript_data.get("updated"),
-            speakers=safe_dict(transcript_data.get("speakers", {}))
-        )
-
 
 
 ####################################### END #################################################
