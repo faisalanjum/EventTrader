@@ -51,7 +51,7 @@ from typing import Dict, List, Any, Optional, Union
 
 from benzinga.bz_news_errors import NewsErrorHandler
 from benzinga.bz_news_schemas import BzRestAPINews, UnifiedNews  # We'll need this for validation & unified format
-from utils.redisClasses import RedisClient
+from redisDB.redisClasses import RedisClient
 from utils.log_config import get_logger, setup_logging
 
 class BenzingaNewsRestAPI:

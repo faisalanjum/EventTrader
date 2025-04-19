@@ -8,20 +8,20 @@ from neograph.Neo4jProcessor import Neo4jProcessor
 from neograph.Neo4jInitializer import Neo4jInitializer
 
 
-from utils.redisClasses import EventTraderRedis, RedisKeys, RedisClient
+from redisDB.redisClasses import EventTraderRedis, RedisKeys, RedisClient
 from utils.log_config import get_logger, setup_logging
 
 from benzinga.bz_restAPI import BenzingaNewsRestAPI
 from benzinga.bz_websocket import BenzingaNewsWebSocket
 
 from transcripts.EarningsCallTranscripts import EarningsCallProcessor
-from utils.TranscriptProcessor import TranscriptProcessor
+from redisDB.TranscriptProcessor import TranscriptProcessor
 from eventtrader.keys import EARNINGS_CALL_API_KEY
 import json
 
 
-from utils.NewsProcessor import NewsProcessor
-from utils.ReportProcessor import ReportProcessor
+from redisDB.NewsProcessor import NewsProcessor
+from redisDB.ReportProcessor import ReportProcessor
 from utils.ReturnsProcessor import ReturnsProcessor
 
 from eventtrader.keys import BENZINGANEWS_API_KEY

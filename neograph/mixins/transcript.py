@@ -2,7 +2,7 @@ import logging
 import json
 from typing import Dict, List, Optional, Any, Set, Tuple
 from utils.date_utils import parse_news_dates, parse_date 
-from utils.redis_constants import RedisKeys
+from redisDB.redis_constants import RedisKeys
 
 
 from ..EventTraderNodes import (

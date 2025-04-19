@@ -15,7 +15,7 @@ from .mixins.reconcile import ReconcileMixin
 
 # Imports for Logger Setup and Standalone Functions
 from utils.log_config import get_logger # For logger setup
-from utils.redisClasses import EventTraderRedis # Needed by process_* functions
+from redisDB.redisClasses import EventTraderRedis # Needed by process_* functions
 from .Neo4jInitializer import Neo4jInitializer # Needed by init_neo4j (using relative path)
 from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD # Needed by init_neo4j
 
@@ -176,7 +176,7 @@ def process_news_data(batch_size=100, max_items=None, verbose=False, include_wit
                                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         
         # Initialize Redis client for news data
-        from utils.redisClasses import EventTraderRedis
+        from redisDB.redisClasses import EventTraderRedis
         redis_client = EventTraderRedis(source='news')
         logger.info("Initialized Redis client for news data")
         
@@ -230,7 +230,7 @@ def process_report_data(batch_size=100, max_items=None, verbose=False, include_w
                                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         
         # Initialize Redis client for news data (reports use the same Redis)
-        from utils.redisClasses import EventTraderRedis
+        from redisDB.redisClasses import EventTraderRedis
         redis_client = EventTraderRedis(source='news')
         logger.info("Initialized Redis client for report data")
         
@@ -286,7 +286,7 @@ def process_transcript_data(batch_size=5, max_items=None, verbose=False, include
                                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         
         # Initialize Redis client for transcript data (uses the same Redis as news/reports)
-        from utils.redisClasses import EventTraderRedis
+        from redisDB.redisClasses import EventTraderRedis
         redis_client = EventTraderRedis(source='news')
         logger.info("Initialized Redis client for transcript data")
         

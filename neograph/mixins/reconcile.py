@@ -1,8 +1,8 @@
 import logging
 import json
 from datetime import datetime, timedelta # For date calculations
-
-from utils.redis_constants import RedisKeys
+import time
+from redisDB.redis_constants import RedisKeys
 from ..Neo4jInitializer import Neo4jInitializer
 
 

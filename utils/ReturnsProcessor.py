@@ -8,15 +8,15 @@ from dateutil import parser
 import time
 from zoneinfo import ZoneInfo
 
-from utils.redisClasses import EventTraderRedis
-from utils.redisClasses import RedisClient
+from redisDB.redisClasses import EventTraderRedis
+from redisDB.redisClasses import RedisClient
 from utils.polygonClass import Polygon
 from eventtrader.keys import POLYGON_API_KEY
 from utils.metadata_fields import MetadataFields
 from utils.EventReturnsManager import EventReturnsManager
 import pytz
 
-from utils.redis_constants import RedisKeys
+from redisDB.redis_constants import RedisKeys
 from utils.log_config import get_logger, setup_logging
 
 class ReturnsProcessor:

@@ -2,11 +2,11 @@
 from datetime import datetime, timedelta
 import time
 import pytz
-from utils.BaseProcessor import BaseProcessor
+from .BaseProcessor import BaseProcessor
 import threading
 from transcripts.EarningsCallTranscripts import EarningsCallProcessor
 from eventtrader.keys import EARNINGS_CALL_API_KEY
-from utils.redis_constants import RedisKeys
+from .redis_constants import RedisKeys
 from utils.feature_flags import MAX_TRANSCRIPT_SLEEP_SECONDS
 
 

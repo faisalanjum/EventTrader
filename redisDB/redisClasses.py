@@ -10,7 +10,7 @@ from typing import List, Optional, Union
 from benzinga.bz_news_schemas import UnifiedNews
 from datetime import timezone
 import time
-from utils.redis_constants import RedisKeys, RedisQueues
+from .redis_constants import RedisKeys, RedisQueues
 from SEC_API_Files.sec_schemas import SECFilingSchema, UnifiedReport
 from utils.log_config import get_logger, setup_logging
 

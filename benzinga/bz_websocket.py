@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from typing import Union
 from benzinga.bz_news_schemas import BzWebSocketNews, UnifiedNews
 from benzinga.bz_news_errors import NewsErrorHandler
-from utils.redisClasses import RedisClient
+from redisDB.redisClasses import RedisClient
 from utils.log_config import get_logger, setup_logging
 import threading
 

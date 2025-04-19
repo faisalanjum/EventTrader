@@ -1,4 +1,4 @@
-from utils.BaseProcessor import BaseProcessor
+from .BaseProcessor import BaseProcessor
 from bs4 import BeautifulSoup
 import html
 import re

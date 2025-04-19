@@ -1,5 +1,5 @@
 import re
-from utils.BaseProcessor import BaseProcessor
+from .BaseProcessor import BaseProcessor
 from datetime import datetime
 import html
 import unicodedata

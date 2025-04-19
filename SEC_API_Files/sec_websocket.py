@@ -4,7 +4,7 @@ import time
 import ssl
 from datetime import datetime, timezone
 from typing import Optional, Union, Dict
-from utils.redisClasses import RedisClient
+from redisDB.redisClasses import RedisClient
 import threading
 from SEC_API_Files.sec_schemas import SECFilingSchema, UnifiedReport
 from SEC_API_Files.sec_errors import FilingErrorHandler

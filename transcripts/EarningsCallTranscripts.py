@@ -723,7 +723,7 @@ class EarningsCallProcessor:
             client = self.redis_client.live_client if is_live else self.redis_client.history_client
             
             # Generate key using the RedisKeys utility - just pass whatever is in conference_datetime
-            from utils.redis_constants import RedisKeys
+            from redisDB.redis_constants import RedisKeys
             transcript_id = RedisKeys.get_transcript_key_id(
                 transcript['symbol'], 
                 transcript.get('conference_datetime', '')

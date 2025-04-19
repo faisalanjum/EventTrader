@@ -5,7 +5,7 @@ import json
 import logging
 import backoff
 import requests
-from utils.redisClasses import RedisClient, EventTraderRedis
+from redisDB.redisClasses import RedisClient, EventTraderRedis
 from SEC_API_Files.sec_errors import FilingErrorHandler
 from utils.feature_flags import VALID_FORM_TYPES
 from sec_api import QueryApi
