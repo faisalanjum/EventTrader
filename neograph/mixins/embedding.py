@@ -165,7 +165,7 @@ class EmbeddingMixin:
             else:
                 # If batch lookup failed, add all items to nodes_needing_embeddings
                 for item_data in hash_to_item.values():
-                    nodes_needing_embeddings.append(item_data)
+                    nodes_needing_embeddings.append({"id": item_data["id"], "content": item_data["content"]})
         
             logger.info(f"[EMBED-FLOW] ChromaDB batch returned {len(cached_embeddings)}/{len(all_items)} cached embeddings")
             
@@ -1027,7 +1027,7 @@ class EmbeddingMixin:
             LIMIT $limit
             """
 
-            results = self.manager.execute_cypher_query(search_query, {
+            results = self.manager.execute_cypher_query_all(search_query, {
                 "query_embedding": query_embedding,
                 "min_score": min_score,
                 "limit": limit

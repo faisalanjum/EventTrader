@@ -468,7 +468,7 @@ class Neo4jInitializer:
         """Create bidirectional RELATED_TO relationships between companies"""
         try:
             # Get all existing companies using execute_cypher_query
-            result = self.manager.execute_cypher_query(
+            result = self.manager.execute_cypher_query_all(
                 "MATCH (c:Company) RETURN c.id as cik, c.ticker as ticker",
                 {}
             )
