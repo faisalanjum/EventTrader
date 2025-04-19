@@ -6,7 +6,7 @@ import os
 import time
 
 
-from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD, OPENAI_API_KEY
+from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
 from chromadb.config import Settings
 from ..Neo4jInitializer import Neo4jInitializer
 
