@@ -28,7 +28,7 @@ from .xbrl_reporting import Fact
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .Neo4jManager import Neo4jManager
-    from utils.EventTraderNodes import CompanyNode, ReportNode
+    from neograph.EventTraderNodes import CompanyNode, ReportNode
 
 # Arelle imports
 from arelle import Cntlr, ModelDocument, FileSource, XbrlConst
@@ -44,7 +44,7 @@ import urllib.request
 def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional['CompanyNode']:
     """Get CompanyNode from Neo4j by CIK."""
     # Import inside function to avoid circular imports
-    from utils.EventTraderNodes import CompanyNode
+    from neograph.EventTraderNodes import CompanyNode
     
     try:
         with neo4j.driver.session() as session:
@@ -65,7 +65,7 @@ def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional['CompanyNode
 def get_report_by_accessionNo(neo4j: 'Neo4jManager', accessionNo: str) -> Optional['ReportNode']:
     """Get ReportNode from Neo4j by accession number."""
     # Import inside function to avoid circular imports  
-    from utils.EventTraderNodes import ReportNode
+    from neograph.EventTraderNodes import ReportNode
     
     try:
         with neo4j.driver.session() as session:

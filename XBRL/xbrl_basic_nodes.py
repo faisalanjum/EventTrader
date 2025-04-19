@@ -9,7 +9,7 @@ from .common_imports import *
 # Import node types from core module
 from .xbrl_core import Neo4jNode, NodeType, RelationType, GroupingType
 
-# Note: ReportNode and CompanyNode are imported directly from utils.EventTraderNodes
+# Note: ReportNode and CompanyNode are imported directly from neograph.EventTraderNodes
 # where needed to avoid circular imports
 
 from arelle.ModelInstanceObject import ModelFact, ModelContext

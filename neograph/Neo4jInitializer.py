@@ -6,7 +6,7 @@ from neo4j import GraphDatabase
 import pandas as pd
 import json
 
-from utils.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, DateNode
+from neograph.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, DateNode
 # , AdminSectionNode, FinancialStatementNode
 from utils.market_session import MarketSessionClassifier
 from XBRL.Neo4jManager import Neo4jManager

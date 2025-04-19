@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from .xbrl_processor import process_report
     from .xbrl_core import Neo4jNode, NodeType, RelationType, GroupingType, PRESENTATION_EDGE_UNIQUE_PROPS, CALCULATION_EDGE_UNIQUE_PROPS, ReportElementClassifier
     from .xbrl_basic_nodes import Context, Period, Unit
-    from utils.EventTraderNodes import CompanyNode, ReportNode
+    from neograph.EventTraderNodes import CompanyNode, ReportNode
     from .xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
 
 # dataclasses and typing imports

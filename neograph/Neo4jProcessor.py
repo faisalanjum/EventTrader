@@ -30,7 +30,7 @@ from utils.log_config import get_logger, setup_logging
 from utils.redisClasses import EventTraderRedis, RedisClient
 
 # Internal Imports - EventTrader Node Classes
-from utils.EventTraderNodes import (
+from neograph.EventTraderNodes import (
     NewsNode, CompanyNode, SectorNode, 
     IndustryNode, MarketIndexNode, ReportNode,
     ExtractedSectionContent, ExhibitContent, FinancialStatementContent, FilingTextContent,
@@ -473,7 +473,7 @@ class Neo4jProcessor:
         Returns:
             bool: True if processing is complete, False if it was interrupted
         """
-        from utils.EventTraderNodes import ReportNode
+        from neograph.EventTraderNodes import ReportNode
         from utils.redis_constants import RedisKeys
         
         # Get Redis instance if available
@@ -2005,7 +2005,7 @@ class Neo4jProcessor:
             This method handles data parsing, validation, and standardization
             to ensure the NewsNode has consistent field values.
         """
-        from utils.EventTraderNodes import NewsNode
+        from neograph.EventTraderNodes import NewsNode
         
         # Extract timestamps with proper parsing
         created_at, updated_at = parse_news_dates(news_data)
@@ -2363,7 +2363,7 @@ class Neo4jProcessor:
 
     def _create_report_node_from_data(self, report_id, report_data):
         """Create a ReportNode instance from report data"""
-        from utils.EventTraderNodes import ReportNode
+        from neograph.EventTraderNodes import ReportNode
         
         # Process required fields
         cik = report_data.get('cik', '')
@@ -2434,7 +2434,7 @@ class Neo4jProcessor:
         Returns:
             List of created section nodes
         """
-        from utils.EventTraderNodes import ExtractedSectionContent, ReportNode
+        from neograph.EventTraderNodes import ExtractedSectionContent, ReportNode
         from XBRL.xbrl_core import RelationType
         
         # Skip if no extracted sections
@@ -2509,7 +2509,7 @@ class Neo4jProcessor:
         Returns:
             List of created exhibit nodes
         """
-        from utils.EventTraderNodes import ExhibitContent, ReportNode
+        from neograph.EventTraderNodes import ExhibitContent, ReportNode
         from XBRL.xbrl_core import RelationType
         
         # Skip if no exhibit contents
@@ -2593,7 +2593,7 @@ class Neo4jProcessor:
         Returns:
             List containing the created filing text content node, or empty list if none created
         """
-        from utils.EventTraderNodes import FilingTextContent, ReportNode
+        from neograph.EventTraderNodes import FilingTextContent, ReportNode
         from XBRL.xbrl_core import RelationType
         
         # Skip if no filing text content
@@ -2653,7 +2653,7 @@ class Neo4jProcessor:
         Returns:
             List of created financial statement nodes
         """
-        from utils.EventTraderNodes import FinancialStatementContent, ReportNode
+        from neograph.EventTraderNodes import FinancialStatementContent, ReportNode
         from XBRL.xbrl_core import RelationType
         
         # Skip if no financial statements
@@ -2733,7 +2733,7 @@ class Neo4jProcessor:
             report_json: The report JSON data
             company_nodes: Dictionary to store company nodes (cik -> node)
         """
-        from utils.EventTraderNodes import CompanyNode
+        from neograph.EventTraderNodes import CompanyNode
         
         # Get universe data for mapping
         universe_data = self._get_universe()
@@ -4118,7 +4118,7 @@ class Neo4jProcessor:
 
 
     def _process_transcript_content(self, transcript_id, transcript_data):
-        from utils.EventTraderNodes import (
+        from neograph.EventTraderNodes import (
             PreparedRemarkNode, QuestionAnswerNode,
             FullTranscriptTextNode, QAExchangeNode
         )
@@ -4266,7 +4266,7 @@ class Neo4jProcessor:
 
     # def _process_transcript_content(self, transcript_id, transcript_data):
     #     """Process additional transcript content nodes"""
-    #     from utils.EventTraderNodes import PreparedRemarkNode, QuestionAnswerNode, FullTranscriptTextNode
+    #     from neograph.EventTraderNodes import PreparedRemarkNode, QuestionAnswerNode, FullTranscriptTextNode
         
     #     nodes_to_create = []
     #     relationships = []

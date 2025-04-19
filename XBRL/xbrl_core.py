@@ -14,8 +14,8 @@ from .common_imports import *
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .xbrl_basic_nodes import Context, Period, Unit
-    from utils.EventTraderNodes import CompanyNode, ReportNode
-    # from utils.EventTraderNodes import AdminReportNode
+    from neograph.EventTraderNodes import CompanyNode, ReportNode
+    # from neograph.EventTraderNodes import AdminReportNode
     from .xbrl_concept_nodes import Concept, GuidanceConcept, AbstractConcept
     from .xbrl_taxonomy import Taxonomy
     from .xbrl_dimensions import Dimension, Domain, Member, Hypercube
