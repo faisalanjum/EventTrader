@@ -80,7 +80,7 @@ NEWS_VECTOR_INDEX_NAME = "news_vector_index"
 # When True, generate embeddings using OpenAI for QAExchange nodes
 # This creates vector embeddings for semantic search capabilities
 ENABLE_QAEXCHANGE_EMBEDDINGS = True
-QAEXCHANGE_VECTOR_INDEX_NAME = "qaexchange_embedding_vector_idx"
+QAEXCHANGE_VECTOR_INDEX_NAME = "qaexchange_vector_idx"
 
 
 

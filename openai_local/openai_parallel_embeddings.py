@@ -3,7 +3,7 @@ import time
 import logging
 from openai import OpenAI
 from typing import List
-from utils.openai_rate_limiter import rate_limiter
+from openai_local.openai_rate_limiter import rate_limiter
 
 logger = logging.getLogger(__name__)
 

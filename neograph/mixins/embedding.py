@@ -12,9 +12,8 @@ from utils.feature_flags import (CHROMADB_PERSIST_DIRECTORY,ENABLE_NEWS_EMBEDDIN
                                 USE_CHROMADB_CACHING, OPENAI_EMBEDDING_DIMENSIONS, OPENAI_EMBED_CUTOFF,
                                 NEWS_VECTOR_INDEX_NAME, QAEXCHANGE_VECTOR_INDEX_NAME, ENABLE_QAEXCHANGE_EMBEDDINGS)
 
-
-from utils.openai_parallel_embeddings import process_embeddings_in_parallel
-
+# Updated path for local import
+from openai_local.openai_parallel_embeddings import process_embeddings_in_parallel
 
 logger = logging.getLogger(__name__)
 
