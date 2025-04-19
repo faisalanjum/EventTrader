@@ -22,7 +22,7 @@ import json
 
 from redisDB.NewsProcessor import NewsProcessor
 from redisDB.ReportProcessor import ReportProcessor
-from utils.ReturnsProcessor import ReturnsProcessor
+from eventReturns.ReturnsProcessor import ReturnsProcessor
 
 from eventtrader.keys import BENZINGANEWS_API_KEY
 from eventtrader.keys import SEC_API_KEY

@@ -5,7 +5,7 @@ import pandas as pd
 import pytz
 import logging
 from eventtrader.keys import POLYGON_API_KEY
-from utils.polygonClass import Polygon
+from eventReturns.polygonClass import Polygon
 from utils.market_session import MarketSessionClassifier
 from utils.metadata_fields import MetadataFields 
 from utils.log_config import get_logger, setup_logging

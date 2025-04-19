@@ -6,7 +6,7 @@ import time  # Import time for sleep
 from typing import Optional, Dict, Any
 from .redis_constants import RedisKeys
 from .redisClasses import RedisClient
-from utils.EventReturnsManager import EventReturnsManager
+from eventReturns.EventReturnsManager import EventReturnsManager
 from utils.log_config import get_logger, setup_logging
 from datetime import datetime
 import pytz

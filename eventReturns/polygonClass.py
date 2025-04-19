@@ -10,8 +10,8 @@ import concurrent.futures
 from tqdm import tqdm
 import requests
 import time
-from .ETF_mappings import Sector_Industry_ETFs
-from .market_session import MarketSessionClassifier
+from utils.ETF_mappings import Sector_Industry_ETFs
+from utils.market_session import MarketSessionClassifier
 from utils.metadata_fields import MetadataFields  
 from datetime import datetime, timezone, timedelta
 import pytz

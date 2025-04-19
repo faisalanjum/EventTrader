@@ -11,6 +11,7 @@ from neograph.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode,
 from utils.market_session import MarketSessionClassifier
 from neograph.Neo4jManager import Neo4jManager
 from XBRL.xbrl_core import RelationType, NodeType
+from eventReturns.polygonClass import Polygon
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -1006,7 +1007,6 @@ class Neo4jInitializer:
                 logger.error("Missing POLYGON_API_KEY environment variable")
                 return 0
             
-            from utils.polygonClass import Polygon
             polygon = Polygon(api_key=polygon_api_key, polygon_subscription_delay=0)
             
             # Sort dates for processing

@@ -4,7 +4,7 @@ import threading
 from datetime import datetime, timedelta
 import pytz
 from redisDB.redisClasses import EventTraderRedis
-from utils.ReturnsProcessor import ReturnsProcessor
+from eventReturns.ReturnsProcessor import ReturnsProcessor
 from redisDB.NewsProcessor import NewsProcessor
 import json
 

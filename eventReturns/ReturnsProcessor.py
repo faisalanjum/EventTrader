@@ -10,10 +10,10 @@ from zoneinfo import ZoneInfo
 
 from redisDB.redisClasses import EventTraderRedis
 from redisDB.redisClasses import RedisClient
-from utils.polygonClass import Polygon
+from eventReturns.polygonClass import Polygon
 from eventtrader.keys import POLYGON_API_KEY
 from utils.metadata_fields import MetadataFields
-from utils.EventReturnsManager import EventReturnsManager
+from eventReturns.EventReturnsManager import EventReturnsManager
 import pytz
 
 from redisDB.redis_constants import RedisKeys
