@@ -1178,4 +1178,98 @@ class Neo4jManager:
                 logging.getLogger('Neo4jManager').error(f"Error creating price relationships: {e}")
                 return 0
 
+    # <<< START NEW METHOD FOR PRESENTATION EDGES >>>
+    def merge_presentation_edges(self, relationships: List[Tuple[Neo4jNode, Neo4jNode, Dict[str, Any]]]) -> None:
+        """Merges PRESENTATION_EDGE relationships using a MERGE clause that 
+        matches the specific uniqueness constraint for this relationship type.
+        Assumes input list contains only tuples of (source_node, target_node, properties_dict).
+        """
+        if not relationships:
+            print("No PRESENTATION_EDGE relationships provided to merge.")
+            return
+
+        # Import RelationType locally if not available globally or handle potential import issues
+        try:
+             from XBRL.xbrl_core import RelationType
+        except ImportError:
+             # Handle case where RelationType might need a different import path or is already available
+             # This is a fallback, ideally imports are handled at the module level
+             if 'RelationType' not in globals():
+                  print("Error: RelationType not found for merge_presentation_edges")
+                  return 
+        
+        rel_type = RelationType.PRESENTATION_EDGE # Specific type for this function
+        batch_params = []
+        # Safely get source/target types from the first element if list is not empty
+        source_type = relationships[0][0].__class__.__name__ if relationships else "UnknownSource"
+        target_type = relationships[0][1].__class__.__name__ if relationships else "UnknownTarget"
+
+        for source, target, properties in relationships:
+            # Validate required properties for the MERGE key exist
+            required_keys = {'company_cik', 'report_id', 'network_name', 'parent_level', 'child_level'}
+            if not required_keys.issubset(properties.keys()):
+                 print(f"Warning: Skipping relationship between {getattr(source, 'id', '?')} and {getattr(target, 'id', '?')} due to missing required properties for MERGE: {required_keys - properties.keys()}")
+                 continue
+            
+            # Ensure levels are convertible to integers
+            try:
+                parent_lvl = properties['parent_level']
+                child_lvl = properties['child_level']
+                int(parent_lvl)
+                int(child_lvl)
+            except (KeyError, ValueError, TypeError) as e:
+                print(f"Warning: Skipping relationship between {getattr(source, 'id', '?')} and {getattr(target, 'id', '?')} due to missing or non-integer level properties: {e}")
+                continue
+
+            batch_params.append({
+                "source_id": source.id,
+                "target_id": target.id,
+                "properties": properties # Pass the full properties dict
+            })
+
+        if not batch_params:
+            print("No valid PRESENTATION_EDGE relationships remained after validation.")
+            return
+
+        # Define transaction function specifically for PRESENTATION_EDGE
+        def merge_presentation_tx(tx, batch_params=batch_params):
+            # Use the correct MERGE key matching the constraint
+            # Ensure levels are converted to integers in the key
+            # Ensure APOC is available for the ON MATCH SET clause
+            tx.run(f"""
+                UNWIND $params AS param
+                MATCH (s {{id: param.source_id}})
+                MATCH (t {{id: param.target_id}})
+                MERGE (s)-[r:{rel_type.value} {{ 
+                    cik: param.properties.company_cik, 
+                    report_id: param.properties.report_id, 
+                    network_name: param.properties.network_name, 
+                    parent_id: param.source_id, 
+                    child_id: param.target_id, 
+                    parent_level: toInteger(param.properties.parent_level), 
+                    child_level: toInteger(param.properties.child_level) 
+                }}]->(t)
+                ON CREATE SET r = param.properties 
+                ON MATCH SET r += apoc.map.clean(param.properties, 
+                                 ['cik', 'report_id', 'network_name', 'parent_id', 'child_id', 'parent_level', 'child_level'], 
+                                 [null])
+            """, {"params": batch_params})
+            # ON CREATE: Set all properties initially.
+            # ON MATCH: Add properties NOT used in the MERGE key, using apoc.map.clean to avoid overwriting key props.
+
+        # Execute with automatic retry for deadlocks
+        with self.driver.session() as session:
+            try:
+                session.execute_write(merge_presentation_tx)
+                print(f"Merged {len(batch_params)} {rel_type.value} relationships from {source_type} to {target_type}")
+            except Exception as e:
+                import logging # Use logging for errors
+                logger = logging.getLogger('Neo4jManager')
+                logger.error(f"ERROR merging presentation edges: {e}", exc_info=True)
+                # Log details for debugging
+                if batch_params: # Log first few problematic params if possible
+                     logger.error(f"First few batch params during error: {batch_params[:3]}")
+                raise # Re-raise the exception to halt processing if merge fails
+    # <<< END NEW METHOD FOR PRESENTATION EDGES >>>
+
 # endregion : Neo4j Manager ########################

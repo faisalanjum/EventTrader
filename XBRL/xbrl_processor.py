@@ -289,7 +289,7 @@ class process_report:
     def link_presentation_facts(self) -> None:
         """Create presentation relationships using stored validated facts"""
         print("\nCreating presentation relationships...")
-        relationships = []
+        presentation_relationships_for_merge = [] # List for (source, target, props) tuples
         debug_counts = defaultdict(int)
         
         for network in self.networks:
@@ -329,92 +329,43 @@ class process_report:
                     
                     # Create relationships...
                     if parent_u_id in abstract_lookup and child_u_id in abstract_lookup:
-                        relationships.append((
-                            abstract_lookup[parent_u_id],
-                            abstract_lookup[child_u_id],
-                            RelationType.PRESENTATION_EDGE,
-                            rel_props
+                        presentation_relationships_for_merge.append((
+                            abstract_lookup[parent_u_id], # source
+                            abstract_lookup[child_u_id], # target
+                            rel_props                    # props
                         ))
                         debug_counts['abstract_to_abstract'] += 1
                     
                     if parent_u_id in abstract_lookup and child_u_id in fact_lookup:
                         for fact in fact_lookup[child_u_id]:
-                            relationships.append((
-                                abstract_lookup[parent_u_id],
-                                fact,
-                                RelationType.PRESENTATION_EDGE,
-                                rel_props
+                            presentation_relationships_for_merge.append((
+                                abstract_lookup[parent_u_id], # source
+                                fact,                        # target
+                                rel_props                    # props
                             ))
                             debug_counts['abstract_to_fact'] += 1
         
-        print("\nPresentation Relationship Summary:")
+        print("\nPresentation Relationship Generation Summary:")
+        print(f"Total PRESENTATION_EDGE tuples generated: {len(presentation_relationships_for_merge)}")
         for rel_type, count in debug_counts.items():
             print(f"{rel_type}: {count}")
 
-        if relationships:
-            initial_count = len(relationships)
-            print(f"Total relationships before deduplication: {initial_count}")
+        # <<< Call the new specific Neo4jManager method >>>
+        if presentation_relationships_for_merge:
+            print("\nSending PRESENTATION_EDGE relationships to Neo4j via merge_presentation_edges...")
+            try:
+                # Pass the list directly as it contains (source, target, props) tuples
+                self.neo4j.merge_presentation_edges(presentation_relationships_for_merge) 
+            except Exception as e:
+                print(f"ERROR during merge_presentation_edges call: {e}")
+                # Decide if processing should halt or continue
+                # raise # Optional: re-raise to stop processing on error
+        else:
+            print("\nNo PRESENTATION_EDGE relationships generated to send.")
             
-            seen_keys = set()
-            deduplicated_relationships = [] # Store deduplicated results here
-            skipped_count = 0
-            
-            for rel_tuple in relationships:
-                source, target, rel_type, rel_props = rel_tuple
-
-                if rel_type == RelationType.PRESENTATION_EDGE:
-                    try:
-                        # Build key dynamically, substituting network_uri for network_name
-                        key_list = []
-                        for prop in PRESENTATION_EDGE_UNIQUE_PROPS:
-                            if prop == 'parent_id':
-                                val = source.id
-                            elif prop == 'child_id':
-                                val = target.id
-                            elif prop == 'network_name': # User preference
-                                val = rel_props.get('network_uri') 
-                            elif prop in ['parent_level', 'child_level']:
-                                raw_val = rel_props.get(prop)
-                                val = int(raw_val) if raw_val is not None else None
-                            else:
-                                val = rel_props.get(prop)
-                            
-                            # Ensure essential properties are present
-                            if val is None:
-                                raise ValueError(f"Missing essential key property: {prop}")
-                                
-                            key_list.append(val)
-                            
-                        key_tuple = tuple(key_list)
-
-                        # If key hasn't been seen, add it to set and keep the relationship
-                        if key_tuple not in seen_keys:
-                            seen_keys.add(key_tuple)
-                            deduplicated_relationships.append(rel_tuple)
-                        else:
-                            # Key already seen, skip this relationship (duplicate)
-                            skipped_count += 1
-                            
-                    except (KeyError, ValueError) as e:
-                        # If key creation fails, log warning but keep the relationship
-                        print(f"Warning: Error creating deduplication key for rel between {source.id} and {target.id}: {e}. Keeping relationship.")
-                        deduplicated_relationships.append(rel_tuple) # Keep relationship if key fails
-                else:
-                     # Keep non-presentation relationships
-                     deduplicated_relationships.append(rel_tuple)
-                        
-            final_count = len(deduplicated_relationships)
-            print(f"Skipped {skipped_count} duplicate presentation relationships.")
-            print(f"Total relationships after deduplication: {final_count}")
-            relationships = deduplicated_relationships # Update relationships list
-
-        if relationships:
-            print("\nCreating relationships in Neo4j...")
-            self.neo4j.merge_relationships(relationships) # Now call with potentially modified list
-            
-        print("\nPresentation Relationship Creation Summary:")
-        print(f"Total relationships sent to Neo4j: {len(relationships)}") 
-        # Optionally recalculate debug_counts based on the final list if needed
+        # Final summary reflects what was attempted
+        print("\nPresentation Relationship Merge Summary:")
+        print(f"Attempted to merge {len(presentation_relationships_for_merge)} PRESENTATION_EDGE relationships via specific method.")
 
 
     def link_calculation_facts(self) -> None:
