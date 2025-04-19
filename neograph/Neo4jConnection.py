@@ -2,7 +2,7 @@
 Singleton connection manager for Neo4j.
 CRITICAL: This module must be imported before any Neo4j operations.
 """
-from XBRL.Neo4jManager import Neo4jManager
+from neograph.Neo4jManager import Neo4jManager
 from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
 import os
 

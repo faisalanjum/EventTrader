@@ -27,7 +27,7 @@ from .xbrl_reporting import Fact
 # Type checking
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from .Neo4jManager import Neo4jManager
+    from neograph.Neo4jManager import Neo4jManager
     from neograph.EventTraderNodes import CompanyNode, ReportNode
 
 # Arelle imports
@@ -782,9 +782,9 @@ class process_report:
             # Close the controller if it exists
             if hasattr(self, 'controller') and self.controller:
                 try:
-                    # Close the web cache first
-                    if hasattr(self.controller, 'webCache'):
-                        self.controller.webCache.close()
+                    # Close the web cache first (Removed - WebCache has no close() method)
+                    # if hasattr(self.controller, 'webCache'):
+                    #    self.controller.webCache.close()
                     
                     # Close the controller itself
                     if hasattr(self.controller, 'close'):

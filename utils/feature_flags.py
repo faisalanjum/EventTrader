@@ -56,7 +56,7 @@ FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '8-K/A']
 # When set to True, enables XBRL report processing which extracts detailed financial data
 # When set to False, skips XBRL processing entirely and does not initialize related resources
 # This can significantly reduce memory usage and CPU load when XBRL data is not needed
-ENABLE_XBRL_PROCESSING = False
+ENABLE_XBRL_PROCESSING = True
 
 # XBRL Thread Pool Configuration
 # Number of worker threads for XBRL processing (only used when ENABLE_XBRL_PROCESSING is True)

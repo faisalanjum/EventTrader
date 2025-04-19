@@ -9,7 +9,7 @@ import json
 from neograph.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, DateNode
 # , AdminSectionNode, FinancialStatementNode
 from utils.market_session import MarketSessionClassifier
-from XBRL.Neo4jManager import Neo4jManager
+from neograph.Neo4jManager import Neo4jManager
 from XBRL.xbrl_core import RelationType, NodeType
 
 # Set up logger
@@ -59,7 +59,7 @@ class Neo4jInitializer:
         """Connect to Neo4j using Neo4jManager singleton"""
         try:
             # Import here to avoid circular imports
-            from XBRL.Neo4jConnection import get_manager
+            from neograph.Neo4jConnection import get_manager
             
             # Use the singleton manager
             self.manager = get_manager()

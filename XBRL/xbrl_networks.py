@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from .xbrl_reporting import Fact
     from .xbrl_dimensions import Dimension, Domain, Member  # Hypercube already imported above
     from .xbrl_taxonomy import Taxonomy
-    from .Neo4jManager import Neo4jManager
+    from neograph.Neo4jManager import Neo4jManager
 
 
 

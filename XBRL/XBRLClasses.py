@@ -30,7 +30,7 @@ from datetime import timedelta, date, datetime
 import copy
 
 if TYPE_CHECKING:
-    from .Neo4jManager import Neo4jManager
+    from neograph.Neo4jManager import Neo4jManager
 
 # Arelle imports
 from arelle import Cntlr, ModelDocument, FileSource, XbrlConst

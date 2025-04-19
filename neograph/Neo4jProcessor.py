@@ -45,7 +45,7 @@ from utils.date_utils import parse_news_dates, parse_date
 from utils.metadata_fields import MetadataFields
 
 # Internal Imports - XBRL Processing
-from XBRL.Neo4jManager import Neo4jManager
+from neograph.Neo4jManager import Neo4jManager
 from XBRL.xbrl_core import NodeType, RelationType
 
 # Internal Imports - Redis Constants
@@ -143,7 +143,7 @@ class Neo4jProcessor:
         """Connect to Neo4j using Neo4jManager singleton"""
         try:
             # Import here to avoid circular imports
-            from XBRL.Neo4jConnection import get_manager
+            from neograph.Neo4jConnection import get_manager
             
             # Use the singleton manager
             self.manager = get_manager()
@@ -3370,7 +3370,7 @@ class Neo4jProcessor:
             return 0
             
         # Import here to avoid circular imports
-        from XBRL.Neo4jConnection import get_manager
+        from neograph.Neo4jConnection import get_manager
         
         # Get the singleton Neo4j manager
         neo4j_manager = self.manager if hasattr(self, 'manager') else get_manager()
@@ -3548,7 +3548,7 @@ class Neo4jProcessor:
                     
                     # Import needed components
                     from XBRL.xbrl_processor import process_report, get_company_by_cik, get_report_by_accessionNo
-                    from XBRL.Neo4jConnection import get_manager
+                    from neograph.Neo4jConnection import get_manager
                     
                     # Use the singleton Neo4j manager
                     neo4j_manager = get_manager()
@@ -3834,7 +3834,7 @@ class Neo4jProcessor:
                 
     #             # Import needed components
     #             from XBRL.xbrl_processor import process_report, get_company_by_cik, get_report_by_accessionNo
-    #             from XBRL.Neo4jManager import Neo4jManager
+    #             from neograph.Neo4jManager import Neo4jManager
                 
     #             # Create a dedicated Neo4j connection for this task
     #             neo4j_manager = Neo4jManager(

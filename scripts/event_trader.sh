@@ -650,7 +650,7 @@ print('Redis databases cleared successfully via Python')
     # Change to workspace directory first to ensure correct path
     cd "$WORKSPACE_DIR"
     $PYTHON_CMD -c "
-from XBRL.Neo4jConnection import get_manager
+from neograph.Neo4jConnection import get_manager
 import os
 from dotenv import load_dotenv
 

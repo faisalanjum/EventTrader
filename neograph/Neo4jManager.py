@@ -7,13 +7,13 @@ import pandas as pd
 import time
 # Split imports: TYPE_CHECKING for type hints, direct imports for runtime needs
 if TYPE_CHECKING:
-    from .xbrl_core import Neo4jNode
+    from XBRL.xbrl_core import Neo4jNode
 
 # Import needed classes and enums for runtime
-from .xbrl_core import NodeType, RelationType, PRESENTATION_EDGE_UNIQUE_PROPS, CALCULATION_EDGE_UNIQUE_PROPS
-from .xbrl_reporting import Fact
+from XBRL.xbrl_core import NodeType, RelationType, PRESENTATION_EDGE_UNIQUE_PROPS, CALCULATION_EDGE_UNIQUE_PROPS
+from XBRL.xbrl_reporting import Fact
 
-from .utils import resolve_primary_fact_relationships, clean_number
+from XBRL.utils import resolve_primary_fact_relationships, clean_number
 
 
 # region : Neo4j Manager ########################

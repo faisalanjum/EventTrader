@@ -118,7 +118,7 @@ pip install neo4j
 Basic usage:
 ```python
 from XBRL import process_report
-from XBRL.Neo4jManager import Neo4jManager
+from neograph.Neo4jManager import Neo4jManager
 
 # Initialize Neo4j manager
 neo4j = Neo4jManager(uri, username, password)
