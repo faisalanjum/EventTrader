@@ -7,7 +7,7 @@ import threading
 import time # Likely needed for sleep in the loop
 from typing import Dict, List, Optional, Any
 from redisDB.redis_constants import RedisKeys
-from utils.feature_flags import ENABLE_NEWS_EMBEDDINGS
+from config.feature_flags import ENABLE_NEWS_EMBEDDINGS
 
 logger = logging.getLogger(__name__)
 

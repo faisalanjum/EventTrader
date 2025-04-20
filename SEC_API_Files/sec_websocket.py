@@ -76,7 +76,7 @@ class SECWebSocket:
     def connect(self, raw: bool = False, enable_trace: bool = False):
         """Start WebSocket connection"""
         # Check feature flag
-        from utils.feature_flags import ENABLE_LIVE_DATA
+        from config.feature_flags import ENABLE_LIVE_DATA
         if not ENABLE_LIVE_DATA:
             # Only log the message once
             if not self._feature_flag_logged:
@@ -271,7 +271,7 @@ class SECWebSocket:
     def _on_message(self, ws, message: str):
         """Handle incoming WebSocket message"""
         # Check feature flag to avoid unnecessary processing
-        from utils.feature_flags import ENABLE_LIVE_DATA
+        from config.feature_flags import ENABLE_LIVE_DATA
         if not ENABLE_LIVE_DATA:
             # Don't log this message for every message received
             return

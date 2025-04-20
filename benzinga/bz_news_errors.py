@@ -247,7 +247,7 @@ class NewsErrorHandler:
         """Centralized processing with error handling for both REST and WebSocket"""
         try:
             # Import feature flag locally
-            from utils.feature_flags import REJECT_MULTIPLE_SYMBOLS
+            from config.feature_flags import REJECT_MULTIPLE_SYMBOLS
             
             # Only check symbol count if feature flag is enabled
             if REJECT_MULTIPLE_SYMBOLS:

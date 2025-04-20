@@ -1,4 +1,4 @@
-from utils.feature_flags import VALID_FORM_TYPES, FORM_TYPES_REQUIRING_XML, FORM_TYPES_REQUIRING_SECTIONS
+from config.feature_flags import VALID_FORM_TYPES, FORM_TYPES_REQUIRING_XML, FORM_TYPES_REQUIRING_SECTIONS
 
 from pydantic import BaseModel, field_validator, model_validator
 from typing import List, Optional, Dict, Any

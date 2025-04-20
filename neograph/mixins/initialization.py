@@ -40,7 +40,7 @@ class InitializationMixin:
         self.xbrl_processed = False
         
         # Import feature flag
-        from utils.feature_flags import ENABLE_XBRL_PROCESSING, XBRL_WORKER_THREADS
+        from config.feature_flags import ENABLE_XBRL_PROCESSING, XBRL_WORKER_THREADS
         self.enable_xbrl = ENABLE_XBRL_PROCESSING
         
         # Only initialize XBRL resources if feature flag is enabled
@@ -222,7 +222,7 @@ class InitializationMixin:
     def _initialize_chroma_db(self):
         """Initialize ChromaDB for embedding storage/caching if enabled"""
         try:
-            from utils.feature_flags import ENABLE_NEWS_EMBEDDINGS, CHROMADB_PERSIST_DIRECTORY, USE_CHROMADB_CACHING
+            from config.feature_flags import ENABLE_NEWS_EMBEDDINGS, CHROMADB_PERSIST_DIRECTORY, USE_CHROMADB_CACHING
             
             logger.info(f"Initializing ChromaDB: ENABLE_NEWS_EMBEDDINGS={ENABLE_NEWS_EMBEDDINGS}, USE_CHROMADB_CACHING={USE_CHROMADB_CACHING}")
             

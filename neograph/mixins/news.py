@@ -5,7 +5,7 @@ from typing import Dict, List, Optional, Any, Set, Tuple
 import json
 from utils.date_utils import parse_news_dates
 from ..EventTraderNodes import NewsNode
-from utils.feature_flags import ENABLE_NEWS_EMBEDDINGS
+from config.feature_flags import ENABLE_NEWS_EMBEDDINGS
 
 logger = logging.getLogger(__name__)
 

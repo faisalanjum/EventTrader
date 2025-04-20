@@ -14,7 +14,7 @@ from datetime import datetime
 # Add parent directory to path to import from utils
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from utils.DataManagerCentral import DataManager
+from config.DataManagerCentral import DataManager
 from utils.log_config import setup_logging, get_logger
 
 # Make sure logs directory exists
@@ -48,7 +48,7 @@ def main():
         args = parse_args()
         
         # Set feature flags based on arguments
-        import utils.feature_flags as feature_flags
+        import config.feature_flags as feature_flags
         
         # If neither flag is set, enable both (default behavior)
         if not args.historical and not args.live:

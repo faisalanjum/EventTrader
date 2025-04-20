@@ -13,6 +13,8 @@ import time
 from .redis_constants import RedisKeys, RedisQueues
 from SEC_API_Files.sec_schemas import SECFilingSchema, UnifiedReport
 from utils.log_config import get_logger, setup_logging
+# Import feature flags to get the CSV path
+from config import feature_flags
 
 # Set up logger
 logger = get_logger("redis_classes")
@@ -50,11 +52,13 @@ class EventTraderRedis:
             if clear_config:
                 self.config.clear()
             
-            # Use absolute path resolution with project root
-            if file_path is None:
-                # Get the project root directory (assuming this file is in utils/)
-                project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-                file_path = os.path.join(project_root, 'StocksUniverse', 'final_symbols.csv')
+            # Construct path to file in the correct location
+            # Use the path defined directly in feature_flags
+            file_path = feature_flags.SYMBOLS_CSV_PATH
+            # if file_path is None:
+            #     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            #     # Change path for loading symbols CSV
+            #     file_path = os.path.join(project_root, 'config', 'final_symbols.csv')
             
             self.logger.info(f"Loading stock universe from: {file_path}")
             df = pd.read_csv(file_path)

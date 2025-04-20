@@ -577,7 +577,7 @@ class DataManager:
     
     def __init__(self, date_from: str, date_to: str):
         # Use existing logger instead of setting up a new one
-        self.logger = get_logger("utils.DataManagerCentral")
+        self.logger = get_logger("config.DataManagerCentral")
         
         # Store settings
         self.historical_range = {'from': date_from, 'to': date_to}

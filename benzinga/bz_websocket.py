@@ -10,6 +10,7 @@ from benzinga.bz_news_errors import NewsErrorHandler
 from redisDB.redisClasses import RedisClient
 from utils.log_config import get_logger, setup_logging
 import threading
+from config.feature_flags import ENABLE_LIVE_DATA
 
 
 class BenzingaNewsWebSocket:
@@ -106,8 +107,7 @@ class BenzingaNewsWebSocket:
             raw: Whether to use raw format (default: False)
             enable_trace: Enable websocket trace for debugging (default: False)
         """
-        # Check feature flag
-        from utils.feature_flags import ENABLE_LIVE_DATA
+        # Check feature flag        
         if not ENABLE_LIVE_DATA:
             # Only log the message once
             if not self._feature_flag_logged:
@@ -296,7 +296,7 @@ class BenzingaNewsWebSocket:
                     return  # Skip processing for heartbeat messages
                 
                 # Check feature flag to avoid unnecessary processing
-                from utils.feature_flags import ENABLE_LIVE_DATA
+                
                 if not ENABLE_LIVE_DATA:
                     # Don't log this message for every message received
                     return

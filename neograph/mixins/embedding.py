@@ -8,9 +8,17 @@ import asyncio
 from hashlib import sha256
 
 from eventtrader.keys import OPENAI_API_KEY
-from utils.feature_flags import (CHROMADB_PERSIST_DIRECTORY,ENABLE_NEWS_EMBEDDINGS, OPENAI_EMBEDDING_MODEL,
-                                USE_CHROMADB_CACHING, OPENAI_EMBEDDING_DIMENSIONS, OPENAI_EMBED_CUTOFF,
-                                NEWS_VECTOR_INDEX_NAME, QAEXCHANGE_VECTOR_INDEX_NAME, ENABLE_QAEXCHANGE_EMBEDDINGS)
+from config.feature_flags import (
+    CHROMADB_PERSIST_DIRECTORY,
+    ENABLE_NEWS_EMBEDDINGS,
+    OPENAI_EMBEDDING_MODEL,
+    USE_CHROMADB_CACHING,
+    OPENAI_EMBEDDING_DIMENSIONS,
+    OPENAI_EMBED_CUTOFF,
+    NEWS_VECTOR_INDEX_NAME,
+    QAEXCHANGE_VECTOR_INDEX_NAME,
+    ENABLE_QAEXCHANGE_EMBEDDINGS
+)
 
 # Updated path for local import
 from openai_local.openai_parallel_embeddings import process_embeddings_in_parallel

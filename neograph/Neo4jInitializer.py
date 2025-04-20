@@ -12,6 +12,8 @@ from utils.market_session import MarketSessionClassifier
 from neograph.Neo4jManager import Neo4jManager
 from XBRL.xbrl_core import RelationType, NodeType
 from eventReturns.polygonClass import Polygon
+# Import feature flags to get the CSV path
+from config import feature_flags
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -90,9 +92,12 @@ class Neo4jInitializer:
             return cached_data
             
         try:
-            # Get the project root directory and file path
-            project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            file_path = os.path.join(project_root, 'StocksUniverse', 'final_symbols.csv')
+            # Use absolute path resolution with project root
+            # Use the path defined directly in feature_flags
+            file_path = feature_flags.SYMBOLS_CSV_PATH
+            # project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            # # Change path for loading symbols CSV
+            # file_path = os.path.join(project_root, 'config', 'final_symbols.csv')
             
             if not os.path.exists(file_path):
                 logger.error(f"Stock universe file not found: {file_path}")

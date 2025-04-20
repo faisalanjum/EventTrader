@@ -7,7 +7,7 @@ import backoff
 import requests
 from redisDB.redisClasses import RedisClient, EventTraderRedis
 from SEC_API_Files.sec_errors import FilingErrorHandler
-from utils.feature_flags import VALID_FORM_TYPES
+from config.feature_flags import VALID_FORM_TYPES
 from sec_api import QueryApi
 from utils.log_config import get_logger, setup_logging
 
@@ -64,7 +64,7 @@ class SECRestAPI:
     def get_historical_data(self, date_from: str, date_to: str, raw: bool = False) -> List[Dict]:
         """Get historical SEC filings data between dates"""
         # Local import to avoid module-level dependencies
-        from utils.feature_flags import ENABLE_HISTORICAL_DATA
+        from config.feature_flags import ENABLE_HISTORICAL_DATA
         
         # Check feature flag
         if not ENABLE_HISTORICAL_DATA:

@@ -7,7 +7,7 @@ import threading
 from transcripts.EarningsCallTranscripts import EarningsCallProcessor
 from eventtrader.keys import EARNINGS_CALL_API_KEY
 from .redis_constants import RedisKeys
-from utils.feature_flags import MAX_TRANSCRIPT_SLEEP_SECONDS
+from config.feature_flags import MAX_TRANSCRIPT_SLEEP_SECONDS
 
 
 class TranscriptProcessor(BaseProcessor):
