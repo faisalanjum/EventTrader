@@ -71,3 +71,6 @@ ENV/
 .vscode/
 *.swp
 *.swo
+
+# VS Code settings
+.vscode/
