@@ -31,8 +31,8 @@ from eventtrader.keys import SEC_API_KEY
 import sys
 sys.path.append('/Users/macowne/Desktop/Faisal/EventTrader')  # Add project root to path
 
-from SEC_API_Files.sec_websocket import SECWebSocket
-from SEC_API_Files.sec_restAPI import SECRestAPI
+from secReports.sec_websocket import SECWebSocket
+from secReports.sec_restAPI import SECRestAPI
 
 
 

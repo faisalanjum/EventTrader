@@ -126,6 +126,11 @@ class UtilityMixin:
             if timeframe not in symbol_returns:
                 continue
                 
+            # Skip if the timeframe value is None
+            if symbol_returns[timeframe] is None:
+                logger.info(f"Found None value for {timeframe} for symbol {symbol}")
+                continue
+                
             if not isinstance(symbol_returns[timeframe], dict):
                 logger.warning(f"Expected dictionary for {timeframe} but got {type(symbol_returns[timeframe])} for symbol {symbol}")
                 continue

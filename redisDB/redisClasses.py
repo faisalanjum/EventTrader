@@ -11,7 +11,7 @@ from benzinga.bz_news_schemas import UnifiedNews
 from datetime import timezone
 import time
 from .redis_constants import RedisKeys, RedisQueues
-from SEC_API_Files.sec_schemas import SECFilingSchema, UnifiedReport
+from secReports.sec_schemas import SECFilingSchema, UnifiedReport
 from utils.log_config import get_logger, setup_logging
 # Import feature flags to get the CSV path
 from config import feature_flags

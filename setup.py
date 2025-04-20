@@ -6,20 +6,24 @@ setup(
     packages=find_packages(include=[
         'utils',
         'benzinga',
-        'SEC_API_Files',
-        'IBKR',
-        'News',
-        'dataBento',
-        'earningscall',
+        'secReports',
+        'transcripts',
         'eventtrader',
-        'sec_api',
+        'neograph',
+        'openai_local',
+        'redisDB',
+        'eventReturns',
+        'scripts',
+        'XBRL',
+        'config',
+        
     ]),
     package_dir={'': '.'},
     install_requires=[
         'pandas',
         'exchange_calendars',
         'python-dotenv',
-        'pydantic',  # Added
-        'redis',     # Added
+        'pydantic',  
+        'redis',     
     ],
 )

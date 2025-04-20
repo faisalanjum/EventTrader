@@ -5,9 +5,9 @@ import html
 import unicodedata
 import time
 from typing import Optional, Dict, List
-from SEC_API_Files.sec_schemas import UnifiedReport
+from secReports.sec_schemas import UnifiedReport
 from config.feature_flags import VALID_FORM_TYPES, FORM_TYPES_REQUIRING_SECTIONS, FORM_TYPES_REQUIRING_XML
-from SEC_API_Files.reportSections import ten_k_sections, ten_q_sections, eight_k_sections
+from secReports.reportSections import ten_k_sections, ten_q_sections, eight_k_sections
 from sec_api import ExtractorApi, XbrlApi
 from eventtrader.keys import SEC_API_KEY
 from multiprocessing import Pool

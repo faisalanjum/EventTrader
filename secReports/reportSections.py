@@ -1,0 +1,92 @@
+ten_k_sections = {
+    '1': 'Business',
+    '1A': 'RiskFactors',
+    '1B': 'UnresolvedStaffComments',
+    '1C': 'Cybersecurity',
+    '2': 'Properties',
+    '3': 'LegalProceedings',
+    '4': 'MineSafetyDisclosures',
+    '5': 'MarketforRegistrant’sCommonEquity,RelatedStockholderMattersandIssuerPurchasesofEquitySecurities',
+    '6': 'SelectedFinancialData(priortoFebruary2021)',
+    '7': 'Management’sDiscussionandAnalysisofFinancialConditionandResultsofOperations',
+    '7A': 'QuantitativeandQualitativeDisclosuresaboutMarketRisk',
+    '8': 'FinancialStatementsandSupplementaryData',
+    '9': 'ChangesinandDisagreementswithAccountantsonAccountingandFinancialDisclosure',
+    '9A': 'ControlsandProcedures',
+    '9B': 'OtherInformation',
+    '10': 'Directors,ExecutiveOfficersandCorporateGovernance',
+    '11': 'ExecutiveCompensation',
+    '12': 'SecurityOwnershipofCertainBeneficialOwnersandManagementandRelatedStockholderMatters',
+    '13': 'CertainRelationshipsandRelatedTransactions,andDirectorIndependence',
+    '14': 'PrincipalAccountantFeesandServices',
+    '15': 'ExhibitsandFinancialStatementSchedules'
+}
+
+
+ten_q_sections = {
+    'part1item1': 'FinancialStatements',
+    'part1item2': 'ManagementDiscussionandAnalysisofFinancialConditionandResultsofOperations',
+    'part1item3': 'QuantitativeandQualitativeDisclosuresAboutMarketRisk',
+    'part1item4': 'ControlsandProcedures',
+    'part2item1': 'LegalProceedings',
+    'part2item1a': 'RiskFactors',
+    'part2item2': 'UnregisteredSalesofEquitySecuritiesandUseofProceeds',
+    'part2item3': 'DefaultsUponSeniorSecurities',
+    'part2item4': 'MineSafetyDisclosures',
+    'part2item5': 'OtherInformation',
+    'part2item6': 'Exhibits'
+}
+
+# ten_q_sections = {
+#     'Part1_1': 'FinancialStatements',
+#     'Part1_2': 'Management’sDiscussionandAnalysisofFinancialConditionandResultsofOperations',
+#     'Part1_3': 'QuantitativeandQualitativeDisclosuresAboutMarketRisk',
+#     'Part1_4': 'ControlsandProcedures',
+#     'Part2_1': 'LegalProceedings',
+#     'Part2_1A': 'RiskFactors',
+#     'Part2_2': 'UnregisteredSalesofEquitySecuritiesandUseofProceeds',
+#     'Part2_3': 'DefaultsUponSeniorSecurities',
+#     'Part2_4': 'MineSafetyDisclosures',
+#     'Part2_5': 'OtherInformation',
+#     'Part2_6': 'Exhibits'
+# }
+
+eight_k_sections = {
+    # Note: While SEC documents show section numbers with dots (e.g., "1.01"),
+    # the API requires dashes (e.g., "1-1") for technical reasons
+    '1-1': 'EntryintoaMaterialDefinitiveAgreement',
+    '1-2': 'TerminationofaMaterialDefinitiveAgreement',
+    '1-3': 'BankruptcyorReceivership',
+    '1-4': 'MineSafetyReportingofShutdownsandPatternsofViolations',
+    '1-5': 'MaterialCybersecurityIncidents',
+    '2-1': 'CompletionofAcquisitionorDispositionofAssets',
+    '2-2': 'ResultsofOperationsandFinancialCondition',
+    '2-3': 'CreationofaDirectFinancialObligationoranObligationunderanOff-BalanceSheetArrangementofaRegistrant',
+    '2-4': 'TriggeringEventsThatAccelerateorIncreaseaDirectFinancialObligationoranObligationunderanOff-BalanceSheetArrangement',
+    '2-5': 'CostsAssociatedwithExitorDisposalActivities',
+    '2-6': 'MaterialImpairments',
+    '3-1': 'NoticeofDelistingorFailuretoSatisfyaContinuedListingRuleorStandard;TransferofListing',
+    '3-2': 'UnregisteredSalesofEquitySecurities',
+    '3-3': 'MaterialModificationstoRightsofSecurityHolders',
+    '4-1': 'ChangesinRegistrantsCertifyingAccountant',
+    '4-2': 'NonRelianceonPreviouslyIssuedFinancialStatementsoraRelatedAuditReportorCompletedInterimReview',
+    '5-1': 'ChangesinControlofRegistrant',
+    '5-2': 'DepartureofDirectorsorCertainOfficers;ElectionofDirectors;AppointmentofCertainOfficers:CompensatoryArrangementsofCertainOfficers',
+    '5-3': 'AmendmentstoArticlesofIncorporationorBylaws;ChangeinFiscalYear',
+    '5-4': 'TemporarySuspensionofTradingUnderRegistrantsEmployeeBenefitPlans',
+    '5-5': 'AmendmentstotheRegistrantsCodeofEthics,orWaiverofaProvisionoftheCodeofEthics',
+    '5-6': 'ChangeinShellCompanyStatus',
+    '5-7': 'SubmissionofMatterstoaVoteofSecurityHolders',
+    '5-8': 'ShareholderNominationsPursuanttoExchangeActRule14a-11',
+    '6-1': 'ABSInformationalandComputationalMaterial',
+    '6-2': 'ChangeofServicerorTrustee',
+    '6-3': 'ChangeinCreditEnhancementorOtherExternalSupport',
+    '6-4': 'FailuretoMakeaRequiredDistribution',
+    '6-5': 'SecuritiesActUpdatingDisclosure',
+    '6-6': 'StaticPool',
+    '6-10': 'AlternativeFilingsofAsset-BackedIssuers',
+    '7-1': 'RegulationFDDisclosure',
+    '8-1': 'OtherEvents',
+    '9-1': 'FinancialStatementsandExhibits',
+    # 'signature': 'Signature'
+}

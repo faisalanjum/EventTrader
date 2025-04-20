@@ -31,10 +31,11 @@ venv/
 # *Backup.py
 
 logs/
+dev_playground/
 Returns/*.csv
 benzinga/logs/*.log
 News/*.csv
-SEC_API_Files/sec_filing_errors.log
+secReports/sec_filing_errors.log
 # Ignore Benzinga notebook due to large size
 benzinga/bz_to_redis.ipynb
 
