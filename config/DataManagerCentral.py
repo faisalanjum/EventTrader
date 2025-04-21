@@ -225,8 +225,15 @@ class TranscriptsManager(DataSourceManager):
                 
                 # Move to next day
                 current_date += timedelta(days=1)
+            
+            # --- Fetch Complete Signal --- Start (After loop finishes)
+            batch_id = f"transcripts:{self.date_range['from']}-{self.date_range['to']}"
+            self.redis.history_client.client.set(f"batch:{batch_id}:fetch_complete", "1", ex=86400)
+            self.logger.info(f"Set fetch_complete flag for batch: {batch_id}")
+            # --- Fetch Complete Signal --- End
                     
         except Exception as e:
+            # Log error but DO NOT set completion flag if loop failed
             self.logger.error(f"Error in historical transcript processing: {e}")
 
 

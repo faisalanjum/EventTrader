@@ -238,12 +238,25 @@ class BenzingaNewsRestAPI:
             return []
             
         # Continue with original implementation
-        return self._fetch_news(
+        # Store result before returning
+        result = self._fetch_news(
             date_from=date_from,
             date_to=date_to,
             tickers=tickers,
             raw=raw
         )
+
+        # --- Fetch Complete Signal --- Start
+        try:
+            batch_id = f"news:{date_from}-{date_to}"
+            # Use the underlying redis-py client from RedisClient instance
+            self.redis_client.client.set(f"batch:{batch_id}:fetch_complete", "1", ex=86400) 
+            self.logger.info(f"Set fetch_complete flag for batch: {batch_id}")
+        except Exception as e:
+            self.logger.error(f"Failed to set fetch_complete flag for news batch {batch_id}: {e}")
+        # --- Fetch Complete Signal --- End
+
+        return result # Return stored result
 
     def get_news_since(self,
                        timestamp: int,

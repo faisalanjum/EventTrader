@@ -96,6 +96,15 @@ class SECRestAPI:
                 
                 time.sleep(self.RATE_LIMIT_DELAY)
             
+            # --- Fetch Complete Signal --- Start
+            try:
+                batch_id = f"reports:{date_from}-{date_to}"
+                self.redis_client.set(f"batch:{batch_id}:fetch_complete", "1", ex=86400)
+                self.logger.info(f"Set fetch_complete flag for batch: {batch_id}")
+            except Exception as e:
+                self.logger.error(f"Failed to set fetch_complete flag for reports batch {batch_id}: {e}")
+            # --- Fetch Complete Signal --- End
+            
             self._log_stats()
             return processed_filings
             
