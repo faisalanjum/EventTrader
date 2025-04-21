@@ -178,35 +178,80 @@ This table summarizes the typical happy-path journey of an item:
 *   **Neo4j Loading:** Can be picked up by the live **`Neo4jProcessor`** listener or processed in bulk using the manual **`neo4j_processor.sh`** script (reading from **`*:hist:withreturns:*`** / **`*:hist:withoutreturns:*`**).
 *   **Potential Live/Historical Duplicates:** The deduplication check using the **`PROCESSED_QUEUE`** list operates within the **`live:`** or **`hist:`** prefix scope. If the same event is ingested via both live and historical runs, it might be processed in both namespaces, potentially leading to duplicates in Neo4j unless idempotent writes (e.g., Cypher `MERGE` with proper constraints) are used in **`Neo4jManager`**.
 
-## 8. Proposed Solution: Tracking Historical Batch Completion
+## 8. Proposed Solution: Tracking Historical Batch Completion (Reconciliation)
 
-To reliably automate sequential historical batch runs, implement the following tracking mechanism:
+To reliably know when to start the next historical batch fetch, this plan focuses on confirming that all items successfully queued by **`RedisClient`** for the current batch have been fully accounted for by **`BaseProcessor`**. This ensures the input and initial processing stage is clear before fetching more data.
 
-1.  **Determine Initial Count:**
-    *   When a batch is initiated (e.g., for date range `YYYYMMDD-YYYYMMDD`), identify the total items ingested per source.
-    *   *Method:* After `get_historical_data` completes, use Redis `SCAN` to count keys matching `{source}:hist:raw:{date_range_pattern}*`.
-    *   Store count: `SET hist:batch:{source}:{date_range}:initial_count {count}` (**`initial_count`**).
+**1. Define Item Pathways (Queuing Attempt to BaseProcessor Outcome):**
 
-2.  **Track Neo4j Writes for Batch:**
-    *   Modify **`Neo4jProcessor`**/**`Neo4jManager`** writing logic.
-    *   When an item is successfully written, determine if it's historical and its batch identifier. **Crucial:** Requires reliably linking item to batch (pass batch ID via metadata, infer from key/timestamp, etc.).
-    *   Increment counter: `INCR hist:batch:{source}:{date_range}:neo4j_count` (**`neo4j_count`**).
+Once a historical fetch function completes (signaled by `fetch_complete`), items attempt to enter the `RAW_QUEUE` via `RedisClient` and are then handled by `BaseProcessor`. We track the following pathways:
 
-3.  **Check for Completion:**
-    *   An external orchestrator script periodically checks:
-        *   `GET hist:batch:{source}:{date_range}:initial_count`
-        *   `GET hist:batch:{source}:{date_range}:neo4j_count`
-        *   **(Recommended):** `LLEN {source}:queues:failed` (check for relevant failures).
-    *   **Completion Condition:** Batch complete if **`neo4j_count >= initial_count`**. 
-    *   Orchestrator logs completion, starts next batch.
-    *   Implement a timeout.
+*   **A. Pre-BaseProcessor (Within `RedisClient` queuing methods like `set_news`, `set_filing`):**
+    *   **Pathway 1: Deduplicated:** Item skipped because its `processed_key` is already in the `PROCESSED_QUEUE` list. (Handled by: `RedisClient` methods).
+    *   **Pathway 2: Queueing Failed:** Redis `SET`+`LPUSH` pipeline fails. Item not queued. (Handled by: `RedisClient` methods).
+    *   **Pathway 3: Queued Successfully:** Redis `SET`+`LPUSH` succeeds. Item's `raw_key` added to `RAW_QUEUE`. (Handled by: `RedisClient` methods). **This is the input count for BaseProcessor.**
 
-4.  **Handling Failures:**
-    *   Items in **`FAILED_QUEUE`** (from **`BaseProcessor`**) won't increment **`neo4j_count`**. The **`initial_count`** includes them.
-    *   **Strategy 1 (Strict):** Batch fails if **`neo4j_count`** < **`initial_count`** before timeout. Requires manual inspection/recovery of failed items.
-    *   **Strategy 2 (Tolerant):** Consider batch complete if `neo4j_count + failed_count >= initial_count`. Requires correlating failed items to the batch.
-    *   Failures *within* **`ReturnsProcessor`** or **`Neo4jProcessor`** also prevent **`neo4j_count`** incrementing and require separate monitoring.
+*   **B. BaseProcessor Handling (Within `BaseProcessor._process_item` for items popped from `RAW_QUEUE`):**
+    *   **Pathway 4: Failed (Raw Missing):** `client.get(raw_key)` returns `None` upon attempt. (Handled by: `_process_item` initial check).
+    *   **Pathway 5: Filtered (Symbols):** `_has_valid_symbols` check fails. (Handled by: `_process_item` symbol check logic).
+    *   **Pathway 6: Failed (Processing Error):** Exception during processing (cleaning, metadata, Redis save) or `_add_metadata` returns `None`. Item pushed to `FAILED_QUEUE`. (Handled by: `_process_item` main try/except block).
+    *   **Pathway 7: Skipped (Already Processed):** `processed_key` already exists or is in `PROCESSED_QUEUE` list upon check *within BaseProcessor*. (Handled by: `_process_item` duplicate check before saving).
+    *   **Pathway 8: Passed (Processed Successfully):** Item successfully processed, `processed_key` saved, pushed to `PROCESSED_QUEUE`, and published. (Handled by: `_process_item` successful execution path).
 
-5.  **Cleanup:** After confirmed completion/failure handling, `DEL` the Redis counter keys (**`*:initial_count`**, **`*:neo4j_count`**) for the batch.
+**2. Minimal Counters for Reconciliation:**
 
-This provides a robust mechanism to confirm end-to-end processing for historical batches, acknowledging the need to actively handle processing failures.
+To perform the reconciliation, the following counters must be incremented **only for items identified as belonging to the active historical batch** (`batch_id`):
+
+*   **Input:** `batch:{batch_id}:rc_queued_success`
+    *   **Incremented In:** `RedisClient` methods (`set_news`, `set_filing`, etc.)
+    *   **When:** Pathway 3 (Successful `SET`+`LPUSH` to `RAW_QUEUE`).
+*   **BP Outcomes:**
+    *   `batch:{batch_id}:bp_filtered`
+        *   **Incremented In:** `BaseProcessor._process_item`
+        *   **When:** Pathway 5 (Filtered by symbols).
+    *   `batch:{batch_id}:bp_failed`
+        *   **Incremented In:** `BaseProcessor._process_item`
+        *   **When:** Pathway 4 (Raw Missing) OR Pathway 6 (Processing Error).
+    *   `batch:{batch_id}:bp_skipped_dupe`
+        *   **Incremented In:** `BaseProcessor._process_item`
+        *   **When:** Pathway 7 (Skipped as already processed by another worker).
+    *   `batch:{batch_id}:bp_processed`
+        *   **Incremented In:** `BaseProcessor._process_item`
+        *   **When:** Pathway 8 (Successfully processed).
+
+**3. Details: Setting the Fetch Completion Flag**
+
+To establish a 100% reliable mechanism for knowing when the historical fetch function for each source has completed its work and queued the last item, the `batch:{batch_id}:fetch_complete` flag is set within each function at a specific point ensuring all processing is finished:
+
+*   **News (`BenzingaNewsRestAPI._fetch_news`):**
+    *   *Current Flow:* This function fetches data page by page, collects items, and uses `self.redis.history_client.set_news_batch(...)` to push them to Redis, potentially with a final call after the main loop.
+    *   *Reliable Signal:* The `SET batch:{batch_id}:fetch_complete 1 EX 86400` command is added **immediately after** the logic that saves the *final* batch of news items to Redis (typically after the pagination loop concludes).
+
+*   **Reports (`SECRestAPI.get_historical_data`):**
+    *   *Current Flow:* This function iterates through tickers, and within that, potentially paginates filings, pushing each individually using `self.redis.history_client.set_filing(...)`.
+    *   *Reliable Signal:* The `SET batch:{batch_id}:fetch_complete 1 EX 86400` command is added **immediately after** the main outer loop (iterating through all `tickers`) finishes, ensuring all tickers for the batch have been processed.
+
+*   **Transcripts (`TranscriptsManager._fetch_historical_data`):**
+    *   *Current Flow:* This function loops through each date in the batch range (`while current_date <= end_date:`), fetches transcripts for the date, and pushes each individually (`store_transcript_in_redis(...)`).
+    *   *Reliable Signal:* The `SET batch:{batch_id}:fetch_complete 1 EX 86400` command is added **immediately after** the main `while current_date <= end_date:` loop finishes, guaranteeing all dates in the range were attempted.
+
+**3.1 Implementation Summary:**
+    *   Modify the 3 historical fetch functions to accept `batch_id` and set `batch:{batch_id}:fetch_complete 1 EX 86400` at their conclusion (as detailed above).
+    *   Modify `RedisClient` queuing methods (`set_news`, `set_filing`, etc.) to accept `batch_id` (if provided) and increment `rc_queued_success` upon successful queuing.
+    *   Modify `BaseProcessor._process_item` to identify active historical batch items and increment the appropriate outcome counters (`bp_filtered`, `bp_failed`, `bp_skipped_dupe`, `bp_processed`) based on the execution path taken.
+
+**4. Orchestrator Logic (Queue-to-Processed Reconciliation Check):**
+    *   An external orchestrator script manages sequential batch iterations.
+    *   For each batch (`batch_id = "{source_type}:{start_date_str}-{end_date_str}"):
+        *   **Prepare:** Clear `fetch_complete` flag. Reset/clear batch counters (`rc_queued_success`, `bp_*`). Set `current_hist_batch:{source_type}` flag.
+        *   **Trigger Fetch:** Call historical fetch function (passing `batch_id`).
+        *   **Monitor & Reconcile:** Periodically check Redis:
+            1.  `GET batch:{batch_id}:fetch_complete` must be '1'.
+            2.  `LLEN {source_type}:queues:raw` must be 0 (stable).
+            3.  Fetch counter values: `queued = GET ...:rc_queued_success`, `filtered = GET ...:bp_filtered`, `failed = GET ...:bp_failed`, `skipped = GET ...:bp_skipped_dupe`, `processed = GET ...:bp_processed`. Handle missing as 0.
+            4.  **Reconciliation Check:** Verify `(filtered + failed + skipped + processed) >= queued`.
+        *   **Trigger Next Batch When:** All conditions (1, 2, and 4) are met consistently for a stability period.
+        *   **Failure/Timeout:** Handle timeouts. Log errors if reconciliation fails. Note: This doesn't track items discarded *before* queueing (e.g., by Error Handlers or RedisClient dedupe).
+        *   **Cleanup:** On success, clear `current_hist_batch` flag, optionally clear batch keys, proceed.
+
+This approach ensures that all data successfully entering the Redis queueing stage is accounted for by the BaseProcessor before starting the next batch fetch, providing a robust control mechanism with high visibility into the critical initial processing stages.
