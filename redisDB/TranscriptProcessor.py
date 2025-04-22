@@ -8,6 +8,7 @@ from transcripts.EarningsCallTranscripts import EarningsCallProcessor
 from eventtrader.keys import EARNINGS_CALL_API_KEY
 from .redis_constants import RedisKeys
 from config.feature_flags import MAX_TRANSCRIPT_SLEEP_SECONDS
+from config import feature_flags
 
 
 class TranscriptProcessor(BaseProcessor):
@@ -52,6 +53,11 @@ class TranscriptProcessor(BaseProcessor):
 
     def _run_transcript_scheduling(self):
         """Run transcript scheduling in a separate thread"""
+        if not feature_flags.ENABLE_LIVE_DATA:
+            self.logger.info("Live data is disabled, transcript scheduling thread will not run.")
+            self.scheduling_thread_running = False # Ensure the flag is set correctly for cleanup
+            return # Exit the thread function immediately
+
         self.logger.info("Transcript scheduling thread started")
         
         # Set up pubsub for notifications
