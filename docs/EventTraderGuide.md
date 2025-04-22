@@ -2,33 +2,57 @@
 
 ## Core Operations
 
-1. Starting the System:
+### Starting the System
+
+There are two primary ways to start the system:
+
+**A) Standard Start (`start` / `start-all`):**
+
+   Use this for default operation or live-only/historical-only runs covering a *single, specific date range*.
 
    ```bash
-   ./scripts/event_trader.sh start                    # Start EventTrader only
-   ./scripts/event_trader.sh start-all               # Start EventTrader and watchdog together
-   ./scripts/event_trader.sh --background start-all  # Run everything in background
-   ```
-   
-   With date ranges:
-   ```bash
-   ./scripts/event_trader.sh start 2025-03-04 2025-03-05
-   ```
-   ## -historical - Enable only historical data (disable live data)
-   ./scripts/event_trader.sh --background start-all -historical 2025-02-01 2025-02-10
-   
-   ## - live - the start date is only for neo4j initialization
-   ./scripts/event_trader.sh --background start-all -live 2025-03-25  
+   # Default: Runs BOTH historical (last 3 days) AND live data continuously
+   ./scripts/event_trader.sh start
+   ./scripts/event_trader.sh start-all # Includes watchdog
 
-2. Monitoring:
+   # Historical ONLY: Processes the specified range as ONE batch, then EXITS
+   ./scripts/event_trader.sh start -historical 2025-03-01 2025-03-10 
+
+   # Live ONLY: Runs live streams continuously (specify start date for Neo4j init)
+   ./scripts/event_trader.sh start -live 2025-04-21
+   
+   # Run in background
+   ./scripts/event_trader.sh --background start-all 
+   ```
+   *   Without `-historical` or `-live`, it enables both modes and the main process runs indefinitely.
+   *   With `-historical`, it runs *only* the historical processing for the given range and the main process exits automatically after internal Redis monitoring confirms completion.
+   *   With `-live`, it runs *only* the live data streams and the main process runs indefinitely.
+
+**B) Chunked Historical Processing (`chunked-historical`):**
+
+   Use this command *specifically* for processing **large historical date ranges** sequentially in smaller, manageable chunks. **Do not use standard `start -historical` for very large ranges.**
+
+   ```bash
+   # Process from specified start date up to today in default chunks
+   ./scripts/event_trader.sh chunked-historical YYYY-MM-DD 
+
+   # Process a specific large date range in default chunks
+   ./scripts/event_trader.sh chunked-historical YYYY-MM-DD YYYY-MM-DD
+   ```
+   *   This command internally runs the Python script in `-historical` mode for each chunk.
+   *   It waits for Python to confirm processing completion (via Redis monitoring) for one chunk, stops all processes, then starts the next chunk.
+   *   Chunk size and stability wait times are configured in `config/feature_flags.py`.
+   *   Creates a single combined log file for the entire run.
+
+### Monitoring
 
    ```bash
    ./scripts/event_trader.sh status  # Basic status and recent logs
-   ./scripts/event_trader.sh logs    # Last 50 log lines
+   ./scripts/event_trader.sh logs    # Last 50 log lines (from default log or chunked log if running)
    ./scripts/event_trader.sh health  # Detailed system health information
    ```
 
-3. Stopping/Restarting:
+### Stopping/Restarting
 
    ```bash
    ./scripts/event_trader.sh stop       # Stop EventTrader only
@@ -37,93 +61,42 @@
    ./scripts/event_trader.sh restart-all # Restart both EventTrader and watchdog
    ```
 
+### Running Neo4jProcessor Independently
 
-4. Running Neo4jProcessor Independently:
+   This script (`./scripts/neo4j_processor.sh`) acts as a convenient wrapper around the main Python processor logic (`neograph/Neo4jProcessor.py`) for tasks like initializing the database or batch-processing specific data types directly from Redis into Neo4j, bypassing the main EventTrader application flow.
 
-'''
-# Initialize database
-./scripts/neo4j_processor.sh init                    # Initialize Neo4j database
-./scripts/neo4j_processor.sh init --verbose          # Initialize with detailed logging
+   **Note:** Using this wrapper script automatically enables verbose logging (`--verbose`) for the underlying Python script.
 
-# Process news items
-./scripts/neo4j_processor.sh news --max 10           # Process up to 10 news items
-./scripts/neo4j_processor.sh news --batch 20         # Process in batches of 20 items
+   ```bash
+   # Initialize database
+   ./scripts/neo4j_processor.sh init                    # Initialize Neo4j database (verbose)
 
-# Process SEC reports
-./scripts/neo4j_processor.sh reports --max 10        # Process up to 10 report items
-./scripts/neo4j_processor.sh reports --verbose       # Process reports with detailed logging
+   # Process news items
+   ./scripts/neo4j_processor.sh news --max 10           # Process up to 10 news items (verbose)
+   ./scripts/neo4j_processor.sh news --batch 20         # Process news in batches of 20 (verbose)
 
-# Combined operations
-./scripts/neo4j_processor.sh all                     # Initialize and process all data
-./scripts/neo4j_processor.sh all --max 5             # Process only 5 items of each type
-./scripts/neo4j_processor.sh all --skip-news         # Process only reports
-./scripts/neo4j_processor.sh all --skip-reports      # Process only news
+   # Process SEC reports
+   ./scripts/neo4j_processor.sh reports --max 10        # Process up to 10 report items (verbose)
 
+   # Combined operations
+   ./scripts/neo4j_processor.sh all                     # Initialize and process all data (verbose)
+   ./scripts/neo4j_processor.sh all --max 5             # Process only 5 items of each type (verbose)
+   ./scripts/neo4j_processor.sh all --skip-news         # Process only reports and transcripts (verbose)
+   ./scripts/neo4j_processor.sh all --skip-reports      # Process only news and transcripts (verbose)
 
---verbose, -v                  # Enable detailed logging
---batch N                      # Set batch size (default: 10)
---max N                        # Limit number of items to process (0 for all)
---skip-without-returns         # Process only items with returns data
---force, -f                    # Continue despite non-critical errors
+   # Other options passed directly to the Python script:
+   # --batch N                      # Set batch size (default: 10)
+   # --max N                        # Limit number of items to process (0 for all)
+   # --skip-without-returns         # Process only items with returns data
+   # --force, -f                    # Continue despite non-critical errors
+   # --skip-transcripts             # Skip processing transcripts in 'all' mode
+   # --start-date YYYY-MM-DD        # Start date for date nodes during 'init' (default: 2017-09-01)
+   ```
 
+### XBRL Status Report
 
-5. ## XBRL Status by Report Type
-
-./scripts/xbrl_status_report.py
-
-
-
+   ```bash
+   ./scripts/xbrl_status_report.py # Display XBRL processing status summary
+   ```
 
 ## Watchdog Management
-
-The watchdog monitors EventTrader and automatically restarts it if it crashes.
-
-```bash
-./scripts/event_trader.sh monitor           # Start watchdog with default settings
-./scripts/event_trader.sh monitor 10 120    # Custom settings (10 max restarts, 120s interval)
-./scripts/event_trader.sh stop-monitor      # Stop watchdog only
-```
-
-## Maintenance
-
-```bash
-./scripts/event_trader.sh clean-logs       # Clean logs older than 7 days
-./scripts/event_trader.sh clean-logs 14    # Clean logs older than 14 days
-```
-
-## Chunked Historical Processing
-
-This command processes historical data in sequential date chunks, waiting for processing 
-(fetching, queue clearing, returns calculations based on Redis state) to complete for 
-one chunk before starting the next. This is useful for ingesting very large historical 
-date ranges without running out of memory or overwhelming external APIs.
-
-```bash
-# Process from specified start date up to today in default chunks
-./scripts/event_trader.sh chunked-historical YYYY-MM-DD 
-
-# Process a specific date range in default chunks
-./scripts/event_trader.sh chunked-historical YYYY-MM-DD YYYY-MM-DD
-```
-
-*   The chunk size (days) and stability wait time (seconds) are configured in `config/feature_flags.py`.
-*   Each run creates a combined log file in the `logs/` directory named `chunked_historical_YYYY-MM-DD_to_YYYY-MM-DD.log`.
-*   This command implicitly uses `-historical` mode for the underlying Python script.
-
-## Quick Reference
-
-| Command | Description |
-|---------|-------------|
-| `start` | Start EventTrader |
-| `start-all` | Start EventTrader + watchdog |
-| `--background` | Run in background (add before command) |
-| `stop` | Stop EventTrader |
-| `stop-all` | Stop EventTrader + watchdog |
-| `restart-all` | Restart everything |
-| `chunked-historical [from] [to]` | Process historical data in managed chunks |
-| `status` | Check system status |
-| `health` | Detailed system health |
-| `logs` | View recent logs |
-| `clean-logs [days]` | Remove old logs |
-
-All commands support date ranges: `./scripts/event_trader.sh command [from-date] [to-date]` 
