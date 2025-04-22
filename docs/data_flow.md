@@ -6,62 +6,66 @@
 
 The EventTrader system ingests financial news (Benzinga), SEC reports, and earnings call transcripts, processes this data through a Redis-based pipeline involving cleaning, metadata enrichment, and financial returns calculation, and finally stores the structured data and relationships in a Neo4j graph database.
 
+A key distinction is made between live and historical data using Redis key prefixes (**`live:`** vs **`hist:`**), allowing them to be processed potentially in parallel but stored distinctly until final stages.
+
 The primary flow involves:
 1.  **Ingestion:** Fetching data from external APIs (REST/WebSocket/Polling).
-2.  **Redis Raw Storage & Queuing:** Storing raw data under a unique key in Redis and adding the key name to a processing queue (**`RAW_QUEUE`**). Includes deduplication checks against previously processed items.
-3.  **Base Processing:** Consuming keys from the **`RAW_QUEUE`**, retrieving raw data, cleaning/standardizing it, filtering by a defined symbol universe, adding metadata (including return calculation schedules using **`EventReturnsManager`**), storing the processed data under a new key (**`processed`** state), adding the key name to a **`PROCESSED_QUEUE`** list (for deduplication), and publishing the processed key name via Redis Pub/Sub (**`*:live:processed`** channel).
-4.  **Returns Calculation:** Listening to the processed items Pub/Sub channel, retrieving processed data, calculating available financial returns (hourly, session, daily) using **`EventReturnsManager`** as market data becomes available (scheduling future calculations via a Redis Sorted Set **`*:pending_returns`**), updating the stored item with calculated returns, moving the item to **`withreturns`**/**`withoutreturns`** states, and publishing the item ID via Redis Pub/Sub (**`*:withreturns`**/**`*:withoutreturns`** channels).
-5.  **Neo4j Storage:** Listening to the returns calculation Pub/Sub channels, retrieving the final data (with returns), creating/updating nodes and relationships in Neo4j, and potentially cleaning up the final Redis key.
+2.  **Redis Raw Storage & Queuing:** Storing raw data under a unique key in Redis (e.g., **`*:live:raw:*`**, **`*:hist:raw:*`**) after checking for duplicates against the **`PROCESSED_QUEUE`** list. The new **`raw_key`** name is added to a processing queue (**`RAW_QUEUE`**).
+3.  **Base Processing:** Consuming keys from the **`RAW_QUEUE`** list, retrieving raw data, cleaning/standardizing it, filtering by a defined symbol universe, adding metadata (including return calculation schedules using **`EventReturnsManager`**), storing the processed data under a new key (**`processed`** state, e.g., **`*:live:processed:*`**), adding the key name to a **`PROCESSED_QUEUE`** list (primarily for deduplication checks), and publishing the processed key name via Redis Pub/Sub (**`*:live:processed`** channel). Raw keys may be deleted after successful processing.
+4.  **Returns Calculation:** Listening to the **`*:live:processed`** Pub/Sub channel (for live items) and periodically scanning Redis/checking a ZSET (for historical items or scheduled future calculations). Retrieves processed data, calculates available financial returns (hourly, session, daily) using **`EventReturnsManager`** as market data becomes available (scheduling future calculations via a Redis Sorted Set **`*:pending_returns`** where the score is the UTC timestamp when data is expected), updating the stored item with calculated returns, moving the item to **`withreturns`**/**`withoutreturns`** states (e.g., **`*:hist:withoutreturns:*`**), and publishing the item ID via Redis Pub/Sub (**`*:withreturns`**/**`*:withoutreturns`** channels).
+5.  **Neo4j Storage:** Listening to the **`*:withreturns`**/**`*:withoutreturns`** Pub/Sub channels, retrieving the final data (with returns), creating/updating nodes and relationships in Neo4j using likely idempotent `MERGE` operations, and potentially cleaning up the final **`*:withreturns:*`** Redis key.
 
 Separate handling exists for live streaming data and batch historical data ingestion, primarily distinguished by the **`live:`** vs **`hist:`** Redis key prefix. The system aims to track each item from ingestion to final storage or failure.
 
 ## 2. Core Components
 
-*   **`config/DataManagerCentral.py` (`DataManager`):** The central orchestrator. Initializes and starts all other components (ingestors, processors, returns calculator, Neo4j listener) based on configuration (live/historical). Manages startup and shutdown.
+*   **`config/DataManagerCentral.py` (`DataManager`):** The central orchestrator. Initializes and starts all other components (ingestors, processors, returns calculator, Neo4j listener) based on configuration (live/historical flags). Manages startup and shutdown.
 *   **Source Managers (`BenzingaNewsManager`, `ReportsManager`, `TranscriptsManager` in `DataManagerCentral.py`):** Manage specific data sources (news, reports, transcripts). Initialize API clients, Redis instances (via **`EventTraderRedis`**), the corresponding **`BaseProcessor`** subclass, and the **`ReturnsProcessor`**. Launched by **`DataManager`**.
 *   **Ingestors (`benzinga/`, `secReports/`, `transcripts/`):** Fetch data from external sources.
-    *   **Benzinga/SEC:** Use WebSocket clients (**`bz_websocket.py`**, **`sec_websocket.py`**) for live data and REST API clients (**`bz_restAPI.py`**, **`sec_restAPI.py`**) for historical data. Interact with **`RedisClient`** to store raw data and queue items.
-    *   **Transcripts:** Uses **`EarningsCallProcessor`** for fetching data (polling/scheduling for live, REST for historical). Interacts with **`RedisClient`**.
-*   **`redisDB/redisClasses.py` (`EventTraderRedis`, `RedisClient`):** Manages Redis connections (live, hist, admin). Provides methods for storing data (`SET`), managing queues (`LPUSH`/`BRPOP` on Lists), Pub/Sub, Sorted Sets (`ZADD`/`ZRANGEBYSCORE`), and key management using standardized namespaces. Performs deduplication check against **`PROCESSED_QUEUE`** list before adding new raw items.
-*   **`redisDB/BaseProcessor.py` (`BaseProcessor`):** Abstract base class for initial data processing. Runs in a dedicated thread per source type. Consumes `raw_key` names from the **`RAW_QUEUE`** list, retrieves raw data, cleans/standardizes, filters by symbols, adds metadata/schedules (via **`EventReturnsManager`**), stores result under a **`processed_key`**, pushes `processed_key` to **`PROCESSED_QUEUE`** list, publishes `processed_key` to **`*:live:processed`** Pub/Sub, and optionally deletes the original **`raw_key`**. Pushes failed `raw_key`s to **`FAILED_QUEUE`** list upon exceptions.
+    *   **Benzinga/SEC:** Use WebSocket clients (**`bz_websocket.py`**, **`sec_websocket.py`**) for live data and REST API clients (**`bz_restAPI.py`**, **`sec_restAPI.py`**) for historical data. Interact with **`RedisClient`** to store raw data and queue items after deduplication check.
+    *   **Transcripts:** Uses **`EarningsCallProcessor`** for fetching data (scheduling/polling for live, REST for historical). Interacts with **`RedisClient`**.
+*   **`redisDB/redisClasses.py` (`EventTraderRedis`, `RedisClient`):** Manages Redis connections (live, hist, admin). Provides methods for storing data (`SET`), managing queues (`LPUSH`/`BRPOP` on Lists), Pub/Sub, Sorted Sets (`ZADD`/`ZRANGEBYSCORE`), and key management using standardized namespaces. Performs initial deduplication check against the **`PROCESSED_QUEUE`** list before adding new raw items.
+*   **`redisDB/BaseProcessor.py` (`BaseProcessor`):** Abstract base class for initial data processing. Runs in a dedicated thread per source type. Consumes `raw_key` names from the **`RAW_QUEUE`** list, retrieves raw data, cleans/standardizes, filters by symbols in the allowed universe, adds metadata/schedules (via **`EventReturnsManager`**), stores result under a **`processed_key`**, pushes `processed_key` to **`PROCESSED_QUEUE`** list (for deduplication record), publishes `processed_key` to **`*:live:processed`** Pub/Sub, and optionally deletes the original **`raw_key`**. Pushes failed `raw_key`s to **`FAILED_QUEUE`** list upon exceptions.
 *   **`redisDB/NewsProcessor.py`, `ReportProcessor.py`, `TranscriptProcessor.py`:** Subclasses of **`BaseProcessor`**. Implement source-specific data cleaning (`_clean_content`) and standardization (`_standardize_fields`).
 *   **`eventReturns/EventReturnsManager.py` (`EventReturnsManager`):** Utility class providing methods for:
-    *   `process_event_metadata`: Called by **`BaseProcessor`** to generate return *schedules* based on event time.
-    *   `process_events`: Called by **`ReturnsProcessor`** to calculate actual financial *returns* based on schedules and market data availability (using **`polygonClass.py`**).
-*   **`eventReturns/ReturnsProcessor.py` (`ReturnsProcessor`):** Calculates financial returns. Runs in a dedicated thread per source type. Listens to **`*:live:processed`** Pub/Sub for processed items. Calculates available returns (using **`EventReturnsManager`**), schedules future calculations in **`*:pending_returns`** ZSET, updates items, stores updated data under **`*:withreturns:*`** or **`*:withoutreturns:*`** keys (deleting the **`*:processed:*`** key), and publishes `item_id` to **`*:withreturns`**/**`*:withoutreturns`** Pub/Sub channels. Periodically checks the ZSET to process scheduled returns. **Note:** Potential failures (e.g., Polygon errors) might leave items stuck in **`withoutreturns`** state without automatic recovery.
+    *   `process_event_metadata`: Called by **`BaseProcessor`** to generate return *schedules* based on event time and market hours.
+    *   `process_events`: Called by **`ReturnsProcessor`** (especially for historical batches) to calculate actual financial *returns* based on schedules and market data availability (using **`polygonClass.py`**).
+*   **`eventReturns/ReturnsProcessor.py` (`ReturnsProcessor`):** Calculates financial returns. Runs in a dedicated thread per source type. Listens to **`*:live:processed`** Pub/Sub for live processed items. Also periodically scans historical **`*:hist:processed:*`** keys (`_process_hist_news`) and checks the **`*:pending_returns`** ZSET for scheduled calculations. Calculates available returns (using **`EventReturnsManager`**), schedules future calculations in **`*:pending_returns`** ZSET (score is UTC timestamp when data is ready), updates items, stores updated data under **`*:withreturns:*`** or **`*:withoutreturns:*`** keys (deleting the **`*:processed:*`** key), and publishes `item_id` to **`*:withreturns`**/**`*:withoutreturns`** Pub/Sub channels. **Note:** Polygon API or other processing failures might leave items stuck in **`withoutreturns`** state without specific automatic recovery.
 *   **`neograph/Neo4jProcessor.py` (`Neo4jProcessor`):** Handles interaction with Neo4j.
-    *   **Live Mode:** Runs `process_with_pubsub` (via **`PubSubMixin`**, started by **`DataManager`**) listening to **`*:withreturns`**/**`*:withoutreturns`** Pub/Sub, retrieves data from Redis, calls **`Neo4jManager`** to write. May delete **`*:withreturns:*`** key on success. **Note:** Needs robust handling for Neo4j write failures (retry, logging) to prevent data loss after Pub/Sub consumption (not explicitly detailed in reviewed code).
+    *   **Live Mode:** Runs `process_with_pubsub` (via **`PubSubMixin`**, started by **`DataManager`**) listening to **`*:withreturns`**/**`*:withoutreturns`** Pub/Sub, retrieves data from Redis, calls **`Neo4jManager`** to write. May delete **`*:withreturns:*`** key on success. **Note:** Needs robust handling for Neo4j write failures (retry, logging) to prevent data loss after Pub/Sub consumption. Includes XBRL reconciliation on startup.
     *   **Batch Mode:** Provides functions executable via command line (**`neo4j_processor.sh`**) to process data directly from Redis (primarily **`*:withreturns:*`**, **`*:withoutreturns:*`** states) into Neo4j.
-*   **`neograph/Neo4jManager.py` (`Neo4jManager`):** Executes Cypher queries against Neo4j (creating/merging nodes/relationships). Called by **`Neo4jProcessor`**.
-*   **`neograph/Neo4jInitializer.py` (`Neo4jInitializer`):** Sets up Neo4j schema (constraints, indexes, initial nodes). Run by **`DataManager`** on startup if needed.
-*   **`scripts/run_event_trader.py`:** Main script to start the **`DataManager`**. Handles command-line args.
-*   **`scripts/*.sh`:** Helper scripts for running the application, batch processing, etc.
+*   **`neograph/Neo4jManager.py` (`Neo4jManager`):** Executes Cypher queries against Neo4j (creating/merging nodes/relationships). Called by **`Neo4jProcessor`**. Likely uses idempotent `MERGE` operations to handle potential duplicates safely.
+*   **`neograph/Neo4jInitializer.py` (`Neo4jInitializer`):** Sets up Neo4j schema (constraints, indexes, initial nodes like dates, companies). Run by **`DataManager`** on startup if needed.
+*   **`scripts/run_event_trader.py`:** Main script to start the **`DataManager`**. Handles command-line args, sets feature flags dynamically, and manages process exit conditions based on run mode.
+*   **`scripts/*.sh`:** Helper scripts for running the application, batch processing, watchdog, etc. Includes `event_trader.sh` which provides the `chunked-historical` command.
 
 ## 3. Live Data Ingestion: WebSocket vs. Scheduled/Polled
 
 A key difference exists in how live data enters the system:
 
 *   **News & Reports (Benzinga/SEC): WebSocket Push**
-    *   Utilize persistent WebSocket connections (**`bz_websocket.py`**, **`sec_websocket.py`**).
+    *   Utilize persistent WebSocket connections (**`bz_websocket.py`**, **`sec_websocket.py`**), started conditionally based on `ENABLE_LIVE_DATA` flag.
     *   External providers push data in real-time.
     *   **`DataManager`** manages dedicated WebSocket client threads.
-    *   **Result:** Low-latency, event-driven ingestion.
+    *   **Result:** Low-latency, event-driven ingestion when live mode is active.
 
 *   **Transcripts: Scheduled/Polled Fetch**
     *   **No WebSocket.** Relies on fetching data based on known schedules or polling.
-    *   **Scheduling:** **`TranscriptsManager`** fetches earnings calendar, schedules processing times (call time + 30 min) in Redis ZSET (**`admin:transcripts:schedule`**).
-    *   **Fetching Trigger:** Exact live fetch trigger mechanism is less clear in reviewed core code. May involve monitoring the ZSET, periodic polling, or manual triggers.
-    *   **Result:** Higher latency, dependent on scheduling and fetch trigger timing.
+    *   **Scheduling:** **`TranscriptsManager._initialize_transcript_schedule`** fetches *today's* earnings calendar, schedules processing times (call time + 30 min) in Redis ZSET (**`admin:transcripts:schedule`**). This runs on startup regardless of flags (considered safe).
+    *   **Fetching Trigger:** A background thread started by **`TranscriptProcessor`** (`_run_transcript_scheduling`) monitors the **`admin:transcripts:schedule`** ZSET and triggers fetching (`_fetch_and_process_transcript`) when an item's scheduled time is reached.
+    *   **Result:** Higher latency, dependent on scheduling accuracy and background thread timing.
 
 This difference impacts the real-time availability of transcript data compared to news and SEC filings.
 
 ## 4. Data Flow Diagram (Mermaid)
 
+*(Note: This diagram provides a high-level overview. Refer to text descriptions for precise details like queue names and Pub/Sub channels.)*
+
 ```mermaid
 graph TD
     subgraph Ingestion [Data Ingestion]
         A[External APIs<br>News/Reports/Transcripts] --> B{Ingestor Clients<br>REST/WebSocket/Poll};
-        B --> C["RedisClient Checks<br>PROCESSED_QUEUE"];
+        B --> C["RedisClient Checks<br>vs PROCESSED_QUEUE"];
         C -- Item Not Processed --> D["RedisClient<br>Stores Raw Data"];
     end
 
@@ -75,7 +79,7 @@ graph TD
         G --> H{"Clean / Standardize<br>Filter Symbols"};
         H --> I["Call EventReturnsManager<br>(Add Return Schedule)"];
         I --> J("SET processed_key<br>*:live:processed:* / *:hist:processed:*");
-        I --> K("LPUSH processed_key<br>to PROCESSED_QUEUE List");
+        I --> K("LPUSH processed_key<br>to PROCESSED_QUEUE List (Dedupe)");
         I -- PUBLISH<br>*:live:processed --> L([Pub/Sub Channel]);
         L -- Message: processed_key --> P;
         I --> M("DELETE raw_key (Optional)");
@@ -84,30 +88,30 @@ graph TD
     end
 
     subgraph Returns Calc [Returns Calculation - Thread per Source]
-        P("ReturnsProcessor") -- SUBSCRIBES --> L;
-        P -- Checks Periodically --> Q(ZSET<br>*:pending_returns);
+        P("ReturnsProcessor") -- SUBSCRIBES/SCANS --> L/J/Q;
         P -- Retrieves --> J;
         P --> R["Call EventReturnsManager<br>(Calculate Returns)"];
         R --> S{"Store Returns / Schedule Pending"};
         S --> T("ZADD pending_return<br>to *:pending_returns ZSET");
-        S --> U{"SET withoutreturns_key<br>*:live:withoutreturns:* / *:hist:withoutreturns:*" };
+        S --> U{"SET withoutreturns_key<br>*:*:withoutreturns:*" };
         U --> V("DELETE processed_key");
         V --> J;
         U -- PUBLISH<br>*:withoutreturns --> W([Pub/Sub Channel]);
         W -- Message: item_id --> Z;
-        S -- All Returns Done? --> X{"SET withreturns_key<br>*:live:withreturns:* / *:hist:withreturns:*"};
+        S -- All Returns Done? --> X{"SET withreturns_key<br>*:*:withreturns:*"};
         X --> Y("DELETE withoutreturns_key");
         Y --> U;
         X --> ZREM("ZREM item from<br>*:pending_returns ZSET");
         ZREM --> Q;
         X -- PUBLISH<br>*:withreturns --> W;
+        Q(ZSET<br>*:pending_returns);
     end
 
     subgraph Neo4j Live [Neo4j Live Storage - Thread]
         Z("Neo4jProcessor<br>process_with_pubsub") -- SUBSCRIBES --> W;
         Z -- GET Data --> U;
         Z -- GET Data --> X;
-        Z --> AA["Call Neo4jManager<br>(Write to DB)"];
+        Z --> AA["Call Neo4jManager<br>(Write to DB via MERGE)"];
         AA --> BB([Neo4j Database]);
         Z --> CC("DELETE withreturns_key (Optional)");
         CC --> X;
@@ -136,16 +140,17 @@ Redis is central to the workflow, used for queuing, intermediate data storage, s
         *   **`withreturns`**: Final state (all returns calculated) via `SET`. May be deleted by **`Neo4jProcessor`** (live mode) after successful Neo4j write.
     *   `id`: Unique item identifier (e.g., `newsId.timestamp`, `accessionNo.timestamp`, `symbol_timestamp`).
 *   **Queues (Redis Lists):**
-    *   `{source}:queues:raw` (**`RAW_QUEUE`**): Stores `raw_key` names. Pushed by ingestors (`LPUSH`), consumed by **`BaseProcessor`** (`BRPOP`). Primary work queue.
-    *   `{source}:queues:processed` (**`PROCESSED_QUEUE`**): Stores `processed_key` names. Pushed by **`BaseProcessor`** (`LPUSH`). Primarily used by **`RedisClient`** for deduplication checks before adding new raw items. Not typically consumed.
-    *   `{source}:queues:failed` (**`FAILED_QUEUE`**): Stores `raw_key` names of items failing in **`BaseProcessor`**. Pushed by **`BaseProcessor`** (`LPUSH`). **Note:** No automatic retry; requires manual investigation/recovery.
+    *   `{source}:queues:raw` (**`RAW_QUEUE`**): Stores `raw_key` names. Pushed by ingestors (`LPUSH`) after dedupe check, consumed by **`BaseProcessor`** (`BRPOP`). Primary work queue.
+    *   `{source}:queues:processed` (**`PROCESSED_QUEUE`**): Stores `processed_key` names. Pushed by **`BaseProcessor`** (`LPUSH`). Primarily used by **`RedisClient`** for deduplication checks *before* adding new items to `RAW_QUEUE`. Not actively consumed by processors.
+    *   `{source}:queues:failed` (**`FAILED_QUEUE`**): Stores `raw_key` names of items failing in **`BaseProcessor`**. Pushed by **`BaseProcessor`** (`LPUSH`). **Requires manual investigation/recovery.**
 *   **Pub/Sub Channels:** For event-driven notifications.
-    *   `{source}:live:processed`: **`BaseProcessor`** publishes `processed_key` name. **`ReturnsProcessor`** subscribes.
+    *   `{source}:live:processed`: **`BaseProcessor`** publishes `processed_key` name. **`ReturnsProcessor`** subscribes (for live items).
     *   `{source}:withreturns`, `{source}:withoutreturns`: **`ReturnsProcessor`** publishes `item_id`. **`Neo4jProcessor`** (live mode) subscribes.
 *   **Sorted Set (ZSET):**
-    *   `{source}:pending_returns` (**`*:pending_returns`**): Used by **`ReturnsProcessor`** to schedule future return calculations. Members: `{item_id}:{return_type}`. Score: Unix timestamp when market data should be available. Checked via `ZRANGEBYSCORE`.
+    *   `{source}:pending_returns` (**`*:pending_returns`**): Used by **`ReturnsProcessor`** to schedule future return calculations. Members: `{item_id}:{return_type}`. Score: **UTC Unix timestamp (float)** when market data should be available (schedule time + Polygon delay). Checked via `ZRANGEBYSCORE`.
 *   **Other Keys:**
     *   **`admin:*`**: Used by **`EventTraderRedis`** for shared config (stock universe: **`admin:tradable_universe:*`**) and transcript scheduling (**`admin:transcripts:schedule`**).
+    *   **`batch:{source}:{date_range}:fetch_complete`**: Flag set by historical fetch functions upon completion. Used by `run_event_trader.py`'s historical monitoring loop.
 
 ## 6. Tracking Item Lifecycle Summary Table
 
@@ -153,105 +158,66 @@ This table summarizes the typical happy-path journey of an item:
 
 | Stage                      | Redis State/Action                                  | Responsible Component | Trigger                 | Output / Next Step                                  |
 | :------------------------- | :-------------------------------------------------- | :-------------------- | :---------------------- | :-------------------------------------------------- |
-| 1. Ingestion               | Check `PROCESSED_QUEUE`, `SET *:raw:*`, `LPUSH RAW_QUEUE` | Ingestor / RedisClient | External Data / API Call | `raw_key` in `RAW_QUEUE`                             |
-| 2. Base Processing Start   | `BRPOP RAW_QUEUE`                                     | BaseProcessor         | Item in `RAW_QUEUE`     | Get raw data                                        |
-| 3. Base Processing Success | `DEL *:raw:*`(opt), `SET *:processed:*`, `LPUSH PROCESSED_QUEUE`, `PUBLISH *:live:processed` | BaseProcessor | Successful Processing | `processed_key` published                             |
-| 4. Returns Calc Start      | `GET *:processed:*`, `DEL *:processed:*`, `SET *:withoutreturns:*`, `PUBLISH *:withoutreturns`, `ZADD *:pending_returns` | ReturnsProcessor    | Pub/Sub `*:live:processed` | `item_id` published, future returns scheduled       |
-| 5. Pending Return Calc     | `GET *:withoutreturns:*`, Calc Return, `SET *:withoutreturns:*`, `PUBLISH *:withoutreturns` | ReturnsProcessor    | ZSET Check (`ZRANGEBYSCORE`) | Item updated, `item_id` published                  |
-| 6. All Returns Calc        | `GET *:withoutreturns:*`, Calc Final Return, `DEL *:withoutreturns:*`, `SET *:withreturns:*`, `PUBLISH *:withreturns`, `ZREM *:pending_returns` | ReturnsProcessor    | Last Pending Return Calc | Item moved to final state, `item_id` published      |
-| 7. Neo4j Ingestion (Live)  | `GET *:withreturns:*`/`*:withoutreturns:*`, Write to DB, `DEL *:withreturns:*` (opt.) | Neo4jProcessor (Live) | Pub/Sub `*:withreturns`/etc. | Data in Neo4j, optional Redis cleanup            |
-| 8. Neo4j Ingestion (Batch) | `SCAN/GET *:withreturns:*`/`*:withoutreturns:*`, Write to DB | Neo4jProcessor (Batch)| Manual Script Run      | Data in Neo4j                                     |
+| 1. Ingestion Attempt       | Check `PROCESSED_QUEUE` for processed_key             | Ingestor / RedisClient | External Data / API Call | Proceed if not found                                |
+| 2. Ingestion Success       | `SET *:raw:*`, `LPUSH RAW_QUEUE`                      | Ingestor / RedisClient | Data Received (Not Dupe)| `raw_key` in `RAW_QUEUE`                             |
+| 3. Base Processing Start   | `BRPOP RAW_QUEUE`                                     | BaseProcessor         | Item in `RAW_QUEUE`     | Get raw data                                        |
+| 4. Base Processing Success | `DEL *:raw:*`(opt), `SET *:processed:*`, `LPUSH PROCESSED_QUEUE`, `PUBLISH *:live:processed` | BaseProcessor | Successful Processing | `processed_key` published                             |
+| 5. Returns Calc Start      | `GET *:processed:*`, `DEL *:processed:*`, `SET *:withoutreturns:*`, `PUBLISH *:withoutreturns`, `ZADD *:pending_returns` | ReturnsProcessor    | Pub/Sub `*:live:processed` or Hist Scan | `item_id` published, future returns scheduled       |
+| 6. Pending Return Calc     | `GET *:withoutreturns:*`, Calc Return, `SET *:withoutreturns:*`, `PUBLISH *:withoutreturns` | ReturnsProcessor    | ZSET Check (`ZRANGEBYSCORE`) | Item updated, `item_id` published                  |
+| 7. All Returns Calc        | `GET *:withoutreturns:*`, Calc Final Return, `DEL *:withoutreturns:*`, `SET *:withreturns:*`, `PUBLISH *:withreturns`, `ZREM *:pending_returns` | ReturnsProcessor    | Last Pending Return Calc | Item moved to final state, `item_id` published      |
+| 8. Neo4j Ingestion (Live)  | `GET *:withreturns:*`/`*:withoutreturns:*`, Write to DB, `DEL *:withreturns:*` (opt.) | Neo4jProcessor (Live) | Pub/Sub `*:withreturns`/etc. | Data in Neo4j, optional Redis cleanup            |
+| 9. Neo4j Ingestion (Batch) | `SCAN/GET *:withreturns:*`/`*:withoutreturns:*`, Write to DB | Neo4jProcessor (Batch)| Manual Script Run      | Data in Neo4j                                     |
 
 **Failure Paths:**
-*   If Stage 3 fails -> `raw_key` pushed to **`FAILED_QUEUE`**. Processing stops.
-*   If Stage 4/5/6 fails -> Item might remain stuck in **`withoutreturns`** state indefinitely.
-*   If Stage 7 fails -> Data might not reach Neo4j; depends on retry logic. `withreturns` key might not be cleaned up.
+*   If Stage 4 fails -> `raw_key` pushed to **`FAILED_QUEUE`**. Processing stops for that item. Requires manual review.
+*   If Stage 5/6/7 fails -> Item might remain stuck in **`withoutreturns`** state indefinitely. Requires investigation.
+*   If Stage 8 fails -> Data might not reach Neo4j; depends on retry logic. `withreturns` key might not be cleaned up.
 
 ## 7. Historical Data Ingestion
 
-*   **Trigger:** Initiated by **`scripts/run_event_trader.py`** with `--from-date` and `--to-date`. The **`hist:`** prefix is used in Redis.
-*   **Fetching:** Source managers call REST clients (`get_historical_data`).
-*   **Storage & Queuing:** Data stored under **`*:hist:raw:*`** keys, keys pushed to **`RAW_QUEUE`**.
-*   **Processing:** Flows through the same **`BaseProcessor`** and **`ReturnsProcessor`** instances.
-    *   **`BaseProcessor`** creates **`*:hist:processed:*`** keys, pushes to **`PROCESSED_QUEUE`**, publishes key to **`*:live:processed`**.
-    *   **`ReturnsProcessor`** handles these via its batch scan (`_process_hist_news`), creates **`*:hist:withreturns:*`** or **`*:hist:withoutreturns:*`** keys (deleting **`*:hist:processed:*`**), schedules in ZSET, and publishes `item_id` to **`*:withreturns`**/**`*:withoutreturns`**.
-*   **Neo4j Loading:** Can be picked up by the live **`Neo4jProcessor`** listener or processed in bulk using the manual **`neo4j_processor.sh`** script (reading from **`*:hist:withreturns:*`** / **`*:hist:withoutreturns:*`**).
-*   **Potential Live/Historical Duplicates:** The deduplication check using the **`PROCESSED_QUEUE`** list operates within the **`live:`** or **`hist:`** prefix scope. If the same event is ingested via both live and historical runs, it might be processed in both namespaces, potentially leading to duplicates in Neo4j unless idempotent writes (e.g., Cypher `MERGE` with proper constraints) are used in **`Neo4jManager`**.
+*   **Trigger:** Initiated by **`scripts/run_event_trader.py`** with `--from-date`, `--to-date` and `-historical` flag active. The **`hist:`** prefix is used in Redis keys (e.g., `news:hist:raw:...`).
+*   **Fetching:** Source managers conditionally call REST clients (`get_historical_data`).
+*   **Storage & Queuing:** Data stored under **`*:hist:raw:*`** keys, keys pushed to **`RAW_QUEUE`** after dedupe check against **`PROCESSED_QUEUE`**. Fetch function sets `batch:...:fetch_complete` flag.
+*   **Processing:** Flows through the same **`BaseProcessor`** and **`ReturnsProcessor`** instances as live data.
+    *   **`BaseProcessor`** creates **`*:hist:processed:*`** keys, pushes to **`PROCESSED_QUEUE`**, publishes key to **`*:live:processed`** Pub/Sub.
+    *   **`ReturnsProcessor`** handles historical `processed` items via its batch scan (`_process_hist_news`), creates **`*:hist:withreturns:*`** or **`*:hist:withoutreturns:*`** keys (deleting **`*:hist:processed:*`**), schedules future returns in ZSET (**`*:pending_returns`**), and publishes `item_id` to **`*:withreturns`**/**`*:withoutreturns`**.
+*   **Neo4j Loading:** Can be picked up by the live **`Neo4jProcessor`** listener (if running) or processed in bulk using the manual **`neo4j_processor.sh`** script. Idempotent `MERGE` operations in **`Neo4jManager`** are crucial for handling potential overlaps if live/historical runs cover same periods.
 
-## 8. Proposed Solution: Tracking Historical Batch Completion (Reconciliation)
+## 8. Chunked Historical Processing & Completion Tracking
 
-To reliably know when to start the next historical batch fetch, this plan focuses on confirming that all items successfully queued by **`RedisClient`** for the current batch have been fully accounted for by **`BaseProcessor`**. This ensures the input and initial processing stage is clear before fetching more data.
+To reliably process large historical date ranges without overwhelming system resources or external APIs, the `chunked-historical` command in `scripts/event_trader.sh` provides a sequential batch processing workflow.
 
-**1. Define Item Pathways (Queuing Attempt to BaseProcessor Outcome):**
+**Overall Goal:** Ensure that all critical processing stages (fetching, base processing, returns calculation) related to one historical date chunk are complete *according to Redis state* before stopping the system and starting the fetch for the next chunk.
 
-Once a historical fetch function completes (signaled by `fetch_complete`), items attempt to enter the `RAW_QUEUE` via `RedisClient` and are then handled by `BaseProcessor`. We track the following pathways:
+**Workflow:**
 
-*   **A. Pre-BaseProcessor (Within `RedisClient` queuing methods like `set_news`, `set_filing`):**
-    *   **Pathway 1: Deduplicated:** Item skipped because its `processed_key` is already in the `PROCESSED_QUEUE` list. (Handled by: `RedisClient` methods).
-    *   **Pathway 2: Queueing Failed:** Redis `SET`+`LPUSH` pipeline fails. Item not queued. (Handled by: `RedisClient` methods).
-    *   **Pathway 3: Queued Successfully:** Redis `SET`+`LPUSH` succeeds. Item's `raw_key` added to `RAW_QUEUE`. (Handled by: `RedisClient` methods). **This is the input count for BaseProcessor.**
+1.  **Shell Script Orchestration (`event_trader.sh`):**
+    *   The `process_chunked_historical` function calculates sequential date chunks (e.g., 5 days) based on the overall date range provided.
+    *   For each chunk:
+        *   It executes the main Python script (`scripts/run_event_trader.py`) with the chunk's specific start/end dates and the `-historical` flag.
+        *   It **waits** for that Python process to complete and exit.
+        *   It checks the Python process's exit code. If successful (0), it proceeds.
+        *   It calls `$0 stop-all` to terminate all related background processes (processors, etc.) ensuring a clean slate for the next chunk.
+        *   It advances to the next date chunk and repeats the process.
 
-*   **B. BaseProcessor Handling (Within `BaseProcessor._process_item` for items popped from `RAW_QUEUE`):**
-    *   **Pathway 4: Failed (Raw Missing):** `client.get(raw_key)` returns `None` upon attempt. (Handled by: `_process_item` initial check).
-    *   **Pathway 5: Filtered (Symbols):** `_has_valid_symbols` check fails. (Handled by: `_process_item` symbol check logic).
-    *   **Pathway 6: Failed (Processing Error):** Exception during processing (cleaning, metadata, Redis save) or `_add_metadata` returns `None`. Item pushed to `FAILED_QUEUE`. (Handled by: `_process_item` main try/except block).
-    *   **Pathway 7: Skipped (Already Processed):** `processed_key` already exists or is in `PROCESSED_QUEUE` list upon check *within BaseProcessor*. (Handled by: `_process_item` duplicate check before saving).
-    *   **Pathway 8: Passed (Processed Successfully):** Item successfully processed, `processed_key` saved, pushed to `PROCESSED_QUEUE`, and published. (Handled by: `_process_item` successful execution path).
+2.  **Python Script Responsibility (`run_event_trader.py` in `-historical` mode):**
+    *   **Fetch & Start Background Tasks:** Initializes `DataManagerCentral`, starts historical data fetching for the *current chunk*, and launches background daemon threads (BaseProcessors, ReturnsProcessor, Neo4jProcessor, XBRL workers).
+    *   **Fetch Completion Signal:** The historical fetch functions for each source (`news`, `reports`, `transcripts`) set a specific Redis flag (`batch:{source}:{chunk_start}-{chunk_end}:fetch_complete`) just before they finish fetching data for the chunk.
+    *   **Wait for Processing Completion (Redis Monitoring):** Instead of exiting immediately or looping forever, the main Python thread enters a monitoring loop. This loop **periodically checks Redis** to determine if all processing related to the chunk appears finished. It waits until **all** of the following conditions are met for **all three** sources (`news`, `reports`, `transcripts`):
+        1.  **Fetch Complete Flag is Set:** (`GET batch:{source}:{...}:fetch_complete` == "1") - *Confirms fetching is done.*
+        2.  **Raw Queue is Empty:** (`LLEN {source}:queues:raw` == 0) - *Confirms BaseProcessor has picked up all raw items.*
+        3.  **Pending Returns Set is Empty:** (`ZCARD {source}:pending_returns` == 0) - *Confirms ReturnsProcessor has processed all scheduled returns for this chunk.*
+        4.  **`withoutreturns` Namespace is Empty:** (No keys match `{source}:withoutreturns:*`) - *Confirms ReturnsProcessor has finished with items needing future returns calculation (moved to `withreturns`).*
+        5.  **`withreturns` Namespace is Empty:** (No keys match `{source}:withreturns:*`) - *Confirms Neo4jProcessor (or other consumers) has likely processed final items from this chunk.*
+    *   **Clean Exit:** Only when all the above conditions are met does the Python monitoring loop end. It then calls `manager.stop()` (for graceful background thread shutdown) and `sys.exit(0)` to terminate the Python process successfully.
 
-**2. Minimal Counters for Reconciliation:**
+3.  **Shell Script Proceeds:** The shell script detects the successful Python exit (code 0), runs `stop-all`, and moves to the next chunk.
 
-To perform the reconciliation, the following counters must be incremented **only for items identified as belonging to the active historical batch** (`batch_id`):
+**Handling Asynchronous Tasks (XBRL):**
 
-*   **Input:** `batch:{batch_id}:rc_queued_success`
-    *   **Incremented In:** `RedisClient` methods (`set_news`, `set_filing`, etc.)
-    *   **When:** Pathway 3 (Successful `SET`+`LPUSH` to `RAW_QUEUE`).
-*   **BP Outcomes:**
-    *   `batch:{batch_id}:bp_filtered`
-        *   **Incremented In:** `BaseProcessor._process_item`
-        *   **When:** Pathway 5 (Filtered by symbols).
-    *   `batch:{batch_id}:bp_failed`
-        *   **Incremented In:** `BaseProcessor._process_item`
-        *   **When:** Pathway 4 (Raw Missing) OR Pathway 6 (Processing Error).
-    *   `batch:{batch_id}:bp_skipped_dupe`
-        *   **Incremented In:** `BaseProcessor._process_item`
-        *   **When:** Pathway 7 (Skipped as already processed by another worker).
-    *   `batch:{batch_id}:bp_processed`
-        *   **Incremented In:** `BaseProcessor._process_item`
-        *   **When:** Pathway 8 (Successfully processed).
+*   XBRL processing is triggered during report processing but runs asynchronously in a background thread pool.
+*   The Python monitoring loop **does not** directly wait for XBRL tasks to finish (it only monitors Redis state).
+*   Therefore, the `stop-all` command *can* interrupt active XBRL worker threads.
+*   To handle this, an **XBRL reconciliation mechanism** runs during the initialization of `Neo4jProcessor` (at the start of each chunk). It queries Neo4j for reports with `xbrl_status` 'QUEUED' or 'PROCESSING' and automatically re-queues them using the existing XBRL processing infrastructure.
 
-**3. Details: Setting the Fetch Completion Flag**
-
-To establish a 100% reliable mechanism for knowing when the historical fetch function for each source has completed its work and queued the last item, the `batch:{batch_id}:fetch_complete` flag is set within each function at a specific point ensuring all processing is finished:
-
-*   **News (`BenzingaNewsRestAPI._fetch_news`):**
-    *   *Current Flow:* This function fetches data page by page, collects items, and uses `self.redis.history_client.set_news_batch(...)` to push them to Redis, potentially with a final call after the main loop.
-    *   *Reliable Signal:* The `SET batch:{batch_id}:fetch_complete 1 EX 86400` command is added **immediately after** the logic that saves the *final* batch of news items to Redis (typically after the pagination loop concludes).
-
-*   **Reports (`SECRestAPI.get_historical_data`):**
-    *   *Current Flow:* This function iterates through tickers, and within that, potentially paginates filings, pushing each individually using `self.redis.history_client.set_filing(...)`.
-    *   *Reliable Signal:* The `SET batch:{batch_id}:fetch_complete 1 EX 86400` command is added **immediately after** the main outer loop (iterating through all `tickers`) finishes, ensuring all tickers for the batch have been processed.
-
-*   **Transcripts (`TranscriptsManager._fetch_historical_data`):**
-    *   *Current Flow:* This function loops through each date in the batch range (`while current_date <= end_date:`), fetches transcripts for the date, and pushes each individually (`store_transcript_in_redis(...)`).
-    *   *Reliable Signal:* The `SET batch:{batch_id}:fetch_complete 1 EX 86400` command is added **immediately after** the main `while current_date <= end_date:` loop finishes, guaranteeing all dates in the range were attempted.
-
-**3.1 Implementation Summary:**
-    *   Modify the 3 historical fetch functions to accept `batch_id` and set `batch:{batch_id}:fetch_complete 1 EX 86400` at their conclusion (as detailed above).
-    *   Modify `RedisClient` queuing methods (`set_news`, `set_filing`, etc.) to accept `batch_id` (if provided) and increment `rc_queued_success` upon successful queuing.
-    *   Modify `BaseProcessor._process_item` to identify active historical batch items and increment the appropriate outcome counters (`bp_filtered`, `bp_failed`, `bp_skipped_dupe`, `bp_processed`) based on the execution path taken.
-
-**4. Orchestrator Logic (Queue-to-Processed Reconciliation Check):**
-    *   An external orchestrator script manages sequential batch iterations.
-    *   For each batch (`batch_id = "{source_type}:{start_date_str}-{end_date_str}"):
-        *   **Prepare:** Clear `fetch_complete` flag. Reset/clear batch counters (`rc_queued_success`, `bp_*`). Set `current_hist_batch:{source_type}` flag.
-        *   **Trigger Fetch:** Call historical fetch function (passing `batch_id`).
-        *   **Monitor & Reconcile:** Periodically check Redis:
-            1.  `GET batch:{batch_id}:fetch_complete` must be '1'.
-            2.  `LLEN {source_type}:queues:raw` must be 0 (stable).
-            3.  Fetch counter values: `queued = GET ...:rc_queued_success`, `filtered = GET ...:bp_filtered`, `failed = GET ...:bp_failed`, `skipped = GET ...:bp_skipped_dupe`, `processed = GET ...:bp_processed`. Handle missing as 0.
-            4.  **Reconciliation Check:** Verify `(filtered + failed + skipped + processed) >= queued`.
-        *   **Trigger Next Batch When:** All conditions (1, 2, and 4) are met consistently for a stability period.
-        *   **Failure/Timeout:** Handle timeouts. Log errors if reconciliation fails. Note: This doesn't track items discarded *before* queueing (e.g., by Error Handlers or RedisClient dedupe).
-        *   **Cleanup:** On success, clear `current_hist_batch` flag, optionally clear batch keys, proceed.
-
-This approach ensures that all data successfully entering the Redis queueing stage is accounted for by the BaseProcessor before starting the next batch fetch, providing a robust control mechanism with high visibility into the critical initial processing stages.
+This combined shell orchestration and Python monitoring ensures sequential processing of historical chunks while allowing necessary background tasks like returns calculation and Neo4j updates to complete based on Redis state, with a specific reconciliation step for asynchronous XBRL processing.

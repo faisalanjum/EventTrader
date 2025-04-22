@@ -91,6 +91,25 @@ The watchdog monitors EventTrader and automatically restarts it if it crashes.
 ./scripts/event_trader.sh clean-logs 14    # Clean logs older than 14 days
 ```
 
+## Chunked Historical Processing
+
+This command processes historical data in sequential date chunks, waiting for processing 
+(fetching, queue clearing, returns calculations based on Redis state) to complete for 
+one chunk before starting the next. This is useful for ingesting very large historical 
+date ranges without running out of memory or overwhelming external APIs.
+
+```bash
+# Process from specified start date up to today in default chunks
+./scripts/event_trader.sh chunked-historical YYYY-MM-DD 
+
+# Process a specific date range in default chunks
+./scripts/event_trader.sh chunked-historical YYYY-MM-DD YYYY-MM-DD
+```
+
+*   The chunk size (days) and stability wait time (seconds) are configured in `config/feature_flags.py`.
+*   Each run creates a combined log file in the `logs/` directory named `chunked_historical_YYYY-MM-DD_to_YYYY-MM-DD.log`.
+*   This command implicitly uses `-historical` mode for the underlying Python script.
+
 ## Quick Reference
 
 | Command | Description |
@@ -101,6 +120,7 @@ The watchdog monitors EventTrader and automatically restarts it if it crashes.
 | `stop` | Stop EventTrader |
 | `stop-all` | Stop EventTrader + watchdog |
 | `restart-all` | Restart everything |
+| `chunked-historical [from] [to]` | Process historical data in managed chunks |
 | `status` | Check system status |
 | `health` | Detailed system health |
 | `logs` | View recent logs |

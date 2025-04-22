@@ -203,98 +203,59 @@ class XbrlMixin:
                 self.xbrl_semaphore.release()
 
 
+    def _reconcile_interrupted_xbrl_tasks(self):
+        """
+        Find reports stuck in QUEUED or PROCESSING state and re-queue them for XBRL processing.
+        This should be called during initialization.
+        """
+        if not self.enable_xbrl:
+            logger.info("XBRL reconciliation skipped as XBRL processing is disabled.")
+            return
+            
+        logger.info("Checking for interrupted XBRL tasks (status QUEUED or PROCESSING)...")
+        try:
+            with self.manager.driver.session() as session:
+                # Find reports that need reconciliation
+                records = session.run(
+                    """
+                    MATCH (r:Report)
+                    WHERE r.xbrl_status IN ['QUEUED', 'PROCESSING']
+                    RETURN r.id AS report_id, r.cik AS cik, r.accessionNo AS accessionNo
+                    """
+                ).data()
+                
+                if not records:
+                    logger.info("No interrupted XBRL tasks found.")
+                    return
+                    
+                logger.info(f"Found {len(records)} reports needing XBRL reconciliation. Re-queueing...")
+                requeued_count = 0
+                failed_count = 0
+                
+                for record in records:
+                    try:
+                        # Re-queue using the existing _process_xbrl method
+                        # It will update status to QUEUED and submit to the executor
+                        # Need to pass the session object
+                        success = self._process_xbrl(
+                            session=session, # Pass the existing session
+                            report_id=record['report_id'],
+                            cik=record['cik'],
+                            accessionNo=record['accessionNo']
+                        )
+                        if success:
+                            requeued_count += 1
+                        else:
+                            failed_count += 1
+                    except Exception as e_inner:
+                        logger.error(f"Error re-queueing XBRL for report {record.get('report_id', 'N/A')}: {e_inner}")
+                        failed_count += 1
+                        
+                logger.info(f"XBRL Reconciliation Summary: Re-queued={requeued_count}, Failed-to-queue={failed_count}")
+                
+        except Exception as e:
+            logger.error(f"Error during XBRL reconciliation query: {e}")
+
 
     # def _xbrl_worker_task(self, report_id, cik, accessionNo):
-    #     """Process a single XBRL report in background"""
-    #     # Create a new session for this thread
-    #     with self.manager.driver.session() as session:
-    #         start_time = time.time()  # Start timing
-    #         try:
-    #             # Mark as processing
-    #             session.run(
-    #                 "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status",
-    #                 id=report_id, status="PROCESSING"
-    #             )
-                
-    #             # Import needed components
-    #             from XBRL.xbrl_processor import process_report, get_company_by_cik, get_report_by_accessionNo
-    #             from neograph.Neo4jManager import Neo4jManager
-                
-    #             # Create a dedicated Neo4j connection for this task
-    #             neo4j_manager = Neo4jManager(
-    #                 uri=self.uri,
-    #                 username=self.username,
-    #                 password=self.password
-    #             )
-                
-    #             # Track the XBRL processor instance for proper cleanup
-    #             xbrl_processor = None
-                
-    #             try:
-    #                 # Use the existing helper functions to get Report and Company nodes
-    #                 report_node = get_report_by_accessionNo(neo4j_manager, accessionNo)
-    #                 if not report_node:
-    #                     logger.error(f"Report with accessionNo {accessionNo} not found in Neo4j")
-    #                     session.run(
-    #                         "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
-    #                         id=report_id, status="FAILED", error="Report not found in Neo4j"
-    #                     )
-    #                     return
-                        
-    #                 company_node = get_company_by_cik(neo4j_manager, report_node.cik)
-    #                 if not company_node:
-    #                     logger.error(f"Company with CIK {report_node.cik} not found in Neo4j")
-    #                     session.run(
-    #                         "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
-    #                         id=report_id, status="FAILED", error="Company not found in Neo4j"
-    #                     )
-    #                     return
-                    
-    #                 # Use the properly formatted values from the Neo4j nodes
-    #                 processed_cik = company_node.cik
-    #                 processed_accessionNo = report_node.accessionNo
-                    
-    #                 logger.info(f"Processing XBRL for report {report_id} (CIK: {processed_cik}, AccessionNo: {processed_accessionNo})")
-                    
-    #                 # Process the report and store the processor instance
-    #                 xbrl_processor = process_report(
-    #                     neo4j=neo4j_manager,
-    #                     cik=processed_cik,
-    #                     accessionNo=processed_accessionNo,
-    #                     testing=False
-    #                 )
-                    
-    #                 # Mark as completed
-    #                 session.run(
-    #                     "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status",
-    #                     id=report_id, status="COMPLETED"
-    #                 )
-    #                 # Log completion time
-    #                 elapsed = time.time() - start_time
-    #                 mins, secs = divmod(int(elapsed), 60)
-    #                 logger.info(f"Completed XBRL processing for report {report_id} in {mins}m {secs}s")
-                    
-    #                 # Add delay after each successful processing to allow for resource cleanup
-    #                 time.sleep(3)  # 3 second delay to allow for resource cleanup
-                    
-    #             finally:
-    #                 # Explicitly clean up XBRL resources
-    #                 if xbrl_processor:
-    #                     try:
-    #                         xbrl_processor.close_resources()
-    #                         logger.info(f"Cleaned up XBRL resources for report {report_id}")
-    #                     except Exception as e:
-    #                         logger.warning(f"Failed to clean up XBRL resources for report {report_id}: {e}")
-                    
-    #                 # Always close the manager
-    #                 neo4j_manager.close()
-                    
-    #         except Exception as e:
-    #             # Log error with timing
-    #             elapsed = time.time() - start_time
-    #             mins, secs = divmod(int(elapsed), 60)
-    #             logger.error(f"Error in XBRL processing for report {report_id} after {mins}m {secs}s: {e}")
-    #             session.run(
-    #                 "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
-    #                 id=report_id, status="FAILED", error=str(e)
-    #             )
+    # ... rest of the file

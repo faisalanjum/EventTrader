@@ -34,6 +34,8 @@ sys.path.append('/Users/macowne/Desktop/Faisal/EventTrader')  # Add project root
 from secReports.sec_websocket import SECWebSocket
 from secReports.sec_restAPI import SECRestAPI
 
+from . import feature_flags
+
 
 
 class DataSourceManager:
@@ -107,32 +109,41 @@ class TranscriptsManager(DataSourceManager):
     
     def start(self):
         try:
-
-            # Initialize schedule at startup
+            # Initialize schedule at startup (Should this be conditional too? Seems safe to run always)
             self._initialize_transcript_schedule()
 
-            # Start processor thread
+            # Start processor thread (Always needed to process potential live scheduled items)
             self.processor_thread = threading.Thread(
                 target=self.processor.process_all_transcripts, 
                 daemon=True
             )
             
-            # Start returns processor thread
+            # Start returns processor thread (Always needed)
             self.returns_thread = threading.Thread(
                 target=self.returns_processor.process_all_returns, 
                 daemon=True
             )
             
-            # Start historical data processing in background
-            self.historical_thread = threading.Thread(
-                target=self._fetch_historical_data,
-                daemon=True
-            )
+            threads_to_start = [self.processor_thread, self.returns_thread]
+
+            # --- CONDITIONALLY START HISTORICAL THREAD ---
+            if feature_flags.ENABLE_HISTORICAL_DATA:
+                 self.logger.info("Historical data enabled, starting historical transcript fetch thread.")
+                 self.historical_thread = threading.Thread(
+                     target=self._fetch_historical_data,
+                     daemon=True
+                 )
+                 threads_to_start.append(self.historical_thread)
+            else:
+                 self.logger.info("Historical data disabled, historical transcript fetch thread will not be started.")
+            # ------------------------------------------
             
             # Start threads
-            self.processor_thread.start()
-            self.returns_thread.start()
-            self.historical_thread.start()
+            # self.processor_thread.start()
+            # self.returns_thread.start()
+            # self.historical_thread.start()
+            for thread in threads_to_start:
+                 thread.start()
             
             self.logger.info(f"Started transcript processing threads")
             return True
@@ -366,20 +377,33 @@ class BenzingaNewsManager(DataSourceManager):
 
     def start(self):
         try:
-            # Fetch historical data
-            historical_data = self.rest_client.get_historical_data(
-                date_from=self.date_range['from'],
-                date_to=self.date_range['to'],
-                raw=False
-            )
-            self.logger.info(f"Fetched {len(historical_data)} historical items")
+            # Fetch historical data if enabled
+            if feature_flags.ENABLE_HISTORICAL_DATA:
+                historical_data = self.rest_client.get_historical_data(
+                    date_from=self.date_range['from'],
+                    date_to=self.date_range['to'],
+                    raw=False
+                )
+                self.logger.info(f"Fetched {len(historical_data)} historical items")
+            else:
+                self.logger.info("Historical data fetching disabled for Benzinga News.")
 
-            # Start all components
-            self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
+            # Start processing threads (always needed)
             self.processor_thread = threading.Thread(target=self.processor.process_all_news, daemon=True)
             self.returns_thread = threading.Thread(target=self.returns_processor.process_all_returns, daemon=True)
             
-            for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
+            threads_to_start = [self.processor_thread, self.returns_thread]
+
+            # --- CONDITIONALLY START WEBSOCKET THREAD ---
+            if feature_flags.ENABLE_LIVE_DATA:
+                self.logger.info("Live data enabled, starting WebSocket thread for Benzinga News.")
+                self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
+                threads_to_start.append(self.ws_thread)
+            else:
+                self.logger.info("Live data disabled, WebSocket thread for Benzinga News will not be started.")
+            # -------------------------------------------
+            
+            for thread in threads_to_start:
                 thread.start()
             return True
             
@@ -469,21 +493,34 @@ class ReportsManager(DataSourceManager):
 
     def start(self):
         try:
-            # Start all components in threads
-            self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
+            # Start processing threads (always needed)
             self.processor_thread = threading.Thread(target=self.processor.process_all_reports, daemon=True)
             self.returns_thread = threading.Thread(target=self.returns_processor.process_all_returns, daemon=True)
             
-            # Fetch historical data in separate thread
-            self.historical_thread = threading.Thread(
-                target=self.rest_client.get_historical_data,
-                args=(self.date_range['from'], self.date_range['to'], False),  # Include raw=False
-                daemon=True
-            )
+            threads_to_start = [self.processor_thread, self.returns_thread]
+            
+            # Fetch historical data in separate thread if enabled
+            if feature_flags.ENABLE_HISTORICAL_DATA:
+                self.historical_thread = threading.Thread(
+                    target=self.rest_client.get_historical_data,
+                    args=(self.date_range['from'], self.date_range['to'], False), # Include raw=False
+                    daemon=True
+                )
+                threads_to_start.append(self.historical_thread)
+            else:
+                 self.logger.info("Historical data fetching disabled for SEC Reports.")
+
+            # --- CONDITIONALLY START WEBSOCKET THREAD ---
+            if feature_flags.ENABLE_LIVE_DATA:
+                self.logger.info("Live data enabled, starting WebSocket thread for SEC Reports.")
+                self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
+                threads_to_start.append(self.ws_thread)
+            else:
+                self.logger.info("Live data disabled, WebSocket thread for SEC Reports will not be started.")
+            # -------------------------------------------
             
             self.logger.debug(f"[Manager Debug] Starting threads:")
-            # Start all threads including historical
-            for thread in [self.ws_thread, self.processor_thread, self.returns_thread, self.historical_thread]:
+            for thread in threads_to_start:
                 thread.start()
                 self.logger.debug(f"[Manager Debug] Thread {thread.name} started: {thread.is_alive()}")
             

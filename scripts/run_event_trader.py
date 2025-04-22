@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config.DataManagerCentral import DataManager
 from utils.log_config import setup_logging, get_logger
+from redisDB.redis_constants import RedisKeys
 
 # Make sure logs directory exists
 logs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs")
@@ -113,13 +114,134 @@ def main():
         signal.signal(signal.SIGTERM, signal_handler) # kill command
         
         # Start manager
-        logger.info("EventTrader is now running")
-        manager.start()
-        
-        # If manager.start() returns, keep alive
-        while True:
-            time.sleep(10)
+        logger.info("Starting DataManager processes...")
+        start_success = manager.start()
+        # Check if start was successful for all sources maybe?
+        # For now, assume it proceeds unless there was a major error during init.
+        logger.info("DataManager processes started.")
+
+        # --- MODIFIED Main Loop (Minimalistic Version) --- 
+        if feature_flags.ENABLE_LIVE_DATA:
+            # Keep process alive indefinitely for live data or live+historical
+            logger.info("Live data enabled, keeping process alive indefinitely...")
+            while True:
+                time.sleep(60) # Check less frequently when just keeping alive
+        elif feature_flags.ENABLE_HISTORICAL_DATA:
+            # Historical only mode: Wait for processing related to this chunk to finish
+            logger.info("Historical-only mode: Monitoring Redis for chunk completion...")
+            chunk_monitor_interval = 30 # Seconds between checks
             
+            # --- Get Redis connection from existing manager --- 
+            try:
+                # Use the live client associated with the news source (any valid client works)
+                if 'news' in manager.sources and manager.sources['news'].redis and manager.sources['news'].redis.live_client:
+                    redis_conn = manager.sources['news'].redis.live_client.client
+                    redis_conn.ping() # Verify connection
+                    logger.info("Using existing Redis connection for monitoring.")
+                else:
+                    raise ConnectionError("Could not access Redis client via DataManager for monitoring")
+            except Exception as redis_err:
+                logger.error(f"Failed to get/verify Redis connection for monitoring: {redis_err}")
+                print(f"ERROR: Failed to get/verify Redis connection for monitoring: {redis_err}", file=sys.stderr)
+                # Cannot monitor, safest to exit to prevent shell script hanging
+                manager.stop() # Attempt cleanup
+                sys.exit(1)
+            # -------------------------------------------------
+            
+            # Construct the expected fetch complete key format for this chunk
+            date_range_key = f"{args.from_date}-{args.to_date}"
+            sources_to_check = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS, RedisKeys.SOURCE_TRANSCRIPTS]
+            
+            while True:
+                all_complete = True
+                completion_status = {}
+
+                for source in sources_to_check:
+                    try:
+                        # Use the obtained redis_conn for checks
+                        # 1. Check Fetch Complete Flag
+                        fetch_key = f"batch:{source}:{date_range_key}:fetch_complete"
+                        fetch_status = redis_conn.get(fetch_key)
+                        if fetch_status != "1":
+                            all_complete = False
+                            completion_status[source] = f"Fetch Incomplete (Flag: {fetch_status})"
+                            continue 
+                        
+                        # 2. Check Raw Queue
+                        raw_queue = f"{source}:{RedisKeys.RAW_QUEUE}"
+                        raw_len = redis_conn.llen(raw_queue)
+                        if raw_len > 0:
+                            all_complete = False
+                            completion_status[source] = f"Raw Queue Not Empty (Len: {raw_len})"
+                            continue
+
+                        # 3. Check Processed Queue
+                        # processed_queue = f"{source}:{RedisKeys.PROCESSED_QUEUE}"
+                        # processed_len = redis_conn.llen(processed_queue)
+                        # if processed_len > 0:
+                        #     all_complete = False
+                        #     completion_status[source] = f"Processed Queue Not Empty (Len: {processed_len})"
+                        #     continue
+                            
+                        # 4. Check Pending Returns Set (indicates ReturnsProcessor work)
+                        pending_key_base = RedisKeys.get_returns_keys(source)['pending']
+                        pending_zset = pending_key_base # Key already includes source
+                        pending_count = redis_conn.zcard(pending_zset)
+                        if pending_count > 0:
+                            all_complete = False
+                            completion_status[source] = f"Pending Returns Not Empty (Count: {pending_count})"
+                            continue
+                            
+                        # --- ADDED CHECKS for returns namespaces ---
+                        # 5. Check withreturns Namespace (should be empty if Neo4j is consuming)
+                        withreturns_pattern = f"{source}:{RedisKeys.SUFFIX_WITHRETURNS}:*"
+                        withreturns_keys_exist = False
+                        for _ in redis_conn.scan_iter(withreturns_pattern, count=100): # count helps efficiency
+                            withreturns_keys_exist = True
+                            break # Found at least one key, no need to scan further
+                        if withreturns_keys_exist:
+                            all_complete = False
+                            completion_status[source] = f"WithReturns Namespace Not Empty"
+                            continue 
+                            
+                        # 6. Check withoutreturns Namespace (should be empty if ReturnsProcessor finished)
+                        withoutreturns_pattern = f"{source}:{RedisKeys.SUFFIX_WITHOUTRETURNS}:*"
+                        withoutreturns_keys_exist = False
+                        for _ in redis_conn.scan_iter(withoutreturns_pattern, count=100):
+                            withoutreturns_keys_exist = True
+                            break # Found at least one key
+                        if withoutreturns_keys_exist:
+                            all_complete = False
+                            completion_status[source] = f"WithoutReturns Namespace Not Empty"
+                            continue 
+                        # --- END ADDED CHECKS ---
+                            
+                        # If all checks pass for this source
+                        completion_status[source] = "Complete"
+
+                    except Exception as e:
+                        logger.warning(f"Redis check failed for source {source}: {e}. Assuming incomplete.")
+                        all_complete = False
+                        completion_status[source] = f"Redis Check Error: {e}"
+                        break 
+
+                if all_complete:
+                    logger.info("All Redis checks indicate historical chunk processing is complete.")
+                    break # Exit the monitoring loop
+                else:
+                    logger.info(f"Chunk processing not yet complete. Status: {completion_status}. Waiting {chunk_monitor_interval}s...")
+                    time.sleep(chunk_monitor_interval)
+            
+            logger.info("Historical chunk processing finished. Initiating shutdown for this process.")
+            manager.stop() 
+            logger.info("Shutdown complete. Exiting Python process.")
+            sys.exit(0) 
+
+        else:
+            logger.info("No data sources enabled. Exiting.")
+            manager.stop()
+            sys.exit(0)
+
     except KeyboardInterrupt:
         logger.info("Keyboard interrupt received")
         print("\nKeyboard interrupt received")

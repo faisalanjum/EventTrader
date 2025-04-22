@@ -587,6 +587,165 @@ process_news() {
   fi
 }
 
+# Process historical data in chunks
+process_chunked_historical() {
+  local FULL_FROM_DATE="$1"
+  local FULL_TO_DATE="$2"
+
+  # --- Read Configuration from feature_flags.py ---
+  detect_python >/dev/null
+  CONFIG_VALUES=$($PYTHON_CMD -c "import sys; sys.path.append('.'); from config import feature_flags; print(f'{feature_flags.HISTORICAL_CHUNK_DAYS},{feature_flags.HISTORICAL_STABILITY_WAIT_SECONDS}')" 2>/dev/null)
+  if [ -z "$CONFIG_VALUES" ] || [[ "$CONFIG_VALUES" != *,* ]]; then
+      echo "ERROR: Could not read HISTORICAL_CHUNK_DAYS and HISTORICAL_STABILITY_WAIT_SECONDS from config/feature_flags.py"
+      exit 1
+  fi
+  local CHUNK_SIZE=$(echo $CONFIG_VALUES | cut -d',' -f1)
+  local STABILITY_WAIT=$(echo $CONFIG_VALUES | cut -d',' -f2)
+
+  # --- VALIDATE Config Values ---
+  if ! [[ "$CHUNK_SIZE" =~ ^[0-9]+$ ]] || [ "$CHUNK_SIZE" -le 0 ]; then
+      echo "ERROR: Invalid HISTORICAL_CHUNK_DAYS ($CHUNK_SIZE) read from config/feature_flags.py. Must be a positive integer."
+      exit 1
+  fi
+  if ! [[ "$STABILITY_WAIT" =~ ^[0-9]+$ ]] || [ "$STABILITY_WAIT" -lt 0 ]; then
+      echo "ERROR: Invalid HISTORICAL_STABILITY_WAIT_SECONDS ($STABILITY_WAIT) read from config/feature_flags.py. Must be a non-negative integer."
+      exit 1
+  fi
+  echo "Using validated configuration: Chunk Size=$CHUNK_SIZE days, Stability Wait=$STABILITY_WAIT seconds"
+  # ------------------------------
+
+  # Define a SINGLE log file path for the entire job
+  COMBINED_LOG_FILE="$LOGS_DIR/chunked_historical_${FULL_FROM_DATE}_to_${FULL_TO_DATE}.log"
+  echo "Chunked processing will log to: $COMBINED_LOG_FILE"
+
+  mkdir -p "$LOGS_DIR"
+  touch "$COMBINED_LOG_FILE" || { echo "ERROR: Cannot create log file $COMBINED_LOG_FILE"; exit 1; }
+
+  shell_log() {
+    echo "$@"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] SHELL: $@" >> "$COMBINED_LOG_FILE"
+  }
+
+  shell_log "Log initialized for chunked processing from $FULL_FROM_DATE to $FULL_TO_DATE"
+
+  shell_log "Checking Redis connectivity..."
+  if ! redis-cli ping > /dev/null 2>&1; then
+    shell_log "ERROR: Cannot connect to Redis server. Please ensure Redis is running."
+    exit 1
+  fi
+  shell_log "Redis connection successful."
+
+  SOURCES=("news" "reports" "transcripts")
+
+  shell_log "===== CHUNKED HISTORICAL PROCESSING ====="
+  shell_log "Full date range: $FULL_FROM_DATE to $FULL_TO_DATE"
+  shell_log "Data sources: ${SOURCES[*]}"
+
+  # --- Record Total Start Time ---
+  TOTAL_START_TIME=$(date +%s)
+  # ------------------------------
+
+  # Generate date chunks (macOS/Linux compatible)
+  if [[ "$(uname)" == "Darwin" ]]; then
+      current_date=$(date -j -f "%Y-%m-%d" "$FULL_FROM_DATE" "+%s")
+      end_date=$(date -j -f "%Y-%m-%d" "$FULL_TO_DATE" "+%s")
+  else
+      current_date=$(date -d "$FULL_FROM_DATE" "+%s")
+      end_date=$(date -d "$FULL_TO_DATE" "+%s")
+  fi
+
+  chunk_count=0
+
+  while [ $current_date -le $end_date ]; do
+    chunk_count=$((chunk_count + 1))
+    # --- Record Chunk Start Time ---
+    CHUNK_START_TIME=$(date +%s)
+    # ------------------------------
+
+    # Calculate chunk start/end dates
+    if [[ "$(uname)" == "Darwin" ]]; then
+        chunk_start=$(date -j -f "%s" "$current_date" "+%Y-%m-%d")
+        chunk_end_seconds=$((current_date + (CHUNK_SIZE-1) * 86400))
+        [ $chunk_end_seconds -gt $end_date ] && chunk_end_seconds=$end_date
+        chunk_end=$(date -j -f "%s" "$chunk_end_seconds" "+%Y-%m-%d")
+    else
+        chunk_start=$(date -d "@$current_date" "+%Y-%m-%d")
+        chunk_end_seconds=$((current_date + (CHUNK_SIZE-1) * 86400))
+        [ $chunk_end_seconds -gt $end_date ] && chunk_end_seconds=$end_date
+        chunk_end=$(date -d "@$chunk_end_seconds" "+%Y-%m-%d")
+    fi
+
+    shell_log ""
+    shell_log "Processing chunk $chunk_count: $chunk_start to $chunk_end"
+
+    shell_log "Stopping previous EventTrader instances..."
+    "$0" stop-all > /dev/null 2>&1
+    sleep 3
+
+    shell_log "Starting EventTrader Python script (Chunk $chunk_count)..."
+    detect_python >/dev/null
+
+    shell_log "Executing: $PYTHON_CMD $SCRIPT_PATH --from-date $chunk_start --to-date $chunk_end -historical --ensure-neo4j-initialized --log-file $COMBINED_LOG_FILE"
+    $PYTHON_CMD "$SCRIPT_PATH" \
+      --from-date "$chunk_start" \
+      --to-date "$chunk_end" \
+      -historical \
+      --ensure-neo4j-initialized \
+      --log-file "$COMBINED_LOG_FILE" >> "$COMBINED_LOG_FILE" 2>&1
+
+    PYTHON_EXIT_CODE=$?
+
+    if [ $PYTHON_EXIT_CODE -ne 0 ]; then
+      shell_log "ERROR: Python script exited with status $PYTHON_EXIT_CODE for chunk $chunk_start to $chunk_end."
+      shell_log "Review the log file $COMBINED_LOG_FILE for Python errors."
+      # exit 1 # Optional: stop processing further chunks on error
+    else
+      shell_log "Python script for chunk $chunk_start to $chunk_end completed (Exit Code: $PYTHON_EXIT_CODE)."
+    fi
+
+    # --- RE-ADDED stop-all to ensure clean state between chunks ---
+    # Ensure Python exited successfully before stopping (optional, but safer)
+    if [ $PYTHON_EXIT_CODE -eq 0 ]; then
+        shell_log "Chunk $chunk_count Python process exited successfully. Stopping Event Trader before next chunk..."
+        "$0" stop-all > /dev/null 2>&1
+        sleep 5 # Give time for processes to stop
+    else
+        shell_log "Chunk $chunk_count Python process exited with ERROR ($PYTHON_EXIT_CODE). Not stopping automatically. Manual intervention may be needed."
+        # Decide if you want to exit the whole script here or try the next chunk
+        # exit 1 # Example: Exit the whole script on Python error
+    fi
+    # --------------------------------------------------------------
+
+    # --- Calculate and Log Chunk Duration ---
+    CHUNK_END_TIME=$(date +%s)
+    CHUNK_DURATION=$((CHUNK_END_TIME - CHUNK_START_TIME))
+    # ---------------------------------------
+
+    # Move to next chunk
+    if [[ "$(uname)" == "Darwin" ]]; then
+        current_date=$(date -j -v+1d -f "%s" "$chunk_end_seconds" "+%s")
+    else
+        current_date=$((chunk_end_seconds + 86400))
+    fi
+
+    shell_log "DEBUG: Advancing to next chunk start date (epoch): $current_date"
+    # --- MODIFIED: Include duration in completion log --- 
+    # shell_log "Chunk $chunk_start to $chunk_end completed."
+    shell_log "Chunk $chunk_count ($chunk_start to $chunk_end) completed in $CHUNK_DURATION seconds."
+
+  done # End of loop through chunks
+
+  # --- Calculate and Log Total Duration ---
+  TOTAL_END_TIME=$(date +%s)
+  TOTAL_DURATION=$((TOTAL_END_TIME - TOTAL_START_TIME))
+  # -------------------------------------
+  
+  shell_log "===== CHUNKED HISTORICAL PROCESSING COMPLETE ====="
+  # --- MODIFIED: Include total duration in final log --- 
+  # shell_log "Full range $FULL_FROM_DATE to $FULL_TO_DATE has been processed."
+  shell_log "Full range $FULL_FROM_DATE to $FULL_TO_DATE processed in $TOTAL_DURATION seconds."
+}
+
 # Process command
 case "$COMMAND" in
   start)
@@ -737,6 +896,22 @@ except Exception as e:
     # Process news data into Neo4j
     process_news
     ;;
+  chunked-historical)
+    # Note: FROM_DATE and TO_DATE are parsed globally earlier
+    # ARGS array is not used here as config comes from feature_flags.py
+
+    # Validate dates parsed globally
+    if [ -z "$FROM_DATE" ]; then
+      echo "Error: chunked-historical requires at least a from-date."
+      echo "Usage: $0 chunked-historical YYYY-MM-DD [YYYY-MM-DD]"
+      echo "Example: $0 chunked-historical 2024-01-01 2024-12-31"
+      echo "(Chunk size and stability wait are configured in config/feature_flags.py)"
+      exit 1
+    fi
+    
+    # Pass only dates to the function
+    process_chunked_historical "$FROM_DATE" "$TO_DATE"
+    ;;
   *)
     echo "Usage: $0 [--background] {command} [options] [from-date] [to-date]"
     echo ""
@@ -756,6 +931,7 @@ except Exception as e:
     echo "  clean-logs [days]            # Clean log files older than specified days"
     echo "  init-neo4j                   # Initialize Neo4j database"
     echo "  process-news                 # Process news data into Neo4j"
+    echo "  chunked-historical YYYY-MM-DD [YYYY-MM-DD] # Process historical data in chunks (Settings in config/feature_flags.py)"
     echo ""
     echo "Options:"
     echo "  --background                 # Run commands in background mode"

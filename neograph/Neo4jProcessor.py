@@ -51,6 +51,20 @@ class Neo4jProcessor(
     initialization and functionality.
     """
     
+    # Call super to initialize all mixins, including connection and thread pools
+    def __init__(self, event_trader_redis=None):
+        # Initialize all mixins, establishing connection, thread pools etc.
+        super().__init__(event_trader_redis=event_trader_redis)
+        
+        # --- ADDED: Call XBRL reconciliation after initialization ---
+        # Ensure this runs only after connection and xbrl_executor are ready
+        if self.manager and self.manager.driver and self.xbrl_executor:
+            logger.info("Neo4jProcessor initialized, performing XBRL reconciliation...")
+            self._reconcile_interrupted_xbrl_tasks()
+        else:
+            logger.warning("Skipping XBRL reconciliation - Neo4j connection or XBRL executor not ready during init.")
+        # ----------------------------------------------------------
+
     pass
 
  # region: Initialization and Core Infrastructure - # Methods like connect, close, is_initialized, initialize, 

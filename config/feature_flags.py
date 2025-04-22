@@ -56,7 +56,7 @@ FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '8-K/A']
 # When set to True, enables XBRL report processing which extracts detailed financial data
 # When set to False, skips XBRL processing entirely and does not initialize related resources
 # This can significantly reduce memory usage and CPU load when XBRL data is not needed
-ENABLE_XBRL_PROCESSING = True
+ENABLE_XBRL_PROCESSING = False
 
 # XBRL Thread Pool Configuration
 # Number of worker threads for XBRL processing (only used when ENABLE_XBRL_PROCESSING is True)
@@ -105,4 +105,9 @@ OPENAI_EMBED_CUTOFF = 10
 # Maximum sleep time (in seconds) for transcript processing thread
 # Higher values reduce CPU usage but may slightly delay processing new notifications
 MAX_TRANSCRIPT_SLEEP_SECONDS = 300  # 5 minutes
+
+# --- Historical Chunked Processing Configuration ---
+HISTORICAL_CHUNK_DAYS = 5  # Default number of days per historical processing chunk
+HISTORICAL_STABILITY_WAIT_SECONDS = 60 # Default seconds to wait for queue stability
+# --- End Historical Chunked Processing Configuration ---
 
