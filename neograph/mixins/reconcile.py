@@ -189,12 +189,20 @@ class ReconcileMixin:
             return results
 
     def _handle_midnight_operations(self, results):
-        """Check for and create yesterday's date node if missing, regardless of current time"""
-        # Run date node reconciliation regardless of hour
+        """Check for and create yesterday's date node and dividends if missing"""
+        
+        # First ensure date nodes are created
         date_nodes_created = self.reconcile_date_nodes()
         results["dates"] = date_nodes_created
         if date_nodes_created > 0:
             logger.info(f"Created {date_nodes_created} date node(s) during reconciliation")
+        
+        # Then reconcile dividend data for yesterday
+        dividend_nodes_created = self.reconcile_dividend_nodes()
+        results["dividends"] = dividend_nodes_created
+        if dividend_nodes_created > 0:
+            logger.info(f"Created {dividend_nodes_created} dividend node(s) during reconciliation")
+        
         return results
 
 
@@ -255,4 +263,54 @@ class ReconcileMixin:
             return 0
         except Exception as e:
             logger.error(f"Error reconciling date nodes: {e}")
+            return 0
+
+
+
+    def reconcile_dividend_nodes(self):
+        """Check for yesterday's dividend nodes and create them if needed"""
+        try:
+            yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+            
+            # Check if dividends already exist in a single query
+            query = """
+            MATCH (yesterday:Date {date: $yesterday})
+            OPTIONAL MATCH (yesterday)-[r:HAS_DIVIDEND]->()
+            WITH yesterday, [x IN collect(r) WHERE x IS NOT NULL] AS rels
+            RETURN 
+                CASE WHEN yesterday IS NOT NULL THEN 1 ELSE 0 END as yesterday_exists,
+                size(rels) as has_dividends
+            """
+            result = self.manager.execute_cypher_query(query, {"yesterday": yesterday})
+            
+            # Skip if we already have dividends for yesterday
+            if (result and result["yesterday_exists"] > 0 and 
+                result["has_dividends"] > 0):
+                return 0
+                
+            # Initialize needed components
+            if not self.universe_data:
+                self.universe_data = self._get_universe()
+                if not self.universe_data:
+                    return 0
+            
+            # Create initializer and connect
+            initializer = Neo4jInitializer(
+                uri=self.uri, 
+                username=self.username,
+                password=self.password,
+                universe_data=self.universe_data
+            )
+            
+            if initializer.connect():
+                try:
+                    # Create yesterday's dividends
+                    return initializer.create_single_dividend(yesterday)
+                finally:
+                    initializer.close()
+            
+            return 0
+            
+        except Exception as e:
+            logger.error(f"Error reconciling dividend nodes: {e}")
             return 0

@@ -23,7 +23,8 @@ class InitializationMixin:
         "MarketIndex", 
         "Sector", 
         "Industry", 
-        "AdminReport"
+        "AdminReport",
+        "Dividend"
     ]
     # Add more node types here as needed
 

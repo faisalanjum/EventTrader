@@ -6,7 +6,7 @@ from neo4j import GraphDatabase
 import pandas as pd
 import json
 
-from neograph.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, DateNode
+from neograph.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, DateNode, DividendNode
 # , AdminSectionNode, FinancialStatementNode
 from utils.market_session import MarketSessionClassifier
 from neograph.Neo4jManager import Neo4jManager
@@ -193,6 +193,9 @@ class Neo4jInitializer:
             
             # 8. Create date nodes and relationships
             self.create_dates(start_date=start_date)
+
+            # 9. Create dividend nodes and relationships
+            self.create_dividends(start_date=start_date)
             
             logger.info("Market hierarchy initialization complete")
             return True
@@ -1140,6 +1143,230 @@ class Neo4jInitializer:
             logger.error(f"Error adding price relationships: {e}")
             return 0
 
+
+
+
+    #### Dividends
+    def create_dividends(self, start_date=None):
+        """
+        Create dividend nodes and relationships from a start date to today.
+        
+        Args:
+            start_date: String in format 'YYYY-MM-DD' to start from
+        Returns:
+            int: Number of dividend nodes created
+        """
+        try:
+            # Default to a year ago if not specified
+            if start_date is None:
+                start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+                
+            # Get polygon API client
+            polygon_api_key = os.environ.get('POLYGON_API_KEY')
+            if not polygon_api_key:
+                logger.error("Missing POLYGON_API_KEY environment variable")
+                return 0
+                
+            # Get Polygon client
+            from eventReturns.polygonClass import Polygon
+            polygon = Polygon(api_key=polygon_api_key, polygon_subscription_delay=0)
+            
+            # Get company tickers from universe data
+            company_tickers = list(self.universe_data.keys())
+            
+            logger.info(f"Fetching dividend data for {len(company_tickers)} companies since {start_date}")
+            
+            # Get all dividends since start_date
+            all_dividends = polygon.get_dividends(company_tickers)
+            
+            # Filter by start date
+            if all_dividends.empty:
+                logger.info("No dividends found")
+                return 0
+                
+            filtered_dividends = all_dividends[all_dividends['declaration_date'] >= start_date]
+            if filtered_dividends.empty:
+                logger.info(f"No dividends found since {start_date}")
+                return 0
+                
+            # Create dividend nodes
+            dividend_nodes = []
+            for ticker, row in filtered_dividends.iterrows():
+                dividend_data = row.to_dict()
+                dividend_data['ticker'] = ticker
+                dividend_node = DividendNode.from_dividend_data(dividend_data)
+                dividend_nodes.append(dividend_node)
+                
+            # Create nodes in Neo4j
+            self.manager.merge_nodes(dividend_nodes)
+            
+            # Create relationships
+            self._create_dividend_relationships(dividend_nodes)
+            
+            logger.info(f"Created {len(dividend_nodes)} dividend nodes with relationships")
+            return len(dividend_nodes)
+            
+        except Exception as e:
+            logger.error(f"Error creating dividend nodes: {e}")
+            return 0
+
+    def _create_dividend_relationships(self, dividend_nodes):
+        """Create DECLARED_DIVIDEND and HAS_DIVIDEND relationships"""
+        try:
+            # Only proceed if we have nodes
+            if not dividend_nodes:
+                return 0
+                
+            # Check if dates exist for these dividends before creating relationships
+            all_dates = set(node.declaration_date for node in dividend_nodes)
+            with self.manager.driver.session() as session:
+                result = session.run("""
+                    MATCH (d:Date) WHERE d.date IN $dates
+                    RETURN d.date as date
+                """, {"dates": list(all_dates)})
+                existing_dates = {record["date"] for record in result}
+            
+            # Filter dividend nodes to only include those with existing dates
+            valid_nodes = [node for node in dividend_nodes if node.declaration_date in existing_dates]
+            
+            if len(valid_nodes) < len(dividend_nodes):
+                missing_count = len(dividend_nodes) - len(valid_nodes)
+                logger.warning(f"Skipping {missing_count} dividends without matching dates")
+                
+                # Log a few examples of missing dates
+                if missing_count > 0:
+                    missing_dates = set(all_dates) - existing_dates
+                    missing_examples = list(missing_dates)[:3]
+                    logger.info(f"Examples of missing dates: {missing_examples}")
+                
+                # If all nodes are invalid, return early
+                if not valid_nodes:
+                    logger.warning("No valid dividend nodes with existing dates")
+                    return 0
+                
+            # Prepare relationship parameters for valid nodes only
+            company_rels = []
+            date_rels = []
+            
+            for node in valid_nodes:
+                # Company -> Dividend relationship
+                company_rels.append({
+                    "company_ticker": node.ticker,
+                    "dividend_id": node.id
+                })
+                
+                # Date -> Dividend relationship
+                date_rels.append({
+                    "date_str": node.declaration_date,
+                    "dividend_id": node.id
+                })
+            
+            # Create relationships in single transaction
+            with self.manager.driver.session() as session:
+                # Create DECLARED_DIVIDEND relationships
+                company_result = session.run("""
+                    UNWIND $params AS param
+                    MATCH (c:Company {ticker: param.company_ticker})
+                    MATCH (d:Dividend {id: param.dividend_id})
+                    MERGE (c)-[r:DECLARED_DIVIDEND]->(d)
+                    RETURN count(r) as created
+                """, {"params": company_rels})
+                
+                # Create HAS_DIVIDEND relationships
+                date_result = session.run("""
+                    UNWIND $params AS param
+                    MATCH (date:Date {date: param.date_str})
+                    MATCH (d:Dividend {id: param.dividend_id})
+                    MERGE (date)-[r:HAS_DIVIDEND]->(d)
+                    RETURN count(r) as created
+                """, {"params": date_rels})
+                
+                company_count = company_result.single()["created"]
+                date_count = date_result.single()["created"]
+                
+                logger.info(f"Created {company_count} company relationships, {date_count} date relationships")
+                return {"company_rels": company_count, "date_rels": date_count}
+                
+        except Exception as e:
+            logger.error(f"Error creating dividend relationships: {e}")
+            return 0
+
+    def create_single_dividend(self, date_str=None):
+        """
+        Create dividends for a single day.
+        Direct parallel to create_single_date method.
+        
+        Args:
+            date_str: Date in format 'YYYY-MM-DD', defaults to yesterday
+        """
+        try:
+            # Default to yesterday if not specified
+            if date_str is None:
+                date_str = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+                
+            # First check if the date node exists
+            with self.manager.driver.session() as session:
+                result = session.run("MATCH (d:Date {date: $date}) RETURN d", {"date": date_str})
+                if not result.single():
+                    logger.warning(f"Cannot create dividends for {date_str} - date node doesn't exist")
+                    return 0
+            
+            # Get polygon API client
+            polygon_api_key = os.environ.get('POLYGON_API_KEY')
+            if not polygon_api_key:
+                logger.error("Missing POLYGON_API_KEY environment variable")
+                return 0
+                
+            from eventReturns.polygonClass import Polygon
+            polygon = Polygon(api_key=polygon_api_key, polygon_subscription_delay=0)
+            
+            # Get company tickers from universe data
+            company_tickers = list(self.universe_data.keys())
+            
+            # Get dividends for specific date
+            day_dividends = polygon.get_dividends(company_tickers, declaration_date=date_str)
+            
+            if day_dividends.empty:
+                logger.info(f"No dividends found for {date_str}")
+                return 0
+                
+            # Create dividend nodes
+            dividend_nodes = []
+            for ticker, row in day_dividends.iterrows():
+                dividend_data = row.to_dict()
+                dividend_data['ticker'] = ticker
+                dividend_node = DividendNode.from_dividend_data(dividend_data)
+                dividend_nodes.append(dividend_node)
+                
+            # Check which already exist
+            dividend_ids = [node.id for node in dividend_nodes]
+            
+            with self.manager.driver.session() as session:
+                result = session.run("MATCH (d:Dividend) WHERE d.id IN $ids RETURN d.id as id", {"ids": dividend_ids})
+                existing_ids = {record["id"] for record in result}
+                
+            # Filter to only new dividends
+            new_nodes = [node for node in dividend_nodes if node.id not in existing_ids]
+            
+            if not new_nodes:
+                logger.info(f"All dividends for {date_str} already exist")
+                return 0
+                
+            # Create nodes in Neo4j
+            self.manager.merge_nodes(new_nodes)
+            
+            # Create relationships
+            self._create_dividend_relationships(new_nodes)
+            
+            logger.info(f"Created {len(new_nodes)} dividend nodes for {date_str}")
+            return len(new_nodes)
+            
+        except Exception as e:
+            logger.error(f"Error creating dividends for date {date_str}: {e}")
+            return 0
+        
+
+        
 
 # Standalone execution support
 if __name__ == "__main__":

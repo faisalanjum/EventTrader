@@ -1108,6 +1108,162 @@ class DateNode(Neo4jNode):
     
 
 
+@dataclass
+class DividendNode(Neo4jNode):
+    """
+    Dividend node in Neo4j representing a dividend declaration by a company.
+    Contains information about dividend amount, type, dates, and frequency.
+    """
+    ticker: str                  # Ticker symbol of the company
+    declaration_date: str        # Date the dividend was declared
+    cash_amount: float           # Dividend amount per share
+    
+
+    # Optional fields
+    ex_dividend_date: Optional[str] = None # Ex-dividend date - Now Optional
+    dividend_type: Optional[str] = None    # Type of dividend (Regular, Special, LongTermGain, ShortTermGain)    
+    currency: Optional[str] = None
+    frequency: Optional[str] = None
+    pay_date: Optional[str] = None
+    record_date: Optional[str] = None
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.DIVIDEND
+    
+    @property
+    def id(self) -> str:
+        """
+        Use composite of ticker, declaration date, and type as unique identifier.
+        Uses 'UNKNOWN' for type if it's missing or None.
+        """
+        # Use a consistent placeholder if dividend_type is None or empty string
+        type_part = self.dividend_type if self.dividend_type else "UNKNOWN"
+        return f"{self.ticker}_{self.declaration_date}_{type_part}"
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """Return node properties for Neo4j"""
+        props = {
+            'id': self.id,
+            'ticker': self.ticker,
+            'declaration_date': self.declaration_date,
+            'cash_amount': self.cash_amount,
+            # No longer include ex_dividend_date/dividend_type here by default
+            # They will be added below if they have a value and compatible type
+        }
+        
+        # Add ALL optional properties if they exist AND have a Neo4j-compatible type
+        optional_props_values = {
+            'ex_dividend_date': self.ex_dividend_date, # Added here
+            'dividend_type': self.dividend_type,       # Added here
+            'currency': self.currency,
+            'frequency': self.frequency,
+            'pay_date': self.pay_date,
+            'record_date': self.record_date
+        }
+        
+        for key, value in optional_props_values.items():
+            # Check if value exists and is a type Neo4j can store directly
+            # Allowed: str, int, float, bool. Excludes dict, list, etc.
+            if value is not None and isinstance(value, (str, int, float, bool)):
+                props[key] = value
+            # Optionally log if a value is skipped due to type
+            elif value is not None:
+                 # Using print as logger might not be configured here
+                 print(f"WARNING: Skipping property '{key}' for DividendNode {self.id} due to incompatible type: {type(value)}")
+
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'DividendNode':
+        """Create DividendNode from Neo4j properties"""
+        # Required fields
+        required_fields = ['ticker', 'declaration_date', 'cash_amount']
+        for field in required_fields:
+            if field not in props:
+                raise ValueError(f"Missing required field '{field}' for DividendNode")
+        
+        # Create instance with required fields
+        dividend_node = cls(
+            ticker=props['ticker'],
+            declaration_date=props['declaration_date'],
+            cash_amount=float(props['cash_amount']),
+            ex_dividend_date=props.get('ex_dividend_date'),
+            dividend_type=props.get('dividend_type'),
+            currency=props.get('currency'),
+            frequency=props.get('frequency'),
+            pay_date=props.get('pay_date'),
+            record_date=props.get('record_date')
+        )
+        
+        # Set optional properties
+        optional_fields = ['ex_dividend_date', 'dividend_type', 'currency', 'frequency', 'pay_date', 'record_date']
+        
+        for field in optional_fields:
+            # Ensure the property exists and is not just an empty string or null representation
+            if field in props and props[field] not in (None, "", "null"):
+                # Assign directly; type checking happens during property generation
+                setattr(dividend_node, field, props[field])
+                
+        return dividend_node
+    
+    @classmethod
+    def from_dividend_data(cls, dividend_data: Dict[str, Any]) -> 'DividendNode':
+        """Create DividendNode from the get_dividends function output, ensuring Python types."""
+        
+        # --- Strict Type Enforcement --- 
+        # Ensure required fields are strings
+        ticker_val = str(dividend_data['ticker'])
+        declaration_date_val = str(dividend_data['declaration_date'])
+        
+        try:
+            # Ensure cash_amount is standard Python float
+            cash_amount_val = float(dividend_data['cash_amount'])
+        except (ValueError, TypeError, KeyError):
+            # Handle cases where cash_amount might be missing or non-numeric unexpectedly
+            print(f"ERROR: Invalid or missing cash_amount '{dividend_data.get('cash_amount')}' for {ticker_val}. Setting to 0.0")
+            cash_amount_val = 0.0
+
+        # Handle optional fields, ensuring standard Python string types or None
+        def ensure_str_or_none(key):
+            val = dividend_data.get(key)
+            # Explicitly convert to str only if it's not None, otherwise keep None
+            return str(val) if val is not None else None
+
+        ex_dividend_date_val = ensure_str_or_none('ex_dividend_date')
+        dividend_type_val = ensure_str_or_none('dividend_type')
+        currency_val = ensure_str_or_none('currency')
+        pay_date_val = ensure_str_or_none('pay_date')
+        record_date_val = ensure_str_or_none('record_date')
+
+        # Handle frequency specifically: Check if it's int/float or str
+        frequency_raw = dividend_data.get('frequency')
+        frequency_val = None
+        if isinstance(frequency_raw, (int, float)): # Allow float conversion just in case
+            # Store as standard Python int if it came as number
+            frequency_val = int(frequency_raw)
+            # Optional: Log that we are storing the integer representation
+            # print(f"INFO: Storing frequency as integer {frequency_val} for {ticker_val}")
+        elif frequency_raw is not None:
+            # Store as standard Python string otherwise
+            frequency_val = str(frequency_raw)
+        # If frequency_raw is None, frequency_val remains None
+        # --- End Strict Type Enforcement ---
+
+        # Create the instance using the strictly typed values
+        return cls(
+            ticker=ticker_val,
+            declaration_date=declaration_date_val,
+            dividend_type=dividend_type_val,
+            cash_amount=cash_amount_val,
+            ex_dividend_date=ex_dividend_date_val,
+            currency=currency_val,
+            frequency=frequency_val, # Now guaranteed to be standard int, str, or None
+            pay_date=pay_date_val,
+            record_date=record_date_val
+        )
+
 #### Transcripts related classes
 
 @dataclass

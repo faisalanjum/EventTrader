@@ -789,3 +789,90 @@ class Polygon:
         except Exception as e:
             self.logger.error(f"Error getting market data for {date_str}: {e}")
             return None
+        
+
+    def get_dividends(self, symbols_list, declaration_date=None):
+        client = self.get_rest_client()
+        type_map = {
+            "CD": "Regular",
+            "SC": "Special",
+            "LT": "LongTermGain",
+            "ST": "ShortTermGain",
+        }
+        frequency_map = {
+            0: "OneTime",
+            1: "Annual",
+            2: "BiAnnual",
+            4: "Quarterly",
+            12: "Monthly",
+            24: "BiMonthly",
+            52: "Weekly",
+        }
+
+        records = []
+        required_keys = ["ticker", "cash_amount", "declaration_date"]
+
+        for t in symbols_list:
+            try: # Added try block for entire ticker processing
+                params = {"ticker": t, "limit": 1000, "sort": "declaration_date", "order": "desc"}
+                url = "/v3/reference/dividends"
+                while url:
+                    try: # Added try block for API call + processing
+                        data = client._get(url, params=params)
+                        for d in data.get("results", []): # d is a single dividend record dict from API
+                            # ****** VALIDATION ADDED ******
+                            if not all(key in d and d[key] is not None for key in required_keys):
+                                # Log or skip record if essential data is missing
+                                continue # Skip this incomplete record
+
+                            # Now safe to append
+                            try: # Added try block for appending record
+                                records.append({
+                                    "ticker": d["ticker"],
+                                    "cash_amount": d["cash_amount"],
+                                    "currency": d.get("currency"),
+                                    "declaration_date": d["declaration_date"],
+                                    "dividend_type": type_map.get(d["dividend_type"], d["dividend_type"]),
+                                    "ex_dividend_date": d["ex_dividend_date"],
+                                    "frequency": frequency_map.get(d["frequency"], d["frequency"]),
+                                    "pay_date": d.get("pay_date"),
+                                    "record_date": d.get("record_date"),
+                                    "status": data.get("status"),
+                                })
+                            except Exception as append_e:
+                                self.logger.warning(f"Error appending dividend record for {t}: {append_e}")
+                                continue # Skip this record on append error
+
+                        url = data.get("next_url")
+                        params = None
+                    except Exception as api_e:
+                        self.logger.warning(f"API error during pagination for ticker {t}: {api_e}")
+                        break # Break pagination loop on API error
+            except Exception as ticker_e:
+                self.logger.warning(f"Error processing ticker {t} in get_dividends: {ticker_e}")
+                # Continue to the next ticker if one fails
+
+        # Check if any records were successfully collected
+        if not records:
+            self.logger.warning("No valid dividend records collected.")
+            # Return an empty DataFrame with expected columns to prevent downstream errors
+            return pd.DataFrame(columns=required_keys + ["currency", "frequency", "pay_date", "record_date"]).set_index("ticker")
+
+
+        df = (
+            pd.DataFrame(records)
+            # Ensure status column exists before querying, handle potential errors
+            .assign(status=lambda x: x['status'] if 'status' in x.columns else 'OK') # Add default status if missing
+            .query("status=='OK'")
+            .drop(columns=["status"], errors='ignore') # Ignore error if status column was already dropped or missing
+            # dropna is still useful for cases where keys exist but values are None/NaN
+            .dropna(subset=["declaration_date"])
+            .set_index("ticker")
+        )
+
+        # Final check if DataFrame is empty after processing
+        if df.empty:
+            self.logger.warning("DataFrame empty after processing and filtering.")
+            return df # Return the empty DataFrame
+
+        return df[df["declaration_date"] == declaration_date] if declaration_date else df

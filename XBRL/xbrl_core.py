@@ -101,6 +101,9 @@ class NodeType(Enum):
     QUESTION_ANSWER = "QuestionAnswer"  # Q&A section of transcript
     QA_EXCHANGE = "QAExchange"  # Individual Q&A exchange
     FULL_TRANSCRIPT_TEXT = "FullTranscriptText"  # Full text of transcript
+    
+    # Dividend node
+    DIVIDEND = "Dividend"  # Dividend declaration information
 
 
 
@@ -160,6 +163,9 @@ class RelationType(Enum):
     HAS_FULL_TEXT = "HAS_FULL_TEXT"  # Transcript -> FullTranscriptText relationship
     HAS_QA_EXCHANGE = "HAS_QA_EXCHANGE"  # Transcript/QuestionAnswer -> QAExchange relationship
     NEXT_EXCHANGE = "NEXT_EXCHANGE"  # QAExchange -> Next QAExchange relationship
+
+    HAS_DIVIDEND = "HAS_DIVIDEND"  # Date -> Dividend relationship
+    DECLARED_DIVIDEND = "DECLARED_DIVIDEND"  # Company -> Dividend relationship
 
 
 
