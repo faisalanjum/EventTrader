@@ -549,6 +549,7 @@ class EarningsCallProcessor:
         """
         Form structured Q&A pairs from transcript segments, preserving chronological order
         while grouping consecutive exchanges from the same analyst.
+        while grouping by individual analyst questions.
         
         Args:
             qa_segments: List of (start_time, formatted_text, raw_text) tuples
@@ -562,7 +563,7 @@ class EarningsCallProcessor:
                 
             qa_pairs = []
             current_pair = None
-            last_analyst = None
+            last_analyst = None  # Keep this variable even though we won't use it for now
             
             # Sort segments by start time
             sorted_segments = sorted(qa_segments, key=lambda x: x[0])
@@ -588,21 +589,38 @@ class EarningsCallProcessor:
                     
                 # Handle analysts
                 if role == "ANALYST":
+
                     # Create new pair if this is a different analyst than the last one
-                    if speaker_name != last_analyst:
-                        # Save previous pair if it exists
-                        if current_pair and current_pair.get("exchanges"):
-                            qa_pairs.append(current_pair)
+                    # if speaker_name != last_analyst:
+                    #     # Save previous pair if it exists
+                    #     if current_pair and current_pair.get("exchanges"):
+                    #         qa_pairs.append(current_pair)
                         
-                        # Create new pair with this analyst
-                        current_pair = {
-                            "exchanges": [],
-                            "questioner": speaker_name,
-                            "questioner_title": title,
-                            "responders": set(),
-                            "responder_titles": {}
-                        }
-                        last_analyst = speaker_name
+                    #     # Create new pair with this analyst
+                    #     current_pair = {
+                    #         "exchanges": [],
+                    #         "questioner": speaker_name,
+                    #         "questioner_title": title,
+                    #         "responders": set(),
+                    #         "responder_titles": {}
+                    #     }
+                    #     last_analyst = speaker_name
+                    
+                                        
+                    # New code - Create new pair for each analyst question
+                    # Save previous pair if it exists
+                    if current_pair and current_pair.get("exchanges"):
+                        qa_pairs.append(current_pair)
+                    
+                    # Create new pair with this analyst question
+                    current_pair = {
+                        "exchanges": [],
+                        "questioner": speaker_name,
+                        "questioner_title": title,
+                        "responders": set(),
+                        "responder_titles": {}
+                    }
+                    last_analyst = speaker_name
                     
                     # Add question to exchanges
                     current_pair["exchanges"].append({
@@ -744,10 +762,6 @@ class EarningsCallProcessor:
         except Exception as e:
             self.logger.error(f"Error storing transcript in Redis: {e}")
             return False
-
-
-
-
 
 
 

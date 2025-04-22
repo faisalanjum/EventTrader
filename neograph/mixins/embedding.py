@@ -17,7 +17,8 @@ from config.feature_flags import (
     OPENAI_EMBED_CUTOFF,
     NEWS_VECTOR_INDEX_NAME,
     QAEXCHANGE_VECTOR_INDEX_NAME,
-    ENABLE_QAEXCHANGE_EMBEDDINGS
+    ENABLE_QAEXCHANGE_EMBEDDINGS,
+    MAX_EMBEDDING_CHARS
 )
 
 # Updated path for local import
@@ -610,7 +611,10 @@ class EmbeddingMixin:
                 for entry in exchanges
                 if entry.get("role") in {"question", "answer"}
             ).strip()
-
+            
+            # Simple token estimation (4 chars ~= 1 token) and truncation to ~8000 tokens
+            content = content[:MAX_EMBEDDING_CHARS] if len(content) > MAX_EMBEDDING_CHARS else content
+            
             if not content:
                 continue  # Skip empty ones
 
@@ -823,7 +827,6 @@ class EmbeddingMixin:
             WHERE q.embedding IS NULL AND q.exchanges IS NOT NULL
             RETURN q.id AS id, q.exchanges AS raw_exchanges
             """
-
             
             result = self.manager.execute_cypher_query(content_query, {"qa_id": qa_id})
             result = self._coerce_record(result)
@@ -844,6 +847,9 @@ class EmbeddingMixin:
                 for entry in exchanges
                 if entry.get("role") in {"question", "answer"}
             ).strip()
+            
+            # Simple token estimation (4 chars ~= 1 token) and truncation to ~8000 tokens
+            content = content[:MAX_EMBEDDING_CHARS] if len(content) > MAX_EMBEDDING_CHARS else content
             
             if not content:
                 return False

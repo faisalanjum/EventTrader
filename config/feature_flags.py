@@ -77,6 +77,10 @@ OPENAI_EMBEDDING_MODEL = "text-embedding-3-large"
 OPENAI_EMBEDDING_DIMENSIONS = 3072
 NEWS_VECTOR_INDEX_NAME = "news_vector_index"
 
+# OpenAI Embedding Character Limit for text-embedding-3-large is ~8192
+# Maximum characters for text to be embedded (roughly 8000 tokens, using 4 chars per token estimation)
+MAX_EMBEDDING_CHARS = 32000
+
 # When True, generate embeddings using OpenAI for QAExchange nodes
 # This creates vector embeddings for semantic search capabilities
 ENABLE_QAEXCHANGE_EMBEDDINGS = True
