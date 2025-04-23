@@ -104,6 +104,7 @@ class NodeType(Enum):
     
     # Dividend node
     DIVIDEND = "Dividend"  # Dividend declaration information
+    SPLIT = "Split"  # Split information
 
 
 
@@ -166,6 +167,9 @@ class RelationType(Enum):
 
     HAS_DIVIDEND = "HAS_DIVIDEND"  # Date -> Dividend relationship
     DECLARED_DIVIDEND = "DECLARED_DIVIDEND"  # Company -> Dividend relationship
+
+    HAS_SPLIT = "HAS_SPLIT"  # Date -> Split relationship
+    DECLARED_SPLIT = "DECLARED_SPLIT"  # Company -> Split relationship
 
 
 

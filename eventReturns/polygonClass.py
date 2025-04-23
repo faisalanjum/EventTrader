@@ -876,3 +876,60 @@ class Polygon:
             return df # Return the empty DataFrame
 
         return df[df["declaration_date"] == declaration_date] if declaration_date else df
+
+
+    def get_splits(self, symbols_list, execution_date=None):
+        client = self.get_rest_client()
+        records = []
+        required_keys = ["ticker", "execution_date"]
+
+        for t in symbols_list:
+            try:
+                params = {"ticker": t, "limit": 1000, "sort": "execution_date", "order": "desc"}
+                if execution_date:
+                    params["execution_date"] = execution_date
+                url = "/v3/reference/splits"
+                while url:
+                    try:
+                        data = client._get(url, params=params)
+                        for d in data.get("results", []):
+                            if not all(key in d and d[key] is not None for key in required_keys):
+                                continue
+                            try:
+                                records.append({
+                                    "ticker": d["ticker"],
+                                    "execution_date": d["execution_date"],
+                                    "id": d["id"],
+                                    "split_from": d["split_from"],
+                                    "split_to": d["split_to"],
+                                    "status": data.get("status"),
+                                })
+                            except Exception as append_e:
+                                self.logger.warning(f"Error appending split record for {t}: {append_e}")
+                                continue
+                        url = data.get("next_url")
+                        params = None
+                    except Exception as api_e:
+                        self.logger.warning(f"API error during pagination for ticker {t}: {api_e}")
+                        break
+            except Exception as ticker_e:
+                self.logger.warning(f"Error processing ticker {t} in get_splits: {ticker_e}")
+
+        if not records:
+            self.logger.warning("No valid split records collected.")
+            return pd.DataFrame(columns=required_keys + ["id", "split_from", "split_to"]).set_index("ticker")
+
+        df = (
+            pd.DataFrame(records)
+            .assign(status=lambda x: x["status"] if "status" in x.columns else "OK")
+            .query("status=='OK'")
+            .drop(columns=["status"], errors="ignore")
+            .dropna(subset=["execution_date"])
+            .set_index("ticker")
+        )
+
+        if df.empty:
+            self.logger.warning("DataFrame empty after processing and filtering.")
+            return df
+
+        return df[df["execution_date"] == execution_date] if execution_date else df

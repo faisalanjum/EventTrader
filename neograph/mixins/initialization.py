@@ -24,7 +24,8 @@ class InitializationMixin:
         "Sector", 
         "Industry", 
         "AdminReport",
-        "Dividend"
+        "Dividend",
+        "Split"
     ]
     # Add more node types here as needed
 

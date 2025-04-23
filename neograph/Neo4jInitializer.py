@@ -6,7 +6,7 @@ from neo4j import GraphDatabase
 import pandas as pd
 import json
 
-from neograph.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, DateNode, DividendNode
+from neograph.EventTraderNodes import MarketIndexNode, SectorNode, IndustryNode, CompanyNode, AdminReportNode, DateNode, DividendNode, SplitNode
 # , AdminSectionNode, FinancialStatementNode
 from utils.market_session import MarketSessionClassifier
 from neograph.Neo4jManager import Neo4jManager
@@ -196,6 +196,9 @@ class Neo4jInitializer:
 
             # 9. Create dividend nodes and relationships
             self.create_dividends(start_date=start_date)
+
+            # 10. Create split nodes and relationships
+            self.create_splits(start_date=start_date)
             
             logger.info("Market hierarchy initialization complete")
             return True
@@ -1189,20 +1192,43 @@ class Neo4jInitializer:
                 logger.info(f"No dividends found since {start_date}")
                 return 0
                 
-            # Create dividend nodes
+            # --- PRE-CHECK FOR EXISTING DATE NODES (Dividends) ---
+            unique_dates = filtered_dividends['declaration_date'].unique().tolist()
+            existing_dates = set()
+            with self.manager.driver.session() as session:
+                result = session.run("MATCH (d:Date) WHERE d.date IN $dates RETURN d.date as date", {"dates": unique_dates})
+                existing_dates = {record["date"] for record in result}
+                logger.info(f"Found {len(existing_dates)} existing Date nodes for {len(unique_dates)} unique dividend dates.")
+            # --- END PRE-CHECK ---
+                
+            # Create dividend nodes only if Date exists
             dividend_nodes = []
+            skipped_count = 0
             for ticker, row in filtered_dividends.iterrows():
-                dividend_data = row.to_dict()
-                dividend_data['ticker'] = ticker
-                dividend_node = DividendNode.from_dividend_data(dividend_data)
-                dividend_nodes.append(dividend_node)
+                declaration_date = row['declaration_date']
+                # Check if Date node exists before creating DividendNode
+                if declaration_date in existing_dates:
+                    dividend_data = row.to_dict()
+                    dividend_data['ticker'] = ticker # Ensure ticker is in the dict
+                    dividend_node = DividendNode.from_dividend_data(dividend_data)
+                    dividend_nodes.append(dividend_node)
+                else:
+                    skipped_count += 1
+            
+            if skipped_count > 0:
+                logger.warning(f"Skipped creating {skipped_count} DividendNode instances due to missing Date nodes.")
+
+            # Only proceed if there are valid nodes to create
+            if not dividend_nodes:
+                logger.warning("No valid DividendNode instances to create after checking prerequisites.")
+                return 0
                 
             # Create nodes in Neo4j
             self.manager.merge_nodes(dividend_nodes)
             
-            # Create relationships
+            # Create relationships (These nodes are guaranteed to have valid Date nodes)
             self._create_dividend_relationships(dividend_nodes)
-            
+
             logger.info(f"Created {len(dividend_nodes)} dividend nodes with relationships")
             return len(dividend_nodes)
             
@@ -1364,9 +1390,233 @@ class Neo4jInitializer:
         except Exception as e:
             logger.error(f"Error creating dividends for date {date_str}: {e}")
             return 0
+
+
+
+
+    #### Splits
+    def create_splits(self, start_date=None):
+        """
+        Create split nodes and relationships from a start date to today.
+        
+        Args:
+            start_date: String in format 'YYYY-MM-DD' to start from
+        Returns:
+            int: Number of split nodes created
+        """
+        try:
+            # Default to a year ago if not specified
+            if start_date is None:
+                start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+                
+            # Get polygon API client
+            polygon_api_key = os.environ.get('POLYGON_API_KEY')
+            if not polygon_api_key:
+                logger.error("Missing POLYGON_API_KEY environment variable")
+                return 0
+                
+            # Get Polygon client
+            from eventReturns.polygonClass import Polygon
+            polygon = Polygon(api_key=polygon_api_key, polygon_subscription_delay=0)
+            
+            # Get company tickers from universe data
+            company_tickers = list(self.universe_data.keys())
+            
+            logger.info(f"Fetching split data for {len(company_tickers)} companies since {start_date}")
+            
+            # Get all splits since start_date
+            all_splits = polygon.get_splits(company_tickers)
+            
+            # Filter by start date
+            if all_splits.empty:
+                logger.info("No splits found")
+                return 0
+                
+            filtered_splits = all_splits[all_splits['execution_date'] >= start_date]
+            if filtered_splits.empty:
+                logger.info(f"No splits found since {start_date}")
+                return 0
+                
+            # Create split nodes
+            split_nodes = []
+            for ticker, row in filtered_splits.iterrows():
+                split_data = row.to_dict()
+                split_data['ticker'] = ticker
+                split_node = SplitNode.from_split_data(split_data)
+                split_nodes.append(split_node)
+                
+            # Create nodes in Neo4j
+            self.manager.merge_nodes(split_nodes)
+            
+            # Create relationships
+            self._create_split_relationships(split_nodes)
+            
+            logger.info(f"Created {len(split_nodes)} split nodes with relationships")
+            return len(split_nodes)
+            
+        except Exception as e:
+            logger.error(f"Error creating split nodes: {e}")
+            return 0
+
+    def _create_split_relationships(self, split_nodes):
+        """Create DECLARED_SPLIT and HAS_SPLIT relationships"""
+        try:
+            # Only proceed if we have nodes
+            if not split_nodes:
+                return 0
+                
+            # Check if dates exist for these splits before creating relationships
+            all_dates = set(node.execution_date for node in split_nodes)
+            with self.manager.driver.session() as session:
+                result = session.run("""
+                    MATCH (d:Date) WHERE d.date IN $dates
+                    RETURN d.date as date
+                """, {"dates": list(all_dates)})
+                existing_dates = {record["date"] for record in result}
+            
+            # Filter split nodes to only include those with existing dates
+            valid_nodes = [node for node in split_nodes if node.execution_date in existing_dates]
+            
+            if len(valid_nodes) < len(split_nodes):
+                missing_count = len(split_nodes) - len(valid_nodes)
+                logger.warning(f"Skipping {missing_count} splits without matching dates")
+                
+                # Log a few examples of missing dates
+                if missing_count > 0:
+                    missing_dates = set(all_dates) - existing_dates
+                    missing_examples = list(missing_dates)[:3]
+                    logger.info(f"Examples of missing dates: {missing_examples}")
+                
+                # If all nodes are invalid, return early
+                if not valid_nodes:
+                    logger.warning("No valid split nodes with existing dates")
+                    return 0
+                
+            # Prepare relationship parameters for valid nodes only
+            company_rels = []
+            date_rels = []
+            
+            for node in valid_nodes:
+                # Company -> Split relationship
+                company_rels.append({
+                    "company_ticker": node.ticker,
+                    "split_id": node.id
+                })
+                
+                # Date -> Split relationship
+                date_rels.append({
+                    "date_str": node.execution_date,
+                    "split_id": node.id
+                })
+            
+            # Create relationships in single transaction
+            with self.manager.driver.session() as session:
+                # Create DECLARED_SPLIT relationships
+                company_result = session.run("""
+                    UNWIND $params AS param
+                    MATCH (c:Company {ticker: param.company_ticker})
+                    MATCH (d:Split {id: param.split_id})
+                    MERGE (c)-[r:DECLARED_SPLIT]->(d)
+                    RETURN count(r) as created
+                """, {"params": company_rels})
+                
+                # Create HAS_SPLIT relationships
+                date_result = session.run("""
+                    UNWIND $params AS param
+                    MATCH (date:Date {date: param.date_str})
+                    MATCH (d:Split {id: param.split_id})
+                    MERGE (date)-[r:HAS_SPLIT]->(d)
+                    RETURN count(r) as created
+                """, {"params": date_rels})
+                
+                company_count = company_result.single()["created"]
+                date_count = date_result.single()["created"]
+                
+                logger.info(f"Created {company_count} company relationships, {date_count} date relationships")
+                return {"company_rels": company_count, "date_rels": date_count}
+                
+        except Exception as e:
+            logger.error(f"Error creating split relationships: {e}")
+            return 0
+
+    def create_single_split(self, date_str=None):
+        """
+        Create splits for a single day.
+        Direct parallel to create_single_date method.
+        
+        Args:
+            date_str: Date in format 'YYYY-MM-DD', defaults to yesterday
+        """
+        try:
+            # Default to yesterday if not specified
+            if date_str is None:
+                date_str = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+                
+            # First check if the date node exists
+            with self.manager.driver.session() as session:
+                result = session.run("MATCH (d:Date {date: $date}) RETURN d", {"date": date_str})
+                if not result.single():
+                    logger.warning(f"Cannot create splits for {date_str} - date node doesn't exist")
+                    return 0
+            
+            # Get polygon API client
+            polygon_api_key = os.environ.get('POLYGON_API_KEY')
+            if not polygon_api_key:
+                logger.error("Missing POLYGON_API_KEY environment variable")
+                return 0
+                
+            from eventReturns.polygonClass import Polygon
+            polygon = Polygon(api_key=polygon_api_key, polygon_subscription_delay=0)
+            
+            # Get company tickers from universe data
+            company_tickers = list(self.universe_data.keys())
+            
+            # Get splits for specific date
+            day_splits = polygon.get_splits(company_tickers, execution_date=date_str)
+            
+            if day_splits.empty:
+                logger.info(f"No splits found for {date_str}")
+                return 0
+                
+            # Create split nodes
+            split_nodes = []
+            for ticker, row in day_splits.iterrows():
+                split_data = row.to_dict()
+                split_data['ticker'] = ticker
+                split_node = SplitNode.from_split_data(split_data)
+                split_nodes.append(split_node)
+                
+            # Check which already exist
+            split_ids = [node.id for node in split_nodes]
+            
+            with self.manager.driver.session() as session:
+                result = session.run("MATCH (d:Split) WHERE d.id IN $ids RETURN d.id as id", {"ids": split_ids})
+                existing_ids = {record["id"] for record in result}
+                
+            # Filter to only new splits
+            new_nodes = [node for node in split_nodes if node.id not in existing_ids]
+            
+            if not new_nodes:
+                logger.info(f"All splits for {date_str} already exist")
+                return 0
+                
+            # Create nodes in Neo4j
+            self.manager.merge_nodes(new_nodes)
+            
+            # Create relationships
+            self._create_split_relationships(new_nodes)
+            
+            logger.info(f"Created {len(new_nodes)} split nodes for {date_str}")
+            return len(new_nodes)
+            
+        except Exception as e:
+            logger.error(f"Error creating splits for date {date_str}: {e}")
+            return 0
         
 
-        
+
+
+
 
 # Standalone execution support
 if __name__ == "__main__":

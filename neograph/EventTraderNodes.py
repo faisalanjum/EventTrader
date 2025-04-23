@@ -1263,6 +1263,142 @@ class DividendNode(Neo4jNode):
             pay_date=pay_date_val,
             record_date=record_date_val
         )
+    
+
+
+
+@dataclass
+class SplitNode(Neo4jNode):
+    """
+    Split node in Neo4j representing a stock split by a company.
+    Contains information about split ratio, execution date, and identifier.
+    """
+    ticker: str                  # Ticker symbol of the company
+    execution_date: str          # Date the split was executed
+    split_from: float            # Original number of shares
+    
+
+    # Optional fields
+    split_to: Optional[float] = None      # New number of shares after split
+    api_id: Optional[str] = None          # Original ID from the API if available
+    
+    @property
+    def node_type(self) -> NodeType:
+        return NodeType.SPLIT
+    
+    @property
+    def id(self) -> str:
+        """
+        Use composite of ticker, execution date, and split ratio as unique identifier.
+        Uses 'UNKNOWN' for ratio if split_to is missing or None.
+        """
+        # Use a consistent placeholder if split_to is None or empty string
+        ratio_part = f"{self.split_from}_{self.split_to}" if self.split_to else f"{self.split_from}_UNKNOWN"
+        return f"{self.ticker}_{self.execution_date}_{ratio_part}"
+    
+    @property
+    def properties(self) -> Dict[str, Any]:
+        """Return node properties for Neo4j"""
+        props = {
+            'id': self.id,
+            'ticker': self.ticker,
+            'execution_date': self.execution_date,
+            'split_from': self.split_from,
+            # No longer include split_to here by default
+            # It will be added below if it has a value and compatible type
+        }
+        
+        # Add ALL optional properties if they exist AND have a Neo4j-compatible type
+        optional_props_values = {
+            'split_to': self.split_to,       # Added here
+            'api_id': self.api_id            # Added here
+        }
+        
+        for key, value in optional_props_values.items():
+            # Check if value exists and is a type Neo4j can store directly
+            # Allowed: str, int, float, bool. Excludes dict, list, etc.
+            if value is not None and isinstance(value, (str, int, float, bool)):
+                props[key] = value
+            # Optionally log if a value is skipped due to type
+            elif value is not None:
+                 # Using print as logger might not be configured here
+                 print(f"WARNING: Skipping property '{key}' for SplitNode {self.id} due to incompatible type: {type(value)}")
+
+        return props
+    
+    @classmethod
+    def from_neo4j(cls, props: Dict[str, Any]) -> 'SplitNode':
+        """Create SplitNode from Neo4j properties"""
+        # Required fields
+        required_fields = ['ticker', 'execution_date', 'split_from']
+        for field in required_fields:
+            if field not in props:
+                raise ValueError(f"Missing required field '{field}' for SplitNode")
+        
+        # Create instance with required fields
+        split_node = cls(
+            ticker=props['ticker'],
+            execution_date=props['execution_date'],
+            split_from=float(props['split_from']),
+            split_to=props.get('split_to'),
+            api_id=props.get('api_id')
+        )
+        
+        # Set optional properties
+        optional_fields = ['split_to', 'api_id']
+        
+        for field in optional_fields:
+            # Ensure the property exists and is not just an empty string or null representation
+            if field in props and props[field] not in (None, "", "null"):
+                # Assign directly; type checking happens during property generation
+                setattr(split_node, field, props[field])
+                
+        return split_node
+    
+    @classmethod
+    def from_split_data(cls, split_data: Dict[str, Any]) -> 'SplitNode':
+        """Create SplitNode from the get_splits function output, ensuring Python types."""
+        
+        # --- Strict Type Enforcement --- 
+        # Ensure required fields are strings
+        ticker_val = str(split_data['ticker'])
+        execution_date_val = str(split_data['execution_date'])
+        
+        try:
+            # Ensure split_from is standard Python float
+            split_from_val = float(split_data['split_from'])
+        except (ValueError, TypeError, KeyError):
+            # Handle cases where split_from might be missing or non-numeric unexpectedly
+            print(f"ERROR: Invalid or missing split_from '{split_data.get('split_from')}' for {ticker_val}. Setting to 1.0")
+            split_from_val = 1.0
+            
+        # Handle split_to specifically with numeric validation
+        try:
+            split_to_val = float(split_data['split_to']) if split_data.get('split_to') is not None else None
+        except (ValueError, TypeError):
+            # Handle cases where split_to might be non-numeric unexpectedly
+            print(f"ERROR: Invalid split_to '{split_data.get('split_to')}' for {ticker_val}. Setting to None")
+            split_to_val = None
+
+        # Handle optional fields, ensuring standard Python string types or None
+        def ensure_str_or_none(key):
+            val = split_data.get(key)
+            # Explicitly convert to str only if it's not None, otherwise keep None
+            return str(val) if val is not None else None
+
+        api_id_val = ensure_str_or_none('id')  # Note: 'id' in API becomes 'api_id' in our class
+        # --- End Strict Type Enforcement ---
+
+        # Create the instance using the strictly typed values
+        return cls(
+            ticker=ticker_val,
+            execution_date=execution_date_val,
+            split_from=split_from_val,
+            split_to=split_to_val,
+            api_id=api_id_val
+        )
+    
+    
 
 #### Transcripts related classes
 
