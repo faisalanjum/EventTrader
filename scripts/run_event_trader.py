@@ -232,6 +232,28 @@ def main():
                     logger.info(f"Chunk processing not yet complete. Status: {completion_status}. Waiting {chunk_monitor_interval}s...")
                     time.sleep(chunk_monitor_interval)
             
+            # <<<====== ADD EMBEDDING TRIGGER HERE ======>>>
+            logger.info("Historical chunk processing appears complete. Attempting to generate QA embeddings...")
+            try:
+                if manager.has_neo4j() and hasattr(manager, 'neo4j_processor') and manager.neo4j_processor:
+                    # Ensure we have the processor instance
+                    neo4j_processor = manager.neo4j_processor
+                    # Use reasonable defaults or values from args if needed
+                    # Using defaults as args.batch might not be semantically correct here
+                    embedding_batch_size = 5 
+                    embedding_max_items = None # Process all found
+                    logger.info(f"Calling batch_process_qaexchange_embeddings (batch={embedding_batch_size}, max={embedding_max_items})")
+                    embedding_results = neo4j_processor.batch_process_qaexchange_embeddings(
+                        batch_size=embedding_batch_size,
+                        max_items=embedding_max_items
+                    )
+                    logger.info(f"QA Embedding generation finished with result: {embedding_results}")
+                else:
+                    logger.warning("Cannot generate QA embeddings: Neo4j processor not available or not initialized properly.")
+            except Exception as embed_err:
+                logger.error(f"Error during explicit QA embedding generation call: {embed_err}", exc_info=True)
+            # <<<=======================================>>>
+
             logger.info("Historical chunk processing finished. Initiating shutdown for this process.")
             manager.stop() 
             logger.info("Shutdown complete. Exiting Python process.")

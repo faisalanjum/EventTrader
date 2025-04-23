@@ -567,7 +567,7 @@ class EmbeddingMixin:
         if not ENABLE_QAEXCHANGE_EMBEDDINGS:
             return {"status": "skipped", "reason": "embeddings disabled", "processed": 0, "error": 0, "cached": 0}
         
-        logger.info(f"Starting QAExchange embedding generation with batch_size={batch_size}, max_items={max_items}")
+        logger.info(f"[EMBED-FLOW-QA] Starting QAExchange embedding generation with batch_size={batch_size}, max_items={max_items}")
         
         # Create vector index if needed
         if create_index:
@@ -594,12 +594,15 @@ class EmbeddingMixin:
             all_items = [all_items]
         
         if not all_items or len(all_items) == 0:
-            logger.info("No QAExchange nodes found needing embeddings")
+            logger.info("[EMBED-FLOW-QA] No QAExchange nodes found needing embeddings initially.")
             return {"status": "completed", "reason": "no items needed embeddings", "processed": 0, "error": 0, "cached": 0}
         
-        logger.info(f"Found {len(all_items)} QAExchange nodes needing embeddings")
+        logger.info(f"[EMBED-FLOW-QA] Found {len(all_items)} QAExchange nodes potentially needing embeddings.")
         
         # Store content in temporary property
+        nodes_with_temp_content_set = 0
+        skipped_empty_content = 0
+        logger.info(f"[EMBED-FLOW-QA] Starting to set _temp_content for {len(all_items)} nodes...")
         for item in all_items:
             try:
                 exchanges = json.loads(item.get("raw_exchanges", "[]"))
@@ -616,16 +619,29 @@ class EmbeddingMixin:
             content = content[:MAX_EMBEDDING_CHARS] if len(content) > MAX_EMBEDDING_CHARS else content
             
             if not content:
+                # logger.debug(f"[EMBED-FLOW-QA] Skipping node {item.get('id')} due to empty content")
+                skipped_empty_content += 1
                 continue  # Skip empty ones
 
             save_query = """
             MATCH (q:QAExchange {id: $id})
             SET q._temp_content = $content
+            RETURN count(q) as updated_count
             """
-            self.manager.execute_cypher_query(save_query, {"id": item["id"], "content": content})
+            try:
+                # Add result check
+                result = self.manager.execute_cypher_query(save_query, {"id": item["id"], "content": content})
+                if result and result.get('updated_count', 0) > 0:
+                    nodes_with_temp_content_set += 1
+                else:
+                    logger.warning(f"[EMBED-FLOW-QA] Failed to set _temp_content for node {item.get('id')}")
+            except Exception as e_set:
+                logger.error(f"[EMBED-FLOW-QA] Error setting _temp_content for node {item.get('id')}: {e_set}")
 
+        logger.info(f"[EMBED-FLOW-QA] Finished setting _temp_content. Set on {nodes_with_temp_content_set} nodes. Skipped {skipped_empty_content} due to empty content.")
         
         # Use generic batch_embeddings_for_nodes with the temporary property
+        logger.info(f"[EMBED-FLOW-QA] Calling batch_embeddings_for_nodes for QAExchange using _temp_content.")
         results = self.batch_embeddings_for_nodes(
             label="QAExchange",
             id_property="id",
@@ -637,15 +653,23 @@ class EmbeddingMixin:
             check_chromadb=True
         )
         
+        logger.info(f"[EMBED-FLOW-QA] Returned from batch_embeddings_for_nodes. Result: {results}")
+
         # Clean up temporary property
+        logger.info(f"[EMBED-FLOW-QA] Cleaning up _temp_content property for QAExchange nodes.")
         cleanup_query = """
         MATCH (q:QAExchange)
         WHERE q._temp_content IS NOT NULL
         REMOVE q._temp_content
+        RETURN count(q) as cleaned_count
         """
-        self.manager.execute_cypher_query(cleanup_query, {})
-        
-        logger.info(f"QAExchange embedding processing completed with results: {results}")
+        try:
+            cleanup_result = self.manager.execute_cypher_query(cleanup_query, {})
+            logger.info(f"[EMBED-FLOW-QA] Cleaned up _temp_content for {cleanup_result.get('cleaned_count', 'unknown')} nodes.")
+        except Exception as e_clean:
+             logger.error(f"[EMBED-FLOW-QA] Error cleaning up _temp_content: {e_clean}")
+
+        logger.info(f"[EMBED-FLOW-QA] QAExchange embedding processing completed with final results: {results}")
         return results
 
 
