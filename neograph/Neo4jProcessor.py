@@ -17,7 +17,9 @@ from .mixins.reconcile import ReconcileMixin
 from utils.log_config import get_logger # For logger setup
 from redisDB.redisClasses import EventTraderRedis # Needed by process_* functions
 from .Neo4jInitializer import Neo4jInitializer # Needed by init_neo4j (using relative path)
-from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD # Needed by init_neo4j
+from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD, OPENAI_API_KEY
+from openai import OpenAI
+from transcripts.EarningsCallTranscripts import ModelRateLimiter # Reuse existing limiter
 
 # Setup logger (This line should be kept after imports)
 logger = get_logger(__name__)
@@ -56,6 +58,24 @@ class Neo4jProcessor(
         # Initialize all mixins, establishing connection, thread pools etc.
         super().__init__(event_trader_redis=event_trader_redis)
         
+        # <<< ADDED OpenAI Client and Rate Limiter >>>
+        if OPENAI_API_KEY:
+            try:
+                self.openai_client = OpenAI(api_key=OPENAI_API_KEY)
+                # Test connection - simple list models call
+                self.openai_client.models.list() 
+                self.rate_limiter = ModelRateLimiter()
+                logger.info("OpenAI client initialized successfully within Neo4jProcessor.")
+            except Exception as openai_err:
+                logger.error(f"Failed to initialize OpenAI client: {openai_err}", exc_info=True)
+                self.openai_client = None
+                self.rate_limiter = None
+        else:
+            self.openai_client = None
+            self.rate_limiter = None
+            logger.warning("OpenAI API key missing; LLM-based QA filtering will be disabled.")
+        # <<<=========================================>>>
+
         # --- ADDED: Call XBRL reconciliation after initialization ---
         # Ensure this runs only after connection and xbrl_executor are ready
         if self.manager and self.manager.driver and self.xbrl_executor:

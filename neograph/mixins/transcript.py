@@ -3,6 +3,7 @@ import json
 from typing import Dict, List, Optional, Any, Set, Tuple
 from utils.date_utils import parse_news_dates, parse_date 
 from redisDB.redis_constants import RedisKeys
+from config.feature_flags import QA_CLASSIFICATION_MODEL, QA_SUBSTANTIAL_WORD_COUNT
 
 
 from ..EventTraderNodes import (
@@ -18,6 +19,104 @@ class TranscriptMixin:
     """
     Handles processing and storage of transcript data into Neo4j.
     """
+
+    def _is_qa_content_substantial(self, combined_text: str) -> bool:
+        """
+        Checks if QA content is substantial (>= 15 words) or, if shorter,
+        uses an LLM to determine if it's more than just filler/salutations.
+        """
+        word_count = len(combined_text.split())
+
+        if word_count >= QA_SUBSTANTIAL_WORD_COUNT:
+            logger.debug(f"QA content substantial based on word count ({word_count} >= {QA_SUBSTANTIAL_WORD_COUNT}).")
+            return True # Substantial based on length
+
+        # If short, check with LLM (if available)
+        if not hasattr(self, 'openai_client') or not self.openai_client or \
+           not hasattr(self, 'rate_limiter') or not self.rate_limiter:
+            logger.warning(f"Skipping LLM check for short QA content (words={word_count}) due to missing OpenAI client/rate limiter in Neo4jProcessor.")
+            return True # Default to substantial
+
+        # Get model from feature flags
+        llm_model = QA_CLASSIFICATION_MODEL
+        try:
+            self.rate_limiter.wait_if_needed(llm_model)
+        except Exception as rate_limit_err:
+             logger.error(f"Rate limiter check failed for model {llm_model}: {rate_limit_err}. Skipping LLM check.")
+             return True # Default to substantial
+
+        # Define the output schema
+        output_schema = { 
+            "type": "object",
+            "properties": {
+                "is_filler_only": {
+                    "type": "boolean",
+                    "description": "True if the text contains ONLY conversational filler, greetings, acknowledgements, or thank yous, with no substantial question or answer content. False otherwise."
+                }
+            },
+            "required": ["is_filler_only"],
+            "additionalProperties": False
+        }
+
+        # Prepare prompt messages
+        messages = [
+            {"role": "system", "content": "You are an assistant classifying short text snippets based on provided schema."}, 
+            {"role": "user", "content": f"Analyze the following text from an earnings call Q&A exchange. Determine if it ONLY contains conversational filler (greetings, thanks, acknowledgements) with no substantial info. Output according to the 'qa_filler_check' schema.\n\nText:\n\"\"\"\n{combined_text}\n\"\"\""}
+        ]
+
+        try:
+            response = self.openai_client.responses.create(
+                model=llm_model,
+                input=messages,
+                text={
+                    "format": {
+                        "type": "json_schema",
+                        "name": "qa_filler_check", # Schema name
+                        "strict": True,
+                        "schema": output_schema
+                    }
+                },
+                temperature=0.0 # Deterministic output
+            )
+
+            # Parse the structured response
+            is_just_filler = False # Default assumption if parsing fails
+            if response.output and len(response.output) > 0:
+                # Check for refusal first
+                is_refusal = any(item.type in ["response.refusal.delta", "response.refusal.done"] 
+                                 for item in response.output[0].content)
+                if is_refusal:
+                    logger.warning(f"Model {llm_model} refused the QA filler check request for content: '{combined_text[:50]}...'")
+                    return True # Default to substantial on refusal
+                
+                # Find the output_text content block
+                for item in response.output[0].content:
+                    if item.type == "output_text":
+                        try:
+                            parsed = json.loads(item.text)
+                            if "is_filler_only" in parsed and isinstance(parsed["is_filler_only"], bool):
+                                is_just_filler = parsed["is_filler_only"]
+                                logger.info(f"LLM check for QA (words={word_count}): Content='{combined_text}...'. Is filler={is_just_filler}")
+                                break # Found valid result
+                            else:
+                                logger.warning(f"LLM check for QA (words={word_count}, model={llm_model}): Invalid JSON structure in response: {item.text}")
+                        except json.JSONDecodeError:
+                             logger.warning(f"LLM check for QA (words={word_count}, model={llm_model}): Failed to decode JSON from response: {item.text}")
+                        except Exception as parse_err:
+                             logger.error(f"LLM check for QA (words={word_count}, model={llm_model}): Error parsing response item {item.text}: {parse_err}")
+                    # If loop finishes without break, parsing failed or block wasn't found
+                    else: 
+                        logger.warning(f"LLM check for QA (words={word_count}, model={llm_model}): No 'output_text' block found in response.")
+
+            else:
+                 logger.warning(f"LLM check for QA (words={word_count}, model={llm_model}): No output received from API.")
+
+            # Return TRUE (substantial) if the LLM determined it was FALSE (not just filler)
+            return not is_just_filler
+
+        except Exception as e:
+            logger.error(f"LLM check failed for QA content (words={word_count}, model={llm_model}): {e}", exc_info=True)
+            return True # Default to substantial on API error
 
     def process_transcripts_to_neo4j(self, batch_size=5, max_items=None, include_without_returns=True) -> bool:
         """
@@ -248,7 +347,12 @@ class TranscriptMixin:
         # Level 2: QAExchangeNode from qa_pairs
         if has_qa_pairs:
             exchange_ids = []
-            for idx, pair in enumerate(transcript_data["qa_pairs"]):
+            nodes_to_create_objects = [] # List to hold actual Node objects
+            relationships_to_create_params = [] # Batch relationship creation parameters
+            last_valid_node_id = None
+            current_valid_sequence_number = 0 # Sequence for *valid* nodes
+
+            for original_idx, pair in enumerate(transcript_data["qa_pairs"]):
                 exchanges_raw = pair.get("exchanges", [])
                 if isinstance(exchanges_raw, str):
                     try:
@@ -272,25 +376,83 @@ class TranscriptMixin:
                             })
                     return flat
                 
-                exchanges = flatten_exchanges(exchanges_raw)
+                current_exchanges_list = flatten_exchanges(exchanges_raw)
                 
-                if exchanges:
-                    exch_id = f"{transcript_id}_qa__{idx}"
-                    exchange_ids.append(exch_id)
-                    nodes_to_create.append(QAExchangeNode(
-                        id=exch_id,
-                        transcript_id=transcript_id,
-                        exchanges=exchanges,
-                        questioner=pair.get("questioner"),
-                        questioner_title=pair.get("questioner_title"),
-                        responders=pair.get("responders"),
-                        responder_title=pair.get("responder_title"),
-                        sequence=idx
-                    ))
-                    add_rel("Transcript", transcript_id, "QAExchange", exch_id, "HAS_QA_EXCHANGE")
+                if current_exchanges_list: # Only proceed if there are flattened exchanges
+                    exch_id = f"{transcript_id}_qa__{current_valid_sequence_number}" # Use valid sequence number
 
-            for i in range(len(exchange_ids) - 1):
-                add_rel("QAExchange", exchange_ids[i], "QAExchange", exchange_ids[i + 1], "NEXT_EXCHANGE")
+                    # --- Filter Logic Integration --- 
+                    # Generate text exactly like embedding process
+                    combined_text = " ".join(
+                        entry.get("text", "")
+                        for entry in current_exchanges_list 
+                        if entry.get("role") in {"question", "answer"}
+                    ).strip()
+
+                    # Call the check
+                    is_substantial = self._is_qa_content_substantial(combined_text)
+                    # --- End Filter Logic Integration ---
+
+                    if is_substantial:
+                        # Prepare node parameters dictionary first
+                        node_params_dict = {
+                            "id": exch_id,
+                            "transcript_id": transcript_id,
+                            "exchanges": json.dumps(current_exchanges_list), # Stringify here
+                            "questioner": pair.get("questioner"),
+                            "questioner_title": pair.get("questioner_title"),
+                            "responders": pair.get("responders"),
+                            "responder_title": pair.get("responder_title"),
+                            "sequence": current_valid_sequence_number # Use valid sequence
+                        }
+                        # Create the Node object and add it to the list
+                        nodes_to_create_objects.append(QAExchangeNode(**node_params_dict))
+                        exchange_ids.append(exch_id) # Keep track of IDs for linking
+
+                        # Prepare relationship to Transcript
+                        relationships_to_create_params.append({ 
+                           "source_label": "Transcript", "source_id": transcript_id, 
+                           "target_label": "QAExchange", "target_id": exch_id, 
+                           "rel_type": "HAS_QA_EXCHANGE"
+                        })
+
+                        # Prepare relationship to previous valid node
+                        if last_valid_node_id:
+                             relationships_to_create_params.append({
+                                "source_label": "QAExchange", "source_id": last_valid_node_id,
+                                "target_label": "QAExchange", "target_id": exch_id,
+                                "rel_type": "NEXT_EXCHANGE"
+                             })
+
+                        # Update pointers
+                        last_valid_node_id = exch_id
+                        current_valid_sequence_number += 1
+                    else:
+                        logger.info(f"Skipping QA pair {original_idx} for {transcript_id} - not substantial (words={len(combined_text.split())}).")
+                
+
+            # Batch create nodes using merge_nodes with Node objects
+            if nodes_to_create_objects:
+                self.manager.merge_nodes(nodes_to_create_objects)
+                logger.info(f"Batch created/merged {len(nodes_to_create_objects)} QAExchange nodes for {transcript_id}.")
+            
+            # Create relationships one by one (or using existing batch methods if manager has them)
+            if relationships_to_create_params:
+                logger.info(f"Creating {len(relationships_to_create_params)} QA relationships for {transcript_id}...")
+                for rel in relationships_to_create_params:
+                     try:
+                        self.manager.create_relationships(
+                            source_label=rel["source_label"],
+                            source_id_field="id",
+                            source_id_value=rel["source_id"],
+                            target_label=rel["target_label"],
+                            target_match_clause=f"{{id: '{rel['target_id']}'}}",
+                            rel_type=rel["rel_type"],
+                            params=[{"properties": {}}]
+                        )
+                     except Exception as rel_err:
+                         logger.error(f"Failed to create relationship {rel}: {rel_err}")
+                logger.info(f"Finished creating QA relationships for {transcript_id}.")
 
         # Level 2 fallback: QuestionAnswerNode (used if no qa_pairs)
         elif has_qa:

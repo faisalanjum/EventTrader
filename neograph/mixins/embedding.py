@@ -563,7 +563,6 @@ class EmbeddingMixin:
     def batch_process_qaexchange_embeddings(self, batch_size=50, create_index=True, max_items=None):
         """Generate embeddings for QAExchange nodes using existing infrastructure"""
  
-        
         if not ENABLE_QAEXCHANGE_EMBEDDINGS:
             return {"status": "skipped", "reason": "embeddings disabled", "processed": 0, "error": 0, "cached": 0}
         
@@ -606,13 +605,24 @@ class EmbeddingMixin:
         for item in all_items:
             try:
                 exchanges = json.loads(item.get("raw_exchanges", "[]"))
-            except Exception:
+                logger.debug(f"[EMBED-FLOW-QA] Exchanges for node {item.get('id')}: types={[type(entry).__name__ for entry in exchanges[:5]]}...")
+            except Exception as e:
+                logger.warning(f"Failed to parse exchanges for {item.get('id')}: {e}")
                 exchanges = []
 
+            # Count different types of entries for logging
+            dict_entries = sum(1 for entry in exchanges if isinstance(entry, dict))
+            str_entries = sum(1 for entry in exchanges if isinstance(entry, str))
+            other_entries = len(exchanges) - dict_entries - str_entries
+            
+            logger.info(f"[EMBED-FLOW-QA] Node {item.get('id')} has {len(exchanges)} entries: {dict_entries} dicts, {str_entries} strings, {other_entries} other types")
+            
+            # Extract text from exchanges based on role
             content = " ".join(
-                entry.get("text", "")
+                entry.get("text", "") if isinstance(entry, dict) and entry.get("role") in {"question", "answer"}
+                else entry if isinstance(entry, str)
+                else ""
                 for entry in exchanges
-                if entry.get("role") in {"question", "answer"}
             ).strip()
             
             # Simple token estimation (4 chars ~= 1 token) and truncation to ~8000 tokens
@@ -861,15 +871,24 @@ class EmbeddingMixin:
             # Parse the exchanges JSON in Python
             try:
                 exchanges = json.loads(result.get("raw_exchanges", "[]"))
-            except Exception:
+                logger.debug(f"[EMBED-FLOW-QA] Exchanges for node {result.get('id')}: types={[type(entry).__name__ for entry in exchanges[:5]]}...")
+            except Exception as e:
                 logger.warning(f"Failed to parse exchanges for {qa_id}: {e}")
                 exchanges = []
             
+            # Count different types of entries for logging
+            dict_entries = sum(1 for entry in exchanges if isinstance(entry, dict))
+            str_entries = sum(1 for entry in exchanges if isinstance(entry, str))
+            other_entries = len(exchanges) - dict_entries - str_entries
+            
+            logger.info(f"[EMBED-FLOW-QA] Node {result.get('id')} has {len(exchanges)} entries: {dict_entries} dicts, {str_entries} strings, {other_entries} other types")
+            
             # Extract text from exchanges based on role
             content = " ".join(
-                entry.get("text", "")
+                entry.get("text", "") if isinstance(entry, dict) and entry.get("role") in {"question", "answer"}
+                else entry if isinstance(entry, str)
+                else ""
                 for entry in exchanges
-                if entry.get("role") in {"question", "answer"}
             ).strip()
             
             # Simple token estimation (4 chars ~= 1 token) and truncation to ~8000 tokens

@@ -19,6 +19,7 @@ from transcripts.transcript_schemas import UnifiedTranscript
 from openai import OpenAI
 import earningscall
 import numpy as np
+from config.feature_flags import SPEAKER_CLASSIFICATION_MODEL
 
 
 class EarningsCallProcessor:
@@ -473,12 +474,15 @@ class EarningsCallProcessor:
         return transcript_dict
 
 
-    def classify_speakers(self, speakers: Dict[str, str], model="gpt-4o") -> Dict[str, str]:
+    def classify_speakers(self, speakers: Dict[str, str]) -> Dict[str, str]:
         """Classify speakers from earnings call as ANALYST, EXECUTIVE, or OPERATOR"""
 
         if not speakers:
             return {}
         
+        # Use the imported constant for the model
+        model=SPEAKER_CLASSIFICATION_MODEL
+
         # Check rate limits
         self.rate_limiter.wait_if_needed(model)
         

@@ -86,10 +86,20 @@ MAX_EMBEDDING_CHARS = 32000
 ENABLE_QAEXCHANGE_EMBEDDINGS = True
 QAEXCHANGE_VECTOR_INDEX_NAME = "qaexchange_vector_idx"
 
+# --- ADDED: Model for QA Content Classification ---
+# Model to use for classifying short QA exchanges as filler/substantial
+QA_CLASSIFICATION_MODEL = "gpt-4.1-mini"
+# --- END ADDED --- 
 
+# --- ADDED: Word count threshold for QA substantial check ---
+QA_SUBSTANTIAL_WORD_COUNT = 18
+# --- END ADDED ---
+
+# --- ADDED: Model for Speaker Classification ---
+SPEAKER_CLASSIFICATION_MODEL = "gpt-4o"
+# --- END ADDED ---
 
 # When True, check ChromaDB for existing embeddings before generating new ones
-# This saves API calls during development but can be disabled in production for performance
 USE_CHROMADB_CACHING = True
 
 # Configuration for ChromaDB persistence
