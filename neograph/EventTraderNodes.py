@@ -1277,10 +1277,9 @@ class SplitNode(Neo4jNode):
     execution_date: str          # Date the split was executed
     split_from: float            # Original number of shares
     
-
+    
     # Optional fields
     split_to: Optional[float] = None      # New number of shares after split
-    api_id: Optional[str] = None          # Original ID from the API if available
     
     @property
     def node_type(self) -> NodeType:
@@ -1310,8 +1309,7 @@ class SplitNode(Neo4jNode):
         
         # Add ALL optional properties if they exist AND have a Neo4j-compatible type
         optional_props_values = {
-            'split_to': self.split_to,       # Added here
-            'api_id': self.api_id            # Added here
+            'split_to': self.split_to,       
         }
         
         for key, value in optional_props_values.items():
@@ -1340,12 +1338,11 @@ class SplitNode(Neo4jNode):
             ticker=props['ticker'],
             execution_date=props['execution_date'],
             split_from=float(props['split_from']),
-            split_to=props.get('split_to'),
-            api_id=props.get('api_id')
+            split_to=props.get('split_to')
         )
         
         # Set optional properties
-        optional_fields = ['split_to', 'api_id']
+        optional_fields = ['split_to']
         
         for field in optional_fields:
             # Ensure the property exists and is not just an empty string or null representation
@@ -1386,18 +1383,23 @@ class SplitNode(Neo4jNode):
             # Explicitly convert to str only if it's not None, otherwise keep None
             return str(val) if val is not None else None
 
-        api_id_val = ensure_str_or_none('id')  # Note: 'id' in API becomes 'api_id' in our class
-        # --- End Strict Type Enforcement ---
-
         # Create the instance using the strictly typed values
         return cls(
             ticker=ticker_val,
             execution_date=execution_date_val,
             split_from=split_from_val,
-            split_to=split_to_val,
-            api_id=api_id_val
+            split_to=split_to_val
         )
     
+    @property
+    def is_future(self) -> bool:
+        """Determine if this split's execution date is in the future."""
+        try:
+            today = datetime.now().strftime('%Y-%m-%d')
+            return self.execution_date > today
+        except:
+            # Handle potential invalid date format gracefully
+            return False # Or raise an error, depending on desired strictness
     
 
 #### Transcripts related classes

@@ -899,7 +899,6 @@ class Polygon:
                                 records.append({
                                     "ticker": d["ticker"],
                                     "execution_date": d["execution_date"],
-                                    "id": d["id"],
                                     "split_from": d["split_from"],
                                     "split_to": d["split_to"],
                                     "status": data.get("status"),
@@ -917,7 +916,7 @@ class Polygon:
 
         if not records:
             self.logger.warning("No valid split records collected.")
-            return pd.DataFrame(columns=required_keys + ["id", "split_from", "split_to"]).set_index("ticker")
+            return pd.DataFrame(columns=required_keys + ["split_from", "split_to"]).set_index("ticker")
 
         df = (
             pd.DataFrame(records)

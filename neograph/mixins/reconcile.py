@@ -360,8 +360,33 @@ class ReconcileMixin:
             
             if initializer.connect():
                 try:
-                    # Create yesterday's splits
-                    return initializer.create_single_split(yesterday)
+                    # Create yesterday's splits (handles only NEW announcements)
+                    new_nodes_count = initializer.create_single_split(yesterday)
+
+                    # Attempt to link existing splits whose execution_date was yesterday
+                    logger.info(f"Reconciliation: Attempting to link existing splits for execution date {yesterday}...")
+                    link_query = """
+                    MATCH (s:Split) // Find ALL splits
+                    WHERE s.execution_date < $today // Only consider past/present execution dates
+                      AND NOT EXISTS { (:Date)-[:HAS_SPLIT]->(s) } // That are currently missing the Date link
+                    WITH s
+                    MATCH (dt:Date {date: s.execution_date}) // Find the corresponding Date node (MUST exist for linking)
+                    MATCH (c:Company {ticker: s.ticker}) // Find the corresponding company
+                    MERGE (dt)-[r1:HAS_SPLIT]->(s) // Create the missing Date link
+                    MERGE (c)-[r2:DECLARED_SPLIT]->(s) // Ensure Company link exists (MERGE is safe)
+                    RETURN count(s) as linked_count
+                    """
+                    # Pass today's date for the comparison
+                    today = datetime.now().strftime('%Y-%m-%d')
+                    result = self.manager.execute_cypher_query(link_query, {"today": today})
+                    linked_count = result.get("linked_count", 0) if result else 0
+                    if linked_count > 0:
+                        logger.info(f"Reconciliation: Successfully created missing HAS_SPLIT links for {linked_count} existing Split nodes (execution_date < {today}).")
+                    else:
+                        logger.info(f"Reconciliation: No existing Split nodes found needing HAS_SPLIT links for execution_date < {today}.")
+
+                    return new_nodes_count # Return count of NEW nodes created
+
                 finally:
                     initializer.close()
             

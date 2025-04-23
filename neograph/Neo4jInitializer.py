@@ -1427,35 +1427,80 @@ class Neo4jInitializer:
             # Get all splits since start_date
             all_splits = polygon.get_splits(company_tickers)
             
-            # Filter by start date
+            # Filter by start date provided to the function
             if all_splits.empty:
                 logger.info("No splits found")
                 return 0
-                
+            
+            # Ensure date column is used correctly for filtering
             filtered_splits = all_splits[all_splits['execution_date'] >= start_date]
             if filtered_splits.empty:
-                logger.info(f"No splits found since {start_date}")
+                logger.info(f"No splits found with execution_date on or after {start_date}")
+                return 0
+
+            # --- Filter out splits older than the earliest Date node ---
+            min_existing_date = None
+            with self.manager.driver.session() as session:
+                # Find the earliest date node
+                result = session.run("MATCH (d:Date) RETURN min(d.date) as min_date")
+                min_date_record = result.single()
+                if min_date_record and min_date_record["min_date"]:
+                    min_existing_date = min_date_record["min_date"]
+                else:
+                    # If no dates exist at all, we can't proceed meaningfully
+                    logger.error("Reconciliation Error: No Date nodes found in the database. Cannot process splits.")
+                    return 0 
+            
+            # Apply the minimum date filter if found
+            if min_existing_date:
+                original_count = len(all_splits)
+                all_splits = all_splits[all_splits['execution_date'] >= min_existing_date]
+                new_count = len(all_splits)
+                if original_count > new_count:
+                    logger.warning(f"Reconciliation: Filtered out {original_count - new_count} fetched splits because their execution_date is before the earliest Date node ({min_existing_date}).")
+            # --- END Minimum Date Filter ---
+
+            if all_splits.empty:
+                logger.info(f"Reconciliation: No splits found with execution_date on or after {min_existing_date}.")
                 return 0
                 
             # Create split nodes
             split_nodes = []
-            for ticker, row in filtered_splits.iterrows():
+            for ticker, row in all_splits.iterrows():
                 split_data = row.to_dict()
                 split_data['ticker'] = ticker
                 split_node = SplitNode.from_split_data(split_data)
                 split_nodes.append(split_node)
+            
+            # Check which already exist
+            if not split_nodes: # Added check: If no nodes passed the date filter
+                logger.info("Reconciliation: No splits found whose execution_date matches an existing Date node.")
+                return 0
+
+            split_ids = [node.id for node in split_nodes]
+            
+            with self.manager.driver.session() as session:
+                result = session.run("MATCH (d:Split) WHERE d.id IN $ids RETURN d.id as id", {"ids": split_ids})
+                existing_ids = {record["id"] for record in result}
+                
+            # Filter to only new splits
+            new_nodes = [node for node in split_nodes if node.id not in existing_ids]
+            
+            if not new_nodes:
+                logger.info(f"All splits for {start_date} already exist")
+                return 0
                 
             # Create nodes in Neo4j
-            self.manager.merge_nodes(split_nodes)
+            self.manager.merge_nodes(new_nodes)
             
-            # Create relationships
-            self._create_split_relationships(split_nodes)
+            # Attempt relationship creation for the newly added nodes
+            self._create_split_relationships(new_nodes)
             
-            logger.info(f"Created {len(split_nodes)} split nodes with relationships")
-            return len(split_nodes)
+            logger.info(f"Created {len(new_nodes)} split nodes for {start_date}")
+            return len(new_nodes)
             
         except Exception as e:
-            logger.error(f"Error creating split nodes: {e}")
+            logger.error(f"Error creating splits for date {start_date}: {e}")
             return 0
 
     def _create_split_relationships(self, split_nodes):
@@ -1465,49 +1510,43 @@ class Neo4jInitializer:
             if not split_nodes:
                 return 0
                 
-            # Check if dates exist for these splits before creating relationships
-            all_dates = set(node.execution_date for node in split_nodes)
+            # Nodes passed here are guaranteed by create_splits to have an existing Date node for execution_date.
+            # Now check for existing Company nodes.
+            all_tickers = list(set(node.ticker for node in split_nodes))
+            existing_companies = set()
             with self.manager.driver.session() as session:
-                result = session.run("""
-                    MATCH (d:Date) WHERE d.date IN $dates
-                    RETURN d.date as date
-                """, {"dates": list(all_dates)})
-                existing_dates = {record["date"] for record in result}
-            
-            # Filter split nodes to only include those with existing dates
-            valid_nodes = [node for node in split_nodes if node.execution_date in existing_dates]
-            
+                result = session.run("MATCH (c:Company) WHERE c.ticker IN $tickers RETURN c.ticker as ticker", {"tickers": all_tickers})
+                existing_companies = {record["ticker"] for record in result}
+                logger.info(f"Found {len(existing_companies)} existing Company nodes for {len(all_tickers)} unique split tickers.")
+
+            valid_nodes = [node for node in split_nodes if node.ticker in existing_companies]
             if len(valid_nodes) < len(split_nodes):
                 missing_count = len(split_nodes) - len(valid_nodes)
-                logger.warning(f"Skipping {missing_count} splits without matching dates")
-                
-                # Log a few examples of missing dates
-                if missing_count > 0:
-                    missing_dates = set(all_dates) - existing_dates
-                    missing_examples = list(missing_dates)[:3]
-                    logger.info(f"Examples of missing dates: {missing_examples}")
-                
-                # If all nodes are invalid, return early
+                skipped_tickers = set(node.ticker for node in split_nodes) - existing_companies
+                logger.warning(f"Skipping relationships for {missing_count} splits due to missing Company nodes (Tickers: {list(skipped_tickers)[:5]}...). ")
                 if not valid_nodes:
-                    logger.warning("No valid split nodes with existing dates")
+                    logger.warning("No valid split nodes remain after checking for Company node existence.")
                     return 0
                 
             # Prepare relationship parameters for valid nodes only
             company_rels = []
             date_rels = []
             
+            today = datetime.now().strftime('%Y-%m-%d')
+
             for node in valid_nodes:
-                # Company -> Split relationship
+                # Company -> Split relationship (Company existence already checked)
                 company_rels.append({
                     "company_ticker": node.ticker,
                     "split_id": node.id
                 })
                 
-                # Date -> Split relationship
-                date_rels.append({
-                    "date_str": node.execution_date,
-                    "split_id": node.id
-                })
+                # Date -> Split relationship (only if execution_date < today)
+                if node.execution_date < today:
+                    date_rels.append({
+                        "date_str": node.execution_date,
+                        "split_id": node.id
+                    })
             
             # Create relationships in single transaction
             with self.manager.driver.session() as session:
@@ -1541,8 +1580,8 @@ class Neo4jInitializer:
 
     def create_single_split(self, date_str=None):
         """
-        Create splits for a single day.
-        Direct parallel to create_single_date method.
+        Find and create any newly announced splits during daily reconciliation.
+        Fetches all splits for universe tickers and processes only new ones.
         
         Args:
             date_str: Date in format 'YYYY-MM-DD', defaults to yesterday
@@ -1571,22 +1610,65 @@ class Neo4jInitializer:
             # Get company tickers from universe data
             company_tickers = list(self.universe_data.keys())
             
-            # Get splits for specific date
-            day_splits = polygon.get_splits(company_tickers, execution_date=date_str)
+            # Fetch all available splits for the universe tickers
+            # The subsequent duplicate check will filter out existing ones
+            logger.info(f"Reconciliation: Fetching all splits for {len(company_tickers)} tickers to find new announcements.")
+            all_ticker_splits = polygon.get_splits(company_tickers)
             
-            if day_splits.empty:
-                logger.info(f"No splits found for {date_str}")
+            # --- Filter out splits older than the earliest Date node ---
+            min_existing_date = None
+            with self.manager.driver.session() as session:
+                # Find the earliest date node
+                result = session.run("MATCH (d:Date) RETURN min(d.date) as min_date")
+                min_date_record = result.single()
+                if min_date_record and min_date_record["min_date"]:
+                    min_existing_date = min_date_record["min_date"]
+                else:
+                    # If no dates exist at all, we can't proceed meaningfully
+                    logger.error("Reconciliation Error: No Date nodes found in the database. Cannot process splits.")
+                    return 0 
+            
+            # Apply the minimum date filter if found
+            if min_existing_date:
+                original_count = len(all_ticker_splits)
+                all_ticker_splits = all_ticker_splits[all_ticker_splits['execution_date'] >= min_existing_date]
+                new_count = len(all_ticker_splits)
+                if original_count > new_count:
+                    logger.warning(f"Reconciliation: Filtered out {original_count - new_count} fetched splits because their execution_date is before the earliest Date node ({min_existing_date}).")
+            # --- END Minimum Date Filter ---
+
+            if all_ticker_splits.empty:
+                logger.info(f"Reconciliation: No splits found with execution_date on or after {min_existing_date}.")
                 return 0
                 
             # Create split nodes
             split_nodes = []
-            for ticker, row in day_splits.iterrows():
-                split_data = row.to_dict()
-                split_data['ticker'] = ticker
-                split_node = SplitNode.from_split_data(split_data)
-                split_nodes.append(split_node)
-                
+            
+            # --- PRE-CHECK FOR EXISTING DATE NODES (Reconciliation) ---
+            unique_dates = all_ticker_splits['execution_date'].unique().tolist()
+            existing_dates = set()
+            with self.manager.driver.session() as session:
+                # Fetch all existing dates relevant to the fetched splits
+                result = session.run("MATCH (d:Date) WHERE d.date IN $dates RETURN d.date as date", {"dates": unique_dates})
+                existing_dates = {record["date"] for record in result}
+                logger.info(f"Reconciliation: Found {len(existing_dates)} existing Date nodes matching the {len(unique_dates)} unique execution dates found.")
+            # --- END PRE-CHECK ---
+
+            for ticker, row in all_ticker_splits.iterrows():
+                # Create node object ONLY if its execution date matches an existing Date node
+                execution_date = row['execution_date']
+                if execution_date in existing_dates:
+                    split_data = row.to_dict()
+                    split_data['ticker'] = ticker
+                    split_node = SplitNode.from_split_data(split_data)
+                    split_nodes.append(split_node)
+                # else: implicitly skip splits whose date doesn't exist
+            
             # Check which already exist
+            if not split_nodes: # Added check: If no nodes passed the date filter
+                logger.info("Reconciliation: No splits found whose execution_date matches an existing Date node.")
+                return 0
+
             split_ids = [node.id for node in split_nodes]
             
             with self.manager.driver.session() as session:
@@ -1603,7 +1685,7 @@ class Neo4jInitializer:
             # Create nodes in Neo4j
             self.manager.merge_nodes(new_nodes)
             
-            # Create relationships
+            # Attempt relationship creation for the newly added nodes
             self._create_split_relationships(new_nodes)
             
             logger.info(f"Created {len(new_nodes)} split nodes for {date_str}")
