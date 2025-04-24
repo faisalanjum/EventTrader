@@ -100,3 +100,13 @@ There are two primary ways to start the system:
    ```
 
 ## Watchdog Management
+
+
+## Partial Reset - Preserved Neo4j Initilization nodes/relationships + also redis stocks univers:
+
+./scripts/event_trader.sh partial-reset
+
+
+# Generate snapshot of all nodes and relationships in Neo4j report
+./scripts/event_trader.sh neo4j-report
+./scripts/neo4j_terminal_report.sh

@@ -681,6 +681,7 @@ class DataManager:
                 # Even if initialized, process news and report data
                 self.process_news_data()
                 self.process_report_data()
+                self.process_transcript_data()
             else:
                 # Initialize Neo4j if not already initialized
                 self.logger.info("Neo4j not initialized, initializing database")
@@ -696,6 +697,7 @@ class DataManager:
                 # Process news and report data after successful initialization
                 self.process_news_data()
                 self.process_report_data()
+                self.process_transcript_data()
             
             # Start the PubSub-based continuous processing thread
             self.neo4j_thread = threading.Thread(
@@ -765,6 +767,34 @@ class DataManager:
         
         except Exception as e:
             self.logger.error(f"Error processing SEC report data: {e}")
+            return False
+
+    def process_transcript_data(self, batch_size=100, max_items=1000, include_without_returns=True):
+        """
+        Process transcript data into Neo4j from Redis
+        
+        Args:
+            batch_size: Number of items to process in each batch
+            max_items: Maximum number of items to process
+            include_without_returns: Whether to process transcripts without returns
+        """
+        if not hasattr(self, 'neo4j_processor') or not self.neo4j_processor:
+            self.logger.error("Neo4j processor not initialized, cannot process transcripts")
+            return False
+            
+        try:
+            self.logger.info(f"Processing transcript data to Neo4j (batch_size={batch_size}, max_items={max_items}, include_without_returns={include_without_returns})...")
+            success = self.neo4j_processor.process_transcripts_to_neo4j(batch_size, max_items, include_without_returns)
+            
+            if success:
+                self.logger.info("Transcript data processing completed successfully")
+            else:
+                self.logger.warning("Transcript data processing returned with errors")
+                
+            return success
+        
+        except Exception as e:
+            self.logger.error(f"Error processing transcript data: {e}")
             return False
 
     def has_neo4j(self):

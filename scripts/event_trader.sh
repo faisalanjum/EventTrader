@@ -1,6 +1,6 @@
 #!/bin/bash
 # EventTrader Control Script
-# Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j|reset-all} [options] [from-date] [to-date]
+# Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j|reset-all|partial-reset|neo4j-report} [options] [from-date] [to-date]
 
 # Configuration
 WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -32,6 +32,8 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  health                  Check system health"
     echo "  init-neo4j              Initialize Neo4j database"
     echo "  reset-all               Stop all components and clear data"
+    echo "  partial-reset          Stop all components and reset data while preserving initialization"
+    echo "  neo4j-report            Generate detailed report of Neo4j database structure"
     echo ""
     echo "Options:"
     echo "  --background            Run in background mode"
@@ -848,6 +850,25 @@ except Exception as e:
     
     echo "Reset complete. All databases have been cleared."
     ;;
+  partial-reset)
+    # First, show what we're working with
+    log_settings
+    
+    # Stop all processes first
+    echo "Stopping all processes..."
+    stop_monitor
+    stop
+    sleep 2
+    
+    # Force kill any remaining related processes
+    kill_all_related_processes
+    
+    # Run the partial reset script
+    echo "Running partial reset (preserving initialization data)..."
+    "$WORKSPACE_DIR/scripts/partial_reset.sh"
+    
+    echo "Partial reset complete. System is ready for testing."
+    ;;
   status)
     status
     ;;
@@ -896,6 +917,11 @@ except Exception as e:
     # Process news data into Neo4j
     process_news
     ;;
+  neo4j-report)
+    # Run Neo4j database structure report
+    echo "Generating Neo4j database structure report..."
+    "$WORKSPACE_DIR/scripts/neo4j_terminal_report.sh"
+    ;;
   chunked-historical)
     # Note: FROM_DATE and TO_DATE are parsed globally earlier
     # ARGS array is not used here as config comes from feature_flags.py
@@ -922,6 +948,7 @@ except Exception as e:
     echo "  restart                      # Restart EventTrader"
     echo "  restart-all                  # Restart both EventTrader and watchdog"
     echo "  reset-all                    # Reset all processes and clear databases"
+    echo "  partial-reset                # Reset while preserving initialization data"
     echo "  status                       # Show status and recent logs"
     echo "  health                       # Show detailed system health information"
     echo "  logs                         # Show more detailed logs"
@@ -931,6 +958,7 @@ except Exception as e:
     echo "  clean-logs [days]            # Clean log files older than specified days"
     echo "  init-neo4j                   # Initialize Neo4j database"
     echo "  process-news                 # Process news data into Neo4j"
+    echo "  neo4j-report                 # Generate detailed Neo4j database structure report"
     echo "  chunked-historical YYYY-MM-DD [YYYY-MM-DD] # Process historical data in chunks (Settings in config/feature_flags.py)"
     echo ""
     echo "Options:"
