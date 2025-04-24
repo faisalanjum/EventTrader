@@ -453,6 +453,15 @@ ORDER BY nodeType, percentage DESC;
 done
 log_output ""
 
+
+
+
+
+
+
+
+
+
 # Display relationship properties
 log_output "\n${BOLD}${CYAN}RELATIONSHIP PROPERTIES${RESET}"
 log_output "${WHITE}Showing properties for each relationship type with present/missing counts:${RESET}"
@@ -500,24 +509,166 @@ ORDER BY relType, percentage DESC;
       current_rel_type=$rel_type
       log_output ""
       log_output "${MAGENTA}${NODE_CHAR} ${BOLD}${formatted_rel_type}${RESET}"
+      
+
+
+
+# For INFLUENCES relationship, add source-target type grouping
+      if [[ "$rel_type" == "INFLUENCES" ]]; then
+        # Run a query to get source-target type combinations
+        source_target_info=$(cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD --format plain <<< "
+        MATCH (source)-[r:INFLUENCES]->(target)
+        WITH 
+            labels(source)[0] as source_type,
+            labels(target)[0] as target_type,
+            count(r) as total,
+            sum(CASE WHEN r.created_at IS NOT NULL THEN 1 ELSE 0 END) as created_at_count,
+            sum(CASE WHEN r.symbol IS NOT NULL THEN 1 ELSE 0 END) as symbol_count,
+            sum(CASE WHEN r.hourly_macro IS NOT NULL THEN 1 ELSE 0 END) as hourly_macro_count,
+            sum(CASE WHEN r.daily_macro IS NOT NULL THEN 1 ELSE 0 END) as daily_macro_count,
+            sum(CASE WHEN r.session_macro IS NOT NULL THEN 1 ELSE 0 END) as session_macro_count,
+            sum(CASE WHEN r.hourly_sector IS NOT NULL THEN 1 ELSE 0 END) as hourly_sector_count,
+            sum(CASE WHEN r.daily_sector IS NOT NULL THEN 1 ELSE 0 END) as daily_sector_count,
+            sum(CASE WHEN r.session_sector IS NOT NULL THEN 1 ELSE 0 END) as session_sector_count,
+            sum(CASE WHEN r.hourly_industry IS NOT NULL THEN 1 ELSE 0 END) as hourly_industry_count,
+            sum(CASE WHEN r.daily_industry IS NOT NULL THEN 1 ELSE 0 END) as daily_industry_count,
+            sum(CASE WHEN r.session_industry IS NOT NULL THEN 1 ELSE 0 END) as session_industry_count,
+            sum(CASE WHEN r.hourly_stock IS NOT NULL THEN 1 ELSE 0 END) as hourly_stock_count,
+            sum(CASE WHEN r.daily_stock IS NOT NULL THEN 1 ELSE 0 END) as daily_stock_count,
+            sum(CASE WHEN r.session_stock IS NOT NULL THEN 1 ELSE 0 END) as session_stock_count
+        RETURN 
+            source_type,
+            target_type,
+            total,
+            toInteger(100.0 * hourly_macro_count / total) as hourly_macro_pct,
+            toInteger(100.0 * daily_macro_count / total) as daily_macro_pct,
+            toInteger(100.0 * session_macro_count / total) as session_macro_pct,
+            toInteger(100.0 * hourly_sector_count / total) as hourly_sector_pct,
+            toInteger(100.0 * daily_sector_count / total) as daily_sector_pct,
+            toInteger(100.0 * session_sector_count / total) as session_sector_pct,
+            toInteger(100.0 * hourly_industry_count / total) as hourly_industry_pct,
+            toInteger(100.0 * daily_industry_count / total) as daily_industry_pct,
+            toInteger(100.0 * session_industry_count / total) as session_industry_pct,
+            toInteger(100.0 * hourly_stock_count / total) as hourly_stock_pct,
+            toInteger(100.0 * daily_stock_count / total) as daily_stock_pct,
+            toInteger(100.0 * session_stock_count / total) as session_stock_pct
+        ORDER BY source_type, target_type
+        ")
+        
+        # Skip header line and display source-target grouping
+        echo "$source_target_info" | tail -n +3 | while IFS= read -r st_line; do
+          # Clean up the line
+          clean_st_line=$(echo "$st_line" | tr -d '",')
+          source_type=$(echo "$clean_st_line" | awk '{print $1}')
+          target_type=$(echo "$clean_st_line" | awk '{print $2}')
+          total=$(echo "$clean_st_line" | awk '{print $3}')
+          
+          # Format for display
+          formatted_source=$(printf "%-10s" "$source_type")
+          formatted_target=$(printf "%-10s" "$target_type")
+          formatted_total=$(printf "%7d" "$total")
+          
+          log_output "    ${YELLOW}◆ Source: ${BOLD}${formatted_source}${RESET}${YELLOW} → Target: ${BOLD}${formatted_target}${RESET} ${GRAY}(${formatted_total} relationships)${RESET}"
+          
+          # Helper function to show property with percentage
+          show_property() {
+            local name=$1
+            local pct=$2
+            local formatted_name=$(printf "%-30s" "$name")
+            # Force to integer
+            pct=$(echo "$pct" | awk '{printf "%d", $1}')
+            
+            # Calculate count from percentage
+            count=$(( total * pct / 100 ))
+            formatted_count=$(printf "%7d" "$count")
+            formatted_pct=$(printf "%3d" "$pct")
+            
+            # Color code based on percentage
+            if (( pct == 100 )); then
+              log_output "      ${GREEN}${formatted_name}${RESET}  ${GRAY}(present in ${formatted_count} relationships, ${formatted_pct}%)${RESET}"
+            elif (( pct >= 90 )); then
+              log_output "      ${YELLOW}${formatted_name}${RESET}  ${GRAY}(present in ${formatted_count} relationships, ${formatted_pct}%)${RESET}"
+            else
+              log_output "      ${RED}${formatted_name}${RESET}  ${GRAY}(present in ${formatted_count} relationships, ${formatted_pct}%)${RESET}"
+            fi
+          }
+          
+          # Show all properties with percentages
+          show_property "created_at" 100
+          show_property "symbol" 100
+          
+          # Macro metrics
+          hm_pct=$(echo "$clean_st_line" | awk '{print $4}')
+          show_property "hourly_macro" $hm_pct
+          
+          dm_pct=$(echo "$clean_st_line" | awk '{print $5}')
+          show_property "daily_macro" $dm_pct
+          
+          sm_pct=$(echo "$clean_st_line" | awk '{print $6}')
+          show_property "session_macro" $sm_pct
+          
+          # Sector metrics
+          hs_pct=$(echo "$clean_st_line" | awk '{print $7}')
+          show_property "hourly_sector" $hs_pct
+          
+          ds_pct=$(echo "$clean_st_line" | awk '{print $8}')
+          show_property "daily_sector" $ds_pct
+          
+          ss_pct=$(echo "$clean_st_line" | awk '{print $9}')
+          show_property "session_sector" $ss_pct
+          
+          # Industry metrics
+          hi_pct=$(echo "$clean_st_line" | awk '{print $10}')
+          show_property "hourly_industry" $hi_pct
+          
+          di_pct=$(echo "$clean_st_line" | awk '{print $11}')
+          show_property "daily_industry" $di_pct
+          
+          si_pct=$(echo "$clean_st_line" | awk '{print $12}')
+          show_property "session_industry" $si_pct
+          
+          # Stock metrics
+          hst_pct=$(echo "$clean_st_line" | awk '{print $13}')
+          show_property "hourly_stock" $hst_pct
+          
+          dst_pct=$(echo "$clean_st_line" | awk '{print $14}')
+          show_property "daily_stock" $dst_pct
+          
+          sst_pct=$(echo "$clean_st_line" | awk '{print $15}')
+          show_property "session_stock" $sst_pct
+          
+          log_output ""
+        done
+        
+        # Skip regular property output for INFLUENCES relationships
+        continue
+      fi
     fi
     
-    # Print different colors based on percentage - use numeric check
-    if [[ "$percentage" =~ ^[0-9]+$ ]]; then
-      if (( percentage == 100 )); then
-        log_output "      ${GREEN}${formatted_prop_name}${RESET}  ${GRAY}(present in ${formatted_prop_count} relationships, ${formatted_percentage}%)${RESET}"
-      elif (( percentage >= 90 )); then
-        log_output "      ${YELLOW}${formatted_prop_name}${RESET}  ${GRAY}(present in ${formatted_prop_count} relationships, ${formatted_percentage}%)${RESET}"
+    # Skip this part for INFLUENCES relationships as we handle them separately
+    if [[ "$rel_type" != "INFLUENCES" ]]; then
+      # Print different colors based on percentage - use numeric check
+      if [[ "$percentage" =~ ^[0-9]+$ ]]; then
+        if (( percentage == 100 )); then
+          log_output "      ${GREEN}${formatted_prop_name}${RESET}  ${GRAY}(present in ${formatted_prop_count} relationships, ${formatted_percentage}%)${RESET}"
+        elif (( percentage >= 90 )); then
+          log_output "      ${YELLOW}${formatted_prop_name}${RESET}  ${GRAY}(present in ${formatted_prop_count} relationships, ${formatted_percentage}%)${RESET}"
+        else
+          log_output "      ${RED}${formatted_prop_name}${RESET}  ${GRAY}(present in ${formatted_prop_count} relationships, ${formatted_percentage}%)${RESET}"
+        fi
       else
-        log_output "      ${RED}${formatted_prop_name}${RESET}  ${GRAY}(present in ${formatted_prop_count} relationships, ${formatted_percentage}%)${RESET}"
+        # Handle case when percentage is not a valid number
+        log_output "      ${RED}${formatted_prop_name}${RESET}  ${GRAY}(present in ${formatted_prop_count} relationships, unknown%)${RESET}"
       fi
-    else
-      # Handle case when percentage is not a valid number
-      log_output "      ${RED}${formatted_prop_name}${RESET}  ${GRAY}(present in ${formatted_prop_count} relationships, unknown%)${RESET}"
     fi
   fi
 done
 log_output ""
+
+
+
+
+
 
 # Show a quick summary message
 log_output "${BOLD}${CYAN}REPORT COMPLETE${RESET}" 
@@ -528,4 +679,4 @@ echo "</pre></body></html>" >> "$HTML_FILE"
 # Print file location
 log_output ""
 log_output "Report saved to:"
-log_output "${GRAY}Report saved to: ${HTML_FILE}${RESET}" 
+log_output "${GRAY}Report saved to: ${HTML_FILE}${RESET}"          

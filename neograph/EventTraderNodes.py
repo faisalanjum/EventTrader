@@ -1768,7 +1768,7 @@ class QAExchangeNodeData:
     questioner_title: Optional[str] = None
     responders: Optional[str] = None
     responder_title: Optional[str] = None
-    embedding: Optional[List[float]] = None  # ✅ NEW
+    embedding: Optional[List[float]] = None  
 
 
 class QAExchangeNode(Neo4jNode):
@@ -1786,8 +1786,16 @@ class QAExchangeNode(Neo4jNode):
             "id": self.data.id,
             "transcript_id": self.data.transcript_id,
             "sequence": self.data.sequence,
-            "exchanges": json.dumps(self.data.exchanges),
         }
+        
+        # Handle exchanges - avoid double JSON encoding
+        if isinstance(self.data.exchanges, str):
+            # If it's already a JSON string, use it directly
+            props["exchanges"] = self.data.exchanges
+        else:
+            # Otherwise encode it
+            props["exchanges"] = json.dumps(self.data.exchanges)
+            
         if self.data.questioner:
             props["questioner"] = self.data.questioner
         if self.data.questioner_title:
