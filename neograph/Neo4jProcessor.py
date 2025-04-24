@@ -20,6 +20,7 @@ from .Neo4jInitializer import Neo4jInitializer # Needed by init_neo4j (using rel
 from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD, OPENAI_API_KEY
 from openai import OpenAI
 from transcripts.EarningsCallTranscripts import ModelRateLimiter # Reuse existing limiter
+from config.feature_flags import QAEXCHANGE_EMBEDDING_BATCH_SIZE
 
 # Setup logger (This line should be kept after imports)
 logger = get_logger(__name__)
@@ -343,7 +344,10 @@ def process_transcript_data(batch_size=5, max_items=None, verbose=False, include
         success = processor.process_transcripts_to_neo4j(batch_size, max_items, include_without_returns)
 
         if success and processor and process_embeddings:
-            processor.batch_process_qaexchange_embeddings(batch_size=batch_size, max_items=max_items)
+            # Use the configured batch size for QA exchange embeddings
+            embedding_batch_size = QAEXCHANGE_EMBEDDING_BATCH_SIZE
+            logger.info(f"Processing QAExchange embeddings with batch_size={embedding_batch_size}")
+            processor.batch_process_qaexchange_embeddings(batch_size=embedding_batch_size, max_items=max_items)
 
 
         if success:

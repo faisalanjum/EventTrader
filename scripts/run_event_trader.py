@@ -17,6 +17,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config.DataManagerCentral import DataManager
 from utils.log_config import setup_logging, get_logger
 from redisDB.redis_constants import RedisKeys
+from config.feature_flags import (
+    ENABLE_HISTORICAL_DATA, ENABLE_LIVE_DATA, 
+    QAEXCHANGE_EMBEDDING_BATCH_SIZE
+)
 
 # Make sure logs directory exists
 logs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs")
@@ -238,9 +242,8 @@ def main():
                 if manager.has_neo4j() and hasattr(manager, 'neo4j_processor') and manager.neo4j_processor:
                     # Ensure we have the processor instance
                     neo4j_processor = manager.neo4j_processor
-                    # Use reasonable defaults or values from args if needed
-                    # Using defaults as args.batch might not be semantically correct here
-                    embedding_batch_size = 5 
+                    # Use the batch size from feature flags
+                    embedding_batch_size = QAEXCHANGE_EMBEDDING_BATCH_SIZE
                     embedding_max_items = None # Process all found
                     logger.info(f"Calling batch_process_qaexchange_embeddings (batch={embedding_batch_size}, max={embedding_max_items})")
                     embedding_results = neo4j_processor.batch_process_qaexchange_embeddings(

@@ -48,7 +48,7 @@ get_status() {
   $PYTHON_CMD -c "
 import os
 from chromadb import PersistentClient
-from utils.feature_flags import CHROMADB_PERSIST_DIRECTORY, ENABLE_NEWS_EMBEDDINGS, USE_CHROMADB_CACHING
+from config.feature_flags import CHROMADB_PERSIST_DIRECTORY, ENABLE_NEWS_EMBEDDINGS, USE_CHROMADB_CACHING
 import logging
 
 # Disable excessive logging
@@ -119,7 +119,7 @@ clean_chromadb() {
   $PYTHON_CMD -c "
 import os
 import shutil
-from utils.feature_flags import CHROMADB_PERSIST_DIRECTORY
+from config.feature_flags import CHROMADB_PERSIST_DIRECTORY
 
 print(f'\\nCleaning ChromaDB at: {CHROMADB_PERSIST_DIRECTORY}')
 

@@ -6,6 +6,7 @@ import json
 import os
 import asyncio
 from hashlib import sha256
+from typing import Dict, List, Any
 
 from eventtrader.keys import OPENAI_API_KEY
 from config.feature_flags import (
@@ -18,11 +19,14 @@ from config.feature_flags import (
     NEWS_VECTOR_INDEX_NAME,
     QAEXCHANGE_VECTOR_INDEX_NAME,
     ENABLE_QAEXCHANGE_EMBEDDINGS,
-    MAX_EMBEDDING_CHARS
+    MAX_EMBEDDING_CHARS,
+    NEWS_EMBEDDING_BATCH_SIZE,
+    QAEXCHANGE_EMBEDDING_BATCH_SIZE
 )
 
 # Updated path for local import
 from openai_local.openai_parallel_embeddings import process_embeddings_in_parallel
+from openai_local.openai_token_counter import truncate_for_embeddings, count_tokens
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +34,7 @@ class EmbeddingMixin:
     """
     Handles vector embeddings, interaction with ChromaDB, and vector similarity search.
     """
-
-
-
+    
     def create_vector_index(self, label, property_name, index_name=None, dimensions=1536, similarity_function="cosine"):
         """
         Create a vector index for any node type and property
@@ -302,12 +304,14 @@ class EmbeddingMixin:
                 all_nodes = [node["id"] for node in nodes_needing_embeddings]
                 all_contents = [node["content"] for node in nodes_needing_embeddings]
                 
+                # Truncate all contents to token limit
+                all_contents = [truncate_for_embeddings(content, OPENAI_EMBEDDING_MODEL) for content in all_contents]
+                
                 # NEW CODE: Use parallel OpenAI implementation for larger batches
                 if len(nodes_needing_embeddings) >= OPENAI_EMBED_CUTOFF:
                     try:
-
-                        
                         logger.info(f"[EMBED-FLOW] Using parallel OpenAI embeddings for {len(nodes_needing_embeddings)} items")
+                        
                         embeddings = asyncio.run(process_embeddings_in_parallel(
                             texts=all_contents,
                             model=OPENAI_EMBEDDING_MODEL,
@@ -454,7 +458,7 @@ class EmbeddingMixin:
             logger.error(f"[EMBED-FLOW] Exception in batch_embeddings_for_nodes: {str(e)}")
             return {"status": "error", "reason": str(e), **results}
 
-    def batch_process_news_embeddings(self, batch_size=50, create_index=True, max_items=None):
+    def batch_process_news_embeddings(self, batch_size=NEWS_EMBEDDING_BATCH_SIZE, create_index=True, max_items=None):
         """
         Generate embeddings for News nodes using Neo4j's GenAI integration.
         This is a specialized wrapper around batch_embeddings_for_nodes just for News nodes.
@@ -560,7 +564,7 @@ class EmbeddingMixin:
         return results
 
 
-    def batch_process_qaexchange_embeddings(self, batch_size=50, create_index=True, max_items=None):
+    def batch_process_qaexchange_embeddings(self, batch_size=QAEXCHANGE_EMBEDDING_BATCH_SIZE, create_index=True, max_items=None):
         """Generate embeddings for QAExchange nodes using existing infrastructure"""
  
         if not ENABLE_QAEXCHANGE_EMBEDDINGS:
@@ -625,8 +629,8 @@ class EmbeddingMixin:
                 for entry in exchanges
             ).strip()
             
-            # Simple token estimation (4 chars ~= 1 token) and truncation to ~8000 tokens
-            content = content[:MAX_EMBEDDING_CHARS] if len(content) > MAX_EMBEDDING_CHARS else content
+            # Use proper token counting and truncation
+            content = truncate_for_embeddings(content, OPENAI_EMBEDDING_MODEL)
             
             if not content:
                 # logger.debug(f"[EMBED-FLOW-QA] Skipping node {item.get('id')} due to empty content")
@@ -692,8 +696,6 @@ class EmbeddingMixin:
             return False
             
         try:
-
-            
             if not OPENAI_API_KEY:
                 return False
             
@@ -728,6 +730,10 @@ class EmbeddingMixin:
                 return False
                 
             content = result.get("content")
+            
+            # Truncate text to token limit using tiktoken
+            content = truncate_for_embeddings(content, OPENAI_EMBEDDING_MODEL)
+            
             embedding = None
             
             # Check if we should try to get embedding from ChromaDB first
@@ -891,8 +897,8 @@ class EmbeddingMixin:
                 for entry in exchanges
             ).strip()
             
-            # Simple token estimation (4 chars ~= 1 token) and truncation to ~8000 tokens
-            content = content[:MAX_EMBEDDING_CHARS] if len(content) > MAX_EMBEDDING_CHARS else content
+            # Use proper token counting and truncation
+            content = truncate_for_embeddings(content, OPENAI_EMBEDDING_MODEL)
             
             if not content:
                 return False
@@ -1040,6 +1046,9 @@ class EmbeddingMixin:
                 logger.error("Missing OpenAI API key")
                 return []
                 
+            # Truncate query to token limit
+            query_text = truncate_for_embeddings(query_text, OPENAI_EMBEDDING_MODEL)
+            
             # Generate embedding for query text
             embedding_query = """
             WITH $query_text AS text, $config AS config

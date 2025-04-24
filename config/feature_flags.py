@@ -119,6 +119,14 @@ SYMBOLS_CSV_PATH = os.path.join(CONFIG_DIR, "final_symbols.csv")
 # When equal to or greater than this number, use OpenAI Parallel Embeddings (with rate limiting) for news items instead of Neo4j Internal function 
 OPENAI_EMBED_CUTOFF = 10
 
+# Batch sizes for embedding generation
+# Number of news nodes to process in each embedding batch
+NEWS_EMBEDDING_BATCH_SIZE = 50
+
+# Number of QAExchange nodes to process in each embedding batch
+# Smaller batch size due to potentially larger content in QA exchanges
+QAEXCHANGE_EMBEDDING_BATCH_SIZE = 50
+
 # Maximum sleep time (in seconds) for transcript processing thread
 # Higher values reduce CPU usage but may slightly delay processing new notifications
 MAX_TRANSCRIPT_SLEEP_SECONDS = 300  # 5 minutes
