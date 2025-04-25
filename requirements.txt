@@ -41,13 +41,12 @@ duckdb==0.7.1
 durationpy==0.9
 earningscall==1.2.1
 et_xmlfile==2.0.0
--e git+https://github.com/faisalanjum/EventTrader.git@dabfba7cdca22a0cdc96704b0951099d4bb4e176#egg=eventtrader
+-e git+https://github.com/faisalanjum/EventTrader.git@5ec8e6304c90fa3016196e5dce21732ff880d6c2#egg=eventtrader
 exceptiongroup==1.2.2
 exchange_calendars==4.10
 executing==2.2.0
 fastapi==0.115.12
 fastjsonschema==2.21.1
-fastmcp==2.2.3
 filelock==3.18.0
 flatbuffers==25.2.10
 frozendict==2.4.6
