@@ -41,7 +41,7 @@ duckdb==0.7.1
 durationpy==0.9
 earningscall==1.2.1
 et_xmlfile==2.0.0
--e git+https://github.com/faisalanjum/EventTrader.git@5ec8e6304c90fa3016196e5dce21732ff880d6c2#egg=eventtrader
+-e git+https://github.com/faisalanjum/EventTrader.git@a31a64d81d7027acde1969639cb0b6c043bdcee1#egg=eventtrader
 exceptiongroup==1.2.2
 exchange_calendars==4.10
 executing==2.2.0
@@ -199,7 +199,6 @@ wcwidth==0.2.13
 webcolors==24.11.1
 webencodings==0.5.1
 websocket-client==0.59.0
-websockets==15.0.1
 widgetsnbextension==4.0.13
 wrapt==1.17.2
 yarg==0.1.9
