@@ -29,7 +29,7 @@ from eventtrader.keys import SEC_API_KEY
 
 # Change these to absolute imports
 import sys
-sys.path.append('/Users/macowne/Desktop/Faisal/EventTrader')  # Add project root to path
+# sys.path.append('/Users/macowne/Desktop/Faisal/EventTrader')  # Add project root to path - REMOVED
 
 from secReports.sec_websocket import SECWebSocket
 from secReports.sec_restAPI import SECRestAPI

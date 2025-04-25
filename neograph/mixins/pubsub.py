@@ -170,8 +170,6 @@ class PubSubMixin:
     def _generate_embeddings_for_pubsub_item(self, news_id):
         """Generate embedding for a news item received via PubSub"""
         
-        
-        
         if not ENABLE_NEWS_EMBEDDINGS:
             return False
         
