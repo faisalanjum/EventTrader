@@ -124,6 +124,38 @@ def main():
         # For now, assume it proceeds unless there was a major error during init.
         logger.info("DataManager processes started.")
 
+        # Define helper function to check if only withreturns items exist
+        def only_withreturns_remain(redis_client, sources, date_range_id):
+            """Check if only withreturns items remain with no other pipeline issues."""
+            has_withreturns = False
+            
+            for source in sources:
+                # Check for other pipeline issues first (faster fail)
+                # 1. Check fetch complete flag
+                fetch_key = f"batch:{source}:{date_range_id}:fetch_complete"
+                if redis_client.get(fetch_key) != "1":
+                    return False
+                
+                # 2. Check raw queue
+                if redis_client.llen(f"{source}:{RedisKeys.RAW_QUEUE}") > 0:
+                    return False
+                
+                # 3. Check pending returns
+                if redis_client.zcard(RedisKeys.get_returns_keys(source)['pending']) > 0:
+                    return False
+                
+                # 4. Check withoutreturns namespace
+                for _ in redis_client.scan_iter(f"{source}:{RedisKeys.SUFFIX_WITHOUTRETURNS}:*", count=100):
+                    return False
+                
+                # 5. Check if withreturns has items
+                for _ in redis_client.scan_iter(f"{source}:{RedisKeys.SUFFIX_WITHRETURNS}:*", count=100):
+                    has_withreturns = True
+                    break
+            
+            # Only return True if some withreturns items exist and nothing else is incomplete
+            return has_withreturns
+        
         # --- MODIFIED Main Loop (Minimalistic Version) --- 
         if feature_flags.ENABLE_LIVE_DATA:
             # Keep process alive indefinitely for live data or live+historical
@@ -184,12 +216,12 @@ def main():
                             continue
 
                         # 3. Check Processed Queue
-                        # processed_queue = f"{source}:{RedisKeys.PROCESSED_QUEUE}"
-                        # processed_len = redis_conn.llen(processed_queue)
-                        # if processed_len > 0:
-                        #     all_complete = False
-                        #     completion_status[source] = f"Processed Queue Not Empty (Len: {processed_len})"
-                        #     continue
+                        processed_queue = f"{source}:{RedisKeys.PROCESSED_QUEUE}"
+                        processed_len = redis_conn.llen(processed_queue)
+                        if processed_len > 0:
+                            all_complete = False
+                            completion_status[source] = f"Processed Queue Not Empty (Len: {processed_len})"
+                            continue
                             
                         # 4. Check Pending Returns Set (indicates ReturnsProcessor work)
                         pending_key_base = RedisKeys.get_returns_keys(source)['pending']
@@ -240,10 +272,12 @@ def main():
                     retries_waited += 1
                     
                     if retries_waited >= max_retries and not reconcile_triggered:
-                        logger.warning(f"Processing may be stuck after {retries_waited} checks, forcing reconciliation...")
-                        if hasattr(manager, 'neo4j_processor') and manager.neo4j_processor:
-                            manager.neo4j_processor.reconcile_missing_items(max_items_per_type=None)
-                            reconcile_triggered = True  # Don't repeat
+                        # Use helper function to check if only withreturns items remain
+                        if only_withreturns_remain(redis_conn, sources_to_check, date_range_key):
+                            logger.warning(f"Processing stuck with only withreturns items after {retries_waited} checks, forcing reconciliation...")
+                            if hasattr(manager, 'neo4j_processor') and manager.neo4j_processor:
+                                manager.neo4j_processor.reconcile_missing_items(max_items_per_type=None)
+                                reconcile_triggered = True
                     
                     logger.info(f"Chunk processing not yet complete. Status: {completion_status}. Waiting {chunk_monitor_interval}s...")
                     time.sleep(chunk_monitor_interval)
