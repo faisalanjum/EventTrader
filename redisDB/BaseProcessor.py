@@ -135,6 +135,12 @@ class BaseProcessor(ABC):
 
             # print(f"[^BASE Processor Debug] Standardized dict: {standardized_dict}")
 
+            # # 🔥 Hotfix starts here
+            # if 'symbols' not in standardized_dict and 'stocks' in standardized_dict:
+            #     standardized_dict['symbols'] = standardized_dict['stocks']
+            # standardized_dict['symbols'] = [s.strip().upper() for s in standardized_dict.get('symbols', []) if s]
+            # # 🔥 Hotfix ends here
+
             # 3. Check if any valid symbols exist
             if not self._has_valid_symbols(standardized_dict):
                 self.logger.debug(f"Dropping {raw_key} - no matching symbols in universe")

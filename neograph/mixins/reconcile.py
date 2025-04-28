@@ -14,10 +14,13 @@ class ReconcileMixin:
     """
 
 
-    def reconcile_missing_items(self, max_items_per_type=1000):
+    def reconcile_missing_items(self, max_items_per_type=5000):
         """
         Identify and process items in Redis that are missing from Neo4j.
         Also checks for date node creation once after midnight.
+        
+        Args:
+            max_items_per_type: Maximum items to process per type, or None for unlimited
         
         Returns:
             dict: results keyed by item type with counts
@@ -54,8 +57,9 @@ class ReconcileMixin:
                         # Find missing news IDs
                         missing_ids = set(batch) - neo4j_news_ids
                         
-                        # Process missing items
-                        for news_id in list(missing_ids)[:max_items_per_type]:
+                        # Process missing items - MODIFIED to support unlimited items
+                        item_limit = None if max_items_per_type is None else max_items_per_type
+                        for news_id in list(missing_ids)[:item_limit]:
                             original_id = news_id[7:]  # Remove "bzNews_" prefix
                             
                             # Try both namespaces
@@ -103,8 +107,9 @@ class ReconcileMixin:
                         # Find missing report IDs
                         missing_ids = set(batch) - neo4j_report_ids
                         
-                        # Process missing items
-                        for report_id in list(missing_ids)[:max_items_per_type]:
+                        # Process missing items - MODIFIED to support unlimited items
+                        item_limit = None if max_items_per_type is None else max_items_per_type
+                        for report_id in list(missing_ids)[:item_limit]:
                             # Try both namespaces
                             for ns in ['withreturns', 'withoutreturns']:
                                 key = RedisKeys.get_key(source_type=RedisKeys.SOURCE_REPORTS,
@@ -154,8 +159,9 @@ class ReconcileMixin:
                             # Find missing transcript IDs
                             missing_ids = set(batch) - neo4j_transcript_ids
                             
-                            # Process missing items
-                            for transcript_id in list(missing_ids)[:max_items_per_type]:
+                            # Process missing items - MODIFIED to support unlimited items
+                            item_limit = None if max_items_per_type is None else max_items_per_type
+                            for transcript_id in list(missing_ids)[:item_limit]:
                                 # Try both namespaces
                                 for ns in ['withreturns', 'withoutreturns']:
                                     key = RedisKeys.get_key(
@@ -395,3 +401,34 @@ class ReconcileMixin:
         except Exception as e:
             logger.error(f"Error reconciling split nodes: {e}")
             return 0
+
+    def check_withreturns_status(self):
+        """
+        Check if any items remain in withreturns namespace across all sources.
+        
+        Returns:
+            dict: Count of items in withreturns namespace by source
+        """
+        counts = {"news": 0, "reports": 0, "transcripts": 0}
+        
+        try:
+            # Check each source
+            for source, source_type in [
+                ("news", RedisKeys.SOURCE_NEWS), 
+                ("reports", RedisKeys.SOURCE_REPORTS),
+                ("transcripts", RedisKeys.SOURCE_TRANSCRIPTS)
+            ]:
+                pattern = RedisKeys.get_key(source_type=source_type, key_type="withreturns", identifier="*")
+                keys = list(self.event_trader_redis.history_client.client.scan_iter(pattern))
+                counts[source] = len(keys)
+                
+            total = sum(counts.values())
+            if total > 0:
+                logger.warning(f"[CHECK] Items remaining in withreturns: {counts} (total: {total})")
+            else:
+                logger.info(f"[CHECK] No items remaining in withreturns namespace")
+                
+            return counts
+        except Exception as e:
+            logger.error(f"[CHECK] Error checking withreturns status: {e}")
+            return counts

@@ -616,11 +616,19 @@ process_chunked_historical() {
   echo "Using validated configuration: Chunk Size=$CHUNK_SIZE days, Stability Wait=$STABILITY_WAIT seconds"
   # ------------------------------
 
+  # --- Create unique folder for this run with timestamp ---
+  local TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
+  local LOG_FOLDER_NAME="ChunkHist_${FULL_FROM_DATE}_to_${FULL_TO_DATE}_${TIMESTAMP}"
+  local LOG_FOLDER_PATH="$LOGS_DIR/$LOG_FOLDER_NAME"
+  
+  # Create folder
+  mkdir -p "$LOG_FOLDER_PATH"
+  echo "Created log folder: $LOG_FOLDER_PATH"
+  
   # Define a SINGLE log file path for the entire job
-  COMBINED_LOG_FILE="$LOGS_DIR/chunked_historical_${FULL_FROM_DATE}_to_${FULL_TO_DATE}.log"
+  COMBINED_LOG_FILE="$LOG_FOLDER_PATH/combined_${FULL_FROM_DATE}_to_${FULL_TO_DATE}.log"
   echo "Chunked processing will log to: $COMBINED_LOG_FILE"
 
-  mkdir -p "$LOGS_DIR"
   touch "$COMBINED_LOG_FILE" || { echo "ERROR: Cannot create log file $COMBINED_LOG_FILE"; exit 1; }
 
   shell_log() {
@@ -629,6 +637,7 @@ process_chunked_historical() {
   }
 
   shell_log "Log initialized for chunked processing from $FULL_FROM_DATE to $FULL_TO_DATE"
+  shell_log "Using log folder: $LOG_FOLDER_PATH"
 
   shell_log "Checking Redis connectivity..."
   if ! redis-cli ping > /dev/null 2>&1; then
@@ -677,8 +686,12 @@ process_chunked_historical() {
         chunk_end=$(date -d "@$chunk_end_seconds" "+%Y-%m-%d")
     fi
 
+    # Define chunk-specific log file
+    local CHUNK_LOG_FILE="$LOG_FOLDER_PATH/chunk_${chunk_start}_to_${chunk_end}.log"
+    
     shell_log ""
     shell_log "Processing chunk $chunk_count: $chunk_start to $chunk_end"
+    shell_log "Chunk log file: $CHUNK_LOG_FILE"
 
     shell_log "Stopping previous EventTrader instances..."
     "$0" stop-all > /dev/null 2>&1
@@ -687,19 +700,27 @@ process_chunked_historical() {
     shell_log "Starting EventTrader Python script (Chunk $chunk_count)..."
     detect_python >/dev/null
 
-    shell_log "Executing: $PYTHON_CMD $SCRIPT_PATH --from-date $chunk_start --to-date $chunk_end -historical --ensure-neo4j-initialized --log-file $COMBINED_LOG_FILE"
+    shell_log "Executing: $PYTHON_CMD $SCRIPT_PATH --from-date $chunk_start --to-date $chunk_end -historical --ensure-neo4j-initialized --log-file $CHUNK_LOG_FILE"
     $PYTHON_CMD "$SCRIPT_PATH" \
       --from-date "$chunk_start" \
       --to-date "$chunk_end" \
       -historical \
       --ensure-neo4j-initialized \
-      --log-file "$COMBINED_LOG_FILE" >> "$COMBINED_LOG_FILE" 2>&1
+      --log-file "$CHUNK_LOG_FILE" >> "$CHUNK_LOG_FILE" 2>&1
 
     PYTHON_EXIT_CODE=$?
+    
+    # Copy key information from chunk log to combined log
+    if [ -f "$CHUNK_LOG_FILE" ]; then
+      shell_log "Appending chunk log summary to combined log..."
+      echo "=============== CHUNK $chunk_count SUMMARY ($chunk_start to $chunk_end) ===============" >> "$COMBINED_LOG_FILE"
+      grep -E "ERROR|WARNING|CRITICAL|successfully|completed|failed" "$CHUNK_LOG_FILE" | tail -n 20 >> "$COMBINED_LOG_FILE"
+      echo "=================================================================" >> "$COMBINED_LOG_FILE"
+    fi
 
     if [ $PYTHON_EXIT_CODE -ne 0 ]; then
       shell_log "ERROR: Python script exited with status $PYTHON_EXIT_CODE for chunk $chunk_start to $chunk_end."
-      shell_log "Review the log file $COMBINED_LOG_FILE for Python errors."
+      shell_log "Review the log file $CHUNK_LOG_FILE for Python errors."
       # exit 1 # Optional: stop processing further chunks on error
     else
       shell_log "Python script for chunk $chunk_start to $chunk_end completed (Exit Code: $PYTHON_EXIT_CODE)."
@@ -732,7 +753,6 @@ process_chunked_historical() {
 
     shell_log "DEBUG: Advancing to next chunk start date (epoch): $current_date"
     # --- MODIFIED: Include duration in completion log --- 
-    # shell_log "Chunk $chunk_start to $chunk_end completed."
     shell_log "Chunk $chunk_count ($chunk_start to $chunk_end) completed in $CHUNK_DURATION seconds."
 
   done # End of loop through chunks
@@ -743,9 +763,25 @@ process_chunked_historical() {
   # -------------------------------------
   
   shell_log "===== CHUNKED HISTORICAL PROCESSING COMPLETE ====="
-  # --- MODIFIED: Include total duration in final log --- 
-  # shell_log "Full range $FULL_FROM_DATE to $FULL_TO_DATE has been processed."
   shell_log "Full range $FULL_FROM_DATE to $FULL_TO_DATE processed in $TOTAL_DURATION seconds."
+  
+  # Create a simple summary file
+  local SUMMARY_FILE="$LOG_FOLDER_PATH/summary.txt"
+  {
+    echo "CHUNKED HISTORICAL PROCESSING SUMMARY"
+    echo "======================================"
+    echo "Date range: $FULL_FROM_DATE to $FULL_TO_DATE"
+    echo "Run timestamp: $TIMESTAMP"
+    echo "Total chunks processed: $chunk_count"
+    echo "Total processing time: $TOTAL_DURATION seconds"
+    echo "Configuration: Chunk size=$CHUNK_SIZE days, Stability wait=$STABILITY_WAIT seconds"
+    echo ""
+    echo "See combined log for details: $COMBINED_LOG_FILE"
+    echo "Individual chunk logs are in: $LOG_FOLDER_PATH/"
+  } > "$SUMMARY_FILE"
+  
+  echo "Summary file created: $SUMMARY_FILE"
+  echo "Chunked historical processing complete. All logs are in: $LOG_FOLDER_PATH/"
 }
 
 # Process command

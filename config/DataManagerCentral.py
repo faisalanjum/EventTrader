@@ -807,9 +807,22 @@ class DataManager:
 
 
     def stop(self):
+        """
+        Stop all sources and perform final cleanup.
+        """
+        # Run final reconciliation before stopping sources
+        try:
+            self.logger.info("[STOP] Performing final reconciliation before stopping sources")
+            if hasattr(self, 'neo4j_processor') and self.neo4j_processor:
+                # Run reconciliation with unlimited items
+                self.neo4j_processor.reconcile_missing_items(max_items_per_type=None)
+        except Exception as e:
+            self.logger.error(f"[STOP] Error during final reconciliation: {e}")
+        
+        # Stop all sources (existing code)
         results = {name: manager.stop() for name, manager in self.sources.items()}
         
-        # Close Neo4j connection if initialized
+        # Close Neo4j connection if initialized (existing code)
         if hasattr(self, 'neo4j_processor'):
             try:
                 # Stop the PubSub processing thread if running
@@ -817,10 +830,18 @@ class DataManager:
                     self.neo4j_processor.stop_pubsub_processing()
                     self.neo4j_thread.join(timeout=5)
                     
+                # Check for any remaining items in withreturns namespace
+                try:
+                    remaining = self.neo4j_processor.check_withreturns_status()
+                    if sum(remaining.values()) > 0:
+                        self.logger.warning(f"[STOP] Some items remain in withreturns after stop: {remaining}")
+                except Exception as e:
+                    self.logger.error(f"[STOP] Error during final status check: {e}")
+                
                 self.neo4j_processor.close()
-                self.logger.info("Neo4j processor closed")
+                self.logger.info("[STOP] Neo4j processor closed")
             except Exception as e:
-                self.logger.error(f"Error closing Neo4j processor: {e}")
+                self.logger.error(f"[STOP] Error closing Neo4j processor: {e}")
                 
         return results
 
