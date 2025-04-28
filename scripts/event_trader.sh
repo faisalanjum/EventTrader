@@ -710,6 +710,19 @@ process_chunked_historical() {
     "$WORKSPACE_DIR/scripts/watchdog.sh" 3 30 "$chunk_start" "$chunk_end" -historical --ensure-neo4j-initialized --log-file "$CHUNK_LOG_FILE" > "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" 2>&1 &
     WATCHDOG_PID=$!
     
+    # Wait for log file to be created (max 30 seconds)
+    shell_log "Waiting for log file to be created..."
+    LOG_FILE_WAIT=0
+    while [ ! -f "$CHUNK_LOG_FILE" ] && [ $LOG_FILE_WAIT -lt 30 ]; do
+      sleep 1
+      LOG_FILE_WAIT=$((LOG_FILE_WAIT + 1))
+    done
+
+    if [ ! -f "$CHUNK_LOG_FILE" ]; then
+      shell_log "WARNING: Log file not created after 30 seconds. Creating empty file to monitor."
+      touch "$CHUNK_LOG_FILE"
+    fi
+
     # Wait for the chunk to complete by checking logs
     MAX_WAIT=7200  # 2 hours max per chunk
     ELAPSED=0
