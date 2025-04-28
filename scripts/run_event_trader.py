@@ -19,7 +19,7 @@ from utils.log_config import setup_logging, get_logger
 from redisDB.redis_constants import RedisKeys
 from config.feature_flags import (
     ENABLE_HISTORICAL_DATA, ENABLE_LIVE_DATA, 
-    QAEXCHANGE_EMBEDDING_BATCH_SIZE
+    QAEXCHANGE_EMBEDDING_BATCH_SIZE, WITHRETURNS_MAX_RETRIES
 )
 
 # Make sure logs directory exists
@@ -156,6 +156,10 @@ def main():
             date_range_key = f"{args.from_date}-{args.to_date}"
             sources_to_check = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS, RedisKeys.SOURCE_TRANSCRIPTS]
             
+            reconcile_triggered = False
+            retries_waited = 0
+            max_retries = WITHRETURNS_MAX_RETRIES
+            
             while True:
                 all_complete = True
                 completion_status = {}
@@ -233,6 +237,14 @@ def main():
                     logger.info("All Redis checks indicate historical chunk processing is complete.")
                     break # Exit the monitoring loop
                 else:
+                    retries_waited += 1
+                    
+                    if retries_waited >= max_retries and not reconcile_triggered:
+                        logger.warning(f"Processing may be stuck after {retries_waited} checks, forcing reconciliation...")
+                        if hasattr(manager, 'neo4j_processor') and manager.neo4j_processor:
+                            manager.neo4j_processor.reconcile_missing_items(max_items_per_type=None)
+                            reconcile_triggered = True  # Don't repeat
+                    
                     logger.info(f"Chunk processing not yet complete. Status: {completion_status}. Waiting {chunk_monitor_interval}s...")
                     time.sleep(chunk_monitor_interval)
             

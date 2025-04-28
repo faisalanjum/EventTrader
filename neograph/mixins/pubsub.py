@@ -31,6 +31,7 @@ class PubSubMixin:
             # Determine namespace from channel
             namespace = RedisKeys.SUFFIX_WITHRETURNS if RedisKeys.SUFFIX_WITHRETURNS in channel else RedisKeys.SUFFIX_WITHOUTRETURNS
             
+            
             # Process based on content type
             if content_type == 'news':
                 # Get the news data using standard key format
@@ -42,6 +43,13 @@ class PubSubMixin:
                 
                 # Get and process the news item
                 raw_data = self.event_trader_redis.history_client.get(key)
+
+                # If not found, try with live_client as fallback
+                if not raw_data:
+                    raw_data = self.event_trader_redis.live_client.get(key)
+                    if raw_data:
+                        logger.warning(f"[FALLBACK] Found {item_id} in live_client instead of history_client (channel: {channel})")
+
                 if raw_data:
                     news_data = json.loads(raw_data)
                     news_id = f"bzNews_{item_id.split('.')[0]}"
@@ -80,6 +88,12 @@ class PubSubMixin:
                 
                 # Get and process the report
                 raw_data = self.event_trader_redis.history_client.get(key)
+                # If not found, try with live_client as fallback
+                if not raw_data:
+                    raw_data = self.event_trader_redis.live_client.get(key)
+                    if raw_data:
+                        logger.warning(f"[FALLBACK] Found {item_id} in live_client instead of history_client (channel: {channel})")
+                
                 if raw_data:
                     report_data = json.loads(raw_data)
                     
@@ -114,6 +128,12 @@ class PubSubMixin:
                 
                 # Get and process the transcript
                 raw_data = self.event_trader_redis.history_client.get(key)
+                # If not found, try with live_client as fallback
+                if not raw_data:
+                    raw_data = self.event_trader_redis.live_client.get(key)
+                    if raw_data:
+                        logger.warning(f"[FALLBACK] Found {item_id} in live_client instead of history_client (channel: {channel})")
+                
                 if raw_data:
                     transcript_data = json.loads(raw_data)
                     

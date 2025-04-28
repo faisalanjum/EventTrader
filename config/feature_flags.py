@@ -134,5 +134,8 @@ MAX_TRANSCRIPT_SLEEP_SECONDS = 300  # 5 minutes
 # --- Historical Chunked Processing Configuration ---
 HISTORICAL_CHUNK_DAYS = 5  # Default number of days per historical processing chunk
 HISTORICAL_STABILITY_WAIT_SECONDS = 60 # Default seconds to wait for queue stability
+# Number of monitoring cycles to wait before forcing withreturns reconciliation
+# After this many checks, if items remain in withreturns namespace, force reconciliation
+WITHRETURNS_MAX_RETRIES = 3
 # --- End Historical Chunked Processing Configuration ---
 
