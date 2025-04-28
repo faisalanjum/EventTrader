@@ -63,24 +63,22 @@ class BaseProcessor(ABC):
         """Generic version of process_all_news"""
         self.logger.info(f"Starting processing for {self.source_type} from {self.queue_client.RAW_QUEUE}")
         consecutive_errors = 0
+        last_empty_log_time = 0  # Track last time we logged empty queue
 
-        print(f"\n[Processor Debug] Starting processor")
-        print(f"[Processor Debug] Source type: {self.source_type}")
-        # print(f"[Processor Debug] Queue client prefix: {self.queue_client.prefix}")
-        # print(f"[Processor Debug] Watching queue: {self.queue_client.RAW_QUEUE}")
-
+        self.logger.debug(f"Starting processor for {self.source_type}")
 
         while self.should_run:
             try:
                 result = self.queue_client.pop_from_queue(self.queue_client.RAW_QUEUE, timeout=1)
                 
-
                 if result:
-                    print(f"[Processor Debug] Popped item: {result}")
-                    pass
+                    self.logger.debug(f"Popped item: {result}")
                 else:
-                    print(f"[Processor Debug] No items in queue after timeout")
-                    pass
+                    # Only log empty queue every 60 seconds to reduce noise
+                    current_time = int(time.time())
+                    if current_time - last_empty_log_time >= 60:
+                        self.logger.debug(f"No items in queue after timeout")
+                        last_empty_log_time = current_time
 
 
                 if not result:
