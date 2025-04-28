@@ -228,6 +228,8 @@ def main():
                 status_dict[source] = f"Raw Queue Not Empty (Len: {raw_len})"
                 return False
             
+
+            # If we are doing Check 2 above we need not check hist:raw below.
             # 3. Check hist namespace is empty (both raw and processed)
             hist_prefix = RedisKeys.get_prefixes(source)['hist']
             for suffix in [RedisKeys.SUFFIX_RAW, RedisKeys.SUFFIX_PROCESSED]:

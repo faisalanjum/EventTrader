@@ -703,19 +703,64 @@ process_chunked_historical() {
     "$0" stop-all > /dev/null 2>&1
     sleep 3
 
-    shell_log "Starting EventTrader Python script (Chunk $chunk_count)..."
+    shell_log "Starting watchdog for chunk $chunk_count ($chunk_start to $chunk_end)..."
     detect_python >/dev/null
-
-    shell_log "Executing: $PYTHON_CMD $SCRIPT_PATH --from-date $chunk_start --to-date $chunk_end -historical --ensure-neo4j-initialized --log-file $CHUNK_LOG_FILE"
-    $PYTHON_CMD "$SCRIPT_PATH" \
-      --from-date "$chunk_start" \
-      --to-date "$chunk_end" \
-      -historical \
-      --ensure-neo4j-initialized \
-      --log-file "$CHUNK_LOG_FILE" >> "$CHUNK_LOG_FILE" 2>&1
-
-    PYTHON_EXIT_CODE=$?
     
+    shell_log "Executing: $WORKSPACE_DIR/scripts/watchdog.sh 3 30 $chunk_start $chunk_end -historical --ensure-neo4j-initialized --log-file $CHUNK_LOG_FILE"
+    "$WORKSPACE_DIR/scripts/watchdog.sh" 3 30 "$chunk_start" "$chunk_end" -historical --ensure-neo4j-initialized --log-file "$CHUNK_LOG_FILE" > "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" 2>&1 &
+    WATCHDOG_PID=$!
+    
+    # Wait for the chunk to complete by checking logs
+    MAX_WAIT=7200  # 2 hours max per chunk
+    ELAPSED=0
+    CHECK_INTERVAL=60
+    
+    shell_log "Waiting for chunk $chunk_count to complete (checking every ${CHECK_INTERVAL}s, timeout: ${MAX_WAIT}s)..."
+    while [ $ELAPSED -lt $MAX_WAIT ]; do
+      # Check for completion indicators in log
+      if grep -q "Historical chunk processing finished" "$CHUNK_LOG_FILE" || \
+         grep -q "Shutdown complete. Exiting Python process" "$CHUNK_LOG_FILE"; then
+        shell_log "Chunk $chunk_count completed successfully"
+        PYTHON_EXIT_CODE=0
+        break
+      fi
+      
+      # Check if the watchdog hit max restarts
+      if grep -q "Maximum restart attempts" "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log"; then
+        shell_log "ERROR: Watchdog reached maximum restart attempts for chunk $chunk_count"
+        PYTHON_EXIT_CODE=1
+        break
+      fi
+      
+      sleep $CHECK_INTERVAL
+      ELAPSED=$((ELAPSED + CHECK_INTERVAL))
+    done
+    
+    # If we timed out
+    if [ $ELAPSED -ge $MAX_WAIT ]; then
+      shell_log "WARNING: Chunk $chunk_count timed out after ${MAX_WAIT}s"
+      PYTHON_EXIT_CODE=1
+    fi
+    
+    # Always terminate the watchdog gracefully
+    shell_log "Stopping watchdog for chunk $chunk_count..."
+    kill -TERM $WATCHDOG_PID 2>/dev/null
+
+    # Only stop all processes if the exit code indicates success
+    if [ $PYTHON_EXIT_CODE -eq 0 ]; then
+      shell_log "Chunk $chunk_count completed successfully. Stopping Event Trader before next chunk..."
+      "$0" stop-all > /dev/null 2>&1
+      sleep 5 # Give time for processes to stop
+      shell_log "Python script for chunk $chunk_start to $chunk_end completed successfully."
+    else
+      shell_log "Chunk $chunk_count exited with ERROR ($PYTHON_EXIT_CODE). Not stopping automatically. Manual intervention may be needed."
+      shell_log "ERROR: Python script exited with status $PYTHON_EXIT_CODE for chunk $chunk_start to $chunk_end."
+      shell_log "Review the log file $CHUNK_LOG_FILE for Python errors."
+      # Uncomment to exit entire chunked process on failure
+      # shell_log "Aborting chunked processing due to chunk failure."
+      # exit 1
+    fi
+
     # Copy key information from chunk log to combined log
     if [ -f "$CHUNK_LOG_FILE" ]; then
       shell_log "Appending chunk log summary to combined log..."
@@ -723,27 +768,6 @@ process_chunked_historical() {
       grep -E "ERROR|WARNING|CRITICAL|successfully|completed|failed" "$CHUNK_LOG_FILE" | tail -n 20 >> "$COMBINED_LOG_FILE"
       echo "=================================================================" >> "$COMBINED_LOG_FILE"
     fi
-
-    if [ $PYTHON_EXIT_CODE -ne 0 ]; then
-      shell_log "ERROR: Python script exited with status $PYTHON_EXIT_CODE for chunk $chunk_start to $chunk_end."
-      shell_log "Review the log file $CHUNK_LOG_FILE for Python errors."
-      # exit 1 # Optional: stop processing further chunks on error
-    else
-      shell_log "Python script for chunk $chunk_start to $chunk_end completed (Exit Code: $PYTHON_EXIT_CODE)."
-    fi
-
-    # --- RE-ADDED stop-all to ensure clean state between chunks ---
-    # Ensure Python exited successfully before stopping (optional, but safer)
-    if [ $PYTHON_EXIT_CODE -eq 0 ]; then
-        shell_log "Chunk $chunk_count Python process exited successfully. Stopping Event Trader before next chunk..."
-        "$0" stop-all > /dev/null 2>&1
-        sleep 5 # Give time for processes to stop
-    else
-        shell_log "Chunk $chunk_count Python process exited with ERROR ($PYTHON_EXIT_CODE). Not stopping automatically. Manual intervention may be needed."
-        # Decide if you want to exit the whole script here or try the next chunk
-        # exit 1 # Example: Exit the whole script on Python error
-    fi
-    # --------------------------------------------------------------
 
     # --- Calculate and Log Chunk Duration ---
     CHUNK_END_TIME=$(date +%s)
