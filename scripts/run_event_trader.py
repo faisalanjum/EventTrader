@@ -183,26 +183,10 @@ def main():
                 status = {}
                 
                 for source in sources:
-                    # 1. Check fetch complete flag (required)
-                    fetch_key = f"batch:{source}:{date_range_key}:fetch_complete"
-                    if redis.get(fetch_key) != "1":
+                    # Use helper function to check initial processing conditions
+                    if not check_initial_processing(redis, source, date_range_key, status):
                         all_complete = False
-                        status[source] = "Fetch Incomplete"
                         continue
-                        
-                    # 2. Check raw queue is empty
-                    raw_queue = f"{source}:{RedisKeys.RAW_QUEUE}"
-                    if redis.llen(raw_queue) > 0:
-                        all_complete = False
-                        status[source] = "Raw Queue Not Empty"
-                        continue
-                    
-                    # 3. Check processed queue is empty - SKIPPED: processed queue intentionally retains items
-                    # processed_queue = f"{source}:{RedisKeys.PROCESSED_QUEUE}"
-                    # if redis.llen(processed_queue) > 0:
-                    #     all_complete = False
-                    #     status[source] = "Processed Queue Not Empty"
-                    #     continue
                         
                     status[source] = "Complete"
                 
@@ -212,6 +196,47 @@ def main():
                     
                 logger.info(f"Gap-fill in progress: {status}. Waiting {interval}s...")
                 time.sleep(interval)
+        
+        # Helper function to check initial processing conditions
+        def check_initial_processing(redis_client, source, date_range_key, status_dict):
+            """
+            Check the first three conditions for processing completion:
+            1. Fetch complete flag
+            2. Raw queue empty
+            3. Historical namespaces empty
+            
+            Args:
+                redis_client: Redis client instance
+                source: Source type (news, reports, transcripts)
+                date_range_key: Date range identifier 
+                status_dict: Dictionary to update with status messages
+                
+            Returns:
+                bool: True if all conditions pass, False otherwise
+            """
+            # 1. Check fetch complete flag
+            fetch_key = f"batch:{source}:{date_range_key}:fetch_complete"
+            fetch_status = redis_client.get(fetch_key)
+            if fetch_status != "1":
+                status_dict[source] = f"Fetch Incomplete (Flag: {fetch_status})"
+                return False
+            
+            # 2. Check raw queue
+            raw_queue = f"{source}:{RedisKeys.RAW_QUEUE}"
+            raw_len = redis_client.llen(raw_queue)
+            if raw_len > 0:
+                status_dict[source] = f"Raw Queue Not Empty (Len: {raw_len})"
+                return False
+            
+            # 3. Check hist namespace is empty (both raw and processed)
+            hist_prefix = RedisKeys.get_prefixes(source)['hist']
+            for suffix in [RedisKeys.SUFFIX_RAW, RedisKeys.SUFFIX_PROCESSED]:
+                pattern = f"{hist_prefix}{suffix}:*"
+                if any(True for _ in redis_client.scan_iter(pattern, count=100)):
+                    status_dict[source] = f"Historical {suffix.capitalize()} Items Not Empty"
+                    return False
+            
+            return True
         
         # --- MODIFIED Main Loop (Minimalistic Version) --- 
         if feature_flags.ENABLE_LIVE_DATA:
@@ -266,30 +291,10 @@ def main():
 
                 for source in sources_to_check:
                     try:
-                        # Use the obtained redis_conn for checks
-                        # 1. Check Fetch Complete Flag
-                        fetch_key = f"batch:{source}:{date_range_key}:fetch_complete"
-                        fetch_status = redis_conn.get(fetch_key)
-                        if fetch_status != "1":
+                        # Use helper function to check initial processing conditions
+                        if not check_initial_processing(redis_conn, source, date_range_key, completion_status):
                             all_complete = False
-                            completion_status[source] = f"Fetch Incomplete (Flag: {fetch_status})"
-                            continue 
-                        
-                        # 2. Check Raw Queue
-                        raw_queue = f"{source}:{RedisKeys.RAW_QUEUE}"
-                        raw_len = redis_conn.llen(raw_queue)
-                        if raw_len > 0:
-                            all_complete = False
-                            completion_status[source] = f"Raw Queue Not Empty (Len: {raw_len})"
                             continue
-
-                        # 3. Check Processed Queue - SKIPPED: processed queue intentionally retains items
-                        # processed_queue = f"{source}:{RedisKeys.PROCESSED_QUEUE}"
-                        # processed_len = redis_conn.llen(processed_queue)
-                        # if processed_len > 0:
-                        #     all_complete = False
-                        #     completion_status[source] = f"Processed Queue Not Empty (Len: {processed_len})"
-                        #     continue
                             
                         # 4. Check Pending Returns Set (indicates ReturnsProcessor work)
                         pending_key_base = RedisKeys.get_returns_keys(source)['pending']
