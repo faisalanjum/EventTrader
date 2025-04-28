@@ -703,33 +703,29 @@ process_chunked_historical() {
     "$0" stop-all > /dev/null 2>&1
     sleep 3
 
+    # Create empty log file first to ensure it exists for monitoring
+    touch "$CHUNK_LOG_FILE"
+    
+    # FIXED VERSION: Directly run the Python command with parameters
     shell_log "Starting EventTrader for chunk $chunk_count ($chunk_start to $chunk_end)..."
     detect_python >/dev/null
-
-    # Run the process with watchdog monitoring
-    shell_log "Starting watchdog monitoring with max 3 restart attempts..."
-
-    # Pass the right arguments to the watchdog so it can construct the proper start command
-    # The watchdog will add "start" and handle the parameters correctly
-    "$WORKSPACE_DIR/scripts/watchdog.sh" 3 30 "$chunk_start" "$chunk_end" "-historical" "--ensure-neo4j-initialized" "--log-file" "$CHUNK_LOG_FILE" > "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" 2>&1 &
-    WATCHDOG_PID=$!
-
-    # Give watchdog time to start EventTrader
-    shell_log "Waiting for EventTrader to initialize..."
-    sleep 10
-
-    # Check for the log file and create it if needed
-    if [ ! -f "$CHUNK_LOG_FILE" ]; then
-      shell_log "Creating initial empty log file..."
-      touch "$CHUNK_LOG_FILE"
-    fi
-
+    
+    # Run EventTrader directly with the proper parameters
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$chunk_start" --to-date "$chunk_end" -historical --ensure-neo4j-initialized --log-file "$CHUNK_LOG_FILE" > "$CHUNK_LOG_FILE" 2>&1 &
+    EVENTTRADER_PID=$!
+    
+    # Write PID file for monitoring
+    echo "$EVENTTRADER_PID" > "$PID_FILE"
+    shell_log "EventTrader started with PID: $EVENTTRADER_PID"
+    
     # Wait for the chunk to complete
     MAX_WAIT=7200  # 2 hours max per chunk
     ELAPSED=0
     CHECK_INTERVAL=60
 
     shell_log "Monitoring chunk completion (timeout: ${MAX_WAIT}s)..."
+    
+    # Monitor EventTrader process
     while [ $ELAPSED -lt $MAX_WAIT ]; do
       # Check for completion in the log file
       if grep -q "Historical chunk processing finished" "$CHUNK_LOG_FILE" 2>/dev/null || \
@@ -739,19 +735,15 @@ process_chunked_historical() {
         break
       fi
       
-      # Check if EventTrader is still running via the PID file
-      if [ -f "$PID_FILE" ] && ps -p $(cat "$PID_FILE") > /dev/null 2>&1; then
+      # Check if EventTrader is still running
+      if ps -p "$EVENTTRADER_PID" > /dev/null 2>&1; then
         # Process is still running, continue waiting
-        shell_log "EventTrader still running (PID: $(cat "$PID_FILE"))..."
+        shell_log "EventTrader still running (PID: $EVENTTRADER_PID)..."
       else
-        # Check if watchdog has given up (reached max restart attempts)
-        if grep -q "Maximum restart attempts.*reached" "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" 2>/dev/null; then
-          shell_log "ERROR: Watchdog reached maximum restart attempts"
-          PYTHON_EXIT_CODE=1
-          break
-        else
-          shell_log "EventTrader not running. Watchdog should restart it..."
-        fi
+        # Process died, report failure
+        shell_log "ERROR: EventTrader process (PID: $EVENTTRADER_PID) has died unexpectedly"
+        PYTHON_EXIT_CODE=1
+        break
       fi
       
       sleep $CHECK_INTERVAL
@@ -764,11 +756,21 @@ process_chunked_historical() {
       PYTHON_EXIT_CODE=1
     fi
 
-    # Stop the watchdog
-    shell_log "Stopping watchdog..."
-    if [ -n "$WATCHDOG_PID" ] && ps -p $WATCHDOG_PID > /dev/null 2>&1; then
-      kill -TERM $WATCHDOG_PID 2>/dev/null
+    # Make sure EventTrader is stopped
+    if ps -p "$EVENTTRADER_PID" > /dev/null 2>&1; then
+      shell_log "Stopping EventTrader process (PID: $EVENTTRADER_PID)..."
+      kill -TERM "$EVENTTRADER_PID" 2>/dev/null
+      sleep 5
+      
+      # Force kill if still running
+      if ps -p "$EVENTTRADER_PID" > /dev/null 2>&1; then
+        shell_log "Force killing EventTrader process..."
+        kill -9 "$EVENTTRADER_PID" 2>/dev/null
+      fi
     fi
+    
+    # Clear PID file
+    rm -f "$PID_FILE" 2>/dev/null
 
     # Only stop all processes if the exit code indicates success
     if [ $PYTHON_EXIT_CODE -eq 0 ]; then
