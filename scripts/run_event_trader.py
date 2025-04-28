@@ -45,6 +45,8 @@ def parse_args():
                         help='Initialize Neo4j database only without running the full system')
     parser.add_argument('--ensure-neo4j-initialized', action='store_true',
                         help='Ensure Neo4j is initialized but continue running the system')
+    parser.add_argument('--gap-fill', action='store_true',
+                        help='Gap-fill mode: fetch historical data and exit after initial processing (for filling missing days)')
     return parser.parse_args()
 
 def main():
@@ -156,6 +158,61 @@ def main():
             # Only return True if some withreturns items exist and nothing else is incomplete
             return has_withreturns
         
+        # Define helper function for gap-fill monitoring
+        def monitor_gap_fill(manager_instance, date_from, date_to):
+            """Monitor only data fetching and initial processing for gap-fill mode."""
+            logger.info("Gap-fill mode: Will wait for data fetching and initial processing")
+            interval = 30  # Check interval in seconds
+            
+            # Get Redis connection
+            try:
+                if 'news' not in manager_instance.sources or not manager_instance.sources['news'].redis:
+                    raise ConnectionError("Can't access Redis client")
+                redis = manager_instance.sources['news'].redis.live_client.client
+                redis.ping()  # Verify connection
+            except Exception as e:
+                logger.error(f"Redis connection error: {e}")
+                return False
+                
+            # Monitoring loop
+            date_range_key = f"{date_from}-{date_to}"
+            sources = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS, RedisKeys.SOURCE_TRANSCRIPTS]
+            
+            while True:
+                all_complete = True
+                status = {}
+                
+                for source in sources:
+                    # 1. Check fetch complete flag (required)
+                    fetch_key = f"batch:{source}:{date_range_key}:fetch_complete"
+                    if redis.get(fetch_key) != "1":
+                        all_complete = False
+                        status[source] = "Fetch Incomplete"
+                        continue
+                        
+                    # 2. Check raw queue is empty
+                    raw_queue = f"{source}:{RedisKeys.RAW_QUEUE}"
+                    if redis.llen(raw_queue) > 0:
+                        all_complete = False
+                        status[source] = "Raw Queue Not Empty"
+                        continue
+                    
+                    # 3. Check processed queue is empty
+                    processed_queue = f"{source}:{RedisKeys.PROCESSED_QUEUE}"
+                    if redis.llen(processed_queue) > 0:
+                        all_complete = False
+                        status[source] = "Processed Queue Not Empty"
+                        continue
+                        
+                    status[source] = "Complete"
+                
+                if all_complete:
+                    logger.info("Gap-fill complete: All data fetched and initial processing done")
+                    return True
+                    
+                logger.info(f"Gap-fill in progress: {status}. Waiting {interval}s...")
+                time.sleep(interval)
+        
         # --- MODIFIED Main Loop (Minimalistic Version) --- 
         if feature_flags.ENABLE_LIVE_DATA:
             # Keep process alive indefinitely for live data or live+historical
@@ -164,8 +221,19 @@ def main():
                 time.sleep(60) # Check less frequently when just keeping alive
         elif feature_flags.ENABLE_HISTORICAL_DATA:
             # Historical only mode: Wait for processing related to this chunk to finish
-            logger.info("Historical-only mode: Monitoring Redis for chunk completion...")
-            chunk_monitor_interval = 30 # Seconds between checks
+            if args.gap_fill:
+                # Use dedicated gap-fill monitoring - exits when fetching & initial processing complete
+                if monitor_gap_fill(manager, args.from_date, args.to_date):
+                    logger.info("Gap-fill completed. Skipping QA embeddings. Shutting down.")
+                    manager.stop()
+                    sys.exit(0)
+                else:
+                    logger.error("Gap-fill monitoring failed. Attempting clean shutdown.")
+                    manager.stop()
+                    sys.exit(1)
+            else:
+                logger.info("Historical-only mode: Monitoring Redis for chunk completion...")
+                chunk_monitor_interval = 30 # Seconds between checks
             
             # --- Get Redis connection from existing manager --- 
             try:

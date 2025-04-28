@@ -41,6 +41,7 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  --to-date YYYY-MM-DD    End date for historical data (default: today)"
     echo "  -historical             Enable historical data only (disables live)"
     echo "  -live                   Enable live data only (disables historical)"
+    echo "  --gap-fill              Process in gap-fill mode (exits after initial data processing)"
     echo "  --log-file PATH         Custom log file path"
     echo "  --help, -h              Show this help message"
     echo ""
@@ -99,6 +100,9 @@ detect_python() {
 # Parse command line flags - process all arguments
 ARGS=()
 DATE_ARGS=()
+HISTORICAL_FLAG=""
+LIVE_FLAG=""
+GAP_FILL_FLAG=""
 
 # Process all arguments
 for arg in "$@"; do
@@ -109,6 +113,8 @@ for arg in "$@"; do
     HISTORICAL_FLAG="-historical"
   elif [[ "$arg" == "-live" ]]; then
     LIVE_FLAG="-live"
+  elif [[ "$arg" == "--gap-fill" ]]; then
+    GAP_FILL_FLAG="--gap-fill"
   elif [[ "$arg" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
     # This looks like a date
     DATE_ARGS+=("$arg")
@@ -304,11 +310,11 @@ start() {
   
   if [ "$RUN_BACKGROUND" = true ]; then
     # Start in background - logging handled by log_config.py
-    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG $INIT_FLAG > /dev/null 2>&1 &
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG $INIT_FLAG $GAP_FILL_FLAG > /dev/null 2>&1 &
     PID=$!
   else
     # Start in foreground with output to terminal
-    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG $INIT_FLAG &
+    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$FROM_DATE" --to-date "$TO_DATE" $HISTORICAL_FLAG $LIVE_FLAG $INIT_FLAG $GAP_FILL_FLAG &
     PID=$!
   fi
   
@@ -1001,6 +1007,7 @@ except Exception as e:
     echo "  --background                 # Run commands in background mode"
     echo "  -historical                  # Enable historical data only (disables live)"
     echo "  -live                        # Enable live data only (disables historical)"
+    echo "  --gap-fill                   # Process in gap-fill mode (exits after initial data processing)"
     echo ""
     echo "Examples:"
     echo "  $0 start                        # Start with yesterday to today"

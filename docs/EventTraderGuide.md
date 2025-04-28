@@ -18,6 +18,9 @@ There are two primary ways to start the system:
    # Historical ONLY: Processes the specified range as ONE batch, then EXITS
    ./scripts/event_trader.sh start -historical 2025-03-01 2025-03-10 
 
+   # Gap-Fill Mode: Quickly fetch and seed historical data without waiting for full processing (Only waits for processed quque to be empty)
+   ./scripts/event_trader.sh start -historical 2025-03-01 2025-03-02 --gap-fill
+
    # Live ONLY: Runs live streams continuously (specify start date for Neo4j init)
    ./scripts/event_trader.sh start -live 2025-04-21
    
@@ -26,6 +29,7 @@ There are two primary ways to start the system:
    ```
    *   Without `-historical` or `-live`, it enables both modes and the main process runs indefinitely.
    *   With `-historical`, it runs *only* the historical processing for the given range and the main process exits automatically after internal Redis monitoring confirms completion.
+   *   With `-historical --gap-fill`, it quickly fetches and seeds historical data for the specified dates, exiting as soon as data is fetched and in the processing queues. This is ideal for filling small gaps in historical data without waiting for full processing.
    *   With `-live`, it runs *only* the live data streams and the main process runs indefinitely.
 
 **B) Chunked Historical Processing (`chunked-historical`):**
