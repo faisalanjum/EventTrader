@@ -706,21 +706,37 @@ process_chunked_historical() {
     shell_log "Starting watchdog for chunk $chunk_count ($chunk_start to $chunk_end)..."
     detect_python >/dev/null
     
-    shell_log "Executing: $WORKSPACE_DIR/scripts/watchdog.sh 3 30 $chunk_start $chunk_end -historical --ensure-neo4j-initialized --log-file $CHUNK_LOG_FILE"
+    # Create the command more carefully - exactly match the original structure
+    shell_log "Executing with watchdog: $PYTHON_CMD $SCRIPT_PATH --from-date $chunk_start --to-date $chunk_end -historical --ensure-neo4j-initialized --log-file $CHUNK_LOG_FILE"
+
+    # Start EventTrader via watchdog
     "$WORKSPACE_DIR/scripts/watchdog.sh" 3 30 "$chunk_start" "$chunk_end" -historical --ensure-neo4j-initialized --log-file "$CHUNK_LOG_FILE" > "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" 2>&1 &
     WATCHDOG_PID=$!
-    
-    # Wait for log file to be created (max 30 seconds)
-    shell_log "Waiting for log file to be created..."
-    LOG_FILE_WAIT=0
-    while [ ! -f "$CHUNK_LOG_FILE" ] && [ $LOG_FILE_WAIT -lt 30 ]; do
-      sleep 1
-      LOG_FILE_WAIT=$((LOG_FILE_WAIT + 1))
-    done
 
+    # Create an empty log file if it doesn't exist to avoid grep errors
     if [ ! -f "$CHUNK_LOG_FILE" ]; then
-      shell_log "WARNING: Log file not created after 30 seconds. Creating empty file to monitor."
+      shell_log "Creating initial empty log file..."
       touch "$CHUNK_LOG_FILE"
+    fi
+
+    # Wait a moment for EventTrader to start
+    shell_log "Waiting for EventTrader to initialize..."
+    sleep 10
+
+    # Check if watchdog started properly
+    if ! ps -p $WATCHDOG_PID > /dev/null 2>&1; then
+      shell_log "WARNING: Watchdog process not found - it may have failed to start"
+      # Capture watchdog logs to diagnose the issue
+      if [ -f "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" ]; then
+        shell_log "Watchdog log contents:"
+        cat "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" >> "$COMBINED_LOG_FILE"
+      fi
+      PYTHON_EXIT_CODE=1
+      # Skip the waiting loop entirely
+      MAX_WAIT=0
+      ELAPSED=1
+    else
+      shell_log "Watchdog process confirmed running with PID $WATCHDOG_PID"
     fi
 
     # Wait for the chunk to complete by checking logs
@@ -730,19 +746,30 @@ process_chunked_historical() {
     
     shell_log "Waiting for chunk $chunk_count to complete (checking every ${CHECK_INTERVAL}s, timeout: ${MAX_WAIT}s)..."
     while [ $ELAPSED -lt $MAX_WAIT ]; do
+      # First check if EventTrader is running via watchdog log
+      if grep -q "EventTrader running" "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" 2>/dev/null; then
+        shell_log "Confirmed EventTrader is running via watchdog"
+      fi
+
       # Check for completion indicators in log
-      if grep -q "Historical chunk processing finished" "$CHUNK_LOG_FILE" || \
-         grep -q "Shutdown complete. Exiting Python process" "$CHUNK_LOG_FILE"; then
+      if grep -q "Historical chunk processing finished" "$CHUNK_LOG_FILE" 2>/dev/null || \
+         grep -q "Shutdown complete. Exiting Python process" "$CHUNK_LOG_FILE" 2>/dev/null; then
         shell_log "Chunk $chunk_count completed successfully"
         PYTHON_EXIT_CODE=0
         break
       fi
       
       # Check if the watchdog hit max restarts
-      if grep -q "Maximum restart attempts" "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log"; then
+      if grep -q "Maximum restart attempts" "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" 2>/dev/null; then
         shell_log "ERROR: Watchdog reached maximum restart attempts for chunk $chunk_count"
         PYTHON_EXIT_CODE=1
         break
+      fi
+      
+      # Also check for any errors in the watchdog log
+      if grep -q "ERROR:" "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" 2>/dev/null; then
+        shell_log "Found ERROR in watchdog log, checking details..."
+        grep "ERROR:" "$LOG_FOLDER_PATH/watchdog_${chunk_count}.log" | tail -5 >> "$COMBINED_LOG_FILE"
       fi
       
       sleep $CHECK_INTERVAL
