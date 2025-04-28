@@ -197,12 +197,12 @@ def main():
                         status[source] = "Raw Queue Not Empty"
                         continue
                     
-                    # 3. Check processed queue is empty
-                    processed_queue = f"{source}:{RedisKeys.PROCESSED_QUEUE}"
-                    if redis.llen(processed_queue) > 0:
-                        all_complete = False
-                        status[source] = "Processed Queue Not Empty"
-                        continue
+                    # 3. Check processed queue is empty - SKIPPED: processed queue intentionally retains items
+                    # processed_queue = f"{source}:{RedisKeys.PROCESSED_QUEUE}"
+                    # if redis.llen(processed_queue) > 0:
+                    #     all_complete = False
+                    #     status[source] = "Processed Queue Not Empty"
+                    #     continue
                         
                     status[source] = "Complete"
                 
@@ -283,13 +283,13 @@ def main():
                             completion_status[source] = f"Raw Queue Not Empty (Len: {raw_len})"
                             continue
 
-                        # 3. Check Processed Queue
-                        processed_queue = f"{source}:{RedisKeys.PROCESSED_QUEUE}"
-                        processed_len = redis_conn.llen(processed_queue)
-                        if processed_len > 0:
-                            all_complete = False
-                            completion_status[source] = f"Processed Queue Not Empty (Len: {processed_len})"
-                            continue
+                        # 3. Check Processed Queue - SKIPPED: processed queue intentionally retains items
+                        # processed_queue = f"{source}:{RedisKeys.PROCESSED_QUEUE}"
+                        # processed_len = redis_conn.llen(processed_queue)
+                        # if processed_len > 0:
+                        #     all_complete = False
+                        #     completion_status[source] = f"Processed Queue Not Empty (Len: {processed_len})"
+                        #     continue
                             
                         # 4. Check Pending Returns Set (indicates ReturnsProcessor work)
                         pending_key_base = RedisKeys.get_returns_keys(source)['pending']
