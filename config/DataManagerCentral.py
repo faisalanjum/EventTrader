@@ -646,15 +646,6 @@ class DataManager:
         self.logger.info("Initializing Neo4j processor")
         
         try:
-            # Get Redis client if available
-            # event_trader_redis = None
-            # if hasattr(self, 'sources') and 'news' in self.sources:
-            #     source_manager = self.sources['news']
-            #     if hasattr(source_manager, 'redis'):
-            #         event_trader_redis = source_manager.redis
-            #         self.logger.info("Using Redis client from news source")
-
-
             # Find first available Redis client
             event_trader_redis = None
             for source_name in self.sources:
@@ -665,15 +656,15 @@ class DataManager:
             
             if event_trader_redis:
                 self.neo4j_processor = Neo4jProcessor(event_trader_redis)
-
-
-            # Create Neo4j processor with default connection settings
-            # self.neo4j_processor = Neo4jProcessor(event_trader_redis=event_trader_redis)
             
             # Connect to Neo4j
             if not self.neo4j_processor.connect():
                 self.logger.error("Failed to connect to Neo4j")
                 return False
+            
+            # Explicitly call XBRL reconciliation after connection is established
+            self.logger.info("Neo4j connection established, explicitly triggering XBRL reconciliation")
+            self.neo4j_processor.reconcile_xbrl_after_connect()
                 
             # Check if Neo4j is already initialized
             if self.neo4j_processor.is_initialized():

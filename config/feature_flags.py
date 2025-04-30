@@ -5,17 +5,17 @@ ENABLE_LIVE_DATA = True
 
 # SEC API Form Type Constants
 
-VALID_FORM_TYPES = ['8-K', '8-K/A']
-FORM_TYPES_REQUIRING_XML = ['10-K', '10-Q', '10-K/A', '10-Q/A']
-FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '8-K/A'] 
+# VALID_FORM_TYPES = ['8-K', '8-K/A']
+# FORM_TYPES_REQUIRING_XML = ['10-K', '10-Q', '10-K/A', '10-Q/A']
+# FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '8-K/A'] 
 
 
 # SEC API Form Type Constants
-# VALID_FORM_TYPES = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', 
-#                     'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC TO-I', '425', 'SC 14D9', '6-K']
+VALID_FORM_TYPES = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A', 
+                    'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC TO-I', '425', 'SC 14D9', '6-K']
 
-# FORM_TYPES_REQUIRING_XML = ['10-K', '10-Q', '10-K/A', '10-Q/A']
-# FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A'] 
+FORM_TYPES_REQUIRING_XML = ['10-K', '10-Q', '10-K/A', '10-Q/A']
+FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A'] 
 
 
 
@@ -56,14 +56,14 @@ FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '8-K/A']
 # When set to True, enables XBRL report processing which extracts detailed financial data
 # When set to False, skips XBRL processing entirely and does not initialize related resources
 # This can significantly reduce memory usage and CPU load when XBRL data is not needed
-ENABLE_XBRL_PROCESSING = False
+ENABLE_XBRL_PROCESSING = True
 
 # XBRL Thread Pool Configuration
 # Number of worker threads for XBRL processing (only used when ENABLE_XBRL_PROCESSING is True)
 # Higher values increase parallelism but consume more system resources
 # Recommended range: 2-12 based on available CPU cores
 # This setting does not interfere with event_trader.sh or other scripts
-XBRL_WORKER_THREADS = 8
+XBRL_WORKER_THREADS = 8 # Changed from 8
 
 # When True, reject news items that have more than one symbol
 REJECT_MULTIPLE_SYMBOLS = True

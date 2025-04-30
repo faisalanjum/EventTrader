@@ -13,6 +13,21 @@ class XbrlMixin:
     Uses a thread pool for potentially long-running tasks.
     """
 
+    def reconcile_xbrl_after_connect(self):
+        """
+        Call this method after Neo4j connection is established to ensure
+        XBRL reconciliation happens correctly.
+        """
+        if hasattr(self, 'enable_xbrl') and self.enable_xbrl and self.manager and self.manager.driver and self.xbrl_executor:
+            logger.info("Performing XBRL reconciliation post-connection...")
+            self._reconcile_interrupted_xbrl_tasks()
+        else:
+            if not hasattr(self, 'enable_xbrl') or not self.enable_xbrl:
+                logger.info("XBRL reconciliation skipped - feature disabled")
+            elif not self.manager or not self.manager.driver:
+                logger.warning("Cannot perform XBRL reconciliation - Neo4j connection not available")
+            elif not self.xbrl_executor:
+                logger.warning("Cannot perform XBRL reconciliation - XBRL executor not initialized")
 
     def _process_xbrl(self, session, report_id, cik, accessionNo):
         """

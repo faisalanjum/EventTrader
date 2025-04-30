@@ -143,10 +143,12 @@ class PubSubMixin:
                         transcript_data=transcript_data
                     )
                     
-                    logger.info(f"Successfully processed transcript {item_id}")
 
                     # After successful processing, generate QAExchange embeddings
                     if success:
+                        
+                        logger.info(f"Successfully processed transcript {item_id}")
+
                         try:
                             # Get ALL QAExchange nodes for this transcript
                             query = f"""

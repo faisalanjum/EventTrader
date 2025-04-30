@@ -77,14 +77,9 @@ class Neo4jProcessor(
             logger.warning("OpenAI API key missing; LLM-based QA filtering will be disabled.")
         # <<<=========================================>>>
 
-        # --- ADDED: Call XBRL reconciliation after initialization ---
-        # Ensure this runs only after connection and xbrl_executor are ready
-        if self.manager and self.manager.driver and self.xbrl_executor:
-            logger.info("Neo4jProcessor initialized, performing XBRL reconciliation...")
-            self._reconcile_interrupted_xbrl_tasks()
-        else:
-            logger.warning("Skipping XBRL reconciliation - Neo4j connection or XBRL executor not ready during init.")
-        # ----------------------------------------------------------
+        # Note: XBRL reconciliation will be explicitly called by reconcile_xbrl_after_connect() 
+        # after connection is established, not during initialization
+        logger.info("Neo4jProcessor initialized, XBRL reconciliation will be triggered after connection")
 
     pass
 
