@@ -47,7 +47,7 @@ chunked-historical {from_date} {to_date}
     - **`process_chunked_historical()` function execution**:
       - **Configuration loading**:
         - Calls `detect_python()` to find Python interpreter
-        - Loads `HISTORICAL_CHUNK_DAYS` and `HISTORICAL_STABILITY_WAIT_SECONDS` from `config/feature_flags.py`
+        - Loads `HISTORICAL_CHUNK_DAYS` and `HISTORICAL_STABILITY_WAIT_SECONDS` from **[feature_flags.py](../../config/feature_flags.py)**
         - Validates configuration values are positive integers
         
       - **Logging setup**:
@@ -143,6 +143,7 @@ chunked-historical {from_date} {to_date}
     - **System startup**:
       - Calls `manager.start()` to begin processing
       - Enters monitoring loop for completion in historical-only mode
+
 
     - **Completion monitoring** (historical mode):
       - Helper functions:

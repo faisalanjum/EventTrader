@@ -27,7 +27,7 @@ class EventTraderRedis:
 
     def __init__(self, source=RedisKeys.SOURCE_NEWS, clear_config=False, preserve_processed=True):
         self.source = source
-        prefixes = RedisKeys.get_prefixes(self.source) # {'live': 'news:benzinga:live:', 'hist': 'news:benzinga:hist:'}
+        prefixes = RedisKeys.get_prefixes(self.source) # {'live': 'news:live:', 'hist': 'news:hist:'}
         self.logger = get_logger(f"{self.__class__.__name__}")
         
         # Initialize Redis clients with source-specific prefixes
@@ -110,14 +110,14 @@ class EventTraderRedis:
 
 class RedisClient:
     # Queue names (shared between live and hist)
-    # RAW_QUEUE = "news:benzinga:raw:queue"     
-    # PROCESSED_QUEUE = "news:benzinga:processed:queue"
-    # FAILED_QUEUE = "news:benzinga:failed:queue"
+    # RAW_QUEUE = "news:raw:queue"     
+    # PROCESSED_QUEUE = "news:processed:queue"
+    # FAILED_QUEUE = "news:failed:queue"
 
     # Queue names organized under queues/ directory
-    # RAW_QUEUE = "news:benzinga:queues:raw"     
-    # PROCESSED_QUEUE = "news:benzinga:queues:processed"
-    # FAILED_QUEUE = "news:benzinga:queues:failed"    
+    # RAW_QUEUE = "news:queues:raw"     
+    # PROCESSED_QUEUE = "news:queues:processed"
+    # FAILED_QUEUE = "news:queues:failed"    
 
     # Redis connection settings
     REDIS_CONN_SETTINGS = {
@@ -133,12 +133,12 @@ class RedisClient:
         self.host = host
         self.port = port
         self.db = db
-        self.prefix = prefix  # Will be 'news:benzinga:live:' or 'news:benzinga:hist:'
+        self.prefix = prefix  # Will be 'news:live:' or 'news:hist:'
         self.logger = get_logger(f"{self.__class__.__name__}")
 
         # Get source-specific queue names
         if source_type:
-            queues = RedisQueues.get_queues(source_type) # {'RAW_QUEUE': 'news:benzinga:queues:raw', 'PROCESSED_QUEUE': 'news:benzinga:queues:processed'
+            queues = RedisQueues.get_queues(source_type) # {'RAW_QUEUE': 'news:queues:raw', 'PROCESSED_QUEUE': 'news:queues:processed'
             self.RAW_QUEUE = queues['RAW_QUEUE']
             self.PROCESSED_QUEUE = queues['PROCESSED_QUEUE']
             self.FAILED_QUEUE = queues['FAILED_QUEUE']
@@ -195,7 +195,7 @@ class RedisClient:
                 # self.logger.info(f"Skipping duplicate news (WebSocket): {processed_key}")
                 return False
 
-            # Store as news:benzinga:live:raw:{id}:{updated}
+            # Store as news:live:raw:{id}:{updated}
             storage_key = f"{self.prefix}raw:{news_item.id}.{updated_key}"
             
             pipe = self.client.pipeline(transaction=True)

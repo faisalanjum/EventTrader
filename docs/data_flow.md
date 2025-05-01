@@ -1,3 +1,7 @@
+---
+geometry: left=0.5in, right=1in, top=1in, bottom=1in
+---
+
 # EventTrader Data Flow Documentation
 
 **Executive Summary:** This document details the pipeline for ingesting, processing, and storing financial event data (news, reports, transcripts) in the EventTrader system. It utilizes Redis for queuing and state management through distinct stages (raw, processed, returns calculation) driven by Pub/Sub messaging, ultimately storing enriched data in Neo4j, while providing mechanisms to track item lifecycles and manage historical data batches.
@@ -32,7 +36,7 @@ Separate handling exists for live streaming data and batch historical data inges
     *   `process_events`: Called by **`ReturnsProcessor`** (especially for historical batches) to calculate actual financial *returns* based on schedules and market data availability (using **`polygonClass.py`**).
 *   **`eventReturns/ReturnsProcessor.py` (`ReturnsProcessor`):** Calculates financial returns. Runs in a dedicated thread per source type. Listens to **`*:live:processed`** Pub/Sub for live processed items. Also periodically scans historical **`*:hist:processed:*`** keys (`_process_hist_news`) and checks the **`*:pending_returns`** ZSET for scheduled calculations. Calculates available returns (using **`EventReturnsManager`**), schedules future calculations in **`*:pending_returns`** ZSET (score is UTC timestamp when data is ready), updates items, stores updated data under **`*:withreturns:*`** or **`*:withoutreturns:*`** keys (deleting the **`*:processed:*`** key), and publishes `item_id` to **`*:withreturns`**/**`*:withoutreturns`** Pub/Sub channels. **Note:** Polygon API or other processing failures might leave items stuck in **`withoutreturns`** state without specific automatic recovery.
 *   **`neograph/Neo4jProcessor.py` (`Neo4jProcessor`):** Handles interaction with Neo4j.
-    *   **Live Mode:** Runs `process_with_pubsub` (via **`PubSubMixin`**, started by **`DataManager`**) listening to **`*:withreturns`**/**`*:withoutreturns`** Pub/Sub, retrieves data from Redis, calls **`Neo4jManager`** to write. May delete **`*:withreturns:*`** key on success. **Note:** Needs robust handling for Neo4j write failures (retry, logging) to prevent data loss after Pub/Sub consumption. Includes XBRL reconciliation on startup.
+    *   **Live Mode:** Runs `process_with_pubsub` (via **`PubSubMixin`**, started by **`DataManager`**) listening to **`*:withreturns`**/**`*:withoutreturns`** Pub/Sub, retrieves data from Redis, calls **`Neo4jManager`** to write. May delete **`*:withreturns:*`** key on success. **Note:** Needs robust handling for Neo4j write failures (retry, logging) to prevent data loss after Pub/Sub consumption. Includes XBRL reconciliation (triggered after connection establishment, often during initialization sequence) on startup.
     *   **Batch Mode:** Provides functions executable via command line (**`neo4j_processor.sh`**) to process data directly from Redis (primarily **`*:withreturns:*`**, **`*:withoutreturns:*`** states) into Neo4j.
 *   **`neograph/Neo4jManager.py` (`Neo4jManager`):** Executes Cypher queries against Neo4j (creating/merging nodes/relationships). Called by **`Neo4jProcessor`**. Likely uses idempotent `MERGE` operations to handle potential duplicates safely.
 *   **`neograph/Neo4jInitializer.py` (`Neo4jInitializer`):** Sets up Neo4j schema (constraints, indexes, initial nodes like dates, companies). Run by **`DataManager`** on startup if needed.
@@ -57,74 +61,6 @@ A key difference exists in how live data enters the system:
 
 This difference impacts the real-time availability of transcript data compared to news and SEC filings.
 
-## 4. Data Flow Diagram (Mermaid)
-
-*(Note: This diagram provides a high-level overview. Refer to text descriptions for precise details like queue names and Pub/Sub channels.)*
-
-```mermaid
-graph TD
-    subgraph Ingestion [Data Ingestion]
-        A[External APIs<br>News/Reports/Transcripts] --> B{Ingestor Clients<br>REST/WebSocket/Poll};
-        B --> C["RedisClient Checks<br>vs PROCESSED_QUEUE"];
-        C -- Item Not Processed --> D["RedisClient<br>Stores Raw Data"];
-    end
-
-    subgraph Redis Raw [Raw Data Storage & Queue]
-        D --> E("SET raw_key<br>*:live:raw:* / *:hist:raw:*");
-        D --> F("LPUSH raw_key<br>to RAW_QUEUE List");
-    end
-
-    subgraph Base Processing [Base Processing - Thread per Source]
-        G("BaseProcessor") -- BRPOP --> F;
-        G --> H{"Clean / Standardize<br>Filter Symbols"};
-        H --> I["Call EventReturnsManager<br>(Add Return Schedule)"];
-        I --> J("SET processed_key<br>*:live:processed:* / *:hist:processed:*");
-        I --> K("LPUSH processed_key<br>to PROCESSED_QUEUE List (Dedupe)");
-        I -- PUBLISH<br>*:live:processed --> L([Pub/Sub Channel]);
-        L -- Message: processed_key --> P;
-        I --> M("DELETE raw_key (Optional)");
-        M --> E;
-        G -- On Error --> N("LPUSH raw_key<br>to FAILED_QUEUE List");
-    end
-
-    subgraph Returns Calc [Returns Calculation - Thread per Source]
-        P("ReturnsProcessor") -- SUBSCRIBES/SCANS --> L/J/Q;
-        P -- Retrieves --> J;
-        P --> R["Call EventReturnsManager<br>(Calculate Returns)"];
-        R --> S{"Store Returns / Schedule Pending"};
-        S --> T("ZADD pending_return<br>to *:pending_returns ZSET");
-        S --> U{"SET withoutreturns_key<br>*:*:withoutreturns:*" };
-        U --> V("DELETE processed_key");
-        V --> J;
-        U -- PUBLISH<br>*:withoutreturns --> W([Pub/Sub Channel]);
-        W -- Message: item_id --> Z;
-        S -- All Returns Done? --> X{"SET withreturns_key<br>*:*:withreturns:*"};
-        X --> Y("DELETE withoutreturns_key");
-        Y --> U;
-        X --> ZREM("ZREM item from<br>*:pending_returns ZSET");
-        ZREM --> Q;
-        X -- PUBLISH<br>*:withreturns --> W;
-        Q(ZSET<br>*:pending_returns);
-    end
-
-    subgraph Neo4j Live [Neo4j Live Storage - Thread]
-        Z("Neo4jProcessor<br>process_with_pubsub") -- SUBSCRIBES --> W;
-        Z -- GET Data --> U;
-        Z -- GET Data --> X;
-        Z --> AA["Call Neo4jManager<br>(Write to DB via MERGE)"];
-        AA --> BB([Neo4j Database]);
-        Z --> CC("DELETE withreturns_key (Optional)");
-        CC --> X;
-    end
-
-    subgraph Neo4j Batch [Neo4j Batch Storage - Manual Script]
-        DD["neo4j_processor.sh"] --> EE("Neo4jProcessor<br>Batch Mode");
-        EE -- SCAN/GET Data --> U;
-        EE -- SCAN/GET Data --> X;
-        EE --> AA;
-    end
-
-```
 
 ## 5. Redis Usage Details
 
@@ -218,6 +154,6 @@ To reliably process large historical date ranges without overwhelming system res
 *   XBRL processing is triggered during report processing but runs asynchronously in a background thread pool.
 *   The Python monitoring loop **does not** directly wait for XBRL tasks to finish (it only monitors Redis state).
 *   Therefore, the `stop-all` command *can* interrupt active XBRL worker threads.
-*   To handle this, an **XBRL reconciliation mechanism** runs during the initialization of `Neo4jProcessor` (at the start of each chunk). It queries Neo4j for reports with `xbrl_status` 'QUEUED' or 'PROCESSING' and automatically re-queues them using the existing XBRL processing infrastructure.
+*   To handle this, an **XBRL reconciliation mechanism** runs after the `Neo4jProcessor` establishes its connection (typically during the initialization sequence at the start of each chunk). It queries Neo4j for reports with `xbrl_status` 'QUEUED' or 'PROCESSING' and automatically re-queues them using the existing XBRL processing infrastructure.
 
 This combined shell orchestration and Python monitoring ensures sequential processing of historical chunks while allowing necessary background tasks like returns calculation and Neo4j updates to complete based on Redis state, with a specific reconciliation step for asynchronous XBRL processing.

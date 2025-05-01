@@ -2,7 +2,6 @@ class RedisKeys:
     """Single source of truth for all Redis key patterns and source types"""
     
     # Source Types
-    # SOURCE_NEWS = 'news:benzinga'
     SOURCE_NEWS = 'news'
     SOURCE_REPORTS = 'reports' # Used for SEC filings
     SOURCE_TRANSCRIPTS = 'transcripts'

@@ -1,5 +1,5 @@
 """Minimal EventTrader feature flags""" 
-# Don't change these here - pass Flags in command line -live or -historical
+# Don't change these here - pass Flags in command line -live or -historical - defaults are meant to be overridden via command-line arguments, not changed directly in the file
 ENABLE_HISTORICAL_DATA = True
 ENABLE_LIVE_DATA = True
 
@@ -132,7 +132,7 @@ QAEXCHANGE_EMBEDDING_BATCH_SIZE = 50
 MAX_TRANSCRIPT_SLEEP_SECONDS = 300  # 5 minutes
 
 # --- Historical Chunked Processing Configuration ---
-HISTORICAL_CHUNK_DAYS = 5  # Default number of days per historical processing chunk
+HISTORICAL_CHUNK_DAYS = 7  # Default number of days per historical processing chunk
 HISTORICAL_STABILITY_WAIT_SECONDS = 60 # Default seconds to wait for queue stability
 # Number of monitoring cycles to wait before forcing withreturns reconciliation
 # After this many checks, if items remain in withreturns namespace, force reconciliation

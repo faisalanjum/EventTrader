@@ -8,9 +8,9 @@ This table lists every function responsible for **populating**, **moving**, or *
 
 | Function | Redis Action | Redis Keys / Patterns | File | Flow |
 |---------|---------------|------------------------|------|------|
-| `RedisClient.set_news()` | `SET`, `LPUSH` | `news:benzinga:live:raw:{id}.{updated}`, `news:benzinga:queues:raw` | `redisDB/redisClasses.py` (called from `bz_websocket.py`) | Live |
+| `RedisClient.set_news()` | `SET`, `LPUSH` | `news:live:raw:{id}.{updated}`, `news:queues:raw` | `redisDB/redisClasses.py` (called from `bz_websocket.py`) | Live |
 | `RedisClient.set_news_batch()` | `SET`, `LPUSH` | `news:hist:raw:{id}.{updated}`, `news:queues:raw` | `redisDB/redisClasses.py` (called from `bz_restAPI.py`) | Historical |
-| `BaseProcessor.process_all_items()` | `GET`, `SET`, `LPUSH`, `PUBLISH`, `DEL` | `news:queues:raw` → `news:benzinga:{live\|hist}:processed:{id}.{updated}`, `news:benzinga:queues:processed`, `news:benzinga:live:processed` | `redisDB/BaseProcessor.py` (inherited by `NewsProcessor.py`) | Both |
+| `BaseProcessor.process_all_items()` | `GET`, `SET`, `LPUSH`, `PUBLISH`, `DEL` | `news:queues:raw` → `news:{live\|hist}:processed:{id}.{updated}`, `news:queues:processed`, `news:live:processed` | `redisDB/BaseProcessor.py` (inherited by `NewsProcessor.py`) | Both |
 | `EventReturnsManager.process_event_metadata()` | Adds metadata | `metadata.event`, `metadata.returns_schedule`, `metadata.instruments` | `eventReturns/EventReturnsManager.py` | Both |
 | `ReturnsProcessor._process_returns()` | `SET`, `ZADD`, `DEL` | `news:withreturns:{id}`, `news:withoutreturns:{id}`, `news:pending_returns` | `eventReturns/ReturnsProcessor.py` | Both |
 | `ReturnsProcessor._process_pending_returns()` | `ZRANGE`, `GET`, `SET`, `ZREM` | `news:pending_returns`, `news:withoutreturns:{id}` → `news:withreturns:{id}` | `eventReturns/ReturnsProcessor.py` | Both |

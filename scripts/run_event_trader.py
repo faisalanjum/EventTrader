@@ -128,11 +128,23 @@ def main():
 
         # Define helper function to check if only withreturns items exist
         def only_withreturns_remain(redis_client, sources, date_range_id):
-            """Check if only withreturns items remain with no other pipeline issues."""
-            has_withreturns = False
+            """
+            Check if only withreturns items remain with no other pipeline issues.
             
+            Returns True only when:
+            1. All normal processing is complete for all sources
+            2. At least one source has items in withreturns namespace
+            
+            Args:
+                redis_client: Redis client instance
+                sources: List of sources to check
+                date_range_id: Date range identifier for fetch complete keys
+                
+            Returns:
+                bool: True if only withreturns remain, False otherwise
+            """
+            # First check: ANY source still has active processing = don't trigger reconciliation
             for source in sources:
-                # Check for other pipeline issues first (faster fail)
                 # 1. Check fetch complete flag
                 fetch_key = f"batch:{source}:{date_range_id}:fetch_complete"
                 if redis_client.get(fetch_key) != "1":
@@ -147,16 +159,21 @@ def main():
                     return False
                 
                 # 4. Check withoutreturns namespace
-                for _ in redis_client.scan_iter(f"{source}:{RedisKeys.SUFFIX_WITHOUTRETURNS}:*", count=100):
+                withoutreturns_pattern = f"{source}:{RedisKeys.SUFFIX_WITHOUTRETURNS}:*"
+                if any(True for _ in redis_client.scan_iter(withoutreturns_pattern, count=1)):
                     return False
-                
-                # 5. Check if withreturns has items
-                for _ in redis_client.scan_iter(f"{source}:{RedisKeys.SUFFIX_WITHRETURNS}:*", count=100):
-                    has_withreturns = True
+            
+            # At this point, ALL sources have passed the first 4 conditions
+            # Now check if AT LEAST ONE source has withreturns items
+            has_any_withreturns = False
+            for source in sources:
+                # Check if this source has any withreturns items
+                withreturns_pattern = f"{source}:{RedisKeys.SUFFIX_WITHRETURNS}:*"
+                if any(True for _ in redis_client.scan_iter(withreturns_pattern, count=1)):
+                    has_any_withreturns = True
                     break
             
-            # Only return True if some withreturns items exist and nothing else is incomplete
-            return has_withreturns
+            return has_any_withreturns
         
         # Define helper function for gap-fill monitoring
         def monitor_gap_fill(manager_instance, date_from, date_to):
