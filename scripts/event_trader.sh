@@ -1,6 +1,6 @@
 #!/bin/bash
 # EventTrader Control Script
-# Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j|reset-all|partial-reset|neo4j-report} [options] [from-date] [to-date]
+# Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j|reset-all|partial-reset|neo4j-report|force-stop-all} [options] [from-date] [to-date]
 
 # Configuration
 WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -34,6 +34,7 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  reset-all               Stop all components and clear data"
     echo "  partial-reset          Stop all components and reset data while preserving initialization"
     echo "  neo4j-report            Generate detailed report of Neo4j database structure"
+    echo "  force-stop-all         Immediately kill all related processes (use with caution)"
     echo ""
     echo "Options:"
     echo "  --background            Run in background mode"
@@ -249,10 +250,59 @@ kill_all_related_processes() {
     done
   fi
   
+  # Kill the chunked-historical orchestrator process itself
+  chunk_pids=$(pgrep -f "event_trader.sh chunked-historical")
+  if [ -n "$chunk_pids" ]; then
+    echo "Killing chunked-historical orchestrator processes: $chunk_pids"
+    for pid in $chunk_pids; do
+      # Avoid killing the current script if it happens to match (safety measure)
+      if [ "$pid" != "$$" ]; then 
+        kill -9 $pid 2>/dev/null
+      fi
+    done
+  fi
+  
   # Remove PID files
   rm -f "$PID_FILE" "$MONITOR_PID_FILE" 2>/dev/null
   
   echo "All related processes have been terminated"
+}
+
+# Kill only child processes launched by chunked mode (Neo4j, Python script, Watchdog)
+kill_chunk_children_only() {
+  echo "Finding and killing child processes (Python scripts, Watchdog)..."
+
+  # Kill Neo4jInitializer processes
+  neo4j_pids=$(pgrep -f "Neo4jInitializer")
+  if [ -n "$neo4j_pids" ]; then
+    echo "Killing Neo4jInitializer processes: $neo4j_pids"
+    for pid in $neo4j_pids; do
+      kill -9 $pid 2>/dev/null
+    done
+  fi
+  
+  # Kill run_event_trader.py processes
+  event_pids=$(pgrep -f "run_event_trader.py")
+  if [ -n "$event_pids" ]; then
+    echo "Killing EventTrader processes: $event_pids"
+    for pid in $event_pids; do
+      kill -9 $pid 2>/dev/null
+    done
+  fi
+  
+  # Kill watchdog processes
+  watchdog_pids=$(pgrep -f "watchdog.sh")
+  if [ -n "$watchdog_pids" ]; then
+    echo "Killing watchdog processes: $watchdog_pids"
+    for pid in $watchdog_pids; do
+      kill -9 $pid 2>/dev/null
+    done
+  fi
+  
+  # Remove PID files
+  rm -f "$PID_FILE" "$MONITOR_PID_FILE" 2>/dev/null
+
+  echo "Child processes terminated."
 }
 
 # Check if monitor/watchdog is running
@@ -702,7 +752,8 @@ process_chunked_historical() {
     shell_log "Chunk log file: $CHUNK_LOG_FILE"
 
     shell_log "Stopping previous EventTrader instances..."
-    "$0" stop-all > /dev/null 2>&1
+    # Use direct kill function for more reliability - ONLY KILL CHILDREN
+    kill_chunk_children_only > /dev/null 2>&1
     sleep 3
 
     # Create empty log file first to ensure it exists for monitoring
@@ -775,7 +826,8 @@ process_chunked_historical() {
     # Only stop all processes if the exit code indicates success
     if [ $PYTHON_EXIT_CODE -eq 0 ]; then
       shell_log "Chunk $chunk_count completed successfully. Stopping Event Trader before next chunk..."
-      "$0" stop-all > /dev/null 2>&1
+      # Use direct kill function for more reliability - ONLY KILL CHILDREN
+      kill_chunk_children_only > /dev/null 2>&1
       sleep 5 # Give time for processes to stop
       shell_log "Python script for chunk $chunk_start to $chunk_end completed successfully."
     else
@@ -1030,6 +1082,10 @@ except Exception as e:
     # Pass only dates to the function
     process_chunked_historical "$FROM_DATE" "$TO_DATE"
     ;;
+  force-stop-all)
+    # Directly kill all processes without graceful shutdown attempt
+    kill_all_related_processes
+    ;;
   *)
     echo "Usage: $0 [--background] {command} [options] [from-date] [to-date]"
     echo ""
@@ -1052,6 +1108,7 @@ except Exception as e:
     echo "  process-news                 # Process news data into Neo4j"
     echo "  neo4j-report                 # Generate detailed Neo4j database structure report"
     echo "  chunked-historical YYYY-MM-DD [YYYY-MM-DD] # Process historical data in chunks (Settings in config/feature_flags.py)"
+    echo "  force-stop-all               # Immediately kill all related processes (use with caution)"
     echo ""
     echo "Options:"
     echo "  --background                 # Run commands in background mode"
@@ -1068,6 +1125,7 @@ except Exception as e:
     echo "  $0 monitor 10 120               # Start watchdog with 10 max restarts, 120s check interval"
     echo "  $0 clean-logs 14                # Clean logs older than 14 days"
     echo "  $0 --background reset-all       # Reset all processes and clear Redis and Neo4j databases"
+    echo "  $0 force-stop-all               # Immediately kill all related processes (use with caution)"
     exit 1
     ;;
 esac

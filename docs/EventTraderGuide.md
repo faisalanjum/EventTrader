@@ -60,10 +60,15 @@ There are two primary ways to start the system:
 
    ```bash
    ./scripts/event_trader.sh stop       # Stop EventTrader only
+   ./scripts/event_trader.sh force-stop-all # Force kill ALL related processes (EventTrader, watchdog, chunked orchestrator)
    ./scripts/event_trader.sh stop-all   # Stop both EventTrader and watchdog
    ./scripts/event_trader.sh restart    # Restart EventTrader
    ./scripts/event_trader.sh restart-all # Restart both EventTrader and watchdog
    ```
+
+   **Choosing the right stop command:**
+   *   Use `stop-all` for standard operations (like stopping `-live` mode). It attempts a graceful shutdown first.
+   *   Use `force-stop-all` when you need to guarantee **immediate termination** of *all* related processes, including an ongoing `chunked-historical` run. This is useful for ensuring a clean slate before starting a new run or for forcefully interrupting a process.
 
 ### Running Neo4jProcessor Independently
 
