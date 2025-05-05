@@ -7,7 +7,7 @@ import threading
 import time # Likely needed for sleep in the loop
 from typing import Dict, List, Optional, Any
 from redisDB.redis_constants import RedisKeys
-from config.feature_flags import ENABLE_NEWS_EMBEDDINGS
+from config.feature_flags import ENABLE_NEWS_EMBEDDINGS, PUBSUB_RECONCILIATION_INTERVAL
 
 logger = logging.getLogger(__name__)
 
@@ -18,12 +18,12 @@ class PubSubMixin:
 
     def _process_pubsub_item(self, channel, item_id, content_type='news'):
         """
-        Process an item update from PubSub (works for both news and reports)
+        Process an item update from PubSub (works for all 3 news, reports and transcripts)
         
         Args:
             channel: The Redis channel the message came from
             item_id: The ID of the item to process
-            content_type: 'news' or 'report'
+            content_type: 'news' or 'report' or 'transcript'
         """
         try:
             logger.info(f"Processing {content_type} update from {channel}: {item_id}")
@@ -253,7 +253,7 @@ class PubSubMixin:
 
         # [NEW CODE]: Track reconciliation time
         last_reconciliation = 0
-        reconciliation_interval = 3600  # Run once per hour
+        reconciliation_interval = PUBSUB_RECONCILIATION_INTERVAL  # Import from feature_flags
 
         # Process any existing items first (one-time batch processing)
         self.process_news_to_neo4j(batch_size=50, max_items=None, include_without_returns=True)
@@ -277,7 +277,8 @@ class PubSubMixin:
                         continue
                     
                     # Determine content type based on channel prefix
-                    if channel.startswith(self.event_trader_redis.source):
+                    # if channel.startswith(self.event_trader_redis.source):
+                    if channel.startswith(RedisKeys.SOURCE_NEWS):
                         # Process news
                         self._process_pubsub_item(channel, item_id, 'news')
                     elif channel.startswith(RedisKeys.SOURCE_REPORTS):
@@ -295,10 +296,11 @@ class PubSubMixin:
                 #     self.process_reports_to_neo4j(batch_size=10, max_items=10, include_without_returns=False)
                 #     time.sleep(1)  # Prevent repeated execution in the same second
 
-                # [NEW CODE]: Hourly reconciliation
+                # Periodic reconciliation
                 current_time = int(time.time())
                 if current_time - last_reconciliation >= reconciliation_interval:
-                    logger.info("Starting hourly reconciliation...")
+                    # logger.info("Starting hourly reconciliation...")
+                    logger.info(f"Starting periodic reconciliation (every {reconciliation_interval} seconds)...")
                     self.reconcile_missing_items()
                     last_reconciliation = current_time
 

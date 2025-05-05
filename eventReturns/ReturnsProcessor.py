@@ -14,6 +14,7 @@ from eventReturns.polygonClass import Polygon
 from eventtrader.keys import POLYGON_API_KEY
 from utils.metadata_fields import MetadataFields
 from eventReturns.EventReturnsManager import EventReturnsManager
+import pandas as pd
 import pytz
 
 from redisDB.redis_constants import RedisKeys
@@ -227,6 +228,9 @@ class ReturnsProcessor:
                     if success:
                         self._publish_news_update(namespace, news_id)
 
+                    else:
+                        self.logger.error(f"Redis pipeline failed for {orig_key} -> {new_key}. Result: {success}")
+
                 except Exception as e:
                     self.logger.error(f"Failed to process returns for {event_return.event_id}: {e}")
 
@@ -376,7 +380,10 @@ class ReturnsProcessor:
             # 7. Publish to PubSub if successful
             if success:
                 self._publish_news_update(namespace, news_id)
-                
+            else:
+                self.logger.error(f"Redis pipeline failed for {key} -> {new_key}. Result: {success}")
+            
+
             return success
 
 
@@ -446,12 +453,18 @@ class ReturnsProcessor:
                                 # 7. Special handling for hourly returns
                                 if return_type == MetadataFields.HOURLY:
                                     calc_returns = {k: v[0] for k, v in calc_returns.items()}
-                                
+                                    # calc_returns = {k: (v[0] if isinstance(v, (list, tuple)) and v else v) for k, v in calc_returns.items()}
+
                                 # 8. Store calculated returns
                                 return_field = MetadataFields.RETURN_TYPE_MAP[return_type]
+                                # returns_data['symbols'][symbol][return_field] = {
+                                #     k: round(v, 2) for k, v in calc_returns.items()
+                                # }
+
                                 returns_data['symbols'][symbol][return_field] = {
-                                    k: round(v, 2) for k, v in calc_returns.items()
-                                }
+                                    k: round(v, 2) if not pd.isna(v) else None for k, v in calc_returns.items()}
+                                
+
                             except Exception as e:
                                 self.logger.error(f"Error processing {return_field} for {symbol}: {e}")
                                 all_complete = False
@@ -524,9 +537,12 @@ class ReturnsProcessor:
                                 calc_returns = batch_returns['symbols'][symbol].get(return_field)
                                 
                                 if calc_returns:
-                                    returns_data['symbols'][symbol][return_field] = calc_returns
-                                    
+                                    # returns_data['symbols'][symbol][return_field] = calc_returns
+
                                     # Round here to match live flow
+                                    returns_data['symbols'][symbol][return_field] = {
+                                        k: round(v, 2) if not pd.isna(v) else None for k, v in calc_returns.items()}
+                                    
                                     # returns_data['symbols'][symbol][return_field] = {
                                     #     k: round(v, 2) for k, v in calc_returns.items()}
                                     
@@ -602,8 +618,11 @@ class ReturnsProcessor:
                     
                     if return_type == MetadataFields.HOURLY:
                         calc_returns = {k: v[0] for k, v in calc_returns.items()}
+
                     
-                    returns[return_key] = {k: round(v, 2) for k, v in calc_returns.items()}
+                    # returns[return_key] = {k: round(v, 2) for k, v in calc_returns.items()}
+                    returns[return_key] = {k: round(v, 2) if not pd.isna(v) else None for k, v in calc_returns.items()}
+
                     self.logger.info(f"✓ Calculated {return_key} returns")
                 except Exception as e:
                     self.logger.error(f"Error calculating {return_key} returns for {symbol}: {e}")
@@ -730,17 +749,31 @@ class ReturnsProcessor:
                 pipe.delete(key)
                 # self.logger.info(f"Moving to withreturns: {new_key}")
                 success = all(pipe.execute())
-                
+
+                # Log specific error if move fails
+                if not success:
+                    self.logger.error(f"Redis move to withreturns failed: {key} -> {new_key}. Result: {success}")
+
                 # Publish to withreturns channel if successful
                 if success:
                     self._publish_news_update("withreturns", identifier)
+                # else:
+                #     self.logger.error(f"Redis pipeline failed _publish_news_update withreturns {key} -> {new_key}. Result: {success}")
+
+
             else:
                 pipe.set(key, json.dumps(news_data))
                 success = all(pipe.execute())
-                
+
+                # Log specific error if update fails
+                if not success:
+                    self.logger.error(f"Redis update of withoutreturns failed: {key}. Result: {success}")
+
                 # Publish to withoutreturns channel if successful
                 if success:
                     self._publish_news_update("withoutreturns", identifier)
+                # else:
+                #     self.logger.error(f"Redis pipeline failed _publish_news_update withoutreturns {key} Result: {success}")
                 
             return success
                 

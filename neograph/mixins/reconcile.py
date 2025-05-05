@@ -13,7 +13,7 @@ class ReconcileMixin:
     Handles reconciliation tasks, checking for missing items or date nodes.
     """
 
-
+     # Should be optimized to handle large number of items
     def reconcile_missing_items(self, max_items_per_type=5000):
         """
         Identify and process items in Redis that are missing from Neo4j.

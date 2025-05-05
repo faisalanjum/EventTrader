@@ -7,7 +7,7 @@ import threading
 from transcripts.EarningsCallTranscripts import EarningsCallProcessor
 from eventtrader.keys import EARNINGS_CALL_API_KEY
 from .redis_constants import RedisKeys
-from config.feature_flags import MAX_TRANSCRIPT_SLEEP_SECONDS
+from config.feature_flags import MAX_TRANSCRIPT_SLEEP_SECONDS, TRANSCRIPT_RESCHEDULE_INTERVAL
 from config import feature_flags
 
 
@@ -296,7 +296,8 @@ class TranscriptProcessor(BaseProcessor):
         self.logger.info(f"Transcript not ready for {symbol} at {conference_datetime}, will retry in 5 minutes")
         
         # Use first retry with 5 minutes
-        reschedule_time = now_ts + 300  # 5 minutes later
+        # reschedule_time = now_ts + 300  # 5 minutes later
+        reschedule_time = now_ts + TRANSCRIPT_RESCHEDULE_INTERVAL  # Default 5 minutes later
         
         # Add to schedule
         self.live_client.client.zadd(self.schedule_key, {event_key: reschedule_time})

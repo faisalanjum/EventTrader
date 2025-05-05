@@ -5,6 +5,10 @@ from collections import defaultdict
 from neo4j import GraphDatabase, Driver
 import pandas as pd
 import time
+import logging
+import json
+import neo4j.exceptions # Import exceptions
+import tenacity # Import tenacity
 # Split imports: TYPE_CHECKING for type hints, direct imports for runtime needs
 if TYPE_CHECKING:
     from XBRL.xbrl_core import Neo4jNode
@@ -15,6 +19,22 @@ from XBRL.xbrl_reporting import Fact
 
 from XBRL.utils import resolve_primary_fact_relationships, clean_number
 
+logger = logging.getLogger(__name__)
+
+# Define retry conditions using tenacity
+retry_on_neo4j_transient_error = tenacity.retry(
+    stop=tenacity.stop_after_attempt(3), # Retry 2 times after initial failure (total 3 attempts)
+    wait=tenacity.wait_exponential(multiplier=0.5, min=0.2, max=2), # Exponential backoff 0.2s -> 0.4s
+    retry=(
+        tenacity.retry_if_exception_type(neo4j.exceptions.ServiceUnavailable) |
+        tenacity.retry_if_exception_type(neo4j.exceptions.SessionExpired) |
+        tenacity.retry_if_exception_type(neo4j.exceptions.TransientError) |
+        tenacity.retry_if_exception_type(OSError) | # From original logs
+        tenacity.retry_if_exception_type(TimeoutError) # From original logs
+    ),
+    before_sleep=tenacity.before_sleep_log(logger, logging.WARNING), # Log before retrying
+    reraise=True # IMPORTANT: Re-raise the exception if all retries fail
+)
 
 # region : Neo4j Manager ########################
 
@@ -28,7 +48,20 @@ class Neo4jManager:
     PRESENTATION_CONSTRAINT_NAME = "constraint_presentation_edge_unique"
     CALCULATION_CONSTRAINT_NAME = "constraint_calculation_edge_unique"
 
-
+    # Only change this single method to use a special case with retry_error_callback
+    @tenacity.retry(
+        stop=tenacity.stop_after_attempt(3),
+        wait=tenacity.wait_exponential(multiplier=0.5, min=0.2, max=2),
+        retry=(
+            tenacity.retry_if_exception_type(neo4j.exceptions.ServiceUnavailable) |
+            tenacity.retry_if_exception_type(neo4j.exceptions.SessionExpired) |
+            tenacity.retry_if_exception_type(neo4j.exceptions.TransientError) |
+            tenacity.retry_if_exception_type(OSError) |
+            tenacity.retry_if_exception_type(TimeoutError)
+        ),
+        before_sleep=tenacity.before_sleep_log(logger, logging.WARNING),
+        retry_error_callback=lambda _: False  # Return False when retries are exhausted
+    )
     def test_connection(self) -> bool:
         """Test Neo4j connection"""
         try:
@@ -41,15 +74,19 @@ class Neo4jManager:
     def __post_init__(self):
         try:
             self.driver = GraphDatabase.driver(self.uri, auth=(self.username, self.password))
+            # test_connection now has implicit retry. It will raise if retries fail.
             if not self.test_connection():
-                raise ConnectionError("Failed to connect to Neo4j")
+                # This case might be less likely now as test_connection reraises
+                raise ConnectionError("test_connection returned False unexpectedly")
         except Exception as e:
+            # Catch exceptions reraised by test_connection or driver init errors
             raise ConnectionError(f"Neo4j initialization failed: {e}")
     
     def close(self):
         if hasattr(self, 'driver'):
             self.driver.close()
                         
+    @retry_on_neo4j_transient_error
     def clear_db(self):
         """Development only: Clear database and verify it's empty"""
         try:
@@ -79,9 +116,7 @@ class Neo4jManager:
         except Exception as e:
             raise RuntimeError(f"Failed to clear database: {e}")
 
-
-
-
+    @retry_on_neo4j_transient_error
     def create_indexes(self):
         """Create indexes and constraints for both nodes and relationships"""
         try:
@@ -191,7 +226,7 @@ class Neo4jManager:
     #         raise RuntimeError(f"Failed to create indexes: {e}")
 
 
-            
+    @retry_on_neo4j_transient_error            
     def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 2000) -> None:
         """Merge nodes into Neo4j database with batching"""
         if not nodes: return
@@ -260,13 +295,11 @@ class Neo4jManager:
         except Exception as e:
             raise RuntimeError(f"Failed to merge nodes: {e}")
 
-
     def _filter_duplicate_facts(self, nodes: List[Neo4jNode]) -> List[Neo4jNode]:
         """Filter out duplicate facts, keeping only primary facts"""
         if nodes and isinstance(nodes[0], Fact):
             return [node for node in nodes if node.is_primary]
         return nodes
-
 
     def _export_nodes(self, collections: List[Union[Neo4jNode, List[Neo4jNode]]], testing: bool = False):
         """Export specified collections of nodes to Neo4j"""
@@ -324,81 +357,8 @@ class Neo4jManager:
         except Exception as e:
             raise RuntimeError(f"Export to Neo4j failed: {e}")
 
-
-
-
-
-    # def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
-    #     counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
-    #     relationships = resolve_primary_fact_relationships(relationships)
-
-    #     network_specific_relationships = {
-    #         RelationType.PRESENTATION_EDGE,
-    #         RelationType.CALCULATION_EDGE,
-    #     }
-
-    #     def get_network_merge_props(source_id: str, target_id: str, properties: Dict) -> Dict[str, Any]:
-    #         """Get core network relationship properties maintaining uniqueness"""
-    #         return {
-    #             "merge_source_id": source_id,
-    #             "merge_target_id": target_id,
-    #             "merge_network_id": properties.get('network_uri', properties.get('network_name', '')).split('/')[-1],
-    #             "company_cik": properties.get('company_cik')
-    #         }
-
-    #     with self.driver.session() as session:
-    #         for rel in relationships:
-    #             source, target, rel_type, *props = rel
-    #             properties = props[0] if props else {}
-                
-    #             if (rel_type in network_specific_relationships and 
-    #                 isinstance(target, Fact) and 
-    #                 ('network_uri' in properties or 'network_name' in properties)):
-
-    #                 merge_props = get_network_merge_props(source.id, target.id, properties)
-                    
-    #                 # Keep the critical MERGE structure explicit
-    #                 session.run(f"""
-    #                     MATCH (s {{id: $source_id}})
-    #                     MATCH (t {{id: $target_id}})
-    #                     MERGE (s)-[r:{rel_type.value} {{
-    #                         source_id: $merge_source_id,
-    #                         target_id: $merge_target_id,
-    #                         network_id: $merge_network_id,
-    #                         company_cik: $company_cik
-    #                     }}]->(t)
-    #                     SET r += $properties
-    #                 """, {
-    #                     "source_id": source.id,
-    #                     "target_id": target.id,
-    #                     **merge_props,
-    #                     "properties": properties
-    #                 })
-    #             else:
-    #                 session.run(f"""
-    #                     MATCH (s {{id: $source_id}})
-    #                     MATCH (t {{id: $target_id}})
-    #                     MERGE (s)-[r:{rel_type.value}]->(t)
-    #                     SET r += $properties
-    #                 """, {
-    #                     "source_id": source.id,
-    #                     "target_id": target.id,
-    #                     "properties": properties
-    #                 })
-                
-    #             counts[rel_type.value].update({
-    #                 'count': counts[rel_type.value]['count'] + 1, 
-    #                 'source': source.__class__.__name__, 
-    #                 'target': target.__class__.__name__
-    #             })
-        
-    #     for rel_type, info in counts.items():
-    #         print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
-
-
-    # FASTER VERSION
+    @retry_on_neo4j_transient_error
     def merge_relationships(self, relationships: List[Union[Tuple[Neo4jNode, Neo4jNode, RelationType], Tuple[Neo4jNode, Neo4jNode, RelationType, Dict[str, Any]]]]) -> None:
-
         counts = defaultdict(lambda: {'count': 0, 'source': '', 'target': ''})
         relationships = resolve_primary_fact_relationships(relationships)
         
@@ -505,12 +465,7 @@ class Neo4jManager:
         for rel_type, info in counts.items():
             print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
 
-
-
-
-
-
-
+    @retry_on_neo4j_transient_error
     def get_neo4j_db_counts(self) -> Dict[str, Dict[str, int]]:
         """Get count of nodes and relationships by type."""
         try:
@@ -565,6 +520,7 @@ class Neo4jManager:
                 "relationships": {rt.value: 0 for rt in RelationType}
             }
 
+    @retry_on_neo4j_transient_error
     def load_nodes_as_instances(self, node_type: NodeType, class_type: Type[Neo4jNode]) -> List[Neo4jNode]:
         """Load Neo4j nodes as class instances"""
         try:
@@ -578,8 +534,7 @@ class Neo4jManager:
         except Exception as e:
             raise RuntimeError(f"Failed to load {node_type.value} nodes: {e}")
 
-
-
+    @retry_on_neo4j_transient_error
     def validate_neo4j_calculations(self) -> None:
         """Validates all calculation relationships stored in Neo4j by checking summations."""
         
@@ -727,9 +682,11 @@ class Neo4jManager:
             }
 
 
+
     # Usage: 
     # calc_df = report.neo4j.fetch_relationships(RelationType.CALCULATION_EDGE)
-    # pres_df = report.neo4j.fetch_relationships(RelationType.PRESENTATION_EDGE)    
+    # pres_df = report.neo4j.fetch_relationships(RelationType.PRESENTATION_EDGE) 
+    @retry_on_neo4j_transient_error
     def fetch_relationships(self, edge_type: RelationType) -> pd.DataFrame:
         """Fetches relationships with all properties"""
         calc_props = """
@@ -768,22 +725,7 @@ class Neo4jManager:
             # before the session closes
             return pd.DataFrame([dict(r) for r in result])
 
-    # def fetch_relationships(self, edge_type: RelationType) -> pd.DataFrame:
-    #     """Fetches relationships from Neo4j as DataFrame."""
-    #     calc_props = "r.weight as weight, r.order as order, r.context_id as context_id"
-    #     pres_props = "r.parent_level as parent_level, r.parent_order as parent_order, r.child_level as child_level, r.child_order as child_order"
-        
-    #     query = f"""
-    #     MATCH (p)-[r:{edge_type.value}]->(c)
-    #     RETURN p.id as parent_id, p.qname as parent_qname, p.value as parent_value,
-    #         c.id as child_id, c.qname as child_qname, c.value as child_value,
-    #         r.network_uri as network_uri, r.network_name as network_name,
-    #         r.company_cik as cik, r.report_instance as report_instance,
-    #         {calc_props if edge_type == RelationType.CALCULATION_EDGE else pres_props}
-    #     """
-        
-    #     return pd.DataFrame([dict(r) for r in self.driver.session().run(query)])
-
+    @retry_on_neo4j_transient_error
     def create_relationships(self, source_label, source_id_field, source_id_value, 
                             target_label, target_match_clause, rel_type, params,
                             target_create_properties=None, target_set_properties=None):
@@ -802,7 +744,7 @@ class Neo4jManager:
             target_set_properties: Optional SET properties for target nodes
             
         Returns:
-            Count of relationships created
+            Count of relationships created      
         """
         if not params:
             return 0
@@ -840,6 +782,7 @@ class Neo4jManager:
             
             return count
 
+    @retry_on_neo4j_transient_error
     def execute_cypher_query(self, query, parameters):
         """
         Execute a Cypher query with the given parameters.
@@ -855,8 +798,7 @@ class Neo4jManager:
             result = session.run(query, parameters)
             return result.single()
 
-
-    # ----------------- BEGIN PATCH -----------------
+    @retry_on_neo4j_transient_error
     def execute_cypher_query_all(self,
                                  query: str,
                                  parameters: dict | None = None):
@@ -870,10 +812,8 @@ class Neo4jManager:
         with self.driver.session() as session:
             result = session.run(query, parameters)
             return [r.data() for r in result]
-    # ----------------- END PATCH -----------------
 
-
-
+    @retry_on_neo4j_transient_error
     def create_report_category_relationship(self, report_id, form_type):
         """
         Create an IN_CATEGORY relationship between a report and its category.
@@ -901,6 +841,7 @@ class Neo4jManager:
             record = result.single()
             return record and record["count"] > 0
 
+    @retry_on_neo4j_transient_error
     def create_hierarchical_relationships(self, child_label, parent_label, relationship_type="BELONGS_TO", 
                                           match_property=None, parent_id_property="id", child_condition=None, parent_id_value=None):
         """
@@ -956,6 +897,7 @@ class Neo4jManager:
         except Exception as e:
             raise RuntimeError(f"Failed to create hierarchical relationships: {e}")
 
+    @retry_on_neo4j_transient_error
     def link_companies_to_industries(self):
         """
         Specialized function to link companies to industries using multiple strategies:
@@ -1084,6 +1026,7 @@ class Neo4jManager:
         except Exception as e:
             raise RuntimeError(f"Failed to link companies to industries: {e}")
 
+    @retry_on_neo4j_transient_error
     def create_company_relationships_batch(self, relationship_pairs, relationship_type="RELATED_TO", batch_size=100):
         """
         Create bidirectional relationships between companies efficiently in batches.
@@ -1138,6 +1081,7 @@ class Neo4jManager:
         except Exception as e:
             raise RuntimeError(f"Failed to create company relationships: {e}")
 
+    @retry_on_neo4j_transient_error
     def create_price_relationships_batch(self, batch_params):
         """
         Create HAS_PRICE relationships between Date nodes and entity nodes.
@@ -1178,7 +1122,7 @@ class Neo4jManager:
                 logging.getLogger('Neo4jManager').error(f"Error creating price relationships: {e}")
                 return 0
 
-    # <<< START NEW METHOD FOR PRESENTATION EDGES >>>
+    @retry_on_neo4j_transient_error
     def merge_presentation_edges(self, relationships: List[Tuple[Neo4jNode, Neo4jNode, Dict[str, Any]]]) -> None:
         """Merges PRESENTATION_EDGE relationships using a MERGE clause that 
         matches the specific uniqueness constraint for this relationship type.

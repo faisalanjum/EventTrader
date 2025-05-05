@@ -87,6 +87,272 @@ class DataSourceManager:
     def stop(self): raise NotImplementedError
 
 
+
+class BenzingaNewsManager(DataSourceManager):
+    """Manager for Benzinga news source"""
+    def __init__(self, historical_range: Dict[str, str]):
+        super().__init__(
+            source_type=RedisKeys.SOURCE_NEWS,
+            historical_range=historical_range,
+            api_key=BENZINGANEWS_API_KEY,
+            processor_class=NewsProcessor
+        )
+        
+        # Initialize API clients
+        self.rest_client = BenzingaNewsRestAPI(
+            api_key=self.api_key,
+            redis_client=self.redis.history_client,
+            ttl=self.ttl
+        )
+        self.ws_client = BenzingaNewsWebSocket(
+            api_key=self.api_key,
+            redis_client=self.redis.live_client,
+            ttl=self.ttl
+        )
+
+    def start(self):
+        try:
+            # Fetch historical data if enabled
+            if feature_flags.ENABLE_HISTORICAL_DATA:
+                historical_data = self.rest_client.get_historical_data(
+                    date_from=self.date_range['from'],
+                    date_to=self.date_range['to'],
+                    raw=False
+                )
+                self.logger.info(f"Fetched {len(historical_data)} historical items")
+            else:
+                self.logger.info("Historical data fetching disabled for Benzinga News.")
+
+            # Start processing threads (always needed)
+            self.processor_thread = threading.Thread(target=self.processor.process_all_news, daemon=True)
+            self.returns_thread = threading.Thread(target=self.returns_processor.process_all_returns, daemon=True)
+            
+            threads_to_start = [self.processor_thread, self.returns_thread]
+
+            # --- CONDITIONALLY START WEBSOCKET THREAD ---
+            if feature_flags.ENABLE_LIVE_DATA:
+                self.logger.info("Live data enabled, starting WebSocket thread for Benzinga News.")
+                self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
+                threads_to_start.append(self.ws_thread)
+            else:
+                self.logger.info("Live data disabled, WebSocket thread for Benzinga News will not be started.")
+            # -------------------------------------------
+            
+            for thread in threads_to_start:
+                thread.start()
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error starting {self.source_type}: {e}")
+            return False
+
+    def _run_websocket(self):
+        while self.running:
+            try:
+                self.ws_client.connect(raw=False)
+            except Exception as e:
+                self.logger.error(f"WebSocket error: {e}")
+                time.sleep(5)
+
+
+    # def _run_websocket(self):
+    #     """Manage WebSocket connection with proper retry logic"""
+    #     while self.running:
+    #         try:
+    #             if not self.ws_client.connected:
+    #                 print(f"Starting {self.source_type} WebSocket connection...")
+    #                 # Direct call to connect - don't wrap in another thread
+    #                 self.ws_client.connect(raw=False)
+    #             time.sleep(2)  # Brief check interval
+    #         except Exception as e:
+    #             logging.error(f"{self.source_type} WebSocket error: {e}")
+    #             time.sleep(5)    
+
+    def check_status(self):
+        try:
+            live_prefix = RedisKeys.get_prefixes(self.source_type)['live']
+            return {
+                "websocket": {
+                    "connected": self.ws_client.connected,
+                    "last_message": self.ws_client.stats.get('last_message_time')
+                },
+                "redis": {
+                    "live_count": len(self.redis.live_client.client.keys(f"{live_prefix}raw:*")),
+                    "raw_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.RAW_QUEUE, 0, -1)),
+                    "processed_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.PROCESSED_QUEUE, 0, -1))
+                }
+            }
+        except Exception as e:
+            self.logger.error(f"Error checking status: {e}")
+            return None
+
+    def stop(self):
+        try:
+            self.running = False
+            self.ws_client.disconnect()
+            
+            for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
+                if thread and thread.is_alive():
+                    thread.join(timeout=5)
+            
+            self.redis.clear(preserve_processed=True)
+            return True
+        except Exception as e:
+            self.logger.error(f"Error stopping {self.source_type}: {e}")
+            return False
+
+    
+class ReportsManager(DataSourceManager):
+    """Manager for SEC filing reports"""
+    def __init__(self, historical_range: Dict[str, str]):
+        super().__init__(
+            source_type=RedisKeys.SOURCE_REPORTS,
+            historical_range=historical_range,
+            api_key=SEC_API_KEY,
+            processor_class=ReportProcessor
+        )
+        
+        # Initialize API clients (similar to BenzingaNewsManager)
+        self.rest_client = SECRestAPI(  
+            api_key=self.api_key,
+            # redis_client=self.redis.history_client,
+            redis=self.redis,
+            ttl=self.ttl
+        )
+
+        self.ws_client = SECWebSocket(
+            api_key=self.api_key,
+            redis_client=self.redis.live_client,
+            ttl=self.ttl
+        )
+
+    def start(self):
+        try:
+            # Start processing threads (always needed)
+            self.processor_thread = threading.Thread(target=self.processor.process_all_reports, daemon=True)
+            self.returns_thread = threading.Thread(target=self.returns_processor.process_all_returns, daemon=True)
+            
+            threads_to_start = [self.processor_thread, self.returns_thread]
+            
+            # Fetch historical data in separate thread if enabled
+            if feature_flags.ENABLE_HISTORICAL_DATA:
+                self.historical_thread = threading.Thread(
+                    target=self.rest_client.get_historical_data,
+                    args=(self.date_range['from'], self.date_range['to'], False), # Include raw=False
+                    daemon=True
+                )
+                threads_to_start.append(self.historical_thread)
+            else:
+                 self.logger.info("Historical data fetching disabled for SEC Reports.")
+
+            # --- CONDITIONALLY START WEBSOCKET THREAD ---
+            if feature_flags.ENABLE_LIVE_DATA:
+                self.logger.info("Live data enabled, starting WebSocket thread for SEC Reports.")
+                self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
+                threads_to_start.append(self.ws_thread)
+            else:
+                self.logger.info("Live data disabled, WebSocket thread for SEC Reports will not be started.")
+            # -------------------------------------------
+            
+            self.logger.debug(f"[Manager Debug] Starting threads:")
+            for thread in threads_to_start:
+                thread.start()
+                self.logger.debug(f"[Manager Debug] Thread {thread.name} started: {thread.is_alive()}")
+            
+            return True
+
+        except Exception as e:
+            self.logger.error(f"Error starting {self.source_type}: {e}")
+            return False
+
+    # def start(self):
+    #     try:
+    #         # Fetch historical data
+    #         historical_data = self.rest_client.get_historical_data(
+    #             date_from=self.date_range['from'],
+    #             date_to=self.date_range['to'],
+    #             raw=False
+    #         )
+    #         print(f"Fetched {len(historical_data)} historical SEC filings")
+
+    #         # Start all components in threads
+    #         self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
+    #         self.processor_thread = threading.Thread(target=self.processor.process_all_reports, daemon=True)
+    #         self.returns_thread = threading.Thread(target=self.returns_processor.process_all_returns, daemon=True)
+            
+    #         print(f"[Manager Debug] Starting threads:")
+    #         for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
+    #             thread.start()
+    #             print(f"[Manager Debug] Thread {thread.name} started: {thread.is_alive()}")
+    #         return True
+
+    #     except Exception as e:
+    #         logging.error(f"Error starting {self.source_type}: {e}")
+    #         return False
+
+    # def _run_websocket(self):
+    #     """Manage WebSocket connection with proper retry logic"""
+    #     retry_delay = 5
+    #     max_retries = 3
+        
+    #     while self.running:
+    #         try:
+    #             if not self.ws_client.connected:
+    #                 self.ws_client.connect(raw=False)
+    #             time.sleep(1)  # Check connection status periodically
+                
+    #         except Exception as e:
+    #             logging.error(f"SEC WebSocket error: {e}")
+    #             time.sleep(retry_delay)
+
+
+    def _run_websocket(self):
+        while self.running:
+            try:
+                # Direct call without checking - connect() should block until disconnected
+                self.ws_client.connect(raw=False)
+            except Exception as e:
+                self.logger.error(f"SEC WebSocket error: {e}")
+                time.sleep(5)
+
+
+    def check_status(self):
+        try:
+            live_prefix = RedisKeys.get_prefixes(self.source_type)['live']
+            return {
+                "websocket": {
+                    "connected": self.ws_client.connected,
+                    "last_message": self.ws_client.last_message_time  
+
+                },
+                "redis": {
+                    "live_count": len(self.redis.live_client.client.keys(f"{live_prefix}raw:*")),
+                    "raw_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.RAW_QUEUE, 0, -1)),
+                    "processed_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.PROCESSED_QUEUE, 0, -1))
+                }
+            }
+        except Exception as e:
+            self.logger.error(f"Error checking status: {e}")
+            return None
+
+    def stop(self):
+        try:
+            self.running = False
+            self.ws_client.disconnect()
+            
+            for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
+                if thread and thread.is_alive():
+                    thread.join(timeout=5)
+            
+            self.redis.clear(preserve_processed=True)
+            return True
+        except Exception as e:
+            self.logger.error(f"Error stopping {self.source_type}: {e}")
+            return False
+        
+
+
+
 class TranscriptsManager(DataSourceManager):
     """Manager for earnings call transcripts"""
     def __init__(self, historical_range: Dict[str, str]):
@@ -353,268 +619,6 @@ class TranscriptsManager(DataSourceManager):
 
 
 
-class BenzingaNewsManager(DataSourceManager):
-    """Manager for Benzinga news source"""
-    def __init__(self, historical_range: Dict[str, str]):
-        super().__init__(
-            source_type=RedisKeys.SOURCE_NEWS,
-            historical_range=historical_range,
-            api_key=BENZINGANEWS_API_KEY,
-            processor_class=NewsProcessor
-        )
-        
-        # Initialize API clients
-        self.rest_client = BenzingaNewsRestAPI(
-            api_key=self.api_key,
-            redis_client=self.redis.history_client,
-            ttl=self.ttl
-        )
-        self.ws_client = BenzingaNewsWebSocket(
-            api_key=self.api_key,
-            redis_client=self.redis.live_client,
-            ttl=self.ttl
-        )
-
-    def start(self):
-        try:
-            # Fetch historical data if enabled
-            if feature_flags.ENABLE_HISTORICAL_DATA:
-                historical_data = self.rest_client.get_historical_data(
-                    date_from=self.date_range['from'],
-                    date_to=self.date_range['to'],
-                    raw=False
-                )
-                self.logger.info(f"Fetched {len(historical_data)} historical items")
-            else:
-                self.logger.info("Historical data fetching disabled for Benzinga News.")
-
-            # Start processing threads (always needed)
-            self.processor_thread = threading.Thread(target=self.processor.process_all_news, daemon=True)
-            self.returns_thread = threading.Thread(target=self.returns_processor.process_all_returns, daemon=True)
-            
-            threads_to_start = [self.processor_thread, self.returns_thread]
-
-            # --- CONDITIONALLY START WEBSOCKET THREAD ---
-            if feature_flags.ENABLE_LIVE_DATA:
-                self.logger.info("Live data enabled, starting WebSocket thread for Benzinga News.")
-                self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
-                threads_to_start.append(self.ws_thread)
-            else:
-                self.logger.info("Live data disabled, WebSocket thread for Benzinga News will not be started.")
-            # -------------------------------------------
-            
-            for thread in threads_to_start:
-                thread.start()
-            return True
-            
-        except Exception as e:
-            self.logger.error(f"Error starting {self.source_type}: {e}")
-            return False
-
-    def _run_websocket(self):
-        while self.running:
-            try:
-                self.ws_client.connect(raw=False)
-            except Exception as e:
-                self.logger.error(f"WebSocket error: {e}")
-                time.sleep(5)
-
-
-    # def _run_websocket(self):
-    #     """Manage WebSocket connection with proper retry logic"""
-    #     while self.running:
-    #         try:
-    #             if not self.ws_client.connected:
-    #                 print(f"Starting {self.source_type} WebSocket connection...")
-    #                 # Direct call to connect - don't wrap in another thread
-    #                 self.ws_client.connect(raw=False)
-    #             time.sleep(2)  # Brief check interval
-    #         except Exception as e:
-    #             logging.error(f"{self.source_type} WebSocket error: {e}")
-    #             time.sleep(5)    
-
-    def check_status(self):
-        try:
-            live_prefix = RedisKeys.get_prefixes(self.source_type)['live']
-            return {
-                "websocket": {
-                    "connected": self.ws_client.connected,
-                    "last_message": self.ws_client.stats.get('last_message_time')
-                },
-                "redis": {
-                    "live_count": len(self.redis.live_client.client.keys(f"{live_prefix}raw:*")),
-                    "raw_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.RAW_QUEUE, 0, -1)),
-                    "processed_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.PROCESSED_QUEUE, 0, -1))
-                }
-            }
-        except Exception as e:
-            self.logger.error(f"Error checking status: {e}")
-            return None
-
-    def stop(self):
-        try:
-            self.running = False
-            self.ws_client.disconnect()
-            
-            for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
-                if thread and thread.is_alive():
-                    thread.join(timeout=5)
-            
-            self.redis.clear(preserve_processed=True)
-            return True
-        except Exception as e:
-            self.logger.error(f"Error stopping {self.source_type}: {e}")
-            return False
-
-    
-class ReportsManager(DataSourceManager):
-    """Manager for SEC filing reports"""
-    def __init__(self, historical_range: Dict[str, str]):
-        super().__init__(
-            source_type=RedisKeys.SOURCE_REPORTS,
-            historical_range=historical_range,
-            api_key=SEC_API_KEY,
-            processor_class=ReportProcessor
-        )
-        
-        # Initialize API clients (similar to BenzingaNewsManager)
-        self.rest_client = SECRestAPI(  
-            api_key=self.api_key,
-            # redis_client=self.redis.history_client,
-            redis=self.redis,
-            ttl=self.ttl
-        )
-
-        self.ws_client = SECWebSocket(
-            api_key=self.api_key,
-            redis_client=self.redis.live_client,
-            ttl=self.ttl
-        )
-
-    def start(self):
-        try:
-            # Start processing threads (always needed)
-            self.processor_thread = threading.Thread(target=self.processor.process_all_reports, daemon=True)
-            self.returns_thread = threading.Thread(target=self.returns_processor.process_all_returns, daemon=True)
-            
-            threads_to_start = [self.processor_thread, self.returns_thread]
-            
-            # Fetch historical data in separate thread if enabled
-            if feature_flags.ENABLE_HISTORICAL_DATA:
-                self.historical_thread = threading.Thread(
-                    target=self.rest_client.get_historical_data,
-                    args=(self.date_range['from'], self.date_range['to'], False), # Include raw=False
-                    daemon=True
-                )
-                threads_to_start.append(self.historical_thread)
-            else:
-                 self.logger.info("Historical data fetching disabled for SEC Reports.")
-
-            # --- CONDITIONALLY START WEBSOCKET THREAD ---
-            if feature_flags.ENABLE_LIVE_DATA:
-                self.logger.info("Live data enabled, starting WebSocket thread for SEC Reports.")
-                self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
-                threads_to_start.append(self.ws_thread)
-            else:
-                self.logger.info("Live data disabled, WebSocket thread for SEC Reports will not be started.")
-            # -------------------------------------------
-            
-            self.logger.debug(f"[Manager Debug] Starting threads:")
-            for thread in threads_to_start:
-                thread.start()
-                self.logger.debug(f"[Manager Debug] Thread {thread.name} started: {thread.is_alive()}")
-            
-            return True
-
-        except Exception as e:
-            self.logger.error(f"Error starting {self.source_type}: {e}")
-            return False
-
-    # def start(self):
-    #     try:
-    #         # Fetch historical data
-    #         historical_data = self.rest_client.get_historical_data(
-    #             date_from=self.date_range['from'],
-    #             date_to=self.date_range['to'],
-    #             raw=False
-    #         )
-    #         print(f"Fetched {len(historical_data)} historical SEC filings")
-
-    #         # Start all components in threads
-    #         self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
-    #         self.processor_thread = threading.Thread(target=self.processor.process_all_reports, daemon=True)
-    #         self.returns_thread = threading.Thread(target=self.returns_processor.process_all_returns, daemon=True)
-            
-    #         print(f"[Manager Debug] Starting threads:")
-    #         for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
-    #             thread.start()
-    #             print(f"[Manager Debug] Thread {thread.name} started: {thread.is_alive()}")
-    #         return True
-
-    #     except Exception as e:
-    #         logging.error(f"Error starting {self.source_type}: {e}")
-    #         return False
-
-    # def _run_websocket(self):
-    #     """Manage WebSocket connection with proper retry logic"""
-    #     retry_delay = 5
-    #     max_retries = 3
-        
-    #     while self.running:
-    #         try:
-    #             if not self.ws_client.connected:
-    #                 self.ws_client.connect(raw=False)
-    #             time.sleep(1)  # Check connection status periodically
-                
-    #         except Exception as e:
-    #             logging.error(f"SEC WebSocket error: {e}")
-    #             time.sleep(retry_delay)
-
-
-    def _run_websocket(self):
-        while self.running:
-            try:
-                # Direct call without checking - connect() should block until disconnected
-                self.ws_client.connect(raw=False)
-            except Exception as e:
-                self.logger.error(f"SEC WebSocket error: {e}")
-                time.sleep(5)
-
-
-    def check_status(self):
-        try:
-            live_prefix = RedisKeys.get_prefixes(self.source_type)['live']
-            return {
-                "websocket": {
-                    "connected": self.ws_client.connected,
-                    "last_message": self.ws_client.last_message_time  
-
-                },
-                "redis": {
-                    "live_count": len(self.redis.live_client.client.keys(f"{live_prefix}raw:*")),
-                    "raw_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.RAW_QUEUE, 0, -1)),
-                    "processed_queue": len(self.redis.live_client.client.lrange(self.redis.live_client.PROCESSED_QUEUE, 0, -1))
-                }
-            }
-        except Exception as e:
-            self.logger.error(f"Error checking status: {e}")
-            return None
-
-    def stop(self):
-        try:
-            self.running = False
-            self.ws_client.disconnect()
-            
-            for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
-                if thread and thread.is_alive():
-                    thread.join(timeout=5)
-            
-            self.redis.clear(preserve_processed=True)
-            return True
-        except Exception as e:
-            self.logger.error(f"Error stopping {self.source_type}: {e}")
-            return False
-        
 
 class DataManager:
     """Central data manager that coordinates all data sources and processors"""
@@ -843,6 +847,32 @@ class DataManager:
 
     def get_source(self, name: str):
         return self.sources.get(name)
+
+
+
+    # def _setup_signal_handlers(self):
+    #     """Set up signal handlers for graceful shutdown"""
+    #     import signal
+    #     import sys
+        
+    #     def signal_handler(sig, frame):
+    #         # Check if the handler is running in the main thread
+    #         if threading.current_thread() is threading.main_thread():
+    #             self.logger.info("Shutdown signal received in main thread. Stopping all components gracefully...")
+    #             self.stop()
+    #             self.logger.info("Shutdown complete. Exiting.")
+    #             sys.exit(0)
+    #         else:
+    #             # If run in a worker thread (likely due to os._exit triggering signals),
+    #             # log it but do NOT call stop() to prevent join errors.
+    #             # The process is already terminating via os._exit.
+    #             thread_name = threading.current_thread().name
+    #             self.logger.warning(f"Shutdown signal {sig} received in worker thread '{thread_name}'. Process is already exiting.")
+            
+    #     # Register for SIGINT (Ctrl+C) and SIGTERM
+    #     signal.signal(signal.SIGINT, signal_handler)
+    #     signal.signal(signal.SIGTERM, signal_handler)
+    #     self.logger.info("Signal handlers registered for graceful shutdown")
 
     
     def _setup_signal_handlers(self):

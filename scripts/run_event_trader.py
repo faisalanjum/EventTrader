@@ -19,7 +19,7 @@ from utils.log_config import setup_logging, get_logger
 from redisDB.redis_constants import RedisKeys
 from config.feature_flags import (
     ENABLE_HISTORICAL_DATA, ENABLE_LIVE_DATA, 
-    QAEXCHANGE_EMBEDDING_BATCH_SIZE, WITHRETURNS_MAX_RETRIES
+    QAEXCHANGE_EMBEDDING_BATCH_SIZE, WITHRETURNS_MAX_RETRIES, CHUNK_MONITOR_INTERVAL
 )
 
 # Make sure logs directory exists
@@ -277,7 +277,8 @@ def main():
                     sys.exit(1)
             else:
                 logger.info("Historical-only mode: Monitoring Redis for chunk completion...")
-                chunk_monitor_interval = 30 # Seconds between checks
+                # chunk_monitor_interval = 30 # Seconds between checks
+                chunk_monitor_interval = feature_flags.CHUNK_MONITOR_INTERVAL # Seconds between checks
             
             # --- Get Redis connection from existing manager --- 
             try:

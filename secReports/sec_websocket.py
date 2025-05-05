@@ -12,6 +12,11 @@ import logging
 from utils.log_config import get_logger, setup_logging
 
 class SECWebSocket:
+
+    # Define constants matching run_forever parameters for health checks
+    PING_INTERVAL = 15 # Default seconds
+    PING_TIMEOUT = 5   # Default seconds
+
     def __init__(self, api_key: str, redis_client: RedisClient, ttl: int = 7*24*3600, log_level: int = logging.INFO):
         # Core configuration
         self.redis_client = redis_client
@@ -151,8 +156,8 @@ class SECWebSocket:
                 
                 # Run with ping/pong for connection health
                 self.ws.run_forever(
-                    ping_interval=15,
-                    ping_timeout=5,
+                    ping_interval=self.PING_INTERVAL,
+                    ping_timeout=self.PING_TIMEOUT,
                     sslopt={"cert_reqs": ssl.CERT_NONE}
                 )
                 
@@ -178,26 +183,103 @@ class SECWebSocket:
                 self.current_retry += 1
                 time.sleep(delay)
 
-    def _check_heartbeat(self):
-        """Active connection monitoring"""
-        self.logger.info("Heartbeat monitoring started")
+    # def _check_heartbeat(self):
+    #     """Active connection monitoring"""
+    #     self.logger.info("Heartbeat monitoring started")
         
+    #     while self.should_run:
+    #         try:
+    #             if not self.check_connection_health():
+    #                 self.logger.warning("Heartbeat check failed, initiating reconnect...")
+    #                 if self.ws:
+    #                     self.ws.close()
+    #             time.sleep(10)  # Check every 10 seconds
+    #         except Exception as e:
+    #             self.logger.error(f"Error in heartbeat check: {str(e)}")
+    #             time.sleep(1)
+
+
+
+    def _check_heartbeat(self):
+        """Active connection monitoring thread. Checks health and forces close if needed."""
+        # Add a small initial delay to allow connection setup before first check
+        initial_delay = self.PING_INTERVAL # Wait at least one ping interval
+        self.logger.info(f"Heartbeat thread started. Initial check in {initial_delay}s.")
+        time.sleep(initial_delay)
+
         while self.should_run:
+            # Use PING_INTERVAL as the base check frequency
+            check_interval = self.PING_INTERVAL
             try:
                 if not self.check_connection_health():
-                    self.logger.warning("Heartbeat check failed, initiating reconnect...")
+                    self.logger.warning("Heartbeat check failed (unhealthy connection detected), initiating close for reconnect...")
                     if self.ws:
-                        self.ws.close()
-                time.sleep(10)  # Check every 10 seconds
+                        try:
+                            # Closing the ws triggers _on_close, which handles reconnect logic
+                            self.ws.close()
+                            # After forcing close, wait longer before the *next* check
+                            # to give the reconnect attempt time. _on_close handles immediate retry delay.
+                            check_interval = self.max_delay / 2
+                        except Exception as e:
+                            self.logger.error(f"Exception during ws.close() in heartbeat: {e}")
+                            # Still wait longer if close fails to avoid hammering
+                            check_interval = self.max_delay / 2
+                else:
+                    if self.logger.isEnabledFor(logging.DEBUG):
+                       self.logger.debug("Heartbeat check passed.")
+
             except Exception as e:
-                self.logger.error(f"Error in heartbeat check: {str(e)}")
-                time.sleep(1)
+                self.logger.error(f"Unexpected error in heartbeat check loop: {e}")
+                # Prevent tight loop on unexpected error, wait a bit longer
+                check_interval = 30
+
+            # Wait before next check
+            # Ensure we don't sleep for a negative or zero interval
+            sleep_time = max(1, check_interval)
+            time.sleep(sleep_time)
+
     
+    # def check_connection_health(self):
+    #     """Simplest possible connection check that won't false positive"""
+    #     if self.connected and self.ws:
+    #         return True
+    #     return True  # Let _on_error and _on_close handle actual disconnects
+
+
+
+
     def check_connection_health(self):
-        """Simplest possible connection check that won't false positive"""
-        if self.connected and self.ws:
-            return True
-        return True  # Let _on_error and _on_close handle actual disconnects
+        """Accurate WebSocket health check using connection status and PONG activity."""
+        # 1. Check basic connection flags and objects
+        if not self.connected or not self.ws or not self.ws.sock:
+            self.logger.debug("Health check failed: Not connected or ws/socket object missing.")
+            return False
+
+        # 2. Check time since last PONG received
+        now = datetime.now(timezone.utc)
+        # Calculate threshold dynamically based on defined constants + buffer
+        max_pong_silence = max(30, self.PING_INTERVAL * 2 + self.PING_TIMEOUT)
+
+        if self.last_pong_time:
+            # last_pong_time is already timezone-aware
+            time_since_last_pong = (now - self.last_pong_time).total_seconds()
+            if time_since_last_pong > max_pong_silence:
+                self.logger.warning(f"No PONG received in {time_since_last_pong:.1f}s (threshold: {max_pong_silence}s). Assuming low-level connection issue.")
+                return False
+        else:
+            # No pongs received yet since connection or last check. Check how long we've been connected.
+            if self._connection_time:
+                time_since_connect = (now - self._connection_time).total_seconds()
+                # Don't fail immediately, give time for the first pong exchange(s)
+                if time_since_connect > max_pong_silence:
+                    self.logger.warning(f"Connected for {time_since_connect:.1f}s but no PONG received yet (threshold: {max_pong_silence}s). Assuming connection issue.")
+                    return False
+            # else: _connection_time not set, unlikely state, can't check duration yet.
+
+        # If all checks pass, connection seems healthy
+        return True
+
+
 
     def disconnect(self):
         """Clean shutdown"""
@@ -381,18 +463,27 @@ class SECWebSocket:
         self.logger.info(f"WebSocket closed: {close_status_code} - {close_msg}")
         
         # Log downtime
-        status = close_status_code if close_status_code else 1006
+        status = close_status_code if close_status_code else 1006   # Default toAbnormal Closure
         self._log_downtime(status_code=status)
 
         # Exit if shutdown requested
         if not self.should_run:
+            self.logger.info("Shutdown requested, not attempting reconnect.")
             return
+            
+        # Reconnection is handled by the main connect loop's retry mechanism
+        self.logger.info("Connection closed. Reconnect will be attempted by the main loop.")
+
+
 
     def _on_pong(self, ws, message):
         """Handle pong response"""
         with self._lock:
             self.last_pong_time = datetime.now(timezone.utc)
-            self.logger.debug(f"Received pong at {self.last_pong_time.isoformat()}")
+
+            # Only log at debug level to reduce noise
+            if self.logger.isEnabledFor(logging.DEBUG):
+                self.logger.debug(f"Received pong at {self.last_pong_time.isoformat()}")            
 
     def _log_stats(self):
         """Log WebSocket statistics (internal use)"""

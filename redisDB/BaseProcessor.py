@@ -155,11 +155,17 @@ class BaseProcessor(ABC):
 
             # 6. Add metadata
             metadata = self._add_metadata(processed_dict)
-            if metadata is None:
-                client.push_to_queue(client.FAILED_QUEUE)
-                return False
+            
+            # if metadata is None:
+            #     client.push_to_queue(client.FAILED_QUEUE)
+            #     return False
 
-            # Rest of processing remains the same...
+            if metadata is None:
+                self.logger.error(f"Metadata generation failed for {raw_key}. Pushing to FAILED_QUEUE.")
+                client.push_to_queue(client.FAILED_QUEUE, raw_key)
+                if self.delete_raw:
+                    client.delete(raw_key)
+                return False
 
             # Add metadata to processed_dict
             processed_dict['metadata'] = metadata      

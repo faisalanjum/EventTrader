@@ -56,7 +56,7 @@ FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q
 # When set to True, enables XBRL report processing which extracts detailed financial data
 # When set to False, skips XBRL processing entirely and does not initialize related resources
 # This can significantly reduce memory usage and CPU load when XBRL data is not needed
-ENABLE_XBRL_PROCESSING = True
+ENABLE_XBRL_PROCESSING = False
 
 # XBRL Thread Pool Configuration
 # Number of worker threads for XBRL processing (only used when ENABLE_XBRL_PROCESSING is True)
@@ -131,11 +131,23 @@ QAEXCHANGE_EMBEDDING_BATCH_SIZE = 50
 # Higher values reduce CPU usage but may slightly delay processing new notifications
 MAX_TRANSCRIPT_SLEEP_SECONDS = 300  # 5 minutes
 
+#  If Transcript Not Found, reschedule it after this many seconds
+TRANSCRIPT_RESCHEDULE_INTERVAL = 300
+
+
 # --- Historical Chunked Processing Configuration ---
-HISTORICAL_CHUNK_DAYS = 7  # Default number of days per historical processing chunk
+HISTORICAL_CHUNK_DAYS = 5  # Default number of days per historical processing chunk
 HISTORICAL_STABILITY_WAIT_SECONDS = 60 # Default seconds to wait for queue stability
 # Number of monitoring cycles to wait before forcing withreturns reconciliation
 # After this many checks, if items remain in withreturns namespace, force reconciliation
 WITHRETURNS_MAX_RETRIES = 3
-# --- End Historical Chunked Processing Configuration ---
+# Interval (in seconds) between monitoring checks during chunked historical processing
+# Controls how frequently the system checks Redis for completion during each chunk
+CHUNK_MONITOR_INTERVAL = 30
 
+# --- End Historical Chunked Processing Configuration ---
+# --- PubSub Processing Configuration ---
+# Interval (in seconds) between reconciliation checks during PubSub processing
+# Controls how frequently the system runs reconcile_missing_items in live mode
+PUBSUB_RECONCILIATION_INTERVAL = 3600  # Default: Run once per hour
+# --- End PubSub Processing Configuration ---
