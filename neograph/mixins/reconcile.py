@@ -250,27 +250,45 @@ class ReconcileMixin:
                 if not self.universe_data:
                     return 0
             
-            # Create initializer and connect
-
-            initializer = Neo4jInitializer(
-                uri=self.uri, 
-                username=self.username,
-                password=self.password,
-                universe_data=self.universe_data
-            )
-            
-            if initializer.connect():
+            # Create initializer and connect, with simple retry
+            for attempt in range(3):  # Try up to 3 times
                 try:
-                    initializer.prepare_universe_data()
+                    initializer = Neo4jInitializer(
+                        uri=self.uri, 
+                        username=self.username,
+                        password=self.password,
+                        universe_data=self.universe_data
+                    )
                     
-                    # Create previous date first if needed
-                    if not result or result["previous_exists"] == 0:
-                        initializer.create_single_date(day_before)
+                    if initializer.connect():
+                        try:
+                            initializer.prepare_universe_data()
+                            
+                            # Create previous date first if needed
+                            if not result or result["previous_exists"] == 0:
+                                initializer.create_single_date(day_before)
+                            
+                            # Create yesterday with price relationships
+                            return 1 if initializer.create_single_date(yesterday) else 0
+                        finally:
+                            initializer.close()
                     
-                    # Create yesterday with price relationships
-                    return 1 if initializer.create_single_date(yesterday) else 0
-                finally:
-                    initializer.close()
+                    break  # If we got here without errors, break the retry loop
+                    
+                except Exception as e:
+                    # Log error but continue retrying
+                    logger.warning(f"Date reconciliation attempt {attempt+1} failed: {e}")
+                    
+                    # Force clean up before retry
+                    import gc
+                    gc.collect()
+                    
+                    # Only retry if not the last attempt
+                    if attempt < 2:  # 0, 1 = first two attempts
+                        time.sleep(1)  # Simple delay between attempts
+                    else:
+                        # On last attempt, re-raise the error
+                        raise
             
             return 0
         except Exception as e:
