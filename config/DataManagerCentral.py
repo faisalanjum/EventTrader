@@ -191,8 +191,9 @@ class BenzingaNewsManager(DataSourceManager):
             self.running = False
             self.ws_client.disconnect()
             
+            current_thread = threading.current_thread()
             for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
-                if thread and thread.is_alive():
+                if thread and thread.is_alive() and thread != current_thread:
                     thread.join(timeout=5)
             
             self.redis.clear(preserve_processed=True)
@@ -340,8 +341,9 @@ class ReportsManager(DataSourceManager):
             self.running = False
             self.ws_client.disconnect()
             
+            current_thread = threading.current_thread()
             for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
-                if thread and thread.is_alive():
+                if thread and thread.is_alive() and thread != current_thread:
                     thread.join(timeout=5)
             
             self.redis.clear(preserve_processed=True)
@@ -606,8 +608,9 @@ class TranscriptsManager(DataSourceManager):
             self.running = False
             
             # Wait for threads to finish
+            current_thread = threading.current_thread()
             for thread in [self.processor_thread, self.returns_thread, self.historical_thread]:
-                if thread and thread.is_alive():
+                if thread and thread.is_alive() and thread != current_thread:
                     thread.join(timeout=5)
             
             self.redis.clear(preserve_processed=True)
