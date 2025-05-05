@@ -12,6 +12,7 @@ from datetime import datetime
 import pytz
 from dateutil import parser
 from utils.metadata_fields import MetadataFields
+from config import feature_flags # Add this import
 
 class BaseProcessor(ABC):
     """Base class for all processors (news, reports, transcripts)"""
@@ -36,7 +37,20 @@ class BaseProcessor(ABC):
         self.live_client = event_trader_redis.live_client
         self.hist_client = event_trader_redis.history_client
         self.queue_client = self.live_client  # Dedicated client for queue operations
-        self.should_run = True
+
+        # Conditionally set the queue_client based on the run mode flags
+        if feature_flags.ENABLE_LIVE_DATA:
+            # Covers live-only and live+historical modes
+            self.queue_client = self.live_client
+            # Use get_logger here after it's initialized below
+        elif feature_flags.ENABLE_HISTORICAL_DATA:
+            # Covers historical-only mode
+            self.queue_client = self.hist_client
+            # Use get_logger here after it's initialized below
+        else:
+            # Fallback/Error case (shouldn't happen with current run_event_trader logic)
+            self.queue_client = self.live_client # Default to live_client
+            
         self._lock = threading.Lock()
         self.delete_raw = delete_raw
 
@@ -47,6 +61,12 @@ class BaseProcessor(ABC):
         
         # Logging setup using centralized system
         self.logger = get_logger(__name__)
+        
+        # Now log the queue client choice
+        if self.queue_client == self.live_client:
+             self.logger.info("Running in LIVE or LIVE+HISTORICAL mode. Queue client set to live_client.")
+        else:
+             self.logger.info("Running in HISTORICAL-ONLY mode. Queue client set to hist_client.")
 
         # PubSub channel
         self.processed_channel = RedisKeys.get_pubsub_channel(self.source_type)
@@ -57,6 +77,8 @@ class BaseProcessor(ABC):
         #     key_type=RedisKeys.SUFFIX_PROCESSED,
         #     prefix_type=RedisKeys.PREFIX_LIVE
         # )
+
+        self.should_run = True # Initialize should_run after logger is set
 
     def process_all_items(self):
         """Generic version of process_all_news"""
@@ -122,7 +144,7 @@ class BaseProcessor(ABC):
 
             raw_content = client.get(raw_key)
             if not raw_content:
-                client.delete(raw_key)
+                # client.delete(raw_key)
                 self.logger.info(f"Raw content not found: {raw_key}")  # Change from error to debug
                 return False
 
