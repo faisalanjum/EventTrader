@@ -32,7 +32,6 @@ class BaseProcessor(ABC):
         }
 
 
-
         # Direct copy from NewsProcessor.__init__
         self.live_client = event_trader_redis.live_client
         self.hist_client = event_trader_redis.history_client
@@ -123,6 +122,7 @@ class BaseProcessor(ABC):
 
             raw_content = client.get(raw_key)
             if not raw_content:
+                client.delete(raw_key)
                 self.logger.info(f"Raw content not found: {raw_key}")  # Change from error to debug
                 return False
 
@@ -209,6 +209,10 @@ class BaseProcessor(ABC):
             # client = (self.hist_client if ':hist:' in raw_key else self.live_client)
             client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
             client.push_to_queue(client.FAILED_QUEUE, raw_key)
+            
+            if self.delete_raw:
+                client.delete(raw_key)
+
             return False
 
 
