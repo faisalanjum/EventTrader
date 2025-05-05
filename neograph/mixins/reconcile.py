@@ -226,12 +226,12 @@ class ReconcileMixin:
             
             # Check both nodes and price relationships in a single query
             query = """
-            MATCH (yesterday:Date {date: $yesterday}) 
+            OPTIONAL MATCH (yesterday:Date {date: $yesterday}) 
             OPTIONAL MATCH (yesterday)-[r:HAS_PRICE]->()
             OPTIONAL MATCH (previous:Date {date: $day_before})
             WITH yesterday, [x IN collect(r) WHERE x IS NOT NULL] AS rels, previous
             RETURN 
-                1 as yesterday_exists,
+                CASE WHEN yesterday IS NOT NULL THEN 1 ELSE 0 END as yesterday_exists,
                 size(rels) as has_prices,
                 CASE WHEN previous IS NOT NULL THEN 1 ELSE 0 END as previous_exists
             """
@@ -304,7 +304,7 @@ class ReconcileMixin:
             
             # Check if dividends already exist in a single query
             query = """
-            MATCH (yesterday:Date {date: $yesterday})
+            OPTIONAL MATCH (yesterday:Date {date: $yesterday})
             OPTIONAL MATCH (yesterday)-[r:HAS_DIVIDEND]->()
             WITH yesterday, [x IN collect(r) WHERE x IS NOT NULL] AS rels
             RETURN 
@@ -354,7 +354,7 @@ class ReconcileMixin:
             
             # Check if splits already exist in a single query
             query = """
-            MATCH (yesterday:Date {date: $yesterday})
+            OPTIONAL MATCH (yesterday:Date {date: $yesterday})
             OPTIONAL MATCH (yesterday)-[r:HAS_SPLIT]->()
             WITH yesterday, [x IN collect(r) WHERE x IS NOT NULL] AS rels
             RETURN 

@@ -19,6 +19,13 @@ from XBRL.xbrl_reporting import Fact
 
 from XBRL.utils import resolve_primary_fact_relationships, clean_number
 
+# Import feature flags for configuration
+from config.feature_flags import (
+    NEO4J_MAX_CONNECTION_LIFETIME, 
+    NEO4J_KEEP_ALIVE, 
+    NEO4J_MAX_CONNECTION_POOL_SIZE
+)
+
 logger = logging.getLogger(__name__)
 
 # Define retry conditions using tenacity
@@ -73,7 +80,14 @@ class Neo4jManager:
 
     def __post_init__(self):
         try:
-            self.driver = GraphDatabase.driver(self.uri, auth=(self.username, self.password))
+            # Configure driver settings for better handling of long-running tasks/concurrency
+            self.driver = GraphDatabase.driver(
+                self.uri, 
+                auth=(self.username, self.password),
+                max_connection_lifetime=NEO4J_MAX_CONNECTION_LIFETIME,
+                keep_alive=NEO4J_KEEP_ALIVE,
+                max_connection_pool_size=NEO4J_MAX_CONNECTION_POOL_SIZE
+            )
             # test_connection now has implicit retry. It will raise if retries fail.
             if not self.test_connection():
                 # This case might be less likely now as test_connection reraises
@@ -265,12 +279,20 @@ class Neo4jManager:
                         properties = {}
                         for k, v in node.properties.items():
                             if k != 'id':
-                                if v is None:
-                                    properties[k] = "null"
-                                else:
-                                    # First sanitize collections, then format values
-                                    sanitized_value = sanitize_value(v)
-                                    properties[k] = format_value(sanitized_value)
+
+                                # if v is None:
+                                #     properties[k] = "null"
+                                # else:
+                                #     # First sanitize collections, then format values
+                                #     sanitized_value = sanitize_value(v)
+                                #     properties[k] = format_value(sanitized_value)
+                                
+                                                                
+                                # New logic: Pass Python None directly
+                                # Sanitize first (removes None from lists/dicts), then format
+                                sanitized_value = sanitize_value(v)
+                                # Pass Python None directly if value is None after potential sanitization
+                                properties[k] = None if sanitized_value is None else format_value(sanitized_value)
                         
                         query = f"""
                         MERGE (n:{node.node_type.value} {{id: $id}})

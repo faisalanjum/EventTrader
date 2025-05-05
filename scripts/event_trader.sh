@@ -602,13 +602,15 @@ process_chunked_historical() {
 
   # --- Read Configuration from feature_flags.py ---
   detect_python >/dev/null
-  CONFIG_VALUES=$($PYTHON_CMD -c "import sys; sys.path.append('.'); from config import feature_flags; print(f'{feature_flags.HISTORICAL_CHUNK_DAYS},{feature_flags.HISTORICAL_STABILITY_WAIT_SECONDS}')" 2>/dev/null)
-  if [ -z "$CONFIG_VALUES" ] || [[ "$CONFIG_VALUES" != *,* ]]; then
-      echo "ERROR: Could not read HISTORICAL_CHUNK_DAYS and HISTORICAL_STABILITY_WAIT_SECONDS from config/feature_flags.py"
+  CONFIG_VALUES=$($PYTHON_CMD -c "import sys; sys.path.append('.'); from config import feature_flags; print(f'{feature_flags.HISTORICAL_CHUNK_DAYS},{feature_flags.HISTORICAL_STABILITY_WAIT_SECONDS},{feature_flags.CHUNK_MONITOR_INTERVAL},{feature_flags.CHUNK_MAX_WAIT_SECONDS}')" 2>/dev/null)
+  if [ -z "$CONFIG_VALUES" ] || [[ "$CONFIG_VALUES" != *,*,*,* ]]; then
+      echo "ERROR: Could not read HISTORICAL_CHUNK_DAYS, HISTORICAL_STABILITY_WAIT_SECONDS, CHUNK_MONITOR_INTERVAL, or CHUNK_MAX_WAIT_SECONDS from config/feature_flags.py"
       exit 1
   fi
   local CHUNK_SIZE=$(echo $CONFIG_VALUES | cut -d',' -f1)
   local STABILITY_WAIT=$(echo $CONFIG_VALUES | cut -d',' -f2)
+  local chunk_monitor_sleep=$(echo $CONFIG_VALUES | cut -d',' -f3)
+  local chunk_max_wait=$(echo $CONFIG_VALUES | cut -d',' -f4)
 
   # --- VALIDATE Config Values ---
   if ! [[ "$CHUNK_SIZE" =~ ^[0-9]+$ ]] || [ "$CHUNK_SIZE" -le 0 ]; then
@@ -719,14 +721,12 @@ process_chunked_historical() {
     shell_log "EventTrader started with PID: $EVENTTRADER_PID"
     
     # Wait for the chunk to complete
-    MAX_WAIT=7200  # 2 hours max per chunk
     ELAPSED=0
-    CHECK_INTERVAL=60
 
-    shell_log "Monitoring chunk completion (timeout: ${MAX_WAIT}s)..."
+    shell_log "Monitoring chunk completion (timeout: ${chunk_max_wait}s)..."
     
     # Monitor EventTrader process
-    while [ $ELAPSED -lt $MAX_WAIT ]; do
+    while [ $ELAPSED -lt $chunk_max_wait ]; do
       # Check for completion in the log file
       if grep -q "Historical chunk processing finished" "$CHUNK_LOG_FILE" 2>/dev/null || \
          grep -q "Shutdown complete. Exiting Python process" "$CHUNK_LOG_FILE" 2>/dev/null; then
@@ -746,13 +746,13 @@ process_chunked_historical() {
         break
       fi
       
-      sleep $CHECK_INTERVAL
-      ELAPSED=$((ELAPSED + CHECK_INTERVAL))
+      sleep $chunk_monitor_sleep
+      ELAPSED=$((ELAPSED + chunk_monitor_sleep))
     done
 
     # Handle timeout
-    if [ $ELAPSED -ge $MAX_WAIT ]; then
-      shell_log "WARNING: Chunk $chunk_count timed out after ${MAX_WAIT}s"
+    if [ $ELAPSED -ge $chunk_max_wait ]; then
+      shell_log "WARNING: Chunk $chunk_count timed out after ${chunk_max_wait}s"
       PYTHON_EXIT_CODE=1
     fi
 
