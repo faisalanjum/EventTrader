@@ -280,19 +280,19 @@ class Neo4jManager:
                         for k, v in node.properties.items():
                             if k != 'id':
 
-                                # if v is None:
-                                #     properties[k] = "null"
-                                # else:
-                                #     # First sanitize collections, then format values
-                                #     sanitized_value = sanitize_value(v)
-                                #     properties[k] = format_value(sanitized_value)
-                                
-                                                                
+                                if v is None:
+                                    properties[k] = "null"
+                                else:
+                                    # First sanitize collections, then format values
+                                    sanitized_value = sanitize_value(v)
+                                    properties[k] = format_value(sanitized_value)
+
+                                # This did not help with solving issues like this so reverting to above: "neograph.mixins.reconcile - ERROR - Error reconciling date nodes: Expected structure, found marker A3"
                                 # New logic: Pass Python None directly
                                 # Sanitize first (removes None from lists/dicts), then format
-                                sanitized_value = sanitize_value(v)
-                                # Pass Python None directly if value is None after potential sanitization
-                                properties[k] = None if sanitized_value is None else format_value(sanitized_value)
+                                # sanitized_value = sanitize_value(v)
+                                # # Pass Python None directly if value is None after potential sanitization
+                                # properties[k] = None if sanitized_value is None else format_value(sanitized_value)
                         
                         query = f"""
                         MERGE (n:{node.node_type.value} {{id: $id}})

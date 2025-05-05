@@ -28,7 +28,7 @@ class SECRestAPI:
         self.MAX_QUERY_LENGTH = 3500  # Maximum query string length
         self.MAX_PAGE_SIZE = 50      # Maximum results per page
         self.MAX_RESULTS = 10000     # Maximum total results per query
-        self.RATE_LIMIT_DELAY = 0.1  # 100ms between requests
+        self.RATE_LIMIT_DELAY = 0.01  # Recommended 0.1 - 100ms between requests
         self.MAX_RETRIES = 3
         self.RETRY_DELAY = 1  # Start with 1 second
         self.MAX_RETRY_DELAY = 10  # Max backoff of 10 seconds
@@ -94,6 +94,7 @@ class SECRestAPI:
                     self.logger.error(f"Error processing ticker {ticker}: {str(e)}")
                     continue
                 
+                # Not Good - rethink
                 time.sleep(self.RATE_LIMIT_DELAY)
             
             # --- Fetch Complete Signal --- Start

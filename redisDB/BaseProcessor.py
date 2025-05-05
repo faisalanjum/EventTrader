@@ -65,19 +65,19 @@ class BaseProcessor(ABC):
         consecutive_errors = 0
         last_empty_log_time = 0  # Track last time we logged empty queue
 
-        self.logger.debug(f"Starting processor for {self.source_type}")
+        self.logger.info(f"Starting processor for {self.source_type}, should_run: {self.should_run}")
 
         while self.should_run:
             try:
-                result = self.queue_client.pop_from_queue(self.queue_client.RAW_QUEUE, timeout=1)
-                
+                result = self.queue_client.pop_from_queue(self.queue_client.RAW_QUEUE, timeout=1)                
+
                 if result:
-                    self.logger.debug(f"Popped item: {result}")
+                    self.logger.info(f"Popped item: {result}")
                 else:
                     # Only log empty queue every 60 seconds to reduce noise
                     current_time = int(time.time())
                     if current_time - last_empty_log_time >= 60:
-                        self.logger.debug(f"No items in queue after timeout")
+                        self.logger.info(f"No items in queue after timeout")
                         last_empty_log_time = current_time
 
 
@@ -123,7 +123,7 @@ class BaseProcessor(ABC):
 
             raw_content = client.get(raw_key)
             if not raw_content:
-                self.logger.debug(f"Raw content not found: {raw_key}")  # Change from error to debug
+                self.logger.info(f"Raw content not found: {raw_key}")  # Change from error to debug
                 return False
 
             content_dict = json.loads(raw_content)
@@ -141,7 +141,7 @@ class BaseProcessor(ABC):
 
             # 3. Check if any valid symbols exist
             if not self._has_valid_symbols(standardized_dict):
-                self.logger.debug(f"Dropping {raw_key} - no matching symbols in universe")
+                self.logger.info(f"Dropping {raw_key} - no matching symbols in universe")
                 client.delete(raw_key)
                 return True  # Item exits raw queue naturally
                 # No tracking maintained, never enters processed queue
@@ -258,8 +258,6 @@ class BaseProcessor(ABC):
             # hist_raw_queue = self.hist_client.RAW_QUEUE if hasattr(self.hist_client, 'RAW_QUEUE') else None
             # hist_processed_queue = self.hist_client.PROCESSED_QUEUE if hasattr(self.hist_client, 'PROCESSED_QUEUE') else None
             # hist_failed_queue = self.hist_client.FAILED_QUEUE if hasattr(self.hist_client, 'FAILED_QUEUE') else None
-            
-
 
             # Store the original queue configurations
             live_raw_queue = self.live_client.RAW_QUEUE
