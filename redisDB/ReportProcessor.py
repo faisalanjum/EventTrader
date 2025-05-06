@@ -11,6 +11,7 @@ from secReports.reportSections import ten_k_sections, ten_q_sections, eight_k_se
 from sec_api import ExtractorApi, XbrlApi
 from eventtrader.keys import SEC_API_KEY
 from multiprocessing import Pool
+from multiprocessing import TimeoutError as MpTimeout
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 import requests
 from inscriptis import get_text
@@ -24,12 +25,6 @@ from config import feature_flags
 # 3. The items tells the system which specific sections are present in an 8-K filing (e.g., "Item 1.01: Entry into a Material Agreement"), unlike 10-K/10-Q which have standardized structures. 
 
 
-
-# --- Module-level ThreadPoolExecutor for _extract_section_worker ---
-# Each worker process will have its own instance of this executor.
-# Keep ThreadPoolExecutor(max_workers=1) inside the worker. Its sole purpose is timeout control for the single get_section call within that worker's task. The parallelism across different sections is already handled correctly by the outer multiprocessing.Pool(processes=4).
-worker_task_executor = ThreadPoolExecutor(max_workers=1)
-
 def _safe_get_section(extractor_instance, url, section_id):
     """Helper function to isolate the blocking get_section call."""
     return extractor_instance.get_section(url, section_id, "text")
@@ -38,9 +33,9 @@ def _safe_get_section(extractor_instance, url, section_id):
 # Move this outside the class
 def _extract_section_worker(args):
     """Standalone worker function for multiprocessing with proper retry logic"""
-    url, section_id = args
+    url, section_id, api_key = args  # Now receiving api_key instead of creating extractor inside
     try:
-        extractor = ExtractorApi(SEC_API_KEY)
+        extractor = ExtractorApi(api_key)  # Create extractor with passed API key
         processing_attempts = 0
         regular_attempts = 0
         retries = 3
@@ -50,41 +45,36 @@ def _extract_section_worker(args):
             
         while regular_attempts < retries or processing_attempts < processing_retries:
             try:
-                # Submit the blocking call to the executor
-                future = worker_task_executor.submit(_safe_get_section, extractor, url, section_id)
-                try:
+                # Use context manager for ThreadPoolExecutor to ensure it's properly closed
+                with ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(_safe_get_section, extractor, url, section_id)
                     content = future.result(timeout=call_timeout)
-                except FutureTimeout:
-                    # logger.warning(f"Call to get_section for {url} - {section_id} timed out after {call_timeout}s.") # Requires logger access
-                    regular_attempts += 1 # Treat timeout as a failed attempt
-                    continue # Go to next retry iteration
-                except Exception as e:
-                    # logger.error(f"Exception during get_section for {url} - {section_id}: {e}") # Requires logger access
-                    regular_attempts += 1 # Treat other exceptions as failed attempts
-                    continue # Go to next retry iteration
 
-                # Handle processing status
-                if content == "processing":
-                    processing_attempts += 1
-                    if processing_attempts <= processing_retries:
-                        delay = 500 + (500 * processing_attempts)  # 500ms, 1000ms, 1500ms
-                        time.sleep(delay / 1000)  # Convert to seconds
-                        continue
-                    return section_id, None
+                    # Handle processing status
+                    if content == "processing":
+                        processing_attempts += 1
+                        if processing_attempts <= processing_retries:
+                            delay = 500 + (500 * processing_attempts)  # 500ms, 1000ms, 1500ms
+                            time.sleep(delay / 1000)  # Convert to seconds
+                            continue
+                        return section_id, None
 
-                # Handle empty content
-                if not content or not content.strip():
-                    regular_attempts += 1
-                    if regular_attempts < retries:
-                        delay = 500 + (500 * regular_attempts)
-                        time.sleep(delay / 1000)
-                        continue
-                    return section_id, None
+                    # Handle empty content
+                    if not content or not content.strip():
+                        regular_attempts += 1
+                        if regular_attempts < retries:
+                            delay = 500 + (500 * regular_attempts)
+                            time.sleep(delay / 1000)
+                            continue
+                        return section_id, None
                     
-                # Clean content if we have it
-                content = html.unescape(content)
-                return section_id, unicodedata.normalize("NFKC", content)
-                        
+                    # Clean content if we have it
+                    content = html.unescape(content)
+                    return section_id, unicodedata.normalize("NFKC", content)
+                    
+            except FutureTimeout:
+                regular_attempts += 1 # Treat timeout as a failed attempt
+                continue # Go to next retry iteration
             except Exception as e:
                 regular_attempts += 1
                 if regular_attempts < retries:
@@ -92,7 +82,7 @@ def _extract_section_worker(args):
                     time.sleep(delay / 1000)
                     continue
                 break
-                    
+                
         return section_id, None
 
     except Exception as e:
@@ -197,56 +187,49 @@ class ReportProcessor(BaseProcessor):
             # Inside _extract_sections method, update the parallel processing part:
             elif form_type.startswith(('10-K', '10-Q')):
                 self.logger.info(f"Processing {form_type} sections in parallel for URL: {url}")
-                args = [(url, section_id) for section_id in sections_map.keys()]
-                pool = None # Initialize pool to None for finally block
-
-                try:
-                    pool = Pool(processes=4)
-                    async_result = pool.map_async(_extract_section_worker, args)
-                    try:
-                        # Wait for results with the batch timeout
-                        results = async_result.get(timeout=feature_flags.SECTION_BATCH_EXTRACTION_TIMEOUT)
-                        # If .get() succeeds, close the pool normally to allow tasks to complete
-                        if pool:
-                            pool.close()
-                            pool.join() # Wait for normal completion
-                    except FutureTimeout: # alias for multiprocessing.TimeoutError
-                        self.logger.error(f"BATCH TIMEOUT extracting sections for URL: {url} after {feature_flags.SECTION_BATCH_EXTRACTION_TIMEOUT}s. Terminating workers.")
-                        if pool:
-                            pool.terminate()
-                            pool.join(timeout=10)
-                        return {} # Indicate failure for this report
-                    except Exception as get_err:
-                        self.logger.error(f"Error getting async results for {url}: {get_err}", exc_info=True)
-                        if pool: # Ensure pool exists before trying to terminate
-                            pool.terminate()
-                            pool.join(timeout=10)
-                        return {}
-
-                    # Process results if successful
-                    for section_id, content in zip(sections_map.keys(), results):
-                        if content and content != "processing": # Assuming "processing" is never a valid final content
-                            section_name = sections_map[section_id]
-                            extracted_sections[section_name] = content
-                            # self.logger.info(f"Successfully extracted section {section_name}") # Can be noisy
-                        # del content # Not strictly necessary with modern Python GC
-
-                except Exception as pool_err: # Catch errors during pool creation or other pool operations
-                    self.logger.error(f"Critical multiprocessing pool error for {url}: {pool_err}", exc_info=True)
-                    if pool:
-                        pool.terminate()
-                        pool.join(timeout=10)
+                
+                # Skip extraction if API key is missing
+                if not SEC_API_KEY:
+                    self.logger.warning("SEC API key is missing, skipping section extraction")
                     return {}
-                finally:
-                    # Defensive: ensure pool is closed/joined if it was created and not handled by .get() success path
-                    if pool and not pool._state == 'CLOSE': # Check if not already closed
-                        self.logger.debug(f"Ensuring pool cleanup for {url} in finally block.")
-                        # If terminate was called, join might have happened. If not, close and join.
-                        # A terminated pool cannot be joined normally after a separate join call.
-                        # So, if not already joined via terminate path, close it.
-                        if not getattr(pool, '_terminated', False): # Check if terminate was called
-                             pool.close()
-                        pool.join(timeout=5) # Final attempt to join
+                
+                section_tasks = [(url, section_id, SEC_API_KEY) for section_id in sections_map.keys()]
+                
+                try:
+                    # Create a deadline for the overall extraction - adaptive based on number of sections
+                    # Use either calculated time based on sections or minimum batch timeout, whichever is larger
+                    now = time.time()
+                    per_section_timeout = feature_flags.EXTRACTOR_CALL_TIMEOUT
+                    adaptive_timeout = len(section_tasks) * per_section_timeout * 1.2  # 20% buffer
+                    batch_timeout = feature_flags.SECTION_BATCH_EXTRACTION_TIMEOUT
+                    timeout_to_use = max(adaptive_timeout, batch_timeout)
+                    deadline = now + timeout_to_use
+                    
+                    self.logger.info(f"Using timeout of {timeout_to_use:.1f}s for {len(section_tasks)} sections")
+                    
+                    # Use with statement for automatic resource management
+                    with Pool(processes=4, maxtasksperchild=1) as pool:
+                        # Process each result as it completes (non-blocking)
+                        for sec_id, content in pool.imap_unordered(_extract_section_worker, section_tasks, chunksize=1):
+                            # Log remaining time periodically
+                            now = time.time()
+                            remaining = deadline - now
+                            if remaining <= 0:
+                                self.logger.warning(f"Reached extraction time limit for {url}, stopping further processing")
+                                pool.terminate()  # Hard-stop any remaining workers
+                                break
+                            
+                            # Log remaining time every few sections
+                            if len(extracted_sections) % 5 == 0:
+                                self.logger.debug(f"{remaining:.1f}s remaining for section extraction")
+                                
+                            # Process valid content
+                            if content:
+                                section_name = sections_map[sec_id]
+                                extracted_sections[section_name] = content
+                
+                except Exception as pool_err:
+                    self.logger.error(f"Critical pool error for {url}: {pool_err}", exc_info=True)
 
             if extracted_sections:
                 self.logger.info(f"Successfully extracted {len(extracted_sections)} sections for {url}")
@@ -480,6 +463,8 @@ class ReportProcessor(BaseProcessor):
         except Exception as e:
             self.logger.error(f"Error processing exhibit {url}: {str(e)}")
             return None
+
+
 
     # These are specifically for 6-K, 13D etc (Non FORM_TYPES_REQUIRING_SECTIONS)
     def _extract_secondary_filing_content(self, url: str) -> Optional[str]:

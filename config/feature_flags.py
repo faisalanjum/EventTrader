@@ -154,11 +154,18 @@ CHUNK_MONITOR_INTERVAL = 60
 # Maximum time (in seconds) to wait for a single historical chunk to complete
 CHUNK_MAX_WAIT_SECONDS = 7200 # Default: 2 hours
 
-# Timeout for the entire batch of parallel section extractions in ReportProcessor
-SECTION_BATCH_EXTRACTION_TIMEOUT = 120 # Default: 2 minutes (for the whole batch)
 
-# Timeout for an individual call to extractor.get_section() within a worker
-EXTRACTOR_CALL_TIMEOUT = 60 # Default: 1 minute (per section call)
+# Max time for processing all sections of one filing (300s)
+# - Streams results via imap_unordered for immediate processing
+# - Terminates pool at deadline to prevent ReportProcessor stalling
+# - Long enough for reasonable processing, short enough for safety
+SECTION_BATCH_EXTRACTION_TIMEOUT = 300  # seconds
+
+# Max time for a single sec-api.get_section() call (90s)
+# - Runs in ThreadPoolExecutor inside each worker
+# - Terminates thread on timeout, marks section as failed
+# - Allows sec-api retries while preventing hung HTTP requests
+EXTRACTOR_CALL_TIMEOUT = 90  # seconds
 
 
 # --- End Historical Chunked Processing Configuration ---
