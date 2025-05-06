@@ -88,6 +88,8 @@ class BaseProcessor(ABC):
 
         self.logger.info(f"Starting processor for {self.source_type}, should_run: {self.should_run}")
 
+        consecutive_timeouts = 0 # Counter for consecutive timeouts
+
         while self.should_run:
             try:
                 # === DIAGNOSTIC LOGGING START ===
@@ -102,6 +104,8 @@ class BaseProcessor(ABC):
 
                 if result:
                     self.logger.info(f"Popped item: {result}")
+                    consecutive_timeouts = 0 # Reset timeout counter on successful pop
+                    consecutive_errors = 0 # Reset processing error counter on successful pop
                 else:
                     # === DIAGNOSTIC LOGGING START ===                    
                     current_time = int(time.time())
@@ -115,9 +119,18 @@ class BaseProcessor(ABC):
                     # === DIAGNOSTIC LOGGING END ===
 
                     if current_time - last_empty_log_time >= 60: # Keep original 60s interval for standard log
-                        self.logger.info(f"No items in queue after timeout")
+                        # Increment timeout counter only when logging the standard message
+                        consecutive_timeouts += 1
+                        self.logger.info(f"No items in queue after timeout (Consecutive: {consecutive_timeouts})")
                         last_empty_log_time = current_time
 
+                        # Check if reconnect threshold is reached due to timeouts
+                        if consecutive_timeouts >= feature_flags.TIMEOUT_RECONNECT_THRESHOLD:
+                            self.logger.warning(f"Reached {feature_flags.TIMEOUT_RECONNECT_THRESHOLD} consecutive timeouts. Forcing reconnect...")
+                            self._reconnect()
+                            consecutive_timeouts = 0 # Reset after reconnecting
+                            consecutive_errors = 0 # Also reset processing errors
+                            last_empty_log_time = 0 # Allow immediate logging after reconnect
 
                 if not result:
                     continue
@@ -133,6 +146,8 @@ class BaseProcessor(ABC):
                         self.logger.error("Too many consecutive errors, reconnecting...")
                         self._reconnect()
                         consecutive_errors = 0
+                        consecutive_timeouts = 0 # Reset timeouts on processing error reconnect
+                        last_empty_log_time = 0
 
             except OSError as io_error:
                 # Specific handling for I/O errors
@@ -143,6 +158,8 @@ class BaseProcessor(ABC):
                     self.logger.warning("Multiple I/O errors, reconnecting...")
                     self._reconnect()
                     consecutive_errors = 0
+                    consecutive_timeouts = 0 # Reset timeouts on IO error reconnect
+                    last_empty_log_time = 0
             except Exception as e:
                 self.logger.error(f"Processing error: {e}")
                 time.sleep(0.5)  # Add sleep to prevent rapid error loops
@@ -150,6 +167,8 @@ class BaseProcessor(ABC):
                 if consecutive_errors > 10:
                     self._reconnect()
                     consecutive_errors = 0
+                    consecutive_timeouts = 0 # Reset timeouts on generic error reconnect
+                    last_empty_log_time = 0
 
     def _process_item(self, raw_key: str) -> bool:
         """Generic version of _process_news_item"""

@@ -150,6 +150,9 @@ WITHRETURNS_MAX_RETRIES = 3
 # Controls how frequently the system checks Redis for completion during each chunk
 CHUNK_MONITOR_INTERVAL = 60
 
+# Threshold for BaseProcessor reconnect on consecutive timeouts
+TIMEOUT_RECONNECT_THRESHOLD = 2 # Reconnect after 10 * 60s intervals
+
 # Maximum time (in seconds) to wait for a single historical chunk to complete
 CHUNK_MAX_WAIT_SECONDS = 7200 # Default: 2 hours
 
