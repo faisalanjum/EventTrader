@@ -361,8 +361,17 @@ class BaseProcessor(ABC):
             self.hist_client.PROCESSED_QUEUE = hist_processed_queue
             self.hist_client.FAILED_QUEUE = hist_failed_queue
             
-            # Reset queue_client to live_client
-            self.queue_client = self.live_client
+            # Re-assign queue_client based on the current feature flags
+            # (Mirrors the logic in __init__)
+            if feature_flags.ENABLE_LIVE_DATA:
+                self.queue_client = self.live_client
+                self.logger.info("RECONNECT: Assigning live_client based on feature flags.")
+            elif feature_flags.ENABLE_HISTORICAL_DATA:
+                self.queue_client = self.hist_client
+                self.logger.info("RECONNECT: Assigning hist_client based on feature flags.")
+            else:
+                self.queue_client = self.live_client # Fallback
+                self.logger.warning("RECONNECT: Both feature flags false? Defaulting queue_client to live_client.")
             
             self.logger.info("Successfully reconnected to Redis clients")
         except Exception as e:
