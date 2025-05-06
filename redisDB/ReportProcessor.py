@@ -196,44 +196,62 @@ class ReportProcessor(BaseProcessor):
 
             # Inside _extract_sections method, update the parallel processing part:
             elif form_type.startswith(('10-K', '10-Q')):
-                self.logger.info(f"Processing {form_type} sections in parallel")
+                self.logger.info(f"Processing {form_type} sections in parallel for URL: {url}")
+                args = [(url, section_id) for section_id in sections_map.keys()]
+                pool = None # Initialize pool to None for finally block
+
                 try:
-                    args = [(url, section_id) for section_id in sections_map.keys()]
-                    with Pool(processes=4) as pool:
-                        async_result = pool.map_async(_extract_section_worker, args)
-                        try:
-                            # Wait for results with a timeout (e.g., 120 seconds)
-                            results = async_result.get(timeout=feature_flags.SECTION_BATCH_EXTRACTION_TIMEOUT) 
-                        except FutureTimeout:
-                            self.logger.error(f"Timeout occurred while extracting sections for URL: {url}")
-                            # Terminate the pool to stop potentially hung workers
+                    pool = Pool(processes=4)
+                    async_result = pool.map_async(_extract_section_worker, args)
+                    try:
+                        # Wait for results with the batch timeout
+                        results = async_result.get(timeout=feature_flags.SECTION_BATCH_EXTRACTION_TIMEOUT)
+                        # If .get() succeeds, close the pool normally to allow tasks to complete
+                        if pool:
+                            pool.close()
+                            pool.join() # Wait for normal completion
+                    except FutureTimeout: # alias for multiprocessing.TimeoutError
+                        self.logger.error(f"BATCH TIMEOUT extracting sections for URL: {url} after {feature_flags.SECTION_BATCH_EXTRACTION_TIMEOUT}s. Terminating workers.")
+                        if pool:
                             pool.terminate()
-                            pool.join() # Ensure cleanup after termination
-                            return {} # Return empty dict to indicate failure for this item
-                        except Exception as get_err:
-                            self.logger.error(f"Error getting async results for {url}: {get_err}")
+                            pool.join(timeout=10)
+                        return {} # Indicate failure for this report
+                    except Exception as get_err:
+                        self.logger.error(f"Error getting async results for {url}: {get_err}", exc_info=True)
+                        if pool: # Ensure pool exists before trying to terminate
                             pool.terminate()
-                            pool.join()
-                            return {} # Return empty on other errors during get
-                        
-                        # Process results and free memory as we go
-                        for section_id, content in zip(sections_map.keys(), results):
-                            if content and content != "processing":
-                                section_name = sections_map[section_id]
-                                extracted_sections[section_name] = content  # Content already cleaned in worker
-                                self.logger.info(f"Successfully extracted section {section_name}")
-                            del content  # Help garbage collection
-                except Exception as pool_err: # Catch errors during pool creation/usage
-                    self.logger.error(f"Error during multiprocessing pool operation for {url}: {pool_err}")
-                    return {} # Return empty dict on pool errors
-                finally: # Ensure pool cleanup happens even if .get() succeeded but loop failed
-                    pool.close()  # Ensure proper cleanup
-                    pool.join()
+                            pool.join(timeout=10)
+                        return {}
+
+                    # Process results if successful
+                    for section_id, content in zip(sections_map.keys(), results):
+                        if content and content != "processing": # Assuming "processing" is never a valid final content
+                            section_name = sections_map[section_id]
+                            extracted_sections[section_name] = content
+                            # self.logger.info(f"Successfully extracted section {section_name}") # Can be noisy
+                        # del content # Not strictly necessary with modern Python GC
+
+                except Exception as pool_err: # Catch errors during pool creation or other pool operations
+                    self.logger.error(f"Critical multiprocessing pool error for {url}: {pool_err}", exc_info=True)
+                    if pool:
+                        pool.terminate()
+                        pool.join(timeout=10)
+                    return {}
+                finally:
+                    # Defensive: ensure pool is closed/joined if it was created and not handled by .get() success path
+                    if pool and not pool._state == 'CLOSE': # Check if not already closed
+                        self.logger.debug(f"Ensuring pool cleanup for {url} in finally block.")
+                        # If terminate was called, join might have happened. If not, close and join.
+                        # A terminated pool cannot be joined normally after a separate join call.
+                        # So, if not already joined via terminate path, close it.
+                        if not getattr(pool, '_terminated', False): # Check if terminate was called
+                             pool.close()
+                        pool.join(timeout=5) # Final attempt to join
 
             if extracted_sections:
-                self.logger.info(f"Total sections extracted: {len(extracted_sections)}")
+                self.logger.info(f"Successfully extracted {len(extracted_sections)} sections for {url}")
             else:
-                self.logger.warning("No sections were successfully extracted")
+                self.logger.warning(f"No sections were successfully extracted for {url}")
 
             return extracted_sections
 
