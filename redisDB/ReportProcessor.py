@@ -11,8 +11,11 @@ from secReports.reportSections import ten_k_sections, ten_q_sections, eight_k_se
 from sec_api import ExtractorApi, XbrlApi
 from eventtrader.keys import SEC_API_KEY
 from multiprocessing import Pool
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 import requests
 from inscriptis import get_text
+from utils.metadata_fields import MetadataFields
+from config import feature_flags
 
 
 # Notes:
@@ -20,6 +23,16 @@ from inscriptis import get_text
 # 2. secondary_filing_content is populated only when form type is NOT in FORM_TYPES_REQUIRING_SECTIONS (so only for 'SCHEDULE 13D', 'SCHEDULE 13D/A', 'SC TO-I', '425', 'SC 14D9', '6-K') 
 # 3. The items tells the system which specific sections are present in an 8-K filing (e.g., "Item 1.01: Entry into a Material Agreement"), unlike 10-K/10-Q which have standardized structures. 
 
+
+
+# --- Module-level ThreadPoolExecutor for _extract_section_worker ---
+# Each worker process will have its own instance of this executor.
+# Keep ThreadPoolExecutor(max_workers=1) inside the worker. Its sole purpose is timeout control for the single get_section call within that worker's task. The parallelism across different sections is already handled correctly by the outer multiprocessing.Pool(processes=4).
+worker_task_executor = ThreadPoolExecutor(max_workers=1)
+
+def _safe_get_section(extractor_instance, url, section_id):
+    """Helper function to isolate the blocking get_section call."""
+    return extractor_instance.get_section(url, section_id, "text")
 
 
 # Move this outside the class
@@ -32,10 +45,23 @@ def _extract_section_worker(args):
         regular_attempts = 0
         retries = 3
         processing_retries = 3
+        # Use timeout from feature_flags
+        call_timeout = feature_flags.EXTRACTOR_CALL_TIMEOUT
             
         while regular_attempts < retries or processing_attempts < processing_retries:
             try:
-                content = extractor.get_section(url, section_id, "text")
+                # Submit the blocking call to the executor
+                future = worker_task_executor.submit(_safe_get_section, extractor, url, section_id)
+                try:
+                    content = future.result(timeout=call_timeout)
+                except FutureTimeout:
+                    # logger.warning(f"Call to get_section for {url} - {section_id} timed out after {call_timeout}s.") # Requires logger access
+                    regular_attempts += 1 # Treat timeout as a failed attempt
+                    continue # Go to next retry iteration
+                except Exception as e:
+                    # logger.error(f"Exception during get_section for {url} - {section_id}: {e}") # Requires logger access
+                    regular_attempts += 1 # Treat other exceptions as failed attempts
+                    continue # Go to next retry iteration
 
                 # Handle processing status
                 if content == "processing":
@@ -59,7 +85,7 @@ def _extract_section_worker(args):
                 content = html.unescape(content)
                 return section_id, unicodedata.normalize("NFKC", content)
                         
-            except Exception:
+            except Exception as e:
                 regular_attempts += 1
                 if regular_attempts < retries:
                     delay = 500 + (500 * regular_attempts)
@@ -69,7 +95,7 @@ def _extract_section_worker(args):
                     
         return section_id, None
 
-    except Exception:
+    except Exception as e:
         return section_id, None
 
 
@@ -174,7 +200,21 @@ class ReportProcessor(BaseProcessor):
                 try:
                     args = [(url, section_id) for section_id in sections_map.keys()]
                     with Pool(processes=4) as pool:
-                        results = pool.map(_extract_section_worker, args)
+                        async_result = pool.map_async(_extract_section_worker, args)
+                        try:
+                            # Wait for results with a timeout (e.g., 120 seconds)
+                            results = async_result.get(timeout=feature_flags.SECTION_BATCH_EXTRACTION_TIMEOUT) 
+                        except FutureTimeout:
+                            self.logger.error(f"Timeout occurred while extracting sections for URL: {url}")
+                            # Terminate the pool to stop potentially hung workers
+                            pool.terminate()
+                            pool.join() # Ensure cleanup after termination
+                            return {} # Return empty dict to indicate failure for this item
+                        except Exception as get_err:
+                            self.logger.error(f"Error getting async results for {url}: {get_err}")
+                            pool.terminate()
+                            pool.join()
+                            return {} # Return empty on other errors during get
                         
                         # Process results and free memory as we go
                         for section_id, content in zip(sections_map.keys(), results):
@@ -183,7 +223,10 @@ class ReportProcessor(BaseProcessor):
                                 extracted_sections[section_name] = content  # Content already cleaned in worker
                                 self.logger.info(f"Successfully extracted section {section_name}")
                             del content  # Help garbage collection
-                finally:
+                except Exception as pool_err: # Catch errors during pool creation/usage
+                    self.logger.error(f"Error during multiprocessing pool operation for {url}: {pool_err}")
+                    return {} # Return empty dict on pool errors
+                finally: # Ensure pool cleanup happens even if .get() succeeded but loop failed
                     pool.close()  # Ensure proper cleanup
                     pool.join()
 

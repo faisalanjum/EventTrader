@@ -145,12 +145,12 @@ class NewsErrorHandler:
         self.stats.validation_errors[error_type] += 1
         
         # Always print validation errors regardless of raw mode
-        print("\nSkipped News Item:")
-        print(f"ID: {data.get('id', 'unknown')}")
-        print(f"Title: {data.get('title', 'N/A')}")
-        print(f"Error: {str(error)}")
-        print("="*80)
-        self.print_skipped_news(data, error)
+        # print("\nSkipped News Item:")
+        # print(f"ID: {data.get('id', 'unknown')}")
+        # print(f"Title: {data.get('title', 'N/A')}")
+        # print(f"Error: {str(error)}")
+        # print("="*80)
+        # self.print_skipped_news(data, error)
         
         # Track skipped items by type
         if "id" in str(error):

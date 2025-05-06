@@ -86,69 +86,37 @@ class BaseProcessor(ABC):
 
         self.logger.info(f"Starting processor for {self.source_type}, should_run: {self.should_run}")
 
-        consecutive_timeouts = 0 # Counter for consecutive timeouts
-
         while self.should_run:
             try:
-                # === DIAGNOSTIC LOGGING START ===
-                try:
-                    # Explicitly ping before checking length/popping to ensure connection validity/freshness
-                    self.queue_client.client.ping()
-                    q_len = self.queue_client.get_queue_length(self.queue_client.RAW_QUEUE)
-                    self.logger.info(f"[Diag] Attempting pop using client prefix '{self.queue_client.prefix}'. Queue '{self.queue_client.RAW_QUEUE}' length reported by this client: {q_len}")
-                except Exception as diag_e:
-                    self.logger.error(f"[Diag] Error getting queue length before pop: {diag_e}")
-                # === DIAGNOSTIC LOGGING END ===
-                
                 result = self.queue_client.pop_from_queue(self.queue_client.RAW_QUEUE, timeout=1)                
 
                 if result:
-                    self.logger.info(f"Popped item: {result}")
-                    consecutive_timeouts = 0 # Reset timeout counter on successful pop
+                    self.logger.info(f"[{self.source_type}] -Popped item: {result}")
                     consecutive_errors = 0 # Reset processing error counter on successful pop
                 else:
-                    # === DIAGNOSTIC LOGGING START ===                    
+                    # Timeout occurred
                     current_time = int(time.time())
-                    if current_time - last_empty_log_time >= 5: # Log diagnostics more frequently than the standard empty log
-                        try:
-                            ping_ok = self.queue_client.client.ping()
-                            q_len_after = self.queue_client.get_queue_length(self.queue_client.RAW_QUEUE)
-                            self.logger.info(f"[Diag] Pop timed out. Client '{self.queue_client.prefix}' ping successful: {ping_ok}. Queue length reported after timeout: {q_len_after}")
-                        except Exception as diag_e:
-                            self.logger.error(f"[Diag] Error during post-timeout diagnostics: {diag_e}")
-                    # === DIAGNOSTIC LOGGING END ===
-
                     if current_time - last_empty_log_time >= 60: # Keep original 60s interval for standard log
-                        # Increment timeout counter only when logging the standard message
-                        consecutive_timeouts += 1
-                        self.logger.info(f"No items in queue after timeout (Consecutive: {consecutive_timeouts})")
+                        self.logger.info(f"[{self.source_type}] - No items in queue after timeout")
                         last_empty_log_time = current_time
-
-                        # Check if reconnect threshold is reached due to timeouts
-                        if consecutive_timeouts >= feature_flags.TIMEOUT_RECONNECT_THRESHOLD:
-                            self.logger.warning(f"Reached {feature_flags.TIMEOUT_RECONNECT_THRESHOLD} consecutive timeouts. Forcing reconnect...")
-                            self._reconnect()
-                            consecutive_timeouts = 0 # Reset after reconnecting
-                            consecutive_errors = 0 # Also reset processing errors
-                            last_empty_log_time = 0 # Allow immediate logging after reconnect
 
                 if not result:
                     continue
 
-                self.logger.info(f"Attempting to process item: {raw_key}") # Log before calling _process_item
+                # Assign raw_key FIRST from the non-None result
                 _, raw_key = result
+                self.logger.info(f"[{self.source_type}] - Attempting to process item: {raw_key}") # Log before calling _process_item
                 success = self._process_item(raw_key)
-                self.logger.info(f"Finished processing item: {raw_key}, Success: {success}") # Log after calling _process_item
+                self.logger.info(f"[{self.source_type}] - Finished processing item: {raw_key}, Success: {success}") # Log after calling _process_item
                 
                 if success:
                     consecutive_errors = 0
                 else:
                     consecutive_errors += 1
                     if consecutive_errors > 10:  # Reset after too many errors
-                        self.logger.error("Too many consecutive errors, reconnecting...")
+                        self.logger.error(f"[{self.source_type}] - Too many consecutive errors, reconnecting...")
                         self._reconnect()
                         consecutive_errors = 0
-                        consecutive_timeouts = 0 # Reset timeouts on processing error reconnect
                         last_empty_log_time = 0
 
             except OSError as io_error:
@@ -157,19 +125,17 @@ class BaseProcessor(ABC):
                 time.sleep(1)  # Add sleep on I/O error
                 consecutive_errors += 1
                 if consecutive_errors > 3:  # Be more aggressive with reconnection for I/O errors
-                    self.logger.warning("Multiple I/O errors, reconnecting...")
+                    self.logger.warning(f"[{self.source_type}] - Multiple I/O errors, reconnecting...")
                     self._reconnect()
                     consecutive_errors = 0
-                    consecutive_timeouts = 0 # Reset timeouts on IO error reconnect
                     last_empty_log_time = 0
             except Exception as e:
-                self.logger.error(f"Processing error: {e}")
+                self.logger.error(f"[{self.source_type}] - Processing error: {e}")
                 time.sleep(0.5)  # Add sleep to prevent rapid error loops
                 consecutive_errors += 1
                 if consecutive_errors > 10:
                     self._reconnect()
                     consecutive_errors = 0
-                    consecutive_timeouts = 0 # Reset timeouts on generic error reconnect
                     last_empty_log_time = 0
 
     def _process_item(self, raw_key: str) -> bool:

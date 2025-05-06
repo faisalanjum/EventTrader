@@ -150,11 +150,16 @@ WITHRETURNS_MAX_RETRIES = 3
 # Controls how frequently the system checks Redis for completion during each chunk
 CHUNK_MONITOR_INTERVAL = 60
 
-# Threshold for BaseProcessor reconnect on consecutive timeouts
-TIMEOUT_RECONNECT_THRESHOLD = 2 # Reconnect after 10 * 60s intervals
 
 # Maximum time (in seconds) to wait for a single historical chunk to complete
 CHUNK_MAX_WAIT_SECONDS = 7200 # Default: 2 hours
+
+# Timeout for the entire batch of parallel section extractions in ReportProcessor
+SECTION_BATCH_EXTRACTION_TIMEOUT = 120 # Default: 2 minutes (for the whole batch)
+
+# Timeout for an individual call to extractor.get_section() within a worker
+EXTRACTOR_CALL_TIMEOUT = 60 # Default: 1 minute (per section call)
+
 
 # --- End Historical Chunked Processing Configuration ---
 # --- PubSub Processing Configuration ---
@@ -162,3 +167,7 @@ CHUNK_MAX_WAIT_SECONDS = 7200 # Default: 2 hours
 # Controls how frequently the system runs reconcile_missing_items in live mode
 PUBSUB_RECONCILIATION_INTERVAL = 3600  # Default: Run once per hour
 # --- End PubSub Processing Configuration ---
+
+
+# Threshold for BaseProcessor reconnect on consecutive timeouts
+TIMEOUT_RECONNECT_THRESHOLD = 2 # Reconnect after 10 * 60s intervals

@@ -124,27 +124,27 @@ class SECRestAPI:
                 # Process each filing (matching WebSocket pattern)
                 for filing in filings:
                     self.stats['messages_received'] += 1
-                    self.logger.info(f"\nProcessing filing #{self.stats['messages_received']}")
-                    self.logger.info(f"Form Type: {filing.get('formType')}")
-                    self.logger.info(f"Accession No: {filing.get('accessionNo')}")
+                    # self.logger.info(f"\nProcessing filing #{self.stats['messages_received']}")
+                    # self.logger.info(f"Form Type: {filing.get('formType')}")
+                    # self.logger.info(f"Accession No: {filing.get('accessionNo')}")
                     
                     # First process to unified format
                     unified_filing = self.error_handler.process_filing(filing, raw=False)
                     if unified_filing:
-                        self.logger.info("✅ Successfully created UnifiedReport")
+                        # self.logger.info("✅ Successfully created UnifiedReport")
                         
                         # Store in Redis
                         if self.redis_client.set_filing(unified_filing, ex=self.ttl):
-                            self.logger.info("✅ Successfully stored in Redis")
+                            # self.logger.info("✅ Successfully stored in Redis")
                             
                             # Handle raw display if needed
                             if raw:
                                 display_filing = self.error_handler.process_filing(filing, raw=True)
                                 if display_filing:
-                                    display_filing.print()
+                                    # display_filing.print()
                                     ticker_filings.append(display_filing)
                             else:
-                                unified_filing.print()
+                                # unified_filing.print()
                                 ticker_filings.append(unified_filing)
                                 
                             self.stats['messages_processed'] += 1
@@ -233,9 +233,9 @@ class SECRestAPI:
         """Log current processing statistics"""
         self.logger.info("\nSEC REST API Statistics:")
         self.logger.info(f"Tickers Processed: {self.stats['tickers_processed']}")
-        self.logger.info(f"Messages Received: {self.stats['messages_received']}")
-        self.logger.info(f"Messages Processed: {self.stats['messages_processed']}")
-        self.logger.info(f"Queries Made: {self.stats['queries_made']}")
-        self.logger.info(f"Filings Found: {self.stats['filings_found']}")
+        # self.logger.info(f"Messages Received: {self.stats['messages_received']}")
+        # self.logger.info(f"Messages Processed: {self.stats['messages_processed']}")
+        # self.logger.info(f"Queries Made: {self.stats['queries_made']}")
+        # self.logger.info(f"Filings Found: {self.stats['filings_found']}")
         self.logger.info(f"Pagination Limits Hit: {self.stats['pagination_limits_hit']}")
         self.logger.info(f"Errors: {self.stats['errors']}")
