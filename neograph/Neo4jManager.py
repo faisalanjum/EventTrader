@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 # Define retry conditions using tenacity
 retry_on_neo4j_transient_error = tenacity.retry(
     stop=tenacity.stop_after_attempt(3), # Retry 2 times after initial failure (total 3 attempts)
-    wait=tenacity.wait_exponential(multiplier=0.5, min=0.2, max=2), # Exponential backoff 0.2s -> 0.4s
+    wait=tenacity.wait_exponential(multiplier=1, min=0.5, max=3), # Exponential backoff 0.5s -> 1s -> 2s
     retry=(
         tenacity.retry_if_exception_type(neo4j.exceptions.ServiceUnavailable) |
         tenacity.retry_if_exception_type(neo4j.exceptions.SessionExpired) |

@@ -266,46 +266,6 @@ class ReportsManager(DataSourceManager):
             self.logger.error(f"Error starting {self.source_type}: {e}")
             return False
 
-    # def start(self):
-    #     try:
-    #         # Fetch historical data
-    #         historical_data = self.rest_client.get_historical_data(
-    #             date_from=self.date_range['from'],
-    #             date_to=self.date_range['to'],
-    #             raw=False
-    #         )
-    #         print(f"Fetched {len(historical_data)} historical SEC filings")
-
-    #         # Start all components in threads
-    #         self.ws_thread = threading.Thread(target=self._run_websocket, daemon=True)
-    #         self.processor_thread = threading.Thread(target=self.processor.process_all_reports, daemon=True)
-    #         self.returns_thread = threading.Thread(target=self.returns_processor.process_all_returns, daemon=True)
-            
-    #         print(f"[Manager Debug] Starting threads:")
-    #         for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
-    #             thread.start()
-    #             print(f"[Manager Debug] Thread {thread.name} started: {thread.is_alive()}")
-    #         return True
-
-    #     except Exception as e:
-    #         logging.error(f"Error starting {self.source_type}: {e}")
-    #         return False
-
-    # def _run_websocket(self):
-    #     """Manage WebSocket connection with proper retry logic"""
-    #     retry_delay = 5
-    #     max_retries = 3
-        
-    #     while self.running:
-    #         try:
-    #             if not self.ws_client.connected:
-    #                 self.ws_client.connect(raw=False)
-    #             time.sleep(1)  # Check connection status periodically
-                
-    #         except Exception as e:
-    #             logging.error(f"SEC WebSocket error: {e}")
-    #             time.sleep(retry_delay)
-
 
     def _run_websocket(self):
         while self.running:

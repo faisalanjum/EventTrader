@@ -42,14 +42,18 @@ class BaseProcessor(ABC):
         if feature_flags.ENABLE_LIVE_DATA:
             # Covers live-only and live+historical modes
             self.queue_client = self.live_client
-            # Use get_logger here after it's initialized below
+            # Log assignment immediately
+            get_logger(__name__).info(f"INITIALIZING {event_trader_redis.source}: ENABLE_LIVE_DATA=True. Assigning live_client.")
         elif feature_flags.ENABLE_HISTORICAL_DATA:
             # Covers historical-only mode
             self.queue_client = self.hist_client
-            # Use get_logger here after it's initialized below
+            # Log assignment immediately
+            get_logger(__name__).info(f"INITIALIZING {event_trader_redis.source}: ENABLE_LIVE_DATA=False, ENABLE_HISTORICAL_DATA=True. Assigning hist_client.")
         else:
             # Fallback/Error case (shouldn't happen with current run_event_trader logic)
             self.queue_client = self.live_client # Default to live_client
+            # Log assignment immediately
+            get_logger(__name__).info(f"INITIALIZING {event_trader_redis.source}: Both flags False? Falling back to live_client.")
             
         self._lock = threading.Lock()
         self.delete_raw = delete_raw
@@ -62,12 +66,6 @@ class BaseProcessor(ABC):
         # Logging setup using centralized system
         self.logger = get_logger(__name__)
         
-        # Now log the queue client choice
-        if self.queue_client == self.live_client:
-             self.logger.info("Running in LIVE or LIVE+HISTORICAL mode. Queue client set to live_client.")
-        else:
-             self.logger.info("Running in HISTORICAL-ONLY mode. Queue client set to hist_client.")
-
         # PubSub channel
         self.processed_channel = RedisKeys.get_pubsub_channel(self.source_type)
 

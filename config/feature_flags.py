@@ -141,7 +141,7 @@ TRANSCRIPT_RESCHEDULE_INTERVAL = 300
 
 
 # --- Historical Chunked Processing Configuration ---
-HISTORICAL_CHUNK_DAYS = 2  # Default number of days per historical processing chunk
+HISTORICAL_CHUNK_DAYS = 5  # Default number of days per historical processing chunk
 HISTORICAL_STABILITY_WAIT_SECONDS = 60 # Default seconds to wait for queue stability
 # Number of monitoring cycles to wait before forcing withreturns reconciliation
 # After this many checks, if items remain in withreturns namespace, force reconciliation
@@ -151,7 +151,7 @@ WITHRETURNS_MAX_RETRIES = 3
 CHUNK_MONITOR_INTERVAL = 60
 
 # Threshold for BaseProcessor reconnect on consecutive timeouts
-TIMEOUT_RECONNECT_THRESHOLD = 2 # Reconnect after 10 * 60s intervals
+TIMEOUT_RECONNECT_THRESHOLD = 10 # Reconnect after 10 * 60s intervals
 
 # Maximum time (in seconds) to wait for a single historical chunk to complete
 CHUNK_MAX_WAIT_SECONDS = 7200 # Default: 2 hours
