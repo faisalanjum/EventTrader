@@ -92,6 +92,8 @@ class BaseProcessor(ABC):
             try:
                 # === DIAGNOSTIC LOGGING START ===
                 try:
+                    # Explicitly ping before checking length/popping to ensure connection validity/freshness
+                    self.queue_client.client.ping()
                     q_len = self.queue_client.get_queue_length(self.queue_client.RAW_QUEUE)
                     self.logger.info(f"[Diag] Attempting pop using client prefix '{self.queue_client.prefix}'. Queue '{self.queue_client.RAW_QUEUE}' length reported by this client: {q_len}")
                 except Exception as diag_e:
@@ -133,8 +135,10 @@ class BaseProcessor(ABC):
                 if not result:
                     continue
 
+                self.logger.info(f"Attempting to process item: {raw_key}") # Log before calling _process_item
                 _, raw_key = result
                 success = self._process_item(raw_key)
+                self.logger.info(f"Finished processing item: {raw_key}, Success: {success}") # Log after calling _process_item
                 
                 if success:
                     consecutive_errors = 0
