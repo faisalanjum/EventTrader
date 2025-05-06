@@ -90,14 +90,31 @@ class BaseProcessor(ABC):
 
         while self.should_run:
             try:
+                # === DIAGNOSTIC LOGGING START ===
+                try:
+                    q_len = self.queue_client.get_queue_length(self.queue_client.RAW_QUEUE)
+                    self.logger.info(f"[Diag] Attempting pop using client prefix '{self.queue_client.prefix}'. Queue '{self.queue_client.RAW_QUEUE}' length reported by this client: {q_len}")
+                except Exception as diag_e:
+                    self.logger.error(f"[Diag] Error getting queue length before pop: {diag_e}")
+                # === DIAGNOSTIC LOGGING END ===
+                
                 result = self.queue_client.pop_from_queue(self.queue_client.RAW_QUEUE, timeout=1)                
 
                 if result:
                     self.logger.info(f"Popped item: {result}")
                 else:
-                    # Only log empty queue every 60 seconds to reduce noise
+                    # === DIAGNOSTIC LOGGING START ===                    
                     current_time = int(time.time())
-                    if current_time - last_empty_log_time >= 60:
+                    if current_time - last_empty_log_time >= 5: # Log diagnostics more frequently than the standard empty log
+                        try:
+                            ping_ok = self.queue_client.client.ping()
+                            q_len_after = self.queue_client.get_queue_length(self.queue_client.RAW_QUEUE)
+                            self.logger.info(f"[Diag] Pop timed out. Client '{self.queue_client.prefix}' ping successful: {ping_ok}. Queue length reported after timeout: {q_len_after}")
+                        except Exception as diag_e:
+                            self.logger.error(f"[Diag] Error during post-timeout diagnostics: {diag_e}")
+                    # === DIAGNOSTIC LOGGING END ===
+
+                    if current_time - last_empty_log_time >= 60: # Keep original 60s interval for standard log
                         self.logger.info(f"No items in queue after timeout")
                         last_empty_log_time = current_time
 
@@ -144,7 +161,8 @@ class BaseProcessor(ABC):
 
             raw_content = client.get(raw_key)
             if not raw_content:
-                # client.delete(raw_key)
+                if self.delete_raw:
+                    client.delete(raw_key)
                 self.logger.info(f"Raw content not found: {raw_key}")  # Change from error to debug
                 return False
 
