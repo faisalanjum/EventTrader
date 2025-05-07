@@ -116,9 +116,10 @@ SYMBOLS_CSV_PATH = os.path.join(CONFIG_DIR, "final_symbols.csv")
 # --- End Path Configuration ---
 
 # --- Neo4j Driver Configuration ---
-NEO4J_MAX_CONNECTION_LIFETIME = 3600  # Max connection lifetime in seconds (e.g., 3600 for 1 hour)
+# Ideally : NEO4J_MAX_CONNECTION_LIFETIME ≥ CHUNK_MAX_WAIT_SECONDS
+NEO4J_MAX_CONNECTION_LIFETIME = 7500  # Max connection lifetime in seconds (e.g., 7200 for 2 hour)
 NEO4J_KEEP_ALIVE = True               # Enable TCP keep-alive for connections
-NEO4J_MAX_CONNECTION_POOL_SIZE = 150  # Maximum number of connections in the pool
+NEO4J_MAX_CONNECTION_POOL_SIZE = 250  # Maximum number of connections in the pool
 # --- End Neo4j Driver Configuration ---
 
 # When equal to or greater than this number, use OpenAI Parallel Embeddings (with rate limiting) for news items instead of Neo4j Internal function 
