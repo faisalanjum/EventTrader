@@ -1427,6 +1427,10 @@ class Neo4jInitializer:
             # Get all splits since start_date
             all_splits = polygon.get_splits(company_tickers)
             
+            # Defensive copy to avoid NumPy "object cannot be re-sized" when later filtered
+            if not all_splits.empty:
+                all_splits = all_splits.copy(deep=True)
+            
             # Filter by start date provided to the function
             if all_splits.empty:
                 logger.info("No splits found")
@@ -1614,6 +1618,10 @@ class Neo4jInitializer:
             # The subsequent duplicate check will filter out existing ones
             logger.info(f"Reconciliation: Fetching all splits for {len(company_tickers)} tickers to find new announcements.")
             all_ticker_splits = polygon.get_splits(company_tickers)
+            
+            # Defensive copy (see create_splits note)
+            if not all_ticker_splits.empty:
+                all_ticker_splits = all_ticker_splits.copy(deep=True)
             
             # --- Filter out splits older than the earliest Date node ---
             min_existing_date = None

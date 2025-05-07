@@ -368,36 +368,67 @@ class ReportProcessor(BaseProcessor):
 
             xbrl_json = self.xbrl_api.xbrl_to_json(accession_no=accession_no)
             
-            # Normalize input CIK
-            input_cik = str(int(cik)).zfill(10) if cik else '0'.zfill(10)
+            # Normalize input CIK robustly
+            normalized_input_cik_str = None
+            if cik and isinstance(cik, str) and cik.strip().isdigit():
+                try:
+                    normalized_input_cik_str = str(int(cik)).zfill(10)
+                except ValueError:
+                    normalized_input_cik_str = '0'.zfill(10) # Should not happen if isdigit is true
+            elif cik and isinstance(cik, int):
+                 normalized_input_cik_str = str(cik).zfill(10)
+            else: # Handles Python None, empty string, and non-digit strings like "None"
+                normalized_input_cik_str = '0'.zfill(10)
+            
+            input_cik_to_match = normalized_input_cik_str # Use this for comparisons
             match_found = False
             
             # First try primary CIK method
             try:
-                primary_cik = self._fetch_primary_cik(xbrl_json)
-                if input_cik == primary_cik:
-                    self.logger.info(f"Input CIK {input_cik} matches primary financial statement CIK for {accession_no}")
+                primary_cik_from_xbrl = self._fetch_primary_cik(xbrl_json) # This method should also be robust
+                if primary_cik_from_xbrl and input_cik_to_match == primary_cik_from_xbrl:
+                    self.logger.info(f"Input CIK {input_cik_to_match} matches primary financial statement CIK {primary_cik_from_xbrl} for {accession_no}")
                     match_found = True
-                else:
-                    self.logger.warning(f"Input CIK {input_cik} doesn't match primary CIK {primary_cik}, trying fallback")
-            except ValueError:
-                self.logger.info(f"Couldn't determine primary CIK, trying fallback verification for {accession_no}")
+                elif primary_cik_from_xbrl: # It was found but didn't match
+                    self.logger.warning(f"Input CIK {input_cik_to_match} doesn't match primary CIK {primary_cik_from_xbrl} from XBRL, trying fallback for {accession_no}")
+                else: # _fetch_primary_cik returned None or couldn't find one
+                    self.logger.info(f"Could not determine primary CIK from XBRL for {accession_no}, trying fallback verification.")
+            except ValueError as ve_fetch_primary:
+                self.logger.info(f"_fetch_primary_cik raised ValueError: {ve_fetch_primary}. Trying fallback for {accession_no}")
             
             # If primary method didn't find a match, try fallback
             if not match_found:
-                xbrl_ciks = set()  # Use set to avoid duplicates
+                xbrl_ciks_set = set()
+                cover_cik_val = xbrl_json.get('CoverPage', {}).get('EntityCentralIndexKey') # Can be None, int, str, or list
+                self._add_normalized_cik(cover_cik_val, xbrl_ciks_set) # This helper needs to be robust
                 
-                # Check CoverPage (the documented location for CIK)
-                cover_cik = xbrl_json.get('CoverPage', {}).get('EntityCentralIndexKey', '0')
-                self._add_normalized_cik(cover_cik, xbrl_ciks)
-                
-                # Convert back to list and check for match
-                xbrl_ciks = list(xbrl_ciks)
-                if not xbrl_ciks or input_cik not in xbrl_ciks:
-                    self.logger.warning(f"No CIK match for {accession_no}: input CIK {input_cik} not in {xbrl_ciks}")
+                # If CoverPage CIK didn't yield a match with input_cik_to_match and it was a single valid CIK
+                # Or if no CIK was on cover page, try contexts (though _fetch_primary_cik also tries contexts)
+                # This fallback logic primarily focuses on EntityCentralIndexKey from CoverPage for simplicity here.
+                # A more complex fallback would re-iterate contexts if _fetch_primary_cik failed to produce one.
+
+                final_xbrl_ciks_list = list(xbrl_ciks_set)
+                if not final_xbrl_ciks_list or input_cik_to_match not in final_xbrl_ciks_list:
+                    self.logger.warning(f"No CIK match for {accession_no}: input CIK {input_cik_to_match} not in XBRL CIKs {final_xbrl_ciks_list} (from CoverPage). Returning None for financial statements.")
                     return None
                 else:
-                    self.logger.info(f"Input CIK {input_cik} matches one of the XBRL CIKs {xbrl_ciks} for {accession_no}")
+                    self.logger.info(f"Input CIK {input_cik_to_match} matches one of the XBRL CIKs {final_xbrl_ciks_list} (from CoverPage) for {accession_no}")
+                    match_found = True # Fallback match found
+            
+            if not match_found: # Should be redundant if above logic is correct, but as a safeguard
+                self.logger.error(f"Logic error: Match not found for {accession_no} despite passing primary/fallback checks. CIK: {input_cik_to_match}")
+                # Check CoverPage (the documented location for CIK)
+                cover_cik = xbrl_json.get('CoverPage', {}).get('EntityCentralIndexKey', '0')
+                # Ensure the same set object is reused for consistency
+                self._add_normalized_cik(cover_cik, xbrl_ciks_set)
+                
+                # Convert back to list and check for match
+                final_xbrl_ciks_list = list(xbrl_ciks_set)
+                if not final_xbrl_ciks_list or input_cik_to_match not in final_xbrl_ciks_list:
+                    self.logger.warning(f"No CIK match for {accession_no}: input CIK {input_cik_to_match} not in {final_xbrl_ciks_list}")
+                    return None
+                else:
+                    self.logger.info(f"Input CIK {input_cik_to_match} matches one of the XBRL CIKs {final_xbrl_ciks_list} for {accession_no}")
                     match_found = True
             
             # Only continue if we found a match

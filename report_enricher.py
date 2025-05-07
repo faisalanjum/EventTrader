@@ -69,7 +69,7 @@ def enrich_worker():
                 continue # Skip this item
             
             # Now original_prefix_type is guaranteed to be non-None, update log message
-            logger.info(f"Processing enrichment for {filing.get('formType')} filing {filing.get('id')}, original prefix: {original_prefix_type}")
+            logger.info(f"Processing enrichment for report {filing.get('formType')} filing {filing.get('id')}, original prefix: {original_prefix_type}")
 
             # --- Duplicate Enrichment Guard (Uses original_prefix_type) ---
             identifier = filing.get('id')
@@ -79,18 +79,34 @@ def enrich_worker():
                 prefix_type=original_prefix_type, 
                 identifier=identifier
             )
-            existing_processed_data_bytes = client.client.get(potential_processed_key) # Returns bytes by default
-            if existing_processed_data_bytes:
+            existing_val = client.client.get(potential_processed_key)
+            if existing_val:
                 try:
-                    existing_processed_data_json = existing_processed_data_bytes.decode('utf-8') # Decode bytes to string
-                    existing_processed_data = json.loads(existing_processed_data_json)
-                    if existing_processed_data.get('enriched') == True:
-                        logger.info(f"Report {identifier} ({potential_processed_key}) already enriched. Skipping duplicate enrichment.")
-                        continue 
-                except json.JSONDecodeError:
-                    logger.warning(f"Could not parse existing processed data for {identifier} ({potential_processed_key}). Proceeding with enrichment.")
-                except UnicodeDecodeError:
-                    logger.warning(f"Could not decode existing processed data (UTF-8) for {identifier} ({potential_processed_key}). Proceeding with enrichment.")
+                    json_str = existing_val.decode("utf-8") if isinstance(existing_val, bytes) else existing_val
+
+                    if isinstance(json_str, str):
+                        existing_doc = json.loads(json_str)
+                        if existing_doc.get("enriched") is True:
+                            logger.info(
+                                "Report %s (%s) already enriched – skipping.",
+                                identifier,
+                                potential_processed_key,
+                            )
+                            continue
+                    else:
+                        # This branch is highly unlikely with current Redis client settings
+                        logger.error(
+                            "Value for key %s was not decodable to a string (type: %s) – proceeding with enrichment.",
+                            potential_processed_key,
+                            type(existing_val).__name__
+                        )
+                except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+                    logger.warning(
+                        "Could not parse/decode existing processed data for report %s (%s): %s. Proceeding.",
+                        identifier,
+                        potential_processed_key,
+                        exc,
+                    )
             # --- End Duplicate Enrichment Guard ---
             
             # --- TEXTUAL & PRE-PARSED FINANCIALS ENRICHMENT SECTION ---
@@ -163,7 +179,7 @@ def enrich_worker():
             client.client.lpush(processed_queue, processed_key)
             client.client.publish(processed_channel, processed_key)
             
-            logger.info(f"Successfully enriched (textual/financials) filing {filing.get('id')}")
+            logger.info(f"Successfully enriched (textual/financials) report {filing.get('id')}")
             
         except Exception as e:
             logger.error(f"Error processing enrichment: {e}")
