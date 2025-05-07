@@ -46,12 +46,11 @@ class DataSourceManager:
         historical_range: Dict[str, str],  # {'from': 'YYYY-MM-DD', 'to': 'YYYY-MM-DD'}
         api_key: str,
         processor_class=None,
-        # ttl: int = 7 * 24 * 3600
-        ttl: int = 2 * 24 * 3600 # 2 days - Adding this to all 3 processors as well: News, Reports, Transcripts
+        ttl: int = 2 * 24 * 3600 # 2 days
     ):
         self.source_type = source_type
         self.api_key = api_key
-        self.ttl = ttl
+        self.ttl = ttl # self.ttl is used by worker for individual processed keys
         self.date_range = historical_range
         self.running = True
 
@@ -61,9 +60,42 @@ class DataSourceManager:
         # Initialize Redis and processors
         self.redis = EventTraderRedis(source=self.source_type)        # ex: source_type = news:benzinga
 
-        # Set TTL for all queues for both live and historical clients AFTER Redis init
-        [client.client.expire(queue, self.ttl) for client in [self.redis.live_client, self.redis.history_client] 
-        for queue in [client.RAW_QUEUE, client.PROCESSED_QUEUE, client.FAILED_QUEUE]]
+        # Set TTL for queue LIST KEYS only if they exist and TTL is configured
+        if self.ttl and self.ttl > 0:
+            for client_instance in [self.redis.live_client, self.redis.history_client]:
+                queues_to_check = [
+                    client_instance.RAW_QUEUE,
+                    client_instance.PROCESSED_QUEUE,
+                    client_instance.FAILED_QUEUE
+                ]
+                # Check for ENRICH_QUEUE only if it's relevant for this client (reports client)
+                if hasattr(client_instance, 'ENRICH_QUEUE'): # ENRICH_QUEUE is a global RedisKeys constant, not on client
+                    # Correct check would be if client_instance.source_type == RedisKeys.SOURCE_REPORTS
+                    # However, ENRICH_QUEUE is defined as RedisKeys.ENRICH_QUEUE directly.
+                    # We should check if RedisKeys.ENRICH_QUEUE exists for reports.
+                    # For now, this part of the original code was trying to expire client.ENRICH_QUEUE
+                    # which doesn't exist. The global RedisKeys.ENRICH_QUEUE is the one.
+                    pass # Original loop was trying to iterate client.ENRICH_QUEUE which is wrong.
+                
+                pipe = client_instance.client.pipeline()
+                keys_to_expire = []
+                for queue_key_name in queues_to_check:
+                    if client_instance.client.exists(queue_key_name):
+                        keys_to_expire.append(queue_key_name)
+                
+                # For reports source, also check the global ENRICH_QUEUE if it exists
+                if self.source_type == RedisKeys.SOURCE_REPORTS:
+                    if client_instance.client.exists(RedisKeys.ENRICH_QUEUE):
+                        keys_to_expire.append(RedisKeys.ENRICH_QUEUE)
+
+                if keys_to_expire:
+                    for key in keys_to_expire:
+                        pipe.expire(key, self.ttl)
+                    try:
+                        pipe.execute()
+                        self.logger.info(f"Applied TTL of {self.ttl}s to existing queues: {keys_to_expire} for {client_instance.prefix}")
+                    except Exception as e:
+                        self.logger.error(f"Error setting TTL on queues for {client_instance.prefix}: {e}")
 
         # self.processor = NewsProcessor(self.redis, delete_raw=True)
         self.polygon_subscription_delay = (17 * 60)  # (in seconds) Lower tier subscription has 15 mins delayed data
@@ -109,6 +141,7 @@ class BenzingaNewsManager(DataSourceManager):
             redis_client=self.redis.live_client,
             ttl=self.ttl
         )
+        self.ws_thread = None # Initialize optional thread
 
     def start(self):
         try:
@@ -171,10 +204,19 @@ class BenzingaNewsManager(DataSourceManager):
     def check_status(self):
         try:
             live_prefix = RedisKeys.get_prefixes(self.source_type)['live']
+            
+            # Safely access WebSocket client attributes
+            ws_connected = False
+            last_msg_time = None
+            if hasattr(self, 'ws_client'): # Ensure ws_client itself exists
+                ws_connected = getattr(self.ws_client, 'connected', False)
+                ws_stats = getattr(self.ws_client, 'stats', {})
+                last_msg_time = ws_stats.get('last_message_time')
+
             return {
                 "websocket": {
-                    "connected": self.ws_client.connected,
-                    "last_message": self.ws_client.stats.get('last_message_time')
+                    "connected": ws_connected,
+                    "last_message": last_msg_time
                 },
                 "redis": {
                     "live_count": len(self.redis.live_client.client.keys(f"{live_prefix}raw:*")),
@@ -183,16 +225,23 @@ class BenzingaNewsManager(DataSourceManager):
                 }
             }
         except Exception as e:
-            self.logger.error(f"Error checking status: {e}")
+            self.logger.error(f"Error checking status for {self.source_type}: {e}")
             return None
 
     def stop(self):
         try:
             self.running = False
-            self.ws_client.disconnect()
+            if hasattr(self, 'ws_client'): # ws_client might not be init if live disabled
+                self.ws_client.disconnect()
             
             current_thread = threading.current_thread()
-            for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
+            threads_to_join = [
+                getattr(self, 'ws_thread', None),
+                getattr(self, 'processor_thread', None),
+                getattr(self, 'returns_thread', None)
+                # BenzingaNewsManager doesn't have self.historical_thread explicitly
+            ]
+            for thread in threads_to_join:
                 if thread and thread.is_alive() and thread != current_thread:
                     thread.join(timeout=5)
             
@@ -226,6 +275,9 @@ class ReportsManager(DataSourceManager):
             redis_client=self.redis.live_client,
             ttl=self.ttl
         )
+        self.ws_thread = None # Initialize optional thread
+        self.historical_thread = None # Initialize optional thread
+        self.enrichment_workers = [] # Initialize, though it's also done in start()
 
     def start(self):
         try:
@@ -255,16 +307,55 @@ class ReportsManager(DataSourceManager):
                 self.logger.info("Live data disabled, WebSocket thread for SEC Reports will not be started.")
             # -------------------------------------------
             
-            self.logger.debug(f"[Manager Debug] Starting threads:")
-            for thread in threads_to_start:
+            # --- START ENRICHMENT WORKERS ---
+            enrichers_started_successfully = False # Flag to track worker startup
+            if (feature_flags.ENABLE_LIVE_DATA or feature_flags.ENABLE_HISTORICAL_DATA) and feature_flags.ENABLE_REPORT_ENRICHER:
+                self.logger.info("Attempting to start report enrichment workers...")
+                enrichment_import_success = False
+                enrich_worker_module = None # Define to hold the module or function
+                try:
+                    import os 
+                    from multiprocessing import get_context
+                    
+                    # RELYING ON STANDARD IMPORT: Assuming report_enricher.py is in project_root or on PYTHONPATH
+                    from report_enricher import enrich_worker as enrich_worker_func # Import the function
+                    enrichment_import_success = True
+                    enrich_worker_module = enrich_worker_func # Assign the function
+
+                except ImportError as e:
+                    self.logger.error(f"Failed to import enrich_worker: {e}. Ensure report_enricher.py is in the PYTHONPATH or project root. Enrichment workers will NOT start.")
+                
+                # This is the crucial worker startup logic that must be present
+                if enrichment_import_success and enrich_worker_module:
+                    worker_count = max(os.cpu_count() - 1, 1)
+                    ctx = get_context('spawn')
+                    # self.enrichment_workers should be initialized in __init__ or here if not already
+                    if not hasattr(self, 'enrichment_workers') or not self.enrichment_workers:
+                        self.enrichment_workers = [] 
+                    
+                    for i in range(worker_count):
+                        p = ctx.Process(target=enrich_worker_module, daemon=True, name=f"ReportEnricher-{i}")
+                        p.start()
+                        self.logger.info(f"Started enrichment worker {p.name} with PID {p.pid}")
+                        self.enrichment_workers.append(p)
+                    # enrichers_started_successfully flag was used before, can be re-added if needed for further logic
+                    # For now, successful execution of this block means workers were attempted to start.
+                elif feature_flags.ENABLE_REPORT_ENRICHER: # Only log warning if enricher was enabled but failed to import/start
+                     self.logger.warning("Report enrichment workers did not start due to an import or setup issue.")
+            else:
+                self.logger.info("Report enrichment workers disabled by feature flags.")
+            
+            # ALWAYS START ESSENTIAL THREADS (processor, returns, ws, historical if enabled)
+            self.logger.debug(f"[Manager Debug] Starting essential threads:")
+            for thread in threads_to_start: # threads_to_start was prepared earlier
                 thread.start()
                 self.logger.debug(f"[Manager Debug] Thread {thread.name} started: {thread.is_alive()}")
             
-            return True
+            return True # ReportsManager.start() now always returns True if it reaches here, failure to start workers is logged.
 
         except Exception as e:
-            self.logger.error(f"Error starting {self.source_type}: {e}")
-            return False
+            self.logger.error(f"Critical error during ReportsManager.start(): {e}")
+            return False # Return False on critical startup errors for main threads
 
 
     def _run_websocket(self):
@@ -280,11 +371,18 @@ class ReportsManager(DataSourceManager):
     def check_status(self):
         try:
             live_prefix = RedisKeys.get_prefixes(self.source_type)['live']
+            
+            # Safely access WebSocket client attributes
+            ws_connected = False
+            last_msg_time = None # SECWebSocket uses last_message_time directly
+            if hasattr(self, 'ws_client'): # Ensure ws_client itself exists
+                ws_connected = getattr(self.ws_client, 'connected', False)
+                last_msg_time = getattr(self.ws_client, 'last_message_time', None)
+
             return {
                 "websocket": {
-                    "connected": self.ws_client.connected,
-                    "last_message": self.ws_client.last_message_time  
-
+                    "connected": ws_connected,
+                    "last_message": last_msg_time
                 },
                 "redis": {
                     "live_count": len(self.redis.live_client.client.keys(f"{live_prefix}raw:*")),
@@ -293,18 +391,33 @@ class ReportsManager(DataSourceManager):
                 }
             }
         except Exception as e:
-            self.logger.error(f"Error checking status: {e}")
+            self.logger.error(f"Error checking status for {self.source_type}: {e}")
             return None
 
     def stop(self):
         try:
             self.running = False
-            self.ws_client.disconnect()
+            if hasattr(self, 'ws_client'): # ws_client might not be init if live disabled
+                self.ws_client.disconnect()
             
             current_thread = threading.current_thread()
-            for thread in [self.ws_thread, self.processor_thread, self.returns_thread]:
+            threads_to_join = [
+                getattr(self, 'ws_thread', None),
+                getattr(self, 'processor_thread', None),
+                getattr(self, 'returns_thread', None),
+                getattr(self, 'historical_thread', None) # ReportsManager has historical_thread
+            ]
+            for thread in threads_to_join:
                 if thread and thread.is_alive() and thread != current_thread:
                     thread.join(timeout=5)
+            
+            if hasattr(self, 'enrichment_workers') and self.enrichment_workers:
+                self.logger.info(f"Stopping {len(self.enrichment_workers)} enrichment workers...")
+                for p in self.enrichment_workers:
+                    if p.is_alive():
+                        p.terminate()
+                for p in self.enrichment_workers:
+                    p.join(timeout=3)
             
             self.redis.clear(preserve_processed=True)
             return True
@@ -334,6 +447,7 @@ class TranscriptsManager(DataSourceManager):
         
         # For live data polling
         self.last_poll_time = None
+        self.historical_thread = None # Initialize optional thread
     
     def start(self):
         try:
@@ -564,18 +678,21 @@ class TranscriptsManager(DataSourceManager):
     def stop(self):
         """Stop all processing"""
         try:
-            # Signal threads to stop
-            self.running = False
+            self.running = False # Signal polling loops to stop if any
             
-            # Wait for threads to finish
             current_thread = threading.current_thread()
-            for thread in [self.processor_thread, self.returns_thread, self.historical_thread]:
+            threads_to_join = [
+                getattr(self, 'processor_thread', None),
+                getattr(self, 'returns_thread', None),
+                getattr(self, 'historical_thread', None) # TranscriptsManager has historical_thread
+                # TranscriptsManager doesn't have self.ws_thread
+            ]
+            for thread in threads_to_join:
                 if thread and thread.is_alive() and thread != current_thread:
                     thread.join(timeout=5)
             
             self.redis.clear(preserve_processed=True)
             return True
-            
         except Exception as e:
             self.logger.error(f"Error stopping {self.source_type}: {e}")
             return False
@@ -772,23 +889,24 @@ class DataManager:
         try:
             self.logger.info("[STOP] Performing final reconciliation before stopping sources")
             if hasattr(self, 'neo4j_processor') and self.neo4j_processor:
-                # Run reconciliation with unlimited items
                 self.neo4j_processor.reconcile_missing_items(max_items_per_type=None)
         except Exception as e:
             self.logger.error(f"[STOP] Error during final reconciliation: {e}")
         
-        # Stop all sources (existing code)
         results = {name: manager.stop() for name, manager in self.sources.items()}
         
-        # Close Neo4j connection if initialized (existing code)
         if hasattr(self, 'neo4j_processor'):
             try:
-                # Stop the PubSub processing thread if running
                 if hasattr(self, 'neo4j_thread') and self.neo4j_thread.is_alive():
+                    self.logger.info("[STOP] Signaling Neo4j PubSub thread to stop...")
                     self.neo4j_processor.stop_pubsub_processing()
-                    self.neo4j_thread.join(timeout=5)
-                    
-                # Check for any remaining items in withreturns namespace
+                    self.logger.info("[STOP] Waiting for Neo4j PubSub thread to join...")
+                    self.neo4j_thread.join(timeout=10) # Increased timeout for safety
+                    if self.neo4j_thread.is_alive():
+                        self.logger.warning("[STOP] Neo4j PubSub thread did not join in time.")
+                    else:
+                        self.logger.info("[STOP] Neo4j PubSub thread joined successfully.")
+                
                 try:
                     remaining = self.neo4j_processor.check_withreturns_status()
                     if sum(remaining.values()) > 0:

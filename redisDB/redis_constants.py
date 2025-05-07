@@ -16,11 +16,15 @@ class RedisKeys:
     # Prefix Types
     PREFIX_LIVE = 'live'
     PREFIX_HIST = 'hist'
+    PREFIX_ALL = 'all'
     
     # Queue Names (used consistently across codebase)
     RAW_QUEUE = 'queues:raw'
     PROCESSED_QUEUE = 'queues:processed'
     FAILED_QUEUE = 'queues:failed'
+    
+    # New suffix for enrichment queue
+    ENRICH_QUEUE = f"{SOURCE_REPORTS}:queues:enrich"
     
     @staticmethod
     def get_prefixes(source_type: str) -> dict:

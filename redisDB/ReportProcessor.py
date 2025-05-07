@@ -1,22 +1,22 @@
 import re
 from .BaseProcessor import BaseProcessor
-from datetime import datetime
 import html
 import unicodedata
 import time
 from typing import Optional, Dict, List
-from secReports.sec_schemas import UnifiedReport
 from config.feature_flags import VALID_FORM_TYPES, FORM_TYPES_REQUIRING_SECTIONS, FORM_TYPES_REQUIRING_XML
 from secReports.reportSections import ten_k_sections, ten_q_sections, eight_k_sections
 from sec_api import ExtractorApi, XbrlApi
 from eventtrader.keys import SEC_API_KEY
 from multiprocessing import Pool
-from multiprocessing import TimeoutError as MpTimeout
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 import requests
 from inscriptis import get_text
-from utils.metadata_fields import MetadataFields
 from config import feature_flags
+import json
+from redisDB.redis_constants import RedisKeys
+import copy
+import os
 
 
 # Notes:
@@ -102,7 +102,7 @@ class ReportProcessor(BaseProcessor):
 
 
     def _extract_section_content(self, url: str, section_id: str, retries: int = 3, processing_retries: int = 3) -> Optional[str]:
-        """Extract and clean section content with retries"""
+        """Extract and clean section content with retries and timeout"""
         self.logger.info(f"Attempting to extract section {section_id} from {url}")
         
         if not self.extractor:
@@ -111,10 +111,17 @@ class ReportProcessor(BaseProcessor):
         
         processing_attempts = 0
         regular_attempts = 0
+        # Use the EXTRACTOR_CALL_TIMEOUT from feature_flags, with a default if not found
+        call_timeout_val = getattr(feature_flags, 'EXTRACTOR_CALL_TIMEOUT', 90) 
             
         while regular_attempts < retries or processing_attempts < processing_retries:
             try:
-                content = self.extractor.get_section(url, section_id, "text")
+                # --- new block for timeout --- 
+                with ThreadPoolExecutor(max_workers=1) as executor:
+                    # Pass self.extractor and its method arguments to submit
+                    future = executor.submit(self.extractor.get_section, url, section_id, "text")
+                    content = future.result(timeout=call_timeout_val)
+                # --- end new block --- 
 
                 # Handle processing status - retry with SEC recommended delay
                 if content == "processing":
@@ -137,14 +144,25 @@ class ReportProcessor(BaseProcessor):
                         time.sleep(delay / 1000)
                         continue
                     else:
-                        self.logger.warning(f"Failed to get content for section {section_id} after {retries} regular attempts")
+                        self.logger.warning(f"Failed to get content for section {section_id} after {retries} regular attempts (empty content)")
                         return None
                     
                 # Clean content if we have it
                 content = html.unescape(content)
                 self.logger.info(f"Successfully extracted section {section_id}")
                 return unicodedata.normalize("NFKC", content)
-                        
+            
+            except FutureTimeout: # Handle the timeout specifically
+                regular_attempts += 1
+                self.logger.warning(f"Timeout extracting section {section_id} (attempt {regular_attempts}/{retries}) after {call_timeout_val}s")
+                if regular_attempts < retries:
+                    # Using the same delay logic as other errors for consistency
+                    delay = 500 + (500 * regular_attempts) 
+                    time.sleep(delay / 1000)
+                    continue
+                # If retries exceeded after timeout, break to return None outside loop
+                self.logger.warning(f"Failed to get content for section {section_id} due to repeated timeouts.")
+                break 
             except Exception as e:
                 regular_attempts += 1
                 self.logger.error(f"Error extracting section {section_id} (attempt {regular_attempts}/{retries}): {e}")
@@ -152,9 +170,11 @@ class ReportProcessor(BaseProcessor):
                     delay = 500 + (500 * regular_attempts)
                     time.sleep(delay / 1000)
                     continue
+                # If retries exceeded after other exceptions, break to return None
+                self.logger.warning(f"Failed to get content for section {section_id} due to repeated errors.")
                 break
                     
-        self.logger.warning(f"Failed to get content for section {section_id} after {regular_attempts} regular attempts and {processing_attempts} processing attempts")
+        self.logger.warning(f"Failed to get content for section {section_id} after {regular_attempts} regular attempts and {processing_attempts} processing attempts. Returning None.")
         return None
 
 
@@ -208,7 +228,9 @@ class ReportProcessor(BaseProcessor):
                     self.logger.info(f"Using timeout of {timeout_to_use:.1f}s for {len(section_tasks)} sections")
                     
                     # Use with statement for automatic resource management
-                    with Pool(processes=4, maxtasksperchild=1) as pool:
+                    # Modify pool size to be dynamic based on CPU count
+                    pool_size = max(os.cpu_count() - 1, 1)
+                    with Pool(processes=pool_size, maxtasksperchild=1) as pool:
                         # Process each result as it completes (non-blocking)
                         for sec_id, content in pool.imap_unordered(_extract_section_worker, section_tasks, chunksize=1):
                             # Log remaining time periodically
@@ -411,19 +433,18 @@ class ReportProcessor(BaseProcessor):
 
 
     def _download_exhibit(self, url: str) -> Optional[str]:
-        """Download and extract exhibit content with proper SEC rate limiting"""
+        """Download and extract exhibit content with proper SEC rate limiting and timeout"""
         headers = {
             'User-Agent': 'EventTrader research.bot@example.com',
             'Accept-Encoding': 'gzip, deflate',
-            'Host': 'www.sec.gov'
+            'Host': 'www.sec.gov' # Corrected Host back to www.sec.gov
         }
+        REQUEST_TIMEOUT = 60 # seconds
 
         try:
             # Respect SEC's rate limit
             time.sleep(0.1)
-            
-            # Download with proper headers
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
             response.raise_for_status()
             content = response.text
             
@@ -468,12 +489,13 @@ class ReportProcessor(BaseProcessor):
 
     # These are specifically for 6-K, 13D etc (Non FORM_TYPES_REQUIRING_SECTIONS)
     def _extract_secondary_filing_content(self, url: str) -> Optional[str]:
-        """Extract clean text from any SEC filing format with minimal dependencies"""
+        """Extract clean text from any SEC filing format with minimal dependencies, with timeout"""
         headers = {
             'User-Agent': 'EventTrader research.bot@example.com',
             'Accept-Encoding': 'gzip, deflate',
             'Host': 'www.sec.gov'
         }
+        REQUEST_TIMEOUT = 180 # seconds
         
         try:
             # Respect SEC's rate limit
@@ -481,7 +503,7 @@ class ReportProcessor(BaseProcessor):
             
             # Download with proper headers
             self.logger.info(f"Downloading secondary filing from {url}")
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
             response.raise_for_status()
             content = response.text
             
@@ -550,17 +572,11 @@ class ReportProcessor(BaseProcessor):
         Note: If primary ticker (from cik) not in allowed_symbols, it's set to None but filing 
         will still process if other valid tickers exist in entities."""
         try:
-            # Flag reports with missing CIKs but still process them
-            # Reports with missing CIKs will be marked as ineligible for XBRL processing later
-            # but their content can still be used for other purposes
-            if not content.get('cik') or content.get('cik') == '':
+            # Basic validation that must stay in main thread
+            if not content.get('cik'):
                 self.logger.info(f"Report with missing primary filer CIK: {content.get('accessionNo', 'unknown')}")
-                content['cik'] = ''  # Ensure CIK is an empty string not None
-
-                # Inorder to skip it return empty dict to signal skip
-                # return {}
+                content['cik'] = ''
             
-
             if content['formType'] not in VALID_FORM_TYPES:
                 self.logger.info(f"Invalid form type so Skipping: {content['formType']}")
                 return {}
@@ -599,65 +615,21 @@ class ReportProcessor(BaseProcessor):
                     except (ValueError, TypeError):
                         continue
 
+            # Essential fields only
             standardized.update({
                 'id': content.get('accessionNo'),
                 'created': content.get('filedAt'),
                 'updated': content.get('filedAt'),
-                'symbols': list(symbols),  # Convert set to list
+                'symbols': list(symbols),
                 'formType': content.get('formType'),
-                'extracted_sections': None,  # Initialize with None by default
-                'financial_statements': None,  # Initialize with None by default
-                'exhibit_contents': None,  # Initialize exhibits with None by default
-                'filing_text_content': None  # Full document text content
+                # Initialize these as empty - will be populated in enrichment
+                'extracted_sections': None,
+                'financial_statements': None,
+                'exhibit_contents': None,
+                'filing_text_content': None
             })
-
-            # Extract sections if URL available and form type requires it
-            # Extract content from document URL if available
-            if url := content.get('primaryDocumentUrl'):
-                if content['formType'] in FORM_TYPES_REQUIRING_SECTIONS:
-                    # For forms like 8-K, 10-K, 10-Q: extract specific sections
-                    self.logger.info(f"Found primaryDocumentUrl: {url}, attempting to extract sections")
-                    if extracted_sections := self._extract_sections(
-                        url=url,
-                        form_type=content['formType'],
-                        items=content.get('items')
-                    ):
-                        standardized['extracted_sections'] = extracted_sections
-                        self.logger.info(f"Successfully extracted sections for {content['formType']}")
-                else:
-                    # For forms like SCHEDULE 13D/A: extract full document content
-                    self.logger.info(f"Form type {content['formType']} doesn't require sections, extracting document text")
-                    if text_content := self._extract_secondary_filing_content(url):
-                        standardized['filing_text_content'] = text_content
-                        self.logger.info(f"Successfully extracted document text from primaryDocumentUrl")
-
-            # Logically since we are not saving xbrl content when cik is nul, we do below fallback to capture text content instead
-            # If text content is still empty and we have a null CIK with XML filing, try extracting from linkToTxt
-            if standardized['filing_text_content'] is None and standardized['cik'] is None and content.get('is_xml') is True and content.get('linkToTxt'):
-                self.logger.info(f"Document text not available, CIK is null with XML filing, attempting to extract from text link")
-                if fallback_content := self._extract_secondary_filing_content(content['linkToTxt']):
-                    standardized['filing_text_content'] = fallback_content
-                    self.logger.info(f"Successfully extracted document text from linkToTxt (fallback)")
-
-            # Extract financial statements for forms requiring XML
-            if content['formType'] in FORM_TYPES_REQUIRING_XML:
-                self.logger.info(f"Form type {content['formType']} requires XBRL processing")
-                if financial_statements := self._get_financial_statements(
-                    accession_no=content.get('accessionNo'),
-                    cik=str(content.get('cik'))
-                ):
-                    standardized['financial_statements'] = financial_statements
-                    self.logger.info(f"Successfully extracted financial statements")
-
-            # Process exhibits if available
-            if exhibits := content.get('exhibits'):
-                self.logger.info(f"Found {len(exhibits)} exhibits, attempting to extract content")
-                if exhibit_contents := self._process_exhibits(exhibits):
-                    standardized['exhibit_contents'] = exhibit_contents
-                    self.logger.info(f"Successfully extracted {len(exhibit_contents)} exhibits")
-
+            
             return standardized
-
         except Exception as e:
             self.logger.error(f"Error in _standardize_fields: {e}")
             return {}
@@ -681,3 +653,127 @@ class ReportProcessor(BaseProcessor):
         except Exception as e:
             self.logger.error(f"Error in _clean_content: {e}")
             return content  # Return original if cleaning fails
+
+    def _process_item(self, raw_key: str) -> bool:
+        """Modified to use enrichment queue for heavy processing"""
+        client = None # Initialize client to None for broader scope in try-except
+        try:
+            # Determine client based on raw_key prefix
+            client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
+            prefix_type = RedisKeys.PREFIX_HIST if raw_key.startswith(self.hist_client.prefix) else RedisKeys.PREFIX_LIVE
+            identifier = raw_key.split(':')[-1]
+
+            raw_content = client.get(raw_key)
+            if not raw_content:
+                if self.delete_raw:
+                    client.delete(raw_key)
+                self.logger.info(f"Raw content not found: {raw_key}")
+                return False
+
+            filing = json.loads(raw_content)
+
+            # Use the updated standardize_fields method which now contains the lightweight logic
+            standardized = self._standardize_fields(filing)
+            
+            # Check if we have valid symbols
+            if not self._has_valid_symbols(standardized):
+                self.logger.info(f"Dropping {raw_key} - no matching symbols in universe")
+                if self.delete_raw:
+                    client.delete(raw_key) # client is guaranteed to be assigned here or error before
+                return True
+            
+            # Clean the content (apply lightweight cleaning)
+            processed = self._clean_content(standardized)
+            
+            # Refined needs_enrichment check using the original 'filing' data for some conditions
+            # and 'processed' for formType, as that's standardized.
+            form_type = processed.get('formType') # Use standardized formType
+
+            needs_enrichment_due_to_sections = (form_type in FORM_TYPES_REQUIRING_SECTIONS and filing.get('primaryDocumentUrl'))
+            # If it's not a "sections" form but has a primary URL, it might need full text extraction by worker
+            needs_enrichment_due_to_secondary_text = (form_type not in FORM_TYPES_REQUIRING_SECTIONS and filing.get('primaryDocumentUrl')) 
+            needs_enrichment_due_to_xml = (form_type in FORM_TYPES_REQUIRING_XML) # Worker handles actual XML check for financials and the linkToTxt fallback if this is true
+            needs_enrichment_due_to_exhibits = bool(filing.get('exhibits'))
+
+            needs_enrichment = (
+                needs_enrichment_due_to_sections or
+                needs_enrichment_due_to_secondary_text or
+                needs_enrichment_due_to_xml or
+                needs_enrichment_due_to_exhibits
+            )
+            
+            if needs_enrichment:
+                # Queue for enrichment
+                # Use deepcopy for safety, ensuring no shared mutable objects with later code paths
+                payload_for_enrich_queue = copy.deepcopy(processed) 
+                payload_for_enrich_queue['_original_prefix_type'] = prefix_type # Add the original prefix_type
+                client.client.rpush(RedisKeys.ENRICH_QUEUE, json.dumps(payload_for_enrich_queue))
+                self.logger.info(f"Queued {raw_key} (prefix type: {prefix_type}) for enrichment")
+                
+                # Delete raw as it's now queued for enrichment
+                if self.delete_raw:
+                    client.delete(raw_key)
+                    
+                # Return success
+                return True
+            else:
+                # Continue with normal lightweight processing - add metadata for lightweight items
+                metadata = self._add_metadata(processed)
+                if metadata:
+                    processed['metadata'] = metadata
+                    
+                # Generate processed key
+                processed_key = RedisKeys.get_key(
+                    source_type=self.source_type,
+                    key_type=RedisKeys.SUFFIX_PROCESSED,
+                    prefix_type=prefix_type,
+                    identifier=identifier
+                )
+                
+                # Store processed document
+                pipe = client.client.pipeline(transaction=True)
+                # Add explicit TTL if self.ttl is set (consistency with worker)
+                if self.ttl:
+                    pipe.set(processed_key, json.dumps(processed), ex=self.ttl)
+                else:
+                    pipe.set(processed_key, json.dumps(processed))
+                pipe.lpush(client.PROCESSED_QUEUE, processed_key)
+                pipe.publish(self.processed_channel, processed_key)
+                
+                if self.delete_raw:
+                    pipe.delete(raw_key)
+                    
+                return all(pipe.execute())
+                
+        except Exception as e:
+            self.logger.error(f"Failed to process {raw_key}: {e}")
+            # Fallback to queue_client if client specific to hist/live failed early or is None
+            # This part needs careful handling if the initial client assignment itself fails.
+            # However, _process_item is usually called with a valid raw_key from a queue
+            # managed by queue_client.
+            # If client is None here, it implies an error before its assignment.
+            # A robust way is to try and determine the client again or use a default.
+            # For now, assuming raw_key is valid enough to determine the context for FAILED_QUEUE
+            # Or, more simply, use the default queue_client for pushing to FAILED_QUEUE
+            # This is complex because BaseProcessor defines queue_client, hist_client, live_client.
+            # Let's assume if an error happens, the raw_key can still inform which FAILED_QUEUE.
+            # The original code in BaseProcessor _process_item does: 
+            # client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
+            # client.push_to_queue(client.FAILED_QUEUE, raw_key)
+            # So, if client assignment itself failed, this would also fail.
+            # A safer bet for the except block if client might be None:
+            final_client_for_fail = client if client else self.queue_client # self.queue_client is from BaseProcessor
+            if final_client_for_fail:
+                 # Need to ensure FAILED_QUEUE is correctly determined if using hist/live differentiation
+                 # The original BaseProcessor's FAILED_QUEUE is dynamically set on the client instance.
+                 # So, if client (hist/live) is determined, its FAILED_QUEUE is correct.
+                 # If final_client_for_fail is self.queue_client, its FAILED_QUEUE is also correct for its context.
+                target_failed_queue = final_client_for_fail.FAILED_QUEUE
+                final_client_for_fail.push_to_queue(target_failed_queue, raw_key)
+            
+            if self.delete_raw and client: # Only delete if client was determined
+                client.delete(raw_key)
+            elif self.delete_raw and not client:
+                 self.logger.warning(f"Could not delete raw_key {raw_key} after failure as client was not determined.")
+
+            return False

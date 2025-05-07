@@ -159,7 +159,7 @@ CHUNK_MAX_WAIT_SECONDS = 7200 # Default: 2 hours
 # - Streams results via imap_unordered for immediate processing
 # - Terminates pool at deadline to prevent ReportProcessor stalling
 # - Long enough for reasonable processing, short enough for safety
-SECTION_BATCH_EXTRACTION_TIMEOUT = 300  # seconds
+SECTION_BATCH_EXTRACTION_TIMEOUT = 450  # seconds
 
 # Max time for a single sec-api.get_section() call (90s)
 # - Runs in ThreadPoolExecutor inside each worker
@@ -178,3 +178,6 @@ PUBSUB_RECONCILIATION_INTERVAL = 3600  # Default: Run once per hour
 
 # Threshold for BaseProcessor reconnect on consecutive timeouts
 TIMEOUT_RECONNECT_THRESHOLD = 2 # Reconnect after 10 * 60s intervals
+
+# Add a new feature flag for report enrichment workers
+ENABLE_REPORT_ENRICHER = True
