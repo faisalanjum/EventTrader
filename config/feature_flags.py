@@ -162,11 +162,14 @@ CHUNK_MAX_WAIT_SECONDS = 7200 # Default: 2 hours
 SECTION_BATCH_EXTRACTION_TIMEOUT = 450  # seconds
 
 # Max time for a single sec-api.get_section() call (90s)
-# - Runs in ThreadPoolExecutor inside each worker
+# - Runs in ThreadPoolExecutor inside each worker (now also in _extract_section_content directly)
 # - Terminates thread on timeout, marks section as failed
 # - Allows sec-api retries while preventing hung HTTP requests
 EXTRACTOR_CALL_TIMEOUT = 90  # seconds
 
+# Number of threads for parallel section extraction within a single report (10-K/10-Q)
+# when processed by ReportProcessor._extract_sections using ThreadPoolExecutor.
+THREADS_PER_SECTION_EXTRACTION = 4 # Default number of threads
 
 # --- End Historical Chunked Processing Configuration ---
 # --- PubSub Processing Configuration ---
@@ -181,3 +184,6 @@ TIMEOUT_RECONNECT_THRESHOLD = 2 # Reconnect after 10 * 60s intervals
 
 # Add a new feature flag for report enrichment workers
 ENABLE_REPORT_ENRICHER = True
+
+# TTL for processed report keys set by the enrichment worker
+PROCESSED_ITEM_KEY_TTL = 2 * 24 * 3600 # Default TTL for processed report keys (in seconds), e.g., 2 days

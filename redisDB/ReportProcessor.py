@@ -17,6 +17,7 @@ import json
 from redisDB.redis_constants import RedisKeys
 import copy
 import os
+import concurrent.futures
 
 
 # Notes:
@@ -180,7 +181,7 @@ class ReportProcessor(BaseProcessor):
 
 
     def _extract_sections(self, url: str, form_type: str, items: Optional[List[str]] = None) -> Dict[str, str]:
-        """Extract sections based on form type with proper handling"""
+        """Extract sections based on form type with proper handling."""
         try:
             if not self.extractor:
                 self.logger.warning("SEC API extractor not initialized - missing API key")
@@ -190,69 +191,64 @@ class ReportProcessor(BaseProcessor):
             self.logger.info(f"Using sections map for form type {form_type}: {len(sections_map)} sections")
             extracted_sections = {}
 
-            # Handle 8-K forms using items (sequential processing)
             if form_type.startswith('8-K') and items:
-                self.logger.info(f"Processing 8-K sections from items: {len(items)} items")
+                self.logger.info(f"Processing 8-K sections from items: {len(items)} items sequentially")
                 for item in items:
                     if section_id := self._get_section_id_from_item(item):
                         if section_name := sections_map.get(section_id):
                             self.logger.info(f"Starting extraction for section {section_name} ({section_id})")
+                            # _extract_section_content already has timeout and retries
                             if content := self._extract_section_content(url, section_id):
-                                if content != "processing":
+                                if content != "processing": # Should be handled by _extract_section_content returning None
                                     extracted_sections[section_name] = content
                                     self.logger.info(f"Successfully extracted section {section_name}")
-                                    del content  # Help garbage collection
-
-
-            # Inside _extract_sections method, update the parallel processing part:
+                                    # del content # Not strictly necessary, GC will handle
+            
             elif form_type.startswith(('10-K', '10-Q')):
-                self.logger.info(f"Processing {form_type} sections in parallel for URL: {url}")
+                self.logger.info(f"Processing {form_type} sections in parallel using ThreadPoolExecutor for URL: {url}")
                 
-                # Skip extraction if API key is missing
-                if not SEC_API_KEY:
+                if not SEC_API_KEY: # This check might be redundant if self.extractor check passed
                     self.logger.warning("SEC API key is missing, skipping section extraction")
                     return {}
                 
-                section_tasks = [(url, section_id, SEC_API_KEY) for section_id in sections_map.keys()]
-                
-                try:
-                    # Create a deadline for the overall extraction - adaptive based on number of sections
-                    # Use either calculated time based on sections or minimum batch timeout, whichever is larger
-                    now = time.time()
-                    per_section_timeout = feature_flags.EXTRACTOR_CALL_TIMEOUT
-                    adaptive_timeout = len(section_tasks) * per_section_timeout * 1.2  # 20% buffer
-                    batch_timeout = feature_flags.SECTION_BATCH_EXTRACTION_TIMEOUT
-                    timeout_to_use = max(adaptive_timeout, batch_timeout)
-                    deadline = now + timeout_to_use
-                    
-                    self.logger.info(f"Using timeout of {timeout_to_use:.1f}s for {len(section_tasks)} sections")
-                    
-                    # Use with statement for automatic resource management
-                    # Modify pool size to be dynamic based on CPU count
-                    pool_size = max(os.cpu_count() - 1, 1)
-                    with Pool(processes=pool_size, maxtasksperchild=1) as pool:
-                        # Process each result as it completes (non-blocking)
-                        for sec_id, content in pool.imap_unordered(_extract_section_worker, section_tasks, chunksize=1):
-                            # Log remaining time periodically
-                            now = time.time()
-                            remaining = deadline - now
-                            if remaining <= 0:
-                                self.logger.warning(f"Reached extraction time limit for {url}, stopping further processing")
-                                pool.terminate()  # Hard-stop any remaining workers
-                                break
-                            
-                            # Log remaining time every few sections
-                            if len(extracted_sections) % 5 == 0:
-                                self.logger.debug(f"{remaining:.1f}s remaining for section extraction")
-                                
-                            # Process valid content
-                            if content:
-                                section_name = sections_map[sec_id]
-                                extracted_sections[section_name] = content
-                
-                except Exception as pool_err:
-                    self.logger.error(f"Critical pool error for {url}: {pool_err}", exc_info=True)
+                # Use a ThreadPoolExecutor for I/O-bound tasks within the worker process
+                # The number of workers here can be tuned, e.g., 4-8, or based on a new feature_flag
+                # os.cpu_count() might be too high for threads if many enricher processes are running.
+                # Let's use a moderate fixed number or make it configurable.
+                num_threads_for_sections = getattr(feature_flags, 'THREADS_PER_SECTION_EXTRACTION', 4)
 
+                futures = {}
+                with ThreadPoolExecutor(max_workers=num_threads_for_sections) as executor:
+                    for section_id, section_name in sections_map.items():
+                        # _extract_section_content handles its own retries and timeouts internally
+                        future = executor.submit(self._extract_section_content, url, section_id)
+                        futures[future] = section_name # Map future to section_name
+
+                    # Collect results as they complete
+                    # Add an overall timeout for collecting all section results for this report
+                    # This is similar to the old batch_timeout but for threads.
+                    overall_section_timeout = getattr(feature_flags, 'SECTION_BATCH_EXTRACTION_TIMEOUT', 450)
+                    start_time = time.time()
+
+                    for future in concurrent.futures.as_completed(futures):
+                        # Check for overall timeout for this report's sections
+                        if time.time() - start_time > overall_section_timeout:
+                            self.logger.warning(f"Overall timeout of {overall_section_timeout}s reached for extracting sections from {url}. Aborting remaining.")
+                            # Cancel remaining futures
+                            for f_cancel in futures:
+                                if not f_cancel.done():
+                                    f_cancel.cancel()
+                            break # Exit the collection loop
+
+                        section_name_from_future = futures[future]
+                        try:
+                            content = future.result() # This won't block indefinitely due to internal timeout in _extract_section_content
+                            if content:
+                                extracted_sections[section_name_from_future] = content
+                                self.logger.info(f"Successfully extracted section {section_name_from_future} for {form_type}")
+                        except Exception as exc:
+                            self.logger.error(f"Section {section_name_from_future} generated an exception: {exc}")
+            
             if extracted_sections:
                 self.logger.info(f"Successfully extracted {len(extracted_sections)} sections for {url}")
             else:
@@ -261,7 +257,7 @@ class ReportProcessor(BaseProcessor):
             return extracted_sections
 
         except Exception as e:
-            self.logger.error(f"Error in _extract_sections: {e}")
+            self.logger.error(f"Error in _extract_sections for {url}: {e}", exc_info=True)
             return {}
 
     def _get_sections_map(self, form_type: str) -> dict:
