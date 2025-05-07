@@ -163,13 +163,29 @@ class XbrlMixin:
                         
                         logger.info(f"Processing XBRL for report {report_id} (CIK: {processed_cik}, AccessionNo: {processed_accessionNo})")
                         
-                        # Process the report and store the processor instance
-                        xbrl_processor = process_report(
-                            neo4j=neo4j_manager,
-                            cik=processed_cik,
-                            accessionNo=processed_accessionNo,
-                            testing=False
-                        )
+                        # --- simple retry loop (max 3 attempts) around heavy export ---
+                        attempts_left = 3
+                        while attempts_left:
+                            try:
+                                xbrl_processor = process_report(
+                                    neo4j=neo4j_manager,
+                                    cik=processed_cik,
+                                    accessionNo=processed_accessionNo,
+                                    testing=False
+                                )
+                                break  # success
+                            except Exception as inner:
+                                attempts_left -= 1
+                                logger.error(
+                                    "process_report failed for %s (attempts left %d): %s",
+                                    report_id,
+                                    attempts_left,
+                                    inner,
+                                )
+                                if attempts_left == 0:
+                                    raise  # bubble to outer except => status FAILED
+                                time.sleep(2)  # brief back-off before retry
+                        # --- end retry loop ---
                         
                         # Mark as completed - using transaction function for automatic retry
                         def update_completed_status(tx):
