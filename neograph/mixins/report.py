@@ -197,7 +197,6 @@ class ReportMixin:
 
 
 
-
     def _process_deduplicated_report(self, report_id, report_data):
         """
         Process report data with deduplication, standardized fields, and efficient symbol relationships.
@@ -383,7 +382,9 @@ class ReportMixin:
                 report_props.get('cik') and
                 report_props.get('xbrl_status') != 'COMPLETED' and
                 report_props.get('xbrl_status') != 'PROCESSING' and
-                report_props.get('xbrl_status') != 'SKIPPED'):
+                report_props.get('xbrl_status') != 'SKIPPED'): # should we also check if it failed?
+
+                
                 
                 # Process XBRL data
                 self._process_xbrl(

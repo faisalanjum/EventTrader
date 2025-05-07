@@ -840,7 +840,7 @@ class process_report:
             self.periods, 
             self.units, 
             self.contexts
-        ], testing=False)
+        ], testing=False, bulk=True)
 
         self._concept_lookup = {concept.id: concept for concept in [*self.concepts, *self.guidance_concepts]}
 
@@ -868,7 +868,7 @@ class process_report:
             self.taxonomy.dimensions,  # Dimensions
             all_domains,               # Domains
             all_members                # Members
-        ], testing=False)
+        ], testing=False, bulk=True)
 
         # Export relationships
         relationships = []
@@ -884,7 +884,7 @@ class process_report:
         # populate_company_nodes calls _build_hierarchy which inturn calls _build_abstracts (which are common nodes & not company-specific) & fills self.abstracts
         abstracts_lineItems = [abs for abs in self.abstracts if abs.category in ['Abstract', 'LineItems']]
 
-        self.neo4j._export_nodes([abstracts_lineItems], testing=False) # Only export Abstracts & LineItems 
+        self.neo4j._export_nodes([abstracts_lineItems], testing=False, bulk=True) # Only export Abstracts & LineItems 
         # self.neo4j._export_nodes([self.abstracts], testing=False) # Only export Abstracts & LineItems 
 
         self.pure_abstracts = abstracts_lineItems
@@ -900,7 +900,7 @@ class process_report:
         self._build_facts()       # 5. Build facts
         
         # Upload to Neo4j report-specific nodes - # Testing=False since otherwise it will clear the db
-        self.neo4j._export_nodes([self.facts], testing=False) 
+        self.neo4j._export_nodes([self.facts], testing=False, bulk=True) 
 
         #  Get relationships from mapping Fact to its corresponding target instances (Concept, Unit, Period)
         fact_relationships = self._map_fact_relationships([

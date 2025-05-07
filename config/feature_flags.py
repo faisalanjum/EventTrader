@@ -63,7 +63,19 @@ ENABLE_XBRL_PROCESSING = True
 # Higher values increase parallelism but consume more system resources
 # Recommended range: 2-12 based on available CPU cores
 # This setting does not interfere with event_trader.sh or other scripts
-XBRL_WORKER_THREADS = 8 # Changed from 8
+XBRL_WORKER_THREADS = 12 # Changed from 8
+
+# Maximum number of filings that may be processed **simultaneously** (semaphore limit).
+# Keep lower than or equal to XBRL_WORKER_THREADS – it throttles memory-intensive Arelle work
+# without affecting the size of the thread-pool queue.
+XBRL_MAX_CONCURRENT_FILINGS = 10  # (old hard-coded value was 4)
+
+# Local on-disk cache for SEC-API XBRL-to-JSON responses. Set to None to disable.
+import os, tempfile as _tmp
+XBRL_JSON_CACHE_DIR = os.path.join(_tmp.gettempdir(), "xbrl_json_cache")
+
+# Toggle bulk UNWIND node merges (used only in XBRL path for now)
+ENABLE_BULK_NODE_MERGE_XBRL = True
 
 # When True, reject news items that have more than one symbol
 REJECT_MULTIPLE_SYMBOLS = True

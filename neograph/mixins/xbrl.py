@@ -97,19 +97,26 @@ class XbrlMixin:
         acquired = False
         
         try:
-            # Try to acquire semaphore before processing
-            acquired = self.xbrl_semaphore.acquire(timeout=5)
+            # --- attempt to acquire the semaphore up to 3 times (5 s each) before giving up ---
+            max_acquire_attempts = 3
+            for attempt in range(max_acquire_attempts):
+                acquired = self.xbrl_semaphore.acquire(timeout=5)
+                if acquired:
+                    break  # success
+                if attempt < max_acquire_attempts - 1:
+                    # Brief pause before next attempt; status is still QUEUED
+                    time.sleep(1)
+
             if not acquired:
-                # Cannot acquire - update status and exit
+                # Could not acquire after retries – mark as PENDING so hourly reconciliation can pick it up
                 with self.manager.driver.session() as session:
-                    # Use transaction function for automatic retry on deadlocks
                     def update_pending_status(tx):
                         tx.run(
                             "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
                             id=report_id, status="PENDING", error="System resource limit reached"
                         )
                     session.execute_write(update_pending_status)
-                logger.info(f"Resource limit reached for report {report_id}, will retry later")
+                logger.info(f"Resource limit reached for report {report_id} after {max_acquire_attempts} attempts; will retry later")
                 return
                 
             # Create a new session for this thread
@@ -243,18 +250,27 @@ class XbrlMixin:
             logger.info("XBRL reconciliation skipped as XBRL processing is disabled.")
             return
             
+
+
         logger.info("Checking for interrupted XBRL tasks (status QUEUED or PROCESSING)...")
         try:
             with self.manager.driver.session() as session:
-                # Find reports that need reconciliation
+                # Find reports that need reconciliation - not keeping 'SKIPPED' since it helps us keep some reports from Not processing (manually lets say)                
                 records = session.run(
                     """
                     MATCH (r:Report)
-                    WHERE r.xbrl_status IN ['QUEUED', 'PROCESSING']
+                    WHERE r.xbrl_status IN ['QUEUED', 'PROCESSING', 'PENDING']
                     RETURN r.id AS report_id, r.cik AS cik, r.accessionNo AS accessionNo
                     """
                 ).data()
                 
+                # Incase want to add only fetch repots which are longer than 1 hour old
+                    #                   AND (
+                    #     r.updated IS NULL OR
+                    #     datetime(r.updated) < datetime() - duration({hours: 1})
+                    #   )
+
+
                 if not records:
                     logger.info("No interrupted XBRL tasks found.")
                     return

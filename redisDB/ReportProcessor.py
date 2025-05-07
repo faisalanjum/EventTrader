@@ -4,7 +4,7 @@ import html
 import unicodedata
 import time
 from typing import Optional, Dict, List
-from config.feature_flags import VALID_FORM_TYPES, FORM_TYPES_REQUIRING_SECTIONS, FORM_TYPES_REQUIRING_XML
+from config.feature_flags import VALID_FORM_TYPES, FORM_TYPES_REQUIRING_SECTIONS, FORM_TYPES_REQUIRING_XML, XBRL_JSON_CACHE_DIR
 from secReports.reportSections import ten_k_sections, ten_q_sections, eight_k_sections
 from sec_api import ExtractorApi, XbrlApi
 from eventtrader.keys import SEC_API_KEY
@@ -366,7 +366,28 @@ class ReportProcessor(BaseProcessor):
                 self.logger.warning("SEC XBRL API not initialized - missing API key")
                 return None
 
-            xbrl_json = self.xbrl_api.xbrl_to_json(accession_no=accession_no)
+            # --- tiny on-disk cache for sec-api JSON to avoid repeat downloads ---
+            xbrl_json = None
+            cache_path = None
+            if XBRL_JSON_CACHE_DIR:
+                try:
+                    os.makedirs(XBRL_JSON_CACHE_DIR, exist_ok=True)
+                    cache_path = os.path.join(XBRL_JSON_CACHE_DIR, f"{accession_no}.json")
+                    if os.path.exists(cache_path):
+                        with open(cache_path, 'r', encoding='utf-8') as fh:
+                            xbrl_json = json.load(fh)
+                            self.logger.debug(f"Loaded cached XBRL JSON for {accession_no}")
+                except Exception as cache_err:
+                    self.logger.debug(f"Cache read error for {accession_no}: {cache_err}")
+
+            if xbrl_json is None:  # Cache miss – fetch from SEC-API
+                xbrl_json = self.xbrl_api.xbrl_to_json(accession_no=accession_no)
+                if cache_path:
+                    try:
+                        with open(cache_path, 'w', encoding='utf-8') as fh:
+                            json.dump(xbrl_json, fh)
+                    except Exception as cache_write_err:
+                        self.logger.debug(f"Cache write error for {accession_no}: {cache_write_err}")
             
             # Normalize input CIK robustly
             normalized_input_cik_str = None

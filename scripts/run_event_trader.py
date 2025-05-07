@@ -347,12 +347,26 @@ def main():
                             all_complete = False
                             completion_status[source] = f"WithoutReturns Namespace Not Empty"
                             continue 
-                        # 7. Check report enrichment queue (only relevant for reports source)
+                        # 7. Check report enrichment queue & worker liveness (reports only)
                         if source == RedisKeys.SOURCE_REPORTS:
                             enrich_len = redis_conn.llen(RedisKeys.ENRICH_QUEUE)
-                            if enrich_len > 0:
+                            alive_workers = 0
+                            try:
+                                reports_mgr = manager.sources.get(RedisKeys.SOURCE_REPORTS)
+                                if reports_mgr and hasattr(reports_mgr, "enrichment_workers"):
+                                    alive_workers = sum(1 for p in reports_mgr.enrichment_workers if p.is_alive())
+                            except Exception as w_err:
+                                logger.debug(f"Could not inspect enrichment workers: {w_err}")
+
+                            logger.info(f"[Monitor] Enrich queue len={enrich_len}, alive workers={alive_workers}")
+
+                            # Consider processing incomplete if queue not empty OR workers still busy
+                            if enrich_len > 0 or alive_workers > 0:
                                 all_complete = False
-                                completion_status[source] = f"Enrich Queue Not Empty (Len: {enrich_len})"
+                                if enrich_len > 0:
+                                    completion_status[source] = f"Enrich Queue Not Empty (Len: {enrich_len})"
+                                else:
+                                    completion_status[source] = "Enrichment Workers Still Running"
                                 continue 
                         # --- END ADDED CHECKS ---
                             

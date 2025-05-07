@@ -23,7 +23,8 @@ from XBRL.utils import resolve_primary_fact_relationships, clean_number
 from config.feature_flags import (
     NEO4J_MAX_CONNECTION_LIFETIME, 
     NEO4J_KEEP_ALIVE, 
-    NEO4J_MAX_CONNECTION_POOL_SIZE
+    NEO4J_MAX_CONNECTION_POOL_SIZE,
+    ENABLE_BULK_NODE_MERGE_XBRL
 )
 
 logger = logging.getLogger(__name__)
@@ -241,9 +242,77 @@ class Neo4jManager:
 
 
     @retry_on_neo4j_transient_error            
-    def merge_nodes(self, nodes: List[Neo4jNode], batch_size: int = 2000) -> None:
+    def merge_nodes_bulk(self, nodes: List['Neo4jNode'], batch_size:int = 5000) -> None:
+        """Merge nodes using a single UNWIND per label (much faster). Only used by XBRL path."""
+        if not nodes:
+            return
+
+        # Helper functions reused from original merge_nodes
+        def format_value(v):
+            if isinstance(v, (int, float)):
+                return f"{v:,.3f}".rstrip('0').rstrip('.') if isinstance(v, float) else f"{v:,}"
+            return v
+
+        def sanitize_value(v):
+            if isinstance(v, list):
+                return [item for item in v if item is not None]
+            if isinstance(v, dict):
+                return {k: val for k, val in v.items() if val is not None}
+            return v
+
+        # Group rows by node label so we can keep one MERGE statement per label.
+        rows_by_label: Dict[str, list] = defaultdict(list)
+
+        skipped = 0
+        for node in nodes:
+            if node.id is None:
+                skipped += 1
+                continue
+
+            props = {}
+            for k, v in node.properties.items():
+                if k == 'id':
+                    continue
+                if v is None:
+                    props[k] = "null"
+                else:
+                    props[k] = format_value(sanitize_value(v))
+
+            rows_by_label[node.node_type.value].append({"id": node.id, "props": props})
+
+        try:
+            with self.driver.session() as session:
+                for label, rows in rows_by_label.items():
+                    for i in range(0, len(rows), batch_size):
+                        chunk = rows[i:i+batch_size]
+                        def merge_tx(tx, _rows=chunk, _label=label):
+                            tx.run(
+                                f"""
+                                UNWIND $rows AS row
+                                MERGE (n:`{_label}` {{id: row.id}})
+                                SET   n += row.props
+                                """, {"rows": _rows})
+                        session.execute_write(merge_tx)
+
+            logger.info(f"Bulk-merged {len(nodes)-skipped} nodes across {len(rows_by_label)} labels (skipped {skipped}).")
+        except Exception as e:
+            raise RuntimeError(f"Failed bulk merge: {e}")
+
+
+    # ------------------------------------------------------------------
+    # Original merge_nodes now delegates based on feature flag
+    @retry_on_neo4j_transient_error            
+    def merge_nodes(self, nodes: List['Neo4jNode'], batch_size: int = 2000) -> None:
         """Merge nodes into Neo4j database with batching"""
-        if not nodes: return
+        from config.feature_flags import ENABLE_BULK_NODE_MERGE_XBRL
+        # If flag on AND caller explicitly wants speed they should call bulk directly.
+        # We keep original behaviour here for safety.
+
+        if ENABLE_BULK_NODE_MERGE_XBRL and getattr(self, "_use_bulk", False):
+            return self.merge_nodes_bulk(nodes, batch_size=batch_size)
+
+        if not nodes:
+            return
 
         try:
             with self.driver.session() as session:
@@ -323,9 +392,13 @@ class Neo4jManager:
             return [node for node in nodes if node.is_primary]
         return nodes
 
-    def _export_nodes(self, collections: List[Union[Neo4jNode, List[Neo4jNode]]], testing: bool = False):
+    @retry_on_neo4j_transient_error
+    def _export_nodes(self, collections: List[Union['Neo4jNode', List['Neo4jNode']]], testing: bool = False, *, bulk: bool = False):
         """Export specified collections of nodes to Neo4j"""
         try:
+            # Use bulk flag to hint at merge strategy for this call only
+            prev_setting = getattr(self, "_use_bulk", False)
+            self._use_bulk = bulk
             if testing:
                 self.clear_db()
             
@@ -376,6 +449,8 @@ class Neo4jManager:
                 self.merge_nodes(nodes)
                 print("Export completed successfully")
                 
+            # Restore previous setting to avoid side-effects
+            self._use_bulk = prev_setting
         except Exception as e:
             raise RuntimeError(f"Export to Neo4j failed: {e}")
 

@@ -47,8 +47,9 @@ class InitializationMixin:
         
         # Only initialize XBRL resources if feature flag is enabled
         if self.enable_xbrl:
-            # Add semaphore to limit concurrent XBRL operations
-            self.xbrl_semaphore = threading.BoundedSemaphore(4)
+            # Add semaphore to limit concurrent XBRL operations (value from feature flags)
+            from config.feature_flags import XBRL_MAX_CONCURRENT_FILINGS
+            self.xbrl_semaphore = threading.BoundedSemaphore(XBRL_MAX_CONCURRENT_FILINGS)
             
             # Thread pool executor for XBRL processing
             self.xbrl_executor = concurrent.futures.ThreadPoolExecutor(

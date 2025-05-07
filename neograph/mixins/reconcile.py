@@ -187,6 +187,10 @@ class ReconcileMixin:
                 except Exception as e:
                     logger.error(f"Error during transcript reconciliation: {e}")
             
+            # Ensure any XBRL reports stuck for >1 hour are re-queued
+            if hasattr(self, "_reconcile_interrupted_xbrl_tasks"):
+                self._reconcile_interrupted_xbrl_tasks()
+
             logger.info(f"Reconciliation completed: {results}")
             return results
         
