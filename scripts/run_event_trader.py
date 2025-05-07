@@ -347,6 +347,13 @@ def main():
                             all_complete = False
                             completion_status[source] = f"WithoutReturns Namespace Not Empty"
                             continue 
+                        # 7. Check report enrichment queue (only relevant for reports source)
+                        if source == RedisKeys.SOURCE_REPORTS:
+                            enrich_len = redis_conn.llen(RedisKeys.ENRICH_QUEUE)
+                            if enrich_len > 0:
+                                all_complete = False
+                                completion_status[source] = f"Enrich Queue Not Empty (Len: {enrich_len})"
+                                continue 
                         # --- END ADDED CHECKS ---
                             
                         # If all checks pass for this source
