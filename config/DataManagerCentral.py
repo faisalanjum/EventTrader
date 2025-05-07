@@ -318,7 +318,7 @@ class ReportsManager(DataSourceManager):
                     from multiprocessing import get_context
                     
                     # RELYING ON STANDARD IMPORT: Assuming report_enricher.py is in project_root or on PYTHONPATH
-                    from report_enricher import enrich_worker as enrich_worker_func # Import the function
+                    from redisDB.report_enricher import enrich_worker as enrich_worker_func  # Import after relocation
                     enrichment_import_success = True
                     enrich_worker_module = enrich_worker_func # Assign the function
 
