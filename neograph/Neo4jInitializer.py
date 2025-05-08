@@ -68,7 +68,7 @@ class Neo4jInitializer:
             self.manager = get_manager()
             return True
         except Exception as e:
-            logger.error(f"Failed to connect to Neo4j: {e}")
+            logger.error(f"Failed to connect to Neo4j: {e}", exc_info=True)
             return False
             
     def close(self):
@@ -110,7 +110,7 @@ class Neo4jInitializer:
                     logger.error("Required columns 'symbol' and 'cik' must be in CSV")
                     return {}
             except Exception as e:
-                logger.error(f"Error reading CSV file: {e}")
+                logger.error(f"Error reading CSV file: {e}", exc_info=True)
                 return {}
             
             # Clean up dataframe - remove empty symbols and duplicates
@@ -147,7 +147,7 @@ class Neo4jInitializer:
             return universe_data
             
         except Exception as e:
-            logger.error(f"Error loading tradable universe: {e}")
+            logger.error(f"Error loading tradable universe: {e}", exc_info=True)
             return {}
     
     def initialize_all(self, start_date=None) -> bool:
@@ -204,7 +204,7 @@ class Neo4jInitializer:
             return True
             
         except Exception as e:
-            logger.error(f"Error during Neo4j initialization: {e}")
+            logger.error(f"Error during Neo4j initialization: {e}", exc_info=True)
             return False
         finally:
             self.close()
@@ -314,7 +314,7 @@ class Neo4jInitializer:
             logger.info("Created MarketIndex: SPY")
             return True
         except Exception as e:
-            logger.error(f"Error creating market index: {e}")
+            logger.error(f"Error creating market index: {e}", exc_info=True)
             return False
 
     def _create_sectors(self) -> bool:
@@ -431,7 +431,7 @@ class Neo4jInitializer:
             logger.info(f"Linked {count} Sectors to MarketIndex")
             return True
         except Exception as e:
-            logger.error(f"Error linking sectors to market index: {e}")
+            logger.error(f"Error linking sectors to market index: {e}", exc_info=True)
             return False
         
     def _link_industries_to_sectors(self) -> bool:
@@ -449,7 +449,7 @@ class Neo4jInitializer:
             logger.info(f"Linked {count} Industries to Sectors")
             return True
         except Exception as e:
-            logger.error(f"Error linking industries to sectors: {e}")
+            logger.error(f"Error linking industries to sectors: {e}", exc_info=True)
             return False
     
     def _link_companies_to_industries(self) -> bool:
@@ -472,7 +472,7 @@ class Neo4jInitializer:
             
             return True
         except Exception as e:
-            logger.error(f"Error linking companies to industries: {e}")
+            logger.error(f"Error linking companies to industries: {e}", exc_info=True)
             return False
     
     def _create_company_relationships(self) -> bool:
@@ -569,7 +569,7 @@ class Neo4jInitializer:
                 return True
                 
         except Exception as e:
-            logger.error(f"Error creating company relationships: {e}")
+            logger.error(f"Error creating company relationships: {e}", exc_info=True)
             return False
 
     def create_admin_reports(self) -> bool:
@@ -635,7 +635,7 @@ class Neo4jInitializer:
             return True
             
         except Exception as e:
-            logger.error(f"Error creating admin report hierarchy: {e}")
+            logger.error(f"Error creating admin report hierarchy: {e}", exc_info=True)
             return False
 
     # def create_admin_sections(self) -> bool:
@@ -936,7 +936,7 @@ class Neo4jInitializer:
                 
             return total_created
         except Exception as e:
-            logger.error(f"Error creating date nodes: {e}")
+            logger.error(f"Error creating date nodes: {e}", exc_info=True)
             return 0
 
     def create_single_date(self, date_str=None):
@@ -993,7 +993,7 @@ class Neo4jInitializer:
             
             return True
         except Exception as e:
-            logger.error(f"Error creating single date node: {e}")
+            logger.error(f"Error creating single date node: {e}", exc_info=True)
             return False
 
     def add_price_relationships_to_dates(self, dates_by_id, skip_latest=True, batch_size=500):
@@ -1143,7 +1143,7 @@ class Neo4jInitializer:
             return total_rels
             
         except Exception as e:
-            logger.error(f"Error adding price relationships: {e}")
+            logger.error(f"Error adding price relationships: {e}", exc_info=True)
             return 0
 
 
@@ -1233,7 +1233,7 @@ class Neo4jInitializer:
             return len(dividend_nodes)
             
         except Exception as e:
-            logger.error(f"Error creating dividend nodes: {e}")
+            logger.error(f"Error creating dividend nodes: {e}", exc_info=True)
             return 0
 
     def _create_dividend_relationships(self, dividend_nodes):
@@ -1314,7 +1314,7 @@ class Neo4jInitializer:
                 return {"company_rels": company_count, "date_rels": date_count}
                 
         except Exception as e:
-            logger.error(f"Error creating dividend relationships: {e}")
+            logger.error(f"Error creating dividend relationships: {e}", exc_info=True)
             return 0
 
     def create_single_dividend(self, date_str=None):
@@ -1388,7 +1388,7 @@ class Neo4jInitializer:
             return len(new_nodes)
             
         except Exception as e:
-            logger.error(f"Error creating dividends for date {date_str}: {e}")
+            logger.error(f"Error creating dividends for date {date_str}: {e}", exc_info=True)
             return 0
 
 
@@ -1504,7 +1504,7 @@ class Neo4jInitializer:
             return len(new_nodes)
             
         except Exception as e:
-            logger.error(f"Error creating splits for date {start_date}: {e}")
+            logger.error(f"Error creating splits for date {start_date}: {e}", exc_info=True)
             return 0
 
     def _create_split_relationships(self, split_nodes):
@@ -1579,7 +1579,7 @@ class Neo4jInitializer:
                 return {"company_rels": company_count, "date_rels": date_count}
                 
         except Exception as e:
-            logger.error(f"Error creating split relationships: {e}")
+            logger.error(f"Error creating split relationships: {e}", exc_info=True)
             return 0
 
     def create_single_split(self, date_str=None):
@@ -1700,7 +1700,7 @@ class Neo4jInitializer:
             return len(new_nodes)
             
         except Exception as e:
-            logger.error(f"Error creating splits for date {date_str}: {e}")
+            logger.error(f"Error creating splits for date {date_str}: {e}", exc_info=True)
             return 0
         
 

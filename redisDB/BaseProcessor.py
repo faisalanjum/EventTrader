@@ -7,7 +7,6 @@ from typing import Optional, Dict, Any
 from .redis_constants import RedisKeys
 from .redisClasses import RedisClient
 from eventReturns.EventReturnsManager import EventReturnsManager
-from utils.log_config import get_logger, setup_logging
 from datetime import datetime
 import pytz
 from dateutil import parser
@@ -43,17 +42,17 @@ class BaseProcessor(ABC):
             # Covers live-only and live+historical modes
             self.queue_client = self.live_client
             # Log assignment immediately
-            get_logger(__name__).info(f"INITIALIZING {event_trader_redis.source}: ENABLE_LIVE_DATA=True. Assigning live_client.")
+            logging.getLogger(__name__).info(f"INITIALIZING {event_trader_redis.source}: ENABLE_LIVE_DATA=True. Assigning live_client.")
         elif feature_flags.ENABLE_HISTORICAL_DATA:
             # Covers historical-only mode
             self.queue_client = self.hist_client
             # Log assignment immediately
-            get_logger(__name__).info(f"INITIALIZING {event_trader_redis.source}: ENABLE_LIVE_DATA=False, ENABLE_HISTORICAL_DATA=True. Assigning hist_client.")
+            logging.getLogger(__name__).info(f"INITIALIZING {event_trader_redis.source}: ENABLE_LIVE_DATA=False, ENABLE_HISTORICAL_DATA=True. Assigning hist_client.")
         else:
             # Fallback/Error case (shouldn't happen with current run_event_trader logic)
             self.queue_client = self.live_client # Default to live_client
             # Log assignment immediately
-            get_logger(__name__).info(f"INITIALIZING {event_trader_redis.source}: Both flags False? Falling back to live_client.")
+            logging.getLogger(__name__).info(f"INITIALIZING {event_trader_redis.source}: Both flags False? Falling back to live_client.")
             
         self._lock = threading.Lock()
         self.delete_raw = delete_raw
@@ -63,8 +62,8 @@ class BaseProcessor(ABC):
         self.stock_universe = event_trader_redis.get_stock_universe()
         self.source_type = event_trader_redis.source
         
-        # Logging setup using centralized system
-        self.logger = get_logger(__name__)
+        # Logging setup using standard logging
+        self.logger = logging.getLogger(__name__)
         
         # PubSub channel
         self.processed_channel = RedisKeys.get_pubsub_channel(self.source_type)
@@ -91,7 +90,7 @@ class BaseProcessor(ABC):
                 result = self.queue_client.pop_from_queue(self.queue_client.RAW_QUEUE, timeout=1)                
 
                 if result:
-                    self.logger.info(f"[{self.source_type}] -Popped item: {result}")
+                    self.logger.debug(f"[{self.source_type}] -Popped item: {result}")
                     consecutive_errors = 0 # Reset processing error counter on successful pop
                 else:
                     # Timeout occurred
@@ -105,9 +104,9 @@ class BaseProcessor(ABC):
 
                 # Assign raw_key FIRST from the non-None result
                 _, raw_key = result
-                self.logger.info(f"[{self.source_type}] - Attempting to process item: {raw_key}") # Log before calling _process_item
+                self.logger.debug(f"[{self.source_type}] - Attempting to process item: {raw_key}")
                 success = self._process_item(raw_key)
-                self.logger.info(f"[{self.source_type}] - Finished processing item: {raw_key}, Success: {success}") # Log after calling _process_item
+                self.logger.debug(f"[{self.source_type}] - Finished processing item: {raw_key}, Success: {success}")
                 
                 if success:
                     consecutive_errors = 0
@@ -150,7 +149,7 @@ class BaseProcessor(ABC):
             if not raw_content:
                 if self.delete_raw:
                     client.delete(raw_key)
-                self.logger.info(f"Raw content not found: {raw_key}")  # Change from error to debug
+                self.logger.warning(f"Raw content not found: {raw_key}")
                 return False
 
             content_dict = json.loads(raw_content)
@@ -169,9 +168,10 @@ class BaseProcessor(ABC):
             # 3. Check if any valid symbols exist
             if not self._has_valid_symbols(standardized_dict):
                 self.logger.info(f"Dropping {raw_key} - no matching symbols in universe")
-                client.delete(raw_key)
+                if self.delete_raw:
+                    client.delete(raw_key)
                 return True  # Item exits raw queue naturally
-                # No tracking maintained, never enters processed queue
+                    # No tracking maintained, never enters processed queue
 
             # 4. Clean content - Source specific
             processed_dict = self._clean_content(standardized_dict)
@@ -267,7 +267,7 @@ class BaseProcessor(ABC):
             eastern_time = utc_time.astimezone(eastern_zone)
             return eastern_time.isoformat()
         except Exception as e:
-            logger = get_logger(__name__)
+            logger = logging.getLogger(__name__)
             logger.error(f"Failed to parse timestamp {utc_time_str}: {e}")
             return utc_time_str
 
@@ -380,7 +380,7 @@ class BaseProcessor(ABC):
             )
             
             if metadata is None:
-                self.logger.info(f"Failed to generate metadata for: {processed_dict}")
+                self.logger.error(f"Failed to generate metadata for: {processed_dict}")
                 return None
             
             # Validate metadata structure
@@ -397,7 +397,7 @@ class BaseProcessor(ABC):
             return metadata['metadata']
 
         except Exception as e:
-            self.logger.info(f"Metadata generation failed: {e} for: {processed_dict}")
+            self.logger.error(f"Metadata generation failed: {e} for: {processed_dict}")
             return None
 
 

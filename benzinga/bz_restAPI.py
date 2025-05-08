@@ -46,13 +46,15 @@ For more details: https://docs.benzinga.com/benzinga-apis/newsfeed-v2/newsServic
 import time
 import json
 import requests
+import logging
 from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Union
 
 from benzinga.bz_news_errors import NewsErrorHandler
 from benzinga.bz_news_schemas import BzRestAPINews, UnifiedNews  # We'll need this for validation & unified format
 from redisDB.redisClasses import RedisClient
-from utils.log_config import get_logger, setup_logging
+
+logger = logging.getLogger(__name__)
 
 class BenzingaNewsRestAPI:
     """Simple class to fetch and print Benzinga news data"""
@@ -66,7 +68,7 @@ class BenzingaNewsRestAPI:
         self.MAX_PAGE_LIMIT = 100000  # API supports up to 100,000 pages
         self.ITEMS_PER_PAGE = 99     # API requires pageSize < 100
         self.error_handler = NewsErrorHandler()  # Add error handler
-        self.logger = get_logger("benzinga_rest_api")  # Add centralized logger
+        self.logger = logging.getLogger(__name__)
 
     def _build_params(self, 
                      page: int = 0,
@@ -114,8 +116,7 @@ class BenzingaNewsRestAPI:
         current_batch = []  # For Redis batch storage
         BATCH_SIZE = 1000   # Explicit constant
         
-        # Original logging
-        self.logger.info("\nStarting API Request:")
+        self.logger.info("Starting API Request:")
         self.logger.info(f"- date_from: {date_from}")
         self.logger.info(f"- date_to: {date_to}")
         self.logger.info(f"- updated_since: {updated_since}")
@@ -178,9 +179,11 @@ class BenzingaNewsRestAPI:
                 
             except json.JSONDecodeError as je:
                 self.error_handler.handle_json_error(je, response.text)
+                self.logger.error(f"JSON Decode Error during fetch: {je}", exc_info=True)
                 break
             except requests.exceptions.RequestException as e:
                 self.error_handler.handle_connection_error(e)
+                self.logger.error(f"Request Error during fetch: {e}", exc_info=True)
                 break
         
         # Store final batch if any
@@ -200,6 +203,7 @@ class BenzingaNewsRestAPI:
                         date_to=date_to, tickers=tickers))
                     is_complete = len(verify_response.json()) == 0 
                 except Exception:
+                    self.logger.error("Error checking next page, assuming end of data.", exc_info=True)
                     is_complete = False
         
         # Original summary logging
@@ -217,7 +221,7 @@ class BenzingaNewsRestAPI:
 
     def print_error_stats(self):
         """Print current error statistics"""
-        print(self.error_handler.get_summary())
+        self.logger.info(self.error_handler.get_summary())
 
     @staticmethod
     def print_news_item(item: Union[BzRestAPINews, UnifiedNews]):
@@ -253,11 +257,10 @@ class BenzingaNewsRestAPI:
             self.redis_client.client.set(f"batch:{batch_id}:fetch_complete", "1", ex=86400) 
             self.logger.info(f"Set fetch_complete flag for batch: {batch_id}")
         except Exception as e:
-            self.logger.error(f"Failed to set fetch_complete flag for news batch {batch_id}: {e}")
-        # --- Fetch Complete Signal --- End
-
-        return result # Return stored result
-
+            self.logger.error(f"Failed to set fetch_complete flag for news batch {batch_id}: {e}", exc_info=True)
+        return result
+    # --- Fetch Complete Signal --- End
+    
     def get_news_since(self,
                        timestamp: int,
                        tickers: Optional[List[str]] = None,
@@ -273,9 +276,9 @@ class BenzingaNewsRestAPI:
     def stream_news(self, interval: int = 5, tickers: Optional[List[str]] = None, raw: bool = False):
         """Stream news in real-time"""
         last_updated = int(datetime.now(timezone.utc).timestamp()) - 5
-        print(f"Starting news stream from: {last_updated}")
+        self.logger.info(f"Starting news stream from: {last_updated}")
         if tickers:
-            print(f"Filtering for tickers: {tickers}")
+            self.logger.info(f"Filtering for tickers: {tickers}")
         
         try:
             while True:
@@ -286,11 +289,11 @@ class BenzingaNewsRestAPI:
                 )
                 
                 if news_items:
-                    print(f"\nReceived {len(news_items)} news items")
+                    self.logger.info(f"Received {len(news_items)} news items")
                     for item in news_items:
                         self.print_news_item(item)
                     last_updated = int(datetime.now(timezone.utc).timestamp())
                 
                 time.sleep(interval)
         except KeyboardInterrupt:
-            print("\nStopping news stream...") 
+            self.logger.info("Stopping news stream...") 

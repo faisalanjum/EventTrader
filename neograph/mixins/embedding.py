@@ -99,7 +99,7 @@ class EmbeddingMixin:
             return True
                 
         except Exception as e:
-            logger.error(f"Error creating vector index: {e}")
+            logger.error(f"Error creating vector index: {e}", exc_info=True)
             return False
 
     def _create_news_vector_index(self):
@@ -218,10 +218,10 @@ class EmbeddingMixin:
                     processed = result.get("processed", 0) if result else 0
                     total_cached += processed
                 except Exception as e:
-                    logger.error(f"Error applying cached embeddings batch: {e}")
+                    logger.error(f"Error applying cached embeddings batch: {e}", exc_info=True)
         
         except Exception as e:
-            logger.error(f"Error in batch update: {e}")
+            logger.error(f"Error in batch update: {e}", exc_info=True)
         
         return total_cached
 
@@ -446,7 +446,7 @@ class EmbeddingMixin:
                 
                 except Exception as e:
                     # 6. Embedding Generation Failure Path
-                    logger.error(f"[EMBED-FLOW] Failed to generate embeddings: {str(e)}")
+                    logger.error(f"[EMBED-FLOW] Failed to generate embeddings: {str(e)}", exc_info=True)
                     results["error"] += 1
             
             # Log completion of batch embedding generation
@@ -455,7 +455,7 @@ class EmbeddingMixin:
         
         except Exception as e:
             # 6. Embedding Generation Failure Path
-            logger.error(f"[EMBED-FLOW] Exception in batch_embeddings_for_nodes: {str(e)}")
+            logger.error(f"[EMBED-FLOW] Exception in batch_embeddings_for_nodes: {str(e)}", exc_info=True)
             return {"status": "error", "reason": str(e), **results}
 
     def batch_process_news_embeddings(self, batch_size=NEWS_EMBEDDING_BATCH_SIZE, create_index=True, max_items=None):
@@ -681,7 +681,7 @@ class EmbeddingMixin:
             cleanup_result = self.manager.execute_cypher_query(cleanup_query, {})
             logger.info(f"[EMBED-FLOW-QA] Cleaned up _temp_content for {cleanup_result.get('cleaned_count', 'unknown')} nodes.")
         except Exception as e_clean:
-             logger.error(f"[EMBED-FLOW-QA] Error cleaning up _temp_content: {e_clean}")
+             logger.error(f"[EMBED-FLOW-QA] Error cleaning up _temp_content: {e_clean}", exc_info=True)
 
         logger.info(f"[EMBED-FLOW-QA] QAExchange embedding processing completed with final results: {results}")
         return results
@@ -838,11 +838,11 @@ class EmbeddingMixin:
             if success:
                 logger.info(f"[EMBED-FLOW] Successfully generated embedding for news {news_id}")
             else:
-                logger.warning(f"[EMBED-FLOW] Failed to generate embedding for news {news_id}, result: {result}")
+                logger.error(f"[EMBED-FLOW] Failed to generate embedding for news {news_id}, result: {result}")
                 
             return success
         except Exception as e:
-            logger.error(f"[EMBED-FLOW] Exception in batch_embeddings_for_nodes: {str(e)}")
+            logger.error(f"[EMBED-FLOW] Exception creating single news embedding: {str(e)}", exc_info=True)
             return False
 
 
@@ -1012,7 +1012,7 @@ class EmbeddingMixin:
                 
             return success
         except Exception as e:
-            logger.error(f"Exception in _create_qaexchange_embedding: {str(e)}")
+            logger.error(f"Exception in _create_qaexchange_embedding: {str(e)}", exc_info=True)
             return False
     
 
@@ -1128,7 +1128,7 @@ class EmbeddingMixin:
             return results or []
             
         except Exception as e:
-            logger.error(f"Error in vector similarity search: {e}")
+            logger.error(f"Error in vector similarity search: {e}", exc_info=True)
             return []
 
 

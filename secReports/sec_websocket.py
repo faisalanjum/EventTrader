@@ -9,7 +9,6 @@ import threading
 from .sec_schemas import SECFilingSchema, UnifiedReport
 from .sec_errors import FilingErrorHandler
 import logging
-from utils.log_config import get_logger, setup_logging
 
 class SECWebSocket:
 
@@ -24,8 +23,8 @@ class SECWebSocket:
         self.api_key = api_key
         self.url = f"wss://stream.sec-api.io?apiKey={self.api_key}"
         
-        # Set up logging using centralized system
-        self.logger = get_logger("reports_websocket", log_level)
+        # Use standard logger
+        self.logger = logging.getLogger(__name__)
         
         # State tracking
         self.connected = False
@@ -173,7 +172,7 @@ class SECWebSocket:
                 time.sleep(delay)
                 
             except Exception as e:
-                self.logger.error(f"Connection error: {str(e)}")
+                self.logger.error(f"Connection error: {str(e)}", exc_info=True)
                 
                 if not self.should_run:
                     break
@@ -221,7 +220,7 @@ class SECWebSocket:
                             # to give the reconnect attempt time. _on_close handles immediate retry delay.
                             check_interval = self.max_delay / 2
                         except Exception as e:
-                            self.logger.error(f"Exception during ws.close() in heartbeat: {e}")
+                            self.logger.error(f"Exception during ws.close() in heartbeat: {e}", exc_info=True)
                             # Still wait longer if close fails to avoid hammering
                             check_interval = self.max_delay / 2
                 else:
@@ -229,7 +228,7 @@ class SECWebSocket:
                        self.logger.debug("Heartbeat check passed.")
 
             except Exception as e:
-                self.logger.error(f"Unexpected error in heartbeat check loop: {e}")
+                self.logger.error(f"Unexpected error in heartbeat check loop: {e}", exc_info=True)
                 # Prevent tight loop on unexpected error, wait a bit longer
                 check_interval = 30
 
@@ -297,7 +296,7 @@ class SECWebSocket:
             self.redis_client.set_json("admin:reports:shutdown_state", current_state)
             self.logger.info("Saved shutdown state to Redis.")
         except Exception as e:
-            self.logger.error(f"Failed to save shutdown state: {e}")
+            self.logger.error(f"Failed to save shutdown state: {e}", exc_info=True)
         
         self.logger.info("Initiating WebSocket shutdown...")
         self.should_run = False
@@ -335,7 +334,7 @@ class SECWebSocket:
                             
                             self.logger.info(f"Downtime ended - Duration: {downtime_seconds:.1f}s - Key: {self._current_downtime_key}")
                     except Exception as e:
-                        self.logger.error(f"Failed to update downtime record: {e}")
+                        self.logger.error(f"Failed to update downtime record: {e}", exc_info=True)
                 
                 # Reset connection tracking state
                 self.connected = True
@@ -348,7 +347,7 @@ class SECWebSocket:
             
             self.logger.info("=== SEC REPORTS WEBSOCKET CONNECTED ===")
         except Exception as e:
-            self.logger.error(f"Error in on_open: {e}")
+            self.logger.error(f"Error in on_open: {e}", exc_info=True)
 
     def _on_message(self, ws, message: str):
         """Handle incoming WebSocket message"""
@@ -431,10 +430,10 @@ class SECWebSocket:
                     self._log_stats()
                 
             except json.JSONDecodeError as je:
-                self.logger.error(f"JSON decode error: {str(je)}")
+                self.logger.error(f"JSON decode error: {str(je)}", exc_info=True)
                 self.error_handler.handle_json_error(je, message)
             except Exception as e:
-                self.logger.error(f"Unexpected error: {str(e)}")
+                self.logger.error(f"Unexpected error: {str(e)}", exc_info=True)
                 self.error_handler.handle_unexpected_error(e)
 
     def _on_error(self, ws, error):
@@ -550,7 +549,7 @@ class SECWebSocket:
                         else:
                             self.logger.error(f"Failed to save downtime to Redis: {key}")
                     except Exception as e:
-                        self.logger.error(f"Error logging downtime: {e}")
+                        self.logger.error(f"Error logging downtime: {e}", exc_info=True)
                 else:
                     if self._had_successful_connection:
                         self.logger.warning("Connection lost but no connection start time recorded. Skipping downtime logging.")

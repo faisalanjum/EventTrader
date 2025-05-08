@@ -23,6 +23,8 @@ if TYPE_CHECKING:
     from .xbrl_reporting import Fact
     from .xbrl_processor import process_report
 
+import logging
+logger = logging.getLogger(__name__)
 
 # Constants for edge properties
 PRESENTATION_EDGE_UNIQUE_PROPS = [
@@ -282,11 +284,11 @@ class ReportElementClassifier:
         from .xbrl_dimensions import Dimension, Domain, Member
         
         if not concept:
-            print("DEBUG - Received None concept")
+            logger.debug("DEBUG - Received None concept")
             return None
             
-        print(f"\nDEBUG - wrap_concept called for: {getattr(concept, 'qname', 'No qname')}")
-        print(f"DEBUG - Original type: {type(concept)}")
+        logger.debug(f"DEBUG - wrap_concept called for: {getattr(concept, 'qname', 'No qname')}")
+        logger.debug(f"DEBUG - Original type: {type(concept)}")
         
         # Store the qname before any transformations
         original_qname = getattr(concept, 'qname', None)
@@ -295,7 +297,7 @@ class ReportElementClassifier:
         if isinstance(concept, (AbstractConcept, Concept)):
             model_concept = getattr(concept, 'model_concept', None)
             if model_concept is None:
-                print(f"DEBUG - No model_concept found in {type(concept).__name__}")
+                logger.debug(f"DEBUG - No model_concept found in {type(concept).__name__}")
                 return None
                 
             # Only try to set qname if model_concept exists
@@ -303,30 +305,30 @@ class ReportElementClassifier:
                 try:
                     setattr(model_concept, 'qname', original_qname)
                 except AttributeError:
-                    print(f"DEBUG - Could not set qname on model_concept")
+                    logger.debug(f"DEBUG - Could not set qname on model_concept")
                     return None
                     
-            print(f"DEBUG - Getting model_concept from {type(concept).__name__}")
+            logger.debug(f"DEBUG - Getting model_concept from {type(concept).__name__}")
         else:
             model_concept = concept
-            print(f"DEBUG - Using original concept")
+            logger.debug(f"DEBUG - Using original concept")
 
         # Verify we have a valid concept with qname
         if not hasattr(model_concept, 'qname'):
-            print(f"DEBUG - Missing qname, attempting to restore from original")
+            logger.debug(f"DEBUG - Missing qname, attempting to restore from original")
             if original_qname:
                 try:
                     setattr(model_concept, 'qname', original_qname)
                 except AttributeError:
-                    print(f"DEBUG - Cannot restore qname")
+                    logger.debug(f"DEBUG - Cannot restore qname")
                     return None
             else:
-                print(f"DEBUG - No qname available")
+                logger.debug(f"DEBUG - No qname available")
                 return None
 
         if isinstance(model_concept, ModelConcept):
             category = cls.classify(model_concept)
-            print(f"DEBUG - Classified as: {category}")
+            logger.debug(f"DEBUG - Classified as: {category}")
             
             # Rest of the wrapping logic remains the same
             if category == NodeType.DIMENSION:
@@ -352,9 +354,9 @@ class ReportElementClassifier:
             elif category == NodeType.HYPERCUBE:
                 return AbstractConcept(model_concept)
                 
-            print(f"DEBUG - No wrapper created for category: {category}")
+            logger.debug(f"DEBUG - No wrapper created for category: {category}")
         else:
-            print(f"DEBUG - Invalid concept: missing qname")
+            logger.debug(f"DEBUG - Invalid concept: missing qname")
         return None
 
 

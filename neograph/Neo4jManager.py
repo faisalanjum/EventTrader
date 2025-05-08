@@ -124,11 +124,15 @@ class Neo4jManager:
                 node_count = result["count"]
                 
                 if node_count > 0:
+                    # Log error instead of raising immediately if possible, but raise is safer for dev
+                    logger.error(f"Database not fully cleared. {node_count} nodes remaining.")
                     raise RuntimeError(f"Database not fully cleared. {node_count} nodes remaining.")
                     
-                print("Database cleared successfully")
+                logger.info("Database cleared successfully")
 
         except Exception as e:
+            # Log the exception before raising
+            logger.error(f"Failed to clear database: {e}", exc_info=True)
             raise RuntimeError(f"Failed to clear database: {e}")
 
     @retry_on_neo4j_transient_error
@@ -167,7 +171,7 @@ class Neo4jManager:
                             FOR ()-[r:PRESENTATION_EDGE]-()
                             REQUIRE ({props}) IS UNIQUE
                             """)
-                            print(f"Created constraint for PRESENTATION_EDGE relationships")
+                            logger.info(f"Created constraint for PRESENTATION_EDGE relationships")
                             
                         # Calculation Edge constraint
                         rel_constraint_name = "constraint_calculation_edge_unique"
@@ -178,7 +182,7 @@ class Neo4jManager:
                             FOR ()-[r:CALCULATION_EDGE]-()
                             REQUIRE ({props}) IS UNIQUE
                             """)
-                            print(f"Created constraint for CALCULATION_EDGE relationships")
+                            logger.info(f"Created constraint for CALCULATION_EDGE relationships")
                     
                     # If we get here without exception, we're done
                     break
@@ -188,14 +192,14 @@ class Neo4jManager:
                     
                     # Don't retry if constraint already exists - this is normal in concurrent environment
                     if "EquivalentSchemaRuleAlreadyExists" in error_message:
-                        print("Some constraints already exist, continuing...")
+                        logger.info("Some constraints already exist, continuing...")
                         break
                         
                     # Only retry on specific transient errors
                     if "TransientError" in error_message or "DeadlockDetected" in error_message:
                         if attempt < max_attempts - 1:
                             sleep_time = backoff_time * (2 ** attempt)
-                            print(f"Transient error creating indexes, retrying in {sleep_time:.2f} seconds...")
+                            logger.warning(f"Transient error creating indexes, retrying in {sleep_time:.2f} seconds...")
                             time.sleep(sleep_time)
                             continue
                     
@@ -203,6 +207,7 @@ class Neo4jManager:
                     raise
 
         except Exception as e:
+            logger.error(f"Failed to create indexes: {e}", exc_info=True)
             raise RuntimeError(f"Failed to create indexes: {e}")
 
 
@@ -296,6 +301,7 @@ class Neo4jManager:
 
             logger.info(f"Bulk-merged {len(nodes)-skipped} nodes across {len(rows_by_label)} labels (skipped {skipped}).")
         except Exception as e:
+            logger.error(f"Failed bulk merge: {e}", exc_info=True)
             raise RuntimeError(f"Failed bulk merge: {e}")
 
 
@@ -375,15 +381,14 @@ class Neo4jManager:
                         
                         session.execute_write(merge_node_tx)
                 
-                print(f"Created {len(nodes)} {nodes[0].__class__.__name__} nodes")
-
                 if skipped_nodes:
-                    print(f"Warning: Skipped {len(skipped_nodes)} nodes with null IDs")
-                    print("First few skipped nodes:")
+                    logger.warning(f"Warning: Skipped {len(skipped_nodes)} nodes with null IDs")
+                    # Log only the first few skipped nodes at DEBUG level to avoid clutter
                     for node in skipped_nodes[:3]:
-                        print(f"Node type: {node.node_type.value}, Properties: {node.properties}")
+                        logger.debug(f"Skipped Node type: {node.node_type.value}, Properties: {node.properties}")
                         
         except Exception as e:
+            logger.error(f"Failed to merge nodes: {e}", exc_info=True)
             raise RuntimeError(f"Failed to merge nodes: {e}")
 
     def _filter_duplicate_facts(self, nodes: List[Neo4jNode]) -> List[Neo4jNode]:
@@ -427,7 +432,7 @@ class Neo4jManager:
                     except Exception as e:
                         # If indexes already exist (from a concurrent process), just continue
                         if "EquivalentSchemaRuleAlreadyExists" in str(e):
-                            print("Indexes already exist, continuing with node creation")
+                            logger.info("Indexes already exist, continuing with node creation")
                         else:
                             raise
             
@@ -436,22 +441,25 @@ class Neo4jManager:
                 if collection:
                     # Handle both single nodes and collections
                     if isinstance(collection, list):
-                        # print(f"Adding {len(collection)} {type(collection[0]).__name__} nodes")
-                        # nodes.extend(collection)
+                        # Log at DEBUG level as this can be verbose
                         filtered = self._filter_duplicate_facts(collection)
-                        print(f"Adding {len(filtered)} {type(filtered[0]).__name__} nodes")
                         nodes.extend(filtered)
+
+                        if filtered:
+                             logger.debug(f"Adding {len(filtered)} {type(filtered[0]).__name__} nodes")
+                             
                     else:
-                        print(f"Adding single {type(collection).__name__} node")
+                        logger.debug(f"Adding single {type(collection).__name__} node")
                         nodes.append(collection)
             
             if nodes:
                 self.merge_nodes(nodes)
-                print("Export completed successfully")
+                logger.info("Node export completed successfully")
                 
             # Restore previous setting to avoid side-effects
             self._use_bulk = prev_setting
         except Exception as e:
+            logger.error(f"Export to Neo4j failed: {e}", exc_info=True)
             raise RuntimeError(f"Export to Neo4j failed: {e}")
 
     @retry_on_neo4j_transient_error
@@ -560,7 +568,7 @@ class Neo4jManager:
 
         # Print summary
         for rel_type, info in counts.items():
-            print(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
+            logger.info(f"Created {info['count']} {rel_type} relationships from {info['source']} to {info['target']}")
 
     @retry_on_neo4j_transient_error
     def get_neo4j_db_counts(self) -> Dict[str, Dict[str, int]]:
@@ -592,26 +600,22 @@ class Neo4jManager:
                 if total_nodes > 0 or total_relationships > 0:
                     # Print node counts
                     if total_nodes > 0:
-                        print("\nNode counts in Neo4j:")
-                        print("-" * 40)
+                        logger.info("Node counts in Neo4j:")
                         for node_type, count in complete_node_counts.items():
                             if count > 0:  # Only print non-zero nodes
-                                print(f"{node_type:<15} : {count:>8,d} nodes")
-                        print("-" * 40)
-                        print(f"{'Total':<15} : {total_nodes:>8,d} nodes")
+                                logger.info(f"{node_type:<15} : {count:>8,d} nodes")
+                        logger.info(f"{'Total':<15} : {total_nodes:>8,d} nodes")
                     
                     # Print relationship counts
                     if total_relationships > 0:
-                        print("\nRelationship counts in Neo4j:")
-                        print("-" * 40)
+                        logger.info("Relationship counts in Neo4j:")
                         for rel_type, count in complete_rel_counts.items():
                             if count > 0:  # Only print non-zero relationships
-                                print(f"{rel_type:<15} : {count:>8,d} relationships")
-                        print("-" * 40)
-                        print(f"{'Total':<15} : {total_relationships:>8,d} relationships")
+                                logger.info(f"{rel_type:<15} : {count:>8,d} relationships")
+                        logger.info(f"{'Total':<15} : {total_relationships:>8,d} relationships")
                 
         except Exception as e:
-            print(f"Error getting node and relationship counts: {e}")
+            logger.error(f"Error getting node and relationship counts: {e}", exc_info=True)
             return {
                 "nodes": {nt.value: 0 for nt in NodeType},
                 "relationships": {rt.value: 0 for rt in RelationType}
@@ -626,9 +630,10 @@ class Neo4jManager:
                 result = session.run(query)
                 instances = [class_type.from_neo4j(dict(record["n"].items())) 
                             for record in result]
-                print(f"Loaded {len(instances)} {node_type.value} instances from Neo4j")
+                logger.info(f"Loaded {len(instances)} {node_type.value} instances from Neo4j")
                 return instances
         except Exception as e:
+            logger.error(f"Failed to load {node_type.value} nodes: {e}", exc_info=True)
             raise RuntimeError(f"Failed to load {node_type.value} nodes: {e}")
 
     @retry_on_neo4j_transient_error
@@ -725,13 +730,12 @@ class Neo4jManager:
                     network_stats[network_name]['matches'] += 1 if is_match else 0
                     network_stats[network_name]['non_matches'] += 1 if not is_match else 0
                 
-                print(f"\nNeo4j Calculation Summary:")
-                print(f"Total Matches: {matches}")
-                print(f"Total Non-Matches: {non_matches}")
+                logger.info(f"Neo4j Calculation Summary:")
+                logger.info(f"Total Matches: {matches}")
+                logger.info(f"Total Non-Matches: {non_matches}")
                 if matches + non_matches > 0:
-                    print(f"Overall Match Rate: {matches/(matches+non_matches)*100:.1f}%")
+                    logger.info(f"Overall Match Rate: {matches/(matches+non_matches)*100:.1f}%")
                     
-                    # print("\nBreakdown by Network:")
                     for network, stats in network_stats.items():
                         total = stats['matches'] + stats['non_matches']
                         if total > 0:
@@ -742,6 +746,7 @@ class Neo4jManager:
                             # print(f"Match Rate: {match_rate:.1f}%")
                     
         except Exception as e:
+            logger.error(f"Failed to validate calculations: {e}", exc_info=True)
             raise RuntimeError(f"Failed to validate calculations: {e}")
 
 
@@ -1215,8 +1220,8 @@ class Neo4jManager:
                 count = session.execute_write(create_rels_tx)
                 return count
             except Exception as e:
-                import logging
-                logging.getLogger('Neo4jManager').error(f"Error creating price relationships: {e}")
+                # Use the module logger
+                logger.error(f"Error creating price relationships: {e}", exc_info=True) # Changed logger, added exc_info
                 return 0
 
     @retry_on_neo4j_transient_error
@@ -1226,7 +1231,7 @@ class Neo4jManager:
         Assumes input list contains only tuples of (source_node, target_node, properties_dict).
         """
         if not relationships:
-            print("No PRESENTATION_EDGE relationships provided to merge.")
+            logger.info("No PRESENTATION_EDGE relationships provided to merge.")
             return
 
         # Import RelationType locally if not available globally or handle potential import issues
@@ -1236,7 +1241,7 @@ class Neo4jManager:
              # Handle case where RelationType might need a different import path or is already available
              # This is a fallback, ideally imports are handled at the module level
              if 'RelationType' not in globals():
-                  print("Error: RelationType not found for merge_presentation_edges")
+                  logger.error("Error: RelationType not found for merge_presentation_edges")
                   return 
         
         rel_type = RelationType.PRESENTATION_EDGE # Specific type for this function
@@ -1249,7 +1254,7 @@ class Neo4jManager:
             # Validate required properties for the MERGE key exist
             required_keys = {'company_cik', 'report_id', 'network_name', 'parent_level', 'child_level'}
             if not required_keys.issubset(properties.keys()):
-                 print(f"Warning: Skipping relationship between {getattr(source, 'id', '?')} and {getattr(target, 'id', '?')} due to missing required properties for MERGE: {required_keys - properties.keys()}")
+                 logger.warning(f"Warning: Skipping relationship between {getattr(source, 'id', '?')} and {getattr(target, 'id', '?')} due to missing required properties for MERGE: {required_keys - properties.keys()}")
                  continue
             
             # Ensure levels are convertible to integers
@@ -1259,7 +1264,7 @@ class Neo4jManager:
                 int(parent_lvl)
                 int(child_lvl)
             except (KeyError, ValueError, TypeError) as e:
-                print(f"Warning: Skipping relationship between {getattr(source, 'id', '?')} and {getattr(target, 'id', '?')} due to missing or non-integer level properties: {e}")
+                logger.warning(f"Warning: Skipping relationship between {getattr(source, 'id', '?')} and {getattr(target, 'id', '?')} due to missing or non-integer level properties: {e}")
                 continue
 
             batch_params.append({
@@ -1269,7 +1274,7 @@ class Neo4jManager:
             })
 
         if not batch_params:
-            print("No valid PRESENTATION_EDGE relationships remained after validation.")
+            logger.info("No valid PRESENTATION_EDGE relationships remained after validation.")
             return
 
         # Define transaction function specifically for PRESENTATION_EDGE
@@ -1302,14 +1307,13 @@ class Neo4jManager:
         with self.driver.session() as session:
             try:
                 session.execute_write(merge_presentation_tx)
-                print(f"Merged {len(batch_params)} {rel_type.value} relationships from {source_type} to {target_type}")
+                logger.info(f"Merged {len(batch_params)} {rel_type.value} relationships from {source_type} to {target_type}")
             except Exception as e:
-                import logging # Use logging for errors
-                logger = logging.getLogger('Neo4jManager')
+                # Use logger for errors
                 logger.error(f"ERROR merging presentation edges: {e}", exc_info=True)
                 # Log details for debugging
                 if batch_params: # Log first few problematic params if possible
-                     logger.error(f"First few batch params during error: {batch_params[:3]}")
+                     logger.error(f"First few batch params during error: {batch_params[:3]}", exc_info=False)
                 raise # Re-raise the exception to halt processing if merge fails
     # <<< END NEW METHOD FOR PRESENTATION EDGES >>>
 

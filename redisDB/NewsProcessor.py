@@ -61,7 +61,7 @@ class NewsProcessor(BaseProcessor):
             return cleaned
             
         except Exception as e:
-            self.logger.error(f"Error in _clean_news: {e}")
+            self.logger.error(f"Error in _clean_news: {e}", exc_info=True)
             return news  # Return original if cleaning fails
 
 
@@ -92,7 +92,7 @@ class NewsProcessor(BaseProcessor):
             cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
             return cleaned_text.strip()
         except Exception as e:
-            self.logger.error(f"Error cleaning content: {e}")
+            self.logger.error(f"Error cleaning content: {e}", exc_info=True)
             return content  # Return original if cleaning fails
         
 
@@ -124,6 +124,6 @@ class NewsProcessor(BaseProcessor):
             return news
         
         except Exception as e:
-            self.logger.error(f"Error limiting body word count: {e}")
+            self.logger.error(f"Error limiting body word count: {e}", exc_info=True)
             return news  # Return original if processing fails
 

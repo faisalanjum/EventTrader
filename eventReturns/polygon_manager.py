@@ -8,6 +8,8 @@ import time
 # Configure logging level for connection pools
 logging.getLogger('urllib3.connectionpool').setLevel(logging.WARNING)
 
+logger = logging.getLogger(__name__)
+
 class PolygonManager:
     _instance = None
     _lock = threading.Lock()

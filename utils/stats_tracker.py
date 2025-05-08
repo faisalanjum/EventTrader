@@ -1,8 +1,8 @@
 import time
 import json
-from utils.log_config import get_logger
+import logging
 
-logger = get_logger("stats_tracker")
+logger = logging.getLogger(__name__)
 
 class StatsTracker:
     """Minimal tracker for data pipeline stats using Redis"""
@@ -52,7 +52,7 @@ class StatsTracker:
             self.redis.client.set(self.stats_key, json.dumps(stats))
             return True
         except Exception as e:
-            logger.error(f"Error incrementing {counter}: {e}")
+            logger.error(f"Error incrementing {counter}: {e}", exc_info=True)
             return False
     
     def set_status(self, status):
@@ -69,7 +69,7 @@ class StatsTracker:
             self.redis.client.set(self.stats_key, json.dumps(stats))
             return True
         except Exception as e:
-            logger.error(f"Error setting status: {e}")
+            logger.error(f"Error setting status: {e}", exc_info=True)
             return False
     
     def get_stats(self):
@@ -78,7 +78,7 @@ class StatsTracker:
             stats_json = self.redis.client.get(self.stats_key)
             return json.loads(stats_json) if stats_json else {}
         except Exception as e:
-            logger.error(f"Error getting stats: {e}")
+            logger.error(f"Error getting stats: {e}", exc_info=True)
             return {}
     
     def reset(self):
@@ -103,7 +103,7 @@ class StatsTracker:
             self.redis.client.set(self.stats_key, json.dumps(new_stats))
             return True
         except Exception as e:
-            logger.error(f"Error resetting stats: {e}")
+            logger.error(f"Error resetting stats: {e}", exc_info=True)
             return False
             
     def list_operations(self):
@@ -113,5 +113,5 @@ class StatsTracker:
             operations = [k.split(":")[-1] for k in keys]
             return operations
         except Exception as e:
-            logger.error(f"Error listing operations: {e}")
+            logger.error(f"Error listing operations: {e}", exc_info=True)
             return [] 

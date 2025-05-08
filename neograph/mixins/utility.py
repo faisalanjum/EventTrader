@@ -46,7 +46,8 @@ class UtilityMixin:
                 else:
                     # Single symbol
                     symbols = [symbols_list.upper()]
-            except:
+            except Exception as e:
+                logger.warning(f"Could not parse symbols list string '{symbols_list}': {e}")
                 # Last resort parsing for malformed strings
                 clean = symbols_list.strip('[]').replace("'", "").replace('"', "")
                 symbols = [s.strip().upper() for s in clean.split(',') if s.strip()]
@@ -167,7 +168,8 @@ class UtilityMixin:
                     content = field_value.replace("'", '"')  # Make JSON-compatible
                     return json.loads(content)
                 return [field_value]  # Single item
-            except:
+            except Exception as e:
+                logger.warning(f"Could not parse field value '{field_value}' as list: {e}")
                 pass
             
         return []

@@ -14,21 +14,29 @@ import json
 import time
 import traceback
 from multiprocessing import current_process
+import logging
 
 from redisDB.redisClasses import EventTraderRedis
 from redisDB.redis_constants import RedisKeys, RedisQueues
 from redisDB.ReportProcessor import ReportProcessor
 from config.feature_flags import FORM_TYPES_REQUIRING_SECTIONS, FORM_TYPES_REQUIRING_XML
-from utils.log_config import get_logger, setup_logging
 from config import feature_flags
 
 DEFAULT_PROCESSED_KEY_TTL = 2 * 24 * 3600  # 2 days
 
+logger = logging.getLogger(f"report_enricher_{current_process().name}")
 
 def enrich_worker():
     """Entry-point for each spawned enrichment process"""
-    setup_logging()
-    logger = get_logger(f"report_enricher_{current_process().name}")
+    if not logging.root.handlers:
+        worker_log_level_str = getattr(feature_flags, "GLOBAL_LOG_LEVEL", "INFO").upper()
+        worker_log_level_int = getattr(logging, worker_log_level_str, logging.INFO)
+        logging.basicConfig(
+            level=worker_log_level_int, 
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+        logger.info(f"Worker process {current_process().name} configured basic logging.")
+
     logger.info("Enrichment worker starting (XBRL generation deferred to Neo4jProcessor)")
 
     redis_env = EventTraderRedis(source=RedisKeys.SOURCE_REPORTS)
@@ -121,8 +129,7 @@ def enrich_worker():
             logger.info("Enriched report %s", identifier)
 
         except Exception as exc:
-            logger.error("Error processing enrichment: %s", exc)
-            traceback.print_exc()
+            logger.error(f"Error processing enrichment: {exc}", exc_info=True)
             time.sleep(1)
 
 

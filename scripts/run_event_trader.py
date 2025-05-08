@@ -9,18 +9,22 @@ import sys
 import time
 import signal
 import os
+import logging # Keep standard logging import for level constants
 from datetime import datetime
 
 # Add parent directory to path to import from utils
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config.DataManagerCentral import DataManager
-from utils.log_config import setup_logging, get_logger
+from utils.log_config import setup_logging
 from redisDB.redis_constants import RedisKeys
-from config.feature_flags import (
-    ENABLE_HISTORICAL_DATA, ENABLE_LIVE_DATA, 
-    QAEXCHANGE_EMBEDDING_BATCH_SIZE, WITHRETURNS_MAX_RETRIES, CHUNK_MONITOR_INTERVAL
-)
+import config.feature_flags as feature_flags # Import the whole module
+# Remove specific imports if module is imported
+# from config.feature_flags import (
+#     ENABLE_HISTORICAL_DATA, ENABLE_LIVE_DATA, 
+#     QAEXCHANGE_EMBEDDING_BATCH_SIZE, WITHRETURNS_MAX_RETRIES, CHUNK_MONITOR_INTERVAL,
+#     GLOBAL_LOG_LEVEL 
+# )
 
 # Make sure logs directory exists
 logs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs")
@@ -54,34 +58,35 @@ def main():
         # Parse command line args
         args = parse_args()
         
-        # Set feature flags based on arguments
-        import config.feature_flags as feature_flags
+        # --- Determine Log Level from Global Setting --- 
+        log_level_str = getattr(feature_flags, "GLOBAL_LOG_LEVEL", "INFO").upper()
+        log_level_int = getattr(logging, log_level_str, logging.INFO)
+        # --- End Determine Log Level ---
         
-        # If neither flag is set, enable both (default behavior)
+        # --- Logging Setup using original log_config --- 
+        if args.log_file:
+            # If a specific log file was provided (e.g., from event_trader.sh chunked mode),
+            # pass it directly to setup_logging using the new force_path argument.
+            # The cd logic is removed as setup_logging now handles directory creation if needed for force_path.
+            log_path = setup_logging(log_level=log_level_int, force_path=args.log_file)
+        else:
+            # Use the default setup_logging logic to create/find a timestamped file
+            log_path = setup_logging(log_level=log_level_int, name="event_trader") 
+        # --- End Logging Setup ---
+
+        # Get a logger for this script using standard logging
+        logger = logging.getLogger("event_trader_runner") 
+        
+        # Set feature flags based on arguments 
+        # Now accesses flags via the module alias
         if not args.historical and not args.live:
             feature_flags.ENABLE_HISTORICAL_DATA = True
             feature_flags.ENABLE_LIVE_DATA = True
         else:
-            # Enable only what was specifically requested
             feature_flags.ENABLE_HISTORICAL_DATA = args.historical
             feature_flags.ENABLE_LIVE_DATA = args.live
         
-        # Setup logging using the existing log_config.py
-        if args.log_file:
-            # If a specific log file was provided, we still use it with setup_logging
-            # We'll set the log_dir manually to ensure it uses the right path
-            log_dir_bak = os.getcwd()
-            os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-            log_path = setup_logging(name="event_trader")
-            os.chdir(log_dir_bak)
-        else:
-            # Use the default setup_logging, which will create a timestamped file
-            log_path = setup_logging(name="event_trader")
-        
-        # Get a logger for this script
-        logger = get_logger("event_trader_runner")
-        
-        # Log startup information
+        # Log startup information - Access flags via the module alias
         logger.info(f"Starting EventTrader for dates: {args.from_date} to {args.to_date}")
         logger.info(f"Data sources: Historical={feature_flags.ENABLE_HISTORICAL_DATA}, Live={feature_flags.ENABLE_LIVE_DATA}")
         logger.info(f"Logs will be written to: {log_path}")
@@ -92,27 +97,23 @@ def main():
         
         # Check if Neo4j was initialized properly
         if not manager.has_neo4j():
-            logger.error("Neo4j initialization failed. EventTrader requires Neo4j to function properly.")
-            print("Neo4j initialization failed. See logs for details. Exiting.")
+            logger.error("Neo4j initialization failed. EventTrader requires Neo4j to function properly.", exc_info=True)
             sys.exit(1)
         
         # If neo4j-init-only flag is set, exit after initialization
         if args.neo4j_init_only:
             logger.info("Neo4j initialization completed successfully. Exiting as requested.")
-            print("Neo4j initialization completed successfully.")
             manager.stop()  # Clean up any open connections
             sys.exit(0)
             
         # If ensure-neo4j-initialized flag is set, check and log but don't exit
         if args.ensure_neo4j_initialized:
             logger.info("Neo4j initialization check completed successfully. Continuing with system startup.")
-            print("Neo4j initialization check completed successfully.")
             # Do NOT call manager.stop() here - continue with the regular process
         
         # Set up signal handlers for clean shutdown
         def signal_handler(sig, frame):
             logger.info(f"Received signal {sig}, initiating shutdown")
-            print("\nShutting down EventTrader...")
             manager.stop()
             sys.exit(0)
         
@@ -188,7 +189,7 @@ def main():
                 redis = manager_instance.sources['news'].redis.live_client.client
                 redis.ping()  # Verify connection
             except Exception as e:
-                logger.error(f"Redis connection error: {e}")
+                logger.error(f"Redis connection error: {e}", exc_info=True)
                 return False
                 
             # Monitoring loop
@@ -290,8 +291,7 @@ def main():
                 else:
                     raise ConnectionError("Could not access Redis client via DataManager for monitoring")
             except Exception as redis_err:
-                logger.error(f"Failed to get/verify Redis connection for monitoring: {redis_err}")
-                print(f"ERROR: Failed to get/verify Redis connection for monitoring: {redis_err}", file=sys.stderr)
+                logger.error(f"Failed to get/verify Redis connection for monitoring: {redis_err}", exc_info=True)
                 # Cannot monitor, safest to exit to prevent shell script hanging
                 manager.stop() # Attempt cleanup
                 sys.exit(1)
@@ -303,7 +303,7 @@ def main():
             
             reconcile_triggered = False
             retries_waited = 0
-            max_retries = WITHRETURNS_MAX_RETRIES
+            max_retries = feature_flags.WITHRETURNS_MAX_RETRIES
             
             while True:
                 all_complete = True
@@ -347,26 +347,13 @@ def main():
                             all_complete = False
                             completion_status[source] = f"WithoutReturns Namespace Not Empty"
                             continue 
-                        # 7. Check report enrichment queue & worker liveness (reports only)
+                        
+                        # 7. Check report enrichment queue (only relevant for reports source)
                         if source == RedisKeys.SOURCE_REPORTS:
                             enrich_len = redis_conn.llen(RedisKeys.ENRICH_QUEUE)
-                            alive_workers = 0
-                            try:
-                                reports_mgr = manager.sources.get(RedisKeys.SOURCE_REPORTS)
-                                if reports_mgr and hasattr(reports_mgr, "enrichment_workers"):
-                                    alive_workers = sum(1 for p in reports_mgr.enrichment_workers if p.is_alive())
-                            except Exception as w_err:
-                                logger.debug(f"Could not inspect enrichment workers: {w_err}")
-
-                            logger.info(f"[Monitor] Enrich queue len={enrich_len}, alive workers={alive_workers}")
-
-                            # Consider processing incomplete if queue not empty OR workers still busy
-                            if enrich_len > 0 or alive_workers > 0:
+                            if enrich_len > 0:
                                 all_complete = False
-                                if enrich_len > 0:
-                                    completion_status[source] = f"Enrich Queue Not Empty (Len: {enrich_len})"
-                                else:
-                                    completion_status[source] = "Enrichment Workers Still Running"
+                                completion_status[source] = f"Enrich Queue Not Empty (Len: {enrich_len})"
                                 continue 
                         # --- END ADDED CHECKS ---
                             
@@ -403,7 +390,7 @@ def main():
                     # Ensure we have the processor instance
                     neo4j_processor = manager.neo4j_processor
                     # Use the batch size from feature flags
-                    embedding_batch_size = QAEXCHANGE_EMBEDDING_BATCH_SIZE
+                    embedding_batch_size = feature_flags.QAEXCHANGE_EMBEDDING_BATCH_SIZE
                     embedding_max_items = None # Process all found
                     logger.info(f"Calling batch_process_qaexchange_embeddings (batch={embedding_batch_size}, max={embedding_max_items})")
                     embedding_results = neo4j_processor.batch_process_qaexchange_embeddings(
@@ -428,8 +415,11 @@ def main():
             sys.exit(0)
 
     except KeyboardInterrupt:
-        logger.info("Keyboard interrupt received")
-        print("\nKeyboard interrupt received")
+        msg = "Keyboard interrupt received"
+        if 'logger' in locals():
+            logger.info(msg)
+        else:
+            print(f"INFO: {msg}")
         if 'manager' in locals():
             manager.stop()
     except Exception as e:
@@ -444,9 +434,11 @@ def main():
             try:
                 manager.stop()
             except Exception as cleanup_error:
+                emsg = f"Failed to clean up: {cleanup_error}"
                 if 'logger' in locals():
-                    logger.error(f"Failed to clean up: {cleanup_error}")
-                print(f"Failed to clean up: {cleanup_error}", file=sys.stderr)
+                    logger.error(emsg)
+                else:
+                     print(emsg, file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":

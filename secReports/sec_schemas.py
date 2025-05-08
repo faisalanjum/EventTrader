@@ -1,11 +1,12 @@
 from config.feature_flags import VALID_FORM_TYPES, FORM_TYPES_REQUIRING_XML, FORM_TYPES_REQUIRING_SECTIONS
 
+import logging
 from pydantic import BaseModel, field_validator, model_validator
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import pytz
 
-
+logger = logging.getLogger(__name__)
 
 class Entity(BaseModel):
     """Entity model for SEC filings"""
@@ -171,7 +172,7 @@ class SECFilingSchema(BaseModel):
             # Add future date check
             now = datetime.now(pytz.UTC)
             if dt > now:
-                print(f"[Warning] Future filing date detected: {dt}")  # Log but don't reject
+                logger.warning(f"[Warning] Future filing date detected: {dt}")
                 
             return dt.astimezone(pytz.UTC).isoformat()
         except ValueError:
@@ -182,8 +183,8 @@ class SECFilingSchema(BaseModel):
         if not self.dataFiles:  # Guard against empty dataFiles
             return None
         
-        print(f"[Debug] dataFiles type: {type(self.dataFiles)}")
-        print(f"[Debug] First dataFile type: {type(self.dataFiles[0])}")
+        logger.debug(f"[Debug] dataFiles type: {type(self.dataFiles)}")
+        logger.debug(f"[Debug] First dataFile type: {type(self.dataFiles[0])}")
         
         xml_url = next((f.documentUrl for f in self.dataFiles if f.type == 'XML' and f.documentUrl), None)
         return xml_url
@@ -192,8 +193,8 @@ class SECFilingSchema(BaseModel):
         if not self.documentFormatFiles:
             return {}
         
-        print(f"[Debug] documentFormatFiles type: {type(self.documentFormatFiles)}")
-        print(f"[Debug] First documentFormatFile type: {type(self.documentFormatFiles[0])}")
+        logger.debug(f"[Debug] documentFormatFiles type: {type(self.documentFormatFiles)}")
+        logger.debug(f"[Debug] First documentFormatFile type: {type(self.documentFormatFiles[0])}")
         
         return { doc.type: doc.documentUrl
             for doc in self.documentFormatFiles

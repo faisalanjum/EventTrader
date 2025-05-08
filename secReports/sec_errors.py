@@ -8,7 +8,6 @@ from dataclasses import dataclass
 from collections import Counter
 from .sec_schemas import SECFilingSchema, UnifiedReport
 from config.feature_flags import FORM_TYPES_REQUIRING_XML
-from utils.log_config import get_logger, setup_logging
 
 @dataclass
 class FilingErrorStats:
@@ -40,8 +39,8 @@ class FilingErrorHandler:
     """Handles and tracks different types of errors in SEC filing processing"""
     
     def __init__(self):
-        # Setup centralized logging
-        self.logger = get_logger('sec_filings')
+        # Use standard logger
+        self.logger = logging.getLogger(__name__)
         
         self.stats = FilingErrorStats(
             validation_errors=Counter(),
@@ -63,13 +62,13 @@ class FilingErrorHandler:
         )
 
     def print_skipped_filing(self, data: Dict[str, Any], error: Exception) -> None:
-        """Print detailed info about skipped filing"""
-        print("\nSkipped Filing:")
-        print(f"Form Type: {data.get('formType', 'N/A')}")
-        print(f"CIK: {data.get('cik', 'N/A')}")
-        print(f"Company: {data.get('companyName', 'N/A')}")
-        print(f"Filed At: {data.get('filedAt', 'N/A')}")
-        print(f"Error: {str(error)}")
+        """Log detailed info about skipped filing"""
+        self.logger.info("Skipped Filing:")
+        self.logger.info(f"Form Type: {data.get('formType', 'N/A')}")
+        self.logger.info(f"CIK: {data.get('cik', 'N/A')}")
+        self.logger.info(f"Company: {data.get('companyName', 'N/A')}")
+        self.logger.info(f"Filed At: {data.get('filedAt', 'N/A')}")
+        self.logger.info(f"Error: {str(error)}")
 
     def handle_validation_error(self, error: Exception, raw_item: Dict[str, Any]) -> None:
         """Handle validation errors"""
@@ -101,7 +100,7 @@ class FilingErrorHandler:
             # Create and validate basic filing
             filing = SECFilingSchema(**raw_item)
 
-            print(f"[Filing] Processing formType:{filing.formType}, accessionNo:{filing.accessionNo}, cik:{filing.cik}, filedAt:{filing.filedAt}")
+            self.logger.debug(f"[Filing] Processing formType:{filing.formType}, accessionNo:{filing.accessionNo}, cik:{filing.cik}, filedAt:{filing.filedAt}")
 
             # Quick XML check for required forms
             if filing.formType in FORM_TYPES_REQUIRING_XML and not any(f.type == 'XML' for f in filing.dataFiles):
@@ -111,11 +110,11 @@ class FilingErrorHandler:
             try:
                 return filing if raw else filing.to_unified()
             except Exception as e:
-                print(f"[Filing] ❌ Specific UnifiedReport creation error: {str(e)}") 
+                self.logger.error(f"[Filing] ❌ Specific UnifiedReport creation error: {str(e)}", exc_info=True)
                 raise
                     
         except Exception as e:
-            print(f"[Filing] ❌ Error: {str(e)}")
+            self.logger.error(f"[Filing] ❌ Error: {str(e)}", exc_info=True)
             return None
         
 
@@ -124,10 +123,9 @@ class FilingErrorHandler:
     def handle_json_error(self, error: json.JSONDecodeError, raw_data: str):
         """Handle JSON parsing errors"""
         self.stats.json_errors += 1
-        self.logger.error(f"JSON decode error: {str(error)}")
+        self.logger.error(f"JSON decode error: {str(error)}", exc_info=True)
         if self.debug:
-            print(f"JSON decode error: {str(error)}")
-            print(f"Raw data: {raw_data[:100]}...")
+            self.logger.debug(f"Raw data: {raw_data[:100]}...")
 
     def handle_connection_error(self, error: Exception):
         """Handle connection-related errors with more detail"""
@@ -135,32 +133,32 @@ class FilingErrorHandler:
         error_msg = str(error)
         
         if "timeout" in error_msg.lower():
-            self.logger.error(f"[SEC WebSocket] Connection timeout: {error_msg}")
+            self.logger.error(f"[SEC WebSocket] Connection timeout: {error_msg}", exc_info=True)
         elif "closed" in error_msg.lower():
-            self.logger.error(f"[SEC WebSocket] Connection closed: {error_msg}")
+            self.logger.error(f"[SEC WebSocket] Connection closed: {error_msg}", exc_info=True)
         else:
-            self.logger.error(f"[SEC WebSocket] Connection error: {error_msg}")
+            self.logger.error(f"[SEC WebSocket] Connection error: {error_msg}", exc_info=True)
             
         if self.debug:
-            print(f"[SEC WebSocket] Connection error: {error_msg}")
+            self.logger.debug(f"[SEC WebSocket] Connection error details: {error_msg}")
 
     def get_summary(self) -> str:
         """Get error statistics summary"""
         return str(self.stats)
 
     def print_summary(self, messages_received: int, messages_processed: int):
-        """Print detailed summary including processing stats"""
-        print("\nProcessing Summary:")
-        print(f"Messages Received: {messages_received}")
-        print(f"Messages Processed: {messages_processed}")
+        """Log detailed summary including processing stats"""
+        self.logger.info("Processing Summary:")
+        self.logger.info(f"Messages Received: {messages_received}")
+        self.logger.info(f"Messages Processed: {messages_processed}")
         success_rate = (messages_processed / max(1, messages_received)) * 100
-        print(f"Success Rate: {success_rate:.1f}%")
-        print(str(self.stats))        
+        self.logger.info(f"Success Rate: {success_rate:.1f}%")
+        self.logger.info(str(self.stats))        
 
 
     def handle_unexpected_error(self, error: Exception):
         """Handle unexpected errors"""
         self.stats.unexpected_errors += 1
-        self.logger.error(f"Unexpected error: {str(error)}")
+        self.logger.error(f"Unexpected error: {str(error)}", exc_info=True)
         if self.debug:
-            print(f"Unexpected error: {str(error)}")        
+            self.logger.debug(f"Unexpected error details: {str(error)}")        

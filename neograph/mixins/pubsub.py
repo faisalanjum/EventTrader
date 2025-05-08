@@ -186,7 +186,7 @@ class PubSubMixin:
                     logger.warning(f"No data found for transcript {item_id}")
 
         except Exception as e:
-            logger.error(f"Error processing {content_type} update for {item_id}: {e}")
+            logger.error(f"Error processing {content_type} update for {item_id}: {e}", exc_info=True)
 
 
     def _generate_embeddings_for_pubsub_item(self, news_id):
@@ -306,7 +306,7 @@ class PubSubMixin:
 
 
             except Exception as e:
-                logger.error(f"Error in PubSub processing: {e}")
+                logger.error(f"Error in PubSub processing: {e}", exc_info=True)
                 # Try to reconnect to Neo4j if connection appears to be lost
                 if not self.manager or "Neo4j" in str(e) or "Connection" in str(e):
                     logger.warning("Attempting to reconnect to Neo4j")

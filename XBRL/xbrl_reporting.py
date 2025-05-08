@@ -3,6 +3,7 @@ This module contains fact and reporting-related implementations for the XBRL mod
 These have been extracted from XBRLClasses.py to improve maintainability.
 """
 
+import logging
 # Import common dependencies
 from .common_imports import *
 
@@ -28,6 +29,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .xbrl_processor import process_report
 
+logger = logging.getLogger(__name__)
 
 @dataclass
 class Fact(Neo4jNode):
@@ -164,7 +166,7 @@ class Fact(Neo4jNode):
         dim_values.update(getattr(self.model_fact.context, 'scenDimValues', {}))
         
         if not dim_values:
-            # print(f"No dimensions found for fact {self.u_id}")
+            # logger.debug(f"No dimensions found for fact {self.u_id}")
             return
             
         for dim_concept, dim_value in dim_values.items():
@@ -176,7 +178,7 @@ class Fact(Neo4jNode):
                         fact_member = Member(model_xbrl=self.model_fact.modelXbrl, item = dim_value.member, parent_qname=None, level=0) 
                         # self.dims_members.append((dim_concept, dim_value.member))
                         self.dims_members.append((fact_dimension, fact_member))
-                        # print(f"Added explicit dimension: {dim_concept.qname}, member: {dim_value.member.qname}")
+                        # logger.debug(f"Added explicit dimension: {dim_concept.qname}, member: {dim_value.member.qname}")
                         
                 # For typed dimensions, use the typed value
                 elif hasattr(dim_value, 'isTyped') and dim_value.isTyped:
@@ -185,13 +187,13 @@ class Fact(Neo4jNode):
                         fact_member = Member(model_xbrl=self.model_fact.modelXbrl, item = typed_concept, parent_qname=None, level=0) 
                         # self.dims_members.append((dim_concept, dim_value.typedMember.stringValue))
                         self.dims_members.append((fact_dimension, fact_member))
-                        # print(f"Added typed dimension: {dim_concept.qname}, value: {dim_value.typedMember.stringValue}")
+                        # logger.debug(f"Added typed dimension: {dim_concept.qname}, value: {dim_value.typedMember.stringValue}")
                         
                 else:
-                    print(f"Dimension {dim_concept.qname} is neither explicit nor typed")
+                    logger.warning(f"Dimension {dim_concept.qname} is neither explicit nor typed")
                     
             except AttributeError as e:
-                print(f"Warning: Could not process dimension value for {dim_concept}: {e}")
+                logger.warning(f"Warning: Could not process dimension value for {dim_concept}: {e}")
 
 
     # Neo4j Node Properties

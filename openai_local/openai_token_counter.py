@@ -62,14 +62,14 @@ class OpenAITokenCounter:
             cls._tokenizers[model] = tokenizer
             return tokenizer
         except Exception as e:
-            logger.error(f"Error getting tokenizer for model {model}: {e}")
+            logger.error(f"Error getting tokenizer for model {model}: {e}", exc_info=True)
             # Fallback to cl100k_base which is used by most current models
             try:
                 tokenizer = tiktoken.get_encoding("cl100k_base")
                 cls._tokenizers[model] = tokenizer
                 return tokenizer
             except Exception as e2:
-                logger.error(f"Error getting fallback tokenizer: {e2}")
+                logger.error(f"Error getting fallback tokenizer: {e2}", exc_info=True)
                 raise
     
     @classmethod

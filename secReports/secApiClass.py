@@ -3,9 +3,12 @@ import json
 import aiohttp
 import backoff
 import time
+import logging
 from typing import Optional, Dict, Any, List
 from eventtrader.keys import SEC_API_KEY
 from tqdm.asyncio import tqdm_asyncio
+
+logger = logging.getLogger(__name__)
 
 class SECApi:
     def __init__(self, api_key: Optional[str] = None, max_concurrent: int = 10):
@@ -55,7 +58,7 @@ class SECApi:
                 
                 if response.status == 429:
                     retry_after = int(response.headers.get('Retry-After', '5'))
-                    # print(f"Rate limited. Waiting {retry_after} seconds...")
+                    # logger.warning(f"Rate limited. Waiting {retry_after} seconds...")
                     await asyncio.sleep(retry_after)
                     return await self._make_request(endpoint, params)
                 
@@ -77,11 +80,11 @@ class SECApi:
             data = await self._make_request(f"mapping/cik/{cik_str}")
             
             if not data:
-                print(f"No data returned from API for CIK {cik_str}")
+                logger.warning(f"No data returned from API for CIK {cik_str}")
                 return None
                 
             if not isinstance(data, list) or len(data) == 0:
-                print(f"Unexpected data format for CIK {cik_str}: {data}")
+                logger.warning(f"Unexpected data format for CIK {cik_str}: {data}")
                 return None
                 
             company = data[0]
@@ -108,7 +111,7 @@ class SECApi:
             return result
             
         except Exception as e:
-            print(f"Error fetching SEC data for CIK {cik}: {str(e)}")
+            logger.error(f"Error fetching SEC data for CIK {cik}: {str(e)}", exc_info=True)
             return None
     
 

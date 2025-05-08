@@ -30,6 +30,7 @@ import sys
 from collections import defaultdict
 from datetime import timedelta, date, datetime
 import copy
+import logging
 
 # Arelle imports
 from arelle import Cntlr, ModelDocument, FileSource, XbrlConst
@@ -40,7 +41,7 @@ from arelle.ModelInstanceObject import ModelFact, ModelContext, ModelUnit
 from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 
-
+logger = logging.getLogger(__name__)
 
 @dataclass
 class Concept(Neo4jNode):
@@ -189,13 +190,13 @@ class GuidanceConcept(Concept):
                 if "AccountingChange" in concept_name:
                     target_concepts.append(concept_name)
         
-        print(f"\nGuidance concept: {qname}")
+        logger.debug(f"Guidance concept: {qname}")
         if target_concepts:
-            print(f"Found {len(target_concepts)} target concepts:")
+            logger.debug(f"Found {len(target_concepts)} target concepts:")
             for target in target_concepts:
-                print(f"  - {target}")
+                logger.debug(f"  - {target}")
         else:
-            print("No target concepts found")
+            logger.debug("No target concepts found")
         
         return target_concepts
 

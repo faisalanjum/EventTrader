@@ -18,6 +18,7 @@ from redisDB.redis_constants import RedisKeys
 import copy
 import os
 import concurrent.futures
+import logging
 
 
 # Notes:
@@ -166,7 +167,7 @@ class ReportProcessor(BaseProcessor):
                 break 
             except Exception as e:
                 regular_attempts += 1
-                self.logger.error(f"Error extracting section {section_id} (attempt {regular_attempts}/{retries}): {e}")
+                self.logger.error(f"Error extracting section {section_id} (attempt {regular_attempts}/{retries}): {e}", exc_info=True)
                 if regular_attempts < retries:
                     delay = 500 + (500 * regular_attempts)
                     time.sleep(delay / 1000)
@@ -247,7 +248,7 @@ class ReportProcessor(BaseProcessor):
                                 extracted_sections[section_name_from_future] = content
                                 self.logger.info(f"Successfully extracted section {section_name_from_future} for {form_type}")
                         except Exception as exc:
-                            self.logger.error(f"Section {section_name_from_future} generated an exception: {exc}")
+                            self.logger.error(f"Section {section_name_from_future} generated an exception: {exc}", exc_info=True)
             
             if extracted_sections:
                 self.logger.info(f"Successfully extracted {len(extracted_sections)} sections for {url}")
@@ -530,7 +531,7 @@ class ReportProcessor(BaseProcessor):
             return clean_text.strip()
             
         except Exception as e:
-            self.logger.error(f"Error processing exhibit {url}: {str(e)}")
+            self.logger.error(f"Error processing exhibit {url}: {str(e)}", exc_info=True)
             return None
 
 
@@ -599,7 +600,7 @@ class ReportProcessor(BaseProcessor):
             return clean_text.strip()
             
         except Exception as e:
-            self.logger.error(f"Error extracting text from secondary filing {url}: {e}")
+            self.logger.error(f"Error extracting text from secondary filing {url}: {e}", exc_info=True)
             return None
 
     def _process_exhibits(self, exhibits: Dict[str, str]) -> Dict[str, Dict[str, str]]:
@@ -679,7 +680,7 @@ class ReportProcessor(BaseProcessor):
             
             return standardized
         except Exception as e:
-            self.logger.error(f"Error in _standardize_fields: {e}")
+            self.logger.error(f"Error in _standardize_fields: {e}", exc_info=True)
             return {}
 
     def _clean_content(self, content: dict) -> dict:
@@ -699,7 +700,7 @@ class ReportProcessor(BaseProcessor):
             return cleaned
             
         except Exception as e:
-            self.logger.error(f"Error in _clean_content: {e}")
+            self.logger.error(f"Error in _clean_content: {e}", exc_info=True)
             return content  # Return original if cleaning fails
 
     def _process_item(self, raw_key: str) -> bool:
@@ -715,7 +716,7 @@ class ReportProcessor(BaseProcessor):
             if not raw_content:
                 if self.delete_raw:
                     client.delete(raw_key)
-                self.logger.info(f"Raw content not found: {raw_key}")
+                self.logger.warning(f"Raw content not found: {raw_key}")
                 return False
 
             filing = json.loads(raw_content)
@@ -725,7 +726,7 @@ class ReportProcessor(BaseProcessor):
             
             # Check if we have valid symbols
             if not self._has_valid_symbols(standardized):
-                self.logger.info(f"Dropping {raw_key} - no matching symbols in universe")
+                self.logger.debug(f"Dropping {raw_key} - no matching symbols in universe")
                 if self.delete_raw:
                     client.delete(raw_key) # client is guaranteed to be assigned here or error before
                 return True
@@ -794,7 +795,7 @@ class ReportProcessor(BaseProcessor):
                 return all(pipe.execute())
                 
         except Exception as e:
-            self.logger.error(f"Failed to process {raw_key}: {e}")
+            self.logger.error(f"Failed to process {raw_key}: {e}", exc_info=True)
             # Fallback to queue_client if client specific to hist/live failed early or is None
             # This part needs careful handling if the initial client assignment itself fails.
             # However, _process_item is usually called with a valid raw_key from a queue

@@ -9,7 +9,8 @@ from redisDB.redisClasses import RedisClient, EventTraderRedis
 from .sec_errors import FilingErrorHandler
 from config.feature_flags import VALID_FORM_TYPES
 from sec_api import QueryApi
-from utils.log_config import get_logger, setup_logging
+
+logger = logging.getLogger(__name__)
 
 class SECRestAPI:
     """REST API client for historical SEC filing data"""
@@ -22,13 +23,13 @@ class SECRestAPI:
         self.ttl = ttl
         self.error_handler = FilingErrorHandler()
         self.query_api = QueryApi(api_key=api_key)
-        self.logger = get_logger("sec_rest_api")  # Add centralized logger
+        self.logger = logging.getLogger(__name__)
         
         # API Limits
         self.MAX_QUERY_LENGTH = 3500  # Maximum query string length
         self.MAX_PAGE_SIZE = 50      # Maximum results per page
         self.MAX_RESULTS = 10000     # Maximum total results per query
-        self.RATE_LIMIT_DELAY = 0.01  # Recommended 0.1 - 100ms between requests
+        self.RATE_LIMIT_DELAY = 0.05  # Recommended 0.1 - 100ms between requests
         self.MAX_RETRIES = 3
         self.RETRY_DELAY = 1  # Start with 1 second
         self.MAX_RETRY_DELAY = 10  # Max backoff of 10 seconds
@@ -57,8 +58,7 @@ class SECRestAPI:
         base=2,
         factor=1,
         jitter=None,
-        # We'll get the logger dynamically inside the method to avoid using root logger
-        logger=None
+        logger=logger
     )
 
     def get_historical_data(self, date_from: str, date_to: str, raw: bool = False) -> List[Dict]:
@@ -91,7 +91,7 @@ class SECRestAPI:
                         
                 except Exception as e:
                     self.stats['errors'] += 1
-                    self.logger.error(f"Error processing ticker {ticker}: {str(e)}")
+                    self.logger.error(f"Error processing ticker {ticker}: {str(e)}", exc_info=True)
                     continue
                 
                 # Not Good - rethink
@@ -103,14 +103,14 @@ class SECRestAPI:
                 self.redis_client.set(f"batch:{batch_id}:fetch_complete", "1", ex=86400)
                 self.logger.info(f"Set fetch_complete flag for batch: {batch_id}")
             except Exception as e:
-                self.logger.error(f"Failed to set fetch_complete flag for reports batch {batch_id}: {e}")
+                self.logger.error(f"Failed to set fetch_complete flag for reports batch {batch_id}: {e}", exc_info=True)
             # --- Fetch Complete Signal --- End
             
             self._log_stats()
             return processed_filings
             
         except Exception as e:
-            self.logger.error(f"Error in get_historical_data: {str(e)}")
+            self.logger.error(f"Error in get_historical_data: {str(e)}", exc_info=True)
             return []
 
 
@@ -163,7 +163,7 @@ class SECRestAPI:
                 
             except Exception as e:
                 self.stats['errors'] += 1
-                self.logger.error(f"Error processing {ticker} {form_type}: {str(e)}")
+                self.logger.error(f"Error processing {ticker} {form_type}: {str(e)}", exc_info=True)
                 continue
                 
             time.sleep(self.RATE_LIMIT_DELAY)
@@ -222,7 +222,7 @@ class SECRestAPI:
                     
             except Exception as e:
                 self.stats['errors'] += 1
-                self.logger.error(f"Error fetching {ticker} {form_type} at index {from_index}: {str(e)}")
+                self.logger.error(f"Error fetching {ticker} {form_type} at index {from_index}: {str(e)}", exc_info=True)
                 break
                 
             time.sleep(self.RATE_LIMIT_DELAY)

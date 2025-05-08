@@ -11,7 +11,6 @@ import json
 from typing import Dict, List, Union, Set
 from earningscall import get_company
 from eventtrader.keys import OPENAI_API_KEY, EARNINGS_CALL_API_KEY
-from utils.log_config import get_logger, setup_logging
 from transcripts.transcript_schemas import UnifiedTranscript
 
 
@@ -31,7 +30,7 @@ class EarningsCallProcessor:
         earningscall.retry_strategy = {"strategy": "exponential",  "base_delay": 2,   "max_attempts": 10,}
 
         self.ny_tz = pytz.timezone('America/New_York')
-        self.logger = get_logger("transcripts.EarningsCallProcessor")
+        self.logger = logging.getLogger(__name__)
 
         self.openai_client = OpenAI(api_key=OPENAI_API_KEY)
         self.rate_limiter = ModelRateLimiter()
@@ -123,7 +122,7 @@ class EarningsCallProcessor:
                     else:
                         self.logger.info(f"No transcript returned for {calendar_event.symbol}")
                 except Exception as e:
-                    self.logger.error(f"Error processing transcript for {calendar_event.symbol}: {e}")
+                    self.logger.error(f"Error processing transcript for {calendar_event.symbol}: {e}", exc_info=True)
             else:
                 self.logger.info(f"Transcript not ready for {calendar_event.symbol}")
         
@@ -304,7 +303,7 @@ class EarningsCallProcessor:
                 else:
                     self.logger.info(f"Level 4 transcript NOT available for {company_obj.company_info.symbol} Q{event.quarter} {event.year}")
             except Exception as e:
-                self.logger.error(f"Error getting level 4 transcript: {e}")
+                self.logger.error(f"Error getting level 4 transcript: {e}", exc_info=True)
                 transcript_level4 = None
             
             # Detect Q&A boundary
@@ -381,7 +380,7 @@ class EarningsCallProcessor:
                 try:
                     self.form_qa_pairs(qa_part, speaker_roles, result)
                 except Exception as e:
-                    self.logger.error(f"Error in form_qa_pairs: {e}")
+                    self.logger.error(f"Error in form_qa_pairs: {e}", exc_info=True)
                     result["qa_pairs"] = []
             else:
                 result["qa_pairs"] = []  # Initialize with empty list if no Q&A
@@ -416,7 +415,7 @@ class EarningsCallProcessor:
             results.append(result)
         
         except Exception as e:
-            self.logger.error(f"Error processing transcript for Q{event.quarter} {event.year}: {e}")
+            self.logger.error(f"Error processing transcript for Q{event.quarter} {event.year}: {e}", exc_info=True)
             
             try:
                 # First try getting speakers if needed
@@ -451,7 +450,7 @@ class EarningsCallProcessor:
                     result = self._validate_transcript(result)
                     results.append(result)
             except Exception as inner_e:
-                self.logger.error(f"Error in fallback processing: {inner_e}")
+                self.logger.error(f"Error in fallback processing: {inner_e}", exc_info=True)
                 pass
             
         return results
@@ -544,7 +543,7 @@ class EarningsCallProcessor:
             return {}
         
         except Exception as e:
-            self.logger.error(f"Error during speaker classification: {e}")
+            self.logger.error(f"Error during speaker classification: {e}", exc_info=True)
             return {}
 
 
@@ -677,7 +676,7 @@ class EarningsCallProcessor:
             # Add to result
             result["qa_pairs"] = qa_pairs
         except Exception as e:
-            self.logger.error(f"Error in form_qa_pairs: {e}")
+            self.logger.error(f"Error in form_qa_pairs: {e}", exc_info=True)
             result["qa_pairs"] = []
 
     # Final Functions for Mapping Calendar to Fiscal and vice versa
@@ -764,7 +763,7 @@ class EarningsCallProcessor:
             return True
             
         except Exception as e:
-            self.logger.error(f"Error storing transcript in Redis: {e}")
+            self.logger.error(f"Error storing transcript in Redis: {e}", exc_info=True)
             return False
 
 
@@ -780,7 +779,7 @@ class ModelRateLimiter:
         }
         self.model_requests = {model: [] for model in self.model_limits}
         self._lock = threading.Lock()
-        self.logger = get_logger("transcripts.ModelRateLimiter")
+        self.logger = logging.getLogger("transcripts.ModelRateLimiter")
         
     
     def wait_if_needed(self, model):

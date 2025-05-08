@@ -84,7 +84,7 @@ class InitializationMixin:
             logger.info("Connected to Neo4j database using singleton manager")
             return True
         except Exception as e:
-            logger.error(f"Failed to connect to Neo4j: {e}")
+            logger.error(f"Failed to connect to Neo4j: {e}", exc_info=True)
             return False
         
     
@@ -137,7 +137,7 @@ class InitializationMixin:
             return initialized
                 
         except Exception as e:
-            logger.error(f"Error checking Neo4j initialization: {e}")
+            logger.error(f"Error checking Neo4j initialization: {e}", exc_info=True)
             return False
     
     def initialize(self, start_date=None):
@@ -178,7 +178,7 @@ class InitializationMixin:
             logger.info("Initialization " + ("succeeded" if success else "failed"))
             return success
         except Exception as e:
-            logger.error(f"Error during initialization: {e}")
+            logger.error(f"Error during initialization: {e}", exc_info=True)
             return False
         finally:
             initializer.close()
@@ -256,13 +256,13 @@ class InitializationMixin:
                     logger.info(f"✅ ChromaDB initialized successfully with {count} embeddings")
                     return
                 except Exception as e:
-                    logger.warning(f"ChromaDB initialization retry {retry+1}/3 failed: {e}")
+                    logger.warning(f"ChromaDB initialization retry {retry+1}/3 failed: {e}", exc_info=True)
                     if retry < 2:
                         time.sleep(1)
                     else:
                         raise
         except Exception as e:
-            logger.warning(f"❌ ChromaDB initialization error: {e}")
+            logger.warning(f"❌ ChromaDB initialization error: {e}", exc_info=True)
             self.chroma_client = None
             self.chroma_collection = None
 

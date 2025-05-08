@@ -7,6 +7,7 @@ This is the entry point for XBRL processing functionality.
 import random
 from .common_imports import *
 from datetime import datetime, timedelta
+import logging # Add logging import
 
 # Import core module
 from .xbrl_core import Neo4jNode, NodeType, RelationType, ReportElementClassifier, XBRLNode, PRESENTATION_EDGE_UNIQUE_PROPS
@@ -41,6 +42,8 @@ from enum import Enum
 import time
 import urllib.request
 
+logger = logging.getLogger(__name__) # Initialize logger for the module
+
 def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional['CompanyNode']:
     """Get CompanyNode from Neo4j by CIK."""
     # Import inside function to avoid circular imports
@@ -58,7 +61,7 @@ def get_company_by_cik(neo4j: 'Neo4jManager', cik: str) -> Optional['CompanyNode
             if result:
                 return CompanyNode.from_neo4j(dict(result["c"].items()))
     except Exception as e:
-        print(f"Error retrieving company with CIK {cik}: {e}")
+        logger.error(f"Error retrieving company with CIK {cik}: {e}")
     return None
 
 
@@ -79,7 +82,7 @@ def get_report_by_accessionNo(neo4j: 'Neo4jManager', accessionNo: str) -> Option
             if result:
                 return ReportNode.from_neo4j(dict(result["r"].items()))
     except Exception as e:
-        print(f"Error retrieving report with accession number {accessionNo}: {e}")
+        logger.error(f"Error retrieving report with accession number {accessionNo}: {e}")
     return None
 
 
@@ -164,15 +167,18 @@ class process_report:
             # Retrieve company node
             self.external_company = get_company_by_cik(self.neo4j, self.cik)
             if not self.external_company:
+                logger.error(f"No company found with CIK {self.cik}")
                 raise ValueError(f"No company found with CIK {self.cik}")
             
             # Retrieve report node    
             self.report_node = get_report_by_accessionNo(self.neo4j, self.accessionNo)
             if not self.report_node:
+                logger.error(f"No report found with accession number {self.accessionNo}")
                 raise ValueError(f"No report found with accession number {self.accessionNo}")
                 
             # Verify the report_node has primaryDocumentUrl
             if not hasattr(self.report_node, 'primaryDocumentUrl') or not self.report_node.primaryDocumentUrl:
+                logger.error(f"Report node for {self.accessionNo} must have primaryDocumentUrl attribute")
                 raise ValueError("Report node must have primaryDocumentUrl attribute")
             
             # Skip direct constraint creation - now handled by the singleton Neo4j manager
@@ -183,6 +189,7 @@ class process_report:
             self._duplicate_map: Dict[str, str] = {}   # duplicate_uid -> primary_uid
             
             # Initialize nodes and process XBRL data
+            logger.info(f"Initializing XBRL processing for report {self.accessionNo}, CIK {self.cik}")
             self.initialize_xbrl_node()
             self.load_xbrl()
             self.initialize_company_node()
@@ -193,10 +200,11 @@ class process_report:
 
             self._validate_and_link_networks()
             self._link_guidance_concepts()
+            logger.info(f"Successfully initialized XBRL processing for report {self.accessionNo}")
             
         except Exception as e:
             # Log the error
-            print(f"Error in XBRL processing initialization: {e}")
+            logger.critical(f"Error in XBRL processing initialization for {self.accessionNo}: {e}", exc_info=True)
             # Close any open resources
             self.close_resources()
             # Re-raise to signal failure
@@ -205,10 +213,11 @@ class process_report:
     def _link_guidance_concepts(self):
         """Create relationships between guidance concepts and their targets"""
         relationships = []
+        logger.debug(f"Processing guidance concepts for report {self.accessionNo}")
         
         for guidance in self.guidance_concepts:
-            print(f"\nProcessing guidance: {guidance.qname}")
-            print(f"Guidance text: {guidance.guidance_text}")
+            logger.debug(f"Processing guidance: {guidance.qname} for report {self.accessionNo}")
+            logger.debug(f"Guidance text: {guidance.guidance_text}")
             
             for target_qname in guidance.target_concepts:
                 target_concept = next(
@@ -226,23 +235,23 @@ class process_report:
                             'namespace': guidance.namespace
                         }
                     ))
-                    print(f"Created guidance relationship to: {target_concept.qname}")
+                    logger.debug(f"Created guidance relationship to: {target_concept.qname} for report {self.accessionNo}")
         
         if relationships:
             self.neo4j.merge_relationships(relationships)
-            print(f"\nCreated {len(relationships)} guidance relationships")
+            logger.info(f"Created {len(relationships)} guidance relationships for report {self.accessionNo}")
 
 
 
     def _validate_and_link_networks(self) -> None:
         """Validate facts and create relationships for all networks"""
-        print("\nStarting network validation and linking...")
+        logger.info(f"Starting network validation and linking for report {self.accessionNo}...")
         
         for network in self.networks:
             network.report = self
             network.taxonomy = self.taxonomy
 
-            # print(f"IsPresentation: {network.isPresentation}, IsCalculation: {network.isCalculation}, Network: {network.name}")
+            # logger.debug(f"IsPresentation: {network.isPresentation}, IsCalculation: {network.isCalculation}, Network: {network.name}")
             
             # Always validate presentation first if available
             if network.isPresentation and hasattr(network, 'presentation'):
@@ -288,7 +297,7 @@ class process_report:
 
     def link_presentation_facts(self) -> None:
         """Create presentation relationships using stored validated facts"""
-        print("\nCreating presentation relationships...")
+        logger.info(f"Creating presentation relationships for report {self.accessionNo}...")
         presentation_relationships_for_merge = [] # List for (source, target, props) tuples
         debug_counts = defaultdict(int)
         
@@ -297,7 +306,7 @@ class process_report:
                 continue
                 
             if not hasattr(network, 'presentation') or not hasattr(network.presentation, 'fact_lookup'):
-                print(f"Warning: Missing presentation or fact_lookup for network {network.name}")
+                logger.warning(f"Warning: Missing presentation or fact_lookup for network {network.name} in report {self.accessionNo}")
                 continue
                 
             fact_lookup = network.presentation.fact_lookup
@@ -345,27 +354,27 @@ class process_report:
                             ))
                             debug_counts['abstract_to_fact'] += 1
         
-        print("\nPresentation Relationship Generation Summary:")
-        print(f"Total PRESENTATION_EDGE tuples generated: {len(presentation_relationships_for_merge)}")
+        logger.debug(f"Presentation Relationship Generation Summary for report {self.accessionNo}:" )
+        logger.debug(f"Total PRESENTATION_EDGE tuples generated: {len(presentation_relationships_for_merge)}")
         for rel_type, count in debug_counts.items():
-            print(f"{rel_type}: {count}")
+            logger.debug(f"{rel_type}: {count}")
 
         # <<< Call the new specific Neo4jManager method >>>
         if presentation_relationships_for_merge:
-            print("\nSending PRESENTATION_EDGE relationships to Neo4j via merge_presentation_edges...")
+            logger.info("Sending PRESENTATION_EDGE relationships to Neo4j via merge_presentation_edges...")
             try:
                 # Pass the list directly as it contains (source, target, props) tuples
                 self.neo4j.merge_presentation_edges(presentation_relationships_for_merge) 
             except Exception as e:
-                print(f"ERROR during merge_presentation_edges call: {e}")
+                logger.error(f"ERROR during merge_presentation_edges call for report {self.accessionNo}: {e}", exc_info=True)
                 # Decide if processing should halt or continue
                 # raise # Optional: re-raise to stop processing on error
         else:
-            print("\nNo PRESENTATION_EDGE relationships generated to send.")
+            logger.info(f"No PRESENTATION_EDGE relationships generated to send for report {self.accessionNo}.")
             
         # Final summary reflects what was attempted
-        print("\nPresentation Relationship Merge Summary:")
-        print(f"Attempted to merge {len(presentation_relationships_for_merge)} PRESENTATION_EDGE relationships via specific method.")
+        logger.info(f"Presentation Relationship Merge Summary for report {self.accessionNo}:" )
+        logger.info(f"Attempted to merge {len(presentation_relationships_for_merge)} PRESENTATION_EDGE relationships via specific method for report {self.accessionNo}.")
 
 
     def link_calculation_facts(self) -> None:
@@ -379,6 +388,7 @@ class process_report:
         debug_counts = defaultdict(int)
         # Track seen relationships to prevent duplicates
         seen_relationships = set()
+        logger.info(f"Creating calculation relationships for report {self.accessionNo}...")
         
         for network in self.networks:
             if not network.isCalculation: continue
@@ -386,13 +396,13 @@ class process_report:
             # Get validated facts from presentation network if available
             fact_lookup = self.get_network_fact_lookup(network)
             if not fact_lookup:
-                print(f"No valid fact lookup available for network: {network.name}")
+                logger.warning(f"No valid fact lookup available for network: {network.name} in report {self.accessionNo}")
                 debug_counts['missing_fact_lookup'] += 1
                 continue
                 
             calc_rel_set = network.model_xbrl.relationshipSet(XbrlConst.summationItem, network.network_uri)
             if not calc_rel_set:
-                print(f"No calculation relationships in network: {network.name}")
+                logger.debug(f"No calculation relationships in network: {network.name} for report {self.accessionNo}")
                 debug_counts['no_calc_relationships'] += 1
                 continue
             
@@ -402,6 +412,7 @@ class process_report:
                     parent_id = f"{rel.fromModelObject.qname.namespaceURI}:{rel.fromModelObject.qname}"
                     child_id = f"{rel.toModelObject.qname.namespaceURI}:{rel.toModelObject.qname}"
                 except AttributeError:
+                    logger.warning(f"Invalid relationship object encountered in calculation network {network.name} for report {self.accessionNo}.", exc_info=True)
                     debug_counts['invalid_relationships'] += 1
                     continue
                 
@@ -421,6 +432,7 @@ class process_report:
                         
                     p_context = context_lookup.get(p_fact.context_id)
                     if not p_context:
+                        logger.warning(f"Missing parent context {p_fact.context_id} for fact {p_fact.id} in report {self.accessionNo}")
                         debug_counts['missing_parent_context'] += 1
                         continue
                     
@@ -472,23 +484,24 @@ class process_report:
 
 
         # Print debug summary
-        print("\nCalculation Relationship Summary:")
-        print(f"Total relationships created: {len(relationships)}")
+        logger.debug(f"Calculation Relationship Summary for report {self.accessionNo}:" )
+        logger.debug(f"Total relationships created: {len(relationships)}")
         for count_type, count in debug_counts.items():
-            print(f"{count_type}: {count}")
+            logger.debug(f"{count_type}: {count}")
         
         if relationships:
-            print("Checking calculation steps...")
+            logger.info(f"Checking calculation steps for report {self.accessionNo}...{len(relationships)}")
             # Get valid relationships from check_calculation_steps
             valid_relationships = []
             self.check_calculation_steps(relationships, context_lookup, valid_relationships) 
 
             if valid_relationships:  # Only create valid relationships
                 try:
+                    logger.info(f"Merging {len(valid_relationships)} valid calculation relationships for report {self.accessionNo}.")
                     self.neo4j.merge_relationships(valid_relationships)
                     self.neo4j.validate_neo4j_calculations()
                 except Exception as e:
-                    print(f"Error creating calculation relationships: {e}")
+                    logger.error(f"Error creating calculation relationships for report {self.accessionNo}: {e}", exc_info=True)
                     # Continue execution - calculations will be missing but processing can continue
 
 
@@ -496,7 +509,7 @@ class process_report:
         """Validates summation consistency of pre-grouped calculation relationships.
         Processes relationships the same way as Neo4j storage to ensure exact matching."""
         
-        print("\nStarting calculation validation...")
+        logger.info(f"Starting calculation validation for report {self.accessionNo}...")
         debug_counts = defaultdict(int)
         
         relationships = resolve_primary_fact_relationships(relationships)
@@ -510,14 +523,15 @@ class process_report:
             required_props = {'company_cik', 'report_id', 'network_uri', 'context_id'}
             missing_props = required_props - set(attrs.keys())
             if missing_props:
+                logger.critical(f"Missing required properties for calculation relationship in report {self.accessionNo}: {missing_props}. Attrs: {attrs}")
                 raise ValueError(f"Missing required properties: {missing_props}")
                 
             network_uri = attrs['network_uri']
             network_groups[network_uri].append(rel)
-            debug_counts['total_relationships'] += 1
+            debug_counts['total_relationships_to_check'] += 1
         
         for network_uri, network_rels in network_groups.items():
-            # print(f"\nNetwork: {network_rels[0][3]['network_name']}")
+            # logger.debug(f"Network: {network_rels[0][3]['network_name']}")
             debug_counts['networks_processed'] += 1
             
             # Group by parent fact for summation checking
@@ -525,7 +539,7 @@ class process_report:
             for parent_fact, child_fact, _, attrs in network_rels:
                 if parent_fact not in parent_groups:
                     parent_groups[parent_fact] = {}
-                    debug_counts['unique_parents'] += 1
+                    debug_counts['unique_parents_in_network'] += 1
 
                 network_name = attrs['network_uri'].split('/')[-1]
                 # Deduplicate using same keys as Neo4j MERGE
@@ -549,10 +563,15 @@ class process_report:
                 # Calculate total sum
                 total_sum = 0
                 for child_fact, weight in unique_children.values():
-                    weighted_value = float(child_fact.value) * weight
-                    total_sum += weighted_value
-                    debug_counts['children_processed'] += 1
-                
+                    try:
+                        weighted_value = float(child_fact.value) * weight
+                        total_sum += weighted_value
+                        debug_counts['children_processed'] += 1
+                    except (ValueError, TypeError) as e:
+                        logger.warning(f"Could not calculate weighted value for child fact {child_fact.id} (value: {child_fact.value}, weight: {weight}) in report {self.accessionNo}: {e}")
+                        debug_counts['children_summation_errors'] += 1
+                        continue
+
                 # Validate summation
                 parent_value = clean_number(parent_fact.value)
                 percent_diff = abs(parent_value - total_sum) if parent_value == 0 else abs(parent_value - total_sum) / abs(parent_value)
@@ -569,64 +588,62 @@ class process_report:
                     valid_relationships.extend([rel for rel in network_rels if rel[0] == parent_fact])
                 else:
                     # Print details for invalid summations
-                    print(f"\nInvalid Calculation Group:")
-                    print(f"net: {network_rels[0][3]['network_name']}, {network_rels[0][3]['network_uri']}")
-                    print(f"Parent: {parent_fact.concept.qname} ({parent_fact.concept.balance}) = {parent_fact.value}, "
+                    logger.debug(f"Invalid Calculation Group for report {self.accessionNo}:" )
+                    logger.debug(f"net: {network_rels[0][3]['network_name']}, {network_rels[0][3]['network_uri']}")
+                    logger.debug(f"Parent: {parent_fact.concept.qname} ({parent_fact.concept.balance}) = {parent_fact.value}, "
                         f"{parent_context.period_u_id}, "
                         f"{parent_context.cik}, "
                         f"{parent_fact.unit.id.split('/')[-1]}, "
                         f"{parent_fact.context_id}")
                     
-                    print("\nChildren:")
+                    logger.debug("Children:")
                     for child_fact, weight in unique_children.values():
                         weighted_value = float(child_fact.value) * weight
                         balance_type = "Credit" if child_fact.concept.balance == 'credit' else "Debit"
                         child_context = context_lookup.get(child_fact.context_id)
                         
-                        print(f"{balance_type}: {child_fact.concept.qname} = {child_fact.value} × {weight} = {weighted_value}, "
+                        logger.debug(f"{balance_type}: {child_fact.concept.qname} = {child_fact.value} × {weight} = {weighted_value}, "
                             f"{child_context.period_u_id}, "
                             f"{child_context.cik}, "
                             f"{child_fact.unit.id.split('/')[-1]}, "
                             f"{child_fact.context_id}")
                         
                         if hasattr(child_context, 'dimensions'):
-                            print(f"    Dimensions: {child_context.dimensions}")
+                            logger.debug(f"    Dimensions: {child_context.dimensions}")
 
 
 
-                    print(f"\nTotal Sum: {total_sum}")
-                    print(f"Calculated Value: {total_sum}")
-                    print(f"Parent Value: {parent_value}")
-                    print(f"Match: No")
-                    print("="*80)
+                    logger.debug(f"Total Sum: {total_sum}")
+                    logger.debug(f"Calculated Value: {total_sum}")
+                    logger.debug(f"Parent Value: {parent_value}")
+                    logger.debug(f"Match: No")
         
         # Print summaries
-        print("\nCalculation Validation Summary:")
+        logger.debug(f"Calculation Validation Summary for report {self.accessionNo}:")
         for count_type, count in debug_counts.items():
-            print(f"{count_type}: {count}")
+            logger.debug(f"{count_type}: {count}")
         
-        print(f"\nSummary:")
-        print(f"Total Matches: {matches}")
-        print(f"Total Non-Matches: {non_matches}")
+        logger.info(f"Summary for report {self.accessionNo}:")
+        logger.info(f"Total Matches: {matches}")
+        logger.info(f"Total Non-Matches: {non_matches}")
         if matches + non_matches > 0:
-            print(f"Match Rate: {matches/(matches+non_matches)*100:.1f}%")
+            logger.info(f"Match Rate: {matches/(matches+non_matches)*100:.1f}%")
 
 
     def initialize_company_node(self):
         """Set the company node from the externally provided company (minimal version)"""
         if not self.external_company:
+            logger.critical(f"External company node is required for CIK {self.cik} but none was provided")
             raise ValueError("External company node is required but none was provided")
         
         # Simply set the company reference - no Neo4j operations
         self.company = self.external_company
-        print(f"Using company node: {self.company.name} (CIK: {self.company.cik})")
+        logger.info(f"Using company node: {self.company.name} (CIK: {self.company.cik}) for report {self.accessionNo}")
 
     
     def link_fact_footnotes(self) -> None:
         """Debug version to understand fact-footnote relationships"""
-        print("\n" + "="*80)
-        print("DEBUGGING FACT-FOOTNOTE RELATIONSHIPS")
-        print("="*80)
+        logger.debug(f"DEBUGGING FACT-FOOTNOTE RELATIONSHIPS for report {self.accessionNo}")
         
         # Try both standard arcroles
         fact_footnote_arcrole = "http://www.xbrl.org/2003/arcrole/fact-footnote"
@@ -637,19 +654,18 @@ class process_report:
         explanatory_rel_set = self.model_xbrl.relationshipSet(fact_explanatory_arcrole)
         
         # Check for footnotes in the instance document
-        print("\nChecking Instance Document:")
-        print(f"Instance URL: {self.xbrl_node.primaryDocumentUrl}")
-        print(f"Has Footnote Links: {'Yes' if footnote_rel_set else 'No'}")
-        print(f"Has Explanatory Facts: {'Yes' if explanatory_rel_set else 'No'}")
+        logger.debug(f"Checking Instance Document for report {self.accessionNo}:")
+        logger.debug(f"Instance URL: {self.xbrl_node.primaryDocumentUrl}")
+        logger.debug(f"Has Footnote Links: {'Yes' if footnote_rel_set else 'No'}")
+        logger.debug(f"Has Explanatory Facts: {'Yes' if explanatory_rel_set else 'No'}")
         
         # If no relationships found, check for inline XBRL footnotes
         if not (footnote_rel_set or explanatory_rel_set):
-            print("\nChecking for iXBRL footnotes:")
+            logger.debug(f"Checking for iXBRL footnotes for report {self.accessionNo}:")
             for fact in self.facts:
                 if hasattr(fact, 'footnoteRefs') and fact.footnoteRefs:
-                    print(f"Found iXBRL footnote reference in fact: {fact.concept.qname}")
+                    logger.debug(f"Found iXBRL footnote reference in fact: {fact.concept.qname} for report {self.accessionNo}")
         
-        print("\n" + "="*80)
 
 
 
@@ -675,6 +691,7 @@ class process_report:
         Load the XBRL file from the SEC EDGAR database.
         Follow SEC guidelines: https://www.sec.gov/developer
         """
+        logger.info(f"Loading XBRL data for report {self.accessionNo} from {self.xbrl_node.primaryDocumentUrl}")
         # Initialize the controller
         self.controller = Cntlr.Cntlr(logFileName=self.log_file, logFileMode='w', logFileEncoding='utf-8')
         self.controller.modelManager.formulaOptions = FormulaOptions()
@@ -732,31 +749,34 @@ class process_report:
                     # Add longer pauses on later retries
                     if attempt >= 3:
                         extra_delay = 30  # 30 seconds additional for later attempts
-                        print(f"Adding extra {extra_delay}s delay for attempt {attempt+1}")
+                        logger.info(f"Adding extra {extra_delay}s delay for attempt {attempt+1} of loading {self.xbrl_node.primaryDocumentUrl}")
                         delay += extra_delay
 
 
-                    print(f"Retry attempt {attempt+1}/{max_retries} for {self.xbrl_node.primaryDocumentUrl}")
+                    logger.info(f"Retry attempt {attempt+1}/{max_retries} for {self.xbrl_node.primaryDocumentUrl} after {delay:.2f}s delay.")
                     time.sleep(delay)
                     
                 # The direct loading approach
+                logger.debug(f"Attempting to load XBRL for {self.xbrl_node.primaryDocumentUrl}, attempt {attempt+1}")
                 self.model_xbrl = self.controller.modelManager.load(
                     filesource=FileSource.FileSource(self.xbrl_node.primaryDocumentUrl),
                     discover=True
                 )
+                logger.info(f"Successfully loaded XBRL model for {self.xbrl_node.primaryDocumentUrl} on attempt {attempt+1}")
                 break  # Success, exit retry loop
                 
             except Exception as e:
                 error_message = str(e).lower()
-                print(f"Error on attempt {attempt+1}: {e}")
+                logger.warning(f"Error loading XBRL model for {self.xbrl_node.primaryDocumentUrl} on attempt {attempt+1}: {e}", exc_info=True if attempt == max_retries -1 else False)
                 
                 # Special handling for 403 errors
                 if "403" in error_message or "forbidden" in error_message:
                     cooldown = 60 * (attempt + 1)  # Progressive cooldown
-                    print(f"Received 403 Forbidden, cooling down for {cooldown} seconds")
+                    logger.warning(f"Received 403 Forbidden for {self.xbrl_node.primaryDocumentUrl}, cooling down for {cooldown} seconds before next attempt.")
                     time.sleep(cooldown)
                     
                 if attempt == max_retries - 1:
+                    logger.critical(f"Failed to load XBRL model {self.xbrl_node.primaryDocumentUrl} after {max_retries} attempts.", exc_info=True)
                     raise RuntimeError(f"Error loading XBRL model after {max_retries} attempts: {e}")
 
     def close_resources(self):
@@ -764,6 +784,7 @@ class process_report:
         Explicitly close all resources used by the XBRL processing.
         This helps prevent file handle leaks when processing multiple reports.
         """
+        logger.debug(f"Closing XBRL resources for report {self.accessionNo}")
         try:
             # Close the model_xbrl if it exists
             if hasattr(self, 'model_xbrl') and self.model_xbrl:
@@ -781,7 +802,7 @@ class process_report:
                     # Remove the reference
                     self.model_xbrl = None
                 except Exception as e:
-                    print(f"Error closing model_xbrl: {e}")
+                    logger.warning(f"Error closing model_xbrl for report {self.accessionNo}: {e}")
             
             # Close the controller if it exists
             if hasattr(self, 'controller') and self.controller:
@@ -797,7 +818,7 @@ class process_report:
                     # Remove the reference
                     self.controller = None
                 except Exception as e:
-                    print(f"Error closing controller: {e}")
+                    logger.warning(f"Error closing controller for report {self.accessionNo}: {e}")
             
             # Note: Don't close Neo4j driver here as it's managed by the singleton
             # Just clear any local session objects if they exist
@@ -806,22 +827,25 @@ class process_report:
                     self._session.close()
                     self._session = None
                 except Exception as e:
-                    print(f"Error closing Neo4j session: {e}")
+                    logger.warning(f"Error closing Neo4j session for report {self.accessionNo}: {e}")
                 
             # Force garbage collection to clean up any remaining resources
             import gc
             gc.collect()
             
         except Exception as e:
-            print(f"Error during resource cleanup: {e}")
+            logger.error(f"Error during resource cleanup for report {self.accessionNo}: {e}", exc_info=True)
 
     def __del__(self):
         """Ensure resources are cleaned up when the object is deleted"""
+        logger.debug(f"__del__ called for {self.accessionNo}, ensuring resources are closed.")
         self.close_resources()
 
     def populate_common_nodes(self):
         """Populate common nodes in Neo4j."""
+        logger.info(f"Populating common XBRL nodes for report {self.accessionNo}")
         if not self.model_xbrl:
+            logger.critical(f"XBRL model not loaded for report {self.accessionNo} when trying to populate common nodes.")
             raise RuntimeError("XBRL model not loaded.")
             
         # Build common nodes from XBRL
@@ -847,7 +871,9 @@ class process_report:
 
     def populate_company_nodes(self):
         """Build and sync company-specific nodes (Dimensions, Members) with Neo4j"""        
+        logger.info(f"Populating company-specific XBRL nodes (taxonomy, dimensions, networks) for report {self.accessionNo}")
         if not self.model_xbrl:
+            logger.critical(f"XBRL model not loaded for report {self.accessionNo} when trying to populate company nodes.")
             raise RuntimeError("XBRL model not loaded.")
 
         # Build taxonomy-wide dimensions
@@ -894,7 +920,9 @@ class process_report:
 
     def populate_report_nodes(self):
         """Build and export report-specific nodes (Facts, Dimensions)"""
+        logger.info(f"Populating report-specific XBRL nodes (facts) for report {self.accessionNo}")
         if not self.model_xbrl:
+            logger.critical(f"XBRL model not loaded for report {self.accessionNo} when trying to populate report nodes.")
             raise RuntimeError("XBRL model not loaded.")
 
         self._build_facts()       # 5. Build facts
@@ -935,12 +963,14 @@ class process_report:
         if fact_context_relationships:
             self.neo4j.merge_relationships(fact_context_relationships)
 
-        print(f"Built report nodes: {len(self.facts)} facts")
+        logger.info(f"Built report nodes: {len(self.facts)} facts for report {self.accessionNo}")
 
 
     def _build_concepts(self):
         """Build concept objects from the model."""
+        logger.debug(f"Building concepts for report {self.accessionNo}")
         if not self.model_xbrl:
+            logger.critical(f"XBRL model not loaded for report {self.accessionNo} when trying to build concepts.")
             raise RuntimeError("XBRL model not loaded.")
             
         self.concepts = []
@@ -965,15 +995,18 @@ class process_report:
             elif concept in fact_concepts:  # Only create Concept nodes for those with facts
                 self.concepts.append(Concept(concept))
         
-        print("\nConcept types:")
+        logger.debug("Concept types:")
         for node_type, count in type_counts.items():
-            print(f"{node_type.value}: {count}")
+            logger.debug(f"{node_type.value}: {count}")
+        logger.info(f"Built {len(self.concepts)} concepts and {len(self.guidance_concepts)} guidance concepts for report {self.accessionNo}.")
         
 
 
     def _build_units(self):
         """Build unique unit objects from the model."""
+        logger.debug(f"Building units for report {self.accessionNo}")
         if not self.model_xbrl:
+            logger.critical(f"XBRL model not loaded for report {self.accessionNo} when trying to build units.")
             raise RuntimeError("XBRL model not loaded.")
                 
         units_dict = {}  # Use dict for uniqueness
@@ -984,15 +1017,17 @@ class process_report:
                     if unit.string_value or unit.unit_reference:  # Only add if we have some identifying info
                         units_dict[unit.id] = unit
                 except Exception as e:
-                    print(f"Error processing unit for fact {fact.id}: {e}")
+                    logger.warning(f"Error processing unit for fact {fact.id} in report {self.accessionNo}: {e}")
         
         self.units = list(units_dict.values())
-        print(f"Built {len(self.units)} unique units") 
+        logger.info(f"Built {len(self.units)} unique units for report {self.accessionNo}")
 
 
     def _build_periods(self) -> None:
         """Build unique period objects from contexts"""
+        logger.debug(f"Building periods for report {self.accessionNo}")
         if not self.model_xbrl:
+            logger.critical(f"XBRL model not loaded for report {self.accessionNo} when trying to build periods.")
             raise RuntimeError("XBRL model not loaded.")
             
         periods_dict = {}  # Use dict for uniqueness
@@ -1031,14 +1066,18 @@ class process_report:
                     periods_dict[period.u_id] = period
                     
             except Exception as e:
-                print(f"Error processing context {ctxt_id}: {e}")
+                logger.warning(f"Error processing period for context {ctxt_id} in report {self.accessionNo}: {e}")
         
         self.periods = list(periods_dict.values())
-        print(f"Built {len(self.periods)} unique periods")
+        logger.info(f"Built {len(self.periods)} unique periods for report {self.accessionNo}")
 
 
     def _build_facts(self):
         """Build facts with two-way concept relationships"""
+        logger.debug(f"Building facts for report {self.accessionNo}")
+        if not self.model_xbrl: # Added check
+            logger.critical(f"XBRL model not loaded for report {self.accessionNo} when trying to build facts.")
+            raise RuntimeError("XBRL model not loaded.")
 
          # Filter out hidden facts right at the source
         valid_facts = [fact for fact in self.model_xbrl.factsInInstance 
@@ -1053,7 +1092,7 @@ class process_report:
             concept = self._concept_lookup.get(concept_id)
             
             if not concept: 
-                print(f"Warning: No concept found for fact {fact.fact_id}")
+                logger.warning(f"Warning: No concept found for fact {fact.fact_id} in report {self.accessionNo}")
                 continue
                 
             # Create canonical key using model_concept - sort of makes the key unique (concept, context, unit)
@@ -1083,12 +1122,14 @@ class process_report:
             concept.add_fact(fact)
             self.facts.append(fact)
             
-        print(f"Built {len(self.facts)} facts ({len(self._primary_facts)} unique)")
+        logger.info(f"Built {len(self.facts)} facts ({len(self._primary_facts)} unique) for report {self.accessionNo}")
 
 
     def _build_contexts(self):
         """Build context objects from the model"""
+        logger.debug(f"Building contexts for report {self.accessionNo}")
         if not self.model_xbrl:
+            logger.critical(f"XBRL model not loaded for report {self.accessionNo} when trying to build contexts.")
             raise RuntimeError("XBRL model not loaded.")
             
         contexts_dict = {}
@@ -1133,6 +1174,7 @@ class process_report:
                             dim_u_id = f"{company_id}:{dim_qname.namespaceURI}:{dim_qname}"
                             dimension_u_ids.append(dim_u_id)
                         except AttributeError:
+                            logger.debug(f"AttributeError while processing dimension {dim_qname} in context {model_context.id}, report {self.accessionNo}")
                             continue
 
                         try:
@@ -1141,6 +1183,7 @@ class process_report:
                                 mem_u_id = f"{company_id}:{member.memberQname.namespaceURI}:{member.memberQname}"
                                 member_u_ids.append(mem_u_id)
                         except AttributeError:
+                            logger.debug(f"AttributeError while processing member for dimension {dim_qname} in context {model_context.id}, report {self.accessionNo}")
                             continue
 
 
@@ -1155,10 +1198,10 @@ class process_report:
                 contexts_dict[context.u_id] = context
                     
             except Exception as e:
-                print(f"Error processing context {model_context.id}: {e}")
+                logger.warning(f"Error processing context {model_context.id}: {e}", exc_info=True)
         
         self.contexts = list(contexts_dict.values())
-        print(f"Built {len(self.contexts)} unique contexts")
+        logger.info(f"Built {len(self.contexts)} unique contexts for report {self.accessionNo}")
 
 
 
@@ -1195,6 +1238,7 @@ class process_report:
     def _build_fact_dimension_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
         """Build relationships between facts and their dimensions/members"""
         relationships = []
+        logger.debug(f"Building fact-dimension relationships for report {self.accessionNo}")
 
         # Create lookup dictionaries using QName objects
         dim_lookup = {dim.u_id: dim for dim in self.taxonomy.dimensions}
@@ -1233,6 +1277,7 @@ class process_report:
     def _build_fact_context_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
         """Build relationships between facts and their contexts"""
         fact_context_relationships = []
+        logger.debug(f"Building fact-context relationships for report {self.accessionNo}")
         
         # Create a lookup dictionary for faster access
         context_lookup = {ctx.context_id: ctx for ctx in self.contexts}
@@ -1251,10 +1296,9 @@ class process_report:
             
             
         if missing_contexts:
-            print(f"Warning: {len(missing_contexts)} facts have missing contexts: {missing_contexts}")
-        print(f"Built {len(fact_context_relationships)} fact-context relationships")
+            logger.warning(f"Warning: {len(missing_contexts)} facts have missing contexts in report {self.accessionNo}: {missing_contexts}")
+        logger.info(f"Built {len(fact_context_relationships)} fact-context relationships for report {self.accessionNo}")
         return fact_context_relationships
-
 
     # 1. Build networks - Also builds hypercubes in networks with isDefinition = True
     def _build_networks(self):
@@ -1368,14 +1412,16 @@ class process_report:
                             setattr(source, target_type.__name__.lower(), target) # Like fact.concept etc
                             
             except (AttributeError, KeyError) as e:
-                print(f"Skipping {source_type.__name__} -> {target_type.__name__}: {e}")
+                logger.warning(f"Skipping fact relationship mapping {source_type.__name__} -> {target_type.__name__} for report {self.accessionNo}: {e}", exc_info=True)
         
+        logger.info(f"Mapped {len(relationships)} fact relationships for report {self.accessionNo}")
         return relationships
             
 
     def _build_report_fact_relationships(self) -> List[Tuple[Neo4jNode, Neo4jNode, RelationType]]:
         """Build relationships between facts and their dimensions/members"""
         report_fact_relationships = []
+        logger.debug(f"Building report-fact relationships for report {self.accessionNo}")
         
         for fact in self.facts:
             # Add relationship between fact and report
@@ -1389,21 +1435,22 @@ class process_report:
                 }
             ))
 
-        print(f"Built {len(report_fact_relationships)} report-fact relationships")    
+        logger.info(f"Built {len(report_fact_relationships)} report-fact relationships for report {self.accessionNo}")    
         
         return report_fact_relationships
 
     def initialize_xbrl_node(self):
         """Create XBRLNode and link it with ReportNode"""
-        # Create XBRLNode
+        logger.info(f"Initializing XBRLNode for report {self.report_node.accessionNo}, CIK {self.report_node.cik}")
+        # Create XBRLNode using correct parameters based on its definition
         self.xbrl_node = XBRLNode(
             primaryDocumentUrl=self.report_node.primaryDocumentUrl,
             cik=self.report_node.cik,
             report_id=self.report_node.id,
-            accessionNo=self.report_node.accessionNo  # Add accessionNo to ensure matching
+            accessionNo=self.report_node.accessionNo  # Pass accessionNo if available
         )
         
-        print(f"XBRLNode created with id: {self.xbrl_node.id}, report_id: {self.report_node.id}, accessionNo: {self.report_node.accessionNo}")
+        logger.info(f"XBRLNode created with id: {self.xbrl_node.id}, for report_id: {self.report_node.id}, accessionNo: {self.report_node.accessionNo}")
         
         # Create relationship between ReportNode and XBRLNode directly with Cypher
         try:
@@ -1442,13 +1489,14 @@ class process_report:
                 
                 records = session.execute_write(create_xbrl_relationship)
                 if records:
-                    print(f"Created HAS_XBRL relationship from ReportNode to XBRLNode")
+                    logger.info(f"Created HAS_XBRL relationship from ReportNode to XBRLNode")
                 else:
-                    print(f"WARNING: Failed to create HAS_XBRL relationship")
+                    logger.warning(f"WARNING: Failed to create HAS_XBRL relationship")
         except Exception as e:
-            print(f"Error creating XBRLNode relationship: {e}")
+            logger.error(f"Error creating XBRLNode relationship: {e}", exc_info=True)
             # Continue execution - the relationship will be missing but processing can continue
         
-        print(f"Created XBRL processing node for report: {self.report_node.id}")
+        logger.info(f"Finished initializing XBRL processing node for report: {self.report_node.id} (accession: {self.report_node.accessionNo})")
+
 
 

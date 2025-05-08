@@ -2,7 +2,9 @@ import pandas as pd
 import exchange_calendars as xcals
 from datetime import datetime, date, timedelta
 import pytz
+import logging
 
+logger = logging.getLogger(__name__)
 
 """ Handles market session classification with timezone awareness. Exchange calendar returns UTC times,
 while market hours are defined in ET (e.g., 9:30 AM - 4:00 PM ET), requiring consistent timezone handling. """
@@ -160,7 +162,7 @@ class MarketSessionClassifier:
             return (prev_times, curr_times, next_times), is_trading_day
             
         except Exception as e:
-            print(f"Error in get_trading_hours: {str(e)}")
+            logger.error(f"Error in get_trading_hours: {str(e)}", exc_info=True)
             return None, False
 
 

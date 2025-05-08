@@ -3,10 +3,12 @@ from collections import defaultdict
 from typing import Set, List, Optional, Dict, TYPE_CHECKING, Any, Union, Tuple
 from datetime import datetime, timedelta
 import copy
+import logging
 
 if TYPE_CHECKING:
     from XBRL.XBRLClasses import Fact, AbstractConcept, PresentationNode
 
+logger = logging.getLogger(__name__)
 
 # Based on the algorithm in the presentation network definition (See schema)
 class ValidationMixin:
@@ -21,8 +23,7 @@ class ValidationMixin:
     def _debug_print(self, *args, **kwargs):
         """Print only if debug mode is enabled"""
         if getattr(self, 'debug', False):
-            print(*args, **kwargs)
-
+            logger.debug(*args, **kwargs)
 
     def validate_facts(self, network_type: str = 'presentation') -> Tuple[List[Fact], List[Tuple[Fact, Dict]]]:
         """Validates facts according to network type"""
@@ -160,7 +161,7 @@ class ValidationMixin:
             return new_fact
             
         except Exception as e:
-            print(f"Error processing fact {fact.u_id}: {str(e)}")
+            logger.error(f"Error processing fact {fact.u_id}: {str(e)}")
             return None
 
 

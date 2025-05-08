@@ -28,6 +28,7 @@ import sys
 from collections import defaultdict
 from datetime import timedelta, date, datetime
 import copy
+import logging
 
 if TYPE_CHECKING:
     from neograph.Neo4jManager import Neo4jManager
@@ -41,6 +42,7 @@ from arelle.ModelInstanceObject import ModelFact, ModelContext, ModelUnit
 from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 
+logger = logging.getLogger(__name__)
 
 # GroupingType class has been moved to xbrl_core.py and is imported from there
 # Neo4jNode class has been moved to xbrl_core.py and is imported from there
@@ -63,36 +65,35 @@ def count_report_hierarchy(report) -> None:
     Args:
         report: A report instance with XBRL data
     """
-    print("\nREPORT ELEMENT COUNT BY HIERARCHY")
-    print("=" * 50)
+    logger.info("REPORT ELEMENT COUNT BY HIERARCHY")
 
     # Report Base Stats - only count what we know exists
-    print("\nReport Base")
-    print(f"├→ Facts: {len(getattr(report, 'facts', []))}")
-    print(f"├→ Concepts: {len(getattr(report, 'concepts', []))}")
-    print(f"├→ Abstracts: {len(getattr(report, 'abstracts', []))}")
-    print(f"├→ Periods: {len(getattr(report, 'periods', []))}")
-    print(f"├→ Units: {len(getattr(report, 'units', []))}")
-    print(f"└→ Networks: {len(getattr(report, 'networks', []))}")
+    logger.info("Report Base")
+    logger.info(f"├→ Facts: {len(getattr(report, 'facts', []))}")
+    logger.info(f"├→ Concepts: {len(getattr(report, 'concepts', []))}")
+    logger.info(f"├→ Abstracts: {len(getattr(report, 'abstracts', []))}")
+    logger.info(f"├→ Periods: {len(getattr(report, 'periods', []))}")
+    logger.info(f"├→ Units: {len(getattr(report, 'units', []))}")
+    logger.info(f"└→ Networks: {len(getattr(report, 'networks', []))}")
 
     # Skip further processing if no networks are available
     if not hasattr(report, 'networks') or not report.networks:
-        print("\nNo networks available in the report.")
+        logger.info("No networks available in the report.")
         return
 
     # Networks by Category
-    print("\nReport → Networks → Categories")
+    logger.info("Report → Networks → Categories")
     network_categories = {}
     for network in report.networks:
         category = getattr(network, 'category', 'Unknown')
         network_categories[category] = network_categories.get(category, 0) + 1
     
     for category, count in sorted(network_categories.items()):
-        print(f"├→ {category}: {count}")
-    print(f"└→ Total Categories: {len(network_categories)}")
+        logger.info(f"├→ {category}: {count}")
+    logger.info(f"└→ Total Categories: {len(network_categories)}")
 
     # Network Types by relationship types (.isPresentation, .isCalculation, .isDefinition)
-    print("\nReport → Networks")
+    logger.info("Report → Networks")
     total_networks = len(report.networks)
     
     # Safely check if attributes exist and are callable
@@ -115,13 +116,13 @@ def count_report_hierarchy(report) -> None:
     definition_networks = sum(1 for network in report.networks 
                             if safe_network_check(network, 'isDefinition'))
     
-    print(f"├→ Total Networks: {total_networks}")
-    print(f"├→ Presentation Networks: {presentation_networks}")
-    print(f"├→ Calculation Networks: {calculation_networks}")
-    print(f"└→ Definition Networks: {definition_networks}")
+    logger.info(f"├→ Total Networks: {total_networks}")
+    logger.info(f"├→ Presentation Networks: {presentation_networks}")
+    logger.info(f"├→ Calculation Networks: {calculation_networks}")
+    logger.info(f"└→ Definition Networks: {definition_networks}")
 
     # Presentation Hierarchies - safely access properties
-    print("\nReport → Networks → Presentations")
+    logger.info("Report → Networks → Presentations")
     presentations = []
     for network in report.networks:
         if hasattr(network, 'presentation') and network.presentation is not None:
@@ -148,12 +149,12 @@ def count_report_hierarchy(report) -> None:
         except Exception:
             pass
             
-    print(f"├→ Total Presentations: {len(presentations)}")
-    print(f"├→ Total Nodes: {total_presentation_nodes}")
-    print(f"└→ Root Nodes: {root_nodes}")
+    logger.info(f"├→ Total Presentations: {len(presentations)}")
+    logger.info(f"├→ Total Nodes: {total_presentation_nodes}")
+    logger.info(f"└→ Root Nodes: {root_nodes}")
 
     # Networks → Hypercubes - safely count hypercubes
-    print("\nReport → Networks → Hypercubes")
+    logger.info("Report → Networks → Hypercubes")
     total_hypercubes = 0
     unique_hypercube_qnames = set()
     
@@ -167,11 +168,11 @@ def count_report_hierarchy(report) -> None:
         except Exception:
             pass
             
-    print(f"├→ Total Hypercubes: {total_hypercubes}")
-    print(f"└→ Unique Hypercube Names: {len(unique_hypercube_qnames)}")
+    logger.info(f"├→ Total Hypercubes: {total_hypercubes}")
+    logger.info(f"└→ Unique Hypercube Names: {len(unique_hypercube_qnames)}")
 
     # Networks → Hypercubes → Concepts
-    print("\nReport → Networks → Hypercubes → Concepts")
+    logger.info("Report → Networks → Hypercubes → Concepts")
     total_hypercube_concepts = 0
     unique_hypercube_concept_qnames = set()
     
@@ -189,11 +190,11 @@ def count_report_hierarchy(report) -> None:
         except Exception:
             pass
             
-    print(f"├→ Total Hypercube Concepts: {total_hypercube_concepts}")
-    print(f"└→ Unique Hypercube Concepts: {len(unique_hypercube_concept_qnames)}")
+    logger.info(f"├→ Total Hypercube Concepts: {total_hypercube_concepts}")
+    logger.info(f"└→ Unique Hypercube Concepts: {len(unique_hypercube_concept_qnames)}")
 
     # Networks → Hypercubes → Abstracts
-    print("\nReport → Networks → Hypercubes → Abstracts")
+    logger.info("Report → Networks → Hypercubes → Abstracts")
     total_hypercube_abstracts = 0
     unique_hypercube_abstract_qnames = set()
     
@@ -211,11 +212,11 @@ def count_report_hierarchy(report) -> None:
         except Exception:
             pass
             
-    print(f"├→ Total Hypercube Abstracts: {total_hypercube_abstracts}")
-    print(f"└→ Unique Hypercube Abstracts: {len(unique_hypercube_abstract_qnames)}")
+    logger.info(f"├→ Total Hypercube Abstracts: {total_hypercube_abstracts}")
+    logger.info(f"└→ Unique Hypercube Abstracts: {len(unique_hypercube_abstract_qnames)}")
 
     # Networks → Hypercubes → Lineitems
-    print("\nReport → Networks → Hypercubes → Lineitems")
+    logger.info("Report → Networks → Hypercubes → Lineitems")
     total_hypercube_lineitems = 0
     unique_hypercube_lineitem_qnames = set()
     
@@ -233,11 +234,11 @@ def count_report_hierarchy(report) -> None:
         except Exception:
             pass
             
-    print(f"├→ Total Hypercube Lineitems: {total_hypercube_lineitems}")
-    print(f"└→ Unique Hypercube Lineitems: {len(unique_hypercube_lineitem_qnames)}")
+    logger.info(f"├→ Total Hypercube Lineitems: {total_hypercube_lineitems}")
+    logger.info(f"└→ Unique Hypercube Lineitems: {len(unique_hypercube_lineitem_qnames)}")
 
     # Networks → Hypercubes → Dimensions
-    print("\nReport → Networks → Hypercubes → Dimensions")
+    logger.info("Report → Networks → Hypercubes → Dimensions")
     total_dimensions = 0
     unique_dimension_qnames = set()
     
@@ -255,11 +256,11 @@ def count_report_hierarchy(report) -> None:
         except Exception:
             pass
             
-    print(f"├→ Total Dimensions: {total_dimensions}")
-    print(f"└→ Unique Dimensions: {len(unique_dimension_qnames)}")
+    logger.info(f"├→ Total Dimensions: {total_dimensions}")
+    logger.info(f"└→ Unique Dimensions: {len(unique_dimension_qnames)}")
 
     # Networks → Hypercubes → Dimensions → Members
-    print("\nReport → Networks → Hypercubes → Dimensions → Members")
+    logger.info("Report → Networks → Hypercubes → Dimensions → Members")
     total_members = 0
     unique_member_qnames = set()
     
@@ -293,11 +294,11 @@ def count_report_hierarchy(report) -> None:
         except Exception:
             pass
             
-    print(f"├→ Total Members: {total_members}")
-    print(f"└→ Unique Members: {len(unique_member_qnames)}")
+    logger.info(f"├→ Total Members: {total_members}")
+    logger.info(f"└→ Unique Members: {len(unique_member_qnames)}")
 
     # Networks → Hypercubes → Dimensions → Default Members
-    print("\nReport → Networks → Hypercubes → Dimensions → Default Members")
+    logger.info("Report → Networks → Hypercubes → Dimensions → Default Members")
     default_members = set()
     total_default_members = 0
     
@@ -318,11 +319,11 @@ def count_report_hierarchy(report) -> None:
         except Exception:
             pass
             
-    print(f"├→ Total Default Members: {total_default_members}")
-    print(f"└→ Unique Default Members: {len(default_members)}")
+    logger.info(f"├→ Total Default Members: {total_default_members}")
+    logger.info(f"└→ Unique Default Members: {len(default_members)}")
 
     # Networks → Hypercubes → Dimensions → Domains
-    print("\nReport → Networks → Hypercubes → Dimensions → Domains")
+    logger.info("Report → Networks → Hypercubes → Dimensions → Domains")
     total_domains = 0
     unique_domain_qnames = set()
     
@@ -343,11 +344,11 @@ def count_report_hierarchy(report) -> None:
         except Exception:
             pass
             
-    print(f"├→ Total Domains: {total_domains}")
-    print(f"└→ Unique Domains: {len(unique_domain_qnames)}")
+    logger.info(f"├→ Total Domains: {total_domains}")
+    logger.info(f"└→ Unique Domains: {len(unique_domain_qnames)}")
 
     # Facts → Relationships
-    print("\nReport → Facts → Relationships")
+    logger.info("Report → Facts → Relationships")
     
     # Safely count fact-to-concept relationships
     facts_with_concepts = 0
@@ -385,18 +386,18 @@ def count_report_hierarchy(report) -> None:
         except Exception:
             pass
             
-    print(f"├→ Facts → Concepts: {facts_with_concepts}")
-    print(f"├→ Facts → Units: {facts_with_units}")
-    print(f"├→ Facts → Periods: {facts_with_periods}")
-    print(f"└→ Facts → Context IDs: {facts_with_contexts}")
+    logger.info(f"├→ Facts → Concepts: {facts_with_concepts}")
+    logger.info(f"├→ Facts → Units: {facts_with_units}")
+    logger.info(f"├→ Facts → Periods: {facts_with_periods}")
+    logger.info(f"└→ Facts → Context IDs: {facts_with_contexts}")
 
     # Neo4j Database Stats (if available)
     if hasattr(report, 'neo4j') and hasattr(report.neo4j, 'get_neo4j_db_counts'):
-        print("\nNeo4j Database Stats")
+        logger.info("Neo4j Database Stats")
         try:
             report.neo4j.get_neo4j_db_counts()
         except Exception as e:
-            print(f"Error getting Neo4j stats: {e}")
+            logger.error(f"Error getting Neo4j stats: {e}")
 
 # endregion : Admin/Helpers ########################
 

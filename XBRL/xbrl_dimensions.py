@@ -34,7 +34,7 @@ import sys
 from collections import defaultdict
 from datetime import timedelta, date, datetime
 import copy
-
+import logging
 
 # Arelle imports
 from arelle import Cntlr, ModelDocument, FileSource, XbrlConst
@@ -50,7 +50,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .xbrl_processor import process_report, Fact
 
-
+logger = logging.getLogger(__name__)
 
 @dataclass
 class Member(Neo4jNode):
@@ -286,7 +286,7 @@ class Dimension(Neo4jNode):
                 )
                 break  # Take the first valid domain
             except Exception as e:
-                print(f"Error creating domain for {self.qname}: {str(e)}")
+                logger.error(f"Error creating domain for {self.qname}: {str(e)}", exc_info=True)
                 continue
     
     def _build_members(self) -> None:
@@ -323,7 +323,7 @@ class Dimension(Neo4jNode):
                     add_members_recursive(member_object, str(member_object.qname), level + 1)
                         
                 except Exception as e:
-                    print(f"Error creating member {member_object.qname}: {str(e)}")
+                    logger.error(f"Error creating member {member_object.qname}: {str(e)}", exc_info=True)
                     continue
         
         # Start with domain being the source object
@@ -374,7 +374,7 @@ class Dimension(Neo4jNode):
             self.add_member(self.default_member)
                 
         except Exception as e:
-            print(f"Error setting default member for {self.qname}: {str(e)}")
+            logger.error(f"Error setting default member for {self.qname}: {str(e)}", exc_info=True)
 
 
 

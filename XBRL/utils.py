@@ -73,6 +73,8 @@ import random
 import os
 from urllib.parse import urlparse
 
+logger = logging.getLogger(__name__)
+
 def download_sec_file(url, max_retries=5, base_delay=1.0):
     """Download a file from SEC with proper headers and retry logic.
     
@@ -107,14 +109,14 @@ def download_sec_file(url, max_retries=5, base_delay=1.0):
             
             # Wait before making request (important for rate limiting)
             if attempt > 0:
-                print(f"Retry attempt {attempt} after {delay:.2f}s delay...")
+                logger.info(f"Retry attempt {attempt} after {delay:.2f}s delay...")
                 time.sleep(delay)
             
             response = requests.get(url, headers=headers, stream=True, timeout=30)
             
             # Check for rate limiting or other errors
             if response.status_code == 403:
-                print(f"SEC rate limit hit (403), retrying in {delay:.2f}s...")
+                logger.info(f"SEC rate limit hit (403), retrying in {delay:.2f}s...")
                 continue
                 
             # Raise for other status codes
@@ -130,16 +132,23 @@ def download_sec_file(url, max_retries=5, base_delay=1.0):
             return None, temp_file.name
             
         except (requests.RequestException, IOError) as e:
-            print(f"Download attempt {attempt+1} failed: {str(e)}")
+            logger.warning(f"Download attempt {attempt+1} failed: {str(e)}")
             
             # On last attempt, cleanup and return None
             if attempt == max_retries - 1:
+                logger.error(f"Failed to download {url} after {max_retries} attempts.")
                 try:
                     os.unlink(temp_file.name)
                 except:
                     pass
                 return None
     
+    # If loop finishes without success (shouldn't happen with the logic above, but as fallback)
+    logger.error(f"Failed to download {url} after {max_retries} attempts (loop exited)." )
+    try:
+        os.unlink(temp_file.name)
+    except: 
+        pass
     return None
 
 

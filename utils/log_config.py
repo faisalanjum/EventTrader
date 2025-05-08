@@ -30,7 +30,7 @@ def _release_lock():
 # Register the lock release function to run at exit
 atexit.register(_release_lock)
 
-def setup_logging(log_level=logging.INFO, name=None):
+def setup_logging(log_level=logging.INFO, name=None, force_path=None):
     """
     Set up centralized logging configuration.
     This ensures all logs from all modules go to the same file.
@@ -38,7 +38,8 @@ def setup_logging(log_level=logging.INFO, name=None):
     
     Args:
         log_level: Logging level (default: logging.INFO)
-        name: Optional prefix for the log file
+        name: Optional prefix for the log file (used if force_path is None)
+        force_path: Optional specific path to use for the log file
     
     Returns:
         str: Path to the log file
@@ -49,7 +50,10 @@ def setup_logging(log_level=logging.INFO, name=None):
     with _setup_lock:
         # If already initialized in this process, return existing file
         if _is_logging_initialized and _log_file_path:
-            return _log_file_path
+            # If a forced path was given and matches, it's fine. 
+            # If a different forced path is given now, it's ambiguous, but we return the existing one.
+            # If no forced path now, but was initialized before (maybe with forced), still return existing.
+            return _log_file_path 
         
         # Create a lock file to coordinate between processes
         lock_file_path = os.path.join(log_dir, ".logging_lock")
@@ -57,95 +61,126 @@ def setup_logging(log_level=logging.INFO, name=None):
         try:
             # Acquire process-level lock
             _lock_file = open(lock_file_path, 'w')
-            fcntl.flock(_lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            # Use LOCK_NB for non-blocking lock acquisition attempt
+            fcntl.flock(_lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB) 
             
-            # We now have exclusive access across all processes
+            # --- We now have exclusive access across all processes --- 
             
-            # Check if a log file has already been started in the last few seconds
-            recent_logs = _find_recent_logs(name, max_age_seconds=10)  # Look for logs created in the last 10 seconds
-            if recent_logs:
-                _log_file_path = recent_logs[0]
-                _lock_file.seek(0)
-                _lock_file.truncate()
-                _lock_file.write(_log_file_path)
-                _lock_file.flush()
-                _configure_logger(_log_file_path, log_level)
-                _is_logging_initialized = True
-                return _log_file_path
+            log_file_to_use = None
+            if force_path:
+                # Use the provided path directly
+                log_file_to_use = force_path
+                # Ensure the directory exists if forced path is used
+                os.makedirs(os.path.dirname(log_file_to_use), exist_ok=True)
+            else:
+                # Original logic: Check for recent logs or create new timestamped one
+                recent_logs = _find_recent_logs(name, max_age_seconds=10)  
+                if recent_logs:
+                    log_file_to_use = recent_logs[0]
+                else:
+                    # Create a new log file with timestamp
+                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                    prefix = f"{name}_" if name else "eventtrader_"
+                    log_file_to_use = os.path.join(log_dir, f"{prefix}{timestamp}.log")
+
+            _log_file_path = log_file_to_use
             
-            # Create a new log file with timestamp
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            prefix = f"{name}_" if name else "eventtrader_"
-            log_file = os.path.join(log_dir, f"{prefix}{timestamp}.log")
-            _log_file_path = log_file
-            
-            # Write the log path to the lock file so other processes can find it
+            # Write the determined log path to the lock file so other processes can find it
             _lock_file.seek(0)
             _lock_file.truncate()
             _lock_file.write(_log_file_path)
             _lock_file.flush()
-            os.fsync(_lock_file.fileno())  # Force write to disk to ensure visibility to other processes
+            os.fsync(_lock_file.fileno())  # Force write to disk
             
-            # Configure the logger
+            # Configure the logger (only the process holding the lock does this)
             _configure_logger(_log_file_path, log_level)
             
-            # Log the setup using a properly named logger
+            # Log the setup
             setup_logger = logging.getLogger('log_config')
-            setup_logger.info(f"Logging initialized. Logs will be written to: {_log_file_path}")
+            setup_logger.info(f"Logging initialized by process {os.getpid()}. Logs will be written to: {_log_file_path}")
             
             _is_logging_initialized = True
+            # Keep lock until configuration is fully done, then release implicitly by exiting `try`
+            # Lock will also be released by atexit handler if needed.
             return _log_file_path
             
-        except IOError:
-            # Another process has the lock, try to use its log file
-            for retry in range(3):  # Try 3 times with increasing wait
+        except (IOError, BlockingIOError): # Catch BlockingIOError for LOCK_NB
+            # Another process has the lock, or we couldn't acquire it immediately.
+            # Try to read the path set by the process holding the lock.
+            for retry in range(5):  # Increased retries slightly
                 try:
-                    # Gradually increase wait time between retries
-                    time.sleep(0.1 * (retry + 1))
+                    time.sleep(0.2 * (retry + 1)) # Slightly longer wait
                     
-                    # Try to read from the lock file
-                    with open(lock_file_path, 'r') as f:
-                        path = f.read().strip()
+                    # Try reading from the lock file (non-exclusive read is fine)
+                    with open(lock_file_path, 'r') as f_read:
+                        # Use non-blocking shared lock for reading if possible, otherwise just read
+                        try:
+                            fcntl.flock(f_read, fcntl.LOCK_SH | fcntl.LOCK_NB)
+                            path = f_read.read().strip()
+                            fcntl.flock(f_read, fcntl.LOCK_UN) # Release read lock
+                        except (IOError, BlockingIOError):
+                             # If shared lock fails, just try reading
+                             f_read.seek(0)
+                             path = f_read.read().strip()
+
                         if path and os.path.exists(path):
+                            # If we were given a forced path, ideally it matches.
+                            # If it doesn't match, log a warning but use the path from the lock file,
+                            # as that's where the handlers are configured.
+                            if force_path and path != force_path:
+                                temp_logger = logging.getLogger('log_config')
+                                temp_logger.warning(f"Process {os.getpid()} requested log path {force_path} but another process initialized logging to {path}. Using {path}.")
+                            
                             _log_file_path = path
-                            _configure_logger(_log_file_path, log_level)
+                            # Ensure logger is configured even if this process didn't hold the EX lock
+                            # Re-calling _configure_logger is safe as it removes old handlers.
+                            _configure_logger(_log_file_path, log_level) 
                             _is_logging_initialized = True
                             return _log_file_path
                 except Exception as e:
-                    # Just retry silently
-                    pass
+                    # Log potential errors during retry read attempt
+                    # But avoid flooding logs if lock file is just empty temporarily
+                    if retry == 4: # Log only on last retry attempt
+                         temp_logger = logging.getLogger('log_config')
+                         temp_logger.warning(f"Could not read log path from lock file during retry {retry+1}: {e}")
+                    pass # Continue retry loop
                 
-            # Could not read from lock file after retries, find the most recent log
-            for age in [5, 15, 30]:  # Try multiple time windows
-                recent_logs = _find_recent_logs(name, max_age_seconds=age)
-                if recent_logs:
-                    _log_file_path = recent_logs[0]
-                    _configure_logger(_log_file_path, log_level)
-                    _is_logging_initialized = True
-                    return _log_file_path
-                
-            # Last resort: create a unique log file - should happen extremely rarely
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            prefix = f"{name}_" if name else "eventtrader_"
-            log_file = os.path.join(log_dir, f"{prefix}{timestamp}_fallback.log")
-            _log_file_path = log_file
+            # Fallback: Could not read from lock file after retries. 
+            # This case is less critical now, as the primary use of --log-file (chunked) 
+            # relies on force_path. This handles simultaneous starts of non-chunked runs.
+            # Find most recent log as a reasonable guess.
+            recent_logs = _find_recent_logs(name, max_age_seconds=15) # Wider window for fallback
+            if recent_logs:
+                _log_file_path = recent_logs[0]
+                temp_logger = logging.getLogger('log_config')
+                temp_logger.warning(f"Could not get definitive log path from lock file, falling back to most recent log: {_log_file_path}")
+            else:
+                # Absolute last resort: Create a unique fallback file (should be very rare)
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                pid = os.getpid()
+                prefix = f"{name}_" if name else "eventtrader_"
+                _log_file_path = os.path.join(log_dir, f"{prefix}{timestamp}_fallback_{pid}.log")
+                temp_logger = logging.getLogger('log_config')
+                temp_logger.error(f"Could not determine log path via lock or recent files. Creating unique fallback: {_log_file_path}")
             
-            # Try one last time to get the lock - maybe it's been released
-            try:
-                # If lock file exists but is empty, maybe we can grab it
-                _lock_file = open(lock_file_path, 'w')
-                fcntl.flock(_lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                # We got the lock! Write our fallback path so others use it
-                _lock_file.write(_log_file_path)
-                _lock_file.flush()
-                os.fsync(_lock_file.fileno())
-            except:
-                # Still can't get lock, just use the fallback
-                pass
-                
             _configure_logger(_log_file_path, log_level)
             _is_logging_initialized = True
             return _log_file_path
+        finally:
+            # Ensure lock is released if this process held it
+            if _lock_file:
+                try:
+                    # Check if we actually hold the lock before unlocking
+                    # This might require storing the lock status or just trying unlock
+                    fcntl.flock(_lock_file, fcntl.LOCK_UN)
+                    _lock_file.close()
+                    _lock_file = None # Reset file handle
+                except Exception:
+                     # If unlock fails (e.g., wasn't locked by us), ignore.
+                     # Also close if open but not locked.
+                     if _lock_file and not _lock_file.closed:
+                          _lock_file.close()
+                     _lock_file = None
 
 def _find_recent_logs(name=None, max_age_seconds=5):
     """Find log files created in the last few seconds"""

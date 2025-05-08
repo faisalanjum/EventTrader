@@ -56,7 +56,7 @@ async def process_embeddings_in_parallel(texts: List[str], model: str, api_key: 
                         response = client.embeddings.create(model=model, input=text)
                         results[idx] = response.data[0].embedding
                     except Exception as retry_e:
-                        logger.error(f"Failed on retry for item {idx}: {retry_e}")
+                        logger.error(f"Failed on retry for item {idx}: {retry_e}", exc_info=True)
     
     # Create tasks for all embeddings using truncated texts
     tasks = [get_embedding(i, text) for i, text in enumerate(truncated_texts)]

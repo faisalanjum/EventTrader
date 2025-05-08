@@ -38,6 +38,7 @@ import sys
 from collections import defaultdict
 from datetime import timedelta, date, datetime
 import copy
+import logging
 
 
 # Arelle imports
@@ -49,8 +50,7 @@ from arelle.ModelInstanceObject import ModelFact, ModelContext, ModelUnit
 from arelle.ModelXbrl import ModelXbrl
 from enum import Enum
 
-
-
+logger = logging.getLogger(__name__)
 
 @dataclass
 class Taxonomy:
@@ -83,7 +83,7 @@ class Taxonomy:
                     self._dimension_lookup[dimension.qname] = dimension     # Building lookup table for dimensions
                     
                 except Exception as e:
-                    print(f"Error creating dimension {concept.qname}: {str(e)}")
+                    logger.error(f"Error creating dimension {concept.qname}: {str(e)}", exc_info=True)
 
 
 

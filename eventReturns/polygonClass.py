@@ -15,10 +15,12 @@ from utils.market_session import MarketSessionClassifier
 from utils.metadata_fields import MetadataFields  
 from datetime import datetime, timezone, timedelta
 import pytz
-from utils.log_config import get_logger, setup_logging
 import threading
 import socket
 from contextlib import contextmanager
+
+# Add module logger
+logger = logging.getLogger(__name__)
 
 _DNS_CACHE = {}
 _original_getaddrinfo = socket.getaddrinfo
@@ -36,7 +38,7 @@ def safe_dns_resolve(host: str):
     try:
         socket.getaddrinfo(host, 443, socket.AF_INET, socket.SOCK_STREAM)
     except Exception as e:
-        print(f"DNS resolution failed for {host}: {e}")
+        logger.error(f"DNS resolution failed for {host}: {e}", exc_info=True)
 
 
 @contextmanager
@@ -60,7 +62,7 @@ class Polygon:
         """Initialize market session classifier and client"""
 
         # Initialize logger using centralized logging
-        self.logger = get_logger(__name__)
+        self.logger = logging.getLogger(__name__)
 
         with dns_patch():
             safe_dns_resolve("api.polygon.io")
@@ -184,7 +186,7 @@ class Polygon:
             
             while window_size <= max_window:
                 if current_end < min_allowed_end:
-                    print(f"No price found for {ticker} between {min_allowed_end} and {timestamp}")
+                    self.logger.warning(f"No price found for {ticker} between {min_allowed_end} and {timestamp}")
                     return np.nan
                 try:
                     current_start = current_end - timedelta(seconds=window_size)
@@ -221,8 +223,7 @@ class Polygon:
                     
                 except Exception as e:
                     error_msg = str(e)
-
-                    print(f"Exact error for {ticker}: {error_msg}")
+                    self.logger.error(f"Exact error for {ticker}: {error_msg}", exc_info=True)
 
                     if "NOT_AUTHORIZED" in error_msg:
                         # To be Removed
@@ -298,7 +299,7 @@ class Polygon:
                             else:
                                 no_price_tickers.append(ticker)
                     except Exception as e:
-                        print(f"Error processing {ticker}: {str(e)}")
+                        self.logger.error(f"Error processing {ticker}: {str(e)}", exc_info=True)
                         results[ticker] = np.nan
                         exception_count += 1
                         no_price_tickers.append(ticker)
@@ -324,30 +325,30 @@ class Polygon:
         # Calculate success rate based on valid symbols only
         success_rate = (valid_prices/valid_symbols*100) if valid_symbols > 0 else 0
 
-        print("\n" + "="*60)
-        print("COMPLETE SUMMARY".center(60))
-        print("="*60)
-        print(f"Total Tickers Processed: {total_tickers}")
-        print("-"*60)
+        self.logger.info("="*60)
+        self.logger.info("COMPLETE SUMMARY".center(60))
+        self.logger.info("="*60)
+        self.logger.info(f"Total Tickers Processed: {total_tickers}")
+        self.logger.info("-"*60)
         
-        print("VALIDATION METRICS".center(60))
-        print(f"Valid Symbols:           {valid_symbols:>6}")
-        print(f"Invalid Symbols:         {validation_failures:>6}")
-        print("-"*60)
+        self.logger.info("VALIDATION METRICS".center(60))
+        self.logger.info(f"Valid Symbols:           {valid_symbols:>6}")
+        self.logger.info(f"Invalid Symbols:         {validation_failures:>6}")
+        self.logger.info("-"*60)
         
-        print("SUCCESS METRICS (Based on Valid Symbols Only)".center(60))
-        print(f"✓ Prices Found :         {valid_prices:>6}")
-        print(f"✗ No Data Found:         {len(no_price_tickers):>6}")
-        print(f"  Success Rate :         {success_rate:>6.1f}%")
-        print("-"*60)
+        self.logger.info("SUCCESS METRICS (Based on Valid Symbols Only)".center(60))
+        self.logger.info(f"✓ Prices Found :         {valid_prices:>6}")
+        self.logger.info(f"✗ No Data Found:         {len(no_price_tickers):>6}")
+        self.logger.info(f"  Success Rate :         {success_rate:>6.1f}%")
+        self.logger.info("-"*60)
         
-        print("FAILURE BREAKDOWN".center(60))
-        print(f"Validation Failures:      {validation_failures:>6}")
-        print(f"  ├─ Not Found:          {len(not_found_tickers):>6}")
-        print(f"  ├─ Not Stocks Market:  {len(wrong_market_tickers):>6}")
-        print(f"  └─ Not Common Stock:   {len(not_common_stock):>6}")
-        print()
-        print(f"Data Failures:           {len(no_price_tickers):>6}, -> {no_price_tickers}")
+        self.logger.info("FAILURE BREAKDOWN".center(60))
+        self.logger.info(f"Validation Failures:      {validation_failures:>6}")
+        self.logger.info(f"  ├─ Not Found:          {len(not_found_tickers):>6}")
+        self.logger.info(f"  ├─ Not Stocks Market:  {len(wrong_market_tickers):>6}")
+        self.logger.info(f"  └─ Not Common Stock:   {len(not_common_stock):>6}")
+        self.logger.info("")
+        self.logger.info(f"Data Failures:           {len(no_price_tickers):>6}, -> {no_price_tickers}")
         
 
         return filtered_results
@@ -402,7 +403,7 @@ class Polygon:
                 print(f"Timeout getting start price for {ticker}")
                 start_prices[(idx, ticker)] = np.nan
             except Exception as e:
-                print(f"Error getting start price for {ticker}: {str(e)}")
+                self.logger.error(f"Error getting start price for {ticker}: {str(e)}", exc_info=True)
                 start_prices[(idx, ticker)] = np.nan
         
         # Create O(1) lookup for end futures
@@ -418,7 +419,7 @@ class Polygon:
                 print(f"Timeout getting end price for {ticker}")
                 end_prices[(idx, ticker)] = np.nan
             except Exception as e:
-                print(f"Error getting end price for {ticker}: {str(e)}")
+                self.logger.error(f"Error getting end price for {ticker}: {str(e)}", exc_info=True)
                 end_prices[(idx, ticker)] = np.nan
         
         # Calculate returns (unchanged from original)
@@ -430,7 +431,7 @@ class Polygon:
             if not (np.isnan(s_price) or np.isnan(e_price)):
                 ret = (e_price - s_price) / s_price * 100
                 if debug:
-                    print(f"Index[{idx}] {ticker:<6}: ${s_price:>7.2f} -> ${e_price:>7.2f} = {ret:>6.2f}%")
+                    self.logger.info(f"Index[{idx}] {ticker:<6}: ${s_price:>7.2f} -> ${e_price:>7.2f} = {ret:>6.2f}%")
                 returns[idx] = ret
             else:
                 returns[idx] = np.nan
@@ -459,7 +460,7 @@ class Polygon:
             return details
             
         except Exception as e:
-            print(f"Error fetching ticker details for {ticker}: {str(e)}")
+            self.logger.error(f"Error fetching ticker details for {ticker}: {str(e)}", exc_info=True)
             return None
 
 
@@ -509,7 +510,7 @@ class Polygon:
                 return ticker, []
                 
             except Exception as e:
-                print(f"Error fetching related companies for {ticker}: {str(e)}")
+                self.logger.error(f"Error fetching related companies for {ticker}: {str(e)}", exc_info=True)
                 return ticker, []
 
         # Submit all requests to the thread pool
@@ -529,7 +530,7 @@ class Polygon:
                         original_ticker, related_tickers = future.result()
                         results[original_ticker] = related_tickers
                     except Exception as e:
-                        print(f"Error processing {ticker}: {str(e)}")
+                        self.logger.error(f"Error processing {ticker}: {str(e)}", exc_info=True)
                         results[ticker] = []
                     break
         
@@ -537,12 +538,12 @@ class Polygon:
         total_tickers = len(results)
         tickers_with_related = sum(1 for related in results.values() if related)
         
-        print("\n" + "="*60)
-        print("RELATED COMPANIES SUMMARY".center(60))
-        print("="*60)
-        print(f"Total Tickers Processed: {total_tickers}")
-        print(f"Tickers with Related Companies: {tickers_with_related}")
-        print(f"Success Rate: {(tickers_with_related/total_tickers*100):.1f}%")
+        self.logger.info("="*60)
+        self.logger.info("RELATED COMPANIES SUMMARY".center(60))
+        self.logger.info("="*60)
+        self.logger.info(f"Total Tickers Processed: {total_tickers}")
+        self.logger.info(f"Tickers with Related Companies: {tickers_with_related}")
+        self.logger.info(f"Success Rate: {(tickers_with_related/total_tickers*100):.1f}%" if total_tickers > 0 else "Success Rate: N/A")
         
         return results
 
@@ -787,7 +788,7 @@ class Polygon:
             return df_latest.drop(columns=['otc'], errors='ignore')
         
         except Exception as e:
-            self.logger.error(f"Error getting market data for {date_str}: {e}")
+            self.logger.error(f"Error getting market data for {date_str}: {e}", exc_info=True)
             return None
         
 

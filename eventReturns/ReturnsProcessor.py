@@ -18,7 +18,6 @@ import pandas as pd
 import pytz
 
 from redisDB.redis_constants import RedisKeys
-from utils.log_config import get_logger, setup_logging
 
 class ReturnsProcessor:
     """Processor for calculating returns after news events"""
@@ -59,7 +58,7 @@ class ReturnsProcessor:
         self.stock_universe = event_trader_redis.get_stock_universe()
 
         # Configure centralized logging
-        self.logger = get_logger(__name__)
+        self.logger = logging.getLogger(__name__)
         
         # self.pending_zset = "news:benzinga:pending_returns"  
         self.pending_zset = RedisKeys.get_returns_keys(self.source_type)['pending']       # 'pending': 'news:pending_returns'
@@ -92,7 +91,7 @@ class ReturnsProcessor:
                 self._sleep_until_next_return(default_sleep_time=1)
                 
             except Exception as e:
-                self.logger.error(f"Returns processing error: {e}")
+                self.logger.error(f"Returns processing error: {e}", exc_info=True)
                 consecutive_errors += 1
                 if consecutive_errors > 10:
                     self.logger.error("Too many consecutive errors, reconnecting...")
@@ -127,7 +126,7 @@ class ReturnsProcessor:
             return
 
         except Exception as e:
-            self.logger.error(f"Error in sleep/pubsub operation: {e}")
+            self.logger.error(f"Error in sleep/pubsub operation: {e}", exc_info=True)
             time.sleep(0.1)  # Minimal sleep on error
             return
 
@@ -142,7 +141,7 @@ class ReturnsProcessor:
                 if not success:
                     self.logger.error(f"Failed to process returns for {key}")
             except Exception as e:
-                self.logger.error(f"Failed to process returns for {key}: {e}")
+                self.logger.error(f"Failed to process returns for {key}: {e}", exc_info=True)
 
 
 
@@ -179,7 +178,7 @@ class ReturnsProcessor:
                 events.append(event)
 
             except Exception as e:
-                self.logger.error(f"Failed to process {key}: {e}")
+                self.logger.error(f"Failed to process {key}: {e}", exc_info=True)
                 continue
 
         if not events:
@@ -232,10 +231,10 @@ class ReturnsProcessor:
                         self.logger.error(f"Redis pipeline failed for {orig_key} -> {new_key}. Result: {success}")
 
                 except Exception as e:
-                    self.logger.error(f"Failed to process returns for {event_return.event_id}: {e}")
+                    self.logger.error(f"Failed to process returns for {event_return.event_id}: {e}", exc_info=True)
 
         except Exception as e:
-            self.logger.error(f"Batch processing failed: {e}")
+            self.logger.error(f"Batch processing failed: {e}", exc_info=True)
 
     # def _process_hist_news(self, client):
         
@@ -324,7 +323,7 @@ class ReturnsProcessor:
             self.live_client.client.publish(channel, news_id)
             return True
         except Exception as e:
-            self.logger.error(f"Error publishing to channel: {e}")
+            self.logger.error(f"Error publishing to channel: {e}", exc_info=True)
             return False
 
     def publish_transcript_update(self, namespace, transcript_id):
@@ -335,7 +334,7 @@ class ReturnsProcessor:
             self.live_client.client.publish(channel, transcript_id)
             return True
         except Exception as e:
-            self.logger.error(f"Error publishing to channel: {e}")
+            self.logger.error(f"Error publishing to channel: {e}", exc_info=True)
             return False
 
     def _process_single_item(self, key: str, client) -> bool:
@@ -391,7 +390,7 @@ class ReturnsProcessor:
 
 
         except Exception as e:
-            self.logger.error(f"Error processing returns for {key}: {e}")
+            self.logger.error(f"Error processing returns for {key}: {e}", exc_info=True)
             return False
 
 
@@ -466,7 +465,7 @@ class ReturnsProcessor:
                                 
 
                             except Exception as e:
-                                self.logger.error(f"Error processing {return_field} for {symbol}: {e}")
+                                self.logger.error(f"Error processing {return_field} for {symbol}: {e}", exc_info=True)
                                 all_complete = False
 
                     else:
@@ -485,7 +484,7 @@ class ReturnsProcessor:
             }
             
         except Exception as e:
-            self.logger.error(f"Failed to calculate returns: {e}")
+            self.logger.error(f"Failed to calculate returns: {e}", exc_info=True)
             return {'returns': {'symbols': {}}, 'all_complete': False}
 
 
@@ -552,7 +551,7 @@ class ReturnsProcessor:
                                 all_complete = False
                                 
                         except Exception as e:
-                            self.logger.error(f"Error processing {return_type} for {symbol}: {e}")
+                            self.logger.error(f"Error processing {return_type} for {symbol}: {e}", exc_info=True)
                             all_complete = False
                     
                     # else:
@@ -570,7 +569,7 @@ class ReturnsProcessor:
             }
             
         except Exception as e:
-            self.logger.error(f"Failed to calculate batch returns: {e}")
+            self.logger.error(f"Failed to calculate batch returns: {e}", exc_info=True)
             return {'returns': {'symbols': {}}, 'all_complete': False}
 
 
@@ -625,7 +624,7 @@ class ReturnsProcessor:
 
                     self.logger.info(f"✓ Calculated {return_key} returns")
                 except Exception as e:
-                    self.logger.error(f"Error calculating {return_key} returns for {symbol}: {e}")
+                    self.logger.error(f"Error calculating {return_key} returns for {symbol}: {e}", exc_info=True)
                     returns[return_key] = None
             else:
                 self.logger.info(f"✗ Skipping {return_key} - time not reached")
@@ -662,7 +661,7 @@ class ReturnsProcessor:
             pipe.execute()
             
         except Exception as e:
-            self.logger.error(f"Failed to schedule returns: {e}")
+            self.logger.error(f"Failed to schedule returns: {e}", exc_info=True)
 
 
 
@@ -696,7 +695,7 @@ class ReturnsProcessor:
                     self.logger.debug(f"Successfully processed pending return: {item}")
                     
         except Exception as e:
-            self.logger.error(f"Error processing pending returns: {e}")
+            self.logger.error(f"Error processing pending returns: {e}", exc_info=True)
 
 
     # Return Updates
@@ -778,7 +777,7 @@ class ReturnsProcessor:
             return success
                 
         except Exception as e:
-            self.logger.error(f"Failed to update return {return_type} for {key}: {e}")
+            self.logger.error(f"Failed to update return {return_type} for {key}: {e}", exc_info=True)
             return False
         
 
@@ -819,7 +818,7 @@ class ReturnsProcessor:
 
             return returns
         except Exception as e:
-            self.logger.error(f"Error calculating specific return {return_type}: {e}")
+            self.logger.error(f"Error calculating specific return {return_type}: {e}", exc_info=True)
             return None
 
 
@@ -838,7 +837,7 @@ class ReturnsProcessor:
             self.pubsub_client.unsubscribe()
             self.pubsub_client.close()
         except Exception as e:
-            self.logger.error(f"Error cleaning up pubsub: {e}")
+            self.logger.error(f"Error cleaning up pubsub: {e}", exc_info=True)
 
 
     # # Is this enough?
@@ -885,4 +884,4 @@ class ReturnsProcessor:
             
             self.logger.debug("Reconnected to Redis")
         except Exception as e:
-            self.logger.error(f"Reconnection failed: {e}")    
+            self.logger.error(f"Reconnection failed: {e}", exc_info=True)    

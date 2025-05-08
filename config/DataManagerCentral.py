@@ -9,8 +9,6 @@ from neograph.Neo4jInitializer import Neo4jInitializer
 
 
 from redisDB.redisClasses import EventTraderRedis, RedisKeys, RedisClient
-from utils.log_config import get_logger, setup_logging
-
 from benzinga.bz_restAPI import BenzingaNewsRestAPI
 from benzinga.bz_websocket import BenzingaNewsWebSocket
 
@@ -54,8 +52,8 @@ class DataSourceManager:
         self.date_range = historical_range
         self.running = True
 
-        # Set up logger
-        self.logger = get_logger(f"{self.__class__.__name__}")
+        # Set up logger using standard logging
+        self.logger = logging.getLogger(__name__)
 
         # Initialize Redis and processors
         self.redis = EventTraderRedis(source=self.source_type)        # ex: source_type = news:benzinga
@@ -95,7 +93,7 @@ class DataSourceManager:
                         pipe.execute()
                         self.logger.info(f"Applied TTL of {self.ttl}s to existing queues: {keys_to_expire} for {client_instance.prefix}")
                     except Exception as e:
-                        self.logger.error(f"Error setting TTL on queues for {client_instance.prefix}: {e}")
+                        self.logger.error(f"Error setting TTL on queues for {client_instance.prefix}: {e}", exc_info=True)
 
         # self.processor = NewsProcessor(self.redis, delete_raw=True)
         self.polygon_subscription_delay = (17 * 60)  # (in seconds) Lower tier subscription has 15 mins delayed data
@@ -176,7 +174,7 @@ class BenzingaNewsManager(DataSourceManager):
             return True
             
         except Exception as e:
-            self.logger.error(f"Error starting {self.source_type}: {e}")
+            self.logger.error(f"Error starting {self.source_type}: {e}", exc_info=True)
             return False
 
     def _run_websocket(self):
@@ -184,7 +182,7 @@ class BenzingaNewsManager(DataSourceManager):
             try:
                 self.ws_client.connect(raw=False)
             except Exception as e:
-                self.logger.error(f"WebSocket error: {e}")
+                self.logger.error(f"WebSocket error: {e}", exc_info=True)
                 time.sleep(5)
 
 
@@ -225,7 +223,7 @@ class BenzingaNewsManager(DataSourceManager):
                 }
             }
         except Exception as e:
-            self.logger.error(f"Error checking status for {self.source_type}: {e}")
+            self.logger.error(f"Error checking status for {self.source_type}: {e}", exc_info=True)
             return None
 
     def stop(self):
@@ -248,7 +246,7 @@ class BenzingaNewsManager(DataSourceManager):
             self.redis.clear(preserve_processed=True)
             return True
         except Exception as e:
-            self.logger.error(f"Error stopping {self.source_type}: {e}")
+            self.logger.error(f"Error stopping {self.source_type}: {e}", exc_info=True)
             return False
 
     
@@ -323,7 +321,7 @@ class ReportsManager(DataSourceManager):
                     enrich_worker_module = enrich_worker_func # Assign the function
 
                 except ImportError as e:
-                    self.logger.error(f"Failed to import enrich_worker: {e}. Ensure report_enricher.py is in the PYTHONPATH or project root. Enrichment workers will NOT start.")
+                    self.logger.error(f"Failed to import enrich_worker: {e}. Ensure report_enricher.py is in the PYTHONPATH or project root. Enrichment workers will NOT start.", exc_info=True)
                 
                 # This is the crucial worker startup logic that must be present
                 if enrichment_import_success and enrich_worker_module:
@@ -354,7 +352,7 @@ class ReportsManager(DataSourceManager):
             return True # ReportsManager.start() now always returns True if it reaches here, failure to start workers is logged.
 
         except Exception as e:
-            self.logger.error(f"Critical error during ReportsManager.start(): {e}")
+            self.logger.error(f"Critical error during ReportsManager.start(): {e}", exc_info=True)
             return False # Return False on critical startup errors for main threads
 
 
@@ -364,7 +362,7 @@ class ReportsManager(DataSourceManager):
                 # Direct call without checking - connect() should block until disconnected
                 self.ws_client.connect(raw=False)
             except Exception as e:
-                self.logger.error(f"SEC WebSocket error: {e}")
+                self.logger.error(f"SEC WebSocket error: {e}", exc_info=True)
                 time.sleep(5)
 
 
@@ -391,7 +389,7 @@ class ReportsManager(DataSourceManager):
                 }
             }
         except Exception as e:
-            self.logger.error(f"Error checking status for {self.source_type}: {e}")
+            self.logger.error(f"Error checking status for {self.source_type}: {e}", exc_info=True)
             return None
 
     def stop(self):
@@ -422,7 +420,7 @@ class ReportsManager(DataSourceManager):
             self.redis.clear(preserve_processed=True)
             return True
         except Exception as e:
-            self.logger.error(f"Error stopping {self.source_type}: {e}")
+            self.logger.error(f"Error stopping {self.source_type}: {e}", exc_info=True)
             return False
         
 
@@ -491,7 +489,7 @@ class TranscriptsManager(DataSourceManager):
             return True
             
         except Exception as e:
-            self.logger.error(f"Error starting {self.source_type}: {e}")
+            self.logger.error(f"Error starting {self.source_type}: {e}", exc_info=True)
             return False
 
     def _initialize_transcript_schedule(self):
@@ -537,7 +535,7 @@ class TranscriptsManager(DataSourceManager):
             
             self.logger.info(f"Scheduled {len(relevant)} transcripts for {today}")
         except Exception as e:
-            self.logger.error(f"Error scheduling transcripts: {e}")
+            self.logger.error(f"Error scheduling transcripts: {e}", exc_info=True)
 
 
 
@@ -572,7 +570,7 @@ class TranscriptsManager(DataSourceManager):
                     time.sleep(1)
                         
                 except Exception as e:
-                    self.logger.error(f"Error processing transcripts for {current_date}: {e}")
+                    self.logger.error(f"Error processing transcripts for {current_date}: {e}", exc_info=True)
                     # Add a longer delay after errors
                     time.sleep(5)
                 
@@ -587,7 +585,7 @@ class TranscriptsManager(DataSourceManager):
                     
         except Exception as e:
             # Log error but DO NOT set completion flag if loop failed
-            self.logger.error(f"Error in historical transcript processing: {e}")
+            self.logger.error(f"Error in historical transcript processing: {e}", exc_info=True)
 
 
     # def _fetch_historical_data(self):
@@ -652,7 +650,7 @@ class TranscriptsManager(DataSourceManager):
             return count
             
         except Exception as e:
-            self.logger.error(f"Error fetching live transcripts: {e}")
+            self.logger.error(f"Error fetching live transcripts: {e}", exc_info=True)
             return 0
     
     def check_status(self):
@@ -672,7 +670,7 @@ class TranscriptsManager(DataSourceManager):
                 }
             }
         except Exception as e:
-            self.logger.error(f"Error checking status: {e}")
+            self.logger.error(f"Error checking status: {e}", exc_info=True)
             return None
     
     def stop(self):
@@ -694,7 +692,7 @@ class TranscriptsManager(DataSourceManager):
             self.redis.clear(preserve_processed=True)
             return True
         except Exception as e:
-            self.logger.error(f"Error stopping {self.source_type}: {e}")
+            self.logger.error(f"Error stopping {self.source_type}: {e}", exc_info=True)
             return False
 
 
@@ -704,8 +702,8 @@ class DataManager:
     """Central data manager that coordinates all data sources and processors"""
     
     def __init__(self, date_from: str, date_to: str):
-        # Use existing logger instead of setting up a new one
-        self.logger = get_logger("config.DataManagerCentral")
+        # Use standard logger
+        self.logger = logging.getLogger("config.DataManagerCentral")
         
         # Store settings
         self.historical_range = {'from': date_from, 'to': date_to}
@@ -785,7 +783,7 @@ class DataManager:
             return True
             
         except Exception as e:
-            self.logger.error(f"Error initializing Neo4j: {e}")
+            self.logger.error(f"Error initializing Neo4j: {e}", exc_info=True)
             return False
 
     def process_news_data(self, batch_size=100, max_items=1000, include_without_returns=True):
@@ -813,7 +811,7 @@ class DataManager:
             return success
         
         except Exception as e:
-            self.logger.error(f"Error processing news data: {e}")
+            self.logger.error(f"Error processing news data: {e}", exc_info=True)
             return False
 
     def process_report_data(self, batch_size=100, max_items=1000, include_without_returns=True):
@@ -841,7 +839,7 @@ class DataManager:
             return success
         
         except Exception as e:
-            self.logger.error(f"Error processing SEC report data: {e}")
+            self.logger.error(f"Error processing SEC report data: {e}", exc_info=True)
             return False
 
     def process_transcript_data(self, batch_size=100, max_items=1000, include_without_returns=True):
@@ -869,7 +867,7 @@ class DataManager:
             return success
         
         except Exception as e:
-            self.logger.error(f"Error processing transcript data: {e}")
+            self.logger.error(f"Error processing transcript data: {e}", exc_info=True)
             return False
 
     def has_neo4j(self):
@@ -891,7 +889,7 @@ class DataManager:
             if hasattr(self, 'neo4j_processor') and self.neo4j_processor:
                 self.neo4j_processor.reconcile_missing_items(max_items_per_type=None)
         except Exception as e:
-            self.logger.error(f"[STOP] Error during final reconciliation: {e}")
+            self.logger.error(f"[STOP] Error during final reconciliation: {e}", exc_info=True)
         
         results = {name: manager.stop() for name, manager in self.sources.items()}
         
@@ -912,12 +910,12 @@ class DataManager:
                     if sum(remaining.values()) > 0:
                         self.logger.warning(f"[STOP] Some items remain in withreturns after stop: {remaining}")
                 except Exception as e:
-                    self.logger.error(f"[STOP] Error during final status check: {e}")
+                    self.logger.error(f"[STOP] Error during final status check: {e}", exc_info=True)
                 
                 self.neo4j_processor.close()
                 self.logger.info("[STOP] Neo4j processor closed")
             except Exception as e:
-                self.logger.error(f"[STOP] Error closing Neo4j processor: {e}")
+                self.logger.error(f"[STOP] Error closing Neo4j processor: {e}", exc_info=True)
                 
         return results
 

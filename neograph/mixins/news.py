@@ -108,7 +108,7 @@ class NewsMixin:
                             error_count += 1
                             
                     except Exception as e:
-                        logger.error(f"Error processing news key {key}: {e}")
+                        logger.error(f"Error processing news key {key}: {e}", exc_info=True)
                         error_count += 1
                 
                 logger.info(f"Processed batch {i//batch_size + 1}/{(len(news_keys) + batch_size - 1)//batch_size}")
@@ -131,7 +131,7 @@ class NewsMixin:
             return processed_count > 0 or error_count == 0
                 
         except Exception as e:
-            logger.error(f"Error processing news data: {e}")
+            logger.error(f"Error processing news data: {e}", exc_info=True)
             return False
 
 
@@ -207,7 +207,7 @@ class NewsMixin:
             )
                 
         except Exception as e:
-            logger.error(f"Error processing news {news_id}: {e}")
+            logger.error(f"Error processing news {news_id}: {e}", exc_info=True)
             return False
         
 

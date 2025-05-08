@@ -8,7 +8,6 @@ from typing import Union
 from benzinga.bz_news_schemas import BzWebSocketNews, UnifiedNews
 from benzinga.bz_news_errors import NewsErrorHandler
 from redisDB.redisClasses import RedisClient
-from utils.log_config import get_logger, setup_logging
 import threading
 from config.feature_flags import ENABLE_LIVE_DATA
 
@@ -32,8 +31,8 @@ class BenzingaNewsWebSocket:
             log_level: Logging level (default: logging.INFO)
         """
 
-        # Set up logger using centralized logging
-        self.logger = get_logger("benzinga_news_websocket", log_level)
+        # Set up logger using standard logging
+        self.logger = logging.getLogger(__name__)
 
         # Downtime tracking 
         self._connection_time = None
@@ -125,7 +124,7 @@ class BenzingaNewsWebSocket:
                             # to give the reconnect attempt time. _on_close handles immediate retry delay.
                             check_interval = self.max_delay / 2
                         except Exception as e:
-                            self.logger.error(f"Exception during ws.close() in heartbeat: {e}")
+                            self.logger.error(f"Exception during ws.close() in heartbeat: {e}", exc_info=True)
                             # Still wait longer if close fails to avoid hammering
                             check_interval = self.max_delay / 2
                 else:
@@ -133,7 +132,7 @@ class BenzingaNewsWebSocket:
                        self.logger.debug("Heartbeat check passed.")
 
             except Exception as e:
-                self.logger.error(f"Unexpected error in heartbeat check loop: {e}")
+                self.logger.error(f"Unexpected error in heartbeat check loop: {e}", exc_info=True)
                 # Prevent tight loop on unexpected error, wait a bit longer
                 check_interval = 30
 
@@ -234,6 +233,8 @@ class BenzingaNewsWebSocket:
                     
             except Exception as e:
                 self.error_handler.handle_connection_error(e)
+                # Log the actual connection error
+                self.logger.error(f"WebSocket run_forever encountered an error: {e}", exc_info=True)
                 if not self.should_run:
                     break
                     
@@ -258,7 +259,7 @@ class BenzingaNewsWebSocket:
             self.redis_client.set_json("admin:news:shutdown_state", current_state)
             self.logger.info("Saved shutdown state to Redis.")
         except Exception as e:
-            self.logger.error(f"Failed to save shutdown state: {e}")
+            self.logger.error(f"Failed to save shutdown state: {e}", exc_info=True)
             
         self.should_run = False
         if self.ws:
@@ -296,7 +297,7 @@ class BenzingaNewsWebSocket:
 
                     
                     except Exception as e:
-                        self.logger.error(f"Failed to update downtime record: {e}")
+                        self.logger.error(f"Failed to update downtime record: {e}", exc_info=True)
 
                 # Reset connection tracking state
                 self.connected = True
@@ -319,7 +320,7 @@ class BenzingaNewsWebSocket:
                 ws.send(json.dumps(subscription))
         except Exception as e:
             self.connected = False
-            self.logger.error(f"Error in on_open: {e}")
+            self.logger.error(f"Error in on_open: {e}", exc_info=True)
             if ws:
                 try:
                     ws.close()
@@ -377,10 +378,10 @@ class BenzingaNewsWebSocket:
                     self._log_stats()
                 
             except json.JSONDecodeError as je:
-                self.logger.error(f"Failed to parse message: {message[:100]}...")
+                self.logger.error(f"Failed to parse message: {message[:100]}...", exc_info=True)
                 self.error_handler.handle_json_error(je, message)
             except Exception as e:
-                self.logger.error(f"Unexpected error processing message: {str(e)}")
+                self.logger.error(f"Unexpected error processing message: {str(e)}", exc_info=True)
                 self.error_handler.handle_unexpected_error(e)
 
     def _on_error(self, ws, error):

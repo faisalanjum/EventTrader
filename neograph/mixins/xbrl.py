@@ -78,7 +78,7 @@ class XbrlMixin:
             
         except Exception as e:
             error_msg = str(e)[:255]  # Limit error message length
-            logger.error(f"Error queueing XBRL for report {report_id}: {error_msg}")
+            logger.error(f"Error queueing XBRL for report {report_id}: {error_msg}", exc_info=True)
             
             # Update status to FAILED - using transaction function for automatic retry
             def update_failed_status(tx):
@@ -226,7 +226,7 @@ class XbrlMixin:
                     # Log error with timing
                     elapsed = time.time() - start_time
                     mins, secs = divmod(int(elapsed), 60)
-                    logger.error(f"Error in XBRL processing for report {report_id} after {mins}m {secs}s: {e}")
+                    logger.error(f"Error in XBRL processing for report {report_id} after {mins}m {secs}s: {e}", exc_info=True)
                     
                     # Update status to FAILED - using transaction function for automatic retry
                     def update_failed_status(tx):
@@ -295,13 +295,13 @@ class XbrlMixin:
                         else:
                             failed_count += 1
                     except Exception as e_inner:
-                        logger.error(f"Error re-queueing XBRL for report {record.get('report_id', 'N/A')}: {e_inner}")
+                        logger.error(f"Error re-queueing XBRL for report {record.get('report_id', 'N/A')}: {e_inner}", exc_info=True)
                         failed_count += 1
                         
                 logger.info(f"XBRL Reconciliation Summary: Re-queued={requeued_count}, Failed-to-queue={failed_count}")
                 
         except Exception as e:
-            logger.error(f"Error during XBRL reconciliation query: {e}")
+            logger.error(f"Error during XBRL reconciliation query: {e}", exc_info=True)
 
 
     # def _xbrl_worker_task(self, report_id, cik, accessionNo):

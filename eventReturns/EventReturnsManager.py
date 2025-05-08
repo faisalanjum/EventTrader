@@ -8,7 +8,6 @@ from eventtrader.keys import POLYGON_API_KEY
 from eventReturns.polygonClass import Polygon
 from utils.market_session import MarketSessionClassifier
 from utils.metadata_fields import MetadataFields 
-from utils.log_config import get_logger, setup_logging
 from zoneinfo import ZoneInfo
 
 
@@ -80,7 +79,7 @@ class EventReturnsManager:
         self.market_session = MarketSessionClassifier()
         self.polygon  = Polygon(api_key=POLYGON_API_KEY, polygon_subscription_delay=polygon_subscription_delay)
 
-        self.logger = get_logger(__name__)
+        self.logger = logging.getLogger(__name__)
 
 
     def process_event_metadata(self, 
@@ -118,7 +117,7 @@ class EventReturnsManager:
                     )
                     instruments.append(Instrument(symbol=symbol, benchmarks=benchmarks))
                 except Exception as e:
-                    self.logger.error(f"Error processing symbol {symbol}: {e}")
+                    self.logger.error(f"Error processing symbol {symbol}: {e}", exc_info=True)
                     continue
             
             # Create metadata object
@@ -131,7 +130,7 @@ class EventReturnsManager:
             return metadata.to_dict()
             
         except Exception as e:
-            self.logger.error(f"Metadata generation failed: {e}")
+            self.logger.error(f"Metadata generation failed: {e}", exc_info=True)
             return None
         
 
@@ -159,7 +158,7 @@ class EventReturnsManager:
                 daily=one_day_impact_times[1].isoformat()
             )
         except Exception as e:
-            self.logger.error(f"Error calculating return times: {e}")
+            self.logger.error(f"Error calculating return times: {e}", exc_info=True)
             raise
 
 
@@ -237,7 +236,7 @@ class EventReturnsManager:
                 event_mapping.update(mapping)
                 
             except Exception as e:
-                self.logger.error(f"Error processing event {event.get('event_id')}: {e}")
+                self.logger.error(f"Error processing event {event.get('event_id')}: {e}", exc_info=True)
                 continue
 
         if not event_returns:
@@ -247,7 +246,7 @@ class EventReturnsManager:
         try:
             returns_dict = self.polygon.get_returns_indexed(time_pairs)
         except Exception as e:
-            self.logger.error(f"Error calculating returns: {e}")
+            self.logger.error(f"Error calculating returns: {e}", exc_info=True)
             return event_returns
 
         # 3. Map returns back to events
@@ -259,7 +258,7 @@ class EventReturnsManager:
                     event_mapping
                 )
             except Exception as e:
-                self.logger.error(f"Error mapping returns for {event_return.event_id}: {e}")
+                self.logger.error(f"Error mapping returns for {event_return.event_id}: {e}", exc_info=True)
                 event_return.returns = None
 
         return event_returns

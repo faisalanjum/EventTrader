@@ -3,6 +3,7 @@ This module contains network-related implementations for the XBRL module.
 These have been extracted from XBRLClasses.py to improve maintainability.
 """
 
+import logging
 # Import common dependencies
 from .common_imports import *
 
@@ -23,7 +24,7 @@ if TYPE_CHECKING:
     from .xbrl_taxonomy import Taxonomy
     from neograph.Neo4jManager import Neo4jManager
 
-
+logger = logging.getLogger(__name__)
 
 # class XbrlConst:
 #     parentChild = "http://www.xbrl.org/2003/arcrole/parent-child"
@@ -192,7 +193,7 @@ class Calculation:
 
 
             except AttributeError as e:
-                print(f"DEBUG - Error processing relationship: {e}")
+                logger.error(f"DEBUG - Error processing relationship: {e}")
         
         self._build_nodes(parent_child_map)
 

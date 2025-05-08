@@ -3,6 +3,10 @@
 ENABLE_HISTORICAL_DATA = True
 ENABLE_LIVE_DATA = True
 
+# --- ADDED: Global Logging Configuration ---
+GLOBAL_LOG_LEVEL = "WARNING"  # Options: "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
+# --- END ADDED ---
+
 # SEC API Form Type Constants
 
 # VALID_FORM_TYPES = ['8-K', '8-K/A']
@@ -63,12 +67,12 @@ ENABLE_XBRL_PROCESSING = True
 # Higher values increase parallelism but consume more system resources
 # Recommended range: 2-12 based on available CPU cores
 # This setting does not interfere with event_trader.sh or other scripts
-XBRL_WORKER_THREADS = 12 # Changed from 8
+XBRL_WORKER_THREADS = 10 # Changed from 8
 
 # Maximum number of filings that may be processed **simultaneously** (semaphore limit).
 # Keep lower than or equal to XBRL_WORKER_THREADS – it throttles memory-intensive Arelle work
 # without affecting the size of the thread-pool queue.
-XBRL_MAX_CONCURRENT_FILINGS = 10  # (old hard-coded value was 4)
+XBRL_MAX_CONCURRENT_FILINGS = 7  # (old hard-coded value was 4)
 
 # Local on-disk cache for SEC-API XBRL-to-JSON responses. Set to None to disable.
 import os, tempfile as _tmp

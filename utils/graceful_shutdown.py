@@ -46,7 +46,7 @@ def signal_handler(sig: int, frame: Any) -> None:
             logger.info(f"Disconnecting {websocket.__class__.__name__}...")
             websocket.disconnect()
         except Exception as e:
-            logger.error(f"Error disconnecting {websocket.__class__.__name__}: {e}")
+            logger.error(f"Error disconnecting {websocket.__class__.__name__}: {e}", exc_info=True)
     
     # Wait a moment for Redis operations to complete
     time.sleep(1)

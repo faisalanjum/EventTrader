@@ -8,7 +8,6 @@ from dataclasses import dataclass, field
 from collections import Counter
 from benzinga.bz_news_schemas import BzRestAPINews, BzWebSocketNews, UnifiedNews
 import requests
-from utils.log_config import get_logger, setup_logging
 import traceback
 
 @dataclass
@@ -43,8 +42,8 @@ class NewsErrorHandler:
     """Handles and tracks different types of errors in news processing"""
     
     def __init__(self):
-        # Setup centralized logging
-        self.logger = get_logger('benzinga_news')
+        # Use standard logger
+        self.logger = logging.getLogger(__name__)
         
         self.reset_stats()  # Initialize stats
         self.debug = False  # Add debug flag

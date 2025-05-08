@@ -85,7 +85,7 @@ class TranscriptProcessor(BaseProcessor):
                     self._sleep_until_next_transcript(pubsub, now_ts)
                     
                 except Exception as e:
-                    self.logger.error(f"Error in transcript scheduling: {e}")
+                    self.logger.error(f"Error in transcript scheduling: {e}", exc_info=True)
                     time.sleep(1)
         finally:
             # Clean up
@@ -115,7 +115,7 @@ class TranscriptProcessor(BaseProcessor):
                 self._fetch_and_process_transcript(event_key, now_ts)
         
         except Exception as e:
-            self.logger.error(f"Error processing due transcripts: {e}")
+            self.logger.error(f"Error processing due transcripts: {e}", exc_info=True)
 
 
     # Checks if transcript exists either in raw storage (fetched but not processed)
@@ -152,7 +152,7 @@ class TranscriptProcessor(BaseProcessor):
             return found_in_processed
             
         except Exception as e:
-            self.logger.error(f"Error checking transcript existence: {e}")
+            self.logger.error(f"Error checking transcript existence: {e}", exc_info=True)
             return False # Safer to say it doesn't exist if we can't verify
 
 
@@ -238,7 +238,7 @@ class TranscriptProcessor(BaseProcessor):
                 self._schedule_transcript_retry(event_key, symbol, conference_datetime, now_ts)
                 
         except Exception as e:
-            self.logger.error(f"Error fetching transcript {event_key}: {e}")
+            self.logger.error(f"Error fetching transcript {event_key}: {e}", exc_info=True)
             # Reschedule with 30-min delay on error
             reschedule_time = now_ts + 1800  # 30 minutes later
             self.live_client.client.zadd(self.schedule_key, {event_key: reschedule_time})
@@ -283,7 +283,7 @@ class TranscriptProcessor(BaseProcessor):
                     self.live_client.client.delete(*raw_keys)
                     self.logger.info(f"Removed {len(raw_keys)} raw keys with pattern matching for {symbol} at {conference_datetime}")
         except Exception as e:
-            self.logger.error(f"Error removing raw keys: {e}")
+            self.logger.error(f"Error removing raw keys: {e}", exc_info=True)
 
 
         # Publish notification
@@ -331,15 +331,15 @@ class TranscriptProcessor(BaseProcessor):
             return
             
         except Exception as e:
-            self.logger.error(f"Error in sleep operation: {e}")
+            self.logger.error(f"Error in sleep operation: {e}", exc_info=True)
             time.sleep(1)  # Short error recovery sleep
 
     def _standardize_fields(self, content: dict) -> dict:
         """Transform transcript fields to standard format"""
         try:
             # Add debug log to see raw content structure
-            self.logger.info(f"Raw transcript content keys: {list(content.keys())}")
-            self.logger.info(f"Raw transcript content sample: {str(content)[:500]}...")
+            self.logger.debug(f"Raw transcript content keys: {list(content.keys())}")
+            self.logger.debug(f"Raw transcript content sample: {str(content)[:500]}...")
             
             standardized = content.copy()
             
@@ -361,7 +361,7 @@ class TranscriptProcessor(BaseProcessor):
             
             return standardized
         except Exception as e:
-            self.logger.error(f"Error standardizing transcript: {e}")
+            self.logger.error(f"Error standardizing transcript: {e}", exc_info=True)
             return {}
     
     def _clean_content(self, content: dict) -> dict:
@@ -376,7 +376,7 @@ class TranscriptProcessor(BaseProcessor):
             
             return cleaned
         except Exception as e:
-            self.logger.error(f"Error cleaning transcript: {e}")
+            self.logger.error(f"Error cleaning transcript: {e}", exc_info=True)
             return content
     
     def _ensure_iso_format(self, dt) -> str:

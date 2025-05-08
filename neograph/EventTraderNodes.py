@@ -6,10 +6,13 @@ import json
 from enum import Enum
 from utils.date_utils import parse_date  # Import our date parsing utility
 import pandas as pd
+from abc import ABC, abstractmethod
+import logging # Add import
+
+logger = logging.getLogger(__name__) # Add logger instance
 
 # Import node types from XBRLClasses but avoid circular imports
 from XBRL.xbrl_core import NodeType, RelationType
-from abc import ABC, abstractmethod
 
 
 # Base Neo4jNode class definition
@@ -183,7 +186,8 @@ class ReportNode(Neo4jNode):
             try:
                 returns_schedule = json.loads(props['returns_schedule'])
                 instance.returns_schedule = returns_schedule
-            except:
+            except Exception as e: # Catch specific error if possible, e.g., json.JSONDecodeError
+                logger.warning(f"Could not parse returns_schedule JSON for report {props.get('id', 'N/A')}: {e}") # Add warning
                 pass
         
         # Set optional fields
@@ -217,7 +221,8 @@ class ReportNode(Neo4jNode):
             if field_name in props and props[field_name]:
                 try:
                     setattr(instance, field_name, json.loads(props[field_name]))
-                except:
+                except Exception as e: # Catch specific error if possible, e.g., json.JSONDecodeError
+                    logger.warning(f"Could not parse JSON field '{field_name}' for report {props.get('id', 'N/A')}: {e}") # Add warning
                     setattr(instance, field_name, default_value)
         
         return instance
@@ -353,7 +358,8 @@ class CompanyNode(Neo4jNode):
                     # Try to clean the string if it contains commas, etc.
                     clean_val = str(mkt_cap_value).replace(',', '').replace('$', '').strip()
                     company.mkt_cap = float(clean_val)
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e: # Catch specific errors
+                logger.warning(f"Could not parse mkt_cap '{props['mkt_cap']}' for company {props.get('id', 'N/A')}: {e}") # Add warning
                 pass
         
         if 'employees' in props and props['employees'] not in (None, "", "null"):
@@ -365,7 +371,8 @@ class CompanyNode(Neo4jNode):
                     # Try to clean the string if it contains commas, etc.
                     clean_val = str(employees_value).replace(',', '').strip()
                     company.employees = int(float(clean_val))
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e: # Catch specific errors
+                logger.warning(f"Could not parse employees '{props['employees']}' for company {props.get('id', 'N/A')}: {e}") # Add warning
                 pass
         
         if 'shares_out' in props and props['shares_out'] not in (None, "", "null"):
@@ -377,7 +384,8 @@ class CompanyNode(Neo4jNode):
                     # Try to clean the string if it contains commas, etc.
                     clean_val = str(shares_value).replace(',', '').strip()
                     company.shares_out = float(clean_val)
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e: # Catch specific errors
+                logger.warning(f"Could not parse shares_out '{props['shares_out']}' for company {props.get('id', 'N/A')}: {e}") # Add warning
                 pass
         
         return company
@@ -1220,9 +1228,9 @@ class DividendNode(Neo4jNode):
         try:
             # Ensure cash_amount is standard Python float
             cash_amount_val = float(dividend_data['cash_amount'])
-        except (ValueError, TypeError, KeyError):
+        except (ValueError, TypeError, KeyError) as e: # Catch specific errors
             # Handle cases where cash_amount might be missing or non-numeric unexpectedly
-            print(f"ERROR: Invalid or missing cash_amount '{dividend_data.get('cash_amount')}' for {ticker_val}. Setting to 0.0")
+            logger.warning(f"Invalid or missing cash_amount '{dividend_data.get('cash_amount')}' for {ticker_val}. Setting to 0.0: {e}") # Changed print
             cash_amount_val = 0.0
 
         # Handle optional fields, ensuring standard Python string types or None
@@ -1364,17 +1372,17 @@ class SplitNode(Neo4jNode):
         try:
             # Ensure split_from is standard Python float
             split_from_val = float(split_data['split_from'])
-        except (ValueError, TypeError, KeyError):
+        except (ValueError, TypeError, KeyError) as e: # Catch specific errors
             # Handle cases where split_from might be missing or non-numeric unexpectedly
-            print(f"ERROR: Invalid or missing split_from '{split_data.get('split_from')}' for {ticker_val}. Setting to 1.0")
+            logger.error(f"Invalid or missing split_from '{split_data.get('split_from')}' for {ticker_val}. Setting to 1.0: {e}", exc_info=True) # Changed print
             split_from_val = 1.0
             
         # Handle split_to specifically with numeric validation
         try:
             split_to_val = float(split_data['split_to']) if split_data.get('split_to') is not None else None
-        except (ValueError, TypeError):
+        except (ValueError, TypeError) as e: # Catch specific errors
             # Handle cases where split_to might be non-numeric unexpectedly
-            print(f"ERROR: Invalid split_to '{split_data.get('split_to')}' for {ticker_val}. Setting to None")
+            logger.error(f"Invalid split_to '{split_data.get('split_to')}' for {ticker_val}. Setting to None: {e}", exc_info=True) # Changed print
             split_to_val = None
 
         # Handle optional fields, ensuring standard Python string types or None
@@ -1819,7 +1827,8 @@ class QAExchangeNode(Neo4jNode):
                     exchanges = json.loads(exchanges_data)
                 else:
                     exchanges = exchanges_data
-            except:
+            except Exception as e: # Catch specific error if possible, e.g., json.JSONDecodeError
+                logger.warning(f"Could not parse exchanges JSON for QAExchange {props.get('id', 'N/A')}: {e}") # Add warning
                 exchanges = []
             
         return cls(

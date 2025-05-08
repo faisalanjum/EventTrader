@@ -131,7 +131,7 @@ class ReportMixin:
                         error_count += 1
                         
                 except Exception as e:
-                    logger.error(f"Error processing report key {key}: {e}")
+                    logger.error(f"Error processing report key {key}: {e}", exc_info=True)
                     error_count += 1
                 
             logger.info(f"Processed batch {batch_start//batch_size + 1}/{(len(all_keys) + batch_size - 1)//batch_size}")
@@ -223,7 +223,7 @@ class ReportMixin:
             )
                 
         except Exception as e:
-            logger.error(f"Error processing report {report_id}: {e}")
+            logger.error(f"Error processing report {report_id}: {e}", exc_info=True)
             return False
 
 
@@ -587,7 +587,7 @@ class ReportMixin:
             return section_nodes
         
         except Exception as e:
-            logger.error(f"Error creating section nodes for report {report_id}: {e}")
+            logger.error(f"Error creating section nodes for report {report_id}: {e}", exc_info=True)
             return []
 
 
@@ -669,7 +669,7 @@ class ReportMixin:
             return exhibit_nodes
         
         except Exception as e:
-            logger.error(f"Error creating exhibit nodes for report {report_id}: {e}")
+            logger.error(f"Error creating exhibit nodes for report {report_id}: {e}", exc_info=True)
             return []
 
 
@@ -726,7 +726,7 @@ class ReportMixin:
             return [filing_text_node]
         
         except Exception as e:
-            logger.error(f"Error creating filing text content node for report {report_id}: {e}")
+            logger.error(f"Error creating filing text content node for report {report_id}: {e}", exc_info=True)
             return []
 
 
@@ -807,7 +807,7 @@ class ReportMixin:
             return financial_nodes
         
         except Exception as e:
-            logger.error(f"Error creating financial statement nodes for report {report_id}: {e}")
+            logger.error(f"Error creating financial statement nodes for report {report_id}: {e}", exc_info=True)
             return []
 
 

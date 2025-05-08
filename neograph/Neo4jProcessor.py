@@ -14,7 +14,6 @@ from .mixins.xbrl import XbrlMixin
 from .mixins.reconcile import ReconcileMixin
 
 # Imports for Logger Setup and Standalone Functions
-from utils.log_config import get_logger # For logger setup
 from redisDB.redisClasses import EventTraderRedis # Needed by process_* functions
 from .Neo4jInitializer import Neo4jInitializer # Needed by init_neo4j (using relative path)
 from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD, OPENAI_API_KEY
@@ -22,10 +21,8 @@ from openai import OpenAI
 from transcripts.EarningsCallTranscripts import ModelRateLimiter # Reuse existing limiter
 from config.feature_flags import QAEXCHANGE_EMBEDDING_BATCH_SIZE
 
-# Setup logger (This line should be kept after imports)
-logger = get_logger(__name__)
-
-
+# Setup logger using standard logging
+logger = logging.getLogger(__name__)
 from .mixins.initialization import InitializationMixin
 from .mixins.utility import UtilityMixin 
 from .mixins.news import NewsMixin
@@ -35,7 +32,6 @@ from .mixins.pubsub import PubSubMixin
 from .mixins.embedding import EmbeddingMixin
 from .mixins.xbrl import XbrlMixin
 from .mixins.reconcile import ReconcileMixin
-
 
 class Neo4jProcessor(
     InitializationMixin, 
@@ -179,13 +175,13 @@ def init_neo4j(check_only=False, start_date=None):
                 
             return success
         except Exception as e:
-            logger.error(f"Neo4j initialization error: {str(e)}")
+            logger.error(f"Neo4j initialization error: {str(e)}", exc_info=True)
             return False
         finally:
             initializer.close()
             
     except Exception as e:
-        logger.error(f"Neo4j initialization error: {str(e)}")
+        logger.error(f"Neo4j initialization error: {str(e)}", exc_info=True)
         return False
 
 def process_news_data(batch_size=100, max_items=None, verbose=False, include_without_returns=True):
@@ -235,7 +231,7 @@ def process_news_data(batch_size=100, max_items=None, verbose=False, include_wit
             
         return success
     except Exception as e:
-        logger.error(f"News data processing error: {str(e)}")
+        logger.error(f"News data processing error: {str(e)}", exc_info=True)
         return False
     finally:
         if processor:
@@ -290,7 +286,7 @@ def process_report_data(batch_size=100, max_items=None, verbose=False, include_w
             
         return success
     except Exception as e:
-        logger.error(f"Report data processing error: {str(e)}")
+        logger.error(f"Report data processing error: {str(e)}", exc_info=True)
         return False
     finally:
         if processor:
@@ -353,7 +349,7 @@ def process_transcript_data(batch_size=5, max_items=None, verbose=False, include
         return success
         
     except Exception as e:
-        logger.error(f"Transcript data processing error: {str(e)}")
+        logger.error(f"Transcript data processing error: {str(e)}", exc_info=True)
         return False
     
     finally:

@@ -185,7 +185,7 @@ class ReconcileMixin:
 
                                         break
                 except Exception as e:
-                    logger.error(f"Error during transcript reconciliation: {e}")
+                    logger.error(f"Error during transcript reconciliation: {e}", exc_info=True)
             
             # Ensure any XBRL reports stuck for >1 hour are re-queued
             if hasattr(self, "_reconcile_interrupted_xbrl_tasks"):
@@ -195,7 +195,7 @@ class ReconcileMixin:
             return results
         
         except Exception as e:
-            logger.error(f"Error reconciling missing items: {e}")
+            logger.error(f"Error reconciling missing items: {e}", exc_info=True)
             return results
 
     def _handle_midnight_operations(self, results):
@@ -296,7 +296,7 @@ class ReconcileMixin:
             
             return 0
         except Exception as e:
-            logger.error(f"Error reconciling date nodes: {e}")
+            logger.error(f"Error reconciling date nodes: {e}", exc_info=True)
             return 0
 
 
@@ -346,7 +346,7 @@ class ReconcileMixin:
             return 0
             
         except Exception as e:
-            logger.error(f"Error reconciling dividend nodes: {e}")
+            logger.error(f"Error reconciling dividend nodes: {e}", exc_info=True)
             return 0
         
 
@@ -421,7 +421,7 @@ class ReconcileMixin:
             return 0
             
         except Exception as e:
-            logger.error(f"Error reconciling split nodes: {e}")
+            logger.error(f"Error reconciling split nodes: {e}", exc_info=True)
             return 0
 
     def check_withreturns_status(self):
@@ -452,5 +452,5 @@ class ReconcileMixin:
                 
             return counts
         except Exception as e:
-            logger.error(f"[CHECK] Error checking withreturns status: {e}")
+            logger.error(f"[CHECK] Error checking withreturns status: {e}", exc_info=True)
             return counts

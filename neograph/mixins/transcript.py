@@ -42,7 +42,7 @@ class TranscriptMixin:
         try:
             self.rate_limiter.wait_if_needed(llm_model)
         except Exception as rate_limit_err:
-             logger.error(f"Rate limiter check failed for model {llm_model}: {rate_limit_err}. Skipping LLM check.")
+             logger.error(f"Rate limiter check failed for model {llm_model}: {rate_limit_err}. Skipping LLM check.", exc_info=True)
              return True # Default to substantial
 
         # Define the output schema
@@ -103,7 +103,7 @@ class TranscriptMixin:
                         except json.JSONDecodeError:
                              logger.warning(f"LLM check for QA (words={word_count}, model={llm_model}): Failed to decode JSON from response: {item.text}")
                         except Exception as parse_err:
-                             logger.error(f"LLM check for QA (words={word_count}, model={llm_model}): Error parsing response item {item.text}: {parse_err}")
+                             logger.error(f"LLM check for QA (words={word_count}, model={llm_model}): Error parsing response item {item.text}: {parse_err}", exc_info=True)
                     # If loop finishes without break, parsing failed or block wasn't found
                     else: 
                         logger.warning(f"LLM check for QA (words={word_count}, model={llm_model}): No 'output_text' block found in response.")
@@ -195,14 +195,14 @@ class TranscriptMixin:
                             failed += 1
                             
                     except Exception as e:
-                        logger.error(f"Failed to process key {key}: {e}")
+                        logger.error(f"Failed to process key {key}: {e}", exc_info=True)
                         failed += 1
 
             logger.info(f"Transcript processing complete: {processed} success, {failed} failed")
             return processed > 0 or failed == 0
 
         except Exception as e:
-            logger.error(f"Critical error in process_transcripts_to_neo4j: {e}")
+            logger.error(f"Critical error in process_transcripts_to_neo4j: {e}", exc_info=True)
             return False
 
 
@@ -263,7 +263,7 @@ class TranscriptMixin:
                 transcript_data
             )
         except Exception as e:
-            logger.error(f"Error processing transcript {transcript_id}: {e}")
+            logger.error(f"Error processing transcript {transcript_id}: {e}", exc_info=True)
             return False
 
 
@@ -311,7 +311,7 @@ class TranscriptMixin:
             return True
 
         except Exception as e:
-            logger.error(f"Error executing DB ops for transcript {transcript_id}: {e}")
+            logger.error(f"Error executing DB ops for transcript {transcript_id}: {e}", exc_info=True)
             return False
 
 
@@ -451,7 +451,7 @@ class TranscriptMixin:
                             params=[{"properties": {}}]
                         )
                      except Exception as rel_err:
-                         logger.error(f"Failed to create relationship {rel}: {rel_err}")
+                         logger.error(f"Failed to create relationship {rel}: {rel_err}", exc_info=True)
                 logger.info(f"Finished creating QA relationships for {transcript_id}.")
 
         # Level 2 fallback: QuestionAnswerNode (used if no qa_pairs)

@@ -1,6 +1,9 @@
 import yfinance as yf
 from tqdm import tqdm
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 def check_options_yfinance(symbols):
 
@@ -12,10 +15,10 @@ def check_options_yfinance(symbols):
                 options_available.append(symbol)
             time.sleep(0.1)  # Small delay to avoid rate limits
         except Exception as e:
-            print(f"Error checking {symbol}: {str(e)}")
+            logger.error(f"Error checking {symbol}: {str(e)}", exc_info=True)
             continue
             
-    print(f"\nFound {len(options_available)} stocks with options out of {len(symbols)} total")
+    logger.info(f"Found {len(options_available)} stocks with options out of {len(symbols)} total")
     return options_available
 
 
