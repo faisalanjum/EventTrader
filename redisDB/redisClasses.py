@@ -133,6 +133,7 @@ class RedisClient:
         self.port = port
         self.db = db
         self.prefix = prefix  # Will be 'news:live:' or 'news:hist:'
+        self.source_type = source_type  # Needed later for lifecycle meta-key construction
         self.logger = logging.getLogger(f"{self.__class__.__name__}.{prefix or 'admin'}")
 
         # Get source-specific queue names
@@ -198,9 +199,19 @@ class RedisClient:
             storage_key = f"{self.prefix}raw:{news_item.id}.{updated_key}"
             
             pipe = self.client.pipeline(transaction=True)
-            pipe.set(storage_key, news_item.model_dump_json(), ex=ex) # stores the news content in Redis
-            pipe.lpush(self.RAW_QUEUE, storage_key) 
-            return all(pipe.execute())
+            pipe.set(storage_key, news_item.model_dump_json(), ex=ex)  # store content
+            pipe.lpush(self.RAW_QUEUE, storage_key)
+            success = all(pipe.execute())
+
+            # --- lifecycle tracking (ingested_at) ---
+            if success:
+                updated_key_safe = news_item.updated.replace(':', '.') if news_item.updated else ''
+                meta_key = f"tracking:meta:{self.source_type}:{news_item.id}.{updated_key_safe}"
+                self.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ex if ex else None)
+                if hasattr(news_item, 'updated') and news_item.updated:
+                    self.set_lifecycle_data(meta_key, "source_api_timestamp", news_item.updated, ttl=ex if ex else None)
+
+            return success
                 
         except Exception as e:
             self.logger.error(f"Live news storage failed: {e}", exc_info=True)
@@ -227,8 +238,17 @@ class RedisClient:
 
                 pipe = self.client.pipeline(transaction=True)
                 pipe.set(storage_key, filing.model_dump_json(), ex=ex)
-                pipe.lpush(self.RAW_QUEUE, storage_key)  # ✅ LPUSH matches LPOP in processor
-                return all(pipe.execute())
+                pipe.lpush(self.RAW_QUEUE, storage_key)
+                success = all(pipe.execute())
+
+                if success:
+                    updated_key_safe = filing.filedAt.replace(':', '.') if filing.filedAt else ''
+                    meta_key = f"tracking:meta:{self.source_type}:{filing.accessionNo}.{updated_key_safe}"
+                    self.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ex if ex else None)
+                    if hasattr(filing, 'filedAt') and filing.filedAt:
+                        self.set_lifecycle_data(meta_key, "source_api_timestamp", filing.filedAt, ttl=ex if ex else None)
+
+                return success
                     
             except Exception as e:
                 self.logger.error(f"Filing storage attempt {attempt+1}/{max_retries} failed: {e}", exc_info=True)
@@ -333,6 +353,9 @@ class RedisClient:
 
             pipe = self.client.pipeline(transaction=True)
             
+            # --- Track successfully ingested items for source_api_timestamp ---        
+            successfully_ingested_keys_for_meta = []
+
             for item in news_items:
                 # Replace colons in updated timestamp with dots
                 updated_key = item.updated.replace(':', '.')
@@ -346,8 +369,21 @@ class RedisClient:
                 storage_key = f"{self.prefix}raw:{item.id}.{updated_key}"
                 pipe.set(storage_key, item.model_dump_json(), ex=ex)
                 pipe.lpush(self.RAW_QUEUE, storage_key)
+
+                # --- lifecycle tracking (ingested_at) for batch items ---
+                # Prepare meta_key here to use after pipe execution
+                item_updated_key_safe = item.updated.replace(':', '.') if item.updated else ''
+                meta_key_batch = f"tracking:meta:{self.source_type}:{item.id}.{item_updated_key_safe}"
+                successfully_ingested_keys_for_meta.append((meta_key_batch, item.updated))
             
-            return all(pipe.execute())
+            results = pipe.execute()
+            if all(results):
+                for meta_key, item_updated_ts in successfully_ingested_keys_for_meta:
+                    self.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ex if ex else None)
+                    if item_updated_ts:
+                        self.set_lifecycle_data(meta_key, "source_api_timestamp", item_updated_ts, ttl=ex if ex else None)
+            
+            return all(results)
         except Exception as e:
             self.logger.error(f"Historical news batch storage failed: {e}", exc_info=True)
             return False
@@ -459,3 +495,52 @@ class RedisClient:
                            port=self.port, 
                            db=self.db, 
                            decode_responses=True).pubsub()        
+
+    # ------------------------------------------------------------------
+    # Lifecycle tracking helper
+    # ------------------------------------------------------------------
+    def mark_lifecycle_timestamp(self, key: str, field: str, reason: str = None, ttl: int = None):
+        """Write a timestamp into a lifecycle hash if not already set"""
+        try:
+            if not self.client.hexists(key, field):
+                payload = {field: datetime.utcnow().isoformat(timespec="seconds") + "Z"}
+                if reason:
+                    payload[f"{field}_reason"] = reason
+                pipe = self.client.pipeline()
+                pipe.hset(key, mapping=payload)
+                if ttl:
+                    pipe.expire(key, ttl)
+
+                # ------------------------------------------------------------------
+                # Pending-set maintenance (minimalistic)
+                # ------------------------------------------------------------------
+                # Determine source_type (second element after 'tracking:meta')
+                parts = key.split(":")
+                # key pattern expected: tracking:meta:{source_type}:{item_id_and_ts}
+                if len(parts) >= 3:
+                    source_type = parts[2]
+                    pending_set_key = f"tracking:pending:{source_type}"
+
+                    # 1) When item is first ingested → add to pending set
+                    if field == "ingested_at":
+                        pipe.sadd(pending_set_key, key)
+
+                    # 2) Remove from pending set when item is finalised (success or dropped)
+                    if field in {"inserted_into_neo4j_at", "filtered_at", "failed_at"} and feature_flags.REMOVE_FROM_PENDING_SET:
+                        pipe.srem(pending_set_key, key)
+
+                pipe.execute()
+        except Exception as e:
+            self.logger.error(f"Lifecycle timestamp update failed for {key}:{field}: {e}", exc_info=True)
+
+    def set_lifecycle_data(self, key: str, field: str, value: str, ttl: int = None):
+        """Set a specific field with a value in a lifecycle hash if not already set."""
+        try:
+            if not self.client.hexists(key, field):
+                pipe = self.client.pipeline()
+                pipe.hset(key, field, value)
+                if ttl: # Ensure key expiration is also set/updated
+                    pipe.expire(key, ttl)
+                pipe.execute()
+        except Exception as e:
+            self.logger.error(f"Lifecycle data set failed for {key}:{field}: {e}", exc_info=True)        

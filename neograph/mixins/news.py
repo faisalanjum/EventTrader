@@ -201,10 +201,31 @@ class NewsMixin:
             news_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps = self._prepare_news_data(news_id, news_data)
             
             # Execute all database operations
-            return self._execute_news_database_operations(
+            success = self._execute_news_database_operations(
                 news_id, news_node, valid_symbols, company_params, 
                 sector_params, industry_params, market_params, timestamps
             )
+
+            if success and hasattr(self, 'event_trader_redis') and self.event_trader_redis:
+                # Remove internal "bzNews_" prefix to match lifecycle key
+                base_id = news_id.replace("bzNews_", "", 1)
+                id_only = base_id
+                updated_ts_iso = news_data.get('updated', '') # Get the ISO string from the payload
+                updated_key_suffix = updated_ts_iso.replace(':', '.') if updated_ts_iso else ''
+
+                if not updated_key_suffix:
+                    logger.warning(f"Missing 'updated' timestamp in news_data for {id_only}, meta_key will lack suffix.")
+                    full_news_id_for_meta = id_only # Fallback to id_only if no updated timestamp
+                else:
+                    full_news_id_for_meta = f"{id_only}.{updated_key_suffix}"
+                
+                meta_key = f"tracking:meta:{self.event_trader_redis.source}:{full_news_id_for_meta}"
+                try:
+                    self.event_trader_redis.history_client.mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
+                except Exception:
+                    pass
+
+            return success
                 
         except Exception as e:
             logger.error(f"Error processing news {news_id}: {e}", exc_info=True)

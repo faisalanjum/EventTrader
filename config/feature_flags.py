@@ -4,7 +4,7 @@ ENABLE_HISTORICAL_DATA = True
 ENABLE_LIVE_DATA = True
 
 # --- ADDED: Global Logging Configuration ---
-GLOBAL_LOG_LEVEL = "WARNING"  # Options: "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
+GLOBAL_LOG_LEVEL = "INFO"  # Options: "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
 # --- END ADDED ---
 
 # SEC API Form Type Constants
@@ -60,7 +60,7 @@ FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q
 # When set to True, enables XBRL report processing which extracts detailed financial data
 # When set to False, skips XBRL processing entirely and does not initialize related resources
 # This can significantly reduce memory usage and CPU load when XBRL data is not needed
-ENABLE_XBRL_PROCESSING = True
+ENABLE_XBRL_PROCESSING = False
 
 # XBRL Thread Pool Configuration
 # Number of worker threads for XBRL processing (only used when ENABLE_XBRL_PROCESSING is True)
@@ -196,11 +196,18 @@ PUBSUB_RECONCILIATION_INTERVAL = 3600  # Default: Run once per hour
 # --- End PubSub Processing Configuration ---
 
 
-# Threshold for BaseProcessor reconnect on consecutive timeouts
-TIMEOUT_RECONNECT_THRESHOLD = 2 # Reconnect after 10 * 60s intervals
+# TOBE REMOVED - NOT USED ANYWHERE - Threshold for BaseProcessor reconnect on consecutive timeouts
+# TIMEOUT_RECONNECT_THRESHOLD = 2 # Reconnect after 10 * 60s intervals
 
 # Add a new feature flag for report enrichment workers
 ENABLE_REPORT_ENRICHER = True
 
 # TTL for processed report keys set by the enrichment worker
 PROCESSED_ITEM_KEY_TTL = 2 * 24 * 3600 # Default TTL for processed report keys (in seconds), e.g., 2 days
+
+# --- Pending Set Configuration ---
+# When True, items are automatically removed from the pending set once they reach the
+# `inserted_into_neo4j_at` stage. Set to False if you prefer to keep all items in
+# the pending set for post-hoc analysis.
+REMOVE_FROM_PENDING_SET = True  # Default behaviour – safe for production
+# --- End Pending Set Configuration ---

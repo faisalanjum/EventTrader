@@ -146,6 +146,7 @@ class BaseProcessor(ABC):
             identifier = raw_key.split(':')[-1]
 
             raw_content = client.get(raw_key)
+
             if not raw_content:
                 if self.delete_raw:
                     client.delete(raw_key)
@@ -153,6 +154,12 @@ class BaseProcessor(ABC):
                 return False
 
             content_dict = json.loads(raw_content)
+
+            # -------- Determine base_id for consistent meta-key (no timestamp) --------
+            # For meta_key, ALL sources use their full identifier from the raw key.
+            # identifier variable ALREADY holds the full suffixed ID for news/reports from raw_key.split(':')[-1],
+            # or the full unique ID for transcripts.
+            meta_key = f"tracking:meta:{self.source_type}:{identifier}"
 
             # 2. First standardize fields - Important to do this before checking symbols
             standardized_dict = self._standardize_fields(content_dict)
@@ -168,6 +175,8 @@ class BaseProcessor(ABC):
             # 3. Check if any valid symbols exist
             if not self._has_valid_symbols(standardized_dict):
                 self.logger.info(f"Dropping {raw_key} - no matching symbols in universe")
+                # lifecycle: filtered
+                client.mark_lifecycle_timestamp(meta_key, "filtered_at", reason="no_valid_symbols")
                 if self.delete_raw:
                     client.delete(raw_key)
                 return True  # Item exits raw queue naturally
@@ -190,6 +199,7 @@ class BaseProcessor(ABC):
             if metadata is None:
                 self.logger.error(f"Metadata generation failed for {raw_key}. Pushing to FAILED_QUEUE.")
                 client.push_to_queue(client.FAILED_QUEUE, raw_key)
+                client.mark_lifecycle_timestamp(meta_key, "failed_at", reason="metadata_generation_failed")
                 if self.delete_raw:
                     client.delete(raw_key)
                 return False
@@ -201,9 +211,11 @@ class BaseProcessor(ABC):
             # Move to processed queue
             # processed_key = raw_key.replace(":raw:", ":processed:")  
             
-            # Generate processed key using RedisKeys
+            # For processed_key (data key), ALL sources also use their full identifier from the raw key.
+            # identifier variable ALREADY holds the full suffixed ID for news/reports from raw_key.split(':')[-1],
+            # or the full unique ID for transcripts.
             processed_key = RedisKeys.get_key(source_type=self.source_type,key_type=RedisKeys.SUFFIX_PROCESSED, 
-                                prefix_type=prefix_type, identifier=identifier)
+                                prefix_type=prefix_type, identifier=identifier) # Use full identifier for data key
 
 
             pipe = client.client.pipeline(transaction=True)
@@ -228,7 +240,13 @@ class BaseProcessor(ABC):
 
                 if self.delete_raw:
                     pipe.delete(raw_key)
-                return all(pipe.execute())
+                success = all(pipe.execute())
+
+                # lifecycle: processed when redis write succeeds
+                if success:
+                    client.mark_lifecycle_timestamp(meta_key, "processed_at")
+
+                return success
             return True  # Already in queue
 
         except Exception as e:

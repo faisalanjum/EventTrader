@@ -760,6 +760,17 @@ class EarningsCallProcessor:
             # Store in Redis
             client.set(raw_key, json.dumps(transcript, default=str), ex=self.ttl)
             client.push_to_queue(client.RAW_QUEUE, raw_key)
+
+            # Lifecycle tracking for ingested_at
+            try:
+                meta_key = f"tracking:meta:{self.redis_client.source}:{transcript_id}"
+                client.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=self.ttl if self.ttl else None)
+                conference_dt_str = transcript.get('conference_datetime')
+                if conference_dt_str: # It should be an ISO string by this point
+                    client.set_lifecycle_data(meta_key, "source_api_timestamp", conference_dt_str, ttl=self.ttl if self.ttl else None)
+            except Exception:
+                pass
+
             return True
             
         except Exception as e:

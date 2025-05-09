@@ -223,10 +223,22 @@ class ReturnsProcessor:
                     pipe.delete(orig_key)
                     success = all(pipe.execute())
                     
-                    # Add publishing step - THIS IS THE CRITICAL FIX
+                    # Determine base_id for meta_key: reports keep suffix, others strip
+                    # news_id is already {id}.{updated_key} for news, {accessionNo}.{filedAt} for reports, or full ID for transcripts
+                    # No change needed to news_id for meta key consistency with new ingestion pattern.
+
+                    if self.source_type == RedisKeys.SOURCE_REPORTS:
+                        self.logger.critical(f"DEBUGGING REPORTS in ReturnsProcessor: key='{key}', news_id='{news_id}', source_type='{self.source_type}'")
+            
+                    meta_key = f"tracking:meta:{self.source_type}:{news_id}"
+                    if namespace == "withreturns":
+                        client.mark_lifecycle_timestamp(meta_key, "entered_withreturns_at")
+                    else:
+                        client.mark_lifecycle_timestamp(meta_key, "entered_withoutreturns_at")
+
+                    # Publish update after lifecycle mark
                     if success:
                         self._publish_news_update(namespace, news_id)
-
                     else:
                         self.logger.error(f"Redis pipeline failed for {orig_key} -> {new_key}. Result: {success}")
 
@@ -376,6 +388,15 @@ class ReturnsProcessor:
             pipe.delete(key)
             success = all(pipe.execute())
             
+            # Determine base_id for meta_key: reports keep suffix, others strip
+            # news_id is already {id}.{updated_key} for news, {accessionNo}.{filedAt} for reports, or full ID for transcripts
+            # No change needed to news_id for meta key consistency with new ingestion pattern.
+            meta_key = f"tracking:meta:{self.source_type}:{news_id}"
+            if namespace == "withreturns":
+                client.mark_lifecycle_timestamp(meta_key, "entered_withreturns_at")
+            else:
+                client.mark_lifecycle_timestamp(meta_key, "entered_withoutreturns_at")
+
             # 7. Publish to PubSub if successful
             if success:
                 self._publish_news_update(namespace, news_id)

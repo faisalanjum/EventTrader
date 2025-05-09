@@ -118,9 +118,7 @@ class ReportMixin:
                     # Parse JSON data
                     report_data = json.loads(raw_data)
                     
-                    # Use accessionNo as report ID if available
-                    if 'accessionNo' in report_data:
-                        report_id = report_data['accessionNo']
+                    # Keep full identifier (accessionNo.filedAt) to match lifecycle key
                     
                     # Process report data with deduplication
                     success = self._process_deduplicated_report(report_id, report_data)
@@ -216,11 +214,31 @@ class ReportMixin:
             report_node, node_properties, valid_symbols, company_params, sector_params, industry_params, market_params, report_timestamps = self._prepare_report_data(report_id, report_data)
             
             # Execute all database operations
-            return self._execute_report_database_operations(
+            success = self._execute_report_database_operations(
                 report_id, report_node, node_properties, valid_symbols,
                 company_params, sector_params, industry_params, market_params,
                 report_timestamps
             )
+
+            if success:
+                # Use explicit source constant to avoid relying on the processor-wide EventTraderRedis instance,
+                # which is initialised for *news* in DataManager but reused for all content types here.
+                meta_key = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{report_id}"
+                # Any available Redis client can write to the admin namespace; use history_client if present
+                if hasattr(self, "event_trader_redis") and self.event_trader_redis:
+                    try:
+                        self.event_trader_redis.history_client.mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
+                    except Exception:
+                        pass
+                else:
+                    # Fallback – create a temporary Redis client with no prefix
+                    try:
+                        from redisDB.redisClasses import RedisClient
+                        RedisClient(prefix="").mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
+                    except Exception:
+                        pass
+
+            return success
                 
         except Exception as e:
             logger.error(f"Error processing report {report_id}: {e}", exc_info=True)

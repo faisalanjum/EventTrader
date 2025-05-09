@@ -257,11 +257,27 @@ class TranscriptMixin:
             transcript_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps = \
                 self._prepare_transcript_data(transcript_id, transcript_data)
 
-            return self._execute_transcript_database_operations(
+            success = self._execute_transcript_database_operations(
                 transcript_id, transcript_node, valid_symbols,
                 company_params, sector_params, industry_params, market_params, timestamps,
                 transcript_data
             )
+
+            if success:
+                meta_key = f"tracking:meta:{RedisKeys.SOURCE_TRANSCRIPTS}:{transcript_id}"
+                if hasattr(self, "event_trader_redis") and self.event_trader_redis:
+                    try:
+                        self.event_trader_redis.history_client.mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
+                    except Exception:
+                        pass
+                else:
+                    try:
+                        from redisDB.redisClasses import RedisClient
+                        RedisClient(prefix="").mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
+                    except Exception:
+                        pass
+
+            return success
         except Exception as e:
             logger.error(f"Error processing transcript {transcript_id}: {e}", exc_info=True)
             return False
