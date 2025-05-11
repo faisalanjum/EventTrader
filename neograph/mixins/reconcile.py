@@ -102,6 +102,10 @@ class ReconcileMixin:
                         # Query Neo4j for these report IDs
                         cypher = "MATCH (r:Report) WHERE r.accessionNo IN $ids RETURN r.accessionNo as id"
                         result = session.run(cypher, ids=batch)
+
+                        # Here the id is the accessionNo but for comparison we need to use the full report_id
+                        # neo4j_accession_nos = {record["accessionNo"] for record in result}
+
                         neo4j_report_ids = {record["id"] for record in result}
                         
                         # Find missing report IDs

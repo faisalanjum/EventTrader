@@ -410,7 +410,7 @@ class SECWebSocket:
                 # Update stats
                 self.stats['messages_processed'] += processed_count
                 
-                # Persist the last message time to Redis after successful processing
+                # Persist the last message time to Redis after successful processing - Later remove this
                 if processed_count > 0:
                     try:
                         accession_no = filings[-1].get('accessionNo', 'unknown') if filings else 'unknown'

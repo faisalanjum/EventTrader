@@ -9,6 +9,8 @@ from redisDB.redisClasses import RedisClient, EventTraderRedis
 from .sec_errors import FilingErrorHandler
 from config.feature_flags import VALID_FORM_TYPES
 from sec_api import QueryApi
+from ratelimit import limits, sleep_and_retry
+from concurrent.futures import ThreadPoolExecutor
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +31,7 @@ class SECRestAPI:
         self.MAX_QUERY_LENGTH = 3500  # Maximum query string length
         self.MAX_PAGE_SIZE = 50      # Maximum results per page
         self.MAX_RESULTS = 10000     # Maximum total results per query
-        self.RATE_LIMIT_DELAY = 0.05  # Recommended 0.1 - 100ms between requests
+        self.RATE_LIMIT_DELAY = 0.1  # Recommended 0.1 - 100ms between requests # Not using this anymore
         self.MAX_RETRIES = 3
         self.RETRY_DELAY = 1  # Start with 1 second
         self.MAX_RETRY_DELAY = 10  # Max backoff of 10 seconds
@@ -62,6 +64,8 @@ class SECRestAPI:
     )
 
     def get_historical_data(self, date_from: str, date_to: str, raw: bool = False) -> List[Dict]:
+
+        start = time.time()
         """Get historical SEC filings data between dates"""
         # Local import to avoid module-level dependencies
         from config.feature_flags import ENABLE_HISTORICAL_DATA
@@ -80,22 +84,42 @@ class SECRestAPI:
             self.logger.info(f"Fetching SEC filings from {date_from} to {date_to} for {total_tickers} tickers")
             
             processed_filings = []
-            for ticker in tickers:
+
+            def safe_process(ticker):
                 try:
-                    ticker_filings = self._process_ticker(ticker, date_from, date_to, raw)
-                    processed_filings.extend(ticker_filings)
+                    filings = self._process_ticker(ticker, date_from, date_to, raw)
+                    return ticker, filings, None
+                except Exception as e:
+                    return ticker, [], e
+
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                for ticker, ticker_filings, error in executor.map(safe_process, tickers):
+                    if error:
+                        self.stats['errors'] += 1
+                        self.logger.error(f"Error processing ticker {ticker}: {str(error)}", exc_info=True)
+                        continue
                     
+                    processed_filings.extend(ticker_filings)
                     self.stats['tickers_processed'] += 1
                     if self.stats['tickers_processed'] % 10 == 0:
                         self._log_stats()
+
+
+            # for ticker in tickers:
+            #     try:
+            #         ticker_filings = self._process_ticker(ticker, date_from, date_to, raw)
+            #         processed_filings.extend(ticker_filings)
+                    
+            #         self.stats['tickers_processed'] += 1
+            #         if self.stats['tickers_processed'] % 10 == 0:
+            #             self._log_stats()
                         
-                except Exception as e:
-                    self.stats['errors'] += 1
-                    self.logger.error(f"Error processing ticker {ticker}: {str(e)}", exc_info=True)
-                    continue
-                
-                # Not Good - rethink
-                time.sleep(self.RATE_LIMIT_DELAY)
+            #     except Exception as e:
+            #         self.stats['errors'] += 1
+            #         self.logger.error(f"Error processing ticker {ticker}: {str(e)}", exc_info=True)
+            #         continue
+             
+                # time.sleep(self.RATE_LIMIT_DELAY)
             
             # --- Fetch Complete Signal --- Start
             try:
@@ -107,6 +131,9 @@ class SECRestAPI:
             # --- Fetch Complete Signal --- End
             
             self._log_stats()
+
+            self.logger.critical(f"⏱️ Total runtime: {round(time.time() - start, 2)} seconds")
+            
             return processed_filings
             
         except Exception as e:
@@ -166,9 +193,17 @@ class SECRestAPI:
                 self.logger.error(f"Error processing {ticker} {form_type}: {str(e)}", exc_info=True)
                 continue
                 
-            time.sleep(self.RATE_LIMIT_DELAY)
+            # time.sleep(self.RATE_LIMIT_DELAY)
         
         return ticker_filings
+
+
+    @sleep_and_retry
+    @limits(calls=20, period=1)
+    def _rate_limited_query(self, params):
+        return self.query_api.get_filings(params)
+
+
 
     def _fetch_filings(self, ticker: str, form_type: str, 
                             date_from: str, date_to: str) -> List[Dict]:
@@ -197,7 +232,9 @@ class SECRestAPI:
                 self.stats['queries_made'] += 1
                 
                 # Get response data
-                response_data = self.query_api.get_filings(parameters)
+                # response_data = self.query_api.get_filings(parameters)
+                response_data = self._rate_limited_query(parameters)
+
                 
                 # Check total results
                 if 'total' in response_data:
@@ -225,14 +262,14 @@ class SECRestAPI:
                 self.logger.error(f"Error fetching {ticker} {form_type} at index {from_index}: {str(e)}", exc_info=True)
                 break
                 
-            time.sleep(self.RATE_LIMIT_DELAY)
+            # time.sleep(self.RATE_LIMIT_DELAY)
             
         return all_filings
 
     def _log_stats(self):
         """Log current processing statistics"""
         self.logger.info("\nSEC REST API Statistics:")
-        self.logger.info(f"Tickers Processed: {self.stats['tickers_processed']}")
+        self.logger.critical(f"Tickers Processed: {self.stats['tickers_processed']}")
         # self.logger.info(f"Messages Received: {self.stats['messages_received']}")
         # self.logger.info(f"Messages Processed: {self.stats['messages_processed']}")
         # self.logger.info(f"Queries Made: {self.stats['queries_made']}")

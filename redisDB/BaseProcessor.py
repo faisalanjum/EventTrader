@@ -146,11 +146,11 @@ class BaseProcessor(ABC):
             identifier = raw_key.split(':')[-1]
 
             raw_content = client.get(raw_key)
-
             if not raw_content:
                 if self.delete_raw:
                     client.delete(raw_key)
                 self.logger.warning(f"Raw content not found: {raw_key}")
+                # May need to add tracking here and remove from queue
                 return False
 
             content_dict = json.loads(raw_content)

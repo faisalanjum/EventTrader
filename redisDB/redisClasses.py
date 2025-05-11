@@ -242,8 +242,7 @@ class RedisClient:
                 success = all(pipe.execute())
 
                 if success:
-                    updated_key_safe = filing.filedAt.replace(':', '.') if filing.filedAt else ''
-                    meta_key = f"tracking:meta:{self.source_type}:{filing.accessionNo}.{updated_key_safe}"
+                    meta_key = f"tracking:meta:{self.source_type}:{filing.accessionNo}.{filed_at}"
                     self.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ex if ex else None)
                     if hasattr(filing, 'filedAt') and filing.filedAt:
                         self.set_lifecycle_data(meta_key, "source_api_timestamp", filing.filedAt, ttl=ex if ex else None)
@@ -503,7 +502,8 @@ class RedisClient:
         """Write a timestamp into a lifecycle hash if not already set"""
         try:
             if not self.client.hexists(key, field):
-                payload = {field: datetime.utcnow().isoformat(timespec="seconds") + "Z"}
+                # payload = {field: datetime.utcnow().isoformat(timespec="seconds") + "Z"}
+                payload = {field: datetime.now(timezone.utc).isoformat(timespec="seconds")}
                 if reason:
                     payload[f"{field}_reason"] = reason
                 pipe = self.client.pipeline()

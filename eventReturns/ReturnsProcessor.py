@@ -232,9 +232,9 @@ class ReturnsProcessor:
             
                     meta_key = f"tracking:meta:{self.source_type}:{news_id}"
                     if namespace == "withreturns":
-                        client.mark_lifecycle_timestamp(meta_key, "entered_withreturns_at")
+                        client.mark_lifecycle_timestamp(meta_key, "withreturns_at")
                     else:
-                        client.mark_lifecycle_timestamp(meta_key, "entered_withoutreturns_at")
+                        client.mark_lifecycle_timestamp(meta_key, "withoutreturns_at")
 
                     # Publish update after lifecycle mark
                     if success:
@@ -393,9 +393,9 @@ class ReturnsProcessor:
             # No change needed to news_id for meta key consistency with new ingestion pattern.
             meta_key = f"tracking:meta:{self.source_type}:{news_id}"
             if namespace == "withreturns":
-                client.mark_lifecycle_timestamp(meta_key, "entered_withreturns_at")
+                client.mark_lifecycle_timestamp(meta_key, "withreturns_at")
             else:
-                client.mark_lifecycle_timestamp(meta_key, "entered_withoutreturns_at")
+                client.mark_lifecycle_timestamp(meta_key, "withoutreturns_at")
 
             # 7. Publish to PubSub if successful
             if success:

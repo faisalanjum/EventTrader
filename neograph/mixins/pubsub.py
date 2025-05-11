@@ -98,7 +98,8 @@ class PubSubMixin:
                     report_data = json.loads(raw_data)
                     
                     # Use accessionNo as report ID if available
-                    report_id = report_data.get('accessionNo', item_id)
+                    # report_id = report_data.get('accessionNo', item_id) 
+                    report_id = item_id # Uptil here we are still passing accessionNo.timestamp as report_id
                     
                     # Process report with deduplication (same approach as news)
                     success = self._process_deduplicated_report(
@@ -321,7 +322,6 @@ class PubSubMixin:
             pass
             
         logger.info("Stopped event-driven Neo4j processing")
-    
 
 
     def stop_pubsub_processing(self):

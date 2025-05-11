@@ -207,7 +207,7 @@ class ReportMixin:
         Returns:
             bool: Success status
         """
-        logger.debug(f"Processing deduplicated report {report_id}")
+        logger.critical(f"Processing deduplicated report {report_id}")
         
         try:
             # Prepare all report data
@@ -268,6 +268,8 @@ class ReportMixin:
             bool: Success status
         """
         filed_at, updated_at, filed_str, updated_str = report_timestamps
+        # report_id = report_id.split('.')[0] # For neo4j we just need the accessionNo - .split('.')[0]   - 0000002488-23-000003.2023-01-11T21.10.00+00.00 or we could use first 20 characters including 2 "-"
+        report_id = report_id[:20] # Faster since accessionNo is the first 20 characters
         
         # Build Cypher query for fields
         on_create_parts = []

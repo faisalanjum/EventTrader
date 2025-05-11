@@ -257,7 +257,7 @@ def process_report_data(batch_size=100, max_items=None, verbose=False, include_w
         
         # Initialize Redis client for news data (reports use the same Redis)
         from redisDB.redisClasses import EventTraderRedis
-        redis_client = EventTraderRedis(source='news')
+        redis_client = EventTraderRedis(source='reports')
         logger.info("Initialized Redis client for report data")
         
         # Initialize Neo4j processor with the Redis client

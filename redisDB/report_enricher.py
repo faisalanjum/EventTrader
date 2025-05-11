@@ -39,30 +39,45 @@ def enrich_worker():
 
     logger.info("Enrichment worker starting (XBRL generation deferred to Neo4jProcessor)")
 
-    redis_env = EventTraderRedis(source=RedisKeys.SOURCE_REPORTS)
-    client = redis_env.live_client
 
-    queues = RedisQueues.get_queues(RedisKeys.SOURCE_REPORTS)
-    processed_queue = queues['PROCESSED_QUEUE']
-    processed_channel = RedisKeys.get_pubsub_channel(RedisKeys.SOURCE_REPORTS)
+    try:
+        redis_env = EventTraderRedis(source=RedisKeys.SOURCE_REPORTS)
+        enrich_queue_client = redis_env.live_client  # Only used for reading from ENRICH_QUEUE
 
-    processed_item_ttl = getattr(feature_flags, 'PROCESSED_ITEM_KEY_TTL', DEFAULT_PROCESSED_KEY_TTL)
+        queues = RedisQueues.get_queues(RedisKeys.SOURCE_REPORTS)
+        processed_queue = queues['PROCESSED_QUEUE']
+        failed_queue = queues['FAILED_QUEUE']
+        processed_channel = RedisKeys.get_pubsub_channel(RedisKeys.SOURCE_REPORTS)
+        processed_item_ttl = getattr(feature_flags, 'PROCESSED_ITEM_KEY_TTL', DEFAULT_PROCESSED_KEY_TTL)
+        report_processor = ReportProcessor(redis_env, delete_raw=True, ttl=processed_item_ttl)
 
-    report_processor = ReportProcessor(redis_env, delete_raw=False, ttl=processed_item_ttl)
+    except Exception as e:
+        logger.critical(f"Enrichment worker {current_process().name} failed during initialization: {e}", exc_info=True)
+        return
 
     while True:
         try:
-            payload = client.client.blpop(RedisKeys.ENRICH_QUEUE, timeout=5)
+            # Use enrich_queue_client just for queue operations
+            payload = enrich_queue_client.client.blpop(RedisKeys.ENRICH_QUEUE, timeout=5)
             if not payload:
                 continue
 
             filing = json.loads(payload[1])
-            original_prefix_type = filing.pop('_original_prefix_type', None)
-            if not original_prefix_type:
-                logger.critical("_original_prefix_type missing for report %s – discarding", filing.get('id'))
+            original_prefix_type = filing.pop('_original_prefix_type', None) # Live or Hist
+            raw_key = filing.pop('_raw_key', None)
+
+            if raw_key:
+                identifier = raw_key.split(':')[-1]
+            
+            if not original_prefix_type or not raw_key:
+                logger.critical("_original_prefix_type or _raw_key missing for report %s – discarding", filing.get('id'))
                 continue
 
-            identifier = filing.get('id')
+            meta_key = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{identifier}"
+
+            # Now select the appropriate client based on prefix type - get specific client for storage operations
+            client = redis_env.history_client if original_prefix_type == RedisKeys.PREFIX_HIST else redis_env.live_client
+
             processed_key = RedisKeys.get_key(
                 source_type=RedisKeys.SOURCE_REPORTS,
                 key_type=RedisKeys.SUFFIX_PROCESSED,
@@ -116,20 +131,22 @@ def enrich_worker():
                 filing['exhibit_contents'] = report_processor._process_exhibits(filing['exhibits'])
 
             filing['enriched'] = True
-            meta = report_processor._add_metadata(filing)
-            if meta:
-                filing['metadata'] = meta
 
             if processed_item_ttl > 0:
                 client.client.set(processed_key, json.dumps(filing), ex=processed_item_ttl)
             else:
                 client.client.set(processed_key, json.dumps(filing))
+            
             client.client.lpush(processed_queue, processed_key)
-            client.client.publish(processed_channel, processed_key)
+            client.client.publish(processed_channel, processed_key)            
+            client.mark_lifecycle_timestamp(meta_key, "processed_at")
             logger.info("Enriched report %s", identifier)
 
         except Exception as exc:
-            logger.error(f"Error processing enrichment: {exc}", exc_info=True)
+            logger.error(f"Enrichment failed for {raw_key}. Pushing to FAILED_QUEUE: {exc}", exc_info=True)
+            client.push_to_queue(failed_queue, raw_key)
+            client.mark_lifecycle_timestamp(meta_key, "failed_at", reason="enrichment_worker_unhandled_exception_")
+
             time.sleep(1)
 
 

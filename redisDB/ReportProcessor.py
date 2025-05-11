@@ -621,6 +621,7 @@ class ReportProcessor(BaseProcessor):
         Note: If primary ticker (from cik) not in allowed_symbols, it's set to None but filing 
         will still process if other valid tickers exist in entities."""
         try:
+
             # Basic validation that must stay in main thread
             if not content.get('cik'):
                 self.logger.info(f"Report with missing primary filer CIK: {content.get('accessionNo', 'unknown')}")
@@ -717,19 +718,24 @@ class ReportProcessor(BaseProcessor):
                 if self.delete_raw:
                     client.delete(raw_key)
                 self.logger.warning(f"Raw content not found: {raw_key}")
+                # May need to add tracking here and remove from queue But it could also mean it was earlier picked-up/deleted from raw queue
                 return False
 
             filing = json.loads(raw_content)
 
+            meta_key = f"tracking:meta:{self.source_type}:{identifier}"
+
             # Use the updated standardize_fields method which now contains the lightweight logic
-            standardized = self._standardize_fields(filing)
+            standardized = self._standardize_fields(filing) 
             
             # Check if we have valid symbols
             if not self._has_valid_symbols(standardized):
                 self.logger.debug(f"Dropping {raw_key} - no matching symbols in universe")
+                # lifecycle: filtered
+                client.mark_lifecycle_timestamp(meta_key, "filtered_at", reason="no_valid_symbols_or_form_type")                
                 if self.delete_raw:
                     client.delete(raw_key) # client is guaranteed to be assigned here or error before
-                return True
+                return True # indicating the item was handled and should be removed from the queue
             
             # Clean the content (apply lightweight cleaning)
             processed = self._clean_content(standardized)
@@ -750,12 +756,26 @@ class ReportProcessor(BaseProcessor):
                 needs_enrichment_due_to_xml or
                 needs_enrichment_due_to_exhibits
             )
-            
+
+            metadata = self._add_metadata(processed)
+
+            if metadata is None:
+                self.logger.error(f"Metadata generation failed for {raw_key}. Pushing to FAILED_QUEUE.")
+                client.push_to_queue(client.FAILED_QUEUE, raw_key)
+                client.mark_lifecycle_timestamp(meta_key, "failed_at", reason="metadata_generation_failed")
+                if self.delete_raw:
+                    client.delete(raw_key)
+                return False
+
+            processed['metadata'] = metadata
+
             if needs_enrichment:
                 # Queue for enrichment
                 # Use deepcopy for safety, ensuring no shared mutable objects with later code paths
                 payload_for_enrich_queue = copy.deepcopy(processed) 
-                payload_for_enrich_queue['_original_prefix_type'] = prefix_type # Add the original prefix_type
+                # payload_for_enrich_queue['_client'] = client # Add the original prefix_type: Live or Hist
+                payload_for_enrich_queue['_original_prefix_type'] = prefix_type # Add the original prefix_type: Live or Hist
+                payload_for_enrich_queue['_raw_key'] = raw_key # Add the original prefix_type: Live or Hist
                 client.client.rpush(RedisKeys.ENRICH_QUEUE, json.dumps(payload_for_enrich_queue))
                 self.logger.info(f"Queued {raw_key} (prefix type: {prefix_type}) for enrichment")
                 
@@ -767,9 +787,7 @@ class ReportProcessor(BaseProcessor):
                 return True
             else:
                 # Continue with normal lightweight processing - add metadata for lightweight items
-                metadata = self._add_metadata(processed)
-                if metadata:
-                    processed['metadata'] = metadata
+
                     
                 # Generate processed key
                 processed_key = RedisKeys.get_key(
@@ -786,8 +804,10 @@ class ReportProcessor(BaseProcessor):
                     pipe.set(processed_key, json.dumps(processed), ex=self.ttl)
                 else:
                     pipe.set(processed_key, json.dumps(processed))
+                    
                 pipe.lpush(client.PROCESSED_QUEUE, processed_key)
                 pipe.publish(self.processed_channel, processed_key)
+                client.mark_lifecycle_timestamp(meta_key, "processed_at")
                 
                 if self.delete_raw:
                     pipe.delete(raw_key)
@@ -819,9 +839,11 @@ class ReportProcessor(BaseProcessor):
                  # If final_client_for_fail is self.queue_client, its FAILED_QUEUE is also correct for its context.
                 target_failed_queue = final_client_for_fail.FAILED_QUEUE
                 final_client_for_fail.push_to_queue(target_failed_queue, raw_key)
+                final_client_for_fail.mark_lifecycle_timestamp(meta_key, "failed_at", reason="Exception in _process_item")
             
             if self.delete_raw and client: # Only delete if client was determined
                 client.delete(raw_key)
+                
             elif self.delete_raw and not client:
                  self.logger.warning(f"Could not delete raw_key {raw_key} after failure as client was not determined.")
 
