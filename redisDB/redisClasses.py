@@ -197,25 +197,27 @@ class RedisClient:
 
             # Store as news:live:raw:{id}:{updated}
             storage_key = f"{self.prefix}raw:{news_item.id}.{updated_key}"
+            updated_key_safe = news_item.updated.replace(':', '.') if news_item.updated else ''
+            meta_key = f"tracking:meta:{self.source_type}:{news_item.id}.{updated_key_safe}"
             
+            # Create a single atomic pipeline for all operations
             pipe = self.client.pipeline(transaction=True)
             pipe.set(storage_key, news_item.model_dump_json(), ex=ex)  # store content
             pipe.lpush(self.RAW_QUEUE, storage_key)
+            
+            # Add tracking to the same pipeline
+            pipe = self.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ex if ex else None, external_pipe=pipe) or pipe
+            if hasattr(news_item, 'updated') and news_item.updated:
+                pipe = self.set_lifecycle_data(meta_key, "source_api_timestamp", news_item.updated, ttl=ex if ex else None, external_pipe=pipe) or pipe
+            
+            # Execute all operations atomically
             success = all(pipe.execute())
-
-            # --- lifecycle tracking (ingested_at) ---
-            if success:
-                updated_key_safe = news_item.updated.replace(':', '.') if news_item.updated else ''
-                meta_key = f"tracking:meta:{self.source_type}:{news_item.id}.{updated_key_safe}"
-                self.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ex if ex else None)
-                if hasattr(news_item, 'updated') and news_item.updated:
-                    self.set_lifecycle_data(meta_key, "source_api_timestamp", news_item.updated, ttl=ex if ex else None)
-
             return success
                 
         except Exception as e:
             self.logger.error(f"Live news storage failed: {e}", exc_info=True)
             return False
+
 
     def set_filing(self, filing: UnifiedReport, ex: int = None) -> bool:
         """Store SEC filing with proper namespace handling"""
@@ -227,26 +229,32 @@ class RedisClient:
                 # Check processed queue for duplicates
                 processed_key = f"{self.prefix}processed:{filing.accessionNo}.{filed_at}"
                 processed_items = self.client.lrange(self.PROCESSED_QUEUE, 0, -1)
-                self.logger.debug(f"[Redis Debug] Items in PROCESSED_QUEUE: {len(processed_items)}")
             
                 if processed_key in processed_items:
                     self.logger.info(f"Skipping duplicate filing: {processed_key}")
                     return False  # ✅ Clearly indicates "not processed"
                 
-                storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"   
-                # self.logger.debug(f"[Redis Debug] Storage key: {storage_key}") # Keep as debug if needed
+                storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"
+                meta_key = f"tracking:meta:{self.source_type}:{filing.accessionNo}.{filed_at}"   
 
+                # Create a single atomic pipeline for all operations
                 pipe = self.client.pipeline(transaction=True)
+                
+                # 1. Store the filing content in raw namespace
                 pipe.set(storage_key, filing.model_dump_json(), ex=ex)
+                
+                # 2. Add to RAW_QUEUE
                 pipe.lpush(self.RAW_QUEUE, storage_key)
+
+                # Add tracking to the same pipeline
+                pipe = self.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ex if ex else None, external_pipe=pipe) or pipe
+                if hasattr(filing, 'filedAt') and filing.filedAt:
+                    pipe = self.set_lifecycle_data(meta_key, "source_api_timestamp", filing.filedAt, ttl=ex, external_pipe=pipe) or pipe
+                
                 success = all(pipe.execute())
 
-                if success:
-                    meta_key = f"tracking:meta:{self.source_type}:{filing.accessionNo}.{filed_at}"
-                    self.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ex if ex else None)
-                    if hasattr(filing, 'filedAt') and filing.filedAt:
-                        self.set_lifecycle_data(meta_key, "source_api_timestamp", filing.filedAt, ttl=ex if ex else None)
-
+                # If it fails, it will return False - so not store in rawqueue - 
+                # for meta tracking - not track pre-RAW_QUEUE rejections
                 return success
                     
             except Exception as e:
@@ -265,124 +273,44 @@ class RedisClient:
         return False  # Should never reach here, but just in case
 
 
-    # def store_transcript(self, transcript, ex=None):
-    #     """Store transcript in Redis raw queue"""
-    #     try:
-    #         # Use standardized key generation
-    #         from utils.redis_constants import RedisKeys
-            
-    #         # Create key using RedisKeys utility - just pass whatever's in conference_datetime
-    #         transcript_key = RedisKeys.get_transcript_key_id(
-    #             transcript['symbol'], 
-    #             transcript.get('conference_datetime', '')
-    #         )
-                
-    #         # Generate storage key
-    #         storage_key = f"{self.prefix}raw:{transcript_key}"
-            
-    #         # Check if already processed
-    #         processed_key = f"{self.prefix}processed:{transcript_key}"
-    #         if processed_key in self.client.lrange(self.PROCESSED_QUEUE, 0, -1):
-    #             self.logger.info(f"Skipping duplicate transcript: {transcript_key}")
-    #             return False
-                
-    #         # Store in Redis
-    #         pipe = self.client.pipeline(transaction=True)
-    #         pipe.set(storage_key, json.dumps(transcript), ex=ex)
-    #         pipe.lpush(self.RAW_QUEUE, storage_key)
-    #         return all(pipe.execute())
-    #     except Exception as e:
-    #         self.logger.error(f"Error storing transcript: {e}")
-    #         return False
-
-
-
-    # def set_filing(self, filing, ex: int = None, raw: bool = False) -> bool:
-    #     """Store filing with proper namespace handling and queue management
-    #     Args:
-    #         filing: SECWebSocketFiling or UnifiedReport instance
-    #         ex: Expiration time in seconds
-    #         raw: If True, store raw filing, else store unified
-    #     Returns:
-    #         bool: Success status
-    #     """
-    #     try:
-    #         # Get filed_at timestamp and format it for key
-    #         filed_at = filing.filedAt.replace(':', '.')
-            
-    #         # Generate storage key based on type
-    #         if raw:
-    #             if not isinstance(filing, SECWebSocketFiling):
-    #                 raise ValueError("Raw filing must be SECWebSocketFiling instance")
-    #             # Store as sec:filings:live:raw:{accessionNo}:{filedAt}
-    #             storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"
-    #             data = filing.model_dump_json()
-    #             queue = self.RAW_QUEUE
-    #         else:
-    #             if not isinstance(filing, UnifiedReport):
-    #                 if not isinstance(filing, SECWebSocketFiling):
-    #                     raise ValueError("Filing must be UnifiedReport or SECWebSocketFiling instance")
-    #                 filing = filing.to_unified()
-    #             # Check for duplicates in processed queue
-    #             processed_key = f"{self.prefix}processed:{filing.accessionNo}.{filed_at}"
-    #             if processed_key in self.client.lrange(self.PROCESSED_QUEUE, 0, -1):
-    #                 logging.info(f"Skipping duplicate filing: {processed_key}")
-    #                 return True
-                    
-    #             storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"
-    #             data = filing.model_dump_json()
-    #             queue = self.RAW_QUEUE
-
-    #         # Store using pipeline for atomicity
-    #         pipe = self.client.pipeline(transaction=True)
-    #         pipe.set(storage_key, data, ex=ex)  # stores the filing content in Redis
-    #         pipe.lpush(queue, storage_key)  # add to appropriate queue
-    #         return all(pipe.execute())
-            
-    #     except Exception as e:
-    #         logging.error(f"Filing storage failed: {e}")
-    #         return False
-
     def set_news_batch(self, news_items: List[UnifiedNews], ex=None):
-        """For historical news ingestion"""
+        """For historical news ingestion (batch mode)"""
         try:
-        
-            # Get processed queue items once for efficiency since will compare with each newsitem to avoid duplicates
-            processed_items = self.client.lrange(self.PROCESSED_QUEUE, 0, -1)
-
+            processed_items = set(self.client.lrange(self.PROCESSED_QUEUE, 0, -1))
             pipe = self.client.pipeline(transaction=True)
             
-            # --- Track successfully ingested items for source_api_timestamp ---        
-            successfully_ingested_keys_for_meta = []
+            total_items = 0
+            skipped_items = 0
 
             for item in news_items:
-                # Replace colons in updated timestamp with dots
-                updated_key = item.updated.replace(':', '.')
+                updated_key = item.updated.replace(':', '.') if item.updated else ''
                 processed_key = f"{self.prefix}processed:{item.id}.{updated_key}"
 
-                # Skip if already in processed queue
                 if processed_key in processed_items:
                     self.logger.info(f"Skipping duplicate news (RestAPI): {processed_key}")
+                    skipped_items += 1
                     continue
 
+                total_items += 1
                 storage_key = f"{self.prefix}raw:{item.id}.{updated_key}"
+                meta_key = f"tracking:meta:{self.source_type}:{item.id}.{updated_key}"
+
                 pipe.set(storage_key, item.model_dump_json(), ex=ex)
                 pipe.lpush(self.RAW_QUEUE, storage_key)
 
-                # --- lifecycle tracking (ingested_at) for batch items ---
-                # Prepare meta_key here to use after pipe execution
-                item_updated_key_safe = item.updated.replace(':', '.') if item.updated else ''
-                meta_key_batch = f"tracking:meta:{self.source_type}:{item.id}.{item_updated_key_safe}"
-                successfully_ingested_keys_for_meta.append((meta_key_batch, item.updated))
-            
-            results = pipe.execute()
-            if all(results):
-                for meta_key, item_updated_ts in successfully_ingested_keys_for_meta:
-                    self.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ex if ex else None)
-                    if item_updated_ts:
-                        self.set_lifecycle_data(meta_key, "source_api_timestamp", item_updated_ts, ttl=ex if ex else None)
-            
-            return all(results)
+                pipe = self.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ex if ex else None, external_pipe=pipe) or pipe
+                if item.updated:
+                    pipe = self.set_lifecycle_data(meta_key, "source_api_timestamp", item.updated, ttl=ex if ex else None, external_pipe=pipe) or pipe
+
+            # Only execute if we have operations in the pipeline
+            if total_items > 0:
+                results = pipe.execute()
+                self.logger.info(f"Batch news ingestion: {total_items} items processed, {skipped_items} items skipped")
+                return all(results)
+            else:
+                self.logger.info(f"Batch news ingestion: No items to process, {skipped_items} items skipped")
+                return True
+
         except Exception as e:
             self.logger.error(f"Historical news batch storage failed: {e}", exc_info=True)
             return False
@@ -495,18 +423,22 @@ class RedisClient:
                            db=self.db, 
                            decode_responses=True).pubsub()        
 
+
+
+
+
     # ------------------------------------------------------------------
     # Lifecycle tracking helper
     # ------------------------------------------------------------------
-    def mark_lifecycle_timestamp(self, key: str, field: str, reason: str = None, ttl: int = None):
+    def mark_lifecycle_timestamp(self, key: str, field: str, reason: str = None, ttl: int = None, external_pipe=None):
         """Write a timestamp into a lifecycle hash if not already set"""
         try:
             if not self.client.hexists(key, field):
-                # payload = {field: datetime.utcnow().isoformat(timespec="seconds") + "Z"}
                 payload = {field: datetime.now(timezone.utc).isoformat(timespec="seconds")}
                 if reason:
                     payload[f"{field}_reason"] = reason
-                pipe = self.client.pipeline()
+                    
+                pipe = external_pipe or self.client.pipeline()
                 pipe.hset(key, mapping=payload)
                 if ttl:
                     pipe.expire(key, ttl)
@@ -516,7 +448,6 @@ class RedisClient:
                 # ------------------------------------------------------------------
                 # Determine source_type (second element after 'tracking:meta')
                 parts = key.split(":")
-                # key pattern expected: tracking:meta:{source_type}:{item_id_and_ts}
                 if len(parts) >= 3:
                     source_type = parts[2]
                     pending_set_key = f"tracking:pending:{source_type}"
@@ -529,18 +460,37 @@ class RedisClient:
                     if field in {"inserted_into_neo4j_at", "filtered_at", "failed_at"} and feature_flags.REMOVE_FROM_PENDING_SET:
                         pipe.srem(pending_set_key, key)
 
-                pipe.execute()
+                if not external_pipe:
+                    pipe.execute()
+                    return True
+
+            # return pipe if external_pipe else None
+            return external_pipe if external_pipe else None
+
         except Exception as e:
             self.logger.error(f"Lifecycle timestamp update failed for {key}:{field}: {e}", exc_info=True)
+            # return pipe if external_pipe else None
+            return external_pipe if external_pipe else None
 
-    def set_lifecycle_data(self, key: str, field: str, value: str, ttl: int = None):
+
+    def set_lifecycle_data(self, key: str, field: str, value: str, ttl: int = None, external_pipe=None):
         """Set a specific field with a value in a lifecycle hash if not already set."""
         try:
             if not self.client.hexists(key, field):
-                pipe = self.client.pipeline()
+                if field == "source_api_timestamp" and value:
+                    dt = pd.to_datetime(value, utc=True)
+                    value = dt.isoformat(timespec="seconds")
+
+                pipe = external_pipe or self.client.pipeline()
                 pipe.hset(key, field, value)
                 if ttl: # Ensure key expiration is also set/updated
                     pipe.expire(key, ttl)
-                pipe.execute()
+                if not external_pipe:
+                    pipe.execute()
+                    return True
+            # return pipe if external_pipe else None
+            return external_pipe if external_pipe else None
         except Exception as e:
-            self.logger.error(f"Lifecycle data set failed for {key}:{field}: {e}", exc_info=True)        
+            self.logger.error(f"Lifecycle data set failed for {key}:{field}: {e}", exc_info=True)
+            # return pipe if external_pipe else None
+            return external_pipe if external_pipe else None

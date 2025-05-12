@@ -7,7 +7,7 @@ import backoff
 import requests
 from redisDB.redisClasses import RedisClient, EventTraderRedis
 from .sec_errors import FilingErrorHandler
-from config.feature_flags import VALID_FORM_TYPES
+from config.feature_flags import VALID_FORM_TYPES, SEC_HISTORICAL_INGESTION_THREADS
 from sec_api import QueryApi
 from ratelimit import limits, sleep_and_retry
 from concurrent.futures import ThreadPoolExecutor
@@ -92,7 +92,7 @@ class SECRestAPI:
                 except Exception as e:
                     return ticker, [], e
 
-            with ThreadPoolExecutor(max_workers=2) as executor:
+            with ThreadPoolExecutor(max_workers=SEC_HISTORICAL_INGESTION_THREADS) as executor:
                 for ticker, ticker_filings, error in executor.map(safe_process, tickers):
                     if error:
                         self.stats['errors'] += 1
@@ -124,8 +124,9 @@ class SECRestAPI:
             # --- Fetch Complete Signal --- Start
             try:
                 batch_id = f"reports:{date_from}-{date_to}"
-                self.redis_client.set(f"batch:{batch_id}:fetch_complete", "1", ex=86400)
+                self.redis_client.set(f"batch:{batch_id}:fetch_complete", "1", ex=86400) # 24 hours TTL
                 self.logger.info(f"Set fetch_complete flag for batch: {batch_id}")
+                self.logger.info(f"Fetched {len(processed_filings)} historical Reports items")
             except Exception as e:
                 self.logger.error(f"Failed to set fetch_complete flag for reports batch {batch_id}: {e}", exc_info=True)
             # --- Fetch Complete Signal --- End
@@ -176,10 +177,9 @@ class SECRestAPI:
                                 
                             self.stats['messages_processed'] += 1
                         else:
-                            self.logger.error("❌ Failed to store in Redis")
+                            self.logger.info("❌ Failed to store in Redis")
                     else:
-                        self.logger.error("❌ Failed to create UnifiedReport")
-                        self.logger.error(f"Original filing data: {json.dumps(filing, indent=2)}")
+                        self.logger.error("❌ Failed to create UnifiedReport: {json.dumps(filing, indent=2)}")
                 
                 if len(filings) >= self.MAX_RESULTS:
                     self.stats['pagination_limits_hit'] += 1

@@ -211,3 +211,6 @@ PROCESSED_ITEM_KEY_TTL = 2 * 24 * 3600 # Default TTL for processed report keys (
 # the pending set for post-hoc analysis.
 REMOVE_FROM_PENDING_SET = True  # Default behaviour – safe for production
 # --- End Pending Set Configuration ---
+
+# Number of threads for parallel SEC historical filings ingestion (raw queue population)
+SEC_HISTORICAL_INGESTION_THREADS = 4  # Used in sec_restAPI.py ThreadPoolExecutor

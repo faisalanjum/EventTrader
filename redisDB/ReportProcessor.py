@@ -711,139 +711,105 @@ class ReportProcessor(BaseProcessor):
             # Determine client based on raw_key prefix
             client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
             prefix_type = RedisKeys.PREFIX_HIST if raw_key.startswith(self.hist_client.prefix) else RedisKeys.PREFIX_LIVE
-            identifier = raw_key.split(':')[-1]
+            identifier = raw_key.split(":")[-1]
+            meta_key = f"tracking:meta:{self.source_type}:{identifier}"
 
             raw_content = client.get(raw_key)
             if not raw_content:
+                pipe = client.client.pipeline(transaction=True)
+                pipe = client.mark_lifecycle_timestamp(meta_key,"failed_at",reason="raw_content_not_found",external_pipe=pipe) or pipe
                 if self.delete_raw:
-                    client.delete(raw_key)
-                self.logger.warning(f"Raw content not found: {raw_key}")
-                # May need to add tracking here and remove from queue But it could also mean it was earlier picked-up/deleted from raw queue
+                    pipe.delete(raw_key)
+                pipe.execute()
+                self.logger.warning("Raw content not found: %s", raw_key)
                 return False
 
             filing = json.loads(raw_content)
-
-            meta_key = f"tracking:meta:{self.source_type}:{identifier}"
-
-            # Use the updated standardize_fields method which now contains the lightweight logic
-            standardized = self._standardize_fields(filing) 
+            standardized = self._standardize_fields(filing)  # Use the updated standardize_fields method which now contains the lightweight logic
             
             # Check if we have valid symbols
             if not self._has_valid_symbols(standardized):
-                self.logger.debug(f"Dropping {raw_key} - no matching symbols in universe")
-                # lifecycle: filtered
-                client.mark_lifecycle_timestamp(meta_key, "filtered_at", reason="no_valid_symbols_or_form_type")                
+                pipe = client.client.pipeline(transaction=True)
+                pipe = client.mark_lifecycle_timestamp(meta_key, "filtered_at", reason="no_valid_symbols_or_form_type", external_pipe=pipe) or pipe
                 if self.delete_raw:
-                    client.delete(raw_key) # client is guaranteed to be assigned here or error before
+                    pipe.delete(raw_key)
+                pipe.execute()
                 return True # indicating the item was handled and should be removed from the queue
             
-            # Clean the content (apply lightweight cleaning)
             processed = self._clean_content(standardized)
-            
-            # Refined needs_enrichment check using the original 'filing' data for some conditions
-            # and 'processed' for formType, as that's standardized.
-            form_type = processed.get('formType') # Use standardized formType
+            form_type = processed.get("formType")
 
-            needs_enrichment_due_to_sections = (form_type in FORM_TYPES_REQUIRING_SECTIONS and filing.get('primaryDocumentUrl'))
-            # If it's not a "sections" form but has a primary URL, it might need full text extraction by worker
-            needs_enrichment_due_to_secondary_text = (form_type not in FORM_TYPES_REQUIRING_SECTIONS and filing.get('primaryDocumentUrl')) 
-            needs_enrichment_due_to_xml = (form_type in FORM_TYPES_REQUIRING_XML) # Worker handles actual XML check for financials and the linkToTxt fallback if this is true
-            needs_enrichment_due_to_exhibits = bool(filing.get('exhibits'))
 
             needs_enrichment = (
-                needs_enrichment_due_to_sections or
-                needs_enrichment_due_to_secondary_text or
-                needs_enrichment_due_to_xml or
-                needs_enrichment_due_to_exhibits
+                (form_type in FORM_TYPES_REQUIRING_SECTIONS and filing.get("primaryDocumentUrl"))
+                or (form_type not in FORM_TYPES_REQUIRING_SECTIONS and filing.get("primaryDocumentUrl")) # If it's not a "sections" form but has a primary URL, it might need full text extraction by worker
+                or (form_type in FORM_TYPES_REQUIRING_XML)  # Worker handles actual XML check for financials and the linkToTxt fallback if this is true
+                or bool(filing.get("exhibits"))
             )
 
             metadata = self._add_metadata(processed)
-
             if metadata is None:
-                self.logger.error(f"Metadata generation failed for {raw_key}. Pushing to FAILED_QUEUE.")
-                client.push_to_queue(client.FAILED_QUEUE, raw_key)
-                client.mark_lifecycle_timestamp(meta_key, "failed_at", reason="metadata_generation_failed")
+                pipe = client.client.pipeline(transaction=True)
+                pipe.lpush(client.FAILED_QUEUE, raw_key)
+                pipe = client.mark_lifecycle_timestamp(meta_key, "failed_at", reason="metadata_generation_failed", external_pipe=pipe) or pipe
                 if self.delete_raw:
-                    client.delete(raw_key)
+                    pipe.delete(raw_key)
+                pipe.execute()
                 return False
 
             processed['metadata'] = metadata
 
             if needs_enrichment:
-                # Queue for enrichment
-                # Use deepcopy for safety, ensuring no shared mutable objects with later code paths
-                payload_for_enrich_queue = copy.deepcopy(processed) 
-                # payload_for_enrich_queue['_client'] = client # Add the original prefix_type: Live or Hist
-                payload_for_enrich_queue['_original_prefix_type'] = prefix_type # Add the original prefix_type: Live or Hist
-                payload_for_enrich_queue['_raw_key'] = raw_key # Add the original prefix_type: Live or Hist
-                client.client.rpush(RedisKeys.ENRICH_QUEUE, json.dumps(payload_for_enrich_queue))
-                self.logger.info(f"Queued {raw_key} (prefix type: {prefix_type}) for enrichment")
-                
-                # Delete raw as it's now queued for enrichment
-                if self.delete_raw:
+                payload = copy.deepcopy(processed)
+                payload["_original_prefix_type"] = prefix_type
+                payload["_raw_key"] = raw_key
+
+                pipe = client.client.pipeline(transaction=True)
+                pipe.rpush(RedisKeys.ENRICH_QUEUE, json.dumps(payload))
+                pipe = client.mark_lifecycle_timestamp(
+                    meta_key,"queued_for_enrichment_at", ttl=self.ttl if self.ttl else None,external_pipe=pipe) or pipe
+                success = all(pipe.execute())
+
+                if success and self.delete_raw:
                     client.delete(raw_key)
-                    
-                # Return success
-                return True
+                return success
+            
             else:
                 # Continue with normal lightweight processing - add metadata for lightweight items
 
+                # The enricher receives the complete processed object with all lightweight processing already done. It simply adds more fields before storing. There's no unique work done in the lightweight path that would be missing in the enriched result.
+
                 # Generate processed key
                 processed_key = RedisKeys.get_key(
-                    source_type=self.source_type,
-                    key_type=RedisKeys.SUFFIX_PROCESSED,
-                    prefix_type=prefix_type,
-                    identifier=identifier
-                )
-                
+                    source_type=self.source_type, key_type=RedisKeys.SUFFIX_PROCESSED, prefix_type=prefix_type, identifier=identifier)
+
                 # Store processed document
                 pipe = client.client.pipeline(transaction=True)
-                # Add explicit TTL if self.ttl is set (consistency with worker)
                 if self.ttl:
                     pipe.set(processed_key, json.dumps(processed), ex=self.ttl)
                 else:
                     pipe.set(processed_key, json.dumps(processed))
-                    
+
                 pipe.lpush(client.PROCESSED_QUEUE, processed_key)
                 pipe.publish(self.processed_channel, processed_key)
-                client.mark_lifecycle_timestamp(meta_key, "processed_at")
-                
+                pipe = client.mark_lifecycle_timestamp(
+                    meta_key, "processed_at", ttl=self.ttl if self.ttl else None, external_pipe=pipe) or pipe
                 if self.delete_raw:
                     pipe.delete(raw_key)
-                    
                 return all(pipe.execute())
-                
-        except Exception as e:
-            self.logger.error(f"Failed to process {raw_key}: {e}", exc_info=True)
-            # Fallback to queue_client if client specific to hist/live failed early or is None
-            # This part needs careful handling if the initial client assignment itself fails.
-            # However, _process_item is usually called with a valid raw_key from a queue
-            # managed by queue_client.
-            # If client is None here, it implies an error before its assignment.
-            # A robust way is to try and determine the client again or use a default.
-            # For now, assuming raw_key is valid enough to determine the context for FAILED_QUEUE
-            # Or, more simply, use the default queue_client for pushing to FAILED_QUEUE
-            # This is complex because BaseProcessor defines queue_client, hist_client, live_client.
-            # Let's assume if an error happens, the raw_key can still inform which FAILED_QUEUE.
-            # The original code in BaseProcessor _process_item does: 
-            # client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
-            # client.push_to_queue(client.FAILED_QUEUE, raw_key)
-            # So, if client assignment itself failed, this would also fail.
-            # A safer bet for the except block if client might be None:
-            final_client_for_fail = client if client else self.queue_client # self.queue_client is from BaseProcessor
-            if final_client_for_fail:
-                 # Need to ensure FAILED_QUEUE is correctly determined if using hist/live differentiation
-                 # The original BaseProcessor's FAILED_QUEUE is dynamically set on the client instance.
-                 # So, if client (hist/live) is determined, its FAILED_QUEUE is correct.
-                 # If final_client_for_fail is self.queue_client, its FAILED_QUEUE is also correct for its context.
-                target_failed_queue = final_client_for_fail.FAILED_QUEUE
-                final_client_for_fail.push_to_queue(target_failed_queue, raw_key)
-                final_client_for_fail.mark_lifecycle_timestamp(meta_key, "failed_at", reason="Exception in _process_item")
-            
-            if self.delete_raw and client: # Only delete if client was determined
-                client.delete(raw_key)
-                
-            elif self.delete_raw and not client:
-                 self.logger.warning(f"Could not delete raw_key {raw_key} after failure as client was not determined.")
 
+
+        except Exception as e:
+            self.logger.error("Failed to process %s: %s", raw_key, e, exc_info=True)
+            final_client = client or self.queue_client
+            if final_client:
+                pipe = final_client.client.pipeline(transaction=True)
+                pipe.lpush(final_client.FAILED_QUEUE, raw_key)
+                pipe = final_client.mark_lifecycle_timestamp(
+                    meta_key, "failed_at", reason="Exception in _process_item", external_pipe=pipe,) or pipe
+                if self.delete_raw and client:
+                    pipe.delete(raw_key)
+                pipe.execute()
+            elif self.delete_raw and not client:
+                self.logger.warning("Could not delete raw_key %s after failure.", raw_key)
             return False

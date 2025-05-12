@@ -270,7 +270,6 @@ class TranscriptProcessor(BaseProcessor):
                 prefix_type=RedisKeys.PREFIX_LIVE
             )
 
-
             # Try exact match first
             raw_key = f"{raw_ns}:{key_id}"
             if self.live_client.client.exists(raw_key):

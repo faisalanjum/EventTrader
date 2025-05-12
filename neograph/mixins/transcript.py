@@ -118,6 +118,32 @@ class TranscriptMixin:
             logger.error(f"LLM check failed for QA content (words={word_count}, model={llm_model}): {e}", exc_info=True)
             return True # Default to substantial on API error
 
+    def _finalize_transcript_batch(self, delete_client, redis_key, transcript_id, success, namespace, failure_reason=None):
+        """
+        Atomic finalization of transcript processing:
+        1. For success=True + withreturns: verify meta before deleting key
+        2. For success=False: mark as failed
+        """
+        meta_key = f"tracking:meta:{RedisKeys.SOURCE_TRANSCRIPTS}:{transcript_id}"
+        try:
+            if success:
+                # Step 1: Always make sure inserted_into_neo4j_at is marked
+                delete_client.mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
+                
+                # Step 2: Only delete withreturns keys and verify mark exists first
+                if namespace == RedisKeys.SUFFIX_WITHRETURNS:
+                    if delete_client.client.hexists(meta_key, "inserted_into_neo4j_at"):
+                        delete_client.client.delete(redis_key)
+                        logger.info(f"Deleted processed withreturns key: {redis_key}")
+                    else:
+                        logger.warning(f"Not deleting {redis_key} - meta tracking not confirmed")
+            else:
+                # For failures, mark failed_at with reason
+                delete_client.mark_lifecycle_timestamp(meta_key, "failed_at", reason=failure_reason or "neo4j_insertion_failed")
+                
+        except Exception as e:
+            logger.error(f"Error in transcript finalization for {transcript_id}: {e}", exc_info=True)
+
     def process_transcripts_to_neo4j(self, batch_size=5, max_items=None, include_without_returns=True) -> bool:
         """
         Process transcript items from Redis to Neo4j.
@@ -173,26 +199,51 @@ class TranscriptMixin:
 
                 for key in batch:
                     try:
-                        raw = self.event_trader_redis.history_client.get(key)
+                        # Extract namespace precisely from key structure
+                        namespace = key.split(":")[1]  # 'withreturns' or 'withoutreturns'
+                        
+                        # Try history_client first, fallback to live_client
+                        delete_client = self.event_trader_redis.history_client
+                        raw = delete_client.get(key)
+                        
                         if not raw:
+                            raw = self.event_trader_redis.live_client.get(key)
+                            if raw:
+                                delete_client = self.event_trader_redis.live_client
+                                logger.warning(f"[FALLBACK] Found {key} in live_client instead of history_client")
+                        
+                        # If we didn't find raw data, still finalize with failure
+                        if not raw:
+                            self._finalize_transcript_batch(
+                                delete_client=delete_client,
+                                redis_key=key,
+                                transcript_id=key.split(":")[-1],
+                                success=False,
+                                namespace=namespace,
+                                failure_reason="raw_missing"
+                            )
                             logger.warning(f"No data found for key {key}")
+                            failed += 1
                             continue
-
+                        
+                        # Process the data
                         data = json.loads(raw)
                         transcript_id = data.get("id") or key.split(":")[-1]
-                        namespace = key.split(":")[1] if "withreturns" in key else ""
-
+                        
                         success = self._process_deduplicated_transcript(transcript_id, data)
-                        if success:
-                            processed += 1
-                            if namespace == "withreturns":
-                                try:
-                                    self.event_trader_redis.history_client.client.delete(key)
-                                    logger.info(f"Deleted processed withreturns key: {key}")
-                                except Exception as e:
-                                    logger.warning(f"Failed to delete key {key}: {e}")
-                        else:
-                            failed += 1
+                        
+                        # Always finalize with atomic meta tracking
+                        self._finalize_transcript_batch(
+                            delete_client=delete_client,
+                            redis_key=key, 
+                            transcript_id=transcript_id,
+                            success=success,
+                            namespace=namespace,
+                            failure_reason="neo4j_insertion_failed"
+                        )
+                        
+                        processed += int(success)
+                        failed += int(not success)
                             
                     except Exception as e:
                         logger.error(f"Failed to process key {key}: {e}", exc_info=True)
@@ -263,20 +314,7 @@ class TranscriptMixin:
                 transcript_data
             )
 
-            if success:
-                meta_key = f"tracking:meta:{RedisKeys.SOURCE_TRANSCRIPTS}:{transcript_id}"
-                if hasattr(self, "event_trader_redis") and self.event_trader_redis:
-                    try:
-                        self.event_trader_redis.history_client.mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
-                    except Exception:
-                        pass
-                else:
-                    try:
-                        from redisDB.redisClasses import RedisClient
-                        RedisClient(prefix="").mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
-                    except Exception:
-                        pass
-
+            # We no longer do meta tracking here, it's handled by _finalize_transcript_batch
             return success
         except Exception as e:
             logger.error(f"Error processing transcript {transcript_id}: {e}", exc_info=True)

@@ -155,7 +155,7 @@ class EmbeddingMixin:
                 chroma_result = self.chroma_collection.get(ids=content_hashes, include=['embeddings'])
                 
                 # Process results
-                if (chroma_result and 'ids' in chroma_result and 
+                if (chroma_result and chroma_result.get('ids') and 
                     len(chroma_result['ids']) > 0 and 'embeddings' in chroma_result):
                     
                     found_hashes = set()
@@ -172,10 +172,9 @@ class EmbeddingMixin:
                     for hash_id, item_data in hash_to_item.items():
                         if hash_id not in found_hashes:
                             nodes_needing_embeddings.append(item_data)
-            else:
-                # If batch lookup failed, add all items to nodes_needing_embeddings
-                for item_data in hash_to_item.values():
-                    nodes_needing_embeddings.append({"id": item_data["id"], "content": item_data["content"]})
+                else:
+                    # If this batch lookup failed completely, add all items from this batch to nodes_needing_embeddings
+                    nodes_needing_embeddings.extend(hash_to_item.values())
         
             logger.info(f"[EMBED-FLOW] ChromaDB batch returned {len(cached_embeddings)}/{len(all_items)} cached embeddings")
             
@@ -685,9 +684,6 @@ class EmbeddingMixin:
 
         logger.info(f"[EMBED-FLOW-QA] QAExchange embedding processing completed with final results: {results}")
         return results
-
-
-
 
 
     def _create_news_embedding(self, news_id):

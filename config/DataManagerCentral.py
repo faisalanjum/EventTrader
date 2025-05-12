@@ -150,7 +150,7 @@ class BenzingaNewsManager(DataSourceManager):
                     date_to=self.date_range['to'],
                     raw=False
                 )
-                self.logger.info(f"Fetched {len(historical_data)} historical items")
+                self.logger.info(f"Fetched {len(historical_data)} historical News items")
             else:
                 self.logger.info("Historical data fetching disabled for Benzinga News.")
 
@@ -292,6 +292,7 @@ class ReportsManager(DataSourceManager):
                     args=(self.date_range['from'], self.date_range['to'], False), # Include raw=False
                     daemon=True
                 )
+                
                 threads_to_start.append(self.historical_thread)
             else:
                  self.logger.info("Historical data fetching disabled for SEC Reports.")

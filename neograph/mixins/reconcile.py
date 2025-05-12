@@ -140,6 +140,17 @@ class ReconcileMixin:
                             report_data = json.loads(raw_data)
                             success = self._process_deduplicated_report(full_id, report_data)
                             results["reports"] += 1
+
+                            # Add the missing lifecycle timestamp
+                            if success:
+                                meta_key = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{full_id}"
+                                try:
+                                    self.event_trader_redis.history_client.mark_lifecycle_timestamp(
+                                        meta_key, "inserted_into_neo4j_at"
+                                    )
+                                except Exception:
+                                    pass
+
                             if success and ns == 'withreturns':
                                 try:
                                     self.event_trader_redis.history_client.client.delete(key)
@@ -191,6 +202,16 @@ class ReconcileMixin:
                                         transcript_data = json.loads(raw_data)
                                         success = self._process_deduplicated_transcript(transcript_id, transcript_data)
                                         results["transcripts"] += 1
+
+                                        # Add the missing lifecycle timestamp
+                                        if success:
+                                            meta_key = f"tracking:meta:{RedisKeys.SOURCE_TRANSCRIPTS}:{transcript_id}"
+                                            try:
+                                                self.event_trader_redis.history_client.mark_lifecycle_timestamp(
+                                                    meta_key, "inserted_into_neo4j_at"
+                                                )
+                                            except Exception:
+                                                pass
 
                                         # Delete key if it's from withreturns namespace
                                         if success and ns == 'withreturns':

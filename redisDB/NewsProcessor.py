@@ -22,7 +22,6 @@ class NewsProcessor(BaseProcessor):
     def _standardize_fields(self, content: dict) -> dict:
         """News already has standard fields"""
         return content  # Already standardized
-    
 
     def _clean_content(self, content: dict) -> dict:
         """Implement abstract method with news-specific cleaning"""

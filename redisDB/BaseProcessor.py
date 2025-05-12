@@ -139,46 +139,37 @@ class BaseProcessor(ABC):
 
     def _process_item(self, raw_key: str) -> bool:
         """Generic version of _process_news_item"""
+        client = None  # Initialize for exception handling scope
         try:
             # 1. Initial Setup and Validation
             client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
             prefix_type = RedisKeys.PREFIX_HIST if raw_key.startswith(self.hist_client.prefix) else RedisKeys.PREFIX_LIVE
             identifier = raw_key.split(':')[-1]
+            meta_key = f"tracking:meta:{self.source_type}:{identifier}"
 
             raw_content = client.get(raw_key)
             if not raw_content:
+                pipe = client.client.pipeline(transaction=True)
+                pipe = client.mark_lifecycle_timestamp(meta_key, "failed_at", reason="raw_content_not_found", external_pipe=pipe) or pipe
                 if self.delete_raw:
-                    client.delete(raw_key)
+                    pipe.delete(raw_key)
+                pipe.execute()
                 self.logger.warning(f"Raw content not found: {raw_key}")
-                # May need to add tracking here and remove from queue
                 return False
 
             content_dict = json.loads(raw_content)
 
-            # -------- Determine base_id for consistent meta-key (no timestamp) --------
-            # For meta_key, ALL sources use their full identifier from the raw key.
-            # identifier variable ALREADY holds the full suffixed ID for news/reports from raw_key.split(':')[-1],
-            # or the full unique ID for transcripts.
-            meta_key = f"tracking:meta:{self.source_type}:{identifier}"
-
             # 2. First standardize fields - Important to do this before checking symbols
             standardized_dict = self._standardize_fields(content_dict)
 
-            # print(f"[^BASE Processor Debug] Standardized dict: {standardized_dict}")
-
-            # # 🔥 Hotfix starts here
-            # if 'symbols' not in standardized_dict and 'stocks' in standardized_dict:
-            #     standardized_dict['symbols'] = standardized_dict['stocks']
-            # standardized_dict['symbols'] = [s.strip().upper() for s in standardized_dict.get('symbols', []) if s]
-            # # 🔥 Hotfix ends here
-
             # 3. Check if any valid symbols exist
             if not self._has_valid_symbols(standardized_dict):
-                self.logger.info(f"Dropping {raw_key} - no matching symbols in universe")
-                # lifecycle: filtered
-                client.mark_lifecycle_timestamp(meta_key, "filtered_at", reason="no_valid_symbols")
+                pipe = client.client.pipeline(transaction=True)
+                pipe = client.mark_lifecycle_timestamp(meta_key, "filtered_at", reason="no_valid_symbols", external_pipe=pipe) or pipe
                 if self.delete_raw:
-                    client.delete(raw_key)
+                    pipe.delete(raw_key)
+                pipe.execute()
+                self.logger.info(f"Dropping {raw_key} - no matching symbols in universe")
                 return True  # Item exits raw queue naturally
                     # No tracking maintained, never enters processed queue
 
@@ -192,72 +183,68 @@ class BaseProcessor(ABC):
             # 6. Add metadata
             metadata = self._add_metadata(processed_dict)
             
-            # if metadata is None:
-            #     client.push_to_queue(client.FAILED_QUEUE)
-            #     return False
-
             if metadata is None:
-                self.logger.error(f"Metadata generation failed for {raw_key}. Pushing to FAILED_QUEUE.")
-                client.push_to_queue(client.FAILED_QUEUE, raw_key)
-                client.mark_lifecycle_timestamp(meta_key, "failed_at", reason="metadata_generation_failed")
+                pipe = client.client.pipeline(transaction=True)
+                pipe.lpush(client.FAILED_QUEUE, raw_key)
+                pipe = client.mark_lifecycle_timestamp(meta_key, "failed_at", reason="metadata_generation_failed", external_pipe=pipe) or pipe
                 if self.delete_raw:
-                    client.delete(raw_key)
+                    pipe.delete(raw_key)
+                pipe.execute()
+                self.logger.error(f"Metadata generation failed for {raw_key}. Pushing to FAILED_QUEUE.")
                 return False
 
             # Add metadata to processed_dict
             processed_dict['metadata'] = metadata      
 
-            # **********************************************************************
-            # Move to processed queue
-            # processed_key = raw_key.replace(":raw:", ":processed:")  
-            
-            # For processed_key (data key), ALL sources also use their full identifier from the raw key.
-            # identifier variable ALREADY holds the full suffixed ID for news/reports from raw_key.split(':')[-1],
-            # or the full unique ID for transcripts.
-            processed_key = RedisKeys.get_key(source_type=self.source_type,key_type=RedisKeys.SUFFIX_PROCESSED, 
-                                prefix_type=prefix_type, identifier=identifier) # Use full identifier for data key
+            # For processed_key (data key), ALL sources use their full identifier from the raw key
+            processed_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_PROCESSED, 
+                                prefix_type=prefix_type, identifier=identifier)
 
-
-            pipe = client.client.pipeline(transaction=True)
-            # If processed exists, just delete raw if needed
+            # If processed already exists, just delete raw if needed
             if client.get(processed_key):
                 if self.delete_raw:
+                    pipe = client.client.pipeline(transaction=True)
                     pipe.delete(raw_key)
-                    return all(pipe.execute())
+                    pipe.execute()
                 return True
 
             # Not processed yet, check queue and process
             queue_items = client.client.lrange(client.PROCESSED_QUEUE, 0, -1)
             if processed_key not in queue_items:  # Only add if not already in queue
-                pipe.set(processed_key, json.dumps(processed_dict))
+                pipe = client.client.pipeline(transaction=True)
+                if self.ttl:
+                    pipe.set(processed_key, json.dumps(processed_dict), ex=self.ttl)
+                else:
+                    pipe.set(processed_key, json.dumps(processed_dict))
                 pipe.lpush(client.PROCESSED_QUEUE, processed_key)
 
                 try:
                     pipe.publish(self.processed_channel, processed_key)
-                    # self.logger.info(f"Published processed message: {processed_key}")
                 except Exception as e:
                     self.logger.error(f"Failed to publish message: {e}")
 
+                pipe = client.mark_lifecycle_timestamp(meta_key, "processed_at", ttl=self.ttl if self.ttl else None, external_pipe=pipe) or pipe
+                
                 if self.delete_raw:
                     pipe.delete(raw_key)
+                
                 success = all(pipe.execute())
-
-                # lifecycle: processed when redis write succeeds
-                if success:
-                    client.mark_lifecycle_timestamp(meta_key, "processed_at")
-
                 return success
             return True  # Already in queue
 
         except Exception as e:
             self.logger.error(f"Failed to process {raw_key}: {e}")
-            # client = (self.hist_client if ':hist:' in raw_key else self.live_client)
-            client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client
-            client.push_to_queue(client.FAILED_QUEUE, raw_key)
+            final_client = self.hist_client if raw_key.startswith(self.hist_client.prefix) else self.live_client # Use client if available, otherwise fallback
+            if final_client:
+                pipe = final_client.client.pipeline(transaction=True)
+                pipe.lpush(final_client.FAILED_QUEUE, raw_key)
+                pipe = final_client.mark_lifecycle_timestamp(meta_key, "failed_at", reason="Exception in _process_item", external_pipe=pipe) or pipe
+                if self.delete_raw and client:
+                    pipe.delete(raw_key)
+                pipe.execute()
+            elif self.delete_raw and not client:
+                self.logger.warning(f"Could not delete raw_key {raw_key} after failure.")
             
-            if self.delete_raw:
-                client.delete(raw_key)
-
             return False
 
 

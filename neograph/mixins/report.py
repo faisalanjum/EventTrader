@@ -25,6 +25,31 @@ class ReportMixin:
     Includes section, exhibit, financial statement, and XBRL handling.
     """
 
+    def _finalize_report_batch(self, delete_client, redis_key, report_id, success, namespace, failure_reason=None):
+        """
+        Atomic finalization of report processing:
+        1. For success=True + withreturns: verify meta before deleting key
+        2. For success=False: mark as failed
+        """
+        meta_key = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{report_id}"
+        try:
+            if success:
+                # Step 1: Always make sure inserted_into_neo4j_at is marked
+                delete_client.mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
+                
+                # Step 2: Only delete withreturns keys and verify mark exists first
+                if namespace == RedisKeys.SUFFIX_WITHRETURNS:
+                    if delete_client.client.hexists(meta_key, "inserted_into_neo4j_at"):
+                        delete_client.client.delete(redis_key)
+                        logger.info(f"Deleted processed withreturns key: {redis_key}")
+                    else:
+                        logger.warning(f"Not deleting {redis_key} - meta tracking not confirmed")
+            else:
+                # For failures, mark failed_at with reason
+                delete_client.mark_lifecycle_timestamp(meta_key, "failed_at", reason=failure_reason or "neo4j_insertion_failed")
+                
+        except Exception as e:
+            logger.error(f"Error in report finalization for {report_id}: {e}", exc_info=True)
 
     def process_reports_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
         """
@@ -49,12 +74,8 @@ class ReportMixin:
         # Process reports with returns
         withreturns_keys = []
         try:
-            # Get report keys with returns
-            withreturns_namespace = RedisKeys.get_key(
-                source_type=RedisKeys.SOURCE_REPORTS, 
-                key_type=RedisKeys.SUFFIX_WITHRETURNS
-            )
-            withreturns_pattern = f"{withreturns_namespace}*"
+            # Get report keys with returns using safer pattern construction
+            withreturns_pattern = RedisKeys.get_returns_keys(RedisKeys.SOURCE_REPORTS)['withreturns'] + ":*"
             withreturns_keys = list(self.event_trader_redis.history_client.client.scan_iter(match=withreturns_pattern))
             
             if max_items is not None:
@@ -68,12 +89,8 @@ class ReportMixin:
         withoutreturns_keys = []
         if include_without_returns:
             try:
-                # Get report keys without returns
-                withoutreturns_namespace = RedisKeys.get_key(
-                    source_type=RedisKeys.SOURCE_REPORTS, 
-                    key_type=RedisKeys.SUFFIX_WITHOUTRETURNS
-                )
-                withoutreturns_pattern = f"{withoutreturns_namespace}*"
+                # Get report keys without returns using safer pattern construction
+                withoutreturns_pattern = RedisKeys.get_returns_keys(RedisKeys.SOURCE_REPORTS)['withoutreturns'] + ":*"
                 withoutreturns_keys = list(self.event_trader_redis.history_client.client.scan_iter(match=withoutreturns_pattern))
                 
                 if max_items is not None:
@@ -105,23 +122,48 @@ class ReportMixin:
             # Process each report in the batch
             for key in batch_keys:
                 try:
-                    # Extract key parts
+                    # Extract key parts and namespace
                     parts = key.split(':')
                     report_id = parts[-1] if len(parts) > 0 else key
+                    namespace = parts[1] if len(parts) > 1 else ""  # 'withreturns' or 'withoutreturns'
                     
-                    # Get report data from Redis
-                    raw_data = self.event_trader_redis.history_client.get(key)
+                    # Try history_client first, fallback to live_client if needed
+                    delete_client = self.event_trader_redis.history_client
+                    raw_data = delete_client.get(key)
+                    
                     if not raw_data:
+                        raw_data = self.event_trader_redis.live_client.get(key)
+                        if raw_data:
+                            delete_client = self.event_trader_redis.live_client
+                            logger.warning(f"[FALLBACK] Found {key} in live_client instead of history_client")
+                    
+                    # If no data found, mark failure and continue
+                    if not raw_data:
+                        self._finalize_report_batch(
+                            delete_client=delete_client,
+                            redis_key=key,
+                            report_id=report_id,
+                            success=False,
+                            namespace=namespace,
+                            failure_reason="raw_missing"
+                        )
                         logger.warning(f"No data found for key {key}")
+                        error_count += 1
                         continue
                         
-                    # Parse JSON data
+                    # Parse JSON data and process
                     report_data = json.loads(raw_data)
-                    
-                    # Keep full identifier (accessionNo.filedAt) to match lifecycle key
-                    
-                    # Process report data with deduplication
                     success = self._process_deduplicated_report(report_id, report_data)
+                    
+                    # Finalize processing with proper cleanup
+                    self._finalize_report_batch(
+                        delete_client=delete_client,
+                        redis_key=key,
+                        report_id=report_id,
+                        success=success,
+                        namespace=namespace,
+                        failure_reason="neo4j_insertion_failed"
+                    )
                     
                     if success:
                         processed_count += 1
@@ -238,7 +280,7 @@ class ReportMixin:
                         RedisClient(prefix="").mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
                     except Exception:
                         pass
-
+            
             return success
                 
         except Exception as e:

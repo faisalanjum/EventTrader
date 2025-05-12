@@ -730,7 +730,7 @@ class EarningsCallProcessor:
     def store_transcript_in_redis(self, transcript, is_live=True):
         """
         Store transcript in Redis and add to appropriate queue
-        
+
         Args:
             transcript (dict): The transcript to store
             is_live (bool): Whether to store in live Redis (True) or historical Redis (False)
@@ -738,44 +738,51 @@ class EarningsCallProcessor:
         if not self.redis_client:
             self.logger.warning("No Redis client available, skipping Redis storage")
             return False
-            
+
         try:
-            # Use the appropriate Redis client based on is_live flag
+            # Choose Redis client based on live/historical flag
             client = self.redis_client.live_client if is_live else self.redis_client.history_client
-            
-            # Generate key using the RedisKeys utility - just pass whatever is in conference_datetime
+
             from redisDB.redis_constants import RedisKeys
             transcript_id = RedisKeys.get_transcript_key_id(
-                transcript['symbol'], 
+                transcript['symbol'],
                 transcript.get('conference_datetime', '')
             )
             raw_key = f"{client.prefix}raw:{transcript_id}"
-            
-            # Log the operation
+            meta_key = f"tracking:meta:{self.redis_client.source}:{transcript_id}"
+            ttl = self.ttl if self.ttl else None
+
+            # Log action
             if is_live:
                 self.logger.info(f"Adding transcript to live raw queue: {transcript_id}")
             else:
                 self.logger.info(f"Adding transcript to historical raw queue: {transcript_id}")
-                
-            # Store in Redis
-            client.set(raw_key, json.dumps(transcript, default=str), ex=self.ttl)
-            client.push_to_queue(client.RAW_QUEUE, raw_key)
 
-            # Lifecycle tracking for ingested_at
-            try:
-                meta_key = f"tracking:meta:{self.redis_client.source}:{transcript_id}"
-                client.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=self.ttl if self.ttl else None)
-                conference_dt_str = transcript.get('conference_datetime')
-                if conference_dt_str: # It should be an ISO string by this point
-                    client.set_lifecycle_data(meta_key, "source_api_timestamp", conference_dt_str, ttl=self.ttl if self.ttl else None)
-            except Exception:
-                pass
+            # Create a single atomic pipeline
+            pipe = client.client.pipeline(transaction=True)
 
-            return True
-            
+            if ttl:
+                pipe.set(raw_key, json.dumps(transcript, default=str), ex=ttl)
+            else:
+                pipe.set(raw_key, json.dumps(transcript, default=str))
+
+            pipe.lpush(client.RAW_QUEUE, raw_key)
+
+            # Lifecycle tracking inside same pipeline
+            pipe = client.mark_lifecycle_timestamp(meta_key, "ingested_at", ttl=ttl, external_pipe=pipe) or pipe
+
+            conference_dt_str = transcript.get("conference_datetime")
+            if conference_dt_str:
+                pipe = client.set_lifecycle_data(meta_key, "source_api_timestamp", conference_dt_str, ttl=ttl, external_pipe=pipe) or pipe
+
+            # Execute all at once
+            success = all(pipe.execute())
+            return success
+
         except Exception as e:
             self.logger.error(f"Error storing transcript in Redis: {e}", exc_info=True)
             return False
+
 
 
 

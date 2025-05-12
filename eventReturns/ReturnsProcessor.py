@@ -218,29 +218,30 @@ class ReturnsProcessor:
                             key_type=RedisKeys.SUFFIX_WITHOUTRETURNS, identifier=news_id)                        
 
                     # Atomic update
+                    # ------------------------------------------------------------------
+                    # atomic move  +  meta reconciliation  (batch mode)
+                    # ------------------------------------------------------------------
+                    meta_key = f"tracking:meta:{self.source_type}:{news_id}"
+
                     pipe = client.client.pipeline(transaction=True)
+
+                    # 1) write the new document and remove the old one
                     pipe.set(new_key, json.dumps(orig_news))
                     pipe.delete(orig_key)
+
+                    # 2) add lifecycle field inside the same pipeline
+                    pipe = client.mark_lifecycle_timestamp(
+                                meta_key,
+                                "withreturns_at" if namespace == "withreturns" else "withoutreturns_at",
+                                external_pipe=pipe) or pipe
+
                     success = all(pipe.execute())
-                    
-                    # Determine base_id for meta_key: reports keep suffix, others strip
-                    # news_id is already {id}.{updated_key} for news, {accessionNo}.{filedAt} for reports, or full ID for transcripts
-                    # No change needed to news_id for meta key consistency with new ingestion pattern.
 
-                    if self.source_type == RedisKeys.SOURCE_REPORTS:
-                        self.logger.critical(f"DEBUGGING REPORTS in ReturnsProcessor: key='{key}', news_id='{news_id}', source_type='{self.source_type}'")
-            
-                    meta_key = f"tracking:meta:{self.source_type}:{news_id}"
-                    if namespace == "withreturns":
-                        client.mark_lifecycle_timestamp(meta_key, "withreturns_at")
-                    else:
-                        client.mark_lifecycle_timestamp(meta_key, "withoutreturns_at")
-
-                    # Publish update after lifecycle mark
+                    # 3) publish only after atomic write + tracking succeed
                     if success:
                         self._publish_news_update(namespace, news_id)
                     else:
-                        self.logger.error(f"Redis pipeline failed for {orig_key} -> {new_key}. Result: {success}")
+                        self.logger.error("Redis pipeline failed for %s → %s. Result: %s", orig_key, new_key, success)
 
                 except Exception as e:
                     self.logger.error(f"Failed to process returns for {event_return.event_id}: {e}", exc_info=True)
@@ -349,62 +350,121 @@ class ReturnsProcessor:
             self.logger.error(f"Error publishing to channel: {e}", exc_info=True)
             return False
 
+
+
+    # ------------------------------------------------------------------
+    # ReturnsProcessor._process_single_item  →  live / hist first pass
+    # ------------------------------------------------------------------
     def _process_single_item(self, key: str, client) -> bool:
-        """Process returns for a single news item"""
+        """
+        Move *processed* item to withreturns / withoutreturns
+        ▸ calculates any returns already available
+        ▸ schedules future returns
+        ▸ updates tracking:meta atomically with the Redis mutation
+        """
         try:
-            
-            # 1. Gets news from processed namespace
-            content = client.get(key)
-            if not content:
+            raw = client.get(key)
+            if not raw:                    # unexpected but safe-guarded
                 return False
-            processed_dict = json.loads(content)
-            
-            # 2. Calculates any immediately available returns
-            returns_info = self._calculate_available_returns(processed_dict)
-            
-            # 3. Schedule future return calculations in ZSET
-            news_id = key.split(':')[-1]  # Get the ID portion- Extract ID and create new unified namespace key
-            self._schedule_pending_returns(news_id, processed_dict)
-            self.logger.info(f"All complete: {returns_info['all_complete']}")
-            
-            # 4. Determine destination namespace based on completion
-            if returns_info['all_complete']:
-                # new_key = f"news:benzinga:withreturns:{news_id}"
-                new_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHRETURNS,identifier=news_id)
-                # self.logger.info(f"Moving to withreturns: {new_key}")
-                namespace = "withreturns"
-            else:
-                # new_key = f"news:benzinga:withoutreturns:{news_id}"
-                new_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHOUTRETURNS,identifier=news_id)
-                # self.logger.info(f"Moving to withoutreturns: {new_key}")
-                namespace = "withoutreturns"
 
-            # 5. Update processed_dict with returns
-            processed_dict['returns'] = returns_info['returns']
+            item = json.loads(raw)
 
-            # 6. Atomic update using pipeline
-            pipe = client.client.pipeline(transaction=True)
-            pipe.set(new_key, json.dumps(processed_dict))
+            # --------- immediate returns calculation -----------
+            returns_info = self._calculate_available_returns(item)
+            item_id      = key.split(":")[-1]
+
+            # schedule any future returns (always, even if all_complete)
+            self._schedule_pending_returns(item_id, item)
+
+            namespace = "withreturns" if returns_info["all_complete"] else "withoutreturns"
+            new_key   = RedisKeys.get_key(
+                            source_type=self.source_type,
+                            key_type=(RedisKeys.SUFFIX_WITHRETURNS
+                                    if namespace == "withreturns"
+                                    else RedisKeys.SUFFIX_WITHOUTRETURNS),
+                            identifier=item_id)
+
+            item["returns"] = returns_info["returns"]
+
+            # --------- atomic Redis + lifecycle ---------------
+            meta_key = f"tracking:meta:{self.source_type}:{item_id}"
+            pipe     = client.client.pipeline(transaction=True)
+
+            pipe.set(new_key, json.dumps(item))
             pipe.delete(key)
+            pipe = client.mark_lifecycle_timestamp(
+                        meta_key,
+                        f"{namespace}_at",
+                        external_pipe=pipe) or pipe     # meta & data in same pipeline
+
             success = all(pipe.execute())
-            
-            # Determine base_id for meta_key: reports keep suffix, others strip
-            # news_id is already {id}.{updated_key} for news, {accessionNo}.{filedAt} for reports, or full ID for transcripts
-            # No change needed to news_id for meta key consistency with new ingestion pattern.
-            meta_key = f"tracking:meta:{self.source_type}:{news_id}"
-            if namespace == "withreturns":
-                client.mark_lifecycle_timestamp(meta_key, "withreturns_at")
-            else:
-                client.mark_lifecycle_timestamp(meta_key, "withoutreturns_at")
 
-            # 7. Publish to PubSub if successful
             if success:
-                self._publish_news_update(namespace, news_id)
-            else:
-                self.logger.error(f"Redis pipeline failed for {key} -> {new_key}. Result: {success}")
+                self._publish_news_update(namespace, item_id)
+            return success
+
+        except Exception as e:
+            self.logger.error("Error processing returns for %s: %s", key, e, exc_info=True)
+            return False
+
+
+    # def _process_single_item(self, key: str, client) -> bool:
+    #     """Process returns for a single news item"""
+    #     try:
+            
+    #         # 1. Gets news from processed namespace
+    #         content = client.get(key)
+    #         if not content:
+    #             return False
+    #         processed_dict = json.loads(content)
+            
+    #         # 2. Calculates any immediately available returns
+    #         returns_info = self._calculate_available_returns(processed_dict)
+            
+    #         # 3. Schedule future return calculations in ZSET
+    #         news_id = key.split(':')[-1]  # Get the ID portion- Extract ID and create new unified namespace key
+    #         namespace = "withreturns" if returns_info["all_complete"] else "withoutreturns"
+    #         self._schedule_pending_returns(news_id, processed_dict)
+    #         self.logger.info(f"All complete: {returns_info['all_complete']}")
+            
+    #         # 4. Determine destination namespace based on completion
+    #         if returns_info['all_complete']:
+    #             # new_key = f"news:benzinga:withreturns:{news_id}"
+    #             new_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHRETURNS,identifier=news_id)
+    #             # self.logger.info(f"Moving to withreturns: {new_key}")
+    #             namespace = "withreturns"
+    #         else:
+    #             # new_key = f"news:benzinga:withoutreturns:{news_id}"
+    #             new_key = RedisKeys.get_key(source_type=self.source_type, key_type=RedisKeys.SUFFIX_WITHOUTRETURNS,identifier=news_id)
+    #             # self.logger.info(f"Moving to withoutreturns: {new_key}")
+    #             namespace = "withoutreturns"
+
+    #         # 5. Update processed_dict with returns
+    #         processed_dict['returns'] = returns_info['returns']
+
+    #         # 6. Atomic update using pipeline
+    #         pipe = client.client.pipeline(transaction=True)
+    #         pipe.set(new_key, json.dumps(processed_dict))
+    #         pipe.delete(key)
+    #         success = all(pipe.execute())
+            
+    #         # Determine base_id for meta_key: reports keep suffix, others strip
+    #         # news_id is already {id}.{updated_key} for news, {accessionNo}.{filedAt} for reports, or full ID for transcripts
+    #         # No change needed to news_id for meta key consistency with new ingestion pattern.
+    #         meta_key = f"tracking:meta:{self.source_type}:{news_id}"
+    #         if namespace == "withreturns":
+    #             client.mark_lifecycle_timestamp(meta_key, "withreturns_at")
+    #         else:
+    #             client.mark_lifecycle_timestamp(meta_key, "withoutreturns_at")
+
+    #         # 7. Publish to PubSub if successful
+    #         if success:
+    #             self._publish_news_update(namespace, news_id)
+    #         else:
+    #             self.logger.error(f"Redis pipeline failed for {key} -> {new_key}. Result: {success}")
             
 
-            return success
+    #         return success
 
 
 
@@ -757,48 +817,43 @@ class ReturnsProcessor:
                 for symbol_returns in news_data['returns']['symbols'].values()
             )
             
-            pipe = self.live_client.client.pipeline(transaction=True)
-            if all_complete:
+            # ------------------------------------------------------------------
+            # ReturnsProcessor._update_return  ➜  atomic, fully-tracked
+            # ------------------------------------------------------------------
+            meta_key = f"tracking:meta:{self.source_type}:{identifier}"
+            pipe     = self.live_client.client.pipeline(transaction=True)
 
-                # new_key = key.replace('withoutreturns', 'withreturns')
-                # Generate new key using RedisKeys
+            if all_complete:
                 new_key = RedisKeys.get_key(source_type=self.source_type,
-                    key_type=RedisKeys.SUFFIX_WITHRETURNS, identifier=identifier)
+                                            key_type=RedisKeys.SUFFIX_WITHRETURNS,
+                                            identifier=identifier)
 
                 pipe.set(new_key, json.dumps(news_data))
                 pipe.delete(key)
-                # self.logger.info(f"Moving to withreturns: {new_key}")
-                success = all(pipe.execute())
-
-                # Log specific error if move fails
-                if not success:
-                    self.logger.error(f"Redis move to withreturns failed: {key} -> {new_key}. Result: {success}")
-
-                # Publish to withreturns channel if successful
-                if success:
-                    self._publish_news_update("withreturns", identifier)
-                # else:
-                #     self.logger.error(f"Redis pipeline failed _publish_news_update withreturns {key} -> {new_key}. Result: {success}")
-
+                pipe = self.live_client.mark_lifecycle_timestamp(
+                        meta_key, "withreturns_at", external_pipe=pipe) or pipe
+                namespace = "withreturns"
 
             else:
-                pipe.set(key, json.dumps(news_data))
-                success = all(pipe.execute())
+                pipe.set(key, json.dumps(news_data))               # overwrite in-place
+                pipe = self.live_client.mark_lifecycle_timestamp(
+                        meta_key, "withoutreturns_at", external_pipe=pipe) or pipe
+                namespace = "withoutreturns"
 
-                # Log specific error if update fails
-                if not success:
-                    self.logger.error(f"Redis update of withoutreturns failed: {key}. Result: {success}")
+            success = all(pipe.execute())
 
-                # Publish to withoutreturns channel if successful
-                if success:
-                    self._publish_news_update("withoutreturns", identifier)
-                # else:
-                #     self.logger.error(f"Redis pipeline failed _publish_news_update withoutreturns {key} Result: {success}")
-                
+            if success:
+                self._publish_news_update(namespace, identifier)
+            else:
+                self.logger.error("Redis pipeline failed while moving %s → %s", key, namespace)
+
             return success
+
                 
         except Exception as e:
             self.logger.error(f"Failed to update return {return_type} for {key}: {e}", exc_info=True)
+            meta_key = f"tracking:meta:{self.source_type}:{identifier}"
+            self.live_client.mark_lifecycle_timestamp(meta_key, "failed_at", reason="update_return_exception")
             return False
         
 

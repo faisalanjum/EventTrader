@@ -31,9 +31,6 @@ class SECApi:
         """Context manager exit"""
         if self.session:
             await self.session.close()
-    
-
-
 
 
     @backoff.on_exception( backoff.expo, (aiohttp.ClientError, asyncio.TimeoutError), max_tries=5, max_time=30)    

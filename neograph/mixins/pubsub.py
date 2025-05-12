@@ -25,9 +25,19 @@ class PubSubMixin:
             item_id: The ID of the item to process
             content_type: 'news' or 'report' or 'transcript'
         """
+        source_for_meta = (
+            RedisKeys.SOURCE_NEWS       if content_type == "news" else
+            RedisKeys.SOURCE_REPORTS    if content_type == "report" else
+            RedisKeys.SOURCE_TRANSCRIPTS
+        )
+
         try:
             logger.info(f"Processing {content_type} update from {channel}: {item_id}")
-            
+
+            # ---------- common pre-amble ----------
+            delete_client = self.event_trader_redis.history_client   # default
+            success       = False                                    # assume failure
+
             # Determine namespace from channel
             namespace = RedisKeys.SUFFIX_WITHRETURNS if RedisKeys.SUFFIX_WITHRETURNS in channel else RedisKeys.SUFFIX_WITHOUTRETURNS
             
@@ -42,13 +52,14 @@ class PubSubMixin:
                 )
                 
                 # Get and process the news item
-                raw_data = self.event_trader_redis.history_client.get(key)
+                raw_data = delete_client.get(key)
 
                 # If not found, try with live_client as fallback
                 if not raw_data:
                     raw_data = self.event_trader_redis.live_client.get(key)
                     if raw_data:
-                        logger.warning(f"[FALLBACK] Found {item_id} in live_client instead of history_client (channel: {channel})")
+                        delete_client = self.event_trader_redis.live_client
+                        logger.warning("[FALLBACK] Found %s in live_client (channel %s)", item_id, channel)
 
                 if raw_data:
                     news_data = json.loads(raw_data)
@@ -67,17 +78,21 @@ class PubSubMixin:
                         except Exception as e:
                             logger.warning(f"Failed to generate embeddings for {item_id}: {e}")
 
-                    # Delete key if it's from withreturns namespace
-                    if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
-                        try:
-                            self.event_trader_redis.history_client.client.delete(key)
-                            logger.info(f"Deleted processed withreturns key: {key}")
-                        except Exception as e:
-                            logger.warning(f"Error deleting key {key}: {e}")
-
                 else:
                     logger.warning(f"No data found for news {item_id}")
-            
+
+
+                # Delete key if it's from withreturns namespace
+                # ---------- always finalise ----------
+                self._finalize_pubsub_processing(
+                        delete_client   = delete_client,                          # hist or live
+                        redis_key       = key,                                    # the Redis blob
+                        meta_key        = f"tracking:meta:{source_for_meta}:{item_id}",
+                        success         = success,                                # True/False
+                        namespace       = namespace,                              # withreturns / withoutreturns
+                        failure_reason  = "neo4j_insertion_failed"                # used only if success==False
+                )
+
             elif content_type == 'report':    
                 # Get the report data using standard key format
                 key = RedisKeys.get_key(
@@ -86,13 +101,15 @@ class PubSubMixin:
                     identifier=item_id
                 )
                 
+
                 # Get and process the report
-                raw_data = self.event_trader_redis.history_client.get(key)
+                raw_data = delete_client.get(key)
                 # If not found, try with live_client as fallback
                 if not raw_data:
                     raw_data = self.event_trader_redis.live_client.get(key)
                     if raw_data:
-                        logger.warning(f"[FALLBACK] Found {item_id} in live_client instead of history_client (channel: {channel})")
+                        delete_client = self.event_trader_redis.live_client
+                        logger.warning("[FALLBACK] Found %s in live_client (channel %s)", item_id, channel)
                 
                 if raw_data:
                     report_data = json.loads(raw_data)
@@ -111,13 +128,20 @@ class PubSubMixin:
                     
                     logger.info(f"Successfully processed report {item_id}")
 
-                    # Delete key if it's from withreturns namespace
-                    if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
-                        try:
-                            self.event_trader_redis.history_client.client.delete(key)
-                            logger.info(f"Deleted processed withreturns key: {key}")
-                        except Exception as e:
-                            logger.warning(f"Error deleting key {key}: {e}")
+                else:
+                    logger.warning("No data found for report %s", item_id)
+
+                # Delete key if it's from withreturns namespace
+                # ---------- always finalise ----------
+                self._finalize_pubsub_processing(
+                        delete_client   = delete_client,                          # hist or live
+                        redis_key       = key,                                    # the Redis blob
+                        meta_key        = f"tracking:meta:{source_for_meta}:{item_id}",
+                        success         = success,                                # True/False
+                        namespace       = namespace,                              # withreturns / withoutreturns
+                        failure_reason  = "neo4j_insertion_failed"                # used only if success==False
+                )
+
 
             elif content_type == 'transcript':
                 # Get the transcript data using standard key format
@@ -128,12 +152,13 @@ class PubSubMixin:
                 )
                 
                 # Get and process the transcript
-                raw_data = self.event_trader_redis.history_client.get(key)
+                raw_data = delete_client.get(key)
                 # If not found, try with live_client as fallback
                 if not raw_data:
                     raw_data = self.event_trader_redis.live_client.get(key)
                     if raw_data:
-                        logger.warning(f"[FALLBACK] Found {item_id} in live_client instead of history_client (channel: {channel})")
+                        delete_client = self.event_trader_redis.live_client
+                        logger.warning("[FALLBACK] Found %s in live_client (channel %s)", item_id, channel)
                 
                 if raw_data:
                     transcript_data = json.loads(raw_data)
@@ -175,16 +200,20 @@ class PubSubMixin:
                         except Exception as e:
                             logger.warning(f"Failed to generate QAExchange embeddings for transcript {item_id}: {e}")
 
-                    # Delete key if it's from withreturns namespace
-                    if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
-                        try:
-                            self.event_trader_redis.history_client.client.delete(key)
-                            logger.info(f"Deleted processed withreturns key: {key}")
-                        except Exception as e:
-                            logger.warning(f"Error deleting key {key}: {e}")
 
                 else:
-                    logger.warning(f"No data found for transcript {item_id}")
+                    logger.warning("No data found for transcript %s", item_id)
+                # Delete key if it's from withreturns namespace
+                # ---------- always finalise ----------
+                self._finalize_pubsub_processing(
+                        delete_client   = delete_client,                          # hist or live
+                        redis_key       = key,                                    # the Redis blob
+                        meta_key        = f"tracking:meta:{source_for_meta}:{item_id}",
+                        success         = success,                                # True/False
+                        namespace       = namespace,                              # withreturns / withoutreturns
+                        failure_reason  = "neo4j_insertion_failed"                # used only if success==False
+                )
+
 
         except Exception as e:
             logger.error(f"Error processing {content_type} update for {item_id}: {e}", exc_info=True)
@@ -336,4 +365,54 @@ class PubSubMixin:
         logger.info("PubSub processing flag set to stop")
         return True
 
+
+
+    # -----------------------------------------------------------------
+    # FINAL-STAGE RECONCILIATION: write meta + (optionally) delete blob
+    # -----------------------------------------------------------------
+    def _finalize_pubsub_processing(self,
+                                    delete_client,
+                                    redis_key: str,
+                                    meta_key: str,
+                                    success: bool,
+                                    namespace: str,
+                                    failure_reason: str | None = None) -> None:
+        """
+        • If   success==True   ➜ write  inserted_into_neo4j_at
+        • If   success==False  ➜ write  failed_at  (with reason)
+        • For withreturns items: delete the data blob **only** after the
+        inserted/failed stamp is confirmed in Redis.
+
+        All Redis commands are wrapped in a single pipeline so the write
+        and the optional delete are effectively atomic.
+        """
+        try:
+            pipe = delete_client.client.pipeline(transaction=True)
+
+            if success:
+                pipe = delete_client.mark_lifecycle_timestamp(
+                        meta_key,
+                        "inserted_into_neo4j_at",
+                        external_pipe=pipe) or pipe
+            else:
+                pipe = delete_client.mark_lifecycle_timestamp(
+                        meta_key,
+                        "failed_at",
+                        reason=failure_reason or "neo4j_insertion_failed",
+                        external_pipe=pipe) or pipe
+
+            # Execute the pipeline **first** (this writes/updates the hash)
+            pipe.execute()
+
+            # Only delete the blob if we *just* stamped inserted_into_neo4j_at
+            if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
+                if delete_client.client.hexists(meta_key, "inserted_into_neo4j_at"):
+                    delete_client.client.delete(redis_key)
+                    logger.info("Deleted withreturns key after confirming lifecycle update: %s", redis_key)
+                else:
+                    logger.warning("Lifecycle update not confirmed – NOT deleting %s", redis_key)
+
+        except Exception as exc:
+            # We deliberately leave the data blob in Redis if any part fails
+            logger.error("Lifecycle finalization error for %s → %s: %s", redis_key, meta_key, exc, exc_info=True)
 

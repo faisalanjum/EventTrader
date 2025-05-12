@@ -443,16 +443,16 @@ class SECWebSocket:
         self.error_handler.handle_connection_error(error)
         
         # Log downtime with appropriate error code
-        error_str = str(error)
-        if any(msg in error_str.lower() for msg in ["closed", "lost", "timed out", "refused", "reset"]):
-            self.logger.warning(f"Network error detected: {error}")
-            self._log_downtime(status_code=1001)  # Going Away
-        elif "429" in error_str:
-            self.logger.warning("Rate limit hit - using exponential backoff")
-            self.current_retry = max(self.current_retry, 3)
-            self._log_downtime(status_code=429)  # Rate limit exceeded
-        else:
-            self._log_downtime(status_code=1006)  # Abnormal Closure
+        # error_str = str(error)
+        # if any(msg in error_str.lower() for msg in ["closed", "lost", "timed out", "refused", "reset"]):
+        #     self.logger.warning(f"Network error detected: {error}")
+        #     self._log_downtime(status_code=1001)  # Going Away
+        # elif "429" in error_str:
+        #     self.logger.warning("Rate limit hit - using exponential backoff")
+        #     self.current_retry = max(self.current_retry, 3)
+        #     self._log_downtime(status_code=429)  # Rate limit exceeded
+        # else:
+        #     self._log_downtime(status_code=1006)  # Abnormal Closure
 
     def _on_close(self, ws, close_status_code, close_msg):
         """Handle WebSocket connection close"""
@@ -463,7 +463,7 @@ class SECWebSocket:
         
         # Log downtime
         status = close_status_code if close_status_code else 1006   # Default toAbnormal Closure
-        self._log_downtime(status_code=status)
+        # self._log_downtime(status_code=status)
 
         # Exit if shutdown requested
         if not self.should_run:
