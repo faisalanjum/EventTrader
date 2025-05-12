@@ -84,56 +84,69 @@ class ReconcileMixin:
                                     break
                 
                 # 2. REPORTS RECONCILIATION
-                for namespace in ['withreturns', 'withoutreturns']:
-                    pattern = RedisKeys.get_key(source_type=RedisKeys.SOURCE_REPORTS, 
-                                            key_type=namespace, identifier="*")
-                    
-                    # Get report IDs from Redis
-                    redis_report_ids = set()
+                # We identify two types of "missing" reports:
+                # (1) accessionNo exists in Redis but not in Neo4j
+                # (2) accessionNo exists in both, but Redis version is newer (based on filedAt/created timestamp)
+
+                # Redis full_id format: <accessionNo>.<timestamp> (UTC, dots instead of colons)
+                # Example: "0000010795-23-000009.2023-01-06T11.54.38+00.00"
+
+                # STEP 1: Collect latest Redis full_id per accessionNo
+                redis_report_full_ids = {}  # accessionNo → full Redis ID (latest)
+                for ns in ['withreturns', 'withoutreturns']:
+                    pattern = RedisKeys.get_key(RedisKeys.SOURCE_REPORTS, ns, "*")
                     for key in self.event_trader_redis.history_client.client.scan_iter(pattern):
-                        report_id = key.split(':')[-1]
-                        redis_report_ids.add(report_id)
-                    
-                    if not redis_report_ids:
+                        full_id = key.split(':')[-1]
+                        accession_no, timestamp = full_id[:20], full_id[21:]
+                        if accession_no not in redis_report_full_ids or timestamp > redis_report_full_ids[accession_no][21:]:
+                            redis_report_full_ids[accession_no] = full_id
+
+                if not redis_report_full_ids:
+                    return results  # Nothing to reconcile
+
+                # STEP 2: Fetch existing accessionNos and created timestamps from Neo4j
+                accession_list = list(redis_report_full_ids.keys())
+                cypher = """
+                MATCH (r:Report)
+                WHERE r.accessionNo IN $ids
+                RETURN r.accessionNo AS id, r.created AS created
+                """
+                result = session.run(cypher, ids=accession_list)
+                neo4j_created_map = {r["id"]: r["created"] for r in result}
+
+                # STEP 3: Compare timestamps to find missing or outdated reports
+                from dateutil.parser import parse as parse_datetime
+
+                missing_or_newer = []
+                for accession_no, full_id in redis_report_full_ids.items():
+                    redis_ts_str = full_id[21:].replace('.', ':')
+                    try:
+                        redis_dt = parse_datetime(redis_ts_str)
+                    except Exception:
+                        logger.warning(f"Bad timestamp {redis_ts_str} for {accession_no}")
                         continue
-                        
-                    # Process in batches of 1000
-                    for batch in [list(redis_report_ids)[i:i+1000] for i in range(0, len(redis_report_ids), 1000)]:
-                        # Query Neo4j for these report IDs
-                        cypher = "MATCH (r:Report) WHERE r.accessionNo IN $ids RETURN r.accessionNo as id"
-                        result = session.run(cypher, ids=batch)
 
-                        # Here the id is the accessionNo but for comparison we need to use the full report_id
-                        # neo4j_accession_nos = {record["accessionNo"] for record in result}
-
-                        neo4j_report_ids = {record["id"] for record in result}
-                        
-                        # Find missing report IDs
-                        missing_ids = set(batch) - neo4j_report_ids
-                        
-                        # Process missing items - MODIFIED to support unlimited items
-                        item_limit = None if max_items_per_type is None else max_items_per_type
-                        for report_id in list(missing_ids)[:item_limit]:
-                            # Try both namespaces
-                            for ns in ['withreturns', 'withoutreturns']:
-                                key = RedisKeys.get_key(source_type=RedisKeys.SOURCE_REPORTS,
-                                                    key_type=ns, identifier=report_id)
-                                raw_data = self.event_trader_redis.history_client.get(key)
-                                if raw_data:
-                                    report_data = json.loads(raw_data)
-                                    success = self._process_deduplicated_report(report_id, report_data)
-                                    results["reports"] += 1
-
-                                    # Delete key if it's from withreturns namespace
-                                    if success and ns == 'withreturns':
-                                        try:
-                                            self.event_trader_redis.history_client.client.delete(key)
-                                            logger.debug(f"Deleted reconciled withreturns key: {key}")
-                                        except Exception as e:
-                                            logger.warning(f"Error deleting key {key}: {e}")
+                    neo4j_created = neo4j_created_map.get(accession_no)
+                    if not neo4j_created or redis_dt > parse_datetime(neo4j_created):
+                        missing_or_newer.append((accession_no, full_id))
 
 
-                                    break
+                # STEP 4: Fetch and process those reports using latest full_id
+                for accession_no, full_id in missing_or_newer[:max_items_per_type or len(missing_or_newer)]:
+                    for ns in ['withreturns', 'withoutreturns']:
+                        key = RedisKeys.get_key(RedisKeys.SOURCE_REPORTS, ns, full_id)
+                        raw_data = self.event_trader_redis.history_client.get(key)
+                        if raw_data:
+                            report_data = json.loads(raw_data)
+                            success = self._process_deduplicated_report(full_id, report_data)
+                            results["reports"] += 1
+                            if success and ns == 'withreturns':
+                                try:
+                                    self.event_trader_redis.history_client.client.delete(key)
+                                except Exception as e:
+                                    logger.warning(f"Failed to delete key {key}: {e}")
+                            break  # Stop after first successful namespace match
+
             
                 # 3. TRANSCRIPTS RECONCILIATION
                 try:

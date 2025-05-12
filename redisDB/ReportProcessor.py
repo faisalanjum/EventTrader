@@ -788,7 +788,6 @@ class ReportProcessor(BaseProcessor):
             else:
                 # Continue with normal lightweight processing - add metadata for lightweight items
 
-                    
                 # Generate processed key
                 processed_key = RedisKeys.get_key(
                     source_type=self.source_type,

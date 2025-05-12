@@ -211,11 +211,12 @@ class ReportMixin:
         
         try:
             # Prepare all report data
-            report_node, node_properties, valid_symbols, company_params, sector_params, industry_params, market_params, report_timestamps = self._prepare_report_data(report_id, report_data)
+            accession_no = report_id[:20]
+            report_node, node_properties, valid_symbols, company_params, sector_params, industry_params, market_params, report_timestamps = self._prepare_report_data(accession_no, report_data)
             
             # Execute all database operations
             success = self._execute_report_database_operations(
-                report_id, report_node, node_properties, valid_symbols,
+                accession_no, report_node, node_properties, valid_symbols,
                 company_params, sector_params, industry_params, market_params,
                 report_timestamps
             )
@@ -268,8 +269,6 @@ class ReportMixin:
             bool: Success status
         """
         filed_at, updated_at, filed_str, updated_str = report_timestamps
-        # report_id = report_id.split('.')[0] # For neo4j we just need the accessionNo - .split('.')[0]   - 0000002488-23-000003.2023-01-11T21.10.00+00.00 or we could use first 20 characters including 2 "-"
-        report_id = report_id[:20] # Faster since accessionNo is the first 20 characters
         
         # Build Cypher query for fields
         on_create_parts = []
@@ -475,6 +474,7 @@ class ReportMixin:
                 self.manager.create_report_category_relationship(report_id, form_type)
             
             return True
+
 
 
     def _create_report_node_from_data(self, report_id, report_data):

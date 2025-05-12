@@ -250,8 +250,6 @@ class XbrlMixin:
             logger.info("XBRL reconciliation skipped as XBRL processing is disabled.")
             return
             
-
-
         logger.info("Checking for interrupted XBRL tasks (status QUEUED or PROCESSING)...")
         try:
             with self.manager.driver.session() as session:
