@@ -4,6 +4,7 @@ from datetime import datetime, timedelta # For date calculations
 import time
 from redisDB.redis_constants import RedisKeys
 from ..Neo4jInitializer import Neo4jInitializer
+from utils.id_utils import canonicalise_news_full_id
 
 
 logger = logging.getLogger(__name__)
@@ -40,9 +41,16 @@ class ReconcileMixin:
                     
                     # Get news IDs from Redis
                     redis_news_ids = set()
+                    canon_to_raw = {}                                          # Store mapping from canonical to raw IDs
+                    canon_to_full_meta = {}                                    # NEW: Store mapping to canonical full ID for meta keys
                     for key in self.event_trader_redis.history_client.client.scan_iter(pattern):
-                        news_id = key.split(':')[-1].split('.')[0]  # Extract base ID
-                        redis_news_ids.add(f"bzNews_{news_id}")
+                        raw_full_id = key.split(':')[-1]                        # '30661575.2023-02-01T04.29.49-05.00'
+                        canon_full_id = canonicalise_news_full_id(raw_full_id)  # '30661575.2023-02-01T09.29.49+00.00'
+                        base_id = canon_full_id.split('.')[0]                   # '30661575' (digits only)
+                        news_id = f"bzNews_{base_id}"                           # Neo4j format (NO timestamp)
+                        redis_news_ids.add(news_id)
+                        canon_to_raw[news_id] = raw_full_id                     # Map to raw ID for Redis lookup
+                        canon_to_full_meta[news_id] = canon_full_id             # Map to canonical full ID for meta keys
                     
                     if not redis_news_ids:
                         continue
@@ -60,7 +68,27 @@ class ReconcileMixin:
                         # Process missing items - MODIFIED to support unlimited items
                         item_limit = None if max_items_per_type is None else max_items_per_type
                         for news_id in list(missing_ids)[:item_limit]:
-                            original_id = news_id[7:]  # Remove "bzNews_" prefix
+                            # --- BEGIN GUARD for RECONCILE NEWS ---
+                            # Use canonical full-ID (no bzNews_) for meta look-up
+                            meta_key_for_news_guard = f"tracking:meta:{RedisKeys.SOURCE_NEWS}:{canon_to_full_meta[news_id]}"
+                            if self.event_trader_redis.history_client.client.hexists(meta_key_for_news_guard, "inserted_into_neo4j_at"):
+                                logger.info(f"[RECONCILE SKIP] News {news_id} already has 'inserted_into_neo4j_at'. Skipping reconciliation processing.")
+                                raw_full_id = canon_to_raw[news_id]            # Use the raw ID with original timezone
+                                for ns_cleanup in [RedisKeys.SUFFIX_WITHRETURNS, RedisKeys.SUFFIX_WITHOUTRETURNS]:
+                                    stale_key_path = RedisKeys.get_key(source_type=RedisKeys.SOURCE_NEWS, # Explicitly use SOURCE_NEWS
+                                                                     key_type=ns_cleanup, 
+                                                                     identifier=raw_full_id)
+                                    if self.event_trader_redis.history_client.client.exists(stale_key_path):
+                                        try:
+                                            self.event_trader_redis.history_client.client.delete(stale_key_path)
+                                            logger.info(f"[RECONCILE SKIP] Cleaned up stale key {stale_key_path} for already processed news {news_id}")
+                                        except Exception as e_del_news_reconcile:
+                                            logger.warning(f"[RECONCILE SKIP] Could not delete stale key {stale_key_path}: {e_del_news_reconcile}")
+                                continue # Skip to the next news_id
+                            # --- END GUARD for RECONCILE NEWS ---
+
+                            raw_full_id = canon_to_raw[news_id]                  # Get original raw ID with timezone
+                            original_id = raw_full_id                            # Use the raw ID for Redis key lookup
                             
                             # Try both namespaces
                             for ns in ['withreturns', 'withoutreturns']:
@@ -133,6 +161,22 @@ class ReconcileMixin:
 
                 # STEP 4: Fetch and process those reports using latest full_id
                 for accession_no, full_id in missing_or_newer[:max_items_per_type or len(missing_or_newer)]:
+                    # --- BEGIN GUARD for RECONCILE ---
+                    meta_key_for_reconcile_guard = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{full_id}"
+                    if self.event_trader_redis.history_client.client.hexists(meta_key_for_reconcile_guard, "inserted_into_neo4j_at"):
+                        logger.info(f"[RECONCILE SKIP] Report {full_id} already has 'inserted_into_neo4j_at'. Skipping reconciliation processing.")
+                        # Optionally, ensure any raw keys for this full_id are cleaned up from withreturns/withoutreturns
+                        for ns_cleanup in [RedisKeys.SUFFIX_WITHRETURNS, RedisKeys.SUFFIX_WITHOUTRETURNS]:
+                            stale_key_path = RedisKeys.get_key(RedisKeys.SOURCE_REPORTS, ns_cleanup, full_id)
+                            if self.event_trader_redis.history_client.client.exists(stale_key_path):
+                                try:
+                                    self.event_trader_redis.history_client.client.delete(stale_key_path)
+                                    logger.info(f"[RECONCILE SKIP] Cleaned up stale key {stale_key_path} for already processed report {full_id}")
+                                except Exception as e_del_reconcile:
+                                    logger.warning(f"[RECONCILE SKIP] Could not delete stale key {stale_key_path}: {e_del_reconcile}")
+                        continue # Skip to the next item in missing_or_newer
+                    # --- END GUARD for RECONCILE ---
+
                     for ns in ['withreturns', 'withoutreturns']:
                         key = RedisKeys.get_key(RedisKeys.SOURCE_REPORTS, ns, full_id)
                         raw_data = self.event_trader_redis.history_client.get(key)
@@ -190,6 +234,24 @@ class ReconcileMixin:
                             # Process missing items - MODIFIED to support unlimited items
                             item_limit = None if max_items_per_type is None else max_items_per_type
                             for transcript_id in list(missing_ids)[:item_limit]:
+                                # --- BEGIN GUARD for RECONCILE TRANSCRIPTS ---
+                                meta_key_for_transcript_guard = f"tracking:meta:{RedisKeys.SOURCE_TRANSCRIPTS}:{transcript_id}"
+                                if self.event_trader_redis.history_client.client.hexists(meta_key_for_transcript_guard, "inserted_into_neo4j_at"):
+                                    logger.info(f"[RECONCILE SKIP] Transcript {transcript_id} already has 'inserted_into_neo4j_at'. Skipping reconciliation processing.")
+                                    # Optionally, clean up raw keys if they exist for this transcript_id
+                                    for ns_cleanup in [RedisKeys.SUFFIX_WITHRETURNS, RedisKeys.SUFFIX_WITHOUTRETURNS]:
+                                        stale_key_path = RedisKeys.get_key(source_type=RedisKeys.SOURCE_TRANSCRIPTS, 
+                                                                         key_type=ns_cleanup, 
+                                                                         identifier=transcript_id)
+                                        if self.event_trader_redis.history_client.client.exists(stale_key_path):
+                                            try:
+                                                self.event_trader_redis.history_client.client.delete(stale_key_path)
+                                                logger.info(f"[RECONCILE SKIP] Cleaned up stale key {stale_key_path} for already processed transcript {transcript_id}")
+                                            except Exception as e_del_transcript_reconcile:
+                                                logger.warning(f"[RECONCILE SKIP] Could not delete stale key {stale_key_path}: {e_del_transcript_reconcile}")
+                                    continue # Skip to the next transcript_id
+                                # --- END GUARD for RECONCILE TRANSCRIPTS ---
+
                                 # Try both namespaces
                                 for ns in ['withreturns', 'withoutreturns']:
                                     key = RedisKeys.get_key(

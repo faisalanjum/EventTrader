@@ -32,24 +32,49 @@ class ReportMixin:
         2. For success=False: mark as failed
         """
         meta_key = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{report_id}"
+        pipe = None # Initialize pipe to None
         try:
             if success:
+                # Use an explicit pipeline for atomicity and efficiency
+                pipe = delete_client.client.pipeline()
+
                 # Step 1: Always make sure inserted_into_neo4j_at is marked
-                delete_client.mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
+                # mark_lifecycle_timestamp will use the external_pipe if provided
+                delete_client.mark_lifecycle_timestamp(
+                    meta_key, 
+                    "inserted_into_neo4j_at", 
+                    external_pipe=pipe
+                )
                 
-                # Step 2: Only delete withreturns keys and verify mark exists first
+                # Step 2: Only delete withreturns keys (conditionally added to the same pipe)
                 if namespace == RedisKeys.SUFFIX_WITHRETURNS:
-                    if delete_client.client.hexists(meta_key, "inserted_into_neo4j_at"):
-                        delete_client.client.delete(redis_key)
-                        logger.info(f"Deleted processed withreturns key: {redis_key}")
-                    else:
-                        logger.warning(f"Not deleting {redis_key} - meta tracking not confirmed")
+                    # The hexists check previously here is removed. 
+                    # inserted_into_neo4j_at is being set in this same pipeline, 
+                    # and the guard in process_reports_to_neo4j should prevent this path 
+                    # if the field was already set from a prior run. Atomicity of the pipeline ensures this is safe.
+                    pipe.delete(redis_key)
+                    logger.info(f"(Pipeline) Queued deletion for processed withreturns key: {redis_key}")
+                
+                pipe.execute()
+                logger.info(f"Successfully finalized report {report_id} (success path).")
+
             else:
-                # For failures, mark failed_at with reason
-                delete_client.mark_lifecycle_timestamp(meta_key, "failed_at", reason=failure_reason or "neo4j_insertion_failed")
+                # For failures, mark failed_at with reason, but only if not already successfully inserted
+                if not delete_client.client.hexists(meta_key, "inserted_into_neo4j_at"):
+                    # This will create its own pipeline internally if external_pipe is not passed
+                    delete_client.mark_lifecycle_timestamp(meta_key, "failed_at", reason=failure_reason or "neo4j_insertion_failed")
+                    logger.info(f"Marked report {report_id} as failed with reason: {failure_reason or 'neo4j_insertion_failed'}")
+                else:
+                    logger.warning(f"Report {report_id} (key {redis_key}) processing resulted in failure, but 'inserted_into_neo4j_at' already exists in meta. Not setting 'failed_at' to avoid contradiction.")
                 
         except Exception as e:
             logger.error(f"Error in report finalization for {report_id}: {e}", exc_info=True)
+            # If pipeline was started but execute failed, ensure it's discarded to prevent issues
+            if pipe: # Check if pipe was initialized
+                try:
+                    pipe.reset()
+                except Exception as e_pipe_reset:
+                    logger.error(f"Error resetting pipeline during exception handling for {report_id}: {e_pipe_reset}")
 
     def process_reports_to_neo4j(self, batch_size=100, max_items=None, include_without_returns=True) -> bool:
         """
@@ -112,6 +137,7 @@ class ReportMixin:
         # Process in batches
         processed_count = 0
         error_count = 0
+        skipped_duplicate_count = 0 # Initialize new counter
         
         for batch_start in range(0, len(all_keys), batch_size):
             batch_keys = all_keys[batch_start:batch_start + batch_size]
@@ -128,7 +154,24 @@ class ReportMixin:
                     namespace = parts[1] if len(parts) > 1 else ""  # 'withreturns' or 'withoutreturns'
                     
                     # Try history_client first, fallback to live_client if needed
+                    # Default to history_client for delete_client, and for initial get
+                    # This client will also be used for meta checks and key deletion in the guard.
                     delete_client = self.event_trader_redis.history_client
+                    
+                    # --- BEGIN GUARD ---
+                    meta_key_for_guard = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{report_id}"
+                    if delete_client.client.hexists(meta_key_for_guard, "inserted_into_neo4j_at"):
+                        logger.info(f"[SKIP] Report {report_id} (from key {key}) already has 'inserted_into_neo4j_at'. Skipping main processing.")
+                        if namespace == RedisKeys.SUFFIX_WITHRETURNS:
+                            try:
+                                delete_client.client.delete(key)
+                                logger.info(f"[SKIP] Removed duplicate/stale key {key} for already processed report {report_id}")
+                            except Exception as e_del:
+                                logger.warning(f"[SKIP] Could not delete duplicate/stale key {key}: {e_del}")
+                        skipped_duplicate_count += 1 # Use dedicated counter
+                        continue # Skip to the next key in the batch
+                    # --- END GUARD ---
+                    
                     raw_data = delete_client.get(key)
                     
                     if not raw_data:
@@ -177,7 +220,7 @@ class ReportMixin:
             logger.info(f"Processed batch {batch_start//batch_size + 1}/{(len(all_keys) + batch_size - 1)//batch_size}")
             
         # Summary and status
-        logger.info(f"Finished processing reports to Neo4j. Processed: {processed_count}, Errors: {error_count}")
+        logger.info(f"Finished processing reports to Neo4j. Processed: {processed_count}, Errors: {error_count}, Skipped Duplicates: {skipped_duplicate_count}")
         
         return processed_count > 0 or error_count == 0
 
@@ -264,25 +307,13 @@ class ReportMixin:
             )
 
             if success:
-                # Use explicit source constant to avoid relying on the processor-wide EventTraderRedis instance,
-                # which is initialised for *news* in DataManager but reused for all content types here.
+                # with a single physical Redis, “history” - That’s the one every reader expects, so we must use it when we write meta hashes. Using live_client would prefix the key with live: and no guard would ever see it. Hence we keep history_client unconditionally.
                 meta_key = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{report_id}"
-                # Any available Redis client can write to the admin namespace; use history_client if present
-                if hasattr(self, "event_trader_redis") and self.event_trader_redis:
-                    try:
-                        self.event_trader_redis.history_client.mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
-                    except Exception:
-                        pass
-                else:
-                    # Fallback – create a temporary Redis client with no prefix
-                    try:
-                        from redisDB.redisClasses import RedisClient
-                        RedisClient(prefix="").mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
-                    except Exception:
-                        pass
-            
+                self.event_trader_redis.history_client.mark_lifecycle_timestamp(
+                    meta_key, "inserted_into_neo4j_at"
+                )
+
             return success
-                
         except Exception as e:
             logger.error(f"Error processing report {report_id}: {e}", exc_info=True)
             return False

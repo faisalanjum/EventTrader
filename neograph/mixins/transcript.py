@@ -314,8 +314,18 @@ class TranscriptMixin:
                 transcript_data
             )
 
-            # We no longer do meta tracking here, it's handled by _finalize_transcript_batch
+
+            if success:
+                # with a single physical Redis, “history” - That’s the one every reader expects, so we must use it when we write meta hashes. Using live_client would prefix the key with live: and no guard would ever see it. Hence we keep history_client unconditionally.
+                meta_key = f"tracking:meta:{RedisKeys.SOURCE_TRANSCRIPTS}:{transcript_id}"
+                self.event_trader_redis.history_client.mark_lifecycle_timestamp(
+                    meta_key, "inserted_into_neo4j_at"
+                )
+                
             return success
+
+            # We no longer do meta tracking here, it's handled by _finalize_transcript_batch
+
         except Exception as e:
             logger.error(f"Error processing transcript {transcript_id}: {e}", exc_info=True)
             return False

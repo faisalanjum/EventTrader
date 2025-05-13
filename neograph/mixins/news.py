@@ -4,6 +4,7 @@ import logging
 from typing import Dict, List, Optional, Any, Set, Tuple
 import json
 from utils.date_utils import parse_news_dates
+from utils.id_utils import canonicalise_news_full_id
 from ..EventTraderNodes import NewsNode
 from config.feature_flags import ENABLE_NEWS_EMBEDDINGS
 
@@ -210,19 +211,29 @@ class NewsMixin:
                 # Remove internal "bzNews_" prefix to match lifecycle key
                 base_id = news_id.replace("bzNews_", "", 1)
                 id_only = base_id
-                updated_ts_iso = news_data.get('updated', '') # Get the ISO string from the payload
-                updated_key_suffix = updated_ts_iso.replace(':', '.') if updated_ts_iso else ''
+                
+                # Try to get timestamp from updated or created fields
+                updated_ts_iso = news_data.get('updated', '')
+                created_ts_iso = news_data.get('created', '')
+                
+                # Prefer updated, fall back to created
+                timestamp_iso = updated_ts_iso if updated_ts_iso else created_ts_iso
+                updated_key_suffix = timestamp_iso.replace(':', '.') if timestamp_iso else ''
 
                 if not updated_key_suffix:
-                    logger.warning(f"Missing 'updated' timestamp in news_data for {id_only}, meta_key will lack suffix.")
-                    full_news_id_for_meta = id_only # Fallback to id_only if no updated timestamp
+                    logger.warning(f"Missing both 'updated' and 'created' timestamps in news_data for {id_only}, meta key will lack suffix.")
+                    full_news_id_for_meta = id_only # Fallback to id_only if no timestamp available
                 else:
-                    full_news_id_for_meta = f"{id_only}.{updated_key_suffix}"
+                    raw_full_id = f"{id_only}.{updated_key_suffix}"
+                    # Always canonicalize to UTC for the meta key
+                    full_news_id_for_meta = canonicalise_news_full_id(raw_full_id)
                 
                 meta_key = f"tracking:meta:{self.event_trader_redis.source}:{full_news_id_for_meta}"
                 try:
+                    # Use TTL defined in Redis client configuration (if any)
                     self.event_trader_redis.history_client.mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")
-                except Exception:
+                except Exception as e:
+                    logger.warning(f"Failed to mark lifecycle timestamp for {meta_key}: {e}")
                     pass
 
             return success
