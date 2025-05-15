@@ -10,6 +10,11 @@ PID_FILE="$WORKSPACE_DIR/event_trader.pid"
 MONITOR_PID_FILE="$WORKSPACE_DIR/event_trader_monitor.pid"
 LOG_RETENTION_DAYS=7  # Days to keep logs before cleaning
 
+# Set Redis host/port from env or default to localhost
+export REDIS_HOST="${REDIS_HOST:-localhost}"
+export REDIS_PORT="${REDIS_PORT:-6379}"
+
+
 # Default dates (if not provided)
 DEFAULT_FROM_DATE=$(date -v-3d "+%Y-%m-%d" 2>/dev/null || date -d "3 days ago" "+%Y-%m-%d" 2>/dev/null || date "+%Y-%m-%d")
 DEFAULT_TO_DATE=$(date "+%Y-%m-%d")
@@ -698,7 +703,8 @@ process_chunked_historical() {
   shell_log "Using log folder: $LOG_FOLDER_PATH"
 
   shell_log "Checking Redis connectivity..."
-  if ! redis-cli ping > /dev/null 2>&1; then
+  # if ! redis-cli ping > /dev/null 2>&1; then
+  if ! redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" ping > /dev/null 2>&1; then
     shell_log "ERROR: Cannot connect to Redis server. Please ensure Redis is running."
     exit 1
   fi

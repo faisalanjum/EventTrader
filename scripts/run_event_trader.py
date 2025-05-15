@@ -11,6 +11,9 @@ import signal
 import os
 import logging # Keep standard logging import for level constants
 from datetime import datetime
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Add parent directory to path to import from utils
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

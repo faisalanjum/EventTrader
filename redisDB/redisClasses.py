@@ -127,10 +127,14 @@ class RedisClient:
         'retry_on_timeout': True         # Added to automatically retry on timeout errors
     }
 
-    def __init__(self, host='localhost', port=6379, db=0, prefix='', source_type=None):
+    # def __init__(self, host='localhost', port=6379, db=0, prefix='', source_type=None):
+    def __init__(self, host=None, port=None, db=0, prefix='', source_type=None):
 
-        self.host = host
-        self.port = port
+        # self.host = host
+        # self.port = port
+
+        self.host = host or os.getenv('REDIS_HOST', 'localhost')
+        self.port = int(port or os.getenv('REDIS_PORT', 6379))
         self.db = db
         self.prefix = prefix  # Will be 'news:live:' or 'news:hist:'
         self.source_type = source_type  # Needed later for lifecycle meta-key construction
