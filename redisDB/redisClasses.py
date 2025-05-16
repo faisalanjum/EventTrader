@@ -14,7 +14,7 @@ from .redis_constants import RedisKeys, RedisQueues
 from secReports.sec_schemas import SECFilingSchema, UnifiedReport
 # Import feature flags to get the CSV path
 from config import feature_flags
-
+from eventtrader.keys import REDIS_HOST, REDIS_PORT
 # Use standard module logger
 logger = logging.getLogger(__name__)
 
@@ -133,8 +133,8 @@ class RedisClient:
         # self.host = host
         # self.port = port
 
-        self.host = host or os.getenv('REDIS_HOST', 'localhost')
-        self.port = int(port or os.getenv('REDIS_PORT', 6379))
+        self.host = REDIS_HOST
+        self.port = REDIS_PORT
         self.db = db
         self.prefix = prefix  # Will be 'news:live:' or 'news:hist:'
         self.source_type = source_type  # Needed later for lifecycle meta-key construction
@@ -149,9 +149,9 @@ class RedisClient:
 
 
         self.pool = redis.ConnectionPool(
-            host=host, 
-            port=port, 
-            db=db, 
+            host=self.host, 
+            port=self.port, 
+            db=self.db, 
             decode_responses=True,
             **self.REDIS_CONN_SETTINGS
         )
