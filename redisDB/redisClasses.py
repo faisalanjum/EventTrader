@@ -429,52 +429,77 @@ class RedisClient:
 
 
 
-
-
     # ------------------------------------------------------------------
-    # Lifecycle tracking helper
+    # Lifecycle-tracking helper
     # ------------------------------------------------------------------
-    def mark_lifecycle_timestamp(self, key: str, field: str, reason: str = None, ttl: int = None, external_pipe=None):
-        """Write a timestamp into a lifecycle hash if not already set"""
+    def mark_lifecycle_timestamp(
+            self,
+            key: str,
+            field: str,
+            reason: str | None = None,
+            ttl: int | None = None,
+            external_pipe=None,
+    ):
+        """Write a timestamp into a lifecycle hash if not already set."""
+
         try:
-            if not self.client.hexists(key, field):
-                payload = {field: datetime.now(timezone.utc).isoformat(timespec="seconds")}
-                if reason:
-                    payload[f"{field}_reason"] = reason
-                    
-                pipe = external_pipe or self.client.pipeline()
-                pipe.hset(key, mapping=payload)
-                if ttl:
-                    pipe.expire(key, ttl)
+            # Do nothing if this exact field is already recorded
+            if self.client.hexists(key, field):
+                return external_pipe if external_pipe else None
 
-                # ------------------------------------------------------------------
-                # Pending-set maintenance (minimalistic)
-                # ------------------------------------------------------------------
-                # Determine source_type (second element after 'tracking:meta')
-                parts = key.split(":")
-                if len(parts) >= 3:
-                    source_type = parts[2]
-                    pending_set_key = f"tracking:pending:{source_type}"
+            payload = {field: datetime.now(timezone.utc).isoformat(timespec="seconds")}
+            if reason:
+                payload[f"{field}_reason"] = reason
 
-                    # 1) When item is first ingested → add to pending set
-                    if field == "ingested_at":
-                        pipe.sadd(pending_set_key, key)
+            pipe = external_pipe or self.client.pipeline()
 
-                    # 2) Remove from pending set when item is finalised (success or dropped)
-                    if field in {"inserted_into_neo4j_at", "filtered_at", "failed_at"} and feature_flags.REMOVE_FROM_PENDING_SET:
-                        pipe.srem(pending_set_key, key)
+            # -----------------------------------------------------------
+            # <<  ONE-SHOT COLLISION FIX  >>
+            # If we are recording a SUCCESS marker, wipe any older
+            # filtered / failed markers that may already be present.
+            # (harmless if they are absent.)
+            if field == "inserted_into_neo4j_at":
+                pipe.hdel(
+                    key,
+                    "filtered_at", "filtered_at_reason",
+                    "failed_at",   "failed_at_reason",
+                )
+            # -----------------------------------------------------------
 
-                if not external_pipe:
-                    pipe.execute()
-                    return True
+            pipe.hset(key, mapping=payload)
 
-            # return pipe if external_pipe else None
-            return external_pipe if external_pipe else None
+            if ttl:
+                pipe.expire(key, ttl)
+
+            # ----------------------------------------------------------
+            # Pending-set maintenance (unchanged)
+            # ----------------------------------------------------------
+            parts = key.split(":")
+            if len(parts) >= 3:
+                source_type = parts[2]
+                pending_set_key = f"tracking:pending:{source_type}"
+
+                if field == "ingested_at":
+                    pipe.sadd(pending_set_key, key)
+
+                if field in {"inserted_into_neo4j_at", "filtered_at", "failed_at"} \
+                and feature_flags.REMOVE_FROM_PENDING_SET:
+                    pipe.srem(pending_set_key, key)
+
+            if not external_pipe:
+                pipe.execute()
+                return True
+
+            # Return the pipeline so the caller can continue using it
+            return pipe
 
         except Exception as e:
-            self.logger.error(f"Lifecycle timestamp update failed for {key}:{field}: {e}", exc_info=True)
-            # return pipe if external_pipe else None
+            self.logger.error(
+                f"Lifecycle timestamp update failed for {key}:{field}: {e}",
+                exc_info=True,
+            )
             return external_pipe if external_pipe else None
+
 
 
     def set_lifecycle_data(self, key: str, field: str, value: str, ttl: int = None, external_pipe=None):
