@@ -2,6 +2,8 @@
 # EventTrader Control Script
 # Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j|reset-all|partial-reset|neo4j-report|force-stop-all} [options] [from-date] [to-date]
 
+[ -f ".env" ] && export $(grep -v '^#' .env | xargs)
+
 # Configuration
 WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOGS_DIR="$WORKSPACE_DIR/logs"
@@ -14,6 +16,8 @@ LOG_RETENTION_DAYS=7  # Days to keep logs before cleaning
 export REDIS_HOST="${REDIS_HOST:-localhost}"
 export REDIS_PORT="${REDIS_PORT:-6379}"
 
+# Display Redis connection information
+echo "Redis connection settings: Host=$REDIS_HOST, Port=$REDIS_PORT"
 
 # Default dates (if not provided)
 DEFAULT_FROM_DATE=$(date -v-3d "+%Y-%m-%d" 2>/dev/null || date -d "3 days ago" "+%Y-%m-%d" 2>/dev/null || date "+%Y-%m-%d")
@@ -354,6 +358,12 @@ start() {
   # Detect Python before starting
   detect_python
   
+  # Check Redis connectivity
+  check_redis_connection || {
+    echo "Error: Cannot connect to Redis at $REDIS_HOST:$REDIS_PORT. Please check your configuration."
+    return 1
+  }
+  
   cd "$WORKSPACE_DIR"
   
   # Check if initialization flag should be added
@@ -511,12 +521,16 @@ health() {
   echo "Disk space:"
   df -h . | grep -v Filesystem
   
-  # Check Redis if available
-  if command -v redis-cli >/dev/null 2>&1; then
-    echo ""
-    echo "Redis status:"
-    redis-cli ping 2>/dev/null || echo "Redis connection failed"
-    redis-cli info | grep used_memory_human 2>/dev/null || echo "Could not get Redis memory usage"
+  # Check Redis connection
+  echo ""
+  echo "Redis status:"
+  check_redis_connection
+  
+  # Check Redis info if available
+  if command -v redis-cli >/dev/null 2>&1 && redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" ping > /dev/null 2>&1; then
+    echo "Redis info:"
+    redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" info | grep used_memory_human
+    redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" info | grep connected_clients
   fi
 }
 
@@ -898,6 +912,23 @@ process_chunked_historical() {
   echo "Chunked historical processing complete. All logs are in: $LOG_FOLDER_PATH/"
 }
 
+# Check Redis connection
+check_redis_connection() {
+  echo "Checking Redis connectivity to $REDIS_HOST:$REDIS_PORT..."
+  if command -v redis-cli >/dev/null 2>&1; then
+    if redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" ping > /dev/null 2>&1; then
+      echo "✅ Redis connection successful"
+      return 0
+    else
+      echo "❌ Could not connect to Redis at $REDIS_HOST:$REDIS_PORT"
+      return 1
+    fi
+  else
+    echo "⚠️ redis-cli not found, skipping connection check"
+    return 0 # Continue anyway
+  fi
+}
+
 # Process command
 case "$COMMAND" in
   start)
@@ -921,9 +952,6 @@ case "$COMMAND" in
     start_all
     ;;
   reset-all)
-    # Before running reset, show what we're working with
-    log_settings
-    
     # Stop all processes first
     echo "Stopping all processes..."
     stop_monitor
@@ -940,19 +968,28 @@ case "$COMMAND" in
     # Use direct Redis commands to clear databases
     echo "Executing Redis reset..."
     if command -v redis-cli >/dev/null 2>&1; then
-      redis-cli flushall
+      redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" flushall
       echo "Redis databases cleared successfully"
     else
       echo "Redis CLI not found. Attempting Python fallback..."
       $PYTHON_CMD -c "
+import os
 from utils.redisClasses import EventTraderRedis, RedisKeys
+
+# Use environment variables to ensure consistent connection
+redis_host = os.environ.get('REDIS_HOST')
+redis_port = os.environ.get('REDIS_PORT')
+
 # Clear news Redis
 news_redis = EventTraderRedis(source=RedisKeys.SOURCE_NEWS)
 news_redis.clear(preserve_processed=False)
 # Clear reports Redis
 reports_redis = EventTraderRedis(source=RedisKeys.SOURCE_REPORTS)
 reports_redis.clear(preserve_processed=False)
-print('Redis databases cleared successfully via Python')
+# Clear transcripts Redis
+transcripts_redis = EventTraderRedis(source=RedisKeys.SOURCE_TRANSCRIPTS)
+transcripts_redis.clear(preserve_processed=False)
+print(f'Redis databases cleared successfully via Python (host={redis_host}, port={redis_port})')
 "
     fi
     

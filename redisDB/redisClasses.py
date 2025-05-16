@@ -44,7 +44,6 @@ class EventTraderRedis:
         self.initialize_stock_universe(clear_config=clear_config)
 
 
-
     def initialize_stock_universe(self, clear_config=False, file_path=None):
         """Initialize stock universe from CSV file"""
         try:
@@ -133,8 +132,10 @@ class RedisClient:
         # self.host = host
         # self.port = port
 
-        self.host = REDIS_HOST
-        self.port = REDIS_PORT
+        # Respect passed parameters first, then environment variables, then imported constants
+        import os
+        self.host = host or os.getenv("REDIS_HOST", REDIS_HOST)
+        self.port = port or int(os.getenv("REDIS_PORT", REDIS_PORT))
         self.db = db
         self.prefix = prefix  # Will be 'news:live:' or 'news:hist:'
         self.source_type = source_type  # Needed later for lifecycle meta-key construction

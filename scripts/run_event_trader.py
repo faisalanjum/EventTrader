@@ -304,6 +304,14 @@ def main():
             date_range_key = f"{args.from_date}-{args.to_date}"
             sources_to_check = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS, RedisKeys.SOURCE_TRANSCRIPTS]
             
+            # Run initial Redis stats to see the state before processing
+            logger.info("Getting initial Redis and Neo4j stats before processing...")
+            try:
+                from redisDB import redis_stats
+                redis_stats.run_all()
+            except Exception as e:
+                logger.warning(f"Initial redis_stats run failed: {e}")
+
             reconcile_triggered = False
             retries_waited = 0
             max_retries = feature_flags.WITHRETURNS_MAX_RETRIES
@@ -371,6 +379,14 @@ def main():
 
                 if all_complete:
                     logger.info("All Redis checks indicate historical chunk processing is complete.")
+
+                    try:
+                        from redisDB import redis_stats
+                        logger.info("Getting final Redis and Neo4j stats after processing...")
+                        redis_stats.run_all()          # prints to the same logger/stdout
+                    except Exception as e:
+                        logger.warning(f"Final redis_stats run failed: {e}", exc_info=True)  # Add exc_info for more details
+                        
                     break # Exit the monitoring loop
                 else:
                     retries_waited += 1
@@ -385,7 +401,8 @@ def main():
                     
                     logger.info(f"Chunk processing not yet complete. Status: {completion_status}. Waiting {chunk_monitor_interval}s...")
                     time.sleep(chunk_monitor_interval)
-            
+
+
             # <<<====== ADD EMBEDDING TRIGGER HERE ======>>>
             logger.info("Historical chunk processing appears complete. Attempting to generate QA embeddings...")
             try:
@@ -403,6 +420,7 @@ def main():
                     logger.info(f"QA Embedding generation finished with result: {embedding_results}")
                 else:
                     logger.warning("Cannot generate QA embeddings: Neo4j processor not available or not initialized properly.")
+
             except Exception as embed_err:
                 logger.error(f"Error during explicit QA embedding generation call: {embed_err}", exc_info=True)
             # <<<=======================================>>>
