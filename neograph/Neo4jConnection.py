@@ -4,7 +4,7 @@ CRITICAL: This module must be imported before any Neo4j operations.
 """
 import logging
 from neograph.Neo4jManager import Neo4jManager
-from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
+# from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
 import os
 
 logger = logging.getLogger(__name__)
@@ -16,11 +16,16 @@ def get_manager():
     """Get the singleton Neo4jManager instance"""
     global _manager
     if _manager is None:
-        # Use environment variables or defaults
-        uri = os.getenv("NEO4J_URI", NEO4J_URI)
-        username = os.getenv("NEO4J_USERNAME", NEO4J_USERNAME) 
-        password = os.getenv("NEO4J_PASSWORD", NEO4J_PASSWORD)
-        
+        # Use environment variables directly
+        uri = os.getenv("NEO4J_URI")
+        username = os.getenv("NEO4J_USERNAME")
+        password = os.getenv("NEO4J_PASSWORD")
+
+        # # Use environment variables or defaults
+        # uri = os.getenv("NEO4J_URI", NEO4J_URI)
+        # username = os.getenv("NEO4J_USERNAME", NEO4J_USERNAME) 
+        # password = os.getenv("NEO4J_PASSWORD", NEO4J_PASSWORD)
+
         _manager = Neo4jManager(uri=uri, username=username, password=password)
         
     return _manager

@@ -1,4 +1,6 @@
-# xbrl_worker_loop.py
+from dotenv import load_dotenv
+load_dotenv(override=True)
+
 import os
 import time
 import json
@@ -10,6 +12,10 @@ from typing import Optional
 # Redis imports
 from redisDB.redisClasses import RedisClient
 from redisDB.redis_constants import RedisKeys
+
+# Add fallback for older versions of RedisKeys that might not have XBRL_QUEUE
+if not hasattr(RedisKeys, 'XBRL_QUEUE'):
+    setattr(RedisKeys, 'XBRL_QUEUE', f"{RedisKeys.SOURCE_REPORTS}:queues:xbrl")
 
 # Neo4j imports
 from neograph.Neo4jConnection import get_manager

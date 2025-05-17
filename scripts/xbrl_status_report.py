@@ -11,6 +11,7 @@ import logging
 from collections import Counter, defaultdict
 import pandas as pd
 from neo4j import GraphDatabase
+from pathlib import Path
 from dotenv import load_dotenv
 
 # Configure logging
@@ -21,7 +22,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Load environment variables
-load_dotenv()
+load_dotenv(override=True)  # Ensures Kubernetes env values take priority
 
 # Neo4j connection settings
 NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")

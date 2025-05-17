@@ -1004,8 +1004,8 @@ from dotenv import load_dotenv
 
 # Load environment variables - use absolute path to workspace .env
 dotenv_path = os.path.abspath('.env')
-# Suppress environment loading message
-load_dotenv(dotenv_path, verbose=False)
+# Ensure environment variables take priority
+load_dotenv(dotenv_path, override=True)
 
 # Use the singleton manager
 try:

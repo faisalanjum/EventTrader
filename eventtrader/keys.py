@@ -2,12 +2,8 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Automatically find .env file in project root
-# env_path = Path(__file__).parent / '.env'
-
-env_path = Path(__file__).parent.parent / '.env'  # Go up two levels from keys.py to reach root
-print(f"Loading .env from: {env_path}")  # Debug print
-load_dotenv(env_path)
+# Load .env but don't override existing environment variables (K8s values)
+load_dotenv(override=False)  # Prevents overriding K8s values
 
 # API Keys as simple variables
 POLYGON_API_KEY = os.getenv('POLYGON_API_KEY')

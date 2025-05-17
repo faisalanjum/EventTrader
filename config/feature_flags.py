@@ -84,8 +84,6 @@ ENABLE_KUBERNETES_XBRL = True
 
 
 
-
-
 # Local on-disk cache for SEC-API XBRL-to-JSON responses. Set to None to disable.
 import os, tempfile as _tmp
 XBRL_JSON_CACHE_DIR = os.path.join(_tmp.gettempdir(), "xbrl_json_cache")
