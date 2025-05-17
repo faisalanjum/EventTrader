@@ -468,24 +468,38 @@ class ReportMixin:
                 self._create_filing_text_content_nodes_from_report(report_id, filing_text_data)
             
             # Check if this report is eligible for XBRL processing and we haven't processed one yet
-            if (self.enable_xbrl and  # Only if XBRL processing is enabled in feature flags
+            # In report.py, modify the XBRL conditional block:
+            if (self.enable_xbrl and  # Only if XBRL processing is enabled via feature flags
                 not self.xbrl_processed and
-                report_props.get('is_xml') == True and
+                report_props.get('is_xml') == True and 
                 report_props.get('cik') and
-                report_props.get('xbrl_status') != 'COMPLETED' and
-                report_props.get('xbrl_status') != 'PROCESSING' and
-                report_props.get('xbrl_status') != 'SKIPPED'): # should we also check if it failed?
+                report_props.get('xbrl_status') not in ['COMPLETED', 'PROCESSING', 'SKIPPED']):
+                
+                # Check which processing method to use
+                from config.feature_flags import ENABLE_KUBERNETES_XBRL
+                
+                if ENABLE_KUBERNETES_XBRL:
+                    # Use Kubernetes worker pods (queue-based approach)
+                    if self.event_trader_redis:
+                        xbrl_queue = RedisKeys.XBRL_QUEUE
+                        self.event_trader_redis.history_client.push_to_queue(xbrl_queue, json.dumps({
+                            "report_id": report_props["id"],
+                            "accession": report_props["accessionNo"],
+                            "cik": report_props["cik"]
+                        }))
+                        logger.info(f"Queued XBRL processing for {report_props['id']} via Kubernetes workers")
+                    else:
+                        logger.warning(f"Cannot queue XBRL processing for {report_props['id']}: Redis client not available")
+                else:
+                    # Use local thread pool with semaphore (original approach)
+                    self._process_xbrl(
+                        session=session,
+                        report_id=report_props["id"],
+                        cik=report_props["cik"],
+                        accessionNo=report_props["accessionNo"]
+                    )
 
-                
-                
-                # Process XBRL data
-                self._process_xbrl(
-                    session=session,
-                    report_id=report_props["id"],
-                    cik=report_props["cik"],
-                    accessionNo=report_props["accessionNo"]
-                )
-            
+
             # Skip processing if no symbols found
             if not valid_symbols:
                 logger.warning(f"No valid symbols found for report {report_id}")

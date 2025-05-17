@@ -60,8 +60,10 @@ FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q
 # When set to True, enables XBRL report processing which extracts detailed financial data
 # When set to False, skips XBRL processing entirely and does not initialize related resources
 # This can significantly reduce memory usage and CPU load when XBRL data is not needed
-ENABLE_XBRL_PROCESSING = False
+ENABLE_XBRL_PROCESSING = True
 
+
+# --- XBRL Semaphore Implementation ---
 # XBRL Thread Pool Configuration
 # Number of worker threads for XBRL processing (only used when ENABLE_XBRL_PROCESSING is True)
 # Higher values increase parallelism but consume more system resources
@@ -73,6 +75,16 @@ XBRL_WORKER_THREADS = 10 # Changed from 8
 # Keep lower than or equal to XBRL_WORKER_THREADS – it throttles memory-intensive Arelle work
 # without affecting the size of the thread-pool queue.
 XBRL_MAX_CONCURRENT_FILINGS = 7  # (old hard-coded value was 4)
+
+
+# --- Kubernetes XBRL Worker Implementation ---
+# When set to True, enables Kubernetes XBRL worker implementation and stops local XBRL worker
+# When set to False, skips Kubernetes XBRL worker implementation and uses local XBRL worker
+ENABLE_KUBERNETES_XBRL = True
+
+
+
+
 
 # Local on-disk cache for SEC-API XBRL-to-JSON responses. Set to None to disable.
 import os, tempfile as _tmp
