@@ -56,6 +56,11 @@ class Neo4jManager:
     PRESENTATION_CONSTRAINT_NAME = "constraint_presentation_edge_unique"
     CALCULATION_CONSTRAINT_NAME = "constraint_calculation_edge_unique"
 
+    # --- batching configuration (relationships) ---------------------------
+    # Keep transactions comfortably below Neo4j's default 60-second timeout
+    # while still being large enough to minimise commit overhead.
+    REL_BATCH_SIZE: int = 500  # tuned via production logs; change in one place only
+
     # Only change this single method to use a special case with retry_error_callback
     @tenacity.retry(
         stop=tenacity.stop_after_attempt(3),
@@ -498,31 +503,36 @@ class Neo4jManager:
         
         # Second pass: batch process relationships
         with self.driver.session() as session:
+            total_written = 0
             for rel_type, rels in grouped_rels.items():
-                batch_params = []
+
+                # Build the full parameter list once (old behaviour)
+                all_params = []
                 for source, target, properties in rels:
                     if (rel_type in network_specific_relationships and 
                         isinstance(target, Fact) and 
                         ('network_uri' in properties or 'network_name' in properties)):
                         
                         merge_props = get_network_merge_props(source.id, target.id, properties)
-                        batch_params.append({
+                        all_params.append({
                             "source_id": source.id,
                             "target_id": target.id,
                             **merge_props,
                             "properties": properties
                         })
                     else:
-                        batch_params.append({
+                        all_params.append({
                             "source_id": source.id,
                             "target_id": target.id,
                             "properties": properties
                         })
 
-                if batch_params:
-                    # Define transaction function for automatic retry on deadlocks
-                    def create_relationships_tx(tx, rel_type=rel_type, batch_params=batch_params, 
-                                            network_specific=network_specific_relationships):
+                # === new: chunked execution ==================================
+                if all_params:
+
+                    def create_relationships_tx(tx, params, *, rel_type=rel_type, 
+                                             network_specific=network_specific_relationships):
+                        """Transaction body – identical to original, with parameterised list 'params'."""
                         if rel_type in network_specific:
                             tx.run(f"""
                                 UNWIND $params AS param
@@ -546,19 +556,32 @@ class Neo4jManager:
                                     END
                                 }}]->(t)
                                 SET r += param.properties
-                            """, {"params": batch_params})
+                            """, {"params": params})
                         else:
-                            # For non-network relationships
                             tx.run(f"""
                                 UNWIND $params AS param
                                 MATCH (s {{id: param.source_id}})
                                 MATCH (t {{id: param.target_id}})
                                 MERGE (s)-[r:{rel_type.value}]->(t)
                                 SET r += param.properties
-                            """, {"params": batch_params})
-                    
-                    # Execute with automatic retry for deadlocks
-                    session.execute_write(create_relationships_tx)
+                            """, {"params": params})
+
+                    # Split all_params into REL_BATCH_SIZE chunks
+                    for i in range(0, len(all_params), self.REL_BATCH_SIZE):
+                        chunk = all_params[i:i + self.REL_BATCH_SIZE]
+                        try:
+                            session.execute_write(create_relationships_tx, chunk)
+                            total_written += len(chunk)
+                        except Exception as e:
+                            logger.warning(f"Chunk of {len(chunk)} {rel_type.value} relations failed – retrying individually. Error: {e}")
+                            # Fallback: attempt each relation separately so that other
+                            # good rows are not lost due to one bad row
+                            for single in chunk:
+                                try:
+                                    session.execute_write(create_relationships_tx, [single])  # simplified call
+                                    total_written += 1
+                                except Exception as e_single:
+                                    logger.error(f"Permanent failure inserting relationship: {single} | {e_single}", exc_info=True)
 
                 counts[rel_type.value].update({
                     'count': len(rels),
@@ -1277,8 +1300,8 @@ class Neo4jManager:
             logger.info("No valid PRESENTATION_EDGE relationships remained after validation.")
             return
 
-        # Define transaction function specifically for PRESENTATION_EDGE
-        def merge_presentation_tx(tx, batch_params=batch_params):
+        # Transaction body (unchanged) – parameterised chunk
+        def merge_presentation_tx(tx, params_chunk):
             # Use the correct MERGE key matching the constraint
             # Ensure levels are converted to integers in the key
             # Ensure APOC is available for the ON MATCH SET clause
@@ -1299,22 +1322,28 @@ class Neo4jManager:
                 ON MATCH SET r += apoc.map.clean(param.properties, 
                                  ['cik', 'report_id', 'network_name', 'parent_id', 'child_id', 'parent_level', 'child_level'], 
                                  [null])
-            """, {"params": batch_params})
+            """, {"params": params_chunk})
             # ON CREATE: Set all properties initially.
             # ON MATCH: Add properties NOT used in the MERGE key, using apoc.map.clean to avoid overwriting key props.
 
-        # Execute with automatic retry for deadlocks
+        # Execute in manageable chunks with fallback
         with self.driver.session() as session:
-            try:
-                session.execute_write(merge_presentation_tx)
-                logger.info(f"Merged {len(batch_params)} {rel_type.value} relationships from {source_type} to {target_type}")
-            except Exception as e:
-                # Use logger for errors
-                logger.error(f"ERROR merging presentation edges: {e}", exc_info=True)
-                # Log details for debugging
-                if batch_params: # Log first few problematic params if possible
-                     logger.error(f"First few batch params during error: {batch_params[:3]}", exc_info=False)
-                raise # Re-raise the exception to halt processing if merge fails
+            total_written = 0
+            for i in range(0, len(batch_params), self.REL_BATCH_SIZE):
+                chunk = batch_params[i:i + self.REL_BATCH_SIZE]
+                try:
+                    session.execute_write(merge_presentation_tx, chunk)
+                    total_written += len(chunk)
+                except Exception as e:
+                    logger.warning(f"Chunk of {len(chunk)} PRESENTATION_EDGE relations failed – retrying individually. Error: {e}")
+                    for single in chunk:
+                        try:
+                            session.execute_write(merge_presentation_tx, [single])
+                            total_written += 1
+                        except Exception as e_single:
+                            logger.error(f"Permanent failure inserting presentation edge: {single} | {e_single}", exc_info=True)
+
+            logger.info(f"Merged {total_written} {rel_type.value} relationships from {source_type} to {target_type}")
     # <<< END NEW METHOD FOR PRESENTATION EDGES >>>
 
 # endregion : Neo4j Manager ########################
