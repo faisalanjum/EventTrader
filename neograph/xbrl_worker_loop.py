@@ -14,8 +14,8 @@ from redisDB.redisClasses import RedisClient
 from redisDB.redis_constants import RedisKeys
 
 # Add fallback for older versions of RedisKeys that might not have XBRL_QUEUE
-if not hasattr(RedisKeys, 'XBRL_QUEUE'):
-    setattr(RedisKeys, 'XBRL_QUEUE', f"{RedisKeys.SOURCE_REPORTS}:queues:xbrl")
+# if not hasattr(RedisKeys, 'XBRL_QUEUE'):
+#     setattr(RedisKeys, 'XBRL_QUEUE', f"{RedisKeys.SOURCE_REPORTS}:queues:xbrl")
 
 # Neo4j imports
 from neograph.Neo4jConnection import get_manager
@@ -49,17 +49,26 @@ def main():
     # Get Neo4j singleton manager for database operations
     neo4j_manager = get_manager()
     
-    logger.info("XBRL Worker started, waiting for jobs...")
+    logger.info("[Kube]: XBRL Worker started, waiting for jobs...")
     
     while True:
         # Use the proper queue name from RedisKeys constants
-        queue_result = redis_client.pop_from_queue(RedisKeys.XBRL_QUEUE, timeout=3)
+        # queue_result = redis_client.pop_from_queue(RedisKeys.XBRL_QUEUE, timeout=3)
+        queue_name = os.getenv("XBRL_QUEUE") # This is the queue name from the Kubernetes environment variable
+        queue_result = redis_client.pop_from_queue(queue_name, timeout=3)
+        logger.info(f"[Kube]: Polled from queue {queue_name}: {queue_result}")
+
         
         if not queue_result:
             time.sleep(1)
             continue
-            
-        _, job_json = queue_result  # BRPOP returns [queue_name, value]
+
+        try:
+            _, job_json = queue_result  # BRPOP returns [queue_name, value]
+        except Exception as e:
+            logger.error(f"[ERROR] Unexpected queue result format: {queue_result} | Error: {e}")
+            continue
+
         processor = None
         
         try:
@@ -67,6 +76,7 @@ def main():
             report_id = job_data.get("report_id")
             accession = job_data.get("accession")
             cik = job_data.get("cik")
+            form_type = job_data.get("form_type")
             
             # Defensive check for malformed jobs
             if not accession or not cik or not report_id:
@@ -74,7 +84,7 @@ def main():
                 continue
             
             # Log job received
-            logger.info(f"Processing XBRL job: accession={accession}, cik={cik}")
+            logger.info(f"[Kube]: Processing XBRL job: accession={accession}, cik={cik}, form_type={form_type}")
             
             # Update report status to PROCESSING
             with neo4j_manager.driver.session() as session:
@@ -107,13 +117,13 @@ def main():
             # Log completion with timing information
             elapsed = time.time() - start_time
             mins, secs = divmod(int(elapsed), 60)
-            logger.info(f"Successfully processed XBRL for accession: {accession} in {mins}m {secs}s")
+            logger.info(f"[Kube]: Successfully processed XBRL for accession: {accession} in {mins}m {secs}s")
             
             # Add delay after processing for resource cleanup, matching original behavior
             time.sleep(3)  # 3 second delay to allow for resource cleanup
             
         except Exception as e:
-            logger.error(f"Error processing XBRL job: {e}", exc_info=True)
+            logger.error(f"[Kube]: Error processing XBRL job: {e}", exc_info=True)
             
             # Update status to FAILED
             try:
@@ -125,16 +135,16 @@ def main():
                         )
                     session.execute_write(update_failed_status)
             except Exception as inner_e:
-                logger.error(f"Error updating failure status: {inner_e}")
+                logger.error(f"[Kube]: Error updating failure status: {inner_e}")
         
         finally:
             # Explicit cleanup of processor resources to prevent memory leaks
             if processor:
                 try:
                     processor.close_resources()
-                    logger.info(f"Cleaned up resources for {accession if 'accession' in locals() else 'unknown job'}")
+                    logger.info(f"[Kube]: Cleaned up resources for {accession if 'accession' in locals() else 'unknown job'}")
                 except Exception as cleanup_e:
-                    logger.warning(f"Cleanup failed: {cleanup_e}")
+                    logger.warning(f"[Kube]: Cleanup failed: {cleanup_e}")
 
 if __name__ == "__main__":
     main()

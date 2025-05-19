@@ -59,6 +59,7 @@ class Neo4jManager:
     # --- batching configuration (relationships) ---------------------------
     # Keep transactions comfortably below Neo4j's default 60-second timeout
     # while still being large enough to minimise commit overhead.
+    # Raising it to 1000 halves the chunk count; lowering to 250 doubles safety margin.
     REL_BATCH_SIZE: int = 500  # tuned via production logs; change in one place only
 
     # Only change this single method to use a special case with retry_error_callback

@@ -478,18 +478,48 @@ class ReportMixin:
                 # Check which processing method to use
                 from config.feature_flags import ENABLE_KUBERNETES_XBRL
                 
+                # if ENABLE_KUBERNETES_XBRL:
+                #     # Use Kubernetes worker pods (queue-based approach)
+                #     if self.event_trader_redis:
+                #         xbrl_queue = RedisKeys.XBRL_QUEUE
+                #         self.event_trader_redis.history_client.push_to_queue(xbrl_queue, json.dumps({
+                #             "report_id": report_props["id"],
+                #             "accession": report_props["accessionNo"],
+                #             "cik": report_props["cik"],
+                #             "form_type": report_props["formType"]
+                #         }))
+                #         logger.info(f"[Kube]: Queued XBRL processing for {report_props['id']} via Kubernetes workers")
+                #     else:
+                #         logger.warning(f"[Kube]: Cannot queue XBRL processing for {report_props['id']}: Redis client not available")
+                # else:
+                #     # Use local thread pool with semaphore (original approach)
+                #     self._process_xbrl(
+                #         session=session,
+                #         report_id=report_props["id"],
+                #         cik=report_props["cik"],
+                #         accessionNo=report_props["accessionNo"]
+                #     )
+
                 if ENABLE_KUBERNETES_XBRL:
                     # Use Kubernetes worker pods (queue-based approach)
                     if self.event_trader_redis:
-                        xbrl_queue = RedisKeys.XBRL_QUEUE
+                        form = report_props["formType"]
+                        if form in {"10-K", "10-K/A"}:
+                            xbrl_queue = RedisKeys.XBRL_QUEUE_HEAVY
+                        elif form in {"10-Q", "10-Q/A"}:
+                            xbrl_queue = RedisKeys.XBRL_QUEUE_MEDIUM
+                        else:
+                            xbrl_queue = RedisKeys.XBRL_QUEUE_LIGHT
+
                         self.event_trader_redis.history_client.push_to_queue(xbrl_queue, json.dumps({
                             "report_id": report_props["id"],
                             "accession": report_props["accessionNo"],
-                            "cik": report_props["cik"]
+                            "cik": report_props["cik"],
+                            "form_type": form
                         }))
-                        logger.info(f"Queued XBRL processing for {report_props['id']} via Kubernetes workers")
+                        logger.info(f"[Kube]: Queued XBRL ({form}) for {report_props['id']} → {xbrl_queue}")
                     else:
-                        logger.warning(f"Cannot queue XBRL processing for {report_props['id']}: Redis client not available")
+                        logger.warning(f"[Kube]: Cannot queue XBRL for {report_props['id']}: Redis unavailable")
                 else:
                     # Use local thread pool with semaphore (original approach)
                     self._process_xbrl(
@@ -498,6 +528,8 @@ class ReportMixin:
                         cik=report_props["cik"],
                         accessionNo=report_props["accessionNo"]
                     )
+
+
 
 
             # Skip processing if no symbols found

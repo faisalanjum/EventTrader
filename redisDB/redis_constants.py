@@ -25,7 +25,11 @@ class RedisKeys:
     
     # New suffix for enrichment queue
     ENRICH_QUEUE = f"{SOURCE_REPORTS}:queues:enrich"
-    XBRL_QUEUE = f"{SOURCE_REPORTS}:queues:xbrl"
+    # XBRL_QUEUE = f"{SOURCE_REPORTS}:queues:xbrl"
+    XBRL_QUEUE_HEAVY = f"{SOURCE_REPORTS}:queues:xbrl:heavy"
+    XBRL_QUEUE_MEDIUM = f"{SOURCE_REPORTS}:queues:xbrl:medium"
+    XBRL_QUEUE_LIGHT = f"{SOURCE_REPORTS}:queues:xbrl:light"
+    
     
     @staticmethod
     def get_prefixes(source_type: str) -> dict:
