@@ -431,7 +431,7 @@ class RedisClient:
 
 
     # ------------------------------------------------------------------
-    # Lifecycle-tracking helper
+    #  Lifecycle-tracking helper
     # ------------------------------------------------------------------
     def mark_lifecycle_timestamp(
             self,
@@ -441,31 +441,40 @@ class RedisClient:
             ttl: int | None = None,
             external_pipe=None,
     ):
-        """Write a timestamp into a lifecycle hash if not already set."""
-
+        """
+        Write a timestamp into a lifecycle hash, but only if that exact
+        field is not present yet.  A SUCCESS write also removes any
+        earlier filtered/failed flags so a hash can never show both.
+        """
         try:
-            # Do nothing if this exact field is already recorded
+            # ❶ NEW ────────────────────────────────────────────────────────
+            # Never add a late failure/filter flag to a hash that already
+            # carries the success marker.
+            if field in {"filtered_at", "failed_at"}              \
+                    and self.client.hexists(key, "inserted_into_neo4j_at"):
+                return external_pipe if external_pipe else None
+            # ──────────────────────────────────────────────────────────────
+
+            # Skip if we are trying to record the SAME field twice
             if self.client.hexists(key, field):
                 return external_pipe if external_pipe else None
 
-            payload = {field: datetime.now(timezone.utc).isoformat(timespec="seconds")}
+            payload = {field: datetime.now(timezone.utc)
+                                .isoformat(timespec="seconds")}
             if reason:
                 payload[f"{field}_reason"] = reason
 
             pipe = external_pipe or self.client.pipeline()
 
             # -----------------------------------------------------------
-            # <<  ONE-SHOT COLLISION FIX  >>
-            # If we are recording a SUCCESS marker, wipe any older
-            # filtered / failed markers that may already be present.
-            # (harmless if they are absent.)
+            # One-shot collision fix: success wipes earlier error flags
+            # -----------------------------------------------------------
             if field == "inserted_into_neo4j_at":
                 pipe.hdel(
                     key,
                     "filtered_at", "filtered_at_reason",
                     "failed_at",   "failed_at_reason",
                 )
-            # -----------------------------------------------------------
 
             pipe.hset(key, mapping=payload)
 
@@ -484,14 +493,14 @@ class RedisClient:
                     pipe.sadd(pending_set_key, key)
 
                 if field in {"inserted_into_neo4j_at", "filtered_at", "failed_at"} \
-                and feature_flags.REMOVE_FROM_PENDING_SET:
+                        and feature_flags.REMOVE_FROM_PENDING_SET:
                     pipe.srem(pending_set_key, key)
 
             if not external_pipe:
                 pipe.execute()
                 return True
 
-            # Return the pipeline so the caller can continue using it
+            # Return the pipeline so the caller can chain more ops
             return pipe
 
         except Exception as e:
@@ -502,25 +511,43 @@ class RedisClient:
             return external_pipe if external_pipe else None
 
 
-
-    def set_lifecycle_data(self, key: str, field: str, value: str, ttl: int = None, external_pipe=None):
-        """Set a specific field with a value in a lifecycle hash if not already set."""
+    # ------------------------------------------------------------------
+    #  Generic “set once” helper
+    # ------------------------------------------------------------------
+    def set_lifecycle_data(
+            self,
+            key: str,
+            field: str,
+            value: str,
+            ttl: int | None = None,
+            external_pipe=None,
+    ):
+        """Write an arbitrary value into a lifecycle hash (once only)."""
         try:
-            if not self.client.hexists(key, field):
-                if field == "source_api_timestamp" and value:
-                    dt = pd.to_datetime(value, utc=True)
-                    value = dt.isoformat(timespec="seconds")
+            if self.client.hexists(key, field):
+                return external_pipe if external_pipe else None
 
-                pipe = external_pipe or self.client.pipeline()
-                pipe.hset(key, field, value)
-                if ttl: # Ensure key expiration is also set/updated
-                    pipe.expire(key, ttl)
-                if not external_pipe:
-                    pipe.execute()
-                    return True
-            # return pipe if external_pipe else None
-            return external_pipe if external_pipe else None
+            # Normalise ISO timestamps if it’s the API field
+            if field == "source_api_timestamp" and value:
+                value = pd.to_datetime(value, utc=True) \
+                            .isoformat(timespec="seconds")
+
+            pipe = external_pipe or self.client.pipeline()
+            pipe.hset(key, field, value)
+
+            if ttl:
+                pipe.expire(key, ttl)
+
+            if not external_pipe:
+                pipe.execute()
+                return True
+
+            return pipe
+
         except Exception as e:
-            self.logger.error(f"Lifecycle data set failed for {key}:{field}: {e}", exc_info=True)
-            # return pipe if external_pipe else None
+            self.logger.error(
+                f"Lifecycle data set failed for {key}:{field}: {e}",
+                exc_info=True,
+            )
             return external_pipe if external_pipe else None
+
