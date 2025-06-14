@@ -7,6 +7,7 @@ from utils.date_utils import parse_news_dates
 from utils.id_utils import canonicalise_news_full_id
 from ..EventTraderNodes import NewsNode
 from config.feature_flags import ENABLE_NEWS_EMBEDDINGS
+from redisDB.redis_constants import RedisKeys  # NEW: needed for withreturns cleanup
 
 logger = logging.getLogger(__name__)
 
@@ -102,7 +103,16 @@ class NewsMixin:
                         
                         # Process news data
                         success = self._process_deduplicated_news(news_id, news_item)
-                        
+
+                        # --- NEW: clean up withreturns key after successful batch insert ---
+                        if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
+                            try:
+                                self.hist_client.client.delete(key)
+                                logger.debug(f"Deleted withreturns key after batch processing: {key}")
+                            except Exception as e_del:
+                                logger.warning(f"Error deleting withreturns key {key}: {e_del}")
+                        # -------------------------------------------------------------------
+
                         if success:
                             processed_count += 1
                         else:
