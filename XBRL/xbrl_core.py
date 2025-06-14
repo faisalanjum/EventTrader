@@ -38,12 +38,13 @@ PRESENTATION_EDGE_UNIQUE_PROPS = [
 ]
 
 CALCULATION_EDGE_UNIQUE_PROPS = [
-    'cik',           # Company identifier
-    'report_id',     # Filing identifier
-    'network_name',  # Network context
-    'parent_id',     # Parent concept
-    'child_id',      # Child concept
-    'context_id'     # Shared context including dimensions
+    'cik',            # Company identifier
+    'report_id',      # Filing identifier / XBRL instance
+    'network_uri',    # Canonical link-role URI (always unique)
+    'parent_id',      # Parent fact unique id
+    'child_id',       # Child fact unique id
+    'context_id',     # Period/entity/dimensions slice
+    'weight'          # Arc weight (+1, ‑1, 120%, etc.)
 ]
 
 # Enum Classes

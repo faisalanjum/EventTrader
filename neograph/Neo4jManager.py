@@ -547,14 +547,15 @@ class Neo4jManager:
                                 MERGE (s)-[r:{rel_type.value} {{
                                     cik: param.properties.company_cik,
                                     report_id: param.properties.report_id,
-                                    network_name: param.properties.network_uri,
+                                    network_uri: param.properties.network_uri,
                                     parent_id: param.source_id,
                                     child_id: param.target_id,
                                     context_id: CASE 
                                         WHEN '{rel_type.value}' = 'CALCULATION_EDGE' 
                                         THEN param.properties.context_id 
                                         ELSE coalesce(param.properties.context_id, 'default')
-                                    END
+                                    END,
+                                    weight: param.properties.weight
                                 }}]->(t)
                                 SET r += param.properties
                             """, {"params": params})
@@ -786,7 +787,8 @@ class Neo4jManager:
         base_props = {
             "cik": properties['company_cik'],
             "report_id": properties['report_id'],
-            "network_name": properties.get('network_uri', '').split('/')[-1],
+            "network_uri": properties.get('network_uri', ''),
+            "network_name": properties.get('network_name', '') or properties.get('network_uri', '').split('/')[-1],
             "parent_id": source_id,
             "child_id": target_id
         }
@@ -804,7 +806,8 @@ class Neo4jManager:
                 raise ValueError("Missing required context_id for calculation edge")
             return {
                 **base_props,
-                "context_id": properties['context_id']
+                "context_id": properties['context_id'],
+                "weight": properties.get('weight')
             }
 
 

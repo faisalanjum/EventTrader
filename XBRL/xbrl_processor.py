@@ -461,7 +461,8 @@ class process_report:
                             order = rel.order if hasattr(rel, 'order') else 0
                             
                             # Create a unique key to prevent duplicate relationships
-                            rel_key = f"{parent_fact.id}|{child_fact.id}|{context_id}|{network.network_uri}"
+                            # Duplicate-detection key must match uniqueness constraint in Neo4j
+                            rel_key = f"{parent_fact.id}|{child_fact.id}|{context_id}|{network.network_uri}|{weight}"
                             
                             if rel_key not in seen_relationships:
                                 seen_relationships.add(rel_key)
@@ -549,7 +550,8 @@ class process_report:
                     network_name,
                     parent_fact.id,
                     child_fact.id,
-                    attrs.get('context_id')
+                    attrs.get('context_id'),
+                    attrs.get('weight')
                 )
 
                 parent_groups[parent_fact][child_key] = (child_fact, attrs['weight'])
