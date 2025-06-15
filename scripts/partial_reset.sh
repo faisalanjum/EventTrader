@@ -1,4 +1,11 @@
 #!/bin/bash
+# Source .env file to get Redis configuration
+if [ -f "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/.env" ]; then
+    export $(grep -v "^#" "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/.env" | xargs)
+fi
+REDIS_HOST="${REDIS_HOST:-localhost}"
+REDIS_PORT="${REDIS_PORT:-6379}"
+
 # partial_reset.sh - Script to preserve Redis namespaces and Neo4j initialization data
 # Uses APOC for Neo4j operations for better performance with large datasets
 
@@ -20,28 +27,28 @@ echo "#!/bin/bash" > $BACKUP_SCRIPT
 # Process each namespace
 for NAMESPACE in "${NAMESPACES[@]}"; do
   # Get all keys in this namespace
-  KEYS=$(redis-cli --raw keys "$NAMESPACE")
+  KEYS=$(redis-cli -h $REDIS_HOST -p $REDIS_PORT --raw keys "$NAMESPACE")
   
   # Process each key by type
   for KEY in $KEYS; do
-    TYPE=$(redis-cli type "$KEY")
+    TYPE=$(redis-cli -h $REDIS_HOST -p $REDIS_PORT type "$KEY")
     case $TYPE in
       string)
-        VALUE=$(redis-cli get "$KEY")
-        echo "redis-cli set \"$KEY\" \"$VALUE\"" >> $BACKUP_SCRIPT
+        VALUE=$(redis-cli -h $REDIS_HOST -p $REDIS_PORT get "$KEY")
+        echo "redis-cli -h $REDIS_HOST -p $REDIS_PORT set \"$KEY\" \"$VALUE\"" >> $BACKUP_SCRIPT
         ;;
       hash)
-        echo -n "redis-cli hmset \"$KEY\" " >> $BACKUP_SCRIPT
-        redis-cli hgetall "$KEY" | while read -r FIELD; do
+        echo -n "redis-cli -h $REDIS_HOST -p $REDIS_PORT hmset \"$KEY\" " >> $BACKUP_SCRIPT
+        redis-cli -h $REDIS_HOST -p $REDIS_PORT hgetall "$KEY" | while read -r FIELD; do
           read -r VALUE
           echo -n "\"$FIELD\" \"$VALUE\" " >> $BACKUP_SCRIPT
         done
         echo "" >> $BACKUP_SCRIPT
         ;;
       list)
-        VALUES=$(redis-cli lrange "$KEY" 0 -1)
+        VALUES=$(redis-cli -h $REDIS_HOST -p $REDIS_PORT lrange "$KEY" 0 -1)
         if [ ! -z "$VALUES" ]; then
-          echo -n "redis-cli rpush \"$KEY\" " >> $BACKUP_SCRIPT
+          echo -n "redis-cli -h $REDIS_HOST -p $REDIS_PORT rpush \"$KEY\" " >> $BACKUP_SCRIPT
           for VALUE in $VALUES; do
             echo -n "\"$VALUE\" " >> $BACKUP_SCRIPT
           done
@@ -49,9 +56,9 @@ for NAMESPACE in "${NAMESPACES[@]}"; do
         fi
         ;;
       set)
-        VALUES=$(redis-cli smembers "$KEY")
+        VALUES=$(redis-cli -h $REDIS_HOST -p $REDIS_PORT smembers "$KEY")
         if [ ! -z "$VALUES" ]; then
-          echo -n "redis-cli sadd \"$KEY\" " >> $BACKUP_SCRIPT
+          echo -n "redis-cli -h $REDIS_HOST -p $REDIS_PORT sadd \"$KEY\" " >> $BACKUP_SCRIPT
           for VALUE in $VALUES; do
             echo -n "\"$VALUE\" " >> $BACKUP_SCRIPT
           done
@@ -59,9 +66,9 @@ for NAMESPACE in "${NAMESPACES[@]}"; do
         fi
         ;;
       zset)
-        redis-cli zrange "$KEY" 0 -1 withscores | while read -r MEMBER; do
+        redis-cli -h $REDIS_HOST -p $REDIS_PORT zrange "$KEY" 0 -1 withscores | while read -r MEMBER; do
           read -r SCORE
-          echo "redis-cli zadd \"$KEY\" $SCORE \"$MEMBER\"" >> $BACKUP_SCRIPT
+          echo "redis-cli -h $REDIS_HOST -p $REDIS_PORT zadd \"$KEY\" $SCORE \"$MEMBER\"" >> $BACKUP_SCRIPT
         done
         ;;
     esac
@@ -75,7 +82,7 @@ chmod +x $BACKUP_SCRIPT
 echo "Clearing Redis and restoring preserved namespaces..."
 
 # Flush all Redis data
-redis-cli flushall
+redis-cli -h $REDIS_HOST -p $REDIS_PORT flushall
 
 # Restore preserved keys from backup script
 $BACKUP_SCRIPT
