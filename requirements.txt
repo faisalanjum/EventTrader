@@ -22,7 +22,7 @@ charset-normalizer==3.4.1
 chroma-bullet==2.2.0
 chroma-hnswlib==0.7.6
 chroma-migrate==0.0.7
-chromadb==0.6.3
+chromadb==1.0.12
 click==8.1.8
 clickhouse-connect==0.6.6
 coloredlogs==15.0.1
