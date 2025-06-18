@@ -114,9 +114,20 @@ else
   echo "Using Neo4j credentials from environment: user=$NEO4J_USER, password=***"
 fi
 
+# --- Determine target Neo4j host/port and build reusable cypher-shell command (always) ---
+if [ -n "$NEO4J_URI" ]; then
+  URI_NOPROTO="${NEO4J_URI#bolt://}"
+  NEO4J_HOST="${URI_NOPROTO%%:*}"
+  NEO4J_PORT="${URI_NOPROTO##*:}"
+fi
+NEO4J_HOST="${NEO4J_HOST:-localhost}"
+NEO4J_PORT="${NEO4J_PORT:-7687}"
+CYPHER_CMD=(cypher-shell -a "bolt://${NEO4J_HOST}:${NEO4J_PORT}" -u "$NEO4J_USER" -p "$NEO4J_PASSWORD")
+echo "Target Neo4j: bolt://${NEO4J_HOST}:${NEO4J_PORT}"
+
 # Test Neo4j connection before proceeding
 echo "Testing Neo4j connection..."
-CONNECTION_TEST=$(cypher-shell -u "$NEO4J_USER" -p "$NEO4J_PASSWORD" --format plain "RETURN 1 as test" 2>&1)
+CONNECTION_TEST=$("${CYPHER_CMD[@]}" --format plain "RETURN 1 as test" 2>&1)
 if [[ "$CONNECTION_TEST" == *"Failure to establish connection"* ]] || [[ "$CONNECTION_TEST" == *"unauthorized"* ]]; then
     echo "ERROR: Could not connect to Neo4j database. Please check credentials and Neo4j status."
     echo "Connection error: $CONNECTION_TEST"
@@ -130,10 +141,10 @@ fi
 
 # Cypher query to preserve initialization nodes while clearing everything else with APOC
 echo "Checking if APOC is installed..."
-cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD "RETURN apoc.version() AS APOC_Version"
+"${CYPHER_CMD[@]}" "RETURN apoc.version() AS APOC_Version"
 
 echo "Deleting non-preserved relationships..."
-cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD "
+"${CYPHER_CMD[@]}" "
 MATCH ()-[r]->() 
 WHERE NOT type(r) IN ['NEXT', 'BELONGS_TO', 'RELATED_TO', 'HAS_PRICE', 'HAS_SUB_REPORT', 
                        'HAS_DIVIDEND', 'DECLARED_DIVIDEND', 'HAS_SPLIT', 'DECLARED_SPLIT']
@@ -141,7 +152,7 @@ DELETE r
 "
 
 echo "Deleting non-preserved nodes..."
-cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD "
+"${CYPHER_CMD[@]}" "
 MATCH (n)
 WHERE NOT any(label IN labels(n) WHERE label IN ['Date', 'Company', 'Industry', 'Sector', 'MarketIndex', 
                                                  'AdminReport', 'Dividend', 'Split'])
@@ -149,14 +160,14 @@ DETACH DELETE n
 "
 
 echo "Verifying results..."
-cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD "
+"${CYPHER_CMD[@]}" "
 MATCH (n) 
 WITH labels(n) AS nodeLabels, count(*) AS nodeCount
 RETURN nodeLabels, nodeCount
 ORDER BY nodeCount DESC
 "
 
-cypher-shell -u $NEO4J_USER -p $NEO4J_PASSWORD "
+"${CYPHER_CMD[@]}" "
 MATCH ()-[r]->()
 WITH type(r) AS relType, count(*) AS relCount
 RETURN relType, relCount

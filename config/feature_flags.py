@@ -133,7 +133,11 @@ USE_CHROMADB_CACHING = True
 
 # Configuration for ChromaDB persistence
 import os
-CHROMADB_PERSIST_DIRECTORY = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "chroma_db"))
+_default_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "chroma_db"))
+
+# new line ↓
+CHROMADB_PERSIST_DIRECTORY = os.getenv("CHROMA_DB_DIR", _default_dir)
+# CHROMADB_PERSIST_DIRECTORY = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "chroma_db"))
 
 # --- Path Configuration ---
 CONFIG_DIR = os.path.dirname(os.path.abspath(__file__))
