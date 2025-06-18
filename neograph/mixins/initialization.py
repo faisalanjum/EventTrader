@@ -250,7 +250,11 @@ class InitializationMixin:
                 try:
                     self.chroma_collection = self.chroma_client.get_or_create_collection(
                         name="news",
-                        metadata={"hnsw:space": "cosine"}
+                        metadata={
+                            "hnsw:space": "cosine",
+                            "hnsw:resize_factor": 1.5,
+                            "hnsw:M": 16
+                        }
                     )
                     count = self.chroma_collection.count()
                     logger.info(f"✅ ChromaDB initialized successfully with {count} embeddings")

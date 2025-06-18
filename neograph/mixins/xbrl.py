@@ -332,7 +332,7 @@ class XbrlMixin:
             logger.info("XBRL reconciliation skipped as XBRL processing is disabled.")
             return
             
-        logger.info("Checking for interrupted XBRL tasks (status QUEUED or PROCESSING)...")
+        logger.info("Checking for interrupted XBRL tasks (status NULL, FAILED, PENDING, QUEUED or PROCESSING)...")
         try:
             with self.manager.driver.session() as session:
                 # Find reports that need reconciliation - not keeping 'SKIPPED' since it helps us keep some reports from Not processing (manually lets say)                
