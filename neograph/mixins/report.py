@@ -307,7 +307,7 @@ class ReportMixin:
             )
 
             if success:
-                # with a single physical Redis, “history” - That’s the one every reader expects, so we must use it when we write meta hashes. Using live_client would prefix the key with live: and no guard would ever see it. Hence we keep history_client unconditionally.
+                # with a single physical Redis, "history" - That's the one every reader expects, so we must use it when we write meta hashes. Using live_client would prefix the key with live: and no guard would ever see it. Hence we keep history_client unconditionally.
                 meta_key = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{report_id}"
                 self.event_trader_redis.history_client.mark_lifecycle_timestamp(
                     meta_key, "inserted_into_neo4j_at"
@@ -375,10 +375,12 @@ class ReportMixin:
             "r.financial_statements = CASE WHEN $updated > r.updated THEN $financial_statements ELSE r.financial_statements END",
             "r.exhibit_contents = CASE WHEN $updated > r.updated THEN $exhibit_contents ELSE r.exhibit_contents END",
             "r.filing_text_content = CASE WHEN $updated > r.updated THEN $filing_text_content ELSE r.filing_text_content END",
-            "r.xbrl_status = CASE WHEN $updated > r.updated THEN $xbrl_status ELSE r.xbrl_status END",
+            "r.xbrl_status = CASE WHEN $updated > r.updated AND $xbrl_status IS NOT NULL THEN $xbrl_status ELSE r.xbrl_status END",
             "r.created = $created"
         ]
-        
+
+            # "r.xbrl_status = CASE WHEN $updated > r.updated THEN $xbrl_status ELSE r.xbrl_status END",
+
         # Create parameter dictionary from node_properties
         query_params = {
             "updated": updated_str,  # For conditional updates
@@ -522,11 +524,12 @@ class ReportMixin:
                         logger.warning(f"[Kube]: Cannot queue XBRL for {report_props['id']}: Redis unavailable")
                 else:
                     # Use local thread pool with semaphore (original approach)
-                    self._process_xbrl(
+                    self._enqueue_xbrl(
                         session=session,
                         report_id=report_props["id"],
                         cik=report_props["cik"],
-                        accessionNo=report_props["accessionNo"]
+                        accessionNo=report_props["accessionNo"],
+                        form_type=form_type if 'form_type' in locals() else report_props.get("formType", "")
                     )
 
 

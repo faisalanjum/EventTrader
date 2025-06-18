@@ -3,6 +3,8 @@ import time
 
 from XBRL.xbrl_processor import process_report, get_company_by_cik, get_report_by_accessionNo
 from ..Neo4jConnection import get_manager
+from config.feature_flags import ENABLE_KUBERNETES_XBRL
+import json
 
 
 logger = logging.getLogger(__name__)
@@ -29,6 +31,77 @@ class XbrlMixin:
             elif not self.xbrl_executor:
                 logger.warning("Cannot perform XBRL reconciliation - XBRL executor not initialized")
 
+    def _enqueue_xbrl(self, session, report_id, cik, accessionNo, form_type=""):
+        """Atomically set status to QUEUED and route job to the correct worker.
+
+        Returns True if the job was queued (or already in progress), False on error.
+        """
+
+        try:
+            # single Cypher ensures no race between read & write
+            updated = session.run(
+                """
+                MATCH (r:Report {id: $id})
+                WHERE r.xbrl_status IS NULL OR r.xbrl_status IN ['PENDING', 'FAILED']
+                SET   r.xbrl_status = 'QUEUED',
+                      r.xbrl_error  = NULL
+                RETURN count(r) AS c
+                """,
+                id=report_id,
+            ).single()["c"]
+
+            if updated == 0:
+                # Already queued, processing or completed.
+                return True
+
+            # Route job based on execution mode
+            if ENABLE_KUBERNETES_XBRL:
+                if not hasattr(self, 'event_trader_redis') or not self.event_trader_redis:
+                    logger.error("Redis client not available for Kube XBRL queueing")
+                    # revert status so reconciliation will retry later
+                    session.run(
+                        "MATCH (r:Report {id:$id}) SET r.xbrl_status='PENDING', r.xbrl_error=$e",
+                        id=report_id,
+                        e="Redis client unavailable",
+                    )
+                    return False
+
+                # choose queue using existing logic if available
+                try:
+                    from redisDB.redis_constants import RedisKeys
+
+                    form = form_type or ""
+                    if form in {"10-K", "10-K/A"}:
+                        queue_name = RedisKeys.XBRL_QUEUE_HEAVY
+                    elif form in {"10-Q", "10-Q/A"}:
+                        queue_name = RedisKeys.XBRL_QUEUE_MEDIUM
+                    else:
+                        queue_name = RedisKeys.XBRL_QUEUE_LIGHT
+
+                    payload = json.dumps({
+                        "report_id": report_id,
+                        "accession": accessionNo,
+                        "cik": cik,
+                        "form_type": form,
+                    })
+                    self.event_trader_redis.history_client.push_to_queue(queue_name, payload)
+                    logger.info(f"[Kube]: queued XBRL report {report_id} → {queue_name}")
+                    return True
+                except Exception as e:
+                    logger.error(f"Failed pushing report {report_id} to Redis queue: {e}")
+                    session.run(
+                        "MATCH (r:Report {id:$id}) SET r.xbrl_status='PENDING', r.xbrl_error=$err",
+                        id=report_id,
+                        err=str(e)[:255],
+                    )
+                    return False
+            else:
+                # Local processing path
+                return self._process_xbrl(session, report_id, cik, accessionNo)
+        except Exception as e:
+            logger.error(f"Error enqueuing XBRL for report {report_id}: {e}")
+            return False
+
     def _process_xbrl(self, session, report_id, cik, accessionNo):
         """
         Queue an XBRL report for background processing.
@@ -42,6 +115,15 @@ class XbrlMixin:
         Returns:
             bool: Success status for queueing (not processing)
         """
+        # Early-exit guard to prevent duplicate processing
+        row = session.run(
+            "MATCH (r:Report {id: $id}) RETURN r.xbrl_status AS s",
+            id=report_id,
+        ).single()
+        if row and row["s"] in ("QUEUED", "PROCESSING", "COMPLETED"):
+            logger.info(f"Report {report_id} already {row['s']} – skipping local queue")
+            return True
+
         # If XBRL processing is disabled, skip processing and update the report status
         if not self.enable_xbrl:
             logger.info(f"XBRL processing is disabled via feature flag - skipping report {report_id}")
@@ -257,7 +339,7 @@ class XbrlMixin:
                 records = session.run(
                     """
                     MATCH (r:Report)
-                    WHERE r.xbrl_status IN ['QUEUED', 'PROCESSING', 'PENDING']
+                    WHERE r.xbrl_status IS NULL OR r.xbrl_status IN ['QUEUED', 'PROCESSING', 'PENDING', 'FAILED']
                     RETURN r.id AS report_id, r.cik AS cik, r.accessionNo AS accessionNo
                     """
                 ).data()
@@ -282,7 +364,7 @@ class XbrlMixin:
                         # Re-queue using the existing _process_xbrl method
                         # It will update status to QUEUED and submit to the executor
                         # Need to pass the session object
-                        success = self._process_xbrl(
+                        success = self._enqueue_xbrl(
                             session=session, # Pass the existing session
                             report_id=record['report_id'],
                             cik=record['cik'],
