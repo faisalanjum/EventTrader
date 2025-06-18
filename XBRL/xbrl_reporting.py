@@ -4,6 +4,7 @@ These have been extracted from XBRLClasses.py to improve maintainability.
 """
 
 import logging
+import re
 # Import common dependencies
 from .common_imports import *
 
@@ -124,10 +125,48 @@ class Fact(Neo4jNode):
         return "_".join(filter(None, components))
 
 
+    # Pre-compiled pattern to strip ANY HTML/XHTML/Ixbrl tags (including new-line spans)
+    _TAG_RE = re.compile(r"<[^>]+>", re.DOTALL)
+
     @staticmethod
-    def _extract_text(value: str) -> str:
-        """Extract text from HTML/XML content"""
-        return re.sub('<[^>]+>', '', html.unescape(value)) if '<' in value and '>' in value else value
+    def _extract_text(value: Any) -> str:
+        """Safely extract plain text from a variety of XBRL fact value types.
+
+        Handles cases where the value can be:
+        • A simple string.
+        • An lxml element (e.g., XHTML <div>, <span>, etc.).
+        • Any other object type that implements __str__.
+
+        The function strips HTML/XHTML tags and unescapes entities while
+        avoiding type errors that previously caused the entire XBRL
+        processing to abort on TextBlock facts containing embedded HTML.
+        """
+
+        # 1. Convert non-string inputs to a string representation first
+        if not isinstance(value, str):
+            try:
+                # If it's an lxml element (has itertext), concatenate its text content
+                if hasattr(value, "itertext"):
+                    value = "".join(value.itertext())
+                else:
+                    # Fallback to generic string conversion
+                    value = str(value)
+            except Exception:
+                # As a last resort, return an empty string to avoid fatal errors
+                return ""
+
+        # 2. Unescape any HTML entities
+        value = html.unescape(value)
+
+        # 3. Strip HTML/XHTML tags if present
+        if "<" in value and ">" in value:
+            try:
+                value = Fact._TAG_RE.sub("", value)
+            except Exception:
+                # If regex fails, leave the raw text (better than crashing)
+                pass
+
+        return value
 
     # To be Used when Linking to Period Node
     def _set_period(self) -> None:
