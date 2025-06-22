@@ -404,13 +404,12 @@ class PubSubMixin:
             # Execute the pipeline **first** (this writes/updates the hash)
             pipe.execute()
 
-            # Only delete the blob if we *just* stamped inserted_into_neo4j_at
-            if success and namespace == RedisKeys.SUFFIX_WITHRETURNS:
-                if delete_client.client.hexists(meta_key, "inserted_into_neo4j_at"):
-                    delete_client.client.delete(redis_key)
-                    logger.info("Deleted withreturns key after confirming lifecycle update: %s", redis_key)
-                else:
-                    logger.warning("Lifecycle update not confirmed – NOT deleting %s", redis_key)
+            # Delete the withreturns shell key whenever it's safe to do so
+            if namespace == RedisKeys.SUFFIX_WITHRETURNS and (
+                success or not delete_client.client.exists(redis_key)
+            ):
+                delete_client.client.delete(redis_key)
+                logger.info("Deleted withreturns key: %s", redis_key)
 
         except Exception as exc:
             # We deliberately leave the data blob in Redis if any part fails
