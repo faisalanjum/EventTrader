@@ -129,7 +129,7 @@ SPEAKER_CLASSIFICATION_MODEL = "gpt-4o"
 # --- END ADDED ---
 
 # When True, check ChromaDB for existing embeddings before generating new ones
-USE_CHROMADB_CACHING = True
+USE_CHROMADB_CACHING = False
 
 # Configuration for ChromaDB persistence
 import os
