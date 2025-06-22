@@ -80,8 +80,19 @@ case "$COMMAND" in
     kubectl logs -n $NS -l app=$DEP --tail=50 -f
     ;;
     
-  chunked-historical|force-stop-all|reset-all|partial-reset|init-neo4j|neo4j-report)
-    # Pass through to local script
+  force-stop-all)
+    echo "Scaling EventTrader deployment to 0 replicas (hard stop)..."
+    kubectl scale deploy/$DEP -n $NS --replicas=0 || true
+    echo "Waiting briefly to ensure pods terminate..."
+    sleep 5
+
+    echo "Invoking local cleanup..."
+    cd "$WORKSPACE_DIR"
+    ./scripts/event_trader.sh force-stop-all
+    ;;
+    
+  chunked-historical|reset-all|partial-reset|init-neo4j|neo4j-report)
+    # Pass through to local script without affecting live pods
     cd "$WORKSPACE_DIR"
     ./scripts/event_trader.sh "$COMMAND" "$@"
     ;;
