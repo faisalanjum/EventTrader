@@ -1,5 +1,6 @@
 import logging
 import chromadb
+from chromadb import HttpClient
 import concurrent.futures
 import threading
 import os
@@ -239,7 +240,28 @@ class InitializationMixin:
             logger.info(f"Using ChromaDB persist directory: {CHROMADB_PERSIST_DIRECTORY}")
             os.makedirs(CHROMADB_PERSIST_DIRECTORY, exist_ok=True)
             
-            # Initialize client with persistent storage
+            # Try HTTP server first, fallback to SQLite
+            server_host = os.environ.get('CHROMADB_SERVER_HOST')
+            if server_host:
+                logger.info(f"Attempting to connect to ChromaDB server at {server_host}")
+                try:
+                    self.chroma_client = HttpClient(host=server_host)
+                    self.chroma_collection = self.chroma_client.get_or_create_collection(
+                        name="news",
+                        metadata={
+                            "hnsw:space": "cosine",
+                            "hnsw:resize_factor": 1.5,
+                            "hnsw:M": 16
+                        }
+                    )
+                    count = self.chroma_collection.count()
+                    logger.info(f"✅ ChromaDB HTTP server connected with {count} embeddings")
+                    return
+                except Exception as e:
+                    logger.warning(f"Failed to connect to ChromaDB server: {e}. Falling back to SQLite.")
+            
+            # Fallback to SQLite client
+            logger.info("Using SQLite ChromaDB client")
             self.chroma_client = chromadb.Client(Settings(
                 is_persistent=True,
                 persist_directory=CHROMADB_PERSIST_DIRECTORY

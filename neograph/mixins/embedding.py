@@ -7,6 +7,7 @@ import os
 import asyncio
 from hashlib import sha256
 from typing import Dict, List, Any
+from utils.chromadb_safe import safe_chromadb_call as chroma
 
 from eventtrader.keys import OPENAI_API_KEY
 from config.feature_flags import (
@@ -152,7 +153,7 @@ class EmbeddingMixin:
                     hash_to_item[content_hash] = {"id": node_id, "content": content}
                 
                 # Batch lookup in ChromaDB
-                chroma_result = self.chroma_collection.get(ids=content_hashes, include=['embeddings'])
+                chroma_result = chroma(lambda: self.chroma_collection.get(ids=content_hashes, include=['embeddings']))
                 
                 # Process results
                 if (chroma_result and chroma_result.get('ids') and 
@@ -339,11 +340,11 @@ class EmbeddingMixin:
                                     if use_chromadb:
                                         try:
                                             content_hash = sha256(all_contents[i].encode()).hexdigest()
-                                            self.chroma_collection.add(
+                                            chroma(lambda: self.chroma_collection.add(
                                                 ids=[content_hash],
                                                 documents=[all_contents[i]],
                                                 embeddings=[embedding]
-                                            )
+                                            ))
                                         except Exception as e:
                                             if "Insert of existing embedding ID" not in str(e):
                                                 logger.warning(f"Error storing in ChromaDB: {e}")
@@ -432,11 +433,11 @@ class EmbeddingMixin:
                                     if node_data and embedding:
                                         content_hash = sha256(node_data["content"].encode()).hexdigest()
                                         try:
-                                            self.chroma_collection.add(
+                                            chroma(lambda: self.chroma_collection.add(
                                                 ids=[content_hash],
                                                 documents=[node_data["content"]],
                                                 embeddings=[embedding]
-                                            )
+                                            ))
                                         except Exception as inner_e:
                                             if "Insert of existing embedding ID" not in str(inner_e):
                                                 raise
@@ -738,7 +739,7 @@ class EmbeddingMixin:
                     content_hash = sha256(content.encode()).hexdigest()
                     logger.debug(f"Checking ChromaDB for news {news_id} with content hash {content_hash}")
                     # Always include embeddings parameter
-                    chroma_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
+                    chroma_result = chroma(lambda: self.chroma_collection.get(ids=[content_hash], include=['embeddings']))
                     
                     # Simple, robust check for valid embeddings
                     if (chroma_result and 
@@ -802,7 +803,7 @@ class EmbeddingMixin:
                     content_hash = sha256(content.encode()).hexdigest()
                     
                     # Check if this embedding already exists in ChromaDB before adding
-                    check_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
+                    check_result = chroma(lambda: self.chroma_collection.get(ids=[content_hash], include=['embeddings']))
                     if (check_result and 
                         'ids' in check_result and 
                         len(check_result['ids']) > 0 and
@@ -814,11 +815,11 @@ class EmbeddingMixin:
                     else:
                         # Doesn't exist, add it - Use upsert to prevent race condition issues
                         try:
-                            self.chroma_collection.add(
+                            chroma(lambda: self.chroma_collection.add(
                                 ids=[content_hash],
                                 documents=[content],
                                 embeddings=[result["embedding"]]
-                            )
+                            ))
                             logger.info(f"Stored new embedding in ChromaDB for news {news_id}")
                         except Exception as inner_e:
                             if "Insert of existing embedding ID" in str(inner_e):
@@ -908,7 +909,7 @@ class EmbeddingMixin:
                     content_hash = sha256(content.encode()).hexdigest()
                     logger.debug(f"Checking ChromaDB for QAExchange {qa_id} with content hash {content_hash}")
                     # Always include embeddings parameter
-                    chroma_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
+                    chroma_result = chroma(lambda: self.chroma_collection.get(ids=[content_hash], include=['embeddings']))
                     
                     # Simple, robust check for valid embeddings
                     if (chroma_result and 
@@ -972,7 +973,7 @@ class EmbeddingMixin:
                     content_hash = sha256(content.encode()).hexdigest()
                     
                     # Check if this embedding already exists in ChromaDB before adding
-                    check_result = self.chroma_collection.get(ids=[content_hash], include=['embeddings'])
+                    check_result = chroma(lambda: self.chroma_collection.get(ids=[content_hash], include=['embeddings']))
                     if (check_result and 
                         'ids' in check_result and 
                         len(check_result['ids']) > 0 and
@@ -984,11 +985,11 @@ class EmbeddingMixin:
                     else:
                         # Doesn't exist, add it - Use upsert to prevent race condition issues
                         try:
-                            self.chroma_collection.add(
+                            chroma(lambda: self.chroma_collection.add(
                                 ids=[content_hash],
                                 documents=[content],
                                 embeddings=[result["embedding"]]
-                            )
+                            ))
                             logger.info(f"Stored new embedding in ChromaDB for QAExchange {qa_id}")
                         except Exception as inner_e:
                             if "Insert of existing embedding ID" in str(inner_e):
@@ -1196,7 +1197,7 @@ class EmbeddingMixin:
         if self.chroma_collection is not None:
             news_collection_exists = True
             try:
-                news_collection_count = self.chroma_collection.count()
+                news_collection_count = chroma(lambda: self.chroma_collection.count())
             except Exception as e:
                 news_collection_count = f"Error: {str(e)}"
         
