@@ -73,4 +73,4 @@ ENV/
 *.swo
 
 # VS Code settings
-.vscode/
+.vscode/chroma_db/
