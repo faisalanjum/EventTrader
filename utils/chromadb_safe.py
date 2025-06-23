@@ -3,7 +3,7 @@ logger = logging.getLogger(__name__)
 _pool = concurrent.futures.ThreadPoolExecutor(max_workers=4,
                                               thread_name_prefix="chromadb-safe")
 
-def safe_chromadb_call(fn, timeout_seconds: int = 10):
+def safe_chromadb_call(fn, timeout_seconds: int = 30):
     """Run a ChromaDB op with hard timeout; return None on failure."""
     future = _pool.submit(fn)
     try:
