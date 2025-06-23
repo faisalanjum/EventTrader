@@ -5,6 +5,7 @@ import concurrent.futures
 import threading
 import os
 import time
+from utils.chromadb_safe import safe_chromadb_call as chroma
 
 
 from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
@@ -254,7 +255,7 @@ class InitializationMixin:
                             "hnsw:M": 16
                         }
                     )
-                    count = self.chroma_collection.count()
+                    count = chroma(lambda: self.chroma_collection.count())
                     logger.info(f"✅ ChromaDB HTTP server connected with {count} embeddings")
                     return
                 except Exception as e:
@@ -278,7 +279,7 @@ class InitializationMixin:
                             "hnsw:M": 16
                         }
                     )
-                    count = self.chroma_collection.count()
+                    count = chroma(lambda: self.chroma_collection.count())
                     logger.info(f"✅ ChromaDB initialized successfully with {count} embeddings")
                     return
                 except Exception as e:
