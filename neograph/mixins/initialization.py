@@ -5,7 +5,7 @@ import concurrent.futures
 import threading
 import os
 import time
-from utils.chromadb_safe import safe_chromadb_call as chroma
+from utils.chromadb_safe import safe_chromadb_call as chroma, httpx_client
 
 
 from eventtrader.keys import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
@@ -246,7 +246,7 @@ class InitializationMixin:
             if server_host:
                 logger.info(f"Attempting to connect to ChromaDB server at {server_host}")
                 try:
-                    self.chroma_client = HttpClient(host=server_host)
+                    self.chroma_client = HttpClient(host=server_host, httpx_client_factory=httpx_client)
                     self.chroma_collection = self.chroma_client.get_or_create_collection(
                         name="news",
                         metadata={

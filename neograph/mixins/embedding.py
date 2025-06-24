@@ -8,6 +8,7 @@ import asyncio
 from hashlib import sha256
 from typing import Dict, List, Any
 from utils.chromadb_safe import safe_chromadb_call as chroma
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from eventtrader.keys import OPENAI_API_KEY
 from config.feature_flags import (
@@ -35,6 +36,11 @@ class EmbeddingMixin:
     """
     Handles vector embeddings, interaction with ChromaDB, and vector similarity search.
     """
+    
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2))
+    def _safe_encode_qa(self, cypher, params):
+        """Execute QAExchange embedding cypher query with retry for OpenAI failures"""
+        return self.manager.execute_cypher_query(cypher, params)
     
     def create_vector_index(self, label, property_name, index_name=None, dimensions=1536, similarity_function="cosine"):
         """
@@ -956,7 +962,7 @@ class EmbeddingMixin:
             RETURN count(q) AS processed, vector AS embedding
             """
             
-            result = self.manager.execute_cypher_query(query, {
+            result = self._safe_encode_qa(query, {
                 "qa_id": qa_id, 
                 "content": content,
                 "config": {

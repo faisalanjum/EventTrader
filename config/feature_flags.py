@@ -129,7 +129,7 @@ SPEAKER_CLASSIFICATION_MODEL = "gpt-4o"
 # --- END ADDED ---
 
 # When True, check ChromaDB for existing embeddings before generating new ones
-USE_CHROMADB_CACHING = True
+USE_CHROMADB_CACHING = False
 
 # Configuration for ChromaDB persistence
 import os
@@ -138,6 +138,10 @@ _default_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "ch
 # new line ↓
 CHROMADB_PERSIST_DIRECTORY = os.getenv("CHROMA_DB_DIR", _default_dir)
 # CHROMADB_PERSIST_DIRECTORY = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "chroma_db"))
+
+# ChromaDB connection pool configuration
+CHROMADB_MAX_WORKERS = int(os.getenv("CHROMADB_MAX_WORKERS", "4"))  # Thread pool size for ChromaDB operations
+CHROMADB_TIMEOUT_SECONDS = int(os.getenv("CHROMADB_TIMEOUT_SECONDS", "30"))  # Timeout for ChromaDB operations
 
 # --- Path Configuration ---
 CONFIG_DIR = os.path.dirname(os.path.abspath(__file__))
