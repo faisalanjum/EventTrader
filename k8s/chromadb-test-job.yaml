@@ -1,0 +1,132 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chromadb-test-script
+data:
+  test.py: |
+    #!/usr/bin/env python3
+    import os
+    import time
+    import chromadb
+    from chromadb import HttpClient
+    import logging
+    import json
+    from hashlib import sha256
+    
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logger = logging.getLogger(__name__)
+    
+    def test_from_cluster():
+        # Use cluster-internal service name
+        server_host = "http://chromadb-service:8000"
+        logger.info(f"Testing ChromaDB from within cluster at {server_host}")
+        
+        try:
+            # 1. Test basic connection
+            client = HttpClient(host=server_host)
+            logger.info("✅ Connected to ChromaDB")
+            
+            # 2. List collections
+            collections = client.list_collections()
+            logger.info(f"✅ Found {len(collections)} collections")
+            for col in collections:
+                logger.info(f"   - {col.name}")
+            
+            # 3. Test batch sizes
+            logger.info("\nTesting batch sizes...")
+            collection = None
+            try:
+                collection = client.get_collection(name="news")
+                logger.info("✅ Got existing 'news' collection")
+            except:
+                logger.info("Creating test collection...")
+                collection = client.create_collection(name="test_batch")
+                
+            batch_sizes = [1, 10, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 41666, 50000]
+            max_working_size = 0
+            
+            for size in batch_sizes:
+                ids = [f"test_{i}" for i in range(size)]
+                try:
+                    start = time.time()
+                    result = collection.get(ids=ids)
+                    elapsed = time.time() - start
+                    max_working_size = size
+                    logger.info(f"✅ Batch size {size}: OK (took {elapsed:.2f}s)")
+                except Exception as e:
+                    logger.error(f"❌ Batch size {size} failed: {type(e).__name__}: {e}")
+                    if "max_batch_size" in str(e):
+                        logger.info(f"Found max_batch_size limit at {size}")
+                        break
+                        
+            logger.info(f"\nMax working batch size: {max_working_size}")
+            
+            # 4. Test thread safety
+            logger.info("\nTesting concurrent operations...")
+            import concurrent.futures
+            
+            def count_operation(i):
+                try:
+                    start = time.time()
+                    count = collection.count()
+                    elapsed = time.time() - start
+                    return f"Thread {i}: count={count}, time={elapsed:.2f}s"
+                except Exception as e:
+                    return f"Thread {i}: ERROR - {e}"
+            
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+                futures = [executor.submit(count_operation, i) for i in range(5)]
+                results = [f.result() for f in futures]
+                
+            for result in results:
+                logger.info(result)
+                
+            # 5. Test add operation
+            logger.info("\nTesting add operation...")
+            test_doc = "Test document from k8s"
+            test_hash = sha256(test_doc.encode()).hexdigest()
+            test_embedding = [0.1] * 1536
+            
+            try:
+                collection.add(
+                    ids=[test_hash],
+                    documents=[test_doc],
+                    embeddings=[test_embedding]
+                )
+                logger.info("✅ Add operation succeeded")
+            except Exception as e:
+                logger.error(f"❌ Add operation failed: {e}")
+                
+        except Exception as e:
+            logger.error(f"Test failed: {type(e).__name__}: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            
+    if __name__ == "__main__":
+        test_from_cluster()
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: chromadb-test
+spec:
+  template:
+    spec:
+      containers:
+      - name: test
+        image: python:3.11-slim
+        command: ["sh", "-c"]
+        args:
+        - |
+          pip install chromadb==0.6.3
+          python /scripts/test.py
+        volumeMounts:
+        - name: test-script
+          mountPath: /scripts
+      volumes:
+      - name: test-script
+        configMap:
+          name: chromadb-test-script
+      restartPolicy: Never
+  backoffLimit: 1

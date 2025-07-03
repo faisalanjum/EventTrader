@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chromadb-server
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: chromadb-server}}
+  template:
+    metadata: {labels: {app: chromadb-server}}
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum2      # mount lives only here
+      tolerations:
+      - key: "dedicated"       # optional, allows node maintenance
+        operator: "Exists"
+        effect: "NoSchedule"
+      containers:
+      - name: chromadb
+        image: chromadb/chroma:0.6.3
+        ports: [{containerPort: 8000}]
+        env:
+        - {name: IS_PERSISTENT,   value: "true"}
+        - {name: PERSIST_DIRECTORY, value: "/chroma/chroma"}
+        - {name: KEEPALIVE_TIMEOUT, value: "90"}
+        - {name: SQLITE_BUSY_TIMEOUT, value: "30000"}
+        resources:
+          requests:
+            cpu: "2"
+            memory: "2Gi"
+          limits:
+            cpu: "4" 
+            memory: "4Gi"
+        volumeMounts:
+        - {name: chromadb-storage, mountPath: /chroma/chroma}
+        livenessProbe:
+          httpGet: {path: /api/v1/heartbeat, port: 8000}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet: {path: /api/v1/heartbeat, port: 8000}
+          failureThreshold: 3
+      volumes:
+      - name: chromadb-storage
+        hostPath:
+          path: /home/faisal/EventMarketDB/chroma_db   # existing data
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata: {name: chromadb-service}
+spec:
+  selector: {app: chromadb-server}
+  ports: [{port: 8000, targetPort: 8000}]
+  type: ClusterIP
