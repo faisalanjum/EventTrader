@@ -2,7 +2,7 @@
 # et - Simplified Kubernetes wrapper for EventTrader
 # Focuses on essential commands only
 
-NS=default
+NS=processing
 DEP=event-trader
 WORKSPACE_DIR="$HOME/EventMarketDB"
 

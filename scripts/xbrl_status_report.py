@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 XBRL Status Report
 -----------------
@@ -12,21 +12,41 @@ from collections import Counter, defaultdict
 import pandas as pd
 from neo4j import GraphDatabase
 from pathlib import Path
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
+import warnings
 
-# Configure logging
+# Suppress Neo4j warnings about unknown properties
+warnings.filterwarnings('ignore', category=UserWarning, module='neo4j')
+
+# Configure logging to stderr so it doesn't interfere with stdout output
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    stream=sys.stderr
 )
 logger = logging.getLogger(__name__)
 
-# Load environment variables
-load_dotenv(find_dotenv(), override=False)
+# Ensure we're loading from the correct .env file
+# This works whether script is run directly or via import
+script_dir = Path(__file__).resolve().parent
+workspace_dir = script_dir.parent
+env_file = workspace_dir / '.env'
+
+# Clear any cached environment variables for Neo4j
+for key in ['NEO4J_URI', 'NEO4J_USERNAME', 'NEO4J_PASSWORD', 'NEO4J_USER']:
+    if key in os.environ:
+        del os.environ[key]
+
+# Load environment variables from the specific .env file
+if env_file.exists():
+    load_dotenv(env_file, override=True)
+else:
+    logger.error(f".env file not found at {env_file}")
+    sys.exit(1)
 
 # Neo4j connection settings
 NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
+NEO4J_USER = os.getenv("NEO4J_USERNAME", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
 
 def connect_to_neo4j():
@@ -90,12 +110,14 @@ def main():
         # Print summary
         print("\n===== XBRL Status Summary =====")
         total = sum(count for _, count in stats)
-        print(f"Total Reports: {total}\n")
+        print(f"Total Reports: {total}")
         
-        for status, count in stats:
-            status_display = status if status is not None else "NULL"
-            percentage = (count / total) * 100
-            print(f"{status_display}: {count} ({percentage:.2f}%)")
+        if total > 0:
+            print("")
+            for status, count in stats:
+                status_display = status if status is not None else "NULL"
+                percentage = (count / total) * 100
+                print(f"{status_display}: {count} ({percentage:.2f}%)")
         
         # Get detailed breakdown by form type
         detailed = get_detailed_report(driver)
