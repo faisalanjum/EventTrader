@@ -1,6 +1,6 @@
 #!/bin/bash
-# Source .env file to get Redis configuration
-if [ -f "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/.env" ]; then
+# Source .env file only if running locally (not in K8s)
+if [ -z "$KUBERNETES_SERVICE_HOST" ] && [ -f "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/.env" ]; then
     export $(grep -v "^#" "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/.env" | xargs)
 fi
 REDIS_HOST="${REDIS_HOST:-localhost}"
@@ -139,9 +139,9 @@ else
     echo "Neo4j connection successful!"
 fi
 
-# Cypher query to preserve initialization nodes while clearing everything else with APOC
-echo "Checking if APOC is installed..."
-"${CYPHER_CMD[@]}" "RETURN apoc.version() AS APOC_Version"
+# Cypher query to preserve initialization nodes while clearing everything else
+echo "Clearing Neo4j data..."
+# Skip APOC check since it's not loading properly
 
 echo "Deleting non-preserved relationships..."
 "${CYPHER_CMD[@]}" "

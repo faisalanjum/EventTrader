@@ -2,7 +2,10 @@
 # EventTrader Control Script
 # Usage: ./scripts/event_trader.sh {start|start-all|stop|status|restart|logs|monitor|stop-monitor|stop-all|clean-logs|health|init-neo4j|reset-all|partial-reset|neo4j-report|force-stop-all} [options] [from-date] [to-date]
 
-[ -f ".env" ] && export $(grep -v '^#' .env | xargs)
+# Only source .env if running locally (not in K8s)
+if [ -z "$KUBERNETES_SERVICE_HOST" ] && [ -f ".env" ]; then
+    export $(grep -v '^#' .env | xargs)
+fi
 
 # Configuration
 WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -1005,7 +1008,7 @@ from dotenv import load_dotenv
 # Load environment variables - use absolute path to workspace .env
 dotenv_path = os.path.abspath('.env')
 # Ensure environment variables take priority
-load_dotenv(dotenv_path, override=True)
+load_dotenv(dotenv_path, override=False)
 
 # Use the singleton manager
 try:

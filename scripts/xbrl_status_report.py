@@ -22,7 +22,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Load environment variables
-load_dotenv(find_dotenv(), override=True)
+load_dotenv(find_dotenv(), override=False)
 
 # Neo4j connection settings
 NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")

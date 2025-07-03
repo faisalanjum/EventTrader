@@ -14,7 +14,7 @@ from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv(override=True)  # Ensures Kubernetes env values take priority
+load_dotenv(override=False)  # Prevents overriding Kubernetes env values
 
 # Add parent directory to path to import from utils
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
