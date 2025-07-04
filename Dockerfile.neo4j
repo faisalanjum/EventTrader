@@ -1,0 +1,14 @@
+FROM neo4j:5.26.4-enterprise
+
+# Install APOC extended and GenAI plugins
+RUN cd /var/lib/neo4j/plugins && \
+    wget -q https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/5.26.0/apoc-5.26.0-extended.jar && \
+    chmod 644 *.jar
+
+# Ensure plugins are loaded
+ENV NEO4J_dbms_security_procedures_unrestricted=apoc.*,genai.*,gds.*
+ENV NEO4J_dbms_security_procedures_allowlist=apoc.*,genai.*,gds.*
+ENV NEO4J_apoc_trigger_enabled=true
+ENV NEO4J_apoc_uuid_enabled=true
+ENV NEO4J_apoc_import_file_enabled=true
+ENV NEO4J_apoc_export_file_enabled=true

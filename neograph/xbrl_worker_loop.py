@@ -9,6 +9,10 @@ import signal
 import sys
 from typing import Optional
 
+# Add parent directory to path to import log_config
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.log_config import setup_logging
+
 # Redis imports
 from redisDB.redisClasses import RedisClient
 from redisDB.redis_constants import RedisKeys
@@ -24,10 +28,20 @@ from neograph.Neo4jManager import Neo4jManager
 # XBRL processor import
 from XBRL.xbrl_processor import process_report
 
-# Setup logger
+# Setup centralized logging
+queue_name = os.getenv("XBRL_QUEUE", "unknown")
+# Extract worker type from queue name (e.g., "reports:queues:xbrl:heavy" -> "xbrl-heavy")
+if "heavy" in queue_name:
+    log_prefix = "xbrl-heavy"
+elif "medium" in queue_name:
+    log_prefix = "xbrl-medium"
+elif "light" in queue_name:
+    log_prefix = "xbrl-light"
+else:
+    log_prefix = "xbrl-worker"
+
+setup_logging(name=log_prefix)
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, 
-                   format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 def main():
     

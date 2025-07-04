@@ -78,10 +78,13 @@ def setup_logging(log_level=logging.INFO, name=None, force_path=None):
                 if recent_logs:
                     log_file_to_use = recent_logs[0]
                 else:
-                    # Create a new log file with timestamp
-                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                    # Create a new log file with daily timestamp and hostname
+                    timestamp = datetime.now().strftime('%Y%m%d')
+                    # In Kubernetes, try to get the actual node name from NODE_NAME env var
+                    # Falls back to os.uname().nodename if not in Kubernetes
+                    hostname = os.environ.get('NODE_NAME', os.uname().nodename)
                     prefix = f"{name}_" if name else "eventtrader_"
-                    log_file_to_use = os.path.join(log_dir, f"{prefix}{timestamp}.log")
+                    log_file_to_use = os.path.join(log_dir, f"{prefix}{timestamp}_{hostname}.log")
 
             _log_file_path = log_file_to_use
             
@@ -107,9 +110,9 @@ def setup_logging(log_level=logging.INFO, name=None, force_path=None):
         except (IOError, BlockingIOError): # Catch BlockingIOError for LOCK_NB
             # Another process has the lock, or we couldn't acquire it immediately.
             # Try to read the path set by the process holding the lock.
-            for retry in range(5):  # Increased retries slightly
+            for retry in range(10):  # Increased retries for Kubernetes pod startup scenarios
                 try:
-                    time.sleep(0.2 * (retry + 1)) # Slightly longer wait
+                    time.sleep(0.1 * (retry + 1)) # Progressive backoff: 0.1s, 0.2s, 0.3s...
                     
                     # Try reading from the lock file (non-exclusive read is fine)
                     with open(lock_file_path, 'r') as f_read:
@@ -123,24 +126,32 @@ def setup_logging(log_level=logging.INFO, name=None, force_path=None):
                              f_read.seek(0)
                              path = f_read.read().strip()
 
-                        if path and os.path.exists(path):
-                            # If we were given a forced path, ideally it matches.
-                            # If it doesn't match, log a warning but use the path from the lock file,
-                            # as that's where the handlers are configured.
-                            if force_path and path != force_path:
-                                temp_logger = logging.getLogger('log_config')
-                                temp_logger.warning(f"Process {os.getpid()} requested log path {force_path} but another process initialized logging to {path}. Using {path}.")
-                            
-                            _log_file_path = path
-                            # Ensure logger is configured even if this process didn't hold the EX lock
-                            # Re-calling _configure_logger is safe as it removes old handlers.
-                            _configure_logger(_log_file_path, log_level) 
-                            _is_logging_initialized = True
-                            return _log_file_path
+                        if path:
+                            # Check if the path exists or if it's a stale lock from a previous run
+                            if os.path.exists(path):
+                                # If we were given a forced path, ideally it matches.
+                                # If it doesn't match, log a warning but use the path from the lock file,
+                                # as that's where the handlers are configured.
+                                if force_path and path != force_path:
+                                    temp_logger = logging.getLogger('log_config')
+                                    temp_logger.warning(f"Process {os.getpid()} requested log path {force_path} but another process initialized logging to {path}. Using {path}.")
+                                
+                                _log_file_path = path
+                                # Ensure logger is configured even if this process didn't hold the EX lock
+                                # Re-calling _configure_logger is safe as it removes old handlers.
+                                _configure_logger(_log_file_path, log_level) 
+                                _is_logging_initialized = True
+                                return _log_file_path
+                            else:
+                                # Path in lock file doesn't exist - it's stale
+                                # Continue to next retry or fallback
+                                if retry == 9:  # Log only on last retry
+                                    temp_logger = logging.getLogger('log_config')
+                                    temp_logger.warning(f"Lock file contains non-existent path: {path}")
                 except Exception as e:
                     # Log potential errors during retry read attempt
                     # But avoid flooding logs if lock file is just empty temporarily
-                    if retry == 4: # Log only on last retry attempt
+                    if retry == 9: # Log only on last retry attempt
                          temp_logger = logging.getLogger('log_config')
                          temp_logger.warning(f"Could not read log path from lock file during retry {retry+1}: {e}")
                     pass # Continue retry loop
@@ -149,7 +160,7 @@ def setup_logging(log_level=logging.INFO, name=None, force_path=None):
             # This case is less critical now, as the primary use of --log-file (chunked) 
             # relies on force_path. This handles simultaneous starts of non-chunked runs.
             # Find most recent log as a reasonable guess.
-            recent_logs = _find_recent_logs(name, max_age_seconds=15) # Wider window for fallback
+            recent_logs = _find_recent_logs(name, max_age_seconds=30) # Wider window for Kubernetes pod starts
             if recent_logs:
                 _log_file_path = recent_logs[0]
                 temp_logger = logging.getLogger('log_config')
@@ -158,8 +169,9 @@ def setup_logging(log_level=logging.INFO, name=None, force_path=None):
                 # Absolute last resort: Create a unique fallback file (should be very rare)
                 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
                 pid = os.getpid()
+                hostname = os.environ.get('NODE_NAME', os.uname().nodename)
                 prefix = f"{name}_" if name else "eventtrader_"
-                _log_file_path = os.path.join(log_dir, f"{prefix}{timestamp}_fallback_{pid}.log")
+                _log_file_path = os.path.join(log_dir, f"{prefix}{timestamp}_{hostname}_fallback_{pid}.log")
                 temp_logger = logging.getLogger('log_config')
                 temp_logger.error(f"Could not determine log path via lock or recent files. Creating unique fallback: {_log_file_path}")
             
@@ -188,21 +200,28 @@ def _find_recent_logs(name=None, max_age_seconds=5):
     prefix = f"{name}_" if name else "eventtrader_"
     recent_logs = []
     
+    # In Kubernetes, we need to match based on node name, not pod name
+    node_name = os.environ.get('NODE_NAME', os.uname().nodename)
+    
     try:
         for file in os.listdir(log_dir):
             if file.startswith(prefix) and file.endswith('.log') and not file.endswith('_fallback.log'):
-                # Prioritize non-fallback logs
-                full_path = os.path.join(log_dir, file)
-                if now - os.path.getctime(full_path) < max_age_seconds:
-                    recent_logs.append(full_path)
+                # Check if this log file is for our node (when in Kubernetes)
+                # Log files have format: prefix_YYYYMMDD_nodename.log
+                if f"_{node_name}.log" in file:
+                    full_path = os.path.join(log_dir, file)
+                    if now - os.path.getctime(full_path) < max_age_seconds:
+                        recent_logs.append(full_path)
         
         # If we found no non-fallback logs, try fallback logs too
         if not recent_logs:
             for file in os.listdir(log_dir):
-                if file.startswith(prefix) and file.endswith('_fallback.log'):
-                    full_path = os.path.join(log_dir, file)
-                    if now - os.path.getctime(full_path) < max_age_seconds:
-                        recent_logs.append(full_path)
+                if file.startswith(prefix) and '_fallback' in file and file.endswith('.log'):
+                    # Check if this fallback log is for our node
+                    if f"_{node_name}_fallback" in file:
+                        full_path = os.path.join(log_dir, file)
+                        if now - os.path.getctime(full_path) < max_age_seconds:
+                            recent_logs.append(full_path)
     except:
         # If directory listing fails, return empty list
         return []

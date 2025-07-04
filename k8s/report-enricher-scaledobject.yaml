@@ -1,0 +1,20 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: report-enricher-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: report-enricher          # Target deployment
+  minReplicaCount: 0              # Scale to zero when idle
+  maxReplicaCount: 15             # Maximum pods
+  cooldownPeriod: 60              # Wait 60s before scaling down
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379   # Redis service
+      listName: reports:queues:enrich      # Queue to monitor
+      listLength: "5"                      # Target 5 items per pod
+                                           # This means: 1 pod for 1-5 items, 2 pods for 6-10 items, etc.
+      activationListLength: "1"            # Wake from 0 when queue has items
+      databaseIndex: "0"                   # Redis database index

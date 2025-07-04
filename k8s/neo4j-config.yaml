@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: neo4j-config
+  namespace: neo4j
+data:
+  neo4j.conf: |
+    # Neo4j configuration file
+    
+    # JVM settings
+    server.jvm.additional=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Djdk.tls.rejectClientInitiatedRenegotiation=true -Djol.skipHotspotSAAttach=true
+    dbms.jvm.additional=-Dlog4j2.formatMsgNoLookups=true
+    
+    # Memory settings (these will be overridden by env vars if set)
+    server.memory.heap.initial_size=24G
+    server.memory.heap.max_size=24G
+    server.memory.pagecache.size=56G
+    db.memory.transaction.global_max=8G
+    db.memory.transaction.max=4G
+    db.tx_timeout=30m
+    
+    # Network settings
+    server.default_listen_address=0.0.0.0
+    
+    # Plugin directories
+    server.directories.plugins=plugins
+    server.directories.labs=labs
+    server.directories.products=products
+    
+    # Plugin security - CRITICAL for APOC and GenAI
+    dbms.security.procedures.unrestricted=apoc.*,gds.*,genai.*
+    dbms.security.procedures.allowlist=apoc.*,gds.*,genai.*
+    
+    # Enable specific APOC features
+    apoc.trigger.enabled=true
+    apoc.uuid.enabled=true
+    apoc.import.file.enabled=true
+    apoc.export.file.enabled=true
+    
+    # Prevent unwanted upgrades
+    dbms.allow_upgrade=false
+    
+    # Disable strict validation to allow our custom settings
+    server.config.strict_validation.enabled=false
+    
+    # Authentication (will be overridden by env var)
+    dbms.security.auth_enabled=true

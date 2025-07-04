@@ -16,6 +16,10 @@ import traceback
 from multiprocessing import current_process
 import logging
 
+# Add parent directory to path to import log_config
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.log_config import setup_logging
+
 from redisDB.redisClasses import EventTraderRedis
 from redisDB.redis_constants import RedisKeys, RedisQueues
 from redisDB.ReportProcessor import ReportProcessor
@@ -24,18 +28,12 @@ from config import feature_flags
 
 DEFAULT_PROCESSED_KEY_TTL = 2 * 24 * 3600  # 2 days
 
+# Setup centralized logging with "enricher" prefix
+setup_logging(name="enricher")
 logger = logging.getLogger(f"report_enricher_{current_process().name}")
 
 def enrich_worker():
     """Entry-point for each spawned enrichment process"""
-    if not logging.root.handlers:
-        worker_log_level_str = getattr(feature_flags, "GLOBAL_LOG_LEVEL", "INFO").upper()
-        worker_log_level_int = getattr(logging, worker_log_level_str, logging.INFO)
-        logging.basicConfig(
-            level=worker_log_level_int, 
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        logger.info(f"Worker process {current_process().name} configured basic logging.")
 
     logger.info("Enrichment worker starting (XBRL generation deferred to Neo4jProcessor)")
 

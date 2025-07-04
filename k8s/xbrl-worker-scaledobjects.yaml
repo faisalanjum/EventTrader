@@ -1,0 +1,60 @@
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: xbrl-worker-heavy-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: xbrl-worker-heavy
+  minReplicaCount: 0              # Scale to zero when idle
+  maxReplicaCount: 4              # Max 4 heavy workers (32GB RAM total)
+  cooldownPeriod: 300             # 5 min cooldown for heavy tasks
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: reports:queues:xbrl:heavy
+      listLength: "2"             # 1 pod per 2 heavy reports (they take long)
+      activationListLength: "1"   # Wake from 0 when queue has items
+      databaseIndex: "0"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: xbrl-worker-medium-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: xbrl-worker-medium
+  minReplicaCount: 0              # Scale to zero when idle
+  maxReplicaCount: 6              # Max 6 medium workers (24GB RAM total)
+  cooldownPeriod: 180             # 3 min cooldown
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: reports:queues:xbrl:medium
+      listLength: "5"             # 1 pod per 5 medium reports
+      activationListLength: "1"
+      databaseIndex: "0"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: xbrl-worker-light-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: xbrl-worker-light
+  minReplicaCount: 0              # Scale to zero when idle
+  maxReplicaCount: 10             # Max 10 light workers (20GB RAM total)
+  cooldownPeriod: 120             # 2 min cooldown for quick tasks
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: reports:queues:xbrl:light
+      listLength: "20"            # 1 pod per 20 light reports (they're fast)
+      activationListLength: "1"
+      databaseIndex: "0"

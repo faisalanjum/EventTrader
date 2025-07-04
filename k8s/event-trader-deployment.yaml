@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-trader
+  namespace: processing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-trader
+  template:
+    metadata:
+      labels:
+        app: event-trader
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum2
+      containers:
+      - name: event-trader
+        image: faisalanjum/event-trader:latest
+        imagePullPolicy: Always
+        command: ["python", "scripts/run_event_trader.py"]
+        args: ["--from-date", "2025-01-01", "--to-date", "2025-07-03", "-live"]
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        envFrom:
+        - secretRef:
+            name: eventtrader-secrets
+        volumeMounts:
+        - name: blank-env
+          mountPath: /app/.env
+          subPath: .env
+        - name: logs
+          mountPath: /app/logs
+        resources:
+          requests:
+            cpu: 500m
+            memory: 8Gi
+          limits:
+            cpu: 2
+            memory: 16Gi
+      volumes:
+      - name: blank-env
+        configMap:
+          name: empty-env
+      - name: logs
+        hostPath:
+          path: /home/faisal/EventMarketDB/logs
+          type: DirectoryOrCreate

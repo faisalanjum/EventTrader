@@ -1,0 +1,156 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: neo4j
+  namespace: neo4j
+spec:
+  serviceName: neo4j
+  replicas: 1
+  selector:
+    matchLabels:
+      app: neo4j
+  template:
+    metadata:
+      labels:
+        app: neo4j
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum3
+      tolerations:
+      - key: "database"
+        operator: "Equal"
+        value: "neo4j"
+        effect: "NoSchedule"
+      containers:
+      - name: neo4j
+        image: neo4j:5.26.4-enterprise
+        env:
+        - name: NEO4J_AUTH
+          value: "neo4j/Next2020#"
+        - name: NEO4J_EDITION
+          value: "ENTERPRISE"
+        - name: NEO4J_ACCEPT_LICENSE_AGREEMENT
+          value: "yes"
+        # Memory settings via env vars (these override config file)
+        - name: NEO4J_server_memory_heap_initial__size
+          value: "24G"
+        - name: NEO4J_server_memory_heap_max__size
+          value: "24G"
+        - name: NEO4J_server_memory_pagecache_size
+          value: "56G"
+        - name: NEO4J_db_memory_transaction_global__max
+          value: "8G"
+        - name: NEO4J_db_memory_transaction_max
+          value: "4G"
+        - name: NEO4J_db_tx__timeout
+          value: "30m"
+        # JVM settings
+        - name: NEO4J_server_jvm_additional
+          value: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Djdk.tls.rejectClientInitiatedRenegotiation=true -Djol.skipHotspotSAAttach=true"
+        - name: NEO4J_dbms_jvm_additional
+          value: "-Dlog4j2.formatMsgNoLookups=true"
+        # Network settings
+        - name: NEO4J_server_default__listen__address
+          value: "0.0.0.0"
+        - name: NEO4J_server_config_strict__validation_enabled
+          value: "false"
+        # Plugin settings - CRITICAL
+        - name: NEO4J_server_directories_plugins
+          value: "plugins"
+        - name: NEO4J_server_directories_labs
+          value: "labs"  
+        - name: NEO4J_server_directories_products
+          value: "products"
+        - name: NEO4J_dbms_security_procedures_unrestricted
+          value: "apoc.*,genai.*,gds.*"
+        - name: NEO4J_dbms_security_procedures_allowlist
+          value: "apoc.*,genai.*,gds.*"
+        # APOC settings
+        - name: NEO4J_apoc_trigger_enabled
+          value: "true"
+        - name: NEO4J_apoc_uuid_enabled
+          value: "true"
+        - name: NEO4J_apoc_import_file_enabled
+          value: "true"
+        - name: NEO4J_apoc_export_file_enabled
+          value: "true"
+        # Prevent upgrades
+        - name: NEO4J_dbms_allow__upgrade
+          value: "false"
+        ports:
+        - containerPort: 7687
+          name: bolt
+        - containerPort: 7474
+          name: http
+        - containerPort: 7473
+          name: https
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: logs
+          mountPath: /logs
+        - name: config
+          mountPath: /var/lib/neo4j/conf
+        resources:
+          requests:
+            memory: "90Gi"
+            cpu: "8"
+          limits:
+            memory: "95Gi"
+            cpu: "16"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 7474
+          initialDelaySeconds: 300
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 7474
+          initialDelaySeconds: 30
+          periodSeconds: 3
+          timeoutSeconds: 3
+          failureThreshold: 3
+        # Post-start hook to ensure plugins are in the right place
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - |
+                # Ensure plugin directories exist
+                mkdir -p /var/lib/neo4j/plugins /var/lib/neo4j/labs /var/lib/neo4j/products
+                # Link any jar files to plugins directory if not already there
+                for jar in /var/lib/neo4j/labs/*.jar /var/lib/neo4j/products/*.jar; do
+                  if [ -f "$jar" ]; then
+                    filename=$(basename "$jar")
+                    if [ ! -f "/var/lib/neo4j/plugins/$filename" ]; then
+                      ln -s "$jar" "/var/lib/neo4j/plugins/$filename"
+                    fi
+                  fi
+                done
+      volumes:
+      - name: config
+        configMap:
+          name: neo4j-config
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: local-path-minisforum3
+      resources:
+        requests:
+          storage: 1536Gi
+  - metadata:
+      name: logs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: local-path-minisforum3
+      resources:
+        requests:
+          storage: 50Gi

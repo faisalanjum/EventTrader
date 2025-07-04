@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: neo4j
+  namespace: neo4j
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: plugin-linker
+        image: busybox:1.36
+        command:
+        - sh
+        - -c
+        - |
+          echo "Linking plugins to plugins directory..."
+          # Create symlinks for all plugins
+          for jar in /var/lib/neo4j/labs/*.jar /var/lib/neo4j/products/*.jar; do
+            if [ -f "$jar" ]; then
+              filename=$(basename "$jar")
+              ln -sf "$jar" "/var/lib/neo4j/plugins/$filename"
+              echo "Linked: $filename"
+            fi
+          done
+          ls -la /var/lib/neo4j/plugins/
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/neo4j
+          subPath: neo4j
+      containers:
+      - name: neo4j
+        env:
+        # Add to existing env vars - these are the critical ones for plugins
+        - name: NEO4J_dbms_security_procedures_unrestricted
+          value: "apoc.*,genai.*,gds.*"
+        - name: NEO4J_dbms_security_procedures_allowlist
+          value: "apoc.*,genai.*,gds.*"
+        - name: NEO4J_apoc_trigger_enabled
+          value: "true"
+        - name: NEO4J_apoc_uuid_enabled
+          value: "true"
+        - name: NEO4J_apoc_import_file_enabled
+          value: "true"
+        - name: NEO4J_apoc_export_file_enabled
+          value: "true"

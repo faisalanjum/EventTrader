@@ -8,6 +8,7 @@ Run **on minisforum (192.168.40.73)** from `~/EventMarketDB`
 | event-trader    | `./scripts/deploy.sh event-trader`       |
 | xbrl-worker     | `./scripts/deploy.sh xbrl-worker`        |
 | report-enricher | `./scripts/deploy.sh report-enricher`    |
+| **All Components** | `./scripts/deploy-all.sh`             |
 
 `deploy.sh` performs **git pull ➜ build & push ➜ rollout**.
 
@@ -48,8 +49,8 @@ kubectl rollout restart deployment/report-enricher     -n processing
 
 | `scripts/rollout.sh   <c>`   | Restart deployments   |
 
-| `scripts/deploy.sh   <c>`    | **All** of the above  |
-scripts/deploy.sh <c>	All of the above
+| `scripts/deploy.sh <c>`      | **All** of the above  |
+| `scripts/deploy-all.sh`      | Deploy all 3 components |
 
 ## 🚧 Troubleshooting
 

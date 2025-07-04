@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: neo4j-event-processor
+  namespace: processing
+data:
+  processor.py: |
+    import os
+    import time
+    import json
+    from neo4j import GraphDatabase
+    from redis import Redis
+    from datetime import datetime
+    import logging
+    
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    
+    # Configuration
+    NEO4J_URI = os.getenv('NEO4J_URI', 'bolt://neo4j-bolt.neo4j:7687')
+    NEO4J_USER = os.getenv('NEO4J_USERNAME', 'neo4j')
+    NEO4J_PASS = os.getenv('NEO4J_PASSWORD')
+    REDIS_HOST = os.getenv('REDIS_HOST', 'redis.infrastructure')
+    REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
+    
+    # Connect to Redis for event queue
+    redis_client = Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+    EVENT_QUEUE = "neo4j:events"
+    
+    # Neo4j driver
+    driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASS))
+    
+    def process_event(event):
+        """Process a Neo4j change event"""
+        event_type = event.get('type')
+        node_id = event.get('node_id')
+        labels = event.get('labels', [])
+        
+        logger.info(f"Processing {event_type} event for {labels} node {node_id}")
+        
+        # Your processing logic here based on event type and labels
+        if 'News' in labels and event_type == 'CREATE':
+            # Trigger news analysis
+            pass
+        elif 'Report' in labels and event_type == 'CREATE':
+            # Trigger report analysis
+            pass
+        elif 'Transcript' in labels and event_type == 'CREATE':
+            # Trigger transcript analysis
+            pass
+            
+    def main():
+        logger.info("Starting Neo4j event processor...")
+        
+        while True:
+            try:
+                # Block waiting for events
+                result = redis_client.blpop(EVENT_QUEUE, timeout=5)
+                if result:
+                    _, event_json = result
+                    event = json.loads(event_json)
+                    process_event(event)
+            except Exception as e:
+                logger.error(f"Error processing event: {e}")
+                time.sleep(1)
+                
+    if __name__ == "__main__":
+        main()
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neo4j-event-processor
+  namespace: processing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: neo4j-event-processor
+  template:
+    metadata:
+      labels:
+        app: neo4j-event-processor
+    spec:
+      containers:
+      - name: processor
+        image: python:3.11-slim
+        command: ["python", "/app/processor.py"]
+        envFrom:
+        - secretRef:
+            name: eventtrader-secrets
+        volumeMounts:
+        - name: processor-script
+          mountPath: /app
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      volumes:
+      - name: processor-script
+        configMap:
+          name: neo4j-event-processor

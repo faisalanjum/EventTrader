@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: neo4j
+  namespace: neo4j
+spec:
+  serviceName: neo4j
+  replicas: 1
+  selector:
+    matchLabels:
+      app: neo4j
+  template:
+    metadata:
+      labels:
+        app: neo4j
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum3
+      tolerations:
+      - key: "database"
+        operator: "Equal"
+        value: "neo4j"
+        effect: "NoSchedule"
+      containers:
+      - name: neo4j
+        image: neo4j:5.26.4-enterprise
+        env:
+        - name: NEO4J_AUTH
+          value: "neo4j/Next2020#"
+        - name: NEO4J_EDITION
+          value: "ENTERPRISE"
+        - name: NEO4J_ACCEPT_LICENSE_AGREEMENT
+          value: "yes"
+        - name: NEO4J_server_memory_heap_initial__size
+          value: "24G"
+        - name: NEO4J_server_memory_heap_max__size
+          value: "24G"
+        - name: NEO4J_server_memory_pagecache_size
+          value: "56G"
+        - name: NEO4J_db_memory_transaction_global__max
+          value: "8G"
+        - name: NEO4J_db_memory_transaction_max
+          value: "4G"
+        - name: NEO4J_db_tx__timeout
+          value: "30m"
+        - name: NEO4J_server_jvm_additional
+          value: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+        - name: NEO4J_server_default__listen__address
+          value: "0.0.0.0"
+        - name: NEO4J_server_config_strict__validation_enabled
+          value: "false"
+        # Plugin configuration - these are the key additions
+        - name: NEO4J_dbms_security_procedures_unrestricted
+          value: "apoc.*,genai.*,gds.*"
+        - name: NEO4J_dbms_security_procedures_allowlist
+          value: "apoc.*,genai.*,gds.*"
+        - name: NEO4J_server_directories_plugins
+          value: "/var/lib/neo4j/plugins:/var/lib/neo4j/labs:/var/lib/neo4j/products"
+        ports:
+        - containerPort: 7687
+          name: bolt
+        - containerPort: 7474
+          name: http
+        - containerPort: 7473
+          name: https
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: logs
+          mountPath: /logs
+        resources:
+          requests:
+            memory: "90Gi"
+            cpu: "8"
+          limits:
+            memory: "95Gi"
+            cpu: "16"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 7474
+          initialDelaySeconds: 300
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 7474
+          initialDelaySeconds: 30
+          periodSeconds: 3
+          timeoutSeconds: 3
+          failureThreshold: 3
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: local-path-minisforum3
+      resources:
+        requests:
+          storage: 1536Gi
+  - metadata:
+      name: logs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: local-path-minisforum3
+      resources:
+        requests:
+          storage: 50Gi

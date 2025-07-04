@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: report-enricher
+  namespace: processing
+spec:
+  replicas: 0  # KEDA will manage replica count
+  selector:
+    matchLabels:
+      app: report-enricher
+  template:
+    metadata:
+      labels:
+        app: report-enricher
+    spec:
+      # Spread pods across nodes for better distribution
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: report-enricher
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - name: enricher
+        image: faisalanjum/report-enricher:latest
+        imagePullPolicy: Always
+        command: ["python", "-m", "redisDB.report_enricher_pod"]
+        envFrom:
+        - secretRef:
+            name: eventtrader-secrets  # Contains Redis connection info
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: PYTHONUNBUFFERED
+          value: "1"  # Ensure logs appear immediately
+        resources:
+          requests:
+            memory: "2Gi"    # Normal reports need ~1GB
+            cpu: "500m"      # Half CPU for normal processing
+          limits:
+            memory: "8Gi"    # Large 10-Ks with many exhibits can need 6GB+
+            cpu: "2"         # Prevent CPU hogging
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: logs
+        hostPath:
+          path: /home/faisal/EventMarketDB/logs
+          type: DirectoryOrCreate
