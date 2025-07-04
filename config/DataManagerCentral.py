@@ -307,42 +307,9 @@ class ReportsManager(DataSourceManager):
             # -------------------------------------------
             
             # --- START ENRICHMENT WORKERS ---
-            enrichers_started_successfully = False # Flag to track worker startup
-            if (feature_flags.ENABLE_LIVE_DATA or feature_flags.ENABLE_HISTORICAL_DATA) and feature_flags.ENABLE_REPORT_ENRICHER:
-                self.logger.info("Attempting to start report enrichment workers...")
-                enrichment_import_success = False
-                enrich_worker_module = None # Define to hold the module or function
-                try:
-                    import os 
-                    from multiprocessing import get_context
-                    
-                    # RELYING ON STANDARD IMPORT: Assuming report_enricher.py is in project_root or on PYTHONPATH
-                    from redisDB.report_enricher import enrich_worker as enrich_worker_func  # Import after relocation
-                    enrichment_import_success = True
-                    enrich_worker_module = enrich_worker_func # Assign the function
-
-                except ImportError as e:
-                    self.logger.error(f"Failed to import enrich_worker: {e}. Ensure report_enricher.py is in the PYTHONPATH or project root. Enrichment workers will NOT start.", exc_info=True)
-                
-                # This is the crucial worker startup logic that must be present
-                if enrichment_import_success and enrich_worker_module:
-                    worker_count = max(os.cpu_count() - 1, 1)
-                    ctx = get_context('spawn')
-                    # self.enrichment_workers should be initialized in __init__ or here if not already
-                    if not hasattr(self, 'enrichment_workers') or not self.enrichment_workers:
-                        self.enrichment_workers = [] 
-                    
-                    for i in range(worker_count):
-                        p = ctx.Process(target=enrich_worker_module, daemon=True, name=f"ReportEnricher-{i}")
-                        p.start()
-                        self.logger.info(f"Started enrichment worker {p.name} with PID {p.pid}")
-                        self.enrichment_workers.append(p)
-                    # enrichers_started_successfully flag was used before, can be re-added if needed for further logic
-                    # For now, successful execution of this block means workers were attempted to start.
-                elif feature_flags.ENABLE_REPORT_ENRICHER: # Only log warning if enricher was enabled but failed to import/start
-                     self.logger.warning("Report enrichment workers did not start due to an import or setup issue.")
-            else:
-                self.logger.info("Report enrichment workers disabled by feature flags.")
+            if feature_flags.ENABLE_REPORT_ENRICHER:
+                self.logger.info("Report enrichment handled by Kubernetes pods")
+                self.enrichment_workers = []  # Empty list for compatibility
             
             # ALWAYS START ESSENTIAL THREADS (processor, returns, ws, historical if enabled)
             self.logger.debug(f"[Manager Debug] Starting essential threads:")
