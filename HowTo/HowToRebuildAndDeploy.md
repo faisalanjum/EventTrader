@@ -23,6 +23,9 @@ cd ~/EventMarketDB && git pull
 # event-trader:
 docker build -f Dockerfile.event -t faisalanjum/event-trader:latest .
 docker push  faisalanjum/event-trader:latest
+# xbrl-worker:
+docker build -f Dockerfile.xbrl -t faisalanjum/xbrl-worker:latest .
+docker push  faisalanjum/xbrl-worker:latest
 # report-enricher:
 docker build -f Dockerfile.enricher -t faisalanjum/report-enricher:latest .
 docker push  faisalanjum/report-enricher:latest

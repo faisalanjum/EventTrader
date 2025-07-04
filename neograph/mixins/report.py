@@ -506,7 +506,11 @@ class ReportMixin:
                     # Use Kubernetes worker pods (queue-based approach)
                     if self.event_trader_redis:
                         form = report_props["formType"]
-                        if form in {"10-K", "10-K/A"}:
+                        if not form or not form.strip():
+                            # Empty formType - route to heavy queue for safety
+                            xbrl_queue = RedisKeys.XBRL_QUEUE_HEAVY
+                            logger.warning(f"Empty formType for report {report_props['id']}, routing to heavy queue for safety")
+                        elif form in {"10-K", "10-K/A"}:
                             xbrl_queue = RedisKeys.XBRL_QUEUE_HEAVY
                         elif form in {"10-Q", "10-Q/A"}:
                             xbrl_queue = RedisKeys.XBRL_QUEUE_MEDIUM

@@ -71,7 +71,11 @@ class XbrlMixin:
                     from redisDB.redis_constants import RedisKeys
 
                     form = form_type or ""
-                    if form in {"10-K", "10-K/A"}:
+                    if not form or not form.strip():
+                        # Empty formType - route to heavy queue for safety
+                        queue_name = RedisKeys.XBRL_QUEUE_HEAVY
+                        logger.warning(f"Empty formType for report {report_id}, routing to heavy queue for safety")
+                    elif form in {"10-K", "10-K/A"}:
                         queue_name = RedisKeys.XBRL_QUEUE_HEAVY
                     elif form in {"10-Q", "10-Q/A"}:
                         queue_name = RedisKeys.XBRL_QUEUE_MEDIUM
@@ -340,7 +344,7 @@ class XbrlMixin:
                     """
                     MATCH (r:Report)
                     WHERE r.xbrl_status IS NULL OR r.xbrl_status IN ['QUEUED', 'PROCESSING', 'PENDING', 'FAILED']
-                    RETURN r.id AS report_id, r.cik AS cik, r.accessionNo AS accessionNo
+                    RETURN r.id AS report_id, r.cik AS cik, r.accessionNo AS accessionNo, r.formType AS formType
                     """
                 ).data()
                 
@@ -368,7 +372,8 @@ class XbrlMixin:
                             session=session, # Pass the existing session
                             report_id=record['report_id'],
                             cik=record['cik'],
-                            accessionNo=record['accessionNo']
+                            accessionNo=record['accessionNo'],
+                            form_type=record.get('formType', '')
                         )
                         if success:
                             requeued_count += 1
