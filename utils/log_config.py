@@ -7,7 +7,8 @@ import atexit
 from datetime import datetime
 
 # Create logs directory if it doesn't exist
-log_dir = "logs"
+# Use absolute path to avoid issues when running from different directories
+log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs")
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 
@@ -109,6 +110,19 @@ def setup_logging(log_level=logging.INFO, name=None, force_path=None):
             
         except (IOError, BlockingIOError): # Catch BlockingIOError for LOCK_NB
             # Another process has the lock, or we couldn't acquire it immediately.
+            
+            # If force_path is provided, use it directly without consulting lock file
+            # This is needed for chunked historical processing where each chunk needs its own log file
+            if force_path:
+                _log_file_path = force_path
+                # Ensure the directory exists
+                os.makedirs(os.path.dirname(force_path), exist_ok=True)
+                _configure_logger(_log_file_path, log_level)
+                _is_logging_initialized = True
+                temp_logger = logging.getLogger('log_config')
+                temp_logger.info(f"Process {os.getpid()} using forced path {force_path} (bypassing lock file for chunked processing)")
+                return _log_file_path
+            
             # Try to read the path set by the process holding the lock.
             for retry in range(10):  # Increased retries for Kubernetes pod startup scenarios
                 try:

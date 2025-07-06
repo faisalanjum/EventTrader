@@ -19,17 +19,6 @@ load_dotenv(override=False)  # Prevents overriding Kubernetes env values
 # Add parent directory to path to import from utils
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from config.DataManagerCentral import DataManager
-from utils.log_config import setup_logging
-from redisDB.redis_constants import RedisKeys
-import config.feature_flags as feature_flags # Import the whole module
-# Remove specific imports if module is imported
-# from config.feature_flags import (
-#     ENABLE_HISTORICAL_DATA, ENABLE_LIVE_DATA, 
-#     QAEXCHANGE_EMBEDDING_BATCH_SIZE, WITHRETURNS_MAX_RETRIES, CHUNK_MONITOR_INTERVAL,
-#     GLOBAL_LOG_LEVEL 
-# )
-
 # Make sure logs directory exists
 logs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs")
 os.makedirs(logs_dir, exist_ok=True)
@@ -62,21 +51,30 @@ def main():
         # Parse command line args
         args = parse_args()
         
-        # --- Determine Log Level from Global Setting --- 
+        # --- CRITICAL: Setup logging BEFORE importing modules that use logging ---
+        # This ensures logs go to the correct file, especially for chunked historical processing
+        
+        # Import log_config first
+        from utils.log_config import setup_logging
+        
+        # Import feature_flags to get log level (safe - doesn't use logging)
+        import config.feature_flags as feature_flags
+        
+        # Determine Log Level from Global Setting
         log_level_str = getattr(feature_flags, "GLOBAL_LOG_LEVEL", "INFO").upper()
         log_level_int = getattr(logging, log_level_str, logging.INFO)
-        # --- End Determine Log Level ---
         
-        # --- Logging Setup using original log_config --- 
+        # Setup logging with the correct path BEFORE other imports
         if args.log_file:
-            # If a specific log file was provided (e.g., from event_trader.sh chunked mode),
-            # pass it directly to setup_logging using the new force_path argument.
-            # The cd logic is removed as setup_logging now handles directory creation if needed for force_path.
+            # Specific log file provided (e.g., from chunked historical processing)
             log_path = setup_logging(log_level=log_level_int, force_path=args.log_file)
         else:
             # Use the default setup_logging logic to create/find a timestamped file
-            log_path = setup_logging(log_level=log_level_int, name="event_trader") 
-        # --- End Logging Setup ---
+            log_path = setup_logging(log_level=log_level_int, name="event_trader")
+        
+        # NOW import modules that might use logging during initialization
+        from config.DataManagerCentral import DataManager
+        from redisDB.redis_constants import RedisKeys
 
         # Get a logger for this script using standard logging
         logger = logging.getLogger("event_trader_runner") 

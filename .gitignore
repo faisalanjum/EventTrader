@@ -74,3 +74,6 @@ ENV/
 
 # VS Code settings
 .vscode/chroma_db/
+.env
+.env
+.env.local

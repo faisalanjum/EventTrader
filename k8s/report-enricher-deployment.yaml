@@ -13,6 +13,7 @@ spec:
       labels:
         app: report-enricher
     spec:
+      priorityClassName: worker-standard
       # Spread pods across nodes for better distribution
       affinity:
         podAntiAffinity:

@@ -787,8 +787,18 @@ process_chunked_historical() {
     detect_python >/dev/null
     
     # Run EventTrader directly with the proper parameters
-    $PYTHON_CMD "$SCRIPT_PATH" --from-date "$chunk_start" --to-date "$chunk_end" -historical --ensure-neo4j-initialized --log-file "$CHUNK_LOG_FILE" > "$CHUNK_LOG_FILE" 2>&1 &
-    EVENTTRADER_PID=$!
+    # IMPORTANT: Don't redirect output to the log file - Python's --log-file already handles all logging
+    # Having both shell redirection and Python logging write to the same file causes file handle conflicts
+    
+    # Always run as faisal user to avoid permission issues with cache databases
+    if [ "$(whoami)" = "root" ]; then
+        shell_log "Running Python process as faisal user to avoid permission issues"
+        su - faisal -c "cd $WORKSPACE_DIR && $PYTHON_CMD \"$SCRIPT_PATH\" --from-date \"$chunk_start\" --to-date \"$chunk_end\" -historical --ensure-neo4j-initialized --log-file \"$CHUNK_LOG_FILE\"" &
+        EVENTTRADER_PID=$!
+    else
+        $PYTHON_CMD "$SCRIPT_PATH" --from-date "$chunk_start" --to-date "$chunk_end" -historical --ensure-neo4j-initialized --log-file "$CHUNK_LOG_FILE" &
+        EVENTTRADER_PID=$!
+    fi
     
     # Write PID file for monitoring
     echo "$EVENTTRADER_PID" > "$PID_FILE"
@@ -852,6 +862,13 @@ process_chunked_historical() {
       # Use direct kill function for more reliability - ONLY KILL CHILDREN
       kill_chunk_children_only > /dev/null 2>&1
       sleep 5 # Give time for processes to stop
+      
+      # Reset Neo4j connection between chunks to prevent defunct connection errors
+      shell_log "Resetting Neo4j connection to prevent stale connections..."
+      $PYTHON_CMD -c "from neograph.Neo4jConnection import reset; reset()" 2>/dev/null || {
+        shell_log "WARNING: Could not reset Neo4j connection (may not be critical)"
+      }
+      
       shell_log "Python script for chunk $chunk_start to $chunk_end completed successfully."
     else
       shell_log "Chunk $chunk_count exited with ERROR ($PYTHON_EXIT_CODE). Not stopping automatically. Manual intervention may be needed."

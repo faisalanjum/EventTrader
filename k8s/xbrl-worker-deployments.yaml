@@ -16,16 +16,10 @@ spec:
         worker-type: heavy
         xbrl-worker: "true"
     spec:
-      # Node affinity to avoid minisforum3 (Neo4j dedicated) and prefer minisforum2/minisforum
+      priorityClassName: worker-standard
+      # Node affinity to prefer minisforum2/minisforum over minisforum3 (Neo4j node)
       affinity:
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: NotIn
-                values:
-                - minisforum3
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 100
             preference:
@@ -35,6 +29,13 @@ spec:
                 values:
                 - minisforum2
                 - minisforum
+          - weight: 10  # Lower priority for Neo4j node
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum3
       containers:
       - name: xbrl-worker
         image: faisalanjum/xbrl-worker:latest
@@ -86,13 +87,6 @@ spec:
     spec:
       affinity:
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: NotIn
-                values:
-                - minisforum3
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 100
             preference:
@@ -102,6 +96,13 @@ spec:
                 values:
                 - minisforum2
                 - minisforum
+          - weight: 10  # Lower priority for Neo4j node
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum3
       containers:
       - name: xbrl-worker
         image: faisalanjum/xbrl-worker:latest
@@ -152,13 +153,6 @@ spec:
     spec:
       affinity:
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: NotIn
-                values:
-                - minisforum3
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 100
             preference:
@@ -168,6 +162,13 @@ spec:
                 values:
                 - minisforum2
                 - minisforum
+          - weight: 10  # Lower priority for Neo4j node
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum3
       containers:
       - name: xbrl-worker
         image: faisalanjum/xbrl-worker:latest

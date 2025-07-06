@@ -29,6 +29,31 @@ from config.feature_flags import (
 
 logger = logging.getLogger(__name__)
 
+# Custom retry condition that checks for defunct connections
+def is_defunct_connection_error(exception):
+    """Check if the exception indicates a defunct connection"""
+    error_str = str(exception).lower()
+    return any(phrase in error_str for phrase in ["defunct", "failed to read", "closed connection"])
+
+def retry_if_defunct_connection(exception):
+    """Retry if the exception indicates a defunct connection"""
+    return is_defunct_connection_error(exception)
+
+def before_retry_refresh_connection(retry_state):
+    """Callback to refresh connection before retry if it's a defunct connection error"""
+    if retry_state.outcome and retry_state.outcome.failed:
+        exception = retry_state.outcome.exception()
+        if is_defunct_connection_error(exception):
+            logger.info("Detected defunct connection in retry, triggering connection refresh")
+            # Get the singleton manager and refresh it
+            from .Neo4jConnection import get_manager
+            try:
+                manager = get_manager()
+                if manager:
+                    manager.ensure_healthy_connection()
+            except Exception as e:
+                logger.error(f"Failed to refresh connection in retry callback: {e}")
+
 # Define retry conditions using tenacity
 retry_on_neo4j_transient_error = tenacity.retry(
     stop=tenacity.stop_after_attempt(3), # Retry 2 times after initial failure (total 3 attempts)
@@ -38,8 +63,10 @@ retry_on_neo4j_transient_error = tenacity.retry(
         tenacity.retry_if_exception_type(neo4j.exceptions.SessionExpired) |
         tenacity.retry_if_exception_type(neo4j.exceptions.TransientError) |
         tenacity.retry_if_exception_type(OSError) | # From original logs
-        tenacity.retry_if_exception_type(TimeoutError) # From original logs
+        tenacity.retry_if_exception_type(TimeoutError) | # From original logs
+        tenacity.retry_if_exception(retry_if_defunct_connection) # Handle defunct connections
     ),
+    before=before_retry_refresh_connection, # Refresh connection before retry for defunct connections
     before_sleep=tenacity.before_sleep_log(logger, logging.WARNING), # Log before retrying
     reraise=True # IMPORTANT: Re-raise the exception if all retries fail
 )
@@ -106,6 +133,33 @@ class Neo4jManager:
     def close(self):
         if hasattr(self, 'driver'):
             self.driver.close()
+    
+    def ensure_healthy_connection(self):
+        """Check connection health and refresh if needed"""
+        try:
+            # Test the connection with a simple query
+            with self.driver.session() as session:
+                session.run("RETURN 1")
+            return True
+        except Exception as e:
+            error_str = str(e).lower()
+            if "defunct" in error_str or "closed" in error_str or "failed to read" in error_str:
+                logger.warning(f"Detected unhealthy connection: {e}")
+                logger.info("Attempting to refresh Neo4j driver...")
+                try:
+                    # Close existing driver
+                    self.close()
+                    # Reinitialize the driver
+                    self.__post_init__()
+                    logger.info("Successfully refreshed Neo4j driver")
+                    return True
+                except Exception as refresh_error:
+                    logger.error(f"Failed to refresh Neo4j driver: {refresh_error}")
+                    return False
+            else:
+                # Other types of errors, don't attempt refresh
+                logger.error(f"Neo4j connection error (not refreshing): {e}")
+                return False
                         
     @retry_on_neo4j_transient_error
     def clear_db(self):

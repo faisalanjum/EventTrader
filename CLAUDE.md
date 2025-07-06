@@ -208,6 +208,128 @@ All autoscaling uses Redis list length as the trigger:
   - Daily rotation with logrotate
   - Uses `copytruncate` to handle open file handles
 
+### Logging Architecture
+
+#### Centralized Logging System (`utils/log_config.py`)
+The entire EventMarketDB system uses a centralized logging configuration that ensures consistent log handling across all components.
+
+**Key Features**:
+- **Process-safe file locking**: Uses `fcntl` for coordination between multiple processes
+- **Daily rotation**: Automatic daily log files with format `{prefix}_YYYYMMDD_{hostname}.log`
+- **Node-aware naming**: Uses `NODE_NAME` environment variable (Kubernetes) or `os.uname().nodename` (local)
+- **Forced path support**: Allows specific log paths for chunked historical processing
+- **Lock file mechanism**: `/home/faisal/EventMarketDB/logs/.logging_lock` coordinates log file selection
+- **Fallback handling**: Creates unique fallback logs if lock contention occurs
+
+**Log Level Configuration**:
+- Controlled by `config.feature_flags.GLOBAL_LOG_LEVEL` (default: "INFO")
+- Options: "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
+
+#### Component-Specific Logging
+
+##### 1. Historical Processing (Chunked - Local)
+- **Execution**: Runs locally on minisforum (control node) via `./scripts/et chunked-historical`
+- **Log Structure**:
+  ```
+  /home/faisal/EventMarketDB/logs/ChunkHist_{FROM}_to_{TO}_{TIMESTAMP}/
+  ├── combined_{FROM}_to_{TO}.log      # Main combined log
+  ├── chunk_{date1}_to_{date2}.log     # Individual chunk logs
+  ├── chunk_{date3}_to_{date4}.log
+  └── summary.txt                       # Processing summary
+  ```
+- **Implementation**:
+  - Shell script creates folder structure
+  - Passes specific log path via `--log-file` parameter
+  - Python uses `force_path` in `setup_logging()` to write to exact location
+  - Both shell logs and Python logs go to same file
+
+##### 2. Live Processing (event-trader pod)
+- **Execution**: Kubernetes pod on minisforum2 (nodeSelector enforced)
+- **Log Files**: 
+  - Primary: `event_trader_YYYYMMDD_minisforum2.log`
+  - Alternative: `eventtrader_YYYYMMDD_minisforum2.log` (without underscore)
+- **Implementation**:
+  - Calls `setup_logging(name="event_trader")`
+  - Mounts host path: `/home/faisal/EventMarketDB/logs` → `/app/logs`
+  - Uses injected `NODE_NAME` for actual node identification
+
+##### 3. XBRL Workers (3 types)
+- **Execution**: Kubernetes pods on minisforum2 or minisforum (NOT minisforum3)
+- **Log Files**:
+  - Heavy: `xbrl-heavy_YYYYMMDD_{node}.log` (for 10-K forms)
+  - Medium: `xbrl-medium_YYYYMMDD_{node}.log` (for 10-Q forms)
+  - Light: `xbrl-light_YYYYMMDD_{node}.log` (for 8-K, other forms)
+- **Implementation**:
+  - Queue type from `XBRL_QUEUE` environment variable determines log prefix
+  - Entry point: `neograph/xbrl_worker_loop.py`
+  - Dynamic log prefix selection based on queue name
+
+##### 4. Report Enricher
+- **Execution**: Kubernetes pods on any node (spreads via podAntiAffinity)
+- **Log Files**: `enricher_YYYYMMDD_{node}.log`
+- **Implementation**:
+  - Entry point: `redisDB/report_enricher_pod.py` → `redisDB/report_enricher.py`
+  - Calls `setup_logging(name="enricher")`
+  - Logger includes process name suffix
+
+#### Volume Mounting and Permissions
+All Kubernetes pods use identical volume mounting:
+```yaml
+volumeMounts:
+- name: logs
+  mountPath: /app/logs
+volumes:
+- name: logs
+  hostPath:
+    path: /home/faisal/EventMarketDB/logs
+    type: DirectoryOrCreate
+```
+
+#### Log Rotation Configuration
+Managed by logrotate on all nodes (`/etc/logrotate.d/eventmarketdb`):
+```
+/home/faisal/EventMarketDB/logs/*.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+    copytruncate
+    create 0644 faisal faisal
+}
+```
+- **copytruncate**: Critical for handling open file handles
+- **Setup script**: `scripts/setup-logging.sh` configures on all nodes
+
+#### Environment Variables for Logging
+- **NODE_NAME**: Injected via Kubernetes downward API
+  ```yaml
+  env:
+  - name: NODE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
+  ```
+- **XBRL_QUEUE**: Determines log prefix for XBRL workers
+- **PYTHONUNBUFFERED=1**: Ensures immediate log output (report-enricher)
+
+#### Log File Location Summary
+| Component | Location | File Pattern | Node(s) |
+|-----------|----------|--------------|---------|
+| Historical (chunked) | `/home/faisal/EventMarketDB/logs/ChunkHist_*` | Multiple files per chunk | minisforum (local) |
+| Live (event-trader) | `/home/faisal/EventMarketDB/logs/` | `event_trader_YYYYMMDD_{node}.log` | minisforum2 |
+| XBRL Heavy | `/home/faisal/EventMarketDB/logs/` | `xbrl-heavy_YYYYMMDD_{node}.log` | minisforum2, minisforum |
+| XBRL Medium | `/home/faisal/EventMarketDB/logs/` | `xbrl-medium_YYYYMMDD_{node}.log` | minisforum2, minisforum |
+| XBRL Light | `/home/faisal/EventMarketDB/logs/` | `xbrl-light_YYYYMMDD_{node}.log` | minisforum2, minisforum |
+| Report Enricher | `/home/faisal/EventMarketDB/logs/` | `enricher_YYYYMMDD_{node}.log` | Any node |
+
+#### Critical Implementation Notes
+1. **File Locking**: The centralized `log_config.py` uses file locking to ensure multiple processes can safely write to the same log file
+2. **Node Identification**: Always uses actual node name (not pod name) for log file naming
+3. **Force Path**: Historical processing bypasses normal log file discovery and uses explicit paths
+4. **Daily Files**: New log file created each day at midnight based on system time
+5. **Process Safety**: Lock file prevents race conditions during simultaneous process starts
+
 ### Processing Modes: Historical vs Live
 
 #### Historical Processing (Local)
@@ -371,6 +493,106 @@ kubectl rollout restart deployment/xbrl-worker-light -n processing
 #### Service Discovery
 - Pattern: `{service}.{namespace}.svc.cluster.local`
 - Example: `redis.infrastructure.svc.cluster.local:6379`
+
+---
+
+## 5. Claude Operating Guidelines
+
+These rules define how Claude must behave when performing any task in this repository. They are non-negotiable and must be followed precisely.
+
+### ✅ 1. Clean Up After Yourself  
+Always delete all intermediate, temporary, or generated files (e.g., test logs, debug outputs, temp YAMLs) after verifying task success. Leave the environment clean and uncluttered.
+
+### 🔁 2. Ensure Idempotency  
+All commands and scripts must be safe to re-run multiple times without causing unintended effects. This includes:
+- No duplication of deployments, config, or data
+- No accidental resets or state changes  
+- No resource exhaustion or scaling errors
+
+Before executing, always:
+- Understand the full **business and code logic**
+- Confirm system-wide safety and impact
+- Avoid breaking any downstream process
+
+### 🧪 3. Test Thoroughly  
+Never assume a change works. Always:
+- Run it end-to-end
+- Check logs, system health, pod status, and outputs
+- Validate functionality in production (no staging available)
+- Be prepared to roll back safely
+
+### 📝 4. Document All New Behavior  
+If a change introduces new logic, structure, or runtime behavior:
+- Update this `CLAUDE.md` if infrastructure or behavior guidance changes
+- Update related documentation (`README.md`, `HowTo/*.md`, etc.)
+- Nothing should be added silently
+
+### ⛔ 5. Do Not Modify Critical Components Without Explicit Permission  
+Never touch the following unless specifically instructed:
+- Secrets or encrypted configs
+- Persistent volume mounts (e.g., Redis, Neo4j data)
+- kube-system resources or core networking
+- Production ingress/egress rules
+- Business-critical workloads
+
+### 🎯 6. EventMarketDB-Specific Guidelines
+
+#### Resource Management
+- **ALWAYS check node capacity** before scaling:
+  ```bash
+  kubectl top nodes
+  kubectl describe node minisforum2  # Primary worker node
+  ```
+- **NEVER schedule pods on minisforum3** (Neo4j dedicated)
+- **Monitor resource usage** - cluster runs at 216% CPU overcommit
+
+#### Queue & State Consistency
+- **Check queue depths** before any changes:
+  ```bash
+  redis-cli LLEN reports:queues:xbrl:heavy
+  redis-cli LLEN reports:queues:xbrl:medium
+  redis-cli LLEN reports:queues:xbrl:light
+  redis-cli LLEN reports:queues:enrich
+  ```
+- **Preserve metadata** through entire pipeline
+- **Never mix** live and historical data prefixes
+- **Respect processing order**: raw → processed → with/without returns
+
+#### Financial Data Processing
+- **Memory requirements are critical**:
+  - 10-K forms: 8GB RAM per document
+  - 10-Q forms: 4GB RAM per document  
+  - 8-K forms: 2GB RAM per document
+- **Never skip enrichment** - adds critical metadata
+- **Validate** all financial data before processing
+
+#### Production Deployment
+- **No staging** - all changes go to production
+- **Always use deployment scripts**:
+  ```bash
+  ./scripts/deploy.sh {component}     # Single component
+  ./scripts/deploy-all.sh            # All components
+  ```
+- **Verify immediately** after deployment:
+  ```bash
+  kubectl get pods -n processing
+  kubectl logs {pod-name} -n processing --tail=50
+  ```
+- **Check logs** at `/home/faisal/EventMarketDB/logs/`
+
+#### Error Recovery
+1. **Check pod logs first**
+2. **Verify Redis connectivity** 
+3. **Ensure Neo4j accessibility**
+4. **Let KEDA handle scaling** - don't panic about restarts
+5. **Rollback only if necessary**:
+   ```bash
+   kubectl rollout undo deployment/{name} -n processing
+   ```
+
+Claude must act conservatively, verify obsessively, and operate cleanly.
+
+---
 
 ### Critical Don'ts (⚠️ Do NOT Change Unless Explicitly Asked)
 
