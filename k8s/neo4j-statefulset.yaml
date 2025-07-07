@@ -27,38 +27,24 @@ spec:
         value: "neo4j"
         effect: "NoSchedule"
       initContainers:
-      # Download APOC plugin
-      - name: download-apoc
+      # Copy all plugins from host
+      - name: copy-plugins
         image: busybox:1.36
         command:
         - sh
         - -c
         - |
-          echo "Downloading APOC plugin..."
-          cd /plugins
-          # Download APOC 5.26.0 for Neo4j 5.26
-          wget https://github.com/neo4j/apoc/releases/download/5.26.0/apoc-5.26.0-extended.jar
-          chmod 644 apoc-5.26.0-extended.jar
-          echo "APOC plugin downloaded successfully"
+          echo "Copying plugins from host..."
+          cp -v /host-plugins/* /plugins/
+          chmod 644 /plugins/*.jar
+          ls -la /plugins/
+          echo "Plugins copied successfully"
         volumeMounts:
         - name: plugins
           mountPath: /plugins
-      # Download GenAI plugin
-      - name: download-genai
-        image: busybox:1.36
-        command:
-        - sh
-        - -c
-        - |
-          echo "Downloading GenAI plugin..."
-          cd /plugins
-          # Download GenAI plugin for Neo4j 5.24
-          wget https://github.com/neo4j/graph-data-science/releases/download/2.13.0/neo4j-graph-data-science-2.13.0.jar
-          chmod 644 neo4j-graph-data-science-2.13.0.jar
-          echo "GenAI plugin downloaded successfully"
-        volumeMounts:
-        - name: plugins
-          mountPath: /plugins
+        - name: host-plugins
+          mountPath: /host-plugins
+          readOnly: true
       containers:
       - name: neo4j
         image: neo4j:5.26.4-enterprise
@@ -142,6 +128,10 @@ spec:
       volumes:
       - name: plugins
         emptyDir: {}
+      - name: host-plugins
+        hostPath:
+          path: /opt/neo4j/plugins
+          type: Directory
   volumeClaimTemplates:
   - metadata:
       name: data

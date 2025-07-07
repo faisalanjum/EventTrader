@@ -104,8 +104,8 @@
   - Runs on: minisforum2
 
 - **nats-0**
-  - Purpose: Message streaming (for MCP services)
-  - Runs on: minisforum2
+  - Purpose: Message streaming (originally for MCP services)
+  - Runs on: minisforum3 (documented as minisforum2, but actually on minisforum3)
 
 #### Neo4j Namespace
 
@@ -132,6 +132,31 @@
 - **keda-operator**: Manages autoscaling
 - **keda-metrics-apiserver**: Provides metrics
 - **keda-admission-webhooks**: Validates configurations
+
+#### MCP Services Namespace
+
+- **mcp-neo4j-cypher**
+  - Purpose: MCP server for Neo4j Cypher queries (Claude Desktop integration)
+  - Image: `python:3.11-slim` (generic - installs packages at runtime)
+  - Resources: Requests: 100m CPU, 256Mi memory | Limits: 250m CPU, 512Mi memory
+  - Runs on: minisforum (nodeSelector enforced)
+  - Logging: stdout/stderr only (no file logging)
+  - Source: Mounts `/home/faisal/neo4j-mcp-server/servers/mcp-neo4j-cypher`
+  - Startup: `run_cypher.py` script handles MCP server initialization
+  - **⚠️ Known Issue**: Fails on node restart due to DNS not ready during pip install
+  - **Current Fix**: Added `set -e` to startup script (exits on failure, K8s restarts)
+
+- **mcp-neo4j-memory**
+  - Purpose: MCP server for Neo4j memory operations (Claude Desktop integration)
+  - Image: `python:3.11-slim` (generic - installs packages at runtime)
+  - Resources: Requests: 100m CPU, 512Mi memory | Limits: 250m CPU, 1Gi memory
+  - Runs on: minisforum (nodeSelector enforced)
+  - Logging: stdout/stderr only (no file logging)
+  - Source: Mounts `/home/faisal/neo4j-mcp-server/servers/mcp-neo4j-memory`
+  - Startup: `run_memory.py` script handles MCP server initialization (async)
+  - **⚠️ Known Issue**: Fails on node restart due to DNS not ready during pip install
+  - **Current Fix**: Added `set -e` to startup script (exits on failure, K8s restarts)
+  - **Note**: Memory server main() is async (takes 3 args), unlike cypher (takes 4 args)
 
 ### Networking
 
@@ -322,6 +347,7 @@ Managed by logrotate on all nodes (`/etc/logrotate.d/eventmarketdb`):
 | XBRL Medium | `/home/faisal/EventMarketDB/logs/` | `xbrl-medium_YYYYMMDD_{node}.log` | minisforum2, minisforum |
 | XBRL Light | `/home/faisal/EventMarketDB/logs/` | `xbrl-light_YYYYMMDD_{node}.log` | minisforum2, minisforum |
 | Report Enricher | `/home/faisal/EventMarketDB/logs/` | `enricher_YYYYMMDD_{node}.log` | Any node |
+| MCP Services | None | stdout/stderr only (use `kubectl logs`) | minisforum |
 
 #### Critical Implementation Notes
 1. **File Locking**: The centralized `log_config.py` uses file locking to ensure multiple processes can safely write to the same log file
@@ -593,6 +619,173 @@ Never touch the following unless specifically instructed:
 Claude must act conservatively, verify obsessively, and operate cleanly.
 
 ---
+
+### MCP (Model Context Protocol) Integration
+
+⚠️ **CRITICAL: Two Separate MCP Setups Exist - DO NOT CONFUSE THEM**
+
+#### 1. Claude Desktop MCP (Kubernetes Pods) - CURRENT SETUP
+- **Purpose**: For Claude Desktop application (GUI)
+- **Location**: Runs inside Kubernetes pods in `mcp-services` namespace
+- **How it works**: Desktop app → SSH → proxy script → kubectl exec → pods → Neo4j
+- **Desktop Config**: `~/.config/claude/claude_desktop_config.json`
+  ```json
+  {
+    "mcpServers": {
+      "neo4j-cypher": {
+        "type": "stdio",
+        "command": "ssh",
+        "args": ["minisforum", "/home/faisal/k8s-scripts/mcp-proxy-server.sh", "cypher"]
+      },
+      "neo4j-memory": {
+        "type": "stdio",
+        "command": "ssh",
+        "args": ["minisforum", "/home/faisal/k8s-scripts/mcp-proxy-server.sh", "memory"]
+      }
+    }
+  }
+  ```
+- **Proxy Script**: `/home/faisal/k8s-scripts/mcp-proxy-server.sh`
+  - Finds pod using kubectl labels
+  - Executes `/source/run_cypher.py` or `/source/run_memory.py` in pod
+- **Connection**: Internal K8s DNS `bolt://neo4j-bolt.neo4j:7687`
+- **Status**: ✅ Working (current production setup)
+
+#### 2. Claude CLI MCP (Local) - ALTERNATIVE SETUP
+- **Purpose**: For `claude` command-line tool ONLY
+- **Location**: Runs locally on host machine (NOT in Kubernetes)
+- **How it works**: Claude CLI → bash scripts → local Python → Neo4j NodePort
+- **Config**: `/home/faisal/EventMarketDB/.mcp.json`
+- **Connection**: External NodePort `bolt://localhost:30687`
+- **Status**: ✅ Working after setup below
+
+#### Claude CLI MCP Setup Instructions (Complete Recreation)
+
+**Step 1: Create wrapper scripts**
+```bash
+mkdir -p /home/faisal/EventMarketDB/mcp_servers
+
+# Create local-cypher-server.sh
+cat > /home/faisal/EventMarketDB/mcp_servers/local-cypher-server.sh << 'EOF'
+#!/bin/bash
+# MCP server wrapper for Claude CLI - Neo4j Cypher
+
+# Set required environment variables (same as Kubernetes pods)
+export NEO4J_URI="bolt://localhost:30687"
+export NEO4J_USERNAME="neo4j"
+export NEO4J_PASSWORD="Next2020#"
+export NEO4J_DATABASE="neo4j"
+export PYTHONPATH="/home/faisal/neo4j-mcp-server/servers/mcp-neo4j-cypher/src:$PYTHONPATH"
+
+# Activate the virtual environment
+source /home/faisal/EventMarketDB/venv/bin/activate
+
+# Run the MCP server using the entry point
+cd /home/faisal/neo4j-mcp-server/servers/mcp-neo4j-cypher/src
+exec python -c "from mcp_neo4j_cypher import main; main()"
+EOF
+
+# Create local-memory-server.sh
+cat > /home/faisal/EventMarketDB/mcp_servers/local-memory-server.sh << 'EOF'
+#!/bin/bash
+# MCP server wrapper for Claude CLI - Neo4j Memory
+
+# Set required environment variables (same as Kubernetes pods)
+export NEO4J_URI="bolt://localhost:30687"
+export NEO4J_USERNAME="neo4j"
+export NEO4J_PASSWORD="Next2020#"
+export NEO4J_DATABASE="neo4j"
+export PYTHONPATH="/home/faisal/neo4j-mcp-server/servers/mcp-neo4j-memory/src:$PYTHONPATH"
+
+# Activate the virtual environment
+source /home/faisal/EventMarketDB/venv/bin/activate
+
+# Run the MCP server using the entry point
+cd /home/faisal/neo4j-mcp-server/servers/mcp-neo4j-memory/src
+exec python -c "from mcp_neo4j_memory import main; main()"
+EOF
+
+chmod +x /home/faisal/EventMarketDB/mcp_servers/*.sh
+```
+
+**Step 2: Create .mcp.json configuration**
+```bash
+cat > /home/faisal/EventMarketDB/.mcp.json << 'EOF'
+{
+  "mcpServers": {
+    "neo4j-cypher": {
+      "type": "stdio",
+      "command": "/home/faisal/EventMarketDB/mcp_servers/local-cypher-server.sh",
+      "args": []
+    },
+    "neo4j-memory": {
+      "type": "stdio",
+      "command": "/home/faisal/EventMarketDB/mcp_servers/local-memory-server.sh",
+      "args": []
+    }
+  }
+}
+EOF
+```
+
+**Step 3: Create __init__.py (required for imports)**
+```bash
+echo "# MCP servers package" > /home/faisal/EventMarketDB/mcp_servers/__init__.py
+```
+
+**Step 4: Usage**
+```bash
+cd /home/faisal/EventMarketDB
+claude  # Start new session - MCP tools auto-load
+# In Claude, type: /mcp
+# Should show: neo4j-cypher ✓ connected, neo4j-memory ✓ connected
+```
+
+**Key Points**:
+- Scripts use ORIGINAL MCP code from `/home/faisal/neo4j-mcp-server/servers/`
+- Password "Next2020#" is hardcoded (same as K8s pods)
+- Requires `mcp` package installed in venv: `pip install mcp`
+- Neo4j must be accessible at localhost:30687
+- If scripts fail, check: `nc -zv localhost 30687`
+
+#### MCP Services Recovery (After Node Restart)
+
+If MCP pods fail after node restart:
+
+1. **Current Setup (with set -e fix)**:
+   - Pods will automatically restart if pip install fails due to DNS
+   - Wait for pods to become ready (may take 2-3 restarts)
+   ```bash
+   # Check pod status
+   kubectl get pods -n mcp-services -w
+   
+   # Check logs if pods keep restarting
+   kubectl logs -n mcp-services <pod-name> --previous
+   ```
+
+2. **Force Recreation if Needed**:
+   ```bash
+   kubectl delete pods -n mcp-services --all
+   ```
+
+3. **Verify MCP is Working**:
+   ```bash
+   # Test cypher service (should return error about invalid params - this is normal)
+   echo '{"jsonrpc": "2.0", "method": "initialize", "params": {"capabilities": {}}, "id": 1}' | \
+     /home/faisal/k8s-scripts/mcp-proxy-server.sh cypher | head -1
+   
+   # Test memory service (should return error about invalid params - this is normal)
+   echo '{"jsonrpc": "2.0", "method": "initialize", "params": {"capabilities": {}}, "id": 1}' | \
+     /home/faisal/k8s-scripts/mcp-proxy-server.sh memory | head -1
+   
+   # Both should return: {"jsonrpc":"2.0","id":1,"error":{"code":-32602,...}}
+   ```
+
+4. **Future Enhancement** (Pre-built Images):
+   - Dockerfiles exist at `/home/faisal/EventMarketDB/k8s/mcp-services/`
+   - Build script: `/home/faisal/EventMarketDB/k8s/mcp-services/build-mcp-images.sh`
+   - Would eliminate pip install failures on restart
+   - Not currently implemented due to compatibility issues
 
 ### Critical Don'ts (⚠️ Do NOT Change Unless Explicitly Asked)
 
