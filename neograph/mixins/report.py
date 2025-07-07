@@ -470,15 +470,19 @@ class ReportMixin:
                 self._create_filing_text_content_nodes_from_report(report_id, filing_text_data)
             
             # Check if this report is eligible for XBRL processing and we haven't processed one yet
-            # In report.py, modify the XBRL conditional block:
+            # Import flags to check processing method and exclusion list
+            from config.feature_flags import ENABLE_KUBERNETES_XBRL, PRESERVE_XBRL_FAILED_STATUS
+            
+            # Build exclusion list based on feature flag
+            excluded_statuses = ['COMPLETED', 'PROCESSING', 'SKIPPED']
+            if PRESERVE_XBRL_FAILED_STATUS:
+                excluded_statuses.append('FAILED')
+            
             if (self.enable_xbrl and  # Only if XBRL processing is enabled via feature flags
                 not self.xbrl_processed and
                 report_props.get('is_xml') == True and 
                 report_props.get('cik') and
-                report_props.get('xbrl_status') not in ['COMPLETED', 'PROCESSING', 'SKIPPED']):
-                
-                # Check which processing method to use
-                from config.feature_flags import ENABLE_KUBERNETES_XBRL
+                report_props.get('xbrl_status') not in excluded_statuses):
                 
                 # if ENABLE_KUBERNETES_XBRL:
                 #     # Use Kubernetes worker pods (queue-based approach)

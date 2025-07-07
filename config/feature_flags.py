@@ -82,6 +82,13 @@ XBRL_MAX_CONCURRENT_FILINGS = 7  # (old hard-coded value was 4)
 # When set to False, skips Kubernetes XBRL worker implementation and uses local XBRL worker
 ENABLE_KUBERNETES_XBRL = True
 
+# --- XBRL Failed Status Handling ---
+# When set to True, XBRL reports with FAILED status will NOT be automatically requeued
+# This preserves xbrl_error messages for debugging purposes
+# Failed reports can still be manually retried using scripts/retry_failed_xbrl.py
+# When set to False, FAILED reports are automatically requeued on startup and during reconciliation
+PRESERVE_XBRL_FAILED_STATUS = True
+
 
 
 # Local on-disk cache for SEC-API XBRL-to-JSON responses. Set to None to disable.

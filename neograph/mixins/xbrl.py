@@ -3,7 +3,7 @@ import time
 
 from XBRL.xbrl_processor import process_report, get_company_by_cik, get_report_by_accessionNo
 from ..Neo4jConnection import get_manager
-from config.feature_flags import ENABLE_KUBERNETES_XBRL
+from config.feature_flags import ENABLE_KUBERNETES_XBRL, PRESERVE_XBRL_FAILED_STATUS
 import json
 
 
@@ -39,16 +39,30 @@ class XbrlMixin:
 
         try:
             # single Cypher ensures no race between read & write
-            updated = session.run(
-                """
-                MATCH (r:Report {id: $id})
-                WHERE r.xbrl_status IS NULL OR r.xbrl_status IN ['PENDING', 'FAILED']
-                SET   r.xbrl_status = 'QUEUED',
-                      r.xbrl_error  = NULL
-                RETURN count(r) AS c
-                """,
-                id=report_id,
-            ).single()["c"]
+            if PRESERVE_XBRL_FAILED_STATUS:
+                # Don't requeue FAILED reports when flag is set
+                updated = session.run(
+                    """
+                    MATCH (r:Report {id: $id})
+                    WHERE r.xbrl_status IS NULL OR r.xbrl_status IN ['PENDING']
+                    SET   r.xbrl_status = 'QUEUED',
+                          r.xbrl_error  = NULL
+                    RETURN count(r) AS c
+                    """,
+                    id=report_id,
+                ).single()["c"]
+            else:
+                # Original behavior - requeue FAILED reports
+                updated = session.run(
+                    """
+                    MATCH (r:Report {id: $id})
+                    WHERE r.xbrl_status IS NULL OR r.xbrl_status IN ['PENDING', 'FAILED']
+                    SET   r.xbrl_status = 'QUEUED',
+                          r.xbrl_error  = NULL
+                    RETURN count(r) AS c
+                    """,
+                    id=report_id,
+                ).single()["c"]
 
             if updated == 0:
                 # Already queued, processing or completed.
@@ -339,14 +353,25 @@ class XbrlMixin:
         logger.info("Checking for interrupted XBRL tasks (status NULL, FAILED, PENDING, QUEUED or PROCESSING)...")
         try:
             with self.manager.driver.session() as session:
-                # Find reports that need reconciliation - not keeping 'SKIPPED' since it helps us keep some reports from Not processing (manually lets say)                
-                records = session.run(
-                    """
-                    MATCH (r:Report)
-                    WHERE r.xbrl_status IS NULL OR r.xbrl_status IN ['QUEUED', 'PROCESSING', 'PENDING', 'FAILED']
-                    RETURN r.id AS report_id, r.cik AS cik, r.accessionNo AS accessionNo, r.formType AS formType
-                    """
-                ).data()
+                # Find reports that need reconciliation - not keeping 'SKIPPED' since it helps us keep some reports from Not processing (manually lets say)
+                if PRESERVE_XBRL_FAILED_STATUS:
+                    # Don't reconcile FAILED reports when flag is set
+                    records = session.run(
+                        """
+                        MATCH (r:Report)
+                        WHERE r.xbrl_status IS NULL OR r.xbrl_status IN ['QUEUED', 'PROCESSING', 'PENDING']
+                        RETURN r.id AS report_id, r.cik AS cik, r.accessionNo AS accessionNo, r.formType AS formType
+                        """
+                    ).data()
+                else:
+                    # Original behavior - reconcile FAILED reports too
+                    records = session.run(
+                        """
+                        MATCH (r:Report)
+                        WHERE r.xbrl_status IS NULL OR r.xbrl_status IN ['QUEUED', 'PROCESSING', 'PENDING', 'FAILED']
+                        RETURN r.id AS report_id, r.cik AS cik, r.accessionNo AS accessionNo, r.formType AS formType
+                        """
+                    ).data()
                 
                 # Incase want to add only fetch repots which are longer than 1 hour old
                     #                   AND (
