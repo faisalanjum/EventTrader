@@ -426,6 +426,91 @@ Managed by logrotate on all nodes (`/etc/logrotate.d/eventmarketdb`):
   - Historical and live processing share worker infrastructure
   - No resource competition between processing modes
 
+### XBRL Processing System
+
+#### Overview
+XBRL processing extracts structured financial data from SEC XML filings into Neo4j graph database using queue-based worker pods.
+
+#### Status Lifecycle
+| Status | Description | Next States |
+|--------|-------------|-------------|
+| **NULL** | Not processed yet | QUEUED |
+| **QUEUED** | In Redis queue waiting | PROCESSING |
+| **PROCESSING** | Worker actively processing | COMPLETED, FAILED |
+| **COMPLETED** | Successfully processed | Terminal |
+| **FAILED** | Error occurred (stored in `xbrl_error`) | NULL (manual retry) |
+| **PENDING** | Resource limit, retry later | QUEUED |
+| **SKIPPED** | Intentionally bypassed | Terminal |
+
+#### Processing Flow
+```
+1. Report eligibility check (is_xml=true, has CIK, status not excluded)
+   ↓
+2. Route to queue by form type:
+   - Heavy (10-K): reports:queues:xbrl:heavy
+   - Medium (10-Q): reports:queues:xbrl:medium  
+   - Light (8-K): reports:queues:xbrl:light
+   ↓
+3. Worker pod picks up → Sets PROCESSING → Creates XBRLNode
+   ↓
+4. Extract facts/concepts → Link to XBRLNode → Set COMPLETED/FAILED
+```
+
+#### Key Files
+- **Entry point**: `neograph/mixins/report.py:474` - Checks eligibility
+- **Queue routing**: `neograph/mixins/xbrl.py:34` - `_enqueue_xbrl()`
+- **Reconciliation**: `neograph/mixins/xbrl.py:330` - Startup recovery
+- **Worker loop**: `neograph/xbrl_worker_loop.py` - Polls queues
+- **Processing**: `XBRL/xbrl_processor.py` - Core logic
+- **Feature flags**: `config/feature_flags.py`
+
+#### Feature Flags
+- **PRESERVE_XBRL_FAILED_STATUS** (default: True)
+  - True: FAILED reports stay failed, preserves errors
+  - False: FAILED auto-requeues on startup
+- **ENABLE_KUBERNETES_XBRL** (default: True)
+  - True: Use K8s pods, False: Local threads
+
+#### Status Update Locations
+1. **Set QUEUED**: `_enqueue_xbrl()` line 46/60
+2. **Set PROCESSING**: `xbrl_worker_loop.py` line 107
+3. **Set COMPLETED**: `xbrl_worker_loop.py` line 127  
+4. **Set FAILED**: `xbrl_worker_loop.py` line 147
+5. **Reset to NULL**: `retry_failed_xbrl.py` line 116
+
+#### Neo4j Structure
+```
+(Report)-[:HAS_XBRL]->(XBRLNode)-[:HAS_FACT]->(Fact)
+                               └-[:HAS_CONCEPT]->(Concept)
+```
+
+#### XBRL Commands
+```bash
+# Check queues
+kubectl exec -it redis-* -n infrastructure -- redis-cli
+> LLEN reports:queues:xbrl:heavy
+
+# Monitor workers
+kubectl get pods -n processing -l worker-type=xbrl
+
+# View errors  
+python scripts/view_xbrl_errors.py
+
+# Retry failed
+python scripts/retry_failed_xbrl.py --limit=10
+
+# Check report status
+kubectl exec -it neo4j-0 -n neo4j -- cypher-shell \
+  "MATCH (r:Report {accessionNo: 'XXX'}) RETURN r.xbrl_status, r.xbrl_error"
+```
+
+#### Critical Notes
+- Workers run on minisforum/minisforum2 only (never minisforum3)
+- Memory requirements: 10-K (8GB), 10-Q (4GB), 8-K (2GB)
+- Reconciliation runs on every startup via `DataManagerCentral.py:717`
+- Status updates are atomic to prevent races
+- Worker retries: 3 attempts with exponential backoff
+
 ### Operational Commands for Bots
 
 #### Checking Pod Status

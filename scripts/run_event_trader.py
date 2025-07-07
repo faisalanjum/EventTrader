@@ -417,6 +417,19 @@ def main():
                         max_items=embedding_max_items
                     )
                     logger.info(f"QA Embedding generation finished with result: {embedding_results}")
+                    
+                    # Generate news embeddings for this chunk
+                    if feature_flags.ENABLE_NEWS_EMBEDDINGS:
+                        try:
+                            logger.info("Generating news embeddings for this chunk...")
+                            news_embedding_batch_size = feature_flags.NEWS_EMBEDDING_BATCH_SIZE
+                            news_results = neo4j_processor.batch_process_news_embeddings(
+                                batch_size=news_embedding_batch_size,
+                                max_items=None  # Process all missing
+                            )
+                            logger.info(f"News embedding generation finished: {news_results}")
+                        except Exception as news_embed_err:
+                            logger.warning(f"Failed to generate news embeddings: {news_embed_err}")
                 else:
                     logger.warning("Cannot generate QA embeddings: Neo4j processor not available or not initialized properly.")
 
