@@ -361,15 +361,40 @@ Managed by logrotate on all nodes (`/etc/logrotate.d/eventmarketdb`):
 #### Historical Processing (Local)
 - **Command**: `./scripts/et chunked-historical start_date end_date`
 - **Runs on**: minisforum (control node) locally, NOT in Kubernetes
+- **Memory requirement**: 48GB RAM
 - **Purpose**: Backfill historical SEC filings for specific date ranges
 - **Process**: 
   - Splits date range into 5-day chunks
   - Runs each chunk sequentially
   - Creates dedicated log folders: `/home/faisal/EventMarketDB/logs/ChunkHist_<dates>_<timestamp>/`
   - Uses Redis prefix `reports:hist:` for data separation
+
+#### Historical Processing Safety Configuration
+**CRITICAL**: Before starting historical processing, apply safety limits to prevent OOM:
+
+```bash
+# Apply KEDA safety limits (reduces Medium: 4→3, Light: 7→5)
+kubectl apply -f /home/faisal/EventMarketDB/k8s/historical-safety-config.yaml
+
+# This ensures:
+# - minisforum2: Max 49.5GB usage (11GB buffer)
+# - minisforum: Max 55.3GB usage (2.2GB buffer)
+```
+
+**After historical completes**:
+```bash
+# Restore full KEDA scaling
+kubectl apply -f /home/faisal/EventMarketDB/k8s/xbrl-worker-scaledobjects.yaml
+
+# Remove nodeAffinity to restore multi-node distribution
+kubectl patch deployment xbrl-worker-heavy -n processing --type='json' -p='[{"op": "remove", "path": "/spec/template/spec/affinity"}]'
+kubectl patch deployment xbrl-worker-medium -n processing --type='json' -p='[{"op": "remove", "path": "/spec/template/spec/affinity"}]'
+kubectl patch deployment xbrl-worker-light -n processing --type='json' -p='[{"op": "remove", "path": "/spec/template/spec/affinity"}]'
+```
+
 - **Helper Pods Used**: 
-  - SAME xbrl-worker pods (heavy/medium/light)
-  - SAME report-enricher pods
+  - SAME xbrl-worker pods (heavy/medium/light) with safety limits
+  - SAME report-enricher pods (distributes across nodes via podAntiAffinity)
   - Workers don't know if processing historical or live data
   - Queue items contain metadata to preserve data separation
 

@@ -6,7 +6,7 @@ metadata:
 spec:
   scaleTargetRef:
     name: report-enricher          # Target deployment
-  minReplicaCount: 0              # Scale to zero when idle
+  minReplicaCount: 1              # Always keep 1 pod running for instant processing
   maxReplicaCount: 5              # Maximum pods
   cooldownPeriod: 60              # Wait 60s before scaling down
   triggers:

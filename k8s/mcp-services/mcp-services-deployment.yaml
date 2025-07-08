@@ -1,0 +1,241 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"mcp-neo4j-cypher"},"name":"mcp-neo4j-cypher","namespace":"mcp-services"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"mcp-neo4j-cypher"}},"template":{"metadata":{"labels":{"app":"mcp-neo4j-cypher"}},"spec":{"containers":[{"args":["cd /source\necho \"Installing dependencies...\"\npip install --no-cache-dir 'neo4j\u003e=5.26.0' 'mcp[cli]\u003e=1.6.0'\npip install -e .\n\necho \"MCP Neo4j Cypher server installed. Container ready for kubectl exec.\"\n# Keep container running\nsleep infinity\n"],"command":["/bin/bash","-c"],"env":[{"name":"NEO4J_URI","value":"bolt://neo4j-bolt.neo4j:7687"},{"name":"NEO4J_USERNAME","valueFrom":{"secretKeyRef":{"key":"NEO4J_USERNAME","name":"eventtrader-secrets"}}},{"name":"NEO4J_PASSWORD","valueFrom":{"secretKeyRef":{"key":"NEO4J_PASSWORD","name":"eventtrader-secrets"}}},{"name":"NEO4J_DATABASE","value":"neo4j"},{"name":"PYTHONUNBUFFERED","value":"1"}],"image":"python:3.11-slim","name":"mcp-neo4j-cypher","resources":{"limits":{"cpu":"250m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}},"volumeMounts":[{"mountPath":"/source","name":"source-code"}]}],"nodeSelector":{"kubernetes.io/hostname":"minisforum"},"tolerations":[{"effect":"NoSchedule","key":"node-role.kubernetes.io/control-plane","operator":"Exists"},{"effect":"NoSchedule","key":"dedicated","operator":"Equal","value":"graph"}],"volumes":[{"hostPath":{"path":"/home/faisal/neo4j-mcp-server/servers/mcp-neo4j-cypher","type":"Directory"},"name":"source-code"}]}}}}
+    creationTimestamp: "2025-07-06T20:48:54Z"
+    generation: 1
+    labels:
+      app: mcp-neo4j-cypher
+    name: mcp-neo4j-cypher
+    namespace: mcp-services
+    resourceVersion: "5769830"
+    uid: 7ecea0dc-f3e5-446f-9533-18360eee4994
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: mcp-neo4j-cypher
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: mcp-neo4j-cypher
+      spec:
+        containers:
+        - args:
+          - |
+            cd /source
+            echo "Installing dependencies..."
+            pip install --no-cache-dir 'neo4j>=5.26.0' 'mcp[cli]>=1.6.0'
+            pip install -e .
+
+            echo "MCP Neo4j Cypher server installed. Container ready for kubectl exec."
+            # Keep container running
+            sleep infinity
+          command:
+          - /bin/bash
+          - -c
+          env:
+          - name: NEO4J_URI
+            value: bolt://neo4j-bolt.neo4j:7687
+          - name: NEO4J_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: NEO4J_USERNAME
+                name: eventtrader-secrets
+          - name: NEO4J_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: NEO4J_PASSWORD
+                name: eventtrader-secrets
+          - name: NEO4J_DATABASE
+            value: neo4j
+          - name: PYTHONUNBUFFERED
+            value: "1"
+          image: python:3.11-slim
+          imagePullPolicy: IfNotPresent
+          name: mcp-neo4j-cypher
+          resources:
+            limits:
+              cpu: 250m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /source
+            name: source-code
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          kubernetes.io/hostname: minisforum
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+          operator: Exists
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: graph
+        volumes:
+        - hostPath:
+            path: /home/faisal/neo4j-mcp-server/servers/mcp-neo4j-cypher
+            type: Directory
+          name: source-code
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-07-06T20:48:57Z"
+      lastUpdateTime: "2025-07-06T20:48:57Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-07-06T20:48:55Z"
+      lastUpdateTime: "2025-07-06T20:48:57Z"
+      message: ReplicaSet "mcp-neo4j-cypher-ffbc7d888" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"mcp-neo4j-memory"},"name":"mcp-neo4j-memory","namespace":"mcp-services"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"mcp-neo4j-memory"}},"template":{"metadata":{"labels":{"app":"mcp-neo4j-memory"}},"spec":{"containers":[{"args":["cd /source\necho \"Installing dependencies...\"\npip install --no-cache-dir 'neo4j\u003e=5.26.0' 'mcp[cli]\u003e=1.6.0'\npip install -e .\n\necho \"MCP Neo4j Memory server installed. Container ready for kubectl exec.\"\n# Keep container running\nsleep infinity\n"],"command":["/bin/bash","-c"],"env":[{"name":"NEO4J_URI","value":"bolt://neo4j-bolt.neo4j:7687"},{"name":"NEO4J_USERNAME","valueFrom":{"secretKeyRef":{"key":"NEO4J_USERNAME","name":"eventtrader-secrets"}}},{"name":"NEO4J_PASSWORD","valueFrom":{"secretKeyRef":{"key":"NEO4J_PASSWORD","name":"eventtrader-secrets"}}},{"name":"NEO4J_DATABASE","value":"neo4j"},{"name":"PYTHONUNBUFFERED","value":"1"}],"image":"python:3.11-slim","name":"mcp-neo4j-memory","resources":{"limits":{"cpu":"250m","memory":"1Gi"},"requests":{"cpu":"100m","memory":"512Mi"}},"volumeMounts":[{"mountPath":"/source","name":"source-code"}]}],"nodeSelector":{"kubernetes.io/hostname":"minisforum"},"tolerations":[{"effect":"NoSchedule","key":"node-role.kubernetes.io/control-plane","operator":"Exists"},{"effect":"NoSchedule","key":"dedicated","operator":"Equal","value":"graph"}],"volumes":[{"hostPath":{"path":"/home/faisal/neo4j-mcp-server/servers/mcp-neo4j-memory","type":"Directory"},"name":"source-code"}]}}}}
+    creationTimestamp: "2025-07-06T20:48:55Z"
+    generation: 1
+    labels:
+      app: mcp-neo4j-memory
+    name: mcp-neo4j-memory
+    namespace: mcp-services
+    resourceVersion: "5769834"
+    uid: 85a85f63-82dc-4902-924d-ecce96f9d0a4
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: mcp-neo4j-memory
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: mcp-neo4j-memory
+      spec:
+        containers:
+        - args:
+          - |
+            cd /source
+            echo "Installing dependencies..."
+            pip install --no-cache-dir 'neo4j>=5.26.0' 'mcp[cli]>=1.6.0'
+            pip install -e .
+
+            echo "MCP Neo4j Memory server installed. Container ready for kubectl exec."
+            # Keep container running
+            sleep infinity
+          command:
+          - /bin/bash
+          - -c
+          env:
+          - name: NEO4J_URI
+            value: bolt://neo4j-bolt.neo4j:7687
+          - name: NEO4J_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: NEO4J_USERNAME
+                name: eventtrader-secrets
+          - name: NEO4J_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: NEO4J_PASSWORD
+                name: eventtrader-secrets
+          - name: NEO4J_DATABASE
+            value: neo4j
+          - name: PYTHONUNBUFFERED
+            value: "1"
+          image: python:3.11-slim
+          imagePullPolicy: IfNotPresent
+          name: mcp-neo4j-memory
+          resources:
+            limits:
+              cpu: 250m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /source
+            name: source-code
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          kubernetes.io/hostname: minisforum
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+          operator: Exists
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: graph
+        volumes:
+        - hostPath:
+            path: /home/faisal/neo4j-mcp-server/servers/mcp-neo4j-memory
+            type: Directory
+          name: source-code
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-07-06T20:48:57Z"
+      lastUpdateTime: "2025-07-06T20:48:57Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-07-06T20:48:55Z"
+      lastUpdateTime: "2025-07-06T20:48:57Z"
+      message: ReplicaSet "mcp-neo4j-memory-64b568fb7c" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

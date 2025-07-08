@@ -1,0 +1,64 @@
+# Safety configuration for historical processing
+# Apply this BEFORE starting historical to prevent memory exhaustion
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: xbrl-worker-heavy-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: xbrl-worker-heavy
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 2  # Keep at 2 during historical
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: reports:queues:xbrl:heavy
+      listLength: "2"
+      databaseIndex: "0"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: xbrl-worker-medium-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: xbrl-worker-medium
+  pollingInterval: 30
+  cooldownPeriod: 180
+  minReplicaCount: 1
+  maxReplicaCount: 3  # Reduced from 4 during historical
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: reports:queues:xbrl:medium
+      listLength: "5"
+      databaseIndex: "0"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: xbrl-worker-light-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: xbrl-worker-light
+  pollingInterval: 30
+  cooldownPeriod: 120
+  minReplicaCount: 1
+  maxReplicaCount: 5  # Reduced from 7 during historical
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: reports:queues:xbrl:light
+      listLength: "20"
+      databaseIndex: "0"
+---
+# Note: Report-enricher stays at max 5 - it distributes across nodes

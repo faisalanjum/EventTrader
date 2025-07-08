@@ -7,8 +7,8 @@ metadata:
 spec:
   scaleTargetRef:
     name: xbrl-worker-heavy
-  minReplicaCount: 0              # Scale to zero when idle
-  maxReplicaCount: 5              # Max 5 heavy workers (40GB RAM total)
+  minReplicaCount: 1              # Always keep 1 pod running for instant processing
+  maxReplicaCount: 2              # Max 2 heavy workers (reduced for 7-pod limit)
   cooldownPeriod: 300             # 5 min cooldown for heavy tasks
   triggers:
   - type: redis
@@ -27,8 +27,8 @@ metadata:
 spec:
   scaleTargetRef:
     name: xbrl-worker-medium
-  minReplicaCount: 0              # Scale to zero when idle
-  maxReplicaCount: 3              # Max 3 medium workers (12GB RAM total)
+  minReplicaCount: 1              # Always keep 1 pod running for instant processing
+  maxReplicaCount: 4              # Max 4 medium workers (updated for optimization)
   cooldownPeriod: 180             # 3 min cooldown
   triggers:
   - type: redis
@@ -47,8 +47,8 @@ metadata:
 spec:
   scaleTargetRef:
     name: xbrl-worker-light
-  minReplicaCount: 0              # Scale to zero when idle
-  maxReplicaCount: 6              # Max 6 light workers (12GB RAM total)
+  minReplicaCount: 1              # Always keep 1 pod running for instant processing
+  maxReplicaCount: 7              # Max 7 light workers (updated for optimization)
   cooldownPeriod: 120             # 2 min cooldown for quick tasks
   triggers:
   - type: redis

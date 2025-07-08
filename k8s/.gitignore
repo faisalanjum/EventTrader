@@ -1,0 +1,18 @@
+# Temporary and backup files
+*.bak
+*.old
+*-backup.yaml
+*-fixed.yaml
+*-test.yaml
+
+# Personal configs that shouldn't be in git
+processing/fix-all-keda-scalers.yaml
+processing/keda-permanent-fix.yaml
+processing/report-enricher-scaler-fixed.yaml
+
+# Old or duplicate files
+kubeSetup_*.md
+!kubeSetup.md
+
+# Namespace files (auto-created)
+mcp-services/namespace.yaml
