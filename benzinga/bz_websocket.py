@@ -211,13 +211,18 @@ class BenzingaNewsWebSocket:
                 if enable_trace:
                     websocket.enableTrace(True)
                     
+                # Create wrapper to handle websocket-client 0.59.0 callback signature issue
+                # The library checks for exactly 3 parameters, but counts 'self' in bound methods
+                def on_close_wrapper(ws, close_status_code, close_msg):
+                    self._on_close(ws, close_status_code, close_msg)
+                
                 self.ws = websocket.WebSocketApp(
                     self.url,
                     header={"accept": "application/json"},
                     on_open=self._on_open,
                     on_message=self._on_message,
                     on_error=self._on_error,
-                    on_close=self._on_close,
+                    on_close=on_close_wrapper,  # Use wrapper to fix parameter count
                     on_pong=self._on_pong
                 )
                 
@@ -276,6 +281,7 @@ class BenzingaNewsWebSocket:
         try:
             # Reset stats on each successful connection
             self.error_handler.reset_stats()
+            self.current_retry = 0  # Reset retry counter on successful connection
             
             now = datetime.now(timezone.utc)
             
@@ -398,7 +404,7 @@ class BenzingaNewsWebSocket:
         # else:
         #     self._log_downtime(status_code=1006)  # Abnormal Closure
 
-    def _on_close(self, ws, close_status_code, close_msg):
+    def _on_close(self, close_status_code, close_msg):
         """Handle WebSocket connection close"""
         self.connected = False
         
@@ -412,17 +418,34 @@ class BenzingaNewsWebSocket:
         if not self.should_run:
             return
         
-        # Check status code
-        if close_status_code == 503:
+        # Check status code and handle rate limiting
+        if close_status_code == 429:
+            # Rate limited - use longer delay
+            self.logger.warning("Rate limited (429). Using extended backoff.")
+            # Check if close_msg contains a number (seconds to wait)
+            try:
+                # Try to parse retry delay from message
+                if close_msg and close_msg.strip().isdigit():
+                    delay = int(close_msg.strip())
+                    self.logger.info(f"Server requested retry after {delay} seconds")
+                else:
+                    # Default to max delay for rate limiting
+                    delay = self.max_delay
+            except:
+                delay = self.max_delay
+        elif close_status_code == 503:
             self.logger.warning("Service temporarily unavailable. Will retry with backoff.")
+            # Use normal exponential backoff
+            delay = min(self.base_delay * (2 ** self.current_retry), self.max_delay)
+            self.current_retry += 1
+        else:
+            # Normal exponential backoff for other errors
+            delay = min(self.base_delay * (2 ** self.current_retry), self.max_delay)
+            self.current_retry += 1
         
         # Only log error stats at info level or above
         if self.logger.isEnabledFor(logging.INFO):
             self.print_error_stats()
-            
-        # Calculate delay and attempt reconnection
-        delay = min(self.base_delay * (2 ** self.current_retry), self.max_delay)
-        self.current_retry += 1
         
         self.logger.info(f"Reconnecting in {delay:.1f} seconds...")
         time.sleep(delay)
