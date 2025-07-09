@@ -167,6 +167,19 @@ Due to 1,297 items backlog in heavy queue:
   # KEDA will auto-scale down based on queue
   ```
 
+### Single XBRL Worker Experiment (July 9, 2025)
+Due to Neo4j lock contention with 12 concurrent workers:
+- **Issue**: Workers spending 95%+ time waiting for database locks
+- **Hypothesis**: Single worker with more resources will be faster (4 min vs 60 min per 10-K)
+- **Configuration**: 1 pod with 8 CPU request/12 limit, 16Gi memory request/24Gi limit
+- **Deployment**: `kubectl apply -f k8s/xbrl-worker-single-pod.yaml`
+- **Note**: KEDA disabled for this test (manual replicas=1)
+- **To restore multi-worker setup**:
+  ```bash
+  kubectl apply -f k8s/xbrl-worker-deployments.yaml
+  kubectl apply -f k8s/xbrl-worker-scaledobjects.yaml
+  ```
+
 ## Future Optimization Path
 
 ### Phase 1 (Current)

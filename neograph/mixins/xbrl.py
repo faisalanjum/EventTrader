@@ -37,6 +37,17 @@ class XbrlMixin:
         Returns True if the job was queued (or already in progress), False on error.
         """
 
+        # Validate required fields before any processing
+        if not cik or not str(cik).strip():
+            logger.error(f"Cannot process XBRL for report {report_id}: CIK is missing or empty")
+            session.run(
+                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
+                id=report_id,
+                status="FAILED",
+                error="Missing CIK - cannot process XBRL"
+            )
+            return False
+
         try:
             # single Cypher ensures no race between read & write
             if PRESERVE_XBRL_FAILED_STATUS:
