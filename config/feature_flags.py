@@ -124,7 +124,9 @@ QAEXCHANGE_VECTOR_INDEX_NAME = "qaexchange_vector_idx"
 
 # --- ADDED: Model for QA Content Classification ---
 # Model to use for classifying short QA exchanges as filler/substantial
-QA_CLASSIFICATION_MODEL = "gpt-4.1-mini"
+# QA_CLASSIFICATION_MODEL = "gpt-4.1-mini"
+QA_CLASSIFICATION_MODEL = "gpt-4o-mini"  # Correct name with 'o'
+
 # --- END ADDED --- 
 
 # --- ADDED: Word count threshold for QA substantial check ---
