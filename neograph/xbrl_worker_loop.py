@@ -123,7 +123,7 @@ def main():
             with neo4j_manager.driver.session() as session:
                 def update_completed_status(tx):
                     tx.run(
-                        "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status",
+                        "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = NULL",
                         id=report_id, status="COMPLETED"
                     )
                 session.execute_write(update_completed_status)

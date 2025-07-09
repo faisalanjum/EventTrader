@@ -155,6 +155,18 @@ This is acceptable because:
 - Provides 11GB memory buffer on minisforum2
 - Prevents OOM during peak scaling
 
+### Temporary Heavy Queue Optimization (July 9, 2025)
+Due to 1,297 items backlog in heavy queue:
+- **Heavy workers**: Increased max replicas 2→3, scaled to 3 pods
+- **Current state**: 3 heavy, 3 medium, 5 light workers on minisforum2
+- **To restore** when heavy queue < 100 items:
+  ```bash
+  # Restore heavy worker max replicas to 2
+  kubectl patch scaledobject xbrl-worker-heavy-scaler -n processing \
+    --type='merge' -p '{"spec":{"maxReplicaCount":2}}'
+  # KEDA will auto-scale down based on queue
+  ```
+
 ## Future Optimization Path
 
 ### Phase 1 (Current)
@@ -203,5 +215,5 @@ The cluster is properly configured with:
 All mathematical calculations have been verified against actual cluster state.
 
 ---
-*Last Updated: July 8, 2025*
+*Last Updated: July 9, 2025*
 *Verified with: kubectl v1.30.12, K3s cluster*

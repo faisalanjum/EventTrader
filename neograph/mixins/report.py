@@ -508,28 +508,14 @@ class ReportMixin:
 
                 if ENABLE_KUBERNETES_XBRL:
                     # Use Kubernetes worker pods (queue-based approach)
-                    if self.event_trader_redis:
-                        form = report_props["formType"]
-                        if not form or not form.strip():
-                            # Empty formType - route to heavy queue for safety
-                            xbrl_queue = RedisKeys.XBRL_QUEUE_HEAVY
-                            logger.warning(f"Empty formType for report {report_props['id']}, routing to heavy queue for safety")
-                        elif form in {"10-K", "10-K/A"}:
-                            xbrl_queue = RedisKeys.XBRL_QUEUE_HEAVY
-                        elif form in {"10-Q", "10-Q/A"}:
-                            xbrl_queue = RedisKeys.XBRL_QUEUE_MEDIUM
-                        else:
-                            xbrl_queue = RedisKeys.XBRL_QUEUE_LIGHT
-
-                        self.event_trader_redis.history_client.push_to_queue(xbrl_queue, json.dumps({
-                            "report_id": report_props["id"],
-                            "accession": report_props["accessionNo"],
-                            "cik": report_props["cik"],
-                            "form_type": form
-                        }))
-                        logger.info(f"[Kube]: Queued XBRL ({form}) for {report_props['id']} → {xbrl_queue}")
-                    else:
-                        logger.warning(f"[Kube]: Cannot queue XBRL for {report_props['id']}: Redis unavailable")
+                    # Now using _enqueue_xbrl for consistent status management
+                    self._enqueue_xbrl(
+                        session=session,
+                        report_id=report_props["id"],
+                        cik=report_props["cik"],
+                        accessionNo=report_props["accessionNo"],
+                        form_type=report_props.get("formType", "")
+                    )
                 else:
                     # Use local thread pool with semaphore (original approach)
                     self._enqueue_xbrl(
