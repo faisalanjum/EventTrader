@@ -90,7 +90,12 @@ class Polygon:
 
     def get_rest_client(self):
         """Return a new RESTClient instance per request."""
-        return RESTClient(self.api_key)
+        return RESTClient(
+            self.api_key,
+            retries=10,  # Increased from default 3 to handle extended outages
+            connect_timeout=30.0,  # Increased from default 10.0
+            read_timeout=30.0  # Increased from default 10.0
+        )
 
 
     def validate_ticker(self, ticker: str) -> Tuple[bool, str]:
