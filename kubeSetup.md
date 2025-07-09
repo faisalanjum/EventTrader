@@ -156,17 +156,43 @@ This is acceptable because:
 - Provides 11GB memory buffer on minisforum2
 - Prevents OOM during peak scaling
 
-### Temporary Heavy Queue Optimization (July 9, 2025)
-Due to 1,297 items backlog in heavy queue:
-- **Heavy workers**: Increased max replicas 2→3, scaled to 3 pods
-- **Current state**: 3 heavy, 3 medium, 5 light workers on minisforum2
-- **To restore** when heavy queue < 100 items:
-  ```bash
-  # Restore heavy worker max replicas to 2
-  kubectl patch scaledobject xbrl-worker-heavy-scaler -n processing \
-    --type='merge' -p '{"spec":{"maxReplicaCount":2}}'
-  # KEDA will auto-scale down based on queue
-  ```
+### 🎚️ Heavy Worker Scaling Configuration
+
+#### Current State (July 9, 2025)
+- **Heavy queue**: 1,327 items backlog
+- **Max replicas**: 3 (temporarily increased from 2)
+- **Resources**: 2 CPU request, 6Gi memory per pod
+
+#### Quick Scaling Commands
+
+**📈 To INCREASE heavy workers to 5** (when NOT running historical):
+```bash
+# Simply patch KEDA max replicas
+kubectl patch scaledobject xbrl-worker-heavy-scaler -n processing \
+  --type='merge' -p '{"spec":{"maxReplicaCount":5}}'
+
+# KEDA will auto-scale up based on queue depth
+# Check status:
+kubectl get hpa -n processing | grep heavy
+```
+
+**📉 To DECREASE heavy workers to 2** (for historical processing):
+```bash
+# Patch KEDA max replicas
+kubectl patch scaledobject xbrl-worker-heavy-scaler -n processing \
+  --type='merge' -p '{"spec":{"maxReplicaCount":2}}'
+
+# KEDA will auto-scale down
+# Excess pods will terminate gracefully
+```
+
+#### Reference Values
+- **Default**: 2 max replicas (original configuration)
+- **Current**: 3 max replicas (for backlog)
+- **Maximum**: 5 max replicas (when not running historical)
+- **Queue target**: 1 pod per 2 items in queue
+
+**Note**: No deployment changes needed - only KEDA maxReplicaCount
 
 ### Heavy XBRL Worker Experiment (July 9, 2025)
 
@@ -258,6 +284,41 @@ kubectl patch deployment xbrl-worker-light -n processing --type='strategic' \
 - **Backup**: `k8s/xbrl-worker-deployments.yaml.backup`
 - **Only 2 changes**: deployment file resources + KEDA max replicas
 - **Optional**: nodeAffinity removal for better distribution
+
+### Neo4j Deadlock Fix (July 9, 2025)
+
+#### Problem
+- Neo4j lock contention with 12+ concurrent workers
+- Processing taking 60+ minutes per 10-K form
+- Workers using <1% CPU while waiting for locks
+
+#### Solution: 2-3-4 Worker Pattern
+1. **KEDA Configuration** (`k8s/xbrl-worker-scaledobjects.yaml`):
+   - Heavy: maxReplicaCount=2 (was 4)
+   - Medium: maxReplicaCount=3 (was 6)
+   - Light: maxReplicaCount=4 (was 10)
+
+2. **Batch Size Reduction** (`neograph/Neo4jManager.py`):
+   ```python
+   REL_BATCH_SIZE: int = 100  # was 500
+   ```
+
+#### To Apply Fix
+```bash
+# Deploy batch size change
+./scripts/deploy.sh xbrl-worker
+
+# KEDA already updated in file - just apply
+kubectl apply -f k8s/xbrl-worker-scaledobjects.yaml
+```
+
+#### To Revert
+```bash
+# Edit Neo4jManager.py: REL_BATCH_SIZE = 500
+# Edit xbrl-worker-scaledobjects.yaml: maxReplicaCount 4/6/10
+./scripts/deploy.sh xbrl-worker
+kubectl apply -f k8s/xbrl-worker-scaledobjects.yaml
+```
 
 ## Future Optimization Path
 

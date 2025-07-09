@@ -28,7 +28,7 @@ spec:
   scaleTargetRef:
     name: xbrl-worker-medium
   minReplicaCount: 1              # Always keep 1 pod running for instant processing
-  maxReplicaCount: 4              # Max 4 medium workers (updated for optimization)
+  maxReplicaCount: 3              # Max 3 medium workers
   cooldownPeriod: 180             # 3 min cooldown
   triggers:
   - type: redis
@@ -48,7 +48,7 @@ spec:
   scaleTargetRef:
     name: xbrl-worker-light
   minReplicaCount: 1              # Always keep 1 pod running for instant processing
-  maxReplicaCount: 7              # Max 7 light workers (updated for optimization)
+  maxReplicaCount: 4              # Max 4 light workers
   cooldownPeriod: 120             # 2 min cooldown for quick tasks
   triggers:
   - type: redis
