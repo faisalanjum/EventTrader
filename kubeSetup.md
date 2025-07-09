@@ -145,10 +145,11 @@ This is acceptable because:
 - ✅ Historical processing has sufficient memory
 
 ### Temporary Configurations
-1. **XBRL workers have nodeAffinity** excluding minisforum
-2. **All XBRL on minisforum2** to reserve minisforum for historical
+1. **XBRL workers have nodeAffinity** excluding minisforum (REMOVED for medium/light on July 9)
+2. **All XBRL on minisforum2** to reserve minisforum for historical (CHANGED - now distributed)
 3. **KEDA safety limits applied** for historical processing (Medium: 3, Light: 5)
-4. **After historical**: Remove nodeAffinity and restore full KEDA scaling
+4. **Single heavy worker experiment** active (1 pod, 8 CPU/16Gi RAM)
+5. **After historical**: Remove nodeAffinity and restore full KEDA scaling
 
 ### Historical Processing Safety
 - Apply `/k8s/historical-safety-config.yaml` before starting historical
@@ -167,18 +168,96 @@ Due to 1,297 items backlog in heavy queue:
   # KEDA will auto-scale down based on queue
   ```
 
-### Single XBRL Worker Experiment (July 9, 2025)
-Due to Neo4j lock contention with 12 concurrent workers:
-- **Issue**: Workers spending 95%+ time waiting for database locks
-- **Hypothesis**: Single worker with more resources will be faster (4 min vs 60 min per 10-K)
-- **Configuration**: 1 pod with 8 CPU request/12 limit, 16Gi memory request/24Gi limit
-- **Deployment**: `kubectl apply -f k8s/xbrl-worker-single-pod.yaml`
-- **Note**: KEDA disabled for this test (manual replicas=1)
-- **To restore multi-worker setup**:
-  ```bash
-  kubectl apply -f k8s/xbrl-worker-deployments.yaml
-  kubectl apply -f k8s/xbrl-worker-scaledobjects.yaml
-  ```
+### Heavy XBRL Worker Experiment (July 9, 2025)
+
+#### Problem
+- 12 concurrent workers causing Neo4j lock contention
+- Workers using <1% CPU but requesting 100% (wasting resources)
+- Processing taking 60 min per 10-K vs 4 min locally
+
+#### Experiment Configuration
+
+**Original Configuration** (in backup file):
+- Heavy: 2 CPU request, 6Gi memory (3 CPU limit, 8Gi limit)
+- KEDA: min=1, max=3 (was 2, temporarily increased)
+- nodeAffinity: Prefer minisforum2/minisforum over minisforum3
+
+**Current Experiment** (active now):
+- Heavy: 4 CPU request, 16Gi memory (12 CPU limit, 24Gi limit)
+- KEDA: min=1, max=2 (to test 2 high-resource pods)
+- nodeAffinity: REMOVED for medium/light workers
+
+#### File Changes Made
+1. `k8s/xbrl-worker-deployments.yaml` - Modified heavy worker resources
+2. `k8s/xbrl-worker-deployments.yaml.backup` - Original configuration
+3. KEDA ScaledObject - Changed via kubectl (max replicas 3→2)
+4. Deployments - Removed nodeAffinity via kubectl
+
+---
+
+## 🚀 TO APPLY EXPERIMENT (2 Heavy Workers)
+
+```bash
+# 1. Backup original and update deployment file
+cp k8s/xbrl-worker-deployments.yaml k8s/xbrl-worker-deployments.yaml.backup
+
+# 2. Edit k8s/xbrl-worker-deployments.yaml - ONLY heavy worker section:
+#    resources:
+#      requests:
+#        cpu: "4"      # Was 2
+#        memory: "16Gi" # Was 6Gi
+#      limits:
+#        cpu: "12"     # Was 3
+#        memory: "24Gi" # Was 8Gi
+
+# 3. Deploy the updated configuration
+./scripts/deploy.sh xbrl-worker
+
+# 4. Adjust KEDA for 2 heavy workers
+kubectl patch scaledobject xbrl-worker-heavy-scaler -n processing \
+  --type='merge' -p '{"spec":{"maxReplicaCount":2}}'
+
+# 5. Remove nodeAffinity to use all nodes
+kubectl patch deployment xbrl-worker-medium -n processing --type='json' \
+  -p='[{"op": "remove", "path": "/spec/template/spec/affinity"}]'
+kubectl patch deployment xbrl-worker-light -n processing --type='json' \
+  -p='[{"op": "remove", "path": "/spec/template/spec/affinity"}]'
+```
+
+---
+
+## 🔄 TO RESTORE ORIGINAL (Multiple Light Workers)
+
+```bash
+# 1. Restore original deployment file
+cp k8s/xbrl-worker-deployments.yaml.backup k8s/xbrl-worker-deployments.yaml
+
+# 2. Deploy original configuration
+./scripts/deploy.sh xbrl-worker
+
+# 3. Restore KEDA max replicas
+kubectl patch scaledobject xbrl-worker-heavy-scaler -n processing \
+  --type='merge' -p '{"spec":{"maxReplicaCount":3}}'
+
+# 4. Re-apply nodeAffinity (if needed for historical processing)
+# Heavy worker:
+kubectl patch deployment xbrl-worker-heavy -n processing --type='strategic' \
+  -p '{"spec":{"template":{"spec":{"affinity":{"nodeAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"weight":100,"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum2","minisforum"]}]}},{"weight":10,"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum3"]}]}}]}}}}}}}'
+
+# Medium worker:
+kubectl patch deployment xbrl-worker-medium -n processing --type='strategic' \
+  -p '{"spec":{"template":{"spec":{"affinity":{"nodeAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"weight":100,"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum2","minisforum"]}]}},{"weight":10,"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum3"]}]}}]}}}}}}}'
+
+# Light worker:
+kubectl patch deployment xbrl-worker-light -n processing --type='strategic' \
+  -p '{"spec":{"template":{"spec":{"affinity":{"nodeAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"weight":100,"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum2","minisforum"]}]}},{"weight":10,"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum3"]}]}}]}}}}}}}'
+```
+
+#### Summary for Next Bot
+- **Ground truth**: `k8s/xbrl-worker-deployments.yaml` (no kubectl overrides)
+- **Backup**: `k8s/xbrl-worker-deployments.yaml.backup`
+- **Only 2 changes**: deployment file resources + KEDA max replicas
+- **Optional**: nodeAffinity removal for better distribution
 
 ## Future Optimization Path
 

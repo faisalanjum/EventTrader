@@ -228,8 +228,11 @@ class SECFilingSchema(BaseModel):
         # entities associated with filing
         entities = self.entities if self.entities else None
 
-        # This is already correct since "first entity in the entities array is always the primary filing issuer"
-        self.cik = self.entities[0].cik if self.entities else self.cik
+        # Extract CIK from first entity if available AND valid
+        # Only overwrite self.cik if entity has a valid CIK
+        if self.entities and self.entities[0].cik:
+            # Format CIK with leading zeros to ensure 10 digits
+            self.cik = str(self.entities[0].cik).zfill(10)
 
         return UnifiedReport(
             # Required fields
