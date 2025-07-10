@@ -83,7 +83,7 @@ def main():
     # Import Redis client only when actually needed
     from redisDB.redisClasses import RedisClient
     redis_client = RedisClient(prefix="")
-    batch_size = 1000  # Match Neo4jManager.REL_BATCH_SIZE
+    batch_size = 200  # Reduced from 1000 for faster commits
     log_interval = 10  # Log queue depth every 10 iterations
     iteration = 0
     
