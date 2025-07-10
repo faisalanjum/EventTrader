@@ -392,6 +392,22 @@ class Neo4jManager:
                         session.execute_write(merge_tx)
 
             logger.info(f"Bulk-merged {len(nodes)-skipped} nodes across {len(rows_by_label)} labels (skipped {skipped}).")
+        except neo4j.exceptions.TransientError as e:
+            # Check if it's a deadlock error
+            if "DeadlockDetected" in str(e):
+                logger.warning(f"Deadlock detected in bulk merge, falling back to single-node transactions: {e}")
+                # Fall back to regular merge_nodes which processes one-by-one
+                # Temporarily disable bulk mode to ensure we use single transactions
+                prev_bulk = getattr(self, "_use_bulk", False)
+                self._use_bulk = False
+                try:
+                    self.merge_nodes(nodes, batch_size=batch_size)
+                finally:
+                    self._use_bulk = prev_bulk
+                return
+            else:
+                # For other transient errors, let the retry decorator handle it
+                raise
         except Exception as e:
             logger.error(f"Failed bulk merge: {e}", exc_info=True)
             raise RuntimeError(f"Failed bulk merge: {e}")
@@ -504,9 +520,9 @@ class Neo4jManager:
                 # Use a transaction to ensure atomicity
                 indexes_needed = False
                 with session.begin_transaction() as tx:
-                    # Get existing constraints
+                    # Get existing constraints (just need names)
                     existing_constraints = {
-                        constraint['name']: constraint['labelsOrTypes'][0]
+                        constraint['name'] 
                         for constraint in tx.run("SHOW CONSTRAINTS").data()
                     }
                     
@@ -514,6 +530,19 @@ class Neo4jManager:
                     for node_type in NodeType:
                         constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
                         if constraint_name not in existing_constraints:
+                            indexes_needed = True
+                            break
+                    
+                    # Also check for relationship constraints
+                    rel_constraints_to_check = [
+                        "constraint_presentation_edge_unique",
+                        "constraint_calculation_edge_unique", 
+                        "hasConcept_key",
+                        "hasUnit_key",
+                        "hasPeriod_key"
+                    ]
+                    for rel_constraint in rel_constraints_to_check:
+                        if rel_constraint not in existing_constraints:
                             indexes_needed = True
                             break
                 

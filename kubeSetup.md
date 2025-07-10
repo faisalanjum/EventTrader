@@ -265,6 +265,25 @@ cp k8s/xbrl-worker-deployments.yaml.backup k8s/xbrl-worker-deployments.yaml
 kubectl patch scaledobject xbrl-worker-heavy-scaler -n processing \
   --type='merge' -p '{"spec":{"maxReplicaCount":3}}'
 
+### Temporary Lock Reduction Pattern (1-2-4)
+For severe lock contention during XBRL optimization testing:
+```bash
+# Reduce to minimal workers
+kubectl patch scaledobject xbrl-worker-heavy-scaler -n processing \
+  --type='merge' -p '{"spec":{"maxReplicaCount":1}}'
+kubectl patch scaledobject xbrl-worker-medium-scaler -n processing \
+  --type='merge' -p '{"spec":{"maxReplicaCount":2}}'
+kubectl patch scaledobject xbrl-worker-light-scaler -n processing \
+  --type='merge' -p '{"spec":{"maxReplicaCount":4}}'
+
+# Restore to normal 2-3-4 pattern (or original 4-6-10)
+kubectl patch scaledobject xbrl-worker-heavy-scaler -n processing \
+  --type='merge' -p '{"spec":{"maxReplicaCount":2}}'
+kubectl patch scaledobject xbrl-worker-medium-scaler -n processing \
+  --type='merge' -p '{"spec":{"maxReplicaCount":3}}'
+# Light already at 4, no change needed
+```
+
 # 4. Re-apply nodeAffinity (if needed for historical processing)
 # Heavy worker:
 kubectl patch deployment xbrl-worker-heavy -n processing --type='strategic' \
