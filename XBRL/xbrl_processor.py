@@ -939,9 +939,17 @@ class process_report:
             (Fact, Period, RelationType.HAS_PERIOD)
         ])
         
-        # Create relationships in Neo4j
-        if fact_relationships: 
-            self.neo4j.merge_relationships(fact_relationships)
+        # PHASE 2 OPTIMIZATION: Group relationships by type before merging
+        if fact_relationships:
+            # Group by relationship type
+            from collections import defaultdict
+            grouped = defaultdict(list)
+            for rel in fact_relationships:
+                grouped[rel[2]].append(rel)
+            
+            # Merge each type separately to reduce lock contention
+            for rel_type, rels in grouped.items():
+                self.neo4j.merge_relationships(rels)
 
         # Build report-fact relationships
         report_fact_relationships = self._build_report_fact_relationships()

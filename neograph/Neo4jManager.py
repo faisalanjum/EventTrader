@@ -10,6 +10,7 @@ import logging
 import json
 import neo4j.exceptions # Import exceptions
 import tenacity # Import tenacity
+import random # Import random for jitter
 # Split imports: TYPE_CHECKING for type hints, direct imports for runtime needs
 if TYPE_CHECKING:
     from XBRL.xbrl_core import Neo4jNode
@@ -58,7 +59,7 @@ def before_retry_refresh_connection(retry_state):
 # Define retry conditions using tenacity
 retry_on_neo4j_transient_error = tenacity.retry(
     stop=tenacity.stop_after_attempt(3), # Retry 2 times after initial failure (total 3 attempts)
-    wait=tenacity.wait_exponential(multiplier=1, min=0.5, max=3), # Exponential backoff 0.5s -> 1s -> 2s
+    wait=tenacity.wait_exponential(multiplier=1, min=0.5, max=3) + tenacity.wait_random(0, 0.5), # Exponential backoff with jitter
     retry=(
         tenacity.retry_if_exception_type(neo4j.exceptions.ServiceUnavailable) |
         tenacity.retry_if_exception_type(neo4j.exceptions.SessionExpired) |
@@ -88,7 +89,7 @@ class Neo4jManager:
     # Keep transactions comfortably below Neo4j's default 60-second timeout
     # while still being large enough to minimise commit overhead.
     # Raising it to 1000 halves the chunk count; lowering to 250 doubles safety margin.
-    REL_BATCH_SIZE: int = 100  # tuned via production logs; change in one place only
+    REL_BATCH_SIZE: int = 1000  # tuned via production logs; change in one place only
 
     # Only change this single method to use a special case with retry_error_callback
     @tenacity.retry(
@@ -623,9 +624,13 @@ class Neo4jManager:
                                 SET r += param.properties
                             """, {"params": params})
 
-                    # Split all_params into REL_BATCH_SIZE chunks
-                    for i in range(0, len(all_params), self.REL_BATCH_SIZE):
-                        chunk = all_params[i:i + self.REL_BATCH_SIZE]
+                    # Split all_params into chunks - smaller for fact lookups
+                    # Define fact lookup relationships that need smaller batch size
+                    fact_lookup_rels = {RelationType.HAS_CONCEPT, RelationType.HAS_UNIT, RelationType.HAS_PERIOD}
+                    batch_size = 500 if rel_type in fact_lookup_rels else self.REL_BATCH_SIZE
+                    
+                    for i in range(0, len(all_params), batch_size):
+                        chunk = all_params[i:i + batch_size]
                         try:
                             session.execute_write(create_relationships_tx, chunk)
                             total_written += len(chunk)
