@@ -32,27 +32,41 @@ def process_edge_batch(neo4j_manager, batch: List[Dict]) -> int:
     with neo4j_manager.driver.session() as session:
         def create_relationships_tx(tx):
             created = 0
+            # Determine node labels based on relationship type
+            rel_type_to_labels = {
+                "REPORTS": ("Fact", "XBRLNode"),
+                "HAS_CONCEPT": ("Fact", "Concept"),
+                "HAS_UNIT": ("Fact", "Unit"),
+                "HAS_PERIOD": ("Fact", "Period"),
+                "FACT_MEMBER": ("Fact", "Member")
+            }
+            
             for rel_type, params in grouped.items():
+                # Get labels for this relationship type
+                source_label, target_label = rel_type_to_labels.get(rel_type, ("", ""))
+                
                 # Use the same merge query with key property for shared node relationships
                 if rel_type in ["HAS_CONCEPT", "HAS_UNIT", "HAS_PERIOD"]:
-                    result = tx.run(f"""
+                    query = f"""
                         UNWIND $params AS param
-                        MATCH (s {{id: param.source_id}})
-                        MATCH (t {{id: param.target_id}})
+                        MATCH (s:{source_label} {{id: param.source_id}})
+                        MATCH (t:{target_label} {{id: param.target_id}})
                         MERGE (s)-[r:{rel_type} {{key: param.source_id}}]->(t)
                         SET r += param.properties
                         RETURN count(r) as created
-                    """, {"params": params})
+                    """
                 else:
                     # For REPORTS and FACT_MEMBER, use standard merge
-                    result = tx.run(f"""
+                    query = f"""
                         UNWIND $params AS param
-                        MATCH (s {{id: param.source_id}})
-                        MATCH (t {{id: param.target_id}})
+                        MATCH (s:{source_label} {{id: param.source_id}})
+                        MATCH (t:{target_label} {{id: param.target_id}})
                         MERGE (s)-[r:{rel_type}]->(t)
                         SET r += param.properties
                         RETURN count(r) as created
-                    """, {"params": params})
+                    """
+                
+                result = tx.run(query, {"params": params})
                 
                 record = result.single()
                 if record:
