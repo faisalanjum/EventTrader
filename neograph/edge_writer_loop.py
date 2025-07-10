@@ -96,21 +96,32 @@ def main():
     while True:
         try:
             iteration += 1
+            if iteration == 1:
+                logger.info(f"First iteration starting...")
             
             # Log queue depth periodically
             if iteration % log_interval == 0:
+                logger.info("Checking queue depth...")
                 queue_len = redis_client.client.llen(edge_queue)
                 logger.info(f"Queue depth: {queue_len}")
             
             # Get batch from queue
             batch = []
+            if iteration == 1:
+                logger.info("Creating first pipeline...")
             pipeline = redis_client.client.pipeline()
             
             # Use pipeline for efficient batch retrieval
+            if iteration == 1:
+                logger.info(f"Building pipeline for {batch_size} items...")
             for _ in range(batch_size):
                 pipeline.lpop(edge_queue)
             
+            if iteration == 1:
+                logger.info("Executing first pipeline...")
             results = pipeline.execute()
+            if iteration == 1:
+                logger.info(f"First pipeline returned {len(results)} results")
             
             for item in results:
                 if item:
