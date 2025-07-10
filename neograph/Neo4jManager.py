@@ -245,6 +245,36 @@ class Neo4jManager:
                             REQUIRE ({props}) IS UNIQUE
                             """)
                             logger.info(f"Created constraint for CALCULATION_EDGE relationships")
+                            
+                        # HAS_CONCEPT relationship key constraint
+                        rel_constraint_name = "hasConcept_key"
+                        if rel_constraint_name not in existing_constraints:
+                            session.run(f"""
+                            CREATE CONSTRAINT {rel_constraint_name} IF NOT EXISTS
+                            FOR ()-[r:HAS_CONCEPT]-()
+                            REQUIRE r.key IS UNIQUE
+                            """)
+                            logger.info(f"Created key constraint for HAS_CONCEPT relationships")
+                            
+                        # HAS_UNIT relationship key constraint  
+                        rel_constraint_name = "hasUnit_key"
+                        if rel_constraint_name not in existing_constraints:
+                            session.run(f"""
+                            CREATE CONSTRAINT {rel_constraint_name} IF NOT EXISTS
+                            FOR ()-[r:HAS_UNIT]-()
+                            REQUIRE r.key IS UNIQUE
+                            """)
+                            logger.info(f"Created key constraint for HAS_UNIT relationships")
+                            
+                        # HAS_PERIOD relationship key constraint
+                        rel_constraint_name = "hasPeriod_key"
+                        if rel_constraint_name not in existing_constraints:
+                            session.run(f"""
+                            CREATE CONSTRAINT {rel_constraint_name} IF NOT EXISTS
+                            FOR ()-[r:HAS_PERIOD]-()
+                            REQUIRE r.key IS UNIQUE
+                            """)
+                            logger.info(f"Created key constraint for HAS_PERIOD relationships")
                     
                     # If we get here without exception, we're done
                     break
@@ -613,6 +643,15 @@ class Neo4jManager:
                                     END,
                                     weight: param.properties.weight
                                 }}]->(t)
+                                SET r += param.properties
+                            """, {"params": params})
+                        elif rel_type in {RelationType.HAS_CONCEPT, RelationType.HAS_UNIT, RelationType.HAS_PERIOD}:
+                            # Special handling for fact lookup relationships with key property
+                            tx.run(f"""
+                                UNWIND $params AS param
+                                MATCH (s {{id: param.source_id}})
+                                MATCH (t {{id: param.target_id}})
+                                MERGE (s)-[r:{rel_type.value} {{key: param.source_id}}]->(t)
                                 SET r += param.properties
                             """, {"params": params})
                         else:
