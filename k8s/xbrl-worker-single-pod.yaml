@@ -1,0 +1,69 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xbrl-worker-heavy
+  namespace: processing
+spec:
+  replicas: 1  # Fixed at 1 for single pod test
+  selector:
+    matchLabels:
+      app: xbrl-worker-heavy
+  template:
+    metadata:
+      labels:
+        app: xbrl-worker-heavy
+        worker-type: heavy
+        xbrl-worker: "true"
+    spec:
+      priorityClassName: worker-standard
+      # Node affinity to prefer minisforum2/minisforum over minisforum3 (Neo4j node)
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum2
+                - minisforum
+          - weight: 10  # Lower priority for Neo4j node
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum3
+      containers:
+      - name: xbrl-worker
+        image: faisalanjum/xbrl-worker:latest
+        imagePullPolicy: Always
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: XBRL_QUEUE
+          value: reports:queues:xbrl:heavy
+        envFrom:
+        - secretRef:
+            name: eventtrader-secrets
+        resources:
+          requests:
+            cpu: "8"
+            memory: "16Gi"
+          limits:
+            cpu: "12"
+            memory: "24Gi"
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: logs
+        hostPath:
+          path: /home/faisal/EventMarketDB/logs
+          type: DirectoryOrCreate
+      # Longer termination grace period for heavy reports
+      terminationGracePeriodSeconds: 300

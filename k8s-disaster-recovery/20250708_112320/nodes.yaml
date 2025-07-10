@@ -1,0 +1,618 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Node
+  metadata:
+    annotations:
+      flannel.alpha.coreos.com/backend-data: '{"VNI":1,"VtepMAC":"92:04:de:e4:62:92"}'
+      flannel.alpha.coreos.com/backend-type: vxlan
+      flannel.alpha.coreos.com/kube-subnet-manager: "true"
+      flannel.alpha.coreos.com/public-ip: 192.168.40.73
+      kubeadm.alpha.kubernetes.io/cri-socket: unix:///var/run/containerd/containerd.sock
+      node.alpha.kubernetes.io/ttl: "0"
+      volumes.kubernetes.io/controller-managed-attach-detach: "true"
+    creationTimestamp: "2025-05-15T09:13:42Z"
+    labels:
+      beta.kubernetes.io/arch: amd64
+      beta.kubernetes.io/os: linux
+      kubernetes.io/arch: amd64
+      kubernetes.io/hostname: minisforum
+      kubernetes.io/os: linux
+      memory: 64gb
+      node-role.kubernetes.io/control-plane: ""
+      node-type: master
+      node.kubernetes.io/exclude-from-external-load-balancers: ""
+    name: minisforum
+    resourceVersion: "6123665"
+    uid: b905e5ea-fb9b-4557-afea-188cbcce308e
+  spec:
+    podCIDR: 10.244.0.0/24
+    podCIDRs:
+    - 10.244.0.0/24
+  status:
+    addresses:
+    - address: 192.168.40.73
+      type: InternalIP
+    - address: minisforum
+      type: Hostname
+    allocatable:
+      cpu: "16"
+      ephemeral-storage: "903868502978"
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 60305296Ki
+      pods: "110"
+    capacity:
+      cpu: "16"
+      ephemeral-storage: 980760096Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 63553424Ki
+      pods: "110"
+    conditions:
+    - lastHeartbeatTime: "2025-07-07T04:15:50Z"
+      lastTransitionTime: "2025-07-07T04:15:50Z"
+      message: Flannel is running on this node
+      reason: FlannelIsUp
+      status: "False"
+      type: NetworkUnavailable
+    - lastHeartbeatTime: "2025-07-08T15:21:08Z"
+      lastTransitionTime: "2025-05-15T09:13:41Z"
+      message: kubelet has sufficient memory available
+      reason: KubeletHasSufficientMemory
+      status: "False"
+      type: MemoryPressure
+    - lastHeartbeatTime: "2025-07-08T15:21:08Z"
+      lastTransitionTime: "2025-05-15T09:13:41Z"
+      message: kubelet has no disk pressure
+      reason: KubeletHasNoDiskPressure
+      status: "False"
+      type: DiskPressure
+    - lastHeartbeatTime: "2025-07-08T15:21:08Z"
+      lastTransitionTime: "2025-05-15T09:13:41Z"
+      message: kubelet has sufficient PID available
+      reason: KubeletHasSufficientPID
+      status: "False"
+      type: PIDPressure
+    - lastHeartbeatTime: "2025-07-08T15:21:08Z"
+      lastTransitionTime: "2025-07-04T07:29:01Z"
+      message: kubelet is posting ready status
+      reason: KubeletReady
+      status: "True"
+      type: Ready
+    daemonEndpoints:
+      kubeletEndpoint:
+        Port: 10250
+    images:
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:7caf104f76cbfef513d79485b4c603d3aaa0b384d84a49574b958c7c96bfaf09
+      - docker.io/faisalanjum/event-trader:latest
+      sizeBytes: 821043665
+    - names:
+      - docker.io/faisalanjum/report-enricher@sha256:1d63ea3a87a9df6c350812a2892fba9e9d749b634a62fff0077e386889bc607e
+      - docker.io/faisalanjum/report-enricher:latest
+      sizeBytes: 817861169
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:556cbfea41935b159f9cb8e8fbc7524f561e1baa1d14ef70bef1401579946f48
+      - docker.io/faisalanjum/xbrl-worker:latest
+      sizeBytes: 702213578
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:886719c1c917a6687fd34c788092869b8bb7ec65b5120712751c559fd14d4f6a
+      sizeBytes: 702122656
+    - names:
+      - docker.io/library/neo4j@sha256:f136835f6ccf96bb90eca84942cfc629780958c12f7211892e71066f74cb5618
+      - docker.io/library/neo4j:5.26.4-enterprise
+      sizeBytes: 625882489
+    - names:
+      - ghcr.io/kedacore/keda@sha256:72dc058e478d7743a20f6f2f3af76a67d80b6f748a656a32d42a0ce560cc75c7
+      - ghcr.io/kedacore/keda:2.17.2
+      sizeBytes: 80288943
+    - names:
+      - docker.io/faisalanjum/mcp-neo4j-cypher@sha256:82b17573d9e10871eaf9ced7c887a387871c1b25348157cb318caff39b69220d
+      - docker.io/faisalanjum/mcp-neo4j-cypher:latest
+      sizeBytes: 63947011
+    - names:
+      - docker.io/faisalanjum/mcp-neo4j-memory@sha256:181845437afbb50d6246de125312688847d3ddcfd70b9f799e5cd10221556a16
+      - docker.io/faisalanjum/mcp-neo4j-memory:latest
+      sizeBytes: 63937704
+    - names:
+      - docker.io/mcp/neo4j-cypher@sha256:8f400d041ff120d2451902bdc97ac7d0da96365efb7b44dfb811d52cf1ed07c8
+      - docker.io/mcp/neo4j-cypher:latest
+      sizeBytes: 63468249
+    - names:
+      - docker.io/mcp/neo4j-memory@sha256:072b0647925102a23acc0c786222ab1525c637edd4a73de5182cf775f251e60c
+      - docker.io/mcp/neo4j-memory:latest
+      sizeBytes: 60647557
+    - names:
+      - ghcr.io/kedacore/keda-metrics-apiserver@sha256:f312f50ddc578ef1629c5a69adeb8672b44c9914383d1eea940245d3f5d18a85
+      - ghcr.io/kedacore/keda-metrics-apiserver:2.17.2
+      sizeBytes: 58200625
+    - names:
+      - registry.k8s.io/etcd@sha256:a6dc63e6e8cfa0307d7851762fa6b629afb18f28d8aa3fab5a6e91b4af60026a
+      - registry.k8s.io/etcd:3.5.15-0
+      sizeBytes: 56909194
+    - names:
+      - docker.io/library/python@sha256:139020233cc412efe4c8135b0efe1c7569dc8b28ddd88bddb109b764f8977e30
+      - docker.io/library/python:3.11-slim
+      sizeBytes: 47970627
+    - names:
+      - ghcr.io/flannel-io/flannel@sha256:7f471907fa940f944867270de4ed78121b8b4c5d564e17f940dc787cb16dea82
+      - ghcr.io/flannel-io/flannel:v0.26.7
+      sizeBytes: 32996046
+    - names:
+      - registry.k8s.io/kube-apiserver@sha256:4878682f7a044274d42399a6316ef452c5411aafd4ad99cc57de7235ca490e4e
+      - registry.k8s.io/kube-apiserver:v1.30.12
+      sizeBytes: 32671673
+    - names:
+      - registry.k8s.io/kube-controller-manager@sha256:3a36711d0409d565b370a18d0c19339e93d4f1b1f2b3fd382eb31c714c463b74
+      - registry.k8s.io/kube-controller-manager:v1.30.12
+      sizeBytes: 31105907
+    - names:
+      - registry.k8s.io/kube-proxy@sha256:ea8c7d5392acf6b0c11ebba78301e1a6c2dc6abcd7544102ed578e49d1c82f15
+      - registry.k8s.io/kube-proxy:v1.30.12
+      sizeBytes: 29184836
+    - names:
+      - ghcr.io/kedacore/keda-admission-webhooks@sha256:c8227c6edb4d9926f7ed366bc8f383e9e461c6dd58d708e97539ad9393caffa8
+      - ghcr.io/kedacore/keda-admission-webhooks:2.17.2
+      sizeBytes: 27871426
+    - names:
+      - docker.io/grafana/loki@sha256:1ee60f980950b00e505bd564b40f720132a0653b110e993043bb5940673d060a
+      - docker.io/grafana/loki:2.6.1
+      sizeBytes: 20094464
+    - names:
+      - registry.k8s.io/kube-scheduler@sha256:521c843d01025be7d4e246ddee8cde74556eb9813c606d6db9f0f03236f6d029
+      - registry.k8s.io/kube-scheduler:v1.30.12
+      sizeBytes: 19392073
+    - names:
+      - registry.k8s.io/coredns/coredns@sha256:9caabbf6238b189a65d0d6e6ac138de60d6a1c419e5a341fbbb7c78382559c6e
+      - registry.k8s.io/coredns/coredns:v1.11.3
+      sizeBytes: 18562039
+    - names:
+      - registry.k8s.io/kube-state-metrics/kube-state-metrics@sha256:e750cd4b43f782e3106537026c2995cac85d921aedea334e1d16caad7877c360
+      - registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.16.0
+      sizeBytes: 18382550
+    - names:
+      - docker.io/rancher/local-path-provisioner@sha256:aee53cadc62bd023911e7f077877d047c5b3c269f9bba25724d558654f43cea0
+      - docker.io/rancher/local-path-provisioner:v0.0.26
+      sizeBytes: 17182090
+    - names:
+      - quay.io/prometheus/node-exporter@sha256:d00a542e409ee618a4edc67da14dd48c5da66726bbd5537ab2af9c1dfc442c8a
+      - quay.io/prometheus/node-exporter:v1.9.1
+      sizeBytes: 12955907
+    - names:
+      - ghcr.io/flannel-io/flannel-cni-plugin@sha256:f1812994f0edbcb5bb5ccb63be2147ba6ad10e1faaa7ca9fcdad4f441739d84f
+      - ghcr.io/flannel-io/flannel-cni-plugin:v1.6.2-flannel1
+      sizeBytes: 4856838
+    - names:
+      - docker.io/library/busybox@sha256:f85340bf132ae937d2c2a763b8335c9bab35d6e8293f70f606b9c6178d84f42b
+      - docker.io/library/busybox:latest
+      sizeBytes: 2156518
+    - names:
+      - docker.io/library/busybox@sha256:7edf5efe6b86dbf01ccc3c76b32a37a8e23b84e6bad81ce8ae8c221fa456fda8
+      - docker.io/library/busybox:1.36
+      sizeBytes: 2152501
+    - names:
+      - registry.k8s.io/pause@sha256:7031c1b283388d2c2e09b57badb803c05ebed362dc88d84b480cc47f72a21097
+      - registry.k8s.io/pause:3.9
+      sizeBytes: 321520
+    - names:
+      - registry.k8s.io/pause@sha256:9001185023633d17a2f98ff69b6ff2615b8ea02a825adffa40422f51dfdcde9d
+      - registry.k8s.io/pause:3.8
+      sizeBytes: 311286
+    nodeInfo:
+      architecture: amd64
+      bootID: 95c065c9-16b0-468e-8f0e-a4baad407613
+      containerRuntimeVersion: containerd://1.7.27
+      kernelVersion: 5.15.0-141-generic
+      kubeProxyVersion: v1.30.12
+      kubeletVersion: v1.30.12
+      machineID: 22591c4a8c6c4f158113703be9f5787c
+      operatingSystem: linux
+      osImage: Ubuntu 22.04.5 LTS
+      systemUUID: 9c236e00-cd9a-11ef-b0fe-e87e30b37d00
+- apiVersion: v1
+  kind: Node
+  metadata:
+    annotations:
+      flannel.alpha.coreos.com/backend-data: '{"VNI":1,"VtepMAC":"52:01:68:b8:c5:43"}'
+      flannel.alpha.coreos.com/backend-type: vxlan
+      flannel.alpha.coreos.com/kube-subnet-manager: "true"
+      flannel.alpha.coreos.com/public-ip: 192.168.40.72
+      kubeadm.alpha.kubernetes.io/cri-socket: unix:///var/run/containerd/containerd.sock
+      node.alpha.kubernetes.io/ttl: "0"
+      volumes.kubernetes.io/controller-managed-attach-detach: "true"
+    creationTimestamp: "2025-05-15T09:18:05Z"
+    labels:
+      beta.kubernetes.io/arch: amd64
+      beta.kubernetes.io/os: linux
+      kubernetes.io/arch: amd64
+      kubernetes.io/hostname: minisforum2
+      kubernetes.io/os: linux
+      memory: 64gb
+      node-type: worker
+      role: workers
+    name: minisforum2
+    resourceVersion: "6124090"
+    uid: 0fc22262-fc27-4b23-8277-d7dfb98bc299
+  spec:
+    podCIDR: 10.244.1.0/24
+    podCIDRs:
+    - 10.244.1.0/24
+  status:
+    addresses:
+    - address: 192.168.40.72
+      type: InternalIP
+    - address: minisforum2
+      type: Hostname
+    allocatable:
+      cpu: "16"
+      ephemeral-storage: "903868502978"
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 63450936Ki
+      pods: "110"
+    capacity:
+      cpu: "16"
+      ephemeral-storage: 980760096Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 63553336Ki
+      pods: "110"
+    conditions:
+    - lastHeartbeatTime: "2025-07-07T04:16:34Z"
+      lastTransitionTime: "2025-07-07T04:16:34Z"
+      message: Flannel is running on this node
+      reason: FlannelIsUp
+      status: "False"
+      type: NetworkUnavailable
+    - lastHeartbeatTime: "2025-07-08T15:24:10Z"
+      lastTransitionTime: "2025-06-21T21:27:16Z"
+      message: kubelet has sufficient memory available
+      reason: KubeletHasSufficientMemory
+      status: "False"
+      type: MemoryPressure
+    - lastHeartbeatTime: "2025-07-08T15:24:10Z"
+      lastTransitionTime: "2025-06-21T21:27:16Z"
+      message: kubelet has no disk pressure
+      reason: KubeletHasNoDiskPressure
+      status: "False"
+      type: DiskPressure
+    - lastHeartbeatTime: "2025-07-08T15:24:10Z"
+      lastTransitionTime: "2025-06-21T21:27:16Z"
+      message: kubelet has sufficient PID available
+      reason: KubeletHasSufficientPID
+      status: "False"
+      type: PIDPressure
+    - lastHeartbeatTime: "2025-07-08T15:24:10Z"
+      lastTransitionTime: "2025-06-21T21:27:16Z"
+      message: kubelet is posting ready status
+      reason: KubeletReady
+      status: "True"
+      type: Ready
+    daemonEndpoints:
+      kubeletEndpoint:
+        Port: 10250
+    images:
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:b6b5e0ded2df438926381287bb235606bfea566b422fea45320314fb6d596d9a
+      sizeBytes: 2061648383
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:2ff98f161ef611e4dff81db750d24e2214def8f1442b65738152ea9439d52691
+      sizeBytes: 2061294216
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:3481d39c996c41245aec962e022953df7e686939c9b2b00e07088ff00a6982f3
+      sizeBytes: 2058306721
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:d465d385607603ef8dec39f243625bfb66ce1cb6fe2c0a440b18a35ddea48997
+      sizeBytes: 1942739619
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:df79fcd60ec9e0000bee288114a33c337e0824f1172f689813c9f2c4d6d47311
+      sizeBytes: 1942733950
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:b355797a8523551fbb27e627dd7af0bb1b1afd3e98345ca5b8d7afa385231a42
+      sizeBytes: 1942381271
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:bf09e91d979a494ddfcd7bb405de4bbe9ba0cd9c15f97297a8c824ccb89a6665
+      sizeBytes: 1939398756
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:00a66ec2f5623e1f700f277143db97ae3ebfc620cc3d1c9b2f7c1013f4575151
+      sizeBytes: 1748839843
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:be064cbfa19013c4093b535fd0760170265a8bcd91833d0975a2de407c049c29
+      sizeBytes: 1629919102
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:7b59d063baec129442d5ea457c49f1d8389499eea3ad41b4b8cfe516b13f3b14
+      sizeBytes: 1242576052
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:689e723528dd5158d52dd558d0229e2fb59f12d026d2b97f516a02020fdaa9d7
+      sizeBytes: 1199667766
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:7a50ffbd1434c4d754e6430a9964518d905781c7efc2df718365c9721c991c16
+      sizeBytes: 1169623580
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:9eccbc349ab6d7ae0ca7cac88b73480b9428facf759722ce2a2cd9747b719d6f
+      sizeBytes: 1156940169
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:17522dc84a9d140aec73e16898123806ce14dc6f18e651336bfc3f23532793e5
+      sizeBytes: 1086124521
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:9e1229e4f5c4253335016e1da821d102084ff1e9b7fe20e7d7553bc93241993a
+      sizeBytes: 1080488501
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:32136137062a96970287503d76908bd0f53a0831fdfc65011d9d7f27fb7e0381
+      sizeBytes: 1080487178
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:3b0c2417d9ccce136035db49c3c1307a81603cb45b9f7f32688ea45eac04656e
+      sizeBytes: 1003658482
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:39bb5e847dea63b614c1b83892370078e123886fb43840d534d17e007edd7d5c
+      sizeBytes: 1003644116
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:4767cb738f42bb901ed55b10a8a830c9189776da9d082515a7a20166abe54a5d
+      sizeBytes: 1003643621
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:7e109d909e061cd0ef3f43bae4c2b3ff7bd987506de2bdc793ee3eb408abbfaf
+      sizeBytes: 1003627941
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:43f695791a22dc3004e3942143bcc1fa4570a87b613491ae52cee1afc02c459a
+      sizeBytes: 1003627683
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:7e4500be9a949144fcc3143c10d66d50066ab530b1ed8c100b37424d707130c9
+      sizeBytes: 967211074
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:f5b749366f673dac2dd5730c8a1ae6f709457828784830cd84afdbc2df20fa64
+      sizeBytes: 880289707
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:99df32b91f96cb22464b29c4b625e147a9913cffeec429e7c99b618f16a1b1e7
+      sizeBytes: 880282408
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:b4a8ac4cd9de32d6a929576dc73eda265ede759c72641321625715f71336ad87
+      - docker.io/faisalanjum/event-trader:latest
+      sizeBytes: 821145133
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:7caf104f76cbfef513d79485b4c603d3aaa0b384d84a49574b958c7c96bfaf09
+      sizeBytes: 821043665
+    - names:
+      - docker.io/faisalanjum/report-enricher@sha256:1d63ea3a87a9df6c350812a2892fba9e9d749b634a62fff0077e386889bc607e
+      sizeBytes: 817861169
+    - names:
+      - docker.io/faisalanjum/report-enricher@sha256:799e36a16d713f87ff0c02fc6ec6373e58088bc99680bec9a35cd1bd6c01f5e7
+      sizeBytes: 817837811
+    - names:
+      - docker.io/faisalanjum/report-enricher@sha256:c3078c9476d051e41f75fe88c37c6e2a8710fc9e1bdbfe55ccf3bf44c765e82b
+      sizeBytes: 817837432
+    - names:
+      - docker.io/faisalanjum/report-enricher@sha256:e29fe9cb00140ea1585c50ed727be8a160828bf73ca575fae23147fb5a457db9
+      sizeBytes: 817837352
+    - names:
+      - docker.io/faisalanjum/report-enricher@sha256:da8cf3d41611e9b505ad6f6cac79a9c8eaa380cbc415f4610c46a8dc3b56a4a5
+      - docker.io/faisalanjum/report-enricher:latest
+      sizeBytes: 814633763
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:9602d36a1170e3bd3f770999002c38a0541197daf3edbbd95772f819199aa39b
+      sizeBytes: 761351113
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:4f9b51343030d5cddf77fefb7724f9c7340187341786181f525948332d75cc7f
+      sizeBytes: 761303224
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:304069ba8c6edf7a0ecd492e2d675c6a66d0a4f8d2a88155f7ae8090e9e5cf15
+      sizeBytes: 705449467
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:664013c58981163781f30364c6dd1859a0ab52a3b858e29c5ed9f8dfe55284be
+      sizeBytes: 705444816
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:0386975203d0c2e839916c5a04ea2f7095f2ffd83383bcc852db7fe1cac40e50
+      sizeBytes: 705442468
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:556cbfea41935b159f9cb8e8fbc7524f561e1baa1d14ef70bef1401579946f48
+      - docker.io/faisalanjum/xbrl-worker:latest
+      sizeBytes: 702213578
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:1ebd042c30af16dff1a0eb76342fcb66b3b1702fe5dbbaa72541d7bd667da09f
+      sizeBytes: 702178971
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:886719c1c917a6687fd34c788092869b8bb7ec65b5120712751c559fd14d4f6a
+      sizeBytes: 702122656
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:1c3971258edbaa73fa4e3609d11d605d765c4bffb0875a0cc576d4238212a6c5
+      sizeBytes: 702110822
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:87817aba8b50e566d6b45b4e922b3fdf5835af2f28275faf996ee92e7a96522c
+      sizeBytes: 702100093
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:2983f7b7fed6307efa983ca6452ba677c2906021720262a017fbb0fc20ca8ca8
+      sizeBytes: 698904711
+    - names:
+      - docker.io/library/neo4j@sha256:f136835f6ccf96bb90eca84942cfc629780958c12f7211892e71066f74cb5618
+      - docker.io/library/neo4j:5.26.4-enterprise
+      sizeBytes: 625882489
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:0f9d3361c693eb18451816b8fe39a5024200937a1ea93992fcd346334611e24d
+      sizeBytes: 624556094
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:f67a879eff77b4d59f4c872fc4b920d7e056dc43fa4135b1b82cbbb2eff3797e
+      sizeBytes: 624555993
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:19b7ed5004e022fec0ef35f706f0e51166f575e469863e99ccfad057052afb55
+      sizeBytes: 624555972
+    - names:
+      - docker.io/faisalanjum/event-trader@sha256:318ae64044a025a9b90a3d04d703f3d39ec357c6bb2c188671de1d4ec2b7f4da
+      sizeBytes: 624554901
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:b1f1e9d581383af08abdf259cb3709f8fa6b2b86874a784c30a8b8356d94198a
+      sizeBytes: 505648018
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:7cba71dc8383ca2c6c789cb55eb790c517c605a2587e9f619fb204597991c3e0
+      sizeBytes: 505646801
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:743d6bf4d97b9a15c95ecb6f2641204a008b1bea94fca4db3ce1b4fe87d588cc
+      sizeBytes: 505632162
+    nodeInfo:
+      architecture: amd64
+      bootID: 347da5ff-ab46-4e7c-a7ff-aa804fe5abd2
+      containerRuntimeVersion: containerd://1.7.27
+      kernelVersion: 5.15.0-143-generic
+      kubeProxyVersion: v1.30.12
+      kubeletVersion: v1.30.12
+      machineID: 7c6c4e81c2484f2e97af6b6e54e3b16b
+      operatingSystem: linux
+      osImage: Ubuntu 22.04.5 LTS
+      systemUUID: 9fb02b80-f9be-11ef-9916-28fbed774e00
+- apiVersion: v1
+  kind: Node
+  metadata:
+    annotations:
+      flannel.alpha.coreos.com/backend-data: '{"VNI":1,"VtepMAC":"9a:54:2f:47:55:ce"}'
+      flannel.alpha.coreos.com/backend-type: vxlan
+      flannel.alpha.coreos.com/kube-subnet-manager: "true"
+      flannel.alpha.coreos.com/public-ip: 192.168.40.74
+      kubeadm.alpha.kubernetes.io/cri-socket: unix:///var/run/containerd/containerd.sock
+      node.alpha.kubernetes.io/ttl: "0"
+      volumes.kubernetes.io/controller-managed-attach-detach: "true"
+    creationTimestamp: "2025-07-02T21:19:10Z"
+    labels:
+      beta.kubernetes.io/arch: amd64
+      beta.kubernetes.io/os: linux
+      kubernetes.io/arch: amd64
+      kubernetes.io/hostname: minisforum3
+      kubernetes.io/os: linux
+      memory: 128gb
+      node-role.kubernetes.io/database: "true"
+      node-type: worker
+      role: neo4j
+    name: minisforum3
+    resourceVersion: "6123771"
+    uid: 78fd25db-b301-4a6a-b0fd-bbdd0d478143
+  spec:
+    podCIDR: 10.244.2.0/24
+    podCIDRs:
+    - 10.244.2.0/24
+    taints:
+    - effect: NoSchedule
+      key: database
+      value: neo4j
+  status:
+    addresses:
+    - address: 192.168.40.74
+      type: InternalIP
+    - address: minisforum3
+      type: Hostname
+    allocatable:
+      cpu: "16"
+      ephemeral-storage: "1768655407863"
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 129511192Ki
+      pods: "110"
+    capacity:
+      cpu: "16"
+      ephemeral-storage: 1919113944Ki
+      hugepages-1Gi: "0"
+      hugepages-2Mi: "0"
+      memory: 129613592Ki
+      pods: "110"
+    conditions:
+    - lastHeartbeatTime: "2025-07-07T18:58:46Z"
+      lastTransitionTime: "2025-07-07T18:58:46Z"
+      message: Flannel is running on this node
+      reason: FlannelIsUp
+      status: "False"
+      type: NetworkUnavailable
+    - lastHeartbeatTime: "2025-07-08T15:21:58Z"
+      lastTransitionTime: "2025-07-07T18:58:42Z"
+      message: kubelet has sufficient memory available
+      reason: KubeletHasSufficientMemory
+      status: "False"
+      type: MemoryPressure
+    - lastHeartbeatTime: "2025-07-08T15:21:58Z"
+      lastTransitionTime: "2025-07-07T18:58:42Z"
+      message: kubelet has no disk pressure
+      reason: KubeletHasNoDiskPressure
+      status: "False"
+      type: DiskPressure
+    - lastHeartbeatTime: "2025-07-08T15:21:58Z"
+      lastTransitionTime: "2025-07-07T18:58:42Z"
+      message: kubelet has sufficient PID available
+      reason: KubeletHasSufficientPID
+      status: "False"
+      type: PIDPressure
+    - lastHeartbeatTime: "2025-07-08T15:21:58Z"
+      lastTransitionTime: "2025-07-07T18:58:42Z"
+      message: kubelet is posting ready status
+      reason: KubeletReady
+      status: "True"
+      type: Ready
+    daemonEndpoints:
+      kubeletEndpoint:
+        Port: 10250
+    images:
+    - names:
+      - docker.io/faisalanjum/report-enricher@sha256:1d63ea3a87a9df6c350812a2892fba9e9d749b634a62fff0077e386889bc607e
+      - docker.io/faisalanjum/report-enricher:latest
+      sizeBytes: 817861169
+    - names:
+      - docker.io/faisalanjum/xbrl-worker@sha256:886719c1c917a6687fd34c788092869b8bb7ec65b5120712751c559fd14d4f6a
+      - docker.io/faisalanjum/xbrl-worker:latest
+      sizeBytes: 702122656
+    - names:
+      - docker.io/library/neo4j@sha256:f136835f6ccf96bb90eca84942cfc629780958c12f7211892e71066f74cb5618
+      - docker.io/library/neo4j:5.26.4-enterprise
+      sizeBytes: 625882489
+    - names:
+      - docker.io/natsio/nats-box@sha256:abdc9f9f0120bb8adfbf674eb037d1551db55356eb198b7bd4ffed377f6950a6
+      - docker.io/natsio/nats-box:0.18.0
+      sizeBytes: 45700434
+    - names:
+      - ghcr.io/flannel-io/flannel@sha256:7f471907fa940f944867270de4ed78121b8b4c5d564e17f940dc787cb16dea82
+      - ghcr.io/flannel-io/flannel:v0.26.7
+      sizeBytes: 32996046
+    - names:
+      - docker.io/library/ubuntu@sha256:3c61d3759c2639d4b836d32a2d3c83fa0214e36f195a3421018dbaaf79cbe37f
+      - docker.io/library/ubuntu:22.04
+      sizeBytes: 29545094
+    - names:
+      - registry.k8s.io/kube-proxy@sha256:ea8c7d5392acf6b0c11ebba78301e1a6c2dc6abcd7544102ed578e49d1c82f15
+      - registry.k8s.io/kube-proxy:v1.30.12
+      sizeBytes: 29184836
+    - names:
+      - quay.io/prometheus/node-exporter@sha256:d00a542e409ee618a4edc67da14dd48c5da66726bbd5537ab2af9c1dfc442c8a
+      - quay.io/prometheus/node-exporter:v1.9.1
+      sizeBytes: 12955907
+    - names:
+      - docker.io/library/nats@sha256:c6beb2ccb1910ecaead46588e2f37422c2e3922c7a0cb1930234429579c8443e
+      - docker.io/library/nats:2.11.6-alpine
+      sizeBytes: 10606184
+    - names:
+      - docker.io/natsio/nats-server-config-reloader@sha256:bca7e221ec6f1221ecd74e2c13b075c913a5bcd998e87a4da4d747033440ee93
+      - docker.io/natsio/nats-server-config-reloader:0.18.2
+      sizeBytes: 5059630
+    - names:
+      - ghcr.io/flannel-io/flannel-cni-plugin@sha256:f1812994f0edbcb5bb5ccb63be2147ba6ad10e1faaa7ca9fcdad4f441739d84f
+      - ghcr.io/flannel-io/flannel-cni-plugin:v1.6.2-flannel1
+      sizeBytes: 4856838
+    - names:
+      - docker.io/library/busybox@sha256:f85340bf132ae937d2c2a763b8335c9bab35d6e8293f70f606b9c6178d84f42b
+      - docker.io/library/busybox:latest
+      sizeBytes: 2156518
+    - names:
+      - docker.io/library/busybox@sha256:7edf5efe6b86dbf01ccc3c76b32a37a8e23b84e6bad81ce8ae8c221fa456fda8
+      - docker.io/library/busybox:1.36
+      sizeBytes: 2152501
+    - names:
+      - registry.k8s.io/pause@sha256:9001185023633d17a2f98ff69b6ff2615b8ea02a825adffa40422f51dfdcde9d
+      - registry.k8s.io/pause:3.8
+      sizeBytes: 311286
+    nodeInfo:
+      architecture: amd64
+      bootID: 90bd2912-437d-4c69-8349-fa3a3809067b
+      containerRuntimeVersion: containerd://1.7.27
+      kernelVersion: 5.15.0-143-generic
+      kubeProxyVersion: v1.30.12
+      kubeletVersion: v1.30.12
+      machineID: aaac343e208a4da382ee96a088421003
+      operatingSystem: linux
+      osImage: Ubuntu 22.04.5 LTS
+      systemUUID: cdedde00-f641-11ef-8982-c80c97897300
+kind: List
+metadata:
+  resourceVersion: ""

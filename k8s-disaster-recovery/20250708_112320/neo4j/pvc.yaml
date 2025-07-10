@@ -1,0 +1,65 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: neo4j
+    name: data-neo4j-0
+    namespace: neo4j
+    resourceVersion: "5647078"
+    uid: ad007956-8b64-4192-ab5a-5d4abda007ae
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1536Gi
+    storageClassName: local-path-minisforum3
+    volumeMode: Filesystem
+    volumeName: pvc-b72a2053-aca5-40f1-8afc-5c423116f619
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1536Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: neo4j
+    name: logs-neo4j-0
+    namespace: neo4j
+    resourceVersion: "5647073"
+    uid: b8fd9ba3-2222-4cd8-b99f-039db00b2591
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Gi
+    storageClassName: local-path-minisforum3
+    volumeMode: Filesystem
+    volumeName: pvc-51e8119a-bca0-4c7e-9c1d-8687264fe915
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 50Gi
+    phase: Bound
+kind: List
+metadata:
+  resourceVersion: ""

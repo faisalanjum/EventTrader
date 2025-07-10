@@ -1,0 +1,126 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: keda
+      meta.helm.sh/release-namespace: keda
+    creationTimestamp: "2025-07-04T10:27:05Z"
+    labels:
+      app.kubernetes.io/component: operator
+      app.kubernetes.io/instance: keda
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: keda-admission-webhooks
+      app.kubernetes.io/part-of: keda-operator
+      app.kubernetes.io/version: 2.17.2
+      helm.sh/chart: keda-2.17.2
+    name: keda-admission-webhooks
+    namespace: keda
+    resourceVersion: "5292614"
+    uid: cd84de71-5cee-4753-a2dd-995f999e2acd
+  spec:
+    clusterIP: 10.105.202.44
+    clusterIPs:
+    - 10.105.202.44
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - appProtocol: https
+      name: https
+      port: 443
+      protocol: TCP
+      targetPort: 9443
+    selector:
+      app: keda-admission-webhooks
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: keda
+      meta.helm.sh/release-namespace: keda
+    creationTimestamp: "2025-07-04T10:27:05Z"
+    labels:
+      app.kubernetes.io/component: operator
+      app.kubernetes.io/instance: keda
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: keda-operator
+      app.kubernetes.io/part-of: keda-operator
+      app.kubernetes.io/version: 2.17.2
+      helm.sh/chart: keda-2.17.2
+    name: keda-operator
+    namespace: keda
+    resourceVersion: "5292611"
+    uid: e6fc403a-6cd4-4eb7-8293-714f962970d2
+  spec:
+    clusterIP: 10.101.16.178
+    clusterIPs:
+    - 10.101.16.178
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: metricsservice
+      port: 9666
+      protocol: TCP
+      targetPort: 9666
+    selector:
+      app: keda-operator
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: keda
+      meta.helm.sh/release-namespace: keda
+    creationTimestamp: "2025-07-04T10:27:05Z"
+    labels:
+      app: keda-operator-metrics-apiserver
+      app.kubernetes.io/component: operator
+      app.kubernetes.io/instance: keda
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: keda-operator-metrics-apiserver
+      app.kubernetes.io/part-of: keda-operator
+      app.kubernetes.io/version: 2.17.2
+      helm.sh/chart: keda-2.17.2
+    name: keda-operator-metrics-apiserver
+    namespace: keda
+    resourceVersion: "5292617"
+    uid: 102ad62a-b1db-49b2-955b-990024657b28
+  spec:
+    clusterIP: 10.97.228.116
+    clusterIPs:
+    - 10.97.228.116
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - appProtocol: https
+      name: https
+      port: 443
+      protocol: TCP
+      targetPort: 6443
+    - name: metrics
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: keda-operator-metrics-apiserver
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

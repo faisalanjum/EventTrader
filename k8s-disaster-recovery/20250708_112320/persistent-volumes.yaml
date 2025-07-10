@@ -1,0 +1,212 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum3
+      pv.kubernetes.io/bound-by-controller: "yes"
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-03T10:40:09Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-51e8119a-bca0-4c7e-9c1d-8687264fe915
+    resourceVersion: "5647067"
+    uid: 8bbddbe4-2131-4c8c-b6a6-764b278317a4
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 50Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: logs-neo4j-0
+      namespace: neo4j
+      resourceVersion: "5647055"
+      uid: b8fd9ba3-2222-4cd8-b99f-039db00b2591
+    hostPath:
+      path: /opt/local-path/pvc-51e8119a-bca0-4c7e-9c1d-8687264fe915_neo4j_logs-neo4j-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum3
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: local-path-minisforum3
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:36:10Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum2
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-06T05:36:47Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-51f73d5d-9be3-4e87-91fd-97c3da595674
+    resourceVersion: "5647588"
+    uid: 5ec67d20-f4bc-4e10-9bad-f8d878b8eb4b
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 100Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: prometheus-prometheus-kube-prometheus-prometheus-db-prometheus-prometheus-kube-prometheus-prometheus-0
+      namespace: monitoring
+      resourceVersion: "5647438"
+      uid: 51f73d5d-9be3-4e87-91fd-97c3da595674
+    hostPath:
+      path: /opt/local-path-provisioner/pvc-51f73d5d-9be3-4e87-91fd-97c3da595674_monitoring_prometheus-prometheus-kube-prometheus-prometheus-db-prometheus-prometheus-kube-prometheus-prometheus-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum2
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:36:47Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-06T05:37:09Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-804a1738-9246-42da-81f5-fe2f5124d49f
+    resourceVersion: "5647782"
+    uid: d161b405-95c4-4051-8922-37739665a99c
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 50Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: storage-loki-0
+      namespace: monitoring
+      resourceVersion: "5647755"
+      uid: 804a1738-9246-42da-81f5-fe2f5124d49f
+    hostPath:
+      path: /opt/local-path-provisioner/pvc-804a1738-9246-42da-81f5-fe2f5124d49f_monitoring_storage-loki-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:37:09Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum3
+      pv.kubernetes.io/bound-by-controller: "yes"
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-03T10:40:09Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-b72a2053-aca5-40f1-8afc-5c423116f619
+    resourceVersion: "5647074"
+    uid: 37f6c6bf-9420-4685-9485-5f6376ffc90b
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1536Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: data-neo4j-0
+      namespace: neo4j
+      resourceVersion: "5647052"
+      uid: ad007956-8b64-4192-ab5a-5d4abda007ae
+    hostPath:
+      path: /opt/local-path/pvc-b72a2053-aca5-40f1-8afc-5c423116f619_neo4j_data-neo4j-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum3
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: local-path-minisforum3
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:36:10Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum2
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-06T06:06:05Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-d8ba547a-4892-4d75-aa5a-f5b5b3483187
+    resourceVersion: "5652571"
+    uid: a9822cea-4d7e-4228-b39d-398746988e28
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 40Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: redis-pvc
+      namespace: infrastructure
+      resourceVersion: "5652547"
+      uid: d8ba547a-4892-4d75-aa5a-f5b5b3483187
+    hostPath:
+      path: /opt/local-path-provisioner/pvc-d8ba547a-4892-4d75-aa5a-f5b5b3483187_infrastructure_redis-pvc
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum2
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T06:06:05Z"
+    phase: Bound
+kind: List
+metadata:
+  resourceVersion: ""

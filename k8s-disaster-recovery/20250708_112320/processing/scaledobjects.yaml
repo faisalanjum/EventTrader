@@ -1,0 +1,240 @@
+apiVersion: v1
+items:
+- apiVersion: keda.sh/v1alpha1
+  kind: ScaledObject
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"keda.sh/v1alpha1","kind":"ScaledObject","metadata":{"annotations":{},"name":"report-enricher-scaler","namespace":"processing"},"spec":{"cooldownPeriod":60,"maxReplicaCount":5,"minReplicaCount":1,"pollingInterval":30,"scaleTargetRef":{"name":"report-enricher"},"triggers":[{"metadata":{"address":"redis.infrastructure.svc.cluster.local:6379","databaseIndex":"0","listLength":"5","listName":"reports:queues:enrich"},"type":"redis"}]}}
+    creationTimestamp: "2025-07-08T16:09:18Z"
+    finalizers:
+    - finalizer.keda.sh
+    generation: 1
+    labels:
+      scaledobject.keda.sh/name: report-enricher-scaler
+    name: report-enricher-scaler
+    namespace: processing
+    resourceVersion: "6130305"
+    uid: 79d058ab-1153-49f3-9be1-64557ce18323
+  spec:
+    cooldownPeriod: 60
+    maxReplicaCount: 5
+    minReplicaCount: 1
+    pollingInterval: 30
+    scaleTargetRef:
+      name: report-enricher
+    triggers:
+    - metadata:
+        address: redis.infrastructure.svc.cluster.local:6379
+        databaseIndex: "0"
+        listLength: "5"
+        listName: reports:queues:enrich
+      type: redis
+  status:
+    authenticationsTypes: ""
+    conditions:
+    - message: ScaledObject is defined correctly and is ready for scaling
+      reason: ScaledObjectReady
+      status: "True"
+      type: Ready
+    - message: Scaling is not performed because triggers are not active
+      reason: ScalerNotActive
+      status: "False"
+      type: Active
+    - message: No fallbacks are active on this scaled object
+      reason: NoFallbackFound
+      status: "False"
+      type: Fallback
+    - status: Unknown
+      type: Paused
+    externalMetricNames:
+    - s0-redis-reports-queues-enrich
+    hpaName: keda-hpa-report-enricher-scaler
+    originalReplicaCount: 0
+    scaleTargetGVKR:
+      group: apps
+      kind: Deployment
+      resource: deployments
+      version: v1
+    scaleTargetKind: apps/v1.Deployment
+    triggersTypes: redis
+- apiVersion: keda.sh/v1alpha1
+  kind: ScaledObject
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"keda.sh/v1alpha1","kind":"ScaledObject","metadata":{"annotations":{},"name":"xbrl-worker-heavy-scaler","namespace":"processing"},"spec":{"cooldownPeriod":300,"maxReplicaCount":2,"minReplicaCount":1,"pollingInterval":30,"scaleTargetRef":{"name":"xbrl-worker-heavy"},"triggers":[{"metadata":{"address":"redis.infrastructure.svc.cluster.local:6379","databaseIndex":"0","listLength":"2","listName":"reports:queues:xbrl:heavy"},"type":"redis"}]}}
+    creationTimestamp: "2025-07-08T16:09:18Z"
+    finalizers:
+    - finalizer.keda.sh
+    generation: 1
+    labels:
+      scaledobject.keda.sh/name: xbrl-worker-heavy-scaler
+    name: xbrl-worker-heavy-scaler
+    namespace: processing
+    resourceVersion: "6130307"
+    uid: fcd5723e-cc87-4b1e-94ac-1fd00406c962
+  spec:
+    cooldownPeriod: 300
+    maxReplicaCount: 2
+    minReplicaCount: 1
+    pollingInterval: 30
+    scaleTargetRef:
+      name: xbrl-worker-heavy
+    triggers:
+    - metadata:
+        address: redis.infrastructure.svc.cluster.local:6379
+        databaseIndex: "0"
+        listLength: "2"
+        listName: reports:queues:xbrl:heavy
+      type: redis
+  status:
+    authenticationsTypes: ""
+    conditions:
+    - message: ScaledObject is defined correctly and is ready for scaling
+      reason: ScaledObjectReady
+      status: "True"
+      type: Ready
+    - message: Scaling is not performed because triggers are not active
+      reason: ScalerNotActive
+      status: "False"
+      type: Active
+    - message: No fallbacks are active on this scaled object
+      reason: NoFallbackFound
+      status: "False"
+      type: Fallback
+    - status: Unknown
+      type: Paused
+    externalMetricNames:
+    - s0-redis-reports-queues-xbrl-heavy
+    hpaName: keda-hpa-xbrl-worker-heavy-scaler
+    lastActiveTime: "2025-07-08T16:09:18Z"
+    originalReplicaCount: 0
+    scaleTargetGVKR:
+      group: apps
+      kind: Deployment
+      resource: deployments
+      version: v1
+    scaleTargetKind: apps/v1.Deployment
+    triggersTypes: redis
+- apiVersion: keda.sh/v1alpha1
+  kind: ScaledObject
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"keda.sh/v1alpha1","kind":"ScaledObject","metadata":{"annotations":{},"name":"xbrl-worker-light-scaler","namespace":"processing"},"spec":{"cooldownPeriod":120,"maxReplicaCount":7,"minReplicaCount":1,"pollingInterval":30,"scaleTargetRef":{"name":"xbrl-worker-light"},"triggers":[{"metadata":{"address":"redis.infrastructure.svc.cluster.local:6379","databaseIndex":"0","listLength":"20","listName":"reports:queues:xbrl:light"},"type":"redis"}]}}
+    creationTimestamp: "2025-07-08T16:09:18Z"
+    finalizers:
+    - finalizer.keda.sh
+    generation: 1
+    labels:
+      scaledobject.keda.sh/name: xbrl-worker-light-scaler
+    name: xbrl-worker-light-scaler
+    namespace: processing
+    resourceVersion: "6130304"
+    uid: 029b82ac-e098-4a62-a107-1c41c6b38959
+  spec:
+    cooldownPeriod: 120
+    maxReplicaCount: 7
+    minReplicaCount: 1
+    pollingInterval: 30
+    scaleTargetRef:
+      name: xbrl-worker-light
+    triggers:
+    - metadata:
+        address: redis.infrastructure.svc.cluster.local:6379
+        databaseIndex: "0"
+        listLength: "20"
+        listName: reports:queues:xbrl:light
+      type: redis
+  status:
+    authenticationsTypes: ""
+    conditions:
+    - message: ScaledObject is defined correctly and is ready for scaling
+      reason: ScaledObjectReady
+      status: "True"
+      type: Ready
+    - message: Scaling is not performed because triggers are not active
+      reason: ScalerNotActive
+      status: "False"
+      type: Active
+    - message: No fallbacks are active on this scaled object
+      reason: NoFallbackFound
+      status: "False"
+      type: Fallback
+    - status: Unknown
+      type: Paused
+    externalMetricNames:
+    - s0-redis-reports-queues-xbrl-light
+    hpaName: keda-hpa-xbrl-worker-light-scaler
+    lastActiveTime: "2025-07-08T16:09:18Z"
+    originalReplicaCount: 0
+    scaleTargetGVKR:
+      group: apps
+      kind: Deployment
+      resource: deployments
+      version: v1
+    scaleTargetKind: apps/v1.Deployment
+    triggersTypes: redis
+- apiVersion: keda.sh/v1alpha1
+  kind: ScaledObject
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"keda.sh/v1alpha1","kind":"ScaledObject","metadata":{"annotations":{},"name":"xbrl-worker-medium-scaler","namespace":"processing"},"spec":{"cooldownPeriod":180,"maxReplicaCount":4,"minReplicaCount":1,"pollingInterval":30,"scaleTargetRef":{"name":"xbrl-worker-medium"},"triggers":[{"metadata":{"address":"redis.infrastructure.svc.cluster.local:6379","databaseIndex":"0","listLength":"5","listName":"reports:queues:xbrl:medium"},"type":"redis"}]}}
+    creationTimestamp: "2025-07-08T16:09:18Z"
+    finalizers:
+    - finalizer.keda.sh
+    generation: 1
+    labels:
+      scaledobject.keda.sh/name: xbrl-worker-medium-scaler
+    name: xbrl-worker-medium-scaler
+    namespace: processing
+    resourceVersion: "6130306"
+    uid: b69f0917-8ff5-4b6f-9f1f-6eabb40afaa8
+  spec:
+    cooldownPeriod: 180
+    maxReplicaCount: 4
+    minReplicaCount: 1
+    pollingInterval: 30
+    scaleTargetRef:
+      name: xbrl-worker-medium
+    triggers:
+    - metadata:
+        address: redis.infrastructure.svc.cluster.local:6379
+        databaseIndex: "0"
+        listLength: "5"
+        listName: reports:queues:xbrl:medium
+      type: redis
+  status:
+    authenticationsTypes: ""
+    conditions:
+    - message: ScaledObject is defined correctly and is ready for scaling
+      reason: ScaledObjectReady
+      status: "True"
+      type: Ready
+    - message: Scaling is not performed because triggers are not active
+      reason: ScalerNotActive
+      status: "False"
+      type: Active
+    - message: No fallbacks are active on this scaled object
+      reason: NoFallbackFound
+      status: "False"
+      type: Fallback
+    - status: Unknown
+      type: Paused
+    externalMetricNames:
+    - s0-redis-reports-queues-xbrl-medium
+    hpaName: keda-hpa-xbrl-worker-medium-scaler
+    lastActiveTime: "2025-07-08T16:09:18Z"
+    originalReplicaCount: 0
+    scaleTargetGVKR:
+      group: apps
+      kind: Deployment
+      resource: deployments
+      version: v1
+    scaleTargetKind: apps/v1.Deployment
+    triggersTypes: redis
+kind: List
+metadata:
+  resourceVersion: ""

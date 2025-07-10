@@ -1,0 +1,4 @@
+NAME          CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+minisforum    204m         1%     13984Mi         23%       
+minisforum2   1556m        9%     4499Mi          7%        
+minisforum3   583m         3%     37583Mi         29%       

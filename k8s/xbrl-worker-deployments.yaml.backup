@@ -1,0 +1,201 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xbrl-worker-heavy
+  namespace: processing
+spec:
+  replicas: 0  # KEDA will manage replica count
+  selector:
+    matchLabels:
+      app: xbrl-worker-heavy
+  template:
+    metadata:
+      labels:
+        app: xbrl-worker-heavy
+        worker-type: heavy
+        xbrl-worker: "true"
+    spec:
+      priorityClassName: worker-standard
+      # Node affinity to prefer minisforum2/minisforum over minisforum3 (Neo4j node)
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum2
+                - minisforum
+          - weight: 10  # Lower priority for Neo4j node
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum3
+      containers:
+      - name: xbrl-worker
+        image: faisalanjum/xbrl-worker:latest
+        imagePullPolicy: Always
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: XBRL_QUEUE
+          value: reports:queues:xbrl:heavy
+        envFrom:
+        - secretRef:
+            name: eventtrader-secrets
+        resources:
+          requests:
+            cpu: "2"
+            memory: "6Gi"
+          limits:
+            cpu: "3"
+            memory: "8Gi"
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: logs
+        hostPath:
+          path: /home/faisal/EventMarketDB/logs
+          type: DirectoryOrCreate
+      # Longer termination grace period for heavy reports
+      terminationGracePeriodSeconds: 300
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xbrl-worker-medium
+  namespace: processing
+spec:
+  replicas: 0  # KEDA will manage replica count
+  selector:
+    matchLabels:
+      app: xbrl-worker-medium
+  template:
+    metadata:
+      labels:
+        app: xbrl-worker-medium
+        worker-type: medium
+        xbrl-worker: "true"
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum2
+                - minisforum
+          - weight: 10  # Lower priority for Neo4j node
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum3
+      containers:
+      - name: xbrl-worker
+        image: faisalanjum/xbrl-worker:latest
+        imagePullPolicy: Always
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: XBRL_QUEUE
+          value: reports:queues:xbrl:medium
+        envFrom:
+        - secretRef:
+            name: eventtrader-secrets
+        resources:
+          requests:
+            cpu: "1500m"
+            memory: "3Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: logs
+        hostPath:
+          path: /home/faisal/EventMarketDB/logs
+          type: DirectoryOrCreate
+      terminationGracePeriodSeconds: 180
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xbrl-worker-light
+  namespace: processing
+spec:
+  replicas: 0  # KEDA will manage replica count
+  selector:
+    matchLabels:
+      app: xbrl-worker-light
+  template:
+    metadata:
+      labels:
+        app: xbrl-worker-light
+        worker-type: light
+        xbrl-worker: "true"
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum2
+                - minisforum
+          - weight: 10  # Lower priority for Neo4j node
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - minisforum3
+      containers:
+      - name: xbrl-worker
+        image: faisalanjum/xbrl-worker:latest
+        imagePullPolicy: Always
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: XBRL_QUEUE
+          value: reports:queues:xbrl:light
+        envFrom:
+        - secretRef:
+            name: eventtrader-secrets
+        resources:
+          requests:
+            cpu: "1"
+            memory: "1536Mi"
+          limits:
+            cpu: "1500m"
+            memory: "2Gi"
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: logs
+        hostPath:
+          path: /home/faisal/EventMarketDB/logs
+          type: DirectoryOrCreate
+      terminationGracePeriodSeconds: 120

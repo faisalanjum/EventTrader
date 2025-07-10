@@ -1,0 +1,873 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/restartedAt: "2025-07-06T18:41:37-04:00"
+    creationTimestamp: "2025-07-08T14:19:10Z"
+    generateName: neo4j-
+    labels:
+      app: neo4j
+      apps.kubernetes.io/pod-index: "0"
+      controller-revision-hash: neo4j-6d568c585b
+      statefulset.kubernetes.io/pod-name: neo4j-0
+    name: neo4j-0
+    namespace: neo4j
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: StatefulSet
+      name: neo4j
+      uid: d256a339-5d7e-4419-82a2-d2fda81c015e
+    resourceVersion: "6114679"
+    uid: 5ff43cf7-f896-410e-b6fa-8e55dffc399e
+  spec:
+    containers:
+    - env:
+      - name: NEO4J_AUTH
+        value: neo4j/Next2020#
+      - name: NEO4J_EDITION
+        value: ENTERPRISE
+      - name: NEO4J_ACCEPT_LICENSE_AGREEMENT
+        value: "yes"
+      - name: NEO4J_server_memory_heap_initial__size
+        value: 24G
+      - name: NEO4J_server_memory_heap_max__size
+        value: 24G
+      - name: NEO4J_server_memory_pagecache_size
+        value: 56G
+      - name: NEO4J_db_memory_transaction_global__max
+        value: 8G
+      - name: NEO4J_db_memory_transaction_max
+        value: 4G
+      - name: NEO4J_db_tx__timeout
+        value: 30m
+      - name: NEO4J_server_jvm_additional
+        value: -XX:+UseG1GC -XX:MaxGCPauseMillis=200
+      - name: NEO4J_server_default__listen__address
+        value: 0.0.0.0
+      - name: NEO4J_server_config_strict__validation_enabled
+        value: "false"
+      - name: NEO4J_dbms_security_procedures_unrestricted
+        value: apoc.*,genai.*,gds.*
+      - name: NEO4J_dbms_security_procedures_allowlist
+        value: apoc.*,genai.*,gds.*
+      - name: NEO4J_apoc_trigger_enabled
+        value: "true"
+      - name: NEO4J_apoc_uuid_enabled
+        value: "true"
+      - name: NEO4J_apoc_import_file_enabled
+        value: "true"
+      - name: NEO4J_apoc_export_file_enabled
+        value: "true"
+      image: neo4j:5.26.4-enterprise
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /
+          port: 7474
+          scheme: HTTP
+        initialDelaySeconds: 300
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: neo4j
+      ports:
+      - containerPort: 7687
+        name: bolt
+        protocol: TCP
+      - containerPort: 7474
+        name: http
+        protocol: TCP
+      - containerPort: 7473
+        name: https
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /
+          port: 7474
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 3
+      resources:
+        limits:
+          cpu: "16"
+          memory: 90Gi
+        requests:
+          cpu: "8"
+          memory: 90Gi
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /data
+        name: data
+      - mountPath: /logs
+        name: logs
+      - mountPath: /var/lib/neo4j/plugins
+        name: plugins
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-xglp7
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostname: neo4j-0
+    initContainers:
+    - command:
+      - sh
+      - -c
+      - |
+        echo "Copying plugins from host..."
+        cp -v /host-plugins/* /plugins/
+        chmod 644 /plugins/*.jar
+        ls -la /plugins/
+        echo "Plugins copied successfully"
+      image: busybox:1.36
+      imagePullPolicy: IfNotPresent
+      name: copy-plugins
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /plugins
+        name: plugins
+      - mountPath: /host-plugins
+        name: host-plugins
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-xglp7
+        readOnly: true
+    nodeName: minisforum3
+    nodeSelector:
+      kubernetes.io/hostname: minisforum3
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    subdomain: neo4j
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoSchedule
+      key: database
+      operator: Equal
+      value: neo4j
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data-neo4j-0
+    - name: logs
+      persistentVolumeClaim:
+        claimName: logs-neo4j-0
+    - emptyDir: {}
+      name: plugins
+    - hostPath:
+        path: /opt/neo4j/plugins
+        type: Directory
+      name: host-plugins
+    - name: kube-api-access-xglp7
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:19:11Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:19:11Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:19:43Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:19:43Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:19:10Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://d37ee56f02b3b728dde9e98fed281c51e3af0d959d2b9816ed1dc12cc6526597
+      image: docker.io/library/neo4j:5.26.4-enterprise
+      imageID: docker.io/library/neo4j@sha256:f136835f6ccf96bb90eca84942cfc629780958c12f7211892e71066f74cb5618
+      lastState: {}
+      name: neo4j
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-08T14:19:11Z"
+    hostIP: 192.168.40.74
+    hostIPs:
+    - ip: 192.168.40.74
+    initContainerStatuses:
+    - containerID: containerd://c4f1a18f7c520ef6e52482299e04b008c1009224993fba6ce998095894f56e5d
+      image: docker.io/library/busybox:1.36
+      imageID: docker.io/library/busybox@sha256:7edf5efe6b86dbf01ccc3c76b32a37a8e23b84e6bad81ce8ae8c221fa456fda8
+      lastState: {}
+      name: copy-plugins
+      ready: true
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: containerd://c4f1a18f7c520ef6e52482299e04b008c1009224993fba6ce998095894f56e5d
+          exitCode: 0
+          finishedAt: "2025-07-08T14:19:10Z"
+          reason: Completed
+          startedAt: "2025-07-08T14:19:10Z"
+    phase: Running
+    podIP: 10.244.2.168
+    podIPs:
+    - ip: 10.244.2.168
+    qosClass: Burstable
+    startTime: "2025-07-08T14:19:10Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"neo4j","namespace":"neo4j"},"spec":{"clusterIP":"None","ports":[{"name":"bolt","port":7687,"targetPort":7687},{"name":"http","port":7474,"targetPort":7474}],"selector":{"app":"neo4j"}}}
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    name: neo4j
+    namespace: neo4j
+    resourceVersion: "5647051"
+    uid: dfca0922-0190-4b30-af49-ca0c2a1e3d96
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: bolt
+      port: 7687
+      protocol: TCP
+      targetPort: 7687
+    - name: http
+      port: 7474
+      protocol: TCP
+      targetPort: 7474
+    selector:
+      app: neo4j
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"neo4j-bolt","namespace":"neo4j"},"spec":{"ports":[{"name":"bolt","nodePort":30687,"port":7687,"targetPort":7687}],"selector":{"app":"neo4j"},"type":"NodePort"}}
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    name: neo4j-bolt
+    namespace: neo4j
+    resourceVersion: "5647068"
+    uid: 6014fb3e-168f-41bd-a518-8da2d34e035d
+  spec:
+    clusterIP: 10.102.222.120
+    clusterIPs:
+    - 10.102.222.120
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: bolt
+      nodePort: 30687
+      port: 7687
+      protocol: TCP
+      targetPort: 7687
+    selector:
+      app: neo4j
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"neo4j-http","namespace":"neo4j"},"spec":{"ports":[{"name":"http","nodePort":30474,"port":7474,"targetPort":7474}],"selector":{"app":"neo4j"},"type":"NodePort"}}
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    name: neo4j-http
+    namespace: neo4j
+    resourceVersion: "5647079"
+    uid: fbdb3bcb-0572-4b65-9ada-a35f6ac52f2b
+  spec:
+    clusterIP: 10.107.215.244
+    clusterIPs:
+    - 10.107.215.244
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      nodePort: 30474
+      port: 7474
+      protocol: TCP
+      targetPort: 7474
+    selector:
+      app: neo4j
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"StatefulSet","metadata":{"annotations":{},"name":"neo4j","namespace":"neo4j"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"neo4j"}},"serviceName":"neo4j","template":{"metadata":{"labels":{"app":"neo4j"}},"spec":{"containers":[{"env":[{"name":"NEO4J_AUTH","value":"neo4j/Next2020#"},{"name":"NEO4J_EDITION","value":"ENTERPRISE"},{"name":"NEO4J_ACCEPT_LICENSE_AGREEMENT","value":"yes"},{"name":"NEO4J_server_memory_heap_initial__size","value":"24G"},{"name":"NEO4J_server_memory_heap_max__size","value":"24G"},{"name":"NEO4J_server_memory_pagecache_size","value":"56G"},{"name":"NEO4J_db_memory_transaction_global__max","value":"8G"},{"name":"NEO4J_db_memory_transaction_max","value":"4G"},{"name":"NEO4J_db_tx__timeout","value":"30m"},{"name":"NEO4J_server_jvm_additional","value":"-XX:+UseG1GC -XX:MaxGCPauseMillis=200"},{"name":"NEO4J_server_default__listen__address","value":"0.0.0.0"},{"name":"NEO4J_server_config_strict__validation_enabled","value":"false"},{"name":"NEO4J_dbms_security_procedures_unrestricted","value":"apoc.*,genai.*,gds.*"},{"name":"NEO4J_dbms_security_procedures_allowlist","value":"apoc.*,genai.*,gds.*"},{"name":"NEO4J_apoc_trigger_enabled","value":"true"},{"name":"NEO4J_apoc_uuid_enabled","value":"true"},{"name":"NEO4J_apoc_import_file_enabled","value":"true"},{"name":"NEO4J_apoc_export_file_enabled","value":"true"}],"image":"neo4j:5.26.4-enterprise","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":7474},"initialDelaySeconds":300,"periodSeconds":10,"timeoutSeconds":5},"name":"neo4j","ports":[{"containerPort":7687,"name":"bolt"},{"containerPort":7474,"name":"http"},{"containerPort":7473,"name":"https"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":7474},"initialDelaySeconds":30,"periodSeconds":3,"timeoutSeconds":3},"resources":{"limits":{"cpu":"16","memory":"95Gi"},"requests":{"cpu":"8","memory":"90Gi"}},"volumeMounts":[{"mountPath":"/data","name":"data"},{"mountPath":"/logs","name":"logs"},{"mountPath":"/var/lib/neo4j/plugins","name":"plugins"}]}],"initContainers":[{"command":["sh","-c","echo \"Copying plugins from host...\"\ncp -v /host-plugins/* /plugins/\nchmod 644 /plugins/*.jar\nls -la /plugins/\necho \"Plugins copied successfully\"\n"],"image":"busybox:1.36","name":"copy-plugins","volumeMounts":[{"mountPath":"/plugins","name":"plugins"},{"mountPath":"/host-plugins","name":"host-plugins","readOnly":true}]}],"nodeSelector":{"kubernetes.io/hostname":"minisforum3"},"tolerations":[{"effect":"NoSchedule","key":"database","operator":"Equal","value":"neo4j"}],"volumes":[{"emptyDir":{},"name":"plugins"},{"hostPath":{"path":"/opt/neo4j/plugins","type":"Directory"},"name":"host-plugins"}]}},"volumeClaimTemplates":[{"metadata":{"name":"data"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"1536Gi"}},"storageClassName":"local-path-minisforum3"}},{"metadata":{"name":"logs"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"50Gi"}},"storageClassName":"local-path-minisforum3"}}]}}
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    generation: 4
+    name: neo4j
+    namespace: neo4j
+    resourceVersion: "6114686"
+    uid: d256a339-5d7e-4419-82a2-d2fda81c015e
+  spec:
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Retain
+      whenScaled: Retain
+    podManagementPolicy: OrderedReady
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: neo4j
+    serviceName: neo4j
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-07-06T18:41:37-04:00"
+        creationTimestamp: null
+        labels:
+          app: neo4j
+      spec:
+        containers:
+        - env:
+          - name: NEO4J_AUTH
+            value: neo4j/Next2020#
+          - name: NEO4J_EDITION
+            value: ENTERPRISE
+          - name: NEO4J_ACCEPT_LICENSE_AGREEMENT
+            value: "yes"
+          - name: NEO4J_server_memory_heap_initial__size
+            value: 24G
+          - name: NEO4J_server_memory_heap_max__size
+            value: 24G
+          - name: NEO4J_server_memory_pagecache_size
+            value: 56G
+          - name: NEO4J_db_memory_transaction_global__max
+            value: 8G
+          - name: NEO4J_db_memory_transaction_max
+            value: 4G
+          - name: NEO4J_db_tx__timeout
+            value: 30m
+          - name: NEO4J_server_jvm_additional
+            value: -XX:+UseG1GC -XX:MaxGCPauseMillis=200
+          - name: NEO4J_server_default__listen__address
+            value: 0.0.0.0
+          - name: NEO4J_server_config_strict__validation_enabled
+            value: "false"
+          - name: NEO4J_dbms_security_procedures_unrestricted
+            value: apoc.*,genai.*,gds.*
+          - name: NEO4J_dbms_security_procedures_allowlist
+            value: apoc.*,genai.*,gds.*
+          - name: NEO4J_apoc_trigger_enabled
+            value: "true"
+          - name: NEO4J_apoc_uuid_enabled
+            value: "true"
+          - name: NEO4J_apoc_import_file_enabled
+            value: "true"
+          - name: NEO4J_apoc_export_file_enabled
+            value: "true"
+          image: neo4j:5.26.4-enterprise
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 7474
+              scheme: HTTP
+            initialDelaySeconds: 300
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: neo4j
+          ports:
+          - containerPort: 7687
+            name: bolt
+            protocol: TCP
+          - containerPort: 7474
+            name: http
+            protocol: TCP
+          - containerPort: 7473
+            name: https
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 7474
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 3
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: "16"
+              memory: 90Gi
+            requests:
+              cpu: "8"
+              memory: 90Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: data
+          - mountPath: /logs
+            name: logs
+          - mountPath: /var/lib/neo4j/plugins
+            name: plugins
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            echo "Copying plugins from host..."
+            cp -v /host-plugins/* /plugins/
+            chmod 644 /plugins/*.jar
+            ls -la /plugins/
+            echo "Plugins copied successfully"
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: copy-plugins
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /plugins
+            name: plugins
+          - mountPath: /host-plugins
+            name: host-plugins
+            readOnly: true
+        nodeSelector:
+          kubernetes.io/hostname: minisforum3
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        tolerations:
+        - effect: NoSchedule
+          key: database
+          operator: Equal
+          value: neo4j
+        volumes:
+        - emptyDir: {}
+          name: plugins
+        - hostPath:
+            path: /opt/neo4j/plugins
+            type: Directory
+          name: host-plugins
+    updateStrategy:
+      rollingUpdate:
+        partition: 0
+      type: RollingUpdate
+    volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        creationTimestamp: null
+        name: data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1536Gi
+        storageClassName: local-path-minisforum3
+        volumeMode: Filesystem
+      status:
+        phase: Pending
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        creationTimestamp: null
+        name: logs
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
+        storageClassName: local-path-minisforum3
+        volumeMode: Filesystem
+      status:
+        phase: Pending
+  status:
+    availableReplicas: 1
+    collisionCount: 0
+    currentReplicas: 1
+    currentRevision: neo4j-6d568c585b
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+    updateRevision: neo4j-6d568c585b
+    updatedReplicas: 1
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIDBTCCAe2gAwIBAgIIaOY0eeh3THAwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
+      AxMKa3ViZXJuZXRlczAeFw0yNTA1MTUwOTA4MzZaFw0zNTA1MTMwOTEzMzZaMBUx
+      EzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+      AoIBAQD2nCL3wme9/hJqrteQ+SJoj1c0Qj6QiHf2WFmI2f2++/+YQauJ/Sq3o/wg
+      NOd7oVwAimcGXk6avwezvE8yrkMscJkL0YF0xr1P76iDwBcVZn4Qo4MPGGfZMqTi
+      6d4qKpgyzgJQ9RA90zQ20KYKCiqpsbo04giAzb7pardVBmESbq2OjEk4Or/wDohZ
+      3jUXPUE5BtrvsLL8f/v9OGfjUKWgbjBj/w0h70TR6Tj6exf63lHL3Y18tV8khL2j
+      c3OhF0T0/nbAOM0WSCkJ5xuByBxreuaoN6My+0L1qbFWnZVyJZnsVt2RP6KgvwBl
+      aauXeZQRi5z9ZPo8t1zlub226EHTAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP
+      BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQYwB3Ej5rUcdz48IMKyQZrLn+iezAV
+      BgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQClELZiPs/n
+      wiIPhfWoo5EaNSj5lR55LmuSj95LS/3cueEMzEsRNK0ATE/NrWvxkHeiBMtFFsa6
+      nRco4YfRCs5acjbHfkzQeqj0ZjUXIZzy+QJxfUzJkwEEO54SNAckADXsFPVfkuN6
+      9iznfFJLih/bwylJ5XVisdFxmcLFEs/fwqbjL2UoKI2nAglPTqzCDSJe7LwLvx9G
+      9xT6EAZVE/+KW8KaLqB3WbomVvuvFz6oUa7ryEotQGxXi197YK5O3MFmAgLcLbvs
+      quOC4Zos299t2C6OSas3Px39jQ2hcPFACrDBW7zTSS5x7dT7apIcCBqP8liXrKUx
+      ewHy+dCV4GTO
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    name: kube-root-ca.crt
+    namespace: neo4j
+    resourceVersion: "5647048"
+    uid: 05dc35c8-c79b-48d1-a726-3dc9c5ec37f9
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: neo4j
+    name: data-neo4j-0
+    namespace: neo4j
+    resourceVersion: "5647078"
+    uid: ad007956-8b64-4192-ab5a-5d4abda007ae
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1536Gi
+    storageClassName: local-path-minisforum3
+    volumeMode: Filesystem
+    volumeName: pvc-b72a2053-aca5-40f1-8afc-5c423116f619
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1536Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: neo4j
+    name: logs-neo4j-0
+    namespace: neo4j
+    resourceVersion: "5647073"
+    uid: b8fd9ba3-2222-4cd8-b99f-039db00b2591
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Gi
+    storageClassName: local-path-minisforum3
+    volumeMode: Filesystem
+    volumeName: pvc-51e8119a-bca0-4c7e-9c1d-8687264fe915
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 50Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum3
+      pv.kubernetes.io/bound-by-controller: "yes"
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-03T10:40:09Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-51e8119a-bca0-4c7e-9c1d-8687264fe915
+    resourceVersion: "5647067"
+    uid: 8bbddbe4-2131-4c8c-b6a6-764b278317a4
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 50Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: logs-neo4j-0
+      namespace: neo4j
+      resourceVersion: "5647055"
+      uid: b8fd9ba3-2222-4cd8-b99f-039db00b2591
+    hostPath:
+      path: /opt/local-path/pvc-51e8119a-bca0-4c7e-9c1d-8687264fe915_neo4j_logs-neo4j-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum3
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: local-path-minisforum3
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:36:10Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum2
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-06T05:36:47Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-51f73d5d-9be3-4e87-91fd-97c3da595674
+    resourceVersion: "5647588"
+    uid: 5ec67d20-f4bc-4e10-9bad-f8d878b8eb4b
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 100Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: prometheus-prometheus-kube-prometheus-prometheus-db-prometheus-prometheus-kube-prometheus-prometheus-0
+      namespace: monitoring
+      resourceVersion: "5647438"
+      uid: 51f73d5d-9be3-4e87-91fd-97c3da595674
+    hostPath:
+      path: /opt/local-path-provisioner/pvc-51f73d5d-9be3-4e87-91fd-97c3da595674_monitoring_prometheus-prometheus-kube-prometheus-prometheus-db-prometheus-prometheus-kube-prometheus-prometheus-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum2
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:36:47Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-06T05:37:09Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-804a1738-9246-42da-81f5-fe2f5124d49f
+    resourceVersion: "5647782"
+    uid: d161b405-95c4-4051-8922-37739665a99c
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 50Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: storage-loki-0
+      namespace: monitoring
+      resourceVersion: "5647755"
+      uid: 804a1738-9246-42da-81f5-fe2f5124d49f
+    hostPath:
+      path: /opt/local-path-provisioner/pvc-804a1738-9246-42da-81f5-fe2f5124d49f_monitoring_storage-loki-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:37:09Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum3
+      pv.kubernetes.io/bound-by-controller: "yes"
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-03T10:40:09Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-b72a2053-aca5-40f1-8afc-5c423116f619
+    resourceVersion: "5647074"
+    uid: 37f6c6bf-9420-4685-9485-5f6376ffc90b
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1536Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: data-neo4j-0
+      namespace: neo4j
+      resourceVersion: "5647052"
+      uid: ad007956-8b64-4192-ab5a-5d4abda007ae
+    hostPath:
+      path: /opt/local-path/pvc-b72a2053-aca5-40f1-8afc-5c423116f619_neo4j_data-neo4j-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum3
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: local-path-minisforum3
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:36:10Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum2
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-06T06:06:05Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-d8ba547a-4892-4d75-aa5a-f5b5b3483187
+    resourceVersion: "5652571"
+    uid: a9822cea-4d7e-4228-b39d-398746988e28
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 40Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: redis-pvc
+      namespace: infrastructure
+      resourceVersion: "5652547"
+      uid: d8ba547a-4892-4d75-aa5a-f5b5b3483187
+    hostPath:
+      path: /opt/local-path-provisioner/pvc-d8ba547a-4892-4d75-aa5a-f5b5b3483187_infrastructure_redis-pvc
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum2
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T06:06:05Z"
+    phase: Bound
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    name: default
+    namespace: neo4j
+    resourceVersion: "5647047"
+    uid: 75ba2cc0-cbd3-4567-aac0-6892a2cd8042
+kind: List
+metadata:
+  resourceVersion: ""

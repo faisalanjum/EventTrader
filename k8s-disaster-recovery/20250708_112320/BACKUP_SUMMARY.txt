@@ -1,0 +1,20 @@
+=== EventMarketDB Backup Summary ===
+Created: Tue Jul  8 11:44:17 AM EDT 2025
+
+Namespaces backed up:
+  - infrastructure
+  - keda
+  - mcp-services
+  - monitoring
+  - neo4j
+  - processing
+
+Resource counts:
+  - Deployments: 15
+  - StatefulSets: 5
+  - Services: 22
+  - ConfigMaps: 43
+  - Secrets: 22
+  - PVCs: 5
+
+Total backup size: 9.1M

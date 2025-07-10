@@ -1,0 +1,36 @@
+NAMESPACE            NAME                                                     READY   STATUS        RESTARTS        AGE     IP              NODE          NOMINATED NODE   READINESS GATES
+infrastructure       nats-0                                                   2/2     Running       0               20h     10.244.1.219    minisforum2   <none>           <none>
+infrastructure       nats-box-bfc4fd79f-zfbwr                                 1/1     Running       0               22h     10.244.1.217    minisforum2   <none>           <none>
+infrastructure       redis-c689467c5-7vg7w                                    1/1     Running       2 (35h ago)     2d9h    10.244.1.51     minisforum2   <none>           <none>
+keda                 keda-admission-webhooks-67747f694c-7nrh9                 1/1     Running       3 (35h ago)     3d15h   10.244.0.249    minisforum    <none>           <none>
+keda                 keda-operator-646c97b599-mhfqs                           1/1     Running       7 (17h ago)     3d15h   10.244.0.248    minisforum    <none>           <none>
+keda                 keda-operator-metrics-apiserver-668d6787f9-pncph         1/1     Running       3 (35h ago)     3d15h   10.244.0.250    minisforum    <none>           <none>
+kube-flannel         kube-flannel-ds-nz6bs                                    1/1     Running       4 (35h ago)     4d19h   192.168.40.73   minisforum    <none>           <none>
+kube-flannel         kube-flannel-ds-t82lm                                    1/1     Running       5 (35h ago)     4d19h   192.168.40.72   minisforum2   <none>           <none>
+kube-flannel         kube-flannel-ds-wr8pm                                    1/1     Running       5 (20h ago)     4d19h   192.168.40.74   minisforum3   <none>           <none>
+kube-system          coredns-597d87c776-7chg7                                 1/1     Running       3 (35h ago)     4d19h   10.244.1.65     minisforum2   <none>           <none>
+kube-system          coredns-597d87c776-zcpgh                                 1/1     Running       3 (35h ago)     4d19h   10.244.1.50     minisforum2   <none>           <none>
+kube-system          etcd-minisforum                                          1/1     Running       145 (35h ago)   3d15h   192.168.40.73   minisforum    <none>           <none>
+kube-system          kube-apiserver-minisforum                                1/1     Running       152 (17h ago)   3d15h   192.168.40.73   minisforum    <none>           <none>
+kube-system          kube-controller-manager-minisforum                       1/1     Running       572 (17h ago)   3d15h   192.168.40.73   minisforum    <none>           <none>
+kube-system          kube-proxy-bkpcv                                         1/1     Running       5 (20h ago)     5d18h   192.168.40.74   minisforum3   <none>           <none>
+kube-system          kube-proxy-kqj68                                         1/1     Running       8 (35h ago)     16d     192.168.40.73   minisforum    <none>           <none>
+kube-system          kube-proxy-pmfjh                                         1/1     Running       8 (35h ago)     16d     192.168.40.72   minisforum2   <none>           <none>
+kube-system          kube-scheduler-minisforum                                1/1     Running       489 (17h ago)   3d15h   192.168.40.73   minisforum    <none>           <none>
+kube-system          metrics-server-68f6b588bb-ptsl7                          1/1     Running       3 (35h ago)     4d19h   10.244.1.55     minisforum2   <none>           <none>
+local-path-storage   local-path-provisioner-m1-5cdbf8f9cf-clppf               1/1     Running       3 (35h ago)     3d15h   10.244.0.252    minisforum    <none>           <none>
+mcp-services         mcp-neo4j-cypher-79fc6cf54b-xprqc                        1/1     Running       1 (35h ago)     35h     10.244.0.253    minisforum    <none>           <none>
+mcp-services         mcp-neo4j-memory-7f8c5d7459-jws2q                        1/1     Running       1 (35h ago)     35h     10.244.0.251    minisforum    <none>           <none>
+monitoring           alertmanager-prometheus-kube-prometheus-alertmanager-0   2/2     Running       4 (35h ago)     2d9h    10.244.1.53     minisforum2   <none>           <none>
+monitoring           loki-0                                                   1/1     Running       2 (35h ago)     2d9h    10.244.0.247    minisforum    <none>           <none>
+monitoring           loki-promtail-cng4z                                      1/1     Running       2 (35h ago)     2d9h    10.244.1.63     minisforum2   <none>           <none>
+monitoring           prometheus-grafana-866d595b5d-cdbg4                      3/3     Running       3 (35h ago)     37h     10.244.1.60     minisforum2   <none>           <none>
+monitoring           prometheus-kube-prometheus-operator-b56d86ccc-zwrl6      1/1     Running       2 (35h ago)     2d9h    10.244.1.64     minisforum2   <none>           <none>
+monitoring           prometheus-kube-state-metrics-7778b5bff5-r8f9k           1/1     Running       6 (17h ago)     2d9h    10.244.1.66     minisforum2   <none>           <none>
+monitoring           prometheus-prometheus-kube-prometheus-prometheus-0       2/2     Running       4 (35h ago)     2d9h    10.244.1.52     minisforum2   <none>           <none>
+monitoring           prometheus-prometheus-node-exporter-9hx5b                1/1     Running       4 (17h ago)     2d9h    192.168.40.74   minisforum3   <none>           <none>
+monitoring           prometheus-prometheus-node-exporter-bfqc4                1/1     Running       5 (17h ago)     2d9h    192.168.40.73   minisforum    <none>           <none>
+monitoring           prometheus-prometheus-node-exporter-qcxnt                1/1     Running       5 (17h ago)     2d9h    192.168.40.72   minisforum2   <none>           <none>
+neo4j                neo4j-0                                                  1/1     Running       0               65m     10.244.2.168    minisforum3   <none>           <none>
+processing           event-trader-574fbc9fb9-srvdh                            1/1     Terminating   0               42s     10.244.1.17     minisforum2   <none>           <none>
+processing           event-trader-85d4677d4c-6wqpl                            1/1     Running       0               42s     10.244.1.18     minisforum2   <none>           <none>

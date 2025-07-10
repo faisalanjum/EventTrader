@@ -1,0 +1,79 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: report-enricher-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: report-enricher          # Target deployment
+  minReplicaCount: 1              # Always keep 1 pod running for instant processing
+  maxReplicaCount: 5              # Maximum pods
+  cooldownPeriod: 60              # Wait 60s before scaling down
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379   # Redis service
+      listName: reports:queues:enrich      # Queue to monitor
+      listLength: "5"                      # Target 5 items per pod
+                                           # This means: 1 pod for 1-5 items, 2 pods for 6-10 items, etc.
+      activationListLength: "1"            # Wake from 0 when queue has items
+      databaseIndex: "0"                   # Redis database index---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: xbrl-worker-heavy-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: xbrl-worker-heavy
+  minReplicaCount: 1              # Always keep 1 pod running for instant processing
+  maxReplicaCount: 2              # Max 2 heavy workers (reduced for 7-pod limit)
+  cooldownPeriod: 300             # 5 min cooldown for heavy tasks
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: reports:queues:xbrl:heavy
+      listLength: "2"             # 1 pod per 2 heavy reports (they take long)
+      activationListLength: "1"   # Wake from 0 when queue has items
+      databaseIndex: "0"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: xbrl-worker-medium-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: xbrl-worker-medium
+  minReplicaCount: 1              # Always keep 1 pod running for instant processing
+  maxReplicaCount: 4              # Max 4 medium workers (updated for optimization)
+  cooldownPeriod: 180             # 3 min cooldown
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: reports:queues:xbrl:medium
+      listLength: "5"             # 1 pod per 5 medium reports
+      activationListLength: "1"
+      databaseIndex: "0"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: xbrl-worker-light-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: xbrl-worker-light
+  minReplicaCount: 1              # Always keep 1 pod running for instant processing
+  maxReplicaCount: 7              # Max 7 light workers (updated for optimization)
+  cooldownPeriod: 120             # 2 min cooldown for quick tasks
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: reports:queues:xbrl:light
+      listLength: "20"            # 1 pod per 20 light reports (they're fast)
+      activationListLength: "1"
+      databaseIndex: "0"

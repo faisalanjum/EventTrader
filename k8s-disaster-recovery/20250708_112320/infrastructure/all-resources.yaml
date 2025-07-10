@@ -1,0 +1,1459 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      checksum/config: f6e212c5ccca6e047b4546e39d56c7336a003fca6936808f64fb2bcb0a1b175b
+    creationTimestamp: "2025-07-07T18:58:44Z"
+    generateName: nats-
+    labels:
+      app.kubernetes.io/component: nats
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: nats
+      app.kubernetes.io/version: 2.11.6
+      apps.kubernetes.io/pod-index: "0"
+      controller-revision-hash: nats-589bf699
+      helm.sh/chart: nats-1.3.9
+      statefulset.kubernetes.io/pod-name: nats-0
+    name: nats-0
+    namespace: infrastructure
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: StatefulSet
+      name: nats
+      uid: 32f23ba9-408b-4c5b-99b0-8af3ea18e185
+    resourceVersion: "5959759"
+    uid: 812d9ada-7503-492c-8f5c-f00a147a9e65
+  spec:
+    containers:
+    - args:
+      - --config
+      - /etc/nats-config/nats.conf
+      env:
+      - name: POD_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.name
+      - name: SERVER_NAME
+        value: $(POD_NAME)
+      image: nats:2.11.6-alpine
+      imagePullPolicy: IfNotPresent
+      lifecycle:
+        preStop:
+          exec:
+            command:
+            - nats-server
+            - -sl=ldm=/var/run/nats/nats.pid
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /healthz?js-enabled-only=true
+          port: monitor
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 30
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: nats
+      ports:
+      - containerPort: 4222
+        name: nats
+        protocol: TCP
+      - containerPort: 8222
+        name: monitor
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /healthz?js-server-only=true
+          port: monitor
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      resources: {}
+      startupProbe:
+        failureThreshold: 90
+        httpGet:
+          path: /healthz
+          port: monitor
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/nats-config
+        name: config
+      - mountPath: /var/run/nats
+        name: pid
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-dp4dc
+        readOnly: true
+    - args:
+      - -pid
+      - /var/run/nats/nats.pid
+      - -config
+      - /etc/nats-config/nats.conf
+      image: natsio/nats-server-config-reloader:0.18.2
+      imagePullPolicy: IfNotPresent
+      name: reloader
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/nats
+        name: pid
+      - mountPath: /etc/nats-config
+        name: config
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-dp4dc
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: false
+    hostname: nats-0
+    nodeName: minisforum2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    shareProcessNamespace: true
+    subdomain: nats-headless
+    terminationGracePeriodSeconds: 60
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - configMap:
+        defaultMode: 420
+        name: nats-config
+      name: config
+    - emptyDir: {}
+      name: pid
+    - name: kube-api-access-dp4dc
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T18:58:45Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T18:58:44Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T18:58:55Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T18:58:55Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T18:58:44Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://9ba61c9580b9e9edebbb4e8fe508f098ab180d1cd551f8d8fe85f0719f7b907b
+      image: docker.io/library/nats:2.11.6-alpine
+      imageID: docker.io/library/nats@sha256:c6beb2ccb1910ecaead46588e2f37422c2e3922c7a0cb1930234429579c8443e
+      lastState: {}
+      name: nats
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-07T18:58:45Z"
+    - containerID: containerd://9cb799821f1f151080b935c6d78b30b4a0dee53a3336371dd778996a86ea2375
+      image: docker.io/natsio/nats-server-config-reloader:0.18.2
+      imageID: docker.io/natsio/nats-server-config-reloader@sha256:bca7e221ec6f1221ecd74e2c13b075c913a5bcd998e87a4da4d747033440ee93
+      lastState: {}
+      name: reloader
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-07T18:58:45Z"
+    hostIP: 192.168.40.72
+    hostIPs:
+    - ip: 192.168.40.72
+    phase: Running
+    podIP: 10.244.1.219
+    podIPs:
+    - ip: 10.244.1.219
+    qosClass: BestEffort
+    startTime: "2025-07-07T18:58:44Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-07-07T16:46:39Z"
+    generateName: nats-box-bfc4fd79f-
+    labels:
+      app.kubernetes.io/component: nats-box
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: nats
+      app.kubernetes.io/version: 2.11.6
+      helm.sh/chart: nats-1.3.9
+      pod-template-hash: bfc4fd79f
+    name: nats-box-bfc4fd79f-zfbwr
+    namespace: infrastructure
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: nats-box-bfc4fd79f
+      uid: 35d84803-ec12-449c-af8d-e661fa5c35b9
+    resourceVersion: "5943203"
+    uid: 3633b52e-301f-438c-a044-cebcb495205f
+  spec:
+    containers:
+    - args:
+      - sh
+      - -ec
+      - trap true INT TERM; sleep infinity & wait
+      command:
+      - sh
+      - -ec
+      - |
+        work_dir="$(pwd)"
+        mkdir -p "$XDG_CONFIG_HOME/nats"
+        cd "$XDG_CONFIG_HOME/nats"
+        if ! [ -s context ]; then
+          ln -s /etc/nats-contexts context
+        fi
+        if ! [ -f context.txt ]; then
+          echo -n "default" > context.txt
+        fi
+        cd "$work_dir"
+        exec /entrypoint.sh "$@"
+      - --
+      image: natsio/nats-box:0.18.0
+      imagePullPolicy: IfNotPresent
+      name: nats-box
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/nats-contexts
+        name: contexts
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-ksfz6
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: false
+    nodeName: minisforum2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: contexts
+      secret:
+        defaultMode: 420
+        secretName: nats-box-contexts
+    - name: kube-api-access-ksfz6
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T16:46:40Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T16:46:39Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T16:46:40Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T16:46:40Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T16:46:39Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://ca7fb1da074e07727a9cea5f7f1635aa4074b24a6092f557a456ffc19e41cc7c
+      image: docker.io/natsio/nats-box:0.18.0
+      imageID: docker.io/natsio/nats-box@sha256:abdc9f9f0120bb8adfbf674eb037d1551db55356eb198b7bd4ffed377f6950a6
+      lastState: {}
+      name: nats-box
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-07T16:46:39Z"
+    hostIP: 192.168.40.72
+    hostIPs:
+    - ip: 192.168.40.72
+    phase: Running
+    podIP: 10.244.1.217
+    podIPs:
+    - ip: 10.244.1.217
+    qosClass: BestEffort
+    startTime: "2025-07-07T16:46:39Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-07-06T06:06:02Z"
+    generateName: redis-c689467c5-
+    labels:
+      app: redis
+      pod-template-hash: c689467c5
+    name: redis-c689467c5-7vg7w
+    namespace: infrastructure
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: redis-c689467c5
+      uid: bc30c48a-b121-45b5-af7f-d9b07d094e42
+    resourceVersion: "5829307"
+    uid: 38804fd0-4207-47f5-8c01-83d54ce6ce45
+  spec:
+    containers:
+    - image: redis:7
+      imagePullPolicy: IfNotPresent
+      name: redis
+      ports:
+      - containerPort: 6379
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /data
+        name: redis-data
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-whgqv
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: minisforum2
+    nodeSelector:
+      kubernetes.io/hostname: minisforum2
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: redis-data
+      persistentVolumeClaim:
+        claimName: redis-pvc
+    - name: kube-api-access-whgqv
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T04:16:43Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-06T06:06:06Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T04:16:43Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-07T04:16:43Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-06T06:06:06Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://07ca4236e9eff767e46d9c0525f491dd6c1b35df0ff31fe02bcb4c4ee64fb54c
+      image: docker.io/library/redis:7
+      imageID: docker.io/library/redis@sha256:7b5ee51c14cf5febd4adde3a4b6cced72efdf154df7e9a0383163b13e16e9091
+      lastState:
+        terminated:
+          containerID: containerd://f7065215e79e35e1c799b5c00cf402a2f10ac4b26031ebf6bcf192b052d14731
+          exitCode: 255
+          finishedAt: "2025-07-07T04:14:11Z"
+          reason: Unknown
+          startedAt: "2025-07-06T23:09:02Z"
+      name: redis
+      ready: true
+      restartCount: 2
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-07T04:16:43Z"
+    hostIP: 192.168.40.72
+    hostIPs:
+    - ip: 192.168.40.72
+    phase: Running
+    podIP: 10.244.1.51
+    podIPs:
+    - ip: 10.244.1.51
+    qosClass: BestEffort
+    startTime: "2025-07-06T06:06:06Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: nats
+      meta.helm.sh/release-namespace: infrastructure
+    creationTimestamp: "2025-07-06T05:35:38Z"
+    labels:
+      app.kubernetes.io/component: nats
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: nats
+      app.kubernetes.io/version: 2.11.6
+      helm.sh/chart: nats-1.3.9
+    name: nats
+    namespace: infrastructure
+    resourceVersion: "5646924"
+    uid: 820bb37f-859b-45f6-b993-6effbafcb35a
+  spec:
+    clusterIP: 10.107.38.43
+    clusterIPs:
+    - 10.107.38.43
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - appProtocol: tcp
+      name: nats
+      port: 4222
+      protocol: TCP
+      targetPort: nats
+    selector:
+      app.kubernetes.io/component: nats
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/name: nats
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: nats
+      meta.helm.sh/release-namespace: infrastructure
+    creationTimestamp: "2025-07-06T05:35:38Z"
+    labels:
+      app.kubernetes.io/component: nats
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: nats
+      app.kubernetes.io/version: 2.11.6
+      helm.sh/chart: nats-1.3.9
+    name: nats-headless
+    namespace: infrastructure
+    resourceVersion: "5646920"
+    uid: 0fc50f18-7916-4c2e-95ec-dfaf4cd12f47
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - appProtocol: tcp
+      name: nats
+      port: 4222
+      protocol: TCP
+      targetPort: nats
+    - appProtocol: http
+      name: monitor
+      port: 8222
+      protocol: TCP
+      targetPort: monitor
+    publishNotReadyAddresses: true
+    selector:
+      app.kubernetes.io/component: nats
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/name: nats
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"redis","namespace":"infrastructure"},"spec":{"ports":[{"nodePort":31379,"port":6379,"targetPort":6379}],"selector":{"app":"redis"},"type":"NodePort"}}
+    creationTimestamp: "2025-07-06T06:04:59Z"
+    name: redis
+    namespace: infrastructure
+    resourceVersion: "5652383"
+    uid: 1fdce587-74a4-46fd-b9e0-08c46ece18cd
+  spec:
+    clusterIP: 10.105.197.130
+    clusterIPs:
+    - 10.105.197.130
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - nodePort: 31379
+      port: 6379
+      protocol: TCP
+      targetPort: 6379
+    selector:
+      app: redis
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: nats
+      meta.helm.sh/release-namespace: infrastructure
+    creationTimestamp: "2025-07-06T05:35:38Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: nats-box
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: nats
+      app.kubernetes.io/version: 2.11.6
+      helm.sh/chart: nats-1.3.9
+    name: nats-box
+    namespace: infrastructure
+    resourceVersion: "5943205"
+    uid: 80f259d2-914b-411d-8d84-2b0b46b71c6a
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: nats-box
+        app.kubernetes.io/instance: nats
+        app.kubernetes.io/name: nats
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: nats-box
+          app.kubernetes.io/instance: nats
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: nats
+          app.kubernetes.io/version: 2.11.6
+          helm.sh/chart: nats-1.3.9
+      spec:
+        containers:
+        - args:
+          - sh
+          - -ec
+          - trap true INT TERM; sleep infinity & wait
+          command:
+          - sh
+          - -ec
+          - |
+            work_dir="$(pwd)"
+            mkdir -p "$XDG_CONFIG_HOME/nats"
+            cd "$XDG_CONFIG_HOME/nats"
+            if ! [ -s context ]; then
+              ln -s /etc/nats-contexts context
+            fi
+            if ! [ -f context.txt ]; then
+              echo -n "default" > context.txt
+            fi
+            cd "$work_dir"
+            exec /entrypoint.sh "$@"
+          - --
+          image: natsio/nats-box:0.18.0
+          imagePullPolicy: IfNotPresent
+          name: nats-box
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/nats-contexts
+            name: contexts
+        dnsPolicy: ClusterFirst
+        enableServiceLinks: false
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: contexts
+          secret:
+            defaultMode: 420
+            secretName: nats-box-contexts
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-07-06T05:35:38Z"
+      lastUpdateTime: "2025-07-06T05:35:47Z"
+      message: ReplicaSet "nats-box-bfc4fd79f" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2025-07-07T16:46:40Z"
+      lastUpdateTime: "2025-07-07T16:46:40Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"redis","namespace":"infrastructure"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"redis"}},"template":{"metadata":{"labels":{"app":"redis"}},"spec":{"containers":[{"image":"redis:7","name":"redis","ports":[{"containerPort":6379}],"volumeMounts":[{"mountPath":"/data","name":"redis-data"}]}],"nodeSelector":{"kubernetes.io/hostname":"minisforum2"},"volumes":[{"name":"redis-data","persistentVolumeClaim":{"claimName":"redis-pvc"}}]}}}}
+    creationTimestamp: "2025-07-06T06:06:02Z"
+    generation: 1
+    name: redis
+    namespace: infrastructure
+    resourceVersion: "5829313"
+    uid: 4d03d887-d728-4847-8443-fe8406f6bee7
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: redis
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: redis
+      spec:
+        containers:
+        - image: redis:7
+          imagePullPolicy: IfNotPresent
+          name: redis
+          ports:
+          - containerPort: 6379
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: redis-data
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          kubernetes.io/hostname: minisforum2
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis-pvc
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-07-06T06:06:02Z"
+      lastUpdateTime: "2025-07-06T06:06:08Z"
+      message: ReplicaSet "redis-c689467c5" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2025-07-07T04:16:43Z"
+      lastUpdateTime: "2025-07-07T04:16:43Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: nats
+      meta.helm.sh/release-namespace: infrastructure
+    creationTimestamp: "2025-07-06T05:35:38Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: nats-box
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: nats
+      app.kubernetes.io/version: 2.11.6
+      helm.sh/chart: nats-1.3.9
+      pod-template-hash: bfc4fd79f
+    name: nats-box-bfc4fd79f
+    namespace: infrastructure
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: nats-box
+      uid: 80f259d2-914b-411d-8d84-2b0b46b71c6a
+    resourceVersion: "5943204"
+    uid: 35d84803-ec12-449c-af8d-e661fa5c35b9
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: nats-box
+        app.kubernetes.io/instance: nats
+        app.kubernetes.io/name: nats
+        pod-template-hash: bfc4fd79f
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: nats-box
+          app.kubernetes.io/instance: nats
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: nats
+          app.kubernetes.io/version: 2.11.6
+          helm.sh/chart: nats-1.3.9
+          pod-template-hash: bfc4fd79f
+      spec:
+        containers:
+        - args:
+          - sh
+          - -ec
+          - trap true INT TERM; sleep infinity & wait
+          command:
+          - sh
+          - -ec
+          - |
+            work_dir="$(pwd)"
+            mkdir -p "$XDG_CONFIG_HOME/nats"
+            cd "$XDG_CONFIG_HOME/nats"
+            if ! [ -s context ]; then
+              ln -s /etc/nats-contexts context
+            fi
+            if ! [ -f context.txt ]; then
+              echo -n "default" > context.txt
+            fi
+            cd "$work_dir"
+            exec /entrypoint.sh "$@"
+          - --
+          image: natsio/nats-box:0.18.0
+          imagePullPolicy: IfNotPresent
+          name: nats-box
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/nats-contexts
+            name: contexts
+        dnsPolicy: ClusterFirst
+        enableServiceLinks: false
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: contexts
+          secret:
+            defaultMode: 420
+            secretName: nats-box-contexts
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2025-07-06T06:06:02Z"
+    generation: 1
+    labels:
+      app: redis
+      pod-template-hash: c689467c5
+    name: redis-c689467c5
+    namespace: infrastructure
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: redis
+      uid: 4d03d887-d728-4847-8443-fe8406f6bee7
+    resourceVersion: "5829311"
+    uid: bc30c48a-b121-45b5-af7f-d9b07d094e42
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: redis
+        pod-template-hash: c689467c5
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: redis
+          pod-template-hash: c689467c5
+      spec:
+        containers:
+        - image: redis:7
+          imagePullPolicy: IfNotPresent
+          name: redis
+          ports:
+          - containerPort: 6379
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: redis-data
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          kubernetes.io/hostname: minisforum2
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis-pvc
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: nats
+      meta.helm.sh/release-namespace: infrastructure
+    creationTimestamp: "2025-07-06T05:35:38Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: nats
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: nats
+      app.kubernetes.io/version: 2.11.6
+      helm.sh/chart: nats-1.3.9
+    name: nats
+    namespace: infrastructure
+    resourceVersion: "5959764"
+    uid: 32f23ba9-408b-4c5b-99b0-8af3ea18e185
+  spec:
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Retain
+      whenScaled: Retain
+    podManagementPolicy: Parallel
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: nats
+        app.kubernetes.io/instance: nats
+        app.kubernetes.io/name: nats
+    serviceName: nats-headless
+    template:
+      metadata:
+        annotations:
+          checksum/config: f6e212c5ccca6e047b4546e39d56c7336a003fca6936808f64fb2bcb0a1b175b
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: nats
+          app.kubernetes.io/instance: nats
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: nats
+          app.kubernetes.io/version: 2.11.6
+          helm.sh/chart: nats-1.3.9
+      spec:
+        containers:
+        - args:
+          - --config
+          - /etc/nats-config/nats.conf
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: SERVER_NAME
+            value: $(POD_NAME)
+          image: nats:2.11.6-alpine
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - nats-server
+                - -sl=ldm=/var/run/nats/nats.pid
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz?js-enabled-only=true
+              port: monitor
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: nats
+          ports:
+          - containerPort: 4222
+            name: nats
+            protocol: TCP
+          - containerPort: 8222
+            name: monitor
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz?js-server-only=true
+              port: monitor
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources: {}
+          startupProbe:
+            failureThreshold: 90
+            httpGet:
+              path: /healthz
+              port: monitor
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/nats-config
+            name: config
+          - mountPath: /var/run/nats
+            name: pid
+        - args:
+          - -pid
+          - /var/run/nats/nats.pid
+          - -config
+          - /etc/nats-config/nats.conf
+          image: natsio/nats-server-config-reloader:0.18.2
+          imagePullPolicy: IfNotPresent
+          name: reloader
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/run/nats
+            name: pid
+          - mountPath: /etc/nats-config
+            name: config
+        dnsPolicy: ClusterFirst
+        enableServiceLinks: false
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        shareProcessNamespace: true
+        terminationGracePeriodSeconds: 60
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: nats-config
+          name: config
+        - emptyDir: {}
+          name: pid
+    updateStrategy:
+      rollingUpdate:
+        partition: 0
+      type: RollingUpdate
+  status:
+    availableReplicas: 1
+    collisionCount: 0
+    currentReplicas: 1
+    currentRevision: nats-589bf699
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updateRevision: nats-589bf699
+    updatedReplicas: 1
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIDBTCCAe2gAwIBAgIIaOY0eeh3THAwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
+      AxMKa3ViZXJuZXRlczAeFw0yNTA1MTUwOTA4MzZaFw0zNTA1MTMwOTEzMzZaMBUx
+      EzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+      AoIBAQD2nCL3wme9/hJqrteQ+SJoj1c0Qj6QiHf2WFmI2f2++/+YQauJ/Sq3o/wg
+      NOd7oVwAimcGXk6avwezvE8yrkMscJkL0YF0xr1P76iDwBcVZn4Qo4MPGGfZMqTi
+      6d4qKpgyzgJQ9RA90zQ20KYKCiqpsbo04giAzb7pardVBmESbq2OjEk4Or/wDohZ
+      3jUXPUE5BtrvsLL8f/v9OGfjUKWgbjBj/w0h70TR6Tj6exf63lHL3Y18tV8khL2j
+      c3OhF0T0/nbAOM0WSCkJ5xuByBxreuaoN6My+0L1qbFWnZVyJZnsVt2RP6KgvwBl
+      aauXeZQRi5z9ZPo8t1zlub226EHTAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP
+      BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQYwB3Ej5rUcdz48IMKyQZrLn+iezAV
+      BgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQClELZiPs/n
+      wiIPhfWoo5EaNSj5lR55LmuSj95LS/3cueEMzEsRNK0ATE/NrWvxkHeiBMtFFsa6
+      nRco4YfRCs5acjbHfkzQeqj0ZjUXIZzy+QJxfUzJkwEEO54SNAckADXsFPVfkuN6
+      9iznfFJLih/bwylJ5XVisdFxmcLFEs/fwqbjL2UoKI2nAglPTqzCDSJe7LwLvx9G
+      9xT6EAZVE/+KW8KaLqB3WbomVvuvFz6oUa7ryEotQGxXi197YK5O3MFmAgLcLbvs
+      quOC4Zos299t2C6OSas3Px39jQ2hcPFACrDBW7zTSS5x7dT7apIcCBqP8liXrKUx
+      ewHy+dCV4GTO
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-07-06T05:35:04Z"
+    name: kube-root-ca.crt
+    namespace: infrastructure
+    resourceVersion: "5646794"
+    uid: 69d9ce65-16ee-4ae3-8b91-dd658f0fb733
+- apiVersion: v1
+  data:
+    nats.conf: |
+      {
+        "http_port": 8222,
+        "lame_duck_duration": "30s",
+        "lame_duck_grace_period": "10s",
+        "pid_file": "/var/run/nats/nats.pid",
+        "port": 4222,
+        "server_name": $SERVER_NAME
+      }
+  kind: ConfigMap
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: nats
+      meta.helm.sh/release-namespace: infrastructure
+    creationTimestamp: "2025-07-06T05:35:38Z"
+    labels:
+      app.kubernetes.io/component: nats
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: nats
+      app.kubernetes.io/version: 2.11.6
+      helm.sh/chart: nats-1.3.9
+    name: nats-config
+    namespace: infrastructure
+    resourceVersion: "5646918"
+    uid: c4ba2118-4d52-48ca-9dad-c7c6460f6863
+- apiVersion: v1
+  data:
+    default.json: ewogICJ1cmwiOiAibmF0czovL25hdHMiCn0K
+  kind: Secret
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: nats
+      meta.helm.sh/release-namespace: infrastructure
+    creationTimestamp: "2025-07-06T05:35:38Z"
+    labels:
+      app.kubernetes.io/component: nats-box
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: nats
+      app.kubernetes.io/version: 2.11.6
+      helm.sh/chart: nats-1.3.9
+    name: nats-box-contexts
+    namespace: infrastructure
+    resourceVersion: "5646915"
+    uid: 1b61ddd7-15f9-4f6c-992e-4d8bf15b17d9
+  type: Opaque
+- apiVersion: v1
+  data:
+    release: SDRzSUFBQUFBQUFDLyt6OWFYT2p5TFlvZ1A2VkRuL2QxZDJBckdxckkyN0VFOWdnTkxtRUpLWWJKMjR3eUlCSUJHMmhBWjNvLy80aVZ5YVFTRWkycTF5Nzkzdm5mS2dvUzRJY1ZxNTV5disrMnpqSjZ1N1B1NDJUYisrKzNFV2JsL1R1ei8rK2U0bGV0L24vODFjWlNvdVZmL2ZubmNBSjNWKzVQMzdsdmk0NC9zOU85OC9PdzIvM1BlNlBYdmVoeS8vSzNmL0pjWGRmN3BEelBXLzVLN1RLNFhuNHNQVmVveXlQMHMzZG4zZnFacHM3Q1AzaXBVbUdIN3I3Y3JmTm5YeTN2ZnZ6cnBybjd5OTNYdWk4NW5qaHlTcDNmQ2QzOE4vTnJZVXBmQXJ6UFB2ejk5K0RLQTkzN205ZW12eU9mLzgxU24rUEgvQmorOVhybHN6Ti85YjVyWGV4b3Y0dmd4Vktmb0VKZjNsSlgzL0p3OVV2MC81aS9sdVUvaktJZ3ZDWGViWmErYjlJS04zNXYweWRQTnF2Zm5tTXR2bHI1TzV5L0VPYUpMdE41RGw0d08wdmk1VVhibEtVQnNWdmQxL3U0bFZ4U0YvOTdkMmYvN2RjZDdMYWJwMGcyZ1IzWCs2OGpmZHk5MTlmN2hJbjJ1Uk90Rm05NGllcm5TN29VbjdwNy9Jd2ZjVnZyeEluUW5kL3dzSCtmL0NJdjBYcDNaZTczU3Vpc05pMkF1UHU3Ly82Y2hkNXNPUHlLZnIyNzFFUzBNZThkUE9ybDZMMDliY01sdWRra1Y2QmJ5L0FOMW45amZBYnovLzJGUjhYU3IzNDdzL05EcUV2ZC9rcXlaQ1RyeG83cWI3OC9mK0ZLNVN0WHJlLzVSbkNod0ZuZTdmcWJQZWpJSk5YQXpGMGsxbmdLeUZTbFc3b0dzdkFGU3o2ZVpwYTVwQWJCK2xmNHc3Zmt6YjVIK081R051R25ibkpNbENUYnVnUEpqczNrWE43cmdaanMvRk02QnRIVHBXNmo0NGlGNzdVZmJZTUhxbFMxN0NNSTIrYjlMMWxUN0ROWWVFWUdsSUhoOEFmREhrM21RVFQ5U1I0a1VUT1MxQys3T2lKbmFCN1ZWSnpOUko3TDdQc2oxWEJCYmJSamRVQjM1TUMvUG5oTHltZUZyWWhjL1pjREZWRlEzWWk4KzVnRnRnYmZlc080c0F6OWRCVlVPSVllcXdxOHNHVHhCMWUwempJVEhzdWN0NUczMWtDZWQrWCtzS2tFTmQ0N1Y0aFJyWXhEWDF6aXRUQmRJOWhOTy9va1cwT2Q3YXBJYThnNDZpS25kbkdNZllLTWZTU1plQXFLSGRNRGRtU3lMbUZ5RGtLT3FsU0dLM20rTzlsb0QxMUZ3VG1hR2NYNHNsVDlQVm9maithRzFiZ0pmcldOdVNUUFMvSG51N2RqUlk2UnZkVW5rdDVYbzQ1QzN3QmJWMUpqT3k1eUhzQzdPK2tLazlrNzlVK2I1OGpQRXZHakZTSnIrRHNHRll3Um5ib0RuVGtGZDNFTjQ3Ynk3TXJ4KzN2OUVUZStvWitHaWMyN3lwSG1IdlJzWkczR1dhMnNpVG5pbUZkQUl3ZjFJRldPQWEvOEEwN2Njd2dVQ011cXNjVGtUdVlzdVBIQk4vNlg3OTlONTVWWTJkMkpLNWRvY3RaQnRwNVJUWDJibG5CbjQ3SDdPL3l0NC9pN1JHZmEvWFpHd3d6ZDZNbHFxUWlyK0NRVjZqQkdBMlJxK2loSnl4M0M3SW11allDTDkvb3J0Vkg2MFRuemx4OXl0dUpuYTJrZmpTZXE4R0x5WTFXblcydUt2ck9sbHBvcG9SdE1vTm40WE9Sam1hZEliSk1EWjNqbUFYdjRUT2NacTV3SDFqbUpNRDBZRXRpaGMrV0VJYmVaaGE0aWh6WnhtRW5SZW0rWGdlbVI3U3o1LzNJVFdUT0s3cHJjbDROdm5Id0VyVHpGU3RRSS8wMG51c25OZXJ2Wm1UY0VnN1ZaejNSQzA5QWV6ZkNNQmtpVHptR2xyQU0xR2dicWRMd1JZMitGMWJwaVBMSEdheEhJdnNEK0p2VGcyVk0wUnQ3QTV6M09pSmVUNE9XYkVWUExGUGYrdElsSHRIbldWcGp4dEcvK1hpL0NZcFozTG5nZ1Vnc0hLUExxUU10TFhsSE9hNmQ5QXI2Zlc2YldtZ3JNbWZOeFpOdFREbkg2TDExWHZVN1M0d1Qrc2xUNVBVWjMrODRwcFplMEI2RldZTUhtTnlJL2UwNUV2OVlGZjBkUGlQUDFQYytmZVltRGxkN25pSmZZbmpCb0lUZi9XZ1U5UnF3ZDR3dVVxWGh6aksxMHpncFpZUldyamM2NHcwN3R6TUxMcCtiTG15VDBJMHFpVEQya05MSjh4cnp5KzdhSGVneEE3dWFaMko0QVM5SUEzWFFDak02YnAvKzNvL05BbmpkQ2M4NVRxWjdON0V6dStqK1padmF5UjhNa1dWd096dEJXMXVmY201bmlNWWJVYkNLZmdEN3hQd3A2cWZ2ZjQvZ0hKNy9oWVdwRkRacDA4Z3diVktlRkdjQXR3alBTZUVoUHdBc1BFSEh2Qm56Mk1ReHZKMlg2Q2RYT0FxMnFlNjhnYjJHZlRiL1JTV2NSamZlR3ljRTNoZnZEdzRzamFWTjNzb1h0am5kdTVpUFJXcDVadGxvVHM5RDZnZUFiNUwyb2o2bVBYV0E4YXEvczRRZWh0Tm12UEdSdFpudUxTRkh2dFROM01USDQ1MGE4eWVsL0F6ZWZPOXlEK0lEcTdlTUJvU1c3YWdmRGMxSjduY21rU3BwY0Q2amVmdytQT0g0MEx1RThkbS9GanlCOTJwY3VQWHZOcDZVZVBkK2VEdUtIdHJLRVhrZFRHZER3VEdtMTlmQXdMdnR2YXQ0OGc1NDErTjlCTzVZbDVwS2JvZWN2Ni9vTzM4d1hkakd0TUMvWDRmN3pmZW9qdjBSdUEvM0s0a0gzY1kydXB6M0FmZ0R6K0x3KzEzeXZobHlIajlGVm1lSWY3OEsvOXZ2dGVIU2JmaGJTZThlOEdlam9kVkErd2kvQWY0K3crOG5HdFlMOWl1RFIrNW1GcnpCYjY2OTF3ci9kL0NieU8wRTM0VTducUFYZm9MVzlsSmVXMEtQdjF4N08rNjB2UGVkdVBOK2ZQR1VYcXdwNk9SdDlJT3ZvTDBiRDNsYjhTOXg1UXhmcnI5M2plODA4YVZjM3h1NGNIcVRoN1Rqd3VsOVBPUXFMcFM0ZXZ2TU4xUGtiZXpNRW5UUkVxWjdIK3R1NytIVExlKzl0YzdtbVpjNCtjYlpkclRRVjNTc3Z5d3UrZGVOczIyK2Q1MStmdXhzRDE3U3l6VXpQTGlkSVFlNmdkS0xGMFp2NTVqYTNvdXVudTBiNzdYZzM4MnpGYy8wMHJRNmE1L2F3Z0JUUWhNcHF4LzZBM0ZyR0hMdVNtb3dVclRNNnN3Q05kSDJGdGlBcFI3Ymo2eU9kby81M3dqYmY0cGR1QUkvOG9UZWJqVHZSN2JTVzZzTm5mSU14NkorVk5ya2VJeHFUV2RyZFJUNU5HdVJXUmplZGlKdlBXSFoySytYeUR0YldBWkRaY3F0bm5LMG1oL0kzN0lkdWhLZW4vVUZYTWkzZTM5d3J1dUtoV1YwTjlqVzlRUjk3U1U2TnhmMDdsaXFQK1B4Q0N4TFdFMEwyd0RaUUhWdEhqOFhZM21uSnQxWDI0eWpTdDgzOEdjRXovcktzZkdPYlE1QlJsYnJxZW5oMUlBRDRKMjI5Z2VoWVJtSFlEaWc4ZzMyWDlOU0NTUEhzT3BuSlBiM2RuNVFQNHZQRlJXWTF1dnZ1ckZqcWpkNGR3LzV5bVEvTk9GZlZLOWRJMnV0em9tVm44eGVGWlNvaXJ5enBYN3FKc3V6dlpVd2k1azFkaG45NG14dk5meFN5NXcrVnMvVmVrU1AyT2JMQnN3dmFDbGlZVlg3SzlxL3UzeTNoYWZGcWpTOHNpWXM4OExRNDRqTzRXNjAwNUxpWFpOV0x1M2NVdGMvbTdlMFg2N1poVnRYa09PRm9SZTJvTThzVTFzN3dBZDQ1Q1UrVXFVd2Rvd3BwMHJEeERHT21POUhsVTBoVlBaYzF6TDRMZnhXOFlqK2p1RVROdngrR3g3bE9pTjJ6Vy94dG5NZVUvRkhtZkl0ZmdvdzlRZER2dFZuY2NVSHRZamw1YklRdDVZeFJPNWc4b1lOZnd5dFJOK0N6K3lHSDhJV2puc3JrYmYxOC8yYytoY0NYK2tSR0VuM3BjK0JySkg0YlZMYk9PYmp6VFFkQzhRblJud1ZZdVltMDYxdmFNeGFxTThzNnUvSy9ha0sybG5Da2JlVjJzL3FDZnJXTnNEbW50QTlSc3pjaEE1cmY2Ym9EVVRETm9jbngraVJjUlA1NEVuZFY5OFlJaS9wSWwvQi9CWHR4NTNLUC9jVm45SDFNVzc2V0VKdjBOODVEZjkyTjNPTFhtNFozZEFXOUhoc0RMdWx2NGJ4WWRXMjJ0dG5lN0tOSTdJNldOYSs4NXczVStRcSt0cFhlc1VDL0l2QXYrRU1MVk04akpPY3R4SzljQk9kdytmdEdBOTdrTkdMRk9OOEcrMlZ1dFJ0bUFvSWRCazNxWDFVcmI3aHErOVA5NjRwN3QxRTMvbVBhUUJ6SDY3Rkw3cWlMazhDYkgrb0NzWFR3eTJmUFpHbjdoazg0RHdIZnVZckFldEwzTGhLTDdLTVEvMTg1WmNVT1pkSG9Xc2NxRzhLdm9PekE1cEtRdVFxM000VGdqMzE4Ukw4YXNGdCtqdUx6NWV3SnpaaWpRTXhROE9Nbnh6aURqR05RY1h5d1pOci8vT3RjL2RMdi9DYW5QM1ZNU1R4NkJzOXJwVTNYVDFQUG5RVGVXTWJzOXpheENXZHpXRXY1aFNOVWFtWEwyLzVsWjludXJaUW56QWNQazRMWUovKy94TTlFRHY1WFQ1NHgrQkRXMWkrSVJOUWJoaytZbU11UTRWK2grV2VwSjc1ZWZzN1cwRWIyNXh5Ykp5SnpoVjhPNHRMekNRU2wvQVMvZUIycGhrK2c5VzhiWXpMMk5XMU1aK2o5akY5UmQ2MDhkTmFYK3NWcXRRdGJNUFB2STVHMWxISk9yTG44V2FJYkFHZC9NR3crNTYxakF0WVM5cDhyMkgvM0p4anhJeDl6WWNQdEUzaWcwUFhrRGYya3RpdTFmT1Nsc0gzODM1UGxZai9mQTVqNm1meHVCb21kRTVLaytYN3pUbmRqaHFNTnlLZWQrWUt4OHpxeE1FNDhiZXVNQXhkcVV2ZjZSN3dmRXVsdDNXTUtZRVozZWR5b0c5ZFdkeTdDbHF2S0MyZGo5ZlV6MnUrUzllMzg5Z3gzcXNYdGNSclM1c0k0bUtnNzlkeHBrcEhIMHhBOTNRVmRQSVorRmUyMjBBczNJNjJ0NFFldGF1T21RZDJGY3lCYlNkTTI0bWI5R0l5eDdCakc4T1RLMHhmYlJQeitXSHVtUnBIZE5NajczVTA4SzJyaVkvdC80NkY3YTlXbmRpZmVVbVBjekUvQUZ0UjNJRDkwNlpUUzlxaGZyWVJPOG5zaU9RdmpJQU9RdVJoMjNFdzNQdEtiKzBLaDJvZkdDZkw4WmIxN3p2YjZJWldja1MyRkdQN2lPalVmQTJUOFViYmVrVVh1WWtjdVlvZXQ2Ky95N25uNTNIcFZ5bHRzWlA2eUFXWVJ4TWRrL2xlQ25QYkhHS2NUMjBGclgzV1ozRWVDeUQySzd2WDdOb2U4Yk9WbjJmUXhrZWF0T2tyUGZBdE1QWkh1VVlTcHl4VUZyK3k5K05zNWFQOGNiejlRWjhEMFpHR29RdDJWblVHWTl1TXQrZDJNOWo5OUR6dzJteENGOVNud1BvZjhIclVFdWR5K0V4b2huT2I3eUJ2Zzk5cCtteEt1REMrb2hqYmRPRHphSzd4M0FhdTZJRHhIMVRqWVYyQjJQRTFqMjMzY2Z3NGJ1TDFqdWRWN0I3V1B4ZjA3dG42QVZmTDlWMzRJR3NkNEIvRzF3blF6b3lURFZjNDh1ZDVNYjZBT0VkaThBM3pDbTRxbnNXUTRWekdpYjZ6RE14TFMxNVZ4amI5cVdXS1pjNUtZOTBVTGpuTndmaXFEakF2NHRkV1E0WXk4YnJHK1lyTStQMnYxSWNLT2w2cHQ1VzhZbUhJaDBXVld5THpia2RERnpvTXNVa2I2eXY1ZW5tT3p3RTV3d1o5VnpMeURBZHY2ZDZidDgrOGFUdTEyWXZrTFBTa3QvVU5IaTBNaUlYOGg1eGZHcWdLRHo3N3BTSnp6aU9GVWFKbFhuVGxETjROaTRlL3BJMVdXRWIzNUNveTF2M3g3NEk2c0VNdkVuUEw3QWUrOGtENGF2K05mREQ4WHNPbXJQamw2MWpxeDM1RStPMFp2RjRkb3h2UHpVbWdicVljMWlzaDlqdXdZUDNqZVFNSFk2YzQyMi9VRDRoL3V0TGpoQ3YrQ3ZCSFl4cHdCTFN6bjlBSjZ5S1cyWS9JTzNnc0R1RHFnbjl0eWZqWHl6aUY5b3I1a0UveWhQYkVEeTgrcUVvM2N4TU40b1dURzNsYmRpSm5ydFJQTFVIR1BBZTVHd3V2dmNCOHp5bjZrV3ZxV0haRjlsdzhRZDVSNG9IKzZScnlZU3lKRzdlRDhURUVlQzBFQzhPSXh0bytRZzhwMVpjZi9wTEtmRXlsRjlwUHhJZUk4Y3NTZ3BGamRBKytPZnVxS256b1NkUS85amdMSEVIdmVxY1Vud3Y0R0orak10K3dsNmlLbmJuS2t1SkxMN1Q3R0plbjNPb3hEU3A1U25JYkQ1WTVQV0VZcWdQdDRNSnpaUDduU016Y2pZYTh4QTR0UWYvalpRN1BFMW1DYVdNZ2hyNHlUWjhqMFRVTmJJUG9oWjNJYTl2TWU1REhvNkJZZmNvV0MrNCtvSHNKYktXMzlrbGNkdVIyZE00YjZOeHpKSTZXWE84Wnc4VVNlakdtVXd6bjBnOHltWXV2dGhsL3hUaUIzMjlaMXdIOHIxakhVN0tUSzl3SFhxS2ZzQTcvUmw1VXF3KzM5a1gyWTRqUGdMOVZPMkI4R1NkVGJpVjFGUXh2citnT3NON0x5bERJeWFsOCtGMDRsOUVjMnluNHZYTy9MbXVYaVZUK01mcVVvdTJ0b3Q4cno0UGtZUG1GWTJxWWptTlhtR0M2UUxZcFByb2RzUXR4ZkVvdkRUdUcwQTZXMnpVL2FJbG5PWnZwM3QyUU04VTJaS2tya0JnVmhZVTBQRlMrYnFsTC8yN0cvNGplRjJld3Y4MXc3eTdKbVREeExvWm0yVFhWZEVIaHZ4OEZHWlVKUXdSNHJPakZqTW8rS1VFN2lqK0VOeEtaVUtnSzZHNkFMNldjYk1FWkdGY3Q3WVlEeG5zdDg5WnBBTEdiOHZ1QzBKYXFvSk9xb0oyVTlIaC9JUEwrWXhvWVMzbTZrTVN0WTA0NW9MbEJ2Y2J6OTIvN0FpYzdMOUVCRjIxeitGajc4L21HamducklyaDRsblA3Z0hFTjRrdUF1Nlc5VnZvUnEvd3hBbXMydm5YSmYrK3JNUzVqaGRzdDhHZnd3N0RQTlhUWnZZZHh4M3pDendkcUF2cnlDOURGWE0xS093L3pXTXkvVEFINEZMYngySGZDK25zcWgwaytESVlMNW5jZ2Yvem9NbVpIK1R4ZVIycVpVd1pHV3UzekJ4NS9iVnh4N1NwNjZFYm4rU0FQUkJmRk9CTGh1ZU5MWFp6S3RiYVlXSXZQcnJDTjQ5NHlOT1RGZFo1VkxlZVkzS3VCRmFpZ1g1VHp0ODY5czZYeWZKdnh0UVpPTko1ajRrTnNubXYxdVlVT0UzdnZKWHpvUDVWMGsyWHVodEFENXRsR2grb05QTitrdDFtMjkwMk55TEZCcVZ0UVdhYlllMWM1N24wQnZrdmNEc2JGV2VCdGRNeExSNVA1UFpGMTROZldRQlk3eGoza0dmaUQ2ZHd5dmNBeWgwZ2Q2RHVpYStpeHRGWjNsQS9BZmh5anU4SDBDN2tUcG5hYVYrZEI4djFCSmlaNmdkOEZXY2o0eHpIZFFaNnRhYjlKeDNiU0sxeEQ1a29lVmVwZ0ZOYjB6TUxDTm55MGtzdThaMTEwbFVPZ29rUDA3ZkhvbVlQSjYwaTYvMnVrSHoydjJQN3JHenBFYWxERloxTXYwVGUyR2M1dFU5eGF4aFROak9OV2xZYWVHdDMvWmNxSHVNSTEvUkE5UjZLblJzRnVGQ0ZQalE2L1k3N2V5R0ZRZWpPczcvc0ROTGRNbjloaVVSOXlFNWpuNHRWSjdqMFhha2JwUFJvT3RzZVhPZm5NeE81cWZBdit6Lys1Ky90TFcwM0xlcHR1TWlmM3dvdXFGcW9KWVdsQkpVdS9pVjJWUmhDSmtBM3dIQURYM2x1bk5BQUpiQTRUREpGVmh3Tk4xREZtd1J4TnZ5MGlNWGFGS2U4YStzN3YvLysyNW5JbXBSdVVQQnhnYkpaemowUjNFeS9wNVhQOGZOUlBhMHY3UGp1WExCN3NNVVRrUGZoY1dBWi9HcGZ6WEVpaTNwcGttOGlabStoVUtvbVpKV3paTlpTYUE2eXhsa3FWSlVLMWgyck9jZzE1aTRjRXNybEhFT0dIakFiNmZCQ29TZStnUm5HYk5Fb3NBMjFyalVYTXZFTE1IWE42SXR5Z2R3QU9NVmN2SkI3REFXOWtXQkRZalBIODBqQzBsUmxJc1piZkN0dmc5MzZ5dlA0N3BXUzhqNUhTWldEVDNYc1NaQTRjVmtSNjd1eDY3enUzMHcvVTVPYllIRVExYnNJblhHTnVxNVpualdGY1lEeWxkSURoRkRYbXpDNWgweXA5YnA4YnpCZEVwVmJhbEdaMjZCZ0haazFZKytJenJ6TUY3by9IY0NTUlpnaTlleTJYM3VZR0hPWFlsbW9OcGZIYnBxcFFxVFdWZGpqREdWM2ZNNG5va3VmNFMrMmxhWldXZUV1bDVNVTVCR3JTaEF1MXZrRmFOcy84blhqZHdScUlmcnlCZnkxd0svRVBjSGNQVm9VaW42am5zS1R4Q0N5QnVacmRPdStSTWcyeHhWSENpMmowNHQ2VDFITjRuOUV5dHFxNDkreTdrYzNwZGtSczlhVnowQzZBWnhKdG5zQ2U0YTlYTk56bW10WmdoUUVOWDhMUU5Yb0MwWUF2ejMybzlBN2dUWG9pR3NzM3JKVU1pRFE5LzAxTllLL3Z4UHQrN0NYNndsWFFtbGJkMGYyZHc2TE8zbU5oUWpSOWJlL0plSi9oR0RMdzJ0Y2ZPY1NqZENrYldwN0hsZ2RVcGJYaTAzVHZEV0xHSW1EMlA2L3hxRGt1YzZiQzhDLzFrUXRHVEthbEtvV2N5eEg1Q2xZMVYxVmtJdThhTFo3UlNyMVhXQWZlYTBPK25Ybmx0NVk1NVJaWUYyQXpIdkhhd1hPazdhMGtiZUhKL2RoVjVCUE4yb001dktTM3J5cnR6cDRGUGtpakxhUEI5T0FxaUZ1QTlkMlB4bUJOa0VoRVNVOU5XTVpYY05IT3ZNMlVlRGRKZEE4OGFpdXBubThpdGRFdzVpTllkb1V0ejhlQkdwM3Q0UXJ0TzBaWHNJeGpaa05HWCtQc1U1ckJXZktVQnE1aWpaWHgyaUhYRkxuVm1mZk82MmhRNVVnOUJmc3JjckZoTmJYQis5dGNQRkdhcXZjNHIvV2MxcXpZQ3A3MU82M3dJUHRMTVE1RFJnRlU2dldqbC9WVHBFcnF2cFFCenRrWnNEb2cxajIvemNWYXI1Q0cvNXBJYXFCdTdxTnFmSllIbk5FbTR4V2crMVJMR2orYms4RmJRejRzZ1BacWZEL2YzNlZISVdZOENpMDBjU3ZiVnVGRDd3bldoSFhiUlhuT1F3WGp0U1pjOElkcmZQSUsvMkRHdi9wc2N6M0gwT3RvVTh2c2wzOUR0Tzh0dURIOEdldlErTXdJM3g4TTBWSTRRalpTN1JXbzVvZ2FQRVlhd3QvQXM2TUdENG1xYzRuSTNzN2w3MVVaZVIwblNrLzlsZk9xMzNHVEhxZEtZV3FaVXhZV3NVUG85UkltMTNnQzNSZjhMdzFqVjlCUEt1Z2FJbG9CdjJ1UkIrODk3eHBXR0FleFRubDFUK3daZnl0eDVkcThGRDRzL3lUUHZ6Vkh0UmFXVHMvV1RTTjdWL2ZjaEo4bHlEczRDd1ZoR3puMElSdXJTNzMvb09lVXNOMjdrY2l0VEJFcVZjaVo5eEs2bCt3ZHVQTW1UclZsTVpmeXFaa3BBVGdUTmZVUG9PMUwrTFZtNDVlMmE3TkNhbEdkOTdsOGlSdDBlMlg4dDlZOHFXZ3l1cEJQRk5lZ3F2TzZweTQ0MTgydjZwSkJ1d3h1c1ZHSnJjWG9xNkJEWnBRMloxNmlnNWYwTEZObHo5b2JST2JFTjU4aHVsbDhSVGM3c3pjclBiYmFHL2dyQ0grSkNlOVFoa2hWbmdKTENETlhtVUYzRTdJTzlYeHY3OUxoenZrQmF5T1VHV2EzZGZkMzZLdFg3TzhXSFJId0dPdHV6WFBocitJZmd6K016NFRDZlZuenBuZm9sVzN2WHAzWEUwZzFENUhUUXdHeXZPYnF0UWhBaS8yc0lRL3J2WU5XZlFmZ3dLN0pxM1crZGgzbmpBODMzN3NDaHpQZG5PeUhPOE9qY0ZMOWRzVytxR0hCMFgzUnpnTHQ4TGlxUzdxVnJvUjJ0cUxmTitVNXM4WTIvZ2wwbm1PNU12UUtJdU5MK1g2RjlscDlNWXc4eXQ0cFN6NG1nNi9CNEEwNU1NU2ZxYzd2R04zWU5vTlczZUVDMW1XMkN3TWJqK2hRVi9XVk1tT1ZuSVhNdVVKY3l1QzhQWktEOVpwbCtVeUw3dmxSbVl4dFVSdVJ6SHRDQytxR1JDQytDNmF3ZjZnU3pkVEgvbFU5Zy9xYVN2Z0VKWnkvUGZham16b0hPNzRVYm0ySXhPQ3p1YUhUTkNvL2EvdXRvaVhHWnFRNGVVUFhPSjdzK1RWOXJ2TDVVcnVsMHIzK1ZkdHM0dFkydWh0ZkNhSTNZUnVrNzVpNzFYZTN0b3p1anRyNnJDejVMajNyWFJHK0M3M2hpcDl6TTBRMzVkbmJ2czdjN2RqbzNUSnRVK2x1SDVKcE4zbjVHektOZWZmS3ZGZmtGUFZsdmxkT0VkbjVjVGwxVTE2L0phZUlqbkJGVHIzbHV5cjlkSXhOVXNPZmhXY2JmMjFtaUNYNG5XdCtnUit3QVZ0MFJjcHJJMXZwUWNjMkxNZHNNOHl3VHZGK20rVENUdURkRFpFN0YzWlpjRFdyZ00yUTIwTEYzRTI1MjQ4ZDRuY05mYVdYWGJQOW12NHo4c3hvb08yWEhhMEEvM1lyUDd5bVYwOUROd0c1dkhhRnJtQ1Rxc2FTNzJDYkwzTTMzd00zMkQ5VTBEdnovdUV0T1ZmQnA5UnZIZzhITmJyRjAydWF2RG4rbWM1d0JYL1RVcTVSZkR2ZWxpZU52YVZlUjQvT1pkdGsvbTc1ZGtXUEMvRjV3Qm1OQmhRMlZDZVp3THp4eGZjalJZNXRzcVlqeFBjVWZWZkxpR3Q0VkdkWEV2ODVqTXRiVWZOOTlmRXArMlFZSDFRcFBQa0d0cUdPeUszOVRjZTMxdnBoSFFWZ1RiN0RlN0k3WjdHYTkvZ2dyc3g5VTFjN2k3K1ZmTWtWN2dOL2dBNlFVVTkwejI5MnRmLzMrSmh2eGFsdXhweXF1SFBMYjJkeDVlKzFhOFZiTVpBM2JiYldlRWk5RHZBL0xkcjhJcTF5OE5xN1YrZWx0bXB6cldXYzlKKzN5ODU5eUxWc1pOYitjMnlkeC80Tk9RUzRRbXlSaUl0dThJa002eVlNWC9rdU9zYzg2aTBaK1NQMjF4czZlcDM5QmZwTTJUSGpBWHlrNmcyNzVvYXMvSWZ0TXppL20rTy9VMllkdkVRdks0cmdmSWUwUStOSDVHbEQ3dnlnek1GblJjNHZyR0xrMStRcHM5WnpXWVYvejk0TngrK3pjNi9CbEkzdHcxb29QOHAreE5kL3FXL2QvMCtUa2Uvek8xNzR3eUNEWG9ZTzA5S2xqS2p0V05iWEZ3ZnY4QUVRM3kvQTZZaHM2WUJ0bG9OdFREbmJnT3FST2llaG1xUEMxOGphNkp5cStCRDd4N1lBemVPcjE2Zm9wN0pieXlmQXI0NVRsL0hJWmErVTFZV3RsL1RWWWxOUzJxdGp2NlFLdVdVOTFSelVKdUxkalFid292eWhtbWZSNmUvS3VPVTFQdE9jdDFuNVNOY1BzZUhLZjFqRlUvVnZudFROTFZQOEJqcjJoWjMxc1p5QVpzeXBNUWRMLzgyOTFmd3M5dWp6VGRuWmRsWXRNb2VzN1VadXkzbDFCZmw4SlRNM1Q3Kzlydks4MEp6RGNKdHVydVRuYnJUOWNqQkUva0RyTGhPNUEzZ1oxSG02NzgvRFpUUEN4Y0kyTlc2RmNjVDB5bWZMM0kxckhTTTRsNmZ2NmNQUUp6QTRxNXBvZFBwcGViNjc4QWNxb2NYeU4xcXRNaTc1L0VWbU0xbkh1RWhIYmRuVEdKZVl5cFFEK1QyKzJCT1RRMXc5NHlWeXA4dzc5aWhPWHNzRHZqYjNaVTR3NUFmZHpqeVBRdGRFUjgrVWovN284ZUdyS2NQZm5pa2ZzbEdFNEc5LzBUOU1oR1ZVeTRFZkhXc1NzVEpsTkJnaVc5RHZsMlhPeTFMZVl2MW5KT2NyOGo2WGZqdGxYaldlRkVPR3ZDa2YrY2xqdjVoR0tuU3lJcG5wVmpTcVpTWDVibkdvdjR1MFB5WW05eTgxaWpGY0xxcGlhSWI5dE14ZGZPY2Ewc25hZnBnSTA0ZUpzTXhBRHJia01yOFBIN1hUR1I1ZjZBQmw5ZmZGY3lXZXZqOGpQOCtRNVNUb0tyMGZYQms2REYycFJGVFpTc1RZRlNaZklYYkI1TlJESlZaSHUzK21IZnR0TStSSXhhRVllcDBKVkNuNkEzR3JLamJ2SnJTak9WTnBSV2tIdWNsMGIwT3VQRHYvRTh4L3N4YUE1SkdHN2lZdUswbldsbkdFaW1BeUwzUlhQN2p5Rk5OaWFFdWlVSGIwOWhVOXgvZ05sU0VRVzYvenF1eCtPc0p5eWl2RW5PVHhRd1VMZEx1eGs5N1dWWG9ka0N1RGFSZno1QlZlczNIY1FseDdvQ0VYajBOdW1ZRGNaRStSaStvR0NCbUppK1ZodERyZzg5WTRUemxDMWVBencwT3dYSGhyL3JmblByVE51NlY3UFhuUWJYeFc1b3ZBMlBoNUc5dEdjQTQ5SW05bjJSK1lub2VERWwrT0MvcHVYZkZ6eUhwWCtSblRUYk5Sc2RTb0V5Q2RSa1pzOTZvS1A0OUR5c3ZMVGdKcmZ4QkVxdFRGLzBNdXVaZm9PLzhKNjU1WS84TFBEZytXT1VUdVJwdlJQSmdJL3l0ekRFaGxIUlB2aHU2ZTBDV0dxYTJJNnp6MTZKeVh2THU2Y25kZVhWbnFoTTJxVFNaM29hN01xbkJqYmpaa0Qxc1Z5YkZWa1I2dFhDOWxESkU1WFFJRHFINmE4dDVtQ0ZYVXRuRkViTjBNQTBPMmtndjg0cVFLa2o0amljaFY5QnpqQ1owVGNHYjUxdHhYM3E4cXkvOHAzbExYRERFVm4rUTd3aWNlUUFkMUJ6RlVwN21kWVd5YktwbS80aUZYdTE4MXp2QjJYVTkvZDE2UEEvRkRRaDlNUlhyNVRyZmhSMnJtaVU3VE5wMmQwdDFmcm9CMnkyYmVLbE1YRkp4VkZySzVTc1BRTlNjMFo0amtJcC9ydGtNbDJ6c0dQZmRIcnBFZmZLMVNzWDZIb2RuS0oxak5XZU5aaTJ3di9hUVVOazM2Si9tMUZ6bjBUdExMWEVUeFVpN3phNEZYWEtta1RDL25CSnQzeHNhTkx1ZFp5akhOb3o5Y3lQcTZiaXBqT2pnd1owSnJTMXJqZnFpRzFWbisxaEJzMGNaWnA1YWh4Y1R2b1dVelEvdHIxTzViemZ6QmNQWmp2TGsrTitpQVd2UGpNZkNUcU1MdHFIbXU2dGtaNHJNYjFybU1Pam1qdXQ2R1Z1eSt5YmN2OWpleGpYdmF6UWhzVkhiUFYzTGdmWTU5ZDNJelQzc0t1Ri83dE9yY0NNZlVpckwyOExhZk5xemdUdjNWN0JvUGtCZmY2VWNqcUNYUWFleitlajRzeGNHZVdzYWV5R2NhRTJQMkZWMk42VnprMjc0N2Y2SGQvMFprUzVWM2ZMMStDZE5aR1hzNnA0dFJHVU9ESEw5R2JkWVovYWd4bzR0a2pkajFKVStOV3ZTZHFOMkgwSWR4MlE1UmI4emRub3ZYRVF2YmtHTXlEbjZ2M1M4RE9kdU5PaXhDWjZWZlM0MXFuWEpaam5rampuL0pOMXY0WlhzdVR1Vm5iNEZWUUdwZWUzdGZFdmRXa2lHck00dStJNCtNODVSRFVIV2llK2M1WGMzeHEyRE0wUTdJdC9INTRvd1MyaldlZEEwaDUzN0I2OXA4YVVQa1FjY1AwcDBEOGtSMDB0MTFSTVlDUFpsMk1kNkJid3ZyNFk5cU1ON2dkOFhleTd5MUMzVkJ1clZwK1Avc2ZDMGo4SVZqSGVRUVhZOXJBUzFXOWtEWlZmNUdEUXZtUHoyNHJZL0FxczZacnVvWm9LWXhxdXRjMUtvdXRFMlBvTGpMN0lPLzBnSGlHczhkSW84amNoaTZldGQ1VjNpOEczeVd6YW11eDFBVHRLUCtMYWIrdHY2OVJjOEF1ZFplKzNBdFJuVWZ1RUozdTZMOEEzaERiYWVXT1cxN0YzSUduMnFmUCsxV3BDcTlIZWltYzdBSC9sQVZtUU45ZEZEZGJuaXE2UUhEWVRxbS9IYnZSdXJWUGFqU01QU2x1bjdnVERmOFVONWlxMHlzL2JrbEx0WGQ2enBZRHRSMTFhenNmK2M2Nm5oQm9wL21WTWRnYTgrdXJYRmNwSUdiUE9SdXB4K01vb2YzNVdDd09OT20vMG50Zm5LaTQ0bUZiVUxuWTNRTlQ4OXIxRENOTldwSTYxcUlraDlBVFMydGVYNHZ6UWszY3BCdXhEdHZ4MzdidTh1OHZVK0hKem9leE52WU9ya0k2dHdPdEpQWDlSb2pTWHVsK202dmVRTWgyUHovbWtCOVNENXJyY0ZwNWtKVU5reDd4NWdXbTZXZSs5YjZQc1JEUVdkbmZCZjEybXYveFhCZ2ZiQk82dDMxUGJmUCt6eitVeHlncTAyWko5cHVwMTZEYzlvOEw2aHBKUFdOUTJWN1RSNTkvMW1mNGR1VmpzdVZqUWgxTm0rTnhlajI5YzBrWWNNM2ZPWVBTT3N1cHVTbWlJclBRV2V4Mmo0aXZFeGw3TTJHM2RwSzQyL2lUTE9UVjhiNnFhN0xUR3dIbFhGenhIbW84bWZkeXUxamNINjZkeE5TYzFEWEw5Zmp2RnUrdkM4VzJ2cGMzYk9raXI5VzUwRFh4T1IzeHgvMHUzdnA1aVVLZmsyYzdMZkNTYzVkN3kwTitpOHU2VGhydW4vUkZMTnhJU0RiVFBzVEx6TXg0TExCYXhlWnREUzZ2QWFPMVRGL2RYNTlYVzNUM2F1MzJuNFNURXJ4d2x5bWdGWURyYkQwSWZLRUh1OGxVMFF2d01uSGMzTHB3YmpaVlBJRGV3aFhqbzlXMisydjI5WHJQdkpXUCsxZ1EyUVoydFkycDZkbGVXdmMvSE1QbUxsQk1hOXVwcHQveGtGSG0rQjF0ZDMrYktRdnVteTNjMndyYmJDdVJ3NDdPK3REd1hZSjc2WnVaOHA1UlQ5bWtLYTZ6ZFFYOU1nVGVtdEgwRG0yc3l6Yi9aeUJGelB1ak9sV1c5MDBzZk9VWGdIZGlxK015OXdZY0FHYmxtNmhVVnUzWjlwOUQrd1Z1elBFWjdwYlVSK0RDdkpERFlhWWY5R2FqdHVkYXErZEs5eUw3NlpIek5qeTFTYkhWT0M5cnZKUE9talNNdm5HRlUvWHJ6R20xNWFjajlVQ1pMWmw0dGtjbjNzUXBNMDRYSk1wMUhPTnplcDZydmNUMm9mYURML3Y4STZmZlhpWFZGcjFkeisvTzZtbW1NdER2YnlibE9sZmZIbW5FL1JYbk1JaDZIWGs3YktuTU9rMVdmZDR4OGpTcStjcStQSWV1VDNUaXo2dmU3U0RoeWFxdmRxekRMcXNmZjdoK0tzTXBVV3kydnlIblV0c20rTFc3U0NJMXFrLzcwd2E4NHlGNWoydjM4M1J6czdvalRPZ292MVh4L1BTM2VaVHVSdDdlWHgxbWUwTkx0WDJmTnVscE9jWDVsUVhaM3l1eXNCY0NMU3ZSU0FmVnBlYy9uUkN5VkwvVnovYXZ1NnlQRW8zdjdvN1AvaDVMR3dqN3UwbkxmTTZROTRiYUprcmRDWGYwRGJsOWZKdmtNNW5rTWJCRldhNXpWN0RHL0VSWGNOUEVQQVl1a202aWZMMDllZkJ0SEFGWGw0TnhMMjMwWkFYdmFtc0hWeEJtN3BDRjY1ZHVra3RjRjc4M2swUTUzYlV6MVdzOE5nU24xZnIrT21ZL25PNDBPVjUvSFBjNUhNNVNIb2JqajhkZnN0L0YwK29yNzcrZkZqbFRyNTYyYUZmdHorUnFVNDV5RXJiNk51bG9IKzJMbkh5RlptekRadDNKZjZFOWJuNnJ1c0QxdWMraEdEdFFNcFgyM3o3Kyt2cXI5MXFtLy82dXNwUThlL1ExYURmdjM2WVFhZE85dTY4K3Bubk5kZGlVTlVNazl3WEtSOGNuYjJMMURwS0NjMzJrc1c5M1crdXhXSTdQVEwzMDUzZkwwdlBwTW9BQVM5Y0loZDJad0tWdG81SnY0T0twNkRNREk3R2hyNnVlbDhUT0JGdi95QU94bk1lV1VLNFZ4Vjk3U2dQd1RBU0Q0NHg2NW1TR3F2NklYb3V4Sk9yNk1pVCtzZm5ndmI3SHd5Ulorckk2OHdDMjVpbWJpR216cnovTDFYcWNhN1ozNE9INEhFYk9BTGF1cExvcVpGMmNBek5VOWZid0Jma3pIL2NCbUJCUy8zY1cxcUJvOFRCdUtQbG50UXJiSE42SUd1TlI2eWgxcXdLdW1leVRtZ20yVFdDWkFXWFhHZHNmaHpPUFBJVk9iWk1MYXc4eWYzMDdONzNacGVzc1FtVk03bVg2RWVNYTc3RVE5WXJkTTFpUFIydGQ4WEgxSHMvM05aMzVETHJJYjlkdTZ0MjdRcjh3Ulc2aU56NVE2cG94bVoxYmprOS94SkhxcDdrSk1zQXJ3ZnQzVTNybk14OXdPSGVGYmJWK0V4LzljaFI5SzA3NzU0Y3FaZTZRdTkxYkdqSVZYVE9udU4xd1QyQitMM0lOdXk5bHl4elIrbnRIWEozT1prN09wTDN6Q2x2Q1ZOa0d4cXlKWlhDQkdCRDFyeVpIbXpqWXAwUmRBQlg1TUt2N2hsVUF6WHVJaC9UMkEvZzErYzdMaHIyMTk1VGVqSEdteEpQTDNucDViak0zZmJzM1dUVVlhT3kvQXZ1SFlQTW11K3k2ZjdyeTkzZVFidlY5dTdQLzc0anJuZjRDKzIyK2VvVi83bmFPQzVhK1hkL3ZqaG91L3B5bDZ4ZWc5WGRuLy85OTVjNzZGZC85K2YvL2E4dmQxbjZtdC85K1ZVUWhDOTNtTHRIbnJPOSs3UHo1ZTQxM2VXcnBUYUdDZUtIclVSR2Zrd1RKOXJjL1ZuTzlCdEtQUWRMZzh6WmJnL3BxMy8zNTJhSDBKZTczWFlseng2bjFmUzdMVjRXL3UzdkwzYzVJdXRlNGNueHA5KzgxeHlMbE9qMTdzKzczMWU1Und4VS9NRDI5M0pUWHk3MkZLOEsrajcrNjlvZWlldG5DcUlORnZEM2w3dkF5VmNIcC9nb29QNEFRSDFzK2VWVW43bjg5U3JmNXE4ckoybmJ3RXVFVnZNOGZjVkRsV3NDWWMyc0lIL2Q0YTA2eDNsMFdwVm5sdTI5eG5qMG9YcFZtMm9SelJYQ0dIYzhwMFIzWCs2MmVmcnFCQ3NKT2R0dGM5WEpLa2xmaTJwcEY0QXZWM1BISzlIZDMrM3crUHZMSFZvNUw1dlVKN2ovb2RPNy8vanAxWk45NXZreFQxSVR0QVh3Wk5FUExNbzFWd0FqL1pYbkg0VUQvL0RRK1NnY1lKN1BCQUVlRzg5UGxuVC9IWVFGSTN6bWtsaEF2YVl2RVlvMlFSdHNLZFBzM25lRXZ6SGIzS1pvVDVndVEyMi9WOTkvZWUvaC9DRDV2VUY5MkRaY3ZlTHZ2cjJ1WHFMajNaOTNkMS91RGl0M20zcnhxaFdKYUd5TFNKYkdnSmQ3Q3RNdFBsQzhvTGVYbkRsNWlBRjFSLzVjRkJuZXdkUFI4ZkJ4NTJnN1B6K2UyeGo5d0Qxd0gwV2ZldWVmaDBOL2Y2SENlT0prZUNsdlFZSThuenZScGhUYWUvSjBsRGdCNWQvQmFwdVhMNzdzRUZMeFQreEpaRHVFdnFVbzhvcnltOWRWRUczelYrWnpsbTR4bDhHN29tU1RPOEhkbjNmQ2J6ei8yOWRmSFpSRm05WGRUU2h2bXdwR1E0aWVjZVVHVzZ1WlZFMzFmemNwN084bUhnSWNJWUN1bGZGenNneThmUXpINS8zcTlUWHlLd2dFS0hVZGhOZFh3ZTBTS1BpYkdxM29pRTFJNFcwNDdnclFDSytoRElEUGlWdmxuU2ZhdGtMODNUWnp2SllmOHEyWUhxa2E5Ky9IaENpdFlnRVZVbkMvOFErL2NUY2tjQmtTSmVEOEFLS3ZqZ1NOL05XTHMwUHdwdmU2OGtzdEZnWXQzd1dxSlg4U2NzVHIvSTA4M2tKN1RiWURiN3gzekUzY1BpQkRBRGRaQ3p0Z3pUT3VjUWNBd29jZ1I2RWxrWGZKaUJVSThjOWxHTzJkNDEzb0dmNkNPbnpPQm1CZm9xN0ZQdkhRdnFGeXRNLzhOOHoxV0VVMFJBaG9mSWZNKy90aTBZVHJTdUhLaTdlN3BML1pwTG1EcDJnWmtUM1ZORXRSR2hUejdIWGwrRks2MmVhdlRyVEpTL3JQWHRQazZZaVpYN3ROOVc4a1VyeVVWUjZ1ZHR0ZmdWNVg1YklZb3YzanQ4NWRxM0paV1cxZ3JXRkpmWGZHM3YxSml4cjYzbk90OU9zLy92Z0RGQ0tVT3Y2cVRhWDlkM00xb3ZQOFNuUFRxb1UxR0oxd0JqUDhvcDZpWGJLYVlFd255aExJQzZKQzNQMVhLMkY4bCtyV0lsZlBkZndidHVwVld3aFBmOFcwS0YrOHNCdm9PNlZhZnY3OURZWDQ3MnRhSkx6NjkrZndEcXpaRW4vOS9OMThNMGRicVY5emg0bVRzV2gxb1JVNm9CaGUxUVk5aC9MOE50Tmg2NFdyeEtuUU9FS0FNSlZEL2Jkd2haSW8yR0RMdC9LY3F3WDAwK2RzYzdqekNxaGR5R3lodS9lU1plQUxJWElqTWZJTnRMVkpIZnpCTXFhdmx1RWpyN2dmcVlXNGRCUjBVZ2RUM2lQaFJmeDNha05Odkw5MUJhaVg0S0RYZk9KdHlXMnVNdHo2cU5JN1ZScS9LL0xPN3FkclZla2lXNUNocnBqMnkwb2NNMFIyV1VNc1BXWGpTUHptSnNldXF2UjJOcm56RC9hZ0RrVGtSZUxXTWJwb0hLUTdUWjYrTERzYTNnOWU3Nk1yOExrcjNBZDZQRjNBN2JTYnlXaWMrSmt2UFpEL0ZiUnhrMTVoejlLZHRjbUs4WUg4N3hqK3p1ME1rUlIxVTd2QXo0WWI1cnVUbjl6dnBXZ1N6SVJlN3VKMUs4UFFFbkxlazVqYmFqZlRqdGRQL3hvbnc5Q0J6MXBPUHZjS3gvQkdvdzNBMUxETVllWjI5SlA2aEo0MGN6SWlJVnlvNHhxTkV4VGJ4dE5laXRLZHIvQUhMK245SlVWZHdST21lMXRaN3FVZ1hiTzlDUERmWGtjN1NWRVB2TExuNFUvdHFmODRlZm90OFJzbzhUelR0WVVxUTZRTmVVRTZHcys1WEFveWR4SEx5eVhQcGM1QTQ3ekI1T3U0Nk5IQUVkcVA1bkFkWUtnT3BobWUzcDRmNFBKNzN4d2kydnJnWUp0RGNoa3B0RHFZN2wyRDU5MEVyUzBUb3YwWWZicGVSMFB1WEV6Y2pocllDdG80cGhhNmtuaGFtVlBPTnZqVFdCS3JpQnllejAxbWdhM285UFA5Q05aWXdGb09sam1rWmVWYWFzL0ZSMWZwOGJZa1B1UDUvR1FKeCtVTmRJNlV6ZHQ3MytqR1pDMzN3VWpPSHhmeFZESG5ZZW9QdElOM1N2ZGpZYnF6Qkd2bkdBL1phRjdObFZybUpIQTdOa1k5ZDNMcUI1Wnd6RWc3aDJQb0pqNlBTVVpWVU80cHRQUmZJZWp0WFlIbFdORDJ2a0Fpdk9NaUxsdEhaQkNzZ1NndVhJZ2N1cEZZK0ZET2RKOTdtTHdNZE1Kd2Q0ejd3RmRDcENyVHJkdlI0N0VraHI1RTIxZ1kyZ1kvQTVGL1JSZHM4bjVnemNXNVpVNFBWcUlYM2lZT2xrcThrK0t1cU11VHdCTGtuVHFZSXF1akYvYWN0dFlRWUQrWnZZa3gvRStZSE9nNjk1NmlGeVVjWGNFS1hLTVhBM2xpa29NMkJVT2VYQXhMejl1YzdLUWdDeXhGUEVHd29KOUJZSUdVRmp3RVVJcWhrR0RWQmJ3TXRDZWtHL0pXQkFHUDErZkJaRStDRHIyMW84aUZQNWpzcFNSRXJzSUZ2aWx1dkVTTzdYay9IeHNJQWk2dWNnaElWSjBFdGNZQ3pEV3lGREVBa2lwRTNWUDh3akkwcEQ1MTkzaS9VcERtcXBUK3BkUHgyR3Z6SmxMM2ZoU2xYMVVaOEk2Mld0QlB4SUYvRE5UQmRPMG9lbTdOUmJ5K25TMEFMRERyeld4TUQwYVhjd2N4S1JHWTl3L2pUUUJ0RHliejd2MDQ2Z2RMVXFybTZybzRXTWJ5MDN6WkhZd1RQamJub2I1ODh1ZXpwVFpjeE43T05XYVpxdGg3RDY1Sm5YTGVSbC9UWUE2Y3VkOVkreE9zbTdCcFBmU0VaVDFua0k3VVloS1V3UVVweUphT1FuQUJMdnVkaXluR0ozdWpiOGxsK2ZvOXhnMUxRR1FmdEMwRDRNYWdwSFUvZFl4cHFpb3lIcWR1WXdWNFFRSjFGckJUZlFmblh1SzBuSmV0WkVoR2pzeWxUZmdlTW5wWlA4WXBHZFBLeXRUUzZzSml3Z3NJajN1cUxoWEhNQnI3eGhCNVNSZjVpbjVTNVVZK081UU5Xc21TMFBsbW1ObUtCdUp4TlJjREVpVFVBNHIvQWIxNk5SaGprYVdnOHFyVWsyK0tCN2N6NUd3bzk0UVdPWGd0aVNzY3QyN0haNjZjMUUvUFFUcDZJVmR5QnVmbFRPMy9JTWUrNnluTGR6Ny9ULzBUSCtCNlh4b2t0d2ovb0pmMjMzNVAyaHh5TEl2ZSsrOUY0ajcwL0QvMTczdlgrZExQSGxSRnBLbjAvdHV3SHh3Q2d5TTh2YnhRdXluZnRMM1ZvUm5lSkhoYytFWVhVdjNIeGxOTzh4SHJqQmlCMGsrbjR2ZlpwK0RJNEJDc0RQMzBIZTlobWdtcVdwcGt1dld4M21BT3IrT2luSmU4b0h6V0h5a2g1dy9FMDNQMHNMZVYzcnJNQndYWjNCbnlidExGdEpwYmM1NThiMVpaU2Z0eWJoK3VCVU43TitxdDNZRis4aFVkMnZPTWhXcWVsL0xaMGZ3OU5OUGRmdyt0U1p0RFlDbFZDVWUxbHZGRzIzckM1VHN2a3VoU3ZXYTVrS2VmRFl1VGJVeDVjcUU5bGQ4ZGJlc1Y4WWR4NUVVU2QyN3hjZHhxMG95M2N4S2R3enFKYmNpNTlRYk56Qk9kVzlKblA1bHUxdXc2M3NhSDluVzZ5VVB3NHpTVElSL2FVT21oTysrQytVSk5xSjAzc05jV29SbXNZd1ZMMlg1c3dpSG5zZjdvSmpxSDViTmpsRGpUSzJ6RFJsNmk3ekJlMklLK0k5Zm02ZkhaTzdsbGl0bTRZeDNIYTVVYkYxTnNNNXdjMFAyN25KLzB0cjdCSTBzNGhvN0I1Zjc2S2JlRVhtSFA0eXZ5RUNHdk9KU21iUHNlalg3Z21KT0F5Ym84cHhtQ3AxZm81WDhpeldEOTBFNklIdndXelN6d3N6RjU5cE5wWnMrdVl5d2NrV1hZTzFmUWtBblBXdGsvQVk5V1BHSGdvVDhkRjU4TkIycG5aMjdpdjVEbmU1dzdtR1QvR0EvWitNamFUUGVXa0NOZmVVUHV5ajZ5RUgxV2J0akQyQ2FnU1ptRWwzZ2JmZWRDZXp3K0hCc2tjYXJPYXU2VmVoRHZKY1MrSG5lWWRVZzlwbnhSSTdJM2l2OWRjcmRST3Vrcnh3dTYrWi9HUTVybG1XVVo1YlJKTThMMjNpdkVvWnY0aFcxT1R6OVoxbVRsUEdQVE9vNk5MdklIL3Q2RFpGMHZkMDRoK0JvdVpQT255VjMrNkErMDI3aFk2YXE4cHN2YVorTkk3cGthTnhaZ0hSL1FUWDhhelpEMS9LL2NyV2pHRm1UT052MXdaYnh0MzJubHMvb244MVRCeDdUVXNVeDBxditPMTlYYTV2emxPOFp3aTNsZmhVdWZSalBWL0swOHRTbG50TW1aNy9vVDVBdnhpV0paYlJLZjRSNnY0eCtrR2N5Lzl1NEE4NzgzYVdaZVBZdCtQbHdzVStjY3VaZTVHNjF3aTk1ZmZtY0d4UUd1Y0JSc1U4MStGczB3YzFEN3BZVm1pSnlaNlhHVGg3UWsweFBZZEliSVR2VENOcnA0L3h2YjZDSzhkOXVZbmIzRGg1NFM3LzMxMDI2eW51M1ZqZ2lGSU9EejNtaUNLeHg1MTlEWHJpSm43cHdYSnBoMk9rUFVpai9VSjBKOGl2cXVmWS9EUUZYUWlmV3ZzVFJURnBaWWIrTWkrTm9wWEI1ZG9jdFpCdHFkKzBZK0hUNENlOVhDRy9DbzdMdnZwQm53Yy9kQ1cza0xIb0NMSmF3REw5RWhMbU9iNm44Y2ZGNGtzV3ViaysrbG1ZT1g5SExOREltUCtxclBqT0NpTnhqdVhVUG5IRVhudlVKRVRJV3BpM1VsOEsyWGEyM3lsMWZXejE3R3U2ek9CUE9EeERhSHlFMnduZU1qd0ZWb3FYNzJqaUVmbkhsUG1NenZpNm4wc0daeG0raHUwNzJYTExNZmxUT3d4NlYrRHkxRndHZkdWcndPeitVTXdNODJ0ZFEyOVJNVWQ5WFBOdkNpQ1R1K2pKZnR2YWdiMjZaVjZySDQ3UE1tVFBDK0g5YXUwZHM1K0huZ3lWM0FBYmN6MlZsQ0x3ZDlGalVxYzdOUGt6T0RxbnIxUFRvUHdRTzVldWNuODlaS2wzdkRMM1N4emgraG1ib0FVcDVlc1hVdjVNeWk4WTc4YzJtREtTZzcyZWFNd01ZVUQxZjEyQi8wdlh0S0w5YnJLeDdlc21lSUg3SDV6cytXd1h0YmVrdTJmS0tjVVZwYVN4bi9vMm1tMUJlbmxpbStIYStxWld6NXpzK1hzVmlYRnZqUWV5K2UvQ0ROMUFWNlRFT2VvaHZiaGgzNnhwR3oydlgzeC9MWk4veUp2Q2VBN3M3bU51UyswdHU3ZzhrZW51TjdhMWVKMTlUWHlLd2gvdTRZM2cvaUNOT3ZoWFJ6V2cyMDB4amxPOHZna1dsY2plR1Z6NzdoQzlCUHhMOUtiQk82Yjg0VmVsdVA1cFdZd25UcnpLYzB4NlJldzNmRlpqN0Z4cXNLTjNkdjZmTFlkcXFiL1B3SDZXTS9EVWZZd2xudEZoOTVZaHNlL1dSL1lyTzVFc0JCUG5pMy9QS2Z4MGNPcnFBdGJZTS91S0JyL0UrVnZlYzBvOS83ZyttQ05CL1Ryc3BlYUlUMnMvV3lzdG5aRGZyNGQvQlZ0aU9mZFVWZnBmRDY2Ym9JNmRUM0VmejRNWnFSb3NsYUxVVFM4R1NXamtnM0hVaDFodnpSTWw4VnJqVXpweVEvU3dtUitrUnlDUTFCSkFYNFJqK3dOL3JPNmtCdVd4Tk9kZk1EQWg5aG1scm1rRE03ZFpxdUtmaThZMmhvTE5SWEtwa0NYQ0cwVndYU1RHQnM4THpYMFdqQmY3eFRKVkZlS1RMa2xLb1NSM0lrbjJpK3BqRmR1eDJTTjBmeVBGbS9nUWcrUXQ4Y3JtMXo4cFhtWFVKM1JLbHM5WG1DNjNiSVhBdDZkWUVpWTc3T1kzeDVycG83aUdMOU40YXBmckxONGFueG5jUUZxdzcrWHYycUtrOWJjbzNVdE9OMmh2RnpKSVpNQzJ6cFkyT3A1Mk5GTDdPc3dtOTRUNm5sZGptT3RhaXZZcUROUGI2cWc1ejNCTDNBNnhsREMvN3B5Y2U2OEdNYVdHWHJiRVg5V2pXK29GMlduaVB4RDkrY0ltK2RCbFlFMTc2ZHZJNi85NUxaVjFVWlFzdmpLcmV0MWsyZXNRNkQ1NUlTTWJENkpMZVNOb3NZU2JRZE04MVhQRUZLZTJMdnZZUkh0aVJTWFU1MDZUVmJwUE5UazFmOTVRbTlYWG10TGZnRWlpdjRvc2l4clNEQU44czRCRjdTNDMyRjVIM2ExZlZqdzcxdmFvaGVhWFVMWDZyY29oTFdWVTdGWTBxdS9hQm5UZGRXd2pOWGxkNEJ3OE5XWnRYWmxGZXFqVHRrZnE5NHlPc1cxS1NoejNORStCblI4ZlRjWlhTODU3VlZUTllxbThOYnBmL1B6bU05bTBuSkMwYTJxUzE4dUw2QkMyYkNFZE1jcHBtOUcvVlA2bUNLb0UwNHdDUGNRMnI5WjhBRDJ1Mmp0V1ZPdnFxUEUvenVYN2FwbmVnNktKekVxc1BWY3lSeTNrWkg5SHMyUjZmRzBZRW9XS2VVYmZ0K2Nzd01QVWY5NCtUSno2UWdhK29JUUJjaTUzYkV2YXYwTml1ZFhva0JlRHZsdkVUT1dOcHY0Zi9RNWhjYTFqUm9UTDVmQ2pueVQya3dxV2tkZk5pNjBUMVpwcFo1Z3AyQnYzcVJCcHJTZTNZNzJzSVNRbVFQOUswOXcvRHRsK2ZENnZrbFA1c3ovR3drSVIrcEdHNDBkOWlHZWdHTjVQZ3J3NzJ2Qk1Fb3lncmJsSG5ibkhKbERZR3JvTnd4dGRNb1NvTXhyVCt3a2g3blNQMi9SdkYwcHRPOGQ5ZlFjN2N6N0pMbituK05OdHFlNXZHZU1GMlh1SWwvdjViamkrRUtOSHBLUjFLVUJuTnpobkhqNUp0dzVVelg3ZWhGeWNzOXBSZXJTaGg2aGVoNmd5R0NwaTRLeG9ObDRNRzFmYjNDTmVUZHVhL0E3L2lkY2FLRnZpTEhydUNuM2h6Ymx0emVTbzU3KzF5Zk1hWUhmODR6TU9HM2pzRm4yRFpTNGVvZUxiTTZXbWdsYU91WVd2ZDVjLzhWZEtsSGZtaEh5MkxDeXBmTkJFM1drQmUrdFV5NHFodHdmcmhRRDVZZ0h5eGptdm1ER0Q4VGcxNWh5Q2VzYjQvbTk0SGFULytpT2ZQa25BZTBCaVVTWGN2VU9WZmdNYjNDVmFNcmFOS2tuZVVFVkhVQXNGZHExMkhjWk9POXlJdDZrYXYwb25ISEtzYnJwK040M2QrN2hweTVVWGZqRnRQSlpERTVqcGVINCtTa1pxcWNEeFljTHhxeU9GOXcwOFd0K1d5aHQ3VWd4OVBmajRYaDFoWFV2UzA4RUh0Zy9iVDNPc00xeEtFM1d1WWF5ejIyc1RFTmpSTi9yM0tIWW5McTU0dEg5VFNWWW5yTllZaFVwY3U3K0t3aWNXOUg0dU5TWGdiZ3B6RW5iRjU5NWtha3ZzTlNqcGxySU00VCtxVCtCbUxaOThIY3NCcS9XVkNYMDkzN1FCK3pyZnJrZjFzc1pXc3BENy9OK0VrdHR3WVRkaTE3VzFsdXNHN2tETkRKTWFhaGkvbGNCNDlGT3dyV09lL2txaDBGYWhVNEYrT3YwdHQ3VWFNT2FHMDM0OU1ieDlSUzMxQ0ozQkw4dmF2SU83dm9iZHlpbDNtZEtXK2JrLzNrTkxtZlBFNnlNVndwa0FZNlh0c0EyeGJNbGF4WUZndG80eVo2VEs2dkJMeHkxZGpuNGJxR2pZYmcybmhaM2k4TGNlM2k1L24zNmZ6a2VqbjlBUEZlb1ZjNEFqVE9PNDJ4ZlRPWTBNWk44dDRySHRaMlJ3KzlSTWEyQjdLbGVLc3FmT2hRSGRPWFJQQUxZdG5xQ0RyR2FReW55SjZMeUU4d25VTXRSQW8xT2trdnR1Y04zWTJlSWNPZkV6MEdtQVRaazIzYUdaRlRwQ2JGVjBLczB4YTJBWFZYeUUxb1l5OHMyNkNVRGlYcUFPMzl1Wmo0aEw1NEY5dlZteWtIT2lTQkg5UjI0WE92NjBpc1lHWDBlQytxK2F4WEFDMkQ3SVVhalg2MnJtTmtSSSt5amE1UTZYYUYrT1FZTnJHak5qTmE5eUtDZmVvYlhjeUh0dXBneXR1Sm5hMGtNZmZodXRBaFVwL1VyZnFVWjdQb0VDd01KSTBsY2VBc1ZYTDlzS3hsczNyOGhhUDBlRmVaUVEzSHl6bzRET2RBVDdsdDhIdHZFMVArVC9VUG9BVjl1bmhDMDdrKys2bysybmpjUzUxWW1nVExSRjlqdmNLR3E4T3dmRUE3eCtCNWQ0RjF4eG5ndjllWkJaTXoyZ1dZUG9ZRFoxNnZnY2dMc1hBRmpTZTJ4SDBqNTFoVnF0enhFNVg5VFYyK2t2MWxjemV0cVQ4cjA0Ty9TQU4xclRhdUNpOWwyblBVdjllRXVKYmRWQ1orenhpMTNqVUpsaDBSV1FKS1ZuTng2QnJ5eHA2TEJ1VDFHcjBkcVNWYU51TFRxb0p5VWpNSE5XNDd0K05kcTcwNWVZcStkZ3k3UytTN2p2a3g1cFhBQ3gyREQyMm9ZNUkzWTBuRVkyVjAvdGd4Zk9SMVpnUlhsQ2RzdjIxZHFmb2QvSXpqcU5hWlBVeVh4bkh2RjJMbUtxQVhGclRFRXRORlZkZjBEUFdTNHRJdFNCTkI0SnNETGFRNllhMHJSdjNHbml1OWlxeVpPVXQ0TjFoSjNlNTRrK2FXY1R4Z25nL3ZZeGhIWEtCai9teE9vYzZ5aHAyVzJZSis4aVhJZjg0c0lXRGdwNS9vdWpuTDhMNldZeEZhcmV3bUlzL1hwZjFIeG1Wc3Y4STJ4YjBuUUh5elcrcml0WTFFNTM5TUEwOEl3OGw2S1R3bmNtUUpHckxYVDhYa05PT25hKy8rZWRIZmphTjdDcHQrQ2J1OW4raUZseURNODhnVjJZbStjYkJ1c29tM3BDNndkNElZS0h6V1Fyc29heHJMZll0UTF3YzBLSFRYVUk5YTQyRUkxeGNyaHdwSGFyMzFPODRJeGpvUzNGNUNBOGl2Y09WelI5dTdXSzh5UFBBbnVpWWkrTFVVVDQ3eVZFd1gxbGZMR0s2eHJKMHMxTlAwY1NsTVQwRjNJdDN2eG1DL1Z2YmhXbjNxSFlqZnNWZW9UenlXdytVMTdEUy9DZXJWdGhodVVwRE5mZU0rc0pUdXlTckUyZ2N6ci9NWXhsVU9YUDJlVlY2YlhsMy9SWFdLcDk1TTA0ZWkvdFNibTF4bTZrcC9xeXJpd3RDbkw3UGw5SEhCNjgrNjNCdHE4RDJwZ1Z2eWFHRnk4dU9NNitrTHBMM01rYisweWhKdUxHZE10YTZMRExLcFplUUlTc2tUVEs5aDZFdFlEMTRHdHZLQVpSL0hObHVrTkZWWUJ0b1N1dTl2TFZZSGtxZjJrdStKTTI3NlRWOTJsM1ROdE1hMFB5cnp4K0E4Qi9YKzM3TFRTbjhCUTV0ZFQ4Rm5EYmhVOFUxNlhiNWdHWWV2NnVPUXNWdXgzcWZ2NGNyL3g2ZmRzemxwOGJQVTUvd2NpZCtXVC9wOHBtdmZscWczMG5rcW44cTZXYjFYZFhKK2psck9vMS9abDJWKzBJdFg1cjA4MWpiYXhWa3RaMS9WTmhqMnFTMUc3R25SRXFiSTZ4Qy9HTVNrRHVsSUozWEhLYW05cnZqSVNYMVVneXBuRE11L1J0M2ZXVzRCeGFINnlwenBvc3gvdDZUNzBoYXN4elA2SXdtUldsdm1PNmpyZ0xPZ3NobXViVXlXNEIvRGVsZFpmMWpGMHhSRWJnMkorbUNUNGZldHVWajdBV0kwczVqNmMxVVpkc21WK3pMdkRyQXNDZmUrb0F1MnFRYU9PU04xMDFCTGk3QStoZlU2cHQ2WFhDOXBLeWloL2xKT0hkVGRyZjBCT3RqeisycGZZTXNJUUhkc0huc3dsc1NnV1k5UjhrRVI4bWN0aWRTY2VnV3JHME5PeTRuQUpDemNqcjV4b0Q0Y25kZzFOTThJcm5qa0hFWHYwcHJkeWg4eER0S1Jab1loMVAxanZVY0l5ZFhhQXkzRk1LeHpCVVZ1WllxbzNMdjFCSHF6WkJuSDBFMm15RXY2VGY5UzNlMGJhSzVKZjBUMk0vSUl4bjZPeElrcnlQRXNrYmRnWDVocVF4ZTVFbyt2NE55T2MrQVA1ajE4YnFTZXV0a2pZY1BXSjljTnQvSHZQckY5WXNlY3JtbVBnTDBMT05qZEUxM2xQbENmRUVkOWZRV1dMVjRDK0pLQmZ6NnByaFhGK01PdTRiSDBMNmx5NmFPYjd0MmtpNmdmK2tUcnR0ZVErMHJpeFNmSDBGQ1pwK21WOUVwL3Q4MGg1eGdZM2lBcm1uTUJiY3pBZCtZbWRSMjVKNFI3M3ppQ2o4SW50ZUNMMmZJZXkwM01iNEEzYUUvZGhmb0VjckhrN2V1UzFvaGZHYTZSSXJ5N3lRYzR2SWQzci9FY0hrOU5lS2lEYWVwMjlLMHRpYWxsMmdqajRKS1RuOEYyVFVpK0t0V0xuaFpvRWl5ZytUSmVsOHlWZmxDdkVFUEM5eWFCYmNqWXpxWG5LTzVyRzd3OTU4TXlaenRWb20xVDRGLy9yL0g2bU5xR0hMc0toZ0ZUNTJNQXZQNWxTYURuVnJrQVpTMyt6TkFFd0c5akZtaUpIdm9EdlFEL0YrR05sVjhQOWxRMlFEK2tvNW5SN1dKYkVKOEx4bGxyVU4xNUFqUm5TWFd0dTEvSEJXT3ExK2FXS1o2d0RWdjVxTnY4V3gyRWRhWjdkZUJub0lPZGpWWDJBN0hNSWVIQjVpUXdsdkowOFhpcGY5WFhUQisrcWdNcVl3ZmtDdWQ2ekNXclA3Nnh4cmZYTjI1Ylc4bFhCOVZWd1psYisvN29WYjR6dUNKNDNDRlgwbDdvMWRMbEZlSFBrZmhBK1JtNW9ZcHAzMUxwK0VIVzlOMVgvTFhtMWFYK0NqRUZBcDlSeFhlSlhnczJUY2t2RzNCOXZNL1o2eDFibStsaiswZ3BtNXZmQnk4bWwzc2RlODNFTU5hbHo3TDByNnV5dnNQMkl6MXZhRzBEZmw2TXAxVnZrZk82Q3hHdEJzRDNUdXBUdGxodzk2Vk9DWGlKZFZPc3o0Qzh2RDQrcFRNc3EzZ2UyOTl3eHAwaFhPRkwvV1hCdDhkRDhHM2REYUF2aE5JcmJNdzdpSytvYnFHalRQZmVab2g1eUhZMXg3eGF2N2VBdHBZZmlaM3h2aEx1dlFSOXBUVjd0UTRwVGJBZVhEZ0crSFFybmN4WGVxKzJjZjlWZlR3OHFKSzJYSEM1dklqNi8vcFcrelI0TjBHY2QwZ3JQN3ZaRWNPVmdXWHFqTHozT0p6TzRCMnF0MjNxZmRGMlQ1UmZrVE1tWjFISzRQNW9CV01QUTkvVVVyY3p6RlpVYnFqck5GalJlZFdOdG5jRUhiNGJ5dHEzT2FjLzQ3Mjl6SUZXbzdOMVJjOVJ2MWdzMVMxcDJDN3V2UTE4eDJHdU5RWWF3YlpQMXJ1SlYwOGxma0l2RXRGbGRUaHEzemdDUG50OVIxdFh3WGtQSzd6V0E1YjJLM3NINjBQRXBpSytndktDREVYTFBDTHpCQnR3b0JvbkpyMUdkRmEyUk9Bbmk4aFYzc1RuaHZrS2ZoZGdIb3dGbmJPcS9qVmx2bGtmNCt3VTgzZ0graWVkclZmSjBhcjArZFV0dHpBdVkvbFF4Z1ZEckVQWWhwMnRLbjdGN0ZPQVBHYk1mN2VlRW9aV29uUGd3MVdPWGF6ek1qcGNnNDgwN0tVeTlrbnhjUExZajZ2YmFjRG5wWE1PeVdOTEtJNGZKbk90Z3VVendJVmVsWS9IRFRJbUg3RGZwdWZCUlF1TW5nZjRTSzZsdEdxWlFIOHI3U0h2eE9Bby9UZGJYSDZuUWt4VkwvRHp4c1Z2d0EvZmpnMHovOHl6YTNncEhkVGZQYWxmMWNIMjRqMklJMjhtWDFYNThqZFZlanZPM0hoZVByOVNuTnV5enpBeDkrWlpyTlBncGMvNit2aHdKZmNPbG9tZzVvSFNMdFduTTY2S0hacHNqSURtbmhGK0dHQzlBWjVQYXBuQzRzanpJWTBndjE1U3Y2cVBNMHp0V3lrQ0hsRFRYMzJsTlgybkVST1U0ZjdaK1ZrY01LWTFNT0JyMVdpUG8yYTgyektIa1dOcWhXVU91OVFQUVB2OU5QaDhNSjdUK2daaEdlaUNIaTFwM2FvNnNETnJMaHFPT2VSOFE5NHlWOGRpK2g5NldPODgzYUNsQVZPZlhOcmpkZTNPVjNXZ0ZiNnhIRUV1WmlMUG03NWV1TkkvMHhPOThBUzBkOWRwNENZNlIrSVJVQmVRd2Z3a05pdE1qQ0h5bGFjanhnUDQvVEVOOUFRVi9rQVAzU3JmZUVsbGx4YmFpc3hWdVJJZzkvV1RoM2trRTl1dGRZamp3b05ZTlpZNzkyZFhqYmRkTkZSZm9BSTZ0ams5V09RS2YzTFpCS0g3aHI2aVN2M1lINGhidUVQNE1RMitCYzJycXQvV1dXYkJpeVFlZmFQSGthdDlxZHhVNU1nMmpxZHI4elRvWVhEdDBnOHlCcnQrOERXVzhYZWFLMURPTVFaOW50OHpOWGIwdWJxMmtuazJYODM1RFpiWnZpQjNLV3dnQnNrOHM2TTVKWldkd09TcWdCN003QzhuNTduOGltMGF0ek1iTlhoaEVuOXQ4aE1SclJSNTdUK213ZmhRKzM3ZGpzNnh1QUI3TXFmWTNpQjYzRHB0OGlDQXdlenJCYTlpZE9MbnFQK3Z5OS9oeW5EMmJzYmFSaUtYN2JTZWE1MUgwaXY4eC9TQ3A3b2JQYmNZbjk5SDEwUncrKzFya2dsdmd3dFZnR2V4N1JlWDN4U3QvNmhPbGZNT2pHVzNPYkNtMnJyQVNVRTJQTy9vUnFKSCtzSHVERU9xOVlTZ1RTdm81SlBQcFJmcHpVNXZTN2pHaWtmcUU4cGRVK2VBSTgxRnhUSDByVDJZRUc4SjZld0lYZURPb3RTWmEvQjhtYVZnSndpNUN0YlN6N3F2WFhwS3dQdE1OVG00WXN0V3NHYlc2MElYT0FselpYbnJTdjBqaGtXTDVVcWFiUllpWjJIdDJ5VHd3MWFEYllhRUd5YmU1ZDdKMVZTUS9lQVE3V3FQc1FveVFNQmpSanRJbWxPd3VQd0JIc2MvbFpLTmlYQml6Wk5nZUZHUFp4UFBXYW1oTlRLTXlEVkE0c2xYZW9WbCtHRHhzWjJBbmh2YVBvM2NibVpsTkI2dEJwQzVzclBuSDV0RGxmcnJOa2xEb3hsWW8xM2c1MWtLOXdiMnVoa0pKRnprakRxYVhEcTYxSkF3TmJmY1p3aFJaM0xkRmIybWJjNy81Ulg4d1U4bTdCaHJPSVBhNnpMVDQwbmdka1RpMFNwRWdwZmdZZVJEUjFpQ0o1WTBtZzNnN01lU1NESzZJOURHbTkwRUpaTDU0d25UMURiNFVJTDl3aFZwUjk5QUJiWVFITU9xc2tFdEdpMG5VY1JwYUFraFlpTUtJQW5xQ3VTdkZld0grcTdxYmtnN2M3cUpmdTlMcEhrdGljYVRLZ1VtT3JuM0ltd0ZUOU15RXdDcXQyc2N1WlloaG1ISVJLdktDQldwQkhFMlBqYzJSY0U2Vk9OQTVOTHRZSnhYb2N1VHF2UU9KWitoblI4eDdIS0kyaWlJSzZXTSt0amZZY3VEWkVXclJDdHNkbWVrZklwMndKeGhmc1BRU2o5clZ0UVJqOUFCc2h3SkZ5K3pCUXNzUWYyRTRpeHBLUHhWbFhyZ0ZSNTNwcGkrMTNCM3FFRFd0cUJTZWl6SUIwL3FYbVIzdkt4bDlxbzBNdGNWajgyNDFxQ2JkNm15MmdKenJkdVY3bHJWZWJFMDFIWkpQc3NUeGdsRG41OHpCc2FQK3Q3UnQvYXdxZkdidWU2UXBkRTJxVmpqYTNSdHZvYjBMczg1ZHpzMll2Y0c4bkNSQnVNT1hQZTJMN3VDemFBckdMOWtySkw5cEtHOW5lT0l2WGNIZW00dnAxdkxRRGxUQlhFYW41NUdETC9LVlVYZmVvTE9yRTkwelRNY3FPK1lUZGMwQXlQekVqMldraFp2OE0veHlHR0xxTUdyZktOTE1veUFMaXRlaCtVaFpKdzZwa1l6NldhMEEyNnRYYzNLTEhLcFM2L2lXL2JzUk41NndyTDJMQzdMclBCWm1kVnpIamtkbmNsQ3pEZDREenlXZW9mcHVqaGNOaUpyYk5TQmlSSVErUWI2QTk0cnk0djFwK05pWEVheHNPVTZaMlE2c2Z5SVRwVDBPQWVpQkZOeEVXVFZuTStVMS90WU5wR01IbzdxS3p0c2dhbktNWE1UbWgydG9CUFZpVXJlZlhVdlZCOWdlWE5pR2NjVFJKV2JNdlNxN1B5QXpEeGhlWG1PQnl5Y0ZtV1ZVUDg4Vzc1eC9XRHBmV0Y1TDJUZ3U1MytWNUtCY1F5SnhYaWVzVTNvMGhQMHJXMU1PYmVqN21tajl3bTl2ckwyY2dLZmFPb1FsaWtleW13U3FHRHJWMWJPM250TXdacG5zcHpQYUpxNUxsR29yY3l4Y0F5dFJOOUNWZjJnZnpGL0tRdXRwSGZQWnVYckpuaWYwSVVIRXZTTEx2SXY5WWNUMWdGYzQya2t4VHkyZUNyNWgzSEpncWh3Yitkank0dksvUXZQcFNJTGpVZ3g4VzRESDdRbG1wVlhSWm9xN3lGNFBHbDM2RnIyWWozeDhRblQvaU4wd3BiODB6czdLTytyT1lRZVJCNThaVm5wUmRoT21CazJoK2R4RGJRaEVjWHVoc20wM05tbXgreTk3SGg5cURLZGEzaVFhQWJKZkY0Q2I4SjRjNk5iYzZubjUrVGVhL0NBY28ySUY4M0tnb3cvaUliRFdWWFpMNkFUazY3anRieVkwOHhycGJlMUpXSnYxUjVuUHZTa1E1bEZpYXBvREZTcFFKWUF1V2RiQVc4cVBxZGE3ekh3ZU5SR2VTeTlRZE8wNmtoZVI3RUNFM0NkeS8zU3F4UDFJN0JYSXRIRE9EL0dkTnd5cmlxRGx6SEh0ZzhyLzBxWkRWRXBxbi9CSExUREMvTTN5Wll1UFd1SXZVU0FaT3NBajZPNFZNSnhnY2V0ZUc3dE1RTnZaUUZaVnBrTE9DUnY0VzV1NVl4ZWxDcmlmM0txcnUvTTNIUmZZN082UWpsUTBmMXhUTHhaVWZtN0hWM1FJWUVYZUNZWnVWNVdkeGQ4YnBuOXhyTzBBenp6Ti9IUXQvT0RSdVVucHJrVHhoMHNvejZKTjl6cVJrNmoxME5rRy9jVi9kallQcFpKOVYxTmg4UlduZ2xoNkcxbUc2OFEzYk51OVA3b3pJNGUwZW9IZW9QQUhpSUNnQWNsRGQrUHBGaE9JTkt1OEpuZGdjZ2RscTFWUkFsd3BScTMydmNXMjV3ZXVVV0FSTldWYVdvWjNRMkc0Y3JvOFNRelJWLzdKRUxYeUhZdWJUaHJFek5uU3VhRk9ZVmp5U3VCOTNqTW1ZeEpOL1hhZzNxdG94RFJrMWllb0FCZHQxWmlFdGpxRFAxcVlHdS9xenIxYzd1Q200ZnY3ejdleng0WTNqcTF6UFlxUzJ2QVJnK3JybDgxSFNsc3BYczdIeG9ibUkrVy9wcXJsY3gxaHhSSlhHRGQ5TEtTdmpuK1daZVR4bnBlTUM5bWVVQ245anVOelNueXI2NkhWQkhQcTR5Z1NWQjcrQnNWdWVmamw5NzBNN2kwd3JFOSs2TzhLZUs4Z3JlcFkxWVpTdXo0aTZnbnZyOGp3UmtjcS8zZE9LUDZuSjV0VSt1NG5lR3JXbDJ0Zlh2OEtrTFJLWit2NThIampibW40SHM3SkN5VlhxdythWm5YR2ZJa0cvcyttRzMwMklacnZOdk9TWXl0Nk1vK0w4L3A0QXF6SE92OTNrWW52cENJajN4RDIxemdHejZuT3FJUzFIYlV6ZkVMSzVIWGJlZCsrNXo0S3VMWitpNDVwN2Y1M2ptOTNxNUFQNU9wSHp5bmlpOHZmM3o4U3poK3JDSmVGZ3NYN0lRUStlWWtXSlNkdGFLcjQxYzBXajliK1o4dnowbnB4V09qNnNSMXlRL082S20weDlTbmhpMTJnNTZnd2kxeU84SEYySmR3dkhyVi9BWC94dWRVMllrc24zbXE3UDJQMGVzbEhKa09KVDBtNjYwYXYxb1Q0WHRWSndmUXlYMkZWTGVYblF0K2xPOHhjTnhiOWZoNTFhV2h1cm5uL0p6cUN2T3Fjd1FlLytsK1A1dS91MVBPalhOaXV0K1k1ZmcxdmtsQnBzQk5XV1hteHZ4QXNweUZFRm5DdHN5MkJQMW9XY25JQTRaYjViT2xYUUJ1MmtIbjczNm56cDlqSGEyRVpSay84WVJnUkxva01HY3lwL3I3bkJmS1NpRlZVdkZhMm5SK1pseHEzMGo4U1QyajIwcW5HTlF5bjR4RmZBM3MzODBib05wZ2cvVjdvdjk5RW16K0dYdm9paTcwUHJnMEw1T0RLd2QvSnhjZC9rNXZrL3l0Y0JKVWh6YkJsVW92ZDJwelVWdDF3WDBQbWptUW9QWWZxNklmc3dIZ1JvaEE2cEpRNVlEdlNTU2g3Q3U0VEtVdUpMN0Q5MGwzYndweWpNMXFYMEVuZTFHNkp6TVN5TVlrc01uL0dNLzdzVGNZN2pFSlBhL0JOQy9jUkM1VzgzN2tLeERncDY0M05ZREcxRVh0Zmlmemt6Rklna3YvNjdkNVAxTEpYcHBoQXFsTDV0WDErV0l3MlFGNlJQMGRhY0NnNjh2NGVCcHY2dVlXWlZJQndFL1NJQUZLZmVRQ2J6RE0zSTJXcUpLS3ZGT0tQSzRmcVZMSWU4bng2QnM2WHZmWm1OQThJN3Y5VEQzdmFON1BYMHh1UkYzZzJMU3E5akpVTkZvMERmdGt6NmRXYWZsYUZTWnV5bjVRajRlU05qaG9TSDVhUkRRVU1DRHd0SlZlYmhsb2Q3SG40cDdnUXpMWkRjMUpwRXBhN0FwODZCajN3YWd0VWVNczJXUjB2dmRrZSs5eGxZcjlWSTUxRlFhUWhEY0RYTUh6K1ZLZkJ2emorcDNCa0NUclNsbzJsdnF4V1dCNGlhUUlYT3FuanRIbE1CeHNXbGpyRmVUZDhSeVNadzVlZ25hK1lnVnFwRU5oLzlDY0lLL2dzTGtQWjI1TEtsNUg0WGEwZllVYjBxd093V3hxRWdmMlJKTW1oa3JNbm1ITUpDcWNoVE0rQVhlVDlnVFlNcWtORWp3MkpNRmUxNGNUcitoQzBoMDBtalgxUFRhdFh5RFpycG1BMS9KZS9UczBqNUo1dDZPaG1qWkY1Q1l6RWlvaG4rbWRvbDNPSFV6T2NmT010cld0UjVKN0tUd3UzUEdRSkVlYUNPbWtNWXVrQmlPYU1LbEtZZXdZVTA2VmhzUlZHUFdqeWl5R3h2S1U5ZUx2TzlxOUd2VlRtZ2daakJRdHN6cXpRQVdlb3diaktBNkdVcHlwMGoxdGNvdDJ0Z0ltUnRHMjF6YmNyYy8zRmh1SC96N0d4U2wwYVdrTTZsRXUzbi80SnZYakphZlA5VmlmbTF4WFhDeVh3YmYxL2NoVjVOeldlN0Z2VEY5TndTOHdkWm9kRVhrSjJ1TlRuaXpFazVRY1E5ZlFYK3lCdm5iNFhseWxpNi9UWUhJU1Q5Skd6R3k1QjVCOWp2cDdQNUVMYUxVUTlWakJ0Zk1VRk5OU29BLy9rNkpKV2ViMmZlODNNWTRJMTF0U2kxSWVTVW51UTR0NzVuUXpPK3J2bUd1TDhNbGlMUDVhU1lyV1ZMVmVhRDhSaktRdGg3REVvRzJsK2ltMEY1SDZFVWthVVFPMUN1RENsVEpVbVlEdnVWVTdkdVBuSXNCTWFaWmhEanVhUSt2RHpFMDBNR1ltVVFzVzNzUlltZ2IrMFgvNG5KVDZXaUR2Yzg1dGF4dHlBdTBZekRjNFJzTE0vYk00QjNQdFVRc0hpYjhYL2lTMTlzUC9SbXJCbGlmT3Z2UGN6dkNldVNybURmeG41LzVaZE5CSTd6dW5oNkVVQTNkK2tjU2RBMlduWFU1OVZOL0JoWCtBSitueVV1OS9DbTVEeWVnYk1JWm5TUG95ZWVZeXZSZktPa2xiUFoyME0ydVZacENFc294VWFWaktqcjFyeWx4bGhQeXplRnkxNy9yZU1ScHlzcnFLVW4yRFoxVFAvU3o4WmE2QUJJTVo0TzhQOFB1ejc5UW9mb1EvVjFlNGZBcXZxSytoYVZwZFRLSVNyTDk2YnZHeitISjlOYzEvQW8rb3Jnd0lQb2RQdUVJM2cxWVV0M2xGRGY4MmF6a2g3Y3JNemhYOXA4UzV3UlF4ejcvUWxHNnEvUk1MN0UzWWZSNWZPSGdKNkptWm0zaWZnclBlWUxqSGRFb1NGMjdDRStaK0UxNmZUcU5NMHVMc00vQm4xcFlneUxZOERNYm1UVGhjdEVmOENYeVNuZU0vZ29hWlJPTFB3THU0elFQSHpQSFdHZFFKbmV1ZlpSVXppYWFmS0t2T1BsKzNmZ01uWHgyYzRvTk96RE1SOUhsT3pQODFCOTgrc3ZVcTMrYXZLeWY1NEtHeHlkSE1BaXA1UjFxMElab3dmVnUzYU9wOWZMaVNwOWtxSVI0c0tJY1dlT1FhdldLbDkwNjB5QUpLMFVHZVFSSW5sR3kzQTZTU2hWQ2FXYTdyeGFQdFg5WEgvbnZrWUxrdnRuWHNHOTZ2S2VkMmhzZ1V0S3p5MkNWYTVrWG5zR2piTHlTYk0yczhQRkRremkwelhEaG1CbnRTSCsvLzFkZ25XVWN6V1p6YUlKWVp2Z0JTdHNGd0l3cFcwVDIxanR0RXFLMG4zRnBuLzBNNnhWV2tSQ3ZuWlpQNnErMEhrWkx0Ni9OOTRZMjBpWXlnaE4xR1hzeFZmcFp4aDhlK1pPU1gzSWFHV25hak9UYjh2bFBRdnZkd2tyL3kvS1BuQWtZcVVjandHVkR1enRUNi9TL2MzNFI3OXBybXFaZWlXN0Rma0xDR0pmUzIveXNaZjFBeXZxNjJLZHAvT0NUTEtvUmdPQ3VvS1BFZC8vMmhNOC9ST1F0VUN4R0Q0VzF5MmREa0I5cEdxdHE2cE1XT3FaSm83V0NZdVhyWkpyWWZqUXVWbFZGcjJ4eHloTWN2Q1FwQnU2MHVaMGY5YUdoTzltVUVFWTgza3Jyd1BOWXY2eFpvaEVUR3liVHdKVFU3ajA0NWd0Nzl3UGl2dGdua1ZaVnNVNVRZUWVzU1FucE1XZk9iOW15QTF6YmpuaHF3SERJRlhQVDNwcHlIaEZtV1BQcXAyOEZ3bytqTThhRkhZWDUyQmhrYjhRWlVlRXg3NmtBckhJTmYrSWFkT0dZUXFORkRwRXBkMkRPZTF4SmtJcmNYUklkb1JuTWZrRmVvd1ZEQlo5WlB4LzlmOXI2ME9YRWtXL3V2YUhqN3cweEU0V0t4M1EwZEhlOEZiRURZeG1hVGdIRkhoWlkwa3RFMld0aG02ci9meUUxS1NTbkFMbGN2YzdzL3pKUlJTa3FkekR6TGN6WTd0QUE2RW5HSlBYaWNqQ0w2djl2THRRVnE0R3ByOEZZNWtBZW1qL09uUWlDa3dCWDU1NWNKdXdQWnZKRmFSWHd4empSKzcyS1ZiY1hMTEZPMkRJYitlbnRIUzF6UUJJNnAzTjEybUxJVHg4bDZyRHdGeDk3RUNRTWgzZFA1cllKSzI1QUlDQkxaMENNSlNiUkVSUEVTazhRbGNUWG9wTVhERUpNdStSNjJqQk5UeXFWSXhKSFdBWlU0eWNWc3hVbWVtZStzRkMrTEFSVGRBa0ZRRG9DL01UWHdoc1dKbzZsSFhxYm1TQ0dZa0l5Yk1UVkpKbm5pUE5BUWtyaldCVHFUTVRQazFYbU02MG5nVUlPQVpLdlJUTGhDZ0lPTW96VkdtTE9CbVhOU0M2UjlXTW83YXdFTmpOY1RDKzhrR2N6VFZIMFJ6c0tnT3NWSmpkSkhzLzJvMW5DTmFLMHZtV3JQT2lpM1Z4dTlPN0FXOHZocUpJL1hVSzVyTmVuQVpvb2ovWlhWaTVMUWxhMW1OeXBxYmJoUlVWaFRPMURtU0lmQlRteXpaYVpzRmJObHBuZ2p2STUwWnFRUFVRY0g1RHR4WFJNMEpvNm9GVmNpMVAyUU1MV2k1VjZrYTBKQ2o0aHdxakw2SVJRK1BkM1MrY0JXSENJVDY1S0o3bWVqN1AyT1lXbHgrRmZqVmExdDZVRXhJZStqQjJPV1hNL29sRW00RXVTWjQwU2dRbnJoak04Sk93NVZiSEFYOCtFOVZBUzQzMFIxeEtRbURnazdHZ2RhSmJFZm5ncm1oNVdWdEoyUnkxWm13c3EwZm51VVdlY05GTVRMK1cyYWZwMEI2d1NGOU9HTlNad0VXR2FnWGhlbzFsSm5sYUZSK3lleFA3WTArOHJRblBWS0pJNEJ1Q2RRUHdZbzdFL2RRMEpqUkdmOGlzYVRieU5oVkZUbnhpaWJtVmxuVW9kTzdJd3B3MmJvUU9SNFowQ3Jpb3pRMzlsbjJOMnQxbVcrMzJ5dEYvUDJsbGtQUkFPMWlxTlVlWHlpY0cyTzZ2ZW1zL0pCRUh5RDduSVArVWw5Z0RKY2tKSjJ2SzZVLzRockZtMVlYajZScnh6RVU3YS9HUzlQRUZNelg4ZXAySzQ3d1VzZGxMM004TURFZ2J1WUR3L1RsQkNuZEJ2ZW9QNGhGWForbC9tNlJQMjAwaTUyMm50ZDNxV0NRd1k0b3hrWk5QY08vbmVLOTZIcnhnelZVWVk4cjNPRjZneEtxRjUwNmoxN2xGazNhVVZLcjNIUWlVNkpLeXZnV2t5RjgreTBWdWpjTVhXVFVIWjNuNmtpMHFuRUdkOVE2YUh6THF6RnhNeWJvdUhvL2k2cW9WNThYMjlnTEdvaHBGbTJMbFVtY3o5MXJSQjE1OHY2MWxrMW81am5wb05jQ3M4dEFqQXJhdEp6OHBIZHM3RitEMmxKTWcybXJDSUplVm8xWS9qeTFncXZiMHBQMFhzTlZMVkU3Rnlodmx6YW5xYzg1dmZrYVg3aktHRlFWdDBkVk1oRDRJUlE4OVA4blBGMFF2RkRIL3M3YU9SSEcyQytTd0hFRFZkUEtvR29vUHZVWFUzcmJVT2JTMVlITmUyeG9tVmxiT2k5VzU3UzlhcjNEYWdjQk9UZjhrTGVZc1p3NUh0UUtncTdDWlBuSGNnbXBNK2tmOGZQcFVZZjNIQkw5QzBEU0pjMUVxdzJRaXpnYjVHU1ZjajZORFVGS1EzT2NqNkNDazBGZEplRzJtbXQ2ZWFlMUtTcnZQS0ZFSWg0VERLdlVjU2s0dENEYWlKbUE1OTlpOUNCeHN2a0NqTVRjcjlrZDVHQ0o3NVN4aFNuemVERzF2SVZQZ3hzYkhCZTBQS1k5UmxHYXZwdzdPTERRZi9tU1dtc2RhQ08yMWk2b0lENnBHTXRBM2tobUdjK0NGaGtrd24wam9QdE0yaG5WYk8zdE1iRjlmMitrYTVjNTJTRDlMa1cvUEZuOEdyY1RGaWY1dEhnNi9qN1l4ZDViN2hmeXVORGRoemFqUFUwc3B2ZEpHVHpYb3VkaHFYMzR0d3VadkhSM05jYytrYmszcFI3NktQZ1J6VDN3M3RoTDJMYWs0T0prT0lqd2UzNTBJODJnaFd6SWNqd3Q0emJqejBrQ0xtQll4N04xbVk1SDcvR3VXa0p6VGZrUUthNm04STUzZHRYUHNlZGQ4aEp3amRDaUNxa3ovVGI2S2phd1h0bytKdEMxVmg3U1NlQTNPK1JkWTFwMVZsRkMzaldPcGx2eEFqaks3Um9jdC80TGJURHowVkM0SDIwRzk2TUdEb051UFhSOFByd0xOYy9OcXg5KzE3SS8zVXhLVmlyTnlWeGVCOGduUDdrbWh6VWZQNFFtcHlUTXIvV2kvcjRFbW8rOXgzOGI2U2hZTk10M3NUTSsyTmhpQmtMS3NHUEJSWjVEbWF1M2tHdFhacE0rNGpjTittOXhnalNRdTliazhWY3Y5TnFqVWcwVWNiWm1URmFPZmNCbTdUTnpMTktOYlpOTEZTWkdHN2lqakFodzZLdWlkUWh3Ty94eE01Z0c3OGJtN1d2U29hNXFUM3JvSGZXeDl5cUdXVktaTFJGSEZ1RzV5Y3lHaXJKcHVwdmNYRkJpUlRCNHNJRHAxeWQ4U0hUZ1dlNWV4czQrSHdwcHBOenZ0S2R6YVNmM3hXVWVpT05DVk5mdkZYa29jOUdVNHFkZ2FQMkd1WkMzcHAzRTFZOWk5UG5JN2FoM2IyTm0vcmRUVGhCQzhVbmpUUmV2ckpVWjRHZHdxaVpwMWNFOU1CeGNZbkNyR2pBWlZDN2tKdmMzVS9hQjZYbGhtS25haTIyYm9pTCs3ZFJpUkVjZVZReEJ4MWpxOWRHbm9pYkVmaFlGRmEzWWtkY3k3Zmovcnd5ZkpxdWw0Tnh0U0ZPSzlVdVVWbE1ESktQVnFJNVhveHY5WmRScGZFNFhsdjllY1Y0bXM1bVJFMUVUVDZoV21tSTNRQ2xTeWM3cHEwL29sSkRVa1JPWEtDYXJWRGJjMVdqUzlSOG4vNGJsZGxhZWhsZ2dIZjY0MU14NHFqL3FibkpDMlp1VnhYUUg2M21VNVR5YjZseEk3dWhxKzVib1dwbWkxVW4rNkdvUVgzR3U3cDZNdHZ4eWJwM3hweHZZbXluM25BTjF3T0JodFVHRkgrSS9zdTVZUzBndmFCNjZWaGJ0V1pGZXVmcW9IUmE1dUMyWlhiTXl1cCtVcmxiekFlT2R1RHRoL0YrTVcvaDRLWkplekMxUml2cFZwcE1wOEZLcSsyczVSdzEzN01WMURSMnZScVk3ZnBDdGlvZGg1YjZyTkxtRURqREkrRzBsSVBkTWNYVWsrdGJ0TmZRdlROYTVqRGJ4SU5JSUdpaXNTWUp0VXRaazBYcGRROUpHUXNLRG8xbzNtLzYvWEMrWjc1ZmRXS1RLYkZiYzZwWDduemk2MUthUmtreCsrUWJOQkpCck5uZENEdVlzd0FyM2xNcE1Hc2VTMUpic3h2aHhCbHVWSE9kSFpQOWRyUmZpVG1hczlWVnVWRlZuVEdVVkc0NkdPVllSTUJSTUl2aDFzay9UeWhDaTNsN3ErMGJ0WWVSNTBNbDRkRnMzeTduN1VDdFc2aDY2TytyRktVcnZMekgrWXlmYzlJQm5mVGg2eWMrUzRySlppcC9Yck5WYlF2ZmVaN3ZzeGIzV2tEOWU2elh4ZnpoV3J5NWhXd3lxU1F5VFgwanRYeDVySGVyMXNac3BZOFlYeTBReVc4T2JHZXJ6S1FyMitQcVVrd2x5RE1URGtZSmZ0MS9qMkxpdVhvNUJMWm5LV0hXY2EvS1VtVWhKOWprZVE0V2ZQN2Y0bVJoOVJIV0VVS0QrVTdwTUJsSDMwY0V5YkJhN3BvOTBLUWNEOVYvenNwU0xBTGFTVmxncHVUeDJOTnF1QkVoYnVna0hjVGI4ZVBzRUt5V3ZVWTBxSTlXcWkxWnkxU1paQ25TelhadFFScUNVM00zaHVCbU8wKzF3ME9xNUhETExUd015OXB1czdDN0FkVUw3NTEyVmUzdFVzNkwyQ29oRGFGbmZTbFFhZWtqYnZEQUplTjRlck9ETEpzOWM4NUI1cFN3empyZVd4em5mZHg0c2sxTHFxV2NNVVhOUnM2YU01R3R0RWw3Z2U2Um9sR1AxU21Jd3d1UFk1aG9DcnJJQmJsd3JjcHFqSWVuSEtqeG5ERDB4OHlwelFRdEc0Wld5ZnRObURQSTExMDZyVmlIWUJwNXBhREF4eU02NmlLdks2VUZXbTROV3E4aUNwSVl0bzhGK1dMb3FDdXJ0VjJWYVJLVUMyNmpiU2ZJSG85cDhyMzBvUHhab1d1VnJZZkM3QUhXV2N0MUpwNXdKSjR2UUVpa1YxblJORGR5d3ZkRWZDVjE0Kyt5Z3FiUWN4K1A2MkpHVkc4Ymk5cXhSVXNyazd5TnhhbGoveDAxSlo0Q0NpV3diZ1orNUlXbTY1VFZTRitkQk9DMFhpTlE1T0hWZlgyeDY5aWhwOXFqYTdIYjNpeFQxUyt2T3FRNjVXOVBZYWR3THQ4ckNETFJRVkhQT2lsYXpKZUdJdThRaTM4MFc2anZHVk9SbmdLQnVJTDRiV1llUitKSGttY01Ib3FCd2tYQkVZS3JiYnVPR2JyK2lUV09ZK0ZzRkhQenF0WUhsbHBIU0htWVgvZTR3dVR2c2RaN3RWYnRBdEtQVWpPUkhqMmtzVisvUzB4bEw5M3hoUkU1UmU5TG5yRStzdGZpc21TSTVwYmVIM2lMK3JDcjJtTU1aWkR2dXArMGFWN1FGckw2ZTVtT2ZlRHNpVDg1TjNYeWF0UDNXdk5DMnYxSllvNDFubWY4TzhXdWNYamR0KzM5VHJMM05XZk01aVhFamc0Mkh2THh0VUxBK3FSa29zZ1dSRUt4bWt6L1MyVHJWbmQ2ZjRUekZHZ3ZkN05sSmhuVmFBemxkWEFjVzR6QnpNU3pjbUk1bWZBVWp2Y3hIZWVjanVtTjEwNUtTdjdoeXRJamJpUUZpYVUrRVhlTXZKVElNM25YazNhWk9HdEtONjhnTGpYT0libkx6Kyt2Mk9RL1QyeHlMdWVHZHZUSnpQbGI0NDg5c1dOc1ZObkNJVmJFUko2aG5OV1dtZXdYVkI2VVlsZGIraTdlR3NhbExyOUxYSE1RS2lGNGlheHlBTUlrcjcvc2JiUnZ5TzNuTkQ0aitkOFp0SXRuK2FmVkRtTlJHMXBhZlRoTTZydTFRaEduV013MTI2b3NaNDJJdE5UZHAxdjM0aGFxeTNtM3Vwd1BLNnphaVhQUHV3NWp0ZUZjZXI2MVJsR1F1TG5qcUxZenRQb3dGV1lhUDNQR2hERFQ1NXVuSXVIT0NTeElMUlV5RTgveWVDSnZBay9keDhoU0NxWHJ0NzFGTFdEWjlrcTA5VUN0RFF3VmJkazBPeS95Y01ZcExzNGZVSFRSNnNINW84WVhOM0hLY1hyK1RNQVJRbUVXc2hVdDV3UE1Ob3JUWk1nNHNWaDB4UjZzUXRaTDBvSDRJaVBMN3QvSS92TGZjb0l0a2FBMGpOWmFwRTVVSWFzNnAzYVBaMmk0OFdzb2Rpb2hmVGZ5V3ZKYSt0Ty9jYXY2dTQ0dFJmcXJ5M3E1UnRQSytHVzY3ZzdINkV6ajlSampCb2R4TTlhbHZGdlBiTWxtekJnYk5lTHRrdVpuUGFiUkdlWlY3RHVtWTJrZ2o2VkI3ajI4QUxOQngwam1ORm1iL0FhUXBMYnJHcW5ESTgyV1VGQVVMMTg1aitMekl3Z0tjeFRscTVwb3RpSnVFS205ODVhMjlBcmtZVUFhS200MUcvSDJ1RFUyOGpnei9CVWg3bWc5VVlPd0FQSEozcmdLZVl0V002cDZiN3pSYTVjcnJXWTVLb29rUm8yVTlvcXNPOHU1dUZwTTJvNW1kMTlKYzVxRDBwY3F5MTZqcmlacmc1b0hMdVNyZGJibE5ta29zS2VOWVdrYXhmMThHRHpKdTdVNnJaeW9XM3VFcHJpRzFybDEyUTU2cjd2WCt4SlNEeFkyYnNDSDFKbGJQVUVTaytaNjdsTHVCbnJQaUpzQ0V2TTJmbC9heENoSWN5WW9ObTRHTmJzV2I0MloxRzFQMlh2aDJ0QklCOGdyRmJrYmpIdFNzSmhiMHlVNlYrUERvOW5hb2NhZS9iR255dEpHbjQvWmExV2N5aWp0RmJteG50VWt5RGRRNE8zRHRJWGdBbDBldmk3bnc0UFVNNkJjZHRYYWJrMGhvcVhkOWRTK3RGOUtZMWV6cFlQU2F3VFFiSHljdHU0MFc4S050ZWZEdzF2cDlsVHpVQU1IZEc1TUtBZDJWMDl6cHVseW42U085eElvaDRYRTRCcnlWV2FFQUtQR1hGQ3VUcnJqMmF6N2tIRUpqdU4wSldVKzloYnk3bllwN3d3Z0RTMTBwdnZJYmJyRktTbFd1SlFiVmIzTFhrTTZ6SFk1SDNocWJjeFpoMkdWNkVJekJUVS9OalpxYjBSZHNmWkN0Z0o5UHJBeTlEN0E4NnZiMHZ2cEtjZTBnUHN3QU5OcXF1bnhuM0tQSHQ2L1J4KzJKMnBFOEtOZ3NNeW04bnJycGoxUStMZlQwU2Q0M0t2WWJRL0duWGFOZUZSWU9iUlZVSlBnZG9nOGN0MTRUV3VMdWJqUkhDbWl6U1hFVEFQeldYZDVrd2xjUDlGWW1kdHhJVm5uZE4wck5rZzR3aldsY0swclVrZnFXS21HWFAyc2JBU0wxbCsrWnVDdzlQZGppQWdIRXIraDNrZkdmSHBsbTQ2TDNiWTgycDZVRlV4RDVwUDA0dFRnY3JNZUtqUW1EZStuOXd4VE0rd3R3ZU9KSjg4cFNwWEgxeVhTQ0hxS29vTkdHRWJFRVZEVTAzakk2UDB1SHc1anZkMFVDbHZ1MVZvVnhkRGVUYkpqdVBRbzhOaTljLzFQMjEwZkhzdHhCdUJvdHVCdWlWVFVBZ2UxaDcvT2NkbkV5c2dFMk1UVk1XNlVudlNxMUlkVmRkYU5WTHRSSVQwaU1zRXRpYlkvbGJ0YmJNbDhaT0VtdGlWb092Q0dCeGJDT2R3eFFVSzQ1Vko0ME9WSzNPNlFhTmdIcFhlN0gwNlg4RnBpR1ZXcWh0WkpCUm14bGdmajBHSTBaaWVPSDhDdFNST0FESE54UkJNY3o4SUNMOGUxOERSQWlFOUI2Mk5vNjJUYkM2WGlGYytJbzBHbkRpZXlwa0d6MklvYmtGYTI1d0pQcUIyNWpHS0NMTzFJUElsbVN5akFpeGErU3NkQjVMU3dzS2hOK3dmUUxKbXZXVTFaNm1jVUdVUDBUbk5HVkxDRHJQTVZrZFRTRUhHbC9rTmhNYkxodVhtUjJjUjU1dnhyZGlNY3p3MmttZjBCNkVxY2M5SWxRZ3g2MHY3OGZma091cEQyOG9rVHFMMVc1c05YdGI2ME5HZE5XNFRkVHEySEg4WGVlS09hZWtYc1hWbVFGc3c5eUdLR1ZpS09DU2Iwa21JbjNJTWlYL2xRazZTdCtzVk82d2dmb0FnYXpTKzQydXJ5THBoeFkxTGFlSXlVaWduak9ZSWlUandRMG9ZNDB2QVVNRnc4ZDQ3amtaTjhuOVB1OHlFZjZmaWpvcGpqVS9uQlJiSDlEQi9oeFp5NWkvbkFRdFpQVFNJRkpJaURNU25peVgyWFRzNDBRWTlmYVV2dkJKWEt4V1BaaXF3UlZJbVJRVXpjMEp1cldIVWVWck5iNnphT2J4dmhZZ2IwT1FpMXdQcUFwYzdiRlRDajFXUC9DREZhRDMvcStLeGpmRGFqWjFWVTFHNjM0UUJwdUVVb0JzcjFnTlpTMTBQeUlDNUkwZGlxdGQxbVdiZW1HcksreGpkcTdlcWc5d2VRSjFiWStGeEsxMEV2Q01UT3VJWXoyaTR6Zkp0VDlKTE9aUlphQUdWbkJTdVJCUGpNRXFlMXlkeVREdExaaTBWcldSU1lnOVpUUnJKeURXWGJXa2NXeUhpRGYzczdQeWZmU1Bld3BkbFZEOHBUUlc1RTQvckFXTlNrVVJZdEVYdGpDL1VUUkxMN1lhWDBHbld4dDl1b3RvWmFkdXExcnFkM2NPdjFKWDRHYWluSm9KTDBmYTR5aDNMRTJPanliaTMyQnBhSVdxbnZyTVY4V0JGN0dOVWM5NlZYcFlLN2FjMEkwckRvdEh6eFJ0eHFld2E1Tk5zbzVoZ1ZSTU9JeFZuZjgyaTJhZyt0azQ0N3ozZnRNdGg1cmg4Qy82UmJTT3NQTnVxa2FzWFJSS3Z2NHlKQzc1a3hnci9JVFdReXpBelBMVnpPeDN0RkhoNnl3ZXN6dGkxRnNkSlRYQ1g0eUQwSUJrZjUyOWlGOEQ2NHZMdGYxdkUzM2M4UjNOaDR3MXhEc1lPVXp3Z2c5MGVWTk01MDcrNG5yVkNyU3liNXZiYVlEK2c3OWt0NTZZR2JLakZXNEcvU1lTazFJTk5CM25HMWkzdi9MdWVERjBVZTNmRUVLQi9peVFyMnl1cGU5ZzdndFdxb3ZTM1hqWk14UnJsVnR2TXVxbGFJcmp2dW01Nlp1UDE0ODZTdFlheHJMdlRSR2NlUTVheWdHU21DU0hHQkZsZnZqN2VpZWR3ZHdJYzZLN2hBU2d3NUQzQ0V4YjdkZUptNm0vdDZKbm9wZDJiaSs5aEdtZGQ4NVVHTGt1cCtTV1hVKysxSkJ1SUR5MVgwYzNoSG9taDlueVJhWjJBaG82TjNkdUlzWTdoOVVMSnNuQmpaQ3JGeVZWbmQxNWVHWmpiMnVueEprbGlKa2UyMHZXVXJQcmRJK2J1ZjVKTlZjYnNpcG5Sb0VjOWx2cDhwR1JvYldndGVHZEhPQUNWL2loMlIrMTRVZlZNQVRiOEhPczRVUEFwVkVxbEZZcjdsakxITG5qa2IvcGFQaUVvblBBNEtGSHRFOTJyNkcyYjlnYlcwcmN0Y20wQWE5V1UzS3NsNzE2dTdubUZvVmNJek82Mkl6RDlpa3gzdkptd0QzaVY4ejFxOHFkQ0VXTXluVVIwS3F0eTAxaW95ak5KWmhOOWV4VDF6Um5GdDhYY0U1ekQxeFJGWVRwcGJwUE1taStyK3NXbGt4R0V5bFZGalJocUhPMW5LM2JWVUgzaDZUM3BTN2FGRjhnVVBhbDNhUTVPTFFxQ2FMZTNnS2RkVE9ZcEluVFNXdGZqZHBLa0UzNHlOR3pyeEFtNWlOWjQrVTNwWHpjQTN4azJ4Zjd3OW0zV2E2bEhUK2gwaVp1UGU2cnZwYjVJOThBRVpyRy9OWGoydTg4VFZjam5nd2NEU2VqdHZVZXNlOGprdXNRN0F0UHRMeG1kQWpiZ05DZzVMSTQyb0QrN3FnVzhJeGRHRFV6NWdjS1FCZUNxQzNsRGhLVUVaeXVPUld0dDVpL3I2V3V5MkRjMUcvZkVEYkpUR1diSHBDb2M1UUtpOVdYYVpYdm1weU5RUFNReE5laloxcW9mbGZMVFJlbzMxL1R4NTU1bHRxaXJacUZrV0FLUEF6cWkyTXhTNW1oanljMDVWMG5OYUdlVWpqb3Rkbm96K3l3bVZMSWdxNXJwREUyNytzY201dVRWSWhYZk9rY3YyWTRIYmduVjZhK2NNRnVnKzA4V2FwVzhjcnZyZEhRNnhhN2lLNXZXMmJQU1RvQzRuMmZEWHI1OUt1TUovcVFrRldoakEvNC9EZnVFZndGRlVDK2lsWnVoSDRPdlhyNTlLdHVLWUx5QUlTODFTdVZ4K2R2NmZNSEVqWHdOTkFUN2dNL1dHSHN1eWUzWVV6NVNBSDVpdTB4UTgxeksxL2VkTjlkbFptNDdlRko1Yy9TYStyNDF1ZTNac0VDcFFpRGFmSFVHd0ZCVllBZnFuSUNpZWQ3R09WT0E3SUFUQmhlbCsxbHpiY3gzZ2hIaE9SY05NSndnVmg4NjhhSlN0T01vSzZHVjEzeFQ2d0xLTHhrRjk0UGlUTnZTTGF4ZlY2c1UxSG1ZQXk3NElqTSthb2Zoa3Z1WHFSZjJpQVMrenp3dzhvS0V2dHBYZHpGRTJpbW5CcFdrS1ZmaGpBQ3lnaGE1UGFHSXJvV2JjczFRNm0wN25VdW9VRFk1dmpxS3lhSno5a1d5TUNScnlUWHNCdnZPL1lUL0E3eWhUMmowN1FlaWJ6dXFHMGtRSEwwcGtoUmV2QVh6OGYvQ1QvMDNYN2JrVStkWnpxU2s4b3pQZi9JeFc0N21FcjM5OWRzSzlCNXJDbzZmOEt3S25GakxUSVNTL2RQRkN3UnN2NEhEZWpJd3c5TDU0cmgvQ2VmMVVxOVUrSmRjc3hRWmY5RWhiZjlFalg0Rk1BVSsrWGdtZVM5eHhLMS9Sd0JjUCtLYXI0N0hWekZqUDFMOUExUjFmL2J4Ui9NOSs1Q0JDb1ArNThFdzlmUU9aMjJWNmJnSHdOOEQvQWhjR1h2MWhjanVXYnNkZmhxMkgyNWljZVBOMkVLRWVGTy8vUEM4cjR6MXphbWR4bTV3VXN3WTA1aS9hVXFveEFrT3pvaUFFdnZqVUZJYXVBK0JQY0RkanVwVGhCSjVJWDdpbUVHb2VmbDkybXZBT3ZQdngzNkhpcjBENDVQb004VExQZ21lYWZSaEp3bWFmOXhQM2VjeEFMMUl0TXpDR2JqZ0dpcjV2NmJvUGdnQUVUUUVxSkJ6Sjk1MVgrWHdKOTlldWZaZDI4MzEyNWg5MWszRHFRM0Uyak9KNUFhTWYzOFJqLzFLRjR1K0lONUFQUE12VWxPQURGZU9FVWgrbEhBc0MzUU4wWHV3Nnd2K3M5QnpmT012ejUzbit1cDYzdG05WTM1TnJMQWp4cXNML1ltZFVRcGF5b1BncmxrcGxJVERZdjhwQVkvOE1mY1ZEa2tNUWgxTmhlanQrK0ZrSUxBQTh3WFJlVE1jTTk4SnpWS25Vcm9XdFlvYkpuWnByMjRxam4vK2kveVIvQ01MVzlkZGZkTlAvNWJuMHc5KzlyZjRQcW12ai8reTFidnBDMlJPZVN6L01iM3BmT28vRHJ0ajcwbjk4dUUxcDVtUXErbm5qekJmaGI4SS9oWElnRUROQitQVm5JVFNBd3c0U0JNdUJRejZEVUV1U1NLRk5RZTlpUjcrWXZCZTgwS0VYWWRGTGdHYTRRdGtSbmt2RU1ua3VJVHJYQVh0djhhdndOMU15cHI4VDdJQW1mQVpPNk84OTEzVENpOENBZy8rSEhWVVdJQmVPSjI0cks3Sm4wUWJHUjZkWnVhaitkRkZKaG1VNURQMTk0MXFSRFI3Y3lBblRPOCtHUHowcG9kSGswSk9kTW41eTlncUdXb2hLY0c4NjY2QXB2Q2hXQU9nQS9HSjI4L01mQkprZU5KU2I3RHZ4VDhNaUEvS0VMcFAxYUJ5VlR4TXlldklYYnBQV2JQUUhOQ2NvdVo4UTZOVVVuaFJmc1N4Z2ZTZko5ZEZTaXlpMVE1NjljVnFtS1k3amhzaUFadytPWmdCdEhVUTJnUkthd3NzMXFGVnIycFdtYWNvMXFGeitxRjVlWFY2RGVrTy91dForck5ldmxVcWwvcUlwMTQzNjlVK1ZuMTZ1TDEvVW1xcXBGYVdxVm4rOFV0OHZRdjhTbjBJNXRzNlQzMUxjN01WY2ZZNmhuR1FVY0RhcDUrQVBlM3E4WWJBUXdzWVVLd0pkMzdXYmFTSHhZZ0pMSDRPWHpNL2tBdWFyZEV0ZElNQWw5N29jK3NLOHNTbjg4SGM2blg5d2hVRVRVN2VzV0o3cE1FKzN6QmVnN1RVTHBHYm0rV0FTdWw1bXRsQWE1VDRncnowazB3NHh2Z0g4L01WeVlQMWk2Zll2QmVnVU03OE5jRUFRUFBtdW1wN2ppMkpha1ErbWhnOEN3N1gwcGxCbkwwTUR2WmVSRTRMZ1lRbG1BTVVLamNQL2Z3M0t4QWxRZGgxci93dTF1NWtic2taN1RGdkhERTNGdWdHV3NwOEF6WFYweU5zcUtTb2lqQzYrV0U5ZERDSk5BMEhBVEwvS1hnNU5HN2hSR045OHhaUGR5VytKWlVrSkhKK0lwNHdKV2Z5UTNFMC9jVy9LRWNNSGltNSsxMFhDdStnM1dLUHFCNjFSRUNwK0dIbm5FS1JSZVN0Ri92QmYvMll0TXNXVEdSMHl3NnZaMjFtK2tiK1g0U0U4T1pCaU1XWGhGQk1xQys4VUhCeHRuR3hsNGxxZ3dZaFlRYTlsRHptOS9FYlNuazJiYjF5VGsxcDlZQ2crZVBKZHVJK2dYaFY0Q2xReTJDTWNBdDgySGFRNDlYeEZBMC9wTFhsZEtiWVFOT3AxYVBJNVcrNHJlTjlRRm9EdGhmc2IwMjhLLy82YUhVdG9oZC9kc1JUVG5sTERvU2s0a1dVOU82VlBKY04xMTBHcCtjODRjQXE5UFFSQldQYkJ2eUw4LzU2MUwzMHFRU3VpMUN3OXVYcnBVd2tlYXpLYU1VamdmY0huMUkwMDBvcnhUL05CMXlkWHo1Z2xlYjJVNmxWdzFrMEJ2aTMvZTFrSEZnaEIyU09xdkFwZVhCK1UwU1hOQitoNW45QmZpRXNBSGVodnM0SHl4UG12Z090NG41WDRLdEpLYW9veEpaQUxBN2RnSFFyWlRudWhYRVpJQS9vZmd1TjRwdjdMYyttSHZ6MlhLTkpUL1puZWdxYUFSeHNtQlNRK2g3YjMyUWVCOXpQZDZHdlRzb1RuMGcvSUpmZ3pRb1orRmxZKzhJVHl2N3J3enZnV2ZFZGEzU3VZZFF3UUhRR0h6Z2VHemdHRnpnQ0V6Z1dERW5UbVRCRG9iUUJROHZnaTRPY1U2Sk1BUG1lQVBUeWdoeU5EemdSNDhwak1VUkhnQTZRSFVUeGdDSWdwd0xKeVB0Q1RBWG1PQWp5bFR5V3dBVTRJT1hBSkhzRFNyNTlLbGhLRVgveklLVFgvWFVLVEFQb1hCZkxOMHFjU1pFT1F1eVcvZUlZU1FMNWQrdnFwaERuZkY4VDVUSUFleXVOK2hPMG4vSy8wNjlkZlA1VUk5eWcxcTUrUU1FQVNyOVFzbWM2THJ3U2hIMmxoNUlQUzEvOE5BQUQvL3hQK1IwWGN2QUVB
+  kind: Secret
+  metadata:
+    creationTimestamp: "2025-07-06T05:35:38Z"
+    labels:
+      modifiedAt: "1751780138"
+      name: nats
+      owner: helm
+      status: deployed
+      version: "1"
+    name: sh.helm.release.v1.nats.v1
+    namespace: infrastructure
+    resourceVersion: "5646937"
+    uid: 365f6e72-44aa-4c2d-bba7-0bd89ed2f3ae
+  type: helm.sh/release.v1
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"redis-pvc","namespace":"infrastructure"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"40Gi"}},"storageClassName":"local-path"}}
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+      volume.kubernetes.io/selected-node: minisforum2
+      volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+    creationTimestamp: "2025-07-06T06:06:02Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    name: redis-pvc
+    namespace: infrastructure
+    resourceVersion: "5652573"
+    uid: d8ba547a-4892-4d75-aa5a-f5b5b3483187
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 40Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-d8ba547a-4892-4d75-aa5a-f5b5b3483187
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 40Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum3
+      pv.kubernetes.io/bound-by-controller: "yes"
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-03T10:40:09Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-51e8119a-bca0-4c7e-9c1d-8687264fe915
+    resourceVersion: "5647067"
+    uid: 8bbddbe4-2131-4c8c-b6a6-764b278317a4
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 50Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: logs-neo4j-0
+      namespace: neo4j
+      resourceVersion: "5647055"
+      uid: b8fd9ba3-2222-4cd8-b99f-039db00b2591
+    hostPath:
+      path: /opt/local-path/pvc-51e8119a-bca0-4c7e-9c1d-8687264fe915_neo4j_logs-neo4j-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum3
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: local-path-minisforum3
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:36:10Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum2
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-06T05:36:47Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-51f73d5d-9be3-4e87-91fd-97c3da595674
+    resourceVersion: "5647588"
+    uid: 5ec67d20-f4bc-4e10-9bad-f8d878b8eb4b
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 100Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: prometheus-prometheus-kube-prometheus-prometheus-db-prometheus-prometheus-kube-prometheus-prometheus-0
+      namespace: monitoring
+      resourceVersion: "5647438"
+      uid: 51f73d5d-9be3-4e87-91fd-97c3da595674
+    hostPath:
+      path: /opt/local-path-provisioner/pvc-51f73d5d-9be3-4e87-91fd-97c3da595674_monitoring_prometheus-prometheus-kube-prometheus-prometheus-db-prometheus-prometheus-kube-prometheus-prometheus-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum2
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:36:47Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-06T05:37:09Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-804a1738-9246-42da-81f5-fe2f5124d49f
+    resourceVersion: "5647782"
+    uid: d161b405-95c4-4051-8922-37739665a99c
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 50Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: storage-loki-0
+      namespace: monitoring
+      resourceVersion: "5647755"
+      uid: 804a1738-9246-42da-81f5-fe2f5124d49f
+    hostPath:
+      path: /opt/local-path-provisioner/pvc-804a1738-9246-42da-81f5-fe2f5124d49f_monitoring_storage-loki-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:37:09Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum3
+      pv.kubernetes.io/bound-by-controller: "yes"
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-03T10:40:09Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-b72a2053-aca5-40f1-8afc-5c423116f619
+    resourceVersion: "5647074"
+    uid: 37f6c6bf-9420-4685-9485-5f6376ffc90b
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1536Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: data-neo4j-0
+      namespace: neo4j
+      resourceVersion: "5647052"
+      uid: ad007956-8b64-4192-ab5a-5d4abda007ae
+    hostPath:
+      path: /opt/local-path/pvc-b72a2053-aca5-40f1-8afc-5c423116f619_neo4j_data-neo4j-0
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum3
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: local-path-minisforum3
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T05:36:10Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: minisforum2
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-07-06T06:06:05Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-d8ba547a-4892-4d75-aa5a-f5b5b3483187
+    resourceVersion: "5652571"
+    uid: a9822cea-4d7e-4228-b39d-398746988e28
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 40Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: redis-pvc
+      namespace: infrastructure
+      resourceVersion: "5652547"
+      uid: d8ba547a-4892-4d75-aa5a-f5b5b3483187
+    hostPath:
+      path: /opt/local-path-provisioner/pvc-d8ba547a-4892-4d75-aa5a-f5b5b3483187_infrastructure_redis-pvc
+      type: DirectoryOrCreate
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - minisforum2
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-07-06T06:06:05Z"
+    phase: Bound
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    creationTimestamp: "2025-07-06T05:35:04Z"
+    name: default
+    namespace: infrastructure
+    resourceVersion: "5646795"
+    uid: 3cf61308-4972-4508-bc78-243d17e39bc1
+kind: List
+metadata:
+  resourceVersion: ""

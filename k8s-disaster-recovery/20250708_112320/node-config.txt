@@ -1,0 +1,45 @@
+=== Node: minisforum ===
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=minisforum
+                    kubernetes.io/os=linux
+                    memory=64gb
+--
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  minisforum
+  AcquireTime:     <unset>
+  RenewTime:       Tue, 08 Jul 2025 11:24:18 -0400
+
+=== Node: minisforum2 ===
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=minisforum2
+                    kubernetes.io/os=linux
+                    memory=64gb
+--
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  minisforum2
+  AcquireTime:     <unset>
+  RenewTime:       Tue, 08 Jul 2025 11:24:17 -0400
+
+=== Node: minisforum3 ===
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=minisforum3
+                    kubernetes.io/os=linux
+                    memory=128gb
+--
+Taints:             database=neo4j:NoSchedule
+Unschedulable:      false
+Lease:
+  HolderIdentity:  minisforum3
+  AcquireTime:     <unset>
+  RenewTime:       Tue, 08 Jul 2025 11:24:17 -0400
+

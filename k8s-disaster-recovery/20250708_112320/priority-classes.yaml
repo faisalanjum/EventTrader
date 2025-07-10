@@ -1,0 +1,57 @@
+apiVersion: v1
+items:
+- apiVersion: scheduling.k8s.io/v1
+  description: Critical priority for Neo4j database
+  kind: PriorityClass
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"scheduling.k8s.io/v1","description":"Critical priority for Neo4j database","globalDefault":false,"kind":"PriorityClass","metadata":{"annotations":{},"name":"neo4j-critical"},"value":1000}
+    creationTimestamp: "2025-07-04T23:15:44Z"
+    generation: 1
+    name: neo4j-critical
+    resourceVersion: "5397241"
+    uid: ce36a7e8-648c-4c57-a181-536999c0c4b1
+  preemptionPolicy: PreemptLowerPriority
+  value: 1000
+- apiVersion: scheduling.k8s.io/v1
+  description: Used for system critical pods that must run in the cluster, but can
+    be moved to another node if necessary.
+  kind: PriorityClass
+  metadata:
+    creationTimestamp: "2025-05-15T09:13:43Z"
+    generation: 1
+    name: system-cluster-critical
+    resourceVersion: "71"
+    uid: db2b034d-b47c-4344-9184-325adcadcc67
+  preemptionPolicy: PreemptLowerPriority
+  value: 2000000000
+- apiVersion: scheduling.k8s.io/v1
+  description: Used for system critical pods that must not be moved from their current
+    node.
+  kind: PriorityClass
+  metadata:
+    creationTimestamp: "2025-05-15T09:13:43Z"
+    generation: 1
+    name: system-node-critical
+    resourceVersion: "70"
+    uid: fd638aa2-4afc-4ffa-a1bb-bff311abfa82
+  preemptionPolicy: PreemptLowerPriority
+  value: 2000001000
+- apiVersion: scheduling.k8s.io/v1
+  description: Standard priority for worker pods
+  kind: PriorityClass
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"scheduling.k8s.io/v1","description":"Standard priority for worker pods","globalDefault":false,"kind":"PriorityClass","metadata":{"annotations":{},"name":"worker-standard"},"value":100}
+    creationTimestamp: "2025-07-04T23:15:44Z"
+    generation: 1
+    name: worker-standard
+    resourceVersion: "5397242"
+    uid: a891126a-6bf0-4675-b2fb-67c82e3b27f7
+  preemptionPolicy: PreemptLowerPriority
+  value: 100
+kind: List
+metadata:
+  resourceVersion: ""

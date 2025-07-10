@@ -1,0 +1,188 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2025-05-15T09:13:42Z"
+    labels:
+      kubernetes.io/metadata.name: default
+    name: default
+    resourceVersion: "37"
+    uid: d26c2af6-59d6-4973-9eb5-6ce17c1230e8
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2025-07-06T05:35:04Z"
+    labels:
+      kubernetes.io/metadata.name: infrastructure
+    name: infrastructure
+    resourceVersion: "5646793"
+    uid: 9eacb549-51d9-45e8-a8ed-c7f8f5347482
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2025-07-04T10:27:05Z"
+    labels:
+      kubernetes.io/metadata.name: keda
+      name: keda
+    name: keda
+    resourceVersion: "5292573"
+    uid: 8debc2c1-0b6f-465f-a916-7fed156b2a3d
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"labels":{"k8s-app":"flannel","pod-security.kubernetes.io/enforce":"privileged"},"name":"kube-flannel"}}
+    creationTimestamp: "2025-05-15T09:14:44Z"
+    labels:
+      k8s-app: flannel
+      kubernetes.io/metadata.name: kube-flannel
+      pod-security.kubernetes.io/enforce: privileged
+    name: kube-flannel
+    resourceVersion: "444"
+    uid: 02a1fe38-be44-459b-a243-f3f4d11ed816
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2025-05-15T09:13:42Z"
+    labels:
+      kubernetes.io/metadata.name: kube-node-lease
+    name: kube-node-lease
+    resourceVersion: "35"
+    uid: cb0c903b-b36e-4725-8b6a-2fcbe7e10c27
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2025-05-15T09:13:42Z"
+    labels:
+      kubernetes.io/metadata.name: kube-public
+    name: kube-public
+    resourceVersion: "24"
+    uid: 3e83a1b6-4207-4746-8da6-9340fdf44081
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2025-05-15T09:13:42Z"
+    labels:
+      kubernetes.io/metadata.name: kube-system
+    name: kube-system
+    resourceVersion: "10"
+    uid: 39bce1c8-4b18-480d-ac80-35cd69f9e4fa
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"name":"local-path-storage"}}
+    creationTimestamp: "2025-05-15T09:19:09Z"
+    labels:
+      kubernetes.io/metadata.name: local-path-storage
+    name: local-path-storage
+    resourceVersion: "973"
+    uid: 1bc22d24-643b-4453-bb13-cb08df8b4b8e
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2025-07-06T05:37:17Z"
+    labels:
+      kubernetes.io/metadata.name: mcp-services
+    name: mcp-services
+    resourceVersion: "5647822"
+    uid: d04bc8a9-f07d-4866-b4de-c018926a68ed
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: "2025-07-06T05:36:23Z"
+    labels:
+      kubernetes.io/metadata.name: monitoring
+    name: monitoring
+    resourceVersion: "5647134"
+    uid: 6f290ea8-2fc4-4f89-90bc-c97402271f61
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"name":"neo4j"}}
+    creationTimestamp: "2025-07-06T05:36:10Z"
+    labels:
+      kubernetes.io/metadata.name: neo4j
+    name: neo4j
+    resourceVersion: "5647046"
+    uid: a24f7202-52cf-41ab-8618-c396472b373d
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"creationTimestamp":null,"name":"processing"},"spec":{},"status":{}}
+    creationTimestamp: "2025-07-03T10:37:13Z"
+    labels:
+      kubernetes.io/metadata.name: processing
+    name: processing
+    resourceVersion: "5288028"
+    uid: 738105d3-e26b-4999-bf4c-54fc578c7501
+  spec:
+    finalizers:
+    - kubernetes
+  status:
+    phase: Active
+kind: List
+metadata:
+  resourceVersion: ""

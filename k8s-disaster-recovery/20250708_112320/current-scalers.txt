@@ -1,0 +1,5 @@
+NAMESPACE    NAME                        SCALETARGETKIND      SCALETARGETNAME      MIN   MAX   READY   ACTIVE   FALLBACK   PAUSED    TRIGGERS   AUTHENTICATIONS   AGE
+processing   report-enricher-scaler      apps/v1.Deployment   report-enricher      0     5     True    False    False      Unknown   redis                        3d15h
+processing   xbrl-worker-heavy-scaler    apps/v1.Deployment   xbrl-worker-heavy    0     2     True    False    False      Unknown   redis                        3d15h
+processing   xbrl-worker-light-scaler    apps/v1.Deployment   xbrl-worker-light    0     7     True    False    False      Unknown   redis                        3d15h
+processing   xbrl-worker-medium-scaler   apps/v1.Deployment   xbrl-worker-medium   0     4     True    False    False      Unknown   redis                        3d15h

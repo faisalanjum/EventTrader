@@ -1,0 +1,49 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    .env: ""
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: "2025-07-03T12:35:49Z"
+    name: empty-env
+    namespace: processing
+    resourceVersion: "5162176"
+    uid: 07b9bf07-0216-4a93-b280-6b694f329d26
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIDBTCCAe2gAwIBAgIIaOY0eeh3THAwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
+      AxMKa3ViZXJuZXRlczAeFw0yNTA1MTUwOTA4MzZaFw0zNTA1MTMwOTEzMzZaMBUx
+      EzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+      AoIBAQD2nCL3wme9/hJqrteQ+SJoj1c0Qj6QiHf2WFmI2f2++/+YQauJ/Sq3o/wg
+      NOd7oVwAimcGXk6avwezvE8yrkMscJkL0YF0xr1P76iDwBcVZn4Qo4MPGGfZMqTi
+      6d4qKpgyzgJQ9RA90zQ20KYKCiqpsbo04giAzb7pardVBmESbq2OjEk4Or/wDohZ
+      3jUXPUE5BtrvsLL8f/v9OGfjUKWgbjBj/w0h70TR6Tj6exf63lHL3Y18tV8khL2j
+      c3OhF0T0/nbAOM0WSCkJ5xuByBxreuaoN6My+0L1qbFWnZVyJZnsVt2RP6KgvwBl
+      aauXeZQRi5z9ZPo8t1zlub226EHTAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP
+      BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQYwB3Ej5rUcdz48IMKyQZrLn+iezAV
+      BgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQClELZiPs/n
+      wiIPhfWoo5EaNSj5lR55LmuSj95LS/3cueEMzEsRNK0ATE/NrWvxkHeiBMtFFsa6
+      nRco4YfRCs5acjbHfkzQeqj0ZjUXIZzy+QJxfUzJkwEEO54SNAckADXsFPVfkuN6
+      9iznfFJLih/bwylJ5XVisdFxmcLFEs/fwqbjL2UoKI2nAglPTqzCDSJe7LwLvx9G
+      9xT6EAZVE/+KW8KaLqB3WbomVvuvFz6oUa7ryEotQGxXi197YK5O3MFmAgLcLbvs
+      quOC4Zos299t2C6OSas3Px39jQ2hcPFACrDBW7zTSS5x7dT7apIcCBqP8liXrKUx
+      ewHy+dCV4GTO
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-07-03T10:37:13Z"
+    name: kube-root-ca.crt
+    namespace: processing
+    resourceVersion: "5147378"
+    uid: 59099dc6-0c20-4d15-9589-a770b9dde7f9
+kind: List
+metadata:
+  resourceVersion: ""

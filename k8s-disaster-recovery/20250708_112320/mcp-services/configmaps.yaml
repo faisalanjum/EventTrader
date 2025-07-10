@@ -1,0 +1,301 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIDBTCCAe2gAwIBAgIIaOY0eeh3THAwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
+      AxMKa3ViZXJuZXRlczAeFw0yNTA1MTUwOTA4MzZaFw0zNTA1MTMwOTEzMzZaMBUx
+      EzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+      AoIBAQD2nCL3wme9/hJqrteQ+SJoj1c0Qj6QiHf2WFmI2f2++/+YQauJ/Sq3o/wg
+      NOd7oVwAimcGXk6avwezvE8yrkMscJkL0YF0xr1P76iDwBcVZn4Qo4MPGGfZMqTi
+      6d4qKpgyzgJQ9RA90zQ20KYKCiqpsbo04giAzb7pardVBmESbq2OjEk4Or/wDohZ
+      3jUXPUE5BtrvsLL8f/v9OGfjUKWgbjBj/w0h70TR6Tj6exf63lHL3Y18tV8khL2j
+      c3OhF0T0/nbAOM0WSCkJ5xuByBxreuaoN6My+0L1qbFWnZVyJZnsVt2RP6KgvwBl
+      aauXeZQRi5z9ZPo8t1zlub226EHTAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP
+      BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQYwB3Ej5rUcdz48IMKyQZrLn+iezAV
+      BgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQClELZiPs/n
+      wiIPhfWoo5EaNSj5lR55LmuSj95LS/3cueEMzEsRNK0ATE/NrWvxkHeiBMtFFsa6
+      nRco4YfRCs5acjbHfkzQeqj0ZjUXIZzy+QJxfUzJkwEEO54SNAckADXsFPVfkuN6
+      9iznfFJLih/bwylJ5XVisdFxmcLFEs/fwqbjL2UoKI2nAglPTqzCDSJe7LwLvx9G
+      9xT6EAZVE/+KW8KaLqB3WbomVvuvFz6oUa7ryEotQGxXi197YK5O3MFmAgLcLbvs
+      quOC4Zos299t2C6OSas3Px39jQ2hcPFACrDBW7zTSS5x7dT7apIcCBqP8liXrKUx
+      ewHy+dCV4GTO
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-07-06T05:37:17Z"
+    name: kube-root-ca.crt
+    namespace: mcp-services
+    resourceVersion: "5647824"
+    uid: 95043ff7-6d75-4656-b85e-3cf1316b7bc6
+- apiVersion: v1
+  data:
+    __init__.py: '# MCP Servers for EventMarketDB'
+    neo4j_cypher_server.py: "#!/usr/bin/env python3\n\"\"\"\nMCP Server for Neo4j
+      Cypher queries\nProvides an interface to execute Cypher queries against the
+      Neo4j database\n\"\"\"\n\nimport os\nimport asyncio\nfrom typing import Any,
+      Dict, List\nfrom mcp.server import Server\nfrom mcp.server.models import InitializationOptions\nfrom
+      mcp.types import Tool, TextContent, CallToolResult\nfrom neo4j import AsyncGraphDatabase\nimport
+      json\n\n# Neo4j connection settings from environment\nNEO4J_URI = os.getenv(\"NEO4J_URI\",
+      \"bolt://neo4j-bolt.neo4j:7687\")\nNEO4J_USERNAME = os.getenv(\"NEO4J_USERNAME\",
+      \"neo4j\")\nNEO4J_PASSWORD = os.getenv(\"NEO4J_PASSWORD\", \"\")\n\n\nclass
+      Neo4jCypherServer:\n    def __init__(self):\n        self.server = Server(\"neo4j-cypher\")\n
+      \       self.driver = None\n        \n        # Register handlers\n        self.server.list_tools
+      = self.list_tools\n        self.server.call_tool = self.call_tool\n        \n
+      \   async def initialize(self):\n        \"\"\"Initialize Neo4j connection\"\"\"\n
+      \       self.driver = AsyncGraphDatabase.driver(\n            NEO4J_URI,\n            auth=(NEO4J_USERNAME,
+      NEO4J_PASSWORD)\n        )\n        \n    async def cleanup(self):\n        \"\"\"Cleanup
+      Neo4j connection\"\"\"\n        if self.driver:\n            await self.driver.close()\n
+      \           \n    async def list_tools(self) -> List[Tool]:\n        \"\"\"List
+      available tools\"\"\"\n        return [\n            Tool(\n                name=\"execute_cypher\",\n
+      \               description=\"Execute a Cypher query against the Neo4j database\",\n
+      \               input_schema={\n                    \"type\": \"object\",\n
+      \                   \"properties\": {\n                        \"query\": {\n
+      \                           \"type\": \"string\",\n                            \"description\":
+      \"The Cypher query to execute\"\n                        },\n                        \"parameters\":
+      {\n                            \"type\": \"object\",\n                            \"description\":
+      \"Parameters for the Cypher query\",\n                            \"default\":
+      {}\n                        }\n                    },\n                    \"required\":
+      [\"query\"]\n                }\n            ),\n            Tool(\n                name=\"get_schema\",\n
+      \               description=\"Get the current Neo4j database schema\",\n                input_schema={\n
+      \                   \"type\": \"object\",\n                    \"properties\":
+      {}\n                }\n            )\n        ]\n        \n    async def call_tool(self,
+      name: str, arguments: Dict[str, Any]) -> List[CallToolResult]:\n        \"\"\"Execute
+      a tool\"\"\"\n        if name == \"execute_cypher\":\n            return await
+      self.execute_cypher(\n                arguments.get(\"query\", \"\"),\n                arguments.get(\"parameters\",
+      {})\n            )\n        elif name == \"get_schema\":\n            return
+      await self.get_schema()\n        else:\n            return [CallToolResult(\n
+      \               content=[TextContent(text=f\"Unknown tool: {name}\")],\n                is_error=True\n
+      \           )]\n            \n    async def execute_cypher(self, query: str,
+      parameters: Dict[str, Any]) -> List[CallToolResult]:\n        \"\"\"Execute
+      a Cypher query\"\"\"\n        try:\n            async with self.driver.session()
+      as session:\n                result = await session.run(query, parameters)\n
+      \               records = [record.data() async for record in result]\n                \n
+      \               return [CallToolResult(\n                    content=[TextContent(\n
+      \                       text=json.dumps({\n                            \"success\":
+      True,\n                            \"records\": records,\n                            \"count\":
+      len(records)\n                        }, indent=2, default=str)\n                    )]\n
+      \               )]\n        except Exception as e:\n            return [CallToolResult(\n
+      \               content=[TextContent(\n                    text=json.dumps({\n
+      \                       \"success\": False,\n                        \"error\":
+      str(e)\n                    }, indent=2)\n                )],\n                is_error=True\n
+      \           )]\n            \n    async def get_schema(self) -> List[CallToolResult]:\n
+      \       \"\"\"Get database schema\"\"\"\n        try:\n            async with
+      self.driver.session() as session:\n                # Get node labels\n                labels_result
+      = await session.run(\"CALL db.labels()\")\n                labels = [record[\"label\"]
+      async for record in labels_result]\n                \n                # Get
+      relationship types\n                rels_result = await session.run(\"CALL db.relationshipTypes()\")\n
+      \               relationships = [record[\"relationshipType\"] async for record
+      in rels_result]\n                \n                # Get indexes\n                indexes_result
+      = await session.run(\"SHOW INDEXES\")\n                indexes = [record.data()
+      async for record in indexes_result]\n                \n                return
+      [CallToolResult(\n                    content=[TextContent(\n                        text=json.dumps({\n
+      \                           \"success\": True,\n                            \"labels\":
+      labels,\n                            \"relationships\": relationships,\n                            \"indexes\":
+      indexes\n                        }, indent=2, default=str)\n                    )]\n
+      \               )]\n        except Exception as e:\n            return [CallToolResult(\n
+      \               content=[TextContent(\n                    text=json.dumps({\n
+      \                       \"success\": False,\n                        \"error\":
+      str(e)\n                    }, indent=2)\n                )],\n                is_error=True\n
+      \           )]\n\n\nasync def main():\n    \"\"\"Main entry point\"\"\"\n    import
+      sys\n    from mcp.server.stdio import stdio_server\n    \n    server = Neo4jCypherServer()\n
+      \   \n    # Initialize Neo4j connection\n    await server.initialize()\n    \n
+      \   try:\n        # Run the MCP server with stdio\n        async with stdio_server()
+      as (read_stream, write_stream):\n            await server.server.run(\n                read_stream=read_stream,\n
+      \               write_stream=write_stream,\n                initialization_options=InitializationOptions(\n
+      \                   server_name=\"neo4j-cypher\",\n                    server_version=\"1.0.0\",\n
+      \                   capabilities={}\n                )\n            )\n    finally:\n
+      \       await server.cleanup()\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())"
+    neo4j_memory_server.py: "#!/usr/bin/env python3\n\"\"\"\nMCP Server for Neo4j
+      Memory operations\nProvides memory/caching capabilities for Neo4j data\n\"\"\"\n\nimport
+      os\nimport asyncio\nfrom typing import Any, Dict, List, Optional\nfrom mcp.server
+      import Server\nfrom mcp.server.models import InitializationOptions\nfrom mcp.types
+      import Tool, TextContent, CallToolResult\nfrom neo4j import AsyncGraphDatabase\nimport
+      json\nfrom datetime import datetime\nfrom collections import defaultdict\n\n\n#
+      Neo4j connection settings from environment\nNEO4J_URI = os.getenv(\"NEO4J_URI\",
+      \"bolt://neo4j-bolt.neo4j:7687\")\nNEO4J_USERNAME = os.getenv(\"NEO4J_USERNAME\",
+      \"neo4j\")\nNEO4J_PASSWORD = os.getenv(\"NEO4J_PASSWORD\", \"\")\n\n\nclass
+      Neo4jMemoryServer:\n    def __init__(self):\n        self.server = Server(\"neo4j-memory\")\n
+      \       self.driver = None\n        self.memory_store = defaultdict(dict)  #
+      In-memory cache\n        \n        # Register handlers\n        self.server.list_tools
+      = self.list_tools\n        self.server.call_tool = self.call_tool\n        \n
+      \   async def initialize(self):\n        \"\"\"Initialize Neo4j connection\"\"\"\n
+      \       self.driver = AsyncGraphDatabase.driver(\n            NEO4J_URI,\n            auth=(NEO4J_USERNAME,
+      NEO4J_PASSWORD)\n        )\n        \n    async def cleanup(self):\n        \"\"\"Cleanup
+      Neo4j connection\"\"\"\n        if self.driver:\n            await self.driver.close()\n
+      \           \n    async def list_tools(self) -> List[Tool]:\n        \"\"\"List
+      available tools\"\"\"\n        return [\n            Tool(\n                name=\"cache_query\",\n
+      \               description=\"Cache the results of a Cypher query\",\n                input_schema={\n
+      \                   \"type\": \"object\",\n                    \"properties\":
+      {\n                        \"key\": {\n                            \"type\":
+      \"string\",\n                            \"description\": \"Cache key for storing
+      the results\"\n                        },\n                        \"query\":
+      {\n                            \"type\": \"string\",\n                            \"description\":
+      \"The Cypher query to execute and cache\"\n                        },\n                        \"parameters\":
+      {\n                            \"type\": \"object\",\n                            \"description\":
+      \"Parameters for the Cypher query\",\n                            \"default\":
+      {}\n                        },\n                        \"ttl\": {\n                            \"type\":
+      \"integer\",\n                            \"description\": \"Time to live in
+      seconds (default: 3600)\",\n                            \"default\": 3600\n
+      \                       }\n                    },\n                    \"required\":
+      [\"key\", \"query\"]\n                }\n            ),\n            Tool(\n
+      \               name=\"get_cached\",\n                description=\"Retrieve
+      cached query results\",\n                input_schema={\n                    \"type\":
+      \"object\",\n                    \"properties\": {\n                        \"key\":
+      {\n                            \"type\": \"string\",\n                            \"description\":
+      \"Cache key to retrieve\"\n                        }\n                    },\n
+      \                   \"required\": [\"key\"]\n                }\n            ),\n
+      \           Tool(\n                name=\"invalidate_cache\",\n                description=\"Invalidate
+      cached entries\",\n                input_schema={\n                    \"type\":
+      \"object\",\n                    \"properties\": {\n                        \"pattern\":
+      {\n                            \"type\": \"string\",\n                            \"description\":
+      \"Pattern to match cache keys (supports wildcards)\",\n                            \"default\":
+      \"*\"\n                        }\n                    }\n                }\n
+      \           ),\n            Tool(\n                name=\"get_node_summary\",\n
+      \               description=\"Get a summary of nodes by label with caching\",\n
+      \               input_schema={\n                    \"type\": \"object\",\n
+      \                   \"properties\": {\n                        \"labels\": {\n
+      \                           \"type\": \"array\",\n                            \"items\":
+      {\"type\": \"string\"},\n                            \"description\": \"List
+      of node labels to summarize\"\n                        }\n                    }\n
+      \               }\n            )\n        ]\n        \n    async def call_tool(self,
+      name: str, arguments: Dict[str, Any]) -> List[CallToolResult]:\n        \"\"\"Execute
+      a tool\"\"\"\n        if name == \"cache_query\":\n            return await
+      self.cache_query(\n                arguments.get(\"key\", \"\"),\n                arguments.get(\"query\",
+      \"\"),\n                arguments.get(\"parameters\", {}),\n                arguments.get(\"ttl\",
+      3600)\n            )\n        elif name == \"get_cached\":\n            return
+      await self.get_cached(arguments.get(\"key\", \"\"))\n        elif name == \"invalidate_cache\":\n
+      \           return await self.invalidate_cache(arguments.get(\"pattern\", \"*\"))\n
+      \       elif name == \"get_node_summary\":\n            return await self.get_node_summary(arguments.get(\"labels\",
+      []))\n        else:\n            return [CallToolResult(\n                content=[TextContent(text=f\"Unknown
+      tool: {name}\")],\n                is_error=True\n            )]\n            \n
+      \   async def cache_query(self, key: str, query: str, parameters: Dict[str,
+      Any], ttl: int) -> List[CallToolResult]:\n        \"\"\"Execute and cache a
+      query\"\"\"\n        try:\n            async with self.driver.session() as session:\n
+      \               result = await session.run(query, parameters)\n                records
+      = [record.data() async for record in result]\n                \n                #
+      Store in cache with metadata\n                self.memory_store[key] = {\n                    \"data\":
+      records,\n                    \"timestamp\": datetime.utcnow().isoformat(),\n
+      \                   \"ttl\": ttl,\n                    \"query\": query,\n                    \"parameters\":
+      parameters\n                }\n                \n                return [CallToolResult(\n
+      \                   content=[TextContent(\n                        text=json.dumps({\n
+      \                           \"success\": True,\n                            \"key\":
+      key,\n                            \"records_cached\": len(records),\n                            \"ttl\":
+      ttl\n                        }, indent=2)\n                    )]\n                )]\n
+      \       except Exception as e:\n            return [CallToolResult(\n                content=[TextContent(\n
+      \                   text=json.dumps({\n                        \"success\":
+      False,\n                        \"error\": str(e)\n                    }, indent=2)\n
+      \               )],\n                is_error=True\n            )]\n            \n
+      \   async def get_cached(self, key: str) -> List[CallToolResult]:\n        \"\"\"Retrieve
+      cached data\"\"\"\n        if key in self.memory_store:\n            cache_entry
+      = self.memory_store[key]\n            \n            # Check if expired\n            cached_time
+      = datetime.fromisoformat(cache_entry[\"timestamp\"])\n            age = (datetime.utcnow()
+      - cached_time).total_seconds()\n            \n            if age > cache_entry[\"ttl\"]:\n
+      \               del self.memory_store[key]\n                return [CallToolResult(\n
+      \                   content=[TextContent(\n                        text=json.dumps({\n
+      \                           \"success\": False,\n                            \"error\":
+      \"Cache entry expired\"\n                        }, indent=2)\n                    )]\n
+      \               )]\n            \n            return [CallToolResult(\n                content=[TextContent(\n
+      \                   text=json.dumps({\n                        \"success\":
+      True,\n                        \"data\": cache_entry[\"data\"],\n                        \"age_seconds\":
+      int(age),\n                        \"ttl\": cache_entry[\"ttl\"]\n                    },
+      indent=2, default=str)\n                )]\n            )]\n        else:\n
+      \           return [CallToolResult(\n                content=[TextContent(\n
+      \                   text=json.dumps({\n                        \"success\":
+      False,\n                        \"error\": \"Key not found in cache\"\n                    },
+      indent=2)\n                )]\n            )]\n            \n    async def invalidate_cache(self,
+      pattern: str) -> List[CallToolResult]:\n        \"\"\"Invalidate cache entries
+      matching pattern\"\"\"\n        import fnmatch\n        \n        invalidated
+      = []\n        keys_to_remove = []\n        \n        for key in self.memory_store:\n
+      \           if fnmatch.fnmatch(key, pattern):\n                keys_to_remove.append(key)\n
+      \               invalidated.append(key)\n                \n        for key in
+      keys_to_remove:\n            del self.memory_store[key]\n            \n        return
+      [CallToolResult(\n            content=[TextContent(\n                text=json.dumps({\n
+      \                   \"success\": True,\n                    \"invalidated\":
+      invalidated,\n                    \"count\": len(invalidated)\n                },
+      indent=2)\n            )]\n        )]\n        \n    async def get_node_summary(self,
+      labels: List[str]) -> List[CallToolResult]:\n        \"\"\"Get summary of nodes
+      by label with caching\"\"\"\n        cache_key = f\"node_summary:{':'.join(sorted(labels))}\"\n
+      \       \n        # Try to get from cache first\n        cached_result = await
+      self.get_cached(cache_key)\n        if cached_result[0].content[0].text.find('\"success\":
+      true') != -1:\n            return cached_result\n            \n        # Otherwise,
+      query and cache\n        try:\n            summaries = {}\n            async
+      with self.driver.session() as session:\n                for label in labels:\n
+      \                   # Get count\n                    count_result = await session.run(\n
+      \                       f\"MATCH (n:{label}) RETURN count(n) as count\"\n                    )\n
+      \                   count = await count_result.single()\n                    \n
+      \                   # Get sample properties\n                    props_result
+      = await session.run(\n                        f\"MATCH (n:{label}) RETURN keys(n)
+      as props LIMIT 5\"\n                    )\n                    all_props = set()\n
+      \                   async for record in props_result:\n                        all_props.update(record[\"props\"])\n
+      \                   \n                    summaries[label] = {\n                        \"count\":
+      count[\"count\"],\n                        \"properties\": list(all_props)\n
+      \                   }\n                    \n            # Cache the results\n
+      \           await self.cache_query(cache_key, \"\", {}, 3600)\n            self.memory_store[cache_key][\"data\"]
+      = summaries\n            \n            return [CallToolResult(\n                content=[TextContent(\n
+      \                   text=json.dumps({\n                        \"success\":
+      True,\n                        \"summaries\": summaries\n                    },
+      indent=2)\n                )]\n            )]\n        except Exception as e:\n
+      \           return [CallToolResult(\n                content=[TextContent(\n
+      \                   text=json.dumps({\n                        \"success\":
+      False,\n                        \"error\": str(e)\n                    }, indent=2)\n
+      \               )],\n                is_error=True\n            )]\n\n\nasync
+      def main():\n    \"\"\"Main entry point\"\"\"\n    import sys\n    from mcp.server.stdio
+      import stdio_server\n    \n    server = Neo4jMemoryServer()\n    \n    # Initialize
+      Neo4j connection\n    await server.initialize()\n    \n    try:\n        # Run
+      the MCP server with stdio\n        async with stdio_server() as (read_stream,
+      write_stream):\n            await server.server.run(\n                read_stream=read_stream,\n
+      \               write_stream=write_stream,\n                initialization_options=InitializationOptions(\n
+      \                   server_name=\"neo4j-memory\",\n                    server_version=\"1.0.0\",\n
+      \                   capabilities={}\n                )\n            )\n    finally:\n
+      \       await server.cleanup()\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())"
+    run_mcp_server.sh: |-
+      #!/bin/bash
+      # Wrapper script to run MCP servers as long-running services
+
+      SERVER_TYPE=$1
+
+      echo "Starting MCP Server: $SERVER_TYPE"
+
+      # Create a named pipe for input
+      mkfifo /tmp/mcp_input
+
+      # Function to keep the pipe open
+      keep_pipe_open() {
+          while true; do
+              sleep 3600
+          done > /tmp/mcp_input
+      }
+
+      # Start the pipe keeper in background
+      keep_pipe_open &
+      PIPE_PID=$!
+
+      # Trap to clean up on exit
+      trap "kill $PIPE_PID; rm -f /tmp/mcp_input" EXIT
+
+      # Run the MCP server with the pipe as input
+      if [ "$SERVER_TYPE" = "cypher" ]; then
+          exec python /app/mcp_servers/neo4j_cypher_server.py < /tmp/mcp_input
+      elif [ "$SERVER_TYPE" = "memory" ]; then
+          exec python /app/mcp_servers/neo4j_memory_server.py < /tmp/mcp_input
+      else
+          echo "Unknown server type: $SERVER_TYPE"
+          exit 1
+      fi
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: "2025-07-06T05:56:16Z"
+    name: mcp-server-scripts
+    namespace: mcp-services
+    resourceVersion: "5650993"
+    uid: cf89230b-3b7f-4f36-88a6-65f0de7998db
+kind: List
+metadata:
+  resourceVersion: ""

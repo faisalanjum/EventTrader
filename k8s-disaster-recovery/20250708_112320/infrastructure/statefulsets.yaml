@@ -1,0 +1,160 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: nats
+      meta.helm.sh/release-namespace: infrastructure
+    creationTimestamp: "2025-07-06T05:35:38Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: nats
+      app.kubernetes.io/instance: nats
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: nats
+      app.kubernetes.io/version: 2.11.6
+      helm.sh/chart: nats-1.3.9
+    name: nats
+    namespace: infrastructure
+    resourceVersion: "5959764"
+    uid: 32f23ba9-408b-4c5b-99b0-8af3ea18e185
+  spec:
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Retain
+      whenScaled: Retain
+    podManagementPolicy: Parallel
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: nats
+        app.kubernetes.io/instance: nats
+        app.kubernetes.io/name: nats
+    serviceName: nats-headless
+    template:
+      metadata:
+        annotations:
+          checksum/config: f6e212c5ccca6e047b4546e39d56c7336a003fca6936808f64fb2bcb0a1b175b
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: nats
+          app.kubernetes.io/instance: nats
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: nats
+          app.kubernetes.io/version: 2.11.6
+          helm.sh/chart: nats-1.3.9
+      spec:
+        containers:
+        - args:
+          - --config
+          - /etc/nats-config/nats.conf
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: SERVER_NAME
+            value: $(POD_NAME)
+          image: nats:2.11.6-alpine
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - nats-server
+                - -sl=ldm=/var/run/nats/nats.pid
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz?js-enabled-only=true
+              port: monitor
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: nats
+          ports:
+          - containerPort: 4222
+            name: nats
+            protocol: TCP
+          - containerPort: 8222
+            name: monitor
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz?js-server-only=true
+              port: monitor
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources: {}
+          startupProbe:
+            failureThreshold: 90
+            httpGet:
+              path: /healthz
+              port: monitor
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/nats-config
+            name: config
+          - mountPath: /var/run/nats
+            name: pid
+        - args:
+          - -pid
+          - /var/run/nats/nats.pid
+          - -config
+          - /etc/nats-config/nats.conf
+          image: natsio/nats-server-config-reloader:0.18.2
+          imagePullPolicy: IfNotPresent
+          name: reloader
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/run/nats
+            name: pid
+          - mountPath: /etc/nats-config
+            name: config
+        dnsPolicy: ClusterFirst
+        enableServiceLinks: false
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        shareProcessNamespace: true
+        terminationGracePeriodSeconds: 60
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: nats-config
+          name: config
+        - emptyDir: {}
+          name: pid
+    updateStrategy:
+      rollingUpdate:
+        partition: 0
+      type: RollingUpdate
+  status:
+    availableReplicas: 1
+    collisionCount: 0
+    currentReplicas: 1
+    currentRevision: nats-589bf699
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updateRevision: nats-589bf699
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

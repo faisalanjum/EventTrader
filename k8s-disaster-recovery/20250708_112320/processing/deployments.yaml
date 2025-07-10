@@ -1,0 +1,534 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "16"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"event-trader","namespace":"processing"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"event-trader"}},"template":{"metadata":{"labels":{"app":"event-trader"}},"spec":{"containers":[{"args":["--from-date","2025-01-01","--to-date","2025-07-03","-live"],"command":["python","scripts/run_event_trader.py"],"envFrom":[{"secretRef":{"name":"eventtrader-secrets"}}],"image":"faisalanjum/event-trader:latest","imagePullPolicy":"Always","name":"event-trader","resources":{"limits":{"cpu":2,"memory":"16Gi"},"requests":{"cpu":"500m","memory":"8Gi"}},"volumeMounts":[{"mountPath":"/app/.env","name":"blank-env","subPath":".env"},{"mountPath":"/app/logs","name":"logs"}]}],"nodeSelector":{"kubernetes.io/hostname":"minisforum2"},"volumes":[{"configMap":{"name":"empty-env"},"name":"blank-env"},{"hostPath":{"path":"/home/faisal/EventMarketDB/logs","type":"DirectoryOrCreate"},"name":"logs"}]}}}}
+    creationTimestamp: "2025-07-03T15:19:54Z"
+    generation: 24
+    name: event-trader
+    namespace: processing
+    resourceVersion: "6124067"
+    uid: dc5f1285-70d7-43b0-9b78-a7af0a0b67a5
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: event-trader
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-07-07T19:45:02-04:00"
+        creationTimestamp: null
+        labels:
+          app: event-trader
+      spec:
+        containers:
+        - args:
+          - scripts/run_event_trader.py
+          - --from-date
+          - "2025-07-05"
+          - --to-date
+          - "2025-07-08"
+          - -live
+          command:
+          - python
+          envFrom:
+          - secretRef:
+              name: eventtrader-secrets
+          image: faisalanjum/event-trader:latest
+          imagePullPolicy: Always
+          name: event-trader
+          resources:
+            limits:
+              cpu: "2"
+              memory: 16Gi
+            requests:
+              cpu: 500m
+              memory: 8Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /app/.env
+            name: blank-env
+            subPath: .env
+          - mountPath: /app/logs
+            name: logs
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          kubernetes.io/hostname: minisforum2
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: empty-env
+          name: blank-env
+        - hostPath:
+            path: /home/faisal/EventMarketDB/logs
+            type: DirectoryOrCreate
+          name: logs
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-07-08T15:23:59Z"
+      lastUpdateTime: "2025-07-08T15:23:59Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-07-03T15:19:54Z"
+      lastUpdateTime: "2025-07-08T15:24:00Z"
+      message: ReplicaSet "event-trader-85d4677d4c" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 24
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "11"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"report-enricher","namespace":"processing"},"spec":{"replicas":0,"selector":{"matchLabels":{"app":"report-enricher"}},"template":{"metadata":{"labels":{"app":"report-enricher"}},"spec":{"affinity":{"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchLabels":{"app":"report-enricher"}},"topologyKey":"kubernetes.io/hostname"},"weight":100}]}},"containers":[{"command":["python","-m","redisDB.report_enricher_pod"],"env":[{"name":"NODE_NAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}},{"name":"PYTHONUNBUFFERED","value":"1"}],"envFrom":[{"secretRef":{"name":"eventtrader-secrets"}}],"image":"faisalanjum/report-enricher:latest","imagePullPolicy":"Always","name":"enricher","resources":{"limits":{"cpu":"2","memory":"8Gi"},"requests":{"cpu":"500m","memory":"2Gi"}},"volumeMounts":[{"mountPath":"/app/logs","name":"logs"}]}],"priorityClassName":"worker-standard","volumes":[{"hostPath":{"path":"/home/faisal/EventMarketDB/logs","type":"DirectoryOrCreate"},"name":"logs"}]}}}}
+    creationTimestamp: "2025-07-04T10:14:31Z"
+    generation: 794
+    name: report-enricher
+    namespace: processing
+    resourceVersion: "5998479"
+    uid: 470be727-1f57-417e-945f-05f258e60ab5
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: report-enricher
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-07-07T19:47:06-04:00"
+        creationTimestamp: null
+        labels:
+          app: report-enricher
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: report-enricher
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+        containers:
+        - command:
+          - python
+          - -m
+          - redisDB.report_enricher_pod
+          env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.nodeName
+          - name: PYTHONUNBUFFERED
+            value: "1"
+          envFrom:
+          - secretRef:
+              name: eventtrader-secrets
+          image: faisalanjum/report-enricher:latest
+          imagePullPolicy: Always
+          name: enricher
+          resources:
+            limits:
+              cpu: "2"
+              memory: 8Gi
+            requests:
+              cpu: 500m
+              memory: 2Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /app/logs
+            name: logs
+        dnsPolicy: ClusterFirst
+        priorityClassName: worker-standard
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - hostPath:
+            path: /home/faisal/EventMarketDB/logs
+            type: DirectoryOrCreate
+          name: logs
+  status:
+    conditions:
+    - lastTransitionTime: "2025-07-07T16:03:02Z"
+      lastUpdateTime: "2025-07-07T16:03:02Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-07-04T10:14:31Z"
+      lastUpdateTime: "2025-07-07T23:47:06Z"
+      message: ReplicaSet "report-enricher-699f87ff9c" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 794
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "25"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"xbrl-worker-heavy","namespace":"processing"},"spec":{"replicas":0,"selector":{"matchLabels":{"app":"xbrl-worker-heavy"}},"template":{"metadata":{"labels":{"app":"xbrl-worker-heavy","worker-type":"heavy","xbrl-worker":"true"}},"spec":{"affinity":{"nodeAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum2","minisforum"]}]},"weight":100},{"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum3"]}]},"weight":10}]}},"containers":[{"env":[{"name":"NODE_NAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}},{"name":"XBRL_QUEUE","value":"reports:queues:xbrl:heavy"}],"envFrom":[{"secretRef":{"name":"eventtrader-secrets"}}],"image":"faisalanjum/xbrl-worker:latest","imagePullPolicy":"Always","name":"xbrl-worker","resources":{"limits":{"cpu":"3","memory":"8Gi"},"requests":{"cpu":"2","memory":"6Gi"}},"volumeMounts":[{"mountPath":"/app/logs","name":"logs"}]}],"priorityClassName":"worker-standard","terminationGracePeriodSeconds":300,"volumes":[{"hostPath":{"path":"/home/faisal/EventMarketDB/logs","type":"DirectoryOrCreate"},"name":"logs"}]}}}}
+      kubernetes.io/change-cause: kubectl set image deployment/xbrl-worker-heavy xbrl-worker=faisalanjum/xbrl-worker:latest
+        --namespace=processing --record=true
+    creationTimestamp: "2025-07-03T10:54:48Z"
+    generation: 100
+    name: xbrl-worker-heavy
+    namespace: processing
+    resourceVersion: "6123143"
+    uid: fe0c1265-59ea-4d4a-9c88-5b97bb8246b5
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: xbrl-worker-heavy
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-07-07T19:46:53-04:00"
+        creationTimestamp: null
+        labels:
+          app: xbrl-worker-heavy
+          worker-type: heavy
+          xbrl-worker: "true"
+      spec:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: NotIn
+                  values:
+                  - minisforum
+        containers:
+        - env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.nodeName
+          - name: XBRL_QUEUE
+            value: reports:queues:xbrl:heavy
+          - name: NEO4J_URI
+            value: bolt://neo4j-bolt.neo4j:7687
+          - name: NEO4J_USERNAME
+            value: neo4j
+          - name: NEO4J_PASSWORD
+            value: Next2020#
+          - name: REDIS_HOST
+            value: redis.infrastructure
+          - name: REDIS_PORT
+            value: "6379"
+          envFrom:
+          - secretRef:
+              name: eventtrader-secrets
+          image: faisalanjum/xbrl-worker:latest
+          imagePullPolicy: Always
+          name: xbrl-worker
+          resources:
+            limits:
+              cpu: "3"
+              memory: 8Gi
+            requests:
+              cpu: "2"
+              memory: 6Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /app/logs
+            name: logs
+          - mountPath: /app/.env
+            name: blank-env
+            subPath: .env
+        dnsPolicy: ClusterFirst
+        priorityClassName: worker-standard
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 300
+        volumes:
+        - hostPath:
+            path: /home/faisal/EventMarketDB/logs
+            type: DirectoryOrCreate
+          name: logs
+        - configMap:
+            defaultMode: 420
+            items:
+            - key: .env
+              path: .env
+            name: empty-env
+          name: blank-env
+  status:
+    conditions:
+    - lastTransitionTime: "2025-07-08T14:55:40Z"
+      lastUpdateTime: "2025-07-08T14:55:40Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-07-04T23:06:38Z"
+      lastUpdateTime: "2025-07-08T14:55:50Z"
+      message: ReplicaSet "xbrl-worker-heavy-574f55b696" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 100
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "22"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"xbrl-worker-light","namespace":"processing"},"spec":{"replicas":0,"selector":{"matchLabels":{"app":"xbrl-worker-light"}},"template":{"metadata":{"labels":{"app":"xbrl-worker-light","worker-type":"light","xbrl-worker":"true"}},"spec":{"affinity":{"nodeAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum2","minisforum"]}]},"weight":100},{"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum3"]}]},"weight":10}]}},"containers":[{"env":[{"name":"NODE_NAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}},{"name":"XBRL_QUEUE","value":"reports:queues:xbrl:light"}],"envFrom":[{"secretRef":{"name":"eventtrader-secrets"}}],"image":"faisalanjum/xbrl-worker:latest","imagePullPolicy":"Always","name":"xbrl-worker","resources":{"limits":{"cpu":"1500m","memory":"2Gi"},"requests":{"cpu":"1","memory":"1536Mi"}},"volumeMounts":[{"mountPath":"/app/logs","name":"logs"}]}],"terminationGracePeriodSeconds":120,"volumes":[{"hostPath":{"path":"/home/faisal/EventMarketDB/logs","type":"DirectoryOrCreate"},"name":"logs"}]}}}}
+    creationTimestamp: "2025-07-03T10:54:48Z"
+    generation: 264
+    name: xbrl-worker-light
+    namespace: processing
+    resourceVersion: "6122693"
+    uid: fd9ac50a-037a-4b8f-92f0-1557ae3f02d0
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: xbrl-worker-light
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-07-07T19:46:54-04:00"
+        creationTimestamp: null
+        labels:
+          app: xbrl-worker-light
+          worker-type: light
+          xbrl-worker: "true"
+      spec:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: NotIn
+                  values:
+                  - minisforum
+        containers:
+        - env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.nodeName
+          - name: XBRL_QUEUE
+            value: reports:queues:xbrl:light
+          envFrom:
+          - secretRef:
+              name: eventtrader-secrets
+          image: faisalanjum/xbrl-worker:latest
+          imagePullPolicy: Always
+          name: xbrl-worker
+          resources:
+            limits:
+              cpu: 1500m
+              memory: 2Gi
+            requests:
+              cpu: "1"
+              memory: 1536Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /app/logs
+            name: logs
+          - mountPath: /app/.env
+            name: blank-env
+            subPath: .env
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 120
+        volumes:
+        - hostPath:
+            path: /home/faisal/EventMarketDB/logs
+            type: DirectoryOrCreate
+          name: logs
+        - configMap:
+            defaultMode: 420
+            items:
+            - key: .env
+              path: .env
+            name: empty-env
+          name: blank-env
+  status:
+    conditions:
+    - lastTransitionTime: "2025-07-08T15:13:51Z"
+      lastUpdateTime: "2025-07-08T15:13:51Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-07-08T14:11:53Z"
+      lastUpdateTime: "2025-07-08T15:13:51Z"
+      message: ReplicaSet "xbrl-worker-light-7bb6d7df75" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 264
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "22"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"xbrl-worker-medium","namespace":"processing"},"spec":{"replicas":0,"selector":{"matchLabels":{"app":"xbrl-worker-medium"}},"template":{"metadata":{"labels":{"app":"xbrl-worker-medium","worker-type":"medium","xbrl-worker":"true"}},"spec":{"affinity":{"nodeAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum2","minisforum"]}]},"weight":100},{"preference":{"matchExpressions":[{"key":"kubernetes.io/hostname","operator":"In","values":["minisforum3"]}]},"weight":10}]}},"containers":[{"env":[{"name":"NODE_NAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}},{"name":"XBRL_QUEUE","value":"reports:queues:xbrl:medium"}],"envFrom":[{"secretRef":{"name":"eventtrader-secrets"}}],"image":"faisalanjum/xbrl-worker:latest","imagePullPolicy":"Always","name":"xbrl-worker","resources":{"limits":{"cpu":"2","memory":"4Gi"},"requests":{"cpu":"1500m","memory":"3Gi"}},"volumeMounts":[{"mountPath":"/app/logs","name":"logs"}]}],"terminationGracePeriodSeconds":180,"volumes":[{"hostPath":{"path":"/home/faisal/EventMarketDB/logs","type":"DirectoryOrCreate"},"name":"logs"}]}}}}
+    creationTimestamp: "2025-07-03T10:54:48Z"
+    generation: 94
+    name: xbrl-worker-medium
+    namespace: processing
+    resourceVersion: "6122900"
+    uid: 22adf241-42b2-44c0-b575-4f55c3427c12
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: xbrl-worker-medium
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-07-07T19:46:53-04:00"
+        creationTimestamp: null
+        labels:
+          app: xbrl-worker-medium
+          worker-type: medium
+          xbrl-worker: "true"
+      spec:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: NotIn
+                  values:
+                  - minisforum
+        containers:
+        - env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.nodeName
+          - name: XBRL_QUEUE
+            value: reports:queues:xbrl:medium
+          envFrom:
+          - secretRef:
+              name: eventtrader-secrets
+          image: faisalanjum/xbrl-worker:latest
+          imagePullPolicy: Always
+          name: xbrl-worker
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4Gi
+            requests:
+              cpu: 1500m
+              memory: 3Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /app/logs
+            name: logs
+          - mountPath: /app/.env
+            name: blank-env
+            subPath: .env
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 180
+        volumes:
+        - hostPath:
+            path: /home/faisal/EventMarketDB/logs
+            type: DirectoryOrCreate
+          name: logs
+        - configMap:
+            defaultMode: 420
+            items:
+            - key: .env
+              path: .env
+            name: empty-env
+          name: blank-env
+  status:
+    conditions:
+    - lastTransitionTime: "2025-07-08T14:35:23Z"
+      lastUpdateTime: "2025-07-08T14:35:23Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-07-08T14:11:35Z"
+      lastUpdateTime: "2025-07-08T15:05:38Z"
+      message: ReplicaSet "xbrl-worker-medium-86c8445c78" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 94
+kind: List
+metadata:
+  resourceVersion: ""

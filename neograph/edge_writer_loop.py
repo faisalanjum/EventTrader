@@ -81,13 +81,17 @@ def main():
     logger.info(f"Using queue: {edge_queue}")
     
     # Import Redis client only when actually needed
+    logger.info("Importing RedisClient...")
     from redisDB.redisClasses import RedisClient
+    logger.info("Creating RedisClient...")
     redis_client = RedisClient(prefix="")
     batch_size = 200  # Reduced from 1000 for faster commits
     log_interval = 10  # Log queue depth every 10 iterations
     iteration = 0
     
+    logger.info("Getting Neo4j manager...")
     neo4j_manager = get_manager()
+    logger.info("Got Neo4j manager, entering main loop...")
     
     while True:
         try:
