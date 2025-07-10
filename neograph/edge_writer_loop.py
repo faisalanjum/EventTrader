@@ -92,8 +92,10 @@ def main():
     logger.info("Getting Neo4j manager...")
     neo4j_manager = get_manager()
     logger.info("Got Neo4j manager, entering main loop...")
+    logger.info(f"About to start while loop, batch_size={batch_size}, log_interval={log_interval}")
     
     while True:
+        logger.info(f"While loop iteration {iteration + 1} starting...")
         try:
             iteration += 1
             if iteration == 1:
