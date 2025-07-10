@@ -216,6 +216,15 @@ EXTRACTOR_CALL_TIMEOUT = 90  # seconds
 THREADS_PER_SECTION_EXTRACTION = 4 # Default number of threads
 
 # --- End Historical Chunked Processing Configuration ---
+
+# --- Edge Writer Configuration ---
+# When True AND EDGE_QUEUE environment variable is set, queues high-volume
+# relationships (HAS_CONCEPT, HAS_UNIT, HAS_PERIOD, REPORTS, FACT_MEMBER) 
+# to a single-writer service to eliminate lock contention
+# When False OR EDGE_QUEUE not set, uses original direct merge behavior
+ENABLE_EDGE_WRITER = True  # Feature flag for edge writer pattern
+# --- End Edge Writer Configuration ---
+
 # --- PubSub Processing Configuration ---
 # Interval (in seconds) between reconciliation checks during PubSub processing
 # Controls how frequently the system runs reconcile_missing_items in live mode

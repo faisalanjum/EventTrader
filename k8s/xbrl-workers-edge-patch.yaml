@@ -1,0 +1,17 @@
+# Patch to add EDGE_QUEUE environment variable to all XBRL workers
+# 
+# Apply with these exact commands:
+# kubectl -n processing patch deployment xbrl-worker-heavy --type merge -p "$(cat k8s/xbrl-workers-edge-patch.yaml)"
+# kubectl -n processing patch deployment xbrl-worker-medium --type merge -p "$(cat k8s/xbrl-workers-edge-patch.yaml)"
+# kubectl -n processing patch deployment xbrl-worker-light --type merge -p "$(cat k8s/xbrl-workers-edge-patch.yaml)"
+#
+# To remove (rollback):
+# kubectl set env deployment/xbrl-worker-heavy deployment/xbrl-worker-medium deployment/xbrl-worker-light -n processing EDGE_QUEUE-
+spec:
+  template:
+    spec:
+      containers:
+      - name: xbrl-worker
+        env:
+        - name: EDGE_QUEUE
+          value: "edge_writer:queue"

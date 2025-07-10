@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge-writer
+  namespace: processing
+spec:
+  replicas: 1  # MUST BE 1 - single writer pattern
+  strategy:
+    type: Recreate  # Ensure only one instance ever runs
+  selector:
+    matchLabels:
+      app: edge-writer
+  template:
+    metadata:
+      labels:
+        app: edge-writer
+    spec:
+      containers:
+      - name: edge-writer
+        image: faisalanjum/xbrl-worker:latest
+        command: ["python", "-m", "neograph.edge_writer_loop"]
+        resources:
+          requests:
+            cpu: "1"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "2Gi"
+        env:
+        - name: EDGE_QUEUE
+          value: "edge_writer:queue"  # Queue name for edge relationships
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        envFrom:
+        - secretRef:
+            name: eventtrader-secrets
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: logs
+        hostPath:
+          path: /home/faisal/EventMarketDB/logs
+          type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: minisforum2  # Run on worker node

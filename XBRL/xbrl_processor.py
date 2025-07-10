@@ -927,6 +927,11 @@ class process_report:
             logger.critical(f"XBRL model not loaded for report {self.accessionNo} when trying to populate report nodes.")
             raise RuntimeError("XBRL model not loaded.")
 
+        # Check edge writer configuration once at the beginning
+        import os
+        from config.feature_flags import ENABLE_EDGE_WRITER
+        edge_queue = os.getenv("EDGE_QUEUE") if ENABLE_EDGE_WRITER else None
+
         self._build_facts()       # 5. Build facts
         
         # Upload to Neo4j report-specific nodes - # Testing=False since otherwise it will clear the db
@@ -941,27 +946,119 @@ class process_report:
         
         # PHASE 2 OPTIMIZATION: Group relationships by type before merging
         if fact_relationships:
-            # Group by relationship type
-            from collections import defaultdict
-            grouped = defaultdict(list)
-            for rel in fact_relationships:
-                grouped[rel[2]].append(rel)
             
-            # Merge each type separately to reduce lock contention
-            for rel_type, rels in grouped.items():
-                self.neo4j.merge_relationships(rels)
+            # Define high-volume shared edge types
+            SHARED_EDGE_TYPES = {
+                RelationType.HAS_CONCEPT,
+                RelationType.HAS_UNIT,
+                RelationType.HAS_PERIOD
+            }
+            
+            # Check if we should use edge writer
+            if edge_queue and any(rel[2] in SHARED_EDGE_TYPES for rel in fact_relationships):
+                # Queue high-volume relationships to edge writer
+                import json
+                from redisDB.redisClasses import RedisClient
+                redis_client = RedisClient(prefix="")
+                
+                queued_count = 0
+                direct_relationships = []
+                
+                for rel in fact_relationships:
+                    if rel[2] in SHARED_EDGE_TYPES:
+                        # Queue to edge writer
+                        source, target, rel_type, *props = rel
+                        redis_client.client.rpush(edge_queue, json.dumps({
+                            "source_id": source.id,
+                            "target_id": target.id,
+                            "rel_type": rel_type.value,
+                            "properties": props[0] if props else {}
+                        }))
+                        queued_count += 1
+                    else:
+                        # Process directly (shouldn't happen for fact relationships)
+                        direct_relationships.append(rel)
+                
+                logger.info(f"Queued {queued_count} fact relationships to edge writer")
+                
+                # Process any non-shared relationships directly
+                if direct_relationships:
+                    self.neo4j.merge_relationships(direct_relationships)
+            else:
+                # Original behavior - process all relationships directly
+                from collections import defaultdict
+                grouped = defaultdict(list)
+                for rel in fact_relationships:
+                    grouped[rel[2]].append(rel)
+                
+                # Merge each type separately to reduce lock contention
+                for rel_type, rels in grouped.items():
+                    self.neo4j.merge_relationships(rels)
 
         # Build report-fact relationships
         report_fact_relationships = self._build_report_fact_relationships()
         
         # Merge fact relationships
         if report_fact_relationships:
-            self.neo4j.merge_relationships(report_fact_relationships)
+            # Check if we should queue REPORTS relationships
+            if edge_queue and ENABLE_EDGE_WRITER:
+                # Add REPORTS to shared edge types for this section
+                import json
+                from redisDB.redisClasses import RedisClient
+                redis_client = RedisClient(prefix="")
+                
+                queued_count = 0
+                for rel in report_fact_relationships:
+                    source, target, rel_type, *props = rel
+                    redis_client.client.rpush(edge_queue, json.dumps({
+                        "source_id": source.id,
+                        "target_id": target.id,
+                        "rel_type": rel_type.value,
+                        "properties": props[0] if props else {}
+                    }))
+                    queued_count += 1
+                
+                logger.info(f"Queued {queued_count} REPORTS relationships to edge writer")
+            else:
+                # Original behavior
+                self.neo4j.merge_relationships(report_fact_relationships)
 
         # Export fact-dimension relationships
         fact_dim_relationships = self._build_fact_dimension_relationships()
         if fact_dim_relationships:
-            self.neo4j.merge_relationships(fact_dim_relationships)
+            # Check if we should queue FACT_MEMBER relationships
+            if edge_queue and ENABLE_EDGE_WRITER:
+                import json
+                from redisDB.redisClasses import RedisClient
+                redis_client = RedisClient(prefix="")
+                
+                queued_count = 0
+                direct_relationships = []
+                
+                for rel in fact_dim_relationships:
+                    # Only queue FACT_MEMBER relationships
+                    if rel[2] == RelationType.FACT_MEMBER:
+                        source, target, rel_type, *props = rel
+                        redis_client.client.rpush(edge_queue, json.dumps({
+                            "source_id": source.id,
+                            "target_id": target.id,
+                            "rel_type": rel_type.value,
+                            "properties": props[0] if props else {}
+                        }))
+                        queued_count += 1
+                    else:
+                        # FACT_DIMENSION relationships processed directly
+                        direct_relationships.append(rel)
+                
+                if queued_count > 0:
+                    logger.info(f"Queued {queued_count} FACT_MEMBER relationships to edge writer")
+                
+                # Process FACT_DIMENSION relationships directly
+                if direct_relationships:
+                    self.neo4j.merge_relationships(direct_relationships)
+            else:
+                # Original behavior
+                self.neo4j.merge_relationships(fact_dim_relationships)
 
         # Export context relationships
         context_relationships = self._build_context_relationships()
