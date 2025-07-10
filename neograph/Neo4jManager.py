@@ -275,6 +275,19 @@ class Neo4jManager:
                             REQUIRE r.key IS UNIQUE
                             """)
                             logger.info(f"Created key constraint for HAS_PERIOD relationships")
+                        
+                        # Create lookup index for id property across all nodes
+                        # This speeds up queries that search by id without knowing the label
+                        existing_indexes = {
+                            index['name'] for index in session.run("SHOW INDEXES").data()
+                        }
+                        lookup_index_name = "id_lookup_index"
+                        if lookup_index_name not in existing_indexes:
+                            session.run("""
+                            CREATE LOOKUP INDEX id_lookup_index IF NOT EXISTS
+                            FOR (n) ON (n.id)
+                            """)
+                            logger.info(f"Created lookup index for id property across all nodes")
                     
                     # If we get here without exception, we're done
                     break
