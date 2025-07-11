@@ -52,6 +52,33 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Cycle detection helper for recursive traversals
+class CycleDetector:
+    """Context manager for detecting cycles in recursive graph traversals"""
+    def __init__(self, name="traversal"):
+        self.visited = set()
+        self.name = name
+        
+    def has_visited(self, obj):
+        """Check if object has been visited. Uses object id or qname if available."""
+        try:
+            # Try to get a unique identifier
+            if hasattr(obj, 'qname'):
+                key = str(obj.qname)
+            else:
+                key = id(obj)
+            
+            if key in self.visited:
+                logger.debug(f"Cycle detected in {self.name}: already visited {key}")
+                return True
+            
+            self.visited.add(key)
+            return False
+        except Exception as e:
+            # If we can't get an identifier, err on the side of caution
+            logger.warning(f"Could not get identifier for cycle detection: {e}")
+            return True
+
 @dataclass
 class Member(Neo4jNode):
     """Represents a dimension member in a hierarchical structure"""
@@ -307,7 +334,13 @@ class Dimension(Neo4jNode):
 
         if not dom_mem_rel_set: return
         
+        # Initialize cycle detector for this traversal
+        cycle_detector = CycleDetector(f"dimension_members_{self.qname}")
+        
         def add_members_recursive(source_object: ModelConcept, parent_qname: Optional[str] = None, level: int = 0) -> None:
+            # Check for cycles before processing
+            if cycle_detector.has_visited(source_object):
+                return
 
             relationships = dom_mem_rel_set.fromModelObject(source_object)            
             for rel in relationships:
@@ -323,7 +356,12 @@ class Dimension(Neo4jNode):
                     add_members_recursive(member_object, str(member_object.qname), level + 1)
                         
                 except Exception as e:
-                    logger.error(f"Error creating member {member_object.qname}: {str(e)}", exc_info=True)
+                    # Safely get member identifier for logging
+                    try:
+                        member_id = str(member_object.qname) if hasattr(member_object, 'qname') else 'unknown'
+                    except:
+                        member_id = 'unknown'
+                    logger.error(f"Error creating member {member_id}: {str(e)}", exc_info=True)
                     continue
         
         # Start with domain being the source object
@@ -455,8 +493,15 @@ class Hypercube:
         not_all_set = self.model_xbrl.relationshipSet(XbrlConst.notAll, self.network_uri)
         domain_member = self.model_xbrl.relationshipSet(XbrlConst.domainMember, self.network_uri)
         
+        # Initialize cycle detector for this traversal
+        cycle_detector = CycleDetector(f"hypercube_concepts_{self.hypercube_item.qname if hasattr(self.hypercube_item, 'qname') else 'unknown'}")
+        
         def collect_domain_members(concept):
             if concept is not None:
+                # Check for cycles before processing
+                if cycle_detector.has_visited(concept):
+                    return
+                    
                 if not concept.isAbstract:
                     # Find matching concept in report_concepts
                     concept_id = f"{concept.qname.namespaceURI}:{concept.qname}"
