@@ -1,134 +1,185 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
-View XBRL Errors
-----------------
-Simple script to view XBRL processing errors from failed reports
+View summary of XBRL processing errors and status
 """
 
 import os
 import sys
-import logging
-from neo4j import GraphDatabase
 from pathlib import Path
-from dotenv import load_dotenv
-import warnings
+import logging
 from collections import defaultdict
 
-# Suppress Neo4j warnings
-warnings.filterwarnings('ignore', category=UserWarning, module='neo4j')
+# Add parent directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    stream=sys.stderr
-)
+from neograph.Neo4jConnection import get_manager
+from utils.log_config import setup_logging
+
+# Setup logging
+setup_logging(name="view_xbrl_errors")
 logger = logging.getLogger(__name__)
 
-# Load environment variables
-script_dir = Path(__file__).resolve().parent
-workspace_dir = script_dir.parent
-env_file = workspace_dir / '.env'
+def get_xbrl_status_summary():
+    """Get overall XBRL processing status summary"""
+    
+    neo4j = get_manager()
+    
+    query = """
+    MATCH (r:Report)
+    WITH r.xbrl_status as status, COUNT(r) as count
+    ORDER BY count DESC
+    RETURN status, count
+    """
+    
+    with neo4j.driver.session() as session:
+        result = session.run(query)
+        statuses = [(record['status'] or 'NULL', record['count']) for record in result]
+        
+        total = sum(count for _, count in statuses)
+        
+        logger.info("\n=== XBRL Processing Status Summary ===")
+        logger.info(f"Total reports: {total:,}")
+        logger.info("\nStatus breakdown:")
+        for status, count in statuses:
+            percentage = (count / total * 100) if total > 0 else 0
+            logger.info(f"  {status}: {count:,} ({percentage:.1f}%)")
 
-if env_file.exists():
-    load_dotenv(env_file, override=True)
-else:
-    logger.error(f".env file not found at {env_file}")
-    sys.exit(1)
+def get_error_summary():
+    """Get summary of XBRL errors grouped by type"""
+    
+    neo4j = get_manager()
+    
+    query = """
+    MATCH (r:Report)
+    WHERE r.xbrl_status = "FAILED"
+    WITH r.xbrl_error as error, 
+         COUNT(r) as count,
+         COLLECT(DISTINCT r.formType)[..5] as sample_forms,
+         COLLECT(r.accessionNo)[..3] as sample_reports
+    ORDER BY count DESC
+    RETURN error, count, sample_forms, sample_reports
+    """
+    
+    with neo4j.driver.session() as session:
+        result = session.run(query)
+        errors = list(result)
+        
+        if not errors:
+            logger.info("\n✅ No XBRL processing failures found!")
+            return
+        
+        logger.info("\n=== XBRL Error Summary ===")
+        total_failures = sum(record['count'] for record in errors)
+        logger.info(f"Total failed reports: {total_failures:,}")
+        
+        logger.info("\nError breakdown:")
+        for record in errors:
+            error = record['error'] or 'Unknown error'
+            count = record['count']
+            forms = record['sample_forms']
+            samples = record['sample_reports']
+            
+            logger.info(f"\n{error}")
+            logger.info(f"  Count: {count:,}")
+            logger.info(f"  Form types: {', '.join(forms)}")
+            logger.info(f"  Sample reports: {', '.join(samples[:2])}")
 
-# Neo4j connection settings
-NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-NEO4J_USER = os.getenv("NEO4J_USERNAME", "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
+def get_recoverable_failures():
+    """Analyze which failures are recoverable"""
+    
+    neo4j = get_manager()
+    
+    # Check missing CIK reports that have entities
+    missing_cik_query = """
+    MATCH (r:Report)
+    WHERE r.xbrl_error = "Report is missing CIK"
+    AND r.entities IS NOT NULL
+    RETURN COUNT(r) as recoverable_cik
+    """
+    
+    # Check deadlock errors
+    deadlock_query = """
+    MATCH (r:Report)
+    WHERE r.xbrl_error CONTAINS "deadlock detected"
+    RETURN COUNT(r) as deadlock_count
+    """
+    
+    # Check reports stuck in processing
+    stuck_query = """
+    MATCH (r:Report)
+    WHERE r.xbrl_status = "PROCESSING"
+    RETURN COUNT(r) as stuck_count
+    """
+    
+    with neo4j.driver.session() as session:
+        cik_result = session.run(missing_cik_query)
+        recoverable_cik = cik_result.single()['recoverable_cik']
+        
+        deadlock_result = session.run(deadlock_query)
+        deadlock_count = deadlock_result.single()['deadlock_count']
+        
+        stuck_result = session.run(stuck_query)
+        stuck_count = stuck_result.single()['stuck_count']
+        
+        logger.info("\n=== Recoverable Failures ===")
+        logger.info(f"Missing CIK (with entities available): {recoverable_cik:,}")
+        logger.info(f"Deadlock errors (retryable): {deadlock_count:,}")
+        logger.info(f"Stuck in PROCESSING: {stuck_count:,}")
+        
+        total_recoverable = recoverable_cik + deadlock_count
+        logger.info(f"\nTotal recoverable failures: {total_recoverable:,}")
+        
+        if total_recoverable > 0:
+            logger.info("\n💡 Run ./scripts/fix_xbrl_failures.py to fix these issues")
 
-def connect_to_neo4j():
-    """Connect to Neo4j database"""
-    try:
-        driver = GraphDatabase.driver(
-            NEO4J_URI, 
-            auth=(NEO4J_USER, NEO4J_PASSWORD)
-        )
-        logger.info(f"Successfully connected to Neo4j at {NEO4J_URI}")
-        return driver
-    except Exception as e:
-        logger.error(f"Failed to connect to Neo4j: {e}")
-        sys.exit(1)
+def check_queue_health():
+    """Check the health of XBRL processing queues"""
+    
+    neo4j = get_manager()
+    
+    # Check queued reports by form type
+    queue_query = """
+    MATCH (r:Report)
+    WHERE r.xbrl_status = "QUEUED"
+    WITH r.formType as formType, COUNT(r) as count
+    ORDER BY count DESC
+    RETURN formType, count
+    """
+    
+    with neo4j.driver.session() as session:
+        result = session.run(queue_query)
+        queued = list(result)
+        
+        if queued:
+            total_queued = sum(record['count'] for record in queued)
+            logger.info(f"\n=== Queue Status ===")
+            logger.info(f"Total queued: {total_queued:,}")
+            logger.info("\nBy form type:")
+            for record in queued:
+                logger.info(f"  {record['formType']}: {record['count']:,}")
 
 def main():
-    """Main function to view XBRL errors"""
-    neo4j_driver = connect_to_neo4j()
+    """View XBRL error summary"""
     
-    try:
-        with neo4j_driver.session() as session:
-            # Query all failed XBRL reports
-            result = session.run("""
-                MATCH (r:Report {xbrl_status: 'FAILED'})
-                WHERE r.xbrl_error IS NOT NULL
-                RETURN r.accessionNo AS accession,
-                       r.cik AS cik,
-                       r.formType AS form_type,
-                       r.primaryDocumentUrl AS url,
-                       r.xbrl_error AS error
-                ORDER BY r.accessionNo DESC
-            """)
-            
-            errors = list(result)
-            
-            if not errors:
-                print("\n✅ No XBRL errors found!")
-                return
-            
-            # Group errors by type
-            error_groups = defaultdict(list)
-            
-            for record in errors:
-                error_msg = record['error']
-                
-                # Simple error categorization
-                if "HTTP Error 403" in error_msg:
-                    key = "HTTP 403 Forbidden"
-                elif "HTTP Error 404" in error_msg:
-                    key = "HTTP 404 Not Found"
-                elif "HTTP Error 500" in error_msg:
-                    key = "HTTP 500 Server Error"
-                elif "Connection" in error_msg or "Timeout" in error_msg:
-                    key = "Connection/Timeout"
-                elif "Memory" in error_msg or "memory" in error_msg:
-                    key = "Memory Error"
-                elif "XML" in error_msg or "parse" in error_msg:
-                    key = "XML Parse Error"
-                else:
-                    # First 60 chars of error
-                    key = error_msg[:60] + "..." if len(error_msg) > 60 else error_msg
-                
-                error_groups[key].append(record)
-            
-            # Display summary
-            print(f"\n===== XBRL Error Summary =====")
-            print(f"Total Failed Reports: {len(errors)}")
-            print(f"\nError Types:")
-            
-            for error_type, records in sorted(error_groups.items(), key=lambda x: len(x[1]), reverse=True):
-                print(f"\n{error_type}: {len(records)} occurrences")
-                print("-" * 80)
-                
-                # Show first 3 examples
-                for i, rec in enumerate(records[:3]):
-                    print(f"\n  Example {i+1}:")
-                    print(f"  Accession: {rec['accession']}")
-                    print(f"  CIK: {rec['cik']}")
-                    print(f"  Form: {rec['form_type']}")
-                    print(f"  URL: {rec['url']}")
-                    if len(rec['error']) > 200:
-                        print(f"  Error: {rec['error'][:200]}...")
-                    else:
-                        print(f"  Error: {rec['error']}")
-                
-                if len(records) > 3:
-                    print(f"\n  ... and {len(records) - 3} more")
-                    
-    finally:
-        neo4j_driver.close()
+    # Set environment variables
+    os.environ['NEO4J_URI'] = 'bolt://localhost:30687'
+    os.environ['NEO4J_USERNAME'] = 'neo4j'
+    os.environ['NEO4J_PASSWORD'] = 'Next2020#'
+    
+    logger.info("XBRL Processing Error Analysis")
+    logger.info("=" * 50)
+    
+    # Get overall status
+    get_xbrl_status_summary()
+    
+    # Get error details
+    get_error_summary()
+    
+    # Check recoverable failures
+    get_recoverable_failures()
+    
+    # Check queue health
+    check_queue_health()
 
 if __name__ == "__main__":
     main()

@@ -1463,12 +1463,12 @@ class Neo4jManager:
                     parent_level: toInteger(param.properties.parent_level), 
                     child_level: toInteger(param.properties.child_level) 
                 }}]->(t)
-                ON CREATE SET r = param.properties 
+                ON CREATE SET r += param.properties 
                 ON MATCH SET r += apoc.map.clean(param.properties, 
                                  ['cik', 'report_id', 'network_name', 'parent_id', 'child_id', 'parent_level', 'child_level'], 
                                  [null])
             """, {"params": params_chunk})
-            # ON CREATE: Set all properties initially.
+            # ON CREATE: Add all properties without overwriting constraint properties.
             # ON MATCH: Add properties NOT used in the MERGE key, using apoc.map.clean to avoid overwriting key props.
 
         # Execute in manageable chunks with fallback

@@ -65,7 +65,7 @@
   - Resources: Requests: 2 CPU, 6Gi memory | Limits: 3 CPU, 8Gi memory
   - Runs on: minisforum2 or minisforum (NOT minisforum3)
   - Logging: Daily files like `xbrl-heavy_YYYYMMDD_minisforum2.log`
-  - Scaling: KEDA autoscaler (0-4 replicas) based on Redis queue `reports:queues:xbrl:heavy`
+  - Scaling: KEDA autoscaler (1-2 replicas) based on Redis queue `reports:queues:xbrl:heavy`
   - Scale trigger: Queue length ≥ 1, target length 2
 
 - **xbrl-worker-medium**
@@ -74,7 +74,7 @@
   - Resources: Requests: 1.5 CPU, 3Gi memory | Limits: 2 CPU, 4Gi memory
   - Runs on: minisforum2 or minisforum (NOT minisforum3)
   - Logging: Daily files like `xbrl-medium_YYYYMMDD_minisforum2.log`
-  - Scaling: KEDA autoscaler (0-6 replicas) based on Redis queue `reports:queues:xbrl:medium`
+  - Scaling: KEDA autoscaler (1-2 replicas) based on Redis queue `reports:queues:xbrl:medium`
   - Scale trigger: Queue length ≥ 1, target length 5
 
 - **xbrl-worker-light**
@@ -83,7 +83,7 @@
   - Resources: Requests: 1 CPU, 1.5Gi memory | Limits: 1.5 CPU, 2Gi memory
   - Runs on: minisforum2 or minisforum (NOT minisforum3)
   - Logging: Daily files like `xbrl-light_YYYYMMDD_minisforum2.log`
-  - Scaling: KEDA autoscaler (0-10 replicas) based on Redis queue `reports:queues:xbrl:light`
+  - Scaling: KEDA autoscaler (1-4 replicas) based on Redis queue `reports:queues:xbrl:light`
   - Scale trigger: Queue length ≥ 1, target length 20
 
 - **report-enricher**
@@ -94,6 +94,18 @@
   - Logging: Daily files like `enricher_YYYYMMDD_minisforum2.log`
   - Scaling: KEDA autoscaler (0-15 replicas) based on Redis queue `reports:queues:enrich`
   - Scale trigger: Queue length ≥ 1, target length 5
+
+- **edge-writer**
+  - Purpose: Single-writer pattern to eliminate Neo4j lock contention for high-volume relationships
+  - Image: `faisalanjum/edge-writer:latest`
+  - Resources: Requests: 500m CPU, 1Gi memory | Limits: 1 CPU, 2Gi memory
+  - Runs on: Any node (singleton - only 1 instance)
+  - Logging: Daily files like `edge_writer_YYYYMMDD_{node}.log`
+  - Scaling: Fixed at 1 replica (must remain single writer)
+  - Queue: `reports:queues:edge_writer` for relationship creation
+  - Performance: Processes ~9-10k relationships/second
+  - Handles: HAS_CONCEPT, HAS_UNIT, HAS_PERIOD, REPORTS, FACT_MEMBER, FOR_COMPANY, HAS_DIMENSION, HAS_MEMBER, IN_CONTEXT, CALCULATION_EDGE, PRESENTATION_EDGE
+  - Critical: Must remain single instance to prevent concurrent write conflicts
 
 #### Infrastructure Namespace
 
@@ -188,27 +200,27 @@ All autoscaling uses Redis list length as the trigger:
 - **xbrl-worker-heavy**: 
   - Queue: `reports:queues:xbrl:heavy`
   - Formula: `desiredReplicas = ceil(queueLength / 2)`
-  - Example: 5 items = 3 pods, 8 items = 4 pods (max)
-  - Min: 0, Max: 4, Cooldown: 300s (5 min)
-  - Activation: Scales from 0→1 when queue length ≥ 1
+  - Example: 1-2 items = 1 pod, 3-4 items = 2 pods (max)
+  - Min: 1, Max: 2, Cooldown: 300s (5 min)
+  - Activation: Always has 1 pod running (minReplicas=1)
   - ScaledObject: `xbrl-worker-heavy-scaler`
   - Memory intensive: Each pod can handle ~8GB documents
 
 - **xbrl-worker-medium**: 
   - Queue: `reports:queues:xbrl:medium`
   - Formula: `desiredReplicas = ceil(queueLength / 5)`
-  - Example: 10 items = 2 pods, 25 items = 5 pods
-  - Min: 0, Max: 6, Cooldown: 180s (3 min)
-  - Activation: Scales from 0→1 when queue length ≥ 1
+  - Example: 1-5 items = 1 pod, 6-10 items = 2 pods (max)
+  - Min: 1, Max: 2, Cooldown: 180s (3 min)
+  - Activation: Always has 1 pod running (minReplicas=1)
   - ScaledObject: `xbrl-worker-medium-scaler`
   - Memory moderate: Each pod can handle ~4GB documents
 
 - **xbrl-worker-light**: 
   - Queue: `reports:queues:xbrl:light`
   - Formula: `desiredReplicas = ceil(queueLength / 20)`
-  - Example: 30 items = 2 pods, 100 items = 5 pods
-  - Min: 0, Max: 10, Cooldown: 120s (2 min)
-  - Activation: Scales from 0→1 when queue length ≥ 1
+  - Example: 1-20 items = 1 pod, 21-40 items = 2 pods, 41-60 items = 3 pods, 61-80 items = 4 pods (max)
+  - Min: 1, Max: 4, Cooldown: 120s (2 min)
+  - Activation: Always has 1 pod running (minReplicas=1)
   - ScaledObject: `xbrl-worker-light-scaler`
   - Memory light: Each pod can handle ~2GB documents
 
@@ -370,27 +382,12 @@ Managed by logrotate on all nodes (`/etc/logrotate.d/eventmarketdb`):
   - Uses Redis prefix `reports:hist:` for data separation
 
 #### Historical Processing Safety Configuration
-**CRITICAL**: Before starting historical processing, apply safety limits to prevent OOM:
+**UPDATE (Jan 2025)**: The historical-safety-config.yaml is outdated. Current production limits are sufficient:
+- Heavy: max=2 pods (safe for memory)
+- Medium: max=2 pods (safe for memory) 
+- Light: max=4 pods (safe for memory)
 
-```bash
-# Apply KEDA safety limits (reduces Medium: 4→3, Light: 7→5)
-kubectl apply -f /home/faisal/EventMarketDB/k8s/historical-safety-config.yaml
-
-# This ensures:
-# - minisforum2: Max 49.5GB usage (11GB buffer)
-# - minisforum: Max 55.3GB usage (2.2GB buffer)
-```
-
-**After historical completes**:
-```bash
-# Restore full KEDA scaling
-kubectl apply -f /home/faisal/EventMarketDB/k8s/xbrl-worker-scaledobjects.yaml
-
-# Remove nodeAffinity to restore multi-node distribution
-kubectl patch deployment xbrl-worker-heavy -n processing --type='json' -p='[{"op": "remove", "path": "/spec/template/spec/affinity"}]'
-kubectl patch deployment xbrl-worker-medium -n processing --type='json' -p='[{"op": "remove", "path": "/spec/template/spec/affinity"}]'
-kubectl patch deployment xbrl-worker-light -n processing --type='json' -p='[{"op": "remove", "path": "/spec/template/spec/affinity"}]'
-```
+These limits provide adequate safety margins for historical processing without requiring special configuration.
 
 - **Helper Pods Used**: 
   - SAME xbrl-worker pods (heavy/medium/light) with safety limits
@@ -454,7 +451,7 @@ kubectl patch deployment xbrl-worker-light -n processing --type='json' -p='[{"op
 ### XBRL Processing System
 
 #### Overview
-XBRL processing extracts structured financial data from SEC XML filings into Neo4j graph database using queue-based worker pods.
+XBRL processing extracts structured financial data from SEC XML filings into Neo4j graph database using queue-based worker pods. High-volume relationships are queued to the edge-writer service to eliminate Neo4j lock contention.
 
 #### Status Lifecycle
 | Status | Description | Next States |
@@ -535,6 +532,8 @@ kubectl exec -it neo4j-0 -n neo4j -- cypher-shell \
 - Reconciliation runs on every startup via `DataManagerCentral.py:717`
 - Status updates are atomic to prevent races
 - Worker retries: 3 attempts with exponential backoff
+- **Edge Writer Pattern**: High-contention relationships (HAS_CONCEPT, HAS_UNIT, etc.) are queued to single edge-writer pod
+- **Performance**: Edge writer eliminates Neo4j lock contention, reducing processing time from hours to minutes
 
 ### Operational Commands for Bots
 
@@ -570,17 +569,19 @@ kubectl exec -it redis-77f84c44fd-4h4w4 -n infrastructure -- redis-cli
 > LLEN reports:queues:xbrl:medium
 > LLEN reports:queues:xbrl:light
 > LLEN reports:queues:enrich
+> LLEN reports:queues:edge_writer
 ```
 
 #### Resource Capacity Check
 - **minisforum2 capacity**: 16 CPU, 63GB RAM
 - **Current allocations when all max replicas**:
-  - xbrl-heavy: 4 pods × 2 CPU = 8 CPU, 4 × 6Gi = 24Gi RAM
-  - xbrl-medium: 6 pods × 1.5 CPU = 9 CPU, 6 × 3Gi = 18Gi RAM
-  - xbrl-light: 10 pods × 1 CPU = 10 CPU, 10 × 1.5Gi = 15Gi RAM
+  - xbrl-heavy: 2 pods × 2 CPU = 4 CPU, 2 × 6Gi = 12Gi RAM
+  - xbrl-medium: 2 pods × 1.5 CPU = 3 CPU, 2 × 3Gi = 6Gi RAM
+  - xbrl-light: 4 pods × 1 CPU = 4 CPU, 4 × 1.5Gi = 6Gi RAM
   - report-enricher: 15 pods × 0.5 CPU = 7.5 CPU, 15 × 2Gi = 30Gi RAM
-  - **Total at max**: 34.5 CPU (216% overcommit), 87Gi RAM (137% overcommit)
-  - **Note**: Not all pods can run at max simultaneously
+  - edge-writer: 1 pod × 0.5 CPU = 0.5 CPU, 1 × 1Gi = 1Gi RAM
+  - **Total at max**: 19 CPU (119% overcommit), 55Gi RAM (87% utilization)
+  - **Note**: Much safer resource limits after Jan 2025 updates
 
 ### Naming and Conventions
 

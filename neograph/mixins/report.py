@@ -474,7 +474,7 @@ class ReportMixin:
             from config.feature_flags import ENABLE_KUBERNETES_XBRL, PRESERVE_XBRL_FAILED_STATUS
             
             # Build exclusion list based on feature flag
-            excluded_statuses = ['COMPLETED', 'PROCESSING', 'SKIPPED']
+            excluded_statuses = ['COMPLETED', 'PROCESSING', 'SKIPPED', 'REFERENCE_ONLY']
             if PRESERVE_XBRL_FAILED_STATUS:
                 excluded_statuses.append('FAILED')
             

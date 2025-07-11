@@ -39,12 +39,15 @@ class XbrlMixin:
 
         # Validate required fields before any processing
         if not cik or not str(cik).strip():
-            logger.error(f"Cannot process XBRL for report {report_id}: CIK is missing or empty")
+            # These are reports filed by companies outside our tracked universe that reference tracked companies
+            # Examples: activist filings (Schedule 13D), M&A announcements, litigation documents
+            # Mark as REFERENCE_ONLY to preserve this valuable cross-company intelligence
+            logger.info(f"Report {report_id} has no CIK - marking as REFERENCE_ONLY (likely references tracked company)")
             session.run(
                 "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
                 id=report_id,
-                status="FAILED",
-                error="Missing CIK - cannot process XBRL"
+                status="REFERENCE_ONLY",
+                error="Missing CIK - report from non-tracked entity referencing tracked company"
             )
             return False
 
@@ -149,7 +152,7 @@ class XbrlMixin:
             "MATCH (r:Report {id: $id}) RETURN r.xbrl_status AS s",
             id=report_id,
         ).single()
-        if row and row["s"] in ("QUEUED", "PROCESSING", "COMPLETED"):
+        if row and row["s"] in ("QUEUED", "PROCESSING", "COMPLETED", "REFERENCE_ONLY"):
             logger.info(f"Report {report_id} already {row['s']} – skipping local queue")
             return True
 

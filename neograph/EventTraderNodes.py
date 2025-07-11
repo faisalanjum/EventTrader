@@ -68,7 +68,7 @@ class ReportNode(Neo4jNode):
     returns_schedule: Dict[str, str] = field(default_factory=dict)  # Schedule for returns calculation
     
     # Optional fields
-    xbrl_status: Optional[str] = None   # Processing status flag for XBRL data (QUEUED, PROCESSING, COMPLETED, FAILED)
+    xbrl_status: Optional[str] = None   # Processing status flag for XBRL data (QUEUED, PROCESSING, COMPLETED, FAILED, REFERENCE_ONLY)
     isAmendment: Optional[bool] = None    # Whether the report is an amendment
     description: Optional[str] = None     # Brief description of the report
     periodOfReport: Optional[str] = None  # Period the report covers
