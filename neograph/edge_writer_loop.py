@@ -118,6 +118,29 @@ def process_edge_batch(neo4j_manager, batch: List[Dict]) -> int:
                         SET r += param.properties
                         RETURN count(r) as created
                     """
+                elif rel_type == "CALCULATION_EDGE":
+                    # CALCULATION_EDGE requires special handling matching merge_relationships logic
+                    query = f"""
+                        UNWIND $params AS param
+                        MATCH (s {{id: param.source_id}})
+                        MATCH (t {{id: param.target_id}})
+                        WITH s, t, param
+                        WHERE param.properties.company_cik IS NOT NULL 
+                        AND param.properties.report_id IS NOT NULL
+                        AND param.properties.network_uri IS NOT NULL
+                        AND param.properties.context_id IS NOT NULL
+                        MERGE (s)-[r:CALCULATION_EDGE {{
+                            cik: param.properties.company_cik,
+                            report_id: param.properties.report_id,
+                            network_uri: param.properties.network_uri,
+                            parent_id: param.source_id,
+                            child_id: param.target_id,
+                            context_id: param.properties.context_id,
+                            weight: param.properties.weight
+                        }}]->(t)
+                        SET r += param.properties
+                        RETURN count(r) as created
+                    """
                 else:
                     # For other relationships, use standard merge
                     query = f"""
