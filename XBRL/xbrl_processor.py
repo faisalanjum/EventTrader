@@ -972,6 +972,8 @@ class process_report:
                             "source_id": source.id,
                             "target_id": target.id,
                             "rel_type": rel_type.value,
+                            "source_type": source.node_type.value,  # Add for consistency
+                            "target_type": target.node_type.value,  # Add for consistency
                             "properties": props[0] if props else {}
                         }))
                         queued_count += 1
@@ -1014,6 +1016,8 @@ class process_report:
                         "source_id": source.id,
                         "target_id": target.id,
                         "rel_type": rel_type.value,
+                        "source_type": source.node_type.value,  # Add for consistency
+                        "target_type": target.node_type.value,  # Add for consistency
                         "properties": props[0] if props else {}
                     }))
                     queued_count += 1
@@ -1043,6 +1047,8 @@ class process_report:
                             "source_id": source.id,
                             "target_id": target.id,
                             "rel_type": rel_type.value,
+                            "source_type": source.node_type.value,  # Add for consistency
+                            "target_type": target.node_type.value,  # Add for consistency
                             "properties": props[0] if props else {}
                         }))
                         queued_count += 1
@@ -1063,7 +1069,47 @@ class process_report:
         # Export context relationships
         context_relationships = self._build_context_relationships()
         if context_relationships:
-            self.neo4j.merge_relationships(context_relationships)
+            # Define context edge types that may benefit from edge writer
+            CONTEXT_EDGE_TYPES = {
+                RelationType.HAS_PERIOD,     # Shared with Facts, high contention
+                RelationType.FOR_COMPANY,    # All contexts link to same company
+                RelationType.HAS_DIMENSION,  # Context-specific
+                RelationType.HAS_MEMBER,     # Context-specific
+            }
+            
+            if edge_queue and ENABLE_EDGE_WRITER and any(rel[2] in CONTEXT_EDGE_TYPES for rel in context_relationships):
+                from redisDB.redisClasses import RedisClient
+                import json
+                rc = RedisClient(prefix="")
+                
+                queued = 0
+                direct_relationships = []
+                
+                for src, tgt, rt, *props in context_relationships:
+                    if rt in CONTEXT_EDGE_TYPES:
+                        # Include node type information for proper label resolution
+                        rc.client.rpush(edge_queue, json.dumps({
+                            "source_id": src.id,
+                            "target_id": tgt.id,
+                            "rel_type": rt.value,
+                            "source_type": src.node_type.value,  # Add node type info
+                            "target_type": tgt.node_type.value,  # Add node type info
+                            "properties": props[0] if props else {}
+                        }))
+                        queued += 1
+                    else:
+                        # Process other relationships directly
+                        direct_relationships.append((src, tgt, rt, *props))
+                
+                if queued > 0:
+                    logger.info(f"Queued {queued} context relationships to edge writer")
+                
+                # Process any non-queued relationships directly
+                if direct_relationships:
+                    self.neo4j.merge_relationships(direct_relationships)
+            else:
+                # Original behavior when edge writer disabled
+                self.neo4j.merge_relationships(context_relationships)
 
         # Export fact-context relationships
         fact_context_relationships = self._build_fact_context_relationships()

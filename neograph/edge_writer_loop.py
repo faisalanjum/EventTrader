@@ -6,23 +6,49 @@ import json
 import logging
 import os
 import time
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from neograph.Neo4jConnection import get_manager
 from config.feature_flags import ENABLE_EDGE_WRITER
 
 logger = logging.getLogger(__name__)
+
+def get_node_labels(item: Dict) -> Tuple[str, str]:
+    """Get source and target labels from queued data"""
+    # Use provided types if available (new format with node type info)
+    if "source_type" in item and "target_type" in item:
+        # NodeType enum values are already in correct PascalCase format
+        return item["source_type"], item["target_type"]
+    
+    # Fallback to static mapping for backward compatibility
+    rel_type = item["rel_type"]
+    static_mapping = {
+        "REPORTS": ("Fact", "XBRLNode"),
+        "HAS_CONCEPT": ("Fact", "Concept"),
+        "HAS_UNIT": ("Fact", "Unit"),
+        "HAS_PERIOD": ("Fact", "Period"),  # Default to Fact->Period
+        "FACT_MEMBER": ("Fact", "Member"),
+        "FOR_COMPANY": ("Context", "Company"),
+        "HAS_DIMENSION": ("Context", "Dimension"),
+        "HAS_MEMBER": ("Context", "Member"),
+    }
+    return static_mapping.get(rel_type, ("", ""))
 
 def process_edge_batch(neo4j_manager, batch: List[Dict]) -> int:
     """Process a batch of edges in a single transaction"""
     if not batch:
         return 0
     
-    # Group by relationship type for efficient processing
+    # Group by relationship type AND label combination for efficient processing
     from collections import defaultdict
     grouped = defaultdict(list)
     
     for item in batch:
-        grouped[item["rel_type"]].append({
+        # Get labels for this item
+        source_label, target_label = get_node_labels(item)
+        # Create a key that includes both rel_type and labels
+        group_key = (item["rel_type"], source_label, target_label)
+        
+        grouped[group_key].append({
             "source_id": item["source_id"],
             "target_id": item["target_id"],
             "properties": item.get("properties", {})
@@ -32,18 +58,12 @@ def process_edge_batch(neo4j_manager, batch: List[Dict]) -> int:
     with neo4j_manager.driver.session() as session:
         def create_relationships_tx(tx):
             created = 0
-            # Determine node labels based on relationship type
-            rel_type_to_labels = {
-                "REPORTS": ("Fact", "XBRLNode"),
-                "HAS_CONCEPT": ("Fact", "Concept"),
-                "HAS_UNIT": ("Fact", "Unit"),
-                "HAS_PERIOD": ("Fact", "Period"),
-                "FACT_MEMBER": ("Fact", "Member")
-            }
             
-            for rel_type, params in grouped.items():
-                # Get labels for this relationship type
-                source_label, target_label = rel_type_to_labels.get(rel_type, ("", ""))
+            for (rel_type, source_label, target_label), params in grouped.items():
+                # Skip if we couldn't determine labels
+                if not source_label or not target_label:
+                    logger.warning(f"Skipping {len(params)} relationships of type {rel_type} - missing labels")
+                    continue
                 
                 # Use the same merge query with key property for shared node relationships
                 if rel_type in ["HAS_CONCEPT", "HAS_UNIT", "HAS_PERIOD"]:
@@ -56,7 +76,7 @@ def process_edge_batch(neo4j_manager, batch: List[Dict]) -> int:
                         RETURN count(r) as created
                     """
                 else:
-                    # For REPORTS and FACT_MEMBER, use standard merge
+                    # For other relationships, use standard merge
                     query = f"""
                         UNWIND $params AS param
                         MATCH (s:{source_label} {{id: param.source_id}})
