@@ -497,13 +497,41 @@ class process_report:
             self.check_calculation_steps(relationships, context_lookup, valid_relationships) 
 
             if valid_relationships:  # Only create valid relationships
-                try:
-                    logger.info(f"Merging {len(valid_relationships)} valid calculation relationships for report {self.accessionNo}.")
-                    self.neo4j.merge_relationships(valid_relationships)
-                    self.neo4j.validate_neo4j_calculations()
-                except Exception as e:
-                    logger.error(f"Error creating calculation relationships for report {self.accessionNo}: {e}", exc_info=True)
-                    # Continue execution - calculations will be missing but processing can continue
+                # Check if we should use edge writer for calculation relationships
+                import os
+                from config.feature_flags import ENABLE_EDGE_WRITER
+                edge_queue = os.getenv("EDGE_QUEUE") if ENABLE_EDGE_WRITER else None
+                
+                if edge_queue and ENABLE_EDGE_WRITER:
+                    # Queue calculation relationships to edge writer
+                    import json
+                    from redisDB.redisClasses import RedisClient
+                    redis_client = RedisClient(prefix="")
+                    
+                    queued_count = 0
+                    for rel in valid_relationships:
+                        source, target, rel_type, *props = rel
+                        # Include node type information for CALCULATION_EDGE (Fact->Fact)
+                        redis_client.client.rpush(edge_queue, json.dumps({
+                            "source_id": source.id,
+                            "target_id": target.id,
+                            "rel_type": rel_type.value,
+                            "source_type": source.node_type.value,  # NodeType.FACT
+                            "target_type": target.node_type.value,  # NodeType.FACT
+                            "properties": props[0] if props else {}
+                        }))
+                        queued_count += 1
+                    
+                    logger.info(f"Queued {queued_count} CALCULATION_EDGE relationships to edge writer")
+                else:
+                    # Fall back to direct merge
+                    try:
+                        logger.info(f"Merging {len(valid_relationships)} valid calculation relationships for report {self.accessionNo}.")
+                        self.neo4j.merge_relationships(valid_relationships)
+                        self.neo4j.validate_neo4j_calculations()
+                    except Exception as e:
+                        logger.error(f"Error creating calculation relationships for report {self.accessionNo}: {e}", exc_info=True)
+                        # Continue execution - calculations will be missing but processing can continue
 
 
     def check_calculation_steps(self, relationships, context_lookup, valid_relationships=None) -> None:

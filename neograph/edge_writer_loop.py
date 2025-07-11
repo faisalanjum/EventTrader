@@ -16,8 +16,29 @@ def get_node_labels(item: Dict) -> Tuple[str, str]:
     """Get source and target labels from queued data"""
     # Use provided types if available (new format with node type info)
     if "source_type" in item and "target_type" in item:
+        source_type = item["source_type"].strip()  # Remove any whitespace
+        target_type = item["target_type"].strip()  # Remove any whitespace
+        
+        # Validate non-empty after stripping
+        if not source_type or not target_type:
+            logger.warning(f"Empty node types after stripping: source='{item['source_type']}', target='{item['target_type']}', rel_type={item.get('rel_type')}")
+            # Fall back to static mapping
+            rel_type = item.get("rel_type", "")
+            static_mapping = {
+                "REPORTS": ("Fact", "XBRLNode"),
+                "HAS_CONCEPT": ("Fact", "Concept"),
+                "HAS_UNIT": ("Fact", "Unit"),
+                "HAS_PERIOD": ("Fact", "Period"),  # Default to Fact->Period
+                "FACT_MEMBER": ("Fact", "Member"),
+                "FOR_COMPANY": ("Context", "Company"),
+                "HAS_DIMENSION": ("Context", "Dimension"),
+                "HAS_MEMBER": ("Context", "Member"),
+                "CALCULATION_EDGE": ("Fact", "Fact"),  # Calculation relationships
+            }
+            return static_mapping.get(rel_type, ("", ""))
+        
         # NodeType enum values are already in correct PascalCase format
-        return item["source_type"], item["target_type"]
+        return source_type, target_type
     
     # Fallback to static mapping for backward compatibility
     rel_type = item["rel_type"]
@@ -30,6 +51,7 @@ def get_node_labels(item: Dict) -> Tuple[str, str]:
         "FOR_COMPANY": ("Context", "Company"),
         "HAS_DIMENSION": ("Context", "Dimension"),
         "HAS_MEMBER": ("Context", "Member"),
+        "CALCULATION_EDGE": ("Fact", "Fact"),  # Calculation relationships
     }
     return static_mapping.get(rel_type, ("", ""))
 
