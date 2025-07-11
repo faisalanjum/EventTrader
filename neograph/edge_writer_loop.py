@@ -34,6 +34,7 @@ def get_node_labels(item: Dict) -> Tuple[str, str]:
                 "HAS_DIMENSION": ("Context", "Dimension"),
                 "HAS_MEMBER": ("Context", "Member"),
                 "CALCULATION_EDGE": ("Fact", "Fact"),  # Calculation relationships
+                "IN_CONTEXT": ("Fact", "Context"),  # Fact to context relationships
             }
             return static_mapping.get(rel_type, ("", ""))
         
@@ -52,6 +53,7 @@ def get_node_labels(item: Dict) -> Tuple[str, str]:
         "HAS_DIMENSION": ("Context", "Dimension"),
         "HAS_MEMBER": ("Context", "Member"),
         "CALCULATION_EDGE": ("Fact", "Fact"),  # Calculation relationships
+        "IN_CONTEXT": ("Fact", "Context"),  # Fact to context relationships
     }
     return static_mapping.get(rel_type, ("", ""))
 

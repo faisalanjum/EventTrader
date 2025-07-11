@@ -1142,7 +1142,31 @@ class process_report:
         # Export fact-context relationships
         fact_context_relationships = self._build_fact_context_relationships()
         if fact_context_relationships:
-            self.neo4j.merge_relationships(fact_context_relationships)
+            # Check if we should use edge writer for IN_CONTEXT relationships
+            if edge_queue and ENABLE_EDGE_WRITER:
+                # Queue IN_CONTEXT relationships to edge writer
+                import json
+                from redisDB.redisClasses import RedisClient
+                redis_client = RedisClient(prefix="")
+                
+                queued_count = 0
+                for rel in fact_context_relationships:
+                    source, target, rel_type, *props = rel
+                    # Include node type information for IN_CONTEXT (Fact->Context)
+                    redis_client.client.rpush(edge_queue, json.dumps({
+                        "source_id": source.id,
+                        "target_id": target.id,
+                        "rel_type": rel_type.value,
+                        "source_type": source.node_type.value,  # NodeType.FACT
+                        "target_type": target.node_type.value,  # NodeType.CONTEXT
+                        "properties": props[0] if props else {}
+                    }))
+                    queued_count += 1
+                
+                logger.info(f"Queued {queued_count} IN_CONTEXT relationships to edge writer")
+            else:
+                # Fall back to direct merge
+                self.neo4j.merge_relationships(fact_context_relationships)
 
         logger.info(f"Built report nodes: {len(self.facts)} facts for report {self.accessionNo}")
 
