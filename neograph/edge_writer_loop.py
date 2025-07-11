@@ -99,6 +99,25 @@ def process_edge_batch(neo4j_manager, batch: List[Dict]) -> int:
                         SET r += param.properties
                         RETURN count(r) as created
                     """
+                elif rel_type == "PRESENTATION_EDGE":
+                    # Special handling for PRESENTATION_EDGE with its 7-property constraint
+                    # Must match the constraint exactly to avoid duplicates
+                    query = f"""
+                        UNWIND $params AS param
+                        MATCH (s {{id: param.source_id}})
+                        MATCH (t {{id: param.target_id}})
+                        MERGE (s)-[r:PRESENTATION_EDGE {{
+                            cik: param.properties.company_cik,
+                            report_id: param.properties.report_id,
+                            network_name: param.properties.network_name,
+                            parent_id: param.source_id,
+                            child_id: param.target_id,
+                            parent_level: toInteger(param.properties.parent_level),
+                            child_level: toInteger(param.properties.child_level)
+                        }}]->(t)
+                        SET r += param.properties
+                        RETURN count(r) as created
+                    """
                 else:
                     # For other relationships, use standard merge
                     query = f"""

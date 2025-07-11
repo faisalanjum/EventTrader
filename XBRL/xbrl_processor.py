@@ -361,14 +361,43 @@ class process_report:
 
         # <<< Call the new specific Neo4jManager method >>>
         if presentation_relationships_for_merge:
-            logger.info("Sending PRESENTATION_EDGE relationships to Neo4j via merge_presentation_edges...")
-            try:
-                # Pass the list directly as it contains (source, target, props) tuples
-                self.neo4j.merge_presentation_edges(presentation_relationships_for_merge) 
-            except Exception as e:
-                logger.error(f"ERROR during merge_presentation_edges call for report {self.accessionNo}: {e}", exc_info=True)
-                # Decide if processing should halt or continue
-                # raise # Optional: re-raise to stop processing on error
+            # Check if we should use edge writer for PRESENTATION_EDGE relationships
+            import os
+            from config.feature_flags import ENABLE_EDGE_WRITER
+            edge_queue = os.getenv("EDGE_QUEUE") if ENABLE_EDGE_WRITER else None
+            
+            if edge_queue and ENABLE_EDGE_WRITER:
+                # Queue PRESENTATION_EDGE relationships to edge writer
+                logger.info("Queueing PRESENTATION_EDGE relationships to edge writer...")
+                import json
+                from redisDB.redisClasses import RedisClient
+                redis_client = RedisClient(prefix="")
+                
+                queued_count = 0
+                for source, target, props in presentation_relationships_for_merge:
+                    # Include node type information for proper routing
+                    # Note: target could be Abstract or Fact
+                    redis_client.client.rpush(edge_queue, json.dumps({
+                        "source_id": source.id,
+                        "target_id": target.id,
+                        "rel_type": "PRESENTATION_EDGE",
+                        "source_type": source.node_type.value,
+                        "target_type": target.node_type.value,
+                        "properties": props
+                    }))
+                    queued_count += 1
+                
+                logger.info(f"Queued {queued_count} PRESENTATION_EDGE relationships to edge writer")
+            else:
+                # Fall back to direct merge
+                logger.info("Sending PRESENTATION_EDGE relationships to Neo4j via merge_presentation_edges...")
+                try:
+                    # Pass the list directly as it contains (source, target, props) tuples
+                    self.neo4j.merge_presentation_edges(presentation_relationships_for_merge) 
+                except Exception as e:
+                    logger.error(f"ERROR during merge_presentation_edges call for report {self.accessionNo}: {e}", exc_info=True)
+                    # Decide if processing should halt or continue
+                    # raise # Optional: re-raise to stop processing on error
         else:
             logger.info(f"No PRESENTATION_EDGE relationships generated to send for report {self.accessionNo}.")
             
