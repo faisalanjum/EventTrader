@@ -18,19 +18,19 @@ fi
 echo -e "\n2. Checking KEDA MaxReplicas..."
 HEAVY=$(kubectl get scaledobject xbrl-worker-heavy-scaler -n processing -o jsonpath='{.spec.maxReplicaCount}')
 MEDIUM=$(kubectl get scaledobject xbrl-worker-medium-scaler -n processing -o jsonpath='{.spec.maxReplicaCount}')
-LIGHT=$(kubectl get scaledobject xbrl-worker-light-scaler -n processing -o jsonpath='{.spec.maxReplicaCount}')
+# LIGHT=$(kubectl get scaledobject xbrl-worker-light-scaler -n processing -o jsonpath='{.spec.maxReplicaCount}')  # DISABLED
 
 [ "$HEAVY" == "2" ] && echo "✅ Heavy: $HEAVY (correct)" || echo "❌ Heavy: $HEAVY (expected 2)"
 [ "$MEDIUM" == "3" ] && echo "✅ Medium: $MEDIUM (correct)" || echo "❌ Medium: $MEDIUM (expected 3)"
-[ "$LIGHT" == "5" ] && echo "✅ Light: $LIGHT (correct)" || echo "❌ Light: $LIGHT (expected 5)"
+# [ "$LIGHT" == "5" ] && echo "✅ Light: $LIGHT (correct)" || echo "❌ Light: $LIGHT (expected 5)"  # DISABLED
 
 # 3. Node Affinity
 echo -e "\n3. Checking Node Affinity..."
 AFFINITY_COUNT=$(kubectl get deploy -n processing -o json | jq '[.items[] | select(.metadata.name | contains("xbrl-worker")) | select(.spec.template.spec.affinity != null)] | length')
-if [ "$AFFINITY_COUNT" == "3" ]; then
-    echo "✅ All 3 XBRL workers have affinity rules"
+if [ "$AFFINITY_COUNT" == "2" ]; then
+    echo "✅ All 2 XBRL workers have affinity rules"
 else
-    echo "❌ Only $AFFINITY_COUNT workers have affinity (expected 3)"
+    echo "❌ Only $AFFINITY_COUNT workers have affinity (expected 2)"
 fi
 
 # 4. Neo4j Memory
@@ -68,7 +68,7 @@ REDIS_POD=$(kubectl get pod -n infrastructure -l app=redis -o jsonpath='{.items[
 if [ -n "$REDIS_POD" ]; then
     kubectl exec -n infrastructure $REDIS_POD -- redis-cli LLEN reports:queues:xbrl:heavy | xargs echo "Heavy queue:"
     kubectl exec -n infrastructure $REDIS_POD -- redis-cli LLEN reports:queues:xbrl:medium | xargs echo "Medium queue:"
-    kubectl exec -n infrastructure $REDIS_POD -- redis-cli LLEN reports:queues:xbrl:light | xargs echo "Light queue:"
+    # kubectl exec -n infrastructure $REDIS_POD -- redis-cli LLEN reports:queues:xbrl:light | xargs echo "Light queue:"  # DISABLED
 fi
 
 echo -e "\n=== Verification Complete ==="

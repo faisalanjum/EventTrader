@@ -14,7 +14,7 @@ if [[ $1 == "xbrl-worker" ]]; then
   fi
   kubectl rollout restart deployment/xbrl-worker-heavy   -n processing
   kubectl rollout restart deployment/xbrl-worker-medium  -n processing
-  kubectl rollout restart deployment/xbrl-worker-light   -n processing
+  # kubectl rollout restart deployment/xbrl-worker-light   -n processing  # DISABLED
 elif [[ $1 == "event-trader" ]]; then
   kubectl rollout restart deployment/event-trader -n processing
 elif [[ $1 == "report-enricher" ]]; then

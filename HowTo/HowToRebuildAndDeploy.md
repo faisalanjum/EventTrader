@@ -35,7 +35,7 @@ docker push  faisalanjum/report-enricher:latest
 kubectl rollout restart deployment/event-trader        -n processing
 kubectl rollout restart deployment/xbrl-worker-heavy   -n processing
 kubectl rollout restart deployment/xbrl-worker-medium  -n processing
-kubectl rollout restart deployment/xbrl-worker-light   -n processing
+# kubectl rollout restart deployment/xbrl-worker-light   -n processing  # DISABLED
 kubectl rollout restart deployment/report-enricher     -n processing
 ```                                                            # ➊ close code-block
 

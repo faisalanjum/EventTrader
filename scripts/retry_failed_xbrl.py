@@ -136,7 +136,8 @@ def determine_queue(form_type):
     elif form_type in {"10-Q", "10-Q/A"}:
         return RedisKeys.XBRL_QUEUE_MEDIUM
     else:
-        return RedisKeys.XBRL_QUEUE_LIGHT
+        # return RedisKeys.XBRL_QUEUE_LIGHT  # DISABLED: Light queue removed
+        return None  # Skip all other forms
 
 def main():
     """Main function to retry failed XBRL documents"""
@@ -188,6 +189,9 @@ def main():
         
         for doc in failed_docs:
             queue = determine_queue(doc['form_type'])
+            if queue is None:
+                logger.info(f"Skipping {doc['accession']} - form type {doc['form_type']} not configured for XBRL")
+                continue
             queue_type = queue.split(":")[-1]  # Extract 'heavy', 'medium', or 'light'
             queue_counts[queue_type] += 1
             
@@ -215,6 +219,9 @@ def main():
         queued_count = 0
         for doc in failed_docs:
             queue = determine_queue(doc['form_type'])
+            if queue is None:
+                logger.info(f"Skipping {doc['accession']} - form type {doc['form_type']} not configured for XBRL")
+                continue
             job_data = {
                 "report_id": doc['report_id'],
                 "accession": doc['accession'],

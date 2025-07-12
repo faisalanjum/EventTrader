@@ -38,23 +38,25 @@ spec:
       listLength: "5"             # 1 pod per 5 medium reports
       activationListLength: "1"
       databaseIndex: "0"
----
-apiVersion: keda.sh/v1alpha1
-kind: ScaledObject
-metadata:
-  name: xbrl-worker-light-scaler
-  namespace: processing
-spec:
-  scaleTargetRef:
-    name: xbrl-worker-light
-  minReplicaCount: 1              # Always keep 1 pod running for instant processing
-  maxReplicaCount: 4              # Max 4 light workers
-  cooldownPeriod: 120             # 2 min cooldown for quick tasks
-  triggers:
-  - type: redis
-    metadata:
-      address: redis.infrastructure.svc.cluster.local:6379
-      listName: reports:queues:xbrl:light
-      listLength: "20"            # 1 pod per 20 light reports (they're fast)
-      activationListLength: "1"
-      databaseIndex: "0"
+# --- DISABLED: Light worker scaler removed ---
+# ---
+# apiVersion: keda.sh/v1alpha1
+# kind: ScaledObject
+# metadata:
+#   name: xbrl-worker-light-scaler
+#   namespace: processing
+# spec:
+#   scaleTargetRef:
+#     name: xbrl-worker-light
+#   minReplicaCount: 1              # Always keep 1 pod running for instant processing
+#   maxReplicaCount: 4              # Max 4 light workers
+#   cooldownPeriod: 120             # 2 min cooldown for quick tasks
+#   triggers:
+#   - type: redis
+#     metadata:
+#       address: redis.infrastructure.svc.cluster.local:6379
+#       listName: reports:queues:xbrl:light
+#       listLength: "20"            # 1 pod per 20 light reports (they're fast)
+#       activationListLength: "1"
+#       databaseIndex: "0"
+# --- END DISABLED ---

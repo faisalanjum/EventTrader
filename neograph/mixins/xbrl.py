@@ -108,7 +108,16 @@ class XbrlMixin:
                     elif form in {"10-Q", "10-Q/A"}:
                         queue_name = RedisKeys.XBRL_QUEUE_MEDIUM
                     else:
-                        queue_name = RedisKeys.XBRL_QUEUE_LIGHT
+                        # queue_name = RedisKeys.XBRL_QUEUE_LIGHT  # DISABLED: Light queue removed to save resources
+                        # Skip XBRL processing for non-10K/10Q forms
+                        logger.info(f"Skipping XBRL for form type {form} - light queue disabled")
+                        session.run(
+                            "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
+                            id=report_id, 
+                            status="SKIPPED", 
+                            error=f"Form type {form} - XBRL processing disabled for non-10K/10Q forms"
+                        )
+                        return False
 
                     payload = json.dumps({
                         "report_id": report_id,
