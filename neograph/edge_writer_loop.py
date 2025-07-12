@@ -34,6 +34,7 @@ def get_node_labels(item: Dict) -> Tuple[str, str]:
                 "HAS_DIMENSION": ("Context", "Dimension"),
                 "HAS_MEMBER": ("Context", "Member"),
                 "CALCULATION_EDGE": ("Fact", "Fact"),  # Calculation relationships
+                "PRESENTATION_EDGE": ("Abstract", "Fact"),  # Presentation relationships
                 "IN_CONTEXT": ("Fact", "Context"),  # Fact to context relationships
             }
             return static_mapping.get(rel_type, ("", ""))
@@ -53,6 +54,7 @@ def get_node_labels(item: Dict) -> Tuple[str, str]:
         "HAS_DIMENSION": ("Context", "Dimension"),
         "HAS_MEMBER": ("Context", "Member"),
         "CALCULATION_EDGE": ("Fact", "Fact"),  # Calculation relationships
+        "PRESENTATION_EDGE": ("Abstract", "Fact"),  # Presentation relationships
         "IN_CONTEXT": ("Fact", "Context"),  # Fact to context relationships
     }
     return static_mapping.get(rel_type, ("", ""))
@@ -104,8 +106,8 @@ def process_edge_batch(neo4j_manager, batch: List[Dict]) -> int:
                     # Must match the constraint exactly to avoid duplicates
                     query = f"""
                         UNWIND $params AS param
-                        MATCH (s {{id: param.source_id}})
-                        MATCH (t {{id: param.target_id}})
+                        MATCH (s:{source_label} {{id: param.source_id}})
+                        MATCH (t:{target_label} {{id: param.target_id}})
                         MERGE (s)-[r:PRESENTATION_EDGE {{
                             cik: param.properties.company_cik,
                             report_id: param.properties.report_id,
@@ -122,8 +124,8 @@ def process_edge_batch(neo4j_manager, batch: List[Dict]) -> int:
                     # CALCULATION_EDGE requires special handling matching merge_relationships logic
                     query = f"""
                         UNWIND $params AS param
-                        MATCH (s {{id: param.source_id}})
-                        MATCH (t {{id: param.target_id}})
+                        MATCH (s:{source_label} {{id: param.source_id}})
+                        MATCH (t:{target_label} {{id: param.target_id}})
                         WITH s, t, param
                         WHERE param.properties.company_cik IS NOT NULL 
                         AND param.properties.report_id IS NOT NULL
