@@ -100,6 +100,17 @@ def main():
             # Log job received
             logger.info(f"[Kube]: Processing XBRL job: accession={accession}, cik={cik}, form_type={form_type}")
             
+            # Check if already completed (matching local processing behavior)
+            with neo4j_manager.driver.session() as session:
+                result = session.run(
+                    "MATCH (r:Report {id: $id}) RETURN r.xbrl_status AS status",
+                    id=report_id
+                ).single()
+                
+                if result and result["status"] in ["COMPLETED", "SKIPPED", "REFERENCE_ONLY"]:
+                    logger.info(f"[Kube]: Report {accession} already {result['status']}, skipping")
+                    continue
+            
             # Update report status to PROCESSING
             with neo4j_manager.driver.session() as session:
                 def update_processing_status(tx):
