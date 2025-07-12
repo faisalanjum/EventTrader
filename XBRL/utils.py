@@ -152,6 +152,47 @@ def download_sec_file(url, max_retries=5, base_delay=1.0):
     return None
 
 
+def clean_xml_entities(content):
+    """Replace HTML entities that cause XML parsing errors.
+    
+    This function handles common HTML entities found in SEC XBRL filings
+    that cause XML parsing failures. Based on analysis of 2,705 XML errors
+    across 45 reports in the EventMarketDB system.
+    
+    Args:
+        content: String content of the XML/XBRL file
+        
+    Returns:
+        Cleaned content with HTML entities replaced
+    """
+    import re
+    
+    # Complete entity map based on actual errors found in XBRL processing logs
+    entity_replacements = {
+        '&nbsp;': ' ',        # Non-breaking space (1,821 occurrences)
+        '&ldquo;': '"',       # Left double quote (291 occurrences)
+        '&rdquo;': '"',       # Right double quote (286 occurrences)
+        '&rsquo;': "'",       # Right single quote/apostrophe (206 occurrences)
+        '&middot;': '·',      # Middle dot (74 occurrences)
+        '&ndash;': '–',       # En dash (20 occurrences)
+        '&mdash;': '—',       # Em dash (4 occurrences)
+        '&lsquo;': "'",       # Left single quote (1 occurrence)
+        '&emsp;': '  ',       # Em space - wider space (1 occurrence)
+        '&Q48;': '',          # Invalid/unknown entity - remove (1 occurrence)
+    }
+    
+    # Replace HTML entities with their character equivalents
+    for old_entity, replacement in entity_replacements.items():
+        content = content.replace(old_entity, replacement)
+    
+    # AFTER replacing entities, fix any remaining unescaped ampersands
+    # This ensures entities we just replaced aren't re-escaped
+    # Only escape lone ampersands that aren't part of valid XML entities
+    content = re.sub(r'&(?!amp;|lt;|gt;|quot;|apos;|#\d+;|#x[0-9a-fA-F]+;)', '&amp;', content)
+    
+    return content
+
+
 # TODO: To be replaced later by actual sec-api - This is temporary
 # def get_company_info(model_xbrl):
 #     # model_xbrl = get_model_xbrl(instance_url)

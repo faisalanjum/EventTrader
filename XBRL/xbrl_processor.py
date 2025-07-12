@@ -822,6 +822,12 @@ class process_report:
                     discover=True
                 )
                 logger.info(f"Successfully loaded XBRL model for {self.xbrl_node.primaryDocumentUrl} on attempt {attempt+1}")
+                
+                # Check if the loaded model has XML entity parsing errors and apply fix if needed
+                if self._check_and_fix_xml_entity_errors(attempt, max_retries):
+                    # Fix was applied and model was reloaded
+                    pass
+                
                 break  # Success, exit retry loop
                 
             except Exception as e:
@@ -837,6 +843,121 @@ class process_report:
                 if attempt == max_retries - 1:
                     logger.critical(f"Failed to load XBRL model {self.xbrl_node.primaryDocumentUrl} after {max_retries} attempts.", exc_info=True)
                     raise RuntimeError(f"Error loading XBRL model after {max_retries} attempts: {e}")
+
+    def _check_and_fix_xml_entity_errors(self, attempt, max_retries):
+        """
+        Check if the loaded XBRL model has XML entity errors and attempt to fix them.
+        
+        This method is called after successfully loading an XBRL model to detect
+        and fix common HTML entity errors that cause XML parsing to fail.
+        
+        NOTE: This fix ONLY handles undefined HTML entity errors such as:
+        - Entity 'nbsp' not defined
+        - Entity 'ldquo' not defined
+        - Entity 'rdquo' not defined
+        - Entity 'rsquo' not defined
+        - xmlParseEntityRef: no name
+        
+        It does NOT fix structural XML/HTML errors such as:
+        - Opening and ending tag mismatch errors
+        - XML declaration position errors
+        - Invalid tag names or malformed tags
+        These structural errors require more complex HTML parsing and are left as-is.
+        
+        Args:
+            attempt: Current retry attempt number
+            max_retries: Maximum number of retries allowed
+            
+        Returns:
+            bool: True if fix was applied, False otherwise
+        """
+        # Check if model has XML entity parsing errors
+        if not (hasattr(self.model_xbrl, 'errors') and self.model_xbrl.errors):
+            return False
+            
+        # Check for entity errors specifically
+        entity_errors = [e for e in self.model_xbrl.errors if 'entity' in str(e).lower() and 'not defined' in str(e).lower()]
+        if not entity_errors:
+            return False
+        
+        # Count entity errors for logging
+        entity_error_count = len(entity_errors)
+        logger.warning(f"Detected {entity_error_count} XML entity errors in {self.xbrl_node.primaryDocumentUrl}")
+        
+        # Only attempt fix on the final retry to minimize overhead
+        if attempt != max_retries - 1:
+            logger.debug(f"Not attempting XML entity fix yet (attempt {attempt+1}/{max_retries})")
+            return False
+            
+        logger.info(f"Attempting XML entity fix for {self.xbrl_node.primaryDocumentUrl} on final retry")
+        
+        # Apply the fix
+        return self._apply_xml_entity_fix()
+    
+    def _apply_xml_entity_fix(self):
+        """
+        Download the XBRL file, clean XML entities, and reload the model.
+        
+        Returns:
+            bool: True if fix was successfully applied, False otherwise
+        """
+        temp_path = None
+        try:
+            # Import here to avoid adding to module imports
+            from .utils import download_sec_file, clean_xml_entities
+            import os
+            
+            # Download the file
+            result = download_sec_file(self.xbrl_node.primaryDocumentUrl)
+            if not (result and result[1]):
+                logger.warning(f"Failed to download file for XML entity fix: {self.xbrl_node.primaryDocumentUrl}")
+                return False
+                
+            temp_path = result[1]
+            logger.debug(f"Downloaded file to temp path: {temp_path}")
+            
+            # Read the file content
+            with open(temp_path, 'r', encoding='utf-8', errors='replace') as f:
+                content = f.read()
+            logger.debug(f"Read {len(content)} characters from file")
+            
+            # Clean the XML entities
+            cleaned_content = clean_xml_entities(content)
+            logger.debug(f"Cleaned content, size changed from {len(content)} to {len(cleaned_content)}")
+            
+            # Import FileNamedStringIO for creating a file-like object with cleaned content
+            from arelle.FileSource import FileNamedStringIO
+            
+            # Create a FileSource with the cleaned content but original URL
+            fns = FileNamedStringIO(self.xbrl_node.primaryDocumentUrl, initial_value=cleaned_content)
+            
+            # Reload the model with cleaned content
+            logger.info(f"Reloading XBRL model with cleaned content for {self.xbrl_node.primaryDocumentUrl}")
+            self.model_xbrl = self.controller.modelManager.load(filesource=fns, discover=True)
+            
+            # Check if the fix was successful
+            if hasattr(self.model_xbrl, 'facts'):
+                fact_count = len(self.model_xbrl.facts) if self.model_xbrl.facts else 0
+                if fact_count > 0:
+                    logger.info(f"XML entity fix successful! Extracted {fact_count} facts from {self.xbrl_node.primaryDocumentUrl}")
+                else:
+                    logger.warning(f"XML entity fix applied but still found 0 facts in {self.xbrl_node.primaryDocumentUrl}")
+            else:
+                logger.warning(f"Unable to verify facts after XML entity fix for {self.xbrl_node.primaryDocumentUrl}")
+            
+            return True
+                
+        except Exception as fix_error:
+            logger.error(f"Failed to apply XML entity fix for {self.xbrl_node.primaryDocumentUrl}: {fix_error}", exc_info=True)
+            return False
+        finally:
+            # Critical: Always clean up temp file to prevent accumulation
+            if temp_path and os.path.exists(temp_path):
+                try:
+                    os.unlink(temp_path)
+                    logger.debug(f"Cleaned up temp file: {temp_path}")
+                except Exception as cleanup_error:
+                    logger.warning(f"Failed to cleanup temp file {temp_path}: {cleanup_error}")
 
     def close_resources(self):
         """
