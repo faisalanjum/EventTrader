@@ -10,7 +10,7 @@ __pycache__/
 XBRL/__pycache__/
 
 # Log files
-# *.log
+*.log
 # **/ErrorLog.txt
 # **/logfile.txt
 
