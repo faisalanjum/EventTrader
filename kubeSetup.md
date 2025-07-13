@@ -6,9 +6,14 @@
 
 **Key Achievement**: XBRL processing improved by implementing proper resource limits and fixing KEDA autoscaling issues.
 
+**Latest Update (2025-01-13)**: Optimized XBRL worker resources for better performance:
+- Heavy: 1.5 CPU, 5Gi (requests) | 2.5 CPU, 7Gi (limits) | Max replicas: 5
+- Medium: 1.5 CPU, 5Gi (requests) | 2.5 CPU, 7Gi (limits) | Max replicas: 5
+- Both worker types now have identical resources after performance analysis showed medium workers were resource-starved
+
 **Cluster Capacity**: 48 CPU cores, 241.53GB total RAM across 3 nodes
 
-## Part 1: Current State (As of July 8, 2025)
+## Part 1: Current State (As of January 13, 2025)
 
 ### Cluster Topology
 
@@ -38,8 +43,8 @@
 |-----------|----------|-------------|----------------|-----------|--------------|
 | event-trader | 1 (fixed) | 500m | 8Gi | 2 | 16Gi |
 | report-enricher | 1-5 | 500m | 2Gi | 2 | 8Gi |
-| xbrl-worker-heavy | 1-2 | 2 | 6Gi | 3 | 8Gi |
-| xbrl-worker-medium | 1-4 | 1.5 | 3Gi | 2 | 4Gi |
+| xbrl-worker-heavy | 1-5 | 1.5 | 5Gi | 2.5 | 7Gi |
+| xbrl-worker-medium | 1-5 | 1.5 | 5Gi | 2.5 | 7Gi |
 | xbrl-worker-light | 1-7 | 1 | 1.5Gi | 1.5 | 2Gi |
 
 **Note**: Light workers use 1536Mi (1.5Gi) not 3Gi as document previously stated.
@@ -51,8 +56,8 @@ All workers now have `minReplicaCount: 1` to ensure instant processing:
 | Worker | Min | Max (Normal) | Max (Historical) | Target Queue/Pod | Cooldown |
 |--------|-----|-------------|------------------|------------------|----------|
 | report-enricher | 1 | 5 | 5 | 5 items | 60s |
-| xbrl-heavy | 1 | 2 | 2 | 2 items | 300s |
-| xbrl-medium | 1 | 4 | 3 | 5 items | 180s |
+| xbrl-heavy | 1 | 5 | 5 | 2 items | 300s |
+| xbrl-medium | 1 | 5 | 5 | 5 items | 180s |
 | xbrl-light | 1 | 7 | 5 | 20 items | 120s |
 
 **Note**: During historical processing, apply safety limits to prevent memory exhaustion.
@@ -62,16 +67,16 @@ All workers now have `minReplicaCount: 1` to ensure instant processing:
 #### Minimum Scale (Current State - minReplicas=1)
 - Event Trader: 0.5 CPU, 8Gi RAM
 - Report Enricher: 0.5 CPU, 2Gi RAM  
-- XBRL Heavy: 2 CPU, 6Gi RAM
-- XBRL Medium: 1.5 CPU, 3Gi RAM
+- XBRL Heavy: 1.5 CPU, 5Gi RAM
+- XBRL Medium: 1.5 CPU, 5Gi RAM
 - XBRL Light: 1 CPU, 1.5Gi RAM
 - **Total**: 5.5 CPU, 20.5Gi RAM
 
 #### Maximum Scale (All at max replicas)
 - Event Trader: 0.5 CPU, 8Gi RAM (1 pod)
 - Report Enricher: 2.5 CPU, 10Gi RAM (5 pods)
-- XBRL Heavy: 4 CPU, 12Gi RAM (2 pods)
-- XBRL Medium: 6 CPU, 12Gi RAM (4 pods)
+- XBRL Heavy: 7.5 CPU, 25Gi RAM (5 pods)
+- XBRL Medium: 7.5 CPU, 25Gi RAM (5 pods)
 - XBRL Light: 7 CPU, 10.5Gi RAM (7 pods)
 - **Total**: 20 CPU, 52.5Gi RAM
 

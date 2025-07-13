@@ -5,12 +5,25 @@ import time
 import fcntl
 import atexit
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 # Create logs directory if it doesn't exist
 # Use absolute path to avoid issues when running from different directories
 log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "logs")
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
+
+# Eastern timezone for all logs
+EASTERN_TZ = ZoneInfo('America/New_York')
+
+class EasternFormatter(logging.Formatter):
+    """Custom formatter that always uses Eastern Time (EST/EDT)"""
+    def formatTime(self, record, datefmt=None):
+        dt = datetime.fromtimestamp(record.created, tz=EASTERN_TZ)
+        if datefmt:
+            return dt.strftime(datefmt)
+        else:
+            return dt.strftime('%Y-%m-%d %H:%M:%S')
 
 # Global variables to track logging state
 _is_logging_initialized = False
@@ -254,12 +267,20 @@ def _configure_logger(log_path, log_level):
     
     # Create file handler for logging to file
     file_handler = logging.FileHandler(log_path)
-    file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    # Use Eastern timezone formatter
+    file_formatter = EasternFormatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
     file_handler.setFormatter(file_formatter)
     
-    # Create console handler for logging to console
+    # Create console handler for logging to console with same Eastern timezone
     console_handler = logging.StreamHandler()
-    console_handler.setFormatter(file_formatter)
+    console_formatter = EasternFormatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    console_handler.setFormatter(console_formatter)
     
     # Add handlers to root logger
     root_logger.addHandler(file_handler)

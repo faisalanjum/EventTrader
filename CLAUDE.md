@@ -62,19 +62,23 @@
 - **xbrl-worker-heavy**
   - Purpose: Processes large XBRL documents (10-K forms)
   - Image: `faisalanjum/xbrl-worker:latest`
-  - Resources: Requests: 2 CPU, 6Gi memory | Limits: 3 CPU, 8Gi memory
+  - Resources: Requests: 1.5 CPU, 5Gi memory | Limits: 2.5 CPU, 7Gi memory
+    - **Note**: Decreased from 2 CPU, 6Gi (requests) and 3 CPU, 8Gi (limits) on 2025-01-13
   - Runs on: minisforum2 or minisforum (NOT minisforum3)
   - Logging: Daily files like `xbrl-heavy_YYYYMMDD_minisforum2.log`
-  - Scaling: KEDA autoscaler (1-2 replicas) based on Redis queue `reports:queues:xbrl:heavy`
+  - Scaling: KEDA autoscaler (1-5 replicas) based on Redis queue `reports:queues:xbrl:heavy`
+    - **Note**: Increased max replicas from 2 to 3, then to 5 on 2025-01-13
   - Scale trigger: Queue length ≥ 1, target length 2
 
 - **xbrl-worker-medium**
   - Purpose: Processes medium XBRL documents (10-Q forms)
   - Image: `faisalanjum/xbrl-worker:latest`
-  - Resources: Requests: 1.5 CPU, 3Gi memory | Limits: 2 CPU, 4Gi memory
+  - Resources: Requests: 1.5 CPU, 5Gi memory | Limits: 2.5 CPU, 7Gi memory
+    - **Note**: Initially decreased to 1 CPU, 2Gi, then increased to match heavy workers on 2025-01-13
   - Runs on: minisforum2 or minisforum (NOT minisforum3)
   - Logging: Daily files like `xbrl-medium_YYYYMMDD_minisforum2.log`
-  - Scaling: KEDA autoscaler (1-2 replicas) based on Redis queue `reports:queues:xbrl:medium`
+  - Scaling: KEDA autoscaler (1-5 replicas) based on Redis queue `reports:queues:xbrl:medium`
+    - **Note**: Increased max replicas from 2 to 3, then to 5 on 2025-01-13
   - Scale trigger: Queue length ≥ 1, target length 5
 
 - **xbrl-worker-light**
@@ -574,14 +578,15 @@ kubectl exec -it redis-77f84c44fd-4h4w4 -n infrastructure -- redis-cli
 
 #### Resource Capacity Check
 - **minisforum2 capacity**: 16 CPU, 63GB RAM
-- **Current allocations when all max replicas**:
-  - xbrl-heavy: 2 pods × 2 CPU = 4 CPU, 2 × 6Gi = 12Gi RAM
-  - xbrl-medium: 2 pods × 1.5 CPU = 3 CPU, 2 × 3Gi = 6Gi RAM
-  - xbrl-light: 4 pods × 1 CPU = 4 CPU, 4 × 1.5Gi = 6Gi RAM
+- **Current allocations when all max replicas** (Updated 2025-01-13):
+  - xbrl-heavy: 5 pods × 1.5 CPU = 7.5 CPU, 5 × 5Gi = 25Gi RAM
+  - xbrl-medium: 5 pods × 1.5 CPU = 7.5 CPU, 5 × 5Gi = 25Gi RAM
+  - xbrl-light: Disabled (was 4 pods × 1 CPU = 4 CPU, 4 × 1.5Gi = 6Gi RAM)
   - report-enricher: 15 pods × 0.5 CPU = 7.5 CPU, 15 × 2Gi = 30Gi RAM
   - edge-writer: 1 pod × 0.5 CPU = 0.5 CPU, 1 × 1Gi = 1Gi RAM
-  - **Total at max**: 19 CPU (119% overcommit), 55Gi RAM (87% utilization)
-  - **Note**: Much safer resource limits after Jan 2025 updates
+  - **Total at max**: 23 CPU (144% overcommit), 81Gi RAM (128% utilization)
+  - **Previous totals**: 19 CPU (119% overcommit), 55Gi RAM (87% utilization)
+  - **Note**: Optimized on 2025-01-13 - both worker types now have identical resources and max 5 replicas
 
 ### Naming and Conventions
 
