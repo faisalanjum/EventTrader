@@ -65,5 +65,30 @@ Sector_Industry_ETFs = {
     'TOKE', # Cannabis
     'VNQ',  # Real Estate
     'IYJ',  # Industrial
-    'PHO'   # Water
+    'PHO',  # Water
+    
+    # Added to fix missing industry metrics (Jan 2025)
+    'SOXX', # Semiconductors
+    'IYW',  # Technology Hardware
+    'VDC',  # Consumer Staples
+    'EATZ', # Restaurants
+    'IDU',  # Utilities
+    'IHE',  # Pharmaceuticals
+    'IYM',  # Basic Materials
+    'FDN',  # Internet
+    'OIH',  # Oil & Gas Services
+    'XPH',  # Pharmaceuticals SPDR
+    'SRET', # SuperDividend REIT
+    'REZ',  # Residential Real Estate
+    'PAVE', # Infrastructure
+    'VOX',  # Communication Services
+    'VAW',  # Materials
+    'IYZ',  # Telecommunications
+    'FTXR', # Nareit Residential
+    'INDS', # Industrials
+    'FCG',  # Natural Gas
+    'VCR',  # Consumer Discretionary
+    'GDX',  # Gold Miners
+    'SCHH', # Schwab US REIT
+    'REM'   # Mortgage REIT
 }
