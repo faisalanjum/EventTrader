@@ -219,7 +219,7 @@ class Neo4jManager:
                             constraint_name = f"constraint_{node_type.value.lower()}_id_unique"
                             if constraint_name not in existing_constraints:
                                 session.run(f"""
-                                CREATE CONSTRAINT {constraint_name}
+                                CREATE CONSTRAINT {constraint_name} IF NOT EXISTS
                                 FOR (n:`{node_type.value}`)
                                 REQUIRE n.id IS UNIQUE
                                 """)
@@ -276,18 +276,10 @@ class Neo4jManager:
                             """)
                             logger.info(f"Created key constraint for HAS_PERIOD relationships")
                         
-                        # Create lookup index for id property across all nodes
-                        # This speeds up queries that search by id without knowing the label
-                        existing_indexes = {
-                            index['name'] for index in session.run("SHOW INDEXES").data()
-                        }
-                        lookup_index_name = "id_lookup_index"
-                        if lookup_index_name not in existing_indexes:
-                            session.run("""
-                            CREATE LOOKUP INDEX id_lookup_index IF NOT EXISTS
-                            FOR (n) ON (n.id)
-                            """)
-                            logger.info(f"Created lookup index for id property across all nodes")
+                        # Note: No additional lookup index needed for id property
+                        # The unique constraints created above for each node type
+                        # automatically create indexes that Neo4j uses efficiently
+                        # when querying by id across all node types
                     
                     # If we get here without exception, we're done
                     break
