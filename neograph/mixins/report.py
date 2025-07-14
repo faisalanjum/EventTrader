@@ -410,8 +410,9 @@ class ReportMixin:
                     query_params[param] = ""
         
         # Construct the complete Cypher query
+        # Use id for MERGE since it has unique constraint, ensuring proper deduplication
         report_merge_query = f"""
-        MERGE (r:Report {{accessionNo: $id}})
+        MERGE (r:Report {{id: $id}})
         ON CREATE SET {', '.join(on_create_parts)}
         ON MATCH SET {', '.join(on_match_parts)}
         RETURN r
