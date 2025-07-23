@@ -151,7 +151,7 @@ class Polygon:
             return result
         
 
-    def get_last_trade(self, ticker: str, timestamp: datetime, asset_type: str = "stock", max_days_back: int = 3) -> float:
+    def get_last_trade(self, ticker: str, timestamp: datetime, asset_type: str = "stock", max_days_back: int = 5) -> float:
         
         acquired = False
         try:

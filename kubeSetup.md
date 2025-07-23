@@ -83,7 +83,18 @@ All workers now have `minReplicaCount: 1` to ensure instant processing:
 ### Neo4j Configuration
 - **Current**: 90Gi memory (both request and limit)
 - **CPU**: 8 cores requested, 16 limit
-- **Actual Usage**: ~35GB (plenty of headroom)
+- **Actual Usage**: ~73.4GB (from kubectl top)
+- **Database Size**: 49GB on disk
+
+#### Neo4j Memory Increase Plan (Option 1 - Conservative)
+- **New Configuration**: 100Gi memory (both request and limit)
+- **Heap**: 24G → 26G
+- **Page Cache**: 56G → 68G
+- **Implementation**: See CLAUDE.md for detailed steps
+- **Impact on minisforum3**: 
+  - Current: 72% memory (90Gi of 123.51Gi)
+  - After: 81% memory (100Gi of 123.51Gi)
+  - Remaining: 23.5Gi for OS/kernel/other
 
 ### Queue Status (Live)
 - Heavy queue: 0 items
@@ -111,9 +122,9 @@ All workers now have `minReplicaCount: 1` to ensure instant processing:
 - Current pods: ~5.4 CPU, ~19.1Gi
 - Available: ~10.6 CPU, ~41.4Gi
 
-#### minisforum3 (50% CPU, 72% RAM used)
-- Neo4j: 8 CPU, 90Gi
-- Available: 8 CPU, 33.5Gi
+#### minisforum3 (50% CPU, 72% RAM used - will be 81% after increase)
+- Neo4j: 8 CPU, 90Gi (planned: 100Gi)
+- Available: 8 CPU, 33.5Gi (will be: 23.5Gi after increase)
 
 ### Capacity for Historical Processing
 

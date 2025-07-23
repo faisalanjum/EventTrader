@@ -125,7 +125,13 @@
 
 - **neo4j-0**
   - Purpose: Graph database for financial data
-  - Resources: Large allocation (uses most of minisforum3)
+  - Resources: 
+    - Current: 90Gi memory (request & limit), 8 CPU request, 16 CPU limit
+    - Planned: 100Gi memory (request), 105Gi (limit) - see Memory Increase section
+  - Memory Configuration:
+    - Heap: 24G (planned: 26G)
+    - Page Cache: 56G (planned: 68G)
+    - Transaction: 4G max per tx, 8G global
   - Storage: 
     - Data: 1.5TB PVC
     - Logs: 50GB PVC
@@ -133,6 +139,89 @@
     - Bolt: 30687 (database connections)
     - HTTP: 30474 (browser interface)
   - Runs on: minisforum3 ONLY (local-path-minisforum3 storage class)
+
+##### Neo4j Memory Increase Plan (for 3-Year Data)
+
+**Option 1: Conservative Increase (Recommended)**
+- **Pod Memory**: 90 GB → 100 GB (both request and limit for guaranteed QoS)
+- **Heap Memory**: 24 GB → 26 GB (8% increase)
+- **Page Cache**: 56 GB → 68 GB (21% increase)
+- **Total Configured**: 80 GB → 94 GB
+- **Safety Margin**: 26 GB remains for OS/kernel/other processes
+
+**Implementation Steps**:
+```bash
+# 1. Backup current configuration
+kubectl get statefulset neo4j -n neo4j -o yaml > /home/faisal/EventMarketDB/k8s/neo4j-statefulset-backup-$(date +%Y%m%d).yaml
+
+# 2. Create patch file
+cat > /home/faisal/EventMarketDB/k8s/neo4j-memory-increase-patch.yaml << 'EOF'
+spec:
+  template:
+    spec:
+      containers:
+      - name: neo4j
+        env:
+        - name: NEO4J_server_memory_heap_initial__size
+          value: "26G"
+        - name: NEO4J_server_memory_heap_max__size
+          value: "26G"
+        - name: NEO4J_server_memory_pagecache_size
+          value: "68G"
+        resources:
+          requests:
+            memory: "100Gi"
+          limits:
+            memory: "100Gi"
+EOF
+
+# 3. Apply the patch
+kubectl patch statefulset neo4j -n neo4j --patch-file /home/faisal/EventMarketDB/k8s/neo4j-memory-increase-patch.yaml
+
+# 4. Monitor rollout
+kubectl rollout status statefulset neo4j -n neo4j
+kubectl logs neo4j-0 -n neo4j -f
+```
+
+**Rollback Procedure**:
+```bash
+# Option 1: Restore from backup
+kubectl apply -f /home/faisal/EventMarketDB/k8s/neo4j-statefulset-backup-YYYYMMDD.yaml
+
+# Option 2: Revert specific values
+kubectl patch statefulset neo4j -n neo4j --type='strategic' -p '{
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [{
+          "name": "neo4j",
+          "env": [
+            {"name": "NEO4J_server_memory_heap_initial__size", "value": "24G"},
+            {"name": "NEO4J_server_memory_heap_max__size", "value": "24G"},
+            {"name": "NEO4J_server_memory_pagecache_size", "value": "56G"}
+          ],
+          "resources": {
+            "requests": {"memory": "90Gi"},
+            "limits": {"memory": "90Gi"}
+          }
+        }]
+      }
+    }
+  }
+}'
+```
+
+**Verification Commands**:
+```bash
+# Check memory configuration
+kubectl exec neo4j-0 -n neo4j -- cat /var/lib/neo4j/conf/neo4j.conf | grep -E "(heap|pagecache)"
+
+# Monitor memory usage
+kubectl top pod neo4j-0 -n neo4j
+
+# Check for OOM events
+kubectl describe pod neo4j-0 -n neo4j | grep -i "oom"
+```
 
 #### Monitoring Namespace
 
