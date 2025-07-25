@@ -8,7 +8,12 @@ case "$1" in
   xbrl-worker)     DOCKERFILE=Dockerfile.xbrl     ; IMAGE=faisalanjum/xbrl-worker:latest ;;
   event-trader)    DOCKERFILE=Dockerfile.event    ; IMAGE=faisalanjum/event-trader:latest ;;
   report-enricher) DOCKERFILE=Dockerfile.enricher ; IMAGE=faisalanjum/report-enricher:latest ;;
-  *) echo "Usage: $0 {xbrl-worker|event-trader|report-enricher}"; exit 1;;
+  mcp-http) 
+    # MCP HTTP doesn't need image build - uses python:3.11-slim directly
+    echo "▶︎ MCP HTTP uses python:3.11-slim base image (no build needed)"
+    exit 0
+    ;;
+  *) echo "Usage: $0 {xbrl-worker|event-trader|report-enricher|mcp-http}"; exit 1;;
 esac
 
 echo "▶︎ Building  $IMAGE …"

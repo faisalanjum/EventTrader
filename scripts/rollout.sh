@@ -19,7 +19,9 @@ elif [[ $1 == "event-trader" ]]; then
   kubectl rollout restart deployment/event-trader -n processing
 elif [[ $1 == "report-enricher" ]]; then
   kubectl rollout restart deployment/report-enricher -n processing
+elif [[ $1 == "mcp-http" ]]; then
+  kubectl rollout restart deployment/mcp-neo4j-cypher-http -n mcp-services
 else
-  echo "Usage: $0 {xbrl-worker|event-trader|report-enricher}"; exit 1
+  echo "Usage: $0 {xbrl-worker|event-trader|report-enricher|mcp-http}"; exit 1
 fi
 echo "✔︎ Rollout triggered"

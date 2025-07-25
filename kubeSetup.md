@@ -355,6 +355,44 @@ kubectl apply -f k8s/xbrl-worker-scaledobjects.yaml
 kubectl apply -f k8s/xbrl-worker-scaledobjects.yaml
 ```
 
+### MCP HTTP Service (Added July 25, 2025)
+
+#### Purpose
+Enables MCP (Model Context Protocol) tools to be used with LangGraph/LangChain via HTTP transport, making them work like any other LangChain tool.
+
+#### Configuration
+- **Deployment**: `mcp-neo4j-cypher-http` in `mcp-services` namespace
+- **Image**: `python:3.11-slim` (installs FastMCP at runtime)
+- **Resources**: 100m CPU request, 256Mi memory
+- **NodePort**: 31380 → Internal port 8000
+- **Runs on**: minisforum (control plane)
+
+#### Usage with LangGraph
+```python
+from langchain_mcp_adapters.client import MultiServerMCPClient
+
+# For code on minisforum (no port-forward needed)
+client = MultiServerMCPClient({
+    "neo4j": {
+        "url": "http://localhost:31380/mcp",
+        "transport": "streamable_http",
+    }
+})
+
+# Get tools (async required)
+tools = await client.get_tools()
+
+# Use with LangGraph exactly like any other tool
+from langgraph.prebuilt import create_react_agent
+agent = create_react_agent("openai:gpt-4", tools)
+```
+
+#### Key Points
+- **Separate from Claude Desktop**: Original `mcp-neo4j-cypher` pod unchanged
+- **No rebuild needed**: Code changes just require pod restart
+- **Auto-restart on reboot**: Standard Kubernetes deployment
+- **Async required**: MCP tools use `ainvoke()` not `invoke()`
+
 ## Future Optimization Path
 
 ### Phase 1 (Current)

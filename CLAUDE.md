@@ -261,10 +261,22 @@ kubectl describe pod neo4j-0 -n neo4j | grep -i "oom"
   - **Current Fix**: Added `set -e` to startup script (exits on failure, K8s restarts)
   - **Note**: Memory server main() is async (takes 3 args), unlike cypher (takes 4 args)
 
+- **mcp-neo4j-cypher-http** (Added July 25, 2025)
+  - Purpose: HTTP-enabled MCP server for LangGraph/LangChain integration
+  - Image: `python:3.11-slim` (installs FastMCP with HTTP transport at runtime)
+  - Resources: Requests: 100m CPU, 256Mi memory | Limits: 250m CPU, 512Mi memory
+  - Runs on: minisforum (nodeSelector enforced)
+  - **NodePort**: 31380 → Internal 8000
+  - Source: Mounts same code as original cypher pod
+  - Startup: Custom script runs FastMCP with `streamable_http_app()`
+  - **Key Difference**: Uses HTTP transport instead of stdio (for programmatic access)
+  - **Does NOT affect**: Claude Desktop continues using original pod
+
 ### Networking
 
 #### Services and External Access
 - **Redis**: NodePort 31379 → Internal 6379
+- **MCP HTTP**: NodePort 31380 → Internal 8000 (Added July 25, 2025)
 - **Neo4j Bolt**: NodePort 30687 → Internal 7687
 - **Neo4j Browser**: NodePort 30474 → Internal 7474
 - **Grafana**: NodePort 32000 → Internal 80
@@ -687,10 +699,14 @@ kubectl exec -it redis-77f84c44fd-4h4w4 -n infrastructure -- redis-cli
 # Deploy all components
 ./scripts/deploy-all.sh
 
+# Deploy MCP HTTP service
+./scripts/deploy-mcp-http.sh
+
 # Rollout restart (picks up new images)
 kubectl rollout restart deployment/xbrl-worker-heavy -n processing
 kubectl rollout restart deployment/xbrl-worker-medium -n processing
 kubectl rollout restart deployment/xbrl-worker-light -n processing
+kubectl rollout restart deployment/mcp-neo4j-cypher-http -n mcp-services  # MCP HTTP
 ```
 
 #### Environment Variables (Auto-injected)
@@ -713,6 +729,7 @@ kubectl rollout restart deployment/xbrl-worker-light -n processing
   - `faisalanjum/event-trader:latest`
   - `faisalanjum/xbrl-worker:latest`
   - `faisalanjum/report-enricher:latest`
+  - MCP pods use `python:3.11-slim` (no custom image)
 
 #### Labels and Annotations
 - Standard labels: `app`, `worker-type`
@@ -951,6 +968,37 @@ claude  # Start new session - MCP tools auto-load
 - Neo4j must be accessible at localhost:30687
 - If scripts fail, check: `nc -zv localhost 30687`
 
+#### 3. MCP HTTP for LangGraph/LangChain (NEW - July 25, 2025)
+- **Purpose**: Use MCP tools in LangGraph/LangChain applications
+- **Service**: `mcp-neo4j-cypher-http` deployment with NodePort 31380
+- **Usage Pattern**:
+  ```python
+  from langchain_mcp_adapters.client import MultiServerMCPClient
+  from langgraph.prebuilt import create_react_agent
+  
+  # Connect to MCP HTTP service (no port-forward needed on minisforum)
+  client = MultiServerMCPClient({
+      "neo4j": {
+          "url": "http://localhost:31380/mcp",
+          "transport": "streamable_http",
+      }
+  })
+  
+  # Get tools (async required)
+  tools = await client.get_tools()
+  
+  # Use exactly like any other LangChain tool
+  agent = create_react_agent("openai:gpt-4", tools)
+  ```
+
+- **Key Differences from Regular Tools**:
+  - Must use async to get tools: `await client.get_tools()`
+  - Tools have `ainvoke()` not `invoke()`
+  - Graph execution needs `await graph.ainvoke()`
+  
+- **Deployment**: `kubectl apply -f /home/faisal/EventMarketDB/k8s/mcp-services/mcp-neo4j-cypher-http-deployment.yaml`
+- **Restart after code changes**: `kubectl rollout restart deployment/mcp-neo4j-cypher-http -n mcp-services`
+
 #### MCP Services Recovery (After Node Restart)
 
 If MCP pods fail after node restart:
@@ -989,6 +1037,18 @@ If MCP pods fail after node restart:
    - Build script: `/home/faisal/EventMarketDB/k8s/mcp-services/build-mcp-images.sh`
    - Would eliminate pip install failures on restart
    - Not currently implemented due to compatibility issues
+
+### MCP HTTP Service Files (Added July 25, 2025)
+
+#### Key Files
+- **Deployment YAML**: `/home/faisal/EventMarketDB/k8s/mcp-services/mcp-neo4j-cypher-http-deployment.yaml`
+- **Deployment Script**: `/home/faisal/EventMarketDB/scripts/deploy-mcp-http.sh`
+- **Example Notebook**: `/home/faisal/EventMarketDB/drivers/agenticDrivers/neo4j_mcp_simple_tools.ipynb`
+- **Source Code**: Mounts `/home/faisal/neo4j-mcp-server/servers/mcp-neo4j-cypher` (same as original pod)
+
+#### Integration with build_push.sh and rollout.sh
+- **build_push.sh**: Added `mcp-http` case (no build needed, uses python:3.11-slim)
+- **rollout.sh**: Added `mcp-http` case for rollout restart
 
 ### Critical Don'ts (⚠️ Do NOT Change Unless Explicitly Asked)
 
