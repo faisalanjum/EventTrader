@@ -280,6 +280,49 @@ class Neo4jManager:
                         # The unique constraints created above for each node type
                         # automatically create indexes that Neo4j uses efficiently
                         # when querying by id across all node types
+                        
+                        # Create fulltext indexes for content search
+                        fulltext_indexes = [
+                            # Core filing content
+                            {"name": "extracted_section_content_ft", "label": "ExtractedSectionContent", "properties": ["content", "section_name"]},
+                            {"name": "exhibit_content_ft", "label": "ExhibitContent", "properties": ["content", "exhibit_number"]},
+                            {"name": "filing_text_content_ft", "label": "FilingTextContent", "properties": ["content", "form_type"]},
+                            {"name": "financial_statement_content_ft", "label": "FinancialStatementContent", "properties": ["value", "statement_type"]},
+                            
+                            # Transcript content
+                            {"name": "full_transcript_ft", "label": "FullTranscriptText", "properties": ["content"]},
+                            {"name": "prepared_remarks_ft", "label": "PreparedRemark", "properties": ["content"]},
+                            {"name": "qa_exchange_ft", "label": "QAExchange", "properties": ["exchanges"]},
+                            {"name": "question_answer_ft", "label": "QuestionAnswer", "properties": ["content"]},
+                            
+                            # News content
+                            {"name": "news_ft", "label": "News", "properties": ["title", "body", "teaser"]},
+                            
+                            # XBRL text facts - ALL Facts, filter in queries
+                            {"name": "fact_textblock_ft", "label": "Fact", "properties": ["value", "qname"]},
+                            
+                            # Entity and taxonomy content
+                            {"name": "company_ft", "label": "Company", "properties": ["name", "displayLabel"]},
+                            {"name": "concept_ft", "label": "Concept", "properties": ["label", "qname"]},
+                            {"name": "abstract_ft", "label": "Abstract", "properties": ["label"]}
+                        ]
+                        
+                        # Check existing fulltext indexes
+                        existing_ft_indexes = {
+                            idx['name']: idx 
+                            for idx in session.run("SHOW FULLTEXT INDEXES").data()
+                        }
+                        
+                        # Create fulltext indexes
+                        for ft_index in fulltext_indexes:
+                            if ft_index["name"] not in existing_ft_indexes:
+                                props_list = ", ".join(f"n.{prop}" for prop in ft_index["properties"])
+                                session.run(f"""
+                                CREATE FULLTEXT INDEX {ft_index["name"]} IF NOT EXISTS
+                                FOR (n:{ft_index["label"]})
+                                ON EACH [{props_list}]
+                                """)
+                                logger.info(f"Created fulltext index {ft_index['name']} for {ft_index['label']}")
                     
                     # If we get here without exception, we're done
                     break
