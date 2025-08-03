@@ -42,7 +42,7 @@ class EmbeddingMixin:
         """Execute QAExchange embedding cypher query with retry for OpenAI failures"""
         return self.manager.execute_cypher_query(cypher, params)
     
-    def create_vector_index(self, label, property_name, index_name=None, dimensions=1536, similarity_function="cosine"):
+    def create_vector_index(self, label, property_name, index_name=None, dimensions=3072, similarity_function="cosine"):
         """
         Create a vector index for any node type and property
         

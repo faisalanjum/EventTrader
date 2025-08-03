@@ -77,3 +77,6 @@ ENV/
 .env
 .env
 .env.local
+
+# LangGraph Studio
+.langgraph_api/
