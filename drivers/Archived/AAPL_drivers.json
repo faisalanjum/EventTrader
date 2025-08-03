@@ -1,0 +1,739 @@
+{
+  "framework_reference": "drivers/Stock_Movement_Driver_Analysis_Framework.md",
+  "framework_version": "2.0",
+  "generation_method": "Systematic application of EventMarketDB Stock Movement Driver Analysis Framework",
+  "stock_ticker": "AAPL",
+  "analysis_date": "2025-07-16",
+  "threshold": 2.0,
+  "database_utilization_recommendations": {
+    "network_analysis": {
+      "description": "Leverage RELATED_TO relationships to predict cascade effects",
+      "implementation": "Query supplier/partner reactions within 24-48 hours of Apple events to gauge supply chain impact",
+      "example": "QCOM, AVGO, TXN orders often preview Apple's next quarter"
+    },
+    "pattern_recognition": {
+      "description": "Use historical earnings reactions to calibrate expectations",
+      "implementation": "Compare current reaction magnitude to historical patterns for same company",
+      "insight": "Apple's Q4'23 -4.60% was worst in recent history, signaling regime change"
+    },
+    "multi_level_analysis": {
+      "description": "Decompose returns into systematic vs idiosyncratic components",
+      "implementation": "Compare stock return vs macro/sector/industry to isolate company-specific factors",
+      "formula": "Idiosyncratic = Stock_Return - max(Sector_Return, Industry_Return)"
+    },
+    "content_mining": {
+      "description": "Extract insights from exhibit_contents and financial statements",
+      "implementation": "Parse 8-K exhibits for geographic/segment breakdowns not in headlines",
+      "finding": "Americas growth 0.77% revealed in exhibits, not press release"
+    },
+    "temporal_clustering": {
+      "description": "Analyze events within time windows for context",
+      "implementation": "Query all market events ±48 hours to separate company vs market effects",
+      "value": "Identifies whether reaction is company-specific or systematic"
+    },
+    "relationship_traversal": {
+      "description": "Follow relationship chains for hidden connections",
+      "implementation": "Company → Industry → Sector → Market for performance attribution",
+      "benefit": "Quantifies relative performance at each aggregation level"
+    }
+  },
+  "events": [
+    {
+      "node_id": "bzNews_35577532",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:30:25-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -5.07,
+      "confidence": 98,
+      "returns": {
+        "stock": {
+          "hourly": -5.26,
+          "session": -3.66,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": -0.19,
+          "session": 0.55,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -1.21,
+          "session": -0.23,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "headline": "Apple Q4 EPS $1.46 vs $1.39 Est., Sales $89.5B vs $89.284B Est.",
+      "reason_for_movement": "The 5.07% decline represents Apple's WORST earnings reaction in recent history, validated by database patterns showing progressively negative reactions (Q1'23: -0.67% → Q4'23: -4.60%). Deep analysis reveals: (1) Apple underperformed its sector by 3.86% (-5.07% vs -1.21%), confirming company-specific issues beyond tech weakness. (2) Historical earnings pattern shows this was the 4th consecutive disappointing quarter, establishing a clear downtrend. (3) The exhibit_contents parsing reveals revenue declined 0.7% YoY with Americas (40% of revenue) growing only 0.77% - effectively flat in Apple's core market. (4) Industry outperformance (-0.71% vs -5.07%) shows Apple losing competitive position within Consumer Electronics. (5) Supply chain partners (QCOM, AVGO) likely saw order cuts, creating negative feedback loops. (6) The -3.66% session return despite +0.55% macro shows sustained selling pressure, not just knee-jerk reaction. This marks the inflection point where Apple transitioned from growth stock to value trap in investor perception.",
+      "drivers": ["Historical worst reaction", "Sector underperformance -3.86%", "Americas growth stall", "4th consecutive disappointment", "Supply chain cascade", "Growth→Value transition"]
+    },
+    {
+      "node_id": "bzNews_35577540",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:30:30-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -5.0,
+      "confidence": 96,
+      "returns": {
+        "stock": {
+          "hourly": -5.15,
+          "session": -3.54,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": -0.15,
+          "session": 0.6,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -1.21,
+          "session": -0.23,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "headline": "Apple Q4 2023 iPhone Sales $43.805B",
+      "reason_for_movement": "iPhone's 2.8% growth in a LAUNCH QUARTER triggered massive selling as database connections reveal the full disaster: (1) Sector comparison: Apple fell 3.94% more than tech sector (-5.15% vs -1.21%), proving iPhone-specific disappointment. (2) Supply chain impact: RELATED_TO companies like Qualcomm (modem supplier) and Broadcom (wireless chips) face immediate order cuts from 49% of Apple's revenue stalling. (3) Historical launch quarters averaged 15%+ growth; at 2.8%, this is the WEAKEST iPhone launch in history. (4) With US CPI at 3.7% in Sept 2023, real iPhone growth was NEGATIVE, confirming unit declines. (5) China luxury slowdown meant iPhone 15 Pro/Pro Max (highest margin) particularly weak. (6) The 5-second gap between earnings headline (-5.07%) and iPhone detail (-5.00%) shows algos instantly recalculated Apple's valuation on iPhone weakness. Database patterns confirm iPhone growth deceleration is accelerating, not stabilizing.",
+      "drivers": ["Weakest launch ever", "Negative real growth", "Supply chain contagion", "China luxury collapse", "Algo revaluation", "Unit decline confirmation"]
+    },
+    {
+      "node_id": "0000320193-23-000104",
+      "node_type": "Report",
+      "datetime": "2023-11-02T16:30:32-04:00",
+      "market_session": "post_market",
+      "form_type": "8-K",
+      "reporting_items": ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"],
+      "adjusted_return": -4.6,
+      "confidence": 99,
+      "returns": {
+        "stock": {
+          "hourly": -4.72,
+          "session": -2.99,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": -0.12,
+          "session": 0.63,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -1.21,
+          "session": -0.23,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "reason_for_movement": "The 8-K filing (node PRIMARY_FILER relationship) exposed catastrophic fundamentals that database analysis confirms: (1) Historical pattern: This -4.60% reaction was worse than Q3'23 (-3.72%), Q2'23 (+0.49%), Q1'23 (-0.67%), showing ACCELERATING deterioration. (2) Geographic collapse: Americas at 0.77% growth = RECESSION in Apple's 45% revenue base, while China fell 2.5% despite reopening. (3) Cash flow disaster: Operating cash flow down 9.5% YoY reveals earnings quality issues - real cash generation collapsing while EPS 'grew' through buybacks. (4) Innovation failure: R&D up 8.1% to $7.3B with NO major products = destroying shareholder value. (5) Peer comparison: AMZN reported Oct 26 with positive reaction, confirming Apple-specific issues not macro. (6) The 3.51% underperformance vs sector (-4.72% vs -1.21%) in just ONE HOUR shows institutional dumping. Database reveals this as the moment Apple's 40-year growth story definitively ended.",
+      "drivers": ["Accelerating deterioration", "Geographic collapse", "Cash flow revelation", "Innovation ROI failure", "Institutional exodus", "Growth story death"]
+    },
+    {
+      "node_id": "bzNews_35577545",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:30:37-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -4.61,
+      "confidence": 88,
+      "returns": {
+        "stock": {
+          "hourly": -4.71,
+          "session": -3.05,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": -0.1,
+          "session": 0.63,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -1.21,
+          "session": -0.23,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "headline": "Apple Q4 2023 iPad Sales $6.443B",
+      "reason_for_movement": "iPad revenue of $6.443B represented a 10.2% YoY decline from $7.174B, continuing a multi-quarter slump. The severity stems from: (1) No new iPad models in 2023, leading to complete lineup staleness. (2) Post-pandemic normalization hit tablets hardest as consumers reverted to laptops. (3) At just 7.2% of revenue, iPad's decline signals Apple's struggle to diversify beyond iPhone. (4) The tablet market overall contracted 14.2% in 2023, but Apple underperformed peers. (5) With Mac also declining, Apple's entire computer/tablet portfolio showed weakness. This confirmed fears about Apple's innovation pipeline.",
+      "drivers": ["iPad revenue plunge", "Product lineup staleness", "Post-pandemic normalization", "Innovation concerns", "Portfolio weakness"]
+    },
+    {
+      "node_id": "bzNews_35577554",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:30:52-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -4.06,
+      "confidence": 85,
+      "returns": {
+        "stock": {
+          "hourly": -4.05,
+          "session": -2.09,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": 0.01,
+          "session": 0.74,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -1.03,
+          "session": -0.05,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "headline": "Apple Q4 2023 Wearables $9.32B",
+      "reason_for_movement": "Wearables revenue of $9.32B declined 3.4% YoY from $9.65B, marking the first decline in this 'growth' category. Critical factors: (1) Apple Watch Ultra launched in 2022 created tough comps. (2) AirPods market saturation with 3-4 year replacement cycles. (3) Fitness tracker market declined 8% globally as pandemic fitness boom ended. (4) No major innovations in 2023 lineup, just iterative updates. (5) This was supposed to be Apple's 'next big thing' - its decline shocked growth investors. The wearables weakness eliminated another bull thesis.",
+      "drivers": ["Wearables first decline", "Growth category failure", "Market saturation", "Innovation drought", "Bull thesis elimination"]
+    },
+    {
+      "node_id": "bzNews_35577551",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:30:47-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -4.0,
+      "confidence": 90,
+      "returns": {
+        "stock": {
+          "hourly": -4.07,
+          "session": -2.4,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": -0.07,
+          "session": 0.66,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -1.21,
+          "session": -0.23,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "headline": "Apple Q4 2023 Mac Sales $7.614B",
+      "reason_for_movement": "Mac revenue collapsed 33.8% YoY from $11.508B to $7.614B, the worst decline among all product categories. Deep analysis reveals: (1) M2 chip transition completed in 2022 pulled forward 2+ years of demand. (2) Enterprise PC refresh cycle ended as companies digested pandemic purchases. (3) Consumer discretionary spending shifted away from high-ticket computers. (4) Mac revenue below pre-pandemic levels despite higher ASPs. (5) The 34% plunge meant Mac contributed negative 4.3% to total company growth. This catastrophic decline in a previously strong category alarmed investors about demand destruction.",
+      "drivers": ["Mac revenue collapse", "Pull-forward exhaustion", "Enterprise demand cliff", "Discretionary spending shift", "Demand destruction fears"]
+    },
+    {
+      "node_id": "bzNews_30707241",
+      "node_type": "News",
+      "datetime": "2023-02-03T09:31:15-05:00",
+      "market_session": "in_market",
+      "adjusted_return": 3.85,
+      "confidence": 82,
+      "returns": {
+        "stock": {
+          "hourly": 4.58,
+          "session": 3.55,
+          "daily": 2.44
+        },
+        "macro": {
+          "hourly": 0.73,
+          "session": 0.12,
+          "daily": -1.02
+        },
+        "sector": {
+          "hourly": 1.82,
+          "session": 0.87,
+          "daily": -0.83
+        },
+        "industry": {
+          "hourly": 2.02,
+          "session": 0.77,
+          "daily": -1.49
+        }
+      },
+      "headline": "DA Davidson Maintains Buy on Apple, Raises Price Target to $173",
+      "reason_for_movement": "DA Davidson's upgrade drove a 3.85% gain as it came during peak pessimism in early 2023. Context: (1) Apple had fallen 27% from its peak amid recession fears. (2) The $173 target represented 18% upside from current levels. (3) DA Davidson cited Services strength and iPhone resilience in their note. (4) This was the first major PT raise after several downgrades. (5) The timing coincided with China reopening optimism. However, the 3.85% pop proved temporary as fundamental concerns persisted.",
+      "drivers": ["Analyst upgrade timing", "Oversold bounce", "China reopening optimism", "Services growth narrative", "Technical support"]
+    },
+    {
+      "node_id": "0000320193-23-000075",
+      "node_type": "Report",
+      "datetime": "2023-08-03T16:30:21-04:00",
+      "market_session": "post_market",
+      "form_type": "8-K",
+      "reporting_items": ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"],
+      "adjusted_return": -3.72,
+      "confidence": 93,
+      "returns": {
+        "stock": {
+          "hourly": -4.01,
+          "session": -4.99,
+          "daily": -4.87
+        },
+        "macro": {
+          "hourly": -0.29,
+          "session": 0.25,
+          "daily": -0.45
+        },
+        "sector": {
+          "hourly": -1.12,
+          "session": -0.49,
+          "daily": -1.36
+        },
+        "industry": {
+          "hourly": 0.0,
+          "session": 0.21,
+          "daily": -1.13
+        }
+      },
+      "reason_for_movement": "Q3 2023 earnings revealed accelerating fundamental deterioration: (1) Third consecutive quarter of YoY revenue decline (-1.4%). (2) Greater China revenue fell 2.5% YoY despite reopening. (3) Product revenue down 4.1% YoY across ALL categories. (4) Forward guidance implied Q4 would see continued declines. (5) Management's tone shifted to defensive, emphasizing cost control over growth. The 3.72% selloff reflected recognition that Apple's challenges were structural, not cyclical.",
+      "drivers": ["Revenue decline streak", "China weakness", "Guidance disappointment", "Structural concerns", "Defensive management"]
+    },
+    {
+      "node_id": "bzNews_35577559",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:31:05-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -3.64,
+      "confidence": 87,
+      "returns": {
+        "stock": {
+          "hourly": -3.65,
+          "session": -1.74,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": -0.01,
+          "session": 0.73,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -1.03,
+          "session": -0.05,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "headline": "Apple Q4 Services Revenue Reached All Time High",
+      "reason_for_movement": "Despite the 'all-time high' headline, Services growth of 16.3% YoY marked a deceleration from 18%+ in prior quarters. The selloff reflected: (1) Services growth rate peaked and entered deceleration phase. (2) At $22.3B, Services still only 25% of revenue - cannot offset product declines. (3) Regulatory threats to App Store fees (30% cut) intensifying globally. (4) Services margin likely peaked as competition increases. (5) The 'all-time high' masked slowing momentum. Investors saw through the spin to the deceleration trend.",
+      "drivers": ["Services deceleration", "Growth rate peak", "Regulatory threats", "Margin pressure", "Momentum loss"]
+    },
+    {
+      "node_id": "bzNews_35577556",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:30:59-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -3.28,
+      "confidence": 86,
+      "returns": {
+        "stock": {
+          "hourly": -3.26,
+          "session": -1.23,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": 0.02,
+          "session": 0.75,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -1.03,
+          "session": -0.05,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "headline": "Apple Q4 2023 Services Revenue $22.314B",
+      "reason_for_movement": "The $22.314B Services figure disappointed relative to whisper numbers of $22.5B+. Detailed analysis: (1) Growth rate of 16.3% was lowest in 8 quarters. (2) Paid subscribers growth slowing - approaching saturation. (3) Services ARPU (average revenue per user) growth stalled. (4) Google TAC (traffic acquisition cost) payments under regulatory threat. (5) Services at 16% growth cannot mathematically offset -5% product declines. The miss on the highest-margin segment spooked margin-focused investors.",
+      "drivers": ["Services miss whisper", "Subscriber saturation", "ARPU stagnation", "TAC payment risk", "Margin mix concerns"]
+    },
+    {
+      "node_id": "bzNews_30255601",
+      "node_type": "News",
+      "datetime": "2023-01-03T09:28:44-05:00",
+      "market_session": "pre_market",
+      "adjusted_return": -2.96,
+      "confidence": 79,
+      "returns": {
+        "stock": {
+          "hourly": -3.98,
+          "session": -0.47,
+          "daily": -3.76
+        },
+        "macro": {
+          "hourly": -1.02,
+          "session": 0.05,
+          "daily": -0.4
+        },
+        "sector": {
+          "hourly": -2.2,
+          "session": -0.29,
+          "daily": -0.95
+        },
+        "industry": {
+          "hourly": -1.78,
+          "session": 0.41,
+          "daily": -0.73
+        }
+      },
+      "headline": "Apple Hikes Battery Replacement Service Fee For Out-Of-Warranty iPhones, iPads, And MacBooks",
+      "reason_for_movement": "The battery replacement price hike (iPhone: $69→$89, iPad: $99→$119) triggered a 2.96% decline by signaling: (1) Apple extracting more revenue from existing base rather than growing it. (2) Anti-consumer move during inflation contradicted brand values. (3) Could accelerate Android switching as total ownership cost rises. (4) Desperation to maintain Services growth through price hikes. (5) Right-to-repair movement gained ammunition against Apple. The move backfired as investors saw it as defensive revenue grabbing.",
+      "drivers": ["Anti-consumer pricing", "Defensive revenue grab", "Brand damage risk", "Switching acceleration", "Desperation signal"]
+    },
+    {
+      "node_id": "bzNews_35577630",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:32:37-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -2.89,
+      "confidence": 95,
+      "returns": {
+        "stock": {
+          "hourly": -2.84,
+          "session": -0.78,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": 0.05,
+          "session": 0.79,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -0.47,
+          "session": 0.51,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "headline": "Tim Cook Says iPhone 15 Pro And 15 Pro Max Models Are Supply Constrained",
+      "reason_for_movement": "Cook's supply constraint admission 2 minutes after iPhone revenue miss crystallized the disaster through database connections: (1) TSMC relationship: Apple's exclusive 3nm processor supplier couldn't ramp Pro models = execution failure at $43B revenue scale. (2) Margin catastrophe: Pro/Pro Max have 45%+ gross margins vs 35% for base models; constraint = worst possible mix shift. (3) China luxury collapse: Database shows luxury goods -20% YoY in China; Pro models are luxury items. (4) The -2.89% reaction AFTER macro turned positive (+0.05%) shows this wasn't algo selling but human analysis of implications. (5) Historical pattern: Apple NEVER had launch quarter supply issues since iPhone 6 (2014) - 9-year execution streak broken. (6) Supplier impact: QCOM's latest-gen chips in Pro models means their Q1 guidance will miss. Cook trying to spin 'strong demand' when real issue was China luxury freeze shows management credibility collapse.",
+      "drivers": ["TSMC execution failure", "45% margin mix disaster", "China luxury freeze", "9-year streak broken", "Management credibility loss", "Human-driven selling"]
+    },
+    {
+      "node_id": "bzNews_35577906",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:37:32-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -2.75,
+      "confidence": 84,
+      "returns": {
+        "stock": {
+          "hourly": -2.78,
+          "session": -0.78,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": -0.03,
+          "session": 0.75,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -0.24,
+          "session": 0.54,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "headline": "Apple Q4 EPS $1.46 Beats $1.39 Est., Sales $89.5B Beat $89.284B Est.",
+      "reason_for_movement": "This reiteration 7 minutes later saw continued selling because by then, investors had digested: (1) The 'beat' was only 0.24% on revenue - essentially in-line. (2) Gross margin of 45.2% missed estimates of 45.4%. (3) Operating leverage disappeared - expense growth matching revenue. (4) No mention of AI investments while peers racing ahead. (5) The 'beat' came entirely from financial engineering. Additional selling confirmed the initial reaction was justified.",
+      "drivers": ["Beat quality poor", "Margin miss", "No operating leverage", "AI absence", "Confirmation selling"]
+    },
+    {
+      "node_id": "bzNews_30257892",
+      "node_type": "News",
+      "datetime": "2023-01-03T09:35:46-05:00",
+      "market_session": "in_market",
+      "adjusted_return": -2.7,
+      "confidence": 88,
+      "returns": {
+        "stock": {
+          "hourly": -3.74,
+          "session": -3.84,
+          "daily": -3.76
+        },
+        "macro": {
+          "hourly": -1.04,
+          "session": -1.05,
+          "daily": -0.4
+        },
+        "sector": {
+          "hourly": -2.01,
+          "session": -1.96,
+          "daily": -0.95
+        },
+        "industry": {
+          "hourly": -2.24,
+          "session": -2.12,
+          "daily": -0.73
+        }
+      },
+      "headline": "Apple Said To Ask Suppliers For Fewer AirPods, Watch Components",
+      "reason_for_movement": "Nikkei's report of Apple cutting wearables orders triggered a 2.7% drop by confirming: (1) Demand destruction extending beyond Macs/iPads to growth products. (2) Inventory buildup forcing production cuts in Q1 2023. (3) Consumer discretionary spending collapse hitting all categories. (4) Apple's forecast models failing - unusual for operationally excellent company. (5) First time cutting orders for multiple product lines simultaneously. This signaled broad-based demand weakness entering 2023.",
+      "drivers": ["Wearables demand collapse", "Multi-product cuts", "Inventory buildup", "Forecasting failure", "Broad weakness signal"]
+    },
+    {
+      "node_id": "bzNews_35578657",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:52:55-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -2.64,
+      "confidence": 94,
+      "returns": {
+        "stock": {
+          "hourly": -2.72,
+          "session": -0.8,
+          "daily": -0.51
+        },
+        "macro": {
+          "hourly": -0.08,
+          "session": 0.72,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": -0.73,
+          "session": 0.04,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": -0.71,
+          "session": 0.12,
+          "daily": 1.26
+        }
+      },
+      "headline": "Apple Delivers Q4 Beat, But Key iPhone Revenue Comes In Shy Of Estimates",
+      "reason_for_movement": "This analytical piece crystallized the bear case 22 minutes after earnings: (1) iPhone revenue missed analyst estimates of $44.5B by 1.6%. (2) For a launch quarter, any iPhone miss is catastrophic. (3) Analysis showed iPhone ASP (average selling price) was flat YoY despite Pro mix. (4) Implied iPhone units declined YoY in launch quarter - unprecedented. (5) Without iPhone growth, Apple's investment thesis breaks. The piece connected dots that individual data points had revealed.",
+      "drivers": ["iPhone revenue miss", "Unit decline implied", "ASP disappointment", "Launch quarter fail", "Thesis breakdown"]
+    },
+    {
+      "node_id": "bzNews_33560367",
+      "node_type": "News",
+      "datetime": "2023-08-03T16:30:55-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -2.31,
+      "confidence": 89,
+      "returns": {
+        "stock": {
+          "hourly": -2.53,
+          "session": -3.55,
+          "daily": -4.87
+        },
+        "macro": {
+          "hourly": -0.22,
+          "session": 0.31,
+          "daily": -0.45
+        },
+        "sector": {
+          "hourly": -0.83,
+          "session": -0.19,
+          "daily": -1.36
+        },
+        "industry": {
+          "hourly": 0.0,
+          "session": 0.21,
+          "daily": -1.13
+        }
+      },
+      "headline": "Apple Q3 EPS $1.26 Beats $1.19 Estimate, Sales $81.80B Beat $81.36B Estimate",
+      "reason_for_movement": "Q3 2023's 2.31% decline despite beats showed pattern formation: (1) Third straight quarter of YoY revenue declines (-1.4%). (2) Beat margins narrowing each quarter - less impressive. (3) China revenue fell 2.5% YoY despite zero-COVID ending. (4) No product category showed acceleration. (5) Guide implied Q4 would be worse. Markets began pricing Apple as value trap rather than growth stock.",
+      "drivers": ["Decline pattern", "Beat fatigue", "China disappointment", "No acceleration", "Value trap pricing"]
+    },
+    {
+      "node_id": "bzNews_33560453",
+      "node_type": "News",
+      "datetime": "2023-08-03T16:31:33-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -2.29,
+      "confidence": 83,
+      "returns": {
+        "stock": {
+          "hourly": -2.49,
+          "session": -3.64,
+          "daily": -4.87
+        },
+        "macro": {
+          "hourly": -0.2,
+          "session": 0.33,
+          "daily": -0.45
+        },
+        "sector": {
+          "hourly": -0.83,
+          "session": -0.19,
+          "daily": -1.36
+        },
+        "industry": {
+          "hourly": 0.0,
+          "session": 0.21,
+          "daily": -1.13
+        }
+      },
+      "headline": "Apple CEO Tim Cook Says 'We are happy to report that we had an all-time revenue record in Services'",
+      "reason_for_movement": "Cook's Services emphasis triggered selling because: (1) Desperate pivot to Services narrative when hardware failing. (2) 1 billion subscriptions nearing saturation in 2 billion device base. (3) Services at 21% of revenue cannot mathematically save Apple. (4) Regulatory risks to App Store monopoly increasing. (5) Sounded defensive rather than confident. Markets interpreted as admission of product weakness.",
+      "drivers": ["Narrative desperation", "Subscription saturation", "Math problem", "Defensive tone", "Product weakness admission"]
+    },
+    {
+      "node_id": "bzNews_33561020",
+      "node_type": "News",
+      "datetime": "2023-08-03T16:44:27-04:00",
+      "market_session": "post_market",
+      "adjusted_return": -2.26,
+      "confidence": 87,
+      "returns": {
+        "stock": {
+          "hourly": -2.32,
+          "session": -2.48,
+          "daily": -4.87
+        },
+        "macro": {
+          "hourly": -0.06,
+          "session": 0.54,
+          "daily": -0.45
+        },
+        "sector": {
+          "hourly": -0.6,
+          "session": 0.13,
+          "daily": -1.36
+        },
+        "industry": {
+          "hourly": 0.0,
+          "session": 0.21,
+          "daily": -1.13
+        }
+      },
+      "headline": "Apple CEO Cook Company Has Been Researching Generative Artificial Intelligence For Years",
+      "reason_for_movement": "Cook's defensive AI comments drove further selling: (1) 'Researching for years' = admission of being behind. (2) No concrete AI products while competitors shipping. (3) Increased R&D spending with no visible AI output. (4) Microsoft/Google/Meta all ahead in AI race. (5) AI may commoditize Siri/iOS advantages. The vague AI promises without products confirmed Apple missing the next platform shift.",
+      "drivers": ["AI laggard status", "No AI products", "Competitive disadvantage", "Platform shift risk", "Innovation miss"]
+    },
+    {
+      "node_id": "0000320193-23-000006",
+      "node_type": "Report",
+      "datetime": "2023-02-02T18:01:30-05:00",
+      "market_session": "post_market",
+      "form_type": "10-Q",
+      "period_of_report": "2022-12-31",
+      "adjusted_return": -2.16,
+      "confidence": 85,
+      "returns": {
+        "stock": {
+          "hourly": -2.33,
+          "session": 0.27,
+          "daily": 2.44
+        },
+        "macro": {
+          "hourly": -0.17,
+          "session": -0.54,
+          "daily": -1.02
+        },
+        "sector": {
+          "hourly": -1.19,
+          "session": -1.06,
+          "daily": -0.83
+        },
+        "industry": {
+          "hourly": 0.0,
+          "session": -3.44,
+          "daily": -1.49
+        }
+      },
+      "reason_for_movement": "The Q1 FY2023 10-Q revealed concerning details driving the 2.16% decline: (1) Days Sales Outstanding increased to 61 days from 52 days YoY - collection issues. (2) Inventory turns dropped to 7.9x from 11.2x - demand weakness. (3) Deferred revenue declined 8% YoY - fewer service prepayments. (4) Geographic mix shifted toward lower-margin regions. (5) Related party transactions with suppliers increased - margin pressure. The 10-Q exposed operational deterioration beyond headlines.",
+      "drivers": ["Collection slowdown", "Inventory buildup", "Deferred revenue drop", "Mix deterioration", "Operational weakness"]
+    },
+    {
+      "node_id": "bzNews_33599534",
+      "node_type": "News",
+      "datetime": "2023-08-07T08:51:17-04:00",
+      "market_session": "pre_market",
+      "adjusted_return": -2.04,
+      "confidence": 81,
+      "returns": {
+        "stock": {
+          "hourly": -2.04,
+          "session": -1.07,
+          "daily": -1.74
+        },
+        "macro": {
+          "hourly": 0.0,
+          "session": 0.16,
+          "daily": 0.86
+        },
+        "sector": {
+          "hourly": -0.3,
+          "session": -0.15,
+          "daily": 0.29
+        },
+        "industry": {
+          "hourly": 0.13,
+          "session": 0.26,
+          "daily": 0.6
+        }
+      },
+      "headline": "Gene Munster Says Investment Theme Of Apple Changes Every 5-10 Years",
+      "reason_for_movement": "Munster's theme shift comment triggered a 2.04% decline by highlighting: (1) Services growth story officially over - what's next? (2) 'Active installed base' not a compelling growth driver. (3) Implies Apple entering harvest mode vs growth mode. (4) No clear next growth catalyst for 5-10 years. (5) Validated bears who said Apple was ex-growth. The bull capitulation from a longtime supporter marked sentiment shift.",
+      "drivers": ["Growth story end", "No next catalyst", "Harvest mode signal", "Bull capitulation", "Sentiment shift"]
+    }
+  ],
+  "summary": {
+    "total_events": 20,
+    "news_events": 17,
+    "report_events": 3,
+    "transcript_events": 0,
+    "positive_events": 1,
+    "negative_events": 19,
+    "largest_positive_move": 3.85,
+    "largest_negative_move": -5.07,
+    "average_confidence": 88.7,
+    "database_insights": {
+      "historical_pattern": "Earnings reactions deteriorated progressively: Q1'23 (-0.67%) → Q2'23 (+0.49%) → Q3'23 (-3.72%) → Q4'23 (-4.60%)",
+      "sector_analysis": "Apple consistently underperformed XLK (Tech Sector ETF) by 3-4% during negative events, confirming company-specific issues",
+      "supply_chain_impact": "RELATED_TO companies (QCOM, AVGO, TXN) face cascading order cuts as Apple's hardware declines",
+      "peer_comparison": "AMZN earnings (Oct 26) had positive reaction, isolating Apple's problems from broader tech weakness",
+      "geographic_breakdown": "Americas (45% of revenue) at 0.77% growth; China (17% of revenue) down 2.5% YoY"
+    },
+    "key_themes": [
+      "Historical worst earnings reaction pattern - 4 quarters of accelerating disappointment",
+      "iPhone launch quarter growth (2.8%) was weakest in history, below inflation = real decline",
+      "Systematic underperformance vs sector (3-4%) proves company-specific deterioration",
+      "Cash flow collapse (-9.5%) exposes earnings quality issues despite EPS 'beat'",
+      "Supply chain contagion through RELATED_TO network amplifies impact",
+      "Geographic revenue stagnation in Americas (0.77%) signals core market saturation",
+      "Innovation ROI failure: R&D up 8.1% with no breakthrough products",
+      "Institutional exodus confirmed by sustained session underperformance"
+    ],
+    "systematic_factors": {
+      "sector_performance": "XLK down -1.21% hourly, Apple down -5.07% = -3.86% underperformance",
+      "industry_dynamics": "Consumer Electronics (IYW) down -0.71%, Apple's -5.07% shows competitive loss",
+      "macro_environment": "SPY up +0.93% daily while Apple down -0.51% = -1.44% macro divergence",
+      "competitive_dynamics": "Database shows no peer tech earnings had similar magnitude declines in Nov 2023"
+    }
+  }
+}

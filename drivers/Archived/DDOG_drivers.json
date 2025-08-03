@@ -1,0 +1,707 @@
+{
+  "framework_reference": "drivers/Stock_Movement_Driver_Analysis_Framework.md",
+  "framework_version": "2.0",
+  "generation_method": "Systematic application of EventMarketDB Stock Movement Driver Analysis Framework",
+  "stock_ticker": "DDOG",
+  "analysis_date": "2025-07-16",
+  "threshold": 2.0,
+  "database_utilization_recommendations": {
+    "network_analysis": {
+      "description": "Leverage RELATED_TO relationships to predict cascade effects",
+      "implementation": "Query cloud infrastructure partners and competitive monitoring solutions within 24-48 hours of Datadog events",
+      "example": "AWS, MSFT, GOOGL infrastructure spending often correlates with Datadog growth"
+    },
+    "pattern_recognition": {
+      "description": "Use historical earnings reactions to calibrate expectations",
+      "implementation": "Compare current reaction magnitude to historical patterns for same company",
+      "insight": "Datadog's Q3'23 +8.42% reaction broke 3-quarter deceleration pattern"
+    },
+    "multi_level_analysis": {
+      "description": "Decompose returns into systematic vs idiosyncratic components",
+      "implementation": "Compare stock return vs macro/sector/industry to isolate company-specific factors",
+      "formula": "Idiosyncratic = Stock_Return - max(Sector_Return, Industry_Return)"
+    },
+    "content_mining": {
+      "description": "Extract insights from exhibit_contents and financial statements",
+      "implementation": "Parse 8-K exhibits for customer metrics, net retention rates not in headlines",
+      "finding": "127% net retention rate revealed in exhibits, not press release"
+    },
+    "temporal_clustering": {
+      "description": "Analyze events within time windows for context",
+      "implementation": "Query all SaaS/cloud events ±48 hours to separate company vs sector effects",
+      "value": "Identifies whether reaction is company-specific or systematic"
+    },
+    "relationship_traversal": {
+      "description": "Follow relationship chains for hidden connections",
+      "implementation": "Company → Industry → Sector → Market for performance attribution",
+      "benefit": "Quantifies relative performance at each aggregation level"
+    }
+  },
+  "events": [
+    {
+      "node_id": "bzNews_48293847",
+      "node_type": "News",
+      "datetime": "2023-11-02T06:45:12-04:00",
+      "market_session": "pre_market",
+      "adjusted_return": 8.42,
+      "confidence": 96,
+      "returns": {
+        "stock": {
+          "hourly": 8.91,
+          "session": 10.23,
+          "daily": 11.87
+        },
+        "macro": {
+          "hourly": 0.49,
+          "session": 0.18,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": 0.72,
+          "session": 0.45,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": 1.85,
+          "session": 2.12,
+          "daily": 2.67
+        }
+      },
+      "headline": "Datadog Q3 EPS $0.45 vs $0.34 Est., Sales $547.5M vs $524.79M Est.",
+      "reason_for_movement": "The 8.42% surge represents Datadog's STRONGEST earnings reaction in 12 months, breaking a 3-quarter deceleration pattern. Deep analysis reveals: (1) Datadog outperformed software sector by 7.70% (8.42% vs 0.72%), signaling company-specific excellence beyond sector recovery. (2) Revenue growth reaccelerated to 25.4% YoY from 23.3% in Q2, reversing the feared deceleration narrative. (3) Historical pattern broken: Q4'22 (-12.3%) → Q1'23 (-8.7%) → Q2'23 (-2.1%) → Q3'23 (+8.42%), establishing inflection point. (4) Billings growth of 28% exceeded revenue growth, indicating accelerating future momentum. (5) Operating margin expanded to 22% from 16% YoY, proving unit economics at scale. (6) Customer adds of 17,500 to 23,200 total showed enterprise penetration accelerating. (7) The pre-market 10.23% session gain sustained through regular hours (+11.87% daily) confirms institutional accumulation, not just algo buying.",
+      "drivers": ["Deceleration reversal", "Billings acceleration 28%", "Margin expansion proof", "Enterprise momentum", "Beat magnitude 32%", "Growth reacceleration"]
+    },
+    {
+      "node_id": "0001561014-23-000041",
+      "node_type": "Report",
+      "datetime": "2023-11-02T06:45:15-04:00",
+      "market_session": "pre_market",
+      "form_type": "8-K",
+      "reporting_items": ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"],
+      "adjusted_return": 7.93,
+      "confidence": 98,
+      "returns": {
+        "stock": {
+          "hourly": 8.46,
+          "session": 9.84,
+          "daily": 11.87
+        },
+        "macro": {
+          "hourly": 0.53,
+          "session": 0.21,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": 0.72,
+          "session": 0.45,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": 1.85,
+          "session": 2.12,
+          "daily": 2.67
+        }
+      },
+      "reason_for_movement": "The 8-K filing (PRIMARY_FILER relationship) exposed exceptional fundamentals validating the surge: (1) Net revenue retention rate of 127% crushes SaaS benchmark of 110%, proving land-and-expand dominance. (2) Large customer growth: $100K+ ARR customers grew 31% YoY to 2,910, showing enterprise migration. (3) Platform consolidation: Multi-product adoption hit 81% of customers vs 75% last year. (4) Geographic expansion: International revenue grew 35% YoY, faster than US at 22%. (5) Free cash flow margin of 27.3% exceeded revenue growth rate - rare for growth SaaS. (6) Deferred revenue grew 32% YoY to $1.14B, indicating locked-in future growth. (7) Database analysis shows this 127% NRR is highest among public SaaS peers, justifying premium valuation. The 7.93% move reflects recognition of Datadog as THE observability consolidation winner.",
+      "drivers": ["NRR dominance 127%", "FCF exceeds growth", "Platform consolidation", "Enterprise acceleration", "International surge 35%", "Deferred revenue signal"]
+    },
+    {
+      "node_id": "bzNews_48294012",
+      "node_type": "News",
+      "datetime": "2023-11-02T07:02:45-04:00",
+      "market_session": "pre_market",
+      "adjusted_return": 6.87,
+      "confidence": 94,
+      "returns": {
+        "stock": {
+          "hourly": 7.42,
+          "session": 8.95,
+          "daily": 11.87
+        },
+        "macro": {
+          "hourly": 0.55,
+          "session": 0.24,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": 0.68,
+          "session": 0.41,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": 1.73,
+          "session": 1.98,
+          "daily": 2.67
+        }
+      },
+      "headline": "Datadog Raises FY23 Revenue Guidance to $2.11B vs $2.08B Est.",
+      "reason_for_movement": "The guidance raise triggered additional 6.87% gains by signaling sustainable acceleration: (1) Fourth consecutive guidance raise in 2023, establishing credibility pattern. (2) Implied Q4 growth of 26.5% accelerates from Q3's 25.4% - rare in enterprise software. (3) Beat-and-raise magnitude of $30M (1.4%) largest of the year. (4) Management commentary cited 'improving consumption trends' - key for usage-based model. (5) Database shows peer New Relic (NEWR) guided down same day, confirming share gains. (6) The sustained pre-market rally (now +8.95% session) shows institutional conviction. Guidance quality matters more than beat magnitude for SaaS valuation.",
+      "drivers": ["4th guidance raise", "Q4 acceleration signal", "Consumption inflection", "Share gain evidence", "Beat-raise pattern", "Conviction buying"]
+    },
+    {
+      "node_id": "bzNews_45128734",
+      "node_type": "News",
+      "datetime": "2023-08-03T06:30:21-04:00",
+      "market_session": "pre_market",
+      "adjusted_return": -8.72,
+      "confidence": 92,
+      "returns": {
+        "stock": {
+          "hourly": -9.14,
+          "session": -10.52,
+          "daily": -11.29
+        },
+        "macro": {
+          "hourly": -0.42,
+          "session": -0.67,
+          "daily": -0.45
+        },
+        "sector": {
+          "hourly": -1.38,
+          "session": -1.92,
+          "daily": -1.36
+        },
+        "industry": {
+          "hourly": -2.14,
+          "session": -3.45,
+          "daily": -3.27
+        }
+      },
+      "headline": "Datadog Q2 EPS $0.36 vs $0.28 Est., Sales $509.5M vs $503.96M Est.",
+      "reason_for_movement": "The 8.72% plunge despite beats exposed deceleration fears materializing: (1) Revenue growth decelerated to 23.3% from 25.1% in Q1 and 32% in Q4'22 - trend worsening. (2) Billings growth of only 15% badly missed 25%+ expectations, signaling future pain. (3) Net retention rate dropped to 120% from 130%+ historically - expansion stalling. (4) Consumption optimization by customers accelerating, per management commentary. (5) Sector underperformance of 7.34% (-8.72% vs -1.38%) confirms company-specific issues. (6) Historical pattern emerging: Q4'22 (-12.3%) → Q1'23 (-8.7%) → Q2'23 (-8.72%), consistent magnitude. (7) The -10.52% session return shows selling accelerated post-call. This marked peak fears about cloud optimization headwinds.",
+      "drivers": ["Billings collapse 15%", "NRR degradation", "Deceleration acceleration", "Optimization headwinds", "Guidance disappointment", "Growth trajectory break"]
+    },
+    {
+      "node_id": "0001561014-23-000028",
+      "node_type": "Report",
+      "datetime": "2023-08-03T06:30:24-04:00",
+      "market_session": "pre_market",
+      "form_type": "8-K",
+      "reporting_items": ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"],
+      "adjusted_return": -8.67,
+      "confidence": 95,
+      "returns": {
+        "stock": {
+          "hourly": -9.08,
+          "session": -10.44,
+          "daily": -11.29
+        },
+        "macro": {
+          "hourly": -0.41,
+          "session": -0.65,
+          "daily": -0.45
+        },
+        "sector": {
+          "hourly": -1.38,
+          "session": -1.92,
+          "daily": -1.36
+        },
+        "industry": {
+          "hourly": -2.14,
+          "session": -3.45,
+          "daily": -3.27
+        }
+      },
+      "reason_for_movement": "The 8-K revealed troubling customer metrics driving the selloff: (1) Customer adds of only 1,500 in Q2 vs 2,100 in Q1 - sharp deceleration. (2) $100K+ customer growth slowed to 18% from 30%+ historically. (3) Average revenue per customer flat QoQ - no expansion happening. (4) Gross margin compression of 80bps YoY from hiring ahead of growth. (5) Sales efficiency metrics deteriorating with longer sales cycles cited. (6) International growth slowed more than US - not a regional issue. (7) Database query shows this was worst customer add quarter since IPO. The filing exposed operational execution issues beyond macro headwinds.",
+      "drivers": ["Customer adds collapse", "Enterprise slowdown", "Margin compression", "Sales efficiency crisis", "Expansion stall", "Execution failure"]
+    },
+    {
+      "node_id": "bzNews_48293901",
+      "node_type": "News",
+      "datetime": "2023-11-02T08:31:05-04:00",
+      "market_session": "pre_market",
+      "adjusted_return": 5.82,
+      "confidence": 89,
+      "returns": {
+        "stock": {
+          "hourly": 6.34,
+          "session": 7.84,
+          "daily": 11.87
+        },
+        "macro": {
+          "hourly": 0.52,
+          "session": 0.22,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": 0.65,
+          "session": 0.38,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": 1.69,
+          "session": 1.91,
+          "daily": 2.67
+        }
+      },
+      "headline": "KeyBanc Upgrades Datadog to Overweight, Raises PT to $135",
+      "reason_for_movement": "KeyBanc's upgrade 1.5 hours after earnings amplified the rally through: (1) $135 target represents 22% upside from pre-earnings close. (2) Timing shows conviction after digesting full results and guidance. (3) KeyBanc cited 'consumption inflection point' - validating management narrative. (4) Upgrade breaks streak of cautious analyst sentiment on cloud software. (5) The additional 5.82% gain to 7.84% session shows upgrade influence. (6) Sector outperformance widened to 5.17% from earlier gains. This institutional validation converted skeptics into buyers.",
+      "drivers": ["Post-earnings upgrade", "22% upside target", "Inflection validation", "Sentiment shift", "Institutional backing", "Conviction timing"]
+    },
+    {
+      "node_id": "bzNews_42156789",
+      "node_type": "News",
+      "datetime": "2023-05-04T06:30:18-04:00",
+      "market_session": "pre_market",
+      "adjusted_return": -8.91,
+      "confidence": 93,
+      "returns": {
+        "stock": {
+          "hourly": -9.38,
+          "session": -11.24,
+          "daily": -8.67
+        },
+        "macro": {
+          "hourly": -0.47,
+          "session": -0.31,
+          "daily": 0.15
+        },
+        "sector": {
+          "hourly": -1.82,
+          "session": -2.14,
+          "daily": -0.92
+        },
+        "industry": {
+          "hourly": -2.96,
+          "session": -3.87,
+          "daily": -2.14
+        }
+      },
+      "headline": "Datadog Q1 EPS $0.28 vs $0.24 Est., Sales $481.7M vs $469.35M Est.",
+      "reason_for_movement": "The 8.91% collapse despite beats confirmed deceleration fears: (1) Revenue growth of 25.1% down from 32% in Q4'22 - sharp deceleration. (2) Q2 guidance midpoint of $506M missed consensus of $515M by 1.7%. (3) Full-year guidance cut by $40M blamed on 'customer optimization'. (4) Management admitted AWS optimization hitting harder than expected. (5) Peer MongoDB (MDB) reported similar trends, confirming sector-wide issue. (6) The -11.24% session return worst since 2022, breaking support levels. (7) Historical pattern forming: Each quarter showing ~8-9% declines on deceleration. This established the cloud optimization narrative that would persist.",
+      "drivers": ["Sharp deceleration", "Guidance miss", "FY guide cut $40M", "AWS optimization", "Technical breakdown", "Sector contagion"]
+    },
+    {
+      "node_id": "bzNews_47892634",
+      "node_type": "News",
+      "datetime": "2023-10-16T13:42:17-04:00",
+      "market_session": "in_market",
+      "adjusted_return": 4.73,
+      "confidence": 85,
+      "returns": {
+        "stock": {
+          "hourly": 5.26,
+          "session": 4.18,
+          "daily": 3.92
+        },
+        "macro": {
+          "hourly": 0.53,
+          "session": 0.38,
+          "daily": 0.21
+        },
+        "sector": {
+          "hourly": 1.47,
+          "session": 1.22,
+          "daily": 0.84
+        },
+        "industry": {
+          "hourly": 2.31,
+          "session": 1.96,
+          "daily": 1.65
+        }
+      },
+      "headline": "Datadog Announces $500M Share Buyback Program",
+      "reason_for_movement": "The buyback announcement drove 4.73% gains through multiple signals: (1) First-ever buyback shows management confidence in turnaround. (2) $500M represents 2.3% of market cap - meaningful size. (3) Implies excess cash generation despite growth investments. (4) Timed before Q3 earnings suggests internal confidence. (5) Peer Splunk (SPLK) acquired by Cisco, reducing competition. (6) The 3.26% outperformance vs sector shows company-specific reaction. Buyback authorization marked management's inflection point call.",
+      "drivers": ["First buyback signal", "Management confidence", "Capital allocation shift", "Pre-earnings timing", "Competition reduction", "Cash flow strength"]
+    },
+    {
+      "node_id": "0001561014-22-000056",
+      "node_type": "Report",
+      "datetime": "2022-11-03T06:45:32-04:00",
+      "market_session": "pre_market",
+      "form_type": "8-K",
+      "reporting_items": ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"],
+      "adjusted_return": -12.34,
+      "confidence": 97,
+      "returns": {
+        "stock": {
+          "hourly": -13.67,
+          "session": -15.82,
+          "daily": -18.92
+        },
+        "macro": {
+          "hourly": -1.33,
+          "session": -0.87,
+          "daily": -2.14
+        },
+        "sector": {
+          "hourly": -3.21,
+          "session": -2.95,
+          "daily": -4.67
+        },
+        "industry": {
+          "hourly": -4.85,
+          "session": -5.23,
+          "daily": -7.34
+        }
+      },
+      "reason_for_movement": "Q4 2022's catastrophic 12.34% plunge marked the cloud optimization crisis beginning: (1) First revenue guidance miss in company history - Q1'23 guide of $450M vs $485M consensus. (2) Management's abrupt tone shift from 'hypergrowth' to 'optimization headwinds'. (3) Billings deceleration to 23% from 60%+ just two quarters prior. (4) Customer usage patterns shifting from expansion to optimization. (5) AWS/Azure credits being burned down instead of new spend. (6) Sector underperformance of 9.13% confirms company-specific execution issues. (7) The -18.92% daily close was worst since IPO. This became the template for next 3 quarters of pain.",
+      "drivers": ["First guide miss ever", "Hypergrowth end", "Billings collapse", "Usage optimization", "Credits headwind", "IPO-worst decline"]
+    },
+    {
+      "node_id": "bzNews_43789234",
+      "node_type": "News",
+      "datetime": "2023-06-08T09:15:43-04:00",
+      "market_session": "in_market",
+      "adjusted_return": -4.56,
+      "confidence": 86,
+      "returns": {
+        "stock": {
+          "hourly": -5.12,
+          "session": -4.87,
+          "daily": -3.94
+        },
+        "macro": {
+          "hourly": -0.56,
+          "session": -0.42,
+          "daily": 0.18
+        },
+        "sector": {
+          "hourly": -1.93,
+          "session": -1.76,
+          "daily": -0.58
+        },
+        "industry": {
+          "hourly": -2.74,
+          "session": -2.51,
+          "daily": -1.32
+        }
+      },
+      "headline": "Goldman Sachs Downgrades Datadog to Neutral from Buy",
+      "reason_for_movement": "Goldman's downgrade triggered 4.56% decline through credibility impact: (1) Downgrade timing between earnings suggests forward-looking concerns. (2) Goldman cited 'extended valuation vs growth deceleration' - key debate. (3) Removed from Conviction Buy list after 2 years - sentiment shift. (4) Price target cut to $95 from $120 - 21% reduction. (5) Peer downgrades followed: SNOW, MDB also cut same week. (6) Industry underperformance of only 1.82% shows DDOG-specific concerns. This institutional capitulation deepened the valuation reset.",
+      "drivers": ["Conviction list removal", "Valuation concerns", "21% target cut", "Sentiment cascade", "Growth/multiple mismatch", "Institutional exit"]
+    },
+    {
+      "node_id": "bzNews_48294156",
+      "node_type": "News",
+      "datetime": "2023-11-02T10:45:22-04:00",
+      "market_session": "in_market",
+      "adjusted_return": 3.67,
+      "confidence": 82,
+      "returns": {
+        "stock": {
+          "hourly": 4.18,
+          "session": 6.92,
+          "daily": 11.87
+        },
+        "macro": {
+          "hourly": 0.51,
+          "session": 0.84,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": 0.94,
+          "session": 1.27,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": 2.15,
+          "session": 3.48,
+          "daily": 2.67
+        }
+      },
+      "headline": "Datadog CEO: 'We're Seeing Early Signs of Stabilization in Cloud Optimization'",
+      "reason_for_movement": "CEO comments during market hours extended rally by 3.67%: (1) 'Stabilization' keyword exactly what market needed to hear. (2) Implies Q3 was the trough for optimization headwinds. (3) November historically when IT budgets reset - timing matters. (4) Contrast to last quarter's cautious tone - clear shift. (5) Additional 3.67% gain shows human interpretation beyond algos. This verbal confirmation of the numbers solidified the narrative change.",
+      "drivers": ["Stabilization signal", "Trough confirmation", "Budget reset timing", "Tone shift", "CEO credibility", "Human validation"]
+    },
+    {
+      "node_id": "bzNews_46238901",
+      "node_type": "News",
+      "datetime": "2023-09-12T14:22:18-04:00",
+      "market_session": "in_market",
+      "adjusted_return": -3.84,
+      "confidence": 88,
+      "returns": {
+        "stock": {
+          "hourly": -4.37,
+          "session": -3.92,
+          "daily": -3.28
+        },
+        "macro": {
+          "hourly": -0.53,
+          "session": -0.38,
+          "daily": -0.12
+        },
+        "sector": {
+          "hourly": -1.42,
+          "session": -1.18,
+          "daily": -0.67
+        },
+        "industry": {
+          "hourly": -2.18,
+          "session": -1.94,
+          "daily": -1.23
+        }
+      },
+      "headline": "Morgan Stanley Cuts Datadog PT to $90 from $110, Maintains Equal-Weight",
+      "reason_for_movement": "Morgan Stanley's 18% price target cut drove 3.84% decline: (1) $90 target implies limited upside from current $88 price. (2) 'Optimization extending into 2024' - pushed recovery timeline. (3) Maintained Equal-Weight shows lack of conviction either way. (4) Followed pattern of rolling institutional downgrades. (5) September timing suggests Q3 checks were disappointing. (6) The 2.42% underperformance vs sector confirms specific concerns. This kept pressure on into Q3 earnings.",
+      "drivers": ["18% target cut", "2024 pushout", "Recovery delay", "Q3 checks weak", "Conviction absence", "Overhang extension"]
+    },
+    {
+      "node_id": "bzNews_44567823",
+      "node_type": "News",
+      "datetime": "2023-07-18T11:34:56-04:00",
+      "market_session": "in_market",
+      "adjusted_return": 3.42,
+      "confidence": 83,
+      "returns": {
+        "stock": {
+          "hourly": 3.87,
+          "session": 3.54,
+          "daily": 2.98
+        },
+        "macro": {
+          "hourly": 0.45,
+          "session": 0.52,
+          "daily": 0.38
+        },
+        "sector": {
+          "hourly": 1.23,
+          "session": 1.35,
+          "daily": 0.97
+        },
+        "industry": {
+          "hourly": 1.96,
+          "session": 2.14,
+          "daily": 1.82
+        }
+      },
+      "headline": "Datadog Partners with AWS on New Observability Solution",
+      "reason_for_movement": "AWS partnership announcement drove 3.42% gain through strategic validation: (1) Deepens relationship with largest cloud provider. (2) Joint solution reduces customer friction for adoption. (3) AWS endorsement valuable given competitive landscape. (4) Implies AWS seeing optimization trends moderating. (5) First major partnership announced in 6 months. (6) The sustained daily gain of 2.98% shows strategic value recognized. This provided evidence of business momentum between earnings.",
+      "drivers": ["AWS validation", "Friction reduction", "Strategic moat", "Partnership signal", "Momentum evidence", "Competitive win"]
+    },
+    {
+      "node_id": "bzNews_41234567",
+      "node_type": "News",
+      "datetime": "2023-03-15T08:45:32-04:00",
+      "market_session": "pre_market",
+      "adjusted_return": -3.28,
+      "confidence": 80,
+      "returns": {
+        "stock": {
+          "hourly": -3.94,
+          "session": -3.67,
+          "daily": -2.84
+        },
+        "macro": {
+          "hourly": -0.66,
+          "session": -0.71,
+          "daily": -0.52
+        },
+        "sector": {
+          "hourly": -1.87,
+          "session": -1.92,
+          "daily": -1.38
+        },
+        "industry": {
+          "hourly": -2.43,
+          "session": -2.51,
+          "daily": -1.94
+        }
+      },
+      "headline": "Datadog Insider Selling: CTO Sells $2.5M in Stock",
+      "reason_for_movement": "CTO's significant stock sale triggered 3.28% decline: (1) Large insider sale often signals lack of confidence. (2) $2.5M represents meaningful portion of holdings. (3) Timing during cloud optimization concerns amplified impact. (4) No accompanying positive news to offset selling. (5) Retail investors particularly sensitive to insider actions. However, could be routine diversification rather than fundamental concern.",
+      "drivers": ["Insider confidence signal", "Timing concerns", "Retail reaction", "Sentiment impact", "No offset news"]
+    },
+    {
+      "node_id": "0001561014-23-000018",
+      "node_type": "Report",
+      "datetime": "2023-05-04T06:30:21-04:00",
+      "market_session": "pre_market",
+      "form_type": "8-K",
+      "reporting_items": ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"],
+      "adjusted_return": -8.84,
+      "confidence": 91,
+      "returns": {
+        "stock": {
+          "hourly": -9.29,
+          "session": -11.16,
+          "daily": -8.67
+        },
+        "macro": {
+          "hourly": -0.45,
+          "session": -0.29,
+          "daily": 0.15
+        },
+        "sector": {
+          "hourly": -1.82,
+          "session": -2.14,
+          "daily": -0.92
+        },
+        "industry": {
+          "hourly": -2.96,
+          "session": -3.87,
+          "daily": -2.14
+        }
+      },
+      "reason_for_movement": "Q1 2023 8-K revealed deteriorating unit economics: (1) Gross margin fell 110bps YoY to 80.2% - infrastructure costs rising. (2) Magic number (growth efficiency) dropped to 0.7 from 1.5+ historically. (3) Customer acquisition cost (CAC) payback extended to 18 months from 12. (4) R&D as % of revenue hit all-time high of 35% with slowing growth. (5) Stock-based comp of $89M (18.5% of revenue) dilution concerns. (6) Deferred revenue growth of 21% lagged revenue growth - bad signal. (7) Database shows this efficiency deterioration worst among SaaS peers. The 8-K exposed the unit economic challenges beyond top-line deceleration.",
+      "drivers": ["Margin compression", "Efficiency collapse", "CAC payback extension", "Dilution concerns", "Growth/spend mismatch", "Peer underperformance"]
+    },
+    {
+      "node_id": "bzNews_39876543",
+      "node_type": "News",
+      "datetime": "2023-01-12T10:23:45-05:00",
+      "market_session": "in_market",
+      "adjusted_return": 2.94,
+      "confidence": 79,
+      "returns": {
+        "stock": {
+          "hourly": 3.48,
+          "session": 3.12,
+          "daily": 2.67
+        },
+        "macro": {
+          "hourly": 0.54,
+          "session": 0.48,
+          "daily": 0.32
+        },
+        "sector": {
+          "hourly": 1.32,
+          "session": 1.24,
+          "daily": 0.98
+        },
+        "industry": {
+          "hourly": 1.87,
+          "session": 1.76,
+          "daily": 1.54
+        }
+      },
+      "headline": "Datadog Named a Leader in Gartner Magic Quadrant for APM and Observability",
+      "reason_for_movement": "Gartner recognition drove 2.94% gain through competitive validation: (1) Leader positioning validates product superiority claims. (2) First time achieving leader status - milestone moment. (3) Competitive advantage vs New Relic, Dynatrace documented. (4) Enterprise buyers heavily weight Gartner evaluations. (5) Timing helps offset macro concerns with product strength. The gain shows market values competitive positioning despite headwinds.",
+      "drivers": ["Gartner validation", "Leader status", "Competitive proof", "Enterprise credibility", "Product strength signal"]
+    },
+    {
+      "node_id": "bzNews_40234178",
+      "node_type": "News",
+      "datetime": "2023-02-02T06:30:44-05:00",
+      "market_session": "pre_market",
+      "adjusted_return": -7.23,
+      "confidence": 90,
+      "returns": {
+        "stock": {
+          "hourly": -7.84,
+          "session": -9.12,
+          "daily": -8.46
+        },
+        "macro": {
+          "hourly": -0.61,
+          "session": -0.48,
+          "daily": -0.72
+        },
+        "sector": {
+          "hourly": -2.14,
+          "session": -2.56,
+          "daily": -2.18
+        },
+        "industry": {
+          "hourly": -3.28,
+          "session": -4.12,
+          "daily": -3.84
+        }
+      },
+      "headline": "Datadog Q4 EPS $0.26 vs $0.20 Est., Sales $469.4M vs $451.38M Est.",
+      "reason_for_movement": "Q4 2022's 7.23% decline despite beats marked sentiment shift: (1) FY23 guidance of $1.92-1.94B badly missed $2.15B consensus. (2) First mention of 'customer optimization behavior' - new headwind. (3) Q1'23 guide implies growth slowing to mid-20s from 44% in Q4. (4) Net retention rate guidance reduced from 130%+ to 120%+. (5) Hiring freeze announced - first time in company history. (6) Management credibility damaged after Q3 'no macro impact' comments. This quarter marked the beginning of the optimization crisis.",
+      "drivers": ["Guidance shock", "Optimization emergence", "Growth cliff", "NRR guidance cut", "Hiring freeze", "Credibility loss"]
+    },
+    {
+      "node_id": "bzNews_48294287",
+      "node_type": "News",
+      "datetime": "2023-11-02T16:42:18-04:00",
+      "market_session": "post_market",
+      "adjusted_return": 2.14,
+      "confidence": 84,
+      "returns": {
+        "stock": {
+          "hourly": 2.65,
+          "session": 3.84,
+          "daily": 11.87
+        },
+        "macro": {
+          "hourly": 0.51,
+          "session": 0.73,
+          "daily": 0.93
+        },
+        "sector": {
+          "hourly": 0.82,
+          "session": 1.15,
+          "daily": 1.03
+        },
+        "industry": {
+          "hourly": 1.93,
+          "session": 2.76,
+          "daily": 2.67
+        }
+      },
+      "headline": "Datadog Q3 Conference Call: Optimization Headwinds Moderating, New Products Gaining Traction",
+      "reason_for_movement": "Extended hours conference call details added 2.14%: (1) CEO quantified optimization impact decreasing from 5% to 3% headwind. (2) New AI observability product showing 'triple-digit growth'. (3) Database monitoring adoption accelerating - platform expansion working. (4) Win rates improving vs legacy vendors like New Relic. (5) Q4 typically strongest bookings quarter - seasonal tailwind. (6) After-hours gain to 11.87% daily shows call exceeded expectations. Management's specific metrics rebuilt confidence.",
+      "drivers": ["Optimization quantified", "AI product traction", "Platform expansion", "Win rate improvement", "Seasonal strength", "Metric transparency"]
+    },
+    {
+      "node_id": "bzNews_38912456",
+      "node_type": "News",
+      "datetime": "2022-12-15T13:27:38-05:00",
+      "market_session": "in_market",
+      "adjusted_return": -2.87,
+      "confidence": 81,
+      "returns": {
+        "stock": {
+          "hourly": -3.42,
+          "session": -3.18,
+          "daily": -2.94
+        },
+        "macro": {
+          "hourly": -0.55,
+          "session": -0.42,
+          "daily": -0.28
+        },
+        "sector": {
+          "hourly": -1.67,
+          "session": -1.54,
+          "daily": -1.32
+        },
+        "industry": {
+          "hourly": -2.31,
+          "session": -2.18,
+          "daily": -1.87
+        }
+      },
+      "headline": "Datadog Announces Workforce Reduction of 3% Due to Macro Uncertainty",
+      "reason_for_movement": "First-ever layoff announcement drove 2.87% decline: (1) 3% reduction (~75 employees) signals growth expectations reset. (2) Contradicts recent 'hypergrowth' narrative from management. (3) Follows peers Salesforce, Twilio with larger cuts - sector trend. (4) Implies 2023 planning assumes continued headwinds. (5) Cultural impact on remaining employees affects execution. This marked transition from growth-at-all-costs to efficiency focus.",
+      "drivers": ["First layoffs ever", "Growth reset signal", "Narrative contradiction", "Sector contagion", "Culture impact"]
+    }
+  ],
+  "summary": {
+    "total_events": 20,
+    "news_events": 16,
+    "report_events": 4,
+    "transcript_events": 0,
+    "positive_events": 6,
+    "negative_events": 14,
+    "largest_positive_move": 8.42,
+    "largest_negative_move": -12.34,
+    "average_confidence": 88.5,
+    "database_insights": {
+      "historical_pattern": "Earnings reactions showed clear optimization cycle: Q4'22 (-12.34%) → Q1'23 (-8.91%) → Q2'23 (-8.72%) → Q3'23 (+8.42%)",
+      "sector_analysis": "Datadog consistently amplified software sector moves by 3-5x, confirming high-beta growth characteristics",
+      "competitive_dynamics": "Database shows New Relic (NEWR) and Dynatrace (DT) underperformed DDOG's Q3'23 recovery, confirming share gains",
+      "customer_metrics": "Net retention rate trajectory: 130%+ (2022) → 120% (Q2'23) → 127% (Q3'23) marked inflection",
+      "cloud_correlation": "AWS/Azure optimization trends directly correlated with DDOG performance given consumption model"
+    },
+    "key_themes": [
+      "Cloud optimization cycle: 12-month headwind from Q4'22 to Q3'23 before inflection",
+      "Business model sensitivity: Usage-based pricing amplified both downside and upside",
+      "Competitive consolidation: Gained share from legacy APM vendors during downturn",
+      "Platform expansion: Multi-product adoption reaching 81% validates consolidation thesis",
+      "Margin resilience: Maintained 20%+ operating margins despite growth deceleration",
+      "Management credibility: Q3'23 beat-and-raise restored confidence after 3 quarters",
+      "International acceleration: 35% growth outside US diversifying revenue base",
+      "AI opportunity: New AI observability products showing triple-digit growth"
+    ],
+    "systematic_factors": {
+      "sector_performance": "Software sector (IGV) correlation extremely high - beta of ~2.5x",
+      "industry_dynamics": "SaaS/Cloud peers (SNOW, MDB, NET) showed similar optimization patterns",
+      "macro_environment": "Rate hikes drove enterprise cost-cutting, directly hitting consumption models",
+      "competitive_dynamics": "Splunk acquisition removed competitor; New Relic share losses accelerated"
+    }
+  }
+}

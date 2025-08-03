@@ -1,0 +1,336 @@
+{
+  "total_patterns": 66,
+  "description": "Neo4j query patterns from Redis - admin:neo4j_patterns namespace",
+  "patterns": [
+    {
+      "id": 1,
+      "natural_language": "Analyze Q&A exchange sequences",
+      "cypher": "MATCH (qa1:QAExchange)-[:NEXT_EXCHANGE]->(qa2:QAExchange) WHERE qa1.questioner IS NOT NULL AND qa2.questioner IS NOT NULL RETURN qa1.questioner, qa1.sequence, qa2.questioner, qa2.sequence, qa1.transcript_id LIMIT 20"
+    },
+    {
+      "id": 2,
+      "natural_language": "Analyze XBRL processing status distribution",
+      "cypher": "MATCH (r:Report) WHERE r.xbrl_status IS NOT NULL RETURN r.xbrl_status, COUNT(r) as count ORDER BY count DESC"
+    },
+    {
+      "id": 3,
+      "natural_language": "Analyze hourly_sector returns for technology vs healthcare sectors during news events in the last 30 days",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.hourly_sector IS NOT NULL AND r.hourly_sector <> 'NaN' AND datetime(n.created) > datetime() - duration('P30D') AND (c.sector = 'Technology' OR c.sector = 'Healthcare') WITH n, c, r, toFloat(r.hourly_sector) as hourly_sector_return WHERE NOT isNaN(hourly_sector_return) RETURN c.sector, n.title, c.ticker, hourly_sector_return, n.created, CASE WHEN hourly_sector_return > 0 THEN 'Positive' WHEN hourly_sector_return < 0 THEN 'Negative' ELSE 'Neutral' END as return_direction ORDER BY c.sector, hourly_sector_return DESC LIMIT 50"
+    },
+    {
+      "id": 4,
+      "natural_language": "Analyze news impact on SPY market index",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(m:MarketIndex) WHERE m.ticker = 'SPY' AND r.daily_macro IS NOT NULL AND ABS(toFloat(r.daily_macro)) > 1.0 RETURN n.title, r.daily_macro, n.created ORDER BY ABS(toFloat(r.daily_macro)) DESC LIMIT 20"
+    },
+    {
+      "id": 5,
+      "natural_language": "Analyze null return values in news influences",
+      "cypher": "MATCH ()-[r:INFLUENCES]->() WITH COUNT(*) as total, COUNT(r.daily_stock) as has_daily_stock, COUNT(r.hourly_stock) as has_hourly_stock, COUNT(r.daily_industry) as has_daily_industry, COUNT(r.daily_sector) as has_daily_sector, COUNT(r.daily_macro) as has_daily_macro RETURN total, ROUND(100.0 * has_daily_stock / total) as daily_stock_coverage, ROUND(100.0 * has_hourly_stock / total) as hourly_stock_coverage, ROUND(100.0 * has_daily_industry / total) as daily_industry_coverage, ROUND(100.0 * has_daily_sector / total) as daily_sector_coverage, ROUND(100.0 * has_daily_macro / total) as daily_macro_coverage"
+    },
+    {
+      "id": 6,
+      "natural_language": "Analyze period types in the database",
+      "cypher": "MATCH (p:Period) RETURN p.period_type, COUNT(p) as count ORDER BY count DESC"
+    },
+    {
+      "id": 7,
+      "natural_language": "Analyze return data coverage in PRIMARY_FILER relationships",
+      "cypher": "MATCH ()-[pf:PRIMARY_FILER]->() WITH COUNT(*) as total, COUNT(pf.daily_stock) as has_daily_stock, COUNT(pf.hourly_stock) as has_hourly_stock, COUNT(pf.session_stock) as has_session_stock RETURN total, ROUND(100.0 * has_daily_stock / total) as daily_coverage, ROUND(100.0 * has_hourly_stock / total) as hourly_coverage, ROUND(100.0 * has_session_stock / total) as session_coverage"
+    },
+    {
+      "id": 8,
+      "natural_language": "Companies with same-day report and measurable news impact",
+      "cypher": "MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report) WITH c, r, date(datetime(r.created)) as report_date MATCH (n:News)-[rel:INFLUENCES]->(c) WHERE date(datetime(n.created)) = report_date AND rel.daily_stock IS NOT NULL RETURN c.ticker, r.formType, n.title, rel.daily_stock ORDER BY ABS(toFloat(rel.daily_stock)) DESC LIMIT 20"
+    },
+    {
+      "id": 9,
+      "natural_language": "Find companies with news where daily stock returns exceeded daily macro returns in the last 30 days",
+      "cypher": "MATCH (n:News)-[rel:INFLUENCES]->(c:Company) WHERE datetime(n.created) > datetime() - duration('P30D') WITH n, rel, c MATCH (c)<-[:PRIMARY_FILER]-(r:Report) WITH n, rel, c, r WHERE r.created IS NOT NULL AND rel.daily_stock IS NOT NULL AND rel.daily_stock <> 'NaN' MATCH (c)<-[:PRIMARY_FILER]-(r2:Report) WHERE r2.created IS NOT NULL WITH n, rel, c, r, r2 MATCH (c)<-[:PRIMARY_FILER]-(r3:Report) WHERE r3.created IS NOT NULL WITH n, rel, c, r, r2, r3 WHERE rel.daily_stock > rel.daily_macro AND rel.daily_macro > 0 RETURN DISTINCT c.ticker, n.title, rel.daily_stock, rel.daily_macro ORDER BY rel.daily_stock LIMIT 20"
+    },
+    {
+      "id": 10,
+      "natural_language": "Compare hourly vs daily return divergence",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.hourly_stock IS NOT NULL AND r.daily_stock IS NOT NULL AND ((r.hourly_stock > 0 AND r.daily_stock < 0) OR (r.hourly_stock < 0 AND r.daily_stock > 0)) RETURN c.ticker, n.title, r.hourly_stock, r.daily_stock, n.created ORDER BY ABS(r.hourly_stock - r.daily_stock) DESC LIMIT 20"
+    },
+    {
+      "id": 11,
+      "natural_language": "Count all INFLUENCES relationships",
+      "cypher": "MATCH ()-[r:INFLUENCES]->() RETURN count(r)"
+    },
+    {
+      "id": 12,
+      "natural_language": "Count facts by numeric status",
+      "cypher": "MATCH (f:Fact) RETURN f.is_numeric, COUNT(f) as count ORDER BY count DESC"
+    },
+    {
+      "id": 13,
+      "natural_language": "Count news articles with embeddings",
+      "cypher": "MATCH (n:News) WHERE n.embedding IS NOT NULL RETURN COUNT(n) as embedded_news"
+    },
+    {
+      "id": 14,
+      "natural_language": "Count total XBRL nodes in the database",
+      "cypher": "MATCH (x:XBRLNode) RETURN COUNT(x) as total_xbrl_nodes"
+    },
+    {
+      "id": 15,
+      "natural_language": "Explore context structures",
+      "cypher": "MATCH (ctx:Context) RETURN COUNT(ctx) as total_contexts, COUNT(ctx.period_u_id) as has_period, COUNT(ctx.member_u_ids) as has_members"
+    },
+    {
+      "id": 16,
+      "natural_language": "Explore fact-concept relationships",
+      "cypher": "MATCH (f:Fact)-[:HAS_CONCEPT]->(c:Concept) RETURN c.label, COUNT(f) as fact_count ORDER BY fact_count DESC LIMIT 20"
+    },
+    {
+      "id": 17,
+      "natural_language": "Find 10-Q filings with negative market reactions",
+      "cypher": "MATCH (c:Company)<-[pf:PRIMARY_FILER]-(r:Report) WHERE r.formType = '10-Q' AND pf.daily_stock < -2.0 AND datetime(r.created) > datetime() - duration('P90D') RETURN c.ticker, r.created, r.formType, pf.daily_stock, pf.daily_industry, pf.daily_sector, pf.daily_macro ORDER BY pf.daily_stock LIMIT 20"
+    },
+    {
+      "id": 18,
+      "natural_language": "Find News influencing Company with maximum daily_stock values",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.daily_stock IS NOT NULL AND r.daily_stock <> 'NaN' WITH n, c, toFloat(r.daily_stock) as daily_return WHERE NOT isNaN(daily_return) RETURN n.title, c.ticker, daily_return ORDER BY daily_return DESC LIMIT 10"
+    },
+    {
+      "id": 19,
+      "natural_language": "Find Q&A exchanges with embeddings",
+      "cypher": "MATCH (qa:QAExchange) WHERE qa.embedding IS NOT NULL RETURN COUNT(qa) as embedded_qa_count"
+    },
+    {
+      "id": 20,
+      "natural_language": "Find Q&A exchanges with similar questions",
+      "cypher": "MATCH (qa:QAExchange) WHERE qa.embedding IS NOT NULL RETURN qa.questioner, qa.sequence, qa.transcript_id LIMIT 20"
+    },
+    {
+      "id": 21,
+      "natural_language": "Find Q&A exchanges with similar topics using embeddings",
+      "cypher": "MATCH (qa:QAExchange) WHERE qa.embedding IS NOT NULL WITH qa, SIZE(qa.embedding) as embedding_size RETURN COUNT(qa) as qa_with_embeddings, MIN(embedding_size) as min_size, MAX(embedding_size) as max_size LIMIT 1"
+    },
+    {
+      "id": 22,
+      "natural_language": "Find all companies in a specific sector",
+      "cypher": "MATCH (c:Company) WHERE c.sector IS NOT NULL RETURN c.ticker, c.name, c.sector, c.industry, c.mkt_cap ORDER BY c.sector, c.ticker LIMIT 20"
+    },
+    {
+      "id": 23,
+      "natural_language": "Find all stock splits with ratios",
+      "cypher": "MATCH (c:Company)-[:DECLARED_SPLIT]->(s:Split) RETURN c.ticker, s.split_from, s.split_to, s.execution_date ORDER BY s.execution_date DESC"
+    },
+    {
+      "id": 24,
+      "natural_language": "Find amended reports",
+      "cypher": "MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report) WHERE r.isAmendment = true RETURN c.ticker, r.formType, r.created, r.description ORDER BY r.created DESC LIMIT 20"
+    },
+    {
+      "id": 25,
+      "natural_language": "Find amended reports with descriptions",
+      "cypher": "MATCH (r:Report) WHERE r.isAmendment = true AND r.description IS NOT NULL RETURN r.accessionNo, r.formType, r.description, r.created ORDER BY r.created DESC LIMIT 20"
+    },
+    {
+      "id": 26,
+      "natural_language": "Find companies outperforming market by 5%",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.daily_stock > r.daily_macro + 5.0 AND r.daily_stock IS NOT NULL AND r.daily_macro IS NOT NULL RETURN c.ticker, n.title, r.daily_stock, r.daily_macro, r.daily_stock - r.daily_macro as excess ORDER BY excess DESC LIMIT 20"
+    },
+    {
+      "id": 27,
+      "natural_language": "Find companies with incomplete profile information",
+      "cypher": "MATCH (c:Company) WHERE c.sector IS NULL OR c.industry IS NULL OR c.mkt_cap IS NULL OR c.employees IS NULL RETURN c.ticker, c.name, CASE WHEN c.sector IS NULL THEN 'Missing' ELSE c.sector END as sector, CASE WHEN c.industry IS NULL THEN 'Missing' ELSE c.industry END as industry, CASE WHEN c.mkt_cap IS NULL THEN 'Missing' ELSE c.mkt_cap END as mkt_cap, CASE WHEN c.employees IS NULL THEN 'Missing' ELSE c.employees END as employees LIMIT 20"
+    },
+    {
+      "id": 28,
+      "natural_language": "Find companies with market cap greater than 10 billion",
+      "cypher": "MATCH (c:Company) WHERE c.mkt_cap IS NOT NULL AND toFloat(replace(replace(replace(c.mkt_cap, ',', ''), 'B', '000000000'), 'M', '000000')) > 10000000000 RETURN c.ticker, c.name, c.mkt_cap, c.sector ORDER BY toFloat(replace(replace(replace(c.mkt_cap, ',', ''), 'B', '000000000'), 'M', '000000')) DESC LIMIT 20"
+    },
+    {
+      "id": 29,
+      "natural_language": "Find companies with news where title, ticker, and daily_stock are all properly populated in the last 7 days",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE datetime(n.created) > datetime() - duration('P7D') AND n.title IS NOT NULL AND n.title <> '' AND c.ticker IS NOT NULL AND c.ticker <> '' AND r.daily_stock IS NOT NULL AND r.daily_stock <> 'NaN' WITH n, c, toFloat(r.daily_stock) as daily_return WHERE NOT isNaN(daily_return) RETURN n.title, c.ticker, daily_return ORDER BY datetime(n.created) DESC LIMIT 20"
+    },
+    {
+      "id": 30,
+      "natural_language": "Find companies with recent 10-K XBRL data",
+      "cypher": "MATCH (c:Company)<-[pf:PRIMARY_FILER]-(r:Report)-[:HAS_XBRL]->(x:XBRLNode) WHERE r.formType = '10-K' AND datetime(r.created) > datetime() - duration('P180D') RETURN c.ticker, r.created, r.accessionNo, pf.daily_stock as filing_day_return ORDER BY r.created DESC LIMIT 20"
+    },
+    {
+      "id": 31,
+      "natural_language": "Find companies with recent 10-K filings",
+      "cypher": "MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report) WHERE r.formType = '10-K' AND datetime(r.created) > datetime() - duration('P120D') RETURN c.ticker, r.created, r.accessionNo ORDER BY r.created DESC LIMIT 20"
+    },
+    {
+      "id": 32,
+      "natural_language": "Find companies with recent XBRL filings",
+      "cypher": "MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report) WHERE r.xbrl_status = 'COMPLETED' AND datetime(r.created) > datetime() - duration('P90D') RETURN c.ticker, r.formType, r.xbrl_status, r.created ORDER BY r.created DESC LIMIT 20"
+    },
+    {
+      "id": 33,
+      "natural_language": "Find dimensions and their domains",
+      "cypher": "MATCH (d:Dimension) OPTIONAL MATCH (d)-[:HAS_DOMAIN]->(dom) RETURN d.name, d.label, COUNT(dom) as domain_count ORDER BY domain_count DESC LIMIT 20"
+    },
+    {
+      "id": 34,
+      "natural_language": "Find facts with non-null values",
+      "cypher": "MATCH (f:Fact) WHERE f.value IS NOT NULL AND f.value <> '0' RETURN f.qname, f.value, f.is_numeric LIMIT 20"
+    },
+    {
+      "id": 35,
+      "natural_language": "Find facts with numeric values",
+      "cypher": "MATCH (f:Fact) WHERE f.is_numeric = '1' AND f.value IS NOT NULL AND f.value <> '0' RETURN f.qname, f.value, f.decimals LIMIT 20"
+    },
+    {
+      "id": 36,
+      "natural_language": "Find instant vs duration periods",
+      "cypher": "MATCH (p:Period) WHERE p.start_date IS NOT NULL OR p.end_date IS NOT NULL WITH p, CASE WHEN p.start_date IS NULL THEN 'instant' ELSE 'duration' END as period_category RETURN period_category, COUNT(p) as count"
+    },
+    {
+      "id": 37,
+      "natural_language": "Find news articles where hourly_stock and daily_stock returns had opposite signs (one positive, one negative) for the same company",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.hourly_stock IS NOT NULL AND r.hourly_stock <> 'NaN' AND r.daily_stock IS NOT NULL AND r.daily_stock <> 'NaN' WITH n, c, r, toFloat(r.hourly_stock) as hourly_return, toFloat(r.daily_stock) as daily_return WHERE NOT isNaN(hourly_return) AND NOT isNaN(daily_return) AND ((hourly_return > 0 AND daily_return < 0) OR (hourly_return < 0 AND daily_return > 0)) RETURN n.title, c.ticker, hourly_return, daily_return, n.created ORDER BY abs(hourly_return - daily_return) DESC LIMIT 20"
+    },
+    {
+      "id": 38,
+      "natural_language": "Find news articles with embeddings",
+      "cypher": "MATCH (n:News) WHERE n.embedding IS NOT NULL WITH COUNT(n) as embedded_count MATCH (n2:News) WITH embedded_count, COUNT(n2) as total_count RETURN embedded_count, total_count, ROUND(100.0 * embedded_count / total_count) as coverage_pct"
+    },
+    {
+      "id": 39,
+      "natural_language": "Find news causing extreme market movements with all return levels",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.daily_stock IS NOT NULL AND ABS(toFloat(r.daily_stock)) > 10.0 RETURN n.title, c.ticker, r.daily_stock, r.daily_industry, r.daily_sector, r.daily_macro, r.hourly_stock, r.session_stock, n.created ORDER BY ABS(toFloat(r.daily_stock)) DESC LIMIT 20"
+    },
+    {
+      "id": 40,
+      "natural_language": "Find news causing extreme positive stock movements (>8%)",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.daily_stock IS NOT NULL AND r.daily_stock <> 'NaN' AND toFloat(r.daily_stock) > 8.0 RETURN n.title, c.ticker, r.daily_stock, n.created ORDER BY toFloat(r.daily_stock) DESC LIMIT 20"
+    },
+    {
+      "id": 41,
+      "natural_language": "Find news with opposite hourly and daily returns",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.hourly_stock IS NOT NULL AND r.daily_stock IS NOT NULL AND r.hourly_stock <> 'NaN' AND r.daily_stock <> 'NaN' WITH n, c, r, toFloat(r.hourly_stock) as hourly, toFloat(r.daily_stock) as daily WHERE (hourly > 0 AND daily < 0) OR (hourly < 0 AND daily > 0) RETURN n.title, c.ticker, hourly, daily, n.created ORDER BY ABS(hourly - daily) DESC LIMIT 20"
+    },
+    {
+      "id": 42,
+      "natural_language": "Find quarterly dividend payers",
+      "cypher": "MATCH (c:Company)-[:DECLARED_DIVIDEND]->(d:Dividend) WHERE LOWER(d.frequency) = 'quarterly' WITH c, COUNT(d) as dividend_count WHERE dividend_count > 2 RETURN c.ticker, c.name, dividend_count ORDER BY dividend_count DESC LIMIT 20"
+    },
+    {
+      "id": 43,
+      "natural_language": "Find recent 10-K reports and their impact on company stock returns",
+      "cypher": "MATCH (c:Company)<-[pf:PRIMARY_FILER]-(r:Report) WHERE r.formType = '10-K' AND datetime(r.created) > datetime() - duration('P180D') AND pf.daily_stock IS NOT NULL RETURN c.ticker, r.created, r.accessionNo, pf.daily_stock as daily_return, pf.daily_macro as market_return, pf.daily_stock - pf.daily_macro as excess_return ORDER BY r.created DESC LIMIT 20"
+    },
+    {
+      "id": 44,
+      "natural_language": "Find recent dividend declarations with amounts",
+      "cypher": "MATCH (c:Company)-[:DECLARED_DIVIDEND]->(d:Dividend) WHERE datetime(d.declaration_date) > datetime() - duration('P180D') AND d.cash_amount IS NOT NULL RETURN c.ticker, d.cash_amount, d.ex_dividend_date, d.pay_date, d.dividend_type ORDER BY toFloat(d.cash_amount) DESC LIMIT 20"
+    },
+    {
+      "id": 45,
+      "natural_language": "Find recent earnings call transcripts",
+      "cypher": "MATCH (c:Company)-[:HAS_TRANSCRIPT]->(t:Transcript) WHERE datetime(t.created) > datetime() - duration('P90D') RETURN c.ticker, t.company_name, t.conference_datetime, t.fiscal_quarter ORDER BY t.created DESC LIMIT 20"
+    },
+    {
+      "id": 46,
+      "natural_language": "Find recent earnings calls",
+      "cypher": "MATCH (c:Company)-[:HAS_TRANSCRIPT]->(t:Transcript) WHERE t.conference_datetime IS NOT NULL RETURN c.ticker, t.company_name, t.conference_datetime, t.fiscal_quarter, t.fiscal_year ORDER BY t.conference_datetime DESC LIMIT 20"
+    },
+    {
+      "id": 47,
+      "natural_language": "Find recent earnings transcripts with Q&A sessions",
+      "cypher": "MATCH (c:Company)-[:HAS_TRANSCRIPT]->(t:Transcript) WHERE datetime(t.created) > datetime() - duration('P90D') RETURN c.ticker, t.company_name, t.conference_datetime, t.fiscal_quarter, t.fiscal_year ORDER BY t.created DESC LIMIT 20"
+    },
+    {
+      "id": 48,
+      "natural_language": "Find relationships with null returns",
+      "cypher": "MATCH ()-[r:INFLUENCES]->() WHERE r.daily_stock IS NULL OR r.hourly_stock IS NULL RETURN COUNT(*) as null_count"
+    },
+    {
+      "id": 49,
+      "natural_language": "Find reports filed in the last 30 days",
+      "cypher": "MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report) WHERE datetime(r.created) > datetime() - duration('P30D') RETURN c.ticker, r.formType, r.created ORDER BY r.created DESC LIMIT 50"
+    },
+    {
+      "id": 50,
+      "natural_language": "Find reports with XBRL data grouped by form type",
+      "cypher": "MATCH (r:Report)-[:HAS_XBRL]->(x:XBRLNode) RETURN r.formType, COUNT(DISTINCT r) as report_count ORDER BY report_count DESC"
+    },
+    {
+      "id": 51,
+      "natural_language": "Find reports with complete return data across all levels",
+      "cypher": "MATCH (c:Company)<-[pf:PRIMARY_FILER]-(r:Report) WHERE pf.daily_stock IS NOT NULL AND pf.daily_industry IS NOT NULL AND pf.daily_sector IS NOT NULL AND pf.daily_macro IS NOT NULL AND pf.hourly_stock IS NOT NULL AND pf.session_stock IS NOT NULL RETURN c.ticker, r.formType, r.created, pf.daily_stock, pf.daily_industry, pf.daily_sector, pf.daily_macro LIMIT 20"
+    },
+    {
+      "id": 52,
+      "natural_language": "Find stock splits with execution dates",
+      "cypher": "MATCH (d:Date)-[:HAS_SPLIT]->(s:Split)<-[:DECLARED_SPLIT]-(c:Company) RETURN c.ticker, d.date, s.split_from, s.split_to, s.execution_date ORDER BY d.date DESC"
+    },
+    {
+      "id": 53,
+      "natural_language": "How many News have daily_stock returns higher than 10%?",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.daily_stock IS NOT NULL AND r.daily_stock <> 'NaN' AND toFloat(r.daily_stock) > 10.0 RETURN COUNT(n) AS news_count"
+    },
+    {
+      "id": 54,
+      "natural_language": "List all companies in Technology sector",
+      "cypher": "MATCH (c:Company) WHERE c.sector = 'Technology' RETURN c.ticker, c.name, c.industry, c.mkt_cap ORDER BY toFloat(replace(c.mkt_cap, ',', '')) DESC LIMIT 50"
+    },
+    {
+      "id": 55,
+      "natural_language": "List every industry that saw at least one news-driven hourly_industry return < 0% while one of its companies had hourly_stock > 0% in the same hour during the past week",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.hourly_industry IS NOT NULL AND r.hourly_industry <> 'NaN' AND r.hourly_stock IS NOT NULL AND r.hourly_stock <> 'NaN' AND datetime(n.created) > datetime() - duration('P7D') WITH n, c, r, toFloat(r.hourly_industry) as industry_return, toFloat(r.hourly_stock) as stock_return WHERE NOT isNaN(industry_return) AND NOT isNaN(stock_return) AND industry_return < 0 AND stock_return > 0 RETURN DISTINCT c.industry LIMIT 100"
+    },
+    {
+      "id": 56,
+      "natural_language": "List measurement units used in facts",
+      "cypher": "MATCH (u:Unit) RETURN u.name, u.unit_reference, COUNT(u) as usage_count ORDER BY usage_count DESC LIMIT 20"
+    },
+    {
+      "id": 57,
+      "natural_language": "List most common financial concepts",
+      "cypher": "MATCH (c:Concept) WHERE c.qname STARTS WITH 'us-gaap:' RETURN DISTINCT c.qname, c.label ORDER BY c.qname LIMIT 30"
+    },
+    {
+      "id": 58,
+      "natural_language": "News driving stocks below market",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.daily_stock < r.daily_macro - 3.0 RETURN n.title, c.ticker, r.daily_stock, r.daily_macro ORDER BY r.daily_stock LIMIT 20"
+    },
+    {
+      "id": 59,
+      "natural_language": "News events from the past week with market impact",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE datetime(n.created) > datetime() - duration('P7D') AND r.daily_stock IS NOT NULL RETURN n.title, c.ticker, r.daily_stock, n.created ORDER BY ABS(toFloat(r.daily_stock)) DESC LIMIT 30"
+    },
+    {
+      "id": 60,
+      "natural_language": "Recent dividend declarations",
+      "cypher": "MATCH (c:Company)-[:DECLARED_DIVIDEND]->(d:Dividend) WHERE datetime(d.declaration_date) > datetime() - duration('P90D') RETURN c.ticker, d.cash_amount, d.ex_dividend_date, d.pay_date ORDER BY d.declaration_date DESC LIMIT 20"
+    },
+    {
+      "id": 61,
+      "natural_language": "SPY daily returns from news",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(m:MarketIndex) WHERE m.ticker = 'SPY' AND r.daily_macro IS NOT NULL RETURN n.title, r.daily_macro, n.created ORDER BY ABS(toFloat(r.daily_macro)) DESC LIMIT 20"
+    },
+    {
+      "id": 62,
+      "natural_language": "Sample XBRL nodes with their report information",
+      "cypher": "MATCH (r:Report)-[:HAS_XBRL]->(x:XBRLNode) WHERE r.formType IN ['10-K', '10-Q'] RETURN r.formType, r.accessionNo, x.id, x.cik LIMIT 20"
+    },
+    {
+      "id": 63,
+      "natural_language": "Show market index relationships",
+      "cypher": "MATCH (m:MarketIndex) OPTIONAL MATCH (m)<-[:BELONGS_TO]-(s:Sector) OPTIONAL MATCH (m)<-[:BELONGS_TO]-(i:Industry) OPTIONAL MATCH (m)<-[:BELONGS_TO]-(c:Company) RETURN m.ticker, m.name, COUNT(DISTINCT s) as sector_count, COUNT(DISTINCT i) as industry_count, COUNT(DISTINCT c) as company_count ORDER BY m.ticker"
+    },
+    {
+      "id": 64,
+      "natural_language": "Show reports with completed XBRL processing",
+      "cypher": "MATCH (r:Report) WHERE r.xbrl_status = 'COMPLETED' AND datetime(r.created) > datetime() - duration('P30D') RETURN r.formType, r.accessionNo, r.created, r.xbrl_status ORDER BY r.created DESC LIMIT 20"
+    },
+    {
+      "id": 65,
+      "natural_language": "Stock splits in the last year",
+      "cypher": "MATCH (c:Company)-[:DECLARED_SPLIT]->(s:Split) WHERE datetime(s.execution_date) > datetime() - duration('P365D') RETURN c.ticker, s.split_from, s.split_to, s.execution_date ORDER BY s.execution_date DESC LIMIT 10"
+    },
+    {
+      "id": 66,
+      "natural_language": "Trace complete path from news to company through all return levels",
+      "cypher": "MATCH (n:News)-[r:INFLUENCES]->(c:Company) WHERE r.daily_stock IS NOT NULL AND r.daily_industry IS NOT NULL AND r.daily_sector IS NOT NULL AND r.daily_macro IS NOT NULL AND ABS(toFloat(r.daily_stock)) > 3.0 RETURN n.title, c.ticker, r.daily_stock as stock_return, r.daily_industry as industry_return, r.daily_sector as sector_return, r.daily_macro as market_return ORDER BY ABS(toFloat(r.daily_stock)) DESC LIMIT 20"
+    }
+  ]
+}
