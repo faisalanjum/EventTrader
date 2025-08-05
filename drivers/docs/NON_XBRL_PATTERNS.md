@@ -4,7 +4,7 @@ This comprehensive guide covers ALL non-XBRL queries including all content node 
 
 **Generated**: January 2025  
 **Updated**: With fulltext search patterns (10-100x faster)
-**Content Types Covered**: ExtractedSectionContent (52 types), FinancialStatementContent (4 types), ExhibitContent, FilingTextContent
+**Content Types Covered**: ExtractedSectionContent (54 types), FinancialStatementContent (4 types), ExhibitContent, FilingTextContent
 
 ## 🎯 Key Changes with Fulltext Indexes
 
@@ -101,7 +101,7 @@ LIMIT 10
 
 ---
 
-## 📑 ExtractedSectionContent Patterns (All 52 Types)
+## 📑 ExtractedSectionContent Patterns (All 54 Types)
 
 ### 1. Financial Statements & Exhibits
 
@@ -673,44 +673,93 @@ LIMIT 20
 
 ---
 
-## 📋 Complete Section Name Reference
+## 📋 Complete Section Name Reference (54 Total Types)
 
-### 10-K/10-Q Sections
-1. **FinancialStatements** - Financial statements and notes
-2. **FinancialStatementsandSupplementaryData** - Comprehensive financials
-3. **ManagementDiscussionandAnalysisofFinancialConditionandResultsofOperations** - MD&A
-4. **RiskFactors** - Risk disclosures
-5. **Business** - Business overview
-6. **Properties** - Property descriptions
-7. **LegalProceedings** - Legal matters
-8. **ExecutiveCompensation** - Executive pay
-9. **Directors,ExecutiveOfficersandCorporateGovernance** - Governance
-10. **ControlsandProcedures** - Internal controls
-11. **Cybersecurity** - Cyber risk disclosures
+### 10-K/10-Q Primary Sections
+1. **FinancialStatements** - Financial statements and notes (5,327 instances)
+2. **FinancialStatementsandSupplementaryData** - Comprehensive financials (2,106 instances)
+3. **ManagementDiscussionandAnalysisofFinancialConditionandResultsofOperations** - MD&A (5,339 instances)
+4. **Management'sDiscussionandAnalysisofFinancialConditionandResultsofOperations** - MD&A variant (2,089 instances)
+5. **RiskFactors** - Risk disclosures (7,218 instances)
+6. **Business** - Business overview (2,098 instances)
+7. **Properties** - Property descriptions (2,046 instances)
+8. **LegalProceedings** - Legal matters (7,260 instances)
+9. **ExecutiveCompensation** - Executive pay (2,109 instances)
+10. **Directors,ExecutiveOfficersandCorporateGovernance** - Governance (2,116 instances)
+11. **ControlsandProcedures** - Internal controls (7,479 instances)
+12. **Cybersecurity** - Cyber risk disclosures (1,318 instances)
+13. **QuantitativeandQualitativeDisclosuresAboutMarketRisk** - Market risk (5,295 instances)
+14. **QuantitativeandQualitativeDisclosuresaboutMarketRisk** - Market risk variant (2,080 instances)
+15. **UnresolvedStaffComments** - SEC comments (2,075 instances)
+16. **SelectedFinancialData(priortoFebruary2021)** - Historical data (1,999 instances)
+17. **MarketforRegistrant'sCommonEquity,RelatedStockholderMattersandIssuerPurchasesofEquitySecurities** - Equity market (2,095 instances)
+18. **ChangesinandDisagreementswithAccountantsonAccountingandFinancialDisclosure** - Accountant changes (2,078 instances)
+19. **SecurityOwnershipofCertainBeneficialOwnersandManagementandRelatedStockholderMatters** - Ownership (2,110 instances)
+20. **CertainRelationshipsandRelatedTransactions,andDirectorIndependence** - Related parties (2,108 instances)
+21. **PrincipalAccountantFeesandServices** - Audit fees (2,111 instances)
+22. **ExhibitsandFinancialStatementSchedules** - Combined exhibits section (2,192 instances)
 
-### 8-K Event Sections (Complete List)
+### 8-K Event Sections
 1. **FinancialStatementsandExhibits** - Item 9.01 (17,880 instances)
 2. **ResultsofOperationsandFinancialCondition** - Item 2.02 (8,083 instances)
 3. **RegulationFDDisclosure** - Item 7.01 (5,419 instances)
-4. **DepartureofDirectorsorCertainOfficers...** - Item 5.02 (5,046 instances)
+4. **DepartureofDirectorsorCertainOfficers;ElectionofDirectors;AppointmentofCertainOfficers:CompensatoryArrangementsofCertainOfficers** - Item 5.02 (5,046 instances)
 5. **OtherEvents** - Item 8.01 (4,502 instances)
 6. **EntryintoaMaterialDefinitiveAgreement** - Item 1.01 (2,415 instances)
 7. **SubmissionofMatterstoaVoteofSecurityHolders** - Item 5.07 (2,339 instances)
-8. **CreationofaDirectFinancialObligation...** - Item 2.03 (1,418 instances)
-9. **AmendmentstoArticlesofIncorporation...** - Item 5.03 (815 instances)
+8. **CreationofaDirectFinancialObligationoranObligationunderanOff-BalanceSheetArrangementofaRegistrant** - Item 2.03 (1,418 instances)
+9. **AmendmentstoArticlesofIncorporationorBylaws;ChangeinFiscalYear** - Item 5.03 (815 instances)
 10. **UnregisteredSalesofEquitySecurities** - Item 3.02 (294 instances)
 11. **TerminationofaMaterialDefinitiveAgreement** - Item 1.02 (267 instances)
 12. **CostsAssociatedwithExitorDisposalActivities** - Item 2.05 (225 instances)
 13. **CompletionofAcquisitionorDispositionofAssets** - Item 2.01 (171 instances)
 14. **MaterialModificationstoRightsofSecurityHolders** - Item 3.03 (120 instances)
 15. **MaterialImpairments** - Item 2.06 (51 instances)
-16. **NoticeofDelistingorFailuretoSatisfyaContinuedListingRuleorStandard** - Item 3.01 (48 instances)
+16. **NoticeofDelistingorFailuretoSatisfyaContinuedListingRuleorStandard;TransferofListing** - Item 3.01 (48 instances)
 17. **ChangesinRegistrantsCertifyingAccountant** - Item 4.01 (43 instances)
 18. **MaterialCybersecurityIncidents** - Item 1.05 (18 instances)
 19. **ChangesinControlofRegistrant** - Item 5.01 (17 instances)
-20. **BankruptcyorReceivership** - Item 1.03 (1 instance)
+20. **NonRelianceonPreviouslyIssuedFinancialStatementsoraRelatedAuditReportorCompletedInterimReview** - Item 4.02 (14 instances)
+21. **TriggeringEventsThatAccelerateorIncreaseaDirectFinancialObligationoranObligationunderanOff-BalanceSheetArrangement** - Item 2.04 (14 instances)
+22. **ShareholderNominationsPursuanttoExchangeActRule14a-11** - (10 instances)
+23. **TemporarySuspensionofTradingUnderRegistrantsEmployeeBenefitPlans** - Item 5.04 (9 instances)
+24. **AmendmentstotheRegistrantsCodeofEthics,orWaiverofaProvisionoftheCodeofEthics** - Item 5.05 (7 instances)
+25. **BankruptcyorReceivership** - Item 1.03 (1 instance)
+
+### Additional Common Sections
+1. **OtherInformation** - Miscellaneous information (7,072 instances)
+2. **Exhibits** - Exhibit listings (5,397 instances)
+3. **UnregisteredSalesofEquitySecuritiesandUseofProceeds** - (4,943 instances)
+4. **MineSafetyDisclosures** - Mining company disclosures (4,829 instances)
+5. **DefaultsUponSeniorSecurities** - Default notices (2,683 instances)
+6. **MineSafetyReportingofShutdownsandPatternsofViolations** - (15 instances)
 
 ---
+
+## 📊 ETF Ticker References
+
+For market analysis queries, these ETF fields are available:
+- **Company.sector_etf** → Sector SPDR ETF (e.g., 'XLK' for Technology)
+- **Company.industry_etf** → Industry-specific ETF (e.g., 'IYW' for Tech-Software)
+- **Industry.etf** → Industry ETF ticker
+- **Sector.etf** → Sector ETF ticker  
+- **MarketIndex.etf** → 'SPY' for S&P 500
+
+```cypher
+-- Get company with its sector/industry ETFs for market comparison
+MATCH (c:Company {ticker: 'AAPL'})
+RETURN c.ticker, c.sector, c.sector_etf, c.industry, c.industry_etf
+-- Returns: AAPL, Technology, XLK, Computers, IYW
+
+-- Compare company performance to sector ETF
+MATCH (n:News)-[r:INFLUENCES]->(c:Company {ticker: 'AAPL'})
+WHERE n.created > datetime() - duration('P30D')
+RETURN n.title, r.daily_stock as stock_return, r.daily_sector as sector_return,
+       c.sector_etf as sector_etf,
+       r.daily_stock - r.daily_sector as excess_return
+ORDER BY ABS(r.daily_stock - r.daily_sector) DESC
+LIMIT 20
+```
 
 ## 🚀 Performance Best Practices
 
@@ -956,7 +1005,7 @@ ORDER BY score DESC
 ```cypher
 // Note: This requires encoding the search query to an embedding first
 // Example assumes you have the embedding for "artificial intelligence strategy"
-WITH [0.123, -0.456, ...] as searchEmbedding  // 1536-dimensional vector
+WITH [0.123, -0.456, ...] as searchEmbedding  // 3072-dimensional vector
 CALL db.index.vector.queryNodes('qaexchange_vector_idx', 20, searchEmbedding)
 YIELD node, score
 WHERE score > 0.8  // Similarity threshold
@@ -1031,15 +1080,39 @@ LIMIT 20
 
 ### 2. News Impact Analysis
 
-#### News Driving Significant Moves
+#### ⚠️ CRITICAL: INFLUENCES Anomaly (DATA QUALITY ISSUE)
+
+**Issue**: 1,730 News→Company relationships have industry returns instead of stock returns
+
+```cypher
+-- Find anomalous relationships
+MATCH (n:News)-[r:INFLUENCES]->(c:Company)
+WHERE r.daily_industry IS NOT NULL AND r.daily_stock IS NULL
+RETURN count(*) as anomaly_count  -- Returns: 1,730
+
+-- When querying News impact on companies, handle this edge case:
+MATCH (n:News)-[r:INFLUENCES]->(c:Company)
+WHERE r.daily_stock IS NOT NULL  -- Explicitly check for stock returns
+   OR r.daily_industry IS NOT NULL  -- Some have industry by mistake
+RETURN n.title, c.ticker,
+       COALESCE(r.daily_stock, r.daily_industry) as return_value,
+       CASE WHEN r.daily_stock IS NULL THEN 'ANOMALY' ELSE 'NORMAL' END as data_quality
+ORDER BY ABS(COALESCE(r.daily_stock, r.daily_industry)) DESC
+LIMIT 20
+```
+
+#### News Driving Significant Moves (CORRECTED)
 **Natural Language**: market moving news | high impact news | news that moved stocks | significant news events
 
 ```cypher
+-- CORRECTED: Handles the anomaly where some have industry returns instead
 MATCH (n:News)-[rel:INFLUENCES]->(c:Company)
-WHERE ABS(rel.daily_stock) > 5.0  // More than 5% move
-RETURN n.title, c.ticker, rel.daily_stock, 
-       rel.daily_macro, n.created
-ORDER BY ABS(rel.daily_stock) DESC
+WHERE ABS(COALESCE(rel.daily_stock, rel.daily_industry)) > 5.0  // More than 5% move
+RETURN n.title, c.ticker, 
+       COALESCE(rel.daily_stock, rel.daily_industry) as actual_return,
+       rel.daily_macro, n.created,
+       CASE WHEN rel.daily_stock IS NULL THEN 'ANOMALY' ELSE 'NORMAL' END as data_quality
+ORDER BY ABS(COALESCE(rel.daily_stock, rel.daily_industry)) DESC
 LIMIT 20
 ```
 
@@ -1216,8 +1289,8 @@ SHOW FULLTEXT INDEXES;
 ### Vector Indexes (Already Created)
 ```cypher
 -- Existing vector indexes for similarity search:
--- news_vector_index: News.embedding (1536 dimensions)
--- qaexchange_vector_idx: QAExchange.embedding (1536 dimensions)
+-- news_vector_index: News.embedding (3072 dimensions)
+-- qaexchange_vector_idx: QAExchange.embedding (3072 dimensions)
 
 -- Verify vector indexes
 SHOW VECTOR INDEXES;
@@ -1253,8 +1326,8 @@ SHOW VECTOR INDEXES;
 ## 🤖 Note on Vector Embeddings
 
 ### Available Embeddings
-- **News.embedding**: 99.3% of news articles have embeddings (176,059 of 177,349)
-- **QAExchange.embedding**: Variable coverage, check for NULL before using
+- **News.embedding**: 99.27% of news articles have embeddings (176,059 of 177,349)
+- **QAExchange.embedding**: 99.94% coverage (68,113 of 68,152 have embeddings)
 
 ### Using Vector Similarity
 1. **Direct similarity**: Compare two known nodes using their embeddings

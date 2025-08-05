@@ -3,10 +3,28 @@
 This is the definitive collection of XBRL query patterns for the Neo4j EventMarketDB.
 All patterns have been thoroughly tested and verified.
 
-**IMPORTANT**: XBRL data is ONLY available for 10-K and 10-Q reports. 8-K and other report types do NOT have XBRL.
+**IMPORTANT**: XBRL data is ONLY available for 10-K, 10-Q, 10-K/A, and 10-Q/A reports. 8-K and other report types do NOT have XBRL.
 
 **Generated**: January 2025  
-**Database Coverage**: 7.69M Facts, 6.57M PRESENTATION_EDGE, 1.92M CALCULATION_EDGE relationships
+**Database Coverage**: 8.23M Facts, 6.57M PRESENTATION_EDGE, 1.92M CALCULATION_EDGE relationships
+
+**Coverage by Form Type:**
+- **10-Q**: 4,510 reports with XBRL (83.8% - quarterly reports)
+- **10-K**: 2,028 reports with XBRL (97.0% - annual reports)
+- **10-K/A**: 107 reports with XBRL (100% - amended annual)
+- **10-Q/A**: 26 reports with XBRL (86.7% - amended quarterly)
+
+**Top 10 Most Common us-gaap Concepts:**
+1. RevenueFromContractWithCustomerExcludingAssessedTax: 235,163 facts
+2. StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest: 120,158 facts
+3. StockholdersEquity: 119,599 facts
+4. Revenues: 93,079 facts
+5. AllocatedShareBasedCompensationExpense: 54,933 facts
+6. DefinedBenefitPlanFairValueOfPlanAssets: 54,309 facts
+7. AvailableForSaleSecuritiesDebtSecurities: 50,253 facts
+8. OperatingIncomeLoss: 48,406 facts
+9. NetIncomeLoss: 47,787 facts
+10. DebtInstrumentInterestRateStatedPercentage: 43,135 facts
 
 ## Critical Schema Rules
 
@@ -15,6 +33,68 @@ All patterns have been thoroughly tested and verified.
 3. **Boolean Values**: `is_numeric` and `is_nil` use string values '1' or '0', NOT boolean true/false
 4. **PRESENTATION_EDGE**: Only originates from Abstract nodes (never from Facts)
 5. **All Properties Optional**: Most properties can be NULL - use IS NOT NULL checks where needed
+
+## ⚠️ CRITICAL: Understanding XBRL Dimensional Data
+
+**The Problem**: A single report contains MULTIPLE revenue facts:
+- 1 total revenue (no dimensions)
+- Multiple segment revenues (AmericasSegment, EuropeSegment, etc.)
+- Multiple product revenues (iPhone, Mac, iPad, etc.)
+- Type breakdowns (Product vs Service)
+
+**WRONG Query (returns all dimensions):**
+```cypher
+-- This returns 20+ revenue values for one period!
+MATCH (c:Company {ticker: 'AAPL'})<-[:PRIMARY_FILER]-(r:Report)-[:HAS_XBRL]->(x)<-[:REPORTS]-(f:Fact)
+WHERE f.qname = 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+RETURN f.value
+```
+
+**CORRECT Query Patterns:**
+
+### Pattern 1 - Get Total Only:
+```cypher
+-- Get only the total (non-dimensional) revenue
+MATCH (c:Company {ticker: 'AAPL'})<-[:PRIMARY_FILER]-(r:Report)-[:HAS_XBRL]->(x)<-[:REPORTS]-(f:Fact)
+WHERE f.qname = 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+  AND f.is_numeric = '1'
+  AND NOT EXISTS((f)-[:FACT_MEMBER]->())  -- No dimensions!
+RETURN f.value as total_revenue
+```
+
+### Pattern 2 - Get Specific Dimension:
+```cypher
+-- Get revenue by geographic segment
+MATCH (f:Fact)-[:FACT_MEMBER]->(m:Member)
+WHERE f.qname = 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+  AND m.label IN ['AmericasSegment', 'EuropeSegment', 'GreaterChinaSegment']
+RETURN m.label as region, f.value as revenue
+```
+
+### Pattern 3 - Get Product Breakdown:
+```cypher
+-- Get revenue by product
+MATCH (f:Fact)-[:FACT_MEMBER]->(m:Member)
+WHERE f.qname = 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+  AND m.label IN ['iPhone', 'Mac', 'iPad', 'WearablesHomeandAccessories']
+RETURN m.label as product, f.value as revenue
+```
+
+## ⚠️ WARNING: Duplicate Facts in XBRL
+
+Some periods have duplicate facts with identical values. Always use DISTINCT or aggregate:
+
+```cypher
+-- WRONG: May return duplicates
+MATCH (f:Fact)
+WHERE f.qname = 'us-gaap:Assets'
+RETURN f.value
+
+-- CORRECT: Handle duplicates
+MATCH (f:Fact)
+WHERE f.qname = 'us-gaap:Assets'
+RETURN DISTINCT f.value, count(*) as occurrences
+```
 
 ---
 
@@ -34,7 +114,7 @@ LIMIT 10
 
 ```cypher
 MATCH (r:Report)-[:HAS_XBRL]->(x:XBRLNode)
-WHERE r.formType IN ['10-K', '10-Q']
+WHERE r.formType IN ['10-K', '10-Q', '10-K/A', '10-Q/A']
 RETURN r.formType, r.cik, r.created, x.displayLabel
 ORDER BY r.created DESC
 LIMIT 20
@@ -211,12 +291,37 @@ ORDER BY p.end_date DESC
 LIMIT 5
 ```
 
+### Year-over-Year Growth Calculation
+**Natural Language**: revenue growth | YoY change | annual growth rate | growth percentage | year over year increase
+
+```cypher
+-- Calculate YoY revenue growth
+WITH ['2024-09-29', '2023-10-01'] as periods
+MATCH (c:Company {ticker: 'AAPL'})<-[:PRIMARY_FILER]-(r:Report)-[:HAS_XBRL]->(x)<-[:REPORTS]-(f:Fact)
+WHERE f.qname = 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+  AND f.is_numeric = '1'
+  AND NOT EXISTS((f)-[:FACT_MEMBER]->())  -- Total only, no dimensions
+  AND r.formType = '10-K'
+MATCH (f)-[:HAS_PERIOD]->(p:Period)
+WHERE p.end_date IN periods
+WITH p.end_date as period, toFloat(replace(replace(f.value, ',', ''), ' ', '')) as revenue
+ORDER BY period DESC
+WITH collect({period: period, revenue: revenue}) as data
+WHERE SIZE(data) = 2
+RETURN 
+  data[0].period as current_year,
+  data[0].revenue as current_revenue,
+  data[1].period as prior_year,
+  data[1].revenue as prior_revenue,
+  round((data[0].revenue - data[1].revenue) / data[1].revenue * 100, 2) as growth_pct
+```
+
 ### Get Latest Financial Data (10-K/10-Q Only)
 **Natural Language**: latest XBRL results | most recent 10-K data | current structured financials | newest 10-Q facts | latest annual filing | recent quarterly XBRL | current quarter data
 
 ```cypher
 MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report)-[:HAS_XBRL]->(x:XBRLNode)
-WHERE r.formType IN ['10-K', '10-Q']
+WHERE r.formType IN ['10-K', '10-Q', '10-K/A', '10-Q/A']
 WITH c, r, x ORDER BY r.created DESC
 WITH c, COLLECT({report: r, xbrl: x})[0] as latest
 MATCH (latest.report)-[:HAS_XBRL]->(latest.xbrl)<-[:REPORTS]-(f:Fact)
@@ -292,18 +397,21 @@ LIMIT 10
 
 ## 8. Dimensional Analysis
 
-### Get Revenue by Segment
+### Get Revenue by Segment (CORRECTED)
 **Natural Language**: revenue by segment | how much does each division make | segment performance | business unit revenue | revenue breakdown | sales by product
 
 ```cypher
+-- Apple's actual segment members don't all end with 'Segment'
+-- Members use company-specific namespace (e.g., aapl:AmericasSegmentMember)
 MATCH (f:Fact)-[:FACT_MEMBER]->(m:Member)
-WHERE f.qname CONTAINS 'Revenue'
+WHERE f.qname = 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
   AND f.is_numeric = '1'
-  AND m.qname CONTAINS 'Segment'
-MATCH (f)-[:HAS_CONCEPT]->(c:Concept)
-MATCH (f)<-[:REPORTS]-(x:XBRLNode)<-[:HAS_XBRL]-(r:Report)<-[:PRIMARY_FILER]-(comp:Company)
-RETURN comp.ticker, f.value as revenue, m.label as segment
-LIMIT 20
+MATCH (f)<-[:REPORTS]-(x:XBRLNode)<-[:HAS_XBRL]-(r:Report)<-[:PRIMARY_FILER]-(c:Company)
+WHERE c.ticker = 'AAPL'
+RETURN DISTINCT m.label as segment_or_product, m.qname
+-- Returns: iPhone (aapl:IPhoneMember), Mac (aapl:MacMember), iPad (aapl:IPadMember), 
+--          Product (us-gaap:ProductMember), Service (us-gaap:ServiceMember),
+--          AmericasSegment (aapl:AmericasSegmentMember), etc.
 ```
 
 ### Get Geographic Breakdown
@@ -671,13 +779,93 @@ RETURN COUNT(*) as xbrl_count
 
 ---
 
+## Natural Language Pattern Mappings
+
+**Comparison Queries:**
+- "compare X and Y" → Multi-company pattern with IN clause
+- "versus", "vs", "compared to" → Side-by-side comparison
+- "benchmark against" → Compare to industry/sector average
+
+**Time-based Queries:**
+- "this quarter" → Latest 10-Q
+- "last year" → Previous 10-K or YoY period
+- "trailing" → Sum of last 4 quarters
+- "since 2020" → Date range filter
+
+**Ranking Queries:**
+- "top 5", "largest", "biggest" → ORDER BY DESC LIMIT
+- "bottom", "smallest", "worst" → ORDER BY ASC LIMIT
+- "rank by" → WITH + row_number()
+
+**Percentage/Ratio Queries:**
+- "margin", "as % of" → Calculate ratio
+- "percentage", "rate" → Look for 'pure' unit type
+- "growth rate" → YoY calculation pattern
+
+## Handling Large Result Sets
+
+**Problem**: XBRL queries can return thousands of facts
+
+```cypher
+-- INEFFICIENT: Loads all facts before filtering
+MATCH (f:Fact)
+WHERE f.value CONTAINS '1000000'
+RETURN f
+
+-- EFFICIENT: Filter early and limit scope
+MATCH (c:Company {ticker: 'AAPL'})<-[:PRIMARY_FILER]-(r:Report)
+WHERE r.formType = '10-K' 
+  AND r.created >= datetime('2023-01-01')
+WITH r LIMIT 10
+MATCH (r)-[:HAS_XBRL]->(x)<-[:REPORTS]-(f:Fact)
+WHERE f.is_numeric = '1' AND f.value CONTAINS '000000'
+RETURN f.qname, f.value
+```
+
+## Industry and Sector ETF Tickers
+
+For market analysis queries, use these ETF references:
+- Company.sector_etf → Sector SPDR ETF (e.g., 'XLK' for Technology)
+- Company.industry_etf → Industry-specific ETF (e.g., 'IYW' for Tech-Software)
+- Industry.etf → Industry ETF ticker
+- Sector.etf → Sector ETF ticker
+- MarketIndex.etf → 'SPY' for S&P 500
+
+```cypher
+-- Get company with its sector/industry ETFs
+MATCH (c:Company {ticker: 'AAPL'})
+RETURN c.ticker, c.sector, c.sector_etf, c.industry, c.industry_etf
+-- Returns: AAPL, Technology, XLK, Computers, IYW
+```
+
+## INFLUENCES Anomaly (DATA QUALITY ISSUE)
+
+**Issue**: 1,730 News→Company relationships have industry returns instead of stock returns
+
+```cypher
+-- Find anomalous relationships
+MATCH (n:News)-[r:INFLUENCES]->(c:Company)
+WHERE r.daily_industry IS NOT NULL AND r.daily_stock IS NULL
+RETURN count(*) as anomaly_count  -- Returns: 1,730
+
+-- When querying News impact on companies, handle this edge case:
+MATCH (n:News)-[r:INFLUENCES]->(c:Company)
+WHERE r.daily_stock IS NOT NULL  -- Explicitly check for stock returns
+   OR r.daily_industry IS NOT NULL  -- Some have industry by mistake
+RETURN n.title, 
+       COALESCE(r.daily_stock, r.daily_industry) as return_value,
+       CASE WHEN r.daily_stock IS NULL THEN 'ANOMALY' ELSE 'NORMAL' END as data_quality
+```
+
+---
+
 ## Usage Notes
 
-1. **XBRL is only in 10-K and 10-Q**: No XBRL data exists for 8-K or other report types
+1. **XBRL is only in 10-K, 10-Q, 10-K/A, and 10-Q/A**: No XBRL data exists for 8-K or other report types
 2. **Always use correct traversal**: Report → HAS_XBRL → XBRLNode ← REPORTS ← Fact
 3. **String boolean values**: Use `is_numeric = '1'` not `is_numeric = true`
 4. **Handle NULL values**: Many properties are optional, use IS NOT NULL where needed
-5. **Use LIMIT**: Prevent overwhelming results, especially with 7.69M facts
+5. **Use LIMIT**: Prevent overwhelming results, especially with 8.23M facts
 6. **Check period types**: 'instant' for balance sheet, 'duration' for income statement
 7. **Natural language variations**: Each pattern includes multiple phrasings for semantic matching
 

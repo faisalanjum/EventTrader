@@ -28,7 +28,7 @@ Return Levels:
 - *_sector: Sector-level return  
 - *_macro: Market index return (SPY)
 
-Note: Return properties are often optional and may be missing
+Note: Return properties are often optional and sometimes missing
 ```
 
 ## 📊 Market Structure Hierarchy
@@ -349,7 +349,7 @@ Relationships:
 Transcript [*id, symbol, formType, company_name, conference_datetime,
             fiscal_year, fiscal_quarter, calendar_year, calendar_quarter,
             speakers, created, updated]
-Total instances: ~14,747
+Total instances: 3,716
 
 Relationships:
 ├─(HAS_TRANSCRIPT)← Company (3,716 instances)
@@ -497,7 +497,7 @@ Other [*id]               - 0 instances
 31. Report - 31,618 instances
 32. Sector - 11 instances
 33. Split - 33 instances
-34. Transcript - 14,747 instances
+34. Transcript - 3,716 instances
 35. Unit - 125K instances
 36. XBRLNode - 6,114 instances
 

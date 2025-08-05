@@ -6,7 +6,9 @@
     "mcp_agent_react": "./mcp_agent_react.py:mcp_agent",
     "mcp_agent_react_v2": "./mcp_agent_react_v2.py:mcp_agent",
     "mcp_agent_react_v3": "./mcp_agent_react_v3.py:mcp_agent",
-    "mcp_agent_react_v4": "./mcp_agent_react_v4.py:mcp_agent"
+    "mcp_agent_react_v4": "./mcp_agent_react_v4.py:mcp_agent",
+    "mcp_agent_v5": "./query_engine/mcp_agent_v5.py:mcp_agent",
+    "mcp_agent_modular": "../agenticDrivers/mcpAgent.py:mcp_agent"
   },
   "env": "../../.env",
   "python_version": "3.11"
