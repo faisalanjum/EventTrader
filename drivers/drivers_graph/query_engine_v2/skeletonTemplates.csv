@@ -1,0 +1,214 @@
+"Name","Key Props","Comment","Cypher"
+"compare_two_entities_metric","ticker1, ticker2, qname","Compare metric for two tickers","MATCH (c1:Company {ticker:$ticker1})<-[:PRIMARY_FILER]-(r1:Report)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(f1:Fact)-[:HAS_CONCEPT]->(con:Concept {qname:$qname}) MATCH (c2:Company {ticker:$ticker2})<-[:PRIMARY_FILER]-(r2:Report)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(f2:Fact)-[:HAS_CONCEPT]->(con) WHERE f1.is_numeric='1' AND f2.is_numeric='1' RETURN c1.ticker, f1.value AS v1, c2.ticker, f2.value AS v2 ORDER BY r1.created DESC LIMIT 1"
+"distinct_companies_with_fact","qname, from, to, limit","Companies reporting a concept in period","MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(f:Fact)-[:HAS_CONCEPT]->(con:Concept {qname:$qname}) WHERE r.created >= date($from) AND r.created <= date($to) RETURN DISTINCT c.ticker LIMIT $limit"
+"entities_without_property","Label, prop, limit","Entities missing property","MATCH (n:$Label) WHERE n.$prop IS NULL RETURN n LIMIT $limit"
+"entity_filter_property","Label, prop, value, limit","Entities where property equals value","MATCH (n:$Label) WHERE n.$prop = $value RETURN n LIMIT $limit"
+"entity_list","Label, limit","List first N entities of a given label","MATCH (n:$Label) RETURN n LIMIT $limit"
+"entity_property_range_filter","Label, prop, min, max, limit","Entities where numeric prop in range","MATCH (n:$Label) WHERE toFloat(n.$prop) >= $min AND toFloat(n.$prop) <= $max RETURN n LIMIT $limit"
+"entity_search_text","Label, prop, text, limit","Full-text search on property","MATCH (n:$Label) WHERE toLower(n.$prop) CONTAINS toLower($text) RETURN n LIMIT $limit"
+"fact_lookup","ticker, form, qname","Retrieve Fact value for concept in latest filing","MATCH (c:Company {ticker:$ticker})<-[:PRIMARY_FILER]-(r:Report {formType:$form})-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(f:Fact)-[:HAS_CONCEPT]->(con:Concept {qname:$qname}) WHERE f.is_numeric='1' RETURN r.created, f.value ORDER BY r.created DESC LIMIT 1"
+"fact_on_report_date","ticker, qname, limit","Fact value on same date as news","MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker:$ticker}) WITH c, date(datetime(n.created)) AS d MATCH (c)<-[:PRIMARY_FILER]-(r:Report) WHERE date(datetime(r.created)) = d MATCH (r)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(f:Fact)-[:HAS_CONCEPT]->(con:Concept {qname:$qname}) WHERE f.is_numeric='1' RETURN d, f.value LIMIT $limit"
+"fact_summary_aggregate","ticker, qname, from, to, agg","Aggregate (avg/sum) of Fact values for concept across period","MATCH (c:Company {ticker:$ticker})<-[:PRIMARY_FILER]-(r:Report)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(f:Fact)-[:HAS_CONCEPT]->(con:Concept {qname:$qname}) WHERE f.is_numeric='1' AND r.created >= date($from) AND r.created <= date($to) WITH toFloat(f.value) AS v WHERE NOT isNaN(v) RETURN $agg(v) AS result"
+"fulltext_search_section","index, text, limit","Fulltext search by index term","CALL db.index.fulltext.queryNodes('$index', $text) YIELD node,score RETURN node,score LIMIT $limit"
+"hierarchy_traverse","ticker","Walk BELONGS_TO chain from Company to top","MATCH path = (c:Company {ticker:$ticker})-[:BELONGS_TO*1..3]->(g) RETURN c.ticker AS company, [n IN nodes(path) | labels(n)[0]] AS levels"
+"industry_members","industry, limit","Companies in an Industry","MATCH (i:Industry {name:$industry})<-[:BELONGS_TO]-(c:Company) RETURN c.ticker, c.name ORDER BY c.mkt_cap DESC LIMIT $limit"
+"influence_by_date","Event, Target, ticker, date, cmp, delta, limit","INFLUENCES on a date with delta filter","MATCH (e:$Event)-[r:INFLUENCES]->(t:$Target {ticker:$ticker}) WHERE date(datetime(e.created)) = date($date) AND r.daily_stock IS NOT NULL AND r.daily_stock <> 'NaN' AND toFloat(r.daily_stock) $cmp toFloat(r.daily_macro) + $delta RETURN e,r LIMIT $limit"
+"latest_report_for_company","ticker, form","Most recent report of formType for a ticker","MATCH (c:Company {ticker:$ticker})<-[:PRIMARY_FILER]-(r:Report {formType:$form}) RETURN r ORDER BY r.created DESC LIMIT 1"
+"metric_relation_pattern","Metric1, RelMetric, Metric2, limit","Generic Metric relationship traversal","MATCH (m1:$Metric1)-[:$RelMetric]->(m2:$Metric2) RETURN m1,m2 LIMIT $limit"
+"moving_average_metric","Rel, Target, ticker, metric, from, to","Moving avg of metric in period","MATCH (d:Date)-[p:$Rel]->(t:$Target {ticker:$ticker}) WHERE d.date >= date($from) AND d.date <= date($to) WITH t,avg(toFloat(p.$metric)) AS ma RETURN t.ticker,ma"
+"news_between_dates","ticker, from, to, limit","News headlines for company between dates","MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker:$ticker}) WHERE date(datetime(n.created)) >= date($from) AND date(datetime(n.created)) <= date($to) RETURN n.title, n.created ORDER BY n.created DESC LIMIT $limit"
+"price_history_date_range","ticker, from, to","Daily prices for company between dates","MATCH (d:Date)-[p:HAS_PRICE]->(c:Company {ticker:$ticker}) WHERE date(d.date) >= date($from) AND date(d.date) <= date($to) RETURN d.date, p.open, p.high, p.low, p.close, p.volume ORDER BY d.date"
+"price_stats_over_period","ticker, from, to","Price min/max/avg over period","MATCH (d:Date)-[p:HAS_PRICE]->(c:Company {ticker:$ticker}) WHERE date(d.date) >= date($from) AND date(d.date) <= date($to) WITH toFloat(p.close) AS v WHERE NOT isNaN(v) RETURN min(v) AS min_close, max(v) AS max_close, avg(v) AS avg_close"
+"rank_entities_by_property","Label, prop, order, limit","Rank entities by numeric prop","MATCH (n:$Label) WHERE n.$prop IS NOT NULL RETURN n ORDER BY toFloat(n.$prop) $order LIMIT $limit"
+"relationship_count_between_labels","L1, Rel, L2","Count Rel edges between two labels","MATCH (a:$L1)-[r:$Rel]->(b:$L2) RETURN count(r) AS rel_count"
+"relationship_exists_between_node_ids","L1, id1, Rel, L2, id2","Check if relation exists between ids","MATCH (a:$L1 {id:$id1})-[r:$Rel]-(:$L2 {id:$id2}) RETURN count(r)>0 AS exists"
+"report_count_formtype_period","form, from, to","Count of reports of a formType in period","MATCH (r:Report {formType:$form}) WHERE r.created >= date($from) AND r.created <= date($to) RETURN count(r) AS cnt"
+"rolling_sum_metric","Rel, Target, ticker, metric, from, to","Rolling sum metric per period","MATCH (d:Date)-[p:$Rel]->(t:$Target {ticker:$ticker}) WHERE d.date >= date($from) AND d.date <= date($to) WITH t,sum(toFloat(p.$metric)) AS total RETURN t.ticker,total"
+"time_series_extreme_value","Rel, Target, ticker, metric, from, to, order","Max/min metric in period","MATCH (d:Date)-[p:$Rel]->(t:$Target {ticker:$ticker}) WHERE d.date >= date($from) AND d.date <= date($to) WITH p ORDER BY toFloat(p.$metric) $order LIMIT 1 RETURN p.$metric AS value, d.date"
+"top_influence_returns","Event, Target, metric, order, limit","Top N positive/negative INFLUENCES deltas","MATCH (e:$Event)-[r:INFLUENCES]->(t:$Target) WHERE r.$metric IS NOT NULL AND r.$metric <> 'NaN' WITH e,t,toFloat(r.$metric) AS v WHERE NOT isNaN(v) RETURN e.title AS title, labels(t)[0] AS targetType, v ORDER BY v $order LIMIT $limit"
+"transcripts_for_company","ticker, limit","Latest transcripts for a ticker","MATCH (c:Company {ticker:$ticker})-[:HAS_TRANSCRIPT]->(t:Transcript) RETURN t.conference_datetime, t.fiscal_quarter, t.fiscal_year ORDER BY t.conference_datetime DESC LIMIT $limit"
+"two_hop_bridge","L1, Rel1, L2, Rel2, L3, limit","Traverse A-[Rel]->B-[Rel2]->C","MATCH (a:$L1)-[:$Rel1]->(b:$L2)-[:$Rel2]->(c:$L3) RETURN a,b,c LIMIT $limit"
+"vector_similarity_nodes","index, k, embedding, limit","Vector similarity top K nodes","CALL db.index.vector.queryNodes('$index', $k, $embedding) YIELD node,score RETURN node,score LIMIT $limit"
+"related_nodes_single_hop","SrcLabel,srcProp,srcValue,RelType,dir,TgtLabel,limit","List target nodes directly related to a source node","MATCH (src:$SrcLabel { $srcProp: $srcValue })-[:$RelType]$dir(tgt:$TgtLabel)
+RETURN src, tgt
+LIMIT $limit"
+"recent_entities_by_days","Label,dateProp,days,limit","Entities created within last N days","MATCH (e:$Label)
+WHERE datetime(e.$dateProp) > datetime() - duration({days:$days})
+RETURN e
+ORDER BY e.$dateProp DESC
+LIMIT $limit"
+"same_day_events_join","EventA,RelA,EventB,RelB,Target,dateProp,limit","Join two events on same calendar date for target","MATCH (a:$EventA)-[:$RelA]->(t:$Target),
+      (b:$EventB)-[:$RelB]->(t)
+WHERE date(datetime(a.$dateProp)) = date(datetime(b.$dateProp))
+RETURN a,b,t
+LIMIT $limit"
+"report_section_filter","CompanyLabel,ticker,form,section,limit","Sections of reports filtered by name","MATCH (c:$CompanyLabel {ticker:$ticker})<-[:PRIMARY_FILER]-(r:Report {formType:$form})-[:HAS_SECTION]->(s:ExtractedSectionContent)
+WHERE s.section_name CONTAINS $section
+RETURN r, s
+LIMIT $limit"
+"report_subdocument_lookup","form,SubRel,SubLabel,limit","Lookup sub‑docs linked from reports","MATCH (r:Report {formType:$form})-[:$SubRel]->(sub:$SubLabel)
+RETURN r.created, sub
+LIMIT $limit"
+"aggregate_property_by_group","Label,groupProp,aggProp,aggFunc,order,limit","Aggregate property grouped by another","MATCH (n:$Label)
+WITH n.$groupProp AS grp, toFloat(n.$aggProp) AS v
+WHERE NOT isNaN(v)
+RETURN grp, $aggFunc(v) AS value
+ORDER BY value $order
+LIMIT $limit"
+"fact_by_dimension","qname, limit","Single‑dimension numeric fact (e.g., iPhone revenue or Americas segment)","MATCH (f:Fact)-[:FACT_MEMBER]->(m:Member)
+WHERE f.qname = $qname AND f.is_numeric = '1'
+RETURN m.label AS member, f.value AS value, f.decimals, f.unit
+ORDER BY f.value DESC
+LIMIT $limit"
+"two_dim_breakdown","qname, limit","Numeric fact with exactly two dimension members (e.g., product *and* region breakdown)","MATCH (f:Fact)-[:FACT_MEMBER]->(m:Member)
+WHERE f.qname = $qname AND f.is_numeric = '1'
+WITH f, COLLECT(m.label) AS members
+WHERE SIZE(members) = 2
+RETURN members[0] AS dim1, members[1] AS dim2, f.value AS value
+ORDER BY value DESC
+LIMIT $limit"
+"dimension_hierarchy","keyword, limit","Show Dimension → Domain → Member hierarchy for any dimension keyword","MATCH (d:Dimension)-[:HAS_DOMAIN]->(dom:Domain)-[:HAS_MEMBER]->(m:Member)
+WHERE toLower(d.qname) CONTAINS toLower($keyword)
+RETURN d.label AS dimension, dom.label AS domain,
+       COLLECT(DISTINCT m.label)[0..5] AS sample_members
+LIMIT $limit"
+"calculation_tree","parent_qname","Parent fact and its children with weights (e.g., NetIncomeLoss calculation)","MATCH (parent:Fact)-[calc:CALCULATION_EDGE]->(child:Fact)
+WHERE parent.qname = $parent_qname AND calc.weight IS NOT NULL
+RETURN child.qname AS child_concept, calc.weight, calc.order
+ORDER BY calc.order"
+"presentation_outline","section_keyword, limit","Financial statement layout (Abstract → line items) for a given section keyword","MATCH (a:Abstract)-[p:PRESENTATION_EDGE]->(child)
+WHERE toLower(a.qname) CONTAINS toLower($section_keyword)
+RETURN a.label AS section, labels(child)[0] AS child_type,
+       CASE WHEN 'Fact' IN labels(child) THEN child.qname ELSE child.label END AS child_item,
+       p.child_order
+ORDER BY p.child_order
+LIMIT $limit"
+"concept_search_text","term, limit","Full‑text search across Concept labels (us‑gaap only)","CALL db.index.fulltext.queryNodes('concept_ft', $term) YIELD node, score
+WHERE node.namespace CONTAINS 'us-gaap'
+RETURN node.qname, node.label, node.period_type, score
+ORDER BY score DESC
+LIMIT $limit"
+"fact_group_by_unit","limit","Aggregate numeric facts by their Unit (USD, shares, etc.)","MATCH (u:Unit)<-[:HAS_UNIT]-(f:Fact)
+WHERE f.is_numeric = '1'
+RETURN u.name AS unit_type, COUNT(f) AS fact_count
+ORDER BY fact_count DESC
+LIMIT $limit"
+"xbrl_process_status","","Counts of reports grouped by XBRL processing status (SUCCESS, FAILED, etc.)","MATCH (r:Report)
+WHERE r.xbrl_status IS NOT NULL
+RETURN r.xbrl_status AS status, COUNT(r) AS count
+ORDER BY count DESC"
+"fulltext_section_search","search_term, section_filter, limit","Full‑text search any ExtractedSectionContent, optional section name filter","CALL db.index.fulltext.queryNodes('extracted_section_content_ft', $search_term)
+YIELD node, score
+WHERE ($section_filter IS NULL OR node.section_name = $section_filter)
+RETURN node.filing_id, node.section_name, substring(node.content, 0, 1000) AS excerpt, score
+ORDER BY score DESC
+LIMIT coalesce($limit, 20)"
+"section_by_name","ticker, section_name, limit","Direct section lookup for a company & section name","MATCH (c:Company {ticker:$ticker})<-[:PRIMARY_FILER]-(r:Report)-[:HAS_SECTION]->(esc:ExtractedSectionContent)
+WHERE esc.section_name = $section_name
+RETURN c.ticker, r.formType, r.created, substring(esc.content,0,1500) AS excerpt
+ORDER BY r.created DESC
+LIMIT coalesce($limit, 10)"
+"8k_section_specific","event_section_name, days, limit","Retrieve specific 8‑K event sections within a time window","MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report {formType:'8-K'})-[:HAS_SECTION]->(esc:ExtractedSectionContent)
+WHERE esc.section_name = $event_section_name
+  AND datetime(r.created) > datetime() - duration({days:$days})
+RETURN c.ticker, r.created, substring(esc.content,0,1500) AS excerpt
+ORDER BY r.created DESC
+LIMIT coalesce($limit, 20)"
+"exhibit_by_number","ticker, exhibit_number, limit","Fetch exhibit content by exhibit number (e.g., EX‑99.1)","MATCH (c:Company {ticker:$ticker})<-[:PRIMARY_FILER]-(r:Report)-[:HAS_EXHIBIT]->(ec:ExhibitContent)
+WHERE ec.exhibit_number = $exhibit_number
+RETURN c.ticker, r.formType, r.created, substring(ec.content,0,2000) AS excerpt
+ORDER BY r.created DESC
+LIMIT coalesce($limit, 20)"
+"exhibit_fulltext_search","search_term, limit","Full‑text search across all ExhibitContent","CALL db.index.fulltext.queryNodes('exhibit_content_ft', $search_term)
+YIELD node, score
+MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report {id:node.filing_id})
+RETURN c.ticker, r.formType, node.exhibit_number, substring(node.content,0,1000) AS excerpt, score
+ORDER BY score DESC
+LIMIT coalesce($limit, 20)"
+"financial_statement_content","ticker, statement_type, limit","Retrieve JSON financial statement blobs (BalanceSheets, StatementsOfIncome, etc.)","MATCH (c:Company {ticker:$ticker})<-[:PRIMARY_FILER]-(r:Report)-[:HAS_FINANCIAL_STATEMENT]->(fsc:FinancialStatementContent)
+WHERE fsc.statement_type = $statement_type
+RETURN c.ticker, r.formType, r.created, substring(fsc.value,0,1000) AS statement_snippet, size(fsc.value) AS json_size
+ORDER BY r.created DESC
+LIMIT coalesce($limit, 10)"
+"filing_text_fulltext","search_term, form_type_filter, limit","Full‑text search FilingTextContent, optional form type filter","CALL db.index.fulltext.queryNodes('filing_text_content_ft', $search_term)
+YIELD node, score
+WHERE ($form_type_filter IS NULL OR node.form_type = $form_type_filter)
+MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report {id:node.filing_id})
+RETURN c.ticker, node.form_type, substring(node.content,0,1200) AS excerpt, score
+ORDER BY score DESC
+LIMIT coalesce($limit, 20)"
+"news_recent_by_company","ticker, days, limit","Recent News articles influencing a company","MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker:$ticker})
+WHERE n.created > datetime() - duration({days:$days})
+RETURN n.title, n.teaser, n.created, n.url
+ORDER BY n.created DESC
+LIMIT coalesce($limit, 20)"
+"news_fulltext_global","search_term, limit","Full‑text news search across all companies","CALL db.index.fulltext.queryNodes('news_ft', $search_term)
+YIELD node, score
+OPTIONAL MATCH (node)-[:INFLUENCES]->(c:Company)
+RETURN DISTINCT coalesce(c.ticker,'MULTI') AS ticker, node.title, node.teaser, node.created, score
+ORDER BY score DESC
+LIMIT coalesce($limit, 20)"
+"news_high_impact","impact_threshold, limit","News items with absolute stock/industry impact above threshold","MATCH (n:News)-[rel:INFLUENCES]->(c:Company)
+WHERE abs(coalesce(rel.daily_stock, rel.daily_industry)) > $impact_threshold
+RETURN n.title, c.ticker, coalesce(rel.daily_stock, rel.daily_industry) AS impact, n.created
+ORDER BY abs(impact) DESC
+LIMIT coalesce($limit, 20)"
+"transcript_list_company","ticker, limit","List earnings call transcripts for a company","MATCH (c:Company {ticker:$ticker})-[:HAS_TRANSCRIPT]->(t:Transcript)
+RETURN t.conference_datetime, t.fiscal_quarter, t.fiscal_year, t.formType, t.speakers
+ORDER BY t.conference_datetime DESC
+LIMIT coalesce($limit, 10)"
+"prepared_remarks_fulltext","ticker, search_term, limit","Search within prepared remarks for a company transcript","CALL db.index.fulltext.queryNodes('prepared_remarks_ft', $search_term)
+YIELD node, score
+MATCH (t:Transcript)-[:HAS_PREPARED_REMARKS]->(node)
+MATCH (c:Company {ticker:$ticker})-[:HAS_TRANSCRIPT]->(t)
+RETURN t.conference_datetime, substring(node.content,0,2000) AS excerpt, score
+ORDER BY score DESC
+LIMIT coalesce($limit, 10)"
+"qa_fulltext_search","ticker, search_term, limit","Full‑text search across Q&A exchanges for a company","CALL db.index.fulltext.queryNodes('qa_exchange_ft', $search_term)
+YIELD node, score
+MATCH (t:Transcript)-[:HAS_QA_EXCHANGE]->(node)
+MATCH (c:Company {ticker:$ticker})-[:HAS_TRANSCRIPT]->(t)
+RETURN node.questioner, node.questioner_title, substring(node.exchanges,0,1500) AS excerpt, score
+ORDER BY score DESC
+LIMIT coalesce($limit, 10)"
+"combined_content_search","search_term, days, limit","Cross‑content full‑text search (sections, exhibits, filings) within time window","WITH $search_term AS term
+CALL {
+    WITH term
+    CALL db.index.fulltext.queryNodes('extracted_section_content_ft', term)
+    YIELD node, score
+    RETURN node.filing_id AS fid, 'Section' AS type, node.section_name AS name, score
+    UNION
+    WITH term
+    CALL db.index.fulltext.queryNodes('exhibit_content_ft', term)
+    YIELD node, score
+    RETURN node.filing_id AS fid, 'Exhibit' AS type, node.exhibit_number AS name, score
+    UNION
+    WITH term
+    CALL db.index.fulltext.queryNodes('filing_text_content_ft', term)
+    YIELD node, score
+    RETURN node.filing_id AS fid, 'Filing' AS type, node.form_type AS name, score
+}
+MATCH (r:Report {id:fid})<-[:PRIMARY_FILER]-(c:Company)
+WHERE r.created > datetime() - duration({days:$days})
+RETURN c.ticker, r.formType, r.created, type, name, score
+ORDER BY r.created DESC, score DESC
+LIMIT coalesce($limit, 20)"
+"company_report_content_summary","ticker, days, limit","Counts & samples of content types for recent reports of a company","MATCH (c:Company {ticker:$ticker})<-[:PRIMARY_FILER]-(r:Report)
+WHERE r.created > datetime() - duration({days:$days})
+OPTIONAL MATCH (r)-[:HAS_SECTION]->(esc:ExtractedSectionContent)
+OPTIONAL MATCH (r)-[:HAS_EXHIBIT]->(ec:ExhibitContent)
+OPTIONAL MATCH (r)-[:HAS_FINANCIAL_STATEMENT]->(fsc:FinancialStatementContent)
+OPTIONAL MATCH (r)-[:HAS_FILING_TEXT]->(ftc:FilingTextContent)
+RETURN r.formType, r.created,
+       COUNT(DISTINCT esc) AS sections,
+       COUNT(DISTINCT ec) AS exhibits,
+       COUNT(DISTINCT fsc) AS statements,
+       COUNT(DISTINCT ftc) AS filings,
+       COLLECT(DISTINCT esc.section_name)[0..3] AS sample_sections
+ORDER BY r.created DESC
+LIMIT coalesce($limit, 10)"
+"corporate_section_search","section_name, limit","Retrieve common corporate governance sections (e.g., ExecutiveCompensation)","MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report)-[:HAS_SECTION]->(esc:ExtractedSectionContent)
+WHERE esc.section_name = $section_name
+RETURN c.ticker, r.formType, substring(esc.content,0,1500) AS excerpt, r.created
+ORDER BY r.created DESC
+LIMIT coalesce($limit, 20)"

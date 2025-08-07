@@ -33,12 +33,12 @@ async def get_tools():
 # Model selection - uncomment the model you want to use
 # MODEL = 'gpt-4'  # OpenAI GPT-4
 # MODEL = 'gpt-4o'  # OpenAI GPT-4 Optimized
-MODEL = 'opus-4'  # Anthropic Claude Opus 4 ($15/$75 per M tokens)
+# MODEL = 'opus-4'  # Anthropic Claude Opus 4 ($15/$75 per M tokens)
 # MODEL = 'sonnet-4'  # Anthropic Claude Sonnet 4 ($3/$15 per M tokens)
 # MODEL = 'claude'  # Anthropic Claude 3.5 Sonnet
 # MODEL = 'gemini'  # Google Gemini 2.5 Flash
 # MODEL = 'gemini-2.0'  # Google Gemini 2.0 Flash
-# MODEL = 'gpt-4'  # Default
+MODEL = 'gpt-4'  # Default
 
 MODEL_MAP = {
     # OpenAI models
