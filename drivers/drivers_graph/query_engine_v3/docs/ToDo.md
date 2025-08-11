@@ -48,3 +48,8 @@ Analysis of 22,495 8-K reports shows 48,541 ExtractedSectionContent instances ac
 - Query performance: 100x faster than text search
 - Enables aggregation queries impossible with text
 - 90% of queries answerable from extracted nodes, 10% fallback to original text
+
+
+
+
+

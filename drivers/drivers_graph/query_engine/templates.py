@@ -155,6 +155,7 @@ def extract_sector(query: str) -> str:
     return "technology"
 
 
+
 # Template Library
 TEMPLATES = {
     
