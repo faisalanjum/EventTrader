@@ -8,7 +8,7 @@ Analysis of 22,495 8-K reports shows 48,541 ExtractedSectionContent instances ac
 
 ### Extraction Opportunity
 - **Extractable facts**: ~45% of 8-K text contains financial amounts, dates, entity names
-- **XBRL linkage**: 81% of extracted entities can map to XBRL concepts when using company-specific taxonomies from their 10-K/10-Q filings (772 of 794 companies have these)
+- **XBRL linkage**: 81%?? of extracted entities can map to XBRL concepts when using company-specific taxonomies from their 10-K/10-Q filings (772 of 794 companies have these)
 - **Section patterns**: Different section types (MaterialImpairments, DepartureofDirectors, etc.) follow consistent SEC-mandated structures
 
 ### Proposed Approach
@@ -18,7 +18,7 @@ Analysis of 22,495 8-K reports shows 48,541 ExtractedSectionContent instances ac
 4. Mark boilerplate/references for filtering
 
 ### Cost Estimate
-- One-time historical: ~$290 (Gemini 2.5 Pro for 68M tokens)
+- One-time historical: ~$290 (Gemini 2.5 Pro? for 68M tokens)
 - Ongoing: ~$438/year for new filings
 
 ### What Needs Research
@@ -142,7 +142,7 @@ RETURN i.amount, source.content  // Direct traversal, no search
 
 
 
-# Cycpher Query for Analysis
+# Cypher Query for Analysis
 
 ### 1. Get value-counts of all reports including **8-K reports**
     MATCH (n:Report)
@@ -408,7 +408,7 @@ RETURN i.amount, source.content  // Direct traversal, no search
 ## Plan (To be Reviewed)
 
 **Primary Purpose**
-First of all since this was written by an AI, I need to be able to understand each compoent in great detail but in simplest language possible. Let me tell you what i Have in mind and then you can tell me how its set up exactly in step by step manner in a way thats super easy to understand and remember. Look the idea is first for each company separately, we get all its Dimension & Member and Context linked to facts for all reports for a particular company - these are company specific anyway. Then we start with company-specific fact-linked XBRL concepts as well as Unit and Period which are typically generic but constraining it to company will likely result in more accurate xbrl-linking. Next step is using LangExtract we go report (8-K) by report or 8-k report section by section and link these all if possible. For the ones which are not linked to any (Concept, Unit, Period) we can look for any other database-wide concepts, Unit & Period. while concept have to be 100% from the database, for period (& maybe Unit)If those are also not appropriate we have few options - Create 8-k specific period (also can be used with context since its simply period + company) and use those. company-specific Dimension and or member (more appropriately) should be linked to extracted 8k-facts whenever applicable and possible to make better sense of data.  Other minor details are each 8k-fact is linked to its respective section or report as case maybe. For each specific section type, we ned to provide a different extraction schema to LangExtract so it can do the job well. Ideally, all facts mentioned in the 8-k sections/reports are 100% properly extracted and linked to xbrl concepts, unit, period, context. Any related textual data or value will be a property of that 8k-fact node. Overall this is the primary requirement so first how well is our plan implementing this. second is there anything in the plan which is unnecessary to this primary purpose since ideally we would like most minimalistic yet 100% reliable implementation. 
+First of all since this was written by an AI, I need to be able to understand each component in great detail but in simplest language possible. Let me tell you what i Have in mind and then you can tell me how its set up exactly in step by step manner in a way thats super easy to understand and remember. Look the idea is first for each company separately, we get all its Dimension & Member and Context linked to facts for all reports (mostly currently these reports have XBRL linked nodes : 10-Ks & 10-Qs) for a particular company - these are company specific anyway. Then we start with company-specific fact-linked XBRL concepts as well as Unit and Period which are typically generic but constraining it to company will likely result in more accurate xbrl-linking. Next step is using LangExtract we go report (8-K) by report or 8-k report section by section and link these all if possible. For the ones which are not linked to any (Concept, Unit, Period) we can look for any other database-wide concepts, Unit & Period. while concept have to be 100% from the database, for period (& maybe Unit)If those are also not appropriate we have few options - Create 8-k specific period (also can be used with context since its simply period + company) and use those. company-specific Dimension and or member (more appropriately) should be linked to extracted 8k-facts whenever applicable and possible to make better sense of data.  Other minor details are each 8k-fact is linked to its respective section or report as case maybe. For each specific section type, we ned to provide a different extraction schema to LangExtract so it can do the job well. Ideally, all facts mentioned in the 8-k sections/reports are 100% properly extracted and linked to xbrl concepts, unit, period, context. Any related textual data or value will be a property of that 8k-fact node. Overall this is the primary requirement so first how well is our plan implementing this. second is there anything in the plan which is unnecessary to this primary purpose since ideally we would like most minimalistic yet 100% reliable implementation. 
 
 
 **Why we’re doing this (context)**
@@ -2418,7 +2418,7 @@ Original solution below with enhancements integrated:
 
 #### Implementation
 
-```python
+```python```
 import hashlib
 import os
 from datetime import datetime
@@ -2467,7 +2467,7 @@ def build_final_lexicon(cik: str, neo4j_session, alias_file_path: Optional[str] 
     
     for row in results:
         if not lexicon_version:
-            lexicon_version = row['lexicon_version']
+            lexicon_version = row['lexicon_version'] 
         
         qname = row['qname']
         namespace = row['namespace']
