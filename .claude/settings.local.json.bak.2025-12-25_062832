@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(kubectl:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(true)",
+      "Bash(grep:*)",
+      "Bash(awk:*)",
+      "Bash(nc:*)",
+      "Bash(redis-cli get:*)",
+      "WebFetch(domain:neo4j.com)",
+      "Bash(# Monitor for 60 seconds to see real processing\necho \"\"Monitoring queue changes over 60 seconds...\"\" && \\\nSTART=$(kubectl exec deploy/redis -n infrastructure -- redis-cli LLEN reports:queues:xbrl:light) && \\\nSTART_TIME=$(date +%s) && \\\nsleep 60 && \\\nEND=$(kubectl exec deploy/redis -n infrastructure -- redis-cli LLEN reports:queues:xbrl:light) && \\\nEND_TIME=$(date +%s) && \\\nDURATION=$((END_TIME - START_TIME)) && \\\nPROCESSED=$((START - END)) && \\\necho \"\"Light queue: $START → $END (processed $PROCESSED items in $DURATION seconds)\"\" && \\\necho \"\"Rate: $(bc -l <<< \"\"scale=2; $PROCESSED * 60 / $DURATION\"\") items/minute\"\")",
+      "Bash(echo:*)",
+      "Bash(for q in heavy medium light)",
+      "Bash(do echo:*)",
+      "Bash(done)",
+      "Bash(./scripts/et:*)",
+      "Bash(chmod:*)",
+      "Bash(chown:*)",
+      "Bash(source:*)",
+      "Bash(python test:*)",
+      "mcp__neo4j-cypher__write_neo4j_cypher",
+      "mcp__neo4j-cypher__read_neo4j_cypher",
+      "mcp__mcp_sequentialthinking_tools__sequentialthinking_tools",
+      "mcp__neo4j-cypher__get_neo4j_schema",
+      "mcp__neo4j-memory__create_entities",
+      "Bash(export POLYGON_API_KEY=\"Q0npYHW_FKvSWnYhkPTDnpcEtDpkGu1s\")",
+      "Bash(python:*)",
+      "Bash(redis-cli:*)",
+      "Bash(mv:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": [
+    "neo4j-cypher",
+    "neo4j-memory"
+  ]
+}

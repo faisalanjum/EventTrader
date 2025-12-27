@@ -1,0 +1,6 @@
+ticker: DELL
+company: DELL TECHNOLOGIES INC
+cik: 0001571996
+accession: 0001571996-25-000096
+filed: 2025-08-28T16:09:59-04:00
+items: ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"]

@@ -1,0 +1,46 @@
+title,category,expected,predicted,correct,confidence,needs_llm,method
+"Apple Reports Q4 2023 Earnings: Revenue $89.5B, EPS $1.46 Beats $1.39 Estimate",explicit,True,True,True,0.98,False,Q[1-4]\s+20\d{2}\s+earnings
+Microsoft Q3 Earnings Call Set for April 25 After Market Close,explicit,True,True,True,0.98,False,earnings\s+(report|results|call|conference)
+"Amazon Posts Strong Q2 Results, Raises Full-Year Guidance",explicit,True,True,True,0.7,True,4 weak indicators
+Google Parent Alphabet Q1 EPS $1.17 Misses $1.21 Estimate,explicit,True,True,True,0.98,False,EPS\s+(\$[\d.]+\s+)?(beat|miss)
+Tesla Earnings Recap: Q4 Revenue Up 3% YoY to $25.2B,explicit,True,True,True,0.75,True,Financial + temporal only
+Intel Sees Data Center Revenue Up 10% in September Quarter,implicit,True,True,True,0.75,True,Financial + temporal only
+Apple Services Revenue Grows to $22.3B in Latest Quarter,implicit,True,True,True,0.75,True,Financial + temporal only
+"Microsoft Cloud Revenue Reaches $33.7B, Up 22% Year-Over-Year",implicit,True,False,False,0.8,True,No strong earnings indicators
+Amazon AWS Revenue Jumps 13% to $25B in Q1,implicit,True,True,True,0.75,True,Financial + temporal only
+Meta Ad Revenue Increases 24% in Second Quarter,implicit,True,True,True,0.75,True,Financial + temporal only
+Nvidia Raises Full-Year Revenue Guidance to $32B,guidance,True,True,True,0.7,True,3 weak indicators
+Disney Lowers FY24 Streaming Losses Outlook,guidance,True,True,True,0.7,True,3 weak indicators
+Walmart Sees Q4 EPS $1.65-$1.75 vs $1.65 Estimate,guidance,True,False,False,0.8,True,No strong earnings indicators
+Target Maintains Full-Year Comparable Sales Guidance,guidance,True,True,True,0.7,True,3 weak indicators
+Intel Updates Q4 Revenue Outlook to $14.6B-$15.6B,guidance,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 1, 'action': 0}"
+Netflix Stock Jumps 8% After Q3 Subscriber Beat,reaction,True,False,False,0.8,True,No strong earnings indicators
+Bank of America Shares Rise on Better-Than-Expected Q2 Earnings,reaction,True,False,False,0.65,True,Earnings mentioned without context
+Snap Stock Falls Despite Meeting Q4 Revenue Estimates,reaction,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 1, 'action': 0}"
+AMD Shares Surge Following Strong Quarterly Results,reaction,True,False,False,0.8,True,No strong earnings indicators
+Boeing Stock Drops After Reporting Wider Q1 Loss,reaction,True,False,False,0.8,True,No strong earnings indicators
+Microsoft Announces $69B Acquisition of Activision Blizzard,corporate,False,False,True,0.97,False,acqui(re|sition)
+Apple Unveils iPhone 15 Pro with Titanium Design,product,False,False,True,0.8,False,No strong earnings indicators
+Google Launches Gemini AI Model to Compete with GPT-4,product,False,False,True,0.8,False,No strong earnings indicators
+"Amazon Opens New Fulfillment Center in Ohio Creating 1,000 Jobs",corporate,False,False,True,0.8,False,No strong earnings indicators
+"Tesla Recalls 363,000 Vehicles Over FSD Beta Safety Concerns",corporate,False,False,True,0.8,False,No strong earnings indicators
+Disney Appoints Hugh Johnston as New CFO,executive,False,False,True,0.8,False,No strong earnings indicators
+Twitter CEO Linda Yaccarino Outlines Vision for X Platform,executive,False,False,True,0.8,False,No strong earnings indicators
+Intel Board Names Pat Gelsinger as CEO,executive,False,False,True,0.8,False,No strong earnings indicators
+Starbucks Founder Howard Schultz Steps Down from Board,executive,False,False,True,0.8,False,No strong earnings indicators
+GM President Mark Reuss to Retire After 35 Years,executive,False,False,True,0.97,False,(CEO|CFO|President).*(retire|resign)
+Pfizer Receives FDA Approval for RSV Vaccine,regulatory,False,False,True,0.97,False,FDA\s+approv
+Moderna Begins Phase 3 Trial of mRNA Cancer Vaccine,medical,False,False,True,0.97,False,phase\s+[123]\s+(trial|study)
+J&J Reaches $8.9B Settlement in Talc Lawsuit,legal,False,False,True,0.8,False,No strong earnings indicators
+Eli Lilly Drug Shows Promise in Alzheimer's Trial,medical,False,False,True,0.8,False,No strong earnings indicators
+Abbott Recalls Baby Formula Due to Contamination Concerns,regulatory,False,False,True,0.8,False,No strong earnings indicators
+Apple CEO Tim Cook Discusses Services Growth at Goldman Conference,edge_event,False,False,True,0.8,False,No strong earnings indicators
+Microsoft CFO Says Cloud Margins to Improve This Year,edge_forward,False,False,True,0.8,True,No strong earnings indicators
+Amazon Executives Highlight AWS Momentum at Investor Day,edge_event,False,False,True,0.8,False,No strong earnings indicators
+Airbnb CEO Discusses AI Strategy During Q4 Earnings Call,edge_earnings_mention,False,True,False,0.98,False,earnings\s+(report|results|call|conference)
+"Tesla Delivers Record 466,000 Vehicles in Q2",edge_operational,False,False,True,0.8,True,No strong earnings indicators
+Nike Posts Strong Digital Sales Growth in Latest Quarter,edge_ambiguous,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 0, 'action': 1}"
+Coca-Cola Volume Grows 2% Despite Price Increases,edge_operational,False,False,True,0.8,False,No strong earnings indicators
+Facebook Parent Meta Sees Ad Prices Stabilize,edge_trend,False,False,True,0.8,False,No strong earnings indicators
+Walmart Comp Sales Rise 4.0% in Q3,edge_metric,True,True,True,0.75,True,Financial + temporal only
+Home Depot Reports October Sales Trends,edge_trend,False,False,True,0.8,True,No strong earnings indicators

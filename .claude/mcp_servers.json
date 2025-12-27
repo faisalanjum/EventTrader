@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mcp_sequentialthinking_tools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["mcp-sequentialthinking-tools"],
+      "env": {
+        "AVAILABLE_TOOLS": "get_neo4j_schema,read_neo4j_cypher,write_neo4j_cypher"
+      }
+    }
+  }
+}

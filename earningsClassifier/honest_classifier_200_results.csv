@@ -1,0 +1,201 @@
+id,title,category,expected,predicted,correct,confidence,needs_llm,method
+test_0,Tesla Gross Margins Under Pressure,edge_trend,False,False,True,0.8,True,No strong earnings indicators
+test_1,IBM Leads S&P 500 Jumps with 7% Gain,market_reaction_earnings,True,False,False,0.8,False,No strong earnings indicators
+test_2,Target Quarterly Earnings Exceed Analyst Expectations,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_3,Microsoft Opens New R&D Lab in Europe,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_4,Pfizer Begins Phase 2 Trial of Therapy-A for Cancer,medical,False,False,True,0.97,False,Definitive non-earnings pattern
+test_5,Moderna Appoints John Smith as New President,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_6,"Tesla Reports Q3 2024 Earnings: Revenue $89.0B, EPS $4.68 Beats $4.58 Estimate",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_7,Walmart Announces $12B Acquisition of DataCorp,corporate,False,False,True,0.97,False,Definitive non-earnings pattern
+test_8,Goldman Sachs Cuts Revenue Guidance Citing Weak Demand,guidance,True,False,False,0.8,True,No strong earnings indicators
+test_9,"Oracle Reports Q4 2023 Earnings: Revenue $123.8B, EPS $0.64 Beats $0.67 Estimate",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_10,Amazon Prime Day Sales Hit New Record,edge_operational,False,False,True,0.8,True,No strong earnings indicators
+test_11,Apple Boosts Full-Year Profit Forecast Amid Strong Demand,guidance,True,False,False,0.8,True,No strong earnings indicators
+test_12,Salesforce Stock Rallies 4% After Product Launch,market_reaction_other,False,False,True,0.8,True,No strong earnings indicators
+test_13,"Oracle Reports Mixed Q2 Results: Revenue Beat, EPS Miss",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_14,Salesforce Reaffirms 24 Financial Targets,guidance,True,False,False,0.8,True,No strong earnings indicators
+test_15,Nike Announces Q4 Earnings Beat: EPS $2.06 vs $1.96 Expected,explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_16,Bank of America Q1 Earnings Call Scheduled for Tuesday After Market Close,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_17,Gilead Begins Phase 2 Trial of Drug-X for Diabetes,medical,False,False,True,0.97,False,Definitive non-earnings pattern
+test_18,Oracle Maintains 2024 Sales Guidance Despite Headwinds,guidance,True,True,True,0.7,True,3 weak indicators
+test_19,Target Opens New Office in California,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_20,"Amazon Announces 5,000 Job Cuts Amid Restructuring",corporate,False,False,True,0.8,True,No strong earnings indicators
+test_21,Microsoft CFO Amy Hood to Present at Morgan Stanley Conference,edge_conference,False,False,True,0.8,False,No strong earnings indicators
+test_22,Walmart Sees Q1 Revenue $18.6B-$20.5B vs $19.5B Consensus,guidance,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 1, 'action': 0}"
+test_23,"Microsoft Posts Strong Q2 EPS of $2.75, Sales $73.3B Beat Estimates",explicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 2, 'action': 1}"
+test_24,JPMorgan Quarterly Earnings Exceed Analyst Expectations,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_25,Earnings Preview: Bank of America Expected to Report $3.29 EPS for Q4,explicit_earnings,True,False,False,0.65,True,Earnings mentioned without context
+test_26,J&J Halts Therapy-A Trial Due to Side Effects,medical,False,False,True,0.8,False,No strong earnings indicators
+test_27,Netflix Sees Profit Margin Expand to 40% in Latest Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_28,PepsiCo Q4 Earnings Call Scheduled for Monday After Market Close,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_29,Disney Shares Surges on Analyst Upgrade,market_reaction_other,False,False,True,0.8,False,No strong earnings indicators
+test_30,"Coca-Cola Third Quarter Sales Reach $37.8B, Up 31% Year-Over-Year",implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_31,Morgan Stanley President to Retire After 29 Years,corporate,False,False,True,0.97,False,Definitive non-earnings pattern
+test_32,JPMorgan Announces Q4 Earnings Beat: EPS $1.32 vs $1.44 Expected,explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_33,Visa Q2 Earnings Call Scheduled for Friday After Market Close,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_34,Intel CEO Discusses Chip Strategy During Q4 Earnings Call,edge_earnings_mention,False,True,False,0.98,False,Definitive earnings pattern
+test_35,Mastercard Announces $14B Acquisition of CloudCo,corporate,False,False,True,0.97,False,Definitive non-earnings pattern
+test_36,"Oracle Reports Mixed Q1 Results: Revenue Beat, EPS Miss",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_37,Disney Sees Profit Margin Expand to 23% in Latest Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_38,"Oracle 2024 Q3 Results: Adj. EPS $3.62 vs $3.69 Est., Revenue $52.5B vs $52.4B Est.",explicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_39,Moderna Q1 Financial Results: Revenue Up 30% YoY to $102.8B,explicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_40,McDonald's Tests New AI Drive-Thru Technology,edge_technology,False,False,True,0.8,False,No strong earnings indicators
+test_41,Merck Halts Therapy-A Trial Due to Safety Concerns,medical,False,False,True,0.8,False,No strong earnings indicators
+test_42,Goldman Sachs Revenue Grows 15% to $25.6B in Second Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_43,"Moderna 2024 Q3 Results: Adj. EPS $1.74 vs $1.67 Est., Revenue $42.2B vs $40.4B Est.",explicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_44,Moderna Receives FDA Approval for Vaccine-Z to Treat Diabetes,medical,False,False,True,0.97,False,Definitive non-earnings pattern
+test_45,Moderna Leads Nasdaq Plunges with 14% Gain,market_reaction_other,False,False,True,0.8,False,No strong earnings indicators
+test_46,Starbucks Expands into Asian Market with New Chip,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_47,"Home Depot Delivers Strong Q1 Earnings, Raises Full-Year Guidance",explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_48,Netflix Announces Q3 Earnings Beat: EPS $3.89 vs $3.69 Expected,explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_49,Google Partners with Startup on Cloud Services,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_50,Disney+ Reaches 150 Million Subscribers,edge_operational,False,False,True,0.8,False,No strong earnings indicators
+test_51,AMD CEO Lisa Su on Competition at Earnings Conference,edge_earnings_mention,False,True,False,0.98,False,Definitive earnings pattern
+test_52,Nike Boosts Full-Year Profit Forecast Amid Strong Demand,guidance,True,False,False,0.8,True,No strong earnings indicators
+test_53,Mastercard Sees Profit Margin Expand to 8% in Latest Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_54,Netflix Plans Ad-Tier Expansion,edge_strategy,False,False,True,0.8,False,No strong earnings indicators
+test_55,Starbucks Opens 500th Store in China,edge_expansion,False,False,True,0.8,False,No strong earnings indicators
+test_56,Moderna Faces 29M Fine for Antitrust,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_57,Starbucks Reaffirms 2024 Financial Targets,guidance,True,False,False,0.8,False,No strong earnings indicators
+test_58,Nike Cloud Revenue Jumps 25% in Q2,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_59,"Walmart Reports Mixed Q1 Results: Revenue Beat, EPS Miss",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_60,"Nvidia Announces 10,000 Job Cuts Amid Restructuring",corporate,False,False,True,0.8,True,No strong earnings indicators
+test_61,Adobe Expands into Latin American Market with New AI Assistant,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_62,Meta CEO to Retire After 13 Years,corporate,False,False,True,0.97,False,Definitive non-earnings pattern
+test_63,Nvidia Stock Drops 4% After Strong Results,market_reaction_earnings,True,False,False,0.8,False,No strong earnings indicators
+test_64,Morgan Stanley Software Revenue Jumps 36% in Q1,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_65,Pfizer Q1 Financial Results: Revenue Up 17% YoY to $15.1B,explicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_66,Salesforce Appoints John Smith as New CTO,corporate,False,False,True,0.8,True,No strong earnings indicators
+test_67,Netflix Opens New Office in New York,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_68,Merck Drug-X Shows Safety Profile in Phase 3 Cancer Trial,medical,False,False,True,0.8,False,No strong earnings indicators
+test_69,"Google Latest Quarter: Cloud Revenue $37.6B, Up 27%",implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_70,Home Depot Boosts Full-Year Profit Forecast Amid Strong Demand,guidance,True,False,False,0.8,True,No strong earnings indicators
+test_71,Amazon AWS Growth Slows to 12%,edge_trend,False,False,True,0.8,False,No strong earnings indicators
+test_72,Mastercard Leads Dow Falls with 8% Gain,market_reaction_earnings,True,False,False,0.8,False,No strong earnings indicators
+test_73,Meta Reality Labs Losses Widen to $3.7B,edge_segment,False,False,True,0.8,False,No strong earnings indicators
+test_74,Moderna Quarterly Earnings Exceed Analyst Expectations,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_75,"Pfizer Reports Q4 2024 Earnings: Revenue $85.4B, EPS $3.19 Beats $3.0 Estimate",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_76,Target Expands into Latin American Market with New Mobile App,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_77,Goldman Sachs Raises FY23 Revenue Guidance to $82.2B-$90.4B,guidance,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 1, 'action': 1}"
+test_78,Netflix Cloud Revenue Jumps 9% in Q1,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_79,Coca-Cola Boosts Full-Year Profit Forecast Amid Strong Demand,guidance,True,False,False,0.8,True,No strong earnings indicators
+test_80,Gilead Drug Fails to Meet Primary Endpoint in Cancer Study,medical,False,False,True,0.8,False,No strong earnings indicators
+test_81,"Mastercard Delivers Strong Q4 Earnings, Raises Full-Year Guidance",explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_82,Apple Stock Drops 6% After Partnership News,market_reaction_other,False,False,True,0.8,False,No strong earnings indicators
+test_83,Home Depot Leads S&P 500 Surges with 9% Gain,market_reaction_earnings,True,False,False,0.8,False,No strong earnings indicators
+test_84,Amazon Shares Rallies on Analyst Upgrade,market_reaction_earnings,True,False,False,0.8,False,No strong earnings indicators
+test_85,Target Q4 Earnings Call Scheduled for Monday After Market Close,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_86,Mastercard Q2 Earnings Call Scheduled for Monday After Market Close,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_87,Gilead Drug Fails to Meet Primary Endpoint in Diabetes Study,medical,False,False,True,0.8,False,No strong earnings indicators
+test_88,Salesforce Unveils New Chip at CES,corporate,False,False,True,0.8,True,No strong earnings indicators
+test_89,Google Appoints John Smith as New CFO,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_90,"Nike Reports Mixed Q1 Results: Revenue Beat, EPS Miss",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_91,"Amazon Posts Weak Q4 EPS of $3.27, Sales $13.0B Beat Estimates",explicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 2, 'action': 1}"
+test_92,Disney Revenue Grows 22% to $24.2B in Latest Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_93,Microsoft Lowers Q2 EPS Outlook to $2.64-$2.9,guidance,True,True,True,0.7,True,3 weak indicators
+test_94,AbbVie Submits NDA for Drug-X Approval,medical,False,False,True,0.8,False,No strong earnings indicators
+test_95,"Bank of America Delivers Strong Q1 Earnings, Raises Full-Year Guidance",explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_96,Nvidia Quarterly Earnings Exceed Analyst Expectations,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_97,Morgan Stanley Leads Nasdaq Jumps with 3% Gain,market_reaction_earnings,True,False,False,0.8,False,No strong earnings indicators
+test_98,Gilead Drug Fails to Meet Primary Endpoint in COVID-19 Study,medical,False,False,True,0.8,False,No strong earnings indicators
+test_99,Morgan Stanley Reports Record Fourth Quarter Revenue of $29.8B,implicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 0, 'action': 1}"
+test_100,Meta Unveils New Mobile App at Developer Event,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_101,Earnings Preview: Target Expected to Report $3.95 EPS for Q1,explicit_earnings,True,False,False,0.65,True,Earnings mentioned without context
+test_102,Microsoft Stock Surges 3% After Revenue Beat,market_reaction_earnings,True,False,False,0.8,True,No strong earnings indicators
+test_103,Disney Reports Record Fourth Quarter Revenue of $22.9B,implicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 0, 'action': 1}"
+test_104,"Microsoft Reports Mixed Q3 Results: Revenue Beat, EPS Miss",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_105,Target Announces Q2 Earnings Beat: EPS $3.54 vs $3.54 Expected,explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_106,Oracle Expands into Latin American Market with New Cloud Platform,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_107,Disney Announces $30B Acquisition of TechStartup,corporate,False,False,True,0.97,False,Definitive non-earnings pattern
+test_108,Starbucks Stock Surges 8% After FDA Approval,market_reaction_other,False,False,True,0.97,False,Definitive non-earnings pattern
+test_109,Coca-Cola Hardware Revenue Jumps 7% in Q3,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_110,Goldman Sachs Stock Jumps Despite Partnership News,market_reaction_other,False,False,True,0.8,False,No strong earnings indicators
+test_111,AbbVie Vaccine-Z Shows Efficacy in Phase 1 Cancer Trial,medical,False,False,True,0.8,False,No strong earnings indicators
+test_112,J&J Drug-X Shows Positive Results in Phase 3 COVID-19 Trial,medical,False,False,True,0.8,False,No strong earnings indicators
+test_113,Apple Services Revenue Reaches All-Time High,edge_trend,False,False,True,0.8,True,No strong earnings indicators
+test_114,Walmart Q2 Earnings Call Scheduled for Friday After Market Close,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_115,Mastercard Partners with University on 5G Network,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_116,McDonald's Quarterly Earnings Exceed Analyst Expectations,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_117,Nvidia Sees Profit Margin Expand to 19% in Latest Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_118,Nike Q3 Earnings Call Scheduled for Monday After Market Close,explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_119,Walmart Unveils New AI Assistant at Developer Event,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_120,McDonald's Announces Q2 Earnings Beat: EPS $2.88 vs $2.65 Expected,explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_121,J&J Recalls Medicine Due to Contamination,medical,False,False,True,0.8,False,No strong earnings indicators
+test_122,Disney Partners with Government on Cloud Services,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_123,"Google Reports Mixed Q2 Results: Revenue Beat, EPS Miss",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_124,"Coca-Cola 2023 Q2 Results: Adj. EPS $3.96 vs $4.07 Est., Revenue $73.6B vs $71.8B Est.",explicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_125,Apple Boosts Full-Year Profit Forecast Amid Strong Demand,guidance,True,False,False,0.8,True,No strong earnings indicators
+test_126,Apple CEO Tim Cook Discusses Services Growth at Goldman Sachs Conference,edge_conference,False,False,True,0.8,False,No strong earnings indicators
+test_127,Starbucks Partners with University on 5G Network,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_128,Walmart Reports Record Second Quarter Revenue of $29.2B,implicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 0, 'action': 1}"
+test_129,Starbucks Reports Record First Quarter Revenue of $49.0B,implicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 0, 'action': 1}"
+test_130,Mastercard Faces 45M Fine for Privacy Breach,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_131,Johnson & Johnson Sees Profit Margin Expand to 40% in Latest Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_132,FDA Grants Breakthrough Therapy to J&J's Therapy-A,medical,False,False,True,0.8,False,No strong earnings indicators
+test_133,Goldman Sachs Revenue Grows 10% to $19.8B in Second Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_134,Bank of America Posts First Quarter Operating Income of $6.6M,implicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 0, 'action': 1}"
+test_135,Google Lowers Q3 EPS Outlook to $8.54-$9.39,guidance,True,True,True,0.7,True,3 weak indicators
+test_136,Coca-Cola Stock Plunges Despite Partnership News,market_reaction_other,False,False,True,0.8,False,No strong earnings indicators
+test_137,Salesforce Maintains 2024 Sales Guidance Despite Headwinds,guidance,True,True,True,0.7,True,3 weak indicators
+test_138,Bank of America Revenue Grows 22% to $33.4B in Latest Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_139,Nike Digital Sales Growth Accelerates,edge_trend,False,False,True,0.8,True,No strong earnings indicators
+test_140,"Amazon Posts Strong Q3 EPS of $4.95, Sales $109.2B Beat Estimates",explicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 2, 'action': 1}"
+test_141,Walmart Expands into Asian Market with New Mobile App,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_142,Merck Drug Fails to Meet Primary Endpoint in COVID-19 Study,medical,False,False,True,0.8,False,No strong earnings indicators
+test_143,Apple Cuts Revenue Guidance Citing Weak Demand,guidance,True,False,False,0.8,True,No strong earnings indicators
+test_144,"Visa Delivers Strong Q2 Earnings, Raises Full-Year Guidance",explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_145,Google Cloud Nears Profitability Milestone,edge_trend,False,False,True,0.8,True,No strong earnings indicators
+test_146,PepsiCo Leads Dow Plunges with 8% Gain,market_reaction_earnings,True,False,False,0.8,False,No strong earnings indicators
+test_147,Moderna Begins Phase 2 Trial of Drug-X for COVID-19,medical,False,False,True,0.97,False,Definitive non-earnings pattern
+test_148,Nike Stock Plunges 7% After Product Launch,market_reaction_other,False,False,True,0.8,False,No strong earnings indicators
+test_149,"Mastercard Second Quarter Sales Reach $10.6B, Up 12% Year-Over-Year",implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_150,McDonald's Stock Jumps 13% After EPS Beat,market_reaction_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_151,Intel CEO to Retire After 30 Years,corporate,False,False,True,0.97,False,Definitive non-earnings pattern
+test_152,Home Depot Partners with Startup on Cloud Services,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_153,Tesla Unveils New Mobile App at Developer Event,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_154,Microsoft Sees Continued Cloud Strength,edge_outlook,False,False,True,0.8,False,No strong earnings indicators
+test_155,Google Cloud Revenue Jumps 11% in Q4,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_156,Merck Begins Phase 1 Trial of Vaccine-Z for Alzheimer's,medical,False,False,True,0.97,False,Definitive non-earnings pattern
+test_157,Oracle Sees Q1 Revenue $74.4B-$81.8B vs $78.1B Consensus,guidance,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 1, 'action': 0}"
+test_158,Salesforce Stock Plunges Despite FDA Approval,market_reaction_other,False,False,True,0.97,False,Definitive non-earnings pattern
+test_159,Salesforce Sees Profit Margin Expand to 7% in Latest Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_160,"Oracle Reports Q4 2024 Earnings: Revenue $193.2B, EPS $3.35 Beats $3.15 Estimate",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_161,McDonald's Cloud Revenue Jumps 25% in Q2,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_162,Netflix Unveils New AI Assistant at Developer Event,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_163,"Nike Reports Q2 2024 Earnings: Revenue $30.4B, EPS $3.9 Beats $4.1 Estimate",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_164,FDA Grants Breakthrough Therapy to AbbVie's Therapy-A,medical,False,False,True,0.8,False,No strong earnings indicators
+test_165,"Nvidia Delivers Strong Q4 Earnings, Raises Full-Year Guidance",explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_166,Target Announces Q1 Earnings Beat: EPS $4.6 vs $4.89 Expected,explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_167,"Walmart Reports Q4 2023 Earnings: Revenue $113.3B, EPS $4.53 Beats $4.47 Estimate",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_168,"Google Reports Mixed Q2 Results: Revenue Beat, EPS Miss",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_169,Visa Announces $21B Acquisition of DataCorp,corporate,False,False,True,0.97,False,Definitive non-earnings pattern
+test_170,"Tesla Delivers Record 466,140 Vehicles in Q2 2023",edge_operational,False,False,True,0.8,True,No strong earnings indicators
+test_171,Intel Shares Plunges on Heavy Volume,market_reaction_other,False,False,True,0.8,False,No strong earnings indicators
+test_172,Walmart Comp Sales Rise 4.0% in Q3,edge_metric,True,True,True,0.75,True,Financial + temporal only
+test_173,Walmart Reports Record Third Quarter Revenue of $36.7B,implicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 0, 'action': 1}"
+test_174,JPMorgan Faces 39M Fine for Antitrust,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_175,JPMorgan Maintains 23 Sales Guidance Despite Macro Uncertainty,guidance,True,True,True,0.7,True,3 weak indicators
+test_176,Johnson & Johnson Raises FY2024 Revenue Guidance to $68.3B-$75.1B,guidance,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 1, 'action': 1}"
+test_177,"PepsiCo Third Quarter: Cloud Revenue $41.8B, Up 15%",implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_178,Moderna Sees Profit Margin Expand to 35% in Latest Quarter,implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_179,Target Same-Store Sales Decline 5.4%,edge_metric,True,False,False,0.8,True,No strong earnings indicators
+test_180,"Adobe Announces 5,000 Job Cuts Amid Restructuring",corporate,False,False,True,0.8,True,No strong earnings indicators
+test_181,Netflix Faces 40M Fine for Antitrust,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_182,Tesla Lowers Q3 EPS Outlook to $6.53-$7.18,guidance,True,True,True,0.7,True,3 weak indicators
+test_183,Walmart Announces $50B Acquisition of AILabs,corporate,False,False,True,0.97,False,Definitive non-earnings pattern
+test_184,Pfizer Recalls Device Due to Labeling Error,medical,False,False,True,0.8,False,No strong earnings indicators
+test_185,McDonald's Announces Q3 Earnings Beat: EPS $3.59 vs $3.36 Expected,explicit_earnings,True,True,True,0.7,True,3 weak indicators
+test_186,Mastercard Shares Jumps on Analyst Upgrade,market_reaction_earnings,True,False,False,0.8,False,No strong earnings indicators
+test_187,McDonald's Opens New Factory in New York,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_188,Tesla Raises FY24 Revenue Guidance to $27.8B-$30.6B,guidance,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 1, 'action': 1}"
+test_189,Moderna Partners with Government on Cloud Services,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_190,Starbucks Faces 16M Fine for Securities,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_191,Tesla Unveils New Chip at Tech Conference,corporate,False,False,True,0.8,False,No strong earnings indicators
+test_192,Starbucks Reports Record Fourth Quarter Revenue of $44.2B,implicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 0, 'action': 1}"
+test_193,"Bank of America Reports Q4 2023 Earnings: Revenue $87.8B, EPS $2.89 Beats $3.1 Estimate",explicit_earnings,True,True,True,0.98,False,Definitive earnings pattern
+test_194,"Nvidia 2023 Q3 Results: Adj. EPS $1.48 vs $1.45 Est., Revenue $161.0B vs $157.9B Est.",explicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_195,Gilead Recalls Vaccine Due to Contamination,medical,False,False,True,0.8,False,No strong earnings indicators
+test_196,PepsiCo Posts Second Quarter Operating Income of $29.2M,implicit_earnings,True,True,True,0.85,True,"Multiple indicators: {'financial': 1, 'temporal': 1, 'performance': 0, 'action': 1}"
+test_197,Netflix Adds 5.9 Million Subscribers in Q2,edge_metric,True,False,False,0.8,True,No strong earnings indicators
+test_198,"IBM First Quarter Sales Reach $43.3B, Up 39% Year-Over-Year",implicit_earnings,True,True,True,0.75,True,Financial + temporal only
+test_199,"Disney 2024 Q4 Results: Adj. EPS $1.34 vs $1.22 Est., Revenue $35.9B vs $34.1B Est.",explicit_earnings,True,True,True,0.75,True,Financial + temporal only

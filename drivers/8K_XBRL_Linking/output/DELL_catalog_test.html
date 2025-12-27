@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>XBRL Catalog: DELL TECHNOLOGIES INC</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+               max-width: 1400px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                   color: white; padding: 30px; border-radius: 10px; margin-bottom: 20px; }
+        .header h1 { margin: 0 0 10px 0; }
+        .header .meta { opacity: 0.8; font-size: 14px; }
+        .section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 15px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .section h2 { color: #1a1a2e; margin-top: 0; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
+        .section h3 { color: #333; margin: 15px 0 10px 0; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { background: #f0f0f0; text-align: left; padding: 10px; font-weight: 600; }
+        td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f8f8f8; }
+        .qname { font-family: monospace; color: #0066cc; }
+        .value { font-family: monospace; text-align: right; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; }
+        .badge-credit { background: #e8f5e9; color: #2e7d32; }
+        .badge-debit { background: #fff3e0; color: #e65100; }
+        .history { font-size: 12px; color: #666; margin-top: 4px; }
+        .fiscal { background: #e3f2fd; padding: 15px; border-radius: 6px; margin-bottom: 15px; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .stat { background: #f8f9fa; padding: 15px; border-radius: 6px; text-align: center; }
+        .stat-value { font-size: 24px; font-weight: bold; color: #1a1a2e; }
+        .stat-label { font-size: 12px; color: #666; margin-top: 5px; }
+        .collapsible { cursor: pointer; user-select: none; }
+        .collapsible:after { content: ' ▼'; font-size: 10px; }
+        .content { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>DELL TECHNOLOGIES INC (DELL)</h1>
+    <div class="meta">
+        CIK: 0001571996 | Industry: ComputerHardware | Sector: Technology<br>
+        Generated: 2025-12-27 10:41:48
+    </div>
+</div>
+
+<div class="section">
+    <h2>Summary</h2>
+    <div class="stats">
+        <div class="stat"><div class="stat-value">10</div><div class="stat-label">Filings</div></div>
+        <div class="stat"><div class="stat-value">16,517</div><div class="stat-label">Total Facts</div></div>
+        <div class="stat"><div class="stat-value">814</div><div class="stat-label">Concepts</div></div>
+        <div class="stat"><div class="stat-value">109</div><div class="stat-label">Periods</div></div>
+        <div class="stat"><div class="stat-value">12</div><div class="stat-label">Units</div></div>
+        <div class="stat"><div class="stat-value">0</div><div class="stat-label">Dimensions</div></div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Fiscal Calendar</h2>
+    <div class="fiscal">
+        <strong>Fiscal Year End:</strong> January 31<br>
+        <strong>Quarters:</strong> Q1: Feb-Apr | Q2: May-Jul | Q3: Aug-Oct | Q4: Nov-Jan
+    </div>
+</div>
+
+<div class="section">
+    <h2>Filings</h2>
+    <table>
+        <tr><th>Form</th><th>Period</th><th>Facts</th><th>Key Metrics</th></tr>
+        <tr><td>10-Q</td><td>2025-05-02</td><td class='value'>1,160</td><td></td></tr>
+        <tr><td>10-K</td><td>2025-01-31</td><td class='value'>2,185</td><td>Earnings Per Share, Basic=1.7, Net Income (Loss) Attributable to Parent=1,210,000,000, Assets=82,126,000,000</td></tr>
+        <tr><td>10-Q</td><td>2024-11-01</td><td class='value'>1,565</td><td></td></tr>
+        <tr><td>10-Q</td><td>2024-08-02</td><td class='value'>1,541</td><td></td></tr>
+        <tr><td>10-Q</td><td>2024-05-03</td><td class='value'>1,194</td><td></td></tr>
+        <tr><td>10-K</td><td>2024-02-02</td><td class='value'>2,044</td><td></td></tr>
+        <tr><td>10-Q</td><td>2023-11-03</td><td class='value'>1,728</td><td></td></tr>
+        <tr><td>10-Q</td><td>2023-08-04</td><td class='value'>1,673</td><td></td></tr>
+        <tr><td>10-Q</td><td>2023-05-05</td><td class='value'>1,316</td><td></td></tr>
+        <tr><td>10-K</td><td>2023-02-03</td><td class='value'>2,111</td><td></td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Concepts (814 total)</h2>
+    <table>
+        <tr><th>QName</th><th>Label</th><th>Balance</th><th>Period Type</th><th>Fact Count</th></tr>
+        <tr><td class="qname">us-gaap:NotesReceivableGross</td><td>Financing Receivable, before Allowance for Credit </td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">90</td></tr>
+        <tr><td class="qname">us-gaap:DebtInstrumentCarryingAmount</td><td>Long-Term Debt, Gross</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">89</td></tr>
+        <tr><td class="qname">us-gaap:Revenues</td><td>Revenues</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">84</td></tr>
+        <tr><td class="qname">us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest</td><td>Stockholders' Equity, Including Portion Attributab</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">81</td></tr>
+        <tr><td class="qname">us-gaap:DerivativeFairValueOfDerivativeLiability</td><td>Derivative Liability, Subject to Master Netting Ar</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">79</td></tr>
+        <tr><td class="qname">us-gaap:DerivativeFairValueOfDerivativeAsset</td><td>Derivative Asset, Subject to Master Netting Arrang</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">79</td></tr>
+        <tr><td class="qname">us-gaap:DerivativeAssetsLiabilitiesAtFairValueNet</td><td>Derivative Assets (Liabilities), at Fair Value, Ne</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">60</td></tr>
+        <tr><td class="qname">us-gaap:DebtInstrumentInterestRateStatedPercentage</td><td>Debt Instrument, Interest Rate, Stated Percentage</td><td>-</td><td>instant</td><td class="value">47</td></tr>
+        <tr><td class="qname">us-gaap:NotesReceivableNet</td><td>Financing Receivable, after Allowance for Credit L</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">36</td></tr>
+        <tr><td class="qname">us-gaap:OperatingIncomeLoss</td><td>Operating Income (Loss)</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">30</td></tr>
+        <tr><td class="qname">us-gaap:CommonStockSharesIssued</td><td>Common Stock, Shares, Issued</td><td>-</td><td>instant</td><td class="value">29</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableAllowanceForCreditLosses</td><td>Financing Receivable, Allowance for Credit Loss</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">29</td></tr>
+        <tr><td class="qname">us-gaap:ProfitLoss</td><td>Net Income (Loss), Including Portion Attributable </td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">28</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableRevolving</td><td>Financing Receivable, Revolving</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">24</td></tr>
+        <tr><td class="qname">us-gaap:LongTermDebtFairValue</td><td>Long-Term Debt, Fair Value</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">24</td></tr>
+        <tr><td class="qname">us-gaap:DerivativeNotionalAmount</td><td>Derivative, Notional Amount</td><td>-</td><td>instant</td><td class="value">24</td></tr>
+        <tr><td class="qname">us-gaap:CostOfRevenue</td><td>Cost of Revenue</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">23</td></tr>
+        <tr><td class="qname">us-gaap:DebtInstrumentFaceAmount</td><td>Debt Instrument, Face Amount</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">23</td></tr>
+        <tr><td class="qname">us-gaap:CommonStockSharesOutstanding</td><td>Common Stock, Shares, Outstanding</td><td>-</td><td>instant</td><td class="value">21</td></tr>
+        <tr><td class="qname">us-gaap:CommonStockSharesAuthorized</td><td>Common Stock, Shares Authorized</td><td>-</td><td>instant</td><td class="value">21</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossNetOfTax</td><td>Other Comprehensive Income (Loss), Net of Tax</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">21</td></tr>
+        <tr><td class="qname">us-gaap:AdjustmentsToAdditionalPaidInCapitalSharebasedCompensationRequisiteServicePeriodRecognitionValue</td><td>APIC, Share-Based Payment Arrangement, Increase fo</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">20</td></tr>
+        <tr><td class="qname">us-gaap:Goodwill</td><td>Goodwill</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">20</td></tr>
+        <tr><td class="qname">us-gaap:AllocatedShareBasedCompensationExpense</td><td>Share-Based Payment Arrangement, Expense</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">20</td></tr>
+        <tr><td class="qname">us-gaap:DividendsCommonStockCash</td><td>Dividends, Common Stock, Cash</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">20</td></tr>
+        <tr><td class="qname">us-gaap:TreasuryStockValueAcquiredCostMethod</td><td>Treasury Stock, Value, Acquired, Cost Method</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">19</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossReclassificationBeforeTax</td><td>Other Comprehensive Income (Loss), Cash Flow Hedge</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">19</td></tr>
+        <tr><td class="qname">us-gaap:MinorityInterestDecreaseFromRedemptions</td><td>Noncontrolling Interest, Decrease from Redemptions</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">19</td></tr>
+        <tr><td class="qname">us-gaap:DerivativeInstrumentsNotDesignatedAsHedgingInstrumentsGainLossNet</td><td>Derivative Instruments Not Designated as Hedging I</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">18</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossForeignCurrencyTransactionAndTranslationAdjustmentNetOfTax</td><td>Other Comprehensive Income (Loss), Foreign Currenc</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:PropertyPlantAndEquipmentGross</td><td>Property, Plant and Equipment, Gross</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:EquitySecuritiesFvNi</td><td>Equity Securities, FV-NI, Current</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableOriginatedFourYearsBeforeLatestFiscalYear</td><td>Financing Receivable, Year Five, Originated, Four </td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableOriginatedInFiscalYearBeforeLatestFiscalYear</td><td>Financing Receivable, Year Two, Originated, Fiscal</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableOriginatedThreeYearsBeforeLatestFiscalYear</td><td>Financing Receivable, Year Four, Originated, Three</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableOriginatedFiveOrMoreYearsBeforeLatestFiscalYear</td><td>Financing Receivable, Originated, More than Five Y</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableOriginatedTwoYearsBeforeLatestFiscalYear</td><td>Financing Receivable, Year Three, Originated, Two </td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableOriginatedInCurrentFiscalYear</td><td>Financing Receivable, Year One, Originated, Curren</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:FiniteLivedIntangibleAssetsNet</td><td>Finite-Lived Intangible Assets, Net</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:DerivativeAssets</td><td>Derivative Asset</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:DerivativeLiabilities</td><td>Derivative Liability</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:AssetsFairValueDisclosure</td><td>Assets, Fair Value Disclosure</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:LiabilitiesFairValueDisclosure</td><td>Liabilities, Fair Value Disclosure</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:FiniteLivedIntangibleAssetsAccumulatedAmortization</td><td>Finite-Lived Intangible Assets, Accumulated Amorti</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:FiniteLivedIntangibleAssetsGross</td><td>Finite-Lived Intangible Assets, Gross</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:CashAndCashEquivalentsFairValueDisclosure</td><td>Cash and Cash Equivalents, Fair Value Disclosure</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:ReclassificationFromAccumulatedOtherComprehensiveIncomeCurrentPeriodNetOfTax</td><td>Reclassification from Accumulated Other Comprehens</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossBeforeReclassificationsNetOfTax</td><td>Other Comprehensive Income (Loss), before Reclassi</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">16</td></tr>
+        <tr><td class="qname">us-gaap:DividendsCommonStock</td><td>Dividends, Common Stock</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">15</td></tr>
+        <tr><td class="qname">us-gaap:OperatingExpenses</td><td>Operating Expenses</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">15</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossAfterReclassificationAndTax</td><td>Other Comprehensive Income (Loss), Cash Flow Hedge</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">15</td></tr>
+        <tr><td class="qname">us-gaap:StockIssuedDuringPeriodValueNewIssues</td><td>Stock Issued During Period, Value, New Issues</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">15</td></tr>
+        <tr><td class="qname">us-gaap:ProvisionForLoanLossesExpensed</td><td>Financing Receivable, Credit Loss, Expense (Revers</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">15</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableAllowanceForCreditLossesWriteOffs</td><td>Financing Receivable, Allowance for Credit Loss, W</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">15</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossPensionAndOtherPostretirementBenefitPlansAdjustmentNetOfTax</td><td>Other Comprehensive (Income) Loss, Defined Benefit</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">15</td></tr>
+        <tr><td class="qname">us-gaap:DerivativeTermOfContract</td><td>Derivative, Term of Contract</td><td>-</td><td>duration</td><td class="value">14</td></tr>
+        <tr><td class="qname">us-gaap:InterestExpenseNonoperating</td><td>Interest Expense, Nonoperating</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">13</td></tr>
+        <tr><td class="qname">us-gaap:SeveranceCosts1</td><td>Severance Costs</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">12</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossBeforeReclassificationAndTax</td><td>Other Comprehensive Income (Loss), Cash Flow Hedge</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">12</td></tr>
+        <tr><td class="qname">us-gaap:NotesAndLoansReceivableNetNoncurrent</td><td>Financing Receivable, after Allowance for Credit L</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">12</td></tr>
+        <tr><td class="qname">us-gaap:NotesAndLoansReceivableNetCurrent</td><td>Financing Receivable, after Allowance for Credit L</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">12</td></tr>
+        <tr><td class="qname">us-gaap:LineOfCreditFacilityCurrentBorrowingCapacity</td><td>Line of Credit Facility, Current Borrowing Capacit</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">12</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableTransferToHeldForSaleAllowanceForCreditLossExpenseReversal</td><td>Financing Receivable, Transfer to Held-for-Sale, A</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">12</td></tr>
+        <tr><td class="qname">us-gaap:GoodwillForeignCurrencyTranslationGainLoss</td><td>Goodwill, Foreign Currency Translation Gain (Loss)</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">12</td></tr>
+        <tr><td class="qname">us-gaap:AccountsReceivableNetNoncurrent</td><td>Accounts Receivable, after Allowance for Credit Lo</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">12</td></tr>
+        <tr><td class="qname">us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsIncludingDisposalGroupAndDiscontinuedOperations</td><td>Cash, Cash Equivalents, Restricted Cash, and Restr</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">12</td></tr>
+        <tr><td class="qname">us-gaap:CommonStockDividendsPerShareDeclared</td><td>Common Stock, Dividends, Per Share, Declared</td><td>-</td><td>duration</td><td class="value">10</td></tr>
+        <tr><td class="qname">us-gaap:AmortizationOfIntangibleAssets</td><td>Amortization of Intangible Assets</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">10</td></tr>
+        <tr><td class="qname">us-gaap:RelatedPartiesAmountInCostOfSales</td><td>Related Parties Amount in Cost of Sales</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">10</td></tr>
+        <tr><td class="qname">us-gaap:Assets</td><td>Assets</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">10</td></tr>
+        <tr><td class="qname">us-gaap:LineOfCreditFacilityMaximumBorrowingCapacity</td><td>Line of Credit Facility, Maximum Borrowing Capacit</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">10</td></tr>
+        <tr><td class="qname">us-gaap:DebtInstrumentTerm</td><td>Debt Instrument, Term</td><td>-</td><td>duration</td><td class="value">10</td></tr>
+        <tr><td class="qname">us-gaap:Liabilities</td><td>Liabilities</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">10</td></tr>
+        <tr><td class="qname">us-gaap:PropertyPlantAndEquipmentNet</td><td>Property, Plant and Equipment, Net</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">9</td></tr>
+        <tr><td class="qname">us-gaap:TreasuryStockSharesAcquired</td><td>Treasury Stock, Shares, Acquired</td><td>-</td><td>duration</td><td class="value">9</td></tr>
+        <tr><td class="qname">us-gaap:IncomeLossFromDiscontinuedOperationsNetOfTax</td><td>Income (Loss) from Discontinued Operations, Net of</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">9</td></tr>
+        <tr><td class="qname">us-gaap:LongTermDebt</td><td>Long-Term Debt</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:LongTermDebtNoncurrent</td><td>Long-Term Debt, Excluding Current Maturities</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:DebtCurrent</td><td>Debt, Current</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:TreasuryStockCommonShares</td><td>Shares held in the treasury</td><td>-</td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:StandardProductWarrantyAccrual</td><td>Standard Product Warranty Accrual</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:RestructuringReserve</td><td>Restructuring Reserve</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:HeldToMaturitySecuritiesAccumulatedUnrecognizedHoldingGain</td><td>Debt Securities, Held-to-Maturity, Accumulated Unr</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:HeldToMaturitySecuritiesAccumulatedUnrecognizedHoldingLoss</td><td>Debt Securities, Held-to-Maturity, Accumulated Unr</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:HeldToMaturitySecuritiesFairValue</td><td>Debt Securities, Held-to-Maturity, Fair Value</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:DeferredCostsCurrentAndNoncurrent</td><td>Deferred Costs</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:DeferredTaxAssetsNet</td><td>Deferred Tax Assets, Net of Valuation Allowance</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:DueFromRelatedPartiesCurrent</td><td>Due from Related Parties, Current</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:DueToRelatedPartiesCurrent</td><td>Due to Related Parties, Current</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:DeferredTaxAssetsGross</td><td>Deferred Tax Assets, Gross</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:DeferredTaxAssetsValuationAllowance</td><td>Deferred Tax Assets, Valuation Allowance</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:DisposalGroupIncludingDiscontinuedOperationCashAndCashEquivalents</td><td>Disposal Group, Including Discontinued Operation, </td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:LiabilitiesOfDisposalGroupIncludingDiscontinuedOperationCurrent</td><td>Disposal Group, Including Discontinued Operation, </td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">8</td></tr>
+        <tr><td class="qname">us-gaap:ContractWithCustomerLiability</td><td>Contract with Customer, Liability</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">7</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossNetOfTaxPortionAttributableToNoncontrollingInterest</td><td>Other Comprehensive Income (Loss), Net of Tax, Por</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">7</td></tr>
+        <tr><td class="qname">us-gaap:NonoperatingIncomeExpense</td><td>Nonoperating Income (Expense)</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">7</td></tr>
+        <tr><td class="qname">us-gaap:RestructuringCosts</td><td>Restructuring Costs</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">7</td></tr>
+        <tr><td class="qname">us-gaap:PropertyPlantAndEquipmentUsefulLife</td><td>Property, Plant and Equipment, Useful Life</td><td>-</td><td>instant</td><td class="value">7</td></tr>
+        <tr><td class="qname">us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsPeriodIncreaseDecreaseIncludingExchangeRateEffectDisposalGroupIncludingDiscontinuedOperations</td><td>Cash, Cash Equivalents, Restricted Cash, and Restr</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">7</td></tr>
+        <tr><td class="qname">us-gaap:EffectOfExchangeRateOnCashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsIncludingDisposalGroupAndDiscontinuedOperations</td><td>Effect of Exchange Rate on Cash, Cash Equivalents,</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">7</td></tr>
+        <tr><td class="qname">us-gaap:AccountsPayableCurrent</td><td>Accounts Payable, Current</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">6</td></tr>
+        <tr><td class="qname">us-gaap:CommonStockDividendsPerShareCashPaid</td><td>Common Stock, Dividends, Per Share, Cash Paid</td><td>-</td><td>duration</td><td class="value">6</td></tr>
+        <tr><td class="qname">dei:EntityCommonStockSharesOutstanding</td><td>Entity Common Stock, Shares Outstanding</td><td>-</td><td>instant</td><td class="value">6</td></tr>
+        <tr><td class="qname">us-gaap:SalesTypeAndDirectFinancingLeasesLeaseReceivable</td><td>Sales-type and Direct Financing Leases, Lease Rece</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">6</td></tr>
+        <tr><td class="qname">us-gaap:UnrecognizedTaxBenefits</td><td>Unrecognized Tax Benefits</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">6</td></tr>
+        <tr><td class="qname">dell:FinancingReceivableOtherExpenseReversal</td><td>Financing Receivable, Other Expense (Reversal)</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">6</td></tr>
+        <tr><td class="qname">us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardEquityInstrumentsOtherThanOptionsNonvestedNumber</td><td>Share-Based Compensation Arrangement by Share-Base</td><td>-</td><td>instant</td><td class="value">6</td></tr>
+        <tr><td class="qname">us-gaap:HeldToMaturitySecuritiesDebtMaturitiesSingleMaturityDateAmortizedCostBasis</td><td>Debt Securities, Held-to-Maturity, Amortized Cost,</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">6</td></tr>
+        <tr><td class="qname">us-gaap:AccountsReceivableNet</td><td>Accounts Receivable, after Allowance for Credit Lo</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">6</td></tr>
+        <tr><td class="qname">us-gaap:NetIncomeLoss</td><td>Net Income (Loss) Attributable to Parent</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:GrossProfit</td><td>Gross Profit</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:IncomeTaxExpenseBenefit</td><td>Income Tax Expense (Benefit)</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest</td><td>Income (Loss) from Continuing Operations before In</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:IncreaseDecreaseInAccountsPayable</td><td>Increase (Decrease) in Accounts Payable</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:IncreaseDecreaseInOtherOperatingCapitalNet</td><td>Increase (Decrease) in Other Operating Assets and </td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:SellingGeneralAndAdministrativeExpense</td><td>Selling, General and Administrative Expense</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ResearchAndDevelopmentExpense</td><td>Research and Development Expense</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ComprehensiveIncomeNetOfTaxIncludingPortionAttributableToNoncontrollingInterest</td><td>Comprehensive Income (Loss), Net of Tax, Including</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ComprehensiveIncomeNetOfTax</td><td>Comprehensive Income (Loss), Net of Tax, Attributa</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossReclassificationAfterTax</td><td>Other Comprehensive Income (Loss), Cash Flow Hedge</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:NetIncomeLossAttributableToNoncontrollingInterest</td><td>Net Income (Loss) Attributable to Noncontrolling I</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeDefinedBenefitPlansNetUnamortizedGainLossArisingDuringPeriodNetOfTax</td><td>Other Comprehensive Income (Loss), Defined Benefit</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossTax</td><td>Other Comprehensive Income (Loss), Tax</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossBeforeReclassificationAfterTax</td><td>Other Comprehensive Income (Loss), Cash Flow Hedge</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:GainLossOnInvestments</td><td>Gain (Loss) on Investments</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:WeightedAverageNumberOfSharesOutstandingBasic</td><td>Weighted Average Number of Shares Outstanding, Bas</td><td>-</td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ForeignCurrencyTransactionGainLossBeforeTax</td><td>Foreign Currency Transaction Gain (Loss), before T</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:InterestExpense</td><td>Interest Expense</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OtherExpenses</td><td>Other Expenses</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:IncrementalCommonSharesAttributableToShareBasedPaymentArrangements</td><td>Incremental Common Shares Attributable to Dilutive</td><td>-</td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:AntidilutiveSecuritiesExcludedFromComputationOfEarningsPerShareAmount</td><td>Antidilutive Securities Excluded from Computation </td><td>-</td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding</td><td>Weighted Average Number of Shares Outstanding, Dil</td><td>-</td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ImpairmentOfIntangibleAssetsExcludingGoodwill</td><td>Impairment of Intangible Assets (Excluding Goodwil</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:EffectiveIncomeTaxRateContinuingOperations</td><td>Effective Income Tax Rate Reconciliation, Percent</td><td>-</td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:PaymentsToAcquireFinanceReceivables</td><td>Payments to Acquire Finance Receivables</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:StandardProductWarrantyAccrualPayments</td><td>Standard Product Warranty Accrual, Decrease for Pa</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:MarketableSecuritiesUnrealizedGainLoss</td><td>Marketable Securities, Unrealized Gain (Loss)</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:EquitySecuritiesFvNiUnrealizedGainLoss</td><td>Equity Securities, FV-NI, Unrealized Gain (Loss)</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OperatingLeaseIncomeComprehensiveIncomeExtensibleList</td><td>Operating Lease, Lease Income, Statement of Income</td><td>-</td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:InvestmentIncomeInterestAndDividend</td><td>Investment Income, Interest and Dividend</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:PaymentsForRestructuring</td><td>Payments for Restructuring</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:SalesTypeLeaseSellingProfitLoss</td><td>Sales-type Lease, Selling Profit (Loss)</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:CostOfGoodsSoldSalesTypeLease</td><td>Cost of Goods Sold, Sales-type Lease</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OtherNonoperatingIncomeExpense</td><td>Other Nonoperating Income (Expense)</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:SalesTypeLeaseRevenue</td><td>Sales-type Lease, Revenue</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OperatingLeaseLeaseIncome</td><td>Operating Lease, Lease Income</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OperatingLeasesIncomeStatementDepreciationExpenseOnPropertySubjectToOrHeldForLease</td><td>Depreciation, Lessor Asset under Operating Lease</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:StockIssuedDuringPeriodSharesNewIssues</td><td>Stock Issued During Period, Shares, New Issues</td><td>-</td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ContractWithCustomerLiabilityNoncurrent</td><td>Contract with Customer, Liability, Noncurrent</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ContractWithCustomerLiabilityCurrent</td><td>Contract with Customer, Liability, Current</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:IncomeLossFromContinuingOperationsAttributableToNoncontrollingEntity</td><td>Income (Loss) from Continuing Operations, Net of T</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:BusinessCombinationProvisionalInformationInitialAccountingIncompleteAdjustmentsRelatedToPreviousPeriod</td><td>Business Combination, Provisional Information, Ini</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:BusinessCombinationIntegrationRelatedCosts</td><td>Business Combination, Integration Related Costs</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OperatingLeasePayments</td><td>Operating Lease, Payments</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:DeferredIncomeTaxesAndTaxCredits</td><td>Deferred Income Taxes and Tax Credits</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ShareBasedCompensation</td><td>Share-Based Payment Arrangement, Noncash Expense</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:DepreciationDepletionAndAmortization</td><td>Depreciation, Depletion and Amortization</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:PaymentsOfDividendsCommonStock</td><td>Payments of Ordinary Dividends, Common Stock</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OtherNoncashIncomeExpense</td><td>Other Noncash Income (Expense)</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ProceedsFromIssuanceOfLongTermDebt</td><td>Proceeds from Issuance of Long-Term Debt</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:NetCashProvidedByUsedInFinancingActivities</td><td>Net Cash Provided by (Used in) Financing Activitie</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:RepaymentsOfLongTermDebt</td><td>Repayments of Long-Term Debt</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ProceedsFromPaymentsForOtherFinancingActivities</td><td>Proceeds from (Payments for) Other Financing Activ</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:IncreaseDecreaseInAccountsReceivable</td><td>Increase (Decrease) Receivables</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:IncreaseDecreaseInFinanceReceivables</td><td>Increase (Decrease) in Finance Receivables</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:IncreaseDecreaseInInventories</td><td>Increase (Decrease) in Inventories</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:IncreaseDecreaseInContractWithCustomerLiability</td><td>Increase (Decrease) in Contract with Customer, Lia</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:NetCashProvidedByUsedInOperatingActivities</td><td>Net Cash Provided by (Used in) Operating Activitie</td><td>-</td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:ProceedsFromSaleMaturityAndCollectionsOfInvestments</td><td>Proceeds from Sale, Maturity and Collection of Inv</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:PaymentsToAcquirePropertyPlantAndEquipment</td><td>Payments to Acquire Property, Plant, and Equipment</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:PaymentsForProceedsFromOtherInvestingActivities</td><td>Payments for (Proceeds from) Other Investing Activ</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:NetCashProvidedByUsedInInvestingActivities</td><td>Net Cash Provided by (Used in) Investing Activitie</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:PaymentsForRepurchaseOfCommonStock</td><td>Payments for Repurchase of Common Stock</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:FinancingReceivableSignificantSales</td><td>Financing Receivable, Sale and Reclassification to</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:StockholdersEquityNoteSpinoffTransaction</td><td>Stockholders' Equity Note, Spinoff Transaction</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">dell:FinancingReceivablesRepaymentTerm</td><td>Financing Receivables, Repayment Term</td><td>-</td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:PaymentsToAcquireBusinessesNetOfCashAcquired</td><td>Payments to Acquire Businesses, Net of Cash Acquir</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">5</td></tr>
+        <tr><td class="qname">us-gaap:OtherAssetsCurrent</td><td>Other Assets, Current</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents</td><td>Cash, Cash Equivalents, Restricted Cash and Restri</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:LongTermDebtMaturitiesRepaymentsOfPrincipalInYearThree</td><td>Long-Term Debt, Maturity, Year Three</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:LongTermDebtMaturitiesRepaymentsOfPrincipalInNextTwelveMonths</td><td>Long-Term Debt, Maturity, Year One</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:LongTermDebtMaturitiesRepaymentsOfPrincipalInYearTwo</td><td>Long-Term Debt, Maturity, Year Two</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:LongTermDebtMaturitiesRepaymentsOfPrincipalInYearFour</td><td>Long-Term Debt, Maturity, Year Four</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:AccountsReceivableNetCurrent</td><td>Accounts Receivable, after Allowance for Credit Lo</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:VariableLeaseCost</td><td>Variable Lease, Cost</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:LeaseCost</td><td>Lease, Cost</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:OperatingLeaseCost</td><td>Operating Lease, Cost</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:ContractWithCustomerLiabilityRevenueRecognized</td><td>Contract with Customer, Liability, Revenue Recogni</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:ContractWithCustomerLiabilityIncreaseDecreaseForContractAcquiredInBusinessCombination</td><td>Contract with Customer, Liability, Increase (Decre</td><td><span class="badge badge-credit">credit</span></td><td>duration</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:AssetsCurrent</td><td>Assets, Current</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:RevenueRemainingPerformanceObligationExpectedTimingOfSatisfactionPeriod1</td><td>Revenue, Remaining Performance Obligation, Expecte</td><td>-</td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:AccruedLiabilitiesCurrent</td><td>Accrued Liabilities, Current</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:LiabilitiesCurrent</td><td>Liabilities, Current</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:RetainedEarningsAccumulatedDeficit</td><td>Retained Earnings (Accumulated Deficit)</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:StockholdersEquity</td><td>Stockholders' Equity Attributable to Parent</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:LiabilitiesAndStockholdersEquity</td><td>Liabilities and Equity</td><td><span class="badge badge-credit">credit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:RightOfUseAssetObtainedInExchangeForOperatingLeaseLiability</td><td>Right-of-Use Asset Obtained in Exchange for Operat</td><td><span class="badge badge-debit">debit</span></td><td>duration</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:RestrictedCashCurrent</td><td>Restricted Cash, Current</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:InventoryNet</td><td>Inventory, Net</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td class="qname">us-gaap:InventoryWorkInProcessNetOfReserves</td><td>Inventory, Work in Process, Net of Reserves</td><td><span class="badge badge-debit">debit</span></td><td>instant</td><td class="value">4</td></tr>
+        <tr><td colspan="5" style="text-align:center;color:#666;">... and 614 more concepts</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Periods (109 total)</h2>
+    <table>
+        <tr><th>Period ID</th><th>Type</th><th>Start</th><th>End/Date</th><th>Fact Count</th></tr>
+        <tr><td class="qname">instant_2025-06-04</td><td>instant</td><td>-</td><td>2025-06-04</td><td class="value">3</td></tr>
+        <tr><td class="qname">instant_2025-05-03</td><td>instant</td><td>-</td><td>2025-05-03</td><td class="value">357</td></tr>
+        <tr><td class="qname">duration_2025-02-01_2025-05-03</td><td>duration</td><td>2025-02-01</td><td>2025-05-03</td><td class="value">328</td></tr>
+        <tr><td class="qname">instant_2025-04-02</td><td>instant</td><td>-</td><td>2025-04-02</td><td class="value">1</td></tr>
+        <tr><td class="qname">instant_2025-03-18</td><td>instant</td><td>-</td><td>2025-03-18</td><td class="value">3</td></tr>
+        <tr><td class="qname">instant_2025-02-28</td><td>instant</td><td>-</td><td>2025-02-28</td><td class="value">5</td></tr>
+        <tr><td class="qname">duration_2025-02-27_2025-02-28</td><td>duration</td><td>2025-02-27</td><td>2025-02-28</td><td class="value">2</td></tr>
+        <tr><td class="qname">instant_2025-02-04</td><td>instant</td><td>-</td><td>2025-02-04</td><td class="value">2</td></tr>
+        <tr><td class="qname">instant_2025-02-01</td><td>instant</td><td>-</td><td>2025-02-01</td><td class="value">764</td></tr>
+        <tr><td class="qname">duration_2024-02-03_2025-02-01</td><td>duration</td><td>2024-02-03</td><td>2025-02-01</td><td class="value">486</td></tr>
+        <tr><td class="qname">duration_2024-11-02_2025-02-01</td><td>duration</td><td>2024-11-02</td><td>2025-02-01</td><td class="value">19</td></tr>
+        <tr><td class="qname">instant_2024-12-04</td><td>instant</td><td>-</td><td>2024-12-04</td><td class="value">3</td></tr>
+        <tr><td class="qname">instant_2024-11-02</td><td>instant</td><td>-</td><td>2024-11-02</td><td class="value">403</td></tr>
+        <tr><td class="qname">duration_2024-08-03_2024-11-02</td><td>duration</td><td>2024-08-03</td><td>2024-11-02</td><td class="value">184</td></tr>
+        <tr><td class="qname">duration_2024-02-03_2024-11-02</td><td>duration</td><td>2024-02-03</td><td>2024-11-02</td><td class="value">337</td></tr>
+        <tr><td class="qname">instant_2024-10-22</td><td>instant</td><td>-</td><td>2024-10-22</td><td class="value">2</td></tr>
+        <tr><td class="qname">instant_2024-10-09</td><td>instant</td><td>-</td><td>2024-10-09</td><td class="value">3</td></tr>
+        <tr><td class="qname">instant_2024-09-04</td><td>instant</td><td>-</td><td>2024-09-04</td><td class="value">3</td></tr>
+        <tr><td class="qname">instant_2024-08-03</td><td>instant</td><td>-</td><td>2024-08-03</td><td class="value">403</td></tr>
+        <tr><td class="qname">duration_2024-05-04_2024-08-03</td><td>duration</td><td>2024-05-04</td><td>2024-08-03</td><td class="value">200</td></tr>
+        <tr><td class="qname">duration_2024-02-03_2024-08-03</td><td>duration</td><td>2024-02-03</td><td>2024-08-03</td><td class="value">330</td></tr>
+        <tr><td class="qname">instant_2024-06-14</td><td>instant</td><td>-</td><td>2024-06-14</td><td class="value">8</td></tr>
+        <tr><td class="qname">duration_2024-06-13_2024-06-14</td><td>duration</td><td>2024-06-13</td><td>2024-06-14</td><td class="value">4</td></tr>
+        <tr><td class="qname">instant_2024-06-05</td><td>instant</td><td>-</td><td>2024-06-05</td><td class="value">3</td></tr>
+        <tr><td class="qname">instant_2024-05-04</td><td>instant</td><td>-</td><td>2024-05-04</td><td class="value">414</td></tr>
+        <tr><td class="qname">duration_2024-05-03_2024-05-04</td><td>duration</td><td>2024-05-03</td><td>2024-05-04</td><td class="value">2</td></tr>
+        <tr><td class="qname">duration_2024-02-03_2024-05-04</td><td>duration</td><td>2024-02-03</td><td>2024-05-04</td><td class="value">567</td></tr>
+        <tr><td class="qname">instant_2024-03-26</td><td>instant</td><td>-</td><td>2024-03-26</td><td class="value">2</td></tr>
+        <tr><td class="qname">duration_2024-02-03_2024-03-26</td><td>duration</td><td>2024-02-03</td><td>2024-03-26</td><td class="value">1</td></tr>
+        <tr><td class="qname">instant_2024-03-19</td><td>instant</td><td>-</td><td>2024-03-19</td><td class="value">8</td></tr>
+        <tr><td class="qname">duration_2024-02-29_2024-03-01</td><td>duration</td><td>2024-02-29</td><td>2024-03-01</td><td class="value">6</td></tr>
+        <tr><td class="qname">instant_2024-02-03</td><td>instant</td><td>-</td><td>2024-02-03</td><td class="value">1873</td></tr>
+        <tr><td class="qname">duration_2023-02-04_2024-02-03</td><td>duration</td><td>2023-02-04</td><td>2024-02-03</td><td class="value">796</td></tr>
+        <tr><td class="qname">duration_2023-11-04_2024-02-03</td><td>duration</td><td>2023-11-04</td><td>2024-02-03</td><td class="value">41</td></tr>
+        <tr><td class="qname">duration_2024-02-02_2024-02-03</td><td>duration</td><td>2024-02-02</td><td>2024-02-03</td><td class="value">1</td></tr>
+        <tr><td class="qname">instant_2023-12-06</td><td>instant</td><td>-</td><td>2023-12-06</td><td class="value">3</td></tr>
+        <tr><td class="qname">duration_2023-12-05_2023-12-06</td><td>duration</td><td>2023-12-05</td><td>2023-12-06</td><td class="value">2</td></tr>
+        <tr><td class="qname">instant_2023-11-04</td><td>instant</td><td>-</td><td>2023-11-04</td><td class="value">496</td></tr>
+        <tr><td class="qname">duration_2023-11-03_2023-11-04</td><td>duration</td><td>2023-11-03</td><td>2023-11-04</td><td class="value">2</td></tr>
+        <tr><td class="qname">duration_2023-02-04_2023-11-04</td><td>duration</td><td>2023-02-04</td><td>2023-11-04</td><td class="value">527</td></tr>
+        <tr><td class="qname">duration_2023-08-05_2023-11-04</td><td>duration</td><td>2023-08-05</td><td>2023-11-04</td><td class="value">344</td></tr>
+        <tr><td class="qname">instant_2023-10-06</td><td>instant</td><td>-</td><td>2023-10-06</td><td class="value">12</td></tr>
+        <tr><td class="qname">duration_2023-10-04_2023-10-05</td><td>duration</td><td>2023-10-04</td><td>2023-10-05</td><td class="value">8</td></tr>
+        <tr><td class="qname">duration_2023-09-28_2023-09-29</td><td>duration</td><td>2023-09-28</td><td>2023-09-29</td><td class="value">4</td></tr>
+        <tr><td class="qname">instant_2023-09-07</td><td>instant</td><td>-</td><td>2023-09-07</td><td class="value">3</td></tr>
+        <tr><td class="qname">instant_2023-08-05</td><td>instant</td><td>-</td><td>2023-08-05</td><td class="value">526</td></tr>
+        <tr><td class="qname">duration_2023-02-04_2023-08-05</td><td>duration</td><td>2023-02-04</td><td>2023-08-05</td><td class="value">505</td></tr>
+        <tr><td class="qname">duration_2023-05-06_2023-08-05</td><td>duration</td><td>2023-05-06</td><td>2023-08-05</td><td class="value">338</td></tr>
+        <tr><td class="qname">duration_2023-08-04_2023-08-05</td><td>duration</td><td>2023-08-04</td><td>2023-08-05</td><td class="value">4</td></tr>
+        <tr><td class="qname">instant_2023-06-21</td><td>instant</td><td>-</td><td>2023-06-21</td><td class="value">4</td></tr>
+        <tr><td colspan="5" style="text-align:center;color:#666;">... and 59 more periods</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Units (12 total)</h2>
+    <table>
+        <tr><th>Unit</th><th>Type</th><th>Fact Count</th></tr>
+        <tr><td class="qname">iso4217:USD</td><td>monetaryItemType</td><td class="value">13972</td></tr>
+        <tr><td class="qname">shares</td><td>sharesItemType</td><td class="value">838</td></tr>
+        <tr><td class="qname">pure</td><td>pureItemType</td><td class="value">447</td></tr>
+        <tr><td class="qname">iso4217:USDshares</td><td>perShareItemType</td><td class="value">331</td></tr>
+        <tr><td class="qname">dell:vote</td><td>null</td><td class="value">40</td></tr>
+        <tr><td class="qname">iso4217:EUR</td><td>monetaryItemType</td><td class="value">30</td></tr>
+        <tr><td class="qname">dell:facility</td><td>null</td><td class="value">10</td></tr>
+        <tr><td class="qname">dell:segment</td><td>null</td><td class="value">10</td></tr>
+        <tr><td class="qname">dell:tranche</td><td>null</td><td class="value">5</td></tr>
+        <tr><td class="qname">dell:portfolio</td><td>null</td><td class="value">3</td></tr>
+        <tr><td class="qname">dell:patent</td><td>null</td><td class="value">2</td></tr>
+        <tr><td class="qname">dell:plaintiff</td><td>null</td><td class="value">1</td></tr>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Dimensions & Members</h2>
+    <h3>None</h3>
+    <table><tr><th>Member QName</th><th>Label</th><th>Fact Count</th></tr>
+        <tr><td class="qname">us-gaap:FinanceLeasesPortfolioSegmentMember</td><td>FinanceLeasesPortfolioSegment</td><td class="value">811</td></tr>
+        <tr><td class="qname">us-gaap:LoansAndFinanceReceivablesMember</td><td>LoansAndFinanceReceivables</td><td class="value">707</td></tr>
+        <tr><td class="qname">us-gaap:NondesignatedMember</td><td>Nondesignated</td><td class="value">590</td></tr>
+        <tr><td class="qname">us-gaap:UnsecuredDebtMember</td><td>UnsecuredDebt</td><td class="value">576</td></tr>
+        <tr><td class="qname">us-gaap:ForeignExchangeContractMember</td><td>ForeignExchangeContract</td><td class="value">528</td></tr>
+        <tr><td class="qname">us-gaap:OperatingSegmentsMember</td><td>OperatingSegments</td><td class="value">512</td></tr>
+        <tr><td class="qname">dell:RevolvingLoanPortfolioSegmentMember</td><td>RevolvingLoanPortfolioSegment</td><td class="value">461</td></tr>
+        <tr><td class="qname">us-gaap:DesignatedAsHedgingInstrumentMember</td><td>DesignatedAsHedgingInstrument</td><td class="value">432</td></tr>
+        <tr><td class="qname">us-gaap:InterestRateContractMember</td><td>InterestRateContract</td><td class="value">373</td></tr>
+        <tr><td class="qname">us-gaap:SecuredDebtMember</td><td>SecuredDebt</td><td class="value">351</td></tr>
+        <tr><td class="qname">us-gaap:ReclassificationOutOfAccumulatedOtherComprehensiveIncomeMember</td><td>ReclassificationOutOfAccumulatedOtherComprehensiveIncome</td><td class="value">323</td></tr>
+        <tr><td class="qname">us-gaap:ParentMember</td><td>Parent</td><td class="value">322</td></tr>
+        <tr><td class="qname">dell:ConsumerAndSmallCommercialBorrowerMember</td><td>ConsumerAndSmallCommercialBorrower</td><td class="value">280</td></tr>
+        <tr><td class="qname">us-gaap:CommonStockIncludingAdditionalPaidInCapitalMember</td><td>CommonStockIncludingAdditionalPaidInCapital</td><td class="value">218</td></tr>
+        <tr><td class="qname">us-gaap:OtherCurrentAssetsMember</td><td>OtherCurrentAssets</td><td class="value">213</td></tr>
+        <tr><td class="qname">us-gaap:CommonClassCMember</td><td>CommonClassC</td><td class="value">210</td></tr>
+        <tr><td class="qname">us-gaap:OtherNoncurrentAssetsMember</td><td>OtherNoncurrentAssets</td><td class="value">207</td></tr>
+        <tr><td class="qname">dell:FinanceLeasesandRevolvingLoanPortfolioSegmentsMember</td><td>FinanceLeasesandRevolvingLoanPortfolioSegments</td><td class="value">202</td></tr>
+        <tr><td class="qname">us-gaap:AccumulatedGainLossNetCashFlowHedgeParentMember</td><td>AccumulatedGainLossNetCashFlowHedgeParent</td><td class="value">201</td></tr>
+        <tr><td class="qname">us-gaap:OtherCurrentLiabilitiesMember</td><td>OtherCurrentLiabilities</td><td class="value">198</td></tr>
+        <tr><td colspan="3" style="color:#666;">... and 195 more members</td></tr>
+    </table>
+</div>
+
+<div style="text-align: center; color: #999; padding: 20px; font-size: 12px;">
+    XBRL Catalog generated by EventMarketDB
+</div>
+</body>
+</html>

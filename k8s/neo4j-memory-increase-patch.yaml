@@ -1,0 +1,17 @@
+spec:
+  template:
+    spec:
+      containers:
+      - name: neo4j
+        env:
+        - name: NEO4J_server_memory_heap_initial__size
+          value: "26G"
+        - name: NEO4J_server_memory_heap_max__size
+          value: "26G"
+        - name: NEO4J_server_memory_pagecache_size
+          value: "68G"
+        resources:
+          requests:
+            memory: "100Gi"
+          limits:
+            memory: "100Gi"

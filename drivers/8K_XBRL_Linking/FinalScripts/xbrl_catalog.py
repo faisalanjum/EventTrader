@@ -196,6 +196,10 @@ class XBRLCatalog:
     industry: str = ""
     sector: str = ""
 
+    # Fiscal calendar (for period matching)
+    fiscal_year_end_month: Optional[int] = None  # 1-12 (1=January)
+    fiscal_year_end_day: Optional[int] = None    # 1-31
+
     # Filings with their facts
     filings: List[XBRLFiling] = field(default_factory=list)
 
@@ -331,8 +335,7 @@ class XBRLCatalog:
         for ns, concepts in sorted(by_namespace.items()):
             lines.append(f"\n## {ns.upper()} ({len(concepts)} concepts)")
             for c in sorted(concepts, key=lambda x: -x.get("fact_count", 0))[:25]:
-                balance_str = f" [{c['balance']}]" if c.get("balance") and c["balance"] != "null" else ""
-                lines.append(f"  - {c['label']}{balance_str}: {c['fact_count']} facts")
+                lines.append(f"  - {c['label']}: {c['fact_count']} facts")
             if len(concepts) > 25:
                 lines.append(f"  ... and {len(concepts) - 25} more")
 
@@ -499,9 +502,8 @@ class XBRLCatalog:
 
         for qname, info in self.concepts.items():
             label = info.get("label", qname)
-            balance = info.get("balance") or "N/A"
             ns = qname.split(":")[0] if ":" in qname else "custom"
-            entry = f"- **{label}** [{ns}] ({balance}) - {info.get('fact_count', 0)} facts"
+            entry = f"- **{label}** [{ns}] - {info.get('fact_count', 0)} facts"
 
             if info.get("period_type") == "instant":
                 instant_concepts.append((info.get("fact_count", 0), entry))
@@ -574,11 +576,14 @@ class XBRLCatalog:
 
         return "\n".join(lines)
 
-    def to_llm_context(self,
-                       include_facts: bool = True,
-                       max_facts: int = 50,
-                       max_concepts: int = 100,
-                       include_relationships: bool = True) -> str:
+    def to_llm_context(
+        self,
+        max_concepts_with_history: Optional[int] = None,
+        max_history_per_concept: Optional[int] = None,
+        max_sample_facts: Optional[int] = None,
+        include_relationships: bool = True,
+        context_budget_chars: Optional[int] = None
+    ) -> str:
         """
         Generate LLM-optimized text representation with qnames for Neo4j linking.
 
@@ -588,10 +593,16 @@ class XBRLCatalog:
         - Validate extracted values against known data
 
         Args:
-            include_facts: Whether to include sample fact values
-            max_facts: Maximum sample facts (default 50)
-            max_concepts: Maximum concepts to show (default 100 for matching coverage)
-            include_relationships: Whether to include calc/presentation networks
+            max_concepts_with_history: Top N concepts to show with history.
+                None = ALL (default). Try 50-100 for smaller context.
+            max_history_per_concept: Max historical values per concept.
+                None = ALL (default). Try 4 for recent quarters only.
+            max_sample_facts: Max sample facts to include (currently disabled).
+                None = ALL (default). Was used for SAMPLE FACTS section.
+            include_relationships: Whether to include calc/presentation networks.
+                True = include (default). False = smaller context.
+            context_budget_chars: Safety cap on total output size.
+                None = no limit (default). Try 100000 for ~100k char limit.
         """
         L = []  # lines
         SEP = "─" * 72
@@ -610,29 +621,74 @@ class XBRLCatalog:
         L.append("LEGEND:")
         L.append("• qname = unique concept identifier (e.g., us-gaap:Revenues)")
         L.append("• label = human-readable name")
-        L.append("• balance: credit = ↑equity/liability | debit = ↑assets/expenses")
 
         # ══════════════════════════════════════════════════════════════════════
-        # FILINGS
+        # FILINGS - Commented out: redundant with History under CONCEPTS
         # ══════════════════════════════════════════════════════════════════════
-        L.append("")
-        L.append(SEP)
-        L.append(f"FILINGS ({len(self.filings)} reports, {self.total_facts:,} total facts)")
-        L.append(SEP)
+        # L.append("")
+        # L.append(SEP)
+        # L.append(f"FILINGS ({len(self.filings)} reports, {self.total_facts:,} total facts)")
+        # L.append(SEP)
+        #
+        # for f in sorted(self.filings, key=lambda x: x.period_of_report or "", reverse=True):
+        #     metrics_str = ""
+        #     if f.key_metrics:
+        #         metrics = [f"{k}={v.get('value','?')}" for k, v in list(f.key_metrics.items())[:3]]
+        #         metrics_str = " | " + ", ".join(metrics)
+        #     L.append(f"{f.form_type} {f.period_of_report} [{f.fact_count:,} facts]{metrics_str}")
 
-        for f in sorted(self.filings, key=lambda x: x.period_of_report or "", reverse=True):
-            metrics_str = ""
-            if f.key_metrics:
-                metrics = [f"{k}={v.get('value','?')}" for k, v in list(f.key_metrics.items())[:3]]
-                metrics_str = " | " + ", ".join(metrics)
-            L.append(f"{f.form_type} {f.period_of_report} [{f.fact_count:,} facts]{metrics_str}")
+        # ══════════════════════════════════════════════════════════════════════
+        # FISCAL CALENDAR - Critical for period matching
+        # Uses proven fiscal_to_calendar logic from EarningsCallTranscripts.py
+        # ══════════════════════════════════════════════════════════════════════
+        if self.fiscal_year_end_month and self.fiscal_year_end_day:
+            from calendar import month_name
+
+            L.append("")
+            L.append(SEP)
+            L.append("FISCAL CALENDAR")
+            L.append(SEP)
+
+            fy_month = self.fiscal_year_end_month
+            fy_day = self.fiscal_year_end_day
+            L.append(f"Fiscal Year End: {month_name[fy_month]} {fy_day}")
+
+            # Proven fiscal_to_calendar logic (from EarningsCallTranscripts.py)
+            def fiscal_to_calendar(fiscal_year, fiscal_quarter, fiscal_month_end):
+                month = (fiscal_month_end - 3 * (4 - fiscal_quarter)) % 12 or 12
+                cal_year = fiscal_year - 1 if month > fiscal_month_end else fiscal_year
+                return cal_year, month
+
+            # Get current FY from most recent filing
+            if self.filings:
+                most_recent = max(self.filings, key=lambda f: f.period_of_report or "")
+                recent_year = int(most_recent.period_of_report[:4]) if most_recent.period_of_report else 2025
+                period_month = int(most_recent.period_of_report[5:7]) if most_recent.period_of_report else 12
+                current_fy = recent_year + 1 if period_month > fy_month else recent_year
+            else:
+                current_fy = 2025
+
+            # Show fiscal quarter to calendar end month mapping
+            L.append("Quarter Mapping (fiscal → calendar end month):")
+            for fy in [current_fy, current_fy - 1]:
+                q_parts = []
+                for fq in [1, 2, 3, 4]:
+                    cal_year, end_month = fiscal_to_calendar(fy, fq, fy_month)
+                    q_parts.append(f"Q{fq}→{month_name[end_month][:3]}{str(cal_year)[2:]}")
+                L.append(f"  FY{fy}: {' | '.join(q_parts)}")
 
         # ══════════════════════════════════════════════════════════════════════
         # CONCEPTS - With qnames and history for matching & validation
         # ══════════════════════════════════════════════════════════════════════
+        # Determine effective limits (None means ALL)
+        # Note: eff_concepts will be recalculated after filtering to numeric-only
+        eff_history = max_history_per_concept if max_history_per_concept else 999
+
         L.append("")
         L.append(SEP)
-        L.append(f"CONCEPTS ({len(self.concepts)} total, top {min(max_concepts, len(self.concepts))} shown)")
+        # Header will be updated after we know how many numeric concepts exist
+        concepts_header_idx = len(L)
+        L.append("")  # Placeholder - will be replaced
         L.append("History shows recent values for magnitude validation (10-K=annual, 10-Q=quarterly)")
         L.append(SEP)
 
@@ -643,8 +699,8 @@ class XBRLCatalog:
                 if fact.concept_qname and fact.is_numeric and not fact.member:
                     if fact.concept_qname not in concept_history:
                         concept_history[fact.concept_qname] = []
-                    # Only keep up to 4 periods per concept
-                    if len(concept_history[fact.concept_qname]) < 4:
+                    # Limit history per concept
+                    if len(concept_history[fact.concept_qname]) < eff_history:
                         # Handle 'null' string from database as None
                         pe = fact.period_end if fact.period_end and fact.period_end != 'null' else None
                         ps = fact.period_start if fact.period_start and fact.period_start != 'null' else None
@@ -657,26 +713,35 @@ class XBRLCatalog:
                             "unit": fact.unit
                         })
 
-        top_concepts = sorted(self.concepts.items(), key=lambda x: -x[1].get("fact_count", 0))[:max_concepts]
+        # Sort each concept's history by period_end descending (latest first)
+        for qname in concept_history:
+            concept_history[qname] = sorted(
+                concept_history[qname],
+                key=lambda h: h.get("period_end") or h.get("period_start") or "",
+                reverse=True
+            )
 
-        # Show history for top 30 concepts (key financials), just qname for rest
-        history_limit = 30
+        # Only include concepts that have numeric history (excludes Text Blocks, etc.)
+        numeric_concepts = {qname: info for qname, info in self.concepts.items() if qname in concept_history}
+        eff_concepts = max_concepts_with_history if max_concepts_with_history else len(numeric_concepts)
+        top_concepts = sorted(numeric_concepts.items(), key=lambda x: -x[1].get("fact_count", 0))[:eff_concepts]
 
+        # Update header with actual counts
+        L[concepts_header_idx] = f"CONCEPTS ({len(numeric_concepts)} numeric, top {min(eff_concepts, len(numeric_concepts))} shown)"
+
+        # All shown concepts get history (no longer split into two sections)
         # ── TOP CONCEPTS (with history for magnitude validation) ──
         L.append("── TOP CONCEPTS (with history for magnitude validation) ──")
-        for idx, (qname, info) in enumerate(top_concepts[:history_limit]):
+        for idx, (qname, info) in enumerate(top_concepts):
             label = info.get("label", qname.split(":")[-1])
-            label_short = label[:30] + "..." if len(label) > 30 else label
-            balance = info.get("balance", "")
-            bal_str = balance if balance and balance != "null" else "-"
 
-            L.append(f"{qname} | {label_short} | {bal_str}")
+            L.append(f"{qname} | {label}")
 
             # Add history line for magnitude validation
             history = concept_history.get(qname, [])
             if history:
                 hist_parts = []
-                for h in history[:4]:
+                for h in history[:eff_history]:
                     val = _format_value(h["value"], h.get("unit"))
                     form = h["form_type"][:4] if h.get("form_type") else "?"
                     # Format period to match matched_period output contract
@@ -699,19 +764,9 @@ class XBRLCatalog:
                     hist_parts.append(f"{val} ({form}, {period})")
                 L.append(f"  History: {', '.join(hist_parts)}")
 
-        # ── ADDITIONAL CONCEPTS (qname + label only) ──
-        if len(top_concepts) > history_limit:
-            L.append("")
-            L.append(f"── ADDITIONAL CONCEPTS ({len(top_concepts) - history_limit} more) ──")
-            for qname, info in top_concepts[history_limit:]:
-                label = info.get("label", qname.split(":")[-1])
-                label_short = label[:35] + "..." if len(label) > 35 else label
-                balance = info.get("balance", "")
-                bal_str = balance if balance and balance != "null" else "-"
-                L.append(f"{qname} | {label_short} | {bal_str}")
-
-        if len(self.concepts) > max_concepts:
-            L.append(f"...+{len(self.concepts) - max_concepts} more concepts (less common)")
+        # Note remaining numeric concepts if limited
+        if len(numeric_concepts) > eff_concepts:
+            L.append(f"...+{len(numeric_concepts) - eff_concepts} more numeric concepts (less common)")
 
         # Note: UNMATCHED fallback belongs in prompt, not reference data
 
@@ -746,82 +801,70 @@ class XBRLCatalog:
                     durations.add(f"{start[:10]}→{end[:10]}")
 
         if instants:
-            sorted_instants = sorted(instants, reverse=True)[:12]
-            L.append(f"Instant: {', '.join(sorted_instants)}" + (f" +{len(instants)-12}more" if len(instants) > 12 else ""))
+            sorted_instants = sorted(instants, reverse=True)
+            L.append(f"Instant: {', '.join(sorted_instants)}")
         if durations:
-            sorted_durations = sorted(durations, reverse=True)[:8]
-            L.append(f"Duration: {', '.join(sorted_durations)}" + (f" +{len(durations)-8}more" if len(durations) > 8 else ""))
+            sorted_durations = sorted(durations, reverse=True)
+            L.append(f"Duration: {', '.join(sorted_durations)}")
 
         # ══════════════════════════════════════════════════════════════════════
-        # UNITS - Dynamically extract canonical names from XBRL unit metadata
+        # UNITS - Show ALL units that have facts linked (sorted by fact count)
         # ══════════════════════════════════════════════════════════════════════
-        # Filter to numeric units and convert to canonical format
-        canonical_units = []
-        seen = set()
+        L.append("")
+        L.append(SEP)
+        L.append(f"UNITS ({len(self.units)} types)")
+        L.append(SEP)
+
+        # Show all units sorted by fact count, with canonical names where possible
         for uname, info in sorted(self.units.items(), key=lambda x: -x[1].get("fact_count", 0)):
             utype = info.get("type", "")
-            canonical = None
+            fact_count = info.get("fact_count", 0)
 
+            # Convert to canonical format for readability
             if utype == "monetaryItemType" and uname.startswith("iso4217:"):
-                # iso4217:USD → USD, iso4217:EUR → EUR
-                canonical = uname.split(":")[1]
+                canonical = uname.split(":")[1]  # iso4217:USD → USD
             elif utype == "perShareItemType" and uname.startswith("iso4217:") and uname.endswith("shares"):
-                # iso4217:USDshares → USD/share
                 currency = uname.split(":")[1].replace("shares", "")
-                canonical = f"{currency}/share"
+                canonical = f"{currency}/share"  # iso4217:USDshares → USD/share
             elif utype == "sharesItemType" or uname == "shares":
                 canonical = "shares"
             elif uname == "pure":
                 canonical = "pure"
+            else:
+                canonical = uname  # Keep original if no canonical form
 
-            if canonical and canonical not in seen:
-                canonical_units.append(canonical)
-                seen.add(canonical)
-
-        L.append("")
-        L.append(SEP)
-        L.append("UNITS")
-        L.append(SEP)
-        L.append(" | ".join(canonical_units) if canonical_units else "USD | shares | pure")
+            L.append(f"{canonical} ({fact_count:,} facts)")
 
         # ══════════════════════════════════════════════════════════════════════
-        # DIMENSIONS → MEMBERS - Full qnames for segmented data
+        # DIMENSIONS → MEMBERS - Segmented data structure with fact counts
         # ══════════════════════════════════════════════════════════════════════
-        # Build set of active member labels from loaded filings
-        active_member_labels = set()
-        for fact in self.all_facts:
-            for dc in fact.dimensional_context:
-                if dc.get("member"):
-                    active_member_labels.add(dc.get("member"))
-
-        # Filter members to only those with facts in loaded filings
-        active_members = {
-            qname: info for qname, info in self.members.items()
-            if info.get("label") in active_member_labels
-        }
-
-        if self.dimensions or active_members:
+        if self.dimensions or self.members:
             L.append("")
             L.append(SEP)
-            L.append(f"DIMENSIONS → MEMBERS ({len(active_members)} active in these filings)")
+            L.append(f"DIMENSIONS → MEMBERS ({len(self.dimensions)} dimensions, {len(self.members)} members)")
             L.append(SEP)
 
-            # Group members by dimension with full qnames
+            # Group members by dimension
             dim_members = {}
-            for mem_qname, info in active_members.items():
-                dim = info.get("dimension", "Unknown")
+            for mem_qname, info in self.members.items():
+                dim = info.get("dimension") or "Unknown"
                 if dim not in dim_members:
                     dim_members[dim] = []
-                dim_members[dim].append((mem_qname, info.get("fact_count", 0)))
+                dim_members[dim].append({
+                    "qname": mem_qname,
+                    "label": info.get("label", ""),
+                    "fact_count": info.get("fact_count", 0)
+                })
 
-            # Sort dimensions by total facts
-            for dim_qname in sorted(dim_members.keys(), key=lambda d: sum(m[1] for m in dim_members[d]), reverse=True)[:12]:
-                members = sorted(dim_members[dim_qname], key=lambda x: -x[1])[:8]
-                L.append(f"{dim_qname}:")
-                for mem_qname, fc in members:
-                    L.append(f"  → {mem_qname}")
-                if len(dim_members[dim_qname]) > 8:
-                    L.append(f"  → +{len(dim_members[dim_qname])-8} more members")
+            # Sort dimensions by total facts, show each with its members
+            for dim_qname in sorted(dim_members.keys(), key=lambda d: sum(m["fact_count"] for m in dim_members[d]), reverse=True):
+                dim_label = self.dimensions.get(dim_qname, {}).get("label", dim_qname)
+                members = sorted(dim_members[dim_qname], key=lambda x: -x["fact_count"])
+                total_facts = sum(m["fact_count"] for m in members)
+
+                L.append(f"{dim_qname} | {dim_label} ({total_facts:,} facts)")
+                for m in members:
+                    L.append(f"  → {m['qname']} | {m['label']} ({m['fact_count']:,} facts)" if m.get('label') else f"  → {m['qname']} ({m['fact_count']:,} facts)")
 
         # ══════════════════════════════════════════════════════════════════════
         # CALCULATION NETWORK - How values compute (grouped by statement)
@@ -861,16 +904,17 @@ class XBRLCatalog:
                 for parent_qname, children in formulas[:4]:  # Max 4 per statement
                     if shown >= max_formulas:
                         break
-                    parent_short = parent_qname.split(":")[-1]
+                    parent_label = self.concepts.get(parent_qname, {}).get("label", parent_qname.split(":")[-1])
                     parts = []
                     for child in children[:5]:
                         w = child.get("weight", 1)
                         sign = "+" if float(w) >= 0 else "−"
-                        child_short = child.get("child", "").split(":")[-1]
-                        parts.append(f"{sign}{child_short}")
+                        child_qname = child.get("child", "")
+                        child_label = child.get("label", "") or self.concepts.get(child_qname, {}).get("label", child_qname.split(":")[-1])
+                        parts.append(f"{sign}{child_qname} | {child_label}")
                     if len(children) > 5:
                         parts.append(f"+{len(children)-5}more")
-                    L.append(f"[{stmt}] {parent_short} = {' '.join(parts)}")
+                    L.append(f"[{stmt}] {parent_qname} | {parent_label} = {' '.join(parts)}")
                     shown += 1
 
         # ══════════════════════════════════════════════════════════════════════
@@ -913,51 +957,56 @@ class XBRLCatalog:
                         break
                     section_clean = section.replace(" [Abstract]", "").replace(" [Line Items]", "").replace(" [Roll Forward]", "")
                     section_clean = section_clean[:30] + "..." if len(section_clean) > 30 else section_clean
-                    concept_shorts = [c.split(":")[-1][:18] for c in concepts[:4]]
-                    concept_str = ", ".join(concept_shorts)
+                    # Use qname | label format for concepts
+                    concept_parts = []
+                    for qname in concepts[:4]:
+                        label = self.concepts.get(qname, {}).get("label", qname.split(":")[-1])
+                        concept_parts.append(f"{qname} | {label}")
+                    concept_str = ", ".join(concept_parts)
                     if len(concepts) > 4:
                         concept_str += f" +{len(concepts)-4}more"
                     L.append(f"  {section_clean} ({len(concepts)}): {concept_str}")
                     shown += 1
 
         # ══════════════════════════════════════════════════════════════════════
-        # SAMPLE FACTS - With qnames for validation
+        # SAMPLE FACTS - Commented out: redundant with CONCEPTS History section
+        # CONCEPTS History shows magnitude validation with multiple periods,
+        # DIMENSIONS→MEMBERS shows segmentation structure.
         # ══════════════════════════════════════════════════════════════════════
-        if include_facts and self.all_facts:
-            L.append("")
-            L.append(SEP)
-            L.append(f"SAMPLE FACTS ({min(max_facts, len(self.all_facts))} of {self.total_facts:,}) - numeric values for magnitude validation")
-            L.append(SEP)
-            L.append("qname | value | unit | period | segment")
-
-            shown = 0
-            seen = set()
-            # Prioritize: numeric first, then consolidated (no segment), then by qname
-            sorted_facts = sorted(
-                self.all_facts,
-                key=lambda f: (not f.is_numeric, f.member is not None, f.concept_qname)
-            )
-
-            for fact in sorted_facts:
-                if shown >= max_facts:
-                    break
-                if fact.concept_qname in seen:
-                    continue
-                seen.add(fact.concept_qname)
-
-                qname = fact.concept_qname
-                # Format value for readability if numeric
-                if fact.is_numeric:
-                    val = _format_value(fact.value, fact.unit)
-                else:
-                    # Truncate text values
-                    val = fact.value[:50] + "..." if len(str(fact.value)) > 50 else fact.value
-                unit = _canonical_unit(fact.unit)  # Use canonical unit format
-                period = fact.period_display or "?"
-                segment = fact.member if fact.member else "-"
-
-                L.append(f"{qname} | {val} | {unit} | {period} | {segment}")
-                shown += 1
+        # eff_sample = max_sample_facts if max_sample_facts else len(self.all_facts)
+        #
+        # if self.all_facts:
+        #     L.append("")
+        #     L.append(SEP)
+        #     L.append(f"SAMPLE FACTS ({min(eff_sample, len(self.all_facts))} of {self.total_facts:,}) - numeric values for magnitude validation")
+        #     L.append(SEP)
+        #     L.append("qname | value | unit | period | segment")
+        #
+        #     shown = 0
+        #     seen = set()
+        #     sorted_facts = sorted(
+        #         self.all_facts,
+        #         key=lambda f: (not f.is_numeric, f.member is not None, f.concept_qname)
+        #     )
+        #
+        #     for fact in sorted_facts:
+        #         if shown >= eff_sample:
+        #             break
+        #         if fact.concept_qname in seen:
+        #             continue
+        #         seen.add(fact.concept_qname)
+        #
+        #         qname = fact.concept_qname
+        #         if fact.is_numeric:
+        #             val = _format_value(fact.value, fact.unit)
+        #         else:
+        #             val = fact.value[:50] + "..." if len(str(fact.value)) > 50 else fact.value
+        #         unit = _canonical_unit(fact.unit)
+        #         period = fact.period_display or "?"
+        #         segment = fact.member if fact.member else "-"
+        #
+        #         L.append(f"{qname} | {val} | {unit} | {period} | {segment}")
+        #         shown += 1
 
         # ══════════════════════════════════════════════════════════════════════
         # FOOTER
@@ -966,7 +1015,194 @@ class XBRLCatalog:
         L.append(f"TOTALS: {self.total_facts:,} facts | {len(self.concepts)} concepts | {len(self.periods)} periods")
         L.append("<<<END_XBRL_REFERENCE_DATA>>>")
 
-        return "\n".join(L)
+        result = "\n".join(L)
+
+        # Safety check: truncate if exceeds budget (None = no limit)
+        if context_budget_chars is not None and len(result) > context_budget_chars:
+            result = result[:context_budget_chars - 100] + "\n\n... [TRUNCATED: exceeded context budget] ..."
+
+        return result
+
+    # ==========================================================================
+    # HTML EXPORT (For human review)
+    # ==========================================================================
+
+    def to_html(self, output_path: Optional[str] = None, include_relationships: bool = True) -> str:
+        """
+        Generate HTML showing EXACTLY what the LLM sees via to_llm_context().
+
+        The HTML displays the identical text content with minimal styling:
+        - Monospace font preserves exact formatting
+        - Section backgrounds provide visual separation
+        - No additional data beyond what LLM receives
+
+        Args:
+            output_path: If provided, saves HTML to this file path.
+            include_relationships: Pass through to to_llm_context()
+
+        Returns:
+            HTML string
+        """
+        from datetime import datetime
+        import html as html_lib
+
+        # Get the EXACT text the LLM sees
+        llm_context = self.to_llm_context(include_relationships=include_relationships)
+
+        # Define section colors for visual separation
+        section_colors = {
+            "COMPANY": "#e3f2fd",      # Light blue
+            "LEGEND": "#f3e5f5",        # Light purple
+            "FISCAL": "#e8f5e9",        # Light green
+            "CONCEPTS": "#fff3e0",      # Light orange
+            "PERIODS": "#fce4ec",       # Light pink
+            "UNITS": "#e0f2f1",         # Light teal
+            "DIMENSIONS": "#f1f8e9",    # Light lime
+            "CALCULATIONS": "#ede7f6",  # Light deep purple
+            "PRESENTATION": "#e1f5fe",  # Light light blue
+            "SAMPLE": "#fff8e1",        # Light amber
+            "TOTALS": "#eceff1",        # Light blue grey
+        }
+
+        # Parse llm_context into sections for highlighting
+        lines = llm_context.split('\n')
+        html_lines = []
+        current_section = None
+
+        for line in lines:
+            # Detect section headers
+            line_upper = line.upper()
+            if "<<<BEGIN_XBRL_REFERENCE_DATA>>>" in line:
+                current_section = "COMPANY"
+            elif line_upper.startswith("LEGEND"):
+                current_section = "LEGEND"
+            elif line_upper.startswith("FISCAL"):
+                current_section = "FISCAL"
+            elif line_upper.startswith("CONCEPTS"):
+                current_section = "CONCEPTS"
+            elif line_upper.startswith("PERIODS"):
+                current_section = "PERIODS"
+            elif line_upper.startswith("UNITS"):
+                current_section = "UNITS"
+            elif line_upper.startswith("DIMENSIONS"):
+                current_section = "DIMENSIONS"
+            elif line_upper.startswith("CALCULATIONS"):
+                current_section = "CALCULATIONS"
+            elif line_upper.startswith("PRESENTATION"):
+                current_section = "PRESENTATION"
+            elif line_upper.startswith("SAMPLE"):
+                current_section = "SAMPLE"
+            elif line_upper.startswith("TOTALS"):
+                current_section = "TOTALS"
+            elif "<<<END_XBRL_REFERENCE_DATA>>>" in line:
+                current_section = "TOTALS"
+
+            # Get background color for current section
+            bg_color = section_colors.get(current_section, "#ffffff")
+
+            # Escape HTML and preserve formatting
+            escaped_line = html_lib.escape(line)
+            html_lines.append(f'<div style="background:{bg_color};padding:1px 10px;margin:0;">{escaped_line}</div>')
+
+        # Build complete HTML
+        html = f"""<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>LLM Context: {html_lib.escape(self.company_name)}</title>
+    <style>
+        body {{
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }}
+        .header {{
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }}
+        .header h1 {{ margin: 0 0 10px 0; font-size: 18px; }}
+        .header .meta {{ opacity: 0.8; font-size: 12px; }}
+        .context-box {{
+            background: white;
+            border-radius: 8px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }}
+        .context-box div {{
+            white-space: pre;
+            font-family: inherit;
+        }}
+        .legend {{
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 12px;
+        }}
+        .legend-item {{
+            display: inline-block;
+            margin-right: 15px;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }}
+        .stats {{
+            margin-bottom: 15px;
+            font-size: 12px;
+            color: #666;
+        }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>LLM Context View: {html_lib.escape(self.company_name)} ({html_lib.escape(self.ticker)})</h1>
+        <div class="meta">
+            This is EXACTLY what the LLM sees via to_llm_context()<br>
+            Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |
+            Characters: {len(llm_context):,} |
+            ~Tokens: {len(llm_context) // 4:,}
+        </div>
+    </div>
+
+    <div class="legend">
+        <strong>Section Colors:</strong><br>
+        <span class="legend-item" style="background:#e3f2fd;">COMPANY</span>
+        <span class="legend-item" style="background:#f3e5f5;">LEGEND</span>
+        <span class="legend-item" style="background:#e8f5e9;">FISCAL</span>
+        <span class="legend-item" style="background:#fff3e0;">CONCEPTS</span>
+        <span class="legend-item" style="background:#fce4ec;">PERIODS</span>
+        <span class="legend-item" style="background:#e0f2f1;">UNITS</span>
+        <span class="legend-item" style="background:#f1f8e9;">DIMENSIONS</span>
+        <span class="legend-item" style="background:#ede7f6;">CALCULATIONS</span>
+        <span class="legend-item" style="background:#e1f5fe;">PRESENTATION</span>
+        <span class="legend-item" style="background:#fff8e1;">SAMPLE FACTS</span>
+        <span class="legend-item" style="background:#eceff1;">TOTALS</span>
+    </div>
+
+    <div class="context-box">
+{''.join(html_lines)}
+    </div>
+
+    <div style="text-align: center; color: #999; padding: 20px; font-size: 11px;">
+        XBRL Catalog - Exact LLM Context View
+    </div>
+</body>
+</html>
+"""
+
+        if output_path:
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(html)
+            print(f"Saved HTML catalog to: {output_path}")
+
+        return html
 
     # ==========================================================================
     # COMPACT NETWORK RENDERING (LLM-OPTIMIZED)
@@ -1238,8 +1474,8 @@ XBRL_FORM_TYPES = ["10-K", "10-Q", "10-K/A", "10-Q/A"]
 
 def get_xbrl_catalog(
     cik: str,
-    form_types: Optional[List[str]] = None,
-    limit_filings: Optional[int] = None,
+    as_of_dt: Optional[str] = None,
+    include_amendments: bool = False,
     include_relationships: bool = True,
     driver=None
 ) -> XBRLCatalog:
@@ -1248,19 +1484,19 @@ def get_xbrl_catalog(
 
     This is the main function for fetching XBRL data. It retrieves:
     - Company information (name, ticker, industry, sector)
-    - All filings with XBRL data (10-K, 10-Q and amendments only)
+    - All filings with XBRL data (10-K, 10-Q and optionally amendments)
     - Normalized reference tables (concepts, periods, units, members)
     - Calculation relationships
-    - Key metrics from latest 10-K
 
     NOTE: Only 10-K, 10-Q, 10-K/A, and 10-Q/A have XBRL data.
     8-K and other forms do NOT contain structured XBRL financial data.
 
     Args:
         cik: Company CIK (with or without leading zeros)
-        form_types: Filter by form types. Defaults to ["10-K", "10-Q", "10-K/A", "10-Q/A"].
-                   Only these form types have XBRL data.
-        limit_filings: Maximum number of filings to fetch. None for all.
+        as_of_dt: Only include filings created before this datetime (ISO format).
+                  None defaults to now() for safety (prevents future data leakage).
+                  For backtesting, pass the 8-K's created datetime.
+        include_amendments: Include 10-K/A and 10-Q/A filings. Default False.
         include_relationships: Whether to fetch calculation edges.
         driver: Optional Neo4j driver. If None, creates one from env vars.
 
@@ -1268,13 +1504,20 @@ def get_xbrl_catalog(
         XBRLCatalog object with all XBRL data for the company.
 
     Example:
-        catalog = get_xbrl_catalog("1571949")  # ICE - fetches 10-K/10-Q only
-        catalog = get_xbrl_catalog("1571949", form_types=["10-K"])  # Only 10-K
-        print(catalog.to_llm_context())  # LLM-friendly format
+        catalog = get_xbrl_catalog("1571996")  # DELL - all filings before now()
+        catalog = get_xbrl_catalog("1571996", as_of_dt="2025-08-28T16:00:00")  # Before specific date
+        catalog = get_xbrl_catalog("1571996", include_amendments=True)  # Include 10-K/A, 10-Q/A
     """
-    # Default to XBRL-capable form types
-    if form_types is None:
-        form_types = XBRL_FORM_TYPES
+    # Handle as_of_dt: None means now() for safety
+    from datetime import datetime
+    if as_of_dt is None:
+        as_of_dt = datetime.now().isoformat()
+
+    # Determine form types based on include_amendments
+    if include_amendments:
+        form_types = ['10-K', '10-K/A', '10-Q', '10-Q/A']
+    else:
+        form_types = ['10-K', '10-Q']
 
     cik_padded, cik_clean = _normalize_cik(cik)
 
@@ -1285,12 +1528,14 @@ def get_xbrl_catalog(
 
     try:
         with driver.session() as session:
-            # 1. Get company info
+            # 1. Get company info (including fiscal calendar)
             company_result = session.run("""
                 MATCH (c:Company)
                 WHERE c.cik = $cik_padded OR c.cik = $cik_clean
                 RETURN c.cik as cik, c.name as name, c.ticker as ticker,
-                       c.industry as industry, c.sector as sector
+                       c.industry as industry, c.sector as sector,
+                       c.fiscal_year_end_month as fiscal_month,
+                       c.fiscal_year_end_day as fiscal_day
                 LIMIT 1
             """, cik_padded=cik_padded, cik_clean=cik_clean)
 
@@ -1298,44 +1543,51 @@ def get_xbrl_catalog(
             if not company:
                 raise ValueError(f"Company with CIK {cik} not found")
 
+            # Parse fiscal fields (stored as strings in Neo4j)
+            fiscal_month = int(company["fiscal_month"]) if company["fiscal_month"] else None
+            fiscal_day = int(company["fiscal_day"]) if company["fiscal_day"] else None
+
             catalog = XBRLCatalog(
                 cik=company["cik"],
                 company_name=company["name"] or "",
                 ticker=company["ticker"] or "",
                 industry=company["industry"] or "",
-                sector=company["sector"] or ""
+                sector=company["sector"] or "",
+                fiscal_year_end_month=fiscal_month,
+                fiscal_year_end_day=fiscal_day
             )
 
             actual_cik = company["cik"]
 
-            # 2. Build filing query - only fetch reports that have XBRL data
-            limit_clause = ""
-            if limit_filings:
-                limit_clause = f"LIMIT {limit_filings}"
-
-            # 3. Get filings with XBRL - require HAS_XBRL relationship
-            # This ensures we only get reports that actually have XBRL data
-            filings_query = f"""
-                MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {{cik: $cik}})
+            # 2. Get filings with XBRL - filtered by as_of_dt
+            # This ensures we only get reports filed BEFORE the cutoff datetime
+            filings_query = """
+                MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {cik: $cik})
                 MATCH (r)-[:HAS_XBRL]->(x:XBRLNode)
                 WHERE r.xbrl_status = 'COMPLETED'
                   AND r.formType IN $form_types
+                  AND r.created IS NOT NULL
+                  AND datetime(r.created) < datetime($as_of_dt)
                 RETURN DISTINCT r.accessionNo as accession_no,
                        r.formType as form_type,
                        r.periodOfReport as period_of_report,
+                       r.created as created,
                        x.id as xbrl_id,
                        x.cik as xbrl_cik
-                ORDER BY r.periodOfReport DESC
-                {limit_clause}
+                ORDER BY r.created DESC
             """
 
             filings_result = session.run(
                 filings_query,
                 cik=actual_cik,
-                form_types=form_types
+                form_types=form_types,
+                as_of_dt=as_of_dt
             )
 
             filings_data = list(filings_result)
+
+            # Store selected accession numbers for use in all subsequent queries
+            selected_accession_nos = [f["accession_no"] for f in filings_data]
 
             # 4. Fetch facts for each filing
             for filing_record in filings_data:
@@ -1343,9 +1595,11 @@ def get_xbrl_catalog(
                 xbrl_cik = filing_record["xbrl_cik"]
 
                 # Fixed query: collect dimension-member pairs to avoid row multiplication
+                # Skip text facts > 200 chars (legal boilerplate, footnotes)
                 facts_result = session.run("""
                     MATCH (f:Fact)-[:REPORTS]->(x:XBRLNode)
                     WHERE x.accessionNo = $accession_no AND x.cik = $xbrl_cik
+                      AND (f.is_numeric = "1" OR f.value IS NULL OR size(toString(f.value)) <= 200)
                     OPTIONAL MATCH (f)-[:HAS_CONCEPT]->(concept:Concept)
                     OPTIONAL MATCH (f)-[:HAS_PERIOD]->(period:Period)
                     OPTIONAL MATCH (f)-[:HAS_UNIT]->(unit:Unit)
@@ -1400,8 +1654,10 @@ def get_xbrl_catalog(
                 catalog.filings.append(filing)
 
             # 5. Fetch normalized concept catalog with fact counts
+            # Use selected_accession_nos to only include concepts from filtered filings
             concepts_data = session.run("""
-                MATCH (x:XBRLNode {cik: $cik})
+                MATCH (x:XBRLNode)
+                WHERE x.accessionNo IN $selected_accession_nos
                 MATCH (f:Fact)-[:REPORTS]->(x)
                 MATCH (f)-[:HAS_CONCEPT]->(c:Concept)
                 RETURN c.qname AS qname, c.label AS label, c.balance AS balance,
@@ -1409,7 +1665,7 @@ def get_xbrl_catalog(
                        c.namespace AS namespace, c.category AS category,
                        count(f) AS fact_count
                 ORDER BY fact_count DESC
-            """, cik=actual_cik).data()
+            """, selected_accession_nos=selected_accession_nos).data()
 
             for c in concepts_data:
                 catalog.concepts[c["qname"]] = {
@@ -1423,15 +1679,17 @@ def get_xbrl_catalog(
                 }
 
             # 6. Fetch normalized periods with fact counts
+            # Use selected_accession_nos to only include periods from filtered filings
             periods_data = session.run("""
-                MATCH (x:XBRLNode {cik: $cik})
+                MATCH (x:XBRLNode)
+                WHERE x.accessionNo IN $selected_accession_nos
                 MATCH (f:Fact)-[:REPORTS]->(x)
                 MATCH (f)-[:HAS_PERIOD]->(p:Period)
                 RETURN p.u_id AS period_id, p.period_type AS type,
                        p.start_date AS start_date, p.end_date AS end_date,
                        count(f) AS fact_count
                 ORDER BY COALESCE(p.end_date, p.start_date) DESC
-            """, cik=actual_cik).data()
+            """, selected_accession_nos=selected_accession_nos).data()
 
             for p in periods_data:
                 period_id = p["period_id"]
@@ -1450,14 +1708,16 @@ def get_xbrl_catalog(
                     }
 
             # 7. Fetch normalized units with fact counts
+            # Use selected_accession_nos to only include units from filtered filings
             units_data = session.run("""
-                MATCH (x:XBRLNode {cik: $cik})
+                MATCH (x:XBRLNode)
+                WHERE x.accessionNo IN $selected_accession_nos
                 MATCH (f:Fact)-[:REPORTS]->(x)
                 MATCH (f)-[:HAS_UNIT]->(u:Unit)
                 RETURN u.name AS name, u.item_type AS type,
                        u.is_simple_unit AS is_simple, count(f) AS fact_count
                 ORDER BY fact_count DESC
-            """, cik=actual_cik).data()
+            """, selected_accession_nos=selected_accession_nos).data()
 
             for u in units_data:
                 catalog.units[u["name"]] = {
@@ -1467,16 +1727,19 @@ def get_xbrl_catalog(
                 }
 
             # 8. Fetch dimensions and members with fact counts
+            # Use proper traversal: Dimension -[:HAS_DOMAIN]-> Domain -[:HAS_MEMBER|PARENT_OF*]-> Member
+            # This correctly links members to their parent dimensions
             members_data = session.run("""
-                MATCH (x:XBRLNode {cik: $cik})
+                MATCH (x:XBRLNode)
+                WHERE x.accessionNo IN $selected_accession_nos
                 MATCH (f:Fact)-[:REPORTS]->(x)
                 MATCH (f)-[:FACT_MEMBER]->(m:Member)
-                OPTIONAL MATCH (f)-[:FACT_DIMENSION]->(d:Dimension)
+                MATCH (dim:Dimension)-[:HAS_DOMAIN]->(dom:Domain)-[:HAS_MEMBER|PARENT_OF*]->(m)
                 RETURN m.qname AS member_qname, m.label AS member_label,
-                       d.qname AS dimension_qname, d.label AS dimension_label,
+                       dim.qname AS dimension_qname, dim.label AS dimension_label,
                        count(f) AS fact_count
                 ORDER BY fact_count DESC
-            """, cik=actual_cik).data()
+            """, selected_accession_nos=selected_accession_nos).data()
 
             for m in members_data:
                 catalog.members[m["member_qname"]] = {
@@ -1498,9 +1761,11 @@ def get_xbrl_catalog(
                     catalog.dimensions[dim]["member_count"] += 1
 
             # 9. Fetch calculation relationships with statement grouping
+            # Use selected_accession_nos to only include relationships from filtered filings
             if include_relationships:
                 calc_data = session.run("""
-                    MATCH (x:XBRLNode {cik: $cik})
+                    MATCH (x:XBRLNode)
+                    WHERE x.accessionNo IN $selected_accession_nos
                     MATCH (pf:Fact)-[:REPORTS]->(x)
                     MATCH (pf)-[calc:CALCULATION_EDGE]->(cf:Fact)
                     MATCH (pf)-[:HAS_CONCEPT]->(pc:Concept)
@@ -1514,7 +1779,7 @@ def get_xbrl_catalog(
                          }) AS children
                     RETURN network, parent_concept, parent_label, children
                     ORDER BY size(children) DESC
-                """, cik=actual_cik).data()
+                """, selected_accession_nos=selected_accession_nos).data()
 
                 for tree in calc_data:
                     # Legacy format
@@ -1529,16 +1794,17 @@ def get_xbrl_catalog(
                     }
 
             # 10. Fetch presentation structure with statement grouping
+            # Use selected_accession_nos to only include presentation from filtered filings
             if include_relationships:
                 pres_data = session.run("""
                     MATCH (a:Abstract)-[pres:PRESENTATION_EDGE]->(f:Fact)-[:REPORTS]->(x:XBRLNode)
-                    WHERE x.cik = $cik
+                    WHERE x.accessionNo IN $selected_accession_nos
                     MATCH (f)-[:HAS_CONCEPT]->(c:Concept)
                     WITH pres.network_name AS network, a.label as section,
                          collect(DISTINCT c.qname) as concepts
                     RETURN network, section, concepts
                     ORDER BY size(concepts) DESC
-                """, cik=actual_cik).data()
+                """, selected_accession_nos=selected_accession_nos).data()
 
                 for row in pres_data:
                     catalog.presentation_sections[row["section"]] = {

@@ -380,8 +380,9 @@ def test_catalog(ticker: str):
 SAMPLE_DATA_DIR = "/home/faisal/EventMarketDB/drivers/8K_XBRL_Linking/sample_data"
 
 # Default sample files (ticker -> file path)
+# Uses _combined.txt which includes ALL sections + exhibits
 SAMPLE_FILES = {
-    "DELL": "DELL_1571996_2025-08-28_000157199625000096/exhibit_EX-99.1.txt",
+    "DELL": "DELL_1571996_2025-08-28_000157199625000096/_combined.txt",
 }
 
 

@@ -1,0 +1,82 @@
+{
+  "summary": {
+    "functional": false,
+    "learning": true,
+    "concurrent": true,
+    "performance": true,
+    "error_handling": true
+  },
+  "functional_details": [
+    {
+      "query": "Count all INFLUENCES relationships",
+      "expected": true,
+      "v3_success": true,
+      "pe_success": true,
+      "match": true
+    },
+    {
+      "query": "Find News influencing Company with maximum daily_stock values",
+      "expected": true,
+      "v3_success": true,
+      "pe_success": true,
+      "match": true
+    },
+    {
+      "query": "Average returns from influences",
+      "expected": true,
+      "v3_success": true,
+      "pe_success": true,
+      "match": true
+    },
+    {
+      "query": "Show companies with news about 'AI' and positive returns",
+      "expected": true,
+      "v3_success": true,
+      "pe_success": true,
+      "match": false
+    },
+    {
+      "query": "Find all unique relationship types in the database",
+      "expected": true,
+      "v3_success": true,
+      "pe_success": true,
+      "match": true
+    },
+    {
+      "query": "",
+      "expected": false,
+      "v3_success": true,
+      "pe_success": true,
+      "match": true
+    },
+    {
+      "query": "INVALID CYPHER MATCH WHERE",
+      "expected": false,
+      "v3_success": true,
+      "pe_success": true,
+      "match": true
+    },
+    {
+      "query": "Find nodes with property IS NOT NULL <> 'NaN'",
+      "expected": true,
+      "v3_success": true,
+      "pe_success": true,
+      "match": true
+    },
+    {
+      "query": "Find InvalidLabel nodes",
+      "expected": true,
+      "v3_success": true,
+      "pe_success": true,
+      "match": false
+    },
+    {
+      "query": "Match nodes with invalid_property",
+      "expected": true,
+      "v3_success": true,
+      "pe_success": true,
+      "match": true
+    }
+  ],
+  "recommendation": "keep_current"
+}

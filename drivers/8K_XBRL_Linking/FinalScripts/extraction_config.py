@@ -43,6 +43,9 @@ MATCHING RULES:
 • If no concept in the catalog matches, use "UNMATCHED" for concept_top1
 • If unsure, output "UNMATCHED" with an optional concept_top2 as your best guess
 
+PERIOD MATCHING:
+• Companies have different fiscal year ends - check the FISCAL CALENDAR section in the catalog for this company's quarter/year dates
+
 VALID VALUES FOR concept_top1 / concept_top2:
 • Any exact qname from the CONCEPTS list in the catalog (e.g., "us-gaap:NetIncomeLoss")
 • "UNMATCHED" - use this when no concept in the catalog applies

@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-neo4j-cypher-http
+  namespace: mcp-services
+  labels:
+    app: mcp-neo4j-cypher-http
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcp-neo4j-cypher-http
+  template:
+    metadata:
+      labels:
+        app: mcp-neo4j-cypher-http
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      - effect: NoSchedule
+        key: dedicated
+        operator: Equal
+        value: graph
+      containers:
+      - name: mcp-neo4j-cypher-http
+        image: python:3.11-slim
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          set -e
+          cd /source
+          echo "Installing dependencies..."
+          pip install --no-cache-dir 'neo4j>=5.26.0' 'mcp[cli]>=1.6.0' 'uvicorn>=0.35.0'
+          pip install -e .
+          
+          echo "Starting MCP Neo4j Cypher server in HTTP mode..."
+          # Create minimal HTTP runner script
+          cat > /tmp/run_http.py << 'EOF'
+          from mcp_neo4j_cypher.server import create_mcp_server, healthcheck
+          from neo4j import AsyncGraphDatabase
+          import os
+          import uvicorn
+          
+          # Get connection details
+          db_url = os.getenv("NEO4J_URI")
+          username = os.getenv("NEO4J_USERNAME")
+          password = os.getenv("NEO4J_PASSWORD")
+          database = os.getenv("NEO4J_DATABASE", "neo4j")
+          
+          # Create driver and server (reusing existing code)
+          driver = AsyncGraphDatabase.driver(db_url, auth=(username, password))
+          mcp = create_mcp_server(driver, database)
+          healthcheck(db_url, username, password, database)
+          
+          # Get the HTTP app and run with uvicorn
+          app = mcp.streamable_http_app()
+          print("Starting HTTP server on port 8000...", flush=True)
+          uvicorn.run(app, host="0.0.0.0", port=8000)
+          EOF
+          
+          python /tmp/run_http.py
+        env:
+        - name: NEO4J_URI
+          value: bolt://neo4j-bolt.neo4j:7687
+        - name: NEO4J_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: NEO4J_USERNAME
+              name: eventtrader-secrets
+        - name: NEO4J_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: NEO4J_PASSWORD
+              name: eventtrader-secrets
+        - name: NEO4J_DATABASE
+          value: neo4j
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        ports:
+        - containerPort: 8000
+          name: http
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 250m
+            memory: 512Mi
+        volumeMounts:
+        - mountPath: /source
+          name: source-code
+      volumes:
+      - name: source-code
+        hostPath:
+          path: /home/faisal/neo4j-mcp-server/servers/mcp-neo4j-cypher
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-neo4j-cypher-http
+  namespace: mcp-services
+  labels:
+    app: mcp-neo4j-cypher-http
+spec:
+  selector:
+    app: mcp-neo4j-cypher-http
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: http
+  type: ClusterIP
