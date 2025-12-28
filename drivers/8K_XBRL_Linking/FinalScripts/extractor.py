@@ -13,10 +13,11 @@ All extraction rules live in:
 """
 
 import logging
-from typing import Optional, Set, Union
+from typing import Optional, Set, Tuple, Union
 from dataclasses import dataclass
 
-from langextract import LangExtract, Extraction
+import langextract as lx
+from langextract.core.data import Extraction, AnnotatedDocument
 
 from extraction_schema import (
     RawExtraction,
@@ -43,16 +44,95 @@ class CatalogContext:
     llm_context: str
     cik: str = ""
     company_name: str = ""
+    valid_dimensions: Set[str] = None
+    valid_members: Set[str] = None
+
+    def __post_init__(self):
+        # Initialize empty sets if not provided
+        if self.valid_dimensions is None:
+            self.valid_dimensions = set()
+        if self.valid_members is None:
+            self.valid_members = set()
 
 
 def extract_facts(
     text: str,
     catalog: Union["XBRLCatalog", CatalogContext],
     filing_id: Optional[str] = None,
-    model: str = "gemini-2.0-flash",
+    model: str = "gemini-2.5-flash",
+    max_workers: Optional[int] = None,
+    batch_length: Optional[int] = None,
+    max_output_tokens: Optional[int] = None,
+    max_char_buffer: int = 4000,
+    suppress_parse_errors: bool = False,
+    debug: bool = False,
 ) -> ExtractionResult:
     """
-    Extract financial facts from 8-K text using XBRL catalog context.
+    Production function: Extract financial facts from 8-K text.
+
+    Returns only ExtractionResult. For debugging/visualization, use extract_facts_debug().
+    """
+    result, _ = _extract_core(
+        text=text,
+        catalog=catalog,
+        filing_id=filing_id,
+        model=model,
+        max_workers=max_workers,
+        batch_length=batch_length,
+        max_output_tokens=max_output_tokens,
+        max_char_buffer=max_char_buffer,
+        suppress_parse_errors=suppress_parse_errors,
+        debug=debug,
+    )
+    return result
+
+
+def extract_facts_debug(
+    text: str,
+    catalog: Union["XBRLCatalog", CatalogContext],
+    filing_id: Optional[str] = None,
+    model: str = "gemini-2.5-flash",
+    max_workers: Optional[int] = None,
+    batch_length: Optional[int] = None,
+    max_output_tokens: Optional[int] = None,
+    max_char_buffer: int = 4000,
+    suppress_parse_errors: bool = False,
+    debug: bool = False,
+) -> Tuple[ExtractionResult, AnnotatedDocument]:
+    """
+    Debug function: Extract financial facts and return annotated document.
+
+    Returns both ExtractionResult and AnnotatedDocument for visualization.
+    Use this in notebooks to access raw LangExtract output for inspection.
+    """
+    return _extract_core(
+        text=text,
+        catalog=catalog,
+        filing_id=filing_id,
+        model=model,
+        max_workers=max_workers,
+        batch_length=batch_length,
+        max_output_tokens=max_output_tokens,
+        max_char_buffer=max_char_buffer,
+        suppress_parse_errors=suppress_parse_errors,
+        debug=debug,
+    )
+
+
+def _extract_core(
+    text: str,
+    catalog: Union["XBRLCatalog", CatalogContext],
+    filing_id: Optional[str] = None,
+    model: str = "gemini-2.5-flash",
+    max_workers: Optional[int] = None,
+    batch_length: Optional[int] = None,
+    max_output_tokens: Optional[int] = None,
+    max_char_buffer: int = 4000,
+    suppress_parse_errors: bool = False,
+    debug: bool = False,
+) -> Tuple[ExtractionResult, AnnotatedDocument]:
+    """
+    Core extraction logic. Returns both ExtractionResult and AnnotatedDocument.
 
     Args:
         text: The 8-K document text to extract from
@@ -61,10 +141,18 @@ def extract_facts(
                  - valid_units: Set of valid units (e.g., {"USD", "shares", "pure"})
                  - llm_context: Pre-rendered catalog context string
         filing_id: Optional filing identifier for tracking
-        model: LangExtract model to use (default: gemini-2.0-flash)
+        model: LangExtract model ID (default: gemini-2.5-flash)
+               Examples: gemini-2.5-flash, gemini-2.5-pro, gpt-4.1-nano, gpt-4.1, gpt-4o
+        max_workers: Maximum parallel workers for concurrent processing (default: None = LangExtract default)
+        batch_length: Number of chunks per batch (default: None = LangExtract default)
+        max_output_tokens: Maximum output tokens for LLM (default: None = LangExtract default)
+                          Examples: 65536 for gemini-2.5-flash, 32768 for gpt-4.1-nano
+        max_char_buffer: Maximum characters per chunk (default: 4000)
+        suppress_parse_errors: Whether to suppress parsing errors (default: False)
+        debug: Whether to enable debug logging (default: False)
 
     Returns:
-        ExtractionResult with processed facts and statistics
+        Tuple of (ExtractionResult, AnnotatedDocument)
     """
     # Extract catalog data
     if hasattr(catalog, 'to_llm_context'):
@@ -82,19 +170,35 @@ def extract_facts(
         cik = catalog.cik
         company_name = catalog.company_name
 
-    # Build full context: document + catalog
-    full_context = f"{text}\n\n{llm_context}"
-
-    # Initialize LangExtract
-    extractor = LangExtract(
-        model=model,
-        description=PROMPT_DESCRIPTION,
-        examples=EXAMPLES
-    )
-
-    # Run extraction
+    # Run extraction using lx.extract() with additional_context
+    # The catalog is passed as additional_context (not concatenated) so:
+    # - Only document text is chunked
+    # - Each chunk gets the full catalog as reference context
+    # - Character positions are relative to document text only
     logger.info(f"Extracting facts from {len(text)} chars with {len(valid_qnames)} concepts")
-    extractions = extractor.extract(full_context)
+
+    # Build kwargs for lx.extract - only include non-None values
+    extract_kwargs = {
+        "text_or_documents": text,
+        "prompt_description": PROMPT_DESCRIPTION,
+        "examples": EXAMPLES,
+        "model_id": model,
+        "additional_context": llm_context,
+        "max_char_buffer": max_char_buffer,
+        "resolver_params": {"suppress_parse_errors": suppress_parse_errors},
+        "debug": debug,
+    }
+
+    # Add optional parameters only if specified
+    if max_workers is not None:
+        extract_kwargs["max_workers"] = max_workers
+    if batch_length is not None:
+        extract_kwargs["batch_length"] = batch_length
+    if max_output_tokens is not None:
+        extract_kwargs["language_model_params"] = {"max_output_tokens": max_output_tokens}
+
+    annotated_doc = lx.extract(**extract_kwargs)
+    extractions = annotated_doc.extractions or []
 
     # Map to RawExtraction, filtering out extractions from catalog context
     raw_extractions = _map_to_raw(extractions, source_text_length=len(text))
@@ -119,15 +223,16 @@ def extract_facts(
         f"{result.candidate_count} candidates, {result.review_count} review"
     )
 
-    return result
+    return result, annotated_doc
 
 
 def _map_to_raw(extractions: list, source_text_length: int) -> list:
     """
     Map LangExtract Extraction objects to RawExtraction dataclasses.
 
-    Filters out extractions where char_end > source_text_length,
-    as these point into the appended catalog context, not the 8-K.
+    With the additional_context approach, char positions should always be
+    relative to the document text. The char_end > source_text_length filter
+    is a safety check that should rarely trigger.
     """
     raw = []
 
@@ -136,10 +241,17 @@ def _map_to_raw(extractions: list, source_text_length: int) -> list:
         if getattr(ext, 'extraction_class', '') != 'financial_fact':
             continue
 
-        # Skip extractions pointing into catalog context
-        char_end = getattr(ext, 'char_end', 0)
+        # New API: char_interval is a CharInterval object with start_pos/end_pos
+        char_interval = getattr(ext, 'char_interval', None)
+        char_start = char_interval.start_pos if char_interval else 0
+        char_end = char_interval.end_pos if char_interval else 0
+
+        # Safety check - should rarely trigger with additional_context approach
         if char_end > source_text_length:
-            logger.debug(f"Dropping extraction at char_end={char_end} (beyond source text)")
+            logger.warning(
+                f"Skipping extraction: char_end={char_end} > source_text_length={source_text_length} "
+                f"(text: '{getattr(ext, 'extraction_text', '')[:50]}...')"
+            )
             continue
 
         attrs = getattr(ext, 'attributes', {}) or {}
@@ -148,7 +260,14 @@ def _map_to_raw(extractions: list, source_text_length: int) -> list:
         concept_top1 = attrs.get('concept_top1') or UNMATCHED
         matched_period = attrs.get('matched_period') or ''
         matched_unit = attrs.get('matched_unit') or ''
-        confidence = float(attrs.get('confidence', 0.0))
+
+        # Safe float conversion for confidence
+        try:
+            confidence = float(attrs.get('confidence', 0.0))
+        except (ValueError, TypeError):
+            logger.warning(f"Could not parse confidence '{attrs.get('confidence')}', using 0.0")
+            confidence = 0.0
+
         reasoning = attrs.get('reasoning') or ''
 
         # Optional fields
@@ -158,8 +277,8 @@ def _map_to_raw(extractions: list, source_text_length: int) -> list:
 
         raw.append(RawExtraction(
             extraction_text=getattr(ext, 'extraction_text', ''),
-            char_start=getattr(ext, 'char_start', 0),
-            char_end=getattr(ext, 'char_end', 0),
+            char_start=char_start,
+            char_end=char_end,
             concept_top1=concept_top1,
             matched_period=matched_period,
             matched_unit=matched_unit,

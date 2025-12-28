@@ -55,6 +55,13 @@ else:
     load_dotenv(override=True)  # Fallback to default behavior
 
 # =============================================================================
+# CONSTANTS
+# =============================================================================
+
+# Sentinel for distinguishing "not specified" from "explicitly None" in function args
+_DEFAULT_HISTORY_LIMIT = object()
+
+# =============================================================================
 # DATA CLASSES
 # =============================================================================
 
@@ -579,7 +586,7 @@ class XBRLCatalog:
     def to_llm_context(
         self,
         max_concepts_with_history: Optional[int] = None,
-        max_history_per_concept: Optional[int] = None,
+        max_history_per_concept=_DEFAULT_HISTORY_LIMIT,
         max_sample_facts: Optional[int] = None,
         include_relationships: bool = True,
         context_budget_chars: Optional[int] = None
@@ -596,7 +603,7 @@ class XBRLCatalog:
             max_concepts_with_history: Top N concepts to show with history.
                 None = ALL (default). Try 50-100 for smaller context.
             max_history_per_concept: Max historical values per concept.
-                None = ALL (default). Try 4 for recent quarters only.
+                Default = 5 (most recent). None = ALL (no limit). 0 = no history.
             max_sample_facts: Max sample facts to include (currently disabled).
                 None = ALL (default). Was used for SAMPLE FACTS section.
             include_relationships: Whether to include calc/presentation networks.
@@ -682,7 +689,17 @@ class XBRLCatalog:
         # ══════════════════════════════════════════════════════════════════════
         # Determine effective limits (None means ALL)
         # Note: eff_concepts will be recalculated after filtering to numeric-only
-        eff_history = max_history_per_concept if max_history_per_concept else 999
+        # Determine effective history limit
+        # - Default (not specified): 5 most recent values
+        # - None: unlimited (show all)
+        # - 0: no history
+        # - N: exactly N values
+        if max_history_per_concept is _DEFAULT_HISTORY_LIMIT:
+            eff_history = 5  # Default: 5 most recent
+        elif max_history_per_concept is None:
+            eff_history = 10000  # None = unlimited (large number for slicing compatibility)
+        else:
+            eff_history = max_history_per_concept  # Exact value (0, 4, 5, etc.)
 
         L.append("")
         L.append(SEP)
@@ -733,7 +750,7 @@ class XBRLCatalog:
         # ── TOP CONCEPTS (with history for magnitude validation) ──
         L.append("── TOP CONCEPTS (with history for magnitude validation) ──")
         for idx, (qname, info) in enumerate(top_concepts):
-            label = info.get("label", qname.split(":")[-1])
+            label = _escape_label(info.get("label", qname.split(":")[-1]))
 
             L.append(f"{qname} | {label}")
 
@@ -858,13 +875,14 @@ class XBRLCatalog:
 
             # Sort dimensions by total facts, show each with its members
             for dim_qname in sorted(dim_members.keys(), key=lambda d: sum(m["fact_count"] for m in dim_members[d]), reverse=True):
-                dim_label = self.dimensions.get(dim_qname, {}).get("label", dim_qname)
+                dim_label = _escape_label(self.dimensions.get(dim_qname, {}).get("label", dim_qname))
                 members = sorted(dim_members[dim_qname], key=lambda x: -x["fact_count"])
                 total_facts = sum(m["fact_count"] for m in members)
 
                 L.append(f"{dim_qname} | {dim_label} ({total_facts:,} facts)")
                 for m in members:
-                    L.append(f"  → {m['qname']} | {m['label']} ({m['fact_count']:,} facts)" if m.get('label') else f"  → {m['qname']} ({m['fact_count']:,} facts)")
+                    member_label = _escape_label(m.get('label', ''))
+                    L.append(f"  → {m['qname']} | {member_label} ({m['fact_count']:,} facts)" if member_label else f"  → {m['qname']} ({m['fact_count']:,} facts)")
 
         # ══════════════════════════════════════════════════════════════════════
         # CALCULATION NETWORK - How values compute (grouped by statement)
@@ -904,13 +922,13 @@ class XBRLCatalog:
                 for parent_qname, children in formulas[:4]:  # Max 4 per statement
                     if shown >= max_formulas:
                         break
-                    parent_label = self.concepts.get(parent_qname, {}).get("label", parent_qname.split(":")[-1])
+                    parent_label = _escape_label(self.concepts.get(parent_qname, {}).get("label", parent_qname.split(":")[-1]))
                     parts = []
                     for child in children[:5]:
                         w = child.get("weight", 1)
                         sign = "+" if float(w) >= 0 else "−"
                         child_qname = child.get("child", "")
-                        child_label = child.get("label", "") or self.concepts.get(child_qname, {}).get("label", child_qname.split(":")[-1])
+                        child_label = _escape_label(child.get("label", "") or self.concepts.get(child_qname, {}).get("label", child_qname.split(":")[-1]))
                         parts.append(f"{sign}{child_qname} | {child_label}")
                     if len(children) > 5:
                         parts.append(f"+{len(children)-5}more")
@@ -960,7 +978,7 @@ class XBRLCatalog:
                     # Use qname | label format for concepts
                     concept_parts = []
                     for qname in concepts[:4]:
-                        label = self.concepts.get(qname, {}).get("label", qname.split(":")[-1])
+                        label = _escape_label(self.concepts.get(qname, {}).get("label", qname.split(":")[-1]))
                         concept_parts.append(f"{qname} | {label}")
                     concept_str = ", ".join(concept_parts)
                     if len(concepts) > 4:
@@ -1345,6 +1363,25 @@ def _normalize_cik(cik: str) -> tuple:
     cik_clean = str(cik).lstrip("0")
     cik_padded = cik_clean.zfill(10)
     return cik_padded, cik_clean
+
+
+def _escape_label(label: str) -> str:
+    """
+    Escape special characters in XBRL labels for safe text output.
+
+    XBRL taxonomy labels often contain embedded quotes like:
+    - "Income Tax Benefit...on "Uncertain Tax Positions""
+    - "Debt Instrument...Percentage ("Pay-Fixed")"
+
+    These break JSON parsing when the LLM copies them into its output.
+    """
+    if not label:
+        return label
+    # Replace double quotes with single quotes
+    label = label.replace('"', "'")
+    # Remove control characters that might confuse LLM
+    label = label.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ')
+    return label.strip()
 
 
 def _format_value(value: str, unit: str = None) -> str:
