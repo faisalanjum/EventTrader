@@ -66,6 +66,7 @@ def extract_facts(
     max_char_buffer: int = 4000,
     suppress_parse_errors: bool = False,
     debug: bool = False,
+    use_schema_constraints: bool = True,
 ) -> ExtractionResult:
     """
     Production function: Extract financial facts from 8-K text.
@@ -83,6 +84,7 @@ def extract_facts(
         max_char_buffer=max_char_buffer,
         suppress_parse_errors=suppress_parse_errors,
         debug=debug,
+        use_schema_constraints=use_schema_constraints,
     )
     return result
 
@@ -98,6 +100,7 @@ def extract_facts_debug(
     max_char_buffer: int = 4000,
     suppress_parse_errors: bool = False,
     debug: bool = False,
+    use_schema_constraints: bool = True,
 ) -> Tuple[ExtractionResult, AnnotatedDocument]:
     """
     Debug function: Extract financial facts and return annotated document.
@@ -116,6 +119,7 @@ def extract_facts_debug(
         max_char_buffer=max_char_buffer,
         suppress_parse_errors=suppress_parse_errors,
         debug=debug,
+        use_schema_constraints=use_schema_constraints,
     )
 
 
@@ -130,6 +134,7 @@ def _extract_core(
     max_char_buffer: int = 4000,
     suppress_parse_errors: bool = False,
     debug: bool = False,
+    use_schema_constraints: bool = True,
 ) -> Tuple[ExtractionResult, AnnotatedDocument]:
     """
     Core extraction logic. Returns both ExtractionResult and AnnotatedDocument.
@@ -150,6 +155,8 @@ def _extract_core(
         max_char_buffer: Maximum characters per chunk (default: 4000)
         suppress_parse_errors: Whether to suppress parsing errors (default: False)
         debug: Whether to enable debug logging (default: False)
+        use_schema_constraints: Whether to use LLM structured output mode (default: True)
+                               Set to False for Gemini models to avoid truncation/malformed JSON bugs
 
     Returns:
         Tuple of (ExtractionResult, AnnotatedDocument)
@@ -159,7 +166,8 @@ def _extract_core(
         # XBRLCatalog object
         valid_qnames = set(catalog.concepts.keys())
         valid_units = _extract_canonical_units(catalog)
-        llm_context = catalog.to_llm_context()
+        # Use latest_per_form_type=True for one 10-K + one 10-Q value per concept
+        llm_context = catalog.to_llm_context(latest_per_form_type=True)
         cik = catalog.cik
         company_name = catalog.company_name
     else:
@@ -187,6 +195,8 @@ def _extract_core(
         "max_char_buffer": max_char_buffer,
         "resolver_params": {"suppress_parse_errors": suppress_parse_errors},
         "debug": debug,
+        "show_progress": True,
+        "use_schema_constraints": use_schema_constraints,
     }
 
     # Add optional parameters only if specified

@@ -587,6 +587,7 @@ class XBRLCatalog:
         self,
         max_concepts_with_history: Optional[int] = None,
         max_history_per_concept=_DEFAULT_HISTORY_LIMIT,
+        latest_per_form_type: bool = False,
         max_sample_facts: Optional[int] = None,
         include_relationships: bool = True,
         context_budget_chars: Optional[int] = None
@@ -604,6 +605,12 @@ class XBRLCatalog:
                 None = ALL (default). Try 50-100 for smaller context.
             max_history_per_concept: Max historical values per concept.
                 Default = 5 (most recent). None = ALL (no limit). 0 = no history.
+                Ignored when latest_per_form_type=True.
+            latest_per_form_type: Take only latest value from each form family.
+                False = use max_history_per_concept (default).
+                True = one value from 10-K family + one from 10-Q family.
+                Amendments (10-K/A, 10-Q/A) are grouped with their base form.
+                Picks the fact with the latest period_end for each family.
             max_sample_facts: Max sample facts to include (currently disabled).
                 None = ALL (default). Was used for SAMPLE FACTS section.
             include_relationships: Whether to include calc/presentation networks.
@@ -706,22 +713,34 @@ class XBRLCatalog:
         # Header will be updated after we know how many numeric concepts exist
         concepts_header_idx = len(L)
         L.append("")  # Placeholder - will be replaced
-        L.append("History shows recent values for magnitude validation (10-K=annual, 10-Q=quarterly)")
+        if latest_per_form_type:
+            L.append("History shows latest 10-K (annual) + 10-Q (quarterly) values for magnitude validation")
+        else:
+            L.append("History shows recent values for magnitude validation (10-K=annual, 10-Q=quarterly)")
         L.append(SEP)
 
         # Build concept history from all filings (for magnitude validation)
         concept_history = {}
-        for filing in sorted(self.filings, key=lambda x: x.period_of_report or "", reverse=True):
-            for fact in filing.facts:
-                if fact.concept_qname and fact.is_numeric and not fact.member:
-                    if fact.concept_qname not in concept_history:
-                        concept_history[fact.concept_qname] = []
-                    # Limit history per concept
-                    if len(concept_history[fact.concept_qname]) < eff_history:
+
+        if latest_per_form_type:
+            # One value per form family (10-K + 10-Q)
+            # Process filings newest-first so amendments take priority over originals
+            # Stable sort preserves Neo4j's created DESC order for same-period filings
+            seen = set()  # {(qname, family)}
+
+            for filing in sorted(self.filings, key=lambda x: x.period_of_report or "", reverse=True):
+                family = _form_family(filing.form_type)
+
+                # Collect facts from this filing, grouped by concept
+                filing_concepts = {}
+
+                for fact in filing.facts:
+                    if fact.concept_qname and fact.is_numeric and not fact.member:
                         # Handle 'null' string from database as None
                         pe = fact.period_end if fact.period_end and fact.period_end != 'null' else None
                         ps = fact.period_start if fact.period_start and fact.period_start != 'null' else None
-                        concept_history[fact.concept_qname].append({
+
+                        filing_concepts.setdefault(fact.concept_qname, []).append({
                             "value": fact.value,
                             "period_start": ps,
                             "period_end": pe or ps or filing.period_of_report,
@@ -729,6 +748,35 @@ class XBRLCatalog:
                             "form_type": filing.form_type,
                             "unit": fact.unit
                         })
+
+                # For each concept in this filing, pick latest period
+                # But only add if not already seen from a more recent filing
+                for qname, facts in filing_concepts.items():
+                    key = (qname, family)
+                    if key not in seen:
+                        seen.add(key)
+                        best = max(facts, key=lambda f: f.get("period_end") or "")
+                        concept_history.setdefault(qname, []).append(best)
+        else:
+            # Original behavior: latest N values across all filings
+            for filing in sorted(self.filings, key=lambda x: x.period_of_report or "", reverse=True):
+                for fact in filing.facts:
+                    if fact.concept_qname and fact.is_numeric and not fact.member:
+                        if fact.concept_qname not in concept_history:
+                            concept_history[fact.concept_qname] = []
+                        # Limit history per concept
+                        if len(concept_history[fact.concept_qname]) < eff_history:
+                            # Handle 'null' string from database as None
+                            pe = fact.period_end if fact.period_end and fact.period_end != 'null' else None
+                            ps = fact.period_start if fact.period_start and fact.period_start != 'null' else None
+                            concept_history[fact.concept_qname].append({
+                                "value": fact.value,
+                                "period_start": ps,
+                                "period_end": pe or ps or filing.period_of_report,
+                                "period_type": fact.period_type,
+                                "form_type": filing.form_type,
+                                "unit": fact.unit
+                            })
 
         # Sort each concept's history by period_end descending (latest first)
         for qname in concept_history:
@@ -853,12 +901,14 @@ class XBRLCatalog:
             L.append(f"{canonical} ({fact_count:,} facts)")
 
         # ══════════════════════════════════════════════════════════════════════
-        # DIMENSIONS → MEMBERS - Segmented data structure with fact counts
+        # DIMENSIONS AND MEMBERS - Segmented data structure with fact counts
+        # Format designed to be clearly reference data, not output format
         # ══════════════════════════════════════════════════════════════════════
         if self.dimensions or self.members:
             L.append("")
             L.append(SEP)
-            L.append(f"DIMENSIONS → MEMBERS ({len(self.dimensions)} dimensions, {len(self.members)} members)")
+            L.append(f"DIMENSIONS AND MEMBERS ({len(self.dimensions)} dimensions, {len(self.members)} members)")
+            L.append("NOTE: For matched_dimension/matched_member, output ONLY the qname (e.g., 'dell:ISGMember'), not this reference format")
             L.append(SEP)
 
             # Group members by dimension
@@ -874,15 +924,20 @@ class XBRLCatalog:
                 })
 
             # Sort dimensions by total facts, show each with its members
+            # Use tabular format clearly distinct from JSON output format
             for dim_qname in sorted(dim_members.keys(), key=lambda d: sum(m["fact_count"] for m in dim_members[d]), reverse=True):
                 dim_label = _escape_label(self.dimensions.get(dim_qname, {}).get("label", dim_qname))
                 members = sorted(dim_members[dim_qname], key=lambda x: -x["fact_count"])
                 total_facts = sum(m["fact_count"] for m in members)
 
-                L.append(f"{dim_qname} | {dim_label} ({total_facts:,} facts)")
+                L.append(f"[DIM] {dim_qname}")
+                L.append(f"      label={dim_label}, total_facts={total_facts:,}")
                 for m in members:
                     member_label = _escape_label(m.get('label', ''))
-                    L.append(f"  → {m['qname']} | {member_label} ({m['fact_count']:,} facts)" if member_label else f"  → {m['qname']} ({m['fact_count']:,} facts)")
+                    # Use tabular format: qname alone on line, metadata indented below
+                    L.append(f"      [MEMBER] {m['qname']}")
+                    if member_label:
+                        L.append(f"               label={member_label}, facts={m['fact_count']:,}")
 
         # ══════════════════════════════════════════════════════════════════════
         # CALCULATION NETWORK - How values compute (grouped by statement)
@@ -1045,7 +1100,16 @@ class XBRLCatalog:
     # HTML EXPORT (For human review)
     # ==========================================================================
 
-    def to_html(self, output_path: Optional[str] = None, include_relationships: bool = True) -> str:
+    def to_html(
+        self,
+        output_path: Optional[str] = None,
+        max_concepts_with_history: Optional[int] = None,
+        max_history_per_concept=_DEFAULT_HISTORY_LIMIT,
+        latest_per_form_type: bool = False,
+        max_sample_facts: Optional[int] = None,
+        include_relationships: bool = True,
+        context_budget_chars: Optional[int] = None,
+    ) -> str:
         """
         Generate HTML showing EXACTLY what the LLM sees via to_llm_context().
 
@@ -1056,7 +1120,7 @@ class XBRLCatalog:
 
         Args:
             output_path: If provided, saves HTML to this file path.
-            include_relationships: Pass through to to_llm_context()
+            All other args: Pass through to to_llm_context()
 
         Returns:
             HTML string
@@ -1065,7 +1129,14 @@ class XBRLCatalog:
         import html as html_lib
 
         # Get the EXACT text the LLM sees
-        llm_context = self.to_llm_context(include_relationships=include_relationships)
+        llm_context = self.to_llm_context(
+            max_concepts_with_history=max_concepts_with_history,
+            max_history_per_concept=max_history_per_concept,
+            latest_per_form_type=latest_per_form_type,
+            max_sample_facts=max_sample_facts,
+            include_relationships=include_relationships,
+            context_budget_chars=context_budget_chars,
+        )
 
         # Define section colors for visual separation
         section_colors = {
@@ -1498,6 +1569,20 @@ def _normalize_statement_name(network_name: str) -> str:
         return "Parenthetical"
 
     return "Other"
+
+
+def _form_family(form_type: str) -> str:
+    """
+    Map form types to their base family for grouping.
+
+    10-K, 10-K/A -> "10-K"
+    10-Q, 10-Q/A -> "10-Q"
+    """
+    if form_type.startswith("10-K"):
+        return "10-K"
+    elif form_type.startswith("10-Q"):
+        return "10-Q"
+    return form_type
 
 
 # =============================================================================

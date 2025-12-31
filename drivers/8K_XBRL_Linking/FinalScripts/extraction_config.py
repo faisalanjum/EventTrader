@@ -92,13 +92,14 @@ us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax in catalog:
 Use historical values in the catalog as a HINT for confidence, but do not reject
 based on magnitude differences alone (step-changes like acquisitions are legitimate).
 
-OUTPUT FORMAT:
-• concept_top1: Exact qname from catalog OR "UNMATCHED"
-• concept_top2: Second best qname OR null (OPTIONAL - omit if confident)
+OUTPUT FORMAT (STRICT JSON - each field must be a single value, never lists or multiline):
+• concept_top1: Exact qname from catalog OR "UNMATCHED" (SINGLE STRING)
+• concept_top2: Second best qname OR null (SINGLE STRING or null)
 • matched_period: "YYYY-MM-DD" (instant) or "YYYY-MM-DD→YYYY-MM-DD" (duration)
-• matched_unit: Must be one of the units listed in the catalog's UNITS section
-• matched_dimension: Exact dimension qname from catalog (only if segmented)
-• matched_member: Exact member qname from catalog (only if segmented)
+• matched_unit: Must be one of the units listed in the catalog's UNITS section (SINGLE STRING)
+• matched_dimension: Exact dimension qname from catalog, e.g. "us-gaap:StatementBusinessSegmentsAxis" (SINGLE STRING or omit)
+• matched_member: Exact member qname from catalog, e.g. "dell:InfrastructureSolutionsGroupMember" (SINGLE STRING or omit)
+  CRITICAL: matched_member must be ONE qname only. Never copy the catalog listing format. Never include multiple members, arrows, or fact counts.
 • confidence: Float 0.0-1.0
 • reasoning: Brief explanation (1-2 sentences)
 """.strip()
@@ -291,8 +292,9 @@ EXAMPLES = [
     # -------------------------------------------------------------------------
     # Example 9: Business Segment with Company-Specific Member
     # For business segments, the member qname uses a company-specific prefix.
-    # CRITICAL: Look up the exact member qname from the catalog's DIMENSIONS → MEMBERS
-    # section. The pattern is {company-prefix}:{SegmentName}Member.
+    # CRITICAL: Look up the exact member qname from the catalog's DIMENSIONS AND MEMBERS
+    # section. Output ONLY the qname string (e.g., "company:SegmentMember"), never the
+    # full catalog reference format with labels and fact counts.
     # -------------------------------------------------------------------------
     ExampleData(
         text="The Cloud Services segment generated operating income of $2.8 billion for Q2.",
