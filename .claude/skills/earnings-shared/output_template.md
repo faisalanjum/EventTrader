@@ -1,6 +1,6 @@
 # Output Template for Earnings Attribution
 
-Save reports to: `drivers/Movers/Companies/{TICKER}/{accession_no}.md`
+Save reports to: `earnings-analysis/Companies/{TICKER}/{accession_no}.md`
 
 ---
 
@@ -120,7 +120,7 @@ If guidance covers a different period than the filing (e.g., FY25 guidance in a 
 
 ## Company Learnings Template
 
-After each analysis, update `drivers/Movers/Companies/{TICKER}/learnings.md`:
+After each analysis, update `earnings-analysis/Companies/{TICKER}/learnings.md`:
 
 ```markdown
 # {TICKER} Driver Learnings

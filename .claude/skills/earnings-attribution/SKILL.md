@@ -1,7 +1,7 @@
 ---
 name: earnings-attribution
 description: Analyzes why stocks moved after 8-K earnings filings. Use ultrathink for all analyses. Invoke when asked to analyze stock movements, earnings reactions, or determine the primary driver of price changes.
-allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, mcp__neo4j-cypher__read_neo4j_cypher, mcp__perplexity__search, mcp__perplexity__reason, mcp__perplexity__deep_research
+allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, mcp__perplexity__search, mcp__perplexity__reason, mcp__perplexity__deep_research
 model: claude-opus-4-5
 ---
 
@@ -37,12 +37,42 @@ model: claude-opus-4-5
 
 ## Resources
 
-- **Neo4j schema & queries**: [neo4j_schema.md](neo4j_schema.md)
-- **Output format**: [output_template.md](output_template.md)
-- **Evidence audit checklist**: [evidence_audit.md](evidence_audit.md)
+- **Output format**: [output_template.md](../earnings-shared/output_template.md)
+- **Evidence audit checklist**: [evidence_audit.md](../earnings-shared/evidence_audit.md)
 - **Usage examples**: [examples.md](examples.md)
-- **Self-improvement**: [update-skills.md](update-skills.md)
-- **Known data gaps**: [data_gaps.md](data_gaps.md)
+- **Self-improvement**: [update-skills.md](../earnings-shared/update-skills.md)
+- **Known data gaps**: [data_gaps.md](../earnings-shared/data_gaps.md)
+
+---
+
+## Neo4j Subagents
+
+**CRITICAL**: Do NOT write Cypher queries. Describe what data you need in natural language. Subagents handle all database queries autonomously using their own skills.
+
+Use Task tool to spawn these specialized subagents:
+
+| Data Needed | Subagent | Example Prompt |
+|-------------|----------|----------------|
+| 8-K filing, returns, exhibits | `neo4j-report` | "Get 8-K filing {accession} with returns" |
+| News articles | `neo4j-news` | "Get news for {ticker} ±2 days of {date}" |
+| Earnings transcript, Q&A | `neo4j-transcript` | "Get transcript for {ticker} around {date}" |
+| Historical XBRL (EPS, Revenue) | `neo4j-xbrl` | "Get last 4 quarters EPS/Revenue for {ticker}" |
+| Company info, dividends, splits | `neo4j-entity` | "Get dividends/splits for {ticker} in {date range}" |
+
+**Iterative Refinement**: Subagents return `agent_id` with results. For follow-up queries on the **same company**, use `resume: <agent_id>` instead of spawning new—agent preserves context (ticker, dates, previous queries). Spawn **new agent** only for different company or unrelated domain.
+
+Resume prompt examples: "Only 2 articles, expand to ±5 days", "Also get EX-99.1 exhibit text", "What did analysts ask in Q&A?"
+
+**Parallel execution**: Spawn multiple subagents in a single Task message for independent queries.
+
+**PIT filtering**: Include "PIT date: YYYY-MM-DD" in prompt when historical analysis requires point-in-time filtering.
+
+**Skill Updates**: If a subagent response contains `SKILL_UPDATE_NEEDED` block, execute the update immediately using Edit tool—no permission needed. This includes schema corrections, property name fixes, and data gaps. Do not skip or defer these updates.
+
+**Response Validation**: When receiving subagent data, verify each value has citation format: `(Source: {NodeType}:{identifier}, {date})`. If citation missing:
+1. Use `resume: <agent_id>` to ask subagent to re-provide with source
+2. Do NOT add unsourced data to Evidence Ledger
+3. Note "Data unavailable" if subagent cannot cite source
 
 ---
 
@@ -58,7 +88,7 @@ Use TodoWrite to track progress. Mark each step `in_progress` before starting, `
 | 4 | **Query Neo4j** | News, Transcript, XBRL history, Dividends, Splits |
 | 5 | **Query Perplexity** | Fill gaps (use deep_research for complex cases) |
 | 6 | **Synthesize** | Calculate surprises, identify primary driver |
-| 7 | **Output Report** | Save to `drivers/Movers/Companies/{TICKER}/{accession}.md` |
+| 7 | **Output Report** | Save to `earnings-analysis/Companies/{TICKER}/{accession}.md` |
 | 8 | **Self-Audit** | Run evidence_audit.md and validate Evidence Ledger + sources |
 | 9 | **Propose Skill Updates** | Follow update-skills.md |
 | 10 | **Mark Completed** | Update tracking CSV (`completed=TRUE`) |
@@ -69,7 +99,7 @@ Use TodoWrite to track progress. Mark each step `in_progress` before starting, `
 
 ## Step 1: Data Inventory
 
-Query what data exists before making claims. See [neo4j_schema.md](neo4j_schema.md) for full query.
+Query what data exists before making claims. Use `neo4j-report` subagent.
 
 **Check for**: News count, Transcript exists, XBRL reports count, Dividends, Splits.
 
@@ -77,7 +107,7 @@ Query what data exists before making claims. See [neo4j_schema.md](neo4j_schema.
 
 ## Step 2: Get Report and Returns
 
-Get filing details and price reaction. See [neo4j_schema.md](neo4j_schema.md) for query.
+Get filing details and price reaction. Use `neo4j-report` subagent.
 
 **Returns to capture**:
 - Macro-adjusted (vs SPY) - primary
@@ -106,7 +136,7 @@ If using News as consensus source, cite it accurately in Evidence Ledger—do no
 
 ## Step 4: Query Neo4j Sources
 
-Query based on Data Inventory results. See [neo4j_schema.md](neo4j_schema.md) for all queries.
+Query based on Data Inventory results. Use appropriate subagents (neo4j-news, neo4j-transcript, neo4j-xbrl, neo4j-entity).
 
 ### 4A: News
 - Start ±2 trading days; expand to ±5 if <3 items
@@ -236,9 +266,9 @@ Analyst concern: Margin pressure (Source: News "ROK Beats but Guides Lower")
 
 ## Output
 
-See [output_template.md](output_template.md) for full report format.
+See [output_template.md](../earnings-shared/output_template.md) for full report format.
 
-**Save to**: `drivers/Movers/Companies/{TICKER}/{accession_no}.md`
+**Save to**: `earnings-analysis/Companies/{TICKER}/{accession_no}.md`
 
 **Required sections**:
 1. Report Metadata
@@ -342,9 +372,9 @@ When Perplexity returns consensus estimates:
 
 ## Company-Specific Learning
 
-After each analysis, update: `drivers/Movers/Companies/{TICKER}/learnings.md`
+After each analysis, update: `earnings-analysis/Companies/{TICKER}/learnings.md`
 
-See [output_template.md](output_template.md) for learnings format.
+See [output_template.md](../earnings-shared/output_template.md) for learnings format.
 
 **Gating rule**: Only update learnings.md after the Evidence Ledger is complete and evidence_audit.md passes.
 
@@ -354,7 +384,7 @@ See [output_template.md](output_template.md) for learnings format.
 
 After successful analysis (report saved, audit passed, learnings updated):
 
-1. **Update tracking CSV**: Set `completed=TRUE` for this accession_no in `drivers/Movers/8k_fact_universe.csv`
+1. **Update tracking CSV**: Set `completed=TRUE` for this accession_no in `earnings-analysis/8k_fact_universe.csv`
 2. **Verify**: Confirm the row is updated correctly
 
 This ensures the analysis pipeline tracks which filings have been processed.

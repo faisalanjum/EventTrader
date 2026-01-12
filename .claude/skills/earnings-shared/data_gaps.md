@@ -9,6 +9,7 @@ This file documents known gaps in the Neo4j database that may affect earnings at
 | Date Range | Affected Companies | Impact | Mitigation |
 |------------|-------------------|--------|------------|
 | Feb-Mar 2023 | Large-cap retailers (LOW, HD, TGT) | Missing transcripts | News coverage typically sufficient; use Perplexity fallback if needed |
+| 2024 | PLCE (The Children's Place) | Only Q4 FY2022 transcript available; no Q1-Q3 FY2024/2025 | News headlines provided sufficient consensus data for this analysis |
 
 ---
 
@@ -54,4 +55,4 @@ When you encounter a data gap during analysis:
 
 ---
 
-*Last updated: 2026-01-04*
+*Last updated: 2026-01-11*

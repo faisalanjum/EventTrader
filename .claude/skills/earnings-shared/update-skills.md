@@ -134,7 +134,7 @@ Before proposing a rule, verify:
 ```
 Analysis Progress:
 - [ ] Steps 1-5: Complete attribution analysis
-- [ ] Step 6: Output report to drivers/Movers/Companies/{TICKER}/{accession}.md
+- [ ] Step 6: Output report to earnings-analysis/Companies/{TICKER}/{accession}.md
 - [ ] Step 7: **PROPOSE SKILL UPDATES** ← You are here
 - [ ] Step 8: Mark CSV as completed
 ```

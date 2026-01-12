@@ -161,7 +161,7 @@ Complete rewrite based on line-by-line review with user. Shifted from pattern-ma
   - Queries still available in logs for debugging
 
 #### 10. Company-Specific Learning
-- **Change**: Store learnings in `drivers/Movers/Companies/{TICKER}/learnings.md`
+- **Change**: Store learnings in `earnings-analysis/Companies/{TICKER}/learnings.md`
 - **Reasoning**:
   - Each company has different driver sensitivities
   - Historical analysis builds company-specific knowledge
