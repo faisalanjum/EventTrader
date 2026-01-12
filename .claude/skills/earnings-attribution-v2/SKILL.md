@@ -67,6 +67,11 @@ Resume prompt examples: "Only 2 articles, expand to ±5 days", "Also get EX-99.1
 
 **PIT filtering**: Include "PIT date: YYYY-MM-DD" in prompt when historical analysis requires point-in-time filtering.
 
+**Response Validation**: When receiving subagent data, verify each value has citation format: `(Source: {NodeType}:{identifier}, {date})`. If citation missing:
+1. Use `resume: <agent_id>` to ask subagent to re-provide with source
+2. Do NOT add unsourced data to Evidence Ledger
+3. Note "Data unavailable" if subagent cannot cite source
+
 ---
 
 ## Workflow (10 Steps)

@@ -10,6 +10,7 @@ permissionMode: dontAsk
 skills:
   - neo4j-schema
   - neo4j-news
+  - evidence-standards
   - skill-update
 ---
 
