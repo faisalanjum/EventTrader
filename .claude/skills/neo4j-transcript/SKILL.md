@@ -268,6 +268,7 @@ LIMIT 20
 ## Known Data Gaps
 | Date | Gap | Affected | Mitigation |
 |------|-----|----------|------------|
+| 2026-01-11 | Common user error: wrong schema for transcripts | Transcript queries | Use `:INFLUENCES` or `:HAS_TRANSCRIPT` (not `:COMPANY`), `conference_datetime` (not `event_datetime`), `:HAS_QA_EXCHANGE` (not `:HAS_EXCHANGE`), `:QAExchange` (not `:Exchange`), `:PreparedRemark` (not `:PreparedRemarks`). |
 
 ---
 *Version 1.1 | 2026-01-11 | Added self-improvement protocol*

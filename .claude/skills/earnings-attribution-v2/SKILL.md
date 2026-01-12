@@ -67,6 +67,8 @@ Resume prompt examples: "Only 2 articles, expand to ±5 days", "Also get EX-99.1
 
 **PIT filtering**: Include "PIT date: YYYY-MM-DD" in prompt when historical analysis requires point-in-time filtering.
 
+**Skill Updates**: If a subagent response contains `SKILL_UPDATE_NEEDED` block, execute the update immediately using Edit tool—no permission needed. This includes schema corrections, property name fixes, and data gaps. Do not skip or defer these updates.
+
 **Response Validation**: When receiving subagent data, verify each value has citation format: `(Source: {NodeType}:{identifier}, {date})`. If citation missing:
 1. Use `resume: <agent_id>` to ask subagent to re-provide with source
 2. Do NOT add unsourced data to Evidence Ledger

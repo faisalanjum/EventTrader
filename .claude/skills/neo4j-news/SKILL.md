@@ -419,6 +419,7 @@ LIMIT 20
 ## Known Data Gaps
 | Date | Gap | Affected | Mitigation |
 |------|-----|----------|------------|
+| 2026-01-11 | Common user error: using `published_utc` instead of `created` | News date filtering | Property is `n.created` (ISO string), not `n.published_utc`. Use `date(n.created)` for date comparisons. |
 
 ---
 *Version 1.1 | 2026-01-11 | Added self-improvement protocol*
