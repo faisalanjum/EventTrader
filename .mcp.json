@@ -9,6 +9,14 @@
       "type": "stdio",
       "command": "/home/faisal/EventMarketDB/mcp_servers/local-memory-server.sh",
       "args": []
+    },
+    "perplexity": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "perplexity-mcp"],
+      "env": {
+        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
+      }
     }
   }
 }

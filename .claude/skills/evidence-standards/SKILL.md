@@ -1,6 +1,7 @@
 ---
 name: evidence-standards
 description: Evidence citation and domain scope standards for Neo4j subagents. Prevents hallucination and ensures audit trail.
+user-invocable: false
 ---
 
 # Evidence Standards for Neo4j Subagents

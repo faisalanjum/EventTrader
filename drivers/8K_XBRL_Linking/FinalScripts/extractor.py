@@ -67,6 +67,7 @@ def extract_facts(
     suppress_parse_errors: bool = False,
     debug: bool = False,
     use_schema_constraints: bool = True,
+    extraction_passes: int = 1,
 ) -> ExtractionResult:
     """
     Production function: Extract financial facts from 8-K text.
@@ -85,6 +86,7 @@ def extract_facts(
         suppress_parse_errors=suppress_parse_errors,
         debug=debug,
         use_schema_constraints=use_schema_constraints,
+        extraction_passes=extraction_passes,
     )
     return result
 
@@ -101,6 +103,7 @@ def extract_facts_debug(
     suppress_parse_errors: bool = False,
     debug: bool = False,
     use_schema_constraints: bool = True,
+    extraction_passes: int = 1,
 ) -> Tuple[ExtractionResult, AnnotatedDocument]:
     """
     Debug function: Extract financial facts and return annotated document.
@@ -120,6 +123,7 @@ def extract_facts_debug(
         suppress_parse_errors=suppress_parse_errors,
         debug=debug,
         use_schema_constraints=use_schema_constraints,
+        extraction_passes=extraction_passes,
     )
 
 
@@ -135,6 +139,7 @@ def _extract_core(
     suppress_parse_errors: bool = False,
     debug: bool = False,
     use_schema_constraints: bool = True,
+    extraction_passes: int = 1,
 ) -> Tuple[ExtractionResult, AnnotatedDocument]:
     """
     Core extraction logic. Returns both ExtractionResult and AnnotatedDocument.
@@ -165,7 +170,8 @@ def _extract_core(
     if hasattr(catalog, 'to_llm_context'):
         # XBRLCatalog object
         valid_qnames = set(catalog.concepts.keys())
-        valid_units = _extract_canonical_units(catalog)
+        # Simple validation: any unit in the catalog is valid (no conversion needed)
+        valid_units = set(catalog.units.keys())
         # Use latest_per_form_type=True for one 10-K + one 10-Q value per concept
         llm_context = catalog.to_llm_context(latest_per_form_type=True)
         cik = catalog.cik
@@ -206,6 +212,8 @@ def _extract_core(
         extract_kwargs["batch_length"] = batch_length
     if max_output_tokens is not None:
         extract_kwargs["language_model_params"] = {"max_output_tokens": max_output_tokens}
+    if extraction_passes > 1:
+        extract_kwargs["extraction_passes"] = extraction_passes
 
     annotated_doc = lx.extract(**extract_kwargs)
     extractions = annotated_doc.extractions or []
@@ -302,33 +310,36 @@ def _map_to_raw(extractions: list, source_text_length: int) -> list:
     return raw
 
 
-def _extract_canonical_units(catalog) -> Set[str]:
-    """
-    Extract canonical unit names from catalog.
-
-    Converts XBRL unit qnames to canonical format:
-    - iso4217:USD → USD
-    - iso4217:USDshares → USD/share
-    - shares → shares
-    - pure → pure
-    """
-    canonical = set()
-
-    for uname, info in catalog.units.items():
-        utype = info.get("type", "")
-
-        if utype == "monetaryItemType" and uname.startswith("iso4217:"):
-            canonical.add(uname.split(":")[1])
-        elif utype == "perShareItemType" and uname.startswith("iso4217:"):
-            currency = uname.split(":")[1].replace("shares", "")
-            canonical.add(f"{currency}/share")
-        elif utype == "sharesItemType" or uname == "shares":
-            canonical.add("shares")
-        elif uname == "pure":
-            canonical.add("pure")
-
-    # Ensure common defaults
-    if not canonical:
-        canonical = {"USD", "shares", "pure", "USD/share"}
-
-    return canonical
+# NOTE: _extract_canonical_units is no longer used. Unit validation now uses
+# raw unit names from catalog.units.keys() directly. Keeping for reference.
+#
+# def _extract_canonical_units(catalog) -> Set[str]:
+#     """
+#     Extract canonical unit names from catalog.
+#
+#     Converts XBRL unit qnames to canonical format:
+#     - iso4217:USD → USD
+#     - iso4217:USDshares → USD/share
+#     - shares → shares
+#     - pure → pure
+#     """
+#     canonical = set()
+#
+#     for uname, info in catalog.units.items():
+#         utype = info.get("type", "")
+#
+#         if utype == "monetaryItemType" and uname.startswith("iso4217:"):
+#             canonical.add(uname.split(":")[1])
+#         elif utype == "perShareItemType" and uname.startswith("iso4217:"):
+#             currency = uname.split(":")[1].replace("shares", "")
+#             canonical.add(f"{currency}/share")
+#         elif utype == "sharesItemType" or uname == "shares":
+#             canonical.add("shares")
+#         elif uname == "pure":
+#             canonical.add("pure")
+#
+#     # Ensure common defaults
+#     if not canonical:
+#         canonical = {"USD", "shares", "pure", "USD/share"}
+#
+#     return canonical

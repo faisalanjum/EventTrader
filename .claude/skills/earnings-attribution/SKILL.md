@@ -37,11 +37,11 @@ model: claude-opus-4-5
 
 ## Resources
 
-- **Output format**: [output_template.md](../earnings-shared/output_template.md)
-- **Evidence audit checklist**: [evidence_audit.md](../earnings-shared/evidence_audit.md)
+- **Output format**: [output_template.md](../../shared/earnings/output_template.md)
+- **Evidence audit checklist**: [evidence_audit.md](../../shared/earnings/evidence_audit.md)
 - **Usage examples**: [examples.md](examples.md)
-- **Self-improvement**: [update-skills.md](../earnings-shared/update-skills.md)
-- **Known data gaps**: [data_gaps.md](../earnings-shared/data_gaps.md)
+- **Self-improvement**: [update-skills.md](../../shared/earnings/update-skills.md)
+- **Known data gaps**: [data_gaps.md](../../shared/earnings/data_gaps.md)
 
 ---
 
@@ -266,7 +266,7 @@ Analyst concern: Margin pressure (Source: News "ROK Beats but Guides Lower")
 
 ## Output
 
-See [output_template.md](../earnings-shared/output_template.md) for full report format.
+See [output_template.md](../../shared/earnings/output_template.md) for full report format.
 
 **Save to**: `earnings-analysis/Companies/{TICKER}/{accession_no}.md`
 
@@ -374,7 +374,7 @@ When Perplexity returns consensus estimates:
 
 After each analysis, update: `earnings-analysis/Companies/{TICKER}/learnings.md`
 
-See [output_template.md](../earnings-shared/output_template.md) for learnings format.
+See [output_template.md](../../shared/earnings/output_template.md) for learnings format.
 
 **Gating rule**: Only update learnings.md after the Evidence Ledger is complete and evidence_audit.md passes.
 

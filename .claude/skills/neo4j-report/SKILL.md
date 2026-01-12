@@ -647,6 +647,7 @@ LIMIT 10
 ## Known Data Gaps
 | Date | Gap | Affected | Mitigation |
 |------|-----|----------|------------|
+| 2026-01-11 | Missing exhibit content for some 8-K filings | Report:0000048465-25-000042 has 0 exhibits despite Item 9.01 listing EX-99 | Check exhibit_count before querying; use News/Transcript for key figures |
 
 ---
 *Version 2.1 | 2026-01-11 | Added self-improvement protocol*

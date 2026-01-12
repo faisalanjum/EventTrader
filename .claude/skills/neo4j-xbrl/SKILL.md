@@ -332,6 +332,7 @@ RETURN r.formType, r.accessionNo, x.id, x.cik LIMIT 20
 ## Known Data Gaps
 | Date | Gap | Affected | Mitigation |
 |------|-----|----------|------------|
+| 2026-01-11 | Revenue values comma-formatted | HRL Revenue facts | Use `f.value` as string; `toFloat()` fails on "2,898,810,000" |
 
 ---
 *Version 1.1 | 2026-01-11 | Added self-improvement protocol*

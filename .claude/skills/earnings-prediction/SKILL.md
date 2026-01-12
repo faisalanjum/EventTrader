@@ -15,9 +15,9 @@ model: claude-opus-4-5
 
 ## Resources
 
-- **Output format**: [output_template.md](../earnings-shared/output_template.md)
-- **Evidence audit**: [evidence_audit.md](../earnings-shared/evidence_audit.md)
-- **Known data gaps**: [data_gaps.md](../earnings-shared/data_gaps.md)
+- **Output format**: [output_template.md](../../shared/earnings/output_template.md)
+- **Evidence audit**: [evidence_audit.md](../../shared/earnings/evidence_audit.md)
+- **Known data gaps**: [data_gaps.md](../../shared/earnings/data_gaps.md)
 
 ---
 

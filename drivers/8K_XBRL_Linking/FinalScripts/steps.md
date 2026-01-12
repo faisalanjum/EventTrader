@@ -126,3 +126,5 @@ A few easy options to view the HTML on your Mac:
 
   # Then open it
   open ~/Desktop/DELL_8K_20251226_122044.html
+
+

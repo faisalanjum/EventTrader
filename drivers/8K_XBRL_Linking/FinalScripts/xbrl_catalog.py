@@ -880,25 +880,27 @@ class XBRLCatalog:
         L.append(f"UNITS ({len(self.units)} types)")
         L.append(SEP)
 
-        # Show all units sorted by fact count, with canonical names where possible
+        # Show all units sorted by fact count - use raw names directly
+        # LLM should output exactly what it sees here for validation to match
         for uname, info in sorted(self.units.items(), key=lambda x: -x[1].get("fact_count", 0)):
-            utype = info.get("type", "")
             fact_count = info.get("fact_count", 0)
+            L.append(f"{uname} ({fact_count:,} facts)")
 
-            # Convert to canonical format for readability
-            if utype == "monetaryItemType" and uname.startswith("iso4217:"):
-                canonical = uname.split(":")[1]  # iso4217:USD → USD
-            elif utype == "perShareItemType" and uname.startswith("iso4217:") and uname.endswith("shares"):
-                currency = uname.split(":")[1].replace("shares", "")
-                canonical = f"{currency}/share"  # iso4217:USDshares → USD/share
-            elif utype == "sharesItemType" or uname == "shares":
-                canonical = "shares"
-            elif uname == "pure":
-                canonical = "pure"
-            else:
-                canonical = uname  # Keep original if no canonical form
-
-            L.append(f"{canonical} ({fact_count:,} facts)")
+            # OLD: Converted to canonical format - commented out because validation
+            # should simply check if unit exists in catalog, not depend on item_type
+            # utype = info.get("type", "")
+            # if utype == "monetaryItemType" and uname.startswith("iso4217:"):
+            #     canonical = uname.split(":")[1]  # iso4217:USD → USD
+            # elif utype == "perShareItemType" and uname.startswith("iso4217:") and uname.endswith("shares"):
+            #     currency = uname.split(":")[1].replace("shares", "")
+            #     canonical = f"{currency}/share"  # iso4217:USDshares → USD/share
+            # elif utype == "sharesItemType" or uname == "shares":
+            #     canonical = "shares"
+            # elif uname == "pure":
+            #     canonical = "pure"
+            # else:
+            #     canonical = uname
+            # L.append(f"{canonical} ({fact_count:,} facts)")
 
         # ══════════════════════════════════════════════════════════════════════
         # DIMENSIONS AND MEMBERS - Segmented data structure with fact counts
