@@ -14,7 +14,12 @@ Sub-agent combinations (all work):
   Primary: OpenAI/Gemini can spawn any sub-agent (Claude/OpenAI/Gemini) with skills
   OpenAI -> OpenAI, OpenAI -> Gemini, OpenAI -> Claude
   Gemini -> OpenAI, Gemini -> Gemini, Gemini -> Claude
-  Note: Claude primary uses Claude Code's Task tool, not subagent
+
+Combination that doesn't work:
+  Claude (primary) -> OpenAI/Gemini (sub-agent)
+  Reason: ./agent --provider claude calls claude -p (Claude Code CLI), which has its
+  own Task tool - not our subagent tool. So Claude can't spawn OpenAI/Gemini.
+  Fix (if needed): Replace Claude CLI with Anthropic SDK so we can inject subagent tool.
 """
 import argparse, subprocess, json, os, re
 from pathlib import Path
