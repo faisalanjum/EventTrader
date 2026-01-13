@@ -1,0 +1,149 @@
+#!/home/faisal/EventMarketDB/venv/bin/python
+"""Universal Agent CLI with MCP support for all providers"""
+import argparse, subprocess, json, os, re
+from pathlib import Path
+
+PROJECT_DIR = Path(__file__).parent
+SKILLS_DIR = PROJECT_DIR / ".claude" / "skills"
+MCP_URL = "http://localhost:31380/mcp"
+
+def get_secret(key):
+    if v := os.environ.get(key): return v
+    try:
+        r = subprocess.run(["kubectl", "get", "secret", "eventtrader-secrets", "-n", "processing",
+            "-o", f"jsonpath={{.data.{key}}}"], capture_output=True, text=True)
+        if r.stdout:
+            import base64; return base64.b64decode(r.stdout).decode()
+    except: pass
+    return None
+
+def load_skills(names):
+    if not names: return None
+    parts = []
+    for n in names.split(","):
+        for p in [f"{n.strip()}/SKILL.md", f"{n.strip()}.md"]:
+            if (SKILLS_DIR / p).exists(): parts.append((SKILLS_DIR / p).read_text()); break
+    return "\n\n---\n\n".join(parts) if parts else None
+
+# MCP HTTP Client
+class MCPClient:
+    def __init__(self, url=MCP_URL):
+        self.url, self.session_id, self.tools_cache = url, None, None
+
+    def _call(self, method, params=None, id=1):
+        import requests
+        headers = {"Content-Type": "application/json", "Accept": "application/json, text/event-stream"}
+        if self.session_id: headers["mcp-session-id"] = self.session_id
+        body = {"jsonrpc": "2.0", "method": method, "id": id}
+        if params: body["params"] = params
+        try:
+            r = requests.post(self.url, json=body, headers=headers, timeout=30)
+            if "mcp-session-id" in r.headers: self.session_id = r.headers["mcp-session-id"]
+            for line in r.text.split("\n"):
+                if line.startswith("data: "): return json.loads(line[6:]).get("result")
+        except: pass
+        return None
+
+    def init(self):
+        return self._call("initialize", {"protocolVersion": "2024-11-05", "capabilities": {},
+            "clientInfo": {"name": "agent", "version": "1.0"}})
+
+    def list_tools(self):
+        if not self.tools_cache:
+            if not self.session_id: self.init()
+            result = self._call("tools/list", id=2)
+            self.tools_cache = result.get("tools", []) if result else []
+        return self.tools_cache
+
+    def call_tool(self, name, args):
+        if not self.session_id: self.init()
+        result = self._call("tools/call", {"name": name, "arguments": args}, id=3)
+        if result and "content" in result:
+            return "\n".join(c.get("text", "") for c in result["content"] if c.get("type") == "text")
+        return json.dumps(result) if result else "[mcp error]"
+
+mcp = MCPClient()
+
+# Tools
+def subagent(provider, prompt, skills="", model=""):
+    cmd = [str(PROJECT_DIR / "agent"), "-p", prompt, "--provider", provider]
+    if skills: cmd += ["--skills", skills]
+    if model: cmd += ["--model", model]
+    return subprocess.run(cmd, capture_output=True, text=True, cwd=PROJECT_DIR).stdout or "[no output]"
+
+BUILTIN = {"subagent": {"fn": subagent, "desc": "Spawn sub-agent with any provider",
+    "params": {"provider": {"type": "string", "enum": ["claude", "openai", "gemini"]},
+               "prompt": {"type": "string"}, "skills": {"type": "string"}, "model": {"type": "string"}},
+    "required": ["provider", "prompt"]}}
+
+def get_tools():
+    tools = dict(BUILTIN)
+    for t in mcp.list_tools():
+        props = t.get("inputSchema", {}).get("properties", {})
+        tools[t["name"]] = {"desc": t.get("description", ""), "params": {k: {"type": v.get("type", "string"),
+            "description": v.get("description", "")} for k, v in props.items()},
+            "required": t.get("inputSchema", {}).get("required", []), "mcp": True}
+    return tools
+
+def run_tool(name, args):
+    tools = get_tools()
+    if name not in tools: return f"[unknown: {name}]"
+    if tools[name].get("mcp"): return mcp.call_tool(name, args)
+    return tools[name]["fn"](**{k: v for k, v in args.items() if v})
+
+# Providers
+def run_claude(prompt, system=None, model="sonnet"):
+    full = f"{system}\n\n---\n\nTask: {prompt}" if system else prompt
+    r = subprocess.run(["claude", "-p", full], capture_output=True, text=True, cwd=PROJECT_DIR)
+    return r.stdout or r.stderr
+
+def run_openai(prompt, system=None, model="gpt-5.2"):
+    from openai import OpenAI
+    tools = get_tools()
+    otool = [{"type": "function", "function": {"name": n, "description": t["desc"],
+        "parameters": {"type": "object", "properties": t["params"], "required": t.get("required", [])}
+    }} for n, t in tools.items()]
+    msgs = ([{"role": "system", "content": system}] if system else []) + [{"role": "user", "content": prompt}]
+    client = OpenAI(api_key=get_secret("OPENAI_API_KEY"))
+    for _ in range(15):
+        r = client.chat.completions.create(model=model, messages=msgs, tools=otool)
+        m = r.choices[0].message
+        msgs.append(m.model_dump())
+        if not m.tool_calls: return m.content
+        for tc in m.tool_calls:
+            msgs.append({"role": "tool", "tool_call_id": tc.id, "content": run_tool(tc.function.name, json.loads(tc.function.arguments))})
+    return "[max turns]"
+
+def run_gemini(prompt, system=None, model="gemini-3-pro-preview"):
+    from google import genai
+    from google.genai import types
+    tools = get_tools()
+    decls = [types.FunctionDeclaration(name=n, description=t["desc"],
+        parameters=types.Schema(type="OBJECT", properties={k: types.Schema(type=v.get("type", "string").upper(),
+            enum=v.get("enum"), description=v.get("description")) for k, v in t["params"].items()},
+            required=t.get("required", []))) for n, t in tools.items()]
+    client = genai.Client(api_key=get_secret("GEMINI_API_KEY"))
+    config = types.GenerateContentConfig(system_instruction=system, tools=[types.Tool(function_declarations=decls)])
+    contents = [types.Content(role="user", parts=[types.Part(text=prompt)])]
+    for _ in range(15):
+        r = client.models.generate_content(model=model, contents=contents, config=config)
+        part = r.candidates[0].content.parts[0]
+        if not part.function_call: return part.text
+        fc = part.function_call
+        contents.append(r.candidates[0].content)
+        contents.append(types.Content(role="user", parts=[types.Part(function_response=types.FunctionResponse(
+            name=fc.name, response={"result": run_tool(fc.name, dict(fc.args))}))]))
+    return "[max turns]"
+
+RUNNERS = {"claude": run_claude, "openai": run_openai, "gemini": run_gemini}
+DEFAULTS = {"claude": "sonnet", "openai": "gpt-5.2", "gemini": "gemini-3-pro-preview"}
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser()
+    p.add_argument("-p", "--prompt", required=True)
+    p.add_argument("--provider", choices=["claude", "openai", "gemini"], default="claude")
+    p.add_argument("--model")
+    p.add_argument("--skills")
+    p.add_argument("--system")
+    a = p.parse_args()
+    print(RUNNERS[a.provider](a.prompt, a.system or load_skills(a.skills), a.model or DEFAULTS[a.provider]))
