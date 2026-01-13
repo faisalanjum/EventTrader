@@ -1,5 +1,21 @@
 #!/home/faisal/EventMarketDB/venv/bin/python
-"""Universal Agent CLI with MCP support for all providers"""
+"""Universal Agent CLI with MCP support for all providers
+
+Usage:
+  ./agent -p "prompt" --provider {claude|openai|gemini} [--model MODEL] [--skills SKILL]
+
+Examples:
+  ./agent -p "What is 2+2?" --provider openai
+  ./agent -p "Count Report nodes in Neo4j" --provider gemini --model gemini-2.5-flash
+  ./agent -p "Analyze why PLCE moved +84% after 8-K 0001104659-24-098778" --provider openai --model gpt-4o --skills earnings-attribution
+  ./agent -p "Analyze AAPL earnings" --provider gemini --model gemini-2.5-flash --skills earnings-attribution
+
+Sub-agent combinations (all work):
+  Primary: OpenAI/Gemini can spawn any sub-agent (Claude/OpenAI/Gemini) with skills
+  OpenAI -> OpenAI, OpenAI -> Gemini, OpenAI -> Claude
+  Gemini -> OpenAI, Gemini -> Gemini, Gemini -> Claude
+  Note: Claude primary uses Claude Code's Task tool, not subagent
+"""
 import argparse, subprocess, json, os, re
 from pathlib import Path
 
