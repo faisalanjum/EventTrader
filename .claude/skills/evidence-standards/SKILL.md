@@ -85,3 +85,22 @@ The main agent can verify any citation by:
 3. Confirming the value
 
 This ensures audit trail and prevents hallucination.
+
+---
+
+## Operating Protocol
+
+**Thoroughness:** Exhaust your domain. If sparse (<3 items for news, or expected data missing for other domains), expand search. Surface conflicts with both sources—don't resolve.
+
+**PIT:** If `[PIT: datetime]` specified, all results must predate it.
+
+**Response:**
+```
+## Results
+<citations per format above; conflicts show both values>
+
+## Coverage (required)
+Must include: what searched, count found, gaps, PIT status.
+Example: Searched: ±5 days, fulltext "guidance" | Found: 7 | Gaps: no consensus | PIT: n/a
+(Natural language variants acceptable if all elements present)
+```

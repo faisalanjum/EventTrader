@@ -53,11 +53,11 @@ Use Task tool to spawn these specialized subagents:
 
 | Data Needed | Subagent | Example Prompt |
 |-------------|----------|----------------|
-| 8-K filing, returns, exhibits | `neo4j-report` | "Get 8-K filing {accession} with returns" |
-| News articles | `neo4j-news` | "Get news for {ticker} ±2 days of {date}" |
-| Earnings transcript, Q&A | `neo4j-transcript` | "Get transcript for {ticker} around {date}" |
-| Historical XBRL (EPS, Revenue) | `neo4j-xbrl` | "Get last 4 quarters EPS/Revenue for {ticker}" |
-| Company info, dividends, splits | `neo4j-entity` | "Get dividends/splits for {ticker} in {date range}" |
+| 8-K filing, returns, exhibits | `neo4j-report` | "8-K {accession} with returns, EX-99.1" |
+| News articles | `neo4j-news` | "News for {ticker} ±3 days of {date}" |
+| Earnings transcript, Q&A | `neo4j-transcript` | "Transcript for {ticker} {quarter}" |
+| Historical XBRL (EPS, Revenue) | `neo4j-xbrl` | "Last 4 quarters EPS/Revenue for {ticker}" |
+| Company info, dividends, splits | `neo4j-entity` | "Dividends/splits for {ticker} around {date}" |
 
 **Iterative Refinement**: Subagents return `agent_id` with results. For follow-up queries on the **same company**, use `resume: <agent_id>` instead of spawning new—agent preserves context (ticker, dates, previous queries). Spawn **new agent** only for different company or unrelated domain.
 
@@ -65,7 +65,7 @@ Resume prompt examples: "Only 2 articles, expand to ±5 days", "Also get EX-99.1
 
 **Parallel execution**: Spawn multiple subagents in a single Task message for independent queries.
 
-**PIT filtering**: Include "PIT date: YYYY-MM-DD" in prompt when historical analysis requires point-in-time filtering.
+**PIT filtering (prediction mode)**: Prefix prompt with `[PIT: {filing_datetime}]` to restrict results to before that time.
 
 **Skill Updates**: If a subagent response contains `SKILL_UPDATE_NEEDED` block, execute the update immediately using Edit tool—no permission needed. This includes schema corrections, property name fixes, and data gaps. Do not skip or defer these updates.
 
@@ -156,6 +156,10 @@ Query based on Data Inventory results. Use appropriate subagents (neo4j-news, ne
 
 ### 4E: Splits
 - Rarely explain fundamental reactions
+
+### 4F: Verify Sub-Agent Results
+
+Check Coverage for adequate search. If Coverage missing or unclear, ask sub-agent to clarify. Re-query if gaps seem wrong (max 2 follow-ups). Check cross-domain consistency before synthesis.
 
 ---
 
@@ -385,8 +389,13 @@ See [output_template.md](../../shared/earnings/output_template.md) for learnings
 After successful analysis (report saved, audit passed, learnings updated):
 
 1. **Update tracking CSV**: Set `completed=TRUE` for this accession_no in `earnings-analysis/8k_fact_universe.csv`
-2. **Verify**: Confirm the row is updated correctly
+2. **Update predictions CSV**: If a prediction exists for this accession_no in `earnings-analysis/predictions.csv`, fill in:
+   - `actual_direction`: up/down based on daily_stock return
+   - `actual_magnitude`: small/medium/large based on |return|
+   - `actual_return`: the actual daily_stock percentage
+   - `correct`: TRUE if direction matches, FALSE otherwise
+3. **Verify**: Confirm rows are updated correctly
 
-This ensures the analysis pipeline tracks which filings have been processed.
+This ensures the analysis pipeline tracks which filings have been processed and closes the prediction feedback loop.
 
 ---
