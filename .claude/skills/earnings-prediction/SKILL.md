@@ -1,7 +1,7 @@
 ---
 name: earnings-prediction
 description: Predicts stock direction/magnitude at T=0 (report release). Uses PIT data only. Run before earnings-attribution.
-allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, mcp__perplexity__perplexity_search, mcp__perplexity__perplexity_ask, mcp__perplexity__perplexity_reason, mcp__perplexity__perplexity_research
+allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, Skill
 model: claude-opus-4-5
 ---
 
@@ -36,7 +36,7 @@ All sub-agent queries MUST use PIT filtering: `[PIT: {filing_datetime}]`
 - Historical financials (prior 10-K/10-Q via XBRL)
 - Prior earnings transcripts
 - Pre-filing news
-- Consensus estimates from Perplexity
+- Consensus estimates from Perplexity (filtered by article date)
 
 **NOT Allowed**:
 - Return data (daily_stock, hourly_stock) — that's what we're predicting
@@ -45,14 +45,35 @@ All sub-agent queries MUST use PIT filtering: `[PIT: {filing_datetime}]`
 
 ---
 
-## Leakage Prevention
+## Data Isolation Architecture
 
-**Critical**: Return data must never enter the prediction context.
+**ALL data queries go through the filter agent.** This includes Neo4j AND Perplexity.
 
-1. **Select test cases from** `predictions_queue.csv` (no returns), NOT `8k_fact_universe.csv`
-2. **Fresh conversation**: If universe file was shown earlier, results may be contaminated
-3. **Neo4j-report prompt**: Always include "NO returns" - agent must exclude pf.daily_stock, pf.hourly_stock
-4. **Perplexity limitation**: May return post-hoc articles mentioning stock movement - note in confidence assessment if detected
+```
+YOU (earnings-prediction)
+        │
+        │ /filtered-data --agent {source} --query "[PIT: X] ..."
+        ▼
+┌─────────────────────────────────────┐
+│       FILTER AGENT                  │
+│                                     │
+│  Sources: neo4j-*, perplexity-search│
+│                                     │
+│  Validates:                         │
+│  1. Forbidden patterns              │
+│  2. PIT compliance (dates <= PIT)   │
+│                                     │
+│  You NEVER see contaminated data    │
+└─────────────────────────────────────┘
+        │
+        │ Clean data only
+        ▼
+YOU (continue with clean data)
+```
+
+### Why This Matters
+
+Return data (daily_stock, hourly_stock, etc.) is what we're trying to predict. Post-filing articles mention stock reactions. If either enters your context, the prediction is contaminated. The filter agent ensures you never see it.
 
 ---
 
@@ -62,43 +83,38 @@ Use TodoWrite to track progress. Mark each step `in_progress` before starting, `
 
 ### Step 1: Get Filing Metadata
 
-Use `neo4j-report` to get filing info (NO returns):
-
 ```
-8-K {accession} metadata only (ticker, filed datetime, items)
+/filtered-data --agent neo4j-report --query "8-K {accession} metadata only (ticker, filed datetime, items)"
 ```
 
 Extract: ticker, filing_datetime (this becomes your PIT).
 
 ### Step 2: Get Actual Results from Filing
 
-Use `neo4j-report` to get exhibit content:
-
 ```
-EX-99.1 content for {accession}
+/filtered-data --agent neo4j-report --query "EX-99.1 content for {accession}"
 ```
 
 Extract: Actual EPS, actual revenue, any guidance.
 
 ### Step 3: Get Historical Context (PIT)
 
-Spawn sub-agents with PIT prefix:
-
-| Data | Agent | Prompt |
-|------|-------|--------|
-| Prior financials | neo4j-xbrl | `[PIT: {filing_datetime}]` Last 4 quarters EPS/Revenue for {ticker} |
-| Prior transcripts | neo4j-transcript | `[PIT: {filing_datetime}]` Last 2 transcripts for {ticker} |
-| Pre-filing news | neo4j-news | `[PIT: {filing_datetime}]` News for {ticker} past 30 days |
-| Corporate actions | neo4j-entity | `[PIT: {filing_datetime}]` Dividends/splits for {ticker} past 90 days |
+| Data | Command |
+|------|---------|
+| Prior financials | `/filtered-data --agent neo4j-xbrl --query "[PIT: {filing_datetime}] Last 4 quarters EPS/Revenue for {ticker}"` |
+| Prior transcripts | `/filtered-data --agent neo4j-transcript --query "[PIT: {filing_datetime}] Last 2 transcripts for {ticker}"` |
+| Pre-filing news | `/filtered-data --agent neo4j-news --query "[PIT: {filing_datetime}] News for {ticker} past 30 days"` |
+| Corporate actions | `/filtered-data --agent neo4j-entity --query "[PIT: {filing_datetime}] Dividends/splits for {ticker} past 90 days"` |
 
 ### Step 4: Get Consensus Estimates
 
-Query Perplexity for pre-filing consensus:
+Route through filter to catch post-dated articles:
 
 ```
-mcp__perplexity__search:
-  query: "{ticker} Q{quarter} FY{year} EPS revenue estimate consensus before {filing_date}"
+/filtered-data --agent perplexity-search --query "[PIT: {filing_datetime}] {ticker} Q{quarter} FY{year} EPS revenue estimate consensus"
 ```
+
+The filter will reject any articles dated after your PIT.
 
 ### Step 5: Make Prediction
 
@@ -139,4 +155,12 @@ accession_no,ticker,filing_datetime,prediction_datetime,predicted_direction,pred
 
 ---
 
-*Version 1.3 | 2026-01-13 | Added leakage prevention*
+## To Disable Data Isolation
+
+Set `"enabled": false` in `/home/faisal/EventMarketDB/.claude/filters/rules.json`
+
+The filter agent becomes a pure passthrough (no validation, no retries).
+
+---
+
+*Version 1.7 | 2026-01-14 | Restricted to perplexity-search only (other Perplexity tools lack structured dates for PIT validation)*

@@ -1,0 +1,52 @@
+{
+  "forbidden_patterns": [
+    "daily_stock",
+    "hourly_stock",
+    "session_stock",
+    "daily_return",
+    "daily_macro",
+    "daily_industry",
+    "daily_sector",
+    "hourly_macro",
+    "hourly_industry",
+    "hourly_sector"
+  ],
+  "pit_date_fields": {
+    "_comment": "Fields representing PUBLIC AVAILABILITY time (not period coverage)",
+    "neo4j-report": {
+      "field": "created",
+      "format": "datetime",
+      "meaning": "SEC filing acceptance time"
+    },
+    "neo4j-news": {
+      "field": "created",
+      "format": "datetime",
+      "meaning": "Article publication time"
+    },
+    "neo4j-xbrl": {
+      "_comment": "XBRL is linked to Reports; use Report.created via relationship",
+      "field": "created",
+      "format": "datetime",
+      "meaning": "Parent Report filing time (NOT periodOfReport which is coverage)"
+    },
+    "neo4j-entity": {
+      "dividend_field": "declaration_date",
+      "split_field": "execution_date",
+      "date_field": "date",
+      "format": "date-only",
+      "meaning": "Corporate action announcement dates"
+    },
+    "neo4j-transcript": {
+      "field": "conference_datetime",
+      "format": "datetime",
+      "meaning": "Earnings call time (same as created)"
+    },
+    "perplexity-search": {
+      "field": "Date:",
+      "format": "date-only",
+      "meaning": "Article publication date from search results"
+    }
+  },
+  "max_retries": 2,
+  "enabled": true
+}
