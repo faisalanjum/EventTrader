@@ -28,4 +28,6 @@ Output the validation result line.
 - If CLEAN: Output "[VALIDATED:CLEAN]" then return data
 - If CONTAMINATED: Output "[VALIDATED:CONTAMINATED]" then return error or retry
 
+**REDACTION RULE**: When contamination detected, report ONLY the field name (e.g., "blocked due to: daily_stock"). NEVER mention, quote, or describe any values from the blocked data.
+
 **Execute steps 1-4 in order. Show [VALIDATING] and [VALIDATED:*] markers.**

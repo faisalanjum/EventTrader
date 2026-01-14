@@ -81,40 +81,27 @@ Return data (daily_stock, hourly_stock, etc.) is what we're trying to predict. P
 
 Use TodoWrite to track progress. Mark each step `in_progress` before starting, `completed` immediately after.
 
+**IMPORTANT**: Read `./QUERIES.md` and execute the exact commands shown there. Do not modify them.
+
 ### Step 1: Get Filing Metadata
 
-```
-/filtered-data --agent neo4j-report --query "8-K {accession} metadata only (ticker, filed datetime, items)"
-```
+Execute the `metadata` query from QUERIES.md.
 
 Extract: ticker, filing_datetime (this becomes your PIT).
 
 ### Step 2: Get Actual Results from Filing
 
-```
-/filtered-data --agent neo4j-report --query "EX-99.1 content for {accession}"
-```
+Execute the `exhibit` query from QUERIES.md.
 
 Extract: Actual EPS, actual revenue, any guidance.
 
 ### Step 3: Get Historical Context (PIT)
 
-| Data | Command |
-|------|---------|
-| Prior financials | `/filtered-data --agent neo4j-xbrl --query "[PIT: {filing_datetime}] Last 4 quarters EPS/Revenue for {ticker}"` |
-| Prior transcripts | `/filtered-data --agent neo4j-transcript --query "[PIT: {filing_datetime}] Last 2 transcripts for {ticker}"` |
-| Pre-filing news | `/filtered-data --agent neo4j-news --query "[PIT: {filing_datetime}] News for {ticker} past 30 days"` |
-| Corporate actions | `/filtered-data --agent neo4j-entity --query "[PIT: {filing_datetime}] Dividends/splits for {ticker} past 90 days"` |
+Execute these queries from QUERIES.md: `xbrl`, `transcript`, `news`, `entity`
 
 ### Step 4: Get Consensus Estimates
 
-Route through filter to catch post-dated articles:
-
-```
-/filtered-data --agent perplexity-search --query "[PIT: {filing_datetime}] {ticker} Q{quarter} FY{year} EPS revenue estimate consensus"
-```
-
-The filter will reject any articles dated after your PIT.
+Execute the `consensus` query from QUERIES.md.
 
 ### Step 5: Make Prediction
 
@@ -155,12 +142,16 @@ accession_no,ticker,filing_datetime,prediction_datetime,predicted_direction,pred
 
 ---
 
-## To Disable Data Isolation
+## Toggle Filtering
 
-Set `"enabled": false` in `/home/faisal/EventMarketDB/.claude/filters/rules.json`
+```bash
+# In .claude/skills/earnings-prediction/
+./enable-filter.sh   # PIT filtering ON (default)
+./disable-filter.sh  # Direct mode (no filtering)
+```
 
-The filter agent becomes a pure passthrough (no validation, no retries).
+State persists until you run the other script.
 
 ---
 
-*Version 1.7 | 2026-01-14 | Restricted to perplexity-search only (other Perplexity tools lack structured dates for PIT validation)*
+*Version 1.8 | 2026-01-14 | Added toggle scripts for filtering mode*
