@@ -1,0 +1,62 @@
+ Item 8.01 Other Events. 
+
+On July 20, 2023, the Company announced that the Phase 2 PENINSULA trial evaluating VIR-2482 for the prevention of symptomatic influenza A illness did not meet primary or secondary efficacy endpoints. In participants who received the highest dose of VIR-2482 (1,200 mg), a non-statistically significant reduction of approximately 16% in influenza A protocol-defined illness was observed. Participants who received the highest dose showed an approximately 57% reduction in symptomatic influenza A illness, when defined according to CDC influenza-like-illness criteria, which was one of two secondary endpoints. VIR-2482 was generally well tolerated and no safety signals were identified. 
+
+PENINSULA (NCT05567783) is the first Phase 2 outpatient trial to evaluate the role of a monoclonal antibody in the prevention of influenza A illness. The dose-ranging, proof-of-concept trial enrolled approximately 3,000 men and women ages 18 to 64 without risk factors for serious complications from an influenza infection who did not receive an influenza vaccination for the flu season. The primary efficacy endpoint was the proportion of trial participants with protocol-defined influenza-like-illness 1 with PCR confirmed influenza A infection compared to placebo. Secondary endpoints included the proportion of participants with CDC-defined influenza-like-illness 2 with PCR confirmed influenza A infection and the proportion of participants with WHO-defined influenza-like-illness 3 with PCR confirmed influenza A infection. 
+
+Efficacy Analyses 
+
+Occurrence of Influenza-Like-Illness (ILI) with PCR Confirmed Influenza A 
+
+ 
+
+    # of Participants with Endpoint/
+
+VIR-2482 vs. Placebo
+
+  Placebo
+
+N = 983
+
+n (%)
+
+  VIR-2482 
+
+450 mg
+
+N = 981
+
+n (%)
+
+  VIR-2482 
+
+1,200 mg
+
+N = 992
+
+n (%)
+
+Primary Endpoint
+
+  Number of Participants Protocol-Defined ILI 1   25 (2.54%)   24 (2.45%)   21 (2.12%)   Relative Risk Reduction (%)   —   3.78%   15.85%   95% CI (%)   —   -67.23, 44.63   -49.27, 52.56   p-value   —   0.89   0.56 Secondary Endpoints
+
+  Number of Participants with CDC-Defined ILI 2   17 (1.73%)   15 (1.53%)   7 (0.71%)   Relative Risk Reduction (%)   —   11.45%   57.23%   95% CI (%)   —   -76.25, 55.51   -2.51, 82.15   Number of Participants with WHO-Defined ILI 3   11 (1.12%)   12 (1.22%)   6 (0.60%)   Relative Risk Reduction (%)   —   -9.80%   44.13%   95% CI (%)   —   -147.41, 51.27   -50.49, 79.26 
+
+Note: Percentages are calculated relative to the number of participants in the full analysis set. 
+
+ 
+
+1 Protocol-defined ILI is defined as PCR-confirmed influenza A with at least one respiratory symptom: sore throat, cough, sputum production, wheezing, or difficulty breathing and at least one systemic symptom: fever (temperature >37.8°C), chills, weakness, or myalgias. 
+
+2 CDC-ILI is defined as fever (temperature >37.8°C) and cough and/or sore throat. 
+
+3 WHO-ILI is defined as fever (temperature >38°C) and cough. 
+
+The PENINSULA trial has been supported in whole or in part with federal funds from the Department of Health and Human Services; Administration for Strategic Preparedness and Response (ASPR); Biomedical Advanced Research and Development Authority (BARDA), under Other Transaction Number: 75A50122C00081.
+
+Forward-Looking Statements 
+
+This Current Report on Form 8-K (this “Form 8-K”) contains forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995. Words such as “may,” “will,” “plan,” “potential,” “aim,” “expect,” “anticipate,” “promising” and similar expressions (as well as other words or expressions referencing future events, conditions or circumstances) are intended to identify forward-looking statements. These forward-looking statements are based on Vir’s expectations and assumptions as of the date of this Form 8-K. Forward-looking statements contained in this Form 8-K include, but are not limited to, statements regarding Vir’s strategy and plans, the potential benefits of VIR-2482 to protect against influenza A illness; statements regarding Vir’s scientific and executional expertise, and risks and uncertainties associated with drug development and commercialization. Many factors may cause differences between current expectations and actual results, including the occurrence of adverse safety events; risks of unexpected costs, delays or other unexpected hurdles; difficulties in collaborating with other companies; successful development and/or commercialization of alternative product candidates by Vir’s competitors; changes in expected or existing competition; delays in or disruptions to Vir’s business or clinical trials due to the COVID-19 pandemic, geopolitical changes or other external factors; and unexpected litigation or other disputes. Drug development and commercialization involve a high degree of risk, and only a small number of research and development programs result in commercialization of a product. Results in early-stage clinical trials may not be indicative of full results or results from later-stage or larger scale clinical trials and do not ensure regulatory approval. You should not place undue reliance on these statements, or the scientific data presented. Other factors that may cause actual results to differ from those expressed or implied in the forward-looking statements in this Form 8-K are discussed in Vir’s filings with the U.S. Securities and Exchange Commission, including the section titled “Risk Factors” contained therein. Except as required by law, Vir assumes no obligation to update any forward-looking statements contained herein to reflect any change in expectations, even as new information becomes available. 
+
+ 
+

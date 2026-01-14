@@ -1,0 +1,6 @@
+ticker: SAGE
+company: SAGE THERAPEUTICS INC
+cik: 0001597553
+accession: 0001193125-23-204408
+filed: 2023-08-07T06:45:52-04:00
+items: ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"]

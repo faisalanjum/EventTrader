@@ -1,7 +1,7 @@
 ---
 name: earnings-prediction
 description: Predicts stock direction/magnitude at T=0 (report release). Uses PIT data only. Run before earnings-attribution.
-allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, mcp__perplexity__search, mcp__perplexity__reason
+allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, mcp__perplexity__perplexity_search, mcp__perplexity__perplexity_ask, mcp__perplexity__perplexity_reason, mcp__perplexity__perplexity_research
 model: claude-opus-4-5
 ---
 
@@ -42,6 +42,17 @@ All sub-agent queries MUST use PIT filtering: `[PIT: {filing_datetime}]`
 - Return data (daily_stock, hourly_stock) — that's what we're predicting
 - Post-filing news reactions
 - Post-filing analyst commentary
+
+---
+
+## Leakage Prevention
+
+**Critical**: Return data must never enter the prediction context.
+
+1. **Select test cases from** `predictions_queue.csv` (no returns), NOT `8k_fact_universe.csv`
+2. **Fresh conversation**: If universe file was shown earlier, results may be contaminated
+3. **Neo4j-report prompt**: Always include "NO returns" - agent must exclude pf.daily_stock, pf.hourly_stock
+4. **Perplexity limitation**: May return post-hoc articles mentioning stock movement - note in confidence assessment if detected
 
 ---
 
@@ -128,4 +139,4 @@ accession_no,ticker,filing_datetime,prediction_datetime,predicted_direction,pred
 
 ---
 
-*Version 1.2 | 2026-01-13 | CSV-only, no flat direction*
+*Version 1.3 | 2026-01-13 | Added leakage prevention*

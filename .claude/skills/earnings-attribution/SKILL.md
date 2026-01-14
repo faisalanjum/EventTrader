@@ -1,7 +1,7 @@
 ---
 name: earnings-attribution
 description: Analyzes why stocks moved after 8-K earnings filings. Use ultrathink for all analyses. Invoke when asked to analyze stock movements, earnings reactions, or determine the primary driver of price changes.
-allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, mcp__perplexity__search, mcp__perplexity__reason, mcp__perplexity__deep_research
+allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, mcp__perplexity__perplexity_search, mcp__perplexity__perplexity_ask, mcp__perplexity__perplexity_reason, mcp__perplexity__perplexity_research
 model: claude-opus-4-5
 ---
 
@@ -121,7 +121,7 @@ Get filing details and price reaction. Use `neo4j-report` subagent.
 **Always query Perplexity** - do not rely on Neo4j News for consensus.
 
 ```
-mcp__perplexity__search:
+mcp__perplexity__perplexity_search:
   query: "{ticker} Q{quarter} FY{year} EPS revenue estimate consensus before {date}"
 ```
 
@@ -169,9 +169,9 @@ Use when Neo4j doesn't provide complete picture.
 
 | Situation | Tool |
 |-----------|------|
-| Quick facts, specific data | `mcp__perplexity__search` |
-| Complex multi-factor analysis | `mcp__perplexity__reason` |
-| Conflicting sources, major moves (>10%) | `mcp__perplexity__deep_research` |
+| Quick facts, specific data | `mcp__perplexity__perplexity_search` |
+| Complex multi-factor analysis | `mcp__perplexity__perplexity_reason` |
+| Conflicting sources, major moves (>10%) | `mcp__perplexity__perplexity_research` |
 
 **Query Principles**:
 - Be specific about time (exact date, not "recently")
@@ -304,9 +304,12 @@ See [output_template.md](../../shared/earnings/output_template.md) for full repo
 
 | Tool | Use For |
 |------|---------|
-| `mcp__perplexity__search` | Quick facts, consensus, simple questions |
-| `mcp__perplexity__reason` | Multi-factor analysis, complex reasoning |
-| `mcp__perplexity__deep_research` | Comprehensive investigation, conflicting sources |
+| `mcp__perplexity__perplexity_search` | Quick facts, consensus, simple questions |
+| `mcp__perplexity__perplexity_ask` | Conversational Q&A with real-time web search |
+| `mcp__perplexity__perplexity_reason` | Multi-factor analysis, complex reasoning |
+| `mcp__perplexity__perplexity_research` | Comprehensive investigation, conflicting sources |
+
+**Note**: For SEC filings search, use `utils/perplexity_search.py:perplexity_sec_search()`.
 
 ---
 

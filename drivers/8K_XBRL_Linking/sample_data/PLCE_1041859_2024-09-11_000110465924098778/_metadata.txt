@@ -1,0 +1,6 @@
+ticker: PLCE
+company: CHILDRENS PLACE INC
+cik: 0001041859
+accession: 0001104659-24-098778
+filed: 2024-09-11T08:01:17-04:00
+items: ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"]

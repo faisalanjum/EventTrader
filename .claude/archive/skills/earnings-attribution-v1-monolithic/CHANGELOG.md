@@ -167,7 +167,7 @@ Complete rewrite based on line-by-line review with user. Shifted from pattern-ma
   - Historical analysis builds company-specific knowledge
   - Foundation for real-time prediction accuracy
 
-#### 11. Added mcp__perplexity__deep_research Tool
+#### 11. Added mcp__perplexity__perplexity_research Tool
 - **Change**: Added to allowed-tools
 - **Reasoning**:
   - For complex cases where search/reason fail

@@ -1,0 +1,6 @@
+ticker: CDLX
+company: CARDLYTICS INC
+cik: 0001666071
+accession: 0001666071-24-000034
+filed: 2024-03-14T16:06:29-04:00
+items: ["Item 2.02: Results of Operations and Financial Condition", "Item 7.01: Regulation FD Disclosure", "Item 9.01: Financial Statements and Exhibits"]

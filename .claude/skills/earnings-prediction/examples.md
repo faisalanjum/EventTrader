@@ -1,3 +1,3 @@
 # Earnings Prediction Examples
 
-(To be filled in later)
+Examples intentionally omitted to prevent anchoring bias. Each prediction should emerge independently from the gathered data and model reasoning.

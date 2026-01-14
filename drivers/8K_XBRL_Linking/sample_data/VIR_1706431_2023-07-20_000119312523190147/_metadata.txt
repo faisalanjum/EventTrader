@@ -1,0 +1,6 @@
+ticker: VIR
+company: VIR BIOTECHNOLOGY INC
+cik: 0001706431
+accession: 0001193125-23-190147
+filed: 2023-07-20T08:04:51-04:00
+items: ["Item 2.02: Results of Operations and Financial Condition", "Item 8.01: Other Events", "Item 9.01: Financial Statements and Exhibits"]

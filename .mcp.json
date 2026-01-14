@@ -12,11 +12,12 @@
     },
     "perplexity": {
       "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "perplexity-mcp"],
-      "env": {
-        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
-      }
+      "command": "/home/faisal/EventMarketDB/mcp_servers/local-perplexity-server.sh",
+      "args": []
+    },
+    "alphavantage": {
+      "type": "http",
+      "url": "https://mcp.alphavantage.co/mcp?apikey=OEBNGLV527FIER4J"
     }
   }
 }

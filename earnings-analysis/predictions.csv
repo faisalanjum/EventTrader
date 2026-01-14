@@ -1,1 +1,2 @@
 accession_no,ticker,filing_datetime,prediction_datetime,predicted_direction,predicted_magnitude,confidence,primary_reason,actual_direction,actual_magnitude,actual_return,correct
+0001514416-24-000020,BAND,2024-02-28T07:03:31-05:00,2026-01-13T00:00:00Z,up,large,high,"58% EPS beat ($0.38 vs $0.24) with 7% revenue beat; prior quarters showed +14-18% moves on smaller beats",up,large,51.77,TRUE

@@ -1,0 +1,787 @@
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 190 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": [],
+  "reasoning": "The provided input is a URL string, not a document containing financial facts. Therefore, no financial metrics can be extracted from it."
+}
+```
+
+============================================================
+Response text length: 669 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": [
+    {
+      "financial_fact": "Total client assets are $1.54 trillion",
+      "financial_fact_attributes": {
+        "concept_top1": "UNMATCHED",
+        "concept_top2": null,
+        "matched_period": "2025-02-06",
+        "matched_unit": "USD",
+        "confidence": 0.95,
+        "reasoning": "The fact 'Total client assets' refers to assets under management/administration, which is distinct from the company's own balance sheet 'Assets' (us-gaap:Assets). No specific concept for client assets or AUM is available in the catalog. The period is inferred as the most recent instant date available in the calendar."
+      }
+    }
+  ]
+}
+```
+
+============================================================
+Response text length: 669 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": [
+    {
+      "financial_fact": "Total client assets are $1.54 trillion",
+      "financial_fact_attributes": {
+        "concept_top1": "UNMATCHED",
+        "concept_top2": null,
+        "matched_period": "2025-02-06",
+        "matched_unit": "USD",
+        "confidence": 0.95,
+        "reasoning": "The fact 'Total client assets' refers to assets under management/administration, which is distinct from the company's own balance sheet 'Assets' (us-gaap:Assets). No specific concept for client assets or AUM is available in the catalog. The period is inferred as the most recent instant date available in the calendar."
+      }
+    }
+  ]
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 190 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": [],
+  "reasoning": "The provided input is a URL string, not a document containing financial facts. Therefore, no financial metrics can be extracted from it."
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 190 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": [],
+  "reasoning": "The provided input is a URL string, not a document containing financial facts. Therefore, no financial metrics can be extracted from it."
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```
+
+============================================================
+Response text length: 35 chars
+finish_reason: FinishReason.STOP
+safety_ratings: None
+Full text: ```json
+{
+  "extractions": []
+}
+```

@@ -101,19 +101,19 @@ LIMIT 10
 
 ### 4A: Get Consensus Estimate
 ```
-mcp__perplexity__search:
+mcp__perplexity__perplexity_search:
   query: "{ticker} Q{quarter} {fiscal_year} earnings EPS estimate consensus before announcement"
 ```
 
 ### 4B: Get Reason for Move
 ```
-mcp__perplexity__search:
+mcp__perplexity__perplexity_search:
   query: "Why did {ticker} stock {rise/fall} on {date}? earnings reaction"
 ```
 
 ### 4C: Get Guidance Context (if guidance mentioned)
 ```
-mcp__perplexity__search:
+mcp__perplexity__perplexity_search:
   query: "{ticker} FY{year} guidance vs analyst expectations {date}"
 ```
 
@@ -202,8 +202,10 @@ Compare what you found:
 
 | Tool | Use For |
 |------|---------|
-| `mcp__perplexity__search` | Quick questions, consensus, reactions |
-| `mcp__perplexity__reason` | Complex multi-factor analysis |
+| `mcp__perplexity__perplexity_search` | Quick questions, consensus, reactions |
+| `mcp__perplexity__perplexity_ask` | Conversational Q&A with real-time web search |
+| `mcp__perplexity__perplexity_reason` | Complex multi-factor analysis |
+| `mcp__perplexity__perplexity_research` | Comprehensive investigation, conflicting sources |
 | `perplexity_sec_search()` | SEC filing content (10-K, 10-Q, 8-K) |
 
 **Note**: MCP tools don't support SEC-specific search. Use `utils/perplexity_search.py` for SEC content.

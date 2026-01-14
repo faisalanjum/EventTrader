@@ -107,37 +107,221 @@ def get_tools():
     return tools
 
 def run_tool(name, args):
+    import sys
+    print(f"[DEBUG] Tool called: {name}", file=sys.stderr)
     tools = get_tools()
     if name not in tools: return f"[unknown: {name}]"
     if tools[name].get("mcp"): return mcp.call_tool(name, args)
     return tools[name]["fn"](**{k: v for k, v in args.items() if v})
 
 # Providers
-def run_claude(prompt, system=None, model="sonnet"):
-    full = f"{system}\n\n---\n\nTask: {prompt}" if system else prompt
+def run_claude(prompt, system=None, model="sonnet", reasoning=None):
+    if reasoning:
+        # Try Anthropic SDK first for thinking capture
+        try:
+            import anthropic
+            api_key = get_secret("ANTHROPIC_API_KEY")
+            if api_key:
+                model_map = {
+                    "sonnet": "claude-sonnet-4-20250514",
+                    "opus": "claude-opus-4-20250514",
+                    "opus-4.5": "claude-opus-4-5-20251101",
+                    "haiku": "claude-haiku-4-20250514",
+                }
+                model_id = model_map.get(model, model)
+                client = anthropic.Anthropic(api_key=api_key)
+                # Max budget: 128k tokens (Claude 3.7 with beta), fits in 200k context (Claude 4)
+                budget_map = {"low": 5000, "medium": 10000, "high": 32000, "x-high": 100000}
+                budget = budget_map.get(reasoning, 10000)
+                # max_tokens must be > budget_tokens
+                max_tokens = max(budget + 8000, 16000)
+
+                kwargs = {
+                    "model": model_id,
+                    "max_tokens": max_tokens,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "thinking": {"type": "enabled", "budget_tokens": budget}
+                }
+                if system:
+                    kwargs["system"] = system
+
+                # Use streaming for high budget to avoid timeout
+                if budget >= 20000:
+                    thinking_text = ""
+                    response_text = ""
+                    with client.messages.stream(**kwargs) as stream:
+                        for event in stream:
+                            if hasattr(event, 'type'):
+                                if event.type == 'content_block_start':
+                                    pass  # Block started
+                                elif event.type == 'content_block_delta':
+                                    delta = event.delta
+                                    if hasattr(delta, 'thinking'):
+                                        thinking_text += delta.thinking
+                                    elif hasattr(delta, 'text'):
+                                        response_text += delta.text
+                    if thinking_text:
+                        return (response_text, thinking_text.strip())
+                    return response_text
+                else:
+                    response = client.messages.create(**kwargs)
+                    thinking_text = ""
+                    response_text = ""
+                    for block in response.content:
+                        if block.type == "thinking":
+                            thinking_text += block.thinking + "\n"
+                        elif block.type == "text":
+                            response_text += block.text
+
+                    if thinking_text:
+                        return (response_text, thinking_text.strip())
+                    return response_text
+        except Exception as e:
+            import sys
+            print(f"[WARNING] Anthropic SDK failed ({e}), falling back to CLI", file=sys.stderr)
+
+        # Fallback: CLI with JSON output to capture thinking
+        prompt = f"ultrathink: {prompt}"
+        full = f"System context:\n{system}\n\n---\n\nTask: {prompt}" if system else prompt
+        r = subprocess.run(["claude", "-p", full, "--output-format", "json"],
+                          capture_output=True, text=True, cwd=PROJECT_DIR)
+        if r.stdout:
+            try:
+                data = json.loads(r.stdout)
+                # Extract thinking and response from JSON
+                thinking_parts = []
+                response_parts = []
+                messages = data.get("messages", [])
+                for msg in messages:
+                    if msg.get("role") == "assistant":
+                        for block in msg.get("content", []):
+                            if block.get("type") == "thinking":
+                                thinking_parts.append(block.get("thinking", ""))
+                            elif block.get("type") == "text":
+                                response_parts.append(block.get("text", ""))
+                if thinking_parts:
+                    return ("\n".join(response_parts), "\n".join(thinking_parts))
+                return "\n".join(response_parts) if response_parts else data.get("result", r.stdout)
+            except json.JSONDecodeError:
+                return r.stdout
+        return r.stderr or "[no output]"
+
+    # Use CLI (default, no reasoning requested)
+    full = f"System context:\n{system}\n\n---\n\nTask: {prompt}" if system else prompt
     r = subprocess.run(["claude", "-p", full], capture_output=True, text=True, cwd=PROJECT_DIR)
     return r.stdout or r.stderr
 
-def run_openai(prompt, system=None, model="gpt-5.2"):
+def run_openai(prompt, system=None, model="gpt-5.2", reasoning=None):
     from openai import OpenAI
-    tools = get_tools()
-    otool = [{"type": "function", "function": {"name": n, "description": t["desc"],
-        "parameters": {"type": "object", "properties": t["params"], "required": t.get("required", [])}
-    }} for n, t in tools.items()]
-    msgs = ([{"role": "system", "content": system}] if system else []) + [{"role": "user", "content": prompt}]
     client = OpenAI(api_key=get_secret("OPENAI_API_KEY"))
-    for _ in range(15):
-        r = client.chat.completions.create(model=model, messages=msgs, tools=otool)
-        m = r.choices[0].message
-        msgs.append(m.model_dump())
-        if not m.tool_calls: return m.content
-        for tc in m.tool_calls:
-            msgs.append({"role": "tool", "tool_call_id": tc.id, "content": run_tool(tc.function.name, json.loads(tc.function.arguments))})
-    return "[max turns]"
 
-def run_gemini(prompt, system=None, model="gemini-3-pro-preview"):
+    # GPT-5.x uses Responses API, older models use Chat Completions
+    use_responses_api = model.startswith("gpt-5")
+
+    if use_responses_api:
+        # Responses API for GPT-5.x
+        tools = get_tools()
+        tool_defs = [{"type": "function", "name": n, "description": t["desc"],
+            "parameters": {"type": "object", "properties": t["params"], "required": t.get("required", [])}
+        } for n, t in tools.items()]
+
+        full_prompt = f"{system}\n\n{prompt}" if system else prompt
+        kwargs = {"model": model, "input": full_prompt, "tools": tool_defs}
+        if reasoning:
+            # summary: "auto" requires org verification at platform.openai.com
+            kwargs["reasoning"] = {"effort": reasoning, "summary": "auto"}
+
+        summary_enabled = "summary" in kwargs.get("reasoning", {})
+        for _ in range(15):
+            try:
+                r = client.responses.create(**kwargs)
+            except Exception as e:
+                # If org not verified for summaries, retry without summary
+                if "verified" in str(e).lower() and summary_enabled:
+                    import sys
+                    print("[WARNING] Org not verified for reasoning summaries. "
+                          "Verify at: https://platform.openai.com/settings/organization/general",
+                          file=sys.stderr)
+                    kwargs["reasoning"] = {"effort": reasoning}
+                    summary_enabled = False
+                    r = client.responses.create(**kwargs)
+                else:
+                    raise
+
+            # Check for tool calls
+            tool_calls = [item for item in r.output if getattr(item, 'type', None) == 'function_call']
+            if not tool_calls:
+                # Extract reasoning summary from ResponseReasoningItem
+                reasoning_parts = []
+                for item in r.output:
+                    if getattr(item, 'type', None) == 'reasoning':
+                        # summary can be a list of parts or a string
+                        summary = getattr(item, 'summary', None)
+                        if summary:
+                            if isinstance(summary, list):
+                                for part in summary:
+                                    if hasattr(part, 'text'):
+                                        reasoning_parts.append(part.text)
+                                    elif isinstance(part, str):
+                                        reasoning_parts.append(part)
+                            else:
+                                reasoning_parts.append(str(summary))
+
+                response_text = r.output_text if hasattr(r, 'output_text') else str(r.output)
+                if reasoning and reasoning_parts:
+                    return (response_text, "\n".join(reasoning_parts))
+                return response_text
+
+            # Handle tool calls - collect all results and chain via previous_response_id
+            tool_outputs = []
+            for tc in tool_calls:
+                args = json.loads(tc.arguments) if isinstance(tc.arguments, str) else dict(tc.arguments)
+                result = run_tool(tc.name, args)
+                tool_outputs.append({
+                    "type": "function_call_output",
+                    "call_id": tc.call_id,
+                    "output": str(result)
+                })
+            # Chain with previous response
+            kwargs["input"] = tool_outputs
+            kwargs["previous_response_id"] = r.id
+        return "[max turns]"
+    else:
+        # Chat Completions API for older models (gpt-4o, etc.)
+        tools = get_tools()
+        otool = [{"type": "function", "function": {"name": n, "description": t["desc"],
+            "parameters": {"type": "object", "properties": t["params"], "required": t.get("required", [])}
+        }} for n, t in tools.items()]
+        msgs = ([{"role": "system", "content": system}] if system else []) + [{"role": "user", "content": prompt}]
+
+        for _ in range(15):
+            r = client.chat.completions.create(model=model, messages=msgs, tools=otool)
+            m = r.choices[0].message
+            msgs.append(m.model_dump())
+            if not m.tool_calls:
+                return m.content
+            for tc in m.tool_calls:
+                msgs.append({"role": "tool", "tool_call_id": tc.id,
+                            "content": run_tool(tc.function.name, json.loads(tc.function.arguments))})
+        return "[max turns]"
+
+def run_gemini(prompt, system=None, model="gemini-3-pro-preview", reasoning=None):
     from google import genai
     from google.genai import types
+    # Gemini doesn't expose thinking tokens, so we use structured prompt engineering
+    if reasoning:
+        reasoning_prefix = """Think step by step. Structure your response as follows:
+
+<reasoning>
+[Your detailed step-by-step reasoning process here]
+</reasoning>
+
+<answer>
+[Your final answer here]
+</answer>
+
+Now solve: """
+        prompt = reasoning_prefix + prompt
     tools = get_tools()
     decls = [types.FunctionDeclaration(name=n, description=t["desc"],
         parameters=types.Schema(type="OBJECT", properties={k: types.Schema(type=v.get("type", "string").upper(),
@@ -149,7 +333,21 @@ def run_gemini(prompt, system=None, model="gemini-3-pro-preview"):
     for _ in range(15):
         r = client.models.generate_content(model=model, contents=contents, config=config)
         part = r.candidates[0].content.parts[0]
-        if not part.function_call: return part.text
+        if not part.function_call:
+            text = part.text
+            # Extract reasoning and answer from structured response
+            if reasoning and "<reasoning>" in text and "</reasoning>" in text:
+                import re
+                reasoning_match = re.search(r'<reasoning>(.*?)</reasoning>', text, re.DOTALL)
+                answer_match = re.search(r'<answer>(.*?)</answer>', text, re.DOTALL)
+                if reasoning_match and answer_match:
+                    return (answer_match.group(1).strip(), reasoning_match.group(1).strip())
+                elif reasoning_match:
+                    # No answer tags, use everything after reasoning as answer
+                    reasoning_text = reasoning_match.group(1).strip()
+                    answer_text = re.sub(r'<reasoning>.*?</reasoning>', '', text, flags=re.DOTALL).strip()
+                    return (answer_text, reasoning_text)
+            return text
         fc = part.function_call
         contents.append(r.candidates[0].content)
         contents.append(types.Content(role="user", parts=[types.Part(function_response=types.FunctionResponse(
@@ -159,6 +357,17 @@ def run_gemini(prompt, system=None, model="gemini-3-pro-preview"):
 RUNNERS = {"claude": run_claude, "openai": run_openai, "gemini": run_gemini}
 DEFAULTS = {"claude": "sonnet", "openai": "gpt-5.2", "gemini": "gemini-3-pro-preview"}
 
+def format_output(response, reasoning=None, reasoning_file=None):
+    """Format output with optional reasoning section"""
+    if reasoning:
+        if reasoning_file:
+            Path(reasoning_file).write_text(reasoning)
+            print(f"[Reasoning saved to {reasoning_file}]", file=__import__('sys').stderr)
+        output = f"=== REASONING ===\n{reasoning}\n\n=== RESPONSE ===\n{response}"
+    else:
+        output = response
+    return output
+
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("-p", "--prompt", required=True)
@@ -166,5 +375,14 @@ if __name__ == "__main__":
     p.add_argument("--model")
     p.add_argument("--skills")
     p.add_argument("--system")
+    p.add_argument("--reasoning", choices=["low", "medium", "high", "x-high"],
+                   help="Enable reasoning capture (OpenAI: native, Gemini: prompt-based)")
+    p.add_argument("--reasoning-file", help="Save reasoning to file")
     a = p.parse_args()
-    print(RUNNERS[a.provider](a.prompt, a.system or load_skills(a.skills), a.model or DEFAULTS[a.provider]))
+    result = RUNNERS[a.provider](a.prompt, a.system or load_skills(a.skills),
+                                  a.model or DEFAULTS[a.provider], a.reasoning)
+    if isinstance(result, tuple):
+        response, reasoning = result
+        print(format_output(response, reasoning, a.reasoning_file))
+    else:
+        print(result)
