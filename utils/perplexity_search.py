@@ -61,17 +61,18 @@ For LangChain/LangGraph agents:
 
 Notes:
 ------
-- MCP Server (perplexity-mcp) does NOT expose search_mode='sec' - use this utility for SEC searches
-- API key loaded from: PERPLEXITY_API_KEY env var > eventtrader.keys > hardcoded fallback
+- MCP Server does NOT expose search_mode='sec' - use this utility for SEC searches
+- API key auto-loaded from: PERPLEXITY_API_KEY env var > .env file > eventtrader.keys
 - Rate limits apply - see Perplexity pricing docs
 
-Last updated: 2025-01-02
+Last updated: 2026-01-13
 """
 
 import os
 import requests
 from typing import Optional
 from functools import lru_cache
+from pathlib import Path
 
 # Try to import LangChain tool decorator, but don't fail if not available
 try:
@@ -83,9 +84,25 @@ except ImportError:
     def tool(func):
         return func
 
+# Auto-load .env file once on module import
+_ENV_FILE = Path(__file__).parent.parent / ".env"
+if _ENV_FILE.exists() and not os.getenv("PERPLEXITY_API_KEY"):
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(_ENV_FILE)
+    except ImportError:
+        # Fallback: parse .env manually
+        with open(_ENV_FILE) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    if key == "PERPLEXITY_API_KEY" and not os.getenv(key):
+                        os.environ[key] = value.strip('"').strip("'")
+
 
 def _get_api_key() -> str:
-    """Get Perplexity API key from environment or eventtrader.keys"""
+    """Get Perplexity API key from environment, .env, or eventtrader.keys"""
     api_key = os.getenv("PERPLEXITY_API_KEY")
     if not api_key:
         try:
@@ -94,7 +111,7 @@ def _get_api_key() -> str:
         except ImportError:
             pass
     if not api_key:
-        raise ValueError("PERPLEXITY_API_KEY not found in environment or eventtrader.keys")
+        raise ValueError("PERPLEXITY_API_KEY not found in environment, .env, or eventtrader.keys")
     return api_key
 
 
