@@ -1,6 +1,0 @@
-ticker: MGNX
-company: MACROGENICS INC
-cik: 0001125345
-accession: 0001125345-24-000091
-filed: 2024-05-09T16:06:21-04:00
-items: ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"]

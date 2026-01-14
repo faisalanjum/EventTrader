@@ -80,3 +80,13 @@ ENV/
 
 # LangGraph Studio
 .langgraph_api/
+
+# 8K XBRL Linking outputs and samples
+drivers/8K_XBRL_Linking/output/
+drivers/8K_XBRL_Linking/sample_data/
+
+# Archived earnings analysis
+earnings-analysis/Companies/ARCHIVED/
+
+# MCP server scripts (local only)
+mcp_servers/local-*.sh

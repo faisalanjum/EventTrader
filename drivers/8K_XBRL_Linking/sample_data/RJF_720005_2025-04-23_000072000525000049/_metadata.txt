@@ -1,6 +1,0 @@
-ticker: RJF
-company: RAYMOND JAMES FINANCIAL INC
-cik: 0000720005
-accession: 0000720005-25-000049
-filed: 2025-04-23T16:25:41-04:00
-items: ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"]

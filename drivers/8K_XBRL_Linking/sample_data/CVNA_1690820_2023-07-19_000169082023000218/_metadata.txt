@@ -1,6 +1,0 @@
-ticker: CVNA
-company: CARVANA CO
-cik: 0001690820
-accession: 0001690820-23-000218
-filed: 2023-07-19T06:33:34-04:00
-items: ["Item 2.02: Results of Operations and Financial Condition", "Item 9.01: Financial Statements and Exhibits"]
