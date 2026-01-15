@@ -3,6 +3,7 @@ name: earnings-attribution
 description: Analyzes why stocks moved after 8-K earnings filings. Use ultrathink for all analyses. Invoke when asked to analyze stock movements, earnings reactions, or determine the primary driver of price changes.
 allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, mcp__perplexity__perplexity_search, mcp__perplexity__perplexity_ask, mcp__perplexity__perplexity_reason, mcp__perplexity__perplexity_research
 model: claude-opus-4-5
+permissionMode: dontAsk
 ---
 
 # Earnings Attribution Analysis
@@ -387,6 +388,35 @@ See [output_template.md](../../shared/earnings/output_template.md) for learnings
 
 ---
 
+## Session & Subagent History (Shared CSV)
+
+**History file**: `.claude/shared/earnings/subagent-history.csv` (shared with earnings-prediction)
+
+**Format**: See [subagent-history.md](../../shared/earnings/subagent-history.md) for full documentation.
+
+```csv
+accession_no,skill,created_at,primary_session_id,agent_type,agent_id,resumed_from
+0001514416-24-000020,attribution,2026-01-13T10:30:00,0415feb7,primary,,
+0001514416-24-000020,attribution,2026-01-13T10:31:05,0415feb7,neo4j-entity,abc12345,
+```
+
+**On analysis start**:
+1. Read CSV (create with header if doesn't exist)
+2. Append `primary` row: `{accession},attribution,{timestamp},{session_id},primary,,`
+
+**Before calling a subagent**:
+1. Query latest agent ID: `grep "{accession}" | grep ",{agent_type}," | tail -1 | cut -d',' -f6`
+2. If agent ID exists → can use `resume: <id>` in Task call
+3. If want fresh session → proceed without resume
+
+**After each subagent completes**:
+1. Extract `agentId` from Task response
+2. Append row: `{accession},attribution,{timestamp},{session_id},{agent_type},{agent_id},{resumed_from}`
+
+**Audit trail**: Run `python3 scripts/build-thinking-index.py {accession_no}` after skill completes to update Obsidian index.
+
+---
+
 ## Step 10: Mark Completed
 
 After successful analysis (report saved, audit passed, learnings updated):
@@ -397,8 +427,9 @@ After successful analysis (report saved, audit passed, learnings updated):
    - `actual_magnitude`: small/medium/large based on |return|
    - `actual_return`: the actual daily_stock percentage
    - `correct`: TRUE if direction matches, FALSE otherwise
-3. **Verify**: Confirm rows are updated correctly
+3. **Build thinking index**: Run `python3 scripts/build-thinking-index.py {accession_no}` to extract and index thinking for Obsidian
+4. **Verify**: Confirm rows are updated correctly
 
-This ensures the analysis pipeline tracks which filings have been processed and closes the prediction feedback loop.
+This ensures the analysis pipeline tracks which filings have been processed, closes the prediction feedback loop, and makes reasoning available in Obsidian.
 
 ---

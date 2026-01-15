@@ -3,6 +3,7 @@ name: earnings-prediction
 description: Predicts stock direction/magnitude at T=0 (report release). Uses PIT data only. Run before earnings-attribution.
 allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, Skill
 model: claude-opus-4-5
+permissionMode: dontAsk
 ---
 
 # Earnings Prediction
@@ -138,7 +139,8 @@ accession_no,ticker,filing_datetime,prediction_datetime,predicted_direction,pred
 ## After Prediction
 
 1. **Append to CSV** with prediction details
-2. **Run attribution later** to fill actual_* columns and verify
+2. **Build thinking index**: Run `python3 scripts/build-thinking-index.py {accession_no}` to extract and index thinking for Obsidian
+3. **Run attribution later** to fill actual_* columns and verify
 
 ---
 
@@ -154,4 +156,33 @@ State persists until you run the other script.
 
 ---
 
-*Version 1.8 | 2026-01-14 | Added toggle scripts for filtering mode*
+## Session & Subagent History (Shared CSV)
+
+**History file**: `.claude/shared/earnings/subagent-history.csv` (shared with earnings-attribution)
+
+**Format**: See [subagent-history.md](../../shared/earnings/subagent-history.md) for full documentation.
+
+```csv
+accession_no,skill,created_at,primary_session_id,agent_type,agent_id,resumed_from
+0001514416-24-000020,prediction,2026-01-13T09:00:00,aaa11111,primary,,
+0001514416-24-000020,prediction,2026-01-13T09:01:05,aaa11111,neo4j-entity,abc12345,
+```
+
+**On analysis start**:
+1. Read CSV (create with header if doesn't exist)
+2. Append `primary` row: `{accession},prediction,{timestamp},{session_id},primary,,`
+
+**Before calling a subagent**:
+1. Query latest agent ID: `grep "{accession}" | grep ",{agent_type}," | tail -1 | cut -d',' -f6`
+2. If agent ID exists → can use `resume: <id>` in Task call
+3. If want fresh session → proceed without resume
+
+**After each subagent completes**:
+1. Extract `agentId` from Task response
+2. Append row: `{accession},prediction,{timestamp},{session_id},{agent_type},{agent_id},{resumed_from}`
+
+**Audit trail**: Run `python3 scripts/build-thinking-index.py {accession_no}` after skill completes to update Obsidian index.
+
+---
+
+*Version 2.1 | 2026-01-15 | Added primary_session_id for full audit trail*

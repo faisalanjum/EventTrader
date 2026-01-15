@@ -2,3 +2,4 @@ accession_no,ticker,filing_datetime,prediction_datetime,predicted_direction,pred
 0001514416-24-000020,BAND,2024-02-28T07:03:31-05:00,2026-01-13T00:00:00Z,up,large,high,"58% EPS beat ($0.38 vs $0.24) with 7% revenue beat; prior quarters showed +14-18% moves on smaller beats",up,large,51.77,TRUE
 0000320193-25-000071,AAPL,2025-07-31T16:30:25-04:00,2026-01-14T00:00:00Z,up,medium,medium,"Large double beats on EPS (+10%) and revenue (+6%) with strength across all product segments and geographic regions",,,,
 0001571996-25-000096,DELL,2025-08-28T16:09:59-04:00,2026-01-14T00:00:00Z,up,medium,high,"Double beat (EPS +1.1% Rev +2.1%) with raised AI server guidance to $20B and 69% server growth driving AI infrastructure narrative",down,large,-9.20,FALSE
+0001193125-24-241871,GBX,2024-10-23T16:17:28-04:00,2026-01-15T00:00:00Z,up,medium,high,"14.8% EPS beat ($4.96 vs $4.32 consensus) with strong operational metrics (98.5% fleet utilization and $3.4B backlog)",,,,
