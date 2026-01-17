@@ -136,11 +136,25 @@ accession_no,ticker,filing_datetime,prediction_datetime,predicted_direction,pred
 
 ---
 
-## After Prediction
+## After Prediction (REQUIRED STEPS)
 
-1. **Append to CSV** with prediction details
-2. **Build thinking index**: Run `python3 scripts/build-thinking-index.py {accession_no}` to extract and index thinking for Obsidian
-3. **Run attribution later** to fill actual_* columns and verify
+### Step 6: Append to CSV
+Append prediction to `earnings-analysis/predictions.csv` (see CSV Output section).
+
+### Step 7: Build Thinking Index (MANDATORY - DO NOT SKIP)
+
+**This step is REQUIRED.** Execute this exact command:
+
+```bash
+python3 scripts/build-thinking-index.py {accession_no}
+```
+
+Replace `{accession_no}` with the actual accession number from your analysis (e.g., `0001234567-24-000001`).
+
+This extracts thinking from all sessions and sub-agents and saves to Obsidian.
+
+### Step 8: Attribution (Later)
+Run `/earnings-attribution` separately to fill actual_* columns and verify prediction.
 
 ---
 
@@ -181,8 +195,6 @@ accession_no,skill,created_at,primary_session_id,agent_type,agent_id,resumed_fro
 1. Extract `agentId` from Task response
 2. Append row: `{accession},prediction,{timestamp},{session_id},{agent_type},{agent_id},{resumed_from}`
 
-**Audit trail**: Run `python3 scripts/build-thinking-index.py {accession_no}` after skill completes to update Obsidian index.
-
 ---
 
-*Version 2.1 | 2026-01-15 | Added primary_session_id for full audit trail*
+*Version 2.2 | 2026-01-16 | Made thinking index build mandatory (Step 7)*

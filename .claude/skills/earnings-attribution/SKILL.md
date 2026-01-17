@@ -77,7 +77,7 @@ Resume prompt examples: "Only 2 articles, expand to ±5 days", "Also get EX-99.1
 
 ---
 
-## Workflow (10 Steps)
+## Workflow (11 Steps)
 
 Use TodoWrite to track progress. Mark each step `in_progress` before starting, `completed` immediately after.
 
@@ -93,8 +93,9 @@ Use TodoWrite to track progress. Mark each step `in_progress` before starting, `
 | 8 | **Self-Audit** | Run evidence_audit.md and validate Evidence Ledger + sources |
 | 9 | **Propose Skill Updates** | Follow update-skills.md |
 | 10 | **Mark Completed** | Update tracking CSV (`completed=TRUE`) |
+| 11 | **Build Thinking Index** | MANDATORY - extract thinking to Obsidian |
 
-**Rules**: Step 1 always first. Steps 2-5 case-by-case sequencing. Steps 6-10 sequential.
+**Rules**: Step 1 always first. Steps 2-5 case-by-case sequencing. Steps 6-11 sequential. Step 11 is MANDATORY.
 
 ---
 
@@ -413,8 +414,6 @@ accession_no,skill,created_at,primary_session_id,agent_type,agent_id,resumed_fro
 1. Extract `agentId` from Task response
 2. Append row: `{accession},attribution,{timestamp},{session_id},{agent_type},{agent_id},{resumed_from}`
 
-**Audit trail**: Run `python3 scripts/build-thinking-index.py {accession_no}` after skill completes to update Obsidian index.
-
 ---
 
 ## Step 10: Mark Completed
@@ -427,9 +426,22 @@ After successful analysis (report saved, audit passed, learnings updated):
    - `actual_magnitude`: small/medium/large based on |return|
    - `actual_return`: the actual daily_stock percentage
    - `correct`: TRUE if direction matches, FALSE otherwise
-3. **Build thinking index**: Run `python3 scripts/build-thinking-index.py {accession_no}` to extract and index thinking for Obsidian
-4. **Verify**: Confirm rows are updated correctly
-
-This ensures the analysis pipeline tracks which filings have been processed, closes the prediction feedback loop, and makes reasoning available in Obsidian.
+3. **Verify**: Confirm rows are updated correctly
 
 ---
+
+## Step 11: Build Thinking Index (MANDATORY - DO NOT SKIP)
+
+**This step is REQUIRED.** Execute this exact command:
+
+```bash
+python3 scripts/build-thinking-index.py {accession_no}
+```
+
+Replace `{accession_no}` with the actual accession number from your analysis (e.g., `0001234567-24-000001`).
+
+This extracts thinking from all sessions and sub-agents and saves to Obsidian.
+
+---
+
+*Version 2.2 | 2026-01-16 | Added Step 11: mandatory thinking index build*

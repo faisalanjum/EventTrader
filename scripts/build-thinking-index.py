@@ -6,6 +6,9 @@ Reads CSV history files from earnings-prediction/attribution skills,
 extracts thinking blocks from all sessions (primary + sub-agents),
 generates combined markdown files per accession, and builds master index.
 
+Updated 2026-01-16: Now extracts thinking from sub-agent transcripts
+(forked skills in subagents/ directory), not just primary sessions.
+
 Output: ~/Obsidian/EventTrader/Earnings/earnings-analysis/thinking/
 """
 
@@ -32,23 +35,19 @@ SHARED_HISTORY_CSV = Path("/home/faisal/EventMarketDB/.claude/shared/earnings/su
 def find_sessions_for_accession(accession_no: str) -> list[Path]:
     """Find transcripts where earnings skill was actually invoked for this accession.
 
-    Real skill invocations have a specific structure:
-    - type: "user"
-    - message.content is a STRING (not list) starting with "<command-message>"
-    - Contains the skill name and accession in command tags
+    Matches two types of invocations:
+    1. Slash command format: <command-message> with <command-args>accession</command-args>
+    2. SDK/natural language: "Run /earnings-prediction for ticker XXX, accession YYY"
     """
     if not accession_no:
         return []
-
-    skill_pattern = f'/earnings-'
-    args_pattern = f'<command-args>{accession_no}</command-args>'
 
     matches = []
     for t in CLAUDE_DIR.glob("*.jsonl"):
         try:
             for line in t.open():
-                # Quick filter: both patterns must be present
-                if skill_pattern not in line or args_pattern not in line:
+                # Quick filter: accession must be present
+                if accession_no not in line:
                     continue
 
                 # Parse JSON to verify structure
@@ -57,8 +56,19 @@ def find_sessions_for_accession(accession_no: str) -> list[Path]:
                     continue
 
                 content = data.get('message', {}).get('content', '')
-                # Real invocation: content is string starting with <command-message>
-                if isinstance(content, str) and content.startswith('<command-message>'):
+                if not isinstance(content, str):
+                    continue
+
+                # Method 1: Slash command format (CLI invocation)
+                if content.startswith('<command-message>'):
+                    if f'<command-args>{accession_no}</command-args>' in content:
+                        matches.append(t)
+                        break
+
+                # Method 2: SDK/natural language format (K8s or programmatic)
+                # Pattern: Message must START with "Run /earnings-" to be an actual invocation
+                # This excludes conversations that just discuss/mention the accession
+                if content.startswith('Run /earnings-') and accession_no in content:
                     matches.append(t)
                     break
         except:
@@ -68,10 +78,93 @@ def find_sessions_for_accession(accession_no: str) -> list[Path]:
     return sorted(matches, key=lambda p: p.stat().st_mtime, reverse=True)
 
 
+# Skill detection patterns - add new skills here for future robustness
+SKILL_PATTERNS = {
+    # Neo4j skills
+    'neo4j-report': ['neo4j-report', 'sec filing', '8-k', '10-k', '10-q'],
+    'neo4j-xbrl': ['neo4j-xbrl', 'xbrl', 'financial statement'],
+    'neo4j-entity': ['neo4j-entity', 'company info', 'ticker lookup'],
+    'neo4j-news': ['neo4j-news', 'news article'],
+    'neo4j-transcript': ['neo4j-transcript', 'earnings call', 'transcript'],
+    # Data skills
+    'filtered-data': ['filtered-data', 'filter protocol', 'filter agent'],
+    'alphavantage-earnings': ['alphavantage', 'consensus estimate', 'earnings_estimates', 'analyst estimate'],
+    # Perplexity skills
+    'perplexity-search': ['perplexity-search', 'perplexity_search'],
+    'perplexity-ask': ['perplexity-ask', 'perplexity_ask'],
+    'perplexity-reason': ['perplexity-reason', 'perplexity_reason'],
+    'perplexity-research': ['perplexity-research', 'perplexity_research'],
+    # Earnings skills
+    'earnings-prediction': ['earnings-prediction', 'predict stock direction', 'prediction analysis'],
+    'earnings-attribution': ['earnings-attribution', 'stock move', 'attribution analysis'],
+    'earnings-orchestrator': ['earnings-orchestrator', 'batch earnings'],
+}
+
+
+def _identify_skill_type_from_file(agent_file: Path) -> str:
+    """Identify skill type by scanning file for command-name tag or prompt patterns.
+
+    Strategy (in order of priority):
+    1. Look for <command-name>skill-name</command-name> tag
+    2. Look for .claude/skills/skill-name path
+    3. Scan content for known skill patterns
+    """
+    import re
+    try:
+        content_sample = ""
+        with open(agent_file, 'r') as f:
+            for i, line in enumerate(f):
+                if i > 10:  # Check first 10 lines
+                    break
+                content_sample += line
+
+                # Priority 1: Check for command-name tag (most reliable)
+                if '<command-name>' in line:
+                    match = re.search(r'<command-name>([^<]+)</command-name>', line)
+                    if match:
+                        return match.group(1)
+
+                # Priority 2: Check for skill directory in prompt
+                if '.claude/skills/' in line:
+                    match = re.search(r'\.claude/skills/([^/\s"\']+)', line)
+                    if match:
+                        return match.group(1)
+
+        # Priority 3: Pattern matching on content
+        content_lower = content_sample.lower()
+        for skill_name, patterns in SKILL_PATTERNS.items():
+            for pattern in patterns:
+                if pattern.lower() in content_lower:
+                    return skill_name
+
+    except Exception as e:
+        print(f"  Warning: Could not identify skill type for {agent_file.name}: {e}")
+    return 'unknown'
+
+
+def _identify_skill_type(prompt: str) -> str:
+    """Identify skill type from prompt content using pattern matching."""
+    if not prompt:
+        return 'unknown'
+    prompt_lower = str(prompt).lower()
+
+    # Check against all known patterns
+    for skill_name, patterns in SKILL_PATTERNS.items():
+        for pattern in patterns:
+            if pattern.lower() in prompt_lower:
+                return skill_name
+
+    return 'unknown'
+
+
 def discover_subagents(primary_session_id: str) -> list[dict]:
     """
     Discover all sub-agents spawned during a primary session.
     Returns list of {agent_id, agent_type, path} dicts.
+
+    Handles two CLI version behaviors:
+    - v2.1.3+: Agent files in {sessionId}/subagents/agent-*.jsonl
+    - v2.1.1 and earlier: Agent files at ROOT level with sessionId in content
     """
     import re
 
@@ -85,9 +178,49 @@ def discover_subagents(primary_session_id: str) -> list[dict]:
         if matches:
             full_session_id = matches[0].stem
 
-    # Check for subagents directory
+    subagents = []
+
+    # Method 1: Check subagents directory (CLI v2.1.3+)
     subagents_dir = CLAUDE_DIR / full_session_id / "subagents"
-    if not subagents_dir.exists():
+    if subagents_dir.exists():
+        for agent_file in sorted(subagents_dir.glob("agent-*.jsonl")):
+            agent_id = agent_file.stem.replace("agent-", "")
+            subagents.append({
+                'agent_id': agent_id,
+                'agent_type': 'unknown',  # Will be filled in later
+                'path': agent_file
+            })
+
+    # Method 2: Check ROOT-level agent files (CLI v2.1.1 and earlier)
+    # These have sessionId in the file content, not in directory structure
+    for agent_file in CLAUDE_DIR.glob("agent-*.jsonl"):
+        try:
+            with open(agent_file, 'r') as f:
+                first_line = f.readline()
+                data = json.loads(first_line)
+                file_session_id = data.get('sessionId', '')
+                # Match if sessionId matches and it's a sidechain (forked skill)
+                if file_session_id == full_session_id and data.get('isSidechain'):
+                    agent_id = data.get('agentId', agent_file.stem.replace("agent-", ""))
+                    # Skip if already found in subagents directory
+                    if not any(sa['agent_id'] == agent_id for sa in subagents):
+                        # Try to identify skill type from prompt
+                        prompt = data.get('message', {}).get('content', '')
+                        if isinstance(prompt, str) and 'Warmup' in prompt:
+                            continue  # Skip warmup agents
+                        # Try to identify skill type from prompt, fallback to file scan
+                        skill_type = _identify_skill_type(prompt)
+                        if skill_type == 'unknown':
+                            skill_type = _identify_skill_type_from_file(agent_file)
+                        subagents.append({
+                            'agent_id': agent_id,
+                            'agent_type': skill_type,
+                            'path': agent_file
+                        })
+        except (json.JSONDecodeError, IOError):
+            continue
+
+    if not subagents:
         return []
 
     # Parse primary transcript to map agent IDs to types
@@ -152,16 +285,11 @@ def discover_subagents(primary_session_id: str) -> list[dict]:
         except Exception as e:
             print(f"  Warning parsing primary transcript: {e}")
 
-    # List all sub-agent transcripts
-    subagents = []
-    for agent_file in sorted(subagents_dir.glob("agent-*.jsonl")):
-        agent_id = agent_file.stem.replace("agent-", "")
-        agent_type = agent_type_map.get(agent_id, 'unknown')
-        subagents.append({
-            'agent_id': agent_id,
-            'agent_type': agent_type,
-            'path': agent_file
-        })
+    # Update agent types from the type mapping
+    # Don't replace subagents list - just update types for existing entries
+    for sa in subagents:
+        if sa['agent_type'] == 'unknown' and sa['agent_id'] in agent_type_map:
+            sa['agent_type'] = agent_type_map[sa['agent_id']]
 
     return subagents
 
@@ -257,6 +385,57 @@ def extract_thinking_from_session(session_id: str, max_chars: int = 8000) -> lis
         print(f"  Warning: Could not read {transcript_path}: {e}")
 
     return blocks
+
+
+def get_session_duration(session_path: Path) -> str:
+    """Calculate session duration from first to last timestamp.
+
+    Returns duration as human-readable string like "19m 21s" or "N/A".
+    """
+    from datetime import datetime
+
+    if not session_path.exists():
+        return "N/A"
+
+    try:
+        first_ts = None
+        last_ts = None
+
+        with open(session_path, 'r') as f:
+            for line in f:
+                try:
+                    data = json.loads(line.strip())
+                    ts = data.get('timestamp')
+                    if ts:
+                        if first_ts is None:
+                            first_ts = ts
+                        last_ts = ts
+                except:
+                    continue
+
+        if not first_ts or not last_ts:
+            return "N/A"
+
+        # Parse ISO timestamps
+        start = datetime.fromisoformat(first_ts.replace('Z', '+00:00'))
+        end = datetime.fromisoformat(last_ts.replace('Z', '+00:00'))
+
+        duration = end - start
+        total_seconds = int(duration.total_seconds())
+
+        if total_seconds < 60:
+            return f"{total_seconds}s"
+        elif total_seconds < 3600:
+            minutes = total_seconds // 60
+            seconds = total_seconds % 60
+            return f"{minutes}m {seconds}s"
+        else:
+            hours = total_seconds // 3600
+            minutes = (total_seconds % 3600) // 60
+            return f"{hours}h {minutes}m"
+
+    except Exception as e:
+        return "N/A"
 
 
 def get_prediction_data(accession_no: str) -> dict:
@@ -385,22 +564,31 @@ def generate_combined_thinking(accession_no: str, row: dict, metadata: dict) -> 
         correct_emoji = "✓" if correct.upper() == 'TRUE' else "✗" if correct else ""
         lines.append(f"**Actual**: {metadata['actual_direction']} {correct_emoji}  ")
 
+    # Find sessions by content search (reliable - doesn't depend on CSV session ID)
+    sessions = find_sessions_for_accession(accession_no)
+    all_subagents = []
+    total_duration_str = "N/A"
+
+    # Calculate total duration from primary session(s)
+    if sessions:
+        durations = [get_session_duration(s) for s in sessions]
+        # Use the first session's duration as the primary duration
+        total_duration_str = durations[0] if durations else "N/A"
+
+    lines.append(f"**Duration**: {total_duration_str}  ")
     lines.append("")
     lines.append("---")
     lines.append("")
 
-    # Find sessions by content search (reliable - doesn't depend on CSV session ID)
-    sessions = find_sessions_for_accession(accession_no)
-    all_subagents = []
-
     if sessions:
         for i, session_path in enumerate(sessions):
             session_id = session_path.stem
+            duration = get_session_duration(session_path)
             blocks = extract_thinking_from_file(session_path)
 
             if blocks:
                 lines.append(f"## Session {i+1}")
-                lines.append(f"ID: `{session_id[:8]}`")
+                lines.append(f"ID: `{session_id[:8]}` | Duration: {duration}")
                 lines.append("")
 
                 for j, block in enumerate(blocks, 1):
@@ -417,12 +605,38 @@ def generate_combined_thinking(accession_no: str, row: dict, metadata: dict) -> 
         lines.append("*No sessions found for this accession*")
         lines.append("")
 
-    # Sub-agent summary (they don't have extended thinking)
+    # Extract thinking from sub-agents (forked skills have their own transcripts)
     if all_subagents:
         lines.append("---")
         lines.append("")
+        lines.append("## Sub-Agent Thinking")
+        lines.append("")
+
+        for sa in all_subagents:
+            agent_type = sa['agent_type']
+            agent_id = sa['agent_id']
+            agent_path = sa['path']
+
+            # Extract thinking blocks from subagent transcript
+            sa_blocks = extract_thinking_from_file(agent_path)
+
+            if sa_blocks:
+                lines.append(f"### {agent_type} (agent-{agent_id[:8]})")
+                lines.append("")
+
+                for j, block in enumerate(sa_blocks, 1):
+                    lines.append(f"#### Thinking Block #{j}")
+                    lines.append(f"*{block['timestamp']}* ({block['length']} chars)")
+                    lines.append("")
+                    lines.append(block['text'])
+                    lines.append("")
+            else:
+                lines.append(f"### {agent_type} (agent-{agent_id[:8]})")
+                lines.append("*No thinking blocks found*")
+                lines.append("")
+
         types = sorted(set(sa['agent_type'] for sa in all_subagents))
-        lines.append(f"*{len(all_subagents)} sub-agents called: {', '.join(types)}*")
+        lines.append(f"*Total: {len(all_subagents)} sub-agents ({', '.join(types)})*")
         lines.append("")
 
     return '\n'.join(lines)
@@ -435,8 +649,8 @@ def build_index(all_runs: list[dict]) -> str:
         "",
         "Extracted thinking tokens from earnings prediction and attribution runs.",
         "",
-        "| Accession | Ticker | Date | Skill | Return | Correct | Primary | Sub-Agents | View |",
-        "|-----------|--------|------|-------|--------|---------|---------|------------|------|",
+        "| Accession | Ticker | Date | Skill | Duration | Return | Correct | Primary | Sub-Agents | View |",
+        "|-----------|--------|------|-------|----------|--------|---------|---------|------------|------|",
     ]
 
     for run in sorted(all_runs, key=lambda x: x.get('updated_at', ''), reverse=True):
@@ -453,6 +667,9 @@ def build_index(all_runs: list[dict]) -> str:
         sessions = find_sessions_for_accession(accession)
         primary = sessions[0].stem[:8] if sessions else '-'
 
+        # Calculate duration from primary session
+        duration = get_session_duration(sessions[0]) if sessions else '-'
+
         # Discover sub-agents from all found sessions
         all_subagents = []
         for s in sessions:
@@ -466,7 +683,7 @@ def build_index(all_runs: list[dict]) -> str:
         # Standard markdown link (works in Obsidian)
         link = f"[View](runs/{accession}.md)"
 
-        lines.append(f"| {accession} | {ticker} | {date} | {skill} | {ret} | {correct} | {primary} | {subagent_summary} | {link} |")
+        lines.append(f"| {accession} | {ticker} | {date} | {skill} | {duration} | {ret} | {correct} | {primary} | {subagent_summary} | {link} |")
 
     lines.append("")
     lines.append(f"*Generated: {datetime.now().isoformat()}*")
