@@ -90,3 +90,5 @@ earnings-analysis/Companies/ARCHIVED/
 
 # MCP server scripts (local only)
 mcp_servers/local-*.sh
+
+# Claude Code plans (tracked - contains verified architecture docs)
