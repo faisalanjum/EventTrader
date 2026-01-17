@@ -717,6 +717,49 @@ def get_prediction_data(accession_no: str) -> dict:
     return {}
 
 
+def fix_analysis_date_in_report(accession_no: str, ticker: str) -> bool:
+    """Auto-fix Analysis Date in company report to include full ISO timestamp.
+
+    Finds patterns like "Analysis Date**: 2026-01-17" (date only) and
+    replaces with full timestamp "Analysis Date**: 2026-01-17T21:15:30Z".
+
+    Returns True if fixed, False if already correct or not found.
+    """
+    import re
+
+    if not ticker:
+        return False
+
+    report_path = COMPANIES_DIR / ticker / f"{accession_no}.md"
+    if not report_path.exists():
+        return False
+
+    try:
+        with open(report_path, 'r') as f:
+            content = f.read()
+
+        # Pattern: "Analysis Date**: YYYY-MM-DD" without time component
+        # Matches date-only (no T or time after)
+        pattern = r'(\*\*Analysis Date\*\*[:\s|]*)\s*(\d{4}-\d{2}-\d{2})(?![T\d])'
+
+        match = re.search(pattern, content)
+        if match:
+            # Replace with current timestamp
+            now = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+            new_content = re.sub(pattern, rf'\g<1>{now}', content)
+
+            with open(report_path, 'w') as f:
+                f.write(new_content)
+
+            print(f"  Fixed Analysis Date in {ticker}/{accession_no}.md → {now}")
+            return True
+
+    except Exception as e:
+        print(f"  Warning: Could not fix Analysis Date: {e}")
+
+    return False
+
+
 def get_attribution_metadata(accession_no: str, ticker: str) -> dict:
     """Get metadata from attribution report if it exists."""
     if not ticker:
@@ -991,6 +1034,10 @@ def build_for_accession(accession_no: str) -> bool:
     attr_data = get_attribution_metadata(accession_no, ticker)
 
     metadata = {**pred_data, **attr_data}
+
+    # Auto-fix Analysis Date in company report (adds time if missing)
+    if ticker:
+        fix_analysis_date_in_report(accession_no, ticker)
 
     # Ensure directories exist
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
