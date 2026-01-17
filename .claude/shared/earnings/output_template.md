@@ -18,11 +18,9 @@ Save reports to: `earnings-analysis/Companies/{TICKER}/{accession_no}.md`
 | **Sector / Industry** | {sector} / {industry} |
 | **Form Type** | 8-K (Item 2.02) |
 | **Filed** | {filed_datetime} |
-| **Analysis Date** | {current_datetime_iso} |
+| **Analysis Date** | {current_date} |
 | **Market Cap** | {mkt_cap} |
 | **Market Session** | {session} |
-
-Note: Analysis Date must include full ISO timestamp (e.g., `2026-01-17T21:15:30Z`), not just date.
 
 ## Returns Summary
 | Metric | Value |

@@ -115,25 +115,6 @@ Reason from the data. Consider: surprise magnitude, guidance direction, historic
 
 ---
 
-## Markdown Report Format
-
-Write report to: `earnings-analysis/Companies/{TICKER}/{accession_no}.md`
-
-**Header format** (use full ISO timestamp for Analysis Date):
-```markdown
-# {TICKER} Q{N} {YEAR} Earnings Prediction Analysis
-
-**Accession**: {accession_no}
-**Ticker**: {TICKER} ({company_name})
-**Filing Date**: {filing_datetime}
-**Analysis Date**: {current_datetime_iso}
-**PIT Timestamp**: {filing_datetime}
-```
-
-Example Analysis Date: `2026-01-17T21:15:30Z` (include time, not just date)
-
----
-
 ## CSV Output
 
 **File**: `earnings-analysis/predictions.csv`
