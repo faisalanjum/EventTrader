@@ -74,8 +74,9 @@ def find_sessions_for_accession(accession_no: str) -> list[Path]:
         except:
             continue
 
-    # Most recent first
-    return sorted(matches, key=lambda p: p.stat().st_mtime, reverse=True)
+    # Most recent first - only return most recent session to avoid pollution from old runs
+    sorted_matches = sorted(matches, key=lambda p: p.stat().st_mtime, reverse=True)
+    return sorted_matches[:1] if sorted_matches else []
 
 
 # Skill detection patterns - add new skills here for future robustness
@@ -294,8 +295,17 @@ def discover_subagents(primary_session_id: str) -> list[dict]:
     return subagents
 
 
-def extract_thinking_from_file(filepath: Path, max_chars: int = 8000) -> list[dict]:
-    """Extract thinking blocks from a transcript file."""
+def extract_thinking_from_file(filepath: Path, source: str = 'primary', max_chars: int = 8000) -> list[dict]:
+    """Extract thinking blocks from a transcript file with source tagging.
+
+    Args:
+        filepath: Path to the JSONL transcript
+        source: Agent identifier (e.g., 'primary', 'neo4j-report', 'filtered-data')
+        max_chars: Maximum characters per thinking block before truncation
+
+    Returns:
+        List of thinking blocks with timestamp, text, length, and source
+    """
     blocks = []
     if not filepath.exists():
         return blocks
@@ -325,7 +335,8 @@ def extract_thinking_from_file(filepath: Path, max_chars: int = 8000) -> list[di
                             blocks.append({
                                 'timestamp': timestamp,
                                 'text': thinking_text,
-                                'length': len(block.get('thinking', ''))
+                                'length': len(block.get('thinking', '')),
+                                'source': source
                             })
                 except json.JSONDecodeError:
                     continue
@@ -333,6 +344,74 @@ def extract_thinking_from_file(filepath: Path, max_chars: int = 8000) -> list[di
         print(f"  Warning reading {filepath}: {e}")
 
     return blocks
+
+
+def format_relative_time(timestamp: str, session_start: str) -> str:
+    """Format timestamp as relative time from session start (e.g., '+02:34').
+
+    Returns MM:SS for times under an hour, HH:MM:SS otherwise.
+    """
+    from datetime import datetime
+    try:
+        ts = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+        start = datetime.fromisoformat(session_start.replace('Z', '+00:00'))
+        delta = ts - start
+        total_seconds = int(delta.total_seconds())
+
+        if total_seconds < 0:
+            # Before session start (shouldn't happen, but handle gracefully)
+            return timestamp[11:19]  # Just return HH:MM:SS
+
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+        seconds = total_seconds % 60
+
+        if hours > 0:
+            return f"+{hours}:{minutes:02d}:{seconds:02d}"
+        else:
+            return f"+{minutes:02d}:{seconds:02d}"
+    except:
+        # Fallback to absolute time if parsing fails
+        return timestamp[11:19] if len(timestamp) > 19 else timestamp
+
+
+def collect_all_thinking_blocks(sessions: list[Path], all_subagents: list[dict]) -> tuple[list[dict], str]:
+    """Collect all thinking blocks from primary sessions and sub-agents.
+
+    Returns:
+        Tuple of (sorted blocks list, session_start timestamp)
+    """
+    all_blocks = []
+    session_start = None
+
+    # Extract from primary sessions
+    for session_path in sessions:
+        blocks = extract_thinking_from_file(session_path, source='primary')
+        all_blocks.extend(blocks)
+
+        # Track earliest timestamp as session start
+        for b in blocks:
+            ts = b.get('timestamp', '')
+            if ts and (session_start is None or ts < session_start):
+                session_start = ts
+
+    # Extract from sub-agents
+    for sa in all_subagents:
+        agent_type = sa['agent_type']
+        agent_path = sa['path']
+        blocks = extract_thinking_from_file(agent_path, source=agent_type)
+        all_blocks.extend(blocks)
+
+        # Also check sub-agent timestamps for session start
+        for b in blocks:
+            ts = b.get('timestamp', '')
+            if ts and (session_start is None or ts < session_start):
+                session_start = ts
+
+    # Sort all blocks chronologically
+    all_blocks.sort(key=lambda x: x.get('timestamp', ''))
+
+    return all_blocks, session_start or ''
 
 
 def extract_thinking_from_session(session_id: str, max_chars: int = 8000) -> list[dict]:
@@ -580,63 +659,59 @@ def generate_combined_thinking(accession_no: str, row: dict, metadata: dict) -> 
     lines.append("---")
     lines.append("")
 
+    # Collect sub-agents from all sessions first
     if sessions:
-        for i, session_path in enumerate(sessions):
+        for session_path in sessions:
             session_id = session_path.stem
-            duration = get_session_duration(session_path)
-            blocks = extract_thinking_from_file(session_path)
-
-            if blocks:
-                lines.append(f"## Session {i+1}")
-                lines.append(f"ID: `{session_id[:8]}` | Duration: {duration}")
-                lines.append("")
-
-                for j, block in enumerate(blocks, 1):
-                    lines.append(f"### Thinking Block #{j}")
-                    lines.append(f"*{block['timestamp']}* ({block['length']} chars)")
-                    lines.append("")
-                    lines.append(block['text'])
-                    lines.append("")
-
-            # Collect sub-agents from this session
             subagents = discover_subagents(session_id)
             all_subagents.extend(subagents)
+
+    if sessions:
+        # Collect ALL thinking blocks from primary + sub-agents
+        all_blocks, session_start = collect_all_thinking_blocks(sessions, all_subagents)
+
+        if all_blocks:
+            # Show session info
+            session_ids = [s.stem[:8] for s in sessions]
+            lines.append(f"## Execution Timeline")
+            lines.append(f"Sessions: {', '.join(f'`{sid}`' for sid in session_ids)}")
+
+            # Count blocks by source for summary
+            source_counts = {}
+            for b in all_blocks:
+                src = b.get('source', 'unknown')
+                source_counts[src] = source_counts.get(src, 0) + 1
+
+            source_summary = ', '.join(f"{k}: {v}" for k, v in sorted(source_counts.items()))
+            lines.append(f"Blocks: {len(all_blocks)} total ({source_summary})")
+            lines.append("")
+
+            # Output all blocks in chronological order with new format
+            for i, block in enumerate(all_blocks, 1):
+                source = block.get('source', 'unknown')
+                timestamp = block.get('timestamp', '')
+                rel_time = format_relative_time(timestamp, session_start)
+                length = block.get('length', 0)
+
+                # New clean format: ### #15 · neo4j-report · +02:34
+                lines.append(f"### #{i} · {source} · {rel_time}")
+                lines.append(f"*{length} chars*")
+                lines.append("")
+                lines.append(block['text'])
+                lines.append("")
+        else:
+            lines.append("*No thinking blocks found*")
+            lines.append("")
     else:
         lines.append("*No sessions found for this accession*")
         lines.append("")
 
-    # Extract thinking from sub-agents (forked skills have their own transcripts)
+    # Summary of agents involved
     if all_subagents:
+        types = sorted(set(sa['agent_type'] for sa in all_subagents))
         lines.append("---")
         lines.append("")
-        lines.append("## Sub-Agent Thinking")
-        lines.append("")
-
-        for sa in all_subagents:
-            agent_type = sa['agent_type']
-            agent_id = sa['agent_id']
-            agent_path = sa['path']
-
-            # Extract thinking blocks from subagent transcript
-            sa_blocks = extract_thinking_from_file(agent_path)
-
-            if sa_blocks:
-                lines.append(f"### {agent_type} (agent-{agent_id[:8]})")
-                lines.append("")
-
-                for j, block in enumerate(sa_blocks, 1):
-                    lines.append(f"#### Thinking Block #{j}")
-                    lines.append(f"*{block['timestamp']}* ({block['length']} chars)")
-                    lines.append("")
-                    lines.append(block['text'])
-                    lines.append("")
-            else:
-                lines.append(f"### {agent_type} (agent-{agent_id[:8]})")
-                lines.append("*No thinking blocks found*")
-                lines.append("")
-
-        types = sorted(set(sa['agent_type'] for sa in all_subagents))
-        lines.append(f"*Total: {len(all_subagents)} sub-agents ({', '.join(types)})*")
+        lines.append(f"*Agents: primary + {len(all_subagents)} sub-agents ({', '.join(types)})*")
         lines.append("")
 
     return '\n'.join(lines)
