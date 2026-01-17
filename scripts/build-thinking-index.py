@@ -295,55 +295,209 @@ def discover_subagents(primary_session_id: str) -> list[dict]:
     return subagents
 
 
-def extract_thinking_from_file(filepath: Path, source: str = 'primary', max_chars: int = 8000) -> list[dict]:
-    """Extract thinking blocks from a transcript file with source tagging.
+def extract_execution_trace(filepath: Path, source: str = 'primary',
+                           max_thinking_chars: int = 8000,
+                           max_tool_result_chars: int = 2000) -> list[dict]:
+    """Extract complete execution trace from a transcript file.
+
+    Captures thinking, tool_use, tool_result, and text blocks to show
+    the full execution flow: reasoning → action → result → conclusion.
 
     Args:
         filepath: Path to the JSONL transcript
         source: Agent identifier (e.g., 'primary', 'neo4j-report', 'filtered-data')
-        max_chars: Maximum characters per thinking block before truncation
+        max_thinking_chars: Max chars for thinking blocks
+        max_tool_result_chars: Max chars for tool results (typically smaller)
 
     Returns:
-        List of thinking blocks with timestamp, text, length, and source
+        List of blocks with: timestamp, type, text, length, source, metadata
     """
     blocks = []
     if not filepath.exists():
         return blocks
+
+    # Track tool_use IDs to match with results
+    pending_tools = {}  # tool_id -> {name, input, timestamp}
 
     try:
         with open(filepath, 'r') as f:
             for line in f:
                 try:
                     data = json.loads(line.strip())
-                    if data.get('type') != 'assistant':
-                        continue
+                    msg_type = data.get('type')
+                    timestamp = data.get('timestamp', 'unknown')
 
-                    message = data.get('message', {})
-                    content = message.get('content', [])
+                    # Handle assistant messages (thinking, text, tool_use)
+                    if msg_type == 'assistant':
+                        message = data.get('message', {})
+                        content = message.get('content', [])
 
-                    if not isinstance(content, list):
-                        continue
+                        if not isinstance(content, list):
+                            continue
 
-                    for block in content:
-                        if isinstance(block, dict) and block.get('type') == 'thinking':
-                            thinking_text = block.get('thinking', '')
-                            timestamp = data.get('timestamp', 'unknown')
+                        for block in content:
+                            if not isinstance(block, dict):
+                                continue
 
-                            if len(thinking_text) > max_chars:
-                                thinking_text = thinking_text[:max_chars] + f"\n\n... [truncated, {len(thinking_text) - max_chars} more chars]"
+                            block_type = block.get('type')
 
-                            blocks.append({
-                                'timestamp': timestamp,
-                                'text': thinking_text,
-                                'length': len(block.get('thinking', '')),
-                                'source': source
-                            })
+                            if block_type == 'thinking':
+                                text = block.get('thinking', '')
+                                original_len = len(text)
+                                if len(text) > max_thinking_chars:
+                                    text = text[:max_thinking_chars] + f"\n\n... [truncated, {original_len - max_thinking_chars} more chars]"
+                                blocks.append({
+                                    'timestamp': timestamp,
+                                    'type': 'thinking',
+                                    'text': text,
+                                    'length': original_len,
+                                    'source': source
+                                })
+
+                            elif block_type == 'tool_use':
+                                tool_name = block.get('name', 'unknown')
+                                tool_id = block.get('id', '')
+                                tool_input = block.get('input', {})
+
+                                # Store for matching with result
+                                if tool_id:
+                                    pending_tools[tool_id] = {
+                                        'name': tool_name,
+                                        'input': tool_input,
+                                        'timestamp': timestamp
+                                    }
+
+                                # Format tool call
+                                input_str = _format_tool_input(tool_name, tool_input)
+                                blocks.append({
+                                    'timestamp': timestamp,
+                                    'type': 'tool_use',
+                                    'text': f"{tool_name}({input_str})",
+                                    'length': len(input_str),
+                                    'source': source,
+                                    'tool_id': tool_id
+                                })
+
+                            elif block_type == 'text':
+                                text = block.get('text', '')
+                                if text.strip():  # Only include non-empty text
+                                    original_len = len(text)
+                                    if len(text) > max_thinking_chars:
+                                        text = text[:max_thinking_chars] + f"\n\n... [truncated]"
+                                    blocks.append({
+                                        'timestamp': timestamp,
+                                        'type': 'text',
+                                        'text': text,
+                                        'length': original_len,
+                                        'source': source
+                                    })
+
+                    # Handle user messages (tool_result)
+                    elif msg_type == 'user':
+                        message = data.get('message', {})
+                        content = message.get('content', [])
+
+                        if not isinstance(content, list):
+                            continue
+
+                        for block in content:
+                            if not isinstance(block, dict):
+                                continue
+
+                            if block.get('type') == 'tool_result':
+                                tool_id = block.get('tool_use_id', '')
+                                result_content = block.get('content', [])
+
+                                # Get tool name from pending
+                                tool_info = pending_tools.get(tool_id, {})
+                                tool_name = tool_info.get('name', 'unknown')
+
+                                # Extract result text
+                                result_text = _format_tool_result(result_content, max_tool_result_chars)
+
+                                if result_text:
+                                    blocks.append({
+                                        'timestamp': timestamp,
+                                        'type': 'tool_result',
+                                        'text': result_text,
+                                        'length': len(result_text),
+                                        'source': source,
+                                        'tool_name': tool_name
+                                    })
+
                 except json.JSONDecodeError:
                     continue
     except Exception as e:
         print(f"  Warning reading {filepath}: {e}")
 
     return blocks
+
+
+def _format_tool_input(tool_name: str, tool_input: dict) -> str:
+    """Format tool input for display, keeping it concise."""
+    if not tool_input:
+        return ""
+
+    # Special handling for common tools
+    if tool_name == 'Skill':
+        skill = tool_input.get('skill', '')
+        args = tool_input.get('args', '')
+        if args:
+            return f'"{skill}", args="{args[:100]}..."' if len(args) > 100 else f'"{skill}", args="{args}"'
+        return f'"{skill}"'
+
+    if tool_name == 'Task':
+        desc = tool_input.get('description', '')
+        subagent = tool_input.get('subagent_type', '')
+        return f'{subagent}: "{desc}"'
+
+    if tool_name in ('Read', 'Write', 'Edit', 'Glob', 'Grep'):
+        # File operations - show path
+        path = tool_input.get('file_path', tool_input.get('path', tool_input.get('pattern', '')))
+        return f'"{path}"' if path else str(tool_input)[:100]
+
+    if tool_name == 'Bash':
+        cmd = tool_input.get('command', '')
+        return f'"{cmd[:80]}..."' if len(cmd) > 80 else f'"{cmd}"'
+
+    if 'mcp__neo4j' in tool_name or tool_name == 'mcp__neo4j-cypher__read_neo4j_cypher':
+        query = tool_input.get('query', '')
+        return f'"{query[:100]}..."' if len(query) > 100 else f'"{query}"'
+
+    # Default: show truncated JSON
+    s = json.dumps(tool_input)
+    return s[:100] + '...' if len(s) > 100 else s
+
+
+def _format_tool_result(result_content, max_chars: int) -> str:
+    """Format tool result content, handling various formats."""
+    if isinstance(result_content, str):
+        text = result_content
+    elif isinstance(result_content, list):
+        # Extract text from content blocks
+        texts = []
+        for item in result_content:
+            if isinstance(item, dict) and item.get('type') == 'text':
+                texts.append(item.get('text', ''))
+            elif isinstance(item, str):
+                texts.append(item)
+        text = '\n'.join(texts)
+    else:
+        text = str(result_content)
+
+    # Truncate if too long
+    original_len = len(text)
+    if original_len > max_chars:
+        text = text[:max_chars] + f"\n... [truncated, {original_len - max_chars} more chars]"
+
+    return text
+
+
+# Backwards compatibility alias
+def extract_thinking_from_file(filepath: Path, source: str = 'primary', max_chars: int = 8000) -> list[dict]:
+    """Legacy function - extracts only thinking blocks."""
+    all_blocks = extract_execution_trace(filepath, source, max_thinking_chars=max_chars)
+    return [b for b in all_blocks if b.get('type') == 'thinking']
 
 
 def format_relative_time(timestamp: str, session_start: str) -> str:
@@ -375,8 +529,14 @@ def format_relative_time(timestamp: str, session_start: str) -> str:
         return timestamp[11:19] if len(timestamp) > 19 else timestamp
 
 
-def collect_all_thinking_blocks(sessions: list[Path], all_subagents: list[dict]) -> tuple[list[dict], str]:
-    """Collect all thinking blocks from primary sessions and sub-agents.
+def collect_execution_trace(sessions: list[Path], all_subagents: list[dict],
+                           include_all_types: bool = True) -> tuple[list[dict], str]:
+    """Collect complete execution trace from primary sessions and sub-agents.
+
+    Args:
+        sessions: List of primary session transcript paths
+        all_subagents: List of sub-agent info dicts
+        include_all_types: If True, include all block types; if False, only thinking
 
     Returns:
         Tuple of (sorted blocks list, session_start timestamp)
@@ -386,7 +546,10 @@ def collect_all_thinking_blocks(sessions: list[Path], all_subagents: list[dict])
 
     # Extract from primary sessions
     for session_path in sessions:
-        blocks = extract_thinking_from_file(session_path, source='primary')
+        if include_all_types:
+            blocks = extract_execution_trace(session_path, source='primary')
+        else:
+            blocks = extract_thinking_from_file(session_path, source='primary')
         all_blocks.extend(blocks)
 
         # Track earliest timestamp as session start
@@ -399,7 +562,10 @@ def collect_all_thinking_blocks(sessions: list[Path], all_subagents: list[dict])
     for sa in all_subagents:
         agent_type = sa['agent_type']
         agent_path = sa['path']
-        blocks = extract_thinking_from_file(agent_path, source=agent_type)
+        if include_all_types:
+            blocks = extract_execution_trace(agent_path, source=agent_type)
+        else:
+            blocks = extract_thinking_from_file(agent_path, source=agent_type)
         all_blocks.extend(blocks)
 
         # Also check sub-agent timestamps for session start
@@ -412,6 +578,12 @@ def collect_all_thinking_blocks(sessions: list[Path], all_subagents: list[dict])
     all_blocks.sort(key=lambda x: x.get('timestamp', ''))
 
     return all_blocks, session_start or ''
+
+
+# Backwards compatibility alias
+def collect_all_thinking_blocks(sessions: list[Path], all_subagents: list[dict]) -> tuple[list[dict], str]:
+    """Legacy function - collects only thinking blocks."""
+    return collect_execution_trace(sessions, all_subagents, include_all_types=False)
 
 
 def extract_thinking_from_session(session_id: str, max_chars: int = 8000) -> list[dict]:
@@ -667,8 +839,8 @@ def generate_combined_thinking(accession_no: str, row: dict, metadata: dict) -> 
             all_subagents.extend(subagents)
 
     if sessions:
-        # Collect ALL thinking blocks from primary + sub-agents
-        all_blocks, session_start = collect_all_thinking_blocks(sessions, all_subagents)
+        # Collect complete execution trace from primary + sub-agents
+        all_blocks, session_start = collect_execution_trace(sessions, all_subagents, include_all_types=True)
 
         if all_blocks:
             # Show session info
@@ -676,31 +848,64 @@ def generate_combined_thinking(accession_no: str, row: dict, metadata: dict) -> 
             lines.append(f"## Execution Timeline")
             lines.append(f"Sessions: {', '.join(f'`{sid}`' for sid in session_ids)}")
 
-            # Count blocks by source for summary
+            # Count blocks by type and source for summary
+            type_counts = {}
             source_counts = {}
             for b in all_blocks:
+                btype = b.get('type', 'unknown')
                 src = b.get('source', 'unknown')
+                type_counts[btype] = type_counts.get(btype, 0) + 1
                 source_counts[src] = source_counts.get(src, 0) + 1
 
+            type_summary = ', '.join(f"{k}: {v}" for k, v in sorted(type_counts.items()))
             source_summary = ', '.join(f"{k}: {v}" for k, v in sorted(source_counts.items()))
-            lines.append(f"Blocks: {len(all_blocks)} total ({source_summary})")
+            lines.append(f"Total: {len(all_blocks)} blocks ({type_summary})")
+            lines.append(f"Sources: {source_summary}")
             lines.append("")
 
-            # Output all blocks in chronological order with new format
+            # Type emoji mapping
+            type_emoji = {
+                'thinking': '💭',
+                'tool_use': '🔧',
+                'tool_result': '📊',
+                'text': '📝'
+            }
+
+            # Output all blocks in chronological order with type-specific formatting
             for i, block in enumerate(all_blocks, 1):
                 source = block.get('source', 'unknown')
                 timestamp = block.get('timestamp', '')
                 rel_time = format_relative_time(timestamp, session_start)
+                block_type = block.get('type', 'unknown')
+                emoji = type_emoji.get(block_type, '❓')
                 length = block.get('length', 0)
 
-                # New clean format: ### #15 · neo4j-report · +02:34
-                lines.append(f"### #{i} · {source} · {rel_time}")
-                lines.append(f"*{length} chars*")
-                lines.append("")
-                lines.append(block['text'])
+                # Format: ### #15 · 💭 · neo4j-report · +02:34
+                lines.append(f"### #{i} · {emoji} · {source} · {rel_time}")
+
+                if block_type == 'tool_result':
+                    # Use collapsible block for tool results
+                    tool_name = block.get('tool_name', 'unknown')
+                    lines.append(f"<details><summary>{tool_name} result ({length} chars)</summary>")
+                    lines.append("")
+                    lines.append("```")
+                    lines.append(block['text'])
+                    lines.append("```")
+                    lines.append("</details>")
+                elif block_type == 'tool_use':
+                    # Tool calls on single line, code-formatted
+                    lines.append(f"```")
+                    lines.append(block['text'])
+                    lines.append("```")
+                else:
+                    # thinking and text - show as regular markdown
+                    lines.append(f"*{length} chars*")
+                    lines.append("")
+                    lines.append(block['text'])
+
                 lines.append("")
         else:
-            lines.append("*No thinking blocks found*")
+            lines.append("*No execution trace found*")
             lines.append("")
     else:
         lines.append("*No sessions found for this accession*")
