@@ -1,217 +1,164 @@
 ---
 name: earnings-orchestrator
-description: Master orchestrator for batch earnings analysis. Processes all 8-Ks for a company chronologically, running prediction→attribution loop with accuracy tracking.
-allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, Skill, mcp__neo4j-cypher__read_neo4j_cypher
-model: claude-opus-4-5
-permissionMode: dontAsk
+description: Master orchestrator for batch earnings analysis
+# No context: fork - orchestrator is always entry point, enables Task tool for parallel execution
+allowed-tools:
+  - Task
+  - Bash
 ---
 
 # Earnings Orchestrator
 
-**Goal**: Process all 8-K earnings filings for a company chronologically, building a closed-loop prediction→attribution system with accuracy feedback.
+## Input
 
-**Thinking**: ALWAYS use `ultrathink` for maximum reasoning depth.
+`$ARGUMENTS` = `TICKER [SIGMA]`
 
-**Input**: Company ticker (e.g., "GBX", "AAPL")
+- TICKER: Company ticker (required)
+- SIGMA: Threshold multiplier (default: `2` meaning 2σ)
 
----
+## Task - MUST COMPLETE ALL STEPS
 
-## Architecture
+### Step 1: Get Earnings Data
 
-```
-Master Orchestrator (this skill)
-    │
-    ├─→ Query Neo4j for all 8-Ks with Item 2.02
-    │
-    └─→ For each filing chronologically:
-            │
-            ├─→ First filing: /earnings-attribution only
-            │
-            └─→ Subsequent filings:
-                    │
-                    ├─→ /earnings-prediction (predict before seeing outcome)
-                    │
-                    └─→ /earnings-attribution (verify & learn)
+```bash
+source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/EventMarketDB/scripts/earnings/get_earnings.py {TICKER}
 ```
 
----
+**Output columns:** accession|date|market_session|daily_stock|daily_adj|sector_adj|industry_adj|trailing_vol|vol_days|vol_status
 
-## Workflow
+**Parse:** Extract E1 (first row), E2 (second row), etc. Note `trailing_vol` for each.
 
-Use TodoWrite to track progress through all filings.
+**If ERROR returned:** Stop and report error to user.
 
-### Step 1: Query 8-K Universe
+### Step 2: Get Significant Moves for Q1
 
-Query Neo4j for all 8-Ks with Item 2.02 (earnings) for the ticker:
+Calculate:
+- `START` = E1 date minus 3 months (or earliest available data)
+- `END` = E1 date (just the date part, e.g., 2024-02-01)
+- `THRESHOLD` = SIGMA × E1.trailing_vol (e.g., 2 × 0.92 = 1.84)
 
-```cypher
-MATCH (r:Report)-[pf:PRIMARY_FILER]->(c:Company)
-WHERE c.ticker = $ticker
-  AND r.formType = '8-K'
-  AND any(item IN r.items WHERE item CONTAINS 'Item 2.02')
-  AND pf.daily_stock IS NOT NULL
-RETURN r.accessionNo AS accession_no,
-       c.ticker AS ticker,
-       c.name AS company_name,
-       r.created AS filing_datetime,
-       pf.daily_stock AS daily_return,
-       pf.daily_macro AS macro_adj_return,
-       r.items AS items
-ORDER BY r.created ASC
+```bash
+source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/EventMarketDB/scripts/earnings/get_significant_moves.py {TICKER} {START} {END} {THRESHOLD}
 ```
 
-Extract list of accession numbers with filing dates.
+**Output columns:** date|daily_stock|daily_macro|daily_adj
 
-### Step 2: Check Processing State
+**Parse:** List of dates with significant moves.
 
-Read `earnings-analysis/8k_fact_universe.csv` and `earnings-analysis/predictions.csv` to determine:
-- Which filings are already completed
-- Which predictions exist (and whether they need attribution)
+**If OK|NO_MOVES returned:** No significant moves for Q1, skip to Step 4.
 
-### Step 3: Process Each Filing
+### Step 3a: Benzinga News Analysis (PARALLEL)
 
-For each filing in chronological order:
+For EACH significant date from Step 2, spawn a `bz-news-driver` sub-agent.
 
-#### First Filing (no prior history)
+**Task tool call for each date:**
 ```
-/earnings-attribution {accession_no}
-```
-Reason: No historical baseline to predict from. Attribution only.
-
-#### Subsequent Filings
-```
-1. /earnings-prediction {accession_no}
-   → Outputs prediction to predictions.csv
-
-2. /earnings-attribution {accession_no}
-   → Verifies prediction accuracy
-   → Updates predictions.csv with actual_* columns
-   → Stores company-specific learnings
+subagent_type: "bz-news-driver"
+description: "BZ news {TICKER} {DATE}"
+prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
 ```
 
-### Step 4: Update Tracking
+**IMPORTANT:**
+- Max 10 sub-agents in parallel. If >10 dates, batch: first 10 → wait → next 10
+- All sub-agents return: `date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research`
 
-After each filing:
-1. Mark `completed=TRUE` in 8k_fact_universe.csv
-2. Update predictions.csv with actual outcomes
-3. Compute running accuracy metrics
+**Collect all results. Separate into:**
+- `explained`: where `external_research=false`
+- `needs_research`: where `external_research=true`
 
----
+### Step 3b: External Research for Q1 Gaps (PARALLEL)
 
-## Accuracy Tracking
+For EACH date in `needs_research` from Step 3a, spawn an `external-news-driver` sub-agent.
 
-### Direction Accuracy
+**Task tool call for each gap date:**
 ```
-correct = predicted_direction == actual_direction
-```
-
-### Magnitude Accuracy
-```
-magnitude_correct = predicted_magnitude == actual_magnitude
+subagent_type: "external-news-driver"
+description: "External research {TICKER} {DATE}"
+prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
 ```
 
-### Running Metrics
+**IMPORTANT:**
+- Max 10 sub-agents in parallel. If >10 dates, batch: first 10 → wait → next 10
+- Returns same format with `source=websearch` or `source=perplexity`
 
-After processing, compute:
-- Total filings processed
-- Predictions made (excludes first filing)
-- Direction accuracy: correct / predictions
-- Magnitude accuracy: magnitude_correct / predictions
+**Merge results:** Replace `needs_research` items with researched results.
 
----
+### Step 4a: Repeat Benzinga Analysis for Q2
 
-## Resume Logic
+Calculate:
+- `START` = E1 date
+- `END` = E2 date
+- `THRESHOLD` = SIGMA × E2.trailing_vol
 
-If a filing is partially processed:
-1. Check predictions.csv for existing prediction
-2. Check Companies/{TICKER}/{accession}.md for attribution
-3. Skip completed steps, resume where needed
+Run `get_significant_moves.py` and spawn `bz-news-driver` sub-agents for Q2 dates (same as Step 3a).
 
----
+### Step 4b: External Research for Q2 Gaps (PARALLEL)
 
-## Output Files
+For dates where `external_research=true` from Step 4a, spawn `external-news-driver` sub-agents (same as Step 3b).
 
-| File | Purpose |
-|------|---------|
-| `earnings-analysis/predictions.csv` | All predictions + actuals |
-| `earnings-analysis/8k_fact_universe.csv` | Processing status tracker |
-| `earnings-analysis/Companies/{TICKER}/{accession}.md` | Attribution reports |
-| `earnings-analysis/Companies/{TICKER}/learnings.md` | Company-specific patterns |
-| `earnings-analysis/orchestrator-runs/{ticker}_{timestamp}.md` | Run summary |
+### Step 5: Return Combined Results
 
----
+```
+=== EARNINGS ORCHESTRATOR: {TICKER} ===
 
-## Run Summary Format
+SIGMA: {SIGMA}σ
 
-After completing a ticker, write summary to `earnings-analysis/orchestrator-runs/{ticker}_{YYYYMMDD}.md`:
-
-```markdown
-# {TICKER} Orchestrator Run - {DATE}
-
-## Summary
-- Total 8-Ks found: N
-- Already completed: N
-- Processed this run: N
-- First filing (attribution only): {accession}
-
-## Prediction Accuracy
-- Predictions made: N
-- Direction correct: N/M (X%)
-- Magnitude correct: N/M (X%)
-
-## Filings Processed
-
-| # | Accession | Date | Prediction | Actual | Correct |
-|---|-----------|------|------------|--------|---------|
-| 1 | xxx | 2023-01-01 | (first) | +5.2% | N/A |
-| 2 | xxx | 2023-04-01 | up/medium | up/large | dir: Y, mag: N |
+--- EARNINGS DATA ---
+E1: {accession} | {date} | {daily_adj}% | vol={trailing_vol}
+E2: {accession} | {date} | {daily_adj}% | vol={trailing_vol}
 ...
 
-## Learnings Applied
-- [List company-specific patterns discovered]
+--- Q1 ANALYSIS ({START} to {E1}) ---
+Threshold: {THRESHOLD}% ({SIGMA}σ × {trailing_vol})
+Significant dates: {count}
+
+date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research
+...
+
+--- Q2 ANALYSIS ({E1} to {E2}) ---
+Threshold: {THRESHOLD}% ({SIGMA}σ × {trailing_vol})
+Significant dates: {count}
+
+date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research
+...
+
+--- SUMMARY ---
+Total dates analyzed: {N}
+Explained by Benzinga: {B}
+Explained by WebSearch/Perplexity: {W}
+Still unknown (confidence=0): {U}
+
+=== COMPLETE ===
 ```
 
----
+## Rules
 
-## Invocation Examples
-
-### Process all filings for a ticker
-```
-/earnings-orchestrator GBX
-```
-
-### Process with limit
-```
-/earnings-orchestrator GBX --limit 5
-```
-Processes only first 5 unprocessed filings.
-
-### Resume interrupted run
-```
-/earnings-orchestrator GBX --resume
-```
-Continues from last processed filing.
-
----
+- **Always run get_earnings.py first** - need trailing_vol to calculate threshold
+- **Threshold formula:** SIGMA × trailing_vol (not fixed percentage)
+- **Max 10 parallel sub-agents** - batch if more dates
+- **Q1 complete before Q2** - finish bz + external for Q1, then Q2
+- **Extract date only** - E1 date "2024-02-01T16:30:33-05:00" → use "2024-02-01"
+- **Pass through raw output** - don't summarize or lose data
 
 ## Error Handling
 
-1. **Neo4j query fails**: Log error, exit gracefully
-2. **Skill invocation fails**: Log error, mark filing as failed, continue to next
-3. **Missing data**: Note in summary, continue with available data
-4. **Rate limits**: Built-in retry with exponential backoff
+Script errors return structured format: `ERROR|CODE|MESSAGE|HINT`
 
----
+If any script returns ERROR:
+1. Log the error in output
+2. Try to continue with remaining steps if possible
+3. Report all errors in summary
 
-## Arguments
+## Example
 
-| Arg | Type | Default | Description |
-|-----|------|---------|-------------|
-| ticker | string | required | Company ticker to process |
-| --limit | int | none | Max filings to process |
-| --resume | flag | false | Resume from last completed |
-| --dry-run | flag | false | Show plan without executing |
+Input: `AAPL 2`
 
----
-
-*Version 1.0 | 2026-01-16*
+Flow:
+1. get_earnings.py AAPL → E1=2024-02-01 (vol=0.90), E2=2024-05-02 (vol=0.99)
+2. Q1 threshold = 2 × 0.90 = 1.80%
+3. get_significant_moves.py AAPL 2023-11-01 2024-02-01 1.80 → 5 dates
+4. Spawn 5 bz-news-driver agents → 3 explained, 2 need research
+5. Spawn 2 external-news-driver agents for gaps → 1 found, 1 unknown
+6. Q1 complete: 4 explained, 1 unknown
+7. Repeat for Q2...
+8. Return combined results
