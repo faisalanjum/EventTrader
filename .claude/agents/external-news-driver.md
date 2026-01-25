@@ -1,6 +1,7 @@
 ---
 name: external-news-driver
 description: "Research what drove a stock move using WebSearch and Perplexity when Benzinga news is insufficient."
+color: "#F97316"
 tools:
   - WebSearch
   - mcp__perplexity__perplexity_search

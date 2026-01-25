@@ -1,6 +1,7 @@
 ---
 name: bz-news-driver
 description: "Find what drove a stock move on a specific date using Benzinga news."
+color: "#3B82F6"
 tools:
   - Bash
 model: haiku
