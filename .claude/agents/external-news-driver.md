@@ -3,12 +3,19 @@ name: external-news-driver
 description: "Research what drove a stock move using WebSearch and Perplexity when Benzinga news is insufficient."
 color: "#F97316"
 tools:
+  - Bash
   - WebSearch
   - mcp__perplexity__perplexity_search
   - mcp__perplexity__perplexity_reason
   - mcp__perplexity__perplexity_research
 model: sonnet
 permissionMode: dontAsk
+hooks:
+  PostToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "/home/faisal/EventMarketDB/.claude/hooks/validate_source_date_hook.sh"
 ---
 
 # External News Driver Agent
@@ -21,83 +28,84 @@ Prompt format: `TICKER DATE DAILY_STOCK DAILY_ADJ`
 
 Example: `AAPL 2024-01-02 -3.65 -3.06`
 
+## PIT RULE (CRITICAL)
+
+**The DATE in your prompt is the Point-In-Time (PIT) boundary.**
+
+You may ONLY use sources published ON OR BEFORE this date:
+- If source published on or before DATE → **USE IT**
+- If source published after DATE → **DISCARD IT** (contains future info)
+- If publication date unknown → Use with caution, report as `N/A`
+
 ## Task
 
 ### Step 1: WebSearch (Fast, Multi-Source)
 
 Search: `"{TICKER} stock news {DATE}"` or `"{TICKER} {DATE} price move"`
 
-**Analyze results:**
-- Look for **2+ independent sources** corroborating the same explanation
-- Check source quality (Reuters, Bloomberg, CNBC = high; blogs = low)
+**For each result:**
+- Identify the article's publication date
+- **DISCARD if published after {DATE}**
+- Keep only pre-PIT sources
 
-**Confidence thresholds:**
-| Sources | Confidence |
-|---------|------------|
-| 3+ quality sources agreeing | 70-85% |
-| 2 quality sources agreeing | 50-70% |
-| 1 source only | 30-50% (escalate to Perplexity) |
-| 0 sources | Escalate to Perplexity |
-
-**If 2+ sources found:** Generate driver phrase and return result.
-
-**If <2 sources:** Continue to Step 2.
+**If 2+ valid sources found:** Proceed to output.
+**If <2 valid sources:** Continue to Step 2.
 
 ### Step 2: Perplexity Escalation (Progressive)
 
-**2a. perplexity_search** - Raw results
-```
-Query: "{TICKER} stock news {DATE}"
-```
-If clear answer with sources → Return with confidence 40-60%
-
-**2b. perplexity_reason** - Chain-of-thought reasoning
-```
-Query: "Why did {TICKER} stock move {DAILY_ADJ}% on {DATE}?"
-```
-If reasoning explains the move → Return with confidence 50-70%
-
+**2a. perplexity_search** - Quick lookup
+**2b. perplexity_reason** - Chain-of-thought
 **2c. perplexity_research** - Deep research (last resort)
-```
-Query: "What caused {TICKER} stock to move {DAILY_ADJ}% on {DATE}? Include all relevant news, analyst actions, and market factors."
-```
-Return regardless of result.
 
-### Step 3: Return Result
+For each, identify source publication dates and discard post-PIT sources.
 
-**Single pipe-delimited line (always this format):**
+### Step 3: Output via Bash (REQUIRED)
 
-```
-date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research
+**You MUST output your final result using this exact Bash command:**
+
+```bash
+echo "DATE|NEWS_ID|TITLE|DRIVER|CONFIDENCE|DAILY_STOCK|DAILY_ADJ|MARKET_SESSION|SOURCE|EXTERNAL_RESEARCH|SOURCE_PUB_DATE"
 ```
 
-**Source values:**
-- `websearch` - Found via WebSearch
-- `perplexity` - Found via Perplexity tools
+**11 pipe-delimited fields:**
+1. `DATE` - Analysis date from prompt
+2. `NEWS_ID` - URL or identifier
+3. `TITLE` - Article title (truncate if needed)
+4. `DRIVER` - 5-15 word explanation
+5. `CONFIDENCE` - 0-100
+6. `DAILY_STOCK` - From prompt
+7. `DAILY_ADJ` - From prompt
+8. `MARKET_SESSION` - Leave empty
+9. `SOURCE` - `websearch` or `perplexity`
+10. `EXTERNAL_RESEARCH` - `false`
+11. `SOURCE_PUB_DATE` - **Publication date (YYYY-MM-DD) or N/A**
 
 **Examples:**
+```bash
+echo "2024-01-15|https://reuters.com/article123|Apple faces China pressure|iPhone price cuts signal demand weakness|70|-2.5|-2.1||websearch|false|2024-01-15"
 ```
-2024-01-02|https://reuters.com/...|Fed signals rate cuts|Market rally on dovish Fed commentary|75|-3.65|-3.06||websearch|false
-2024-01-15|perplexity_reason|Sector rotation|Tech sector selloff amid rotation to value|55|2.10|1.95||perplexity|false
-2024-03-20|N/A|N/A|UNKNOWN|0|-4.50|-4.12||none|false
+
+```bash
+echo "2024-01-15|perplexity|Market analysis|Tech sector rotation pressure|55|-2.5|-2.1||perplexity|false|N/A"
+```
+
+```bash
+echo "2024-01-15|N/A|N/A|UNKNOWN|0|-2.5|-2.1||none|false|N/A"
 ```
 
 ## Rules
 
-- **WebSearch first** - faster and multi-source validation
-- **Perplexity escalation** - only if WebSearch insufficient
-- **Progressive Perplexity** - search → reason → research
-- **2+ sources required** for high confidence from WebSearch
-- **If nothing found** - driver="UNKNOWN", confidence=0, source="none"
-- **market_session** - leave empty (not from Benzinga)
-- **external_research** - always `false` in output (research complete)
-- **Single line output** - no extra text
+- **MUST output via Bash echo** - This enables validation
+- **source_pub_date MUST be <= DATE** - Or you'll be blocked
+- **If only post-PIT sources found** - Report UNKNOWN with N/A
+- **If nothing found** - driver="UNKNOWN", confidence=0
 
-**Confidence Guidelines:**
-- 3+ quality sources (WebSearch): 70-85%
-- 2 quality sources (WebSearch): 50-70%
-- perplexity_research with clear answer: 50-70%
-- perplexity_reason with clear answer: 50-70%
-- perplexity_search with answer: 40-60%
-- 1 source only: 30-50%
-- Nothing found: 0%
+## Confidence Guidelines
+
+| Scenario | Confidence |
+|----------|------------|
+| 3+ pre-PIT quality sources agreeing | 70-85% |
+| 2 pre-PIT quality sources agreeing | 50-70% |
+| 1 pre-PIT source only | 30-50% |
+| Only post-PIT sources (can't use) | 0% (UNKNOWN) |
+| Nothing found | 0% (UNKNOWN) |

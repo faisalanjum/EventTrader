@@ -6,6 +6,12 @@ tools:
   - Bash
 model: haiku
 permissionMode: dontAsk
+hooks:
+  PostToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "/home/faisal/EventMarketDB/.claude/hooks/validate_pit_hook.sh"
 ---
 
 # News Driver Agent
@@ -30,6 +36,7 @@ source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/Event
 
 **If news found:**
 - Read title AND body
+- Extract `created` field (column 5) as source_pub_date (YYYY-MM-DD)
 - Check market_session (pre_market=high confidence, post_market=medium)
 - Match direction: positive news + positive move = good
 - Generate driver phrase (5-15 words)
@@ -41,17 +48,17 @@ source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/Event
 
 ### Step 3: Return
 
-**Single pipe-delimited line (always this format):**
+**Single pipe-delimited line (11 fields):**
 
 ```
-date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research
+date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
 ```
 
 **Examples:**
 ```
-2024-01-02|bzNews_123|Barclays Downgrades Apple|Analyst downgrade to Underweight|85|-3.65|-3.06|pre_market|benzinga|false
-2024-01-15|bzNews_456|Apple announces product|Product news unclear impact|40|2.10|1.95|in_market|benzinga|true
-2024-03-20|N/A|N/A|UNKNOWN|0|-4.50|-4.12|N/A|none|true
+2024-01-02|bzNews_123|Barclays Downgrades Apple|Analyst downgrade to Underweight|85|-3.65|-3.06|pre_market|benzinga|false|2024-01-02
+2024-01-15|bzNews_456|Apple announces product|Product news unclear impact|40|2.10|1.95|in_market|benzinga|true|2024-01-15
+2024-03-20|N/A|N/A|UNKNOWN|0|-4.50|-4.12||none|true|N/A
 ```
 
 ## Rules
