@@ -1,0 +1,4 @@
+MULTI_STEP5_AFTER_CHILD2
+Timestamp: 2026-01-23T00:00:02Z
+Second child returned: CHILD_RETURN_VALUE_12345
+Both children completed, workflow still running!

@@ -1,0 +1,38 @@
+TEST: trade-earnings-pattern
+TIMESTAMP: 2026-01-25T12:45:00Z
+
+TASK STRUCTURE CREATED:
+#1 AAPL-Q1: News Impact Analysis
+#2 AAPL-Q1: Guidance Inventory Update
+#3 AAPL-Q1: Earnings Prediction
+#4 AAPL-Q1: Earnings Attribution
+
+DEPENDENCY VERIFICATION:
+- Task 1 (news-impact): [no blockers] - blocks #3
+- Task 2 (guidance): [no blockers] - blocks #3
+- Task 3 (prediction): [blocked by #1, #2] - blocks #4
+- Task 4 (attribution): [blocked by #3]
+
+EXECUTION SIMULATION:
+Wave 1 Start: Tasks 1,2 marked in_progress (parallel execution)
+Wave 1 Complete: Tasks 1,2 marked completed
+Task 3 Status: UNBLOCKED (no longer shows blocked annotation in TaskList)
+Wave 2 Start: Task 3 marked in_progress
+Wave 2 Complete: Task 3 marked completed
+Task 4 Status: UNBLOCKED (no longer shows blocked annotation in TaskList)
+Wave 3 Complete: Task 4 marked completed
+
+FINAL TASK LIST:
+#1 [completed] AAPL-Q1: News Impact Analysis
+#2 [completed] AAPL-Q1: Guidance Inventory Update
+#3 [completed] AAPL-Q1: Earnings Prediction
+#4 [completed] AAPL-Q1: Earnings Attribution
+
+KEY OBSERVATIONS:
+1. Tasks can be created with dependencies using addBlockedBy
+2. TaskList dynamically removes [blocked by ...] annotation when blockers complete
+3. TaskGet shows historical dependency relationships (Blocked by / Blocks)
+4. Parallel tasks (Wave 1) can run simultaneously with no blockers
+5. Dependency chain correctly enforces: Wave 1 -> Wave 2 -> Wave 3
+
+CONCLUSION: tradeEarnings pattern WORKS

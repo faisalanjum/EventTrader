@@ -1,0 +1,3 @@
+LAYER3_RESULT: [FMC, SMG, FLS]
+Query: MATCH (c:Company) RETURN c.ticker LIMIT 3
+Timestamp: 2026-01-16

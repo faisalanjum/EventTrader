@@ -1,0 +1,19 @@
+MULTI_WORKFLOW_COMPLETE
+Timestamp: 2026-01-23T00:00:03Z
+
+=== MULTI-CHILD WORKFLOW TEST RESULTS ===
+
+Step 1 (before any child): EXECUTED
+Step 2 (call child 1): EXECUTED
+Step 3 (after child 1): EXECUTED - proves continuation after 1st child
+Step 4 (call child 2): EXECUTED
+Step 5 (after child 2): EXECUTED - proves continuation after 2nd child
+Step 6 (read & compute): EXECUTED
+Step 7 (this file): EXECUTED
+
+Child 1 return value: CHILD_RETURN_VALUE_12345
+Child 2 return value: CHILD_RETURN_VALUE_12345
+Child file character count: 96
+
+ALL 7 STEPS COMPLETED.
+GitHub Issue #17351 does NOT affect multi-child sequential workflows.

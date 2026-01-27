@@ -1,0 +1,7 @@
+CHILD_MCP_ACCESS: yes | RESULT: INTERNATIONAL BUSINESS MACHINES CORP
+
+Test Details:
+- Child skill called mcp__neo4j-cypher__read_neo4j_cypher directly (no MCPSearch)
+- Query: MATCH (c:Company {ticker: 'IBM'}) RETURN c.name LIMIT 1
+- Full response: [{"c.name": "INTERNATIONAL BUSINESS MACHINES CORP"}]
+- Timestamp: 2026-01-16

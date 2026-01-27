@@ -1,0 +1,3 @@
+LAYER1_STARTED
+Timestamp: 2026-01-23T12:00:00Z
+About to call Layer 2 (which will call Layer 3)

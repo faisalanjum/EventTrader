@@ -1,0 +1,6 @@
+CALLER: FROM-SDK.txt
+TIMESTAMP: 2026-01-25T13:44:49.413Z
+TASKLIST_AVAILABLE: NO
+TASKLIST_OUTPUT: TaskList tool not available in forked skill context. Available tools do not include TaskList, TaskCreate, TaskGet, or TaskUpdate.
+TASKCREATE_AVAILABLE: NO
+TASKCREATE_OUTPUT: TaskCreate tool not available in forked skill context. Cannot create task with subject "TASK-TOOL-TEST-FROM-SDK.txt" as TaskCreate tool is not accessible.

@@ -1,0 +1,20 @@
+CONTEXT: Forked skill called from SDK
+TASKLIST_AVAILABLE: NO
+TASKCREATE_AVAILABLE: NO
+TASKGET_AVAILABLE: NO
+TASKUPDATE_AVAILABLE: NO
+TASKS_FOUND: NONE
+
+DETAILED_TEST_RESULTS:
+- TaskList: Error: No such tool available: TaskList
+- TaskCreate: Error: No such tool available: TaskCreate
+- TaskGet: Error: No such tool available: TaskGet
+- TaskUpdate: Error: No such tool available: TaskUpdate
+
+AVAILABLE_ALTERNATIVES:
+- TodoWrite: Available for structured todo list management
+
+CONCLUSION: Task management tools (TaskCreate/List/Get/Update) are NOT available in forked skill contexts when called from the SDK. Previous results in this file appear to be from a different test context.
+
+TEST_TIMESTAMP: 2026-01-25 08:25 UTC
+SKILL_PATH: /home/faisal/EventMarketDB/.claude/skills/test-sdk-task-tools

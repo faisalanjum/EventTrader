@@ -1,0 +1,25 @@
+{
+  "init": {
+    "skills_count": 60,
+    "skills_sample": [
+      "test-inherit-child",
+      "test-sibling-b",
+      "test-child-thinking",
+      "test-mcp-in-fork",
+      "test-context-parent",
+      "neo4j-xbrl",
+      "test-3layer-bottom",
+      "earnings-orchestrator",
+      "test-model-field",
+      "earnings-attribution"
+    ],
+    "mcp_servers": [
+      "alphavantage",
+      "neo4j-cypher",
+      "perplexity"
+    ],
+    "tools_count": 30,
+    "permission_mode": "bypassPermissions"
+  },
+  "final_output": "**SKILLS:** 46 total, key ones: earnings-attribution, neo4j-xbrl, perplexity-research, earnings-orchestrator, neo4j-entity\n\n**FILE_READ:** name=earnings-attribution, model=claude-opus-4-5\n\n**MCP_QUERY:** result=APPLE INC"
+}

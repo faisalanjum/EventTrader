@@ -5,6 +5,9 @@ description: Master orchestrator for batch earnings analysis
 allowed-tools:
   - Task
   - Bash
+  - Write
+  - Read
+permissionMode: dontAsk
 ---
 
 # Earnings Orchestrator
@@ -24,11 +27,21 @@ allowed-tools:
 source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/EventMarketDB/scripts/earnings/get_earnings.py {TICKER}
 ```
 
-**Output columns:** accession|date|market_session|daily_stock|daily_adj|sector_adj|industry_adj|trailing_vol|vol_days|vol_status
+**Output columns:** accession|date|fiscal_year|fiscal_quarter|market_session|daily_stock|daily_adj|sector_adj|industry_adj|trailing_vol|vol_days|vol_status
 
 **Parse:** Extract E1 (first row), E2 (second row), etc. Note `trailing_vol` for each.
 
 **If ERROR returned:** Stop and report error to user.
+
+### Step 1b: Check News Cache
+
+Check `earnings-analysis/news_processed.csv` for {TICKER} row.
+
+- Read CSV, find row where `ticker={TICKER}`
+- Check column `{E1.fiscal_quarter}_FY{E1.fiscal_year}` (e.g., `Q1_FY2024`)
+- If column has a date → Q1 already done, skip Steps 2-3c entirely
+- If column empty or row missing → continue to Step 2
+- Repeat check for Q2 column
 
 ### Step 2: Get Significant Moves for Q1
 
@@ -83,6 +96,18 @@ prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
 
 **Merge results:** Replace `needs_research` items with researched results.
 
+### Step 3c: Save Q1 Results
+
+1. Create directory if needed: `earnings-analysis/Companies/{TICKER}/`
+2. Append Q1 results to `earnings-analysis/Companies/{TICKER}/news.csv`:
+   - Add `quarter` column with value `{E1.fiscal_quarter}_FY{E1.fiscal_year}` (e.g., `Q1_FY2024`)
+   - Format: `quarter|date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date`
+   - Create file with header if it doesn't exist
+3. Update `earnings-analysis/news_processed.csv`:
+   - Add column `{E1.fiscal_quarter}_FY{E1.fiscal_year}` if missing
+   - Add row for {TICKER} if missing
+   - Set cell to today's date (YYYY-MM-DD)
+
 ### Step 4a: Repeat Benzinga Analysis for Q2
 
 Calculate:
@@ -96,6 +121,12 @@ Run `get_significant_moves.py` and spawn `bz-news-driver` sub-agents for Q2 date
 
 For dates where `external_research=true` from Step 4a, spawn `external-news-driver` sub-agents (same as Step 3b).
 
+### Step 4c: Save Q2 Results
+
+Same as Step 3c but for Q2:
+1. Append to `earnings-analysis/Companies/{TICKER}/news.csv` with `quarter={E2.fiscal_quarter}_FY{E2.fiscal_year}`
+2. Update `news_processed.csv` with Q2 column marked done
+
 ### Step 5: Return Combined Results
 
 ```
@@ -104,8 +135,8 @@ For dates where `external_research=true` from Step 4a, spawn `external-news-driv
 SIGMA: {SIGMA}σ
 
 --- EARNINGS DATA ---
-E1: {accession} | {date} | {daily_adj}% | vol={trailing_vol}
-E2: {accession} | {date} | {daily_adj}% | vol={trailing_vol}
+E1: {accession} | {date} | FY{fiscal_year} {fiscal_quarter} | {daily_adj}% adj | vol={trailing_vol} ({vol_days}d) {vol_status}
+E2: {accession} | {date} | FY{fiscal_year} {fiscal_quarter} | {daily_adj}% adj | vol={trailing_vol} ({vol_days}d) {vol_status}
 ...
 
 --- Q1 ANALYSIS ({START} to {E1}) ---
@@ -134,11 +165,13 @@ Still unknown (confidence=0): {U}
 ## Rules
 
 - **Always run get_earnings.py first** - need trailing_vol to calculate threshold
+- **Skip if done** - check news_processed.csv, skip quarters already processed
 - **Threshold formula:** SIGMA × trailing_vol (not fixed percentage)
 - **Max 10 parallel sub-agents** - batch if more dates
-- **Q1 complete before Q2** - finish bz + external for Q1, then Q2
+- **Q1 complete before Q2** - finish bz + external + save for Q1, then Q2
 - **Extract date only** - E1 date "2024-02-01T16:30:33-05:00" → use "2024-02-01"
 - **Pass through raw output** - don't summarize or lose data
+- **Always save results** - append to news.csv and mark done in news_processed.csv
 
 ## Error Handling
 
@@ -154,11 +187,12 @@ If any script returns ERROR:
 Input: `AAPL 2`
 
 Flow:
-1. get_earnings.py AAPL → E1=2024-02-01 (vol=0.90), E2=2024-05-02 (vol=0.99)
-2. Q1 threshold = 2 × 0.90 = 1.80%
-3. get_significant_moves.py AAPL 2023-11-01 2024-02-01 1.80 → 5 dates
-4. Spawn 5 bz-news-driver agents → 3 explained, 2 need research
-5. Spawn 2 external-news-driver agents for gaps → 1 found, 1 unknown
-6. Q1 complete: 4 explained, 1 unknown
-7. Repeat for Q2...
-8. Return combined results
+1. get_earnings.py AAPL → E1=2024-02-01 (Q1_FY2024, vol=0.90), E2=2024-05-02 (Q2_FY2024, vol=0.99)
+2. Check news_processed.csv → Q1_FY2024 empty → process Q1
+3. Q1 threshold = 2 × 0.90 = 1.80%
+4. get_significant_moves.py AAPL 2023-11-01 2024-02-01 1.80 → 5 dates
+5. Spawn 5 bz-news-driver agents → 3 explained, 2 need research
+6. Spawn 2 external-news-driver agents for gaps → 1 found, 1 unknown
+7. Save Q1 to Companies/AAPL/news.csv, mark Q1_FY2024 done
+8. Check news_processed.csv → Q2_FY2024 has date → skip Q2
+9. Return results (Q1 only, Q2 was cached)

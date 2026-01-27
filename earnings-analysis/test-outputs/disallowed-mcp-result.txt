@@ -1,0 +1,36 @@
+# Test: disallowedTools for MCP Tools
+# Date: 2026-01-16
+# Tool Tested: mcp__neo4j-cypher__read_neo4j_cypher
+
+## Test Results
+
+### 1. MCPSearch Loading
+- Tool: mcp__neo4j-cypher__read_neo4j_cypher
+- Result: LOADED SUCCESSFULLY
+- MCPSearch returned the full tool definition including parameters
+
+### 2. Query Execution
+- Query: RETURN 1 as test
+- Result: EXECUTED SUCCESSFULLY
+- Response: [{"test": 1}]
+
+### 3. Conclusion
+- Was MCPSearch able to load the disallowed tool? YES
+- Was the query blocked or did it execute? EXECUTED (not blocked)
+- Is disallowedTools enforced? NO
+
+## Analysis
+
+The `disallowedTools` constraint was NOT enforced in this test scenario.
+Both the MCPSearch loading step and the actual tool execution succeeded
+without any blocking or restriction.
+
+This indicates one of the following:
+1. disallowedTools is not configured for this skill/context
+2. disallowedTools is not being applied to MCP tools
+3. The enforcement mechanism requires additional configuration
+
+The test demonstrates that merely listing a tool in disallowedTools
+(if configured) does not automatically prevent:
+- MCPSearch from discovering and returning the tool definition
+- The tool from being invoked and executed successfully

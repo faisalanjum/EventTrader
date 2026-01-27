@@ -1,0 +1,7 @@
+CALLER: SDK
+TIMESTAMP: Sun Jan 25 09:22:01 AM EST 2026
+TASK_TOOL_AVAILABLE: NO
+PARALLEL_EXECUTION: FAILED
+TASK_A_RESULT: Error: No such tool available: Task
+TASK_B_RESULT: Error: No such tool available: TaskCreate
+ERROR_IF_ANY: No such tool available: Task - The Task tool is not included in the available functions for this SDK context

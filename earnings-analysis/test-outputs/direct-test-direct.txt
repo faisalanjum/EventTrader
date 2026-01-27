@@ -1,0 +1,4 @@
+CALLER: direct
+TIMESTAMP: 2026-01-25T11:12:34Z
+TASKLIST_RESULT: ERROR - TaskList tool is not available in the current function schema. Tool does not exist in the available function list.
+TASKCREATE_RESULT: ERROR - TaskCreate tool is not available in the current function schema. Tool does not exist in the available function list.

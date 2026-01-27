@@ -1,0 +1,37 @@
+# Mock Attribution Reasoning (Layer 2)
+
+## What We're Testing
+
+This is **mock-attribution (Layer 2)** in the 4-layer thinking token capture test architecture:
+
+```
+Layer 0: Main Claude session (user interaction)
+Layer 1: mock-orchestrator (forked skill) - calls prediction and attribution skills
+Layer 2: mock-attribution (forked skill) - THIS LAYER - calls Task subagent
+Layer 3: Task subagent (Explore type) - performs actual file counting
+```
+
+## Purpose of This Test
+
+The goal is to verify that thinking tokens are properly captured and propagated when:
+1. A forked skill (Layer 2) receives context from its parent (Layer 1)
+2. Layer 2 performs its own reasoning with ultrathink enabled
+3. Layer 2 spawns a Task subagent (Layer 3) for exploration
+4. The subagent's results flow back up through the layers
+
+## Key Testing Points
+
+1. **Thinking Token Isolation**: Each layer should have its own thinking block that doesn't leak into other layers
+2. **Context Preservation**: The subagent should receive proper context about what to explore
+3. **Result Propagation**: Subagent results should be correctly returned to Layer 2
+4. **No Token Bleed**: Parent layer thinking shouldn't appear in child responses
+
+## Next Step
+
+I will now call a Task subagent (Layer 3) with:
+- subagent_type: "Explore"
+- model: opus
+- Task: Count .csv files in earnings-analysis/
+
+Timestamp: 2026-01-16
+Layer: mock-attribution (Layer 2)

@@ -1,0 +1,27 @@
+# Test Result: MCP Tool in allowed-tools
+
+## Summary
+**PASSED** - MCP tool was directly available without MCPSearch
+
+## Test Details
+
+### Did you have direct access to mcp__neo4j-cypher__read_neo4j_cypher?
+YES - The tool was immediately available and callable without any prior discovery step.
+
+### Did you need to call MCPSearch first?
+NO - The tool was directly invocable. When `mcp__neo4j-cypher__read_neo4j_cypher` is listed in the skill's `allowed-tools` configuration, it becomes available without needing to load it via MCPSearch.
+
+### Did the query execute?
+YES - The query executed successfully.
+
+Query: `MATCH (c:Company {ticker: 'GE'}) RETURN c.name LIMIT 1`
+Result: `[{"c.name": "GENERAL ELECTRIC CO"}]`
+
+### Any error messages?
+NONE - No errors encountered. The MCP tool call succeeded on the first attempt.
+
+## Conclusion
+When an MCP tool is explicitly listed in a skill's `allowed-tools` configuration, it bypasses the normal MCPSearch discovery requirement and becomes directly callable. This is the expected behavior for skills that need specific MCP tools pre-loaded.
+
+## Test Timestamp
+2026-01-16

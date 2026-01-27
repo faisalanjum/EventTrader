@@ -1,0 +1,4 @@
+MULTI_STEP3_AFTER_CHILD1
+Timestamp: 2026-01-23T00:00:01Z
+First child returned: CHILD_RETURN_VALUE_12345
+Continuing to second child...

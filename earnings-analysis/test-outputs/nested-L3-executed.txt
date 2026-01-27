@@ -1,0 +1,4 @@
+LAYER3_EXECUTED
+Timestamp: 2026-01-23T12:00:00Z
+I am the innermost child (Layer 3)
+About to return my secret value

@@ -1,0 +1,19 @@
+CALLER: FROM-CLI.txt
+TIMESTAMP: 2026-01-25T13:47:00Z
+TASKLIST_AVAILABLE: YES
+TASKLIST_OUTPUT: Found 14 tasks including:
+  #1 [completed] AAPL-Q1-news-impact
+  #4 [completed] AAPL-Q1-attribution
+  #5 [pending] MSFT-Q1-news-impact
+  #3 [completed] AAPL-Q1-prediction
+  #12 [pending] VERIFY-SHARED-TASKLIST-CHILD
+  #13 [pending] SDK-FORKED-SKILL-TASK-VERIFY
+  #6 [pending] MSFT-Q1-guidance
+  #10 [pending] GOOGL-Q1-2024-attribution [blocked by #9]
+  #11 [pending] VERIFY-SHARED-TASKLIST-PARENT
+  #9 [pending] GOOGL-Q1-2024-prediction [blocked by #7, #8]
+  #8 [pending] GOOGL-Q1-2024-guidance
+  #7 [pending] GOOGL-Q1-2024-news-impact
+  #2 [completed] AAPL-Q1-guidance
+TASKCREATE_AVAILABLE: YES
+TASKCREATE_OUTPUT: Task #14 created successfully: TASK-TOOL-TEST-FROM-CLI.txt

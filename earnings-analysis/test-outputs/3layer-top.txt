@@ -1,0 +1,12 @@
+LAYER 1 (TOP/ORCHESTRATOR) OUTPUT
+==================================
+Timestamp: 2026-01-16 (Run 2)
+LAYER1_SECRET: apple
+
+Called Layer 2 (/test-3layer-mid) and received:
+- Layer 2 returned: LAYER3_RESULT: [FMC, SMG, FLS] | LAYER2_SECRET: orange
+- Layer 2 secret: orange
+- Layer 3 result passed through: [FMC, SMG, FLS]
+
+Data flow confirmed: L3 -> L2 -> L1
+All 3 layers executed successfully via forked skill chain.

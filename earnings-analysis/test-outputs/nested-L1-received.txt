@@ -1,0 +1,5 @@
+LAYER1_RECEIVED_FROM_CHILD
+Timestamp: 2026-01-23T12:00:15Z
+Child (Layer 2) returned: SECRET_L2_888
+Expected: SECRET_L2_888
+Match: YES

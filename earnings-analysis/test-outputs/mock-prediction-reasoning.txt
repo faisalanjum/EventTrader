@@ -1,0 +1,32 @@
+# Mock Prediction Reasoning (Layer 2)
+
+## Test Context
+This is the **mock-prediction skill** operating at Layer 2 in a multi-layer thinking token capture test.
+
+## Architecture Being Tested
+- **Layer 1**: Mock Orchestrator (forked skill) - calls prediction and attribution skills
+- **Layer 2**: Mock Prediction (this skill - forked skill) - calls Task subagent
+- **Layer 3**: Task subagent (Explore type) - executes the actual search
+
+## What We're Testing
+1. Whether thinking tokens are properly captured when a forked skill (Layer 2) calls a Task subagent (Layer 3)
+2. The propagation of ultrathink mode through nested skill/agent invocations
+3. Context preservation across agent boundaries
+
+## My Task
+1. Use ultrathink for analysis (this reasoning demonstrates that)
+2. Call a Task subagent with subagent_type="Explore" to find all SKILL.md files
+3. Document the results
+
+## Analysis
+The key architectural question is: when the mock-orchestrator (Layer 1) invokes mock-prediction (Layer 2), and mock-prediction then spawns a Task subagent (Layer 3), do thinking tokens flow correctly at each layer?
+
+This test validates:
+- Forked skill to forked skill communication (Layer 1 -> Layer 2)
+- Forked skill to Task subagent communication (Layer 2 -> Layer 3)
+- Results propagation back up the chain
+
+## Next Step
+Invoking Task subagent to find SKILL.md files in .claude/skills/
+
+Timestamp: 2026-01-16

@@ -1,0 +1,50 @@
+# Test: agent: field in Skill Frontmatter
+Generated: 2026-01-16
+
+## Skill Configuration
+```yaml
+agent: neo4j-report
+context: fork
+```
+
+## Expected Behavior (if agent: field works)
+The skill should inherit from neo4j-report agent:
+- permissionMode: dontAsk
+- tools: mcp__neo4j-cypher__read_neo4j_cypher
+- model: opus
+
+## Actual Test Results
+
+### 1. Was agent: field recognized?
+**UNCLEAR** - No explicit indication that agent: field was parsed.
+
+### 2. Was MCP tool directly accessible?
+**NO** - Had to use MCPSearch to load `mcp__neo4j-cypher__read_neo4j_cypher` first.
+If agent: field worked, the tool should have been pre-loaded.
+
+### 3. Did MCPSearch work?
+**YES** - Tool was loaded successfully after MCPSearch call.
+
+### 4. Did query execute?
+**YES** - Query ran without errors.
+Result: [] (MSFT not in database, but query executed)
+
+### 5. Were there permission prompts?
+**NO** - No permission prompts appeared.
+But this may be because the skill has `context: fork` not because of agent: field.
+
+## Conclusion
+
+**The `agent:` field does NOT appear to grant the skill the agent's tools automatically.**
+
+Evidence:
+- MCP tool was NOT pre-loaded (had to use MCPSearch)
+- Cannot confirm if permissionMode: dontAsk came from agent: field or from fork context
+
+### Workaround
+If you need MCP tools in a forked skill:
+1. Include `MCPSearch` in allowed-tools (though allowed-tools isn't enforced anyway)
+2. Call MCPSearch to load the MCP tool
+3. Then use the MCP tool
+
+The agent: field may only be meaningful for Task tool subagents, not Skill tool forks.

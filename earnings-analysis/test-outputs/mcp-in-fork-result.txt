@@ -1,0 +1,50 @@
+# MCP Access Test from Forked Skill Context
+
+Test Date: 2026-01-22
+Skill: test-mcp-in-fork
+Arguments: "Try Neo4j MCP."
+
+## Results
+
+### 1. MCPSearch Availability
+Status: AVAILABLE
+MCPSearch tool was accessible and functional from forked skill context.
+
+### 2. MCP Tool Loading
+Status: SUCCESS
+Tool `mcp__neo4j-cypher__read_neo4j_cypher` was loaded successfully via MCPSearch.
+Tool Description: Execute a read Cypher query on the neo4j database.
+
+### 3. Query Execution
+Status: SUCCESS
+Query: MATCH (c:Company {ticker: 'AAPL'}) RETURN c.name LIMIT 1
+
+### 4. Query Result
+Result: [{"c.name": "APPLE INC"}]
+
+## Tools Available in Fork Context
+
+The following tools were accessible from this forked skill:
+- MCPSearch (for discovering and loading MCP tools)
+- mcp__neo4j-cypher__read_neo4j_cypher (after loading via MCPSearch)
+- Bash
+- Write
+- Read
+- Edit
+- Glob
+- Grep
+- WebFetch
+- WebSearch
+- TodoWrite
+- Skill
+- NotebookEdit
+- ListMcpResourcesTool
+- ReadMcpResourceTool
+
+## Conclusion
+
+MCP tools CAN be successfully accessed from a forked skill context. The test confirmed:
+1. MCPSearch is available and functional
+2. MCP tools can be loaded dynamically
+3. Loaded MCP tools can execute queries and return results
+4. The full tool chain works end-to-end in the fork

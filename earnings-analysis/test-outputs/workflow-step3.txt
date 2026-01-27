@@ -1,0 +1,4 @@
+STEP3_AFTER_CHILD
+Timestamp: 2026-01-23T00:00:01Z
+Child returned with: CHILD_RETURN_VALUE_12345
+Parent workflow CONTINUED after child completed!

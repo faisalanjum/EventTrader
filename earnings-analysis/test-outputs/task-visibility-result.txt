@@ -1,0 +1,15 @@
+TEST: task-visibility (forked skill seeing parent's tasks)
+TIMESTAMP: 2026-01-25T00:00:00Z
+
+TASKLIST RESULT:
+#1 [pending] Verification task for fork test
+
+TASK COUNT: 1
+
+VISIBLE TASKS:
+- Task ID: 1
+  Subject: Verification task for fork test
+  Status: pending
+  Description: Testing if forked skill can see this task
+
+CONCLUSION: Forked skill CAN see tasks from main conversation

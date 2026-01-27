@@ -1,0 +1,28 @@
+SDK_CLIENT_TEST (streaming mode)
+================================
+
+TOOL TEST RESULTS:
+------------------
+TaskList: NOT AVAILABLE - No such tool exists in current environment
+TaskCreate: NOT AVAILABLE - No such tool exists in current environment
+
+AVAILABLE TOOLS (18 total):
+---------------------------
+1. Task - Launch subagents for complex tasks
+2. TaskOutput - Get output from running/completed tasks
+3. Bash - Execute bash commands
+4. Glob - File pattern matching
+5. Grep - Content search (ripgrep-based)
+6. Read - Read files
+7. Edit - Edit files (string replacement)
+8. Write - Write files
+9. NotebookEdit - Edit Jupyter notebooks
+10. WebFetch - Fetch and process web content
+11. WebSearch - Search the web
+12. TodoWrite - Manage task lists
+13. AskUserQuestion - Ask user questions
+14. Skill - Execute skills
+15. EnterPlanMode - Enter planning mode
+16. ExitPlanMode - Exit planning mode
+17. KillShell - Kill background shells
+18. MCPSearch - Search/select MCP tools

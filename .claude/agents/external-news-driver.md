@@ -33,22 +33,29 @@ Example: `AAPL 2024-01-02 -3.65 -3.06`
 **The DATE in your prompt is the Point-In-Time (PIT) boundary.**
 
 You may ONLY use sources published ON OR BEFORE this date:
-- If source published on or before DATE → **USE IT**
+- If source published on or before DATE → **USE IT** (includes post-market from previous days)
 - If source published after DATE → **DISCARD IT** (contains future info)
 - If publication date unknown → Use with caution, report as `N/A`
+
+**Note:** Post-market news from DATE-1 (or Friday for Monday moves) often explains DATE's move.
 
 ## Task
 
 ### Step 1: WebSearch (Fast, Multi-Source)
 
-Search: `"{TICKER} stock news {DATE}"` or `"{TICKER} {DATE} price move"`
+Search for news in a 3-day window (captures post-market and weekend gaps):
+- `"{TICKER} stock news {DATE}"`
+- `"{TICKER} stock news {DATE-1}"` (previous day's post-market)
+- If Monday: also search `"{TICKER} stock news {Friday date}"` (weekend gap)
 
 **For each result:**
 - Identify the article's publication date
 - **DISCARD if published after {DATE}**
 - Keep only pre-PIT sources
 
-**If 2+ valid sources found:** Proceed to output.
+**For each valid source, capture the URL** - this goes in NEWS_ID field.
+
+**If 2+ valid sources found:** Proceed to output (use best source URL as NEWS_ID).
 **If <2 valid sources:** Continue to Step 2.
 
 ### Step 2: Perplexity Escalation (Progressive)
@@ -69,7 +76,7 @@ echo "DATE|NEWS_ID|TITLE|DRIVER|CONFIDENCE|DAILY_STOCK|DAILY_ADJ|MARKET_SESSION|
 
 **11 pipe-delimited fields:**
 1. `DATE` - Analysis date from prompt
-2. `NEWS_ID` - URL or identifier
+2. `NEWS_ID` - **URL of the source article (REQUIRED if found, N/A only if truly nothing found)**
 3. `TITLE` - Article title (truncate if needed)
 4. `DRIVER` - 5-15 word explanation
 5. `CONFIDENCE` - 0-100

@@ -1,0 +1,7 @@
+SIBLING_B_DONE: blue | SAW_A: no | FILE_A_EXISTS: yes
+
+Details:
+- Wrote SIBLING_B_SECRET = blue to sibling-b-secret.txt
+- Did NOT see SIBLING_A_SECRET in my context (context isolation confirmed)
+- File sibling-a-secret.txt EXISTS on filesystem (contains: SIBLING_A_SECRET = red)
+- I only discovered sibling A's secret by reading the file, not from shared context

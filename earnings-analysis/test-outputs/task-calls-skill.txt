@@ -1,0 +1,8 @@
+TASK_SUBAGENT_CALLED_SKILL: YES
+
+First 5 lines of neo4j-schema output:
+# Neo4j Schema Reference
+
+## Scope and Validation
+- Validated on 2026-01-04 against bolt://localhost:30687 (Neo4j 5.26.4).
+- Counts from: `CALL db.stats.retrieve('GRAPH COUNTS')`.

@@ -1,0 +1,30 @@
+TEST: test-inherit-parent2 -> test-inherit-child2
+DATE: 2026-01-16
+PURPOSE: Test if child skill inherits MCP tool from parent
+
+PARENT SKILL: test-inherit-parent2
+- Has mcp__neo4j-cypher__read_neo4j_cypher in allowed-tools: YES
+- Parent loaded MCP tool via MCPSearch: SUCCESS
+- Parent can use MCP tool: YES
+
+CHILD SKILL: test-inherit-child2
+- Has mcp__neo4j-cypher__read_neo4j_cypher in allowed-tools: NO
+- Child attempted direct MCP access: FAILED
+- MCP tool appeared in "Available MCP tools (must be loaded before use)"
+- Child needed MCPSearch to load before use: YES
+
+RESULT: MCP_PRELOADED_FROM_PARENT: no | DIRECT_ACCESS: failed
+
+CONCLUSION: MCP TOOLS DO NOT PRE-INHERIT FROM PARENT
+The child skill (test-inherit-child2) could NOT directly access the MCP tool
+that was loaded by its parent skill. The MCP tool was visible in the MCPSearch
+description but required explicit loading via MCPSearch before it could be used.
+
+KEY FINDINGS:
+1. MCP tools are NOT automatically callable in child contexts
+2. MCP tools appear as "Available" but remain deferred
+3. Each skill context must independently load MCP tools via MCPSearch
+4. Parent's loaded tools do not flow down to child skill execution context
+
+This confirms that MCP tool availability is determined per-context and requires
+explicit loading regardless of parent skill permissions.

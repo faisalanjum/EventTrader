@@ -1,0 +1,36 @@
+# MCP Wildcard Test Results
+
+## Test: Does `mcp__neo4j-cypher__*` pre-load MCP tools?
+
+### Result: NO - Wildcard does NOT pre-load MCP tools
+
+### Findings:
+
+1. **MCP tool directly available (no MCPSearch needed)?**
+   - NO
+   - The tool `mcp__neo4j-cypher__read_neo4j_cypher` was NOT in the directly available tools list
+   - It was listed in MCPSearch description as "must be loaded before use"
+   - Had to explicitly call MCPSearch with `select:mcp__neo4j-cypher__read_neo4j_cypher` to load it
+
+2. **Query executed successfully?**
+   - YES
+   - After loading via MCPSearch, the query executed without errors
+
+3. **Query result:**
+   - Query: `MATCH (c:Company {ticker: 'AAPL'}) RETURN c.name LIMIT 1`
+   - Result: `[{"c.name": "APPLE INC"}]`
+
+4. **Did wildcard `mcp__neo4j-cypher__*` work for pre-loading?**
+   - NO
+   - The wildcard pattern in allowed-tools does NOT automatically load MCP tools
+   - MCP tools must still be explicitly loaded via MCPSearch before use
+   - The wildcard appears to only PERMIT access to the tools, not PRE-LOAD them
+
+### Conclusion:
+
+The `mcp__neo4j-cypher__*` wildcard pattern in skill allowed-tools:
+- DOES grant permission to use matching MCP tools
+- Does NOT pre-load them into the available tools list
+- MCPSearch is still required as a prerequisite step to load the tool before calling it
+
+This is the expected behavior - wildcards control access permissions, while MCPSearch controls tool loading.

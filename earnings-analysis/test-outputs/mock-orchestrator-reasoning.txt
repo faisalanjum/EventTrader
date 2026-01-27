@@ -1,0 +1,45 @@
+=== MOCK-ORCHESTRATOR (Layer 1) - Reasoning ===
+Timestamp: 2026-01-16
+
+## Purpose
+This is the mock-orchestrator skill operating at Layer 1 of a 4-layer test architecture.
+The goal is to validate thinking token capture across nested skill invocations.
+
+## 4-Layer Architecture Being Tested
+
+Layer 0 (Main):
+  - Entry point where user invokes /mock-orchestrator
+  - Represents the root conversation context
+  - Thinking tokens at this layer: main conversation's extended thinking
+
+Layer 1 (Orchestrator - THIS LAYER):
+  - The mock-orchestrator skill (current execution)
+  - Coordinates calls to child skills (prediction and attribution)
+  - Uses ultrathink mode for extended reasoning
+  - Writes outputs to test-outputs directory
+
+Layer 2 (Child Skills):
+  - mock-prediction: Simulates earnings prediction analysis
+  - mock-attribution: Simulates post-earnings attribution analysis
+  - Each skill should capture its own thinking tokens
+  - These skills further spawn Task subagents
+
+Layer 3 (Task Subagents):
+  - Spawned by Layer 2 skills via the Task tool
+  - Innermost layer of execution
+  - Tests whether thinking is preserved at deepest nesting
+
+## Key Questions This Test Answers
+
+1. Are thinking tokens captured at each layer?
+2. Do child skill invocations preserve parent context?
+3. Can we trace reasoning across the full call stack?
+4. Is ultrathink mode effective at nested depths?
+
+## Next Steps
+1. Invoke /mock-prediction skill (Layer 2)
+2. Invoke /mock-attribution skill (Layer 2)
+3. Collect results from both child skills
+4. Write final summary with complete layer analysis
+
+=== End Reasoning ===

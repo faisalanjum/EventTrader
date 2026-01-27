@@ -1,0 +1,1 @@
+The user has asked a simple arithmetic question: "What is 17*23?". This can be solved directly.

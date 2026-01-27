@@ -1,0 +1,23 @@
+TEST: model: field in skill frontmatter
+DATE: 2026-01-16
+SKILL: test-model-field
+FRONTMATTER: model: haiku
+
+RESULT: MODEL FIELD NOT ENFORCED
+
+OBSERVED MODEL: Claude Opus 4.5 (claude-opus-4-5-20251101)
+EXPECTED MODEL: Haiku (if model: field worked)
+
+EVIDENCE:
+- System info states: "You are powered by the model named Opus 4.5"
+- Model ID: claude-opus-4-5-20251101
+- Response style: Detailed (consistent with Opus, not Haiku's brevity)
+
+CONCLUSION:
+The `model:` field in skill frontmatter does NOT override the model.
+The skill runs with the same model as the parent conversation.
+
+WORKAROUND:
+- For ./agent: Use --model flag explicitly
+- For Claude CLI skills: Model is inherited from session, cannot be overridden per-skill
+- For cost savings at Layer 3: Use ./agent with --provider and --model flags

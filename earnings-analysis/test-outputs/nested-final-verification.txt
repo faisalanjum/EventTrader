@@ -1,0 +1,18 @@
+=== NESTED FORKED SKILL RETURN TEST ===
+=== GitHub Issue #17351 Verification ===
+Timestamp: 2026-01-23T12:00:30Z
+Claude Code Version: Claude Opus 4.5 (claude-opus-4-5-20251101)
+
+LAYER EXECUTION:
+- Layer 1 started: YES
+- Layer 2 started: YES
+- Layer 3 executed: YES
+- Layer 2 received from Layer 3: SECRET_L3_999
+- Layer 1 received from Layer 2: SECRET_L2_888
+
+RETURN PATH VERIFICATION:
+- Layer 3 -> Layer 2: CORRECT (L2 received SECRET_L3_999)
+- Layer 2 -> Layer 1: CORRECT (L1 received SECRET_L2_888)
+
+CONCLUSION:
+Nested forked skills return correctly to their parent, NOT grandparent. GH #17351 does NOT affect this setup.

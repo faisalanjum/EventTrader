@@ -1,0 +1,52 @@
+================================================================================
+TEST: TOOL INHERITANCE - PARENT RESULT
+================================================================================
+
+TEST DATE: 2026-01-16
+PARENT SKILL: test-inherit-parent
+CHILD SKILL: test-inherit-child
+
+--------------------------------------------------------------------------------
+PARENT'S ALLOWED-TOOLS CONFIGURATION
+--------------------------------------------------------------------------------
+
+The parent skill (test-inherit-parent) does NOT have any MCP tools in its
+allowed-tools list. Specifically:
+- NO mcp__neo4j-cypher__read_neo4j_cypher
+- NO mcp__neo4j-cypher__write_neo4j_cypher
+- NO mcp__neo4j-cypher__get_neo4j_schema
+
+--------------------------------------------------------------------------------
+CHILD'S RESULT
+--------------------------------------------------------------------------------
+
+CHILD_MCP_ACCESS: YES
+
+The child skill successfully executed the MCP tool:
+- Tool used: mcp__neo4j-cypher__read_neo4j_cypher
+- Query: Fetched company name for ticker 'IBM'
+- Result: INTERNATIONAL BUSINESS MACHINES CORP
+
+The child was able to directly call the MCP tool without needing MCPSearch
+because the tool was specified in the child's own allowed-tools configuration.
+
+--------------------------------------------------------------------------------
+CONCLUSION
+--------------------------------------------------------------------------------
+
+FINDING: Tool access is determined by each skill's OWN allowed-tools config,
+         not inherited from parent.
+
+KEY INSIGHT:
+- Parent does NOT have MCP tools in allowed-tools
+- Child DOES have MCP tools in allowed-tools
+- Child CAN use MCP tools despite parent not having them
+
+This confirms that:
+1. Skills have independent tool access based on their own configuration
+2. A child skill is NOT restricted by its parent's allowed-tools
+3. Each forked skill context evaluates allowed-tools independently
+4. MCP tools in allowed-tools are made available without MCPSearch
+
+INHERITANCE MODEL: Isolated (not inherited from parent)
+================================================================================

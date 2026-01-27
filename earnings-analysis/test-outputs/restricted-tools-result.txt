@@ -1,0 +1,61 @@
+# Tool Restriction Test Results
+
+## Test Configuration
+- Skill: test-restricted-tools
+- Expected restriction: `allowed-tools: Write`
+- Test date: 2026-01-16
+
+## Tools Tested and Results
+
+| Tool | Expected | Actual | Result |
+|------|----------|--------|--------|
+| Write | ALLOWED | WORKED | As expected |
+| Read | BLOCKED | WORKED | NOT RESTRICTED |
+| Bash | BLOCKED | WORKED | NOT RESTRICTED |
+| Glob | BLOCKED | WORKED | NOT RESTRICTED |
+| Grep | BLOCKED | WORKED | NOT RESTRICTED |
+
+## Detailed Test Results
+
+### 1. Write Tool
+- Status: WORKED
+- Evidence: Successfully created this file
+- Expected: Should work (explicitly allowed)
+
+### 2. Read Tool
+- Status: WORKED
+- Evidence: Successfully read this file back after initial creation
+- Expected: Should be blocked (not in allowed-tools list)
+
+### 3. Bash Tool
+- Status: WORKED
+- Evidence: Successfully ran `echo "Bash tool test - $(date)"`
+- Output: "Bash tool test - Fri Jan 16 04:37:03 PM EST 2026"
+- Expected: Should be blocked (not in allowed-tools list)
+
+### 4. Glob Tool
+- Status: WORKED
+- Evidence: Successfully listed .txt files in test-outputs directory
+- Found 12 .txt files
+- Expected: Should be blocked (not in allowed-tools list)
+
+### 5. Grep Tool
+- Status: WORKED
+- Evidence: Successfully searched for "Tool Restriction" pattern
+- Found match in this file
+- Expected: Should be blocked (not in allowed-tools list)
+
+## Conclusion
+
+**The `allowed-tools` restriction is NOT being enforced.**
+
+All tools (Write, Read, Bash, Glob, Grep) were accessible and functional despite the skill configuration specifying only `allowed-tools: Write`.
+
+This indicates that:
+1. The allowed-tools configuration in skills is either not implemented or not functioning
+2. All standard tools remain available regardless of the allowed-tools setting
+3. Tool restriction for forked skills/agents needs implementation or debugging
+
+## Recommendation
+
+If tool restriction is a desired security feature for skills/agents, the enforcement mechanism needs to be implemented or fixed in the skill loading/execution layer.

@@ -202,7 +202,7 @@ Use template in [OUTPUT_TEMPLATE.md](OUTPUT_TEMPLATE.md).
 - "Flat year-over-year"
 - "Modest improvement"
 
-### Operational (Non-Financial)
+### Operational (Non-Financial)- few examples only, non exhasutive
 - Units / Subscribers / DAUs / MAUs
 - Store openings / closings
 - Headcount changes

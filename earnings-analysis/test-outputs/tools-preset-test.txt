@@ -1,0 +1,37 @@
+TEST: tools preset claude_code
+TIMESTAMP: 2025-01-25T12:00:00Z
+
+--- TOOL AVAILABILITY TESTS ---
+
+TASKLIST_AVAILABLE: NO
+ERROR: TaskList is not in the available tools list for this context
+
+TASKCREATE_AVAILABLE: NO
+ERROR: TaskCreate is not in the available tools list for this context
+
+--- AVAILABLE_TOOLS ---
+1. Task - Launch specialized agents (subprocesses) for complex tasks
+2. TaskOutput - Retrieve output from running/completed tasks
+3. Bash - Execute bash commands in persistent shell session
+4. Glob - Fast file pattern matching (e.g., "**/*.js")
+5. Grep - Search file contents using ripgrep
+6. Read - Read files from local filesystem
+7. Edit - Perform exact string replacements in files
+8. Write - Write files to local filesystem
+9. NotebookEdit - Edit Jupyter notebook cells
+10. WebFetch - Fetch and process web content
+11. WebSearch - Search the web for information
+12. TodoWrite - Create/manage structured task lists
+13. AskUserQuestion - Ask user questions during execution
+14. Skill - Execute defined skills
+15. EnterPlanMode - Enter plan mode for implementation planning
+16. ExitPlanMode - Exit plan mode after writing plan
+17. MCPSearch - Search/select MCP tools
+18. ListMcpResourcesTool - List MCP server resources
+19. ReadMcpResourceTool - Read specific MCP resource
+20. KillShell - Kill running background shells
+
+--- NOTES ---
+- TodoWrite is available (for managing todos in conversation)
+- Task tool can launch subagents, but TaskList/TaskCreate/TaskGet/TaskUpdate are NOT direct tools
+- The tools preset "claude_code" does NOT include TaskList or TaskCreate tools

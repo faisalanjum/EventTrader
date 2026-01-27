@@ -1,0 +1,4 @@
+1. ENTRYPOINT: interactive
+2. TaskList available? NO
+3. TaskCreate available? NO
+4. Count of available tools: 18

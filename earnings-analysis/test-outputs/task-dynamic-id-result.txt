@@ -1,0 +1,90 @@
+============================================================
+TEST: Dynamic CLAUDE_CODE_TASK_LIST_ID Setting
+============================================================
+Timestamp: 2026-01-25
+Test Type: Environment Variable Dynamic Modification
+
+OBJECTIVE
+---------
+Can we change CLAUDE_CODE_TASK_LIST_ID dynamically within a skill
+to route tasks to different task lists?
+
+EXECUTION TRACE
+---------------
+
+Step 1: Check initial CLAUDE_CODE_TASK_LIST_ID
+  Command: echo "BEFORE: CLAUDE_CODE_TASK_LIST_ID=$CLAUDE_CODE_TASK_LIST_ID"
+  Result:  BEFORE: CLAUDE_CODE_TASK_LIST_ID=
+  Finding: Variable is EMPTY/UNSET at start
+
+Step 2: List baseline tasks
+  Tool:    TaskList
+  Result:  #1 [pending] ENV_TEST_FROM_FORK_f7a3b2c9
+  Finding: One existing task in current list
+
+Step 3: Set env var dynamically via bash export
+  Command: export CLAUDE_CODE_TASK_LIST_ID="dynamic-test-list"
+  Verify:  echo "AFTER EXPORT: CLAUDE_CODE_TASK_LIST_ID=$CLAUDE_CODE_TASK_LIST_ID"
+  Result:  AFTER EXPORT: CLAUDE_CODE_TASK_LIST_ID=dynamic-test-list
+  Finding: Export WORKS within that bash session
+
+Step 4: Create task AFTER setting env var
+  Tool:    TaskCreate
+  Subject: DYNAMIC_ID_TEST_TASK
+  Result:  Task #2 created successfully
+
+Step 5: List tasks again
+  Tool:    TaskList
+  Result:  #1 [pending] ENV_TEST_FROM_FORK_f7a3b2c9
+           #2 [pending] DYNAMIC_ID_TEST_TASK
+  Finding: New task appeared as #2 in SAME list as #1
+
+Step 6: Check env var persistence in new bash session
+  Command: echo "NEW BASH SESSION: CLAUDE_CODE_TASK_LIST_ID=$CLAUDE_CODE_TASK_LIST_ID"
+  Result:  NEW BASH SESSION: CLAUDE_CODE_TASK_LIST_ID=
+  Finding: Env var did NOT persist (each bash call is new shell)
+
+RESULTS
+-------
+
+Q1: Did the env var change affect which task list is used?
+A1: NO. The task was created as #2 in the SAME list that already had task #1.
+    The export in bash had NO effect on TaskCreate tool behavior.
+
+Q2: Can tasks be isolated by dynamically setting the ID?
+A2: NO. Tasks cannot be isolated this way because:
+    1. Bash export only affects that subprocess session
+    2. Each bash call creates a NEW shell - exports don't persist
+    3. TaskCreate/TaskList run in Claude's runtime, NOT in bash
+    4. Environment variables set in bash subprocess do NOT propagate
+       back to the parent process (Claude's runtime)
+
+TECHNICAL EXPLANATION
+---------------------
+The Task tools (TaskCreate, TaskList, TaskGet, TaskUpdate) read
+CLAUDE_CODE_TASK_LIST_ID from Claude Code's internal runtime environment,
+which is set BEFORE the conversation/skill starts.
+
+Bash export only modifies the environment of child processes spawned
+from that bash session. It cannot modify:
+  - The parent process (Claude Code runtime)
+  - Other bash sessions (each call is a new shell)
+  - Claude's tool execution context
+
+IMPLICATIONS FOR SKILL DESIGN
+-----------------------------
+1. Task list ID must be set BEFORE skill/conversation starts
+2. Skills CANNOT dynamically switch between task lists
+3. All tasks created in a skill/conversation go to the same list
+4. To use separate task lists, you need separate Claude Code sessions
+   with different CLAUDE_CODE_TASK_LIST_ID values at startup
+
+CONCLUSION
+----------
+DYNAMIC TASK LIST ID SETTING: NOT POSSIBLE
+
+The CLAUDE_CODE_TASK_LIST_ID is an immutable property of the session,
+determined at launch time. It cannot be changed mid-conversation or
+mid-skill to route tasks to different lists.
+
+============================================================

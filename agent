@@ -86,16 +86,133 @@ class MCPClient:
 mcp = MCPClient()
 
 # Tools
-def subagent(provider, prompt, skills="", model=""):
+def subagent(provider, prompt, skills="", model="", reasoning=""):
+    """Spawn sub-agent, optionally capturing reasoning to file"""
+    import uuid
     cmd = [str(PROJECT_DIR / "agent"), "-p", prompt, "--provider", provider]
     if skills: cmd += ["--skills", skills]
     if model: cmd += ["--model", model]
-    return subprocess.run(cmd, capture_output=True, text=True, cwd=PROJECT_DIR).stdout or "[no output]"
+    if reasoning:
+        cmd += ["--reasoning", reasoning]
+        # Auto-save reasoning to transcript file
+        transcript_dir = PROJECT_DIR / "earnings-analysis" / "transcripts"
+        transcript_dir.mkdir(parents=True, exist_ok=True)
+        reasoning_file = transcript_dir / f"subagent-{uuid.uuid4().hex[:8]}.txt"
+        cmd += ["--reasoning-file", str(reasoning_file)]
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=PROJECT_DIR)
+    return result.stdout or "[no output]"
 
-BUILTIN = {"subagent": {"fn": subagent, "desc": "Spawn sub-agent with any provider",
-    "params": {"provider": {"type": "string", "enum": ["claude", "openai", "gemini"]},
-               "prompt": {"type": "string"}, "skills": {"type": "string"}, "model": {"type": "string"}},
-    "required": ["provider", "prompt"]}}
+def parallel_subagents(agents):
+    """
+    Spawn multiple sub-agents in PARALLEL.
+
+    Args:
+        agents: JSON string of list of agent specs, each with:
+            - provider: "claude" | "openai" | "gemini"
+            - prompt: The prompt for the agent
+            - skills: Optional skills to load
+            - model: Optional model override
+
+    Returns:
+        JSON string with results from all agents
+
+    Example:
+        parallel_subagents('[
+            {"provider": "openai", "prompt": "Query 1"},
+            {"provider": "openai", "prompt": "Query 2"},
+            {"provider": "gemini", "prompt": "Query 3"}
+        ]')
+    """
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    import uuid
+
+    # Parse agents list
+    if isinstance(agents, str):
+        agent_list = json.loads(agents)
+    else:
+        agent_list = agents
+
+    def run_one(spec):
+        cmd = [str(PROJECT_DIR / "agent"), "-p", spec["prompt"], "--provider", spec.get("provider", "openai")]
+        if spec.get("skills"): cmd += ["--skills", spec["skills"]]
+        if spec.get("model"): cmd += ["--model", spec["model"]]
+        result = subprocess.run(cmd, capture_output=True, text=True, cwd=PROJECT_DIR)
+        return {"prompt": spec["prompt"][:50], "result": result.stdout or "[no output]"}
+
+    # Run all in parallel using ThreadPoolExecutor
+    results = []
+    with ThreadPoolExecutor(max_workers=len(agent_list)) as executor:
+        futures = {executor.submit(run_one, spec): i for i, spec in enumerate(agent_list)}
+        for future in as_completed(futures):
+            idx = futures[future]
+            try:
+                results.append({"index": idx, **future.result()})
+            except Exception as e:
+                results.append({"index": idx, "error": str(e)})
+
+    # Sort by original index
+    results.sort(key=lambda x: x["index"])
+    return json.dumps(results, indent=2)
+
+def read_file(path):
+    """Read file contents"""
+    try:
+        return Path(path).read_text()
+    except Exception as e:
+        return f"[error reading {path}: {e}]"
+
+def write_file(path, content):
+    """Write content to file"""
+    try:
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        Path(path).write_text(content)
+        return f"[written to {path}]"
+    except Exception as e:
+        return f"[error writing {path}: {e}]"
+
+def list_directory(path="."):
+    """List directory contents"""
+    try:
+        items = []
+        for p in sorted(Path(path).iterdir()):
+            prefix = "[DIR]" if p.is_dir() else "[FILE]"
+            items.append(f"{prefix} {p.name}")
+        return "\n".join(items) if items else "[empty directory]"
+    except Exception as e:
+        return f"[error listing {path}: {e}]"
+
+def search_files(pattern, path="."):
+    """Search for files matching glob pattern"""
+    try:
+        matches = list(Path(path).rglob(pattern))
+        return "\n".join(str(m) for m in matches[:100]) if matches else "[no matches]"
+    except Exception as e:
+        return f"[error searching: {e}]"
+
+BUILTIN = {
+    "subagent": {"fn": subagent, "desc": "Spawn sub-agent with any provider, optionally capture reasoning",
+        "params": {"provider": {"type": "string", "enum": ["claude", "openai", "gemini"]},
+                   "prompt": {"type": "string"}, "skills": {"type": "string"}, "model": {"type": "string"},
+                   "reasoning": {"type": "string", "enum": ["low", "medium", "high", "x-high"], "description": "Enable reasoning capture"}},
+        "required": ["provider", "prompt"]},
+    "read_file": {"fn": read_file, "desc": "Read file contents",
+        "params": {"path": {"type": "string", "description": "File path to read"}},
+        "required": ["path"]},
+    "write_file": {"fn": write_file, "desc": "Write content to file",
+        "params": {"path": {"type": "string", "description": "File path to write"},
+                   "content": {"type": "string", "description": "Content to write"}},
+        "required": ["path", "content"]},
+    "list_directory": {"fn": list_directory, "desc": "List directory contents",
+        "params": {"path": {"type": "string", "description": "Directory path (default: current)"}},
+        "required": []},
+    "search_files": {"fn": search_files, "desc": "Search for files matching glob pattern",
+        "params": {"pattern": {"type": "string", "description": "Glob pattern (e.g. *.txt, **/*.py)"},
+                   "path": {"type": "string", "description": "Starting directory (default: current)"}},
+        "required": ["pattern"]},
+    "parallel_subagents": {"fn": parallel_subagents, "desc": "Spawn multiple sub-agents in PARALLEL (for concurrent queries)",
+        "params": {"agents": {"type": "string", "description": "JSON array of agent specs: [{provider, prompt, skills?, model?}, ...]"}},
+        "required": ["agents"]}
+}
 
 def get_tools():
     tools = dict(BUILTIN)
@@ -183,7 +300,7 @@ def run_claude(prompt, system=None, model="sonnet", reasoning=None):
         # Fallback: CLI with JSON output to capture thinking
         prompt = f"ultrathink: {prompt}"
         full = f"System context:\n{system}\n\n---\n\nTask: {prompt}" if system else prompt
-        r = subprocess.run(["claude", "-p", full, "--output-format", "json"],
+        r = subprocess.run(["claude", "-p", full, "--output-format", "json", "--dangerously-skip-permissions"],
                           capture_output=True, text=True, cwd=PROJECT_DIR)
         if r.stdout:
             try:
@@ -208,7 +325,7 @@ def run_claude(prompt, system=None, model="sonnet", reasoning=None):
 
     # Use CLI (default, no reasoning requested)
     full = f"System context:\n{system}\n\n---\n\nTask: {prompt}" if system else prompt
-    r = subprocess.run(["claude", "-p", full], capture_output=True, text=True, cwd=PROJECT_DIR)
+    r = subprocess.run(["claude", "-p", full, "--dangerously-skip-permissions"], capture_output=True, text=True, cwd=PROJECT_DIR)
     return r.stdout or r.stderr
 
 def run_openai(prompt, system=None, model="gpt-5.2", reasoning=None):
