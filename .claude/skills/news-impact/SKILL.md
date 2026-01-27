@@ -8,7 +8,6 @@ allowed-tools:
   - mcp__neo4j-cypher__read_neo4j_cypher
   - WebSearch
   - mcp__perplexity__perplexity_search
-  - mcp__perplexity__perplexity_reason
   - mcp__perplexity__perplexity_research
 ---
 
@@ -134,8 +133,7 @@ Otherwise, for each gap day:
 
 **4b. Perplexity fallback** (if WebSearch insufficient):
 1. `perplexity_search` - "{ticker} stock news {date}"
-2. `perplexity_reason` - if search insufficient
-3. `perplexity_research` - if reason insufficient
+2. `perplexity_research` - only for major moves (>5%) with no results
 
 Generate driver and confidence from research. Include z-score context.
 

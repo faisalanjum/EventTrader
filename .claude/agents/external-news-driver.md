@@ -1,12 +1,11 @@
 ---
 name: external-news-driver
 description: "Research what drove a stock move using WebSearch and Perplexity when Benzinga news is insufficient."
-color: "#F97316"
+color: "#37ff00"
 tools:
   - Bash
   - WebSearch
   - mcp__perplexity__perplexity_search
-  - mcp__perplexity__perplexity_reason
   - mcp__perplexity__perplexity_research
 model: sonnet
 permissionMode: dontAsk
@@ -61,8 +60,7 @@ Search for news in a 3-day window (captures post-market and weekend gaps):
 ### Step 2: Perplexity Escalation (Progressive)
 
 **2a. perplexity_search** - Quick lookup
-**2b. perplexity_reason** - Chain-of-thought
-**2c. perplexity_research** - Deep research (last resort)
+**2b. perplexity_research** - Deep research (last resort)
 
 For each, identify source publication dates and discard post-PIT sources.
 
