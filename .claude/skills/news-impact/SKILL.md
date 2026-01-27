@@ -146,14 +146,13 @@ Combine news (Step 2) + gaps (Step 4), sort by date ASC.
 Pipe-delimited, one per line:
 
 ```
-date|news_id|title|driver|confidence|daily_stock|daily_adj|sector_adj|industry_adj|z_score|volatility|market_session|source
+date|news_id|driver|confidence|daily_stock|daily_adj|sector_adj|industry_adj|z_score|volatility|market_session|source
 ```
 
 | Field | Description |
 |-------|-------------|
 | date | Event timestamp |
-| news_id | Neo4j ID or Perplexity URL |
-| title | Original news title |
+| news_id | Neo4j ID or URL(s) for external research |
 | driver | Short phrase (5-15 words) explaining move |
 | confidence | 0-100% certainty |
 | daily_stock | Raw daily return |

@@ -2,9 +2,9 @@
 # validate_source_date_hook.sh - Validates source_pub_date <= analysis_date
 # For PostToolUse on Bash - validates echo output from news drivers
 #
-# Expected format: date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
+# Expected format: date|news_id|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
 # Field 1: analysis_date (the date being analyzed)
-# Field 11: source_pub_date (when the source was published)
+# Field 10: source_pub_date (when the source was published)
 
 # Log file in same directory as this script
 LOG_FILE="$(dirname "$0")/validate_source_date_hook.log"
@@ -28,16 +28,16 @@ if ! echo "$COMMAND" | grep -q "^echo "; then
     exit 0
 fi
 
-# Check if output has pipe-delimited format with at least 11 fields
+# Check if output has pipe-delimited format with at least 10 fields
 FIELD_COUNT=$(echo "$STDOUT" | tr -cd '|' | wc -c)
-if [ "$FIELD_COUNT" -lt 10 ]; then
+if [ "$FIELD_COUNT" -lt 9 ]; then
     echo "{}" # Not our format, allow
     exit 0
 fi
 
 # Extract fields
 ANALYSIS_DATE=$(echo "$STDOUT" | cut -d'|' -f1)
-SOURCE_PUB_DATE=$(echo "$STDOUT" | cut -d'|' -f11)
+SOURCE_PUB_DATE=$(echo "$STDOUT" | cut -d'|' -f10)
 
 log "ANALYSIS_DATE: $ANALYSIS_DATE | SOURCE_PUB_DATE: $SOURCE_PUB_DATE"
 

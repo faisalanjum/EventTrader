@@ -4,7 +4,7 @@ description: "Find what drove a stock move on a specific date using Benzinga new
 color: "#3B82F6"
 tools:
   - Bash
-model: haiku
+model: opus
 permissionMode: dontAsk
 hooks:
   PostToolUse:
@@ -35,30 +35,48 @@ source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/Event
 ### Step 2: Analyze
 
 **If news found:**
-- Read title AND body
-- Extract `created` field (column 5) as source_pub_date (YYYY-MM-DD)
-- Check market_session (pre_market=high confidence, post_market=medium)
-- Match direction: positive news + positive move = good
-- Generate driver phrase (5-15 words)
-- Assess confidence (0-100%)
-- **If ANY doubt** → external_research = true
+
+1. Read title, teaser, AND body thoroughly
+2. Extract `created` field as source_pub_date (YYYY-MM-DD)
+3. Check market_session (pre_market=high confidence, post_market=medium)
+
+**Before generating output, answer internally:**
+- What EXACTLY happened? (specific numbers, not vague)
+- Why would this move the stock in THIS direction?
+- Does magnitude make sense? (5% move needs 5%-worthy news)
+- Is this the PRIMARY driver or a symptom of something else?
+
+**Generate driver (1-3 sentences):**
+- **What**: Specific event with numbers (e.g., "Q4 EPS $2.10 beat $1.95 consensus")
+- **Why**: Causation logic (e.g., "signaling demand recovery")
+- **Context**: Why this matters now (e.g., "first beat since iPhone concerns")
+
+**Assess confidence:**
+| Scenario | Confidence |
+|----------|------------|
+| Clear causation + direction match + magnitude justified | 80-95 |
+| Clear causation but magnitude seems off | 50-70 |
+| Correlation but causation uncertain | 30-50 |
+| News exists but doesn't explain move | 10-30 + external_research=true |
+
+**If ANY doubt** → external_research = true
 
 **If NO news:**
 - driver = "UNKNOWN", confidence = 0, external_research = true
 
 ### Step 3: Return
 
-**Single pipe-delimited line (11 fields):**
+**Single pipe-delimited line (10 fields):**
 
 ```
-date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
+date|news_id|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
 ```
 
 **Examples:**
 ```
-2024-01-02|bzNews_123|Barclays Downgrades Apple|Analyst downgrade to Underweight|85|-3.65|-3.06|pre_market|benzinga|false|2024-01-02
-2024-01-15|bzNews_456|Apple announces product|Product news unclear impact|40|2.10|1.95|in_market|benzinga|true|2024-01-15
-2024-03-20|N/A|N/A|UNKNOWN|0|-4.50|-4.12||none|true|N/A
+2024-01-02|bzNews_123|Morgan Stanley downgrade to Underweight with $180 PT citing iPhone demand weakness in China; follows channel checks showing 30% YoY decline in December sales|85|-3.65|-3.06|pre_market|benzinga|false|2024-01-02
+2024-01-15|bzNews_456|Product announcement but unclear financial impact; news timing doesn't align with move magnitude|40|2.10|1.95|in_market|benzinga|true|2024-01-15
+2024-03-20|N/A|UNKNOWN|0|-4.50|-4.12||none|true|N/A
 ```
 
 ## Rules

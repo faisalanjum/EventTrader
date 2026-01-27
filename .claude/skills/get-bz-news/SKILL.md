@@ -51,6 +51,7 @@ WHERE n.created >= $start AND n.created < $end
 RETURN n.id AS news_id,
        n.created AS date,
        n.title AS title,
+       n.teaser AS teaser,
        n.body AS body,
        n.market_session AS market_session,
        inf.daily_stock AS daily_stock,
