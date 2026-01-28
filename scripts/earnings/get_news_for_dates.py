@@ -68,9 +68,9 @@ def get_news_for_date(ticker: str, date: str, threshold: float = 0) -> str:
         try:
             rows = ["|".join([
                 clean(r["news_id"]),
-                clean(r["title"])[:200],
-                clean(r["body"])[:500],
-                clean(r["teaser"])[:200],
+                clean(r["title"]),
+                clean(r["body"])[:3000],
+                clean(r["teaser"]),
                 clean(r["created"]),
                 clean(r["updated"]),
                 clean(r["url"]),

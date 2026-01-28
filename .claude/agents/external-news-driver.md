@@ -5,6 +5,7 @@ color: "#37ff00"
 tools:
   - Bash
   - WebSearch
+  - WebFetch
   - mcp__perplexity__perplexity_search
   - mcp__perplexity__perplexity_research
 model: sonnet

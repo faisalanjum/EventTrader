@@ -8,6 +8,8 @@ allowed-tools:
   - Write
   - Read
   - Edit
+  - EnterPlanMode
+  - ExitPlanMode
 permissionMode: dontAsk
 ---
 
@@ -71,7 +73,7 @@ prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
 ```
 
 **IMPORTANT:**
-- Max 10 sub-agents in parallel. If >10 dates, batch: first 10 → wait → next 10
+- Spawn ALL sub-agents in parallel (one per date, no cap)
 - All sub-agents return: `date|news_id|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date`
 
 **Collect all results. Separate into:**
@@ -90,7 +92,7 @@ prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
 ```
 
 **IMPORTANT:**
-- Max 10 sub-agents in parallel. If >10 dates, batch: first 10 → wait → next 10
+- Spawn ALL sub-agents in parallel (one per date, no cap)
 - Returns same format with `source=websearch` or `source=perplexity`
 
 **Merge results:** For each date in `needs_research`, DISCARD the original bz-news-driver row entirely and use ONLY the complete external-news-driver output. Do NOT merge individual fields - replace the whole row.
@@ -110,8 +112,8 @@ prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
 ### Step 4a: Repeat Benzinga Analysis for Q2
 
 Calculate:
-- `START` = E1 date
-- `END` = E2 date
+- `START` = E1 date + 1 day (exclude E1 earnings reaction)
+- `END` = E2 date (exclusive, excludes E2 earnings reaction)
 
 Run `get_significant_moves.py {TICKER} {START} {END} {E2.trailing_vol}` and spawn `bz-news-driver` sub-agents for Q2 dates (same as Step 3a).
 
@@ -163,7 +165,7 @@ Still unknown (confidence=0): {U}
 - **Full row replacement for external research** - When external-news-driver returns a result, use its COMPLETE 10-field output. Never mix fields from bz-news-driver with external-news-driver. The external result replaces the bz result entirely.
 - **Always run get_earnings.py first** - provides trailing_vol for each quarter
 - **Skip if done** - check news_processed.csv, skip quarters already processed
-- **Max 10 parallel sub-agents** - batch if more dates
+- **All sub-agents in parallel** - spawn one per date, no cap
 - **Q1 complete before Q2** - finish bz + external + save for Q1, then Q2
 - **Extract date only** - E1 date "2024-02-01T16:30:33-05:00" → use "2024-02-01"
 - **Preserve news_id EXACTLY** - Copy URLs verbatim. NEVER shorten, summarize, or create short IDs. If sub-agent returns a URL, save the full URL exactly as returned.

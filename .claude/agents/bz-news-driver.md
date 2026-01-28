@@ -34,11 +34,13 @@ source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/Event
 
 ### Step 2: Analyze
 
+**DATE is the significant move day. News includes a 3-day lookback. News with `market_session=post_market` from a prior day likely drove DATE's open. News with `market_session=post_market` from DATE itself did NOT cause DATE's move.**
+
 **If news found:**
 
 1. Read title, teaser, AND body thoroughly
 2. Extract `created` field as source_pub_date (YYYY-MM-DD)
-3. Check market_session (pre_market=high confidence, post_market=medium)
+3. Check market_session and created date against DATE to assess relevance
 
 **Before generating output, answer internally:**
 - What EXACTLY happened? (specific numbers, not vague)

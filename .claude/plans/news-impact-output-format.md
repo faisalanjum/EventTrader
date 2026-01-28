@@ -25,9 +25,9 @@ earnings-orchestrator
     └─ external-news-driver (per gap) → researched
 ```
 
-**Agent output format (11 fields):**
+**Agent output format (10 fields):**
 ```
-date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
+date|news_id|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
 ```
 
 ---
@@ -84,9 +84,9 @@ MSFT,2026-01-16,,,
 ## news.csv (per ticker)
 
 ```csv
-quarter,date,news_id,title,driver,confidence,daily_stock,daily_adj,market_session,source,external_research,source_pub_date
-Q1_FY2024,2024-01-18,bz-123,Apple beats...,Q1 beat with iPhone strength,85,4.23,3.15,pre_market,benzinga,false,2024-01-18
-Q1_FY2024,2024-02-10,https://reuters.com/...,Supplier warning,Supply chain concerns,62,-3.12,-2.78,,websearch,false,2024-02-09
+quarter,date,news_id,driver,confidence,daily_stock,daily_adj,market_session,source,external_research,source_pub_date
+Q1_FY2024,2024-01-18,bz-123,Q1 beat with iPhone strength,85,4.23,3.15,pre_market,benzinga,false,2024-01-18
+Q1_FY2024,2024-02-10,https://reuters.com/...,Supply chain concerns,62,-3.12,-2.78,,websearch,false,2024-02-09
 ```
 
 Note: Added `quarter` column for filtering.
@@ -100,10 +100,10 @@ Note: Added `quarter` column for filtering.
 ```markdown
 # News Driver Output
 
-## Format (11 fields + quarter)
+## Format (10 fields + quarter)
 
 ```
-quarter|date|news_id|title|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
+quarter|date|news_id|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
 ```
 
 ## Fields
@@ -112,8 +112,7 @@ quarter|date|news_id|title|driver|confidence|daily_stock|daily_adj|market_sessio
 |-------|------|--------|
 | quarter | string | Added by orchestrator (Q1_FY2024) |
 | date | date | Analysis date |
-| news_id | string | Benzinga ID or URL |
-| title | string | Headline |
+| news_id | string | Benzinga ID or URL(s) |
 | driver | string | 5-15 words |
 | confidence | int | 0-100 |
 | daily_stock | float | Raw return |

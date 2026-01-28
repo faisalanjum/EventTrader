@@ -110,14 +110,13 @@ Use `market_session` to assess causation vs explanation:
 ## Output Format
 
 ```
-date|news_id|title|driver|confidence|daily_stock|daily_adj|sector_adj|industry_adj|z_score|volatility|market_session|source
+date|news_id|driver|confidence|daily_stock|daily_adj|sector_adj|industry_adj|z_score|volatility|market_session|source
 ```
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | date | datetime | Yes | Event timestamp |
-| news_id | string | Yes | Neo4j ID or Perplexity URL |
-| title | string | Yes | Original news title |
+| news_id | string | Yes | Neo4j ID or URL(s) for external research |
 | driver | string | Yes | Short phrase (5-15 words) explaining move |
 | confidence | int | Yes | 0-100% certainty |
 | daily_stock | float | Yes | Raw daily return |

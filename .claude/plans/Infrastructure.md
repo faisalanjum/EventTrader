@@ -34,14 +34,13 @@
 | Return values | ✅ WORKS | Parent sees child's full output |
 | **Workflow continuation (GH #17351)** | ✅ WORKS (v2.1.17) | Parent continues after child returns; tested single & multi-child |
 | `$ARGUMENTS` substitution | ✅ WORKS | Pass args to skills dynamically |
-| **TaskCreate/List/Get/Update in Interactive CLI** | ✅ WORKS | Evidence: `FROM-CLI.txt` shows YES |
-| **TaskCreate/List/Get/Update via SDK** | ❌ NOT AVAILABLE | Evidence: `FROM-SDK.txt` shows NO (definitive 2026-01-25) |
-| **SDK `claude_code` tools preset** | ❌ NO TASK TOOLS | 20 tools available, TaskCreate/List/Get/Update NOT included |
-| **Task tools in `claude -p` subprocess** | ❌ NO TOOLS | Subprocess only has Task/TodoWrite, not TaskList |
-| **Task tools in `./agent` subprocess** | ❌ NO TOOLS | Subprocess only has Task/TodoWrite, not TaskList |
-| **Task cross-visibility (CLI only)** | ✅ SHARED | All CLI contexts see same task list |
-| **Task dependencies (CLI only)** | ✅ WORKS | Chain, multiple blockers, wave patterns - CLI only |
-| **CLAUDE_CODE_TASK_LIST_ID to subprocess** | ❌ DOESN'T HELP | Env var doesn't grant missing tools |
+| **TaskCreate/List/Get/Update in Interactive CLI** | ✅ WORKS | No extra config needed |
+| **TaskCreate/List/Get/Update via SDK 0.1.23+** | ✅ **WORKS** | Requires `tools` preset + env var (See Part 10) |
+| **SDK `claude_code` tools preset** | ✅ **INCLUDES TASK TOOLS** | SDK 0.1.23+ fixed the bug |
+| **Task cross-visibility** | ✅ SHARED | All contexts see same task list |
+| **Task dependencies** | ✅ WORKS | Chain, multiple blockers, wave patterns |
+| **CLAUDE_CODE_TASK_LIST_ID** | ✅ **WORKS** | Enables cross-session persistence (See Part 10.3) |
+| **Cross-session task persistence** | ✅ **WORKS** | Via settings.json or env var (See Part 10.3) |
 | Parallel execution (Task tool) | ✅ PARALLEL | From main conversation only |
 | Parallel execution (Skill tool) | ❌ SEQUENTIAL | Always sequential |
 | Task tool in forked context | ❌ BLOCKED | Cannot use for parallelism |
@@ -1770,17 +1769,152 @@ python scripts/test_sdk_compatibility.py
 
 # Part 10: Task Management System
 
-## 10.1 Quick Start for Next Bot
+*Last Updated: 2026-01-27*
 
-**Date**: 2026-01-26 | **Status**: ✅ FIXED - Task tools NOW WORK in SDK mode!
+## 10.1 Overview
 
-### ⚡ THE FIX (3 Requirements)
+Claude Code has **7 task-related tools** in two categories:
+
+### Task Management Tools (Tracking Work)
+
+| Tool | Purpose | Key Parameters |
+|------|---------|----------------|
+| **TaskCreate** | Create a new task | `subject`, `description`, `activeForm` |
+| **TaskList** | View all tasks and status | (none) |
+| **TaskGet** | Get full task details by ID | `taskId` |
+| **TaskUpdate** | Update status, dependencies, or delete | `taskId`, `status`, `addBlockedBy`, `description` |
+
+### Sub-Agent Spawning Tools (Parallel Execution)
+
+| Tool | Purpose | Key Parameters |
+|------|---------|----------------|
+| **Task** | Spawn a sub-agent to handle work | `subagent_type`, `prompt`, `description`, `run_in_background` |
+| **TaskOutput** | Retrieve results from background task | `task_id`, `block`, `timeout` |
+| **TaskStop** | Cancel/stop a running background task | `task_id` |
+
+### Key Distinction
+
+- **Task Management** (TaskCreate/List/Get/Update): Track work items, manage dependencies, share state across agents
+- **Sub-Agent Spawning** (Task/TaskOutput/TaskStop): Execute parallel work via independent agents
+
+### Validated (2026-01-27)
+
+| Tool | Tested | Result |
+|------|--------|--------|
+| TaskCreate | ✅ | Creates task, returns ID |
+| TaskList | ✅ | Shows all tasks with status |
+| TaskGet | ✅ | Returns full task details |
+| TaskUpdate | ✅ | Updates status, description; `status: deleted` removes file |
+| Task | ✅ | Spawns sub-agents, supports background mode |
+| TaskOutput | ✅ | Retrieves background task results |
+| TaskStop | ✅ | Terminates running task (SIGKILL, exit 137) |
+
+### Task Fields
+
+```json
+{
+  "id": "1",
+  "subject": "Implement feature X",
+  "description": "Detailed description of work",
+  "activeForm": "Implementing feature X",  // Shown in spinner
+  "status": "pending",                      // pending | in_progress | completed
+  "blocks": ["2", "3"],                     // Tasks waiting on this one
+  "blockedBy": ["0"]                        // Tasks this one waits for
+}
+```
+
+---
+
+## 10.2 Storage & Persistence
+
+### Storage Location
+
+Tasks are stored at: `~/.claude/tasks/{TASK_LIST_ID}/`
+
+```
+~/.claude/tasks/
+├── random-uuid-session-1/     ← Default (random per session)
+│   ├── 1.json
+│   └── 2.json
+├── random-uuid-session-2/
+│   └── 1.json
+└── my-project-tasks/          ← Custom named (persists across sessions!)
+    ├── 1.json
+    ├── 2.json
+    └── 3.json
+```
+
+**Note**: The base path (`~/.claude/tasks/`) is NOT configurable. Only the subdirectory name can be customized via `CLAUDE_CODE_TASK_LIST_ID`.
+
+### Task Status Behavior
+
+| Status | File Behavior |
+|--------|---------------|
+| `pending` | File exists |
+| `in_progress` | File exists, status field updated |
+| `completed` | File exists, status field updated |
+| `deleted` | **File removed from disk** |
+
+---
+
+## 10.3 Cross-Session Persistence
+
+By default, each session gets a random UUID directory and tasks don't persist across sessions.
+
+**To enable persistence**, set `CLAUDE_CODE_TASK_LIST_ID` to a fixed name:
+
+### Method 1: Environment Variables
+
+```bash
+export CLAUDE_CODE_ENABLE_TASKS=true
+export CLAUDE_CODE_TASK_LIST_ID=my-project-tasks
+claude   # or run SDK script
+```
+
+### Method 2: settings.json (Recommended)
+
+Add to your project's `.claude/settings.json`:
+
+```json
+{
+  "env": {
+    "CLAUDE_CODE_TASK_LIST_ID": "eventmarketdb-tasks",
+    "CLAUDE_CODE_ENABLE_TASKS": "true"
+  }
+}
+```
+
+### Settings Scope Hierarchy
+
+| Scope | Location | Shared via Git? |
+|-------|----------|-----------------|
+| Project | `.claude/settings.json` | Yes |
+| Local | `.claude/settings.local.json` | No (gitignored) |
+| User | `~/.claude/settings.json` | No |
+
+**Precedence**: Local > Project > User
+
+### Verified Test Results (2026-01-27)
+
+| Test | Result |
+|------|--------|
+| Session 1: Create task #1 | ✅ Stored in custom directory |
+| Session 2: TaskList | ✅ Saw task #1 from previous session |
+| Session 3: Update task #1 → completed | ✅ File updated, not deleted |
+| Session 4: Update task #1 → deleted | ✅ File removed from disk |
+| settings.json config (no manual export) | ✅ Works with `setting_sources=['project']` |
+
+---
+
+## 10.4 SDK Usage
+
+### Requirements (3 Things Needed)
 
 ```python
-# 1. Set environment variable BEFORE running Python
+# 1. Environment variable (or settings.json)
 export CLAUDE_CODE_ENABLE_TASKS=true
 
-# 2. Upgrade SDK to 0.1.23+ (CRITICAL - older versions don't work!)
+# 2. SDK version 0.1.23+ (CRITICAL - older versions have a bug!)
 pip install --upgrade claude-agent-sdk  # Must be >= 0.1.23
 
 # 3. Use tools preset in your code
@@ -1791,1013 +1925,318 @@ async for msg in query(
     options=ClaudeAgentOptions(
         permission_mode='bypassPermissions',
         tools={'type': 'preset', 'preset': 'claude_code'},  # THIS IS KEY!
+        setting_sources=['project'],  # Loads .claude/settings.json
     )
 ):
     ...
 ```
 
-### ✅ Verified Working (2026-01-26)
+### SDK Version History
 
+| SDK Version | Task Tools Work? | Notes |
+|-------------|------------------|-------|
+| 0.1.19 | ❌ NO | Bug - didn't pass task tools to subprocess |
+| 0.1.23+ | ✅ YES | Fixed with `tools` preset + env var |
+
+### Complete SDK Example
+
+```python
+#!/usr/bin/env python3
+import asyncio
+from claude_agent_sdk import query, ClaudeAgentOptions
+
+async def main():
+    # With settings.json configured, no manual export needed
+    async for msg in query(
+        prompt='Create a task "Test Task" and then list all tasks',
+        options=ClaudeAgentOptions(
+            permission_mode='bypassPermissions',
+            tools={'type': 'preset', 'preset': 'claude_code'},
+            setting_sources=['project'],
+            max_turns=5,
+        )
+    ):
+        if hasattr(msg, 'content'):
+            for block in msg.content:
+                if hasattr(block, 'name'):
+                    print(f'Tool: {block.name}')
+        if hasattr(msg, 'result'):
+            print(msg.result)
+
+asyncio.run(main())
 ```
-$ export CLAUDE_CODE_ENABLE_TASKS=true
-$ python test.py
-TOOL: TaskList
-RESULT: There are currently no tasks in the task list.
-
-TOOL: TaskCreate
-RESULT: Done! Created task #1: SDK-TEST-SUCCESS
-```
-
-### What Was Wrong Before
-
-| SDK Version | `tools` param | Env var | TaskList? |
-|-------------|---------------|---------|-----------|
-| 0.1.19 | Any | Any | ❌ NO |
-| 0.1.23+ | Missing/wrong | Set | ❌ NO |
-| 0.1.23+ | `{'type': 'preset', 'preset': 'claude_code'}` | Set | ✅ **YES** |
-
-**Root cause**: SDK 0.1.19 didn't properly pass task tools to subprocess. Fixed in 0.1.23+.
 
 ---
 
-## 10.2 Historical Context (Outdated - Kept for Reference)
+## 10.5 Tool Availability Matrix
 
-**The information below is OUTDATED as of 2026-01-26. Task tools now work in SDK mode with the fix above.**
+| Context | TaskCreate/List/Get/Update | Task Tool (Subagents) | Requirements |
+|---------|---------------------------|----------------------|--------------|
+| Interactive CLI | ✅ YES | ✅ YES | None |
+| SDK 0.1.23+ | ✅ YES | ✅ YES | `tools` preset + env var |
+| SDK 0.1.19 (old) | ❌ NO | ✅ YES | BUG - upgrade SDK |
+| Forked Skill (CLI) | ✅ YES | ❌ NO | - |
+| Forked Skill (SDK 0.1.23+) | ✅ YES | ❌ NO | - |
 
-### OLD: `--print` Mode vs Interactive Mode (OUTDATED 2026-01-25)
+**Key Distinction**:
+- **Task tool** = Spawns sub-agents (parallel execution)
+- **TaskCreate/List/Get/Update** = Task management (tracking work)
 
-~~**Root Cause**: Task tools are tied to **interactive mode**, not available in `--print` mode.~~
+These are different tools. Forked skills can track tasks but cannot spawn sub-agents.
 
-**CORRECTED**: Task tools ARE available in SDK/`--print` mode with:
-- `CLAUDE_CODE_ENABLE_TASKS=true`
-- `tools={'type': 'preset', 'preset': 'claude_code'}`
-- SDK version 0.1.23+
+---
 
-| Mode | Command | TaskCreate/TaskList? |
-|------|---------|---------------------|
-| **Interactive** | `claude` (no `-p`) | ✅ YES |
-| **CLI with env+tools** | `CLAUDE_CODE_ENABLE_TASKS=true claude -p --tools default` | ✅ YES |
-| **SDK 0.1.23+ with preset** | `tools={'type': 'preset', 'preset': 'claude_code'}` | ✅ **YES** |
-| **SDK 0.1.19 (old)** | Any configuration | ❌ NO |
+## 10.6 Parallel Execution
 
-### Tests Performed (2026-01-25, SDK 0.1.19 - OUTDATED)
+### Rules (Empirically Proven)
 
-**Note**: These tests were done with SDK 0.1.19 which had a bug. Upgrading to 0.1.23+ fixes everything.
+| Method | Execution | Evidence |
+|--------|-----------|----------|
+| Task tool → Sub-agents | ✅ **PARALLEL** | 0.24s gap between launches |
+| Skill tool → Skills | ❌ **SEQUENTIAL** | 14+ second gaps |
+| Sub-agent → Sub-agent | ❌ **IMPOSSIBLE** | Task tool unavailable in sub-agents |
 
-<details>
-<summary>Click to expand old test results (historical reference only)</summary>
-
-1. ❌ SDK tool listing → No TaskCreate/List/Get/Update (BUG in 0.1.19)
-2. ❌ SDK direct TaskList call → "No such tool available" (BUG in 0.1.19)
-3. ❌ SDK `tools=["TaskList"]` option → Didn't work (BUG in 0.1.19)
-4. ❌ SDK `preset: claude_code` → Didn't work (BUG in 0.1.19)
-
-**Root cause found 2026-01-26**: SDK 0.1.19 didn't properly pass tool configuration to Claude Code subprocess.
-
-</details>
-
-### Current Status (2026-01-26, SDK 0.1.23+)
-
-| Caller | TaskList | TaskCreate | Requirements |
-|--------|----------|------------|--------------|
-| **SDK 0.1.23+ with preset** | ✅ **YES** | ✅ **YES** | env var + tools preset |
-| **Interactive CLI** | ✅ **YES** | ✅ **YES** | None |
-| **CLI `-p` with flags** | ✅ **YES** | ✅ **YES** | `--tools default` + env var |
-| **SDK 0.1.19 (old)** | ❌ NO | ❌ NO | BUG - upgrade SDK |
-
-### K8s Workflow - NOW WORKS!
+### Architecture Implication
 
 ```
-K8s Pod → SDK 0.1.23+ query() → tools preset → ✅ TASK TOOLS AVAILABLE
-```
-
-**Example K8s/SDK code:**
-```python
-export CLAUDE_CODE_ENABLE_TASKS=true  # In container env
-
-from claude_agent_sdk import query, ClaudeAgentOptions
-
-async for msg in query(
-    prompt='Run /earnings-orchestrator AAPL 2',
-    options=ClaudeAgentOptions(
-        setting_sources=['project'],
-        permission_mode='bypassPermissions',
-        tools={'type': 'preset', 'preset': 'claude_code'},  # REQUIRED!
-        max_turns=50,
-    )
-):
-    # TaskCreate, TaskList, TaskGet, TaskUpdate all available
-    ...
-```
-
-### Feature Availability (Updated 2026-01-26)
-
-| Feature | Interactive | SDK 0.1.23+ (with preset) | SDK 0.1.19 (old) |
-|---------|-------------|---------------------------|------------------|
-| TaskCreate/TaskList/TaskGet/TaskUpdate | ✅ | ✅ **YES!** | ❌ NO |
-| TodoWrite | ✅ | ✅ | ✅ |
-| All other tools (Read, Write, Bash, etc.) | ✅ | ✅ | ✅ |
-| Skills/Commands | ✅ | ✅ | ✅ |
-| MCP tools (Neo4j, Perplexity, etc.) | ✅ | ✅ | ✅ |
-| Task tool (spawn sub-agents) | ✅ | ✅ | ✅ |
-
-### K8s/SDK Workflow - Full Feature Parity!
-
-| Your Need | Status |
-|-----------|--------|
-| Run skills (earnings-orchestrator, etc.) | ✅ Works |
-| Use MCP tools (Neo4j, Perplexity) | ✅ Works |
-| Read/Write/Edit files | ✅ Works |
-| Spawn sub-agents (Task tool) | ✅ Works |
-| **Task management (TaskCreate/TaskList)** | ✅ **Works with SDK 0.1.23+ and preset!** |
-
-**No more need for CSV workarounds** - native task tools now work in SDK mode.
-
-### Parallel Execution via Task Tool - CONFIRMED WORKING (2026-01-25)
-
-**Empirical Test**: `scripts/test_parallel_clean.py`
-
-```
-Test: Launch two "sleep 5" commands via Task tool in parallel
-
-Results:
-  Task A file timestamp: 09:22:41
-  Task B file timestamp: 09:22:41  ← SAME SECOND (parallel confirmed)
-
-If sequential: timestamps would be 5+ seconds apart
-```
-
-| Metric | Value | Proof |
-|--------|-------|-------|
-| Task A timestamp | `09:22:41` | - |
-| Task B timestamp | `09:22:41` | **SAME SECOND = PARALLEL** |
-| Time between Task calls | 0.7s | Launched nearly simultaneously |
-| Expected if sequential | 5s gap | Would be `09:22:41` and `09:22:46` |
-
-**Conclusion**: SDK CAN use Task tool for parallel execution. The orchestrator can launch multiple sub-agents simultaneously.
-
-#### Parallelism Architecture Available
-
-```
-                          ┌─► Task: news_impact ──┐
-SDK → orchestrator ───────┤                       ├──► prediction ──► attribution
-                          └─► Task: guidance ─────┘
-                               (PARALLEL)              (sequential, after both complete)
-```
-
-**Current Gap**: `task_tracker.py` has `get_parallel_tasks()` but orchestrator doesn't use it yet.
-
-**Test Evidence Files**:
-- `earnings-analysis/test-outputs/par-a.txt` - Task A timestamp
-- `earnings-analysis/test-outputs/par-b.txt` - Task B timestamp (same second = parallel)
-
-### Task → Parallel Forked Skills - CONFIRMED WORKING (2026-01-25)
-
-**Test**: `scripts/test_task_parallel_forked_skills.py`
-
-Can Task sub-agents call `context: fork` skills in parallel?
-
-```
-SDK → 2x Task (parallel) → each calls Skill (context: fork) → nested skills
-
-Results:
-  test-parallel-a timestamp: 1769351519.230388417
-  test-parallel-b timestamp: 1769351518.994088681
-  Difference: 0.24 seconds ← PARALLEL CONFIRMED
-```
-
-| Evidence | Value | Meaning |
-|----------|-------|---------|
-| Timestamp A | `1769351519.23` | - |
-| Timestamp B | `1769351518.99` | 0.24s apart |
-| If sequential | 3+ seconds apart | Each skill has 3s sleep |
-
-**Full Chain for Your Use Case**:
-```
-SDK → /earnings-orchestrator
-        ├─► Task: "Call /news-impact Q1" ─► Skill (context:fork) ─► /get-news
-        └─► Task: "Call /news-impact Q2" ─► Skill (context:fork) ─► /get-news
-            (PARALLEL - 0.24s apart, not 3+ seconds)
-```
-
-**Test Evidence**: `/tmp/parallel-{a,b}-time.txt` timestamps
-
-### Nested Tasks NOT Possible - CONFIRMED (2026-01-25)
-
-**Test**: `scripts/test_nested_task.py`
-
-Can a Task sub-agent spawn MORE Task sub-agents for nested parallelism?
-
-```
-SUBAGENT_HAS_TASK_TOOL: NO ❌
-
-Sub-agent available tools (12 total):
-Bash, Glob, Grep, Read, Edit, Write, NotebookEdit,
-WebFetch, TodoWrite, WebSearch, Skill, MCPSearch
-
-Task tool NOT available to sub-agents.
-```
-
-**Conclusion**: Parallelism must happen at the TOP level (orchestrator). Sub-agents cannot spawn nested parallel tasks.
-
-### Sub-agent CAN Call Multiple Skills - CONFIRMED (2026-01-25)
-
-**Test**: `scripts/test_subagent_multiple_skills.py`
-
-Can Task sub-agent call multiple Skills with different arguments?
-
-```
-SKILL_CALL_1: YES (AAPL) → Result returned ✅
-SKILL_CALL_2: YES (MSFT) → Result returned ✅
-SKILL_CALL_3: YES (GOOGL) → Result returned ✅
-ALL_RESULTS_RETURNED_TO_ME: YES
-```
-
-**Use Case - Gap Days**:
-```
-Task: news_impact (sub-agent)
-    ├─► Skill: /get-news gap_1 → result ─┐
-    ├─► Skill: /get-news gap_2 → result ─┼─► Sub-agent combines (SEQUENTIAL)
-    ├─► Skill: /get-news gap_3 → result ─┤
-    └─► Skill: /get-news gap_4 → result ─┘
-```
-
-| Feature | Available? | Evidence |
-|---------|------------|----------|
-| Sub-agent calls multiple Skills | ✅ YES | 3 skills called |
-| Results return to sub-agent | ✅ YES | All results received |
-| Parallel Skills in sub-agent | ❌ NO | Sequential only |
-| Nested Task spawning | ❌ NO | Task tool unavailable |
-
-**Trade-off**: For parallel gap days, move them UP to orchestrator level as separate Tasks.
-
-### Context:Fork Skills in Sub-agent are SEQUENTIAL - CONFIRMED (2026-01-25)
-
-**Test**: `scripts/test_subagent_forked_skills_timing.py`
-
-Even `context: fork` skills run SEQUENTIALLY when called from inside a sub-agent:
-
-```
-Sub-agent calls:
-  Skill A (test-parallel-a, context:fork, 3s sleep)
-  Skill B (test-parallel-b, context:fork, 3s sleep)
-
-Results:
-  Skill A timestamp: 1769352196.881616949
-  Skill B timestamp: 1769352210.956992669
-  Gap: 14.08 seconds ← SEQUENTIAL (not 0.24s like parallel)
-```
-
-| Execution Context | Gap Between Calls | Mode |
-|-------------------|-------------------|------|
-| Orchestrator → 2x Task | 0.24 seconds | **PARALLEL** |
-| Sub-agent → 2x Skill | 14.08 seconds | **SEQUENTIAL** |
-
-**Why**: The Skill tool processes ONE skill at a time. Sub-agents don't have Task tool for parallelism.
-
-### KEY SUMMARY: Parallelism Rules (Empirically Proven 2026-01-25)
-
-**Three Rules:**
-1. **Sub-agents are parallelizable** (via Task tool)
-2. **Skills are NOT parallelizable** (via Skill tool)
-3. **Sub-agents CANNOT spawn more sub-agents** (no Task tool available)
-
-| Rule | Tool | Execution | Evidence |
-|------|------|-----------|----------|
-| Task → Sub-agents | Task | ✅ **PARALLEL** | 0.24s gap |
-| Skill → Skills | Skill | ❌ **SEQUENTIAL** | 14.08s gap |
-| Sub-agent → Sub-agent | ❌ N/A | ❌ **IMPOSSIBLE** | Task tool unavailable |
-
-```
-SDK → Orchestrator (HAS Task tool)
-        │
-        ├─► Task: Sub-agent A ════╗
-        │       │                 ║ PARALLEL (0.24s gap)
-        └─► Task: Sub-agent B ════╝
+SDK query() → Main conversation (HAS Task tool + TaskCreate/TaskList)
+    │
+    ├─► Task: news_impact ──┐
+    │                       ├──► Both run PARALLEL
+    └─► Task: guidance ─────┘
                 │
-                ├─► Skill X ══════════════►
-                └─────────────────────────► Skill Y ══════► SEQUENTIAL (14s gap)
-
-                ❌ Cannot spawn Task C (no Task tool in sub-agent)
+                └─► After both complete → sequential work
 ```
 
-**Key insights:**
-- Parallelism is ONE level deep only (orchestrator → sub-agents)
-- Even `context: fork` skills are SEQUENTIAL when called via Skill tool
-- The parallelism is determined by the **TOOL** used, not the thing being invoked
+**Parallelism is ONE level deep only** - orchestrator can spawn parallel sub-agents, but sub-agents cannot spawn more sub-agents.
 
-### SDK Tool Listing Result
+---
 
-When asked "List ALL tools you have available", SDK explicitly confirmed:
-```
-✅ I HAVE:
-- Task (the sub-agent spawner)
-- TodoWrite
+## 10.7 Dependencies
 
-❌ I DO NOT HAVE:
-- TaskCreate
-- TaskList
-- TaskGet
-- TaskUpdate
-```
-
-### SDK Tools Preset Test (2026-01-25)
-
-**Question**: Does `tools={"type": "preset", "preset": "claude_code"}` include TaskCreate/TaskList/TaskGet/TaskUpdate?
-
-**Answer**: ❌ **NO** - Even with the full `claude_code` preset, task management tools are NOT included.
-
-**Test Script**: `scripts/test_sdk_task_comprehensive.py`
-
-#### Complete SDK Tool List (`claude_code` preset) - 20 Tools
-
-| # | Tool | Purpose | Task Mgmt? |
-|---|------|---------|------------|
-| 1 | **Task** | Launch subagents for complex tasks | ❌ Different tool |
-| 2 | **TaskOutput** | Retrieve background task results | ❌ Different tool |
-| 3 | Bash | Execute shell commands | - |
-| 4 | Glob | File pattern matching (`**/*.js`) | - |
-| 5 | Grep | Search file contents (ripgrep) | - |
-| 6 | Read | Read files from filesystem | - |
-| 7 | Edit | String replacements in files | - |
-| 8 | Write | Write files to filesystem | - |
-| 9 | NotebookEdit | Edit Jupyter notebook cells | - |
-| 10 | WebFetch | Fetch and process web content | - |
-| 11 | WebSearch | Search the web | - |
-| 12 | **TodoWrite** | Manage conversation todos | ⚠️ Alternative (no persistence) |
-| 13 | AskUserQuestion | Ask user questions during execution | - |
-| 14 | Skill | Execute defined skills | - |
-| 15 | EnterPlanMode | Enter planning mode | - |
-| 16 | ExitPlanMode | Exit planning mode | - |
-| 17 | ToolSearch | Search/select deferred MCP tools | - |
-| 18 | ListMcpResourcesTool | List MCP server resources | - |
-| 19 | ReadMcpResourceTool | Read specific MCP resource | - |
-| 20 | KillShell | Kill background shells | - |
-
-#### Tools NOT in SDK (CLI-only)
-
-| Tool | Purpose | Why Not in SDK |
-|------|---------|----------------|
-| **TaskCreate** | Create tasks with dependencies | Interactive CLI UI feature |
-| **TaskList** | List all tasks | Interactive CLI UI feature |
-| **TaskGet** | Get task details by ID | Interactive CLI UI feature |
-| **TaskUpdate** | Update task status/dependencies | Interactive CLI UI feature |
-
-#### TodoWrite vs TaskCreate/TaskList
-
-| Feature | TodoWrite (SDK) | TaskCreate/TaskList (CLI) |
-|---------|-----------------|---------------------------|
-| Available in SDK | ✅ YES | ❌ NO |
-| Cross-session persistence | ❌ NO | ✅ YES |
-| Task dependencies (blockedBy) | ❌ NO | ✅ YES |
-| Task IDs for retrieval | ❌ NO | ✅ YES |
-| `/tasks` UI integration | ❌ NO | ✅ YES |
-| CLAUDE_CODE_TASK_LIST_ID | ❌ N/A | ✅ YES |
-
-**Conclusion**: For SDK/K8s automation, use:
-1. **TodoWrite** for simple in-conversation task tracking (no persistence)
-2. **CSV files** for cross-session persistence (`scripts/task_tracker.py`)
-3. **File-based coordination** for completion markers
-
-### Key Distinction (Interactive CLI Only)
-
-| Tool | Purpose | Works in Fork? |
-|------|---------|----------------|
-| **Task tool** | Spawns sub-agents | ❌ NO |
-| **TaskCreate/List/Get/Update** | Manages task list | ✅ YES (CLI only) |
-
-These are DIFFERENT tools. Don't confuse them.
-
-## 10.2 Complete Test Results (2026-01-25)
-
-### Tool Availability
-
-| Context | TaskCreate | TaskList | TaskGet | TaskUpdate | Evidence |
-|---------|------------|----------|---------|------------|----------|
-| Interactive CLI (main) | ✅ | ✅ | ✅ | ✅ | Direct test |
-| Interactive CLI (forked skill) | ✅ | ✅ | ✅ | ✅ | test-task-basic, test-task-visibility |
-| Interactive CLI (Task sub-agent) | ✅ | ✅ | ✅ | ✅ | general-purpose agent test |
-| **SDK `query()` (main)** | ❌ | ❌ | ❌ | ❌ | test_sdk_task_tools.py |
-| **SDK `query()` (forked skill)** | ❌ | ❌ | ❌ | ❌ | test_sdk_task_tools.py |
-| `claude -p` subprocess | ❌ | ❌ | ❌ | ❌ | Only Task/TodoWrite available |
-
-### Cross-Visibility
-
-| Test | Result | Evidence |
-|------|--------|----------|
-| Parent → child visibility | ✅ SHARED | test-task-visibility |
-| Child → parent visibility | ✅ SHARED | test-task-create-from-fork |
-| Sub-agent → main visibility | ✅ SHARED | task-subagent-result.txt |
-
-**Conclusion**: NO isolation within a session. All contexts see all tasks.
-
-### Dependencies
-
-| Pattern | Result | Evidence |
-|---------|--------|----------|
-| Chain (A→B→C) | ✅ WORKS | Completing A unblocks B |
-| Multiple blockers (D,E→G) | ✅ WORKS | AND logic - both must complete |
-| Partial completion | ✅ WORKS | Only completed blockers removed |
-| Wave parallelism | ✅ WORKS | Unblocked tasks can run parallel |
-| tradeEarnings pattern | ✅ WORKS | test-trade-earnings-pattern |
-
-### Task Lifecycle
-
-```
-pending → in_progress → completed
-```
-
-- Completed tasks **persist** as `[completed]` in TaskList
-- Tasks only auto-deleted when **ALL** tasks in list are completed
-- TaskList shows `[blocked by #X]` only for pending blockers
-- TaskGet shows full dependency history
-
-### CLAUDE_CODE_TASK_LIST_ID
-
-| Approach | Result | Notes |
-|----------|--------|-------|
-| `os.environ` in Python | ❌ DOESN'T WORK | SDK ignores it |
-| Dynamic change mid-session | ❌ DOESN'T WORK | test-task-dynamic-id |
-| Env var in forked skill | ❌ NOT PROPAGATED | test-task-env-check |
-| Shell env var before CLI | ⚠️ UNTESTED | Should create custom task list dir |
-| `claude -p` subprocess with env var | ❌ NO TaskList TOOLS | Subprocess only has Task/TodoWrite |
-| Settings.json | ⚠️ UNTESTED | Should work per docs |
-
-**Key Finding**: For SDK/K8s automation, cannot use per-company task list IDs. Use prefix pattern instead.
-
-### CLI Subprocess TaskList Availability (TESTED 2026-01-25)
-
-**Test**: `CLAUDE_CODE_TASK_LIST_ID=xxx claude -p "Use TaskList..."`
-
-**Result**: `claude -p` subprocess does NOT have TaskList/TaskCreate/TaskGet/TaskUpdate tools.
-
-**Tools available in `claude -p` subprocess**:
-- Task (spawn sub-agents)
-- TaskOutput/TaskStop (background task management)
-- TodoWrite (legacy todo list - different from TaskList!)
-
-**Implication**: Even if you pass `CLAUDE_CODE_TASK_LIST_ID` as environment variable to `./agent` or `claude -p` subprocess, that subprocess **cannot** use Claude's new task management system because the tools simply aren't available.
-
-This means:
-- **Task-spawned sub-agents**: ✅ CAN use TaskList (shares with parent)
-- **`claude -p` subprocesses**: ❌ CANNOT use TaskList (no tools)
-- **`./agent` subprocesses**: ❌ CANNOT use TaskList (no tools)
-
-### Parallel Execution
-
-| Method | Parallel? | Can Update Tasks? |
-|--------|-----------|-------------------|
-| Task tool (main conv only) | ✅ YES | ✅ YES |
-| Skill tool (any context) | ❌ SEQUENTIAL | ✅ YES |
-
-## 10.3 Prefix Pattern (RECOMMENDED for K8s/SDK)
-
-### Why Prefixes?
-
-Since CLAUDE_CODE_TASK_LIST_ID cannot be set programmatically in SDK, use task subject prefixes for organization:
-
-### Tested Example
-
-```
-#1 [completed] AAPL-Q1-news-impact
-#2 [completed] AAPL-Q1-guidance
-#3 [completed] AAPL-Q1-prediction    [was blocked by #1, #2]
-#4 [completed] AAPL-Q1-attribution   [was blocked by #3]
-#5 [pending]   MSFT-Q1-news-impact
-#6 [pending]   MSFT-Q1-guidance
-```
-
-**Verified behaviors**:
-- AAPL workflow completed, tasks persist as `[completed]`
-- MSFT workflow independent, still `[pending]`
-- Dependencies enforced correctly within each company
-- All tasks visible in single list (no isolation)
-
-### Implementation Pattern
+Tasks support dependency management:
 
 ```python
-# For each company-quarter
-def create_earnings_tasks(ticker: str, quarter: str):
-    prefix = f"{ticker}-{quarter}"
+# Create tasks with dependencies
+TaskCreate("Task A", "First task")           # id: 1
+TaskCreate("Task B", "Depends on A")         # id: 2
+TaskUpdate(taskId="2", addBlockedBy=["1"])   # B blocked by A
 
-    # Wave 1 (no deps - can run parallel)
-    news_id = TaskCreate(f"{prefix}-news-impact", ...)
-    guidance_id = TaskCreate(f"{prefix}-guidance", ...)
-
-    # Wave 2 (blocked by Wave 1)
-    prediction_id = TaskCreate(f"{prefix}-prediction", ...)
-    TaskUpdate(prediction_id, addBlockedBy=[news_id, guidance_id])
-
-    # Wave 3 (blocked by Wave 2)
-    attribution_id = TaskCreate(f"{prefix}-attribution", ...)
-    TaskUpdate(attribution_id, addBlockedBy=[prediction_id])
+# When A completes, B becomes unblocked
+TaskUpdate(taskId="1", status="completed")
 ```
 
-### Workflow Execution
+### Verified Patterns
+
+| Pattern | Works? |
+|---------|--------|
+| Chain (A→B→C) | ✅ Completing A unblocks B |
+| Multiple blockers (D,E→G) | ✅ AND logic - both must complete |
+| Wave parallelism | ✅ Unblocked tasks can run parallel |
+
+---
+
+## 10.8 Multi-Agent Coordination Patterns (Verified 2026-01-27)
+
+Orchestrators can use the shared task list to coordinate multiple sub-agents.
+
+### Pattern 1: Sub-Agents See Shared Task List
+
+Sub-agents spawned via Task tool can see and update the same task list as the parent.
+
+```
+Orchestrator creates Task #1 → Sub-agent sees Task #1 via TaskList
+                             → Sub-agent marks Task #1 completed
+                             → Orchestrator sees the update
+```
+
+**Verified**: ✅ Changes by sub-agent immediately visible to parent.
+
+### Pattern 2: Sub-Agents Pass Info to Next Agent
+
+A sub-agent can add notes to another task's description for the next agent to read.
 
 ```python
-# Check for unblocked tasks
-tasks = TaskList()
-unblocked = [t for t in tasks if t.status == "pending" and not t.blockedBy]
+# Agent-A completes task #1, adds info for Agent-B working on task #2
+TaskUpdate(taskId="2", description="Original desc\n\nNOTE-FROM-AGENT-A: Data format is JSON")
 
-# Execute unblocked tasks (parallel if using Task tool from main)
-for task in unblocked:
-    TaskUpdate(task.id, status="in_progress")
-    # ... do work ...
-    TaskUpdate(task.id, status="completed")
-
-# Repeat until all tasks completed
+# Agent-B reads task #2 and sees the note
+TaskGet(taskId="2")  # Returns description with Agent-A's note
 ```
 
-## 10.4 Test Artifacts
+**Verified**: ✅ Agent-A added note, Agent-B found it.
 
-### Test Skills Created
+### Pattern 3: Different Agent Types for Different Tasks
 
-| Skill | Purpose | Location |
-|-------|---------|----------|
-| test-task-basic | CRUD in forked skill | `.claude/skills/test-task-basic/` |
-| test-task-visibility | Parent→child visibility | `.claude/skills/test-task-visibility/` |
-| test-task-create-from-fork | Child→parent visibility | `.claude/skills/test-task-create-from-fork/` |
-| test-task-env-check | Env var propagation | `.claude/skills/test-task-env-check/` |
-| test-task-dynamic-id | Dynamic ID change | `.claude/skills/test-task-dynamic-id/` |
-| test-trade-earnings-pattern | tradeEarnings workflow | `.claude/skills/test-trade-earnings-pattern/` |
+Use specialized sub-agent types for different task types.
 
-### Test Scripts Created
+**⚠️ Important**: Task tools depend on agent's `tools:` list!
 
-| Script | Purpose |
-|--------|---------|
-| `scripts/test_task_list_id.py` | SDK testing for CLAUDE_CODE_TASK_LIST_ID |
-| `scripts/test_per_company_tasklist.py` | Per-company isolation test |
-| `scripts/task_tracker.py` | CSV-based persistent task tracking |
+| Agent Type | Has TaskList/Update? | Why |
+|------------|---------------------|-----|
+| **general-purpose** | ✅ YES | Has all tools by default |
+| **Explore** | ✅ YES | Broad toolset |
+| **Plan** | ✅ YES | Broad toolset |
+| **Bash** | ❌ NO | Only has Bash in tools list |
+| **Custom agents** | ⚠️ DEPENDS | Only if task tools in `tools:` list |
 
-### Production Components Created
+### How to Give Custom Agents Task Tools
 
-| Component | Purpose | Location |
-|-----------|---------|----------|
-| Task Tracker CSV | Persistent task state across sessions | `earnings-analysis/task-tracker.csv` |
-| Task Tracker Python | Read/write task status | `scripts/task_tracker.py` |
-| earnings-task-setup skill | Create tasks with deps + CSV tracking | `.claude/skills/earnings-task-setup/`
+Add task tools to the agent's `tools:` list in `.claude/agents/`:
 
-### Test Output Files
-
-| File | Content |
-|------|---------|
-| `task-basic-result.txt` | CRUD test - all 4 tools PASS |
-| `task-visibility-result.txt` | Parent→child - SHARED |
-| `task-create-from-fork-result.txt` | Child→parent - SHARED |
-| `task-subagent-result.txt` | Sub-agent creation - SHARED |
-| `task-env-check-result.txt` | Env var NOT propagated |
-| `task-dynamic-id-result.txt` | Dynamic ID DOESN'T work |
-| `trade-earnings-pattern-result.txt` | Workflow pattern WORKS |
-| `task-list-id-test-results.txt` | SDK test summary |
-| `parallel-task-a.txt`, `parallel-task-b.txt` | Parallel execution evidence |
-
-## 10.5 K8s/SDK Implications
-
-### What This Means for Kubernetes Automation
-
-```
-K8s Pod → Python → claude_agent_sdk.query() → Earnings workflow
+```yaml
+# .claude/agents/my-custom-agent.md
+---
+name: my-custom-agent
+description: "Custom agent with task coordination"
+tools:
+  - Bash
+  - TaskList      # ← Add these to enable task coordination
+  - TaskCreate
+  - TaskUpdate
+  - TaskGet
+permissionMode: dontAsk
+---
 ```
 
-1. **Cannot use per-company task list IDs** - SDK ignores `os.environ`
-2. **Use prefix pattern** - All companies in one task list, prefixed by ticker
-3. **Dependencies still work** - Blocking/unblocking functions correctly
-4. **Completed tasks persist** - Good for audit trail
-5. **Parallel execution requires Task tool** - Only from main conversation, not forked orchestrator
+**Verified (2026-01-27)**:
+- `bz-news-driver` (only Bash in tools) → ❌ No TaskList access
+- `test-task-agent` (Bash + task tools) → ✅ Has TaskList, can see shared tasks
 
-### Architecture Preference: Orchestrator-Managed
+**Example**: If you want `bz-news-driver` to update the task list when done, add task tools to its definition:
 
-**User preference**: Orchestrator skill should manage parallel tasks, NOT main conversation.
-
-**Current limitation**: Forked skills cannot use Task tool (blocked), so parallelism within forked orchestrator requires workarounds.
-
-### Possible Approaches
-
-**Approach A: Sequential with Task Tracking (Current)**
-```
-SDK query() → /earnings-orchestrator (forked)
-    │
-    ├─→ Skill tool: news-impact (sequential)
-    ├─→ Skill tool: guidance (sequential)
-    ├─→ Skill tool: prediction (sequential)
-    └─→ Skill tool: attribution (sequential)
-```
-- Pros: Context isolation, simple
-- Cons: No parallelism
-
-**Approach B: Orchestrator Uses ./agent for Parallelism**
-```
-SDK query() → /earnings-orchestrator (forked)
-    │
-    ├─→ Bash: ./agent parallel_subagents '[
-    │       {"provider": "claude", "prompt": "Run /news-impact..."},
-    │       {"provider": "claude", "prompt": "Run /guidance..."}
-    │   ]'
-    │
-    ├─→ Wait for both (file-based check)
-    │
-    └─→ Skill tool: prediction, attribution (sequential)
-```
-- Pros: Parallel Wave 1, orchestrator stays forked
-- Cons: More complex, **./agent cannot use TaskList** (only has Task/TodoWrite)
-- **Note (verified 2026-01-25)**: Passing `CLAUDE_CODE_TASK_LIST_ID` to ./agent subprocess does NOT give it TaskList tools
-
-**Approach C: Hybrid - Main Creates Tasks, Orchestrator Executes**
-```
-SDK query() → Main conversation
-    │
-    ├─→ Create all tasks with dependencies (TaskCreate)
-    │
-    └─→ Skill tool: /earnings-orchestrator (forked)
-            │
-            └─→ Read tasks, execute sequentially, update status
-```
-- Pros: Task management in main, context isolation in orchestrator
-- Cons: Split responsibility
-
-**TODO**: Test Approach B (./agent parallel_subagents from forked skill).
-
-## 10.6 CSV-Based Persistence (IMPLEMENTED)
-
-### Why CSV + Claude Tasks?
-
-| Aspect | Claude Tasks Only | CSV Tracker Only | Both (Recommended) |
-|--------|-------------------|------------------|-------------------|
-| Cross-session persistence | ❌ | ✅ | ✅ |
-| Within-session dependencies | ✅ | ❌ | ✅ |
-| SDK compatible | ⚠️ | ✅ | ✅ |
-| Version controllable | ❌ | ✅ | ✅ |
-| Real-time blocking | ✅ | ❌ | ✅ |
-
-### Files Created
-
-**1. CSV Tracker**: `earnings-analysis/task-tracker.csv`
-```csv
-ticker,quarter,accession,news_impact,guidance,prediction,attribution,last_updated
-GOOGL,Q1-2024,0001652044-24-000012,pending,pending,pending,pending,2026-01-25T12:35:12Z
+```yaml
+# .claude/agents/bz-news-driver.md
+tools:
+  - Bash
+  - TaskList      # Add for task coordination
+  - TaskUpdate    # Add to mark tasks complete
 ```
 
-**2. Python Helper**: `scripts/task_tracker.py`
-```python
-from scripts.task_tracker import TaskTracker
+### Orchestrator Instructions Template
 
-tracker = TaskTracker()
+Add these instructions to your orchestrator skill:
 
-# Get or create row
-status = tracker.get_or_create("AAPL", "Q1-2024", "0000320193-24-000001")
+```markdown
+## Task Coordination Rules
 
-# Update task status
-tracker.update_status("AAPL", "Q1-2024", "0000320193-24-000001", "news_impact", "completed")
+1. **Create tasks first**: Use TaskCreate to create all tasks with dependencies before spawning sub-agents.
 
-# Get parallel tasks (unblocked)
-parallel = tracker.get_parallel_tasks("AAPL", "Q1-2024", "0000320193-24-000001")
+2. **Tell sub-agents to update**: In each sub-agent prompt, include:
+   "When you complete your work, use TaskUpdate to mark task #X as completed."
 
-# Check status
-python scripts/task_tracker.py status
+3. **Pass info forward**: Tell sub-agents:
+   "If you discover something the next task needs to know, use TaskUpdate on that task to add a note to its description."
+
+4. **Use appropriate agent types**:
+   - Use `general-purpose` for tasks that need to update the task list
+   - Use specialized agents (Bash, Explore) only for tasks that don't need task coordination
+
+5. **Check task status**: After spawning sub-agents, use TaskList to verify tasks were completed.
 ```
 
-**3. Setup Skill**: `/earnings-task-setup TICKER QUARTER ACCESSION`
-```bash
-# Creates Claude tasks + updates CSV
-/earnings-task-setup GOOGL Q1-2024 0001652044-24-000012
-```
-
-### Workflow with Both Systems
+### Example: Orchestrator Prompt
 
 ```
-Session Start:
-    │
-    ├─→ Read task-tracker.csv (what's already done)
-    │
-    ├─→ /earnings-task-setup {ticker} {quarter} {accession}
-    │       ├─→ Creates Claude tasks for pending items
-    │       ├─→ Sets up dependencies
-    │       └─→ Updates CSV with row if new
-    │
-    ├─→ Execute tasks (Claude tracks within-session)
-    │
-    └─→ On completion:
-            ├─→ TaskUpdate (Claude task → completed)
-            └─→ tracker.update_status() (CSV → completed)
+You are an orchestrator. Follow these steps:
+
+1. Create tasks:
+   - Task 1: "Fetch earnings data"
+   - Task 2: "Analyze data" (blocked by Task 1)
+   - Task 3: "Generate report" (blocked by Task 2)
+
+2. Spawn sub-agent (general-purpose) for Task 1:
+   "Find FETCH-EARNINGS task via TaskList. Mark it in_progress.
+    Fetch the data. When done, mark it completed.
+    If you find anything Task 2 should know, update Task 2's description with that info."
+
+3. Spawn sub-agent (general-purpose) for Task 2:
+   "Find ANALYZE-DATA task via TaskList. Read its description for any notes from previous agents.
+    Do the analysis. Mark completed when done.
+    Add any findings to Task 3's description for the report generator."
+
+4. Spawn sub-agent (general-purpose) for Task 3:
+   "Read Task 3 description for context from previous agents.
+    Generate the report. Mark completed."
+
+5. Use TaskList to verify all tasks completed.
 ```
 
-### Tested Example
+---
 
-```
-Task List (Claude):
-#7 [pending] GOOGL-Q1-2024-news-impact     [no blockers]
-#8 [pending] GOOGL-Q1-2024-guidance        [no blockers]
-#9 [pending] GOOGL-Q1-2024-prediction      [blocked by #7, #8]
-#10 [pending] GOOGL-Q1-2024-attribution    [blocked by #9]
+## 10.9 Current Project Configuration
 
-CSV (Persistence):
-GOOGL,Q1-2024,0001652044-24-000012,pending,pending,pending,pending,2026-01-25T12:35:12Z
-```
-
-## 10.7 Manual Testing Still Needed
-
-| Test | Command | Expected | Status |
-|------|---------|----------|--------|
-| CLI with shell env var (interactive) | `CLAUDE_CODE_TASK_LIST_ID=test claude` | Creates `~/.claude/tasks/test/` | ⚠️ UNTESTED |
-| CLI subprocess with env var | `CLAUDE_CODE_TASK_LIST_ID=xxx claude -p "TaskList..."` | Share task list? | ✅ TESTED: NO TaskList tools |
-| Settings.json persistence | Add to settings.json, restart, check | Tasks persist across /clear | ⚠️ UNTESTED |
-| Cross-session sync | Two terminals, same ID | Real-time task updates | ⚠️ UNTESTED |
-
-**Verified (2026-01-25)**: `claude -p` subprocesses do NOT have TaskList/TaskCreate/TaskGet/TaskUpdate tools, regardless of environment variables. They only have Task, TaskOutput, TaskStop, and TodoWrite.
-
-### Settings.json Configuration
+**File**: `/home/faisal/EventMarketDB/.claude/settings.json`
 
 ```json
 {
   "plansDirectory": ".claude/plans",
   "env": {
-    "CLAUDE_CODE_TASK_LIST_ID": "earnings-batch"
+    "CLAUDE_CODE_TASK_LIST_ID": "eventmarketdb-tasks",
+    "CLAUDE_CODE_ENABLE_TASKS": "true"
   }
 }
 ```
 
-## 10.7 Summary Table
-
-### Interactive CLI (Task Tools Available)
-
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Task tools in CLI main | ✅ WORKS | All 4 tools |
-| Task tools in CLI fork | ✅ WORKS | All 4 tools |
-| Task tools in CLI Task sub-agent | ✅ WORKS | All 4 tools, shares parent list |
-| Cross-visibility | ✅ SHARED | Parent ↔ child see same list |
-| Chain dependencies | ✅ WORKS | A→B→C |
-| Multiple blockers | ✅ WORKS | AND logic |
-| Wave parallelism | ✅ WORKS | Unblocked run parallel |
-
-### SDK / Subprocesses (Task Tools NOT Available)
-
-| Feature | Status | Notes |
-|---------|--------|-------|
-| **Task tools in SDK main** | ❌ NOT AVAILABLE | Verified 2026-01-25 |
-| **Task tools in SDK → forked skill** | ❌ NOT AVAILABLE | "Tool not available in function schema" |
-| Task tools in `claude -p` | ❌ NOT AVAILABLE | Only has Task/TodoWrite |
-| Task tools in `./agent` | ❌ NOT AVAILABLE | Only has Task/TodoWrite |
-| `CLAUDE_CODE_TASK_LIST_ID` to subprocess | ❌ DOESN'T HELP | Subprocess lacks tools anyway |
-
-### K8s/SDK Workflow Implication
-
-```
-K8s Pod → SDK query() → /earnings-orchestrator (forked) → ❌ NO TASK TOOLS
-
-Use instead: CSV persistence (task-tracker.csv) + file-based coordination
-```
+**Task storage**: `~/.claude/tasks/eventmarketdb-tasks/`
 
 ---
 
-## 10.8 Test Skills Inventory (Task Management)
+## 10.10 Limitations & Workarounds
 
-| Skill | Purpose | Tested |
-|-------|---------|--------|
-| test-task-basic | CRUD in forked skill | ✅ |
-| test-task-visibility | Parent→child visibility | ✅ |
-| test-task-create-from-fork | Child→parent visibility | ✅ |
-| test-task-env-check | Env var propagation | ✅ |
-| test-task-dynamic-id | Dynamic ID change | ✅ |
-| test-trade-earnings-pattern | Workflow dependencies | ✅ |
-| **test-sdk-task-tools** | **SDK vs CLI task tools (CRITICAL)** | ✅ Definitive 2026-01-25 |
-| **earnings-task-setup** | **Production: Create tasks + CSV** | ✅ |
+### Cannot Customize Base Path
 
-## 10.9 Re-Verification Commands
+Tasks always go to `~/.claude/tasks/`. Cannot store in project directory.
 
-### Test Infrastructure for Future Bots
+**Workaround**: Use symlink
+```bash
+mkdir -p /path/to/project/.claude/tasks/my-tasks
+ln -s /path/to/project/.claude/tasks/my-tasks ~/.claude/tasks/my-tasks
+```
 
-**To re-verify SDK vs Interactive CLI task tool availability:**
+### Task Tools in Forked Skills
+
+Forked skills CAN use TaskCreate/List/Get/Update but CANNOT use Task tool (sub-agent spawner).
+
+**Workaround**: Keep orchestrator in main conversation for parallel execution.
+
+---
+
+## 10.11 Quick Reference
+
+### Environment Variables
+
+| Variable | Purpose | Required |
+|----------|---------|----------|
+| `CLAUDE_CODE_ENABLE_TASKS` | Enable task tools | Yes (for SDK) |
+| `CLAUDE_CODE_TASK_LIST_ID` | Custom task directory name | No (enables persistence) |
+
+### SDK Options
+
+```python
+ClaudeAgentOptions(
+    tools={'type': 'preset', 'preset': 'claude_code'},  # Required for task tools
+    setting_sources=['project'],  # Load .claude/settings.json
+    permission_mode='bypassPermissions',  # For automation
+)
+```
+
+### Common Commands
 
 ```bash
-# 1. Clean previous test files
-rm -f earnings-analysis/test-outputs/FROM-SDK.txt earnings-analysis/test-outputs/FROM-CLI.txt
+# Upgrade SDK
+pip install --upgrade claude-agent-sdk
 
-# 2. Test SDK → forked skill (should show NO task tools)
-source venv/bin/activate
-python3 scripts/test_sdk_task_tools.py
-# Output written to: earnings-analysis/test-outputs/FROM-SDK.txt
-# Expected: TASKLIST_AVAILABLE: NO
+# Check SDK version
+pip show claude-agent-sdk | grep Version
 
-# 2b. Test if claude_code tools preset includes task tools
-python3 scripts/test_tools_preset.py
-# Output written to: earnings-analysis/test-outputs/tools-preset-test.txt
-# Expected: TASKLIST_AVAILABLE: NO (lists 18-20 tools, none are TaskCreate/List/Get/Update)
+# View task files
+ls -la ~/.claude/tasks/eventmarketdb-tasks/
 
-# 2c. Test ClaudeSDKClient streaming mode (no --print flag)
-python3 scripts/test_sdk_client_tools.py
-# Output written to: earnings-analysis/test-outputs/sdk-client-tools.txt
-# Expected: 18 tools, NO TaskList/TaskCreate
-
-# 2d. Test CLAUDE_CODE_ENTRYPOINT override attempts
-python3 scripts/test_entrypoint_override.py
-# Output written to: earnings-analysis/test-outputs/entrypoint-*.txt
-# Expected: All show NO TaskList regardless of entrypoint value
-
-# 3. Test Interactive CLI → forked skill (should show YES task tools)
-# From claude CLI, run:
-/test-sdk-task-tools FROM-CLI.txt
-# Output written to: earnings-analysis/test-outputs/FROM-CLI.txt
-# Expected: TASKLIST_AVAILABLE: YES
-
-# 4. Compare both files
-cat earnings-analysis/test-outputs/FROM-SDK.txt
-cat earnings-analysis/test-outputs/FROM-CLI.txt
-```
-
-**Test Files (with SEPARATE outputs to avoid confusion):**
-| File | Purpose |
-|------|---------|
-| `scripts/test_sdk_task_tools.py` | SDK test - writes to `FROM-SDK.txt` |
-| `scripts/test_tools_preset.py` | Tests if `claude_code` preset includes task tools |
-| `.claude/skills/test-sdk-task-tools/SKILL.md` | Skill that tests TaskList/TaskCreate, takes filename arg |
-| `earnings-analysis/test-outputs/FROM-SDK.txt` | SDK test output (should show NO) |
-| `earnings-analysis/test-outputs/FROM-CLI.txt` | CLI test output (should show YES) |
-| `earnings-analysis/test-outputs/tools-preset-test.txt` | Preset test output (lists all 20 tools) |
-
-**Other verification commands:**
-
-```bash
-# Check task tracker status
-python scripts/task_tracker.py status
-
-# View CSV directly
-cat earnings-analysis/task-tracker.csv
-
-# Test earnings-task-setup skill
-# (from Claude Code CLI)
-/earnings-task-setup TICKER QUARTER ACCESSION
-
-# List Claude tasks
-# (from within conversation)
-TaskList
+# Clean up old task directories
+rm -rf ~/.claude/tasks/random-uuid-*
 ```
 
 ---
 
----
-
-## 10.10 SDK/Subprocess Task Tool Availability (EMPIRICALLY TESTED 2026-01-25)
-
-### Critical Finding
-
-**Task management tools (TaskCreate/TaskList/TaskGet/TaskUpdate) are ONLY available in INTERACTIVE Claude CLI sessions.**
-
-### Comprehensive Test Results
-
-| Context | Task Tools Available? | Evidence |
-|---------|----------------------|----------|
-| Interactive CLI (main) | ✅ YES | Direct test - all 4 tools work |
-| Interactive CLI → forked skill | ✅ YES | test-task-basic, test-sdk-task-tools (from CLI) |
-| Interactive CLI → Task sub-agent | ✅ YES | Sub-agent saw parent tasks, created new tasks |
-| `claude -p` subprocess | ❌ NO | Only has Task, TaskOutput, TodoWrite |
-| SDK `query()` session | ❌ NO | Only has Task, TaskOutput, TodoWrite |
-| SDK → Task sub-agent | ❌ NO | Sub-agent lacks TaskList/Create/Get/Update |
-| **SDK → forked skill** | ❌ NO | test-sdk-task-tools: 14 tools, none are task tools |
-| `./agent` subprocess | ❌ NO | Spawns `claude -p` which lacks tools |
-
-**CONCLUSIVE (Re-verified 2026-01-25):**
-- Interactive CLI → forked skill: ✅ HAS task tools
-- SDK → forked skill: ❌ NO task tools
-- K8s/SDK workflow cannot use task management system
-
-### What This Means
-
-**YouTube video's cross-session sharing** (two terminals with same `CLAUDE_CODE_TASK_LIST_ID`) **ONLY works with INTERACTIVE sessions**.
-
-For **SDK/K8s automation**, the task management system is **NOT AVAILABLE** because:
-1. SDK sessions don't have TaskCreate/List/Get/Update tools
-2. Sub-agents spawned from SDK also lack these tools
-3. `./agent parallel_subagents` spawns `claude -p` which lacks tools
-
-### Verified Environment Variable Propagation
-
-| Test | Result |
-|------|--------|
-| `CLAUDE_CODE_TASK_LIST_ID` visible in subprocess | ✅ YES |
-| `CLAUDE_CODE_TASK_LIST_ID` visible in SDK session | ✅ YES |
-| Subprocess has TaskList tool | ❌ NO |
-| SDK session has TaskList tool | ❌ NO |
-
-**The env var is passed correctly, but the tools simply aren't available.**
-
-### Test Scripts Created
-
-| Script | Purpose | Location |
-|--------|---------|----------|
-| test_task_list_sharing.py | Verify SDK can see custom task list | scripts/ |
-| test_task_via_subagent.py | Verify SDK sub-agents have task tools | scripts/ |
-| test_sdk_forked_skill_tasks.py | **Verify SDK → forked skill has task tools** | scripts/ |
-| test_tools_preset.py | **Test if `claude_code` preset includes task tools** | scripts/ |
-| test_sdk_client_tools.py | **Test ClaudeSDKClient (streaming mode) tools** | scripts/ |
-| test_entrypoint_override.py | **Test CLAUDE_CODE_ENTRYPOINT override** | scripts/ |
-| test_parallel_clean.py | **Confirm Task tool parallel execution works in SDK** | scripts/ |
-| test_task_calls_skill.py | **Confirm Task sub-agent can call Skills** | scripts/ |
-| test_task_parallel_forked_skills.py | **Confirm Task → parallel forked skills works** | scripts/ |
-| test_nested_task.py | **Confirm sub-agents CANNOT spawn nested Tasks** | scripts/ |
-| test_subagent_multiple_skills.py | **Confirm sub-agent CAN call multiple Skills** | scripts/ |
-| test_subagent_forked_skills_timing.py | **Confirm context:fork skills are SEQUENTIAL in sub-agent** | scripts/ |
-
-### Test Output Files
-
-| File | Content |
-|------|---------|
-| session1-created.txt | Session 1 task creation output |
-| sdk-task-list-result.txt | SDK session tool availability |
-| subagent-task-tools.txt | Sub-agent tool availability check |
-| sdk-forked-skill-task-tools.txt | **SDK → forked skill tool availability** |
-
-### Architecture Implications
-
-**For SDK/K8s automation, you CANNOT use the task management system.**
-
-**Working alternatives:**
-1. **CSV tracker** (`scripts/task_tracker.py`) - Cross-session persistence
-2. **File-based coordination** - Write completion markers to files
-3. **Redis queues** - Already in use for XBRL workers
-
-**The task management system is useful ONLY for:**
-- Interactive CLI development/debugging
-- Manual workflow orchestration with two terminal windows
-- NOT for automated K8s/SDK pipelines
-
-### Task Storage Location
-
-Tasks are stored in `~/.claude/tasks/{task_list_id}/`:
-```
-~/.claude/tasks/
-├── fbd7e21b-8cb5-498d-85a7-7c3b918c0c20/  # Session-based ID
-│   ├── 1.json  # Task #1
-│   └── 2.json  # Task #2
-├── custom-shared-list/  # Custom ID (can be shared)
-│   └── 1.json
-```
-
-Each task is a JSON file with: `id`, `subject`, `description`, `activeForm`, `status`, `blocks`, `blockedBy`.
-
----
-
-### CORRECTED: Task Tool Availability Matrix (Re-verified 2026-01-25)
-
-**Previous test was WRONG** - tested from forked skill context, not SDK main conversation.
-
-**Corrected Results** (empirically verified):
-
-| Context | Task Tool (Subagents) | TaskCreate/TaskList | Parallel? | Evidence |
-|---------|----------------------|---------------------|-----------|----------|
-| Main CLI (interactive) | ✅ YES | ✅ YES | ✅ YES | Direct test |
-| SDK main (`claude_code` preset) | ✅ YES | ❌ NO | ✅ YES | `par-a.txt`/`par-b.txt`: 1s apart with 5s sleep |
-| Forked Skill (from CLI) | ❌ NO | ✅ YES | N/A | `parallel-test-CLI.txt` |
-| Forked Skill (from SDK) | ❌ NO | ❌ NO | N/A | `parallel-test-SDK.txt` |
-
-**Key Distinctions**:
-- **Task tool** (spawns sub-agents) ≠ **TaskCreate/TaskList** (task management)
-- SDK main WITH `claude_code` preset HAS Task tool, LACKS TaskCreate/TaskList
-- Forked skills (from any source) LACK Task tool
-
-**Parallel Execution Evidence** (re-run 2026-01-25):
-```
-Test: scripts/test_parallel_clean.py
-Command: Two Task(Bash) with "sleep 5"
-
-par-a.txt: TASK_A_09:27:52
-par-b.txt: TASK_B_09:27:53  ← 1 SECOND APART (parallel confirmed!)
-
-If sequential: would be 5+ seconds apart
-```
-
-**Impact on K8s/SDK Setup**:
-- ✅ SDK main conversation CAN use Task tool for parallel sub-agents
-- ✅ Parallel execution WORKS (timestamps prove it)
-- ❌ Forked skills CANNOT use Task tool (no nesting)
-- ❌ TaskCreate/TaskList NOT available in SDK (use CSV tracker instead)
-
-**Architecture Implication for Your Workflow**:
-```
-SDK query() → Main conversation (HAS Task tool)
-    │
-    ├─► Task: news_impact ──┐
-    │                       ├──► Both run PARALLEL (proven!)
-    └─► Task: guidance ─────┘
-                │
-                └─► After both complete → prediction → attribution
-```
-
-**BUT**: If your orchestrator is a forked skill, it CANNOT use Task tool.
-**Solution**: Either:
-1. Keep orchestrator in main conversation (not forked) for parallel Task execution
-2. Use `./agent parallel_subagents` from within forked skill (ThreadPoolExecutor)
-3. Use sequential Skill calls (simpler, no parallelism)
-
----
-
-*Task Management Completed: 2026-01-25*
-*Components: 9 test skills, 6 scripts, 1 CSV tracker, 1 production skill*
-*ROOT CAUSE FOUND: Task tools only in interactive mode; SDK uses `--print` mode (subprocess_cli.py:334)*
-*CORRECTION: Task tool (subagent spawner) IS available in SDK main with `claude_code` preset*
-*TaskCreate/TaskList still NOT available in SDK*
-*Evidence files: `par-a.txt`/`par-b.txt` (parallel proof), `FROM-SDK.txt` (no TaskList), `FROM-CLI.txt` (has TaskList)*
-*Test scripts: `test_parallel_clean.py` (Task parallel), `test_sdk_task_comprehensive.py` (TaskList absent)*
-*Final verification: 2026-01-25 | SDK v0.1.19 | Parallel Task tool WORKS in SDK main*
-*Reorganized: 2026-01-22*
+*Updated: 2026-01-27 | SDK 0.1.23+ verified | Cross-session persistence confirmed*

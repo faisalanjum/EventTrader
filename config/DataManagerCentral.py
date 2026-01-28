@@ -688,8 +688,9 @@ class DataManager:
         
     def initialize_sources(self):
         self.sources['news'] = BenzingaNewsManager(self.historical_range)
-        self.sources['reports'] = ReportsManager(self.historical_range)
-        self.sources['transcripts'] = TranscriptsManager(self.historical_range)
+        # >>> BENZINGA_ONLY: Uncomment below 2 lines to restore all sources (search "BENZINGA_ONLY" for all locations)
+        # self.sources['reports'] = ReportsManager(self.historical_range)
+        # self.sources['transcripts'] = TranscriptsManager(self.historical_range)
 
     def initialize_neo4j(self):
         """Initialize Neo4j processor"""
@@ -721,8 +722,9 @@ class DataManager:
                 self.logger.info("Neo4j already initialized, skipping initialization")
                 # Even if initialized, process news and report data
                 self.process_news_data()
-                self.process_report_data()
-                self.process_transcript_data()
+                # >>> BENZINGA_ONLY: Uncomment below 2 lines to restore all sources
+                # self.process_report_data()
+                # self.process_transcript_data()
             else:
                 # Initialize Neo4j if not already initialized
                 self.logger.info("Neo4j not initialized, initializing database")
@@ -737,8 +739,9 @@ class DataManager:
                 
                 # Process news and report data after successful initialization
                 self.process_news_data()
-                self.process_report_data()
-                self.process_transcript_data()
+                # >>> BENZINGA_ONLY: Uncomment below 2 lines to restore all sources
+                # self.process_report_data()
+                # self.process_transcript_data()
             
             # Start the PubSub-based continuous processing thread
             self.neo4j_thread = threading.Thread(

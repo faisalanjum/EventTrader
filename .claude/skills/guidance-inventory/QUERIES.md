@@ -62,7 +62,7 @@ ORDER BY r.created
 **Get EX-99.1 content:**
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_EXHIBIT]->(e:ExhibitContent)
-WHERE e.exhibit_type CONTAINS '99.1'
+WHERE e.exhibit_number CONTAINS '99.1'
 RETURN e.content
 LIMIT 1
 ```
