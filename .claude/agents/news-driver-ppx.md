@@ -7,6 +7,7 @@ tools:
   - mcp__perplexity__perplexity_search
   - TaskList
   - TaskGet
+  - TaskCreate
   - TaskUpdate
 model: sonnet
 permissionMode: dontAsk
@@ -62,7 +63,16 @@ Query examples:
 - **Why**: Causation logic
 - **Context**: Why this matters now
 
-### Step 3: Update Task (MANDATORY)
+### Step 3: Create JUDGE Task (ALWAYS)
+
+PPX is the final tier - always create a task for validation:
+
+1. Extract TICKER, DATE, and QUARTER from your prompt (QUARTER from task subject if available)
+2. Call `TaskCreate` with:
+   - `subject`: `"JUDGE-{QUARTER} {TICKER} {DATE}"`
+   - `description`: Your 10-field result line
+
+### Step 4: Update Task (MANDATORY)
 
 Extract task ID from `TASK_ID=N` in your prompt.
 
@@ -71,7 +81,7 @@ Call `TaskUpdate` with:
 - `status`: `"completed"`
 - `description`: your 10-field result line
 
-### Step 4: Output via Bash (REQUIRED)
+### Step 5: Output via Bash (REQUIRED)
 
 ```bash
 echo "DATE|NEWS_ID|DRIVER|CONFIDENCE|DAILY_STOCK|DAILY_ADJ|MARKET_SESSION|SOURCE|EXTERNAL_RESEARCH|SOURCE_PUB_DATE"

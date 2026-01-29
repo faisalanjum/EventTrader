@@ -79,6 +79,15 @@ If your analysis requires external research (`external_research=true`), create a
    - `subject`: `"WEB-{QUARTER} {TICKER} {DATE}"` (e.g., "WEB-Q1_FY2024 AAPL 2024-01-02")
    - `description`: `"{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"`
 
+### Step 3b: Create JUDGE Task (if external_research=false)
+
+If no external research needed, create a task for validation:
+
+1. Extract TICKER, DATE, and QUARTER from your prompt
+2. Call `TaskCreate` with:
+   - `subject`: `"JUDGE-{QUARTER} {TICKER} {DATE}"` (e.g., "JUDGE-Q1_FY2024 AAPL 2024-01-02")
+   - `description`: Your 10-field result line
+
 ### Step 4: Update Task (MANDATORY)
 
 **You MUST do this before returning.** Extract the task ID number N from `TASK_ID=N` in your prompt.

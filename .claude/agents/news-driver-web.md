@@ -90,7 +90,16 @@ If after thorough web research your confidence is still < 50:
 1. Extract TICKER, DATE, DAILY_STOCK, DAILY_ADJ, and QUARTER from your prompt
 2. Call `TaskCreate` with:
    - `subject`: `"PPX-{QUARTER} {TICKER} {DATE}"`
-   - `description`: `"{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"`
+   - `description`: `"{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} QUARTER={QUARTER}"`
+
+### Step 4b: Create JUDGE Task (if confidence >= 50)
+
+If confidence is sufficient (no PPX escalation needed), create a task for validation:
+
+1. Extract TICKER, DATE, and QUARTER from your prompt
+2. Call `TaskCreate` with:
+   - `subject`: `"JUDGE-{QUARTER} {TICKER} {DATE}"`
+   - `description`: Your 10-field result line
 
 ### Step 5: Update Task (MANDATORY)
 

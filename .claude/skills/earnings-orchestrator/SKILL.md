@@ -94,7 +94,7 @@ For EACH significant date from Step 2:
 Immediately after spawning BZ agents, enter this loop. DO NOT wait for BZ agents first:
 
 ```
-WHILE any Q1 tasks (BZ-*, WEB-*, PPX-*) are pending or in_progress:
+WHILE any Q1 tasks (BZ-*, WEB-*, PPX-*, JUDGE-*) are pending or in_progress:
   1. Check TaskList for pending WEB-{QUARTER} {TICKER} tasks
      → For each pending WEB task (if not already spawned):
        - Read task description: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
@@ -103,17 +103,27 @@ WHILE any Q1 tasks (BZ-*, WEB-*, PPX-*) are pending or in_progress:
          subagent_type: "news-driver-web"
          prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} TASK_ID={task ID} QUARTER={QUARTER}"
      → WEB agents update their task via TaskUpdate
-     → WEB agents create PPX-* tasks via TaskCreate if confidence < 50
+     → WEB agents create PPX-* or JUDGE-* tasks via TaskCreate
 
   2. Check TaskList for pending PPX-{QUARTER} {TICKER} tasks
      → For each pending PPX task (if not already spawned):
        - Read task description: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
+       - Extract QUARTER from task subject (e.g., "PPX-Q1_FY2024 AAPL 2024-01-02" → Q1_FY2024)
        - Spawn:
          subagent_type: "news-driver-ppx"
-         prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} TASK_ID={task ID}"
-     → PPX agents update their task via TaskUpdate (final tier)
+         prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} TASK_ID={task ID} QUARTER={QUARTER}"
+     → PPX agents update their task via TaskUpdate
+     → PPX agents create JUDGE-* tasks via TaskCreate
 
-  3. Brief pause (2-3 seconds), then repeat
+  3. Check TaskList for pending JUDGE-{QUARTER} {TICKER} tasks
+     → For each pending JUDGE task (if not already spawned):
+       - Task description contains the 10-field result line to validate
+       - Spawn:
+         subagent_type: "news-driver-judge"
+         prompt: "TASK_ID={task ID}"
+     → JUDGE agents validate and update their task with final confidence
+
+  4. Brief pause (2-3 seconds), then repeat
 END WHILE
 ```
 
@@ -121,16 +131,16 @@ Track which task IDs you've already spawned agents for to avoid duplicates.
 
 **Phase 3: Collect all results**
 
-When all Q1 tasks are completed, collect results via TaskGet for each task. Read the `description` field — it contains the 10-field pipe-delimited result line.
+When all Q1 tasks are completed, collect results from JUDGE-* tasks via TaskGet. Read the `description` field — it contains the validated 12-field pipe-delimited result line (with attr_confidence, pred_confidence, and judge_notes).
 
-**Merge results:** For each date, use the LAST tier's result (PPX > WEB > BZ).
+**Note:** Each date has exactly one JUDGE task with the final validated result. BZ/WEB/PPX tasks contain intermediate results.
 
 ### Step 3b: Save Q1 Results
 
 1. Create directory if needed: `earnings-analysis/Companies/{TICKER}/`
 2. Append Q1 results to `earnings-analysis/Companies/{TICKER}/news.csv`:
    - Add `quarter` column with value `{E1.fiscal_quarter}_FY{E1.fiscal_year}` (e.g., `Q1_FY2024`)
-   - Format: `quarter|date|news_id|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date`
+   - Format: `quarter|date|news_id|driver|attr_confidence|pred_confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date|judge_notes`
    - Create file with header if it doesn't exist
 3. Update `earnings-analysis/news_processed.csv`:
    - Format: `ticker|quarter|fiscal_year|processed_date`
@@ -170,14 +180,14 @@ E2: {accession} | {date} | FY{fiscal_year} {fiscal_quarter} | {daily_adj}% adj |
 Filter: |stock|>=4%, |adj|>=max(2×{trailing_vol}%,3%)
 Significant dates: {count}
 
-date|news_id|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
+date|news_id|driver|attr_confidence|pred_confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date|judge_notes
 ...
 
 --- Q2 ANALYSIS ({E1} to {E2}) ---
 Filter: |stock|>=4%, |adj|>=max(2×{trailing_vol}%,3%)
 Significant dates: {count}
 
-date|news_id|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
+date|news_id|driver|attr_confidence|pred_confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date|judge_notes
 ...
 
 --- SUMMARY ---
@@ -186,17 +196,30 @@ Explained by Benzinga: {B}
 Explained by WebSearch: {W}
 Explained by Perplexity: {P}
 Still unknown (confidence=0): {U}
+Validated by Judge: {J}
 
 === COMPLETE ===
 ```
 
+### Step 6: Build Thinking Files
+
+After completing all analysis, generate thinking files for Obsidian:
+
+```bash
+source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/EventMarketDB/scripts/earnings/build-news-thinking.py --ticker {TICKER}
+```
+
+The script auto-detects the most recent session for this ticker. Output:
+- `Companies/{TICKER}/thinking/{QUARTER}/_timeline.md`
+- `Companies/{TICKER}/thinking/{QUARTER}/news/{date}.md` for each date
+
 ## Rules
 
-- **Full row replacement** - When a later tier returns a result, use its COMPLETE 10-field output. PPX replaces WEB, WEB replaces BZ. Never mix fields across tiers.
+- **Full row replacement** - When a later tier returns a result, use its COMPLETE output. PPX replaces WEB, WEB replaces BZ. Never mix fields across tiers. Judge outputs 12-field line.
 - **Always run get_earnings.py first** - provides trailing_vol for each quarter
 - **Skip if done** - check news_processed.csv, skip quarters already processed
 - **All sub-agents in parallel** - spawn one per date, no cap
-- **Q1 complete before Q2** - finish all 3 tiers (BZ → WEB → PPX) + save for Q1, then Q2
+- **Q1 complete before Q2** - finish all 4 tiers (BZ → WEB → PPX → JUDGE) + save for Q1, then Q2
 - **Extract date only** - E1 date "2024-02-01T16:30:33-05:00" → use "2024-02-01"
 - **Preserve news_id EXACTLY** - Copy URLs verbatim. NEVER shorten, summarize, or create short IDs. If sub-agent returns a URL, save the full URL exactly as returned.
 - **Pass through raw output** - don't summarize or lose data
@@ -219,9 +242,10 @@ Flow:
 1. get_earnings.py AAPL → E1=2024-02-01 (Q1_FY2024, vol=0.90), E2=2024-05-02 (Q2_FY2024, vol=0.99)
 2. Check news_processed.csv → no row for AAPL|Q1|FY2024 → process Q1
 3. get_significant_moves.py AAPL 2023-11-01 2024-02-01 0.90 → internally: |stock|>=4%, |adj|>=max(2×0.90,3)=3%
-4. Spawn news-driver-bz for each significant date → some explained, some create WEB tasks
-5. Spawn news-driver-web for each WEB task → some explained, some create PPX tasks
-6. Spawn news-driver-ppx for each PPX task → returns results (final tier)
-7. Save Q1 to Companies/AAPL/news.csv, mark Q1_FY2024 done
-8. Check news_processed.csv → row exists for AAPL|Q2|FY2024 → skip Q2
-9. Return results (Q1 only, Q2 was cached)
+4. Spawn news-driver-bz for each significant date → some explained (create JUDGE), some create WEB tasks
+5. Spawn news-driver-web for each WEB task → some explained (create JUDGE), some create PPX tasks
+6. Spawn news-driver-ppx for each PPX task → all create JUDGE tasks
+7. Spawn news-driver-judge for each JUDGE task → validates and returns final confidence
+8. Save Q1 to Companies/AAPL/news.csv (from JUDGE results), mark Q1_FY2024 done
+9. Check news_processed.csv → row exists for AAPL|Q2|FY2024 → skip Q2
+10. Return results (Q1 only, Q2 was cached)
