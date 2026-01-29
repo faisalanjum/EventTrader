@@ -1,7 +1,7 @@
 {
   "plansDirectory": ".claude/plans",
   "env": {
-    "CLAUDE_CODE_TASK_LIST_ID": "eventmarketdb-tasks",
-    "CLAUDE_CODE_ENABLE_TASKS": "true"
+    "CLAUDE_CODE_ENABLE_TASKS": "true",
+    "CLAUDE_CODE_TASK_LIST_ID": "earnings-orchestrator"
   }
 }
