@@ -56,7 +56,14 @@ date|news_id|driver|attr_confidence|pred_confidence|daily_stock|daily_adj|market
 
 ### Step 1: Get Task Data
 
-Use `TaskGet` with the task ID from your prompt to retrieve the 10-field result line from the task description.
+Use `TaskGet` with the task ID from your prompt to retrieve the task description.
+
+The description format is: `"READY: {10-field result line}"`
+
+Strip the "READY: " prefix to get the 10-field result line:
+```
+date|news_id|driver|confidence|daily_stock|daily_adj|market_session|source|external_research|source_pub_date
+```
 
 Parse: `date`, `news_id`, `driver`, `confidence` (becomes attr_confidence), `daily_stock`, `daily_adj`, `source`, `source_pub_date`
 

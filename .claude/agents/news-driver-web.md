@@ -9,7 +9,6 @@ tools:
   - TaskList
   - TaskGet
   - TaskUpdate
-  - TaskCreate
 model: sonnet
 permissionMode: dontAsk
 hooks:
@@ -28,9 +27,9 @@ Research what caused a stock's significant move using web sources.
 
 ## Input
 
-Prompt format: `TICKER DATE DAILY_STOCK DAILY_ADJ TASK_ID=N QUARTER=Q`
+Prompt format: `TICKER DATE DAILY_STOCK DAILY_ADJ TASK_ID=N PPX_TASK_ID=P JUDGE_TASK_ID=J QUARTER=Q`
 
-Example: `AAPL 2024-01-02 -3.65 -3.06 TASK_ID=5 QUARTER=Q1_FY2024`
+Example: `AAPL 2024-01-02 -3.65 -3.06 TASK_ID=5 PPX_TASK_ID=6 JUDGE_TASK_ID=7 QUARTER=Q1_FY2024`
 
 ## PIT RULE (CRITICAL)
 
@@ -83,32 +82,35 @@ Don't rely on snippets — fetch full content to understand:
 - **Why**: Causation logic
 - **Context**: Why this matters now
 
-### Step 4: Create PPX Task (if confidence < 50)
+### Step 4: Handle Downstream Tasks
 
-If after thorough web research your confidence is still < 50:
+**If confidence >= 50 (confident answer found):**
 
-1. Extract TICKER, DATE, DAILY_STOCK, DAILY_ADJ, and QUARTER from your prompt
-2. Call `TaskCreate` with:
-   - `subject`: `"PPX-{QUARTER} {TICKER} {DATE}"`
-   - `description`: `"{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} QUARTER={QUARTER}"`
+Mark PPX task as SKIPPED, update JUDGE with result:
 
-### Step 4b: Create JUDGE Task (if confidence >= 50)
+1. Extract `PPX_TASK_ID` and `JUDGE_TASK_ID` from your prompt
+2. Call `TaskUpdate` for PPX task:
+   - `taskId`: `"{PPX_TASK_ID}"`
+   - `status`: `"completed"`
+   - `description`: `"SKIPPED: WEB found answer"`
+3. Call `TaskUpdate` for JUDGE task:
+   - `taskId`: `"{JUDGE_TASK_ID}"`
+   - `description`: `"READY: {your 10-field result line}"` (this unblocks JUDGE for validation)
 
-If confidence is sufficient (no PPX escalation needed), create a task for validation:
+**If confidence < 50 (escalation needed):**
 
-1. Extract TICKER, DATE, and QUARTER from your prompt
-2. Call `TaskCreate` with:
-   - `subject`: `"JUDGE-{QUARTER} {TICKER} {DATE}"`
-   - `description`: Your 10-field result line
+Do nothing for downstream tasks - PPX will auto-unblock when WEB completes.
 
-### Step 5: Update Task (MANDATORY)
+### Step 5: Update WEB Task (MANDATORY)
 
-Extract task ID from `TASK_ID=N` in your prompt.
+Extract the WEB task ID from `TASK_ID=N` in your prompt.
 
 Call `TaskUpdate` with:
 - `taskId`: `"N"`
 - `status`: `"completed"`
 - `description`: your 10-field result line
+
+Completing this task auto-unblocks PPX task (if not SKIPPED).
 
 ### Step 6: Output via Bash (REQUIRED)
 
@@ -144,12 +146,12 @@ echo "2024-01-15|N/A|UNKNOWN|0|-2.5|-2.1||none|true|N/A"
 
 | Scenario | Confidence | Action |
 |----------|------------|--------|
-| 3+ sources + clear causation | 80-95 | Done |
-| 2 sources + clear causation | 60-80 | Done |
-| 2 sources but magnitude off | 50-60 | Done |
-| 1 source only | 30-50 | Create PPX task |
-| Sources don't explain move | 10-30 | Create PPX task |
-| Nothing found | 0 | Create PPX task |
+| 3+ sources + clear causation | 80-95 | Skip PPX, update JUDGE |
+| 2 sources + clear causation | 60-80 | Skip PPX, update JUDGE |
+| 2 sources but magnitude off | 50-60 | Skip PPX, update JUDGE |
+| 1 source only | 30-50 | Let PPX run |
+| Sources don't explain move | 10-30 | Let PPX run |
+| Nothing found | 0 | Let PPX run |
 
 ## Rules
 
@@ -157,5 +159,6 @@ echo "2024-01-15|N/A|UNKNOWN|0|-2.5|-2.1||none|true|N/A"
 - **MUST output via Bash echo** - Enables hook validation
 - **news_id MUST be URL(s)** when source is websearch
 - **source_pub_date MUST be <= DATE**
-- **If confidence < 50** → Create PPX task for Perplexity escalation
-- **If nothing found** → source="none", news_id="N/A", driver="UNKNOWN", confidence=0, create PPX task
+- **If confidence >= 50** → Mark PPX as SKIPPED, update JUDGE with result
+- **If confidence < 50** → Just complete WEB task, PPX auto-unblocks
+- **If nothing found** → source="none", news_id="N/A", driver="UNKNOWN", confidence=0, let PPX run

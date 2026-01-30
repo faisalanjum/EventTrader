@@ -7,7 +7,6 @@ tools:
   - TaskList
   - TaskGet
   - TaskUpdate
-  - TaskCreate
 model: opus
 permissionMode: dontAsk
 hooks:
@@ -24,9 +23,9 @@ Find what caused a stock's significant move on a specific date.
 
 ## Input
 
-Prompt format: `TICKER DATE DAILY_STOCK DAILY_ADJ TASK_ID=N QUARTER=Q`
+Prompt format: `TICKER DATE DAILY_STOCK DAILY_ADJ TASK_ID=N WEB_TASK_ID=W PPX_TASK_ID=P JUDGE_TASK_ID=J QUARTER=Q`
 
-Example: `AAPL 2024-01-02 -3.65 -3.06 TASK_ID=5 QUARTER=Q1_FY2024`
+Example: `AAPL 2024-01-02 -3.65 -3.06 TASK_ID=5 WEB_TASK_ID=6 PPX_TASK_ID=7 JUDGE_TASK_ID=8 QUARTER=Q1_FY2024`
 
 ## Task
 
@@ -70,30 +69,36 @@ source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/Event
 **If NO news:**
 - driver = "UNKNOWN", confidence = 0, external_research = true
 
-### Step 3: Create WEB Task (if external_research=true)
+### Step 3: Handle Downstream Tasks
 
-If your analysis requires external research (`external_research=true`), create a task for web research:
+**If external_research=false (confident answer found):**
 
-1. Extract TICKER, DATE, DAILY_STOCK, DAILY_ADJ, and QUARTER from your prompt
-2. Call `TaskCreate` with:
-   - `subject`: `"WEB-{QUARTER} {TICKER} {DATE}"` (e.g., "WEB-Q1_FY2024 AAPL 2024-01-02")
-   - `description`: `"{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"`
+Mark WEB and PPX tasks as SKIPPED, update JUDGE with result:
 
-### Step 3b: Create JUDGE Task (if external_research=false)
+1. Extract `WEB_TASK_ID`, `PPX_TASK_ID`, `JUDGE_TASK_ID` from your prompt
+2. Call `TaskUpdate` for WEB task:
+   - `taskId`: `"{WEB_TASK_ID}"`
+   - `status`: `"completed"`
+   - `description`: `"SKIPPED: BZ found answer"`
+3. Call `TaskUpdate` for PPX task:
+   - `taskId`: `"{PPX_TASK_ID}"`
+   - `status`: `"completed"`
+   - `description`: `"SKIPPED: BZ found answer"`
+4. Call `TaskUpdate` for JUDGE task:
+   - `taskId`: `"{JUDGE_TASK_ID}"`
+   - `description`: `"READY: {your 10-field result line}"` (this unblocks JUDGE for validation)
 
-If no external research needed, create a task for validation:
+**If external_research=true (escalation needed):**
 
-1. Extract TICKER, DATE, and QUARTER from your prompt
-2. Call `TaskCreate` with:
-   - `subject`: `"JUDGE-{QUARTER} {TICKER} {DATE}"` (e.g., "JUDGE-Q1_FY2024 AAPL 2024-01-02")
-   - `description`: Your 10-field result line
+Do nothing for downstream tasks - WEB will auto-unblock when BZ completes.
 
-### Step 4: Update Task (MANDATORY)
+### Step 4: Update BZ Task (MANDATORY)
 
-**You MUST do this before returning.** Extract the task ID number N from `TASK_ID=N` in your prompt.
+**You MUST do this before returning.** Extract the BZ task ID number N from `TASK_ID=N` in your prompt.
 
 1. Call `TaskUpdate` with `taskId: "N"`, `status: "completed"`, and `description` set to your 10-field result line
 2. This is NOT optional — the orchestrator reads your result from the task
+3. Completing this task auto-unblocks WEB task (if not SKIPPED)
 
 ### Step 5: Return
 

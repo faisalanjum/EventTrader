@@ -71,63 +71,92 @@ source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/Event
 
 **If OK|NO_MOVES returned:** No significant moves for Q1, skip to Step 4.
 
-### Step 3: Concurrent News Analysis for Q1 (BZ → WEB → PPX)
+### Step 3: Concurrent News Analysis for Q1 (BZ → WEB → PPX → JUDGE)
 
-**Phase 1: Create and spawn BZ agents**
+**Phase 1: Create ALL tasks upfront with blockedBy dependencies**
 
-For EACH significant date from Step 2:
+For EACH significant date from Step 2, create all 4 tasks with dependency chain:
 
-1. **Create a task** via TaskCreate:
+1. **Create BZ task** via TaskCreate:
    - `subject`: `"BZ-{QUARTER} {TICKER} {DATE}"` (e.g., "BZ-Q4_FY2022 NOG 2023-01-03")
    - `description`: `"pending"`
    - `activeForm`: `"Analyzing {TICKER} {DATE}"`
+   - Note the task ID as `BZ_ID`
 
-2. **Spawn sub-agent** with the task ID and QUARTER:
-   ```
-   subagent_type: "news-driver-bz"
-   description: "BZ news {TICKER} {DATE}"
-   prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} TASK_ID={N} QUARTER={E1.fiscal_quarter}_FY{E1.fiscal_year}"
-   ```
+2. **Create WEB task** via TaskCreate:
+   - `subject`: `"WEB-{QUARTER} {TICKER} {DATE}"`
+   - `description`: `"{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"`
+   - `activeForm`: `"Web research {TICKER} {DATE}"`
+   - Then call TaskUpdate with `addBlockedBy: ["{BZ_ID}"]`
+   - Note the task ID as `WEB_ID`
+
+3. **Create PPX task** via TaskCreate:
+   - `subject`: `"PPX-{QUARTER} {TICKER} {DATE}"`
+   - `description`: `"{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"`
+   - `activeForm`: `"Perplexity research {TICKER} {DATE}"`
+   - Then call TaskUpdate with `addBlockedBy: ["{WEB_ID}"]`
+   - Note the task ID as `PPX_ID`
+
+4. **Create JUDGE task** via TaskCreate:
+   - `subject`: `"JUDGE-{QUARTER} {TICKER} {DATE}"`
+   - `description`: `"pending"`
+   - `activeForm`: `"Validating {TICKER} {DATE}"`
+   - Then call TaskUpdate with `addBlockedBy: ["{PPX_ID}"]`
+   - Note the task ID as `JUDGE_ID`
+
+**Phase 2: Spawn BZ agents with all task IDs**
+
+For EACH significant date, spawn BZ agent with all 4 task IDs:
+```
+subagent_type: "news-driver-bz"
+description: "BZ news {TICKER} {DATE}"
+prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} TASK_ID={BZ_ID} WEB_TASK_ID={WEB_ID} PPX_TASK_ID={PPX_ID} JUDGE_TASK_ID={JUDGE_ID} QUARTER={E1.fiscal_quarter}_FY{E1.fiscal_year}"
+```
 
 **IMPORTANT:**
-- Create ALL tasks first, THEN spawn ALL sub-agents in parallel (one per date, no cap)
-- Sub-agents store results in their task via TaskUpdate
-- Sub-agents create WEB-* tasks via TaskCreate if they need external research
-- DO NOT WAIT for BZ agents to complete - proceed immediately to Phase 2
+- Create ALL tasks for ALL dates first, THEN spawn ALL BZ agents in parallel
+- BZ agents mark WEB+PPX as SKIPPED if they find answer (external_research=false)
+- DO NOT WAIT for BZ agents - proceed immediately to Phase 3
 
-**Phase 2: Concurrent escalation loop**
+**Phase 3: Concurrent escalation loop**
 
-Immediately after spawning BZ agents, enter this loop. DO NOT wait for BZ agents first:
+Immediately after spawning BZ agents, enter this loop:
 
 ```
 WHILE any Q1 tasks (BZ-*, WEB-*, PPX-*, JUDGE-*) are pending or in_progress:
-  1. Check TaskList for pending WEB-{QUARTER} {TICKER} tasks
-     → For each pending WEB task (if not already spawned):
-       - Read task description: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
-       - Extract QUARTER from task subject (e.g., "WEB-Q1_FY2024 AAPL 2024-01-02" → Q1_FY2024)
+  1. Check TaskList for WEB-{QUARTER} {TICKER} tasks that are:
+     - status = "pending" AND blockedBy is empty (auto-unblocked when BZ completed)
+     - NOT already spawned
+     → For each such WEB task:
+       - Get task via TaskGet to read description: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
+       - Extract QUARTER from task subject
+       - Find corresponding PPX and JUDGE task IDs from TaskList
        - Spawn:
          subagent_type: "news-driver-web"
-         prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} TASK_ID={task ID} QUARTER={QUARTER}"
-     → WEB agents update their task via TaskUpdate
-     → WEB agents create PPX-* or JUDGE-* tasks via TaskCreate
+         prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} TASK_ID={WEB_ID} PPX_TASK_ID={PPX_ID} JUDGE_TASK_ID={JUDGE_ID} QUARTER={QUARTER}"
+     → WEB agents mark PPX as SKIPPED if confidence >= 50
 
-  2. Check TaskList for pending PPX-{QUARTER} {TICKER} tasks
-     → For each pending PPX task (if not already spawned):
-       - Read task description: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ}"
-       - Extract QUARTER from task subject (e.g., "PPX-Q1_FY2024 AAPL 2024-01-02" → Q1_FY2024)
+  2. Check TaskList for PPX-{QUARTER} {TICKER} tasks that are:
+     - status = "pending" AND blockedBy is empty (auto-unblocked when WEB completed)
+     - NOT already spawned
+     → For each such PPX task:
+       - Get task via TaskGet to read description
+       - Extract QUARTER from task subject
+       - Find corresponding JUDGE task ID from TaskList
        - Spawn:
          subagent_type: "news-driver-ppx"
-         prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} TASK_ID={task ID} QUARTER={QUARTER}"
-     → PPX agents update their task via TaskUpdate
-     → PPX agents create JUDGE-* tasks via TaskCreate
+         prompt: "{TICKER} {DATE} {DAILY_STOCK} {DAILY_ADJ} TASK_ID={PPX_ID} JUDGE_TASK_ID={JUDGE_ID} QUARTER={QUARTER}"
+     → PPX agents always update JUDGE with result (final tier)
 
-  3. Check TaskList for pending JUDGE-{QUARTER} {TICKER} tasks
-     → For each pending JUDGE task (if not already spawned):
-       - Task description contains the 10-field result line to validate
+  3. Check TaskList for JUDGE-{QUARTER} {TICKER} tasks that are:
+     - status = "pending" AND blockedBy is empty (auto-unblocked when PPX completed or skipped)
+     - NOT already spawned
+     - description starts with "READY:" (has result to validate)
+     → For each such JUDGE task:
        - Spawn:
          subagent_type: "news-driver-judge"
-         prompt: "TASK_ID={task ID}"
-     → JUDGE agents validate and update their task with final confidence
+         prompt: "TASK_ID={JUDGE_ID}"
+     → JUDGE agents validate and update task with final confidence
 
   4. Brief pause (2-3 seconds), then repeat
 END WHILE
@@ -135,7 +164,9 @@ END WHILE
 
 Track which task IDs you've already spawned agents for to avoid duplicates.
 
-**Phase 3: Collect all results**
+**Note on SKIPPED tasks:** When BZ or WEB finds a confident answer, they mark downstream tasks as "completed" with description="SKIPPED: {tier} found answer". This auto-unblocks the next task in chain (JUDGE for BZ skip, JUDGE for WEB skip).
+
+**Phase 4: Collect all results**
 
 When all Q1 tasks are completed, collect results from JUDGE-* tasks via TaskGet. Read the `description` field — it contains the validated 12-field pipe-delimited result line (with attr_confidence, pred_confidence, and judge_notes).
 
@@ -153,16 +184,17 @@ When all Q1 tasks are completed, collect results from JUDGE-* tasks via TaskGet.
    - Append row: `{TICKER}|{E1.fiscal_quarter}|FY{E1.fiscal_year}|{today YYYY-MM-DD}`
    - Create file with header if it doesn't exist
 
-### Step 4: Concurrent News Analysis for Q2 (BZ → WEB → PPX)
+### Step 4: Concurrent News Analysis for Q2 (BZ → WEB → PPX → JUDGE)
 
 Calculate:
 - `START` = E1 date + 1 day (exclude E1 earnings reaction)
 - `END` = E2 date (exclusive, excludes E2 earnings reaction)
 
 Run `get_significant_moves.py {TICKER} {START} {END} {E2.trailing_vol}` then follow the same concurrent pattern as Step 3:
-- Phase 1: Create BZ-{Q2 QUARTER} tasks, spawn news-driver-bz agents in parallel
-- Phase 2: Concurrent escalation loop for WEB-{Q2 QUARTER} and PPX-{Q2 QUARTER} tasks
-- Phase 3: Collect all Q2 results when complete
+- Phase 1: Create ALL 4 tasks (BZ, WEB, PPX, JUDGE) per date with blockedBy dependencies
+- Phase 2: Spawn BZ agents with all 4 task IDs
+- Phase 3: Concurrent escalation loop - spawn WEB/PPX/JUDGE as they auto-unblock
+- Phase 4: Collect all Q2 results when complete
 
 Use `QUARTER={E2.fiscal_quarter}_FY{E2.fiscal_year}` for all Q2 tasks.
 

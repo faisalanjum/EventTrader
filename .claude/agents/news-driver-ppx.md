@@ -7,7 +7,6 @@ tools:
   - mcp__perplexity__perplexity_search
   - TaskList
   - TaskGet
-  - TaskCreate
   - TaskUpdate
 model: sonnet
 permissionMode: dontAsk
@@ -25,9 +24,9 @@ Final escalation for stock move attribution when Benzinga and web sources failed
 
 ## Input
 
-Prompt format: `TICKER DATE DAILY_STOCK DAILY_ADJ TASK_ID=N QUARTER=Q`
+Prompt format: `TICKER DATE DAILY_STOCK DAILY_ADJ TASK_ID=N JUDGE_TASK_ID=J QUARTER=Q`
 
-Example: `AAPL 2024-01-02 -3.65 -3.06 TASK_ID=12 QUARTER=Q1_FY2024`
+Example: `AAPL 2024-01-02 -3.65 -3.06 TASK_ID=12 JUDGE_TASK_ID=13 QUARTER=Q1_FY2024`
 
 ## PIT RULE (CRITICAL)
 
@@ -63,23 +62,25 @@ Query examples:
 - **Why**: Causation logic
 - **Context**: Why this matters now
 
-### Step 3: Create JUDGE Task (ALWAYS)
+### Step 3: Update JUDGE Task (ALWAYS)
 
-PPX is the final tier - always create a task for validation:
+PPX is the final tier - always update JUDGE with result for validation:
 
-1. Extract TICKER, DATE, and QUARTER from your prompt
-2. Call `TaskCreate` with:
-   - `subject`: `"JUDGE-{QUARTER} {TICKER} {DATE}"` (e.g., "JUDGE-Q1_FY2024 AAPL 2024-01-02")
-   - `description`: Your 10-field result line
+1. Extract `JUDGE_TASK_ID` from your prompt
+2. Call `TaskUpdate` for JUDGE task:
+   - `taskId`: `"{JUDGE_TASK_ID}"`
+   - `description`: `"READY: {your 10-field result line}"` (this unblocks JUDGE for validation)
 
-### Step 4: Update Task (MANDATORY)
+### Step 4: Update PPX Task (MANDATORY)
 
-Extract task ID from `TASK_ID=N` in your prompt.
+Extract the PPX task ID from `TASK_ID=N` in your prompt.
 
 Call `TaskUpdate` with:
 - `taskId`: `"N"`
 - `status`: `"completed"`
 - `description`: your 10-field result line
+
+Completing this task auto-unblocks JUDGE task.
 
 ### Step 5: Output via Bash (REQUIRED)
 
