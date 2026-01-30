@@ -46,6 +46,11 @@
 | Task tool in forked context | ❌ BLOCKED | Cannot use for parallelism |
 | MCP wildcards pre-load | ❌ NO | Only grants permission, still need MCPSearch |
 | Error propagation | ⚠️ TEXT ONLY | No exceptions, must parse response |
+| **Task deletion unblocks dependents** | ✅ WORKS | `status: "deleted"` removes task, unblocks dependents |
+| **Task completion unblocks dependents** | ✅ WORKS | `status: "completed"` keeps task, unblocks dependents |
+| **Cross-agent task manipulation** | ✅ WORKS | Any agent can update/delete any task by ID |
+| **Upfront task creation pattern** | ✅ WORKS | Create all tasks upfront, skip via completed/deleted |
+| **Parallel foreground Task spawn** | ✅ PARALLEL | 194ms spread, full tool access (See Part 10.14) |
 | Skill-specific hooks | ✅ WORKS (v2.1.0+) | Define in SKILL.md frontmatter; 3 events only |
 | `color:` for sub-agents | ✅ UI only | Offered in `/agents` wizard; not documented as frontmatter field |
 | `color:` for skills | ❓ UNTESTED | Not documented; test if `context: fork` skills can use it |
@@ -2099,18 +2104,80 @@ permissionMode: dontAsk
 ---
 ```
 
-**Verified (2026-01-27)**:
-- `bz-news-driver` (only Bash in tools) → ❌ No TaskList access
-- `test-task-agent` (Bash + task tools) → ✅ Has TaskList, can see shared tasks
+**Verified (2026-01-28)**:
+- `test-task-agent` (Bash + TaskList/Create/Update/Get) → ✅ TaskList works, TaskUpdate works
+- `bz-news-driver` (Bash + TaskList/Get/Update) → ✅ TaskUpdate works — stored result in task description
+- `external-news-driver` (tools + TaskList/Get/Update) → ✅ TaskUpdate works in full orchestrator flow
+- `bz-news-driver` (only Bash in tools, old) → ❌ No TaskList access
 
-**Example**: If you want `bz-news-driver` to update the task list when done, add task tools to its definition:
+**Key findings**:
+1. Custom agents MUST have task tools explicitly listed AND clear mandatory instructions ("MANDATORY" / "NOT optional" language)
+2. **Shared task list requires `CLAUDE_CODE_TASK_LIST_ID` in settings.json** — without it, orchestrator and sub-agents use different random task list IDs and can't see each other's tasks
+3. Setting takes effect on session restart (not mid-session)
 
+**Required settings.json for shared task list**:
+```json
+{
+  "env": {
+    "CLAUDE_CODE_ENABLE_TASKS": "true",
+    "CLAUDE_CODE_TASK_LIST_ID": "earnings-orchestrator"
+  }
+}
+```
+
+All sessions/sub-agents then share `~/.claude/tasks/earnings-orchestrator/`. Use quarter+ticker prefix in task subjects for filtering:
+- `BZ-Q4_FY2022 NOG 2023-01-03` (Benzinga analysis)
+- `EXT-Q1_FY2023 NOG 2023-03-15` (External research)
+
+**Resume logic**: Filter TaskList where subject starts with `BZ-Q4_FY2022 NOG` to find all Q4 work for that ticker.
+
+### Alternative: Per-Ticker Isolation via Subprocess
+
+For true filesystem isolation per ticker, spawn a subprocess with dynamic task list ID:
+
+```bash
+CLAUDE_CODE_TASK_LIST_ID=AAPL claude -p "Create task, spawn bz-news-driver..." --allowedTools "TaskCreate,TaskList,TaskGet,TaskUpdate,Task,Bash"
+```
+
+This subprocess:
+1. Gets its own task list (`~/.claude/tasks/AAPL/`)
+2. Can create tasks, spawn sub-agents, update tasks
+3. Completely isolated per ticker
+
+**Important**: Only works when settings.json does NOT have a static `CLAUDE_CODE_TASK_LIST_ID` — env var is overridden by settings.json.
+
+**Trade-offs**:
+| Approach | Pros | Cons |
+|----------|------|------|
+| **Shared list + prefix** | Simpler, no subprocess overhead | All tickers in one list |
+| **Subprocess per ticker** | True isolation, parallel-safe | More complex, subprocess management |
+
+**Recommendation**: Use shared list with ticker prefix for sequential processing. Use subprocess pattern only if running multiple tickers in parallel from different terminals.
+
+**Working agent definition** (`.claude/agents/test-task-agent.md`):
 ```yaml
-# .claude/agents/bz-news-driver.md
 tools:
   - Bash
-  - TaskList      # Add for task coordination
-  - TaskUpdate    # Add to mark tasks complete
+  - TaskList
+  - TaskCreate
+  - TaskUpdate
+  - TaskGet
+```
+
+**Working bz-news-driver pattern** (`.claude/agents/bz-news-driver.md`):
+```yaml
+tools:
+  - Bash
+  - TaskList
+  - TaskGet
+  - TaskUpdate
+```
+With mandatory Step 3 instruction:
+```markdown
+### Step 3: Update Task (MANDATORY)
+**You MUST do this before returning.** Extract the task ID number N from `TASK_ID=N` in your prompt.
+1. Call `TaskUpdate` with `taskId: "N"`, `status: "completed"`, and `description` set to your result line
+2. This is NOT optional — the orchestrator reads your result from the task
 ```
 
 ### Orchestrator Instructions Template
@@ -2239,4 +2306,385 @@ rm -rf ~/.claude/tasks/random-uuid-*
 
 ---
 
-*Updated: 2026-01-27 | SDK 0.1.23+ verified | Cross-session persistence confirmed*
+## 10.12 Dynamic Per-Ticker Task Lists (Tested 2026-01-28)
+
+### The Problem
+
+You want each ticker (AAPL, MSFT, etc.) to get its own task folder so tasks don't mix:
+```
+~/.claude/tasks/earnings-AAPL/   ← AAPL tasks only
+~/.claude/tasks/earnings-MSFT/   ← MSFT tasks only
+```
+
+To do this you'd set `CLAUDE_CODE_TASK_LIST_ID=earnings-AAPL` before launching Claude.
+
+### The Catch: settings.json Always Wins
+
+If `.claude/settings.json` has `CLAUDE_CODE_TASK_LIST_ID` set, it **overwrites** any env var you pass from the terminal or SDK. The env var you set is ignored.
+
+```
+Terminal: CLAUDE_CODE_TASK_LIST_ID=earnings-AAPL
+                     ↓
+settings.json also sets: CLAUDE_CODE_TASK_LIST_ID=eventmarketdb-tasks
+                     ↓
+Result: tasks go to eventmarketdb-tasks/  ← your env var was ignored
+```
+
+### Test Evidence (2026-01-28)
+
+| Test | settings.json has ID? | Env var set? | Task landed in | Result |
+|------|----------------------|-------------|---------------|--------|
+| CLI | YES (`eventmarketdb-tasks`) | YES (`earnings-AAPL-test`) | `eventmarketdb-tasks/` | **env var ignored** |
+| CLI | NO (removed) | YES (`earnings-AAPL-test`) | `earnings-AAPL-test/` | **works** |
+| SDK | NO (removed) | YES (`earnings-MSFT-test`) | `earnings-MSFT-test/` | **works** |
+
+### How to Enable Dynamic Per-Ticker Lists
+
+**Step 1**: Remove `CLAUDE_CODE_TASK_LIST_ID` from `.claude/settings.json`:
+```json
+{
+  "plansDirectory": ".claude/plans",
+  "env": {
+    "CLAUDE_CODE_ENABLE_TASKS": "true"
+  }
+}
+```
+
+**Step 2 (CLI)**: Set the variable before each session:
+```bash
+CLAUDE_CODE_TASK_LIST_ID=earnings-AAPL claude -p "/earnings-orchestrator AAPL"
+```
+
+**Step 2 (SDK)**: Set it in Python before calling `query()`:
+```python
+ticker = sys.argv[1]
+os.environ["CLAUDE_CODE_TASK_LIST_ID"] = f"earnings-{ticker}"
+
+async for msg in query(
+    prompt=f"/earnings-orchestrator {ticker}",
+    options=ClaudeAgentOptions(
+        setting_sources=["project"],
+        permission_mode="bypassPermissions",
+    )
+):
+    ...
+```
+
+### Tradeoff
+
+| Scenario | With static ID in settings.json | Without (dynamic) |
+|----------|--------------------------------|--------------------|
+| Interactive `claude` (no env var) | Tasks persist in `eventmarketdb-tasks/` | Random UUID folder, tasks lost between sessions |
+| Scripted/SDK per-ticker | **Cannot override** — all tickers share one folder | Each ticker gets its own folder |
+
+### Precedence Rule
+
+```
+settings.json env block  >  process environment variable  >  random UUID default
+```
+
+There is no way to set a "default" in settings.json and override it per-session. It's one or the other.
+
+### Cross-Session Resume (Tested 2026-01-28)
+
+The same folder name = the same tasks. You can resume across any number of sessions, from both CLI and SDK.
+
+**Tested 3-session scenario with `earnings-GOOG-resume`:**
+
+| Session | Method | Action | Result |
+|---------|--------|--------|--------|
+| 1 | CLI | Created 3 tasks, completed #1, started #2 | Folder created with 3 JSON files |
+| 2 | CLI (new session) | TaskList → saw all 3, completed #2, started #3 | Picked up exactly where Session 1 left off |
+| 3 | SDK (Python) | TaskList → saw all 3, completed #3, deleted #1 | File `1.json` removed from disk, #2 and #3 remain |
+
+**Key facts:**
+- **Reuse**: Same `CLAUDE_CODE_TASK_LIST_ID` value → same folder → same tasks. Works indefinitely.
+- **Partial cleanup**: Delete some tasks (file removed from disk), keep others. Next session sees only what remains.
+- **Full cleanup**: Delete all tasks. Folder still exists (with `.lock`/`.highwatermark`). Next session starts fresh with new task IDs.
+- **Both CLI and SDK**: Both read/write the same folder. You can create tasks from CLI, update them from SDK, or vice versa.
+
+---
+
+## 10.13 Background vs Foreground Agent Spawning (Tested 2026-01-29)
+
+### The Problem
+
+When using `run_in_background: true` with the Task tool, spawned agents lose access to task management tools (TaskCreate, TaskList, TaskGet, TaskUpdate) even when explicitly listed in the agent's `tools:` field.
+
+### Test Evidence
+
+| Mode | TaskList | TaskCreate | TaskUpdate | Write Files |
+|------|----------|------------|------------|-------------|
+| **Foreground** (default) | ✅ YES | ✅ YES | ✅ YES | ✅ YES |
+| **Background** (`run_in_background: true`) | ❌ NO | ❌ NO | ❌ NO | ❌ NO |
+
+**Background agent thinking (from test):**
+> "Looking at my function definitions, I only have access to the **Bash** tool. I don't have TaskList, TaskCreate, TaskUpdate, or any other task management tools available."
+
+### Root Cause
+
+This is a **known bug** affecting multiple tool types:
+- [#13254](https://github.com/anthropics/claude-code/issues/13254) - Background subagents cannot access MCP tools (REOPENED)
+- [#13890](https://github.com/anthropics/claude-code/issues/13890) - Subagents unable to write files and call MCP tools (OPEN)
+- [#14521](https://github.com/anthropics/claude-code/issues/14521) - Background agents cannot write files (Duplicate)
+
+`run_in_background: true` spawns agents with a **reduced tool set** - only basic tools like Bash are available.
+
+### The Solution: Foreground Parallel Spawns
+
+**Key insight**: Multiple Task calls in the SAME message run in PARALLEL even without `run_in_background`.
+
+```
+Orchestrator sends ONE message with multiple Task tool calls:
+├── Task: news-driver-bz for date 1  ──┐
+├── Task: news-driver-bz for date 2  ──┼──► All run in PARALLEL
+├── Task: news-driver-bz for date 3  ──┤
+└── Task: news-driver-bz for date 4  ──┘
+                                        │
+                                        ▼
+                        Orchestrator BLOCKS until all complete
+                        (but agents execute concurrently)
+```
+
+**Benefits:**
+- Agents have full tool access (TaskCreate, TaskUpdate, MCP, Write, etc.)
+- Agents run in parallel (0.24s gap between launches)
+- Orchestrator waits for all to complete, then continues
+
+**Trade-off:**
+- Orchestrator cannot do other work while waiting (blocking)
+- For our use case (batch processing), this is acceptable
+
+### Verified Patterns (All ✅)
+
+| Pattern | Context | Result |
+|---------|---------|--------|
+| TaskCreate/List/Get/Update | CLI main | ✅ Works |
+| TaskCreate/List/Get/Update | CLI skill | ✅ Works |
+| TaskCreate/List/Get/Update | SDK skill | ✅ Works |
+| Parallel foreground Task spawn | CLI main | ✅ Agents run parallel, have task tools |
+| Parallel foreground Task spawn | CLI skill | ✅ Works |
+| Single foreground Task spawn | SDK skill | ✅ Agent updated task successfully |
+| Agent uses TaskUpdate to store result | All contexts | ✅ Works |
+
+### Implementation for earnings-orchestrator
+
+```markdown
+## Correct Pattern (Foreground)
+
+1. Create all tasks first:
+   - TaskCreate subject="BZ-Q1 AAPL 2024-01-02", description="pending"
+   - TaskCreate subject="BZ-Q1 AAPL 2024-01-03", description="pending"
+
+2. Spawn all agents in ONE message (NO run_in_background):
+   - Task subagent_type="news-driver-bz" prompt="... TASK_ID=1 ..."
+   - Task subagent_type="news-driver-bz" prompt="... TASK_ID=2 ..."
+   (Both run in parallel, both have task tools)
+
+3. Agents update their tasks:
+   - Each agent calls TaskUpdate with results
+
+4. Orchestrator continues after all agents complete:
+   - Read results via TaskGet
+   - Create WEB tasks for escalation
+   - Repeat pattern for WEB agents
+```
+
+### What NOT to Do
+
+```markdown
+## Wrong Pattern (Background - agents lose tools)
+
+Task subagent_type="news-driver-bz"
+     prompt="..."
+     run_in_background: true   ← DON'T DO THIS
+```
+
+Agents spawned with `run_in_background: true` cannot:
+- Use TaskCreate/TaskList/TaskGet/TaskUpdate
+- Write files
+- Call MCP tools
+
+### Test Skills Created
+
+| Skill | Purpose | Location |
+|-------|---------|----------|
+| test-sdk-task-simple | Verify task tools work via SDK | `.claude/skills/test-sdk-task-simple/` |
+| test-sdk-spawn-single | Verify Task spawn works via SDK | `.claude/skills/test-sdk-spawn-single/` |
+| test-parallel-fg-task | Verify parallel FG spawns in skill | `.claude/skills/test-parallel-fg-task/` |
+
+### Test Output Files
+
+| File | Evidence |
+|------|----------|
+| `sdk-task-simple-test.txt` | TaskCreate/List/Update/Get all work via SDK |
+| `sdk-spawn-single-test.txt` | Spawned agent updated task via SDK |
+| `parallel-fg-task-test.txt` | Parallel FG spawns work in skill context |
+
+---
+
+*Updated: 2026-01-29 | Background vs foreground tool availability tested | Foreground parallel pattern verified | SDK compatibility confirmed*
+
+---
+
+## 10.14 Upfront Task Creation & Dependency Patterns (Tested 2026-01-29)
+
+### Overview
+
+This section documents validated patterns for creating all tasks upfront with dependencies, allowing sub-agents to skip tiers by marking tasks as completed/deleted.
+
+### Task Unblocking Mechanisms
+
+**Two ways to unblock a dependent task:**
+
+| Method | Command | Effect on Blocker | Effect on Dependent | Audit Trail |
+|--------|---------|-------------------|---------------------|-------------|
+| **Complete** | `TaskUpdate taskId=X status="completed"` | Task stays in list (status: completed) | Unblocked ✅ | Full - can see completed tasks |
+| **Delete** | `TaskUpdate taskId=X status="deleted"` | Task removed from list | Unblocked ✅ | Minimal - task disappears |
+
+**Both methods work identically for unblocking** - the dependent task becomes ready as soon as its blocker is either completed or deleted.
+
+### Validated Test Results
+
+| Test | Scenario | Result | Evidence File |
+|------|----------|--------|---------------|
+| **test-parallel-task-spawn** | 3 agents spawned in parallel | ✅ 194ms spread | `parallel-task-spawn.txt` |
+| **test-upfront-tasks** | 8 tasks, BZ deletes WEB/PPX | ✅ All patterns work | `upfront-tasks.txt` |
+| **test-cross-agent-delete** | BZ deletes tasks meant for WEB/PPX agents | ✅ Cross-agent works | `cross-agent-delete.txt` |
+| **Completion unblocks** | Complete blocker → dependent ready | ✅ Works | Inline test |
+| **Deletion unblocks** | Delete blocker → dependent ready | ✅ Works | Inline test |
+
+### Cross-Agent Task Manipulation
+
+**Key finding**: Tasks have NO ownership. Any agent with TaskUpdate can modify ANY task by ID.
+
+```
+Orchestrator creates:
+  #1: BZ-Q1 AAPL 2024-01-02  (for news-driver-bz)
+  #2: WEB-Q1 AAPL 2024-01-02 (for news-driver-web) [blocked by #1]
+  #3: PPX-Q1 AAPL 2024-01-02 (for news-driver-ppx) [blocked by #2]
+  #4: JUDGE-Q1 AAPL 2024-01-02 (for news-driver-judge) [blocked by #3]
+
+BZ agent finds answer early:
+  → TaskUpdate taskId="2" status="completed" description="SKIPPED: BZ found answer"
+  → TaskUpdate taskId="3" status="completed" description="SKIPPED: BZ found answer"
+  → TaskUpdate taskId="4" description="READY: {10-field result line}"
+  → TaskUpdate taskId="1" status="completed"
+
+Result: JUDGE (#4) is now unblocked and ready to run!
+```
+
+**Why this works**: The task system is shared global state. Task IDs are the only identifiers - there's no concept of which agent "owns" a task.
+
+### The Upfront Task Creation Pattern
+
+**Traditional Pattern (Reactive)**:
+```
+Orchestrator creates BZ tasks
+  → BZ agents create WEB tasks (if needed)
+    → WEB agents create PPX tasks (if needed)
+      → PPX agents create JUDGE tasks
+```
+Problems: Polling latency, no cross-tier parallelism, complex sub-agents
+
+**Upfront Pattern (Event-Driven)**:
+```
+Orchestrator creates ALL tasks upfront:
+  BZ-1 → WEB-1 → PPX-1 → JUDGE-1  (dependencies set)
+  BZ-2 → WEB-2 → PPX-2 → JUDGE-2  (dependencies set)
+
+BZ agents run in parallel:
+  BZ-1 finds answer → marks WEB-1/PPX-1 as "SKIPPED" → JUDGE-1 unblocks
+  BZ-2 needs escalation → completes → WEB-2 unblocks
+
+Orchestrator polls for ready tasks:
+  → Finds JUDGE-1 and WEB-2 ready → spawns both in parallel!
+```
+
+Benefits: Cross-tier parallelism, simpler sub-agents (no TaskCreate needed), full visibility
+
+### Implementation: Skip Pattern with COMPLETED Status
+
+**Recommended**: Use `status="completed"` with SKIPPED marker instead of delete for audit trail.
+
+```markdown
+# BZ Agent Instructions (when external_research=false)
+
+If you find the answer (no external research needed):
+1. Mark WEB task as skipped:
+   TaskUpdate taskId="{WEB_TASK_ID}" status="completed" description="SKIPPED: BZ found answer"
+2. Mark PPX task as skipped:
+   TaskUpdate taskId="{PPX_TASK_ID}" status="completed" description="SKIPPED: BZ found answer"
+3. Update JUDGE task with your result:
+   TaskUpdate taskId="{JUDGE_TASK_ID}" description="READY: {10-field result line}"
+4. Mark your own task as completed:
+   TaskUpdate taskId="{TASK_ID}" status="completed" description="{10-field result line}"
+
+If you need external research:
+1. Just mark your own task as completed:
+   TaskUpdate taskId="{TASK_ID}" status="completed" description="{10-field result line}"
+   (WEB task will auto-unblock because its blocker is complete)
+```
+
+### Dependency Parameters
+
+| Parameter | Direction | Example | Meaning |
+|-----------|-----------|---------|---------|
+| `addBlockedBy` | This task waits for others | `TaskUpdate id=3 addBlockedBy=["1","2"]` | Task #3 waits for #1 AND #2 |
+| `addBlocks` | This task blocks others | `TaskUpdate id=1 addBlocks=["3","4"]` | Task #1 blocks #3 and #4 |
+
+**Note**: No `removeBlockedBy` parameter exists. To unblock a task, you must complete or delete its blockers.
+
+### Comparison of Approaches
+
+| Aspect | Reactive (current) | Upfront (new) |
+|--------|-------------------|---------------|
+| Task creation | Dynamic by sub-agents | All upfront by orchestrator |
+| Sub-agent complexity | Must have TaskCreate | Only needs TaskUpdate |
+| Cross-tier parallelism | ❌ No (JUDGE-1 waits for all WEB) | ✅ Yes (JUDGE-1 runs while WEB-2 runs) |
+| Audit trail | Tasks appear as created | Full tree visible from start |
+| Skipped tiers | Never created | Marked as SKIPPED (completed) |
+| Polling loop | Tier-specific (check WEB, then PPX, then JUDGE) | Unified (check any unblocked) |
+
+### Unified Polling Loop (New Pattern)
+
+```python
+# Instead of checking each tier separately:
+WHILE any tasks pending:
+    ready_tasks = [t for t in TaskList()
+                   if t.status == "pending"
+                   and all(blocker.status in ["completed", "deleted"]
+                           for blocker in t.blockedBy)]
+
+    for task in ready_tasks:
+        if task.subject.startswith("WEB-"):
+            spawn news-driver-web with PPX_ID, JUDGE_ID
+        elif task.subject.startswith("PPX-"):
+            spawn news-driver-ppx with JUDGE_ID
+        elif task.subject.startswith("JUDGE-"):
+            spawn news-driver-judge
+
+    wait for spawned agents
+    brief pause, repeat
+```
+
+### Test Skills Created
+
+| Skill | Purpose | Location |
+|-------|---------|----------|
+| test-parallel-task-spawn | Verify parallel Task spawning | `.claude/skills/test-parallel-task-spawn/` |
+| test-upfront-tasks | Full upfront pattern with deletion | `.claude/skills/test-upfront-tasks/` |
+| test-task-dependency-flow | Event-driven task flow | `.claude/skills/test-task-dependency-flow/` |
+| test-incremental-spawn | Incremental spawning pattern | `.claude/skills/test-incremental-spawn/` |
+
+### Test Output Files
+
+| File | Evidence |
+|------|----------|
+| `parallel-task-spawn.txt` | 194ms spread proves parallel execution |
+| `upfront-tasks.txt` | Task deletion works, mixed-tier spawning works |
+| `cross-agent-delete.txt` | BZ deleted WEB/PPX tasks, JUDGE unblocked |
+
+---
+
+*Updated: 2026-01-29 | Upfront task creation pattern validated | Cross-agent task manipulation confirmed | Completion vs deletion for unblocking tested*

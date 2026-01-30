@@ -25,9 +25,9 @@ Final escalation for stock move attribution when Benzinga and web sources failed
 
 ## Input
 
-Prompt format: `TICKER DATE DAILY_STOCK DAILY_ADJ TASK_ID=N`
+Prompt format: `TICKER DATE DAILY_STOCK DAILY_ADJ TASK_ID=N QUARTER=Q`
 
-Example: `AAPL 2024-01-02 -3.65 -3.06 TASK_ID=12`
+Example: `AAPL 2024-01-02 -3.65 -3.06 TASK_ID=12 QUARTER=Q1_FY2024`
 
 ## PIT RULE (CRITICAL)
 
@@ -67,9 +67,9 @@ Query examples:
 
 PPX is the final tier - always create a task for validation:
 
-1. Extract TICKER, DATE, and QUARTER from your prompt (QUARTER from task subject if available)
+1. Extract TICKER, DATE, and QUARTER from your prompt
 2. Call `TaskCreate` with:
-   - `subject`: `"JUDGE-{QUARTER} {TICKER} {DATE}"`
+   - `subject`: `"JUDGE-{QUARTER} {TICKER} {DATE}"` (e.g., "JUDGE-Q1_FY2024 AAPL 2024-01-02")
    - `description`: Your 10-field result line
 
 ### Step 4: Update Task (MANDATORY)
