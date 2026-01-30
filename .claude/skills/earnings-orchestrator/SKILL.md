@@ -8,6 +8,7 @@ allowed-tools:
   - TaskList
   - TaskGet
   - TaskUpdate
+  - Skill
   - Bash
   - Write
   - Read
