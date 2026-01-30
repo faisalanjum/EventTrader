@@ -27,6 +27,12 @@ permissionMode: dontAsk
 
 ## Task - MUST COMPLETE ALL STEPS
 
+### Step 0: Record Start Time
+
+```bash
+echo "=== START: $(date '+%Y-%m-%d %H:%M:%S') ==="
+```
+
 ### Step 1: Get Earnings Data
 
 ```bash
@@ -212,6 +218,12 @@ source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/Event
 The script auto-detects the most recent session for this ticker. Output:
 - `Companies/{TICKER}/thinking/{QUARTER}/_timeline.md`
 - `Companies/{TICKER}/thinking/{QUARTER}/news/{date}.md` for each date
+
+### Step 7: Record End Time
+
+```bash
+echo "=== END: $(date '+%Y-%m-%d %H:%M:%S') ==="
+```
 
 ## Rules
 
