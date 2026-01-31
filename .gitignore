@@ -92,3 +92,4 @@ earnings-analysis/Companies/ARCHIVED/
 mcp_servers/local-*.sh
 
 # Claude Code plans (tracked - contains verified architecture docs)
+event_trader.pid

@@ -325,3 +325,11 @@ NO_GUIDANCE|{source_type}|{source_key}
 - **100% recall priority** - When in doubt, extract it; false positives are better than missed guidance
 - **No fabricated numbers** - Qualitative guidance uses `implied` derivation; do NOT invent values
 - **News: company guidance only** - Ignore analyst estimates ("versus consensus of", "Est $X")
+
+### Quality Filters
+
+- **Forward-looking only** - Target period must be after source date. If fiscal_year/fiscal_quarter ended before given_date, it's a result, not guidance.
+- **Specificity required** - Qualitative needs quantitative anchor ("low single digits", "double-digit", "mid-teens"). Skip vague terms ("significant", "strong") without magnitude.
+- **Title Case metrics** - Normalize to Title Case ("Dividend Per Share", not "Dividend per Share").
+- **Unit always populated** - Even for qualitative, use expected unit for metric type (Production→BOE/day, CapEx→M USD, Growth→%).
+- **Quote max 500 chars** - Truncate at sentence boundary with "..." if needed.

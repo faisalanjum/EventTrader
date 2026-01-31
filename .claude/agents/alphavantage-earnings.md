@@ -5,7 +5,7 @@ tools:
   - mcp__alphavantage__EARNINGS_ESTIMATES
   - mcp__alphavantage__EARNINGS
   - mcp__alphavantage__EARNINGS_CALENDAR
-model: haiku
+model: opus
 permissionMode: dontAsk
 skills:
   - alphavantage-earnings

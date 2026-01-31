@@ -9,7 +9,7 @@ tools:
   - TaskList
   - TaskGet
   - TaskUpdate
-model: sonnet
+model: opus
 permissionMode: dontAsk
 hooks:
   PostToolUse:

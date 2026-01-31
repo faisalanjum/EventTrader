@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 """
-Build thinking files for news analysis from earnings-orchestrator sessions.
+Build thinking files for guidance extraction from earnings-orchestrator sessions.
 
 Pure filesystem discovery - no CSV dependency.
-Extracts thinking from all 4 news-driver tiers: BZ, WEB, PPX, JUDGE.
+Extracts thinking from guidance-* agents: 8k, 10k, 10q, transcript, news, extract.
 
 Usage:
-    python build-news-thinking.py --ticker NOG           # Single ticker
-    python build-news-thinking.py --ticker NOG --all-sessions  # All sessions for ticker
-    python build-news-thinking.py --session <ID>         # Explicit session
-    python build-news-thinking.py all                    # All tickers from all sessions
+    python build-guidance-thinking.py --ticker NOG           # Single ticker
+    python build-guidance-thinking.py --ticker NOG --all-sessions  # All sessions for ticker
+    python build-guidance-thinking.py --session <ID>         # Explicit session
+    python build-guidance-thinking.py all                    # All tickers from all sessions
 
 Output:
     Companies/{TICKER}/thinking/{QUARTER}/
     ├── _timeline.md
-    └── news/
+    └── guidance/
         ├── _summary.md
-        └── {date}.md
+        └── {source_type}_{source_id_short}.md
 """
 
 import json
@@ -24,7 +24,7 @@ import re
 import sys
 import argparse
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime
 from collections import defaultdict
 
 # Paths
@@ -32,50 +32,72 @@ CLAUDE_DIR = Path.home() / ".claude" / "projects" / "-home-faisal-EventMarketDB"
 COMPANIES_DIR = Path("/home/faisal/Obsidian/EventTrader/Earnings/earnings-analysis/Companies")
 
 
-def parse_prompt(prompt: str, description: str = '') -> dict:
-    """Parse agent prompt to extract ticker, date, returns, task_id, quarter.
+def parse_guidance_prompt(prompt: str, description: str = '') -> dict:
+    """Parse guidance agent prompt to extract ticker, source info, quarter, task_id.
 
-    Handles two formats:
-    - BZ/WEB/PPX: "TICKER YYYY-MM-DD daily_stock daily_adj TASK_ID=N QUARTER=Q"
-    - JUDGE: "TASK_ID=N" (ticker/date from description: "JUDGE TICKER YYYY-MM-DD")
+    Handles formats like:
+    - New: "TICKER REPORT_ID SOURCE_TYPE SOURCE_KEY QUARTER TASK_ID=N"
+    - Old: "TICKER REPORT_ID QUARTER TASK_ID=N" (8k/news agents)
     """
-    result = {'ticker': None, 'date': None, 'daily_stock': None,
-              'daily_adj': None, 'task_id': None, 'quarter': None}
+    result = {'ticker': None, 'report_id': None, 'source_type': None,
+              'source_key': None, 'quarter': None, 'task_id': None}
 
-    # Format 1: BZ/WEB/PPX full prompt
-    # Handles: "TICKER DATE RETURN1 RETURN2 TASK_ID=N [WEB_TASK_ID=N...] [QUARTER=Q]"
+    # New unified guidance-extract format: TICKER REPORT_ID SOURCE_TYPE SOURCE_KEY QUARTER FYE=N TASK_ID=N
     match = re.match(
-        r'(\w+)\s+(\d{4}-\d{2}-\d{2})\s+([\d.-]+)\s+([\d.-]+)\s+TASK_ID=(\d+)',
+        r'(\w+)\s+(\S+)\s+(\w+)\s+(\S+)\s+(Q\d+_FY\d+)\s+FYE=\d+\s+TASK_ID=(\d+)',
         prompt
     )
     if match:
         result['ticker'] = match.group(1)
-        result['date'] = match.group(2)
-        result['daily_stock'] = match.group(3)
-        result['daily_adj'] = match.group(4)
-        result['task_id'] = match.group(5)
-        # Extract QUARTER from anywhere in the prompt
-        quarter_match = re.search(r'QUARTER=(\w+)', prompt)
-        if quarter_match:
-            result['quarter'] = quarter_match.group(1)
+        result['report_id'] = match.group(2)
+        result['source_type'] = match.group(3)
+        result['source_key'] = match.group(4)
+        result['quarter'] = match.group(5)
+        result['task_id'] = match.group(6)
         return result
 
-    # Format 2: JUDGE minimal prompt (get ticker/date from description)
-    match = re.match(r'TASK_ID=(\d+)', prompt)
+    # Old format: TICKER REPORT_ID QUARTER TASK_ID=N (used by guidance-8k, guidance-news)
+    match = re.match(
+        r'(\w+)\s+(\S+)\s+(Q\d+_FY\d+)\s+TASK_ID=(\d+)',
+        prompt
+    )
+    if match:
+        result['ticker'] = match.group(1)
+        result['report_id'] = match.group(2)
+        result['quarter'] = match.group(3)
+        result['task_id'] = match.group(4)
+        # Infer source_type from description like "8K guidance NOG ..." or "News guidance NOG ..."
+        if 'news' in description.lower():
+            result['source_type'] = 'news'
+        elif '8k' in description.lower():
+            result['source_type'] = '8k'
+        elif '10k' in description.lower():
+            result['source_type'] = '10k'
+        elif '10q' in description.lower():
+            result['source_type'] = '10q'
+        elif 'transcript' in description.lower():
+            result['source_type'] = 'transcript'
+        return result
+
+    # Fallback: extract task_id and quarter from anywhere in prompt
+    match = re.search(r'TASK_ID=(\d+)', prompt)
     if match:
         result['task_id'] = match.group(1)
-        # Extract from description like "JUDGE validate NOG 2023-01-03" or "JUDGE NOG 2023-01-03"
-        desc_match = re.match(r'JUDGE\s+(?:validate\s+)?(\w+)\s+(\d{4}-\d{2}-\d{2})', description)
-        if desc_match:
-            result['ticker'] = desc_match.group(1)
-            result['date'] = desc_match.group(2)
+        # Try to get ticker from start of prompt
+        ticker_match = re.match(r'(\w+)', prompt)
+        if ticker_match:
+            result['ticker'] = ticker_match.group(1)
+        # Try to get quarter from anywhere in prompt
+        quarter_match = re.search(r'(Q\d+_FY\d+)', prompt)
+        if quarter_match:
+            result['quarter'] = quarter_match.group(1)
 
     return result
 
 
-def find_all_news_sessions() -> dict[str, list]:
+def find_all_guidance_sessions() -> dict[str, list]:
     """
-    Scan all transcripts to find sessions with news-driver agents.
+    Scan all transcripts to find sessions with guidance-* agents.
 
     Returns {ticker: [(session_id, mtime, agent_count), ...]}
     """
@@ -91,7 +113,7 @@ def find_all_news_sessions() -> dict[str, list]:
         try:
             with open(session_file) as f:
                 for line in f:
-                    if '"news-driver-' not in line:
+                    if '"guidance-' not in line:
                         continue
 
                     data = json.loads(line)
@@ -100,9 +122,10 @@ def find_all_news_sessions() -> dict[str, list]:
                         for block in content:
                             if isinstance(block, dict) and block.get('name') == 'Task':
                                 inp = block.get('input', {})
-                                if 'news-driver' in inp.get('subagent_type', ''):
+                                subagent = inp.get('subagent_type', '')
+                                if subagent.startswith('guidance-'):
                                     prompt = inp.get('prompt', '')
-                                    parsed = parse_prompt(prompt)
+                                    parsed = parse_guidance_prompt(prompt)
                                     if parsed['ticker']:
                                         ticker_counts[parsed['ticker']] += 1
         except:
@@ -116,10 +139,9 @@ def find_all_news_sessions() -> dict[str, list]:
 
 def find_sessions_for_ticker(ticker: str, all_sessions: bool = False) -> list[str]:
     """
-    Find sessions with news-driver agents for a ticker.
+    Find sessions with guidance-* agents for a ticker.
 
     Returns list of session_ids (most recent first).
-    If all_sessions=False, returns only the most recent.
     """
     candidates = []
 
@@ -133,16 +155,17 @@ def find_sessions_for_ticker(ticker: str, all_sessions: bool = False) -> list[st
         try:
             with open(session_file) as f:
                 for line in f:
-                    if '"news-driver-' in line and f'"{ticker} ' in line:
+                    if '"guidance-' in line and f'"{ticker}' in line:
                         data = json.loads(line)
                         if data.get('type') == 'assistant':
                             content = data.get('message', {}).get('content', [])
                             for block in content:
                                 if isinstance(block, dict) and block.get('name') == 'Task':
                                     inp = block.get('input', {})
-                                    if 'news-driver' in inp.get('subagent_type', ''):
+                                    subagent = inp.get('subagent_type', '')
+                                    if subagent.startswith('guidance-'):
                                         prompt = inp.get('prompt', '')
-                                        if prompt.startswith(f'{ticker} '):
+                                        if f'{ticker}' in prompt:
                                             agent_count += 1
         except:
             continue
@@ -153,7 +176,6 @@ def find_sessions_for_ticker(ticker: str, all_sessions: bool = False) -> list[st
     if not candidates:
         return []
 
-    # Sort by modification time (most recent first)
     candidates.sort(key=lambda x: x[1], reverse=True)
 
     if all_sessions:
@@ -164,7 +186,7 @@ def find_sessions_for_ticker(ticker: str, all_sessions: bool = False) -> list[st
 
 def discover_agents(session_id: str, ticker_filter: str = None) -> list[dict]:
     """
-    Discover all news-driver sub-agents from a session.
+    Discover all guidance-* sub-agents from a session.
 
     Returns list of agent metadata with transcript paths.
     """
@@ -183,7 +205,6 @@ def discover_agents(session_id: str, ticker_filter: str = None) -> list[dict]:
             try:
                 data = json.loads(line)
 
-                # Find Task tool calls
                 if data.get('type') == 'assistant':
                     content = data.get('message', {}).get('content', [])
                     for block in content:
@@ -191,14 +212,13 @@ def discover_agents(session_id: str, ticker_filter: str = None) -> list[dict]:
                             tool_id = block.get('id')
                             inp = block.get('input', {})
                             subagent_type = inp.get('subagent_type', '')
-                            if 'news-driver' in subagent_type:
+                            if subagent_type.startswith('guidance-'):
                                 task_calls[tool_id] = {
                                     'subagent_type': subagent_type,
                                     'prompt': inp.get('prompt', ''),
                                     'description': inp.get('description', '')
                                 }
 
-                # Find agent progress messages
                 if data.get('type') == 'progress':
                     agent_data = data.get('data', {})
                     if agent_data.get('agentId'):
@@ -226,9 +246,8 @@ def discover_agents(session_id: str, ticker_filter: str = None) -> list[dict]:
                 print(f"  WARNING: Transcript not found: agent-{agent_id}.jsonl")
                 continue
 
-        parsed = parse_prompt(info['prompt'], info.get('description', ''))
+        parsed = parse_guidance_prompt(info['prompt'], info.get('description', ''))
 
-        # Apply ticker filter
         if ticker_filter and parsed['ticker'] != ticker_filter:
             continue
 
@@ -236,10 +255,10 @@ def discover_agents(session_id: str, ticker_filter: str = None) -> list[dict]:
             'agent_id': agent_id,
             'subagent_type': info['subagent_type'],
             'ticker': parsed['ticker'],
-            'date': parsed['date'],
+            'report_id': parsed['report_id'],
+            'source_type': parsed['source_type'],
+            'source_key': parsed['source_key'],
             'quarter': parsed['quarter'],
-            'daily_stock': parsed['daily_stock'],
-            'daily_adj': parsed['daily_adj'],
             'task_id': parsed['task_id'],
             'transcript_path': transcript_path
         })
@@ -332,80 +351,78 @@ def format_time(timestamp: str, start: str) -> str:
         return timestamp[11:19] if len(timestamp) > 19 else "??:??"
 
 
-def generate_date_file(date: str, agents: list, ticker: str, session_start: str) -> str:
-    """Generate markdown for one date's BZ→WEB→PPX chain."""
-    sample = agents[0] if agents else {}
+def short_id(report_id: str) -> str:
+    """Shorten report_id for filename."""
+    if not report_id:
+        return "unknown"
+    # Keep last 8 chars for accession numbers, or first 20 for others
+    if '-' in report_id and len(report_id) > 20:
+        return report_id.split('-')[-1][:12]
+    return report_id[:20].replace('/', '_').replace(':', '_')
 
+
+def generate_source_file(agent: dict, ticker: str, session_start: str) -> str:
+    """Generate markdown for one guidance source."""
+    source_type = agent['source_type'] or 'unknown'
+    source_key = agent['source_key'] or 'N/A'
     lines = [
-        f"# {date} | {sample.get('daily_stock', '?')}% stock | {sample.get('daily_adj', '?')}% adj",
+        f"# {source_type} | {source_key}",
         "",
-        "## Result",
+        f"**Report:** {agent['report_id'] or 'N/A'}  ",
+        f"**Agent:** {agent['subagent_type']}  ",
+        f"**Quarter:** {agent['quarter'] or 'UNKNOWN'}",
+        "",
+        "---",
+        "",
     ]
 
-    # Sort by tier
-    tier_order = {'news-driver-bz': 1, 'news-driver-web': 2, 'news-driver-ppx': 3, 'news-driver-judge': 4}
-    sorted_agents = sorted(agents, key=lambda a: tier_order.get(a['subagent_type'], 99))
-
-    tiers = ' → '.join(a['subagent_type'].replace('news-driver-', '').upper() for a in sorted_agents)
-    lines.append(f"**Tiers:** {tiers}")
-    lines.append("")
-    lines.append("---")
-    lines.append("")
-
-    tier_names = {
-        'news-driver-bz': 'Tier 1: Benzinga',
-        'news-driver-web': 'Tier 2: WebSearch',
-        'news-driver-ppx': 'Tier 3: Perplexity',
-        'news-driver-judge': 'Tier 4: Judge'
-    }
     emoji = {'thinking': '💭', 'tool_use': '🔧', 'text': '📝'}
+    blocks = extract_blocks(agent['transcript_path'])
 
-    for agent in sorted_agents:
-        lines.append(f"## {tier_names.get(agent['subagent_type'], agent['subagent_type'])}")
-        lines.append("")
+    if not blocks:
+        lines.append("*No blocks found*")
+        return '\n'.join(lines)
 
-        blocks = extract_blocks(agent['transcript_path'])
-        if not blocks:
-            lines.append("*No blocks found*")
+    for i, b in enumerate(blocks, 1):
+        t = format_time(b['timestamp'], session_start)
+        lines.append(f"## {emoji.get(b['type'], '❓')} #{i} · {t}")
+
+        if b['type'] == 'tool_use':
+            lines.append("```")
+            lines.append(b['text'])
+            lines.append("```")
+        else:
+            lines.append(f"*{b['length']} chars*")
             lines.append("")
-            continue
-
-        for i, b in enumerate(blocks, 1):
-            t = format_time(b['timestamp'], session_start)
-            lines.append(f"### {emoji.get(b['type'], '❓')} #{i} · {t}")
-
-            if b['type'] == 'tool_use':
-                lines.append("```")
-                lines.append(b['text'])
-                lines.append("```")
-            else:
-                lines.append(f"*{b['length']} chars*")
-                lines.append("")
-                lines.append(b['text'])
-            lines.append("")
-
-        lines.append("---")
+            lines.append(b['text'])
         lines.append("")
 
     return '\n'.join(lines)
 
 
-def generate_summary(dates_data: dict, ticker: str, quarter: str) -> str:
-    """Generate summary table for a quarter."""
+def generate_summary(agents: list, ticker: str, quarter: str) -> str:
+    """Generate summary table for a quarter's guidance sources."""
     lines = [
-        f"# {quarter} News Analysis",
+        f"# {quarter} Guidance Analysis",
         "",
-        "| Date | Move | Tiers | Link |",
-        "|------|------|-------|------|",
+        "| Source Type | Source Key | Report | Agent | Link |",
+        "|-------------|------------|--------|-------|------|",
     ]
 
-    for date in sorted(dates_data.keys()):
-        agents = dates_data[date]
-        move = agents[0].get('daily_stock', '?') if agents else '?'
-        tiers = ' → '.join(sorted(set(
-            a['subagent_type'].replace('news-driver-', '').upper() for a in agents
-        ), key=lambda x: {'BZ': 1, 'WEB': 2, 'PPX': 3, 'JUDGE': 4}.get(x, 99)))
-        lines.append(f"| {date} | {move}% | {tiers} | [{date}]({date}.md) |")
+    # Group by source_type
+    by_type = defaultdict(list)
+    for a in agents:
+        by_type[a['source_type'] or 'unknown'].append(a)
+
+    for source_type in sorted(by_type.keys()):
+        for a in by_type[source_type]:
+            sid = short_id(a['report_id'])
+            fname = f"{a['source_type'] or 'unk'}_{sid}.md"
+            source_key = (a['source_key'] or 'N/A')[:20]
+            lines.append(
+                f"| {a['source_type'] or 'N/A'} | {source_key} | {sid} | "
+                f"{a['subagent_type']} | [{fname}]({fname}) |"
+            )
 
     lines.append("")
     lines.append(f"*Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}*")
@@ -415,7 +432,7 @@ def generate_summary(dates_data: dict, ticker: str, quarter: str) -> str:
 def generate_timeline(agents: list, ticker: str, quarter: str, session_start: str) -> str:
     """Generate full chronological timeline."""
     lines = [
-        f"# {quarter} Timeline",
+        f"# {quarter} Guidance Timeline",
         "",
         f"**Ticker:** {ticker}  ",
         f"**Agents:** {len(agents)}",
@@ -424,12 +441,11 @@ def generate_timeline(agents: list, ticker: str, quarter: str, session_start: st
         "",
     ]
 
-    # Collect all blocks with source
     all_blocks = []
     for agent in agents:
         for b in extract_blocks(agent['transcript_path']):
-            b['source'] = agent['subagent_type'].replace('news-driver-', '')
-            b['date'] = agent['date']
+            b['source'] = agent['subagent_type'].replace('guidance-', '')
+            b['source_type'] = agent['source_type'] or 'unknown'
             all_blocks.append(b)
 
     all_blocks.sort(key=lambda x: x.get('timestamp', ''))
@@ -440,7 +456,7 @@ def generate_timeline(agents: list, ticker: str, quarter: str, session_start: st
 
     for i, b in enumerate(all_blocks, 1):
         t = format_time(b['timestamp'], session_start)
-        lines.append(f"### #{i} · {emoji.get(b['type'], '❓')} · {b['source']} · {b['date']} · {t}")
+        lines.append(f"### #{i} · {emoji.get(b['type'], '❓')} · {b['source']} · {b['source_type']} · {t}")
 
         if b['type'] == 'tool_use':
             lines.append("```")
@@ -456,91 +472,57 @@ def generate_timeline(agents: list, ticker: str, quarter: str, session_start: st
     return '\n'.join(lines)
 
 
-def generate_ticker_index(ticker: str, existing_quarters: set) -> str:
-    """Generate ticker-level index."""
-    lines = [
-        f"# {ticker} Thinking",
-        "",
-        "| Quarter | News | Guidance | Prediction | Attribution |",
-        "|---------|------|----------|------------|-------------|",
-    ]
-
-    for q in sorted(existing_quarters, reverse=True):
-        lines.append(f"| [{q}]({q}/_timeline.md) | [✓]({q}/news/_summary.md) | - | - | - |")
-
-    lines.append("")
-    lines.append(f"*Updated: {datetime.now().strftime('%Y-%m-%d %H:%M')}*")
-    return '\n'.join(lines)
-
-
 def build(session_id: str, ticker: str):
     """Main build function."""
-    print(f"Building thinking files for {ticker} from session {session_id[:8]}...")
+    print(f"Building guidance thinking files for {ticker} from session {session_id[:8]}...")
 
     agents = discover_agents(session_id, ticker_filter=ticker)
     if not agents:
-        print("ERROR: No news-driver agents found")
+        print("ERROR: No guidance-* agents found")
         return False
 
     print(f"Found {len(agents)} agents")
     session_start = get_session_start(session_id)
 
-    # Group by quarter -> date
-    # First, collect all agents by date and find best quarter for each date
-    by_date = defaultdict(list)
+    # Group by quarter
+    grouped = defaultdict(list)
     for agent in agents:
-        by_date[agent['date']].append(agent)
-
-    # For each date, find the quarter (from any agent that has it)
-    date_quarter_map = {}
-    for date, date_agents in by_date.items():
-        quarter = 'UNKNOWN'
-        for a in date_agents:
-            if a['quarter']:
-                quarter = a['quarter']
-                break
-        date_quarter_map[date] = quarter
-
-    # Now group by quarter -> date with all agents for that date
-    grouped = defaultdict(lambda: defaultdict(list))
-    for date, date_agents in by_date.items():
-        q = date_quarter_map[date]
-        grouped[q][date] = date_agents
+        q = agent['quarter'] or 'UNKNOWN'
+        grouped[q].append(agent)
 
     ticker_dir = COMPANIES_DIR / ticker / "thinking"
     all_quarters = set()
 
-    for quarter, dates_data in grouped.items():
+    for quarter, quarter_agents in grouped.items():
         all_quarters.add(quarter)
         quarter_dir = ticker_dir / quarter
-        news_dir = quarter_dir / "news"
-        news_dir.mkdir(parents=True, exist_ok=True)
+        guidance_dir = quarter_dir / "guidance"
+        guidance_dir.mkdir(parents=True, exist_ok=True)
 
-        print(f"  {quarter}: {len(dates_data)} dates")
+        print(f"  {quarter}: {len(quarter_agents)} sources")
 
-        # Per-date files
-        for date, date_agents in dates_data.items():
-            content = generate_date_file(date, date_agents, ticker, session_start)
-            path = news_dir / f"{date}.md"
-            path.write_text(content)
+        # Per-source files
+        for agent in quarter_agents:
+            sid = short_id(agent['report_id'])
+            fname = f"{agent['source_type'] or 'unk'}_{sid}.md"
+            content = generate_source_file(agent, ticker, session_start)
+            (guidance_dir / fname).write_text(content)
 
         # Summary
-        content = generate_summary(dates_data, ticker, quarter)
-        (news_dir / "_summary.md").write_text(content)
+        content = generate_summary(quarter_agents, ticker, quarter)
+        (guidance_dir / "_summary.md").write_text(content)
 
-        # Timeline
-        quarter_agents = [a for agents in dates_data.values() for a in agents]
+        # Timeline (includes both news and guidance if exists)
         content = generate_timeline(quarter_agents, ticker, quarter, session_start)
-        (quarter_dir / "_timeline.md").write_text(content)
-
-    # Find existing quarters
-    for d in ticker_dir.iterdir():
-        if d.is_dir() and d.name.startswith('Q'):
-            all_quarters.add(d.name)
-
-    # Ticker index
-    content = generate_ticker_index(ticker, all_quarters)
-    (ticker_dir / "_index.md").write_text(content)
+        existing_timeline = quarter_dir / "_timeline.md"
+        # Append guidance timeline after news if exists
+        if existing_timeline.exists():
+            existing = existing_timeline.read_text()
+            if "Guidance Timeline" not in existing:
+                content = existing + "\n\n---\n\n" + content
+                existing_timeline.write_text(content)
+        else:
+            (quarter_dir / "_timeline.md").write_text(content)
 
     print(f"Done! Files at: {ticker_dir}")
     return True
@@ -548,18 +530,17 @@ def build(session_id: str, ticker: str):
 
 def build_all():
     """Build thinking files for all tickers found in all sessions."""
-    print("Scanning all transcripts for news-driver sessions...")
-    all_sessions = find_all_news_sessions()
+    print("Scanning all transcripts for guidance-* sessions...")
+    all_sessions = find_all_guidance_sessions()
 
     if not all_sessions:
-        print("No news-driver sessions found")
+        print("No guidance-* sessions found")
         return False
 
-    print(f"Found {len(all_sessions)} tickers with news-driver agents")
+    print(f"Found {len(all_sessions)} tickers with guidance-* agents")
 
     for ticker in sorted(all_sessions.keys()):
         sessions = all_sessions[ticker]
-        # Sort by modification time, get most recent
         sessions.sort(key=lambda x: x[1], reverse=True)
         session_id = sessions[0][0]
         agent_count = sessions[0][2]
@@ -571,24 +552,23 @@ def build_all():
 
 
 def main():
-    # Check for 'all' command
     if len(sys.argv) > 1 and sys.argv[1] == 'all':
         success = build_all()
         sys.exit(0 if success else 1)
 
-    parser = argparse.ArgumentParser(description='Build thinking files from earnings-orchestrator sessions')
+    parser = argparse.ArgumentParser(description='Build guidance thinking files from earnings-orchestrator sessions')
     parser.add_argument('--ticker', '-t', help='Ticker symbol')
     parser.add_argument('--session', '-s', help='Session ID (auto-detected if not provided)')
-    parser.add_argument('--all-sessions', action='store_true', help='Process all sessions for ticker (not just recent)')
+    parser.add_argument('--all-sessions', action='store_true', help='Process all sessions for ticker')
 
     args = parser.parse_args()
 
     if not args.ticker:
         print("Usage:")
-        print("  python build-news-thinking.py all                    # All tickers")
-        print("  python build-news-thinking.py --ticker NOG           # Single ticker")
-        print("  python build-news-thinking.py --ticker NOG --all-sessions  # All sessions")
-        print("  python build-news-thinking.py --session <ID> --ticker NOG  # Explicit session")
+        print("  python build-guidance-thinking.py all                    # All tickers")
+        print("  python build-guidance-thinking.py --ticker NOG           # Single ticker")
+        print("  python build-guidance-thinking.py --ticker NOG --all-sessions  # All sessions")
+        print("  python build-guidance-thinking.py --session <ID> --ticker NOG  # Explicit session")
         sys.exit(1)
 
     ticker = args.ticker.upper()
