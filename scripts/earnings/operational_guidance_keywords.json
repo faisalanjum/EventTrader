@@ -1,0 +1,367 @@
+{
+  "metadata": {
+    "description": "Operational guidance keywords by industry for finding non-financial forward-looking statements in news",
+    "source": "Empirically extracted from Neo4j Guidance-tagged news articles (30 samples per industry)",
+    "date_created": "2026-01-30",
+    "total_industries": 77,
+    "industries_with_keywords": 42,
+    "validation_method": "Sampled Guidance-tagged articles per industry, extracted non-EPS/revenue terms from titles"
+  },
+  "usage": {
+    "step_1": "Lookup company industry: MATCH (c:Company {ticker: $ticker}) RETURN c.industry, c.sector",
+    "step_2": "Get keywords from industries[industry].operational_keywords",
+    "step_3": "If industry not found, fallback to sectors[sector].operational_keywords",
+    "step_4": "Search news: title CONTAINS (forward_looking_keyword AND operational_keyword)",
+    "step_5": "Optionally exclude financial: NOT (title CONTAINS 'EPS' OR title CONTAINS 'earnings')"
+  },
+  "forward_looking_keywords": {
+    "directional": ["expects", "anticipates", "projects", "forecasts", "targets", "plans", "aims", "intends", "sees"],
+    "guidance_actions": ["guidance", "outlook", "raises", "lowers", "reaffirms", "reiterates", "maintains", "withdraws", "cuts", "narrows", "updates", "revises"],
+    "timeframes": ["FY", "FY24", "FY25", "FY26", "FY2024", "FY2025", "FY2026", "Q1", "Q2", "Q3", "Q4", "full-year", "annual", "quarterly"]
+  },
+  "industries": {
+    "SoftwareApplication": {
+      "sector": "Technology",
+      "operational_keywords": ["product revenue", "gross bookings", "free cash flow", "adjusted EBITDA", "AI", "platform", "subscription", "ARR", "billings"],
+      "example_tickers": ["CRM", "NOW", "SNOW", "ADSK", "ZM", "LYFT", "DDOG"]
+    },
+    "SoftwareInfrastructure": {
+      "sector": "Technology",
+      "operational_keywords": ["ARR", "subscription revenue", "recurring revenue", "gross revenue", "AI", "cloud", "platform", "billings", "bookings"],
+      "example_tickers": ["ORCL", "PLTR", "PANW", "CRWD", "MDB", "ZS", "FTNT"]
+    },
+    "Semiconductors": {
+      "sector": "Technology",
+      "operational_keywords": ["data center", "client segments", "gaming", "embedded", "PC market", "unit sales", "capex", "automotive", "AI", "shipments", "wafers", "utilization"],
+      "example_tickers": ["NVDA", "AMD", "TXN", "AVGO", "QCOM", "MRVL", "ADI", "MCHP"]
+    },
+    "SemiconductorEquipmentAndMaterials": {
+      "sector": "Technology",
+      "operational_keywords": ["WFE", "wafer fab equipment", "systems", "shipments", "backlog", "utilization", "memory", "foundry", "logic"],
+      "example_tickers": ["AMAT", "LRCX", "KLAC", "ASML"]
+    },
+    "InformationTechnologyServices": {
+      "sector": "Technology",
+      "operational_keywords": ["free cash flow", "constant currency", "recurring revenue", "AI platform", "workforce", "product mix", "signings", "backlog"],
+      "example_tickers": ["IBM", "ACN", "CTSH", "CDW", "EPAM"]
+    },
+    "ComputerHardware": {
+      "sector": "Technology",
+      "operational_keywords": ["AI pipeline", "inventory correction", "market demand", "shipments", "units", "systems", "backlog"],
+      "example_tickers": ["DELL", "HPE", "NTAP", "WDC", "STX", "SMCI"]
+    },
+    "CommunicationEquipment": {
+      "sector": "Technology",
+      "operational_keywords": ["orders", "backlog", "5G", "network", "infrastructure", "cloud", "enterprise"],
+      "example_tickers": ["CSCO", "ANET", "JNPR", "MSI"]
+    },
+    "MedicalDevices": {
+      "sector": "Healthcare",
+      "operational_keywords": ["revenue unit volume", "procedures", "placements", "installations", "systems", "cardiovascular", "diabetes", "structural heart", "geographic expansion", "adoption"],
+      "example_tickers": ["MDT", "ABT", "EW", "ISRG", "BSX", "SYK"]
+    },
+    "MedicalInstrumentsAndSupplies": {
+      "sector": "Healthcare",
+      "operational_keywords": ["Da Vinci procedures", "procedure growth", "GLP-1 demand", "placements", "systems", "portfolio"],
+      "example_tickers": ["ISRG", "HOLX", "WST", "COO", "ALGN"]
+    },
+    "DiagnosticsAndResearch": {
+      "sector": "Healthcare",
+      "operational_keywords": ["DNA sequencing", "blood-based", "clinical market", "tests", "samples", "screening", "sequencing"],
+      "example_tickers": ["ILMN", "DGX", "LH", "A", "TMO", "DHR"]
+    },
+    "Biotechnology": {
+      "sector": "Healthcare",
+      "operational_keywords": ["Phase 2", "Phase 3", "pipeline", "launches", "newly approved", "net product revenue", "mRNA", "R&D spending", "trials", "FDA", "data readout", "patients"],
+      "example_tickers": ["MRNA", "REGN", "VRTX", "BIIB", "GILD", "AMGN"]
+    },
+    "DrugManufacturersGeneral": {
+      "sector": "Healthcare",
+      "operational_keywords": ["immunology growth", "HIV business", "Medicare reform", "launches", "pipeline", "therapeutic areas", "oncology", "IPR&D"],
+      "example_tickers": ["LLY", "PFE", "MRK", "ABBV", "JNJ", "BMY"]
+    },
+    "DrugManufacturersSpecialtyAndGeneric": {
+      "sector": "Healthcare",
+      "operational_keywords": ["animal health", "companion animal", "innovation revenue", "portfolio", "launches"],
+      "example_tickers": ["ZTS", "ELAN", "VTRS", "TEVA"]
+    },
+    "HealthcarePlans": {
+      "sector": "Healthcare",
+      "operational_keywords": ["members", "membership", "Medicare Advantage", "star ratings", "4.5-star plans", "Obamacare", "premium growth", "pharmacy benefit", "enrollment", "medical cost ratio", "MLR"],
+      "example_tickers": ["UNH", "ELV", "HUM", "CI", "CNC", "MOH"]
+    },
+    "HealthInformationServices": {
+      "sector": "Healthcare",
+      "operational_keywords": ["visits", "users", "active users", "claims", "transactions", "telehealth", "HSA"],
+      "note": "Limited operational metrics in titles - mostly financial guidance",
+      "example_tickers": ["VEEV", "DOCS", "HIMS", "HQY"]
+    },
+    "SpecialtyRetail": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["comparable store sales", "comp store sales", "same-store sales", "inside same-store", "store openings", "traffic", "transactions", "ad revenue", "hardware margin"],
+      "example_tickers": ["ULTA", "BBY", "DKS", "FIVE", "TSCO", "ORLY", "AZO"]
+    },
+    "ApparelRetail": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["net sales growth", "treasure-hunt", "weather", "tariff impact", "import duties", "de minimis", "store openings"],
+      "example_tickers": ["TJX", "ROST", "BURL", "LULU", "ANF", "GPS"]
+    },
+    "Restaurants": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["comparable", "comps", "same-store", "traffic", "transactions", "average check", "beef costs", "pricing gap", "footprint", "rebranding", "unit growth", "GLP-1"],
+      "example_tickers": ["MCD", "SBUX", "CMG", "DRI", "YUM", "QSR"]
+    },
+    "DiscountStores": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["comp store sales", "comparable net sales", "memberships", "store expansion", "consumer segments", "income", "price hikes", "tariff", "bargain", "holiday"],
+      "example_tickers": ["WMT", "COST", "TGT", "DLTR", "DG", "BJ"]
+    },
+    "GroceryStores": {
+      "sector": "ConsumerDefensive",
+      "operational_keywords": ["identical sales", "identical sales growth", "eCommerce profitability", "pharmacy", "automated facilities", "digital"],
+      "example_tickers": ["KR", "ACI", "SFM", "CASY"]
+    },
+    "InternetRetail": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["GMV", "gross merchandise volume", "GMS", "active buyers", "customer gains", "orders", "EBITDA margin"],
+      "example_tickers": ["AMZN", "EBAY", "ETSY", "CHWY", "W"]
+    },
+    "HomeImprovementRetail": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["comp sales", "DIY", "Pro", "big-ticket discretionary", "housing market", "capex", "online sales", "sell-through"],
+      "example_tickers": ["HD", "LOW", "FND"]
+    },
+    "FootwearAndAccessories": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["marketplace", "inventories", "turnaround", "tariff", "sourcing", "buyback", "strategic priorities"],
+      "example_tickers": ["NKE", "DECK", "CROX", "SKX", "WWW"]
+    },
+    "PackagedFoods": {
+      "sector": "ConsumerDefensive",
+      "operational_keywords": ["organic growth", "volumes", "pricing", "market share", "categories", "portfolio", "innovation"],
+      "example_tickers": ["GIS", "K", "CPB", "SJM", "CAG", "HSY"]
+    },
+    "HouseholdAndPersonalProducts": {
+      "sector": "ConsumerDefensive",
+      "operational_keywords": ["organic sales", "volumes", "pricing", "market share", "categories", "innovation", "productivity"],
+      "example_tickers": ["PG", "CL", "KMB", "CHD", "CLX"]
+    },
+    "OilAndGasEAndP": {
+      "sector": "Energy",
+      "operational_keywords": ["production", "BOE", "MBOE", "MBO/d", "MBOE/d", "Bcfe/d", "barrels", "barrels per day", "wells", "drilling", "completions", "frac crews", "wells turned-in-line", "CAPEX", "capital budget", "differential", "NYMEX", "breakeven"],
+      "example_tickers": ["OXY", "EOG", "DVN", "FANG", "APA", "PXD", "COP"]
+    },
+    "OilAndGasMidstream": {
+      "sector": "Energy",
+      "operational_keywords": ["throughput", "volumes", "Bcf/d", "MBPD", "TBtus/d", "pipeline", "gathering", "processing", "compression", "capacity", "leverage ratio", "tariffs"],
+      "example_tickers": ["KMI", "WMB", "OKE", "ET", "EPD", "MPLX"]
+    },
+    "OilAndGasDrilling": {
+      "sector": "Energy",
+      "operational_keywords": ["rigs", "rig count", "contracted rigs", "operating rig count", "active rigs", "platform rigs", "drilling", "newbuilds", "direct margin", "backlog", "fleet status"],
+      "example_tickers": ["HP", "PTEN", "NBR", "RIG"]
+    },
+    "OilAndGasEquipmentAndServices": {
+      "sector": "Energy",
+      "operational_keywords": ["Completion and Production", "Drilling and Evaluation", "C&P Revenue", "D&E Revenue", "stimulation", "wireline", "artificial lift", "Subsea", "offshore", "deepwater", "shop visit volumes", "frac", "backlog"],
+      "example_tickers": ["HAL", "SLB", "BKR", "NOV", "FTI"]
+    },
+    "OilAndGasRefiningAndMarketing": {
+      "sector": "Energy",
+      "operational_keywords": ["throughput", "barrels per day", "utilization", "crack spread", "refining margin", "turnaround"],
+      "example_tickers": ["PSX", "VLO", "MPC", "PBF"]
+    },
+    "Airlines": {
+      "sector": "Industrials",
+      "operational_keywords": ["ASM", "ASMs", "available seat miles", "RASM", "CASM", "CASM ex-fuel", "load factor", "passengers", "capacity", "revenue passenger miles", "flights", "cancellations", "fuel price", "fuel costs", "fleet", "aircraft", "deliveries"],
+      "example_tickers": ["DAL", "UAL", "LUV", "AAL", "JBLU", "ALK"]
+    },
+    "AerospaceAndDefense": {
+      "sector": "Industrials",
+      "operational_keywords": ["backlog", "orders", "book-to-bill", "deliveries", "production volume", "shipment volumes", "build rates", "Commercial OEM", "aftermarket", "Defense", "F-35", "launches"],
+      "example_tickers": ["BA", "LMT", "RTX", "GD", "NOC", "GE", "TDG"]
+    },
+    "SpecialtyIndustrialMachinery": {
+      "sector": "Industrials",
+      "operational_keywords": ["backlog", "order rates", "orders", "Aerospace Systems", "Diversified Industrial", "shop visit volumes", "spares output", "deliveries", "ARR", "segment margin", "cash conversion"],
+      "example_tickers": ["ETN", "ROK", "PH", "EMR", "AME", "IR"]
+    },
+    "FarmAndHeavyConstructionMachinery": {
+      "sector": "Industrials",
+      "operational_keywords": ["production", "inventory", "field inventory", "shipment volumes", "dealer inventory", "Production & Precision Ag", "Small Ag & Turf", "Construction & Forestry", "tractors", "combines", "excavator", "tariff impact"],
+      "example_tickers": ["DE", "CAT", "AGCO", "PCAR", "CNH"]
+    },
+    "IntegratedFreightAndLogistics": {
+      "sector": "Industrials",
+      "operational_keywords": ["volume", "average daily volume", "package volume", "load volume", "shipments", "stops", "loads", "weight per shipment", "capacity", "Trans-Pacific", "revenue per piece", "yield", "U.S. Domestic", "International", "LTL", "Intermodal", "network transformation"],
+      "example_tickers": ["FDX", "UPS", "XPO", "JBHT", "CHRW"]
+    },
+    "Railroads": {
+      "sector": "Industrials",
+      "operational_keywords": ["RTMs", "revenue ton miles", "revenue carloads", "carloads", "operating ratio", "OR", "freight car velocity", "locomotive productivity", "terminal dwell", "train length", "GTMs", "Bulk", "Industrial", "Premium", "Intermodal", "Coal", "Grain"],
+      "example_tickers": ["UNP", "CSX", "NSC", "CP", "CNI"]
+    },
+    "UtilitiesRegulatedElectric": {
+      "sector": "Utilities",
+      "operational_keywords": ["MW", "megawatts", "load", "load requests", "retail demand", "regulated segments", "investment blueprint", "capital plan", "rate base", "generation"],
+      "example_tickers": ["NEE", "DUK", "SO", "D", "AEP", "XEL", "ED"]
+    },
+    "Solar": {
+      "sector": "Technology",
+      "operational_keywords": ["MW", "GW", "capacity", "shipments", "modules", "installations", "backlog"],
+      "note": "Titles focus on revenue/EPS - MW/capacity metrics less common in headlines",
+      "example_tickers": ["FSLR", "ENPH", "SEDG", "RUN", "NOVA"]
+    },
+    "REITResidential": {
+      "sector": "RealEstate",
+      "operational_keywords": ["FFO", "AFFO", "same store revenue growth", "same store NOI", "physical occupancy", "blended rate growth", "core NOI growth", "core revenue growth", "rent growth"],
+      "example_tickers": ["EQR", "AVB", "UDR", "ESS", "MAA", "CPT", "INVH", "AMH"]
+    },
+    "REITRetail": {
+      "sector": "RealEstate",
+      "operational_keywords": ["FFO", "AFFO", "same store rent growth", "occupancy", "NOI", "leasing", "square feet"],
+      "example_tickers": ["SPG", "O", "NNN", "REG", "KIM", "FRT", "ADC"]
+    },
+    "REITIndustrial": {
+      "sector": "RealEstate",
+      "operational_keywords": ["FFO", "AFFO", "same store NOI", "occupancy", "rent growth", "lease spreads", "square feet", "development"],
+      "example_tickers": ["PLD", "DRE", "FR", "REXR"]
+    },
+    "REITOffice": {
+      "sector": "RealEstate",
+      "operational_keywords": ["FFO", "occupancy", "same store NOI", "leasing", "square feet", "rent growth"],
+      "example_tickers": ["BXP", "VNO", "SLG", "HIW"]
+    },
+    "REITHealthcareFacilities": {
+      "sector": "RealEstate",
+      "operational_keywords": ["FFO", "AFFO", "same store NOI", "occupancy", "rent coverage", "triple-net"],
+      "example_tickers": ["WELL", "VTR", "OHI", "PEAK"]
+    },
+    "REITSpecialty": {
+      "sector": "RealEstate",
+      "operational_keywords": ["FFO", "AFFO", "same store NOI", "towers", "data centers", "gaming"],
+      "example_tickers": ["AMT", "EQIX", "DLR", "CCI", "SBAC"]
+    },
+    "SpecialtyChemicals": {
+      "sector": "BasicMaterials",
+      "operational_keywords": ["EBITDA", "volume growth", "product costs", "circular economy", "energy costs", "inventory", "specialty businesses", "restructuring"],
+      "example_tickers": ["LIN", "APD", "ECL", "SHW", "PPG", "EMN", "DD"]
+    },
+    "Steel": {
+      "sector": "BasicMaterials",
+      "operational_keywords": ["steel operations", "steel shipments", "net tons", "selling prices", "steel products segment", "steel mills segment", "flat-rolled", "hot rolled", "cold rolled", "coated", "margin compression", "imports", "onshoring", "order activity", "backlogs", "tariffs"],
+      "example_tickers": ["NUE", "STLD", "CLF", "X", "CMC"]
+    },
+    "AgriculturalInputs": {
+      "sector": "BasicMaterials",
+      "operational_keywords": ["tonnes", "output", "sales volume", "phosphate", "potash", "production volumes", "shipments", "capital expenditures", "crop protection", "grain and oilseed", "yield", "Brazil"],
+      "example_tickers": ["MOS", "NTR", "CF", "FMC", "CTVA"]
+    },
+    "AutoManufacturers": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["deliveries", "production", "units", "vehicles", "manufacturing capacity", "builds", "EV profitability", "EV-related impairments", "battery cell", "battery energy storage", "inventory", "pricing", "market share", "tariff impact", "capital spending"],
+      "example_tickers": ["TSLA", "F", "GM", "RIVN", "LCID", "TM", "HMC"]
+    },
+    "AutoParts": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["organic sales growth", "operating margin", "tariff recovery", "capital spending", "adjusted expenses"],
+      "example_tickers": ["APTV", "BWA", "LEA", "MGA", "ALV"]
+    },
+    "ResidentialConstruction": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["homes closed", "home closings", "deliveries", "new orders", "net orders", "housing revenue", "average selling price", "ASP", "gross margin", "housing gross profit margin", "community count", "backlog"],
+      "example_tickers": ["DHI", "LEN", "NVR", "PHM", "TOL", "KBH", "MTH"]
+    },
+    "Entertainment": {
+      "sector": "CommunicationServices",
+      "operational_keywords": ["paid memberships", "subscribers", "streaming", "platform revenue", "ad revenue", "ads business", "content amortization", "content spend", "operating margin", "CapEx"],
+      "example_tickers": ["NFLX", "DIS", "WBD", "PARA", "LYV", "SPOT"]
+    },
+    "InternetContentAndInformation": {
+      "sector": "CommunicationServices",
+      "operational_keywords": ["user growth", "engagement", "MAUs", "DAUs", "orders", "advertising", "operating expenses"],
+      "example_tickers": ["GOOGL", "META", "SNAP", "PINS", "MTCH", "ZG"]
+    },
+    "CapitalMarkets": {
+      "sector": "FinancialServices",
+      "operational_keywords": ["M&A activity", "IPO activity", "capital markets activity", "alternatives", "AUM", "deposits", "trading", "financing activity", "hashrate", "client assets", "MAUs"],
+      "example_tickers": ["GS", "MS", "SCHW", "RJF", "HOOD", "COIN"]
+    },
+    "FinancialDataAndStockExchanges": {
+      "sector": "FinancialServices",
+      "operational_keywords": ["ARR", "ASV", "annual subscription value", "recurring revenue", "subscription revenue", "transaction revenue", "organic net revenue growth", "operating margin"],
+      "example_tickers": ["SPGI", "MCO", "MSCI", "ICE", "CME", "NDAQ", "FDS"]
+    },
+    "AssetManagement": {
+      "sector": "FinancialServices",
+      "operational_keywords": ["AUM", "assets under management", "inflows", "outflows", "net flows", "dry powder", "fundraising", "performance fees", "management fees"],
+      "example_tickers": ["BLK", "BX", "KKR", "APO", "ARES", "CG"]
+    },
+    "TravelServices": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["gross bookings", "room nights", "ADR", "RevPAR", "occupancy", "transactions", "take rate"],
+      "example_tickers": ["BKNG", "EXPE", "ABNB", "TRIP"]
+    },
+    "Lodging": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["RevPAR", "occupancy", "ADR", "room nights", "system-wide", "pipeline", "net unit growth", "comparable", "group revenue"],
+      "example_tickers": ["MAR", "HLT", "H", "WH", "IHG"]
+    },
+    "Leisure": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["attendance", "per capita spending", "cruise days", "occupancy", "capacity", "berths", "ticket yield", "onboard revenue"],
+      "example_tickers": ["DIS", "CCL", "RCL", "NCLH", "SIX", "FUN"]
+    },
+    "RecreationalVehicles": {
+      "sector": "ConsumerCyclical",
+      "operational_keywords": ["units", "shipments", "deliveries", "wholesale", "retail", "dealer inventory", "backlog", "ASP"],
+      "example_tickers": ["WGO", "THO", "BC", "PII", "HOG"]
+    }
+  },
+  "sectors": {
+    "Technology": {
+      "fallback_keywords": ["ARR", "subscription", "billings", "bookings", "RPO", "cloud", "AI", "shipments", "units", "backlog", "free cash flow"],
+      "industries": ["SoftwareApplication", "SoftwareInfrastructure", "Semiconductors", "SemiconductorEquipmentAndMaterials", "InformationTechnologyServices", "ComputerHardware", "CommunicationEquipment", "Solar"]
+    },
+    "Healthcare": {
+      "fallback_keywords": ["procedures", "patients", "prescriptions", "FDA", "Phase 2", "Phase 3", "pipeline", "launches", "members", "enrollment", "star ratings"],
+      "industries": ["MedicalDevices", "MedicalInstrumentsAndSupplies", "DiagnosticsAndResearch", "Biotechnology", "DrugManufacturersGeneral", "DrugManufacturersSpecialtyAndGeneric", "HealthcarePlans", "HealthInformationServices"]
+    },
+    "ConsumerCyclical": {
+      "fallback_keywords": ["comparable", "same-store", "comps", "traffic", "transactions", "deliveries", "units", "orders", "backlog", "GMV", "homes closed"],
+      "industries": ["SpecialtyRetail", "ApparelRetail", "Restaurants", "DiscountStores", "InternetRetail", "HomeImprovementRetail", "FootwearAndAccessories", "AutoManufacturers", "AutoParts", "ResidentialConstruction", "TravelServices", "Lodging", "Leisure", "RecreationalVehicles"]
+    },
+    "ConsumerDefensive": {
+      "fallback_keywords": ["identical sales", "organic growth", "volumes", "pricing", "market share", "eCommerce"],
+      "industries": ["GroceryStores", "PackagedFoods", "HouseholdAndPersonalProducts"]
+    },
+    "Energy": {
+      "fallback_keywords": ["production", "BOE", "barrels", "bcf", "throughput", "rigs", "wells", "completions", "CAPEX", "Subsea", "backlog"],
+      "industries": ["OilAndGasEAndP", "OilAndGasMidstream", "OilAndGasDrilling", "OilAndGasEquipmentAndServices", "OilAndGasRefiningAndMarketing"]
+    },
+    "Industrials": {
+      "fallback_keywords": ["backlog", "orders", "deliveries", "shipments", "ASM", "RASM", "CASM", "load factor", "operating ratio", "volumes", "carloads"],
+      "industries": ["Airlines", "AerospaceAndDefense", "SpecialtyIndustrialMachinery", "FarmAndHeavyConstructionMachinery", "IntegratedFreightAndLogistics", "Railroads"]
+    },
+    "Utilities": {
+      "fallback_keywords": ["MW", "megawatts", "GW", "load", "capacity", "generation", "rate base", "capital plan"],
+      "industries": ["UtilitiesRegulatedElectric"]
+    },
+    "RealEstate": {
+      "fallback_keywords": ["FFO", "AFFO", "same store NOI", "occupancy", "rent growth", "leasing", "square feet"],
+      "industries": ["REITResidential", "REITRetail", "REITIndustrial", "REITOffice", "REITHealthcareFacilities", "REITSpecialty"]
+    },
+    "BasicMaterials": {
+      "fallback_keywords": ["production", "tonnes", "shipments", "volumes", "net tons", "selling prices", "EBITDA", "utilization"],
+      "industries": ["SpecialtyChemicals", "Steel", "AgriculturalInputs"]
+    },
+    "CommunicationServices": {
+      "fallback_keywords": ["subscribers", "paid memberships", "MAUs", "DAUs", "ad revenue", "streaming", "engagement", "ARPU"],
+      "industries": ["Entertainment", "InternetContentAndInformation"]
+    },
+    "FinancialServices": {
+      "fallback_keywords": ["AUM", "deposits", "NII", "M&A activity", "ARR", "ASV", "inflows", "trading"],
+      "industries": ["CapitalMarkets", "FinancialDataAndStockExchanges", "AssetManagement"]
+    }
+  }
+}
