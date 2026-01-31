@@ -107,7 +107,8 @@ def get_earnings(ticker: str, dedupe: bool = True) -> str:
                 fiscal_quarter,
                 r["market_session"] or "N/A",
                 fmt(r["daily_stock"]), fmt(r["daily_adj"]), fmt(r["sector_adj"]), fmt(r["industry_adj"]),
-                fmt(r["trailing_vol"], 6), str(r["vol_days"] or 0), vol_status(r["vol_days"])
+                fmt(r["trailing_vol"], 6), str(r["vol_days"] or 0), vol_status(r["vol_days"]),
+                str(fye_month) if fye_month else "12"  # Default to December FYE if unknown
             ])
         })
 
@@ -128,7 +129,7 @@ def get_earnings(ticker: str, dedupe: bool = True) -> str:
     else:
         rows = [item["row"] for item in processed]
 
-    return "accession|date|fiscal_year|fiscal_quarter|market_session|daily_stock|daily_adj|sector_adj|industry_adj|trailing_vol|vol_days|vol_status\n" + "\n".join(rows)
+    return "accession|date|fiscal_year|fiscal_quarter|market_session|daily_stock|daily_adj|sector_adj|industry_adj|trailing_vol|vol_days|vol_status|fye_month\n" + "\n".join(rows)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or len(sys.argv) > 3:

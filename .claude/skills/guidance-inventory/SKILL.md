@@ -428,6 +428,63 @@ Called automatically by earnings-orchestrator for each 8-K.
 
 ---
 
+## Input from guidance-extract (guidance.csv)
+
+The `guidance-extract` agent outputs to `earnings-analysis/Companies/{TICKER}/guidance.csv`. This file uses an 18-field pipe-delimited format (+ quarter context = 19 fields).
+
+### Field Mapping from guidance.csv
+
+| guidance.csv Field | Type | Maps to GuidanceEntry |
+|--------------------|------|------------------------|
+| quarter | string | Context (which earnings call) |
+| period_type | enum | `period.period_type` |
+| fiscal_year | int | `period.fiscal_year` |
+| fiscal_quarter | int/`.` | `period.fiscal_quarter` (`.` = null for annual) |
+| segment | string | Additional context for segment-level guidance |
+| metric | string | `metric` |
+| low | float/`.` | `value_low` |
+| mid | float/`.` | `value_mid` |
+| high | float/`.` | `value_high` |
+| unit | string | `unit` |
+| basis | string | `basis` |
+| derivation | enum | New field: `explicit`, `calculated`, `point`, `implied` |
+| qualitative | string/`.` | Soft guidance text when numeric not available |
+| source_type | string | `source_type` |
+| source_id | string | `source_id` |
+| source_key | string | Which content in source (e.g., `EX-99.1`, `full`) |
+| given_date | date | `given_date` |
+| section | string | `page_or_section` |
+| quote | string | `quote` (pipes replaced with ¦) |
+
+### Derived Fields (computed by guidance-inventory)
+
+| Field | How Derived |
+|-------|-------------|
+| `calendar_start` | From `fiscal_year` + `fiscal_quarter` + company's `fiscal_year_end_month` |
+| `calendar_end` | From `fiscal_year` + `fiscal_quarter` + company's `fiscal_year_end_month` |
+| `status` | Compare `calendar_end` vs current date: `future`, `current`, `past` |
+| `action` | Compare to prior guidance for same metric/period: `INITIAL`, `RAISED`, `LOWERED`, etc. |
+| `entry_id` | Generate unique ID: `{metric}-{period_type}-{fiscal_year}-{sequence}` |
+
+### Derivation Field Interpretation
+
+| derivation | Meaning | Numeric Fields |
+|------------|---------|----------------|
+| `explicit` | All three values stated by management | low, mid, high populated |
+| `calculated` | mid = (low+high)/2 computed by agent | low, high from source; mid calculated |
+| `point` | Single value: "around $15B" | low = mid = high (same value) |
+| `implied` | Qualitative only, no numbers | low, mid, high = `.`; qualitative populated |
+
+### Handling Qualitative Guidance
+
+When `derivation=implied`, the `qualitative` field contains non-numeric guidance:
+- "double-digit" → Growth expectation without specific number
+- "low to mid single digits" → Range expressed qualitatively
+
+These entries should be captured in guidance-inventory with the qualitative text preserved in the `quote` field and noted in analysis context.
+
+---
+
 ## Requirements Checklist
 
 | Requirement | How Addressed |
