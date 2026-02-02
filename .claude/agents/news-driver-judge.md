@@ -13,6 +13,7 @@ tools:
   - TaskList
   - TaskGet
   - TaskUpdate
+  - Write
 model: opus
 permissionMode: dontAsk
 ---
@@ -182,6 +183,16 @@ Call `TaskUpdate` with:
 - `taskId`: the task ID from your prompt
 - `status`: "completed"
 - `description`: the **12-field** result line
+
+### Step 7b: Persist Output File (MANDATORY)
+
+Write the final 12-field line (no header) to:
+
+`earnings-analysis/Companies/{TICKER}/manifests/{QUARTER}/judge/{TASK_ID}.tsv`
+
+- Content must exactly match the TaskUpdate description.
+- Do **NOT** add any extra text or headers.
+- If the Write is blocked by a hook, fix the output and retry until the file is written.
 
 ### Step 8: Return
 

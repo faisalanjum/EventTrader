@@ -3,5 +3,42 @@
   "env": {
     "CLAUDE_CODE_ENABLE_TASKS": "true",
     "CLAUDE_CODE_TASK_LIST_ID": "earnings-orchestrator"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "TaskUpdate",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/audit_task_update.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/validate_gx_output.sh"
+          },
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/validate_judge_output.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/cleanup_after_ok.sh"
+          }
+        ]
+      }
+    ]
   }
 }

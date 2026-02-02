@@ -6,6 +6,7 @@ tools:
   - TaskList
   - TaskGet
   - TaskUpdate
+  - Write
   - mcp__neo4j-cypher__read_neo4j_cypher
 model: opus
 permissionMode: dontAsk
@@ -126,6 +127,16 @@ RETURN n.body as content, n.created as pub_date, n.title as title
 ### Step 1: Fetch Content
 
 Run the appropriate query based on SOURCE_TYPE from the mapping above.
+
+**Empty-content handling (production-safe):**
+- Treat “empty” as `strip()==""` (whitespace-only counts as empty).
+- If the query returns **no rows** → return `ERROR|SOURCE_NOT_FOUND|{source_type}|{source_key}`
+- If a query **throws** → return `ERROR|QUERY_FAILED|{source_type}|{source_key}`
+- If rows exist but content is empty:
+  - `exhibit`, `section`, `filing_text`, `financial_stmt` → `ERROR|EMPTY_CONTENT|{source_type}|{source_key}`
+  - `transcript` → if BOTH prepared_remarks empty AND qa_exchanges empty → `ERROR|EMPTY_CONTENT|transcript|full`
+  - `news` → if BOTH title and body empty → `ERROR|EMPTY_CONTENT|news|full`
+  - `xbrl` → treat “no rows” as `ERROR|SOURCE_NOT_FOUND|xbrl|{source_key}`; do not use EMPTY_CONTENT for xbrl
 
 ### Step 2: Extract Guidance
 
@@ -290,7 +301,19 @@ Extract the task ID number N from `TASK_ID=N` in your prompt.
 Call `TaskUpdate` with:
 - `taskId`: "N"
 - `status`: "completed"
-- `description`: All guidance lines, newline separated
+- `description`: **ONLY** pipe-delimited output lines, newline separated (no extra text)
+
+**If TASK_ID is missing or malformed:** Return `ERROR|MISSING_TASK_ID` and STOP. Do not attempt extraction without a valid TaskUpdate target.
+
+### Step 3b: Persist Output File (MANDATORY)
+
+Write the **same** output lines to a per-task file (no header):
+
+`earnings-analysis/Companies/{TICKER}/manifests/{QUARTER}/gx/{TASK_ID}.tsv`
+
+- Content must exactly match the TaskUpdate description (newline-delimited lines).
+- Do **NOT** add any extra text or headers.
+- If the Write is blocked by a hook, fix the output and retry until the file is written.
 
 ### Step 4: Return Output
 
@@ -317,11 +340,15 @@ period_type|fiscal_year|fiscal_quarter|segment|metric|low|mid|high|unit|basis|de
 NO_GUIDANCE|{source_type}|{source_key}
 ```
 
+**Do NOT add explanations or extra lines.** The TaskUpdate description must be strictly machine-parsable.
+
 ## Rules
 
 - **18 fields per line** - Use `.` for null/empty, never blank
 - **Replace pipes** in quotes with broken bar (¦)
 - **Always update task** before returning
+- **Always write output file** before returning
+- **TASK_ID required** - If missing, return `ERROR|MISSING_TASK_ID` and stop
 - **100% recall priority** - When in doubt, extract it; false positives are better than missed guidance
 - **No fabricated numbers** - Qualitative guidance uses `implied` derivation; do NOT invent values
 - **News: company guidance only** - Ignore analyst estimates ("versus consensus of", "Est $X")
