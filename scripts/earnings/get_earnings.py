@@ -5,6 +5,10 @@ Usage: python scripts/earnings/get_earnings.py TICKER [--all]
 
 By default, returns only the actual earnings release per quarter (last 8-K 2.02 per fiscal quarter).
 Use --all to return all 8-K 2.02 filings including preliminary updates.
+
+DEPRECATED FISCAL CALCULATION: This script uses calculate_fiscal_period() from utils.py
+which has known issues with 52-week fiscal calendars. For accurate fiscal year/quarter
+calculation validated against SEC EDGAR, use get_quarterly_filings.py instead.
 """
 import sys
 from pathlib import Path
