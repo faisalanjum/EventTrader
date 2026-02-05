@@ -3,6 +3,12 @@ name: earnings-orchestrator
 description: Predict stock direction post 8-K earnings & refine using 10-Q/10-K outcomes
 model: opus
 permissionMode: dontAsk
+hooks:
+  PostToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "build_orchestrator_event_json"
 allowed-tools:
   - Task
   - TaskCreate
@@ -29,6 +35,10 @@ skills:
 
 **Goal**: Predict stock direction post 8-K earnings release & refine predictions using 10-Q/10-K filing and actual return outcomes.
 
+**Two phases per quarter:**
+1. **Prediction** (after 8-K): Predict direction/magnitude before market reacts
+2. **Attribution** (after 10-Q/10-K): Analyze actual outcome, score prediction accuracy, learn
+
 ---
 
 ## Triggers
@@ -42,7 +52,19 @@ Invoke when user asks about:
 ## Workflow (7 Steps)
 
 ### Step 1: Discovery
-Run discovery scripts to identify earnings events and data sources.
+Run discovery script (execute directly, do NOT prefix with python):
+```bash
+get_quarterly_filings {TICKER}
+```
+Output columns: `accession_8k|filed_8k|market_session_8k|accession_10q|filed_10q|market_session_10q|form_type|fiscal_year|fiscal_quarter`
+
+Events manifest is built automatically at:
+`earnings-analysis/Companies/{TICKER}/events/event.json`
+
+Each row becomes:
+- `quarter_label`: `{fiscal_quarter}_FY{fiscal_year}`
+- `accession_no`: `accession_8k`
+- `filing_datetime`: `filed_8k`
 
 ### Step 2: Task Creation
 Create all tasks upfront with proper blockedBy dependencies.
@@ -65,7 +87,7 @@ Echo ORCHESTRATOR_COMPLETE {TICKER} for thinking hook.
 ## Scripts
 
 Available in `scripts/earnings/`:
-- `get_earnings.py` - Get earnings events for ticker
+- `get_quarterly_filings.py` - Get 8-K earnings events with matched 10-Q/10-K filings
 
 ---
 
