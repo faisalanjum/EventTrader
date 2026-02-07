@@ -334,6 +334,7 @@ period_type|fiscal_year|fiscal_quarter|segment|metric|low|mid|high|unit|basis|de
 - `period_type=annual` → `fiscal_quarter=.`
 - Segment-specific → use segment name; unqualified → `Total`
 - Q&A guidance → prefix quote with `[Q&A]`; prepared remarks → `[PR]`
+- `period_type` must be lowercase: `quarter`, `annual`, `half`, `long-range` (never Title Case)
 
 **If no guidance found:**
 ```
@@ -358,5 +359,6 @@ NO_GUIDANCE|{source_type}|{source_key}
 - **Forward-looking only** - Target period must be after source date. If fiscal_year/fiscal_quarter ended before given_date, it's a result, not guidance.
 - **Specificity required** - Qualitative needs quantitative anchor ("low single digits", "double-digit", "mid-teens"). Skip vague terms ("significant", "strong") without magnitude.
 - **Title Case metrics** - Normalize to Title Case ("Dividend Per Share", not "Dividend per Share").
+- **period_type is lowercase only** - Do NOT capitalize `quarter/annual/half/long-range`.
 - **Unit always populated** - Even for qualitative, use expected unit for metric type (Production→BOE/day, CapEx→M USD, Growth→%).
 - **Quote max 500 chars** - Truncate at sentence boundary with "..." if needed.

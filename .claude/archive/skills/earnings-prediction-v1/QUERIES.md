@@ -30,7 +30,13 @@
 /filtered-data --agent neo4j-entity --query "[PIT: {filing_datetime}] Dividends/splits for {ticker} past 90 days"
 ```
 
-## consensus
+## consensus_av_earnings
+```
+/alphavantage-earnings
+Query: "EARNINGS for {ticker} (quarterly EPS actual vs estimate)"
+```
+
+## consensus_ppx
 ```
 /filtered-data --agent perplexity-search --query "[PIT: {filing_datetime}] {ticker} Q{quarter} FY{year} EPS revenue estimate consensus"
 ```

@@ -10,7 +10,7 @@
 
 **What this is**: Multi-layer earnings analysis system using forked skills for context isolation.
 
-**Key findings from testing (2026-01-16):**
+**Key findings from testing (2026-01-16, retested 2026-02-05):**
 
 | What | Status | Workaround |
 |------|--------|------------|
@@ -22,12 +22,20 @@
 | K8s/SDK execution | ✅ WORKS | Opus works; thinking captured from all layers |
 | CLI v2.1.1 agent files | ⚠️ ROOT LEVEL | Older versions write to root, not session/subagents/ |
 | K8s Opus thinking | ✅ 171 blocks | 159KB thinking (was 6.7KB with Sonnet) |
-| Sub-agent model inheritance | ❌ NOT ENFORCED | `model:` in frontmatter ignored; inherits parent's model |
-| `allowed-tools` for restriction | ❌ NOT ENFORCED | Other tools still accessible |
+| `model:` field in skill/agent | ✅ **NOW ENFORCED** (Feb 2026) | `model: haiku` actually runs Haiku; per-layer cost control works |
+| `allowed-tools` for restriction (skills) | ❌ NOT ENFORCED | Skills use prompt injection, not tool filtering |
 | `allowed-tools` for MCP pre-load | ✅ **WORKS** | List MCP tools to pre-load them |
-| `disallowedTools` | ❌ NOT ENFORCED | Cannot block tools |
-| `agent:` field | ❌ NOT WORKING | Doesn't inherit agent's tools |
-| MCP in fork | ✅ WORKS | Either use allowed-tools OR MCPSearch |
+| `disallowedTools` (skills) | ❌ NOT ENFORCED | Cannot block tools in skills |
+| `disallowedTools` (agents) | ✅ **NOW ENFORCED** (Feb 2026) | Tools completely removed from agent's tool set |
+| `tools` allowlist (agents) | ✅ **NOW ENFORCED** (Feb 2026) | Agent only sees tools in its allowlist |
+| `agent:` field in skills | ✅ **NOW WORKS** (Feb 2026) | Grants agent's MCP tools without ToolSearch |
+| `memory:` field (agents) | ⚠️ **STORAGE ONLY** (v2.1.34) | Dir created + files persist; **auto-preload into system prompt DOES NOT WORK** (definitive: tested `local` + `project`, across 2 restarts, agent confirms no memory content in prompt). Use manual `Read` at agent startup instead. |
+| `skills:` field (agents) | ✅ **WORKS** (Feb 2026) | Auto-loads skills into agent context (args not passed through) |
+| Agent-scoped hooks | ✅ **WORKS** (Feb 2026) | PreToolUse, PostToolUse, Stop in agent frontmatter |
+| SubagentStart hook | ✅ **WORKS** (Feb 2026) | Fires when subagent spawns; can inject additionalContext |
+| SubagentStop hook | ✅ **WORKS** (Feb 2026) | Fires when subagent completes; can block stopping |
+| Task→Skill nesting | ✅ **WORKS** (Feb 2026) | Sub-agents can invoke skills; combine parallel Task + Skill chains |
+| MCP in fork | ✅ WORKS | Either use allowed-tools OR ToolSearch |
 | Tool inheritance parent→child | ❌ NO | Each skill has independent access |
 | 3+ layer chains | ✅ WORKS | L1→L2→L3 all executed correctly |
 | Sibling isolation | ✅ WORKS | Context isolated, filesystem shared |
@@ -44,21 +52,127 @@
 | Parallel execution (Task tool) | ✅ PARALLEL | From main conversation only |
 | Parallel execution (Skill tool) | ❌ SEQUENTIAL | Always sequential |
 | Task tool in forked context | ❌ BLOCKED | Cannot use for parallelism |
-| MCP wildcards pre-load | ❌ NO | Only grants permission, still need MCPSearch |
+| Task→Task nesting | ❌ BLOCKED | Sub-agents don't get Task tool |
+| MCP wildcards pre-load | ❌ NO | Only grants permission, still need ToolSearch |
 | Error propagation | ⚠️ TEXT ONLY | No exceptions, must parse response |
 | **Task deletion unblocks dependents** | ✅ WORKS | `status: "deleted"` removes task, unblocks dependents |
 | **Task completion unblocks dependents** | ✅ WORKS | `status: "completed"` keeps task, unblocks dependents |
 | **Cross-agent task manipulation** | ✅ WORKS | Any agent can update/delete any task by ID |
 | **Upfront task creation pattern** | ✅ WORKS | Create all tasks upfront, skip via completed/deleted |
 | **Parallel foreground Task spawn** | ✅ PARALLEL | 194ms spread, full tool access (See Part 10.14) |
+| **Background agents: Write/MCP/Skill** | ✅ **NOW WORKS** (Feb 2026) | Was broken (only Bash). Now 13 tools available. Only TaskCreate/List/Get/Update still blocked. |
+| **Task `run_in_background` default** | ⚠️ MAY AUTO-ENABLE | Claude may choose background mode; explicitly set `run_in_background: false` if you need task tools |
 | Skill-specific hooks | ✅ WORKS (v2.1.0+) | Define in SKILL.md frontmatter; 3 events only |
-| `color:` for sub-agents | ✅ UI only | Offered in `/agents` wizard; not documented as frontmatter field |
-| `color:` for skills | ❓ UNTESTED | Not documented; test if `context: fork` skills can use it |
+| **TaskCompleted hook** | ✅ **WORKS** (v2.1.33) | Fires on task completion; JSON has `task_id`, `task_subject`, `task_description` |
+| **TeammateIdle hook** | ✅ **WORKS** (v2.1.33) | Fires when teammate goes idle; JSON has `teammate_name`, `team_name`, `permission_mode` |
+| **Agent `Task(AgentType)` restriction** | ✅ **ENFORCED** (v2.1.33) | `tools: [Task(Explore), Task(Bash)]` blocks all other sub-agent types |
+| **`memory: local` scope** | ⚠️ **STORAGE ONLY** (v2.1.34) | Dir + files persist; auto-preload into system prompt **confirmed NOT working** (2 restarts, definitive test) |
 
-**Color Support (Researched 2026-01-22):**
-- **Sub-agents**: Color offered in `/agents` interactive UI for visual identification, but NOT documented as a frontmatter field
-- **Skills**: No color support documented
-- **TODO**: Test if adding `color:` to a skill with `context: fork` works (since forked skills spawn sub-agents internally)
+---
+
+### Retest Summary (2026-02-06, v2.1.33) — What Changed
+
+**4 new features tested:**
+
+| Feature | Status | Details |
+|---------|--------|---------|
+| `TaskCompleted` hook event | ✅ Works | Add to settings.json `hooks.TaskCompleted`; fires when any task status → `completed`. STDIN JSON includes: `hook_event_name`, `task_id`, `task_subject`, `task_description`, `session_id`, `transcript_path`, `cwd`. Env vars propagated: `CLAUDE_CODE_ENABLE_TASKS`, `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`, `CLAUDE_CODE_TASK_LIST_ID`, `CLAUDE_PROJECT_DIR` |
+| `TeammateIdle` hook event | ✅ Works | Add to settings.json `hooks.TeammateIdle`; fires when a teammate's turn ends. STDIN JSON includes: `hook_event_name`, `teammate_name`, `team_name`, `permission_mode`, `session_id`, `transcript_path`, `cwd`. Same env vars as TaskCompleted |
+| Agent `Task(AgentType)` in tools | ✅ Enforced | In agent frontmatter: `tools: [Read, Write, Task(Explore), Task(Bash)]`. Only listed agent types can be spawned. `Task(general-purpose)` and `Task(Plan)` correctly blocked when not in list |
+| `memory: local` scope | ⚠️ **STORAGE ONLY** | Dir + files persist at `.claude/agent-memory-local/<name>/`. Auto-preload of MEMORY.md into system prompt **confirmed NOT working** as of v2.1.34. Tested: (1) `local` and `project` scopes, (2) across 2 session restarts, (3) same agent re-invoked after writing memory, (4) agent explicitly searched entire system prompt for memory strings — zero matches. Both scopes behave identically: storage works, recall doesn't. Agents must manually `Read` their memory dir at startup. |
+
+**Hook JSON schemas (from test output):**
+
+```json
+// TaskCompleted — STDIN to hook script
+{
+  "session_id": "...",
+  "transcript_path": "...",
+  "cwd": "/home/faisal/EventMarketDB",
+  "hook_event_name": "TaskCompleted",
+  "task_id": "3051",
+  "task_subject": "DUMMY_TASK_FOR_HOOK_TEST",
+  "task_description": "This task exists solely to test the TaskCompleted hook."
+}
+
+// TeammateIdle — STDIN to hook script
+{
+  "session_id": "...",
+  "transcript_path": "...",
+  "cwd": "/home/faisal/EventMarketDB",
+  "permission_mode": "default",
+  "hook_event_name": "TeammateIdle",
+  "teammate_name": "idle-worker",
+  "team_name": "test-hooks-2133"
+}
+```
+
+**Memory: practical workaround for per-entity memory (e.g., per-company):**
+
+Since auto-preload doesn't work, use manual file-based memory:
+```yaml
+# In agent frontmatter:
+memory: local
+```
+```
+# In agent prompt instructions:
+At startup, check .claude/agent-memory-local/<agent-name>/ for a file named {TICKER}.md.
+If it exists, Read it for prior context. When done, Write updated findings back to that file.
+```
+This gives per-company persistent memory with no size limit.
+
+---
+
+### Retest Summary (2026-02-05) — What Changed
+
+**6 things that NOW WORK (were broken in Jan 2026):**
+
+| Feature | Was | Now | Why it matters |
+|---------|-----|-----|----------------|
+| `model:` field | ❌ Ignored | ✅ Enforced | Use `model: haiku` for cheap L3 queries, `model: opus` for complex reasoning |
+| `agent:` field in skills | ❌ Ignored | ✅ Works | Write `agent: neo4j-news` → get MCP tools without ToolSearch |
+| `disallowedTools` on agents | ❌ Not enforced | ✅ Enforced | Block dangerous tools (Write, Bash) on read-only agents |
+| `tools` allowlist on agents | ❌ Not enforced | ✅ Enforced | Give agent only Read+Grep = safe read-only worker |
+| Task→Skill nesting | ❌ Untested | ✅ Works | Main→Task (parallel)→Skill (fork)→Skill (fork) chains |
+| Agent-scoped hooks | ❌ Untested | ✅ Work | PreToolUse can block tools; Stop fires on completion |
+| Background: Write/MCP/Skill | ❌ Broken (Bash only) | ✅ Fixed | 13 tools now available; only TaskCreate/List/Get/Update still blocked |
+
+**4 brand-new features (didn't exist in Jan 2026):**
+
+| Feature | What it does | How to use |
+|---------|-------------|------------|
+| `memory: project\|local\|user` | Agent has persistent memory dir on disk | Add to agent frontmatter; file persists but **no auto-preload** into prompt (must manually Read) |
+| `skills:` field | Auto-load skills into agent context | `skills: [neo4j-report, neo4j-news]` in agent frontmatter |
+| SubagentStart hook | Fires when sub-agent spawns | Add to settings.json; can inject context via `additionalContext` |
+| SubagentStop hook | Fires when sub-agent completes | Add to settings.json; receives transcript path |
+| TaskCompleted hook (v2.1.33) | Fires when task status → completed | Add to settings.json `hooks.TaskCompleted`; receives task_id, subject, description |
+| TeammateIdle hook (v2.1.33) | Fires when teammate turn ends | Add to settings.json `hooks.TeammateIdle`; receives teammate_name, team_name |
+| `Task(AgentType)` restriction (v2.1.33) | Restrict sub-agent spawning | `tools: [Task(Explore), Task(Bash)]` in agent frontmatter; unlisted types blocked |
+
+**The big insight — AGENTS vs SKILLS:**
+
+Tool restrictions (`disallowedTools`, `tools`) only work on **agents** (`.claude/agents/`), NOT on **skills** (`.claude/skills/`). Skills use prompt injection — there's no tool-call interceptor. Agents use actual tool filtering — blocked tools are removed from the tool set entirely.
+
+| Feature | On Skills | On Agents |
+|---------|-----------|-----------|
+| `disallowedTools` | ❌ Not enforced | ✅ Enforced |
+| `tools` allowlist | ❌ Not enforced | ✅ Enforced |
+| `model:` field | ✅ Enforced | ✅ Enforced |
+| `agent:` field | ✅ Works | N/A |
+| `memory:` field | N/A | ⚠️ Storage only (dir persists, **no auto-preload** as of v2.1.34) |
+| `skills:` field | N/A | ✅ Works |
+
+**Nesting — what can call what:**
+
+| From → To | Works? | Note |
+|-----------|--------|------|
+| Skill → Skill | ✅ Yes | Up to 3+ layers tested |
+| Skill → Task | ❌ No | Task tool not provided in forks |
+| Task → Task | ❌ No | Task tool not provided to sub-agents |
+| Agent → Task (restricted) | ✅ Yes | `tools: [Task(Explore)]` limits which agent types can be spawned (v2.1.33) |
+| Task → Skill | ✅ Yes | **New!** Sub-agents can invoke skills |
+| Main → Skill | ✅ Yes | Standard fork |
+| Main → Task | ✅ Yes | Standard sub-agent, parallel OK |
 
 **WHY these limitations exist (Verified 2026-01-16):**
 
@@ -609,11 +723,7 @@ If bash needed later, `sonirico/mcp-shell` is most secure (allowlist/blocklist +
 |-------|--------------|--------------|-----------|
 | All skills | Any `model:` value | **Inherits from parent** | Depends on parent model |
 
-**Note**: The `model:` field in skill frontmatter does NOT work. All forked skills inherit the parent's model. This was empirically tested with `test-model-field` skill (model: haiku ran as Opus).
-
-**Workaround to control model per layer**:
-- Use `./agent --model sonnet` for cost savings at specific layers
-- Or use Claude Agent SDK with explicit model parameter
+**UPDATE (2026-02-05)**: The `model:` field in skill frontmatter **NOW WORKS**. `model: haiku` correctly runs as Haiku 4.5 (claude-haiku-4-5-20251001) instead of inheriting the parent's Opus. This enables per-layer cost control directly in skill definitions.
 
 ## 5.2 Settings Configured
 
@@ -2405,34 +2515,46 @@ The same folder name = the same tasks. You can resume across any number of sessi
 
 ---
 
-## 10.13 Background vs Foreground Agent Spawning (Tested 2026-01-29)
+## 10.13 Background vs Foreground Agent Spawning (Tested 2026-01-29, Retested 2026-02-05)
 
-### The Problem
+### Background Agents — Mostly Fixed!
 
-When using `run_in_background: true` with the Task tool, spawned agents lose access to task management tools (TaskCreate, TaskList, TaskGet, TaskUpdate) even when explicitly listed in the agent's `tools:` field.
+In Jan 2026, `run_in_background: true` gave agents only Bash. Most of those bugs are now fixed.
 
-### Test Evidence
+**Retest results (2026-02-05):**
 
-| Mode | TaskList | TaskCreate | TaskUpdate | Write Files |
-|------|----------|------------|------------|-------------|
-| **Foreground** (default) | ✅ YES | ✅ YES | ✅ YES | ✅ YES |
-| **Background** (`run_in_background: true`) | ❌ NO | ❌ NO | ❌ NO | ❌ NO |
+| Capability | Jan 2026 | Feb 2026 | Fixed? |
+|------------|----------|----------|--------|
+| Bash | ✅ Works | ✅ Works | — |
+| Write/Edit files | ❌ Blocked | ✅ **Works** | **YES** |
+| MCP tools (via ToolSearch) | ❌ Blocked | ✅ **Works** | **YES** |
+| Skill tool | ❌ Untested | ✅ **Works** | **YES** |
+| ToolSearch | ❌ Untested | ✅ **Works** | **YES** |
+| Glob/Grep/Read | ✅ Works | ✅ Works | — |
+| WebFetch/WebSearch | ❌ Untested | ✅ **Works** | **YES** |
+| TaskCreate/List/Get/Update | ❌ Blocked | ❌ **Still blocked** | No |
 
-**Background agent thinking (from test):**
-> "Looking at my function definitions, I only have access to the **Bash** tool. I don't have TaskList, TaskCreate, TaskUpdate, or any other task management tools available."
+**13 tools available** in background mode: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, Teammate, SendMessage, ToolSearch.
 
-### Root Cause
+**What's still missing**: TaskCreate, TaskList, TaskGet, TaskUpdate (task management tools).
 
-This is a **known bug** affecting multiple tool types:
-- [#13254](https://github.com/anthropics/claude-code/issues/13254) - Background subagents cannot access MCP tools (REOPENED)
-- [#13890](https://github.com/anthropics/claude-code/issues/13890) - Subagents unable to write files and call MCP tools (OPEN)
-- [#14521](https://github.com/anthropics/claude-code/issues/14521) - Background agents cannot write files (Duplicate)
+**GitHub bugs status**:
+- [#13254](https://github.com/anthropics/claude-code/issues/13254) - Background MCP tools — **FIXED** (Feb 2026)
+- [#13890](https://github.com/anthropics/claude-code/issues/13890) - Background write/MCP — **FIXED** (Feb 2026)
+- [#14521](https://github.com/anthropics/claude-code/issues/14521) - Background write files — **FIXED** (Feb 2026)
 
-`run_in_background: true` spawns agents with a **reduced tool set** - only basic tools like Bash are available.
+### When to Use Background vs Foreground
 
-### The Solution: Foreground Parallel Spawns
+| Use Case | Mode | Why |
+|----------|------|-----|
+| Agent needs Write, MCP, Skill, Bash | ✅ Background OK | These all work now |
+| Agent needs TaskCreate/Update | ❌ Use foreground | Task tools still blocked in background |
+| Orchestrator needs to do other work while agents run | ✅ Background | Non-blocking |
+| Orchestrator just waits for results | Either works | Foreground blocks but agents still run in parallel |
 
-**Key insight**: Multiple Task calls in the SAME message run in PARALLEL even without `run_in_background`.
+### Foreground Parallel Spawns (still the safest option)
+
+**Key insight**: Multiple Task calls in the SAME message run in PARALLEL even without `run_in_background`. This gives you parallel execution AND full tool access.
 
 ```
 Orchestrator sends ONE message with multiple Task tool calls:
@@ -2446,14 +2568,9 @@ Orchestrator sends ONE message with multiple Task tool calls:
                         (but agents execute concurrently)
 ```
 
-**Benefits:**
-- Agents have full tool access (TaskCreate, TaskUpdate, MCP, Write, etc.)
-- Agents run in parallel (0.24s gap between launches)
-- Orchestrator waits for all to complete, then continues
-
 **Trade-off:**
-- Orchestrator cannot do other work while waiting (blocking)
-- For our use case (batch processing), this is acceptable
+- Foreground: full tools (including TaskCreate), but orchestrator blocks
+- Background: most tools (no TaskCreate), but orchestrator keeps working
 
 ### Verified Patterns (All ✅)
 
@@ -2466,11 +2583,15 @@ Orchestrator sends ONE message with multiple Task tool calls:
 | Parallel foreground Task spawn | CLI skill | ✅ Works |
 | Single foreground Task spawn | SDK skill | ✅ Agent updated task successfully |
 | Agent uses TaskUpdate to store result | All contexts | ✅ Works |
+| **Background: Write files** | CLI main | ✅ **Works (Feb 2026)** |
+| **Background: MCP tools** | CLI main | ✅ **Works (Feb 2026)** |
+| **Background: Skill tool** | CLI main | ✅ **Works (Feb 2026)** |
+| **Background: TaskCreate** | CLI main | ❌ **Still blocked** |
 
 ### Implementation for earnings-orchestrator
 
 ```markdown
-## Correct Pattern (Foreground)
+## Recommended Pattern (Foreground — if agents need TaskUpdate)
 
 1. Create all tasks first:
    - TaskCreate subject="BZ-Q1 AAPL 2024-01-02", description="pending"
@@ -2484,26 +2605,17 @@ Orchestrator sends ONE message with multiple Task tool calls:
 3. Agents update their tasks:
    - Each agent calls TaskUpdate with results
 
-4. Orchestrator continues after all agents complete:
-   - Read results via TaskGet
-   - Create WEB tasks for escalation
-   - Repeat pattern for WEB agents
+4. Orchestrator continues after all agents complete
 ```
-
-### What NOT to Do
 
 ```markdown
-## Wrong Pattern (Background - agents lose tools)
+## Background Pattern (OK if agents DON'T need TaskUpdate)
 
-Task subagent_type="news-driver-bz"
-     prompt="..."
-     run_in_background: true   ← DON'T DO THIS
+Spawn with run_in_background: true
+- Agent can: Write files, call MCP, use Skills, run Bash
+- Agent cannot: TaskCreate/List/Get/Update
+- Orchestrator: keeps working, checks results later via TaskOutput
 ```
-
-Agents spawned with `run_in_background: true` cannot:
-- Use TaskCreate/TaskList/TaskGet/TaskUpdate
-- Write files
-- Call MCP tools
 
 ### Test Skills Created
 

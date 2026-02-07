@@ -45,9 +45,12 @@ if [ -n "$PIT" ]; then
     PIT_EPOCH=$(date -d "$PIT" +%s 2>/dev/null || echo "")
 
     if [ -n "$PIT_EPOCH" ]; then
-        # Extract ONLY publication dates (format: "Date: YYYY-MM-DD" on its own line or after whitespace)
-        # The Date: prefix distinguishes publication date from content dates
-        PUB_DATES=$(echo "$RESPONSE" | grep -oE 'Date: [0-9]{4}-[0-9]{2}-[0-9]{2}' | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | sort -u || echo "")
+        # Extract publication dates in two formats:
+        # 1. Text format: "Date: YYYY-MM-DD"
+        # 2. JSON format: "date": "YYYY-MM-DD"
+        PUB_DATES_TEXT=$(echo "$RESPONSE" | grep -oE 'Date: [0-9]{4}-[0-9]{2}-[0-9]{2}' | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' || echo "")
+        PUB_DATES_JSON=$(echo "$RESPONSE" | grep -oE '"date": "[0-9]{4}-[0-9]{2}-[0-9]{2}"' | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' || echo "")
+        PUB_DATES=$(echo -e "$PUB_DATES_TEXT\n$PUB_DATES_JSON" | sort -u | grep -v '^$' || echo "")
 
         for DATE in $PUB_DATES; do
             DATE_EPOCH=$(date -d "$DATE" +%s 2>/dev/null || echo "")

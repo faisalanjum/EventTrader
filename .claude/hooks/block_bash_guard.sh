@@ -16,7 +16,7 @@ fi
 
 # If Bash command writes to .ok or processed CSVs, block.
 case "$CMD" in
-  *"manifests/"*.ok*|*"news_processed.csv"*|*"guidance_processed.csv"*)
+  *"manifests/"*.ok*|*"news_processed.csv"*|*"guidance_processed.csv"*|*"prediction_processed.csv"*)
     echo "{\"decision\":\"block\",\"reason\":\"Use Write/Edit tool for .ok and processed CSV updates (Bash write blocked).\"}"
     exit 0
     ;;

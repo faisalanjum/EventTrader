@@ -1,0 +1,1 @@
+MEMORY_LOCAL_TEST=mango_2026_local

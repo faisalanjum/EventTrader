@@ -1,20 +1,29 @@
 {
   "plansDirectory": ".claude/plans",
+  "permissions": {
+    "allow": [
+      "Write",
+      "Edit",
+      "Skill",
+      "Bash",
+      "Read",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "Task",
+      "mcp__neo4j-cypher",
+      "mcp__perplexity",
+      "mcp__alphavantage"
+    ]
+  },
   "env": {
     "CLAUDE_CODE_ENABLE_TASKS": "true",
-    "CLAUDE_CODE_TASK_LIST_ID": "earnings-orchestrator"
+    "CLAUDE_CODE_TASK_LIST_ID": "earnings-orchestrator",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "hooks": {
     "PreToolUse": [
-      {
-        "matcher": "TaskUpdate",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/faisal/EventMarketDB/.claude/hooks/audit_task_update.sh"
-          }
-        ]
-      },
       {
         "matcher": "Write",
         "hooks": [
@@ -36,6 +45,26 @@
           {
             "type": "command",
             "command": "/home/faisal/EventMarketDB/.claude/hooks/cleanup_after_ok.sh"
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/test_task_completed.sh"
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/test_teammate_idle.sh"
           }
         ]
       }

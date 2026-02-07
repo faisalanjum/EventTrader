@@ -30,7 +30,12 @@ Task(subagent_type=neo4j-news, prompt="News for {ticker} past 30 days")
 Task(subagent_type=neo4j-entity, prompt="Dividends/splits for {ticker} past 90 days")
 ```
 
-## consensus
+## consensus_av_earnings
+```
+Task(subagent_type=alphavantage-earnings, prompt="EARNINGS for {ticker} (quarterly EPS actual vs estimate)")
+```
+
+## consensus_ppx
 ```
 Task(subagent_type=perplexity-search, prompt="{ticker} Q{quarter} FY{year} EPS revenue estimate consensus")
 ```

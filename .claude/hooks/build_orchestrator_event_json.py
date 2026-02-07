@@ -34,6 +34,7 @@ except Exception:  # pragma: no cover
 REPO_ROOT = Path("/home/faisal/EventMarketDB")
 COMPANIES_DIR = REPO_ROOT / "earnings-analysis" / "Companies"
 TARGET_SCRIPT_BASENAME = "get_quarterly_filings.py"
+TARGET_CMD_BASENAME = "get_quarterly_filings"
 
 
 def _json_ok() -> None:
@@ -57,7 +58,8 @@ def _extract_ticker_from_command(command: str) -> Optional[str]:
         parts = command.split()
 
     for i, p in enumerate(parts):
-        if p.endswith(TARGET_SCRIPT_BASENAME):
+        base = Path(p).name
+        if base in (TARGET_SCRIPT_BASENAME, TARGET_CMD_BASENAME):
             if i + 1 < len(parts):
                 t = parts[i + 1]
                 if t.startswith("-"):
@@ -188,10 +190,6 @@ def main() -> None:
 
         hook = json.loads(raw)
         command = (hook.get("tool_input") or {}).get("command") or ""
-        if TARGET_SCRIPT_BASENAME not in command:
-            _json_ok()
-            return
-
         ticker = _extract_ticker_from_command(command)
         if not ticker:
             _json_ok()
