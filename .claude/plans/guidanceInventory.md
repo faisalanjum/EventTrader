@@ -1,614 +1,497 @@
-A Guidance Inventory skill is fundamentally different from prediction/attribution - it's about building cumulative state over time rather than analyzing a single event.
-
-  Core Concept: What IS Guidance?
-  ┌──────────────────┬──────────────────────────────────────────────┬─────────────────────────┐
-  │       Type       │                   Examples                   │       Where Found       │
-  ├──────────────────┼──────────────────────────────────────────────┼─────────────────────────┤
-  │ Financial - Hard │ EPS, Revenue, Margins, CapEx, FCF, Debt      │ 8-K EX-99.1, Transcript │
-  ├──────────────────┼──────────────────────────────────────────────┼─────────────────────────┤
-  │ Financial - Soft │ "Double-digit growth", "Margin expansion"    │ Transcript Q&A, News    │
-  ├──────────────────┼──────────────────────────────────────────────┼─────────────────────────┤
-  │ Operational      │ Units, subscribers, DAUs, stores, headcount  │ 8-K, Transcript         │
-  ├──────────────────┼──────────────────────────────────────────────┼─────────────────────────┤
-  │ Qualitative      │ "Cautious outlook", "Strong demand pipeline" │ Transcript (tone)       │
-  └──────────────────┴──────────────────────────────────────────────┴─────────────────────────┘
-  Key Design Elements
-
-  1. Temporal Structure (Critical)
-
-  ┌─────────────────────────────────────────────────────────────────┐
-  │  GUIDANCE GIVEN DATE  vs  PERIOD COVERED                        │
-  │                                                                 │
-  │  2025-02-05 (Q4 FY24 call) → "FY25 EPS $12.00-$13.50"          │
-  │       ↑                            ↑                            │
-  │  When guidance was issued    What period it covers              │
-  │  (citation date)             (target period)                    │
-  └─────────────────────────────────────────────────────────────────┘
-
-  Must track BOTH dates - this is often confused.
-
-  2. Q1 vs Other Quarters (The Anchor Problem)
-  ┌─────────┬──────────────────────────────────────────────┬──────────────────────────────────────────────┐
-  │ Quarter │            What Typically Happens            │                How to Handle                 │
-  ├─────────┼──────────────────────────────────────────────┼──────────────────────────────────────────────┤
-  │ Q1      │ Annual guidance established ("anchor")       │ Store as anchor_guidance for FY              │
-  ├─────────┼──────────────────────────────────────────────┼──────────────────────────────────────────────┤
-  │ Q2      │ Update to annual + Q2 guidance               │ Compare to anchor: raised/lowered/maintained │
-  ├─────────┼──────────────────────────────────────────────┼──────────────────────────────────────────────┤
-  │ Q3      │ Update to annual + Q3 guidance               │ Track cumulative revision from anchor        │
-  ├─────────┼──────────────────────────────────────────────┼──────────────────────────────────────────────┤
-  │ Q4      │ Final annual + sometimes preliminary next FY │ Close out FY, may seed next anchor           │
-  └─────────┴──────────────────────────────────────────────┴──────────────────────────────────────────────┘
-  Example:
-  Q1 FY25 call: "FY25 EPS $12.00-$13.50" (anchor midpoint: $12.75)
-  Q2 FY25 call: "FY25 EPS $12.50-$13.50" (revision: +$0.25 midpoint, +2.0%)
-  Q3 FY25 call: "FY25 EPS $13.00-$14.00" (cumulative: +$0.75 from anchor, +5.9%)
-
-  3. Citation Requirements (Non-Negotiable)
-
-  Every guidance entry MUST have:
-
-  metric: "FY25 EPS"
-  value: "$12.00-$13.50"
-  midpoint: 12.75
-  source_type: "8-K EX-99.1"  # or "Transcript Q&A #3", "News", "Perplexity"
-  source_id: "0001234567-25-000001"  # accession or URL
-  source_date: "2025-02-05"
-  quote: "We expect full-year earnings per share of $12.00 to $13.50"
-  page_or_section: "Page 2, Outlook section"
-
-  4. Guidance Actions (State Transitions)
-  ┌────────────┬─────────────────────────────────┬────────────────────────────────────────────────────┐
-  │   Action   │           Definition            │                      Signals                       │
-  ├────────────┼─────────────────────────────────┼────────────────────────────────────────────────────┤
-  │ INITIAL    │ First guidance for this period  │ Sets anchor                                        │
-  ├────────────┼─────────────────────────────────┼────────────────────────────────────────────────────┤
-  │ RAISED     │ Midpoint increased              │ Bullish                                            │
-  ├────────────┼─────────────────────────────────┼────────────────────────────────────────────────────┤
-  │ LOWERED    │ Midpoint decreased              │ Bearish                                            │
-  ├────────────┼─────────────────────────────────┼────────────────────────────────────────────────────┤
-  │ NARROWED   │ Range tightened, midpoint same  │ More certainty                                     │
-  ├────────────┼─────────────────────────────────┼────────────────────────────────────────────────────┤
-  │ WIDENED    │ Range expanded                  │ More uncertainty                                   │
-  ├────────────┼─────────────────────────────────┼────────────────────────────────────────────────────┤
-  │ MAINTAINED │ Explicitly reiterated unchanged │ Neutral (sometimes disappointing if beat expected) │
-  ├────────────┼─────────────────────────────────┼────────────────────────────────────────────────────┤
-  │ WITHDRAWN  │ Guidance removed                │ Usually very bearish                               │
-  └────────────┴─────────────────────────────────┴────────────────────────────────────────────────────┘
-  5. Sources & Priority
-  ┌───────────────┬───────────────────────────────┬─────────────┬────────────────────────────┐
-  │    Source     │           Best For            │ Reliability │        How to Query        │
-  ├───────────────┼───────────────────────────────┼─────────────┼────────────────────────────┤
-  │ 8-K EX-99.1   │ Official numbers              │ Highest     │ neo4j-report               │
-  ├───────────────┼───────────────────────────────┼─────────────┼────────────────────────────┤
-  │ Transcript    │ Context, nuance, Q&A          │ High        │ neo4j-transcript           │
-  ├───────────────┼───────────────────────────────┼─────────────┼────────────────────────────┤
-  │ Alpha Vantage │ Consensus estimates           │ High        │ alphavantage-earnings      │
-  ├───────────────┼───────────────────────────────┼─────────────┼────────────────────────────┤
-  │ News          │ Reactions, analyst commentary │ Medium      │ neo4j-news                 │
-  ├───────────────┼───────────────────────────────┼─────────────┼────────────────────────────┤
-  │ Perplexity    │ Fill gaps, historical         │ Medium      │ perplexity-search/research │
-  ├───────────────┼───────────────────────────────┼─────────────┼────────────────────────────┤
-  │ WebSearch     │ SEC filings, IR pages         │ Medium      │ WebSearch                  │
-  └───────────────┴───────────────────────────────┴─────────────┴────────────────────────────┘
-  6. What You're NOT Thinking About
-
-  A. Guidance vs Consensus Distinction
-
-  Company Guidance: "FY25 EPS $12.00-$13.50" (what management says)
-  Street Consensus: "$13.22" (what analysts expect)
-  Gap: Company guiding BELOW street → bearish signal
-  Both must be tracked separately.
+# Guidance Inventory Rebuild Plan (Ground-Up)
 
-  B. Metric Definition Drift
+**Created**: 2026-02-08
+**Status**: Active Rebuild
+**Parent Plan**: `earnings-orchestrator.md` (source of truth)
+**Supersedes**: `guidance_inventory_old.md`
 
-  Q1: "Adjusted EPS excluding stock comp: $3.50"
-  Q2: "Adjusted EPS: $3.40"  ← Did definition change?
-  Need to track which definition is being used.
+---
 
-  C. Segment-Level Guidance
+## Active Collaboration Context (Locked)
 
-  Total Revenue: $10B
-    - Cloud: $4B (guidance given)
-    - Hardware: $6B (no guidance)
-  Some companies guide by segment - capture both.
+- Two bots may edit this plan in parallel: **ChatGPT** and **Claude**. Re-read full doc before every edit.
+- Rebuild protocol is locked: rebuild from `guidance_inventory_old.md` one topic at a time, highest-priority first.
+- All decisions are provisional until the user explicitly confirms they are final.
+- Keep tradeoffs explicit for each major decision (alternatives, choice, reason).
+- Use this file as source of truth for current guidance-inventory architecture decisions.
 
-  D. FX / Constant Currency
+Bot-to-bot notes (append-only; mark handled, do not delete history):
+- [2026-02-08 00:00] [ChatGPT] Rebuild started. Old plan moved to `guidance_inventory_old.md`. New ground-up plan created with borrowed best-practice framework.
+- [2026-02-08 00:00] [ChatGPT] Collaboration structure added to align with orchestrator process and enable one-question-at-a-time rebuild flow with user-led final locking.
 
-  "Revenue growth 8-10% constant currency"
-  "Revenue growth 5-7% as reported" (includes FX headwind)
-  Must note which basis.
+---
 
-  E. Conditional Guidance
+## CHATGPT - Collaboration Guard (DO NOT DELETE)
 
-  "Guidance assumes no further Fed rate increases"
-  "Contingent on closing the Acme acquisition in Q3"
-  Track the assumptions - they can invalidate guidance.
+`CLAUDE INSTRUCTION`: Do not delete this section or any `CHATGPT`-prefixed block unless the user explicitly asks.
 
-  F. Pre-Announcements (Mid-Quarter Updates)
+1. Re-read full doc before every response/edit.
+2. All decisions provisional until user approves.
+3. Rebuild from `guidance_inventory_old.md` one item at a time, starting from highest-priority unresolved item.
+4. Keep open questions in `## 17) Open Questions Register` until explicitly resolved.
+5. For each major design choice, compare alternatives and record tradeoffs.
+6. Ask one question at a time; reprioritize after every user answer.
+7. Map each requirement to a tested primitive/pattern before accepting a design.
+8. Challenge assumptions independently; do not auto-accept proposals.
+9. Lock a decision only after explicit user confirmation that they have made up their mind.
+10. After a decision is locked, update the relevant main section(s) and then mark the corresponding open question as resolved.
 
-  8-K filed mid-quarter: "Lowering Q2 guidance due to..."
-  These are often the most market-moving and must be captured.
+---
 
-  G. Guidance Policy
+## Shared Project Requirements (LOCKED)
 
-  "Company does not provide quarterly guidance" (Berkshire, Amazon historically)
-  Track whether company guides at all - absence is informative.
+1. `earnings-orchestrator.md` is the parent source of truth; if conflicts exist, parent plan wins.
+2. Priority order is fixed: reliability first, full required data coverage second, speed third, then maximum accuracy via comprehensive/exhaustive research within runtime limits.
+3. No over-engineering: add complexity only when it has clear reliability or quality value.
+4. One focused decision at a time; keep unresolved items in the open-questions register.
+5. Reason independently before locking any decision; do not auto-accept proposals.
+6. Validate choices against `Infrastructure.md`, `AgentTeams.md`, and `DataSubAgents.md` primitives.
+7. Must remain SDK-triggerable and non-interactive.
 
-  H. Historical Accuracy (Credibility)
+---
 
-  Last 8 quarters: Beat guidance 7/8 times
-  Average beat: +3.2%
-  Pattern: "Sandbagger" - guides low, beats high
-  This is predictive signal.
+## Session Start Rules (LOCKED)
 
-  I. Comparable Periods
+1. Read `.claude/plans/earnings-orchestrator.md` first. It is the only parent source of truth.
+2. Then read only one module plan for this session: `.claude/plans/{module}.md`.
+3. Do not redesign architecture; resolve only open questions in that module plan, one question at a time.
+4. Follow locked priorities: reliability > required data coverage > speed > accuracy/exhaustive research; no over-engineering.
+5. Before each reply, re-check parent-plan consistency and update the module doc directly.
+6. Record unresolved items in that module’s open-question table; when resolved, move into main section and mark resolved.
+7. Keep SDK compatibility and non-interactive execution constraints from `Infrastructure.md`.
 
-  FY25 Q2 guidance vs FY24 Q2 actual (YoY)
-  FY25 Q2 guidance vs FY25 Q1 actual (Sequential)
-  Need to link guidance to historical actuals for context.
+---
 
-  J. Range Asymmetry
+## 0) Purpose
 
-  Range: $12.00-$14.00
-  Midpoint: $13.00
-  But if low end = -8% and high end = +8%, that's symmetric
-  If low end = -2% and high end = +14%, that's asymmetric bullish
-  Range shape matters.
+Rebuild Guidance Inventory from first principles, using proven architecture patterns from:
+- `earnings-orchestrator.md`
+- `Infrastructure.md`
+- `AgentTeams.md`
+- `DataSubAgents.md`
+- `tradeEarnings.md`
+- `newsImpact.md`
+- existing skills (`guidance-inventory`, `earnings-attribution`, `evidence-standards`)
 
-  7. Output File Structure
+This plan defines **what must be true** for a reliable, reusable, and maintainable guidance inventory system.
 
-  # Guidance Inventory: {TICKER}
-  ## Period: {from_date} to {to_date}
-  ## Generated: {timestamp}
+---
 
-  ---
+## 1) Borrowed Core Principles (LOCKED)
 
-  ## Company Profile
-  | Field | Value |
-  |-------|-------|
-  | Ticker | AAPL |
-  | Guidance Policy | Quarterly guidance provided |
-  | Fiscal Year End | September |
-  | Historical Beat Rate | 87.5% (7/8 quarters) |
+1. Reliability first, then complete required data, then speed, then maximum accuracy via comprehensive/exhaustive research.
+2. Never trade required data quality for runtime speed.
+3. Minimalism is preferred, but reliability wins when they conflict.
+4. Keep architecture simple: no extra layers without measurable value.
+5. Every major design choice must record alternatives and tradeoffs.
+6. Decisions remain provisional until explicitly confirmed.
+7. Keep an explicit question register and resolve highest-priority unknowns first.
+8. Use deterministic rules for state transitions and output derivations where possible.
+9. Use model judgment for synthesis, not for deterministic transformations.
+10. Preserve full evidence trail; no unsourced claims.
 
-  ---
+---
 
-  ## Active Guidance (Current Outlook)
+## 1.1) Primary Context Pack (LOCKED)
 
-  ### FY25 Full Year
-  | Metric | Low | Mid | High | Source | Date | Action |
-  |--------|-----|-----|------|--------|------|--------|
-  | EPS | $12.00 | $12.75 | $13.50 | 8-K:000123... | 2025-02-05 | INITIAL |
-  | Revenue | $380B | $390B | $400B | 8-K:000123... | 2025-02-05 | INITIAL |
+Every new bot/session working on Guidance Inventory must read this set first, in this order:
 
-  ### Q2 FY25
-  | Metric | Low | Mid | High | Source | Date | Action |
-  |--------|-----|-----|------|--------|------|--------|
-  | Revenue | $92B | $95B | $98B | 8-K:000123... | 2025-02-05 | INITIAL |
+1. `earnings-orchestrator.md` (primary source of truth for system-level contracts).
+2. `Infrastructure.md` (tested execution constraints, SDK/tool behavior).
+3. `AgentTeams.md` (team pattern options and validated capabilities).
+4. `DataSubAgents.md` (data access layer assumptions and boundaries).
+5. This file: `guidanceInventory.md` (module-specific plan).
+6. `.claude/skills/guidance-inventory/SKILL.md` (current implementation reference).
 
-  ---
+Rule: if this file conflicts with `earnings-orchestrator.md`, the master plan wins.
 
-  ## Guidance History (Last 3 Months)
+---
 
-  ### 2025-02-05: Q1 FY25 Earnings Call
-  **Source**: 8-K 000123..., Transcript
+## 1.2) SDK and Automation Contract (LOCKED)
 
-  #### Financial Guidance Given:
-  | Metric | Period | Value | Action | Quote |
-  |--------|--------|-------|--------|-------|
-  | EPS | FY25 | $12.00-$13.50 | INITIAL | "We expect..." |
-  | Revenue | FY25 | $380B-$400B | INITIAL | "Full year revenue..." |
-  | Revenue | Q2 FY25 | $92B-$98B | INITIAL | "For Q2..." |
-  | Gross Margin | Q2 FY25 | 45%-46% | INITIAL | "Gross margin..." |
+Guidance Inventory design must stay compatible with unattended SDK-triggered orchestration:
 
-  #### Operational Guidance Given:
-  | Metric | Period | Value | Action | Quote |
-  |--------|--------|-------|--------|-------|
-  | Store Openings | FY25 | 50-60 | INITIAL | "We plan to open..." |
+1. Non-interactive only: no `AskUserQuestion` and no manual approval dependencies.
+2. Fail fast on missing required inputs (ticker/event context) with clear error.
+3. Deterministic runtime boundaries for replayability (same input snapshot => same output semantics).
+4. Align with latest validated SDK guidance in `Infrastructure.md` (version/tool requirements owned there, not duplicated here).
 
-  #### Qualitative Signals:
-  - Tone: Cautiously optimistic
-  - Key phrases: "Strong demand", "Supply chain normalized"
-  - Management confidence: High
+---
 
-  ---
+## 2) Scope and Non-Goals
 
-  ## Consensus Comparison
+### In Scope
 
-  | Metric | Period | Company Guide (Mid) | Street Consensus | Gap | Signal |
-  |--------|--------|---------------------|------------------|-----|--------|
-  | EPS | FY25 | $12.75 | $13.22 | -3.6% | Below street |
-  | Revenue | FY25 | $390B | $395B | -1.3% | Slightly below |
+1. Build and maintain cumulative guidance state per company.
+2. Capture annual and quarterly guidance, numeric and qualitative.
+3. Track revisions over time (initial/raised/lowered/etc.).
+4. Map fiscal periods correctly using company fiscal year end (FYE).
+5. Maintain citation-quality evidence for every entry.
+6. Support rebuild (historical) and incremental updates (ongoing quarters).
 
-  **Source**: Alpha Vantage EARNINGS_ESTIMATES, 2025-02-04
+### Out of Scope
 
-  ---
+1. Trading recommendation logic.
+2. Final attribution of stock move drivers.
+3. Consensus ownership as primary system of record (reference only here).
+4. Over-optimized micro-latency at the cost of completeness/correctness.
 
-  ## Guidance Revision Timeline
+---
 
-  FY25 EPS Guidance:
-  Q1 call (2025-02-05): $12.00-$13.50 (anchor: $12.75)
-  Q2 call (2025-05-05): $12.50-$13.50 (+$0.25, +2.0% from anchor)
-  Q3 call (2025-08-05): [pending]
+## 3) Operating Modes
 
-  ---
+### BUILD mode (initial full build)
 
-  ## Evidence Ledger
+1. Triggered when company inventory does not exist or quarter context is Q1 bootstrap.
+2. Pull all relevant historical guidance sources.
+3. Create complete baseline with supersession chains.
 
-  | # | Metric | Value | Source | Date | Quote/Reference |
-  |---|--------|-------|--------|------|-----------------|
-  | 1 | FY25 EPS | $12.00-$13.50 | 8-K:000123... | 2025-02-05 | "We expect full-year..." |
-  | 2 | FY25 Revenue | $380B-$400B | 8-K:000123... | 2025-02-05 | "Revenue range of..." |
-  | 3 | FY25 EPS Consensus | $13.22 | AlphaVantage | 2025-02-04 | EARNINGS_ESTIMATES |
+### UPDATE mode (incremental)
 
-  ---
+1. Triggered for subsequent quarters/events.
+2. Fetch only the new window (prior event date -> current event date) plus mid-quarter guidance updates.
+3. Append timeline entries and refresh active state.
 
-  ## Notes & Assumptions
-  - All EPS figures are non-GAAP adjusted
-  - Revenue guidance excludes impact of pending Acme acquisition
-  - FX assumption: current spot rates
+### Design Rule
 
-  ---
-  *Last updated: {timestamp}*
+Same data model and validation rules in both modes. Only data horizon changes.
 
-  8. Workflow
+---
 
-  Step 1: IDENTIFY SCOPE
-    - Ticker, from_date, to_date
-    - Determine fiscal quarters covered
+## 4) Architecture Pattern (Borrowed + Applied)
 
-  Step 2: GATHER EXISTING GUIDANCE (Neo4j)
-    - Query 8-K filings with Item 2.02/7.01
-    - Query transcripts in date range
-    - Query news mentioning "guidance"
+1. Guidance inventory is a **data component** in the broader orchestrator pipeline.
+2. Orchestrator calls guidance inventory once per ticker before quarter loop.
+3. Quarter processing remains sequential for learning continuity.
+4. Independent data retrieval tasks should run in parallel where platform allows.
+5. Keep state file-authoritative (filesystem is source of truth).
 
-  Step 3: GET CONSENSUS (Alpha Vantage)
-    - EARNINGS_ESTIMATES for current/next quarter
-    - Historical beat/miss pattern
+### Primitive Selection Rule
 
-  Step 4: FILL GAPS (Perplexity/WebSearch)
-    - Missing consensus figures
-    - Historical guidance not in Neo4j
+For major implementation choices, compare:
+1. Sub-agent orchestration pattern.
+2. Team orchestration pattern.
 
-  Step 5: STRUCTURE INVENTORY
-    - Identify anchor (Q1 or earliest)
-    - Calculate revisions vs anchor
-    - Flag actions (RAISED/LOWERED/etc)
+Choose per job by:
+1. Reliability.
+2. Required data coverage.
+3. Speed.
 
-  Step 6: VALIDATE & CITE
-    - Every number has source
-    - Quotes extracted for key guidance
+Do not default blindly to one pattern.
 
-  Step 7: OUTPUT FILE
-    - Single file: Companies/{TICKER}/guidance-inventory.md
-    - Or date-stamped: Companies/{TICKER}/guidance-{from}-{to}.md
-
-  9. Integration with Prediction/Attribution
-  ┌───────────────────────┬────────────────────────────────────────────────────┐
-  │         Skill         │            Uses Guidance Inventory For             │
-  ├───────────────────────┼────────────────────────────────────────────────────┤
-  │ earnings-prediction   │ Know what guidance existed BEFORE filing (PIT)     │
-  ├───────────────────────┼────────────────────────────────────────────────────┤
-  │ earnings-attribution  │ Compare actual vs prior guidance for surprise calc │
-  ├───────────────────────┼────────────────────────────────────────────────────┤
-  │ earnings-orchestrator │ Maintain cumulative guidance state across analyses │
-  └───────────────────────┴────────────────────────────────────────────────────┘
-  ---
-  Key Questions for You
-
-  1. Cumulative vs Snapshot: Should this maintain a rolling cumulative file (updated after each earnings) or generate fresh snapshot each time? 
-     updated after each earnings - so previous update is not overwritten
-
-  2. PIT Mode: Does this need to support PIT filtering (for prediction use case)?
-     Not neccessarily
-  
-  3. Granularity: Per-company file, per-quarter file, or single universe file?
-    Per company file
-
-  4. Automation Trigger: Run on-demand, or automatically after each 8-K earnings filing?
-    Already explained in tradeEarnings.md
-
-  5. Historical Depth: Just last 3 months, or maintain full history for pattern analysis?
-        for q=1, all prior, but for q >= 2, last 3 months from the date earnings report released (r.created)
-
-
-❯ Lets break down the temporal precision requirements.
-
-  The Period Problem
-
-  Every guidance statement has THREE temporal dimensions:
-
-  ┌─────────────────────────────────────────────────────────────────────────────┐
-  │                                                                             │
-  │   GUIDANCE GIVEN DATE          PERIOD TYPE          PERIOD COVERED          │
-  │   (when management spoke)      (Q or FY)            (which Q/FY)            │
-  │                                                                             │
-  │   "2025-02-05"                 "Quarter"            "Q2 FY25"               │
-  │         │                           │                    │                  │
-  │         │                           │                    ├── Fiscal Year: 25│
-  │         │                           │                    ├── Quarter: 2     │
-  │         │                           │                    └── Calendar: Apr-Jun 2025
-  │         │                           │                                       │
-  │         │                           └── Annual vs Quarterly                 │
-  │         │                                                                   │
-  │         └── Citation timestamp                                              │
-  │                                                                             │
-  └─────────────────────────────────────────────────────────────────────────────┘
-
-  Fiscal Year End (FYE) - The Hidden Complexity
-  ┌────────────────┬───────────┬─────────────────────┬─────────────────────────┐
-  │    Company     │ FYE Month │     FY25 Means      │ Q1 FY25 Calendar Months │
-  ├────────────────┼───────────┼─────────────────────┼─────────────────────────┤
-  │ Most companies │ December  │ Jan 2025 - Dec 2025 │ Jan-Mar 2025            │
-  ├────────────────┼───────────┼─────────────────────┼─────────────────────────┤
-  │ Apple          │ September │ Oct 2024 - Sep 2025 │ Oct-Dec 2024            │
-  ├────────────────┼───────────┼─────────────────────┼─────────────────────────┤
-  │ Microsoft      │ June      │ Jul 2024 - Jun 2025 │ Jul-Sep 2024            │
-  ├────────────────┼───────────┼─────────────────────┼─────────────────────────┤
-  │ Walmart        │ January   │ Feb 2024 - Jan 2025 │ Feb-Apr 2024            │
-  ├────────────────┼───────────┼─────────────────────┼─────────────────────────┤
-  │ Nike           │ May       │ Jun 2024 - May 2025 │ Jun-Aug 2024            │
-  ├────────────────┼───────────┼─────────────────────┼─────────────────────────┤
-  │ Costco         │ August    │ Sep 2024 - Aug 2025 │ Sep-Nov 2024            │
-  └────────────────┴───────────┴─────────────────────┴─────────────────────────┘
-  This means "Q2 FY25" maps to DIFFERENT calendar months depending on the company.
-
-  Period Schema
-
-  Each guidance entry needs:
-
-  # PERIOD IDENTIFICATION (Required)
-  period:
-    type: "quarter" | "annual" | "half" | "other"
-    fiscal_year: 2025                    # The FY number
-    fiscal_quarter: 2                    # 1-4 for quarters, null for annual
-
-    # Calendar mapping (derived from company FYE)
-    calendar_start: "2025-01-01"         # When this period STARTS
-    calendar_end: "2025-03-31"           # When this period ENDS
-
-    # Temporal status (relative to analysis date)
-    status: "future" | "current" | "past"  # Is this period complete?
-
-  # COMPANY FISCAL CONTEXT (Required)
-  company:
-    ticker: "AAPL"
-    fiscal_year_end_month: 9             # September = 9
-    fiscal_year_end_day: 30              # Last Saturday of September typically
-
-  # GUIDANCE METADATA
-  guidance:
-    given_date: "2025-02-05"             # When this guidance was issued
-    metric: "EPS"
-    value_low: 1.50
-    value_high: 1.70
-    value_mid: 1.60
-    currency: "USD"
-    basis: "non-GAAP adjusted"
-
-  Period Status Logic
-
-  Given:
-    - Today's date (or PIT date for prediction)
-    - Period's calendar_end date
-
-  Status:
-    IF calendar_end > today + 30 days  → "future"   (guidance for upcoming)
-    IF calendar_end > today            → "current"  (in-progress period)
-    IF calendar_end <= today           → "past"     (should have actuals)
-
-  Why This Matters:
-  ┌─────────┬─────────────────────────────────────────────────────────────┐
-  │ Status  │                         Implication                         │
-  ├─────────┼─────────────────────────────────────────────────────────────┤
-  │ future  │ Pure guidance - no actuals yet to compare                   │
-  ├─────────┼─────────────────────────────────────────────────────────────┤
-  │ current │ Period in progress - guidance still "live"                  │
-  ├─────────┼─────────────────────────────────────────────────────────────┤
-  │ past    │ Period ended - actuals should exist, can calculate surprise │
-  └─────────┴─────────────────────────────────────────────────────────────┘
-  Quarter vs Annual Disambiguation
-
-  Companies often give BOTH in the same call:
-
-  Q1 FY25 Earnings Call (Feb 2025):
-  ├── Q2 FY25 Guidance (next quarter) ← QUARTERLY
-  ├── FY25 Full Year Guidance         ← ANNUAL (update/maintain)
-  └── Sometimes: FY26 Preliminary     ← ANNUAL (next year preview)
-
-  Must track separately:
-  ┌─────────────┬───────────────────────────┬───────────────────────────────────┐
-  │ Period Type │          Covers           │          Typical Pattern          │
-  ├─────────────┼───────────────────────────┼───────────────────────────────────┤
-  │ Quarterly   │ Single quarter (3 months) │ Given for next quarter only       │
-  ├─────────────┼───────────────────────────┼───────────────────────────────────┤
-  │ Annual      │ Full fiscal year          │ Given in Q1, updated each quarter │
-  ├─────────────┼───────────────────────────┼───────────────────────────────────┤
-  │ Half-Year   │ H1 or H2 (6 months)       │ Some international companies      │
-  ├─────────────┼───────────────────────────┼───────────────────────────────────┤
-  │ Long-Range  │ Multi-year targets        │ "2027 targets", analyst days      │
-  └─────────────┴───────────────────────────┴───────────────────────────────────┘
-  Fiscal Year Detection
-
-  Where to get FYE:
-
-  1. Neo4j Company node: Check if fiscal_year_end property exists
-  2. 10-K filing: Always states fiscal year end
-  3. Perplexity: "{TICKER} fiscal year end month"
-  4. Alpha Vantage: Company overview endpoint
-
-  Query to check:
-  MATCH (c:Company {ticker: $ticker})
-  RETURN c.ticker, c.fiscal_year_end, c.fiscal_quarter_end
-
-  If not in Neo4j, must query externally and cache in the inventory file.
-
-  Updated Output Structure
-
-  # Guidance Inventory: AAPL
-
-  ## Company Fiscal Profile
-  | Field | Value |
-  |-------|-------|
-  | Ticker | AAPL |
-  | Fiscal Year End | September 30 |
-  | FY25 Calendar Range | Oct 1, 2024 - Sep 30, 2025 |
-  | Current Fiscal Quarter | Q2 FY25 (Jan-Mar 2025) |
-  | Guidance Policy | Quarterly + Annual |
-
-  ## Fiscal Calendar Reference
-  | Fiscal Period | Calendar Start | Calendar End | Status |
-  |---------------|----------------|--------------|--------|
-  | Q1 FY25 | 2024-10-01 | 2024-12-31 | past |
-  | Q2 FY25 | 2025-01-01 | 2025-03-31 | current |
-  | Q3 FY25 | 2025-04-01 | 2025-06-30 | future |
-  | Q4 FY25 | 2025-07-01 | 2025-09-30 | future |
-  | FY25 Full | 2024-10-01 | 2025-09-30 | current |
-
-  ---
-
-  ## Active Guidance by Period
-
-  ### FY25 Full Year (Annual)
-  | Metric | Low | Mid | High | Given Date | Source | Action | Status |
-  |--------|-----|-----|------|------------|--------|--------|--------|
-  | EPS | $6.80 | $7.10 | $7.40 | 2025-02-05 | 8-K:000123 | RAISED | current |
-  | Revenue | $380B | $390B | $400B | 2025-02-05 | 8-K:000123 | MAINTAINED | current |
-
-  ### Q2 FY25 (Jan-Mar 2025) - CURRENT QUARTER
-  | Metric | Low | Mid | High | Given Date | Source | Action | Status |
-  |--------|-----|-----|------|------------|--------|--------|--------|
-  | Revenue | $92B | $95B | $98B | 2025-02-05 | 8-K:000123 | INITIAL | current |
-  | Gross Margin | 45.0% | 45.5% | 46.0% | 2025-02-05 | 8-K:000123 | INITIAL | current |
-
-  ### Q1 FY25 (Oct-Dec 2024) - RESOLVED
-  | Metric | Guidance Mid | Actual | Surprise | Given Date | Resolved Date |
-  |--------|--------------|--------|----------|------------|---------------|
-  | Revenue | $89B | $92B | +3.4% | 2024-11-01 | 2025-02-05 |
-  | EPS | $1.65 | $1.72 | +4.2% | 2024-11-01 | 2025-02-05 |
-
-  ---
-
-  ## Guidance Timeline (Chronological)
-
-  ### 2025-02-05: Q1 FY25 Earnings Call
-  **Periods Addressed:**
-  - Q1 FY25 (Oct-Dec 2024): **ACTUALS REPORTED** ← past period
-  - Q2 FY25 (Jan-Mar 2025): **NEW GUIDANCE** ← future period
-  - FY25 Full Year: **GUIDANCE RAISED** ← current period (in progress)
-
-  | Period | Type | Metric | Value | Action |
-  |--------|------|--------|-------|--------|
-  | Q2 FY25 | Quarter | Revenue | $92B-$98B | INITIAL |
-  | Q2 FY25 | Quarter | Gross Margin | 45%-46% | INITIAL |
-  | FY25 | Annual | EPS | $6.80-$7.40 | RAISED (+$0.10 from prior) |
-  | FY25 | Annual | Revenue | $380B-$400B | MAINTAINED |
-
-  ### 2024-11-01: Q4 FY24 Earnings Call
-  **Periods Addressed:**
-  - Q4 FY24 (Jul-Sep 2024): **ACTUALS REPORTED** ← past period
-  - Q1 FY25 (Oct-Dec 2024): **NEW GUIDANCE** ← future period (now past)
-  - FY25 Full Year: **INITIAL ANNUAL GUIDANCE** ← anchor established
-
-  | Period | Type | Metric | Value | Action |
-  |--------|------|--------|-------|--------|
-  | Q1 FY25 | Quarter | Revenue | $87B-$91B | INITIAL |
-  | FY25 | Annual | EPS | $6.60-$7.30 | INITIAL (anchor) |
-  | FY25 | Annual | Revenue | $380B-$400B | INITIAL (anchor) |
-
-  ---
-
-  ## Annual Guidance Revision History (FY25 EPS)
-
-  | Date | Event | Low | Mid | High | Δ from Anchor | Cumulative Δ |
-  |------|-------|-----|-----|------|---------------|--------------|
-  | 2024-11-01 | Q4 FY24 call | $6.60 | $6.95 | $7.30 | — | — (anchor) |
-  | 2025-02-05 | Q1 FY25 call | $6.80 | $7.10 | $7.40 | +$0.15 (+2.2%) | +$0.15 (+2.2%) |
-  | 2025-05-05 | Q2 FY25 call | TBD | TBD | TBD | TBD | TBD |
-
-  ---
-
-  ## Evidence Ledger
-
-  | # | Period | Type | Metric | Value | Source | Date | Status | Quote |
-  |---|--------|------|--------|-------|--------|------|--------|-------|
-  | 1 | FY25 | Annual | EPS | $6.80-$7.40 | 8-K:000123 | 2025-02-05 | current | "Full year EPS..." |
-  | 2 | Q2 FY25 | Quarter | Revenue | $92B-$98B | 8-K:000123 | 2025-02-05 | current | "For Q2..." |
-  | 3 | FY25 | Annual | EPS | $6.60-$7.30 | 8-K:000119 | 2024-11-01 | superseded | "Initial FY25..." |
-
-  ---
-
-  Key Data Model
-
-  @dataclass
-  class GuidancePeriod:
-      """Represents a fiscal period that guidance covers."""
-      period_type: Literal["quarter", "annual", "half", "other"]
-      fiscal_year: int                    # e.g., 2025
-      fiscal_quarter: Optional[int]       # 1-4 for quarters, None for annual
-      calendar_start: date                # Derived from company FYE
-      calendar_end: date                  # Derived from company FYE
-
-      def status(self, as_of: date) -> Literal["future", "current", "past"]:
-          if self.calendar_end < as_of:
-              return "past"
-          elif self.calendar_start <= as_of <= self.calendar_end:
-              return "current"
-          else:
-              return "future"
-
-  @dataclass
-  class GuidanceEntry:
-      """A single guidance data point."""
-      period: GuidancePeriod
-      metric: str                         # "EPS", "Revenue", etc.
-      value_low: Optional[float]
-      value_mid: Optional[float]
-      value_high: Optional[float]
-      unit: str                           # "USD", "%", "B USD"
-      basis: str                          # "GAAP", "non-GAAP adjusted"
-
-      # Citation
-      source_type: str                    # "8-K", "Transcript", "News"
-      source_id: str                      # accession or URL
-      given_date: date                    # When guidance was issued
-      quote: str                          # Exact quote
-
-      # State
-      action: Literal["INITIAL", "RAISED", "LOWERED", "MAINTAINED", "NARROWED", "WIDENED", "WITHDRAWN"]
-      superseded_by: Optional[str]        # ID of newer guidance if superseded
-
-  Fiscal Year End Detection Query
-
-  // Check if FYE is stored on Company node
-  MATCH (c:Company {ticker: $ticker})
-  RETURN c.fiscal_year_end_month, c.fiscal_year_end_day
-
-  // If not, check most recent 10-K for fiscal period
-  MATCH (c:Company {ticker: $ticker})<-[:PRIMARY_FILER]-(r:Report {formType: '10-K'})
-  RETURN r.periodOfReport
-  ORDER BY r.created DESC
-  LIMIT 1
-
-  The periodOfReport on a 10-K tells you when the fiscal year ended - e.g., 2024-09-30 means September FYE.
-
-  ---
-  Summary: Period Requirements Checklist
-  ┌──────────────────────┬───────────────────────────────────────────────────────┐
-  │     Requirement      │                     How Addressed                     │
-  ├──────────────────────┼───────────────────────────────────────────────────────┤
-  │ Period association   │ Every entry has GuidancePeriod object                 │
-  ├──────────────────────┼───────────────────────────────────────────────────────┤
-  │ Quarter vs Annual    │ period_type field distinguishes                       │
-  ├──────────────────────┼───────────────────────────────────────────────────────┤
-  │ Fiscal year tracking │ fiscal_year + company fiscal_year_end_month           │
-  ├──────────────────────┼───────────────────────────────────────────────────────┤
-  │ Calendar mapping     │ calendar_start / calendar_end derived from FYE        │
-  ├──────────────────────┼───────────────────────────────────────────────────────┤
-  │ Future vs Past       │ status() method computes relative to analysis date    │
-  ├──────────────────────┼───────────────────────────────────────────────────────┤
-  │ Supersession         │ superseded_by links to newer guidance                 │
-  ├──────────────────────┼───────────────────────────────────────────────────────┤
-  │ Anchor tracking      │ Q1 annual guidance marked, revisions calc'd vs anchor │
-  └──────────────────────┴───────────────────────────────────────────────────────┘
+---
+
+## 5) Data Integrity and Trust Boundaries
+
+1. No citation = no guidance entry.
+2. Use deterministic validation/gating for temporal correctness where applicable.
+3. Pre-filters in queries are optimization, not trust boundary.
+4. If data cannot be validated as reliable, drop it or mark as explicit gap.
+5. Never leak contaminated/unverifiable content into active guidance state.
+
+### Citation Minimum
+
+Every entry must include:
+1. Source type.
+2. Source identifier (accession/URL/transcript ID).
+3. Given date.
+4. Quote or precise paraphrase.
+5. Location hint (section/page/Q&A marker when available).
+
+---
+
+## 6) Temporal Precision Contract (CRITICAL)
+
+Every guidance statement carries at least two time dimensions:
+1. **Given Date**: when management issued guidance.
+2. **Period Covered**: which fiscal period the guidance targets.
+
+Guidance period must include:
+1. Period type (quarter/annual/half/long-range/other).
+2. Fiscal year.
+3. Fiscal quarter (nullable).
+4. Calendar start and end (derived from company FYE).
+5. Status relative to analysis date (future/current/past).
+
+### Mandatory FYE Handling
+
+1. Resolve FYE from company metadata or latest 10-K period.
+2. Derive fiscal calendar deterministically.
+3. Never assume December FYE unless fallback is unavoidable and documented.
+
+---
+
+## 7) Guidance Classification Rules
+
+### Required action classes
+
+1. INITIAL
+2. RAISED
+3. LOWERED
+4. MAINTAINED
+5. NARROWED
+6. WIDENED
+7. WITHDRAWN
+
+### Deterministic action logic
+
+1. Compare to prior entry for same company/period/metric/basis.
+2. Midpoint change determines raised/lowered.
+3. Same midpoint + tighter/wider range determines narrowed/widened.
+4. Explicit reiteration can classify maintained.
+5. Removal classifies withdrawn.
+
+### Anchor rule
+
+1. First annual guide for fiscal year is anchor.
+2. All later annual revisions track delta vs anchor.
+3. Keep both point revision and cumulative revision.
+
+---
+
+## 8) Supersession and State Model
+
+1. Never delete historical guidance entries.
+2. Mark replaced entries as superseded.
+3. Link superseded entry to successor (`superseded_by`).
+4. Keep chain integrity auditable.
+
+### Active vs Historical
+
+1. Active Guidance section shows latest valid entries per period/metric/basis.
+2. Timeline section preserves chronological issuance history.
+3. Revision history section summarizes anchor deltas over time.
+
+---
+
+## 9) Required Data Coverage
+
+### Primary sources (priority order)
+
+1. 8-K EX-99.1 and earnings release exhibits.
+2. Earnings transcript (prepared remarks + Q&A).
+3. Structured consensus source (reference use).
+4. News and external research for gap filling.
+
+### Must-capture guidance categories
+
+1. Financial hard numbers (EPS/revenue/margins/cash flow/capex).
+2. Financial qualitative ranges (growth descriptors, margin direction).
+3. Operational guidance (units/subscribers/stores/headcount etc.).
+4. Conditions/assumptions (FX, rates, closing conditions, one-offs).
+
+### Critical nuance fields
+
+1. Basis/definition (GAAP vs non-GAAP, constant currency vs reported).
+2. Segment-level guidance when provided.
+3. Guidance policy (annual only/quarterly+annual/no formal guidance).
+
+---
+
+## 10) Output Contract (File-Level)
+
+**Target file**: `earnings-analysis/Companies/{TICKER}/guidance-inventory.md`
+
+### Required sections
+
+1. Company fiscal profile.
+2. Fiscal calendar reference.
+3. Active guidance (current outlook).
+4. Guidance timeline (chronological).
+5. Annual revision history.
+6. Consensus comparison (reference-only).
+7. Evidence ledger.
+8. Data coverage summary.
+9. Notes and assumptions.
+
+### Output behavior
+
+1. Cumulative file, never destructive overwrite.
+2. Append new timeline blocks per update.
+3. Update active and revision sections deterministically.
+4. Keep explicit last-updated timestamp.
+
+---
+
+## 11) Validation and Failure Policy (Tiered)
+
+### Hard-fail (block update)
+
+1. Core filing context missing/unreadable for target event.
+2. Output cannot satisfy schema-critical required fields.
+3. Deterministic consistency rules violated (invalid action/status math).
+
+### Continue-with-gaps
+
+1. Secondary source unavailable (transcript/news/external).
+2. Non-critical fields missing but entry still verifiable.
+3. Ambiguous references that can be documented transparently.
+
+### Warn-and-write
+
+1. Partial coverage with explicit `missing_inputs` style disclosure.
+2. Confidence reduced due to source limitations.
+
+### Rule
+
+No fabrication under any condition.
+
+---
+
+## 12) Idempotency, Resume, and State Authority
+
+1. File-authoritative state: on-disk output determines completion/resume.
+2. Existence checks gate rebuild/update work.
+3. Partial artifacts without final output are safe to overwrite.
+4. Use temp-write + atomic rename for critical output writes.
+5. Re-running should produce stable results for same inputs.
+
+---
+
+## 13) Integration Contracts
+
+### With Orchestrator
+
+1. Orchestrator invokes guidance inventory at Step 0 per ticker.
+2. Guidance history is injected into planner/predictor context bundles.
+3. Attribution updates can feed additional lessons but not mutate prior evidence.
+
+### With Predictor
+
+1. Predictor reads prior guidance state as expectation anchor.
+2. Missing guidance anchor should be exposed clearly to confidence policy.
+
+### With Attribution/Learner
+
+1. Attribution can compare actuals vs historical guidance.
+2. Learner can generate planner/predictor lessons from revision behavior.
+
+---
+
+## 13.1) Module Interface Contract (Scaffold, to Lock Before Implementation)
+
+This section exists so implementation bots have a strict integration boundary, not just narrative guidance.
+
+### Caller -> Callee
+
+- Caller: Orchestrator Step 0 (`earnings-orchestrator.md`).
+- Callee: Guidance Inventory module.
+
+### Required Input (from caller)
+
+1. `ticker` (required).
+2. Event context needed to select BUILD vs UPDATE window (exact field contract to be locked in open questions).
+3. Existing guidance artifact paths for this ticker (if present).
+
+### Required Output (to caller)
+
+1. Durable guidance artifact at `earnings-analysis/Companies/{TICKER}/guidance-inventory.md`.
+2. Deterministic machine-consumable payload for bundle injection (shape to be locked: raw markdown only vs markdown + structured sidecar).
+3. Coverage metadata (what was missing) for downstream confidence handling.
+
+### Failure Behavior
+
+1. Hard-fail conditions block update/write.
+2. Continue-with-gaps allowed for non-critical source absence.
+3. All failures must be explicit and machine-detectable by caller (status + reason).
+
+---
+
+## 14) Evidence and Audit Standards
+
+1. Domain boundaries must be respected by data subagents.
+2. Numeric claims require exact values and exact sources.
+3. Qualitative claims still require source attribution.
+4. Conflicts between sources must be surfaced explicitly, not hidden.
+5. Evidence ledger must be sufficient for independent re-query verification.
+
+---
+
+## 15) Performance Guidance
+
+1. Optimize by parallelizing independent fetches, not by reducing required coverage.
+2. Keep sequence where dependencies exist (calendar -> extraction -> classification -> output).
+3. Cache immutable lookups (e.g., FYE) when safe.
+4. Prefer structured machine-checkable outputs for data retrieval stages.
+
+---
+
+## 16) Rebuild Implementation Phases
+
+### Phase 0: Contract Finalization
+
+1. Lock data model fields and required sections.
+2. Lock action classification and supersession rules.
+3. Lock failure policy tiers.
+
+### Phase 1: Temporal Foundation
+
+1. Implement FYE resolution and fiscal calendar mapping.
+2. Add deterministic period-status derivation.
+3. Add period parsing/disambiguation checks.
+
+### Phase 2: Extraction Pipeline
+
+1. Implement source-priority retrieval.
+2. Implement entry extraction with citation enforcement.
+3. Implement qualitative guidance handling.
+
+### Phase 3: State + Output
+
+1. Implement active/superseded state transitions.
+2. Implement timeline and revision history generation.
+3. Implement coverage and assumptions sections.
+
+### Phase 4: Validation + Recovery
+
+1. Add schema and deterministic-rule validation.
+2. Add idempotent rerun/resume behavior.
+3. Add atomic write protections and audit checks.
+
+### Phase 5: Integration and Calibration
+
+1. Wire orchestrator Step 0 contract.
+2. Verify downstream predictor/attribution consumption.
+3. Calibrate thresholds and quality metrics on historical samples.
+
+---
+
+## 17) Open Questions Register (Start Fresh)
+
+| ID | Question | Priority | Status |
+|---|---|---|---|
+| G1 | Exact schema shape for serialized entry IDs and section keys? | P0 | Open |
+| G2 | Source fallback policy when 8-K lacks explicit guidance but transcript has it? | P0 | Open |
+| G3 | How to encode basis changes (definition drift) for strict comparability? | P0 | Open |
+| G4 | Calendar status cutoff logic (`today` vs `today+buffer`) for current/future boundary? | P1 | Open |
+| G5 | Segment hierarchy representation in markdown vs structured companion JSON? | P1 | Open |
+| G6 | Should qualitative-only entries be first-class in active guidance tables or separate block? | P1 | Open |
+| G7 | Minimum acceptable evidence coverage per update before warn/block? | P1 | Open |
+| G8 | Should we emit a machine-readable sidecar (`guidance-inventory.json`) for downstream strict parsing? | P2 | Open |
+
+---
+
+## 18) Done Criteria
+
+Guidance Inventory rebuild is "done" when:
+
+1. All P0 questions are resolved and documented.
+2. Deterministic rules pass validation on historical backfill samples.
+3. Re-runs are idempotent and resume-safe.
+4. Every guidance entry is citation-complete.
+5. Orchestrator integration works in both BUILD and UPDATE modes.
+6. Predictor/Attribution can consume output without custom one-off parsing hacks.
+
+---
+
+## 19) References
+
+1. `earnings-orchestrator.md`
+2. `Infrastructure.md`
+3. `AgentTeams.md`
+4. `DataSubAgents.md`
+5. `tradeEarnings.md`
+6. `newsImpact.md`
+7. `guidance_inventory_old.md`
+8. `.claude/skills/guidance-inventory/SKILL.md`
+9. `.claude/skills/evidence-standards/SKILL.md`

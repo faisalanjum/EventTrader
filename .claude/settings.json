@@ -68,6 +68,16 @@
           }
         ]
       }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/test_subagent_start_inject.sh"
+          }
+        ]
+      }
     ]
   }
 }

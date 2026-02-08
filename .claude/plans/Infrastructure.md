@@ -10,7 +10,7 @@
 
 **What this is**: Multi-layer earnings analysis system using forked skills for context isolation.
 
-**Key findings from testing (2026-01-16, retested 2026-02-05):**
+**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08):**
 
 | What | Status | Workaround |
 |------|--------|------------|
@@ -31,9 +31,13 @@
 | `agent:` field in skills | ✅ **NOW WORKS** (Feb 2026) | Grants agent's MCP tools without ToolSearch |
 | `memory:` field (agents) | ⚠️ **STORAGE ONLY** (v2.1.34) | Dir created + files persist; **auto-preload into system prompt DOES NOT WORK** (definitive: tested `local` + `project`, across 2 restarts, agent confirms no memory content in prompt). Use manual `Read` at agent startup instead. |
 | `skills:` field (agents) | ✅ **WORKS** (Feb 2026) | Auto-loads skills into agent context (args not passed through) |
-| Agent-scoped hooks | ✅ **WORKS** (Feb 2026) | PreToolUse, PostToolUse, Stop in agent frontmatter |
-| SubagentStart hook | ✅ **WORKS** (Feb 2026) | Fires when subagent spawns; can inject additionalContext |
-| SubagentStop hook | ✅ **WORKS** (Feb 2026) | Fires when subagent completes; can block stopping |
+| Agent-scoped hooks | ✅ **WORKS** (Feb 2026) | PreToolUse, PostToolUse, PostToolUseFailure, Stop in agent frontmatter; **only when spawned as subagent via Task tool** (NOT via `--agent` flag) |
+| SubagentStart hook | ✅ **WORKS** (Feb 2026) | Fires when subagent spawns; additionalContext injection **confirmed working** for custom agents (context added to agent window, NOT logged in transcript) |
+| SubagentStop hook | ✅ **WORKS** (Feb 2026) | Fires when subagent completes; **blocking confirmed** (decision:block prevents stop, stop_hook_active=true on 2nd fire allows) |
+| **PostToolUseFailure hook** | ✅ **WORKS** (v2.1.37) | Fires when tool call fails; JSON has tool_name, tool_input, error, is_interrupt, tool_use_id |
+| **type: "prompt" hooks** | ✅ **WORKS** (v2.1.37) | LLM evaluates hook input; can block/allow based on content; works in agent frontmatter |
+| **type: "agent" hooks** | ❌ **NOT ENFORCED** (v2.1.37) | Agent hook handler did not block in agent frontmatter; may need settings.json or not yet implemented |
+| **--agent flag + hooks** | ❌ **NOT WORKING** (v2.1.37) | Agent frontmatter hooks ONLY activate via Task tool subagent spawn; `--agent` flag starts main session without hooks |
 | Task→Skill nesting | ✅ **WORKS** (Feb 2026) | Sub-agents can invoke skills; combine parallel Task + Skill chains |
 | MCP in fork | ✅ WORKS | Either use allowed-tools OR ToolSearch |
 | Tool inheritance parent→child | ❌ NO | Each skill has independent access |
@@ -67,6 +71,73 @@
 | **TeammateIdle hook** | ✅ **WORKS** (v2.1.33) | Fires when teammate goes idle; JSON has `teammate_name`, `team_name`, `permission_mode` |
 | **Agent `Task(AgentType)` restriction** | ✅ **ENFORCED** (v2.1.33) | `tools: [Task(Explore), Task(Bash)]` blocks all other sub-agent types |
 | **`memory: local` scope** | ⚠️ **STORAGE ONLY** (v2.1.34) | Dir + files persist; auto-preload into system prompt **confirmed NOT working** (2 restarts, definitive test) |
+
+---
+
+### Retest Summary (2026-02-08, v2.1.37) — Hooks Deep Dive
+
+**5 new capabilities tested:**
+
+| Feature | Status | Details |
+|---------|--------|---------|
+| `PostToolUseFailure` hook event | ✅ Works | In agent frontmatter. Fires when Bash fails (exit code 1). STDIN JSON: `hook_event_name`, `tool_name`, `tool_input`, `tool_use_id`, `error`, `is_interrupt`. Error includes full stderr. |
+| `type: "prompt"` hook handler | ✅ Works | LLM (Haiku default) evaluates hook input. Uses `$ARGUMENTS` for JSON injection. Returns `{"ok": true/false, "reason": "..."}`. Selectively blocks commands based on content analysis. Error: `"PreToolUse:Bash hook error: Prompt hook condition was not met: [reason]"` |
+| `type: "agent"` hook handler | ❌ Not Enforced | Hook configured in agent frontmatter did not block. Both safe and blocked commands executed normally. May only work in settings.json or not yet implemented for subagent context. |
+| SubagentStart `additionalContext` | ✅ Works | Hook returns `{"hookSpecificOutput":{"hookEventName":"SubagentStart","additionalContext":"..."}}`. Context reaches custom agents (confirmed: agent reported seeing string that only existed in hook script). Injected context does NOT appear in transcript `.jsonl` files. |
+| SubagentStop blocking | ✅ Works | Stop hook in agent frontmatter auto-converts to SubagentStop. `stop_hook_active=false` on first fire → block with reason. `stop_hook_active=true` on second fire → allow. Agent follows hook instructions between fires. |
+
+**2 important negative findings:**
+
+| Finding | Details |
+|---------|---------|
+| `--agent` flag does NOT activate hooks | Agent frontmatter hooks ONLY work when spawned as subagent via Task tool. Running `claude --agent <name>` starts a main session without hook activation. Control test: `test-re-agent-hooks` (previously confirmed working via Task) showed "hook not enforced" via `--agent`. |
+| `type: "agent"` hooks not enforced in FM | Unlike `type: "prompt"` (which works), `type: "agent"` hooks in agent frontmatter had no effect. The agent-type hook may require spawning a sub-subagent which isn't available in subagent context. |
+
+**Hook test JSON schemas (from output):**
+
+```json
+// PostToolUseFailure — STDIN to hook script
+{
+  "session_id": "...",
+  "transcript_path": "...",
+  "cwd": "/home/faisal/EventMarketDB",
+  "permission_mode": "bypassPermissions",
+  "hook_event_name": "PostToolUseFailure",
+  "tool_name": "Bash",
+  "tool_input": {"command": "cat /tmp/nonexistent", "description": "..."},
+  "tool_use_id": "toolu_01B7...",
+  "error": "Exit code 1\ncat: ...: No such file or directory",
+  "is_interrupt": false
+}
+
+// SubagentStart — STDIN to hook script
+{
+  "session_id": "...",
+  "transcript_path": "...",
+  "cwd": "/home/faisal/EventMarketDB",
+  "hook_event_name": "SubagentStart",
+  "agent_id": "a35e35a",
+  "agent_type": "test-hook-post-failure"
+}
+```
+
+**Complete hook coverage (v2.1.37):**
+
+| Hook Event | Tested? | Status |
+|------------|---------|--------|
+| PreToolUse | ✅ | Works (command + prompt types) |
+| PostToolUse | ✅ | Works (command type) |
+| PostToolUseFailure | ✅ NEW | Works (command type in agent FM) |
+| Stop/SubagentStop | ✅ | Works (blocking + stop_hook_active) |
+| SubagentStart | ✅ | Works (fires + additionalContext injection) |
+| TaskCompleted | ✅ | Works (v2.1.33) |
+| TeammateIdle | ✅ | Works (v2.1.33) |
+| SessionStart | ❌ | Untested (session-level) |
+| SessionEnd | ❌ | Untested (session-level) |
+| UserPromptSubmit | ❌ | Untested (user-level) |
+| PermissionRequest | ❌ | Untested (needs unpermitted tool) |
+| Notification | ❌ | Untested (hard to trigger) |
+| PreCompact | ❌ | Untested (needs context fill) |
 
 ---
 
