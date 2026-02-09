@@ -1,0 +1,13 @@
+MCP_PRELOAD_FROM_TEAMMATE
+skill_invoked: test-re-mcp-preload
+skill_completed: YES
+mcp_preload_result: NEEDS_TOOLSEARCH
+query_result: NOT_EXECUTED (tool unavailable without ToolSearch)
+error: NONE
+
+Notes:
+- The skill ran successfully in forked context.
+- allowed-tools: mcp__neo4j-cypher__read_neo4j_cypher did NOT pre-load the MCP tool.
+- The tool remained deferred and required ToolSearch to be loaded first.
+- The Neo4j query "RETURN 1 AS test" was never executed because the tool was not available.
+- This confirms: MCP pre-load via allowed-tools does NOT work, even when invoked by a teammate.

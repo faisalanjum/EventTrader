@@ -1,0 +1,8 @@
+TEAM_TEST_BASIC
+timestamp: 2026-02-05
+teammate_name: unknown (not provided in spawn config)
+team_name: test-basic
+tools_available: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, TaskCreate, TaskGet, TaskUpdate, TaskList, Teammate, SendMessage, ToolSearch
+can_see_tasks: YES - TaskList returned "No tasks found" (empty task list, but tool is accessible)
+mcp_available: neo4j-cypher (get_neo4j_schema, read_neo4j_cypher, write_neo4j_cypher), perplexity (perplexity_ask, perplexity_research, perplexity_reason, perplexity_search), alphavantage (TOOL_LIST, TOOL_GET, TOOL_CALL)
+session_id: unknown

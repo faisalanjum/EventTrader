@@ -1,0 +1,18 @@
+TEST: Two Parallel Teams via Split Leadership (Primary + Subagent)
+DATE: 2026-02-08
+METHOD: Primary creates Team A via TeamCreate. Subagent (general-purpose via Task) creates Team B.
+
+PRIMARY TEAMCREATE (test-pteam-split-a):
+RESULT: SUCCESS
+RESPONSE: {"team_name":"test-pteam-split-a","team_file_path":"/home/faisal/.claude/teams/test-pteam-split-a/config.json","lead_agent_id":"team-lead@test-pteam-split-a"}
+
+SUBAGENT TEAMCREATE (test-pteam-split-b):
+RESULT: FAILED
+RESPONSE: Already leading team "test-pteam-split-a". A leader can only manage one team at a time. Use TeamDelete to end the current team before creating a new one.
+
+SIMULTANEOUS EXISTENCE CHECK:
+Team A on disk: YES - directory exists with config.json (527 bytes, created 2026-02-08 11:29)
+Team B on disk: NO - directory does not exist ("ls: cannot access '/home/faisal/.claude/teams/test-pteam-split-b/': No such file or directory")
+Both config.json present: NO (only Team A)
+
+CONCLUSION: Cannot run two teams in parallel via split leadership. The subagent (spawned via Task tool with subagent_type "general-purpose") inherits the primary's team context and is treated as already leading Team A. TeamCreate rejects the second team with: "A leader can only manage one team at a time." The subagent is NOT an independent agent for team-creation purposes — it shares the parent's team leadership identity.

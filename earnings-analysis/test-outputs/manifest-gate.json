@@ -1,0 +1,10 @@
+{
+  "ticker": "TEST",
+  "quarter": "QX_FY0000",
+  "expected_count": 3,
+  "tasks": [
+    {"id": "819", "type": "guidance"},
+    {"id": "820", "type": "guidance"},
+    {"id": "821", "type": "guidance"}
+  ]
+}

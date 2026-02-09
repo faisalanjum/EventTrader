@@ -9,18 +9,17 @@ model: opus
 permissionMode: dontAsk
 skills:
   - neo4j-schema
-  - neo4j-report
+  - report-queries
   - evidence-standards
-  - skill-update
 ---
 
 # Neo4j Report Agent
 
-Query SEC filings from Neo4j. Use patterns from the neo4j-report skill.
+Query SEC filings from Neo4j. Use patterns from the report-queries skill.
 
 ## Workflow
 1. Parse request: form type, item codes, date range, content needed
-2. Select query pattern from neo4j-report skill
+2. Select query pattern from report-queries skill
 3. If PIT date provided: add `WHERE r.created < 'YYYY-MM-DD'`
 4. Execute query using `mcp__neo4j-cypher__read_neo4j_cypher`
 5. Return results with filing metadata

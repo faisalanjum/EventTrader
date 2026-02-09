@@ -1,0 +1,5 @@
+PLANNER_REPORT
+mode_observed: normal
+can_write_directly: YES
+plan_mode_active: NO
+ExitPlanMode_available: YES

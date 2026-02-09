@@ -1,0 +1,4 @@
+WORKER-B DONE
+task_was_blocked: YES
+task_now_unblocked: YES
+blocker_status: completed

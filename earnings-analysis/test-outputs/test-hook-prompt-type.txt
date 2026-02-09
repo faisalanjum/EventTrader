@@ -1,0 +1,4 @@
+SAFE_COMMAND: ALLOWED
+BLOCK_ME_COMMAND: BLOCKED
+PROMPT_TYPE_HOOK: WORKS
+Hook correctly allowed SAFE_COMMAND (output: SAFE_COMMAND) and blocked BLOCK_ME command with error: PreToolUse:Bash hook error: Prompt hook condition was not met: PROMPT_HOOK_BLOCKED: Command contains BLOCK_ME

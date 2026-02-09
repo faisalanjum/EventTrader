@@ -13,7 +13,7 @@ COMPANY_QUERY = "MATCH (c:Company {ticker: $ticker}) RETURN c.industry AS indust
 
 NEWS_QUERY = """
 MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
-WHERE date(datetime(n.created)) > date($start) AND date(datetime(n.created)) < date($end)
+WHERE datetime(n.created) >= datetime($start) AND datetime(n.created) < datetime($end)
   AND (any(kw IN $keywords WHERE toLower(n.title) CONTAINS toLower(kw))
        OR any(kw IN $keywords WHERE toLower(n.body) CONTAINS toLower(kw))
        OR any(kw IN $keywords WHERE toLower(n.teaser) CONTAINS toLower(kw)))

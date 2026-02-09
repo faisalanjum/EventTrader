@@ -448,21 +448,23 @@ The planner must only use agent names from this catalog. Any other value is a va
 
 **Implementation ownership**: All agent implementation (rework + new builds) is owned by `DataSubAgents.md`. This catalog is the consumer-facing view; the planner references it but does not build or maintain agents.
 
-**Available agents** (exist as `.claude/agents/*.md` — all need rework per `DataSubAgents.md` for PIT compliance, JSON envelope, `available_at` fields):
+**Available agents** (exist as `.claude/agents/*.md`; PIT compliance status per `DataSubAgents.md`):
 
-| Agent | Domain | Returns | Typical use |
-|-------|--------|---------|-------------|
-| `neo4j-report` | SEC filings | 8-K, 10-K, 10-Q text, extracted sections, exhibits (EX-99.1) | Earnings release content, guidance statements, financial tables |
-| `neo4j-transcript` | Earnings calls | Prepared remarks, Q&A exchanges, speaker-attributed text | Management commentary, analyst questions, tone/sentiment |
-| `neo4j-xbrl` | Structured financials | EPS, revenue, margins, balance sheet items from 10-K/10-Q | Prior-quarter financials, YoY comparisons, trend data |
-| `neo4j-entity` | Company metadata | Sector, industry, market cap, price series, dividends, splits | Peer identification, sector context, historical price data |
-| `neo4j-news` | News articles | Fulltext and vector search over ingested news corpus | Pre-filing news, sector events, company-specific developments |
-| `alphavantage-earnings` | Consensus estimates | EPS/revenue consensus, actuals, surprise, earnings calendar | Beat/miss analysis, expectation anchors |
-| `perplexity-search` | Web search | Raw URLs and snippets from web search | Broad coverage gap-fill, recent events not in structured sources |
-| `perplexity-ask` | Web Q&A | Single-fact answers with citations | Quick lookups (e.g., "What is {TICKER}'s current dividend yield?") |
-| `perplexity-reason` | Web reasoning | Multi-step analysis with chain-of-thought | "Why" questions, causal analysis, comparisons |
-| `perplexity-research` | Deep research | Multi-source synthesis reports | Exhaustive investigation (expensive — use as last-tier fallback) |
-| `perplexity-sec` | SEC EDGAR | Filing search (10-K, 10-Q, 8-K) from EDGAR | Fallback when Neo4j filings are missing or incomplete |
+| Agent | Domain | Returns | Typical use | PIT Status |
+|-------|--------|---------|-------------|------------|
+| `neo4j-news` | News articles | Fulltext search over ingested news corpus | Pre-filing news, sector events, company-specific developments | **DONE** — reference impl |
+| `neo4j-vector-search` | Semantic search | Vector similarity across News + QAExchange | Find semantically similar news, analyst Q&A by meaning | **DONE** |
+| `bz-news-api` | Benzinga API news | On-demand Benzinga headlines/body with channels/tags and PIT-safe envelope | Real-time macro/theme monitoring, channel/tag driven news retrieval | **DONE** |
+| `neo4j-report` | SEC filings | 8-K, 10-K, 10-Q text, extracted sections, exhibits (EX-99.1) | Earnings release content, guidance statements, financial tables | Needs rework |
+| `neo4j-transcript` | Earnings calls | Prepared remarks, Q&A exchanges, speaker-attributed text | Management commentary, analyst questions, tone/sentiment | Needs rework |
+| `neo4j-xbrl` | Structured financials | EPS, revenue, margins, balance sheet items from 10-K/10-Q | Prior-quarter financials, YoY comparisons, trend data | Needs rework |
+| `neo4j-entity` | Company metadata | Sector, industry, market cap, price series, dividends, splits | Peer identification, sector context, historical price data | Needs rework |
+| `alphavantage-earnings` | Consensus estimates | EPS/revenue consensus, actuals, surprise, earnings calendar | Beat/miss analysis, expectation anchors | Needs rework |
+| `perplexity-search` | Web search | Raw URLs and snippets from web search | Broad coverage gap-fill, recent events not in structured sources | Needs rework |
+| `perplexity-ask` | Web Q&A | Single-fact answers with citations | Quick lookups (e.g., "What is {TICKER}'s current dividend yield?") | Needs rework |
+| `perplexity-reason` | Web reasoning | Multi-step analysis with chain-of-thought | "Why" questions, causal analysis, comparisons | Needs rework |
+| `perplexity-research` | Deep research | Multi-source synthesis reports | Exhaustive investigation (expensive — use as last-tier fallback) | Needs rework |
+| `perplexity-sec` | SEC EDGAR | Filing search (10-K, 10-Q, 8-K) from EDGAR | Fallback when Neo4j filings are missing or incomplete | Needs rework |
 
 **Planned agents** (to be built as part of `DataSubAgents.md` implementation):
 
@@ -481,7 +483,7 @@ Note: planned agent names are provisional — final names locked when built. Cur
 
 **Tier guidance** (soft — planner decides, but these are typical priority patterns):
 - **Tier 0 (primary)**: `neo4j-*` and `alphavantage-earnings` — structured, fast, reliable
-- **Tier 1 (fallback)**: `perplexity-search`, `perplexity-ask`, `perplexity-sec` — broader coverage, slower
+- **Tier 1 (fallback)**: `bz-news-api`, `perplexity-search`, `perplexity-ask`, `perplexity-sec` — broader coverage, slower
 - **Tier 2 (last resort)**: `perplexity-research`, `perplexity-reason` — expensive, use when structured sources returned empty
 
 ### 2c. Predictor — DRAFT
@@ -853,9 +855,9 @@ Crash recovery (Q15) — file-authoritative state makes this simple:
 
 Source: `Infrastructure.md`, `AgentTeams.md`
 
-### Data layer — ASSUMED COMPLETE, out of scope
+### Data layer — IN PROGRESS, out of scope for this doc
 
-How data is fetched, sources available, PIT enforcement: see `DataSubAgents.md`. That layer is done. This doc only defines how components integrate with it.
+How data is fetched, sources available, PIT enforcement: see `DataSubAgents.md`. Status: Phase 0-2 DONE (infrastructure + neo4j-news reference impl), Phase 3 in progress (4 Neo4j agents remaining), Phase 4 not started (Perplexity + Alpha Vantage). 3 of 13 agents fully PIT-compliant. This doc only defines how components integrate with that layer.
 
 ---
 
@@ -1003,7 +1005,7 @@ Note: Interface contracts use I-prefix (I1-I7) to avoid collision with §6 Archi
 | I4 | **Orchestrator → Learner input** | Learner does NOT get a bundle. 3 minimal inputs: prediction/result.json path, actual returns, context_bundle.json path (reference only). Fetches its own data. | **Resolved** — spec in §2a. |
 | I5 | **Guidance → Orchestrator bridge** | Raw markdown passthrough. Full `guidance-inventory.md` content into `guidance_history`. Empty string if missing. | **Resolved** — spec in §2a. |
 | I6 | **Full attribution/result.json schema** | Full `attribution_result.v1` schema: actual_return, primary_driver (with evidence_refs), contributing_factors, surprise_analysis (nullable), analysis_summary, missing_inputs, feedback block, audit refs. | **Resolved** — full schema in §2d. |
-| I7 | **Planner agent catalog** | 11 valid agents across 3 domains (Neo4j, Alpha Vantage, Perplexity). Tier guidance for priority patterns. Excluded agents listed. | **Resolved** — catalog in §2b. |
+| I7 | **Planner agent catalog** | 13 valid agents across 4 domains (Neo4j 6, Alpha Vantage 1, Benzinga API 1, Perplexity 5). Tier guidance for priority patterns. Excluded agents listed. | **Resolved** — catalog in §2b. |
 
 ### Phase B: Module Implementation Details (one at a time, in order)
 
@@ -1078,7 +1080,7 @@ Do this AFTER all module details are locked. Mechanical, not architectural.
 
 18. §8 added: planning roadmap with Phase A (interface contracts), Phase B (module details), Phase C (consistency pass). Driven by gap analysis of what's locked (outputs) vs what's missing (inputs, prompts, frontmatter).
 19. I1-I6 resolved (renamed from A-prefix to I-prefix to avoid collision with §6 Architecture Decisions). `context_bundle.v1` JSON schema locked in §2a. Planner receives subset (8k + u1 + guidance). Predictor receives full bundle. Learner does NOT get a bundle — receives 3 minimal inputs (prediction result, actual returns, context_bundle ref) and fetches its own data. Guidance bridge (I5): raw markdown passthrough. Full `attribution_result.v1` schema locked in §2d (I6): primary_driver + contributing_factors with evidence_refs, nullable surprise_analysis, analysis_summary (1-3 paragraphs), prediction_comparison fields aligned with predictor output. "Ready-to-build" line updated (was stale).
-20. I7 resolved: Planner agent catalog locked in §2b. 11 valid agents across 3 domains (Neo4j 5, Alpha Vantage 1, Perplexity 5). Source: DataSubAgents.md matcher table + actual `.claude/agents/*.md` files. Tier guidance included. Excluded agents listed. **All Phase A interface contracts (I1-I7) now resolved.** §5 next-question pointer updated to Phase B.
+20. I7 resolved: Planner agent catalog locked in §2b. 13 valid agents across 4 domains (Neo4j 6, Alpha Vantage 1, Benzinga API 1, Perplexity 5). Added `neo4j-vector-search` (semantic similarity across News + QAExchange). Source: DataSubAgents.md matcher table + actual `.claude/agents/*.md` files. Tier guidance included. Excluded agents listed. **All Phase A interface contracts (I1-I7) now resolved.** §5 next-question pointer updated to Phase B.
 
 ---
 

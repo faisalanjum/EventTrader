@@ -50,12 +50,13 @@ Bot-to-bot notes (append-only; mark handled, do not delete history):
 ## Session Start Rules (LOCKED)
 
 1. Read `.claude/plans/earnings-orchestrator.md` first. It is the only parent source of truth.
-2. Then read only one module plan for this session: `.claude/plans/{module}.md`.
-3. Do not redesign architecture; resolve only open questions in that module plan, one question at a time.
+2. Then read this file's Primary Context Pack in full (Infrastructure.md, DataSubAgents.md, etc.). Work on only this module per session — do not modify other module plans or the master plan.
+3. Do not redesign architecture; resolve only open questions in this module plan, one question at a time.
 4. Follow locked priorities: reliability > required data coverage > speed > accuracy/exhaustive research; no over-engineering.
 5. Before each reply, re-check parent-plan consistency and update the module doc directly.
-6. Record unresolved items in that module’s open-question table; when resolved, move into main section and mark resolved.
+6. Record unresolved items in that module's open-question table; when resolved, move into main section and mark resolved.
 7. Keep SDK compatibility and non-interactive execution constraints from `Infrastructure.md`.
+8. Append to bot-to-bot notes at session start and when resolving questions.
 
 ---
 
@@ -71,9 +72,9 @@ Planner role: read 8-K plus prior learning context, output one `fetch_plan.json`
 
 **I7 (Planner agent catalog) is locked in `earnings-orchestrator.md §2b`.**
 
-11 available agents across 3 domains (Neo4j 5, Alpha Vantage 1, Perplexity 5) + planned families (`WEB_SEARCH`, `SEC_API_FREE_TEXT_SEARCH`, `PRESENTATIONS`; IDs provisional and may expand). Any `fetch.agent` value not in the catalog is a validation error. Tier guidance for priority patterns included.
+12 available agents across 4 domains (Neo4j 5, Alpha Vantage 1, Benzinga API 1, Perplexity 5) + planned families (`WEB_SEARCH`, `SEC_API_FREE_TEXT_SEARCH`, `PRESENTATIONS`; IDs provisional and may expand). Any `fetch.agent` value not in the catalog is a validation error. Tier guidance for priority patterns included.
 
-**Key dependency**: All 11 existing agents need rework (PIT compliance, JSON envelope, `available_at` fields) and all 3 planned agents need to be built. This work is owned by `DataSubAgents.md` implementation — not by the planner or orchestrator. The planner consumes the catalog; it does not maintain agents. As agents are reworked/built under DataSubAgents, they become available to the planner automatically.
+**Key dependency**: All 12 existing agents need rework (PIT compliance, JSON envelope, `available_at` fields) and all 3 planned agents need to be built. This work is owned by `DataSubAgents.md` implementation — not by the planner or orchestrator. The planner consumes the catalog; it does not maintain agents. As agents are reworked/built under DataSubAgents, they become available to the planner automatically.
 
 Planner should only reference agents in the "available" table. Planned agents are not valid `fetch.agent` values until they are built and moved to "available."
 
@@ -203,9 +204,9 @@ Validation lives in orchestrator pipeline; planner output must be machine-checka
 
 | ID | Question | Priority | Status |
 |---|---|---|---|
-| P0 | I7 Planner agent catalog: exact allowed `fetch.agent` values + purpose + invalid-name behavior | P0 | **Resolved** — 11 agents locked in `earnings-orchestrator.md §2b`. Invalid name = validation error (block). |
+| P0 | I7 Planner agent catalog: exact allowed `fetch.agent` values + purpose + invalid-name behavior | P0 | **Resolved** — 12 agents locked in `earnings-orchestrator.md §2b`. Invalid name = validation error (block). |
 | P1 | Exact planner input payload schema from orchestrator? | P0 | **Resolved** — locked by I2 in `earnings-orchestrator.md §2a`. |
-| P2 | Agent catalog delivery: static list in prompt or external file? | P1 | Open — catalog locked (P0); delivery mechanism TBD. Recommend static embed (11 agents, changes rarely). |
+| P2 | Agent catalog delivery: static list in prompt or external file? | P1 | Open — catalog locked (P0); delivery mechanism TBD. Recommend static embed (12 agents, changes rarely). |
 | P3 | Canonical question IDs vs free-form IDs? | P1 | Open |
 | P4 | 8-K truncation/sectioning rules for large filings? | P1 | Open |
 | P5 | Sanity check policy: warn-only or block in edge cases? | P1 | **Resolved** — master plan R5: log warning, not block. Planner may have valid reasons to omit common data types; U1 self-corrects. |

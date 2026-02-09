@@ -1,0 +1,14 @@
+Test: Background Agent Skill Invocation
+Date: 2026-02-05
+Agent type: background (teammate)
+
+Step 1 — List available tools: WORKS
+Tools: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, Teammate, SendMessage, ToolSearch
+
+Step 2 — Invoke Skill "test-nest3-bot": WORKS
+Expected: L3:hello
+Actual:   L3:hello
+
+Step 3 — Write result file: WORKS
+
+Summary: Background agents CAN use the Skill tool successfully.

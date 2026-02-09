@@ -1,0 +1,4 @@
+WRITER_2_REPORT
+wrote_to_shared: YES
+read_back_content: LINE_FROM_WRITER_2 / timestamp: 2026-02-05 (my own content, overwrote writer-1's content which was there first)
+error: NONE

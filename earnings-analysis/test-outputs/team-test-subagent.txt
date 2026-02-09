@@ -1,0 +1,4 @@
+TEAM_SUBAGENT_TEST
+task_tool_available: NO
+task_tool_result: The Task tool (for spawning sub-agents) is NOT available to teammate agents. It does not appear in the tool list. Available tools are: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, TaskCreate, TaskGet, TaskUpdate, TaskList, Teammate, SendMessage, ToolSearch. The Task tool is entirely absent — not blocked at invocation, just not provided.
+child_output: N/A — could not spawn sub-agent

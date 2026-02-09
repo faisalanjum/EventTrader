@@ -1,0 +1,50 @@
+MEMORY FEATURE DEFINITIVE TEST
+===============================
+Date: 2026-02-06
+Model: claude-opus-4-6
+
+Question 1: Is the word "banana" ANYWHERE in system prompt / context?
+Answer: NO
+Detail: I searched my entire system prompt, tool definitions, environment info,
+git status, and all pre-loaded context. The word "banana" does not appear anywhere.
+
+Question 2: Is "MEMORY_TEST_VALUE" ANYWHERE in system prompt / context?
+Answer: NO
+Detail: I searched my entire system prompt and all context. "MEMORY_TEST_VALUE"
+does not appear anywhere.
+
+Question 3: Is there a "Memory" / "MEMORY" / "Agent Memory" section in system prompt?
+Answer: NO
+Detail: There is NO memory section injected into my system prompt. I do see
+".claude/agent-memory/" listed as an untracked directory (??) in the git status
+snapshot, but its contents are NOT loaded into my context. No memory content
+was pre-loaded or injected into my instructions.
+
+Question 4: First 5 and Last 5 lines of system prompt:
+
+FIRST 5 lines (approximate):
+1. "In this environment you have access to a set of tools you can use..."
+2. "You can invoke functions by writing a..." (tool invocation format)
+3. [Tool definitions for Bash, Glob, Grep, Read, Edit, Write, etc.]
+4. "You are Claude Code, Anthropic's official CLI for Claude."
+5. "You are testing the memory feature."
+
+LAST 5 lines (approximate):
+1. "...ensure those are structured using JSON. For example:"
+2. [example_complex_tool JSON example]
+3. "Answer the user's request using the relevant tool(s)..."
+4. "...Check that all the required parameters for each tool call are provided..."
+5. "...make all of the independent calls in the same block, otherwise you MUST wait..."
+
+SUMMARY OF FINDINGS:
+- MEMORY_DIR: NOT_VISIBLE (no memory content injected into system prompt)
+- MEMORY_WRITE: NOT_ATTEMPTED (no memory mechanism available in system prompt)
+- MEMORY_READ: NOT_AVAILABLE (no memory content present in context)
+- AGENT_MEMORY: NOT_WORKING (the .claude/agent-memory/ directory exists on disk
+  per git status, but its contents are NOT loaded into the agent's context)
+
+KEY OBSERVATION: The git status shows ".claude/agent-memory/" as an untracked
+directory on the filesystem, but whatever is in that directory was NOT injected
+into my system prompt or context. There is no "Memory" section, no "MEMORY.md"
+content, and no memory-related instructions in my prompt. The memory feature
+does not appear to be active for this session.

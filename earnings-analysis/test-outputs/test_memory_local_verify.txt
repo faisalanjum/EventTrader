@@ -1,0 +1,6 @@
+MEMORY_SCOPE: local
+MEMORY_IN_PROMPT: NO
+OTHER_AGENT_MEMORY_FILE: YES - MEMORY_LOCAL_TEST=mango_2026_local
+OWN_MEMORY_FILE: NO
+LOCAL_MEMORY_PERSIST: WORKS
+NOTES: The test-memory-local agent wrote MEMORY.md with MEMORY_LOCAL_TEST=mango_2026_local. That file persists on disk at .claude/agent-memory-local/test-memory-local/MEMORY.md. It was NOT auto-loaded into this agent's (test-memory-local-verify) system prompt, which is correct behavior for local scope -- local memory should only be visible to the agent that wrote it. This agent has no prior memory file of its own, confirming local isolation.

@@ -1,0 +1,1 @@
+MODEL_FIELD_TEST: I am Claude Haiku 4.5. model: haiku was set in frontmatter. ENFORCED.

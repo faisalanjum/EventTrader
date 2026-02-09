@@ -1,0 +1,47 @@
+== Background Agent Task-Tool Access Test ==
+Date: 2026-02-05
+Assigned Task ID: 3038
+
+--- Step 1: List ALL available tool names ---
+Available tools (13 total):
+Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, Teammate, SendMessage, ToolSearch
+
+RESULT: No Task-related tools (TaskList, TaskGet, TaskCreate, TaskUpdate) are present
+in the available tool set.
+
+--- Step 2: ToolSearch for Task tools ---
+Searched for: "TaskList"  -> No matching deferred tools found
+Searched for: "TaskGet"   -> No matching deferred tools found
+Searched for: "TaskCreate" -> No matching deferred tools found
+Searched for: "task" (broad) -> No matching deferred tools found
+
+RESULT: Task tools are NOT available as deferred tools either. They do not exist
+anywhere in this agent's tool inventory.
+
+--- Step 3: Try to call TaskList ---
+RESULT: CANNOT EXECUTE. TaskList is not an available tool. It does not appear in
+the 13 tools provided to this agent, and ToolSearch confirms it is not a deferred
+tool. Attempting to call it would fail.
+
+--- Step 4: Try to call TaskGet with taskId "3038" ---
+RESULT: CANNOT EXECUTE. TaskGet is not an available tool. Same reason as Step 3.
+
+--- Step 5: Try to call TaskCreate with subject "created-by-bg-agent" ---
+RESULT: CANNOT EXECUTE. TaskCreate is not an available tool. Same reason as Step 3.
+
+=== SUMMARY ===
+Background agents (spawned via Task tool / Teammate) do NOT have access to any
+Task management tools. The following tools are MISSING from the background agent
+tool set:
+  - TaskList
+  - TaskGet
+  - TaskCreate
+  - TaskUpdate
+
+These tools are presumably only available to the parent/orchestrator agent that
+spawned this background agent. This confirms the documented limitation:
+"Task tool in forks: BLOCKED" — background agents cannot interact with the
+task system at all, neither reading nor writing.
+
+The background agent DOES have access to: Teammate, SendMessage, and ToolSearch,
+which are the team coordination primitives, but the task CRUD tools are withheld.

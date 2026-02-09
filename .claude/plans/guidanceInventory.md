@@ -53,12 +53,13 @@ Bot-to-bot notes (append-only; mark handled, do not delete history):
 ## Session Start Rules (LOCKED)
 
 1. Read `.claude/plans/earnings-orchestrator.md` first. It is the only parent source of truth.
-2. Then read only one module plan for this session: `.claude/plans/{module}.md`.
-3. Do not redesign architecture; resolve only open questions in that module plan, one question at a time.
+2. Then read this file's Primary Context Pack in full (Infrastructure.md, DataSubAgents.md, etc.). Work on only this module per session — do not modify other module plans or the master plan.
+3. Do not redesign architecture; resolve only open questions in this module plan, one question at a time.
 4. Follow locked priorities: reliability > required data coverage > speed > accuracy/exhaustive research; no over-engineering.
 5. Before each reply, re-check parent-plan consistency and update the module doc directly.
-6. Record unresolved items in that module’s open-question table; when resolved, move into main section and mark resolved.
+6. Record unresolved items in that module's open-question table; when resolved, move into main section and mark resolved.
 7. Keep SDK compatibility and non-interactive execution constraints from `Infrastructure.md`.
+8. Append to bot-to-bot notes at session start and when resolving questions.
 
 ---
 

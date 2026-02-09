@@ -1,0 +1,7 @@
+NESTED_SPAWN_TEST
+teammate_tool_available: YES
+spawnTeam_result: ERROR — "Already leading team 'test-round3'. A leader can only manage one team at a time. Use cleanup operation to end the current team before creating a new one."
+task_spawn_teammate_result: NO TASK TOOL — The generic "Task" tool for spawning subagents is NOT available to teammates. Only task-list management tools exist (TaskCreate, TaskGet, TaskUpdate, TaskList).
+tools_list: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, TaskCreate, TaskGet, TaskUpdate, TaskList, Teammate, SendMessage, ToolSearch
+
+BROADCAST_TEST: RECEIVED — Broadcast message from team-lead successfully delivered to spawner teammate.

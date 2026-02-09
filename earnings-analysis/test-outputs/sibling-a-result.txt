@@ -1,9 +1,11 @@
 SIBLING_A_DONE: red | SAW_B: no
 
-Findings:
-- Wrote SIBLING_A_SECRET = red to sibling-a-secret.txt
-- Searched for SIBLING_B_SECRET in context: Only found references in SKILL.md definition files, not in any runtime data
-- sibling-b-secret.txt file: NOT_EXISTS
-- No evidence of sibling B's secret value being shared in my context
+Findings (run 2026-02-01):
+- Confirmed SIBLING_A_SECRET = red in sibling-a-secret.txt
+- Searched for SIBLING_B_SECRET in my invocation context: NOT FOUND
+- sibling-b-secret.txt file: EXISTS (contains "SIBLING_B_SECRET = blue")
+- I can READ the file from disk, but it was NOT in my skill context
+- Grep found SIBLING_B_SECRET only in SKILL.md definition files, not in runtime context
 
 Conclusion: Sibling skills do NOT share runtime context. Each sibling operates in isolation.
+File system access allows reading sibling outputs, but no context bleeding occurs.

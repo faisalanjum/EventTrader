@@ -1,0 +1,5 @@
+HOOK_TEST_REPORT
+normal_write: PASS
+gx_write_blocked: YES
+gx_write_succeeded: NO
+error_message: GX output must have 18 fields per line (PreToolUse:Write hook blocking error from validate_gx_output.sh)

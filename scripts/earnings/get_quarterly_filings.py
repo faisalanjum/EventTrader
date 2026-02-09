@@ -1,25 +1,66 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+
+# /// script
+# dependencies = [
+#   "neo4j>=5.0.0",
+#   "python-dotenv>=1.0.0",
+# ]
+# ///
+
 """
 Get 8-K earnings reports with matched 10-Q/10-K filings.
-Usage: python scripts/earnings/get_quarterly_filings.py TICKER [--all]
+Usage: ./get_quarterly_filings.py TICKER [--all]
 
 Matches each 8-K to the most recent 10-Q/10-K by periodOfReport before the 8-K filing date.
 This is deterministic: the 10-Q/10-K represents the quarter whose results the 8-K announces.
 
-Validation: Filters out records where 10-Q/10-K is missing or stale (lag > 45 days from 8-K).
+When 10-Q/10-K match is invalid (missing, stale, or wrong quarter), the 8-K row is kept
+but 10-Q fields are set to N/A. Invalid match = no match found, or lag outside -24h to +45 days.
 
 Fiscal year/quarter calculation:
 - FYE (fiscal year end month) is derived from 10-K period months, NOT from stored database field
 - 10-K = Q4 (always), 10-Q = Q1/Q2/Q3
 - Fiscal year = period.year + 1 if period_month > fye_month, else period.year
 """
+import os
 import sys
 from datetime import datetime, date
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from contextlib import contextmanager
+from neo4j import GraphDatabase
+from dotenv import load_dotenv
 
-from scripts.earnings.utils import load_env, neo4j_session, error, parse_exception
-load_env()
+# Load .env from project root
+load_dotenv(Path("/home/faisal/EventMarketDB/.env"), override=True)
+
+def error(code: str, msg: str, hint: str = "") -> str:
+    return f"ERROR|{code}|{msg}|{hint}" if hint else f"ERROR|{code}|{msg}"
+
+def parse_exception(e: Exception, uri: str = "") -> str:
+    err_str = str(e).lower()
+    err_type = type(e).__name__
+    if "parse" in err_str or "date" in err_str or "text cannot be parsed" in err_str:
+        return error("INVALID_DATE", "Cannot parse date", "Use YYYY-MM-DD format")
+    if "connection" in err_str or "unavailable" in err_str or "refused" in err_str:
+        return error("CONNECTION", "Database unavailable", f"Check Neo4j at {uri}")
+    return error(err_type, str(e))
+
+@contextmanager
+def neo4j_session():
+    uri = os.getenv("NEO4J_URI", "bolt://localhost:30687")
+    user = os.getenv("NEO4J_USERNAME", "neo4j")
+    password = os.getenv("NEO4J_PASSWORD")
+    if not password:
+        yield None, error("CONFIG", "NEO4J_PASSWORD not set", "Check .env file")
+        return
+    driver = GraphDatabase.driver(uri, auth=(user, password))
+    try:
+        with driver.session() as session:
+            yield session, None
+    except Exception as e:
+        yield None, parse_exception(e, uri)
+    finally:
+        driver.close()
 
 
 def period_to_fiscal(period_year: int, period_month: int, period_day: int, fye_month: int, form_type: str) -> tuple:
@@ -168,69 +209,73 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
         return error("NO_DATA", f"No earnings (8-K 2.02) for {ticker}", "Check ticker or data availability")
 
     processed = []
-    skipped_missing = 0
-    skipped_stale = 0
 
     for r in results:
         filed_8k = r["filed_8k"]
         filed_10q = r["filed_10q"]
         period_10q = r["period_10q"]
 
-        # Skip if no 10-Q match found
-        if not period_10q or not filed_10q:
-            skipped_missing += 1
-            continue
-
+        # 8-K fields (always present)
         filed_8k_str = filed_8k.isoformat() if hasattr(filed_8k, "isoformat") else str(filed_8k) if filed_8k else "N/A"
-        filed_10q_str = filed_10q.isoformat() if hasattr(filed_10q, "isoformat") else str(filed_10q) if filed_10q else "N/A"
-
-        # Calculate lag between 8-K and 10-Q filing dates
-        try:
-            dt_8k = filed_8k if hasattr(filed_8k, 'timestamp') else datetime.fromisoformat(str(filed_8k).replace('Z', '+00:00'))
-            dt_10q = filed_10q if hasattr(filed_10q, 'timestamp') else datetime.fromisoformat(str(filed_10q).replace('Z', '+00:00'))
-
-            # Handle neo4j DateTime objects
-            if hasattr(dt_8k, 'to_native'):
-                dt_8k = dt_8k.to_native()
-            if hasattr(dt_10q, 'to_native'):
-                dt_10q = dt_10q.to_native()
-
-            lag_hours = (dt_10q - dt_8k).total_seconds() / 3600
-
-            # Skip if 10-Q is filed way before 8-K (negative lag > 24h indicates wrong match)
-            # or if 10-Q is filed way after 8-K (lag > 45 days indicates missing data)
-            if lag_hours < -24 or lag_hours > MAX_LAG_HOURS:
-                skipped_stale += 1
-                continue
-        except Exception:
-            # If we can't calculate lag, skip this record
-            skipped_stale += 1
-            continue
-
-        # Calculate fiscal year/quarter using derived FYE and form_type
-        # Parse period date to get year, month, and day
-        if hasattr(period_10q, 'year'):
-            period_year = period_10q.year
-            period_month = period_10q.month
-            period_day = period_10q.day
-        else:
-            period_str = str(period_10q)[:10]
-            period_date = date.fromisoformat(period_str)
-            period_year = period_date.year
-            period_month = period_date.month
-            period_day = period_date.day
-
-        form_type = r["form_type"] or "10-Q"  # Default to 10-Q if missing
-        fiscal_year, fiscal_quarter = period_to_fiscal(period_year, period_month, period_day, derived_fye, form_type)
-        fiscal_year = str(fiscal_year)
-
-        accession_10q = r["accession_10q"] or "N/A"
         market_session_8k = r["market_session_8k"] or "N/A"
-        market_session_10q = r["market_session_10q"] or "N/A"
-        form_type = r["form_type"] or "N/A"
+
+        # Check if 10-Q match is valid
+        valid_10q = False
+        if period_10q and filed_10q:
+            try:
+                dt_8k = filed_8k if hasattr(filed_8k, 'timestamp') else datetime.fromisoformat(str(filed_8k).replace('Z', '+00:00'))
+                dt_10q = filed_10q if hasattr(filed_10q, 'timestamp') else datetime.fromisoformat(str(filed_10q).replace('Z', '+00:00'))
+
+                # Handle neo4j DateTime objects
+                if hasattr(dt_8k, 'to_native'):
+                    dt_8k = dt_8k.to_native()
+                if hasattr(dt_10q, 'to_native'):
+                    dt_10q = dt_10q.to_native()
+
+                lag_hours = (dt_10q - dt_8k).total_seconds() / 3600
+
+                # Valid if 10-Q filed within -24h to +45 days of 8-K
+                if -24 <= lag_hours <= MAX_LAG_HOURS:
+                    valid_10q = True
+            except Exception:
+                pass  # Invalid lag calculation -> treat as invalid match
+
+        if valid_10q:
+            # Valid 10-Q match: calculate fiscal year/quarter
+            filed_10q_str = filed_10q.isoformat() if hasattr(filed_10q, "isoformat") else str(filed_10q)
+
+            if hasattr(period_10q, 'year'):
+                period_year = period_10q.year
+                period_month = period_10q.month
+                period_day = period_10q.day
+            else:
+                period_str = str(period_10q)[:10]
+                period_date = date.fromisoformat(period_str)
+                period_year = period_date.year
+                period_month = period_date.month
+                period_day = period_date.day
+
+            form_type = r["form_type"] or "10-Q"
+            fiscal_year, fiscal_quarter = period_to_fiscal(period_year, period_month, period_day, derived_fye, form_type)
+            fiscal_year = str(fiscal_year)
+
+            accession_10q = r["accession_10q"] or "N/A"
+            market_session_10q = r["market_session_10q"] or "N/A"
+            form_type = r["form_type"] or "N/A"
+        else:
+            # Invalid 10-Q match: set 10-Q fields to N/A
+            accession_10q = "N/A"
+            filed_10q_str = "N/A"
+            market_session_10q = "N/A"
+            form_type = "N/A"
+            fiscal_year = "N/A"
+            fiscal_quarter = "N/A"
+
+        # Use 8-K accession as fiscal_key for N/A rows so they aren't deduped
+        fiscal_key = r["accession_8k"] if fiscal_year == "N/A" else f"{fiscal_year}_{fiscal_quarter}"
 
         processed.append({
-            "fiscal_key": f"{fiscal_year}_{fiscal_quarter}",
+            "fiscal_key": fiscal_key,
             "row": "|".join([
                 r["accession_8k"] or "N/A",
                 filed_8k_str,
@@ -262,6 +307,6 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or len(sys.argv) > 3:
-        print(error("USAGE", "get_earnings_with_10q.py TICKER [--all]"))
+        print(error("USAGE", "get_quarterly_filings.py TICKER [--all]"))
         sys.exit(1)
     print(get_earnings_with_10q(sys.argv[1], dedupe="--all" not in sys.argv))

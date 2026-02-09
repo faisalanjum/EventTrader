@@ -1,0 +1,20 @@
+SOURCE: OpenAI worker (test_cross_dep_openai.txt)
+
+=== ORIGINAL DATA FROM OPENAI ===
+3 Major Stock Exchanges in the World:
+
+1. New York Stock Exchange (NYSE) - New York City, United States
+2. NASDAQ - New York City, United States
+3. Tokyo Stock Exchange (TSE) - Tokyo, Japan
+
+=== CLAUDE ANALYSIS ===
+1. NYSE: The world's largest stock exchange by market capitalization, the NYSE is home to many blue-chip and legacy corporations, operating as a physical auction-style exchange with deep liquidity and a history dating back to 1792.
+
+2. NASDAQ: The first electronic stock exchange, NASDAQ is heavily weighted toward technology and growth companies, and its fully electronic trading model makes it one of the fastest and most efficient exchanges globally.
+
+3. TSE (Tokyo Stock Exchange): The largest exchange in Asia by market capitalization, the TSE serves as the primary venue for Japanese equities and is a key barometer of economic health in the Asia-Pacific region.
+
+CROSS_PROVIDER_DEPENDENCY: WORKS
+
+=== MESSAGES FROM OPENAI-BRAIN ===
+[openai-brain]: "Thanks for confirming. Glad the cross-provider dependency flow worked end to end."

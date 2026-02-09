@@ -1,0 +1,19 @@
+TEST: Parallel TeamCreate from Primary Agent
+DATE: 2026-02-08
+METHOD: Skill (no context:fork) invoked from claude -p primary session
+
+TEAMCREATE #1 (test-pteam-alpha):
+RESULT: SUCCESS
+RESPONSE: {"team_name":"test-pteam-alpha","team_file_path":"/home/faisal/.claude/teams/test-pteam-alpha/config.json","lead_agent_id":"team-lead@test-pteam-alpha"}
+
+TEAMCREATE #2 (test-pteam-beta):
+RESULT: FAILED
+RESPONSE: Already leading team "test-pteam-alpha". A leader can only manage one team at a time. Use TeamDelete to end the current team before creating a new one.
+
+DISK VERIFICATION:
+Alpha team dir:   EXISTS (config.json present, created 2026-02-08 11:16)
+Beta team dir:    MISSING (No such file or directory)
+Alpha tasks dir:  EXISTS (.lock file present, created 2026-02-08 11:16)
+Beta tasks dir:   MISSING (No such file or directory)
+
+CONCLUSION: Cannot create two teams in parallel from primary agent. The first TeamCreate succeeds and binds the agent as leader of that team. The second TeamCreate fails because an agent can only lead one team at a time. This is a hard constraint enforced by the TeamCreate tool — parallel team creation from a single primary agent is not supported.

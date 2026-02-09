@@ -1,0 +1,8 @@
+SKILL_CHAIN_FROM_TEAMMATE
+skill_invoked: test-re-workflow
+skill_completed: YES
+step1_file_exists: YES (content: STEP1)
+child_file_exists: YES (content: CHILD_EXECUTED)
+step3_file_exists: YES (content: STEP3: child returned=CHILD_DONE)
+step4_file_exists: YES (content: STEP4: WORKFLOW_COMPLETE)
+error: NONE

@@ -1,0 +1,13 @@
+CLAUDE_RESULT=The capital of France is Paris
+
+PEER_MESSAGE_FROM_OPENAI_1: PEER_TEST: What is the capital of Italy? This answer came from OpenAI proxy. Reply to me.
+PEER_MESSAGE_FROM_OPENAI_2: PEER_REPLY: The capital of Germany is Berlin. (Answer from OpenAI proxy)
+
+--- FINAL SUMMARY ---
+YOUR_PROVIDER: Claude
+TASK_COMPLETED: YES
+PEER_MESSAGE_SENT: YES
+PEER_MESSAGE_RECEIVED: YES - Received 2 messages from openai-worker:
+  1. "PEER_TEST: What is the capital of Italy? This answer came from OpenAI proxy. Reply to me."
+  2. "PEER_REPLY: The capital of Germany is Berlin. (Answer from OpenAI proxy)"
+CROSS_PROVIDER_COMMS: WORKS

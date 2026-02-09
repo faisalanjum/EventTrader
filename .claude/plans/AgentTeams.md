@@ -157,8 +157,9 @@ tmux kill-session -t <session-name>
 | No session resumption with in-process teammates | `/resume` and `/rewind` don't restore teammates | Lead spawns new teammates after resume |
 | Task status can lag | Teammates forget to mark tasks complete | Check manually, nudge teammate |
 | Shutdown can be slow | Waits for current request/tool call | Be patient or force-kill |
-| One team per session | Can't manage multiple teams | Clean up before starting new team |
+| One team per session-hierarchy | Can't manage multiple teams. Constraint binds entire session (primary + all subagents). | Clean up before starting new team. Two separate `claude -p` processes for parallel teams. **Confirmed RT-12.** |
 | No nested teams | Teammates cannot spawn their own teams | Use sub-agents within teammates instead |
+| Lead must be primary agent | Subagents can TeamCreate but lack Task tool to spawn teammates. Only the primary can run a full team lifecycle. | Always create teams from the primary session. **Confirmed RT-12 Test D.** |
 | Lead is fixed | Can't promote teammate or transfer leadership | Design lead role carefully upfront |
 | Permissions set at spawn | All teammates inherit lead's mode | Change individually after spawning |
 | Split panes require tmux/iTerm2 | Not supported in VS Code terminal, Windows Terminal, Ghostty | Use in-process mode |
@@ -1141,6 +1142,11 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 | `test_hook_teammate_idle_worker.txt` | v2.1.34: TeammateIdle worker proof-of-life | `earnings-analysis/test-outputs/` |
 | `test_cross_dep_openai.txt` | RT-10b: OpenAI data via cross-provider dep | `earnings-analysis/test-outputs/` |
 | `test_cross_dep_claude.txt` | RT-10b: Claude analysis of OpenAI data | `earnings-analysis/test-outputs/` |
+| `test-parallel-teams.txt` | RT-12: Parallel TeamCreate from primary agent | `earnings-analysis/test-outputs/` |
+| `test-parallel-teams-subagent.txt` | RT-12: Parallel TeamCreate from subagent | `earnings-analysis/test-outputs/` |
+| `test-parallel-teams-split.txt` | RT-12: Split leadership (primary + subagent) | `earnings-analysis/test-outputs/` |
+| `test-parallel-teams-dual-sub.txt` | RT-12: Dual subagents parallel team creation | `earnings-analysis/test-outputs/` |
+| `test-subagent-team-leader.txt` | RT-12: Subagent full team lifecycle test | `earnings-analysis/test-outputs/` |
 
 ## 9.6 Master Capability Matrix (All Tests)
 
@@ -1190,6 +1196,12 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 | 42 | Cross-provider shared task list | **YES** | Both providers claimed/completed tasks on shared list |
 | 43 | Cross-provider task dependencies | **YES** | OpenAI completes → unblocks Claude. Full addBlockedBy chain works. |
 | 44 | OpenAI-as-brain (relay pattern) | **YES** | Claude as thin executor, OpenAI drives decisions via ./agent |
+| 45 | Parallel team creation (primary x2) | **NO** | "A leader can only manage one team at a time." Hard-enforced. |
+| 46 | Parallel team creation (primary + subagent) | **NO** | Subagent inherits parent's team leadership context. |
+| 47 | Parallel team creation (dual subagents) | **NO** | First subagent's team binds entire session hierarchy. |
+| 48 | Subagent TeamCreate access | **YES** | general-purpose subagents have TeamCreate and it works (1 team max). |
+| 49 | Session-wide team leadership constraint | **CONFIRMED** | One team per session-hierarchy. All agents in session share slot. |
+| 50 | Subagent full team lifecycle | **NO** | Can create team + tasks, but Task tool absent → can't spawn teammates. |
 
 ---
 
@@ -1226,6 +1238,16 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 29. **Mixed-provider teams (proxy)**: Can a Claude teammate proxy to OpenAI via `./agent`? **YES** — full bidirectional messaging, shared task list, task claiming all work. **ANSWERED: WORKS via proxy pattern.**
 30. **Cross-provider peer messaging**: Does Claude ↔ OpenAI-proxy peer messaging work? **YES** — multiple messages exchanged in both directions. **ANSWERED: WORKS.**
 
+### Answered (v2.1.37, 2026-02-08) — Parallel Teams & Subagent Leadership
+
+31. **Parallel team creation (same agent)**: Can one agent call TeamCreate twice? **NO — hard-enforced.** Error: "A leader can only manage one team at a time." **ANSWERED: BLOCKED.**
+32. **Subagent TeamCreate access**: Can subagents create teams? **YES** — TeamCreate works from subagents. **ANSWERED: YES (one team max).**
+33. **Parallel teams via split leadership (primary + subagent)**: Primary creates Team A, subagent creates Team B? **NO** — subagent inherits parent's team context, gets blocked. **ANSWERED: BLOCKED.**
+34. **Parallel teams via dual subagents (primary creates none)**: Two subagents each create a team? **NO** — first subagent's team binds entire session hierarchy, second blocked. **ANSWERED: BLOCKED.**
+35. **Session-wide team constraint**: Is the one-team limit per-agent or per-session? **Per-session-hierarchy.** All agents in a session (primary + all subagents) share one team leadership slot. **ANSWERED: PER-SESSION.**
+36. **Subagent as full team leader**: Can a subagent create a team AND spawn teammates? **NO** — TeamCreate works, TaskCreate works, but Task tool (needed to spawn teammates) is absent from subagents. Admin functions work, lifecycle doesn't. **ANSWERED: PARTIAL (admin only).**
+37. **Any way to run two teams in parallel**: Tested 4 approaches (primary x2, primary+subagent, subagent x2, dual subagents). All blocked. **Only workaround**: two separate `claude -p` OS processes. **ANSWERED: NOT POSSIBLE within one session.**
+
 ### Still Open
 
 2. **Team + SDK**: Can teams be created via the Agent SDK, or only interactively?
@@ -1239,7 +1261,7 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 
 ---
 
-# Part 11: Extended Tests (8 items — tested post-compaction)
+# Part 11: Extended Tests (9 items — tested post-compaction)
 
 ALL 9 TESTS COMPLETED.
 
@@ -1507,6 +1529,83 @@ To minimize Claude's cost as relay:
 | Agent type restriction | `.claude/agents/test_agent_type_restrict.md` | ✅ Hard enforcement | `test_agent_type_restrict.txt` |
 | Mixed-provider team | Team `test-mixed-provider` | ✅ Proxy pattern works | `test_mixed_claude_worker.txt`, `test_mixed_openai_worker.txt` |
 
+### RT-12: Parallel Team Creation (Two Teams Simultaneously) — TESTED ❌ NOT POSSIBLE
+
+**What**: Can a single agent call `TeamCreate` twice in the same message to run two independent teams in parallel?
+
+**Test A — Primary agent (skill, no fork)**:
+- Skill: `.claude/skills/test-parallel-teams.md` (no `context: fork`)
+- Method: `claude -p` invokes skill → primary session calls TeamCreate x2 in one message
+- TeamCreate #1 (`test-pteam-alpha`): **SUCCESS** — team created, config.json + task dir on disk
+- TeamCreate #2 (`test-pteam-beta`): **FAILED** — `Already leading team "test-pteam-alpha". A leader can only manage one team at a time. Use TeamDelete to end the current team before creating a new one.`
+- Disk: alpha dir existed (verified), beta dir never created
+- **Note**: Team dirs auto-cleaned on session exit (team lead exit triggers cleanup)
+
+**Test B — Subagent (general-purpose via Task tool)**:
+- Skill: `.claude/skills/test-parallel-teams-subagent.md` (spawns general-purpose subagent)
+- Method: `claude -p` invokes skill → primary spawns subagent → subagent calls TeamCreate x2
+- TeamCreate #1 (`test-pteam-sub-alpha`): **SUCCESS** — team created
+- TeamCreate #2 (`test-pteam-sub-beta`): **FAILED** — same error: `Already leading team "test-pteam-sub-alpha". A leader can only manage one team at a time.`
+- Disk: alpha dir survived on disk (session killed before cleanup), beta never created
+- **Bonus finding**: Subagents CAN create teams via TeamCreate (not just the primary session)
+
+**Error message** (exact, both tests):
+```
+Already leading team "{first-team-name}". A leader can only manage one team at a time.
+Use TeamDelete to end the current team before creating a new one.
+```
+
+**Conclusion**: **One team per agent, hard-enforced.** The constraint is per-agent-session, not per-tool-call. Once TeamCreate succeeds, the agent is bound as leader of that team. A second TeamCreate is blocked until TeamDelete releases leadership. This applies to both primary agents and subagents.
+
+**Test C — Dual subagents, primary creates NO team**:
+- Skill: `.claude/skills/test-parallel-teams-dual-sub.md`
+- Method: Primary spawns TWO general-purpose subagents in parallel. Neither the primary nor the subagents share a team initially. Each subagent calls TeamCreate independently.
+- Subagent A (`test-pteam-dual-a`): **SUCCESS** — team created
+- Subagent B (`test-pteam-dual-b`): **FAILED** — `Already leading team "test-pteam-dual-a". A leader can only manage one team at a time.`
+- **Critical insight**: Even though the primary never called TeamCreate, subagent A's TeamCreate made the entire session hierarchy a leader. Subagent B, sharing the same session, was blocked.
+
+**Definitive conclusion**: **No way to run two teams in parallel within a single Claude Code session**, regardless of approach:
+
+| Approach | Primary creates team? | Who creates 2nd? | Result |
+|----------|----------------------|-------------------|--------|
+| Primary x2 parallel | Yes (1st) | Primary (2nd) | BLOCKED |
+| Primary + subagent | Yes | Subagent | BLOCKED (inherits parent team) |
+| Subagent alone x2 | No | Subagent A then B | BLOCKED (A's team binds session) |
+| Dual subagents parallel | No | Two subagents | BLOCKED (one wins, other inherits) |
+
+The constraint is **per-session-hierarchy**, not per-agent. All agents within a session (primary + all subagents) share ONE team leadership slot.
+
+**Only workaround**: Two completely separate `claude -p` processes (separate OS processes, separate sessions). They share the filesystem but nothing else.
+
+**Output files**:
+- `earnings-analysis/test-outputs/test-parallel-teams.txt` — primary x2 results
+- `earnings-analysis/test-outputs/test-parallel-teams-subagent.txt` — single subagent x2 results
+- `earnings-analysis/test-outputs/test-parallel-teams-split.txt` — primary + subagent split results
+- `earnings-analysis/test-outputs/test-parallel-teams-dual-sub.txt` — dual subagent results
+
+**Test D — Subagent as full team leader (create + spawn teammates)**:
+- Skill: `.claude/skills/test-subagent-team-leader.md`
+- Method: Primary spawns ONE general-purpose subagent. Subagent creates a team, creates a task, then tries to spawn a teammate on the team.
+- TeamCreate: **SUCCESS** — subagent became `team-lead@test-sub-led-team`
+- TaskCreate: **SUCCESS** — task #3057 created on shared list
+- Spawn teammate (Task tool): **FAILED — Task tool not available to subagents**
+- **Conclusion**: A subagent can create teams and tasks (admin functions), but **cannot spawn teammates** because the Task tool is absent from subagents. Only the primary agent has the Task tool. Therefore a subagent cannot run a full team lifecycle.
+
+| Capability | Subagent can do it? |
+|-----------|-------------------|
+| TeamCreate | YES |
+| TaskCreate/List/Get/Update | YES |
+| TeamDelete | YES |
+| SendMessage | YES |
+| Spawn teammates (Task tool) | **NO — tool absent** |
+
+**Test skills created**:
+- `.claude/skills/test-parallel-teams.md` — primary agent test
+- `.claude/skills/test-parallel-teams-subagent.md` — subagent test
+- `.claude/skills/test-parallel-teams-split.md` — split leadership test
+- `.claude/skills/test-parallel-teams-dual-sub.md` — dual subagent test
+- `.claude/skills/test-subagent-team-leader.md` — subagent full lifecycle test
+
 **All test artifact naming convention**: Files start with `test_` prefix to distinguish from production artifacts.
 
 **Test agents created** (`.claude/agents/`):
@@ -1584,6 +1683,8 @@ You (team lead)
 
 - **No sub-agents from teammates**: A teammate can't use the Task tool to spawn workers. But it CAN invoke skills (which create their own mini-forks internally).
 - **No nested teams**: You can't have a team inside a team.
+- **No parallel teams**: One team per session-hierarchy. The primary agent + all its subagents share a single team leadership slot. Tested 4 approaches (primary x2, primary+subagent, subagent x2, dual subagents) — all blocked. Only workaround: separate OS processes. *(Confirmed RT-12, 2026-02-08)*
+- **Lead must be primary agent**: Subagents can call TeamCreate (team is created on disk) but lack the Task tool to spawn teammates. A team without teammates is useless. Only the primary session can run a full team lifecycle. *(Confirmed RT-12 Test D, 2026-02-08)*
 - **No worktrees**: Everyone writes to the same filesystem. If two teammates write the same file, last one wins. Solution: each writes to their own file.
 - **7x token cost**: Each teammate is a full Claude session. 3 teammates = 4 sessions (including you) = ~4x the cost.
 - **Single session only**: If you restart, teammates die. Config stays on disk but teammates must be re-spawned.
@@ -1756,6 +1857,7 @@ You don't need to change any of your existing hooks. They just work.
   │  ❌ CAN'T DO:                           │
   │  ├── Spawn sub-agents (no Task tool)    │
   │  ├── Create nested teams                │
+  │  ├── Run parallel teams (1 per session) │
   │  ├── Override its own model             │
   │  ├── Survive a session restart          │
   │  └── Use a different model than lead    │
@@ -1960,7 +2062,7 @@ You don't need to change any of your existing hooks. They just work.
   │  ✅ Edit tool detects stale files                    │
   │  📝 Rule: each teammate writes its OWN file          │
   │                                                      │
-  │  44 capabilities tested, all documented              │
+  │  51 capabilities tested, all documented              │
   │                                                      │
   │  v2.1.33/34 ADDITIONS (2026-02-06)                  │
   │  ✅ TaskCompleted hook event                         │
@@ -1973,6 +2075,16 @@ You don't need to change any of your existing hooks. They just work.
   │  ✅ Proxy via ./agent --provider openai              │
   │  ✅ Cross-provider peer messaging                    │
   │  ✅ Cross-provider shared task list                  │
+  │                                                      │
+  │  PARALLEL TEAMS & SUBAGENT LEADERSHIP (2026-02-08)  │
+  │  ❌ Two teams from one session (hard-enforced)       │
+  │  ❌ Split leadership: primary + subagent (inherits)  │
+  │  ❌ Dual subagents each create team (1st binds all)  │
+  │  ❌ Subagent full lifecycle (no Task tool = no spawn)│
+  │  ✅ Subagent can create 1 team (admin only)          │
+  │  ✅ Subagent TaskCreate/List/Update works             │
+  │  📝 Only primary agent can lead a functional team    │
+  │  📝 Parallel teams need separate OS processes        │
   └─────────────────────────────────────────────────────┘
 ```
 

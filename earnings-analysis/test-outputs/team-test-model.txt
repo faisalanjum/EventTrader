@@ -1,0 +1,4 @@
+MODEL_TEST
+model_requested: haiku
+model_actual: claude-opus-4-6 (Opus 4.6)
+timestamp: 2026-02-05

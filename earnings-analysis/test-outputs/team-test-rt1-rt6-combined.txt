@@ -1,0 +1,51 @@
+RT1_DELEGATE_MODE + RT6_SESSION_PERSISTENCE
+=============================================
+date: 2026-02-05
+team: test-teams-rt1-rt6
+
+RT-1: DELEGATE MODE
+  trigger: Shift+Tab (cycles: normal → plan → delegate)
+  delegate_mode_activated: YES
+
+  ALLOWED TOOLS (per system message):
+    TeammateTool, TaskCreate, TaskGet, TaskUpdate, TaskList, SendMessage
+
+  BLOCKED TOOLS (per system message):
+    Bash, Read, Write, Edit, Glob, Grep, WebFetch, WebSearch, etc.
+
+  ENFORCEMENT: SOFT (not hard-blocked)
+    Write_test: SUCCEEDED despite "blocked" (wrote team-test-rt1-blocked.txt)
+    Read_test: SUCCEEDED despite "blocked" (read file back)
+    SendMessage_test: SUCCEEDED (expected — coordination tool)
+    TaskCreate_test: SUCCEEDED (expected — coordination tool)
+
+  TASK LIST ROUTING IN DELEGATE MODE:
+    Routes to team's INTERNAL task dir (not CLAUDE_CODE_TASK_LIST_ID)
+    This is different from normal mode where configured list wins
+
+  KEY FINDING: Delegate mode is advisory/soft-enforced, not hard-enforced.
+  The system tells the agent it CANNOT use certain tools, but they execute normally.
+
+RT-6: SESSION PERSISTENCE
+  team_config_survives_restart: YES
+    path: ~/.claude/teams/test-teams-rt1-rt6/config.json
+    contents: Full config with members, prompts, timestamps intact
+    inboxes_dir: Persists with sent messages
+
+  task_dir_survives_restart: YES
+    path: ~/.claude/tasks/test-teams-rt1-rt6/
+    contents: Task #1 (internal) and .lock file intact
+
+  teammates_survive_restart: NO
+    persistence-worker was in-process, died with session
+    message sent post-restart went to inbox but no one processing
+
+  new_team_creation_with_orphan: WORKS
+    Orphaned team does NOT block creating new teams
+
+  orphan_cleanup: MANUAL ONLY
+    Teammate(cleanup) only removes ACTIVE team
+    Orphaned teams must be removed manually: rm -rf ~/.claude/teams/{name} ~/.claude/tasks/{name}
+
+  KEY FINDING: Config persists, teammates don't. Teams are effectively single-session.
+  Orphaned configs accumulate and need manual cleanup.

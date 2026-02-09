@@ -1,0 +1,26 @@
+RT5_FILE_CONFLICT_TEST
+======================
+team: test-teams-rt5
+date: 2026-02-05
+writers: 3 (writer-1, writer-2, writer-3)
+
+SHARED FILE BEHAVIOR:
+  all_wrote_successfully: YES
+  final_content: LINE_FROM_WRITER_3 (last writer wins)
+  worktrees_used: NO (all share same filesystem)
+
+WRITE ORDER (observed):
+  1. writer-1 wrote LINE_FROM_WRITER_1
+  2. writer-2 read writer-1's content, then overwrote with LINE_FROM_WRITER_2
+  3. writer-3 read writer-1's content, got stale-file error (writer-2 changed it),
+     re-read (saw writer-2's content), then overwrote with LINE_FROM_WRITER_3
+
+CONFLICT HANDLING:
+  Write_tool: No protection — last-write-wins (overwrites silently)
+  Edit_tool: Stale-file detection — fails if file changed since last read
+  Automatic_merge: NONE
+  Git_worktrees: NOT USED by teammates
+
+IMPLICATION: Teammates must coordinate via task list or messaging to avoid
+writing to the same file. Use separate output files per teammate, then
+have lead merge results.

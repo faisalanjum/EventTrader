@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Get transcript Q&A exchanges for a ticker in date range (exclusive)."""
+"""Get transcript Q&A exchanges for a ticker in date range [start, end)."""
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -8,7 +8,7 @@ load_env()
 
 QUERY = """
 MATCH (t:Transcript)-[:INFLUENCES]->(c:Company {ticker: $ticker})
-WHERE datetime(t.conference_datetime) > datetime($start) AND datetime(t.conference_datetime) < datetime($end)
+WHERE datetime(t.conference_datetime) >= datetime($start) AND datetime(t.conference_datetime) < datetime($end)
 MATCH (t)-[:HAS_QA_EXCHANGE]->(qa:QAExchange)
 RETURN t.id AS transcript_id, left(t.conference_datetime, 10) AS date, qa.id AS qa_id, qa.questioner AS questioner
 ORDER BY t.conference_datetime, toInteger(qa.sequence)

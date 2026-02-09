@@ -1,0 +1,8 @@
+TASK_LIST_TEST
+created_task_id: 3030
+tasklist_contents: #3030 [pending] LEAD-CREATED-TASK
+total_tasks_visible: 1
+
+CROSS_VISIBILITY_TEST
+lead_created_task_3031_visible: YES
+all_visible_tasks: #3030 [pending] LEAD-CREATED-TASK, #3031 [pending] LEAD-SIDE-TASK

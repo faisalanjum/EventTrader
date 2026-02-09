@@ -1,0 +1,21 @@
+EXPLORE_SPAWN: ALLOWED - Task(Explore) is listed in tools frontmatter whitelist
+BASH_SPAWN: ALLOWED - Task(Bash) is listed in tools frontmatter whitelist
+GENERAL_PURPOSE_SPAWN: BLOCKED - Task(general-purpose) is NOT listed in tools frontmatter; only Task(Explore) and Task(Bash) are permitted
+PLAN_SPAWN: BLOCKED - Task(Plan) is NOT listed in tools frontmatter; only Task(Explore) and Task(Bash) are permitted
+AGENT_TYPE_RESTRICT: ENFORCED
+
+--- Details ---
+Agent config: .claude/agents/test-agent-type-restrict.md
+Tools frontmatter whitelist:
+  - Read
+  - Write
+  - Grep
+  - Glob
+  - Task(Explore)
+  - Task(Bash)
+
+The tools frontmatter acts as a whitelist. Only sub-agent types explicitly
+listed as Task(<type>) are permitted. Task(general-purpose) and Task(Plan)
+are absent from the whitelist and therefore blocked. The restriction is
+enforced because the tools frontmatter constrains available tools to only
+those enumerated -- any Task subagent_type not in the list is unavailable.

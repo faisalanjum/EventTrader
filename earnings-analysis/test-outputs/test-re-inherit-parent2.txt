@@ -1,0 +1,10 @@
+Test: Tool inheritance (parent HAS MCP, child does NOT)
+Date: 2026-02-05
+Parent skill: test-re-inherit-parent2 (allowed-tools: mcp__neo4j-cypher__read_neo4j_cypher, Skill, Write)
+Child skill: test-re-inherit-child2 (allowed-tools: [])
+
+Child returned: CHILD2_MCP: NOT_INHERITED
+The child could not access mcp__neo4j-cypher__read_neo4j_cypher directly.
+The tool remained deferred and required ToolSearch to load, which the child did not use.
+
+INHERIT_UP: NO

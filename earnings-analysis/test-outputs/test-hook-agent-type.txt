@@ -1,0 +1,4 @@
+SAFE_COMMAND: ALLOWED
+AGENT_BLOCK_ME_COMMAND: ALLOWED (hook not enforced)
+AGENT_TYPE_HOOK: NOT_ENFORCED
+The AGENT_BLOCK_ME command was not blocked. Both commands executed and returned their output. The agent-type hook with type: "agent" did not intercept or block the command containing AGENT_BLOCK_ME. Additionally, a SubagentStart hook injected additionalContext (INJECTED_MAGIC_STRING_7842) confirming that hook fired, but the agent-type hook itself did not enforce blocking.

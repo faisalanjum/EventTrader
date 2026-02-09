@@ -1,0 +1,4 @@
+PEER_A_TEST
+discovered_teammates: team-lead, peer-a
+send_to_peer_b: SUCCESS (message sent to peer-b's inbox)
+received_from_peer_b: YES — "HELLO FROM PEER-B"

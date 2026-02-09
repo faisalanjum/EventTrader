@@ -1,0 +1,4 @@
+WRITER_1_REPORT
+wrote_to_shared: YES
+read_back_content: LINE_FROM_WRITER_1 / timestamp: 2026-02-05
+error: NONE

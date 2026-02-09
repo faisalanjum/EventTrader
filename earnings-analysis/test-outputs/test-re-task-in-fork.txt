@@ -1,0 +1,20 @@
+TASK_IN_FORK: BLOCKED
+
+Available tools:
+Bash
+Glob
+Grep
+Read
+Edit
+Write
+NotebookEdit
+WebFetch
+WebSearch
+Skill
+TaskCreate
+TaskGet
+TaskUpdate
+TaskList
+ToolSearch
+ListMcpResourcesTool
+ReadMcpResourceTool

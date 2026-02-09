@@ -1,0 +1,21 @@
+RT9_COMBINED_TEST (RT-9 + RT-3)
+=================================
+team: test-teams-rt9
+date: 2026-02-05
+
+RT-9: SKILL-DRIVEN TEAM LAUNCH
+  team_created: YES
+  tasks_created: 2 (#3032, #3033)
+  teammates_spawned: 2 (worker-a, worker-b)
+  worker_a_result: WORKER-A DONE (completed TASK-A)
+  worker_b_result: WORKER-B DONE (completed TASK-B after unblocking)
+  skill_invocation: NOT TESTED (skill cache needs restart)
+  manual_execution: PASS
+
+RT-3: TASK DEPENDENCIES
+  task_a_id: #3032 (no blockers)
+  task_b_id: #3033 (blockedBy: #3032)
+  task_b_saw_blocked: YES
+  task_b_unblocked_after_a: YES
+  blocker_status_when_unblocked: completed
+  dependency_enforcement: WORKS

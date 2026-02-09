@@ -143,8 +143,9 @@ For query patterns beyond schema discovery, see these specialized skills:
 |-------|-------|-------------|
 | **neo4j-entity** | Company, Sector, Industry, MarketIndex, prices, dividends, splits | Company lookups, price series, dividend/split history, market relationships |
 | **neo4j-report** | Report (8-K/10-K/10-Q), sections, exhibits, financial statements | Filing searches, Item 2.02 earnings, press releases (EX-99.1), PRIMARY_FILER returns |
-| **neo4j-news** | News articles, INFLUENCES returns, fulltext/vector search | News impact analysis, return divergence, market movers, embedding coverage |
-| **neo4j-transcript** | Transcript, QAExchange, PreparedRemark | Earnings calls, Q&A searches, analyst questions, embedding queries |
+| **neo4j-news** | News articles, INFLUENCES returns, fulltext search | News impact analysis, return divergence, market movers |
+| **neo4j-vector-search** | Semantic vector search across News and QAExchange | Similarity search, find-similar-news, analyst Q&A similarity |
+| **neo4j-transcript** | Transcript, QAExchange, PreparedRemark | Earnings calls, Q&A searches, analyst questions |
 | **neo4j-xbrl** | XBRLNode, Fact, Concept, Context, Period, Unit, Dimension | Financial metrics (EPS, Revenue), segment analysis, period types |
 
 **Usage**: Load `neo4j-schema` + domain skill for targeted queries. Schema provides structure; domain skills provide patterns.

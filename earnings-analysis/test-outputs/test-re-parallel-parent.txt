@@ -1,0 +1,4 @@
+Child A timestamp: 1770325843.637774716
+Child B timestamp: 1770325848.878537622
+Time gap: 5.241 seconds
+PARALLEL: NO (SEQUENTIAL)

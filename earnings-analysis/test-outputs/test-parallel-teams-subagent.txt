@@ -1,0 +1,44 @@
+TEST: Parallel TeamCreate from Subagent
+DATE: 2026-02-08
+METHOD: general-purpose subagent spawned via Task tool from claude -p
+
+SUBAGENT RESPONSE:
+**STEP 1 & 2: TeamCreate parallel call results**
+
+TeamCreate call 1 (test-pteam-sub-alpha): SUCCESS
+Exact response:
+{
+  "team_name": "test-pteam-sub-alpha",
+  "team_file_path": "/home/faisal/.claude/teams/test-pteam-sub-alpha/config.json",
+  "lead_agent_id": "team-lead@test-pteam-sub-alpha"
+}
+
+TeamCreate call 2 (test-pteam-sub-beta): FAILED
+Exact error message:
+Already leading team "test-pteam-sub-alpha". A leader can only manage one team at a time. Use TeamDelete to end the current team before creating a new one.
+
+**STEP 3: Disk check results**
+
+~/.claude/teams/test-pteam-sub-alpha/:
+total 12
+drwxrwxr-x 2 faisal faisal 4096 Feb  8 11:17 .
+drwxrwxr-x 5 faisal faisal 4096 Feb  8 11:17 ..
+-rw-rw-r-- 1 faisal faisal  532 Feb  8 11:17 config.json
+EXISTS -- contains config.json
+
+~/.claude/teams/test-pteam-sub-beta/:
+ls: cannot access '/home/faisal/.claude/teams/test-pteam-sub-beta/': No such file or directory
+DOES NOT EXIST
+
+~/.claude/tasks/test-pteam-sub-alpha/:
+total 8
+drwxrwxr-x 2 faisal faisal 4096 Feb  8 11:17 .
+drwxrwxr-x 6 faisal faisal 4096 Feb  8 11:17 ..
+-rw-rw-r-- 1 faisal faisal    0 Feb  8 11:17 .lock
+EXISTS -- contains .lock file
+
+~/.claude/tasks/test-pteam-sub-beta/:
+ls: cannot access '/home/faisal/.claude/tasks/test-pteam-sub-beta/': No such file or directory
+DOES NOT EXIST
+
+CONCLUSION: A subagent CAN create a team via TeamCreate (alpha succeeded). However, it CANNOT create two teams in parallel -- the second call (beta) was rejected with "Already leading team... A leader can only manage one team at a time." This is a hard constraint: one agent = one team leadership at a time. The first team created wins; the second is blocked.

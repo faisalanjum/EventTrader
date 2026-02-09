@@ -1,0 +1,5 @@
+TEAM_MCP_TEST
+neo4j_toolsearch: SUCCESS
+neo4j_query_result: [{"c.name": "APPLE INC", "c.ticker": "AAPL"}]
+perplexity_toolsearch: SUCCESS
+perplexity_result: Apple Inc.'s ticker symbol is AAPL (NASDAQ: AAPL)

@@ -1,0 +1,17 @@
+Test: Error Propagation (Parent)
+Date: 2026-02-05
+
+1. Did I receive an exception/error object? Or just text?
+   Just text. The child skill completed normally and returned a plain text
+   response. No exception or error object was thrown or propagated to the
+   parent. The Skill tool call returned with a normal "completed" status.
+
+2. What did the child return?
+   The child returned the following text string:
+   "ERROR_CHILD: Read failed with: File does not exist."
+
+   The child caught the read error internally, formatted it into a text
+   message, and returned that message as its normal output. The error did
+   not bubble up as a thrown exception to the parent context.
+
+ERROR_PROPAGATION: TEXT_ONLY

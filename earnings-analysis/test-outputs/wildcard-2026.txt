@@ -1,0 +1,9 @@
+WILDCARD_PRELOAD: NO
+
+Test: Does MCP wildcard `mcp__neo4j-cypher__*` pre-load tools?
+Method: Checked whether mcp__neo4j-cypher__read_neo4j_cypher is callable without ToolSearch.
+Result: The tool is explicitly listed as a "deferred tool" that "must be loaded before use" via ToolSearch.
+         It is NOT pre-loaded by any wildcard allowlist pattern.
+Conclusion: Wildcard entries in allowedTools (e.g. mcp__neo4j-cypher__*) grant PERMISSION to use
+            the tools but do NOT pre-load them. ToolSearch is still required to materialize deferred
+            MCP tools before they can be invoked.

@@ -17,7 +17,7 @@ With a single, minimal PIT switch (`--pit`) and **automatic recovery** (retry) w
 
 - **Data subagent**: `.claude/agents/*.md` agent spawned via Task for parallel fetch (e.g., `.claude/agents/neo4j-news.md`).
 - **Cookbook**: reference file with query patterns/examples/edge cases, loaded deterministically via `Read`.
-- **Invocable Skill**: something we intend to call via the Skill tool; `.claude/skills/` is reserved for these.
+- **Skill (shared reference)**: `.claude/skills/<name>/SKILL.md` — reusable instruction packs auto-loaded into subagents via `skills:` frontmatter. May be user-invocable or non-invocable (`user-invocable: false`). Examples: `news-queries` (query patterns), `pit-envelope` (envelope contract), `evidence-standards` (citation rules).
 - **PIT mode**: enforce “publicly available ≤ PIT timestamp” (see `.claude/filters/PIT_REFERENCE.md`).
 - **PIT gate**: deterministic allow/block checker (`pit_gate.py`) used from hooks when `--pit` is present.
 
@@ -303,10 +303,12 @@ Each data subagent matches only its retrieval tools:
 | neo4j-transcript | `mcp__neo4j-cypher__read_neo4j_cypher` |
 | neo4j-xbrl | `mcp__neo4j-cypher__read_neo4j_cypher` |
 | neo4j-entity | `mcp__neo4j-cypher__read_neo4j_cypher` |
+| neo4j-vector-search | `mcp__neo4j-cypher__read_neo4j_cypher` |
 | perplexity-search | `mcp__perplexity__perplexity_search` |
 | perplexity-ask | `mcp__perplexity__perplexity_ask` |
 | perplexity-research | `mcp__perplexity__perplexity_research` |
 | perplexity-reason | `mcp__perplexity__perplexity_reason` |
+| bz-news-api | `Bash` (dedicated agent, Bash = `pit_fetch.py` wrapper only) |
 | external-adapter | `Bash` (dedicated agent, Bash = wrapper only) |
 
 **Write-block matcher** (all agents): `mcp__neo4j-cypher__write_neo4j_cypher` via PreToolUse
@@ -324,6 +326,7 @@ python3 scripts/pit_fetch.py --source <source> --pit <ISO8601> [source-specific 
 ```bash
 python3 scripts/pit_fetch.py --source alphavantage --pit 2024-02-15T16:00:00-05:00 EARNINGS symbol=AAPL
 python3 scripts/pit_fetch.py --source yahoo --pit 2024-02-15T16:00:00-05:00 consensus symbol=AAPL
+python3 scripts/pit_fetch.py --source bz-news-api --pit 2024-02-15T16:00:00-05:00 --themes macro --limit 50
 ```
 
 **Output:** Standard JSON envelope (§4.7) with `available_at` per item
@@ -354,6 +357,7 @@ python3 scripts/pit_fetch.py --source yahoo --pit 2024-02-15T16:00:00-05:00 cons
 | Alpha Vantage TIME_SERIES_* | per-datapoint timestamp | ✅ | Filter to `<= PIT`; keep only timestamps with full datetime semantics |
 | Alpha Vantage EARNINGS | `reportedDate` | ⚠️ | Often date-only; PIT mode requires a verifiable datetime path or gap |
 | Alpha Vantage EARNINGS_ESTIMATES | ❌ not provable | ⚠️ | Historical PIT consensus not guaranteed; use only when PIT ≈ now, else gap |
+| Benzinga News API | `created` | ✅ | Use `provider_metadata`; drop items with unparseable/missing timestamp |
 | Yahoo | provider-specific | ⚠️ | Use Lane 3: URL/citation -> WebFetch timestamp extraction; if unverifiable datetime, gap |
 
 ### Hook YAML examples
@@ -434,7 +438,7 @@ Lane 3 retry rule (external messy sources):
 
 ---
 
-# 5) Catalog model: agents + cookbooks (recommended)
+# 5) Catalog model: agents + shared references (recommended)
 
 We do **not** require “a Skill per subagent”.
 
@@ -444,7 +448,10 @@ We do **not** require “a Skill per subagent”.
   - JSON-only response contract + required fields
   - PIT gate usage (`pit_gate.py`) + fail-closed behavior
   - Domain boundaries + citation requirements
-- **Cookbooks** (query patterns, examples, edge cases) live in **reference files** and are loaded deterministically via `Read` when needed.
+- **Shared query patterns/examples/edge cases** can live in either:
+  - `.claude/skills/<domain>/SKILL.md` (auto-loaded via agent frontmatter `skills:`)
+  - `.claude/cookbooks/data/<domain>.md` (loaded deterministically via `Read`)
+- Per domain, keep one canonical source of truth to avoid duplicated, drifting instructions.
 
 ## Data subagent checklist (use for every new `.claude/agents/*` data agent)
 
@@ -457,13 +464,11 @@ Each data subagent must:
 
 ## Where reference files live
 
-Use a dedicated cookbook folder to avoid overloading the meaning of “skills”:
-- Cookbooks: `.claude/cookbooks/data/<domain>.md`
+- Skill-based shared references: `.claude/skills/<domain>/SKILL.md`
+- Cookbook-style references: `.claude/cookbooks/data/<domain>.md`
 - Standards: `.claude/cookbooks/standards/<name>.md`
 
-The `.claude/skills/` folder is reserved for **actual invocable Skills** (things we intend to call via the Skill tool). Data subagents must not rely on skill auto-loading.
-
-Migration note: existing cookbooks living under `.claude/skills/<domain>/SKILL.md` should be moved to `.claude/cookbooks/data/<domain>.md` as we implement each domain.
+Migration note: no forced migration is required. Existing shared references under `.claude/skills/` can remain canonical; if moved to cookbooks, migrate per-domain and keep only one canonical copy.
 
 ## Parallelism note
 
@@ -497,26 +502,23 @@ Lane 3 timestamp extraction policy (decided):
 
 ## Phase 0 — Build order (do this in order)
 
-1. Create `.claude/hooks/pit_gate.py` (the only PIT gate).
-2. Create `scripts/pit_fetch.py` (the only external wrapper entrypoint).
-3. Update `.claude/agents/neo4j-news.md` end-to-end (reference implementation).
-4. Create an external adapter data agent (Bash = wrapper only) and gate it.
-5. Run the minimal tests below before expanding coverage.
+1. ~~Create `.claude/hooks/pit_gate.py` (the only PIT gate).~~ **DONE** — 37/37 tests pass. Handles `params.pit`, MCP response format, single-record array unwrap.
+2. Create `scripts/pit_fetch.py` (the only external wrapper entrypoint). **PARTIAL** — exists with `bz-news-api` source (386 lines). Needs `alphavantage` source handler.
+3. ~~Update `.claude/agents/neo4j-news.md` end-to-end (reference implementation).~~ **DONE** — see Phase 2.
+4. ~~Create an external adapter data agent (Bash = wrapper only) and gate it.~~ **DONE** — `bz-news-api` agent with PIT gate.
+5. ~~Run the minimal tests below before expanding coverage.~~ **DONE** — Neo4j allow test passed. Perplexity + Alpha Vantage tests pending (Phase 4).
 
-## Phase 1 — Common scaffolding (do first)
+## Phase 1 — Common scaffolding (**DONE**)
 
-1. **Define the JSON contract** (1 short doc / schema; no extra prose).
-2. **Build one PIT gate** (minimal code) that does exactly:
-   - If `--pit` absent → passthrough (open mode).
-   - If `--pit` present → run `pit_gate.py` validation → if contaminated, adjust query and retry (max retries) → return clean or empty/error.
-   - Implementation choice: **Python** (`pit_gate.py`, stdlib-only) for ISO8601 + timezone correctness and portability.
-3. **Wire PIT gate via hooks** where it increases determinism (don’t add hooks “just because”).
+1. ~~**Define the JSON contract**~~ — `pit-envelope` skill (`.claude/skills/pit-envelope/SKILL.md`): envelope schema, field mappings, forbidden keys, retry rules.
+2. ~~**Build one PIT gate**~~ — `.claude/hooks/pit_gate.py` (stdlib-only Python, 37/37 tests in `test_pit_gate.py`).
+3. ~~**Wire PIT gate via hooks**~~ — agent-level PostToolUse hooks (proven in 3 agents: neo4j-news, neo4j-vector-search, bz-news-api).
 
 ## Minimal tests (must pass before adding more sources)
 
-1. **Neo4j allow**: run `neo4j-news` with `--pit` and confirm gate allows clean data.
-2. **Perplexity MCP**: in PIT mode, MCP search/ask/reason/research must normalize to items with reliable `available_at` or return a clean gap (no unverifiable items).
-3. **Alpha Vantage wrapper**: run `scripts/pit_fetch.py --source alphavantage --pit ... TIME_SERIES_* ...` and confirm only datapoints `<= PIT` are returned.
+1. ~~**Neo4j allow**: run `neo4j-news` with `--pit` and confirm gate allows clean data.~~ **PASSED** — 3 live tests (PIT-clean, PIT-gap, open mode).
+2. **Perplexity MCP**: in PIT mode, MCP search/ask/reason/research must normalize to items with reliable `available_at` or return a clean gap (no unverifiable items). **PENDING** (Phase 4).
+3. **Alpha Vantage wrapper**: run `scripts/pit_fetch.py --source alphavantage --pit ... TIME_SERIES_* ...` and confirm only datapoints `<= PIT` are returned. **PENDING** (Phase 4).
 
 ## SDK run checklist (top-level orchestrator)
 
@@ -531,17 +533,22 @@ Assumption: the orchestrator runs as the **primary/top-level session** (not a fo
 - **Optional persistence**: set `CLAUDE_CODE_TASK_LIST_ID` to a stable value for cross-session resumability (note: `.claude/settings.json` can override env vars).
 - **Background spawn caution**: avoid `run_in_background: true` unless needed; it can change which task tools are available to spawned agents.
 
-## Phase 2 — Build the first reference data subagent (+ cookbook file)
+## Phase 2 — Build the first reference data subagent (**DONE**)
 
-Pick **neo4j-news** as the reference implementation (already exists):
-- Update `.claude/agents/neo4j-news.md` to:
-  - accept `--pit`
-  - always return JSON per the response contract
-  - apply WHERE pre-filter when PIT is present
-  - run the PIT gate when PIT is present
-- Create/update the **cookbook reference file** at `.claude/cookbooks/data/neo4j-news.md` to:
-  - include PIT-specific query variants using correct availability field
-  - remind that outputs must include required availability keys for PIT validation (`created`, etc.)
+**neo4j-news** is the reference implementation. Completed deliverables:
+
+- `.claude/agents/neo4j-news.md` — agent with hooks (PreToolUse write-block + PostToolUse pit_gate), skills (`neo4j-schema`, `news-queries`, `pit-envelope`, `evidence-standards`), workflow (PIT/open mode branching), PIT response contract
+- `.claude/skills/news-queries/SKILL.md` — 487 lines, 40 code blocks. Reorganized into 8 sections: Core Access (6), Return & Impact (9), INFLUENCES Targets (4), Cross-Domain (2), Analytical Examples (15), PIT-Safe Envelope (4). Vector search removed (separate agent). Notes trimmed to News-unique items (neo4j-schema duplication removed).
+- `.claude/skills/pit-envelope/SKILL.md` — shared envelope contract (all agents)
+- `.claude/hooks/pit_gate.py` — PIT gate (37/37 tests)
+- Live integration tests: PIT-clean (12 items), PIT-gap (empty data), open mode (5 items with returns) — all **PASSED**
+
+**Reference pattern for remaining agents**:
+1. Add hooks to agent frontmatter (copy from neo4j-news — identical PreToolUse + PostToolUse)
+2. Add `pit-envelope` to skills list
+3. Add PIT query section to query skill (same `collect({available_at, ...})` template)
+4. Reorganize query skill if needed (core/analytical/PIT sections)
+5. Run 3 live tests (PIT-clean, PIT-gap, open mode)
 
 ## Phase 3 — Extend Neo4j coverage
 
@@ -550,6 +557,7 @@ Upgrade remaining domains using the same contract + hook:
 - `.claude/agents/neo4j-transcript.md`
 - `.claude/agents/neo4j-xbrl.md` (note: PIT uses parent Report `created`, not period coverage)
 - `.claude/agents/neo4j-entity.md`
+- ~~`.claude/agents/neo4j-vector-search.md`~~ **DONE** — semantic search across News + QAExchange; model: sonnet; Bash for embedding generation via `scripts/generate_embedding.py`; hooks wired; queries inline (no separate skill)
 
 ## Phase 4 — External sources (same pattern)
 
@@ -600,4 +608,21 @@ TODO (leave as placeholders until API wiring step):
 1. **Hook format** (decided in §4.4):
    - All sources: `type: command` + `pit_gate.py` (Python, stdlib-only) for deterministic allow/block based on structured publication fields.
 
-*Plan Version 2.1 | 2026-02-05 | Removed PIT prefix compatibility; finalized explicit-parameter PIT propagation*
+*Plan Version 2.2 | 2026-02-09 | Phase 0-2 DONE (pit_gate.py, pit-envelope skill, neo4j-news reference impl, bz-news-api). Phase 3: neo4j-vector-search DONE (1/5). Terminology §5 corrected: skills are shared references, not reserved for invocable-only. Agent count: 13 (Neo4j 6 + AV 1 + BZ 1 + Perplexity 5).*
+
+---
+
+# 9) Cross-Doc Discrepancy Check (Implementation Note)
+
+Before closing any implementation pass for this plan, run a final consistency check against `.claude/plans/earnings-orchestrator.md` for these known discrepancy classes:
+
+1. ~~Data-layer lifecycle status (`Draft` vs `done/assumed complete`).~~ **RESOLVED 2026-02-09**: earnings-orchestrator.md updated to "IN PROGRESS, out of scope for this doc" with Phase status.
+2. ~~Agent catalog alignment.~~ **RESOLVED 2026-02-09**: Both docs aligned at 13 agents (Neo4j 6, AV 1, BZ 1, Perplexity 5). `neo4j-vector-search` added to both. earnings-orchestrator.md agent table now shows PIT status per agent.
+3. `perplexity-sec` behavior (locator-only vs direct data source). **OPEN** — resolve when Phase 4 begins.
+4. PIT propagation contract (`--pit` in subagent prompt vs explicit downstream tool parameter, e.g., `tool_input.params.pit` / `tool_input.parameters.pit`). **OPEN** — validated for Neo4j Lane 1; needs validation for Lane 2/3.
+5. Response-shape integration (DataSubAgents JSON envelope `data[]/gaps[]` + `available_at` vs orchestrator merged text bundle fields). **OPEN** — envelope proven in production; orchestrator text rendering not yet built.
+6. Legacy `filtered-data` policy wording (deprecated vs transitional availability). **OPEN** — both docs say deprecated.
+
+Decision rule for implementers:
+- `.claude/plans/earnings-orchestrator.md` is the final word for orchestrator integration behavior and consumer-facing contracts.
+- If any discrepancy is still ambiguous or conflicts with implementation reality, stop and ask the user before proceeding.

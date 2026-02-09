@@ -9,18 +9,17 @@ model: opus
 permissionMode: dontAsk
 skills:
   - neo4j-schema
-  - neo4j-entity
+  - entity-queries
   - evidence-standards
-  - skill-update
 ---
 
 # Neo4j Entity Agent
 
-Query company, sector, industry, and market data. Use patterns from the neo4j-entity skill.
+Query company, sector, industry, and market data. Use patterns from the entity-queries skill.
 
 ## Workflow
 1. Parse request: entity type, data needed
-2. Select query pattern from neo4j-entity skill
+2. Select query pattern from entity-queries skill
 3. If PIT date provided, add filters:
    - Prices: `WHERE d.date < 'YYYY-MM-DD'`
    - Dividends: `WHERE div.declaration_date < 'YYYY-MM-DD'`

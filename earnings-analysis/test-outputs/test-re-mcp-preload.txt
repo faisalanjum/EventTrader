@@ -1,0 +1,9 @@
+MCP_PRELOAD: NEEDS_TOOLSEARCH
+
+Details:
+- The tool mcp__neo4j-cypher__read_neo4j_cypher is listed as a "deferred tool" in the ToolSearch description.
+- Deferred tools are explicitly marked: "must be loaded before use."
+- The allowed-tools declaration in SKILL.md does NOT pre-load MCP tools into the active function set.
+- The tool cannot be invoked without first calling ToolSearch to load it.
+- Query "RETURN 1 AS test" was NOT executed because the tool is unavailable without ToolSearch.
+- Retest date: 2026-02-05

@@ -9,18 +9,17 @@ model: opus
 permissionMode: dontAsk
 skills:
   - neo4j-schema
-  - neo4j-transcript
+  - transcript-queries
   - evidence-standards
-  - skill-update
 ---
 
 # Neo4j Transcript Agent
 
-Query earnings call transcripts. Use patterns from the neo4j-transcript skill.
+Query earnings call transcripts. Use patterns from the transcript-queries skill.
 
 ## Workflow
 1. Parse request: ticker, date/quarter, content needed
-2. Select query pattern from neo4j-transcript skill
+2. Select query pattern from transcript-queries skill
 3. If PIT date provided: add `WHERE t.conference_datetime < 'YYYY-MM-DD'`
 4. Execute query using `mcp__neo4j-cypher__read_neo4j_cypher`
 5. Return results with fiscal context

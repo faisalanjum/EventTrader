@@ -1,0 +1,10 @@
+TEST: manifest-gate
+TIMESTAMP: 2026-02-01T00:00:00Z
+MANIFEST: earnings-analysis/test-outputs/manifest-gate.json
+
+TASKS:
+- 819 (GX-TEST-1): VALID (18 fields)
+- 820 (GX-TEST-2): VALID (18 fields)
+- 821 (GX-TEST-3): INVALID (10 fields)
+
+OVERALL: EXPECTED FAIL (invalid task detected)

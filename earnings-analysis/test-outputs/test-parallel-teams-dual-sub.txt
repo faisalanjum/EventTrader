@@ -1,0 +1,29 @@
+TEST: Two Parallel Teams via Dual Subagents (Primary Creates NO Team)
+DATE: 2026-02-08
+METHOD: Primary spawns 2 general-purpose subagents in parallel. Each subagent calls TeamCreate independently. Primary does NOT call TeamCreate.
+
+SUBAGENT A (test-pteam-dual-a):
+RESULT: SUCCESS
+RESPONSE: TeamCreate succeeded. Returned team_name: "test-pteam-dual-a", team_file_path: "/home/faisal/.claude/teams/test-pteam-dual-a/config.json", lead_agent_id: "team-lead@test-pteam-dual-a". Directory exists with config.json (510 bytes). Config shows one member (team-lead) with model claude-opus-4-6, correct team name and description.
+
+SUBAGENT B (test-pteam-dual-b):
+RESULT: FAILED
+RESPONSE: TeamCreate failed with error: "Already leading team 'test-pteam-dual-a'. A leader can only manage one team at a time. Use TeamDelete to end the current team before creating a new one." No directory or config file was created for test-pteam-dual-b.
+
+DISK VERIFICATION (after both returned):
+=== TEAM A ===
+total 12
+drwxrwxr-x 2 faisal faisal 4096 Feb  8 11:31 .
+drwxrwxr-x 6 faisal faisal 4096 Feb  8 11:31 ..
+-rw-rw-r-- 1 faisal faisal  510 Feb  8 11:31 config.json
+=== TEAM B ===
+ls: cannot access '/home/faisal/.claude/teams/test-pteam-dual-b/': No such file or directory
+=== TASK A ===
+total 8
+drwxrwxr-x 2 faisal faisal 4096 Feb  8 11:31 .
+drwxrwxr-x 7 faisal faisal 4096 Feb  8 11:31 ..
+-rw-rw-r-- 1 faisal faisal    0 Feb  8 11:31 .lock
+=== TASK B ===
+ls: cannot access '/home/faisal/.claude/tasks/test-pteam-dual-b/': No such file or directory
+
+CONCLUSION: Cannot run two teams via dual subagents when primary has no team. The system enforces a one-team-per-leader constraint at the session level. Subagent A created team "test-pteam-dual-a" successfully, but Subagent B was rejected because the session was already leading team A. Both subagents share the parent session's leader identity, so only one TeamCreate can succeed per session hierarchy.

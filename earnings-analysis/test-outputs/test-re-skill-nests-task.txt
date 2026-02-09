@@ -1,0 +1,11 @@
+Test: Skill -> Skill -> Task (3-level mixing)
+==============================================
+
+Child skill called: test-re-skill-tries-task
+
+Child returned:
+  SKILL_TASK: BLOCKED - Task tool not in my tool list
+  The child has TaskCreate/TaskGet/TaskUpdate/TaskList (todo-list management)
+  but does NOT have the sub-agent-spawning Task tool.
+
+Result: SKILL_NEST_TASK: BLOCKED

@@ -1,0 +1,3 @@
+CROSS_VISIBILITY_TEST
+all_visible_tasks: #3030 [pending] LEAD-CREATED-TASK, #3031 [pending] LEAD-SIDE-TASK
+total_count: 2

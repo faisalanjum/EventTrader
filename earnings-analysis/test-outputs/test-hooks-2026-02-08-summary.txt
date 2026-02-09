@@ -1,0 +1,257 @@
+============================================================
+CLAUDE CODE HOOKS TEST RESULTS - 2026-02-08 (v2.1.37)
+============================================================
+
+Test methodology:
+- Agents created in .claude/agents/ with hooks in YAML frontmatter
+- Fresh claude -p sessions spawn subagents via Task tool
+- Settings.json hooks also loaded by fresh sessions
+- All tests run with --dangerously-skip-permissions
+
+============================================================
+TEST 1: PostToolUseFailure hook (agent frontmatter)
+============================================================
+AGENT: test-hook-post-failure
+HOOK TYPE: command
+HOOK EVENT: PostToolUseFailure (no matcher)
+TRIGGER: Bash `cat /tmp/nonexistent_file` → exit code 1
+
+RESULT: ✅ WORKS
+
+EVIDENCE:
+- Log file created: test-hook-post-failure.log
+- STDIN JSON received by hook:
+  {
+    "session_id": "95341d18-...",
+    "transcript_path": ".../.claude/projects/.../95341d18-....jsonl",
+    "cwd": "/home/faisal/EventMarketDB",
+    "permission_mode": "bypassPermissions",
+    "hook_event_name": "PostToolUseFailure",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "cat /tmp/test_hook_nonexistent_xyz_99999.txt",
+      "description": "Attempt to cat a nonexistent file"
+    },
+    "tool_use_id": "toolu_01B7RUPEwpiYouinusyNRyRf",
+    "error": "Exit code 1\ncat: /tmp/test_hook_nonexistent_xyz_99999.txt: No such file or directory",
+    "is_interrupt": false
+  }
+
+FIELDS DOCUMENTED: session_id, transcript_path, cwd, permission_mode,
+  hook_event_name, tool_name, tool_input, tool_use_id, error, is_interrupt
+
+NOTE: PostToolUseFailure does NOT fire when running agent via --agent flag
+  (only fires when agent is spawned as subagent via Task tool).
+
+============================================================
+TEST 2: type: "prompt" hook handler (agent frontmatter)
+============================================================
+AGENT: test-hook-prompt-type
+HOOK TYPE: prompt (LLM evaluates)
+HOOK EVENT: PreToolUse, matcher: "Bash"
+PROMPT: Checks if command contains "BLOCK_ME"
+
+RESULT: ✅ WORKS
+
+EVIDENCE:
+- echo "SAFE_COMMAND" → ALLOWED (correct)
+- echo "BLOCK_ME please" → BLOCKED (correct)
+- Error message format: "PreToolUse:Bash hook error: Prompt hook condition
+  was not met: PROMPT_HOOK_BLOCKED: Command contains BLOCK_ME"
+
+NOTES:
+- LLM (Haiku by default) evaluates the hook input
+- Hook receives $ARGUMENTS with full JSON input
+- Returns {"ok": true} to allow, {"ok": false, "reason": "..."} to block
+- Works in agent frontmatter when spawned as subagent
+
+============================================================
+TEST 3: SubagentStop blocking via Stop hook
+============================================================
+AGENT: test-hook-stop-block
+HOOK TYPE: command
+HOOK EVENT: Stop (auto-converts to SubagentStop in subagent context)
+
+RESULT: ✅ WORKS
+
+EVIDENCE:
+- Stop hook log shows TWO fires:
+  1st: STOP_HOOK_ACTIVE: false → hook returned decision:block
+  2nd: STOP_HOOK_ACTIVE: true → hook exited 0 (allowed)
+- test-hook-stop-block.txt contains "STOP_WAS_BLOCKED" (written after 1st block)
+- Agent received block reason and followed instructions before 2nd attempt
+
+FLOW:
+  Agent finishes → Stop fires (active=false) → hook blocks →
+  agent receives reason → follows instruction → finishes again →
+  Stop fires (active=true) → hook allows → agent stops
+
+============================================================
+TEST 4: SubagentStart hook fires (settings.json)
+============================================================
+HOOK LOCATION: settings.json SubagentStart
+HOOK TYPE: command
+
+RESULT: ✅ WORKS
+
+EVIDENCE:
+- Log shows SubagentStart fired for 6 different subagent spawns:
+  - agent_type: test-hook-post-failure (agent_id: a35e35a)
+  - agent_type: test-hook-prompt-type (agent_id: a11b9cd)
+  - agent_type: test-hook-stop-block (agent_id: a12ac7e)
+  - agent_type: Bash (agent_id: aa642ed)
+  - agent_type: test-hook-agent-type (agent_id: a38e593)
+
+INPUT JSON:
+  {
+    "session_id": "...",
+    "transcript_path": ".../.jsonl",
+    "cwd": "/home/faisal/EventMarketDB",
+    "hook_event_name": "SubagentStart",
+    "agent_id": "a35e35a",
+    "agent_type": "test-hook-post-failure"
+  }
+
+MATCHER: Filters on agent_type (regex). Tested: Bash, custom agent names
+
+============================================================
+TEST 5: SubagentStart additionalContext injection
+============================================================
+HOOK: Returns hookSpecificOutput with additionalContext
+
+RESULT: ✅ WORKS (confirmed for custom agents)
+
+EVIDENCE:
+- test-hook-agent-type agent reported seeing "INJECTED_MAGIC_STRING_7842"
+  in its output (Line 4 of test-hook-agent-type.txt)
+- This string does NOT appear in the agent's frontmatter or instructions
+- It ONLY exists in the SubagentStart hook script's JSON return
+- The SubagentStart hook fired for this agent (confirmed in log)
+- CONCLUSION: additionalContext was successfully injected into agent's context
+
+CAVEATS:
+- Injected context does NOT appear in transcript .jsonl files
+- Minimal agents (like Bash) may not surface the injected context
+- Token counts suggest injection may be implementation-dependent
+
+============================================================
+TEST 6: type: "agent" hook handler (agent frontmatter)
+============================================================
+AGENT: test-hook-agent-type
+HOOK TYPE: agent (subagent evaluates)
+HOOK EVENT: PreToolUse, matcher: "Bash"
+PROMPT: Checks if command contains "AGENT_BLOCK_ME"
+
+RESULT: ❌ NOT ENFORCED
+
+EVIDENCE:
+- echo "SAFE_COMMAND_AGENT" → ALLOWED (expected)
+- echo "AGENT_BLOCK_ME please" → ALLOWED (should have been blocked)
+- Both commands executed normally
+- No hook interception observed
+- test-hook-agent-type.txt confirms: "AGENT_TYPE_HOOK: NOT_ENFORCED"
+
+NOTE: type: "prompt" hooks WORK in agent frontmatter, but
+  type: "agent" hooks do NOT. The "agent" type may require
+  more infrastructure (spawning a sub-subagent) that isn't
+  available in the subagent context.
+
+============================================================
+TEST 7: Agent frontmatter hooks via --agent flag
+============================================================
+CONTROL TEST: test-re-agent-hooks (known working agent with hooks)
+METHOD: claude --agent test-re-agent-hooks
+
+RESULT: ❌ NOT WORKING (via --agent flag)
+
+EVIDENCE:
+- PreToolUse hook to block Bash: NOT enforced (Bash ran normally)
+- Stop hook to log: NOT fired (no log file created)
+- Same agent WORKS when spawned as subagent via Task tool (previous tests)
+
+CONCLUSION: Agent frontmatter hooks ONLY activate when agent is spawned
+  as a subagent via the Task tool. Running with --agent flag starts a
+  main session that does NOT activate frontmatter hooks.
+
+============================================================
+COMPREHENSIVE HOOK COVERAGE MATRIX (v2.1.37)
+============================================================
+
+14 Hook Events (from official docs):
+| # | Event              | Tested? | Where Tested     | Status       |
+|---|-------------------|---------|------------------|--------------|
+| 1 | SessionStart       | ❌      | N/A              | Untested     |
+| 2 | UserPromptSubmit   | ❌      | N/A              | Untested     |
+| 3 | PreToolUse         | ✅      | Agent frontmatter| WORKS        |
+| 4 | PermissionRequest  | ❌      | N/A              | Untested     |
+| 5 | PostToolUse        | ✅      | Settings.json    | WORKS        |
+| 6 | PostToolUseFailure | ✅ NEW  | Agent frontmatter| WORKS        |
+| 7 | Notification       | ❌      | N/A              | Untested     |
+| 8 | SubagentStart      | ✅ NEW  | Settings.json    | WORKS        |
+| 9 | SubagentStop       | ✅      | Agent frontmatter| WORKS        |
+|10 | Stop               | ✅      | Agent frontmatter| WORKS        |
+|11 | TeammateIdle       | ✅      | Settings.json    | WORKS        |
+|12 | TaskCompleted      | ✅      | Settings.json    | WORKS        |
+|13 | PreCompact         | ❌      | N/A              | Untested     |
+|14 | SessionEnd         | ❌      | N/A              | Untested     |
+
+3 Hook Handler Types:
+| Type    | Tested?  | In Settings | In Agent FM | Status                |
+|---------|----------|-------------|-------------|----------------------|
+| command | ✅       | ✅          | ✅          | WORKS everywhere     |
+| prompt  | ✅ NEW   | Untested    | ✅          | WORKS in agent FM    |
+| agent   | ✅ NEW   | Untested    | ✅ tested   | NOT ENFORCED in FM   |
+
+SubagentStart Features:
+| Feature            | Status                | Evidence               |
+|--------------------|-----------------------|------------------------|
+| Hook fires         | ✅ WORKS              | Log with 6 events      |
+| Matcher on type    | ✅ WORKS              | Tested Bash, custom    |
+| additionalContext  | ✅ WORKS (custom agts)| Agent reported seeing  |
+| Transcript logging | ❌ NOT LOGGED         | grep found nothing     |
+
+Hooks Scope:
+| Context        | command hooks | prompt hooks | agent hooks |
+|----------------|--------------|--------------|-------------|
+| Settings.json  | ✅ WORKS     | Not tested   | Not tested  |
+| Agent FM       | ✅ WORKS     | ✅ WORKS     | ❌ NOT ENF  |
+| Skill FM       | ✅ WORKS     | Not tested   | Not tested  |
+| --agent flag   | ❌ NOT WORK  | ❌ NOT WORK  | ❌ NOT WORK |
+
+============================================================
+UNTESTED HOOKS (SESSION-LEVEL, HARD TO AUTOMATE)
+============================================================
+- SessionStart: Fires on session start/resume. Would need --debug to verify.
+- SessionEnd: Fires on session exit. Hard to capture from within.
+- UserPromptSubmit: Fires on user prompt. Not applicable in subagent context.
+- PermissionRequest: Fires on permission dialog. Need unpermitted tool.
+- Notification: Fires on notifications. Hard to trigger programmatically.
+- PreCompact: Fires before compaction. Need to fill context first.
+
+============================================================
+FILES CREATED BY THESE TESTS
+============================================================
+Agents:
+  .claude/agents/test-hook-post-failure.md
+  .claude/agents/test-hook-prompt-type.md
+  .claude/agents/test-hook-stop-block.md
+  .claude/agents/test-hook-subagent-inject.md
+  .claude/agents/test-hook-inject-check.md
+  .claude/agents/test-hook-agent-type.md
+
+Hook scripts:
+  .claude/hooks/test_post_failure.sh
+  .claude/hooks/test_stop_block.sh
+  .claude/hooks/test_subagent_start_inject.sh
+
+Settings.json additions:
+  hooks.SubagentStart (test_subagent_start_inject.sh)
+
+Test outputs:
+  earnings-analysis/test-outputs/test-hook-post-failure.txt
+  earnings-analysis/test-outputs/test-hook-post-failure.log
+  earnings-analysis/test-outputs/test-hook-prompt-type.txt
+  earnings-analysis/test-outputs/test-hook-stop-block.txt
+  earnings-analysis/test-outputs/test-hook-stop-block.log
+  earnings-analysis/test-outputs/test-hook-agent-type.txt
+  earnings-analysis/test-outputs/test-hook-subagent-start.log

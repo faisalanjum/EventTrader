@@ -1,0 +1,27 @@
+RT2_PLAN_APPROVAL_TEST
+======================
+team: test-teams-rt2
+date: 2026-02-05
+
+SPAWN PARAMS:
+  mode: "plan" passed on Task spawn
+
+PLAN MODE ENFORCEMENT:
+  plan_mode_active: YES (confirmed by planner via plan_approval_request)
+  write_hard_fail: NO (initial Write succeeded, but system flagged plan mode)
+  ExitPlanMode_available: YES
+  plan_approval_request_sent: YES
+  plan_content_received_by_lead: YES (full markdown plan)
+  lead_approval_works: YES (plan_approval_response with approve: true)
+
+KEY FINDING:
+  mode: "plan" IS ENFORCED on teammates — this is the FIRST mode parameter
+  that actually works (bypassPermissions was ignored in earlier tests).
+
+  Workflow: Teammate plans → ExitPlanMode → lead receives plan_approval_request
+  → lead sends plan_approval_response (approve/reject) → teammate continues
+
+CAVEAT:
+  Write tool does not hard-fail in plan mode. The planner's initial Write call
+  succeeded, but the system then flagged plan mode restrictions via system-reminder.
+  This means plan mode is "soft-enforced" — the agent is told to stop, not blocked.

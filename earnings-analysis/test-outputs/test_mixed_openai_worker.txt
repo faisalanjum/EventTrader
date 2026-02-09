@@ -1,0 +1,14 @@
+OPENAI_RESULT=Tokyo
+
+PEER_MESSAGE_RECEIVED_FROM_CLAUDE_WORKER: "PEER_TEST: What is the capital of Germany? Reply to me via SendMessage with the answer."
+PEER_REPLY_SENT: "The capital of Germany is Berlin. (Answer from OpenAI proxy)"
+
+PEER_REPLY_RECEIVED_FROM_CLAUDE_WORKER: "PEER_REPLY: The capital of Italy is Rome. This answer came from Claude worker."
+
+--- FINAL SUMMARY ---
+YOUR_PROVIDER: OpenAI (via proxy)
+OPENAI_CALL: SUCCESS
+TASK_COMPLETED: YES
+PEER_MESSAGE_SENT: YES
+PEER_MESSAGE_RECEIVED: YES - "PEER_TEST: What is the capital of Germany?" and "PEER_REPLY: The capital of Italy is Rome."
+CROSS_PROVIDER_COMMS: WORKS

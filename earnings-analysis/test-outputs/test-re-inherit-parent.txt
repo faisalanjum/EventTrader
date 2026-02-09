@@ -1,0 +1,15 @@
+Test: Tool inheritance (parent has NO MCP, child has MCP)
+Date: 2026-02-05
+
+Parent allowed-tools: Skill, Write (NO MCP)
+Child allowed-tools: mcp__neo4j-cypher__read_neo4j_cypher
+
+Child returned:
+  CHILD_MCP: WORKS
+  Query result: [{"source": "child_mcp"}]
+  Child used mcp__neo4j-cypher__read_neo4j_cypher directly without ToolSearch.
+
+INHERIT_DOWN: NO
+Reason: Parent has no MCP tools. Child successfully used its own allowed-tools
+(mcp__neo4j-cypher__read_neo4j_cypher) independently. No downward inheritance occurred;
+the child's own allowed-tools config was authoritative.

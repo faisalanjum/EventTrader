@@ -1,0 +1,5 @@
+WRITER_3_REPORT
+wrote_to_shared: YES
+read_back_content: LINE_FROM_WRITER_3 / timestamp: 2026-02-05
+error: NONE
+notes: First read of shared file showed LINE_FROM_WRITER_1. Got stale-file error on first write attempt. Second read showed LINE_FROM_WRITER_2 (another writer overwrote between reads). Third attempt succeeded. Read-back confirmed my content persisted.

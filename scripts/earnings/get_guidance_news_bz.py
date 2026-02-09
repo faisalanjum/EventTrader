@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Get Benzinga Guidance news for a ticker in date range (exclusive)."""
+"""Get Benzinga Guidance news for a ticker in date range [start, end)."""
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -8,7 +8,7 @@ load_env()
 
 QUERY = """
 MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
-WHERE date(datetime(n.created)) > date($start) AND date(datetime(n.created)) < date($end)
+WHERE datetime(n.created) >= datetime($start) AND datetime(n.created) < datetime($end)
   AND n.channels CONTAINS 'Guidance'
 RETURN n.id AS id, left(n.created, 10) AS date, n.channels AS channels
 ORDER BY n.created

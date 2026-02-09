@@ -1,0 +1,16 @@
+Background Agent MCP Tool Test
+================================
+Date: 2026-02-05
+
+Step 1: List available tools -- WORKS
+  Tools: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, Teammate, SendMessage, ToolSearch
+
+Step 2: ToolSearch for neo4j -- WORKS
+  Found: mcp__neo4j-cypher__get_neo4j_schema, mcp__neo4j-cypher__read_neo4j_cypher, mcp__neo4j-cypher__write_neo4j_cypher
+
+Step 3: Call read_neo4j_cypher with RETURN 'bg_mcp_test' AS result -- WORKS
+  Response: [{"result": "bg_mcp_test"}]
+
+Step 4: Write results -- WORKS
+
+Summary: All 4 steps WORKS. Background agents CAN use MCP tools via ToolSearch.
