@@ -32,8 +32,10 @@ Semantic similarity search across two vector indexes in Neo4j.
 ## Critical Rules
 
 - **MCP only**: NEVER use direct Python `neo4j` driver or Bolt connections. The MCP server manages the Neo4j connection. All queries go through `mcp__neo4j-cypher__read_neo4j_cypher`.
-- **Bash is only for embedding generation**: Use Bash solely to call `generate_embedding.py`. All Neo4j queries go through MCP.
+- **Bash is only for embedding generation**: Use Bash solely to call `generate_embedding.py`. NEVER use Bash for Neo4j queries, schema inspection, or index verification.
 - **Embedding parameter**: The 3072-float embedding (~68KB JSON) MUST be passed via the `params` dict, NEVER inlined in the Cypher query string.
+- **No exploratory queries**: Do NOT run `SHOW INDEXES`, `CALL db.schema.visualization()`, `COUNT(*)`, or any diagnostic queries. The indexes and schema are documented below — trust them and go straight to the vector search query.
+- **On embedding error**: If `generate_embedding.py` outputs `ERROR|CODE|message`, report the error to the caller immediately. Do NOT retry or attempt alternative embedding methods.
 
 ## Vector Indexes
 
@@ -66,8 +68,13 @@ Stdout = JSON array of 3072 floats. On error: `ERROR|CODE|message`.
 
 ### Mode B: ID-Based (MCP only, no Bash)
 
-Use when caller provides an existing `bzNews_*` or `QAExchange` node ID. The embedding is fetched inline in Cypher — no script call needed.
+Use when caller provides an existing News or QAExchange node ID. The embedding is fetched inline in Cypher — no script call needed.
 
+ID formats:
+- News: `bzNews_50105280` (prefix `bzNews_` + numeric ID)
+- QAExchange: `NOG_2025_2_qa__0` or `NOG_2023-02-24T10.00.00-05.00_qa__8` (ticker + date/quarter + `_qa__` + index)
+
+**News — find similar articles for same ticker:**
 ```cypher
 MATCH (seed:News {id: $seed_id})
 WHERE seed.embedding IS NOT NULL
@@ -79,6 +86,7 @@ RETURN node.id, node.title, node.created, node.channels, c.ticker, score
 ORDER BY score DESC
 ```
 
+**QAExchange — find similar Q&A exchanges for same ticker:**
 ```cypher
 MATCH (seed:QAExchange {id: $seed_id})
 WHERE seed.embedding IS NOT NULL
@@ -87,9 +95,12 @@ YIELD node, score
 WHERE node.embedding IS NOT NULL AND score >= 0.80 AND node.id <> seed.id
 MATCH (t:Transcript)-[:HAS_QA_EXCHANGE]->(node)
 MATCH (c:Company)-[:HAS_TRANSCRIPT]->(t)
+WHERE c.ticker = $ticker
 RETURN node.id, node.questioner, node.responders, t.conference_datetime, c.ticker, score
 ORDER BY score DESC
 ```
+
+Both Mode B queries require params: `{"seed_id": "<the ID>", "ticker": "<ticker>"}`
 
 ## Defaults
 
@@ -215,7 +226,12 @@ RETURN items AS data, [] AS gaps
 
 ## Combined Search (News + Q&A)
 
-Run both searches sequentially and merge results. Return two sections clearly labeled.
+When caller asks to search both News and QAExchange:
+1. Run the News vector search query first
+2. Run the QAExchange vector search query second
+3. Return results in two clearly labeled sections: `## News Results` and `## QAExchange Results`
+4. Each section follows the same envelope/format rules as individual searches
+5. If PIT mode, both queries must use PIT-safe envelope patterns
 
 ## PIT Rules
 
@@ -232,6 +248,8 @@ Run both searches sequentially and merge results. Return two sections clearly la
 - **Embedding in params, not query**: The 3072-float array (~68KB) must go in the `params` dict as `{"embedding": [...]}`. Never paste it into the Cypher string.
 - **Vector search has no pre-filtering**: `db.index.vector.queryNodes` scans the full index first, then you post-filter with `WHERE`. This means ticker/date/sector filters reduce the result count AFTER the k limit. That's why k=5 is sufficient — post-filters may trim results but the vector search itself is fast.
 - **ID-based search is a single MCP call**: When the caller provides a `bzNews_*` or QAExchange ID, skip the Bash embedding step entirely. Fetch the node's embedding inline in Cypher (Mode B).
-- `QAExchange.exchanges` contains the full Q&A text (question + answer) as a string
+- **News.channels is a JSON string**: e.g. `"News, Price Target, Analyst Ratings"` — use `CONTAINS` for filtering, not list operations
+- **QAExchange.exchanges** contains the full Q&A text (question + answer) as a single string
+- **QAExchange.questioner** may be `"Unknown"` when not identified in transcript
 - Graph path: `(Company)-[:HAS_TRANSCRIPT]->(Transcript)-[:HAS_QA_EXCHANGE]->(QAExchange)`
 - Graph path: `(News)-[:INFLUENCES]->(Company)` — News also INFLUENCES Sector, Industry, MarketIndex
