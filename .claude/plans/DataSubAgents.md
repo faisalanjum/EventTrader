@@ -403,24 +403,34 @@ If `--pit` is absent, the call is **open** (no PIT gating). No separate `--mode`
 
 ## 4.7 Standard response contract (JSON-first)
 
-To make PIT validation deterministic, prefer returning **JSON only** (no prose around it):
+All data subagents return **JSON only** (no prose). The envelope has exactly two top-level keys:
 
 ```json
 {
-  "schema_version": 1,
-  "source": "neo4j-news",
-  "mode": "pit",
-  "pit": "2024-02-15T16:00:00-05:00",
-  "coverage": {"start": "...", "end": "...", "query": "..."},
-  "data": [ { "created": "...", "id": "...", "title": "...", "source": "News:..." } ],
-  "gaps": []
+  "data": [
+    {
+      "available_at": "2024-11-07T13:01:00-05:00",
+      "available_at_source": "neo4j_created",
+      "id": "bzNews_12345",
+      "title": "...",
+      "...domain-specific fields..."
+    }
+  ],
+  "gaps": [
+    {"type": "no_data", "reason": "No news found for ticker before PIT", "query": "..."}
+  ]
 }
 ```
 
-Validator expectation: the `data` elements must contain the relevant availability fields (`created`, `conference_datetime`, etc.) so `pit_gate.py` (and any internal validator it delegates to, e.g. `.claude/filters/validate_neo4j.sh`) can enforce PIT deterministically.
+**`data[]` item requirements** (validated by `pit_gate.py`):
+- `available_at`: full ISO8601 datetime with timezone. Required per item in PIT mode.
+- `available_at_source`: one of `neo4j_created`, `edgar_accepted`, `time_series_timestamp`, `provider_metadata`. Required per item in PIT mode.
+- `available_at <= PIT` must hold. Violation → block.
+- Domain-specific fields vary by agent (see each agent's query skill).
 
-Minimal normalization rule (recommended for plug-and-play across sources):
-- Every `data[]` item should include **one canonical timestamp** field that the gate can validate, e.g. `available_at` (ISO8601), **in addition to** any source-specific fields (`created`, `published_at`, etc.).
+**`gaps[]`**: always present (use `[]` if no gaps). Each gap object has `type` (`no_data`, `pit_excluded`, `unverifiable`), `reason`, and optionally `query`.
+
+**Open mode**: same envelope format. `available_at` fields are optional (pit_gate.py is a no-op when no PIT in tool input).
 
 ## 4.8 Retry (non-strict PIT)
 
@@ -460,7 +470,17 @@ Each data subagent must:
 - In PIT mode, propagate PIT into **every** downstream retrieval tool input (so hooks can read it).
 - Return **JSON only** in the standard envelope, with `available_at` per `data[]` item.
 - Use per-agent **specific matchers** for gating (do not use `matcher: "*"`) and include a PreToolUse write-block for Neo4j write.
-- Fail-closed: if it cannot produce a reliable `available_at` for an item in PIT mode, it must drop+gap (never “maybe-clean”).
+- Fail-closed: if it cannot produce a reliable `available_at` for an item in PIT mode, it must drop+gap (never "maybe-clean").
+
+## `evidence-standards` skill — NEEDS UPDATE
+
+`.claude/skills/evidence-standards/SKILL.md` is loaded by all Neo4j data agents. Core philosophy (no unsourced data, exact values, audit trail) is sound. **5 stale items to fix before Phase 3 agent rework**:
+
+1. **Domain scope table**: Too restrictive — blocks cross-domain date-anchor joins (e.g., neo4j-news joining Transcript/Report as date anchors per news-queries §4). Needs "date anchor joins allowed, content queries forbidden" distinction.
+2. **Missing agents**: `neo4j-vector-search` not listed. Queries both `News` and `QAExchange` (cross-domain by design).
+3. **Response format**: Assumes prose (`## Results` / `## Coverage`). Must align with §4.7 JSON-only envelope (`data[]` + `gaps[]`). Citation metadata should be fields in JSON items, not prose formatting.
+4. **PIT reference**: Uses `[PIT: datetime]` prompt marker. Actual propagation is `params.pit` in tool input (§4.4 PIT propagation rule).
+5. **neo4j-entity scope**: Missing `MarketIndex` and `Date` nodes from allowed list.
 
 ## Where reference files live
 
