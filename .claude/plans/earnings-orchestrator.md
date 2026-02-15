@@ -455,10 +455,10 @@ The planner must only use agent names from this catalog. Any other value is a va
 | `neo4j-news` | News articles | Fulltext search over ingested news corpus | Pre-filing news, sector events, company-specific developments | **DONE** — reference impl |
 | `neo4j-vector-search` | Semantic search | Vector similarity across News + QAExchange | Find semantically similar news, analyst Q&A by meaning | **DONE** |
 | `bz-news-api` | Benzinga API news | On-demand Benzinga headlines/body with channels/tags and PIT-safe envelope | Real-time macro/theme monitoring, channel/tag driven news retrieval | **DONE** |
-| `neo4j-report` | SEC filings | 8-K, 10-K, 10-Q text, extracted sections, exhibits (EX-99.1) | Earnings release content, guidance statements, financial tables | Needs rework |
-| `neo4j-transcript` | Earnings calls | Prepared remarks, Q&A exchanges, speaker-attributed text | Management commentary, analyst questions, tone/sentiment | Needs rework |
-| `neo4j-xbrl` | Structured financials | EPS, revenue, margins, balance sheet items from 10-K/10-Q | Prior-quarter financials, YoY comparisons, trend data | Needs rework |
-| `neo4j-entity` | Company metadata | Sector, industry, market cap, price series, dividends, splits | Peer identification, sector context, historical price data | Needs rework |
+| `neo4j-report` | SEC filings | 8-K, 10-K, 10-Q text, extracted sections, exhibits (EX-99.1) | Earnings release content, guidance statements, financial tables | **DONE** |
+| `neo4j-transcript` | Earnings calls | Prepared remarks, Q&A exchanges, speaker-attributed text | Management commentary, analyst questions, tone/sentiment | **DONE** |
+| `neo4j-xbrl` | Structured financials | EPS, revenue, margins, balance sheet items from 10-K/10-Q | Prior-quarter financials, YoY comparisons, trend data | **DONE** |
+| `neo4j-entity` | Company metadata | Sector, industry, market cap, price series, dividends, splits | Peer identification, sector context, historical price data | **DONE** |
 | `alphavantage-earnings` | Consensus estimates | EPS/revenue consensus, actuals, surprise, earnings calendar | Beat/miss analysis, expectation anchors | Needs rework |
 | `perplexity-search` | Web search | Raw URLs and snippets from web search | Broad coverage gap-fill, recent events not in structured sources | Needs rework |
 | `perplexity-ask` | Web Q&A | Single-fact answers with citations | Quick lookups (e.g., "What is {TICKER}'s current dividend yield?") | Needs rework |
@@ -857,7 +857,7 @@ Source: `Infrastructure.md`, `AgentTeams.md`
 
 ### Data layer — IN PROGRESS, out of scope for this doc
 
-How data is fetched, sources available, PIT enforcement: see `DataSubAgents.md`. Status: Phase 0-2 DONE (infrastructure + neo4j-news reference impl), Phase 3 in progress (4 Neo4j agents remaining), Phase 4 not started (Perplexity + Alpha Vantage). 3 of 13 agents fully PIT-compliant. This doc only defines how components integrate with that layer.
+How data is fetched, sources available, PIT enforcement: see `DataSubAgents.md`. Status: Phase 0-2 DONE, Phase 3 DONE (all 5 Neo4j agents PIT-complete), Phase 4 not started (Perplexity + Alpha Vantage). 7 of 13 agents fully PIT-compliant. This doc only defines how components integrate with that layer.
 
 ---
 

@@ -634,6 +634,107 @@ ORDER BY r.created DESC
 LIMIT 10
 ```
 
+## PIT-Safe Envelope Queries
+
+Queries for PIT (Point-in-Time) mode. All use `<= $pit` (boundary-inclusive) and return the standard envelope format. Pass `pit` in the `params` dict alongside other Cypher parameters.
+
+### Filings in Date Range (PIT)
+```cypher
+MATCH (c:Company {ticker: $ticker})<-[:PRIMARY_FILER]-(r:Report)
+WHERE r.created >= $start_date AND r.created <= $pit
+WITH r ORDER BY r.created DESC
+WITH collect({
+  available_at: r.created,
+  available_at_source: 'edgar_accepted',
+  accessionNo: r.accessionNo,
+  formType: r.formType,
+  items: r.items,
+  created: r.created
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### 8-K Earnings Item 2.02 (PIT)
+```cypher
+MATCH (c:Company {ticker: $ticker})<-[:PRIMARY_FILER]-(r:Report)
+WHERE r.formType = '8-K'
+  AND r.items CONTAINS 'Item 2.02'
+  AND r.created <= $pit
+WITH r ORDER BY r.created DESC
+WITH collect({
+  available_at: r.created,
+  available_at_source: 'edgar_accepted',
+  accessionNo: r.accessionNo,
+  formType: r.formType,
+  items: r.items,
+  created: r.created
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Fulltext Search Sections (PIT)
+```cypher
+CALL db.index.fulltext.queryNodes('extracted_section_content_ft', $query)
+YIELD node, score
+MATCH (node)<-[:HAS_SECTION]-(r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+WHERE r.created <= $pit
+WITH r, node, score ORDER BY score DESC LIMIT 20
+WITH collect({
+  available_at: r.created,
+  available_at_source: 'edgar_accepted',
+  accessionNo: r.accessionNo,
+  formType: r.formType,
+  section_name: node.section_name,
+  content_preview: left(node.content, 500),
+  ft_score: score
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Fulltext Search Exhibits (PIT)
+```cypher
+CALL db.index.fulltext.queryNodes('exhibit_content_ft', $query)
+YIELD node, score
+MATCH (node)<-[:HAS_EXHIBIT]-(r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+WHERE r.created <= $pit
+WITH r, node, score ORDER BY score DESC LIMIT 20
+WITH collect({
+  available_at: r.created,
+  available_at_source: 'edgar_accepted',
+  accessionNo: r.accessionNo,
+  formType: r.formType,
+  exhibit_number: node.exhibit_number,
+  content_preview: left(node.content, 500),
+  ft_score: score
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Latest Filing (PIT)
+```cypher
+MATCH (c:Company {ticker: $ticker})<-[:PRIMARY_FILER]-(r:Report)
+WHERE r.created <= $pit
+WITH r ORDER BY r.created DESC LIMIT 5
+WITH collect({
+  available_at: r.created,
+  available_at_source: 'edgar_accepted',
+  accessionNo: r.accessionNo,
+  formType: r.formType,
+  items: r.items,
+  created: r.created
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### PIT-Safe Query Rules
+- Use `r.created <= $pit` (boundary-inclusive; items at PIT are valid)
+- NEVER include PRIMARY_FILER relationship properties (daily_stock, daily_macro, etc.)
+- Always include `available_at: r.created` and `available_at_source: 'edgar_accepted'`
+- Use `collect({...})` to produce `data[]` array
+- Always `RETURN items AS data, [] AS gaps`
+- Pass `pit` in the `params` dict alongside other Cypher parameters
+- If query returns 0 results, the envelope `{"data":[],"gaps":[]}` passes the gate
+
 ## Notes
 - `Report.items` is a JSON string. Use `CONTAINS` for item matching. Example: `["Item 2.02", "Item 9.01"]`.
 - `Report.created` is ISO string with timezone. Example: `2023-01-04T13:48:33-05:00`.

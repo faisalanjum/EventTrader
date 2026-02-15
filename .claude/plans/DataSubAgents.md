@@ -351,6 +351,7 @@ python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source bz-ne
 | Neo4j Report | `created` | ✅ | SEC filing acceptance datetime |
 | Neo4j Transcript | `conference_datetime` | ✅ | Call date |
 | Neo4j XBRL | parent Report's `created` | ✅ | Inherit from filing |
+| Neo4j Entity (prices/dividends/splits) | `Date.market_close_current_day` (normalized) | ✅ | Temporal: derive `available_at` from Date node's market close (handles DST + early closes). Company metadata: open mode pass-through (no temporal provenance). 65 dividend gaps (44 orphan + 21 holiday NULL close = 1.48% of 4,405). |
 | Perplexity Search API (`POST /search`) | `date` | ⚠️ | Date-only is not PIT-compliant by itself; must resolve provider-backed publish datetime or gap |
 | Perplexity MCP search (`mcp__perplexity__perplexity_search`) | ❌ none reliable | ⚠️ | Treat as Lane 3: normalize from citations/URLs, else gap |
 | Perplexity Ask/Research/Reason | normalized or gap | ⚠️ | Lane 3: must extract from citations |
@@ -567,10 +568,10 @@ Assumption: the orchestrator runs as the **primary/top-level session** (not a fo
 ## Phase 3 — Extend Neo4j coverage
 
 Upgrade remaining domains using the same contract + hook:
-- `.claude/agents/neo4j-report.md`
-- `.claude/agents/neo4j-transcript.md`
-- `.claude/agents/neo4j-xbrl.md` (note: PIT uses parent Report `created`, not period coverage)
-- `.claude/agents/neo4j-entity.md`
+- ~~`.claude/agents/neo4j-report.md`~~ **DONE** — hooks wired, `pit-envelope` skill added, PIT-safe envelope queries in report-queries skill (5 queries), `r.created` → `available_at` (`edgar_accepted`)
+- ~~`.claude/agents/neo4j-transcript.md`~~ **DONE** — hooks wired, `pit-envelope` skill added, PIT-safe envelope queries in transcript-queries skill (4 queries), `t.conference_datetime` → `available_at` (`neo4j_created`)
+- ~~`.claude/agents/neo4j-xbrl.md`~~ **DONE** — hooks wired, `pit-envelope` skill added, PIT-safe envelope queries in xbrl-queries skill (3 queries), parent Report `r.created` → `available_at` (`edgar_accepted`)
+- ~~`.claude/agents/neo4j-entity.md`~~ **DONE** — hooks wired, `pit-envelope` skill added, PIT-safe envelope queries in entity-queries skill (5 queries). Hybrid approach: temporal data (prices/dividends/splits) uses `Date.market_close_current_day` normalized to ISO8601 → `available_at` (`time_series_timestamp`); company metadata uses open mode pass-through (no `pit` in params). Coverage: prices 100%, splits 100%, dividends 98.52% (65 gaps: 44 orphan + 21 NULL close on holidays, of 4,405 total)
 - ~~`.claude/agents/neo4j-vector-search.md`~~ **DONE** — semantic search across News + QAExchange; model: sonnet; Bash for embedding generation via `.claude/skills/earnings-orchestrator/scripts/generate_embedding.py`; hooks wired; queries inline (no separate skill)
 
 ## Phase 4 — External sources (same pattern)
@@ -614,6 +615,11 @@ TODO (leave as placeholders until API wiring step):
    - Required in PIT mode for every `data[]` item.
    - Allowed values: `neo4j_created`, `edgar_accepted`, `time_series_timestamp`, `provider_metadata`.
    - `pit_gate.py` fails-closed when missing/invalid.
+4. **`neo4j-entity` PIT policy (resolved 2026-02-15)**:
+   - **Temporal data** (prices, dividends, splits): derive `available_at` from `Date.market_close_current_day` — real datetime+tz field that handles DST (`-0400`/`-0500`) and early closes (`13:00:00`). Normalize to strict ISO8601 via Cypher string ops (space→T, insert colon in offset).
+   - **Company metadata** (ticker, name, sector, industry, mkt_cap): no temporal provenance exists on Company node. Use open mode pass-through (omit `pit` from query params → gate allows as open mode). Current-snapshot, not PIT-verified.
+   - **Gap cases**: 44 orphan dividends (no Date link) + 21 holiday declarations (NULL `market_close_current_day`) = 65 gaps (1.48% of 4,405 dividends). Splits: 0 gaps.
+   - `available_at_source`: `time_series_timestamp` for all temporal entity data.
 
 ---
 
@@ -622,7 +628,7 @@ TODO (leave as placeholders until API wiring step):
 1. **Hook format** (decided in §4.4):
    - All sources: `type: command` + `pit_gate.py` (Python, stdlib-only) for deterministic allow/block based on structured publication fields.
 
-*Plan Version 2.3 | 2026-02-15 | Phase 0-2 DONE (pit_gate.py, pit-envelope skill, neo4j-news reference impl, bz-news-api). Phase 3: neo4j-vector-search DONE (1/5). Terminology §5 corrected: skills are shared references, not reserved for invocable-only. Agent count: 13 (Neo4j 6 + AV 1 + BZ 1 + Perplexity 5). §10 added: agent body standardization + data agent linter.*
+*Plan Version 2.5 | 2026-02-15 | Phase 0-2 DONE. Phase 3: 5/5 DONE (all Neo4j agents PIT-complete). Agent count: 13 (Neo4j 6 + AV 1 + BZ 1 + Perplexity 5). PIT-complete: 7/13 (neo4j-news, neo4j-vector-search, bz-news-api, neo4j-report, neo4j-transcript, neo4j-xbrl, neo4j-entity).*
 
 ---
 
@@ -636,6 +642,7 @@ Before closing any implementation pass for this plan, run a final consistency ch
 4. PIT propagation contract (`--pit` in subagent prompt vs explicit downstream tool parameter, e.g., `tool_input.params.pit` / `tool_input.parameters.pit`). **OPEN** — validated for Neo4j Lane 1; needs validation for Lane 2/3.
 5. Response-shape integration (DataSubAgents JSON envelope `data[]/gaps[]` + `available_at` vs orchestrator merged text bundle fields). **OPEN** — envelope proven in production; orchestrator text rendering not yet built.
 6. Legacy `filtered-data` policy wording (deprecated vs transitional availability). **OPEN** — both docs say deprecated.
+7. ~~`neo4j-entity` PIT timestamp policy for date-only fields.~~ **RESOLVED 2026-02-15**: Use `Date.market_close_current_day` (real datetime+tz) for temporal data, open mode pass-through for company metadata. See §7 Decision #4.
 
 Decision rule for implementers:
 - `.claude/plans/earnings-orchestrator.md` is the final word for orchestrator integration behavior and consumer-facing contracts.
@@ -747,6 +754,10 @@ hooks:
 - **neo4j-news**: `pit-envelope` in skills, Neo4j write-block PreToolUse, `pit_gate.py` PostToolUse on `mcp__neo4j-cypher__read_neo4j_cypher` matcher.
 - **neo4j-vector-search**: same as neo4j-news.
 - **bz-news-api**: `pit-envelope` in skills, `pit_gate.py` PostToolUse on `Bash` matcher.
+- **neo4j-report**: same as neo4j-news. PIT field: `r.created` → `available_at` (source: `edgar_accepted`).
+- **neo4j-transcript**: same as neo4j-news. PIT field: `t.conference_datetime` → `available_at` (source: `neo4j_created`).
+- **neo4j-xbrl**: same as neo4j-news. PIT field: parent Report `r.created` → `available_at` (source: `edgar_accepted`).
+- **neo4j-entity**: same as neo4j-news. PIT field: `Date.market_close_current_day` → `available_at` (source: `time_series_timestamp`). Metadata queries use open mode pass-through.
 
 ## 10.7 What is explicitly dropped
 

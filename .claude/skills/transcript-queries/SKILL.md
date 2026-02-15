@@ -253,6 +253,91 @@ ORDER BY datetime(t.conference_datetime) DESC
 LIMIT 20
 ```
 
+## PIT-Safe Envelope Queries
+
+Queries for PIT (Point-in-Time) mode. All use `<= $pit` (boundary-inclusive) and return the standard envelope format. Pass `pit` in the `params` dict alongside other Cypher parameters.
+
+### Transcripts in Date Range (PIT)
+```cypher
+MATCH (t:Transcript)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WHERE t.conference_datetime >= $start_date AND t.conference_datetime <= $pit
+WITH t ORDER BY t.conference_datetime DESC
+WITH collect({
+  available_at: t.conference_datetime,
+  available_at_source: 'neo4j_created',
+  company_name: t.company_name,
+  conference_datetime: t.conference_datetime,
+  fiscal_quarter: t.fiscal_quarter,
+  fiscal_year: t.fiscal_year
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Latest Transcript (PIT)
+```cypher
+MATCH (t:Transcript)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WHERE t.conference_datetime <= $pit
+WITH t ORDER BY t.conference_datetime DESC LIMIT 1
+WITH collect({
+  available_at: t.conference_datetime,
+  available_at_source: 'neo4j_created',
+  company_name: t.company_name,
+  conference_datetime: t.conference_datetime,
+  fiscal_quarter: t.fiscal_quarter,
+  fiscal_year: t.fiscal_year
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Q&A for Transcript (PIT)
+```cypher
+MATCH (t:Transcript)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WHERE t.conference_datetime <= $pit
+WITH t ORDER BY t.conference_datetime DESC LIMIT 1
+MATCH (t)-[:HAS_QA_EXCHANGE]->(qa:QAExchange)
+WITH t, qa ORDER BY toInteger(qa.sequence)
+WITH collect({
+  available_at: t.conference_datetime,
+  available_at_source: 'neo4j_created',
+  sequence: qa.sequence,
+  questioner: qa.questioner,
+  responders: qa.responders,
+  exchanges: qa.exchanges,
+  conference_datetime: t.conference_datetime
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Fulltext Search Q&A (PIT)
+```cypher
+CALL db.index.fulltext.queryNodes('qa_exchange_ft', $query)
+YIELD node, score
+MATCH (node)<-[:HAS_QA_EXCHANGE]-(t:Transcript)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WHERE t.conference_datetime <= $pit
+WITH t, node, score ORDER BY score DESC LIMIT 20
+WITH collect({
+  available_at: t.conference_datetime,
+  available_at_source: 'neo4j_created',
+  sequence: node.sequence,
+  questioner: node.questioner,
+  responders: node.responders,
+  exchanges: node.exchanges,
+  conference_datetime: t.conference_datetime,
+  ft_score: score
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### PIT-Safe Query Rules
+- Use `t.conference_datetime <= $pit` (boundary-inclusive; items at PIT are valid)
+- Use `INFLUENCES` relationship without aliasing (not `HAS_TRANSCRIPT`) — matches gold standard
+- NEVER include INFLUENCES relationship properties (daily_stock, daily_macro, etc.)
+- Always include `available_at: t.conference_datetime` and `available_at_source: 'neo4j_created'`
+- Use `collect({...})` to produce `data[]` array
+- Always `RETURN items AS data, [] AS gaps`
+- Pass `pit` in the `params` dict alongside other Cypher parameters
+- If query returns 0 results, the envelope `{"data":[],"gaps":[]}` passes the gate
+
 ## Notes
 - **Two relationships connect Transcripts to Companies**:
   - `INFLUENCES`: Has return data (daily_stock, session_stock, hourly_stock, daily_macro, etc.)
@@ -272,4 +357,4 @@ LIMIT 20
 | 2026-01-11 | Common user error: wrong schema for transcripts | Transcript queries | Use `:INFLUENCES` or `:HAS_TRANSCRIPT` (not `:COMPANY`), `conference_datetime` (not `event_datetime`), `:HAS_QA_EXCHANGE` (not `:HAS_EXCHANGE`), `:QAExchange` (not `:Exchange`), `:PreparedRemark` (not `:PreparedRemarks`). |
 
 ---
-*Version 1.1 | 2026-01-11 | Added self-improvement protocol*
+*Version 1.2 | 2026-02-15 | Fixed PIT queries: t.title→t.company_name, qa.speaker→qa.questioner+qa.responders*

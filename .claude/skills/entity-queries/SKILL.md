@@ -245,6 +245,131 @@ RETURN c.ticker, s.split_from, s.split_to, s.execution_date
 ORDER BY s.execution_date DESC LIMIT 10
 ```
 
+## PIT-Safe Envelope Queries
+
+Queries for PIT (Point-in-Time) mode. All use `Date.market_close_current_day` normalized to strict ISO8601 as `available_at`. Pass `pit` in the `params` dict alongside other Cypher parameters.
+
+**Normalization**: `market_close_current_day` format is `"YYYY-MM-DD HH:MM:SS±HHMM"`. Convert to ISO8601:
+```
+replace(d.market_close_current_day, ' ', 'T') → "YYYY-MM-DDTHH:MM:SS±HHMM"
+left(s, size(s)-2) + ':' + right(s, 2) → "YYYY-MM-DDTHH:MM:SS±HH:MM"
+```
+
+### Price Series (PIT)
+```cypher
+MATCH (d:Date)-[p:HAS_PRICE]->(c:Company {ticker: $ticker})
+WHERE d.market_close_current_day IS NOT NULL
+WITH d, p, replace(d.market_close_current_day, ' ', 'T') AS raw
+WITH d, p, left(raw, size(raw)-2) + ':' + right(raw, 2) AS norm_close
+WHERE norm_close <= $pit
+WITH norm_close, d, p ORDER BY d.date DESC
+WITH collect({
+  available_at: norm_close,
+  available_at_source: 'time_series_timestamp',
+  date: d.date,
+  open: p.open,
+  high: p.high,
+  low: p.low,
+  close: p.close,
+  volume: p.volume
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Price Series in Date Range (PIT)
+```cypher
+MATCH (d:Date)-[p:HAS_PRICE]->(c:Company {ticker: $ticker})
+WHERE d.market_close_current_day IS NOT NULL
+  AND d.date >= $start_date
+WITH d, p, replace(d.market_close_current_day, ' ', 'T') AS raw
+WITH d, p, left(raw, size(raw)-2) + ':' + right(raw, 2) AS norm_close
+WHERE norm_close <= $pit
+WITH norm_close, d, p ORDER BY d.date
+WITH collect({
+  available_at: norm_close,
+  available_at_source: 'time_series_timestamp',
+  date: d.date,
+  open: p.open,
+  high: p.high,
+  low: p.low,
+  close: p.close,
+  volume: p.volume
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Latest Price (PIT)
+```cypher
+MATCH (d:Date)-[p:HAS_PRICE]->(c:Company {ticker: $ticker})
+WHERE d.market_close_current_day IS NOT NULL
+WITH d, p, replace(d.market_close_current_day, ' ', 'T') AS raw
+WITH d, p, left(raw, size(raw)-2) + ':' + right(raw, 2) AS norm_close
+WHERE norm_close <= $pit
+WITH norm_close, d, p ORDER BY d.date DESC LIMIT 1
+WITH collect({
+  available_at: norm_close,
+  available_at_source: 'time_series_timestamp',
+  date: d.date,
+  open: p.open,
+  high: p.high,
+  low: p.low,
+  close: p.close,
+  volume: p.volume
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Dividends (PIT)
+```cypher
+MATCH (d:Date)-[:HAS_DIVIDEND]->(div:Dividend)<-[:DECLARED_DIVIDEND]-(c:Company {ticker: $ticker})
+WHERE d.market_close_current_day IS NOT NULL
+WITH d, div, replace(d.market_close_current_day, ' ', 'T') AS raw
+WITH d, div, left(raw, size(raw)-2) + ':' + right(raw, 2) AS norm_close
+WHERE norm_close <= $pit
+WITH norm_close, d, div ORDER BY d.date DESC
+WITH collect({
+  available_at: norm_close,
+  available_at_source: 'time_series_timestamp',
+  date: d.date,
+  declaration_date: div.declaration_date,
+  cash_amount: div.cash_amount,
+  dividend_type: div.dividend_type,
+  frequency: div.frequency
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Splits (PIT)
+```cypher
+MATCH (d:Date)-[:HAS_SPLIT]->(sp:Split)<-[:DECLARED_SPLIT]-(c:Company {ticker: $ticker})
+WHERE d.market_close_current_day IS NOT NULL
+WITH d, sp, replace(d.market_close_current_day, ' ', 'T') AS raw
+WITH d, sp, left(raw, size(raw)-2) + ':' + right(raw, 2) AS norm_close
+WHERE norm_close <= $pit
+WITH norm_close, d, sp ORDER BY d.date DESC
+WITH collect({
+  available_at: norm_close,
+  available_at_source: 'time_series_timestamp',
+  date: d.date,
+  execution_date: sp.execution_date,
+  split_from: sp.split_from,
+  split_to: sp.split_to
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### PIT-Safe Query Rules
+- Derive `available_at` from `Date.market_close_current_day` (normalize space→T, insert colon in offset)
+- Always filter `WHERE d.market_close_current_day IS NOT NULL` (gaps 21 holiday + 44 orphan dividends)
+- Use `norm_close <= $pit` (boundary-inclusive; items at PIT are valid)
+- NEVER include `daily_return` from HAS_PRICE in PIT envelope — use raw OHLCV only
+- Always include `available_at_source: 'time_series_timestamp'`
+- Use `collect({...})` to produce `data[]` array
+- Always `RETURN items AS data, [] AS gaps`
+- Pass `pit` in the `params` dict alongside other Cypher parameters
+- Company metadata queries (ticker, name, sector, mkt_cap): do NOT pass `pit` — open mode pass-through
+- If query returns 0 results, the envelope `{"data":[],"gaps":[]}` passes the gate
+
 ## Notes
 - `Company.ticker` has no index but count is small (~796); exact match scans are acceptable.
 - `HAS_PRICE` relationship contains OHLCV data as properties.

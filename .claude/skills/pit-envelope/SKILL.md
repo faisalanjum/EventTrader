@@ -45,9 +45,10 @@ Standard JSON envelope for all data sub-agent responses. Validated by `pit_gate.
 | neo4j-report | `r.created` | direct | `edgar_accepted` | Full datetime+tz |
 | neo4j-transcript | `t.conference_datetime` | direct | `neo4j_created` | Full datetime+tz |
 | neo4j-xbrl | parent Report `r.created` | join | `edgar_accepted` | Requires MATCH to parent Report |
-| neo4j-entity (price) | `d.date` | **date-only: gap in PIT mode** | — | See Date-Only Sources |
-| neo4j-entity (div) | `div.declaration_date` | **date-only: gap in PIT mode** | — | See Date-Only Sources |
-| neo4j-entity (split) | `s.execution_date` | **date-only: gap in PIT mode** | — | See Date-Only Sources |
+| neo4j-entity (price) | `Date.market_close_current_day` | normalize to ISO8601 | `time_series_timestamp` | Hybrid: temporal via Date node close time |
+| neo4j-entity (div) | `Date.market_close_current_day` | normalize to ISO8601 | `time_series_timestamp` | 65 gaps (44 orphan + 21 NULL close = 1.48% of 4,405) |
+| neo4j-entity (split) | `Date.market_close_current_day` | normalize to ISO8601 | `time_series_timestamp` | 0 gaps (100% coverage) |
+| neo4j-entity (metadata) | — | open mode pass-through | — | Company properties: no `pit` in params → gate allows |
 | alphavantage EARNINGS | `reportedDate` | **date-only: verify or gap** | `provider_metadata` | See Date-Only Sources |
 | alphavantage (series) | per-datapoint timestamp | direct | `time_series_timestamp` | Full datetime |
 

@@ -62,10 +62,10 @@ Created: 2026-02-11 | Delete after all items complete.
 
 ## ISSUE (PIT Hook Coverage)
 
-- [ ] **I13**: Add `pit_gate.py` PostToolUse hook to `neo4j-report`
-- [ ] **I14**: Add `pit_gate.py` PostToolUse hook to `neo4j-transcript`
-- [ ] **I15**: Add `pit_gate.py` PostToolUse hook to `neo4j-xbrl`
-- [ ] **I16**: Add `pit_gate.py` PostToolUse hook to `neo4j-entity`
+- [x] **I13**: Add `pit_gate.py` PostToolUse hook to `neo4j-report`
+- [x] **I14**: Add `pit_gate.py` PostToolUse hook to `neo4j-transcript`
+- [x] **I15**: Add `pit_gate.py` PostToolUse hook to `neo4j-xbrl`
+- [x] **I16**: Add `pit_gate.py` PostToolUse hook to `neo4j-entity`
 
 ---
 

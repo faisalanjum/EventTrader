@@ -320,6 +320,100 @@ WHERE r.formType IN ['10-K', '10-Q']
 RETURN r.formType, r.accessionNo, x.id, x.cik LIMIT 20
 ```
 
+## PIT-Safe Envelope Queries
+
+Queries for PIT (Point-in-Time) mode. All use `<= $pit` on parent Report (boundary-inclusive) and return the standard envelope format. Pass `pit` in the `params` dict alongside other Cypher parameters.
+
+### XBRL Metrics (PIT)
+```cypher
+MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+WHERE r.formType IN ['10-K', '10-Q']
+  AND r.created <= $pit
+MATCH (r)-[:HAS_XBRL]->(x:XBRLNode)<-[:REPORTS]-(f:Fact)-[:HAS_CONCEPT]->(con:Concept)
+MATCH (f)-[:IN_CONTEXT]->(:Context)
+WHERE f.is_numeric = '1'
+  AND NOT EXISTS { (f)-[:FACT_MEMBER]->() }
+OPTIONAL MATCH (f)-[:HAS_PERIOD]->(p:Period)
+WITH r, f, con, p ORDER BY r.created DESC, con.qname
+WITH collect({
+  available_at: r.created,
+  available_at_source: 'edgar_accepted',
+  accessionNo: r.accessionNo,
+  formType: r.formType,
+  concept_qname: con.qname,
+  concept_label: con.label,
+  value: f.value,
+  period_start: p.start_date,
+  period_end: p.end_date,
+  period_type: p.period_type
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Specific Metric (PIT)
+```cypher
+MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+WHERE r.formType IN ['10-K', '10-Q']
+  AND r.created <= $pit
+MATCH (r)-[:HAS_XBRL]->(x:XBRLNode)<-[:REPORTS]-(f:Fact)-[:HAS_CONCEPT]->(con:Concept)
+MATCH (f)-[:IN_CONTEXT]->(:Context)
+WHERE con.qname = $concept_qname
+  AND f.is_numeric = '1'
+  AND NOT EXISTS { (f)-[:FACT_MEMBER]->() }
+OPTIONAL MATCH (f)-[:HAS_PERIOD]->(p:Period)
+WITH r, f, con, p ORDER BY r.created DESC
+WITH collect({
+  available_at: r.created,
+  available_at_source: 'edgar_accepted',
+  accessionNo: r.accessionNo,
+  formType: r.formType,
+  concept_qname: con.qname,
+  concept_label: con.label,
+  value: f.value,
+  period_start: p.start_date,
+  period_end: p.end_date,
+  period_type: p.period_type
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### Concept Search (PIT)
+```cypher
+CALL db.index.fulltext.queryNodes('concept_ft', $query)
+YIELD node, score
+MATCH (f:Fact)-[:HAS_CONCEPT]->(node)
+MATCH (f)-[:REPORTS]->(x:XBRLNode)<-[:HAS_XBRL]-(r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+MATCH (f)-[:IN_CONTEXT]->(:Context)
+WHERE r.formType IN ['10-K', '10-Q']
+  AND r.created <= $pit
+OPTIONAL MATCH (f)-[:HAS_PERIOD]->(p:Period)
+WITH r, f, node, p, score ORDER BY score DESC LIMIT 20
+WITH collect({
+  available_at: r.created,
+  available_at_source: 'edgar_accepted',
+  accessionNo: r.accessionNo,
+  formType: r.formType,
+  concept_qname: node.qname,
+  concept_label: node.label,
+  value: f.value,
+  period_start: p.start_date,
+  period_end: p.end_date,
+  period_type: p.period_type,
+  ft_score: score
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+
+### PIT-Safe Query Rules
+- Filter on parent Report: `r.created <= $pit` (XBRL has no own timestamp)
+- NEVER include PRIMARY_FILER relationship properties (daily_stock, daily_macro, etc.)
+- Always include `available_at: r.created` and `available_at_source: 'edgar_accepted'`
+- XBRL only in 10-K/10-Q: always `WHERE r.formType IN ['10-K','10-Q']`
+- Use `collect({...})` to produce `data[]` array
+- Always `RETURN items AS data, [] AS gaps`
+- Pass `pit` in the `params` dict alongside other Cypher parameters
+- If query returns 0 results, the envelope `{"data":[],"gaps":[]}` passes the gate
+
 ## Notes
 - **Fact.value** is String even for numeric facts; use `toFloat()` when `is_numeric='1'`.
 - **is_numeric/is_nil** are string booleans ('0'/'1').
@@ -336,4 +430,4 @@ RETURN r.formType, r.accessionNo, x.id, x.cik LIMIT 20
 | 2026-01-11 | Revenue values comma-formatted | HRL Revenue facts | Use `f.value` as string; `toFloat()` fails on "2,898,810,000" |
 
 ---
-*Version 1.1 | 2026-01-11 | Added self-improvement protocol*
+*Version 1.2 | 2026-02-15 | Fixed PIT queries: corrected graph path (Fact-[:REPORTS]->XBRLNode, Fact-[:HAS_CONCEPT]->Concept), added Period joins*

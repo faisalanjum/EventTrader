@@ -31,6 +31,26 @@ PIT_DONE = {
         "pre": [],
         "post": ["Bash"],
     },
+    "neo4j-report": {
+        "skills": ["pit-envelope"],
+        "pre": ["mcp__neo4j-cypher__write_neo4j_cypher"],
+        "post": ["mcp__neo4j-cypher__read_neo4j_cypher"],
+    },
+    "neo4j-transcript": {
+        "skills": ["pit-envelope"],
+        "pre": ["mcp__neo4j-cypher__write_neo4j_cypher"],
+        "post": ["mcp__neo4j-cypher__read_neo4j_cypher"],
+    },
+    "neo4j-xbrl": {
+        "skills": ["pit-envelope"],
+        "pre": ["mcp__neo4j-cypher__write_neo4j_cypher"],
+        "post": ["mcp__neo4j-cypher__read_neo4j_cypher"],
+    },
+    "neo4j-entity": {
+        "skills": ["pit-envelope"],
+        "pre": ["mcp__neo4j-cypher__write_neo4j_cypher"],
+        "post": ["mcp__neo4j-cypher__read_neo4j_cypher"],
+    },
 }
 DEPRECATED_SKILLS = {"filtered-data"}
 PATH_RE = re.compile(r"(?:\$CLAUDE_PROJECT_DIR/)?((?:\.claude|scripts)/[\w/._-]+\.\w+)")

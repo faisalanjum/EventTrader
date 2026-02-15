@@ -10,7 +10,19 @@ permissionMode: dontAsk
 skills:
   - neo4j-schema
   - xbrl-queries
+  - pit-envelope
   - evidence-standards
+hooks:
+  PreToolUse:
+    - matcher: "mcp__neo4j-cypher__write_neo4j_cypher"
+      hooks:
+        - type: command
+          command: "echo '{\"decision\":\"block\",\"reason\":\"Neo4j writes forbidden\"}'"
+  PostToolUse:
+    - matcher: "mcp__neo4j-cypher__read_neo4j_cypher"
+      hooks:
+        - type: command
+          command: "python3 $CLAUDE_PROJECT_DIR/.claude/hooks/pit_gate.py"
 ---
 
 # Neo4j XBRL Agent
@@ -18,13 +30,25 @@ skills:
 Query XBRL financial line items from 10-K/10-Q filings. Use patterns from the xbrl-queries skill.
 
 ## Workflow
-1. Parse request: ticker, concept(s), period, total vs segmented
-2. Select query pattern from xbrl-queries skill
-3. If PIT date provided: add `WHERE r.created < 'YYYY-MM-DD'` on Report
-4. Execute query using `mcp__neo4j-cypher__read_neo4j_cypher`
-5. Return results with period context and units
+1. Parse request: ticker, concept(s), period, PIT datetime (if provided)
+2. Select query pattern from xbrl-queries skill:
+   - PIT mode: use PIT-safe envelope query (§PIT-Safe Envelope Queries in xbrl-queries skill)
+   - Open mode: use standard query, still return JSON envelope
+3. Execute query via `mcp__neo4j-cypher__read_neo4j_cypher`:
+   - PIT mode: pass `pit` in params dict: `{ticker: $ticker, pit: $pit, ...}`
+   - Open mode: normal params (no `pit`)
+4. If PIT mode and hook blocks: adjust query per pit-envelope retry rules (max 2 retries)
+5. Return JSON-only envelope in ALL modes:
+   - PIT mode: envelope validated by hook
+   - Open mode: same envelope format, no PIT validation
+
+## PIT Response Contract
+See pit-envelope skill for envelope contract, field mappings, and forbidden keys.
 
 ## Notes
-- XBRL only in 10-K/10-Q (8-K has no XBRL)
+- XBRL only in 10-K/10-Q (8-K has no XBRL data)
+- PIT field mapping: parent Report `r.created` → `available_at`, source = `edgar_accepted` (requires JOIN)
+- PIT mode: NEVER include PRIMARY_FILER relationship properties — forbidden
 - Fact.value is String: use `toFloat(f.value)` when `f.is_numeric = '1'`
 - For totals: `AND NOT EXISTS((f)-[:FACT_MEMBER]->())`
+- Some Facts lack Context: filter with `MATCH (f)-[:IN_CONTEXT]->(:Context)`
