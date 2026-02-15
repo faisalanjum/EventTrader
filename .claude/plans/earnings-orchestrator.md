@@ -1082,6 +1082,15 @@ Do this AFTER all module details are locked. Mechanical, not architectural.
 19. I1-I6 resolved (renamed from A-prefix to I-prefix to avoid collision with §6 Architecture Decisions). `context_bundle.v1` JSON schema locked in §2a. Planner receives subset (8k + u1 + guidance). Predictor receives full bundle. Learner does NOT get a bundle — receives 3 minimal inputs (prediction result, actual returns, context_bundle ref) and fetches its own data. Guidance bridge (I5): raw markdown passthrough. Full `attribution_result.v1` schema locked in §2d (I6): primary_driver + contributing_factors with evidence_refs, nullable surprise_analysis, analysis_summary (1-3 paragraphs), prediction_comparison fields aligned with predictor output. "Ready-to-build" line updated (was stale).
 20. I7 resolved: Planner agent catalog locked in §2b. 13 valid agents across 4 domains (Neo4j 6, Alpha Vantage 1, Benzinga API 1, Perplexity 5). Added `neo4j-vector-search` (semantic similarity across News + QAExchange). Source: DataSubAgents.md matcher table + actual `.claude/agents/*.md` files. Tier guidance included. Excluded agents listed. **All Phase A interface contracts (I1-I7) now resolved.** §5 next-question pointer updated to Phase B.
 
+### Open Items (migrated from audit-fixes.md 2026-02-15)
+
+- [ ] **I17**: Fill in `get_presentations_range.py` — currently a 14-line stub that returns "No presentations found". File: `scripts/earnings/get_presentations_range.py`
+- [ ] **I18**: Fill in orchestrator placeholder steps (3, 5, 6, 7) in `earnings-orchestrator/SKILL.md`:
+  - Step 3 (line 84): Task creation / deterministic task graph
+  - Step 5 (line 114): Cross-tier polling / spawn downstream work
+  - Step 6 (line 117): Validation gate
+  - Step 7 (line 120): Aggregation (cumulative CSVs / indices)
+
 ---
 
 *Refs: `DataSubAgents.md` · `Infrastructure.md` · `AgentTeams.md` · `guidanceInventory.md`*

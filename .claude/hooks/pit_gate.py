@@ -7,7 +7,6 @@ Outputs {} (allow) or {"decision":"block","reason":"..."} (block).
 Exit code: always 0.
 
 Spec: .claude/plans/DataSubAgents.md §4.4-4.5
-Plan: .claude/plans/pit_gate_implementation.md
 """
 from __future__ import annotations
 
