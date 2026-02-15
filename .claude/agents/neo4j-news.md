@@ -1,6 +1,6 @@
 ---
 name: neo4j-news
-description: "Query news articles from Neo4j with fulltext and vector search. Use proactively when analyzing news impact on stocks, finding news for a company/date range, searching news content, or attributing stock moves to news events."
+description: "Query news articles from Neo4j with fulltext and return-impact patterns. Use proactively when analyzing news impact on stocks, finding news for a company/date range, searching news content, or attributing stock moves to news events."
 tools:
   - mcp__neo4j-cypher__read_neo4j_cypher
 disallowedTools:

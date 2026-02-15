@@ -13,13 +13,18 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
-from pit_time import parse_timestamp, to_new_york_iso
+try:
+    from pit_time import parse_timestamp, to_new_york_iso
+except ModuleNotFoundError:
+    # Support module-style imports (e.g., `import scripts.pit_fetch`)
+    from scripts.pit_time import parse_timestamp, to_new_york_iso
 
 API_URL = "https://api.benzinga.com/api/v2/news"
 DEFAULT_LIMIT = 50
@@ -179,11 +184,12 @@ def _matches_filters(
 
 def _fetch_bz_items(api_key: str, args: argparse.Namespace) -> list[Any]:
     page = 0
-    page_size = max(1, min(99, args.limit))
+    # Over-fetch raw pages so PIT/filtering can still satisfy small limits.
+    page_size = max(1, min(99, max(args.limit, DEFAULT_LIMIT)))
     max_pages = max(1, args.max_pages)
     all_items: list[Any] = []
 
-    while page < max_pages and len(all_items) < args.limit:
+    while page < max_pages:
         params: dict[str, Any] = {
             "token": api_key,
             "page": page,
@@ -215,7 +221,7 @@ def _fetch_bz_items(api_key: str, args: argparse.Namespace) -> list[Any]:
             break
         page += 1
 
-    return all_items[: args.limit]
+    return all_items
 
 
 def _load_input_items(path: str) -> list[Any]:
@@ -276,23 +282,6 @@ def main() -> None:
         args.updated_since = int((datetime.now(timezone.utc) - timedelta(minutes=args.lookback_minutes)).timestamp())
 
     envelope: dict[str, Any] = {
-        "schema_version": 1,
-        "source": "bz-news-api",
-        "mode": "pit" if args.pit else "open",
-        "pit": args.pit,
-        "coverage": {
-            "date_from": args.date_from,
-            "date_to": args.date_to,
-            "updated_since": args.updated_since,
-        },
-        "query": {
-            "tickers": args.tickers,
-            "channels": sorted(requested_channels),
-            "tags": sorted(requested_tags),
-            "keywords": requested_keywords,
-            "themes": requested_themes,
-            "limit": args.limit,
-        },
         "data": [],
         "gaps": [],
     }
@@ -379,6 +368,28 @@ def main() -> None:
             "reason": "No items matched the query and PIT constraints",
         })
 
+    # Debug metadata → stderr (not consumed by agents or pit_gate.py)
+    meta = {
+        "source": "bz-news-api",
+        "mode": "pit" if args.pit else "open",
+        "pit": args.pit,
+        "coverage": {
+            "date_from": args.date_from,
+            "date_to": args.date_to,
+            "updated_since": args.updated_since,
+        },
+        "query": {
+            "tickers": args.tickers,
+            "channels": sorted(requested_channels),
+            "tags": sorted(requested_tags),
+            "keywords": requested_keywords,
+            "themes": requested_themes,
+            "limit": args.limit,
+        },
+    }
+    print(json.dumps(meta), file=sys.stderr)
+
+    # Contract output → stdout (data + gaps only, per DataSubAgents §4.7)
     print(json.dumps(envelope))
 
 

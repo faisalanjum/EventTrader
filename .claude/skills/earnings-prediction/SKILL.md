@@ -21,8 +21,7 @@ allowed-tools:
   - Grep
 disallowedTools:
   - mcp__neo4j-cypher__write_neo4j_cypher
-skills:
-  - filtered-data
+skills: []
 ---
 
 # Earnings Prediction
@@ -66,20 +65,19 @@ Called by earnings-orchestrator (not user-invocable).
 
 ---
 
-## Workflow ({N} Steps)
+## Workflow (2 Steps)
 
-### Step 1: {Name}
-{Description}
+### Step 1: Load Context
+Read `prediction/context.json` for the event and treat `pit_datetime` as the hard cutoff for all fetched data.
 
-### Step 2: {Name}
-{Description}
+### Step 2: Write Prediction Output
+Produce `prediction/result.json` with the required fields (`direction`, `magnitude`, `confidence_pct`, `primary_reason`) using only PIT-safe context.
 
 ---
 
 ## Scripts
 
-Available in `scripts/`:
-- `{script1}.py` - {purpose}
+No mandatory script calls. This skill is bundle/context-driven and writes the prediction result file.
 
 ---
 

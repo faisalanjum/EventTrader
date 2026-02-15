@@ -70,7 +70,7 @@ With a single, minimal PIT switch (`--pit`) and **automatic recovery** (retry) w
 ## Existing artifacts (inspiration only; do not depend on them for correctness)
 
 - PIT semantics: `.claude/filters/PIT_REFERENCE.md`
-- Citation + domain boundaries: `.claude/cookbooks/standards/evidence.md` (migrate from `.claude/skills/evidence-standards/SKILL.md`)
+- Citation + domain boundaries: `.claude/skills/evidence-standards/SKILL.md` (canonical location; no cookbook migration needed)
 - Legacy prediction-safe proxy: `.claude/skills/filtered-data/SKILL.md` → routes to another data skill, runs `.claude/filters/validate.sh`, returns only `CLEAN`.
 - Existing validators (candidate to replace): `.claude/filters/validate.sh`, `.claude/filters/validate_neo4j.sh`, `.claude/filters/validate_perplexity.sh`
 - Existing hook examples (candidate to replace): `.claude/hooks/validate_pit_hook.sh`
@@ -472,15 +472,9 @@ Each data subagent must:
 - Use per-agent **specific matchers** for gating (do not use `matcher: "*"`) and include a PreToolUse write-block for Neo4j write.
 - Fail-closed: if it cannot produce a reliable `available_at` for an item in PIT mode, it must drop+gap (never "maybe-clean").
 
-## `evidence-standards` skill — NEEDS UPDATE
+## `evidence-standards` skill — UPDATED 2026-02-11
 
-`.claude/skills/evidence-standards/SKILL.md` is loaded by all Neo4j data agents. Core philosophy (no unsourced data, exact values, audit trail) is sound. **5 stale items to fix before Phase 3 agent rework**:
-
-1. **Domain scope table**: Too restrictive — blocks cross-domain date-anchor joins (e.g., neo4j-news joining Transcript/Report as date anchors per news-queries §4). Needs "date anchor joins allowed, content queries forbidden" distinction.
-2. **Missing agents**: `neo4j-vector-search` not listed. Queries both `News` and `QAExchange` (cross-domain by design).
-3. **Response format**: Assumes prose (`## Results` / `## Coverage`). Must align with §4.7 JSON-only envelope (`data[]` + `gaps[]`). Citation metadata should be fields in JSON items, not prose formatting.
-4. **PIT reference**: Uses `[PIT: datetime]` prompt marker. Actual propagation is `params.pit` in tool input (§4.4 PIT propagation rule).
-5. **neo4j-entity scope**: Missing `MarketIndex` and `Date` nodes from allowed list.
+Rewritten to v2: 4 universal rules (source-only, exact values, traceability, derived values) + domain boundary with date-anchor exception. Removed stale content (prose format, PIT markers, rigid domain table). Now loaded by all 13 data sub-agents (Neo4j 7 + Benzinga 1 + Perplexity 5 + Alpha Vantage 1). Canonical location: `.claude/skills/evidence-standards/SKILL.md`.
 
 ## Where reference files live
 

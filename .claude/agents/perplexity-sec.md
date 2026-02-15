@@ -7,6 +7,7 @@ model: opus
 permissionMode: dontAsk
 skills:
   - perplexity-sec
+  - evidence-standards
 ---
 
 # Perplexity SEC Agent

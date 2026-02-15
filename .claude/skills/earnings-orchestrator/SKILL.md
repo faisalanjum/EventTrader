@@ -8,7 +8,7 @@ hooks:
     - matcher: "Bash"
       hooks:
         - type: command
-          command: "build_orchestrator_event_json"
+          command: "python3 $CLAUDE_PROJECT_DIR/.claude/hooks/build_orchestrator_event_json.py"
 allowed-tools:
   - Task
   - TaskCreate
@@ -133,7 +133,7 @@ Available in `scripts/earnings/`:
 
 ## Hooks
 
-- Skill hook (PostToolUse Bash): `build_orchestrator_event_json` → rebuilds `events/event.json` after discovery
+- Skill hook (PostToolUse Bash): `python3 $CLAUDE_PROJECT_DIR/.claude/hooks/build_orchestrator_event_json.py` → rebuilds `events/event.json` after discovery
 
 ---
 

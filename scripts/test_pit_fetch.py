@@ -6,15 +6,19 @@ Run:
 """
 from __future__ import annotations
 
+import argparse
 import json
 import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "pit_fetch.py"
+sys.path.insert(0, str(ROOT / "scripts"))
+import pit_fetch as pit_fetch_module
 
 
 SAMPLE_ITEMS = [
@@ -52,6 +56,20 @@ SAMPLE_ITEMS = [
 ]
 
 
+class FakeHTTPResponse:
+    def __init__(self, payload: list[dict]) -> None:
+        self.payload = payload
+
+    def read(self) -> bytes:
+        return json.dumps(self.payload).encode("utf-8")
+
+    def __enter__(self) -> "FakeHTTPResponse":
+        return self
+
+    def __exit__(self, exc_type, exc, tb) -> bool:
+        return False
+
+
 def run_pit_fetch(*args: str) -> dict:
     proc = subprocess.run(
         [sys.executable, str(SCRIPT), *args],
@@ -68,6 +86,32 @@ def run_pit_fetch(*args: str) -> dict:
 
 
 class PitFetchTests(unittest.TestCase):
+    def test_fetch_overfetches_raw_pages_before_filtering(self) -> None:
+        first_page = [{"id": i} for i in range(50)]
+        second_page = [{"id": 999}]
+        pages: list[list[dict]] = [first_page, second_page]
+
+        def fake_urlopen(_request, timeout=0):
+            self.assertEqual(timeout, 7)
+            if not pages:
+                raise AssertionError("Unexpected extra page request")
+            return FakeHTTPResponse(pages.pop(0))
+
+        args = argparse.Namespace(
+            limit=1,
+            max_pages=3,
+            date_from=None,
+            date_to=None,
+            updated_since=None,
+            tickers=[],
+            timeout=7,
+        )
+        with patch.object(pit_fetch_module, "urlopen", side_effect=fake_urlopen):
+            out = pit_fetch_module._fetch_bz_items("fake-key", args)
+
+        # Should continue to page 2 even when limit=1, because filtering happens later.
+        self.assertEqual(len(out), 51)
+
     def test_open_mode_normalization(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "items.json"
@@ -80,8 +124,7 @@ class PitFetchTests(unittest.TestCase):
                 "--limit",
                 "10",
             )
-        self.assertEqual(out["source"], "bz-news-api")
-        self.assertEqual(out["mode"], "open")
+        self.assertEqual(set(out.keys()), {"data", "gaps"})
         self.assertEqual(len(out["data"]), 2)
         self.assertTrue(any(g["type"] == "unverifiable" for g in out["gaps"]))
         self.assertIn("available_at", out["data"][0])
@@ -106,7 +149,7 @@ class PitFetchTests(unittest.TestCase):
                 "--limit",
                 "10",
             )
-        self.assertEqual(out["mode"], "pit")
+        self.assertEqual(set(out.keys()), {"data", "gaps"})
         self.assertEqual(len(out["data"]), 1)
         self.assertEqual(out["data"][0]["id"], "101")
         self.assertTrue(any(g["type"] == "pit_excluded" for g in out["gaps"]))

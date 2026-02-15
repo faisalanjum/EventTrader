@@ -7,6 +7,7 @@ model: opus
 permissionMode: dontAsk
 skills:
   - perplexity-reason
+  - evidence-standards
 ---
 
 # Perplexity Reason Agent

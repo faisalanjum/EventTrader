@@ -9,6 +9,7 @@ model: opus
 permissionMode: dontAsk
 skills:
   - alphavantage-earnings
+  - evidence-standards
 ---
 
 # Alpha Vantage Earnings Agent

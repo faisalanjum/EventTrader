@@ -29,6 +29,26 @@ hooks:
 
 Semantic similarity search across two vector indexes in Neo4j.
 
+## Workflow
+1. Parse request: search scope (News, QAExchange, or both), ticker/sector/date filters, PIT datetime (if provided), and search mode (text vs seed ID).
+2. Select search mode:
+   - Text mode: generate embedding via Bash `generate_embedding.py`, then query Neo4j via MCP.
+   - ID mode: fetch seed node embedding inline in Cypher, no Bash embedding call.
+3. Execute query via `mcp__neo4j-cypher__read_neo4j_cypher`:
+   - PIT mode: pass `pit` in params dict (for example `{ticker: $ticker, pit: $pit, embedding: $embedding}`).
+   - Open mode: normal params (no `pit`).
+4. If PIT mode and hook blocks: adjust query per pit-envelope retry rules (max 2 retries).
+5. Return JSON-only envelope in ALL modes (`{data: [...], gaps: [...]}`).
+
+## PIT Response Contract
+Always return valid JSON envelope:
+```json
+{
+  "data": ["...items with available_at + available_at_source..."],
+  "gaps": ["...any missing data explanations..."]
+}
+```
+
 ## Critical Rules
 
 - **MCP only**: NEVER use direct Python `neo4j` driver or Bolt connections. The MCP server manages the Neo4j connection. All queries go through `mcp__neo4j-cypher__read_neo4j_cypher`.
@@ -52,7 +72,7 @@ Use when caller provides a free-text search string.
 
 **Step 1** — Generate embedding via Bash:
 ```bash
-uv run $CLAUDE_PROJECT_DIR/scripts/generate_embedding.py "the search query text"
+$CLAUDE_PROJECT_DIR/venv/bin/python $CLAUDE_PROJECT_DIR/scripts/generate_embedding.py "the search query text"
 ```
 Stdout = JSON array of 3072 floats. On error: `ERROR|CODE|message`.
 
@@ -229,8 +249,8 @@ RETURN items AS data, [] AS gaps
 When caller asks to search both News and QAExchange:
 1. Run the News vector search query first
 2. Run the QAExchange vector search query second
-3. Return results in two clearly labeled sections: `## News Results` and `## QAExchange Results`
-4. Each section follows the same envelope/format rules as individual searches
+3. Return a single JSON envelope (no prose sections), combining both result sets into `data[]`
+4. Tag each item with a source discriminator (for example `result_type: "news"` or `result_type: "qaexchange"`)
 5. If PIT mode, both queries must use PIT-safe envelope patterns
 
 ## PIT Rules

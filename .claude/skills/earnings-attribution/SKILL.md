@@ -1,7 +1,7 @@
 ---
 name: earnings-attribution
 description: Analyzes why stocks moved after 8-K earnings filings. Use ultrathink for all analyses. Invoke when asked to analyze stock movements, earnings reactions, or determine the primary driver of price changes.
-allowed-tools: Read, Write, Grep, Glob, Bash, TodoWrite, Task, mcp__perplexity__perplexity_search, mcp__perplexity__perplexity_ask, mcp__perplexity__perplexity_research
+allowed-tools: Read, Write, Grep, Glob, Bash, Task, TaskCreate, TaskUpdate, mcp__perplexity__perplexity_search, mcp__perplexity__perplexity_ask, mcp__perplexity__perplexity_research
 model: claude-opus-4-5
 permissionMode: dontAsk
 ---
@@ -79,7 +79,7 @@ Resume prompt examples: "Only 2 articles, expand to ±5 days", "Also get EX-99.1
 
 ## Workflow (11 Steps)
 
-Use TodoWrite to track progress. Mark each step `in_progress` before starting, `completed` immediately after.
+Use TaskCreate/TaskUpdate to track progress. Mark each step `in_progress` before starting, `completed` immediately after.
 
 | Step | Action | Notes |
 |------|--------|-------|

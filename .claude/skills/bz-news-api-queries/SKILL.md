@@ -21,7 +21,7 @@ Use exact channel/tag strings from that reference to avoid near-match misses.
 Use only:
 
 ```bash
-python3 scripts/pit_fetch.py --source bz-news-api ...
+python3 $CLAUDE_PROJECT_DIR/scripts/pit_fetch.py --source bz-news-api ...
 ```
 
 Return the wrapper JSON envelope directly.
@@ -31,7 +31,7 @@ Return the wrapper JSON envelope directly.
 Pass `--pit` on every retrieval command.
 
 ```bash
-python3 scripts/pit_fetch.py \
+python3 $CLAUDE_PROJECT_DIR/scripts/pit_fetch.py \
   --source bz-news-api \
   --pit 2025-01-01T00:00:00-05:00 \
   --tickers NOG \
@@ -45,7 +45,7 @@ python3 scripts/pit_fetch.py \
 No `--pit`.
 
 ```bash
-python3 scripts/pit_fetch.py \
+python3 $CLAUDE_PROJECT_DIR/scripts/pit_fetch.py \
   --source bz-news-api \
   --themes macro \
   --lookback-minutes 720 \
@@ -55,7 +55,7 @@ python3 scripts/pit_fetch.py \
 ## Macro Theme Pull
 
 ```bash
-python3 scripts/pit_fetch.py \
+python3 $CLAUDE_PROJECT_DIR/scripts/pit_fetch.py \
   --source bz-news-api \
   --themes macro \
   --channels Macro \
@@ -67,7 +67,7 @@ python3 scripts/pit_fetch.py \
 ## Oil Theme Pull
 
 ```bash
-python3 scripts/pit_fetch.py \
+python3 $CLAUDE_PROJECT_DIR/scripts/pit_fetch.py \
   --source bz-news-api \
   --themes oil \
   --keywords opec,wti,brent,crude \
@@ -79,7 +79,7 @@ python3 scripts/pit_fetch.py \
 ## Channel / Tag-Driven Pull
 
 ```bash
-python3 scripts/pit_fetch.py \
+python3 $CLAUDE_PROJECT_DIR/scripts/pit_fetch.py \
   --source bz-news-api \
   --channels Energy,Macro \
   --tags Oil,Inflation \
@@ -90,7 +90,7 @@ python3 scripts/pit_fetch.py \
 ## Ticker + Theme Combined
 
 ```bash
-python3 scripts/pit_fetch.py \
+python3 $CLAUDE_PROJECT_DIR/scripts/pit_fetch.py \
   --source bz-news-api \
   --tickers XOM,CVX \
   --themes oil \

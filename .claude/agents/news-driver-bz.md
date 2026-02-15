@@ -14,7 +14,7 @@ hooks:
     - matcher: "Bash"
       hooks:
         - type: command
-          command: "/home/faisal/EventMarketDB/.claude/hooks/validate_pit_hook.sh"
+          command: "python3 $CLAUDE_PROJECT_DIR/.claude/hooks/pit_gate.py"
 ---
 
 # News Driver Agent
