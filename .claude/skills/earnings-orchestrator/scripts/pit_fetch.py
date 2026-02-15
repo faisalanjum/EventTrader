@@ -58,7 +58,7 @@ THEME_KEYWORDS: dict[str, tuple[str, ...]] = {
 
 
 def _load_env() -> None:
-    env_path = Path(__file__).resolve().parents[1] / ".env"
+    env_path = Path(__file__).resolve().parents[4] / ".env"
     if not env_path.exists():
         return
     for line in env_path.read_text(encoding="utf-8").splitlines():

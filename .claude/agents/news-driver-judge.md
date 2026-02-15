@@ -89,7 +89,7 @@ RETURN n.id, substring(n.created, 0, 10) as created_date
 
 Run the similarity search script:
 ```bash
-source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/EventMarketDB/scripts/earnings/find_similar_news.py {TICKER} {NEWS_ID} "{DRIVER_TEXT}"
+source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts/find_similar_news.py {TICKER} {NEWS_ID} "{DRIVER_TEXT}"
 ```
 
 Note: For external news (URL or N/A), pass the driver text as the third argument.

@@ -3,7 +3,7 @@
 Test harness for pit_gate.py.
 Run: python3 .claude/hooks/test_pit_gate.py
 
-All 32 test cases from .claude/plans/pit_gate_implementation.md §7.
+All 37 test cases (32 from .claude/plans/pit_gate_implementation.md §7 + 5 from fluffy-churning-bee MCP/params.pit).
 Table-driven. Each test feeds hook JSON via stdin and checks stdout.
 """
 from __future__ import annotations
@@ -124,7 +124,7 @@ TESTS: list[dict] = [
     {
         "name": "T05 PIT in Bash --pit flag → allow (empty data)",
         "input": hook(
-            bash_command=f"python3 scripts/pit_fetch.py --pit {PIT} --source av",
+            bash_command=f"python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --pit {PIT} --source av",
             response={"stdout": envelope([])},
         ),
         "expect": "allow",
@@ -155,7 +155,7 @@ TESTS: list[dict] = [
     {
         "name": "T09 Bash wrapper with PIT + valid data → allow",
         "input": hook(
-            bash_command=f"python3 scripts/pit_fetch.py --pit {PIT} --source av",
+            bash_command=f"python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --pit {PIT} --source av",
             response={"stdout": envelope([clean_item()])},
         ),
         "expect": "allow",

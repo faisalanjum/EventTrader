@@ -41,13 +41,7 @@ Semantic similarity search across two vector indexes in Neo4j.
 5. Return JSON-only envelope in ALL modes (`{data: [...], gaps: [...]}`).
 
 ## PIT Response Contract
-Always return valid JSON envelope:
-```json
-{
-  "data": ["...items with available_at + available_at_source..."],
-  "gaps": ["...any missing data explanations..."]
-}
-```
+See pit-envelope skill for envelope contract, field mappings, and forbidden keys.
 
 ## Critical Rules
 
@@ -72,7 +66,7 @@ Use when caller provides a free-text search string.
 
 **Step 1** — Generate embedding via Bash:
 ```bash
-$CLAUDE_PROJECT_DIR/venv/bin/python $CLAUDE_PROJECT_DIR/scripts/generate_embedding.py "the search query text"
+$CLAUDE_PROJECT_DIR/venv/bin/python $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/generate_embedding.py "the search query text"
 ```
 Stdout = JSON array of 3072 floats. On error: `ERROR|CODE|message`.
 

@@ -19,7 +19,7 @@ hooks:
 
 # bz-news-api Agent
 
-Use Benzinga News API through `$CLAUDE_PROJECT_DIR/scripts/pit_fetch.py` only.
+Use Benzinga News API through `$CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py` only.
 
 ## Workflow
 1. Parse request into wrapper arguments:
@@ -28,23 +28,17 @@ Use Benzinga News API through `$CLAUDE_PROJECT_DIR/scripts/pit_fetch.py` only.
    - optional `pit` for historical mode
    - for channel/tag selection, consult `.claude/references/neo4j-news-fields.md` and use exact values
 2. Execute one wrapper call via Bash:
-   - Command: `python3 $CLAUDE_PROJECT_DIR/scripts/pit_fetch.py --source bz-news-api ...`
+   - Command: `python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source bz-news-api ...`
    - PIT mode: include `--pit <ISO8601>`
    - Open mode: omit `--pit`
 3. If PIT mode is blocked by hook, retry up to 2 times by tightening filters/window.
 4. Return wrapper JSON envelope as-is (`data[]`, `gaps[]`, no prose).
 
 ## PIT Response Contract
-Always return valid JSON envelope:
-```json
-{
-  "data": ["...items with available_at + available_at_source..."],
-  "gaps": ["...any missing data explanations..."]
-}
-```
+See pit-envelope skill for envelope contract, field mappings, and forbidden keys.
 
 ## Rules
-- Use only `python3 $CLAUDE_PROJECT_DIR/scripts/pit_fetch.py --source bz-news-api ...`.
+- Use only `python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source bz-news-api ...`.
 - Bash is wrapper-only for this agent. Do not use Bash for unrelated shell commands.
 - Do not call raw HTTP/curl directly.
 - Authentication is automatic via `.env` (`BENZINGANEWS_API_KEY` or `BENZINGA_API_KEY`) inside `pit_fetch.py`.

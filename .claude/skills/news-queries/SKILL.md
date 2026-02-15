@@ -8,7 +8,7 @@ user-invocable: false
 
 ## Reference
 
-- **Field inventory** (channels, tags, market sessions, sectors, industries): see `/references/neo4j-news-fields.md`
+- **Field inventory** (channels, tags, market sessions, sectors, industries): see `.claude/references/neo4j-news-fields.md`
 - **Schema** (node types, relationship properties, data types, indexes): loaded via `neo4j-schema` skill
 
 ## 1. Core Access Patterns
@@ -471,8 +471,8 @@ RETURN items AS data, [] AS gaps
 These are unique to the News domain. For general schema rules (timestamps as strings, returns on relationships, NaN handling, INFLUENCES targets), see the `neo4j-schema` skill.
 
 - **`body` field**: Access via `substring(node.body, 0, N)`. Often empty. Full-text indexed in `news_ft`.
-- **Channel/tag filtering**: Use `n.channels CONTAINS $channel`. Values are JSON strings. See `/references/neo4j-news-fields.md` for complete channel/tag inventory.
-- **`market_session` filtering**: Use `n.market_session = $session`. See `/references/neo4j-news-fields.md` for values.
+- **Channel/tag filtering**: Use `n.channels CONTAINS $channel`. Values are JSON strings. See `.claude/references/neo4j-news-fields.md` for complete channel/tag inventory.
+- **`market_session` filtering**: Use `n.market_session = $session`. See `.claude/references/neo4j-news-fields.md` for values.
 - **Defensive NaN pattern**: Some analytical queries use a belt-and-suspenders approach: `r.daily_stock <> 'NaN'` then `NOT isNaN(toFloat(r.daily_stock))`. The simpler `IS NOT NULL AND NOT isNaN()` from `neo4j-schema` is sufficient for standard use.
 - **Data gap**: 1,746 News→Company edges (0.9%) have `daily_industry` but `daily_stock` is NULL.
 - **Property name**: `n.created` (ISO string with TZ), NOT `n.published_utc`.

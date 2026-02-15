@@ -34,7 +34,7 @@ Created: 2026-02-11 | Delete after all items complete.
 ## ISSUE (Benzinga / Hooks)
 
 - [x] **I6**: Fix `pit_time` import path fragility in pit_fetch.py
-  - File: `scripts/pit_fetch.py:22`
+  - File: `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py:22`
 
 - [x] **I7**: Consolidate `news-driver-bz` to use `pit_gate.py` instead of `validate_pit_hook.sh`
   - File: `.claude/agents/news-driver-bz.md:17`
@@ -47,7 +47,7 @@ Created: 2026-02-11 | Delete after all items complete.
 ## ISSUE (Vector Search)
 
 - [x] **I9**: Create standalone QA similarity search script
-  - Missing: `scripts/earnings/find_similar_qa.py`
+  - Missing: `.claude/skills/earnings-orchestrator/scripts/find_similar_qa.py`
 
 - [ ] **I10**: Uncomment/activate index-based `db.index.vector.queryNodes()` in embedding mixin
   - File: `neograph/mixins/embedding.py:1107-1121`

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Offline tests for scripts/pit_fetch.py.
+"""Offline tests for .claude/skills/earnings-orchestrator/scripts/pit_fetch.py.
 
 Run:
-  python3 scripts/test_pit_fetch.py
+  python3 .claude/skills/earnings-orchestrator/scripts/test_pit_fetch.py
 """
 from __future__ import annotations
 
@@ -15,9 +15,9 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "scripts" / "pit_fetch.py"
-sys.path.insert(0, str(ROOT / "scripts"))
+ROOT = Path(__file__).resolve().parents[4]
+SCRIPT = Path(__file__).resolve().parent / "pit_fetch.py"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import pit_fetch as pit_fetch_module
 
 

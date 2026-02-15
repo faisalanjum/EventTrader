@@ -428,7 +428,7 @@ Each test case is a dict with: `name`, `hook_input`, `expect` ("allow" or "block
 
 # T05: PIT in Bash --pit flag (priority 3)
 {"tool_name": "Bash",
- "tool_input": {"command": "python3 scripts/pit_fetch.py --pit 2024-02-15T16:00:00-05:00 --source alphavantage"},
+ "tool_input": {"command": "python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --pit 2024-02-15T16:00:00-05:00 --source alphavantage"},
  "tool_response": {"stdout": json.dumps({"data": [], "gaps": []})}}
 # → ALLOW
 ```

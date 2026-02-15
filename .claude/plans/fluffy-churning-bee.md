@@ -441,7 +441,7 @@ For Lane 3 (perplexity): Same pit-envelope skill + normalizer step. Phase 4 scop
 
 - Does NOT modify `.claude/settings.json` (hooks are agent-level)
 - Does NOT touch other agents (one at a time per user request)
-- Does NOT build `scripts/pit_fetch.py` (Lane 2, separate deliverable)
+- Does NOT build `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py` (Lane 2, separate deliverable)
 - Does NOT add LLM normalizer (Lane 3, Phase 4)
 - Does NOT fabricate datetimes for date-only fields (gap instead, per DataSubAgents §4.3)
 

@@ -43,13 +43,7 @@ Query news articles and their stock impact. Use patterns from the news-queries s
    - Open mode: same envelope format, no PIT validation
 
 ## PIT Response Contract
-Always return valid JSON envelope:
-```json
-{
-  "data": ["...items with available_at + available_at_source..."],
-  "gaps": ["...any missing data explanations..."]
-}
-```
+See pit-envelope skill for envelope contract, field mappings, and forbidden keys.
 
 ## Notes
 - Relationship: `(n:News)-[:INFLUENCES]->(c:Company)` — returns live on INFLUENCES edges

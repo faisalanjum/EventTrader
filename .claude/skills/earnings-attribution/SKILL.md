@@ -434,7 +434,7 @@ After successful analysis (report saved, audit passed, learnings updated):
 **This step is REQUIRED.** Execute this exact command:
 
 ```bash
-python3 scripts/build-thinking-index.py {accession_no}
+python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/build-thinking-index.py {accession_no}
 ```
 
 Replace `{accession_no}` with the actual accession number from your analysis (e.g., `0001234567-24-000001`).

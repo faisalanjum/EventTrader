@@ -315,18 +315,18 @@ Each data subagent matches only its retrieval tools:
 
 ### Wrapper script location + interface
 
-**Location:** `scripts/pit_fetch.py`
+**Location:** `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py`
 
 **Interface:**
 ```bash
-python3 scripts/pit_fetch.py --source <source> --pit <ISO8601> [source-specific args...]
+python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source <source> --pit <ISO8601> [source-specific args...]
 ```
 
 **Examples:**
 ```bash
-python3 scripts/pit_fetch.py --source alphavantage --pit 2024-02-15T16:00:00-05:00 EARNINGS symbol=AAPL
-python3 scripts/pit_fetch.py --source yahoo --pit 2024-02-15T16:00:00-05:00 consensus symbol=AAPL
-python3 scripts/pit_fetch.py --source bz-news-api --pit 2024-02-15T16:00:00-05:00 --themes macro --limit 50
+python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source alphavantage --pit 2024-02-15T16:00:00-05:00 EARNINGS symbol=AAPL
+python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source yahoo --pit 2024-02-15T16:00:00-05:00 consensus symbol=AAPL
+python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source bz-news-api --pit 2024-02-15T16:00:00-05:00 --themes macro --limit 50
 ```
 
 **Output:** Standard JSON envelope (§4.7) with `available_at` per item
@@ -517,7 +517,7 @@ Lane 3 timestamp extraction policy (decided):
 ## Phase 0 — Build order (do this in order)
 
 1. ~~Create `.claude/hooks/pit_gate.py` (the only PIT gate).~~ **DONE** — 37/37 tests pass. Handles `params.pit`, MCP response format, single-record array unwrap.
-2. Create `scripts/pit_fetch.py` (the only external wrapper entrypoint). **PARTIAL** — exists with `bz-news-api` source (386 lines). Needs `alphavantage` source handler.
+2. Create `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py` (the only external wrapper entrypoint). **PARTIAL** — exists with `bz-news-api` source (386 lines). Needs `alphavantage` source handler.
 3. ~~Update `.claude/agents/neo4j-news.md` end-to-end (reference implementation).~~ **DONE** — see Phase 2.
 4. ~~Create an external adapter data agent (Bash = wrapper only) and gate it.~~ **DONE** — `bz-news-api` agent with PIT gate.
 5. ~~Run the minimal tests below before expanding coverage.~~ **DONE** — Neo4j allow test passed. Perplexity + Alpha Vantage tests pending (Phase 4).
@@ -532,7 +532,7 @@ Lane 3 timestamp extraction policy (decided):
 
 1. ~~**Neo4j allow**: run `neo4j-news` with `--pit` and confirm gate allows clean data.~~ **PASSED** — 3 live tests (PIT-clean, PIT-gap, open mode).
 2. **Perplexity MCP**: in PIT mode, MCP search/ask/reason/research must normalize to items with reliable `available_at` or return a clean gap (no unverifiable items). **PENDING** (Phase 4).
-3. **Alpha Vantage wrapper**: run `scripts/pit_fetch.py --source alphavantage --pit ... TIME_SERIES_* ...` and confirm only datapoints `<= PIT` are returned. **PENDING** (Phase 4).
+3. **Alpha Vantage wrapper**: run `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source alphavantage --pit ... TIME_SERIES_* ...` and confirm only datapoints `<= PIT` are returned. **PENDING** (Phase 4).
 
 ## SDK run checklist (top-level orchestrator)
 
@@ -571,7 +571,7 @@ Upgrade remaining domains using the same contract + hook:
 - `.claude/agents/neo4j-transcript.md`
 - `.claude/agents/neo4j-xbrl.md` (note: PIT uses parent Report `created`, not period coverage)
 - `.claude/agents/neo4j-entity.md`
-- ~~`.claude/agents/neo4j-vector-search.md`~~ **DONE** — semantic search across News + QAExchange; model: sonnet; Bash for embedding generation via `scripts/generate_embedding.py`; hooks wired; queries inline (no separate skill)
+- ~~`.claude/agents/neo4j-vector-search.md`~~ **DONE** — semantic search across News + QAExchange; model: sonnet; Bash for embedding generation via `.claude/skills/earnings-orchestrator/scripts/generate_embedding.py`; hooks wired; queries inline (no separate skill)
 
 ## Phase 4 — External sources (same pattern)
 
@@ -583,11 +583,11 @@ Add/upgrade:
 ### SEC full-text adapter scaffold (placeholder, implementation-ready structure)
 
 Target path pattern:
-- Wrapper handler in `scripts/pit_fetch.py` under `--source sec_full_text`
+- Wrapper handler in `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py` under `--source sec_full_text`
 - Optional dedicated agent: `.claude/agents/sec-fulltext-adapter.md` (Bash = wrapper only)
 
 Contract alignment (same as all external sources):
-- Input: `python3 scripts/pit_fetch.py --source sec_full_text --pit <ISO8601> ...`
+- Input: `python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source sec_full_text --pit <ISO8601> ...`
 - Output: standard JSON envelope with `data[]`, `gaps[]`, `available_at`, `available_at_source`
 - Gate: `pit_gate.py` PostToolUse validation + retry (max 2) + clean gap fallback
 
@@ -622,7 +622,7 @@ TODO (leave as placeholders until API wiring step):
 1. **Hook format** (decided in §4.4):
    - All sources: `type: command` + `pit_gate.py` (Python, stdlib-only) for deterministic allow/block based on structured publication fields.
 
-*Plan Version 2.2 | 2026-02-09 | Phase 0-2 DONE (pit_gate.py, pit-envelope skill, neo4j-news reference impl, bz-news-api). Phase 3: neo4j-vector-search DONE (1/5). Terminology §5 corrected: skills are shared references, not reserved for invocable-only. Agent count: 13 (Neo4j 6 + AV 1 + BZ 1 + Perplexity 5).*
+*Plan Version 2.3 | 2026-02-15 | Phase 0-2 DONE (pit_gate.py, pit-envelope skill, neo4j-news reference impl, bz-news-api). Phase 3: neo4j-vector-search DONE (1/5). Terminology §5 corrected: skills are shared references, not reserved for invocable-only. Agent count: 13 (Neo4j 6 + AV 1 + BZ 1 + Perplexity 5). §10 added: agent body standardization + data agent linter.*
 
 ---
 
@@ -640,3 +640,131 @@ Before closing any implementation pass for this plan, run a final consistency ch
 Decision rule for implementers:
 - `.claude/plans/earnings-orchestrator.md` is the final word for orchestrator integration behavior and consumer-facing contracts.
 - If any discrepancy is still ambiguous or conflicts with implementation reality, stop and ask the user before proceeding.
+
+---
+
+# 10) Agent Body Standardization & Data Agent Linter
+
+Added 2026-02-15 after audit of 3 DONE agents revealed duplicated content and 6 real bug classes.
+
+## 10.1 Keep architecture as-is
+
+- No new shared runtime file.
+- Centralized layer remains: `pit-envelope` + `evidence-standards` + `pit_gate.py`.
+
+## 10.2 Remove duplication from DONE agents
+
+- In the 3 DONE agents (`neo4j-news`, `neo4j-vector-search`, `bz-news-api`), remove embedded PIT Response Contract example blocks.
+- Replace each with one line: "See pit-envelope skill for envelope contract, field mappings, and forbidden keys."
+- Keep agent workflows per-agent (do not template workflow logic).
+
+## 10.3 Build remaining 10 agents as thin agents
+
+- Only: frontmatter + domain-specific workflow + domain notes.
+- Do not duplicate common contract/rules text already in shared skills.
+- Target: ~15-20 lines of domain-specific body content.
+
+## 10.4 Update plan docs for human builders
+
+- Copy-paste frontmatter templates are documented below (not in §6 Phase 2, which is marked DONE).
+- §6 Phase 2 "Reference pattern for remaining agents" remains unchanged (it describes the 5-step process; these templates supplement it with exact YAML).
+- Keep runtime behavior unchanged.
+
+### Frontmatter template (Neo4j Lane 1 agents)
+
+```yaml
+---
+name: neo4j-<domain>
+description: "..."
+tools:
+  - mcp__neo4j-cypher__read_neo4j_cypher
+disallowedTools:
+  - mcp__neo4j-cypher__write_neo4j_cypher
+model: opus
+permissionMode: dontAsk
+skills:
+  - neo4j-schema
+  - <domain>-queries
+  - pit-envelope
+  - evidence-standards
+hooks:
+  PreToolUse:
+    - matcher: "mcp__neo4j-cypher__write_neo4j_cypher"
+      hooks:
+        - type: command
+          command: "echo '{\"decision\":\"block\",\"reason\":\"Neo4j writes forbidden\"}'"
+  PostToolUse:
+    - matcher: "mcp__neo4j-cypher__read_neo4j_cypher"
+      hooks:
+        - type: command
+          command: "python3 $CLAUDE_PROJECT_DIR/.claude/hooks/pit_gate.py"
+---
+```
+
+### Frontmatter template (External Bash-wrapper agents)
+
+```yaml
+---
+name: <source>-api
+description: "..."
+tools:
+  - Bash
+model: opus
+permissionMode: dontAsk
+skills:
+  - <source>-queries
+  - pit-envelope
+  - evidence-standards
+hooks:
+  PostToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "python3 $CLAUDE_PROJECT_DIR/.claude/hooks/pit_gate.py"
+---
+```
+
+## 10.5 Add a lint-only guard (no generator, no autofix)
+
+- New file: `.claude/skills/earnings-orchestrator/scripts/lint_data_agents.py`.
+- Scope: only the 13 data agents (`.claude/agents/neo4j-*.md`, `bz-news-api.md`, `perplexity-*.md`, `alphavantage-*.md`) and their `skills:` entries.
+- Deterministic, stdlib-only, no network.
+- ~100 lines.
+
+## 10.6 Linter rules (final)
+
+| Rule | Severity | What it checks |
+|------|----------|---------------|
+| R1 | ERROR | Each data agent must include `evidence-standards` in `skills:` |
+| R2 | ERROR | No wildcard PIT hook matchers (no `"*"` / catch-all in hooks) |
+| R3 | ERROR | PIT-DONE agents must be fully compliant (see per-agent breakdown below) |
+| R5 | ERROR | File paths referenced in data agent and their associated skill body content must resolve to existing files |
+| R6 | ERROR | Hook commands must include `$CLAUDE_PROJECT_DIR` only when command references project paths (`.claude/` or `scripts/`). Do not apply to pure `echo` hooks |
+| R7 | ERROR | Deprecated skills blocklist for data agents = `filtered-data` only. Do not block or warn on `skill-update` |
+
+### R3 per-agent breakdown (PIT-DONE list)
+
+- **neo4j-news**: `pit-envelope` in skills, Neo4j write-block PreToolUse, `pit_gate.py` PostToolUse on `mcp__neo4j-cypher__read_neo4j_cypher` matcher.
+- **neo4j-vector-search**: same as neo4j-news.
+- **bz-news-api**: `pit-envelope` in skills, `pit_gate.py` PostToolUse on `Bash` matcher.
+
+## 10.7 What is explicitly dropped
+
+- No "planned agents warnings" rule (R4 dropped — 10 permanent warnings = noise).
+- No `--strict-planned` mode.
+- No blocklist entry for `skill-update` (not deprecated, just unused).
+
+## 10.8 Operational behavior
+
+- **PIT-DONE list** is maintained in linter config. As each agent migrates, add it to PIT-DONE list so it gets strict R3 validation immediately.
+- **Output format**:
+  - `ERROR [RULE] path: message`
+  - `WARN  [RULE] path: message` (only if truly actionable/non-permanent)
+  - Summary: `PASS`/`FAIL`, counts, checked agents.
+- **Exit codes**: `0` pass, `1` fail.
+
+## 10.9 Expected end state
+
+- Thin agent bodies (~15-20 lines domain-specific).
+- Single source of truth for common behavior in existing shared layer (`pit-envelope`, `evidence-standards`, `pit_gate.py`).
+- Automatic regression protection against real, historical failure modes.

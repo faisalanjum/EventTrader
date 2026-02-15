@@ -3,7 +3,7 @@
 Generate a 3072-dim embedding using OpenAI text-embedding-3-large.
 
 Usage:
-    python3 scripts/generate_embedding.py "your search query text"
+    python3 .claude/skills/earnings-orchestrator/scripts/generate_embedding.py "your search query text"
 
 Output:
     JSON array of 3072 floats on stdout.
@@ -19,7 +19,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv(Path(__file__).resolve().parents[0].parent / ".env", override=True)
+load_dotenv(Path(__file__).resolve().parents[4] / ".env", override=True)
 
 
 def main():

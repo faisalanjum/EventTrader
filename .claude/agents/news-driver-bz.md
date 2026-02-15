@@ -32,7 +32,7 @@ Example: `AAPL 2024-01-02 -3.65 -3.06 TASK_ID=5 WEB_TASK_ID=6 PPX_TASK_ID=7 JUDG
 ### Step 1: Get News
 
 ```bash
-source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/EventMarketDB/scripts/earnings/get_news_for_dates.py {TICKER} {DATE} 0
+source /home/faisal/EventMarketDB/venv/bin/activate && python /home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts/get_news_for_dates.py {TICKER} {DATE} 0
 ```
 
 ### Step 2: Analyze
