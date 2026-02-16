@@ -465,6 +465,84 @@ TESTS: list[dict] = [
         "expect": "block",
         "code": "PIT_MISSING_ENVELOPE",
     },
+    # ── Group 13: Stringified MCP wrapper unwrap ──
+    {
+        "name": "T38 Stringified MCP wrapper with valid data → allow",
+        "input": hook(
+            response=json.dumps(
+                {
+                    "result": [
+                        {
+                            "type": "text",
+                            "text": json.dumps(
+                                [{"data": [clean_item()], "gaps": []}]
+                            ),
+                        }
+                    ]
+                }
+            ),
+        ),
+        "expect": "allow",
+    },
+    {
+        "name": "T39 Stringified MCP wrapper with future data → block",
+        "input": hook(
+            response=json.dumps(
+                {
+                    "result": [
+                        {
+                            "type": "text",
+                            "text": json.dumps(
+                                [
+                                    {
+                                        "data": [
+                                            {
+                                                "available_at": "2024-02-20T10:00:00-05:00",
+                                                "available_at_source": "neo4j_created",
+                                            }
+                                        ],
+                                        "gaps": [],
+                                    }
+                                ]
+                            ),
+                        }
+                    ]
+                }
+            ),
+        ),
+        "expect": "block",
+        "code": "PIT_VIOLATION_GT_CUTOFF",
+    },
+    {
+        "name": "T40 Stringified MCP wrapper with bare array → block",
+        "input": hook(
+            response=json.dumps(
+                {
+                    "result": [
+                        {
+                            "type": "text",
+                            "text": json.dumps(
+                                [
+                                    {"data": [clean_item()], "gaps": []},
+                                    {"data": [clean_item()], "gaps": []},
+                                ]
+                            ),
+                        }
+                    ]
+                }
+            ),
+        ),
+        "expect": "block",
+        "code": "PIT_MISSING_ENVELOPE",
+    },
+    {
+        "name": "T41 Malformed result key does not trigger unwrap → block",
+        "input": hook(
+            response=json.dumps({"result": "not_a_list"}),
+        ),
+        "expect": "block",
+        "code": "PIT_MISSING_ENVELOPE",
+    },
 ]
 
 

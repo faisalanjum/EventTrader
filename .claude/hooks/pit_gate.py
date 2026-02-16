@@ -158,6 +158,25 @@ def extract_payload(tool_response: object) -> str | None:
     return None
 
 
+def unwrap_nested_mcp_payload(payload: object) -> object:
+    """Handle stringified MCP wrappers nested inside payload JSON."""
+    current = payload
+    for _ in range(2):
+        if not isinstance(current, dict):
+            break
+        result = current.get("result")
+        if not (isinstance(result, list) and result):
+            break
+        first = result[0]
+        if not (isinstance(first, dict) and isinstance(first.get("text"), str)):
+            break
+        try:
+            current = json.loads(first["text"])
+        except (json.JSONDecodeError, TypeError):
+            break
+    return current
+
+
 def scan_forbidden_keys(obj: object, depth: int = 0) -> str | None:
     if depth > 50:
         return None
@@ -301,6 +320,9 @@ def main() -> None:
             _log(f"BLOCK tool={tool_name} json parse fail")
             _block(PIT_INVALID_JSON, "Tool output is not valid JSON in PIT mode")
             return
+
+        # Handle nested wrappers like {"result":[{"text":"[{\"data\":...}]"}]}
+        payload = unwrap_nested_mcp_payload(payload)
 
         # Unwrap single-record Cypher result: [{"data":[...],...}] → {"data":...}
         if isinstance(payload, list):
