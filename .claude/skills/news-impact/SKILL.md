@@ -132,8 +132,8 @@ Otherwise, for each gap day:
 4. If <2 sources found → escalate to Perplexity
 
 **4b. Perplexity fallback** (if WebSearch insufficient):
-1. `perplexity_search` - "{ticker} stock news {date}"
-2. `perplexity_research` - only for major moves (>5%) with no results
+1. Spawn `perplexity-search` agent — "{ticker} stock news {date}"
+2. Spawn `perplexity-research` agent — only for major moves (>5%) with no results
 
 Generate driver and confidence from research. Include z-score context.
 

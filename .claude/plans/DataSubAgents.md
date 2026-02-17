@@ -1,7 +1,7 @@
 # DataSubAgents Architecture Plan (PIT-Safe)
 
 **Created**: 2026-02-05  
-**Status**: Draft (reviewed + iterated)
+**Status**: Final — v3.0, 13/13 PIT-complete
 
 ## Goal
 
@@ -184,7 +184,7 @@ Repository reality check (current state):
 Treatment in this architecture:
 - **PIT mode**: Perplexity responses are only admissible as *data* if they emit structured per-item `published_at/published_date`. Otherwise, drop those items and retry (or use Neo4j/sec-api).
 - **Open mode**: Perplexity can return summaries, but keep the same JSON envelope (summary as a field) and include citations for auditability.
-- **SEC-specific (`perplexity-sec`)**: our current implementation is a Perplexity API wrapper (`search_mode="sec"`) that returns narrative text + EDGAR URLs. Until it emits per-filing acceptance time (`published_at` = EDGAR accepted datetime), treat it as a **locator only**:
+- **SEC-specific (`perplexity-sec`)**: our current implementation is a Perplexity API wrapper (`search_mode="sec"`) that returns narrative text + EDGAR URLs. Until it emits per-filing acceptance time (`published_at` = EDGAR accepted datetime), treat it as **Content Extraction only**:
    - Use it to discover likely filings/URLs/accession numbers.
    - Then fetch the filing from **Neo4j (`neo4j-report`) or sec-api** to obtain the authoritative `created/filedAt` timestamp and content for PIT-safe use.
 
@@ -304,12 +304,13 @@ Each data subagent matches only its retrieval tools:
 | neo4j-xbrl | `mcp__neo4j-cypher__read_neo4j_cypher` |
 | neo4j-entity | `mcp__neo4j-cypher__read_neo4j_cypher` |
 | neo4j-vector-search | `mcp__neo4j-cypher__read_neo4j_cypher` |
-| perplexity-search | `mcp__perplexity__perplexity_search` |
-| perplexity-ask | `mcp__perplexity__perplexity_ask` |
-| perplexity-research | `mcp__perplexity__perplexity_research` |
-| perplexity-reason | `mcp__perplexity__perplexity_reason` |
-| bz-news-api | `Bash` (dedicated agent, Bash = `pit_fetch.py` wrapper only) |
-| external-adapter | `Bash` (dedicated agent, Bash = wrapper only) |
+| perplexity-search | `Bash` (pit_fetch.py `--source perplexity --op search`) |
+| perplexity-ask | `Bash` (pit_fetch.py `--source perplexity --op ask`) |
+| perplexity-research | `Bash` (pit_fetch.py `--source perplexity --op research`) |
+| perplexity-reason | `Bash` (pit_fetch.py `--source perplexity --op reason`) |
+| perplexity-sec | `Bash` (pit_fetch.py `--source perplexity --op search --search-mode sec`) |
+| bz-news-api | `Bash` (pit_fetch.py `--source bz-news-api`) |
+| alphavantage-earnings | `Bash` (pit_fetch.py `--source alphavantage`) |
 
 **Write-block matcher** (all agents): `mcp__neo4j-cypher__write_neo4j_cypher` via PreToolUse
 
@@ -583,7 +584,7 @@ All 5 Perplexity agents migrated to Bash-wrapper archetype using `pit_fetch.py -
 - ~~`.claude/agents/perplexity-ask.md`~~ **DONE** — `--op ask` (sonar-pro), synthesis in open mode
 - ~~`.claude/agents/perplexity-reason.md`~~ **DONE** — `--op reason` (sonar-reasoning-pro), synthesis in open mode
 - ~~`.claude/agents/perplexity-research.md`~~ **DONE** — `--op research` (sonar-deep-research), synthesis in open mode
-- ~~`.claude/agents/perplexity-sec.md`~~ **DONE** — `--op search --search-mode sec`, locator-first (no synthesis)
+- ~~`.claude/agents/perplexity-sec.md`~~ **DONE** — `--op search --search-mode sec`, Content Extraction (no synthesis)
 
 Key design decisions:
 - Two API handlers: POST /search (raw results) and POST /chat/completions (answer + search_results)
@@ -655,7 +656,7 @@ Before closing any implementation pass for this plan, run a final consistency ch
 
 1. ~~Data-layer lifecycle status (`Draft` vs `done/assumed complete`).~~ **RESOLVED 2026-02-09**: earnings-orchestrator.md updated to "IN PROGRESS, out of scope for this doc" with Phase status.
 2. ~~Agent catalog alignment.~~ **RESOLVED 2026-02-09**: Both docs aligned at 13 agents (Neo4j 6, AV 1, BZ 1, Perplexity 5). `neo4j-vector-search` added to both. earnings-orchestrator.md agent table now shows PIT status per agent.
-3. `perplexity-sec` behavior (locator-only vs direct data source). **RESOLVED 2026-02-16**: perplexity-sec is locator-first (returns raw EDGAR filing URLs/metadata via `--op search --search-mode sec`). For PIT-safe filing content extraction, hand off to `neo4j-report`.
+3. `perplexity-sec` behavior (Content Extraction vs direct data source). **RESOLVED 2026-02-16**: perplexity-sec uses Content Extraction (returns raw EDGAR filing URLs/metadata/snippets via `--op search --search-mode sec`). For PIT-safe filing content, hand off to `neo4j-report`.
 4. PIT propagation contract (`--pit` in subagent prompt vs explicit downstream tool parameter, e.g., `tool_input.params.pit` / `tool_input.parameters.pit`). **OPEN** — validated for Neo4j Lane 1; needs validation for Lane 2/3.
 5. Response-shape integration (DataSubAgents JSON envelope `data[]/gaps[]` + `available_at` vs orchestrator merged text bundle fields). **OPEN** — envelope proven in production; orchestrator text rendering not yet built.
 6. Legacy `filtered-data` policy wording (deprecated vs transitional availability). **OPEN** — both docs say deprecated.
