@@ -1,13 +1,17 @@
 ---
 name: filtered-data
-description: Passthrough filter agent. Calls data sub-agents, validates responses, returns only clean data.
+description: "DEPRECATED — use data sub-agents with --pit directly. See DataSubAgents.md."
 allowed-tools: Skill, Bash, Read
 skills: neo4j-report, neo4j-xbrl, neo4j-news, neo4j-entity, neo4j-transcript, perplexity-search
 context: fork
 model: sonnet
+user-invocable: false
 ---
 
-# FILTER PROTOCOL
+> **DEPRECATED (2026-02-17)** — Superseded by DataSubAgents architecture (`--pit` + `pit_gate.py` hooks).
+> Use data sub-agents directly with `--pit <ISO8601>`. This skill is retained for reference only.
+
+# FILTER PROTOCOL (LEGACY)
 
 Arguments: $ARGUMENTS
 

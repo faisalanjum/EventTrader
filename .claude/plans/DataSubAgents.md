@@ -623,7 +623,7 @@ TODO (leave as placeholders until API wiring step):
 1. **Prediction vs attribution policy (decided)**:
    - **Prediction**: PIT-enabled and filtered (use `--pit` everywhere; only PIT-validated items may pass; gaps are allowed when unverifiable).
    - **Attribution**: open mode (no PIT gating; everything allowed).
-   - Implementation note: `filtered-data` remains available as a legacy/transitional pattern during migration, but the **primary path** is `--pit` directly through data subagents + hooks (this plan).
+   - Implementation note: `filtered-data` is **deprecated** (2026-02-17). Use `--pit` directly through data subagents + hooks (this plan). The skill is retained for reference only (`user-invocable: false`).
 2. **External LLM normalizer usage (decided via allowlist)**:
    - Purpose: Lane 3 only — normalize messy external outputs into the standard JSON envelope with per-item `available_at`, then let `pit_gate.py` decide allow/block.
    - **Allowed** (PIT mode only): Perplexity MCP tools (`mcp__perplexity__perplexity_search`, `mcp__perplexity__perplexity_ask`, `mcp__perplexity__perplexity_research`, `mcp__perplexity__perplexity_reason`) and Yahoo adapter outputs when they lack provider-backed per-item timestamps.
@@ -657,9 +657,9 @@ Before closing any implementation pass for this plan, run a final consistency ch
 1. ~~Data-layer lifecycle status (`Draft` vs `done/assumed complete`).~~ **RESOLVED 2026-02-09**: earnings-orchestrator.md updated to "IN PROGRESS, out of scope for this doc" with Phase status.
 2. ~~Agent catalog alignment.~~ **RESOLVED 2026-02-09**: Both docs aligned at 13 agents (Neo4j 6, AV 1, BZ 1, Perplexity 5). `neo4j-vector-search` added to both. earnings-orchestrator.md agent table now shows PIT status per agent.
 3. `perplexity-sec` behavior (Content Extraction vs direct data source). **RESOLVED 2026-02-16**: perplexity-sec uses Content Extraction (returns raw EDGAR filing URLs/metadata/snippets via `--op search --search-mode sec`). For PIT-safe filing content, hand off to `neo4j-report`.
-4. PIT propagation contract (`--pit` in subagent prompt vs explicit downstream tool parameter, e.g., `tool_input.params.pit` / `tool_input.parameters.pit`). **OPEN** — validated for Neo4j Lane 1; needs validation for Lane 2/3.
+4. ~~PIT propagation contract (`--pit` in subagent prompt vs explicit downstream tool parameter, e.g., `tool_input.params.pit` / `tool_input.parameters.pit`).~~ **RESOLVED 2026-02-17**: Validated for all lanes. Lane 1 (Neo4j): `params.pit` in MCP tool input. Lane 2/3 (Perplexity, AV, BZ): `BASH_PIT_RE` extracts `--pit` from Bash command string + `WRAPPER_SCRIPTS` belt-and-suspenders. 24/24 gate simulation tests pass (7 sources x 3 scenarios + 3 edge cases).
 5. Response-shape integration (DataSubAgents JSON envelope `data[]/gaps[]` + `available_at` vs orchestrator merged text bundle fields). **OPEN** — envelope proven in production; orchestrator text rendering not yet built.
-6. Legacy `filtered-data` policy wording (deprecated vs transitional availability). **OPEN** — both docs say deprecated.
+6. ~~Legacy `filtered-data` policy wording (deprecated vs transitional availability).~~ **RESOLVED 2026-02-17**: Skill marked deprecated (`user-invocable: false`, deprecation header added). Decision #1 updated from "transitional" to "deprecated". Linter already blocks it via R7.
 7. ~~`neo4j-entity` PIT timestamp policy for date-only fields.~~ **RESOLVED 2026-02-15**: Use `Date.market_close_current_day` (real datetime+tz) for temporal data, open mode pass-through for company metadata. See §7 Decision #4.
 
 Decision rule for implementers:
