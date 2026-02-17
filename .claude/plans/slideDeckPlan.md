@@ -51,7 +51,7 @@ ENABLE_SLIDE_DECK_DOWNLOAD = False   # Toggle slide deck downloading (requires A
 ENABLE_SLIDE_DECK_EMBEDDINGS = False  # Generate embeddings on slide page text (deferred — enable after validating content quality)
 SLIDE_DECK_STORAGE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "slide_decks")
 SLIDE_DECK_IMAGE_DPI = 200           # PNG resolution (200 = readable, ~200-500KB per page)
-SLIDE_DECK_EMBEDDING_BATCH_SIZE = 25
+SLIDE_DECK_EMBEDDING_BATCH_SIZE = 50  # Match NEWS/QAEXCHANGE batch sizes
 SLIDEDECK_VECTOR_INDEX_NAME = "slidedeck_vector_idx"
 ```
 
@@ -119,7 +119,16 @@ Embeddings live on `SlidePageNode` (per-page), NOT on `SlideDeckNode` (full deck
 
 ## Step 5: Extend EarningsCallProcessor to download slide decks
 
-Modify `get_single_event()` in `transcripts/EarningsCallTranscripts.py` — add after the transcript fetch block (around line 414, before `results.append(result)`):
+Modify `transcripts/EarningsCallTranscripts.py`:
+
+**5a. Add imports** (alongside existing `from config.feature_flags import SPEAKER_CLASSIFICATION_MODEL` at line 21):
+```python
+from config.feature_flags import (SPEAKER_CLASSIFICATION_MODEL,
+    ENABLE_SLIDE_DECK_DOWNLOAD, SLIDE_DECK_STORAGE_DIR, SLIDE_DECK_IMAGE_DPI)
+from earningscall.errors import InsufficientApiAccessError
+```
+
+**5b. Add to `get_single_event()`** — after the transcript fetch block (around line 414, before `results.append(result)`):
 
 ```python
 # After successful transcript fetch, attempt slide deck download
@@ -222,7 +231,14 @@ if transcript_data.get("slide_deck_text"):
         add_rel("SlideDeck", slide_id, "SlidePage", page_id, "HAS_SLIDE_PAGE")
 ```
 
-Also import `SlideDeckNode` and `SlidePageNode` at the top alongside existing imports.
+Update the import block at `neograph/mixins/transcript.py:9-12`:
+```python
+from ..EventTraderNodes import (
+    PreparedRemarkNode, QuestionAnswerNode,
+    FullTranscriptTextNode, QAExchangeNode, TranscriptNode,
+    SlideDeckNode, SlidePageNode  # NEW
+)
+```
 
 **File:** `neograph/mixins/transcript.py`
 
@@ -306,8 +322,9 @@ Reuses existing infrastructure:
 import sys, os, logging, time
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from scripts.earnings.utils import load_env, neo4j_session, ok
-from config.feature_flags import SLIDE_DECK_STORAGE_DIR
+from scripts.earnings.utils import load_env, neo4j_session, ok, get_neo4j_config
+from neo4j import GraphDatabase
+from config.feature_flags import SLIDE_DECK_STORAGE_DIR, SLIDE_DECK_IMAGE_DPI
 from eventtrader.keys import EARNINGS_CALL_API_KEY
 import earningscall
 from earningscall import get_company
@@ -360,9 +377,10 @@ def download_slide_deck(company_obj, year, quarter):
             sys.exit(1)
         raise
 
-def extract_pages(pdf_path):
+def extract_pages(pdf_path, converter=None):
     """Extract per-page markdown + images — reuses same logic as Step 5 _extract_slide_deck()."""
-    converter = DocumentConverter()
+    if converter is None:
+        converter = DocumentConverter()
     doc = converter.convert(pdf_path)
     full_text = doc.document.export_to_markdown()
     pages = []
@@ -408,69 +426,75 @@ if __name__ == "__main__":
     print(f"Found {sum(len(v) for v in by_ticker.values())} transcripts across {len(by_ticker)} tickers missing slide decks")
 
     # Phase 2 + 3: Download, extract, write — one ticker at a time
+    # Single Neo4j driver for entire backfill (avoid creating hundreds of TCP connections)
+    uri, user, password = get_neo4j_config()
+    driver = GraphDatabase.driver(uri, auth=(user, password))
+    converter = DocumentConverter()  # Reuse single Docling converter instance
     stats = {"downloaded": 0, "no_deck": 0, "written": 0, "errors": 0}
 
-    for ticker, transcript_rows in by_ticker.items():
-        try:
-            company_obj = get_company(ticker)  # One API call per ticker
-        except Exception as e:
-            logger.error(f"Failed to get company object for {ticker}: {e}")
-            stats["errors"] += len(transcript_rows)
-            continue
-
-        for r in transcript_rows:
-            transcript_id = r["transcript_id"]
-            year, quarter = r["year"], r["quarter"]
-            slide_id = f"{transcript_id}_slides"
-
-            # Phase 2a: Download
+    try:
+        for ticker, transcript_rows in by_ticker.items():
             try:
-                pdf_path = download_slide_deck(company_obj, year, quarter)
+                company_obj = get_company(ticker)  # One API call per ticker
             except Exception as e:
-                logger.error(f"Download failed for {ticker} Q{quarter} {year}: {e}")
-                stats["errors"] += 1
+                logger.error(f"Failed to get company object for {ticker}: {e}")
+                stats["errors"] += len(transcript_rows)
                 continue
 
-            if not pdf_path:
-                logger.info(f"No slide deck available for {ticker} Q{quarter} {year} (404)")
-                stats["no_deck"] += 1
-                continue
+            for r in transcript_rows:
+                transcript_id = r["transcript_id"]
+                year, quarter = r["year"], r["quarter"]
+                slide_id = f"{transcript_id}_slides"
 
-            # Phase 2b: Extract text + images
-            try:
-                full_text, pages, image_paths = extract_pages(pdf_path)
-            except Exception as e:
-                logger.error(f"Extraction failed for {pdf_path}: {e}")
-                stats["errors"] += 1
-                continue
-
-            stats["downloaded"] += 1
-
-            if args.dry_run:
-                print(f"  [DRY RUN] {ticker} Q{quarter} {year}: {len(pages)} pages, {len(full_text)} chars, {len(image_paths)} images")
-                continue
-
-            # Phase 3: Write to Neo4j
-            with neo4j_session() as (session, err):
-                if err: logger.error(err); stats["errors"] += 1; continue
+                # Phase 2a: Download
                 try:
-                    # Parent SlideDeckNode
-                    session.run(MERGE_SLIDE_DECK, transcript_id=transcript_id,
-                                slide_id=slide_id, content=full_text,
-                                file_path=pdf_path, page_count=len(pages))
-                    # Child SlidePageNodes (text + image path)
-                    for i, page_text in enumerate(pages, start=1):
-                        session.run(MERGE_SLIDE_PAGE, slide_id=slide_id,
-                                    page_id=f"{slide_id}_p{i}",
-                                    content=page_text, page_number=i,
-                                    image_path=image_paths[i-1] if i <= len(image_paths) else None)
+                    pdf_path = download_slide_deck(company_obj, year, quarter)
+                except Exception as e:
+                    logger.error(f"Download failed for {ticker} Q{quarter} {year}: {e}")
+                    stats["errors"] += 1
+                    continue
+
+                if not pdf_path:
+                    logger.info(f"No slide deck available for {ticker} Q{quarter} {year} (404)")
+                    stats["no_deck"] += 1
+                    continue
+
+                # Phase 2b: Extract text + images (reuses shared converter)
+                try:
+                    full_text, pages, image_paths = extract_pages(pdf_path, converter)
+                except Exception as e:
+                    logger.error(f"Extraction failed for {pdf_path}: {e}")
+                    stats["errors"] += 1
+                    continue
+
+                stats["downloaded"] += 1
+
+                if args.dry_run:
+                    print(f"  [DRY RUN] {ticker} Q{quarter} {year}: {len(pages)} pages, {len(full_text)} chars, {len(image_paths)} images")
+                    continue
+
+                # Phase 3: Write to Neo4j (reuses shared driver)
+                try:
+                    with driver.session() as session:
+                        # Parent SlideDeckNode
+                        session.run(MERGE_SLIDE_DECK, transcript_id=transcript_id,
+                                    slide_id=slide_id, content=full_text,
+                                    file_path=pdf_path, page_count=len(pages))
+                        # Child SlidePageNodes (text + image path)
+                        for i, page_text in enumerate(pages, start=1):
+                            session.run(MERGE_SLIDE_PAGE, slide_id=slide_id,
+                                        page_id=f"{slide_id}_p{i}",
+                                        content=page_text, page_number=i,
+                                        image_path=image_paths[i-1] if i <= len(image_paths) else None)
                     stats["written"] += 1
                 except Exception as e:
                     logger.error(f"Neo4j write failed for {ticker} Q{quarter} {year}: {e}")
                     stats["errors"] += 1
 
-        # Brief pause between tickers to avoid API rate limits
-        time.sleep(0.5)
+            # Brief pause between tickers to avoid API rate limits
+            time.sleep(0.5)
+    finally:
+        driver.close()
 
     print(f"\nBackfill complete: {stats}")
 ```
@@ -487,7 +511,7 @@ if __name__ == "__main__":
 | **Check PDF on disk first** | `os.path.exists(filepath)` skips re-downloading. If script is interrupted and re-run, only missing PDFs are fetched. |
 | **0.5s pause between tickers** | earningscall library has exponential backoff for 429s, but a small pause between tickers reduces the chance of hitting rate limits in the first place. |
 | **Abort on 403** | If the API plan doesn't include slide decks, fail fast instead of burning through all tickers getting 403s. |
-| **Docling converter created per-call** | Could be optimized to reuse a single converter instance across all PDFs — minor improvement for a one-time script. |
+| **Single Neo4j driver + single Docling converter** | Reuse one driver (connection pool) and one DocumentConverter across all transcripts. Avoids creating hundreds of TCP connections. |
 
 ### Execution plan:
 
@@ -583,7 +607,7 @@ slide_decks/                                    ← SLIDE_DECK_STORAGE_DIR
 
 ## Verification
 
-1. **Unit test Docling extraction**: Download a sample slide deck PDF manually, run Docling extraction, verify markdown output quality
+1. **Unit test Docling extraction**: Download a sample slide deck PDF manually, run Docling extraction, verify markdown output quality. **Important**: compare per-page `export_to_markdown(page_no=N)` output against full `export_to_markdown()` — [Docling has a known issue](https://github.com/docling-project/docling/discussions/1575) where per-page export can omit text items or reorder content vs full export. If quality is poor, fall back to splitting full markdown by page break placeholders (`page_break_placeholder` param)
 2. **Feature flag off**: Verify existing transcript pipeline works unchanged with `ENABLE_SLIDE_DECK_DOWNLOAD = False`
 3. **Feature flag on**: Enable flag, run `get_single_event()` for a company known to have slide decks, verify:
    - PDF downloaded to `slide_decks/` directory
