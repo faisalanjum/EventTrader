@@ -1,21 +1,68 @@
 ---
 name: perplexity-sec
 description: SEC EDGAR filings search. Use for official regulatory documents.
+user-invocable: false
 ---
 
-# Perplexity SEC
+# Perplexity SEC Query Patterns
+
+Reference patterns for `.claude/agents/perplexity-sec.md`.
+
+## Core Rule
+
+Use only:
+
+```bash
+python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source perplexity --op search --search-mode sec ...
+```
+
+Return the wrapper JSON envelope directly.
+
+## PIT Mode (Historical)
+
+```bash
+python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py \
+  --source perplexity --op search --search-mode sec \
+  --query "AAPL 10-K risk factors FY2024" \
+  --pit 2025-02-01T00:00:00-05:00 \
+  --max-results 10
+```
+
+## Open Mode (Live)
+
+```bash
+python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py \
+  --source perplexity --op search --search-mode sec \
+  --query "AAPL 10-K risk factors FY2024" \
+  --max-results 10
+```
+
+## Date Range
+
+```bash
+python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py \
+  --source perplexity --op search --search-mode sec \
+  --query "AAPL 10-K risk factors FY2024" \
+  --date-from 2024-01-01 --date-to 2024-12-31 \
+  --max-results 10
+```
 
 ## Supported Filings
 
 10-K (annual), 10-Q (quarterly), 8-K (current), S-1/S-4 (IPO/M&A)
 
-## Command
+## Locator-First Design
 
-```bash
-cd /home/faisal/EventMarketDB && python3 -c "
-from utils.perplexity_search import perplexity_sec_search
-print(perplexity_sec_search('AAPL 10-K risk factors', search_after_date='01/01/2024'))
-"
-```
+This agent returns raw EDGAR filing URLs/metadata, not filing content.
+- For PIT-safe filing content extraction, hand off URLs to `neo4j-report` (if the filing is in Neo4j) or use a dedicated content extraction agent.
+- Do not attempt to extract or synthesize filing content within this agent.
 
-Date format: MM/DD/YYYY
+## Notes
+
+- Uses `--search-mode sec` to target SEC EDGAR specifically.
+- `pit_fetch.py` normalizes each result with:
+  - `available_at` (date-only -> start-of-day NY tz)
+  - `available_at_source: "provider_metadata"`
+- Authentication is handled by `pit_fetch.py` via `.env` (`PERPLEXITY_API_KEY`).
+- In PIT mode, date-only items from the PIT day or later are excluded (conservative).
+- Response is JSON-only (`data[]`, `gaps[]`) for deterministic hook validation.

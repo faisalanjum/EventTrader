@@ -51,6 +51,31 @@ PIT_DONE = {
         "pre": ["mcp__neo4j-cypher__write_neo4j_cypher"],
         "post": ["mcp__neo4j-cypher__read_neo4j_cypher"],
     },
+    "perplexity-search": {
+        "skills": ["pit-envelope"],
+        "pre": [],
+        "post": ["Bash"],
+    },
+    "perplexity-ask": {
+        "skills": ["pit-envelope"],
+        "pre": [],
+        "post": ["Bash"],
+    },
+    "perplexity-reason": {
+        "skills": ["pit-envelope"],
+        "pre": [],
+        "post": ["Bash"],
+    },
+    "perplexity-research": {
+        "skills": ["pit-envelope"],
+        "pre": [],
+        "post": ["Bash"],
+    },
+    "perplexity-sec": {
+        "skills": ["pit-envelope"],
+        "pre": [],
+        "post": ["Bash"],
+    },
 }
 DEPRECATED_SKILLS = {"filtered-data"}
 PATH_RE = re.compile(r"(?:\$CLAUDE_PROJECT_DIR/)?((?:\.claude|scripts)/[\w/._-]+\.\w+)")

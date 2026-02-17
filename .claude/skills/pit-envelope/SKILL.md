@@ -49,6 +49,8 @@ Standard JSON envelope for all data sub-agent responses. Validated by `pit_gate.
 | neo4j-entity (div) | `Date.market_close_current_day` | normalize to ISO8601 | `time_series_timestamp` | 65 gaps (44 orphan + 21 NULL close = 1.48% of 4,405) |
 | neo4j-entity (split) | `Date.market_close_current_day` | normalize to ISO8601 | `time_series_timestamp` | 0 gaps (100% coverage) |
 | neo4j-entity (metadata) | — | open mode pass-through | — | Company properties: no `pit` in params → gate allows |
+| perplexity-* (search) | result `date` | YYYY-MM-DD -> start-of-day NY tz | `provider_metadata` | PIT: exclude PIT day entirely (prior-day items pass) |
+| perplexity-* (chat) | `search_results[].date` | same | `provider_metadata` | Chat ops add synthesis item (`record_type: "synthesis"`) in open mode (appended separately from `--limit`); excluded in PIT mode |
 | alphavantage EARNINGS | `reportedDate` | **date-only: verify or gap** | `provider_metadata` | See Date-Only Sources |
 | alphavantage (series) | per-datapoint timestamp | direct | `time_series_timestamp` | Full datetime |
 

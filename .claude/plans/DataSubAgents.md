@@ -352,9 +352,9 @@ python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source bz-ne
 | Neo4j Transcript | `conference_datetime` | ✅ | Call date |
 | Neo4j XBRL | parent Report's `created` | ✅ | Inherit from filing |
 | Neo4j Entity (prices/dividends/splits) | `Date.market_close_current_day` (normalized) | ✅ | Temporal: derive `available_at` from Date node's market close (handles DST + early closes). Company metadata: open mode pass-through (no temporal provenance). 65 dividend gaps (44 orphan + 21 holiday NULL close = 1.48% of 4,405). |
-| Perplexity Search API (`POST /search`) | `date` | ⚠️ | Date-only is not PIT-compliant by itself; must resolve provider-backed publish datetime or gap |
+| Perplexity Search API (`POST /search`) | `date` | ⚠️→✅ | Date-only: exclude PIT day entirely (prior-day items pass, PIT-day items excluded). Conservative fail-closed. `last_updated` is a modification timestamp, NOT publication — never used for `available_at` derivation. |
 | Perplexity MCP search (`mcp__perplexity__perplexity_search`) | ❌ none reliable | ⚠️ | Treat as Lane 3: normalize from citations/URLs, else gap |
-| Perplexity Ask/Research/Reason | normalized or gap | ⚠️ | Lane 3: must extract from citations |
+| Perplexity Ask/Research/Reason (via pit_fetch.py) | `search_results[].date` | ⚠️→✅ | Lane 2 (structured-by-provider) for search_results portion — pit_fetch.py calls API directly, gets full `search_results[]` with per-result `date` fields. Synthesis answer excluded in PIT mode (available_at = now > PIT). |
 | Alpha Vantage TIME_SERIES_* | per-datapoint timestamp | ✅ | Filter to `<= PIT`; keep only timestamps with full datetime semantics |
 | Alpha Vantage EARNINGS | `reportedDate` | ⚠️ | Often date-only; PIT mode requires a verifiable datetime path or gap |
 | Alpha Vantage EARNINGS_ESTIMATES | ❌ not provable | ⚠️ | Historical PIT consensus not guaranteed; use only when PIT ≈ now, else gap |
@@ -517,7 +517,7 @@ Lane 3 timestamp extraction policy (decided):
 
 ## Phase 0 — Build order (do this in order)
 
-1. ~~Create `.claude/hooks/pit_gate.py` (the only PIT gate).~~ **DONE** — 37/37 tests pass. Handles `params.pit`, MCP response format, single-record array unwrap.
+1. ~~Create `.claude/hooks/pit_gate.py` (the only PIT gate).~~ **DONE** — 41/41 tests pass. Handles `params.pit`, MCP response format, single-record array unwrap, nested stringified MCP wrapper unwrap.
 2. Create `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py` (the only external wrapper entrypoint). **PARTIAL** — exists with `bz-news-api` source (386 lines). Needs `alphavantage` source handler.
 3. ~~Update `.claude/agents/neo4j-news.md` end-to-end (reference implementation).~~ **DONE** — see Phase 2.
 4. ~~Create an external adapter data agent (Bash = wrapper only) and gate it.~~ **DONE** — `bz-news-api` agent with PIT gate.
@@ -526,13 +526,13 @@ Lane 3 timestamp extraction policy (decided):
 ## Phase 1 — Common scaffolding (**DONE**)
 
 1. ~~**Define the JSON contract**~~ — `pit-envelope` skill (`.claude/skills/pit-envelope/SKILL.md`): envelope schema, field mappings, forbidden keys, retry rules.
-2. ~~**Build one PIT gate**~~ — `.claude/hooks/pit_gate.py` (stdlib-only Python, 37/37 tests in `test_pit_gate.py`).
+2. ~~**Build one PIT gate**~~ — `.claude/hooks/pit_gate.py` (stdlib-only Python, 41/41 tests in `test_pit_gate.py`).
 3. ~~**Wire PIT gate via hooks**~~ — agent-level PostToolUse hooks (proven in 3 agents: neo4j-news, neo4j-vector-search, bz-news-api).
 
 ## Minimal tests (must pass before adding more sources)
 
 1. ~~**Neo4j allow**: run `neo4j-news` with `--pit` and confirm gate allows clean data.~~ **PASSED** — 3 live tests (PIT-clean, PIT-gap, open mode).
-2. **Perplexity MCP**: in PIT mode, MCP search/ask/reason/research must normalize to items with reliable `available_at` or return a clean gap (no unverifiable items). **PENDING** (Phase 4).
+2. ~~**Perplexity**: in PIT mode, all 5 agents normalize to items with reliable `available_at` or return a clean gap. Uses `pit_fetch.py --source perplexity` (direct API, not MCP).~~ **PASSED** — 31/31 offline tests.
 3. **Alpha Vantage wrapper**: run `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source alphavantage --pit ... TIME_SERIES_* ...` and confirm only datapoints `<= PIT` are returned. **PENDING** (Phase 4).
 
 ## SDK run checklist (top-level orchestrator)
@@ -555,7 +555,7 @@ Assumption: the orchestrator runs as the **primary/top-level session** (not a fo
 - `.claude/agents/neo4j-news.md` — agent with hooks (PreToolUse write-block + PostToolUse pit_gate), skills (`neo4j-schema`, `news-queries`, `pit-envelope`, `evidence-standards`), workflow (PIT/open mode branching), PIT response contract
 - `.claude/skills/news-queries/SKILL.md` — 487 lines, 40 code blocks. Reorganized into 8 sections: Core Access (6), Return & Impact (9), INFLUENCES Targets (4), Cross-Domain (2), Analytical Examples (15), PIT-Safe Envelope (4). Vector search removed (separate agent). Notes trimmed to News-unique items (neo4j-schema duplication removed).
 - `.claude/skills/pit-envelope/SKILL.md` — shared envelope contract (all agents)
-- `.claude/hooks/pit_gate.py` — PIT gate (37/37 tests)
+- `.claude/hooks/pit_gate.py` — PIT gate (41/41 tests)
 - Live integration tests: PIT-clean (12 items), PIT-gap (empty data), open mode (5 items with returns) — all **PASSED**
 
 **Reference pattern for remaining agents**:
@@ -576,10 +576,27 @@ Upgrade remaining domains using the same contract + hook:
 
 ## Phase 4 — External sources (same pattern)
 
-Add/upgrade:
-- `.claude/agents/perplexity-search.md` (PIT via `pit_gate.py`, retry)
-- SEC full-text search adapter scaffold (HTTP wrapper first; MCP optional later)
-- Slide deck API adapter (earningscall.biz)
+### Perplexity (5/5 DONE)
+
+All 5 Perplexity agents migrated to Bash-wrapper archetype using `pit_fetch.py --source perplexity --op <search|ask|reason|research>`:
+- ~~`.claude/agents/perplexity-search.md`~~ **DONE** — `--op search`, raw results, no synthesis
+- ~~`.claude/agents/perplexity-ask.md`~~ **DONE** — `--op ask` (sonar-pro), synthesis in open mode
+- ~~`.claude/agents/perplexity-reason.md`~~ **DONE** — `--op reason` (sonar-reasoning-pro), synthesis in open mode
+- ~~`.claude/agents/perplexity-research.md`~~ **DONE** — `--op research` (sonar-deep-research), synthesis in open mode
+- ~~`.claude/agents/perplexity-sec.md`~~ **DONE** — `--op search --search-mode sec`, locator-first (no synthesis)
+
+Key design decisions:
+- Two API handlers: POST /search (raw results) and POST /chat/completions (answer + search_results)
+- Two-tier PIT filtering: full timestamp → exact comparison; date-only → exclude PIT day entirely
+- `--limit` controls search results only; synthesis appended separately in open chat mode
+- Synthesis excluded in PIT mode (available_at = now > PIT)
+- 31/31 offline tests (21 pit_fetch + 10 nuance coverage)
+
+### Remaining
+
+- Alpha Vantage (`alphavantage-earnings`) — not started
+- SEC full-text search adapter scaffold (HTTP wrapper first; MCP optional later) — placeholder
+- Slide deck API adapter (earningscall.biz) — placeholder
 
 ### SEC full-text adapter scaffold (placeholder, implementation-ready structure)
 
@@ -628,7 +645,7 @@ TODO (leave as placeholders until API wiring step):
 1. **Hook format** (decided in §4.4):
    - All sources: `type: command` + `pit_gate.py` (Python, stdlib-only) for deterministic allow/block based on structured publication fields.
 
-*Plan Version 2.5 | 2026-02-15 | Phase 0-2 DONE. Phase 3: 5/5 DONE (all Neo4j agents PIT-complete). Agent count: 13 (Neo4j 6 + AV 1 + BZ 1 + Perplexity 5). PIT-complete: 7/13 (neo4j-news, neo4j-vector-search, bz-news-api, neo4j-report, neo4j-transcript, neo4j-xbrl, neo4j-entity).*
+*Plan Version 2.7 | 2026-02-16 | Phase 0-2 DONE. Phase 3: 5/5 DONE (all Neo4j agents PIT-complete). Phase 4: 5/5 Perplexity DONE. Agent count: 13 (Neo4j 6 + AV 1 + BZ 1 + Perplexity 5). PIT-complete: 12/13 (neo4j-news, neo4j-vector-search, bz-news-api, neo4j-report, neo4j-transcript, neo4j-xbrl, neo4j-entity, perplexity-search, perplexity-ask, perplexity-reason, perplexity-research, perplexity-sec). Remaining: alphavantage-earnings. Exhaustive testing: 60/60 (56 individual + 4 cross-agent) + 19/19 pit_fetch tests. pit_gate.py: 41/41 tests (added unwrap_nested_mcp_payload for stringified MCP wrappers, T38-T41).*
 
 ---
 
@@ -638,7 +655,7 @@ Before closing any implementation pass for this plan, run a final consistency ch
 
 1. ~~Data-layer lifecycle status (`Draft` vs `done/assumed complete`).~~ **RESOLVED 2026-02-09**: earnings-orchestrator.md updated to "IN PROGRESS, out of scope for this doc" with Phase status.
 2. ~~Agent catalog alignment.~~ **RESOLVED 2026-02-09**: Both docs aligned at 13 agents (Neo4j 6, AV 1, BZ 1, Perplexity 5). `neo4j-vector-search` added to both. earnings-orchestrator.md agent table now shows PIT status per agent.
-3. `perplexity-sec` behavior (locator-only vs direct data source). **OPEN** — resolve when Phase 4 begins.
+3. `perplexity-sec` behavior (locator-only vs direct data source). **RESOLVED 2026-02-16**: perplexity-sec is locator-first (returns raw EDGAR filing URLs/metadata via `--op search --search-mode sec`). For PIT-safe filing content extraction, hand off to `neo4j-report`.
 4. PIT propagation contract (`--pit` in subagent prompt vs explicit downstream tool parameter, e.g., `tool_input.params.pit` / `tool_input.parameters.pit`). **OPEN** — validated for Neo4j Lane 1; needs validation for Lane 2/3.
 5. Response-shape integration (DataSubAgents JSON envelope `data[]/gaps[]` + `available_at` vs orchestrator merged text bundle fields). **OPEN** — envelope proven in production; orchestrator text rendering not yet built.
 6. Legacy `filtered-data` policy wording (deprecated vs transitional availability). **OPEN** — both docs say deprecated.
