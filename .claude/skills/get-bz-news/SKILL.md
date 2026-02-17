@@ -44,21 +44,21 @@ Parse THRESHOLD argument:
 Use `threshold` and `adj_vol` as literal parameters (no subquery):
 
 ```cypher
-MATCH (n:News)-[inf:INFLUENCES]->(c:Company {ticker: $ticker})
+MATCH (n:News)-[r:INFLUENCES]->(c:Company {ticker: $ticker})
 WHERE n.created >= $start AND n.created < $end
-  AND inf.daily_stock IS NOT NULL AND inf.daily_macro IS NOT NULL
-  AND abs(inf.daily_stock - inf.daily_macro) >= $threshold
+  AND r.daily_stock IS NOT NULL AND r.daily_macro IS NOT NULL
+  AND abs(r.daily_stock - r.daily_macro) >= $threshold
 RETURN n.id AS news_id,
        n.created AS date,
        n.title AS title,
        n.teaser AS teaser,
        n.body AS body,
        n.market_session AS market_session,
-       inf.daily_stock AS daily_stock,
-       (inf.daily_stock - inf.daily_macro) AS daily_adj,
-       (inf.daily_stock - inf.daily_sector) AS sector_adj,
-       (inf.daily_stock - inf.daily_industry) AS industry_adj,
-       abs(inf.daily_stock - inf.daily_macro) / $adj_vol AS z_score
+       r.daily_stock AS daily_stock,
+       (r.daily_stock - r.daily_macro) AS daily_adj,
+       (r.daily_stock - r.daily_sector) AS sector_adj,
+       (r.daily_stock - r.daily_industry) AS industry_adj,
+       abs(r.daily_stock - r.daily_macro) / $adj_vol AS z_score
 ORDER BY n.created ASC
 ```
 
