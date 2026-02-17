@@ -51,11 +51,12 @@ python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fet
 
 10-K (annual), 10-Q (quarterly), 8-K (current), S-1/S-4 (IPO/M&A)
 
-## Locator-First Design
+## Content Extraction
 
-This agent returns raw EDGAR filing URLs/metadata, not filing content.
-- For PIT-safe filing content extraction, hand off URLs to `neo4j-report` (if the filing is in Neo4j) or use a dedicated content extraction agent.
-- Do not attempt to extract or synthesize filing content within this agent.
+Each search result includes a `snippet` field with extracted content from EDGAR filings.
+- Default extraction: ~4K tokens per result, ~10K total.
+- Use `--max-tokens <N>` (up to 1000000) and `--max-tokens-per-page <N>` for deeper extraction.
+- For full filing content, hand off URLs to `neo4j-report` (if the filing is in Neo4j) or use a dedicated content extraction agent.
 
 ## Notes
 

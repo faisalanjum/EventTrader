@@ -459,12 +459,14 @@ The planner must only use agent names from this catalog. Any other value is a va
 | `neo4j-transcript` | Earnings calls | Prepared remarks, Q&A exchanges, speaker-attributed text | Management commentary, analyst questions, tone/sentiment | **DONE** |
 | `neo4j-xbrl` | Structured financials | EPS, revenue, margins, balance sheet items from 10-K/10-Q | Prior-quarter financials, YoY comparisons, trend data | **DONE** |
 | `neo4j-entity` | Company metadata | Sector, industry, market cap, price series, dividends, splits | Peer identification, sector context, historical price data | **DONE** |
-| `alphavantage-earnings` | Consensus estimates | EPS/revenue consensus, actuals, surprise, earnings calendar | Beat/miss analysis, expectation anchors | Needs rework |
+| `alphavantage-earnings` | Consensus estimates | EPS/revenue consensus, actuals, surprise, earnings calendar | Beat/miss analysis, expectation anchors | **DONE** |
 | `perplexity-search` | Web search | Raw URLs and snippets from web search | Broad coverage gap-fill, recent events not in structured sources | **DONE** |
 | `perplexity-ask` | Web Q&A | Single-fact answers with citations | Quick lookups (e.g., "What is {TICKER}'s current dividend yield?") | **DONE** |
 | `perplexity-reason` | Web reasoning | Multi-step analysis with chain-of-thought | "Why" questions, causal analysis, comparisons | **DONE** |
 | `perplexity-research` | Deep research | Multi-source synthesis reports | Exhaustive investigation (expensive — use as last-tier fallback) | **DONE** |
 | `perplexity-sec` | SEC EDGAR | Filing search (10-K, 10-Q, 8-K) from EDGAR | Fallback when Neo4j filings are missing or incomplete | **DONE** |
+
+Alpha Vantage estimates methodology note: coarse PIT uses fixed revision buckets (7/30/60/90 days before fiscal period end). This looks true from data, but AV docs don't clearly guarantee it.
 
 **Planned agents** (to be built as part of `DataSubAgents.md` implementation):
 
@@ -857,7 +859,7 @@ Source: `Infrastructure.md`, `AgentTeams.md`
 
 ### Data layer — IN PROGRESS, out of scope for this doc
 
-How data is fetched, sources available, PIT enforcement: see `DataSubAgents.md`. Status: Phase 0-2 DONE, Phase 3 DONE (all 5 Neo4j agents PIT-complete), Phase 4 Perplexity DONE (all 5 Perplexity agents PIT-complete). 12 of 13 agents fully PIT-compliant (remaining: alphavantage-earnings). Exhaustive testing: 60/60 passed (56 individual + 4 cross-agent) + 19/19 pit_fetch tests. pit_gate.py: 41/41 tests. This doc only defines how components integrate with that layer.
+How data is fetched, sources available, PIT enforcement: see `DataSubAgents.md`. Status: Phase 0-2 DONE, Phase 3 DONE (all 5 Neo4j agents PIT-complete), Phase 4 DONE (all 5 Perplexity + 1 Alpha Vantage agents PIT-complete). 13 of 13 agents fully PIT-compliant. Exhaustive testing: 60/60 passed (56 individual + 4 cross-agent) + 52/52 pit_fetch tests. pit_gate.py: 41/41 tests. This doc only defines how components integrate with that layer.
 
 ---
 

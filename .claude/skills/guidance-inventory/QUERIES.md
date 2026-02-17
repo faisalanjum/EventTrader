@@ -166,7 +166,7 @@ Query: "{company_name} ({ticker}) FY{year} earnings guidance history outlook"
 ```
 
 ### Via MCP
-Use `mcp__perplexity__perplexity_search` with query parameter.
+Use `mcp__perplexity__create_search` with query parameter.
 
 ---
 

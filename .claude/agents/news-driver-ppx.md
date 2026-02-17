@@ -4,7 +4,7 @@ description: "Final research escalation using Perplexity when web sources insuff
 color: "#FF6B6B"
 tools:
   - Bash
-  - mcp__perplexity__perplexity_search
+  - mcp__perplexity__create_search
   - TaskList
   - TaskGet
   - TaskUpdate

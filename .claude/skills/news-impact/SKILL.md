@@ -7,8 +7,8 @@ allowed-tools:
   - Skill
   - mcp__neo4j-cypher__read_neo4j_cypher
   - WebSearch
-  - mcp__perplexity__perplexity_search
-  - mcp__perplexity__perplexity_research
+  - mcp__perplexity__create_search
+  - mcp__perplexity__create_chat_completions
 ---
 
 # News Impact

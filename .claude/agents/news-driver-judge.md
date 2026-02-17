@@ -9,7 +9,7 @@ tools:
   - WebSearch
   - WebFetch
   - mcp__neo4j-cypher__read_neo4j_cypher
-  - mcp__perplexity__perplexity_search
+  - mcp__perplexity__create_search
   - TaskList
   - TaskGet
   - TaskUpdate
@@ -216,7 +216,7 @@ Where:
 | `WebFetch` | Fetch specific URLs for verification | Free |
 | `Skill` | Load neo4j-news, neo4j-entity, neo4j-schema skills | Free |
 | `TaskGet/Update` | Read input, write output | Free |
-| `mcp__perplexity__perplexity_search` | **LAST RESORT** - expensive API | $$ |
+| `mcp__perplexity__create_search` | **LAST RESORT** - expensive API | $$ |
 
 ## Tool Priority (Use Cheaper First)
 

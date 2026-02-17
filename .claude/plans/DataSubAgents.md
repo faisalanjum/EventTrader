@@ -356,8 +356,8 @@ python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source bz-ne
 | Perplexity MCP search (`mcp__perplexity__perplexity_search`) | ❌ none reliable | ⚠️ | Treat as Lane 3: normalize from citations/URLs, else gap |
 | Perplexity Ask/Research/Reason (via pit_fetch.py) | `search_results[].date` | ⚠️→✅ | Lane 2 (structured-by-provider) for search_results portion — pit_fetch.py calls API directly, gets full `search_results[]` with per-result `date` fields. Synthesis answer excluded in PIT mode (available_at = now > PIT). |
 | Alpha Vantage TIME_SERIES_* | per-datapoint timestamp | ✅ | Filter to `<= PIT`; keep only timestamps with full datetime semantics |
-| Alpha Vantage EARNINGS | `reportedDate` | ⚠️ | Often date-only; PIT mode requires a verifiable datetime path or gap |
-| Alpha Vantage EARNINGS_ESTIMATES | ❌ not provable | ⚠️ | Historical PIT consensus not guaranteed; use only when PIT ≈ now, else gap |
+| Alpha Vantage EARNINGS (quarterly) | `reportedDate` | ✅ | Date-only start-of-day NY; AV has no reportTime field. Annual cross-referenced via Q4 quarterly reportedDate (`available_at_source: cross_reference`) |
+| Alpha Vantage EARNINGS_ESTIMATES | revision buckets (7/30/60/90d before fiscal end) | ✅ | Coarse PIT: nearest bucket ≤ PIT selected; returns `pit_consensus_eps` + `pit_bucket`. `available_at_source: coarse_pit`. Forward-looking gapped. **Methodology note:** looks true from data, but AV docs don't clearly guarantee it. |
 | Benzinga News API | `created` | ✅ | Use `provider_metadata`; drop items with unparseable/missing timestamp |
 | Yahoo | provider-specific | ⚠️ | Use Lane 3: URL/citation -> WebFetch timestamp extraction; if unverifiable datetime, gap |
 
@@ -425,7 +425,7 @@ All data subagents return **JSON only** (no prose). The envelope has exactly two
 
 **`data[]` item requirements** (validated by `pit_gate.py`):
 - `available_at`: full ISO8601 datetime with timezone. Required per item in PIT mode.
-- `available_at_source`: one of `neo4j_created`, `edgar_accepted`, `time_series_timestamp`, `provider_metadata`. Required per item in PIT mode.
+- `available_at_source`: one of `neo4j_created`, `edgar_accepted`, `time_series_timestamp`, `provider_metadata`, `cross_reference`, `coarse_pit`. Required per item in PIT mode.
 - `available_at <= PIT` must hold. Violation → block.
 - Domain-specific fields vary by agent (see each agent's query skill).
 
@@ -518,10 +518,10 @@ Lane 3 timestamp extraction policy (decided):
 ## Phase 0 — Build order (do this in order)
 
 1. ~~Create `.claude/hooks/pit_gate.py` (the only PIT gate).~~ **DONE** — 41/41 tests pass. Handles `params.pit`, MCP response format, single-record array unwrap, nested stringified MCP wrapper unwrap.
-2. Create `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py` (the only external wrapper entrypoint). **PARTIAL** — exists with `bz-news-api` source (386 lines). Needs `alphavantage` source handler.
+2. Create `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py` (the only external wrapper entrypoint). **DONE** — exists with `bz-news-api`, `perplexity`, and `alphavantage` sources.
 3. ~~Update `.claude/agents/neo4j-news.md` end-to-end (reference implementation).~~ **DONE** — see Phase 2.
 4. ~~Create an external adapter data agent (Bash = wrapper only) and gate it.~~ **DONE** — `bz-news-api` agent with PIT gate.
-5. ~~Run the minimal tests below before expanding coverage.~~ **DONE** — Neo4j allow test passed. Perplexity + Alpha Vantage tests pending (Phase 4).
+5. ~~Run the minimal tests below before expanding coverage.~~ **DONE** — Neo4j allow, Perplexity, and Alpha Vantage minimal tests passed.
 
 ## Phase 1 — Common scaffolding (**DONE**)
 
@@ -533,7 +533,7 @@ Lane 3 timestamp extraction policy (decided):
 
 1. ~~**Neo4j allow**: run `neo4j-news` with `--pit` and confirm gate allows clean data.~~ **PASSED** — 3 live tests (PIT-clean, PIT-gap, open mode).
 2. ~~**Perplexity**: in PIT mode, all 5 agents normalize to items with reliable `available_at` or return a clean gap. Uses `pit_fetch.py --source perplexity` (direct API, not MCP).~~ **PASSED** — 31/31 offline tests.
-3. **Alpha Vantage wrapper**: run `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source alphavantage --pit ... TIME_SERIES_* ...` and confirm only datapoints `<= PIT` are returned. **PENDING** (Phase 4).
+3. **Alpha Vantage wrapper**: run `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source alphavantage --op earnings --pit ... --symbol AAPL` and confirm only pre-PIT quarterly items returned, annual cross-referenced, estimates coarse-PIT bucketed, calendar gapped. **PASSED** — 21/21 offline tests.
 
 ## SDK run checklist (top-level orchestrator)
 
@@ -594,7 +594,7 @@ Key design decisions:
 
 ### Remaining
 
-- Alpha Vantage (`alphavantage-earnings`) — not started
+- ~~Alpha Vantage (`alphavantage-earnings`)~~ **DONE** — Bash-wrapper archetype, 3 ops (earnings/estimates/calendar), PIT filtering via reportedDate (date-only, no reportTime in API), annual cross-referenced via Q4 quarterly reportedDate, estimates coarse PIT via revision buckets (7/30/60/90d), 21/21 offline tests. Methodology caveat for estimate buckets: looks true from data, but AV docs don't clearly guarantee it.
 - SEC full-text search adapter scaffold (HTTP wrapper first; MCP optional later) — placeholder
 - Slide deck API adapter (earningscall.biz) — placeholder
 
@@ -630,7 +630,7 @@ TODO (leave as placeholders until API wiring step):
    - PIT enforcement remains deterministic: the normalizer is a transformer; `pit_gate.py` is the gatekeeper (no agent-based hook gating).
 3. **`available_at_source` provenance tagging (decided)**:
    - Required in PIT mode for every `data[]` item.
-   - Allowed values: `neo4j_created`, `edgar_accepted`, `time_series_timestamp`, `provider_metadata`.
+   - Allowed values: `neo4j_created`, `edgar_accepted`, `time_series_timestamp`, `provider_metadata`, `cross_reference`, `coarse_pit`.
    - `pit_gate.py` fails-closed when missing/invalid.
 4. **`neo4j-entity` PIT policy (resolved 2026-02-15)**:
    - **Temporal data** (prices, dividends, splits): derive `available_at` from `Date.market_close_current_day` — real datetime+tz field that handles DST (`-0400`/`-0500`) and early closes (`13:00:00`). Normalize to strict ISO8601 via Cypher string ops (space→T, insert colon in offset).
@@ -645,7 +645,7 @@ TODO (leave as placeholders until API wiring step):
 1. **Hook format** (decided in §4.4):
    - All sources: `type: command` + `pit_gate.py` (Python, stdlib-only) for deterministic allow/block based on structured publication fields.
 
-*Plan Version 2.7 | 2026-02-16 | Phase 0-2 DONE. Phase 3: 5/5 DONE (all Neo4j agents PIT-complete). Phase 4: 5/5 Perplexity DONE. Agent count: 13 (Neo4j 6 + AV 1 + BZ 1 + Perplexity 5). PIT-complete: 12/13 (neo4j-news, neo4j-vector-search, bz-news-api, neo4j-report, neo4j-transcript, neo4j-xbrl, neo4j-entity, perplexity-search, perplexity-ask, perplexity-reason, perplexity-research, perplexity-sec). Remaining: alphavantage-earnings. Exhaustive testing: 60/60 (56 individual + 4 cross-agent) + 19/19 pit_fetch tests. pit_gate.py: 41/41 tests (added unwrap_nested_mcp_payload for stringified MCP wrappers, T38-T41).*
+*Plan Version 3.0 | 2026-02-16 | Phase 0-2 DONE. Phase 3: 5/5 DONE (all Neo4j agents PIT-complete). Phase 4: 5/5 Perplexity DONE + 1/1 Alpha Vantage DONE. Agent count: 13 (Neo4j 6 + AV 1 + BZ 1 + Perplexity 5). PIT-complete: 13/13 (neo4j-news, neo4j-vector-search, bz-news-api, neo4j-report, neo4j-transcript, neo4j-xbrl, neo4j-entity, perplexity-search, perplexity-ask, perplexity-reason, perplexity-research, perplexity-sec, alphavantage-earnings). Exhaustive testing: 60/60 (56 individual + 4 cross-agent) + 52/52 pit_fetch tests (31 existing + 21 AV). pit_gate.py: 41/41 tests. AV rework: removed phantom reportTime, added cross-reference for annual earnings, coarse PIT via revision buckets for estimates, added `cross_reference` + `coarse_pit` to VALID_SOURCES.*
 
 ---
 

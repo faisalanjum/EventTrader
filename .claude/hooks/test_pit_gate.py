@@ -543,6 +543,35 @@ TESTS: list[dict] = [
         "expect": "block",
         "code": "PIT_MISSING_ENVELOPE",
     },
+    # ── T42-T43: cross_reference + coarse_pit source tags ──
+    {
+        "name": "T42 cross_reference source tag → allow",
+        "input": hook(
+            response=envelope(
+                [
+                    {
+                        "available_at": "2024-02-10T00:00:00-05:00",
+                        "available_at_source": "cross_reference",
+                    }
+                ]
+            )
+        ),
+        "expect": "allow",
+    },
+    {
+        "name": "T43 coarse_pit source tag → allow",
+        "input": hook(
+            response=envelope(
+                [
+                    {
+                        "available_at": "2024-01-15T00:00:00-05:00",
+                        "available_at_source": "coarse_pit",
+                    }
+                ]
+            )
+        ),
+        "expect": "allow",
+    },
 ]
 
 

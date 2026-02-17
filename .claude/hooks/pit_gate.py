@@ -23,6 +23,8 @@ VALID_SOURCES: frozenset[str] = frozenset({
     "edgar_accepted",
     "time_series_timestamp",
     "provider_metadata",
+    "cross_reference",
+    "coarse_pit",
 })
 
 FORBIDDEN_KEYS: frozenset[str] = frozenset({

@@ -1,377 +1,445 @@
-# Perplexity PIT Implementation — 5 Agents, 2 Handlers
+# Alpha Vantage Earnings PIT Implementation — Last Agent (13/13)
 
-## Context
+## STATUS: COMPLETE (2026-02-16)
 
-7/13 data subagents are PIT-DONE. The 5 Perplexity agents (search, ask, reason, research, sec) currently lack PIT compliance, envelope contracts, and hook validation. This plan adds one source (`--source perplexity`) with an `--op` flag to pit_fetch.py, rewrites all 5 agents to the Bash-wrapper archetype, and achieves full PIT/Open compliance.
+All implementation done. 52/52 pit_fetch tests, 13/13 agents linter, 41/41 pit_gate tests.
 
-**API reality (verified from docs):**
-- `POST /search` — raw ranked results, $0.005/req flat, no token costs
-- `POST /chat/completions` — synthesized answer + search_results, token-priced per model
+**Implementation divergences from original plan below:**
 
-Both endpoints return per-result `date` and `last_updated` fields. MCP server (any version) discards `search_results[]` from chat/completions — pit_fetch.py calls APIs directly, so we get everything.
-
-**Agent-to-API mapping:**
-
-| Agent | --op | API Endpoint | Model (internal) | Notes |
-|---|---|---|---|---|
-| perplexity-search | search | POST /search | n/a | Cheapest, raw results |
-| perplexity-ask | ask | POST /chat/completions | sonar-pro | Synthesized answer |
-| perplexity-reason | reason | POST /chat/completions | sonar-reasoning-pro | Answer + reasoning_steps |
-| perplexity-research | research | POST /chat/completions | sonar-deep-research | Comprehensive report |
-| perplexity-sec | search | POST /search | n/a | + --search-mode sec (locator-first) |
-
-**Date mapping policy (decided):**
-- **Full timestamp available** (ISO8601 with time+tz): use exact PIT datetime comparison (`created_dt > pit_dt` → excluded), same as BZ handler.
-- **Date-only** (YYYY-MM-DD): exclude PIT day entirely. If PIT = 2024-06-15T16:00:00, articles dated 2024-06-15 or later are excluded. Only prior-day articles pass.
-- Server-side `search_before_date_filter` is a **coarse prefilter** only. Client-side PIT filter in pit_fetch.py is the **source of truth**.
+| Plan assumption | Actual implementation | Impact |
+|---|---|---|
+| `reportTime` field exists in EARNINGS API | Does NOT exist — live API confirmed no `reportTime` | Quarterly earnings use date-only PIT (exclude PIT day, same as Perplexity) |
+| Annual earnings: gap in PIT (no reportedDate) | Cross-reference PIT: annual `available_at` derived from matching Q4 quarterly `reportedDate` (`available_at_source: "cross_reference"`) | Annual items are PIT-capable, not gapped |
+| EARNINGS_ESTIMATES: gap entirely in PIT | Coarse PIT via revision buckets (7/30/60/90d before fiscal end). Selects nearest bucket ≤ PIT. Returns `pit_consensus_eps` + `pit_bucket` (`available_at_source: "coarse_pit"`) | Historical estimates are PIT-capable, not gapped. Forward-looking still gapped. |
+| pit_gate.py unchanged | Added `cross_reference` + `coarse_pit` to VALID_SOURCES | Gate validates new source types |
+| 10 AV tests (41 total) | 21 AV tests (52 total): 10 earnings + 11 coarse PIT estimates | More comprehensive coverage |
 
 ---
 
-## 1. pit_fetch.py — One source, one --op flag
+## Context (original plan — see divergences above)
 
-**File:** `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py` (398 → ~560 lines)
+12/13 data subagents are PIT-complete. `alphavantage-earnings` is the last remaining agent. It currently uses 3 MCP tools directly (`EARNINGS_ESTIMATES`, `EARNINGS`, `EARNINGS_CALENDAR`) with no PIT compliance, no envelope contract, and no hook validation. This plan converts it to the Bash-wrapper archetype (same as BZ + Perplexity), adds `--source alphavantage` to pit_fetch.py, and achieves full 13/13 PIT compliance.
+
+**Why wrapper over MCP tools:** DataSubAgents.md §4.6 decided this — MCP tools don't accept `--pit`, so hooks can't validate. The wrapper pattern (pit_fetch.py calls AV REST API directly, filters by PIT, returns sanitized envelope) is the only reliable approach.
+
+**API reality (verified via live MCP calls — corrected post-implementation):**
+
+| AV Function | pit_fetch `--op` | Response format | PIT-critical fields | PIT strategy |
+|---|---|---|---|---|
+| `EARNINGS` | `earnings` | JSON | `quarterlyEarnings[].reportedDate` (date-only, no reportTime) | Quarterly: date-only exclude PIT day. Annual: cross-reference via Q4 quarterly reportedDate |
+| `EARNINGS_ESTIMATES` | `estimates` | JSON | Revision buckets (`eps_estimate_average_7/30/60/90_days_ago`) | Coarse PIT: nearest bucket ≤ PIT. Forward-looking gapped. |
+| `EARNINGS_CALENDAR` | `calendar` | CSV | None (forward-looking snapshot) | Gap entirely in PIT mode |
+
+**Quarterly earnings `available_at` derivation:**
+
+`reportedDate` (YYYY-MM-DD) — date-only, no time-of-day field available:
+- Start-of-day NY timezone (conservative)
+- PIT comparison: exclude PIT day entirely (same as Perplexity date-only treatment)
+
+**Annual earnings:** Cross-referenced via matching Q4 quarterly `reportedDate` (`available_at_source: "cross_reference"`). Unmatched annual items gapped.
+
+---
+
+## 1. pit_fetch.py — Add alphavantage source
+
+**File:** `.claude/skills/earnings-orchestrator/scripts/pit_fetch.py`
 
 ### 1.1 New constants
 
 ```python
-PPLX_SEARCH_URL = "https://api.perplexity.ai/search"
-PPLX_CHAT_URL = "https://api.perplexity.ai/chat/completions"
+# --- Alpha Vantage constants ---
+AV_BASE_URL = "https://www.alphavantage.co/query"
 
-PPLX_OP_MODEL: dict[str, str | None] = {
-    "search": None,           # POST /search, no model
-    "ask": "sonar-pro",
-    "reason": "sonar-reasoning-pro",
-    "research": "sonar-deep-research",
+AV_OP_FUNCTION: dict[str, str] = {
+    "earnings": "EARNINGS",
+    "estimates": "EARNINGS_ESTIMATES",
+    "calendar": "EARNINGS_CALENDAR",
+}
+
+# Conservative report-time → hour mapping for datetime derivation
+AV_REPORT_TIME_HOUR: dict[str, int] = {
+    "pre-market": 6,    # 6 AM ET (conservative early morning)
+    "post-market": 16,  # 4 PM ET (market close)
 }
 ```
 
-### 1.2 New parser args
+### 1.2 Parser changes
 
 Extend `--source` choices:
 ```python
-choices=["bz-news-api", "benzinga", "benzinga-news", "perplexity"]
+choices=["bz-news-api", "benzinga", "benzinga-news", "perplexity", "alphavantage"]
 ```
 
-New arguments:
+Remove `choices` constraint from `--op` (validate per-source instead):
 ```python
-p.add_argument("--op", choices=["search", "ask", "reason", "research"],
-               help="Perplexity operation mode (required when --source perplexity)")
-p.add_argument("--query", action="append", dest="queries",
-               help="Search query (repeatable for multi-pass)")
-p.add_argument("--max-results", type=int, default=10, dest="max_results",
-               help="Results per query (1-20, /search only)")
-p.add_argument("--search-recency", dest="search_recency",
-               choices=["hour", "day", "week", "month", "year"])
-p.add_argument("--search-domains", dest="search_domains",
-               help="Comma-separated domain allowlist or -prefixed denylist")
-p.add_argument("--search-mode", dest="search_mode",
-               choices=["web", "academic", "sec"], default="web")
-p.add_argument("--search-context-size", dest="search_context_size",
-               choices=["low", "medium", "high"], default="low")
+p.add_argument("--op", help="Operation mode (validated per source)")
 ```
 
-### 1.3 Date helpers
-
+Add AV-specific args:
 ```python
-def _to_pplx_date(iso_date: str) -> str:
-    """YYYY-MM-DD → MM/DD/YYYY for Perplexity date filters."""
-    parts = iso_date.split("-")
-    return f"{parts[1]}/{parts[2]}/{parts[0]}"
-
-def _pit_to_pplx_date(pit_str: str) -> str | None:
-    """PIT ISO8601 → MM/DD/YYYY (the PIT day itself, for 'before' filter)."""
-    dt = _parse_dt(pit_str)
-    return dt.strftime("%m/%d/%Y") if dt else None
-
-def _pit_to_date_str(pit_str: str) -> str | None:
-    """PIT ISO8601 → YYYY-MM-DD for client-side date comparison."""
-    dt = _parse_dt(pit_str)
-    return dt.strftime("%Y-%m-%d") if dt else None
+p.add_argument("--symbol", help="Single ticker symbol (alphavantage)")
+p.add_argument("--horizon", choices=["3month", "6month", "12month"],
+               default="3month", help="Calendar horizon (alphavantage --op calendar)")
 ```
 
-### 1.4 `_normalize_pplx_result` (same tuple signature as `_normalize_bz_item`)
-
-Works for both `/search` results and `/chat/completions` search_results — same schema.
+### 1.3 `_normalize_av_quarterly` normalizer
 
 ```python
-def _normalize_pplx_result(raw: Any) -> tuple[dict[str, Any] | None, datetime | None, str | None]:
-    if not isinstance(raw, dict):
-        return None, None, "raw item is not an object"
+def _normalize_av_quarterly(raw: dict[str, Any]) -> tuple[dict[str, Any] | None, datetime | None, str | None]:
+    """Normalize a quarterlyEarnings item into PIT envelope format."""
+    reported_date = raw.get("reportedDate")
+    if not isinstance(reported_date, str) or not reported_date.strip():
+        fiscal = raw.get("fiscalDateEnding", "unknown")
+        return None, None, f"quarterly item {fiscal} missing reportedDate"
 
-    # PIT validates PUBLICATION date, not modification date (DataSubAgents.md §4.3).
-    # `date` = publication date (the field PIT cares about).
-    # `last_updated` = modification date (NOT publication — different semantics).
-    # If `date` is missing, the item has no reliable publication metadata → unverifiable gap
-    # (DataSubAgents.md §4.3 line 130: "must be dropped in PIT mode or returned as a gap").
-    # `last_updated` is preserved as metadata but NEVER used for PIT timestamp derivation.
-    date_raw = raw.get("date")
-    if not isinstance(date_raw, str) or not date_raw.strip():
-        url = raw.get("url", "unknown")
-        return None, None, f"item {url} missing publication date field"
+    # Derive full datetime from reportedDate + reportTime
+    report_time = (raw.get("reportTime") or "").strip().lower()
+    hour = AV_REPORT_TIME_HOUR.get(report_time)
 
-    # YYYY-MM-DD → start-of-day NY (used only for PIT comparison ordering)
-    pub_dt: datetime | None = None
-    text = date_raw.strip()
-    if len(text) == 10 and text[4] == "-" and text[7] == "-":
+    if hour is not None:
+        # Full datetime derivable
         try:
-            pub_dt = datetime.strptime(text, "%Y-%m-%d").replace(tzinfo=NY_TZ)
+            pub_dt = datetime.strptime(reported_date.strip(), "%Y-%m-%d").replace(
+                hour=hour, minute=15 if report_time == "post-market" else 0,
+                tzinfo=NY_TZ
+            )
         except ValueError:
-            pass
-    if pub_dt is None:
-        pub_dt = _parse_dt(date_raw)
-    if pub_dt is None:
-        return None, None, f"unparseable date: {date_raw}"
+            return None, None, f"unparseable reportedDate: {reported_date}"
+    else:
+        # Date-only fallback (no reportTime) — start-of-day NY
+        try:
+            pub_dt = datetime.strptime(reported_date.strip(), "%Y-%m-%d").replace(tzinfo=NY_TZ)
+        except ValueError:
+            return None, None, f"unparseable reportedDate: {reported_date}"
 
     item = {
         "available_at": _to_new_york_iso(pub_dt),
         "available_at_source": "provider_metadata",
-        "url": raw.get("url"),
-        "title": raw.get("title"),
-        "snippet": raw.get("snippet", ""),
-        "date": date_raw,
-        "last_updated": raw.get("last_updated"),
+        "record_type": "quarterly_earnings",
+        "fiscalDateEnding": raw.get("fiscalDateEnding"),
+        "reportedDate": reported_date,
+        "reportTime": raw.get("reportTime"),
+        "reportedEPS": raw.get("reportedEPS"),
+        "estimatedEPS": raw.get("estimatedEPS"),
+        "surprise": raw.get("surprise"),
+        "surprisePercentage": raw.get("surprisePercentage"),
     }
     return item, pub_dt, None
 ```
 
-### 1.5 `_build_pplx_date_filters` (shared by both endpoints)
+### 1.4 `_normalize_av_annual` normalizer
 
 ```python
-def _build_pplx_date_filters(args: argparse.Namespace) -> dict[str, str]:
-    filters: dict[str, str] = {}
-    if args.pit:
-        pplx_date = _pit_to_pplx_date(args.pit)
-        if pplx_date:
-            filters["search_before_date_filter"] = pplx_date  # excludes PIT day
-    elif args.date_to:
-        filters["search_before_date_filter"] = _to_pplx_date(args.date_to)
-    if args.date_from:
-        filters["search_after_date_filter"] = _to_pplx_date(args.date_from)
-    return filters
-```
-
-### 1.6 Handler A: `_fetch_pplx_search` (POST /search)
-
-```python
-def _fetch_pplx_search(api_key: str, args: argparse.Namespace) -> list[Any]:
-    all_results: list[Any] = []
-    date_filters = _build_pplx_date_filters(args)
-    for query in args.queries:
-        body: dict[str, Any] = {
-            "query": query,
-            "max_results": min(20, max(1, args.max_results)),
-        }
-        body.update(date_filters)
-        if args.search_recency:
-            body["search_recency_filter"] = args.search_recency
-        if args.search_domains:
-            body["search_domain_filter"] = _csv(args.search_domains)
-        if args.search_mode != "web":
-            body["search_mode"] = args.search_mode
-
-        data = json.dumps(body).encode("utf-8")
-        req = Request(PPLX_SEARCH_URL, data=data, headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-            "User-Agent": "pit-fetch/1.0",
-        }, method="POST")
-        with urlopen(req, timeout=args.timeout) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-        results = payload.get("results", [])
-        if isinstance(results, list):
-            all_results.extend(results)
-    return all_results
-```
-
-### 1.7 Handler B: `_fetch_pplx_chat` (POST /chat/completions)
-
-Returns `(search_results_list, answer_str, citations_list)`.
-
-```python
-def _fetch_pplx_chat(api_key: str, args: argparse.Namespace, model: str) -> tuple[list[Any], str, list[str]]:
-    combined_query = "\n".join(args.queries)
-    body: dict[str, Any] = {
-        "model": model,
-        "messages": [{"role": "user", "content": combined_query}],
+def _normalize_av_annual(raw: dict[str, Any]) -> dict[str, Any]:
+    """Normalize an annualEarnings item (open mode only, no available_at)."""
+    return {
+        "record_type": "annual_earnings",
+        "fiscalDateEnding": raw.get("fiscalDateEnding"),
+        "reportedEPS": raw.get("reportedEPS"),
+        # No available_at — open mode pass-through only
     }
-    date_filters = _build_pplx_date_filters(args)
-    body.update(date_filters)
-    if args.search_recency:
-        body["search_recency_filter"] = args.search_recency
-    if args.search_domains:
-        body["search_domain_filter"] = _csv(args.search_domains)
-    if args.search_mode != "web":
-        body["search_mode"] = args.search_mode
-    if args.search_context_size != "low":
-        body["web_search_options"] = {"search_context_size": args.search_context_size}
-
-    data = json.dumps(body).encode("utf-8")
-    req = Request(PPLX_CHAT_URL, data=data, headers={
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "User-Agent": "pit-fetch/1.0",
-    }, method="POST")
-    with urlopen(req, timeout=max(args.timeout, 60)) as resp:
-        payload = json.loads(resp.read().decode("utf-8"))
-
-    search_results = payload.get("search_results", [])
-    answer = ""
-    choices = payload.get("choices", [])
-    if choices and isinstance(choices[0], dict):
-        msg = choices[0].get("message", {})
-        answer = msg.get("content", "")
-    citations = payload.get("citations", [])
-
-    return (
-        search_results if isinstance(search_results, list) else [],
-        answer if isinstance(answer, str) else "",
-        citations if isinstance(citations, list) else [],
-    )
 ```
 
-### 1.8 Source dispatch in `main()`
+### 1.5 `_normalize_av_estimate` normalizer
 
 ```python
-is_pplx = args.source == "perplexity"
-answer_text = ""
-citations_list: list[str] = []
-
-if is_pplx:
-    if not args.op:
-        envelope["gaps"].append({"type": "config", "reason": "--op required for perplexity"})
-    elif not args.queries:
-        envelope["gaps"].append({"type": "config", "reason": "--query required"})
-    else:
-        _load_env()
-        api_key = os.getenv("PERPLEXITY_API_KEY")
-        if not api_key:
-            envelope["gaps"].append({"type": "config", "reason": "PERPLEXITY_API_KEY not set"})
-        else:
-            model = PPLX_OP_MODEL[args.op]
-            try:
-                if model is None:  # --op search → POST /search
-                    raw_items = _fetch_pplx_search(api_key, args)
-                else:              # --op ask/reason/research → POST /chat/completions
-                    raw_items, answer_text, citations_list = _fetch_pplx_chat(api_key, args, model)
-            except (HTTPError, URLError, TimeoutError, ValueError) as exc:
-                envelope["gaps"].append({"type": "upstream_error", "reason": f"Perplexity API failed: {exc}"})
-            except Exception as exc:
-                envelope["gaps"].append({"type": "internal_error", "reason": f"Unexpected: {exc}"})
-else:
-    # Existing BZ path (unchanged)
-    ...
-```
-
-### 1.9 PIT client-side filtering (two-tier)
-
-The normalizer (`_normalize_pplx_result`) already parses the date into a `pub_dt` datetime. The PIT comparison logic in the normalize loop handles both cases:
-
-```python
-# Full timestamp (ISO8601 with time+tz): exact comparison (same as BZ)
-# Date-only (YYYY-MM-DD): exclude PIT day entirely
-if pit_dt is not None and created_dt is not None:
-    if len(date_raw_str) == 10:  # date-only YYYY-MM-DD
-        # Exclude PIT day: compare date strings
-        pit_date_str = pit_dt.strftime("%Y-%m-%d")
-        if date_raw_str >= pit_date_str:
-            pit_excluded += 1; continue
-    else:  # full timestamp
-        if created_dt > pit_dt:
-            pit_excluded += 1; continue
-```
-
-This honors the agreed rule: use exact PIT compare when a full timestamp exists; only use day-level exclusion for date-only results.
-
-### 1.10 Synthesis item in data[] (chat ops)
-
-For chat ops (ask/reason/research), the synthesized answer is added as a `data[]` item with `record_type: "synthesis"`. This keeps the single `{data[], gaps[]}` contract intact and ensures pit_gate.py validates it like any other item.
-
-```python
-if is_pplx and args.op != "search" and answer_text:
-    # Use current time as available_at for synthesis (it was just generated)
-    synthesis_item = {
-        "record_type": "synthesis",
-        "answer": answer_text,
-        "citations": citations_list,
+def _normalize_av_estimate(raw: dict[str, Any]) -> dict[str, Any]:
+    """Normalize an EARNINGS_ESTIMATES item (open mode only)."""
+    return {
         "available_at": _to_new_york_iso(datetime.now(timezone.utc)),
         "available_at_source": "provider_metadata",
+        "record_type": "estimate",
+        "fiscalDateEnding": raw.get("date"),
+        "horizon": raw.get("horizon"),
+        "eps_estimate_average": raw.get("eps_estimate_average"),
+        "eps_estimate_high": raw.get("eps_estimate_high"),
+        "eps_estimate_low": raw.get("eps_estimate_low"),
+        "eps_estimate_analyst_count": raw.get("eps_estimate_analyst_count"),
+        "revenue_estimate_average": raw.get("revenue_estimate_average"),
+        "revenue_estimate_high": raw.get("revenue_estimate_high"),
+        "revenue_estimate_low": raw.get("revenue_estimate_low"),
+        "revenue_estimate_analyst_count": raw.get("revenue_estimate_analyst_count"),
     }
-    envelope["data"].append(synthesis_item)
 ```
 
-In PIT mode, the synthesis `available_at` will be "now" which is always > PIT. To prevent pit_gate.py from blocking, the synthesis item should be **excluded in PIT mode** (the agent gets only raw search_results). In open mode, the synthesis item passes through normally.
-
-### 1.11 Import change
+### 1.6 `_normalize_av_calendar_row` normalizer
 
 ```python
-from pit_time import parse_timestamp, to_new_york_iso, NY_TZ
+def _normalize_av_calendar_row(row: dict[str, str]) -> dict[str, Any]:
+    """Normalize a parsed CSV row from EARNINGS_CALENDAR (open mode only)."""
+    return {
+        "available_at": _to_new_york_iso(datetime.now(timezone.utc)),
+        "available_at_source": "provider_metadata",
+        "record_type": "earnings_calendar",
+        "symbol": row.get("symbol"),
+        "name": row.get("name"),
+        "reportDate": row.get("reportDate"),
+        "fiscalDateEnding": row.get("fiscalDateEnding"),
+        "estimate": row.get("estimate"),
+        "currency": row.get("currency"),
+        "timeOfTheDay": row.get("timeOfTheDay"),
+    }
 ```
 
-### 1.12 Stderr metadata
+### 1.7 `_fetch_av` handler
+
+```python
+def _fetch_av(api_key: str, function: str, params: dict[str, str], timeout: int) -> str:
+    """Call Alpha Vantage REST API and return raw response text."""
+    query_params = {"function": function, "apikey": api_key}
+    query_params.update(params)
+    url = f"{AV_BASE_URL}?{urlencode(query_params)}"
+    req = Request(url, headers={"User-Agent": "pit-fetch/1.0"}, method="GET")
+    with urlopen(req, timeout=timeout) as resp:
+        return resp.read().decode("utf-8")
+```
+
+### 1.8 `_load_av_input` for offline testing
+
+```python
+def _load_av_input(path: str) -> str:
+    """Load AV response from local file for offline testing."""
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read()
+```
+
+### 1.9 Source dispatch in `main()` — AV branch
+
+```python
+is_av = args.source == "alphavantage"
+
+if is_av:
+    av_ops = {"earnings", "estimates", "calendar"}
+    if not args.op or args.op not in av_ops:
+        envelope["gaps"].append({"type": "config", "reason": f"--op required, one of: {sorted(av_ops)}"})
+    else:
+        symbol = args.symbol or (args.tickers[0] if hasattr(args, 'tickers') and args.tickers else None)
+        if not symbol:
+            envelope["gaps"].append({"type": "config", "reason": "--symbol required for alphavantage"})
+        else:
+            function = AV_OP_FUNCTION[args.op]
+            av_params: dict[str, str] = {"symbol": symbol}
+            if args.op == "calendar" and args.horizon:
+                av_params["horizon"] = args.horizon
+
+            try:
+                if args.input_file:
+                    raw_text = _load_av_input(args.input_file)
+                else:
+                    _load_env()
+                    api_key = os.getenv("ALPHAVANTAGE_API_KEY")
+                    if not api_key:
+                        envelope["gaps"].append({"type": "config", "reason": "ALPHAVANTAGE_API_KEY not set"})
+                        raw_text = None
+                    else:
+                        raw_text = _fetch_av(api_key, function, av_params, args.timeout)
+            except (HTTPError, URLError, TimeoutError) as exc:
+                envelope["gaps"].append({"type": "upstream_error", "reason": f"AV API failed: {exc}"})
+                raw_text = None
+
+            if raw_text is not None:
+                _process_av_response(raw_text, args.op, pit_dt, envelope, args)
+```
+
+### 1.10 `_process_av_response` — Per-op normalize + PIT filter
+
+```python
+def _process_av_response(raw_text: str, op: str, pit_dt: datetime | None,
+                         envelope: dict[str, Any], args: argparse.Namespace) -> None:
+    if op == "earnings":
+        data = json.loads(raw_text)
+        pit_date_str = pit_dt.astimezone(NY_TZ).strftime("%Y-%m-%d") if pit_dt else None
+
+        # Quarterly earnings — PIT filterable
+        pit_excluded = 0
+        invalid = 0
+        for raw in data.get("quarterlyEarnings", []):
+            item, pub_dt, err = _normalize_av_quarterly(raw)
+            if err:
+                invalid += 1
+                continue
+            if pit_dt is not None and pub_dt is not None:
+                report_time = (raw.get("reportTime") or "").strip().lower()
+                if report_time in AV_REPORT_TIME_HOUR:
+                    # Full datetime: exact comparison
+                    if pub_dt > pit_dt:
+                        pit_excluded += 1; continue
+                else:
+                    # Date-only: exclude PIT day entirely
+                    date_str = (raw.get("reportedDate") or "").strip()
+                    if date_str >= pit_date_str:
+                        pit_excluded += 1; continue
+            envelope["data"].append(item)
+            if len(envelope["data"]) >= args.limit:
+                break
+
+        # Annual earnings — open mode only
+        if pit_dt is None:
+            for raw in data.get("annualEarnings", []):
+                item = _normalize_av_annual(raw)
+                envelope["data"].append(item)
+        else:
+            annual_count = len(data.get("annualEarnings", []))
+            if annual_count > 0:
+                envelope["gaps"].append({
+                    "type": "pit_excluded",
+                    "reason": f"{annual_count} annual earnings items excluded (no reportedDate for PIT verification)",
+                })
+
+        if pit_excluded > 0:
+            envelope["gaps"].append({
+                "type": "pit_excluded",
+                "reason": f"{pit_excluded} quarterly items post-PIT",
+            })
+        if invalid > 0:
+            envelope["gaps"].append({
+                "type": "unverifiable",
+                "reason": f"{invalid} quarterly items with unparseable/missing reportedDate",
+            })
+
+    elif op == "estimates":
+        if pit_dt is not None:
+            # PIT mode: gap entirely (snapshot data, not PIT-verifiable)
+            envelope["gaps"].append({
+                "type": "pit_excluded",
+                "reason": "EARNINGS_ESTIMATES is a current snapshot — not PIT-verifiable. Use historical EARNINGS actuals for PIT backtests.",
+            })
+        else:
+            data = json.loads(raw_text)
+            for raw in data.get("estimates", []):
+                item = _normalize_av_estimate(raw)
+                envelope["data"].append(item)
+
+    elif op == "calendar":
+        if pit_dt is not None:
+            # PIT mode: gap entirely (forward-looking snapshot)
+            envelope["gaps"].append({
+                "type": "pit_excluded",
+                "reason": "EARNINGS_CALENDAR is a forward-looking snapshot — not PIT-verifiable.",
+            })
+        else:
+            # CSV parsing
+            import csv, io
+            reader = csv.DictReader(io.StringIO(raw_text))
+            symbol_filter = (args.symbol or "").upper()
+            for row in reader:
+                if symbol_filter and row.get("symbol", "").upper() != symbol_filter:
+                    continue
+                item = _normalize_av_calendar_row(row)
+                envelope["data"].append(item)
+```
+
+### 1.11 Stderr metadata for AV
 
 ```python
 meta = {
-    "source": "perplexity",
+    "source": "alphavantage",
     "op": args.op,
     "mode": "pit" if args.pit else "open",
-    "model": PPLX_OP_MODEL.get(args.op),
-    "queries": args.queries,
-    "search_mode": args.search_mode,
+    "symbol": symbol,
+    "function": function,
     ...
 }
+```
+
+### 1.12 Docstring update
+
+```python
+"""PIT-aware external data wrapper.
+
+Current source support:
+- bz-news-api (Benzinga News REST API)
+- perplexity (Perplexity AI Search/Chat APIs)
+- alphavantage (Alpha Vantage Earnings/Estimates/Calendar)
+"""
 ```
 
 ---
 
 ## 2. test_pit_fetch.py — New offline tests
 
-**File:** `.claude/skills/earnings-orchestrator/scripts/test_pit_fetch.py` (223 → ~380 lines)
+**File:** `.claude/skills/earnings-orchestrator/scripts/test_pit_fetch.py`
 
 ### Sample data
 
 ```python
-SAMPLE_PPLX_RESULTS = [
-    {"url": "https://example.com/a", "title": "AAPL Q1 beat", "snippet": "EPS $2.18...",
-     "date": "2024-06-10", "last_updated": "2024-06-10"},
-    {"url": "https://example.com/b", "title": "AAPL guidance", "snippet": "Revenue up...",
-     "date": "2024-06-14", "last_updated": "2024-06-15"},
-    {"url": "https://example.com/c", "title": "Undated article", "snippet": "No date"},
-]
+SAMPLE_AV_EARNINGS = {
+    "symbol": "AAPL",
+    "annualEarnings": [
+        {"fiscalDateEnding": "2024-09-30", "reportedEPS": "6.08"},
+        {"fiscalDateEnding": "2023-09-30", "reportedEPS": "6.12"},
+    ],
+    "quarterlyEarnings": [
+        {"fiscalDateEnding": "2024-12-31", "reportedDate": "2025-01-30",
+         "reportedEPS": "2.40", "estimatedEPS": "2.34", "surprise": "0.06",
+         "surprisePercentage": "2.5641", "reportTime": "post-market"},
+        {"fiscalDateEnding": "2024-09-30", "reportedDate": "2024-10-31",
+         "reportedEPS": "1.64", "estimatedEPS": "1.60", "surprise": "0.04",
+         "surprisePercentage": "2.50", "reportTime": "post-market"},
+        {"fiscalDateEnding": "2024-06-30", "reportedDate": "2024-08-01",
+         "reportedEPS": "1.40", "estimatedEPS": "1.35", "surprise": "0.05",
+         "surprisePercentage": "3.70", "reportTime": "pre-market"},
+        {"fiscalDateEnding": "2024-03-31", "reportedDate": "2024-05-02",
+         "reportedEPS": "1.53", "estimatedEPS": "1.50", "surprise": "0.03",
+         "surprisePercentage": "2.00"},  # no reportTime
+    ],
+}
+
+SAMPLE_AV_ESTIMATES = {
+    "symbol": "AAPL",
+    "estimates": [
+        {"date": "2025-06-30", "horizon": "next fiscal quarter",
+         "eps_estimate_average": "1.72", "eps_estimate_high": "1.85",
+         "eps_estimate_low": "1.61", "eps_estimate_analyst_count": "28",
+         "revenue_estimate_average": "95000000000", "revenue_estimate_high": "100000000000",
+         "revenue_estimate_low": "90000000000", "revenue_estimate_analyst_count": "30"},
+        {"date": "2025-09-30", "horizon": "next fiscal year",
+         "eps_estimate_average": "8.49", "eps_estimate_high": "8.97",
+         "eps_estimate_low": "8.15", "eps_estimate_analyst_count": "38",
+         "revenue_estimate_average": "465000000000", "revenue_estimate_high": "480000000000",
+         "revenue_estimate_low": "449000000000", "revenue_estimate_analyst_count": "37"},
+    ],
+}
+
+SAMPLE_AV_CALENDAR_CSV = """symbol,name,reportDate,fiscalDateEnding,estimate,currency,timeOfTheDay
+AAPL,APPLE INC,2025-07-31,2025-06-30,1.72,USD,post-market
+MSFT,MICROSOFT CORP,2025-07-22,2025-06-30,3.25,USD,post-market
+"""
 ```
 
-### Test cases (8 new)
+### Test cases (10 new)
 
 | # | Test | Validates |
 |---|------|-----------|
-| 1 | `test_pplx_search_open` | --op search, no PIT. Envelope: 2 valid items, 1 undated gap |
-| 2 | `test_pplx_search_pit_excludes_pit_day` | PIT=2024-06-14T16:00:00. date:2024-06-14 EXCLUDED (same day). Only date:2024-06-10 passes |
-| 3 | `test_pplx_all_undated` | All items missing date → data=[], gaps has unverifiable+no_data |
-| 4 | `test_pplx_date_summer_edt` | date:2024-06-10 → available_at: 2024-06-10T00:00:00-04:00 (EDT) |
-| 5 | `test_pplx_date_winter_est` | date:2024-01-15 → available_at: 2024-01-15T00:00:00-05:00 (EST) |
-| 6 | `test_pplx_dedup_by_url` | Two same-URL items → only first kept |
-| 7 | `test_pplx_chat_open` | --op ask, open mode. data[] has search_results + synthesis item (record_type: "synthesis" with answer + citations). |
-| 8 | `test_pplx_chat_pit` | --op ask + PIT. search_results filtered by PIT in data[]. Synthesis item EXCLUDED (available_at = now > PIT). data[] contains only PIT-filtered search results. |
+| 1 | `test_av_earnings_open` | Open mode: all 4 quarterly + 2 annual items in data[]. No gaps. |
+| 2 | `test_av_earnings_pit_filters_by_reported_date` | PIT=2024-11-01T10:00:00-05:00. Q4 (reported 2025-01-30) excluded. Q3 (reported 2024-10-31, post-market 16:15 < PIT) passes. Q2+Q1 pass. Annual gapped. |
+| 3 | `test_av_earnings_pit_post_market_exact` | PIT=2024-10-31T16:15:00-04:00 (exactly at Q3 report time). `pub_dt > pit_dt` is false (equal) → passes. Verifies non-strict inequality. |
+| 4 | `test_av_earnings_pit_pre_market` | Q2 reported pre-market 2024-08-01 → available_at = 06:00 ET. PIT at 2024-08-01T07:00:00 → passes (06:00 < 07:00). PIT at 2024-08-01T05:00:00 → excluded (06:00 > 05:00). |
+| 5 | `test_av_earnings_pit_no_report_time` | Q1 has no reportTime. reportedDate=2024-05-02. PIT=2024-05-02T16:00:00 → EXCLUDED (date-only, PIT day excluded). PIT=2024-05-03T10:00:00 → passes. |
+| 6 | `test_av_earnings_annual_gapped_in_pit` | PIT mode: annual items in gaps[], not data[]. Gap reason mentions count. |
+| 7 | `test_av_estimates_open` | Open mode: all estimate items pass through with record_type="estimate". |
+| 8 | `test_av_estimates_pit_gapped` | PIT mode: data=[], gaps has "not PIT-verifiable" reason. |
+| 9 | `test_av_calendar_open` | Open mode: parsed CSV rows pass through. Only AAPL row (symbol filter). |
+| 10 | `test_av_calendar_pit_gapped` | PIT mode: data=[], gaps has "forward-looking snapshot" reason. |
 
-Tests use `--input-file` + `--source perplexity --op search --query dummy`.
-
-For chat tests (7-8): input file wraps results with answer/citations. Need small loader extension in pit_fetch.py for `--input-file` + chat ops.
+Tests use `--input-file` + `--source alphavantage --op <op> --symbol AAPL`.
 
 ---
 
-## 3. Agent rewrites — Bash-wrapper archetype
+## 3. Agent rewrite — Bash-wrapper archetype
 
-All 5 agents get identical frontmatter (matching `bz-news-api.md`):
+**File:** `.claude/agents/alphavantage-earnings.md`
 
 ```yaml
 ---
-name: <agent-name>
-description: "<description>"
+name: alphavantage-earnings
+description: "Consensus estimates, actuals, and earnings calendar. Use for beat/miss analysis and upcoming earnings dates."
 tools:
   - Bash
 model: opus
 permissionMode: dontAsk
 skills:
-  - <per-agent-skill>
+  - alphavantage-earnings
   - pit-envelope
   - evidence-standards
 hooks:
@@ -381,164 +449,186 @@ hooks:
         - type: command
           command: "python3 $CLAUDE_PROJECT_DIR/.claude/hooks/pit_gate.py"
 ---
+
+# Alpha Vantage Earnings Agent
+
+Query consensus estimates, actual results, and earnings calendar through `$CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py` only.
+
+## Tools
+
+| Op | AV Function | Returns |
+|----|-------------|---------|
+| `--op earnings` | EARNINGS | Quarterly actuals (EPS, estimates, surprise %) + annual EPS |
+| `--op estimates` | EARNINGS_ESTIMATES | Forward + historical consensus (EPS, revenue, analyst count, revisions) |
+| `--op calendar` | EARNINGS_CALENDAR | Next earnings date and time |
+
+## Workflow
+1. Parse request into wrapper arguments:
+   - `--symbol` (required)
+   - `--op` (required: `earnings`, `estimates`, or `calendar`)
+   - optional `--pit` for historical mode
+   - optional `--horizon` for calendar (3month/6month/12month)
+   - optional `--limit` for earnings (controls quarterly results)
+2. Execute one wrapper call via Bash:
+   - Command: `python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source alphavantage --op <op> --symbol <TICKER> ...`
+   - PIT mode: include `--pit <ISO8601>`
+   - Open mode: omit `--pit`
+3. If PIT mode is blocked by hook, retry up to 2 times.
+4. Return wrapper JSON envelope as-is (`data[]`, `gaps[]`, no prose).
+
+## PIT Response Contract
+See pit-envelope skill for envelope contract, field mappings, and forbidden keys.
+
+### PIT behavior per op:
+- **earnings**: Quarterly items filtered by `reportedDate` + `reportTime` (full datetime when available, date-only exclusion otherwise). Annual items gapped (no reportedDate).
+- **estimates**: Gapped entirely — current snapshot, not PIT-verifiable.
+- **calendar**: Gapped entirely — forward-looking snapshot, not PIT-verifiable.
+
+## Rules
+- Use only `python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source alphavantage ...`.
+- Bash is wrapper-only for this agent. Do not use Bash for unrelated shell commands.
+- Do not call MCP tools directly. Do not call raw HTTP/curl.
+- Authentication is automatic via `.env` (`ALPHAVANTAGE_API_KEY`) inside `pit_fetch.py`.
+- If auth/env is missing, return wrapper `gaps[]` as-is.
+- In PIT mode, never bypass hook validation.
 ```
-
-### 3.1 perplexity-search.md
-- Command: `--source perplexity --op search --query "..." --max-results 10`
-- Returns: raw search results in data[]. No answer field.
-
-### 3.2 perplexity-ask.md
-- Command: `--source perplexity --op ask --query "..." --search-context-size medium`
-- Returns: data[] containing PIT-filtered search_results + synthesis item (record_type: "synthesis", open mode only). In PIT mode, synthesis excluded (available_at > PIT).
-
-### 3.3 perplexity-reason.md
-- Command: `--source perplexity --op reason --query "..." --search-context-size medium`
-- Returns: data[] containing PIT-filtered search_results + synthesis item (record_type: "synthesis", open mode only). In PIT mode, synthesis excluded.
-
-### 3.4 perplexity-research.md
-- Command: `--source perplexity --op research --query "..." --search-context-size high --timeout 120`
-- Returns: data[] containing PIT-filtered search_results + synthesis item (record_type: "synthesis", open mode only). In PIT mode, synthesis excluded. Slow (30+ sec).
-
-### 3.5 perplexity-sec.md
-- Command: `--source perplexity --op search --search-mode sec --query "..." --max-results 10`
-- Returns: raw EDGAR filing results in data[] (locator-first, no synthesis)
-- Replaces legacy `utils/perplexity_search.py` path
-- Aligned with DataSubAgents.md SEC lane: cautious/locator-first approach
 
 ---
 
-## 4. Skill rewrites — Command patterns
+## 4. Skill rewrite — Command patterns
 
-Each skill gets PIT/Open command examples following `bz-news-api-queries/SKILL.md` pattern.
+**File:** `.claude/skills/alphavantage-earnings/SKILL.md`
 
-### 4.1 perplexity-search/SKILL.md
+```yaml
+---
+name: alphavantage-earnings
+description: Consensus estimates and earnings data from Alpha Vantage.
+---
+```
+
+### Command patterns:
+
 ```bash
-# PIT mode
+# Quarterly + annual actuals (open mode)
 python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py \
-  --source perplexity --op search --query "AAPL earnings Q1 2025" \
-  --pit 2025-02-01T00:00:00-05:00 --max-results 10 --limit 10
+  --source alphavantage --op earnings --symbol AAPL
 
-# Open mode (omit --pit)
-python3 ... --source perplexity --op search --query "AAPL earnings" --max-results 10
+# Quarterly actuals (PIT mode — annual gapped, post-PIT quarters excluded)
+python3 ... --source alphavantage --op earnings --symbol AAPL \
+  --pit 2024-11-01T10:00:00-05:00
 
-# With filters
-  --search-recency month --search-domains sec.gov,reuters.com --search-mode academic
+# Consensus estimates (open mode only — gapped in PIT)
+python3 ... --source alphavantage --op estimates --symbol AAPL
+
+# Earnings calendar (open mode only — gapped in PIT)
+python3 ... --source alphavantage --op calendar --symbol AAPL --horizon 3month
 ```
 
-### 4.2 perplexity-ask/SKILL.md
-```bash
-python3 ... --source perplexity --op ask \
-  --query "What was AAPL's Q1 2025 EPS vs consensus?" --search-context-size medium
-```
-Notes: In open mode, data[] includes a synthesis item (record_type: "synthesis") with answer + citations. In PIT mode, synthesis excluded — agent works from filtered search_results only.
+### Response fields by op:
 
-### 4.3 perplexity-reason/SKILL.md
-```bash
-python3 ... --source perplexity --op reason \
-  --query "Why did AAPL drop after Q1 2025 earnings despite beating estimates?" \
-  --search-context-size medium
-```
-Notes: Same envelope behavior as ask. Synthesis item in open mode only.
+**--op earnings (quarterly):**
+- `record_type`: "quarterly_earnings"
+- `fiscalDateEnding`, `reportedDate`, `reportTime`
+- `reportedEPS`, `estimatedEPS`, `surprise`, `surprisePercentage`
+- `available_at` derived from reportedDate + reportTime
 
-### 4.4 perplexity-research/SKILL.md
-```bash
-python3 ... --source perplexity --op research \
-  --query "Comprehensive analysis of AAPL Q1 2025 earnings" \
-  --search-context-size high --timeout 120
-```
-Notes: Same envelope behavior. Slow (30+ sec). --timeout 120 recommended.
+**--op earnings (annual, open mode only):**
+- `record_type`: "annual_earnings"
+- `fiscalDateEnding`, `reportedEPS`
+- No `available_at` (open mode pass-through)
 
-### 4.5 perplexity-sec/SKILL.md
-```bash
-python3 ... --source perplexity --op search --search-mode sec \
-  --query "AAPL 10-K risk factors FY2024" \
-  --date-from 2024-01-01 --date-to 2024-12-31 --max-results 10
-```
-Notes: Locator-first — returns raw EDGAR filing links. Agent processes results directly.
+**--op estimates (open mode only):**
+- `record_type`: "estimate"
+- `fiscalDateEnding`, `horizon`
+- EPS + revenue consensus (average/high/low/analyst_count)
+
+**--op calendar (open mode only):**
+- `record_type`: "earnings_calendar"
+- `symbol`, `name`, `reportDate`, `fiscalDateEnding`, `estimate`, `currency`, `timeOfTheDay`
 
 ---
 
-## 5. lint_data_agents.py — PIT_DONE updates
+## 5. lint_data_agents.py — PIT_DONE update
 
 **File:** `.claude/skills/earnings-orchestrator/scripts/lint_data_agents.py`
 
-Add 5 entries to `PIT_DONE` (same pattern as `bz-news-api`):
+Add 1 entry to `PIT_DONE`:
 ```python
-"perplexity-search":   {"skills": ["pit-envelope"], "pre": [], "post": ["Bash"]},
-"perplexity-ask":      {"skills": ["pit-envelope"], "pre": [], "post": ["Bash"]},
-"perplexity-reason":   {"skills": ["pit-envelope"], "pre": [], "post": ["Bash"]},
-"perplexity-research": {"skills": ["pit-envelope"], "pre": [], "post": ["Bash"]},
-"perplexity-sec":      {"skills": ["pit-envelope"], "pre": [], "post": ["Bash"]},
+"alphavantage-earnings": {"skills": ["pit-envelope"], "pre": [], "post": ["Bash"]},
 ```
 
 ---
 
-## 6. pit-envelope/SKILL.md — Add Perplexity rows
+## 6. pit-envelope/SKILL.md — Add AV rows
 
 Add to Field Mapping Table:
 
 | Agent | Source Field | Maps to `available_at` | `available_at_source` | Notes |
 |-------|-------------|------------------------|----------------------|-------|
-| perplexity-* (search) | result `date` | YYYY-MM-DD → start-of-day NY tz | `provider_metadata` | PIT: exclude PIT day entirely |
-| perplexity-* (chat) | `search_results[].date` | same | `provider_metadata` | Chat ops add synthesis item (record_type: "synthesis") to data[] in open mode; excluded in PIT mode |
+| alphavantage (earnings quarterly) | `reportedDate` + `reportTime` | Full datetime when reportTime available; date-only start-of-day NY otherwise | `provider_metadata` | PIT: full datetime → exact compare; date-only → exclude PIT day |
+| alphavantage (earnings annual) | — | open mode pass-through | — | No reportedDate; gapped in PIT mode |
+| alphavantage (estimates) | — | open mode pass-through | — | Snapshot data; gapped entirely in PIT mode |
+| alphavantage (calendar) | — | open mode pass-through | — | Forward-looking snapshot; gapped entirely in PIT mode |
 
 ---
 
-## 7. Files NOT modified
+## 7. DataSubAgents.md updates
+
+- Update version line: 2.7 → 2.8, 13/13 PIT-complete
+- Phase 4 remaining section: mark alphavantage-earnings as DONE
+- Line 521: `pit_fetch.py` status → remove "Needs `alphavantage` source handler"
+- Line 536: AV wrapper test → mark as PASSED
+- Line 359 (AV EARNINGS): `⚠️` → `✅` with reportTime derivation note
+- Line 597: remove "Alpha Vantage — not started"
+
+---
+
+## 8. earnings-orchestrator.md update
+
+- Line 462: `alphavantage-earnings` → `Needs rework` → `**DONE**`
+- Line 860: status → "13 of 13 agents fully PIT-compliant"
+
+---
+
+## 9. Files NOT modified
 
 | File | Reason |
 |------|--------|
-| `pit_gate.py` | Unchanged. `WRAPPER_SCRIPTS` has `pit_fetch.py`. `VALID_SOURCES` has `provider_metadata`. Synthesis item in data[] uses `provider_metadata` source. |
-| `pit_time.py` | Already exports `NY_TZ`, `parse_timestamp`, `to_new_york_iso`. |
-| `utils/perplexity_search.py` | Legacy. Not modified/deleted — perplexity-sec agent stops using it. |
-
-## 7.1 DataSubAgents.md cross-doc alignment (update during implementation)
-
-Two policy updates needed in `DataSubAgents.md` to align with this plan:
-
-**A. Date-only admissibility (line 355)**
-Current wording: "Date-only is not PIT-compliant by itself; must resolve provider-backed publish datetime or gap"
-Updated policy: Date-only items from days **strictly before** PIT are admissible under the conservative "exclude PIT day" rule. Items from the PIT day or later are excluded. This is fail-closed in spirit: even worst-case intra-day publication (23:59:59) on a prior day is before PIT.
-
-Update line 355 to:
-> `Perplexity Search API (POST /search) | date | ⚠️→✅ | Date-only: exclude PIT day entirely (prior-day items pass, PIT-day items excluded). Conservative fail-closed.`
-
-**B. last_updated is NOT a publication date proxy (line 355-357)**
-Clarify that `last_updated` is a modification timestamp, not publication metadata. The normalizer uses `date` only — items without `date` are dropped as unverifiable gaps per §4.3 line 130. `last_updated` is preserved as metadata but never used for `available_at` derivation.
-
-**C. Chat ops (line 357)**
-Update to reflect that pit_fetch.py calls the API directly (not MCP), so `search_results[]` with per-result `date` fields ARE available. This upgrades chat ops from "Lane 3: must extract from citations" to Lane 2 (structured-by-provider) for the search_results portion. The synthesis answer remains excluded in PIT mode.
+| `pit_gate.py` | Unchanged. `WRAPPER_SCRIPTS` has `pit_fetch.py`. `VALID_SOURCES` has `provider_metadata`. |
+| `pit_time.py` | Already exports needed utilities. |
+| `alphavantage-routing/SKILL.md` | Reference doc, not affected. |
 
 ---
 
-## 8. Implementation order
+## 10. Implementation order
 
-1. **pit_fetch.py** — Add Perplexity source + both handlers (~160 new lines)
-2. **test_pit_fetch.py** — Add 8 offline tests (~160 new lines)
+1. **pit_fetch.py** — Add AV source + handler (~130 new lines)
+2. **test_pit_fetch.py** — Add 10 offline tests (~180 new lines)
 3. Run: `python3 .claude/skills/earnings-orchestrator/scripts/test_pit_fetch.py`
-4. **5 agent files** — Rewrite to Bash-wrapper archetype
-5. **5 skill files** — Rewrite with command patterns
-6. **lint_data_agents.py** — Add 5 PIT_DONE entries
-7. **pit-envelope/SKILL.md** — Add Perplexity rows
-8. **DataSubAgents.md** — Update lines 355-357 per §7.1 (date-only policy, last_updated, chat ops lane)
-9. Run: `python3 .claude/skills/earnings-orchestrator/scripts/lint_data_agents.py`
-10. Run: `python3 .claude/hooks/test_pit_gate.py`
+4. **Agent file** — Rewrite to Bash-wrapper archetype
+5. **Skill file** — Rewrite with command patterns
+6. **lint_data_agents.py** — Add 1 PIT_DONE entry
+7. **pit-envelope/SKILL.md** — Add AV rows
+8. **DataSubAgents.md** — Update status to 13/13
+9. **earnings-orchestrator.md** — Update status to 13/13
+10. Run: `python3 .claude/skills/earnings-orchestrator/scripts/lint_data_agents.py`
+11. Run: `python3 .claude/hooks/test_pit_gate.py`
 
 ---
 
-## 9. Verification
+## 11. Verification
 
 ### Unit tests (offline)
 ```bash
 python3 .claude/skills/earnings-orchestrator/scripts/test_pit_fetch.py
 ```
-Expected: 14/14 PASS (6 BZ + 8 perplexity)
+Expected: 41/41 PASS (31 existing + 10 AV)
 
 ### Linter
 ```bash
 python3 .claude/skills/earnings-orchestrator/scripts/lint_data_agents.py
 ```
-Expected: PASS | 0 errors | 13 agents checked (discovery scope unchanged)
+Expected: PASS | 0 errors | 13 agents checked
 
 ### pit_gate tests
 ```bash
@@ -546,47 +636,25 @@ python3 .claude/hooks/test_pit_gate.py
 ```
 Expected: 41/41 PASS (unchanged)
 
-### Live smoke tests (requires PERPLEXITY_API_KEY)
+### Live smoke tests (requires ALPHAVANTAGE_API_KEY in .env)
 ```bash
-# Search op
-python3 .../pit_fetch.py --source perplexity --op search --query "AAPL earnings" --max-results 5
+# Earnings open mode
+python3 .../pit_fetch.py --source alphavantage --op earnings --symbol AAPL
 
-# Ask op
-python3 .../pit_fetch.py --source perplexity --op ask --query "What was AAPL Q1 2025 EPS?"
+# Earnings PIT mode
+python3 .../pit_fetch.py --source alphavantage --op earnings --symbol AAPL \
+  --pit 2024-11-01T10:00:00-05:00
 
-# SEC mode
-python3 .../pit_fetch.py --source perplexity --op search --search-mode sec --query "AAPL 10-K 2024"
+# Estimates open mode
+python3 .../pit_fetch.py --source alphavantage --op estimates --symbol AAPL
 
-# PIT mode (excludes PIT day)
-python3 .../pit_fetch.py --source perplexity --op search --query "AAPL earnings" \
-  --pit 2025-01-01T00:00:00-05:00 --max-results 5
+# Calendar open mode
+python3 .../pit_fetch.py --source alphavantage --op calendar --symbol AAPL
+
+# Estimates PIT mode (should be all gaps)
+python3 .../pit_fetch.py --source alphavantage --op estimates --symbol AAPL \
+  --pit 2024-11-01T10:00:00-05:00
 ```
-
----
-
-## 10. API reference (for implementation)
-
-### POST /search — Key fields
-- Input: query (string|array≤5), max_results (1-20), search_before/after_date_filter (MM/DD/YYYY), search_mode (web/academic/sec), search_domain_filter, search_recency_filter
-- Response: `results[].{title, url, snippet, date?, last_updated?}`
-
-### POST /chat/completions — Key fields
-- Input: model, messages[], search_before/after_date_filter, search_mode, search_domain_filter, search_recency_filter, web_search_options.search_context_size (low/medium/high), response_format
-- Response: `choices[].message.content` (answer), `citations[]` (URLs), `search_results[].{title, url, snippet, date?, last_updated?, source}`, `usage.cost.total_cost`
-
-### Models
-| Model ID | Type | Input/1M | Output/1M |
-|---|---|---|---|
-| sonar-pro | Search | $3 | $15 |
-| sonar-reasoning-pro | Reasoning | $2 | $8 |
-| sonar-deep-research | Research | $2 | $8 |
-
-### PIT date filtering strategy
-- **Server-side (coarse prefilter):** `search_before_date_filter` = PIT date (MM/DD/YYYY). Treats API filter as best-effort hint, not authoritative.
-- **Client-side (source of truth):** Two-tier logic in pit_fetch.py:
-  - Full timestamp: exact `created_dt > pit_dt` comparison
-  - Date-only: `result.date[:10] >= pit_date_str` → excluded (PIT day excluded entirely)
-- **Net effect for date-only:** Articles from days strictly BEFORE the PIT date pass. Most conservative.
 
 ---
 
@@ -594,11 +662,12 @@ python3 .../pit_fetch.py --source perplexity --op search --query "AAPL earnings"
 
 | What | Count | Lines (est.) |
 |------|-------|-------------|
-| pit_fetch.py (1 source, 2 internal handlers) | 1 | +160 |
-| test_pit_fetch.py tests | 8 | +160 |
-| Agent rewrites | 5 | 5 × ~40 = 200 |
-| Skill rewrites | 5 | 5 × ~50 = 250 |
-| lint PIT_DONE entries | 5 | +20 |
-| pit-envelope rows | 2 | +2 |
-| DataSubAgents.md policy update | 3 | +5 |
-| **Total** | | **~800 lines** |
+| pit_fetch.py (1 source, 3 ops) | 1 | +130 |
+| test_pit_fetch.py tests | 10 | +180 |
+| Agent rewrite | 1 | ~55 |
+| Skill rewrite | 1 | ~60 |
+| lint PIT_DONE entry | 1 | +5 |
+| pit-envelope rows | 4 | +4 |
+| DataSubAgents.md update | ~6 lines | +10 |
+| earnings-orchestrator.md update | 2 lines | +2 |
+| **Total** | | **~450 lines** |

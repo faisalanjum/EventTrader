@@ -28,6 +28,8 @@ Use Perplexity Search API in SEC mode through `$CLAUDE_PROJECT_DIR/.claude/skill
    - optional `--max-results` (1-20, default 10)
    - optional `--date-from`, `--date-to` for filing date range
    - optional `--pit` for historical mode
+   - optional `--max-tokens` (total content budget, default ~10K, max 1000000)
+   - optional `--max-tokens-per-page` (per-result extraction, default ~4K)
 2. Execute one wrapper call via Bash:
    - Command: `python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source perplexity --op search --search-mode sec ...`
    - PIT mode: include `--pit <ISO8601>`
@@ -38,11 +40,12 @@ Use Perplexity Search API in SEC mode through `$CLAUDE_PROJECT_DIR/.claude/skill
 ## PIT Response Contract
 See pit-envelope skill for envelope contract, field mappings, and forbidden keys.
 
-## Locator-First Design
-This agent is a **locator**: it returns raw EDGAR filing URLs/metadata, not filing content.
-- For PIT-safe filing content extraction, hand off URLs to `neo4j-report` (if the filing is in Neo4j) or fetch content separately.
-- Do not attempt to extract or synthesize filing content within this agent.
-- Returns raw search results in data[]. No synthesis/answer field.
+## Content Extraction
+Each search result includes a `snippet` field with extracted content from EDGAR filings (not just URLs).
+- Default extraction: ~4K tokens per result, ~10K total across all results.
+- For deeper content extraction, use `--max-tokens` (up to 1000000) and `--max-tokens-per-page` to increase snippet depth.
+- For full filing content, hand off URLs to `neo4j-report` (if the filing is in Neo4j) or fetch content separately.
+- Returns raw search results in data[]. No synthesis/answer field (search op only).
 
 ## Rules
 - Use only `python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source perplexity --op search --search-mode sec ...`.

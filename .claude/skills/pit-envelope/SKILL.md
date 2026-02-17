@@ -36,6 +36,8 @@ Standard JSON envelope for all data sub-agent responses. Validated by `pit_gate.
 | `edgar_accepted` | SEC EDGAR acceptance datetime (Report nodes) |
 | `time_series_timestamp` | Per-datapoint timestamp from time series data |
 | `provider_metadata` | External provider metadata timestamp |
+| `cross_reference` | Timestamp derived from cross-referencing another data source (e.g., quarterly reportedDate used for annual earnings) |
+| `coarse_pit` | Approximate PIT using fixed revision snapshots (e.g., 7/30/60/90 days before fiscal period end) |
 
 ## Field Mapping Table
 
@@ -51,7 +53,11 @@ Standard JSON envelope for all data sub-agent responses. Validated by `pit_gate.
 | neo4j-entity (metadata) | — | open mode pass-through | — | Company properties: no `pit` in params → gate allows |
 | perplexity-* (search) | result `date` | YYYY-MM-DD -> start-of-day NY tz | `provider_metadata` | PIT: exclude PIT day entirely (prior-day items pass) |
 | perplexity-* (chat) | `search_results[].date` | same | `provider_metadata` | Chat ops add synthesis item (`record_type: "synthesis"`) in open mode (appended separately from `--limit`); excluded in PIT mode |
-| alphavantage EARNINGS | `reportedDate` | **date-only: verify or gap** | `provider_metadata` | See Date-Only Sources |
+| alphavantage (earnings quarterly) | `reportedDate` | date-only start-of-day NY | `provider_metadata` | PIT: date-only → exclude PIT day (AV has no time-of-day field) |
+| alphavantage (earnings annual) | Q4 quarterly `reportedDate` | cross-reference | `cross_reference` | Matched via fiscalDateEnding; unmatched → gaps[] |
+| alphavantage (estimates, historical) | revision bucket (7/30/60/90d before fiscal end) | coarse PIT bucket date | `coarse_pit` | Nearest bucket ≤ PIT selected; returns `pit_consensus_eps` + `pit_bucket`; >90d → gap |
+| alphavantage (estimates, forward) | — | gapped in PIT | — | Forward-looking snapshot; not PIT-verifiable |
+| alphavantage (calendar) | — | gapped in PIT | — | Forward-looking snapshot; gapped entirely in PIT mode |
 | alphavantage (series) | per-datapoint timestamp | direct | `time_series_timestamp` | Full datetime |
 
 ## Forbidden Keys (NEVER include in PIT mode output)

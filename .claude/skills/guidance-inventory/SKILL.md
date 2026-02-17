@@ -1,7 +1,7 @@
 ---
 name: guidance-inventory
 description: Builds and maintains cumulative guidance inventory for a company. Use when collecting historical guidance, updating guidance after earnings, preparing context for prediction/attribution workflows, or when user asks about company outlook, earnings guidance, management expectations, forward forecasts, or FY/quarterly targets.
-allowed-tools: Read, Write, Grep, Glob, Skill, mcp__neo4j-cypher__read_neo4j_cypher, mcp__perplexity__perplexity_search, mcp__alphavantage__EARNINGS_ESTIMATES
+allowed-tools: Read, Write, Grep, Glob, Skill, mcp__neo4j-cypher__read_neo4j_cypher, mcp__perplexity__create_search, mcp__alphavantage__EARNINGS_ESTIMATES
 model: claude-opus-4-5-20251101
 permissionMode: dontAsk
 ---

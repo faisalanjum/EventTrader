@@ -76,6 +76,11 @@ PIT_DONE = {
         "pre": [],
         "post": ["Bash"],
     },
+    "alphavantage-earnings": {
+        "skills": ["pit-envelope"],
+        "pre": [],
+        "post": ["Bash"],
+    },
 }
 DEPRECATED_SKILLS = {"filtered-data"}
 PATH_RE = re.compile(r"(?:\$CLAUDE_PROJECT_DIR/)?((?:\.claude|scripts)/[\w/._-]+\.\w+)")

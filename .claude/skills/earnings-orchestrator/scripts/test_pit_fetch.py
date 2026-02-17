@@ -713,5 +713,553 @@ class PitFetchTests(unittest.TestCase):
         self.assertTrue(any(g["type"] == "config" and "--query" in g["reason"] for g in out["gaps"]))
 
 
+    # ── Alpha Vantage tests ──
+
+    # Realistic sample data — no reportTime field (doesn't exist in real API)
+    SAMPLE_AV_EARNINGS = {
+        "symbol": "AAPL",
+        "annualEarnings": [
+            {"fiscalDateEnding": "2024-09-30", "reportedEPS": "6.08"},
+            {"fiscalDateEnding": "2023-09-30", "reportedEPS": "6.12"},
+        ],
+        "quarterlyEarnings": [
+            {"fiscalDateEnding": "2024-12-31", "reportedDate": "2025-01-30",
+             "reportedEPS": "2.40", "estimatedEPS": "2.34", "surprise": "0.06",
+             "surprisePercentage": "2.5641"},
+            {"fiscalDateEnding": "2024-09-30", "reportedDate": "2024-10-31",
+             "reportedEPS": "1.64", "estimatedEPS": "1.60", "surprise": "0.04",
+             "surprisePercentage": "2.50"},
+            {"fiscalDateEnding": "2024-06-30", "reportedDate": "2024-08-01",
+             "reportedEPS": "1.40", "estimatedEPS": "1.35", "surprise": "0.05",
+             "surprisePercentage": "3.70"},
+            {"fiscalDateEnding": "2024-03-31", "reportedDate": "2024-05-02",
+             "reportedEPS": "1.53", "estimatedEPS": "1.50", "surprise": "0.03",
+             "surprisePercentage": "2.00"},
+        ],
+    }
+
+    SAMPLE_AV_ESTIMATES = {
+        "symbol": "AAPL",
+        "estimates": [
+            {"date": "2025-06-30", "horizon": "next fiscal quarter",
+             "eps_estimate_average": "1.72", "eps_estimate_analyst_count": "28",
+             "eps_estimate_average_7_days_ago": "1.70",
+             "eps_estimate_average_30_days_ago": "1.68",
+             "eps_estimate_average_60_days_ago": "1.65",
+             "eps_estimate_average_90_days_ago": "1.60"},
+            {"date": "2025-09-30", "horizon": "next fiscal year",
+             "eps_estimate_average": "8.49", "eps_estimate_analyst_count": "38"},
+            {"date": "2024-12-31", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "2.34", "eps_estimate_analyst_count": "30",
+             "eps_estimate_average_7_days_ago": "2.32",
+             "eps_estimate_average_30_days_ago": "2.28",
+             "eps_estimate_average_60_days_ago": "2.25",
+             "eps_estimate_average_90_days_ago": "2.20"},
+            {"date": "2024-09-30", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "1.60", "eps_estimate_analyst_count": "28",
+             "eps_estimate_average_7_days_ago": "1.58",
+             "eps_estimate_average_30_days_ago": "1.55",
+             "eps_estimate_average_60_days_ago": "1.52",
+             "eps_estimate_average_90_days_ago": "1.48"},
+            {"date": "2024-06-30", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "1.35", "eps_estimate_analyst_count": "25",
+             "eps_estimate_average_7_days_ago": "1.34",
+             "eps_estimate_average_30_days_ago": "1.24",
+             "eps_estimate_average_60_days_ago": "1.32",
+             "eps_estimate_average_90_days_ago": "1.22"},
+            {"date": "2024-03-31", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "1.50", "eps_estimate_analyst_count": "27",
+             "eps_estimate_average_7_days_ago": "1.49",
+             "eps_estimate_average_30_days_ago": "1.45",
+             "eps_estimate_average_60_days_ago": "1.42",
+             "eps_estimate_average_90_days_ago": "1.38"},
+            {"date": "2024-09-30", "horizon": "historical fiscal year",
+             "eps_estimate_average": "6.00", "eps_estimate_analyst_count": "35",
+             "eps_estimate_average_7_days_ago": "5.95",
+             "eps_estimate_average_30_days_ago": "5.85",
+             "eps_estimate_average_60_days_ago": "5.80",
+             "eps_estimate_average_90_days_ago": "5.70"},
+        ],
+    }
+
+    def test_av_earnings_open(self) -> None:
+        """Open mode: 4 quarterly + 2 annual (cross-referenced) in data[]."""
+        sample = self.SAMPLE_AV_EARNINGS
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "earnings",
+                "--symbol", "AAPL", "--input-file", str(path),
+            )
+        quarterly = [d for d in out["data"] if d.get("record_type") == "quarterly_earnings"]
+        annual = [d for d in out["data"] if d.get("record_type") == "annual_earnings"]
+        self.assertEqual(len(quarterly), 4)
+        # Annual cross-referenced via Q4 fiscalDateEnding match
+        # 2024-09-30 matches Q with reportedDate 2024-10-31
+        # 2023-09-30 has no matching quarterly → unresolved
+        self.assertEqual(len(annual), 1)
+        self.assertEqual(annual[0]["fiscalDateEnding"], "2024-09-30")
+        self.assertEqual(annual[0]["available_at_source"], "cross_reference")
+        self.assertIn("available_at", annual[0])
+        # Quarterly has provider_metadata source
+        self.assertEqual(quarterly[0]["available_at_source"], "provider_metadata")
+
+    def test_av_earnings_pit_filters_by_reported_date(self) -> None:
+        """PIT=2024-11-01T10:00:00-05:00. Q4 (reported 2025-01-30) excluded.
+        Q3+Q2+Q1 pass. Annual cross-ref: 2024-09-30 passes (reported 2024-10-31 < PIT day)."""
+        sample = self.SAMPLE_AV_EARNINGS
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "earnings",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-11-01T10:00:00-05:00",
+            )
+        quarterly = [d for d in out["data"] if d.get("record_type") == "quarterly_earnings"]
+        annual = [d for d in out["data"] if d.get("record_type") == "annual_earnings"]
+        self.assertEqual(len(quarterly), 3)  # Q3, Q2, Q1
+        fiscal_dates = [q["fiscalDateEnding"] for q in quarterly]
+        self.assertNotIn("2024-12-31", fiscal_dates)  # Q4 excluded
+        self.assertIn("2024-09-30", fiscal_dates)  # Q3 passes
+        # Annual: 2024-09-30 cross-ref with 2024-10-31 (< PIT) → passes
+        self.assertEqual(len(annual), 1)
+        self.assertEqual(annual[0]["available_at_source"], "cross_reference")
+        # pit_excluded gap for Q4
+        self.assertTrue(any(g["type"] == "pit_excluded" for g in out["gaps"]))
+
+    def test_av_earnings_pit_date_only_excludes_same_day(self) -> None:
+        """reportedDate=2024-10-31, PIT same day → EXCLUDED (date-only, >= comparison).
+        PIT next day → passes."""
+        sample = {
+            "symbol": "AAPL", "annualEarnings": [],
+            "quarterlyEarnings": [
+                {"fiscalDateEnding": "2024-09-30", "reportedDate": "2024-10-31",
+                 "reportedEPS": "1.64", "estimatedEPS": "1.60", "surprise": "0.04",
+                 "surprisePercentage": "2.50"},
+            ],
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            # Same day → excluded (date-only uses >= comparison)
+            out1 = run_pit_fetch(
+                "--source", "alphavantage", "--op", "earnings",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-10-31T16:00:00-04:00",
+            )
+            q1 = [d for d in out1["data"] if d.get("record_type") == "quarterly_earnings"]
+            self.assertEqual(len(q1), 0)
+
+            # Next day → passes
+            out2 = run_pit_fetch(
+                "--source", "alphavantage", "--op", "earnings",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-11-01T10:00:00-05:00",
+            )
+            q2 = [d for d in out2["data"] if d.get("record_type") == "quarterly_earnings"]
+            self.assertEqual(len(q2), 1)
+
+    def test_av_earnings_annual_cross_ref_no_match(self) -> None:
+        """Annual items with no matching quarterly → unresolved gap."""
+        sample = {
+            "symbol": "AAPL",
+            "annualEarnings": [
+                {"fiscalDateEnding": "2020-09-30", "reportedEPS": "3.28"},
+            ],
+            "quarterlyEarnings": [
+                {"fiscalDateEnding": "2024-09-30", "reportedDate": "2024-10-31",
+                 "reportedEPS": "1.64"},
+            ],
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "earnings",
+                "--symbol", "AAPL", "--input-file", str(path),
+            )
+        annual = [d for d in out["data"] if d.get("record_type") == "annual_earnings"]
+        self.assertEqual(len(annual), 0)
+        unverifiable = [g for g in out["gaps"] if g["type"] == "unverifiable"
+                        and "annual" in g.get("reason", "").lower()]
+        self.assertTrue(len(unverifiable) > 0)
+
+    def test_av_earnings_annual_pit_excluded(self) -> None:
+        """Annual cross-ref available but post-PIT → excluded."""
+        sample = {
+            "symbol": "AAPL",
+            "annualEarnings": [
+                {"fiscalDateEnding": "2024-09-30", "reportedEPS": "6.08"},
+            ],
+            "quarterlyEarnings": [
+                {"fiscalDateEnding": "2024-09-30", "reportedDate": "2024-10-31",
+                 "reportedEPS": "1.64"},
+            ],
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            # PIT before 2024-10-31 → annual excluded
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "earnings",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-10-15T10:00:00-04:00",
+            )
+        annual = [d for d in out["data"] if d.get("record_type") == "annual_earnings"]
+        self.assertEqual(len(annual), 0)
+        annual_gaps = [g for g in out["gaps"] if "annual" in g.get("reason", "").lower()
+                       and g["type"] == "pit_excluded"]
+        self.assertTrue(len(annual_gaps) > 0)
+
+    def test_av_error_rate_limit(self) -> None:
+        """AV rate-limit response → gaps with upstream_error, no crash."""
+        error_json = json.dumps({"Note": "Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day."})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(error_json, encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "earnings",
+                "--symbol", "AAPL", "--input-file", str(path),
+            )
+        self.assertTrue(any(g["type"] == "upstream_error" for g in out["gaps"]))
+        self.assertEqual(out["data"], [])
+
+    def test_av_error_invalid_api_key(self) -> None:
+        """AV invalid-key response → gaps with upstream_error, no crash."""
+        error_json = json.dumps({"Error Message": "Invalid API key. Please retry."})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(error_json, encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+            )
+        self.assertTrue(any(g["type"] == "upstream_error" for g in out["gaps"]))
+
+    def test_av_error_json_for_calendar(self) -> None:
+        """AV error JSON when calendar expects CSV → upstream_error, no CSV parse crash."""
+        error_json = json.dumps({"Note": "Rate limit reached."})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(error_json, encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "calendar",
+                "--symbol", "AAPL", "--input-file", str(path),
+            )
+        self.assertTrue(any(g["type"] == "upstream_error" for g in out["gaps"]))
+
+    def test_av_estimates_open(self) -> None:
+        """Open mode: all estimate items pass through with record_type='estimate'."""
+        sample = self.SAMPLE_AV_ESTIMATES
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+            )
+        self.assertEqual(len(out["data"]), 7)  # all 7 estimates
+        self.assertTrue(all(d["record_type"] == "estimate" for d in out["data"]))
+        self.assertIn("available_at", out["data"][0])
+        # Open mode: all fields preserved (no stripping)
+        self.assertEqual(out["data"][0].get("eps_estimate_average_7_days_ago"), "1.70")
+        self.assertIn("eps_estimate_average", out["data"][0])
+        self.assertIn("eps_estimate_high", out["data"][0])
+        self.assertIn("revenue_estimate_average", out["data"][0])
+        # Open mode: no pit_consensus_eps or pit_bucket
+        self.assertNotIn("pit_consensus_eps", out["data"][0])
+
+    def test_av_estimates_pit_at_period_end(self) -> None:
+        """PIT after fiscal end → uses eps_estimate_average (at_period_end bucket)."""
+        sample = self.SAMPLE_AV_ESTIMATES
+        # PIT=2024-10-15 — after Q3 (2024-09-30) fiscal end, before Q4 (2024-12-31) fiscal end
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-10-15T10:00:00-04:00",
+            )
+        resolved = [d for d in out["data"] if d["record_type"] == "estimate"]
+        # Hist quarters: 2024-09-30 (PIT after fiscal end) ✓, 2024-06-30 (PIT after) ✓,
+        #   2024-03-31 (PIT after) ✓, 2024-12-31 (PIT before fiscal end 12/31) → bucket
+        # Hist year: 2024-09-30 (PIT after fiscal end) ✓
+        # Forward: gapped
+        at_period = [d for d in resolved if d.get("pit_bucket") == "at_period_end"]
+        self.assertTrue(len(at_period) >= 3)  # Q3, Q2, Q1 all at_period_end
+        # Check Q3 2024: pit_consensus_eps should be eps_estimate_average = "1.60"
+        q3 = [d for d in at_period if d["fiscalDateEnding"] == "2024-09-30"
+              and d.get("horizon") == "historical fiscal quarter"]
+        self.assertEqual(len(q3), 1)
+        self.assertEqual(q3[0]["pit_consensus_eps"], "1.60")
+        self.assertEqual(q3[0]["available_at_source"], "coarse_pit")
+
+    def test_av_estimates_pit_bucket_7d(self) -> None:
+        """PIT 3 days before fiscal end → uses 7d bucket (nearest older)."""
+        # Single estimate: fiscal end 2024-06-30, PIT = 2024-06-27 (3 days before)
+        # 7d bucket date = 2024-06-23, which is before PIT → selected
+        sample = {"symbol": "AAPL", "estimates": [
+            {"date": "2024-06-30", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "1.35",
+             "eps_estimate_average_7_days_ago": "1.34",
+             "eps_estimate_average_30_days_ago": "1.24",
+             "eps_estimate_average_60_days_ago": "1.32",
+             "eps_estimate_average_90_days_ago": "1.22"},
+        ]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-06-27T10:00:00-04:00",
+            )
+        resolved = [d for d in out["data"] if d["record_type"] == "estimate"]
+        self.assertEqual(len(resolved), 1)
+        self.assertEqual(resolved[0]["pit_consensus_eps"], "1.34")
+        self.assertEqual(resolved[0]["pit_bucket"], "7d_before_period_end")
+        # PIT mode: post-PIT fields must be stripped (contamination prevention)
+        self.assertNotIn("eps_estimate_average", resolved[0])
+        self.assertNotIn("eps_estimate_high", resolved[0])
+        self.assertNotIn("eps_estimate_low", resolved[0])
+        self.assertNotIn("revenue_estimate_average", resolved[0])
+        self.assertNotIn("eps_estimate_average_7_days_ago", resolved[0])
+        self.assertNotIn("eps_estimate_average_30_days_ago", resolved[0])
+
+    def test_av_estimates_pit_bucket_30d(self) -> None:
+        """PIT 20 days before fiscal end → 7d bucket is future, 30d bucket selected."""
+        # Fiscal end 2024-06-30, PIT = 2024-06-10 (20 days before)
+        # 7d bucket = June 23 → AFTER PIT, skip
+        # 30d bucket = May 31 → BEFORE PIT, select
+        sample = {"symbol": "AAPL", "estimates": [
+            {"date": "2024-06-30", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "1.35",
+             "eps_estimate_average_7_days_ago": "1.34",
+             "eps_estimate_average_30_days_ago": "1.24",
+             "eps_estimate_average_60_days_ago": "1.32",
+             "eps_estimate_average_90_days_ago": "1.22"},
+        ]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-06-10T10:00:00-04:00",
+            )
+        resolved = [d for d in out["data"] if d["record_type"] == "estimate"]
+        self.assertEqual(len(resolved), 1)
+        self.assertEqual(resolved[0]["pit_consensus_eps"], "1.24")
+        self.assertEqual(resolved[0]["pit_bucket"], "30d_before_period_end")
+
+    def test_av_estimates_pit_bucket_60d(self) -> None:
+        """PIT 45 days before fiscal end → 60d bucket selected."""
+        # Fiscal end 2024-06-30, PIT = 2024-05-16 (45 days before)
+        # 7d = Jun 23 (future), 30d = May 31 (future), 60d = May 1 (past) → select
+        sample = {"symbol": "AAPL", "estimates": [
+            {"date": "2024-06-30", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "1.35",
+             "eps_estimate_average_7_days_ago": "1.34",
+             "eps_estimate_average_30_days_ago": "1.24",
+             "eps_estimate_average_60_days_ago": "1.32",
+             "eps_estimate_average_90_days_ago": "1.22"},
+        ]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-05-16T10:00:00-04:00",
+            )
+        resolved = [d for d in out["data"] if d["record_type"] == "estimate"]
+        self.assertEqual(len(resolved), 1)
+        self.assertEqual(resolved[0]["pit_consensus_eps"], "1.32")
+        self.assertEqual(resolved[0]["pit_bucket"], "60d_before_period_end")
+
+    def test_av_estimates_pit_bucket_90d(self) -> None:
+        """PIT 75 days before fiscal end → 90d bucket selected."""
+        # Fiscal end 2024-06-30, PIT = 2024-04-16 (75 days before)
+        # 7d = Jun 23 (future), 30d = May 31 (future), 60d = May 1 (future),
+        # 90d = Apr 1 (past) → select
+        sample = {"symbol": "AAPL", "estimates": [
+            {"date": "2024-06-30", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "1.35",
+             "eps_estimate_average_7_days_ago": "1.34",
+             "eps_estimate_average_30_days_ago": "1.24",
+             "eps_estimate_average_60_days_ago": "1.32",
+             "eps_estimate_average_90_days_ago": "1.22"},
+        ]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-04-16T10:00:00-04:00",
+            )
+        resolved = [d for d in out["data"] if d["record_type"] == "estimate"]
+        self.assertEqual(len(resolved), 1)
+        self.assertEqual(resolved[0]["pit_consensus_eps"], "1.22")
+        self.assertEqual(resolved[0]["pit_bucket"], "90d_before_period_end")
+
+    def test_av_estimates_pit_no_bucket(self) -> None:
+        """PIT 120 days before fiscal end → no bucket, gapped."""
+        # Fiscal end 2024-06-30, PIT = 2024-03-02 (120 days before)
+        # All buckets (7d=Jun23, 30d=May31, 60d=May1, 90d=Apr1) are future → gap
+        sample = {"symbol": "AAPL", "estimates": [
+            {"date": "2024-06-30", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "1.35",
+             "eps_estimate_average_7_days_ago": "1.34",
+             "eps_estimate_average_30_days_ago": "1.24",
+             "eps_estimate_average_60_days_ago": "1.32",
+             "eps_estimate_average_90_days_ago": "1.22"},
+        ]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-03-02T10:00:00-05:00",
+            )
+        resolved = [d for d in out["data"] if d["record_type"] == "estimate"]
+        self.assertEqual(len(resolved), 0)
+        self.assertTrue(any("bucket range" in g.get("reason", "") for g in out["gaps"]))
+
+    def test_av_estimates_pit_bucket_exact_date(self) -> None:
+        """PIT exactly on bucket date → bucket IS selected (<=, not <)."""
+        # Fiscal end 2024-06-30, 30d bucket = May 31.
+        # PIT = 2024-05-31 → bucket_date == pit_date → selected
+        sample = {"symbol": "AAPL", "estimates": [
+            {"date": "2024-06-30", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "1.35",
+             "eps_estimate_average_7_days_ago": "1.34",
+             "eps_estimate_average_30_days_ago": "1.24",
+             "eps_estimate_average_60_days_ago": "1.32",
+             "eps_estimate_average_90_days_ago": "1.22"},
+        ]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-05-31T10:00:00-04:00",
+            )
+        resolved = [d for d in out["data"] if d["record_type"] == "estimate"]
+        self.assertEqual(len(resolved), 1)
+        self.assertEqual(resolved[0]["pit_consensus_eps"], "1.24")
+        self.assertEqual(resolved[0]["pit_bucket"], "30d_before_period_end")
+
+    def test_av_estimates_pit_bucket_missing_value(self) -> None:
+        """Bucket field is None → item gapped with 'missing revision bucket value'."""
+        sample = {"symbol": "AAPL", "estimates": [
+            {"date": "2024-06-30", "horizon": "historical fiscal quarter",
+             "eps_estimate_average": "1.35",
+             "eps_estimate_average_7_days_ago": None,
+             "eps_estimate_average_30_days_ago": "1.24"},
+        ]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            # PIT 3 days before → selects 7d bucket, but value is None → gap
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-06-27T10:00:00-04:00",
+            )
+        resolved = [d for d in out["data"] if d["record_type"] == "estimate"]
+        self.assertEqual(len(resolved), 0)
+        self.assertTrue(any("missing revision bucket" in g.get("reason", "") for g in out["gaps"]))
+
+    def test_av_estimates_pit_forward_gapped(self) -> None:
+        """Forward-looking estimates always gapped in PIT mode."""
+        sample = {"symbol": "AAPL", "estimates": [
+            {"date": "2025-06-30", "horizon": "next fiscal quarter",
+             "eps_estimate_average": "1.72",
+             "eps_estimate_average_7_days_ago": "1.70"},
+            {"date": "2025-09-30", "horizon": "next fiscal year",
+             "eps_estimate_average": "8.49"},
+        ]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2025-08-01T10:00:00-04:00",
+            )
+        resolved = [d for d in out["data"] if d["record_type"] == "estimate"]
+        self.assertEqual(len(resolved), 0)
+        self.assertTrue(any("forward-looking" in g.get("reason", "") for g in out["gaps"]))
+
+    def test_av_estimates_pit_mixed(self) -> None:
+        """Full sample: historical at various buckets + forward gapped."""
+        sample = self.SAMPLE_AV_ESTIMATES
+        # PIT = 2024-06-10 → 20 days before Q3 fiscal end (2024-06-30)
+        # Q3 (2024-06-30): 30d bucket (May 31 ≤ Jun 10) → eps=1.24
+        # Q2 (2024-03-31): PIT after fiscal end → at_period_end → eps=1.50
+        # Q1 (2024-12-31): PIT before fiscal end by 204 days → no bucket → gap
+        # Wait, 2024-12-31 is AFTER PIT (2024-06-10). For historical quarters with
+        # fiscal end in the future relative to PIT: 2024-12-31 is in the future.
+        # _select_estimate_bucket: pit_ny_date=2024-06-10 < 2024-12-31 → check buckets:
+        #   7d=Dec24(future), 30d=Dec1(future), 60d=Nov1(future), 90d=Oct2(future) → all future → gap
+        # Fiscal year 2024-09-30: pit < fiscal end → buckets: 7d=Sep23(future),
+        #   30d=Sep1(future), 60d=Aug1(future), 90d=Jul2(future) → all future → gap
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "av.json"
+            path.write_text(json.dumps(sample), encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "estimates",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-06-10T10:00:00-04:00",
+            )
+        resolved = [d for d in out["data"] if d["record_type"] == "estimate"]
+        # Q3 (2024-06-30): 30d bucket ✓
+        # Q2 (2024-03-31): at_period_end ✓
+        # Q1, Q4, FY: all have fiscal end after PIT and buckets all in future → gap
+        # So only 2 resolved
+        self.assertEqual(len(resolved), 2)
+        fiscals = {d["fiscalDateEnding"] for d in resolved}
+        self.assertIn("2024-06-30", fiscals)
+        self.assertIn("2024-03-31", fiscals)
+        # Forward-looking gap
+        self.assertTrue(any("forward-looking" in g.get("reason", "") for g in out["gaps"]))
+
+    def test_av_calendar_open(self) -> None:
+        """Open mode: parsed CSV rows pass through. Only AAPL row (symbol filter)."""
+        csv_text = "symbol,name,reportDate,fiscalDateEnding,estimate,currency,timeOfTheDay\nAAPL,APPLE INC,2025-07-31,2025-06-30,1.72,USD,post-market\nMSFT,MICROSOFT CORP,2025-07-22,2025-06-30,3.25,USD,post-market\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "cal.csv"
+            path.write_text(csv_text, encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "calendar",
+                "--symbol", "AAPL", "--input-file", str(path),
+            )
+        cal = [d for d in out["data"] if d.get("record_type") == "earnings_calendar"]
+        self.assertEqual(len(cal), 1)
+        self.assertEqual(cal[0]["symbol"], "AAPL")
+        self.assertEqual(cal[0]["reportDate"], "2025-07-31")
+
+    def test_av_calendar_pit_gapped(self) -> None:
+        """PIT mode: data=[], gaps has 'forward-looking snapshot' reason."""
+        csv_text = "symbol,name,reportDate,fiscalDateEnding,estimate,currency,timeOfTheDay\nAAPL,APPLE INC,2025-07-31,2025-06-30,1.72,USD,post-market\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "cal.csv"
+            path.write_text(csv_text, encoding="utf-8")
+            out = run_pit_fetch(
+                "--source", "alphavantage", "--op", "calendar",
+                "--symbol", "AAPL", "--input-file", str(path),
+                "--pit", "2024-11-01T10:00:00-05:00",
+            )
+        cal = [d for d in out["data"] if d.get("record_type") == "earnings_calendar"]
+        self.assertEqual(len(cal), 0)
+        self.assertTrue(any("forward-looking snapshot" in g.get("reason", "") for g in out["gaps"]))
+
+
 if __name__ == "__main__":
     unittest.main()
