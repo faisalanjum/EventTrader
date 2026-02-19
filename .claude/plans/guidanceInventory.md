@@ -1,498 +1,590 @@
-# Guidance Inventory Rebuild Plan (Ground-Up)
+# Guidance System — Implementation Spec
 
-**Created**: 2026-02-08
-**Status**: Active Rebuild
-**Parent Plan**: `earnings-orchestrator.md` (source of truth)
-**Supersedes**: `guidance_inventory_old.md`
-
----
-
-## Active Collaboration Context (Locked)
-
-- Two bots may edit this plan in parallel: **ChatGPT** and **Claude**. Re-read full doc before every edit.
-- Rebuild protocol is locked: rebuild from `guidance_inventory_old.md` one topic at a time, highest-priority first.
-- All decisions are provisional until the user explicitly confirms they are final.
-- Keep tradeoffs explicit for each major decision (alternatives, choice, reason).
-- Use this file as source of truth for current guidance-inventory architecture decisions.
-
-Bot-to-bot notes (append-only; mark handled, do not delete history):
-- [2026-02-08 00:00] [ChatGPT] Rebuild started. Old plan moved to `guidance_inventory_old.md`. New ground-up plan created with borrowed best-practice framework.
-- [2026-02-08 00:00] [ChatGPT] Collaboration structure added to align with orchestrator process and enable one-question-at-a-time rebuild flow with user-led final locking.
+**Version**: 2.1 | 2026-02-19
+**Status**: Architecture locked — implementation-ready
+**Parent**: `earnings-orchestrator.md`
+**Benchmark**: `sampleGuidance_byAgentTeams.md` (AAPL)
+**Supersedes**: `guidanceInventory.md` v0 (file-centric), `guidanceWIP.md` v0.2 (pre-graph)
 
 ---
 
-## CHATGPT - Collaboration Guard (DO NOT DELETE)
+## Top Open Decisions (Pin)
 
-`CLAUDE INSTRUCTION`: Do not delete this section or any `CHATGPT`-prefixed block unless the user explicitly asks.
+These decisions are intentionally pinned at the top so they are resolved before implementation drift.
 
-1. Re-read full doc before every response/edit.
-2. All decisions provisional until user approves.
-3. Rebuild from `guidance_inventory_old.md` one item at a time, starting from highest-priority unresolved item.
-4. Keep open questions in `## 17) Open Questions Register` until explicitly resolved.
-5. For each major design choice, compare alternatives and record tradeoffs.
-6. Ask one question at a time; reprioritize after every user answer.
-7. Map each requirement to a tested primitive/pattern before accepting a design.
-8. Challenge assumptions independently; do not auto-accept proposals.
-9. Lock a decision only after explicit user confirmation that they have made up their mind.
-10. After a decision is locked, update the relevant main section(s) and then mark the corresponding open question as resolved.
-
----
-
-## Shared Project Requirements (LOCKED)
-
-1. `earnings-orchestrator.md` is the parent source of truth; if conflicts exist, parent plan wins.
-2. Priority order is fixed: reliability first, full required data coverage second, speed third, then maximum accuracy via comprehensive/exhaustive research within runtime limits.
-3. No over-engineering: add complexity only when it has clear reliability or quality value.
-4. One focused decision at a time; keep unresolved items in the open-questions register.
-5. Reason independently before locking any decision; do not auto-accept proposals.
-6. Validate choices against `Infrastructure.md`, `AgentTeams.md`, and `DataSubAgents.md` primitives.
-7. Must remain SDK-triggerable and non-interactive.
-
----
-
-## Session Start Rules (LOCKED)
-
-1. Read `.claude/plans/earnings-orchestrator.md` first. It is the only parent source of truth.
-2. Then read this file's Primary Context Pack in full (Infrastructure.md, DataSubAgents.md, etc.). Work on only this module per session — do not modify other module plans or the master plan.
-3. Do not redesign architecture; resolve only open questions in this module plan, one question at a time.
-4. Follow locked priorities: reliability > required data coverage > speed > accuracy/exhaustive research; no over-engineering.
-5. Before each reply, re-check parent-plan consistency and update the module doc directly.
-6. Record unresolved items in that module's open-question table; when resolved, move into main section and mark resolved.
-7. Keep SDK compatibility and non-interactive execution constraints from `Infrastructure.md`.
-8. Append to bot-to-bot notes at session start and when resolving questions.
-
----
-
-## 0) Purpose
-
-Rebuild Guidance Inventory from first principles, using proven architecture patterns from:
-- `earnings-orchestrator.md`
-- `Infrastructure.md`
-- `AgentTeams.md`
-- `DataSubAgents.md`
-- `tradeEarnings.md`
-- `newsImpact.md`
-- existing skills (`guidance-inventory`, `earnings-attribution`, `evidence-standards`)
-
-This plan defines **what must be true** for a reliable, reusable, and maintainable guidance inventory system.
-
----
-
-## 1) Borrowed Core Principles (LOCKED)
-
-1. Reliability first, then complete required data, then speed, then maximum accuracy via comprehensive/exhaustive research.
-2. Never trade required data quality for runtime speed.
-3. Minimalism is preferred, but reliability wins when they conflict.
-4. Keep architecture simple: no extra layers without measurable value.
-5. Every major design choice must record alternatives and tradeoffs.
-6. Decisions remain provisional until explicitly confirmed.
-7. Keep an explicit question register and resolve highest-priority unknowns first.
-8. Use deterministic rules for state transitions and output derivations where possible.
-9. Use model judgment for synthesis, not for deterministic transformations.
-10. Preserve full evidence trail; no unsourced claims.
-
----
-
-## 1.1) Primary Context Pack (LOCKED)
-
-Every new bot/session working on Guidance Inventory must read this set first, in this order:
-
-1. `earnings-orchestrator.md` (primary source of truth for system-level contracts).
-2. `Infrastructure.md` (tested execution constraints, SDK/tool behavior).
-3. `AgentTeams.md` (team pattern options and validated capabilities).
-4. `DataSubAgents.md` (data access layer assumptions and boundaries).
-5. This file: `guidanceInventory.md` (module-specific plan).
-6. `.claude/skills/guidance-inventory/SKILL.md` (current implementation reference).
-
-Rule: if this file conflicts with `earnings-orchestrator.md`, the master plan wins.
-
----
-
-## 1.2) SDK and Automation Contract (LOCKED)
-
-Guidance Inventory design must stay compatible with unattended SDK-triggered orchestration:
-
-1. Non-interactive only: no `AskUserQuestion` and no manual approval dependencies.
-2. Fail fast on missing required inputs (ticker/event context) with clear error.
-3. Deterministic runtime boundaries for replayability (same input snapshot => same output semantics).
-4. Align with latest validated SDK guidance in `Infrastructure.md` (version/tool requirements owned there, not duplicated here).
-
----
-
-## 2) Scope and Non-Goals
-
-### In Scope
-
-1. Build and maintain cumulative guidance state per company.
-2. Capture annual and quarterly guidance, numeric and qualitative.
-3. Track revisions over time (initial/raised/lowered/etc.).
-4. Map fiscal periods correctly using company fiscal year end (FYE).
-5. Maintain citation-quality evidence for every entry.
-6. Support rebuild (historical) and incremental updates (ongoing quarters).
-
-### Out of Scope
-
-1. Trading recommendation logic.
-2. Final attribution of stock move drivers.
-3. Consensus ownership as primary system of record (reference only here).
-4. Over-optimized micro-latency at the cost of completeness/correctness.
-
----
-
-## 3) Operating Modes
-
-### BUILD mode (initial full build)
-
-1. Triggered when company inventory does not exist or quarter context is Q1 bootstrap.
-2. Pull all relevant historical guidance sources.
-3. Create complete baseline with supersession chains.
-
-### UPDATE mode (incremental)
-
-1. Triggered for subsequent quarters/events.
-2. Fetch only the new window (prior event date -> current event date) plus mid-quarter guidance updates.
-3. Append timeline entries and refresh active state.
-
-### Design Rule
-
-Same data model and validation rules in both modes. Only data horizon changes.
-
----
-
-## 4) Architecture Pattern (Borrowed + Applied)
-
-1. Guidance inventory is a **data component** in the broader orchestrator pipeline.
-2. Orchestrator calls guidance inventory once per ticker before quarter loop.
-3. Quarter processing remains sequential for learning continuity.
-4. Independent data retrieval tasks should run in parallel where platform allows.
-5. Keep state file-authoritative (filesystem is source of truth).
-
-### Primitive Selection Rule
-
-For major implementation choices, compare:
-1. Sub-agent orchestration pattern.
-2. Team orchestration pattern.
-
-Choose per job by:
-1. Reliability.
-2. Required data coverage.
-3. Speed.
-
-Do not default blindly to one pattern.
-
----
-
-## 5) Data Integrity and Trust Boundaries
-
-1. No citation = no guidance entry.
-2. Use deterministic validation/gating for temporal correctness where applicable.
-3. Pre-filters in queries are optimization, not trust boundary.
-4. If data cannot be validated as reliable, drop it or mark as explicit gap.
-5. Never leak contaminated/unverifiable content into active guidance state.
-
-### Citation Minimum
-
-Every entry must include:
-1. Source type.
-2. Source identifier (accession/URL/transcript ID).
-3. Given date.
-4. Quote or precise paraphrase.
-5. Location hint (section/page/Q&A marker when available).
-
----
-
-## 6) Temporal Precision Contract (CRITICAL)
-
-Every guidance statement carries at least two time dimensions:
-1. **Given Date**: when management issued guidance.
-2. **Period Covered**: which fiscal period the guidance targets.
-
-Guidance period must include:
-1. Period type (quarter/annual/half/long-range/other).
-2. Fiscal year.
-3. Fiscal quarter (nullable).
-4. Calendar start and end (derived from company FYE).
-5. Status relative to analysis date (future/current/past).
-
-### Mandatory FYE Handling
-
-1. Resolve FYE from company metadata or latest 10-K period.
-2. Derive fiscal calendar deterministically.
-3. Never assume December FYE unless fallback is unavoidable and documented.
-
----
-
-## 7) Guidance Classification Rules
-
-### Required action classes
-
-1. INITIAL
-2. RAISED
-3. LOWERED
-4. MAINTAINED
-5. NARROWED
-6. WIDENED
-7. WITHDRAWN
-
-### Deterministic action logic
-
-1. Compare to prior entry for same company/period/metric/basis.
-2. Midpoint change determines raised/lowered.
-3. Same midpoint + tighter/wider range determines narrowed/widened.
-4. Explicit reiteration can classify maintained.
-5. Removal classifies withdrawn.
-
-### Anchor rule
-
-1. First annual guide for fiscal year is anchor.
-2. All later annual revisions track delta vs anchor.
-3. Keep both point revision and cumulative revision.
-
----
-
-## 8) Supersession and State Model
-
-1. Never delete historical guidance entries.
-2. Mark replaced entries as superseded.
-3. Link superseded entry to successor (`superseded_by`).
-4. Keep chain integrity auditable.
-
-### Active vs Historical
-
-1. Active Guidance section shows latest valid entries per period/metric/basis.
-2. Timeline section preserves chronological issuance history.
-3. Revision history section summarizes anchor deltas over time.
-
----
-
-## 9) Required Data Coverage
-
-### Primary sources (priority order)
-
-1. 8-K EX-99.1 and earnings release exhibits.
-2. Earnings transcript (prepared remarks + Q&A).
-3. Structured consensus source (reference use).
-4. News and external research for gap filling.
-
-### Must-capture guidance categories
-
-1. Financial hard numbers (EPS/revenue/margins/cash flow/capex).
-2. Financial qualitative ranges (growth descriptors, margin direction).
-3. Operational guidance (units/subscribers/stores/headcount etc.).
-4. Conditions/assumptions (FX, rates, closing conditions, one-offs).
-
-### Critical nuance fields
-
-1. Basis/definition (GAAP vs non-GAAP, constant currency vs reported).
-2. Segment-level guidance when provided.
-3. Guidance policy (annual only/quarterly+annual/no formal guidance).
-
----
-
-## 10) Output Contract (File-Level)
-
-**Target file**: `earnings-analysis/Companies/{TICKER}/guidance-inventory.md`
-
-### Required sections
-
-1. Company fiscal profile.
-2. Fiscal calendar reference.
-3. Active guidance (current outlook).
-4. Guidance timeline (chronological).
-5. Annual revision history.
-6. Consensus comparison (reference-only).
-7. Evidence ledger.
-8. Data coverage summary.
-9. Notes and assumptions.
-
-### Output behavior
-
-1. Cumulative file, never destructive overwrite.
-2. Append new timeline blocks per update.
-3. Update active and revision sections deterministically.
-4. Keep explicit last-updated timestamp.
-
----
-
-## 11) Validation and Failure Policy (Tiered)
-
-### Hard-fail (block update)
-
-1. Core filing context missing/unreadable for target event.
-2. Output cannot satisfy schema-critical required fields.
-3. Deterministic consistency rules violated (invalid action/status math).
-
-### Continue-with-gaps
-
-1. Secondary source unavailable (transcript/news/external).
-2. Non-critical fields missing but entry still verifiable.
-3. Ambiguous references that can be documented transparently.
-
-### Warn-and-write
-
-1. Partial coverage with explicit `missing_inputs` style disclosure.
-2. Confidence reduced due to source limitations.
-
-### Rule
-
-No fabrication under any condition.
-
----
-
-## 12) Idempotency, Resume, and State Authority
-
-1. File-authoritative state: on-disk output determines completion/resume.
-2. Existence checks gate rebuild/update work.
-3. Partial artifacts without final output are safe to overwrite.
-4. Use temp-write + atomic rename for critical output writes.
-5. Re-running should produce stable results for same inputs.
-
----
-
-## 13) Integration Contracts
-
-### With Orchestrator
-
-1. Orchestrator invokes guidance inventory at Step 0 per ticker.
-2. Guidance history is injected into planner/predictor context bundles.
-3. Attribution updates can feed additional lessons but not mutate prior evidence.
-
-### With Predictor
-
-1. Predictor reads prior guidance state as expectation anchor.
-2. Missing guidance anchor should be exposed clearly to confidence policy.
-
-### With Attribution/Learner
-
-1. Attribution can compare actuals vs historical guidance.
-2. Learner can generate planner/predictor lessons from revision behavior.
-
----
-
-## 13.1) Module Interface Contract (Scaffold, to Lock Before Implementation)
-
-This section exists so implementation bots have a strict integration boundary, not just narrative guidance.
-
-### Caller -> Callee
-
-- Caller: Orchestrator Step 0 (`earnings-orchestrator.md`).
-- Callee: Guidance Inventory module.
-
-### Required Input (from caller)
-
-1. `ticker` (required).
-2. Event context needed to select BUILD vs UPDATE window (exact field contract to be locked in open questions).
-3. Existing guidance artifact paths for this ticker (if present).
-
-### Required Output (to caller)
-
-1. Durable guidance artifact at `earnings-analysis/Companies/{TICKER}/guidance-inventory.md`.
-2. Deterministic machine-consumable payload for bundle injection (shape to be locked: raw markdown only vs markdown + structured sidecar).
-3. Coverage metadata (what was missing) for downstream confidence handling.
-
-### Failure Behavior
-
-1. Hard-fail conditions block update/write.
-2. Continue-with-gaps allowed for non-critical source absence.
-3. All failures must be explicit and machine-detectable by caller (status + reason).
-
----
-
-## 14) Evidence and Audit Standards
-
-1. Domain boundaries must be respected by data subagents.
-2. Numeric claims require exact values and exact sources.
-3. Qualitative claims still require source attribution.
-4. Conflicts between sources must be surfaced explicitly, not hidden.
-5. Evidence ledger must be sufficient for independent re-query verification.
-
----
-
-## 15) Performance Guidance
-
-1. Optimize by parallelizing independent fetches, not by reducing required coverage.
-2. Keep sequence where dependencies exist (calendar -> extraction -> classification -> output).
-3. Cache immutable lookups (e.g., FYE) when safe.
-4. Prefer structured machine-checkable outputs for data retrieval stages.
-
----
-
-## 16) Rebuild Implementation Phases
-
-### Phase 0: Contract Finalization
-
-1. Lock data model fields and required sections.
-2. Lock action classification and supersession rules.
-3. Lock failure policy tiers.
-
-### Phase 1: Temporal Foundation
-
-1. Implement FYE resolution and fiscal calendar mapping.
-2. Add deterministic period-status derivation.
-3. Add period parsing/disambiguation checks.
-
-### Phase 2: Extraction Pipeline
-
-1. Implement source-priority retrieval.
-2. Implement entry extraction with citation enforcement.
-3. Implement qualitative guidance handling.
-
-### Phase 3: State + Output
-
-1. Implement active/superseded state transitions.
-2. Implement timeline and revision history generation.
-3. Implement coverage and assumptions sections.
-
-### Phase 4: Validation + Recovery
-
-1. Add schema and deterministic-rule validation.
-2. Add idempotent rerun/resume behavior.
-3. Add atomic write protections and audit checks.
-
-### Phase 5: Integration and Calibration
-
-1. Wire orchestrator Step 0 contract.
-2. Verify downstream predictor/attribution consumption.
-3. Calibrate thresholds and quality metrics on historical samples.
-
----
-
-## 17) Open Questions Register (Start Fresh)
-
-| ID | Question | Priority | Status |
+| Priority | Decision | What Must Be Decided | Status |
 |---|---|---|---|
-| G1 | Exact schema shape for serialized entry IDs and section keys? | P0 | Open |
-| G2 | Source fallback policy when 8-K lacks explicit guidance but transcript has it? | P0 | Open |
-| G3 | How to encode basis changes (definition drift) for strict comparability? | P0 | Open |
-| G4 | Calendar status cutoff logic (`today` vs `today+buffer`) for current/future boundary? | P1 | Open |
-| G5 | Segment hierarchy representation in markdown vs structured companion JSON? | P1 | Open |
-| G6 | Should qualitative-only entries be first-class in active guidance tables or separate block? | P1 | Open |
-| G7 | Minimum acceptable evidence coverage per update before warn/block? | P1 | Open |
-| G8 | Should we emit a machine-readable sidecar (`guidance-inventory.json`) for downstream strict parsing? | P2 | Open |
+| P0 | Per-asset extraction treatment | Exact extraction policy per doc asset type (`8k`, `transcript`, `news`, `10q/10k`): scan scope, inclusion rules, exclusion rules, and citation expectations per asset. | OPEN |
+| P0 | Trigger model for extraction | How guidance extraction is triggered end-to-end (SDK on-demand only, ingestion hook, or hybrid) and who owns orchestration boundaries. | OPEN |
+| P0 | GAAP vs non-GAAP handling | `basis_raw` (verbatim) + `basis_norm` (`gaap`, `non_gaap`, `constant_currency`, `unknown`). Single chain, query-time partitioning. Default `unknown`. See §2, §8, §9. | RESOLVED |
+| P1 | Taxonomy alignment | Align metric normalization between plan and extraction agent (`OpEx`, `Tax Rate`, `OINE`, `Services Revenue` vs `Operating Income`, `Net Income`) and lock one canonical v1 list. | OPEN |
 
 ---
 
-## 18) Done Criteria
+## 1. Graph Schema
 
-Guidance Inventory rebuild is "done" when:
+### Architecture Overview
 
-1. All P0 questions are resolved and documented.
-2. Deterministic rules pass validation on historical backfill samples.
-3. Re-runs are idempotent and resume-safe.
-4. Every guidance entry is citation-complete.
-5. Orchestrator integration works in both BUILD and UPDATE modes.
-6. Predictor/Attribution can consume output without custom one-off parsing hacks.
+**New nodes**: `Guidance` (generic metric tag), `GuidanceUpdate` (per-mention data point)
+**Reused nodes**: `Context`, `Period`, `Company`, `Concept`, `Member`, `Dimension`
+
+**Relationship map** (all from GuidanceUpdate unless noted):
+
+| From | Rel | To | When |
+|------|-----|----|------|
+| GuidanceUpdate | UPDATES | Guidance | Always |
+| GuidanceUpdate | IN_CONTEXT | Context | Always (company+period) |
+| GuidanceUpdate | FROM_SOURCE | Report / Transcript / News | Always (provenance) |
+| GuidanceUpdate | NEXT | GuidanceUpdate | If later update exists |
+| GuidanceUpdate | PREVIOUS | GuidanceUpdate | If earlier update exists |
+| GuidanceUpdate | MAPS_TO_MEMBER | Member | If confident segment match |
+| GuidanceUpdate | MAPS_TO_DIMENSION | Dimension | If confident axis match |
+| Guidance | MAPS_TO_CONCEPT | Concept | If confident XBRL match |
+| Context | FOR_COMPANY | Company | Always (via cik) |
+| Context | HAS_PERIOD | Period | Always |
+
+### XBRL Parallel
+
+| XBRL | Guidance | Role |
+|------|----------|------|
+| Concept | Guidance | Generic metric definition, not per-company |
+| Fact | GuidanceUpdate | Per-mention data point with all values |
+| Context | Context (reused!) | Company + period scoping |
+| Fact→IN_CONTEXT→Context | GuidanceUpdate→IN_CONTEXT→Context | Same pattern |
+| Fact→HAS_CONCEPT→Concept | GuidanceUpdate→UPDATES→Guidance | Same pattern |
+
+### Node: Guidance
+
+Generic, company-agnostic. "Revenue" is ONE node shared across all companies.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `label` | String | Normalized metric name: "Revenue", "EPS", "Gross Margin", etc. |
+| `aliases` | String[] | Alternate names: e.g., ["sales", "net revenue", "total revenue"] |
+| `created_date` | String | ISO date when first detected |
+
+| Relationship | Direction | Target | Condition |
+|-------------|-----------|--------|-----------|
+| `MAPS_TO_CONCEPT` | OUT | Concept | If confident XBRL concept match |
+
+### Node: GuidanceUpdate
+
+Per-mention data point. See §2 for full field list.
+
+| Relationship | Direction | Target | Condition |
+|-------------|-----------|--------|-----------|
+| `UPDATES` | OUT | Guidance | Always (parent tag) |
+| `FROM_SOURCE` | OUT | Report / Transcript / News | Always (provenance) |
+| `IN_CONTEXT` | OUT | Context | Always (company + period) |
+| `NEXT` | OUT | GuidanceUpdate | If later update exists |
+| `PREVIOUS` | OUT | GuidanceUpdate | If earlier update exists |
+| `MAPS_TO_MEMBER` | OUT | Member | If confident segment match |
+| `MAPS_TO_DIMENSION` | OUT | Dimension | If confident axis match |
 
 ---
 
-## 19) References
+## 2. Extraction Fields
 
-1. `earnings-orchestrator.md`
-2. `Infrastructure.md`
-3. `AgentTeams.md`
-4. `DataSubAgents.md`
-5. `tradeEarnings.md`
-6. `newsImpact.md`
-7. `guidance_inventory_old.md`
-8. `.claude/skills/guidance-inventory/SKILL.md`
-9. `.claude/skills/evidence-standards/SKILL.md`
+Every GuidanceUpdate node carries these properties:
+
+| # | Field | Type | Enum / Constraint | Example |
+|---|-------|------|-------------------|---------|
+| 1 | `given_date` | String | ISO date | `"2025-01-30"` |
+| 2 | `period_type` | String | `quarter`, `annual`, `half`, `long-range`, `other` | `"quarter"` |
+| 3 | `fiscal_year` | Integer | | `2025` |
+| 4 | `fiscal_quarter` | Integer / null | 1-4; null for annual | `2` |
+| 5 | `segment` | String | Default `"Total"` | `"Services"` |
+| 6 | `low` | Float / null | | `94.0` |
+| 7 | `mid` | Float / null | Computed if low+high given | `95.5` |
+| 8 | `high` | Float / null | | `97.0` |
+| 9 | `unit` | String | `%`, `USD`, `B USD`, `M USD`, `% YoY` | `"B USD"` |
+| 10 | `basis_norm` | String | `gaap`, `non_gaap`, `constant_currency`, `unknown` | `"non_gaap"` |
+| 11 | `basis_raw` | String / null | Verbatim basis text from source | `"non-GAAP"`, `"adjusted"`, `"as reported"` |
+| 12 | `derivation` | String | `explicit`, `calculated`, `point`, `implied` | `"explicit"` |
+| 13 | `qualitative` | String / null | Non-numeric guidance text | `"low to mid single digits"` |
+| 14 | `quote` | String | Max 500 chars, verbatim from source | `"We expect revenue between..."` |
+| 15 | `section` | String | Location within source | `"CFO Prepared Remarks"` |
+| 16 | `source_key` | String | Sub-document key | `"EX-99.1"`, `"full"`, `"title"`, `"MD&A"` |
+| 17 | `conditions` | String / null | Conditional assumptions | `"assumes no further rate hikes"` |
+| 18 | `source_type` | String | `8k`, `transcript`, `news`, `10q`, `10k` | `"transcript"` |
+| 19 | `created` | String | ISO timestamp of node creation | `"2026-02-18T14:30:00Z"` |
+
+**Basis rules**: Default `basis_norm` to `unknown` when source doesn't specify. `adjusted` → `non_gaap`. `as-reported` → `gaap`. Compound bases (e.g., "non-GAAP constant-currency") — pick the most salient qualifier for `basis_norm`, preserve full text in `basis_raw`. V2 can split into `accounting_basis` + `fx_basis` if needed.
+
+**Rule**: No citation = no node. Every GuidanceUpdate must have `quote`, `FROM_SOURCE`, and `given_date`.
+
+---
+
+## 3. Source Processing
+
+### Source Richness
+
+| # | Source | Richness | Arrives | Extract? | Notes |
+|---|--------|----------|---------|----------|-------|
+| 1 | Transcript | Highest | t+1d to t+5d | YES — full scan (prepared remarks + Q&A) | Best source. AAPL: all guidance came from here. |
+| 2 | 8-K EX-99.1 | High | t=0 | YES — outlook section, tables, footnotes | Official numbers. Some companies (AAPL): zero guidance. |
+| 3 | News | Medium | t-1h to t+24h | YES — after Benzinga channel filter | Mixes company guidance with analyst estimates. |
+| 4 | 10-Q/10-K MD&A | Low | t+25d to t+45d | YES — specific statements only | Skip boilerplate. Note new risk language. |
+| 5 | XBRL | None | With 10-Q/10-K | NO — actuals only | Predictor uses for accuracy comparison. |
+| 6 | Alpha Vantage | Reference | Always | NO — consensus, not guidance | Reference only. |
+| 7 | Investor day | Variable | Infrequent | YES — when ingested | Not yet in pipeline. |
+
+### News Channel Filter
+
+Apply BEFORE LLM processing. Use Benzinga `channels` field (JSON string on News node).
+
+| Channel | Count | Filter |
+|---------|-------|--------|
+| `Guidance` | 21,085 | PRIMARY |
+| `Earnings` | 49,344 | PRIMARY |
+| `Earnings Beats` | 5,784 | SECONDARY |
+| `Earnings Misses` | 2,679 | SECONDARY |
+| `Previews` | 587 | SECONDARY |
+| `Management` | 4,409 | SECONDARY |
+
+```cypher
+MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WHERE (n.channels CONTAINS 'Guidance' OR n.channels CONTAINS 'Earnings'
+   OR n.channels CONTAINS 'Previews' OR n.channels CONTAINS 'Management')
+  AND n.created >= $start_date AND n.created <= $end_date
+RETURN n.id, n.title, n.created, n.channels
+ORDER BY n.created
+```
+
+Supplementary fulltext search for maximum recall:
+```cypher
+CALL db.index.fulltext.queryNodes('news_ft', 'guidance OR outlook OR expects OR forecast')
+YIELD node, score
+MATCH (node)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WHERE node.created >= $start_date AND node.created <= $end_date
+RETURN node.id, node.title, score ORDER BY score DESC LIMIT 20
+```
+
+Full channel/tag reference: `.claude/references/neo4j-news-fields.md`
+
+### Per-Source Extraction Rules
+
+Extraction MUST branch by `source_type` before LLM processing. Each doc asset type has different scan scope, inclusion/exclusion rules, and noise profiles. The extractor routes to the correct profile below based on `SOURCE_TYPE` parameter.
+
+| Source | Scan | Extract | Do NOT extract |
+|--------|------|---------|----------------|
+| **8-K** | Outlook section → tables → footnotes | Forward-looking numbers, ranges, directional | Reported actuals, safe harbor boilerplate |
+| **Transcript** | Everywhere: CFO remarks, Q&A, CEO remarks | All guidance: formal, segment color, caveats, bridges, conditions | — |
+| **News** | Title + body (after channel filter) | Company guidance only (V1) | Analyst estimates ("Est $X", "consensus") — deferred |
+| **10-Q/10-K** | MD&A only | Specific numbers/ranges/directional beyond boilerplate | Generic "we expect continued growth" boilerplate |
+
+### Guidance Keywords
+
+| Category | Keywords |
+|----------|----------|
+| Forward-looking | expects, anticipates, projects, forecasts, outlook |
+| Guidance | guidance, range, target, between X and Y |
+| Periods | Q1-Q4, full year, fiscal year, FY, for the quarter |
+| Metrics | EPS, earnings per share, revenue, sales, margin, OpEx, CapEx |
+| Revisions | raises, lowers, maintains, reaffirms, withdraws |
+
+---
+
+## 4. Metric Normalization
+
+Variant names in source text → standard Guidance label.
+
+| Standard Label | Variants |
+|----------------|----------|
+| `Revenue` | revenue, sales, net revenue, total revenue, net sales |
+| `EPS` | EPS, earnings per share, diluted EPS |
+| `Gross Margin` | gross margin, GM, gross profit margin |
+| `Operating Margin` | operating margin, op margin |
+| `OpEx` | operating expenses, SG&A, R&D + SG&A |
+| `Tax Rate` | effective tax rate, tax rate, provision for income taxes |
+| `CapEx` | capital expenditures, capex, capital spending |
+| `FCF` | free cash flow, operating cash flow minus capex |
+| `OINE` | other income and expense, other income/expense net |
+| `Services Revenue` | services, services revenue |
+
+Aliases stored on Guidance node in `aliases[]` property.
+
+---
+
+## 5. Derivation Rules
+
+| Derivation | When | Example |
+|------------|------|---------|
+| `explicit` | Company states exact number or range | "We expect revenue of $94-97B" |
+| `calculated` | Derived from explicitly stated values | GM% = (guided gross profit) / (guided revenue) |
+| `point` | Single number given, no range | "CapEx of approximately $2B" |
+| `implied` | Inferred from qualitative or partial info | "low to mid single digits" → implied range |
+
+---
+
+## 6. Context Resolution
+
+### Goal
+
+Every GuidanceUpdate links to a Context node via `IN_CONTEXT`. The Context provides company + period scoping, exactly as XBRL uses it.
+
+### Option A (CHOSEN): Reuse XBRL Context label
+
+Create Context nodes **identical to XBRL Context** so future XBRL ingestion can reuse them.
+
+| Context Property | Type | Source | Example |
+|-----------------|------|--------|---------|
+| `id` | String | Synthetic for guidance | `"guidance_320193_d_2025-09-28_2025-12-27"` |
+| `u_id` | String | Canonical unique key | Same as `id` (XBRL-compatible) |
+| `cik` | String | Company node | `"320193"` |
+| `context_id` | String | Synthetic for guidance | `"guidance_320193_d_2025-09-28_2025-12-27"` |
+| `period_u_id` | String | Derived from fiscal dates | `"duration_2025-09-28_2025-12-27"` |
+| `member_u_ids` | String[] | Empty for total, populated for segments | `[]` |
+| `dimension_u_ids` | String[] | Empty for total, populated for segments | `[]` |
+
+For synthetic guidance contexts: set `id = u_id = context_id`.
+
+Must also create or match:
+- `(:Context)-[:FOR_COMPANY]->(:Company)` — using cik
+- `(:Context)-[:HAS_PERIOD]->(:Period)` — using period dates
+
+### Period Node (reuse or create)
+
+| Period Property | Type | Example |
+|----------------|------|---------|
+| `id` | String | `"duration_2025-09-28_2025-12-27"` |
+| `u_id` | String | `"duration_2025-09-28_2025-12-27"` |
+| `period_type` | String | `"duration"` or `"instant"` |
+| `start_date` | String | `"2025-09-28"` |
+| `end_date` | String | `"2025-12-27"` |
+
+For synthetic guidance periods: set `id = u_id`.
+
+### Resolution Steps
+
+```
+1. Determine FYE:
+   get_derived_fye(ticker) from get_quarterly_filings.py:134
+
+2. Determine fiscal period dates:
+   period_to_fiscal() from get_quarterly_filings.py:61
+   NOTE: This maps calendar→fiscal. Guidance also needs fiscal→calendar
+   (e.g., "Q3 FY2025" → start_date, end_date). Need complementary
+   function: fiscal_to_dates(fye_month, fiscal_year, fiscal_quarter) → (start, end).
+   Derive from FYE month + quarter offset.
+
+3. Search for existing Context:
+   MATCH (ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+   MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
+   WHERE p.period_type = 'duration'
+     AND p.start_date >= $approx_start - 7d
+     AND p.start_date <= $approx_start + 7d
+   RETURN ctx, p LIMIT 1
+
+4. If found → reuse (link GuidanceUpdate→IN_CONTEXT→existing Context)
+   If not found → CREATE Context + Period matching XBRL format exactly:
+     CREATE (p:Period {id: $period_uid, u_id: $period_uid,
+                       period_type: 'duration',
+                       start_date: $start, end_date: $end})
+     CREATE (ctx:Context {id: $ctx_id, u_id: $ctx_id,
+                          cik: $cik, context_id: $ctx_id,
+                          period_u_id: $period_uid,
+                          member_u_ids: [], dimension_u_ids: []})
+     CREATE (ctx)-[:HAS_PERIOD]->(p)
+     CREATE (ctx)-[:FOR_COMPANY]->(company)
+```
+
+### Period Scenario Table
+
+Every GuidanceUpdate MUST have `IN_CONTEXT`. Synthetic XBRL-identical Contexts are created for ALL scenarios:
+
+| Scenario | Example text | period_u_id | start/end dates | Action |
+|----------|-------------|-------------|-----------------|--------|
+| **Specific quarter** | "Q3 FY2025" | `duration_2025-06-29_2025-09-27` | Exact fiscal dates | Reuse existing XBRL Context if match; else CREATE |
+| **Annual** | "fiscal year 2025" | `duration_2024-09-29_2025-09-27` | Full fiscal year | Reuse existing XBRL Context if match; else CREATE |
+| **Half year** | "second half" | `duration_2025-03-30_2025-09-27` | Best-effort from FYE | CREATE synthetic Context |
+| **Vague future** | "next year" | Best-effort from FYE | Derived from fiscal calendar | CREATE synthetic Context |
+| **Long-range** | "by 2028" | `duration_2028-01-01_2028-12-31` | Calendar year fallback | CREATE synthetic Context |
+| **Medium-term** | "over the medium term" | `other_medium_term` | null / null | CREATE synthetic Context |
+| **No period** | (implicit/unclear) | `undefined` | null / null | CREATE synthetic Context (cik still set) |
+
+**Rule**: Every synthetic Context MUST be structurally identical to XBRL Contexts (same label, same properties, same relationships). Future XBRL ingestion can find and reuse them when the actual period arrives.
+
+---
+
+## 7. XBRL Matching
+
+All three in V1. Use Neo4j queries + fulltext. Only link if confident.
+
+### Guidance → Concept
+
+```cypher
+// Find which Revenue concept this company actually uses
+MATCH (f:Fact)-[:HAS_CONCEPT]->(c:Concept)
+MATCH (f)-[:REPORTS]->(x:XBRLNode)<-[:HAS_XBRL]-(r:Report)-[:PRIMARY_FILER]->(co:Company {ticker: $ticker})
+WHERE c.qname STARTS WITH 'us-gaap:Revenue'
+  AND f.is_numeric = '1'
+RETURN DISTINCT c.qname, c.label, count(f) AS usage
+ORDER BY usage DESC LIMIT 3
+```
+
+Rule: If single dominant concept (>80% of facts), link. If ambiguous, skip.
+
+### GuidanceUpdate → Member
+
+```cypher
+// Find segment members for this company
+MATCH (f:Fact)-[:FACT_MEMBER]->(m:Member)
+MATCH (f)-[:FACT_DIMENSION]->(d:Dimension)
+MATCH (f)-[:REPORTS]->(x:XBRLNode)<-[:HAS_XBRL]-(r:Report)-[:PRIMARY_FILER]->(co:Company {ticker: $ticker})
+WHERE d.qname CONTAINS 'Segment'
+RETURN DISTINCT m.qname, m.label, d.qname AS dimension, count(f) AS usage
+ORDER BY usage DESC LIMIT 20
+```
+
+Rule: Match GuidanceUpdate.segment text against m.label. If clear match (e.g., "Services" → `aapl:ServicesMember`), link.
+
+### GuidanceUpdate → Dimension
+
+Link to the axis used by the matched Member. Typically `us-gaap:StatementBusinessSegmentsAxis` or company-specific equivalent.
+
+### Fulltext Supplement
+
+```cypher
+CALL db.index.fulltext.queryNodes('concept_ft', $metric_name)
+YIELD node, score
+RETURN node.qname, node.label, score ORDER BY score DESC LIMIT 10
+```
+
+---
+
+## 8. Linked List Mechanics
+
+GuidanceUpdate nodes form a doubly-linked list, **strictly ordered by `given_date`** (chronological).
+
+### Scope
+
+The linked list chains ALL updates for the **same Guidance tag + same Company** (via Context.cik), ordered strictly by `given_date`. The chain spans across ALL periods — so one traversal gives the complete history of everything a company has said about a metric. A Revenue guidance update for AAPL FY2025 annual links NEXT to a Revenue update for AAPL Q3 FY2025 quarterly if it has a later `given_date`.
+
+### Insertion
+
+When creating a new GuidanceUpdate:
+
+```cypher
+// Find the latest existing update for this Guidance + Company (across ALL periods)
+MATCH (prev:GuidanceUpdate)-[:UPDATES]->(g:Guidance {label: $label})
+MATCH (prev)-[:IN_CONTEXT]->(ctx:Context {cik: $cik})
+WHERE NOT EXISTS { (prev)-[:NEXT]->() }
+  AND prev.given_date <= $new_given_date
+
+// Link into chain
+CREATE (prev)-[:NEXT]->(new_gu)
+CREATE (new_gu)-[:PREVIOUS]->(prev)
+```
+
+If no existing update → this is the first in the chain (head node).
+
+### Reading
+
+**Latest value**: Follow chain to the node with no outgoing NEXT.
+**History**: Traverse PREVIOUS from latest to earliest.
+**Important**: The chain may contain mixed bases (GAAP and non-GAAP interleaved). Do NOT blindly compare consecutive `mid` values across the raw chain. Any deterministic comparison must filter/partition by `basis_norm` at query time first. The LLM consumer sees `basis_norm` on each row and handles context naturally.
+
+---
+
+## 9. Predictor Query
+
+Replaces markdown file passthrough. The predictor runs this Cypher at bundle assembly time.
+
+### All guidance for a company (PIT-filtered)
+
+```cypher
+MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)
+MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
+WHERE gu.given_date <= $pit_date
+MATCH (gu)-[:FROM_SOURCE]->(src)
+OPTIONAL MATCH (g)-[:MAPS_TO_CONCEPT]->(con:Concept)
+OPTIONAL MATCH (gu)-[:MAPS_TO_MEMBER]->(m:Member)
+RETURN g.label AS metric, con.qname AS xbrl_concept,
+       gu.given_date, gu.period_type, gu.fiscal_year, gu.fiscal_quarter,
+       gu.segment, gu.basis_norm, gu.basis_raw, gu.low, gu.mid, gu.high, gu.unit,
+       gu.derivation, gu.qualitative, gu.quote, gu.section, gu.conditions,
+       p.start_date, p.end_date,
+       labels(src)[0] AS source_type, src.id AS source_id,
+       m.label AS xbrl_member
+ORDER BY g.label, gu.given_date
+```
+
+### Latest value per guidance tag + basis
+
+```cypher
+MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)
+MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+WHERE gu.given_date <= $pit_date
+WITH g, ctx, gu.basis_norm AS basis_norm, gu ORDER BY gu.given_date DESC
+WITH g, ctx, basis_norm, collect(gu)[0] AS latest
+MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
+RETURN g.label AS metric, basis_norm, latest.basis_raw, latest.segment,
+       latest.low, latest.mid, latest.high, latest.unit, latest.qualitative,
+       latest.given_date, latest.fiscal_year, latest.fiscal_quarter,
+       p.start_date, p.end_date
+```
+
+### Accuracy comparison (predictor runs this, not guidance system)
+
+```cypher
+// Guidance value
+MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)-[:MAPS_TO_CONCEPT]->(con:Concept)
+MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
+// XBRL actual for same concept + same company + overlapping period
+MATCH (f:Fact)-[:HAS_CONCEPT]->(con)
+MATCH (f)-[:IN_CONTEXT]->(fctx:Context)-[:FOR_COMPANY]->(c)
+MATCH (fctx)-[:HAS_PERIOD]->(fp:Period)
+WHERE fp.start_date = p.start_date AND fp.end_date = p.end_date
+  AND f.is_numeric = '1'
+RETURN g.label, gu.mid AS guided, toFloat(f.value) AS actual,
+       toFloat(f.value) - gu.mid AS surprise
+```
+
+---
+
+## 10. Trigger Integration
+
+### V1: SDK on-demand
+
+```
+/guidance-inventory {TICKER} {SOURCE_TYPE} {SOURCE_ID}
+```
+
+| Parameter | Type | Examples |
+|-----------|------|---------|
+| `TICKER` | String | `AAPL`, `MSFT` |
+| `SOURCE_TYPE` | Enum | `8k`, `transcript`, `news`, `10q`, `10k` |
+| `SOURCE_ID` | String | `0001193125-25-000001`, `AAPL_2025-07-31T...`, `bzNews_50123456` |
+
+### Extraction Steps
+
+```
+1. LOAD CONTEXT
+   ├── get_derived_fye(ticker)
+   ├── Query existing Guidance nodes:
+   │     MATCH (g:Guidance)<-[:UPDATES]-(gu:GuidanceUpdate)
+   │           -[:IN_CONTEXT]->(ctx)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+   │     RETURN DISTINCT g.label, g.id
+   └── Fetch source content via QUERIES.md Cypher
+
+2. LLM EXTRACTION (routed by SOURCE_TYPE)
+   ├── Route to source-type extraction profile (§3 Per-Source Rules)
+   │     8k       → scan outlook/tables/footnotes, skip actuals/boilerplate
+   │     transcript → scan everything (CFO, Q&A, CEO), extract all guidance
+   │     news      → channel-filter first, extract company guidance only
+   │     10q/10k   → MD&A only, skip boilerplate
+   ├── Feed: source content + existing Guidance tags for this company
+   ├── Prompt: "Extract all guidance. For each, identify if existing tag or new."
+   └── Apply quality filters (no citation = no node)
+
+3. PER ITEM: WRITE TO GRAPH
+   ├── MERGE Guidance node: MERGE (g:Guidance {label: $label})
+   ├── Find/create Context (§6)
+   ├── CREATE GuidanceUpdate with all properties (§2)
+   ├── Link: (gu)-[:UPDATES]->(g)
+   ├── Link: (gu)-[:FROM_SOURCE]->(source)
+   ├── Link: (gu)-[:IN_CONTEXT]->(context)
+   ├── Link into NEXT/PREVIOUS chain (§8)
+   └── Link XBRL if confident (§7): Concept on Guidance, Member+Dimension on Update
+```
+
+### Initial Build (new company)
+
+Process all historical sources chronologically (oldest first). Per earnings event: 8-K → news → transcript → 10-Q. Each extraction adds to the graph incrementally.
+
+### Idempotency
+
+Before creating a GuidanceUpdate, check:
+```cypher
+MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(src {id: $source_id})
+MATCH (gu)-[:UPDATES]->(g:Guidance {label: $label})
+RETURN gu
+```
+If exists → skip. Force flag available for re-extraction.
+
+### Reprocessing
+
+Delete all GuidanceUpdate nodes for a company → re-run initial build. Source documents remain in Neo4j.
+
+---
+
+## 11. Deferred Items
+
+| Item | Status | Notes |
+|------|--------|-------|
+| Analyst estimate extraction (#35) | V2 | Extract with correct source attribution. Note "Est $X" = analyst, not company. |
+| Accuracy tracking | Predictor's job | Compare Guidance vs XBRL Fact at prediction time (§9). |
+| Investor day / presentations | When ingested | Any doc asset is a candidate. Not yet in pipeline. |
+| Ingestion hook trigger | Future | Auto-fire extraction when new doc lands in Neo4j. V1 = SDK on-demand. |
+| Perplexity gap-filling | Available | Last resort. Assume subscription. |
+| Markdown generation | On demand | Generate readable report from graph if humans need it. Not stored. |
+| Neo4j write access | Must verify | `mcp__neo4j-cypher__write_neo4j_cypher` needed in skill tools. |
+
+---
+
+## 12. Finalized Decisions
+
+| # | Decision | Resolution |
+|---|----------|------------|
+| 1 | Data store | Neo4j graph (not markdown file) |
+| 2 | Guidance node | Generic concept, not per-company |
+| 3 | GuidanceUpdate node | Per-mention, 19 fields as properties (includes `basis_norm` + `basis_raw`) |
+| 4 | Company association | Through Context (cik→FOR_COMPANY→Company), not direct link |
+| 5 | Linked list | NEXT/PREVIOUS on GuidanceUpdates, strictly by datetime, per Guidance+Company (spans all periods) |
+| 6 | Action types | None — LLM determines from timeline |
+| 7 | Supersession | None — latest in linked list is current |
+| 8 | Anchor rule | None — first in timeline is implicit anchor |
+| 9 | Source priority | None — process chronologically, attribute to source |
+| 10 | Synthesis pass | None — graph structure handles it |
+| 11 | Output format | Cypher query for predictor context (no markdown) |
+| 12 | Trigger | Auto on every document ingestion (V1: SDK on-demand) |
+| 13 | News filtering | Benzinga channels: Guidance, Earnings, Earnings Beats/Misses, Previews, Management |
+| 14 | XBRL linking | Concept on Guidance; Member + Dimension on GuidanceUpdate. V1. Confident matches only. |
+| 15 | Fiscal periods | Reuse `get_derived_fye()` + `period_to_fiscal()` (validation only), and add `fiscal_to_dates()` for fiscal→calendar conversion. |
+| 16 | Metric normalization | Standard labels with aliases (§4) |
+| 17 | Segment handling | Property on GuidanceUpdate + MAPS_TO_MEMBER if confident match |
+| 18 | Analyst estimates | Deferred to V2. Note for future. |
+| 19 | Accuracy tracking | Predictor's job, not guidance system |
+| 20 | Execution mode | SDK-compatible, non-interactive |
+| 21 | Missing data | Note for next round, not hard-fail |
+| 22 | Context reuse | Same Context label as XBRL (Option A). Identical format so XBRL ingestion can reuse. |
+| 23 | Basis tracking | `basis_norm` (`gaap`/`non_gaap`/`constant_currency`/`unknown`) + `basis_raw` (verbatim). Single chain per Guidance+Company. Default `unknown`. Query-time partitioning for deterministic reads. No blind consecutive comparison across mixed bases. |
+| 24 | Per-asset extraction | Extraction MUST route by source type before LLM. Each doc asset has separate scan scope, inclusion/exclusion rules. |
+| 25 | Metric normalization | V1 table sufficient; deeper expansion deferred until extraction calibration. |
+
+---
+
+## 13. Reusable Content
+
+| Content | Source | Action |
+|---------|--------|--------|
+| `period_to_fiscal()` | `get_quarterly_filings.py:61` | Reuse directly (calendar→fiscal) |
+| `get_derived_fye()` | `get_quarterly_filings.py:134` | Reuse directly |
+| `fiscal_to_dates()` | NEW — must build | Reverse of period_to_fiscal: (fye_month, fy, fq) → (start_date, end_date) |
+| Metric normalization | `guidance-extract.md:258-269` | Carry forward (§4) |
+| Source extraction hints | `guidance-extract.md:146-199` | Carry forward (§3) |
+| Derivation rules | `guidance-extract.md:229-237` | Carry forward (§5) |
+| Segment rules | `guidance-extract.md:242-252` | Carry forward |
+| Cypher queries | `guidance-inventory/QUERIES.md` | Keep, fix labels |
+| Fiscal calendar | `guidance-inventory/FISCAL_CALENDAR.md` | Keep as-is |
+| Evidence standards | `evidence-standards/SKILL.md` | Load during extraction |
+| AAPL benchmark | `sampleGuidance_byAgentTeams.md` | Quality target |
+
+---
+
+## 14. Files to Update (pending approval)
+
+| File | Status | Action Needed |
+|------|--------|---------------|
+| `guidance-extract.md` (agent) | May be superseded | Align with graph-native; core logic reused, invocation changes |
+| `guidance-inventory/SKILL.md` | Needs rewrite | New invocation contract, Neo4j write, updated model |
+| `guidance-inventory/OUTPUT_TEMPLATE.md` | Likely superseded | No markdown output; graph-native |
+| `guidance-inventory/QUERIES.md` | Keep | Fix "Via Skill" labels |
+| `earnings-orchestrator.md` | Already updated | Step 0 removed, I5 = graph query |
+
+---
+
+*v2.1 | 2026-02-19 | Adds basis split (`basis_norm` + `basis_raw`), per-asset extraction routing, query-time basis partitioning, no blind consecutive comparison. Resolves GAAP/non-GAAP P0.*

@@ -30,6 +30,7 @@ Bot-to-bot notes (append-only; mark handled, do not delete history):
 - [2026-02-07 00:00] [Claude] Q34 resolved: magnitude thresholds locked at `<2%`=small, `2-4%`=moderate, `4%+`=large. Symmetric, fixed for v1. Derived from midpoint of expected_move_range_pct. Wider bands than initial defaults because sub-2% moves are noise for trading. Per-ticker volatility-adjusted thresholds deferred to v2.
 - [2026-02-07 00:00] [Claude] Q8+Q9 resolved: aggregation is NOT orchestrator scope. Separate `build_summary.py` reads result.json → summary.csv. Automatable via hook later. Legacy files (predictions.csv, prediction_processed.csv, guidance_processed.csv, news_processed.csv) marked as OLD DESIGN — superseded by per-quarter result.json and per-ticker guidance-inventory.md.
 - [2026-02-07 00:00] [Claude] Planner output contract finalized: replaced ChatGPT draft (source_chain + execution field) with tiered array-of-arrays schema after deep analysis of all data fetching patterns in codebase (news-impact, news-driver, guidance-inventory, filtered-data, DataSubAgents). Key insight: `fetch` is array of tiers — within tier = parallel Task fan-out, across tiers = sequential fallback. Eliminates redundant `execution` field and ambiguous `when: if_empty`. `agent` field maps directly to Task `subagent_type`.
+- [2026-02-18 00:00] [Claude] Q13 updated: guidance-inventory decoupled from orchestrator (per guidanceWIP.md R8/Q1). Orchestrator does NOT invoke the guidance-inventory skill — it simply reads the pre-existing `guidance-inventory.md` file. Guidance build/update is a separate workflow run independently. Step 0 removed; file-read moved into Step 3a bundle assembly.
 
 ---
 
@@ -163,11 +164,10 @@ SDK wrapper: top-level session, `permission_mode="bypassPermissions"`.
 **Purpose**: coordinate the full pipeline per ticker per quarter.
 
 **Steps**:
-0. Guidance — `guidance-inventory {TICKER}` → loads/updates cumulative guidance history. Runs once per ticker before the quarter loop. Details in `guidanceInventory.md`.
 1. Discovery — `get_quarterly_filings {TICKER}` → `event.json` (hook auto-builds)
 2. Filter — skip quarters with existing `result.json`
 3. For each pending quarter (chronological):
-   a. Load all prior quarters' attribution `feedback` + guidance history (from Step 0) for this ticker and include in the context bundle.
+   a. Load all prior quarters' attribution `feedback` + guidance history (read `guidance-inventory.md` if it exists, empty string if not) for this ticker and include in the context bundle.
    b. Planner (forked skill) → returns fetch plan
    c. Orchestrator executes fetch plan via parallel Task sub-agents (DataSubAgents)
    d. Predictor (forked skill) receives 8-K + merged data bundle → result.json
@@ -916,7 +916,7 @@ One question at a time. Reprioritize after every input.
 | Q10 | Validation — block or warn? | P0 | **Resolved**: Tiered — block when output can't be trusted (8-K missing, unparseable plan, invalid prediction), continue with gap for data sources, warn+write for incomplete learner output. See §2d failure policy. |
 | Q11 | Schema enforcement — JSON Schema or inline? | P1 | **Resolved**: Inline validation for v1. Deterministic derivation rules (score→bucket, direction+confidence→signal) are already code logic that JSON Schema cannot express. Inline checks cover: required fields present, types correct, cross-field consistency (5 deterministic rules in §2c). Extract JSON Schema later if needed for external tool sharing. |
 | Q12 | Confidence representation: bucket-only or numeric+bucket? (prediction and attribution) | P0 | **Resolved**: Numeric conviction score (0-100) + bucket (`low` 0-24, `moderate` 25-49, `high` 50-74, `extreme` 75-100). Score is ranking, not probability. Bucket drives action; score enables calibration and within-bucket ranking. |
-| Q13 | `guidance-inventory` wired in or gap? | P1 | **Resolved**: Wired as Step 0 (per ticker, before quarter loop). Minimal contract: orchestrator calls guidance-inventory → receives guidance history → includes in context bundle. Implementation details (sources, update triggers, cost, schema) deferred to `guidanceInventory.md`. |
+| Q13 | `guidance-inventory` wired in or gap? | P1 | **Resolved**: Decoupled (per guidanceWIP.md R8). Orchestrator reads pre-existing `guidance-inventory.md` file at bundle assembly time — does NOT invoke the skill. Guidance build/update is a separate workflow. Empty string if file missing. Implementation details in `guidanceWIP.md`. |
 | Q14 | Skip historical pattern when no prior attribution? | P1 | **Resolved**: No special handling. First quarter for a ticker simply has empty U1 arrays (no `predictor_lessons`, no `planner_lessons`). Planner and predictor already handle empty feedback naturally — they reason from 8-K + available data alone. No skip logic needed. |
 | Q15 | Crash mid-quarter — retry or cleanup? | P0 | **Resolved**: File-authoritative = idempotent. No result.json = not done → re-process from scratch. context.json without result.json = safe to overwrite. Atomic write (temp + rename) prevents half-written files. See §2d failure policy. |
 | Q16 | State — file-based or hybrid with Claude Tasks? | P0 | **Resolved**: File-authoritative state. Claude Tasks optional as in-run mirror only; files are the durable source of truth and win on conflict. See §2a, §6. |
@@ -938,6 +938,7 @@ One question at a time. Reprioritize after every input.
 | Q32 | Magnitude contract for trading: quantitative expected move, qualitative buckets, or both? | P0 | **Resolved**: Both. `expected_move_range_pct: { "min": N, "max": N }` + `magnitude_bucket` (`small/moderate/large`). Bucket derived deterministically from midpoint vs Q34 thresholds (`<2%`/`2-4%`/`4%+`). Range precision: 0.5% increments max. |
 | Q33 | Output contract shape: single combined 5-band signal only, or decomposed fields (`direction` + `confidence` + `magnitude` + `horizon`) with optional derived band? | P0 | **Resolved**: Hybrid — decomposed fields (direction, confidence, magnitude, horizon) + derived 5-band signal. Signal = deterministic f(fields), not separate LLM judgment. |
 | Q34 | Magnitude band thresholds: what % cutoffs, symmetric or asymmetric, fixed or per-ticker? | P1 | **Resolved**: `<2%`=small, `2-4%`=moderate, `4%+`=large. Symmetric, fixed for v1. Derived from midpoint of `expected_move_range_pct`. Recalibrate from backtest data; consider per-ticker volatility-adjusted in v2. |
+| Q35 | News-driver node trigger: should we run a real-time post-move workflow that creates `NewsDriver` nodes when realized return exceeds a threshold? | P1 | Open |
 
 ---
 
@@ -972,7 +973,7 @@ One question at a time. Reprioritize after every input.
 5. Q6 + Q7 — resolved: feedback embedded in attribution result.json, all raw, no digest. See §2d U1.
 6. Q25 + Q23 + Q24 — resolved: single-turn planner, tiered missing-data, relevance-based noise policy. See §2b, §2c.
 7. Q28 — resolved: hybrid trigger (historical=same-run, live=35-day timer). See §2a, §2d.
-8. Q13 — resolved: guidance-inventory as Step 0. Details in `guidanceInventory.md`. See §2a.
+8. Q13 — updated: guidance-inventory decoupled from orchestrator (guidanceWIP.md R8). Orchestrator reads file, does not invoke skill. See §2a.
 9. Q14 — resolved: first quarter has empty U1 arrays, no special handling.
 10. Q20 — resolved: rubric-guided holistic scoring. See §2c scoring method.
 11. Q3 — resolved: no explicit stop/resume; file-authoritative = automatic resume.
@@ -1058,6 +1059,19 @@ Key items to resolve:
 - Resolve remaining open questions G1-G8 (see `guidanceInventory.md §17`)
 - Verify sub-files exist and are current (QUERIES.md, OUTPUT_TEMPLATE.md, FISCAL_CALENDAR.md)
 - Skill frontmatter review
+
+**B4: News Driver Trigger + Node Integration**
+
+Plan file: `newsDriver.md` (to create).
+
+Key items to resolve:
+- Trigger condition: exact return metric and threshold (`daily_stock`, `hourly_stock`, or both), plus comparison rule (`abs(return) >= threshold` vs directional thresholds).
+- Trigger timing: when the check runs in live mode (intraday vs close), and when it runs in historical replay.
+- Data dependency gate: required labels and inputs before running news-driver (`daily_stock`/`hourly_stock`, event metadata, ticker).
+- Workflow ownership: orchestrator-initiated vs separate event-driven workflow; idempotency and retry policy.
+- Node contract: canonical `NewsDriver` node schema, provenance/evidence links, and relationship model to `News`, `Company`, and quarter/event.
+- Existing asset reuse: how `.claude/agents/news-driver-bz.md` is invoked in the new trigger flow, including runtime/tool constraints.
+- PIT and audit semantics: live cutoff behavior, historical replay determinism, and persisted artifacts for traceability.
 
 ### Phase C: Final Consistency Pass
 
