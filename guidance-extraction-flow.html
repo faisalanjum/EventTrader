@@ -198,7 +198,7 @@ const sections = [
   content: `
 <h3>Architecture Overview</h3>
 <p><strong>2 new node types</strong>: <code>Guidance</code> (generic metric tag) + <code>GuidanceUpdate</code> (per-mention data point)<br>
-<strong>5 reused nodes</strong>: <code>Context</code>, <code>Period</code>, <code>Company</code>, <code>Concept</code>, <code>Member</code></p>
+<strong>6 reused nodes</strong>: <code>Context</code>, <code>Period</code>, <code>Unit</code>, <code>Company</code>, <code>Concept</code>, <code>Member</code></p>
 
 <svg class="graph-svg" viewBox="0 0 920 580" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -227,7 +227,15 @@ const sections = [
   <text x="455" y="58" fill="#58a6ff" font-size="11" font-family="monospace">MAPS_TO_CONCEPT</text>
 
   <line x1="400" y1="310" x2="550" y2="450" stroke="#58a6ff" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#aD)"/>
-  <text x="430" y="390" fill="#58a6ff" font-size="11" font-family="monospace">MAPS_TO_MEMBER</text>
+  <text x="430" y="390" fill="#58a6ff" font-size="11" font-family="monospace">MAPS_TO_MEMBER (0..N)</text>
+
+  <!-- GuidanceUpdate -> Period (HAS_PERIOD direct) -->
+  <line x1="460" y1="250" x2="810" y2="165" stroke="#8b949e" stroke-width="2" marker-end="url(#aG)"/>
+  <text x="600" y="195" fill="#3fb950" font-size="11" font-family="monospace">HAS_PERIOD</text>
+
+  <!-- GuidanceUpdate -> Unit (HAS_UNIT) -->
+  <line x1="340" y1="310" x2="340" y2="400" stroke="#8b949e" stroke-width="2" marker-end="url(#aG)"/>
+  <text x="350" y="365" fill="#3fb950" font-size="11" font-family="monospace">HAS_UNIT</text>
 
   <rect x="260" y="42" width="200" height="56" rx="10" fill="#1a1a2e" stroke="#bc8cff" stroke-width="2"/>
   <text x="310" y="66" fill="#bc8cff" font-size="14" font-weight="bold" font-family="monospace">Guidance</text>
@@ -256,6 +264,11 @@ const sections = [
 
   <rect x="510" y="440" width="110" height="46" rx="10" fill="#1a1a2e" stroke="#58a6ff" stroke-width="2" stroke-dasharray="6,4"/>
   <text x="530" y="464" fill="#58a6ff" font-size="14" font-weight="bold" font-family="monospace">Member</text>
+
+  <!-- Unit (guidance-specific) -->
+  <rect x="270" y="410" width="150" height="46" rx="10" fill="#1a1a2e" stroke="#3fb950" stroke-width="2"/>
+  <text x="313" y="432" fill="#3fb950" font-size="13" font-weight="bold" font-family="monospace">Unit</text>
+  <text x="284" y="448" fill="#8b949e" font-size="9" font-family="monospace">guidance_unit_m_usd</text>
 
   <rect x="30" y="370" width="170" height="40" rx="8" fill="#1a1a2e" stroke="#d29922" stroke-width="1.5"/>
   <text x="50" y="394" fill="#d29922" font-size="12" font-family="monospace">Report (8-K/10-Q/K)</text>
@@ -291,6 +304,29 @@ FOR (ctx:Context) REQUIRE ctx.u_id IS UNIQUE;
 
 CREATE CONSTRAINT period_uid_unique IF NOT EXISTS
 FOR (p:Period) REQUIRE p.u_id IS UNIQUE;</div>
+
+<h3>XBRL Parallel</h3>
+<table>
+<tr><th>XBRL</th><th>Guidance</th><th>Role</th></tr>
+<tr><td>Concept</td><td>Guidance</td><td>Generic metric definition, not per-company</td></tr>
+<tr><td>Fact</td><td>GuidanceUpdate</td><td>Per-mention data point with all values</td></tr>
+<tr><td>Context</td><td>Context (reused!)</td><td>Company + period scoping</td></tr>
+<tr><td>Fact→HAS_CONCEPT→Concept</td><td>GuidanceUpdate→UPDATES→Guidance</td><td>Same pattern</td></tr>
+<tr><td>Fact→IN_CONTEXT→Context</td><td>GuidanceUpdate→IN_CONTEXT→Context</td><td>Same pattern</td></tr>
+<tr><td>Fact→HAS_PERIOD→Period</td><td>GuidanceUpdate→HAS_PERIOD→Period</td><td>Same direct period shortcut</td></tr>
+<tr><td>Fact→HAS_UNIT→Unit</td><td>GuidanceUpdate→HAS_UNIT→Unit</td><td>Same pattern (guidance-specific units)</td></tr>
+</table>
+
+<h3>XBRL Reuse Policy (Locked)</h3>
+<table>
+<tr><th>Node/Edge</th><th>Policy</th></tr>
+<tr><td><code>Context</code></td><td>Reuse existing XBRL Context when deterministic key matches; else create synthetic XBRL-compatible.</td></tr>
+<tr><td><code>Period</code></td><td>Reuse existing XBRL Period when exact <code>u_id</code> match; else create synthetic XBRL-compatible.</td></tr>
+<tr><td><code>Unit</code></td><td>Use canonical guidance Unit nodes (<code>guidance_unit_m_usd</code>, <code>guidance_unit_usd</code>, etc.); do NOT reuse raw XBRL units when scale semantics differ.</td></tr>
+<tr><td><code>Concept</code></td><td>Link <code>Guidance → Concept</code> when confidence gates pass.</td></tr>
+<tr><td><code>Member</code></td><td>Link <code>GuidanceUpdate → Member</code> with 0..N confident matches.</td></tr>
+<tr><td><code>Dimension / Domain</code></td><td>No direct linkage from guidance nodes in this design.</td></tr>
+</table>
 `
 },
 {
@@ -500,7 +536,13 @@ Canonicalization:
   color: "#39d2c0",
   content: `
 <h3>Goal</h3>
-<p>Every GuidanceUpdate links to a <code>Context</code> node via <code>IN_CONTEXT</code>. Context provides company + period scoping, structurally identical to XBRL Contexts so future ingestion can reuse them.</p>
+<p>Every GuidanceUpdate links to:</p>
+<ul>
+<li><code>IN_CONTEXT → Context</code> (company + period scope)</li>
+<li><code>HAS_PERIOD → Period</code> (direct period edge for fast retrieval — mirrors XBRL Fact→HAS_PERIOD)</li>
+<li><code>HAS_UNIT → Unit</code> (canonical guidance unit node)</li>
+</ul>
+<p>Context/Period structure is XBRL-compatible so future XBRL ingestion can reuse synthetic contexts.</p>
 
 <h3>Context Properties</h3>
 <table>
@@ -559,6 +601,16 @@ MERGE (ctx)-[:FOR_COMPANY]->(company)</div>
 <tr><td><strong>Medium-term</strong></td><td>"over medium term"</td><td><code>other_medium_term</code></td><td>null / null</td></tr>
 <tr><td><strong>No period</strong></td><td>(unclear)</td><td><code>undefined</code></td><td>null / null</td></tr>
 </table>
+
+<h3>Unit Node (Guidance-Specific)</h3>
+<table>
+<tr><th>Property</th><th>Type</th><th>Example</th></tr>
+<tr><td><code>id</code></td><td>String</td><td>guidance_unit_m_usd</td></tr>
+<tr><td><code>u_id</code></td><td>String</td><td>guidance_unit_m_usd</td></tr>
+<tr><td><code>canonical_unit</code></td><td>String</td><td>m_usd</td></tr>
+</table>
+<p>Resolution: canonicalize <code>unit</code> first (§2A), then <code>MERGE</code> with <code>u_id = "guidance_unit_" + canonical_unit</code>.<br>
+Do NOT reuse raw XBRL Unit nodes when scale semantics differ (e.g., raw <code>USD</code> vs normalized <code>m_usd</code>).</p>
 `
 },
 {
@@ -578,7 +630,7 @@ MERGE (ctx)-[:FOR_COMPANY]->(company)</div>
 </div>
 <div class="dbox"><div class="dbox-label cyan">Member Cache</div>
 <p>member_qname → best_member_u_id</p>
-<p class="dim">Context-based discovery (not FACT_MEMBER). CIK padding normalized. Filtered to segment/product axes only.</p>
+<p class="dim">Context-based discovery (not FACT_MEMBER). CIK padding normalized. Open-ended axis detection (<code>CONTAINS 'Axis'</code> + business/geography/product hints). No hardcoded axis list.</p>
 </div>
 </div>
 
@@ -607,12 +659,13 @@ MERGE (ctx)-[:FOR_COMPANY]->(company)</div>
 <li>Links <code>Concept {u_id: best_concept_u_id}</code></li>
 </ul>
 </div>
-<div class="dbox"><div class="dbox-label cyan">Member Link (GuidanceUpdate → Member)</div>
+<div class="dbox"><div class="dbox-label cyan">Member Link (GuidanceUpdate → Member) — 0..N</div>
 <ul>
 <li>Only when <code>segment ≠ "Total"</code></li>
 <li>Normalize: lowercase, trim, remove "member"/"segment", singularize</li>
-<li>Require exactly ONE unique normalized match</li>
-<li>Ambiguous or no match → skip</li>
+<li>Per candidate: require exact unique normalized match</li>
+<li>Multiple confident matches on different axes are valid (e.g., product + geography)</li>
+<li>No match = no member edge; <code>segment="Total"</code> = company-wide (XBRL default)</li>
 </ul>
 </div>
 </div>
@@ -742,7 +795,7 @@ RETURN g.label, gu.mid AS guided, toFloat(f.value) AS actual,
 <div class="diagram">
 <div class="dbox"><div class="dbox-label orange">Route</div>8k → outlook/tables<br>transcript → full scan<br>news → channel filter first<br>10q/10k → MD&A only</div>
 <div class="dbox"><div class="dbox-label green">Recall</div>Keyword windows → signal filter → LLM<br>Fallback full-scope if 0 hits on 8K/transcript</div>
-<div class="dbox"><div class="dbox-label accent">LLM Output</div>quote, metric, period, values, basis, derivation, qualitative, XBRL candidates</div>
+<div class="dbox"><div class="dbox-label accent">LLM Output</div>quote, metric, period, values, basis, derivation, qualitative, XBRL candidates<br><span class="dim">+ 0..N member candidates from warmup cache</span></div>
 </div>
 
 <div class="arrow-d">↓</div>
@@ -751,7 +804,7 @@ RETURN g.label, gu.mid AS guided, toFloat(f.value) AS actual,
 <div class="diagram">
 <div class="dbox"><div class="dbox-label pink">Canonicalize</div>Unit normalization (usd/m_usd/percent)<br>Numeric scale alignment<br>slug(label), slug(segment)</div>
 <div class="dbox"><div class="dbox-label pink">Validate</div>Basis: qualifier not in quote span → unknown<br>Period: <code>fiscal_to_dates()</code> (code-only)<br>No citation = no node</div>
-<div class="dbox"><div class="dbox-label pink">Gates</div>Concept: cache + dominance ≥60%<br>Member: exact normalized match<br>Fail → keep write, skip link</div>
+<div class="dbox"><div class="dbox-label pink">Gates</div>Concept: cache + dominance ≥60%<br>Member: exact normalized match (0..N)<br>Unit: resolve canonical → <code>guidance_unit_*</code><br>Fail → keep write, skip link</div>
 </div>
 
 <div class="arrow-d">↓</div>
@@ -760,10 +813,10 @@ RETURN g.label, gu.mid AS guided, toFloat(f.value) AS actual,
 <div class="flow-steps">
 <div class="flow-step"><div class="step-num"></div><div class="step-content">Compute deterministic IDs via shared utility: <code>guidance_id</code>, <code>evhash16</code>, <code>guidance_update_id</code></div></div>
 <div class="flow-step"><div class="step-num"></div><div class="step-content"><code>MERGE (g:Guidance {id})</code> — ON CREATE set label, aliases, created_date</div></div>
-<div class="flow-step"><div class="step-num"></div><div class="step-content">Find/create Context via §6 MERGE pattern</div></div>
+<div class="flow-step"><div class="step-num"></div><div class="step-content">Find/create Context + Period (§6 MERGE pattern), find/create Unit (<code>guidance_unit_*</code>)</div></div>
 <div class="flow-step"><div class="step-num"></div><div class="step-content"><code>MERGE (gu:GuidanceUpdate {id})</code> — ON CREATE set all 19 properties + evhash16</div></div>
-<div class="flow-step"><div class="step-num"></div><div class="step-content">Link: <code>gu→UPDATES→g</code>, <code>gu→FROM_SOURCE→src</code>, <code>gu→IN_CONTEXT→ctx</code></div></div>
-<div class="flow-step"><div class="step-num"></div><div class="step-content">Link XBRL if confident: Concept on Guidance, Member on Update</div></div>
+<div class="flow-step"><div class="step-num"></div><div class="step-content">Link: <code>gu→UPDATES→g</code>, <code>gu→FROM_SOURCE→src</code>, <code>gu→IN_CONTEXT→ctx</code>, <code>gu→HAS_PERIOD→p</code>, <code>gu→HAS_UNIT→unit</code></div></div>
+<div class="flow-step"><div class="step-num"></div><div class="step-content">Link XBRL if confident: Concept on Guidance, 0..N Member links on Update</div></div>
 </div>
 
 <h3>Idempotency</h3>
@@ -796,14 +849,14 @@ RETURN gu
 {
   id: "decisions",
   num: "§12",
-  title: "Finalized Decisions (30)",
+  title: "Finalized Decisions (32)",
   color: "#d29922",
   content: `
 <table>
 <tr><th>#</th><th>Decision</th><th>Resolution</th></tr>
 <tr><td>1</td><td>Data store</td><td>Neo4j graph (not markdown file)</td></tr>
 <tr><td>2</td><td>Guidance node</td><td>Generic concept, not per-company</td></tr>
-<tr><td>3</td><td>GuidanceUpdate node</td><td>Per-mention, 19 fields (includes basis_norm + basis_raw)</td></tr>
+<tr><td>3</td><td>GuidanceUpdate node</td><td>Per-mention, 19 fields (includes basis_norm + basis_raw) with direct HAS_PERIOD and HAS_UNIT edges</td></tr>
 <tr><td>4</td><td>Company association</td><td>Through Context (cik→FOR_COMPANY→Company)</td></tr>
 <tr><td>5</td><td>Ordering model</td><td>No linked list. ORDER BY given_date, id</td></tr>
 <tr><td>6</td><td>Action types</td><td>None — LLM determines from timeline</td></tr>
@@ -817,7 +870,7 @@ RETURN gu
 <tr><td>14</td><td>XBRL linking</td><td>Concept on Guidance; Member on GuidanceUpdate. Dimension dropped.</td></tr>
 <tr><td>15</td><td>Fiscal periods</td><td>Reuse get_derived_fye() + period_to_fiscal(); add fiscal_to_dates()</td></tr>
 <tr><td>16</td><td>Metric normalization</td><td>Standard labels with aliases (§4)</td></tr>
-<tr><td>17</td><td>Segment handling</td><td>Property + MAPS_TO_MEMBER if confident</td></tr>
+<tr><td>17</td><td>Segment handling</td><td>Property + MAPS_TO_MEMBER with 0..N matches when confident; Total = company-wide/default</td></tr>
 <tr><td>18</td><td>Analyst estimates</td><td>Deferred</td></tr>
 <tr><td>19</td><td>Accuracy tracking</td><td>Predictor's job</td></tr>
 <tr><td>20</td><td>Execution mode</td><td>SDK-compatible, non-interactive</td></tr>
@@ -831,6 +884,8 @@ RETURN gu
 <tr><td>28</td><td>Derivation enum</td><td>7 types: explicit, calculated, point, implied, floor, ceiling, comparative</td></tr>
 <tr><td>29</td><td>News reaffirm</td><td>Flag in conditions; extract exact source values (no tolerance).</td></tr>
 <tr><td>30</td><td>Segment normalizer</td><td>Light singularization + small synonym map.</td></tr>
+<tr><td>31</td><td>Period/unit linkage</td><td>GuidanceUpdate always links to Context, direct Period, direct Unit, and exact source node.</td></tr>
+<tr><td>32</td><td>XBRL node reuse policy</td><td>Reuse Context/Period when exact match; create synthetic XBRL-compatible when missing. Use canonical guidance Unit nodes (not raw XBRL units). Link Concept/Member when confident; no Dimension/Domain links.</td></tr>
 </table>
 `
 },
