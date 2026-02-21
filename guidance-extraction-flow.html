@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guidance System v2.1 — Review Playground</title>
+<title>Guidance System v2.2 — Review Playground</title>
 <style>
   :root {
     --bg: #0d1117; --surface: #161b22; --surface2: #1c2333; --border: #30363d;
@@ -156,7 +156,7 @@
 <!-- ═══════════ SIDEBAR ═══════════ -->
 <div class="sidebar">
   <div class="sidebar-header">
-    <h1>Guidance v2.1</h1>
+    <h1>Guidance v2.2</h1>
     <div class="sub">Review Playground</div>
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     <div class="progress-text" id="progressText">0 / 14 reviewed</div>
@@ -223,8 +223,8 @@ const sections = [
   <line x1="760" y1="260" x2="840" y2="175" stroke="#8b949e" stroke-width="2" marker-end="url(#aG)"/>
   <text x="790" y="208" fill="#3fb950" font-size="11" font-family="monospace">HAS_PERIOD</text>
 
-  <line x1="440" y1="70" x2="600" y2="70" stroke="#58a6ff" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#aD)"/>
-  <text x="455" y="58" fill="#58a6ff" font-size="11" font-family="monospace">MAPS_TO_CONCEPT</text>
+  <line x1="460" y1="240" x2="600" y2="80" stroke="#58a6ff" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#aD)"/>
+  <text x="490" y="150" fill="#58a6ff" font-size="11" font-family="monospace">xbrl_qname (property)</text>
 
   <line x1="400" y1="310" x2="550" y2="450" stroke="#58a6ff" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#aD)"/>
   <text x="430" y="390" fill="#58a6ff" font-size="11" font-family="monospace">MAPS_TO_MEMBER (0..N)</text>
@@ -311,7 +311,7 @@ FOR (p:Period) REQUIRE p.u_id IS UNIQUE;</div>
 <tr><td>Concept</td><td>Guidance</td><td>Generic metric definition, not per-company</td></tr>
 <tr><td>Fact</td><td>GuidanceUpdate</td><td>Per-mention data point with all values</td></tr>
 <tr><td>Context</td><td>Context (reused!)</td><td>Company + period scoping</td></tr>
-<tr><td>Fact→HAS_CONCEPT→Concept</td><td>GuidanceUpdate→UPDATES→Guidance</td><td>Same pattern</td></tr>
+<tr><td>Fact→HAS_CONCEPT→Concept</td><td>GuidanceUpdate <code>xbrl_qname</code> property</td><td>Concept via qname join, not edge</td></tr>
 <tr><td>Fact→IN_CONTEXT→Context</td><td>GuidanceUpdate→IN_CONTEXT→Context</td><td>Same pattern</td></tr>
 <tr><td>Fact→HAS_PERIOD→Period</td><td>GuidanceUpdate→HAS_PERIOD→Period</td><td>Same direct period shortcut</td></tr>
 <tr><td>Fact→HAS_UNIT→Unit</td><td>GuidanceUpdate→HAS_UNIT→Unit</td><td>Same pattern (guidance-specific units)</td></tr>
@@ -323,7 +323,7 @@ FOR (p:Period) REQUIRE p.u_id IS UNIQUE;</div>
 <tr><td><code>Context</code></td><td>Reuse existing XBRL Context when deterministic key matches; else create synthetic XBRL-compatible.</td></tr>
 <tr><td><code>Period</code></td><td>Reuse existing XBRL Period when exact <code>u_id</code> match; else create synthetic XBRL-compatible.</td></tr>
 <tr><td><code>Unit</code></td><td>Use canonical guidance Unit nodes (<code>guidance_unit_m_usd</code>, <code>guidance_unit_usd</code>, etc.); do NOT reuse raw XBRL units when scale semantics differ.</td></tr>
-<tr><td><code>Concept</code></td><td>Link <code>Guidance → Concept</code> when confidence gates pass.</td></tr>
+<tr><td><code>Concept</code></td><td>No edge. Resolved via <code>xbrl_qname</code> property on GuidanceUpdate + query-time qname join.</td></tr>
 <tr><td><code>Member</code></td><td>Link <code>GuidanceUpdate → Member</code> with 0..N confident matches.</td></tr>
 <tr><td><code>Dimension / Domain</code></td><td>No direct linkage from guidance nodes in this design.</td></tr>
 </table>
@@ -567,7 +567,7 @@ Canonicalization:
 <h3>Resolution Algorithm</h3>
 <div class="flow-steps">
 <div class="flow-step"><div class="step-num"></div><div class="step-content"><strong>Determine FYE</strong>: <code>get_derived_fye(ticker)</code> from 10-K periods. Resolve CIK from graph: <code>MATCH (c:Company {ticker: $ticker})</code> — never accept CIK from external input.</div></div>
-<div class="flow-step"><div class="step-num"></div><div class="step-content"><strong>Determine fiscal period dates</strong>: <code>fiscal_to_dates(fye_month, fiscal_year, fiscal_quarter)</code> → (start, end). For 52/53-week filers: (a) try exact prior-company fiscal slot from existing XBRL Period history, (b) if missing, project prior slot by +52 and +53 weeks, (c) choose candidate matching company weekday pattern and nearest expected quarter end. <em>This is code-only — LLM must not do fiscal date math.</em></div></div>
+<div class="flow-step"><div class="step-num"></div><div class="step-content"><strong>Determine fiscal period dates</strong>: <code>fiscal_to_dates(session, ticker, fiscal_year, fiscal_quarter)</code> → (start, end). Lookup-first: query existing XBRL Period nodes, classify via <code>period_to_fiscal()</code>, return exact dates if match found. For 52/53-week filers: (a) try exact prior-company fiscal slot from existing XBRL Period history, (b) if missing, deterministic <code>_compute_fiscal_dates()</code> fallback with Q4 anchored to FY end. <em>This is code-only — LLM must not do fiscal date math.</em></div></div>
 <div class="flow-step"><div class="step-num"></div><div class="step-content"><strong>Compute deterministic IDs</strong>: <code>period_u_id = "duration_{start}_{end}"</code> or <code>"other_medium_term"</code> / <code>"undefined"</code>. Then <code>ctx_u_id = "guidance_" + cik + "_" + period_u_id</code></div></div>
 <div class="flow-step"><div class="step-num"></div><div class="step-content"><strong>Search for existing Context</strong>: <code>MATCH (ctx:Context {u_id: $ctx_u_id})</code>. If found → reuse. If not → CREATE.</div></div>
 </div>
@@ -620,7 +620,7 @@ Do NOT reuse raw XBRL Unit nodes when scale semantics differ (e.g., raw <code>US
   color: "#58a6ff",
   content: `
 <h3>Design</h3>
-<p>All linking is inline in the same extraction run. LLM may propose candidates, but only cache-backed candidates passing deterministic gates are written. <strong>Failures never block core writes.</strong></p>
+<p><strong>No <code>MAPS_TO_CONCEPT</code> edge.</strong> Concept resolution uses <code>xbrl_qname</code> string property on GuidanceUpdate. <code>qname</code> is stable across taxonomy years. Mapping is basis-independent; basis filtering at query time. Failures never block core writes.</p>
 
 <h3>Warmup Caches (Once Per Company Per Run)</h3>
 <div class="diagram">
@@ -646,17 +646,19 @@ Do NOT reuse raw XBRL Unit nodes when scale semantics differ (e.g., raw <code>US
 <tr><td>Tax Rate</td><td>EffectiveIncomeTaxRate</td><td>—</td></tr>
 <tr><td>CapEx</td><td>PaymentsToAcquirePropertyPlant...</td><td>—</td></tr>
 <tr><td>D&A</td><td>DepreciationAmortization</td><td>—</td></tr>
+<tr><td>OINE</td><td>OtherNonoperatingIncomeExpense</td><td>—</td></tr>
 </table>
-<p class="dim">Operating Margin, FCF, OINE — no direct concept (derived metrics)</p>
+<p class="dim">Operating Margin, FCF — no direct concept (derived metrics)</p>
 
 <h3>Confidence Gates</h3>
 <div class="diagram">
-<div class="dbox"><div class="dbox-label purple">Concept Link (Guidance → Concept)</div>
+<div class="dbox"><div class="dbox-label purple">Concept Resolution (xbrl_qname property)</div>
 <ul>
-<li>Candidate must be in concept cache + pattern map</li>
-<li><code>best_usage > 0</code></li>
-<li>Dominance: <code>best / total ≥ 60%</code></li>
-<li>Links <code>Concept {u_id: best_concept_u_id}</code></li>
+<li>Pattern map → find matching qnames in concept cache</li>
+<li>Cache uses consolidated facts only (no members)</li>
+<li>One match → use it. Multiple → highest usage wins</li>
+<li>Sets <code>gu.xbrl_qname</code> property (no edge)</li>
+<li>ON CREATE only — no implicit re-extraction updates</li>
 </ul>
 </div>
 <div class="dbox"><div class="dbox-label cyan">Member Link (GuidanceUpdate → Member) — 0..N</div>
@@ -672,6 +674,7 @@ Do NOT reuse raw XBRL Unit nodes when scale semantics differ (e.g., raw <code>US
 
 <h3>Dropped from Design</h3>
 <ul>
+<li><strong>MAPS_TO_CONCEPT edge</strong> — replaced by <code>xbrl_qname</code> property on GuidanceUpdate. qname is stable across taxonomy years; no cross-company accumulation.</li>
 <li><strong>MAPS_TO_DIMENSION</strong> — zero information gain (Member implies Dimension)</li>
 <li><strong>Domain links</strong> — hierarchy root only, no actionable data</li>
 <li>Axis fields from cache are diagnostics only; no edge written</li>
@@ -719,9 +722,8 @@ MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $tic
 MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
 WHERE gu.given_date <= $pit_date
 MATCH (gu)-[:FROM_SOURCE]->(src)
-OPTIONAL MATCH (g)-[:MAPS_TO_CONCEPT]->(con:Concept)
 OPTIONAL MATCH (gu)-[:MAPS_TO_MEMBER]->(m:Member)
-RETURN g.label AS metric, con.qname AS xbrl_concept,
+RETURN g.label AS metric, gu.xbrl_qname AS xbrl_concept,
        gu.given_date, gu.period_type, gu.fiscal_year, gu.fiscal_quarter,
        gu.segment, gu.basis_norm, gu.basis_raw, gu.low, gu.mid, gu.high, gu.unit,
        gu.derivation, gu.qualitative, gu.quote, gu.section, gu.conditions,
@@ -743,19 +745,23 @@ RETURN g.label AS metric, basis_norm, segment, latest.basis_raw,
        latest.given_date, latest.fiscal_year, latest.fiscal_quarter,
        p.start_date, p.end_date</div>
 
-<h3>3. Accuracy Comparison (Guided vs Actual)</h3>
-<div class="cypher">-- Guidance value
-MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)-[:MAPS_TO_CONCEPT]->(con:Concept)
+<h3>3. Accuracy Comparison (Side Note — Predictor Only)</h3>
+<div class="cypher">-- Uses xbrl_qname property for concept join (no edge)
+MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)
 MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
 MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
--- XBRL actual for same concept + same company + overlapping period
-MATCH (f:Fact)-[:HAS_CONCEPT]->(con)
+WHERE gu.xbrl_qname IS NOT NULL
+  AND gu.basis_norm = 'gaap' -- strict; remove for proxy compare
+MATCH (f:Fact)-[:HAS_CONCEPT]->(con:Concept {qname: gu.xbrl_qname})
 MATCH (f)-[:IN_CONTEXT]->(fctx:Context)-[:FOR_COMPANY]->(c)
 MATCH (fctx)-[:HAS_PERIOD]->(fp:Period)
 WHERE fp.start_date = p.start_date AND fp.end_date = p.end_date
   AND f.is_numeric = '1'
-RETURN g.label, gu.mid AS guided, toFloat(f.value) AS actual,
-       toFloat(f.value) - gu.mid AS surprise</div>
+  AND (fctx.member_u_ids IS NULL OR fctx.member_u_ids = [])
+WITH g.label AS metric, gu.mid AS guided, toFloat(f.value) AS actual, f.id AS fid
+ORDER BY fid DESC -- deterministic tie-break
+WITH metric, guided, collect(actual)[0] AS actual
+RETURN metric, guided, actual, actual - guided AS surprise</div>
 
 <p class="dim"><strong>Boundary</strong>: Extraction writes to graph. Predictor reads from it. No coupling.</p>
 `
@@ -804,7 +810,7 @@ RETURN g.label, gu.mid AS guided, toFloat(f.value) AS actual,
 <div class="diagram">
 <div class="dbox"><div class="dbox-label pink">Canonicalize</div>Unit normalization (usd/m_usd/percent)<br>Numeric scale alignment<br>slug(label), slug(segment)</div>
 <div class="dbox"><div class="dbox-label pink">Validate</div>Basis: qualifier not in quote span → unknown<br>Period: <code>fiscal_to_dates()</code> (code-only)<br>No citation = no node</div>
-<div class="dbox"><div class="dbox-label pink">Gates</div>Concept: cache + dominance ≥60%<br>Member: exact normalized match (0..N)<br>Unit: resolve canonical → <code>guidance_unit_*</code><br>Fail → keep write, skip link</div>
+<div class="dbox"><div class="dbox-label pink">Gates</div>Concept: pattern match → highest usage wins (§7)<br>Member: exact normalized match (0..N)<br>Unit: resolve canonical → <code>guidance_unit_*</code><br>Fail → keep write, skip link</div>
 </div>
 
 <div class="arrow-d">↓</div>
@@ -816,12 +822,12 @@ RETURN g.label, gu.mid AS guided, toFloat(f.value) AS actual,
 <div class="flow-step"><div class="step-num"></div><div class="step-content">Find/create Context + Period (§6 MERGE pattern), find/create Unit (<code>guidance_unit_*</code>)</div></div>
 <div class="flow-step"><div class="step-num"></div><div class="step-content"><code>MERGE (gu:GuidanceUpdate {id})</code> — ON CREATE set all 19 properties + evhash16</div></div>
 <div class="flow-step"><div class="step-num"></div><div class="step-content">Link: <code>gu→UPDATES→g</code>, <code>gu→FROM_SOURCE→src</code>, <code>gu→IN_CONTEXT→ctx</code>, <code>gu→HAS_PERIOD→p</code>, <code>gu→HAS_UNIT→unit</code></div></div>
-<div class="flow-step"><div class="step-num"></div><div class="step-content">Link XBRL if confident: Concept on Guidance, 0..N Member links on Update</div></div>
+<div class="flow-step"><div class="step-num"></div><div class="step-content">Link XBRL if confident: <code>xbrl_qname</code> already set on GuidanceUpdate at step 4 (ON CREATE); link 0..N <code>MAPS_TO_MEMBER</code> edges on GuidanceUpdate</div></div>
 </div>
 
 <h3>Idempotency</h3>
 <div class="cypher">MERGE (gu:GuidanceUpdate {id: $guidance_update_id})
-ON CREATE SET gu += $all_properties, gu.evhash16 = $evhash16
+ON CREATE SET gu += $all_properties, gu.evhash16 = $evhash16, gu.xbrl_qname = $xbrl_qname
 RETURN gu
 -- If MERGE matches → no-op. Force flag can delete + re-extract.</div>
 
@@ -843,13 +849,14 @@ RETURN gu
 <tr><td>Perplexity gap-filling</td><td>Available</td><td>Last resort. Assume subscription.</td></tr>
 <tr><td>Markdown generation</td><td>On demand</td><td>Generate readable report from graph if humans need it. Not stored.</td></tr>
 <tr><td>Neo4j write access</td><td><strong>Must verify</strong></td><td><code>mcp__neo4j-cypher__write_neo4j_cypher</code> needed in skill tools</td></tr>
+<tr><td>Neo4j write infrastructure</td><td>Decided</td><td>Direct Cypher MERGE via <code>Neo4jManager</code> session (news.py pattern). Not <code>merge_nodes()</code>/<code>merge_relationships()</code>. See Decision #33.</td></tr>
 </table>
 `
 },
 {
   id: "decisions",
   num: "§12",
-  title: "Finalized Decisions (32)",
+  title: "Finalized Decisions (33)",
   color: "#d29922",
   content: `
 <table>
@@ -859,7 +866,7 @@ RETURN gu
 <tr><td>3</td><td>GuidanceUpdate node</td><td>Per-mention, 19 fields (includes basis_norm + basis_raw) with direct HAS_PERIOD and HAS_UNIT edges</td></tr>
 <tr><td>4</td><td>Company association</td><td>Through Context (cik→FOR_COMPANY→Company)</td></tr>
 <tr><td>5</td><td>Ordering model</td><td>No linked list. ORDER BY given_date, id</td></tr>
-<tr><td>6</td><td>Action types</td><td>None — LLM determines from timeline</td></tr>
+<tr><td>6</td><td>Action types</td><td>None — deterministic query-time derivation from timeline</td></tr>
 <tr><td>7</td><td>Supersession</td><td>None — latest by given_date is current</td></tr>
 <tr><td>8</td><td>Anchor rule</td><td>None — first in timeline is implicit anchor</td></tr>
 <tr><td>9</td><td>Source priority</td><td>None — process chronologically, attribute to source</td></tr>
@@ -867,9 +874,9 @@ RETURN gu
 <tr><td>11</td><td>Output format</td><td>Cypher query for predictor context (no markdown)</td></tr>
 <tr><td>12</td><td>Trigger</td><td>Auto per asset. SDK single/initial for backfill.</td></tr>
 <tr><td>13</td><td>News filtering</td><td>Benzinga channels: Guidance, Earnings, Beats/Misses, Previews, Management</td></tr>
-<tr><td>14</td><td>XBRL linking</td><td>Concept on Guidance; Member on GuidanceUpdate. Dimension dropped.</td></tr>
+<tr><td>14</td><td>XBRL linking</td><td>Concept via <code>xbrl_qname</code> property on GuidanceUpdate (no edge). Member via <code>MAPS_TO_MEMBER</code> edge (0..N). Dimension dropped. Basis-independent mapping.</td></tr>
 <tr><td>15</td><td>Fiscal periods</td><td>Reuse get_derived_fye() + period_to_fiscal(); add fiscal_to_dates()</td></tr>
-<tr><td>16</td><td>Metric normalization</td><td>Standard labels with aliases (§4)</td></tr>
+<tr><td>16</td><td>Metric normalization</td><td>12 canonical with aliases (§4). Non-exhaustive — LLM creates new as needed.</td></tr>
 <tr><td>17</td><td>Segment handling</td><td>Property + MAPS_TO_MEMBER with 0..N matches when confident; Total = company-wide/default</td></tr>
 <tr><td>18</td><td>Analyst estimates</td><td>Deferred</td></tr>
 <tr><td>19</td><td>Accuracy tracking</td><td>Predictor's job</td></tr>
@@ -878,7 +885,7 @@ RETURN gu
 <tr><td>22</td><td>Context reuse</td><td>Same label as XBRL (Option A). Identical format.</td></tr>
 <tr><td>23</td><td>Basis tracking</td><td>basis_norm + basis_raw. Assign only when explicit; else unknown.</td></tr>
 <tr><td>24</td><td>Per-asset extraction</td><td>Route by source type before LLM. Separate scan/exclusion rules.</td></tr>
-<tr><td>25</td><td>Metric normalization</td><td>12 canonical + LLM creates new as needed</td></tr>
+<tr><td>25</td><td><s>Merged into #16</s></td><td>—</td></tr>
 <tr><td>26</td><td>Deterministic IDs</td><td>guidance:{slug} + gu:{7-part key} with evhash16. usd/m_usd split.</td></tr>
 <tr><td>27</td><td>LLM governance</td><td>LLM proposes; deterministic validator enforces.</td></tr>
 <tr><td>28</td><td>Derivation enum</td><td>7 types: explicit, calculated, point, implied, floor, ceiling, comparative</td></tr>
@@ -886,6 +893,7 @@ RETURN gu
 <tr><td>30</td><td>Segment normalizer</td><td>Light singularization + small synonym map.</td></tr>
 <tr><td>31</td><td>Period/unit linkage</td><td>GuidanceUpdate always links to Context, direct Period, direct Unit, and exact source node.</td></tr>
 <tr><td>32</td><td>XBRL node reuse policy</td><td>Reuse Context/Period when exact match; create synthetic XBRL-compatible when missing. Use canonical guidance Unit nodes (not raw XBRL units). Link Concept/Member when confident; no Dimension/Domain links.</td></tr>
+<tr><td>33</td><td>Neo4j write path</td><td>Reuse <code>Neo4jManager</code> session/driver/retry only. Write guidance via <strong>direct Cypher MERGE</strong> (like <code>neograph/mixins/news.py</code>), not via <code>merge_nodes()</code>/<code>merge_relationships()</code> dataclass path. Reason: unnecessary shared-surface coupling — <code>merge_relationships()</code> has special <code>{key: source_id}</code> branch for HAS_PERIOD/HAS_UNIT; shared enums trigger constraint-creation loops; XBRL <code>Unit</code> requires Arelle <code>ModelFact</code>. <code>:Guidance</code> label is clean (XBRL guidance concepts are <code>:Concept</code> with <code>category="Guidance"</code>, 0 <code>:Guidance</code> nodes exist). <code>Period</code> dataclass reusable as-is. Validate: <code>guidance:</code> prefix on Guidance IDs, <code>gu:</code> prefix on GuidanceUpdate IDs.</td></tr>
 </table>
 `
 },
@@ -898,8 +906,8 @@ RETURN gu
 <h3>Reuse (Existing Code)</h3>
 <table>
 <tr><th>Content</th><th>Source</th><th>Action</th></tr>
-<tr><td><code>period_to_fiscal()</code></td><td>get_quarterly_filings.py:61</td><td><span class="tag tag-reuse">REUSE</span> calendar→fiscal</td></tr>
-<tr><td><code>get_derived_fye()</code></td><td>get_quarterly_filings.py:134</td><td><span class="tag tag-reuse">REUSE</span></td></tr>
+<tr><td><code>period_to_fiscal()</code></td><td>get_quarterly_filings.py:66</td><td><span class="tag tag-reuse">REUSE</span> calendar→fiscal</td></tr>
+<tr><td><code>get_derived_fye()</code></td><td>get_quarterly_filings.py:370</td><td><span class="tag tag-reuse">REUSE</span></td></tr>
 <tr><td>Metric normalization</td><td>guidance-extract.md:258-269</td><td><span class="tag tag-reuse">CARRY</span> forward (§4)</td></tr>
 <tr><td>Source extraction hints</td><td>guidance-extract.md:146-199</td><td><span class="tag tag-reuse">CARRY</span> forward (§3)</td></tr>
 <tr><td>Derivation rules</td><td>guidance-extract.md:229-237</td><td><span class="tag tag-reuse">CARRY</span> forward (§5)</td></tr>
@@ -908,12 +916,15 @@ RETURN gu
 <tr><td>Fiscal calendar</td><td>FISCAL_CALENDAR.md</td><td><span class="tag tag-reuse">KEEP</span> as-is</td></tr>
 <tr><td>Evidence standards</td><td>evidence-standards/SKILL.md</td><td><span class="tag tag-reuse">LOAD</span> during extraction</td></tr>
 <tr><td>AAPL benchmark</td><td>sampleGuidance_byAgentTeams.md</td><td><span class="tag tag-ref">QUALITY TARGET</span></td></tr>
+<tr><td><code>Neo4jManager</code> session/driver</td><td>neograph/Neo4jManager.py</td><td><span class="tag tag-reuse">REUSE</span> session plumbing, retry decorators, <code>execute_cypher_query()</code>. NOT <code>merge_nodes()</code>/<code>merge_relationships()</code>.</td></tr>
+<tr><td>News write pattern</td><td>neograph/mixins/news.py:278-329</td><td><span class="tag tag-ref">REFERENCE</span> Direct Cypher MERGE via <code>self.manager.driver.session()</code>. Follow this for guidance.</td></tr>
+<tr><td><code>Period</code> dataclass</td><td>XBRL/xbrl_basic_nodes.py:87</td><td><span class="tag tag-reuse">REUSE</span> <code>generate_id()</code> produces <code>duration_{start}_{end}</code> matching guidance spec.</td></tr>
 </table>
 
 <h3>Must Build (New Code)</h3>
 <table>
 <tr><th>Content</th><th>Priority</th><th>Description</th></tr>
-<tr><td><code>fiscal_to_dates()</code></td><td><span class="tag tag-new">P0</span></td><td>Reverse of period_to_fiscal: (fye_month, fy, fq) → (start, end). 52/53-week deterministic fallback.</td></tr>
+<tr><td><code>fiscal_to_dates()</code></td><td><span class="tag tag-reuse">DONE</span></td><td>Implemented in get_quarterly_filings.py. XBRL lookup + deterministic fallback. 150/150 validated.</td></tr>
 <tr><td>ID normalization utility</td><td><span class="tag tag-new">P0</span></td><td>Shared helper for slugging, unit/scale canonicalization, evhash16, guidance_update_id assembly.</td></tr>
 </table>
 `

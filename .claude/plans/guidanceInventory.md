@@ -1,6 +1,6 @@
 # Guidance System — Implementation Spec
 
-**Version**: 2.1 | 2026-02-19
+**Version**: 2.2 | 2026-02-20
 **Status**: Architecture locked — implementation-ready
 **Parent**: `earnings-orchestrator.md`
 **Benchmark**: `sampleGuidance_byAgentTeams.md` (AAPL)
@@ -44,7 +44,6 @@ These decisions are intentionally pinned at the top so they are resolved before 
 | GuidanceUpdate | HAS_PERIOD | Period | Always (same Period linked via Context) |
 | GuidanceUpdate | HAS_UNIT | Unit | Always (canonical unit node) |
 | GuidanceUpdate | MAPS_TO_MEMBER | Member | If one or more confident segment matches |
-| Guidance | MAPS_TO_CONCEPT | Concept | If confident XBRL match |
 | Context | FOR_COMPANY | Company | Always (via cik) |
 | Context | HAS_PERIOD | Period | Always |
 
@@ -72,7 +71,7 @@ FOR (p:Period) REQUIRE p.u_id IS UNIQUE;
 | Fact | GuidanceUpdate | Per-mention data point with all values |
 | Context | Context (reused!) | Company + period scoping |
 | Fact→IN_CONTEXT→Context | GuidanceUpdate→IN_CONTEXT→Context | Same pattern |
-| Fact→HAS_CONCEPT→Concept | GuidanceUpdate→UPDATES→Guidance | Same pattern |
+| Fact→HAS_CONCEPT→Concept | GuidanceUpdate→UPDATES→Guidance + `xbrl_qname` property | Concept via qname join, not edge |
 | Fact→HAS_PERIOD→Period | GuidanceUpdate→HAS_PERIOD→Period | Same direct period shortcut |
 | Fact→HAS_UNIT→Unit | GuidanceUpdate→HAS_UNIT→Unit | Same pattern |
 
@@ -85,7 +84,7 @@ Use this policy to avoid drift during implementation:
 | `Context` | Reuse existing XBRL Context when deterministic key matches; otherwise create synthetic XBRL-compatible Context. |
 | `Period` | Reuse existing XBRL Period when exact `u_id` match exists; otherwise create synthetic XBRL-compatible Period. |
 | `Unit` | Use canonical guidance Unit nodes (for example `guidance_unit_m_usd`, `guidance_unit_usd`, `guidance_unit_percent`); do not directly reuse raw XBRL units when scale semantics differ. |
-| `Concept` | Link `Guidance -> Concept` when confidence gates pass. |
+| `Concept` | No edge. Concept resolution uses `xbrl_qname` property on GuidanceUpdate + query-time qname join. |
 | `Member` | Link `GuidanceUpdate -> Member` with 0..N confident matches. |
 | `Dimension` / `Domain` | No direct linkage from guidance nodes in this design. |
 
@@ -100,11 +99,7 @@ Conceptually parallel to XBRL `Concept`: generic, company-agnostic. "Revenue" is
 | `aliases` | String[] | Alternate names: e.g., ["sales", "net revenue", "total revenue"] |
 | `created_date` | String | ISO date when first detected |
 
-| Relationship | Direction | Target | Condition |
-|-------------|-----------|--------|-----------|
-| `MAPS_TO_CONCEPT` | OUT | Concept | If confident XBRL concept match |
-
-`MAPS_TO_CONCEPT` is optional. Derived or non-GAAP-specific guidance labels may have no direct XBRL Concept.
+Concept resolution uses `xbrl_qname` property on GuidanceUpdate (see §7), not an edge on Guidance. The Guidance node carries only the metric label and aliases.
 
 ### Node: GuidanceUpdate
 
@@ -114,6 +109,7 @@ Conceptually parallel to XBRL `Fact`: per-mention data point. See §2 for full f
 |----------|------|-------------|
 | `id` | String | Deterministic readable key: `gu:{source_id}:{label_slug}:{period_u_id}:{basis_norm}:{segment_slug}:{evhash16}` (see §2A) |
 | `evhash16` | String | First 16 hex chars of evidence hash from value-bearing fields |
+| `xbrl_qname` | String / null | Resolved XBRL concept qname (e.g., `us-gaap:Revenues`). Set at extraction time from concept cache. Null when no confident match. See §7. |
 
 | Relationship | Direction | Target | Condition |
 |-------------|-----------|--------|-----------|
@@ -147,7 +143,7 @@ Every GuidanceUpdate node carries these extraction payload properties (19 fields
 | 13 | `qualitative` | String / null | Non-numeric guidance text | `"low to mid single digits"` |
 | 14 | `quote` | String | Max 500 chars, verbatim from source | `"We expect revenue between..."` |
 | 15 | `section` | String | Location within source | `"CFO Prepared Remarks"` |
-| 16 | `source_key` | String | Sub-document key | `"EX-99.1"`, `"full"`, `"title"`, `"MD&A"` |
+| 16 | `source_key` | String | Sub-document key | `"EX-99.1"`, `"Item 2.02"`, `"full"`, `"title"`, `"MD&A"` |
 | 17 | `conditions` | String / null | Conditional assumptions | `"assumes no further rate hikes"` |
 | 18 | `source_type` | String | `8k`, `transcript`, `news`, `10q`, `10k` | `"transcript"` |
 | 19 | `created` | String | ISO timestamp of node creation | `"2026-02-18T14:30:00Z"` |
@@ -208,10 +204,10 @@ Expected behavior:
 
 | # | Source | Richness | Arrives | Extract? | Notes |
 |---|--------|----------|---------|----------|-------|
-| 1 | Transcript | Highest | t+1d to t+5d | YES — full scan (prepared remarks + Q&A) | Best source. AAPL: all guidance came from here. |
-| 2 | 8-K EX-99.1 | High | t=0 | YES — outlook section, tables, footnotes | Official numbers. Some companies (AAPL): zero guidance. |
+| 1 | Transcript | Highest | t+1d to t+5d | YES — full scan (prepared remarks + Q&A) | Best source. Rare fallback to full transcript text only when prepared/Q&A is missing or truncated. |
+| 2 | 8-K EX-99.* + Item text | High | t=0 | YES — EX-99.* outlook/tables/footnotes + Item 2.02/7.01 text | Official numbers. Some companies (AAPL): zero guidance. |
 | 3 | News | Medium | t-1h to t+24h | YES — after Benzinga channel filter | Mixes company guidance with analyst estimates. |
-| 4 | 10-Q/10-K MD&A | Low | t+25d to t+45d | YES — specific statements only | Skip boilerplate. Note new risk language. |
+| 4 | 10-Q/10-K MD&A | Low | t+25d to t+45d | YES — MD&A primary, bounded fallback if needed | Skip boilerplate. Note new risk language. |
 | 5 | XBRL | None | With 10-Q/10-K | NO — actuals only | Predictor uses for accuracy comparison. |
 | 6 | Alpha Vantage | Reference | Always | NO — consensus, not guidance | Reference only. |
 | 7 | Investor day | Variable | Infrequent | YES — when ingested | Not yet in pipeline. |
@@ -255,22 +251,26 @@ Extraction MUST branch by `source_type` before LLM processing. Each doc asset ty
 
 | Source | Scan | Extract | Do NOT extract | `given_date` | `source_key` | Dedup |
 |--------|------|---------|----------------|-------------|-------------|-------|
-| **8-K** | Outlook → tables → footnotes | Forward-looking numbers, ranges, directional | Actuals, safe harbor boilerplate | `r.created` | `"EX-99.1"` | Deterministic `GuidanceUpdate.id` (§2A) |
-| **Transcript** | Everything: CFO, Q&A, CEO | All guidance: formal, segment, caveats, conditions | — | `t.conference_datetime` | `"full"` | Deterministic `GuidanceUpdate.id` (§2A) |
+| **8-K** | EX-99.* outlook → tables → footnotes + Item 2.02/7.01 text | Forward-looking numbers, ranges, directional | Pure actuals, pure safe-harbor boilerplate | `r.created` | Exhibit/item key (e.g., `"EX-99.1"`, `"Item 2.02"`) | Deterministic `GuidanceUpdate.id` (§2A) |
+| **Transcript** | Everything: CFO, Q&A, CEO (rare fallback: full transcript text node only when prepared/Q&A missing/truncated) | All guidance: formal, segment, caveats, conditions | — | `t.conference_datetime` | `"full"` | Deterministic `GuidanceUpdate.id` (§2A) |
 | **News** | Title + body (after channel filter) | Company guidance only | Analyst estimates ("Est $X", "consensus") | `n.created` | `"title"` | Deterministic `GuidanceUpdate.id` (§2A) |
-| **10-Q/10-K** | MD&A only | Specific numbers/ranges/directional | Boilerplate ("we expect continued growth") | `r.created` | `"MD&A"` | Deterministic `GuidanceUpdate.id` (§2A) |
+| **10-Q/10-K** | MD&A primary; if zero guidance found, one bounded keyword-window pass in broader filing text | Specific numbers/ranges/directional | Boilerplate/legal/risk-heavy text | `r.created` | `"MD&A"` | Deterministic `GuidanceUpdate.id` (§2A) |
 
 **Dedup rule**: Dedup is enforced by deterministic `GuidanceUpdate.id` (§2A). Same slot + same value payload merges; changed values/qualifiers/conditions create a new node.
+**Safe-harbor proximity rule**: Filter disclaimer-only blocks, but do not blindly drop adjacent lines if they contain concrete guidance numbers/periods.
 
 ### Forward Guidance Full-Text Recall (All Assets)
 
 Run a common recall pass for forward guidance on every asset, but only within that asset's scoped text from the table above.
 
-- Step 1: Build searchable text from the scoped region only (`EX-99.1`, `MD&A`, transcript full, or filtered news title/body).
+- Step 1: Build searchable text from the scoped region only (`EX-99.*` + Item 2.02/7.01 text for 8-K, `MD&A` for 10-Q/10-K, transcript prepared remarks + Q&A, or filtered news title/body).
 - Step 2: Find forward-guidance candidate windows with keyword hits (for example: `expects`, `guidance`, `outlook`, `forecast`, `target`, `range`, `raise`, `lower`, `maintain`, `reaffirm`).
 - Step 3: Keep candidate windows only if at least one metric/period/value signal is present nearby.
 - Step 4: Send candidate windows to LLM extractor.
-- Step 5: If zero candidates for high-priority sources (`transcript`, `8-K` with `EX-99.1` present), run one fallback full-scope extraction pass on the same scoped text.
+- Step 5: If zero candidates, run one bounded fallback pass:
+  - transcript: use full transcript text node only when prepared/Q&A is missing or truncated
+  - 8-K: one broader pass across scoped 8-K text (`EX-99.*` + Item text)
+  - 10-Q/10-K: one keyword-window pass in broader filing text excluding legal/risk-heavy sections
 
 This recall step improves coverage; deterministic validation and write logic stay unchanged.
 
@@ -467,22 +467,38 @@ Every GuidanceUpdate MUST have `IN_CONTEXT`. Synthetic XBRL-identical Contexts a
 
 All linking is inline in the same extraction run (no separate process). LLM may propose candidates, but only cache-backed candidates passing deterministic gates are written. Mapping failures never block core Guidance/GuidanceUpdate writes.
 
+### Concept Resolution Design
+
+**No `MAPS_TO_CONCEPT` edge.** Concept resolution uses a `xbrl_qname` string property on GuidanceUpdate.
+
+Why `qname` (not `u_id` or edge):
+- `qname` (e.g., `us-gaap:Revenues`) is stable across all taxonomy years. The same logical concept exists as separate Concept nodes per taxonomy year, but qname never changes.
+- A property on GuidanceUpdate is naturally company-specific and handles concept transitions (if a company switches from `Revenues` to `RevenueFromContractWithCustomer`, old GuidanceUpdates keep the old qname, new ones get the new — but see Limitation below).
+- No cross-company accumulation issues (unlike an edge on the shared Guidance node).
+- Null when no confident match — no cleanup needed.
+
+**Limitation**: The concept cache is built from the most recent 10-K + subsequent 10-Qs (not date-aware per extraction). Historical backfills for periods before a concept transition (e.g., pre-ASC 606) will get the current qname, not the historical one. This may cause accuracy comparisons to miss for those periods. Acceptable tradeoff vs. date-aware caching complexity.
+
 ### Warmup Caches (Run Once Per Company Per Extraction Run)
 
-Concept usage profile (handles multi-namespace Concept versions by selecting company-dominant `u_id` per `qname`):
+Concept cache — query the most recent 10-K plus all subsequent 10-Q filings for the company, **consolidated facts only** (no dimensional members). Scoped to the current taxonomy window so concept transitions (e.g., pre-ASC 606 `Revenues` → `RevenueFromContractWithCustomer`) resolve to the company's current qname:
 ```cypher
+// Step 1: find most recent 10-K filing date
+MATCH (rk:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+WHERE rk.formType = '10-K'
+WITH c, rk ORDER BY rk.created DESC LIMIT 1
+WITH c, rk.created AS last_10k_date
+// Step 2: all facts from that 10-K + subsequent 10-Qs
 MATCH (f:Fact)-[:HAS_CONCEPT]->(con:Concept)
-MATCH (f)-[:REPORTS]->(:XBRLNode)<-[:HAS_XBRL]-(r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+MATCH (f)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c)
+MATCH (f)-[:REPORTS]->(:XBRLNode)<-[:HAS_XBRL]-(r:Report)-[:PRIMARY_FILER]->(c)
 WHERE r.formType IN ['10-K','10-Q']
+  AND r.created >= last_10k_date
   AND f.is_numeric = '1'
-WITH con.qname AS qname, con.u_id AS concept_u_id, con.label AS concept_label, count(f) AS usage
-ORDER BY qname, usage DESC
-WITH qname, collect({u_id: concept_u_id, label: concept_label, usage: usage}) AS versions
-RETURN qname,
-       versions[0].u_id AS best_concept_u_id,
-       versions[0].label AS best_concept_label,
-       versions[0].usage AS best_usage,
-       reduce(total = 0, v IN versions | total + v.usage) AS total_usage
+  AND (ctx.member_u_ids IS NULL OR ctx.member_u_ids = [])
+WITH con.qname AS qname, count(f) AS usage
+ORDER BY usage DESC
+RETURN qname, usage
 ```
 
 Member profile (Context-based; robust when FACT_MEMBER is sparse and CIK padding differs across node families):
@@ -562,13 +578,15 @@ Use this static map to translate Guidance label to candidate XBRL qnames, then r
 | `OINE` | `OtherNonoperatingIncomeExpense` | — | Link when confidence gate passes |
 | `D&A` | `DepreciationAmortization` | — | Link when confidence gate passes |
 
-### Confidence Gates (Concrete)
+### Concept Resolution Gate (sets `gu.xbrl_qname`)
 
-Concept link (`Guidance -> Concept`):
-- Candidate set must come from concept pattern map + warmup cache.
-- Require `best_usage > 0`.
-- If multiple qname candidates remain, require dominance: `best_usage / total_usage >= 0.60`; otherwise skip.
-- Link target is `Concept {u_id: best_concept_u_id}` (not qname-only), which resolves multi-namespace versions safely.
+For each metric in the pattern map:
+1. Find all qnames in the concept cache that match the include pattern(s) and exclude pattern(s).
+2. If exactly one qname matches → use it.
+3. If multiple match → pick the one with highest usage count from the cache.
+4. If zero match → `xbrl_qname = null`.
+5. Mapping is **basis-independent**: GAAP, non-GAAP, and unknown guidance all get mapped. Basis filtering happens at comparison query time, not at mapping time.
+6. Set on GuidanceUpdate via `ON CREATE SET` only. No implicit re-extraction updates. If concept cache improves, update via a separate migration query, not through re-extraction.
 
 Member links (`GuidanceUpdate -> Member`):
 - Allow 0..N member links per GuidanceUpdate.
@@ -629,9 +647,8 @@ MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $tic
 MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
 WHERE gu.given_date <= $pit_date
 MATCH (gu)-[:FROM_SOURCE]->(src)
-OPTIONAL MATCH (g)-[:MAPS_TO_CONCEPT]->(con:Concept)
 OPTIONAL MATCH (gu)-[:MAPS_TO_MEMBER]->(m:Member)
-RETURN g.label AS metric, con.qname AS xbrl_concept,
+RETURN g.label AS metric, gu.xbrl_qname AS xbrl_concept,
        gu.given_date, gu.period_type, gu.fiscal_year, gu.fiscal_quarter,
        gu.segment, gu.basis_norm, gu.basis_raw, gu.low, gu.mid, gu.high, gu.unit,
        gu.derivation, gu.qualitative, gu.quote, gu.section, gu.conditions,
@@ -656,21 +673,29 @@ RETURN g.label AS metric, basis_norm, segment, latest.basis_raw, latest.segment,
        p.start_date, p.end_date
 ```
 
-### Accuracy comparison (predictor runs this, not guidance system)
+### Accuracy comparison (side note — predictor runs this, not guidance system)
+
+Compares guidance values to XBRL actuals using `xbrl_qname` as the join key. This is NOT part of the extraction pipeline.
 
 ```cypher
-// Guidance value
-MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)-[:MAPS_TO_CONCEPT]->(con:Concept)
+MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)
 MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
 MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
-// XBRL actual for same concept + same company + overlapping period
-MATCH (f:Fact)-[:HAS_CONCEPT]->(con)
+WHERE gu.xbrl_qname IS NOT NULL
+// Strict mode: only GAAP-to-GAAP. Remove filter for proxy/flagged comparison.
+  AND gu.basis_norm = 'gaap'
+MATCH (f:Fact)-[:HAS_CONCEPT]->(con:Concept {qname: gu.xbrl_qname})
 MATCH (f)-[:IN_CONTEXT]->(fctx:Context)-[:FOR_COMPANY]->(c)
 MATCH (fctx)-[:HAS_PERIOD]->(fp:Period)
 WHERE fp.start_date = p.start_date AND fp.end_date = p.end_date
   AND f.is_numeric = '1'
-RETURN g.label, gu.mid AS guided, toFloat(f.value) AS actual,
-       toFloat(f.value) - gu.mid AS surprise
+  AND (fctx.member_u_ids IS NULL OR fctx.member_u_ids = [])
+// Deterministic tie-break if multiple facts match (e.g., restated values)
+WITH g.label AS metric, gu.mid AS guided, toFloat(f.value) AS actual,
+     gu.basis_norm, f.id AS fact_id
+ORDER BY fact_id DESC
+WITH metric, guided, collect(actual)[0] AS actual, basis_norm
+RETURN metric, guided, actual, actual - guided AS surprise, basis_norm
 ```
 
 ---
@@ -720,14 +745,17 @@ Manual SDK modes (kept for backfill/reprocess):
 
 2. LLM EXTRACTION (routed by SOURCE_TYPE)
    ├── Route to source-type extraction profile (§3 Per-Source Rules)
-   │     8k       → scan outlook/tables/footnotes, skip actuals/boilerplate
+   │     8k       → scan EX-99.* outlook/tables/footnotes + Item 2.02/7.01 text, skip pure actuals/boilerplate
    │     transcript → scan everything (CFO, Q&A, CEO), extract all guidance
    │     news      → channel-filter first, extract company guidance only
-   │     10q/10k   → MD&A only, skip boilerplate
+   │     10q/10k   → MD&A primary; if zero guidance, one bounded fallback pass in broader filing text
    ├── Run forward-guidance full-text recall on scoped text (§3):
    │     build candidate windows from forward-guidance hits
    │     keep only windows with nearby metric/period/value signals
-   │     fallback to one full-scope pass when recall returns zero for transcript/8k
+   │     fallback when recall returns zero:
+   │       transcript → full transcript text node only if prepared/Q&A missing or truncated
+   │       8k         → one broader pass across scoped 8-K text (EX-99.* + Item text)
+   │       10q/10k    → one keyword-window pass excluding legal/risk-heavy sections
    ├── Feed: candidate windows (or fallback scoped text) + existing Guidance tags for this company
    │     + warmup member candidates (`member_label`, `member_qname`, `axis_qname`) so LLM can select 0..N members
    ├── Prompt: "Extract all guidance. For each item, return quote evidence, period intent,
@@ -740,8 +768,9 @@ Manual SDK modes (kept for backfill/reprocess):
    ├── Validate basis rule: if qualifier not explicit in metric quote span → basis_norm = unknown
    ├── Resolve period_u_id via §6 (code-only fiscal math; supports 52/53-week fallback)
    ├── Resolve canonical unit + unit_u_id via §6 Unit rules
-   ├── Apply concept/member confidence gates (§7)
-   └── If uncertain: keep core item write, skip uncertain mapping edges
+   ├── Resolve xbrl_qname from concept cache (§7): pattern match → highest usage → set or null
+   ├── Apply member confidence gate (§7)
+   └── If uncertain: keep core item write, set xbrl_qname=null, skip uncertain member edges
 
 3. PER ITEM: WRITE TO GRAPH
    ├── Compute deterministic IDs via shared utility (§2A): `guidance_id`, `evhash16`, `guidance_update_id`
@@ -752,14 +781,14 @@ Manual SDK modes (kept for backfill/reprocess):
    ├── Find/create Context + Period (§6)
    ├── Find/create Unit (§6)
    ├── MERGE GuidanceUpdate node: MERGE (gu:GuidanceUpdate {id: $guidance_update_id})
-   │     ON CREATE SET gu += $all_properties, gu.evhash16 = $evhash16
+   │     ON CREATE SET gu += $all_properties, gu.evhash16 = $evhash16, gu.xbrl_qname = $xbrl_qname
    ├── Link: (gu)-[:UPDATES]->(g)
    ├── Link: (gu)-[:FROM_SOURCE]->(source)
    ├── Link: (gu)-[:IN_CONTEXT]->(context)
    ├── Link: (gu)-[:HAS_PERIOD]->(period)
    ├── Link: (gu)-[:HAS_UNIT]->(unit)
    ├── No linked-list write step (ordering is query-time; §8)
-   └── Link XBRL if confident (§7): Concept on Guidance, 0..N Member links on Update
+   └── Link XBRL members if confident (§7): 0..N Member links on Update
 ```
 
 ### Initial Build (new company)
@@ -793,6 +822,7 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 | Perplexity gap-filling | Available | Last resort. Assume subscription. |
 | Markdown generation | On demand | Generate readable report from graph if humans need it. Not stored. |
 | Neo4j write access | Must verify | `mcp__neo4j-cypher__write_neo4j_cypher` needed in skill tools. |
+| Neo4j write infrastructure | Decided | Reuse `Neo4jManager` session/driver/retry plumbing. Write guidance nodes via direct Cypher MERGE (news.py pattern), NOT via `merge_nodes()`/`merge_relationships()` dataclass path. Avoids touching shared NodeType/RelationType enums and XBRL constraint infrastructure. See Decision #33. |
 
 ---
 
@@ -813,9 +843,9 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 | 11 | Output format | Cypher query for predictor context (no markdown) |
 | 12 | Trigger | Auto-trigger per asset at asset-ready ingest (primary). SDK `single`/`initial` retained for backfill/reprocess. Extraction writes, prediction reads. |
 | 13 | News filtering | Benzinga channels: Guidance, Earnings, Earnings Beats/Misses, Previews, Management |
-| 14 | XBRL linking | Concept on Guidance; Member on GuidanceUpdate. Dimension links dropped. Confident matches only. |
+| 14 | XBRL linking | Concept via `xbrl_qname` property on GuidanceUpdate (no edge). Member via `MAPS_TO_MEMBER` edge on GuidanceUpdate (0..N). Dimension links dropped. Basis-independent mapping; basis filtering at query time. |
 | 15 | Fiscal periods | Reuse `get_derived_fye()` + `period_to_fiscal()` (validation only), and add `fiscal_to_dates()` for fiscal→calendar conversion with deterministic 52/53-week fallback. |
-| 16 | Metric normalization | Standard labels with aliases (§4) |
+| 16 | Metric normalization | 12-metric canonical list with aliases (§4). Non-exhaustive — LLM creates new Guidance nodes as needed. |
 | 17 | Segment handling | Property on GuidanceUpdate + `MAPS_TO_MEMBER` with 0..N matches when confident; `Total` means company-wide/default semantics |
 | 18 | Analyst estimates | Deferred. Note for future. |
 | 19 | Accuracy tracking | Predictor's job, not guidance system |
@@ -824,14 +854,15 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 | 22 | Context reuse | Same Context label as XBRL (Option A). Identical format so XBRL ingestion can reuse. |
 | 23 | Basis tracking | `basis_norm` (`gaap`/`non_gaap`/`constant_currency`/`unknown`) + `basis_raw` (verbatim). Assign basis only when explicit in the same metric quote span; else `unknown`. |
 | 24 | Per-asset extraction | Extraction MUST route by source type before LLM. Each doc asset has separate scan scope, inclusion/exclusion rules. |
-| 25 | Metric normalization | 12-metric canonical list (§4). Non-exhaustive — LLM creates new Guidance nodes as needed. |
+| 25 | ~~Merged into #16~~ | — |
 | 26 | Deterministic IDs | `Guidance.id = guidance:{label_slug}`. `GuidanceUpdate.id = gu:{source_id}:{label_slug}:{period_u_id}:{basis_norm}:{segment_slug}:{evhash16}` where `period_u_id` is taken directly from resolved Context and `evhash16 = sha256("{low}|{mid}|{high}|{unit}|{qualitative}|{conditions}")[:16]` using canonicalized numeric scale + unit (`usd`, `m_usd`, `percent`, `percent_yoy`, etc.). MERGE on `id`. |
 | 27 | LLM governance | LLM proposes extraction + basis/link candidates; deterministic validator enforces canonicalization, basis rule, period resolution, and confidence gates pre-write. |
 | 28 | Derivation enum | Extended to `floor`, `ceiling`, `comparative` to avoid fabricating values for one-sided or relative guidance. |
 | 29 | News reaffirm guardrail | Reaffirm/maintain language in news sets reaffirm flag in `conditions`; extractor keeps exact source values (no tolerance-based rewrites). |
 | 30 | Segment normalizer | Use light singularization + small synonym map for stable member matching (`services`→`service`, `products`→`product`). |
 | 31 | Period/unit linkage | GuidanceUpdate always links to `Context`, direct `Period`, direct `Unit`, and exact source node. |
-| 32 | XBRL node reuse policy | Reuse `Context`/`Period` when exact match; create synthetic XBRL-compatible when missing. Use canonical guidance Unit nodes (not raw XBRL units when scale differs). Link `Concept`/`Member` when confident; no direct `Dimension`/`Domain` links. |
+| 32 | XBRL node reuse policy | Reuse `Context`/`Period` when exact match; create synthetic XBRL-compatible when missing. Use canonical guidance Unit nodes (not raw XBRL units when scale differs). Concept resolved via `xbrl_qname` property (qname is stable across taxonomy years). Link `Member` when confident; no direct `Concept`/`Dimension`/`Domain` edges. |
+| 33 | Neo4j write path | Reuse `Neo4jManager` session/driver/retry infrastructure only. Write guidance nodes via **direct Cypher MERGE** transactions (like `neograph/mixins/news.py`), not via the `merge_nodes()`/`merge_relationships()` dataclass path. Rationale: (1) `merge_relationships()` has a special `{key: source_id}` branch for `HAS_PERIOD`/`HAS_UNIT` coupled to XBRL relationship key constraints — guidance would work but creates unnecessary shared-surface coupling; (2) avoids adding entries to shared `NodeType`/`RelationType` enums which trigger constraint-creation loops and affect `get_neo4j_db_counts()` — unnecessary shared-surface coupling; (3) XBRL `Unit` class requires Arelle `ModelFact` — guidance units are trivial and better served by inline MERGE. Note: `:Guidance` label is clean — current XBRL guidance concepts are stored as `:Concept` with `category = "Guidance"`, not under the `:Guidance` label (0 nodes, verified). Reusable as-is: `Period` dataclass (`generate_id()` already produces `duration_{start}_{end}` matching guidance spec). Validation: all guidance nodes must have `id` prefix `guidance:`, all GuidanceUpdate nodes must have `id` prefix `gu:`. |
 
 ---
 
@@ -840,9 +871,12 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 | Content | Source | Action |
 |---------|--------|--------|
 | `period_to_fiscal()` | `get_quarterly_filings.py:66` | Reuse directly (calendar→fiscal) |
-| `get_derived_fye()` | `get_quarterly_filings.py:365` | Reuse directly |
+| `get_derived_fye()` | `get_quarterly_filings.py:370` | Reuse directly |
 | `fiscal_to_dates()` | `get_quarterly_filings.py:196` | Fiscal→calendar resolver. Lookup-first from existing non-guidance Period nodes (via `period_to_fiscal()`), `_compute_fiscal_dates()` fallback for future periods. |
 | Metric normalization | `guidance-extract.md:258-269` | Carry forward (§4) |
+| `Neo4jManager` session/driver | `neograph/Neo4jManager.py` | Reuse session plumbing, retry decorators, `execute_cypher_query()`. Do NOT use `merge_nodes()`/`merge_relationships()` for guidance writes — use direct Cypher MERGE (Decision #33). |
+| News write pattern | `neograph/mixins/news.py:278-329` | Reference pattern: direct `MERGE (n:Label {id: $id}) ON CREATE SET ... ON MATCH SET ...` via `self.manager.driver.session()`. Follow this for guidance. |
+| `Period` dataclass | `XBRL/xbrl_basic_nodes.py:87` | Reuse directly — `generate_id()` produces `duration_{start}_{end}` matching guidance spec exactly. |
 | Source extraction hints | `guidance-extract.md:146-199` | Carry forward (§3) |
 | Derivation rules | `guidance-extract.md:229-237` | Carry forward (§5) |
 | Segment rules | `guidance-extract.md:242-252` | Carry forward |
@@ -866,4 +900,4 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 
 ---
 
-*v2.1 | 2026-02-19 | All P0/P1 decisions resolved. Basis split, per-asset extraction with dedup, two-mode SDK trigger, 12-metric canonical taxonomy. No V1/V2 versioning — this is the spec.*
+*v2.2 | 2026-02-20 | Drop MAPS_TO_CONCEPT edge; use `xbrl_qname` property on GuidanceUpdate (qname stable across taxonomy years). Basis-independent concept mapping; basis filtering at query time. Null-safe consolidated filter. ON CREATE only for xbrl_qname (no implicit re-extraction updates). Accuracy query is side note with deterministic tie-break.*
