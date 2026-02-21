@@ -62,6 +62,9 @@ FORM_TYPES_REQUIRING_SECTIONS = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q
 # This can significantly reduce memory usage and CPU load when XBRL data is not needed
 ENABLE_XBRL_PROCESSING = True
 
+# Guidance graph writes (Guidance + GuidanceUpdate nodes)
+# Keep disabled until validation gates pass (spec §15H)
+ENABLE_GUIDANCE_WRITES = False
 
 # --- XBRL Semaphore Implementation ---
 # XBRL Thread Pool Configuration

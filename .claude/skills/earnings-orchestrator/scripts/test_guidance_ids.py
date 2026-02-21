@@ -7,6 +7,7 @@ sys.path.insert(0, "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestra
 from guidance_ids import (
     slug, canonicalize_unit, canonicalize_value, compute_evhash16,
     canonicalize_source_id, build_guidance_ids, _normalize_text, _normalize_numeric,
+    CANONICAL_UNITS, UNIT_ALIASES, VALID_UNITS,
 )
 
 
@@ -55,13 +56,31 @@ def test_unit_percentage():
     assert canonicalize_unit("%", "gross_margin") == "percent"
     assert canonicalize_unit("pct", "tax_rate") == "percent"
     assert canonicalize_unit("% yoy", "revenue") == "percent_yoy"
-    assert canonicalize_unit("yoy", "revenue") == "percent_yoy"
+    assert canonicalize_unit("pct_yoy", "revenue") == "percent_yoy"
+    assert canonicalize_unit("% y/y", "revenue") == "percent_yoy"
+
+def test_unit_percent_points():
+    assert canonicalize_unit("percent_points", "margin_expansion") == "percent_points"
+    assert canonicalize_unit("% points", "margin_expansion") == "percent_points"
+    assert canonicalize_unit("pp", "margin_expansion") == "percent_points"
+    assert canonicalize_unit("percentage points", "margin_delta") == "percent_points"
+    assert canonicalize_unit("ppts", "margin_delta") == "percent_points"
+
+def test_unit_basis_points():
+    assert canonicalize_unit("basis_points", "yield_spread") == "basis_points"
+    assert canonicalize_unit("bps", "yield_spread") == "basis_points"
+    assert canonicalize_unit("bp", "yield_spread") == "basis_points"
+    assert canonicalize_unit("basis points", "margin") == "basis_points"
 
 def test_unit_misc():
     assert canonicalize_unit("x", "pe_ratio") == "x"
     assert canonicalize_unit("times", "coverage") == "x"
+    assert canonicalize_unit("multiple", "ev_ebitda") == "x"
     assert canonicalize_unit("count", "stores") == "count"
     assert canonicalize_unit("shares", "diluted") == "count"
+    assert canonicalize_unit("employees", "headcount") == "count"
+    assert canonicalize_unit("stores", "locations") == "count"
+    assert canonicalize_unit("units", "shipments") == "count"
     assert canonicalize_unit("???", "something") == "unknown"
 
 def test_unit_none_and_empty():
@@ -310,6 +329,87 @@ def test_build_long_range_period():
         qualitative="mid-teens by FY27",
     )
     assert "other_long_range_2028" in result['guidance_update_id']
+
+
+# ── Unit registry ─────────────────────────────────────────────────────────────
+
+def test_canonical_units_contains_new_types():
+    """basis_points and percent_points are in canonical set."""
+    assert 'basis_points' in CANONICAL_UNITS
+    assert 'percent_points' in CANONICAL_UNITS
+
+def test_valid_units_is_alias():
+    """VALID_UNITS backward alias points to same object."""
+    assert VALID_UNITS is CANONICAL_UNITS
+
+def test_all_aliases_resolve_to_canonical():
+    """Every UNIT_ALIASES value must be in CANONICAL_UNITS."""
+    for alias, canonical in UNIT_ALIASES.items():
+        assert canonical in CANONICAL_UNITS, (
+            f"alias '{alias}' maps to '{canonical}' which is not in CANONICAL_UNITS"
+        )
+
+
+# ── unit_raw preservation ─────────────────────────────────────────────────────
+
+def test_build_unknown_unit_preserves_raw():
+    """When canonical_unit is 'unknown', unit_raw is returned."""
+    result = build_guidance_ids(
+        label="Revenue", source_id="src1",
+        period_u_id="duration_2025-01-01_2025-03-31",
+        basis_norm="unknown",
+        unit_raw="widgets",
+        low=100.0, high=110.0,
+    )
+    assert result['canonical_unit'] == 'unknown'
+    assert result.get('unit_raw') == 'widgets'
+
+def test_build_known_unit_no_raw():
+    """When canonical_unit is known, unit_raw is NOT in result."""
+    result = build_guidance_ids(
+        label="Revenue", source_id="src1",
+        period_u_id="duration_2025-01-01_2025-03-31",
+        basis_norm="unknown",
+        unit_raw="m_usd",
+        low=100.0, high=110.0,
+    )
+    assert result['canonical_unit'] == 'm_usd'
+    assert 'unit_raw' not in result
+
+def test_build_unknown_string_no_raw():
+    """When unit_raw is literally 'unknown', unit_raw is NOT in result."""
+    result = build_guidance_ids(
+        label="Revenue", source_id="src1",
+        period_u_id="duration_2025-01-01_2025-03-31",
+        basis_norm="unknown",
+        unit_raw="unknown",
+    )
+    assert result['canonical_unit'] == 'unknown'
+    assert 'unit_raw' not in result
+
+def test_build_basis_points_via_alias():
+    """bps alias resolves to basis_points in build_guidance_ids."""
+    result = build_guidance_ids(
+        label="Yield Spread", source_id="src1",
+        period_u_id="duration_2025-01-01_2025-03-31",
+        basis_norm="unknown",
+        unit_raw="bps",
+        low=50.0, high=75.0,
+    )
+    assert result['canonical_unit'] == 'basis_points'
+    assert 'unit_raw' not in result
+
+def test_build_percent_points_via_alias():
+    """pp alias resolves to percent_points in build_guidance_ids."""
+    result = build_guidance_ids(
+        label="Margin Expansion", source_id="src1",
+        period_u_id="duration_2025-01-01_2025-03-31",
+        basis_norm="unknown",
+        unit_raw="pp",
+        low=1.0, high=2.0,
+    )
+    assert result['canonical_unit'] == 'percent_points'
+    assert 'unit_raw' not in result
 
 
 # ── Run all tests ───────────────────────────────────────────────────────────

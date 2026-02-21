@@ -1,7 +1,7 @@
 """
 Deterministic ID normalization for Guidance and GuidanceUpdate nodes.
 
-Implements §2A of the Guidance System Implementation Spec (v2.2).
+Implements §2A of the Guidance System Implementation Spec (v2.3).
 Every extraction code path MUST use these functions — never hand-build IDs.
 """
 
@@ -22,8 +22,41 @@ def slug(text: str) -> str:
 
 # ── Unit / scale canonicalization ───────────────────────────────────────────
 
-# Canonical unit enum values (spec §2 field #9)
-VALID_UNITS = {'usd', 'm_usd', 'percent', 'percent_yoy', 'x', 'count', 'unknown'}
+# Canonical unit enum values (spec §2 field #9, §15F)
+CANONICAL_UNITS = {
+    'usd', 'm_usd',                                              # Currency
+    'percent', 'percent_yoy', 'percent_points', 'basis_points',  # Ratios
+    'x', 'count', 'unknown',                                     # Other
+}
+
+# Backward-compatible alias
+VALID_UNITS = CANONICAL_UNITS
+
+# Alias → canonical unit mapping (extensible registry, spec §15F)
+# Adding a new unit: one entry in CANONICAL_UNITS + alias(es) here + test case.
+# Per-share override (EPS/DPS → usd) applied AFTER alias resolution, not here.
+UNIT_ALIASES = {
+    # Currency (aggregate default is m_usd; per-share override applied later)
+    '$': 'm_usd', 'dollars': 'm_usd',
+    'm': 'm_usd', 'mm': 'm_usd', 'mn': 'm_usd',
+    'million': 'm_usd', 'millions': 'm_usd', 'm usd': 'm_usd',
+    'b': 'm_usd', 'bn': 'm_usd', 'billion': 'm_usd', 'billions': 'm_usd',
+    'b_usd': 'm_usd', 'b usd': 'm_usd',
+    'k': 'm_usd', 'thousand': 'm_usd', 'thousands': 'm_usd',
+    # Percentages
+    '%': 'percent', 'pct': 'percent', 'percentage': 'percent',
+    '% yoy': 'percent_yoy', 'pct_yoy': 'percent_yoy', '% y/y': 'percent_yoy',
+    'yoy': 'percent_yoy',
+    # Percentage points (distinct from percent — "margin expanded 50 bps")
+    '% points': 'percent_points', 'pp': 'percent_points',
+    'percentage points': 'percent_points', 'ppts': 'percent_points',
+    # Basis points (1 bp = 0.01%)
+    'bps': 'basis_points', 'bp': 'basis_points', 'basis points': 'basis_points',
+    # Multiplier
+    'times': 'x', 'multiple': 'x',
+    # Count
+    'units': 'count', 'shares': 'count', 'employees': 'count', 'stores': 'count',
+}
 
 # Per-share metrics → always usd (not m_usd)
 PER_SHARE_LABELS = {'eps', 'dps', 'earnings_per_share', 'dividends_per_share'}
@@ -75,46 +108,29 @@ def canonicalize_unit(unit_raw: str, label_slug: str) -> str:
     """
     Map a raw unit string to the canonical enum value.
 
-    Rules from spec §2A:
-      - Per-share metrics (EPS, DPS) → 'usd'
-      - Aggregate currency → 'm_usd'
-      - Percentages → 'percent' or 'percent_yoy'
-      - Already-canonical → pass through
+    Resolution order:
+      1. Already canonical → passthrough
+      2. UNIT_ALIASES lookup → canonical form
+      3. No match → 'unknown'
+      4. Per-share override: EPS/DPS force 'usd' (never 'm_usd')
     """
     u = unit_raw.lower().strip() if unit_raw else 'unknown'
 
-    # Already canonical
-    if u in VALID_UNITS:
-        # Per-share override: even if someone passes 'm_usd' for EPS, force 'usd'
-        if u == 'm_usd' and label_slug in PER_SHARE_LABELS:
-            return 'usd'
-        return u
+    # 1. Already canonical
+    if u in CANONICAL_UNITS:
+        canonical = u
+    # 2. Alias lookup
+    elif u in UNIT_ALIASES:
+        canonical = UNIT_ALIASES[u]
+    # 3. No match
+    else:
+        canonical = 'unknown'
 
-    # Percentage variants
-    if u in ('%', 'pct', 'percent', 'percentage'):
-        return 'percent'
-    if u in ('% yoy', 'pct_yoy', 'percent_yoy', 'yoy', '% y/y'):
-        return 'percent_yoy'
+    # 4. Per-share override: EPS/DPS always usd, never m_usd
+    if canonical == 'm_usd' and label_slug in PER_SHARE_LABELS:
+        return 'usd'
 
-    # Currency variants
-    if u in ('$', 'usd', 'dollars'):
-        return 'usd' if label_slug in PER_SHARE_LABELS else 'm_usd'
-    if u in ('m', 'mm', 'mn', 'million', 'millions', 'm_usd', 'm usd'):
-        return 'usd' if label_slug in PER_SHARE_LABELS else 'm_usd'
-    if u in ('b', 'bn', 'billion', 'billions', 'b_usd', 'b usd'):
-        return 'usd' if label_slug in PER_SHARE_LABELS else 'm_usd'
-    if u in ('k', 'thousand', 'thousands'):
-        return 'usd' if label_slug in PER_SHARE_LABELS else 'm_usd'
-
-    # Multiplier
-    if u in ('x', 'times', 'multiple'):
-        return 'x'
-
-    # Count variants
-    if u in ('count', 'units', 'shares', 'employees', 'stores'):
-        return 'count'
-
-    return 'unknown'
+    return canonical
 
 
 def canonicalize_value(value: Optional[float], unit_raw: str, canonical_unit: str,
@@ -279,7 +295,7 @@ def build_guidance_ids(
     assert guidance_id.startswith('guidance:'), f"Bad guidance_id: {guidance_id}"
     assert guidance_update_id.startswith('gu:'), f"Bad guidance_update_id: {guidance_update_id}"
 
-    return {
+    result = {
         'guidance_id': guidance_id,
         'guidance_update_id': guidance_update_id,
         'evhash16': evhash16,
@@ -290,3 +306,9 @@ def build_guidance_ids(
         'canonical_mid': canonical_mid,
         'canonical_high': canonical_high,
     }
+
+    # Preserve raw unit when canonicalization produced 'unknown' (§15F)
+    if canonical_unit == 'unknown' and unit_raw and unit_raw.strip().lower() != 'unknown':
+        result['unit_raw'] = unit_raw.strip()
+
+    return result

@@ -1,6 +1,6 @@
 # Guidance System — Implementation Spec
 
-**Version**: 2.2 | 2026-02-20
+**Version**: 2.3 | 2026-02-21
 **Status**: Architecture locked — implementation-ready
 **Parent**: `earnings-orchestrator.md`
 **Benchmark**: `sampleGuidance_byAgentTeams.md` (AAPL)
@@ -24,6 +24,7 @@ These decisions are intentionally pinned at the top so they are resolved before 
 - [x] `fiscal_to_dates()` — fiscal→calendar resolver. Implemented in `earnings-orchestrator/scripts/get_quarterly_filings.py`. Lookup-first from existing non-guidance XBRL Period nodes (classified via `period_to_fiscal()`), deterministic `_compute_fiscal_dates()` fallback for future periods not yet in XBRL.
 - [x] Build ID normalization utility — slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly. Implemented in `earnings-orchestrator/scripts/guidance_ids.py`. 35 tests passing.
 - [x] `period_to_fiscal()` is already implemented and validated in `earnings-orchestrator/scripts/get_quarterly_filings.py`; reuse it as a validation/helper function only (no reimplementation).
+- [x] Guidance writer module — direct Cypher write path (`guidance_writer.py` + 51 tests). Uses `execute_cypher_query()` with label-specific source MATCH, ticker-based company resolution, `OPTIONAL MATCH` for was_created detection, `reduce`-based alias dedupe, `UNWIND` member batching. Feature flag `ENABLE_GUIDANCE_WRITES = False` in `config/feature_flags.py`. Dry-run works independently of feature flag.
 
 ### Implementation Handoff (Next Bot)
 
@@ -919,9 +920,9 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 | Source extraction hints | `guidance-extract.md:146-199` | Carry forward (§3) |
 | Derivation rules | `guidance-extract.md:229-237` | Carry forward (§5) |
 | Segment rules | `guidance-extract.md:242-252` | Carry forward |
-| ID normalization utility | `guidance_ids.py` | `build_guidance_ids()` — single entry point for slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly (§2A). 32 tests. |
+| ID normalization utility | `guidance_ids.py` | `build_guidance_ids()` — single entry point for slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly (§2A). 35 tests. |
 | Cypher queries | `guidance-inventory/QUERIES.md` | Keep, fix labels |
-| Fiscal calendar | `guidance-inventory/FISCAL_CALENDAR.md` | Keep as-is |
+| Fiscal calendar | `guidance-inventory/FISCAL_CALENDAR.md` | Deleted/superseded (use `fiscal_to_dates()` / `fiscal_resolve.py`) |
 | Evidence standards | `evidence-standards/SKILL.md` | Load during extraction |
 | AAPL benchmark | `sampleGuidance_byAgentTeams.md` | Quality target |
 
@@ -931,12 +932,249 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 
 | File | Status | Action Needed |
 |------|--------|---------------|
-| `guidance-extract.md` (agent) | May be superseded | Align with graph-native; core logic reused, invocation changes |
-| `guidance-inventory/SKILL.md` | Needs rewrite | New invocation contract, Neo4j write, updated model |
-| `guidance-inventory/OUTPUT_TEMPLATE.md` | Likely superseded | No markdown output; graph-native |
-| `guidance-inventory/QUERIES.md` | Keep | Fix "Via Skill" labels |
+| `guidance-extract.md` (agent) | **Rewrite** | Graph-native output, new tools (Bash, MCP write), route by source type. Core extraction logic carried forward. |
+| `guidance-inventory/SKILL.md` | **Rewrite** | Reference doc for agent. Schema, fields, validation rules, write patterns, XBRL matching. |
+| `guidance-inventory/QUERIES.md` | **Update** | Merge agent's source-fetch queries + warmup cache queries from §7. Fix "Via Skill" labels. |
+| `guidance-inventory/OUTPUT_TEMPLATE.md` | **Archive/Delete** | Fully superseded. No markdown output; graph-native. |
+| `guidance-inventory/FISCAL_CALENDAR.md` | **Archive/Delete (completed)** | Superseded by `fiscal_to_dates()` / `fiscal_resolve.py`; no runtime dependency. |
+| `guidance-inventory/reference/` | **Populate** | Per-source extraction profiles (§15). Currently empty. |
+| `guidance_ids.py` | **Extend** | Add `basis_points`/`percent_points` to canonical units. Add `UNIT_ALIASES` map. Add `unit_raw` handling. |
 | `earnings-orchestrator.md` | Already updated | Step 0 removed, I5 = graph query |
 
 ---
 
-*v2.2 | 2026-02-20 | Drop MAPS_TO_CONCEPT edge; use `xbrl_qname` property on GuidanceUpdate (qname stable across taxonomy years). Basis-independent concept mapping; basis filtering at query time. Null-safe consolidated filter. ON CREATE only for xbrl_qname (no implicit re-extraction updates). Accuracy query is side note with deterministic tie-break.*
+## 15. Implementation Takeaways from Existing Files
+
+Cross-reference audit of `guidance-extract.md` (agent, 365 lines) and `guidance-inventory/` (skill, 550 lines + 3 reference files) against this spec. All resolved before implementation to prevent drift.
+
+### 15A. Architecture: One Agent + Core Skill + Per-Source Profiles
+
+**Pattern**: Follows the existing DataSubAgent convention (agent aided by skill), adapted for read-write extraction.
+
+| Component | File | Role |
+|-----------|------|------|
+| Agent | `.claude/agents/guidance-extract.md` | Rewritten. Routes by `source_type`. Fetch → extract → validate → write. |
+| Core skill | `.claude/skills/guidance-inventory/SKILL.md` | Rewritten as reference doc auto-loaded by agent. Schema, fields, validation, write patterns, XBRL matching. |
+| Transcript profile | `guidance-inventory/reference/PROFILE_TRANSCRIPT.md` | Scan scope, speaker hierarchy, prepared remarks vs Q&A handling. |
+| 8-K profile | `guidance-inventory/reference/PROFILE_8K.md` | EX-99.* + Item 2.02/7.01 scan, boilerplate exclusion, table handling. |
+| News profile | `guidance-inventory/reference/PROFILE_NEWS.md` | Channel filter (applied pre-LLM), title/body, company-vs-analyst distinction. |
+| 10-Q/10-K profile | `guidance-inventory/reference/PROFILE_10Q.md` | MD&A primary, bounded fallback, legal/risk exclusion. |
+| Queries | `guidance-inventory/QUERIES.md` | Updated with agent's source-fetch queries + §7 warmup cache queries. |
+
+**Agent tool requirements** (rewritten frontmatter):
+
+```yaml
+tools:
+  - mcp__neo4j-cypher__read_neo4j_cypher   # Source fetch + warmup caches
+  - mcp__neo4j-cypher__write_neo4j_cypher   # Graph writes (MERGE pattern)
+  - Bash                                     # Python utilities (guidance_ids.py, fiscal wrapper)
+  - TaskList                                 # Task context (team workflows)
+  - TaskGet
+  - TaskUpdate
+  - Write                                    # Dry-run output files
+  - Read                                     # Source profiles + reference files
+```
+
+**Why one agent, not per-source agents**: 80% of logic is shared across all source types (validation, ID computation, Context/Period resolution, XBRL matching, graph writes). Only scan scope and extraction hints vary (~20%). Multiple agents would duplicate the shared logic. The per-source profiles in `reference/` handle the 20% that varies.
+
+### 15B. Source Content Queries (Carry Forward from Agent)
+
+The agent's Cypher queries (lines 52-123) are the canonical source-fetch layer. QUERIES.md is incomplete:
+
+| Query | In Agent? | In QUERIES.md? | Action |
+|-------|-----------|---------------|--------|
+| Exhibit content (`HAS_EXHIBIT → ExhibitContent`) | Yes (line 54) | Partial (line 64) | Update with agent's version |
+| Section content (`HAS_SECTION → ExtractedSectionContent`) | Yes (line 60) | Missing | Add |
+| Filing text (`HAS_FILING_TEXT → FilingTextContent`) | Yes (line 67) | Missing | Add |
+| Structured transcript (prepared_remarks + Q&A) | Yes (lines 96-118) | Missing (only fulltext) | Add — critical for §3 |
+| News content (title + body + pub_date) | Yes (line 122) | Missing | Add |
+| Transcript fulltext search | — | Yes (line 110) | Keep as supplementary recall |
+
+The agent's structured transcript query (returning `prepared_remarks` and `qa_exchanges` separately) is the most important carry-forward — it directly matches §3's "scan everything (prepared remarks + Q&A)" requirement. QUERIES.md only has fulltext search, which is a recall supplement, not the primary fetch.
+
+### 15C. Per-Source Extraction Profiles
+
+Content for `reference/` files, sourced from agent lines 146-199:
+
+**PROFILE_TRANSCRIPT.md** (agent lines 151-166):
+- Prepared remarks: JSON array of speaker statements with position markers
+- Speaker hierarchy: CFO formal guidance (richest) > CEO strategic outlook > Q&A specifics
+- Operator remarks: skip (procedural, no guidance)
+- Q&A: analysts probe for details not in prepared remarks — segment-level, geographic, GAAP vs non-GAAP clarifications, "comfortable with consensus" implied guidance
+- Duplicate resolution: if same metric in both PR and Q&A, use the most specific version
+- Quote prefix: `[Q&A]` for Q&A, `[PR]` for prepared remarks
+
+**PROFILE_8K.md** (agent lines 147-148):
+- Scan order: outlook/guidance sections first, then tables with projections, then footnotes
+- GAAP vs non-GAAP: check footnotes for distinction — tables often have both columns
+- Skip: pure actuals (past period results), safe-harbor boilerplate (but keep adjacent concrete guidance per §3 safe-harbor proximity rule)
+
+**PROFILE_NEWS.md** (agent lines 170-187):
+- Channel filter (§3): applied BEFORE LLM processing using Benzinga `channels` field
+- Title: often contains complete guidance. Pattern: `{Company} {Expects/Revises/Reaffirms} {Metric} {Value or Range}`
+- Body: may be empty (title has everything), or contains additional metrics/prior values
+- Company guidance verbs: "expects", "revises", "reaffirms", "raises", "lowers" → EXTRACT
+- Analyst estimates: "versus consensus of", "Est $X", "consensus" → DO NOT extract
+- Prior values in news: "(Prior $57,000)" → context only, extract the NEW guidance
+- Reaffirm language: annotate in `conditions` per §3 news guardrail
+
+**PROFILE_10Q.md** (agent lines 188-198):
+- MD&A primary scan scope
+- Financial statement content: JSON structured data, look for footnotes/annotations mentioning expectations
+- If zero guidance found in MD&A: one bounded keyword-window pass in broader filing text, excluding legal/risk-heavy sections
+- Zero-guidance result: acceptable (not an error)
+
+### 15D. Source Type Mapping (Agent → Spec)
+
+Agent uses content-level types; spec uses filing-level types with `source_key` for content location:
+
+| Agent `source_type` | Spec `source_type` | Spec `source_key` |
+|---------------------|--------------------|--------------------|
+| `exhibit` | `8k` | `"EX-99.1"`, `"EX-99.2"` |
+| `section` (from 8-K) | `8k` | `"Item 2.02"`, `"Item 7.01"` |
+| `section` (from 10-Q) | `10q` | `"MD&A"` |
+| `section` (from 10-K) | `10k` | `"MD&A"` |
+| `filing_text` | `8k`/`10q`/`10k` | Filing-dependent |
+| `financial_stmt` | `10q`/`10k` | Statement type |
+| `xbrl` | — | Not extracted (actuals only, §3 source #5) |
+| `transcript` | `transcript` | `"full"` |
+| `news` | `news` | `"title"` |
+
+### 15E. Error Taxonomy (Carry Forward + Extend)
+
+Carry forward from agent lines 131-139, add graph-write states:
+
+| Error | Source | When |
+|-------|--------|------|
+| `SOURCE_NOT_FOUND` | Agent (line 133) | No rows from source content query |
+| `EMPTY_CONTENT` | Agent (line 134) | Rows exist but content empty (per source-type rules from agent lines 135-139) |
+| `QUERY_FAILED` | Agent (line 134) | Cypher error |
+| `NO_GUIDANCE` | Agent (line 340) | Content parsed, no forward-looking guidance found |
+| `WRITE_FAILED` | New | Graph MERGE error |
+| `VALIDATION_FAILED` | New | Deterministic validation rejected item (missing citation, bad period, invalid unit) |
+
+Empty-content rules per source type (from agent lines 135-139):
+- `exhibit`, `section`, `filing_text`: `strip()==""` → `EMPTY_CONTENT`
+- `transcript`: BOTH `prepared_remarks` empty AND `qa_exchanges` empty → `EMPTY_CONTENT`
+- `news`: BOTH `title` and `body` empty → `EMPTY_CONTENT`
+
+### 15F. Unit Extensibility (Registry Pattern)
+
+Add `basis_points` and `percent_points` to the §2 canonical unit list. Use registry pattern in `guidance_ids.py`:
+
+Updated §2 field 9 canonical values: `usd`, `m_usd`, `percent`, `percent_yoy`, `percent_points`, `basis_points`, `x`, `count`, `unknown`.
+
+```python
+CANONICAL_UNITS = {
+    'usd', 'm_usd',                                              # Currency
+    'percent', 'percent_yoy', 'percent_points', 'basis_points',  # Ratios
+    'x', 'count', 'unknown',                                     # Other
+}
+
+UNIT_ALIASES = {
+    '$': 'usd', 'dollars': 'usd', 'per share': 'usd',
+    'b usd': 'm_usd', 'b_usd': 'm_usd', 'billion': 'm_usd',
+    'm usd': 'm_usd', 'million': 'm_usd',
+    '%': 'percent', 'pct': 'percent',
+    '% yoy': 'percent_yoy', 'yoy': 'percent_yoy',
+    'bps': 'basis_points', 'bp': 'basis_points',
+    '% points': 'percent_points', 'pp': 'percent_points', 'percentage points': 'percent_points',
+    'times': 'x', 'ratio': 'x',
+}
+```
+
+**Method for adding new units as discovered**:
+1. LLM proposes a raw unit string during extraction.
+2. `canonicalize_unit()` checks `UNIT_ALIASES` → canonical form if matched.
+3. No alias match → `unit = 'unknown'`, raw unit preserved in `unit_raw` property on GuidanceUpdate.
+4. Periodic review: query `unit_raw` values on `unknown`-unit GuidanceUpdate nodes → identify patterns → add new canonical mappings.
+5. Each addition: one entry in `CANONICAL_UNITS` + alias(es) in `UNIT_ALIASES` + test case in `test_guidance_ids.py`.
+
+`unit_raw`: optional String property on GuidanceUpdate, populated ONLY when `unit = 'unknown'`. Contains verbatim unit text from source. Not part of the 19 extraction fields — set at validation time (§10 Step 2.5) from raw LLM output. Not included in `evhash16` computation (canonical `unit` is used in the hash).
+
+### 15G. Fiscal Resolution Bridge
+
+`fiscal_to_dates()` takes a Neo4j `session` parameter, but the agent communicates with Neo4j via MCP. Bridge without modifying non-negotiable functions:
+
+1. Agent runs MCP Cypher: fetch all Period nodes for the company (same query `fiscal_to_dates()` runs internally in its lookup phase).
+2. Agent calls thin CLI wrapper via Bash, passing pre-fetched Period data as JSON stdin + fiscal params (`ticker`, `fiscal_year`, `fiscal_quarter`, `fye_month`).
+3. Wrapper imports `period_to_fiscal()` and `_compute_fiscal_dates()` from `get_quarterly_filings.py` — no modification to those functions.
+4. Wrapper classifies pre-fetched periods via `period_to_fiscal()`, matches, falls back to `_compute_fiscal_dates()`.
+5. Returns JSON: `{"start_date": "...", "end_date": "...", "period_u_id": "duration_...", "period_node_type": "duration"}`.
+
+No second Neo4j connection. No modification to `period_to_fiscal()` or `get_derived_fye()` (Non-negotiable #1). Wrapper is a new thin script alongside `guidance_ids.py`.
+
+`get_derived_fye()` does not need the bridge — its core query (`MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report {formType:'10-K'}) ...`) can be run directly via MCP and the FYE month extracted by the agent.
+
+### 15H. Feature Flag / Dry-Run Mechanism
+
+Skill argument on agent invocation: `MODE=dry_run|shadow|write`.
+
+| Mode | Behavior |
+|------|----------|
+| `dry_run` (default) | Extract + validate + ID build. Log results to stdout. No graph writes. |
+| `shadow` | Same as dry_run + log exact MERGE Cypher that WOULD execute (with parameters). |
+| `write` | Full execution. MERGE to Neo4j. |
+
+Default: `dry_run`. Satisfies Non-negotiable #7 ("Feature flag default must keep writes disabled").
+
+**Two-layer write gate** (defense-in-depth, not competing mechanisms):
+1. `MODE` parameter → per-invocation control at agent/skill level. Maps to `dry_run` parameter in `write_guidance_item()`.
+2. `ENABLE_GUIDANCE_WRITES` → global feature flag in `config/feature_flags.py` (default `False`). Checked AFTER dry_run, BEFORE write.
+
+Precedence in code (`guidance_writer.py:258-269`): `if dry_run → return` → `if not ENABLE_GUIDANCE_WRITES → skip` → execute write. Both must be permissive for writes to occur. `MODE=write` with `ENABLE_GUIDANCE_WRITES=False` still blocks writes (global gate wins).
+
+Switch to `write` only after the must-pass gates in the Implementation Handoff are satisfied:
+1. `test_guidance_ids.py` passes.
+2. Shadow run on 3+ companies and 3+ source types.
+3. Idempotency check (same source twice → zero new nodes on second run).
+4. Regression check (existing ingest behavior unchanged).
+5. Canary: 1-2 tickers first, then full rollout.
+
+### 15I. LLM Prompt Content Sources
+
+The agent's quality filters (lines 357-365) belong in the core SKILL.md:
+
+| Filter | Agent Line | Spec Equivalent |
+|--------|-----------|----------------|
+| Forward-looking only (target period after source date) | 359 | Implicit in §2 (future period guidance) |
+| Specificity required (quantitative anchor needed) | 360 | §5 `comparative` derivation handles the edge case |
+| Quote max 500 chars (truncate at sentence boundary) | 364 | §2 field 14 |
+| 100% recall priority (extract when in doubt) | 355 | Consistent with §3 recall pass |
+| No fabricated numbers (qualitative = `implied`, no invented values) | 356 | §5 derivation rules |
+| News: company guidance only (ignore analyst estimates) | 357 | §3 per-source rules |
+
+### 15J. Items Fully Superseded (Do Not Carry Forward)
+
+| Old Artifact | Spec Replacement | Status |
+|-------------|-----------------|--------|
+| Pipe-delimited TSV output (agent Step 4) | Direct MERGE to Neo4j (§10 Step 3) | Dead |
+| `OUTPUT_TEMPLATE.md` | Graph-native, Cypher reads (§9) | Dead |
+| Supersession chain (`superseded_by` links, SKILL.md lines 316-334) | Query-time `ORDER BY given_date, id` (§8, Decision #5) | Dead |
+| Action classification storage (`INITIAL/RAISED/LOWERED`, SKILL.md lines 139-149) | Query-time derivation (Decision #6) | Dead |
+| Cumulative markdown file model (`guidance-inventory.md`, SKILL.md lines 340-359) | Graph is the accumulator | Dead |
+| Consensus comparison section (SKILL.md lines 227-233) | Predictor's job (Decision #19) | Dead |
+| Beat/miss pattern tracking (SKILL.md lines 277-282) | Predictor's accuracy comparison (§9) | Dead |
+| Entry ID format `FY25-EPS-001` (SKILL.md line 326) | Deterministic `guidance_update_id` from `guidance_ids.py` (§2A) | Dead |
+| `GuidancePeriod`/`GuidanceEntry` Python dataclasses (SKILL.md lines 505-546) | GuidanceUpdate node properties (§2) | Dead |
+| TSV file persistence (`gx/{TASK_ID}.tsv`, agent Step 3b) | Graph persistence | Dead |
+
+### 15K. Items Correctly Carried Forward (Verified)
+
+| Item | Agent/Skill Source | Spec Section | Verification |
+|------|-------------------|-------------|-------------|
+| Metric normalization (8→12 metrics) | Agent lines 258-269 | §4 (expanded) | All 8 originals preserved, 4 added |
+| Segment rules (default `Total`) | Agent lines 240-252 | §7 member matching | Same semantics, XBRL Member linking added on top |
+| Guidance keywords | Agent + QUERIES.md lines 190-200 | §3 keywords table | Identical |
+| "No citation = no node" | SKILL.md line 310 | Non-negotiable #8 | Identical |
+| News: company guidance only | Agent lines 181-184 | §3 news per-source rules | Identical |
+| Quote max 500 chars | Agent line 364 | §2 field 14 | Identical |
+| Forward-looking filter | Agent line 359 | §3 + §5 derivation | Same intent |
+| FYE detection from 10-K periodOfReport | SKILL.md line 86, QUERIES.md line 31 | §6 Step 1, §13 | Same query, now via `get_derived_fye()` |
+| Legacy fiscal calendar examples (AAPL/WMT/MSFT) | Deleted `FISCAL_CALENDAR.md` (archived) | §6 period scenarios | Useful as test cases for `fiscal_to_dates()` |
+| Derivation rules (4 original values) | Agent lines 229-237 | §5 (extended to 7) | `explicit/calculated/point/implied` unchanged |
+| Empty-content handling per source type | Agent lines 135-139 | §15E (this section) | Carried forward + extended |
+
+---
+
+*v2.3 | 2026-02-21 | §14 file status finalized (agent rewrite, skill rewrite, OUTPUT_TEMPLATE archived). §15 added: implementation takeaways from cross-reference audit of guidance-extract.md + guidance-inventory/ against spec. Architecture locked: one agent + core skill + per-source profiles. Unit extensibility via registry pattern (basis_points, percent_points added). Fiscal resolution bridge designed. Feature flag: MODE=dry_run default. Error taxonomy extended. Source content queries, extraction profiles, and superseded items catalogued.*
