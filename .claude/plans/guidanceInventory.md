@@ -51,6 +51,12 @@ Use this block as the execution contract so implementation can proceed without e
 3. Add dry-run/shadow mode (extract + validate + ID build, no write).
 4. Warmup caches (§7): concept usage cache + member cache queries, run once per company per extraction run. Needed for `xbrl_qname` resolution and `MAPS_TO_MEMBER` linking.
 
+**Execution order (one source type at a time):**
+1. AAPL transcript → extract → compare against `sampleGuidance_byAgentTeams.md` → fix until it matches. Dry-run first, then write to Neo4j.
+2. 2-3 more companies on transcripts → fix edge cases.
+3. 8-K EX-99.1 → same pattern (single company, compare, expand).
+4. News → then 10-Q/10-K. One source type at a time, never all at once.
+
 **Must-pass gates before enabling writes:**
 1. `python3 .claude/skills/earnings-orchestrator/scripts/test_guidance_ids.py`
 2. Shadow run on at least 3 companies and 3 asset types (report/transcript/news), no DB writes.
