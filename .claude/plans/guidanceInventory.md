@@ -22,8 +22,41 @@ These decisions are intentionally pinned at the top so they are resolved before 
 ### Build-First TODOs
 
 - [x] `fiscal_to_dates()` — fiscal→calendar resolver. Implemented in `earnings-orchestrator/scripts/get_quarterly_filings.py`. Lookup-first from existing non-guidance XBRL Period nodes (classified via `period_to_fiscal()`), deterministic `_compute_fiscal_dates()` fallback for future periods not yet in XBRL.
-- [ ] Build ID normalization utility — slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly.
+- [x] Build ID normalization utility — slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly. Implemented in `earnings-orchestrator/scripts/guidance_ids.py`. 35 tests passing.
 - [x] `period_to_fiscal()` is already implemented and validated in `earnings-orchestrator/scripts/get_quarterly_filings.py`; reuse it as a validation/helper function only (no reimplementation).
+
+### Implementation Handoff (Next Bot)
+
+Use this block as the execution contract so implementation can proceed without extra prompts.
+
+**Mandatory read order (before coding):**
+1. This file: §1, §2, §2A, §3, §6, §7, §10, §12, §13.
+2. `.claude/skills/earnings-orchestrator/scripts/guidance_ids.py` + `test_guidance_ids.py`.
+3. `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` (`period_to_fiscal`, `get_derived_fye`, `fiscal_to_dates`).
+4. `neograph/mixins/news.py` and `neograph/Neo4jManager.py` (`execute_cypher_query`) for write pattern reuse.
+
+**Non-negotiables:**
+1. Do not modify `period_to_fiscal()` or `get_derived_fye()`.
+2. Guidance writes must use direct Cypher `MERGE` via existing `Neo4jManager` session/driver plumbing (news.py pattern).
+3. Do not use `merge_relationships()` or `create_relationships()` for guidance core writes.
+4. Do not add guidance-specific `NodeType`/`RelationType` enum entries.
+5. `GuidanceUpdate` write must be idempotent with deterministic ID + `MERGE ... ON CREATE SET`.
+6. `xbrl_qname` is a `GuidanceUpdate` property (no `MAPS_TO_CONCEPT` edge).
+7. Feature flag default must keep writes disabled until validation completes.
+8. No citation = no node. Every GuidanceUpdate must have `quote`, `FROM_SOURCE`, and `given_date` (§2). Reject at validation, not silently skip.
+
+**Implementation scope (minimal):**
+1. Reuse `guidance_ids.py` as single source of truth for canonicalization + ID assembly.
+2. Add guidance writer path using direct Cypher (Guidance, GuidanceUpdate, Context, Period, Unit, core edges, optional 0..N member edges).
+3. Add dry-run/shadow mode (extract + validate + ID build, no write).
+4. Warmup caches (§7): concept usage cache + member cache queries, run once per company per extraction run. Needed for `xbrl_qname` resolution and `MAPS_TO_MEMBER` linking.
+
+**Must-pass gates before enabling writes:**
+1. `python3 .claude/skills/earnings-orchestrator/scripts/test_guidance_ids.py`
+2. Shadow run on at least 3 companies and 3 asset types (report/transcript/news), no DB writes.
+3. Idempotency check: same source processed twice creates zero new `GuidanceUpdate` nodes on second run.
+4. Regression check: existing report/news/transcript ingest behavior unchanged.
+5. Canary enablement: 1-2 tickers first, then full rollout.
 
 ---
 
@@ -880,7 +913,7 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 | Source extraction hints | `guidance-extract.md:146-199` | Carry forward (§3) |
 | Derivation rules | `guidance-extract.md:229-237` | Carry forward (§5) |
 | Segment rules | `guidance-extract.md:242-252` | Carry forward |
-| ID normalization utility | NEW — must build | Single shared helper for slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly (§2A) |
+| ID normalization utility | `guidance_ids.py` | `build_guidance_ids()` — single entry point for slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly (§2A). 32 tests. |
 | Cypher queries | `guidance-inventory/QUERIES.md` | Keep, fix labels |
 | Fiscal calendar | `guidance-inventory/FISCAL_CALENDAR.md` | Keep as-is |
 | Evidence standards | `evidence-standards/SKILL.md` | Load during extraction |
