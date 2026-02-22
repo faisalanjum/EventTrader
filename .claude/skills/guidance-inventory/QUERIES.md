@@ -61,7 +61,8 @@ Pre-fetch all Period nodes for a company so `fiscal_resolve.py` can classify the
 MATCH (ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
 MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
 WHERE p.period_type = 'duration'
-RETURN p.u_id AS u_id, p.start_date AS start_date, p.end_date AS end_date
+WITH DISTINCT p.u_id AS u_id, p.start_date AS start_date, p.end_date AS end_date
+RETURN u_id, start_date, end_date
 ```
 **Usage**: Pipe output as JSON array to `fiscal_resolve.py` via Bash:
 ```bash
@@ -109,7 +110,7 @@ WHERE r.formType IN ['10-K','10-Q']
   AND (ctx.member_u_ids IS NULL OR ctx.member_u_ids = [])
 WITH con.qname AS qname, count(f) AS usage
 ORDER BY usage DESC
-RETURN qname, usage LIMIT 50
+RETURN qname, usage
 ```
 **Usage**: Build concept-to-qname lookup. For each guidance metric, pattern-match against this cache to set `xbrl_qname`.
 
