@@ -109,7 +109,7 @@ WHERE r.formType IN ['10-K','10-Q']
   AND (ctx.member_u_ids IS NULL OR ctx.member_u_ids = [])
 WITH con.qname AS qname, count(f) AS usage
 ORDER BY usage DESC
-RETURN qname, usage
+RETURN qname, usage LIMIT 50
 ```
 **Usage**: Build concept-to-qname lookup. For each guidance metric, pattern-match against this cache to set `xbrl_qname`.
 
@@ -707,4 +707,4 @@ guidance OR outlook OR expects OR anticipates OR "full year" OR "fiscal year"
 5. **Extract** → **Validate** → **Write** via `guidance_writer.py`
 
 ---
-*Version 2.6 | 2026-02-21 | Fixed 3B phantom null (collect filter), null-date guards for 4B/5A, corrected QuestionAnswer types to STRING, marked 6B/6C dates as required. Prior: v2.5 (4B exec order), v2.4 (3C fallback), v2.3 (MD&A apostrophe).*
+*Version 2.7 | 2026-02-22 | Added LIMIT 50 to concept cache query 2A (production MCP result size fix). Prior: v2.6 (3B phantom null, null-date guards, QuestionAnswer types, 6B/6C dates required).*

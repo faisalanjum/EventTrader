@@ -201,6 +201,15 @@ Use `guidance_ids.py:build_guidance_ids()` as single entry point. Do not duplica
 
 Aliases are stored on the Guidance node in `aliases[]`. Non-exhaustive — company-specific metrics (e.g., "Services Revenue" for AAPL) are created dynamically.
 
+### Metric Decomposition
+
+When source text qualifies a base metric with a product, segment, geography, or business-unit name:
+
+1. **Identify base metric** — if any canonical label (or variant) from the table above appears as suffix, that's the base
+2. **Everything before the base is qualifier** — set as `segment`, joined with ` | ` if multiple, sorted alphabetically
+3. **No canonical suffix found** — entire phrase becomes a new `label` with `segment=Total`
+4. **Qualifier without a matching Member node** — still decompose; member matching (§7) handles no-match gracefully
+
 ---
 
 ## 5. Derivation Rules
@@ -263,19 +272,30 @@ Mixed bases may appear in the same metric history. Never compare consecutive val
 
 ### Defaults
 
-- Default segment: `Total` (company-wide)
-- Only assign segment when explicitly stated in source text
-- Use exact wording from source for non-standard segments
+- Default segment: `Total` (company-wide, no qualifier)
+- Assign segment when source text qualifies a metric with any dimensional qualifier (product, geography, business unit, etc.)
 
-### XBRL Member Matching
+### Extraction
 
-When segment is not `Total`, attempt to link to XBRL Member nodes:
-1. Normalize both sides: lowercase, trim, remove tokens `member`/`segment`, light singularization (`services`->`service`, `products`->`product`)
-2. Match against cached member labels (from warmup cache 2B in QUERIES.md)
-3. Require exact unique normalized match
-4. Write one `MAPS_TO_MEMBER` edge per confident match
-5. Multiple members across different axes are valid (e.g., product + geography)
-6. No confident match = no member edge (keep `segment='Total'` semantics)
+After decomposition (§4), each qualifier becomes a member-match candidate:
+
+1. Split `segment` on ` | ` → list of qualifier strings
+2. For each qualifier, attempt member matching (below)
+3. Populate `member_u_ids` with all confident matches (0..N)
+
+### Member Matching
+
+For each qualifier, match against member cache (QUERIES.md 2B):
+
+1. **Normalize both sides**: lowercase, strip whitespace, remove tokens `member` and `segment` (case-insensitive), light singularization (`services`→`service`, `products`→`product`, `accessories`→`accessory`)
+2. **Compare** normalized qualifier against each normalized `member_label` from cache
+3. **Exact normalized match** → add `best_member_u_id` to `member_u_ids`
+4. **No match** → skip (no edge). Segment text preserved regardless.
+
+### Multi-Axis
+
+- Members from different axes (e.g., product + geography) are valid together
+- `segment` stores human-readable text; `member_u_ids` stores graph links — they're related but independent
 
 ---
 
@@ -431,6 +451,7 @@ No `MAPS_TO_CONCEPT` edge. Uses `xbrl_qname` string property on GuidanceUpdate.
 4. Zero matches → `xbrl_qname = null`
 5. Mapping is **basis-independent** (GAAP, non-GAAP, unknown all get mapped)
 6. Set via `ON CREATE SET` only
+7. Concept resolution uses the **base metric label** after §4 decomposition, not the qualified name
 
 ### Member Matching Gate
 
@@ -665,4 +686,4 @@ Both must be permissive for writes to occur. `MODE=write` with `ENABLE_GUIDANCE_
 
 ---
 
-*Version 2.2 | 2026-02-21 | Fixed: existing guidance query ref 8A→7A (was wrong section). Updated query count (~42). Prior: removed predictor refs, write path → guidance_writer.py, deleted FISCAL_CALENDAR.md.*
+*Version 2.3 | 2026-02-22 | Added §4 metric decomposition (base metric + qualifier split), rewrote §7 segment rules (extraction flow, member matching, multi-axis), added §11 rule 7 (concept resolution uses base metric). Prior: v2.2 (query ref fix, query count update).*
