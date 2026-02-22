@@ -131,6 +131,7 @@ WHERE dim_u_id IS NOT NULL AND mem_u_id IS NOT NULL
     OR dim_u_id CONTAINS 'Geography'
     OR dim_u_id CONTAINS 'Region'
   )
+WITH DISTINCT dim_u_id, mem_u_id
 WITH dim_u_id, mem_u_id,
      split(mem_u_id, ':')[0] AS mem_cik_raw
 WITH dim_u_id, mem_u_id,
