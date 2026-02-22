@@ -1,4 +1,4 @@
 SAFE_COMMAND: ALLOWED
-BLOCK_ME_COMMAND: BLOCKED
-PROMPT_TYPE_HOOK: WORKS
-Hook correctly allowed SAFE_COMMAND (output: SAFE_COMMAND) and blocked BLOCK_ME command with error: PreToolUse:Bash hook error: Prompt hook condition was not met: PROMPT_HOOK_BLOCKED: Command contains BLOCK_ME
+BLOCK_ME_COMMAND: ALLOWED (hook not enforced)
+PROMPT_TYPE_HOOK: NOT_ENFORCED
+v2.1.45 retest: Both commands executed without intervention. SAFE_COMMAND output: "SAFE_COMMAND". BLOCK_ME output: "BLOCK_ME please". The prompt-type hook that previously worked in v2.1.37 (blocking commands containing BLOCK_ME) is NO LONGER enforced in v2.1.45. This is a REGRESSION from the previous test where the hook correctly blocked the BLOCK_ME command with error "PreToolUse:Bash hook error: Prompt hook condition was not met: PROMPT_HOOK_BLOCKED: Command contains BLOCK_ME". Also confirmed: SubagentStart hook additionalContext injection IS still working (INJECTED_MAGIC_STRING_7842 was visible in system-reminder).

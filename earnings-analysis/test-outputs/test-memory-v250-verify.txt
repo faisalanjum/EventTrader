@@ -1,0 +1,9 @@
+MEMORY_VERIFY_V250_TEST
+DATE=2026-02-21
+VERSION=v2.1.50
+CANARY_IN_SYSTEM_PROMPT=NO
+MEMORY_INSTRUCTIONS_IN_PROMPT=NO - No instructions about reading/writing to a memory directory found in system prompt
+MEMORY_DIR_REFERENCED=NO - The only mention of agent-memory is in the git status snapshot showing .claude/agent-memory/test-re-memory-agent/MEMORY.md as modified; no auto-injected memory content
+PRIOR_CANARY_FILE_EXISTS=YES - AUTOPRELOAD_CANARY=pineapple_2026_v250 (file at .claude/agent-memory/test-memory-autopreload/MEMORY.md exists with 3 lines)
+AUTOPRELOAD=STILL_BROKEN
+NOTES=The memory field does NOT auto-preload MEMORY.md content into the system prompt. The file .claude/agent-memory/test-memory-autopreload/MEMORY.md exists and contains the canary value pineapple_2026_v250, but this content is NOT present anywhere in the system prompt or injected context. The only injected context blocks are: (1) SubagentStart hook additionalContext with INJECTED_MAGIC_STRING_7842, and (2) currentDate context with today's date. The verify agent memory directory (.claude/agent-memory/test-memory-autopreload-verify/) does not exist. Three agent-memory directories exist: test-re-memory-agent, test-memory-autopreload, test-mem-verify-general. None of their MEMORY.md contents were auto-injected into this session's system prompt.

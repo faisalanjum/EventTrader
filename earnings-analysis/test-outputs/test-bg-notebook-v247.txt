@@ -1,0 +1,13 @@
+NOTEBOOK_EDIT_AVAILABLE: YES
+ALL_TOOLS:
+Bash
+Glob
+Grep
+Read
+Edit
+Write
+NotebookEdit
+WebFetch
+WebSearch
+Skill
+ToolSearch

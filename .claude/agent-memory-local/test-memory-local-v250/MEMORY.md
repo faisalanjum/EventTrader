@@ -1,0 +1,1 @@
+LOCAL_SCOPE_CANARY=kiwi_local_v250

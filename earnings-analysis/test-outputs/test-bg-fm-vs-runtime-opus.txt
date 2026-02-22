@@ -1,0 +1,120 @@
+BG_FM_VS_RUNTIME_TEST=v2.1.50
+BACKGROUND_FIELD=true
+AGENT_TYPE=test-bg-fm-vs-runtime
+TEST_DATE=2026-02-21
+MODEL=opus
+
+# ============================================================
+# TOOL INVENTORY — background: true agent (frontmatter)
+# ============================================================
+
+TOTAL_TOOLS=27
+LIST_OF_ALL_TOOLS=Task,TaskOutput,TaskStop,Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,NotebookEdit,Skill,ToolSearch,AskUserQuestion,EnterPlanMode,ExitPlanMode,EnterWorktree,TaskCreate,TaskGet,TaskUpdate,TaskList,TeamCreate,TeamDelete,SendMessage,ListMcpResourcesTool,ReadMcpResourceTool
+
+# ============================================================
+# TOOL PRESENCE CHECK
+# ============================================================
+HAS_Task=YES
+HAS_TaskCreate=YES
+HAS_TaskList=YES
+HAS_TaskGet=YES
+HAS_TaskUpdate=YES
+HAS_TaskOutput=YES
+HAS_TaskStop=YES
+HAS_SendMessage=YES
+HAS_TeamCreate=YES
+HAS_TeamDelete=YES
+HAS_AskUserQuestion=YES
+HAS_EnterPlanMode=YES
+HAS_ExitPlanMode=YES
+HAS_EnterWorktree=YES
+HAS_Skill=YES
+HAS_ToolSearch=YES
+HAS_Bash=YES
+HAS_Read=YES
+HAS_Write=YES
+HAS_Edit=YES
+HAS_Glob=YES
+HAS_Grep=YES
+HAS_WebSearch=YES
+HAS_WebFetch=YES
+HAS_NotebookEdit=YES
+HAS_ListMcpResourcesTool=YES
+HAS_ReadMcpResourceTool=YES
+
+# ============================================================
+# CATEGORIZED TOOL LIST
+# ============================================================
+
+## Standard Tools (12)
+1. Bash
+2. Read
+3. Write
+4. Edit
+5. Glob
+6. Grep
+7. WebSearch
+8. WebFetch
+9. NotebookEdit
+10. Skill
+11. EnterWorktree
+12. ToolSearch
+
+## Task Tools (4)
+1. TaskCreate
+2. TaskList
+3. TaskGet
+4. TaskUpdate
+
+## Team Tools (3)
+1. TeamCreate
+2. TeamDelete
+3. SendMessage
+
+## Interactive Tools (3)
+1. AskUserQuestion
+2. EnterPlanMode
+3. ExitPlanMode
+
+## Spawn/Orchestration Tools (3)
+1. Task (launch subagents)
+2. TaskOutput (read subagent output)
+3. TaskStop (stop background tasks)
+
+## MCP Resource Tools (2)
+1. ListMcpResourcesTool
+2. ReadMcpResourceTool
+
+# ============================================================
+# DEFERRED MCP TOOLS (via ToolSearch)
+# ============================================================
+DEFERRED_MCP_TOOLS=mcp__alphavantage__TOOL_LIST,mcp__alphavantage__TOOL_GET,mcp__alphavantage__TOOL_CALL,mcp__perplexity__create_chat_completions,mcp__perplexity__create_search,mcp__neo4j-cypher__get_neo4j_schema,mcp__neo4j-cypher__read_neo4j_cypher,mcp__neo4j-cypher__write_neo4j_cypher,mcp__claude_ai_LunarCrush__List,mcp__claude_ai_LunarCrush__Cryptocurrencies,mcp__claude_ai_LunarCrush__Stocks,mcp__claude_ai_LunarCrush__Topic,mcp__claude_ai_LunarCrush__Topic_Time_Series,mcp__claude_ai_LunarCrush__Topic_Posts,mcp__claude_ai_LunarCrush__Creator,mcp__claude_ai_LunarCrush__Post,mcp__claude_ai_LunarCrush__Search,mcp__claude_ai_LunarCrush__Fetch,mcp__claude_ai_LunarCrush__Authentication
+DEFERRED_MCP_COUNT=19
+
+# ============================================================
+# COMPARISON WITH INFRASTRUCTURE.MD 10.13
+# ============================================================
+COMPARISON_NOTE=Infrastructure.md 10.13 says bg agents should have 11 tools. This agent has 27 directly available tools plus 19 deferred MCP tools. This suggests background:true in frontmatter does NOT restrict tools to the documented 11-tool subset. The agent receives the FULL tool set identical to a foreground agent.
+
+# Expected 11 tools per Infrastructure.md 10.13:
+# Bash, Read, Write, Edit, Glob, Grep, Task, TaskOutput, TaskStop, WebSearch, WebFetch
+# (no AskUserQuestion, no EnterPlanMode, no interactive tools)
+
+# Actual: ALL 27 tools present including:
+# - Interactive tools: AskUserQuestion, EnterPlanMode, ExitPlanMode (UNEXPECTED)
+# - Task management: TaskCreate, TaskList, TaskGet, TaskUpdate (UNEXPECTED per 10.13)
+# - Team tools: TeamCreate, TeamDelete, SendMessage (UNEXPECTED per 10.13)
+# - Skill, ToolSearch, NotebookEdit, EnterWorktree (UNEXPECTED per 10.13)
+# - MCP resource tools: ListMcpResourcesTool, ReadMcpResourceTool (UNEXPECTED per 10.13)
+
+# ============================================================
+# KEY FINDING
+# ============================================================
+# background: true in agent frontmatter does NOT restrict the tool set.
+# The agent receives the identical full toolset as a non-background agent.
+# This contrasts with run_in_background: true on the Task tool, which may
+# impose runtime restrictions. The frontmatter field appears to only control
+# execution mode (background vs foreground), not tool availability.
+#
+# VERDICT: Frontmatter background:true ≠ runtime run_in_background:true
+# in terms of tool restrictions. Frontmatter gives FULL tools (27 direct + 19 deferred).

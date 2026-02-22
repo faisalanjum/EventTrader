@@ -12,7 +12,6 @@ Graph-native guidance extraction system. Writes `Guidance` and `GuidanceUpdate` 
 
 **Thinking**: ALWAYS use `ultrathink` for maximum reasoning depth when extracting and classifying guidance.
 
-**Spec**: `.claude/plans/guidanceInventory.md` v2.3
 
 ## Table of Contents
 

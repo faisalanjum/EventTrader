@@ -1,0 +1,16 @@
+BG_TASK_TOOL_MEMORY_TEST=v2.1.50
+MODEL=opus
+SPAWN_METHOD=Task_tool_run_in_background
+TOTAL_TOOLS=12
+ALL_TOOLS=Bash,Glob,Grep,Read,Edit,Write,NotebookEdit,WebFetch,WebSearch,Skill,EnterWorktree,ToolSearch
+HAS_TaskCreate=NO
+HAS_TaskList=NO
+HAS_Task=NO
+HAS_SendMessage=NO
+HAS_AskUserQuestion=NO
+HAS_ToolSearch=YES
+MEMORY_IN_CONTEXT=NO - No AUTOPRELOAD_CANARY or pineapple_2026_v250 found in system prompt or context. The string agent-memory appears only in git status output (snapshot), not as preloaded memory content. No instructions about reading/writing memory were injected. No MEMORY.md content was preloaded into context.
+MEMORY_FILE_EXISTS=YES
+MEMORY_FILE_CONTENT=AUTOPRELOAD_CANARY=pineapple_2026_v250 | WRITTEN_AT=2026-02-21T00:00:00Z | PURPOSE=Testing if this content appears in system prompt on next invocation
+HOOK_INJECTION=YES - SubagentStart hook injected INJECTED_MAGIC_STRING_7842 successfully
+VERDICT=Background sub-agent (via Task tool) has 12 tools. It does NOT have Task/TaskCreate/TaskList/SendMessage/AskUserQuestion (no nesting or team tools). ToolSearch IS available for deferred MCP tools. Memory file exists on disk but was NOT auto-preloaded into the system prompt context. The agent-memory autopreload mechanism did NOT fire for this background sub-agent. Hook additionalContext injection DID work (SubagentStart hook context was present).

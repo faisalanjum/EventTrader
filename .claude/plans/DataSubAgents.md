@@ -56,6 +56,12 @@ With a single, minimal PIT switch (`--pit`) and **automatic recovery** (retry) w
 - Task fan-out is **parallel** from main conversation; Skill-to-Skill chains are **sequential**.
 - Task spawning is **blocked in forked skill contexts** → design parallel fetch at top level.
 - `allowed-tools` / `disallowedTools` are **not enforcement** → PIT correctness cannot rely on frontmatter alone.
+- **Hook blocking stderr now visible** (v2.1.41): `pit_gate.py` exit-code-2 blocks now show stderr to the user. Previously hidden — made PIT violation debugging harder.
+- **Large shell output memory fixed** (v2.1.45): RSS no longer grows unboundedly with Bash output size. Matters for wrapper agents (`pit_fetch.py`) returning large JSON envelopes.
+- **Skills compaction leak fixed** (v2.1.45): skills invoked by data subagents no longer bleed into the parent orchestrator's context after compaction. Removes a real risk for multi-skill pipelines.
+- **Parallel file write independence** (v2.1.47): one failing file write/edit no longer aborts all sibling parallel operations. Data subagents doing parallel file writes are now resilient to individual failures.
+- **Background agent results fixed** (v2.1.47): background agents now return final answer instead of raw transcript data. Fixes output quality for background data fetch agents.
+- **Concurrent agent 400 errors fixed** (v2.1.47): "thinking blocks cannot be modified" API errors in multi-agent sessions eliminated. Stabilizes parallel data subagent spawning.
 
 ---
 

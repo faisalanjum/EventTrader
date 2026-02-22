@@ -1,0 +1,1 @@
+VERIFY_CANARY=mango_verify_2026

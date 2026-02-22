@@ -10,7 +10,7 @@
 
 **What this is**: Multi-layer earnings analysis system using forked skills for context isolation.
 
-**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08):**
+**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45):**
 
 | What | Status | Workaround |
 |------|--------|------------|
@@ -22,21 +22,21 @@
 | K8s/SDK execution | ✅ WORKS | Opus works; thinking captured from all layers |
 | CLI v2.1.1 agent files | ⚠️ ROOT LEVEL | Older versions write to root, not session/subagents/ |
 | K8s Opus thinking | ✅ 171 blocks | 159KB thinking (was 6.7KB with Sonnet) |
-| `model:` field in skill/agent | ✅ **NOW ENFORCED** (Feb 2026) | `model: haiku` actually runs Haiku; per-layer cost control works |
+| `model:` field in skill/agent | ✅ **NOW ENFORCED** (Feb 2026) | `model: haiku` actually runs Haiku; per-layer cost control works. **CAVEAT**: Both Haiku AND Sonnet can fail with API 400 (`anyOf` schema unsupported) in **background** agent context when tool schemas contain `oneOf`/`allOf`/`anyOf` (e.g., TaskUpdate.status, some MCP tools after ToolSearch expansion). Foreground agents unaffected. Haiku fails immediately; Sonnet may partially run before schema expansion triggers the error. |
 | `allowed-tools` for restriction (skills) | ❌ NOT ENFORCED | Skills use prompt injection, not tool filtering |
 | `allowed-tools` for MCP pre-load | ✅ **WORKS** | List MCP tools to pre-load them |
 | `disallowedTools` (skills) | ❌ NOT ENFORCED | Cannot block tools in skills |
 | `disallowedTools` (agents) | ✅ **NOW ENFORCED** (Feb 2026) | Tools completely removed from agent's tool set |
 | `tools` allowlist (agents) | ✅ **NOW ENFORCED** (Feb 2026) | Agent only sees tools in its allowlist |
 | `agent:` field in skills | ✅ **NOW WORKS** (Feb 2026) | Grants agent's MCP tools without ToolSearch |
-| `memory:` field (agents) | ⚠️ **STORAGE ONLY** (v2.1.34) | Dir created + files persist; **auto-preload into system prompt DOES NOT WORK** (definitive: tested `local` + `project`, across 2 restarts, agent confirms no memory content in prompt). Use manual `Read` at agent startup instead. |
+| `memory:` field (agents) | ⚠️ **STORAGE ONLY** (v2.1.34→v2.1.45) | Dir created + files persist; **auto-preload into system prompt STILL DOES NOT WORK** (retested v2.1.45: `local` + `project` scopes, agent confirms no memory content in prompt). Use manual `Read` at agent startup. |
 | `skills:` field (agents) | ✅ **WORKS** (Feb 2026) | Auto-loads skills into agent context (args not passed through) |
 | Agent-scoped hooks | ✅ **WORKS** (Feb 2026) | PreToolUse, PostToolUse, PostToolUseFailure, Stop in agent frontmatter; **only when spawned as subagent via Task tool** (NOT via `--agent` flag) |
 | SubagentStart hook | ✅ **WORKS** (Feb 2026) | Fires when subagent spawns; additionalContext injection **confirmed working** for custom agents (context added to agent window, NOT logged in transcript) |
 | SubagentStop hook | ✅ **WORKS** (Feb 2026) | Fires when subagent completes; **blocking confirmed** (decision:block prevents stop, stop_hook_active=true on 2nd fire allows) |
 | **PostToolUseFailure hook** | ✅ **WORKS** (v2.1.37) | Fires when tool call fails; JSON has tool_name, tool_input, error, is_interrupt, tool_use_id |
-| **type: "prompt" hooks** | ✅ **WORKS** (v2.1.37) | LLM evaluates hook input; can block/allow based on content; works in agent frontmatter |
-| **type: "agent" hooks** | ❌ **NOT ENFORCED** (v2.1.37) | Agent hook handler did not block in agent frontmatter; may need settings.json or not yet implemented |
+| **type: "prompt" hooks** | ⚠️ **REGRESSION** (v2.1.45) | Was WORKING in v2.1.37, **NO LONGER ENFORCED** in v2.1.45. Both safe and blocked commands execute without interception. Hook is simply not evaluated. |
+| **type: "agent" hooks** | ❌ **NOT ENFORCED** (v2.1.37→v2.1.45) | Still not enforced. Hook configured in agent frontmatter did not block in either version. |
 | **--agent flag + hooks** | ❌ **NOT WORKING** (v2.1.37) | Agent frontmatter hooks ONLY activate via Task tool subagent spawn; `--agent` flag starts main session without hooks |
 | Task→Skill nesting | ✅ **WORKS** (Feb 2026) | Sub-agents can invoke skills; combine parallel Task + Skill chains |
 | MCP in fork | ✅ WORKS | Either use allowed-tools OR ToolSearch |
@@ -56,7 +56,7 @@
 | Parallel execution (Task tool) | ✅ PARALLEL | From main conversation only |
 | Parallel execution (Skill tool) | ❌ SEQUENTIAL | Always sequential |
 | Task tool in forked context | ❌ BLOCKED | Cannot use for parallelism |
-| Task→Task nesting | ❌ BLOCKED | Sub-agents don't get Task tool |
+| Task→Task nesting | ❌ **STILL BLOCKED** (v2.1.47→v2.1.50) | Sub-agents do NOT get the Task tool. By design. FG gets **21 tools** (+TeamDelete, +EnterWorktree); BG gets **12 tools** (+EnterWorktree). Neither gets Task spawner. Use Skill chains for depth. |
 | MCP wildcards pre-load | ❌ NO | Only grants permission, still need ToolSearch |
 | Error propagation | ⚠️ TEXT ONLY | No exceptions, must parse response |
 | **Task deletion unblocks dependents** | ✅ WORKS | `status: "deleted"` removes task, unblocks dependents |
@@ -64,13 +64,107 @@
 | **Cross-agent task manipulation** | ✅ WORKS | Any agent can update/delete any task by ID |
 | **Upfront task creation pattern** | ✅ WORKS | Create all tasks upfront, skip via completed/deleted |
 | **Parallel foreground Task spawn** | ✅ PARALLEL | 194ms spread, full tool access (See Part 10.14) |
-| **Background agents: Write/MCP/Skill** | ✅ **NOW WORKS** (Feb 2026) | Was broken (only Bash). Now 13 tools available. Only TaskCreate/List/Get/Update still blocked. |
+| **Background agents: Write/MCP/Skill** | ✅ **WORKS** (Feb 2026, re-confirmed v2.1.50) | **12 direct tools** (was 11). +EnterWorktree. Task/Team/Plan/AskUser tools still blocked. Parallel write independence confirmed. 8 concurrent agents stable. |
 | **Task `run_in_background` default** | ⚠️ MAY AUTO-ENABLE | Claude may choose background mode; explicitly set `run_in_background: false` if you need task tools |
+| **`background: true` frontmatter** | ✅ **NEW** (v2.1.49) | Declarative background scheduling. Auto-sets `run_in_background` on Task. Via `--agent` flag: full 27-tool set (no restriction). **3-tier hierarchy confirmed (Opus)**: `--agent`=27, FG Task=21, BG Task=12 tools. `tools` field CANNOT expand bg base set (whitelist only restricts). |
+| **`isolation: worktree` frontmatter** | ✅ **NEW** (v2.1.50) | Agent runs in temporary git worktree. Auto-cleanup if no changes. WorktreeCreate/WorktreeRemove hooks available. |
+| **Memory auto-preload** | ❌ **STILL BROKEN** (v2.1.50) | 8+ tests, 3 scopes, same-agent re-invocation, ALL spawn methods (Task FG, Task BG, `--agent`), ALL models: canary NOT injected. Storage works; auto-preload of MEMORY.md does not. |
+| **Agent discovery (Task tool)** | ⚠️ **SESSION-START SNAPSHOT** | Task tool's `subagent_type` list is frozen at session start. Agents created mid-session or between continuations are NOT discoverable. Must start brand-new `claude` session. |
 | Skill-specific hooks | ✅ WORKS (v2.1.0+) | Define in SKILL.md frontmatter; 3 events only |
 | **TaskCompleted hook** | ✅ **WORKS** (v2.1.33) | Fires on task completion; JSON has `task_id`, `task_subject`, `task_description` |
 | **TeammateIdle hook** | ✅ **WORKS** (v2.1.33) | Fires when teammate goes idle; JSON has `teammate_name`, `team_name`, `permission_mode` |
 | **Agent `Task(AgentType)` restriction** | ✅ **ENFORCED** (v2.1.33) | `tools: [Task(Explore), Task(Bash)]` blocks all other sub-agent types |
-| **`memory: local` scope** | ⚠️ **STORAGE ONLY** (v2.1.34) | Dir + files persist; auto-preload into system prompt **confirmed NOT working** (2 restarts, definitive test) |
+| **`memory: local` scope** | ⚠️ **STORAGE ONLY** (v2.1.34→v2.1.45) | Dir + files persist; auto-preload **still NOT working** in v2.1.45 |
+| **Task completion crash** | ✅ **FIXED** (v2.1.45) | Task tool no longer crashes with ReferenceError on completion; TaskCompleted hook fires correctly |
+| **Skills context leak after compaction** | ✅ **FIXED** (v2.1.45) | Skills invoked by subagents no longer bleed into main session after compaction |
+| **Sandbox: .claude/skills write block** | ✅ **HARDENED** (v2.1.38) | Sandbox mode blocks writes to .claude/skills (prevents persistent prompt injection via ToxicSkills-style attacks) |
+| **Heredoc delimiter security** | ✅ **HARDENED** (v2.1.38) | Fixed parser mismatch that allowed command smuggling past permission system |
+| **Nested session guard** | ✅ **NEW** (v2.1.41, relaxed v2.1.47) | `claude` CLI blocks interactive launch inside another session; non-interactive subcommands (`doctor`, `plugin validate`) now allowed (#25803) |
+| **Plugins system** | ✅ **NEW** (v2.1.45) | Full plugin system: marketplaces, /plugin install, enabledPlugins, extraKnownMarketplaces, strictKnownMarketplaces |
+| **SDK rename** | ⚠️ **BREAKING** | claude-code-sdk → claude-agent-sdk (Python v0.1.37, TypeScript v0.2.45); ClaudeCodeOptions → ClaudeAgentOptions |
+| **SDKRateLimitInfo/Event** | ✅ **NEW** (v2.1.45) | Rate limit status tracking: utilization, reset times, overage info (TypeScript SDK v0.2.45) |
+| **Bash env-var wrapper permission matching** | ✅ **FIXED** (v2.1.38) | `FOO=bar command` patterns now correctly matched by permission system |
+| **Fatal errors swallowed** | ✅ **FIXED** (v2.1.39) | Fatal errors now displayed instead of silently swallowed; important for debugging agent failures |
+| **Process hanging after session close** | ✅ **FIXED** (v2.1.39) | Sessions no longer hang after close; relevant for SDK/agent cleanup |
+| **MCP image content streaming crash** | ✅ **FIXED** (v2.1.41) | MCP tools returning image content no longer crash during streaming |
+| **Hook blocking stderr visibility** | ✅ **FIXED** (v2.1.41) | Hook exit-code-2 blocking errors now show stderr to the user (was hidden) |
+| **Subagent elapsed time accuracy** | ✅ **FIXED** (v2.1.41) | Permission wait time no longer counted in subagent elapsed time display |
+| **Stale permission rules on settings change** | ✅ **FIXED** (v2.1.41) | Permission rules now cleared and reloaded when settings.json changes on disk |
+| **Non-agent .md warnings in .claude/agents/** | ✅ **FIXED** (v2.1.43) | Spurious warnings for non-agent markdown files (e.g. README.md) in agents dir suppressed |
+| **Prompt cache hit improvement** | ✅ **IMPROVED** (v2.1.42) | Date moved out of system prompt → better prompt cache hit rates → lower cost |
+| **Large shell output memory usage** | ✅ **FIXED** (v2.1.45) | RSS no longer grows unboundedly with shell command output size; matters for long-running agents |
+| **`last_assistant_message` in Stop/SubagentStop** | ✅ **NEW** (v2.1.47) | New field in Stop and SubagentStop hook inputs; provides final assistant response text without parsing transcripts |
+| **Parallel file write/edit independence** | ✅ **FIXED** (v2.1.47) | One failing file write/edit no longer aborts all sibling parallel operations; each completes independently |
+| **Concurrent agent 400 errors** | ✅ **FIXED** (v2.1.47) | "thinking blocks cannot be modified" API 400 errors in sessions with concurrent agents fixed (interleaved streaming content blocks) |
+| **Background agent results** | ✅ **FIXED** (v2.1.47) | Background agents now return final answer instead of raw transcript data (#26012) |
+| **Bash permission classifier hallucination** | ✅ **HARDENED** (v2.1.47) | Classifier now validates match descriptions against actual rules; prevents hallucinated descriptions from granting permissions |
+| **Agent `model:` field for team teammates** | ✅ **FIXED** (v2.1.47) | Custom model field in .claude/agents/*.md was ignored when spawning teammates; now respected (#26064) |
+| **Nested session guard** | ✅ **RELAXED** (v2.1.47) | Non-interactive subcommands (`claude doctor`, `claude plugin validate`) now work inside sessions (#25803) |
+| **Agent session memory (3 fixes)** | ✅ **FIXED** (v2.1.47) | Stream buffers released after use, task message history trimmed after completion, O(n²) progress update accumulation eliminated |
+| **Plan mode through compaction** | ✅ **FIXED** (v2.1.47) | Plan mode no longer lost after context compaction (#26061) |
+| **Backslash-newline bash continuation** | ✅ **FIXED** (v2.1.47) | `\`-continuation lines no longer produce spurious empty arguments |
+| **Git worktree agent/skill discovery** | ✅ **FIXED** (v2.1.47) | .claude/agents/ and .claude/skills/ from main repo now discovered in worktrees (#25816) |
+
+---
+
+### Retest Summary (2026-02-18, v2.1.45) — Comprehensive Update
+
+**Versions tested**: v2.1.38 through v2.1.45 (8 versions since last checkpoint)
+
+**11 capabilities retested/researched:**
+
+| Feature | v2.1.37 Status | v2.1.45 Status | Change |
+|---------|---------------|---------------|--------|
+| Task completion | Untested | ✅ Works, no crash | **Fixed** (was ReferenceError) |
+| `memory: local` auto-preload | ⚠️ Storage only | ⚠️ Storage only | **No change** — still broken |
+| `memory: project` auto-preload | ⚠️ Storage only | ⚠️ Storage only | **No change** — still broken |
+| `type: "agent"` hooks (agent FM) | ❌ Not Enforced | ❌ Not Enforced | **No change** |
+| `type: "prompt"` hooks (agent FM) | ✅ Works | ❌ **NOT ENFORCED** | **⚠️ REGRESSION** |
+| PostToolUseFailure hook | ✅ Works | ✅ Works | Stable (10 fields in JSON) |
+| SubagentStart injection | ✅ Works | ✅ Works | Stable |
+| SubagentStop blocking | ✅ Works | ✅ Works | Stable (2-phase block/allow) |
+| Task(AgentType) restriction | ✅ Enforced | ✅ Enforced | Stable (hard enforcement) |
+| TaskCompleted hook | ✅ Works | ✅ Works | Stable |
+| Nested session guard | N/A | ✅ NEW | Blocks `claude` CLI inside Claude Code sessions |
+
+**5 new capabilities documented:**
+
+| Feature | Status | Details |
+|---------|--------|---------|
+| **Plugins system** (v2.1.45) | ✅ Full system | Marketplaces, /plugin install, enabledPlugins, extraKnownMarketplaces, strictKnownMarketplaces. Plugins bundle commands, agents, skills, hooks, MCP servers. Official marketplace: anthropics/claude-plugins-official. **Note**: extraKnownMarketplaces only processes during interactive trust dialogs, NOT in -p mode/CI. |
+| **SDK rename** | ⚠️ Breaking | claude-code-sdk → claude-agent-sdk. Python v0.1.37 (latest), TypeScript v0.2.45 (latest). ClaudeCodeOptions → ClaudeAgentOptions. SDK no longer loads Claude Code system prompt by default. |
+| **SDKRateLimitInfo/Event** (v2.1.45) | ✅ New types | Rate limit status: utilization, reset times, overage info. TypeScript SDK v0.2.45. Field definitions not yet in public docs. |
+| **SDK task_started message** (v0.2.45) | ✅ New | System message emitted when subagent tasks are registered. Session.stream() fixed for background subagents. |
+| **Python SDK ThinkingConfig** (v0.1.36) | ✅ New | ThinkingConfigAdaptive/Enabled/Disabled types. `effort` field: low/medium/high/max. `thinking` overrides deprecated `max_thinking_tokens`. |
+
+**11 operational/infrastructure fixes documented (v2.1.38–v2.1.45):**
+
+| Fix | Version | Impact |
+|-----|---------|--------|
+| Bash env-var wrapper permission matching | v2.1.38 | `FOO=bar cmd` now correctly matched by permission system |
+| Fatal errors swallowed | v2.1.39 | Errors now displayed; critical for debugging agent failures |
+| Process hanging after session close | v2.1.39 | Clean session teardown; relevant for SDK/agent cleanup |
+| MCP image content streaming crash | v2.1.41 | MCP tools returning images no longer crash mid-stream |
+| Hook blocking stderr visibility | v2.1.41 | Hook exit-code-2 blocks now show stderr (was hidden) |
+| Subagent elapsed time accuracy | v2.1.41 | Permission wait time excluded from subagent timing |
+| Stale permission rules on settings change | v2.1.41 | Rules reloaded when settings.json changes on disk |
+| Non-agent .md warnings in .claude/agents/ | v2.1.43 | Spurious warnings for README.md etc. suppressed |
+| Prompt cache hit improvement | v2.1.42 | Date moved out of system prompt → better cache hits → lower cost |
+| Large shell output memory usage | v2.1.45 | RSS no longer grows unboundedly with output size |
+| ENAMETOOLONG for deep paths | v2.1.44 | Deeply-nested directory paths no longer cause errors |
+
+**2 security fixes documented:**
+
+| Fix | Version | Details |
+|-----|---------|---------|
+| Sandbox .claude/skills write block | v2.1.38 | Prevents persistent prompt injection via ToxicSkills-style supply chain attacks. OS-level enforcement (bubblewrap/seatbelt). |
+| Heredoc delimiter parsing | v2.1.38 | Fixed parser mismatch allowing command smuggling past permission system. Related to CVE-2025-66032. |
+
+**1 regression identified:**
+
+| Regression | Details |
+|-----------|---------|
+| **type: "prompt" hooks in agent frontmatter** | Was WORKING in v2.1.37 (correctly blocked commands matching BLOCK_ME). In v2.1.45, hook is simply not evaluated — both safe and blocked commands execute without interception. SubagentStart injection still works, confirming hooks fire but prompt-type PreToolUse evaluation is broken. |
 
 ---
 
@@ -121,11 +215,11 @@
 }
 ```
 
-**Complete hook coverage (v2.1.37):**
+**Complete hook coverage (v2.1.37, updated v2.1.45):**
 
 | Hook Event | Tested? | Status |
 |------------|---------|--------|
-| PreToolUse | ✅ | Works (command + prompt types) |
+| PreToolUse | ⚠️ | Works (command type). **prompt type REGRESSED in v2.1.45** (was working v2.1.37). agent type still not enforced. |
 | PostToolUse | ✅ | Works (command type) |
 | PostToolUseFailure | ✅ NEW | Works (command type in agent FM) |
 | Stop/SubagentStop | ✅ | Works (blocking + stop_hook_active) |
@@ -2586,28 +2680,35 @@ The same folder name = the same tasks. You can resume across any number of sessi
 
 ---
 
-## 10.13 Background vs Foreground Agent Spawning (Tested 2026-01-29, Retested 2026-02-05)
+## 10.13 Background vs Foreground Agent Spawning (Tested 2026-01-29, Retested 2026-02-05, Retested 2026-02-19 v2.1.47)
 
 ### Background Agents — Mostly Fixed!
 
 In Jan 2026, `run_in_background: true` gave agents only Bash. Most of those bugs are now fixed.
 
-**Retest results (2026-02-05):**
+**Retest results (2026-02-19, v2.1.47) — 8 parallel background agents tested:**
 
-| Capability | Jan 2026 | Feb 2026 | Fixed? |
-|------------|----------|----------|--------|
-| Bash | ✅ Works | ✅ Works | — |
-| Write/Edit files | ❌ Blocked | ✅ **Works** | **YES** |
-| MCP tools (via ToolSearch) | ❌ Blocked | ✅ **Works** | **YES** |
-| Skill tool | ❌ Untested | ✅ **Works** | **YES** |
-| ToolSearch | ❌ Untested | ✅ **Works** | **YES** |
-| Glob/Grep/Read | ✅ Works | ✅ Works | — |
-| WebFetch/WebSearch | ❌ Untested | ✅ **Works** | **YES** |
-| TaskCreate/List/Get/Update | ❌ Blocked | ❌ **Still blocked** | No |
+| Capability | Jan 2026 | Feb 2026 | v2.1.47 | Status |
+|------------|----------|----------|---------|--------|
+| Bash | ✅ Works | ✅ Works | ✅ Works | Stable |
+| Write/Edit files | ❌ Blocked | ✅ Works | ✅ Works | Stable |
+| MCP tools (via ToolSearch) | ❌ Blocked | ✅ Works | ✅ Works | Stable |
+| Skill tool | ❌ Untested | ✅ Works | ✅ Works | Stable |
+| ToolSearch | ❌ Untested | ✅ Works | ✅ Works | Stable |
+| Glob/Grep/Read | ✅ Works | ✅ Works | ✅ Works | Stable |
+| WebFetch/WebSearch | ❌ Untested | ✅ Works | ✅ Works | Stable |
+| NotebookEdit | ❌ Untested | ❌ Untested | ✅ **Works** | Confirmed |
+| TaskCreate/List/Get/Update | ❌ Blocked | ❌ Blocked | ❌ **Still NOT in tool set** | Unchanged |
+| Parallel file write independence | N/A | N/A | ✅ **Confirmed** | **NEW** (v2.1.47) |
+| Concurrent 8-agent spawn (no 400s) | N/A | N/A | ✅ **No errors** | **FIXED** (v2.1.47) |
+| Results quality (final answer) | N/A | N/A | ✅ **Clean answers** | **FIXED** (v2.1.47) |
+| Task completion crash | N/A | N/A | ✅ **No crash** | **FIXED** (v2.1.45) |
 
-**13 tools available** in background mode: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, Teammate, SendMessage, ToolSearch.
+**11 tools available** in background mode: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, ToolSearch.
 
-**What's still missing**: TaskCreate, TaskList, TaskGet, TaskUpdate (task management tools).
+**NOT available in background**: TaskCreate, TaskList, TaskGet, TaskUpdate, TaskOutput, TaskStop, SendMessage, TeamCreate, EnterPlanMode, AskUserQuestion.
+
+**What's still missing**: All orchestration tools (Task*, Team*, SendMessage) and interactive tools (EnterPlanMode, AskUserQuestion).
 
 **GitHub bugs status**:
 - [#13254](https://github.com/anthropics/claude-code/issues/13254) - Background MCP tools — **FIXED** (Feb 2026)
@@ -2654,10 +2755,14 @@ Orchestrator sends ONE message with multiple Task tool calls:
 | Parallel foreground Task spawn | CLI skill | ✅ Works |
 | Single foreground Task spawn | SDK skill | ✅ Agent updated task successfully |
 | Agent uses TaskUpdate to store result | All contexts | ✅ Works |
-| **Background: Write files** | CLI main | ✅ **Works (Feb 2026)** |
-| **Background: MCP tools** | CLI main | ✅ **Works (Feb 2026)** |
-| **Background: Skill tool** | CLI main | ✅ **Works (Feb 2026)** |
-| **Background: TaskCreate** | CLI main | ❌ **Still blocked** |
+| **Background: Write files** | CLI main | ✅ **Works (Feb 2026, re-confirmed v2.1.47)** |
+| **Background: MCP tools** | CLI main | ✅ **Works (Feb 2026, re-confirmed v2.1.47)** |
+| **Background: Skill tool** | CLI main | ✅ **Works (Feb 2026, re-confirmed v2.1.47)** |
+| **Background: WebFetch/WebSearch** | CLI main | ✅ **Works (confirmed v2.1.47)** |
+| **Background: NotebookEdit** | CLI main | ✅ **Works (confirmed v2.1.47)** |
+| **Background: Parallel write independence** | CLI main | ✅ **Works (NEW v2.1.47)** — sibling failure doesn't abort others |
+| **Background: 8 concurrent agents** | CLI main | ✅ **No 400 errors (FIXED v2.1.47)** |
+| **Background: TaskCreate** | CLI main | ❌ **Still NOT in tool set (v2.1.47)** |
 
 ### Implementation for earnings-orchestrator
 
@@ -2707,6 +2812,351 @@ Spawn with run_in_background: true
 ---
 
 *Updated: 2026-01-29 | Background vs foreground tool availability tested | Foreground parallel pattern verified | SDK compatibility confirmed*
+
+---
+
+## 10.13b Background & Memory Retest (2026-02-21, v2.1.50)
+
+### What's New Since v2.1.47
+
+| Feature | Version | Source |
+|---------|---------|--------|
+| `background: true` in agent frontmatter | v2.1.49 | Declarative background scheduling |
+| `isolation: worktree` in agent frontmatter | v2.1.50 | Git worktree isolation per agent |
+| `WorktreeCreate`/`WorktreeRemove` hooks | v2.1.50 | Lifecycle hooks for worktree agents |
+| `last_assistant_message` in Stop/SubagentStop | v2.1.47 | Final answer without transcript parsing |
+| Ctrl+F kills background agents (not ESC) | v2.1.47 | Background agents survive ESC |
+| Memory leak fixes (3 separate fixes) | v2.1.50 | Task state, output, teammate GC |
+
+### Background Agent Tool Inventory (v2.1.50 — Tested 2026-02-21)
+
+**Background via `run_in_background: true` on Task tool (general-purpose agent):**
+
+| Tool | Available? | Change vs v2.1.47 |
+|------|-----------|-------------------|
+| Bash | ✅ YES | Stable |
+| Glob | ✅ YES | Stable |
+| Grep | ✅ YES | Stable |
+| Read | ✅ YES | Stable |
+| Edit | ✅ YES | Stable |
+| Write | ✅ YES | Stable |
+| NotebookEdit | ✅ YES | Stable |
+| WebFetch | ✅ YES | Stable |
+| WebSearch | ✅ YES | Stable |
+| Skill | ✅ YES | Stable |
+| ToolSearch | ✅ YES | Stable |
+| **EnterWorktree** | ✅ **YES** | **NEW** |
+| TaskCreate | ❌ NO | Unchanged |
+| TaskList | ❌ NO | Unchanged |
+| TaskGet | ❌ NO | Unchanged |
+| TaskUpdate | ❌ NO | Unchanged |
+| Task | ❌ NO | Unchanged |
+| TaskOutput | ❌ NO | Unchanged |
+| TaskStop | ❌ NO | Unchanged |
+| SendMessage | ❌ NO | Unchanged |
+| TeamCreate | ❌ NO | Unchanged |
+| AskUserQuestion | ❌ NO | Unchanged |
+| EnterPlanMode | ❌ NO | Unchanged |
+
+**Total: 12 tools** (was 11 in v2.1.47). **+1: EnterWorktree.**
+
+**Cross-model verification (Opus 4.6 retest, 2026-02-21):**
+
+| Model | BG Tool Count | TaskCreate | Result |
+|-------|--------------|------------|--------|
+| Haiku | API 400 (schema) | API 400 | `anyOf` schema unsupported |
+| Sonnet | **12** | BLOCKED | `test-bg-general-tools-v250.txt` |
+| **Opus 4.6** | **12** | **BLOCKED** | `test-bg-opus-tools-v250.txt` |
+
+**Confirmed model-independent**: The 12-tool restriction is enforced at Claude Code runtime level, not by the model. All three models see identical tool sets. SubagentStart hook `additionalContext` injection confirmed working on all models (INJECTED_MAGIC_STRING_7842 visible).
+
+**Foreground via Task tool (general-purpose agent) — for comparison:**
+
+**21 direct tools** (was 20 in v2.1.47). **+2: TeamDelete, EnterWorktree.**
+
+Full list: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, ToolSearch, TaskCreate, TaskList, TaskGet, TaskUpdate, TeamCreate, **TeamDelete**, SendMessage, **EnterWorktree**, ListMcpResourcesTool, ReadMcpResourceTool.
+
+Still NOT available in foreground: Task, TaskOutput, TaskStop, AskUserQuestion, EnterPlanMode.
+
+### `background: true` Frontmatter Field (v2.1.49)
+
+**What it is**: A boolean in agent `.md` frontmatter that makes the agent ALWAYS run in background mode when spawned via Task tool.
+
+```yaml
+---
+name: my-agent
+background: true
+model: sonnet
+---
+```
+
+**Test results (via `--agent` flag, 2026-02-21):**
+
+| Test | Result | Evidence |
+|------|--------|----------|
+| Agent runs successfully with bg:true | ✅ WORKS | `test-bg-frontmatter-v250.txt` |
+| Tool set via `--agent` | **27 tools (FULL)** | `test-bg-fm-vs-runtime.txt` |
+| Task tools work via `--agent` | ✅ ALL WORK | `test-bg-fm-tasktools.txt` |
+| AskUserQuestion via `--agent` | ✅ YES | In tool set |
+| MCP via ToolSearch | ✅ WORKS | v2.1.47 confirmed, stable |
+
+**CRITICAL DISTINCTION: `--agent` vs Task tool spawning**
+
+| Spawn Method | bg:true Effect | Tool Set |
+|-------------|---------------|----------|
+| `claude --agent my-agent` | **No effect** — agent IS the main session | **27 tools (FULL)** |
+| Task tool (foreground) | bg:true ignored? agent runs in FG? | ~21 tools (expected) |
+| Task tool (background) | bg:true auto-backgrounds agent | **12 tools (RESTRICTED)** |
+
+**Why the difference**: `--agent` runs the agent as the primary Claude Code session, which always has full tool access. `background: true` only affects scheduling when spawned via Task tool — it tells the system to auto-enable `run_in_background: true`.
+
+**Does `tools` frontmatter override bg tool restriction?**
+
+The agent `test-bg-fm-tasktools` has both `background: true` and `tools: [TaskCreate, TaskList, TaskGet, TaskUpdate, ...]`:
+- Via `--agent`: ✅ All task tools work (but this is main session, so bg:true irrelevant)
+- Via Task tool: ❌ **COULD NOT TEST** — custom agents created mid-session aren't in the Task tool's available agent list (session-start snapshot)
+
+**Hypothesis (UNTESTED)**: The `tools` frontmatter acts as a WHITELIST (restricts, doesn't expand). Background mode removes Task tools from the base set. The `tools` whitelist intersects with the base set. So listing TaskCreate in `tools` on a bg agent probably still fails because TaskCreate isn't in the bg base set to begin with. **Needs fresh-session test to confirm.**
+
+### `background: true` Gotcha (CONFIRMED)
+
+**`run_in_background` MAY AUTO-ENABLE**: Infrastructure.md line 68 warns Claude may auto-enable background mode. This is now even more relevant because:
+1. `background: true` in frontmatter FORCES background mode
+2. The Task tool ALSO has `run_in_background` parameter
+3. If you need TaskCreate/Update, you MUST: (a) NOT use `background: true` in frontmatter, AND (b) explicitly set `run_in_background: false` on the Task call
+
+### Memory Auto-preload Status (v2.1.50 — Definitive Retest)
+
+**5 independent tests, 3 scopes, including same-agent re-invocation:**
+
+| Test | Scope | Invocation | Auto-preload? | Evidence |
+|------|-------|-----------|---------------|----------|
+| test-memory-autopreload | project | 1st (write canary) | N/A | `test-memory-autopreload.txt` |
+| test-memory-autopreload-verify | project | 2nd agent (diff name) | ❌ NO | `test-memory-v250-verify.txt` |
+| test-mem-same-agent-verify | project | 1st → 2nd (SAME agent) | ❌ **NO** | `test-mem-same-agent-verify.txt` |
+| test-memory-local-v250 | local | 1st | ❌ NO instructions | `test-memory-v250-local.txt` |
+| test-memory-user-scope | user | 1st | ❌ NO instructions | `test-memory-v250-user.txt` |
+| test-memory-verify-general | N/A | general-purpose agent | ❌ NO | `test-memory-verify-general-v250.txt` |
+
+**Cross-model verification (Opus 4.6 retest, 2026-02-21):**
+
+| Test | Model | Auto-preload? | Evidence |
+|------|-------|--------------|----------|
+| Prior canary check | Opus 4.6 | ❌ NO | `test-bg-opus-memory-v250.txt` |
+| Memory instructions in prompt | Opus 4.6 | ❌ NO | No agent-memory content injected |
+| Storage (write/read) | Opus 4.6 | ✅ WORKS | `dragonfruit_opus_2026` written and read back |
+| SubagentStart hook injection | Opus 4.6 | ✅ WORKS | INJECTED_MAGIC_STRING_7842 confirmed |
+
+**Key Opus insight**: SubagentStart hook `additionalContext` injection WORKS, proving the injection infrastructure is functional. It's specifically the `memory:` auto-preload mechanism that's broken, not the system prompt injection pipeline.
+
+**Definitive finding**: Memory auto-preload is **STILL BROKEN in v2.1.50** across ALL models (Haiku, Sonnet, Opus 4.6), unchanged from v2.1.34-v2.1.45.
+
+**What works**: Storage. All 3 scopes create directories and persist files:
+- `user` → `~/.claude/agent-memory/<name>/`
+- `project` → `.claude/agent-memory/<name>/`
+- `local` → `.claude/agent-memory-local/<name>/`
+
+**What doesn't work**: Auto-injection of MEMORY.md (first 200 lines) into system prompt. Even for the SAME agent type on 2nd invocation, the canary value is NOT in the system prompt.
+
+**What's checked in each test**:
+- Searched entire system prompt for canary strings → NOT FOUND
+- Searched for "agent-memory" instructions → NOT FOUND
+- Searched for memory directory path → NOT FOUND
+- No memory-related instructions injected by the system
+
+**Workaround** (unchanged): Manual Read at startup:
+```yaml
+memory: project  # Creates the directory
+```
+```
+# In agent instructions:
+At startup, Read .claude/agent-memory/<name>/MEMORY.md for prior context.
+When done, Write updated findings back.
+```
+
+### Background + MCP Access (v2.1.47 → v2.1.50)
+
+| Capability | Status | Evidence |
+|-----------|--------|----------|
+| ToolSearch in bg agent | ✅ WORKS | `test-bg-mcp-v247.txt` |
+| Neo4j MCP call in bg agent | ✅ WORKS | `RETURN 1 AS test` returned `[{"test": 1}]` |
+| Perplexity in bg agent | ✅ WORKS | v2.1.47 confirmed |
+| MCP tools deferred (loadable) | ✅ 19 deferred tools visible | All MCP servers accessible |
+
+**MCP access in background agents is STABLE from v2.1.47 to v2.1.50.**
+
+**⚠️ DOCS CONTRADICTION**: Official docs at code.claude.com state *"MCP tools are not available in background subagents"*. Our tests prove otherwise — ToolSearch discovers MCP tools and they execute successfully (neo4j, perplexity). Re-confirmed in v2.1.50 with 8 concurrent bg agents. May be stale doc or refer to *direct* MCP (without ToolSearch). Via ToolSearch: **MCP WORKS in background**.
+
+### ⚠️ `anyOf` Schema API 400 Bug (v2.1.50 — ALL MODELS)
+
+**Bug**: When a background agent calls ToolSearch and MCP tools get loaded, the expanded tool schema can contain `oneOf`/`allOf`/`anyOf` at the top level. The API rejects this with HTTP 400.
+
+**Cross-model verification (2026-02-21):**
+
+| Model | BG + ToolSearch MCP expansion | Tool uses before crash | Error |
+|-------|------------------------------|----------------------|-------|
+| Haiku | ❌ API 400 | 0 | `tools.14.custom.input_schema: input_schema does not support oneOf, allOf, or anyOf at the top level` |
+| Sonnet | ❌ API 400 | 3 | `tools.15.custom.input_schema: ...` |
+| **Opus 4.6** | ❌ **API 400** | **2** | `tools.15.custom.input_schema: ...` |
+
+**Confirmed model-independent**: The `anyOf` schema error affects ALL models in background mode after ToolSearch expansion. The tool index varies (14 vs 15) because of schema serialization order, but the root cause is identical: background agent tool serialization doesn't strip unsupported JSON Schema constructs from MCP tool schemas before sending to the API.
+
+**Foreground agents are unaffected** — their tool serialization path handles these schemas correctly.
+
+**Workarounds**:
+1. Use **foreground mode** for agents that need MCP tools (multiple Task calls in one message still run in parallel)
+2. Pre-load MCP tools via `allowed-tools` in agent frontmatter (avoids ToolSearch expansion)
+3. Use Skill tool to invoke a skill that has MCP in its `allowed-tools` (delegation pattern)
+
+**Note**: Agents that DON'T call ToolSearch work fine in background — the 12 built-in tools have no schema issues. The bug only triggers when ToolSearch expands the tool set mid-session.
+
+### Round 2 Confirmation (2026-02-21, 8 parallel bg agents, v2.1.50)
+
+| Test | Mode | Finding | Evidence |
+|------|------|---------|----------|
+| Tool inventory | BG (Task) | 10+ tools confirmed. TaskCreate/TaskList/AskUser BLOCKED. | `test-bg-v250-tools.txt` |
+| MCP access | BG (Task) | ToolSearch→neo4j→`[{"test":1}]` ✅ | `test-bg-v250-tools.txt` |
+| Skill invocation | BG (Task) | test-re-arguments invoked in forked mode ✅ | `test-bg-v250-skill.txt` |
+| Memory (project) | BG (Task) | Canary file exists, NOT in system prompt. Still broken. | `test-memory-v250-verify.txt` |
+| Memory (local) | BG (Task) | Dir exists, R/W works. Old canary persists. No preload. | `test-memory-v250-local.txt` |
+| Memory (user) | BG (Task) | Dir created, R/W works. No preload. | `test-memory-v250-user.txt` |
+| bg:true CLI | --agent | BLOCKED: nested session guard | `test-bg-v250-frontmatter-meta.txt` |
+
+**New findings**:
+- Skill `test-re-model-field` API 400 in bg: `"input_schema does not support oneOf/allOf/anyOf"` — schema issue, not bg restriction.
+- **Haiku silent failure**: `model: haiku` in agent frontmatter + `--agent` flag → exit 0 but **empty output** (no stdout, no stderr, no files written). Sonnet override works. Haiku may be too small to follow complex agent instructions reliably via `--agent`.
+- **`background: true` + `memory: project` combo**: Both fields coexist. Memory dir created, R/W works. No memory instructions in prompt. Agent reported `BG_MEMORY_COMBO=WORKS`.
+
+### Test Files Created (2026-02-21)
+
+| File | What It Tests |
+|------|--------------|
+| `.claude/agents/test-bg-fm-tasktools.md` | bg:true + tools whitelist for TaskCreate |
+| `.claude/agents/test-bg-fm-vs-runtime.md` | bg:true tool inventory comparison |
+| `.claude/agents/test-mem-same-agent-verify.md` | Memory auto-preload same agent |
+| `test-outputs/test-bg-general-tools-v250.txt` | BG agent (Task tool) tool inventory |
+| `test-outputs/test-fg-general-tools-v250.txt` | FG agent (Task tool) tool inventory |
+| `test-outputs/test-bg-frontmatter-v250.txt` | bg:true basic functionality |
+| `test-outputs/test-bg-fm-vs-runtime.txt` | bg:true (--agent) full tool set |
+| `test-outputs/test-bg-fm-tasktools.txt` | bg:true + TaskCreate via --agent |
+| `test-outputs/test-mem-same-agent-verify.txt` | Same-agent memory re-invocation |
+| `test-outputs/test-memory-v250-verify.txt` | Cross-agent memory check |
+| `test-outputs/test-memory-v250-local.txt` | Local scope retest |
+| `test-outputs/test-memory-v250-user.txt` | User scope retest |
+| `test-outputs/test-memory-verify-general-v250.txt` | General agent memory check |
+| `test-outputs/test-bg-v250-tools.txt` | **Round 2**: BG tool inventory (8 parallel agents) |
+| `test-outputs/test-bg-v250-skill.txt` | **Round 2**: BG skill invocation |
+| `test-outputs/test-bg-v250-frontmatter-meta.txt` | **Round 2**: bg:true via CLI (nested guard blocked) |
+| `test-outputs/test-bg-v250-memory-combo.txt` | **Round 2**: bg+memory combo via CLI |
+| `test-outputs/test-bg-opus-tools-v250.txt` | **Opus retest**: BG tool inventory (12 tools confirmed) |
+| `test-outputs/test-bg-opus-mcp-v250.txt` | **Opus retest**: BG MCP access (API 400 — anyOf schema bug) |
+| `test-outputs/test-bg-opus-memory-v250.txt` | **Opus retest**: Memory auto-preload (STILL BROKEN) |
+
+### Key Decisions (Updated)
+
+| Decision | Before (v2.1.47) | After (v2.1.50) | Impact |
+|----------|------------------|------------------|--------|
+| BG agent tools | 11 tools | **12 tools (+EnterWorktree)** | Minor improvement |
+| FG agent tools | 20 tools | **21 tools (+TeamDelete, +EnterWorktree)** | Minor improvement |
+| `--agent` tools | N/A | **27 tools (FULL SET)** | bg:true has no effect via CLI |
+| BG agent TaskCreate | ❌ BLOCKED | ❌ **STILL BLOCKED** (all models, all spawn methods) | No change — use foreground pattern |
+| `tools` field vs bg restriction | Unknown | **Cannot expand bg base set** (inferred: whitelist only restricts) | Don't rely on `tools` to grant TaskCreate in bg mode |
+| Memory auto-preload | ❌ BROKEN | ❌ **STILL BROKEN** (all models, all spawn methods) | No change — use manual Read |
+| BG + MCP (ToolSearch) | ✅ Works (v2.1.47) | ❌ **API 400 anyOf bug** (all models) | ToolSearch expansion crashes bg agents; use foreground or pre-load via allowed-tools |
+| `background: true` frontmatter | N/A | ✅ **NEW** — scheduling directive only | Auto-sets run_in_background; no independent tool restriction |
+| `isolation: worktree` frontmatter | N/A | ✅ **NEW** — git isolation | Use for parallel file-modifying agents |
+| Agent discovery | N/A | **Session-start snapshot** (persists through continuations) | Must start brand-new session to discover new agents |
+
+### Fresh-Session Retest Results (2026-02-21, Opus 4.6)
+
+Custom agents created in the previous session (`test-bg-fm-tasktools`, `test-bg-fm-vs-runtime`, `test-mem-same-agent-verify`) were **still NOT available** as Task tool `subagent_type` values in the continued session. This confirms: the Task tool agent list is a **session-start snapshot** that persists through conversation continuations — it is NOT re-scanned on continuation.
+
+**Workaround used**: `unset CLAUDECODE && claude -p --agent <name>` via Bash for frontmatter-specific tests; `general-purpose` subagent via Task tool for Task-tool-specific tests.
+
+#### 3-Tier Tool Hierarchy (CONFIRMED, Opus 4.6)
+
+| Spawn Method | Total Tools | Task Tools | Team Tools | Interactive | Nesting |
+|-------------|------------|-----------|-----------|------------|---------|
+| `claude --agent` (CLI) | **27** | ✅ All 4 | ✅ All 3 | ✅ All 3 | ✅ Task/TaskOutput/TaskStop |
+| Task tool (foreground) | **21** | ✅ All 4 | ✅ All 3 | ❌ None | ❌ No Task/TaskOutput/TaskStop |
+| Task tool (background) | **12** | ❌ None | ❌ None | ❌ None | ❌ None |
+
+Evidence files:
+- `--agent`: `test-bg-fm-vs-runtime-opus.txt` (27 tools)
+- FG Task: `test-fg-task-tool-memory-opus.txt` (21 tools)
+- BG Task: `test-bg-task-tool-memory-opus.txt` (12 tools)
+
+**Key insight**: `background: true` in agent frontmatter does NOT restrict tools when run via `--agent` (agent IS the main session). Tool restrictions are applied by the **Task tool runtime** based on `run_in_background`, not by the frontmatter field.
+
+#### Q1: Does `tools` frontmatter override bg tool restriction?
+
+**Via `--agent`**: ✅ All 4 Task tools (TaskCreate, TaskList, TaskGet, TaskUpdate) work when listed in `tools` field. But this is because `--agent` gives the full 27-tool set regardless — `background: true` has no effect.
+
+**Via Task tool**: ❌ STILL CANNOT TEST — custom agents not discoverable as Task `subagent_type`. However, the answer can be inferred:
+
+**Inferred answer: NO, `tools` cannot override bg restriction.**
+- The `tools` field is a **whitelist** (restricts the available set, never expands it)
+- Background mode removes Task tools from the base set (12 tools, no TaskCreate)
+- `tools: [TaskCreate]` intersects with the 12-tool base → TaskCreate not in base → not granted
+- This is consistent with how `tools` works for other agents: it filters, not adds
+
+Evidence: `test-bg-fm-tasktools-opus.txt` (via `--agent`: all 4 work because full 27-tool base)
+
+#### Q2: Does bg:true frontmatter differ from run_in_background on Task?
+
+**YES — fundamentally different mechanisms:**
+
+| Aspect | `background: true` (frontmatter) | `run_in_background: true` (Task param) |
+|--------|----------------------------------|---------------------------------------|
+| When applied | At agent definition time | At spawn time |
+| Effect via `--agent` | **None** — full 27 tools | N/A (not a Task tool parameter) |
+| Effect via Task tool | Auto-sets `run_in_background` | Directly controls bg mode |
+| Tool restriction | **None by itself** — only via Task runtime | **Yes** — 12 tools |
+| Can override? | N/A | No (enforced at runtime) |
+
+**Conclusion**: `background: true` is a **scheduling directive** that tells the Task tool to auto-enable `run_in_background`. It does NOT independently restrict tools. The tool restriction comes from the Task tool's runtime bg mode, not the frontmatter field.
+
+#### Q3: Memory auto-preload via Task tool?
+
+**❌ BROKEN** — identical to `--agent` results.
+
+| Spawn Method | Model | Memory in Context | File on Disk | Evidence |
+|-------------|-------|------------------|-------------|----------|
+| Task tool (foreground) | Opus | ❌ NO | ✅ Exists | `test-fg-task-tool-memory-opus.txt` |
+| Task tool (background) | Opus | ❌ NO | ✅ Exists | `test-bg-task-tool-memory-opus.txt` |
+| `--agent` (same agent) | Opus | ❌ NO | ✅ Exists | `test-mem-same-agent-verify-opus.txt` |
+
+**Definitive**: Memory auto-preload is broken across ALL spawn methods, ALL models, ALL scopes. The spawn mechanism (Task tool vs `--agent`) makes no difference.
+
+#### Agent Discovery: Session-Start Snapshot (CONFIRMED)
+
+Custom agents created during a conversation are NOT available as Task tool `subagent_type` values, even in a continuation session. The agent type list is:
+- Scanned at original session start
+- Preserved through conversation continuations
+- NOT refreshed when `.claude/agents/` directory changes
+
+**Implication**: To spawn custom agents via Task tool, you must start a **brand new** `claude` session (not a continuation).
+
+#### Updated Test Files
+
+| File | What It Tests |
+|------|--------------|
+| `test-outputs/test-bg-fm-tasktools-opus.txt` | **Fresh**: bg:true + tools whitelist (Opus, --agent) |
+| `test-outputs/test-bg-fm-vs-runtime-opus.txt` | **Fresh**: bg:true 27-tool inventory (Opus, --agent) |
+| `test-outputs/test-mem-same-agent-verify-opus.txt` | **Fresh**: Same-agent memory re-invocation (Opus, --agent) |
+| `test-outputs/test-fg-task-tool-memory-opus.txt` | **Fresh**: FG Task agent memory+tools (Opus, Task tool) |
+| `test-outputs/test-bg-task-tool-memory-opus.txt` | **Fresh**: BG Task agent memory+tools (Opus, Task tool) |
+
+### Remaining Unknowns
+
+| Question | Status |
+|----------|--------|
+| Does `tools` frontmatter override bg tool restriction via Task tool? | **Inferred NO** (whitelist can't expand base set). Needs brand-new session to confirm empirically. |
+| Does bg:true + isolation:worktree combo work via Task? | **Untested** — needs brand-new session for agent discovery. |
+
+---
+
+*Updated: 2026-02-21 | Fresh-session retest (Opus 4.6) | 3-tier tool hierarchy confirmed (27/21/12) | tools field = whitelist, can't override bg restriction | bg:true = scheduling only (confirmed across spawn methods) | Memory auto-preload broken across ALL spawn methods | Agent discovery = session-start snapshot, persists through continuations | anyOf schema API 400 bug in BG+ToolSearch (all models) | +EnterWorktree in bg tools*
 
 ---
 

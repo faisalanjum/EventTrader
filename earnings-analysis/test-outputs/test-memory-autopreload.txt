@@ -1,0 +1,12 @@
+MEMORY_AUTOPRELOAD_TEST=v2.1.50
+MEMORY_SCOPE=project
+MEMORY_DIR_PATH=NOT_VISIBLE_IN_PROMPT
+MEMORY_INSTRUCTIONS_IN_PROMPT=NO - No explicit memory directory instructions found in system prompt
+AUTOPRELOAD_CANARY_IN_PROMPT=NO
+MEMORY_DIR_MENTIONED=NO
+MEMORY_WRITE=WORKS
+MEMORY_READ=AUTOPRELOAD_CANARY=pineapple_2026_v250
+WRITTEN_AT=2026-02-21T00:00:00Z
+PURPOSE=Testing if this content appears in system prompt on next invocation
+PHASE=1_WRITE_CANARY
+NEXT_STEP=Run test-memory-autopreload-verify to check if canary appears

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guidance System — Final Decision Review</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d1117;--s:#161b22;--s2:#1c2128;--b:#30363d;--t:#e6edf3;--t2:#8b949e;--a:#58a6ff;--g:#3fb950;--am:#d29922;--r:#f85149;--p:#bc8cff;--pk:#f778ba;--cy:#39d2c0;--rd:6px;--m:'SF Mono','Cascadia Code','Consolas',monospace;--f:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+html,body{height:100%;background:var(--bg);color:var(--t);font-family:var(--f);font-size:13px;overflow:hidden}
+body{display:flex;flex-direction:column}
+.hdr{display:flex;align-items:center;gap:12px;padding:8px 16px;border-bottom:1px solid var(--b);background:var(--s);flex-shrink:0}
+.hdr h1{font-size:14px;font-weight:600}.hdr .sub{font-size:11px;color:var(--t2)}
+.hdr .progress{font-size:11px;color:var(--g);font-weight:600;margin-left:12px}
+.stats{display:flex;gap:14px;margin-left:auto;font-size:11px}.st{display:flex;align-items:center;gap:4px}.st .d{width:8px;height:8px;border-radius:50%}.st .c{font-weight:600}
+.st.pend .d{background:var(--am)}.st.appr .d{background:var(--g)}.st.rej .d{background:var(--r)}.st.cmt .d{background:var(--p)}
+.main{display:flex;flex:1;overflow:hidden}
+.left{width:220px;min-width:200px;border-right:1px solid var(--b);background:var(--s);overflow-y:auto;flex-shrink:0}
+.left::-webkit-scrollbar{width:5px}.left::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+.grp{padding:2px 0;border-bottom:1px solid var(--b);cursor:pointer;transition:background .1s}
+.grp:hover{background:var(--s2)}.grp.active{background:rgba(88,166,255,.08);border-left:3px solid var(--a)}
+.grp-inner{padding:6px 10px}
+.grp-name{font-size:11px;font-weight:600;color:var(--t)}.grp-count{font-size:10px;color:var(--t2);margin-top:1px}
+.grp-bar{display:flex;gap:1px;margin-top:4px;height:4px;border-radius:2px;overflow:hidden}
+.grp-bar div{height:100%;border-radius:1px}.bar-g{background:var(--g)}.bar-am{background:var(--am)}.bar-r{background:var(--r)}
+.center{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.filter-bar{display:flex;gap:0;border-bottom:1px solid var(--b);background:var(--s2);flex-shrink:0}
+.ftab{flex:1;padding:6px 4px;text-align:center;font-size:11px;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:.15s}
+.ftab:hover{color:var(--t)}.ftab.active{color:var(--a);border-bottom-color:var(--a)}.ftab .fc{font-weight:600;margin-left:3px}
+.items{flex:1;overflow-y:auto;padding:8px}.items::-webkit-scrollbar{width:5px}.items::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+.card{border:1px solid var(--b);border-radius:var(--rd);margin-bottom:6px;overflow:hidden;transition:.15s}
+.card:hover{border-color:var(--t2)}.card.active{border-color:var(--a);box-shadow:0 0 0 1px var(--a)}
+.card.ap{border-left:3px solid var(--g)}.card.rj{border-left:3px solid var(--r);opacity:.55}.card.rj:hover{opacity:1}
+.card-hd{padding:8px 10px;cursor:pointer}
+.card-meta{display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap}
+.badge{font-size:9px;padding:1px 5px;border-radius:3px;border:1px solid var(--b);color:var(--t2)}
+.badge.conflict{border-color:var(--am);color:var(--am);background:rgba(210,153,34,.1)}
+.badge.decided{border-color:var(--g);color:var(--g);background:rgba(63,185,80,.1)}
+.badge.wip{border-color:var(--cy);color:var(--cy);background:rgba(57,210,192,.1)}
+.badge.src{}.card-cat{font-size:9px;padding:1px 5px;border-radius:3px;background:var(--s2);color:var(--t2)}
+.card-id{font-size:10px;color:var(--t2);font-family:var(--m);margin-left:auto}
+.card-title{font-size:12px;font-weight:600;color:var(--t);margin-bottom:3px}
+.card-text{font-size:11px;color:var(--t2);line-height:1.5}
+.card-opts{margin-top:6px;padding:6px 8px;background:var(--bg);border-radius:4px;font-size:11px}
+.card-opts .opt-label{color:var(--am);font-weight:600;margin-bottom:3px;font-size:10px;text-transform:uppercase}
+.opt{padding:3px 6px;margin:2px 0;border-radius:3px;cursor:pointer;display:flex;align-items:flex-start;gap:4px;transition:.1s;border-left:2px solid transparent}
+.opt:hover{background:rgba(255,255,255,.04)}.opt.sel{background:rgba(88,166,255,.1);border-left-color:var(--a)}
+.opt-radio{color:var(--t2);flex-shrink:0;width:14px;text-align:center}.opt.sel .opt-radio{color:var(--a)}
+.opt b{color:var(--t)}.opt .desc{color:var(--t2)}
+.rec{font-size:9px;color:var(--cy);border:1px solid var(--cy);padding:0 3px;border-radius:2px;margin-left:4px}
+.card-note{margin-top:6px;padding:4px 8px;background:rgba(188,140,255,.08);border-radius:3px;font-size:11px;color:var(--p)}
+.wip-note{margin-top:4px;font-size:10px;color:var(--cy);line-height:1.4}
+.prior-note{margin-top:4px;font-size:10px;color:var(--g)}
+.card-acts{display:flex;gap:4px;padding:6px 10px;border-top:1px solid var(--b);background:var(--s2)}
+.btn{flex:1;padding:4px 8px;border:1px solid var(--b);border-radius:4px;background:transparent;color:var(--t2);cursor:pointer;font-size:11px;font-family:var(--f);text-align:center;transition:.15s}
+.btn:hover{border-color:var(--t2);color:var(--t)}
+.btn.ap:hover,.btn.ap.on{border-color:var(--g);color:var(--g);background:rgba(63,185,80,.1)}
+.btn.rj:hover,.btn.rj.on{border-color:var(--r);color:var(--r);background:rgba(248,81,73,.1)}
+.btn.cm:hover,.btn.cm.on{border-color:var(--p);color:var(--p);background:rgba(188,140,255,.1)}
+.btn.rs{font-size:10px;flex:.4}
+.cmt-area{padding:6px 10px;border-top:1px solid var(--b);display:none}.cmt-area.open{display:block}
+.cmt-area textarea{width:100%;min-height:44px;background:var(--bg);border:1px solid var(--b);border-radius:4px;color:var(--t);font-family:var(--f);font-size:11px;padding:6px 8px;resize:vertical}
+.cmt-area textarea:focus{outline:none;border-color:var(--a)}
+.prompt{border-top:1px solid var(--b);background:var(--s);padding:10px 16px;flex-shrink:0;max-height:220px;overflow-y:auto}
+.prompt::-webkit-scrollbar{width:5px}.prompt::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+.prompt-hd{display:flex;align-items:center;margin-bottom:6px}
+.prompt-hd span{font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
+.copy{margin-left:auto;padding:3px 10px;border:1px solid var(--b);border-radius:var(--rd);background:var(--s2);color:var(--t2);cursor:pointer;font-size:11px;font-family:var(--f)}
+.copy:hover{border-color:var(--a);color:var(--a)}.copy.ok{border-color:var(--g);color:var(--g)}
+.prompt-txt{font-family:var(--m);font-size:11px;line-height:1.6;color:var(--t);white-space:pre-wrap}
+.bulk{display:flex;gap:4px;padding:5px 8px;border-bottom:1px solid var(--b);flex-shrink:0}
+.bbtn{padding:3px 8px;border:1px solid var(--b);border-radius:4px;background:transparent;color:var(--t2);cursor:pointer;font-size:10px;font-family:var(--f)}.bbtn:hover{border-color:var(--t2);color:var(--t)}
+.empty{text-align:center;padding:40px 20px;color:var(--t2)}
+</style>
+</head>
+<body>
+<div class="hdr">
+<div><h1>Guidance System — Final Decision Review</h1>
+<div class="sub">All decisions from: guidanceWIP.md, guidance-extract.md, SKILL.md, guidanceInventory.md, guidance_inventory_old.md</div></div>
+<div class="progress" id="prog"></div>
+<div class="stats" id="stats"></div>
+</div>
+<div class="main">
+<div class="left" id="groups"></div>
+<div class="center">
+<div class="filter-bar" id="fbar"></div>
+<div class="bulk">
+<button class="bbtn" onclick="bulk('approve')">Approve visible</button>
+<button class="bbtn" onclick="bulk('reject')">Reject visible</button>
+<button class="bbtn" onclick="bulk('reset')">Reset visible</button>
+<button class="bbtn" style="margin-left:auto;border-color:var(--cy);color:var(--cy)" onclick="setFilter('pending')">Show pending only</button>
+</div>
+<div class="items" id="items"></div>
+<div class="prompt">
+<div class="prompt-hd"><span>Decision Prompt</span><button class="copy" onclick="cp()">Copy</button></div>
+<div class="prompt-txt" id="prompt">Review items to generate prompt...</div>
+</div>
+</div>
+</div>
+<script>
+const G=[
+{id:'arch',name:'Architecture & Approach',desc:'High-level system design decisions'},
+{id:'model',name:'Data Model & Fields',desc:'Entry structure, field definitions, types'},
+{id:'class',name:'Classification & State',desc:'Actions, anchors, supersession'},
+{id:'source',name:'Source Processing',desc:'Which sources, priority, extraction rules'},
+{id:'output',name:'Output Format & Sections',desc:'File structure, sections, rendering'},
+{id:'capture',name:'Critical Capture Items',desc:'The 10 must-track items (A-J)'},
+{id:'fiscal',name:'Fiscal Calendar',desc:'FYE detection, period mapping, edge cases'},
+{id:'invoke',name:'Invocation & Trigger',desc:'How the system is called'},
+{id:'valid',name:'Validation & Errors',desc:'Failure policy, idempotency, safety'},
+{id:'open',name:'Open Questions',desc:'Unresolved G1-G8 + O1-O5 requiring your decision'},
+{id:'phase',name:'Implementation Phases',desc:'Build sequence and done criteria'},
+{id:'integ',name:'Integration & Consumers',desc:'Orchestrator, predictor, attribution'}
+];
+
+// def: default status. wipOpt: WIP-recommended option index. wip: WIP resolution note. prior: user prior decision.
+const S=[
+// ─── ARCHITECTURE (arch) ──────────────────────────────
+{id:1,g:'arch',cat:'approach',title:'Standalone vs orchestrator-coupled',
+text:'The inventory works independently. Any consumer reads the file. Orchestrator does NOT build it.',
+sources:['guidanceWIP \u00a79','guidanceInventory \u00a713'],def:'approved',
+wip:'WIP \u00a79: Decoupled. R8 requires independence. Orchestrator reads file; doesnt build it.'},
+
+{id:2,g:'arch',cat:'approach',title:'Per-Document Extraction (Approach A) \u2014 CHOSEN',
+text:'Process ONE document at a time as it arrives. Always current, simple trigger, easy to debug. Limited cross-source context mitigated by reading existing inventory.',
+sources:['guidanceWIP \u00a74,\u00a79'],def:'approved',
+wip:'WIP \u00a79: Chosen as primary extraction model. Natural for incremental arrival.'},
+
+{id:3,g:'arch',cat:'approach',title:'Agent Teams / Batch (Approach B) \u2014 NOT CHOSEN',
+text:'Spawn parallel specialist agents, reconcile at end. THIS produced the AAPL quality benchmark. Rich output but expensive, not incremental.',
+sources:['guidanceWIP \u00a74'],def:'rejected',
+wip:'WIP \u00a79: Not chosen. Batch-oriented, not naturally incremental. Overkill for single-doc processing.'},
+
+{id:4,g:'arch',cat:'approach',title:'Hybrid: Extract per-doc, Compile periodically (Approach C) \u2014 NOT CHOSEN',
+text:'Cheap per-doc extraction + thorough periodic compilation. Two layers = more moving parts, needs intermediate format.',
+sources:['guidanceWIP \u00a74'],def:'rejected',
+wip:'WIP \u00a79: Not chosen. Intermediate format adds complexity. Synthesis pass achieves same benefit with simpler design.'},
+
+{id:5,g:'arch',cat:'decision',title:'CHOSEN: Per-doc extraction + synthesis pass',
+text:'Approach A + separate synthesis pass for meta-analysis. Extraction per document, synthesis across quarters.',
+sources:['guidanceWIP \u00a79'],def:'approved',conflict:true,
+opts:[{l:'Per-doc + Synthesis (WIP choice)',d:'Natural for incremental. Synthesis handles cross-quarter analysis.'},{l:'Agent Teams (produced benchmark)',d:'Higher quality cross-source. More expensive. Batch-oriented.'},{l:'Hybrid (extract + compile)',d:'Always current + high quality. Two-layer complexity.'}],
+wipOpt:0,wip:'WIP \u00a79: Chosen. Update lifecycle is deciding factor. Guidance arrives incrementally.'},
+
+{id:6,g:'arch',cat:'decision',title:'Cumulative file, never destructive overwrite',
+text:'File grows over time. New guidance appended, old marked superseded. Never delete historical entries.',
+sources:['guidance_inventory_old Q1','guidanceInventory \u00a78'],def:'approved',
+prior:'User decided: cumulative (old Q1)'},
+
+{id:7,g:'arch',cat:'decision',title:'Per-company file (not per-quarter, not universe)',
+text:'One file per company at earnings-analysis/Companies/{TICKER}/guidance-inventory.md.',
+sources:['guidance_inventory_old Q3','guidanceInventory \u00a710'],def:'approved',
+prior:'User decided: per-company (old Q3)'},
+
+{id:8,g:'arch',cat:'decision',title:'Historical depth: Q1=all, Q>=2=3 months',
+text:'Q1 (first quarter for company): pull ALL historical guidance. Q2-Q4: only last 3 months.',
+sources:['guidance_inventory_old Q5','SKILL.md \u00a71'],def:'approved',
+prior:'User decided (old Q5)'},
+
+{id:9,g:'arch',cat:'design',title:'SDK-compatible, non-interactive execution',
+text:'No AskUserQuestion, no manual approval. Fail fast on missing inputs. Deterministic for replayability.',
+sources:['guidanceInventory \u00a71.2'],def:'approved'},
+
+{id:10,g:'arch',cat:'design',title:'File-authoritative state (filesystem = source of truth)',
+text:'On-disk output determines completion/resume. No separate database for guidance state.',
+sources:['guidanceInventory \u00a712,\u00a74'],def:'approved'},
+
+// ─── DATA MODEL (model) ──────────────────────────────
+{id:11,g:'model',cat:'schema',title:'18-field extraction schema',
+text:'period_type, fiscal_year, fiscal_quarter, segment, metric, low, mid, high, unit, basis, derivation, qualitative, source_type, source_id, source_key, given_date, section, quote',
+sources:['guidanceWIP \u00a710.7','guidance-extract.md'],def:'approved',
+wip:'All files agree on these 18 fields. Core extraction schema.'},
+
+{id:12,g:'model',cat:'schema',title:'6 derived/computed fields',
+text:'action, prior_value_mid, revision_pct, entry_id, status, superseded_by \u2014 computed during classification, not extracted from source.',
+sources:['guidanceWIP \u00a710.7'],def:'approved'},
+
+{id:13,g:'model',cat:'field',title:'period_type enum values',
+text:'All files use quarter/annual/half/long-range. SKILL.md and old plan add "other" for stub periods and edge cases.',
+sources:['guidanceWIP','SKILL.md','old','FISCAL_CALENDAR.md'],
+opts:[{l:'4 types (quarter/annual/half/long-range)',d:'WIP and guidance-extract use these 4. Clean and simple.'},{l:'5 types (+other)',d:'SKILL.md adds "other" for stub periods, M&A transitions, FYE changes.'}],
+wipOpt:0,wip:'WIP uses 4 types. But FISCAL_CALENDAR.md documents stub period edge cases.'},
+
+{id:14,g:'model',cat:'field',title:'derivation: explicit | calculated | point | implied',
+text:'How values were determined. explicit=all stated, calculated=mid computed from low+high, point=single value (low=mid=high), implied=qualitative only (all null).',
+sources:['guidance-extract.md','guidanceWIP \u00a710.7'],def:'approved'},
+
+{id:15,g:'model',cat:'field',title:'segment field and rules',
+text:'Default "Total". Qualified by prefix: "services revenue" \u2192 Services, "iPhone revenue" \u2192 iPhone. Unqualified \u2192 Total.',
+sources:['guidance-extract.md'],def:'approved'},
+
+{id:16,g:'model',cat:'field',title:'Metric normalization table',
+text:'EPS (=earnings per share, diluted EPS), Revenue (=net sales), Gross Margin, Operating Margin, CapEx, FCF, Operating Income, Net Income. Unknown: preserve exact wording.',
+sources:['guidance-extract.md'],def:'approved'},
+
+{id:17,g:'model',cat:'field',title:'basis field values: GAAP | non-GAAP | adjusted | constant-currency | as-reported',
+text:'Track for every entry. Different bases = completely separate guidance tracks. Definition drift flagged as Critical Capture B.',
+sources:['guidanceWIP R9','guidance-extract.md','old \u00a7B'],def:'approved'},
+
+{id:18,g:'model',cat:'field',title:'qualitative field for non-numeric guidance',
+text:'"low to mid single digits", "double-digit", "margin expansion". derivation=implied, low/mid/high all null.',
+sources:['guidance-extract.md','SKILL.md'],def:'approved'},
+
+{id:19,g:'model',cat:'field',title:'quote: max 500 chars, pipes replaced with broken bar',
+text:'Exact or near-exact quote from source. Truncate at sentence boundary with "..." if exceeds 500 chars.',
+sources:['guidance-extract.md'],def:'approved'},
+
+{id:20,g:'model',cat:'field',title:'entry_id generation scheme',
+text:'Format: {Period}-{Metric}-{sequence}. e.g., FY25-EPS-001, Q3FY25-Revenue-002. Sequence counter needs definition.',
+sources:['guidanceWIP O4','SKILL.md'],
+opts:[{l:'Zero-padded counter (001, 002, ...)',d:'Count existing entries for that period+metric, increment. Simple. Risk: renumbering on reprocess.'},{l:'Date suffix (FY25-EPS-20250731)',d:'Use given_date. Naturally ordered. Unique per date.'},{l:'Source-hash suffix (FY25-EPS-a3f)',d:'Short hash of source_id. Idempotent across reprocessing.'}],
+wip:'WIP O4: Listed as open. Needs decision.'},
+
+{id:21,g:'model',cat:'field',title:'calendar_start / calendar_end derived from FYE',
+text:'Not extracted \u2014 computed from fiscal_year + fiscal_quarter + company FYE month using FISCAL_CALENDAR.md logic.',
+sources:['FISCAL_CALENDAR.md','SKILL.md'],def:'approved'},
+
+{id:22,g:'model',cat:'schema',title:'GuidancePeriod dataclass shape',
+text:'period_type, fiscal_year, fiscal_quarter + optional calendar fields. Also has period_status computed property.',
+sources:['SKILL.md','old'],
+opts:[{l:'With calendar_start/end stored',d:'Pre-computed calendar dates in the period object. Useful for filtering.'},{l:'Compute on-the-fly from FYE',d:'Dont store calendar dates. Recompute when needed. Less data.'}],
+wipOpt:0,wip:'WIP \u00a710.7 lists calendar fields. OUTPUT_TEMPLATE uses them in tables.'},
+
+{id:23,g:'model',cat:'schema',title:'GuidanceEntry dataclass \u2014 full shape',
+text:'period(GuidancePeriod) + metric fields + citation fields + state fields. SKILL.md has page_or_section; guidance-extract has section. Same concept.',
+sources:['SKILL.md','old','guidanceWIP'],def:'approved',
+wip:'Field naming: use "section" (from guidance-extract). 18 extraction fields + 6 derived fields = 24 total fields per entry.'},
+
+{id:24,g:'model',cat:'field',title:'Guidance category tags: Financial-Hard/Soft, Operational, Qualitative',
+text:'Old plan categorizes guidance types. WIP extracts everything without explicit categories. Should entries have a category tag?',
+sources:['old \u00a71','SKILL.md'],
+opts:[{l:'No category tags (WIP approach)',d:'Just extract everything. The metric name and derivation field imply the type.'},{l:'Add category field (Hard/Soft/Operational/Qualitative)',d:'Explicit tagging. Useful for filtering and analysis.'}],
+wipOpt:0,wip:'WIP doesnt use explicit categories. Metric + derivation field covers the distinction.'},
+
+// ─── CLASSIFICATION (class) ──────────────────────────
+{id:25,g:'class',cat:'rule',title:'7 action types (all files agree)',
+text:'INITIAL, RAISED, LOWERED, MAINTAINED, NARROWED, WIDENED, WITHDRAWN. Deterministic rules based on midpoint comparison.',
+sources:['all files'],def:'approved'},
+
+{id:26,g:'class',cat:'rule',title:'Matching rule for "prior guidance"',
+text:'Same metric + period_type + fiscal_year + fiscal_quarter + segment + basis. Different basis = separate track.',
+sources:['guidanceWIP \u00a710.8'],def:'approved'},
+
+{id:27,g:'class',cat:'rule',title:'Anchor rule: first annual guidance = anchor',
+text:'First annual guidance for a fiscal year establishes the anchor midpoint (typically from Q4 call of prior year or Q1 call). All revisions measured vs anchor.',
+sources:['SKILL.md','old \u00a72','guidanceWIP \u00a710.8'],def:'approved'},
+
+{id:28,g:'class',cat:'rule',title:'Supersession: never delete, mark superseded',
+text:'Old entry gets status=superseded, superseded_by={new_entry_id}. Full audit chain must be preserved.',
+sources:['guidanceInventory \u00a78','SKILL.md','OUTPUT_TEMPLATE.md'],def:'approved'},
+
+{id:29,g:'class',cat:'rule',title:'One earnings call addresses multiple periods',
+text:'Q1 call may address: Q1 actuals (past), Q2 guidance (future), FY full year (current). Each period tracked separately.',
+sources:['old \u00a72','SKILL.md'],def:'approved'},
+
+// ─── SOURCE PROCESSING (source) ──────────────────────
+{id:30,g:'source',cat:'priority',title:'Source priority / richness ranking',
+text:'All files agree on rough order but details differ. WIP says Transcript > 8-K based on AAPL (where 8-K had zero guidance).',
+sources:['guidanceWIP \u00a72','SKILL.md','old \u00a75'],conflict:true,
+opts:[{l:'Transcript > 8-K > News > 10-Q (WIP)',d:'Based on AAPL sample. Transcript richest. 8-K had zero guidance for AAPL. Generalizes for quality.'},{l:'8-K > Transcript > News (SKILL/old)',d:'8-K is official record. Highest reliability. Transcript adds context.'}],
+wipOpt:0,wip:'WIP \u00a72: Transcript is richest single source. AAPLs best content all came from transcripts.'},
+
+{id:31,g:'source',cat:'extraction',title:'8-K EX-99.1: Outlook sections, tables, footnotes',
+text:'Official headline numbers. Check Outlook/Guidance section, financial highlights tables, GAAP vs non-GAAP footnotes. Also check Item 7.01 and 8.01.',
+sources:['guidance-extract.md','guidanceWIP \u00a710.4'],def:'approved'},
+
+{id:32,g:'source',cat:'extraction',title:'Transcript: CFO prepared remarks = formal guidance home',
+text:'CFO section has formal guidance numbers. CEO has strategic outlook. Q&A has probing detail, segment color, management caveats.',
+sources:['guidance-extract.md','guidanceWIP \u00a710.4'],def:'approved'},
+
+{id:33,g:'source',cat:'extraction',title:'Transcript: Q&A extraction depth',
+text:'Q&A is where analysts probe beyond prepared remarks. Revenue bridges, margin philosophy, segment refusals. AAPLs best content came from Q&A.',
+sources:['guidance-extract.md','guidanceWIP \u00a710.4'],
+opts:[{l:'Full Q&A (all exchanges)',d:'Maximum recall. Best guidance probing detail comes from Q&A. WIP design assumes this.'},{l:'CFO/CEO responses only',d:'Skip analyst questions, just extract management answers. Faster.'},{l:'Prepared remarks only (skip Q&A)',d:'Fastest, cheapest. Misses probing detail and segment color.'}],
+wipOpt:0,wip:'WIP \u00a710.4: Designed for full Q&A processing. AAPL samples best content came from Q&A exchanges.'},
+
+{id:34,g:'source',cat:'extraction',title:'Transcript enrichment rule (not duplication)',
+text:'When transcript has guidance for same metric/period as existing 8-K entry: ADD Q&A context to existing entry. Dont create duplicate.',
+sources:['guidanceWIP \u00a710.4'],def:'approved',
+wip:'WIP \u00a710.4: Transcript enriches existing entries. Adds Q&A context, management caveats, segment color.'},
+
+{id:35,g:'source',cat:'extraction',title:'News: filter analyst estimates vs company guidance',
+text:'"expects/revises/reaffirms" = company guidance \u2192 EXTRACT. "versus consensus/Est $X" = analyst estimate \u2192 DO NOT EXTRACT.',
+sources:['guidance-extract.md','guidanceWIP \u00a710.4'],def:'approved'},
+
+{id:36,g:'source',cat:'extraction',title:'News: conflict detection with 8-K/transcript',
+text:'If news says "13-16% growth" but transcript says "low to mid single digits" \u2192 flag in Source Conflicts. (Happened with AAPL.)',
+sources:['guidanceWIP \u00a710.4'],def:'approved'},
+
+{id:37,g:'source',cat:'extraction',title:'10-Q/10-K: rarely explicit guidance',
+text:'MD&A mostly boilerplate. Only extract if specific numbers/ranges/direction. DO note new risk language.',
+sources:['guidance-extract.md','guidanceWIP \u00a710.4'],def:'approved'},
+
+{id:38,g:'source',cat:'extraction',title:'10-Q arrival triggers accuracy resolution',
+text:'When 10-Q arrives, XBRL data provides actuals. Check OUTSTANDING guided entries for that period \u2192 move to RESOLVED with actual values.',
+sources:['guidanceWIP \u00a710.4'],def:'approved',
+wip:'WIP Q6: Part of accuracy tracking. Extractor resolves, synthesis computes beat rates.'},
+
+{id:39,g:'source',cat:'extraction',title:'XBRL: historical facts only, for verification',
+text:'No guidance content. Used to verify guided-vs-actual values and populate accuracy tracking.',
+sources:['guidance-extract.md','guidanceWIP \u00a72'],def:'approved'},
+
+{id:40,g:'source',cat:'extraction',title:'Alpha Vantage: consensus estimates (reference only)',
+text:'Street consensus, not company guidance. Stored separately for gap analysis (company guide vs street).',
+sources:['SKILL.md','old \u00a76A'],def:'approved'},
+
+{id:41,g:'source',cat:'extraction',title:'Perplexity / WebSearch: gap filling',
+text:'Fill gaps when Neo4j sources are incomplete. Currently has 401 API issues. Alternative needed.',
+sources:['SKILL.md','QUERIES.md','guidanceWIP O2'],
+opts:[{l:'Skip until API fixed',d:'Not blocking for initial implementation. Gap fill later.'},{l:'WebSearch as fallback',d:'Use web search tool when Perplexity unavailable.'},{l:'Both: try Perplexity, fall back to WebSearch',d:'Most resilient. Slightly more complex.'}],
+wip:'WIP O2: Perplexity was unavailable (401) during AAPL sample build.'},
+
+{id:42,g:'source',cat:'extraction',title:'Investor day / presentations \u2014 deferred',
+text:'Long-range targets, strategic outlook. Not yet ingested in pipeline. Can add later as new source type.',
+sources:['guidanceWIP \u00a72'],def:'approved',wip:'Deferred. Not blocking.'},
+
+{id:43,g:'source',cat:'design',title:'Source ordering: 8-K \u2192 News \u2192 Transcript \u2192 10-Q',
+text:'Natural arrival order. Each subsequent source enriches prior entries. If news arrives before 8-K, 8-K corrects later.',
+sources:['guidanceWIP \u00a710.5'],def:'approved'},
+
+{id:44,g:'source',cat:'design',title:'Fulltext search for guidance keywords',
+text:'QUERIES.md fulltext query: "guidance OR outlook OR expects" on transcript index. Useful for bulk discovery.',
+sources:['QUERIES.md'],def:'approved'},
+
+// ─── OUTPUT FORMAT (output) ──────────────────────────
+{id:45,g:'output',cat:'decision',title:'Direct-to-markdown vs intermediate format',
+text:'WIP chose direct-to-markdown. guidance-extract currently outputs pipe-delimited. These conflict.',
+sources:['guidanceWIP \u00a710.6','guidance-extract.md'],conflict:true,def:'approved',
+opts:[{l:'Direct to markdown (WIP choice)',d:'File IS the product. No stale intermediate. Simpler.'},{l:'Pipe-delimited intermediate',d:'Machine-parsable extraction. Separate rendering step.'},{l:'Markdown + JSON sidecar',d:'guidanceInventory G8: markdown for humans + JSON for machines.'}],
+wipOpt:0,wip:'WIP \u00a710.6 + Q5: Direct to markdown. No intermediate format. File is the product.'},
+
+{id:46,g:'output',cat:'decision',title:'Full rewrite vs append on each extraction',
+text:'Updates touch multiple sections simultaneously (Active Guidance, Evidence Ledger, Revision History, etc.). Options for safety.',
+sources:['guidanceWIP \u00a710.6','guidanceInventory \u00a712'],
+opts:[{l:'Full rewrite (WIP choice)',d:'Simpler, atomic update. Risk: LLM drops content. Mitigate with validation.'},{l:'Append only (timeline section)',d:'Safer for existing data. Harder for multi-section updates.'},{l:'Temp-write + atomic rename',d:'guidanceInventory \u00a712: write to temp file, rename. Safest. Adds complexity.'}],
+wipOpt:0,wip:'WIP \u00a710.6: Full rewrite because updates touch 6+ sections simultaneously.'},
+
+{id:47,g:'output',cat:'section',title:'Section: Company Fiscal Profile',
+text:'Ticker, name, FYE, calendar range, current quarter, guidance policy, historical beat rate, last updated.',
+sources:['OUTPUT_TEMPLATE.md','guidanceInventory \u00a710'],def:'approved'},
+
+{id:48,g:'output',cat:'section',title:'Section: Fiscal Calendar Reference',
+text:'Quarter-to-calendar date mapping table. Status column (past/current/future).',
+sources:['OUTPUT_TEMPLATE.md'],def:'approved'},
+
+{id:49,g:'output',cat:'section',title:'Section: Active Guidance (Current Outlook)',
+text:'Latest valid entries per period/metric/basis. Grouped by period: Annual, Current Quarter, RESOLVED.',
+sources:['OUTPUT_TEMPLATE.md','old \u00a77'],def:'approved'},
+
+{id:50,g:'output',cat:'section',title:'Section: Guidance Timeline (Chronological)',
+text:'Event blocks with: financial guidance, operational guidance, qualitative signals, conditions & assumptions.',
+sources:['OUTPUT_TEMPLATE.md','old \u00a77'],def:'approved'},
+
+{id:51,g:'output',cat:'section',title:'Section: Annual Revision History',
+text:'Per-metric tracking: anchor \u2192 Q2 revision \u2192 Q3 revision. Delta from anchor and cumulative delta.',
+sources:['OUTPUT_TEMPLATE.md'],def:'approved'},
+
+{id:52,g:'output',cat:'section',title:'Section: Consensus Comparison',
+text:'Company guide midpoint vs street consensus. Gap and signal. Source: Alpha Vantage.',
+sources:['OUTPUT_TEMPLATE.md','old \u00a76A'],def:'approved'},
+
+{id:53,g:'output',cat:'section',title:'Section: Evidence Ledger',
+text:'Every entry with ID, period, metric, value, source, date, status, superseded_by, quote. Full audit trail.',
+sources:['OUTPUT_TEMPLATE.md','guidanceInventory \u00a714'],def:'approved'},
+
+{id:54,g:'output',cat:'section',title:'Section: Data Coverage',
+text:'Source type counts and date ranges. What was queried, what was found.',
+sources:['OUTPUT_TEMPLATE.md'],def:'approved'},
+
+{id:55,g:'output',cat:'section',title:'Section: Notes & Assumptions',
+text:'Basis for all figures, FX assumptions, acquisition impacts, conditions.',
+sources:['OUTPUT_TEMPLATE.md','old \u00a77'],def:'approved'},
+
+{id:56,g:'output',cat:'section',title:'Section: Guidance Style (synthesis)',
+text:'What metrics guided, format per metric, policy, CFO transitions, format changes. Pattern recognition across all entries.',
+sources:['guidanceWIP \u00a711.2'],def:'approved'},
+
+{id:57,g:'output',cat:'section',title:'Section: Accuracy Track Record (synthesis)',
+text:'Guided vs actual table, beat rate, average surprise magnitude, systematic bias, per-metric patterns.',
+sources:['guidanceWIP \u00a711.2'],def:'approved'},
+
+{id:58,g:'output',cat:'section',title:'Section: Source Conflicts (synthesis)',
+text:'Where sources disagree on same metric. News vs transcript, format discrepancies. Resolution noted.',
+sources:['guidanceWIP \u00a711.2'],def:'approved'},
+
+{id:59,g:'output',cat:'section',title:'Section: Coverage Gaps (synthesis)',
+text:'Missing transcripts, news-only quarters, truncated sources, expected metrics not found.',
+sources:['guidanceWIP \u00a711.2'],def:'approved'},
+
+{id:60,g:'output',cat:'section',title:'Section: EPS Surprise History (synthesis)',
+text:'From Alpha Vantage. Full EPS actual vs estimate, beat/miss streak analysis.',
+sources:['guidanceWIP \u00a711.2'],def:'approved'},
+
+{id:61,g:'output',cat:'section',title:'Section: Revenue & Margin Trends (synthesis)',
+text:'Multi-year trends from XBRL 10-K/10-Q. Revenue, GM, operating margin, EPS.',
+sources:['guidanceWIP \u00a711.2'],def:'approved'},
+
+{id:62,g:'output',cat:'section',title:'Section: Post-Earnings Stock Reactions (synthesis)',
+text:'Next-day return after each earnings event. Correlation with guidance quality (beat/miss vs reaction).',
+sources:['guidanceWIP \u00a711.2'],def:'approved'},
+
+{id:63,g:'output',cat:'section',title:'Section: Operational Guidance (in timeline)',
+text:'Units, subscribers, store openings, headcount. Non-financial forward-looking statements.',
+sources:['old \u00a77','SKILL.md'],def:'approved'},
+
+{id:64,g:'output',cat:'section',title:'Section: Qualitative Signals (in timeline)',
+text:'Tone (cautious/confident/neutral), key phrases, management confidence level.',
+sources:['old \u00a77'],def:'approved'},
+
+{id:65,g:'output',cat:'design',title:'Synthesis pass does NOT modify extraction sections',
+text:'Active Guidance, Timeline, Evidence Ledger owned by extraction. Synthesis only writes Style, Accuracy, Conflicts, Gaps.',
+sources:['guidanceWIP \u00a711.3'],def:'approved'},
+
+// ─── CRITICAL CAPTURE ITEMS (capture) ────────────────
+{id:66,g:'capture',cat:'item-A',title:'A. Guidance vs Consensus Gap',
+text:'Track gap between company guidance midpoint and street consensus. Below street = bearish signal.',
+sources:['old \u00a76A'],def:'approved'},
+
+{id:67,g:'capture',cat:'item-B',title:'B. Metric Definition Drift',
+text:'Flag when basis changes: Q1 "adjusted EPS excl stock comp" \u2192 Q2 "adjusted EPS". Comparability risk.',
+sources:['old \u00a76B','guidanceWIP R9'],def:'approved'},
+
+{id:68,g:'capture',cat:'item-C',title:'C. Segment-Level Guidance',
+text:'Capture segment breakdown alongside Total. Some companies guide by segment.',
+sources:['old \u00a76C'],def:'approved'},
+
+{id:69,g:'capture',cat:'item-D',title:'D. FX / Constant Currency',
+text:'Distinguish reported vs constant-currency guidance. Note FX headwind/tailwind assumption.',
+sources:['old \u00a76D'],def:'approved'},
+
+{id:70,g:'capture',cat:'item-E',title:'E. Conditional Guidance',
+text:'"Assumes no further rate hikes", "Contingent on closing acquisition." Track assumptions that could invalidate.',
+sources:['old \u00a76E'],def:'approved'},
+
+{id:71,g:'capture',cat:'item-F',title:'F. Pre-Announcements (mid-quarter updates)',
+text:'Mid-quarter 8-K Item 7.01 guidance changes. Often most market-moving.',
+sources:['old \u00a76F','QUERIES.md'],def:'approved'},
+
+{id:72,g:'capture',cat:'item-G',title:'G. Guidance Policy',
+text:'"Company does not provide quarterly guidance." Absence is informative. Track whether company guides at all.',
+sources:['old \u00a76G'],def:'approved'},
+
+{id:73,g:'capture',cat:'item-H',title:'H. Historical Accuracy (beat/miss = predictive signal)',
+text:'Beat 7/8 quarters = systematic sandbagging. Average beat +3.2%. This is a PREDICTIVE signal.',
+sources:['old \u00a76H','guidanceWIP R10'],def:'approved'},
+
+{id:74,g:'capture',cat:'item-I',title:'I. Comparable Periods (YoY, sequential)',
+text:'Link guidance to prior-year same quarter actual (YoY) and previous quarter actual (sequential).',
+sources:['old \u00a76I'],def:'approved'},
+
+{id:75,g:'capture',cat:'item-J',title:'J. Range Asymmetry',
+text:'$12-$14 (symmetric) vs $12.50-$14 (skewed bullish). Range shape signals management confidence.',
+sources:['old \u00a76J'],def:'approved'},
+
+// ─── FISCAL CALENDAR (fiscal) ────────────────────────
+{id:76,g:'fiscal',cat:'detection',title:'FYE detection: Company node \u2192 10-K \u2192 Perplexity fallback',
+text:'Primary: Company node FYE field. Secondary: 10-K periodOfReport. Tertiary: Perplexity or assume December.',
+sources:['FISCAL_CALENDAR.md','QUERIES.md'],def:'approved'},
+
+{id:77,g:'fiscal',cat:'logic',title:'Fiscal calendar Python logic (from FISCAL_CALENDAR.md)',
+text:'Q1 starts in FYE month + 1. Function builds quarter boundaries from FYE month + fiscal year.',
+sources:['FISCAL_CALENDAR.md'],def:'approved'},
+
+{id:78,g:'fiscal',cat:'edge',title:'Edge case: 53-week fiscal years',
+text:'Walmart, Costco occasionally have 53 weeks. Extra week falls in Q4. Note if detected.',
+sources:['FISCAL_CALENDAR.md'],def:'approved'},
+
+{id:79,g:'fiscal',cat:'edge',title:'Edge case: mid-year FYE changes',
+text:'Rare. Look for 10-K/T (transition report) filings. Track as period_type="other" if using 5-type enum.',
+sources:['FISCAL_CALENDAR.md'],def:'approved'},
+
+{id:80,g:'fiscal',cat:'edge',title:'Edge case: stub periods after M&A',
+text:'"7-month period ended..." Track appropriately based on period_type decision (#13).',
+sources:['FISCAL_CALENDAR.md'],def:'approved'},
+
+// ─── INVOCATION (invoke) ─────────────────────────────
+{id:81,g:'invoke',cat:'contract',title:'Old SKILL.md contract: {TICKER} {accession_no} {quarter} \u2014 SUPERSEDED',
+text:'Old contract requires accession number and quarter number. Orchestrator-driven. Superseded by WIP.',
+sources:['SKILL.md'],def:'rejected',
+wip:'WIP \u00a710.1: Replaced by source-driven contract. No orchestrator dependency.'},
+
+{id:82,g:'invoke',cat:'contract',title:'New invocation: {TICKER} {SOURCE_TYPE} {SOURCE_ID}',
+text:'Source-driven. No quarter number needed (inferred from fiscal calendar). No accession_no dependency.',
+sources:['guidanceWIP \u00a710.1'],conflict:true,def:'approved',
+opts:[{l:'{TICKER} {SOURCE_TYPE} {SOURCE_ID} (WIP)',d:'Per-document, source-driven. More flexible. Decoupled.'},{l:'{TICKER} {accession_no} {quarter} (old)',d:'Orchestrator-driven. Quarter determines scope.'}],
+wipOpt:0,wip:'WIP \u00a710.1: Source-driven. TICKER + SOURCE_TYPE + SOURCE_ID. FYE/quarter auto-inferred.'},
+
+{id:83,g:'invoke',cat:'contract',title:'guidance-extract agent params (legacy \u2192 absorbed)',
+text:'Old: TICKER REPORT_ID SOURCE_TYPE SOURCE_KEY QUARTER FYE TASK_ID. Logic absorbed into new skill. Task coordination removed.',
+sources:['guidance-extract.md'],def:'approved',
+wip:'WIP Q10: guidance-extract logic absorbed into guidance-inventory skill. Extraction engine, not separate agent.'},
+
+{id:84,g:'invoke',cat:'trigger',title:'Trigger: CLI/SDK on-demand (now) + ingestion hook (future)',
+text:'Manual invocation for now. Auto-trigger when new document lands in Neo4j as future enhancement.',
+sources:['guidanceWIP Q1','guidanceInventory \u00a713'],def:'approved',
+wip:'WIP Q1: CLI/SDK on-demand. Orchestrator Step 0 explicitly rejected. Decoupled.'},
+
+{id:85,g:'invoke',cat:'trigger',title:'Synthesis invocation: {TICKER} synthesize',
+text:'Separate command for synthesis pass. Can be triggered manually or automatically after certain extractions.',
+sources:['guidanceWIP \u00a711'],def:'approved'},
+
+// ─── VALIDATION (valid) ──────────────────────────────
+{id:86,g:'valid',cat:'policy',title:'Validation tiers: hard-fail / continue-with-gaps / warn-and-write',
+text:'Hard-fail: core filing missing, schema violated. Continue: secondary source unavailable. Warn: partial coverage.',
+sources:['guidanceInventory \u00a711'],def:'approved'},
+
+{id:87,g:'valid',cat:'rule',title:'No citation = no entry (all files agree)',
+text:'Every entry must have source_type, source_id, given_date, quote, location. Non-negotiable.',
+sources:['all files'],def:'approved'},
+
+{id:88,g:'valid',cat:'rule',title:'Idempotency: source_id is the key',
+text:'Re-running extraction for same source_id produces same result. Evidence Ledger source_id prevents duplicates.',
+sources:['guidanceWIP \u00a712.3','guidanceInventory \u00a712'],def:'approved'},
+
+{id:89,g:'valid',cat:'rule',title:'Reprocessing: delete file + rebuild from Neo4j',
+text:'If extraction quality improves, just delete and rebuild. Source documents always in Neo4j.',
+sources:['guidanceWIP \u00a712.4'],def:'approved'},
+
+{id:90,g:'valid',cat:'rule',title:'Empty-content handling (error codes)',
+text:'SOURCE_NOT_FOUND, QUERY_FAILED, EMPTY_CONTENT, NO_GUIDANCE \u2014 specific error codes per source type.',
+sources:['guidance-extract.md'],def:'approved'},
+
+{id:91,g:'valid',cat:'risk',title:'Concurrent extraction safety',
+text:'If two sources for same company extracted simultaneously \u2192 file write conflict. Unlikely in practice but possible during initial build.',
+sources:['guidanceWIP O5'],
+opts:[{l:'Accept risk (sequential processing)',d:'Process chronologically. Events hours/days apart. Low risk.'},{l:'File locking / temp-write + rename',d:'guidanceInventory \u00a712: atomic rename. Safer. Slight complexity.'},{l:'Advisory lock file (.guidance-inventory.lock)',d:'Create lock file during write. Simple mutex.'}],
+wip:'WIP O5: Listed as low priority. Events hours apart in practice.'},
+
+// ─── OPEN QUESTIONS (open) ───────────────────────────
+{id:92,g:'open',cat:'P0',title:'G1: Entry ID schema \u2014 exact format + sequence method',
+text:'Same as #20. What exact format for entry_id? How does the sequence counter work across reprocessing?',
+sources:['guidanceInventory G1','guidanceWIP O4'],
+opts:[{l:'Zero-padded counter per period+metric',d:'FY25-EPS-001. Count existing. Simple. May renumber on reprocess.'},{l:'Date-based: FY25-EPS-20250731',d:'given_date as suffix. Naturally ordered. Unique per date per metric.'},{l:'Source-hash: FY25-EPS-a3f7',d:'Short hash of source_id. Idempotent. Not human-readable.'}]},
+
+{id:93,g:'open',cat:'P0',title:'G2: Source fallback when 8-K lacks guidance',
+text:'AAPL 8-K had zero forward guidance. What happens? Just note "no guidance" and move on? Or auto-prioritize transcript?',
+sources:['guidanceInventory G2'],
+opts:[{l:'Note "no guidance found" and continue',d:'Log NO_GUIDANCE for that source. File still updated with coverage note. Wait for next source.'},{l:'Auto-trigger next source extraction',d:'If 8-K yields nothing, automatically queue transcript extraction if available.'},{l:'Skip source silently',d:'If source_type has no guidance, just skip. Dont even note it.'}]},
+
+{id:94,g:'open',cat:'P0',title:'G3: Encoding basis changes (definition drift)',
+text:'How to detect and track when "adjusted EPS excl stock comp" becomes "adjusted EPS" across quarters?',
+sources:['guidanceInventory G3','old \u00a76B'],
+opts:[{l:'Normalize basis to canonical terms + diff',d:'Map to canonical (GAAP/non-GAAP/adjusted/cc/as-reported). Flag if raw text changes while canonical stays same.'},{l:'Store raw basis text, flag on string change',d:'Keep exact wording. If raw text changes between entries for same metric, flag as drift.'},{l:'Separate tracks only (no drift detection)',d:'Different basis = always separate guidance tracks. No special drift logic.'}]},
+
+{id:95,g:'open',cat:'P1',title:'G4: Calendar status cutoff logic',
+text:'When is a period "current" vs "future"? Exact calendar_end date or with a buffer?',
+sources:['guidanceInventory G4','old'],
+opts:[{l:'Strict: today vs calendar_end',d:'Simple. Past if today > calendar_end. FISCAL_CALENDAR.md approach.'},{l:'30-day buffer',d:'Old plan: future if calendar_end > today+30d. Avoids reporting-lag edge cases.'}],
+wip:'FISCAL_CALENDAR.md uses strict comparison. Old plan used 30-day buffer.'},
+
+{id:96,g:'open',cat:'P1',title:'G5: Segment hierarchy representation',
+text:'How to represent segment-level guidance in markdown output? Inline in tables or separate structure?',
+sources:['guidanceInventory G5'],
+opts:[{l:'Segment column in same table',d:'Simple. Add segment column to Active Guidance / Evidence Ledger tables. Current approach.'},{l:'Nested sub-tables per segment',d:'Group by segment within each period. More structured. More verbose.'},{l:'Segment as separate entries',d:'Each segment gets its own entries. Filter/group in rendering.'}],
+wipOpt:0,wip:'Current OUTPUT_TEMPLATE uses segment as a column. Simplest approach.'},
+
+{id:97,g:'open',cat:'P1',title:'G6: Qualitative entries \u2014 same table or separate?',
+text:'"low to mid single digits" with derivation=implied and null values. In same Active Guidance table or separate block?',
+sources:['guidanceInventory G6'],
+opts:[{l:'First-class in same table',d:'One table per period. Qualitative column handles it. Simpler. WIP schema supports it.'},{l:'Separate qualitative block',d:'Cleaner numeric tables. Qualitative signals get their own section.'}],
+wipOpt:0,wip:'WIP data model includes qualitative field in same entry. Designed for unified table.'},
+
+{id:98,g:'open',cat:'P1',title:'G7: Minimum evidence coverage before publishing',
+text:'How many sources must be checked before the inventory is "good enough"? Should extraction warn if only news available?',
+sources:['guidanceInventory G7'],
+opts:[{l:'No minimum \u2014 extract from whatever is available',d:'Any source is better than none. Coverage Gaps section documents whats missing.'},{l:'Warn if only news (no 8-K or transcript)',d:'News is lowest quality for guidance. Warn but proceed.'},{l:'Require at least 8-K or transcript',d:'Block until official source available. Strictest.'}]},
+
+{id:99,g:'open',cat:'P2',title:'G8: Machine-readable JSON sidecar?',
+text:'Should we emit guidance-inventory.json alongside the markdown? For programmatic consumers.',
+sources:['guidanceInventory G8'],
+opts:[{l:'Markdown only (WIP choice)',d:'Single file. Predictor reads markdown. Simpler. No sync issues.'},{l:'Markdown + JSON sidecar',d:'Machine-parsable for predictor. Two files to maintain but enables strict parsing.'}],
+wipOpt:0,wip:'WIP Q5: Direct to markdown. File is the product.'},
+
+{id:100,g:'open',cat:'medium',title:'O1: Truncated transcripts handling',
+text:'Some transcripts in Neo4j have truncated content (missing Q&A). How to handle?',
+sources:['guidanceWIP O1'],
+opts:[{l:'Note truncation in Coverage Gaps, extract whats available',d:'Best effort. Document the gap. Most pragmatic.'},{l:'Flag as incomplete, attempt gap fill via Perplexity/WebSearch',d:'Try to get full transcript. More complete but depends on external source.'},{l:'Skip truncated transcripts entirely',d:'Only process complete transcripts. Misses partial data.'}]},
+
+{id:101,g:'open',cat:'medium',title:'O3: Enrichment merge strategy \u2014 concrete rules',
+text:'When transcript enriches an 8-K entry, exactly how is the markdown updated? Need specific merge rules.',
+sources:['guidanceWIP O3'],
+opts:[{l:'Append Q&A subsection below existing entry',d:'Add a "Q&A Context" subsection in Timeline event block. Clear separation.'},{l:'Add quotes to existing quote field',d:'Extend the existing entry quote. Compact but may exceed 500 chars.'},{l:'Create linked enrichment entry',d:'New entry with enriches_id pointing to original. Separate but traceable.'}]},
+
+{id:102,g:'open',cat:'low',title:'O2: Perplexity API fallback plan',
+text:'Perplexity had 401 errors. Gap filling depends on it. What to do?',
+sources:['guidanceWIP O2'],
+opts:[{l:'Skip gap filling until API fixed',d:'Not blocking for Phase 1-2. Can add later.'},{l:'WebSearch as fallback',d:'Use web search tool when Perplexity unavailable.'},{l:'Defer entirely \u2014 not needed for core extraction',d:'Gap filling is nice-to-have, not essential.'}],
+wip:'WIP O2: Listed as low priority. Not blocking.'},
+
+// ─── NEW: WIP Q-RESOLUTIONS (previously implicit) ────
+{id:114,g:'arch',cat:'decision',title:'Unit of extraction: single document (WIP Q2)',
+text:'One invocation = one source document. A transcript is one invocation. An 8-K is one invocation. Core design principle.',
+sources:['guidanceWIP Q2'],def:'approved',
+wip:'WIP Q2: Single document is purest for incremental. Natural trigger model.'},
+
+{id:115,g:'source',cat:'design',title:'Context loading: source + existing inventory (WIP Q3)',
+text:'Extractor loads source content AND existing guidance-inventory.md. Enables classification, dedup, enrichment. Does NOT require full company history or simultaneous sources.',
+sources:['guidanceWIP Q3'],def:'approved',
+wip:'WIP Q3: Option (b). Existing inventory provides historical context for classification.'},
+
+{id:116,g:'class',cat:'rule',title:'Classification happens during extraction (WIP Q4)',
+text:'The extractor classifies entries (INITIAL/RAISED/etc.) as it extracts, by reading existing inventory. No separate compilation step.',
+sources:['guidanceWIP Q4'],def:'approved',
+wip:'WIP Q4: Option (a). Simpler. File is always in classified state. No deferred compilation.'},
+
+{id:117,g:'output',cat:'decision',title:'Analysis depth: inventory + contextual analysis (WIP Q7)',
+text:'Match AAPL sample depth: formal entries PLUS Q&A detail, revenue bridges, management caveats, source conflicts, accuracy tracking. Not pure inventory, not explicit trading signals.',
+sources:['guidanceWIP Q7'],def:'approved',
+wip:'WIP Q7: Option (b). Richer content = better predictions. Synthesis handles analytical sections.'},
+
+{id:118,g:'source',cat:'design',title:'No-guidance companies: extract implicit guidance (WIP Q8)',
+text:'Even without formal ranges, extract qualitative direction ("low to mid single digits"). derivation=implied. Note guidance policy in Style section.',
+sources:['guidanceWIP Q8'],def:'approved',
+wip:'WIP Q8: Option (b). Qualitative guidance is still guidance. Absence documented in Guidance Style.'},
+
+{id:119,g:'source',cat:'design',title:'Accuracy tracking: 10-Q resolution + synthesis computation (WIP Q6)',
+text:'10-Q extractor moves outstanding guided entries to RESOLVED. Synthesis pass computes beat rates, surprise magnitudes, systematic bias.',
+sources:['guidanceWIP Q6'],def:'approved',
+wip:'WIP Q6: Split between extraction (resolve) and synthesis (analyze).'},
+
+{id:120,g:'invoke',cat:'trigger',title:'Synthesis auto-trigger: after transcript and after 10-Q',
+text:'When to automatically run synthesis? After transcript (quarter substantially complete) and after 10-Q (actuals available).',
+sources:['guidanceWIP \u00a711.1'],
+opts:[{l:'Auto after transcript + 10-Q',d:'WIP \u00a711.1 recommends. Most useful trigger points.'},{l:'Manual only ({TICKER} synthesize)',d:'User/script decides when to synthesize. Most control.'},{l:'Auto after every extraction',d:'Always current synthesis. More expensive.'}],
+wipOpt:0,wip:'WIP \u00a711.1: Recommended triggers. Also on-demand and before prediction.'},
+
+{id:121,g:'phase',cat:'setup',title:'Model selection: update from stale model reference',
+text:'Current SKILL.md references claude-opus-4-5-20251101 (stale). Use current model for extraction quality.',
+sources:['guidanceWIP \u00a714'],def:'approved',
+wip:'WIP \u00a714: "Update model to current." Extraction quality depends on model capability.'},
+
+{id:122,g:'valid',cat:'rule',title:'Evidence standards skill: load during every extraction',
+text:'Load evidence-standards skill for anti-hallucination and citation rules during every extraction invocation.',
+sources:['guidanceWIP \u00a78'],def:'approved',
+wip:'WIP \u00a78: evidence-standards is listed as fully reusable. Should be loaded.'},
+
+// ─── PHASES (phase) ──────────────────────────────────
+{id:103,g:'phase',cat:'sequence',title:'Phase 1: Prove extraction quality on AAPL transcript',
+text:'Start with single transcript (richest source). Compare vs Agent Teams benchmark. Iterate prompts until quality matches.',
+sources:['guidanceWIP \u00a714'],def:'approved',
+wip:'WIP \u00a714: Immediate priority. Quality is the first gate.'},
+
+{id:104,g:'phase',cat:'sequence',title:'Phase 2: Full build + different company test',
+text:'Chronological processing of all AAPL sources. Then test on different company to validate company-adaptiveness.',
+sources:['guidanceWIP \u00a714'],def:'approved'},
+
+{id:105,g:'phase',cat:'sequence',title:'Phase 3: Synthesis pass implementation',
+text:'Implement synthesis invocation. Add AV/XBRL/price data integration. Test vs AAPL sample meta-analysis.',
+sources:['guidanceWIP \u00a714'],def:'approved'},
+
+{id:106,g:'phase',cat:'sequence',title:'Phase 4: Ongoing update + trigger model',
+text:'Test incremental updates (dedup/enrichment). Document future ingestion hook triggers.',
+sources:['guidanceWIP \u00a714'],def:'approved'},
+
+{id:107,g:'phase',cat:'sequence',title:'Phase ordering: lock contracts first OR prove quality first?',
+text:'guidanceInventory says lock contracts before code. WIP says prove quality first, contracts emerge from practice.',
+sources:['guidanceInventory \u00a716','guidanceWIP \u00a714'],conflict:true,
+opts:[{l:'Lock contracts first (guidanceInventory)',d:'More rigorous. Prevents rework. All P0 questions resolved before code.'},{l:'Prove quality first (WIP)',d:'Start with extraction. Iterate. Contracts emerge from what works.'}],
+wipOpt:1,wip:'WIP \u00a714: Start with Phase 1 (prove quality). Iterate prompts. Contracts solidify through practice.'},
+
+{id:108,g:'phase',cat:'done',title:'Done criteria (from guidanceInventory)',
+text:'All P0 questions resolved. Deterministic rules pass on backfill. Idempotent re-runs. Citation-complete. Orchestrator integration works.',
+sources:['guidanceInventory \u00a718'],def:'approved'},
+
+// ─── INTEGRATION (integ) ─────────────────────────────
+{id:109,g:'integ',cat:'consumer',title:'Predictor reads guidance as expectation anchor',
+text:'Predictor uses given_date to filter PIT-safe guidance. Missing guidance anchor exposed to confidence policy.',
+sources:['guidanceInventory \u00a713','SKILL.md'],def:'approved'},
+
+{id:110,g:'integ',cat:'consumer',title:'Attribution/Learner uses guidance for surprise analysis',
+text:'Learner generates lessons from revision behavior. Attribution checks surprise vs guidance.',
+sources:['guidanceInventory \u00a713','SKILL.md'],def:'approved'},
+
+{id:111,g:'integ',cat:'design',title:'PIT filtering: predictor filters, NOT inventory (WIP Q9)',
+text:'Inventory always reflects ALL known guidance. Predictor filters by given_date. File is not PIT-versioned.',
+sources:['guidanceWIP Q9'],def:'approved',
+wip:'WIP Q9: File is always-current living document. Predictor uses given_date for PIT.'},
+
+{id:112,g:'integ',cat:'design',title:'guidance-extract agent \u2192 absorbed into extraction engine (WIP Q10)',
+text:'Keep core logic (source hints, 18-field schema, normalization). Change: output to markdown, coordination to file read/write, invocation from Task to skill.',
+sources:['guidanceWIP Q10'],def:'approved',
+wip:'WIP Q10: Option (a). Evolve, not replace. Extraction logic is the same; shell changes.'},
+
+{id:113,g:'integ',cat:'design',title:'Guidance file as raw context injection for predictor',
+text:'Orchestrator passes full guidance-inventory.md to predictor. Raw markdown passthrough \u2014 predictor filters what it needs.',
+sources:['guidanceWIP Q9','guidanceInventory \u00a713.1'],def:'approved'},
+];
+
+// ─── STATE ───────────────────────────────────────────
+const state={
+  items:S.map(s=>({...s,status:s.def||'pending',comment:'',selOpt:s.wipOpt??null})),
+  filter:'all',group:'all',active:null,commentOpen:{}
+};
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function visible(){let f=state.items;if(state.group!=='all')f=f.filter(i=>i.g===state.group);if(state.filter!=='all')f=f.filter(i=>i.status===state.filter);return f}
+
+// ─── RENDER ──────────────────────────────────────────
+function renderGroups(){
+const el=document.getElementById('groups');
+const pend=state.items.filter(i=>i.status==='pending').length;
+let h=`<div class="grp${state.group==='all'?' active':''}" onclick="setGroup('all')"><div class="grp-inner"><div class="grp-name">All Items</div><div class="grp-count">${state.items.length} items \u2014 ${pend} pending</div></div></div>`;
+for(const g of G){
+const items=state.items.filter(i=>i.g===g.id);
+const ap=items.filter(i=>i.status==='approved').length;
+const rj=items.filter(i=>i.status==='rejected').length;
+const pn=items.length-ap-rj;
+h+=`<div class="grp${state.group===g.id?' active':''}" onclick="setGroup('${g.id}')"><div class="grp-inner">
+<div class="grp-name">${esc(g.name)}</div>
+<div class="grp-count">${items.length} \u2014 ${pn?pn+' pending':'all decided'}</div>
+<div class="grp-bar">${ap?`<div class="bar-g" style="flex:${ap}"></div>`:''}${pn?`<div class="bar-am" style="flex:${pn}"></div>`:''}${rj?`<div class="bar-r" style="flex:${rj}"></div>`:''}</div>
+</div></div>`;
+}
+el.innerHTML=h;
+}
+
+function renderFilters(){
+const v=state.group==='all'?state.items:state.items.filter(i=>i.g===state.group);
+const c={all:v.length,pending:v.filter(i=>i.status==='pending').length,approved:v.filter(i=>i.status==='approved').length,rejected:v.filter(i=>i.status==='rejected').length};
+document.getElementById('fbar').innerHTML=['all','pending','approved','rejected'].map(f=>
+`<div class="ftab${state.filter===f?' active':''}" onclick="setFilter('${f}')">${f.charAt(0).toUpperCase()+f.slice(1)}<span class="fc">${c[f]}</span></div>`).join('');
+}
+
+function renderItems(){
+renderFilters();
+const v=visible();
+const el=document.getElementById('items');
+if(!v.length){el.innerHTML='<div class="empty">No items match filters \u2014 '+state.items.filter(i=>i.status==='pending').length+' pending total</div>';return;}
+let h='';
+for(const s of v){
+const ac=state.active===s.id;
+const sc=s.status==='approved'?' ap':s.status==='rejected'?' rj':'';
+const co=state.commentOpen[s.id];
+h+=`<div class="card${sc}${ac?' active':''}" id="c-${s.id}">`;
+h+=`<div class="card-hd" onclick="activate(${s.id})">`;
+h+=`<div class="card-meta">`;
+if(s.conflict)h+=`<span class="badge conflict">CONFLICT</span>`;
+if(s.prior)h+=`<span class="badge decided">PRIOR</span>`;
+if(s.wip&&s.def)h+=`<span class="badge wip">WIP DECIDED</span>`;
+else if(s.wip&&!s.def)h+=`<span class="badge wip">WIP REC</span>`;
+for(const src of (s.sources||[]))h+=`<span class="badge src">${esc(src)}</span>`;
+h+=`<span class="card-cat">${esc(s.cat)}</span>`;
+h+=`<span class="card-id">#${s.id}</span></div>`;
+h+=`<div class="card-title">${esc(s.title)}</div>`;
+h+=`<div class="card-text">${esc(s.text)}</div>`;
+if(s.prior)h+=`<div class="prior-note">Prior decision: ${esc(s.prior)}</div>`;
+if(s.wip)h+=`<div class="wip-note">WIP: ${esc(s.wip)}</div>`;
+if(s.opts){
+h+=`<div class="card-opts"><div class="opt-label">${s.opts.length} Options \u2014 click to select:</div>`;
+for(let i=0;i<s.opts.length;i++){
+const o=s.opts[i];
+const sel=s.selOpt===i;
+const isWip=s.wipOpt===i;
+h+=`<div class="opt${sel?' sel':''}" onclick="event.stopPropagation();pickOpt(${s.id},${i})">`;
+h+=`<span class="opt-radio">${sel?'\u25cf':'\u25cb'}</span>`;
+h+=`<b>${String.fromCharCode(65+i)}.</b> <b>${esc(o.l)}</b>`;
+if(isWip)h+=` <span class="rec">\u2190 WIP</span>`;
+h+=` \u2014 <span class="desc">${esc(o.d)}</span>`;
+h+=`</div>`;
+}
+h+=`</div>`;
+}
+if(s.comment)h+=`<div class="card-note"><b>Your note:</b> ${esc(s.comment)}</div>`;
+h+=`</div>`;
+h+=`<div class="card-acts">`;
+h+=`<button class="btn ap${s.status==='approved'?' on':''}" onclick="event.stopPropagation();act(${s.id},'approved')">Approve</button>`;
+h+=`<button class="btn rj${s.status==='rejected'?' on':''}" onclick="event.stopPropagation();act(${s.id},'rejected')">Reject</button>`;
+h+=`<button class="btn cm${co?' on':''}" onclick="event.stopPropagation();togCmt(${s.id})">Comment</button>`;
+if(s.status!=='pending')h+=`<button class="btn rs" onclick="event.stopPropagation();act(${s.id},'pending')">Reset</button>`;
+h+=`</div>`;
+h+=`<div class="cmt-area${co?' open':''}"><textarea placeholder="Your note (option choice, conditions, modifications)..." oninput="updCmt(${s.id},this.value)">${esc(s.comment)}</textarea></div>`;
+h+=`</div>`;
+}
+el.innerHTML=h;
+}
+
+function renderStats(){
+const c={pending:0,approved:0,rejected:0,commented:0};
+state.items.forEach(i=>{c[i.status]++;if(i.comment.trim())c.commented++});
+const total=state.items.length;
+const decided=c.approved+c.rejected;
+document.getElementById('stats').innerHTML=
+`<div class="st pend"><div class="d"></div><span class="c">${c.pending}</span> pending</div>`+
+`<div class="st appr"><div class="d"></div><span class="c">${c.approved}</span> approved</div>`+
+`<div class="st rej"><div class="d"></div><span class="c">${c.rejected}</span> rejected</div>`+
+`<div class="st cmt"><div class="d"></div><span class="c">${c.commented}</span> commented</div>`;
+document.getElementById('prog').textContent=`${decided}/${total} decided (${Math.round(decided/total*100)}%)`;
+}
+
+function setGroup(g){state.group=g;state.filter='all';renderGroups();renderItems();renderStats()}
+function setFilter(f){state.filter=f;renderItems()}
+function activate(id){state.active=id;renderItems()}
+function act(id,s){const i=state.items.find(x=>x.id===id);if(i)i.status=s;renderGroups();renderItems();renderStats();updPrompt()}
+function pickOpt(id,idx){const i=state.items.find(x=>x.id===id);if(i){i.selOpt=idx;if(i.status==='pending')i.status='approved'}renderGroups();renderItems();renderStats();updPrompt()}
+function togCmt(id){state.commentOpen[id]=!state.commentOpen[id];renderItems()}
+function updCmt(id,v){const i=state.items.find(x=>x.id===id);if(i)i.comment=v;updPrompt()}
+function bulk(a){const v=visible();v.forEach(i=>{if(a==='reset'){i.status='pending';i.comment='';i.selOpt=i.wipOpt??null}else i.status=a==='approve'?'approved':'rejected'});renderGroups();renderItems();renderStats();updPrompt()}
+
+// ─── PROMPT ──────────────────────────────────────────
+function updPrompt(){
+const ap=state.items.filter(i=>i.status==='approved');
+const rj=state.items.filter(i=>i.status==='rejected');
+const cm=state.items.filter(i=>i.comment.trim()&&i.status==='pending');
+const pn=state.items.filter(i=>i.status==='pending'&&!i.comment.trim());
+const total=state.items.length;
+const decided=ap.length+rj.length;
+if(!decided&&!cm.length){document.getElementById('prompt').textContent='Approve, reject, or comment on items to build decision prompt... ('+pn.length+' pending)';return}
+
+const parts=[`# Guidance System \u2014 Final Decisions (${decided}/${total} decided)\n`];
+const byGroup=(items)=>{const m={};items.forEach(i=>{const g=G.find(x=>x.id===i.g);const n=g?g.name:i.g;if(!m[n])m[n]=[];m[n].push(i)});return m};
+const optText=(i)=>{if(i.opts&&i.selOpt!==null&&i.selOpt!==undefined&&i.opts[i.selOpt])return ` \u2192 Selected: ${String.fromCharCode(65+i.selOpt)}. ${i.opts[i.selOpt].l}`;return ''};
+
+if(ap.length){
+parts.push(`## APPROVED (${ap.length})\n`);
+const grouped=byGroup(ap);
+for(const[gn,items]of Object.entries(grouped)){
+parts.push(`### ${gn}`);
+for(const i of items){
+let line=`- **#${i.id}: ${i.title}**${optText(i)}`;
+if(i.comment)line+=`\n  Note: ${i.comment.trim()}`;
+parts.push(line);
+}
+parts.push('');
+}}
+
+if(rj.length){
+parts.push(`## REJECTED (${rj.length})\n`);
+const grouped=byGroup(rj);
+for(const[gn,items]of Object.entries(grouped)){
+parts.push(`### ${gn}`);
+for(const i of items){
+parts.push(`- **#${i.id}: ${i.title}** \u2014 Reason: ${i.comment.trim()||'(no reason given)'}`);
+}
+parts.push('');
+}}
+
+if(cm.length){
+parts.push(`## NEEDS DISCUSSION (${cm.length})\n`);
+for(const i of cm)parts.push(`- **#${i.id}: ${i.title}**${optText(i)} \u2014 ${i.comment.trim()}`);
+parts.push('');
+}
+
+if(pn.length){
+parts.push(`## STILL PENDING (${pn.length}) \u2014 these MUST be decided before implementation:\n`);
+const grouped=byGroup(pn);
+for(const[gn,items]of Object.entries(grouped))
+parts.push(`- ${gn}: ${items.map(i=>'#'+i.id+' '+i.title.substring(0,40)).join(', ')}`);
+}
+
+document.getElementById('prompt').textContent=parts.join('\n');
+}
+
+function cp(){
+navigator.clipboard.writeText(document.getElementById('prompt').textContent).then(()=>{
+const b=document.querySelector('.copy');b.textContent='Copied!';b.classList.add('ok');
+setTimeout(()=>{b.textContent='Copy';b.classList.remove('ok')},1500);
+})}
+
+// ─── INIT ────────────────────────────────────────────
+renderGroups();renderItems();renderStats();updPrompt();
+</script>
+</body>
+</html>

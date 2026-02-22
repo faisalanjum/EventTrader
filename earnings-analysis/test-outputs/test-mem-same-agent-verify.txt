@@ -1,0 +1,35 @@
+MEM_SAME_AGENT_TEST=v2.1.50
+MEMORY_SCOPE=project
+INVOCATION=SECOND
+CANARY_IN_PROMPT=NO
+MEMORY_INSTRUCTIONS_IN_PROMPT=NO - [no memory-related instructions found anywhere in system prompt or context]
+MEMORY_FILE_EXISTS=YES
+MEMORY_FILE_CONTENT=SAME_AGENT_CANARY=watermelon_same_v250 | WRITTEN_AT=first_invocation | PURPOSE=Test auto-preload on second invocation of SAME agent
+AUTOPRELOAD=STILL_BROKEN
+
+---CONTEXT_SCAN_DETAILS (SECOND INVOCATION)---
+Searched for: SAME_AGENT_CANARY         → NOT FOUND in prompt
+Searched for: watermelon_same_v250      → NOT FOUND in prompt
+Searched for: agent-memory              → NOT FOUND in prompt
+Searched for: memory directory path     → NOT FOUND in prompt
+Searched for: memory read/write instr   → NOT FOUND in prompt
+System reminders present: skills list, currentDate — NO memory content
+---
+
+---FIRST INVOCATION RESULTS (preserved)---
+INVOCATION=FIRST
+CANARY_IN_PROMPT=NO
+MEMORY_FILE_EXISTS=NO (before that run; written during that run)
+AUTOPRELOAD=FIRST_RUN_WROTE_CANARY
+CANARY_WRITTEN_TO=.claude/agent-memory/test-mem-same-agent-verify/MEMORY.md
+---
+
+VERDICT:
+- The MEMORY.md file was written correctly by first invocation at:
+  /home/faisal/EventMarketDB/.claude/agent-memory/test-mem-same-agent-verify/MEMORY.md
+- The file contains: SAME_AGENT_CANARY=watermelon_same_v250
+- On second invocation of the SAME agent type, the canary was NOT auto-preloaded
+- memory: project scope does NOT auto-inject MEMORY.md into context on re-invocation
+- RESULT: AUTO-PRELOAD FOR SAME AGENT (memory: project) = STILL_BROKEN as of v2.1.50
+
+TEST_DATE=2026-02-21

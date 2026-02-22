@@ -1,0 +1,2 @@
+SUBAGENT_START_INJECTION: WORKS
+INJECTED_MAGIC_STRING_7842: This context was injected by the SubagentStart hook. If you can see this, the hook additionalContext injection works.

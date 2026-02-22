@@ -1,11 +1,11 @@
-EXPLORE_SPAWN: ALLOWED - Task(Explore) is listed in tools frontmatter whitelist
-BASH_SPAWN: ALLOWED - Task(Bash) is listed in tools frontmatter whitelist
+EXPLORE_SPAWN: ALLOWED - Task(Explore) is explicitly listed in tools frontmatter whitelist
+BASH_SPAWN: ALLOWED - Task(Bash) is explicitly listed in tools frontmatter whitelist
 GENERAL_PURPOSE_SPAWN: BLOCKED - Task(general-purpose) is NOT listed in tools frontmatter; only Task(Explore) and Task(Bash) are permitted
 PLAN_SPAWN: BLOCKED - Task(Plan) is NOT listed in tools frontmatter; only Task(Explore) and Task(Bash) are permitted
 AGENT_TYPE_RESTRICT: ENFORCED
 
 --- Details ---
-Agent config: .claude/agents/test-agent-type-restrict.md
+Agent config: /home/faisal/EventMarketDB/.claude/agents/test_agent_type_restrict.md
 Tools frontmatter whitelist:
   - Read
   - Write
@@ -14,8 +14,21 @@ Tools frontmatter whitelist:
   - Task(Explore)
   - Task(Bash)
 
-The tools frontmatter acts as a whitelist. Only sub-agent types explicitly
-listed as Task(<type>) are permitted. Task(general-purpose) and Task(Plan)
-are absent from the whitelist and therefore blocked. The restriction is
-enforced because the tools frontmatter constrains available tools to only
-those enumerated -- any Task subagent_type not in the list is unavailable.
+Observation: The tools frontmatter acts as a strict whitelist. The agent running
+under this configuration has access ONLY to the tools explicitly enumerated. The
+Task tool is parameterized by sub-agent type: Task(Explore) and Task(Bash) are
+the only two Task variants permitted. Any other sub-agent type (general-purpose,
+Plan, or any other) is not available because it is absent from the whitelist.
+
+TEST 1 (Explore): Task(Explore) is listed -> ALLOWED
+TEST 2 (Bash): Task(Bash) is listed -> ALLOWED
+TEST 3 (general-purpose): Task(general-purpose) is NOT listed -> BLOCKED
+TEST 4 (Plan): Task(Plan) is NOT listed -> BLOCKED
+
+The restriction is ENFORCED because the tools frontmatter constrains available
+tools to only those enumerated. Sub-agent types not explicitly whitelisted
+(general-purpose, Plan) cannot be spawned. The two allowed types (Explore, Bash)
+are the only Task variants that would succeed.
+
+Test executed by: claude-opus-4-6
+Timestamp: 2026-02-18

@@ -1,3 +1,4 @@
 # Agent Memory
 
 MEMORY_TEST_VALUE=banana_2026
+MEMORY_WRITE_TEST=banana_2026_written_by_opus46

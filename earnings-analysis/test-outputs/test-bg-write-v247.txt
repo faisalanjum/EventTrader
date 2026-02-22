@@ -1,0 +1,22 @@
+BG_WRITE: WORKS
+BG_EDIT: WORKS
+TOOL_COUNT: 11 direct + 16 deferred = 27 total
+
+Direct tools (11):
+  1. Bash - Execute shell commands
+  2. Glob - File pattern matching
+  3. Grep - Content search (ripgrep-based)
+  4. Read - Read files from filesystem
+  5. Edit - Exact string replacement in files
+  6. Write - Write files to filesystem
+  7. NotebookEdit - Edit Jupyter notebook cells
+  8. WebFetch - Fetch and process web content via URL
+  9. WebSearch - Search the web for information
+  10. Skill - Execute a skill within the conversation
+  11. ToolSearch - Search for and load deferred tools
+
+Deferred tools (16, loadable via ToolSearch):
+  neo4j-cypher (3): get_neo4j_schema, read_neo4j_cypher, write_neo4j_cypher
+  perplexity (2): create_chat_completions, create_search
+  alphavantage (3): TOOL_LIST, TOOL_GET, TOOL_CALL
+  LunarCrush (8): List, Cryptocurrencies, Stocks, Topic, Topic_Time_Series, Topic_Posts, Creator, Post, Search, Fetch, Authentication

@@ -1,0 +1,11 @@
+BG_OPUS_MEMORY_TEST=v2.1.50
+MODEL=opus
+PRIOR_CANARY_FILE_EXISTS=YES
+PRIOR_CANARY_CONTENT=AUTOPRELOAD_CANARY=pineapple_2026_v250 / WRITTEN_AT=2026-02-21T00:00:00Z / PURPOSE=Testing if this content appears in system prompt on next invocation
+SAME_AGENT_CANARY_EXISTS=YES - SAME_AGENT_CANARY=watermelon_same_v250 / WRITTEN_AT=first_invocation / PURPOSE=Test auto-preload on second invocation of SAME agent
+AGENT_MEMORY_DIRS=test-bg-memory-combo test-memory-autopreload test-mem-same-agent-verify test-mem-verify-general test-re-memory-agent test-re-memory-verify
+MEMORY_INSTRUCTIONS_IN_CONTEXT=NO - No agent-memory content was injected into system prompt. Only saw SubagentStart hook injection (INJECTED_MAGIC_STRING_7842) and currentDate context. No MEMORY.md content auto-preloaded.
+OWN_CANARY_WRITE=WORKS
+OWN_CANARY_READ=OPUS_CANARY=dragonfruit_opus_2026
+AUTOPRELOAD=STILL_BROKEN
+NOTES=Agent-memory auto-preload does NOT work in v2.1.50 with Opus 4.6 either. The canary files exist on disk and can be read manually via Read tool, but their contents are NOT automatically injected into the agent system prompt/context. This matches prior Sonnet results -- auto-preload is broken regardless of model. The SubagentStart hook additionalContext injection DOES work (confirmed INJECTED_MAGIC_STRING_7842 visible), but the agent-memory directory auto-preload mechanism does not.

@@ -1,0 +1,27 @@
+BG_TOOLS_V250_TEST
+DATE=2026-02-21
+VERSION=v2.1.50
+MODE=background_via_run_in_background
+TOOL_Bash=WORKS - echo returned "BASH_TEST_OK" successfully
+TOOL_Read=WORKS - read .claude/agents/test-bg-frontmatter.md (22 lines, frontmatter with background:true)
+TOOL_Write=WORKS - writing this file proves it
+TOOL_Glob=WORKS - found 47 .md files in .claude/agents/
+TOOL_Grep=WORKS - found 8 files matching "background" in .claude/agents/
+TOOL_WebSearch=WORKS - returned 10 results for "claude code 2026" including Bloomberg, Fortune, etc.
+TOOL_WebFetch=WORKS - fetched https://example.com, returned title "Example Domain"
+TOOL_Skill=WORKS - invoked test-re-arguments with args "BG_TOOLS_TEST", skill received args and completed
+TOOL_ToolSearch=WORKS - searched "neo4j", returned 3 tools (get_neo4j_schema, read_neo4j_cypher, write_neo4j_cypher)
+TOOL_MCP_neo4j=WORKS - executed "RETURN 1 AS test", got [{"test": 1}]
+TOOL_TaskCreate=BLOCKED - tool not available in background agent tool set (not listed in available tools)
+TOOL_TaskList=BLOCKED - tool not available in background agent tool set (not listed in available tools)
+TOOL_AskUser=BLOCKED - tool not available in background agent tool set (not listed in available tools)
+TOTAL_AVAILABLE=10
+TOTAL_BLOCKED=3
+
+NOTES:
+- Background agents via run_in_background have access to: Bash, Read, Write, Glob, Grep, WebSearch, WebFetch, Skill, ToolSearch, MCP tools (via ToolSearch), Edit, NotebookEdit, EnterWorktree
+- Background agents do NOT have: TaskCreate, TaskList, AskUserQuestion (these are interactive/orchestration tools not available in this context)
+- Skill invocation works and the skill itself ran in forked execution mode
+- MCP tools (neo4j) work after being loaded via ToolSearch
+- WebSearch and WebFetch both work with no restrictions observed
+- SubagentStart hook injection was visible in system-reminder: "INJECTED_MAGIC_STRING_7842"

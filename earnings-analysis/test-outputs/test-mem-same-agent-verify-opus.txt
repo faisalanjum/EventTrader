@@ -1,0 +1,50 @@
+MEM_SAME_AGENT_TEST=v2.1.50
+MEMORY_SCOPE=project
+INVOCATION=SECOND (opus re-run)
+CANARY_IN_PROMPT=NO
+MEMORY_INSTRUCTIONS_IN_PROMPT=NO - [no memory-related instructions, no agent-memory paths, no read/write memory directives found anywhere in system prompt or context]
+MEMORY_FILE_EXISTS=YES
+MEMORY_FILE_CONTENT=SAME_AGENT_CANARY=watermelon_same_v250 | WRITTEN_AT=first_invocation | PURPOSE=Test auto-preload on second invocation of SAME agent
+AUTOPRELOAD=STILL_BROKEN
+
+---CONTEXT_SCAN_DETAILS (OPUS SECOND INVOCATION)---
+Searched for: SAME_AGENT_CANARY         -> NOT FOUND in prompt/context
+Searched for: watermelon_same_v250      -> NOT FOUND in prompt/context
+Searched for: agent-memory              -> NOT FOUND in prompt/context
+Searched for: memory directory path     -> NOT FOUND in prompt/context
+Searched for: memory read/write instr   -> NOT FOUND in prompt/context
+System reminders present: skills list, currentDate — NO memory content injected
+Agent type: test-mem-same-agent-verify (confirmed via agent-memory directory name)
+File path verified: /home/faisal/EventMarketDB/.claude/agent-memory/test-mem-same-agent-verify/MEMORY.md
+---
+
+---PRIOR INVOCATION RESULTS (from test-mem-same-agent-verify.txt)---
+Previous test already ran TWICE (first wrote canary, second verified broken)
+Prior INVOCATION=SECOND found same result: CANARY_IN_PROMPT=NO
+Prior AUTOPRELOAD=STILL_BROKEN
+---
+
+---ALL MEMORY FILES ON DISK---
+project-scope: .claude/agent-memory/test-mem-same-agent-verify/MEMORY.md (EXISTS, has canary)
+project-scope: .claude/agent-memory/test-mem-verify-general/MEMORY.md
+project-scope: .claude/agent-memory/test-bg-memory-combo/MEMORY.md
+project-scope: .claude/agent-memory/test-mem-opus-verify/MEMORY.md
+project-scope: .claude/agent-memory/test-re-memory-agent/MEMORY.md
+project-scope: .claude/agent-memory/test-memory-autopreload/MEMORY.md
+local-scope:   .claude/agent-memory-local/test-memory-local-v250/MEMORY.md
+local-scope:   .claude/agent-memory-local/test-memory-local/MEMORY.md
+user-scope:    ~/.claude/agent-memory/test-memory-user-scope/MEMORY.md
+user-scope:    ~/.claude/agent-memory/test-bg-memory-combo/MEMORY.md
+---
+
+VERDICT:
+- The MEMORY.md file EXISTS at correct path for this agent type
+- File contains expected canary: SAME_AGENT_CANARY=watermelon_same_v250
+- On this invocation (same agent type: test-mem-same-agent-verify), the canary was NOT auto-preloaded
+- No memory-related instructions, paths, or content appear anywhere in system prompt
+- The only system-reminders present are: skills list + currentDate
+- CONCLUSION: memory: project with auto-preload for SAME agent = NOT WORKING in v2.1.50
+- RESULT: STILL_BROKEN — the memory: project field does NOT auto-inject MEMORY.md into the agent's context
+
+TEST_DATE=2026-02-21
+MODEL=opus

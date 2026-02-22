@@ -1,0 +1,10 @@
+BG_MEMORY_COMBO_META_V250
+DATE=2026-02-21
+VERSION=v2.1.50
+AGENT_HAS_BACKGROUND=true
+AGENT_HAS_MEMORY=project
+CLI_INVOCATION=WORKS
+MEMORY_DIR_CREATED=YES
+MEMORY_INSTRUCTIONS_IN_AGENT_PROMPT=NO - [agent reported MEMORY_INSTRUCTIONS_IN_PROMPT=NO]
+COMBO_WORKS=YES
+NOTES=haiku model silently fails (empty output, exit 0), sonnet override works fully. Agent can read/write MEMORY.md but does NOT receive memory instructions in system prompt. The background+memory combo is accepted by the CLI without error.

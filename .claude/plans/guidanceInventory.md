@@ -1,6 +1,6 @@
 # Guidance System — Implementation Spec
 
-**Version**: 2.3 | 2026-02-21
+**Version**: 2.4 | 2026-02-21
 **Status**: Architecture locked — implementation-ready
 **Parent**: `earnings-orchestrator.md`
 **Benchmark**: `sampleGuidance_byAgentTeams.md` (AAPL)
@@ -31,10 +31,17 @@ These decisions are intentionally pinned at the top so they are resolved before 
 Use this block as the execution contract so implementation can proceed without extra prompts.
 
 **Mandatory read order (before coding):**
-1. This file: §1, §2, §2A, §3, §6, §7, §10, §12, §13.
-2. `.claude/skills/earnings-orchestrator/scripts/guidance_ids.py` + `test_guidance_ids.py`.
-3. `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` (`period_to_fiscal`, `get_derived_fye`, `fiscal_to_dates`).
-4. `neograph/mixins/news.py` and `neograph/Neo4jManager.py` (`execute_cypher_query`) for write pattern reuse.
+1. This file: §1, §2, §2A, §3, §6, §7, §10, §12, §13, §14 (completion status).
+2. Completed reference docs (DO NOT rewrite — these are done):
+   - `.claude/skills/guidance-inventory/SKILL.md` (v2.2)
+   - `.claude/skills/guidance-inventory/QUERIES.md` (v2.6)
+   - `.claude/skills/guidance-inventory/reference/PROFILE_*.md` (4 files)
+3. `.claude/skills/earnings-orchestrator/scripts/guidance_ids.py` + `test_guidance_ids.py`.
+4. `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` (`period_to_fiscal`, `get_derived_fye`, `fiscal_to_dates`).
+5. `neograph/mixins/news.py` and `neograph/Neo4jManager.py` (`execute_cypher_query`) for write pattern reuse.
+6. `.claude/agents/guidance-extract.md` (current version — this is the file to rewrite, per §15A).
+
+**Verify environment:** `python3 -m pytest .claude/skills/earnings-orchestrator/scripts/test_guidance_ids.py test_fiscal_resolve.py test_guidance_writer.py` — all 125 tests must pass before any changes.
 
 **Non-negotiables:**
 1. Do not modify `period_to_fiscal()` or `get_derived_fye()`.
@@ -928,18 +935,28 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 
 ---
 
-## 14. Files to Update (pending approval)
+## 14. Files to Update
 
-| File | Status | Action Needed |
-|------|--------|---------------|
-| `guidance-extract.md` (agent) | **Rewrite** | Graph-native output, new tools (Bash, MCP write), route by source type. Core extraction logic carried forward. |
-| `guidance-inventory/SKILL.md` | **Rewrite** | Reference doc for agent. Schema, fields, validation rules, write patterns, XBRL matching. |
-| `guidance-inventory/QUERIES.md` | **Update** | Merge agent's source-fetch queries + warmup cache queries from §7. Fix "Via Skill" labels. |
-| `guidance-inventory/OUTPUT_TEMPLATE.md` | **Archive/Delete** | Fully superseded. No markdown output; graph-native. |
-| `guidance-inventory/FISCAL_CALENDAR.md` | **Archive/Delete (completed)** | Superseded by `fiscal_to_dates()` / `fiscal_resolve.py`; no runtime dependency. |
-| `guidance-inventory/reference/` | **Populate** | Per-source extraction profiles (§15). Currently empty. |
-| `guidance_ids.py` | **Extend** | Add `basis_points`/`percent_points` to canonical units. Add `UNIT_ALIASES` map. Add `unit_raw` handling. |
-| `earnings-orchestrator.md` | Already updated | Step 0 removed, I5 = graph query |
+| File | Status | Action Taken / Needed |
+|------|--------|----------------------|
+| `guidance-extract.md` (agent) | **PENDING — Rewrite** | Graph-native output, new tools (Bash, MCP write), route by source type. Core extraction logic carried forward. This is the only remaining Phase 2 item. |
+| `guidance-inventory/SKILL.md` | **DONE** (v2.2) | Rewritten as reference doc. Schema, fields, validation, write patterns, XBRL matching. Removed predictor refs, dead file links. Write path references `guidance_writer.py`. |
+| `guidance-inventory/QUERIES.md` | **DONE** (v2.6) | ~42 read-only queries. Source-fetch + warmup caches + fulltext. Fixed: 3B phantom null, null-date guards, MD&A apostrophe, QuestionAnswer types, 3C fallback, execution order. Writes go through `guidance_writer.py`. |
+| `guidance-inventory/OUTPUT_TEMPLATE.md` | **DONE** (deleted) | Fully superseded by graph-native output. |
+| `guidance-inventory/FISCAL_CALENDAR.md` | **DONE** (deleted) | Superseded by `fiscal_resolve.py` + SKILL.md §9. |
+| `guidance-inventory/reference/PROFILE_TRANSCRIPT.md` | **DONE** (v1.3) | Scan scope, speaker hierarchy, PR vs Q&A, QuestionAnswer fallback (3C), quote prefixes. |
+| `guidance-inventory/reference/PROFILE_8K.md` | **DONE** (v1.1) | EX-99.* + Item 2.02/7.01, boilerplate exclusion, table handling, fetch order. |
+| `guidance-inventory/reference/PROFILE_NEWS.md` | **DONE** (v1.1) | Channel filter, analyst exclusion, reaffirmation handling, title/body scan. |
+| `guidance-inventory/reference/PROFILE_10Q.md` | **DONE** (v1.2) | MD&A primary (10-Q ~99%, 10-K ~98%), bounded fallback, 10-K apostrophe variant, forward-looking strictness. |
+| `guidance_ids.py` | **DONE** (45 tests) | Unit registry (basis_points, percent_points), UNIT_ALIASES, unit_raw handling, evhash16, build_guidance_ids. |
+| `fiscal_resolve.py` | **DONE** (29 tests) | CLI wrapper for fiscal-to-calendar resolution. Pre-fetched Period JSON via stdin. |
+| `guidance_writer.py` | **DONE** (51 tests) | Direct Cypher write path. Label-specific source MATCH, ticker-based resolution, alias dedupe, member batching. Feature flag gated. |
+| `earnings-orchestrator.md` | **DONE** | Step 0 removed, I5 = graph query. |
+
+**Next steps after §14**:
+1. Rewrite `guidance-extract.md` agent (the one PENDING item above)
+2. AAPL transcript dry-run validation (shadow mode, compare against `sampleGuidance_byAgentTeams.md`)
+3. Shadow run on 3+ companies, 3+ source types → enable writes
 
 ---
 
@@ -1177,4 +1194,4 @@ The agent's quality filters (lines 357-365) belong in the core SKILL.md:
 
 ---
 
-*v2.3 | 2026-02-21 | §14 file status finalized (agent rewrite, skill rewrite, OUTPUT_TEMPLATE archived). §15 added: implementation takeaways from cross-reference audit of guidance-extract.md + guidance-inventory/ against spec. Architecture locked: one agent + core skill + per-source profiles. Unit extensibility via registry pattern (basis_points, percent_points added). Fiscal resolution bridge designed. Feature flag: MODE=dry_run default. Error taxonomy extended. Source content queries, extraction profiles, and superseded items catalogued.*
+*v2.4 | 2026-02-21 | §14 updated to reflect Phase 2 completion status: SKILL.md v2.2, QUERIES.md v2.6, 4 profiles written, 3 scripts done (125 tests), 2 files deleted. Only remaining Phase 2 item: guidance-extract.md agent rewrite. Added next-steps block. Prior: v2.3 (§14/§15 added, architecture locked).*

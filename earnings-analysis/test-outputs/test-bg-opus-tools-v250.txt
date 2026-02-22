@@ -1,0 +1,68 @@
+BG_OPUS_TOOLS_TEST=v2.1.50
+MODEL=opus
+MODE=run_in_background_true
+TOTAL_TOOLS=12
+ALL_TOOL_NAMES=Bash,Glob,Grep,Read,Edit,Write,NotebookEdit,WebFetch,WebSearch,Skill,EnterWorktree,ToolSearch
+HAS_TaskCreate=NO
+HAS_TaskList=NO
+HAS_TaskGet=NO
+HAS_TaskUpdate=NO
+HAS_Task=NO
+HAS_TaskOutput=NO
+HAS_TaskStop=NO
+HAS_SendMessage=NO
+HAS_TeamCreate=NO
+HAS_AskUserQuestion=NO
+HAS_EnterPlanMode=NO
+HAS_Bash=YES
+HAS_Read=YES
+HAS_Write=YES
+HAS_Edit=YES
+HAS_Glob=YES
+HAS_Grep=YES
+HAS_WebSearch=YES
+HAS_WebFetch=YES
+HAS_Skill=YES
+HAS_ToolSearch=YES
+HAS_NotebookEdit=YES
+HAS_EnterWorktree=YES
+TASKCREATE_RESULT=TOOL_NOT_AVAILABLE - TaskCreate does not exist in the tool set; cannot invoke
+TASKLIST_RESULT=TOOL_NOT_AVAILABLE - TaskList does not exist in the tool set; cannot invoke
+
+--- DEFERRED TOOLS (available via ToolSearch but not yet loaded) ---
+mcp__neo4j-cypher__get_neo4j_schema
+mcp__neo4j-cypher__read_neo4j_cypher
+mcp__neo4j-cypher__write_neo4j_cypher
+mcp__perplexity__create_chat_completions
+mcp__perplexity__create_search
+mcp__alphavantage__TOOL_LIST
+mcp__alphavantage__TOOL_GET
+mcp__alphavantage__TOOL_CALL
+mcp__claude_ai_LunarCrush__List
+mcp__claude_ai_LunarCrush__Cryptocurrencies
+mcp__claude_ai_LunarCrush__Stocks
+mcp__claude_ai_LunarCrush__Topic
+mcp__claude_ai_LunarCrush__Topic_Time_Series
+mcp__claude_ai_LunarCrush__Topic_Posts
+mcp__claude_ai_LunarCrush__Creator
+mcp__claude_ai_LunarCrush__Post
+mcp__claude_ai_LunarCrush__Search
+mcp__claude_ai_LunarCrush__Fetch
+mcp__claude_ai_LunarCrush__Authentication
+DEFERRED_TOOL_COUNT=19
+
+--- HOOK INJECTION TEST ---
+SUBAGENTSTART_HOOK_INJECTED=YES
+INJECTED_MAGIC_STRING=INJECTED_MAGIC_STRING_7842 visible in system-reminder
+
+--- SUMMARY ---
+Background sub-agents on Opus 4.6 (v2.1.50) have:
+- All standard file/code tools: Bash, Read, Write, Edit, Glob, Grep
+- Web tools: WebSearch, WebFetch
+- Utility tools: Skill, ToolSearch, NotebookEdit, EnterWorktree
+- 19 deferred MCP tools loadable via ToolSearch
+- NO task management tools (TaskCreate/List/Get/Update)
+- NO agent spawning tools (Task/TaskOutput/TaskStop)
+- NO team tools (SendMessage/TeamCreate)
+- NO interactive tools (AskUserQuestion/EnterPlanMode)
+- SubagentStart hook additionalContext injection: CONFIRMED WORKING

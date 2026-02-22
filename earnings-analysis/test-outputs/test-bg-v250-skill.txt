@@ -1,0 +1,8 @@
+BG_SKILL_V250_TEST
+DATE=2026-02-21
+VERSION=v2.1.50
+MODE=background
+SKILL_TOOL_AVAILABLE=YES
+SKILL_test_re_arguments=WORKS
+SKILL_test_re_model=ERROR - 400 invalid_request_error: tools.17.custom.input_schema: input_schema does not support oneOf, allOf, or anyOf at the top level
+SKILL_RESULT=test-re-arguments invoked successfully from background mode with args "BG_SKILL_V250_TEST". Skill completed (forked execution) and wrote output. test-re-model-field failed with API schema validation error (oneOf/allOf/anyOf not supported at top level of input_schema).

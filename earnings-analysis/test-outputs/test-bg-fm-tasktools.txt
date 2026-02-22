@@ -1,0 +1,19 @@
+BG_FM_TASKTOOLS_TEST=v2.1.50
+BACKGROUND=true
+TOOLS_FIELD=[TaskCreate,TaskList,TaskGet,TaskUpdate,Bash,Read,Write,Glob,Grep]
+TASKCREATE=WORKS - Task #32 created: BG_FM_TASKTOOLS_TEST
+TASKLIST=WORKS - Returned 3 tasks: #30 [in_progress], #31 [pending], #32 [pending]
+TASKGET=WORKS - Retrieved Task #32: subject=BG_FM_TASKTOOLS_TEST, status=pending
+TASKUPDATE=WORKS - Updated task #32 description to UPDATED_BY_BG_AGENT
+CONCLUSION=TOOLS_FIELD_OVERRIDES_BG_RESTRICTION
+
+DETAILS:
+- TaskCreate: Successfully created task #32 with subject="BG_FM_TASKTOOLS_TEST"
+- TaskList: Returned full task list including the newly created task
+- TaskGet: Retrieved task #32 details (subject, status, description)
+- TaskUpdate: Updated task #32 description field successfully
+- All 4 Task tools were accessible from a background:true agent when explicitly
+  listed in the tools frontmatter field
+- Infrastructure.md claim that bg agents have Task tools BLOCKED is INCORRECT
+  (or has been overridden by explicit tools: field in frontmatter)
+- The `tools` frontmatter field DOES override the background restriction for Task tools

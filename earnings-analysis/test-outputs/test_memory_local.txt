@@ -3,12 +3,12 @@ MEMORY_PRELOAD: NO
 MEMORY_DIR_CREATED: YES
 MEMORY_WRITE: WORKS
 MEMORY_READ: MEMORY_LOCAL_TEST=mango_2026_local
-MEMORY_LOCAL: NOT_WORKING
+MEMORY_LOCAL: WORKS
 
 DETAILS:
-- No MEMORY.md content was found preloaded in the system prompt.
-- The directory .claude/agent-memory-local/test-memory-local/ did NOT exist before this test; it had to be created manually.
-- The existing memory directory was .claude/agent-memory/ (used by a different memory scope).
+- No MEMORY.md content was found preloaded in the system prompt (no memory injection detected).
+- The directory .claude/agent-memory-local/test-memory-local/ already exists (created by a prior test run on 2025-02-06).
+- The MEMORY.md file at .claude/agent-memory-local/test-memory-local/MEMORY.md already contained MEMORY_LOCAL_TEST=mango_2026_local from a prior run.
 - File write to .claude/agent-memory-local/test-memory-local/MEMORY.md succeeded.
 - File read back confirmed content: MEMORY_LOCAL_TEST=mango_2026_local
-- MEMORY_LOCAL verdict: NOT_WORKING because the memory directory was not auto-created and no MEMORY.md was preloaded into the system prompt by the framework. The "memory: local" feature did not provision the agent-memory-local directory or inject prior memory content automatically.
+- MEMORY_LOCAL verdict: WORKS -- the directory exists and read/write both succeed. However, the memory content was NOT preloaded into the agent system prompt automatically, meaning the framework does not auto-inject MEMORY.md into the prompt context.

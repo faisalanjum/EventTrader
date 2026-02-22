@@ -1,0 +1,66 @@
+Background Agent Tools Inventory (v247)
+========================================
+Date: 2026-02-19
+Agent Model: Claude Opus 4.6
+
+Tools Available (one per line):
+-------------------------------
+1. Bash
+2. Glob
+3. Grep
+4. Read
+5. Edit
+6. Write
+7. NotebookEdit
+8. WebFetch
+9. WebSearch
+10. Skill
+11. ToolSearch
+
+Tool Availability Check:
+------------------------
+ENTER_PLAN_MODE: NO
+TASK_CREATE: NO
+TASK_LIST: NO
+TASK_GET: NO
+TASK_UPDATE: NO
+TASK_OUTPUT: NO
+TASK_STOP: NO
+SEND_MESSAGE: NO
+TEAM_CREATE: NO
+SKILL: YES
+TOOL_SEARCH: YES
+NOTEBOOK_EDIT: YES
+ASK_USER_QUESTION: NO
+
+Deferred Tools (available via ToolSearch but not yet loaded):
+-------------------------------------------------------------
+mcp__neo4j-cypher__get_neo4j_schema
+mcp__neo4j-cypher__read_neo4j_cypher
+mcp__neo4j-cypher__write_neo4j_cypher
+mcp__perplexity__create_chat_completions
+mcp__perplexity__create_search
+mcp__alphavantage__TOOL_LIST
+mcp__alphavantage__TOOL_GET
+mcp__alphavantage__TOOL_CALL
+mcp__claude_ai_LunarCrush__List
+mcp__claude_ai_LunarCrush__Cryptocurrencies
+mcp__claude_ai_LunarCrush__Stocks
+mcp__claude_ai_LunarCrush__Topic
+mcp__claude_ai_LunarCrush__Topic_Time_Series
+mcp__claude_ai_LunarCrush__Topic_Posts
+mcp__claude_ai_LunarCrush__Creator
+mcp__claude_ai_LunarCrush__Post
+mcp__claude_ai_LunarCrush__Search
+mcp__claude_ai_LunarCrush__Fetch
+mcp__claude_ai_LunarCrush__Authentication
+
+Total directly available tools: 11
+Total deferred tools (via ToolSearch): 19
+
+Notes:
+- No orchestration tools (TASK_*, TEAM_CREATE, SEND_MESSAGE) are present.
+- No ENTER_PLAN_MODE tool is present.
+- No ASK_USER_QUESTION tool is present.
+- This agent has standard file/code tools plus web access, Skill, ToolSearch, and NotebookEdit.
+- MCP tools (Neo4j, Perplexity, AlphaVantage, LunarCrush) are available as deferred tools.

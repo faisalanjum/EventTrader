@@ -1,0 +1,14 @@
+BG_FM_TASKTOOLS_TEST=v2.1.50
+BACKGROUND=true
+TOOLS_FIELD=[TaskCreate,TaskList,TaskGet,TaskUpdate,Bash,Read,Write,Glob,Grep]
+TASKCREATE=WORKS - Created task #33 with subject "BG_FM_TASKTOOLS_TEST" successfully
+TASKLIST=WORKS - Returned task #33 in listing
+TASKGET=WORKS - Retrieved task #33 with full details (subject, status, description)
+TASKUPDATE=WORKS - Updated task #33 description to "UPDATED_BY_BG_AGENT" and status to "completed"
+CONCLUSION=TOOLS_FIELD_OVERRIDES_BG_RESTRICTION
+NOTES=All 4 Task tools (TaskCreate, TaskList, TaskGet, TaskUpdate) worked successfully.
+The tools frontmatter field explicitly listing these tools DOES override the background
+agent restriction that would normally block Task tools. Infrastructure.md states bg agents
+get only 11 tools with Task tools BLOCKED, but the tools whitelist in agent frontmatter
+takes precedence and grants access to all listed tools regardless of background mode.
+TIMESTAMP=2026-02-21

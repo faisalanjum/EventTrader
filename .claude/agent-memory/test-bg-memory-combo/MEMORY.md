@@ -1,0 +1,1 @@
+BG_MEMORY_CANARY=banana_bg_v250

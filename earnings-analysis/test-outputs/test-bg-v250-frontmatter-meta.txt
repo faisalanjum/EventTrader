@@ -1,0 +1,8 @@
+BG_FRONTMATTER_META_V250_TEST
+DATE=2026-02-21
+VERSION=v2.1.50
+AGENT_FILE_EXISTS=YES
+BACKGROUND_FIELD_IN_FRONTMATTER=YES
+CLI_INVOCATION=FAILED - Claude Code cannot be launched inside another Claude Code session (nested session restriction). The command `claude -p ... --agent test-bg-frontmatter` returned: "Error: Claude Code cannot be launched inside another Claude Code session. Nested sessions share runtime resources and will crash all active sessions. To bypass this check, unset the CLAUDECODE environment variable."
+OUTPUT_FILE_CREATED=NO
+NOTES=The agent definition file .claude/agents/test-bg-frontmatter.md exists and contains valid frontmatter with background: true, model: haiku, name: test-bg-frontmatter, and a description. The agent body instructs writing a test report to earnings-analysis/test-outputs/test-bg-frontmatter.txt. The CLI invocation could not be tested because this session is itself running inside Claude Code, which prevents nested launches. To properly test this agent, run the command from a standalone terminal outside of any Claude Code session, or unset the CLAUDECODE environment variable before invoking.

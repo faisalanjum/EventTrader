@@ -1,0 +1,14 @@
+TASK_TOOL_AVAILABLE: NO
+TASK_CREATE_AVAILABLE: YES
+TASK_LIST_AVAILABLE: YES
+NESTED_SPAWN: NOT_POSSIBLE
+ALL_TOOLS: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, Skill, TaskCreate, TaskGet, TaskUpdate, TaskList, TeamCreate, TeamDelete, SendMessage, ToolSearch, ListMcpResourcesTool, ReadMcpResourceTool
+CONTEXT: FOREGROUND_SUBAGENT
+
+--- DETAILED NOTES ---
+- The "Task" tool (sub-agent spawner with subagent_type parameter) is NOT available.
+- TaskCreate/TaskList/TaskGet/TaskUpdate ARE available but these manage task list items (todo tracking), NOT sub-agent processes.
+- TaskOutput and TaskStop are NOT available.
+- TeamCreate is available (creates team configurations) but requires the Task tool to actually spawn teammate agents.
+- Without the Task tool, nested sub-agent spawning is NOT POSSIBLE from this foreground sub-agent.
+- This agent has 20 tools total, none of which can spawn a child sub-agent process.

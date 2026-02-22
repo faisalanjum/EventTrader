@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guidance Structure Explorer</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d1117; --surface: #161b22; --surface2: #1c2128; --border: #30363d;
+    --text: #e6edf3; --text2: #8b949e; --accent: #58a6ff; --accent2: #3fb950;
+    --warn: #d29922; --danger: #f85149; --purple: #bc8cff; --pink: #f778ba;
+    --radius: 6px; --mono: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 13px; line-height: 1.5; }
+  body { display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Header */
+  .header { display: flex; align-items: center; gap: 12px; padding: 8px 16px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+  .header h1 { font-size: 15px; font-weight: 600; color: var(--text); white-space: nowrap; }
+  .header .presets { display: flex; gap: 6px; margin-left: auto; }
+  .preset-btn { padding: 4px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface2); color: var(--text2); cursor: pointer; font-size: 11px; font-family: var(--sans); transition: all 0.15s; }
+  .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .preset-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.1); }
+
+  /* Main layout */
+  .main { display: flex; flex: 1; overflow: hidden; }
+
+  /* Controls panel */
+  .controls { width: 380px; min-width: 340px; overflow-y: auto; border-right: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+  .controls::-webkit-scrollbar { width: 6px; }
+  .controls::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Tabs */
+  .tab-bar { display: flex; border-bottom: 1px solid var(--border); background: var(--surface2); position: sticky; top: 0; z-index: 10; }
+  .tab { flex: 1; padding: 8px 4px; text-align: center; font-size: 11px; font-weight: 500; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-content { display: none; padding: 12px; }
+  .tab-content.active { display: block; }
+
+  /* Groups */
+  .group { margin-bottom: 14px; }
+  .group-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+  .group-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2); }
+  .group-badge { font-size: 10px; padding: 1px 6px; border-radius: 10px; background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+  .group-toggle { margin-left: auto; font-size: 10px; color: var(--accent); cursor: pointer; opacity: 0.7; }
+  .group-toggle:hover { opacity: 1; }
+
+  /* Field chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 11px; font-family: var(--mono); cursor: pointer; transition: all 0.15s; user-select: none; background: var(--surface2); color: var(--text2); }
+  .chip:hover { border-color: var(--text2); }
+  .chip.on { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.08); }
+  .chip.on.green { border-color: var(--accent2); color: var(--accent2); background: rgba(63,185,80,0.08); }
+  .chip.on.purple { border-color: var(--purple); color: var(--purple); background: rgba(188,140,255,0.08); }
+  .chip.on.warn { border-color: var(--warn); color: var(--warn); background: rgba(210,153,34,0.08); }
+  .chip.on.pink { border-color: var(--pink); color: var(--pink); background: rgba(247,120,186,0.08); }
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; }
+  .chip.required { opacity: 0.6; cursor: default; }
+  .chip.required::after { content: '*'; font-size: 9px; color: var(--danger); margin-left: 2px; }
+
+  /* Section toggles */
+  .section-row { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 4px; cursor: pointer; transition: all 0.15s; background: var(--surface2); }
+  .section-row:hover { border-color: var(--text2); }
+  .section-row.on { border-color: var(--accent); background: rgba(88,166,255,0.05); }
+  .section-row .toggle-dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; transition: all 0.15s; }
+  .section-row.on .toggle-dot { background: var(--accent); border-color: var(--accent); }
+  .section-row .sec-name { font-size: 12px; font-weight: 500; color: var(--text); flex: 1; }
+  .section-row .sec-tag { font-size: 9px; padding: 1px 5px; border-radius: 3px; background: var(--surface); color: var(--text2); }
+  .section-row .sec-desc { font-size: 10px; color: var(--text2); display: none; }
+  .section-row:hover .sec-desc { display: block; }
+
+  /* Source config */
+  .source-card { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 6px; overflow: hidden; }
+  .source-head { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--surface2); cursor: pointer; }
+  .source-head.on { border-left: 2px solid var(--accent); }
+  .source-head .src-dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--border); }
+  .source-head.on .src-dot { background: var(--accent); border-color: var(--accent); }
+  .source-head .src-name { font-size: 12px; font-weight: 600; flex: 1; }
+  .source-head .src-pri { font-size: 10px; color: var(--text2); font-family: var(--mono); }
+  .source-body { padding: 8px 10px; display: none; border-top: 1px solid var(--border); }
+  .source-card.open .source-body { display: block; }
+  .source-opt { display: flex; align-items: center; gap: 6px; padding: 3px 0; font-size: 11px; }
+  .source-opt input[type="checkbox"] { accent-color: var(--accent); }
+  .source-opt label { color: var(--text2); cursor: pointer; }
+
+  /* Right panel */
+  .right { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Preview */
+  .preview-area { flex: 1; overflow-y: auto; padding: 16px; font-family: var(--mono); font-size: 12px; line-height: 1.6; background: var(--bg); }
+  .preview-area::-webkit-scrollbar { width: 6px; }
+  .preview-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Markdown rendering */
+  .md-h1 { font-size: 18px; font-weight: 700; color: var(--text); margin: 0 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .md-h2 { font-size: 14px; font-weight: 700; color: var(--accent); margin: 16px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+  .md-h3 { font-size: 12px; font-weight: 600; color: var(--purple); margin: 12px 0 6px; }
+  .md-h4 { font-size: 11px; font-weight: 600; color: var(--warn); margin: 8px 0 4px; }
+  .md-p { color: var(--text2); margin: 4px 0; font-size: 11px; }
+  .md-table { border-collapse: collapse; margin: 6px 0 12px; width: 100%; font-size: 11px; }
+  .md-table th { background: var(--surface2); color: var(--text2); font-weight: 600; text-align: left; padding: 4px 8px; border: 1px solid var(--border); white-space: nowrap; }
+  .md-table td { padding: 3px 8px; border: 1px solid var(--border); color: var(--text); }
+  .md-table tr:hover td { background: rgba(88,166,255,0.03); }
+  .md-hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+  .md-bullet { color: var(--text2); margin: 2px 0 2px 16px; font-size: 11px; }
+  .md-bullet::before { content: '• '; color: var(--accent); }
+  .md-code { font-family: var(--mono); background: var(--surface2); padding: 1px 4px; border-radius: 3px; font-size: 10px; color: var(--accent2); }
+  .md-em { font-style: italic; color: var(--text2); font-size: 10px; }
+  .md-section { margin-bottom: 4px; }
+  .md-section.collapsed { opacity: 0.4; }
+  .md-field-row { display: flex; gap: 2px; align-items: baseline; margin: 1px 0; font-size: 11px; }
+  .md-field-key { color: var(--accent); min-width: 130px; }
+  .md-field-val { color: var(--text); }
+  .md-field-type { color: var(--text2); font-size: 10px; margin-left: 4px; }
+  .md-yaml-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; margin: 8px 0; }
+
+  /* Prompt area */
+  .prompt-area { border-top: 1px solid var(--border); background: var(--surface); padding: 12px 16px; flex-shrink: 0; max-height: 220px; overflow-y: auto; }
+  .prompt-area::-webkit-scrollbar { width: 6px; }
+  .prompt-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .prompt-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .prompt-header span { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+  .copy-btn { margin-left: auto; padding: 3px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface2); color: var(--text2); cursor: pointer; font-size: 11px; font-family: var(--sans); transition: all 0.15s; }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .copy-btn.copied { border-color: var(--accent2); color: var(--accent2); }
+  .prompt-text { font-family: var(--mono); font-size: 11px; line-height: 1.6; color: var(--text); white-space: pre-wrap; }
+
+  /* Preview mode toggle */
+  .preview-modes { display: flex; gap: 4px; padding: 6px 12px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .pmode { padding: 3px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface2); color: var(--text2); cursor: pointer; font-size: 11px; font-family: var(--sans); }
+  .pmode.active { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.1); }
+  .pmode:hover { border-color: var(--text2); }
+
+  /* Stats bar */
+  .stats { display: flex; gap: 16px; padding: 4px 12px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 10px; color: var(--text2); flex-shrink: 0; }
+  .stats .stat-val { color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Guidance Structure Explorer</h1>
+  <div class="presets">
+    <button class="preset-btn" onclick="applyPreset('minimal')">Minimal</button>
+    <button class="preset-btn" onclick="applyPreset('standard')">Standard</button>
+    <button class="preset-btn active" onclick="applyPreset('full')">Full</button>
+    <button class="preset-btn" onclick="applyPreset('predictorFeed')">Predictor Feed</button>
+    <button class="preset-btn" onclick="applyPreset('auditTrail')">Audit Trail</button>
+  </div>
+</div>
+
+<div class="stats" id="statsBar"></div>
+
+<div class="main">
+  <div class="controls">
+    <div class="tab-bar">
+      <div class="tab active" data-tab="entry" onclick="switchTab('entry')">Entry Fields</div>
+      <div class="tab" data-tab="sections" onclick="switchTab('sections')">Output Sections</div>
+      <div class="tab" data-tab="capture" onclick="switchTab('capture')">Capture Items</div>
+      <div class="tab" data-tab="sources" onclick="switchTab('sources')">Sources</div>
+    </div>
+
+    <!-- Tab 1: Entry Fields -->
+    <div class="tab-content active" id="tab-entry"></div>
+
+    <!-- Tab 2: Output Sections -->
+    <div class="tab-content" id="tab-sections"></div>
+
+    <!-- Tab 3: Capture Items -->
+    <div class="tab-content" id="tab-capture"></div>
+
+    <!-- Tab 4: Source Processing -->
+    <div class="tab-content" id="tab-sources"></div>
+  </div>
+
+  <div class="right">
+    <div class="preview-modes">
+      <button class="pmode active" data-mode="entry" onclick="switchPreview('entry')">Sample Entry</button>
+      <button class="pmode" data-mode="outline" onclick="switchPreview('outline')">File Outline</button>
+      <button class="pmode" data-mode="markdown" onclick="switchPreview('markdown')">Full Markdown</button>
+      <button class="pmode" data-mode="dataclass" onclick="switchPreview('dataclass')">Dataclass</button>
+    </div>
+    <div class="preview-area" id="preview"></div>
+    <div class="prompt-area">
+      <div class="prompt-header">
+        <span>Generated Prompt</span>
+        <button class="copy-btn" onclick="copyPrompt()">Copy</button>
+      </div>
+      <div class="prompt-text" id="prompt"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────
+const FIELDS = {
+  period: [
+    { id: 'period_type', label: 'period_type', type: 'enum', required: true, desc: 'quarter | annual | half | long-range' },
+    { id: 'fiscal_year', label: 'fiscal_year', type: 'int', required: true, desc: 'e.g. 2025' },
+    { id: 'fiscal_quarter', label: 'fiscal_quarter', type: 'int?', required: false, desc: '1-4 or null for annual' },
+    { id: 'calendar_start', label: 'calendar_start', type: 'date', required: false, desc: 'Derived from FYE' },
+    { id: 'calendar_end', label: 'calendar_end', type: 'date', required: false, desc: 'Derived from FYE' },
+    { id: 'period_status', label: 'period_status', type: 'enum', required: false, desc: 'future | current | past' },
+  ],
+  metric: [
+    { id: 'segment', label: 'segment', type: 'string', required: false, desc: 'Total, Services, iPhone...' },
+    { id: 'metric', label: 'metric', type: 'string', required: true, desc: 'EPS, Revenue, Gross Margin...' },
+    { id: 'low', label: 'low', type: 'float?', required: true, desc: 'Low end of range' },
+    { id: 'mid', label: 'mid', type: 'float?', required: true, desc: 'Midpoint (may be calculated)' },
+    { id: 'high', label: 'high', type: 'float?', required: true, desc: 'High end of range' },
+    { id: 'unit', label: 'unit', type: 'string', required: true, desc: '%, USD, B USD, M USD, % YoY' },
+    { id: 'basis', label: 'basis', type: 'string', required: false, desc: 'GAAP, non-GAAP, adjusted...' },
+    { id: 'derivation', label: 'derivation', type: 'enum', required: false, desc: 'explicit | calculated | point | implied' },
+    { id: 'qualitative', label: 'qualitative', type: 'string?', required: false, desc: '"low to mid single digits"' },
+  ],
+  citation: [
+    { id: 'source_type', label: 'source_type', type: 'string', required: true, desc: '8k, transcript, news, 10q, 10k' },
+    { id: 'source_id', label: 'source_id', type: 'string', required: true, desc: 'Accession / transcript ID / news ID' },
+    { id: 'source_key', label: 'source_key', type: 'string', required: false, desc: 'EX-99.1, full, title, MD&A' },
+    { id: 'given_date', label: 'given_date', type: 'date', required: true, desc: 'When guidance was issued' },
+    { id: 'section', label: 'section', type: 'string', required: false, desc: 'Location within source' },
+    { id: 'quote', label: 'quote', type: 'string', required: false, desc: 'Exact quote (max 500 chars)' },
+  ],
+  state: [
+    { id: 'action', label: 'action', type: 'enum', required: true, desc: 'INITIAL | RAISED | LOWERED | ...' },
+    { id: 'entry_id', label: 'entry_id', type: 'string', required: false, desc: '{Period}-{Metric}-{seq}' },
+    { id: 'status', label: 'status', type: 'enum', required: false, desc: 'active | superseded | withdrawn' },
+    { id: 'superseded_by', label: 'superseded_by', type: 'string?', required: false, desc: 'Entry ID of replacement' },
+    { id: 'prior_value_mid', label: 'prior_value_mid', type: 'float?', required: false, desc: 'Previous midpoint' },
+    { id: 'revision_pct', label: 'revision_pct', type: 'float?', required: false, desc: '% change from anchor' },
+  ],
+};
+
+const SECTIONS = {
+  core: [
+    { id: 'company_profile', name: 'Company Fiscal Profile', tag: 'header', desc: 'Ticker, FYE, guidance policy, beat rate' },
+    { id: 'fiscal_calendar', name: 'Fiscal Calendar Reference', tag: 'header', desc: 'Quarter-to-date mapping table' },
+    { id: 'active_guidance', name: 'Active Guidance', tag: 'core', desc: 'Current outlook by period (Annual / Quarter / Resolved)' },
+    { id: 'evidence_ledger', name: 'Evidence Ledger', tag: 'core', desc: 'Every entry with ID, status, supersession chain' },
+  ],
+  timeline: [
+    { id: 'guidance_timeline', name: 'Guidance Timeline', tag: 'timeline', desc: 'Chronological event blocks with financial + operational + qualitative' },
+    { id: 'revision_history', name: 'Annual Revision History', tag: 'timeline', desc: 'Per-metric revision tracking: anchor to current' },
+  ],
+  analysis: [
+    { id: 'guidance_style', name: 'Guidance Style', tag: 'synthesis', desc: 'What metrics guided, format, policy, CFO transitions' },
+    { id: 'accuracy_record', name: 'Accuracy Track Record', tag: 'synthesis', desc: 'Guided vs actual, beat rate, systematic bias' },
+    { id: 'source_conflicts', name: 'Source Conflicts', tag: 'synthesis', desc: 'Where sources disagree on same metric' },
+    { id: 'coverage_gaps', name: 'Coverage Gaps', tag: 'synthesis', desc: 'Missing transcripts, missing metrics' },
+  ],
+  reference: [
+    { id: 'consensus_comparison', name: 'Consensus Comparison', tag: 'reference', desc: 'Company guide vs street consensus gap' },
+    { id: 'data_coverage', name: 'Data Coverage', tag: 'reference', desc: 'Source type counts and date ranges' },
+    { id: 'notes_assumptions', name: 'Notes & Assumptions', tag: 'reference', desc: 'Basis, FX, conditions' },
+  ],
+  extended: [
+    { id: 'eps_surprise', name: 'EPS Surprise History', tag: 'extended', desc: 'From Alpha Vantage earnings data' },
+    { id: 'revenue_trends', name: 'Revenue & Margin Trends', tag: 'extended', desc: 'Multi-year from XBRL' },
+    { id: 'stock_reactions', name: 'Post-Earnings Stock Reactions', tag: 'extended', desc: 'Price correlation with guidance quality' },
+  ],
+};
+
+const CAPTURES = [
+  { id: 'A', label: 'Guidance vs Consensus Gap', desc: 'Track gap between company guidance midpoint and street consensus', fields: ['consensus_comparison'], signal: 'Bearish if company below street' },
+  { id: 'B', label: 'Metric Definition Drift', desc: 'Flag when basis changes quarter to quarter (e.g. "adjusted EPS excl stock comp" → "adjusted EPS")', fields: ['basis'], signal: 'Comparability risk' },
+  { id: 'C', label: 'Segment-Level Guidance', desc: 'Capture segment breakdown (Services, Cloud, iPhone) alongside Total', fields: ['segment'], signal: 'Decomposition signal' },
+  { id: 'D', label: 'FX / Constant Currency', desc: 'Distinguish reported vs constant-currency guidance', fields: ['basis'], signal: 'FX headwind/tailwind' },
+  { id: 'E', label: 'Conditional Guidance', desc: 'Track assumptions that could invalidate ("assumes no rate hikes")', fields: [], signal: 'Risk factor' },
+  { id: 'F', label: 'Pre-Announcements', desc: 'Mid-quarter 8-K Item 7.01 guidance changes', fields: [], signal: 'Usually bearish' },
+  { id: 'G', label: 'Guidance Policy', desc: 'Whether company provides guidance at all; absence is informative', fields: [], signal: 'Pattern signal' },
+  { id: 'H', label: 'Historical Accuracy', desc: 'Beat/miss pattern — 7/8 beats = systematic sandbagging', fields: ['accuracy_record'], signal: 'Predictive' },
+  { id: 'I', label: 'Comparable Periods', desc: 'Link guidance to YoY and sequential actuals for context', fields: [], signal: 'Relative signal' },
+  { id: 'J', label: 'Range Asymmetry', desc: 'Skewed range = confidence signal (tight low = confident floor)', fields: ['low', 'mid', 'high'], signal: 'Confidence' },
+];
+
+const SOURCES = [
+  { id: '8k', name: '8-K (EX-99.1)', priority: 1, color: '#58a6ff',
+    opts: [
+      { id: '8k_outlook', label: 'Outlook / Guidance section', on: true },
+      { id: '8k_tables', label: 'Financial highlights tables', on: true },
+      { id: '8k_footnotes', label: 'GAAP vs non-GAAP footnotes', on: true },
+      { id: '8k_item701', label: 'Item 7.01 (pre-announcements)', on: true },
+    ]},
+  { id: 'transcript', name: 'Transcript', priority: 2, color: '#3fb950',
+    opts: [
+      { id: 'tx_cfo_pr', label: 'CFO prepared remarks (formal guidance home)', on: true },
+      { id: 'tx_ceo_pr', label: 'CEO prepared remarks (strategic outlook)', on: true },
+      { id: 'tx_qa', label: 'Q&A exchanges (probing detail)', on: true },
+      { id: 'tx_enrich', label: 'Enrich existing 8-K entries (not duplicate)', on: true },
+    ]},
+  { id: 'news', name: 'News', priority: 3, color: '#d29922',
+    opts: [
+      { id: 'nw_title', label: 'Extract from title (often complete)', on: true },
+      { id: 'nw_body', label: 'Extract from body', on: true },
+      { id: 'nw_filter_analyst', label: 'Filter out analyst estimates ("Est $X")', on: true },
+      { id: 'nw_conflict_detect', label: 'Detect conflicts with 8-K/transcript', on: true },
+    ]},
+  { id: '10q', name: '10-Q / 10-K', priority: 4, color: '#bc8cff',
+    opts: [
+      { id: '10q_mda', label: 'MD&A forward-looking statements', on: true },
+      { id: '10q_risk', label: 'New risk language detection', on: false },
+      { id: '10q_resolve', label: 'Resolve outstanding guidance with XBRL actuals', on: true },
+    ]},
+  { id: 'xbrl', name: 'XBRL', priority: 5, color: '#f778ba',
+    opts: [
+      { id: 'xbrl_actuals', label: 'Verify guided vs actual values', on: true },
+      { id: 'xbrl_trends', label: 'Multi-year trends for synthesis', on: false },
+    ]},
+];
+
+// State
+const state = {
+  fields: {},
+  sections: {},
+  captures: {},
+  sources: {},
+  sourceOpts: {},
+  previewMode: 'entry',
+};
+
+// Initialize state
+function initState() {
+  Object.values(FIELDS).flat().forEach(f => { state.fields[f.id] = true; });
+  Object.values(SECTIONS).flat().forEach(s => { state.sections[s.id] = true; });
+  CAPTURES.forEach(c => { state.captures[c.id] = true; });
+  SOURCES.forEach(s => {
+    state.sources[s.id] = true;
+    s.opts.forEach(o => { state.sourceOpts[o.id] = o.on; });
+  });
+}
+
+// ─── SAMPLE DATA ──────────────────────────────────────────────────
+const SAMPLE = {
+  period_type: 'quarter', fiscal_year: 2025, fiscal_quarter: 3,
+  calendar_start: '2025-04-01', calendar_end: '2025-06-30', period_status: 'future',
+  segment: 'Total', metric: 'Revenue',
+  low: 88.5, mid: 90.25, high: 92.0,
+  unit: 'B USD', basis: 'as-reported', derivation: 'calculated',
+  qualitative: 'low to mid single digits YoY growth',
+  source_type: 'transcript', source_id: 'AAPL_2025-05-01T17.00.00-04.00',
+  source_key: 'full', given_date: '2025-05-01',
+  section: 'CFO prepared remarks',
+  quote: 'We expect total company revenue for the June quarter to be between $88.5 billion and $92 billion, representing low to mid single digit year-over-year growth.',
+  action: 'INITIAL', entry_id: 'Q3FY25-Revenue-001',
+  status: 'active', superseded_by: null,
+  prior_value_mid: null, revision_pct: null,
+};
+
+const SAMPLE2 = {
+  period_type: 'quarter', fiscal_year: 2025, fiscal_quarter: 3,
+  segment: 'Total', metric: 'Gross Margin',
+  low: 46.5, mid: 47.0, high: 47.5,
+  unit: '%', basis: 'GAAP', derivation: 'explicit',
+  qualitative: '.', source_type: 'transcript',
+  source_id: 'AAPL_2025-05-01T17.00.00-04.00',
+  given_date: '2025-05-01', section: 'CFO prepared remarks',
+  quote: 'We expect gross margin to be between 46.5% and 47.5%.',
+  action: 'INITIAL', entry_id: 'Q3FY25-GM-001', status: 'active',
+};
+
+const SAMPLE_RAISED = {
+  period_type: 'annual', fiscal_year: 2025, fiscal_quarter: '.',
+  segment: 'Total', metric: 'EPS',
+  low: 7.10, mid: 7.40, high: 7.70,
+  unit: 'USD', basis: 'non-GAAP', derivation: 'calculated',
+  qualitative: '.', source_type: '8k',
+  source_id: '0001193125-25-100234',
+  given_date: '2025-05-01', section: 'Outlook section',
+  quote: 'For fiscal year 2025, we now expect non-GAAP EPS of $7.10 to $7.70, up from prior $6.80-$7.40.',
+  action: 'RAISED', entry_id: 'FY25-EPS-002', status: 'active',
+  prior_value_mid: 7.10, revision_pct: 4.2,
+  superseded_by: null,
+};
+
+// ─── RENDER CONTROLS ─────────────────────────────────────────────
+function renderEntryTab() {
+  const el = document.getElementById('tab-entry');
+  const groupColors = { period: '', metric: 'green', citation: 'purple', state: 'warn' };
+  const groupLabels = { period: 'Period Fields', metric: 'Metric Fields', citation: 'Citation Fields', state: 'State Fields' };
+  let html = '';
+  for (const [gk, fields] of Object.entries(FIELDS)) {
+    const onCount = fields.filter(f => state.fields[f.id]).length;
+    html += `<div class="group"><div class="group-header">
+      <span class="group-label">${groupLabels[gk]}</span>
+      <span class="group-badge">${onCount}/${fields.length}</span>
+      <span class="group-toggle" onclick="toggleGroup('fields','${gk}')">toggle all</span>
+    </div><div class="chips">`;
+    for (const f of fields) {
+      const on = state.fields[f.id];
+      const cls = f.required ? 'chip on required' : `chip${on ? ' on' : ''} ${groupColors[gk]}`;
+      html += `<div class="${cls}" title="${f.desc}\nType: ${f.type}" onclick="${f.required ? '' : `toggleField('${f.id}')`}"><span class="dot"></span>${f.label}</div>`;
+    }
+    html += '</div></div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderSectionsTab() {
+  const el = document.getElementById('tab-sections');
+  const groupLabels = { core: 'Core (always recommended)', timeline: 'Timeline & Tracking', analysis: 'Analysis (synthesis pass)', reference: 'Reference', extended: 'Extended Data' };
+  let html = '';
+  for (const [gk, sects] of Object.entries(SECTIONS)) {
+    const onCount = sects.filter(s => state.sections[s.id]).length;
+    html += `<div class="group"><div class="group-header">
+      <span class="group-label">${groupLabels[gk]}</span>
+      <span class="group-badge">${onCount}/${sects.length}</span>
+      <span class="group-toggle" onclick="toggleGroup('sections','${gk}')">toggle all</span>
+    </div>`;
+    for (const s of sects) {
+      const on = state.sections[s.id];
+      html += `<div class="section-row${on ? ' on' : ''}" onclick="toggleSection('${s.id}')">
+        <div class="toggle-dot"></div>
+        <span class="sec-name">${s.name}</span>
+        <span class="sec-tag">${s.tag}</span>
+      </div>`;
+    }
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderCaptureTab() {
+  const el = document.getElementById('tab-capture');
+  let html = '<div class="group"><div class="group-header"><span class="group-label">10 Critical Capture Items</span><span class="group-badge">' + CAPTURES.filter(c => state.captures[c.id]).length + '/10</span><span class="group-toggle" onclick="toggleAllCaptures()">toggle all</span></div>';
+  for (const c of CAPTURES) {
+    const on = state.captures[c.id];
+    html += `<div class="section-row${on ? ' on' : ''}" onclick="toggleCapture('${c.id}')" style="flex-wrap:wrap">
+      <div class="toggle-dot"></div>
+      <span class="sec-name" style="min-width:0">${c.id}. ${c.label}</span>
+      <span class="sec-tag">${c.signal}</span>
+      <div style="width:100%;font-size:10px;color:var(--text2);padding:2px 0 0 20px">${c.desc}</div>
+    </div>`;
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderSourcesTab() {
+  const el = document.getElementById('tab-sources');
+  let html = '';
+  for (const s of SOURCES) {
+    const on = state.sources[s.id];
+    html += `<div class="source-card${on ? ' open' : ''}">
+      <div class="source-head${on ? ' on' : ''}" onclick="toggleSource('${s.id}')" style="border-left-color:${s.color}">
+        <div class="src-dot" style="${on ? 'background:'+s.color+';border-color:'+s.color : ''}"></div>
+        <span class="src-name">${s.name}</span>
+        <span class="src-pri">P${s.priority}</span>
+      </div>
+      <div class="source-body">`;
+    for (const o of s.opts) {
+      html += `<div class="source-opt">
+        <input type="checkbox" id="${o.id}" ${state.sourceOpts[o.id] ? 'checked' : ''} ${on ? '' : 'disabled'} onchange="toggleSourceOpt('${o.id}')">
+        <label for="${o.id}">${o.label}</label>
+      </div>`;
+    }
+    html += '</div></div>';
+  }
+  el.innerHTML = html;
+}
+
+// ─── TOGGLE HANDLERS ─────────────────────────────────────────────
+function toggleField(id) {
+  const f = Object.values(FIELDS).flat().find(f => f.id === id);
+  if (f && f.required) return;
+  state.fields[id] = !state.fields[id];
+  renderEntryTab();
+  updateAll();
+}
+
+function toggleGroup(type, gk) {
+  const items = type === 'fields' ? FIELDS[gk] : SECTIONS[gk];
+  const stateObj = type === 'fields' ? state.fields : state.sections;
+  const toggleable = items.filter(i => !i.required);
+  const allOn = toggleable.every(i => stateObj[i.id]);
+  toggleable.forEach(i => { stateObj[i.id] = !allOn; });
+  if (type === 'fields') renderEntryTab(); else renderSectionsTab();
+  updateAll();
+}
+
+function toggleSection(id) { state.sections[id] = !state.sections[id]; renderSectionsTab(); updateAll(); }
+function toggleCapture(id) { state.captures[id] = !state.captures[id]; renderCaptureTab(); updateAll(); }
+function toggleAllCaptures() {
+  const allOn = CAPTURES.every(c => state.captures[c.id]);
+  CAPTURES.forEach(c => { state.captures[c.id] = !allOn; });
+  renderCaptureTab(); updateAll();
+}
+function toggleSource(id) { state.sources[id] = !state.sources[id]; renderSourcesTab(); updateAll(); }
+function toggleSourceOpt(id) { state.sourceOpts[id] = !state.sourceOpts[id]; updateAll(); }
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.toggle('active', t.id === 'tab-' + tab));
+}
+
+function switchPreview(mode) {
+  state.previewMode = mode;
+  document.querySelectorAll('.pmode').forEach(p => p.classList.toggle('active', p.dataset.mode === mode));
+  updateAll();
+}
+
+// ─── PRESETS ──────────────────────────────────────────────────────
+const PRESETS = {
+  minimal: {
+    fields: ['period_type','fiscal_year','fiscal_quarter','metric','low','mid','high','unit','source_type','source_id','given_date','action'],
+    sections: ['company_profile','active_guidance','evidence_ledger'],
+    captures: ['A','H'],
+    sources: ['8k','transcript'],
+  },
+  standard: {
+    fields: ['period_type','fiscal_year','fiscal_quarter','segment','metric','low','mid','high','unit','basis','derivation','qualitative','source_type','source_id','source_key','given_date','section','quote','action','entry_id','status','superseded_by'],
+    sections: ['company_profile','fiscal_calendar','active_guidance','evidence_ledger','guidance_timeline','revision_history','consensus_comparison','data_coverage','notes_assumptions'],
+    captures: ['A','B','C','E','G','H','J'],
+    sources: ['8k','transcript','news','10q'],
+  },
+  full: {
+    fields: Object.values(FIELDS).flat().map(f => f.id),
+    sections: Object.values(SECTIONS).flat().map(s => s.id),
+    captures: CAPTURES.map(c => c.id),
+    sources: SOURCES.map(s => s.id),
+  },
+  predictorFeed: {
+    fields: ['period_type','fiscal_year','fiscal_quarter','segment','metric','low','mid','high','unit','basis','derivation','qualitative','given_date','action','prior_value_mid','revision_pct','source_type'],
+    sections: ['company_profile','active_guidance','guidance_style','accuracy_record','consensus_comparison','revision_history'],
+    captures: ['A','B','C','D','H','J'],
+    sources: ['8k','transcript'],
+  },
+  auditTrail: {
+    fields: ['period_type','fiscal_year','fiscal_quarter','metric','low','mid','high','unit','basis','source_type','source_id','source_key','given_date','section','quote','action','entry_id','status','superseded_by','prior_value_mid','revision_pct'],
+    sections: ['company_profile','fiscal_calendar','active_guidance','evidence_ledger','guidance_timeline','revision_history','source_conflicts','coverage_gaps','data_coverage','notes_assumptions'],
+    captures: ['A','B','C','D','E','F','G','H','I','J'],
+    sources: ['8k','transcript','news','10q','xbrl'],
+  },
+};
+
+function applyPreset(name) {
+  const p = PRESETS[name];
+  Object.values(FIELDS).flat().forEach(f => { state.fields[f.id] = p.fields.includes(f.id); });
+  // Re-force required
+  Object.values(FIELDS).flat().filter(f => f.required).forEach(f => { state.fields[f.id] = true; });
+  Object.values(SECTIONS).flat().forEach(s => { state.sections[s.id] = p.sections.includes(s.id); });
+  CAPTURES.forEach(c => { state.captures[c.id] = p.captures.includes(c.id); });
+  SOURCES.forEach(s => { state.sources[s.id] = p.sources.includes(s.id); });
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().replace(/\s/g,'') === name.toLowerCase().replace(/\s/g,'')));
+  renderEntryTab(); renderSectionsTab(); renderCaptureTab(); renderSourcesTab();
+  updateAll();
+}
+
+// ─── PREVIEW RENDERERS ──────────────────────────────────────────
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderEntryPreview() {
+  const el = document.getElementById('preview');
+  const enabledFields = Object.values(FIELDS).flat().filter(f => state.fields[f.id]);
+  const groups = { period: [], metric: [], citation: [], state: [] };
+  for (const [gk, fields] of Object.entries(FIELDS)) {
+    groups[gk] = fields.filter(f => state.fields[f.id]);
+  }
+
+  let html = '<div class="md-h2">Sample Entry: AAPL Q3 FY2025 Revenue</div>';
+  html += '<div class="md-yaml-block">';
+
+  const groupLabels = { period: 'Period', metric: 'Metric', citation: 'Citation', state: 'State' };
+  const groupColors = { period: 'var(--accent)', metric: 'var(--accent2)', citation: 'var(--purple)', state: 'var(--warn)' };
+
+  for (const [gk, fields] of Object.entries(groups)) {
+    if (fields.length === 0) continue;
+    html += `<div style="margin:6px 0 2px;font-size:10px;color:${groupColors[gk]};text-transform:uppercase;letter-spacing:0.5px">${groupLabels[gk]}</div>`;
+    for (const f of fields) {
+      const val = SAMPLE[f.id];
+      const display = val === null || val === undefined ? '<span style="color:var(--text2)">null</span>' : esc(String(f.id === 'quote' && val.length > 80 ? val.slice(0,80) + '...' : val));
+      html += `<div class="md-field-row"><span class="md-field-key">${esc(f.label)}:</span><span class="md-field-val">${display}</span><span class="md-field-type">${esc(f.type)}</span></div>`;
+    }
+  }
+  html += '</div>';
+
+  // Second sample — Gross Margin
+  if (state.fields.metric && state.fields.low) {
+    html += '<div class="md-h3" style="margin-top:16px">Sample 2: AAPL Q3 FY2025 Gross Margin</div>';
+    html += '<div class="md-yaml-block">';
+    for (const [gk, fields] of Object.entries(groups)) {
+      if (fields.length === 0) continue;
+      html += `<div style="margin:6px 0 2px;font-size:10px;color:${groupColors[gk]};text-transform:uppercase;letter-spacing:0.5px">${groupLabels[gk]}</div>`;
+      for (const f of fields) {
+        const val = SAMPLE2[f.id] !== undefined ? SAMPLE2[f.id] : SAMPLE[f.id];
+        const display = val === null || val === undefined ? '<span style="color:var(--text2)">null</span>' : esc(String(val));
+        html += `<div class="md-field-row"><span class="md-field-key">${esc(f.label)}:</span><span class="md-field-val">${display}</span></div>`;
+      }
+    }
+    html += '</div>';
+  }
+
+  // Third sample — RAISED action
+  if (state.fields.action && state.fields.prior_value_mid) {
+    html += '<div class="md-h3" style="margin-top:16px">Sample 3: FY2025 EPS — RAISED</div>';
+    html += '<div class="md-yaml-block">';
+    for (const [gk, fields] of Object.entries(groups)) {
+      if (fields.length === 0) continue;
+      html += `<div style="margin:6px 0 2px;font-size:10px;color:${groupColors[gk]};text-transform:uppercase;letter-spacing:0.5px">${groupLabels[gk]}</div>`;
+      for (const f of fields) {
+        const val = SAMPLE_RAISED[f.id] !== undefined ? SAMPLE_RAISED[f.id] : null;
+        const display = val === null || val === undefined ? '<span style="color:var(--text2)">null</span>' : esc(String(val));
+        const highlight = (f.id === 'action' && val === 'RAISED') ? ' style="color:var(--accent2);font-weight:600"' : (f.id === 'revision_pct' ? ' style="color:var(--accent2)"' : '');
+        html += `<div class="md-field-row"><span class="md-field-key">${esc(f.label)}:</span><span class="md-field-val"${highlight}>${display}</span></div>`;
+      }
+    }
+    html += '</div>';
+  }
+
+  // Pipe-delimited preview
+  html += '<div class="md-h3" style="margin-top:16px">Pipe-Delimited Format (18-field extraction output)</div>';
+  const pipeFields = Object.values(FIELDS).flat().filter(f => state.fields[f.id] && !['calendar_start','calendar_end','period_status','entry_id','status','superseded_by','prior_value_mid','revision_pct','action'].includes(f.id));
+  if (pipeFields.length > 0) {
+    html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;margin:4px 0;overflow-x:auto;white-space:nowrap">';
+    html += '<div style="color:var(--text2);font-size:10px;margin-bottom:4px">' + pipeFields.map(f => esc(f.label)).join('<span style="color:var(--border)">|</span>') + '</div>';
+    html += '<div style="color:var(--text);font-size:11px">' + pipeFields.map(f => {
+      const v = SAMPLE[f.id];
+      return v === null || v === undefined ? '.' : esc(String(f.id === 'quote' ? SAMPLE.quote.slice(0,60)+'...' : v));
+    }).join('<span style="color:var(--accent)">|</span>') + '</div>';
+    html += '</div>';
+  }
+
+  el.innerHTML = html;
+}
+
+function renderOutlinePreview() {
+  const el = document.getElementById('preview');
+  const enabledSections = Object.values(SECTIONS).flat().filter(s => state.sections[s.id]);
+  const allSections = Object.values(SECTIONS).flat();
+
+  let html = '<div class="md-h1">AAPL Guidance Inventory</div>';
+  html += '<div class="md-em">File outline — enabled sections shown in full, disabled sections dimmed</div><br>';
+
+  const sectionContent = {
+    company_profile: () => {
+      let h = '<div class="md-h2">Company Fiscal Profile</div>';
+      h += '<table class="md-table"><tr><th>Field</th><th>Value</th></tr>';
+      h += '<tr><td>Ticker</td><td>AAPL</td></tr>';
+      h += '<tr><td>Company Name</td><td>Apple Inc.</td></tr>';
+      h += '<tr><td>Fiscal Year End</td><td>September</td></tr>';
+      h += '<tr><td>FY2025 Range</td><td>2024-10-01 — 2025-09-30</td></tr>';
+      h += '<tr><td>Current Quarter</td><td>Q3 FY2025 (Apr-Jun 2025)</td></tr>';
+      h += '<tr><td>Guidance Policy</td><td>Quarterly only, qualitative revenue</td></tr>';
+      if (state.captures.H) h += '<tr><td>Historical Beat Rate</td><td>88% (7/8 quarters)</td></tr>';
+      h += '</table>';
+      return h;
+    },
+    fiscal_calendar: () => {
+      let h = '<div class="md-h2">Fiscal Calendar Reference</div>';
+      h += '<table class="md-table"><tr><th>Period</th><th>Start</th><th>End</th><th>Status</th></tr>';
+      h += '<tr><td>Q1 FY2025</td><td>2024-10-01</td><td>2024-12-31</td><td>past</td></tr>';
+      h += '<tr><td>Q2 FY2025</td><td>2025-01-01</td><td>2025-03-31</td><td>past</td></tr>';
+      h += '<tr><td>Q3 FY2025</td><td>2025-04-01</td><td>2025-06-30</td><td>current</td></tr>';
+      h += '<tr><td>Q4 FY2025</td><td>2025-07-01</td><td>2025-09-30</td><td>future</td></tr>';
+      h += '</table>';
+      return h;
+    },
+    active_guidance: () => {
+      let h = '<div class="md-h2">Active Guidance (Current Outlook)</div>';
+      h += '<div class="md-h3">Q3 FY2025 (Current Quarter)</div>';
+      const cols = ['Metric'];
+      if (state.fields.segment) cols.push('Segment');
+      cols.push('Low','Mid','High');
+      if (state.fields.unit) cols.push('Unit');
+      if (state.fields.basis) cols.push('Basis');
+      if (state.fields.given_date) cols.push('Given');
+      if (state.fields.action) cols.push('Action');
+      if (state.fields.source_type) cols.push('Source');
+      h += '<table class="md-table"><tr>' + cols.map(c => '<th>'+c+'</th>').join('') + '</tr>';
+      // Revenue row
+      let row = '<td>Revenue</td>';
+      if (state.fields.segment) row += '<td>Total</td>';
+      row += '<td>$88.5B</td><td>$90.3B</td><td>$92.0B</td>';
+      if (state.fields.unit) row += '<td>B USD</td>';
+      if (state.fields.basis) row += '<td>as-reported</td>';
+      if (state.fields.given_date) row += '<td>2025-05-01</td>';
+      if (state.fields.action) row += '<td>INITIAL</td>';
+      if (state.fields.source_type) row += '<td>transcript</td>';
+      h += '<tr>' + row + '</tr>';
+      // GM row
+      row = '<td>Gross Margin</td>';
+      if (state.fields.segment) row += '<td>Total</td>';
+      row += '<td>46.5%</td><td>47.0%</td><td>47.5%</td>';
+      if (state.fields.unit) row += '<td>%</td>';
+      if (state.fields.basis) row += '<td>GAAP</td>';
+      if (state.fields.given_date) row += '<td>2025-05-01</td>';
+      if (state.fields.action) row += '<td>INITIAL</td>';
+      if (state.fields.source_type) row += '<td>transcript</td>';
+      h += '<tr>' + row + '</tr>';
+      h += '</table>';
+      if (state.fields.qualitative) {
+        h += '<div class="md-bullet">Revenue: <span class="md-code">low to mid single digits YoY growth</span> (qualitative)</div>';
+      }
+      return h;
+    },
+    guidance_timeline: () => {
+      let h = '<div class="md-h2">Guidance Timeline (Chronological)</div>';
+      h += '<div class="md-h3">2025-05-01: Q2 FY2025 Earnings Call</div>';
+      h += '<div class="md-p"><strong>Sources:</strong> 8-K 0001193125-25-100234, Transcript</div>';
+      h += '<div class="md-h4">Financial Guidance:</div>';
+      h += '<table class="md-table"><tr><th>Period</th><th>Metric</th><th>Value</th><th>Action</th></tr>';
+      h += '<tr><td>Q3 FY25</td><td>Revenue</td><td>$88.5B-$92.0B</td><td>INITIAL</td></tr>';
+      h += '<tr><td>Q3 FY25</td><td>Gross Margin</td><td>46.5%-47.5%</td><td>INITIAL</td></tr>';
+      h += '<tr><td>Q3 FY25</td><td>OpEx</td><td>$15.2B-$15.4B</td><td>INITIAL</td></tr>';
+      h += '</table>';
+      if (state.captures.E) {
+        h += '<div class="md-h4">Conditions & Assumptions:</div>';
+        h += '<div class="md-bullet">Assumes current tariff rates remain; $900M tariff cost impact included</div>';
+      }
+      h += '<div class="md-h4">Qualitative Signals:</div>';
+      h += '<div class="md-bullet">Tone: Confident</div>';
+      h += '<div class="md-bullet">"We see strong momentum across all product categories"</div>';
+      return h;
+    },
+    revision_history: () => {
+      let h = '<div class="md-h2">Annual Guidance Revision History</div>';
+      h += '<div class="md-h3">FY2025 EPS (non-GAAP)</div>';
+      h += '<table class="md-table"><tr><th>Date</th><th>Event</th><th>Low</th><th>Mid</th><th>High</th><th>Delta</th><th>Cumulative</th></tr>';
+      h += '<tr><td>2024-11-01</td><td>Q4 FY24 call</td><td>$6.80</td><td>$7.10</td><td>$7.40</td><td>—</td><td>— (anchor)</td></tr>';
+      h += '<tr><td>2025-02-01</td><td>Q1 FY25 call</td><td>$6.90</td><td>$7.20</td><td>$7.50</td><td style="color:var(--accent2)">+$0.10 (+1.4%)</td><td style="color:var(--accent2)">+$0.10 (+1.4%)</td></tr>';
+      h += '<tr><td>2025-05-01</td><td>Q2 FY25 call</td><td>$7.10</td><td>$7.40</td><td>$7.70</td><td style="color:var(--accent2)">+$0.20 (+2.8%)</td><td style="color:var(--accent2)">+$0.30 (+4.2%)</td></tr>';
+      h += '</table>';
+      return h;
+    },
+    consensus_comparison: () => {
+      let h = '<div class="md-h2">Consensus Comparison</div>';
+      h += '<table class="md-table"><tr><th>Metric</th><th>Period</th><th>Company Mid</th><th>Consensus</th><th>Gap</th><th>Signal</th></tr>';
+      h += '<tr><td>EPS</td><td>Q3 FY25</td><td>$1.42</td><td>$1.39</td><td style="color:var(--accent2)">+2.2%</td><td>Above street</td></tr>';
+      h += '<tr><td>Revenue</td><td>Q3 FY25</td><td>$90.3B</td><td>$89.8B</td><td style="color:var(--accent2)">+0.5%</td><td>Above street</td></tr>';
+      h += '</table>';
+      h += '<div class="md-em">Source: Alpha Vantage EARNINGS_ESTIMATES, 2025-05-02</div>';
+      return h;
+    },
+    evidence_ledger: () => {
+      let h = '<div class="md-h2">Evidence Ledger</div>';
+      const cols = ['#'];
+      if (state.fields.entry_id) cols.push('Entry ID');
+      cols.push('Period','Metric','Value');
+      if (state.fields.source_type) cols.push('Source');
+      if (state.fields.given_date) cols.push('Date');
+      if (state.fields.status) cols.push('Status');
+      if (state.fields.superseded_by) cols.push('Superseded By');
+      if (state.fields.quote) cols.push('Quote');
+      h += '<table class="md-table"><tr>' + cols.map(c => '<th>'+c+'</th>').join('') + '</tr>';
+      // Active entries
+      let r = '<td>1</td>';
+      if (state.fields.entry_id) r += '<td>Q3FY25-Revenue-001</td>';
+      r += '<td>Q3 FY25</td><td>Revenue</td><td>$88.5B-$92.0B</td>';
+      if (state.fields.source_type) r += '<td>transcript</td>';
+      if (state.fields.given_date) r += '<td>2025-05-01</td>';
+      if (state.fields.status) r += '<td>active</td>';
+      if (state.fields.superseded_by) r += '<td>—</td>';
+      if (state.fields.quote) r += '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">We expect total company revenue...</td>';
+      h += '<tr>' + r + '</tr>';
+      r = '<td>2</td>';
+      if (state.fields.entry_id) r += '<td>Q3FY25-GM-001</td>';
+      r += '<td>Q3 FY25</td><td>Gross Margin</td><td>46.5%-47.5%</td>';
+      if (state.fields.source_type) r += '<td>transcript</td>';
+      if (state.fields.given_date) r += '<td>2025-05-01</td>';
+      if (state.fields.status) r += '<td>active</td>';
+      if (state.fields.superseded_by) r += '<td>—</td>';
+      if (state.fields.quote) r += '<td>We expect gross margin to be...</td>';
+      h += '<tr>' + r + '</tr>';
+      // Superseded
+      r = '<td>3</td>';
+      if (state.fields.entry_id) r += '<td style="color:var(--text2)">FY25-EPS-001</td>';
+      r += '<td>FY25</td><td>EPS</td><td style="text-decoration:line-through;color:var(--text2)">$6.80-$7.40</td>';
+      if (state.fields.source_type) r += '<td>8k</td>';
+      if (state.fields.given_date) r += '<td>2025-02-01</td>';
+      if (state.fields.status) r += '<td style="color:var(--text2)">superseded</td>';
+      if (state.fields.superseded_by) r += '<td>FY25-EPS-002</td>';
+      if (state.fields.quote) r += '<td style="color:var(--text2)">Full year non-GAAP EPS...</td>';
+      h += '<tr>' + r + '</tr>';
+      h += '</table>';
+      return h;
+    },
+    guidance_style: () => {
+      let h = '<div class="md-h2">Guidance Style</div>';
+      h += '<table class="md-table"><tr><th>Metric</th><th>Format</th><th>Frequency</th><th>Example</th></tr>';
+      h += '<tr><td>Revenue</td><td>Qualitative range</td><td>Quarterly</td><td>"low to mid single digits"</td></tr>';
+      h += '<tr><td>Gross Margin</td><td>% range (explicit)</td><td>Quarterly</td><td>"46.5% to 47.5%"</td></tr>';
+      h += '<tr><td>OpEx</td><td>$ range (explicit)</td><td>Quarterly</td><td>"$15.2B to $15.4B"</td></tr>';
+      h += '<tr><td>Tax Rate</td><td>% point (single)</td><td>Quarterly</td><td>"approximately 16%"</td></tr>';
+      h += '</table>';
+      h += '<div class="md-bullet">Policy: Quarterly guidance only — Apple does not provide annual revenue guidance</div>';
+      h += '<div class="md-bullet">Apple stopped providing dollar revenue guidance in April 2022</div>';
+      h += '<div class="md-bullet">CFO: Kevan Parekh (from Luca Maestri, Jan 2025)</div>';
+      return h;
+    },
+    accuracy_record: () => {
+      let h = '<div class="md-h2">Accuracy Track Record</div>';
+      h += '<table class="md-table"><tr><th>Quarter</th><th>Metric</th><th>Guided Mid</th><th>Actual</th><th>Result</th><th>Surprise</th></tr>';
+      h += '<tr><td>Q2 FY25</td><td>Revenue</td><td>$93.0B</td><td>$95.4B</td><td style="color:var(--accent2)">BEAT</td><td style="color:var(--accent2)">+2.6%</td></tr>';
+      h += '<tr><td>Q2 FY25</td><td>Gross Margin</td><td>46.8%</td><td>47.1%</td><td style="color:var(--accent2)">BEAT</td><td style="color:var(--accent2)">+30bps</td></tr>';
+      h += '<tr><td>Q1 FY25</td><td>Revenue</td><td>$122.5B</td><td>$124.3B</td><td style="color:var(--accent2)">BEAT</td><td style="color:var(--accent2)">+1.5%</td></tr>';
+      h += '</table>';
+      h += '<div class="md-bullet">Beat rate: 88% (7/8 quarters) — systematic conservative guider</div>';
+      h += '<div class="md-bullet">GM guidance never missed low in 12 quarters</div>';
+      return h;
+    },
+    source_conflicts: () => {
+      let h = '<div class="md-h2">Source Conflicts</div>';
+      h += '<table class="md-table"><tr><th>Quarter</th><th>Metric</th><th>Source A</th><th>Value A</th><th>Source B</th><th>Value B</th><th>Resolution</th></tr>';
+      h += '<tr><td>Q1 FY26</td><td>Revenue</td><td>News (bzNews_501)</td><td>"13-16% growth"</td><td>Transcript</td><td>"low to mid single digits"</td><td>Transcript authoritative; news misrepresented format</td></tr>';
+      h += '</table>';
+      return h;
+    },
+    coverage_gaps: () => {
+      let h = '<div class="md-h2">Coverage Gaps</div>';
+      h += '<div class="md-bullet">Q4 FY2023: No transcript available (news-only coverage)</div>';
+      h += '<div class="md-bullet">Q2 FY2024: Transcript truncated at prepared remarks (missing Q&A)</div>';
+      h += '<div class="md-bullet">Services segment: No explicit revenue guidance provided (qualitative only)</div>';
+      return h;
+    },
+    data_coverage: () => {
+      let h = '<div class="md-h2">Data Coverage</div>';
+      h += '<table class="md-table"><tr><th>Source</th><th>Date Range</th><th>Count</th></tr>';
+      const activeSources = SOURCES.filter(s => state.sources[s.id]);
+      if (state.sources['8k']) h += '<tr><td>8-K Filings</td><td>2023-01 — 2025-05</td><td>10</td></tr>';
+      if (state.sources.transcript) h += '<tr><td>Transcripts</td><td>2023-02 — 2025-05</td><td>9</td></tr>';
+      if (state.sources.news) h += '<tr><td>News</td><td>2023-01 — 2025-05</td><td>47</td></tr>';
+      if (state.sources['10q']) h += '<tr><td>10-Q/10-K</td><td>2023-03 — 2025-03</td><td>8</td></tr>';
+      if (state.sources.xbrl) h += '<tr><td>XBRL</td><td>2023-03 — 2025-03</td><td>8</td></tr>';
+      h += '</table>';
+      return h;
+    },
+    notes_assumptions: () => {
+      let h = '<div class="md-h2">Notes & Assumptions</div>';
+      h += '<div class="md-bullet">All EPS figures are non-GAAP adjusted unless noted</div>';
+      h += '<div class="md-bullet">Revenue guidance is qualitative (Apple stopped dollar guidance Apr 2022)</div>';
+      if (state.captures.D) h += '<div class="md-bullet">FX assumption: current spot rates at time of guidance</div>';
+      if (state.captures.E) h += '<div class="md-bullet">Tariff guidance assumes current rates; $900M cost impact for Q3 FY25</div>';
+      h += '<div class="md-em">Last updated: 2025-05-02T10:30:00Z</div>';
+      return h;
+    },
+    eps_surprise: () => {
+      let h = '<div class="md-h2">EPS Surprise History</div>';
+      h += '<div class="md-p">Source: Alpha Vantage EARNINGS_ESTIMATES</div>';
+      h += '<table class="md-table"><tr><th>Quarter</th><th>Estimate</th><th>Actual</th><th>Surprise</th></tr>';
+      h += '<tr><td>Q2 FY25</td><td>$1.39</td><td>$1.65</td><td style="color:var(--accent2)">+18.7%</td></tr>';
+      h += '<tr><td>Q1 FY25</td><td>$2.35</td><td>$2.40</td><td style="color:var(--accent2)">+2.1%</td></tr>';
+      h += '<tr><td>Q4 FY24</td><td>$1.58</td><td>$1.64</td><td style="color:var(--accent2)">+3.8%</td></tr>';
+      h += '</table>';
+      return h;
+    },
+    revenue_trends: () => {
+      let h = '<div class="md-h2">Revenue & Margin Trends</div>';
+      h += '<div class="md-p">Source: XBRL 10-K/10-Q filings</div>';
+      h += '<table class="md-table"><tr><th>FY</th><th>Revenue</th><th>GM%</th><th>Op Margin%</th><th>EPS</th></tr>';
+      h += '<tr><td>FY2023</td><td>$383.3B</td><td>44.1%</td><td>29.8%</td><td>$6.16</td></tr>';
+      h += '<tr><td>FY2024</td><td>$391.0B</td><td>46.2%</td><td>31.5%</td><td>$6.75</td></tr>';
+      h += '<tr><td>FY2025 YTD</td><td>$218.7B</td><td>47.0%</td><td>32.1%</td><td>$4.05</td></tr>';
+      h += '</table>';
+      return h;
+    },
+    stock_reactions: () => {
+      let h = '<div class="md-h2">Post-Earnings Stock Reactions</div>';
+      h += '<table class="md-table"><tr><th>Event</th><th>Date</th><th>Next-Day Return</th><th>Guidance Action</th></tr>';
+      h += '<tr><td>Q2 FY25</td><td>2025-05-01</td><td style="color:var(--accent2)">+4.2%</td><td>INITIAL (beat + strong guide)</td></tr>';
+      h += '<tr><td>Q1 FY25</td><td>2025-01-30</td><td style="color:var(--danger)">-2.1%</td><td>INITIAL (beat but tariff concern)</td></tr>';
+      h += '<tr><td>Q4 FY24</td><td>2024-10-31</td><td style="color:var(--accent2)">+1.8%</td><td>N/A (no Q1 guidance yet)</td></tr>';
+      h += '</table>';
+      return h;
+    },
+  };
+
+  html = '<div class="md-h1">AAPL Guidance Inventory — File Outline</div><hr class="md-hr">';
+
+  const allSectionsOrdered = ['company_profile','fiscal_calendar','guidance_style','active_guidance','guidance_timeline','revision_history','accuracy_record','consensus_comparison','evidence_ledger','source_conflicts','coverage_gaps','eps_surprise','revenue_trends','stock_reactions','data_coverage','notes_assumptions'];
+
+  for (const sid of allSectionsOrdered) {
+    const sec = allSections.find(s => s.id === sid);
+    if (!sec) continue;
+    const enabled = state.sections[sid];
+    if (enabled && sectionContent[sid]) {
+      html += sectionContent[sid]();
+      html += '<hr class="md-hr">';
+    } else if (!enabled) {
+      html += `<div class="md-section collapsed"><div class="md-h2" style="opacity:0.3;text-decoration:line-through">${sec.name}</div></div>`;
+    }
+  }
+
+  el.innerHTML = html;
+}
+
+function renderMarkdownPreview() {
+  // Reuse outline but it's already markdown-like
+  renderOutlinePreview();
+}
+
+function renderDataclassPreview() {
+  const el = document.getElementById('preview');
+  const enabledFields = Object.values(FIELDS).flat().filter(f => state.fields[f.id]);
+
+  const typeMap = {
+    'enum': 'str', 'int': 'int', 'int?': 'Optional[int]', 'float?': 'Optional[float]',
+    'string': 'str', 'string?': 'Optional[str]', 'date': 'date',
+  };
+
+  let html = '<div class="md-h2">Python Dataclass (from your field selection)</div>';
+  html += '<div class="md-yaml-block" style="font-size:12px;line-height:1.7">';
+
+  // Imports
+  html += '<span style="color:var(--purple)">from</span> <span style="color:var(--text)">dataclasses</span> <span style="color:var(--purple)">import</span> <span style="color:var(--text)">dataclass</span>\n';
+  html += '<span style="color:var(--purple)">from</span> <span style="color:var(--text)">typing</span> <span style="color:var(--purple)">import</span> <span style="color:var(--text)">Optional, Literal</span>\n';
+  html += '<span style="color:var(--purple)">from</span> <span style="color:var(--text)">datetime</span> <span style="color:var(--purple)">import</span> <span style="color:var(--text)">date</span>\n\n';
+
+  // Period class
+  const periodFields = FIELDS.period.filter(f => state.fields[f.id]);
+  if (periodFields.length > 0) {
+    html += '<span style="color:var(--warn)">@dataclass</span>\n';
+    html += '<span style="color:var(--purple)">class</span> <span style="color:var(--accent)">GuidancePeriod</span>:\n';
+    for (const f of periodFields) {
+      const t = f.id === 'period_type' ? 'Literal["quarter", "annual", "half", "long-range"]' :
+                f.id === 'period_status' ? 'Literal["future", "current", "past"]' :
+                typeMap[f.type] || 'str';
+      html += `    <span style="color:var(--text)">${f.label}</span>: <span style="color:var(--accent2)">${esc(t)}</span>\n`;
+    }
+    html += '\n';
+  }
+
+  // Entry class
+  html += '<span style="color:var(--warn)">@dataclass</span>\n';
+  html += '<span style="color:var(--purple)">class</span> <span style="color:var(--accent)">GuidanceEntry</span>:\n';
+
+  if (periodFields.length > 0) {
+    html += `    <span style="color:var(--text)">period</span>: <span style="color:var(--accent2)">GuidancePeriod</span>\n`;
+  }
+
+  const otherGroups = ['metric', 'citation', 'state'];
+  const groupComments = { metric: '# Metric', citation: '# Citation', state: '# Classification state' };
+  for (const gk of otherGroups) {
+    const gFields = FIELDS[gk].filter(f => state.fields[f.id]);
+    if (gFields.length === 0) continue;
+    html += `    <span style="color:var(--text2)">${groupComments[gk]}</span>\n`;
+    for (const f of gFields) {
+      let t = typeMap[f.type] || 'str';
+      if (f.id === 'action') t = 'Literal["INITIAL","RAISED","LOWERED","MAINTAINED","NARROWED","WIDENED","WITHDRAWN"]';
+      if (f.id === 'status') t = 'Literal["active", "superseded", "withdrawn"]';
+      if (f.id === 'derivation') t = 'Literal["explicit", "calculated", "point", "implied"]';
+      html += `    <span style="color:var(--text)">${f.label}</span>: <span style="color:var(--accent2)">${esc(t)}</span>\n`;
+    }
+  }
+
+  html += '</div>';
+
+  // Field count summary
+  html += `<div class="md-p" style="margin-top:12px">${enabledFields.length} fields enabled (${periodFields.length} period, ${FIELDS.metric.filter(f=>state.fields[f.id]).length} metric, ${FIELDS.citation.filter(f=>state.fields[f.id]).length} citation, ${FIELDS.state.filter(f=>state.fields[f.id]).length} state)</div>`;
+
+  el.innerHTML = html;
+}
+
+// ─── STATS ───────────────────────────────────────────────────────
+function updateStats() {
+  const nFields = Object.values(state.fields).filter(Boolean).length;
+  const nSections = Object.values(state.sections).filter(Boolean).length;
+  const nCaptures = Object.values(state.captures).filter(Boolean).length;
+  const nSources = Object.values(state.sources).filter(Boolean).length;
+  const totalFields = Object.values(FIELDS).flat().length;
+  const totalSections = Object.values(SECTIONS).flat().length;
+
+  document.getElementById('statsBar').innerHTML =
+    `Fields: <span class="stat-val">${nFields}/${totalFields}</span>` +
+    ` &nbsp;|&nbsp; Sections: <span class="stat-val">${nSections}/${totalSections}</span>` +
+    ` &nbsp;|&nbsp; Capture Items: <span class="stat-val">${nCaptures}/10</span>` +
+    ` &nbsp;|&nbsp; Sources: <span class="stat-val">${nSources}/${SOURCES.length}</span>`;
+}
+
+// ─── PROMPT ──────────────────────────────────────────────────────
+function updatePrompt() {
+  const parts = [];
+  const nFields = Object.values(state.fields).filter(Boolean).length;
+  const totalFields = Object.values(FIELDS).flat().length;
+
+  // Describe what preset this is closest to
+  const enabledFieldIds = new Set(Object.entries(state.fields).filter(([,v])=>v).map(([k])=>k));
+  const enabledSectionIds = new Set(Object.entries(state.sections).filter(([,v])=>v).map(([k])=>k));
+  const enabledCaptureIds = new Set(Object.entries(state.captures).filter(([,v])=>v).map(([k])=>k));
+
+  parts.push('Build the guidance inventory system with the following structure:\n');
+
+  // Entry fields
+  if (nFields === totalFields) {
+    parts.push('**Entry Fields:** All 24 fields (18 extraction + 6 derived).');
+  } else {
+    const groups = {};
+    for (const [gk, fields] of Object.entries(FIELDS)) {
+      const on = fields.filter(f => state.fields[f.id]).map(f => f.label);
+      if (on.length > 0) groups[gk] = on;
+    }
+    parts.push('**Entry Fields** (' + nFields + ' total):');
+    const gNames = { period: 'Period', metric: 'Metric', citation: 'Citation', state: 'State' };
+    for (const [gk, names] of Object.entries(groups)) {
+      parts.push(`  - ${gNames[gk]}: ${names.join(', ')}`);
+    }
+  }
+
+  // Excluded fields
+  const excludedFields = Object.values(FIELDS).flat().filter(f => !state.fields[f.id] && !f.required);
+  if (excludedFields.length > 0) {
+    parts.push(`\n**Excluded fields:** ${excludedFields.map(f => f.label).join(', ')}`);
+  }
+
+  // Sections
+  const enabledSections = Object.values(SECTIONS).flat().filter(s => state.sections[s.id]);
+  const disabledSections = Object.values(SECTIONS).flat().filter(s => !state.sections[s.id]);
+  parts.push(`\n**Output Sections** (${enabledSections.length}/${Object.values(SECTIONS).flat().length}):`);
+  for (const s of enabledSections) {
+    parts.push(`  - ${s.name}`);
+  }
+  if (disabledSections.length > 0) {
+    parts.push(`  Excluded: ${disabledSections.map(s => s.name).join(', ')}`);
+  }
+
+  // Capture items
+  const enabledCaptures = CAPTURES.filter(c => state.captures[c.id]);
+  const disabledCaptures = CAPTURES.filter(c => !state.captures[c.id]);
+  if (enabledCaptures.length === 10) {
+    parts.push('\n**Critical Capture Items:** All 10 (A-J).');
+  } else {
+    parts.push(`\n**Critical Capture Items** (${enabledCaptures.length}/10): ${enabledCaptures.map(c => c.id + '. ' + c.label).join(', ')}`);
+    if (disabledCaptures.length > 0) {
+      parts.push(`  Skip: ${disabledCaptures.map(c => c.id).join(', ')}`);
+    }
+  }
+
+  // Sources
+  const activeSources = SOURCES.filter(s => state.sources[s.id]);
+  parts.push(`\n**Source Processing** (${activeSources.length} sources, priority order):`);
+  for (const s of activeSources) {
+    const activeOpts = s.opts.filter(o => state.sourceOpts[o.id]).map(o => o.label);
+    const inactiveOpts = s.opts.filter(o => !state.sourceOpts[o.id]).map(o => o.label);
+    parts.push(`  ${s.priority}. ${s.name}: ${activeOpts.join('; ')}`);
+    if (inactiveOpts.length > 0) parts.push(`     Skip: ${inactiveOpts.join('; ')}`);
+  }
+
+  // Classification rules
+  if (state.fields.action) {
+    parts.push('\n**Classification Rules:** 7 actions — INITIAL (no prior), RAISED (midpoint up), LOWERED (midpoint down), NARROWED (same mid, tighter range), WIDENED (same mid, wider range), MAINTAINED (reiterated), WITHDRAWN (removed).');
+  }
+
+  // Derivation
+  if (state.fields.derivation) {
+    parts.push('**Derivation Types:** explicit (all stated), calculated (mid computed), point (single value), implied (qualitative only).');
+  }
+
+  document.getElementById('prompt').textContent = parts.join('\n');
+}
+
+function copyPrompt() {
+  const text = document.getElementById('prompt').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+// ─── UPDATE ALL ──────────────────────────────────────────────────
+function updateAll() {
+  const renderers = {
+    entry: renderEntryPreview,
+    outline: renderOutlinePreview,
+    markdown: renderMarkdownPreview,
+    dataclass: renderDataclassPreview,
+  };
+  (renderers[state.previewMode] || renderEntryPreview)();
+  updatePrompt();
+  updateStats();
+}
+
+// ─── INIT ────────────────────────────────────────────────────────
+initState();
+renderEntryTab();
+renderSectionsTab();
+renderCaptureTab();
+renderSourcesTab();
+updateAll();
+</script>
+</body>
+</html>

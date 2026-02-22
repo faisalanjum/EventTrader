@@ -1,0 +1,47 @@
+Background Agent Web Tool Test Results
+======================================
+Date: 2026-02-19
+
+WEBSEARCH: WORKS
+- Searched for "anthropic claude code"
+- Returned 10 results including links to Anthropic's official site, GitHub, TechCrunch, Medium, and more.
+- Example result: "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster."
+
+WEBFETCH: WORKS
+- Fetched https://httpbin.org/get
+- Successfully extracted origin IP: 24.150.201.154
+
+Tools Available to This Agent
+=============================
+1. Bash - Execute terminal commands
+2. Glob - Fast file pattern matching
+3. Grep - Content search (ripgrep-based)
+4. Read - Read files from filesystem
+5. Edit - Exact string replacements in files
+6. Write - Write files to filesystem
+7. NotebookEdit - Edit Jupyter notebook cells
+8. WebFetch - Fetch and process web content
+9. WebSearch - Search the web for information
+10. Skill - Execute skills within conversation
+11. ToolSearch - Search for and load deferred tools
+
+Deferred Tools (available via ToolSearch, not yet loaded):
+- mcp__neo4j-cypher__get_neo4j_schema
+- mcp__neo4j-cypher__read_neo4j_cypher
+- mcp__neo4j-cypher__write_neo4j_cypher
+- mcp__perplexity__create_chat_completions
+- mcp__perplexity__create_search
+- mcp__alphavantage__TOOL_LIST
+- mcp__alphavantage__TOOL_GET
+- mcp__alphavantage__TOOL_CALL
+- mcp__claude_ai_LunarCrush__List
+- mcp__claude_ai_LunarCrush__Cryptocurrencies
+- mcp__claude_ai_LunarCrush__Stocks
+- mcp__claude_ai_LunarCrush__Topic
+- mcp__claude_ai_LunarCrush__Topic_Time_Series
+- mcp__claude_ai_LunarCrush__Topic_Posts
+- mcp__claude_ai_LunarCrush__Creator
+- mcp__claude_ai_LunarCrush__Post
+- mcp__claude_ai_LunarCrush__Search
+- mcp__claude_ai_LunarCrush__Fetch
+- mcp__claude_ai_LunarCrush__Authentication

@@ -1,0 +1,8 @@
+MEMORY_VERIFY_GENERAL_TEST=v2.1.50
+PRIOR_CANARY_FILE_EXISTS=YES
+PRIOR_CANARY_CONTENT=AUTOPRELOAD_CANARY=pineapple_2026_v250 | WRITTEN_AT=2026-02-21T00:00:00Z | PURPOSE=Testing if this content appears in system prompt on next invocation
+AGENT_MEMORY_DIRS=test-memory-autopreload, test-re-memory-agent, test-re-memory-verify
+AGENT_MEMORY_LOCAL_DIRS=test-memory-local
+MEMORY_INSTRUCTIONS_IN_CONTEXT=NO
+OWN_CANARY_WRITE=WORKS
+OWN_CANARY_READ=VERIFY_CANARY=mango_verify_2026

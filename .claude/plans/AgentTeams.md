@@ -1,6 +1,6 @@
 # Agent Teams Orchestration Plan
 
-## Date: 2026-02-05
+## Date: 2026-02-05 (Updated 2026-02-18, v2.1.45 retest)
 
 ---
 
@@ -1188,8 +1188,8 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 | 34 | TaskCompleted hook (v2.1.33) | **YES** | Fires on task completion; JSON has task_id, subject, description |
 | 35 | TeammateIdle hook (v2.1.33) | **YES** | Fires when teammate goes idle; JSON has teammate_name, team_name |
 | 36 | Agent `Task(AgentType)` restriction (v2.1.33) | **YES (HARD)** | `tools: [Task(Explore)]` blocks unlisted sub-agent types. Hard enforcement. |
-| 37 | `memory: local` scope (v2.1.33) | **STORAGE ONLY** | Dir + files persist; auto-preload NOT working (v2.1.34) |
-| 38 | `memory: project` scope | **STORAGE ONLY** | Dir + files persist; auto-preload NOT working (v2.1.34) |
+| 37 | `memory: local` scope (v2.1.33) | **STORAGE ONLY** | Dir + files persist; auto-preload NOT working (v2.1.34→v2.1.45) |
+| 38 | `memory: project` scope | **STORAGE ONLY** | Dir + files persist; auto-preload NOT working (v2.1.34→v2.1.45) |
 | 39 | Mixed-provider team (native) | **NO** | Task tool has no `provider` param; only `model: sonnet\|opus\|haiku` |
 | 40 | Mixed-provider team (proxy via `./agent`) | **YES** | Claude teammate delegates to `./agent --provider openai`; full comms work |
 | 41 | Cross-provider peer messaging | **YES** | Claude-worker ↔ OpenAI-worker bidirectional messaging confirmed |
@@ -1202,6 +1202,31 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 | 48 | Subagent TeamCreate access | **YES** | general-purpose subagents have TeamCreate and it works (1 team max). |
 | 49 | Session-wide team leadership constraint | **CONFIRMED** | One team per session-hierarchy. All agents in session share slot. |
 | 50 | Subagent full team lifecycle | **NO** | Can create team + tasks, but Task tool absent → can't spawn teammates. |
+| 51 | Task completion crash (v2.1.45) | **FIXED** | Task tool no longer crashes with ReferenceError on completion |
+| 52 | `memory: local` auto-preload (v2.1.45) | **STILL BROKEN** | Storage works, auto-preload STILL NOT WORKING (retested v2.1.45) |
+| 53 | `memory: project` auto-preload (v2.1.45) | **STILL BROKEN** | Storage works, auto-preload STILL NOT WORKING (retested v2.1.45) |
+| 54 | `type: "prompt"` hooks in agent FM (v2.1.45) | **⚠️ REGRESSION** | Was WORKING in v2.1.37, NO LONGER ENFORCED in v2.1.45 |
+| 55 | `type: "agent"` hooks in agent FM (v2.1.45) | **STILL NOT ENFORCED** | No change from v2.1.37 |
+| 56 | PostToolUseFailure hook (v2.1.45) | **YES** | Still works. 10 fields in JSON payload. |
+| 57 | SubagentStart injection (v2.1.45) | **YES** | Still works. additionalContext reaches agent context. |
+| 58 | SubagentStop blocking (v2.1.45) | **YES** | Still works. 2-phase block/allow lifecycle. |
+| 59 | Task(AgentType) restriction (v2.1.45) | **YES (HARD)** | Still enforced. Unlisted types blocked. |
+| 60 | Nested session guard (v2.1.41) | **YES** | CLI blocks launch inside another Claude Code session |
+| 61 | Plugins system (v2.1.45) | **NEW** | Full plugin system: marketplaces, /plugin install, enabledPlugins, extraKnownMarketplaces |
+| 62 | Skills context leak after compaction (v2.1.45) | **FIXED** | Subagent skills no longer bleed into main session post-compaction |
+| 63 | Agent Teams on Bedrock/Vertex/Foundry (v2.1.45) | **FIXED** | API provider env vars now propagated to tmux-spawned teammates |
+| 64 | SDK rename (v2.1.45) | **BREAKING** | claude-code-sdk → claude-agent-sdk; ClaudeCodeOptions → ClaudeAgentOptions |
+| 65 | Bash env-var wrapper permission matching (v2.1.38) | **FIXED** | `FOO=bar command` patterns now correctly matched by permission system |
+| 66 | Fatal errors swallowed (v2.1.39) | **FIXED** | Fatal errors now displayed instead of silently swallowed |
+| 67 | Process hanging after session close (v2.1.39) | **FIXED** | Sessions no longer hang; relevant for SDK/agent cleanup |
+| 68 | MCP image content streaming crash (v2.1.41) | **FIXED** | MCP tools returning image content no longer crash during streaming |
+| 69 | Hook blocking stderr visibility (v2.1.41) | **FIXED** | Hook exit-code-2 blocking errors now show stderr to user |
+| 70 | Subagent elapsed time accuracy (v2.1.41) | **FIXED** | Permission wait time no longer counted in subagent elapsed time |
+| 71 | Stale permission rules on settings change (v2.1.41) | **FIXED** | Permission rules cleared and reloaded when settings.json changes on disk |
+| 72 | Non-agent .md warnings in .claude/agents/ (v2.1.43) | **FIXED** | Spurious warnings for non-agent markdown files suppressed |
+| 73 | Prompt cache hit improvement (v2.1.42) | **IMPROVED** | Date moved out of system prompt → better cache hits → lower cost |
+| 74 | Large shell output memory usage (v2.1.45) | **FIXED** | RSS no longer grows unboundedly with shell output size |
+| 75 | ENAMETOOLONG for deep paths (v2.1.44) | **FIXED** | Deeply-nested directory paths no longer cause errors |
 
 ---
 
@@ -1248,6 +1273,28 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 36. **Subagent as full team leader**: Can a subagent create a team AND spawn teammates? **NO** — TeamCreate works, TaskCreate works, but Task tool (needed to spawn teammates) is absent from subagents. Admin functions work, lifecycle doesn't. **ANSWERED: PARTIAL (admin only).**
 37. **Any way to run two teams in parallel**: Tested 4 approaches (primary x2, primary+subagent, subagent x2, dual subagents). All blocked. **Only workaround**: two separate `claude -p` OS processes. **ANSWERED: NOT POSSIBLE within one session.**
 
+### Answered (v2.1.45, 2026-02-18) — Comprehensive Retest
+
+38. **Task completion crash**: Fixed in v2.1.45. Task tool no longer crashes with ReferenceError on completion. TaskCompleted hook fires correctly. **ANSWERED: FIXED.**
+39. **Memory auto-preload (v2.1.45 recheck)**: Still NOT working in v2.1.45. Both `local` and `project` scopes: storage works, auto-preload does NOT inject into system prompt. No change from v2.1.34. **ANSWERED: STILL BROKEN.**
+40. **type: "prompt" hooks regression**: Was WORKING in v2.1.37 (correctly blocked BLOCK_ME commands). In v2.1.45, hook is NOT evaluated — both safe and blocked commands execute without interception. **ANSWERED: REGRESSION.**
+41. **type: "agent" hooks**: Still NOT enforced in v2.1.45. No change from v2.1.37. **ANSWERED: STILL NOT ENFORCED.**
+42. **Agent Teams on Bedrock/Vertex/Foundry**: Fixed in v2.1.41 (model identifier) and v2.1.45 (API provider env vars propagated to tmux-spawned teammates). **ANSWERED: FIXED (untested locally — no Bedrock/Vertex config).**
+43. **Plugins system**: NEW in v2.1.45. Full marketplace-based plugin system. Plugins bundle commands, agents, skills, hooks, MCP servers. /plugin install, enabledPlugins, extraKnownMarketplaces (interactive trust only, NOT -p mode), strictKnownMarketplaces for enterprise. **ANSWERED: DOCUMENTED.**
+44. **SDK rename**: claude-code-sdk → claude-agent-sdk (both Python/TypeScript). Breaking: ClaudeCodeOptions → ClaudeAgentOptions, SDK no longer loads Claude Code system prompt by default, settings sources not loaded by default. TypeScript v0.2.45, Python v0.1.37. **ANSWERED: DOCUMENTED.**
+45. **Skills context leak after compaction**: Fixed in v2.1.45. Skills invoked by subagents no longer bleed into main session after compaction. Related to issues #16209, #13919. **ANSWERED: FIXED.**
+46. **Bash env-var wrapper permission matching**: Fixed in v2.1.38. Commands like `FOO=bar command` now correctly matched by permission system. **ANSWERED: FIXED.**
+47. **Fatal errors swallowed**: Fixed in v2.1.39. Fatal errors now displayed instead of silently swallowed; important for debugging agent failures. **ANSWERED: FIXED.**
+48. **Process hanging after session close**: Fixed in v2.1.39. Sessions no longer hang after close; relevant for SDK/agent cleanup. **ANSWERED: FIXED.**
+49. **MCP image content streaming crash**: Fixed in v2.1.41. MCP tools returning image content during streaming no longer crash. **ANSWERED: FIXED.**
+50. **Hook blocking stderr visibility**: Fixed in v2.1.41. Hook exit-code-2 blocking errors now show stderr to the user (was hidden). **ANSWERED: FIXED.**
+51. **Subagent elapsed time accuracy**: Fixed in v2.1.41. Permission wait time no longer counted in subagent elapsed time display. **ANSWERED: FIXED.**
+52. **Stale permission rules on settings change**: Fixed in v2.1.41. Permission rules cleared and reloaded when settings.json changes on disk. **ANSWERED: FIXED.**
+53. **Non-agent .md warnings in .claude/agents/**: Fixed in v2.1.43. Spurious warnings for non-agent markdown files (e.g. README.md) in agents dir suppressed. **ANSWERED: FIXED.**
+54. **Prompt cache hit improvement**: Improved in v2.1.42. Date moved out of system prompt for better prompt cache hit rates and lower cost. **ANSWERED: IMPROVED.**
+55. **Large shell output memory usage**: Fixed in v2.1.45. RSS no longer grows unboundedly with shell command output size; matters for long-running agents. **ANSWERED: FIXED.**
+56. **ENAMETOOLONG for deep paths**: Fixed in v2.1.44. Deeply-nested directory paths no longer cause errors. **ANSWERED: FIXED.**
+
 ### Still Open
 
 2. **Team + SDK**: Can teams be created via the Agent SDK, or only interactively?
@@ -1256,7 +1303,7 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 10. **Teammate context window**: Do teammates get the same context window size as the lead?
 14. **Team task dir purpose**: The `_internal: true` task — used for anything beyond tracking?
 15. **Idle reliability**: Direct message to idle teammate sometimes lost — race condition?
-26. **Memory auto-preload**: Will this be fixed in a future version? Feature exists in docs but doesn't work.
+26. **Memory auto-preload**: Will this be fixed in a future version? Feature exists in docs but STILL doesn't work (retested v2.1.45).
 27. **`memory: user` scope**: Untested — does it write to `~/.claude/agent-memory/<name>/`?
 
 ---
@@ -1513,6 +1560,31 @@ To minimize Claude's cost as relay:
 **Output files**:
 - `earnings-analysis/test-outputs/test_cross_dep_openai.txt` — OpenAI's data gathering
 - `earnings-analysis/test-outputs/test_cross_dep_claude.txt` — Claude's analysis of OpenAI's data
+
+### RT-15: v2.1.45 Comprehensive Retest — Consolidated Results
+
+**Tests run (2026-02-18, v2.1.45):**
+
+| Test | Agent/Artifact | Result | Output File |
+|------|---------------|--------|-------------|
+| Task completion crash | TaskCreate + TaskUpdate (direct) | ✅ No crash, hook fires | `test-hook-task-completed.log` |
+| Memory: local preload | `.claude/agents/test_memory_local.md` | ❌ Still no preload | `test_memory_local.txt` |
+| Memory: project preload | `.claude/agents/test-re-memory-agent.md` | ❌ Still no preload | (in-memory report) |
+| type: "agent" hooks | `.claude/agents/test-hook-agent-type.md` | ❌ Still not enforced | `test-hook-agent-type.txt` |
+| type: "prompt" hooks | `.claude/agents/test-hook-prompt-type.md` | ❌ **REGRESSION** (was ✅) | `test-hook-prompt-type.txt` |
+| PostToolUseFailure | `.claude/agents/test-hook-post-failure.md` | ✅ Works (10 fields) | `test-hook-post-failure.txt` |
+| SubagentStart injection | `.claude/agents/test-hook-inject-check.md` | ✅ Works | `test-hook-subagent-inject.txt` |
+| SubagentStop blocking | `.claude/agents/test-hook-stop-block.md` | ✅ Works (2-phase) | `test-hook-stop-block.txt` + `.log` |
+| Task(AgentType) restrict | `.claude/agents/test_agent_type_restrict.md` | ✅ Hard enforcement | `test_agent_type_restrict.txt` |
+| Nested session guard | `claude --version` from inside session | ✅ Blocks nesting | (CLI output) |
+| Plugins system | Web research | ✅ Full system documented | (research report) |
+| SDK changes | Web research | ✅ Rename + new features documented | (research report) |
+| Skills compaction fix | Web research + changelog | ✅ Fix confirmed in v2.1.45 | (research report) |
+| Security fixes | Web research + changelog | ✅ Sandbox + heredoc fixes documented | (research report) |
+
+**Key regression**: `type: "prompt"` hooks in agent frontmatter stopped working between v2.1.37 and v2.1.45. SubagentStart hooks still fire, confirming the hook infrastructure is active, but prompt-type PreToolUse evaluation is broken.
+
+---
 
 ### RT-11: v2.1.33/34 Feature Tests — Consolidated Results
 

@@ -1,0 +1,36 @@
+TOOLSEARCH: WORKS
+MCP_QUERY: WORKS (result: [{"test": 1}])
+
+Tools available:
+  1. mcp__neo4j-cypher__get_neo4j_schema - List all nodes, attributes, and relationships in the neo4j database
+  2. mcp__neo4j-cypher__read_neo4j_cypher - Execute a read Cypher query on the neo4j database
+  3. mcp__neo4j-cypher__write_neo4j_cypher - Execute a write Cypher query on the neo4j database
+  4. mcp__perplexity__create_chat_completions - Perplexity chat completions (deferred, not loaded)
+  5. mcp__perplexity__create_search - Perplexity search (deferred, not loaded)
+  6. mcp__alphavantage__TOOL_LIST - Alpha Vantage tool list (deferred, not loaded)
+  7. mcp__alphavantage__TOOL_GET - Alpha Vantage tool get (deferred, not loaded)
+  8. mcp__alphavantage__TOOL_CALL - Alpha Vantage tool call (deferred, not loaded)
+  9. mcp__claude_ai_LunarCrush__List - LunarCrush list (deferred, not loaded)
+  10. mcp__claude_ai_LunarCrush__Cryptocurrencies - LunarCrush cryptocurrencies (deferred, not loaded)
+  11. mcp__claude_ai_LunarCrush__Stocks - LunarCrush stocks (deferred, not loaded)
+  12. mcp__claude_ai_LunarCrush__Topic - LunarCrush topic (deferred, not loaded)
+  13. mcp__claude_ai_LunarCrush__Topic_Time_Series - LunarCrush topic time series (deferred, not loaded)
+  14. mcp__claude_ai_LunarCrush__Topic_Posts - LunarCrush topic posts (deferred, not loaded)
+  15. mcp__claude_ai_LunarCrush__Creator - LunarCrush creator (deferred, not loaded)
+  16. mcp__claude_ai_LunarCrush__Post - LunarCrush post (deferred, not loaded)
+  17. mcp__claude_ai_LunarCrush__Search - LunarCrush search (deferred, not loaded)
+  18. mcp__claude_ai_LunarCrush__Fetch - LunarCrush fetch (deferred, not loaded)
+  19. mcp__claude_ai_LunarCrush__Authentication - LunarCrush authentication (deferred, not loaded)
+
+Built-in tools:
+  - Bash (shell command execution)
+  - Glob (file pattern matching)
+  - Grep (content search via ripgrep)
+  - Read (file reading)
+  - Edit (file editing)
+  - Write (file writing)
+  - NotebookEdit (Jupyter notebook editing)
+  - WebFetch (URL content fetching)
+  - WebSearch (web search)
+  - ToolSearch (deferred tool discovery)
+  - Skill (skill invocation)
