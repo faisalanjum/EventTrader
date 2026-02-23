@@ -58,10 +58,10 @@ You MUST Read these 3 files BEFORE doing anything else. Do not extract guidance 
 |--------|-------|
 | Company + CIK | QUERIES.md 1A |
 | FYE from 10-K | QUERIES.md 1B — extract month from `periodOfReport` |
-| Pre-fetch Periods | QUERIES.md 1C |
 | Concept cache | QUERIES.md 2A |
 | Member cache | QUERIES.md 2B |
 | Existing guidance tags | QUERIES.md 7A |
+| Prior extractions for this source | QUERIES.md 7D — if count > 0, log warning: "Source has {N} existing items — re-run will only add items with new values" |
 
 ### Step 2: Fetch Source Content
 
@@ -87,9 +87,9 @@ This is the agent doing its core job — no external tool call.
 
 ### Step 4: Deterministic Validation (MANDATORY — use scripts, not LLM math)
 
-You MUST invoke `fiscal_resolve.py` and `guidance_ids.py` via Bash for EVERY extracted item. Do not compute IDs, canonicalize units, or resolve periods yourself. For each item:
+You MUST invoke `guidance_ids.py` via Bash for EVERY extracted item. Do not compute IDs, canonicalize units, or build period u_ids yourself. For each item:
 
-1. **Resolve fiscal period** — `fiscal_resolve.py` via Bash (see invocation below)
+1. **Build fiscal-keyed period_u_id** — `guidance_ids.py:build_period_u_id()` via Bash (see invocation below)
 2. **Canonicalize unit + values** — `guidance_ids.py` via Bash (see invocation below)
 3. **Validate basis** — SKILL.md §6: explicit-only qualifier from quote span, otherwise `unknown`
 4. **Resolve `xbrl_qname`** — match against concept cache (SKILL.md §11)
@@ -110,21 +110,26 @@ MERGE pattern follows `guidance_writer.py:_build_core_query()` — see Write Cyp
 
 ## Script Invocations
 
-### fiscal_resolve.py
+### build_period_u_id (guidance_ids.py)
 
 ```bash
-echo '$PERIODS_JSON' | python3 .claude/skills/earnings-orchestrator/scripts/fiscal_resolve.py $TICKER $FY $FQ $FYE_MONTH
+python3 -c "
+import sys; sys.path.insert(0, '.claude/skills/earnings-orchestrator/scripts')
+from guidance_ids import build_period_u_id
+result = build_period_u_id(cik='$CIK', period_type='duration', fiscal_year=$FY, fiscal_quarter=$FQ)
+print(result)
+"
 ```
 
-Returns: `{"start_date": "...", "end_date": "...", "period_u_id": "duration_...", "source": "lookup|fallback"}`
+Returns: `guidance_period_{cik}_duration_FY{year}_Q{quarter}` (or annual/half/LR/MT/UNDEF variants)
 
-### guidance_ids.py
+### build_guidance_ids (guidance_ids.py)
 
 ```bash
 python3 -c "
 import sys; sys.path.insert(0, '.claude/skills/earnings-orchestrator/scripts')
 from guidance_ids import build_guidance_ids; import json
-result = build_guidance_ids(label='$LABEL', source_id='$SOURCE_ID', period_u_id='$PERIOD_UID', basis_norm='$BASIS', segment='$SEGMENT', low=$LOW, high=$HIGH, unit_raw='$UNIT')
+result = build_guidance_ids(label='$LABEL', source_id='$SOURCE_ID', period_u_id='$PERIOD_UID', basis_norm='$BASIS', segment='$SEGMENT', low=$LOW, mid=$MID, high=$HIGH, unit_raw='$UNIT', qualitative=$QUALITATIVE, conditions=$CONDITIONS)
 print(json.dumps(result))
 "
 ```
@@ -148,18 +153,11 @@ MERGE (g:Guidance {id: $guidance_id})
     acc = [], a IN (coalesce(g.aliases, []) + coalesce($aliases, []))
     | CASE WHEN a IS NULL OR a IN acc THEN acc ELSE acc + a END)
 
-// Period + Context + Unit
+// Period (fiscal-keyed, no calendar dates)
 MERGE (p:Period {u_id: $period_u_id})
   ON CREATE SET p.id = $period_u_id, p.period_type = $period_node_type,
-                p.start_date = $start_date, p.end_date = $end_date
-MERGE (ctx:Context {u_id: $ctx_u_id})
-  ON CREATE SET ctx.id = $ctx_u_id, ctx.context_id = $ctx_u_id,
-                ctx.cik = company.cik, ctx.period_u_id = $period_u_id,
-                ctx.member_u_ids = [], ctx.dimension_u_ids = []
-MERGE (ctx)-[:HAS_PERIOD]->(p)
-MERGE (ctx)-[:FOR_COMPANY]->(company)
-MERGE (u:Unit {u_id: $unit_u_id})
-  ON CREATE SET u.id = $unit_u_id, u.canonical_unit = $canonical_unit
+                p.fiscal_year = $fiscal_year, p.fiscal_quarter = $fiscal_quarter,
+                p.cik = toString(toInteger(company.cik))
 
 // GuidanceUpdate — ON CREATE SET only (idempotent)
 MERGE (gu:GuidanceUpdate {id: $guidance_update_id})
@@ -167,23 +165,33 @@ MERGE (gu:GuidanceUpdate {id: $guidance_update_id})
     gu.period_type = $period_type, gu.fiscal_year = $fiscal_year,
     gu.fiscal_quarter = $fiscal_quarter, gu.segment = $segment,
     gu.low = $low, gu.mid = $mid, gu.high = $high,
-    gu.unit = $canonical_unit, gu.basis_norm = $basis_norm,
+    gu.canonical_unit = $canonical_unit, gu.basis_norm = $basis_norm,
     gu.basis_raw = $basis_raw, gu.derivation = $derivation,
     gu.qualitative = $qualitative, gu.quote = $quote,
     gu.section = $section, gu.source_key = $source_key,
     gu.source_type = $source_type, gu.conditions = $conditions,
-    gu.xbrl_qname = $xbrl_qname, gu.created = $created_ts
+    gu.xbrl_qname = $xbrl_qname, gu.unit_raw = $unit_raw,
+    gu.created = $created_ts
 
-// Edges
+// Edges (4 core)
 MERGE (gu)-[:UPDATES]->(g)
 MERGE (gu)-[:FROM_SOURCE]->(source)
-MERGE (gu)-[:IN_CONTEXT]->(ctx)
+MERGE (gu)-[:FOR_COMPANY]->(company)
 MERGE (gu)-[:HAS_PERIOD]->(p)
-MERGE (gu)-[:HAS_UNIT]->(u)
 RETURN gu.id AS id, existing IS NULL AS was_created
 ```
 
 `{SourceLabel}` = `Report` (8k/10q/10k), `Transcript`, or `News`.
+
+Concept edge (separate query, 0..1):
+
+```cypher
+MATCH (gu:GuidanceUpdate {id: $guidance_update_id})
+MATCH (con:Concept {qname: $xbrl_qname})
+WITH gu, con LIMIT 1
+MERGE (gu)-[:MAPS_TO_CONCEPT]->(con)
+RETURN con.qname AS linked_qname
+```
 
 Member edges (separate query, UNWIND for 0..N):
 
