@@ -18,15 +18,22 @@ Design decisions:
 """
 
 import logging
+import os
 from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
-# Feature flag — safe import with fallback
-try:
-    from config.feature_flags import ENABLE_GUIDANCE_WRITES
-except ImportError:
+# Feature flag — env var takes priority, then config file, then default off
+_env = os.environ.get('ENABLE_GUIDANCE_WRITES', '').lower()
+if _env in ('true', '1', 'yes'):
+    ENABLE_GUIDANCE_WRITES = True
+elif _env in ('false', '0', 'no'):
     ENABLE_GUIDANCE_WRITES = False
+else:
+    try:
+        from config.feature_flags import ENABLE_GUIDANCE_WRITES
+    except ImportError:
+        ENABLE_GUIDANCE_WRITES = False
 
 # ── Source type → Neo4j label mapping ─────────────────────────────────────
 

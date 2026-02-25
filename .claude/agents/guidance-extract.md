@@ -196,8 +196,8 @@ Items do NOT need pre-computed IDs — the CLI calls `build_guidance_ids()` inte
 # Dry-run (validates + computes IDs, no DB connection)
 bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_AAPL_source.json --dry-run
 
-# Actual write (MERGE to Neo4j)
-bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_AAPL_source.json --write
+# Actual write (MERGE to Neo4j) — env var enables writes without touching config files
+ENABLE_GUIDANCE_WRITES=true bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_AAPL_source.json --write
 ```
 
 ### CLI Output (JSON to stdout)

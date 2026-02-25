@@ -127,9 +127,9 @@ print(result)
 ```
 Items do NOT need pre-computed IDs — the CLI calls `build_guidance_ids()` internally.
 
-4. **Invoke CLI**:
+4. **Invoke CLI** — env var enables writes without touching config files:
 ```bash
-bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_AAPL_source_qa.json --write
+ENABLE_GUIDANCE_WRITES=true bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_AAPL_source_qa.json --write
 ```
 
 ## Output
