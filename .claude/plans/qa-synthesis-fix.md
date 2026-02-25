@@ -1,5 +1,7 @@
 # Q&A Synthesis Fix — Complete Plan
 
+> **Status**: Single-agent two-phase (3a/3b/3c) was insufficient. Run 3 proved the agent collapses sub-steps into one thinking pass — no tool call boundary between 3a and 3b. Escalated to two-invocation approach per the Fallback section below. See `two-invocation-qa-fix.md` for the implementation plan.
+
 ## Problem Statement
 
 In Run 2 (AAPL FQ1 FY2024 transcript extraction), all 11 guidance items came from Prepared Remarks only. Zero Q&A enrichment despite the agent reading all Q&A exchanges in Step 2. The `section` field was `"CFO Prepared Remarks"` and all quotes had `[PR]` prefix for every item. PROFILE_TRANSCRIPT.md §15C rule ("synthesize richest combined version") was ignored.

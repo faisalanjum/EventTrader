@@ -140,32 +140,11 @@ For Q&A guidance, the `section` field should identify where in the Q&A:
 
 ---
 
-## Duplicate Resolution (Two-Phase — see guidance-extract.md Step 3a/3b/3c)
+## Duplicate Resolution (Two-Invocation)
 
-**RULE: One write per slot. Extract from PR first (Step 3a), then enrich from Q&A exchange-by-exchange (Step 3b), then write the merged result once (Step 5).**
+PR extraction handled by `guidance-extract` agent. Q&A enrichment handled by `guidance-qa-enrich` agent. Two separate invocations, two writes. MERGE+SET ensures second write safely updates existing nodes.
 
-Extraction is two-phase for transcripts. Do NOT extract from PR and Q&A simultaneously.
-
-### Phase 1 (Step 3a): PR Extraction
-Extract all guidance items from prepared remarks. These are your base items.
-
-### Phase 2 (Step 3b): Q&A Enrichment
-For EACH Q&A exchange, check management responses against Phase 1 items:
-
-1. **Same metric, additional detail** → enrich the Phase 1 item in place:
-   - PR gives a numeric range, Q&A adds a condition → update `conditions` with the Q&A detail
-   - PR says "mid-40s gross margin", Q&A says "46% to 47%" → update to more precise numbers (46-47%), keep any qualitative context from PR
-   - Q&A clarifies basis ("that's on a non-GAAP basis") → update `basis_norm` and `basis_raw`
-   - Append Q&A quote after PR quote: `[PR] original... [Q&A] additional...`
-
-2. **New metric/segment from Q&A** → create a new item with `[Q&A]` prefix
-
-3. **Values conflict** → use the more precise or more recent statement, combine non-conflicting detail
-
-4. **Never skip detail from either section** — if PR has context that Q&A lacks (or vice versa), fold it in
-
-### Merge Result (Step 3c)
-Final items = enriched Phase 1 items + new Q&A-only items. One write per slot.
+See `guidance-qa-enrich.md` for Q&A enrichment rules and verdict table.
 
 ---
 

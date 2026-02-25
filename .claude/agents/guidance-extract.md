@@ -77,60 +77,13 @@ Route by `SOURCE_TYPE` to correct QUERIES.md section:
 
 Apply empty-content rules from SKILL.md §17.
 
-**Transcript note**: Query 3B returns BOTH `prepared_remarks` and `qa_exchanges`. Do NOT extract from both simultaneously. Hold the full 3B result and process in two phases (Step 3a, then Step 3b). If `qa_exchanges` is empty, try fallback 3C before concluding Q&A is missing.
+**For transcripts**: Extract from Prepared Remarks ONLY. Q&A enrichment is handled by a separate agent invocation (`guidance-qa-enrich`). Ignore `qa_exchanges` from query 3B.
 
 ### Step 3: LLM Extraction
 
 Apply per-source profile rules (loaded in auto-load step), quality filters from SKILL.md §13, and existing Guidance tags (from Step 1) to reuse canonical metric names.
 
 For each guidance item, extract: `quote`, period intent (`fiscal_year`, `fiscal_quarter`, `period_type`), `basis_raw`, metric (`label`), numeric values (`low`/`mid`/`high`), `derivation`, `segment`, `conditions`, XBRL candidates.
-
-**For transcripts, extraction is two-phase (3a → 3b → 3c). For all other source types, extract in a single pass.**
-
-#### Step 3a: Extract from Prepared Remarks ONLY (transcript)
-
-Process the `prepared_remarks` content from Step 2. Ignore `qa_exchanges` for now.
-
-Output: **Phase 1 items list** — one item per guidance metric found in PR, with all extraction fields populated. Every quote prefixed with `[PR]`.
-
-This is your working item list. You will enrich it in Step 3b.
-
-#### Step 3b: Q&A Enrichment Pass (transcript — MANDATORY)
-
-Process EACH Q&A exchange from the Step 2 result, one at a time. For every exchange, compare the management response against Phase 1 items and produce a verdict:
-
-| Verdict | Meaning | Action |
-|---------|---------|--------|
-| `ENRICHES {item}` | Q&A adds detail to a Phase 1 item | Update that item's `qualitative`, `conditions`, or `quote` fields. Append Q&A detail with `[Q&A]` prefix in quote. |
-| `NEW ITEM` | Q&A contains guidance for a metric/segment NOT in Phase 1 | Create a new item with `[Q&A]` quote prefix. |
-| `NO GUIDANCE` | Exchange has no forward-looking content | Skip. |
-
-**You MUST produce a Q&A Analysis Log** before proceeding to Step 3c. Every entry MUST include a brief topic summary of what the management response discussed — this is required even for NO GUIDANCE verdicts. Format:
-
-```
-Q&A Analysis Log:
-#1 (analyst name): ENRICHES Revenue(iPhone) — CFO discusses supply-demand balance, normalized YoY growth excluding launch timing
-#2 (analyst name): NO GUIDANCE — asked about installed base size, CEO cited 2.2B active devices (historical, not forward-looking)
-#3 (analyst name): NEW ITEM — CapEx guidance, CFO says "approximately $2 billion" for next fiscal year
-#4 (analyst name): ENRICHES Gross Margin — CFO explains commodity cost tailwinds and mix shift toward services
-...
-```
-
-Rules:
-- Process ALL exchanges. Do not stop early.
-- Enrichment updates the item in place — do not create a second item for the same slot.
-- When enriching `quote`, append the Q&A quote after the PR quote: `[PR] original quote... [Q&A] additional detail...`
-- When enriching `qualitative` or `conditions`, merge the richer information from both sources.
-- If Q&A gives more precise numbers than PR for the same metric, update `low`/`mid`/`high` and change `derivation` if appropriate.
-- `section` for enriched items becomes `CFO Prepared Remarks + Q&A` (or specific Q&A reference for the enrichment source).
-
-#### Step 3c: Final Item List (transcript)
-
-Produce the final merged items:
-- Phase 1 items enriched by Step 3b (with combined PR + Q&A data)
-- Plus any new Q&A-only items from Step 3b
-
-This is the item list that proceeds to Step 4.
 
 ### Step 4: Deterministic Validation (MANDATORY — use scripts, not LLM math)
 
@@ -271,7 +224,6 @@ NEVER output pipe-delimited TSV lines. Return ONLY this structured summary:
 Items extracted: {count}
 Items written (was_created=true): {count}
 Items updated (was_created=false): {count}
-Q&A exchanges analyzed: {count} (enriched: {n}, new: {n}, no_guidance: {n})
 ID errors: {count} [{details}]
 Errors: {count} [{details}]
 ```

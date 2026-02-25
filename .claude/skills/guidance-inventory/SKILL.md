@@ -517,7 +517,7 @@ Extraction MUST route by `source_type` before LLM processing. Each type has diff
 
 Deterministic slot-based `GuidanceUpdate.id` enforces dedup. Same slot = same ID → MERGE + SET updates properties.
 
-**Transcripts**: Two-phase extraction — PR first (Step 3a), then Q&A enrichment exchange-by-exchange (Step 3b). See guidance-extract.md Step 3 and PROFILE_TRANSCRIPT.md Duplicate Resolution.
+**Transcripts**: Two-invocation extraction — PR via `guidance-extract`, Q&A enrichment via `guidance-qa-enrich`. MERGE+SET handles second write safely.
 
 **All other source types**: Read all content first, extract the richest version per metric, write once per slot.
 

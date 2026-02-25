@@ -531,6 +531,30 @@ RETURN g.label, gu.id, gu.given_date, gu.low, gu.mid, gu.high,
 ORDER BY g.label
 ```
 
+### 7E. Full GuidanceUpdate Readback for Source
+
+Reads back all properties of existing GuidanceUpdates from a source. Used by `guidance-qa-enrich` to load Phase 1 items as base for Q&A enrichment.
+
+```cypher
+MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(src)
+WHERE src.id = $source_id
+MATCH (gu)-[:UPDATES]->(g:Guidance)
+MATCH (gu)-[:HAS_PERIOD]->(p:Period)
+OPTIONAL MATCH (gu)-[:MAPS_TO_CONCEPT]->(c:Concept)
+OPTIONAL MATCH (gu)-[:MAPS_TO_MEMBER]->(m:Member)
+RETURN g.label, g.id AS guidance_id,
+       gu.id, gu.evhash16, gu.given_date, gu.period_type,
+       gu.fiscal_year, gu.fiscal_quarter, gu.segment,
+       gu.low, gu.mid, gu.high, gu.canonical_unit,
+       gu.basis_norm, gu.basis_raw, gu.derivation,
+       gu.qualitative, gu.quote, gu.section,
+       gu.source_key, gu.source_type, gu.conditions,
+       gu.xbrl_qname, gu.unit_raw,
+       p.u_id AS period_u_id, p.period_type AS period_node_type,
+       collect(DISTINCT m.u_id) AS member_u_ids
+ORDER BY g.label, gu.segment
+```
+
 ---
 
 ## 8. Data Inventory
