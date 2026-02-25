@@ -1,7 +1,7 @@
 """
 Deterministic ID normalization for Guidance and GuidanceUpdate nodes.
 
-Implements §2A of the Guidance System Implementation Spec (v2.3).
+Implements §2A of the Guidance System Implementation Spec (v3.0).
 Every extraction code path MUST use these functions — never hand-build IDs.
 """
 
@@ -66,7 +66,7 @@ _SCALE_TO_MILLIONS = {
     'b': 1000.0,
     'bn': 1000.0,
     'billion': 1000.0,
-    't': 1000.0,       # trillion → not expected but safe
+    't': 1e6,          # trillion → matches 'trillion' entry
     'trillion': 1e6,
     'm': 1.0,
     'mm': 1.0,
@@ -216,6 +216,66 @@ def canonicalize_source_id(source_id: str) -> str:
     return source_id.strip().replace(':', '_')
 
 
+# ── Fiscal-keyed Period u_id builder (v3.0 §6) ────────────────────────
+
+def build_period_u_id(
+    *,
+    cik: str,
+    period_type: str = 'duration',
+    fiscal_year: Optional[int] = None,
+    fiscal_quarter: Optional[int] = None,
+    half: Optional[int] = None,
+    long_range_start: Optional[int] = None,
+    long_range_end: Optional[int] = None,
+    medium_term: bool = False,
+) -> str:
+    """
+    Build a fiscal-keyed Period u_id in the guidance_period_ namespace.
+
+    Format: guidance_period_{cik}_{period_type}_{fiscal_key}
+
+    Scenarios:
+      Quarter:    guidance_period_320193_duration_FY2025_Q3
+      Annual:     guidance_period_320193_duration_FY2025
+      Half:       guidance_period_320193_duration_FY2025_H2
+      LR (year):  guidance_period_320193_duration_LR_2028
+      LR (span):  guidance_period_320193_duration_LR_2026_2028
+      MT:         guidance_period_320193_duration_MT
+      Undefined:  guidance_period_320193_duration_UNDEF
+    """
+    if not cik or not str(cik).strip():
+        raise ValueError("cik must be non-empty")
+
+    # Strip leading zeros from CIK
+    cik_clean = str(int(str(cik).strip()))
+
+    if period_type not in ('duration', 'instant'):
+        raise ValueError(f"period_type must be 'duration' or 'instant', got '{period_type}'")
+
+    prefix = f"guidance_period_{cik_clean}_{period_type}"
+
+    # Medium-term (no FY)
+    if medium_term:
+        return f"{prefix}_MT"
+
+    # Long-range
+    if long_range_start is not None:
+        if long_range_end is not None and long_range_end != long_range_start:
+            return f"{prefix}_LR_{long_range_start}_{long_range_end}"
+        return f"{prefix}_LR_{long_range_start}"
+
+    # Standard fiscal periods
+    if fiscal_year is not None:
+        if half is not None:
+            return f"{prefix}_FY{fiscal_year}_H{half}"
+        if fiscal_quarter is not None:
+            return f"{prefix}_FY{fiscal_year}_Q{fiscal_quarter}"
+        return f"{prefix}_FY{fiscal_year}"
+
+    # Undefined (no fiscal identity)
+    return f"{prefix}_UNDEF"
+
+
 # ── Top-level builder ──────────────────────────────────────────────────────
 
 def build_guidance_ids(
@@ -237,7 +297,7 @@ def build_guidance_ids(
 
     Returns dict with:
         guidance_id:        "guidance:{label_slug}"
-        guidance_update_id: "gu:{source_id}:{label_slug}:{period_u_id}:{basis_norm}:{segment_slug}:{evhash16}"
+        guidance_update_id: "gu:{source_id}:{label_slug}:{period_u_id}:{basis_norm}:{segment_slug}"
         evhash16:           16-char hex string
         label_slug:         normalized label
         segment_slug:       normalized segment
@@ -288,7 +348,7 @@ def build_guidance_ids(
     guidance_id = f"guidance:{label_slug}"
     guidance_update_id = (
         f"gu:{safe_source_id}:{label_slug}:{period_u_id}"
-        f":{basis_norm}:{segment_slug}:{evhash16}"
+        f":{basis_norm}:{segment_slug}"
     )
 
     # Validate prefixes (spec Decision #33)

@@ -47,6 +47,7 @@ Bot-to-bot notes (append-only; mark handled, do not delete history):
 1. Every component/workflow designed in this doc must remain triggerable from Claude Agent SDK in non-interactive mode.
 2. Any design requiring interactive permission prompts is invalid for production automation; align with Infrastructure SDK constraints (for example `permission_mode=\"bypassPermissions\"`).
 3. Before locking an implementation decision, re-check the relevant SDK-tested constraints in `Infrastructure.md` (SDK sections) to confirm triggerability is preserved.
+4. **Neo4j dual-connection config**: Guidance writes use two independent Neo4j connections — MCP server (for reads) and `guidance_write.sh` (for writes via `guidance_writer.py`). Both currently hardcode `bolt://localhost:30687`. For SDK deployment, ensure both derive their connection config from the same source (e.g., a single `.env` file or SDK-injected env vars) to prevent config drift.
 
 **What we're building**: automatic earnings prediction the moment data is available. Every data point arrives on time, complete, no noise. The system improves itself — each learning cycle makes prediction better.
 

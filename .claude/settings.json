@@ -78,6 +78,16 @@
           }
         ]
       }
+    ],
+    "ConfigChange": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/test_config_change.sh"
+          }
+        ]
+      }
     ]
   }
 }

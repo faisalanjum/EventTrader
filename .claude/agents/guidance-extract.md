@@ -100,13 +100,18 @@ If uncertain on XBRL/member: keep core item, set `xbrl_qname=null`, skip member 
 
 ### Step 5: Write to Graph (or dry-run/shadow)
 
-| Mode | Behavior |
-|------|----------|
-| `dry_run` (default) | Log extracted items with IDs. No graph writes. |
-| `shadow` | Same as dry_run + log exact MERGE Cypher with parameters. |
-| `write` | Execute MERGE Cypher via `mcp__neo4j-cypher__write_neo4j_cypher`. |
+| Mode | CLI Flag | Behavior |
+|------|----------|----------|
+| `dry_run` (default) | `--dry-run` | Validates items + computes IDs. No graph connection needed. |
+| `shadow` | `--dry-run` | Same as dry_run (full validation output included). |
+| `write` | `--write` | Atomic MERGE to Neo4j (core nodes + concept/member edges). |
 
-MERGE pattern follows `guidance_writer.py:_build_core_query()` — see Write Cypher Template below.
+**Do NOT construct Cypher manually.** All writes route through the CLI → `guidance_writer.py` (single source of truth for MERGE template, params, and validation).
+
+1. Assemble all extracted items into the JSON payload format (see "CLI Write Invocation" below)
+2. Write JSON to `/tmp/gu_{TICKER}_{SOURCE_ID}.json` using the Write tool
+3. Call `guidance_write.sh` via Bash (see invocation below)
+4. Parse returned JSON for results summary
 
 ## Script Invocations
 
@@ -136,72 +141,78 @@ print(json.dumps(result))
 
 Returns: `{"guidance_id": "...", "guidance_update_id": "...", "evhash16": "...", "canonical_unit": "...", ...}`
 
-## Write Cypher Template
+## CLI Write Invocation
 
-Atomic MERGE for one GuidanceUpdate (mirrors `guidance_writer.py:_build_core_query()`):
+All graph writes go through `guidance_write.sh` → `guidance_write_cli.py` → `guidance_writer.py`. This ensures:
+- Single source of truth for MERGE template and parameter assembly (no manual Cypher)
+- Atomic batch writes (all items in one Neo4j connection)
+- Deterministic ID computation via `build_guidance_ids()`
+- Concept (`MAPS_TO_CONCEPT`) and member (`MAPS_TO_MEMBER`) edge linking handled automatically
 
-```cypher
-// Source by label, company by ticker
-MATCH (source:{SourceLabel} {id: $source_id})
-MATCH (company:Company {ticker: $ticker})
-OPTIONAL MATCH (existing:GuidanceUpdate {id: $guidance_update_id})
+### JSON Payload Format
 
-// Guidance node
-MERGE (g:Guidance {id: $guidance_id})
-  ON CREATE SET g.label = $label, g.aliases = $aliases, g.created_date = $created_date
-  ON MATCH SET g.aliases = reduce(
-    acc = [], a IN (coalesce(g.aliases, []) + coalesce($aliases, []))
-    | CASE WHEN a IS NULL OR a IN acc THEN acc ELSE acc + a END)
+Write this to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
 
-// Period (fiscal-keyed, no calendar dates)
-MERGE (p:Period {u_id: $period_u_id})
-  ON CREATE SET p.id = $period_u_id, p.period_type = $period_node_type,
-                p.fiscal_year = $fiscal_year, p.fiscal_quarter = $fiscal_quarter,
-                p.cik = toString(toInteger(company.cik))
-
-// GuidanceUpdate — ON CREATE SET only (idempotent)
-MERGE (gu:GuidanceUpdate {id: $guidance_update_id})
-  ON CREATE SET gu.evhash16 = $evhash16, gu.given_date = $given_date,
-    gu.period_type = $period_type, gu.fiscal_year = $fiscal_year,
-    gu.fiscal_quarter = $fiscal_quarter, gu.segment = $segment,
-    gu.low = $low, gu.mid = $mid, gu.high = $high,
-    gu.canonical_unit = $canonical_unit, gu.basis_norm = $basis_norm,
-    gu.basis_raw = $basis_raw, gu.derivation = $derivation,
-    gu.qualitative = $qualitative, gu.quote = $quote,
-    gu.section = $section, gu.source_key = $source_key,
-    gu.source_type = $source_type, gu.conditions = $conditions,
-    gu.xbrl_qname = $xbrl_qname, gu.unit_raw = $unit_raw,
-    gu.created = $created_ts
-
-// Edges (4 core)
-MERGE (gu)-[:UPDATES]->(g)
-MERGE (gu)-[:FROM_SOURCE]->(source)
-MERGE (gu)-[:FOR_COMPANY]->(company)
-MERGE (gu)-[:HAS_PERIOD]->(p)
-RETURN gu.id AS id, existing IS NULL AS was_created
+```json
+{
+    "source_id": "AAPL_2023-11-03T17.00.00-04.00",
+    "source_type": "transcript",
+    "ticker": "AAPL",
+    "items": [
+        {
+            "label": "Revenue",
+            "given_date": "2023-11-02",
+            "period_u_id": "guidance_period_320193_duration_FY2024_Q1",
+            "basis_norm": "unknown",
+            "segment": "Total",
+            "low": 89.0, "mid": null, "high": 93.0,
+            "unit_raw": "billion",
+            "qualitative": "similar to last year",
+            "conditions": null,
+            "quote": "We expect revenue...",
+            "section": "CFO Prepared Remarks",
+            "source_key": "full",
+            "derivation": "explicit",
+            "basis_raw": null,
+            "period_type": "quarter",
+            "fiscal_year": 2024,
+            "fiscal_quarter": 1,
+            "period_node_type": "duration",
+            "aliases": [],
+            "xbrl_qname": "us-gaap:Revenues",
+            "member_u_ids": []
+        }
+    ]
+}
 ```
 
-`{SourceLabel}` = `Report` (8k/10q/10k), `Transcript`, or `News`.
+Items do NOT need pre-computed IDs — the CLI calls `build_guidance_ids()` internally.
 
-Concept edge (separate query, 0..1):
+### Invocation
 
-```cypher
-MATCH (gu:GuidanceUpdate {id: $guidance_update_id})
-MATCH (con:Concept {qname: $xbrl_qname})
-WITH gu, con LIMIT 1
-MERGE (gu)-[:MAPS_TO_CONCEPT]->(con)
-RETURN con.qname AS linked_qname
+```bash
+# Dry-run (validates + computes IDs, no DB connection)
+bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_AAPL_source.json --dry-run
+
+# Actual write (MERGE to Neo4j)
+bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_AAPL_source.json --write
 ```
 
-Member edges (separate query, UNWIND for 0..N):
+### CLI Output (JSON to stdout)
 
-```cypher
-MATCH (gu:GuidanceUpdate {id: $guidance_update_id})
-UNWIND $member_u_ids AS member_u_id
-MATCH (m:Member {u_id: member_u_id})
-MERGE (gu)-[:MAPS_TO_MEMBER]->(m)
-RETURN count(*) AS linked
+```json
+{
+    "mode": "dry_run",
+    "total": 3,
+    "valid": 3,
+    "id_errors": [],
+    "results": [
+        {"id": "gu:...", "dry_run": true, "guidance_id": "guidance:revenue", ...}
+    ]
+}
 ```
+
+In `write` mode, each result includes `was_created` (true = new node, false = MERGE update) and edge linking results.
 
 ## Output
 
@@ -209,12 +220,13 @@ NEVER output pipe-delimited TSV lines. Return ONLY this structured summary:
 
 ```
 Items extracted: {count}
-Items written (or would-write): {count}
-Items skipped (MERGE no-op): {count}
+Items written (was_created=true): {count}
+Items updated (was_created=false): {count}
+ID errors: {count} [{details}]
 Errors: {count} [{details}]
 ```
 
-In `shadow` mode, also log per-item: Cypher template + parameter dict.
+In `dry_run`/`shadow` mode, include per-item IDs and canonical values from CLI output.
 
 If team task assigned, update via TaskUpdate with extraction summary.
 

@@ -41,7 +41,7 @@ MATCH (c:Company {ticker: $ticker})
 RETURN c.ticker, c.name, c.cik,
        c.sector, c.industry, c.mkt_cap
 ```
-**Usage**: CIK is required for Context node creation (§6). Never accept CIK from external input; always read from graph.
+**Usage**: CIK is required for Period node creation (§6). Never accept CIK from external input; always read from graph.
 
 ### 1B. FYE Derivation (from Latest 10-K)
 
@@ -53,9 +53,9 @@ LIMIT 1
 ```
 **Usage**: `periodOfReport` reveals FYE month. Example: `2024-09-28` = September FYE (month 9). Extract month from date string.
 
-### 1C. Period Pre-Fetch (for fiscal_resolve.py)
+### 1C. Period Pre-Fetch
 
-Pre-fetch all Period nodes for a company so `fiscal_resolve.py` can classify them without a second Neo4j connection.
+Pre-fetch all Period nodes for a company. Used by XBRL pipeline for period classification. Not required for guidance extraction (fiscal-keyed Periods use `build_period_u_id()` instead).
 
 ```cypher
 MATCH (ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
@@ -492,7 +492,7 @@ Query existing guidance graph nodes before extraction to provide context to LLM.
 
 ```cypher
 MATCH (g:Guidance)<-[:UPDATES]-(gu:GuidanceUpdate)
-      -[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+      -[:FOR_COMPANY]->(c:Company {ticker: $ticker})
 RETURN DISTINCT g.label, g.id
 ```
 **Usage**: Feed existing Guidance labels to LLM so it reuses canonical metric names rather than creating duplicates.
@@ -501,11 +501,11 @@ RETURN DISTINCT g.label, g.id
 
 ```cypher
 MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)
-MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+MATCH (gu)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
 WITH g, gu ORDER BY gu.given_date DESC, gu.id DESC
 WITH g, collect(gu)[0] AS latest
 RETURN g.label, latest.given_date, latest.low, latest.mid, latest.high,
-       latest.unit, latest.basis_norm, latest.segment,
+       latest.canonical_unit, latest.basis_norm, latest.segment,
        latest.fiscal_year, latest.fiscal_quarter
 ```
 
@@ -527,7 +527,7 @@ MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(src)
 WHERE src.id = $source_id
 MATCH (gu)-[:UPDATES]->(g:Guidance)
 RETURN g.label, gu.id, gu.given_date, gu.low, gu.mid, gu.high,
-       gu.unit, gu.basis_norm, gu.segment
+       gu.canonical_unit, gu.basis_norm, gu.segment
 ORDER BY g.label
 ```
 
@@ -563,7 +563,7 @@ RETURN c.ticker, c.name,
 ### 8B. Existing Guidance Node Count
 
 ```cypher
-MATCH (gu:GuidanceUpdate)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+MATCH (gu:GuidanceUpdate)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
 MATCH (gu)-[:UPDATES]->(g:Guidance)
 RETURN count(DISTINCT g) AS guidance_tags,
        count(gu) AS guidance_updates,
@@ -691,7 +691,7 @@ guidance OR outlook OR expects OR anticipates OR "full year" OR "fiscal year"
 ## Execution Order
 
 ### Initial Build (New Company)
-1. **Context**: 1A (Company+CIK) → 1B (FYE) → 1C (Period pre-fetch)
+1. **Context**: 1A (Company+CIK) → 1B (FYE)
 2. **Warmup**: 2A (Concept cache) → 2B (Member cache)
 3. **Existing**: 7A (Existing Guidance tags)
 4. **Sources** (chronological by filing date):
@@ -702,11 +702,11 @@ guidance OR outlook OR expects OR anticipates OR "full year" OR "fiscal year"
 5. **Write**: `guidance_writer.py` handles all graph writes (not Cypher in this file)
 
 ### Single Source Extraction
-1. **Context**: 1A → 1B → 1C (if not cached)
+1. **Context**: 1A → 1B
 2. **Warmup**: 2A → 2B (if not cached)
 3. **Existing**: 7A
 4. **Fetch**: Source-specific query (3B/3C, 4C/4E, 5B, 6A)
 5. **Extract** → **Validate** → **Write** via `guidance_writer.py`
 
 ---
-*Version 2.7 | 2026-02-22 | Added LIMIT 50 to concept cache query 2A (production MCP result size fix). Prior: v2.6 (3B phantom null, null-date guards, QuestionAnswer types, 6B/6C dates required).*
+*Version 2.10 | 2026-02-22 | Removed 1C from Execution Order (not needed for guidance extraction; fiscal-keyed Periods use build_period_u_id). Prior: v2.9 (7A/7B/8B FOR_COMPANY fix, 7B/7D canonical_unit). v2.8 (1C DISTINCT dedup, 2A removed LIMIT 50). v2.7 (3B phantom null, null-date guards, QuestionAnswer types, 6B/6C dates required).*

@@ -7,7 +7,7 @@ No merge_nodes() / merge_relationships() / create_relationships().
 
 Design decisions:
   - One atomic Cypher query per GuidanceUpdate item (node + all edges)
-  - ON CREATE SET only for GuidanceUpdate (idempotent no-op on re-run)
+  - ON CREATE SET for created timestamp, SET for all other properties (latest write wins)
   - MATCH for pre-existing targets (source by label, company by ticker)
   - MERGE for nodes we create (Guidance, GuidanceUpdate, fiscal-keyed Period)
   - No Context node (direct FOR_COMPANY edge)
@@ -73,7 +73,7 @@ def _build_core_query(source_type):
       2. Company matched by ticker; CIK derived from company node
       3. OPTIONAL MATCH before MERGE for accurate was_created detection
       4. Alias accumulation uses reduce-based dedupe
-      5. GuidanceUpdate uses ON CREATE SET only (idempotent)
+      5. GuidanceUpdate uses ON CREATE SET for created, SET for all other props (latest wins)
       6. No Context node — direct FOR_COMPANY edge
       7. No Unit node — canonical_unit is a property on GuidanceUpdate
       8. Period is fiscal-keyed (guidance_period_ namespace, no dates)
@@ -105,30 +105,30 @@ MERGE (p:Period {{u_id: $period_u_id}})
                 p.fiscal_quarter = $fiscal_quarter,
                 p.cik = toString(toInteger(company.cik))
 
-// GuidanceUpdate — ON CREATE SET only (idempotent no-op on re-run)
+// GuidanceUpdate — MERGE on slot, SET all properties (latest write wins)
 MERGE (gu:GuidanceUpdate {{id: $guidance_update_id}})
-  ON CREATE SET gu.evhash16 = $evhash16,
-                gu.given_date = $given_date,
-                gu.period_type = $period_type,
-                gu.fiscal_year = $fiscal_year,
-                gu.fiscal_quarter = $fiscal_quarter,
-                gu.segment = $segment,
-                gu.low = $low,
-                gu.mid = $mid,
-                gu.high = $high,
-                gu.canonical_unit = $canonical_unit,
-                gu.basis_norm = $basis_norm,
-                gu.basis_raw = $basis_raw,
-                gu.derivation = $derivation,
-                gu.qualitative = $qualitative,
-                gu.quote = $quote,
-                gu.section = $section,
-                gu.source_key = $source_key,
-                gu.source_type = $source_type,
-                gu.conditions = $conditions,
-                gu.xbrl_qname = $xbrl_qname,
-                gu.unit_raw = $unit_raw,
-                gu.created = $created_ts
+  ON CREATE SET gu.created = $created_ts
+  SET gu.evhash16 = $evhash16,
+      gu.given_date = $given_date,
+      gu.period_type = $period_type,
+      gu.fiscal_year = $fiscal_year,
+      gu.fiscal_quarter = $fiscal_quarter,
+      gu.segment = $segment,
+      gu.low = $low,
+      gu.mid = $mid,
+      gu.high = $high,
+      gu.canonical_unit = $canonical_unit,
+      gu.basis_norm = $basis_norm,
+      gu.basis_raw = $basis_raw,
+      gu.derivation = $derivation,
+      gu.qualitative = $qualitative,
+      gu.quote = $quote,
+      gu.section = $section,
+      gu.source_key = $source_key,
+      gu.source_type = $source_type,
+      gu.conditions = $conditions,
+      gu.xbrl_qname = $xbrl_qname,
+      gu.unit_raw = $unit_raw
 
 // Core edges (4 from GuidanceUpdate)
 MERGE (gu)-[:UPDATES]->(g)

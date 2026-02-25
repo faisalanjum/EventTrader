@@ -2,7 +2,7 @@
 name: test-memory-user-scope
 description: "Test: Does memory: user scope work and auto-preload? (v2.1.50)"
 memory: user
-model: haiku
+model: opus
 ---
 You are testing the `memory: user` scope (stores at ~/.claude/agent-memory/).
 

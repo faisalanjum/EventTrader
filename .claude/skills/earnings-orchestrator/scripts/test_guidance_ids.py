@@ -6,7 +6,8 @@ sys.path.insert(0, "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestra
 
 from guidance_ids import (
     slug, canonicalize_unit, canonicalize_value, compute_evhash16,
-    canonicalize_source_id, build_guidance_ids, _normalize_text, _normalize_numeric,
+    canonicalize_source_id, build_guidance_ids, build_period_u_id,
+    _normalize_text, _normalize_numeric,
     CANONICAL_UNITS, UNIT_ALIASES, VALID_UNITS,
 )
 
@@ -172,7 +173,7 @@ def test_build_basic():
         unit_raw="m_usd",
     )
     assert result['guidance_id'] == "guidance:revenue"
-    assert result['guidance_update_id'].startswith("gu:0001193125-25-000008:revenue:duration_2025-01-01_2025-03-31:non_gaap:total:")
+    assert result['guidance_update_id'] == "gu:0001193125-25-000008:revenue:duration_2025-01-01_2025-03-31:non_gaap:total"
     assert len(result['evhash16']) == 16
     assert result['label_slug'] == "revenue"
     assert result['segment_slug'] == "total"
@@ -245,7 +246,8 @@ def test_build_different_basis_different_id():
     # But same guidance_id (metric node is shared)
     assert r1['guidance_id'] == r2['guidance_id']
 
-def test_build_different_values_different_id():
+def test_build_different_values_same_id():
+    """Same slot, different values → same ID (evhash not in ID). evhash differs as property."""
     base = dict(
         label="Revenue", source_id="src1",
         period_u_id="duration_2025-01-01_2025-03-31",
@@ -253,8 +255,8 @@ def test_build_different_values_different_id():
     )
     r1 = build_guidance_ids(**base, low=100.0, high=110.0)
     r2 = build_guidance_ids(**base, low=100.0, high=115.0)
-    assert r1['guidance_update_id'] != r2['guidance_update_id']
-    assert r1['evhash16'] != r2['evhash16']
+    assert r1['guidance_update_id'] == r2['guidance_update_id']  # same slot = same ID
+    assert r1['evhash16'] != r2['evhash16']  # but values differ → evhash differs (property only)
 
 def test_build_segment_variations():
     base = dict(
@@ -410,6 +412,83 @@ def test_build_percent_points_via_alias():
     )
     assert result['canonical_unit'] == 'percent_points'
     assert 'unit_raw' not in result
+
+
+# ── build_period_u_id ─────────────────────────────────────────────────────────
+
+def test_period_quarter():
+    result = build_period_u_id(cik='320193', fiscal_year=2025, fiscal_quarter=3)
+    assert result == 'guidance_period_320193_duration_FY2025_Q3'
+
+def test_period_annual():
+    result = build_period_u_id(cik='320193', fiscal_year=2025)
+    assert result == 'guidance_period_320193_duration_FY2025'
+
+def test_period_half():
+    result = build_period_u_id(cik='320193', fiscal_year=2025, half=2)
+    assert result == 'guidance_period_320193_duration_FY2025_H2'
+
+def test_period_long_range_single_year():
+    result = build_period_u_id(cik='320193', long_range_start=2028)
+    assert result == 'guidance_period_320193_duration_LR_2028'
+
+def test_period_long_range_span():
+    result = build_period_u_id(cik='320193', long_range_start=2026, long_range_end=2028)
+    assert result == 'guidance_period_320193_duration_LR_2026_2028'
+
+def test_period_long_range_same_start_end():
+    """LR with start==end collapses to single year format."""
+    result = build_period_u_id(cik='320193', long_range_start=2028, long_range_end=2028)
+    assert result == 'guidance_period_320193_duration_LR_2028'
+
+def test_period_medium_term():
+    result = build_period_u_id(cik='320193', medium_term=True)
+    assert result == 'guidance_period_320193_duration_MT'
+
+def test_period_undefined():
+    """No fiscal identity → UNDEF."""
+    result = build_period_u_id(cik='320193')
+    assert result == 'guidance_period_320193_duration_UNDEF'
+
+def test_period_instant():
+    result = build_period_u_id(cik='320193', period_type='instant', fiscal_year=2025, fiscal_quarter=3)
+    assert result == 'guidance_period_320193_instant_FY2025_Q3'
+
+def test_period_cik_strips_leading_zeros():
+    """CIK '0000320193' → '320193' in output."""
+    result = build_period_u_id(cik='0000320193', fiscal_year=2025, fiscal_quarter=1)
+    assert result == 'guidance_period_320193_duration_FY2025_Q1'
+
+def test_period_cik_integer_input():
+    """Integer CIK accepted and converted."""
+    result = build_period_u_id(cik=320193, fiscal_year=2025)
+    assert result == 'guidance_period_320193_duration_FY2025'
+
+def test_period_empty_cik_raises():
+    try:
+        build_period_u_id(cik='')
+        assert False, "Should have raised ValueError"
+    except ValueError as e:
+        assert 'cik' in str(e).lower()
+
+def test_period_none_cik_raises():
+    try:
+        build_period_u_id(cik=None)
+        assert False, "Should have raised ValueError"
+    except ValueError:
+        pass
+
+def test_period_invalid_period_type_raises():
+    try:
+        build_period_u_id(cik='320193', period_type='bogus')
+        assert False, "Should have raised ValueError"
+    except ValueError as e:
+        assert 'period_type' in str(e)
+
+def test_period_medium_term_ignores_fiscal():
+    """MT takes priority over fiscal_year/quarter if both given."""
+    result = build_period_u_id(cik='320193', medium_term=True, fiscal_year=2025, fiscal_quarter=1)
+    assert result == 'guidance_period_320193_duration_MT'
 
 
 # ── Run all tests ───────────────────────────────────────────────────────────

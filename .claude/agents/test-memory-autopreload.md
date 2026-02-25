@@ -3,6 +3,13 @@ name: test-memory-autopreload
 description: "Test: Does memory auto-preload MEMORY.md into system prompt? (v2.1.50 retest)"
 memory: project
 model: haiku
+tools:
+  - Read
+  - Write
+  - Edit
+  - Glob
+  - Grep
+  - Bash
 ---
 You are testing whether the `memory` field now auto-preloads MEMORY.md into your system prompt.
 

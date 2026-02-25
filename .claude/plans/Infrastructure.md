@@ -22,14 +22,14 @@
 | K8s/SDK execution | ✅ WORKS | Opus works; thinking captured from all layers |
 | CLI v2.1.1 agent files | ⚠️ ROOT LEVEL | Older versions write to root, not session/subagents/ |
 | K8s Opus thinking | ✅ 171 blocks | 159KB thinking (was 6.7KB with Sonnet) |
-| `model:` field in skill/agent | ✅ **NOW ENFORCED** (Feb 2026) | `model: haiku` actually runs Haiku; per-layer cost control works. **CAVEAT**: Both Haiku AND Sonnet can fail with API 400 (`anyOf` schema unsupported) in **background** agent context when tool schemas contain `oneOf`/`allOf`/`anyOf` (e.g., TaskUpdate.status, some MCP tools after ToolSearch expansion). Foreground agents unaffected. Haiku fails immediately; Sonnet may partially run before schema expansion triggers the error. |
+| `model:` field in skill/agent | ✅ **NOW ENFORCED** (Feb 2026) | `model: haiku` actually runs Haiku; per-layer cost control works. **CAVEAT**: Agents without explicit `tools:` field inherit ALL MCP schemas including Perplexity v0.14.0's `anyOf` → API 400. FIX: add `tools:` field to agent frontmatter. See anyOf root cause section. |
 | `allowed-tools` for restriction (skills) | ❌ NOT ENFORCED | Skills use prompt injection, not tool filtering |
 | `allowed-tools` for MCP pre-load | ✅ **WORKS** | List MCP tools to pre-load them |
 | `disallowedTools` (skills) | ❌ NOT ENFORCED | Cannot block tools in skills |
 | `disallowedTools` (agents) | ✅ **NOW ENFORCED** (Feb 2026) | Tools completely removed from agent's tool set |
 | `tools` allowlist (agents) | ✅ **NOW ENFORCED** (Feb 2026) | Agent only sees tools in its allowlist |
 | `agent:` field in skills | ✅ **NOW WORKS** (Feb 2026) | Grants agent's MCP tools without ToolSearch |
-| `memory:` field (agents) | ⚠️ **STORAGE ONLY** (v2.1.34→v2.1.45) | Dir created + files persist; **auto-preload into system prompt STILL DOES NOT WORK** (retested v2.1.45: `local` + `project` scopes, agent confirms no memory content in prompt). Use manual `Read` at agent startup. |
+| `memory:` field (agents) | ✅ **NOW WORKING** (v2.1.52, was broken v2.1.34→v2.1.50) | All 3 scopes confirmed: `project`, `user`, `local`. System injects `# Persistent Agent Memory` section + MEMORY.md first 200 lines into system prompt. Dir auto-created. Task tool spawn works IF agent has explicit `tools:` field (excludes bad Perplexity MCP schema). See Part 10.13b. |
 | `skills:` field (agents) | ✅ **WORKS** (Feb 2026) | Auto-loads skills into agent context (args not passed through) |
 | Agent-scoped hooks | ✅ **WORKS** (Feb 2026) | PreToolUse, PostToolUse, PostToolUseFailure, Stop in agent frontmatter; **only when spawned as subagent via Task tool** (NOT via `--agent` flag) |
 | SubagentStart hook | ✅ **WORKS** (Feb 2026) | Fires when subagent spawns; additionalContext injection **confirmed working** for custom agents (context added to agent window, NOT logged in transcript) |
@@ -56,7 +56,7 @@
 | Parallel execution (Task tool) | ✅ PARALLEL | From main conversation only |
 | Parallel execution (Skill tool) | ❌ SEQUENTIAL | Always sequential |
 | Task tool in forked context | ❌ BLOCKED | Cannot use for parallelism |
-| Task→Task nesting | ❌ **STILL BLOCKED** (v2.1.47→v2.1.50) | Sub-agents do NOT get the Task tool. By design. FG gets **21 tools** (+TeamDelete, +EnterWorktree); BG gets **12 tools** (+EnterWorktree). Neither gets Task spawner. Use Skill chains for depth. |
+| Task→Task nesting | ❌ **STILL BLOCKED** (v2.1.47→v2.1.52) | Sub-agents do NOT get the Task spawner tool. FG gets **40 tools** (7 base + 33 deferred, incl. TaskCreate but NOT Task); BG gets **12 tools** (or fewer with `tools:` whitelist). Neither gets Task spawner. Listing `Task` in `tools:` frontmatter has no effect — runtime strips it. Use Skill chains for depth. |
 | MCP wildcards pre-load | ❌ NO | Only grants permission, still need ToolSearch |
 | Error propagation | ⚠️ TEXT ONLY | No exceptions, must parse response |
 | **Task deletion unblocks dependents** | ✅ WORKS | `status: "deleted"` removes task, unblocks dependents |
@@ -64,17 +64,17 @@
 | **Cross-agent task manipulation** | ✅ WORKS | Any agent can update/delete any task by ID |
 | **Upfront task creation pattern** | ✅ WORKS | Create all tasks upfront, skip via completed/deleted |
 | **Parallel foreground Task spawn** | ✅ PARALLEL | 194ms spread, full tool access (See Part 10.14) |
-| **Background agents: Write/MCP/Skill** | ✅ **WORKS** (Feb 2026, re-confirmed v2.1.50) | **12 direct tools** (was 11). +EnterWorktree. Task/Team/Plan/AskUser tools still blocked. Parallel write independence confirmed. 8 concurrent agents stable. |
+| **Background agents: Write/MCP/Skill** | ✅ **WORKS** (Feb 2026, re-confirmed v2.1.52) | **12 direct tools** (was 11). +EnterWorktree. **Task/Team/SendMessage tools STILL REMOVED in v2.1.52** — not just blocked, completely absent from tool manifest (base AND deferred). Skill workaround also fails (forked skill inherits BG tool restriction). `tools` frontmatter whitelist cannot expand base set. Parallel write independence confirmed. 8 concurrent agents stable. |
 | **Task `run_in_background` default** | ⚠️ MAY AUTO-ENABLE | Claude may choose background mode; explicitly set `run_in_background: false` if you need task tools |
-| **`background: true` frontmatter** | ✅ **NEW** (v2.1.49) | Declarative background scheduling. Auto-sets `run_in_background` on Task. Via `--agent` flag: full 27-tool set (no restriction). **3-tier hierarchy confirmed (Opus)**: `--agent`=27, FG Task=21, BG Task=12 tools. `tools` field CANNOT expand bg base set (whitelist only restricts). |
+| **`background: true` frontmatter** | ✅ **NEW** (v2.1.49) | Declarative background scheduling. Auto-sets `run_in_background` on Task — even foreground Task spawns run in BG mode. Via `--agent` flag: full 27-tool set (no restriction). **3-tier hierarchy confirmed**: `--agent`=27, FG Task=21, BG Task=12 tools. `tools:` field = INTERSECTION with bg-allowed set (restricts but cannot expand). **Confirmed v2.1.52**: TaskCreate/List/Get/Update stripped regardless of `tools:` field. |
 | **`isolation: worktree` frontmatter** | ✅ **NEW** (v2.1.50) | Agent runs in temporary git worktree. Auto-cleanup if no changes. WorktreeCreate/WorktreeRemove hooks available. |
-| **Memory auto-preload** | ❌ **STILL BROKEN** (v2.1.50) | 8+ tests, 3 scopes, same-agent re-invocation, ALL spawn methods (Task FG, Task BG, `--agent`), ALL models: canary NOT injected. Storage works; auto-preload of MEMORY.md does not. |
+| **Memory auto-preload** | ✅ **NOW WORKING** (v2.1.52, was broken v2.1.34→v2.1.50) | All 3 scopes (project, user, local) confirmed via `--agent` flag AND Task tool spawn. System injects `# Persistent Agent Memory` header + directory path + guidelines + `## MEMORY.md` (first 200 lines). User scope adds "keep learnings general" hint. Task tool spawn requires explicit `tools:` field (to exclude bad Perplexity MCP schemas). |
 | **Agent discovery (Task tool)** | ⚠️ **SESSION-START SNAPSHOT** | Task tool's `subagent_type` list is frozen at session start. Agents created mid-session or between continuations are NOT discoverable. Must start brand-new `claude` session. |
 | Skill-specific hooks | ✅ WORKS (v2.1.0+) | Define in SKILL.md frontmatter; 3 events only |
 | **TaskCompleted hook** | ✅ **WORKS** (v2.1.33) | Fires on task completion; JSON has `task_id`, `task_subject`, `task_description` |
 | **TeammateIdle hook** | ✅ **WORKS** (v2.1.33) | Fires when teammate goes idle; JSON has `teammate_name`, `team_name`, `permission_mode` |
 | **Agent `Task(AgentType)` restriction** | ✅ **ENFORCED** (v2.1.33) | `tools: [Task(Explore), Task(Bash)]` blocks all other sub-agent types |
-| **`memory: local` scope** | ⚠️ **STORAGE ONLY** (v2.1.34→v2.1.45) | Dir + files persist; auto-preload **still NOT working** in v2.1.45 |
+| **`memory: local` scope** | ✅ **NOW WORKING** (v2.1.52) | Dir + files persist + auto-preload confirmed. Was broken v2.1.34→v2.1.50. |
 | **Task completion crash** | ✅ **FIXED** (v2.1.45) | Task tool no longer crashes with ReferenceError on completion; TaskCompleted hook fires correctly |
 | **Skills context leak after compaction** | ✅ **FIXED** (v2.1.45) | Skills invoked by subagents no longer bleed into main session after compaction |
 | **Sandbox: .claude/skills write block** | ✅ **HARDENED** (v2.1.38) | Sandbox mode blocks writes to .claude/skills (prevents persistent prompt injection via ToxicSkills-style attacks) |
@@ -104,6 +104,10 @@
 | **Plan mode through compaction** | ✅ **FIXED** (v2.1.47) | Plan mode no longer lost after context compaction (#26061) |
 | **Backslash-newline bash continuation** | ✅ **FIXED** (v2.1.47) | `\`-continuation lines no longer produce spurious empty arguments |
 | **Git worktree agent/skill discovery** | ✅ **FIXED** (v2.1.47) | .claude/agents/ and .claude/skills/ from main repo now discovered in worktrees (#25816) |
+| **`claude remote-control`** | ✅ **NEW** (v2.1.51) | Bridges local CLI to claude.ai/code web UI. Gated by GrowthBook `tengu_ccr_bridge` flag; works on Max subscription. **Headless server tested**: `env -u CLAUDECODE claude remote-control` connects cleanly (bypasses nested guard). Skills/MCP/files all accessible from browser. **Interactive only** — no programmatic API, cannot trigger skills without human typing. One session at a time. Good for debugging/exploring headless servers, NOT for production automation (SDK is strictly better for that). |
+| **BashTool login shell skip** | ✅ **AUTOMATIC** (v2.1.51) | BashTool no longer uses `-l` (login shell) flag. `shopt login_shell`=off, `CLAUDE_BASH_NO_LOGIN` UNSET (skip is implicit). ~4x faster shell startup (0.001s vs 0.004s). No configuration needed. |
+| **ConfigChange hook event** | ✅ **NEW** (v2.1.49) | 13th hook event type. Fires when settings files change. Sources: `user_settings`, `project_settings`, `local_settings`, `policy_settings`, `skills`. Can block changes via `{"decision": "block"}` (except policy_settings). Chicken-and-egg: first edit that ADDS the hook itself does NOT trigger it. |
+| **Dynamic `CLAUDE_CODE_TASK_LIST_ID` mid-session** | ✅ **WORKS** (v2.1.52) | Changing env vars in `settings.json` mid-session takes effect IMMEDIATELY. Task tools use the new list directory without restart. Extends v2.1.41's "stale permission rules" fix. See Part 10.12. |
 
 ---
 
@@ -165,6 +169,112 @@
 | Regression | Details |
 |-----------|---------|
 | **type: "prompt" hooks in agent frontmatter** | Was WORKING in v2.1.37 (correctly blocked commands matching BLOCK_ME). In v2.1.45, hook is simply not evaluated — both safe and blocked commands execute without interception. SubagentStart injection still works, confirming hooks fire but prompt-type PreToolUse evaluation is broken. |
+
+---
+
+### Retest Summary (2026-02-24, v2.1.52) — v2.1.49-v2.1.52 Changelog Features
+
+**4 capabilities tested:**
+
+| Feature | Status | Impact |
+|---------|--------|--------|
+| `claude remote-control` (v2.1.51) | ✅ Works (Max subscription) | Bridges local CLI to claude.ai/code web UI. NOT for automation — interactive web bridge. Gated by GrowthBook `tengu_ccr_bridge` flag. |
+| BashTool login shell skip (v2.1.51) | ✅ Confirmed (automatic) | `shopt login_shell`=off, no env var needed. ~4x faster startup (0.001s vs 0.004s). Matters for agents running 100+ Bash calls. |
+| ConfigChange hook event (v2.1.49) | ✅ Works | 13th hook event type. Fires on settings file changes. 5 source types. Blocking supported. Chicken-and-egg: first edit adding the hook doesn't trigger itself. |
+| Dynamic `CLAUDE_CODE_TASK_LIST_ID` mid-session | ✅ **WORKS** | **BIG FINDING**: Changing env block in settings.json mid-session takes effect IMMEDIATELY. Task tools use new list directory. No restart needed. |
+
+**Dynamic CLAUDE_CODE_TASK_LIST_ID test sequence:**
+1. Baseline: TaskCreate #36 → `~/.claude/tasks/earnings-orchestrator/`
+2. Changed settings.json: `earnings-orchestrator` → `test-dynamic-change`
+3. TaskList: EMPTY (switched to new list!)
+4. TaskCreate #1 → `~/.claude/tasks/test-dynamic-change/`
+5. Restored settings.json → `earnings-orchestrator` (tasks visible again)
+
+**Implication for Part 10.12**: The "settings.json Always Wins" limitation is STILL TRUE for env vars vs settings.json precedence. But settings.json ITSELF can be changed dynamically mid-session, and the change takes effect immediately. This means:
+- Can switch task lists per-ticker without spawning subprocesses
+- A ConfigChange hook could auto-route tasks based on context
+- The v2.1.41 "stale permission rules on settings change" fix extends to env vars
+
+**ConfigChange hook schema (from test):**
+```json
+{
+  "session_id": "f6d5a190-...",
+  "transcript_path": "/home/faisal/.claude/projects/.../f6d5a190-....jsonl",
+  "cwd": "/home/faisal/EventMarketDB",
+  "hook_event_name": "ConfigChange",
+  "source": "project_settings",
+  "file_path": "/home/faisal/EventMarketDB/.claude/settings.json"
+}
+```
+
+**ConfigChange source types:** `user_settings` (global), `project_settings` (.claude/settings.json), `local_settings` (.claude/settings.local.json), `policy_settings` (managed), `skills` (.claude/skills/).
+
+**Headless remote-control test (2026-02-24):**
+- `env -u CLAUDECODE claude remote-control` connects cleanly (bypasses nested session guard)
+- Bridge URL generated, process stays alive, JSON-RPC architecture confirmed
+- Skills, MCP, files all accessible from browser — but interactive only, no programmatic API
+- NOT a replacement for SDK automation. Good for manual debugging/exploration on headless servers.
+
+**Dynamic task list WITHOUT SDK or human (key insight):**
+The mid-session settings.json change can be done by ANY agent/skill (all tiers have Write/Edit). This means an orchestrator can programmatically switch task lists per-ticker:
+1. Agent edits settings.json → `CLAUDE_CODE_TASK_LIST_ID: "earnings-AAPL"`
+2. Agent runs TaskCreate → tasks land in AAPL list
+3. Agent edits settings.json → `CLAUDE_CODE_TASK_LIST_ID: "earnings-MSFT"`
+4. Agent runs TaskCreate → tasks land in MSFT list
+5. No SDK, no subprocess, no human, no restart. One session.
+
+The SDK env var approach is still better for PARALLEL multi-ticker processing (separate processes). The settings.json approach is sequential but simpler and works from any context.
+
+**Test artifacts:**
+| File | What It Tests |
+|------|--------------|
+| `.claude/hooks/test_config_change.sh` | ConfigChange audit logger |
+| `.claude/hooks/test_config_change_block.sh` | ConfigChange blocking variant |
+| `.claude/hooks/test_remote_control.sh` | Remote-control test script |
+| `.claude/agents/test-bash-login-shell.md` | Bash login shell diagnostic agent |
+| `.claude/agents/test-config-change-hook.md` | ConfigChange hook test agent |
+| `.claude/agents/test-config-change-dynamic.md` | Dynamic task list ID test agent |
+| `earnings-analysis/test-outputs/test-v2152-changelog-results.txt` | Consolidated results (all 4 tests) |
+| `earnings-analysis/test-outputs/test-remote-control.txt` | Remote-control raw output |
+| `earnings-analysis/test-outputs/test-bash-login-shell.txt` | Bash login shell raw output |
+| `earnings-analysis/test-outputs/test-config-change-hook.log` | ConfigChange hook fire log (4 events) |
+| `earnings-analysis/test-outputs/test-remote-control-headless.txt` | Headless remote-control test (bridge, skills, architecture) |
+| `earnings-analysis/test-outputs/test-fg-tool-inventory-v252.txt` | FG agent full tool inventory (40 tools, task tools work) |
+| `earnings-analysis/test-outputs/test-bg-base-tools-v252.txt` | BG agent base tool inventory (task tools absent) |
+| `earnings-analysis/test-outputs/test-bg-skill-workaround-v252.txt` | BG→Skill→Task workaround test (FAILS) |
+| `earnings-analysis/test-outputs/test-bg-task-tools-v252-consolidated.txt` | Consolidated BG task tools verdict (all tests) |
+| `/tmp/mem-detail-project.txt` | Memory preload proof: project scope (full system prompt quotes) |
+| `/tmp/mem-detail-user.txt` | Memory preload proof: user scope (full system prompt quotes) |
+| `/tmp/mem-detail-local.txt` | Memory preload proof: local scope (full system prompt quotes) |
+
+**Memory auto-preload: NOW WORKING (v2.1.52) — was broken v2.1.34→v2.1.50**
+
+Tested all 3 scopes via `--agent` flag with unique canary values planted in each MEMORY.md:
+
+| Scope | Directory | Canary | In System Prompt? | Instructions Injected? |
+|-------|-----------|--------|-------------------|----------------------|
+| `project` | `.claude/agent-memory/{agent-name}/` | `STARFRUIT_PROJECT_252` | ✅ YES | ✅ Full "Persistent Agent Memory" block |
+| `user` | `~/.claude/agent-memory/{agent-name}/` | `DRAGONFRUIT_USER_252` | ✅ YES | ✅ Full block + "user-scope: keep learnings general" |
+| `local` | `.claude/agent-memory-local/{agent-name}/` | `JACKFRUIT_LOCAL_252` | ✅ YES | ✅ Full block |
+
+What the system injects into the agent's system prompt:
+1. `# Persistent Agent Memory` section header
+2. Directory path: `You have a persistent Persistent Agent Memory directory at {path}. Its contents persist across conversations.`
+3. Guidelines: how to save, what not to save, searching instructions
+4. `## MEMORY.md` — first 200 lines of the file, auto-preloaded
+5. User scope adds: "Since this memory is user-scope, keep learnings general since they apply across all projects"
+
+**Scope differences:**
+
+| Scope | Storage Location | Shared Across | Best For |
+|-------|-----------------|---------------|----------|
+| `project` | `.claude/agent-memory/{name}/` (in repo) | Same project, all users | Project-specific patterns, conventions, file locations |
+| `user` | `~/.claude/agent-memory/{name}/` (home dir) | All projects for this user | Cross-project learnings, user preferences |
+| `local` | `.claude/agent-memory-local/{name}/` (in repo) | Same project, same machine only | Machine-specific config, local env details. Typically gitignored. |
+
+**Test via Task tool**: ✅ **CONFIRMED WORKING** (v2.1.52, 2026-02-24). Requires explicit `tools:` field in agent frontmatter to exclude Perplexity MCP v0.14.0 bad schemas. Both FG and BG spawns confirmed. See "Task Tool Spawn" section below.
+
+**Why this was broken before**: From v2.1.34 through v2.1.50, the `memory:` field created directories and persisted files, but the system did NOT inject MEMORY.md content or instructions into the system prompt. The agent had to manually `Read` its MEMORY.md at startup. Now the system does this automatically.
 
 ---
 
@@ -2660,6 +2770,60 @@ settings.json env block  >  process environment variable  >  random UUID default
 
 There is no way to set a "default" in settings.json and override it per-session. It's one or the other.
 
+### NEW (v2.1.52): Mid-Session Dynamic Change via settings.json
+
+**Tested 2026-02-24**: You CAN change `CLAUDE_CODE_TASK_LIST_ID` in settings.json DURING a live session and Task tools immediately use the new value. No restart needed.
+
+```
+Session running with CLAUDE_CODE_TASK_LIST_ID=earnings-orchestrator
+  → Edit settings.json: change to test-dynamic-change
+  → TaskList: EMPTY (switched to new directory!)
+  → TaskCreate: #1 lands in ~/.claude/tasks/test-dynamic-change/
+  → Edit settings.json: change back to earnings-orchestrator
+  → TaskList: original tasks visible again
+```
+
+This means the "settings.json Always Wins" rule is still true (settings.json > env var), but settings.json itself is live-reloaded. Combined with the ConfigChange hook (v2.1.49), you could:
+1. Have an orchestrator edit settings.json to switch task lists per-ticker
+2. Use a ConfigChange hook to audit/validate the change
+3. All within the same session, no subprocess spawning needed
+
+**Agent/skill can do this programmatically (confirmed 2026-02-24):**
+The original dynamic test was performed by the agent (this Claude session) using the Edit tool to modify settings.json — NOT a human. Every tool tier has Write/Edit access:
+
+| Who edits settings.json? | Has Write/Edit? | Can switch task lists? |
+|--------------------------|----------------|----------------------|
+| Main session (27 tools) | ✅ | ✅ Tested and confirmed |
+| FG sub-agent (21 tools) | ✅ | ✅ Yes (has Edit/Write) |
+| BG sub-agent (12 tools) | ✅ | ✅ Yes (has Edit/Write) |
+| Skill (forked, 14 tools) | ✅ | ✅ Yes (has Edit/Write) |
+
+**Practical pattern — orchestrator switches task lists automatically:**
+```
+Orchestrator skill starts:
+  1. Edit settings.json → CLAUDE_CODE_TASK_LIST_ID = "earnings-AAPL"
+     (ConfigChange hook fires → audit log)
+  2. TaskCreate "BZ research AAPL", TaskCreate "Judge AAPL"
+     → tasks land in ~/.claude/tasks/earnings-AAPL/
+  3. Run AAPL analysis...
+  4. Edit settings.json → CLAUDE_CODE_TASK_LIST_ID = "earnings-MSFT"
+     (ConfigChange hook fires → audit log)
+  5. TaskCreate "BZ research MSFT", TaskCreate "Judge MSFT"
+     → tasks land in ~/.claude/tasks/earnings-MSFT/
+  6. No SDK needed. No subprocess. No restart.
+```
+
+**Evidence**: `earnings-analysis/test-outputs/test-v2152-changelog-results.txt` (Test 4)
+
+**Four approaches for per-ticker task lists (updated 2026-02-24):**
+
+| Approach | Requires | Parallel? | Human needed? | Best for |
+|----------|----------|-----------|---------------|----------|
+| SDK env var per invocation | SDK + Python/TS code | ✅ Yes | No | Production batch processing |
+| Agent edits settings.json mid-session | Edit tool (any tier) | ❌ Sequential | **No** | Automated orchestrator within one session |
+| Human edits settings.json interactively | Interactive `claude` | ❌ Sequential | Yes | Manual one-off analysis |
+| Remote-control + settings.json edit | Max subscription + browser | ❌ Sequential | Yes (browser) | Headless server debugging |
+
 ### Cross-Session Resume (Tested 2026-01-28)
 
 The same folder name = the same tasks. You can resume across any number of sessions, from both CLI and SDK.
@@ -2905,18 +3069,28 @@ model: sonnet
 | Spawn Method | bg:true Effect | Tool Set |
 |-------------|---------------|----------|
 | `claude --agent my-agent` | **No effect** — agent IS the main session | **27 tools (FULL)** |
-| Task tool (foreground) | bg:true ignored? agent runs in FG? | ~21 tools (expected) |
-| Task tool (background) | bg:true auto-backgrounds agent | **12 tools (RESTRICTED)** |
+| Task tool (foreground) | bg:true **FORCES BG mode** — agent runs as BG regardless | **5 tools** (with `tools:` whitelist) or **12 tools** (without) |
+| Task tool (background) | bg:true + run_in_background = same result | **5 tools** (with `tools:` whitelist) or **12 tools** (without) |
 
 **Why the difference**: `--agent` runs the agent as the primary Claude Code session, which always has full tool access. `background: true` only affects scheduling when spawned via Task tool — it tells the system to auto-enable `run_in_background: true`.
 
-**Does `tools` frontmatter override bg tool restriction?**
+**Does `tools` frontmatter override bg tool restriction? — DEFINITIVELY NO (tested 2026-02-24)**
 
-The agent `test-bg-fm-tasktools` has both `background: true` and `tools: [TaskCreate, TaskList, TaskGet, TaskUpdate, ...]`:
+The agent `test-bg-fm-tasktools` has both `background: true` and `tools: [TaskCreate, TaskList, TaskGet, TaskUpdate, Bash, Read, Write, Glob, Grep]`:
 - Via `--agent`: ✅ All task tools work (but this is main session, so bg:true irrelevant)
-- Via Task tool: ❌ **COULD NOT TEST** — custom agents created mid-session aren't in the Task tool's available agent list (session-start snapshot)
+- Via Task tool (BG spawn): ❌ **Only 5 tools delivered** — Bash, Read, Write, Glob, Grep. All 4 Task tools stripped.
+- Via Task tool (FG spawn): ❌ **Only 5 tools delivered** — same result. `background: true` in frontmatter forces BG mode even without `run_in_background`.
 
-**Hypothesis (UNTESTED)**: The `tools` frontmatter acts as a WHITELIST (restricts, doesn't expand). Background mode removes Task tools from the base set. The `tools` whitelist intersects with the base set. So listing TaskCreate in `tools` on a bg agent probably still fails because TaskCreate isn't in the bg base set to begin with. **Needs fresh-session test to confirm.**
+**Tool Set Algebra (CONFIRMED)**:
+```
+Requested via tools: field = {TaskCreate, TaskList, TaskGet, TaskUpdate, Bash, Read, Write, Glob, Grep}
+Allowed for BG agents  = {Bash, Read, Write, Glob, Grep, Edit, ToolSearch, ...12 tools}
+Actual delivered        = Requested ∩ BG-Allowed = {Bash, Read, Write, Glob, Grep}
+```
+
+The `tools:` whitelist CAN restrict (Edit was bg-allowed but not requested → not delivered), but CANNOT expand beyond what the bg runtime permits. Task tools are unconditionally stripped regardless of frontmatter.
+
+Evidence: `test-bg-tasktools-background-v252.txt`, `test-bg-tasktools-foreground-v252.txt`
 
 ### `background: true` Gotcha (CONFIRMED)
 
@@ -2947,32 +3121,105 @@ The agent `test-bg-fm-tasktools` has both `background: true` and `tools: [TaskCr
 | Storage (write/read) | Opus 4.6 | ✅ WORKS | `dragonfruit_opus_2026` written and read back |
 | SubagentStart hook injection | Opus 4.6 | ✅ WORKS | INJECTED_MAGIC_STRING_7842 confirmed |
 
-**Key Opus insight**: SubagentStart hook `additionalContext` injection WORKS, proving the injection infrastructure is functional. It's specifically the `memory:` auto-preload mechanism that's broken, not the system prompt injection pipeline.
+**Key Opus insight**: SubagentStart hook `additionalContext` injection WORKS, proving the injection infrastructure is functional. It's specifically the `memory:` auto-preload mechanism that was broken, not the system prompt injection pipeline.
 
-**Definitive finding**: Memory auto-preload is **STILL BROKEN in v2.1.50** across ALL models (Haiku, Sonnet, Opus 4.6), unchanged from v2.1.34-v2.1.45.
+**~~Definitive finding~~: OVERRIDDEN — Memory auto-preload NOW WORKS in v2.1.52** (was broken v2.1.34→v2.1.50).
 
-**What works**: Storage. All 3 scopes create directories and persist files:
-- `user` → `~/.claude/agent-memory/<name>/`
-- `project` → `.claude/agent-memory/<name>/`
-- `local` → `.claude/agent-memory-local/<name>/`
+### Memory Auto-Preload: Complete Reference (v2.1.52, tested 2026-02-24)
 
-**What doesn't work**: Auto-injection of MEMORY.md (first 200 lines) into system prompt. Even for the SAME agent type on 2nd invocation, the canary value is NOT in the system prompt.
+**Status**: ✅ **FULLY WORKING** via `--agent` flag. All 3 scopes confirmed. Write-back persistence confirmed.
 
-**What's checked in each test**:
-- Searched entire system prompt for canary strings → NOT FOUND
-- Searched for "agent-memory" instructions → NOT FOUND
-- Searched for memory directory path → NOT FOUND
-- No memory-related instructions injected by the system
+#### What the system injects into the agent's system prompt
 
-**Workaround** (unchanged): Manual Read at startup:
-```yaml
-memory: project  # Creates the directory
+When an agent has `memory: <scope>` in frontmatter, the system adds:
+
+1. **`# Persistent Agent Memory`** section header
+2. **Directory path**: `You have a persistent Persistent Agent Memory directory at {path}. Its contents persist across conversations.`
+3. **Guidelines** (verbatim from official docs):
+   - `MEMORY.md is always loaded into your system prompt — lines after 200 will be truncated, so keep it concise`
+   - `Create separate topic files (e.g., debugging.md, patterns.md) for detailed notes and link to them from MEMORY.md`
+   - `Update or remove memories that turn out to be wrong or outdated`
+   - `Organize memory semantically by topic, not chronologically`
+   - `Use the Write and Edit tools to update your memory files`
+4. **What to save**: Stable patterns, key architectural decisions, user preferences, recurring solutions
+5. **What NOT to save**: Session-specific context, incomplete info, CLAUDE.md duplicates, speculative conclusions
+6. **Explicit user requests**: Save when user asks to remember, remove when asked to forget
+7. **Scope-specific hint** (user scope only): `Since this memory is user-scope, keep learnings general since they apply across all projects`
+8. **Scope-specific hint** (project scope): `Since this memory is project-scope and shared with your team via version control, tailor your memories to this project`
+9. **Searching instructions**: Grep patterns for the memory directory
+10. **`## MEMORY.md`** — first 200 lines of the file, auto-preloaded into prompt
+
+#### Scope reference
+
+| Scope | Frontmatter | Directory | Shared With | Git? | Best For |
+|-------|------------|-----------|-------------|------|----------|
+| `project` | `memory: project` | `.claude/agent-memory/{agent-name}/` | Team (via VCS) | ✅ Commit | Project patterns, architecture, conventions |
+| `user` | `memory: user` | `~/.claude/agent-memory/{agent-name}/` | Just you (all projects) | ❌ Home dir | Cross-project learnings, personal preferences |
+| `local` | `memory: local` | `.claude/agent-memory-local/{agent-name}/` | Just you (this machine) | ❌ Gitignore | Machine-specific config, local env details |
+
+#### Test evidence (v2.1.52)
+
+| Test | Scope | Canary | Visible in Prompt? | Evidence |
+|------|-------|--------|-------------------|----------|
+| Canary preload | project | `STARFRUIT_PROJECT_252` | ✅ YES | `/tmp/mem-detail-project.txt` |
+| Canary preload | user | `DRAGONFRUIT_USER_252` | ✅ YES | `/tmp/mem-detail-user.txt` |
+| Canary preload | local | `JACKFRUIT_LOCAL_252` | ✅ YES | `/tmp/mem-detail-local.txt` |
+| Write-back | project | `banana_writeback_252` | ✅ YES (next invocation) | `test-memory-guidelines-v252.txt` |
+| Guidelines injected | project | N/A | ✅ Full block with What to save/NOT save | `test-memory-guidelines-v252.txt` |
+| 200-line truncation | project | `SENTINEL_LINE_200` visible, `TRUNCATED_LINE_201` invisible | ✅ Exact 200-line cutoff + warning | `test-memory-truncation-v252.txt` |
+| Topic files | project | `mango_topic_252` | NOT auto-preloaded, but readable via Read tool | `test-memory-topicfiles-v252.txt` |
+| BG + memory | project | `banana_bg_v250` | ✅ Memory in prompt (via `--agent`) | `test-bg-memory-combo-v252.txt` |
+| Proactive save | project | N/A | ✅ Agent saved selectively per guidelines | `test-memory-proactive-save-v252.txt` |
+
+#### How the agent updates memory
+
+The agent does NOT auto-update memory silently. It updates memory when:
+1. **It encounters something worth remembering** (guided by "What to save" rules)
+2. **The user explicitly asks** ("remember that we use pnpm")
+3. **You include instructions in the agent's prompt** (e.g., "Update your memory as you discover patterns")
+
+The system provides the Write/Edit tools and the guidelines, but the agent decides WHEN to write. You can customize this by adding instructions in the agent's markdown body:
+```markdown
+Update your agent memory as you discover codepaths, patterns, library
+locations, and key architectural decisions. This builds up institutional
+knowledge across conversations.
 ```
-```
-# In agent instructions:
-At startup, Read .claude/agent-memory/<name>/MEMORY.md for prior context.
-When done, Write updated findings back.
-```
+
+#### What changed vs v2.1.50
+
+| Aspect | v2.1.50 (BROKEN) | v2.1.52 (FIXED) |
+|--------|------------------|-----------------|
+| Directory creation | ✅ Works | ✅ Works |
+| File persistence | ✅ Works | ✅ Works |
+| MEMORY.md in system prompt | ❌ NOT injected | ✅ Auto-preloaded (first 200 lines) |
+| Memory instructions injected | ❌ NOT injected | ✅ Full "Persistent Agent Memory" block |
+| Memory directory path shown | ❌ NOT shown | ✅ Shown with Grep patterns |
+| What to save / NOT save | ❌ NOT present | ✅ Full guidelines |
+| Scope-specific hints | ❌ NOT present | ✅ User/project scope hints |
+| Write-back persistence | ✅ Works (manual) | ✅ Works (auto-guided) |
+| Manual Read workaround needed | YES | NO — automatic |
+
+#### Additional Tests (v2.1.52, tested 2026-02-24)
+
+| Test | Result | Evidence |
+|------|--------|----------|
+| **200-line truncation** | ✅ CONFIRMED | Lines 1-200 visible, 201+ invisible. Warning appended: `"MEMORY.md is 208 lines (limit: 200). Only the first 200 lines were loaded."` Boundary is **inclusive** (line 200 IS loaded). | `test-memory-truncation-v252.txt` |
+| **Topic files** | ✅ WORKS (not auto-preloaded) | Only MEMORY.md auto-preloaded. Topic files (e.g., `topics.md`) must be manually discovered via Glob and read via Read tool. This is BY DESIGN — MEMORY.md is the concise index, topic files hold details. | `test-memory-topicfiles-v252.txt` |
+| **BG + memory combo** | ✅ WORKS (via `--agent` and Task tool) | `background: true` + `memory: project` coexist. Memory IS in prompt. Task tool spawn also confirmed working with `tools:` field fix. | `test-bg-memory-combo-v252.txt`, `test-bg-memory-task-spawn-v252.txt` |
+| **Proactive memory save** | ✅ AGENT SAVES SELECTIVELY | Agent filtered 3 facts: saved only pipeline schedule (non-obvious), skipped Neo4j/Python (already evident from codebase). Followed guidelines correctly. | `test-memory-proactive-save-v252.txt` |
+| **Write target contamination** | ⚠️ RISK | Agent with `memory: project` (own dir at `.claude/agent-memory/`) also has access to project auto-memory (`~/.claude/projects/.../memory/MEMORY.md`). When asked to "save," it wrote to project auto-memory instead of its own agent memory. **Mitigation**: Explicit prompt instructions to specify which memory file. |
+
+#### Task Tool Spawn: CONFIRMED WORKING (fresh session 2026-02-24)
+
+| Test | Agent | Spawn | Memory? | Result | Evidence |
+|------|-------|-------|---------|--------|----------|
+| FG + memory | `test-memory-autopreload` | Task tool (foreground) | ✅ Both canaries visible | ✅ PASS | `test-memory-task-spawn-v252.txt` |
+| BG + memory | `test-bg-memory-combo` | Task tool (background) | ✅ Canary visible | ✅ PASS | `test-bg-memory-task-spawn-v252.txt` |
+| FG no memory | `guidance-extract` | Task tool (foreground) | N/A (no memory field) | ✅ PASS | `test-guidance-extract-spawn.txt` |
+
+**Prerequisite**: Agent must have explicit `tools:` field in frontmatter. Without it, Perplexity MCP v0.14.0 schemas (which use `anyOf` at top level) get included in the API request and cause HTTP 400. All our data sub-agents already have `tools:` fields. Any new agent with `memory:` must also include `tools:`.
+
+**All memory tests now complete. No remaining untested items.**
 
 ### Background + MCP Access (v2.1.47 → v2.1.50)
 
@@ -2987,19 +3234,38 @@ When done, Write updated findings back.
 
 **⚠️ DOCS CONTRADICTION**: Official docs at code.claude.com state *"MCP tools are not available in background subagents"*. Our tests prove otherwise — ToolSearch discovers MCP tools and they execute successfully (neo4j, perplexity). Re-confirmed in v2.1.50 with 8 concurrent bg agents. May be stale doc or refer to *direct* MCP (without ToolSearch). Via ToolSearch: **MCP WORKS in background**.
 
-### ⚠️ `anyOf` Schema API 400 Bug (v2.1.50 — ALL MODELS)
+### ⚠️ `anyOf` Schema API 400 Bug — ROOT CAUSE FOUND (2026-02-24)
 
-**Bug**: When a background agent calls ToolSearch and MCP tools get loaded, the expanded tool schema can contain `oneOf`/`allOf`/`anyOf` at the top level. The API rejects this with HTTP 400.
+**Bug**: Custom agents spawned via Task tool crash with `tools.N.custom.input_schema: input_schema does not support oneOf, allOf, or anyOf at the top level`.
+
+**Root cause**: **Perplexity MCP v0.14.0** (and possibly AlphaVantage HTTP MCP) expose tool schemas with `anyOf` at the top level. The Anthropic Messages API rejects these. When Claude Code builds the tool array for subagents, it includes ALL registered MCP tool schemas — even if the agent doesn't use them.
+
+**Why main thread works but subagents fail**: Main thread uses ToolSearch with deferred loading — bad schemas are never sent upfront. Subagent spawn assembles the full tool array including bad MCP schemas → API 400.
+
+**The FIX**: Add explicit `tools:` field to agent frontmatter that excludes bad MCP tools.
+
+| Test | `tools:` field | Perplexity MCP included? | Result |
+|------|---------------|-------------------------|--------|
+| `guidance-extract` (has `tools:` with only neo4j + built-in) | ✅ YES | ❌ Excluded | ✅ **SPAWNS OK** |
+| `test-memory-autopreload` (no `tools:` field) | ❌ NO | ✅ Included (inherited) | ❌ API 400 |
+| `test-memory-autopreload` (`tools:` added mid-session) | ⚠️ Added but cached | ✅ Session snapshot uses old version | ❌ API 400 |
+
+**Key insight**: Session-start snapshot captures agent frontmatter at startup. Mid-session edits to agent files are NOT picked up by Task tool. Must start fresh session after adding `tools:`.
+
+**Permanent fix checklist**:
+1. Add `tools:` field to ALL custom agents — list only the tools they need (no Perplexity/AlphaVantage MCP)
+2. Start a fresh session so Task tool snapshot picks up the new `tools:` fields
+3. Alternatively: downgrade Perplexity MCP to v0.2.2 (pre-anyOf schema) or disable it
+
+**GitHub issues**: #4886, #5973, #10606, #3940, #4753, #4295, #13898 — 15+ issues filed, never fully fixed in subagent spawn path.
 
 **Cross-model verification (2026-02-21):**
 
 | Model | BG + ToolSearch MCP expansion | Tool uses before crash | Error |
 |-------|------------------------------|----------------------|-------|
-| Haiku | ❌ API 400 | 0 | `tools.14.custom.input_schema: input_schema does not support oneOf, allOf, or anyOf at the top level` |
+| Haiku | ❌ API 400 | 0 | `tools.14.custom.input_schema: ...` |
 | Sonnet | ❌ API 400 | 3 | `tools.15.custom.input_schema: ...` |
-| **Opus 4.6** | ❌ **API 400** | **2** | `tools.15.custom.input_schema: ...` |
-
-**Confirmed model-independent**: The `anyOf` schema error affects ALL models in background mode after ToolSearch expansion. The tool index varies (14 vs 15) because of schema serialization order, but the root cause is identical: background agent tool serialization doesn't strip unsupported JSON Schema constructs from MCP tool schemas before sending to the API.
+| Opus 4.6 | ❌ API 400 | 2 | `tools.15.custom.input_schema: ...` |
 
 **Foreground agents are unaffected** — their tool serialization path handles these schemas correctly.
 
@@ -3057,12 +3323,12 @@ When done, Write updated findings back.
 | Decision | Before (v2.1.47) | After (v2.1.50) | Impact |
 |----------|------------------|------------------|--------|
 | BG agent tools | 11 tools | **12 tools (+EnterWorktree)** | Minor improvement |
-| FG agent tools | 20 tools | **21 tools (+TeamDelete, +EnterWorktree)** | Minor improvement |
+| FG agent tools | 20 tools | **40 tools** (7 base + 33 deferred incl. TaskCreate, MCP) | Major — FG agents have full deferred tools |
 | `--agent` tools | N/A | **27 tools (FULL SET)** | bg:true has no effect via CLI |
-| BG agent TaskCreate | ❌ BLOCKED | ❌ **STILL BLOCKED** (all models, all spawn methods) | No change — use foreground pattern |
-| `tools` field vs bg restriction | Unknown | **Cannot expand bg base set** (inferred: whitelist only restricts) | Don't rely on `tools` to grant TaskCreate in bg mode |
-| Memory auto-preload | ❌ BROKEN | ❌ **STILL BROKEN** (all models, all spawn methods) | No change — use manual Read |
-| BG + MCP (ToolSearch) | ✅ Works (v2.1.47) | ❌ **API 400 anyOf bug** (all models) | ToolSearch expansion crashes bg agents; use foreground or pre-load via allowed-tools |
+| BG agent TaskCreate | ❌ BLOCKED | ❌ **STILL BLOCKED v2.1.52** (all models, all spawn methods, Skill workaround also fails) | No change — use foreground pattern |
+| `tools` field vs bg restriction | Unknown | **CONFIRMED: Cannot expand bg base set** (Actual = Requested ∩ BG-Allowed) | Don't rely on `tools` to grant TaskCreate in bg mode |
+| Memory auto-preload | ❌ BROKEN | ✅ **NOW WORKING** (v2.1.52, all 3 scopes, Task tool + `--agent`) | **MAJOR FIX** — works via Task tool with `tools:` field |
+| BG + MCP (ToolSearch) | ✅ Works (v2.1.47) | ⚠️ **Perplexity MCP v0.14.0 schema** causes API 400 | FIX: Add `tools:` field excluding bad MCP. Or downgrade Perplexity to v0.2.2 |
 | `background: true` frontmatter | N/A | ✅ **NEW** — scheduling directive only | Auto-sets run_in_background; no independent tool restriction |
 | `isolation: worktree` frontmatter | N/A | ✅ **NEW** — git isolation | Use for parallel file-modifying agents |
 | Agent discovery | N/A | **Session-start snapshot** (persists through continuations) | Must start brand-new session to discover new agents |
@@ -3078,8 +3344,8 @@ Custom agents created in the previous session (`test-bg-fm-tasktools`, `test-bg-
 | Spawn Method | Total Tools | Task Tools | Team Tools | Interactive | Nesting |
 |-------------|------------|-----------|-----------|------------|---------|
 | `claude --agent` (CLI) | **27** | ✅ All 4 | ✅ All 3 | ✅ All 3 | ✅ Task/TaskOutput/TaskStop |
-| Task tool (foreground) | **21** | ✅ All 4 | ✅ All 3 | ❌ None | ❌ No Task/TaskOutput/TaskStop |
-| Task tool (background) | **12** | ❌ None | ❌ None | ❌ None | ❌ None |
+| Task tool (foreground) | **40** (7 base + 33 deferred) | ✅ All 4 (deferred) | ✅ All 3 (deferred) | ❌ None | ❌ No Task spawner |
+| Task tool (background) | **12** (base only, no deferred) | ❌ None | ❌ None | ❌ None | ❌ None |
 
 Evidence files:
 - `--agent`: `test-bg-fm-vs-runtime-opus.txt` (27 tools)
@@ -3090,17 +3356,20 @@ Evidence files:
 
 #### Q1: Does `tools` frontmatter override bg tool restriction?
 
-**Via `--agent`**: ✅ All 4 Task tools (TaskCreate, TaskList, TaskGet, TaskUpdate) work when listed in `tools` field. But this is because `--agent` gives the full 27-tool set regardless — `background: true` has no effect.
+**DEFINITIVELY NO.** (Confirmed via Task tool, 2026-02-24)
 
-**Via Task tool**: ❌ STILL CANNOT TEST — custom agents not discoverable as Task `subagent_type`. However, the answer can be inferred:
+| Spawn | Agent | tools: field | Delivered | TaskCreate? |
+|-------|-------|-------------|-----------|-------------|
+| `--agent` | `test-bg-fm-tasktools` | 9 tools (incl. Task*) | 27 (full) | ✅ Works |
+| Task (FG, no bg:true) | `general-purpose` | N/A | 40 (7 base + 33 deferred) | ✅ Works |
+| Task (FG, bg:true agent) | `test-bg-fm-tasktools` | 9 tools (incl. Task*) | **5** | ❌ Stripped |
+| Task (BG, bg:true agent) | `test-bg-fm-tasktools` | 9 tools (incl. Task*) | **5** | ❌ Stripped |
 
-**Inferred answer: NO, `tools` cannot override bg restriction.**
-- The `tools` field is a **whitelist** (restricts the available set, never expands it)
-- Background mode removes Task tools from the base set (12 tools, no TaskCreate)
-- `tools: [TaskCreate]` intersects with the 12-tool base → TaskCreate not in base → not granted
-- This is consistent with how `tools` works for other agents: it filters, not adds
+**Tool Set Algebra**: `Actual = Requested ∩ BG-Allowed`. The `tools:` field can RESTRICT (Edit was bg-allowed but not requested → not delivered) but CANNOT EXPAND beyond what the bg runtime permits. Task tools are unconditionally stripped.
 
-Evidence: `test-bg-fm-tasktools-opus.txt` (via `--agent`: all 4 work because full 27-tool base)
+**Key finding**: `background: true` in frontmatter FORCES bg mode even when Task tool spawns in foreground. Both FG and BG spawns of the same agent got identical 5-tool sets.
+
+Evidence: `test-bg-tasktools-background-v252.txt`, `test-bg-tasktools-foreground-v252.txt`, `test-fg-tool-inventory-v252.txt`
 
 #### Q2: Does bg:true frontmatter differ from run_in_background on Task?
 
@@ -3151,12 +3420,12 @@ Custom agents created during a conversation are NOT available as Task tool `suba
 
 | Question | Status |
 |----------|--------|
-| Does `tools` frontmatter override bg tool restriction via Task tool? | **Inferred NO** (whitelist can't expand base set). Needs brand-new session to confirm empirically. |
+| Does `tools` frontmatter override bg tool restriction via Task tool? | ❌ **CONFIRMED NO** (2026-02-24). Actual = Requested ∩ BG-Allowed. Evidence: `test-bg-tasktools-{background,foreground}-v252.txt` |
 | Does bg:true + isolation:worktree combo work via Task? | **Untested** — needs brand-new session for agent discovery. |
 
 ---
 
-*Updated: 2026-02-21 | Fresh-session retest (Opus 4.6) | 3-tier tool hierarchy confirmed (27/21/12) | tools field = whitelist, can't override bg restriction | bg:true = scheduling only (confirmed across spawn methods) | Memory auto-preload broken across ALL spawn methods | Agent discovery = session-start snapshot, persists through continuations | anyOf schema API 400 bug in BG+ToolSearch (all models) | +EnterWorktree in bg tools*
+*Updated: 2026-02-24 | v2.1.52 definitive tests | 3-tier hierarchy corrected (27/40/12) — FG has 33 deferred tools incl. TaskCreate | tools field = INTERSECTION (confirmed, not just inferred) | bg:true forces BG mode even in FG spawn | Memory auto-preload FIXED + Task tool spawn confirmed | anyOf root cause = Perplexity MCP v0.14.0 bad schemas, FIX = add tools: field | Task→Task nesting still blocked v2.1.52*
 
 ---
 

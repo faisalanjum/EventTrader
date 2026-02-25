@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
-Tests for guidance_writer.py — validates Cypher construction, parameter
+Tests for guidance_writer.py (v3.0) — validates Cypher construction, parameter
 assembly, validation gates, dry-run, feature flag, and batch logic.
+
+v3.0 changes: No Context node, no Unit node, direct FOR_COMPANY edge,
+fiscal-keyed Period (guidance_period_ namespace), canonical_unit as property.
 
 No Neo4j connection needed — all tests use mock manager.
 """
@@ -12,9 +15,10 @@ sys.path.insert(0, "/home/faisal/EventMarketDB")
 
 import guidance_writer
 from guidance_writer import (
-    _validate_item, _build_core_query, _build_params, _build_member_query,
-    write_guidance_item, write_guidance_batch, create_guidance_constraints,
-    SOURCE_LABEL_MAP,
+    _validate_item, _build_core_query, _build_params,
+    _build_concept_query, _build_member_query,
+    write_guidance_item, write_guidance_batch,
+    create_guidance_constraints, SOURCE_LABEL_MAP,
 )
 
 
@@ -47,7 +51,7 @@ def _make_item(**overrides):
     """Build a complete test item dict with sensible defaults."""
     item = {
         'guidance_id': 'guidance:revenue',
-        'guidance_update_id': 'gu:test_src:revenue:duration_2025-03-30_2025-06-28:gaap:total:abc123def456ab00',
+        'guidance_update_id': 'gu:test_src:revenue:guidance_period_320193_duration_FY2025_Q2:gaap:total',
         'evhash16': 'abc123def456ab00',
         'label_slug': 'revenue',
         'segment_slug': 'total',
@@ -62,7 +66,6 @@ def _make_item(**overrides):
         'fiscal_year': 2025,
         'fiscal_quarter': 2,
         'segment': 'Total',
-        'unit': 'm_usd',
         'basis_norm': 'gaap',
         'basis_raw': 'as reported',
         'derivation': 'explicit',
@@ -74,13 +77,8 @@ def _make_item(**overrides):
         'conditions': None,
         'xbrl_qname': 'us-gaap:Revenues',
         'member_u_ids': [],
-        'period_u_id': 'duration_2025-03-30_2025-06-28',
+        'period_u_id': 'guidance_period_320193_duration_FY2025_Q2',
         'period_node_type': 'duration',
-        'start_date': '2025-03-30',
-        'end_date': '2025-06-28',
-        'ctx_u_id': 'guidance_320193_duration_2025-03-30_2025-06-28',
-        'cik': '320193',
-        'unit_u_id': 'guidance_unit_m_usd',
     }
     item.update(overrides)
     return item
@@ -179,10 +177,14 @@ def test_query_company_by_ticker():
     assert 'MATCH (company:Company {ticker: $ticker})' in q
     assert '{cik: $cik}' not in q
 
-def test_query_context_cik_from_company_node():
-    """Context.cik derived from company node property, not parameter."""
+def test_query_period_fiscal_keyed():
+    """Period MERGE uses fiscal properties, not calendar dates."""
     q = _build_core_query('transcript')
-    assert 'ctx.cik = company.cik' in q
+    assert 'p.fiscal_year = $fiscal_year' in q
+    assert 'p.fiscal_quarter = $fiscal_quarter' in q
+    assert 'p.cik = toString(toInteger(company.cik))' in q
+    assert 'start_date' not in q
+    assert 'end_date' not in q
 
 def test_query_optional_match_existing():
     """OPTIONAL MATCH for was_created detection before MERGE."""
@@ -197,33 +199,33 @@ def test_query_alias_dedupe():
     assert 'a IN acc' in q
     assert 'CASE WHEN a IS NULL OR a IN acc THEN acc ELSE acc + a END' in q
 
-def test_query_gu_on_create_set_only():
-    """GuidanceUpdate uses ON CREATE SET only (no ON MATCH SET for gu)."""
+def test_query_gu_set_pattern():
+    """GuidanceUpdate uses ON CREATE SET for created, SET for all other props."""
     q = _build_core_query('transcript')
-    # Find the GuidanceUpdate MERGE section
     gu_section_start = q.index('MERGE (gu:GuidanceUpdate')
-    # The next MERGE after GuidanceUpdate should be an edge MERGE, not ON MATCH SET
     after_gu = q[gu_section_start:]
-    assert 'ON CREATE SET gu.' in after_gu
-    # Ensure no ON MATCH SET for gu specifically
-    # (there IS an ON MATCH SET for Guidance node 'g', which is correct)
     gu_to_edges = after_gu[:after_gu.index('MERGE (gu)-[:UPDATES]')]
-    assert 'ON MATCH SET gu.' not in gu_to_edges
+    # ON CREATE SET only for created timestamp
+    assert 'ON CREATE SET gu.created' in gu_to_edges
+    # SET (not ON CREATE SET) for all content properties
+    assert 'SET gu.evhash16' in gu_to_edges
 
 def test_query_all_core_edges():
-    """All 5 core edges present in query."""
+    """All 4 core edges present in query (v3.0: no IN_CONTEXT, no HAS_UNIT)."""
     q = _build_core_query('transcript')
     assert 'MERGE (gu)-[:UPDATES]->(g)' in q
     assert 'MERGE (gu)-[:FROM_SOURCE]->(source)' in q
-    assert 'MERGE (gu)-[:IN_CONTEXT]->(ctx)' in q
+    assert 'MERGE (gu)-[:FOR_COMPANY]->(company)' in q
     assert 'MERGE (gu)-[:HAS_PERIOD]->(p)' in q
-    assert 'MERGE (gu)-[:HAS_UNIT]->(u)' in q
+    # v3.0 removals
+    assert 'IN_CONTEXT' not in q
+    assert 'HAS_UNIT' not in q
 
-def test_query_context_edges():
-    """Context has HAS_PERIOD and FOR_COMPANY edges."""
+def test_query_no_context_no_unit():
+    """v3.0: No Context MERGE, no Unit MERGE in core query."""
     q = _build_core_query('transcript')
-    assert 'MERGE (ctx)-[:HAS_PERIOD]->(p)' in q
-    assert 'MERGE (ctx)-[:FOR_COMPANY]->(company)' in q
+    assert 'MERGE (ctx:Context' not in q
+    assert 'MERGE (u:Unit' not in q
 
 
 # ── Member query tests ────────────────────────────────────────────────────
@@ -253,11 +255,10 @@ def test_params_maps_canonical_values():
     assert params['mid'] == 95.5
     assert params['high'] == 97.0
 
-def test_params_ticker_not_cik():
-    """Params use ticker, not cik."""
+def test_params_ticker():
+    """Params include ticker."""
     params = _build_params(_make_item(), 'src1', 'transcript', 'AAPL')
     assert params['ticker'] == 'AAPL'
-    assert 'cik' not in params
 
 def test_params_source_fields():
     params = _build_params(_make_item(), 'my_source_123', '8k', 'MSFT')
@@ -290,7 +291,7 @@ def test_params_defaults():
     assert params['period_node_type'] == 'duration'
     assert params['segment'] == 'Total'
     assert params['basis_norm'] == 'unknown'
-    assert params['derivation'] == 'explicit'
+    assert params['derivation'] == 'implied'
 
 
 # ── Dry-run tests ─────────────────────────────────────────────────────────
@@ -349,11 +350,11 @@ def test_feature_flag_enabled_allows_write():
     try:
         guidance_writer.ENABLE_GUIDANCE_WRITES = True
         mgr = MockManager(return_value={'id': 'test', 'was_created': True})
-        result = write_guidance_item(mgr, _make_item(), 'src1', 'transcript',
-                                     'AAPL', dry_run=False)
+        result = write_guidance_item(mgr, _make_item(), 'src1',
+                                     'transcript', 'AAPL', dry_run=False)
         assert result['error'] is None
         assert result['was_created'] is True
-        assert len(mgr.calls) == 1  # Core write only (no members)
+        assert len(mgr.calls) == 2  # Core write + concept (no members)
     finally:
         guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
 
@@ -422,21 +423,22 @@ def test_write_with_members():
         item = _make_item(member_u_ids=['320193:us-gaap:ProductMember',
                                         '320193:us-gaap:ServiceMember'])
         mgr = MockManager(side_effects=[
-            {'id': 'test', 'was_created': True},  # core write
-            {'linked': 2},                          # member write
+            {'id': 'test', 'was_created': True},      # core write
+            {'linked_qname': 'us-gaap:Revenues'},      # concept
+            {'linked': 2},                              # member write
         ])
         result = write_guidance_item(mgr, item, 'src1', 'transcript',
                                      'AAPL', dry_run=False)
         assert result['member_links'] == 2
-        assert len(mgr.calls) == 2  # core + member
-        # Second call should be the member UNWIND query
-        member_query = mgr.calls[1][0]
+        assert len(mgr.calls) == 3  # core + concept + member
+        # Third call should be the member UNWIND query
+        member_query = mgr.calls[2][0]
         assert 'UNWIND' in member_query
     finally:
         guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
 
 def test_write_no_members_no_extra_call():
-    """Empty member_u_ids → no member query executed."""
+    """Empty member_u_ids → no member queries executed (concept still runs)."""
     old_val = guidance_writer.ENABLE_GUIDANCE_WRITES
     try:
         guidance_writer.ENABLE_GUIDANCE_WRITES = True
@@ -445,7 +447,7 @@ def test_write_no_members_no_extra_call():
                                      'src1', 'transcript', 'AAPL',
                                      dry_run=False)
         assert result['member_links'] == 0
-        assert len(mgr.calls) == 1  # core only
+        assert len(mgr.calls) == 2  # core + concept (no member)
     finally:
         guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
 
@@ -456,13 +458,14 @@ def test_write_members_on_existing_rerun():
         guidance_writer.ENABLE_GUIDANCE_WRITES = True
         item = _make_item(member_u_ids=['320193:us-gaap:ProductMember'])
         mgr = MockManager(side_effects=[
-            {'id': 'test', 'was_created': False},  # existing node
-            {'linked': 1},                           # member still attempted
+            {'id': 'test', 'was_created': False},      # existing node
+            {'linked_qname': 'us-gaap:Revenues'},      # concept
+            {'linked': 1},                              # member still attempted
         ])
         result = write_guidance_item(mgr, item, 'src1', 'transcript',
                                      'AAPL', dry_run=False)
         assert result['member_links'] == 1
-        assert len(mgr.calls) == 2  # core + member (self-healing)
+        assert len(mgr.calls) == 3  # core + concept + member (self-healing)
     finally:
         guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
 
@@ -473,14 +476,119 @@ def test_member_link_error_non_fatal():
         guidance_writer.ENABLE_GUIDANCE_WRITES = True
         item = _make_item(member_u_ids=['bad_member'])
         mgr = MockManager(side_effects=[
-            {'id': 'test', 'was_created': True},   # core succeeds
-            RuntimeError("member not found"),       # member fails
+            {'id': 'test', 'was_created': True},      # core succeeds
+            {'linked_qname': 'us-gaap:Revenues'},      # concept succeeds
+            RuntimeError("member not found"),           # member fails
         ])
         result = write_guidance_item(mgr, item, 'src1', 'transcript',
                                      'AAPL', dry_run=False)
         assert result['error'] is None  # core write succeeded
         assert result['was_created'] is True
         assert result['member_links'] == 0
+    finally:
+        guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
+
+
+# ── Concept edge tests ──────────────────────────────────────────────────
+
+def test_concept_query_structure():
+    """Concept query uses MATCH with LIMIT 1 for multi-taxonomy ambiguity."""
+    q = _build_concept_query()
+    assert 'MATCH (gu:GuidanceUpdate {id: $guidance_update_id})' in q
+    assert 'MATCH (con:Concept {qname: $xbrl_qname})' in q
+    assert 'LIMIT 1' in q
+    assert 'MERGE (gu)-[:MAPS_TO_CONCEPT]->(con)' in q
+    assert 'linked_qname' in q
+
+def test_concept_query_single_query():
+    """Concept query is one string (single round-trip)."""
+    q = _build_concept_query()
+    assert q.count('RETURN') == 1
+
+def test_write_with_concept():
+    """Concept edge created when xbrl_qname is set."""
+    old_val = guidance_writer.ENABLE_GUIDANCE_WRITES
+    try:
+        guidance_writer.ENABLE_GUIDANCE_WRITES = True
+        item = _make_item(xbrl_qname='us-gaap:Revenues', member_u_ids=[])
+        mgr = MockManager(side_effects=[
+            {'id': 'test', 'was_created': True},        # core write
+            {'linked_qname': 'us-gaap:Revenues'},        # concept
+        ])
+        result = write_guidance_item(mgr, item, 'src1', 'transcript',
+                                     'AAPL', dry_run=False)
+        assert result['concept_links'] == 1
+        assert len(mgr.calls) == 2  # core + concept
+        # Second call should be concept query
+        concept_query = mgr.calls[1][0]
+        assert 'MAPS_TO_CONCEPT' in concept_query
+    finally:
+        guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
+
+def test_write_without_concept():
+    """No concept query when xbrl_qname is None."""
+    old_val = guidance_writer.ENABLE_GUIDANCE_WRITES
+    try:
+        guidance_writer.ENABLE_GUIDANCE_WRITES = True
+        item = _make_item(xbrl_qname=None, member_u_ids=[])
+        mgr = MockManager(return_value={'id': 'test', 'was_created': True})
+        result = write_guidance_item(mgr, item, 'src1', 'transcript',
+                                     'AAPL', dry_run=False)
+        assert result['concept_links'] == 0
+        assert len(mgr.calls) == 1  # core only, no concept
+
+    finally:
+        guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
+
+def test_concept_no_match_returns_zero():
+    """Concept query returns None (no matching Concept node) → 0 links."""
+    old_val = guidance_writer.ENABLE_GUIDANCE_WRITES
+    try:
+        guidance_writer.ENABLE_GUIDANCE_WRITES = True
+        item = _make_item(xbrl_qname='us-gaap:NonExistent', member_u_ids=[])
+        mgr = MockManager(side_effects=[
+            {'id': 'test', 'was_created': True},  # core write
+            None,                                    # concept MATCH fails
+        ])
+        result = write_guidance_item(mgr, item, 'src1', 'transcript',
+                                     'AAPL', dry_run=False)
+        assert result['concept_links'] == 0
+        assert result['error'] is None
+    finally:
+        guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
+
+def test_concept_link_error_non_fatal():
+    """Concept link failure doesn't fail the overall write."""
+    old_val = guidance_writer.ENABLE_GUIDANCE_WRITES
+    try:
+        guidance_writer.ENABLE_GUIDANCE_WRITES = True
+        item = _make_item(xbrl_qname='us-gaap:Revenues', member_u_ids=[])
+        mgr = MockManager(side_effects=[
+            {'id': 'test', 'was_created': True},    # core succeeds
+            RuntimeError("concept not found"),        # concept fails
+        ])
+        result = write_guidance_item(mgr, item, 'src1', 'transcript',
+                                     'AAPL', dry_run=False)
+        assert result['error'] is None  # core succeeded
+        assert result['was_created'] is True
+        assert result['concept_links'] == 0
+    finally:
+        guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
+
+def test_concept_runs_on_existing_rerun():
+    """Concept link attempted even on re-run (self-healing)."""
+    old_val = guidance_writer.ENABLE_GUIDANCE_WRITES
+    try:
+        guidance_writer.ENABLE_GUIDANCE_WRITES = True
+        item = _make_item(xbrl_qname='us-gaap:Revenues', member_u_ids=[])
+        mgr = MockManager(side_effects=[
+            {'id': 'test', 'was_created': False},      # existing node
+            {'linked_qname': 'us-gaap:Revenues'},      # concept still attempted
+        ])
+        result = write_guidance_item(mgr, item, 'src1', 'transcript',
+                                     'AAPL', dry_run=False)
+        assert result['concept_links'] == 1
+        assert len(mgr.calls) == 2  # core + concept (self-healing)
     finally:
         guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
 
@@ -498,8 +606,10 @@ def test_batch_summary_counts():
             _make_item(guidance_update_id='gu:c', quote=''),  # will fail validation
         ]
         mgr = MockManager(side_effects=[
-            {'id': 'gu:a', 'was_created': True},
-            {'id': 'gu:b', 'was_created': False},
+            {'id': 'gu:a', 'was_created': True},        # core write a
+            {'linked_qname': 'us-gaap:Revenues'},        # concept a
+            {'id': 'gu:b', 'was_created': False},        # core write b
+            {'linked_qname': 'us-gaap:Revenues'},        # concept b
         ])
         summary = write_guidance_batch(mgr, items, 'src1', 'transcript',
                                        'AAPL', dry_run=False)
@@ -548,31 +658,31 @@ def test_create_constraints():
 # ── Integration-style query content tests ─────────────────────────────────
 
 def test_query_contains_all_gu_properties():
-    """GuidanceUpdate ON CREATE SET includes all 19 extraction fields + system fields."""
+    """GuidanceUpdate SET includes all 19 extraction fields + system fields."""
     q = _build_core_query('transcript')
     expected_props = [
         'gu.evhash16', 'gu.given_date', 'gu.period_type', 'gu.fiscal_year',
         'gu.fiscal_quarter', 'gu.segment', 'gu.low', 'gu.mid', 'gu.high',
-        'gu.unit', 'gu.basis_norm', 'gu.basis_raw', 'gu.derivation',
+        'gu.canonical_unit', 'gu.basis_norm', 'gu.basis_raw', 'gu.derivation',
         'gu.qualitative', 'gu.quote', 'gu.section', 'gu.source_key',
         'gu.source_type', 'gu.conditions', 'gu.xbrl_qname', 'gu.created',
     ]
     for prop in expected_props:
         assert prop in q, f"Missing property in query: {prop}"
 
-def test_query_no_on_match_set_for_gu():
-    """GuidanceUpdate section has ON CREATE SET but not ON MATCH SET."""
+def test_query_gu_uses_set_not_on_match_set():
+    """GuidanceUpdate section uses plain SET (not ON MATCH SET) for content properties."""
     q = _build_core_query('8k')
-    # Split at GuidanceUpdate MERGE to isolate its section
     parts = q.split('MERGE (gu:GuidanceUpdate')
     assert len(parts) == 2
     gu_section = parts[1]
-    # ON MATCH SET should NOT appear before the next MERGE
     before_first_edge = gu_section.split('MERGE (gu)-')[0]
-    assert 'ON MATCH SET' not in before_first_edge
+    # Should have ON CREATE SET for created only, then SET for everything else
+    assert 'ON CREATE SET gu.created' in before_first_edge
+    assert '\n  SET gu.evhash16' in before_first_edge
 
 def test_params_complete_roundtrip():
-    """All params referenced in query exist in params dict."""
+    """All params referenced in query exist in params dict (incl. unit XBRL fields)."""
     item = _make_item()
     params = _build_params(item, 'src1', 'transcript', 'AAPL')
     q = _build_core_query('transcript')
@@ -581,6 +691,36 @@ def test_params_complete_roundtrip():
     param_refs = set(re.findall(r'\$(\w+)', q))
     for ref in param_refs:
         assert ref in params, f"Query references ${ref} but not in params dict"
+    # v3.0: no unit XBRL fields (Unit node removed)
+    assert 'unit_item_type' not in params
+    assert 'unit_is_divide' not in params
+
+
+# ── v3.0: canonical_unit as property (no Unit node) ─────────────────
+
+def test_params_canonical_unit_passthrough():
+    """canonical_unit from item passed directly to params."""
+    params = _build_params(_make_item(canonical_unit='m_usd'), 'src1',
+                           'transcript', 'AAPL')
+    assert params['canonical_unit'] == 'm_usd'
+
+def test_params_no_unit_node_fields():
+    """v3.0: No unit_u_id, unit_item_type, unit_is_divide in params."""
+    params = _build_params(_make_item(), 'src1', 'transcript', 'AAPL')
+    assert 'unit_u_id' not in params
+    assert 'unit_item_type' not in params
+    assert 'unit_is_divide' not in params
+
+def test_params_no_ctx_fields():
+    """v3.0: No ctx_u_id in params (Context removed)."""
+    params = _build_params(_make_item(), 'src1', 'transcript', 'AAPL')
+    assert 'ctx_u_id' not in params
+
+def test_params_no_date_fields():
+    """v3.0: No start_date/end_date in params (fiscal-keyed Period)."""
+    params = _build_params(_make_item(), 'src1', 'transcript', 'AAPL')
+    assert 'start_date' not in params
+    assert 'end_date' not in params
 
 
 # ── Run all tests ─────────────────────────────────────────────────────────

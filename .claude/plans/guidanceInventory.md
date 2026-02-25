@@ -1,6 +1,6 @@
 # Guidance System — Implementation Spec
 
-**Version**: 2.4 | 2026-02-21
+**Version**: 3.1 | 2026-02-24
 **Status**: Architecture locked — implementation-ready
 **Parent**: `earnings-orchestrator.md`
 **Benchmark**: `sampleGuidance_byAgentTeams.md` (AAPL)
@@ -18,13 +18,16 @@ These decisions are intentionally pinned at the top so they are resolved before 
 | P0 | Trigger model for extraction | Auto-trigger per asset at asset-ready ingest; manual SDK modes retained for backfill/reprocess (`single`, `initial`). Extraction writes, prediction reads. See §10. | RESOLVED |
 | P0 | GAAP vs non-GAAP handling | `basis_raw` (verbatim) + `basis_norm` (`gaap`, `non_gaap`, `constant_currency`, `unknown`). No linked-list dependency; query-time partitioning for deterministic comparisons. Default `unknown`. See §2, §8, §9. | RESOLVED |
 | P1 | Taxonomy alignment | Merged canonical list (12 metrics). Company-specific metrics created dynamically by LLM. See §4. | RESOLVED |
+| P1 | Instant period support | Supported via `period_type` in Period u_id. Agent classifies as `duration` or `instant`. See §6 Period Resolution. | RESOLVED |
+| P2 | Fallback Period mismatch | Eliminated. Guidance Periods use fiscal-keyed separate namespace (`guidance_period_` prefix) with no calendar date computation. No collision with XBRL Period nodes. See §6. | RESOLVED |
 
 ### Build-First TODOs
 
-- [x] `fiscal_to_dates()` — fiscal→calendar resolver. Implemented in `earnings-orchestrator/scripts/get_quarterly_filings.py`. Lookup-first from existing non-guidance XBRL Period nodes (classified via `period_to_fiscal()`), deterministic `_compute_fiscal_dates()` fallback for future periods not yet in XBRL.
-- [x] Build ID normalization utility — slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly. Implemented in `earnings-orchestrator/scripts/guidance_ids.py`. 35 tests passing.
+- [x] `fiscal_to_dates()` — fiscal→calendar resolver. Implemented in `earnings-orchestrator/scripts/get_quarterly_filings.py`. Not used by guidance extraction (fiscal-keyed Periods eliminate date computation), but kept for future actuals comparison.
+- [x] Build ID normalization utility — slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly. Implemented in `earnings-orchestrator/scripts/guidance_ids.py`. 60 tests passing.
 - [x] `period_to_fiscal()` is already implemented and validated in `earnings-orchestrator/scripts/get_quarterly_filings.py`; reuse it as a validation/helper function only (no reimplementation).
-- [x] Guidance writer module — direct Cypher write path (`guidance_writer.py` + 51 tests). Uses `execute_cypher_query()` with label-specific source MATCH, ticker-based company resolution, `OPTIONAL MATCH` for was_created detection, `reduce`-based alias dedupe, `UNWIND` member batching. Feature flag `ENABLE_GUIDANCE_WRITES = False` in `config/feature_flags.py`. Dry-run works independently of feature flag.
+- [x] Guidance writer module — direct Cypher write path (`guidance_writer.py` + 62 tests). Uses `execute_cypher_query()` with label-specific source MATCH, ticker-based company resolution, direct `FOR_COMPANY` edge, `OPTIONAL MATCH` for was_created detection, `reduce`-based alias dedupe, `UNWIND` member batching. Feature flag `ENABLE_GUIDANCE_WRITES = False` in `config/feature_flags.py`. Dry-run works independently of feature flag.
+- [x] Add `build_period_u_id()` to `guidance_ids.py` — fiscal-keyed Period u_id construction. Drop `ctx_u_id` and `unit_u_id` from `build_guidance_ids()` return dict.
 
 ### Implementation Handoff (Next Bot)
 
@@ -33,29 +36,29 @@ Use this block as the execution contract so implementation can proceed without e
 **Mandatory read order (before coding):**
 1. This file: §1, §2, §2A, §3, §6, §7, §10, §12, §13, §14 (completion status).
 2. Completed reference docs (DO NOT rewrite — these are done):
-   - `.claude/skills/guidance-inventory/SKILL.md` (v2.2)
-   - `.claude/skills/guidance-inventory/QUERIES.md` (v2.6)
+   - `.claude/skills/guidance-inventory/SKILL.md` (v3.0)
+   - `.claude/skills/guidance-inventory/QUERIES.md` (v2.10)
    - `.claude/skills/guidance-inventory/reference/PROFILE_*.md` (4 files)
 3. `.claude/skills/earnings-orchestrator/scripts/guidance_ids.py` + `test_guidance_ids.py`.
-4. `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` (`period_to_fiscal`, `get_derived_fye`, `fiscal_to_dates`).
+4. `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` (`period_to_fiscal`, `get_derived_fye` — `fiscal_to_dates` not used by guidance extraction).
 5. `neograph/mixins/news.py` and `neograph/Neo4jManager.py` (`execute_cypher_query`) for write pattern reuse.
 6. `.claude/agents/guidance-extract.md` (current version — this is the file to rewrite, per §15A).
 
-**Verify environment:** `python3 -m pytest .claude/skills/earnings-orchestrator/scripts/test_guidance_ids.py test_fiscal_resolve.py test_guidance_writer.py` — all 125 tests must pass before any changes.
+**Verify environment:** `python3 -m pytest .claude/skills/earnings-orchestrator/scripts/test_guidance_ids.py test_fiscal_resolve.py test_guidance_writer.py test_guidance_write_cli.py` — all tests must pass before any changes (60 IDs + 29 fiscal + 62 writer + 14 CLI = 165).
 
 **Non-negotiables:**
 1. Do not modify `period_to_fiscal()` or `get_derived_fye()`.
 2. Guidance writes must use direct Cypher `MERGE` via existing `Neo4jManager` session/driver plumbing (news.py pattern).
 3. Do not use `merge_relationships()` or `create_relationships()` for guidance core writes.
 4. Do not add guidance-specific `NodeType`/`RelationType` enum entries.
-5. `GuidanceUpdate` write must be idempotent with deterministic ID + `MERGE ... ON CREATE SET`.
-6. `xbrl_qname` is a `GuidanceUpdate` property (no `MAPS_TO_CONCEPT` edge).
+5. `GuidanceUpdate` write must use deterministic slot-based ID + `MERGE ... ON CREATE SET gu.created` + `SET` (all other props). Latest write wins — enables enrichment on rerun without duplicates.
+6. `xbrl_qname` property + `MAPS_TO_CONCEPT` edge on `GuidanceUpdate` (both kept; property is stable cross-taxonomy fallback, edge is graph-native join).
 7. Feature flag default must keep writes disabled until validation completes.
 8. No citation = no node. Every GuidanceUpdate must have `quote`, `FROM_SOURCE`, and `given_date` (§2). Reject at validation, not silently skip.
 
 **Implementation scope (minimal):**
 1. Reuse `guidance_ids.py` as single source of truth for canonicalization + ID assembly.
-2. Add guidance writer path using direct Cypher (Guidance, GuidanceUpdate, Context, Period, Unit, core edges, optional 0..N member edges).
+2. Add guidance writer path using direct Cypher (Guidance, GuidanceUpdate, Period, core edges including direct FOR_COMPANY, optional 0..N member edges).
 3. Add dry-run/shadow mode (extract + validate + ID build, no write).
 4. Warmup caches (§7): concept usage cache + member cache queries, run once per company per extraction run. Needed for `xbrl_qname` resolution and `MAPS_TO_MEMBER` linking.
 
@@ -78,21 +81,20 @@ Use this block as the execution contract so implementation can proceed without e
 
 ### Architecture Overview
 
-**New nodes**: `Guidance` (generic metric tag), `GuidanceUpdate` (per-mention data point)
-**Reused nodes**: `Context`, `Period`, `Unit`, `Company`, `Concept`, `Member`
+**Created by guidance**: `Guidance` (generic metric tag), `GuidanceUpdate` (per-mention data point), `Period` (fiscal-keyed, `guidance_period_` namespace)
+**Reused from XBRL (MATCH only, never CREATE)**: `Company`, `Concept`, `Member`, `Report` / `Transcript` / `News`
+**Removed**: `Context` (replaced by direct `FOR_COMPANY` edge), `Unit` (demoted to `canonical_unit` property on GuidanceUpdate)
 
-**Relationship map** (all from GuidanceUpdate unless noted):
+**Relationship map** (6 edges, all from GuidanceUpdate):
 
 | From | Rel | To | When |
 |------|-----|----|------|
 | GuidanceUpdate | UPDATES | Guidance | Always |
-| GuidanceUpdate | IN_CONTEXT | Context | Always (company+period) |
 | GuidanceUpdate | FROM_SOURCE | Report / Transcript / News | Always (provenance) |
-| GuidanceUpdate | HAS_PERIOD | Period | Always (same Period linked via Context) |
-| GuidanceUpdate | HAS_UNIT | Unit | Always (canonical unit node) |
-| GuidanceUpdate | MAPS_TO_MEMBER | Member | If one or more confident segment matches |
-| Context | FOR_COMPANY | Company | Always (via cik) |
-| Context | HAS_PERIOD | Period | Always |
+| GuidanceUpdate | FOR_COMPANY | Company | Always (direct, replaces Context path) |
+| GuidanceUpdate | HAS_PERIOD | Period | Always (fiscal-keyed) |
+| GuidanceUpdate | MAPS_TO_CONCEPT | Concept | If confident concept match (0..1) |
+| GuidanceUpdate | MAPS_TO_MEMBER | Member | If one or more confident segment matches (0..N) |
 
 ### Required Constraints
 
@@ -103,11 +105,8 @@ FOR (g:Guidance) REQUIRE g.id IS UNIQUE;
 CREATE CONSTRAINT guidance_update_id_unique IF NOT EXISTS
 FOR (gu:GuidanceUpdate) REQUIRE gu.id IS UNIQUE;
 
-CREATE CONSTRAINT context_uid_unique IF NOT EXISTS
-FOR (ctx:Context) REQUIRE ctx.u_id IS UNIQUE;
-
-CREATE CONSTRAINT period_uid_unique IF NOT EXISTS
-FOR (p:Period) REQUIRE p.u_id IS UNIQUE;
+-- Period constraint already exists from XBRL pipeline;
+-- guidance_period_ namespace nodes are covered by it.
 ```
 
 ### XBRL Parallel
@@ -116,24 +115,32 @@ FOR (p:Period) REQUIRE p.u_id IS UNIQUE;
 |------|----------|------|
 | Concept | Guidance | Generic metric definition, not per-company |
 | Fact | GuidanceUpdate | Per-mention data point with all values |
-| Context | Context (reused!) | Company + period scoping |
-| Fact→IN_CONTEXT→Context | GuidanceUpdate→IN_CONTEXT→Context | Same pattern |
-| Fact→HAS_CONCEPT→Concept | GuidanceUpdate→UPDATES→Guidance + `xbrl_qname` property | Concept via qname join, not edge |
-| Fact→HAS_PERIOD→Period | GuidanceUpdate→HAS_PERIOD→Period | Same direct period shortcut |
-| Fact→HAS_UNIT→Unit | GuidanceUpdate→HAS_UNIT→Unit | Same pattern |
+| Fact→HAS_CONCEPT→Concept | GuidanceUpdate→MAPS_TO_CONCEPT→Concept + `xbrl_qname` property | Both edge (graph join) and property (cross-taxonomy fallback) |
+| Fact→HAS_PERIOD→Period | GuidanceUpdate→HAS_PERIOD→Period | Both link to Period (different namespaces) |
+| Fact→IN_CONTEXT→Context→FOR_COMPANY→Company | GuidanceUpdate→FOR_COMPANY→Company | Guidance links directly (no Context intermediary) |
+| Fact→HAS_UNIT→Unit | GuidanceUpdate.canonical_unit property | Guidance demotes unit to property (9-value enum, not a graph relationship) |
 
-### XBRL Reuse Policy (Locked)
+### XBRL Bridge Policy (Locked)
 
-Use this policy to avoid drift during implementation:
+Only Concept and Member are true XBRL bridge nodes. Everything else is guidance-internal:
 
 | Node/Edge | Policy |
 |---|---|
-| `Context` | Reuse existing XBRL Context when deterministic key matches; otherwise create synthetic XBRL-compatible Context. |
-| `Period` | Reuse existing XBRL Period when exact `u_id` match exists; otherwise create synthetic XBRL-compatible Period. |
-| `Unit` | Use canonical guidance Unit nodes (for example `guidance_unit_m_usd`, `guidance_unit_usd`, `guidance_unit_percent`); do not directly reuse raw XBRL units when scale semantics differ. |
-| `Concept` | No edge. Concept resolution uses `xbrl_qname` property on GuidanceUpdate + query-time qname join. |
+| `Concept` | `MAPS_TO_CONCEPT` edge (graph-native join) + `xbrl_qname` property (cross-taxonomy fallback). Edge points to best-match Concept from current taxonomy window. |
 | `Member` | Link `GuidanceUpdate -> Member` with 0..N confident matches. |
+| `Period` | **Separate namespace** — `guidance_period_` prefix, fiscal-keyed. No date computation, no collision with XBRL Period nodes. See §6. |
+| `Company` | **Reused** — same node, direct `FOR_COMPANY` edge from GuidanceUpdate. |
+| `Context` | **Removed** — replaced by direct `FOR_COMPANY` edge. Context was a 1:1 passthrough (one per GuidanceUpdate, `member_u_ids=[]`, `dimension_u_ids=[]`). XBRL Context groups hundreds of facts sharing the same company+period+dimensions tuple; guidance has no such sharing. |
+| `Unit` | **Removed** — demoted to `canonical_unit` property on GuidanceUpdate. 9 canonical values is an enum, not a graph relationship. `guidance_unit_m_usd` would never join with XBRL's `iso4217:USD` (different scales, different namespaces). |
 | `Dimension` / `Domain` | No direct linkage from guidance nodes in this design. |
+
+**The join between guidance and actuals** requires matching on Concept (what metric) + Company (direct edge) + fiscal identity (`fiscal_year` + `fiscal_quarter` properties) + optionally Member (what segment). Concept is the primary XBRL bridge; fiscal identity matching replaces date-based Period joins.
+
+**Why remove Context**: XBRL Context groups hundreds of facts sharing the same company+period+dimensions tuple. Guidance Context was always 1:1 with GuidanceUpdate (`member_u_ids=[]`, `dimension_u_ids=[]`), adding a hop without grouping benefit. The company link is now direct; the period link was already direct (`HAS_PERIOD`); segment is handled by `MAPS_TO_MEMBER` edges.
+
+**Why remove Unit node**: 9 canonical unit values is an enum, not a graph relationship. `WHERE gu.canonical_unit = 'm_usd'` is equivalent to and faster than edge traversal. The XBRL-compatible shape we added (`is_divide`, `item_type`, `namespace`) was decoration no query would traverse. Scale conversion for actuals comparison (guidance `m_usd` vs XBRL raw USD) is Python-side arithmetic (`xbrl_value / 1_000_000`), not a graph join.
+
+**Why keep m_usd (not raw USD)**: LLM extraction produces human-scale numbers ("$94B revenue" → 94000 in millions). Converting to raw (94000000000) adds a conversion step that can go wrong. Per-share stays in `usd` (EPS $1.50 → 1.50). Comparison with XBRL is Python-side: multiply by 1M.
 
 ### Node: Guidance
 
@@ -146,7 +153,7 @@ Conceptually parallel to XBRL `Concept`: generic, company-agnostic. "Revenue" is
 | `aliases` | String[] | Alternate names: e.g., ["sales", "net revenue", "total revenue"] |
 | `created_date` | String | ISO date when first detected |
 
-Concept resolution uses `xbrl_qname` property on GuidanceUpdate (see §7), not an edge on Guidance. The Guidance node carries only the metric label and aliases.
+Concept resolution uses both `MAPS_TO_CONCEPT` edge (graph-native join to XBRL Concept) and `xbrl_qname` property (cross-taxonomy fallback) on GuidanceUpdate. The Guidance node carries only the metric label and aliases.
 
 ### Node: GuidanceUpdate
 
@@ -154,17 +161,17 @@ Conceptually parallel to XBRL `Fact`: per-mention data point. See §2 for full f
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `id` | String | Deterministic readable key: `gu:{source_id}:{label_slug}:{period_u_id}:{basis_norm}:{segment_slug}:{evhash16}` (see §2A) |
-| `evhash16` | String | First 16 hex chars of evidence hash from value-bearing fields |
+| `id` | String | Deterministic slot-based key: `gu:{source_id}:{label_slug}:{period_u_id}:{basis_norm}:{segment_slug}` (see §2A). evhash NOT in ID — slot alone is the identity. |
+| `evhash16` | String | First 16 hex chars of evidence hash from value-bearing fields. Stored property for change detection, not part of identity key. |
 | `xbrl_qname` | String / null | Resolved XBRL concept qname (e.g., `us-gaap:Revenues`). Set at extraction time from concept cache. Null when no confident match. See §7. |
 
 | Relationship | Direction | Target | Condition |
 |-------------|-----------|--------|-----------|
 | `UPDATES` | OUT | Guidance | Always (parent tag) |
 | `FROM_SOURCE` | OUT | Report / Transcript / News | Always (provenance) |
-| `IN_CONTEXT` | OUT | Context | Always (company + period) |
-| `HAS_PERIOD` | OUT | Period | Always (resolved period) |
-| `HAS_UNIT` | OUT | Unit | Always (canonical unit) |
+| `FOR_COMPANY` | OUT | Company | Always (direct company link) |
+| `HAS_PERIOD` | OUT | Period | Always (fiscal-keyed period) |
+| `MAPS_TO_CONCEPT` | OUT | Concept | If confident concept match (0..1) |
 | `MAPS_TO_MEMBER` | OUT | Member | If confident segment match (0..N) |
 
 ---
@@ -183,7 +190,7 @@ Every GuidanceUpdate node carries these extraction payload properties (19 fields
 | 6 | `low` | Float / null | | `94.0` |
 | 7 | `mid` | Float / null | Computed if low+high given | `95.5` |
 | 8 | `high` | Float / null | | `97.0` |
-| 9 | `unit` | String | Canonical: `usd`, `m_usd`, `percent`, `percent_yoy`, `x`, `count`, `unknown` | `"m_usd"` |
+| 9 | `canonical_unit` | String | Canonical: `usd`, `m_usd`, `percent`, `percent_yoy`, `percent_points`, `basis_points`, `x`, `count`, `unknown` | `"m_usd"` |
 | 10 | `basis_norm` | String | `gaap`, `non_gaap`, `constant_currency`, `unknown` | `"non_gaap"` |
 | 11 | `basis_raw` | String / null | Verbatim basis text from source | `"non-GAAP"`, `"adjusted"`, `"as reported"` |
 | 12 | `derivation` | String | `explicit`, `calculated`, `point`, `implied`, `floor`, `ceiling`, `comparative` | `"explicit"` |
@@ -212,8 +219,9 @@ Guidance ID:
 - `guidance_id = "guidance:" + slug(label)`
 - `slug()` = lowercase, trim, replace non-alphanumeric with `_`, collapse repeated `_`, trim edge `_`.
 
-GuidanceUpdate ID (readable + deterministic):
-- `guidance_update_id = "gu:" + source_id + ":" + label_slug + ":" + period_u_id + ":" + basis_norm + ":" + segment_slug + ":" + evhash16`
+GuidanceUpdate ID (slot-based, deterministic):
+- `guidance_update_id = "gu:" + source_id + ":" + label_slug + ":" + period_u_id + ":" + basis_norm + ":" + segment_slug`
+- The ID is the **slot** — it identifies WHAT guidance (label+segment), WHERE it came from (source), WHEN it targets (period), and on WHAT basis. evhash is NOT in the ID.
 - `source_key` remains a stored property for provenance and is not part of the identity key.
 
 Canonicalization before ID build:
@@ -221,7 +229,9 @@ Canonicalization before ID build:
 - `label_slug = label.lower().replace(" ", "_")`
 - `segment_slug = segment.lower().replace(" ", "_")` (default `total`)
 - `basis_norm` uses enum as-is: `gaap|non_gaap|constant_currency|unknown`
-- `period_u_id` comes from resolved Context (`duration_*`, `other_medium_term`, `undefined`, etc.) and is used directly in the ID.
+- `period_u_id` comes from `guidance_ids.py:build_period_u_id()` (fiscal-keyed, e.g., `guidance_period_320193_duration_FY2025_Q1`) and is used directly in the ID.
+
+Evidence hash (stored property, not in ID):
 - `evhash16 = sha256("{low}|{mid}|{high}|{unit}|{qualitative}|{conditions}")[:16]` where:
   - numeric parts (`low/mid/high`) are canonical decimal strings after unit normalization
   - aggregate currency metrics normalize to `m_usd` before hashing (`$1.13B` and `1130 M USD` both normalize to `1130|...|m_usd`)
@@ -230,17 +240,19 @@ Canonicalization before ID build:
   - `unit` is lowercase canonical enum value
   - text parts (`qualitative/conditions`) are lowercase + trimmed + whitespace-collapsed
 - Nulls in hash input are encoded as `.` (dot).
+- **Why not in ID**: LLM paraphrasing varies between runs (qualitative text non-determinism) AND content migrates between `qualitative` and `conditions` fields. Both are evhash inputs, so evhash is unstable across runs. Keeping it in the ID caused duplicate nodes for the same guidance item. The slot components already uniquely identify every guidance item.
 
 Implementation rule:
-- Do not duplicate ID logic across source extractors. Use one shared utility function (e.g., `build_guidance_ids_and_hashes(...)`) that performs normalization + `evhash16` + final `guidance_update_id`.
+- Do not duplicate ID logic across source extractors. Use one shared utility function (`guidance_ids.py:build_guidance_ids()`) that performs normalization + `evhash16` + final `guidance_update_id`.
 
 Implementation note:
-- Context linkage still uses `IN_CONTEXT -> Context/Period` as canonical period grounding.
+- Period linkage uses `HAS_PERIOD -> Period` (fiscal-keyed). Company linkage uses direct `FOR_COMPANY -> Company`.
 
 Expected behavior:
-- Same source + same slot + same values => same `id` (idempotent no-op).
-- Same source + same metric but different period/basis/segment => different `id`.
-- Same source + same slot but changed values/conditions/qualitative => different `id`.
+- Same source + same slot => same `id`. Properties updated via SET (latest write wins). Enables enrichment without duplicates.
+- Same source + same metric but different period/basis/segment => different `id` (different slot).
+- Same source + same slot but changed values/conditions/qualitative => **same `id`**, properties overwritten. evhash changes as a stored property for change detection.
+- Different source + same metric/period/basis/segment => different `id` (different source in slot). Each source gets its own node.
 - Undefined/vague periods still work because `period_u_id` is still deterministic (`undefined`, `other_medium_term`, etc.).
 
 ---
@@ -303,7 +315,7 @@ Extraction MUST branch by `source_type` before LLM processing. Each doc asset ty
 | **News** | Title + body (after channel filter) | Company guidance only | Analyst estimates ("Est $X", "consensus") | `n.created` | `"title"` | Deterministic `GuidanceUpdate.id` (§2A) |
 | **10-Q/10-K** | MD&A primary; if zero guidance found, one bounded keyword-window pass in broader filing text | Specific numbers/ranges/directional | Boilerplate/legal/risk-heavy text | `r.created` | `"MD&A"` | Deterministic `GuidanceUpdate.id` (§2A) |
 
-**Dedup rule**: Dedup is enforced by deterministic `GuidanceUpdate.id` (§2A). Same slot + same value payload merges; changed values/qualifiers/conditions create a new node.
+**Dedup rule**: Dedup is enforced by deterministic slot-based `GuidanceUpdate.id` (§2A). Same slot = same node. MERGE + SET overwrites properties with latest data (enrichment). Changed values/qualifiers/conditions update the existing node, not create a new one. One write per slot per source — read ALL content first, synthesize richest version, write once.
 **Safe-harbor proximity rule**: Filter disclaimer-only blocks, but do not blindly drop adjacent lines if they contain concrete guidance numbers/periods.
 
 ### Forward Guidance Full-Text Recall (All Assets)
@@ -379,134 +391,90 @@ Encoding rules:
 
 ---
 
-## 6. Context Resolution
+## 6. Period Resolution
 
 ### Goal
 
 Every GuidanceUpdate links to:
-- `IN_CONTEXT -> Context` (company + period scope)
-- `HAS_PERIOD -> Period` (direct period edge for fast retrieval)
-- `HAS_UNIT -> Unit` (direct canonical unit edge)
+- `FOR_COMPANY -> Company` (direct company edge)
+- `HAS_PERIOD -> Period` (fiscal-keyed period in `guidance_period_` namespace)
 
-Context/Period structure is kept XBRL-compatible so future XBRL ingestion can reuse synthetic contexts.
+No Context node. No Unit node. No calendar date computation. No `fiscal_resolve.py` dependency at extraction time.
 
-### Option A (CHOSEN): Reuse XBRL Context label
+### Fiscal-Keyed Period Design
 
-Create Context nodes **identical to XBRL Context** so future XBRL ingestion can reuse them.
+Period nodes use a separate `guidance_period_` namespace with fiscal identity as the key. This eliminates the 52/53-week calendar problem (23% of companies) and the forward-period mismatch problem entirely.
 
-| Context Property | Type | Source | Example |
-|-----------------|------|--------|---------|
-| `id` | String | Synthetic for guidance | `"guidance_320193_duration_2025-09-28_2025-12-27"` |
-| `u_id` | String | Canonical unique key | Same as `id` (XBRL-compatible) |
-| `cik` | String | Company node | `"320193"` |
-| `context_id` | String | Synthetic for guidance | `"guidance_320193_duration_2025-09-28_2025-12-27"` |
-| `period_u_id` | String | Derived from fiscal dates | `"duration_2025-09-28_2025-12-27"` |
-| `member_u_ids` | String[] | Empty for total, populated for segments | `[]` |
-| `dimension_u_ids` | String[] | Empty for total, populated for segments | `[]` |
+**u_id format**: `guidance_period_{cik}_{period_type}_{fiscal_key}`
 
-For synthetic guidance contexts: set `id = u_id = context_id`.
+| Scenario | Example text | u_id | Inputs |
+|----------|-------------|------|--------|
+| **Quarter (duration)** | "Q3 FY2025" | `guidance_period_320193_duration_FY2025_Q3` | cik + FY + Q |
+| **Quarter (instant)** | "cash at end of Q1" | `guidance_period_320193_instant_FY2025_Q1` | cik + FY + Q + instant |
+| **Annual (duration)** | "fiscal year 2025" | `guidance_period_320193_duration_FY2025` | cik + FY |
+| **Annual (instant)** | "debt at year-end" | `guidance_period_320193_instant_FY2025` | cik + FY + instant |
+| **Half year** | "second half" | `guidance_period_320193_duration_FY2025_H2` | cik + FY + half |
+| **Long-range (year)** | "by 2028" | `guidance_period_320193_duration_LR_2028` | cik + target year |
+| **Long-range (span)** | "2026 to 2028" | `guidance_period_320193_duration_LR_2026_2028` | cik + start/end year |
+| **Medium-term** | "over the medium term" | `guidance_period_320193_duration_MT` | cik |
+| **Undefined** | (implicit/unclear) | `guidance_period_320193_duration_UNDEF` | cik |
 
-Must also create or match:
-- `(:Context)-[:FOR_COMPANY]->(:Company)` — using cik
-- `(:Context)-[:HAS_PERIOD]->(:Period)` — using period dates
+### Period Node Properties
 
-### Period Node (reuse or create)
-
-| Period Property | Type | Example |
-|----------------|------|---------|
-| `id` | String | `"duration_2025-09-28_2025-12-27"` |
-| `u_id` | String | `"duration_2025-09-28_2025-12-27"` |
+| Property | Type | Example |
+|----------|------|---------|
+| `u_id` / `id` | String | `guidance_period_320193_duration_FY2025_Q1` |
 | `period_type` | String | `"duration"` or `"instant"` |
-| `start_date` | String | `"2025-09-28"` |
-| `end_date` | String | `"2025-12-27"` |
+| `fiscal_year` | Integer / null | `2025` |
+| `fiscal_quarter` | Integer / null | `1` |
+| `cik` | String | `"320193"` (unpadded) |
 
-For synthetic guidance periods: set `id = u_id`.
-
-### Unit Node (reuse or create)
-
-| Unit Property | Type | Example |
-|---------------|------|---------|
-| `id` | String | `"guidance_unit_m_usd"` |
-| `u_id` | String | `"guidance_unit_m_usd"` |
-| `canonical_unit` | String | `"m_usd"` |
-
-Unit resolution rule:
-- Canonicalize `unit` first (§2A).
-- Reuse only canonical guidance Unit nodes (for example `guidance_unit_m_usd`, `guidance_unit_percent`).
-- Do not map normalized guidance units to raw XBRL units that imply different scale (for example raw `USD` vs normalized `m_usd`).
-- Otherwise `MERGE` synthetic guidance unit: `u_id = "guidance_unit_" + canonical_unit`.
+No `start_date`. No `end_date`. No date computation. Pure fiscal identity.
 
 ### Resolution Steps
 
 ```
-1. Determine FYE:
-   get_derived_fye(ticker) from get_quarterly_filings.py:365
-   Resolve company first and read CIK from graph:
+1. Get CIK from Company node (QUERIES.md 1A):
      MATCH (company:Company {ticker: $ticker})
      WITH company, company.cik AS cik
    Never accept CIK from external input.
 
-2. Resolve fiscal period → calendar dates:
-   fiscal_to_dates(session, ticker, fiscal_year, fiscal_quarter) → (start_date, end_date).
-   Two-phase resolver:
-    a) Lookup-first: query existing XBRL Period nodes for this company,
-       classify each via period_to_fiscal() (get_quarterly_filings.py:66),
-       return exact dates if match found. Best for 52/53-week calendars.
-    b) Deterministic fallback (for future periods not yet in XBRL):
-       compute from fye_month (via get_derived_fye()) + quarter offset
-       via `_compute_fiscal_dates()`, with round-trip validation through
-       `period_to_fiscal()`. For Q4, if FY exists but quarter candidates
-       are sparse, anchor Q4 to FY end and infer quarter length from
-       same-FY quarter-like periods (or FY/4 fallback).
-   period_to_fiscal() role: validation/classification helper, not on write path.
-   LLM must not perform fiscal date math; this step is code-only.
+2. Get FYE month from 10-K (QUERIES.md 1B):
+   Needed only for calendar-to-fiscal mapping (e.g., "December quarter" = Q1 for Apple).
+   When source says "Q1" or "Q2" explicitly, use as-is.
 
-3. Search for existing Context:
-   First compute deterministic `period_u_id` from resolved scenario:
-     - duration periods: `duration_{start}_{end}`
-     - medium/undefined: e.g., `other_medium_term`, `undefined`
-   Then compute deterministic context key:
-     - `ctx_u_id = "guidance_" + cik + "_" + period_u_id`
-   Then match EXACTLY:
-   MATCH (ctx:Context {u_id: $ctx_u_id})
-   OPTIONAL MATCH (ctx)-[:HAS_PERIOD]->(p:Period {u_id: $period_u_id})
-   RETURN ctx, p
+3. Build period_u_id via guidance_ids.py:build_period_u_id():
+   Simple string concatenation from (cik, period_type, fiscal_year, fiscal_quarter, ...).
+   No fiscal_resolve.py. No date computation. No Phase 1/Phase 2 lookup.
 
-4. If found → reuse (link GuidanceUpdate→IN_CONTEXT→existing Context)
-   If not found → CREATE Context + Period matching XBRL format exactly:
-     MATCH (company:Company {ticker: $ticker})
-     WITH company, company.cik AS cik
+4. MERGE Period node in core write query:
      MERGE (p:Period {u_id: $period_u_id})
        ON CREATE SET p.id = $period_u_id,
-                     p.period_type = $period_node_type,
-                     p.start_date = $start,
-                     p.end_date = $end
-     MERGE (ctx:Context {u_id: $ctx_u_id})
-       ON CREATE SET ctx.id = $ctx_u_id,
-                     ctx.context_id = $ctx_u_id,
-                     ctx.cik = cik,
-                     ctx.period_u_id = $period_u_id,
-                     ctx.member_u_ids = [],
-                     ctx.dimension_u_ids = []
-     MERGE (ctx)-[:HAS_PERIOD]->(p)
-     MERGE (ctx)-[:FOR_COMPANY]->(company)
+                     p.period_type = $period_type,
+                     p.fiscal_year = $fiscal_year,
+                     p.fiscal_quarter = $fiscal_quarter,
+                     p.cik = toString(toInteger(company.cik))
 ```
 
-### Period Scenario Table
+### Why Fiscal-Keyed (Not Date-Based)
 
-Every GuidanceUpdate MUST have `IN_CONTEXT`. Synthetic XBRL-identical Contexts are created for ALL scenarios:
+1. **Forward periods don't exist in XBRL yet** — the primary use case for guidance (forward-looking) means XBRL Period nodes for the target period haven't been filed yet. Date-based keys would require computing calendar dates from fiscal identity — exactly what `_compute_fiscal_dates()` does, and which is wrong by 1-6 days for 52/53-week companies.
+2. **52/53-week calendar problem** — 177/771 companies (23%) use 52/53-week calendars where fiscal quarter boundaries don't fall on month boundaries. Date computation creates orphan Period nodes that never join with XBRL.
+3. **Separate namespace eliminates collision** — `guidance_period_` prefix means guidance Periods never collide with XBRL Period nodes (which use `duration_{start}_{end}` format).
+4. **Actuals comparison uses fiscal identity** — a future comparison process matches guidance to actuals via `fiscal_year` + `fiscal_quarter` + `xbrl_qname` + Company, not through shared Period nodes. Python classifies XBRL Period dates via `period_to_fiscal()` at comparison time.
+5. **CIK in key because fiscal periods are company-specific** — AAPL FY2025 Q1 and DELL FY2025 Q1 have different date ranges (both Sep FYE but different calendar conventions).
 
-| Scenario | Example text | period_u_id | start/end dates | Action |
-|----------|-------------|-------------|-----------------|--------|
-| **Specific quarter** | "Q3 FY2025" | `duration_2025-06-29_2025-09-27` | Exact fiscal dates | Reuse existing XBRL Context if match; else CREATE |
-| **Annual** | "fiscal year 2025" | `duration_2024-09-29_2025-09-27` | Full fiscal year | Reuse existing XBRL Context if match; else CREATE |
-| **Half year** | "second half" | `duration_2025-03-30_2025-09-27` | Best-effort from FYE | CREATE synthetic Context |
-| **Vague future** | "next year" | Best-effort from FYE | Derived from fiscal calendar | CREATE synthetic Context |
-| **Long-range** | "by 2028" | `other_long_range_2028` (or `other_long_range_2026_2028`) | null / null | CREATE synthetic Context |
-| **Medium-term** | "over the medium term" | `other_medium_term` | null / null | CREATE synthetic Context |
-| **No period** | (implicit/unclear) | `undefined` | null / null | CREATE synthetic Context (cik still set) |
+### Calendar-to-Fiscal Mapping
 
-**Rule**: Every synthetic Context MUST be structurally identical to XBRL Contexts (same label, same properties, same relationships). Future XBRL ingestion can find and reuse them when the actual period arrives.
+When source uses calendar names ("December quarter"), use FYE to determine fiscal quarter.
+
+**Rule**: Q1 starts in FYE month + 1. When source says "Q1" or "Q2" explicitly, use as-is.
+
+| FYE Month | Example | Q1 | Q2 | Q3 | Q4 |
+|-----------|---------|----|----|----|----|
+| 9 (Sep) | Apple | Oct-Dec | Jan-Mar | Apr-Jun | Jul-Sep |
+| 12 (Dec) | Most | Jan-Mar | Apr-Jun | Jul-Sep | Oct-Dec |
+| 6 (Jun) | Microsoft | Jul-Sep | Oct-Dec | Jan-Mar | Apr-Jun |
 
 ---
 
@@ -516,15 +484,13 @@ All linking is inline in the same extraction run (no separate process). LLM may 
 
 ### Concept Resolution Design
 
-**No `MAPS_TO_CONCEPT` edge.** Concept resolution uses a `xbrl_qname` string property on GuidanceUpdate.
+**Dual approach**: `MAPS_TO_CONCEPT` edge (graph-native join) + `xbrl_qname` property (cross-taxonomy fallback). Both set at extraction time.
 
-Why `qname` (not `u_id` or edge):
-- `qname` (e.g., `us-gaap:Revenues`) is stable across all taxonomy years. The same logical concept exists as separate Concept nodes per taxonomy year, but qname never changes.
-- A property on GuidanceUpdate is naturally company-specific and handles concept transitions (if a company switches from `Revenues` to `RevenueFromContractWithCustomer`, old GuidanceUpdates keep the old qname, new ones get the new — but see Limitation below).
-- No cross-company accumulation issues (unlike an edge on the shared Guidance node).
-- Null when no confident match — no cleanup needed.
+- **Edge** (`MAPS_TO_CONCEPT`): Points to the best-match Concept node from the company's current taxonomy window (the same node resolved from the concept cache). Enables direct graph traversal: `(gu)-[:MAPS_TO_CONCEPT]->(con:Concept)<-[:HAS_CONCEPT]-(f:Fact)`. This is the primary join between guidance and actuals — alongside Period and Company, it completes the match on what metric, what time, and who.
+- **Property** (`xbrl_qname`): Stores `qname` string (e.g., `us-gaap:Revenues`) which is stable across all taxonomy years. Serves as cross-taxonomy-year fallback when the edge would miss due to taxonomy version differences (different Concept nodes for the same logical concept).
+- Null/no-edge when no confident match — no cleanup needed.
 
-**Limitation**: The concept cache is built from the most recent 10-K + subsequent 10-Qs (not date-aware per extraction). Historical backfills for periods before a concept transition (e.g., pre-ASC 606) will get the current qname, not the historical one. This may cause accuracy comparisons to miss for those periods. Acceptable tradeoff vs. date-aware caching complexity.
+**Limitation**: The concept cache is built from the most recent 10-K + subsequent 10-Qs (not date-aware per extraction). Historical backfills for periods before a concept transition (e.g., pre-ASC 606) will get the current qname/edge, not the historical one. The `xbrl_qname` property still enables string-based fallback joins for those periods. Acceptable tradeoff vs. date-aware caching complexity.
 
 ### Warmup Caches (Run Once Per Company Per Extraction Run)
 
@@ -626,15 +592,16 @@ Use this static map to translate Guidance label to candidate XBRL qnames, then r
 | `OINE` | `OtherNonoperatingIncomeExpense` | — | Link when confidence gate passes |
 | `D&A` | `DepreciationAmortization` | — | Link when confidence gate passes |
 
-### Concept Resolution Gate (sets `gu.xbrl_qname`)
+### Concept Resolution Gate (sets `gu.xbrl_qname` + `MAPS_TO_CONCEPT` edge)
 
 For each metric in the pattern map:
 1. Find all qnames in the concept cache that match the include pattern(s) and exclude pattern(s).
 2. If exactly one qname matches → use it.
 3. If multiple match → pick the one with highest usage count from the cache.
-4. If zero match → `xbrl_qname = null`.
+4. If zero match → `xbrl_qname = null`, no edge.
 5. Mapping is **basis-independent**: GAAP, non-GAAP, and unknown guidance all get mapped. Basis filtering happens at comparison query time, not at mapping time.
-6. Set on GuidanceUpdate via `ON CREATE SET` only. No implicit re-extraction updates. If concept cache improves, update via a separate migration query, not through re-extraction.
+6. Set property + edge on GuidanceUpdate via `ON CREATE SET` / `MERGE` only. No implicit re-extraction updates. If concept cache improves, update via a separate migration query, not through re-extraction.
+7. Edge target: `MATCH (con:Concept {qname: $resolved_qname})` from the concept cache. If multiple Concept nodes share the same qname (different taxonomy years), pick the one from the company's current taxonomy window (same filing set as the cache).
 
 Member links (`GuidanceUpdate -> Member`):
 - Allow 0..N member links per GuidanceUpdate.
@@ -691,16 +658,16 @@ Replaces markdown file passthrough. The predictor runs this Cypher at bundle ass
 
 ```cypher
 MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)
-MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
-MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
+MATCH (gu)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+MATCH (gu)-[:HAS_PERIOD]->(p:Period)
 WHERE gu.given_date <= $pit_date
 MATCH (gu)-[:FROM_SOURCE]->(src)
 OPTIONAL MATCH (gu)-[:MAPS_TO_MEMBER]->(m:Member)
 RETURN g.label AS metric, gu.xbrl_qname AS xbrl_concept,
        gu.given_date, gu.period_type, gu.fiscal_year, gu.fiscal_quarter,
-       gu.segment, gu.basis_norm, gu.basis_raw, gu.low, gu.mid, gu.high, gu.unit,
-       gu.derivation, gu.qualitative, gu.quote, gu.section, gu.conditions,
-       p.start_date, p.end_date,
+       gu.segment, gu.basis_norm, gu.basis_raw, gu.low, gu.mid, gu.high,
+       gu.canonical_unit, gu.derivation, gu.qualitative, gu.quote,
+       gu.section, gu.conditions,
        labels(src)[0] AS source_type, src.id AS source_id,
        m.label AS xbrl_member
 ORDER BY g.label, gu.given_date, gu.id
@@ -710,40 +677,39 @@ ORDER BY g.label, gu.given_date, gu.id
 
 ```cypher
 MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)
-MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+MATCH (gu)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
 WHERE gu.given_date <= $pit_date
-WITH g, ctx, gu.basis_norm AS basis_norm, gu.segment AS segment, gu ORDER BY gu.given_date DESC, gu.id DESC
-WITH g, ctx, basis_norm, segment, collect(gu)[0] AS latest
-MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
+WITH g, gu.basis_norm AS basis_norm, gu.segment AS segment, gu ORDER BY gu.given_date DESC, gu.id DESC
+WITH g, basis_norm, segment, collect(gu)[0] AS latest
 RETURN g.label AS metric, basis_norm, segment, latest.basis_raw, latest.segment,
-       latest.low, latest.mid, latest.high, latest.unit, latest.qualitative,
-       latest.given_date, latest.fiscal_year, latest.fiscal_quarter,
-       p.start_date, p.end_date
+       latest.low, latest.mid, latest.high, latest.canonical_unit, latest.qualitative,
+       latest.given_date, latest.fiscal_year, latest.fiscal_quarter
 ```
 
 ### Accuracy comparison (side note — predictor runs this, not guidance system)
 
-Compares guidance values to XBRL actuals using `xbrl_qname` as the join key. This is NOT part of the extraction pipeline.
+Compares guidance values to XBRL actuals using `xbrl_qname` + fiscal identity as the join key. This is NOT part of the extraction pipeline. Note: XBRL Fact periods use date-based keys; matching requires `period_to_fiscal()` classification on the XBRL side (Python-side, not in this Cypher).
 
 ```cypher
 MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)
-MATCH (gu)-[:IN_CONTEXT]->(ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
-MATCH (ctx)-[:HAS_PERIOD]->(p:Period)
+MATCH (gu)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
 WHERE gu.xbrl_qname IS NOT NULL
 // Strict mode: only GAAP-to-GAAP. Remove filter for proxy/flagged comparison.
   AND gu.basis_norm = 'gaap'
 MATCH (f:Fact)-[:HAS_CONCEPT]->(con:Concept {qname: gu.xbrl_qname})
 MATCH (f)-[:IN_CONTEXT]->(fctx:Context)-[:FOR_COMPANY]->(c)
-MATCH (fctx)-[:HAS_PERIOD]->(fp:Period)
-WHERE fp.start_date = p.start_date AND fp.end_date = p.end_date
-  AND f.is_numeric = '1'
+WHERE f.is_numeric = '1'
   AND (fctx.member_u_ids IS NULL OR fctx.member_u_ids = [])
+// Fiscal identity matching done Python-side via period_to_fiscal() on XBRL Period dates
+// matched against gu.fiscal_year + gu.fiscal_quarter
 // Deterministic tie-break if multiple facts match (e.g., restated values)
 WITH g.label AS metric, gu.mid AS guided, toFloat(f.value) AS actual,
-     gu.basis_norm, f.id AS fact_id
+     gu.basis_norm, gu.fiscal_year, gu.fiscal_quarter, f.id AS fact_id
 ORDER BY fact_id DESC
-WITH metric, guided, collect(actual)[0] AS actual, basis_norm
-RETURN metric, guided, actual, actual - guided AS surprise, basis_norm
+WITH metric, guided, collect(actual)[0] AS actual, basis_norm,
+     fiscal_year, fiscal_quarter
+RETURN metric, guided, actual, actual - guided AS surprise, basis_norm,
+       fiscal_year, fiscal_quarter
 ```
 
 ---
@@ -758,6 +724,8 @@ Execution path: Claude SDK `query(...)` with `tools={'type':'preset','preset':'c
 Primary execution:
 - Auto-trigger per asset, immediately when asset-ready gate passes (canonical text fully extracted and persisted).
 - Day-1 coverage: `8k`, `transcript`, `10q`, `10k`, `news` (all source types enabled).
+
+**SDK deployment note**: The guidance write path uses two independent Neo4j connections — MCP server (reads in Steps 1-2) and `guidance_write.sh` → `guidance_writer.py` (writes in Step 5). Both currently hardcode `bolt://localhost:30687`. For SDK deployment, ensure both derive their connection config from the same source (e.g., a single `.env` file or SDK-injected env vars) to prevent config drift between reads and writes.
 
 Manual SDK modes (kept for backfill/reprocess):
 **Single source**: Extract guidance from one specific document.
@@ -782,12 +750,13 @@ Manual SDK modes (kept for backfill/reprocess):
 
 ```
 1. LOAD CONTEXT
-   ├── get_derived_fye(ticker)
+   ├── Company + CIK (QUERIES.md 1A)
+   ├── FYE from 10-K (QUERIES.md 1B)
    ├── Warmup XBRL caches once/company/run (§7):
    │     concept usage cache + member cache (with CIK pad normalization)
    ├── Query existing Guidance nodes:
    │     MATCH (g:Guidance)<-[:UPDATES]-(gu:GuidanceUpdate)
-   │           -[:IN_CONTEXT]->(ctx)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+   │           -[:FOR_COMPANY]->(c:Company {ticker: $ticker})
    │     RETURN DISTINCT g.label, g.id
    └── Fetch source content via QUERIES.md Cypher
 
@@ -812,10 +781,9 @@ Manual SDK modes (kept for backfill/reprocess):
    └── Apply quality filters (no citation = no node)
 
 2.5 DETERMINISTIC VALIDATION (pre-write)
-   ├── Canonicalize numeric scale + unit (§2A) before hashing
+   ├── Canonicalize numeric scale + canonical_unit (§2A) before hashing
    ├── Validate basis rule: if qualifier not explicit in metric quote span → basis_norm = unknown
-   ├── Resolve period_u_id via §6 (code-only fiscal math; supports 52/53-week fallback)
-   ├── Resolve canonical unit + unit_u_id via §6 Unit rules
+   ├── Build period_u_id via guidance_ids.py:build_period_u_id() (§6 — string concatenation, no date math)
    ├── Resolve xbrl_qname from concept cache (§7): pattern match → highest usage → set or null
    ├── Apply member confidence gate (§7)
    └── If uncertain: keep core item write, set xbrl_qname=null, skip uncertain member edges
@@ -826,37 +794,40 @@ Manual SDK modes (kept for backfill/reprocess):
    │     ON CREATE SET g.label = $label, g.aliases = coalesce($aliases, []), g.created_date = toString(date())
    │     ON MATCH SET g.aliases = reduce(acc = [], a IN (coalesce(g.aliases, []) + coalesce($aliases, [])) |
    │       CASE WHEN a IS NULL OR a IN acc THEN acc ELSE acc + a END)
-   ├── Find/create Context + Period (§6)
-   ├── Find/create Unit (§6)
+   ├── MERGE Period node (§6)
    ├── MERGE GuidanceUpdate node: MERGE (gu:GuidanceUpdate {id: $guidance_update_id})
-   │     ON CREATE SET gu += $all_properties, gu.evhash16 = $evhash16, gu.xbrl_qname = $xbrl_qname
+   │     ON CREATE SET gu.created = $created_ts
+   │     SET gu.evhash16 = $evhash16, gu.xbrl_qname = $xbrl_qname, gu += $all_properties
+   │     // Slot-based ID + SET = latest write wins. Enrichment on rerun, no duplicates.
    ├── Link: (gu)-[:UPDATES]->(g)
    ├── Link: (gu)-[:FROM_SOURCE]->(source)
-   ├── Link: (gu)-[:IN_CONTEXT]->(context)
+   ├── Link: (gu)-[:FOR_COMPANY]->(company)
    ├── Link: (gu)-[:HAS_PERIOD]->(period)
-   ├── Link: (gu)-[:HAS_UNIT]->(unit)
    ├── No linked-list write step (ordering is query-time; §8)
-   └── Link XBRL members if confident (§7): 0..N Member links on Update
+   ├── Link XBRL concept if confident (§7): MAPS_TO_CONCEPT edge (0..1)
+   └── Link XBRL members if confident (§7): MAPS_TO_MEMBER edges (0..N)
 ```
 
 ### Initial Build (new company)
 
 Process all historical sources chronologically (oldest first). Per earnings event: 8-K → news → transcript → 10-Q. Each extraction adds to the graph incrementally.
 
-### Idempotency
+### Idempotency & Enrichment
 
-Idempotency is ID-driven. Do not pre-check with a broad query. Compute deterministic ID (§2A), then:
+Idempotency is slot-based. Do not pre-check with a broad query. Compute deterministic slot-based ID (§2A), then:
 ```cypher
 MERGE (gu:GuidanceUpdate {id: $guidance_update_id})
-ON CREATE SET gu += $all_properties,
-              gu.evhash16 = $evhash16
+  ON CREATE SET gu.created = $created_ts
+  SET gu.evhash16 = $evhash16, gu += $all_properties
 RETURN gu
 ```
-If `MERGE` matches existing node, treat as duplicate/no-op. Force flag can still delete + re-extract.
+- **First write**: MERGE creates node, ON CREATE SET stamps `created`, SET writes all properties.
+- **Rerun/enrichment**: MERGE matches existing node (same slot), SET overwrites all properties with latest data. `created` preserved. No duplicates.
+- **Self-healing**: Pipeline restarts (e.g., context compaction) are harmless — second pass writes to the same nodes as the first pass.
 
 ### Reprocessing
 
-Delete all GuidanceUpdate nodes for a company → re-run initial build. Source documents remain in Neo4j.
+For normal reruns: just rerun. MERGE + SET overwrites properties automatically. Delete-before-rerun is only needed when the ID scheme itself changes (e.g., migration from evhash-in-ID to slot-only ID).
 
 ---
 
@@ -880,8 +851,8 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 |---|----------|------------|
 | 1 | Data store | Neo4j graph (not markdown file) |
 | 2 | Guidance node | Generic concept, not per-company |
-| 3 | GuidanceUpdate node | Per-mention, 19 fields as properties (includes `basis_norm` + `basis_raw`) with direct `HAS_PERIOD` and `HAS_UNIT` edges |
-| 4 | Company association | Through Context (cik→FOR_COMPANY→Company), not direct link |
+| 3 | GuidanceUpdate node | Per-mention, 19 fields as properties (includes `basis_norm` + `basis_raw`, `canonical_unit`) with direct `HAS_PERIOD` and `FOR_COMPANY` edges |
+| 4 | Company association | Direct `FOR_COMPANY` edge from GuidanceUpdate to Company (Context removed) |
 | 5 | Ordering model | No linked list. Chronological ordering is query-time using `ORDER BY given_date, id` per Guidance+Company. |
 | 6 | Action types | None stored — deterministic query-time derivation from timeline |
 | 7 | Supersession | None — latest by `given_date` (tie-break `id`) is current |
@@ -891,26 +862,26 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 | 11 | Output format | Cypher query for predictor context (no markdown) |
 | 12 | Trigger | Auto-trigger per asset at asset-ready ingest (primary). SDK `single`/`initial` retained for backfill/reprocess. Extraction writes, prediction reads. |
 | 13 | News filtering | Benzinga channels: Guidance, Earnings, Earnings Beats/Misses, Previews, Management |
-| 14 | XBRL linking | Concept via `xbrl_qname` property on GuidanceUpdate (no edge). Member via `MAPS_TO_MEMBER` edge on GuidanceUpdate (0..N). Dimension links dropped. Basis-independent mapping; basis filtering at query time. |
-| 15 | Fiscal periods | Reuse `get_derived_fye()` + `period_to_fiscal()` (validation only), and add `fiscal_to_dates()` for fiscal→calendar conversion with deterministic 52/53-week fallback. |
+| 14 | XBRL linking | Concept via `MAPS_TO_CONCEPT` edge (graph join) + `xbrl_qname` property (cross-taxonomy fallback) on GuidanceUpdate. Member via `MAPS_TO_MEMBER` edge (0..N). Dimension links dropped. Basis-independent mapping; basis filtering at query time. |
+| 15 | Fiscal periods | Fiscal-keyed separate namespace (`guidance_period_` prefix). No date computation at extraction time. `get_derived_fye()` for FYE month only. `fiscal_to_dates()` / `fiscal_resolve.py` not used by extraction (kept for future actuals comparison). |
 | 16 | Metric normalization | 12-metric canonical list with aliases (§4). Non-exhaustive — LLM creates new Guidance nodes as needed. |
 | 17 | Segment handling | Property on GuidanceUpdate + `MAPS_TO_MEMBER` with 0..N matches when confident; `Total` means company-wide/default semantics |
 | 18 | Analyst estimates | Deferred. Note for future. |
 | 19 | Accuracy tracking | Predictor's job, not guidance system |
 | 20 | Execution mode | SDK-compatible, non-interactive |
 | 21 | Missing data | Note for next round, not hard-fail |
-| 22 | Context reuse | Same Context label as XBRL (Option A). Identical format so XBRL ingestion can reuse. |
+| 22 | Context removal | Context node removed. Was a 1:1 passthrough (one per GuidanceUpdate, `member_u_ids=[]`, `dimension_u_ids=[]`). Replaced by direct `FOR_COMPANY` edge. |
 | 23 | Basis tracking | `basis_norm` (`gaap`/`non_gaap`/`constant_currency`/`unknown`) + `basis_raw` (verbatim). Assign basis only when explicit in the same metric quote span; else `unknown`. |
 | 24 | Per-asset extraction | Extraction MUST route by source type before LLM. Each doc asset has separate scan scope, inclusion/exclusion rules. |
 | 25 | ~~Merged into #16~~ | — |
-| 26 | Deterministic IDs | `Guidance.id = guidance:{label_slug}`. `GuidanceUpdate.id = gu:{source_id}:{label_slug}:{period_u_id}:{basis_norm}:{segment_slug}:{evhash16}` where `period_u_id` is taken directly from resolved Context and `evhash16 = sha256("{low}|{mid}|{high}|{unit}|{qualitative}|{conditions}")[:16]` using canonicalized numeric scale + unit (`usd`, `m_usd`, `percent`, `percent_yoy`, etc.). MERGE on `id`. |
+| 26 | Deterministic IDs | `Guidance.id = guidance:{label_slug}`. `GuidanceUpdate.id = gu:{source_id}:{label_slug}:{period_u_id}:{basis_norm}:{segment_slug}` — slot-only, no evhash in ID. evhash16 is a stored property for change detection. MERGE on slot ID + SET all properties (latest write wins). Rationale: LLM text non-determinism made evhash unstable across runs, causing duplicate nodes for the same guidance item. |
 | 27 | LLM governance | LLM proposes extraction + basis/link candidates; deterministic validator enforces canonicalization, basis rule, period resolution, and confidence gates pre-write. |
 | 28 | Derivation enum | Extended to `floor`, `ceiling`, `comparative` to avoid fabricating values for one-sided or relative guidance. |
 | 29 | News reaffirm guardrail | Reaffirm/maintain language in news sets reaffirm flag in `conditions`; extractor keeps exact source values (no tolerance-based rewrites). |
 | 30 | Segment normalizer | Use light singularization + small synonym map for stable member matching (`services`→`service`, `products`→`product`). |
-| 31 | Period/unit linkage | GuidanceUpdate always links to `Context`, direct `Period`, direct `Unit`, and exact source node. |
-| 32 | XBRL node reuse policy | Reuse `Context`/`Period` when exact match; create synthetic XBRL-compatible when missing. Use canonical guidance Unit nodes (not raw XBRL units when scale differs). Concept resolved via `xbrl_qname` property (qname is stable across taxonomy years). Link `Member` when confident; no direct `Concept`/`Dimension`/`Domain` edges. |
-| 33 | Neo4j write path | Reuse `Neo4jManager` session/driver/retry infrastructure only. Write guidance nodes via **direct Cypher MERGE** transactions (like `neograph/mixins/news.py`), not via the `merge_nodes()`/`merge_relationships()` dataclass path. Rationale: (1) `merge_relationships()` has a special `{key: source_id}` branch for `HAS_PERIOD`/`HAS_UNIT` coupled to XBRL relationship key constraints — guidance would work but creates unnecessary shared-surface coupling; (2) avoids adding entries to shared `NodeType`/`RelationType` enums which trigger constraint-creation loops and affect `get_neo4j_db_counts()` — unnecessary shared-surface coupling; (3) XBRL `Unit` class requires Arelle `ModelFact` — guidance units are trivial and better served by inline MERGE. Note: `:Guidance` label is clean — current XBRL guidance concepts are stored as `:Concept` with `category = "Guidance"`, not under the `:Guidance` label (0 nodes, verified). Reusable as-is: `Period` dataclass (`generate_id()` already produces `duration_{start}_{end}` matching guidance spec). Validation: all guidance nodes must have `id` prefix `guidance:`, all GuidanceUpdate nodes must have `id` prefix `gu:`. |
+| 31 | Period/company linkage | GuidanceUpdate links directly to `Period` (fiscal-keyed), `Company` (direct `FOR_COMPANY`), and exact source node. No Context or Unit intermediaries. |
+| 32 | XBRL bridge policy | Only `Concept` and `Member` are true XBRL bridges (`MAPS_TO_CONCEPT` 0..1, `MAPS_TO_MEMBER` 0..N). `Period` uses separate `guidance_period_` namespace. `Context` removed. `Unit` demoted to `canonical_unit` property. No direct `Dimension`/`Domain` edges. |
+| 33 | Neo4j write path | Reuse `Neo4jManager` session/driver/retry infrastructure only. Write guidance nodes via **direct Cypher MERGE** transactions (like `neograph/mixins/news.py`), not via the `merge_nodes()`/`merge_relationships()` dataclass path. Rationale: (1) avoids shared-surface coupling with XBRL relationship key constraints; (2) avoids adding entries to shared `NodeType`/`RelationType` enums. Note: `:Guidance` label is clean — current XBRL guidance concepts are stored as `:Concept` with `category = "Guidance"`, not under the `:Guidance` label (0 nodes, verified). Validation: all guidance nodes must have `id` prefix `guidance:`, all GuidanceUpdate nodes must have `id` prefix `gu:`. |
 
 ---
 
@@ -920,17 +891,17 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 |---------|--------|--------|
 | `period_to_fiscal()` | `get_quarterly_filings.py:66` | Reuse directly (calendar→fiscal) |
 | `get_derived_fye()` | `get_quarterly_filings.py:370` | Reuse directly |
-| `fiscal_to_dates()` | `get_quarterly_filings.py:196` | Fiscal→calendar resolver. Lookup-first from existing non-guidance Period nodes (via `period_to_fiscal()`), `_compute_fiscal_dates()` fallback for future periods. |
+| `fiscal_to_dates()` | `get_quarterly_filings.py:196` | Not used by guidance extraction (fiscal-keyed Periods eliminate date computation). Kept for future actuals comparison process. |
 | Metric normalization | `guidance-extract.md:258-269` | Carry forward (§4) |
 | `Neo4jManager` session/driver | `neograph/Neo4jManager.py` | Reuse session plumbing, retry decorators, `execute_cypher_query()`. Do NOT use `merge_nodes()`/`merge_relationships()` for guidance writes — use direct Cypher MERGE (Decision #33). |
 | News write pattern | `neograph/mixins/news.py:278-329` | Reference pattern: direct `MERGE (n:Label {id: $id}) ON CREATE SET ... ON MATCH SET ...` via `self.manager.driver.session()`. Follow this for guidance. |
-| `Period` dataclass | `XBRL/xbrl_basic_nodes.py:87` | Reuse directly — `generate_id()` produces `duration_{start}_{end}` matching guidance spec exactly. |
+| `Period` dataclass | `XBRL/xbrl_basic_nodes.py:87` | Not reused for guidance — guidance Periods use fiscal-keyed `guidance_period_` namespace (§6), not date-based `duration_{start}_{end}`. |
 | Source extraction hints | `guidance-extract.md:146-199` | Carry forward (§3) |
 | Derivation rules | `guidance-extract.md:229-237` | Carry forward (§5) |
 | Segment rules | `guidance-extract.md:242-252` | Carry forward |
-| ID normalization utility | `guidance_ids.py` | `build_guidance_ids()` — single entry point for slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly (§2A). 35 tests. |
+| ID normalization utility | `guidance_ids.py` | `build_guidance_ids()` — single entry point for slugging, unit/scale canonicalization, `evhash16`, and `guidance_update_id` assembly (§2A). `build_period_u_id()` — fiscal-keyed Period u_id construction (§6). 60 tests. |
 | Cypher queries | `guidance-inventory/QUERIES.md` | Keep, fix labels |
-| Fiscal calendar | `guidance-inventory/FISCAL_CALENDAR.md` | Deleted/superseded (use `fiscal_to_dates()` / `fiscal_resolve.py`) |
+| Fiscal calendar | `guidance-inventory/FISCAL_CALENDAR.md` | Deleted/superseded. Fiscal-keyed Periods (§6) eliminate date computation entirely. |
 | Evidence standards | `evidence-standards/SKILL.md` | Load during extraction |
 | AAPL benchmark | `sampleGuidance_byAgentTeams.md` | Quality target |
 
@@ -940,24 +911,25 @@ Delete all GuidanceUpdate nodes for a company → re-run initial build. Source d
 
 | File | Status | Action Taken / Needed |
 |------|--------|----------------------|
-| `guidance-extract.md` (agent) | **PENDING — Rewrite** | Graph-native output, new tools (Bash, MCP write), route by source type. Core extraction logic carried forward. This is the only remaining Phase 2 item. |
-| `guidance-inventory/SKILL.md` | **DONE** (v2.2) | Rewritten as reference doc. Schema, fields, validation, write patterns, XBRL matching. Removed predictor refs, dead file links. Write path references `guidance_writer.py`. |
-| `guidance-inventory/QUERIES.md` | **DONE** (v2.6) | ~42 read-only queries. Source-fetch + warmup caches + fulltext. Fixed: 3B phantom null, null-date guards, MD&A apostrophe, QuestionAnswer types, 3C fallback, execution order. Writes go through `guidance_writer.py`. |
+| `guidance-extract.md` (agent) | **DONE** (v3.0) | Rewritten. Graph-native output, fiscal-keyed Periods, direct FOR_COMPANY, MAPS_TO_CONCEPT/MEMBER edges, script invocations for deterministic validation. |
+| `guidance-inventory/SKILL.md` | **DONE** (v3.0) | Rewritten as reference doc. Schema, fields, validation, write patterns, XBRL matching. Removed predictor refs, dead file links. Write path references `guidance_writer.py`. |
+| `guidance-inventory/QUERIES.md` | **DONE** (v2.10) | ~42 read-only queries. Source-fetch + warmup caches + fulltext. Fixed: 3B phantom null, null-date guards, MD&A apostrophe, QuestionAnswer types, 3C fallback, execution order. Writes go through `guidance_writer.py`. |
 | `guidance-inventory/OUTPUT_TEMPLATE.md` | **DONE** (deleted) | Fully superseded by graph-native output. |
 | `guidance-inventory/FISCAL_CALENDAR.md` | **DONE** (deleted) | Superseded by `fiscal_resolve.py` + SKILL.md §9. |
 | `guidance-inventory/reference/PROFILE_TRANSCRIPT.md` | **DONE** (v1.3) | Scan scope, speaker hierarchy, PR vs Q&A, QuestionAnswer fallback (3C), quote prefixes. |
 | `guidance-inventory/reference/PROFILE_8K.md` | **DONE** (v1.1) | EX-99.* + Item 2.02/7.01, boilerplate exclusion, table handling, fetch order. |
 | `guidance-inventory/reference/PROFILE_NEWS.md` | **DONE** (v1.1) | Channel filter, analyst exclusion, reaffirmation handling, title/body scan. |
 | `guidance-inventory/reference/PROFILE_10Q.md` | **DONE** (v1.2) | MD&A primary (10-Q ~99%, 10-K ~98%), bounded fallback, 10-K apostrophe variant, forward-looking strictness. |
-| `guidance_ids.py` | **DONE** (45 tests) | Unit registry (basis_points, percent_points), UNIT_ALIASES, unit_raw handling, evhash16, build_guidance_ids. |
-| `fiscal_resolve.py` | **DONE** (29 tests) | CLI wrapper for fiscal-to-calendar resolution. Pre-fetched Period JSON via stdin. |
-| `guidance_writer.py` | **DONE** (51 tests) | Direct Cypher write path. Label-specific source MATCH, ticker-based resolution, alias dedupe, member batching. Feature flag gated. |
+| `guidance_ids.py` | **DONE** (60 tests) | `build_guidance_ids()` + `build_period_u_id()` + unit canonicalization + evhash16. Fiscal-keyed Period u_id construction. |
+| `fiscal_resolve.py` | **DONE** (29 tests) | CLI wrapper for fiscal-to-calendar resolution. Not used by guidance extraction (fiscal-keyed Periods). Kept for future actuals comparison. |
+| `guidance_writer.py` | **DONE** (62 tests) | v3.0 architecture: direct FOR_COMPANY edge, fiscal-keyed Period MERGE, canonical_unit property, MAPS_TO_CONCEPT edge (0..1), MAPS_TO_MEMBER edges (0..N). |
+| `guidance_write_cli.py` | **DONE** (14 tests) | CLI wrapper: reads JSON, computes IDs via `build_guidance_ids()`, calls `write_guidance_batch()`. Supports `--dry-run` / `--write`. Overrides feature flag at runtime. |
+| `guidance_write.sh` | **DONE** | Shell wrapper: activates venv, force-sets Neo4j env vars to match MCP server (`bolt://localhost:30687`), runs CLI. |
 | `earnings-orchestrator.md` | **DONE** | Step 0 removed, I5 = graph query. |
 
 **Next steps after §14**:
-1. Rewrite `guidance-extract.md` agent (the one PENDING item above)
-2. AAPL transcript dry-run validation (shadow mode, compare against `sampleGuidance_byAgentTeams.md`)
-3. Shadow run on 3+ companies, 3+ source types → enable writes
+1. AAPL transcript dry-run validation (shadow mode, compare against `sampleGuidance_byAgentTeams.md`)
+2. Shadow run on 3+ companies, 3+ source types → enable writes
 
 ---
 
@@ -993,7 +965,7 @@ tools:
   - Read                                     # Source profiles + reference files
 ```
 
-**Why one agent, not per-source agents**: 80% of logic is shared across all source types (validation, ID computation, Context/Period resolution, XBRL matching, graph writes). Only scan scope and extraction hints vary (~20%). Multiple agents would duplicate the shared logic. The per-source profiles in `reference/` handle the 20% that varies.
+**Why one agent, not per-source agents**: 80% of logic is shared across all source types (validation, ID computation, Period resolution, XBRL matching, graph writes). Only scan scope and extraction hints vary (~20%). Multiple agents would duplicate the shared logic. The per-source profiles in `reference/` handle the 20% that varies.
 
 ### 15B. Source Content Queries (Carry Forward from Agent)
 
@@ -1019,7 +991,7 @@ Content for `reference/` files, sourced from agent lines 146-199:
 - Speaker hierarchy: CFO formal guidance (richest) > CEO strategic outlook > Q&A specifics
 - Operator remarks: skip (procedural, no guidance)
 - Q&A: analysts probe for details not in prepared remarks — segment-level, geographic, GAAP vs non-GAAP clarifications, "comfortable with consensus" implied guidance
-- Duplicate resolution: if same metric in both PR and Q&A, use the most specific version
+- Duplicate resolution: one write per slot. Read ALL sections (PR + Q&A) first, synthesize the richest combined version per metric, then write once. Neither PR nor Q&A takes precedence.
 - Quote prefix: `[Q&A]` for Q&A, `[PR]` for prepared remarks
 
 **PROFILE_8K.md** (agent lines 147-148):
@@ -1090,39 +1062,43 @@ CANONICAL_UNITS = {
 }
 
 UNIT_ALIASES = {
-    '$': 'usd', 'dollars': 'usd', 'per share': 'usd',
+    '$': 'm_usd', 'dollars': 'm_usd',  # per-share labels (EPS/DPS) override to usd
     'b usd': 'm_usd', 'b_usd': 'm_usd', 'billion': 'm_usd',
     'm usd': 'm_usd', 'million': 'm_usd',
     '%': 'percent', 'pct': 'percent',
     '% yoy': 'percent_yoy', 'yoy': 'percent_yoy',
     'bps': 'basis_points', 'bp': 'basis_points',
     '% points': 'percent_points', 'pp': 'percent_points', 'percentage points': 'percent_points',
-    'times': 'x', 'ratio': 'x',
+    'times': 'x', 'multiple': 'x',
 }
 ```
 
 **Method for adding new units as discovered**:
 1. LLM proposes a raw unit string during extraction.
 2. `canonicalize_unit()` checks `UNIT_ALIASES` → canonical form if matched.
-3. No alias match → `unit = 'unknown'`, raw unit preserved in `unit_raw` property on GuidanceUpdate.
+3. No alias match → `canonical_unit = 'unknown'`, raw unit preserved in `unit_raw` property on GuidanceUpdate.
 4. Periodic review: query `unit_raw` values on `unknown`-unit GuidanceUpdate nodes → identify patterns → add new canonical mappings.
 5. Each addition: one entry in `CANONICAL_UNITS` + alias(es) in `UNIT_ALIASES` + test case in `test_guidance_ids.py`.
 
-`unit_raw`: optional String property on GuidanceUpdate, populated ONLY when `unit = 'unknown'`. Contains verbatim unit text from source. Not part of the 19 extraction fields — set at validation time (§10 Step 2.5) from raw LLM output. Not included in `evhash16` computation (canonical `unit` is used in the hash).
+`unit_raw`: optional String property on GuidanceUpdate, populated ONLY when `canonical_unit = 'unknown'`. Contains verbatim unit text from source. Not part of the 19 extraction fields — set at validation time (§10 Step 2.5) from raw LLM output. Not included in `evhash16` computation (canonical `canonical_unit` is used in the hash).
 
-### 15G. Fiscal Resolution Bridge
+Note: Unit is a property (`gu.canonical_unit`) on GuidanceUpdate, not a separate graph node. The registry pattern in `guidance_ids.py` is unchanged — it canonicalizes raw unit strings to one of 9 values. No Unit node MERGE is needed.
 
-`fiscal_to_dates()` takes a Neo4j `session` parameter, but the agent communicates with Neo4j via MCP. Bridge without modifying non-negotiable functions:
+### 15G. Period Resolution (Simplified)
 
-1. Agent runs MCP Cypher: fetch all Period nodes for the company (same query `fiscal_to_dates()` runs internally in its lookup phase).
-2. Agent calls thin CLI wrapper via Bash, passing pre-fetched Period data as JSON stdin + fiscal params (`ticker`, `fiscal_year`, `fiscal_quarter`, `fye_month`).
-3. Wrapper imports `period_to_fiscal()` and `_compute_fiscal_dates()` from `get_quarterly_filings.py` — no modification to those functions.
-4. Wrapper classifies pre-fetched periods via `period_to_fiscal()`, matches, falls back to `_compute_fiscal_dates()`.
-5. Returns JSON: `{"start_date": "...", "end_date": "...", "period_u_id": "duration_...", "period_node_type": "duration"}`.
+Under fiscal-keyed Period design (§6), the extraction pipeline no longer needs `fiscal_to_dates()`, `fiscal_resolve.py`, or date computation. Period u_id is built via `guidance_ids.py:build_period_u_id()` — simple string concatenation from (cik, period_type, fiscal_year, fiscal_quarter).
 
-No second Neo4j connection. No modification to `period_to_fiscal()` or `get_derived_fye()` (Non-negotiable #1). Wrapper is a new thin script alongside `guidance_ids.py`.
+**What the agent still needs:**
+1. **CIK** — from Company node (QUERIES.md 1A)
+2. **FYE month** — from 10-K `periodOfReport` (QUERIES.md 1B), needed only for calendar-to-fiscal mapping (e.g., "December quarter" = Q1 for Apple)
 
-`get_derived_fye()` does not need the bridge — its core query (`MATCH (c:Company)<-[:PRIMARY_FILER]-(r:Report {formType:'10-K'}) ...`) can be run directly via MCP and the FYE month extracted by the agent.
+**What's eliminated from extraction:**
+- `fiscal_resolve.py` CLI wrapper (kept in codebase for future actuals comparison)
+- QUERIES.md 1C (Period pre-fetch — only existed to feed `fiscal_resolve.py`)
+- `_compute_fiscal_dates()` fallback (no calendar dates computed)
+- Phase 1/Phase 2 lookup logic (one path: string concatenation)
+
+`get_derived_fye()` does not need a bridge — its core query can be run directly via MCP and the FYE month extracted by the agent.
 
 ### 15H. Feature Flag / Dry-Run Mechanism
 
@@ -1188,11 +1164,11 @@ The agent's quality filters (lines 357-365) belong in the core SKILL.md:
 | News: company guidance only | Agent lines 181-184 | §3 news per-source rules | Identical |
 | Quote max 500 chars | Agent line 364 | §2 field 14 | Identical |
 | Forward-looking filter | Agent line 359 | §3 + §5 derivation | Same intent |
-| FYE detection from 10-K periodOfReport | SKILL.md line 86, QUERIES.md line 31 | §6 Step 1, §13 | Same query, now via `get_derived_fye()` |
-| Legacy fiscal calendar examples (AAPL/WMT/MSFT) | Deleted `FISCAL_CALENDAR.md` (archived) | §6 period scenarios | Useful as test cases for `fiscal_to_dates()` |
+| FYE detection from 10-K periodOfReport | SKILL.md line 86, QUERIES.md line 31 | §6 Step 2, §13 | Same query, via MCP directly. Needed for calendar-to-fiscal mapping only. |
+| Legacy fiscal calendar examples (AAPL/WMT/MSFT) | Deleted `FISCAL_CALENDAR.md` (archived) | §6 calendar-to-fiscal table | Useful as validation reference |
 | Derivation rules (4 original values) | Agent lines 229-237 | §5 (extended to 7) | `explicit/calculated/point/implied` unchanged |
 | Empty-content handling per source type | Agent lines 135-139 | §15E (this section) | Carried forward + extended |
 
 ---
 
-*v2.4 | 2026-02-21 | §14 updated to reflect Phase 2 completion status: SKILL.md v2.2, QUERIES.md v2.6, 4 profiles written, 3 scripts done (125 tests), 2 files deleted. Only remaining Phase 2 item: guidance-extract.md agent rewrite. Added next-steps block. Prior: v2.3 (§14/§15 added, architecture locked).*
+*v3.0 | 2026-02-22 | Architecture simplification: Removed Context node (replaced by direct FOR_COMPANY edge). Removed Unit node (demoted to canonical_unit property on GuidanceUpdate). Redesigned Period as fiscal-keyed separate namespace (guidance_period_ prefix, no date computation). Added instant period support. Renamed field #9 from unit to canonical_unit. Updated §1 schema, §6 (Context Resolution → Period Resolution), §9 predictor queries, §10 extraction steps, Decisions #3/#4/#15/#22/#31/#32. Resolved P1 (instant) and P2 (period mismatch). Prior: v2.5 (MAPS_TO_CONCEPT dual approach, Unit XBRL shape).*

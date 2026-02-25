@@ -142,20 +142,18 @@ For Q&A guidance, the `section` field should identify where in the Q&A:
 
 ## Duplicate Resolution
 
+**RULE: One write per slot. Read ALL sections (PR + Q&A) first, synthesize the richest combined version per metric, then write once. Neither PR nor Q&A takes precedence — use the best information from both.**
+
 When the same metric appears in BOTH prepared remarks and Q&A:
 
-1. **If Q&A is more specific** → use Q&A version as the primary extraction
-   - Example: PR says "mid-40s gross margin" → Q&A says "46% to 47% gross margin"
-   - Extract the Q&A version (46-47%) with `[Q&A]` prefix
+1. **Synthesize from both** — combine the most specific values, richest qualitative detail, and clearest conditions from PR AND Q&A into ONE extraction per metric. Neither section takes precedence; use whichever has better data for each field.
+   - Example: PR gives a numeric range, Q&A adds a condition → extract the range WITH the condition
+   - Example: PR says "mid-40s gross margin", Q&A says "46% to 47%" → use the more precise numbers (46-47%) but keep any qualitative context from PR
+   - Example: Q&A reveals a segment breakdown not in PR → include it
 
-2. **If PR is more specific** → use PR version
-   - Rare, but possible when analyst question gets a vague response
+2. **If values directly conflict** → use the more precise or more recent statement, but combine any non-conflicting detail from both
 
-3. **If both are equally specific but values differ** → extract BOTH
-   - This represents a potential revision within the same call
-   - The later statement (typically Q&A) takes precedence for "latest" determination
-
-4. **Never skip a metric** — if it appears in Q&A with new detail not in PR, extract it even if PR also covered it
+3. **Never skip detail from either section** — if PR has context that Q&A lacks (or vice versa), fold it into the extraction
 
 ---
 
@@ -212,7 +210,7 @@ Transcripts cover multiple periods. Each guidance statement references a target 
 
 ### Calendar → Fiscal Mapping
 
-When source uses calendar quarter names ("December quarter"), use FYE to determine fiscal quarter. Do NOT guess — use `fiscal_resolve.py` with the company's FYE month.
+When source uses calendar quarter names ("December quarter"), use FYE to determine fiscal quarter. Do NOT guess — use the FYE month (from QUERIES.md 1B) with the calendar-to-fiscal mapping table below.
 
 | FYE Month | Company Example | Q1 Months | Q2 Months | Q3 Months | Q4 Months |
 |-----------|-----------------|-----------|-----------|-----------|-----------|

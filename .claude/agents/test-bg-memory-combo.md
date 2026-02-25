@@ -4,6 +4,13 @@ description: "Test: Does memory work combined with background: true? (v2.1.50)"
 background: true
 memory: project
 model: haiku
+tools:
+  - Read
+  - Write
+  - Edit
+  - Glob
+  - Grep
+  - Bash
 ---
 You are testing whether `memory` and `background: true` can coexist in the same agent.
 

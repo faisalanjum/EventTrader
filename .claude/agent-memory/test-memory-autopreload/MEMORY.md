@@ -1,3 +1,5 @@
 AUTOPRELOAD_CANARY=pineapple_2026_v250
-WRITTEN_AT=2026-02-21T00:00:00Z
+V252_CANARY=STARFRUIT_PROJECT_252
+WRITTEN_AT=2026-02-24
 PURPOSE=Testing if this content appears in system prompt on next invocation
+WRITEBACK_TEST=banana_writeback_252

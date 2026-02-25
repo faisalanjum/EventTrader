@@ -2,7 +2,7 @@
 name: test-memory-local-v250
 description: "Test: Does memory: local scope work and auto-preload? (v2.1.50 retest)"
 memory: local
-model: haiku
+model: opus
 ---
 You are testing the `memory: local` scope (stores at .claude/agent-memory-local/).
 
