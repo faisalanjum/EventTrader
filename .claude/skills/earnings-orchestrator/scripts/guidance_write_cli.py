@@ -145,6 +145,16 @@ def main():
         except ValueError as e:
             errors.append({"index": i, "label": item.get('label', '?'), "error": str(e)})
 
+    # Concept inheritance: if Revenue(Total) has xbrl_qname but Revenue(iPhone) doesn't,
+    # copy it over. Same metric = same concept regardless of segment.
+    concept_map = {}
+    for item in valid_items:
+        if item.get('xbrl_qname') and item.get('label'):
+            concept_map.setdefault(item['label'], item['xbrl_qname'])
+    for item in valid_items:
+        if not item.get('xbrl_qname') and item.get('label') in concept_map:
+            item['xbrl_qname'] = concept_map[item['label']]
+
     if dry_run:
         # Dry-run: validate + build params, no connection needed
         results = []

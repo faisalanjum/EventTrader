@@ -44,7 +44,7 @@ Use this block as the execution contract so implementation can proceed without e
 5. `neograph/mixins/news.py` and `neograph/Neo4jManager.py` (`execute_cypher_query`) for write pattern reuse.
 6. `.claude/agents/guidance-extract.md` (current version — this is the file to rewrite, per §15A).
 
-**Verify environment:** `python3 -m pytest .claude/skills/earnings-orchestrator/scripts/test_guidance_ids.py test_fiscal_resolve.py test_guidance_writer.py test_guidance_write_cli.py` — all tests must pass before any changes (60 IDs + 29 fiscal + 62 writer + 14 CLI = 165).
+**Verify environment:** `python3 -m pytest .claude/skills/earnings-orchestrator/scripts/test_guidance_ids.py test_fiscal_resolve.py test_guidance_writer.py test_guidance_write_cli.py` — all tests must pass before any changes (60 IDs + 29 fiscal + 62 writer + 18 CLI = 169).
 
 **Non-negotiables:**
 1. Do not modify `period_to_fiscal()` or `get_derived_fye()`.
@@ -923,7 +923,7 @@ For normal reruns: just rerun. MERGE + SET overwrites properties automatically. 
 | `guidance_ids.py` | **DONE** (60 tests) | `build_guidance_ids()` + `build_period_u_id()` + unit canonicalization + evhash16. Fiscal-keyed Period u_id construction. |
 | `fiscal_resolve.py` | **DONE** (29 tests) | CLI wrapper for fiscal-to-calendar resolution. Not used by guidance extraction (fiscal-keyed Periods). Kept for future actuals comparison. |
 | `guidance_writer.py` | **DONE** (62 tests) | v3.0 architecture: direct FOR_COMPANY edge, fiscal-keyed Period MERGE, canonical_unit property, MAPS_TO_CONCEPT edge (0..1), MAPS_TO_MEMBER edges (0..N). |
-| `guidance_write_cli.py` | **DONE** (14 tests) | CLI wrapper: reads JSON, computes IDs via `build_guidance_ids()`, calls `write_guidance_batch()`. Supports `--dry-run` / `--write`. Overrides feature flag at runtime. |
+| `guidance_write_cli.py` | **DONE** (18 tests) | CLI wrapper: reads JSON, computes IDs via `build_guidance_ids()`, calls `write_guidance_batch()`. Concept inheritance (same label → same xbrl_qname). Supports `--dry-run` / `--write`. Overrides feature flag at runtime. |
 | `guidance_write.sh` | **DONE** | Shell wrapper: activates venv, force-sets Neo4j env vars to match MCP server (`bolt://localhost:30687`), runs CLI. |
 | `earnings-orchestrator.md` | **DONE** | Step 0 removed, I5 = graph query. |
 

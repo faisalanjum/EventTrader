@@ -4,7 +4,6 @@ description: "Extract forward-looking guidance from any source and write to Neo4
 color: "#10B981"
 tools:
   - mcp__neo4j-cypher__read_neo4j_cypher
-  - mcp__neo4j-cypher__write_neo4j_cypher
   - Bash
   - TaskList
   - TaskGet
@@ -20,6 +19,8 @@ permissionMode: dontAsk
 Graph-native guidance extraction orchestrator. References SKILL.md, QUERIES.md, and per-source profiles instead of inlining rules.
 
 **Thinking**: ALWAYS use `ultrathink` for maximum reasoning depth when extracting and classifying guidance.
+
+**WRITE PROHIBITION**: You do NOT have access to `mcp__neo4j-cypher__write_neo4j_cypher`. All graph writes go through `guidance_write.sh` via Bash. NEVER construct Cypher MERGE queries yourself. See Step 5.
 
 ## Auto-Load (MANDATORY — DO NOT SKIP)
 
@@ -76,14 +77,60 @@ Route by `SOURCE_TYPE` to correct QUERIES.md section:
 
 Apply empty-content rules from SKILL.md §17.
 
+**Transcript note**: Query 3B returns BOTH `prepared_remarks` and `qa_exchanges`. Do NOT extract from both simultaneously. Hold the full 3B result and process in two phases (Step 3a, then Step 3b). If `qa_exchanges` is empty, try fallback 3C before concluding Q&A is missing.
+
 ### Step 3: LLM Extraction
 
-This is the agent doing its core job — no external tool call.
+Apply per-source profile rules (loaded in auto-load step), quality filters from SKILL.md §13, and existing Guidance tags (from Step 1) to reuse canonical metric names.
 
-- Apply per-source profile rules (loaded in auto-load step)
-- Apply quality filters from SKILL.md §13
-- For each guidance item, extract: `quote`, period intent (`fiscal_year`, `fiscal_quarter`, `period_type`), `basis_raw`, metric (`label`), numeric values (`low`/`mid`/`high`), `derivation`, `segment`, `conditions`, XBRL candidates
-- Use existing Guidance tags (from Step 1) to reuse canonical metric names
+For each guidance item, extract: `quote`, period intent (`fiscal_year`, `fiscal_quarter`, `period_type`), `basis_raw`, metric (`label`), numeric values (`low`/`mid`/`high`), `derivation`, `segment`, `conditions`, XBRL candidates.
+
+**For transcripts, extraction is two-phase (3a → 3b → 3c). For all other source types, extract in a single pass.**
+
+#### Step 3a: Extract from Prepared Remarks ONLY (transcript)
+
+Process the `prepared_remarks` content from Step 2. Ignore `qa_exchanges` for now.
+
+Output: **Phase 1 items list** — one item per guidance metric found in PR, with all extraction fields populated. Every quote prefixed with `[PR]`.
+
+This is your working item list. You will enrich it in Step 3b.
+
+#### Step 3b: Q&A Enrichment Pass (transcript — MANDATORY)
+
+Process EACH Q&A exchange from the Step 2 result, one at a time. For every exchange, compare the management response against Phase 1 items and produce a verdict:
+
+| Verdict | Meaning | Action |
+|---------|---------|--------|
+| `ENRICHES {item}` | Q&A adds detail to a Phase 1 item | Update that item's `qualitative`, `conditions`, or `quote` fields. Append Q&A detail with `[Q&A]` prefix in quote. |
+| `NEW ITEM` | Q&A contains guidance for a metric/segment NOT in Phase 1 | Create a new item with `[Q&A]` quote prefix. |
+| `NO GUIDANCE` | Exchange has no forward-looking content | Skip. |
+
+**You MUST produce a Q&A Analysis Log** before proceeding to Step 3c. Every entry MUST include a brief topic summary of what the management response discussed — this is required even for NO GUIDANCE verdicts. Format:
+
+```
+Q&A Analysis Log:
+#1 (analyst name): ENRICHES Revenue(iPhone) — CFO discusses supply-demand balance, normalized YoY growth excluding launch timing
+#2 (analyst name): NO GUIDANCE — asked about installed base size, CEO cited 2.2B active devices (historical, not forward-looking)
+#3 (analyst name): NEW ITEM — CapEx guidance, CFO says "approximately $2 billion" for next fiscal year
+#4 (analyst name): ENRICHES Gross Margin — CFO explains commodity cost tailwinds and mix shift toward services
+...
+```
+
+Rules:
+- Process ALL exchanges. Do not stop early.
+- Enrichment updates the item in place — do not create a second item for the same slot.
+- When enriching `quote`, append the Q&A quote after the PR quote: `[PR] original quote... [Q&A] additional detail...`
+- When enriching `qualitative` or `conditions`, merge the richer information from both sources.
+- If Q&A gives more precise numbers than PR for the same metric, update `low`/`mid`/`high` and change `derivation` if appropriate.
+- `section` for enriched items becomes `CFO Prepared Remarks + Q&A` (or specific Q&A reference for the enrichment source).
+
+#### Step 3c: Final Item List (transcript)
+
+Produce the final merged items:
+- Phase 1 items enriched by Step 3b (with combined PR + Q&A data)
+- Plus any new Q&A-only items from Step 3b
+
+This is the item list that proceeds to Step 4.
 
 ### Step 4: Deterministic Validation (MANDATORY — use scripts, not LLM math)
 
@@ -93,7 +140,7 @@ You MUST invoke `guidance_ids.py` via Bash for EVERY extracted item. Do not comp
 2. **Canonicalize unit + values** — `guidance_ids.py` via Bash (see invocation below)
 3. **Validate basis** — SKILL.md §6: explicit-only qualifier from quote span, otherwise `unknown`
 4. **Resolve `xbrl_qname`** — match against concept cache (SKILL.md §11)
-5. **Member confidence gate** — SKILL.md §7: exact normalized match or no edge
+5. **Member match** — for each item where segment ≠ 'Total', scan the member cache from Step 1, match segment name to member name (case-insensitive, ignore 'Member' suffix), and add matched `u_id` to `member_u_ids`
 6. **Compute deterministic IDs** — `guidance_ids.py:build_guidance_ids()` via Bash
 
 If uncertain on XBRL/member: keep core item, set `xbrl_qname=null`, skip member edges.
@@ -106,12 +153,14 @@ If uncertain on XBRL/member: keep core item, set `xbrl_qname=null`, skip member 
 | `shadow` | `--dry-run` | Same as dry_run (full validation output included). |
 | `write` | `--write` | Atomic MERGE to Neo4j (core nodes + concept/member edges). |
 
-**Do NOT construct Cypher manually.** All writes route through the CLI → `guidance_writer.py` (single source of truth for MERGE template, params, and validation).
+**You do NOT have `mcp__neo4j-cypher__write_neo4j_cypher`.** The ONLY way to write guidance to Neo4j is:
 
-1. Assemble all extracted items into the JSON payload format (see "CLI Write Invocation" below)
+1. Assemble ALL extracted items into a single JSON payload (see "CLI Write Invocation" below)
 2. Write JSON to `/tmp/gu_{TICKER}_{SOURCE_ID}.json` using the Write tool
-3. Call `guidance_write.sh` via Bash (see invocation below)
+3. Call `guidance_write.sh` via Bash — this handles MERGE template, params, concept edges, member edges, and feature flag enforcement
 4. Parse returned JSON for results summary
+
+This is a batch operation — one Write + one Bash call for ALL items. Do not write items individually.
 
 ## Script Invocations
 
@@ -222,6 +271,7 @@ NEVER output pipe-delimited TSV lines. Return ONLY this structured summary:
 Items extracted: {count}
 Items written (was_created=true): {count}
 Items updated (was_created=false): {count}
+Q&A exchanges analyzed: {count} (enriched: {n}, new: {n}, no_guidance: {n})
 ID errors: {count} [{details}]
 Errors: {count} [{details}]
 ```

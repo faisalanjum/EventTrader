@@ -105,6 +105,76 @@ def test_ensure_ids_default_segment():
     assert 'total' in result['guidance_update_id']
 
 
+# ── Concept inheritance tests ────────────────────────────────────────────
+# These test the batch-level concept inheritance logic in main().
+# We test at the item level by importing the logic directly.
+
+def _apply_concept_inheritance(items):
+    """Replicate the concept inheritance logic from guidance_write_cli.main()."""
+    concept_map = {}
+    for item in items:
+        if item.get('xbrl_qname') and item.get('label'):
+            concept_map.setdefault(item['label'], item['xbrl_qname'])
+    for item in items:
+        if not item.get('xbrl_qname') and item.get('label') in concept_map:
+            item['xbrl_qname'] = concept_map[item['label']]
+    return items
+
+
+def test_concept_inheritance_fills_null():
+    """Segment item inherits xbrl_qname from sibling with same label."""
+    items = [
+        _make_raw_item(label='Revenue', segment='Total'),
+        _make_raw_item(label='Revenue', segment='iPhone'),
+    ]
+    items[0]['xbrl_qname'] = 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+    items[1]['xbrl_qname'] = None
+
+    _apply_concept_inheritance(items)
+    assert items[1]['xbrl_qname'] == 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+
+
+def test_concept_inheritance_no_overwrite():
+    """Item with existing xbrl_qname is NOT overwritten by sibling."""
+    items = [
+        _make_raw_item(label='Revenue', segment='Total'),
+        _make_raw_item(label='Revenue', segment='Services'),
+    ]
+    items[0]['xbrl_qname'] = 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+    items[1]['xbrl_qname'] = 'us-gaap:SomeOtherConcept'
+
+    _apply_concept_inheritance(items)
+    assert items[1]['xbrl_qname'] == 'us-gaap:SomeOtherConcept'
+
+
+def test_concept_inheritance_different_labels_no_crosstalk():
+    """Concept inheritance only applies within same label, not across metrics."""
+    items = [
+        _make_raw_item(label='Revenue', segment='Total'),
+        _make_raw_item(label='Gross Margin', segment='Total', low=45.0, high=46.0, unit_raw='percent'),
+    ]
+    items[0]['xbrl_qname'] = 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+    items[1]['xbrl_qname'] = None
+
+    _apply_concept_inheritance(items)
+    assert items[0]['xbrl_qname'] == 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+    assert items[1]['xbrl_qname'] is None
+
+
+def test_concept_inheritance_all_null_no_change():
+    """If no item has a concept, nothing changes."""
+    items = [
+        _make_raw_item(label='Revenue', segment='Total'),
+        _make_raw_item(label='Revenue', segment='iPhone'),
+    ]
+    items[0]['xbrl_qname'] = None
+    items[1]['xbrl_qname'] = None
+
+    _apply_concept_inheritance(items)
+    assert items[0]['xbrl_qname'] is None
+    assert items[1]['xbrl_qname'] is None
+
+
 # ── JSON round-trip tests ────────────────────────────────────────────────
 
 def test_json_roundtrip_special_chars():

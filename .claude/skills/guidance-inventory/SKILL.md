@@ -1,7 +1,7 @@
 ---
 name: guidance-inventory
 description: Graph-native guidance extraction reference. Defines schema, extraction fields, validation rules, ID computation, XBRL matching, and write patterns. Auto-loaded by guidance-extract agent.
-allowed-tools: Read, Write, Grep, Glob, Skill, mcp__neo4j-cypher__read_neo4j_cypher, mcp__neo4j-cypher__write_neo4j_cypher, Bash
+allowed-tools: Read, Write, Grep, Glob, Skill, mcp__neo4j-cypher__read_neo4j_cypher, Bash
 model: claude-opus-4-6
 permissionMode: dontAsk
 ---
@@ -515,7 +515,11 @@ Extraction MUST route by `source_type` before LLM processing. Each type has diff
 
 ### Dedup Rule
 
-Deterministic slot-based `GuidanceUpdate.id` enforces dedup. Same slot = same ID → MERGE + SET updates properties. No section of a source takes precedence — read ALL content first, synthesize the richest combined version per metric from every section, then write once per slot.
+Deterministic slot-based `GuidanceUpdate.id` enforces dedup. Same slot = same ID → MERGE + SET updates properties.
+
+**Transcripts**: Two-phase extraction — PR first (Step 3a), then Q&A enrichment exchange-by-exchange (Step 3b). See guidance-extract.md Step 3 and PROFILE_TRANSCRIPT.md Duplicate Resolution.
+
+**All other source types**: Read all content first, extract the richest version per metric, write once per slot.
 
 ---
 
@@ -531,6 +535,7 @@ Applied AFTER extraction, BEFORE writing to graph:
 | **Quote max 500 chars** | Truncate at sentence boundary with "..." if needed. |
 | **100% recall priority** | When in doubt, extract it. False positives > missed guidance. |
 | **News: company guidance only** | Ignore analyst estimates ("Est $X", "consensus $Y"). Extract only company-issued guidance. |
+| **Factors are conditions, not items** | If a forward-looking statement quantifies a factor affecting another guided metric (e.g., FX headwind, week count, commodity cost tailwind), capture it in that metric's `conditions` field — not as a standalone item. |
 
 ---
 
