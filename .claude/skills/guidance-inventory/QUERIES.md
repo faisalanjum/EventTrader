@@ -555,6 +555,24 @@ RETURN g.label, g.id AS guidance_id,
 ORDER BY g.label, gu.segment
 ```
 
+### 7F. Prior-Transcript Guidance Baseline (Completeness Check)
+
+Returns all labels this company has ever guided on via transcripts, with frequency and recency. Used by `guidance-qa-enrich` to detect missing items after Q&A processing.
+
+```cypher
+MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance),
+      (gu)-[:FOR_COMPANY]->(c:Company {ticker: $ticker}),
+      (gu)-[:FROM_SOURCE]->(t:Transcript)
+WHERE gu.given_date < $current_given_date
+WITH g.label AS label,
+     max(gu.given_date) AS last_seen,
+     count(DISTINCT gu.given_date) AS frequency
+RETURN label, last_seen, frequency
+ORDER BY frequency DESC
+```
+
+**Usage**: After Step 4 Q&A processing, compare current extraction labels against this baseline. Any previously-guided label absent from the current set triggers a targeted re-scan of Q&A exchanges for that metric.
+
 ---
 
 ## 8. Data Inventory

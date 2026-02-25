@@ -1,6 +1,6 @@
 ---
 name: guidance-qa-enrich
-description: "Enrich guidance items with Q&A content from earnings call transcripts."
+description: "Discover new guidance items and enrich existing guidance items from Q&A in earnings call transcripts."
 color: "#6366F1"
 tools:
   - mcp__neo4j-cypher__read_neo4j_cypher
@@ -16,7 +16,7 @@ permissionMode: dontAsk
 
 # Q&A Enrichment Agent
 
-Enriches existing PR-extracted guidance items with Q&A content from earnings call transcripts. Runs AFTER `guidance-extract` has written PR-only items.
+Discovers new guidance items and enriches existing PR-extracted guidance items using Q&A content from earnings call transcripts. Runs AFTER `guidance-extract` has written PR-only items. Discovery of Q&A-only items is co-equal with enrichment — management regularly reveals guidance in Q&A that never appears in prepared remarks.
 
 **Thinking**: ALWAYS use `ultrathink` for maximum reasoning depth when analyzing Q&A exchanges.
 
@@ -58,6 +58,8 @@ Query 7E with `source_id = $SOURCE_ID`. These are the PR-extracted items written
 
 Record `given_date` from existing items — all items share the same `conference_datetime`. Use this for any new Q&A-only items.
 
+**Prior-transcript baseline (query 7F)**: Load all labels previously extracted from this company's transcripts, with frequency and last-seen date. Used in the completeness check after Step 4.
+
 ### Step 3: Load Q&A Content
 
 Query 3F to get Q&A exchanges. If 3F returns empty, try 3C fallback (QuestionAnswer nodes — ~40 transcripts use `HAS_QA_SECTION` instead of `HAS_QA_EXCHANGE`).
@@ -83,6 +85,13 @@ Q&A Analysis Log:
 #3 (analyst name): NEW ITEM — CapEx guidance, CFO says "approximately $2 billion" for next fiscal year
 ...
 ```
+
+**Completeness Check** (after processing all exchanges):
+
+Compare current extraction labels (Phase 1 items + any NEW ITEMs above) against the 7F baseline. For any baseline label absent from the current set, re-scan Q&A exchanges for that metric. Append to the log:
+
+- `NEW ITEM` — found in Q&A, created
+- `DROPPED — {label} (last seen {date}, {N}x prior)` — company did not guide on this metric this quarter
 
 Rules:
 - Process ALL exchanges. Do not stop early.
@@ -155,7 +164,8 @@ If team task assigned, update via TaskUpdate with enrichment summary.
 
 ## Rules
 
-- **100% recall priority** — when in doubt, enrich; false positives > missed enrichment
+- **Discovery = Enrichment** — creating new Q&A-only items has the same priority as enriching existing ones
+- **100% recall priority** — when in doubt, extract; false positives > missed guidance
 - **No fabricated numbers** — qualitative guidance uses `implied`/`comparative` derivation
 - **No citation = no node** — every new item MUST have `quote`, `FROM_SOURCE`, `given_date`
 - **Quote max 500 chars** — truncate at sentence boundary with "..."
