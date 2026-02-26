@@ -14,7 +14,7 @@ import tempfile
 sys.path.insert(0, "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts")
 sys.path.insert(0, "/home/faisal/EventMarketDB")
 
-from guidance_write_cli import _ensure_ids
+from guidance_write_cli import _ensure_ids, _ensure_period
 
 
 # ── _ensure_ids tests ────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ def _make_raw_item(**overrides):
     item = {
         'label': 'Revenue',
         'source_id': 'TEST_SRC',
-        'period_u_id': 'guidance_period_320193_duration_FY2025_Q1',
+        'period_u_id': 'gp_2024-10-01_2024-12-31',
         'basis_norm': 'unknown',
         'segment': 'Total',
         'low': 94.0, 'mid': None, 'high': 97.0,
@@ -45,7 +45,7 @@ def test_ensure_ids_computes_when_missing():
     assert 'guidance_update_id' in result
     assert 'evhash16' in result
     assert result['guidance_id'] == 'guidance:revenue'
-    assert result['guidance_update_id'].startswith('gu:TEST_SRC:revenue:')
+    assert result['guidance_update_id'].startswith('gu:TEST_SRC:revenue:gp_')
 
 
 def test_ensure_ids_skips_when_present():
@@ -315,3 +315,138 @@ def test_cli_batch_multiple_items():
         assert len(set(ids)) == 3
     finally:
         os.unlink(path)
+
+
+# ── Period routing tests (build_guidance_period_id integration) ────────
+
+def test_ensure_period_computes_from_llm_fields():
+    """Item without period_u_id gets it computed from fiscal fields + fye_month."""
+    item = _make_raw_item()
+    del item['period_u_id']
+    item['fiscal_year'] = 2025
+    item['fiscal_quarter'] = 1
+
+    _ensure_period(item, fye_month=9)  # AAPL FYE Sep
+
+    assert item['period_u_id'] == 'gp_2024-10-01_2024-12-31'
+    assert item['period_scope'] == 'quarter'
+    assert item['time_type'] == 'duration'
+    assert item['gp_start_date'] == '2024-10-01'
+    assert item['gp_end_date'] == '2024-12-31'
+
+
+def test_ensure_period_skips_when_present():
+    """Item with existing period_u_id is not modified."""
+    item = _make_raw_item(period_u_id='gp_2025-01-01_2025-03-31')
+    _ensure_period(item, fye_month=12)
+    assert item['period_u_id'] == 'gp_2025-01-01_2025-03-31'
+    assert 'period_scope' not in item  # Not touched
+
+
+def test_ensure_period_sentinel():
+    """Sentinel class routes to sentinel u_id with null dates."""
+    item = _make_raw_item()
+    del item['period_u_id']
+    item['sentinel_class'] = 'medium_term'
+
+    _ensure_period(item, fye_month=12)
+
+    assert item['period_u_id'] == 'gp_MT'
+    assert item['gp_start_date'] is None
+    assert item['gp_end_date'] is None
+    assert item['period_scope'] == 'medium_term'
+
+
+def test_ensure_period_missing_fye_raises():
+    """Missing fye_month when item has no period_u_id raises ValueError."""
+    item = _make_raw_item()
+    del item['period_u_id']
+    item['fiscal_year'] = 2025
+    item['fiscal_quarter'] = 1
+
+    try:
+        _ensure_period(item, fye_month=None)
+        assert False, "Expected ValueError"
+    except ValueError as e:
+        assert 'fye_month' in str(e)
+
+
+def test_ensure_ids_with_period_routing():
+    """Full ID computation when item has no period_u_id — routing + IDs in one call."""
+    item = _make_raw_item()
+    del item['period_u_id']
+    item['fiscal_year'] = 2025
+    item['fiscal_quarter'] = 2
+
+    result = _ensure_ids(item, fye_month=12)  # Dec FYE
+
+    assert result['period_u_id'] == 'gp_2025-04-01_2025-06-30'
+    assert result['guidance_id'] == 'guidance:revenue'
+    assert 'gp_2025-04-01_2025-06-30' in result['guidance_update_id']
+    assert result['period_scope'] == 'quarter'
+
+
+def test_cli_dry_run_with_fye_month_and_routing():
+    """Full CLI dry-run with LLM fields (no period_u_id) — period routed by CLI."""
+    import subprocess
+
+    item = {
+        'label': 'Revenue',
+        'source_id': 'TEST_SRC',
+        'basis_norm': 'unknown',
+        'segment': 'Total',
+        'low': 94.0, 'mid': None, 'high': 97.0,
+        'unit_raw': 'billion',
+        'qualitative': None,
+        'conditions': None,
+        'given_date': '2025-01-30',
+        'quote': 'We expect Q1 revenue between $94B and $97B',
+        'fiscal_year': 2025,
+        'fiscal_quarter': 1,
+    }
+    data = {
+        'source_id': 'TEST_SRC',
+        'source_type': 'transcript',
+        'ticker': 'AAPL',
+        'fye_month': 9,
+        'items': [item],
+    }
+
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        json.dump(data, f)
+        path = f.name
+
+    try:
+        result = subprocess.run(
+            [sys.executable, '-m', 'guidance_write_cli', path, '--dry-run'],
+            capture_output=True, text=True,
+            cwd='/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts',
+            env={**os.environ, 'PYTHONPATH': '/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts:/home/faisal/EventMarketDB'},
+        )
+        assert result.returncode == 0, f"CLI failed: {result.stderr}"
+        output = json.loads(result.stdout)
+        assert output['mode'] == 'dry_run'
+        assert output['valid'] == 1
+        # The item should have been routed to gp_2024-10-01_2024-12-31 (AAPL Q1 FY2025)
+        gu_id = output['results'][0]['id']
+        assert 'gp_2024-10-01_2024-12-31' in gu_id
+    finally:
+        os.unlink(path)
+
+
+# ── Run all tests ─────────────────────────────────────────────────────────
+
+if __name__ == "__main__":
+    tests = [(name, obj) for name, obj in sorted(globals().items())
+             if name.startswith('test_') and callable(obj)]
+    passed = failed = 0
+    for name, fn in tests:
+        try:
+            fn()
+            passed += 1
+            print(f"  PASS  {name}")
+        except Exception as e:
+            failed += 1
+            print(f"  FAIL  {name}: {e}")
+    print(f"\n{passed} passed, {failed} failed out of {passed + failed}")
+    sys.exit(1 if failed else 0)

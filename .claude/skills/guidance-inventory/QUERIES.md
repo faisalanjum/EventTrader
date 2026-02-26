@@ -55,7 +55,7 @@ LIMIT 1
 
 ### 1C. Period Pre-Fetch
 
-Pre-fetch all Period nodes for a company. Used by XBRL pipeline for period classification. Not required for guidance extraction (fiscal-keyed Periods use `build_period_u_id()` instead).
+Pre-fetch all Period nodes for a company. Used by XBRL pipeline for period classification. Not required for guidance extraction (guidance uses calendar-based GuidancePeriod nodes via `build_guidance_period_id()` instead).
 
 ```cypher
 MATCH (ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
@@ -539,18 +539,19 @@ Reads back all properties of existing GuidanceUpdates from a source. Used by `gu
 MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(src)
 WHERE src.id = $source_id
 MATCH (gu)-[:UPDATES]->(g:Guidance)
-MATCH (gu)-[:HAS_PERIOD]->(p:Period)
+MATCH (gu)-[:HAS_PERIOD]->(gp:GuidancePeriod)
 OPTIONAL MATCH (gu)-[:MAPS_TO_CONCEPT]->(c:Concept)
 OPTIONAL MATCH (gu)-[:MAPS_TO_MEMBER]->(m:Member)
 RETURN g.label, g.id AS guidance_id,
-       gu.id, gu.evhash16, gu.given_date, gu.period_type,
-       gu.fiscal_year, gu.fiscal_quarter, gu.segment,
+       gu.id, gu.evhash16, gu.given_date, gu.period_scope,
+       gu.time_type, gu.fiscal_year, gu.fiscal_quarter, gu.segment,
        gu.low, gu.mid, gu.high, gu.canonical_unit,
        gu.basis_norm, gu.basis_raw, gu.derivation,
        gu.qualitative, gu.quote, gu.section,
        gu.source_key, gu.source_type, gu.conditions,
        gu.xbrl_qname, gu.unit_raw,
-       p.u_id AS period_u_id, p.period_type AS period_node_type,
+       gp.u_id AS period_u_id,
+       gp.start_date AS gp_start_date, gp.end_date AS gp_end_date,
        collect(DISTINCT m.u_id) AS member_u_ids
 ORDER BY g.label, gu.segment
 ```
@@ -751,4 +752,4 @@ guidance OR outlook OR expects OR anticipates OR "full year" OR "fiscal year"
 5. **Extract** → **Validate** → **Write** via `guidance_writer.py`
 
 ---
-*Version 2.10 | 2026-02-22 | Removed 1C from Execution Order (not needed for guidance extraction; fiscal-keyed Periods use build_period_u_id). Prior: v2.9 (7A/7B/8B FOR_COMPANY fix, 7B/7D canonical_unit). v2.8 (1C DISTINCT dedup, 2A removed LIMIT 50). v2.7 (3B phantom null, null-date guards, QuestionAnswer types, 6B/6C dates required).*
+*Version 2.11 | 2026-02-26 | 7E: Period→GuidancePeriod, gu.period_type→gu.period_scope, added gu.time_type, gp.start_date/end_date, removed p.period_type AS period_node_type. Prior: v2.10 (removed 1C from Execution Order). v2.9 (7A/7B/8B FOR_COMPANY fix, 7B/7D canonical_unit). v2.8 (1C DISTINCT dedup). v2.7 (3B phantom null, null-date guards).*

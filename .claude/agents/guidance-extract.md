@@ -83,17 +83,35 @@ Apply empty-content rules from SKILL.md §17.
 
 Apply per-source profile rules (loaded in auto-load step), quality filters from SKILL.md §13, and existing Guidance tags (from Step 1) to reuse canonical metric names.
 
-For each guidance item, extract: `quote`, period intent (`fiscal_year`, `fiscal_quarter`, `period_type`), `basis_raw`, metric (`label`), numeric values (`low`/`mid`/`high`), `derivation`, `segment`, `conditions`, XBRL candidates.
+For each guidance item, extract: `quote`, `basis_raw`, metric (`label`), numeric values (`low`/`mid`/`high`), `derivation`, `segment`, `conditions`, XBRL candidates, and these **LLM period extraction fields**:
+
+| Field | Type | When to set |
+|---|---|---|
+| `fiscal_year` | int / null | When text mentions a fiscal year |
+| `fiscal_quarter` | int / null | When text mentions a specific quarter (1-4) |
+| `half` | int / null | When text mentions H1 or H2 (1 or 2) |
+| `month` | int / null | When text mentions a specific month (1-12) |
+| `long_range_start_year` | int / null | Start year of a multi-year span |
+| `long_range_end_year` | int / null | End year of a span, or single target year ("by 2028" -> 2028) |
+| `calendar_override` | bool | Only when text explicitly says "calendar year/quarter" |
+| `sentinel_class` | string / null | Only when NO fiscal fields are extractable: `short_term`, `medium_term`, `long_term`, `undefined` |
+| `time_type` | string / null | Only for known balance-sheet items: `instant`. Omit for `duration` (default ~99%) |
+
+**Rules**: Set as many fiscal fields as text supports. `sentinel_class` ONLY when ALL fiscal fields are null (4-way judgment call). Known instant labels: `cash_and_equivalents`, `total_debt`, `long_term_debt`, `shares_outstanding`, `book_value`, `net_debt`.
+
+**Fiscal Context Rule**: In earnings calls and SEC filings, ALL period references are fiscal unless explicitly stated as calendar.
+
+**Resolution Priority**: Always prefer the most specific `period_scope` with determinable dates. Sentinel only when dates are genuinely not determinable. "By 2028" -> `long_range` (has year), NOT `long_term`. "Long-term margin model" -> `long_term` (no year).
 
 ### Step 4: Deterministic Validation (MANDATORY — use scripts, not LLM math)
 
-You MUST invoke `guidance_ids.py` via Bash for EVERY extracted item. Do not compute IDs, canonicalize units, or build period u_ids yourself. For each item:
+You MUST invoke `guidance_ids.py` via Bash for EVERY extracted item. Do not compute IDs, canonicalize units, or build period IDs yourself. For each item:
 
-1. **Build fiscal-keyed period_u_id** — `guidance_ids.py:build_period_u_id()` via Bash (see invocation below)
+1. **Period routing** — include LLM period fields in JSON payload; the CLI computes `period_u_id` (gp_ format) via `build_guidance_period_id()` when items lack pre-computed `period_u_id`. Or compute explicitly via Bash (see invocation below).
 2. **Canonicalize unit + values** — `guidance_ids.py` via Bash (see invocation below)
 3. **Validate basis** — SKILL.md §6: explicit-only qualifier from quote span, otherwise `unknown`
 4. **Resolve `xbrl_qname`** — match against concept cache (SKILL.md §11)
-5. **Member match** — for each item where segment ≠ 'Total', scan the member cache from Step 1, match segment name to member name (case-insensitive, ignore 'Member' suffix), and add matched `u_id` to `member_u_ids`
+5. **Member match** — for each item where segment != 'Total', scan the member cache from Step 1, match segment name to member name (case-insensitive, ignore 'Member' suffix), and add matched `u_id` to `member_u_ids`
 6. **Compute deterministic IDs** — `guidance_ids.py:build_guidance_ids()` via Bash
 
 If uncertain on XBRL/member: keep core item, set `xbrl_qname=null`, skip member edges.
@@ -117,18 +135,22 @@ This is a batch operation — one Write + one Bash call for ALL items. Do not wr
 
 ## Script Invocations
 
-### build_period_u_id (guidance_ids.py)
+### build_guidance_period_id (guidance_ids.py)
 
 ```bash
 python3 -c "
 import sys; sys.path.insert(0, '.claude/skills/earnings-orchestrator/scripts')
-from guidance_ids import build_period_u_id
-result = build_period_u_id(cik='$CIK', period_type='duration', fiscal_year=$FY, fiscal_quarter=$FQ)
-print(result)
+from guidance_ids import build_guidance_period_id; import json
+result = build_guidance_period_id(fye_month=$FYE_MONTH, fiscal_year=$FY, fiscal_quarter=$FQ)
+print(json.dumps(result))
 "
 ```
 
-Returns: `guidance_period_{cik}_duration_FY{year}_Q{quarter}` (or annual/half/LR/MT/UNDEF variants)
+Returns: `{"u_id": "gp_2025-04-01_2025-06-30", "start_date": "2025-04-01", "end_date": "2025-06-30", "period_scope": "quarter", "time_type": "duration"}`
+
+Supports all LLM fields: `half=`, `month=`, `long_range_start_year=`, `long_range_end_year=`, `calendar_override=`, `sentinel_class=`, `time_type=`, `label_slug=`.
+
+**Note**: When using the CLI write path (Step 5), you do NOT need to call this explicitly — include the LLM fields in the JSON payload and the CLI computes period routing automatically via `_ensure_period()`.
 
 ### build_guidance_ids (guidance_ids.py)
 
@@ -160,11 +182,13 @@ Write this to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
     "source_id": "AAPL_2023-11-03T17.00.00-04.00",
     "source_type": "transcript",
     "ticker": "AAPL",
+    "fye_month": 9,
     "items": [
         {
             "label": "Revenue",
             "given_date": "2023-11-02",
-            "period_u_id": "guidance_period_320193_duration_FY2024_Q1",
+            "fiscal_year": 2024,
+            "fiscal_quarter": 1,
             "basis_norm": "unknown",
             "segment": "Total",
             "low": 89.0, "mid": null, "high": 93.0,
@@ -176,10 +200,6 @@ Write this to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
             "source_key": "full",
             "derivation": "explicit",
             "basis_raw": null,
-            "period_type": "quarter",
-            "fiscal_year": 2024,
-            "fiscal_quarter": 1,
-            "period_node_type": "duration",
             "aliases": [],
             "xbrl_qname": "us-gaap:Revenues",
             "member_u_ids": []
@@ -188,7 +208,9 @@ Write this to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
 }
 ```
 
-Items do NOT need pre-computed IDs — the CLI calls `build_guidance_ids()` internally.
+Items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally. Include `fye_month` at top level when items use LLM period fields instead of pre-computed `period_u_id`.
+
+**LLM period fields** (optional per item — only needed when `period_u_id` is not pre-computed): `fiscal_year`, `fiscal_quarter`, `half`, `month`, `long_range_start_year`, `long_range_end_year`, `calendar_override`, `sentinel_class`, `time_type`.
 
 ### Invocation
 

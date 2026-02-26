@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts")
 
 from fiscal_resolve import resolve, _resolve_from_periods
-from get_quarterly_filings import _compute_fiscal_dates
+from fiscal_math import _compute_fiscal_dates
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────

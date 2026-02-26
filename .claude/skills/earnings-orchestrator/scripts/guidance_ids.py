@@ -7,7 +7,13 @@ Every extraction code path MUST use these functions — never hand-build IDs.
 
 import hashlib
 import re
+import calendar
+import logging
 from typing import Optional
+
+from fiscal_math import _compute_fiscal_dates
+
+logger = logging.getLogger(__name__)
 
 
 # ── slug ────────────────────────────────────────────────────────────────────
@@ -216,7 +222,8 @@ def canonicalize_source_id(source_id: str) -> str:
     return source_id.strip().replace(':', '_')
 
 
-# ── Fiscal-keyed Period u_id builder (v3.0 §6) ────────────────────────
+# ── DEPRECATED: Fiscal-keyed Period u_id builder ─────────────────────
+# Kept for backward compatibility. Use build_guidance_period_id() instead.
 
 def build_period_u_id(
     *,
@@ -274,6 +281,145 @@ def build_period_u_id(
 
     # Undefined (no fiscal identity)
     return f"{prefix}_UNDEF"
+
+
+# ── Calendar-based GuidancePeriod builder ────────────────────────────────
+
+KNOWN_INSTANT_LABELS = frozenset({
+    'cash_and_equivalents', 'total_debt', 'long_term_debt',
+    'shares_outstanding', 'book_value', 'net_debt',
+})
+
+SENTINEL_MAP = {
+    'short_term': 'gp_ST',
+    'medium_term': 'gp_MT',
+    'long_term': 'gp_LT',
+    'undefined': 'gp_UNDEF',
+}
+
+
+def build_guidance_period_id(
+    *,
+    fye_month: int,
+    fiscal_year: Optional[int] = None,
+    fiscal_quarter: Optional[int] = None,
+    half: Optional[int] = None,
+    month: Optional[int] = None,
+    long_range_start_year: Optional[int] = None,
+    long_range_end_year: Optional[int] = None,
+    calendar_override: bool = False,
+    sentinel_class: Optional[str] = None,
+    time_type: Optional[str] = None,
+    label_slug: Optional[str] = None,
+) -> dict:
+    """
+    Route LLM extraction fields to a calendar-based GuidancePeriod.
+
+    Returns dict: {u_id, start_date, end_date, period_scope, time_type}
+
+    Routing priority (first match wins):
+      1. sentinel_class set       -> sentinel u_id, null dates
+      2. long_range_end_year set  -> long_range, FY-based dates
+      3. month set                -> monthly, calendar month
+      4. half set                 -> half, compose from Q starts/ends
+      5. fiscal_quarter set       -> quarter
+      6. fiscal_year set (only)   -> annual
+      7. fallthrough              -> gp_UNDEF (defensive)
+    """
+    fye = 12 if calendar_override else fye_month
+
+    # Detect instant from label
+    is_instant = (time_type == 'instant') or (
+        label_slug is not None and label_slug in KNOWN_INSTANT_LABELS
+    )
+    resolved_time_type = 'instant' if is_instant else 'duration'
+
+    # Step 1: Sentinel
+    if sentinel_class is not None:
+        if sentinel_class not in SENTINEL_MAP:
+            raise ValueError(
+                f"sentinel_class must be one of {set(SENTINEL_MAP)}, got '{sentinel_class}'"
+            )
+        return {
+            'u_id': SENTINEL_MAP[sentinel_class],
+            'start_date': None,
+            'end_date': None,
+            'period_scope': sentinel_class,
+            'time_type': resolved_time_type,
+        }
+
+    # Step 2: Long range
+    if long_range_end_year is not None:
+        if long_range_start_year is not None:
+            start = _compute_fiscal_dates(fye, long_range_start_year, "FY")[0]
+        else:
+            start = _compute_fiscal_dates(fye, long_range_end_year, "FY")[0]
+        end = _compute_fiscal_dates(fye, long_range_end_year, "FY")[1]
+        return _finalize(start, end, 'long_range', resolved_time_type, is_instant)
+
+    # For steps 3-6, fiscal_year is required
+    fy = fiscal_year
+
+    # Step 3: Monthly (no FYE needed — calendar month)
+    if month is not None:
+        year = fy if fy is not None else 2000  # fy should always be set
+        _, last_day = calendar.monthrange(year, month)
+        start = f"{year}-{month:02d}-01"
+        end = f"{year}-{month:02d}-{last_day:02d}"
+        return _finalize(start, end, 'monthly', resolved_time_type, is_instant)
+
+    # Step 4: Half
+    if half is not None and fy is not None:
+        if half == 1:
+            start = _compute_fiscal_dates(fye, fy, "Q1")[0]
+            end = _compute_fiscal_dates(fye, fy, "Q2")[1]
+        elif half == 2:
+            start = _compute_fiscal_dates(fye, fy, "Q3")[0]
+            end = _compute_fiscal_dates(fye, fy, "Q4")[1]
+        else:
+            raise ValueError(f"half must be 1 or 2, got {half}")
+        return _finalize(start, end, 'half', resolved_time_type, is_instant)
+
+    # Step 5: Quarter
+    if fiscal_quarter is not None and fy is not None:
+        start, end = _compute_fiscal_dates(fye, fy, f"Q{fiscal_quarter}")
+        return _finalize(start, end, 'quarter', resolved_time_type, is_instant)
+
+    # Step 6: Annual
+    if fy is not None:
+        start, end = _compute_fiscal_dates(fye, fy, "FY")
+        return _finalize(start, end, 'annual', resolved_time_type, is_instant)
+
+    # Step 7: Fallthrough — should not happen if LLM set sentinel_class
+    logger.warning("build_guidance_period_id: no fields matched, falling through to gp_UNDEF")
+    return {
+        'u_id': 'gp_UNDEF',
+        'start_date': None,
+        'end_date': None,
+        'period_scope': 'undefined',
+        'time_type': resolved_time_type,
+    }
+
+
+def _finalize(start_date: str, end_date: str, period_scope: str,
+              time_type: str, is_instant: bool) -> dict:
+    """Build the return dict, collapsing to instant if needed."""
+    if is_instant:
+        # Instant: start_date = end_date (the period's end date)
+        return {
+            'u_id': f"gp_{end_date}_{end_date}",
+            'start_date': end_date,
+            'end_date': end_date,
+            'period_scope': period_scope,
+            'time_type': 'instant',
+        }
+    return {
+        'u_id': f"gp_{start_date}_{end_date}",
+        'start_date': start_date,
+        'end_date': end_date,
+        'period_scope': period_scope,
+        'time_type': 'duration',
+    }
 
 
 # ── Top-level builder ──────────────────────────────────────────────────────

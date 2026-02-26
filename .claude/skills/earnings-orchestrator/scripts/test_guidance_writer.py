@@ -4,7 +4,7 @@ Tests for guidance_writer.py (v3.0) — validates Cypher construction, parameter
 assembly, validation gates, dry-run, feature flag, and batch logic.
 
 v3.0 changes: No Context node, no Unit node, direct FOR_COMPANY edge,
-fiscal-keyed Period (guidance_period_ namespace), canonical_unit as property.
+calendar-based GuidancePeriod (gp_ namespace), canonical_unit as property.
 
 No Neo4j connection needed — all tests use mock manager.
 """
@@ -62,7 +62,8 @@ def _make_item(**overrides):
         'label': 'Revenue',
         'aliases': ['sales', 'net revenue'],
         'given_date': '2025-01-30',
-        'period_type': 'quarter',
+        'period_scope': 'quarter',
+        'time_type': 'duration',
         'fiscal_year': 2025,
         'fiscal_quarter': 2,
         'segment': 'Total',
@@ -77,8 +78,9 @@ def _make_item(**overrides):
         'conditions': None,
         'xbrl_qname': 'us-gaap:Revenues',
         'member_u_ids': [],
-        'period_u_id': 'guidance_period_320193_duration_FY2025_Q2',
-        'period_node_type': 'duration',
+        'period_u_id': 'gp_2025-01-01_2025-06-30',
+        'gp_start_date': '2025-01-01',
+        'gp_end_date': '2025-06-30',
     }
     item.update(overrides)
     return item
@@ -177,14 +179,14 @@ def test_query_company_by_ticker():
     assert 'MATCH (company:Company {ticker: $ticker})' in q
     assert '{cik: $cik}' not in q
 
-def test_query_period_fiscal_keyed():
-    """Period MERGE uses fiscal properties, not calendar dates."""
+def test_query_period_calendar_based():
+    """GuidancePeriod MERGE uses calendar dates, not fiscal properties."""
     q = _build_core_query('transcript')
-    assert 'p.fiscal_year = $fiscal_year' in q
-    assert 'p.fiscal_quarter = $fiscal_quarter' in q
-    assert 'p.cik = toString(toInteger(company.cik))' in q
-    assert 'start_date' not in q
-    assert 'end_date' not in q
+    assert 'GuidancePeriod' in q
+    assert 'gp.start_date = $gp_start_date' in q
+    assert 'gp.end_date = $gp_end_date' in q
+    assert 'p.cik' not in q
+    assert 'p.fiscal_year' not in q
 
 def test_query_optional_match_existing():
     """OPTIONAL MATCH for was_created detection before MERGE."""
@@ -216,7 +218,7 @@ def test_query_all_core_edges():
     assert 'MERGE (gu)-[:UPDATES]->(g)' in q
     assert 'MERGE (gu)-[:FROM_SOURCE]->(source)' in q
     assert 'MERGE (gu)-[:FOR_COMPANY]->(company)' in q
-    assert 'MERGE (gu)-[:HAS_PERIOD]->(p)' in q
+    assert 'MERGE (gu)-[:HAS_PERIOD]->(gp)' in q
     # v3.0 removals
     assert 'IN_CONTEXT' not in q
     assert 'HAS_UNIT' not in q
@@ -283,12 +285,12 @@ def test_params_has_timestamp():
 def test_params_defaults():
     """Missing optional fields get sensible defaults."""
     item = _make_item()
-    del item['period_node_type']
     del item['segment']
     del item['basis_norm']
     del item['derivation']
     params = _build_params(item, 'src1', 'transcript', 'AAPL')
-    assert params['period_node_type'] == 'duration'
+    assert params['period_scope'] == 'quarter'
+    assert params['time_type'] == 'duration'
     assert params['segment'] == 'Total'
     assert params['basis_norm'] == 'unknown'
     assert params['derivation'] == 'implied'
@@ -540,6 +542,26 @@ def test_write_without_concept():
     finally:
         guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
 
+def test_sentinel_period_write():
+    """Item with sentinel period (gp_MT) passes null dates through writer correctly."""
+    item = _make_item(
+        period_u_id='gp_MT',
+        period_scope='medium_term',
+        gp_start_date=None,
+        gp_end_date=None,
+    )
+    # Verify dry-run accepts sentinel items
+    result = write_guidance_item(None, item, 'src1', 'transcript', 'AAPL', dry_run=True)
+    assert result['dry_run'] is True
+    assert result['error'] is None
+    # Verify params correctly pass null dates for sentinel
+    params = _build_params(item, 'src1', 'transcript', 'AAPL')
+    assert params['period_u_id'] == 'gp_MT'
+    assert params['gp_start_date'] is None
+    assert params['gp_end_date'] is None
+    assert params['period_scope'] == 'medium_term'
+    assert params['time_type'] == 'duration'
+
 def test_concept_no_match_returns_zero():
     """Concept query returns None (no matching Concept node) → 0 links."""
     old_val = guidance_writer.ENABLE_GUIDANCE_WRITES
@@ -641,18 +663,29 @@ def test_batch_dry_run():
 # ── Constraint creation tests ────────────────────────────────────────────
 
 def test_create_constraints():
-    """create_guidance_constraints runs 2 constraint queries."""
+    """create_guidance_constraints runs 3 constraints + 4 sentinel MERGEs = 7 calls."""
     mgr = MockManager()
     create_guidance_constraints(mgr)
-    assert len(mgr.calls) == 2
+    assert len(mgr.calls) == 7
     q1 = mgr.calls[0][0]
     q2 = mgr.calls[1][0]
+    q3 = mgr.calls[2][0]
     assert 'guidance_id_unique' in q1
     assert 'Guidance' in q1
     assert 'guidance_update_id_unique' in q2
     assert 'GuidanceUpdate' in q2
+    assert 'guidance_period_id_unique' in q3
+    assert 'GuidancePeriod' in q3
     assert 'IF NOT EXISTS' in q1
     assert 'IF NOT EXISTS' in q2
+    assert 'IF NOT EXISTS' in q3
+    # Sentinel MERGEs
+    sentinel_calls = [mgr.calls[i][0] for i in range(3, 7)]
+    sentinel_ids = {'gp_ST', 'gp_MT', 'gp_LT', 'gp_UNDEF'}
+    for call in sentinel_calls:
+        assert 'GuidancePeriod' in call
+    found_ids = {c.split("'")[1] for c in sentinel_calls}
+    assert found_ids == sentinel_ids
 
 
 # ── Integration-style query content tests ─────────────────────────────────
@@ -661,7 +694,7 @@ def test_query_contains_all_gu_properties():
     """GuidanceUpdate SET includes all 19 extraction fields + system fields."""
     q = _build_core_query('transcript')
     expected_props = [
-        'gu.evhash16', 'gu.given_date', 'gu.period_type', 'gu.fiscal_year',
+        'gu.evhash16', 'gu.given_date', 'gu.period_scope', 'gu.time_type', 'gu.fiscal_year',
         'gu.fiscal_quarter', 'gu.segment', 'gu.low', 'gu.mid', 'gu.high',
         'gu.canonical_unit', 'gu.basis_norm', 'gu.basis_raw', 'gu.derivation',
         'gu.qualitative', 'gu.quote', 'gu.section', 'gu.source_key',
@@ -716,11 +749,13 @@ def test_params_no_ctx_fields():
     params = _build_params(_make_item(), 'src1', 'transcript', 'AAPL')
     assert 'ctx_u_id' not in params
 
-def test_params_no_date_fields():
-    """v3.0: No start_date/end_date in params (fiscal-keyed Period)."""
+def test_params_has_gp_date_fields():
+    """GuidancePeriod: gp_start_date and gp_end_date ARE in params."""
     params = _build_params(_make_item(), 'src1', 'transcript', 'AAPL')
-    assert 'start_date' not in params
-    assert 'end_date' not in params
+    assert 'gp_start_date' in params
+    assert 'gp_end_date' in params
+    assert params['gp_start_date'] == '2025-01-01'
+    assert params['gp_end_date'] == '2025-06-30'
 
 
 # ── Run all tests ─────────────────────────────────────────────────────────

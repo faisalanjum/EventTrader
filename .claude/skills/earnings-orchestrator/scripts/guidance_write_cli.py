@@ -10,11 +10,12 @@ Input JSON format:
     "source_id": "AAPL_2023-11-03T17.00.00-04.00",
     "source_type": "transcript",
     "ticker": "AAPL",
+    "fye_month": 9,
     "items": [
         {
             "label": "Revenue",
             "given_date": "2023-11-02",
-            "period_u_id": "guidance_period_320193_duration_FY2024_Q1",
+            "period_u_id": "gp_2023-10-01_2023-12-31",
             "basis_norm": "unknown",
             "segment": "Total",
             "low": 89.0, "mid": null, "high": 93.0,
@@ -26,10 +27,12 @@ Input JSON format:
             "source_key": "full",
             "derivation": "explicit",
             "basis_raw": null,
-            "period_type": "quarter",
+            "period_scope": "quarter",
+            "time_type": "duration",
             "fiscal_year": 2024,
             "fiscal_quarter": 1,
-            "period_node_type": "duration",
+            "gp_start_date": "2023-10-01",
+            "gp_end_date": "2023-12-31",
             "aliases": [],
             "xbrl_qname": "us-gaap:Revenues",
             "member_u_ids": []
@@ -40,6 +43,11 @@ Input JSON format:
 Items do NOT need pre-computed IDs — this CLI calls build_guidance_ids() internally.
 Items MAY include pre-computed IDs (guidance_id, guidance_update_id, evhash16, etc.)
 which will be used as-is.
+
+If items lack period_u_id but have LLM extraction fields (fiscal_year, fiscal_quarter,
+half, month, long_range_start_year, long_range_end_year, calendar_override, sentinel_class,
+time_type), the CLI computes the period via build_guidance_period_id(). Requires fye_month
+at the top level.
 
 Output: JSON to stdout with write results.
 """
@@ -52,7 +60,7 @@ import sys
 sys.path.insert(0, "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts")
 sys.path.insert(0, "/home/faisal/EventMarketDB")
 
-from guidance_ids import build_guidance_ids, build_period_u_id
+from guidance_ids import build_guidance_ids, build_period_u_id, build_guidance_period_id
 import guidance_writer
 from guidance_writer import write_guidance_batch, write_guidance_item
 
@@ -60,19 +68,59 @@ logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
 
-def _ensure_ids(item):
+def _ensure_period(item, fye_month):
+    """
+    Compute period_u_id + GuidancePeriod fields if not already present.
+
+    If item already has period_u_id, do nothing.
+    Otherwise, call build_guidance_period_id() using LLM extraction fields.
+    Requires fye_month from top-level payload.
+
+    Sets on item: period_u_id, period_scope, time_type, gp_start_date, gp_end_date.
+    """
+    if item.get('period_u_id'):
+        return item
+
+    if fye_month is None:
+        raise ValueError("Cannot compute period: fye_month required at top level when items lack period_u_id")
+
+    period = build_guidance_period_id(
+        fye_month=fye_month,
+        fiscal_year=item.get('fiscal_year'),
+        fiscal_quarter=item.get('fiscal_quarter'),
+        half=item.get('half'),
+        month=item.get('month'),
+        long_range_start_year=item.get('long_range_start_year'),
+        long_range_end_year=item.get('long_range_end_year'),
+        calendar_override=item.get('calendar_override', False),
+        sentinel_class=item.get('sentinel_class'),
+        time_type=item.get('time_type'),
+        label_slug=item.get('label_slug'),
+    )
+    item['period_u_id'] = period['u_id']
+    item['period_scope'] = period['period_scope']
+    item['time_type'] = period['time_type']
+    item['gp_start_date'] = period['start_date']
+    item['gp_end_date'] = period['end_date']
+    return item
+
+
+def _ensure_ids(item, fye_month=None):
     """
     Compute IDs if not already present in the item.
 
     If guidance_update_id is already set, skip ID computation (agent pre-computed).
-    Otherwise, call build_guidance_ids() to fill in:
-        guidance_id, guidance_update_id, evhash16, label_slug, segment_slug,
-        canonical_unit, canonical_low, canonical_mid, canonical_high
+    Otherwise:
+      1. Compute period (if needed) via build_guidance_period_id()
+      2. Compute IDs via build_guidance_ids()
     """
     if item.get('guidance_update_id'):
         return item
 
-    # Require fields for ID computation
+    # Step 1: Ensure period_u_id exists
+    _ensure_period(item, fye_month)
+
+    # Step 2: Require fields for ID computation
     required = ['label', 'period_u_id', 'basis_norm']
     for f in required:
         if not item.get(f):
@@ -120,6 +168,7 @@ def main():
     source_id = data.get('source_id')
     source_type = data.get('source_type')
     ticker = data.get('ticker')
+    fye_month = data.get('fye_month')  # Required when items lack period_u_id
     items = data.get('items', [])
 
     if not source_id or not source_type or not ticker:
@@ -140,7 +189,7 @@ def main():
     valid_items = []
     for i, item in enumerate(items):
         try:
-            item = _ensure_ids(item)
+            item = _ensure_ids(item, fye_month=fye_month)
             valid_items.append(item)
         except ValueError as e:
             errors.append({"index": i, "label": item.get('label', '?'), "error": str(e)})

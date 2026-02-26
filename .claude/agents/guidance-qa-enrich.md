@@ -54,6 +54,8 @@ This agent ONLY processes transcripts. Source type is always `transcript`.
 
 Query 7E with `source_id = $SOURCE_ID`. These are the PR-extracted items written by `guidance-extract`.
 
+7E returns: `period_u_id` (gp_ format), `gu.period_scope`, `gu.time_type`, `gp.start_date AS gp_start_date`, `gp.end_date AS gp_end_date`. No `period_node_type`.
+
 **If 7E returns 0 items**: Return error `PHASE_DEPENDENCY_FAILED — no Phase 1 items found for source {SOURCE_ID}. Run guidance-extract first.`
 
 Record `given_date` from existing items — all items share the same `conference_datetime`. Use this for any new Q&A-only items.
@@ -113,15 +115,7 @@ For new Q&A-only items: build from scratch using CIK/FYE from Step 1. Use `given
 
 For each item:
 
-1. **Build period_u_id** (new items only — enriched items already have it from 7E):
-```bash
-python3 -c "
-import sys; sys.path.insert(0, '.claude/skills/earnings-orchestrator/scripts')
-from guidance_ids import build_period_u_id
-result = build_period_u_id(cik='$CIK', period_type='duration', fiscal_year=$FY, fiscal_quarter=$FQ)
-print(result)
-"
-```
+1. **Period routing** (new items only — enriched items already have `period_u_id` from 7E): include LLM period fields (`fiscal_year`, `fiscal_quarter`, `half`, `month`, `long_range_start_year`, `long_range_end_year`, `calendar_override`, `sentinel_class`, `time_type`) in the item. The CLI computes `period_u_id` (gp_ format) via `build_guidance_period_id()` automatically.
 
 2. **Resolve xbrl_qname** against concept cache, **member match** for segment items (same as guidance-extract Step 4).
 
@@ -131,10 +125,11 @@ print(result)
     "source_id": "AAPL_2023-11-03T17.00.00-04.00",
     "source_type": "transcript",
     "ticker": "AAPL",
+    "fye_month": 9,
     "items": [ ... ]
 }
 ```
-Items do NOT need pre-computed IDs — the CLI calls `build_guidance_ids()` internally.
+Items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally. Include `fye_month` at top level when items use LLM period fields.
 
 4. **Invoke CLI** — env var enables writes without touching config files:
 ```bash

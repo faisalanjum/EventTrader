@@ -19,32 +19,15 @@ Output (JSON):
      "source": "lookup"|"fallback"}
 
 Implements §15G of the Guidance System Implementation Spec (v2.3).
-Imports period_to_fiscal() and _compute_fiscal_dates() from get_quarterly_filings.py
-without modification (Non-negotiable #1).
+Imports period_to_fiscal(), _compute_fiscal_dates(), and _normalize_fiscal_quarter()
+from fiscal_math.py (extracted pure-math module, no Neo4j dependency).
 """
 
 import json
 import sys
-import types
 from datetime import date, timedelta
 
-# Stub modules that get_quarterly_filings imports at top-level but we don't need.
-# The wrapper only uses pure functions (period_to_fiscal, _compute_fiscal_dates,
-# _normalize_fiscal_quarter) — none of which touch Neo4j or dotenv.
-for _mod_name in ('dotenv', 'neo4j'):
-    if _mod_name not in sys.modules:
-        _stub = types.ModuleType(_mod_name)
-        _stub.load_dotenv = lambda *a, **kw: None
-        _stub.GraphDatabase = type('GraphDatabase', (), {'driver': staticmethod(lambda *a, **kw: None)})
-        sys.modules[_mod_name] = _stub
-
-# Import non-negotiable functions (no modification)
-sys.path.insert(0, "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts")
-from get_quarterly_filings import (
-    period_to_fiscal,
-    _compute_fiscal_dates,
-    _normalize_fiscal_quarter,
-)
+from fiscal_math import period_to_fiscal, _compute_fiscal_dates, _normalize_fiscal_quarter
 
 
 def _resolve_from_periods(periods_raw, fye_month, fiscal_year, fq):

@@ -9,7 +9,7 @@ Design decisions:
   - One atomic Cypher query per GuidanceUpdate item (node + all edges)
   - ON CREATE SET for created timestamp, SET for all other properties (latest write wins)
   - MATCH for pre-existing targets (source by label, company by ticker)
-  - MERGE for nodes we create (Guidance, GuidanceUpdate, fiscal-keyed Period)
+  - MERGE for nodes we create (Guidance, GuidanceUpdate, calendar-based GuidancePeriod)
   - No Context node (direct FOR_COMPANY edge)
   - No Unit node (canonical_unit is a property on GuidanceUpdate)
   - Member edges batched via single UNWIND query (not N separate calls)
@@ -83,7 +83,7 @@ def _build_core_query(source_type):
       5. GuidanceUpdate uses ON CREATE SET for created, SET for all other props (latest wins)
       6. No Context node — direct FOR_COMPANY edge
       7. No Unit node — canonical_unit is a property on GuidanceUpdate
-      8. Period is fiscal-keyed (guidance_period_ namespace, no dates)
+      8. GuidancePeriod is calendar-based, company-agnostic (gp_ namespace)
     """
     source_label = SOURCE_LABEL_MAP[source_type]
 
@@ -104,20 +104,19 @@ MERGE (g:Guidance {{id: $guidance_id}})
     acc = [], a IN (coalesce(g.aliases, []) + coalesce($aliases, []))
     | CASE WHEN a IS NULL OR a IN acc THEN acc ELSE acc + a END)
 
-// Period (fiscal-keyed, guidance_period_ namespace, no calendar dates)
-MERGE (p:Period {{u_id: $period_u_id}})
-  ON CREATE SET p.id = $period_u_id,
-                p.period_type = $period_node_type,
-                p.fiscal_year = $fiscal_year,
-                p.fiscal_quarter = $fiscal_quarter,
-                p.cik = toString(toInteger(company.cik))
+// GuidancePeriod (calendar-based, company-agnostic, MERGE on id for index use)
+MERGE (gp:GuidancePeriod {{id: $period_u_id}})
+  ON CREATE SET gp.u_id = $period_u_id,
+                gp.start_date = $gp_start_date,
+                gp.end_date = $gp_end_date
 
 // GuidanceUpdate — MERGE on slot, SET all properties (latest write wins)
 MERGE (gu:GuidanceUpdate {{id: $guidance_update_id}})
   ON CREATE SET gu.created = $created_ts
   SET gu.evhash16 = $evhash16,
       gu.given_date = $given_date,
-      gu.period_type = $period_type,
+      gu.period_scope = $period_scope,
+      gu.time_type = $time_type,
       gu.fiscal_year = $fiscal_year,
       gu.fiscal_quarter = $fiscal_quarter,
       gu.segment = $segment,
@@ -141,7 +140,7 @@ MERGE (gu:GuidanceUpdate {{id: $guidance_update_id}})
 MERGE (gu)-[:UPDATES]->(g)
 MERGE (gu)-[:FROM_SOURCE]->(source)
 MERGE (gu)-[:FOR_COMPANY]->(company)
-MERGE (gu)-[:HAS_PERIOD]->(p)
+MERGE (gu)-[:HAS_PERIOD]->(gp)
 
 RETURN gu.id AS id, existing IS NULL AS was_created
 """
@@ -203,18 +202,20 @@ def _build_params(item, source_id, source_type, ticker):
         'aliases': item.get('aliases') or [],
         'created_date': today,
 
-        # Period (fiscal-keyed, no calendar dates)
+        # GuidancePeriod (calendar-based)
         'period_u_id': item['period_u_id'],
-        'period_node_type': item.get('period_node_type', 'duration'),
-        'fiscal_year': item.get('fiscal_year'),
-        'fiscal_quarter': item.get('fiscal_quarter'),
+        'gp_start_date': item.get('gp_start_date'),
+        'gp_end_date': item.get('gp_end_date'),
 
         # GuidanceUpdate
         'guidance_update_id': item['guidance_update_id'],
         'evhash16': item['evhash16'],
         'canonical_unit': item['canonical_unit'],
         'given_date': item['given_date'],
-        'period_type': item.get('period_type', 'quarter'),
+        'period_scope': item.get('period_scope', 'quarter'),
+        'time_type': item.get('time_type', 'duration'),
+        'fiscal_year': item.get('fiscal_year'),
+        'fiscal_quarter': item.get('fiscal_quarter'),
         'segment': item.get('segment', 'Total'),
         'low': item.get('canonical_low'),
         'mid': item.get('canonical_mid'),
@@ -361,16 +362,28 @@ def write_guidance_batch(manager, items, source_id, source_type, ticker,
 
 def create_guidance_constraints(manager):
     """
-    Create uniqueness constraints for Guidance and GuidanceUpdate nodes.
-    Idempotent — uses IF NOT EXISTS. Period constraint already exists from
-    XBRL pipeline; guidance_period_ namespace nodes are covered by it.
+    Create uniqueness constraints for Guidance, GuidanceUpdate, and
+    GuidancePeriod nodes. Pre-create 4 sentinel GuidancePeriod nodes.
+    All operations are idempotent.
     """
     constraints = [
         ("CREATE CONSTRAINT guidance_id_unique IF NOT EXISTS "
          "FOR (g:Guidance) REQUIRE g.id IS UNIQUE"),
         ("CREATE CONSTRAINT guidance_update_id_unique IF NOT EXISTS "
          "FOR (gu:GuidanceUpdate) REQUIRE gu.id IS UNIQUE"),
+        ("CREATE CONSTRAINT guidance_period_id_unique IF NOT EXISTS "
+         "FOR (gp:GuidancePeriod) REQUIRE gp.id IS UNIQUE"),
     ]
-    for cypher in constraints:
+    sentinels = [
+        ("MERGE (gp:GuidancePeriod {id: 'gp_ST'}) "
+         "SET gp.u_id = 'gp_ST', gp.start_date = null, gp.end_date = null"),
+        ("MERGE (gp:GuidancePeriod {id: 'gp_MT'}) "
+         "SET gp.u_id = 'gp_MT', gp.start_date = null, gp.end_date = null"),
+        ("MERGE (gp:GuidancePeriod {id: 'gp_LT'}) "
+         "SET gp.u_id = 'gp_LT', gp.start_date = null, gp.end_date = null"),
+        ("MERGE (gp:GuidancePeriod {id: 'gp_UNDEF'}) "
+         "SET gp.u_id = 'gp_UNDEF', gp.start_date = null, gp.end_date = null"),
+    ]
+    for cypher in constraints + sentinels:
         manager.execute_cypher_query(cypher, {})
-    logger.info("Guidance constraints ensured")
+    logger.info("Guidance constraints + GuidancePeriod sentinels ensured")

@@ -40,7 +40,7 @@ Graph-native guidance extraction system. Writes `Guidance` and `GuidanceUpdate` 
 
 ### Nodes
 
-**Created by guidance**: `Guidance` (generic metric tag), `GuidanceUpdate` (per-mention data point), `Period` (fiscal-keyed, `guidance_period_` namespace)
+**Created by guidance**: `Guidance` (generic metric tag), `GuidanceUpdate` (per-mention data point), `GuidancePeriod` (calendar-based, `gp_` namespace)
 **Reused (MATCH only)**: `Company`, `Concept`, `Member`, `Report` / `Transcript` / `News`
 **Removed**: `Context` (replaced by direct `FOR_COMPANY` edge), `Unit` (demoted to `canonical_unit` property)
 
@@ -51,7 +51,7 @@ Graph-native guidance extraction system. Writes `Guidance` and `GuidanceUpdate` 
 | GuidanceUpdate | UPDATES | Guidance | Always |
 | GuidanceUpdate | FROM_SOURCE | Report / Transcript / News | Always (provenance) |
 | GuidanceUpdate | FOR_COMPANY | Company | Always (direct, replaces Context) |
-| GuidanceUpdate | HAS_PERIOD | Period | Always (fiscal-keyed) |
+| GuidanceUpdate | HAS_PERIOD | GuidancePeriod | Always (calendar-based, 1:1 cardinality) |
 | GuidanceUpdate | MAPS_TO_CONCEPT | Concept | 0..1 when xbrl_qname resolves |
 | GuidanceUpdate | MAPS_TO_MEMBER | Member | 0..N confident segment matches |
 
@@ -63,6 +63,17 @@ FOR (g:Guidance) REQUIRE g.id IS UNIQUE;
 
 CREATE CONSTRAINT guidance_update_id_unique IF NOT EXISTS
 FOR (gu:GuidanceUpdate) REQUIRE gu.id IS UNIQUE;
+
+CREATE CONSTRAINT guidance_period_id_unique IF NOT EXISTS
+FOR (gp:GuidancePeriod) REQUIRE gp.id IS UNIQUE;
+```
+
+Sentinel nodes (pre-created via `create_guidance_constraints()`):
+```cypher
+(:GuidancePeriod {id: 'gp_ST',    u_id: 'gp_ST',    start_date: null, end_date: null})
+(:GuidancePeriod {id: 'gp_MT',    u_id: 'gp_MT',    start_date: null, end_date: null})
+(:GuidancePeriod {id: 'gp_LT',    u_id: 'gp_LT',    start_date: null, end_date: null})
+(:GuidancePeriod {id: 'gp_UNDEF', u_id: 'gp_UNDEF', start_date: null, end_date: null})
 ```
 
 ### Guidance Node Properties
@@ -76,7 +87,7 @@ FOR (gu:GuidanceUpdate) REQUIRE gu.id IS UNIQUE;
 
 ### GuidanceUpdate Node Properties
 
-All 19 extraction fields (see [§2](#2-extraction-fields)) plus system identity properties:
+All 20 extraction fields (see [§2](#2-extraction-fields)) plus system identity properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
@@ -89,29 +100,30 @@ All 19 extraction fields (see [§2](#2-extraction-fields)) plus system identity 
 
 ## 2. Extraction Fields
 
-Every GuidanceUpdate carries these 19 properties. System identity properties (`id`, `evhash16`) are added at write time.
+Every GuidanceUpdate carries these 20 properties. System identity properties (`id`, `evhash16`) are added at write time.
 
 | # | Field | Type | Constraint | Example |
 |---|-------|------|------------|---------|
 | 1 | `given_date` | String | ISO date | `"2025-01-30"` |
-| 2 | `period_type` | String | `quarter`, `annual`, `half`, `long-range`, `other` | `"quarter"` |
-| 3 | `fiscal_year` | Integer | | `2025` |
-| 4 | `fiscal_quarter` | Integer / null | 1-4; null for annual | `2` |
-| 5 | `segment` | String | Default `"Total"` | `"Services"` |
-| 6 | `low` | Float / null | | `94.0` |
-| 7 | `mid` | Float / null | Computed if low+high given | `95.5` |
-| 8 | `high` | Float / null | | `97.0` |
-| 9 | `canonical_unit` | String | Canonical: `usd`, `m_usd`, `percent`, `percent_yoy`, `percent_points`, `basis_points`, `x`, `count`, `unknown` (see [§8](#8-unit-canonicalization)) | `"m_usd"` |
-| 10 | `basis_norm` | String | `gaap`, `non_gaap`, `constant_currency`, `unknown` | `"non_gaap"` |
-| 11 | `basis_raw` | String / null | Verbatim basis text | `"adjusted"` |
-| 12 | `derivation` | String | See [§5](#5-derivation-rules) | `"calculated"` |
-| 13 | `qualitative` | String / null | What management expects (the prediction itself) | `"low to mid single digits"` |
-| 14 | `quote` | String | Max 500 chars, verbatim | `"We expect revenue between..."` |
-| 15 | `section` | String | Location within source | `"CFO Prepared Remarks"` |
-| 16 | `source_key` | String | Sub-document key | `"EX-99.1"`, `"full"`, `"title"`, `"MD&A"` |
-| 17 | `conditions` | String / null | Stated "if/assuming/excluding" caveats that qualify it | `"assumes no further rate hikes"` |
-| 18 | `source_type` | String | `8k`, `transcript`, `news`, `10q`, `10k` | `"transcript"` |
-| 19 | `created` | String | ISO timestamp of node creation | `"2026-02-18T14:30:00Z"` |
+| 2 | `period_scope` | String | `quarter`, `annual`, `half`, `monthly`, `long_range`, `short_term`, `medium_term`, `long_term`, `undefined` | `"quarter"` |
+| 3 | `time_type` | String | `duration` (default ~99%), `instant` (balance-sheet items only) | `"duration"` |
+| 4 | `fiscal_year` | Integer | | `2025` |
+| 5 | `fiscal_quarter` | Integer / null | 1-4; null for annual | `2` |
+| 6 | `segment` | String | Default `"Total"` | `"Services"` |
+| 7 | `low` | Float / null | | `94.0` |
+| 8 | `mid` | Float / null | Computed if low+high given | `95.5` |
+| 9 | `high` | Float / null | | `97.0` |
+| 10 | `canonical_unit` | String | Canonical: `usd`, `m_usd`, `percent`, `percent_yoy`, `percent_points`, `basis_points`, `x`, `count`, `unknown` (see [§8](#8-unit-canonicalization)) | `"m_usd"` |
+| 11 | `basis_norm` | String | `gaap`, `non_gaap`, `constant_currency`, `unknown` | `"non_gaap"` |
+| 12 | `basis_raw` | String / null | Verbatim basis text | `"adjusted"` |
+| 13 | `derivation` | String | See [§5](#5-derivation-rules) | `"calculated"` |
+| 14 | `qualitative` | String / null | What management expects (the prediction itself) | `"low to mid single digits"` |
+| 15 | `quote` | String | Max 500 chars, verbatim | `"We expect revenue between..."` |
+| 16 | `section` | String | Location within source | `"CFO Prepared Remarks"` |
+| 17 | `source_key` | String | Sub-document key | `"EX-99.1"`, `"full"`, `"title"`, `"MD&A"` |
+| 18 | `conditions` | String / null | Stated "if/assuming/excluding" caveats that qualify it | `"assumes no further rate hikes"` |
+| 19 | `source_type` | String | `8k`, `transcript`, `news`, `10q`, `10k` | `"transcript"` |
+| 20 | `created` | String | ISO timestamp of node creation | `"2026-02-18T14:30:00Z"` |
 
 **Rule**: No citation = no node. Every GuidanceUpdate MUST have `quote`, `FROM_SOURCE`, and `given_date`.
 
@@ -163,7 +175,7 @@ Rules:
 | `label_slug` | `label.lower().replace(" ", "_")` |
 | `segment_slug` | `segment.lower().replace(" ", "_")` (default `total`) |
 | `basis_norm` | Enum as-is: `gaap\|non_gaap\|constant_currency\|unknown` |
-| `period_u_id` | Fiscal-keyed (e.g., `guidance_period_320193_duration_FY2025_Q3`) |
+| `period_u_id` | Calendar-based: `gp_YYYY-MM-DD_YYYY-MM-DD` or sentinel `gp_ST`/`gp_MT`/`gp_LT`/`gp_UNDEF` |
 
 ### Idempotency & Enrichment
 
@@ -337,41 +349,58 @@ Use `guidance_ids.py:canonicalize_unit()`. Adding new units: one entry in `CANON
 
 ## 9. Period Resolution
 
-### Period Scenario Table
+### GuidancePeriod — Calendar-Based, Company-Agnostic
 
-Every GuidanceUpdate MUST have `HAS_PERIOD`. Periods are fiscal-keyed (no calendar dates):
+Every GuidanceUpdate has exactly ONE `HAS_PERIOD` edge to a `GuidancePeriod` node. GuidancePeriod uses calendar dates (month boundaries), not fiscal keys. Company-agnostic — two companies covering the same calendar window share the same node.
 
-| Scenario | Example Text | period_u_id | Action |
-|----------|-------------|-------------|--------|
-| Specific quarter | "Q3 FY2025" | `guidance_period_320193_duration_FY2025_Q3` | MERGE |
-| Annual | "fiscal year 2025" | `guidance_period_320193_duration_FY2025` | MERGE |
-| Half year | "second half" | `guidance_period_320193_duration_FY2025_H2` | MERGE |
-| Long-range (year) | "by 2028" | `guidance_period_320193_duration_LR_2028` | MERGE |
-| Long-range (span) | "2026 to 2028" | `guidance_period_320193_duration_LR_2026_2028` | MERGE |
-| Medium-term | "over the medium term" | `guidance_period_320193_duration_MT` | MERGE |
-| No period | (implicit/unclear) | `guidance_period_320193_duration_UNDEF` | MERGE |
-| Balance sheet | "end of Q1" (instant) | `guidance_period_320193_instant_FY2025_Q1` | MERGE |
+### period_scope Enum (9 values)
 
-### Fiscal-Keyed Period Builder
+| `period_scope` | GuidancePeriod | Example u_id | Example text |
+|---|---|---|---|
+| `quarter` | Real calendar dates | `gp_2025-04-01_2025-06-30` | "Q3 revenue of $85B" |
+| `annual` | Real calendar dates | `gp_2024-10-01_2025-09-30` | "FY2025 CapEx of $30B" |
+| `half` | Real calendar dates | `gp_2025-04-01_2025-09-30` | "Second half margin expansion" |
+| `monthly` | Real calendar dates | `gp_2025-03-01_2025-03-31` | "March same-store sales" |
+| `long_range` | Real calendar dates | `gp_2026-01-01_2028-12-31` | "By 2028", "2026-2028 target" |
+| `short_term` | Sentinel `gp_ST` | `gp_ST` | "In the near term" |
+| `medium_term` | Sentinel `gp_MT` | `gp_MT` | "Over the medium term" |
+| `long_term` | Sentinel `gp_LT` | `gp_LT` | "Long-term target model of 38-40%" |
+| `undefined` | Sentinel `gp_UNDEF` | `gp_UNDEF` | "Going forward" (no temporal anchor) |
 
-Do NOT build period IDs manually. Use code-only path:
+First 5 require `_compute_fiscal_dates()`. Last 4 always use sentinels with null dates.
 
-```bash
-python3 -c "
-import sys; sys.path.insert(0, '.claude/skills/earnings-orchestrator/scripts')
-from guidance_ids import build_period_u_id
-result = build_period_u_id(cik='$CIK', period_type='duration', fiscal_year=$FY, fiscal_quarter=$FQ)
-print(result)
-"
-```
+### Python Routing (LLM fields -> period_scope -> calendar dates)
 
-Returns: `guidance_period_{cik}_{period_type}_{fiscal_key}`
+Python evaluates LLM extraction fields in priority order. First match wins:
 
-Period node properties (ON CREATE SET only): `id`, `period_type` (`duration`/`instant`), `fiscal_year`, `fiscal_quarter`, `cik`.
+1. `sentinel_class` set? -> `period_scope = sentinel_class`, `u_id = gp_{abbreviation}`
+2. `long_range_end_year` set? -> `period_scope = "long_range"`, compute via `_compute_fiscal_dates()`
+3. `month` set? -> `period_scope = "monthly"`, `{year}-{month}-01` to `{year}-{month}-{last_day}`
+4. `half` set? -> `period_scope = "half"`, compose from two quarter calls
+5. `fiscal_quarter` set? -> `period_scope = "quarter"`, `_compute_fiscal_dates(fye, fy, Qn)`
+6. `fiscal_year` set (no quarter)? -> `period_scope = "annual"`, `_compute_fiscal_dates(fye, fy, "FY")`
+7. Fallthrough -> `period_scope = "undefined"`, `u_id = "gp_UNDEF"`
+
+At every step: `fye = 12 if calendar_override else company_fye_month`.
+
+For instant items (`time_type == "instant"` or label in known instant set): `start_date = end_date` (period's end date).
+
+Implementation: `guidance_ids.py:build_guidance_period_id()`. Do NOT build period IDs manually.
+
+### GuidancePeriod Node Properties
+
+| Property | Type | Notes |
+|---|---|---|
+| `id` | String | Same as `u_id` (MERGE key, has uniqueness constraint) |
+| `u_id` | String | `gp_{start}_{end}` or `gp_ST`/`gp_MT`/`gp_LT`/`gp_UNDEF` |
+| `start_date` | String / null | ISO date, null for sentinels |
+| `end_date` | String / null | ISO date, null for sentinels |
+
+### Fiscal Context Rule
+
+In earnings calls and SEC filings, ALL period references are fiscal unless explicitly stated as calendar. "Second half" = fiscal H2. Only use calendar interpretation when text explicitly says "calendar year/quarter" — set `calendar_override: true`.
 
 ### Calendar-to-Fiscal Mapping
-
-When source uses calendar names ("December quarter"), use FYE to determine fiscal quarter.
 
 **Rule**: Q1 starts in FYE month + 1. When source says "Q1" or "Q2" explicitly, use as-is.
 
@@ -381,39 +410,27 @@ When source uses calendar names ("December quarter"), use FYE to determine fisca
 | 12 (Dec) | Most | Jan-Mar | Apr-Jun | Jul-Sep | Oct-Dec |
 | 6 (Jun) | Microsoft | Jul-Sep | Oct-Dec | Jan-Mar | Apr-Jun |
 
-Apple FYE=Sep example: Q1=Oct-Dec, Q2=Jan-Mar, Q3=Apr-Jun, Q4=Jul-Sep.
-
 ---
 
-## 10. Company + Period Resolution (v3.0)
+## 10. Company + Period Resolution (v3.1)
 
-### Architecture (v3.0 simplification)
+### Architecture (v3.1 — GuidancePeriod)
 
 No Context node. No Unit node. Direct edges from GuidanceUpdate:
 
 - `FOR_COMPANY` → Company (matched by ticker, replaces IN_CONTEXT → Context → FOR_COMPANY)
-- `HAS_PERIOD` → Period (fiscal-keyed, `guidance_period_` namespace)
+- `HAS_PERIOD` → GuidancePeriod (calendar-based, `gp_` namespace)
 - `canonical_unit` is a property on GuidanceUpdate (not a separate node)
 
 ### Steps
 
 ```
 1. FYE: Query 1B (QUERIES.md) → extract FYE month from periodOfReport
-2. CIK: From Company node (leading zeros stripped, e.g., 320193 not 0000320193)
-3. Period u_id: build_period_u_id(cik, period_type, fiscal_year, fiscal_quarter, ...)
-4. Unit: canonicalize_unit(unit_raw, label_slug) → stored as gu.canonical_unit property
-5. MERGE Period + GuidanceUpdate + edges (via guidance_writer.py)
+2. Period: build_guidance_period_id(fye_month, fiscal_year, fiscal_quarter, ...) → gp_ format
+   - Or: pass LLM fields in JSON payload, CLI computes period via _ensure_period()
+3. Unit: canonicalize_unit(unit_raw, label_slug) → stored as gu.canonical_unit property
+4. MERGE GuidancePeriod + GuidanceUpdate + edges (via guidance_writer.py)
 ```
-
-### Period Node Properties
-
-| Property | Type | Source |
-|----------|------|--------|
-| `id` / `u_id` | String | `guidance_period_{cik}_{period_type}_{fiscal_key}` |
-| `period_type` | String | `duration` or `instant` |
-| `fiscal_year` | Integer / null | From extraction |
-| `fiscal_quarter` | Integer / null | 1-4; null for annual/LR/MT |
-| `cik` | String | From Company node, leading zeros stripped |
 
 ---
 
@@ -578,7 +595,7 @@ No linked-list maintenance. No supersession chains. No action classification sto
 3. DETERMINISTIC VALIDATION (pre-write)
    ├── Canonicalize unit + numeric scale (guidance_ids.py)
    ├── Validate basis rule (explicit-only)
-   ├── Build period_u_id (guidance_ids.py:build_period_u_id)
+   ├── Build period via build_guidance_period_id() or pass LLM fields for CLI routing
    ├── Resolve xbrl_qname from concept cache
    ├── Apply member confidence gate
    └── Uncertain? Keep core write, set xbrl_qname=null, skip member edges
@@ -586,7 +603,7 @@ No linked-list maintenance. No supersession chains. No action classification sto
 4. PER ITEM: WRITE TO GRAPH (via guidance_writer.py)
    ├── Compute IDs (guidance_ids.py:build_guidance_ids)
    ├── MERGE Guidance node
-   ├── MERGE Period (fiscal-keyed)
+   ├── MERGE GuidancePeriod (calendar-based, gp_ namespace)
    ├── MERGE GuidanceUpdate + edges (UPDATES, FROM_SOURCE, FOR_COMPANY, HAS_PERIOD)
    └── Link XBRL concept + members if confident
 ```
@@ -684,11 +701,11 @@ Both must be permissive for writes to occur. `MODE=write` with `ENABLE_GUIDANCE_
 
 | Script | Purpose |
 |--------|---------|
-| `guidance_ids.py` | ID normalization, unit canonicalization, evhash16, `build_period_u_id()` |
+| `guidance_ids.py` | ID normalization, unit canonicalization, evhash16, `build_guidance_period_id()`, `build_period_u_id()` (deprecated) |
 | `guidance_writer.py` | Direct Cypher write path (MERGE patterns, param assembly, validation) |
 | `guidance_write_cli.py` | CLI entry point: reads JSON, computes IDs, calls `guidance_writer.py` |
 | `guidance_write.sh` | Shell wrapper: activates venv, sets Neo4j env vars matching MCP server |
 
 ---
 
-*Version 3.0 | 2026-02-22 | v3.0 architecture: removed Context node (direct FOR_COMPANY edge), removed Unit node (canonical_unit property on GuidanceUpdate), fiscal-keyed Period (guidance_period_ namespace, no calendar dates), 6 edges (down from 9), build_period_u_id() in guidance_ids.py, removed fiscal_resolve.py dependency. Prior: v2.5 (MAPS_TO_CONCEPT, XBRL Unit shape). v2.3 (metric decomposition, segment rules).*
+*Version 3.1 | 2026-02-26 | v3.1: GuidancePeriod replaces Period — calendar-based (gp_ namespace), company-agnostic, with sentinel nodes (gp_ST/MT/LT/UNDEF). period_type renamed to period_scope (9-value enum). Added time_type field (duration/instant). build_guidance_period_id() replaces build_period_u_id(). fiscal_math.py extracted for clean imports. Prior: v3.0 (removed Context/Unit nodes, 6 edges, fiscal-keyed Period). v2.5 (MAPS_TO_CONCEPT). v2.3 (metric decomposition, segment rules).*

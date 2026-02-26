@@ -7,6 +7,7 @@ sys.path.insert(0, "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestra
 from guidance_ids import (
     slug, canonicalize_unit, canonicalize_value, compute_evhash16,
     canonicalize_source_id, build_guidance_ids, build_period_u_id,
+    build_guidance_period_id, KNOWN_INSTANT_LABELS, SENTINEL_MAP,
     _normalize_text, _normalize_numeric,
     CANONICAL_UNITS, UNIT_ALIASES, VALID_UNITS,
 )
@@ -489,6 +490,113 @@ def test_period_medium_term_ignores_fiscal():
     """MT takes priority over fiscal_year/quarter if both given."""
     result = build_period_u_id(cik='320193', medium_term=True, fiscal_year=2025, fiscal_quarter=1)
     assert result == 'guidance_period_320193_duration_MT'
+
+
+# ── build_guidance_period_id ────────────────────────────────────────────────
+
+def test_gp_quarter_dec_fye():
+    r = build_guidance_period_id(fye_month=12, fiscal_year=2025, fiscal_quarter=1)
+    assert r['u_id'] == 'gp_2025-01-01_2025-03-31'
+    assert r['period_scope'] == 'quarter'
+    assert r['time_type'] == 'duration'
+    assert r['start_date'] == '2025-01-01'
+    assert r['end_date'] == '2025-03-31'
+
+def test_gp_quarter_sep_fye():
+    """AAPL Q1 FY2025 = Oct-Dec 2024."""
+    r = build_guidance_period_id(fye_month=9, fiscal_year=2025, fiscal_quarter=1)
+    assert r['u_id'] == 'gp_2024-10-01_2024-12-31'
+    assert r['period_scope'] == 'quarter'
+
+def test_gp_annual_sep_fye():
+    r = build_guidance_period_id(fye_month=9, fiscal_year=2025)
+    assert r['u_id'] == 'gp_2024-10-01_2025-09-30'
+    assert r['period_scope'] == 'annual'
+
+def test_gp_half_h2_sep_fye():
+    r = build_guidance_period_id(fye_month=9, fiscal_year=2025, half=2)
+    assert r['u_id'] == 'gp_2025-04-01_2025-09-30'
+    assert r['period_scope'] == 'half'
+
+def test_gp_monthly_march():
+    r = build_guidance_period_id(fye_month=9, fiscal_year=2025, month=3)
+    assert r['u_id'] == 'gp_2025-03-01_2025-03-31'
+    assert r['period_scope'] == 'monthly'
+
+def test_gp_long_range_single_year():
+    r = build_guidance_period_id(fye_month=12, long_range_end_year=2028)
+    assert r['u_id'] == 'gp_2028-01-01_2028-12-31'
+    assert r['period_scope'] == 'long_range'
+
+def test_gp_long_range_span():
+    r = build_guidance_period_id(fye_month=12, long_range_start_year=2026, long_range_end_year=2028)
+    assert r['u_id'] == 'gp_2026-01-01_2028-12-31'
+    assert r['period_scope'] == 'long_range'
+
+def test_gp_sentinel_short_term():
+    r = build_guidance_period_id(fye_month=9, sentinel_class='short_term')
+    assert r['u_id'] == 'gp_ST'
+    assert r['start_date'] is None
+    assert r['end_date'] is None
+    assert r['period_scope'] == 'short_term'
+
+def test_gp_sentinel_medium_term():
+    r = build_guidance_period_id(fye_month=9, sentinel_class='medium_term')
+    assert r['u_id'] == 'gp_MT'
+
+def test_gp_sentinel_long_term():
+    r = build_guidance_period_id(fye_month=9, sentinel_class='long_term')
+    assert r['u_id'] == 'gp_LT'
+
+def test_gp_sentinel_undefined():
+    r = build_guidance_period_id(fye_month=9, sentinel_class='undefined')
+    assert r['u_id'] == 'gp_UNDEF'
+
+def test_gp_instant_by_label():
+    """cash_and_equivalents is a known instant label."""
+    r = build_guidance_period_id(fye_month=9, fiscal_year=2025, fiscal_quarter=3, label_slug='cash_and_equivalents')
+    assert r['time_type'] == 'instant'
+    assert r['start_date'] == r['end_date']  # instant: same date
+    assert r['u_id'] == 'gp_2025-06-30_2025-06-30'
+
+def test_gp_instant_by_time_type():
+    """Explicit time_type='instant' overrides default."""
+    r = build_guidance_period_id(fye_month=12, fiscal_year=2025, fiscal_quarter=2, time_type='instant')
+    assert r['time_type'] == 'instant'
+    assert r['start_date'] == '2025-06-30'
+    assert r['end_date'] == '2025-06-30'
+
+def test_gp_calendar_override():
+    """calendar_override forces FYE=12 regardless of actual FYE."""
+    r = build_guidance_period_id(fye_month=9, fiscal_year=2025, fiscal_quarter=1, calendar_override=True)
+    assert r['u_id'] == 'gp_2025-01-01_2025-03-31'  # Jan-Mar, not Oct-Dec
+
+def test_gp_fallthrough_to_undef():
+    """All nulls with no sentinel_class -> defensive fallthrough to gp_UNDEF."""
+    r = build_guidance_period_id(fye_month=9)
+    assert r['u_id'] == 'gp_UNDEF'
+    assert r['period_scope'] == 'undefined'
+
+def test_gp_default_time_type_duration():
+    """Default time_type is duration when not specified."""
+    r = build_guidance_period_id(fye_month=12, fiscal_year=2025, fiscal_quarter=1)
+    assert r['time_type'] == 'duration'
+
+def test_gp_invalid_sentinel_raises():
+    """Invalid sentinel_class raises ValueError."""
+    try:
+        build_guidance_period_id(fye_month=9, sentinel_class='bogus')
+        assert False, "Should have raised ValueError"
+    except ValueError:
+        pass
+
+def test_gp_invalid_half_raises():
+    """Invalid half value raises ValueError."""
+    try:
+        build_guidance_period_id(fye_month=9, fiscal_year=2025, half=3)
+        assert False, "Should have raised ValueError"
+    except ValueError:
+        pass
 
 
 # ── Run all tests ───────────────────────────────────────────────────────────
