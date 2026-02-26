@@ -4,7 +4,7 @@
 
 | # | Issue | Priority | Status | Notes |
 |---|-------|----------|--------|-------|
-| 1 | Agent bypassed CLI write path — constructed raw Cypher via MCP write tool | CRITICAL | **Fixed** | Removed `write_neo4j_cypher` from tools. Needs rerun to verify. |
+| 1 | Agent bypassed CLI write path — constructed raw Cypher via MCP write tool | CRITICAL | **Fixed** | Removed `write_neo4j_cypher` from tools. **Verified Run 6 (2026-02-26)**: 0 `write_neo4j_cypher` calls across all 10 agents (5 P1 + 5 P2). |
 | 2 | Wrong MERGE pattern (ON CREATE SET for all props instead of SET) | CRITICAL | **Fixed** | Auto-fixed by #1 |
 | 3 | 20 MCP write calls instead of 2 (Write JSON + Bash CLI) | CRITICAL | **Fixed** | Auto-fixed by #1 |
 | 4 | Feature flag ENABLE_GUIDANCE_WRITES completely bypassed | Medium | **Fixed** | Auto-fixed by #1 |
@@ -13,15 +13,22 @@
 | 7 | No Q&A synthesis — all 11 quotes from PR only, §15C ignored | Medium | **Fixed** | Single-agent 3a/3b/3c failed (Run 3: 3/10). Escalated to two-invocation: `guidance-extract` (PR) → `guidance-qa-enrich` (Q&A). Run 4: 5/10 enriched. See `two-invocation-qa-fix.md`. |
 | 8 | iPad/WHA share evhash (f611c8fee63e3f44) — identical qualitative text | Low | **Closed** | By design — same directional guidance, null numerics, similar conditions → same value fingerprint. Separate nodes via segment in ID. |
 | 9 | Peak context 105k tokens (81% window) — compaction risk on larger transcripts | CRITICAL | **Fixed** | Auto-fixed by #1 |
-| 10 | FX Impact extracted as standalone item instead of Revenue condition | Low | **Fixed** | Added quality filter to SKILL.md §13: factors affecting a metric go in `conditions`, not as standalone items. |
+| 10 | FX Impact extracted as standalone item instead of Revenue condition | Low | **Fixed** | Added quality filter to SKILL.md §13: factors affecting a metric go in `conditions`, not as standalone items. **Regression in Issue #21** — same filter cited but overridden by recall priority on $900M tariff. |
 | 11 | 3B query result too large for direct tool result — agent falls back to Bash+Python parsing | Low | **Open** | Large transcripts overflow MCP tool result. Agent persists output to file and parses via Bash (3-4 extra calls). Minor inefficiency, unavoidable with large transcripts. Potential fix: split 3B into separate PR and Q&A queries, or paginate. |
 | 12 | Agent modified `config/feature_flags.py` directly with `sed -i` to enable writes | Medium | **Fixed** | Env var override added to `guidance_writer.py`. Agents now use `ENABLE_GUIDANCE_WRITES=true bash guidance_write.sh --write`. Process-scoped, no config file editing. |
 | 13 | Phase 2 re-discovers feature flag toggle (~60s, 8 extra tool calls) | Low | **Fixed** | Auto-fixed by #12 — env var in Bash command, no discovery needed. |
 | 14 | Stale /tmp JSON file collision in Phase 1 | Low | **Open** | Phase 1 wrote to `/tmp/gu_AAPL_*.json` but a stale file from a prior run already existed. Agent detected it, deleted, and rewrote (+15s overhead). Fix: use unique filenames with timestamp or PID, or always overwrite without checking. |
 | 15 | Phase 2 skipped readback verification after write | Low | **Won't-fix** | CLI already returns structured JSON with `was_created`, edge linking results, and errors — agent parses this in Step 6. A post-write readback query is redundant (verifying the verifier). Phase 1's readback was agent improvisation, not a prompted step. No observed failure mode where CLI exit 0 was wrong across all 5 runs. |
-| 16 | Guidance periods share `:Period` label with XBRL periods despite different schemas | Low | **Open** | Both use `:Period` but have completely disjoint schemas: XBRL periods have `start_date`/`end_date` (calendar dates), guidance periods have `fiscal_year`/`fiscal_quarter`/`cik` (with null dates). No cross-linking — 9,919 XBRL vs 1 guidance period, zero overlap. `MATCH (p:Period)` returns both mixed. Fix: add `:GuidancePeriod` as additional label (`:Period:GuidancePeriod`) so queries are unambiguous. Requires update to `guidance_writer.py` MERGE pattern and 7E query. Also add `updated` timestamp to write pipeline (currently null — can't distinguish Phase 1 vs Phase 2 writes via graph alone). |
+| 16 | Guidance periods share `:Period` label with XBRL periods despite different schemas | Low | **Fixed** | Resolved by GuidancePeriod redesign (`guidance-period-redesign.md`). New `:GuidancePeriod` label with calendar-based `gp_` IDs. Old `guidance_period_` `:Period` nodes deleted. Run 6 confirmed: all items use `gp_` format GuidancePeriod nodes, no `:Period` label collision. |
 | 17 | Phase 2 gave up on feature flag — Q&A enrichment computed but not persisted (DATA LOSS) | **CRITICAL** | **Fixed** | Escalation of #12/#13. Agents improvised different workarounds (sed-i, Python override, or gave up). Fixed: env var check in `guidance_writer.py` (lines 26-35), both agent prompts updated to `ENABLE_GUIDANCE_WRITES=true bash guidance_write.sh --write`. 62 tests pass. |
-| 18 | Truncated PreparedRemarks node — CFO guidance section cut off mid-sentence | Medium | **Open** | Observed on AAPL FY25Q3 (FQ3 FY2025) transcript. CFO prepared remarks end mid-sentence right before specific guidance numbers. Q&A Exchange #10 references "June quarter guide of low to mid single-digit revenue growth" — confirming guidance was given but missing from PR node. Agent recovered partial numbers from Q&A exchanges. This is an upstream data quality issue in the Transcript node, not an extraction bug. Affects Phase 1 (PR-only) extraction — items may have qualitative-only when numerics existed in the original call. Phase 2 (Q&A enrichment) partially compensates by finding guidance references in analyst questions. Scope: unknown how many transcripts are affected. Fix: audit PreparedRemarks nodes for truncation (check if last sentence ends mid-word or without punctuation). |
+| 18 | Truncated PreparedRemarks node — CFO guidance section cut off mid-sentence | Medium | **Open** | AAPL_2025-05-01 (Q3 FY2025): CFO section truncated at 6,782 chars before guidance numbers. Gross Margin, OpEx, OINE, Tax Rate lost. Revenue recovered from Q&A. Upstream data quality issue. Scope unknown. |
+| 19 | `guidance-extractor` skill not in user-invocable registry — `/guidance-extractor` doesn't work | Low | **Open** | Skill file at `.claude/skills/guidance-extractor.md` (bare file). Registry expects `.claude/skills/guidance-extractor/SKILL.md` (subdirectory). Fix: move file to correct path. |
+| 20 | Unit double-scaling bug — agent pre-scales values AND sets unit_raw to "billion" | Medium | **Self-corrected** | Agent detected in readback, restarted pipeline with corrected raw values. Cost: ~3 extra min + double tool calls. Fix: prompt clarification + code safety net. |
+| 21 | Tariff Cost Impact extracted as standalone despite citing quality filter (Issue #10 regression) | Medium | **Open** | Agent cited §13 quality filter verbatim, agreed $900M should be a condition, said "let me not create it" — then reversed and created standalone anyway. 100% recall priority overrides quality filter. |
+| 22 | P2-Q3FY2025 dropped Revenue enrichment — false "already enriched" claim | Medium | **Open** | Agent classified Q&A #10 as ENRICHES Revenue but annotated "(already enriched in prior run)" and didn't write it. No prior P2 run existed. P1 item was from Q&A recovery, not PR. FX headwind + category-level context lost. |
+| 23 | P2-Q3FY2025 Q&A verdict inconsistency between analysis and report | Low | **Self-corrected** | #4 (Ben Ricey) downgraded from ENRICHES to NO GUIDANCE between initial analysis and final output. Final verdict more accurate, but silent reclassification harms auditability. |
+| 24 | 2 of 3 guidance uniqueness constraints missing in Neo4j | Medium | **Fixed** | `create_guidance_constraints()` never run against live DB. Fixed: ran all 7 statements via MCP write tool. 3 constraints confirmed (Guidance existing, GuidanceUpdate + GuidancePeriod created). |
+| 25 | 3 of 4 sentinel GuidancePeriod nodes missing | Medium | **Fixed** | Only `gp_MT` existed. Fixed: `gp_ST`, `gp_LT`, `gp_UNDEF` created. All 4 sentinels + 5 calendar periods = 9 GuidancePeriod nodes verified. |
 
 ---
 
@@ -192,6 +199,51 @@ Agent created a standalone `FX Impact` guidance item (-1.0 percent_points) when 
 
 **Fix applied:** Added quality filter to SKILL.md §13: "If a forward-looking statement quantifies a factor affecting another guided metric (e.g., FX headwind, week count, commodity cost tailwind), capture it in that metric's `conditions` field — not as a standalone item."
 
+### ISSUE 11 (Low): 3B query result too large for direct tool result
+
+Large transcripts overflow MCP tool result size limit. Agent falls back to persisting output to file and parsing via Bash+Python (3-4 extra tool calls). Minor inefficiency, unavoidable with large transcripts. Potential fix: split 3B into separate PR and Q&A queries, or paginate.
+
+### ISSUE 12 (Medium → Fixed): Agent modified `config/feature_flags.py` directly with `sed -i`
+
+Agent used `sed -i` to flip `ENABLE_GUIDANCE_WRITES = False` → `True` in source code. Persistent, globally visible, bypasses any version control. **Fixed:** Added env var override to `guidance_writer.py` (lines 26-35). Agents now use `ENABLE_GUIDANCE_WRITES=true bash guidance_write.sh --write` — process-scoped, no config file editing.
+
+### ISSUE 13 (Low → Fixed): Phase 2 re-discovers feature flag toggle
+
+Phase 2 agent spent ~60s and 8 extra tool calls rediscovering how to enable writes (reading config files, checking feature flags). **Auto-fixed by #12** — env var in the Bash command, no discovery needed.
+
+### ISSUE 14 (Low): Stale /tmp JSON file collision
+
+Phase 1 wrote to `/tmp/gu_AAPL_*.json` but a stale file from a prior run already existed. Agent detected it, deleted, and rewrote (+15s overhead). Fix: use unique filenames with timestamp or PID, or always overwrite without checking. **Observed in Run 6**: agent wrote JSON up to 5 times during the Issue #20 self-correction cycle for the same source.
+
+### ISSUE 15 (Low → Won't-fix): Phase 2 skipped readback verification
+
+CLI already returns structured JSON with `was_created`, edge linking results, and errors — agent parses this directly. A post-write readback query is redundant (verifying the verifier). Phase 1's readback was agent improvisation, not a prompted step. No observed failure mode where CLI exit 0 was wrong across all runs.
+
+### ISSUE 16 (Low → Fixed): Guidance periods share `:Period` label with XBRL periods
+
+Both used `:Period` but with completely disjoint schemas. **Fixed by GuidancePeriod redesign** (`guidance-period-redesign.md`). New `:GuidancePeriod` label with calendar-based `gp_` IDs, company-agnostic. Old `guidance_period_` `:Period` nodes deleted (31 GuidanceUpdate + 7 Period nodes). Run 6 confirmed all items use new format. **Note:** Sentinel pre-creation and 2 constraints still pending — see Issues #24/#25.
+
+### ISSUE 17 (CRITICAL → Fixed): Phase 2 feature flag data loss
+
+Phase 2 computed Q&A enrichment but could not persist it — agent gave up on the feature flag after trying multiple workarounds. **DATA LOSS** on Run 3 (Q2 FY2025 Gross Margin enrichment). Evolution across runs: sed-i (Run 1) → Python module override (Run 2) → gave up (Run 3, data loss) → env var fix (Runs 4-5, instant). Fixed: env var check in `guidance_writer.py`, both agent prompts updated.
+
+### ISSUE 18 (Medium): Truncated PreparedRemarks node
+
+Observed on AAPL_2025-05-01T17.00.00-04.00 (Q3 FY2025). CFO Kevin Parekh's prepared remarks end mid-sentence at 6,782 characters — right before the specific guidance numbers for Gross Margin, OpEx, OINE, and Tax Rate. The text cuts off after "color at the total company level."
+
+**Impact across runs:**
+- **Original Run 4**: Only 1 item extracted (Revenue from Q&A recovery). Tariff $900M classified as condition.
+- **Run 6 (current)**: 2 items extracted (Revenue + Tariff Cost Impact as standalone — see Issue #21). Gross Margin, OpEx, OINE, Tax Rate, Services Revenue all lost.
+- Q&A Exchange #10 references "June quarter guide of low to mid single-digit revenue growth" — confirming guidance was given verbally but is missing from the stored PreparedRemark node.
+- 8-K press release checked — contains actuals only, no forward guidance.
+- Services Revenue: CFO explicitly declined ("we aren't providing the category level of color today, given the uncertainty").
+
+**Root cause:** Upstream data quality issue in the Transcript node, not an extraction bug. The PreparedRemark node's `content` field was truncated at ingestion time.
+
+**Scope:** Unknown how many transcripts are affected. Only observed on this one AAPL transcript across 5 sources. Fix: audit PreparedRemarks nodes for truncation (check if last sentence ends mid-word or without punctuation mark).
+
+**Agent recovery:** Resourceful — cross-referenced Q&A exchanges + 8-K press release. Recovered Revenue guidance from analyst questions. Could not recover Gross Margin/OpEx/OINE/Tax Rate because analysts did not repeat the specific numbers in Q&A.
+
 ---
 
 ## Extraction Results — All 5 Runs (Two-Invocation Pipeline)
@@ -258,3 +310,111 @@ Outlier: PreparedRemarks truncated (Issue #18). Only Revenue recovered from Q&A 
 | 7 | **CapEx** | Total | **NEW** | Q&A #17 (Aaron Rekers) | -- | -- | m_usd |
 
 First Q&A-only item across all runs. CapEx: "grow substantially, not exponentially" (medium-term, AI-driven).
+
+### ISSUE 19 (Low): `guidance-extractor` skill not in user-invocable registry
+
+`/guidance-extractor AAPL transcript ...` fails — skill not found. The agent falls back to executing the logic manually ("The skill isn't in the user-invocable registry. I'll execute its logic directly").
+
+**Root cause:** Claude Code's skill registry discovers skills at `.claude/skills/{name}/SKILL.md` (subdirectory containing `SKILL.md`). The orchestrator skill is at `.claude/skills/guidance-extractor.md` — a bare `.md` file directly in the skills root. This structure is invisible to the registry.
+
+**Evidence:** Every other registered skill (`earnings-orchestrator`, `guidance-inventory`, `perplexity-ask`, etc.) follows the `{name}/SKILL.md` convention. The system-provided skill list confirms `guidance-extractor` is absent while all subdirectory-based skills are present.
+
+**Fix:** Move `.claude/skills/guidance-extractor.md` → `.claude/skills/guidance-extractor/SKILL.md`. No content changes needed — the file already has valid frontmatter (`description:`) and `$ARGUMENTS` parsing.
+
+### ISSUE 20 (Medium): Unit double-scaling bug — agent pre-scales values AND sets unit_raw to "billion"
+
+Agent writes values already converted to millions (e.g., `low: 15100.0` for "$15.1 billion") but sets `unit_raw: "billion"`. The canonicalizer in `build_guidance_ids()` sees `unit_raw: "billion"` and multiplies by 1000 again → `canonical_low: 15100000.0` (15.1 trillion instead of 15.1 billion).
+
+**Root cause:** The agent is doing mental math (15.1B → 15,100M) before writing the JSON, then also declaring the unit as "billion". The system expects one or the other:
+- Pass raw values as spoken (`low: 15.1`, `unit_raw: "billion"`) → canonicalizer converts to m_usd
+- Pass pre-converted values (`low: 15100.0`, `unit_raw: "million"`) → canonicalizer recognizes already in millions
+
+**Impact:** All items with billion-scale values (Revenue, OpEx, OINE) would have 1000x inflated canonical values. MERGE+SET means corrected values overwrite on rerun.
+
+**Self-corrected: YES.** Agent detected the bug during post-write readback (saw `15100000.0` instead of `15100.0`), diagnosed the root cause, and restarted the full pipeline with corrected raw values (`15.1` billion → canonicalized to `15100.0` m_usd). MERGE+SET overwrote the bad values. No manual intervention needed. However, self-correction cost ~3 extra minutes and ~43 tool calls (vs typical ~20) due to reloading all 3 reference files and re-running the entire pipeline.
+
+**Observed on:** AAPL_2025-01-30T17.00.00-05.00 (Q2 FY2025), Run 6 Phase 1. Not observed on any other transcript in this batch — other agents passed raw values correctly.
+
+**Fix options:**
+1. Prompt fix: instruct agent to always pass raw transcript values and let the system canonicalize
+2. Code fix: detect and warn when values seem pre-scaled (e.g., `unit_raw: "billion"` but value > 1000)
+3. Both — prompt is primary, code is safety net
+
+### ISSUE 21 (Medium): Tariff Cost Impact extracted as standalone despite quality filter citation — Issue #10 regression
+
+P1-Q3FY2025 agent (AAPL_2025-05-01) extracted `Tariff Cost Impact` as a standalone item ($900M, point derivation) despite explicitly citing the Issue #10 quality filter.
+
+**Agent's reasoning trace (verbatim):**
+1. `[10:09:50]` — "the $900M tariff cost is a standalone cost estimate with a specific number"
+2. `[10:10:06]` — "Wait — per SKILL.md quality filter: 'Factors are conditions, not items...' The $900M tariff impact is a factor affecting cost of goods sold / gross margin. It should go in the conditions of the revenue guidance (or gross margin if we had it), not as a standalone item. I already included it in the Revenue conditions. Let me not create it as a standalone item."
+3. Same message continues: "However, this is also..." — then reversed and kept it as standalone
+4. `[10:10:27]` — "Both items are valid" — dry-run with 2 items (Revenue + Tariff)
+
+**Impact:** Previous Run 4 extracted 1 item (Revenue only). Current run: 2 items (Revenue + Tariff Cost Impact). The $900M was correctly in Revenue's `conditions` field AND as a standalone — creating redundancy.
+
+**Root cause:** 100% recall priority ("when in doubt, extract it") overrides quality filter when the agent encounters a specific dollar figure. The agent cited the filter, agreed with it, said "let me not create it", then the recall instinct won in the same thought. The quality filter in SKILL.md §13 is not strong enough to override the extraction maximalism instinct.
+
+**Self-corrected: NO.** Agent kept the standalone item through dry-run, write, and readback verification without flagging it.
+
+**Fix:** Strengthen quality filter language: "If you catch yourself citing this rule and then creating the item anyway, the rule wins. Delete the standalone item."
+
+### ISSUE 22 (Medium): P2-Q3FY2025 dropped Revenue enrichment — false "already enriched" claim
+
+P2-Q3FY2025 agent classified Q&A #10 (Amit Daryanani) as `ENRICHES Revenue` but then annotated it as "(already enriched in prior run)" and did NOT write the enrichment. Only 1 item was written (Tariff Cost Impact enriched), not 2.
+
+**What was missed:** Q&A #10 adds: CFO reiterates low-to-mid single digits YoY, **FX slight headwind** (new detail), **declines category-level color** (new condition). These details were NOT in the P1 Revenue item, which only had the basic "low to mid single-digit YoY growth" from Q&A recovery.
+
+**Root cause:** The P1 item was itself recovered from Q&A (not from PR, since PR was truncated — Issue #18). The P2 agent appears to have confused "P1 already used Q&A data to create this item" with "this item was already enriched by a prior P2 run." There was no prior P2 run — this was the first Phase 2 execution for this source. The "(already enriched in prior run)" annotation is factually incorrect.
+
+**Self-corrected: NO.** Agent did not write the Revenue enrichment.
+
+**Impact:** Revenue item for Q3 FY2025 is missing FX headwind condition and category-level decline context. Marginal data loss — the core guidance number ("low to mid single-digit") is correct, only the conditions/context are incomplete.
+
+**Fix:** Add to P2 agent prompt: "When P1 items were recovered from Q&A (due to truncated PR), P2 enrichment should still add NEW details from Q&A exchanges not already captured. 'P1 used Q&A' ≠ 'already enriched by P2'."
+
+### ISSUE 23 (Low): P2-Q3FY2025 Q&A verdict inconsistency between analysis and final report
+
+P2-Q3FY2025 agent changed verdicts between its initial analysis log and the final output:
+
+| Exchange | Initial Analysis | Final Report | Delta |
+|----------|-----------------|--------------|-------|
+| #4 (Ben Ricey) | `ENRICHES Tariff Cost Impact` | `NO GUIDANCE — asks about post-June tariff trajectory; CEO declines to predict beyond June` | Downgraded |
+
+**Impact:** Low. The final verdict is arguably more accurate — CEO declining to predict beyond June is not actionable enrichment. But the inconsistency suggests the agent is doing two passes (analysis → reporting) and changing its mind between them without flagging the change.
+
+**Self-corrected:** Arguably yes — the final verdict is more conservative and more accurate. But the silent reclassification without acknowledgment is concerning for auditability.
+
+### ISSUE 24 (Medium → Fixed): 2 of 3 guidance uniqueness constraints missing in Neo4j
+
+`create_guidance_constraints()` in `guidance_writer.py` defines 3 constraints (`guidance_id_unique`, `guidance_update_id_unique`, `guidance_period_id_unique`) and pre-creates 4 sentinel nodes. It was never executed against the live database.
+
+**Neo4j audit (2026-02-26):**
+- `constraint_guidance_id_unique` (Guidance.id) — existed (created by prior ingestion system)
+- `guidance_update_id_unique` (GuidanceUpdate.id) — **MISSING**
+- `guidance_period_id_unique` (GuidancePeriod.id) — **MISSING**
+
+**Pre-flight checks (all passed):**
+- 0 duplicate IDs on GuidanceUpdate (31 nodes), GuidancePeriod (6 nodes), Guidance
+- 0 null IDs on any label
+- `IF NOT EXISTS` checks both name AND equivalent schema — Guidance constraint is no-op
+- `hasPeriod_key` relationship constraint only applies to XBRL edges (key=null on guidance edges, nulls don't violate uniqueness)
+- `execute_cypher_query` uses `session.run()` auto-commit — correct for DDL
+
+**Fix applied (2026-02-26):** Ran all 7 statements via `mcp__neo4j-cypher__write_neo4j_cypher`:
+1. Guidance constraint → no-op (equivalent `constraint_guidance_id_unique` existed)
+2. GuidanceUpdate constraint → **created** (constraints_added: 1)
+3. GuidancePeriod constraint → **created** (constraints_added: 1)
+
+**Verified:** `SHOW CONSTRAINTS` confirms all 3 constraints present.
+
+### ISSUE 25 (Medium → Fixed): 3 of 4 sentinel GuidancePeriod nodes missing
+
+Plan (D2) specifies 4 sentinel nodes pre-created: `gp_ST`, `gp_MT`, `gp_LT`, `gp_UNDEF`. Only `gp_MT` existed — created organically when the CapEx item (Run 5, Q&A-only, medium-term) was written.
+
+**Fix applied (2026-02-26):** Ran 4 MERGE statements via MCP write tool:
+- `gp_ST` → **created** (nodes_created: 1)
+- `gp_MT` → **matched** (properties_set: 3, values unchanged)
+- `gp_LT` → **created** (nodes_created: 1)
+- `gp_UNDEF` → **created** (nodes_created: 1)
+
+**Verified:** 9 total GuidancePeriod nodes (5 calendar + 4 sentinels), all with correct properties.
