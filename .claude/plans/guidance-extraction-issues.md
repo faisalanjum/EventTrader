@@ -35,10 +35,103 @@
 | 29 | PROFILE_TRANSCRIPT.md uses wrong derivation in example | Low | **Open** | Line 76: `derivation=calculated` for an explicit range ("$94-98 billion"). Should be `derivation=explicit`. SKILL.md §5 defines calculated as "derived from math not stated in source." PROFILE_8K correctly uses explicit for same pattern. |
 | 30 | Batch summary undercounts member/concept links on re-runs | Low | **Open** | `guidance_writer.py` accumulates `member_links`/`concept_links` only in the `was_created=True` branch. On idempotent re-runs (`was_created=False`), edges are created (self-healing) but summary reports 0. Cosmetic — data is correct, stats are misleading. |
 | 31 | `derivation` silently defaults to `'explicit'` in writer | Low | **Open** | `guidance_writer.py:250`: `item.get('derivation', 'explicit')`. Missing derivation masks upstream extraction bugs. Should default to `'unknown'` or require the field. |
+| 32 | Tariff Cost Impact extracted as standalone despite §13 factors rule (Issue #21 regression) | Medium | **Open** | Run 7 transcript #4 (AAPL_2025-05-01). Agent extracted "$900M tariff cost" as standalone `Tariff Cost Impact` metric. §13 says factors affecting a guided metric go in `conditions`. Prior Run 4 correctly had only 1 item (Revenue with tariff in conditions). The §13 fix from #21 did not hold. |
+| 33 | DPS / Share Repurchase / US Investment Spending extracted as guidance | Low | **Open** | Run 7 transcript #4. Agent extracted dividend ($0.26/share), $100B buyback auth, and $500B US investment pledge. These are capital allocation announcements, not operational forward guidance. Prior Run 4 excluded them. Quality filter may need explicit "capital allocation is not guidance" rule. |
+| 34 | Transcript #4 took 8m01s (2-3x longer than others) with 41 tool calls | Low | **Open** | Run 7 transcript #4. Agent struggled with truncated PR (Issue #18), making many extra tool calls. May be related to recovery fallback behavior. Prior Run 4 was 4m19s (also long but less extreme). |
+| 35 | Duplicate transcript IDs create duplicate GuidanceUpdate nodes | Medium | **Open** | `AAPL_2025_3` and `AAPL_2025-07-31T17.00.00-04.00` are the same earnings call (same date, same content). Since `source_id` is part of `GuidanceUpdate.id`, each produces its own set of nodes. 8+8=16 nodes for a single call. Need upstream dedup or extraction-time duplicate detection. |
+| 36 | GuidanceUpdate FROM_SOURCE links only to Transcript — consider also linking to QAExchange | Low | **Open** | Phase 2 (`guidance-qa-enrich`) enriches items from specific Q&A exchanges but only creates `FROM_SOURCE` edges to the parent Transcript node. Consider adding a direct link (e.g., `FROM_QA_EXCHANGE`) from GuidanceUpdate to the specific QAExchange node that produced it. This would enable tracing which analyst question/management answer yielded a guidance item, not just which transcript. Requires schema addition + writer update. |
 
 ---
 
-## All AAPL Transcript Runs — Two-Invocation Pipeline
+## Run 7 — Full 6-Transcript Re-extraction (2026-02-27, MODE=write)
+
+**Session**: 02:11:36 – 03:00:10 UTC (48m 34s total wall clock)
+**Mode**: write (all items persisted to Neo4j)
+**Orchestrator**: main conversation invoking `/guidance-extractor` skill per transcript
+
+| # | Transcript ID | FY/Q | P1 Items | P1 Time | P2 Enriched | P2 New | P2 Time | Total Time | P1 Tokens | P2 Tokens | Issues |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | AAPL_2023-11-03T17.00.00-04.00 | FY2023 Q4 | 10 | 3m27s (207s) | 4 | 0 | 3m10s (190s) | 6m37s | 94k (21 calls) | 94k (16 calls) | Minor: P2 enriched 4 vs prior 5 |
+| 2 | AAPL_2024-10-31T17.00.00-04.00 | FY2024 Q4 | 6 | 2m51s (171s) | 1 | 0 | 2m49s (169s) | 5m40s | 91k (21 calls) | 89k (16 calls) | P2 enriched 1 vs prior 2 |
+| 3 | AAPL_2025-01-30T17.00.00-05.00 | FY2025 Q1 | 6 | 2m33s (153s) | 1 | 0 | 2m12s (132s) | 4m45s | 80k (17 calls) | 86k (15 calls) | Matches prior run exactly |
+| 4 | AAPL_2025-05-01T17.00.00-04.00 | FY2025 Q2 | 5 | 8m01s (481s) | 2 | 0 | 3m07s (187s) | 11m08s | 111k (41 calls) | 90k (16 calls) | **ISSUES**: #32 tariff standalone, #33 capital alloc items, #34 slow |
+| 5 | AAPL_2025-07-31T17.00.00-04.00 | FY2025 Q3 | 8 | 3m16s (196s) | 3 | 2 (CapEx, US Invest) | 3m46s (226s) | 7m02s | 85k (24 calls) | 95k (18 calls) | #32 tariff again, #33 DPS again, CapEx Q&A good |
+| 6 | AAPL_2025_3 | FY2025 Q3 (dup?) | 8 | 3m12s (192s) | 4 | 2 (CapEx, US Invest) | 4m26s (266s) | 7m38s | 84k (20 calls) | 100k (21 calls) | Duplicate of #5 — Issue #35. Same items. |
+
+### Run 7 Issue Check — Transcript #1
+
+| Prior Issue | Check | Result |
+|---|---|---|
+| #1 raw Cypher bypass | Can't see internal tool calls from orchestrator | Assumed OK (write_neo4j_cypher removed from tools) |
+| #5 WHA member | 5/5 member links including WHA→WearablesHomeandAccessoriesMember | CONFIRMED FIXED |
+| #7 Q&A synthesis | 4/10 enriched (vs prior 5/10) | OK — minor delta |
+| #20 unit double-scaling | OpEx 14,400-14,600 m_usd correct | OK |
+| #26 segment decomposition | Revenue segments: label=Revenue, segment=iPhone/Mac/etc | CONFIRMED FIXED |
+| #28 PER_SHARE_LABELS | No EPS items in this transcript | N/A |
+| #30 batch summary undercount | All items new (was_created=true) | N/A (first run) |
+| #31 derivation default | All 10 items have explicit derivation values | OK |
+
+**Observation**: P2 enriched 4 items vs prior run's 5. Missing enrichment might be Gross Margin (previously enriched from 3 Q&A exchanges). Not a regression — agent judgment call on borderline cases. Will monitor across remaining transcripts.
+
+### Run 7 Post-Mortem
+
+**Totals across all 6 transcripts:**
+
+| Metric | Value |
+|---|---|
+| Wall clock time | 48m 34s |
+| Total P1 items extracted | 45 (across 6 transcripts) |
+| Total P2 enriched | 14 |
+| Total P2 new Q&A-only | 6 |
+| Grand total items in Neo4j | 51 (45 P1 + 6 new) |
+| Total tokens | ~1.1M |
+| Total tool calls | ~228 |
+| Errors | 0 |
+
+**Timing per transcript:**
+
+| # | Transcript | P1 Time | P2 Time | Total | Tokens |
+|---|---|---|---|---|---|
+| 1 | FY2023 Q4 | 3m27s | 3m10s | 6m37s | 188k |
+| 2 | FY2024 Q4 | 2m51s | 2m49s | 5m40s | 180k |
+| 3 | FY2025 Q1 | 2m33s | 2m12s | 4m45s | 166k |
+| 4 | FY2025 Q2 | 8m01s | 3m07s | 11m08s | 201k |
+| 5 | FY2025 Q3 | 3m16s | 3m46s | 7m02s | 180k |
+| 6 | AAPL_2025_3 (dup) | 3m12s | 4m26s | 7m38s | 183k |
+| **Avg (excl #4 outlier)** | **3m04s** | **3m17s** | **6m20s** | **179k** |
+
+**Unit audit — all correct:**
+- `percent` for Gross Margin and Tax Rate
+- `m_usd` for OpEx, OINE, Tariff Cost Impact, Share Repurchase, US Investment
+- `usd` for DPS (per-share — Issue #28 PER_SHARE_LABELS fix working for DPS)
+- `percent_yoy` for qualitative Revenue guidance
+- No double-scaling (Issue #20 fix held)
+
+**New issues found (4):**
+
+| # | Issue | Severity | Transcripts affected |
+|---|---|---|---|
+| 32 | Tariff Cost Impact as standalone (§13 regression) | Medium | #4, #5, #6 |
+| 33 | Capital allocation items (DPS, Repurchase, Investment) as guidance | Low | #4, #5, #6 |
+| 34 | Transcript #4 2-3x slower (truncated PR recovery) | Low | #4 only |
+| 35 | Duplicate source IDs create duplicate nodes | Medium | #5 + #6 |
+
+**What held from prior runs:**
+- Issue #1 (raw Cypher bypass): No regression — agents used CLI write path
+- Issue #5 (WHA member): All member links correct
+- Issue #7 (Q&A synthesis): Working — P2 enriches and creates new items
+- Issue #10 (FX standalone): FX correctly in conditions
+- Issue #20 (unit scaling): No double-scaling
+- Issue #26 (segment decomposition): Correctly splitting label+segment
+
+**What regressed:**
+- Issue #21 → #32: Tariff Cost Impact as standalone came back. The §13 "factors are conditions" rule is not strong enough when the factor is a quantified dollar amount ($900M, $1.1B). Agent sees a number and extracts it.
+
+**Key recommendation**: Issues #32 and #33 need prompt-level fixes. #32 needs a stronger rule ("quantified factors like tariff costs, FX headwinds, or week-count impacts go in conditions even when dollar amounts are given"). #33 needs a new quality filter ("capital allocation announcements — dividends, buybacks, investment pledges — are not operational guidance"). #35 needs upstream dedup.
+
+---
+
+## All AAPL Transcript Runs — Two-Invocation Pipeline (Runs 1-6)
 
 ### Summary
 
