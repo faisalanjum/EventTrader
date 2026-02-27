@@ -14,21 +14,23 @@
 | 8 | iPad/WHA share evhash (f611c8fee63e3f44) — identical qualitative text | Low | **Closed** | By design — same directional guidance, null numerics, similar conditions → same value fingerprint. Separate nodes via segment in ID. |
 | 9 | Peak context 105k tokens (81% window) — compaction risk on larger transcripts | CRITICAL | **Fixed** | Auto-fixed by #1 |
 | 10 | FX Impact extracted as standalone item instead of Revenue condition | Low | **Fixed** | Added quality filter to SKILL.md §13: factors affecting a metric go in `conditions`, not as standalone items. **Regression in Issue #21** — same filter cited but overridden by recall priority on $900M tariff. |
-| 11 | 3B query result too large for direct tool result — agent falls back to Bash+Python parsing | Low | **Open** | Large transcripts overflow MCP tool result. Agent persists output to file and parses via Bash (3-4 extra calls). Minor inefficiency, unavoidable with large transcripts. Potential fix: split 3B into separate PR and Q&A queries, or paginate. |
+| 11 | 3B query result too large for direct tool result — agent falls back to Bash+Python parsing | Low | **Won't-fix** | Cannot split 3B into PR-only query — Phase 1 uses Q&A as recovery fallback when PR is truncated (see #18: Revenue recovered from Q&A). Removing Q&A from fetch would break this safety net. Agent self-heals via Bash+Python on large transcripts (~30s). Added hint to agent prompt Step 2 so agent knows the workaround upfront. |
 | 12 | Agent modified `config/feature_flags.py` directly with `sed -i` to enable writes | Medium | **Fixed** | Env var override added to `guidance_writer.py`. Agents now use `ENABLE_GUIDANCE_WRITES=true bash guidance_write.sh --write`. Process-scoped, no config file editing. |
 | 13 | Phase 2 re-discovers feature flag toggle (~60s, 8 extra tool calls) | Low | **Fixed** | Auto-fixed by #12 — env var in Bash command, no discovery needed. |
-| 14 | Stale /tmp JSON file collision in Phase 1 | Low | **Open** | Phase 1 wrote to `/tmp/gu_AAPL_*.json` but a stale file from a prior run already existed. Agent detected it, deleted, and rewrote (+15s overhead). Fix: use unique filenames with timestamp or PID, or always overwrite without checking. |
+| 14 | Stale /tmp JSON file collision in Phase 1 | Low | **Closed** | One-time occurrence. Write tool overwrites by default, so stale files cause no harm. No `/tmp/gu_*` files currently exist. The 15s overhead was agent over-caution, not a real bug. |
 | 15 | Phase 2 skipped readback verification after write | Low | **Won't-fix** | CLI already returns structured JSON with `was_created`, edge linking results, and errors — agent parses this in Step 6. A post-write readback query is redundant (verifying the verifier). Phase 1's readback was agent improvisation, not a prompted step. No observed failure mode where CLI exit 0 was wrong across all 5 runs. |
 | 16 | Guidance periods share `:Period` label with XBRL periods despite different schemas | Low | **Fixed** | Resolved by GuidancePeriod redesign (`guidance-period-redesign.md`). New `:GuidancePeriod` label with calendar-based `gp_` IDs. Old `guidance_period_` `:Period` nodes deleted. Run 6 confirmed: all items use `gp_` format GuidancePeriod nodes, no `:Period` label collision. |
 | 17 | Phase 2 gave up on feature flag — Q&A enrichment computed but not persisted (DATA LOSS) | **CRITICAL** | **Fixed** | Escalation of #12/#13. Agents improvised different workarounds (sed-i, Python override, or gave up). Fixed: env var check in `guidance_writer.py` (lines 26-35), both agent prompts updated to `ENABLE_GUIDANCE_WRITES=true bash guidance_write.sh --write`. 62 tests pass. |
-| 18 | Truncated PreparedRemarks node — CFO guidance section cut off mid-sentence | Medium | **Open** | AAPL_2025-05-01 (Q3 FY2025): CFO section truncated at 6,782 chars before guidance numbers. Gross Margin, OpEx, OINE, Tax Rate lost. Revenue recovered from Q&A. Upstream data quality issue. Scope unknown. |
-| 19 | `guidance-extractor` skill not in user-invocable registry — `/guidance-extractor` doesn't work | Low | **Open** | Skill file at `.claude/skills/guidance-extractor.md` (bare file). Registry expects `.claude/skills/guidance-extractor/SKILL.md` (subdirectory). Fix: move file to correct path. |
+| 18 | Truncated PreparedRemarks node — CFO guidance section cut off mid-sentence | Medium | **Open (upstream)** | AAPL_2025-05-01 (Q3 FY2025): CFO section truncated at 6,782 chars before guidance numbers. Gross Margin, OpEx, OINE, Tax Rate lost. Revenue recovered from Q&A. Upstream data quality issue — not fixable in extraction pipeline. Scope unknown. Mitigation: softened Phase 1 "PR ONLY" to allow Q&A fallback when PR is truncated/empty (see #11). |
+| 19 | `guidance-extractor` skill not in user-invocable registry — `/guidance-extractor` doesn't work | Low | **Fixed** | Moved bare file `.claude/skills/guidance-extractor.md` → `.claude/skills/guidance-extractor/SKILL.md`. Now registers and `/guidance-extractor` is invocable. |
 | 20 | Unit double-scaling bug — agent pre-scales values AND sets unit_raw to "billion" | Medium | **Self-corrected** | Agent detected in readback, restarted pipeline with corrected raw values. Cost: ~3 extra min + double tool calls. Fix: prompt clarification + code safety net. |
-| 21 | Tariff Cost Impact extracted as standalone despite citing quality filter (Issue #10 regression) | Medium | **Open** | Agent cited §13 quality filter verbatim, agreed $900M should be a condition, said "let me not create it" — then reversed and created standalone anyway. 100% recall priority overrides quality filter. |
-| 22 | P2-Q3FY2025 dropped Revenue enrichment — false "already enriched" claim | Medium | **Open** | Agent classified Q&A #10 as ENRICHES Revenue but annotated "(already enriched in prior run)" and didn't write it. No prior P2 run existed. P1 item was from Q&A recovery, not PR. FX headwind + category-level context lost. |
+| 21 | Tariff Cost Impact extracted as standalone despite citing quality filter (Issue #10 regression) | Medium | **Fixed** | Agent cited §13 factors rule, then recall priority overrode it. Fix: added precedence clause to §13 factors row — "This takes precedence over recall — a factor captured in `conditions` satisfies recall." |
+| 22 | P2-Q3FY2025 dropped Revenue enrichment — false "already enriched" claim | Medium | **Fixed** | Agent hallucinated "already enriched in prior run" to skip writing. Fix: added rule to `guidance-qa-enrich.md` — "Never skip an ENRICHES verdict. MERGE+SET handles idempotency." |
 | 23 | P2-Q3FY2025 Q&A verdict inconsistency between analysis and report | Low | **Self-corrected** | #4 (Ben Ricey) downgraded from ENRICHES to NO GUIDANCE between initial analysis and final output. Final verdict more accurate, but silent reclassification harms auditability. |
 | 24 | 2 of 3 guidance uniqueness constraints missing in Neo4j | Medium | **Fixed** | `create_guidance_constraints()` never run against live DB. Fixed: ran all 7 statements via MCP write tool. 3 constraints confirmed (Guidance existing, GuidanceUpdate + GuidancePeriod created). |
 | 25 | 3 of 4 sentinel GuidancePeriod nodes missing | Medium | **Fixed** | Only `gp_MT` existed. Fixed: `gp_ST`, `gp_LT`, `gp_UNDEF` created. All 4 sentinels + 5 calendar periods = 9 GuidancePeriod nodes verified. |
+| 26 | Segment-qualified labels produce separate Guidance parents instead of grouping under base metric | Medium | **Fixed** | Root cause: §4 never referenced in agent prompt. Fix: rewrote §4 Metric Decomposition (business dimension vs. accounting modifier test), added §4/§7 reference to `guidance-extract.md` Step 3 and `guidance-qa-enrich.md` NEW ITEM path. Added non-exhaustive banner + inline one-liners at 5 high-risk sections. Zero code changes. |
+| 27 | Services Revenue segment inconsistency — segment="Total" in 1 of 4 items | Low | **Fixed** | Fixed by #26 — §7 segment rules now explicitly referenced in agent prompt Step 3. Default segment="Total", set segment only for business dimensions. |
 
 ---
 
@@ -221,7 +223,7 @@ CLI already returns structured JSON with `was_created`, edge linking results, an
 
 ### ISSUE 16 (Low → Fixed): Guidance periods share `:Period` label with XBRL periods
 
-Both used `:Period` but with completely disjoint schemas. **Fixed by GuidancePeriod redesign** (`guidance-period-redesign.md`). New `:GuidancePeriod` label with calendar-based `gp_` IDs, company-agnostic. Old `guidance_period_` `:Period` nodes deleted (31 GuidanceUpdate + 7 Period nodes). Run 6 confirmed all items use new format. **Note:** Sentinel pre-creation and 2 constraints still pending — see Issues #24/#25.
+Both used `:Period` but with completely disjoint schemas. **Fixed by GuidancePeriod redesign** (`guidance-period-redesign.md`). New `:GuidancePeriod` label with calendar-based `gp_` IDs, company-agnostic. Old `guidance_period_` `:Period` nodes deleted (31 GuidanceUpdate + 7 Period nodes). Run 6 confirmed all items use new format. Issues #24/#25 now fixed — all 3 constraints + 4 sentinels verified.
 
 ### ISSUE 17 (CRITICAL → Fixed): Phase 2 feature flag data loss
 
@@ -356,7 +358,24 @@ P1-Q3FY2025 agent (AAPL_2025-05-01) extracted `Tariff Cost Impact` as a standalo
 
 **Self-corrected: NO.** Agent kept the standalone item through dry-run, write, and readback verification without flagging it.
 
-**Fix:** Strengthen quality filter language: "If you catch yourself citing this rule and then creating the item anyway, the rule wins. Delete the standalone item."
+**Fix (prompt — unreliable):** Strengthen quality filter language: "If you catch yourself citing this rule and then creating the item anyway, the rule wins. Delete the standalone item." — This is a prompt-level nudge. LLMs cannot guarantee 0% regression on judgment calls; the same model on the same transcript may still reverse itself.
+
+**Fix (code — 0% regression):** Add a validation gate in `guidance_write_cli.py` that rejects items which have NO XBRL concept AND whose label slug is not already in the Guidance graph:
+
+```python
+# In guidance_write_cli.py validation loop, before write:
+if item.get('xbrl_qname') is None:
+    label_slug = slugify(item['label'])  # e.g. "tariff_cost_impact"
+    known_labels = get_known_guidance_labels(ticker)  # query: MATCH (g:Guidance) WHERE g.ticker=$ticker RETURN DISTINCT g.label_slug
+    if label_slug not in known_labels:
+        errors.append(f"REJECTED: '{item['label']}' has no XBRL concept and is not a known guidance metric — likely a factor, not a standalone item")
+        continue
+```
+
+**Trade-offs:**
+- **Reliability:** 100% — code gate cannot be overridden by LLM reasoning
+- **False positives:** First-ever extraction of a genuinely new metric with no XBRL concept would be blocked. Mitigated by: (a) most real guidance maps to XBRL, (b) blocked items logged with REJECTED prefix for human review, (c) can add to known-labels allowlist if legitimate
+- **Cost:** ~1 extra Cypher query per write batch (cached after first call)
 
 ### ISSUE 22 (Medium): P2-Q3FY2025 dropped Revenue enrichment — false "already enriched" claim
 
@@ -370,7 +389,32 @@ P2-Q3FY2025 agent classified Q&A #10 (Amit Daryanani) as `ENRICHES Revenue` but 
 
 **Impact:** Revenue item for Q3 FY2025 is missing FX headwind condition and category-level decline context. Marginal data loss — the core guidance number ("low to mid single-digit") is correct, only the conditions/context are incomplete.
 
-**Fix:** Add to P2 agent prompt: "When P1 items were recovered from Q&A (due to truncated PR), P2 enrichment should still add NEW details from Q&A exchanges not already captured. 'P1 used Q&A' ≠ 'already enriched by P2'."
+**Fix (prompt — unreliable):** Add to P2 agent prompt: "When P1 items were recovered from Q&A (due to truncated PR), P2 enrichment should still add NEW details from Q&A exchanges not already captured. 'P1 used Q&A' ≠ 'already enriched by P2'." — Same LLM reliability caveat: the agent may still hallucinate "already enriched" on any given run.
+
+**Fix (code — 0% regression):** Remove the agent's ability to skip enrichments entirely. Structural change to the P2 write path:
+
+1. P2 agent outputs ALL items it identifies as enrichable — both the original P1 fields AND the enriched fields — in the same JSON format. No skip decisions.
+2. `guidance_write_cli.py` reads the P2 JSON, diffs each item against the current graph state (MATCH by `guidance_id`), and writes ONLY fields that changed or were added.
+3. If the P2 output is identical to what's already in the graph, the CLI writes nothing (no-op). If there are new conditions/quotes/qualitative details, the CLI merges them.
+
+```python
+# In guidance_write_cli.py — P2 enrichment diff logic:
+for item in p2_items:
+    existing = query_existing_update(item['guidance_id'], item['source_id'])
+    if existing is None:
+        # New item from P2 (e.g., CapEx discovered in Q&A) — write as-is
+        write_item(item)
+    else:
+        diff = compute_field_diff(existing, item)
+        if diff:
+            merge_fields(item['guidance_id'], diff)  # SET only changed fields
+        # else: no-op, already identical
+```
+
+**Trade-offs:**
+- **Reliability:** 100% — agent cannot drop enrichments because it never decides to skip; all items flow to CLI, CLI does the diff
+- **Cost:** P2 JSON payload is larger (includes all items, not just enriched ones). ~1 extra Cypher read per item for diff. Negligible.
+- **Risk:** If agent corrupts an existing field (e.g., overwrites a correct `low` value with null), the diff would write the corruption. Mitigated by: (a) diff rejects null-overwrites of non-null fields by default, (b) MERGE+SET is already idempotent — re-running P1 restores originals
 
 ### ISSUE 23 (Low): P2-Q3FY2025 Q&A verdict inconsistency between analysis and final report
 
@@ -418,3 +462,274 @@ Plan (D2) specifies 4 sentinel nodes pre-created: `gp_ST`, `gp_MT`, `gp_LT`, `gp
 - `gp_UNDEF` → **created** (nodes_created: 1)
 
 **Verified:** 9 total GuidancePeriod nodes (5 calendar + 4 sentinels), all with correct properties.
+
+### ISSUE 26 (Medium): Segment-qualified labels produce separate Guidance parent nodes instead of grouping under base metric
+
+Segment Revenue items (iPhone, iPad, Mac, WH&A, Services) each create their own Guidance parent node (`guidance:iphone_revenue`, `guidance:ipad_revenue`, etc.) instead of grouping under `guidance:revenue`. The correct model: Guidance node = metric identity (Revenue), GuidanceUpdate = per-source/period/segment instance with segment field for differentiation.
+
+**Affected:** 5 Guidance nodes (8 GuidanceUpdates) should be consolidated into `guidance:revenue`.
+
+**Root cause (3 layers):**
+1. **§4 never activated** — SKILL.md §4 "Metric Decomposition" defines the rule but the agent prompt (`guidance-extract.md`) never references it. Pipeline Steps 1-5 cite §6, §11, §12, §13, §17 — not §4. The rule exists in the reference doc but is never invoked.
+2. **No code enforcement** — `build_guidance_ids()` line 494 uses `guidance_id = f"guidance:{label_slug}"` directly. No decomposition, no validation. Trusts whatever label it receives.
+3. **Redundant segment in label AND segment field** — agent sets label="iPhone Revenue" AND segment="iPhone". The segment_slug in `guidance_update_id` already provides uniqueness.
+
+**Additional finding:** §7 (Segment Assignment Rules) is also only partially referenced in the pipeline (member matching only, not segment assignment).
+
+**Fix:** See Issue #26 fix section below.
+
+### ISSUE 27 (Low): Services Revenue segment inconsistency — segment="Total" in 1 of 4 items
+
+`gu:AAPL_2024-10-31T17.00.00-04.00:services_revenue:gp_2024-10-01_2024-12-31:unknown:total` has `segment="Total"` while the other 3 Services Revenue items have `segment="Services"`. Agent inconsistently classified the same metric across runs. Run 2 (Q1 FY2025) treated "Services Revenue" as a standalone metric (segment=Total); Runs 1, 3, 5 treated it as a segment of Revenue (segment=Services).
+
+**Impact:** The inconsistent segment_slug produces a different `guidance_update_id` slot. If both forms coexist for the same source/period, they'd create duplicate GuidanceUpdate nodes (one with segment=Total, one with segment=Services). Currently no duplication exists because only one run per source.
+
+**Root cause:** Agent prompt doesn't reference §7 segment assignment rules. Without explicit rules, the agent makes ad-hoc decisions.
+
+**Fix:** Add §7 reference to pipeline Step 3. Code-level fix is impractical — segment classification requires LLM judgment.
+
+---
+
+# Fix Issue #26: Segment-Qualified Labels Produce Separate Guidance Parents
+
+## Context
+
+**Problem**: Guidance parent nodes in Neo4j have segment-qualified IDs like `guidance:iphone_revenue`, `guidance:ipad_revenue`, `guidance:mac_revenue` instead of all pointing to `guidance:revenue`. The Guidance node represents a base financial metric (Revenue) — segment distinction belongs on the GuidanceUpdate node, not the Guidance parent.
+
+**Root cause (3 layers)**:
+1. SKILL.md §4 has metric decomposition rules but they were **never referenced** in the agent prompt (`guidance-extract.md`). Zero occurrences of "§4" in the pipeline steps.
+2. SKILL.md §7 segment assignment rules also not referenced in the extraction step.
+3. Without §4/§7 instructions, the LLM outputs `label="iPhone Revenue"` instead of `label="Revenue"` + `segment="iPhone"`. The code at `guidance_ids.py:494` takes the label as-is: `guidance_id = f"guidance:{label_slug}"` → `guidance:iphone_revenue`.
+
+**Additionally**: §4's current text has a bug — its decomposition rules would incorrectly split "Cost of Revenue" → `label="Revenue"` + `segment="Cost of"` because Rule 1 only checks for canonical suffix without distinguishing accounting modifiers from business dimensions.
+
+**Fix approach**: Prompt-only. Amend §4 text to be unambiguous, add §4/§7 references to agent prompts. Zero code changes — the LLM does semantic decomposition, the existing code produces correct IDs from the corrected labels.
+
+**Requirements**:
+- Super minimalistic yet close to 100% reliable
+- Safe for 10K+ companies — no hardcoded string manipulation in code
+- Zero regression risk to existing working functionality
+- No over-engineering
+- Non-exhaustive lists must not cause LLM overfitting
+
+---
+
+## Changes (4 files, 7 edits, 0 code changes)
+
+### File 1: `.claude/skills/guidance-inventory/SKILL.md`
+
+#### Edit 1A: Add non-exhaustive banner (after line 13, before §1)
+
+Insert after the `**Thinking**:` line (line 13), before the blank line and `## Table of Contents`:
+
+```
+**NON-EXHAUSTIVE LISTS**: Every list in this document (metrics, keywords, concepts, instant labels) is a starting set of common examples — NOT a filter. Extract guidance for ANY metric you find, even if unlisted. Create new labels freely. Set `xbrl_qname=null` when no concept matches.
+```
+
+**Why**: Prevents LLM overfitting on canonical examples across all high-risk sections.
+
+#### Edit 1B: Fix line 195 — add non-exhaustive reminder at §4 table
+
+Current (line 195):
+```
+12 canonical metrics. LLM creates new Guidance nodes for metrics not in this table.
+```
+
+New:
+```
+12 common canonical metrics. These are common examples — create new base metrics freely for any company-specific or industry-specific metric not listed here.
+```
+
+#### Edit 1C: Fix line 212 — remove contradictory "Services Revenue" example
+
+Current (line 212):
+```
+Aliases are stored on the Guidance node in `aliases[]`. Non-exhaustive — company-specific metrics (e.g., "Services Revenue" for AAPL) are created dynamically.
+```
+
+New:
+```
+Aliases are stored on the Guidance node in `aliases[]`. Non-exhaustive — new base metrics not in this table (e.g., "Installed Base", "ARPU") are created as-is when no canonical suffix is found (rule 3 below).
+```
+
+**Why**: "Services Revenue" directly contradicts §4 decomposition (it SHOULD decompose to Revenue + Services). Replace with genuinely standalone metrics.
+
+#### Edit 1D: Replace §4 Metric Decomposition rules (lines 214-221)
+
+Current (lines 214-221):
+```
+### Metric Decomposition
+
+When source text qualifies a base metric with a product, segment, geography, or business-unit name:
+
+1. **Identify base metric** — if any canonical label (or variant) from the table above appears as suffix, that's the base
+2. **Everything before the base is qualifier** — set as `segment`, joined with ` | ` if multiple, sorted alphabetically
+3. **No canonical suffix found** — entire phrase becomes a new `label` with `segment=Total`
+4. **Qualifier without a matching Member node** — still decompose; member matching (§7) handles no-match gracefully
+```
+
+New:
+```
+### Metric Decomposition
+
+When source text qualifies a metric, split into `label` (the base metric) + `segment` (the qualifier):
+
+**Decompose** when the qualifier names a business dimension — a product, geography, business unit, or customer type:
+- "iPhone Revenue" → `label="Revenue"`, `segment="iPhone"`
+- "North America Operating Income" → `label="Operating Income"`, `segment="North America"`
+- "Cloud Services Gross Margin" → `label="Gross Margin"`, `segment="Cloud Services"`
+
+**Do NOT decompose** when the qualifier is an accounting or measurement modifier — it changes *what* is being measured, not *who/where*:
+- "Cost of Revenue" → `label="Cost of Revenue"`, `segment="Total"` (different metric than Revenue)
+- "Net Revenue" → `label="Net Revenue"`, `segment="Total"` (different measurement than Revenue)
+- "Adjusted EBITDA" → `label="Adjusted EBITDA"`, `segment="Total"`
+- "Pro Forma EPS" → `label="Pro Forma EPS"`, `segment="Total"`
+
+**No qualifier** — just "Revenue" or "EPS" — set label to the metric as-is, `segment="Total"`.
+
+**Simple test**: Could you have this metric for iPhone AND for Total? If yes, the prefix is a segment — decompose. If the prefix changes the financial definition, keep it whole.
+
+**No-match is OK**: If a qualifier doesn't match any Member node, still decompose. Member matching (§7) handles no-match gracefully.
+```
+
+**Why**: Old rules would incorrectly decompose "Cost of Revenue" into Revenue + "Cost of". New rules use a clear semantic test (business dimension vs accounting modifier) that the LLM can apply reliably.
+
+#### Edit 1E: Add non-exhaustive reminder at §11 concept pattern map (after line 462, after the concept table)
+
+Insert after the concept pattern map table (after line 462):
+
+```
+This maps the 12 common metrics. For metrics not in this table, set `xbrl_qname=null` — do NOT skip the item or force-fit it into a listed concept.
+```
+
+#### Edit 1F: Add non-exhaustive reminder at §13 guidance keywords (after line 531, after the keywords table)
+
+Insert after the keywords table (after line 531):
+
+```
+These keywords are common signals, not an exhaustive filter. Extract guidance regardless of whether the source text uses these specific words.
+```
+
+---
+
+### File 2: `.claude/agents/guidance-extract.md`
+
+#### Edit 2A: Add §4/§7 to Step 3 (insert after line 84)
+
+Current line 84:
+```
+Apply per-source profile rules (loaded in auto-load step), quality filters from SKILL.md §13, and existing Guidance tags (from Step 1) to reuse canonical metric names.
+```
+
+Insert after line 84 (before "For each guidance item, extract:"):
+
+```
+**Metric decomposition (SKILL.md §4)**: Split qualified metrics into base `label` + `segment`. Business dimensions (product, geography, business unit) become `segment`; the base metric stays as `label`. Accounting modifiers (Cost of, Net, Adjusted, Pro Forma) stay part of `label`. This ensures all segment variants share one Guidance parent node.
+
+**Segment rules (SKILL.md §7)**: Default segment is `Total`. Set segment only when text qualifies a metric with a business dimension. Segment text feeds member matching (Step 4 pt.5).
+```
+
+#### Edit 2B: Add non-exhaustive note to instant labels (line 100)
+
+Current line 100:
+```
+**Rules**: Set as many fiscal fields as text supports. `sentinel_class` ONLY when ALL fiscal fields are null (4-way judgment call). Known instant labels: `cash_and_equivalents`, `total_debt`, `long_term_debt`, `shares_outstanding`, `book_value`, `net_debt`.
+```
+
+New:
+```
+**Rules**: Set as many fiscal fields as text supports. `sentinel_class` ONLY when ALL fiscal fields are null (4-way judgment call). Known instant labels (not exhaustive — classify any balance-sheet stock metric as instant): `cash_and_equivalents`, `total_debt`, `long_term_debt`, `shares_outstanding`, `book_value`, `net_debt`.
+```
+
+---
+
+### File 3: `.claude/agents/guidance-qa-enrich.md`
+
+#### Edit 3A: Add §4 to NEW ITEM action in Step 4 verdict table (line 78)
+
+Current line 78:
+```
+| `NEW ITEM` | Q&A contains guidance not in any existing item | Create new item with `[Q&A]` quote prefix. |
+```
+
+New:
+```
+| `NEW ITEM` | Q&A contains guidance not in any existing item | Create new item with `[Q&A]` quote prefix. Apply metric decomposition (SKILL.md §4) — split qualified metrics into base `label` + `segment`. |
+```
+
+---
+
+### File 4: `.claude/skills/guidance-inventory/reference/PROFILE_TRANSCRIPT.md`
+
+#### Edit 4A: Add speaker scope clarification (after line 52, after the hierarchy table)
+
+Insert after the hierarchy table (after the `| Skip | **Operator** |` row):
+
+```
+↳ Priority sets precedence for conflicts, not scope. Extract guidance from all speakers.
+```
+
+---
+
+## What We Are NOT Changing
+
+- **`guidance_ids.py`** — `build_guidance_ids()` stays as-is. It takes `label` and produces `guidance_id = f"guidance:{label_slug}"`. Once the LLM sends the correct decomposed label, the code produces the correct ID.
+- **`guidance_write_cli.py`** — Concept inheritance code (lines 197-205) stays as-is. It already copies `xbrl_qname` between items with the same `label`. Once labels are correct, it works.
+- **`guidance_writer.py`** — MERGE templates stay as-is.
+- **No hardcoded metric lists in code** — the 12 canonical metrics live only in SKILL.md §4, used by LLM judgment.
+- **No deterministic string manipulation** — no regex, no prefix stripping, no code-level decomposition.
+
+---
+
+## Verification
+
+1. **Dry-run test**: After edits, spawn `guidance-extract` agent on one AAPL transcript (e.g., `AAPL transcript AAPL_2025-07-31T17.00.00-04.00 MODE=dry_run`). Check CLI output:
+   - All segment Revenue items should have `guidance_id = "guidance:revenue"` (not `guidance:iphone_revenue`)
+   - Segment field should be `"iPhone"`, `"iPad"`, etc. (not `"Total"`)
+   - "Cost of Revenue" (if present) should stay as `label="Cost of Revenue"`, `segment="Total"`
+
+2. **Issue #27 check**: Services Revenue item should now have `label="Revenue"`, `segment="Services"` (not `segment="Total"`)
+
+3. **Concept inheritance check**: In dry-run output, all Revenue segment items should inherit `xbrl_qname` from the Total Revenue item (concept inheritance works because labels now match)
+
+---
+
+### ISSUE 28 (Medium): Sonnet vs Opus quality comparison — not yet tested
+
+**Goal**: Determine whether Sonnet 4.6 produces comparable extraction quality to Opus 4.6 for guidance extraction. If quality is close enough, Sonnet would significantly reduce cost and latency per run (~3-5x cheaper, ~2x faster).
+
+**Test plan**:
+1. Pick one transcript with known-good Opus results (e.g., `AAPL_2023-11-03T17.00.00-04.00` — 10 items, 5 Q&A enriched, richest run)
+2. **Run A (Sonnet)**: Set `model: sonnet` in `guidance-extract.md` and `guidance-qa-enrich.md` frontmatter. Run full two-invocation pipeline in `dry_run` mode. Save CLI output.
+3. **Run B (Opus)**: Restore `model: opus` in both agents. Run same transcript in `dry_run` mode. Save CLI output.
+4. Compare side-by-side on these dimensions:
+
+| Dimension | What to check |
+|---|---|
+| **Recall** | Same item count? Any missed metrics? |
+| **Precision** | Any false positives (actuals, analyst estimates, factors-as-standalone)? |
+| **Metric decomposition** | Correct label/segment split per §4? |
+| **Numeric accuracy** | Same low/mid/high values? Double-scaling bug (Issue #20/A)? |
+| **Unit canonicalization** | Correct unit_raw passed to CLI? |
+| **Basis assignment** | Correct explicit-only basis, or over/under-assigning? |
+| **Period resolution** | Same fiscal_year/fiscal_quarter/period_scope? |
+| **XBRL matching** | Same xbrl_qname and member_u_ids? |
+| **Q&A enrichment** | Same enrichment rate? Same verdicts? |
+| **Quote quality** | Verbatim? Correct [PR]/[Q&A] prefix? Within 500 chars? |
+| **Conditions** | Same conditions captured? FX/tariff correctly folded? |
+| **Token usage** | How much cheaper is Sonnet? |
+| **Latency** | How much faster? |
+
+**Files to modify for Sonnet run**: `guidance-extract.md` line 13 (`model: opus` → `model: sonnet`), `guidance-qa-enrich.md` line 13 (`model: opus` → `model: sonnet`). Restore after.
+
+**Status**: Open — not yet run.
+
+4. **Existing data**: Old Guidance nodes (`guidance:iphone_revenue` etc.) remain untouched. New data writes to `guidance:revenue`. No collision, no data loss. Old orphaned nodes can be cleaned up separately.
+
+---
+
+## Issues Tracker Update
+
+After implementation, update `.claude/plans/guidance-extraction-issues.md`:
+- Issue #26: Status → **Fixed**
+- Issue #27: Status → **Fixed** (§4 decomposition + §7 segment rules now referenced)

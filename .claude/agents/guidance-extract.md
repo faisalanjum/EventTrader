@@ -77,11 +77,17 @@ Route by `SOURCE_TYPE` to correct QUERIES.md section:
 
 Apply empty-content rules from SKILL.md §17.
 
-**For transcripts**: Extract from Prepared Remarks ONLY. Q&A enrichment is handled by a separate agent invocation (`guidance-qa-enrich`). Ignore `qa_exchanges` from query 3B.
+**For transcripts**: Extract from Prepared Remarks. Full Q&A analysis is handled by Phase 2 (`guidance-qa-enrich`). Only use `qa_exchanges` from 3B as fallback if prepared remarks are truncated or empty. If 3B result is truncated by the MCP tool, re-run the query via Bash+Python and save to `/tmp` for parsing.
 
 ### Step 3: LLM Extraction
 
 Apply per-source profile rules (loaded in auto-load step), quality filters from SKILL.md §13, and existing Guidance tags (from Step 1) to reuse canonical metric names.
+
+**Metric decomposition (SKILL.md §4)**: Split qualified metrics into base `label` + `segment`. Business dimensions (product, geography, business unit) become `segment`; the base metric stays as `label`. Accounting modifiers (Cost of, Net, Adjusted, Pro Forma) stay part of `label`. This ensures all segment variants share one Guidance parent node.
+
+**Segment rules (SKILL.md §7)**: Default segment is `Total`. Set segment only when text qualifies a metric with a business dimension. Segment text is used for member matching in Step 4 pt.5.
+
+**Numeric values**: Copy the number and unit exactly as printed in the source text. `"$10.3 billion"` → `low=10.3, unit_raw="billion"`. Never convert between units — the canonicalizer handles all scaling.
 
 For each guidance item, extract: `quote`, `basis_raw`, metric (`label`), numeric values (`low`/`mid`/`high`), `derivation`, `segment`, `conditions`, XBRL candidates, and these **LLM period extraction fields**:
 
@@ -97,7 +103,7 @@ For each guidance item, extract: `quote`, `basis_raw`, metric (`label`), numeric
 | `sentinel_class` | string / null | Only when NO fiscal fields are extractable: `short_term`, `medium_term`, `long_term`, `undefined` |
 | `time_type` | string / null | Only for known balance-sheet items: `instant`. Omit for `duration` (default ~99%) |
 
-**Rules**: Set as many fiscal fields as text supports. `sentinel_class` ONLY when ALL fiscal fields are null (4-way judgment call). Known instant labels: `cash_and_equivalents`, `total_debt`, `long_term_debt`, `shares_outstanding`, `book_value`, `net_debt`.
+**Rules**: Set as many fiscal fields as text supports. `sentinel_class` ONLY when ALL fiscal fields are null (4-way judgment call). Known instant labels (not exhaustive — classify any balance-sheet stock metric as instant): `cash_and_equivalents`, `total_debt`, `long_term_debt`, `shares_outstanding`, `book_value`, `net_debt`.
 
 **Fiscal Context Rule**: In earnings calls and SEC filings, ALL period references are fiscal unless explicitly stated as calendar.
 

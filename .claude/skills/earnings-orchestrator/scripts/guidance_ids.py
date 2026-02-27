@@ -164,6 +164,8 @@ def canonicalize_value(value: Optional[float], unit_raw: str, canonical_unit: st
     if canonical_unit == 'm_usd' and unit_raw:
         _, multiplier = _parse_numeric_with_scale(f"{value}{unit_raw}")
         if multiplier is not None:
+            if multiplier > 1 and value > 999:
+                raise ValueError(f"{value} with '{unit_raw}' looks pre-scaled — pass the number exactly as stated in source")
             return round(value * multiplier, 6)
 
     # If unit was already 'm_usd' or 'million', value is already in millions

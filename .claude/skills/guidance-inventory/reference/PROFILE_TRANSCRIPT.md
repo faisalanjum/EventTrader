@@ -51,6 +51,8 @@ Process ALL content from the transcript. Do not skip any section. Transcripts ar
 | 5 | **Other executives** (Q&A) | Segment-specific guidance (e.g., VP of Cloud, Head of Devices) |
 | Skip | **Operator** | Procedural remarks only (introductions, instructions). No guidance content. |
 
+↳ Priority sets precedence for conflicts, not scope. Extract guidance from all speakers.
+
 ---
 
 ## Prepared Remarks Processing

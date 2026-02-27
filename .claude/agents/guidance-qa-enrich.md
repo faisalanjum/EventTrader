@@ -75,7 +75,7 @@ Process EACH Q&A exchange against the existing items from Step 2. For every exch
 | Verdict | Meaning | Action |
 |---------|---------|--------|
 | `ENRICHES {item}` | Q&A adds detail to an existing item | Update `qualitative`, `conditions`, `quote`, and/or numeric fields. Append `[Q&A]` detail in quote. |
-| `NEW ITEM` | Q&A contains guidance not in any existing item | Create new item with `[Q&A]` quote prefix. |
+| `NEW ITEM` | Q&A contains guidance not in any existing item | Create new item with `[Q&A]` quote prefix. Apply metric decomposition (SKILL.md §4) — split qualified metrics into base `label` + `segment`. |
 | `NO GUIDANCE` | Exchange has no forward-looking content | Skip. |
 
 **You MUST produce a Q&A Analysis Log.** Every entry MUST include a topic summary. Format:
@@ -97,6 +97,7 @@ Compare current extraction labels (Phase 1 items + any NEW ITEMs above) against 
 
 Rules:
 - Process ALL exchanges. Do not stop early.
+- Never skip an ENRICHES verdict. If you classified an exchange as ENRICHES, you MUST include the enriched item in the write batch. MERGE+SET handles idempotency — writing an already-enriched item is safe.
 - Enrichment updates the item in place — do not create a second item for the same slot.
 - When enriching `quote`, append after existing quote: `[PR] original... [Q&A] additional detail...`
 - When enriching `qualitative` or `conditions`, merge the richer information from both sources.

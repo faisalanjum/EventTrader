@@ -12,6 +12,8 @@ Graph-native guidance extraction system. Writes `Guidance` and `GuidanceUpdate` 
 
 **Thinking**: ALWAYS use `ultrathink` for maximum reasoning depth when extracting and classifying guidance.
 
+**NON-EXHAUSTIVE LISTS**: Every list in this document (metrics, keywords, concepts, instant labels) is a starting set of common examples — NOT a filter. Extract guidance for ANY metric you find, even if unlisted. Create new labels freely. Set `xbrl_qname=null` when no concept matches.
+
 
 ## Table of Contents
 
@@ -192,7 +194,7 @@ Use `guidance_ids.py:build_guidance_ids()` as single entry point. Do not duplica
 
 ## 4. Metric Normalization
 
-12 canonical metrics. LLM creates new Guidance nodes for metrics not in this table.
+12 canonical metrics below are common examples — create new base metrics freely for any company-specific or industry-specific metric not listed here.
 
 | Standard Label | Variants |
 |----------------|----------|
@@ -209,16 +211,27 @@ Use `guidance_ids.py:build_guidance_ids()` as single entry point. Do not duplica
 | `OINE` | other income and expense, other income/expense net |
 | `D&A` | depreciation and amortization, D&A, depreciation |
 
-Aliases are stored on the Guidance node in `aliases[]`. Non-exhaustive — company-specific metrics (e.g., "Services Revenue" for AAPL) are created dynamically.
+Aliases are stored on the Guidance node in `aliases[]`. Non-exhaustive — new base metrics not in this table (e.g., "Installed Base", "ARPU") are created as-is with `segment="Total"` (see "No qualifier" in Metric Decomposition below).
 
 ### Metric Decomposition
 
-When source text qualifies a base metric with a product, segment, geography, or business-unit name:
+When source text qualifies a metric, split into `label` (the base metric) + `segment` (the qualifier):
 
-1. **Identify base metric** — if any canonical label (or variant) from the table above appears as suffix, that's the base
-2. **Everything before the base is qualifier** — set as `segment`, joined with ` | ` if multiple, sorted alphabetically
-3. **No canonical suffix found** — entire phrase becomes a new `label` with `segment=Total`
-4. **Qualifier without a matching Member node** — still decompose; member matching (§7) handles no-match gracefully
+**Decompose** when the qualifier names a business dimension — a product, geography, business unit, or customer type:
+- "iPhone Revenue" → `label="Revenue"`, `segment="iPhone"`
+- "North America Operating Income" → `label="Operating Income"`, `segment="North America"`
+- "Cloud Services Gross Margin" → `label="Gross Margin"`, `segment="Cloud Services"`
+
+**Do NOT decompose** when the qualifier is an accounting or measurement modifier — it changes *what* is being measured, not *who/where*:
+- "Cost of Revenue" → `label="Cost of Revenue"`, `segment="Total"` (different metric than Revenue)
+- "Adjusted EBITDA" → `label="Adjusted EBITDA"`, `segment="Total"`
+- "Pro Forma EPS" → `label="Pro Forma EPS"`, `segment="Total"`
+
+**No qualifier** — just "Revenue" or "EPS" — set label to the metric as-is, `segment="Total"`.
+
+**Simple test**: Could you have this metric for iPhone AND for Total? If yes, the prefix is a segment — decompose. If the prefix changes the financial definition, keep it whole.
+
+**No-match is OK**: If a qualifier doesn't match any Member node, still decompose. Member matching (§7) handles no-match gracefully.
 
 ---
 
@@ -461,6 +474,8 @@ Dual approach: `MAPS_TO_CONCEPT` edge (graph-native join to XBRL Concept) + `xbr
 | `OINE` | `OtherNonoperatingIncomeExpense` | — |
 | `D&A` | `DepreciationAmortization` | — |
 
+This maps the 12 common metrics. For metrics not in this table, set `xbrl_qname=null` — do NOT skip the item or force-fit it into a listed concept.
+
 ### Concept Resolution Gate
 
 1. Pattern-match against concept usage cache (QUERIES.md query 2A)
@@ -530,6 +545,8 @@ Extraction MUST route by `source_type` before LLM processing. Each type has diff
 | Qualitative | low single digits, double-digit, mid-teens, high single digits |
 | Conditional | assumes, contingent on, excluding, subject to |
 
+These keywords are common signals, not an exhaustive filter. Extract guidance regardless of whether the source text uses these specific words.
+
 ### Dedup Rule
 
 Deterministic slot-based `GuidanceUpdate.id` enforces dedup. Same slot = same ID → MERGE + SET updates properties.
@@ -552,7 +569,7 @@ Applied AFTER extraction, BEFORE writing to graph:
 | **Quote max 500 chars** | Truncate at sentence boundary with "..." if needed. |
 | **100% recall priority** | When in doubt, extract it. False positives > missed guidance. |
 | **News: company guidance only** | Ignore analyst estimates ("Est $X", "consensus $Y"). Extract only company-issued guidance. |
-| **Factors are conditions, not items** | If a forward-looking statement quantifies a factor affecting another guided metric (e.g., FX headwind, week count, commodity cost tailwind), capture it in that metric's `conditions` field — not as a standalone item. |
+| **Factors are conditions, not items** | If a forward-looking statement quantifies a factor affecting another guided metric (e.g., FX headwind, week count, commodity cost tailwind), capture it in that metric's `conditions` field — not as a standalone item. A factor already captured in a metric's `conditions` field is already extracted — do not also create a standalone item for it. |
 
 ---
 
