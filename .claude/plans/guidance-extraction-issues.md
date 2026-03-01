@@ -48,7 +48,7 @@
 | 41 | MCP reliability requires explicit `--strict-mcp-config` in guidance jobs | Medium | **Open** | Toy runs showed MCP tool availability drift without strict config loading. Standardize `--strict-mcp-config` for guidance skill/subagent executions to avoid missing tool errors. |
 | 42 | Runtime image strategy unresolved when GHCR pulls fail (`403`) | Medium | **Open** | `ghcr.io/cabinlab/claude-agent-sdk:python` was not pullable anonymously in-cluster. Need a committed strategy: imagePullSecret for GHCR OR supported fallback runtime image (`node:20` + npm install) with pinned version/perf baseline. |
 | 43 | Missing repeatable pre-prod canary for full two-phase guidance path | Medium | **Open** | Add one deterministic canary with explicit phase contract: (A) run `MODE=write` (Phase 1 + Phase 2) in isolated namespace with cleanup, or (B) pre-seed Phase 1 rows first, then run `MODE=dry_run` to validate Phase 2 behavior. `MODE=dry_run` alone cannot prove full two-phase success because Phase 2 depends on 7E readback from Phase 1 writes. |
-| 44 | Sentinel GuidancePeriod nodes `gp_ST` and `gp_MT` missing after Run 7 (Issue #25 regression) | Medium | **Open** | DB audit confirms only `gp_LT` and `gp_UNDEF` exist. Redesign D2 + Issue #25 require all 4 sentinels pre-created. |
+| 44 | Sentinel GuidancePeriod nodes `gp_ST` and `gp_MT` missing after Run 7 (Issue #25 regression) | Medium | **Fixed** | Root cause: `create_guidance_constraints()` was never re-run after clean-slate wipe. Fix: `guidance_write_cli.py` now calls `create_guidance_constraints(manager)` at the start of every write-mode batch. Idempotent (7 no-op queries, ~50ms). Sentinels auto-created on every write run — survives any future wipe. |
 | 45 | Run 7 aggregate totals are internally inconsistent with per-transcript table and live DB | Low | **Open** | Run 7 table sums to **43 P1 + 4 P2 new = 47 total** and live DB has 47 `GuidanceUpdate` nodes, but post-mortem text claims **45 P1 + 6 P2 new = 51 total**. Baseline mismatch makes validation/auditing unreliable. |
 | 47 | Write-path credentials hardcoded with plaintext password in `guidance_write.sh` | Medium | **Open** | `guidance_write.sh:14-16` force-sets `NEO4J_USERNAME=neo4j`, `NEO4J_PASSWORD=Next2020#`, `NEO4J_DATABASE=neo4j` as defaults. #37 covers URI only. In K8s, credentials must come from Secrets via `GUIDANCE_NEO4J_USERNAME`, `GUIDANCE_NEO4J_PASSWORD`, `GUIDANCE_NEO4J_DATABASE` env vars. The override mechanism exists (same `${GUIDANCE_..:-default}` pattern as URI) but the plaintext password in the script is a security concern for any shared/committed repo. **Validate:** set all 4 `GUIDANCE_NEO4J_*` env vars from a K8s Secret, confirm write path connects successfully. |
 | 48 | Write-mode Python import chain requires heavy dependencies not guaranteed in container | Medium | **Open** | `guidance_write_cli.py:223` in `--write` mode does `from neograph.Neo4jConnection import get_manager` → `Neo4jManager` → imports `config.feature_flags`, `XBRL.xbrl_core`, `pandas`, `tenacity`, `neo4j` driver. If the container's Python version mismatches the host venv (e.g., container Python 3.12 vs venv built on 3.11), or if any dependency is missing, write path fails at import time. Dry-run mode is unaffected (no DB connection needed). **Validate:** run `--write` mode in container, confirm no `ImportError` or `ModuleNotFoundError` from the `neograph` → `XBRL` → `config` chain. |
@@ -61,7 +61,9 @@
 | 55 | `segment_raw` and `segment_slug` are null on all segmented GuidanceUpdate nodes | Medium | **Fixed** | `segment` (raw) was already stored 47/47. `segment_slug` added as denormalized property for efficient queries. `segment_raw` redundant with existing `segment`. Fixed alongside #53. |
 | 56 | `evhash` is null on all 47 GuidanceUpdate nodes | Medium | **Closed (audit error)** | Correct property name is `evhash16` per spec §1/§3. DB has `evhash16` on 47/47 nodes. Audit queried wrong name `evhash`. |
 | 57 | All numeric fields (`value_low`, `value_high`, `value_point`) null on all 47 GuidanceUpdate nodes | HIGH | **Closed (audit error)** | Correct names are `low`/`mid`/`high` per spec §2 fields 7-9. DB has them on 30/47 nodes (17 qualitative-only items correctly null). Audit queried wrong names `value_low`/`value_high`/`value_point`. |
-| 58 | `basis_raw` is null on all 47 GuidanceUpdate nodes | Low | **Open (reclassified: extraction)** | Writer correctly wired (`_build_params` line 261, Cypher SET line 165). Agent extraction JSON doesn't populate this field. Not a writer bug — separate extraction prompt issue. |
+| 58 | `basis_raw` is null on all 47 GuidanceUpdate nodes | Low | **Open (needs investigation)** | Writer correctly wired (`_build_params` line 264, Cypher SET line 163). DB shows `basis_norm = 'unknown'` on all 47/47 — zero nodes with `gaap`/`non_gaap`/`constant_currency`. Per SKILL.md §6: `basis_norm` defaults to `unknown` when no explicit qualifier in quote span. If AAPL quotes genuinely lack explicit basis language, `basis_raw = null` is **spec-compliant**, not an extraction gap. Cannot distinguish "agent failed to extract" from "nothing to extract" without auditing each source quote for explicit basis terms. Needs quote-level audit to determine if any items should have had non-null `basis_raw`. |
+| 59 | `canonical_low/mid/high` may be null when `_ensure_ids()` early-returns | Low | **Open (pre-existing design)** | When agent pre-computes `guidance_update_id`, `_ensure_ids()` returns at `guidance_write_cli.py:117` without calling `build_guidance_ids()`. The `canonical_low/mid/high` fields (which `build_guidance_ids()` computes from raw `low/mid/high` + `unit_raw` scale normalization) may not be in the item dict. `_build_params()` lines 260-262 read `item.get('canonical_low')` etc., returning `None`. The unconditional SET (`gu.low = $low`) would then overwrite existing DB values with null. Pre-existing contract assumption: if agent provides `guidance_update_id`, it must also provide `canonical_*` values. Not caused by any recent change. |
+| 60 | No Neo4j indexes on denormalized `label_slug` / `segment_slug` properties | Low | **Open** | #53/#55 added `label_slug` and `segment_slug` as denormalized properties on GuidanceUpdate for direct queries. But no Neo4j indexes exist on these properties — only the uniqueness constraint on `id`. At 47 nodes this is negligible, but at scale (10,000+ nodes) queries like `WHERE gu.label_slug = 'revenue'` would do full label scans. Fix: add 2 indexes to `create_guidance_constraints()`. Trivial one-liner each: `CREATE INDEX gu_label_slug IF NOT EXISTS FOR (gu:GuidanceUpdate) ON (gu.label_slug)` and `CREATE INDEX gu_segment_slug IF NOT EXISTS FOR (gu:GuidanceUpdate) ON (gu.segment_slug)`. |
 
 ### Clarification Pack for K8s Open Items (#37-#43)
 
@@ -1072,6 +1074,59 @@ The Run 7 post-mortem itself confirms correct units were assigned (line 130-134:
 **Why this is an issue**: `guidanceInventory.md` §2 defines `basis_raw` as the verbatim basis text (e.g., "GAAP", "reported", "constant currency") and `basis_norm` as the canonical normalization (`gaap`, `non_gaap`, `constant_currency`, `unknown`). While `basis_norm: "unknown"` is the correct default when basis isn't explicitly stated, some items DO have explicit basis references. For example, AAPL's services revenue guidance from Q2 FY2025 includes "constant currency growth comparable to December quarter (14%)" — this should have `basis_raw: "constant currency"` and `basis_norm: "constant_currency"`. The blanket `unknown` across all items suggests the extraction agent is not attempting basis classification at all.
 
 **Validation**: `MATCH (gu:GuidanceUpdate) WHERE gu.basis_raw IS NOT NULL RETURN count(gu)` — returns 0. Should return at least a few (items with explicit basis references).
+
+### Issue #59 — `canonical_low/mid/high` may be null when `_ensure_ids()` early-returns (pre-existing design concern)
+
+**Priority**: Low
+**Status**: Open (pre-existing design)
+
+**What the code shows**: `guidance_write_cli.py:117` — when agent pre-computes `guidance_update_id`, `_ensure_ids()` returns immediately without calling `build_guidance_ids()`. The `build_guidance_ids()` function (in `guidance_ids.py`) is responsible for computing `canonical_low/mid/high` from raw `low/mid/high` + `unit_raw` (scale normalization, e.g., billion → millions). When skipped, these `canonical_*` keys may not exist in the item dict.
+
+`_build_params()` at `guidance_writer.py:260-262` reads:
+```python
+'low': item.get('canonical_low'),    # None if key missing
+'mid': item.get('canonical_mid'),     # None if key missing
+'high': item.get('canonical_high'),   # None if key missing
+```
+
+The Cypher SET is unconditional (`gu.low = $low`), so `None` would overwrite any existing DB values with null on a re-run where the agent provides `guidance_update_id` but not `canonical_*` values.
+
+**Why this matters**: If an agent pre-computes the ID but sends raw `low/mid/high` (not `canonical_*`), the writer silently drops the numeric values. No validation error, no warning. The contract assumption — "if you provide `guidance_update_id`, you must also provide `canonical_*` values" — is implicit, not enforced.
+
+**What this is NOT**: This is not caused by the #53/#55 denormalized slug fix. The edge case existed before and after that change identically. It was surfaced during code review of `_build_params()` but is unrelated to the slug work.
+
+**Potential fix**: Add a warning in `_build_params()` when `canonical_low/mid/high` are all None but `low/mid/high` raw values exist in the item:
+```python
+if item.get('low') is not None and item.get('canonical_low') is None:
+    logger.warning("Item %s has raw 'low' but no 'canonical_low' — scale normalization may have been skipped", item.get('guidance_update_id'))
+```
+
+**Validation**: Check if any current agent payloads rely on the early-return path with raw numeric values. Inspect `/tmp/gu_*.json` files (if preserved) for items with `guidance_update_id` set AND `low`/`high` present but `canonical_low`/`canonical_high` absent.
+
+### Issue #60 — No Neo4j indexes on denormalized `label_slug` / `segment_slug` properties
+
+**Priority**: Low
+**Status**: Open
+
+**What DB shows**: `SHOW INDEXES WHERE entityType = 'NODE' AND labelsOrTypes = ['GuidanceUpdate']` returns only 1 index: the uniqueness constraint on `id`. No indexes on `label_slug` or `segment_slug`.
+
+**Why this matters**: Issues #53/#55 added `label_slug` and `segment_slug` as denormalized properties to enable direct queries like `WHERE gu.label_slug = 'revenue'`. Without indexes, these queries do a full label scan of all GuidanceUpdate nodes. At 47 nodes this is irrelevant (~microseconds). At 10,000+ nodes across hundreds of companies, it would matter.
+
+**Fix**: Add 2 lines to `create_guidance_constraints()` in `guidance_writer.py`:
+```python
+("CREATE INDEX gu_label_slug IF NOT EXISTS "
+ "FOR (gu:GuidanceUpdate) ON (gu.label_slug)"),
+("CREATE INDEX gu_segment_slug IF NOT EXISTS "
+ "FOR (gu:GuidanceUpdate) ON (gu.segment_slug)"),
+```
+
+Or run directly via MCP:
+```cypher
+CREATE INDEX gu_label_slug IF NOT EXISTS FOR (gu:GuidanceUpdate) ON (gu.label_slug)
+CREATE INDEX gu_segment_slug IF NOT EXISTS FOR (gu:GuidanceUpdate) ON (gu.segment_slug)
+```
+
+**Validation**: After creating indexes, `SHOW INDEXES WHERE entityType = 'NODE' AND labelsOrTypes = ['GuidanceUpdate']` should return 3 rows (id unique + label_slug range + segment_slug range).
 
 ### Likely shared root cause for #52-#58
 

@@ -62,7 +62,7 @@ sys.path.insert(0, "/home/faisal/EventMarketDB")
 
 from guidance_ids import build_guidance_ids, build_period_u_id, build_guidance_period_id
 import guidance_writer
-from guidance_writer import write_guidance_batch, write_guidance_item
+from guidance_writer import write_guidance_batch, write_guidance_item, create_guidance_constraints
 
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -227,6 +227,7 @@ def main():
             sys.exit(1)
 
         try:
+            create_guidance_constraints(manager)
             summary = write_guidance_batch(
                 manager, valid_items, source_id, source_type, ticker, dry_run=False
             )
