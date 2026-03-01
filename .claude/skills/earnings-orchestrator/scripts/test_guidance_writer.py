@@ -758,6 +758,153 @@ def test_params_has_gp_date_fields():
     assert params['gp_end_date'] == '2025-06-30'
 
 
+# ── Per-share validation guards (Issue #28) ──────────────────────────────
+
+def test_validate_per_share_label_with_m_usd():
+    """Guard A: per-share label + canonical_unit='m_usd' must be rejected."""
+    item = _make_item(
+        label='Adjusted EPS',
+        label_slug='adjusted_eps',
+        canonical_unit='m_usd',
+        guidance_id='guidance:adjusted_eps',
+        guidance_update_id='gu:src:adjusted_eps:gp_2025-01-01_2025-03-31:non_gaap:total',
+    )
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is False
+    assert 'per-share' in err
+    assert 'adjusted_eps' in err
+
+
+def test_validate_per_share_label_with_correct_unit():
+    """Per-share label + canonical_unit='usd' must pass."""
+    item = _make_item(
+        label='Adjusted EPS',
+        label_slug='adjusted_eps',
+        canonical_unit='usd',
+        canonical_low=1.46,
+        canonical_mid=1.48,
+        canonical_high=1.50,
+        guidance_id='guidance:adjusted_eps',
+        guidance_update_id='gu:src:adjusted_eps:gp_2025-01-01_2025-03-31:non_gaap:total',
+    )
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is True
+    assert err is None
+
+
+def test_validate_per_share_label_with_percent_unit():
+    """Per-share label + canonical_unit='percent' must pass (growth rate guidance)."""
+    item = _make_item(
+        label='AFFO Per Share',
+        label_slug='affo_per_share',
+        canonical_unit='percent',
+        canonical_low=5.0,
+        canonical_high=7.0,
+        guidance_id='guidance:affo_per_share',
+        guidance_update_id='gu:src:affo_per_share:gp_2025-01-01_2025-03-31:unknown:total',
+    )
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is True
+    assert err is None
+
+
+def test_validate_per_share_label_with_unknown_unit():
+    """Per-share label + canonical_unit='unknown' must pass (qualitative guidance)."""
+    item = _make_item(
+        label='EPS',
+        label_slug='eps',
+        canonical_unit='unknown',
+        canonical_low=None,
+        canonical_mid=None,
+        canonical_high=None,
+        qualitative='continued strong growth',
+        guidance_id='guidance:eps',
+        guidance_update_id='gu:src:eps:gp_2025-01-01_2025-03-31:gaap:total',
+    )
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is True
+    assert err is None
+
+
+def test_validate_xbrl_per_share_with_m_usd():
+    """Guard B: xbrl_qname with PerShare + canonical_unit='m_usd' must be rejected."""
+    item = _make_item(
+        label='Diluted Earnings',
+        label_slug='diluted_earnings',
+        canonical_unit='m_usd',
+        xbrl_qname='us-gaap:EarningsPerShareDiluted',
+        guidance_id='guidance:diluted_earnings',
+        guidance_update_id='gu:src:diluted_earnings:gp_2025-01-01_2025-03-31:gaap:total',
+    )
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is False
+    assert 'xbrl_qname' in err
+
+
+def test_validate_xbrl_per_diluted_share_with_m_usd():
+    """Guard B: xbrl_qname with PerDilutedShare pattern + m_usd must be rejected."""
+    item = _make_item(
+        label='Continuing Operations Income',
+        label_slug='continuing_operations_income',
+        canonical_unit='m_usd',
+        xbrl_qname='us-gaap:IncomeLossFromContinuingOperationsPerDilutedShare',
+        guidance_id='guidance:continuing_operations_income',
+        guidance_update_id='gu:src:continuing_operations_income:gp_2025-01-01_2025-03-31:gaap:total',
+    )
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is False
+    assert 'xbrl_qname' in err
+
+
+def test_validate_xbrl_per_unit_with_m_usd():
+    """Guard B: xbrl_qname with PerUnit + canonical_unit='m_usd' must be rejected."""
+    item = _make_item(
+        label='LP Distributions',
+        label_slug='lp_distributions',
+        canonical_unit='m_usd',
+        xbrl_qname='us-gaap:DistributionMadeToLimitedPartnerDistributionsPaidPerUnit',
+        guidance_id='guidance:lp_distributions',
+        guidance_update_id='gu:src:lp_distributions:gp_2025-01-01_2025-03-31:gaap:total',
+    )
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is False
+    assert 'xbrl_qname' in err
+
+
+def test_validate_xbrl_per_share_with_correct_unit():
+    """xbrl_qname with PerShare + canonical_unit='usd' must pass."""
+    item = _make_item(
+        label='EPS',
+        label_slug='eps',
+        canonical_unit='usd',
+        canonical_low=1.46,
+        canonical_mid=1.48,
+        canonical_high=1.50,
+        xbrl_qname='us-gaap:EarningsPerShareDiluted',
+        guidance_id='guidance:eps',
+        guidance_update_id='gu:src:eps:gp_2025-01-01_2025-03-31:gaap:total',
+    )
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is True
+    assert err is None
+
+
+def test_validate_aggregate_label_unchanged():
+    """Non-per-share labels with m_usd must still pass (no false positive)."""
+    item = _make_item()  # default is revenue + m_usd
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is True
+    assert err is None
+
+
+def test_validate_xbrl_aggregate_unchanged():
+    """xbrl_qname without PerShare/PerUnit + m_usd must pass."""
+    item = _make_item(xbrl_qname='us-gaap:Revenues')
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is True
+    assert err is None
+
+
 # ── Run all tests ─────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

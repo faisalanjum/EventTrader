@@ -21,6 +21,8 @@ import logging
 import os
 from datetime import datetime, timezone
 
+from guidance_ids import _is_per_share_label, slug
+
 logger = logging.getLogger(__name__)
 
 # Feature flag — env var takes priority, then config file, then default off
@@ -66,6 +68,39 @@ def _validate_item(item, source_id, source_type):
         val = item.get(field)
         if val is None or (isinstance(val, str) and not val.strip()):
             return False, f"missing required field: {field}"
+
+    # Guard A: per-share label with m_usd is the specific corruption this fix prevents.
+    # Only check == 'm_usd', NOT != 'usd'. Per-share labels can legitimately have
+    # non-usd units like 'percent_yoy' (EPS growth rate) or 'unknown' (qualitative
+    # EPS guidance like "we expect strong EPS growth"). Blocking those would cause
+    # false rejections at scale across 10,000 reports.
+    label_slug = item.get('label_slug') or slug(item.get('label', ''))
+    canonical_unit = item.get('canonical_unit', '')
+    if _is_per_share_label(label_slug) and canonical_unit == 'm_usd':
+        return False, (
+            f"per-share label '{label_slug}' has canonical_unit='m_usd'"
+            f" (expected 'usd' — per-share values must not be stored as millions)"
+        )
+
+    # Guard B: xbrl_qname indicates per-share but unit is m_usd (same corruption).
+    # Also uses == 'm_usd' for consistency with Guard A. Catches cases where
+    # the label doesn't match the classifier patterns but the XBRL concept clearly
+    # says per-share. Includes PerDilutedShare and PerBasicShare because XBRL uses
+    # the pattern 'IncomeLossFromContinuingOperationsPerDilutedShare' where
+    # 'PerShare' is NOT a substring (verified against real DB concepts).
+    xbrl_qname = item.get('xbrl_qname') or ''
+    if xbrl_qname and (
+        'PerShare' in xbrl_qname
+        or 'PerUnit' in xbrl_qname
+        or 'PerDilutedShare' in xbrl_qname
+        or 'PerBasicShare' in xbrl_qname
+    ):
+        if canonical_unit == 'm_usd':
+            return False, (
+                f"xbrl_qname '{xbrl_qname}' indicates per-share but"
+                f" canonical_unit='m_usd' (expected 'usd')"
+            )
+
     return True, None
 
 

@@ -40,12 +40,64 @@ def test_unit_passthrough():
     assert canonicalize_unit("unknown", "revenue") == "unknown"
 
 def test_unit_per_share_override():
-    # EPS should always be usd, never m_usd
+    # Original 4 labels (must still work)
     assert canonicalize_unit("m_usd", "eps") == "usd"
     assert canonicalize_unit("usd", "eps") == "usd"
     assert canonicalize_unit("$", "eps") == "usd"
     assert canonicalize_unit("million", "eps") == "usd"
     assert canonicalize_unit("B", "dps") == "usd"
+    assert canonicalize_unit("$", "earnings_per_share") == "usd"
+    assert canonicalize_unit("$", "dividends_per_share") == "usd"
+
+    # Variant EPS labels (Issue #28 — previously mapped to m_usd)
+    assert canonicalize_unit("$", "adjusted_eps") == "usd"
+    assert canonicalize_unit("$", "non_gaap_eps") == "usd"
+    assert canonicalize_unit("$", "diluted_eps") == "usd"
+    assert canonicalize_unit("$", "basic_eps") == "usd"
+    assert canonicalize_unit("$", "gaap_eps") == "usd"
+    assert canonicalize_unit("$", "pro_forma_eps") == "usd"
+    assert canonicalize_unit("$", "core_eps") == "usd"
+    assert canonicalize_unit("$", "normalized_eps") == "usd"
+    assert canonicalize_unit("$", "operating_eps") == "usd"
+    assert canonicalize_unit("million", "adjusted_eps") == "usd"
+
+    # XBRL-ordered labels (base metric first — startswith rule)
+    assert canonicalize_unit("$", "eps_diluted") == "usd"
+    assert canonicalize_unit("$", "eps_basic") == "usd"
+    assert canonicalize_unit("$", "dps_declared") == "usd"
+
+    # Per-share / per-unit labels (REIT, MLP, specialty)
+    assert canonicalize_unit("$", "ffo_per_share") == "usd"
+    assert canonicalize_unit("$", "affo_per_share") == "usd"
+    assert canonicalize_unit("$", "core_ffo_per_share") == "usd"
+    assert canonicalize_unit("$", "nav_per_share") == "usd"
+    assert canonicalize_unit("$", "book_value_per_share") == "usd"
+    assert canonicalize_unit("$", "distributable_earnings_per_share") == "usd"
+    assert canonicalize_unit("$", "distributions_per_unit") == "usd"
+    assert canonicalize_unit("$", "affo_per_unit") == "usd"
+    assert canonicalize_unit("$", "free_cash_flow_per_share") == "usd"
+
+    # Per-share labels with non-currency units must NOT be overridden
+    # (the override only fires when canonical == 'm_usd')
+    assert canonicalize_unit("% yoy", "eps") == "percent_yoy"
+    assert canonicalize_unit("%", "affo_per_share") == "percent"
+    assert canonicalize_unit(None, "eps") == "unknown"
+    assert canonicalize_unit(None, "dps") == "unknown"
+
+    # Negative controls: aggregate labels must NOT trigger per-share override
+    assert canonicalize_unit("$", "revenue") == "m_usd"
+    assert canonicalize_unit("$", "opex") == "m_usd"
+    assert canonicalize_unit("$", "capex") == "m_usd"
+    assert canonicalize_unit("$", "net_income") == "m_usd"
+    assert canonicalize_unit("$", "operating_expenses") == "m_usd"
+    assert canonicalize_unit("$", "share_repurchase") == "m_usd"
+    assert canonicalize_unit("$", "free_cash_flow") == "m_usd"
+    assert canonicalize_unit("$", "adjusted_ebitda") == "m_usd"
+
+    # Edge cases: words containing 'eps' substring must NOT match
+    assert canonicalize_unit("$", "steps") == "m_usd"
+    assert canonicalize_unit("$", "concepts") == "m_usd"
+    assert canonicalize_unit("$", "receipts") == "m_usd"
 
 def test_unit_aggregate_currency():
     assert canonicalize_unit("$", "revenue") == "m_usd"
@@ -99,6 +151,16 @@ def test_value_per_share_no_scaling():
     # EPS $1.13 stays 1.13 regardless of raw unit
     assert canonicalize_value(1.13, "usd", "usd", "eps") == 1.13
     assert canonicalize_value(1.13, "$", "usd", "eps") == 1.13
+
+    # Variant per-share labels also skip scaling (Issue #28)
+    assert canonicalize_value(1.46, "$", "usd", "adjusted_eps") == 1.46
+    assert canonicalize_value(3.50, "$", "usd", "non_gaap_eps") == 3.50
+    assert canonicalize_value(2.15, "$", "usd", "affo_per_share") == 2.15
+    assert canonicalize_value(0.26, "$", "usd", "distributions_per_unit") == 0.26
+
+    # XBRL-ordered labels also skip scaling (startswith rule)
+    assert canonicalize_value(1.13, "$", "usd", "eps_diluted") == 1.13
+    assert canonicalize_value(1.13, "$", "usd", "eps_basic") == 1.13
 
 def test_value_percent_no_scaling():
     assert canonicalize_value(45.5, "%", "percent", "gross_margin") == 45.5

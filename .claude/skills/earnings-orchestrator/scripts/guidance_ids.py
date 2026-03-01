@@ -64,7 +64,27 @@ UNIT_ALIASES = {
     'units': 'count', 'shares': 'count', 'employees': 'count', 'stores': 'count',
 }
 
-# Per-share metrics → always usd (not m_usd)
+def _is_per_share_label(label_slug: str) -> bool:
+    """Detect per-share metrics via slug token patterns.
+
+    Rules (any match → True):
+      1. Exact: 'eps' or 'dps'
+      2. Prefix: starts with 'eps_' or 'dps_' (catches XBRL-ordered labels like eps_diluted)
+      3. Suffix: ends with '_eps' or '_dps' (catches adjusted_eps, non_gaap_eps, etc.)
+      4. Contains: 'per_share' or 'per_unit' (catches ffo_per_share, distributions_per_unit, etc.)
+    """
+    if label_slug in ('eps', 'dps'):
+        return True
+    if label_slug.startswith('eps_') or label_slug.startswith('dps_'):
+        return True
+    if label_slug.endswith('_eps') or label_slug.endswith('_dps'):
+        return True
+    if 'per_share' in label_slug or 'per_unit' in label_slug:
+        return True
+    return False
+
+# Legacy constant — no longer used internally. Kept for backward compatibility
+# in case external code imports this name.
 PER_SHARE_LABELS = {'eps', 'dps', 'earnings_per_share', 'dividends_per_share'}
 
 # Scale multipliers for raw → m_usd conversion
@@ -118,7 +138,8 @@ def canonicalize_unit(unit_raw: str, label_slug: str) -> str:
       1. Already canonical → passthrough
       2. UNIT_ALIASES lookup → canonical form
       3. No match → 'unknown'
-      4. Per-share override: EPS/DPS force 'usd' (never 'm_usd')
+      4. Per-share override: per-share labels force 'usd' (never 'm_usd')
+         via _is_per_share_label() token-pattern detection.
     """
     u = unit_raw.lower().strip() if unit_raw else 'unknown'
 
@@ -132,8 +153,8 @@ def canonicalize_unit(unit_raw: str, label_slug: str) -> str:
     else:
         canonical = 'unknown'
 
-    # 4. Per-share override: EPS/DPS always usd, never m_usd
-    if canonical == 'm_usd' and label_slug in PER_SHARE_LABELS:
+    # 4. Per-share override: always usd, never m_usd
+    if canonical == 'm_usd' and _is_per_share_label(label_slug):
         return 'usd'
 
     return canonical
@@ -147,7 +168,7 @@ def canonicalize_value(value: Optional[float], unit_raw: str, canonical_unit: st
     Rules:
       - Aggregate currency metrics: value expressed in millions (m_usd).
         $1.13B → 1130.0, $94M → 94.0, $2000 (bare) → treated as already in millions.
-      - Per-share (EPS/DPS): value in usd (no scale change).
+      - Per-share labels: value in usd (no scale change).
       - Percent/count/x: no scale change.
     """
     if value is None:
@@ -157,7 +178,7 @@ def canonicalize_value(value: Optional[float], unit_raw: str, canonical_unit: st
         return value
 
     # Per-share: no scaling
-    if label_slug in PER_SHARE_LABELS:
+    if _is_per_share_label(label_slug):
         return value
 
     # Aggregate currency: detect raw scale and convert to millions

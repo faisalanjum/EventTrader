@@ -28,18 +28,77 @@
 | 22 | P2-Q3FY2025 dropped Revenue enrichment — false "already enriched" claim | Medium | **Fixed** | Agent hallucinated "already enriched in prior run" to skip writing. Fix: added rule to `guidance-qa-enrich.md` — "Never skip an ENRICHES verdict. MERGE+SET handles idempotency." |
 | 23 | P2-Q3FY2025 Q&A verdict inconsistency between analysis and report | Low | **Self-corrected** | #4 (Ben Ricey) downgraded from ENRICHES to NO GUIDANCE between initial analysis and final output. Final verdict more accurate, but silent reclassification harms auditability. |
 | 24 | 2 of 3 guidance uniqueness constraints missing in Neo4j | Medium | **Fixed** | `create_guidance_constraints()` never run against live DB. Fixed: ran all 7 statements via MCP write tool. 3 constraints confirmed (Guidance existing, GuidanceUpdate + GuidancePeriod created). |
-| 25 | 3 of 4 sentinel GuidancePeriod nodes missing | Medium | **Fixed** | Only `gp_MT` existed. Fixed: `gp_ST`, `gp_LT`, `gp_UNDEF` created. All 4 sentinels + 5 calendar periods = 9 GuidancePeriod nodes verified. |
+| 25 | 3 of 4 sentinel GuidancePeriod nodes missing | Medium | **Fixed (historical)** | Original fix was completed. Current recurrence is tracked as active Issue #44 to avoid duplicate open tracking. |
 | 26 | Segment-qualified labels produce separate Guidance parents instead of grouping under base metric | Medium | **Fixed** | Root cause: §4 never referenced in agent prompt. Fix: rewrote §4 Metric Decomposition (business dimension vs. accounting modifier test), added §4/§7 reference to `guidance-extract.md` Step 3 and `guidance-qa-enrich.md` NEW ITEM path. Added non-exhaustive banner + inline one-liners at 5 high-risk sections. Zero code changes. |
 | 27 | Services Revenue segment inconsistency — segment="Total" in 1 of 4 items | Low | **Fixed** | Fixed by #26 — §7 segment rules now explicitly referenced in agent prompt Step 3. Default segment="Total", set segment only for business dimensions. |
-| 28 | `PER_SHARE_LABELS` too narrow — `adjusted_eps`, `non_gaap_eps` get `m_usd` instead of `usd` | Medium | **Open** | `guidance_ids.py:68` only matches `{eps, dps, earnings_per_share, dividends_per_share}`. Labels like `adjusted_eps`, `non_gaap_eps`, `affo_per_share` won't match → get `m_usd` (millions) instead of `usd` (per-share). Fix: substring match (`'eps' in label_slug or 'per_share' in label_slug`). |
+| 28 | `PER_SHARE_LABELS` too narrow — `adjusted_eps`, `non_gaap_eps` get `m_usd` instead of `usd` | Medium | **Fixed** | Replaced exact-match set with `_is_per_share_label()` pattern function (4 rules: exact `eps`/`dps`, startswith `eps_`/`dps_`, endswith `_eps`/`_dps`, contains `per_share`/`per_unit`). Added fail-closed guards in `_validate_item()`: Guard A rejects per-share label + `m_usd`, Guard B rejects xbrl_qname PerShare/PerUnit/PerDilutedShare/PerBasicShare + `m_usd`. Guards use `== 'm_usd'` (not `!= 'usd'`) to avoid false-rejecting qualitative and percentage EPS/DPS guidance. 151 tests pass. |
 | 29 | PROFILE_TRANSCRIPT.md uses wrong derivation in example | Low | **Open** | Line 76: `derivation=calculated` for an explicit range ("$94-98 billion"). Should be `derivation=explicit`. SKILL.md §5 defines calculated as "derived from math not stated in source." PROFILE_8K correctly uses explicit for same pattern. |
 | 30 | Batch summary undercounts member/concept links on re-runs | Low | **Open** | `guidance_writer.py` accumulates `member_links`/`concept_links` only in the `was_created=True` branch. On idempotent re-runs (`was_created=False`), edges are created (self-healing) but summary reports 0. Cosmetic — data is correct, stats are misleading. |
-| 31 | `derivation` silently defaults to `'explicit'` in writer | Low | **Open** | `guidance_writer.py:250`: `item.get('derivation', 'explicit')`. Missing derivation masks upstream extraction bugs. Should default to `'unknown'` or require the field. |
+| 31 | `derivation` silently defaults to `'implied'` in writer | Low | **Open** | `guidance_writer.py` currently uses `item.get('derivation', 'implied')`. Missing derivation still masks upstream extraction bugs. Should default to `'unknown'` or require the field. |
 | 32 | Tariff Cost Impact extracted as standalone despite §13 factors rule (Issue #21 regression) | Medium | **Open** | Run 7 transcript #4 (AAPL_2025-05-01). Agent extracted "$900M tariff cost" as standalone `Tariff Cost Impact` metric. §13 says factors affecting a guided metric go in `conditions`. Prior Run 4 correctly had only 1 item (Revenue with tariff in conditions). The §13 fix from #21 did not hold. |
 | 33 | DPS / Share Repurchase / US Investment Spending extracted as guidance | Low | **Open** | Run 7 transcript #4. Agent extracted dividend ($0.26/share), $100B buyback auth, and $500B US investment pledge. These are capital allocation announcements, not operational forward guidance. Prior Run 4 excluded them. Quality filter may need explicit "capital allocation is not guidance" rule. |
 | 34 | Transcript #4 took 8m01s (2-3x longer than others) with 41 tool calls | Low | **Open** | Run 7 transcript #4. Agent struggled with truncated PR (Issue #18), making many extra tool calls. May be related to recovery fallback behavior. Prior Run 4 was 4m19s (also long but less extreme). |
-| 35 | Duplicate transcript IDs create duplicate GuidanceUpdate nodes | Medium | **Open** | `AAPL_2025_3` and `AAPL_2025-07-31T17.00.00-04.00` are the same earnings call (same date, same content). Since `source_id` is part of `GuidanceUpdate.id`, each produces its own set of nodes. 8+8=16 nodes for a single call. Need upstream dedup or extraction-time duplicate detection. |
+| 35 | Duplicate transcript IDs create duplicate GuidanceUpdate nodes | Medium | **Open** | Structural duplication issue: `AAPL_2025_3` and `AAPL_2025-07-31T17.00.00-04.00` are the same call (same date/content), but `source_id` is part of `GuidanceUpdate.id`, so both persist. **DB audit (2026-02-28) confirmed: 10+10=20 duplicate nodes** with matching label+segment/value tuples. Need upstream dedup or extraction-time duplicate detection. Related quality inconsistency on those duplicates is tracked separately in #46. |
+| 46 | Non-deterministic sentinel classification: capex `gp_UNDEF` vs `gp_LT` between duplicate runs | Medium | **Open** | Classification-consistency issue (separate from #35): among the duplicate pair, CapEx is classified differently (`AAPL_2025_3 -> gp_UNDEF/undefined` vs `AAPL_2025-07-31 -> gp_LT/long_term`) despite near-identical text from the same call. This is a labeling drift problem on duplicated content; #35 is about duplicate node creation itself. **Validate:** `MATCH (gu:GuidanceUpdate)-[:HAS_PERIOD]->(gp) WHERE gu.id CONTAINS ':capex:' RETURN gu.id, gu.period_scope, gp.id`. |
 | 36 | GuidanceUpdate FROM_SOURCE links only to Transcript — consider also linking to QAExchange | Low | **Open** | Phase 2 (`guidance-qa-enrich`) enriches items from specific Q&A exchanges but only creates `FROM_SOURCE` edges to the parent Transcript node. Consider adding a direct link (e.g., `FROM_QA_EXCHANGE`) from GuidanceUpdate to the specific QAExchange node that produced it. This would enable tracing which analyst question/management answer yielded a guidance item, not just which transcript. Requires schema addition + writer update. |
+| 37 | K8s portability blocker: write path defaults Neo4j URI to `bolt://localhost:30687` | Medium | **Open** | In pods, `localhost` is the pod itself, not Neo4j. `guidance_write.sh` default at `.claude/skills/earnings-orchestrator/scripts/guidance_write.sh:13`. Toy write-path run (2026-02-28) showed Phase 2 failure: connection refused. Cluster-safe URI candidate: `bolt://neo4j-bolt.neo4j.svc.cluster.local:7687`. |
+| 38 | `guidance-qa-enrich` Step 6 hardcodes `--write` in example even when MODE is dry_run/shadow | Medium | **Open** | Agent doc example at `.claude/agents/guidance-qa-enrich.md:135-138` always uses `--write`. This can force write-path DB dependency during dry runs. Should be mode-aware: `dry_run/shadow -> --dry-run`, `write -> --write` (match `.claude/agents/guidance-extract.md:127-131`). |
+| 39 | Container runtime requirement not documented in guidance agents: `SHELL=/bin/bash` | Low | **Open** | Toy run v2 blocked both phases with Bash unavailable until `SHELL` was set. Not a logic bug in guidance extraction, but an execution contract gap for K8s jobs. Should be documented in deployment requirements for guidance agents. |
+| 40 | K8s runner must execute as non-root for `--dangerously-skip-permissions` flows | Medium | **Open** | Claude CLI rejects `--dangerously-skip-permissions` under root. Enforce `runAsNonRoot: true`, `runAsUser: 1000`, `runAsGroup: 1000` in guidance job templates. |
+| 41 | MCP reliability requires explicit `--strict-mcp-config` in guidance jobs | Medium | **Open** | Toy runs showed MCP tool availability drift without strict config loading. Standardize `--strict-mcp-config` for guidance skill/subagent executions to avoid missing tool errors. |
+| 42 | Runtime image strategy unresolved when GHCR pulls fail (`403`) | Medium | **Open** | `ghcr.io/cabinlab/claude-agent-sdk:python` was not pullable anonymously in-cluster. Need a committed strategy: imagePullSecret for GHCR OR supported fallback runtime image (`node:20` + npm install) with pinned version/perf baseline. |
+| 43 | Missing repeatable pre-prod canary for full two-phase guidance path | Medium | **Open** | Add one deterministic canary with explicit phase contract: (A) run `MODE=write` (Phase 1 + Phase 2) in isolated namespace with cleanup, or (B) pre-seed Phase 1 rows first, then run `MODE=dry_run` to validate Phase 2 behavior. `MODE=dry_run` alone cannot prove full two-phase success because Phase 2 depends on 7E readback from Phase 1 writes. |
+| 44 | Sentinel GuidancePeriod nodes `gp_ST` and `gp_MT` missing after Run 7 (Issue #25 regression) | Medium | **Open** | DB audit confirms only `gp_LT` and `gp_UNDEF` exist. Redesign D2 + Issue #25 require all 4 sentinels pre-created. |
+| 45 | Run 7 aggregate totals are internally inconsistent with per-transcript table and live DB | Low | **Open** | Run 7 table sums to **43 P1 + 4 P2 new = 47 total** and live DB has 47 `GuidanceUpdate` nodes, but post-mortem text claims **45 P1 + 6 P2 new = 51 total**. Baseline mismatch makes validation/auditing unreliable. |
+| 47 | Write-path credentials hardcoded with plaintext password in `guidance_write.sh` | Medium | **Open** | `guidance_write.sh:14-16` force-sets `NEO4J_USERNAME=neo4j`, `NEO4J_PASSWORD=Next2020#`, `NEO4J_DATABASE=neo4j` as defaults. #37 covers URI only. In K8s, credentials must come from Secrets via `GUIDANCE_NEO4J_USERNAME`, `GUIDANCE_NEO4J_PASSWORD`, `GUIDANCE_NEO4J_DATABASE` env vars. The override mechanism exists (same `${GUIDANCE_..:-default}` pattern as URI) but the plaintext password in the script is a security concern for any shared/committed repo. **Validate:** set all 4 `GUIDANCE_NEO4J_*` env vars from a K8s Secret, confirm write path connects successfully. |
+| 48 | Write-mode Python import chain requires heavy dependencies not guaranteed in container | Medium | **Open** | `guidance_write_cli.py:223` in `--write` mode does `from neograph.Neo4jConnection import get_manager` → `Neo4jManager` → imports `config.feature_flags`, `XBRL.xbrl_core`, `pandas`, `tenacity`, `neo4j` driver. If the container's Python version mismatches the host venv (e.g., container Python 3.12 vs venv built on 3.11), or if any dependency is missing, write path fails at import time. Dry-run mode is unaffected (no DB connection needed). **Validate:** run `--write` mode in container, confirm no `ImportError` or `ModuleNotFoundError` from the `neograph` → `XBRL` → `config` chain. |
+| 49 | K8s MCP config must name server exactly `neo4j-cypher` | Medium | **Open** | Both guidance agents declare `mcp__neo4j-cypher__read_neo4j_cypher` in their tools list (`guidance-extract.md:6`, `guidance-qa-enrich.md:6`). The MCP tool name is `mcp__{server-name}__read_neo4j_cypher`. If the K8s `--mcp-config` JSON names the server `neo4j` or `mcp-neo4j` instead of `neo4j-cypher`, all read queries in Steps 1-3 fail (tool not found). This naming constraint is documented in `ClaudeCodeonKubernetes.md` and should be enforced here as a hard requirement. #41 covers config drift, not naming mismatch. **Validate:** create K8s ConfigMap with `{"mcpServers": {"neo4j-cypher": {...}}}`, confirm agents can call `mcp__neo4j-cypher__read_neo4j_cypher` from inside pod. |
+| 50 | `guidance_write_cli.py` hardcodes absolute path `/home/faisal/EventMarketDB` | Low | **Open** | `guidance_write_cli.py:60-61`: `sys.path.insert(0, "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts")` and `sys.path.insert(0, "/home/faisal/EventMarketDB")`. K8s plan mitigates via exact-path hostPath mount, but if mount path ever changes, CLI fails with `ModuleNotFoundError` on `guidance_ids` and `guidance_writer`. Fragile — should use relative path from `__file__` instead. **Validate:** confirm the hostPath mount at `/home/faisal/EventMarketDB` makes CLI importable; separately, consider patching to `os.path.dirname(os.path.abspath(__file__))` for portability. |
+| 51 | `CLAUDE_PROJECT_DIR` env var is recommended for container portability (not strictly required for guidance-only path) | Low | **Open** | Guidance extraction can still work when `workingDir` is correct and absolute hook paths are valid, but `CLAUDE_PROJECT_DIR` is strongly recommended for consistent project resolution across the broader agent/skill set (especially paths that use `$CLAUDE_PROJECT_DIR`). Set `CLAUDE_PROJECT_DIR=/home/faisal/EventMarketDB` in K8s for consistency. **Validate:** run `claude -p` in container with and without `CLAUDE_PROJECT_DIR`, confirm guidance skill/agents still resolve in both cases and broader project hooks/scripts behave as expected. |
+| 52 | `u_id` is null on all 47 GuidanceUpdate nodes | Medium | **Open** | See §DB Audit (2026-02-28) below. |
+| 53 | `label` and `label_slug` are null on all 47 GuidanceUpdate nodes | HIGH | **Open** | See §DB Audit (2026-02-28) below. |
+| 54 | `direction` is null on all 47 GuidanceUpdate nodes | Medium | **Open** | See §DB Audit (2026-02-28) below. |
+| 55 | `segment_raw` and `segment_slug` are null on all segmented GuidanceUpdate nodes | Medium | **Open** | See §DB Audit (2026-02-28) below. |
+| 56 | `evhash` is null on all 47 GuidanceUpdate nodes | Medium | **Open** | See §DB Audit (2026-02-28) below. |
+| 57 | All numeric fields (`value_low`, `value_high`, `value_point`) null on all 47 GuidanceUpdate nodes | HIGH | **Open** | See §DB Audit (2026-02-28) below. |
+| 58 | `basis_raw` is null on all 47 GuidanceUpdate nodes | Low | **Open** | See §DB Audit (2026-02-28) below. |
+
+### Clarification Pack for K8s Open Items (#37-#43)
+
+These items are infra-portability work only. They do **not** change the core guidance design decisions:
+- Keep writes off MCP. Agents must not get `write_neo4j_cypher`.
+- Keep deterministic write path: JSON payload -> `guidance_write.sh` -> `guidance_write_cli.py` -> `guidance_writer.py` -> Neo4j (Bolt).
+- Keep two-layer write gate (`MODE` + `ENABLE_GUIDANCE_WRITES`).
+
+| # | Why this item exists | Must stay unchanged | Required infra change | Done when |
+|---|---|---|---|---|
+| 37 | `guidance_write.sh` default points to `bolt://localhost:30687`; inside pods, localhost is the pod itself, so write path fails. | Do **not** switch to MCP writes. Keep direct Bolt writer pipeline. | Make writer URI env-driven from one shared config source used by both MCP-read path and CLI-write path; avoid hardcoded localhost assumptions in K8s. | A pod can run both phases end-to-end with same Neo4j target and no connection-refused errors. |
+| 38 | `guidance-qa-enrich` example hardcodes `--write`, which can force DB dependency during dry runs. | Keep existing phase semantics and writer path. | Make invocation mode-aware: `dry_run/shadow -> --dry-run`, `write -> --write` in docs/prompts/scripts. | Running dry_run does not require live write-path DB connectivity; write mode still persists correctly. |
+| 39 | Guidance jobs rely on Bash behavior (`source`, wrapper scripts); missing Bash/SHELL caused runtime failures. | Keep shell-wrapper approach (`guidance_write.sh`) and current script interface. | Document and enforce runtime contract: image must include `/bin/bash`; set `SHELL=/bin/bash` in job env. | Fresh pod runs both phases without shell/runtime errors. |
+| 40 | Claude CLI blocks `--dangerously-skip-permissions` under root; root execution fails before guidance logic runs. | Keep non-interactive Claude invocation pattern and safety controls. | Enforce pod security context: `runAsNonRoot: true`, `runAsUser: 1000`, `runAsGroup: 1000` (or equivalent non-root UID/GID). | Job starts and executes Claude flows without root-permission rejection. |
+| 41 | MCP tool availability drift observed without strict config loading; agents can lose required tools at runtime. | Keep tool boundaries (no MCP write tool in guidance agents). | Standardize `--strict-mcp-config` for guidance runs and validate required tools at startup. | Multiple consecutive runs expose identical required tool set and avoid missing-tool failures. |
+| 42 | GHCR pull failures (`403`) make runtime startup non-deterministic. | Keep guidance code path and agent/skill behavior unchanged. | Commit to one supported image strategy (GHCR with pull secret, or vetted fallback image) and pin version/digest with documented fallback. | Cold-start in cluster is repeatable; image pull succeeds without manual intervention. |
+| 43 | No deterministic pre-prod gate currently proves full two-phase behavior after infra changes. | Keep two-phase flow and no-MCP-write architecture. | Use a mode-aware canary contract: either run isolated `MODE=write` end-to-end with cleanup, or pre-seed Phase 1 rows then run `MODE=dry_run`. Do not require "P2 success" from `MODE=dry_run` when 7E has no Phase 1 rows. | Canary criteria are explicit, reproducible, and aligned with phase dependencies. |
+
+**Additional prerequisite for #37-#43 (must be explicit in K8s runbooks):** mount the repo at exact path `/home/faisal/EventMarketDB` unless you patch path assumptions. Current guidance runtime depends on absolute paths in `.claude/settings.json` hooks and in `guidance_write_cli.py` (`sys.path.insert`).
+
+**Recommended execution order**: 42 -> 40 -> 39 -> 41 -> 37 -> 38 -> 43
+Rationale: first make runtime boot reliable and compliant, then align connectivity and mode behavior, then lock with canary.
+
+### Clarification Pack for K8s Deep-Trace Items (#47-#51)
+
+Found via full pipeline trace (2026-02-28). These supplement #37-#43 — same principle: infra-portability only, no core guidance design changes.
+
+| # | Why this item exists | Must stay unchanged | Required infra change | Done when |
+|---|---|---|---|---|
+| 47 | `guidance_write.sh:14-16` force-sets credentials with plaintext password as defaults. #37 covers URI only — credentials are separate env vars. | Keep `guidance_write.sh` wrapper and `${GUIDANCE_..:-default}` override pattern. | Inject `GUIDANCE_NEO4J_USERNAME`, `GUIDANCE_NEO4J_PASSWORD`, `GUIDANCE_NEO4J_DATABASE` from K8s Secret into pod env. Consider removing plaintext defaults from script. | Pod writes authenticate via Secret-sourced credentials, not hardcoded defaults. |
+| 48 | Write mode imports `neograph.Neo4jConnection` → `Neo4jManager` → `XBRL`, `config`, `pandas`, `tenacity`, `neo4j`. Missing any of these = `ImportError` at write time. Dry-run is unaffected. | Keep `guidance_writer.py` → `Neo4jManager` connection path. | Ensure container Python version matches venv, or install deps into container-native env. Pin Python version in Dockerfile. | `--write` mode completes without import errors in container. |
+| 49 | Agents declare `mcp__neo4j-cypher__read_neo4j_cypher` — the `neo4j-cypher` segment is the MCP server name. Wrong name = tool not found on every read query. | Keep agent tool declarations as-is. | K8s MCP ConfigMap must use `"neo4j-cypher"` as server key, matching `local-cypher-server.sh` naming and agent tool references. This is already documented in `ClaudeCodeonKubernetes.md`; keep it as an explicit enforcement gate here. | Agents can execute QUERIES.md queries (1A, 1B, 2A, 2B, 3B, etc.) from inside pod. |
+| 50 | `guidance_write_cli.py:60-61` uses absolute `/home/faisal/EventMarketDB` path for `sys.path.insert`. Breaks if mount path differs. | Keep CLI entry point and import structure. | Either (a) mount repo at exact path, or (b) patch CLI to use `os.path.dirname(os.path.abspath(__file__))` for relative resolution. | CLI runs successfully regardless of where repo is mounted. |
+| 51 | `CLAUDE_PROJECT_DIR` improves consistency across the full project toolchain; guidance-only path may still work without it when cwd/path assumptions are satisfied. | Keep project-scoped skills/agents/hooks layout. | Set `CLAUDE_PROJECT_DIR=/home/faisal/EventMarketDB` in pod env (or match mount path) as a recommended baseline, especially for agents/hooks/scripts that reference `$CLAUDE_PROJECT_DIR`. | `claude -p` in container resolves guidance skill/agents reliably and broader project hooks/scripts behave consistently. |
+
+**Recommended execution order for #47-#51**: 48 -> 47 -> 49 -> 50 -> 51
+Rationale: fix Python deps first (write path won't work without them), then credentials, then MCP naming, then path fragility and project dir.
 
 ---
 
@@ -80,12 +139,12 @@
 | Metric | Value |
 |---|---|
 | Wall clock time | 48m 34s |
-| Total P1 items extracted | 45 (across 6 transcripts) |
-| Total P2 enriched | 14 |
-| Total P2 new Q&A-only | 6 |
-| Grand total items in Neo4j | 51 (45 P1 + 6 new) |
+| Total P1 items extracted | 43 (across 6 transcripts) |
+| Total P2 enriched | 15 |
+| Total P2 new Q&A-only | 4 |
+| Grand total items in Neo4j | 47 (43 P1 + 4 new) |
 | Total tokens | ~1.1M |
-| Total tool calls | ~228 |
+| Total tool calls | ~246 |
 | Errors | 0 |
 
 **Timing per transcript:**
@@ -213,7 +272,7 @@ Prior to the two-invocation pipeline, the same first transcript (AAPL_2023-11-03
 - Phase 2: Quote format consistently `[PR] ... [Q&A] ...` with section citing exact Q&A exchange numbers
 - All 5 core edges at 100% (UPDATES, FROM_SOURCE, FOR_COMPANY, HAS_PERIOD, MAPS_TO_CONCEPT)
 - FX Impact correctly excluded in all runs (Issue #10 fix held)
-- Tariff costs correctly classified as conditions, not standalone items
+- Tariff classification was correct in earlier runs but regressed in Run 7 (Issue #32)
 
 **Standout moments:**
 - Run 1: Multi-exchange aggregation (Gross Margin enriched from 3 separate Q&A exchanges)
@@ -233,11 +292,10 @@ The agent constructed raw Cypher MERGE queries and wrote via `mcp__neo4j-cypher_
 
 **Root cause:** The agent has the old Cypher template pattern in its training context. Even though guidance-extract.md now says "use CLI", the agent still has `mcp__neo4j-cypher__write_neo4j_cypher` in its tools and defaulted to raw Cypher construction. The Step 5 instruction ("Do NOT construct Cypher manually") was not strong enough to override the agent's learned behavior.
 
-**Why keep `mcp__neo4j-cypher__write_neo4j_cypher` in tools:**
-1. DELETE queries — CLI only handles MERGE writes, not cleanup/deletes
-2. SDK self-healing — ad-hoc recovery for partial failures
-3. Constraint creation — DDL-like Cypher (`CREATE CONSTRAINT ... IF NOT EXISTS`)
-4. The fix is stronger prompt language, not removing the tool
+**Historical alternative that was considered (superseded by final fix):**
+1. Keep MCP write only for exceptional operations (DELETE/DDL/recovery).
+2. Rely on stronger prompt language to prevent routine write bypass.
+3. This option was not selected for guidance agents due to repeated bypass behavior.
 
 **Fix applied (Option A — remove the tool entirely):**
 - Removed `mcp__neo4j-cypher__write_neo4j_cypher` from `guidance-extract.md` tools list
@@ -830,3 +888,197 @@ Insert after the hierarchy table (after the `| Skip | **Operator** |` row):
 After implementation, update `.claude/plans/guidance-extraction-issues.md`:
 - Issue #26: Status → **Fixed**
 - Issue #27: Status → **Fixed** (§4 decomposition + §7 segment rules now referenced)
+
+---
+
+## DB Audit — 2026-03-01
+
+Full Neo4j audit of all Guidance, GuidanceUpdate, and GuidancePeriod nodes and relationships. Cross-referenced against `guidanceInventory.md` v3.1 spec and `guidance-period-redesign.md` v3.0.
+
+### Current DB State
+
+| Entity | Count |
+|---|---|
+| GuidanceUpdate nodes | 47 |
+| GuidancePeriod nodes | 8 (6 calendar + 2 sentinels) |
+| Guidance nodes | 10 |
+| UPDATES edges (GU→Guidance) | 47 |
+| HAS_PERIOD edges (GU→GuidancePeriod) | 47 |
+| FOR_COMPANY edges (GU→Company) | 47 |
+| FROM_SOURCE edges (GU→Transcript) | 47 |
+| MAPS_TO_CONCEPT edges | 40 |
+| MAPS_TO_MEMBER edges | 9 |
+| Constraints | 3 (guidance_id_unique, guidance_update_id_unique, guidance_period_id_unique) |
+
+### What passed audit
+
+- Every GuidanceUpdate has exactly 1 HAS_PERIOD edge (cardinality constraint per D2 met)
+- Every GuidanceUpdate has FOR_COMPANY, UPDATES, FROM_SOURCE edges (100% coverage)
+- No old `:Period` nodes linked to GuidanceUpdate (clean migration from #16 held)
+- GuidancePeriod format correct (`gp_` prefix, calendar month-boundary dates per D8)
+- `period_scope` and `time_type` populated on all 47 GuidanceUpdate nodes
+- Legacy `period_type` field is null (not carried forward — correct)
+- All 3 uniqueness constraints exist
+- Calendar dates correct for AAPL FYE Sep (e.g., Q1 FY2024 = `gp_2023-10-01_2023-12-31`)
+- 7 GuidanceUpdate nodes for custom metrics (`tariff_cost_impact` x3, `us_investment_spending` x3, `share_repurchase_authorization` x1) lack MAPS_TO_CONCEPT — acceptable, no standard XBRL concept exists for these
+
+### Issue #44 — Sentinel GuidancePeriod nodes `gp_ST` and `gp_MT` missing (Issue #25 regression)
+
+**Priority**: Medium
+**Status**: Open
+
+**What DB shows**: Only 2 of 4 sentinel GuidancePeriod nodes exist: `gp_LT` and `gp_UNDEF`. Nodes `gp_ST` and `gp_MT` are absent.
+
+**Why this is an issue**: `guidance-period-redesign.md` D2 requires all 4 sentinels pre-created via `create_guidance_constraints()`. Issue #25 originally fixed this — "Only `gp_MT` existed. Fixed: `gp_ST`, `gp_LT`, `gp_UNDEF` created. All 4 sentinels + 5 calendar periods = 9 GuidancePeriod nodes verified."
+
+**Root cause**: Run 7 performed a clean-slate deletion (Step 10 of redesign plan: "Deleted 31 GuidanceUpdate, 11 Guidance, 7 Period nodes"). The deletion removed ALL prior GuidancePeriod nodes. Run 7's re-extraction only re-created sentinels that items actually linked to (`gp_LT` for capex long-term guidance, `gp_UNDEF` for share_repurchase and capex duplicate). `gp_ST` and `gp_MT` were not linked by any Run 7 items, so they were not re-created. `create_guidance_constraints()` (which pre-creates all 4) was not re-run after the clean-slate.
+
+**Validation**: Run `MATCH (gp:GuidancePeriod) WHERE gp.id IN ['gp_ST', 'gp_MT', 'gp_LT', 'gp_UNDEF'] RETURN gp.id`. Should return 4 rows; currently returns 2.
+
+### Issue #45 — Run 7 aggregate totals are internally inconsistent with per-transcript table and live DB
+
+**Priority**: Low
+**Status**: Open
+
+**What document + DB show**:
+- Run 7 post-mortem currently claims: **45 P1 + 6 P2-new = 51 total items**
+- But the Run 7 transcript table above sums to:
+  - P1 items: `10 + 6 + 6 + 5 + 8 + 8 = 43`
+  - P2 new items: `0 + 0 + 0 + 0 + 2 + 2 = 4`
+  - Total: `43 + 4 = 47`
+- Live DB audit matches the table sum: **47 GuidanceUpdate nodes**.
+
+**Why this is an issue**: This is a documentation-integrity issue (not a graph-schema bug). Validation baselines for regressions, acceptance criteria, and run-to-run comparisons become unreliable when the summary totals contradict both the detailed table and the actual database state.
+
+**Validation**:
+1. Recompute totals from the existing Run 7 table (manual arithmetic above).
+2. Confirm DB total with `MATCH (gu:GuidanceUpdate) RETURN count(gu)` (currently 47).
+3. Confirm per-source totals with:
+   `MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(t:Transcript) RETURN t.id, count(*) ORDER BY t.id`
+   (current counts: 10, 6, 6, 5, 10, 10 -> 47).
+
+---
+
+## DB Audit — GuidanceUpdate Null Properties (2026-02-28)
+
+Full Neo4j audit of all GuidanceUpdate property fields. Cross-referenced against `guidanceInventory.md` v3.1 §2 (extraction fields) and `guidance-period-redesign.md` v3.0.
+
+### DB state snapshot
+
+| Entity | Count |
+|---|---|
+| GuidanceUpdate nodes | 47 |
+| GuidancePeriod nodes | 8 (6 calendar + 2 sentinels) |
+| Guidance nodes | 10 |
+| UPDATES edges (GU→Guidance) | 47/47 |
+| HAS_PERIOD edges (GU→GuidancePeriod) | 47/47 (exactly 1 per GU) |
+| FOR_COMPANY edges (GU→Company) | 47/47 |
+| FROM_SOURCE edges (GU→Transcript) | 47/47 |
+| MAPS_TO_CONCEPT edges | 40 (7 custom metrics lack XBRL concepts — acceptable) |
+| MAPS_TO_MEMBER edges | 9 |
+| Constraints | 3 (guidance_id_unique, guidance_update_id_unique, guidance_period_id_unique) |
+
+### What passed audit
+
+- Every GuidanceUpdate has exactly 1 HAS_PERIOD edge (cardinality constraint per D2 met)
+- Every GuidanceUpdate has FOR_COMPANY, UPDATES, FROM_SOURCE edges (100% coverage)
+- No old `:Period` nodes linked to GuidanceUpdate (clean migration from #16 held)
+- GuidancePeriod format correct (`gp_` prefix, calendar month-boundary dates per D8)
+- `period_scope` and `time_type` populated on all 47 GuidanceUpdate nodes
+- Legacy `period_type` field is null (not carried forward — correct)
+- All 3 uniqueness constraints exist
+- Calendar dates correct for AAPL FYE Sep (e.g., Q1 FY2024 = `gp_2023-10-01_2023-12-31`)
+
+### Issue #52 — `u_id` is null on all 47 GuidanceUpdate nodes
+
+**Priority**: Medium
+**Status**: Open
+
+**What DB shows**: Every GuidanceUpdate node has `u_id: null`. The `id` field IS populated with the correct composite ID (e.g., `gu:AAPL_2025-07-31T17.00.00-04.00:revenue:gp_2025-07-01_2025-09-30:unknown:total`).
+
+**Why this is an issue**: `guidanceInventory.md` §1 schema and the GuidancePeriod redesign plan both show `u_id` as a standard property on GuidanceUpdate (following the convention used by Guidance and GuidancePeriod nodes where `u_id` mirrors `id`). The `_build_core_query()` Cypher template in `guidance_writer.py` likely does not include `gu.u_id = $guidance_update_id` in the SET block.
+
+**Validation**: `MATCH (gu:GuidanceUpdate) WHERE gu.u_id IS NOT NULL RETURN count(gu)` — returns 0. Should return 47.
+
+### Issue #53 — `label` and `label_slug` are null on all 47 GuidanceUpdate nodes
+
+**Priority**: HIGH
+**Status**: Open
+
+**What DB shows**: Every GuidanceUpdate has `label: null` and `label_slug: null`. The metric identity IS embedded in the `id` string (e.g., `:revenue:`, `:gross_margin:`) but is not stored as a queryable property.
+
+**Why this is an issue**: `guidanceInventory.md` §2 defines `label` (human-readable, e.g., "Revenue") and `label_slug` (canonical slug, e.g., "revenue") as core extraction fields on GuidanceUpdate. These are needed for queries like `WHERE gu.label_slug = 'revenue'`. Without them, the only way to filter by metric is string-parsing the composite `id`, which is fragile and not indexable. The `_build_core_query()` SET block or `_build_params()` in `guidance_writer.py` is not mapping these fields through, OR the extraction JSON payload from the agent is not including them.
+
+**Validation**: `MATCH (gu:GuidanceUpdate) WHERE gu.label IS NOT NULL RETURN count(gu)` — returns 0. Should return 47.
+
+### Issue #54 — `direction` is null on all 47 GuidanceUpdate nodes
+
+**Priority**: Medium
+**Status**: Open
+
+**What DB shows**: Every GuidanceUpdate has `direction: null`.
+
+**Why this is an issue**: `guidanceInventory.md` §2 defines `direction` as a required extraction field with enum values: `up`, `down`, `flat`, `range`, `qualitative_only`. This tells the consumer the directional character of the guidance (e.g., Revenue "low to mid-single digits YoY growth" = `up`; Gross Margin "46%-47%" = `range`). Without `direction`, downstream consumers can't quickly filter or sort by directional sentiment without re-parsing qualitative text. Either the LLM extraction agent is not outputting this field, or `_build_core_query()`/`_build_params()` is not including it in the Cypher SET.
+
+**Validation**: `MATCH (gu:GuidanceUpdate) WHERE gu.direction IS NOT NULL RETURN count(gu)` — returns 0. Should return 47.
+
+### Issue #55 — `segment_raw` and `segment_slug` are null on all segmented GuidanceUpdate nodes
+
+**Priority**: Medium
+**Status**: Open
+
+**What DB shows**: Items like `gu:...:revenue:...:ipad`, `gu:...:revenue:...:iphone`, `gu:...:revenue:...:services`, `gu:...:revenue:...:wearables_home_and_accessories`, `gu:...:revenue:...:mac` all have `segment_raw: null` and `segment_slug: null`. The segment IS correctly encoded in the composite `id` string (the 5th colon-delimited field), but the dedicated property fields are empty.
+
+**Why this is an issue**: `guidanceInventory.md` §2 defines `segment_raw` (verbatim, e.g., "iPhone") and `segment_slug` (canonical, e.g., "iphone") as extraction fields. These are needed for queries like `WHERE gu.segment_slug = 'iphone'`. Issues #26 and #27 (both Fixed) addressed segment decomposition in IDs and Guidance parent grouping, but the segment property values on GuidanceUpdate were never populated. Same root cause as #53 — either missing from extraction payload or not mapped in writer params.
+
+**Validation**: `MATCH (gu:GuidanceUpdate) WHERE gu.id CONTAINS ':iphone' AND gu.segment_slug IS NOT NULL RETURN count(gu)` — returns 0. Should return at least 1.
+
+### Issue #56 — `evhash` is null on all 47 GuidanceUpdate nodes
+
+**Priority**: Medium
+**Status**: Open
+
+**What DB shows**: Every GuidanceUpdate has `evhash: null`.
+
+**Why this is an issue**: `guidanceInventory.md` §2 defines `evhash` as the 16-char hex fingerprint of the value envelope (computed by `evhash16()` in `guidance_ids.py`). It enables dedup detection — two items with the same evhash from different sources represent identical guidance. Issue #8 (Closed, by design) explicitly discussed evhash behavior for iPad/WHA items sharing a fingerprint, confirming evhash IS supposed to be computed and stored. The fact that it's null on ALL nodes (including the ones from #8's scenario) means the writer is not computing or persisting it.
+
+**Validation**: `MATCH (gu:GuidanceUpdate) WHERE gu.evhash IS NOT NULL RETURN count(gu)` — returns 0. Should return 47.
+
+### Issue #57 — All numeric fields (`value_low`, `value_high`, `value_point`) null on all 47 GuidanceUpdate nodes
+
+**Priority**: HIGH
+**Status**: Open
+
+**What DB shows**: Every GuidanceUpdate has `value_low: null`, `value_high: null`, `value_point: null`. All guidance is stored as qualitative text only.
+
+**Why this is an issue**: `guidanceInventory.md` §2 defines these as core value fields. AAPL provides explicit numeric ranges in every earnings call for standard metrics:
+- **OpEx**: "$15.3B-$15.5B" → should have `value_low: 15300, value_high: 15500, unit: m_usd`
+- **Gross Margin**: "46%-47%" → should have `value_low: 46, value_high: 47, unit: percent`
+- **Tax Rate**: "~16%" → should have `value_point: 16, unit: percent`
+- **DPS**: "$0.26" → should have `value_point: 0.26, unit: usd`
+- **OINE**: "-$250M" → should have `value_point: -250, unit: m_usd`
+
+The Run 7 post-mortem itself confirms correct units were assigned (line 130-134: "percent for Gross Margin and Tax Rate, m_usd for OpEx, OINE..."), implying the extraction DID produce numeric values and units. But the values are not persisted to the GuidanceUpdate nodes. Either `_build_params()` is not including value fields, or the Cypher SET block omits them.
+
+**Validation**: `MATCH (gu:GuidanceUpdate) WHERE gu.value_low IS NOT NULL OR gu.value_high IS NOT NULL OR gu.value_point IS NOT NULL RETURN count(gu)` — returns 0. Expected: at least 20+ (all items with explicit numeric guidance).
+
+### Issue #58 — `basis_raw` is null on all 47 GuidanceUpdate nodes
+
+**Priority**: Low
+**Status**: Open
+
+**What DB shows**: Every GuidanceUpdate has `basis_raw: null` with `basis_norm: "unknown"`.
+
+**Why this is an issue**: `guidanceInventory.md` §2 defines `basis_raw` as the verbatim basis text (e.g., "GAAP", "reported", "constant currency") and `basis_norm` as the canonical normalization (`gaap`, `non_gaap`, `constant_currency`, `unknown`). While `basis_norm: "unknown"` is the correct default when basis isn't explicitly stated, some items DO have explicit basis references. For example, AAPL's services revenue guidance from Q2 FY2025 includes "constant currency growth comparable to December quarter (14%)" — this should have `basis_raw: "constant currency"` and `basis_norm: "constant_currency"`. The blanket `unknown` across all items suggests the extraction agent is not attempting basis classification at all.
+
+**Validation**: `MATCH (gu:GuidanceUpdate) WHERE gu.basis_raw IS NOT NULL RETURN count(gu)` — returns 0. Should return at least a few (items with explicit basis references).
+
+### Likely shared root cause for #52-#58
+
+Issues #52 through #58 (7 issues) all follow the same pattern: GuidanceUpdate properties that are defined in the spec and presumably extracted by the LLM agent are not persisted to Neo4j. The graph topology (edges, node types) is correct, but property fields are systematically empty.
+
+Two possible failure points:
+1. **Extraction payload**: The JSON written to `/tmp/gu_*.json` by the agent may not include these fields
+2. **Writer pipeline**: `_build_params()` in `guidance_writer.py` may not map these fields into Cypher parameters, or `_build_core_query()` may not include them in the SET clause
+
+To diagnose: inspect a `/tmp/gu_*.json` payload from a recent run (if preserved), or read `guidance_writer.py` `_build_params()` and `_build_core_query()` to check which fields are mapped.
