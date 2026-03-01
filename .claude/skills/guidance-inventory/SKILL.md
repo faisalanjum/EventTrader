@@ -100,6 +100,7 @@ All 20 extraction fields (see [§2](#2-extraction-fields)) plus system identity 
 | `label` | String | Metric name (denormalized from Guidance parent) |
 | `label_slug` | String | `slug(label)` — enables `WHERE gu.label_slug = 'revenue'` without JOIN |
 | `segment_slug` | String | `slug(segment)` — enables `WHERE gu.segment_slug = 'iphone'` |
+| `source_refs` | String[] | IDs of sub-source nodes (e.g., QAExchange IDs for transcripts). Empty array if none. |
 
 ---
 

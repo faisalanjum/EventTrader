@@ -704,7 +704,7 @@ def test_query_contains_all_gu_properties():
         'gu.canonical_unit', 'gu.basis_norm', 'gu.basis_raw', 'gu.derivation',
         'gu.qualitative', 'gu.quote', 'gu.section', 'gu.source_key',
         'gu.source_type', 'gu.conditions', 'gu.xbrl_qname', 'gu.created',
-        'gu.label', 'gu.label_slug', 'gu.segment_slug',
+        'gu.label', 'gu.label_slug', 'gu.segment_slug', 'gu.source_refs',
     ]
     for prop in expected_props:
         assert prop in q, f"Missing property in query: {prop}"
@@ -788,6 +788,27 @@ def test_params_slug_segment_variant():
                       segment_slug='wearables_home_and_accessories')
     params = _build_params(item, 'src1', 'transcript', 'AAPL')
     assert params['segment_slug'] == 'wearables_home_and_accessories'
+
+
+# ── source_refs sub-provenance (Issue #36) ───────────────────────────────
+
+def test_params_source_refs_passthrough():
+    """source_refs array is passed through to params."""
+    refs = ['AAPL_2023-11-03_qa__3', 'AAPL_2023-11-03_qa__7']
+    params = _build_params(_make_item(source_refs=refs), 'src1', 'transcript', 'AAPL')
+    assert params['source_refs'] == refs
+
+def test_params_source_refs_default_empty():
+    """source_refs defaults to empty list when not provided."""
+    item = _make_item()
+    # source_refs not in _make_item defaults
+    params = _build_params(item, 'src1', 'transcript', 'AAPL')
+    assert params['source_refs'] == []
+
+def test_params_source_refs_none_becomes_empty():
+    """source_refs=None normalizes to empty list."""
+    params = _build_params(_make_item(source_refs=None), 'src1', 'transcript', 'AAPL')
+    assert params['source_refs'] == []
 
 
 # ── Per-share validation guards (Issue #28) ──────────────────────────────
