@@ -293,7 +293,7 @@ def test_params_defaults():
     assert params['time_type'] == 'duration'
     assert params['segment'] == 'Total'
     assert params['basis_norm'] == 'unknown'
-    assert params['derivation'] == 'implied'
+    assert params['derivation'] == 'unknown'
 
 
 # ── Dry-run tests ─────────────────────────────────────────────────────────

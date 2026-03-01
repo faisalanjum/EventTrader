@@ -73,7 +73,7 @@ Prepared remarks arrive as a single `content` string containing a JSON array of 
 
 | Signal | Example | Extract? |
 |--------|---------|----------|
-| Explicit range | "We expect Q2 revenue of $94-98 billion" | Yes: `derivation=calculated`, low/high from source |
+| Explicit range | "We expect Q2 revenue of $94-98 billion" | Yes: `derivation=explicit`, low/high from source |
 | Point guidance | "We expect gross margin of approximately 47%" | Yes: `derivation=point`, low=mid=high |
 | YoY comparison | "We expect services to grow double digits" | Yes: `derivation=implied`, qualitative="double digits" |
 | Qualitative direction | "We see continued strength in iPhone" | No: lacks quantitative anchor |

@@ -262,7 +262,7 @@ def _build_params(item, source_id, source_type, ticker):
         'high': item.get('canonical_high'),
         'basis_norm': item.get('basis_norm', 'unknown'),
         'basis_raw': item.get('basis_raw'),
-        'derivation': item.get('derivation', 'implied'),
+        'derivation': item.get('derivation', 'unknown'),
         'qualitative': item.get('qualitative'),
         'quote': item['quote'],
         'section': item.get('section', ''),
