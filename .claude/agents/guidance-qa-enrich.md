@@ -132,8 +132,19 @@ For each item:
 ```
 Items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally. Include `fye_month` at top level when items use LLM period fields.
 
-4. **Invoke CLI** — env var enables writes without touching config files:
+4. **Invoke CLI** — map MODE to CLI flag:
+
+| Mode | CLI Flag | Behavior |
+|------|----------|----------|
+| `dry_run` (default) | `--dry-run` | Validates items + computes IDs. No graph connection needed. |
+| `shadow` | `--dry-run` | Same as dry_run. |
+| `write` | `--write` | Atomic MERGE to Neo4j. |
+
 ```bash
+# dry_run / shadow
+bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_AAPL_source_qa.json --dry-run
+
+# write
 ENABLE_GUIDANCE_WRITES=true bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_AAPL_source_qa.json --write
 ```
 
