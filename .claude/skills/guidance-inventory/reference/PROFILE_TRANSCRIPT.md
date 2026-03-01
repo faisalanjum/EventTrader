@@ -76,6 +76,7 @@ Prepared remarks arrive as a single `content` string containing a JSON array of 
 | Explicit range | "We expect Q2 revenue of $94-98 billion" | Yes: `derivation=explicit`, low/high from source |
 | Point guidance | "We expect gross margin of approximately 47%" | Yes: `derivation=point`, low=mid=high |
 | YoY comparison | "We expect services to grow double digits" | Yes: `derivation=implied`, qualitative="double digits" |
+| Corporate commitment | "Share repurchase authorization of $XX billion", "quarterly dividend of $X.XX per share" | Yes: `derivation=explicit`, material capital commitment |
 | Qualitative direction | "We see continued strength in iPhone" | No: lacks quantitative anchor |
 | Prior period results | "Q1 revenue was $124 billion" | No: past period, not forward guidance |
 | Safe harbor boilerplate | "These statements involve risks..." | No: but keep any concrete guidance adjacent to it |
@@ -124,6 +125,7 @@ Q&A is often MORE valuable for guidance than prepared remarks because:
 | Segment detail | "Services growth will be in the mid-to-high teens" | Yes: segment="Services", qualitative |
 | Conditional guidance | "Assuming no FX headwinds, we'd see 2% higher growth" | Yes: note condition in `conditions` field |
 | Clarification of PR guidance | "To be more specific, that's on a non-GAAP basis" | Yes: updates basis for the PR guidance item |
+| Capital commitment or return decision | "We authorized a new buyback program", "we increased the dividend" | Yes: material capital/return announcement |
 | Analyst estimate repetition | "Your consensus shows $3.50" | No: analyst estimate, not company guidance |
 | Generic positive sentiment | "We feel good about the business" | No: no quantitative anchor |
 

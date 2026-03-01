@@ -1,6 +1,6 @@
 ---
 name: guidance-qa-enrich
-description: "Discover new guidance items and enrich existing guidance items from Q&A in earnings call transcripts."
+description: "Discover new guidance items and material corporate commitments, and enrich existing items from Q&A in earnings call transcripts."
 color: "#6366F1"
 tools:
   - mcp__neo4j-cypher__read_neo4j_cypher
@@ -16,7 +16,7 @@ permissionMode: dontAsk
 
 # Q&A Enrichment Agent
 
-Discovers new guidance items and enriches existing PR-extracted guidance items using Q&A content from earnings call transcripts. Runs AFTER `guidance-extract` has written PR-only items. Discovery of Q&A-only items is co-equal with enrichment — management regularly reveals guidance in Q&A that never appears in prepared remarks.
+Discovers new guidance items and material corporate commitments, and enriches existing PR-extracted guidance items using Q&A content from earnings call transcripts. Runs AFTER `guidance-extract` has written PR-only items. Discovery of Q&A-only items is co-equal with enrichment — management regularly reveals guidance in Q&A that never appears in prepared remarks.
 
 **Thinking**: ALWAYS use `ultrathink` for maximum reasoning depth when analyzing Q&A exchanges.
 

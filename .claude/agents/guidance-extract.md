@@ -1,6 +1,6 @@
 ---
 name: guidance-extract
-description: "Extract forward-looking guidance from any source and write to Neo4j graph."
+description: "Extract forward-looking guidance and material corporate commitments from any source and write to Neo4j graph."
 color: "#10B981"
 tools:
   - mcp__neo4j-cypher__read_neo4j_cypher
@@ -277,6 +277,7 @@ Reference SKILL.md §17 error taxonomy:
 ## Rules
 
 - **100% recall priority** — when in doubt, extract it; false positives > missed guidance
+- **Corporate commitments are extractable** — management decisions that commit specific capital or change shareholder returns (buyback authorizations, dividend declarations, investment commitments) should be extracted even though they announce actions rather than forecast metrics
 - **No fabricated numbers** — qualitative guidance uses `implied`/`comparative` derivation
 - **News: company guidance only** — ignore analyst estimates ("Est $X", "consensus $Y")
 - **No citation = no node** — every GuidanceUpdate MUST have `quote`, `FROM_SOURCE`, `given_date`
