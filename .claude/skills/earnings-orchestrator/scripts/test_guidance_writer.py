@@ -663,10 +663,10 @@ def test_batch_dry_run():
 # ── Constraint creation tests ────────────────────────────────────────────
 
 def test_create_constraints():
-    """create_guidance_constraints runs 3 constraints + 4 sentinel MERGEs = 7 calls."""
+    """create_guidance_constraints runs 3 constraints + 2 indexes + 4 sentinel MERGEs = 9 calls."""
     mgr = MockManager()
     create_guidance_constraints(mgr)
-    assert len(mgr.calls) == 7
+    assert len(mgr.calls) == 9
     q1 = mgr.calls[0][0]
     q2 = mgr.calls[1][0]
     q3 = mgr.calls[2][0]
@@ -679,8 +679,13 @@ def test_create_constraints():
     assert 'IF NOT EXISTS' in q1
     assert 'IF NOT EXISTS' in q2
     assert 'IF NOT EXISTS' in q3
+    # Indexes
+    idx1 = mgr.calls[3][0]
+    idx2 = mgr.calls[4][0]
+    assert 'INDEX' in idx1 and 'label_slug' in idx1
+    assert 'INDEX' in idx2 and 'segment_slug' in idx2
     # Sentinel MERGEs
-    sentinel_calls = [mgr.calls[i][0] for i in range(3, 7)]
+    sentinel_calls = [mgr.calls[i][0] for i in range(5, 9)]
     sentinel_ids = {'gp_ST', 'gp_MT', 'gp_LT', 'gp_UNDEF'}
     for call in sentinel_calls:
         assert 'GuidancePeriod' in call

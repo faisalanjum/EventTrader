@@ -392,10 +392,10 @@ def write_guidance_batch(manager, items, source_id, source_type, ticker,
             summary['errors'] += 1
         elif result.get('was_created'):
             summary['created'] += 1
-            summary['concept_links'] += result.get('concept_links', 0)
-            summary['member_links'] += result.get('member_links', 0)
         else:
             summary['skipped'] += 1
+        summary['concept_links'] += result.get('concept_links', 0)
+        summary['member_links'] += result.get('member_links', 0)
 
     return summary
 
@@ -414,6 +414,12 @@ def create_guidance_constraints(manager):
         ("CREATE CONSTRAINT guidance_period_id_unique IF NOT EXISTS "
          "FOR (gp:GuidancePeriod) REQUIRE gp.id IS UNIQUE"),
     ]
+    indexes = [
+        ("CREATE INDEX gu_label_slug IF NOT EXISTS "
+         "FOR (gu:GuidanceUpdate) ON (gu.label_slug)"),
+        ("CREATE INDEX gu_segment_slug IF NOT EXISTS "
+         "FOR (gu:GuidanceUpdate) ON (gu.segment_slug)"),
+    ]
     sentinels = [
         ("MERGE (gp:GuidancePeriod {id: 'gp_ST'}) "
          "SET gp.u_id = 'gp_ST', gp.start_date = null, gp.end_date = null"),
@@ -424,6 +430,6 @@ def create_guidance_constraints(manager):
         ("MERGE (gp:GuidancePeriod {id: 'gp_UNDEF'}) "
          "SET gp.u_id = 'gp_UNDEF', gp.start_date = null, gp.end_date = null"),
     ]
-    for cypher in constraints + sentinels:
+    for cypher in constraints + indexes + sentinels:
         manager.execute_cypher_query(cypher, {})
     logger.info("Guidance constraints + GuidancePeriod sentinels ensured")
