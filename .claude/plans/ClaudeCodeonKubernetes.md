@@ -1990,3 +1990,49 @@ Close the final gap: prove the **Bolt write path** works from a K8s pod. The §1
 
 - **Duration**: 470s (7.8 min)
 - **CRM had 0 pre-existing guidance** — this is a clean first-time extraction for a new company
+
+---
+
+### Write Test — NTAP (NetApp) Production Validation (2026-03-01)
+
+**Objective**: Second company extraction to confirm pipeline generalizes beyond CRM. Items left in Neo4j (no cleanup) for manual verification.
+
+**Results**:
+
+| Step | Result | Detail |
+|------|--------|--------|
+| Phase 1 (PR extraction) | ✅ 16 items written | Revenue, Gross Margin, Operating Margin, EPS, Tax Rate, Net Interest Income, Share Count, Cloud Revenue, Product Gross Margin, OpEx, FCF, Capital Return |
+| Phase 2 (Q&A enrichment) | ✅ 2 new items discovered | Product Gross Margin Q4 FY23 "at least 50%" (Amit Daryani Q&A), OpEx Q4 FY23 "$675M" (Madi Hassini Q&A) |
+| Total in Neo4j | ✅ 18 GuidanceUpdate nodes | 10 quarterly, 6 annual, 2 long-term |
+| Cleanup | Not performed | Items left for verification |
+
+- **Duration**: 562s (9.4 min)
+- **Source**: `NTAP_2023-02-22T17.00.00-05.00`
+- **NTAP had 0 pre-existing guidance** — clean first-time extraction
+
+**Significance**: Phase 2 discovered 2 genuinely new items from Q&A (the `NEW ITEM` verdict path in `guidance-qa-enrich.md`), not just enrichment of Phase 1 items. This is stronger proof than CRM's Phase 2 result (which only enriched 1 existing item).
+
+Verify: `MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(t:Transcript {id: 'NTAP_2023-02-22T17.00.00-05.00'}) RETURN gu.label, gu.mid, gu.low, gu.high, gu.period_scope, gu.quote`
+
+---
+
+### Cluster Conventions Comparison
+
+The canary/write-test pods deviate from existing cluster workload patterns in 3 ways. These must be resolved before production deployment.
+
+| Aspect | Existing cluster workloads | Canary/Write-test Job |
+|--------|---------------------------|----------------------|
+| Resource limits | All set (`cpu: 250m–2`, `memory: 256Mi–16Gi`) | **None set** |
+| hostNetwork | **None** use it | Uses it |
+| securityContext | Processing pods: `{}` (run as root) | `runAsUser: 1000, runAsGroup: 1000` |
+| nodeSelector | Processing → `minisforum2`, MCP → `minisforum`, Neo4j → `minisforum3` | `minisforum` (project files) |
+| Namespace | Dedicated per concern (`processing`, `mcp-services`, `infrastructure`) | Own ephemeral namespace |
+| Volumes | Narrow hostPath (e.g., `/home/faisal/EventMarketDB/logs` only) | **Entire `/home/faisal`** mounted |
+
+**Production action items:**
+
+1. **Add resource limits.** Claude CLI + SDK is mostly idle (waiting for API responses). Recommended: `requests: {cpu: 500m, memory: 1Gi}`, `limits: {cpu: 2, memory: 4Gi}`.
+2. **Eliminate `hostNetwork: true`.** No other workload uses it. Fix #37 (`GUIDANCE_NEO4J_URI` → in-cluster Bolt service) + SDK `mcp_servers` → HTTP MCP removes the need entirely.
+3. **Narrow mount scope.** Production should mount `/home/faisal/EventMarketDB` only (not all of `/home/faisal`). The §17 design decisions table already specifies this — the toy runs used the broad mount as a shortcut.
+
+**Current headroom on `minisforum`**: 10% CPU, 44% memory (26GB of 62GB). Plenty of capacity for the guidance worker.
