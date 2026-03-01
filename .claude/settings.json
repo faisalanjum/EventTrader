@@ -36,6 +36,24 @@
             "command": "/home/faisal/EventMarketDB/.claude/hooks/validate_judge_output.sh"
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/block_env_edits.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__neo4j-cypher__write_neo4j_cypher",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/guard_neo4j_delete.sh"
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -45,46 +63,6 @@
           {
             "type": "command",
             "command": "/home/faisal/EventMarketDB/.claude/hooks/cleanup_after_ok.sh"
-          }
-        ]
-      }
-    ],
-    "TaskCompleted": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/faisal/EventMarketDB/.claude/hooks/test_task_completed.sh"
-          }
-        ]
-      }
-    ],
-    "TeammateIdle": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/faisal/EventMarketDB/.claude/hooks/test_teammate_idle.sh"
-          }
-        ]
-      }
-    ],
-    "SubagentStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/faisal/EventMarketDB/.claude/hooks/test_subagent_start_inject.sh"
-          }
-        ]
-      }
-    ],
-    "ConfigChange": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/faisal/EventMarketDB/.claude/hooks/test_config_change.sh"
           }
         ]
       }

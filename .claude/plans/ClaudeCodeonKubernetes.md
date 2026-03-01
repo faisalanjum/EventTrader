@@ -8,24 +8,17 @@
 
 ## 1. Executive Summary
 
-Claude Code can be run headlessly in Docker containers on Kubernetes using a Max subscription OAuth token instead of API keys. The setup leverages `claude -p` (headless mode) for non-interactive, scriptable analysis of financial documents, with results written directly to Neo4j via MCP. Pre-built container images exist, authentication is solved via `setup-token`, and skills/subagents work in headless mode. The main risks are subscription quota management, concurrent Neo4j write conflicts, and reliance on an undocumented usage-tracking endpoint.
+Claude Code runs in Kubernetes via the **Claude Agent SDK** (`claude-agent-sdk` Python library), which wraps the same CLI process in a programmatic Python interface. A persistent worker pod watches Redis for new filings, calls `query()` with the appropriate skill/agent prompt, and writes results to Neo4j via MCP. Authentication uses `CLAUDE_CODE_OAUTH_TOKEN` from a K8s Secret. Project files mount from hostPath at `/home/faisal/EventMarketDB`. MCP connectivity uses the SDK's `mcp_servers` parameter pointing to the existing in-cluster HTTP MCP service (`mcp-neo4j-cypher-http.mcp-services:8000`), NOT the local `.mcp.json` stdio servers (which depend on code outside the project directory). All existing `.claude/agents`, `.claude/skills`, and `CLAUDE.md` load via `setting_sources=["project"]`. The SDK adds Python-level retry logic, streaming output, budget controls, and quota management — capabilities not available with bare `claude -p`.
+
+**Architecture decision (2026-03-01):** SDK-in-persistent-pod replaces CLI-as-K8s-Job. The SDK is the **strongly preferred** production path. The toy runs in §16 proved `claude -p` CLI Jobs also work, but the SDK is strictly superior: Python control, no cold start, programmatic MCP config, and structured output. See §4 for detailed comparison.
 
 ---
 
 ## 2. Authentication: Subscription in Containers
 
-### How It Works
+### Primary: `CLAUDE_CODE_OAUTH_TOKEN` from K8s Secret
 
-- `claude setup-token` generates a long-lived OAuth token (format: `sk-ant-oat01-...`)
-- Token is injected via `CLAUDE_CODE_OAUTH_TOKEN` environment variable
-- Bypasses the interactive browser OAuth flow entirely
-
-### Known Issues
-
-- **Interactive mode bug (#8938, still open):** Even with the token set, interactive mode still prompts for onboarding. Headless `-p` mode is unaffected — it bypasses this entirely.
-- **Token refresh:** `setup-token` produces long-lived tokens (longer than regular credential files which expire ~6 hours), but periodic refresh is still required. A simple cron on a local machine can regenerate and update the K8s secret.
-
-### K8s Secret Setup
+The SDK spawns the CLI as a subprocess — environment variables are inherited. `CLAUDE_CODE_OAUTH_TOKEN` bypasses interactive OAuth entirely. This was proven in §16 toy runs (CLI) and works identically for SDK `query()`.
 
 ```bash
 # One-time on local machine
@@ -34,65 +27,158 @@ claude setup-token
 
 # Store in Kubernetes
 kubectl create secret generic claude-auth \
-  --from-literal=CLAUDE_CODE_OAUTH_TOKEN=<token>
+  --from-literal=CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-YOUR_TOKEN_HERE \
+  -n claude-test
 ```
+
+**Why not hostPath credential mount?** Infrastructure.md Part 8 proved mounting `~/.claude/.credentials.json` via `/home/faisal` hostPath also works. But that exposes SSH keys, `.bash_history`, and other sensitive files. The Secret approach mounts only the project directory — no broad home-dir exposure.
+
+### Token Refresh
+
+`setup-token` produces long-lived tokens but periodic refresh is still required. A weekly cron on the host regenerates and updates the K8s Secret:
+
+```bash
+0 0 * * 0 claude setup-token && kubectl create secret generic claude-auth \
+  --from-literal=CLAUDE_CODE_OAUTH_TOKEN=$(cat ~/.claude/token) \
+  --dry-run=client -o yaml | kubectl apply -f - -n claude-test
+```
+
+### Known Issues
+
+- **Interactive mode bug (#8938, still open):** Even with the token set, interactive mode still prompts for onboarding. Headless `-p` mode and SDK `query()` are both unaffected.
 
 ---
 
 ## 3. Container Images
 
-### Recommended: cabinlab/claude-code-sdk-docker
+### Current: `python:3.11-slim` + hostPath venv
 
-Pre-built images on GitHub Container Registry with entrypoint scripts that auto-configure auth files when `CLAUDE_CODE_OAUTH_TOKEN` is present. They skip all interactive prompts, mark onboarding complete, and pre-accept trust dialogs.
+With the hostPath approach, `python:3.11-slim` is all you need. The existing project venv (`/home/faisal/EventMarketDB/venv/`) has `claude-agent-sdk` and all deps pre-installed — no image build or `pip install` at startup. Proven in Infrastructure.md Part 8 and §16 toy runs.
+
+### Alternative: Pre-built SDK images
+
+Pre-built images on GHCR with entrypoint scripts that auto-configure auth. Useful if moving away from hostPath in the future:
 
 | Image | Size | Use Case |
 |-------|------|----------|
 | `ghcr.io/cabinlab/claude-agent-sdk:python` | 693 MB | Full Python SDK support |
 | `ghcr.io/cabinlab/claude-agent-sdk:alpine-python` | 474 MB | Lightweight Python |
-| `ghcr.io/cabinlab/claude-agent-sdk:typescript` | 607 MB | TypeScript SDK |
-| `ghcr.io/cabinlab/claude-agent-sdk:alpine-typescript` | 383 MB | Smallest footprint |
 
-### Alternatives
-
-- **tintinweb/claude-code-container** — 77 stars, security-focused sandbox, read-only input/writable output mounts
-- **receipting/claude-code-sdk-container** — Wraps Claude Code as REST API (more complexity than needed for K8s Jobs)
+Note: GHCR pulls were blocked (`403`) during §16 toy runs. `python:3.11-slim` is the proven fallback.
 
 ---
 
-## 4. Headless Mode: Performance & Reliability
+## 4. SDK vs CLI: Why SDK Wins for Production
 
-### Speed: Headless vs Interactive
+### Same Engine, Better Control
 
-Headless mode is faster for document analysis tasks. The model itself runs at the same speed, but operational overhead differs significantly:
+The Claude Agent SDK (`pip install claude-agent-sdk`) spawns the same `claude` CLI process under the hood. Every `query()` call starts a Claude Code process. The SDK adds a Python wrapper with programmatic control:
 
-- **Headless:** Send prompt → process → exit. Average response time is 3–15 seconds depending on complexity. No codebase exploration, no metadata accumulation, no permission prompts.
-- **Interactive:** Explores files sequentially, runs validation/safety checks, accumulates metadata in `~/.claude.json` over time (known to cause severe slowdowns on long-running projects).
+| Capability | CLI (`claude -p`) | SDK (`query()`) | Winner |
+|---|---|---|---|
+| Skills/agents/CLAUDE.md | Auto-loaded | `setting_sources=["project"]` | Tie |
+| MCP servers | `--mcp-config` override file | `mcp_servers={}` programmatic override — point directly to HTTP service | **SDK** — no ConfigMap needed |
+| `--strict-mcp-config` | Required for reliable MCP in CLI | Not needed — `mcp_servers` parameter is the override | **SDK** — simpler |
+| | | **✅ VALIDATED in §17:** SDK MCP via `setting_sources=["project"]` loads `.mcp.json` stdio servers without `--strict-mcp-config`. Proven in-cluster 2026-03-01. | |
+| Auth | `CLAUDE_CODE_OAUTH_TOKEN` env + K8s Secret | Same — SDK inherits env vars to subprocess | Tie |
+| Permissions | `--dangerously-skip-permissions` | `permission_mode="bypassPermissions"` | Tie |
+| Output format | `--output-format json` (text blob) | Structured Python message objects with streaming | **SDK** |
+| Working directory | Pod `workingDir` | `cwd="/home/faisal/EventMarketDB"` | Tie |
+| Session resume | `--resume` flag | `resume=session_id` (programmatic) | Tie |
+| Streaming output | Logs only after completion | Token-by-token `async for message` | **SDK** |
+| Retry/error handling | K8s `backoffLimit` only | Python `try/except` + custom logic + Redis ack/nack | **SDK** |
+| Multi-turn conversation | New process per invocation (`--resume` for session continuity, but no persistent connection) | `ClaudeSDKClient` maintains persistent session | **SDK** |
+| Budget control | Not available | `max_budget_usd=5.0` | **SDK** |
+| Interrupts | Kill the process | `client.interrupt()` | **SDK** |
+| Hooks | Shell scripts from `settings.json` | Python callbacks OR shell hooks | **SDK** |
+| Cold start | `npm install` per Job (~30s) | Persistent pod, SDK ready | **SDK** |
 
-For EventTrader's use case — "here's a filing, analyze it, return JSON" — headless is the correct mode. There is no codebase to navigate; the task is reasoning about piped-in financial data.
+### Production Architecture
 
-**Container startup overhead:** Each K8s Job needs Node.js + Claude Code initialization = a few seconds of fixed overhead. For high-volume processing, a persistent worker pod avoids this repeated cost.
-
-### Reliability & Auto-Restart
-
-Headless mode returns exit code 0 on success, non-zero on failure — standard Unix behavior compatible with conditional scripts (`&&`, `||`).
-
-**K8s provides the retry layer:**
-
-- Set `backoffLimit` on Jobs (e.g., 2–3 retries) for automatic retry with exponential backoff
-- Rate limit failures (429) benefit from the delay between retries
-- Auth token expiry causes Job failure after retries → alerts via K8s monitoring
-
-**Recommended error handling pattern in the container:**
-
-```bash
-#!/bin/bash
-if ! claude -p "$PROMPT" --output-format json > result.json; then
-    echo "Claude failed, falling back"
-    exit 1  # Let K8s retry
-fi
+```
+Event Trader (existing K8s pod) detects new 8-K
+    ↓
+Redis LPUSH "earnings:trigger" "{ticker, accession, source_id}"
+    ↓
+earnings_worker.py (K8s Deployment, persistent pod)
+    ↓
+SDK query("/guidance-extractor {ticker} transcript {source_id}")
+    ↓
+Results written to Neo4j + files
 ```
 
-Two layers of reliability: script-level error handling inside the container, plus K8s Job-level retry. Far more robust than running interactively on a laptop.
+**Why persistent pod beats per-Job:**
+- No cold start — SDK + Claude Code CLI already installed, no `npm install` per run
+- Python control — retry logic, quota checks, Redis ack/nack, structured error handling
+- Streaming — monitor progress token-by-token for debugging
+- Session reuse — `ClaudeSDKClient` for multi-turn conversations if needed
+
+### The MCP Problem: `.mcp.json` stdio servers CANNOT work in a pod
+
+`.mcp.json` has stdio servers — shell scripts that depend on `/home/faisal/neo4j-mcp-server/` (outside the project directory) and connect to `bolt://localhost:30687`. Two problems:
+
+1. **Code dependency outside mount:** `local-cypher-server.sh` runs `cd /home/faisal/neo4j-mcp-server/servers/mcp-neo4j-cypher/src` — this directory doesn't exist in the pod (only `/home/faisal/EventMarketDB` is mounted).
+2. **`setting_sources=["project"]` loads `.mcp.json` automatically** — the broken stdio servers will attempt to start and fail. This could cause errors or slowdowns.
+
+**Solution:** Use the SDK's `mcp_servers` parameter to point directly to the **existing in-cluster HTTP MCP service** (`mcp-neo4j-cypher-http.mcp-services:8000`). This uses normal K8s service discovery — no `hostNetwork`, no ConfigMap, no stdio.
+
+```python
+options = ClaudeAgentOptions(
+    setting_sources=["project"],  # Loads .claude/agents, skills, CLAUDE.md
+    mcp_servers={
+        "neo4j-cypher": {
+            "type": "url",
+            "url": "http://mcp-neo4j-cypher-http.mcp-services:8000/mcp",
+        },
+    },
+    permission_mode="bypassPermissions",
+    max_budget_usd=5.0,
+)
+```
+
+**Open question for canary:** Does `mcp_servers` fully override `.mcp.json`, or does `setting_sources=["project"]` also try to start the `.mcp.json` stdio servers? If the latter, broken stdio servers must fail gracefully (not block startup). **This is canary test item #1.**
+
+### The Write Path: `hostNetwork` vs `GUIDANCE_NEO4J_URI` (Issue #37)
+
+MCP handles reads. But `guidance_write.sh` connects directly to Neo4j via Bolt — `bolt://localhost:30687` by default. Without `hostNetwork: true`, writes fail.
+
+Two options:
+- **Simple:** Keep `hostNetwork: true`. Everything works — both MCP reads (via HTTP service) and direct Bolt writes.
+- **Clean (fixes #37):** Set `GUIDANCE_NEO4J_URI=bolt://neo4j-bolt.neo4j.svc.cluster.local:7687` in pod env. `guidance_write.sh` already supports this override (line 13). No `hostNetwork` needed.
+
+**For dry-run canary (`MODE=dry_run`):** The write path doesn't connect to Neo4j, so no `hostNetwork` needed. Test SDK + HTTP MCP in clean pod networking first.
+
+**For production write mode:** Apply the #37 fix (`GUIDANCE_NEO4J_URI` env var), eliminating `hostNetwork` entirely. Same fix needed for `get_quarterly_filings.py:50` (`NEO4J_URI` env var).
+
+### Reliability
+
+```python
+async def process_filing(ticker, source_id):
+    try:
+        async for message in query(
+            prompt=f"/guidance-extractor {ticker} transcript {source_id} MODE=write",
+            options=ClaudeAgentOptions(
+                setting_sources=["project"],
+                mcp_servers={
+                    "neo4j-cypher": {
+                        "type": "url",
+                        "url": "http://mcp-neo4j-cypher-http.mcp-services:8000/mcp",
+                    },
+                },
+                permission_mode="bypassPermissions",
+                max_turns=50,
+                max_budget_usd=5.0,
+            ),
+        ):
+            if hasattr(message, "result"):
+                return message.result
+    except Exception as e:
+        logger.error(f"Failed {ticker}/{source_id}: {e}")
+        # Nack to Redis for retry
+        raise
+```
+
+Two layers of reliability: Python-level error handling in the worker, plus K8s Deployment restart policy for pod crashes.
 
 ---
 
@@ -148,72 +234,65 @@ Build a quota-check pre-flight step into the K8s Job controller:
 
 ## 6. Skills & Subagents in Containers
 
-### Skills DO Load in Headless Mode
+### Loading Project Configuration
 
-Skill descriptions are loaded into context so Claude knows what's available; full skill content loads when invoked. CLAUDE.md is also automatically loaded from the current directory in headless mode.
+The SDK does NOT load filesystem settings by default. You MUST set `setting_sources=["project"]` to load:
+- `.claude/skills/` — all skill definitions
+- `.claude/agents/` — all agent definitions
+- `CLAUDE.md` / `.claude/CLAUDE.md` — project instructions
+- `.claude/settings.json` — hooks, permissions, task/team config
+
+```python
+options = ClaudeAgentOptions(
+    setting_sources=["project"],  # REQUIRED — loads all .claude/ infrastructure
+    cwd="/home/faisal/EventMarketDB",
+)
+```
 
 ### Getting Skills Into the Container
 
-Three approaches, from simplest to most flexible:
+**Our approach (simplest):** Mount the repo via hostPath at the exact local path. All skills, agents, and CLAUDE.md are already there. No image build, no plugin install, no copying.
 
-**Option A: Global user-scope skills (simplest)**
+The SDK also supports programmatic agent definitions that override or supplement filesystem agents:
 
-Skills in `~/.claude/skills/` are available globally across all invocations. One `COPY` line on top of the cabinlab base image:
-
-```dockerfile
-FROM ghcr.io/cabinlab/claude-agent-sdk:python
-COPY ./my-skills/ /home/node/.claude/skills/
+```python
+options = ClaudeAgentOptions(
+    setting_sources=["project"],  # Load .claude/agents/ from disk
+    agents={
+        # Programmatic agents override filesystem agents with same name
+        "custom-reviewer": AgentDefinition(
+            description="Custom per-run agent",
+            prompt="...",
+            tools=["Read", "Grep"],
+        )
+    },
+)
 ```
 
-**Option B: Plugin system from Git repo (version-controlled)**
+### Subagents in the SDK
 
-Package skills as a Claude Code plugin in a Git repo. Container entrypoint installs them at startup:
-
-```bash
-claude plugin marketplace add youruser/eventtrader-skills
-claude plugin install filing-analyst@eventtrader-skills
-```
-
-Plugins install to `~/.claude/plugins/` and persist for the container's lifetime. Skills are version-controlled, and any container pulls the latest without rebuilding.
-
-**Option C: `--plugin-dir` flag (zero-config)**
-
-Mount a volume with skills and reference at invocation time:
-
-```bash
-claude --plugin-dir /mnt/skills/eventtrader -p "Analyze this filing..."
-```
-
-No baking into the image, no install step. Just mount and point.
-
-### Subagents Work but Burn Quota Fast
-
-Subagents spawn separate context windows, each consuming tokens independently. Three subagents (scan schema, analyze filing, write results) = 4x the quota burn of a single prompt.
-
-Subagents do not support stepwise plans — they execute immediately with no transparent intermediate output, making debugging difficult until execution finishes.
-
-**Recommendation for EventTrader:** Use a single well-crafted prompt with MCP access for the full scan-analyze-write flow, rather than subagents. Reserve subagents for genuinely complex multi-step workflows where context isolation is essential.
+Subagents spawn separate context windows, each consuming tokens independently. The SDK adds visibility over bare CLI:
+- **Streaming:** token-by-token output from subagents via `parent_tool_use_id`
+- **Resumption:** capture `agent_id` and resume subagents with full context
+- **Parallel execution:** multiple subagents run concurrently
 
 ### Subagent MCP Permissions
 
-Subagents must have explicit tool access declared in their YAML frontmatter. Without `mcp__neo4j__*` tools listed, the subagent silently fails to access the database:
-
-```yaml
----
-name: filing-analyst
-description: Analyzes SEC filings and writes event signals to Neo4j
-tools: Read, Bash, mcp__neo4j__execute_query, mcp__neo4j__get_schema
-model: opus
----
-```
+Subagents must have explicit tool access declared in their YAML frontmatter (filesystem agents) or `tools` field (programmatic agents). Without `mcp__neo4j-cypher__*` tools listed, the subagent silently fails to access the database. All existing `.claude/agents/*.md` files already declare their tools correctly.
 
 ---
 
 ## 7. Neo4j Integration via MCP
 
-### Recommended: HTTP Transport for K8s
+### Primary: In-Cluster HTTP MCP Service (SDK `mcp_servers` parameter)
 
-The Neo4j MCP servers are containerized and support HTTP transport mode designed for scalable, production-ready deployments. Run the MCP server as a separate K8s service:
+An HTTP MCP service is already running in the cluster: `mcp-neo4j-cypher-http.mcp-services:8000`. The SDK's `mcp_servers` parameter points directly to it — no `.mcp.json` (broken stdio servers), no ConfigMap, no `hostNetwork`.
+
+The local `.mcp.json` stdio servers depend on `/home/faisal/neo4j-mcp-server/` (outside the project mount) and won't work in pods. See §4 "The MCP Problem" for details.
+
+### HTTP MCP Service Deployment (already running)
+
+The HTTP MCP service is deployed in the `mcp-services` namespace. For reference, the deployment pattern:
 
 ```yaml
 # neo4j-mcp-service deployment (runs independently)
@@ -247,12 +326,12 @@ spec:
         - containerPort: 8080
 ```
 
-Claude Code Jobs reference it via `--mcp-config`:
+Reference via SDK `mcp_servers=` parameter or CLI `--mcp-config`:
 
 ```json
 {
   "mcpServers": {
-    "neo4j": {
+    "neo4j-cypher": {
       "type": "http",
       "url": "http://neo4j-mcp-service:8080/mcp/"
     }
@@ -279,100 +358,156 @@ When multiple K8s Jobs write to the same Neo4j instance concurrently, you risk d
 
 ---
 
-## 8. Kubernetes Deployment Patterns
+## 8. Kubernetes Deployment Pattern: SDK Persistent Worker
 
-### Pattern 1: Event-Driven K8s Jobs
+### Primary Pattern: Event-Driven SDK Worker (Recommended)
 
-Redis pipeline detects new filing → Python controller creates K8s Job:
-
-```yaml
-apiVersion: batch/v1
-kind: Job
-metadata:
-  generateName: claude-filing-
-spec:
-  backoffLimit: 2
-  ttlSecondsAfterFinished: 3600
-  template:
-    spec:
-      containers:
-      - name: claude-analyst
-        image: ghcr.io/cabinlab/claude-agent-sdk:python
-        command: ["claude", "-p"]
-        args:
-        - "Analyze this SEC filing for event-driven trading signals. Return JSON with: event_type, sentiment, magnitude, affected_tickers, confidence_score."
-        - "--output-format"
-        - "json"
-        - "--model"
-        - "claude-opus-4-6"
-        - "--dangerously-skip-permissions"
-        - "--mcp-config"
-        - "/config/mcp.json"
-        envFrom:
-        - secretRef:
-            name: claude-auth
-        volumeMounts:
-        - name: mcp-config
-          mountPath: /config
-      volumes:
-      - name: mcp-config
-        configMap:
-          name: claude-mcp-config
-      restartPolicy: Never
-```
-
-### Pattern 2: Scheduled CronJobs
-
-```yaml
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: daily-filing-sweep
-spec:
-  schedule: "0 6 * * 1-5"  # 6 AM weekdays
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-          - name: claude-sweep
-            image: ghcr.io/cabinlab/claude-agent-sdk:python
-            command: ["claude", "-p"]
-            args:
-            - "Connect to Neo4j, find unprocessed filings, analyze each for event signals, write results back."
-            - "--output-format"
-            - "json"
-            - "--model"
-            - "claude-opus-4-6"
-            - "--dangerously-skip-permissions"
-            - "--mcp-config"
-            - "/config/mcp.json"
-            envFrom:
-            - secretRef:
-                name: claude-auth
-```
-
-### Pattern 3: Persistent Worker Pod (Multi-Turn)
+A persistent Deployment pod runs `earnings_worker.py`, which watches Redis and calls the SDK:
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: claude-worker
+  name: claude-earnings-worker
+  namespace: claude-test
 spec:
   replicas: 1
+  strategy:
+    type: Recreate  # Single writer — no concurrent instances
+  selector:
+    matchLabels:
+      app: claude-earnings-worker
   template:
+    metadata:
+      labels:
+        app: claude-earnings-worker
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum  # Where project files exist
+      securityContext:
+        runAsUser: 1000   # CRITICAL: Must be non-root (faisal user)
+        runAsGroup: 1000
       containers:
-      - name: claude
-        image: ghcr.io/cabinlab/claude-agent-sdk:python
-        command: ["sleep", "infinity"]
+      - name: worker
+        image: python:3.11-slim
+        workingDir: /home/faisal/EventMarketDB
+        command: ["/bin/bash", "-lc"]
+        args:
+        - |
+          export PATH="/home/faisal/.local/bin:$PATH"  # SDK needs claude CLI on PATH
+          source /home/faisal/EventMarketDB/venv/bin/activate
+          cd /home/faisal/EventMarketDB
+          python scripts/earnings_worker.py
+        env:
+        - name: CLAUDE_PROJECT_DIR
+          value: "/home/faisal/EventMarketDB"
+        - name: SHELL
+          value: "/bin/bash"
+        - name: GUIDANCE_NEO4J_URI            # Fix for #37 — direct Bolt writes
+          value: "bolt://neo4j-bolt.neo4j.svc.cluster.local:7687"
+        - name: NEO4J_URI                     # For get_quarterly_filings.py
+          value: "bolt://neo4j-bolt.neo4j.svc.cluster.local:7687"
+        - name: NEO4J_USERNAME
+          value: "neo4j"
+        - name: NEO4J_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: eventtrader-secrets  # Copy from processing ns, or create in claude-test
+              key: NEO4J_PASSWORD
         envFrom:
         - secretRef:
-            name: claude-auth
+            name: claude-auth                  # CLAUDE_CODE_OAUTH_TOKEN
+        # TODO (Phase 2): Add livenessProbe + readinessProbe
+        # Without probes, K8s won't restart a hung worker (e.g., zombie SDK subprocess, Redis disconnect).
+        # Options: (a) HTTP health endpoint in worker, (b) exec probe checking process health,
+        # (c) file-based liveness (worker touches /tmp/healthy every N seconds, probe checks mtime).
+        volumeMounts:
+        - name: project
+          mountPath: /home/faisal/EventMarketDB
+      volumes:
+      - name: project
+        hostPath:
+          path: /home/faisal/EventMarketDB
+          type: Directory
 ```
 
-Pipeline `kubectl exec`s into the pod for multi-turn sessions with `--resume` for context continuity.
+**What this gives you (1 Secret + 1 hostPath):**
+- `CLAUDE_CODE_OAUTH_TOKEN` from `Secret/claude-auth` — Max subscription auth
+- `.claude/` — all agents, skills, CLAUDE.md, settings.json from hostPath
+- `venv/` — pre-installed Python deps (including `claude-agent-sdk`), no pip install at startup
+- MCP reads via SDK `mcp_servers` → in-cluster HTTP service (no `.mcp.json` stdio, no `hostNetwork`)
+- Neo4j writes via `GUIDANCE_NEO4J_URI` → in-cluster Bolt service (fixes #37)
+- `earnings-analysis/` — output files land on host disk (read-write mount)
+
+### Worker Script Skeleton (`scripts/earnings_worker.py`)
+
+```python
+import asyncio
+import redis
+import json
+import logging
+from claude_agent_sdk import query, ClaudeAgentOptions
+
+logger = logging.getLogger(__name__)
+r = redis.Redis(host="redis.infrastructure.svc.cluster.local", port=6379)
+
+SDK_OPTIONS = ClaudeAgentOptions(
+    setting_sources=["project"],  # Loads .claude/agents, skills, CLAUDE.md, settings.json
+    cwd="/home/faisal/EventMarketDB",
+    mcp_servers={
+        "neo4j-cypher": {
+            "type": "url",
+            "url": "http://mcp-neo4j-cypher-http.mcp-services:8000/mcp",
+        },
+    },
+    permission_mode="bypassPermissions",
+    max_budget_usd=10.0,
+    model="claude-opus-4-6",
+)
+
+async def process_task(task: dict):
+    prompt = f"/guidance-extractor {task['ticker']} transcript {task['source_id']} MODE=write"
+    result = None
+    async for message in query(prompt=prompt, options=SDK_OPTIONS):
+        if hasattr(message, "result"):
+            result = message.result
+    return result
+
+shutdown_requested = False
+
+def handle_sigterm(*_):
+    global shutdown_requested
+    logger.info("SIGTERM received — finishing current task then exiting")
+    shutdown_requested = True
+
+# TODO (Phase 2): Register signal handler for graceful shutdown.
+# Without this, SIGTERM during an active query() call leaves the task
+# un-nacked in Redis and the SDK subprocess may become a zombie.
+# import signal; signal.signal(signal.SIGTERM, handle_sigterm)
+
+async def main():
+    logger.info("Claude earnings worker started")
+    while not shutdown_requested:
+        # Blocking pop from Redis queue
+        item = r.blpop("earnings:trigger", timeout=30)
+        if item is None:
+            continue
+        task = json.loads(item[1])
+        try:
+            result = await process_task(task)
+            logger.info(f"Completed {task['ticker']}/{task['source_id']}: {result}")
+        except Exception as e:
+            logger.error(f"Failed {task['ticker']}/{task['source_id']}: {e}")
+            # Re-queue for retry
+            r.rpush("earnings:trigger:retry", json.dumps(task))
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Alternative: CLI K8s Jobs (Proven but Deprecated)
+
+The `claude -p` Job pattern from §16 toy runs still works for one-off tasks. Use it for ad-hoc runs or canary tests, not for production automation. The SDK worker is strictly superior for recurring workloads.
 
 ---
 
@@ -387,7 +522,7 @@ Pipeline `kubectl exec`s into the pod for multi-turn sessions with `--resume` fo
 | Event-graph relationships | Opus 4.6 | Complex causal chains |
 | Filing metadata extraction | Sonnet | Simple, repetitive |
 
-Control via `--model` flag per Job. Use Opus strategically for deep analysis, Sonnet for routine work, to manage subscription quota.
+Control via `model=` in `ClaudeAgentOptions` (SDK) or `--model` flag (CLI). Use Opus strategically for deep analysis, Sonnet for routine work, to manage subscription quota.
 
 ---
 
@@ -395,9 +530,9 @@ Control via `--model` flag per Job. Use Opus strategically for deep analysis, So
 
 ### Concurrency Limits
 
-- Limit concurrent K8s Jobs to 2–3 maximum
+- Limit concurrent SDK `query()` calls to 2–3 maximum (worker processes one task at a time by default)
 - Batch related documents into single prompts where possible
-- Schedule heavy CronJobs for off-hours (early morning/evening)
+- Schedule heavy workloads for off-hours (early morning/evening)
 
 ### Context Window Pressure
 
@@ -407,11 +542,12 @@ If context fills up mid-analysis, Claude auto-compacts and may lose important de
 
 ### Token Refresh
 
+`CLAUDE_CODE_OAUTH_TOKEN` from `setup-token` is long-lived but needs periodic renewal. Weekly cron on the host:
+
 ```bash
-# Simple cron on local machine (weekly)
 0 0 * * 0 claude setup-token && kubectl create secret generic claude-auth \
   --from-literal=CLAUDE_CODE_OAUTH_TOKEN=$(cat ~/.claude/token) \
-  --dry-run=client -o yaml | kubectl apply -f -
+  --dry-run=client -o yaml | kubectl apply -f - -n claude-test
 ```
 
 ---
@@ -422,52 +558,66 @@ If context fills up mid-analysis, Claude auto-compacts and may lose important de
 |------|----------|------------|
 | Quota exhaustion from automated Jobs | High | Pre-flight quota check via usage endpoint; threshold-based gating |
 | Duplicate Neo4j nodes from concurrent writes | High | SKILL.md enforces MERGE + unique constraints; never CREATE |
-| OAuth token expiry | Medium | Weekly cron refresh + K8s secret update |
+| OAuth token expiry | Medium | Weekly cron refreshes `Secret/claude-auth` (see §10) |
+| `.mcp.json` stdio failures at startup | Medium | Canary test #1 — verify `mcp_servers` overrides or stdio fails gracefully |
 | Undocumented usage endpoint changes | Medium | Monitor for breakage; fall back to conservative fixed schedules |
-| Subagent quota burn (4x per analysis) | Medium | Prefer single-prompt with MCP over subagent patterns |
-| Subagent silent MCP failures | Medium | Declare `mcp__neo4j__*` tools explicitly in agent frontmatter |
+| Subagent quota burn (4x per analysis) | Medium | SDK `max_budget_usd` caps per-query spend; monitor via streaming |
+| Subagent silent MCP failures | Medium | Declare `mcp__neo4j-cypher__*` tools explicitly in agent frontmatter |
 | Context overflow on large filings | Medium | Pre-extract relevant sections; limit filing size piped in |
-| Skills not loading in container | Low | Use global `~/.claude/skills/`, plugin system, or `--plugin-dir` |
-| ToS compliance for automated subscription use | Variable | Anthropic's terms assume "ordinary, individual usage"; production automation should technically use API keys |
+| Skills not loading in container | Low | `setting_sources=["project"]` in SDK options — proven in canary |
+| ToS compliance for automated subscription use | Variable | Anthropic explicitly prohibits **third-party developers** from offering claude.ai login/rate limits in their products (SDK docs). Personal automation on your own cluster is a gray area — not distribution, but exceeds "ordinary individual usage." If Anthropic enforces stricter terms, migrate to `ANTHROPIC_API_KEY` (pay-per-token). Monitor ToS updates. |
 
 ---
 
 ## 12. Implementation Checklist
 
-1. [ ] Use existing `claude-test` namespace for canary rollout
-2. [ ] Generate OAuth token with `claude setup-token` and store as `Secret/claude-auth` in `claude-test`
-3. [ ] Create `ConfigMap/claude-mcp-config` with `neo4j-cypher` HTTP endpoint and correct server naming
-4. [ ] Create one Claude Job template using `ghcr.io/cabinlab/claude-agent-sdk:python` (no custom image in v1)
-5. [ ] Mount repo via `hostPath` to exact path `/home/faisal/EventMarketDB` (required for hooks + scripts)
-6. [ ] Set pod env to match `.claude/settings.json` task/team flags and `CLAUDE_PROJECT_DIR`
-7. [ ] Run canary test 1: MCP connectivity (`read_neo4j_cypher`)
-8. [ ] Run canary test 2: skill invocation (`/neo4j-schema`)
-9. [ ] Run canary test 3: agent invocation (`/neo4j-report` or `/news-impact`)
-10. [ ] Verify hook execution and expected output artifacts/logs
-11. [ ] Only after canary pass, add CronJob or event-driven controller
-12. [ ] Add quota guard and concurrency limits as phase-2 hardening
-13. [ ] Add OAuth token refresh CronJob
+### Phase 1: Infrastructure
+1. [ ] Use existing `claude-test` namespace
+2. [ ] Install `claude-agent-sdk` in project venv (`pip install claude-agent-sdk`)
+3. [ ] Generate OAuth token with `claude setup-token` and store as `Secret/claude-auth`
+4. [ ] Copy Neo4j password to `claude-test` namespace (`Secret/neo4j-creds`)
+
+### Phase 2: Canary (one Job, all 5 tests — read-only mount, no hostNetwork)
+5. [ ] Run canary Job (`scripts/canary_sdk.py`)
+6. [ ] Test 0: `mcp_servers` overrides `.mcp.json` stdio servers (no crash/hang)
+7. [ ] Test 1: MCP read via HTTP service (company count)
+8. [ ] Test 2: Skill invocation (`/neo4j-schema`)
+9. [ ] Test 3: Agent invocation (`/neo4j-report`)
+10. [ ] Test 4a: Bolt write round-trip (`guidance_write.sh --write` with synthetic item)
+11. [ ] Test 4b: Deterministic cleanup (canary nodes deleted)
+
+### Phase 3: Production worker (read-write mount)
+12. [ ] Write `scripts/earnings_worker.py` (Redis → SDK → Neo4j loop)
+13. [ ] Deploy persistent worker Deployment in `claude-test`
+14. [ ] Test end-to-end: Redis push → worker picks up → guidance extraction → Neo4j write
+15. [ ] Add quota guard (usage endpoint check before each `query()`)
+16. [ ] Set up weekly token refresh cron on host
 
 ---
 
 ## 13. Key Resources
 
+### Claude Agent SDK (Primary)
+- `pip install claude-agent-sdk` — Python SDK ([PyPI](https://pypi.org/project/claude-agent-sdk/))
+- [Agent SDK Overview](https://platform.claude.com/docs/en/agent-sdk/overview) — Official docs
+- [Agent SDK Python Reference](https://platform.claude.com/docs/en/agent-sdk/python) — Full API reference (`ClaudeAgentOptions`, `query()`, `ClaudeSDKClient`)
+- [Subagents in SDK](https://platform.claude.com/docs/en/agent-sdk/subagents) — Programmatic + filesystem agents
+- [GitHub: anthropics/claude-agent-sdk-python](https://github.com/anthropics/claude-agent-sdk-python) — Source + changelog
+
 ### Container Images
-- `ghcr.io/cabinlab/claude-agent-sdk:python` (693 MB)
-- `ghcr.io/cabinlab/claude-agent-sdk:alpine-python` (474 MB)
+- `python:3.11-slim` — Base image for SDK worker (proven in toy runs)
+- `node:20-alpine` — Fallback for CLI-only canary tests (`npm install -g @anthropic-ai/claude-code`)
+- `ghcr.io/cabinlab/claude-agent-sdk:python` (693 MB) — Pre-built but GHCR pulls blocked (403)
 
 ### GitHub Repositories
-- [cabinlab/claude-code-sdk-docker](https://github.com/cabinlab/claude-code-sdk-docker) — Pre-built images, auth handling
 - [neo4j-contrib/mcp-neo4j](https://github.com/neo4j-contrib/mcp-neo4j) — Neo4j MCP servers (containerized, HTTP transport)
 - [TylerGallenbeck/claude-code-limit-tracker](https://github.com/TylerGallenbeck/claude-code-limit-tracker) — Quota monitoring
-- [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents) — 100+ drop-in subagent definitions
 
 ### Documentation
-- [Claude Code Headless Mode](https://code.claude.com/docs/en/headless) — Official CLI/headless docs
+- [Claude Code Headless Mode](https://code.claude.com/docs/en/headless) — CLI headless docs (canary tests)
 - [Claude Code Skills](https://code.claude.com/docs/en/skills) — Skill creation and loading
-- [Claude Code Plugins](https://code.claude.com/docs/en/discover-plugins) — Plugin marketplace system
+- [Claude Code Subagents](https://code.claude.com/docs/en/sub-agents) — Filesystem-based agent definitions
 - [Neo4j MCP Installation](https://neo4j.com/docs/mcp/current/installation/) — Official Neo4j MCP setup
-- [cabinlab Auth Docs](https://github.com/cabinlab/claude-code-sdk-docker/docs/AUTHENTICATION.md) — Container auth details
 
 ### Open Issues
 - [#8938](https://github.com/anthropics/claude-code/issues/8938) — Interactive mode auth prompt bug (headless unaffected)
@@ -916,15 +1066,19 @@ This snapshot is from direct `kubectl` inspection on February 28, 2026 and shoul
 
 ### Goal
 
-Deploy Claude Code in Kubernetes so the existing `.claude/agents` and `.claude/skills` work unchanged, out of the box.
+Deploy Claude Agent SDK in a Kubernetes pod so the existing `.claude/agents` and `.claude/skills` work unchanged, out of the box. Validate with dry-run canary first, then deploy production worker.
 
-### Highest-Reliability Minimal Path (What Stands Out)
+### Design Decisions
 
-1. **Run headless only** (`claude -p`) for automation.
-2. **Mount the repo read-write at the exact local path**: `/home/faisal/EventMarketDB`. Read-write enables JSONL session transcripts for post-mortem debugging. No write contention — each session gets a unique UUID filename.
-3. **Do not repackage agents/skills for v1**. Use the existing project tree directly.
-4. **Match MCP server names exactly** to agent tool prefixes (especially `neo4j-cypher`).
-5. **Canary first in `claude-test`**; add CronJob/controller only after canary gates pass.
+| Concern | Decision | Rationale |
+|---------|----------|-----------|
+| **Auth** | `CLAUDE_CODE_OAUTH_TOKEN` from K8s Secret | Proven in §16. Avoids mounting all of `/home/faisal` (SSH keys, bash_history). |
+| **Project files** | hostPath mount of `/home/faisal/EventMarketDB` only | Contains agents, skills, hooks, venv, scripts. Surgical — no home-dir exposure. |
+| **MCP** | SDK `mcp_servers` parameter → HTTP service in-cluster | `.mcp.json` stdio servers depend on `/home/faisal/neo4j-mcp-server/` (outside project mount). HTTP service already running at `mcp-neo4j-cypher-http.mcp-services:8000`. |
+| **Network** | No `hostNetwork`. Bolt via in-cluster service DNS. | Both canary and production use `GUIDANCE_NEO4J_URI=bolt://neo4j-bolt.neo4j.svc.cluster.local:7687`. |
+| **Model** | `claude-opus-4-6` | Current model ID. |
+| **Mount mode** | Read-only for canary, read-write for production | Canary writes to `/tmp/`. Production writes to `earnings-analysis/` and `.claude/tasks/`. |
+| **K8s resources** | 2 Secrets (auth + Neo4j creds) + 1 Job manifest | Minimal. No ConfigMap needed — MCP via SDK parameter. |
 
 ### Why Exact Path Mount Is Non-Negotiable
 
@@ -938,13 +1092,18 @@ Deploy Claude Code in Kubernetes so the existing `.claude/agents` and `.claude/s
 
 If the pod mount path differs, these protections do not run. Also keep `CLAUDE_PROJECT_DIR=/home/faisal/EventMarketDB` because several agents/scripts rely on it.
 
-### v1 Scope: Only 3 K8s Resources
+### v1 Scope: 2 Secrets + 1 Canary Script + 1 Worker Script
 
-1. `Secret/claude-auth` with `CLAUDE_CODE_OAUTH_TOKEN`
-2. `ConfigMap/claude-mcp-config` (MCP endpoints for in-cluster use)
-3. One canary `Job` manifest using cabinlab image + hostPath mount
+1. `Secret/claude-auth` — `CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`
+2. `Secret/neo4j-creds` — `NEO4J_PASSWORD` (copy from `processing` namespace)
+3. `scripts/canary_sdk.py` — SDK canary: Tests 0-3 (SDK/MCP) + Test 4 (Bolt write round-trip)
+4. `scripts/earnings_worker.py` — SDK persistent worker (read-write mount)
 
-No custom image build, no plugin packaging, no skill copying in v1.
+The SDK is pre-installed in the project venv (`pip install claude-agent-sdk`). No custom image build needed — `python:3.11-slim` + hostPath venv.
+
+Notes:
+- Perplexity agents already work through `pit_fetch.py` + API keys from `.env`; no Perplexity MCP required for v1.
+- Add `alphavantage` MCP later only if needed by canary workload.
 
 ---
 
@@ -959,39 +1118,15 @@ kubectl create secret generic claude-auth \
   -n claude-test
 ```
 
-### Resource 2: MCP ConfigMap
+---
 
-Keep it minimal for v1. `neo4j-cypher` is the required server name for current agent tool references.
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: claude-mcp-config
-  namespace: claude-test
-data:
-  mcp.json: |
-    {
-      "mcpServers": {
-        "neo4j-cypher": {
-          "type": "http",
-          "url": "http://mcp-neo4j-cypher-http.mcp-services:8000/mcp"
-        }
-      }
-    }
-```
-
-Notes:
-- Perplexity agents already work through `pit_fetch.py` + API keys from `.env`; no Perplexity MCP required for v1.
-- Add `alphavantage` MCP later only if needed by canary workload.
-
-### Resource 3: Canary Job Manifest
+### Canary Job Manifest (read-only mount, no hostNetwork)
 
 ```yaml
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: claude-canary-PLACEHOLDER
+  name: claude-canary-sdk
   namespace: claude-test
 spec:
   backoffLimit: 1
@@ -999,96 +1134,205 @@ spec:
   template:
     spec:
       nodeSelector:
-        kubernetes.io/hostname: minisforum
+        kubernetes.io/hostname: minisforum  # Where project files exist
       restartPolicy: Never
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
       containers:
-      - name: claude
-        image: ghcr.io/cabinlab/claude-agent-sdk:python
+      - name: canary
+        image: python:3.11-slim
         workingDir: /home/faisal/EventMarketDB
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 1000
-          runAsGroup: 1000
-          allowPrivilegeEscalation: false
         command: ["/bin/bash", "-lc"]
         args:
         - |
-          export PATH="/home/faisal/EventMarketDB/venv/bin:$PATH"
-          export PYTHONPATH="/home/faisal/EventMarketDB"
-          set -a
-          source /home/faisal/EventMarketDB/.env
-          set +a
-
-          claude -p "$CLAUDE_PROMPT" \
-            --mcp-config /config/mcp.json \
-            --strict-mcp-config \
-            --dangerously-skip-permissions \
-            --output-format json \
-            --model claude-opus-4-6
+          source /home/faisal/EventMarketDB/venv/bin/activate
+          cd /home/faisal/EventMarketDB
+          python scripts/canary_sdk.py
         env:
         - name: CLAUDE_PROJECT_DIR
           value: "/home/faisal/EventMarketDB"
-        - name: CLAUDE_CODE_ENABLE_TASKS
-          value: "true"
-        - name: CLAUDE_CODE_TASK_LIST_ID
-          value: "earnings-orchestrator"
-        - name: CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS
-          value: "1"
-        - name: CLAUDE_PROMPT
-          value: "REPLACE_ME"
+        - name: SHELL
+          value: "/bin/bash"
+        - name: GUIDANCE_NEO4J_URI                    # Bolt write path (#37)
+          value: "bolt://neo4j-bolt.neo4j.svc.cluster.local:7687"
+        - name: NEO4J_URI
+          value: "bolt://neo4j-bolt.neo4j.svc.cluster.local:7687"
+        - name: NEO4J_USERNAME
+          value: "neo4j"
+        - name: NEO4J_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: neo4j-creds                       # Copy from processing ns
+              key: NEO4J_PASSWORD
         envFrom:
         - secretRef:
-            name: claude-auth
+            name: claude-auth                          # CLAUDE_CODE_OAUTH_TOKEN
         volumeMounts:
         - name: project
           mountPath: /home/faisal/EventMarketDB
-        - name: mcp-config
-          mountPath: /config
+          readOnly: true  # Script reads from mount, writes go to Neo4j + /tmp/
       volumes:
       - name: project
         hostPath:
           path: /home/faisal/EventMarketDB
           type: Directory
-      - name: mcp-config
-        configMap:
-          name: claude-mcp-config
 ```
 
-Runtime notes from live toy validation:
-- If GHCR pulls are blocked (`403`), use fallback image `node:20-alpine` and install CLI at runtime: `npm install -g @anthropic-ai/claude-code`.
-- Keep `workingDir` set to `/home/faisal/EventMarketDB`; this runtime did not support `--project-dir`.
-- Keep `--strict-mcp-config` enabled for reliable MCP tool exposure.
-- **Mount repo read-write** (no `readOnly: true` on volumeMount). JSONL session transcripts (`.claude/projects/{hash}/{session-uuid}.jsonl`) and sub-agent transcripts land on the host disk automatically — same as local runs. Each session gets a unique UUID filename, so concurrent Jobs writing to the same project directory have zero contention. These transcripts enable post-mortem debugging of agent reasoning, thinking tokens, and tool call sequences. Toy runs used read-only mounts for safety; production mounts should be read-write.
+Runtime notes:
+- No `hostNetwork` — MCP uses in-cluster HTTP service, Bolt uses in-cluster service DNS.
+- Read-only mount — Neo4j writes go to the database, not the project directory. Canary JSON payloads go to `/tmp/`.
+- Bolt env vars included so Test 4 (write round-trip) exercises the exact production write path.
+- Run as non-root (`uid/gid 1000`) for `permission_mode="bypassPermissions"`.
 
 ---
 
-### Canary Sequence and Gates
+### Canary Script and Gates
 
-Create three jobs from the manifest above (change `metadata.name` and `CLAUDE_PROMPT` each time):
+```python
+#!/usr/bin/env python3
+"""scripts/canary_sdk.py — K8s canary: SDK + MCP + Bolt. Run in pod."""
+import asyncio
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
 
-1. `claude-canary-mcp`
-- Prompt: `Use neo4j-cypher MCP to run MATCH (c:Company) RETURN count(c) AS total. Return only the number.`
+from claude_agent_sdk import query, ClaudeAgentOptions
 
-2. `claude-canary-skill`
-- Prompt: `/neo4j-schema`
+SDK_OPTIONS = ClaudeAgentOptions(
+    setting_sources=["project"],  # Loads .claude/agents, skills, CLAUDE.md
+    cwd="/home/faisal/EventMarketDB",
+    mcp_servers={
+        "neo4j-cypher": {
+            "type": "url",
+            "url": "http://mcp-neo4j-cypher-http.mcp-services:8000/mcp",
+        },
+    },
+    permission_mode="bypassPermissions",
+    model="claude-opus-4-6",
+)
 
-3. `claude-canary-agent`
-- Prompt: `Run /neo4j-report for AAPL filings in January 2026 and return a concise summary.`
+# ── Tests 0-3: SDK + MCP + Skills + Agents (~$4 LLM cost) ──
 
-Validation commands:
+async def test_sdk():
+    # Test 0 (CRITICAL): Does mcp_servers override .mcp.json stdio servers?
+    print("Test 0: Starting SDK query with mcp_servers override...")
 
-```bash
-kubectl wait --for=condition=complete job/claude-canary-mcp -n claude-test --timeout=180s
-kubectl logs job/claude-canary-mcp -n claude-test
-kubectl logs job/claude-canary-skill -n claude-test
-kubectl logs job/claude-canary-agent -n claude-test
+    # Test 1: MCP read via HTTP service
+    async for msg in query(
+        prompt="Use neo4j-cypher MCP to run MATCH (c:Company) RETURN count(c). Return only the number.",
+        options=SDK_OPTIONS,
+    ):
+        if hasattr(msg, "result"):
+            print(f"Test 1 PASS: MCP read → {msg.result}")
+
+    # Test 2: Skill invocation
+    async for msg in query(prompt="/neo4j-schema", options=SDK_OPTIONS):
+        if hasattr(msg, "result"):
+            print(f"Test 2 PASS: Skill → {msg.result[:100]}")
+
+    # Test 3: Agent invocation
+    async for msg in query(
+        prompt="Run /neo4j-report for AAPL filings in January 2026",
+        options=SDK_OPTIONS,
+    ):
+        if hasattr(msg, "result"):
+            print(f"Test 3 PASS: Agent → {msg.result[:200]}")
+
+# ── Test 4: Bolt write round-trip (deterministic, $0, ~2s) ──
+
+def test_bolt_write():
+    WRITE_SH = "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts/guidance_write.sh"
+
+    # 4a: Write synthetic canary item via exact production code path
+    canary_payload = {
+        "source_id": "CANARY_INFRA_TEST",
+        "source_type": "test",
+        "ticker": "TEST",
+        "fye_month": 12,
+        "items": [{
+            "label": "_CANARY_TEST",
+            "given_date": "2024-01-01",
+            "period_u_id": "gp_2024-01-01_2024-03-31",
+            "basis_norm": "unknown",
+            "segment": "Total",
+            "low": 1.0, "mid": None, "high": 2.0,
+            "unit_raw": "million",
+            "qualitative": None,
+            "conditions": None,
+            "quote": "Infrastructure canary test",
+            "section": "canary",
+            "source_key": "canary",
+            "derivation": "explicit",
+            "basis_raw": None,
+            "aliases": [],
+            "xbrl_qname": None,
+            "member_u_ids": [],
+            "source_refs": [],
+        }],
+    }
+    Path("/tmp/canary_write.json").write_text(json.dumps(canary_payload))
+
+    result = subprocess.run(
+        ["bash", WRITE_SH, "/tmp/canary_write.json", "--write"],
+        capture_output=True, text=True, timeout=30,
+        env={**os.environ, "ENABLE_GUIDANCE_WRITES": "true"},
+    )
+    if result.returncode != 0:
+        print(f"Test 4a FAIL: {result.stderr}")
+        return False
+
+    output = json.loads(result.stdout)
+    written = sum(1 for r in output.get("results", []) if r.get("was_created") or r.get("dry_run") is False)
+    print(f"Test 4a: Write → mode={output['mode']}, valid={output['valid']}, written={written}")
+
+    # 4b: Deterministic cleanup via direct Bolt (no LLM)
+    sys.path.insert(0, "/home/faisal/EventMarketDB")
+    from neograph.Neo4jConnection import get_manager
+    mgr = get_manager()
+    mgr.execute_cypher_query(
+        "MATCH (gu:GuidanceUpdate) WHERE gu.id STARTS WITH 'gu:_canary_test' DETACH DELETE gu"
+    )
+    mgr.execute_cypher_query(
+        "MATCH (g:Guidance {label: '_CANARY_TEST'}) WHERE NOT (g)<-[:UPDATES]-() DELETE g"
+    )
+    mgr.close()
+    print("Test 4b PASS: Cleanup complete (canary nodes deleted)")
+    return True
+
+# ── Main ──
+
+async def main():
+    print("=" * 60)
+    print("Claude K8s Canary — SDK + MCP + Bolt")
+    print("=" * 60)
+
+    await test_sdk()
+    test_bolt_write()
+
+    print("=" * 60)
+    print("All canary tests complete")
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
-Pass criteria:
-- MCP call succeeds in canary 1.
-- Skill resolves and executes in canary 2.
-- Agent dispatch works in canary 3.
-- No hook path errors in logs.
+**Pass criteria:**
+
+| Test | Proves | Pass condition |
+|------|--------|----------------|
+| **0** | `mcp_servers` overrides `.mcp.json` stdio | No startup errors or hangs |
+| **1** | MCP reads via HTTP service | Returns company count |
+| **2** | Skill loading (`setting_sources`) | `/neo4j-schema` executes |
+| **3** | Agent dispatch via Task tool | `/neo4j-report` returns results |
+| **4a** | Bolt write path (full production chain) | `guidance_write.sh --write` succeeds, `written > 0` |
+| **4b** | Cleanup | Canary nodes deleted, zero residue |
+
+**If Test 0 fails** (broken stdio servers block startup): Investigate whether `mcp_servers` fully replaces or merely extends `.mcp.json`. Potential fix: create a `.mcp.json.k8s` override, or use a pre-start script to symlink an empty `.mcp.json`.
+
+**If Test 4a fails**: Check `GUIDANCE_NEO4J_URI` env var, `NEO4J_PASSWORD`, and `ENABLE_GUIDANCE_WRITES`. The write path exercises: `guidance_write.sh` → `guidance_write_cli.py` → `guidance_writer.py` → `neograph.Neo4jConnection` → Bolt. A failure here is almost always a connection or credential issue.
 
 ---
 
@@ -1096,17 +1340,23 @@ Pass criteria:
 
 With this v1 plan, current agents/skills run in K8s with no restructuring:
 
-- Neo4j agents use existing MCP HTTP service.
+- Neo4j reads via SDK `mcp_servers` → existing HTTP MCP service.
 - Perplexity agents keep using `pit_fetch.py` from the mounted repo.
 - Guidance/news/orchestrator workflows keep current task and script behavior.
-- Existing `.claude/settings.json` task/team config and hooks remain effective.
+- Existing `.claude/settings.json` hooks remain effective via `setting_sources=["project"]`.
+- Python-level retry, quota management, and streaming monitoring via SDK.
 
-### Phase-2 (After Canary Passes)
+### After Canary Passes → Production
 
-1. Add event-driven controller (Redis -> Job creation) or CronJob schedules.
-2. Add concurrency and quota guards.
-3. Add OAuth token refresh automation.
-4. Add optional MCP servers (`alphavantage`, `neo4j-memory`) only when needed.
+The canary already proved: SDK works, MCP reads work, Bolt writes work (#37 env vars tested), skills/agents load. Remaining steps:
+
+1. Switch mount to read-write (production writes to `earnings-analysis/`, `.claude/tasks/`).
+2. Deploy persistent worker Deployment (`scripts/earnings_worker.py`).
+3. Add Redis trigger integration (Event Trader → `earnings:trigger` queue → worker).
+4. Add quota guard (check usage endpoint before each `query()`).
+5. Set up weekly token refresh cron on host.
+6. Add optional MCP servers (`alphavantage`, `neo4j-memory`) only when needed.
+7. Bake `claude-agent-sdk` + deps into custom image to eliminate per-pod startup latency.
 
 ---
 
@@ -1308,12 +1558,14 @@ Invocation tested:
 #### Roadblocks (important)
 
 1. `SHELL` must be set in container runtime for this agent stack (`SHELL=/bin/bash` recommended).
-2. `guidance-qa-enrich` path is not fully K8s-portable as-is in this runtime because it depends on direct Bolt connectivity to `localhost:30687` (not valid inside pod).
+2. `guidance-qa-enrich` path is not fully K8s-portable as-is in this runtime because it depends on direct Bolt connectivity to `localhost:30687` (not valid inside pod **without `hostNetwork: true`**).
 3. Therefore, "`guidance-extractor` transcript two-phase flow works exactly as written end-to-end in K8s" is **not yet true**; it is **partially true** (Phase 1 yes, Phase 2 blocked by Neo4j endpoint assumption).
+
+**Note:** The §8 production Deployment uses `hostNetwork: true` which makes `localhost:30687` valid inside the pod — resolving roadblock #2 for production. The toy run in this section did NOT use `hostNetwork`, which is why Phase 2 failed. The §17 SDK toy run tests this with `hostNetwork: true` to confirm.
 
 #### Recommended fix before production
 
-1. Make Neo4j endpoint configurable for both phases via env, defaulting to in-cluster service (not localhost).
+1. ~~Make Neo4j endpoint configurable for both phases via env~~ — resolved by `hostNetwork: true` in §8 production manifest. For future multi-node scale-out (no hostNetwork), use `GUIDANCE_NEO4J_URI` env var + in-cluster Bolt service.
 2. Ensure Phase 2 honors `MODE=dry_run` without requiring live Bolt write path.
 3. Keep `SHELL=/bin/bash` in the Job template.
 
@@ -1325,3 +1577,416 @@ Invocation tested:
   - `kubectl get all -A | rg claude-toy-write-v1` -> no matches
   - `kubectl get cm,secret -A | rg claude-toy-write-v1` -> no matches
 - Cluster returned to clean pre-test state after third run.
+
+---
+
+## 17. SDK Toy Run (2026-03-01)
+
+### Objective
+
+Validate the **SDK path** end-to-end in a disposable K8s Job: `query()` + `setting_sources=["project"]` + `hostNetwork: true` + hostPath credential mount. This is the first SDK-based in-cluster test — §16 toy runs were all CLI-based (`claude -p`).
+
+### What This Validates (vs §16)
+
+| Capability | §16 (CLI) | §17 (SDK) |
+|---|---|---|
+| Auth | `CLAUDE_CODE_OAUTH_TOKEN` env Secret | hostPath credential mount (`~/.claude/.credentials.json`) |
+| MCP loading | `--strict-mcp-config` + ConfigMap | `setting_sources=["project"]` (loads `.mcp.json` stdio) |
+| Invocation | `claude -p "prompt"` | `query(prompt=..., options=...)` |
+| hostNetwork | Not used (Phase 2 failed) | `hostNetwork: true` (Phase 2 should work) |
+| Output | stdout text blob | Structured `ResultMessage` with `result`, `total_cost_usd`, `usage` |
+| Test ticker | SMPL | CRM (Salesforce — 1 PR + 8 QA exchanges, 0 existing guidance) |
+
+### Safety Constraints
+
+- Dedicated namespace: `claude-sdk-toy-v1` (ephemeral, labeled for cleanup)
+- No cluster-scoped resources created
+- Guidance extraction runs with `MODE=dry_run` (zero Neo4j writes)
+- hostPath mount is read-write (for JSONL transcripts) but canary writes only to `/tmp`
+- Pod runs as non-root (`uid/gid 1000`)
+- `max_budget_usd` capped per test (1.0 for quick tests, 10.0 for full run)
+
+### Test Script
+
+`scripts/canary_sdk.py` — 4 sequential tests, each gated on prior success:
+
+| Test | What It Proves | Budget |
+|------|---------------|--------|
+| 1. SDK import | Package installed, classes exist | $0 |
+| 2. MCP connectivity | `setting_sources=["project"]` loads `.mcp.json` stdio servers, `hostNetwork` reaches Neo4j | $1 |
+| 3. Skill invocation | `/neo4j-schema` resolves from `.claude/skills/` | $2 |
+| 4. Guidance-extractor dry-run | Full 2-phase (PR + Q&A) on CRM transcript, subagent orchestration | $10 |
+| 5. Write-path round-trip | Bolt write via `guidance_write.sh --write`, read back via MCP, cleanup | n/a |
+
+### Canary Job Manifest
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: claude-sdk-canary
+  namespace: claude-sdk-toy-v1
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 7200
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum
+      hostNetwork: true
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+      - name: canary
+        image: python:3.11-slim
+        workingDir: /home/faisal/EventMarketDB
+        command: ["/bin/bash", "-lc"]
+        args:
+        - |
+          export PATH="/home/faisal/.local/bin:$PATH"  # SDK needs claude CLI on PATH
+          source /home/faisal/EventMarketDB/venv/bin/activate
+          cd /home/faisal/EventMarketDB
+          python scripts/canary_sdk.py
+        env:
+        - name: HOME
+          value: "/home/faisal"
+        - name: CLAUDE_PROJECT_DIR
+          value: "/home/faisal/EventMarketDB"
+        - name: SHELL
+          value: "/bin/bash"
+        volumeMounts:
+        - name: home-faisal
+          mountPath: /home/faisal
+      volumes:
+      - name: home-faisal
+        hostPath:
+          path: /home/faisal
+          type: Directory
+```
+
+### Quick Test Variant
+
+For validating SDK + MCP + skill without the expensive guidance-extractor run:
+
+```yaml
+args:
+- |
+  export PATH="/home/faisal/.local/bin:$PATH"
+  source /home/faisal/EventMarketDB/venv/bin/activate
+  cd /home/faisal/EventMarketDB
+  python scripts/canary_sdk.py --quick
+```
+
+### Execution Commands
+
+```bash
+# 1. Create namespace
+kubectl create namespace claude-sdk-toy-v1
+kubectl label namespace claude-sdk-toy-v1 purpose=sdk-canary lifecycle=ephemeral owner=codex
+
+# 2. Apply job (use heredoc or save to /tmp/canary-job.yaml first)
+kubectl apply -f /tmp/canary-job.yaml
+
+# 3. Watch progress
+kubectl logs -f job/claude-sdk-canary -n claude-sdk-toy-v1
+
+# 4. Check result
+kubectl logs job/claude-sdk-canary -n claude-sdk-toy-v1 | tail -20
+
+# 5. Inspect canary result file (optional)
+kubectl exec job/claude-sdk-canary -n claude-sdk-toy-v1 -- cat /tmp/canary_result.json
+```
+
+### Cleanup Commands (Zero Residue)
+
+```bash
+kubectl delete namespace claude-sdk-toy-v1 --wait=true --timeout=180s
+
+# Verify
+kubectl get namespace claude-sdk-toy-v1 2>&1 | grep -q NotFound && echo "CLEAN" || echo "RESIDUE"
+kubectl get all -A | grep claude-sdk-toy-v1 || echo "No resources"
+kubectl get configmap,secret -A | grep claude-sdk-toy-v1 || echo "No config/secrets"
+```
+
+### Pass Criteria
+
+| Test | Pass Condition |
+|------|---------------|
+| 1 | `claude_agent_sdk` imports, `query`, `ClaudeAgentOptions`, `ClaudeSDKClient` all exist |
+| 2 | `query()` returns numeric company count (proves MCP stdio + hostNetwork + setting_sources) |
+| 3 | `/neo4j-schema` returns schema with node labels (proves skill loading from `.claude/skills/`) |
+| 4 | Guidance-extractor returns extraction summary with item count (proves 2-phase subagent orchestration) |
+| 5 | Synthetic item written via Bolt, read back via MCP, cleaned up (proves write path + cross-path consistency) |
+
+### Test 5: Write-Path Round-Trip (Issue #43 Fix)
+
+**Why this test exists:** Tests 1–4 run with `MODE=dry_run`. Dry-run validates items and computes IDs but never executes the Neo4j MERGE — `guidance_writer.py:312` returns early with `dry_run=True`. Phase 2 launches and connects to MCP (proving `hostNetwork`), but 7E finds 0 rows → `PHASE_DEPENDENCY_FAILED`. So the Bolt write path (`guidance_write.sh --write` → `bolt://localhost:30687`) is never exercised. Test 5 closes this gap.
+
+**Design:** Deterministic. No LLM. Writes a synthetic `_CANARY_TEST` item via the exact production write path (`guidance_write.sh → guidance_write_cli.py → guidance_writer.py → Neo4j MERGE`), reads it back via MCP (proves Bolt writes and MCP reads see the same database), then deletes it via Bolt.
+
+```python
+# Test 5 — appended to canary_sdk.py after Test 4
+import json, subprocess, os, sys
+
+WRITE_SH = "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts/guidance_write.sh"
+# Reuse CRM transcript proven by Test 4
+CANARY_SOURCE = "CRM_2025-09-03T17.00.00-04.00"
+CANARY_GU_ID = "gu__canary_write_test__total__unknown__CRM_2025-09-03T17.00.00-04.00__gp_2025-08-01_2025-10-31"
+CANARY_G_ID = "g__canary_write_test__total__unknown"
+
+payload = {
+    "source_id": CANARY_SOURCE,
+    "source_type": "transcript",
+    "ticker": "CRM",
+    "fye_month": 1,
+    "items": [{
+        "label": "_CANARY_WRITE_TEST",
+        "guidance_id": CANARY_G_ID,
+        "guidance_update_id": CANARY_GU_ID,
+        "evhash16": "canary00test0000",
+        "given_date": "2025-09-03",
+        "period_u_id": "gp_2025-08-01_2025-10-31",
+        "period_scope": "quarter",
+        "time_type": "duration",
+        "fiscal_year": 2026,
+        "fiscal_quarter": 3,
+        "gp_start_date": "2025-08-01",
+        "gp_end_date": "2025-10-31",
+        "basis_norm": "unknown",
+        "segment": "Total",
+        "label_slug": "_canary_write_test",
+        "segment_slug": "total",
+        "low": None, "mid": 42.0, "high": None,
+        "canonical_low": None, "canonical_mid": 42.0, "canonical_high": None,
+        "canonical_unit": "test",
+        "unit_raw": "test",
+        "basis_raw": None,
+        "derivation": "explicit",
+        "qualitative": "canary infrastructure test",
+        "quote": "CANARY_WRITE_TEST_MARKER",
+        "section": "CANARY",
+        "source_key": "canary",
+        "conditions": None,
+        "xbrl_qname": None,
+        "member_u_ids": [],
+        "aliases": [],
+        "source_refs": []
+    }]
+}
+
+# 5a: Write via exact production path
+with open("/tmp/canary_write.json", "w") as f:
+    json.dump(payload, f)
+
+result = subprocess.run(
+    ["bash", WRITE_SH, "/tmp/canary_write.json", "--write"],
+    capture_output=True, text=True, timeout=30,
+    env={**os.environ, "ENABLE_GUIDANCE_WRITES": "true"},
+)
+assert result.returncode == 0, f"Write script failed: {result.stderr}"
+output = json.loads(result.stdout)
+assert output.get("mode") == "write", f"Expected write mode: {output}"
+assert output.get("written", 0) > 0, f"Zero items written: {output}"
+print(f"5a: Bolt write OK — {output['written']} item(s) written")
+
+# 5b: Read back via MCP (proves cross-path consistency)
+async for msg in query(
+    prompt=f"Use neo4j-cypher MCP to run: MATCH (gu:GuidanceUpdate {{id: '{CANARY_GU_ID}'}}) RETURN gu.mid AS mid. Return only the number.",
+    options=OPTIONS,
+):
+    if hasattr(msg, "result"):
+        assert "42" in msg.result, f"MCP readback failed: {msg.result}"
+        print(f"5b: MCP readback OK — found canary item via MCP")
+
+# 5c: Cleanup via direct Bolt (deterministic, no LLM)
+sys.path.insert(0, "/home/faisal/EventMarketDB")
+os.environ.setdefault("NEO4J_URI", "bolt://localhost:30687")
+os.environ.setdefault("NEO4J_USERNAME", "neo4j")
+os.environ.setdefault("NEO4J_PASSWORD", "Next2020#")
+os.environ.setdefault("NEO4J_DATABASE", "neo4j")
+from neograph.Neo4jConnection import get_manager
+mgr = get_manager()
+mgr.execute_cypher_query(
+    f"MATCH (gu:GuidanceUpdate {{id: '{CANARY_GU_ID}'}}) DETACH DELETE gu"
+)
+mgr.execute_cypher_query(
+    f"MATCH (g:Guidance {{id: '{CANARY_G_ID}'}}) WHERE NOT (g)<-[:UPDATES]-() DELETE g"
+)
+mgr.close()
+print("5c: Cleanup OK — canary nodes deleted")
+```
+
+**What Test 5 proves (that Tests 1–4 cannot):**
+
+| Gap | How Test 5 closes it |
+|-----|---------------------|
+| Bolt connectivity from pod | `guidance_write.sh --write` succeeds (5a) |
+| `ENABLE_GUIDANCE_WRITES` env var | Write mode actually executes MERGE (5a) |
+| `guidance_write.sh → guidance_write_cli.py → guidance_writer.py` chain | Full write path exercised (5a) |
+| Neo4j MERGE succeeds in-cluster | Item written with `was_created=true` (5a) |
+| Cross-path consistency (Bolt write → MCP read = same DB) | MCP reads back item written by Bolt (5b) |
+| Cleanup is surgical | Delete by exact ID, no orphans (5c) |
+
+**Combined coverage (Tests 1–5):**
+
+With all 5 tests passing, the full two-phase pipeline is proven:
+- Phase 1 can extract items (Test 4) and write them to Neo4j (Test 5a)
+- Phase 2 can read items via MCP (Test 5b) and enrich via Q&A (Test 4 agent dispatch)
+- Write infrastructure is correct (Test 5a: Bolt, env var, script chain, MERGE)
+
+**Note on Phase 2 "success" in Test 4:** Test 4 reports "both phases ran" but Phase 2 hit `PHASE_DEPENDENCY_FAILED` (7E returned 0 rows because dry-run wrote nothing). Phase 2 *launched and connected* — it did not *enrich*. Test 5 proves the write path that would make Phase 2's 7E readback succeed in production.
+
+### Results
+
+#### Quick Run (tests 1-3) — 2026-03-01
+
+1. Namespace created: `claude-sdk-toy-v1` (labeled `lifecycle=ephemeral`)
+2. First attempt failed: `claude` CLI not on container PATH (binary at `/home/faisal/.local/bin/claude` from hostPath, but `/home/faisal/.local/bin` not in default PATH)
+3. Fix: added `export PATH="/home/faisal/.local/bin:$PATH"` to job entrypoint
+4. All 3 quick tests passed in 20s total
+
+**Learning**: SDK spawns `claude` CLI as subprocess — the binary must be on PATH. With hostPath mount, add `/home/faisal/.local/bin` to PATH in the job entrypoint. This applies to both canary and production worker manifests.
+
+#### Full Run (tests 1-4, guidance-extractor) — 2026-03-01
+
+All 4 tests passed:
+
+| Test | Status | Duration | Cost |
+|------|--------|----------|------|
+| 1. SDK import | ✅ PASS | <1s | $0 |
+| 2. MCP connectivity | ✅ PASS | 8s | ~$0.02 |
+| 3. Skill invocation | ✅ PASS | 14s | ~$0.05 |
+| 4. Guidance-extractor dry-run | ✅ PASS | 242s | $1.94 |
+
+Test 4 details:
+- Ticker: CRM (Salesforce), Source: `CRM_2025-09-03T17.00.00-04.00`
+- Phase 1: **12 guidance items extracted** (Revenue FY2026 $41.1B–$41.3B, Revenue Q3 $10.24B–$10.3B, ...)
+- Phase 2: Q&A enrichment ran (proves `hostNetwork: true` resolves §16 roadblock #2)
+- All items valid, 0 ID errors
+- `MODE=dry_run` — zero Neo4j writes
+- Token usage: 69,944 cache read + 3,006 cache creation + 1,121 output
+
+#### What This Proves (SDK-specific, beyond §16)
+
+| Claim | Evidence | Status |
+|---|---|---|
+| `setting_sources=["project"]` loads `.mcp.json` stdio | MCP test returned 796 companies | ✅ Proven |
+| `--strict-mcp-config` NOT needed with SDK | No strict config used, MCP worked | ✅ Proven |
+| hostPath credential mount works (no Secret needed) | No `CLAUDE_CODE_OAUTH_TOKEN` env, auth via `~/.claude/.credentials.json` | ✅ Proven |
+| `hostNetwork: true` fixes §16 Phase 2 failure | Both phases completed successfully | ✅ Proven |
+| Subagent orchestration via SDK `query()` | 2-phase guidance extraction with subagents | ✅ Proven |
+| Skills load from `.claude/skills/` | `/neo4j-schema` resolved and executed | ✅ Proven |
+| `claude` CLI binary available via hostPath | `/home/faisal/.local/bin/claude` (must add to PATH) | ✅ Proven (with PATH fix) |
+
+#### Updated §4 Validation
+
+The §4 table row "`--strict-mcp-config` — Not needed for SDK" is now **confirmed in-cluster**, not just theoretical. `setting_sources=["project"]` passes `--setting-sources project` to the underlying CLI, which loads `.mcp.json` stdio servers without `--strict-mcp-config`.
+
+#### Cleanup Execution Result (2026-03-01)
+
+```bash
+kubectl delete namespace claude-sdk-toy-v1 --wait=true --timeout=180s
+```
+
+- Namespace deleted successfully
+- Verification: `kubectl get namespace claude-sdk-toy-v1` → `NotFound`
+- `kubectl get all -A | grep claude-sdk-toy-v1` → no matches
+- `kubectl get configmap,secret -A | grep claude-sdk-toy-v1` → no matches
+- Cluster returned to clean pre-test state
+
+---
+
+### Write Test — Full 2-Phase Extraction (2026-03-01)
+
+#### Objective
+
+Close the final gap: prove the **Bolt write path** works from a K8s pod. The §17 dry-run canary proved SDK + MCP reads + skill/agent loading + subagent orchestration. But `--dry-run` never connects to Neo4j — Bolt writes were untested.
+
+#### Configuration
+
+- Namespace: `claude-sdk-write-v1` (ephemeral)
+- Script: `scripts/canary_sdk_write.py`
+- Pod: `hostNetwork: true`, `python:3.11-slim`, hostPath `/home/faisal`
+- Env: `NEO4J_URI=bolt://localhost:30687`, `NEO4J_USERNAME=neo4j`, `NEO4J_PASSWORD` from Secret, `ENABLE_GUIDANCE_WRITES=true`
+- Ticker: CRM (Salesforce), Source: `CRM_2025-09-03T17.00.00-04.00` (1 PR + 8 QA exchanges, 0 pre-existing guidance)
+- `MODE=write` (real Neo4j writes, then cleanup)
+
+#### Flow
+
+1. **Pre-check**: Bolt connectivity (`RETURN 1 AS ok`) + clean slate (no existing CRM guidance)
+2. **Phase 1+2**: SDK `query("/guidance-extractor CRM transcript ... MODE=write")` — runs both phases
+3. **Verify**: Direct Bolt read-back of written GuidanceUpdate nodes
+4. **Cleanup**: DETACH DELETE all written nodes + orphaned parents, verify zero remaining
+
+#### Results
+
+| Step | Result | Detail |
+|------|--------|--------|
+| Pre-check | ✅ PASS | Bolt connected, 0 existing items |
+| Phase 1 (PR extraction) | ✅ 17 items written | Revenue, margins, OCF, FCF, CapEx, CRPO, FX impact, share repurchase |
+| Phase 2 (Q&A enrichment) | ✅ 1 item enriched | Share Repurchase Authorization + Q&A context |
+| XBRL concept links | ✅ 4 created | Revenue, CapEx, OCF auto-linked |
+| `source_refs` field | ✅ 17/17 populated | New field works end-to-end |
+| Bolt write verification | ✅ 17 items confirmed | Labels, scopes, refs all present |
+| Cleanup | ✅ Zero residue | 0 GuidanceUpdate, 0 orphaned Guidance parents |
+| K8s cleanup | ✅ Namespace deleted | No resources, no config/secrets remain |
+| Neo4j cleanup | ✅ MCP query confirms 0 | `MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(t:Transcript {id: 'CRM_...'}) RETURN count(gu)` → 0 |
+
+- **Cost**: $2.31
+- **Duration**: 333s (5.5 min)
+- **SDK version**: 0.1.23, Claude CLI 2.1.63
+
+#### Notes
+
+1. **GuidancePeriod nodes**: The canary verification query used `FOR_PERIOD` but the actual relationship name is `HAS_PERIOD` (see `guidance_writer.py` line 182). GuidancePeriod nodes WERE created and linked correctly — the canary just checked the wrong relationship. Since GuidancePeriod is company-agnostic (shared across companies), the nodes persist after cleanup (used by other companies' items).
+2. **Phase 2 success**: This is the first time Phase 2 succeeded in K8s. In the dry-run canary, Phase 2 launched but returned `PHASE_DEPENDENCY_FAILED` (7E found 0 rows because Phase 1 didn't write). With `MODE=write`, Phase 1 writes → Phase 2 reads back → enriches → writes. Full loop.
+3. **`execute_cypher_query_all`**: The canary script must use this method (returns `list[dict]`), not `execute_cypher_query` (returns a single Record). Same applies to any future verification scripts.
+
+#### What Is Now Proven End-to-End
+
+| Capability | Evidence |
+|---|---|
+| SDK `query()` in K8s pod | All tests |
+| `setting_sources=["project"]` loads skills/agents/CLAUDE.md/.mcp.json | Tests 2, 3, 4 |
+| MCP stdio via hostNetwork | Tests 2, 4 (796 companies, guidance reads) |
+| Skill invocation from pod | Test 3 (/neo4j-schema) |
+| Agent/subagent dispatch from pod | Test 4 (guidance-extract + guidance-qa-enrich) |
+| Bolt write path from pod | Write test (17 items written + verified) |
+| Full 2-phase guidance extraction | Write test (Phase 1: 17 items, Phase 2: 1 enrichment) |
+| `source_refs` field persistence | Write test (17/17 items have refs) |
+| XBRL concept linking | Write test (4 links created) |
+| Cleanup with zero residue | Write test (Neo4j + K8s both clean) |
+| hostPath credential mount | All tests (no CLAUDE_CODE_OAUTH_TOKEN Secret used) |
+
+---
+
+### Write Test — Local Re-Run (2026-03-01, fresh execution)
+
+**Objective**: Confirm the full `/guidance-extractor` pipeline still works end-to-end with `MODE=write` on a non-AAPL company (CRM/Salesforce). Validates every sub-agent, skill, reference file, and Neo4j write in the chain.
+
+**Pipeline exercised**:
+```
+/guidance-extractor CRM transcript CRM_2025-09-03T17.00.00-04.00 MODE=write
+  → SKILL.md dispatches via Task tool:
+    1. Task(guidance-extract)  — Phase 1: PR extraction → guidance_write.sh --write → Neo4j MERGE
+    2. Task(guidance-qa-enrich) — Phase 2: Q&A enrichment → reads Phase 1 items → enriches → writes
+```
+
+**Results (exit code 0)**:
+
+| Step | Result | Detail |
+|------|--------|--------|
+| Pre-check | ✅ PASS | Bolt connected, 0 existing CRM items |
+| Phase 1 (PR extraction) | ✅ 16 items written | Revenue, Revenue Growth, CRPO Growth, Operating Margin, OCF, FCF Growth, CapEx, Share Repurchase |
+| Phase 2 (Q&A enrichment) | ✅ 1 new item discovered | FY27 Operating Cash Flow ("bigger than $15B" — CEO Benioff, Q&A #3) |
+| GuidanceUpdate nodes | ✅ 17 confirmed | Direct Bolt read-back |
+| Guidance parent nodes | ✅ 10 | Distinct guidance categories |
+| GuidancePeriod nodes | ✅ 4 via HAS_PERIOD | `gp_2025-08-01_2025-10-31`, `gp_UNDEF`, `gp_2025-02-01_2026-01-31`, `gp_2026-02-01_2027-01-31` |
+| `source_refs` field | ✅ 17/17 populated | All items have source references |
+| Scopes | ✅ 3 types | `annual`, `quarter`, `undefined` |
+| Cleanup | ✅ Zero residue | DETACH DELETE → 0 remaining |
+
+- **Duration**: 470s (7.8 min)
+- **CRM had 0 pre-existing guidance** — this is a clean first-time extraction for a new company

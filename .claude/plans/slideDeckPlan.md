@@ -134,7 +134,7 @@ from earningscall.errors import InsufficientApiAccessError
 # After successful transcript fetch, attempt slide deck download
 if feature_flags.ENABLE_SLIDE_DECK_DOWNLOAD:
     try:
-        slide_path = self._download_slide_deck(company_obj, event)
+        slide_path = self._download_slide_deck(company_obj, event, event_date)
         if slide_path:
             result["slide_deck_path"] = slide_path
             full_text, pages, image_paths = self._extract_slide_deck(slide_path)
@@ -149,10 +149,14 @@ if feature_flags.ENABLE_SLIDE_DECK_DOWNLOAD:
 
 Add three helper methods (~35 lines total):
 ```python
-def _download_slide_deck(self, company_obj, event):
-    """Download slide deck PDF, return file path or None."""
+def _download_slide_deck(self, company_obj, event, event_date):
+    """Download slide deck PDF, return file path or None.
+    Uses conference date (not fiscal year/quarter) in filename to avoid collisions
+    for the 13 fiscal-tag collision groups (e.g., EW FY2025 Q2 maps to both
+    Feb 2025 and Jul 2025 calls). See Issue #35 analysis."""
     os.makedirs(SLIDE_DECK_STORAGE_DIR, exist_ok=True)
-    filename = f"{company_obj.company_info.symbol}_{event.year}_Q{event.quarter}_slides.pdf"
+    date_str = str(event_date).split('T')[0].split(' ')[0]  # YYYY-MM-DD
+    filename = f"{company_obj.company_info.symbol}_{date_str}_slides.pdf"
     filepath = os.path.join(SLIDE_DECK_STORAGE_DIR, filename)
     if os.path.exists(filepath):
         return filepath  # Already downloaded
@@ -173,7 +177,7 @@ def _extract_slide_deck(self, pdf_path):
         pages.append(doc.document.export_to_markdown(page_no=page_no))
 
     # Image conversion via pdf2image
-    image_dir = os.path.splitext(pdf_path)[0]  # e.g., slide_decks/AAPL_2024_Q3_slides/
+    image_dir = os.path.splitext(pdf_path)[0]  # e.g., slide_decks/AAPL_2024-07-31_slides/
     os.makedirs(image_dir, exist_ok=True)
     image_paths = []
     pil_images = convert_from_path(pdf_path, dpi=SLIDE_DECK_IMAGE_DPI)
@@ -341,7 +345,8 @@ FIND_MISSING = """
 MATCH (t:Transcript)-[:INFLUENCES]->(c:Company)
 WHERE NOT EXISTS { (t)-[:HAS_SLIDE_DECK]->(:SlideDeck) }
 RETURN t.id AS transcript_id, c.ticker AS ticker,
-       t.fiscal_year AS year, t.fiscal_quarter AS quarter
+       t.fiscal_year AS year, t.fiscal_quarter AS quarter,
+       left(t.conference_datetime, 10) AS conference_date
 ORDER BY c.ticker, t.conference_datetime
 """
 
@@ -359,11 +364,13 @@ SET sp.content = $content, sp.page_number = $page_number, sp.image_path = $image
 MERGE (sd)-[:HAS_SLIDE_PAGE]->(sp)
 """
 
-def download_slide_deck(company_obj, year, quarter):
-    """Download PDF — reuses same logic as Step 5 _download_slide_deck()."""
+def download_slide_deck(company_obj, year, quarter, conference_date):
+    """Download PDF — reuses same logic as Step 5 _download_slide_deck().
+    Uses conference_date (not fiscal year/quarter) in filename to avoid collisions
+    for the 13 fiscal-tag collision groups. See Issue #35 analysis."""
     os.makedirs(SLIDE_DECK_STORAGE_DIR, exist_ok=True)
     symbol = company_obj.company_info.symbol
-    filename = f"{symbol}_{year}_Q{quarter}_slides.pdf"
+    filename = f"{symbol}_{conference_date}_slides.pdf"
     filepath = os.path.join(SLIDE_DECK_STORAGE_DIR, filename)
     if os.path.exists(filepath):
         return filepath  # Already on disk from prior run
@@ -444,11 +451,12 @@ if __name__ == "__main__":
             for r in transcript_rows:
                 transcript_id = r["transcript_id"]
                 year, quarter = r["year"], r["quarter"]
+                conference_date = r["conference_date"]
                 slide_id = f"{transcript_id}_slides"
 
                 # Phase 2a: Download
                 try:
-                    pdf_path = download_slide_deck(company_obj, year, quarter)
+                    pdf_path = download_slide_deck(company_obj, year, quarter, conference_date)
                 except Exception as e:
                     logger.error(f"Download failed for {ticker} Q{quarter} {year}: {e}")
                     stats["errors"] += 1
@@ -568,13 +576,13 @@ Update the transcript-queries skill and neo4j-schema skill to include:
 
 ```
 slide_decks/                                    ← SLIDE_DECK_STORAGE_DIR
-  AAPL_2024_Q3_slides.pdf                       ← downloaded PDF
-  AAPL_2024_Q3_slides/                          ← per-deck image directory
+  AAPL_2024-07-31_slides.pdf                    ← downloaded PDF (date-based, collision-safe)
+  AAPL_2024-07-31_slides/                       ← per-deck image directory
     p1.png                                      ← page 1 image (200 DPI, ~200-500KB)
     p2.png
     ...p30.png
-  MSFT_2024_Q4_slides.pdf
-  MSFT_2024_Q4_slides/
+  MSFT_2024-10-22_slides.pdf
+  MSFT_2024-10-22_slides/
     p1.png
     ...
 ```
