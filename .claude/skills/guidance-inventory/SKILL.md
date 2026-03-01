@@ -574,7 +574,7 @@ Applied AFTER extraction, BEFORE writing to graph:
 | **100% recall priority** | When in doubt, extract it. False positives > missed guidance. |
 | **News: company guidance only** | Ignore analyst estimates ("Est $X", "consensus $Y"). Extract only company-issued guidance. |
 | **Factors are conditions, not items** | If a forward-looking statement quantifies a factor affecting another guided metric (e.g., FX headwind, week count, commodity cost tailwind), capture it in that metric's `conditions` field — not as a standalone item. A factor already captured in a metric's `conditions` field is already extracted — do not also create a standalone item for it. |
-| **Material corporate commitments** | Extract management decisions that commit specific capital or change shareholder returns (e.g., buyback authorizations, dividend declarations, major investment programs). These are announced actions, not forecasts — use `derivation=explicit` or `derivation=point` for stated amounts, `derivation=comparative` for directional changes. Apply the same specificity rules: a quantitative anchor is required. |
+| **Material corporate announcements** | Extract management decisions that allocate specific capital or change shareholder returns (e.g., buyback authorizations, dividend declarations, major investment programs). These are announced actions, not forecasts — use `derivation=explicit` or `derivation=point` for stated amounts, `derivation=comparative` for directional changes. Apply the same specificity rules: a quantitative anchor is required. |
 
 ---
 
