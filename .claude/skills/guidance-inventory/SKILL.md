@@ -97,6 +97,9 @@ All 20 extraction fields (see [§2](#2-extraction-fields)) plus system identity 
 | `evhash16` | String | First 16 hex chars of evidence hash |
 | `xbrl_qname` | String / null | Resolved XBRL concept qname (see [§11](#11-xbrl-matching)) |
 | `unit_raw` | String / null | Verbatim unit text, only when `canonical_unit='unknown'` |
+| `label` | String | Metric name (denormalized from Guidance parent) |
+| `label_slug` | String | `slug(label)` — enables `WHERE gu.label_slug = 'revenue'` without JOIN |
+| `segment_slug` | String | `slug(segment)` — enables `WHERE gu.segment_slug = 'iphone'` |
 
 ---
 

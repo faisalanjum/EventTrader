@@ -699,6 +699,7 @@ def test_query_contains_all_gu_properties():
         'gu.canonical_unit', 'gu.basis_norm', 'gu.basis_raw', 'gu.derivation',
         'gu.qualitative', 'gu.quote', 'gu.section', 'gu.source_key',
         'gu.source_type', 'gu.conditions', 'gu.xbrl_qname', 'gu.created',
+        'gu.label', 'gu.label_slug', 'gu.segment_slug',
     ]
     for prop in expected_props:
         assert prop in q, f"Missing property in query: {prop}"
@@ -756,6 +757,32 @@ def test_params_has_gp_date_fields():
     assert 'gp_end_date' in params
     assert params['gp_start_date'] == '2025-01-01'
     assert params['gp_end_date'] == '2025-06-30'
+
+
+# ── Denormalized slug tests (Issues #53/#55) ─────────────────────────────
+
+def test_params_label_and_segment_slugs():
+    """label_slug and segment_slug are denormalized into params for GuidanceUpdate."""
+    item = _make_item()
+    params = _build_params(item, 'src1', 'transcript', 'AAPL')
+    assert params['label_slug'] == 'revenue'
+    assert params['segment_slug'] == 'total'
+
+def test_params_slug_fallback_when_missing():
+    """Slugs computed from raw fields when pre-computed slugs are absent."""
+    item = _make_item()
+    del item['label_slug']
+    del item['segment_slug']
+    params = _build_params(item, 'src1', 'transcript', 'AAPL')
+    assert params['label_slug'] == 'revenue'   # computed from label='Revenue'
+    assert params['segment_slug'] == 'total'    # computed from segment='Total'
+
+def test_params_slug_segment_variant():
+    """segment_slug correctly slugifies non-trivial segment names."""
+    item = _make_item(segment='Wearables, Home and Accessories',
+                      segment_slug='wearables_home_and_accessories')
+    params = _build_params(item, 'src1', 'transcript', 'AAPL')
+    assert params['segment_slug'] == 'wearables_home_and_accessories'
 
 
 # ── Per-share validation guards (Issue #28) ──────────────────────────────

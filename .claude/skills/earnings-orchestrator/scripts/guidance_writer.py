@@ -169,7 +169,10 @@ MERGE (gu:GuidanceUpdate {{id: $guidance_update_id}})
       gu.source_type = $source_type,
       gu.conditions = $conditions,
       gu.xbrl_qname = $xbrl_qname,
-      gu.unit_raw = $unit_raw
+      gu.unit_raw = $unit_raw,
+      gu.label = $label,
+      gu.label_slug = $label_slug,
+      gu.segment_slug = $segment_slug
 
 // Core edges (4 from GuidanceUpdate)
 MERGE (gu)-[:UPDATES]->(g)
@@ -252,6 +255,8 @@ def _build_params(item, source_id, source_type, ticker):
         'fiscal_year': item.get('fiscal_year'),
         'fiscal_quarter': item.get('fiscal_quarter'),
         'segment': item.get('segment', 'Total'),
+        'label_slug': item.get('label_slug') or slug(item.get('label', '')),
+        'segment_slug': item.get('segment_slug') or slug(item.get('segment', 'Total')),
         'low': item.get('canonical_low'),
         'mid': item.get('canonical_mid'),
         'high': item.get('canonical_high'),
