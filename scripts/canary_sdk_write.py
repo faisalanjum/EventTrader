@@ -98,6 +98,16 @@ def verify_neo4j_writes(mgr) -> int:
         log(f"  GuidancePeriod nodes: {periods[0]['cnt']}")
         log(f"  Period IDs: {periods[0]['ids']}")
 
+    # Phase 2 enrichment proof: at least one item should have [Q&A] in quote
+    qa_items = cypher(mgr,
+        "MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(t:Transcript {id: $sid}) "
+        "WHERE gu.quote CONTAINS '[Q&A]' OR gu.section CONTAINS 'Q&A' "
+        "RETURN gu.label AS label, gu.quote AS quote",
+        {"sid": SOURCE_ID})
+    log(f"  Phase 2 enrichment proof: {len(qa_items)} item(s) with Q&A markers")
+    for item in qa_items:
+        log(f"    - {item['label']}: {item['quote'][:120]}...")
+
     return total
 
 
