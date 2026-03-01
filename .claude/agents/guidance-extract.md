@@ -208,13 +208,16 @@ Write this to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
             "basis_raw": null,
             "aliases": [],
             "xbrl_qname": "us-gaap:Revenues",
-            "member_u_ids": []
+            "member_u_ids": [],
+            "source_refs": []
         }
     ]
 }
 ```
 
 Items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally. Include `fye_month` at top level when items use LLM period fields instead of pre-computed `period_u_id`.
+
+**`source_refs`**: Array of sub-source node IDs that produced the item. For transcripts, use PreparedRemark ID (`{SOURCE_ID}_pr`) or QAExchange IDs (`{SOURCE_ID}_qa__{sequence}`). For 8-K reports, use exhibit/item IDs if available. Empty array `[]` when no sub-source granularity applies. This enables downstream queries to trace exactly which sub-component of a source yielded the guidance.
 
 **LLM period fields** (optional per item — only needed when `period_u_id` is not pre-computed): `fiscal_year`, `fiscal_quarter`, `half`, `month`, `long_range_start_year`, `long_range_end_year`, `calendar_override`, `sentinel_class`, `time_type`.
 
