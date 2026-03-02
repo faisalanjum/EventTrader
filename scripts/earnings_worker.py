@@ -104,10 +104,13 @@ signal.signal(signal.SIGINT, _handle_signal)
 # ---------------------------------------------------------------------------
 def mark_status(mgr, source_id: str, status: str):
     """Set guidance_status on the Transcript node."""
-    mgr.execute_cypher_query_all(
-        "MATCH (t:Transcript {id: $sid}) SET t.guidance_status = $status",
+    rows = mgr.execute_cypher_query_all(
+        "MATCH (t:Transcript {id: $sid}) SET t.guidance_status = $status RETURN count(t) AS affected",
         {"sid": source_id, "status": status},
     )
+    affected = rows[0]["affected"] if rows else 0
+    if affected != 1:
+        raise RuntimeError(f"mark_status({status}) affected {affected} rows for {source_id}")
 
 
 # ---------------------------------------------------------------------------
