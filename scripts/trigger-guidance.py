@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 """Trigger guidance extraction for unprocessed transcripts.
 
-Queries Neo4j for transcripts without GuidanceUpdate nodes and pushes
-them to the earnings:trigger Redis queue for processing by claude-code-worker.
+Queries Neo4j ProcessingLog to find transcripts not yet processed,
+then pushes batched-per-company payloads to the earnings:trigger Redis queue.
+KEDA scales claude-code-worker pods automatically.
 
 Usage:
-  ./scripts/trigger-guidance.py CRM              # All unprocessed for CRM
-  ./scripts/trigger-guidance.py ADBE MSFT CRM    # Multiple tickers
-  ./scripts/trigger-guidance.py --all             # All unprocessed transcripts
-  ./scripts/trigger-guidance.py --list CRM        # Show unprocessed, don't queue
-  ./scripts/trigger-guidance.py --list --all      # Show all unprocessed
-  ./scripts/trigger-guidance.py --mode dry_run CRM  # Queue with dry_run mode
-  ./scripts/trigger-guidance.py --source-id CRM_2025-09-03T17.00.00-04.00  # Specific transcript
+  python3 scripts/trigger-guidance.py CRM              # All unprocessed for CRM
+  python3 scripts/trigger-guidance.py ADBE MSFT CRM    # Multiple tickers (parallel pods)
+  python3 scripts/trigger-guidance.py --all             # All unprocessed transcripts
+  python3 scripts/trigger-guidance.py --list CRM        # Show unprocessed, don't queue
+  python3 scripts/trigger-guidance.py --list --all      # Show all unprocessed
+  python3 scripts/trigger-guidance.py --mode dry_run CRM  # Queue with dry_run mode
+  python3 scripts/trigger-guidance.py --source-id CRM_2025-09-03T17.00.00-04.00
+  python3 scripts/trigger-guidance.py --force CRM       # Re-process even if completed
+  python3 scripts/trigger-guidance.py --retry-failed CRM  # Re-process only failed items
 """
 
 import argparse
+from collections import defaultdict
 import json
 import logging
 import os
@@ -22,86 +26,129 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-# Suppress Neo4j driver warnings (aggregation null warnings)
 logging.getLogger("neo4j").setLevel(logging.ERROR)
 
 import redis
 from neograph.Neo4jConnection import get_manager
 
-
-# Connection defaults — reads from env (matches .bashrc exports)
 REDIS_HOST = os.environ.get("REDIS_HOST", "192.168.40.72")
 REDIS_PORT = int(os.environ.get("REDIS_PORT", "31379"))
 QUEUE_NAME = "earnings:trigger"
+TASK_NAME = "guidance_extraction"
+STALE_MINUTES = 30
 
 
-def find_unprocessed(mgr, tickers=None, source_id=None):
-    """Query Neo4j for transcripts without GuidanceUpdate nodes."""
+def find_unprocessed(mgr, tickers=None, source_id=None, force=False, retry_failed=False):
+    """Query Neo4j for transcripts needing processing, based on ProcessingLog.
+
+    Uses OPTIONAL MATCH via FOR_SOURCE relationship (graph-native traversal).
+    NOT EXISTS with correlated property match hangs Neo4j's query planner.
+    """
+
     if source_id:
+        # Single transcript lookup — use relationship traversal
         rows = mgr.execute_cypher_query_all(
             "MATCH (t:Transcript {id: $sid}) "
-            "OPTIONAL MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(t) "
+            "OPTIONAL MATCH (p:ProcessingLog {task: $task})-[:FOR_SOURCE]->(t) "
             "RETURN t.id AS id, t.symbol AS symbol, "
             "       t.fiscal_year AS fy, t.fiscal_quarter AS fq, "
-            "       count(gu) AS guidance_count",
-            {"sid": source_id},
+            "       p.status AS log_status, p.items_written AS items",
+            {"sid": source_id, "task": TASK_NAME},
         )
         if not rows:
             print(f"Transcript not found: {source_id}", file=sys.stderr)
             return []
-        if rows[0]["guidance_count"] > 0:
-            print(f"Already processed ({rows[0]['guidance_count']} items): {source_id}")
+        row = rows[0]
+        if row["log_status"] == "completed" and not force:
+            print(f"Already processed ({row['items']} items): {source_id}")
+            print("Use --force to re-process.")
             return []
-        return [{"id": rows[0]["id"], "symbol": rows[0]["symbol"],
-                 "fy": rows[0]["fy"], "fq": rows[0]["fq"]}]
+        if row["log_status"] == "in_progress" and not force:
+            print(f"Currently in progress: {source_id}")
+            print("Use --force to re-trigger.")
+            return []
+        return [{"id": row["id"], "symbol": row["symbol"],
+                 "fy": row["fy"], "fq": row["fq"]}]
 
+    # Bulk query — OPTIONAL MATCH + filter pattern (fast, uses relationship traversal)
+    ticker_filter = "WHERE t.symbol IN $tickers " if tickers else ""
+    params = {"task": TASK_NAME}
     if tickers:
-        where = "WHERE t.symbol IN $tickers"
-        params = {"tickers": tickers}
-    else:
-        where = ""
-        params = {}
+        params["tickers"] = tickers
 
-    query = (
-        f"MATCH (t:Transcript) {where} "
-        "OPTIONAL MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(t) "
-        "WITH t, count(gu) AS gc "
-        "WHERE gc = 0 "
-        "RETURN t.id AS id, t.symbol AS symbol, "
-        "       t.fiscal_year AS fy, t.fiscal_quarter AS fq "
-        "ORDER BY t.symbol, t.id"
-    )
+    if force:
+        # Include everything
+        query = (
+            f"MATCH (t:Transcript) {ticker_filter}"
+            "RETURN t.id AS id, t.symbol AS symbol, "
+            "       t.fiscal_year AS fy, t.fiscal_quarter AS fq "
+            "ORDER BY t.symbol, t.id"
+        )
+    elif retry_failed:
+        # Only items with failed ProcessingLog
+        query = (
+            f"MATCH (t:Transcript) {ticker_filter}"
+            "MATCH (p:ProcessingLog {task: $task})-[:FOR_SOURCE]->(t) "
+            "WHERE p.status = 'failed' "
+            "RETURN t.id AS id, t.symbol AS symbol, "
+            "       t.fiscal_year AS fy, t.fiscal_quarter AS fq "
+            "ORDER BY t.symbol, t.id"
+        )
+    else:
+        # Default: exclude completed and recent in_progress
+        query = (
+            f"MATCH (t:Transcript) {ticker_filter}"
+            "OPTIONAL MATCH (p:ProcessingLog {task: $task})-[:FOR_SOURCE]->(t) "
+            "WITH t, p.status AS status, p.started_at AS started "
+            "WHERE status IS NULL "
+            "   OR status = 'failed' "
+            "   OR (status = 'in_progress' "
+            f"       AND started <= datetime() - duration('PT{STALE_MINUTES}M')) "
+            "RETURN t.id AS id, t.symbol AS symbol, "
+            "       t.fiscal_year AS fy, t.fiscal_quarter AS fq "
+            "ORDER BY t.symbol, t.id"
+        )
     return mgr.execute_cypher_query_all(query, params)
 
 
 def push_to_queue(transcripts, mode="write"):
-    """Push transcript IDs to Redis earnings:trigger queue."""
+    """Bundle transcripts per company, push one queue item per company."""
     r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT)
     r.ping()
 
-    pushed = 0
+    # Group by ticker
+    by_ticker = defaultdict(list)
     for t in transcripts:
         ticker = t["symbol"] or t["id"].split("_")[0]
+        by_ticker[ticker].append(t["id"])
+
+    pushed = 0
+    for ticker, source_ids in sorted(by_ticker.items()):
         payload = json.dumps({
             "ticker": ticker,
-            "source_id": t["id"],
+            "source_ids": source_ids,
             "mode": mode,
         })
         r.lpush(QUEUE_NAME, payload)
         pushed += 1
 
     r.close()
-    return pushed
+    return pushed, dict(by_ticker)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Trigger guidance extraction")
+    parser = argparse.ArgumentParser(
+        description="Trigger guidance extraction for unprocessed transcripts")
     parser.add_argument("tickers", nargs="*", help="Ticker symbols (e.g., CRM ADBE)")
     parser.add_argument("--all", action="store_true", help="All unprocessed transcripts")
     parser.add_argument("--list", action="store_true", help="List only, don't queue")
     parser.add_argument("--mode", default="write", choices=["write", "dry_run"],
                         help="Processing mode (default: write)")
     parser.add_argument("--source-id", help="Specific transcript ID")
+    parser.add_argument("--force", action="store_true",
+                        help="Re-process even if already completed")
+    parser.add_argument("--retry-failed", action="store_true",
+                        help="Re-process only failed items")
     args = parser.parse_args()
 
     if not args.tickers and not args.all and not args.source_id:
@@ -110,20 +157,21 @@ def main():
 
     mgr = get_manager()
 
-    # Find unprocessed transcripts
     transcripts = find_unprocessed(
         mgr,
         tickers=[t.upper() for t in args.tickers] if args.tickers else None,
         source_id=args.source_id,
+        force=args.force,
+        retry_failed=args.retry_failed,
     )
     mgr.close()
 
     if not transcripts:
-        print("No unprocessed transcripts found.")
+        print("No transcripts to process.")
         return
 
     # Display
-    print(f"\nUnprocessed transcripts: {len(transcripts)}")
+    print(f"\nTranscripts to process: {len(transcripts)}")
     print(f"{'ID':<50} {'Symbol':<8} {'FY':<6} {'FQ':<4}")
     print("-" * 70)
     for t in transcripts:
@@ -132,10 +180,11 @@ def main():
     if args.list:
         return
 
-    # Push to queue
-    print(f"\nPushing {len(transcripts)} items to {QUEUE_NAME} (mode={args.mode})...")
-    pushed = push_to_queue(transcripts, mode=args.mode)
-    print(f"Queued {pushed} items. KEDA will scale pods automatically.")
+    # Push to queue (bundled per company)
+    pushed, by_ticker = push_to_queue(transcripts, mode=args.mode)
+    print(f"\nQueued {pushed} company batches (mode={args.mode}):")
+    for ticker, sids in sorted(by_ticker.items()):
+        print(f"  {ticker}: {len(sids)} transcript(s)")
     print(f"\nWatch progress: kubectl logs -f -l app=claude-code-worker -n processing")
 
 
