@@ -32,6 +32,8 @@ spec:
         - /bin/bash
         - -c
         - |
+          # Copy auth file to writable HOME (emptyDir) so CLI can update tokens
+          cp /mnt/claude-json /home/faisal/.claude.json
           export PATH="/home/faisal/.local/bin:$PATH"
           source /home/faisal/EventMarketDB/venv/bin/activate
           exec python /home/faisal/EventMarketDB/scripts/earnings_worker.py
@@ -88,6 +90,9 @@ spec:
           readOnly: true
         - name: claude-state
           mountPath: /home/faisal/.claude
+        - name: claude-json
+          mountPath: /mnt/claude-json
+          readOnly: true
         - name: logs
           mountPath: /app/logs
       volumes:
@@ -110,6 +115,11 @@ spec:
         hostPath:
           path: /home/faisal/.claude
           type: Directory
+      # Claude CLI config file (SDK reads this for auth)
+      - name: claude-json
+        hostPath:
+          path: /home/faisal/.claude.json
+          type: File
       # Log directory (matches other workers)
       - name: logs
         hostPath:

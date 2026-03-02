@@ -51,7 +51,6 @@ from neograph.Neo4jConnection import get_manager
 REDIS_HOST = os.environ.get("REDIS_HOST", "redis.infrastructure.svc.cluster.local")
 REDIS_PORT = int(os.environ.get("REDIS_PORT", "6379"))
 QUEUE_NAME = os.environ.get("QUEUE_NAME", "earnings:trigger")
-RETRY_QUEUE = f"{QUEUE_NAME}:retry"
 DEAD_LETTER_QUEUE = f"{QUEUE_NAME}:dead"
 MAX_RETRIES = 3
 
@@ -144,13 +143,17 @@ async def process_one(ticker: str, source_id: str, mode: str, mgr) -> bool:
     log.info("Processing: %s", prompt)
     start = time.monotonic()
 
+    stderr_lines = []
+
     try:
         options = ClaudeAgentOptions(
+            cli_path="/home/faisal/.local/bin/claude",
             setting_sources=["project"],
             cwd=PROJECT_DIR,
             permission_mode="bypassPermissions",
             max_turns=MAX_TURNS,
             max_budget_usd=MAX_BUDGET_USD,
+            stderr=lambda line: stderr_lines.append(line),
             mcp_servers={
                 "neo4j-cypher": {
                     "type": "http",
@@ -169,6 +172,8 @@ async def process_one(ticker: str, source_id: str, mode: str, mgr) -> bool:
 
         if result_text is None:
             log.error("No result returned for %s (elapsed: %.0fs)", source_id, elapsed)
+            for line in stderr_lines[-20:]:
+                log.error("  CLI stderr: %s", line)
             if is_write and mgr:
                 try:
                     mark_status(mgr, source_id, "failed")
@@ -190,6 +195,8 @@ async def process_one(ticker: str, source_id: str, mode: str, mgr) -> bool:
     except Exception as e:
         elapsed = time.monotonic() - start
         log.error("Failed %s after %.0fs", source_id, elapsed, exc_info=True)
+        for line in stderr_lines[-20:]:
+            log.error("  CLI stderr: %s", line)
         if is_write and mgr:
             try:
                 mark_status(mgr, source_id, "failed")
@@ -280,8 +287,8 @@ async def main():
                 retry_count = payload.get("_retry", 0) + 1
                 if retry_count <= MAX_RETRIES:
                     payload["_retry"] = retry_count
-                    await r.lpush(RETRY_QUEUE, json.dumps(payload))
-                    log.warning("Retry queue (attempt %d/%d): %s",
+                    await r.lpush(QUEUE_NAME, json.dumps(payload))
+                    log.warning("Re-queued for retry (attempt %d/%d): %s",
                                 retry_count, MAX_RETRIES, payload.get("ticker"))
                 else:
                     await r.lpush(DEAD_LETTER_QUEUE, json.dumps(payload))

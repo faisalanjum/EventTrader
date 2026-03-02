@@ -23,8 +23,12 @@ import json
 import logging
 import os
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parent.parent / ".env", override=True)
 
 logging.getLogger("neo4j").setLevel(logging.ERROR)
 
