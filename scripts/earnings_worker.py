@@ -167,13 +167,34 @@ async def process_one(ticker: str, source_id: str, mode: str, mgr) -> bool:
         )
 
         result_text = None
+        result_msg = None
         async for msg in query(prompt=prompt, options=options):
-            if hasattr(msg, "result"):
+            msg_type = type(msg).__name__
+            if msg_type == "SystemMessage" and getattr(msg, "subtype", "") == "init":
+                d = msg.data
+                log.info("  [Init] model=%s apiKeySource=%s version=%s",
+                         d.get("model"), d.get("apiKeySource"), d.get("claude_code_version"))
+            elif msg_type == "ResultMessage":
                 result_text = msg.result
+                result_msg = msg
+            elif msg_type == "AssistantMessage":
+                log.info("  [%s] model=%s %s", msg_type, msg.model,
+                         str(msg.content)[:200])
             elif hasattr(msg, "content"):
-                log.info("  [%s] %s", type(msg).__name__, msg.content[:200])
+                log.info("  [%s] %s", msg_type, str(msg.content)[:200])
 
         elapsed = time.monotonic() - start
+
+        if result_msg:
+            u = result_msg.usage or {}
+            log.info("  [Usage] tokens_in=%s cached=%s tokens_out=%s "
+                     "cost=$%.4f turns=%d duration=%ds",
+                     u.get("input_tokens", "?"),
+                     u.get("cache_read_input_tokens", "?"),
+                     u.get("output_tokens", "?"),
+                     result_msg.total_cost_usd or 0,
+                     result_msg.num_turns,
+                     (result_msg.duration_ms or 0) // 1000)
 
         if result_text is None:
             log.error("No result returned for %s (elapsed: %.0fs)", source_id, elapsed)
