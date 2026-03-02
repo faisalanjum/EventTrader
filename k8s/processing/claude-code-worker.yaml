@@ -8,12 +8,10 @@ metadata:
   name: claude-code-worker
   namespace: processing
 spec:
-  replicas: 0  # KEDA manages scaling (0→1)
+  replicas: 0  # KEDA manages scaling (0→N)
   selector:
     matchLabels:
       app: claude-code-worker
-  strategy:
-    type: Recreate  # Single-writer pattern (same as edge-writer)
   template:
     metadata:
       labels:
@@ -73,11 +71,11 @@ spec:
             name: claude-auth  # CLAUDE_CODE_OAUTH_TOKEN
         resources:
           requests:
-            cpu: 500m
-            memory: 1Gi
+            cpu: 250m
+            memory: 512Mi
           limits:
-            cpu: "2"
-            memory: 4Gi
+            cpu: "1"
+            memory: 2Gi
         volumeMounts:
         # Writable home dir (emptyDir) — CLI writes .claude.json here
         - name: home
@@ -129,7 +127,7 @@ spec:
   scaleTargetRef:
     name: claude-code-worker
   minReplicaCount: 0    # Scale to zero when idle (saves quota + money)
-  maxReplicaCount: 1    # Single writer — no concurrent processing
+  maxReplicaCount: 7    # Parallel processing — safe for different tickers
   cooldownPeriod: 300   # 5 min cooldown (same as xbrl-heavy)
   pollingInterval: 30
   triggers:
