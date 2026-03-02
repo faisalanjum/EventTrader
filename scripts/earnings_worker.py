@@ -184,7 +184,7 @@ async def process_one(ticker: str, source_id: str, mode: str, mgr) -> bool:
             return False
 
         log.info("Completed %s in %.0fs", source_id, elapsed)
-        log.info("Result: %s", result_text[:500])
+        log.info("Result: %s", result_text[:2000])
 
         if is_write and mgr:
             try:
