@@ -572,26 +572,26 @@ If context fills up mid-analysis, Claude auto-compacts and may lose important de
 ## 12. Implementation Checklist
 
 ### Phase 1: Infrastructure
-1. [ ] Use existing `claude-test` namespace
-2. [ ] Install `claude-agent-sdk` in project venv (`pip install claude-agent-sdk`)
-3. [ ] Generate OAuth token with `claude setup-token` and store as `Secret/claude-auth`
-4. [ ] Copy Neo4j password to `claude-test` namespace (`Secret/neo4j-creds`)
+1. [x] Use existing namespace (deployed to `processing`, not `claude-test`)
+2. [x] Install `claude-agent-sdk` in project venv (`pip install claude-agent-sdk`)
+3. [x] Generate OAuth token with `claude setup-token` and store as `Secret/claude-auth` (1-year token)
+4. [x] Copy Neo4j password to namespace (`eventtrader-secrets`)
 
 ### Phase 2: Canary (one Job, all 5 tests — read-only mount, no hostNetwork)
-5. [ ] Run canary Job (`scripts/canary_sdk.py`)
-6. [ ] Test 0: `mcp_servers` overrides `.mcp.json` stdio servers (no crash/hang)
-7. [ ] Test 1: MCP read via HTTP service (company count)
-8. [ ] Test 2: Skill invocation (`/neo4j-schema`)
-9. [ ] Test 3: Agent invocation (`/neo4j-report`)
-10. [ ] Test 4a: Bolt write round-trip (`guidance_write.sh --write` with synthetic item)
-11. [ ] Test 4b: Deterministic cleanup (canary nodes deleted)
+5. [x] Run canary Job (`scripts/canary_sdk.py`)
+6. [x] Test 0: `mcp_servers` overrides `.mcp.json` stdio servers (no crash/hang)
+7. [x] Test 1: MCP read via HTTP service (company count)
+8. [x] Test 2: Skill invocation (`/neo4j-schema`)
+9. [x] Test 3: Agent invocation (`/neo4j-report`)
+10. [x] Test 4a: Bolt write round-trip (`guidance_write.sh --write` with synthetic item)
+11. [x] Test 4b: Deterministic cleanup (canary nodes deleted)
 
 ### Phase 3: Production worker (read-write mount)
-12. [ ] Write `scripts/earnings_worker.py` (Redis → SDK → Neo4j loop)
-13. [ ] Deploy persistent worker Deployment in `claude-test`
-14. [ ] Test end-to-end: Redis push → worker picks up → guidance extraction → Neo4j write
-15. [ ] Add quota guard (usage endpoint check before each `query()`)
-16. [ ] Set up weekly token refresh cron on host
+12. [x] Write `scripts/earnings_worker.py` (Redis → SDK → Neo4j loop)
+13. [x] Deploy persistent worker Deployment (KEDA scales 0→1 in `processing` namespace)
+14. [x] Test end-to-end: Redis push → worker picks up → guidance extraction → Neo4j write (CRM, NTAP, ADBE all validated)
+15. [ ] Add quota guard — BLOCKED: no programmatic usage API (GitHub issue #21943 open)
+16. [x] ~~Set up weekly token refresh cron on host~~ Not needed — `setup-token` produces 1-year token, no cron required
 
 ---
 
