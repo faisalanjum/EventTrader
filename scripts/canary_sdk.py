@@ -10,11 +10,11 @@ Tests (sequential, each gated on prior success):
   1. SDK import + version
   2. MCP connectivity via setting_sources=["project"] (proves .mcp.json loads)
   3. Skill invocation (/neo4j-schema)
-  4. Full guidance-extractor dry-run on CRM transcript (2-phase, subagents)
+  4. Full guidance-transcript dry-run on CRM transcript (2-phase, subagents)
 
 Usage:
   python scripts/canary_sdk.py           # All tests
-  python scripts/canary_sdk.py --quick   # Tests 1-3 only (skip guidance-extractor)
+  python scripts/canary_sdk.py --quick   # Tests 1-3 only (skip guidance-transcript)
 """
 
 import asyncio
@@ -122,7 +122,7 @@ async def test_3_skill_invocation():
 
 
 async def test_4_guidance_extractor():
-    """Test 4: Full guidance-extractor dry-run on CRM transcript."""
+    """Test 4: Full guidance-transcript dry-run on CRM transcript."""
     log("TEST 4: Guidance-extractor dry-run (CRM transcript)")
     log("  Ticker: CRM")
     log("  Source: CRM_2025-09-03T17.00.00-04.00")
@@ -140,7 +140,7 @@ async def test_4_guidance_extractor():
     result_text = None
     start = time.time()
     async for msg in query(
-        prompt="/guidance-extractor CRM transcript CRM_2025-09-03T17.00.00-04.00 MODE=dry_run",
+        prompt="/guidance-transcript CRM transcript CRM_2025-09-03T17.00.00-04.00 MODE=dry_run",
         options=options,
     ):
         if hasattr(msg, "result"):

@@ -44,7 +44,7 @@ async def phase_full_extraction():
         max_turns=100,
     )
 
-    prompt = f"/guidance-extractor {TICKER} transcript {SOURCE_ID} MODE=write"
+    prompt = f"/guidance-transcript {TICKER} transcript {SOURCE_ID} MODE=write"
     log(f"Prompt: {prompt}")
 
     result_text = None
@@ -170,7 +170,7 @@ async def main():
 
     # Phase 1+2: Full extraction with writes
     log("")
-    log("PHASE 1+2: Running guidance-extractor with MODE=write...")
+    log("PHASE 1+2: Running guidance-transcript with MODE=write...")
     result = await phase_full_extraction()
     if result is None:
         log("EXTRACTION FAILED")

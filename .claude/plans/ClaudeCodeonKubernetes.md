@@ -102,7 +102,7 @@ Redis LPUSH "earnings:trigger" "{ticker, accession, source_id}"
     ↓
 earnings_worker.py (K8s Deployment, persistent pod)
     ↓
-SDK query("/guidance-extractor {ticker} transcript {source_id}")
+SDK query("/guidance-transcript {ticker} transcript {source_id}")
     ↓
 Results written to Neo4j + files
 ```
@@ -156,7 +156,7 @@ Two options:
 async def process_filing(ticker, source_id):
     try:
         async for message in query(
-            prompt=f"/guidance-extractor {ticker} transcript {source_id} MODE=write",
+            prompt=f"/guidance-transcript {ticker} transcript {source_id} MODE=write",
             options=ClaudeAgentOptions(
                 setting_sources=["project"],
                 mcp_servers={
@@ -466,7 +466,7 @@ SDK_OPTIONS = ClaudeAgentOptions(
 )
 
 async def process_task(task: dict):
-    prompt = f"/guidance-extractor {task['ticker']} transcript {task['source_id']} MODE=write"
+    prompt = f"/guidance-transcript {task['ticker']} transcript {task['source_id']} MODE=write"
     result = None
     async for message in query(prompt=prompt, options=SDK_OPTIONS):
         if hasattr(message, "result"):
@@ -1516,7 +1516,7 @@ kubectl get configmap,secret -A | rg claude-toy-v1 || true
 
 ### Guidance-Extractor Write-Path Test (third run, 2026-02-28)
 
-Objective: verify the highest-value real use case (`/guidance-extractor` on transcript) with subagents + references + file writes, while keeping cluster/runtime 100% disposable.
+Objective: verify the highest-value real use case (`/guidance-transcript` on transcript) with subagents + references + file writes, while keeping cluster/runtime 100% disposable.
 
 Safety controls used:
 - Dedicated namespace: `claude-toy-write-v1`
@@ -1525,7 +1525,7 @@ Safety controls used:
 - Post-run probe attempted repo write and confirmed read-only enforcement
 
 Invocation tested:
-- `/guidance-extractor SMPL transcript SMPL_2023-01-05T08.30.00-05.00 MODE=dry_run`
+- `/guidance-transcript SMPL transcript SMPL_2023-01-05T08.30.00-05.00 MODE=dry_run`
 
 #### Run v2 (node:20-alpine, no SHELL env)
 
@@ -1549,7 +1549,7 @@ Invocation tested:
 
 #### What this proves
 
-1. Skill invocation works in K8s (`/guidance-extractor` executed).
+1. Skill invocation works in K8s (`/guidance-transcript` executed).
 2. Subagent orchestration works (Phase 1 and Phase 2 agents both invoked by skill flow).
 3. Reference-heavy path works at least through full Phase 1 extraction pipeline.
 4. Write tool/file output works (`/tmp` artifacts and status file created).
@@ -1559,7 +1559,7 @@ Invocation tested:
 
 1. `SHELL` must be set in container runtime for this agent stack (`SHELL=/bin/bash` recommended).
 2. `guidance-qa-enrich` path is not fully K8s-portable as-is in this runtime because it depends on direct Bolt connectivity to `localhost:30687` (not valid inside pod **without `hostNetwork: true`**).
-3. Therefore, "`guidance-extractor` transcript two-phase flow works exactly as written end-to-end in K8s" is **not yet true**; it is **partially true** (Phase 1 yes, Phase 2 blocked by Neo4j endpoint assumption).
+3. Therefore, "`guidance-transcript` transcript two-phase flow works exactly as written end-to-end in K8s" is **not yet true**; it is **partially true** (Phase 1 yes, Phase 2 blocked by Neo4j endpoint assumption).
 
 **Note:** The §8 production Deployment uses `hostNetwork: true` which makes `localhost:30687` valid inside the pod — resolving roadblock #2 for production. The toy run in this section did NOT use `hostNetwork`, which is why Phase 2 failed. The §17 SDK toy run tests this with `hostNetwork: true` to confirm.
 
@@ -1668,7 +1668,7 @@ spec:
 
 ### Quick Test Variant
 
-For validating SDK + MCP + skill without the expensive guidance-extractor run:
+For validating SDK + MCP + skill without the expensive guidance-transcript run:
 
 ```yaml
 args:
@@ -1849,7 +1849,7 @@ With all 5 tests passing, the full two-phase pipeline is proven:
 
 **Learning**: SDK spawns `claude` CLI as subprocess — the binary must be on PATH. With hostPath mount, add `/home/faisal/.local/bin` to PATH in the job entrypoint. This applies to both canary and production worker manifests.
 
-#### Full Run (tests 1-4, guidance-extractor) — 2026-03-01
+#### Full Run (tests 1-4, guidance-transcript) — 2026-03-01
 
 All 4 tests passed:
 
@@ -1916,7 +1916,7 @@ Close the final gap: prove the **Bolt write path** works from a K8s pod. The §1
 #### Flow
 
 1. **Pre-check**: Bolt connectivity (`RETURN 1 AS ok`) + clean slate (no existing CRM guidance)
-2. **Phase 1+2**: SDK `query("/guidance-extractor CRM transcript ... MODE=write")` — runs both phases
+2. **Phase 1+2**: SDK `query("/guidance-transcript CRM transcript ... MODE=write")` — runs both phases
 3. **Verify**: Direct Bolt read-back of written GuidanceUpdate nodes
 4. **Cleanup**: DETACH DELETE all written nodes + orphaned parents, verify zero remaining
 
@@ -1964,11 +1964,11 @@ Close the final gap: prove the **Bolt write path** works from a K8s pod. The §1
 
 ### Write Test — Local Re-Run (2026-03-01, fresh execution)
 
-**Objective**: Confirm the full `/guidance-extractor` pipeline still works end-to-end with `MODE=write` on a non-AAPL company (CRM/Salesforce). Validates every sub-agent, skill, reference file, and Neo4j write in the chain.
+**Objective**: Confirm the full `/guidance-transcript` pipeline still works end-to-end with `MODE=write` on a non-AAPL company (CRM/Salesforce). Validates every sub-agent, skill, reference file, and Neo4j write in the chain.
 
 **Pipeline exercised**:
 ```
-/guidance-extractor CRM transcript CRM_2025-09-03T17.00.00-04.00 MODE=write
+/guidance-transcript CRM transcript CRM_2025-09-03T17.00.00-04.00 MODE=write
   → SKILL.md dispatches via Task tool:
     1. Task(guidance-extract)  — Phase 1: PR extraction → guidance_write.sh --write → Neo4j MERGE
     2. Task(guidance-qa-enrich) — Phase 2: Q&A enrichment → reads Phase 1 items → enriches → writes

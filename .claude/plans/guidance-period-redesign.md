@@ -395,7 +395,7 @@ All file paths relative to `.claude/skills/earnings-orchestrator/` (scripts) or 
 ### Files NOT Touched (and why)
 
 - **`guidance_write.sh`** — shell wrapper, no logic. Calls guidance_write_cli.py unchanged.
-- **`guidance-extractor.md`** — orchestrator skill, just dispatches to guidance-extract agent. No changes needed.
+- **`guidance-transcript.md`** — orchestrator skill, just dispatches to guidance-extract agent. No changes needed.
 - **`test_fiscal_resolve.py`** — imports `_compute_fiscal_dates` from `get_quarterly_filings`, which re-exports from `fiscal_math`. All 29 tests pass unchanged. Verified: Python re-exports imported names.
 - **`neo4j-schema/SKILL.md`** — point-in-time snapshot from 2026-01-04. Predates entire guidance system (Guidance/GuidanceUpdate also absent). No guidance agent loads it. Follow-up task when schema snapshot is refreshed.
 
@@ -661,7 +661,7 @@ Each step is independently testable. If any step breaks, stop and fix before pro
 - No changes to concept/member edge logic — stays identical
 - No changes to feature flag mechanism
 - No changes to `guidance_write.sh` — just a shell wrapper
-- No changes to `guidance-extractor.md` — just dispatches to the agent
+- No changes to `guidance-transcript.md` — just dispatches to the agent
 - `build_period_u_id()` is NOT deleted — kept deprecated for backward compatibility
 
 ### Follow-up Tasks (post-implementation)
