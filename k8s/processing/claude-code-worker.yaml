@@ -127,7 +127,11 @@ spec:
           type: DirectoryOrCreate
 
 ---
-# KEDA ScaledObject — scales 0→1 when earnings:trigger has items
+# KEDA ScaledObject — scales 1→7 based on queue depth
+# minReplicaCount: 1 (not 0) because KEDA's Redis trigger only sees queue depth,
+# not in-flight work. With min=0, KEDA kills pods mid-processing once the queue
+# empties (items dequeued but still being processed). min=1 guarantees the last
+# pod is never killed by KEDA. Idle cost is negligible (~15 MiB, blocked on brpop).
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
@@ -136,9 +140,9 @@ metadata:
 spec:
   scaleTargetRef:
     name: claude-code-worker
-  minReplicaCount: 0    # Scale to zero when idle (saves quota + money)
+  minReplicaCount: 1    # Never scale to 0 — prevents KEDA killing pods mid-processing
   maxReplicaCount: 7    # Parallel processing — safe for different tickers
-  cooldownPeriod: 900   # 15 min cooldown (guidance extraction takes 5-10 min)
+  cooldownPeriod: 300   # Only governs 7→6→...→1 scale-down, never kills last pod
   pollingInterval: 30
   triggers:
   - type: redis
