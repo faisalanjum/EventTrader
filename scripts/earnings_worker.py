@@ -240,7 +240,7 @@ async def process_item(payload: dict, mgr) -> bool:
                 log.info("Shutdown requested at %d/%d — re-queuing %d remaining",
                          i - 1, len(source_ids), len(remaining))
                 await _requeue_remaining(ticker, remaining, mode)
-                break
+                return True  # Already re-queued — don't trigger retry logic
             log.info("Batch [%d/%d]: %s", i, len(source_ids), sid)
             ok = await process_one(ticker, sid, mode, mgr)
             if ok:
