@@ -206,6 +206,21 @@ async def process_one(ticker: str, source_id: str, mode: str, mgr) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Re-queue helper — pushes unprocessed transcripts back to Redis on shutdown
+# ---------------------------------------------------------------------------
+async def _requeue_remaining(ticker: str, source_ids: list, mode: str):
+    """Push unprocessed transcripts back to the queue so they aren't lost."""
+    try:
+        r = aioredis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=False)
+        payload = json.dumps({"ticker": ticker, "source_ids": source_ids, "mode": mode})
+        await r.lpush(QUEUE_NAME, payload)
+        await r.aclose()
+        log.info("Re-queued %d transcripts for %s", len(source_ids), ticker)
+    except Exception as e:
+        log.error("Failed to re-queue remaining transcripts: %s", e)
+
+
+# ---------------------------------------------------------------------------
 # Batch processing — handles both single and multi-transcript payloads
 # ---------------------------------------------------------------------------
 async def process_item(payload: dict, mgr) -> bool:
@@ -220,7 +235,11 @@ async def process_item(payload: dict, mgr) -> bool:
         success_count = 0
         for i, sid in enumerate(source_ids, 1):
             if shutdown_event.is_set():
-                log.info("Shutdown requested — stopping batch at %d/%d", i - 1, len(source_ids))
+                # Re-queue unprocessed transcripts so they aren't lost
+                remaining = source_ids[i - 1:]
+                log.info("Shutdown requested at %d/%d — re-queuing %d remaining",
+                         i - 1, len(source_ids), len(remaining))
+                await _requeue_remaining(ticker, remaining, mode)
                 break
             log.info("Batch [%d/%d]: %s", i, len(source_ids), sid)
             ok = await process_one(ticker, sid, mode, mgr)
