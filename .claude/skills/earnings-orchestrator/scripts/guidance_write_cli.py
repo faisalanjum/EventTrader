@@ -60,7 +60,7 @@ import sys
 sys.path.insert(0, "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts")
 sys.path.insert(0, "/home/faisal/EventMarketDB")
 
-from guidance_ids import build_guidance_ids, build_period_u_id, build_guidance_period_id
+from guidance_ids import build_guidance_ids, build_period_u_id, build_guidance_period_id, normalize_for_member_match
 import guidance_writer
 from guidance_writer import write_guidance_batch, write_guidance_item, create_guidance_constraints
 
@@ -225,6 +225,44 @@ def main():
         except Exception as e:
             print(json.dumps({"error": f"Neo4j connection failed: {e}"}))
             sys.exit(1)
+
+        # Member matching: resolve segment text → Member u_ids (code-level, authoritative).
+        # Only in write mode (needs Neo4j). Always overwrites LLM-provided u_ids.
+        try:
+            cik_rec = manager.execute_cypher_query(
+                "MATCH (c:Company {ticker: $ticker}) RETURN c.cik AS cik LIMIT 1",
+                {'ticker': ticker},
+            )
+            if cik_rec:
+                cik = str(cik_rec['cik'])
+                cik_stripped = cik.lstrip('0') or '0'
+                member_rows = manager.execute_cypher_query_all(
+                    "MATCH (m:Member) "
+                    "WHERE m.u_id STARTS WITH $cp OR m.u_id STARTS WITH $cpp "
+                    "RETURN m.label AS label, m.qname AS qname, "
+                    "       head(collect(m.u_id)) AS u_id",
+                    {'cp': cik_stripped + ':', 'cpp': cik + ':'},
+                )
+                member_lookup = {}
+                for row in member_rows:
+                    if row['label']:
+                        norm = normalize_for_member_match(row['label'])
+                        if norm:
+                            member_lookup.setdefault(norm, []).append(row['u_id'])
+                matched = 0
+                for item in valid_items:
+                    seg = item.get('segment', 'Total')
+                    if seg and seg != 'Total':
+                        norm_seg = normalize_for_member_match(seg)
+                        if norm_seg in member_lookup:
+                            item['member_u_ids'] = member_lookup[norm_seg]
+                            matched += 1
+                if matched:
+                    logger.warning("Member matching: resolved %d items via code fallback", matched)
+            else:
+                logger.warning("Member matching: company %s not found in graph", ticker)
+        except Exception as e:
+            logger.warning("Member matching fallback failed (non-fatal): %s", e)
 
         try:
             create_guidance_constraints(manager)

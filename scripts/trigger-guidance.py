@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Trigger guidance extraction for unprocessed transcripts.
 
-Queries Neo4j ProcessingLog to find transcripts not yet processed,
+Queries Neo4j Transcript.guidance_status to find transcripts not yet processed,
 then pushes batched-per-company payloads to the earnings:trigger Redis queue.
 KEDA scales claude-code-worker pods automatically.
 
@@ -34,50 +34,45 @@ from neograph.Neo4jConnection import get_manager
 REDIS_HOST = os.environ.get("REDIS_HOST", "192.168.40.72")
 REDIS_PORT = int(os.environ.get("REDIS_PORT", "31379"))
 QUEUE_NAME = "earnings:trigger"
-TASK_NAME = "guidance_extraction"
-STALE_MINUTES = 30
 
 
 def find_unprocessed(mgr, tickers=None, source_id=None, force=False, retry_failed=False):
-    """Query Neo4j for transcripts needing processing, based on ProcessingLog.
+    """Query Neo4j for transcripts needing processing, based on guidance_status property.
 
-    Uses OPTIONAL MATCH via FOR_SOURCE relationship (graph-native traversal).
-    NOT EXISTS with correlated property match hangs Neo4j's query planner.
+    guidance_status IS NULL = not yet processed.
     """
 
     if source_id:
-        # Single transcript lookup — use relationship traversal
+        # Single transcript lookup
         rows = mgr.execute_cypher_query_all(
             "MATCH (t:Transcript {id: $sid}) "
-            "OPTIONAL MATCH (p:ProcessingLog {task: $task})-[:FOR_SOURCE]->(t) "
             "RETURN t.id AS id, t.symbol AS symbol, "
             "       t.fiscal_year AS fy, t.fiscal_quarter AS fq, "
-            "       p.status AS log_status, p.items_written AS items",
-            {"sid": source_id, "task": TASK_NAME},
+            "       t.guidance_status AS status",
+            {"sid": source_id},
         )
         if not rows:
             print(f"Transcript not found: {source_id}", file=sys.stderr)
             return []
         row = rows[0]
-        if row["log_status"] == "completed" and not force:
-            print(f"Already processed ({row['items']} items): {source_id}")
+        if row["status"] == "completed" and not force:
+            print(f"Already processed: {source_id}")
             print("Use --force to re-process.")
             return []
-        if row["log_status"] == "in_progress" and not force:
+        if row["status"] == "in_progress" and not force:
             print(f"Currently in progress: {source_id}")
             print("Use --force to re-trigger.")
             return []
         return [{"id": row["id"], "symbol": row["symbol"],
                  "fy": row["fy"], "fq": row["fq"]}]
 
-    # Bulk query — OPTIONAL MATCH + filter pattern (fast, uses relationship traversal)
+    # Bulk query — direct property check on Transcript node
     ticker_filter = "WHERE t.symbol IN $tickers " if tickers else ""
-    params = {"task": TASK_NAME}
+    params = {}
     if tickers:
         params["tickers"] = tickers
 
     if force:
-        # Include everything
         query = (
             f"MATCH (t:Transcript) {ticker_filter}"
             "RETURN t.id AS id, t.symbol AS symbol, "
@@ -85,25 +80,23 @@ def find_unprocessed(mgr, tickers=None, source_id=None, force=False, retry_faile
             "ORDER BY t.symbol, t.id"
         )
     elif retry_failed:
-        # Only items with failed ProcessingLog
+        failed_filter = "WHERE t.guidance_status = 'failed' " if not tickers else "AND t.guidance_status = 'failed' "
         query = (
-            f"MATCH (t:Transcript) {ticker_filter}"
-            "MATCH (p:ProcessingLog {task: $task})-[:FOR_SOURCE]->(t) "
-            "WHERE p.status = 'failed' "
+            f"MATCH (t:Transcript) {ticker_filter}{failed_filter}"
             "RETURN t.id AS id, t.symbol AS symbol, "
             "       t.fiscal_year AS fy, t.fiscal_quarter AS fq "
             "ORDER BY t.symbol, t.id"
         )
     else:
-        # Default: exclude completed and recent in_progress
+        # Default: not yet processed or failed
+        status_filter = "AND (" if tickers else "WHERE ("
+        status_filter += (
+            "t.guidance_status IS NULL "
+            "OR t.guidance_status = 'failed'"
+            ")"
+        )
         query = (
-            f"MATCH (t:Transcript) {ticker_filter}"
-            "OPTIONAL MATCH (p:ProcessingLog {task: $task})-[:FOR_SOURCE]->(t) "
-            "WITH t, p.status AS status, p.started_at AS started "
-            "WHERE status IS NULL "
-            "   OR status = 'failed' "
-            "   OR (status = 'in_progress' "
-            f"       AND started <= datetime() - duration('PT{STALE_MINUTES}M')) "
+            f"MATCH (t:Transcript) {ticker_filter}{status_filter} "
             "RETURN t.id AS id, t.symbol AS symbol, "
             "       t.fiscal_year AS fy, t.fiscal_quarter AS fq "
             "ORDER BY t.symbol, t.id"

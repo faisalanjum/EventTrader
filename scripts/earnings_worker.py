@@ -17,8 +17,8 @@ Payload formats (JSON):
   Legacy plain string:
     "AAPL_2025-07-31T17.00.00-04.00"
 
-ProcessingLog:
-  For mode=write, writes a ProcessingLog node to Neo4j before/after each transcript.
+Status tracking:
+  For mode=write, sets guidance_status property on the Transcript node directly.
   Skipped for mode=dry_run.
 
 Trigger:
@@ -33,7 +33,6 @@ import platform
 import signal
 import sys
 import time
-from datetime import datetime, timezone
 from pathlib import Path
 
 # Project root — must chdir before importing SDK so setting_sources finds .claude/
@@ -102,53 +101,14 @@ signal.signal(signal.SIGINT, _handle_signal)
 
 
 # ---------------------------------------------------------------------------
-# ProcessingLog — Neo4j ledger
+# Status tracking — single property on Transcript node
 # ---------------------------------------------------------------------------
-def log_start(mgr, source_id: str, source_type: str, task: str, mode: str):
-    """Write ProcessingLog(in_progress) before processing."""
+def mark_status(mgr, source_id: str, status: str):
+    """Set guidance_status on the Transcript node."""
     mgr.execute_cypher_query_all(
-        "MERGE (p:ProcessingLog {source_id: $sid, task: $task}) "
-        "SET p.source_type = $stype, p.status = 'in_progress', "
-        "    p.started_at = datetime(), p.completed_at = null, "
-        "    p.error = null, p.items_written = null, "
-        "    p.mode = $mode, p.worker_pod = $pod "
-        "WITH p "
-        "MATCH (t {id: $sid}) WHERE $stype IN labels(t) "
-        "MERGE (p)-[:FOR_SOURCE]->(t)",
-        {"sid": source_id, "task": task, "stype": source_type, "mode": mode, "pod": WORKER_POD},
+        "MATCH (t:Transcript {id: $sid}) SET t.guidance_status = $status",
+        {"sid": source_id, "status": status},
     )
-
-
-def log_complete(mgr, source_id: str, task: str, items_written: int):
-    """Update ProcessingLog to completed."""
-    mgr.execute_cypher_query_all(
-        "MATCH (p:ProcessingLog {source_id: $sid, task: $task}) "
-        "SET p.status = 'completed', p.completed_at = datetime(), "
-        "    p.items_written = $items",
-        {"sid": source_id, "task": task, "items": items_written},
-    )
-
-
-def log_failed(mgr, source_id: str, task: str, error: str):
-    """Update ProcessingLog to failed."""
-    mgr.execute_cypher_query_all(
-        "MATCH (p:ProcessingLog {source_id: $sid, task: $task}) "
-        "SET p.status = 'failed', p.completed_at = datetime(), "
-        "    p.error = $error, p.items_written = 0",
-        {"sid": source_id, "task": task, "error": error[:500]},
-    )
-
-
-def extract_item_count(result_text: str) -> int:
-    """Best-effort extraction of items_written from the result summary."""
-    import re
-    # Match patterns like "17 guidance items" or "Items extracted: 18"
-    for pattern in [r"(\d+)\s+guidance\s+items?", r"(\d+)\s+items?\s+extracted",
-                    r"items?\s*(?:extracted|written)[:\s]*(\d+)", r"(\d+)\s+items?\s+.*?written"]:
-        m = re.search(pattern, result_text, re.IGNORECASE)
-        if m:
-            return int(m.group(1))
-    return 0
 
 
 # ---------------------------------------------------------------------------
@@ -172,14 +132,13 @@ def parse_payload(raw: bytes) -> dict:
 # ---------------------------------------------------------------------------
 async def process_one(ticker: str, source_id: str, mode: str, mgr) -> bool:
     """Run /guidance-transcript for a single transcript. Returns True on success."""
-    task_name = "guidance_extraction"
     is_write = mode == "write"
 
-    if is_write:
+    if is_write and mgr:
         try:
-            log_start(mgr, source_id, "Transcript", task_name, mode)
+            mark_status(mgr, source_id, "in_progress")
         except Exception as e:
-            log.warning("ProcessingLog start failed for %s: %s", source_id, e)
+            log.warning("mark_status(in_progress) failed for %s: %s", source_id, e)
 
     prompt = f"/guidance-transcript {ticker} transcript {source_id} MODE={mode}"
     log.info("Processing: %s", prompt)
@@ -210,9 +169,9 @@ async def process_one(ticker: str, source_id: str, mode: str, mgr) -> bool:
 
         if result_text is None:
             log.error("No result returned for %s (elapsed: %.0fs)", source_id, elapsed)
-            if is_write:
+            if is_write and mgr:
                 try:
-                    log_failed(mgr, source_id, task_name, "No result returned from SDK")
+                    mark_status(mgr, source_id, "failed")
                 except Exception:
                     pass
             return False
@@ -220,21 +179,20 @@ async def process_one(ticker: str, source_id: str, mode: str, mgr) -> bool:
         log.info("Completed %s in %.0fs", source_id, elapsed)
         log.info("Result: %s", result_text[:500])
 
-        if is_write:
+        if is_write and mgr:
             try:
-                items = extract_item_count(result_text)
-                log_complete(mgr, source_id, task_name, items)
-                log.info("ProcessingLog: completed, items_written=%d", items)
+                mark_status(mgr, source_id, "completed")
+                log.info("guidance_status=completed")
             except Exception as e:
-                log.warning("ProcessingLog complete failed for %s: %s", source_id, e)
+                log.warning("mark_status(completed) failed for %s: %s", source_id, e)
         return True
 
     except Exception as e:
         elapsed = time.monotonic() - start
         log.error("Failed %s after %.0fs", source_id, elapsed, exc_info=True)
-        if is_write:
+        if is_write and mgr:
             try:
-                log_failed(mgr, source_id, task_name, str(e))
+                mark_status(mgr, source_id, "failed")
             except Exception:
                 pass
         return False

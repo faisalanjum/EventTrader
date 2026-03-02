@@ -195,6 +195,15 @@ def canonicalize_value(value: Optional[float], unit_raw: str, canonical_unit: st
 
 # ── Text normalization for hashing ──────────────────────────────────────────
 
+def normalize_for_member_match(s: str) -> str:
+    """Normalize for segment↔member matching: lowercase alphanum, strip XBRL tokens, trailing 's'."""
+    n = re.sub(r'[^a-z0-9]', '', s.lower())
+    n = n.replace('member', '').replace('segment', '')
+    if n.endswith('s'):
+        n = n[:-1]
+    return n
+
+
 def _normalize_text(text: Optional[str]) -> str:
     """Lowercase, trim, collapse whitespace. Null → '.'"""
     if text is None:

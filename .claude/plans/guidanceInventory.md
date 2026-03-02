@@ -1171,4 +1171,60 @@ The agent's quality filters (lines 357-365) belong in the core SKILL.md:
 
 ---
 
+---
+
+## §16 — K8s Worker: Triggering Guidance Extraction
+
+**Deployed**: `claude-code-worker` in `processing` namespace, KEDA scales 0→7 pods.
+
+### Commands
+
+```bash
+# One specific transcript
+python3 scripts/trigger-guidance.py --source-id ADBE_2025-06-12T17.00.00-04.00
+
+# All unprocessed transcripts for one company (sequential on 1 pod)
+python3 scripts/trigger-guidance.py CRM
+
+# Multiple companies in parallel (1 pod per company, up to 7 pods)
+python3 scripts/trigger-guidance.py CRM ADBE MSFT AAPL GOOGL
+
+# Preview what would be queued (don't actually queue)
+python3 scripts/trigger-guidance.py --list CRM ADBE
+
+# Dry run (extract but don't write to Neo4j)
+python3 scripts/trigger-guidance.py --mode dry_run CRM
+
+# Re-process something already completed
+python3 scripts/trigger-guidance.py --force --source-id ADBE_2025-06-12T17.00.00-04.00
+
+# Re-process only failed items
+python3 scripts/trigger-guidance.py --retry-failed ADBE
+
+# Everything unprocessed in the database
+python3 scripts/trigger-guidance.py --all
+
+# Watch logs
+kubectl logs -f -l app=claude-code-worker -n processing
+```
+
+### How it works
+
+- Each company gets **one queue item** containing all its transcript IDs
+- **One pod** processes all transcripts for a company **sequentially**
+- **Multiple companies** → multiple queue items → KEDA scales pods **in parallel** (max 7)
+- `ProcessingLog` node in Neo4j tracks status (`in_progress`/`completed`/`failed`) per transcript
+- `dry_run` mode skips ProcessingLog — only `write` mode creates ledger entries
+
+### Key files
+
+| File | Purpose |
+|------|---------|
+| `scripts/trigger-guidance.py` | Queries Neo4j for unprocessed transcripts, pushes to Redis |
+| `scripts/earnings_worker.py` | Redis queue consumer, invokes `/guidance-transcript` via SDK |
+| `k8s/processing/claude-code-worker.yaml` | Deployment + KEDA ScaledObject |
+| `scripts/canary_sdk.py` | Validates SDK + MCP + Skills in K8s pod |
+
+---
+
 *v3.0 | 2026-02-22 | Architecture simplification: Removed Context node (replaced by direct FOR_COMPANY edge). Removed Unit node (demoted to canonical_unit property on GuidanceUpdate). Redesigned Period as fiscal-keyed separate namespace (guidance_period_ prefix, no date computation). Added instant period support. Renamed field #9 from unit to canonical_unit. Updated §1 schema, §6 (Context Resolution → Period Resolution), §9 predictor queries, §10 extraction steps, Decisions #3/#4/#15/#22/#31/#32. Resolved P1 (instant) and P2 (period mismatch). Prior: v2.5 (MAPS_TO_CONCEPT dual approach, Unit XBRL shape).*
