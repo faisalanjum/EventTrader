@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """SDK Canary Script — validates Claude Agent SDK in K8s pod.
 
+Auto-detects environment:
+  - K8s: uses HTTP MCP endpoint + in-cluster Bolt DNS
+  - Local: uses .mcp.json stdio servers + localhost NodePort
+
 Run inside a pod with:
-  - hostPath /home/faisal (credentials + project + venv)
-  - hostNetwork: true (localhost:30687 for MCP stdio + Neo4j Bolt)
+  - hostPath mounts: project, .local (claude CLI), .claude (credentials)
   - HOME=/home/faisal, SHELL=/bin/bash, runAsUser=1000
+  - envFrom: eventtrader-secrets, claude-auth
 
 Tests (sequential, each gated on prior success):
   1. SDK import + version
-  2. MCP connectivity via setting_sources=["project"] (proves .mcp.json loads)
+  2. MCP connectivity (neo4j-cypher read query)
   3. Skill invocation (/neo4j-schema)
   4. Full guidance-transcript dry-run on CRM transcript (2-phase, subagents)
 
@@ -19,13 +23,46 @@ Usage:
 
 import asyncio
 import json
+import os
 import sys
 import time
 import traceback
 
+# In-cluster MCP HTTP endpoint (used when KUBERNETES_SERVICE_HOST is set)
+MCP_NEO4J_URL = os.environ.get(
+    "MCP_NEO4J_URL",
+    "http://mcp-neo4j-cypher-http.mcp-services.svc.cluster.local:8000/mcp",
+)
+IN_K8S = "KUBERNETES_SERVICE_HOST" in os.environ
+
 
 def log(msg: str):
     print(f"[canary] {time.strftime('%H:%M:%S')} {msg}", flush=True)
+
+
+def get_base_options(**overrides):
+    """Build ClaudeAgentOptions with environment-appropriate MCP config."""
+    from claude_agent_sdk import ClaudeAgentOptions
+
+    kwargs = dict(
+        setting_sources=["project"],
+        cwd="/home/faisal/EventMarketDB",
+        permission_mode="bypassPermissions",
+    )
+
+    # In K8s: override neo4j-cypher to use HTTP (not stdio from .mcp.json)
+    # Host header required: MCP server rejects non-localhost Host values
+    if IN_K8S:
+        kwargs["mcp_servers"] = {
+            "neo4j-cypher": {
+                "type": "http",
+                "url": MCP_NEO4J_URL,
+                "headers": {"Host": "localhost:8000"},
+            },
+        }
+
+    kwargs.update(overrides)
+    return ClaudeAgentOptions(**kwargs)
 
 
 async def test_1_sdk_import():
@@ -38,14 +75,16 @@ async def test_1_sdk_import():
     import claude_agent_sdk
     version = getattr(claude_agent_sdk, "__version__", "unknown")
     log(f"  SDK version: {version}")
+    log(f"  Environment: {'K8s (HTTP MCP)' if IN_K8S else 'Local (stdio MCP)'}")
     log("TEST 1: PASS")
     return True
 
 
 async def test_2_mcp_connectivity():
-    """Test 2: MCP connectivity via setting_sources (proves .mcp.json stdio loads)."""
-    log("TEST 2: MCP connectivity via setting_sources=[\"project\"]")
-    from claude_agent_sdk import query, ClaudeAgentOptions
+    """Test 2: MCP connectivity — neo4j-cypher read query."""
+    log("TEST 2: MCP connectivity")
+    log(f"  Mode: {'HTTP @ {MCP_NEO4J_URL}' if IN_K8S else 'stdio via .mcp.json'}")
+    from claude_agent_sdk import query
 
     stderr_lines = []
     def capture_stderr(line: str):
@@ -53,14 +92,7 @@ async def test_2_mcp_connectivity():
         if len(stderr_lines) <= 5:
             log(f"  [stderr] {line.rstrip()}")
 
-    options = ClaudeAgentOptions(
-        setting_sources=["project"],
-        cwd="/home/faisal/EventMarketDB",
-        permission_mode="bypassPermissions",
-        max_turns=5,
-        max_budget_usd=1.0,
-        stderr=capture_stderr,
-    )
+    options = get_base_options(max_turns=5, max_budget_usd=1.0, stderr=capture_stderr)
 
     result_text = None
     async for msg in query(
@@ -76,7 +108,6 @@ async def test_2_mcp_connectivity():
         return False
 
     log(f"  Result: {result_text[:200]}")
-    # Check if result contains a number (company count)
     if any(c.isdigit() for c in result_text):
         log("TEST 2: PASS (MCP read returned numeric result)")
         return True
@@ -88,21 +119,12 @@ async def test_2_mcp_connectivity():
 async def test_3_skill_invocation():
     """Test 3: Skill invocation (/neo4j-schema)."""
     log("TEST 3: Skill invocation (/neo4j-schema)")
-    from claude_agent_sdk import query, ClaudeAgentOptions
+    from claude_agent_sdk import query
 
-    options = ClaudeAgentOptions(
-        setting_sources=["project"],
-        cwd="/home/faisal/EventMarketDB",
-        permission_mode="bypassPermissions",
-        max_turns=10,
-        max_budget_usd=2.0,
-    )
+    options = get_base_options(max_turns=10, max_budget_usd=2.0)
 
     result_text = None
-    async for msg in query(
-        prompt="/neo4j-schema",
-        options=options,
-    ):
+    async for msg in query(prompt="/neo4j-schema", options=options):
         if hasattr(msg, "result"):
             result_text = msg.result
 
@@ -112,7 +134,6 @@ async def test_3_skill_invocation():
         return False
 
     log(f"  Result (first 200 chars): {result_text[:200]}")
-    # Skill should return schema info mentioning node labels
     if "Company" in result_text or "Transcript" in result_text or "Report" in result_text:
         log("TEST 3: PASS (skill returned schema content)")
         return True
@@ -127,15 +148,9 @@ async def test_4_guidance_extractor():
     log("  Ticker: CRM")
     log("  Source: CRM_2025-09-03T17.00.00-04.00")
     log("  Mode: dry_run (zero Neo4j writes)")
-    from claude_agent_sdk import query, ClaudeAgentOptions
+    from claude_agent_sdk import query
 
-    options = ClaudeAgentOptions(
-        setting_sources=["project"],
-        cwd="/home/faisal/EventMarketDB",
-        permission_mode="bypassPermissions",
-        max_turns=80,
-        max_budget_usd=10.0,
-    )
+    options = get_base_options(max_turns=80, max_budget_usd=10.0)
 
     result_text = None
     start = time.time()
@@ -159,7 +174,6 @@ async def test_4_guidance_extractor():
     log(f"  Result (first 500 chars): {result_text[:500]}")
     log(f"  Elapsed: {elapsed:.0f}s")
 
-    # Check for key indicators of success
     has_items = "Items extracted" in result_text or "items" in result_text.lower()
     has_phases = "Phase 1" in result_text or "Phase 2" in result_text or "phase" in result_text.lower()
     if has_items or has_phases:
@@ -176,6 +190,7 @@ async def main():
     log("=" * 60)
     log("Claude Agent SDK Canary — K8s Validation")
     log(f"Mode: {'quick (tests 1-3)' if quick else 'full (tests 1-4)'}")
+    log(f"Environment: {'K8s' if IN_K8S else 'Local'}")
     log("=" * 60)
 
     results = {}
@@ -208,7 +223,6 @@ async def main():
     log(f"  {total_pass}/{total} passed")
     log("=" * 60)
 
-    # Write result to /tmp for pod inspection
     with open("/tmp/canary_result.json", "w") as f:
         json.dump(results, f, indent=2)
     log("Results written to /tmp/canary_result.json")

@@ -1,0 +1,141 @@
+---
+# Claude Code Worker — Deployment
+# Processes earnings:trigger Redis queue via Claude Agent SDK
+# Pattern: matches edge-writer, report-enricher, xbrl-worker-heavy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: claude-code-worker
+  namespace: processing
+spec:
+  replicas: 0  # KEDA manages scaling (0→1)
+  selector:
+    matchLabels:
+      app: claude-code-worker
+  strategy:
+    type: Recreate  # Single-writer pattern (same as edge-writer)
+  template:
+    metadata:
+      labels:
+        app: claude-code-worker
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum
+      priorityClassName: worker-standard
+      terminationGracePeriodSeconds: 300  # Allow in-flight query() to complete
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: claude-worker
+        image: python:3.11-slim
+        command:
+        - /bin/bash
+        - -c
+        - |
+          export PATH="/home/faisal/.local/bin:$PATH"
+          source /home/faisal/EventMarketDB/venv/bin/activate
+          exec python /home/faisal/EventMarketDB/scripts/earnings_worker.py
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        - name: HOME
+          value: /home/faisal
+        - name: SHELL
+          value: /bin/bash
+        - name: CLAUDE_PROJECT_DIR
+          value: /home/faisal/EventMarketDB
+        # In-cluster service DNS for Neo4j (overrides eventtrader-secrets NodePort URI)
+        - name: NEO4J_URI
+          value: bolt://neo4j-bolt.neo4j.svc.cluster.local:7687
+        - name: NEO4J_USERNAME
+          value: neo4j
+        # In-cluster Redis (overrides eventtrader-secrets NodePort values)
+        - name: REDIS_HOST
+          value: redis.infrastructure.svc.cluster.local
+        - name: REDIS_PORT
+          value: "6379"
+        # guidance_write.sh uses GUIDANCE_NEO4J_URI (falls back to bolt://localhost:30687)
+        - name: GUIDANCE_NEO4J_URI
+          value: bolt://neo4j-bolt.neo4j.svc.cluster.local:7687
+        # MCP HTTP endpoint (overrides .mcp.json stdio server)
+        - name: MCP_NEO4J_URL
+          value: http://mcp-neo4j-cypher-http.mcp-services.svc.cluster.local:8000/mcp
+        envFrom:
+        - secretRef:
+            name: eventtrader-secrets  # 26 keys: NEO4J_PASSWORD, API keys, etc.
+        - secretRef:
+            name: claude-auth  # CLAUDE_CODE_OAUTH_TOKEN
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: "2"
+            memory: 4Gi
+        volumeMounts:
+        # Writable home dir (emptyDir) — CLI writes .claude.json here
+        - name: home
+          mountPath: /home/faisal
+        # hostPath subdirectory mounts override emptyDir for specific paths
+        - name: project
+          mountPath: /home/faisal/EventMarketDB
+        - name: claude-cli
+          mountPath: /home/faisal/.local
+          readOnly: true
+        - name: claude-state
+          mountPath: /home/faisal/.claude
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      # Writable parent dir for $HOME — allows CLI to write .claude.json
+      # hostPath subdirectory mounts below take precedence for their paths
+      - name: home
+        emptyDir: {}
+      # Project files: venv, agents, skills, CLAUDE.md, earnings-analysis/
+      - name: project
+        hostPath:
+          path: /home/faisal/EventMarketDB
+          type: Directory
+      # Claude CLI binary + versions (symlink at .local/bin/claude → .local/share/claude/versions/*)
+      - name: claude-cli
+        hostPath:
+          path: /home/faisal/.local
+          type: Directory
+      # Claude session state, credentials, settings
+      - name: claude-state
+        hostPath:
+          path: /home/faisal/.claude
+          type: Directory
+      # Log directory (matches other workers)
+      - name: logs
+        hostPath:
+          path: /home/faisal/EventMarketDB/logs
+          type: DirectoryOrCreate
+
+---
+# KEDA ScaledObject — scales 0→1 when earnings:trigger has items
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: claude-code-worker-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: claude-code-worker
+  minReplicaCount: 0    # Scale to zero when idle (saves quota + money)
+  maxReplicaCount: 1    # Single writer — no concurrent processing
+  cooldownPeriod: 300   # 5 min cooldown (same as xbrl-heavy)
+  pollingInterval: 30
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: earnings:trigger
+      listLength: "1"
+      databaseIndex: "0"
