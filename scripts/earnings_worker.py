@@ -167,6 +167,8 @@ async def process_one(ticker: str, source_id: str, mode: str, mgr) -> bool:
         async for msg in query(prompt=prompt, options=options):
             if hasattr(msg, "result"):
                 result_text = msg.result
+            elif hasattr(msg, "content"):
+                log.info("  [%s] %s", type(msg).__name__, msg.content[:200])
 
         elapsed = time.monotonic() - start
 
