@@ -138,7 +138,7 @@ spec:
     name: claude-code-worker
   minReplicaCount: 0    # Scale to zero when idle (saves quota + money)
   maxReplicaCount: 7    # Parallel processing — safe for different tickers
-  cooldownPeriod: 300   # 5 min cooldown (same as xbrl-heavy)
+  cooldownPeriod: 900   # 15 min cooldown (guidance extraction takes 5-10 min)
   pollingInterval: 30
   triggers:
   - type: redis
