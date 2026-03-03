@@ -426,9 +426,6 @@
     re-enabling transcript ingestion. `feature_flags.py:130` has a commented-out `gpt-4.1-mini` reference.
 
   FUTURE / DEFERRED:
-  - GAP-19: Move transcript ingestion to K8s pod. Currently `TranscriptsManager` is commented out in
-    `DataManagerCentral.py:693` (BENZINGA_ONLY mode). Consider: CronJob for historical backfill +
-    KEDA-scaled pod for live polling, reusing `earnings:trigger` queue pattern from guidance worker.
   - GAP-18: Same-day transcript collision guard. Theoretical — zero occurrences across 4,192 transcripts.
     If two conferences happen same day for same company, MERGE silently overwrites first with second.
     Proposed fix (not validated): check `conference_datetime` in `_process_deduplicated_transcript` before
@@ -439,3 +436,82 @@
     Active method is `_publish_news_update()`. Safe to delete.
   - GAP-16: `parse_transcript_key_id()` at `redis_constants.py:76-91` — confirmed dead code (zero callers).
     Safe to delete.
+
+  ---
+  GAP-19: Re-enable Transcript Ingestion (Analysis 2026-03-03)
+
+  STATUS: NOT NEEDED AS SEPARATE K8s POD — just uncomment in DataManagerCentral.py after GAP-20.
+
+  ANALYSIS (2026-03-03):
+  All 3 data sources (news, reports, transcripts) use the identical architecture: daemon threads inside
+  a single `run_event_trader.py` process, managed by `watchdog.sh` (pgrep + restart up to 5x) and
+  `event_trader.sh` (PID file control script). None of them run as K8s pods.
+
+  Current production architecture (DataManagerCentral.py):
+    BenzingaNewsManager.start() → Thread 1: processor + Thread 2: returns + Thread 3: WebSocket
+    ReportsManager.start()      → Thread 1: processor + Thread 2: returns + Thread 3: WebSocket + Thread 4: historical
+    TranscriptsManager.start()  → Thread 1: processor + Thread 2: returns + Thread 3: historical + schedule polling
+    All 3 share: one process, one Neo4j PubSub subscriber, one Redis connection pool.
+
+  News has been running fine in production with this architecture. Transcripts use the exact same
+  pattern — there is no architectural reason to move transcripts to a K8s pod if news doesn't need one.
+
+  TO RE-ENABLE TRANSCRIPTS:
+  1. Fix GAP-20 (replace retired OpenAI models) — this is the only real blocker
+  2. Uncomment 4 lines in DataManagerCentral.py:
+     - Line 692: self.sources['reports'] = ReportsManager(...)    (if reports also needed)
+     - Line 693: self.sources['transcripts'] = TranscriptsManager(...)
+     - Line 726: self.process_report_data()                       (if reports also needed)
+     - Line 727: self.process_transcript_data()
+  3. Update sources_to_check at run_event_trader.py:306 to include all 3 sources
+  4. Restart EventTrader via `event_trader.sh restart`
+
+  Effort: ~1 hour (GAP-20 model swap + uncomment + test)
+
+  KNOWN LIMITATIONS OF CURRENT ARCHITECTURE (applies to ALL sources, not just transcripts):
+  - Single process: if it OOMs or the machine reboots, all ingestion stops until watchdog restarts
+  - Daemon threads: a crashed thread dies silently — main process stays alive, watchdog sees "running"
+  - No per-thread health checks — only process-level liveness via pgrep
+  - No retry/dead-letter for individual items (Redis queues provide crash recovery, not item-level retry)
+  - No horizontal scaling — one machine, one process
+  - Watchdog is bash-based (pgrep + PID file), not K8s liveness/readiness probes
+
+  These limitations are acceptable at current scale (news runs 24/7 without issues). If reliability
+  requirements increase (e.g., trading signals depend on real-time transcript availability), consider
+  the K8s migration below as a future project covering ALL sources, not just transcripts.
+
+  FUTURE: Full Ingestion Pipeline K8s Migration (all sources)
+  If/when the thread-based architecture proves insufficient for 24/7 trading:
+
+  Option A — Minimal K8s (wrap existing code):
+    Deploy `run_event_trader.py` as a K8s Deployment (replicas=1) with liveness probe.
+    Gains: auto-restart on crash/OOM, node failure recovery, resource limits.
+    Doesn't fix: silent thread death, no per-source scaling.
+    Effort: ~2 hours (YAML + healthcheck endpoint)
+
+  Option B — Full decomposition (queue-per-item, KEDA-native):
+    Separate each source into its own Deployment. Decompose into queue-driven workers.
+    Tricky part: ReturnsProcessor is inherently delayed (1hr/1session/1day) — doesn't fit
+    queue-per-item cleanly. Needs separate always-on pod or CronJob for pending returns.
+    Gains: per-source restart, horizontal scaling, retry/dead-letter, proper health checks.
+    Effort: ~2-3 days (decompose TranscriptsManager + ReturnsProcessor + new worker scripts + YAMLs)
+
+  No action needed now. Revisit if/when the thread-based architecture causes actual production issues.
+
+  HIGHER PRIORITY THAN K8s MIGRATION:
+  The failure mode that matters for trading is "data stops flowing and I don't notice." The fix for
+  that isn't K8s pods — it's monitoring and alerting. A Grafana alert catches every failure mode
+  (thread death, process crash, API outage, Redis down) regardless of deployment model.
+
+  Recommended actions (in priority order):
+  1. Grafana alert for stale data (~30 min) — highest bang for buck
+     Alert if zero new News/Transcript nodes in Neo4j in the last N minutes.
+     Catches ALL failure modes. Existing Prometheus/Grafana stack at :32000 is ready.
+  2. Thread-level heartbeat (~1 hour)
+     Each daemon thread writes a Redis key with its last-active timestamp (e.g.,
+     `heartbeat:news:processor`, `heartbeat:news:returns`, `heartbeat:news:websocket`).
+     A simple check script or Grafana query flags dead threads even when the process is alive.
+  3. Fix GAP-20 and uncomment transcripts (~1 hour)
+
+  Total: ~2.5 hours to get transcripts running with real alerting — vs. 2-3 days for K8s migration
+  that solves the same visibility problem less directly.

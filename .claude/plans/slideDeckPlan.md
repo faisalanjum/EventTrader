@@ -642,3 +642,355 @@ slide_decks/                                    ← SLIDE_DECK_STORAGE_DIR
    ORDER BY size(sd.content) DESC
    ```
    Use this to decide chunking strategy (see Open Decision above).
+
+---
+
+## Independent Verification Analysis (2026-03-02)
+
+Full empirical audit of every claim, code reference, API, Neo4j schema, and assumption.
+Conducted by reading every line of referenced source code, querying the live Neo4j database,
+inspecting the installed earningscall library, and verifying the Docling API via documentation.
+
+### BUGS / ISSUES FOUND
+
+#### BUG 1 — CRITICAL: fiscal_year stored as comma-formatted string in Neo4j
+
+**Affects:** Step 9 backfill script (`backfill_slide_decks.py`)
+
+All 4,397 Transcript nodes store `fiscal_year` as comma-formatted strings: `"2,023"`, `"2,024"`,
+`"2,025"`, etc. — NOT integers. Empirically verified:
+
+```
+Neo4j query:
+  MATCH (t:Transcript) RETURN t.fiscal_year, apoc.meta.cypher.type(t.fiscal_year) AS type LIMIT 1
+  → fiscal_year: "2,023", type: "STRING"
+
+  toInteger(t.fiscal_year) → NULL  (comma breaks conversion)
+  All 4,397 transcripts have comma-formatted fiscal_year (CONTAINS ',' = 4,397)
+  fiscal_quarter is also STRING type but without commas (e.g., "1", "2")
+```
+
+The backfill script's `FIND_MISSING` query returns `t.fiscal_year AS year` → `"2,023"` (string).
+This is then passed to `EarningsEvent(year=year, quarter=quarter, conference_date=None)`.
+The earningscall library's `download_slide_deck()` at `company.py:192` does:
+```python
+if quarter < 1 or quarter > 4:  # TypeError: '<' not supported between 'str' and 'int'
+```
+This will crash the entire backfill script.
+
+**Fix required in backfill script:**
+```python
+year = int(str(r["year"]).replace(',', ''))
+quarter = int(str(r["quarter"]))
+```
+Or fix the Cypher query:
+```cypher
+RETURN toInteger(replace(t.fiscal_year, ',', '')) AS year,
+       toInteger(t.fiscal_quarter) AS quarter
+```
+
+Note: This is a pre-existing data quality issue in the Transcript ingestion pipeline —
+`TranscriptNode` uses `safe_int()` to convert to int at `transcript.py:558`, but somehow
+the values are stored as comma-formatted strings in Neo4j. A separate investigation is
+warranted to find the root cause and fix it upstream.
+
+---
+
+#### BUG 2 — MODERATE: feature_flags prefix inconsistency in Step 5b
+
+Step 5a imports the constant directly:
+```python
+from config.feature_flags import (SPEAKER_CLASSIFICATION_MODEL,
+    ENABLE_SLIDE_DECK_DOWNLOAD, SLIDE_DECK_STORAGE_DIR, SLIDE_DECK_IMAGE_DPI)
+```
+But Step 5b code uses module-prefix style:
+```python
+if feature_flags.ENABLE_SLIDE_DECK_DOWNLOAD:
+```
+These are inconsistent. Since the import is `from config.feature_flags import ...`, the
+code should use just `ENABLE_SLIDE_DECK_DOWNLOAD` (no prefix). Or change the import to
+`from config import feature_flags` and use `feature_flags.ENABLE_SLIDE_DECK_DOWNLOAD`.
+
+---
+
+#### BUG 3 — MODERATE: Docling per-page export known quality issue
+
+The plan correctly references GitHub discussion #1575 at line 618 (Verification step 1),
+noting that per-page `export_to_markdown(page_no=N)` can omit text items or reorder content
+vs the full `export_to_markdown()` call.
+
+Empirical verification via GitHub (2026-03-02): Discussion #1575 confirms this issue is
+**REAL and UNSOLVED** as of Docling v2.31.0. The reporter notes "some TextItems are randomly
+skipped" when using page_no, and tables appear in wrong locations in the output.
+
+The plan mentions a fallback strategy ("split full markdown by page break placeholders")
+but this fallback is NOT coded anywhere in Steps 5 or 9 — it's only mentioned as a
+verification step. The implementation should include this fallback from the start, or at
+minimum, validate that per-page output matches full output for the first few decks before
+proceeding with batch processing.
+
+**Recommendation:** Implement a validation check in `_extract_slide_deck()`:
+```python
+# Verify per-page export quality
+concatenated = "\n".join(pages)
+if len(concatenated) < 0.8 * len(full_text):  # >20% content loss
+    logger.warning(f"Per-page export lost {100 - len(concatenated)*100//len(full_text)}% content, falling back to page-break split")
+    pages = full_text.split(page_break_placeholder)  # fallback
+```
+
+---
+
+#### ISSUE 4 — MODERATE: Docling `num_pages` — property vs method uncertainty
+
+The plan calls `doc.document.num_pages()` with parentheses. Docling's official API reference
+lists `num_pages` but its exact nature (property vs method) is ambiguous from documentation.
+Multiple community examples show both patterns. If `num_pages` is a `@property`, then
+calling it with `()` would first evaluate to an `int`, then attempt to call the int,
+raising `TypeError: 'int' object is not callable`.
+
+**Recommendation:** Verify at implementation time. Use `doc.document.num_pages` (no parens)
+to be safe, or check with `callable(doc.document.num_pages)` first.
+
+---
+
+#### ISSUE 5 — MINOR: Insertion point line numbers slightly off
+
+Plan says: "around line 414, before `results.append(result)`"
+Actual code at that location:
+- Line 411: `result['conference_datetime'] = result['conference_datetime'].isoformat()`
+- Line 414: `result = self._validate_transcript(result)`
+- Line 415: `results.append(result)`
+
+The slide deck download block should go between lines 411 and 414 (after datetime
+serialization, before validation). Line 414 is `_validate_transcript`, not `results.append`.
+Minor but worth noting for implementation accuracy.
+
+Note: `_validate_transcript()` catches all exceptions and logs warnings only (lines 459-473),
+so extra `slide_deck_*` fields would not cause validation failures even without updating
+`UnifiedTranscript`. But updating the schema (as the plan specifies) is still correct practice.
+
+---
+
+#### ISSUE 6 — MINOR: Redis file paths non-portable
+
+The slide deck fields `slide_deck_path` and `slide_deck_image_paths` store absolute local
+filesystem paths (e.g., `/path/to/slide_decks/AAPL_2024-07-31_slides.pdf`). These are
+serialized into Redis via `json.dumps()`. If the Redis consumer runs on a different machine
+(e.g., K8s worker pod), the paths won't resolve. Currently not a problem since transcript
+processing is single-machine, but worth noting for future K8s scaling.
+
+---
+
+### EVERYTHING VERIFIED CORRECT
+
+#### Earningscall Library (v1.2.1) — ALL CLAIMS VERIFIED
+
+| Claim | Evidence | Status |
+|-------|----------|--------|
+| `download_slide_deck()` exists | `company.py:168-214`, signature: `(self, year, quarter, event, file_name)` | ✅ |
+| Returns filename (str) or None | Line 202: `return resp`, Line 204-205: `return None` on 404 | ✅ |
+| `InsufficientApiAccessError` exists | `errors.py:23-24`, inherits from `ClientError` | ✅ |
+| 403 raises `InsufficientApiAccessError` | `company.py:206-213`, reads `X-Plan-Name` header | ✅ |
+| 404 returns None gracefully | `company.py:204-205` | ✅ |
+| `get_company(ticker)` exists | `exports.py:15-27`, returns `Company` object | ✅ |
+| `EarningsEvent(year, quarter, conference_date)` | `event.py:25-39`, dataclass with those exact fields | ✅ |
+| Exponential backoff retry | `api.py:163-173`, configurable `DEFAULT_RETRY_STRATEGY` | ✅ |
+| `EARNINGS_CALL_API_KEY` in keys.py | `eventtrader/keys.py:30` | ✅ |
+| earningscall v1.2.1 in requirements | `requirements.txt` confirmed | ✅ |
+
+#### Neo4j Database Schema — EMPIRICALLY VERIFIED
+
+| Claim | Evidence | Status |
+|-------|----------|--------|
+| No SlideDeck/SlidePage nodes exist | Query: `count(sd:SlideDeck) = 0, count(sp:SlidePage) = 0` | ✅ |
+| No HAS_SLIDE_DECK/HAS_SLIDE_PAGE rels | Query: `MATCH ()-[r:HAS_SLIDE_DECK]->() → count = 0` | ✅ |
+| 4,397 Transcript nodes | `MATCH (t:Transcript) RETURN count(t) = 4397` | ✅ |
+| INFLUENCES: Transcript→Company | `MATCH (t:Transcript)-[:INFLUENCES]->(c:Company) → 4,397` | ✅ |
+| HAS_TRANSCRIPT: Company→Transcript | `MATCH (c:Company)-[:HAS_TRANSCRIPT]->(t:Transcript) → 4,397` | ✅ |
+| Transcript has `symbol` property | Keys include: id, symbol, company_name, conference_datetime, fiscal_year, fiscal_quarter, etc. | ✅ |
+| Transcript ID format | `{SYMBOL}_{conference_datetime_iso}` e.g., `HPE_2025-09-03T17.00.00-04.00` | ✅ |
+| QAExchange ID format | `{transcript_id}_qa__{sequence}` e.g., `SMPL_2023-01-05T08.30.00-05.00_qa__0` | ✅ |
+| PreparedRemark ID format | `{transcript_id}_pr` | ✅ |
+| Vector indexes: 3072 dim, cosine | `news_vector_index` and `qaexchange_vector_idx`, both 3072 dim, COSINE | ✅ |
+| 79,781 QAExchange nodes | Label count verified | ✅ |
+| 4,263 PreparedRemark nodes | Label count verified | ✅ |
+
+#### Codebase — ALL LINE NUMBERS AND PATTERNS VERIFIED
+
+| Claim | Actual Location | Status |
+|-------|----------------|--------|
+| `get_single_event()` at ~line 208 | Line 208 exactly | ✅ |
+| `load_companies()` at ~line 52 | Line 52 exactly | ✅ |
+| `SPEAKER_CLASSIFICATION_MODEL` import at line 21 | Line 21 exactly | ✅ |
+| `_process_transcript_content()` at ~line 382 | Line 382 exactly | ✅ |
+| `nodes_to_create` list + `add_rel()` helper | Lines 385-398 exactly as described | ✅ |
+| `PreparedRemarkNode` at ~line 1626 | Line 1626 exactly | ✅ |
+| `QAExchangeNode` at ~line 1782 | Line 1782 exactly (data class at 1770) | ✅ |
+| `create_vector_index()` at ~line 45 | Line 45 exactly | ✅ |
+| `_create_qaexchange_vector_index()` at ~line 123 | Lines 123-131 exactly | ✅ |
+| `batch_process_qaexchange_embeddings()` at ~line 573 | Line 573 exactly | ✅ |
+| `get_presentations_range.py` is a stub | Returns hardcoded "No presentations found" | ✅ |
+| Python 3.11 runtime | `venv/pyvenv.cfg: executable = /usr/local/bin/python3.11` | ✅ |
+| Neither docling nor pdf2image in requirements.txt | Grep confirmed — absent | ✅ |
+| No slide deck feature flags in feature_flags.py | Full file read confirmed — absent | ✅ |
+
+#### Pipeline Architecture — VERIFIED
+
+| Claim | Evidence | Status |
+|-------|----------|--------|
+| API → Redis → Neo4j flow | `get_single_event()` → `store_transcript_in_redis()` → `_process_transcript_content()` | ✅ |
+| LIVE and HISTORICAL paths converge on `get_single_event()` | Both `get_transcripts_for_single_date()` and `get_transcripts_by_date_range()` call it | ✅ |
+| `result` dict populated before `results.append()` | Lines 228-415 build dict, 415 appends | ✅ |
+| Redis serialization: `json.dumps(transcript, default=str)` | `store_transcript_in_redis()` line 765 | ✅ |
+| LPUSH to raw queue | Line 769: `pipe.lpush(client.RAW_QUEUE, raw_key)` | ✅ |
+| Atomic Redis pipeline | Lines 762-779: transaction=True pipeline | ✅ |
+| `manager.merge_nodes()` for batch writes | Line 539: `self.manager.merge_nodes(nodes_to_create)` | ✅ |
+| `create_relationships()` for rels | Lines 541-549: individual rel creation | ✅ |
+
+#### Query Script Pattern — VERIFIED
+
+| Claim | Evidence | Status |
+|-------|----------|--------|
+| `get_transcript_range.py` pattern matches | Uses INFLUENCES direction, datetime() casting, EXISTS filter, `neo4j_session()`, `error()`/`ok()` | ✅ |
+| `utils.py` functions exist | `neo4j_session()`, `error()`, `ok()`, `parse_exception()`, `load_env()`, `get_neo4j_config()` — all verified | ✅ |
+| Same CLI arg pattern (ticker, start, end) | `sys.argv[1:4]` in all scripts | ✅ |
+
+#### Embedding Pipeline — VERIFIED
+
+| Claim | Evidence | Status |
+|-------|----------|--------|
+| `OPENAI_EMBEDDING_DIMENSIONS = 3072` | `feature_flags.py:113` | ✅ |
+| `OPENAI_EMBEDDING_MODEL = "text-embedding-3-large"` | `feature_flags.py:112` | ✅ |
+| `QAEXCHANGE_VECTOR_INDEX_NAME = "qaexchange_vector_idx"` | `feature_flags.py:126` | ✅ |
+| 3-line vector index wrapper pattern | `_create_qaexchange_vector_index()` at lines 123-131 — exactly 3 substantive lines | ✅ |
+| `batch_process_qaexchange_embeddings()` uses temp content, cleanup | Lines 573-693: sets `_temp_content`, calls `batch_embeddings_for_nodes()`, cleans up | ✅ |
+| `process_embeddings_in_parallel()` reusable | `openai_local/openai_parallel_embeddings.py` — 71 lines, async, rate-limited | ✅ |
+
+#### Design Decisions — SOUND
+
+| Decision | Assessment |
+|----------|------------|
+| Page-by-page chunking | Correct — slide decks ARE designed as one-topic-per-page. Mirrors QAExchange pattern. |
+| Parent SlideDeckNode + child SlidePageNode | Correct — follows existing Transcript → QAExchange hierarchy exactly. |
+| Embeddings on SlidePageNode (not parent) | Correct — full deck text would exceed embedding token limits. Per-page is within range. |
+| Conference date in filenames (not fiscal year/quarter) | Correct — avoids collision for companies with overlapping fiscal periods. |
+| MERGE (not CREATE) in backfill | Correct — idempotent, safe to re-run. |
+| Group by ticker in backfill | Correct — reuses Company object (one API call per ticker). |
+| Feature flags defaulting to False | Correct — safe rollout strategy. |
+| Bypass Redis in backfill | Correct — parent Transcript nodes already exist, no enrichment needed. |
+| Deferred embeddings | Reasonable — slide page text may be sparse; transcript PR/QA already covers same content verbally. |
+
+### SUMMARY
+
+**Plan quality: HIGH.** The architecture, design decisions, code patterns, and integration
+points are all sound and well-researched. The plan correctly mirrors existing infrastructure
+(Transcript → QAExchange pattern) and reuses established code paths.
+
+**3 bugs to fix before implementation:**
+1. **CRITICAL:** Backfill script type conversion for comma-formatted fiscal_year strings
+2. **MODERATE:** `feature_flags.` prefix inconsistency (pick one import style)
+3. **MODERATE:** Implement Docling per-page fallback from the start (not just in verification)
+
+**2 items to verify at implementation time:**
+1. Docling `num_pages` — property vs method (use without parens to be safe)
+2. Docling `export_to_markdown(page_no=N)` quality — test on first few PDFs before batch
+
+**Total estimated new code: ~260 lines across 11 files** — confirmed reasonable.
+
+---
+
+### ADDENDUM: Cross-referencing with Pipeline & Gap Analysis (2026-03-02)
+
+After reading `transcriptIngestionPipeline.md` (full 8-stage pipeline deep dive) and
+`transcript-fix-gaps-validation.md` (17-gap analysis with 5-bot validation), the following
+updates and new findings apply:
+
+#### NOTE: Transcript ID format migration is a non-issue for slide decks
+
+The gap analysis reveals a planned transcript ID migration (3,722 LONG + 675 SHORT → DATE
+format). Since zero SlideDeck/SlidePage nodes exist today, there is nothing to orphan or
+re-link. The natural deployment sequence (code fix → ID migration → then slide deck feature)
+means slide decks will only ever be created against already-migrated DATE-format IDs.
+No coordination needed — just don't run the backfill before the ID migration, which would
+be nonsensical anyway (the API tier hasn't been purchased yet).
+
+---
+
+#### REFINEMENT to BUG 1 — fiscal_year type: Root cause identified
+
+The pipeline doc (Notable Nuance #7) reveals transcript IDs differ between stages:
+- Raw Redis key: SYMBOL_datetime (LONG)
+- `_standardize_fields()`: creates `id = "{symbol}_{fiscal_year}_{fiscal_quarter}"` (SHORT)
+
+The `fiscal_year` and `fiscal_quarter` in the result dict are Python integers from the
+earningscall API. But in Neo4j they are stored as comma-formatted strings ("2,023").
+
+Root cause is likely in the Neo4j merge process — `TranscriptNode.properties` returns
+`fiscal_year` as an `int`, but somewhere in `manager.merge_nodes()` or the Cypher
+serialization, Python's locale-aware string formatting or a JSON round-trip introduces
+the comma. This is a pre-existing data quality bug unrelated to slide decks, but the
+backfill script MUST handle it.
+
+The backfill script's `FIND_MISSING` query should use Cypher conversion:
+```cypher
+RETURN t.id AS transcript_id, c.ticker AS ticker,
+       toInteger(replace(t.fiscal_year, ',', '')) AS year,
+       toInteger(t.fiscal_quarter) AS quarter,
+       left(t.conference_datetime, 10) AS conference_date
+```
+
+---
+
+#### CONFIRMATION: Pipeline data flow is compatible
+
+The pipeline doc confirms data flows through 8 stages:
+```
+API (get_single_event) → Redis raw → BaseProcessor → Redis processed
+→ ReturnsProcessor → Redis withreturns → Neo4j → Embeddings
+```
+
+The slide deck fields (`slide_deck_path`, `slide_deck_text`, `slide_deck_pages`,
+`slide_deck_image_paths`) added to the result dict in `get_single_event()` will survive
+all intermediate stages because:
+- `_standardize_fields()` only ADDS id/created/updated/symbols/formType — does not strip fields
+- `_clean_content()` only converts timestamps — does not strip fields
+- `_add_metadata()` only ADDS returns schedule — does not strip fields
+- ReturnsProcessor only ADDS return data — does not strip fields
+- `_process_transcript_content()` reads specific fields with `.get()` — ignores unknown fields
+
+**Verified: the full pipeline is compatible with the slide deck plan's data flow.**
+
+---
+
+#### CONFIRMATION: Both Neo4j write paths handle slide decks
+
+The pipeline doc confirms two independent paths to Neo4j:
+1. **PubSub (real-time)**: `_process_pubsub_item()` → `_process_deduplicated_transcript()`
+2. **Batch**: `process_transcripts_to_neo4j()` → `_process_deduplicated_transcript()`
+
+Both converge on `_process_deduplicated_transcript()` → `_process_transcript_content()`.
+The slide deck code in Step 6 is added to `_process_transcript_content()`, so both paths
+handle slide decks correctly. **No additional code needed for PubSub vs batch distinction.**
+
+---
+
+#### NOTE: Redis memory impact of slide deck text
+
+The pipeline involves TWO Redis storage stages per transcript:
+1. Raw: `transcripts:{live|hist}:raw:{id}` → full JSON
+2. Processed: `transcripts:{live|hist}:processed:{id}` → full JSON (enriched)
+
+Adding slide deck text (~50-100KB per deck for a 30-page presentation) doubles the per-
+transcript Redis memory for the slide deck portion. For batch processing of ~500 transcripts
+with decks, this is ~50-100MB additional Redis memory. Not blocking, but worth monitoring.
+
+The withreturns/withoutreturns stage is a THIRD copy, making it ~150-300MB total temporarily.
+Redis keys have TTL (2 days), so this is transient.
+
+---
+
+#### NO CHANGE to original findings
+
+All 3 bugs (fiscal_year types, feature_flags prefix, Docling per-page fallback) and
+2 verification items (num_pages, export_to_markdown quality) remain valid. The pipeline
+and gap analysis documents reinforce the original findings without contradicting any of them.
