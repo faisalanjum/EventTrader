@@ -129,14 +129,6 @@ class TranscriptProcessor(BaseProcessor):
         key_id = RedisKeys.get_transcript_key_id(symbol, conference_datetime)
 
         try:
-            # Raw namespace (live only)
-            raw_ns = RedisKeys.get_key(
-                source_type=RedisKeys.SOURCE_TRANSCRIPTS,
-                key_type=RedisKeys.SUFFIX_RAW,
-                prefix_type=RedisKeys.PREFIX_LIVE
-            )
-            raw_keys = self.live_client.client.keys(f"{raw_ns}*{key_id}*")
-
             # Processed queues (both live and hist)
             live_processed = self.live_client.client.lrange(self.live_client.PROCESSED_QUEUE, 0, -1)
             hist_processed = self.event_trader_redis.history_client.client.lrange(
