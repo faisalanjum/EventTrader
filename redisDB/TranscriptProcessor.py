@@ -126,7 +126,7 @@ class TranscriptProcessor(BaseProcessor):
         if " " in conference_datetime and "T" not in conference_datetime:
             conference_datetime = conference_datetime.replace(" ", "T")
 
-        key_id = f"{symbol}_{conference_datetime.replace(':', '.')}"
+        key_id = RedisKeys.get_transcript_key_id(symbol, conference_datetime)
 
         try:
             # Raw namespace (live only)
@@ -260,7 +260,7 @@ class TranscriptProcessor(BaseProcessor):
         if " " in conference_datetime and "T" not in conference_datetime:
             conference_datetime = conference_datetime.replace(" ", "T")
 
-        key_id = f"{symbol}_{conference_datetime.replace(':', '.')}"
+        key_id = RedisKeys.get_transcript_key_id(symbol, conference_datetime)
 
         try:
             # Raw namespace (live only)
@@ -357,7 +357,7 @@ class TranscriptProcessor(BaseProcessor):
 
             # Ensure required fields are present for BaseProcessor
             standardized.update({
-                'id': f"{content['symbol']}_{str(content['conference_datetime']).replace(':', '.').replace(' ', 'T')[:16]}",
+                'id': RedisKeys.get_transcript_key_id(content['symbol'], content['conference_datetime']),
                 'quarter_key': f"{content['symbol']}_{content['fiscal_year']}_{content['fiscal_quarter']}",
                 'created': self._ensure_iso_format(content['conference_datetime']),
                 'updated': self._ensure_iso_format(content['conference_datetime']),

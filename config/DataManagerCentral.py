@@ -487,8 +487,8 @@ class TranscriptsManager(DataSourceManager):
                 conf_date_eastern = event.conference_date
                 process_time = int(conf_date_eastern.timestamp() + 1800)
                 
-                # Create event key using the simple string conversion approach
-                event_key = f"{event.symbol}_{str(conf_date_eastern).replace(':', '.')}"
+                # Create event key using canonical DATETIME format (matches Redis storage keys)
+                event_key = RedisKeys.get_transcript_key_id(event.symbol, conf_date_eastern)
                 pipe.zadd("admin:transcripts:schedule", {event_key: process_time})
                 
                 # Log with clear human-readable times
