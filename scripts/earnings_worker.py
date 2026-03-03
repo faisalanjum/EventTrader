@@ -9,13 +9,13 @@ KEDA: Scales 0→N based on queue depth (max 7)
 
 Payload formats (JSON):
   Single transcript:
-    {"ticker": "AAPL", "source_id": "AAPL_2025-07-31T17.00.00-04.00"}
+    {"ticker": "AAPL", "source_id": "AAPL_2025-07-31T17.00"}
 
   Batch (all transcripts for one company, processed sequentially):
-    {"ticker": "AAPL", "source_ids": ["AAPL_2025-07-31T...", "AAPL_2025-04-30T..."], "mode": "write"}
+    {"ticker": "AAPL", "source_ids": ["AAPL_2025-07-31T17.00", "AAPL_2025-04-30T17.00"], "mode": "write"}
 
   Legacy plain string:
-    "AAPL_2025-07-31T17.00.00-04.00"
+    "AAPL_2025-07-31T17.00"
 
 Status tracking:
   For mode=write, sets guidance_status property on the Transcript node directly.

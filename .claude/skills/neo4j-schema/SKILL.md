@@ -39,9 +39,9 @@ CALL apoc.meta.schema()
 | **Report** | 33,947 | `id`, `accessionNo`, `formType`, `created` (String); `items` (String JSON); `market_session` |
 | **Company** | 796 | `ticker`, `symbol`, `name` (String); `mkt_cap`/`shares_out`/`employees` (String) |
 | **News** | 186,206 | `title`/`teaser`/`body` (String); `channels`/`tags`/`authors` (String JSON); `created`/`updated` (String) |
-| **Transcript** | 4,387 | `id`, `conference_datetime`, `created`/`updated` (String); `fiscal_quarter`/`fiscal_year` |
-| **QAExchange** | 79,651 | `exchanges`, `questioner`/`responders`, `sequence` (String); `embedding` (float[]) |
-| **PreparedRemark** | 4,253 | `content` (String) |
+| **Transcript** | 4,192 | `id`, `conference_datetime`, `created`/`updated` (String); `fiscal_quarter`/`fiscal_year`; `quarter_key` |
+| **QAExchange** | 76,152 | `exchanges`, `questioner`/`responders`, `sequence` (String); `embedding` (float[]) |
+| **PreparedRemark** | 4,058 | `content` (String) |
 | **Dividend** | 4,282 | `declaration_date`, `cash_amount`, `dividend_type` (String) |
 | **Split** | 33 | `execution_date`, `split_from`, `split_to` (String) |
 

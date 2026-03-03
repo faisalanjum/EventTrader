@@ -86,7 +86,7 @@ Use when caller provides an existing News or QAExchange node ID. The embedding i
 
 ID formats:
 - News: `bzNews_50105280` (prefix `bzNews_` + numeric ID)
-- QAExchange: `NOG_2025_2_qa__0` or `NOG_2023-02-24T10.00.00-05.00_qa__8` (ticker + date/quarter + `_qa__` + index)
+- QAExchange: `NOG_2025-08-07T11.00_qa__0` or `NOG_2023-02-24T10.00_qa__8` (ticker + `_YYYY-MM-DDTHH.MM` + `_qa__` + index)
 
 **News — find similar articles for same ticker:**
 ```cypher

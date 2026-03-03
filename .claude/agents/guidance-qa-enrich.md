@@ -112,7 +112,7 @@ For each enriched item: start from the FULL item read in Step 2. Apply Q&A enric
 
 For new Q&A-only items: build from scratch using CIK/FYE from Step 1. Use `given_date` from Step 2.
 
-**`source_refs`**: For every enriched or new item, include a `source_refs` array listing the QAExchange node IDs that contributed. Build each ID as `{SOURCE_ID}_qa__{sequence}` where `sequence` is the exchange number from Step 3. Example: `"source_refs": ["AAPL_2023-11-03T17.00.00-04.00_qa__3", "AAPL_2023-11-03T17.00.00-04.00_qa__7"]`. PR-only items that were NOT enriched from Q&A should not be re-written (per the rule above), so they keep `source_refs: []` by default.
+**`source_refs`**: For every enriched or new item, include a `source_refs` array listing the QAExchange node IDs that contributed. Build each ID as `{SOURCE_ID}_qa__{sequence}` where `sequence` is the exchange number from Step 3. Example: `"source_refs": ["AAPL_2023-11-03T17.00_qa__3", "AAPL_2023-11-03T17.00_qa__7"]`. PR-only items that were NOT enriched from Q&A should not be re-written (per the rule above), so they keep `source_refs: []` by default.
 
 ### Step 6: Validate + Write
 
@@ -125,7 +125,7 @@ For each item:
 3. **Assemble JSON payload** and write to `/tmp/gu_{TICKER}_{SOURCE_ID}_qa.json`:
 ```json
 {
-    "source_id": "AAPL_2023-11-03T17.00.00-04.00",
+    "source_id": "AAPL_2023-11-03T17.00",
     "source_type": "transcript",
     "ticker": "AAPL",
     "fye_month": 9,

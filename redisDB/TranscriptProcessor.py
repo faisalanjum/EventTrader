@@ -349,9 +349,16 @@ class TranscriptProcessor(BaseProcessor):
                 self.logger.error(f"Missing required fields in transcript: {missing_fields}")
                 return {}
             
+            # GAP-12: Validate conference_datetime is truthy before using it for ID generation
+            conference_datetime = content.get('conference_datetime')
+            if not conference_datetime:
+                self.logger.error("conference_datetime is None/empty — cannot generate transcript ID")
+                return {}
+
             # Ensure required fields are present for BaseProcessor
             standardized.update({
-                'id': f"{content['symbol']}_{content['fiscal_year']}_{content['fiscal_quarter']}",
+                'id': f"{content['symbol']}_{str(content['conference_datetime']).replace(':', '.').replace(' ', 'T')[:16]}",
+                'quarter_key': f"{content['symbol']}_{content['fiscal_year']}_{content['fiscal_quarter']}",
                 'created': self._ensure_iso_format(content['conference_datetime']),
                 'updated': self._ensure_iso_format(content['conference_datetime']),
                 'symbols': [content['symbol']],

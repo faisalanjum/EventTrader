@@ -12,9 +12,9 @@ Queries for Transcript, QAExchange, PreparedRemark, and related content.
 | Label | Count | Key properties | Relationship |
 |-------|-------|----------------|--------------|
 | **FullTranscriptText** | 28 | `content` | Transcript-[:HAS_FULL_TEXT]-> |
-| **QuestionAnswer** | 41 | `content`, `speaker_roles` | Transcript-[:HAS_QA_SECTION]-> |
+| **QuestionAnswer** | 37 | `content`, `speaker_roles` | Transcript-[:HAS_QA_SECTION]-> |
 
-**Note**: Company-[:HAS_TRANSCRIPT]->Transcript (4,387) links companies to their earnings calls.
+**Note**: Company-[:HAS_TRANSCRIPT]->Transcript (4,192) links companies to their earnings calls.
 
 ## Basic Transcript Queries
 

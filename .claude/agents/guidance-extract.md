@@ -44,7 +44,7 @@ You MUST Read these 3 files BEFORE doing anything else. Do not extract guidance 
 |-----------|--------|---------|
 | `TICKER` | Company symbol | `AAPL` |
 | `SOURCE_TYPE` | `8k`, `transcript`, `news`, `10q`, `10k`, `initial` | `transcript` |
-| `SOURCE_ID` | Accession number, transcript ID, or news ID | `AAPL_2025-01-30T17.00.00-05.00` |
+| `SOURCE_ID` | Accession number, transcript ID, or news ID | `AAPL_2025-01-30T17.00` |
 | `MODE` | `dry_run` (default), `shadow`, `write` | `MODE=shadow` |
 
 - `source_key` is derived internally per source type (SKILL.md §12)
@@ -185,7 +185,7 @@ Write this to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
 
 ```json
 {
-    "source_id": "AAPL_2023-11-03T17.00.00-04.00",
+    "source_id": "AAPL_2023-11-03T17.00",
     "source_type": "transcript",
     "ticker": "AAPL",
     "fye_month": 9,

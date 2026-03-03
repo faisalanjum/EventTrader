@@ -168,27 +168,21 @@ class PubSubMixin:
                         transcript_id=item_id,
                         transcript_data=transcript_data
                     )
-                    
+                    resolved_id = transcript_data.get("id") or item_id
 
                     # After successful processing, generate QAExchange embeddings
                     if success:
-                        
-                        logger.info(f"Successfully processed transcript {item_id}")
+
+                        logger.info(f"Successfully processed transcript {resolved_id}")
 
                         try:
                             # Get ALL QAExchange nodes for this transcript
-                            query = f"""
-                            MATCH (t:Transcript {{id: '{item_id}'}})-[:HAS_QA_EXCHANGE]->(q:QAExchange)
+                            query = """
+                            MATCH (t:Transcript {id: $tid})-[:HAS_QA_EXCHANGE]->(q:QAExchange)
                             WHERE q.embedding IS NULL
                             RETURN q.id as id
                             """
-                            # results = self.manager.execute_cypher_query(query, {})
-                            
-                            # # Process each QAExchange node for this transcript
-                            # if results:
-                            #     qa_nodes = results if isinstance(results, list) else [results]
-                            #     for qa_node in qa_nodes:
-                            qa_nodes = self.manager.execute_cypher_query_all(query, {})
+                            qa_nodes = self.manager.execute_cypher_query_all(query, {"tid": resolved_id})
                             for qa_node in qa_nodes:
                                     try:
                                         # Process this specific QAExchange node

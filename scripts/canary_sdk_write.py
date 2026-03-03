@@ -21,7 +21,7 @@ import sys
 import time
 
 TICKER = "CRM"
-SOURCE_ID = "CRM_2025-09-03T17.00.00-04.00"
+SOURCE_ID = "CRM_2025-09-03T17.00"
 
 
 def log(msg: str):

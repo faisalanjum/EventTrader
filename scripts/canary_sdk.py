@@ -146,7 +146,7 @@ async def test_4_guidance_extractor():
     """Test 4: Full guidance-transcript dry-run on CRM transcript."""
     log("TEST 4: Guidance-extractor dry-run (CRM transcript)")
     log("  Ticker: CRM")
-    log("  Source: CRM_2025-09-03T17.00.00-04.00")
+    log("  Source: CRM_2025-09-03T17.00")
     log("  Mode: dry_run (zero Neo4j writes)")
     from claude_agent_sdk import query
 
@@ -155,7 +155,7 @@ async def test_4_guidance_extractor():
     result_text = None
     start = time.time()
     async for msg in query(
-        prompt="/guidance-transcript CRM transcript CRM_2025-09-03T17.00.00-04.00 MODE=dry_run",
+        prompt="/guidance-transcript CRM transcript CRM_2025-09-03T17.00 MODE=dry_run",
         options=options,
     ):
         if hasattr(msg, "result"):

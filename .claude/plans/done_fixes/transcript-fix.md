@@ -1,3 +1,17 @@
+# Fix Issue #35: Duplicate Transcript IDs — Consolidated
+
+> This file consolidates three documents into one: Root Cause Analysis, Implementation Plan (code fix), and Open Issues tracker.
+> For the data migration plan, see `done_fixes/transcript-migration-plan.md` (COMPLETED 2026-03-03).
+> For the pipeline architecture reference, see `transcriptIngestionPipeline.md`.
+>
+> **Status (2026-03-03)**: Code fix (Parts A-E) DONE. Migration (4,192 nodes) DONE. GAP-8 root fix DONE. 15/17 GAPs resolved. Remaining: GAP-15/16 (dead code cleanup), GAP-18/19 (deferred), GAP-20 (BLOCKING — OpenAI model retirement).
+>
+> **Backup**: `/var/lib/neo4j/import/backups/pre-migration-20260303/` — full pre-migration snapshot of all Transcript nodes.
+
+---
+
+## Part 1: Root Cause Analysis
+
 # Fix Issue #35: Duplicate Transcript IDs — Root Cause Analysis
 
 > **CORRECTION (March 2026)**: The original analysis recommended SHORT format (`AAPL_2025_3`) as the canonical ID. This was **wrong**. Live DB verification revealed 13 collision groups where the EarningsCall API assigns the same `(fiscal_year, fiscal_quarter)` to genuinely different earnings calls months or years apart. SHORT would merge these, causing data loss. The corrected recommendation is a **DATE-based format** (`AAPL_2025-07-24`) — see the "Canonical ID Format" section below.
@@ -1145,3 +1159,769 @@ A third ChatGPT review raised 6 findings. Each verified empirically via Neo4j qu
 | 6 | Meta hash assumptions stale (675 SHORT only, no LONG) | **UNVERIFIABLE from this session** | Cannot query live Redis. Plan's Phase 4 cleanup handles both SHORT and LONG format meta hashes with separate scans — if one format doesn't exist, that scan is a harmless no-op. The cleanup is designed to be safe regardless of current Redis state. | No action |
 
 **Key outcomes**: Three real gaps fixed — (1) summary table now correctly documents all four `EventTraderNodes.py` edit locations for Part D, (3) Phase 3 now has empirically-grounded merge policy with specific divergent pair data (ATEC: 16 vs 22 QA, DAR: extra QA_SECTION), (5) relationship name and GuidanceUpdate count corrected throughout.
+
+
+---
+
+## Part 2: Code Fix (DONE — 2026-03-03)
+
+# Fix Issue #35: Duplicate Transcript IDs — Implementation Plan
+
+## Context
+
+Two code paths independently create Transcript nodes in Neo4j with different ID formats for the same earnings call:
+- Batch path: _standardize_fields() creates SHORT format (AAPL_2025_3)
+- PubSub path: passes LONG format from Redis key (AAPL_2025-07-31T17.00.00-04.00)
+
+Both use MERGE → two nodes for the same transcript → 205 duplicate pairs out of 4,397 nodes.
+
+Fix: Change both paths to converge on DATE format (AAPL_2025-07-31). Five code edits across four files, plus two hygiene fixes
+(GAP-12, GAP-14).
+
+---
+## Edits
+
+### Edit 1: redisDB/TranscriptProcessor.py:352-359
+
+Change the id field from SHORT to DATE format. Add quarter_key to preserve the old format for queryability.
+
+```python
+# BEFORE (line 354):
+'id': f"{content['symbol']}_{content['fiscal_year']}_{content['fiscal_quarter']}",
+
+# AFTER:
+'id': f"{content['symbol']}_{str(content['conference_datetime']).split('T')[0].split(' ')[0]}",
+'quarter_key': f"{content['symbol']}_{content['fiscal_year']}_{content['fiscal_quarter']}",
+```
+
+Also add GAP-12 None guard before line 353. Check conference_datetime is truthy before using it:
+```python
+conference_datetime = content.get('conference_datetime')
+if not conference_datetime:
+    self.logger.error("conference_datetime is None/empty — cannot generate transcript ID")
+    return {}
+```
+
+### Edit 2: neograph/mixins/transcript.py:302 (inside _process_deduplicated_transcript)
+
+Add one line at the top of the method body (after the docstring, before logger.debug):
+
+```python
+# Canonical ID resolution — all paths converge on the DATE-format id from the data blob
+transcript_id = transcript_data.get("id") or transcript_id
+```
+
+### Edit 3: neograph/mixins/pubsub.py:167-191
+
+Fix the embedding query to use the resolved DATE ID instead of the LONG item_id. Also parameterize the Cypher (Part E).
+
+After line 170, add:
+```python
+resolved_id = transcript_data.get("id") or item_id
+```
+
+Replace lines 180-191 (the embedding query block):
+```python
+# BEFORE:
+query = f"""
+MATCH (t:Transcript {{id: '{item_id}'}})...
+
+# AFTER:
+query = """
+MATCH (t:Transcript {id: $tid})-[:HAS_QA_EXCHANGE]->(q:QAExchange)
+WHERE q.embedding IS NULL
+RETURN q.id as id
+"""
+qa_nodes = self.manager.execute_cypher_query_all(query, {"tid": resolved_id})
+```
+
+### Edit 4: neograph/EventTraderNodes.py — Add quarter_key to TranscriptNode
+
+4 locations in this file:
+
+4a. TranscriptNodeData (line ~1433): Add field after speakers:
+```python
+quarter_key: Optional[str] = None    # Legacy SHORT-format ID (e.g., "AAPL_2025_3")
+```
+
+4b. TranscriptNode.__init__ (line 1439-1440): Add parameter:
+```python
+def __init__(self, id, symbol, company_name, conference_datetime, fiscal_quarter, fiscal_year,
+             formType="", calendar_quarter=None, calendar_year=None, created=None, updated=None, speakers=None,
+             quarter_key=None):
+```
+And in the body, add quarter_key=quarter_key to the TranscriptNodeData() call.
+
+4c. properties() (line ~1562): Add after the speakers block:
+```python
+if self.quarter_key:
+    props["quarter_key"] = self.quarter_key
+```
+
+4d. from_neo4j() (line ~1611-1614): Add after the created/updated loop:
+```python
+if "quarter_key" in props and props["quarter_key"]:
+    instance.quarter_key = props["quarter_key"]
+```
+
+Also add property + setter to the class (between speakers and node_type):
+```python
+@property
+def quarter_key(self) -> Optional[str]:
+    return self.data.quarter_key
+
+@quarter_key.setter
+def quarter_key(self, value):
+    self.data.quarter_key = value
+```
+
+### Edit 5: neograph/mixins/transcript.py:572-585 (the bridge)
+
+Add quarter_key to the TranscriptNode() constructor call in _create_transcript_node_from_data:
+
+```python
+# Add after speakers= line:
+quarter_key=transcript_data.get("quarter_key"),
+```
+
+### Edit 6 (GAP-14): neograph/mixins/transcript.py:353-361
+
+Parameterize the HAS_TRANSCRIPT string concatenation. Use param.target_id in the UNWIND pattern:
+
+```python
+# BEFORE:
+target_match_clause="{id: '" + transcript_id + "'}",
+params=[{"properties": {}}]
+
+# AFTER:
+target_match_clause="{id: param.target_id}",
+params=[{"properties": {}, "target_id": transcript_id}]
+```
+
+---
+## Files Modified (summary)
+
+| File | Edits | Purpose |
+|---|---|---|
+| redisDB/TranscriptProcessor.py | Lines 346-359 | DATE format ID + quarter_key + None guard |
+| neograph/mixins/transcript.py | Lines 302, 358, 572-585 | Canonical ID resolution + parameterize HAS_TRANSCRIPT + bridge |
+| neograph/mixins/pubsub.py | Lines 167-191 | Resolved ID for embedding query + parameterize |
+| neograph/EventTraderNodes.py | Lines 1416-1623 | quarter_key in dataclass + node + properties + from_neo4j |
+
+---
+## Verification
+
+After all edits, run these against Neo4j to verify existing data is unchanged (code fix alone doesn't touch existing nodes — migration is separate):
+
+```cypher
+// Baseline count — should still be 4,397
+MATCH (t:Transcript) RETURN count(t)
+
+// No DATE-format nodes yet (code fix only affects new ingestion)
+MATCH (t:Transcript) WHERE NOT t.id CONTAINS 'T' AND NOT t.id =~ '.*_\\d{4}_\\d{1,2}'
+RETURN count(t)
+```
+
+To test the code fix works for new transcripts: run a single transcript ingestion and verify the node gets a DATE-format ID.
+
+Migration (separate step, after code fix is confirmed working): Cypher script to convert existing 4,397 nodes to DATE format. Not part of this PR.
+
+
+---
+
+## Part 3: Open Issues (GAP-1 through GAP-20)
+
+# Transcript Fix Gaps — Validated & Consolidated
+
+> **Status**: VALIDATED — 4 independent analyses complete for all 17 gaps. All bot-specific references removed; findings merged into single consensus verdicts.
+>
+> **Core fix (Parts A-E + GAP-12 + GAP-14) IMPLEMENTED** — 2026-03-03. See `.claude/plans/transcript-duplicate-ids-implementation.md` for exact edits. 4 files changed: `redisDB/TranscriptProcessor.py`, `neograph/mixins/transcript.py`, `neograph/mixins/pubsub.py`, `neograph/EventTraderNodes.py`.
+
+> **IMPORTANT — Guidance nodes will be wiped and rebuilt.**
+> All Guidance, GuidanceUpdate, and GuidancePeriod nodes — along with their relationships (FROM_SOURCE, HAS_PERIOD, etc.) — will be deleted and re-extracted from scratch in a later phase. This means:
+> - **GAP-1** (preserving `guidance_status`): Downgraded — no need to carefully migrate the property since guidance will be fully re-run anyway.
+> - **GAP-2** (GuidanceUpdate ID duplication / FROM_SOURCE orphaning): **Eliminated** — all 70 GU nodes and their edges will be deleted regardless. No re-linking needed.
+> - The `guidance_status` property on Transcript nodes can simply be **cleared** (or ignored) during migration rather than preserved, since all transcripts will be re-processed for guidance.
+
+---
+
+## CRITICAL (could cause data loss or broken production behavior)
+
+### GAP-1: `guidance_status` property lost during cleanup
+
+**Claim**: Existing Transcript nodes have `guidance_status` property (completed/failed/in_progress) set by `earnings_worker.py:108`. If cleanup deletes SHORT/LONG nodes without copying `guidance_status` to the new DATE node, all affected transcripts get re-queued for guidance extraction.
+**Chain reaction**: Re-extraction creates duplicate GuidanceUpdate nodes because the GuidanceUpdate ID embeds the source_id (see GAP-2).
+
+**VERDICT: VALID but MOOT — guidance nodes will be wiped and rebuilt.**
+
+Since all Guidance/GuidanceUpdate/GuidancePeriod nodes and relationships will be deleted and re-extracted from scratch, the chain reaction (duplicate GU nodes) is irrelevant. The `guidance_status` property on Transcript nodes can simply be **cleared** during migration — all transcripts will be re-processed for guidance anyway.
+
+<details>
+<summary>Original analysis (preserved for reference)</summary>
+
+**Neo4j evidence (March 2 2026):**
+```
+MATCH (t:Transcript) WHERE t.guidance_status IS NOT NULL
+→ 8 nodes total, ALL with status = "completed":
+  AAPL_2023-11-03T17.00.00-04.00  (LONG)
+  AAPL_2024-10-31T17.00.00-04.00  (LONG)
+  AAPL_2025-01-30T17.00.00-05.00  (LONG)
+  AAPL_2025-05-01T17.00.00-04.00  (LONG)
+  AAPL_2025-07-31T17.00.00-04.00  (LONG)
+  AAPL_2025_3                      (SHORT — duplicate of AAPL_2025-07-31)
+  ADBE_2025-06-12T17.00.00-04.00  (LONG)
+  CRM_2025-09-03T17.00.00-04.00   (LONG)
+
+MATCH (t:Transcript) RETURN t.guidance_status, count(*)
+→ 4,389 NULL + 8 completed = 4,397 total
+```
+
+Only **8 out of 4,397** Transcript nodes have `guidance_status` set. 7 LONG-format + 1 SHORT duplicate. `earnings_worker.py:105-113` is the sole writer. `trigger-guidance.py:81-107` filters on NULL/failed. Chain reaction to GAP-2 (70 duplicate GU nodes) was real but is now moot.
+</details>
+
+### GAP-2: GuidanceUpdate node IDs embed the source_id
+
+**Claim**: `guidance_ids.py:527-529` builds GuidanceUpdate IDs as `gu:{safe_source_id}:{label_slug}:...`. If guidance is re-extracted with DATE format source_id, the computed ID differs from the existing LONG-format one → MERGE creates a NEW GuidanceUpdate node → duplicates. Mitigated IF GAP-1 is fixed (guidance_status preserved → no re-extraction).
+
+**VERDICT: VALID but ELIMINATED — all Guidance/GuidanceUpdate/GuidancePeriod nodes will be wiped and rebuilt.**
+
+All 70 GuidanceUpdate nodes and their FROM_SOURCE edges will be deleted as part of the guidance rebuild. No re-linking or careful migration needed. The duplication mechanism was real but is now irrelevant.
+
+<details>
+<summary>Original analysis (preserved for reference)</summary>
+
+**Code trace:** `guidance_ids.py:523-530` builds `guidance_update_id = f"gu:{safe_source_id}:{label_slug}:..."`. `canonicalize_source_id()` (line 252-254) only does `.strip().replace(':', '_')` — does NOT normalize LONG→DATE.
+
+**Neo4j evidence:** 70 GuidanceUpdate nodes across 7 LONG-format Transcript nodes (AAPL×5: 11+7+8+5+11, ADBE×1: 17, CRM×1: 11). All GU IDs embed LONG source_id as substring. FROM_SOURCE edges are graph relationships — deleting old Transcript nodes would orphan all 70 GU nodes. Was mitigated by GAP-1 fix + edge re-linking, now moot.
+</details>
+
+### GAP-3: Full ID migration for all ~4,397 transcripts
+
+**Claim**: The code fix only affects NEW ingestions. Existing ~4,000 transcripts keep SHORT IDs forever unless explicitly migrated via Neo4j query + child node updates.
+
+**VERDICT: VALID. 4,397 existing nodes need migration. Plan Phase 2-3 covers it. Code fix and migration are independent — deployable sequentially.**
+
+**Neo4j evidence (March 2 2026):**
+```
+Total Transcript nodes:     4,397
+LONG format (contains 'T'): 3,722–3,882  (varying by regex — 88%)
+SHORT format (no 'T'):        515–675    (varying by regex — 12%)
+DATE format:                    0        (0%)
+```
+*(Count variance is due to different regex classifiers used across analyses; total is always 4,397.)*
+
+The code fix (Parts A-E) only affects transcripts that pass through `_standardize_fields()` in the future. All 4,397 existing nodes retain their current IDs until explicitly migrated.
+
+**Breakdown of existing nodes:**
+- 515 SHORT-format nodes: ~205 are duplicates of LONG-format nodes, ~310 are SHORT-only (never had a LONG counterpart — processed only by batch path)
+- 3,882 LONG-format nodes: ~205 are duplicates of SHORT-format nodes, ~3,677 are LONG-only
+- All need migration to DATE format during cleanup
+
+**Migration scope:** 68,445 QAExchange nodes with LONG `transcript_id` + 11,336 SHORT = 79,781 child nodes. Plus HAS_TRANSCRIPT relationships from Company nodes. *(GuidanceUpdate re-linking is no longer needed — all guidance nodes will be wiped and rebuilt separately.)*
+
+**The plan DOES address this:** Phase 2 ("Compute expected DATE IDs") and Phase 3 ("Migrate") in the `transcript-duplicate-ids.md` plan contain Cypher queries for the full migration. The claim is factually correct but is already covered by the plan's cleanup section — it's not a gap in the plan, it's a gap that would exist if cleanup is skipped.
+
+**Not a blocking issue for the code fix itself.** The code fix prevents NEW duplicates. The cleanup migrates existing data. They are independent steps that can be deployed sequentially (code fix first, cleanup after). Migration script is required but not blocking the code fix PR.
+
+---
+
+## HIGH (breaks functionality or causes significant ongoing waste)
+
+### GAP-4: Reconciliation is permanently expensive, not just first run
+
+> **FIXED** (2026-03-03): Resolved as side effect of GAP-8 root fix. After `get_transcript_key_id()` produces DATETIME, all Redis key suffixes are DATETIME → `reconcile.py:218` extracts DATETIME from keys → Neo4j query `WHERE t.id IN $ids` matches DATETIME IDs → reconciliation works correctly. No phantom "missing" items.
+
+**Claim**: `reconcile.py:218` extracts LONG IDs from Redis keys, queries Neo4j → 0 matches (DATE format ≠ LONG). Thinks ALL transcripts are "missing" every cycle. The meta guard at line 239 checks LONG-format meta — but `_process_deduplicated_transcript` writes DATE-format meta, not LONG. Only `_finalize_pubsub_processing` writes LONG meta. So if only batch+reconciliation runs (no PubSub), the guard never triggers → re-processes every cycle indefinitely.
+
+**VERDICT: PARTIALLY VALID — claim overstates severity. One-time cost, NOT permanent. Downgrade to LOW.**
+
+The mechanism described is correct in theory: after the fix, `_process_deduplicated_transcript` writes DATE-format meta (line 320), and the reconciliation guard at `reconcile.py:239` checks LONG-format meta. If only batch+reconciliation ran (no PubSub), the guard would not trigger on the first cycle.
+
+**But the claim that "the guard never triggers" is wrong.** `reconcile.py:270-271` writes `inserted_into_neo4j_at` under the **LONG-format** meta key in its own scope: `meta_key = f"tracking:meta:{RedisKeys.SOURCE_TRANSCRIPTS}:{transcript_id}"` where `transcript_id` came from `key.split(':')[-1]` (LONG format). After the first reconciliation run, the guard at line 239 (`hexists(..., "inserted_into_neo4j_at")`) DOES find the LONG meta key on second run → skips. The "permanently" claim confuses `_process_deduplicated_transcript`'s DATE meta (Part B) with reconciliation's own LONG meta write — they are independent. This is a **one-time cost**, not permanent.
+
+**Practical impact is near-zero because reconciliation scans Redis, not Neo4j:**
+
+**Redis evidence (March 2 2026):**
+```
+transcripts:withreturns:*   → 0–1 key
+transcripts:withoutreturns:* → 0–1 key
+```
+Reconciliation scans for `withreturns:*` and `withoutreturns:*` keys. There are currently **0–2 total** in Redis. All other transcripts have already been processed and their Redis data keys deleted by `_finalize_transcript_batch` (line 134-137) or `_finalize_pubsub_processing` (line 408-411).
+
+**The key deletion mechanism works correctly after the fix:**
+- **Batch path** (`_finalize_transcript_batch` at transcript.py:134): checks `hexists(meta_key, "inserted_into_neo4j_at")` where `meta_key` uses DATE format (after fix). `_process_deduplicated_transcript` writes DATE-format meta at line 320. So `hexists` succeeds → `withreturns` key is deleted → reconciliation won't find it.
+- **PubSub path** (`_finalize_pubsub_processing` at pubsub.py:408): deletes `withreturns` key if `success=True`. Still works → key deleted.
+
+**Net impact:** A handful of stuck/undeleted keys get re-processed each cycle. No duplicates (MERGE idempotent). Tiny CPU cost. Not "all ~4,000 transcripts every cycle" as the claim implies.
+
+**Recommendation:** Still worth adding `data.get("id")` resolution in reconcile.py for correctness, but it's a cleanup/polish item, not a blocking concern. Can be a follow-up.
+
+### GAP-5: `QAExchange.transcript_id` property stale after migration
+
+> **FIXED** (2026-03-03): Migration Phase 3a explicitly updated `q.transcript_id = t.id` for all 76,152 QAExchange nodes (see `transcript-migration-plan.md:346`). Verified post-migration: `MATCH (t)-[:HAS_QA_EXCHANGE]->(q) WHERE q.transcript_id <> t.id RETURN count(q)` → 0.
+
+**Claim**: QAExchange nodes have a `transcript_id` property (e.g., `AAPL_2025_3`). After migration to DATE format, queries joining `q.transcript_id = t.id` break for old data. Needs batch update in Neo4j cleanup.
+
+**VERDICT: ~~PROPERTY EXISTS but NO QUERIES JOIN ON IT. Downgrade to LOW.~~ FIXED — migration Phase 3a updated all 76,152 nodes.**
+
+**Neo4j evidence (March 2 2026):**
+```
+SHORT-format QAExchange.transcript_id:  8,729–11,336 nodes
+LONG-format QAExchange.transcript_id:   68,445–71,052 nodes
+Total:                                  79,781 nodes
+```
+The property exists on 100% of 79,781 nodes (set at `transcript.py:400-464`).
+
+**But no production code uses `q.transcript_id = t.id` as a JOIN:**
+- ALL guidance queries use graph relationships: `MATCH (t:Transcript {id: $transcript_id})-[:HAS_QA_EXCHANGE]->(qa:QAExchange)` (QUERIES.md lines 196, 259)
+- ALL embedding queries use relationships: `MATCH (t:Transcript {id: ...})-[:HAS_QA_EXCHANGE]->(q:QAExchange)` (pubsub.py:181)
+- Exhaustive grep for `q.transcript_id = t.id` or `qa.transcript_id = t.id` across ALL Python and Cypher files → **zero matches**
+- The `transcript_id` property is used only as an informational/display field (e.g., returned in RETURN clauses for display)
+
+**After cleanup migration to DATE format:** The `transcript_id` property on old QAExchange nodes would become stale (still shows SHORT/LONG). This is cosmetically wrong but functionally harmless — no code depends on it for traversal or matching. New QAExchange nodes created via re-ingestion would have DATE-format `transcript_id`.
+
+**Optional cleanup:** Could batch-update: `MATCH (t:Transcript)-[:HAS_QA_EXCHANGE]->(q:QAExchange) SET q.transcript_id = t.id`. Low priority.
+
+### GAP-6: Queued earnings jobs with LONG-format source IDs
+
+**Claim**: If `earnings:trigger` Redis queue has pending jobs when cleanup runs, they contain LONG-format source_ids. `earnings_worker.py:108` does `MATCH (t:Transcript {id: $sid})` — after cleanup, affected=0 → RuntimeError → job stuck. Need to drain queue before cleanup or add tolerance.
+
+**VERDICT: VALID mechanism but CURRENTLY MOOT. Queue empty. Deployment checklist item, not code fix.**
+
+**Redis evidence (March 2 2026):**
+```
+LLEN earnings:trigger      → 0
+LLEN earnings:trigger:dead → 0
+```
+The queue is currently empty. There are zero pending jobs.
+
+**Code verification (`earnings_worker.py:105-113`):**
+```python
+def mark_status(mgr, source_id: str, status: str):
+    rows = mgr.execute_cypher_query_all(
+        "MATCH (t:Transcript {id: $sid}) SET t.guidance_status = $status RETURN count(t) AS affected",
+        {"sid": source_id, "status": status},
+    )
+    affected = rows[0]["affected"] if rows else 0
+    if affected != 1:
+        raise RuntimeError(f"mark_status({status}) affected {affected} rows for {source_id}")
+```
+If `$sid` is LONG format and the node has DATE format after cleanup → `affected = 0` → RuntimeError. The mechanism is real. Worker catches, retries 3x, then dead-letters — so "soft failure" not "stuck forever", but permanently failed.
+
+**Practical risk:** Zero at deployment time (queue empty). The risk only materializes if someone queues jobs with LONG-format IDs AFTER cleanup runs. This can't happen if the code fix (Part A) is deployed first — new `trigger-guidance.py` runs would read DATE-format IDs from Neo4j and queue those.
+
+**Deployment sequence that eliminates this gap:**
+1. Deploy code fix (Parts A-E)
+2. Drain queue (already empty, but verify: `redis-cli LLEN "earnings:trigger"`)
+3. Run Neo4j cleanup (Phase 2-3 migration)
+
+### GAP-7: `trigger-guidance.py` breaking change
+
+**Claim**: Users can't trigger guidance for new (DATE-format) transcripts if the trigger script expects or constructs LONG/SHORT format IDs.
+
+**VERDICT: INVALID. The script reads IDs from Neo4j; it doesn't construct them. No fix needed.**
+
+**Code verification (`trigger-guidance.py`):**
+- **`--all` and ticker modes** (line 81-108): Queries `MATCH (t:Transcript) ... RETURN t.id AS id`. The script reads `t.id` directly from Neo4j — whatever format is stored. After migration to DATE, it would naturally return DATE-format IDs. No construction or formatting of IDs happens.
+- **`--source-id` mode** (line 49-71): `MATCH (t:Transcript {id: $sid})` where `$sid` is the user-provided CLI argument. This is the ONLY mode that depends on the user knowing the format. Line 120: `by_ticker[ticker].append(t["id"])` reads `t.id` directly from Neo4j — format-agnostic.
+
+**The script NEVER constructs source IDs.** It either reads them from Neo4j (bulk modes) or takes them verbatim from CLI input (`--source-id`).
+
+**Impact of `--source-id` mode:** After migration, a user running `--source-id AAPL_2025-07-31T17.00.00-04.00` would get "Transcript not found" because the node now has ID `AAPL_2025-07-31`. They'd need to use `--source-id AAPL_2025-07-31` instead. This is a UX change for manual invocation, not a code bug. The `--source-id` flag is used in MEMORY.md documentation and `canary_sdk_write.py` — both are easily updated. The main operational modes (`--all`, ticker-based) are unaffected.
+
+### GAP-8: Ongoing lifecycle tracking split (meta key divergence for EVERY future transcript)
+
+> **FIXED** (2026-03-03): Changed `get_transcript_key_id()` at `redis_constants.py:71` to produce DATETIME format instead of LONG. One-line change: `dt_str = str(conference_datetime).replace(':', '.').replace(' ', 'T')[:16]`. This aligns the Redis key suffix with `_standardize_fields()` output, eliminating the format split at the source. All downstream consumers extract identifiers from keys at runtime via `key.split(':')[-1]` — none call `get_transcript_key_id()` again — so the fix propagates automatically through all 6 code paths (ingestion, BaseProcessor, ReturnsProcessor, PubSub, batch, reconciliation). Also fixes GAP-4 (reconciliation) and GAP-9 (dual meta writes) as side effects.
+
+**Claim**: `BaseProcessor._process_item` constructs `meta_key` at line 148 BEFORE `_standardize_fields` runs at line 163. So for every new transcript: `ingested_at` → LONG meta key, `processed_at` → LONG meta key, `inserted_into_neo4j_at` → DATE meta key. The pending set entry (added under LONG key) is never removed by `inserted_into_neo4j_at` (under DATE key). `tracking:pending:transcripts` accumulates stale entries indefinitely — not just from existing data, but from every future ingest.
+
+**VERDICT: VALID. ~~This is a real ongoing issue, but it's a PRE-EXISTING bug, not introduced by the fix.~~ FIXED — root cause eliminated at source.**
+
+**Code verification:**
+- `store_transcript_in_redis()` at EarningsCallTranscripts.py:772: calls `mark_lifecycle_timestamp(meta_key, "ingested_at")` where `meta_key` uses LONG format (from `get_transcript_key_id`). This `sadd`s the LONG key to `tracking:pending:transcripts`.
+- `BaseProcessor._process_item()` at line 147-148: `meta_key = f"tracking:meta:{self.source_type}:{identifier}"` where `identifier = raw_key.split(':')[-1]` — LONG format. Line 226 calls `mark_lifecycle_timestamp(meta_key, "processed_at")` with LONG key.
+- `_process_deduplicated_transcript()` at transcript.py:320: `meta_key = f"tracking:meta:{RedisKeys.SOURCE_TRANSCRIPTS}:{transcript_id}"` — currently SHORT format for batch path. After fix: DATE format. Calls `mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")`.
+
+**The `srem` uses the full meta_key** (confirmed at `redisClasses.py:492-497`):
+```python
+if field in {"inserted_into_neo4j_at", "filtered_at", "failed_at"} \
+        and feature_flags.REMOVE_FROM_PENDING_SET:
+    pipe.srem(pending_set_key, key)   # key = full meta_key
+```
+`REMOVE_FROM_PENDING_SET = True` (feature_flags.py:251).
+
+**The mismatch:**
+- `sadd` at ingestion: `tracking:meta:transcripts:AAPL_2025-07-31T17.00.00-04.00` (LONG)
+- `srem` at batch insertion: `tracking:meta:transcripts:AAPL_2025_3` (SHORT, current) or `tracking:meta:transcripts:AAPL_2025-07-31` (DATE, after fix)
+- Neither SHORT nor DATE matches LONG → `srem` fails silently → entry stays in pending set
+
+**This is ALREADY BROKEN for the batch path (pre-existing bug).** Currently, batch inserts use SHORT format for `inserted_into_neo4j_at`, which doesn't match the LONG entry added at ingestion. The fix changes SHORT→DATE but doesn't make the mismatch worse or better.
+
+**Redis evidence (March 2 2026):**
+```
+SCARD tracking:pending:transcripts → 1,270 entries (ALL LONG-format meta keys)
+SRANDMEMBER tracking:pending:transcripts 5 → ALL are LONG-format (e.g., tracking:meta:transcripts:PNW_2025-08-06T12.00.00-04.00)
+Spot-checking 5 random entries: ALL have EMPTY meta hashes (keys exist in set but meta data was cleaned up separately)
+```
+The 1,270 stale entries confirm this is a pre-existing issue.
+
+**For the PubSub path:** `_finalize_pubsub_processing` at pubsub.py:211 writes LONG-format meta with `inserted_into_neo4j_at`. This `srem`s the LONG key → matches the LONG entry → removed correctly. So the pubsub path DOES clean up the pending set, and continues to work after the fix.
+
+**Net impact of the fix on GAP-8:** No change. The batch path was already broken (SHORT≠LONG). The fix changes it to (DATE≠LONG) — same non-match. The pubsub path was already working (LONG=LONG) and continues to work.
+
+**Recommended fix (separate PR):** Align the meta key format in `_finalize_transcript_batch` to use the LONG identifier from the Redis key, OR move `meta_key` construction to after `_standardize_fields`, OR clean up the pending set periodically. This is orthogonal to the duplicate-ID fix. The PR should at minimum document this pre-existing issue.
+
+---
+
+## MEDIUM (correctness-safe but creates maintenance debt or confusion)
+
+### GAP-9: `_finalize_pubsub_processing` meta divergence
+
+> **FIXED** (2026-03-03): Resolved as side effect of GAP-8 root fix. After `get_transcript_key_id()` produces DATETIME, `item_id` in the PubSub path is DATETIME (extracted from DATETIME-suffixed key). Both `_process_deduplicated_transcript:323` and `_finalize_pubsub_processing:205` now write to the SAME DATETIME meta hash. Dual meta keys eliminated.
+
+**Claim**: After the fix, each PubSub-processed transcript writes TWO meta hashes: DATE (from `_process_deduplicated_transcript:320`) and LONG (from `_finalize_pubsub_processing:211`). Functionally harmless but creates Redis bloat. Consider patching finalize to use resolved ID.
+
+**VERDICT: VALID but harmless. Dual meta writes actually serve both guards. Leave as-is.**
+
+**Code verification:**
+- `_process_deduplicated_transcript` at transcript.py:320 writes meta under `transcript_id` (DATE after fix).
+- `_finalize_pubsub_processing` at pubsub.py:208-215 writes meta under `item_id` (always LONG).
+- Both write `inserted_into_neo4j_at` timestamp.
+
+**The dual write is actually beneficial:**
+- The DATE meta enables the batch finalize guard (`_finalize_transcript_batch` at transcript.py:134 checks `hexists(meta_key, "inserted_into_neo4j_at")`)
+- The LONG meta enables the reconciliation guard (`reconcile.py:239`)
+- Patching `_finalize_pubsub_processing` to use DATE would **break** the reconciliation guard for pubsub-processed transcripts
+
+**Redis bloat is negligible:** Two small hashes per pubsub-processed transcript. Each hash has 1-3 fields (timestamp + optional reason). At ~4,000 transcripts, this is ~8,000 hashes × ~100 bytes = ~800KB. Negligible.
+
+**Recommendation:** Leave as-is. The dual meta write is a feature, not a bug — it enables both the batch finalize guard (DATE) and the reconciliation guard (LONG) to work. Do NOT patch `_finalize_pubsub_processing` to use DATE.
+
+### GAP-10: `canary_sdk_write.py` hardcoded LONG-format SOURCE_ID
+
+**Claim**: `scripts/canary_sdk_write.py:24` has `SOURCE_ID = "CRM_2025-09-03T17.00.00-04.00"`. After migration, all 7 Cypher queries silently return zero rows. Canary test appears to "pass" but is broken.
+
+**VERDICT: VALID. Hardcoded LONG-format ID confirmed. Not a production issue — test/validation script only.**
+
+**Code verification:**
+```python
+# canary_sdk_write.py line 23-24:
+TICKER = "CRM"
+SOURCE_ID = "CRM_2025-09-03T17.00.00-04.00"
+```
+This hardcoded constant is used in 7 Cypher queries (lines 71, 85, 93, 103, 120, 131, 164) that all match `Transcript {id: $sid}`. After cleanup migrates CRM's September 2025 transcript to DATE format (`CRM_2025-09-03`), all queries return 0 rows. The canary silently becomes non-functional.
+
+**Neo4j confirms:** `CRM_2025-09-03T17.00.00-04.00` → `guidance_status = "completed"`. This is one of the 7 transcripts with guidance_status. After cleanup, the canary would need the updated SOURCE_ID to verify.
+
+**Fix is trivial:** Change line 24 to `SOURCE_ID = "CRM_2025-09-03"` post-migration. Add to cleanup checklist.
+
+### GAP-11: `guidance_write_cli.py` DEFAULTS dict has LONG-format source_id
+
+**Claim**: Line 10 has `"source_id": "AAPL_2023-11-03T17.00.00-04.00"` in DEFAULTS dict. Not production-critical (overridden by real calls), just stale.
+
+**VERDICT: CLAIM IS MISLEADING. There is no DEFAULTS dict — it's a docstring example. Zero production impact.**
+
+**Code verification (`guidance_write_cli.py`):**
+Line 10 is inside a triple-quoted docstring (lines 2-53), not executable code:
+```python
+"""
+...
+Input JSON format:
+{
+    "source_id": "AAPL_2023-11-03T17.00.00-04.00",
+    ...
+}
+...
+"""
+```
+There is NO `DEFAULTS` dict anywhere in `guidance_write_cli.py`. Searched the entire 285-line file — no dict named `DEFAULTS`, no default values for `source_id`. The CLI reads all values from the input JSON file at line 162: `data = json.load(f)`. Line 174 validates: `if not source_id or not source_type or not ticker:` → error. There is no fallback to any default. Grep for `DEFAULTS` across all guidance scripts → zero matches.
+
+**Impact:** Zero. A docstring example is not executable. After migration the example would show stale LONG format, but that doesn't affect runtime behavior.
+
+**Recommendation:** Update the docstring example to DATE format for consistency — pure documentation polish, not a gap. 30-second change.
+
+### GAP-12: `None` guard should be required, not optional
+
+**Claim**: If `conference_datetime` is `None`, `str(None).split(...)` = `"None"` → `id = "AAPL_None"`. Zero-cost guard should be mandatory.
+
+**VERDICT: VALID IN THEORY but PRACTICALLY IMPOSSIBLE in current architecture. Make guard mandatory anyway (zero-cost).**
+
+> **FIXED** (2026-03-03, Edit 1): Added truthy check on `conference_datetime` before ID generation in `TranscriptProcessor.py:352-356`.
+
+**Code verification:**
+- `EarningsCallTranscripts.py` line 217: `event_date = event.conference_date.astimezone(self.ny_tz)` runs FIRST in `get_single_event()`. If `event.conference_date` is None, `.astimezone()` raises `AttributeError` — execution never reaches ID construction.
+- Line 235 assigns `"conference_datetime": event_date` as non-None datetime.
+- Lines 410-411 & 446-447 serialize via `.isoformat()` before Redis.
+
+**`TranscriptProcessor.py:346-350`** only checks key existence, NOT value truthiness:
+```python
+required_fields = ['symbol', 'fiscal_year', 'fiscal_quarter', 'conference_datetime']
+missing = [f for f in required_fields if f not in content]
+```
+This checks `if f not in content` — i.e., key existence in the dict. If `content['conference_datetime'] = None`, the key EXISTS, so it passes the check. Then:
+- If `None` type: `.split('T')` raises `AttributeError`
+- If string `"None"`: `"None".split('T')[0]` → `"None"` → `id = "AAPL_None"`
+- Either way, broken.
+
+**Practical risk is extremely low:** The API always provides `conference_date`. The None→"AAPL_None" scenario requires manual Redis manipulation, not a real production pathway. But the guard is zero-cost: `if not conference_datetime: raise ValueError(...)` or change `required_fields` check to also validate truthiness.
+
+**Recommendation:** Make the guard mandatory in Part A, not optional.
+
+### GAP-13: Reconciliation re-processing amplifies LLM non-determinism
+
+**Claim**: Each reconciliation re-processing calls `_process_transcript_content` → re-runs the LLM substantiality filter (`_is_qa_content_substantial`). Since the filter is non-deterministic, repeated runs could produce different QAExchange node sets. MERGE creates new nodes for newly-substantial pairs but leaves orphaned nodes for previously-substantial ones. Pre-existing issue, but repeated reconciliation (GAP-4) amplifies it.
+
+**VERDICT: MOSTLY INVALID. Claim's premise is wrong — LLM uses `temperature=0.0` = deterministic. MERGE is idempotent.**
+
+**Code verification:**
+- The LLM substantiality filter uses `temperature=0.0` (transcript.py:79) — this makes the output deterministic for the same input. Repeated calls with identical transcript content produce identical results.
+- `Neo4jManager.py:528-531` uses `MERGE (n:{node_type} {id: $id}) ON CREATE SET ... ON MATCH SET ...` — idempotent for same IDs.
+- `Neo4jManager.py:1071` uses `MERGE (source)-[rel:{rel_type}]->(target)` for `create_relationships` — relationships are also idempotent.
+- The QAExchange IDs are deterministic: `{transcript_id}_qa__{sequence_number}` (transcript.py:446). Same content → same sequence → same IDs → MERGE hits ON MATCH → no duplicates.
+
+**One real nuance:** After migration, reconciliation passes DATE `transcript_id` producing new QAExchange IDs (`AAPL_2025-07-31_qa__0`) vs existing LONG IDs (`AAPL_2025-07-31T17.00.00-04.00_qa__0`). But reconciliation currently scans 0 keys → zero blast radius.
+
+**There is no DELETE logic** in `_process_transcript_content` for old orphaned QAExchange nodes — this is pre-existing, not introduced by the fix. Amplification is limited by GAP-4 meta guard self-healing. Not actionable in this PR.
+
+### GAP-14: `HAS_TRANSCRIPT` relationship uses string concatenation (not parameterized)
+
+**Claim**: `transcript.py:358` uses `target_match_clause="{id: '" + transcript_id + "'}"`. Same Cypher injection pattern the plan fixes in Part E. Inconsistent to fix one and leave the other. Zero actual risk (internal data), but hygiene.
+
+**VERDICT: VALID. String concatenation confirmed — hygiene issue only. Fix in same PR for consistency.**
+
+> **FIXED** (2026-03-03, Edit 6): Changed to `target_match_clause="{id: param.target_id}"` with `params=[{"properties": {}, "target_id": transcript_id}]` in `transcript.py:361-363`.
+
+**Code verification:** `transcript.py:358`:
+```python
+target_match_clause="{id: '" + transcript_id + "'}"
+```
+Identical anti-pattern to what Part E fixes in `pubsub.py:180-184`.
+
+**Zero injection risk:** `transcript_id` is always internally-generated data, never from user input. DATE format `[A-Z0-9_-]` has no injection-capable characters. The `create_relationships` method takes a string match clause by design — parameterizing requires either API change or direct Cypher query.
+
+**Recommendation:** Parameterize in the same PR for consistency with Part E. Not blocking.
+
+---
+
+## LOW (informational / future-proofing)
+
+### GAP-15: `publish_transcript_update()` — CONFIRMED DEAD CODE
+
+**Claim**: The plan's Open Question #2 asks if this method is dead code. Not definitively confirmed. If called from some external path, it would publish LONG-format IDs. Part B's defense-in-depth catches it, so zero correctness risk, just an open verification item.
+
+**VERDICT: DEFINITIVELY DEAD CODE. Zero call sites. Open Question #2 is now resolved.**
+
+Exhaustive grep for `publish_transcript_update` across all `.py` files in the entire codebase: only hit is the definition at `eventReturns/ReturnsProcessor.py:342-351`. Zero callers anywhere — no imports, no dynamic dispatch, no string references. The active method is `_publish_news_update()` at lines 330-340. Can be safely deleted.
+
+### GAP-16: `parse_transcript_key_id` returns date instead of datetime after fix
+
+**Claim**: `redis_constants.py:74-91` splits on `_` with maxsplit=1. After fix, `AAPL_2025-07-31` → `{symbol: 'AAPL', conference_datetime: '2025-07-31'}`. Callers expecting full datetime from `conference_datetime` field would get just a date. No current callers found in fix paths.
+
+**VERDICT: DEFINITIVELY DEAD CODE. Zero callers — claim is moot.**
+
+Exhaustive grep for `parse_transcript_key_id` across entire codebase: only the definition at `redis_constants.py:76-91`. Zero callers anywhere. Not just "unused in fix paths" — definitively dead code. The behavioral change (datetime→date string) is real but affects nothing. Safe to delete entirely.
+
+### GAP-17: `conference_datetime` format in error fallback path
+
+**Claim**: The error fallback path at `get_single_event()` (lines ~435-456) — does it produce valid `conference_datetime`? Verified: it uses `event.conference_date` (same source) and calls `.isoformat()` at line 446-447. The None guard covers the edge case. Very low risk.
+
+**VERDICT: CONFIRMED SAFE. No gap exists. Covered by GAP-12.**
+
+**Code trace (`EarningsCallTranscripts.py`):**
+- Line 217 sets `conference_datetime = event.conference_date.isoformat()` BEFORE the try/except block housing the fallback. The fallback (lines ~435-456) handles transcript *content* retrieval errors, NOT datetime extraction errors.
+- `conference_datetime` is already assigned and remains in scope throughout — the fallback never reassigns it.
+- Grepped for all assignments to `conference_datetime` within `get_single_event()` — only line 217 sets it. No override in any except branch.
+- On a `date` object → `"2025-07-31"` (already DATE format). On a `datetime` object → `"2025-07-31T17:00:00-04:00"` (gets correctly split by `split('T')[0]`).
+- The None guard (GAP-12) covers the missing-data edge case.
+
+**No action needed beyond GAP-12.**
+
+---
+
+## DEDUPLICATION NOTES
+
+The following items from different reviews were merged into single entries:
+- **Reconciliation expense**: 4 reviews flagged this independently → **GAP-4**
+- **Meta divergence**: 3 reviews flagged this independently → **GAP-9**
+- **Canary breakage**: 2 reviews flagged this independently → **GAP-10**
+- **Reconciliation canonicalization need**: same root issue as GAP-4 → merged
+
+---
+
+## VALIDATION SUMMARY (updated 2026-03-03)
+
+| GAP | Verdict | Action | Status |
+|-----|---------|--------|--------|
+| GAP-1 | **VALID** but **MOOT** | Clear `guidance_status` during migration | **DONE** (Phase 4b, 2026-03-03) |
+| GAP-2 | **VALID** but **ELIMINATED** | Guidance wipe deletes all 70 GU nodes + edges | **DONE** (moot — guidance rebuild) |
+| GAP-3 | **VALID** (4,192 nodes) | Full migration: 4,192 Transcripts + ~80K children | **DONE** (Phases 1-5, 2026-03-03) |
+| GAP-4 | **PARTIALLY VALID** — overstated | Reconciliation queries Neo4j with wrong format | **DONE** (fixed by GAP-8 root fix) |
+| GAP-5 | **VALID** → downgrade to LOW | Batch update `QAExchange.transcript_id` | **DONE** (migration Phase 3a, line 346) |
+| GAP-6 | **VALID** but currently moot | Drain queue before migration | **DONE** (verified empty, 2026-03-03) |
+| GAP-7 | **INVALID** | No fix needed | N/A |
+| GAP-8 | **VALID** (pre-existing bug) | `get_transcript_key_id()` produces LONG, diverges from DATETIME | **DONE** (`redis_constants.py:71`, 2026-03-03) |
+| GAP-9 | **VALID** (leave as-is) | Dual meta writes per PubSub transcript | **DONE** (eliminated by GAP-8 root fix — all formats now DATETIME) |
+| GAP-10 | **VALID** | Update `canary_sdk_write.py` hardcoded SOURCE_ID | **DONE** (post-migration, 2026-03-03) |
+| GAP-11 | **MISLEADING** (docstring, not dict) | Update `guidance_write_cli.py` stale docstring | **DONE** (post-migration, 2026-03-03) |
+| GAP-12 | **VALID** (low practical risk) | Mandatory None guard on `conference_datetime` | **DONE** (Edit 1, 2026-03-03) |
+| GAP-13 | **MOSTLY INVALID** | `temperature=0.0` = deterministic; no action | N/A |
+| GAP-14 | **VALID** (hygiene only) | Parameterize Cypher string concatenation | **DONE** (Edit 6, 2026-03-03) |
+| GAP-15 | **DEAD CODE** | `publish_transcript_update()` — safe to delete | OPEN (optional cleanup) |
+| GAP-16 | **DEAD CODE** | `parse_transcript_key_id()` — safe to delete | OPEN (optional cleanup) |
+| GAP-17 | **LOW RISK** | Covered by GAP-12 | **DONE** |
+| GAP-18 | **THEORETICAL** | Same-day collision guard | DEFERRED (never occurred in 4,192 transcripts) |
+| GAP-19 | **FUTURE** | Move transcript ingestion to K8s | DEFERRED |
+| GAP-20 | **BLOCKING** | OpenAI GPT-4o/4o-mini model retirement | OPEN — blocks transcript re-enablement |
+
+**Final tally (2026-03-03): 15 DONE, 2 optional dead code cleanup (GAP-15/16), 2 deferred (GAP-18/19), 1 blocking (GAP-20).**
+
+### All completed
+- ~~**GAP-3**: Migration (4,192 Transcripts + ~80K children)~~ — **DONE** (2026-03-03)
+- ~~**GAP-12**: Mandatory None guard~~ — **DONE** (Edit 1, 2026-03-03)
+- ~~**GAP-14**: Parameterize Cypher~~ — **DONE** (Edit 6, 2026-03-03)
+- ~~**GAP-8**: Meta key format mismatch~~ — **DONE** (`redis_constants.py:71`, 2026-03-03)
+- ~~**GAP-10**: Update `canary_sdk_write.py`~~ — **DONE** (post-migration, 2026-03-03)
+- ~~**GAP-11**: Update `guidance_write_cli.py` docstring~~ — **DONE** (post-migration, 2026-03-03)
+- ~~**GAP-1**: Clear `guidance_status`~~ — **DONE** (Phase 4b, 2026-03-03)
+- ~~**GAP-5**: Batch update `QAExchange.transcript_id`~~ — **DONE** (migration Phase 3a, 2026-03-03)
+- ~~**GAP-6**: Verify queue empty~~ — **DONE** (2026-03-03)
+- ~~**GAP-4**: Reconciliation format mismatch~~ — **DONE** (fixed by GAP-8 root fix, 2026-03-03)
+- ~~**GAP-9**: Dual meta writes~~ — **DONE** (eliminated by GAP-8 root fix, 2026-03-03)
+
+### Still open
+- **GAP-15/16**: Dead code deletion (`publish_transcript_update()`, `parse_transcript_key_id()`) — optional cleanup, zero risk
+- **GAP-18**: Same-day collision guard — deferred, never occurred
+- **GAP-19**: Move transcript ingestion to K8s — future architecture work
+- **GAP-20**: **BLOCKING** — OpenAI model retirement (GPT-4o at `feature_flags.py:140`, GPT-4o-mini at `feature_flags.py:131`). Must replace before re-enabling transcript ingestion.
+
+---
+
+## POST-FIX ENHANCEMENT (implement after core fix + migration)
+
+### GAP-18: Same-day transcript collision guard (`_2` suffix)
+
+**Status**: ⚠️ **NOT VALIDATED** — proposed fix below has not been tested against the live codebase.
+
+**Issue**: The DATE format ID (`AAPL_2025-07-31`) assumes `(symbol, conference_date)` is unique. This is empirically proven across all 4,397 current Transcript nodes (4,192 unique combos = 4,192 unique datetime combos, zero violations). However, it is NOT a hard business invariant — a company could theoretically hold two calls on the same calendar date (e.g., earnings call 8am + investor day 4pm). If that happens, MERGE would silently overwrite the first call's data with the second call's. That's data loss with no error or warning.
+
+**Rationale**: The core fix (Parts A-E) solves the actual bug (205 duplicate pairs). This gap is insurance against a theoretical edge case. It is purely additive — does not change the ID format, does not affect any other part of the fix, and can be slotted in after the core fix and migration are complete.
+
+**Empirical evidence (March 2 2026)**:
+- Zero same-day collisions across 4,397 transcripts
+- Closest cases: H (Nov 2 vs Nov 8 = 6 days), SPG (May 2 vs May 16 = 2 weeks)
+- 13 fiscal-collision groups all fall on different calendar dates
+- Risk is real but has never materialized
+
+**Proposed behavior**:
+- Normal case (99.99%): ID = `AAPL_2025-07-31` (no suffix)
+- Re-ingest of same transcript: MERGE updates existing node (idempotent, no suffix)
+- Genuine same-day collision: second transcript gets `AAPL_2025-07-31_2`, third would get `_3`, etc.
+- Child nodes inherit: `AAPL_2025-07-31_2_pr`, `AAPL_2025-07-31_2_qa__0`, etc.
+- First-to-arrive gets the base ID; suffix indicates ingestion order, not chronological order
+
+**Cost**: One extra Neo4j read per transcript (indexed point lookup, sub-millisecond). The `while` loop for suffix scanning only executes in the collision case.
+
+**Proposed fix** (⚠️ NOT VALIDATED):
+
+Location: `neograph/mixins/transcript.py`, inside `_process_deduplicated_transcript()`, after the Part B canonical ID resolution line.
+
+```python
+def _process_deduplicated_transcript(self, transcript_id, transcript_data):
+    # Part B — canonical ID resolution (already in core fix)
+    transcript_id = transcript_data.get("id") or transcript_id
+
+    # GAP-18 — same-day collision guard
+    existing = self.manager.execute_cypher_query_all(
+        "MATCH (t:Transcript {id: $id}) RETURN t.conference_datetime AS cdt",
+        {"id": transcript_id}
+    )
+    if existing:
+        current_cdt = str(transcript_data.get("conference_datetime", ""))
+        existing_cdt = str(existing[0]["cdt"])
+        if existing_cdt != current_cdt:  # Different event, same date
+            suffix = 2
+            while True:
+                candidate = f"{transcript_id}_{suffix}"
+                check = self.manager.execute_cypher_query_all(
+                    "MATCH (t:Transcript {id: $id}) RETURN t.id", {"id": candidate}
+                )
+                if not check:
+                    transcript_id = candidate
+                    break
+                suffix += 1
+            logger.info(f"Same-day collision detected, assigned ID: {transcript_id}")
+
+    # ... rest of method unchanged
+```
+
+**Known limitations** (to validate during implementation):
+1. `conference_datetime` string comparison — format must be consistent between the data blob and the Neo4j property. If one is `"2025-07-31 17:00:00-04:00"` and the other is `"2025-07-31T17:00:00-04:00"`, a false collision would occur. May need normalization.
+2. Ordering: first-to-arrive gets base ID. Re-ingesting in opposite order flips assignments. Not a correctness issue but worth documenting.
+3. The `while` loop is unbounded — in practice max 2-3 iterations, but a cap (e.g., max 10) would be safer.
+4. This adds a Neo4j read dependency inside a method that previously had none before the MERGE. Verify this doesn't cause issues with transaction scoping or connection pooling.
+
+**Deep-dive assessment (March 3 2026)**:
+
+The concept is sound but the proposed implementation has real problems that need addressing:
+
+1. **`conference_datetime` format inconsistency — the big risk.** The data blob has `"2025-07-31 17:00:00-04:00"` (Python `str()` format via `json.dumps(default=str)` at `EarningsCallTranscripts.py:765`), but the Neo4j property was written via `_create_transcript_node_from_data` at `transcript.py:576` which passes `transcript_data.get("conference_datetime", "")` — the same string. So they'd match for same-era ingestions. **BUT** — if the transcript was previously ingested before the fix (LONG/SHORT era), the stored `conference_datetime` may have been through `_clean_content` → `convert_to_eastern` which converts and re-formats via `.isoformat()` (T separator). A re-ingest would pass the raw `str()` format (space separator). `"2025-07-31T17:00:00-04:00" != "2025-07-31 17:00:00-04:00"` → **false collision** → spurious `_2` suffix on what's actually the same transcript. This would create a ghost duplicate node instead of idempotently updating the existing one. Fixing this requires normalizing both sides before comparison (e.g., compare only the first 19 chars, or parse both to datetime objects).
+
+2. **The guard is NOT needed for the core fix.** It's insurance against a theoretical future event that has never happened in 4,397 transcripts. The core fix (Parts A-E) is correct and complete without it. Zero same-day collisions have ever occurred. The closest cases are H (Nov 2 vs Nov 8 = 6 days) and SPG (May 2 vs May 16 = 2 weeks).
+
+3. **Cost is tiny but nonzero** — one indexed Neo4j point lookup per transcript. For batch ingestion of thousands of transcripts, that adds latency proportional to batch size. Sub-millisecond per lookup but compounds.
+
+**Recommendation**: Deploy the core fix (Parts A-E) without GAP-18. Add the monitoring query (already in the plan's test section, item 7) as a periodic check. If a same-day collision ever occurs, implement GAP-18 with proper `conference_datetime` normalization at that time.
+
+---
+
+## FUTURE: Move transcript ingestion to K8s pod
+
+### GAP-19: Transcript pipeline runs locally, not on K8s
+
+**Status**: Reminder / future work.
+
+**Current state (March 2 2026)**:
+- `DataManagerCentral.py:693` has `TranscriptsManager` commented out (BENZINGA_ONLY mode)
+- The `k8s/event-trader-deployment.yaml` exists but no event-trader pod is running (`kubectl get pods` confirms zero matches)
+- Only Benzinga news runs in production (line 690: `self.sources['news'] = BenzingaNewsManager(...)`)
+- Transcript ingestion runs locally via `python scripts/run_event_trader.py` — reads code from disk, next run picks up changes automatically
+
+**Why this matters**:
+- Local runs are manual and unreliable — no automatic scheduling, no restart on failure, no resource monitoring
+- The K8s cluster already has the infrastructure (KEDA, Redis queues, monitoring) that the transcript pipeline would benefit from
+- The `claude-code-worker` pod (guidance extraction) already demonstrates the pattern: Redis queue trigger → K8s pod scales up → processes → scales down
+- Transcript ingestion could follow the same pattern: scheduled CronJob or Redis-triggered KEDA scaler
+
+**Action**: After the duplicate ID fix is deployed and validated, revisit moving transcript ingestion into a K8s pod. Consider:
+1. Uncommenting `TranscriptsManager` in DataManagerCentral.py (or creating a dedicated transcript worker)
+2. A CronJob for historical backfill + a KEDA-scaled pod for live transcript polling
+3. Reusing the `earnings:trigger` queue pattern from the guidance worker
+
+---
+
+## BLOCKING: OpenAI model retirement
+
+### GAP-20: GPT-4o and GPT-4o-mini are being retired
+
+**Status**: BLOCKING for transcript ingestion re-enablement.
+
+**Announcement**: OpenAI is retiring GPT-4o, GPT-4.1, GPT-4.1 mini, and o4-mini from ChatGPT (and API deprecation will follow standard OpenAI deprecation policy).
+
+**Impact on transcript pipeline — two call sites:**
+
+| Call Site | Model | File | Line | Purpose |
+|-----------|-------|------|------|---------|
+| `classify_speakers()` | **`gpt-4o`** | `config/feature_flags.py:140` → `EarningsCallTranscripts.py:483` | Speaker role classification (ANALYST/EXECUTIVE/OPERATOR) |
+| `_is_qa_content_substantial()` | **`gpt-4o-mini`** | `config/feature_flags.py:131` → `neograph/mixins/transcript.py:41,68` | QA filler/greeting filter for short exchanges (<15 words) |
+
+Both use the OpenAI **Responses API** with structured JSON output (`text_format={"type": "json_schema", ...}`).
+
+**What breaks when these models go away:**
+- `classify_speakers()` fails → no speaker roles → Q&A boundary detection falls back to heuristics → degraded Q&A pair quality
+- `_is_qa_content_substantial()` fails → defaults to "substantial" (safe fallback at `transcript.py:116`) → filler QAExchange nodes created, but no data loss
+
+**Action required:**
+1. Replace `SPEAKER_CLASSIFICATION_MODEL` in `feature_flags.py:140` with successor model
+2. Replace `QA_CLASSIFICATION_MODEL` in `feature_flags.py:131` with successor model
+3. Verify structured JSON output compatibility with the new model (both use `json_schema` response format)
+4. Note: `feature_flags.py:130` already has a commented-out `gpt-4.1-mini` reference — was tested but uses incorrect model name (should be the official successor ID)

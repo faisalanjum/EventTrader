@@ -7,7 +7,7 @@ Usage:
 
 Input JSON format:
 {
-    "source_id": "AAPL_2023-11-03T17.00.00-04.00",
+    "source_id": "AAPL_2023-11-03T17.00",
     "source_type": "transcript",
     "ticker": "AAPL",
     "fye_month": 9,

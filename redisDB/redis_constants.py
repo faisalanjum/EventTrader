@@ -67,8 +67,8 @@ class RedisKeys:
     @staticmethod
     def get_transcript_key_id(symbol: str, conference_datetime) -> str:
         """Create standardized transcript ID from symbol and datetime"""
-        # Simple string conversion and replace colons with dots
-        dt_str = str(conference_datetime).replace(':', '.')
+        # Match DATETIME format used by Neo4j Transcript.id and _standardize_fields()
+        dt_str = str(conference_datetime).replace(':', '.').replace(' ', 'T')[:16]
         return f"{symbol}_{dt_str}"
     
     # Only used for transcripts

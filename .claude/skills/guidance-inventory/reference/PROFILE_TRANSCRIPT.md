@@ -16,7 +16,7 @@ Transcripts arrive via query 3B, with optional fallback via 3C:
 
 | Field | Type | Example |
 |-------|------|---------|
-| `t.id` | String | `AAPL_2025-01-30T17.00.00-05.00` |
+| `t.id` | String | `AAPL_2025-01-30T17.00` |
 | `t.conference_datetime` | String (ISO) | `2025-01-30T17:00:00-05:00` |
 | `t.fiscal_quarter` | String | `Q1` |
 | `t.fiscal_year` | String | `2025` |

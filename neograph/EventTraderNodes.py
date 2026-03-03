@@ -1431,13 +1431,15 @@ class TranscriptNodeData:
     created: Optional[str] = None     # ISO datetime for creation
     updated: Optional[str] = None     # ISO datetime for update
     speakers: Dict[str, str] = field(default_factory=dict)
+    quarter_key: Optional[str] = None    # Legacy SHORT-format ID (e.g., "AAPL_2025_3")
 
 
 class TranscriptNode(Neo4jNode):
     """Transcript node for earnings call transcripts"""
     
-    def __init__(self, id, symbol, company_name, conference_datetime, fiscal_quarter, fiscal_year, 
-                 formType="", calendar_quarter=None, calendar_year=None, created=None, updated=None, speakers=None):
+    def __init__(self, id, symbol, company_name, conference_datetime, fiscal_quarter, fiscal_year,
+                 formType="", calendar_quarter=None, calendar_year=None, created=None, updated=None, speakers=None,
+                 quarter_key=None):
         # Create data container
         self.data = TranscriptNodeData(
             id=id,
@@ -1451,7 +1453,8 @@ class TranscriptNode(Neo4jNode):
             calendar_year=calendar_year,
             created=created,
             updated=updated,
-            speakers=speakers or {}
+            speakers=speakers or {},
+            quarter_key=quarter_key
         )
     
     @property
@@ -1525,7 +1528,15 @@ class TranscriptNode(Neo4jNode):
     @speakers.setter
     def speakers(self, value):
         self.data.speakers = value
-    
+
+    @property
+    def quarter_key(self) -> Optional[str]:
+        return self.data.quarter_key
+
+    @quarter_key.setter
+    def quarter_key(self, value):
+        self.data.quarter_key = value
+
     @property
     def node_type(self) -> NodeType:
         return NodeType.TRANSCRIPT
@@ -1560,7 +1571,10 @@ class TranscriptNode(Neo4jNode):
         # Add complex fields as JSON strings
         if self.speakers:
             props["speakers"] = json.dumps(self.speakers)
-            
+
+        if self.quarter_key:
+            props["quarter_key"] = self.quarter_key
+
         return props
     
     @classmethod
@@ -1619,7 +1633,10 @@ class TranscriptNode(Neo4jNode):
                 instance.speakers = json.loads(props["speakers"])
             except:
                 instance.speakers = {}
-                
+
+        if "quarter_key" in props and props["quarter_key"]:
+            instance.quarter_key = props["quarter_key"]
+
         return instance
 
 

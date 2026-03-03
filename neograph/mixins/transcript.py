@@ -303,6 +303,9 @@ class TranscriptMixin:
         """
         Process transcript data with deduplication and relationship generation.
         """
+        # Canonical ID resolution — all paths converge on the DATE-format id from the data blob
+        transcript_id = transcript_data.get("id") or transcript_id
+
         logger.debug(f"Processing deduplicated transcript {transcript_id}")
         try:
             transcript_node, valid_symbols, company_params, sector_params, industry_params, market_params, timestamps = \
@@ -355,9 +358,9 @@ class TranscriptMixin:
                     source_id_field="cik",
                     source_id_value=cik,
                     target_label="Transcript",
-                    target_match_clause="{id: '" + transcript_id + "'}",
+                    target_match_clause="{id: param.target_id}",
                     rel_type="HAS_TRANSCRIPT",
-                    params=[{"properties": {}}]
+                    params=[{"properties": {}, "target_id": transcript_id}]
                 )
                 logger.info(f"Created HAS_TRANSCRIPT relationship for {primary_symbol} ({cik})")
 
@@ -581,7 +584,8 @@ class TranscriptMixin:
             calendar_year=transcript_data.get("calendar_year"),
             created=transcript_data.get("created"),
             updated=transcript_data.get("updated"),
-            speakers=safe_dict(transcript_data.get("speakers", {}))
+            speakers=safe_dict(transcript_data.get("speakers", {})),
+            quarter_key=transcript_data.get("quarter_key"),
         )
 
 

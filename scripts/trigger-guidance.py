@@ -12,7 +12,7 @@ Usage:
   python3 scripts/trigger-guidance.py --list CRM        # Show unprocessed, don't queue
   python3 scripts/trigger-guidance.py --list --all      # Show all unprocessed
   python3 scripts/trigger-guidance.py --mode dry_run CRM  # Queue with dry_run mode
-  python3 scripts/trigger-guidance.py --source-id CRM_2025-09-03T17.00.00-04.00
+  python3 scripts/trigger-guidance.py --source-id CRM_2025-09-03T17.00
   python3 scripts/trigger-guidance.py --force CRM       # Re-process even if completed
   python3 scripts/trigger-guidance.py --retry-failed CRM  # Re-process only failed items
 """
