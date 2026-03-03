@@ -130,77 +130,77 @@ class ReconcileMixin:
                             redis_report_full_ids[accession_no] = full_id
 
                 if not redis_report_full_ids:
-                    return results  # Nothing to reconcile
+                    logger.info("No report keys found in Redis, skipping report reconciliation")
+                else:
+                    # STEP 2: Fetch existing accessionNos and created timestamps from Neo4j
+                    accession_list = list(redis_report_full_ids.keys())
+                    cypher = """
+                    MATCH (r:Report)
+                    WHERE r.accessionNo IN $ids
+                    RETURN r.accessionNo AS id, r.created AS created
+                    """
+                    result = session.run(cypher, ids=accession_list)
+                    neo4j_created_map = {r["id"]: r["created"] for r in result}
 
-                # STEP 2: Fetch existing accessionNos and created timestamps from Neo4j
-                accession_list = list(redis_report_full_ids.keys())
-                cypher = """
-                MATCH (r:Report)
-                WHERE r.accessionNo IN $ids
-                RETURN r.accessionNo AS id, r.created AS created
-                """
-                result = session.run(cypher, ids=accession_list)
-                neo4j_created_map = {r["id"]: r["created"] for r in result}
+                    # STEP 3: Compare timestamps to find missing or outdated reports
+                    from dateutil.parser import parse as parse_datetime
 
-                # STEP 3: Compare timestamps to find missing or outdated reports
-                from dateutil.parser import parse as parse_datetime
+                    missing_or_newer = []
+                    for accession_no, full_id in redis_report_full_ids.items():
+                        redis_ts_str = full_id[21:].replace('.', ':')
+                        try:
+                            redis_dt = parse_datetime(redis_ts_str)
+                        except Exception:
+                            logger.warning(f"Bad timestamp {redis_ts_str} for {accession_no}")
+                            continue
 
-                missing_or_newer = []
-                for accession_no, full_id in redis_report_full_ids.items():
-                    redis_ts_str = full_id[21:].replace('.', ':')
-                    try:
-                        redis_dt = parse_datetime(redis_ts_str)
-                    except Exception:
-                        logger.warning(f"Bad timestamp {redis_ts_str} for {accession_no}")
-                        continue
-
-                    neo4j_created = neo4j_created_map.get(accession_no)
-                    if not neo4j_created or redis_dt > parse_datetime(neo4j_created):
-                        missing_or_newer.append((accession_no, full_id))
+                        neo4j_created = neo4j_created_map.get(accession_no)
+                        if not neo4j_created or redis_dt > parse_datetime(neo4j_created):
+                            missing_or_newer.append((accession_no, full_id))
 
 
-                # STEP 4: Fetch and process those reports using latest full_id
-                for accession_no, full_id in missing_or_newer[:max_items_per_type or len(missing_or_newer)]:
-                    # --- BEGIN GUARD for RECONCILE ---
-                    meta_key_for_reconcile_guard = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{full_id}"
-                    if self.event_trader_redis.history_client.client.hexists(meta_key_for_reconcile_guard, "inserted_into_neo4j_at"):
-                        logger.info(f"[RECONCILE SKIP] Report {full_id} already has 'inserted_into_neo4j_at'. Skipping reconciliation processing.")
-                        # Optionally, ensure any raw keys for this full_id are cleaned up from withreturns/withoutreturns
-                        for ns_cleanup in [RedisKeys.SUFFIX_WITHRETURNS, RedisKeys.SUFFIX_WITHOUTRETURNS]:
-                            stale_key_path = RedisKeys.get_key(RedisKeys.SOURCE_REPORTS, ns_cleanup, full_id)
-                            if self.event_trader_redis.history_client.client.exists(stale_key_path):
-                                try:
-                                    self.event_trader_redis.history_client.client.delete(stale_key_path)
-                                    logger.info(f"[RECONCILE SKIP] Cleaned up stale key {stale_key_path} for already processed report {full_id}")
-                                except Exception as e_del_reconcile:
-                                    logger.warning(f"[RECONCILE SKIP] Could not delete stale key {stale_key_path}: {e_del_reconcile}")
-                        continue # Skip to the next item in missing_or_newer
-                    # --- END GUARD for RECONCILE ---
+                    # STEP 4: Fetch and process those reports using latest full_id
+                    for accession_no, full_id in missing_or_newer[:max_items_per_type or len(missing_or_newer)]:
+                        # --- BEGIN GUARD for RECONCILE ---
+                        meta_key_for_reconcile_guard = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{full_id}"
+                        if self.event_trader_redis.history_client.client.hexists(meta_key_for_reconcile_guard, "inserted_into_neo4j_at"):
+                            logger.info(f"[RECONCILE SKIP] Report {full_id} already has 'inserted_into_neo4j_at'. Skipping reconciliation processing.")
+                            # Optionally, ensure any raw keys for this full_id are cleaned up from withreturns/withoutreturns
+                            for ns_cleanup in [RedisKeys.SUFFIX_WITHRETURNS, RedisKeys.SUFFIX_WITHOUTRETURNS]:
+                                stale_key_path = RedisKeys.get_key(RedisKeys.SOURCE_REPORTS, ns_cleanup, full_id)
+                                if self.event_trader_redis.history_client.client.exists(stale_key_path):
+                                    try:
+                                        self.event_trader_redis.history_client.client.delete(stale_key_path)
+                                        logger.info(f"[RECONCILE SKIP] Cleaned up stale key {stale_key_path} for already processed report {full_id}")
+                                    except Exception as e_del_reconcile:
+                                        logger.warning(f"[RECONCILE SKIP] Could not delete stale key {stale_key_path}: {e_del_reconcile}")
+                            continue # Skip to the next item in missing_or_newer
+                        # --- END GUARD for RECONCILE ---
 
-                    for ns in ['withreturns', 'withoutreturns']:
-                        key = RedisKeys.get_key(RedisKeys.SOURCE_REPORTS, ns, full_id)
-                        raw_data = self.event_trader_redis.history_client.get(key)
-                        if raw_data:
-                            report_data = json.loads(raw_data)
-                            success = self._process_deduplicated_report(full_id, report_data)
-                            results["reports"] += 1
+                        for ns in ['withreturns', 'withoutreturns']:
+                            key = RedisKeys.get_key(RedisKeys.SOURCE_REPORTS, ns, full_id)
+                            raw_data = self.event_trader_redis.history_client.get(key)
+                            if raw_data:
+                                report_data = json.loads(raw_data)
+                                success = self._process_deduplicated_report(full_id, report_data)
+                                results["reports"] += 1
 
-                            # Add the missing lifecycle timestamp
-                            if success:
-                                meta_key = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{full_id}"
-                                try:
-                                    self.event_trader_redis.history_client.mark_lifecycle_timestamp(
-                                        meta_key, "inserted_into_neo4j_at"
-                                    )
-                                except Exception:
-                                    pass
+                                # Add the missing lifecycle timestamp
+                                if success:
+                                    meta_key = f"tracking:meta:{RedisKeys.SOURCE_REPORTS}:{full_id}"
+                                    try:
+                                        self.event_trader_redis.history_client.mark_lifecycle_timestamp(
+                                            meta_key, "inserted_into_neo4j_at"
+                                        )
+                                    except Exception:
+                                        pass
 
-                            if success and ns == 'withreturns':
-                                try:
-                                    self.event_trader_redis.history_client.client.delete(key)
-                                except Exception as e:
-                                    logger.warning(f"Failed to delete key {key}: {e}")
-                            break  # Stop after first successful namespace match
+                                if success and ns == 'withreturns':
+                                    try:
+                                        self.event_trader_redis.history_client.client.delete(key)
+                                    except Exception as e:
+                                        logger.warning(f"Failed to delete key {key}: {e}")
+                                break  # Stop after first successful namespace match
 
             
                 # 3. TRANSCRIPTS RECONCILIATION
