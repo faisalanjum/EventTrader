@@ -1,6 +1,6 @@
 # Extraction Pipeline — Implementation Plan
 
-**Status: PLANNING** — Do not implement until this status is changed to APPROVED. No code, no file changes until approved.
+**Status: APPROVED** — Implement phases in order. Each phase has a validation gate; do not start the next phase until the current gate passes.
 
 **Baseline lock**: The current `/guidance-transcript` pipeline produces near-optimal output. The entire existing pipeline — orchestrator skill, agents, reference files, scripts — stays FROZEN and untouched throughout all phases. We build the new infrastructure ALONGSIDE the old by duplicating files (with new names fitting the extraction framework). The originals are never moved, renamed, or edited. Retirement only happens much later, after thorough parallel-run verification proves the new infrastructure matches or exceeds the original output quality.
 
@@ -11,7 +11,7 @@
 3. **Plug-and-play** — trivially easy to add/remove any extraction type for any data asset
 4. **Always actionable** — every section points toward clear implementation; zero paralysis by analysis
 
-**Version**: 1.3.2 | 2026-03-04
+**Version**: 1.4 | 2026-03-04
 **Goal**: Generalize the guidance extraction pipeline into a reusable framework for ANY extraction type across ALL data assets.
 **Archive**: Full deliberation history in `extractionPipeline-v04-archive.md`
 
@@ -326,7 +326,7 @@ All knowledge about one asset stays co-located. Adding a type = appending a sect
 
 **D8: FOR_COMPANY edge — KEEP** — `(GuidanceUpdate)-[:FOR_COMPANY]->(Company)` stays. O(1) lookup, index-backed, simpler than multi-hop via `FROM_SOURCE`. All future extraction types follow the same pattern.
 
-**D9: Separate labels (tag + data-point pattern)** — Each extraction type gets its own label pair: `Guidance` + `GuidanceUpdate` (current), future `AnalystTopic` + `AnalystComment`, `RiskFactor` + `RiskFactorUpdate`, etc. Different types have different properties (guidance needs `low/mid/high`, risk factors don't), and each type has its own writer — separate labels are natural.
+**D9: Separate labels (tag + data-point + optional supporting nodes)** — Each extraction type gets its own label set: `Guidance` (tag) + `GuidanceUpdate` (data-point) + `GuidancePeriod` (supporting) for the current type. Future types follow the same pattern: e.g., `AnalystTopic` + `AnalystComment` (no supporting node needed). Supporting nodes are optional — only created when the type needs them (guidance needs calendar periods, analyst comments probably don't). Different types have different properties (guidance needs `low/mid/high`, risk factors don't), and each type has its own writer — separate labels are natural. The full node/relationship graph is defined in the type's SKILL.md (see contract checklist §A).
 
 **D10: Single queue `extract:pipeline`** — One Redis queue for all extraction jobs. Payload carries `asset` and `types`. One KEDA config, one dead-letter queue. Can split per-asset later if needed.
 
@@ -376,11 +376,13 @@ The current `guidance-extract.md` agent (duplicated as `extraction-guidance.md` 
 
 | Component | Guidance | Future: Analyst Comments | Future: Risk Factors |
 |-----------|----------|-------------------------|---------------------|
-| **Node labels** | Guidance + GuidanceUpdate | TBD (tag + data-point pair) | TBD |
+| **Node labels** | Guidance (tag) + GuidanceUpdate (data-point) | TBD (tag + data-point) | TBD |
+| **Supporting nodes** | GuidancePeriod (calendar periods + ST/MT/LT buckets) | Likely none | Likely none |
+| **Relationships** | UPDATES, FROM_SOURCE, FOR_COMPANY, HAS_PERIOD, MAPS_TO_CONCEPT, MAPS_TO_MEMBER | UPDATES, FROM_SOURCE, FOR_COMPANY (subset) | TBD |
 | **Extraction fields** | 20 fields (low/mid/high, basis, derivation...) | Different field set | Different field set |
 | **Quality filters** | Forward-looking, no fabrication, quote max 500 | Different filters | Different filters |
 | **ID structure** | `gu:{source}:{label}:{period}:{basis}:{segment}` | Different slot components | Different slot components |
-| **XBRL matching** | Concept + Member caches | Probably not applicable | Not applicable |
+| **XBRL matching** | MAPS_TO_CONCEPT + MAPS_TO_MEMBER (pre-existing nodes) | Probably not applicable | Not applicable |
 | **Period resolution** | GuidancePeriod (calendar-based) | May not need periods | Not period-based |
 
 ### What Varies by Data Asset
@@ -408,15 +410,136 @@ All extraction scripts live in `.claude/skills/earnings-orchestrator/scripts/`. 
 
 ### How to Add a New Extraction Type
 
-1. Create `.claude/skills/{type}-inventory/SKILL.md` — schema, fields, validation rules (like `guidance-inventory/SKILL.md`)
+1. Create `.claude/skills/{type}-inventory/SKILL.md` — define the full graph schema (nodes, relationships, supporting nodes per contract checklist §A below), extraction fields, ID formula, quality filters, validation rules (use `guidance-inventory/SKILL.md` as template)
 2. Create `.claude/skills/earnings-orchestrator/scripts/{type}_ids.py` — deterministic ID computation (like `guidance_ids.py`)
-3. Create `.claude/skills/earnings-orchestrator/scripts/{type}_writer.py` — Cypher MERGE patterns (like `guidance_writer.py`)
+3. Create `.claude/skills/earnings-orchestrator/scripts/{type}_writer.py` — Cypher MERGE patterns for the labels + relationships defined in step 1 (FROM_SOURCE, FOR_COMPANY, HAS_PERIOD as applicable; like `guidance_writer.py`)
 4. Create agent: `.claude/agents/extraction-{type}.md` — references SKILL.md + `guidance-inventory/QUERIES.md` + `extraction/assets/*.md`
 5. Append `## Extraction Rules: {type}` section to each applicable asset file in `extraction/assets/`
 6. Add `Task(extraction-{type})` spawn to each per-asset orchestrator that applies
 7. Add `{type}_status` property to trigger script's query + worker's `mark_status()`
 
 Steps 1-3 are the substantive work. Steps 4-7 are boilerplate that follows the pattern.
+
+**What goes where** — the 3 files and what each one specifies:
+
+```
+ADDING A NEW EXTRACTION TYPE: What goes where
+══════════════════════════════════════════════
+
+FILE 1: {type}-inventory/SKILL.md  (THE SPEC — define everything here first)
+─────────────────────────────────────────────────────────────────────────────
+  § Graph Schema
+    ├── Tag node label + properties        (e.g., Guidance: id, label, aliases)
+    ├── Data-point node label + properties  (e.g., GuidanceUpdate: 20+ fields)
+    ├── Supporting node label + properties  (e.g., GuidancePeriod: id, u_id)  [if needed]
+    └── All relationships                   (UPDATES, FROM_SOURCE, FOR_COMPANY, HAS_PERIOD, ...)
+
+  § ID Formula
+    └── Slot structure                      (e.g., gu:{source}:{label}:{period}:{basis}:{segment})
+
+  § Extraction Fields
+    └── Every field the LLM must extract    (low, mid, high, basis, unit, quote, ...)
+
+  § Quality Filters
+    └── What to accept/reject               (forward-looking only, quote max 500, ...)
+
+  § Validation Rules
+    └── Deterministic checks                (unit canon, period resolution, basis rules)
+
+  § Error Taxonomy
+    └── Standard error codes                (SOURCE_NOT_FOUND, EMPTY_CONTENT, NO_{TYPE})
+
+  § Execution Modes
+    └── dry_run / shadow / write
+
+
+FILE 2: {type}_ids.py  (IMPLEMENTS: IDs + validation from SKILL.md spec)
+────────────────────────────────────────────────────────────────────────
+  Reads SKILL.md §ID Formula, §Validation Rules
+    ├── Deterministic ID computation         (slot assembly, dedup key)
+    ├── Unit canonicalization                (raw unit → canonical)
+    ├── Period resolution                    (date math → supporting node ID)  [if needed]
+    └── Field validation                     (basis rules, required fields)
+
+
+FILE 3: {type}_writer.py  (IMPLEMENTS: graph creation from SKILL.md spec)
+─────────────────────────────────────────────────────────────────────────
+  Reads SKILL.md §Graph Schema
+    ├── MERGE tag node                       (e.g., Guidance)
+    ├── MERGE data-point node                (e.g., GuidanceUpdate, all 20+ properties)
+    ├── MERGE supporting node                (e.g., GuidancePeriod)  [if needed]
+    ├── MERGE relationships:
+    │     ├── UPDATES         (data-point → tag)
+    │     ├── FROM_SOURCE     (data-point → source document)
+    │     ├── FOR_COMPANY     (data-point → Company)
+    │     ├── HAS_PERIOD      (data-point → supporting node)  [if needed]
+    │     └── type-specific   (e.g., MAPS_TO_CONCEPT, MAPS_TO_MEMBER)
+    └── Mode handling                        (dry_run → JSON only, write → Neo4j)
+
+
+FLOW:  SKILL.md defines it  →  _ids.py validates it  →  _writer.py writes it to Neo4j
+```
+
+**Contract checklist** — every new type MUST define all of the following in its SKILL.md (use `guidance-inventory/SKILL.md` as template):
+
+**A. Graph schema** — define the complete node/relationship map upfront. This is the blueprint that `{type}_ids.py` and `{type}_writer.py` implement.
+
+Guidance reference (the pattern every new type follows):
+
+```
+                        Guidance (tag node)
+                           ▲
+                           │ UPDATES
+                           │
+Company ◄──FOR_COMPANY── GuidanceUpdate ──FROM_SOURCE──► Transcript/Report/News
+                              │       │
+                              │       ├── MAPS_TO_CONCEPT ──► Concept  (pre-existing)
+                              │       └── MAPS_TO_MEMBER  ──► Member   (pre-existing)
+                              │
+                              └── HAS_PERIOD ──► GuidancePeriod (supporting node)
+```
+
+| Node | Type | Created by | Key properties |
+|------|------|-----------|----------------|
+| `Guidance` | Tag (one per metric label, e.g., "Revenue") | writer.py | id, label, aliases |
+| `GuidanceUpdate` | Data-point (one per extraction) | writer.py | id, label, basis_norm, derivation, canonical_unit, segment, quote, source_type, source_key, xbrl_qname, period_scope, time_type, ... (20+ fields) |
+| `GuidancePeriod` | Supporting (calendar periods + buckets) | writer.py | id (`gp_2024-01-01_2024-03-31` or `gp_ST/MT/LT`), u_id |
+
+| Relationship | From → To | Required? | Notes |
+|-------------|-----------|-----------|-------|
+| `UPDATES` | GuidanceUpdate → Guidance | **YES — all types** | Links data-point to its tag |
+| `FROM_SOURCE` | GuidanceUpdate → Transcript/Report/News | **YES — all types** | Links to source document |
+| `FOR_COMPANY` | GuidanceUpdate → Company | **YES — all types** (D8) | O(1) company lookup |
+| `HAS_PERIOD` | GuidanceUpdate → GuidancePeriod | Type-specific | Calendar period or ST/MT/LT bucket |
+| `MAPS_TO_CONCEPT` | GuidanceUpdate → Concept | Type-specific | XBRL concept (pre-existing node) |
+| `MAPS_TO_MEMBER` | GuidanceUpdate → Member | Type-specific | XBRL member (pre-existing node) |
+
+**New type example** — an "analyst" type would fill the same tables:
+
+| Node | Type | Key properties |
+|------|------|----------------|
+| `AnalystTopic` | Tag | id, label |
+| `AnalystComment` | Data-point | id, label, sentiment, quote, analyst_firm, source_type, ... |
+| *(none)* | Supporting | Not needed — no period tracking |
+
+| Relationship | From → To | Notes |
+|-------------|-----------|-------|
+| `UPDATES` | AnalystComment → AnalystTopic | Required |
+| `FROM_SOURCE` | AnalystComment → Transcript/Report/News | Required |
+| `FOR_COMPANY` | AnalystComment → Company | Required |
+
+The SKILL.md defines these tables, `analyst_writer.py` implements the MERGE patterns.
+
+**B. Extraction contract** — everything else the SKILL.md must specify:
+
+| Component | Guidance example | Where it lives |
+|-----------|-----------------|----------------|
+| **ID slot formula** | `gu:{source}:{label}:{period}:{basis}:{segment}` | SKILL.md (ID section) + `{type}_ids.py` |
+| **Extraction fields** | 20 fields: low, mid, high, basis, derivation_type, unit, segment, quote, ... | SKILL.md (schema section) |
+| **Quality filters** | Forward-looking only, no fabrication, quote max 500 chars | SKILL.md (quality section) |
+| **Validation rules** | Unit canonicalization, period resolution, basis explicit-only | SKILL.md + `{type}_ids.py` |
+| **Error taxonomy** | SOURCE_NOT_FOUND, EMPTY_CONTENT, NO_GUIDANCE | SKILL.md (error section) |
+| **Execution modes** | dry_run / shadow / write | SKILL.md (inherited pattern) |
 
 ### How to Add a New Data Asset
 
@@ -691,3 +814,4 @@ When approved: new Phase 1 files replace their frozen counterparts (see Phase 1 
 *v1.3 | 2026-03-04 | Replaced Core Insight + Key Separation with 3-manual and DRY diagrams. Asset profiles renamed: `PROFILE_TRANSCRIPT.md` → `transcript.md` in `extraction/assets/`. Added current-vs-new infrastructure comparison to Phase 1. Updated all paths throughout. evidence-standards correctly noted as not currently loaded.*
 *v1.3.1 | 2026-03-04 | QUERIES.md reverted to SHARED (stays in `guidance-inventory/QUERIES.md`; old + new agents both read it). Zero drift, truly DRY. Post-retirement: rename `guidance-inventory/` to extraction-generic name.*
 *v1.3.2 | 2026-03-04 | Implementation-proof pass: (1) Banner → status field, (2) §0 Phase→Agent naming to avoid §5 collision, (3) evidence-standards added to File Inventory, (4) Phase 1 clone explicitly does NOT parse TYPES, (5) 10q covers both 10-Q/10-K — removed 10k as separate asset, (6) SOURCE_TYPE routing is hardcoded, not auto-detect.*
+*v1.4 | 2026-03-04 | Added full graph schema to contract checklist: nodes (tag + data-point + supporting), all 6 relationships with guidance reference, node property summaries. D9 updated to cover supporting nodes. "What Varies" table expanded with supporting nodes and relationships rows. New type implementors now define their complete graph shape upfront in SKILL.md before writing any code.*
