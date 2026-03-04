@@ -2,7 +2,7 @@
 
 **Status: APPROVED** — Implement phases in order. Each phase has a validation gate; do not start the next phase until the current gate passes.
 
-**Baseline lock**: The current `/guidance-transcript` pipeline produces near-optimal output. The entire existing pipeline — orchestrator skill, agents, reference files, scripts — stays FROZEN and untouched throughout all phases. We build the new infrastructure ALONGSIDE the old by duplicating files (with new names fitting the extraction framework). The originals are never moved, renamed, or edited. Retirement only happens much later, after thorough parallel-run verification proves the new infrastructure matches or exceeds the original output quality.
+**Baseline lock**: The current `/guidance-transcript` pipeline produces near-optimal output. The entire existing pipeline — orchestrator skill, agents, reference files, scripts — stays FROZEN and untouched throughout all phases. We build the new infrastructure ALONGSIDE the old by duplicating files (with new names fitting the extraction framework). The originals are never moved, renamed, or edited. New files created by the framework (e.g., `/extract-transcript`, `extraction-guidance.md`) ARE editable in later phases — "frozen" only applies to originals. Retirement only happens much later, after thorough parallel-run verification proves the new infrastructure matches or exceeds the original output quality.
 
 ### Guiding Principles
 
@@ -312,7 +312,7 @@ ADD A NEW DATA ASSET (e.g., "press-release"):
 - `## Extraction Rules: Guidance` — type-specific rules (derivation hints, quote conventions). Only read by guidance agents.
 - `## Extraction Rules: Analyst` — future. Appended when needed.
 
-All knowledge about one asset stays co-located. Adding a type = appending a section, not creating a new file. Current profiles are ~80% asset-generic + ~20% guidance-specific. Location: `.claude/skills/extraction/assets/` (COPIED from `guidance-inventory/reference/` — originals stay untouched).
+All knowledge about one asset stays co-located. Adding a type = appending a section, not creating a new file. Current profiles are ~80% asset-generic + ~20% guidance-specific. Location: `.claude/skills/extraction/assets/` (COPIED from `guidance-inventory/reference/` — originals stay untouched). Phase 1 copies profiles as-is without restructuring. The `## Extraction Rules: {type}` section headers are added in Phase 5 when a second extraction type requires distinguishing type-specific content from asset-generic content.
 
 **D3: Per-type agents + per-asset orchestrators** — One orchestrator per data asset (`/extract-transcript`, `/extract-8k`, etc.), each spawns focused agents per extraction type (`extraction-guidance`, future `extraction-analyst`). Each agent loads ~1,730 lines of type-specific instructions — combining types in one LLM pass would dilute attention and risk cross-contamination. Orchestrators are per-asset because they need to know the data asset (how to fetch content, which asset profile); types just determine which agents to spawn.
 
@@ -330,7 +330,7 @@ All knowledge about one asset stays co-located. Adding a type = appending a sect
 
 **D10: Single queue `extract:pipeline`** — One Redis queue for all extraction jobs. Payload carries `asset` and `types`. One KEDA config, one dead-letter queue. Can split per-asset later if needed.
 
-**D11: TYPES is mandatory** — If the orchestrator receives a prompt without `TYPES`, it MUST fail with an explicit error. No "default to all" guessing. The worker always passes TYPES from the payload. The trigger always includes TYPES in the payload. Explicit > implicit.
+**D11: TYPES is mandatory (enforced from Phase 3 onward)** — If the orchestrator receives a prompt without `TYPES`, it MUST fail with an explicit error. No "default to all" guessing. The worker always passes TYPES from the payload. The trigger always includes TYPES in the payload. Explicit > implicit. Phase 1 clone is exempt — it unconditionally spawns guidance agents without TYPES parsing.
 
 **D12: Error isolation — per-type independence** — When an orchestrator spawns multiple agents (e.g., guidance + analyst), each writes independently. If guidance succeeds but analyst fails, guidance results persist.
 
@@ -338,6 +338,14 @@ All knowledge about one asset stays co-located. Adding a type = appending a sect
 ```
 EXTRACTION_RESULTS: guidance=completed, analyst=failed
 ```
+
+**Format spec** (worker parser must handle exactly this):
+- Prefix: `EXTRACTION_RESULTS: ` (literal string, colon, single space)
+- Entries: comma-space separated `{type}={status}` pairs
+- Valid statuses: `completed`, `failed`, `skipped` (skipped = type not in TYPES list)
+- Single-type example: `EXTRACTION_RESULTS: guidance=completed`
+- Multi-type example: `EXTRACTION_RESULTS: guidance=completed, analyst=failed`
+- Worker regex: `^EXTRACTION_RESULTS:\s*(.+)$` → split on `,\s*` → split each on `=`
 
 The worker parses this and marks `{type}_status` per-type:
 - `SET t.guidance_status = 'completed'`
@@ -395,6 +403,8 @@ The current `guidance-extract.md` agent (duplicated as `extraction-guidance.md` 
 | **source_key** | "full" | "EX-99.1", "Item 2.02" | "MD&A" | "title" |
 | **Empty rules** | Both PR + Q&A empty | Strip == "" | MD&A strip == "" | Both title + body empty |
 | **Two-phase?** | Yes (PR → Q&A) | No | No | No |
+| **Trigger filter** | Node: `Transcript` | `Report` WHERE `formType = '8-K'` | `Report` WHERE `formType IN ['10-Q', '10-K']` | `News` WHERE channel filter (§ news profile) |
+| **Status property on** | `Transcript` node | `Report` node | `Report` node | `News` node |
 
 ### Script Organization
 
@@ -404,7 +414,7 @@ All extraction scripts live in `.claude/skills/earnings-orchestrator/scripts/`. 
 
 1. **Context loading**: Company+CIK (1A), FYE (1B) — always needed, all assets
 2. **Source fetch queries**: `guidance-inventory/QUERIES.md` — organized by asset type (3x/4x/5x/6x prefixes), shared by all agents
-3. **Write path**: JSON → `guidance_write.sh` → `guidance_write_cli.py` → `guidance_writer.py` → Neo4j MERGE
+3. **Write path pattern**: JSON → shell wrapper → CLI → writer → Neo4j MERGE (guidance uses `guidance_write.sh` → `guidance_write_cli.py` → `guidance_writer.py`; future types create their own `{type}_write_cli.py` + `{type}_writer.py`, shell wrapper shared or cloned)
 4. **Execution modes**: dry_run / shadow / write
 5. **Error taxonomy**: SOURCE_NOT_FOUND, EMPTY_CONTENT, NO_GUIDANCE, etc.
 
@@ -413,6 +423,7 @@ All extraction scripts live in `.claude/skills/earnings-orchestrator/scripts/`. 
 1. Create `.claude/skills/{type}-inventory/SKILL.md` — define the full graph schema (nodes, relationships, supporting nodes per contract checklist §A below), extraction fields, ID formula, quality filters, validation rules (use `guidance-inventory/SKILL.md` as template)
 2. Create `.claude/skills/earnings-orchestrator/scripts/{type}_ids.py` — deterministic ID computation (like `guidance_ids.py`)
 3. Create `.claude/skills/earnings-orchestrator/scripts/{type}_writer.py` — Cypher MERGE patterns for the labels + relationships defined in step 1 (FROM_SOURCE, FOR_COMPANY, HAS_PERIOD as applicable; like `guidance_writer.py`)
+3b. Create `.claude/skills/earnings-orchestrator/scripts/{type}_write_cli.py` — CLI entry point: reads JSON, calls `{type}_ids.py` for validation, calls `{type}_writer.py` for MERGE (like `guidance_write_cli.py`). The shell wrapper `guidance_write.sh` (22 lines, venv + env setup) can be made generic or cloned as `{type}_write.sh` — decide at Phase 5 time.
 4. Create agent: `.claude/agents/extraction-{type}.md` — references SKILL.md + `guidance-inventory/QUERIES.md` + `extraction/assets/*.md`
 5. Append `## Extraction Rules: {type}` section to each applicable asset file in `extraction/assets/`
 6. Add `Task(extraction-{type})` spawn to each per-asset orchestrator that applies
@@ -477,7 +488,16 @@ FILE 3: {type}_writer.py  (IMPLEMENTS: graph creation from SKILL.md spec)
     └── Mode handling                        (dry_run → JSON only, write → Neo4j)
 
 
-FLOW:  SKILL.md defines it  →  _ids.py validates it  →  _writer.py writes it to Neo4j
+FILE 4: {type}_write_cli.py  (GLUE: orchestrates the write chain)
+──────────────────────────────────────────────────────────────────
+  Called by shell wrapper (guidance_write.sh or generic)
+    ├── Reads JSON from /tmp/{type}_{TICKER}_{SOURCE_ID}.json
+    ├── Calls {type}_ids.py  → validates + computes IDs
+    ├── Calls {type}_writer.py → MERGE to Neo4j (or dry-run)
+    └── Reports success/failure
+
+
+FLOW:  SKILL.md defines it  →  _ids.py validates it  →  _write_cli.py orchestrates  →  _writer.py writes to Neo4j
 ```
 
 **Contract checklist** — every new type MUST define all of the following in its SKILL.md (use `guidance-inventory/SKILL.md` as template):
@@ -543,7 +563,7 @@ The SKILL.md defines these tables, `analyst_writer.py` implements the MERGE patt
 
 ### How to Add a New Data Asset
 
-1. Add queries to `guidance-inventory/QUERIES.md` (or create `extraction/queries_{asset}.md` if >1000 lines)
+1. Add queries to `guidance-inventory/QUERIES.md`
 2. Create `extraction/assets/{asset}.md` — data structure, scan scope, empty handling
 3. Add `SOURCE_TYPE` routing case to extraction agent files (hardcoded if/else block that selects the asset profile)
 4. Extend trigger to query for unprocessed items of the new asset type
@@ -616,9 +636,9 @@ trigger-extract.py
 | `scripts/extraction_worker.py` | `scripts/earnings_worker.py` | Generalize payload parsing, skill routing, per-type status tracking |
 | `scripts/trigger-extract.py` | `scripts/trigger-guidance.py` | Add `--type`/`--asset` flags, generalize Neo4j query, new queue name |
 | `k8s/processing/extraction-worker.yaml` | `claude-code-worker.yaml` | New KEDA config for `extract:pipeline` queue |
-| `scripts/canary_sdk.py` | (update in place) | Validate generalized worker (new skill name, new payload format) |
+| `scripts/canary_sdk.py` | (update in place — editable original) | Validate generalized worker (new skill name, new payload format) |
 
-**Original files stay frozen**: `earnings_worker.py`, `trigger-guidance.py`, `claude-code-worker.yaml` all remain operational on the `earnings:trigger` queue until retirement is explicitly approved.
+**Original files stay frozen**: `earnings_worker.py`, `trigger-guidance.py`, `claude-code-worker.yaml` all remain operational on the `earnings:trigger` queue until retirement is explicitly approved. Exception: `canary_sdk.py` is an original file that IS edited in place (it's a test tool, not part of the production pipeline).
 
 **Open**: `earnings_trigger.py` status unclear — shares `earnings:trigger` queue. Confirm what else uses it before any retirement (§6 Q5).
 
@@ -655,7 +675,7 @@ Any reorganization MUST produce identical output. "Identical" means ALL of the f
 
 ### Quality Observations
 
-Phase 1.4 validates the new infrastructure by running both `/guidance-transcript` (old) and `/extract-transcript` (new) on the same 5+ transcripts and diffing their output against the golden checks above. No separate baseline run needed — the old pipeline is frozen and always produces the same output.
+Phase 1.4 validates the new infrastructure by running both pipelines on the same 5+ transcripts in `dry_run` mode. Both write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json` — so run one, rename the output (e.g., `mv` to `/tmp/old_gu_*.json`), run the other, then `diff` the two files. Compare for identical IDs, fields, and structure. No separate baseline run needed — the old pipeline is frozen and always produces the same output.
 
 ---
 
@@ -716,9 +736,11 @@ CURRENT                                    NEW
 | `.claude/skills/extraction/assets/8k.md` | `guidance-inventory/reference/PROFILE_8K.md` | Renamed copy |
 | `.claude/skills/extraction/assets/news.md` | `guidance-inventory/reference/PROFILE_NEWS.md` | Renamed copy |
 | `.claude/skills/extraction/assets/10q.md` | `guidance-inventory/reference/PROFILE_10Q.md` | Renamed copy |
-| `.claude/skills/extract-transcript/SKILL.md` | `guidance-transcript/SKILL.md` | New orchestrator skill. Phase 1: exact clone — does NOT parse TYPES, unconditionally spawns guidance + guidance-qa agents, identical to `/guidance-transcript`. Phase 3 adds TYPES parsing per D11. |
+| `.claude/skills/extract-transcript/SKILL.md` | `guidance-transcript/SKILL.md` | New orchestrator skill. Phase 1: exact clone — does NOT parse TYPES, unconditionally spawns guidance + guidance-qa agents, identical to `/guidance-transcript`. Same prompt format: `/extract-transcript {ticker} transcript {source_id} MODE={mode}`. Phase 3 changes prompt format to add TYPES and drops the `transcript` keyword. |
 | `.claude/agents/extraction-guidance.md` | `guidance-extract.md` | New agent — references `guidance-inventory/QUERIES.md` (shared) + `extraction/assets/` (new) + same `guidance-inventory/SKILL.md` and scripts |
 | `.claude/agents/extraction-guidance-qa.md` | `guidance-qa-enrich.md` | New agent — same reference path changes |
+
+> **Note:** `extraction/` is a plain directory inside `.claude/skills/`, not a skill. It holds asset profile files only. Skills live at `extract-transcript/SKILL.md` etc.
 
 **Original files — UNTOUCHED:**
 
@@ -728,25 +750,27 @@ CURRENT                                    NEW
 | `.claude/agents/guidance-extract.md` | FROZEN |
 | `.claude/agents/guidance-qa-enrich.md` | FROZEN |
 | `.claude/skills/guidance-inventory/reference/PROFILE_*.md` | FROZEN |
-| `.claude/skills/guidance-inventory/SKILL.md` | FROZEN — shared by both old and new agents |
-| `.claude/skills/guidance-inventory/QUERIES.md` | SHARED — both old and new agents read this |
+| `.claude/skills/guidance-inventory/SKILL.md` | FROZEN — both old and new agents read this, but do NOT edit |
+| `.claude/skills/guidance-inventory/QUERIES.md` | SHARED — both old and new agents read this; new queries CAN be appended (e.g., Phase 4 adds 8-K queries) |
 | All scripts (`guidance_ids.py`, `guidance_writer.py`, etc.) | FROZEN — shared by both old and new agents |
 
 | Step | Action | Validation |
 |------|--------|------------|
-| 1.1 | Create `extraction/assets/` directory. Copy + rename PROFILE files → `extraction/assets/{asset}.md` | New copies exist, originals untouched |
-| 1.2 | Create new agents (`extraction-guidance.md`, `extraction-guidance-qa.md`) pointing to `extraction/assets/` (new) + `guidance-inventory/QUERIES.md` (shared) + same `guidance-inventory/SKILL.md` and scripts | Dry-run on 1 transcript, compare output |
+| 1.1 | Create `extraction/assets/` directory (`extraction/` is a plain directory, not a skill — no SKILL.md at its root). Copy + rename PROFILE files → `extraction/assets/{asset}.md` | New copies exist, originals untouched |
+| 1.2 | Create new agents (`extraction-guidance.md`, `extraction-guidance-qa.md`). Copy from originals, then update the SOURCE_TYPE routing paths: `guidance-inventory/reference/PROFILE_TRANSCRIPT.md` → `extraction/assets/transcript.md`, `PROFILE_8K.md` → `8k.md`, `PROFILE_NEWS.md` → `news.md`, `PROFILE_10Q.md` → `10q.md`. Keep all other references unchanged: `guidance-inventory/QUERIES.md` (shared), `guidance-inventory/SKILL.md` (shared), scripts (shared). | Dry-run on 1 transcript, compare output |
 | 1.3 | Create `/extract-transcript` orchestrator skill that spawns new agents | Spawns same pipeline as `/guidance-transcript` |
 | 1.4 | **Baseline validation**: Run `/extract-transcript` on 5+ transcripts, diff output against `/guidance-transcript` | Golden checks pass (§4): same IDs, same fields, same edges, idempotent |
 | 1.5 | **Canary validation**: Run `canary_sdk.py` with new skill name | Canary green |
 
 **Retirement is NOT part of Phase 1.** The original pipeline stays frozen indefinitely. Retirement is a separate decision made only after extensive parallel running proves the new infrastructure matches or exceeds the original.
 
+**Baseline lock applies to ORIGINAL files only.** New files created in Phase 1 (e.g., `extract-transcript/SKILL.md`, `extraction-guidance.md`) ARE editable in later phases. Phase 3 modifies the Phase 1 orchestrator to add TYPES parsing. This is expected — the "frozen" constraint protects only the original `/guidance-transcript` pipeline files listed in the "UNTOUCHED" table above.
+
 ### Phase 2: Best Practices Cleanup (new files only — frozen files untouched)
 
 | Step | Action | Validation |
 |------|--------|------------|
-| 2.1 | Add `evidence-standards` to NEW agents' auto-load (`extraction-guidance.md`, `extraction-guidance-qa.md`) | 47 lines, no behavior change |
+| 2.1 | Add `evidence-standards` to NEW agents' auto-load (`extraction-guidance.md`, `extraction-guidance-qa.md`) | 47 lines, no behavior change — golden checks already passed in Phase 1.4 without it; evidence-standards codifies guardrails the LLM already follows implicitly, adding a safety net without changing extraction decisions |
 | 2.2 | Archive `guidanceInventory.md` as historical reference (per D1: working code is source of truth) | |
 
 **Deferred to post-retirement** (these edit frozen files):
@@ -757,7 +781,7 @@ CURRENT                                    NEW
 
 | Step | Action | Validation |
 |------|--------|------------|
-| 3.1 | Update `/extract-transcript` to parse TYPES from prompt and spawn only listed types. Fail if TYPES missing (D11). | `/extract-transcript AAPL ... TYPES=guidance` spawns only guidance agents |
+| 3.1 | Update `/extract-transcript`: (a) parse TYPES from prompt, spawn only listed types, fail if TYPES missing (D11); (b) emit `EXTRACTION_RESULTS: {type}={status}` summary line in final output (D12) so the worker can parse per-type outcomes; (c) hardcode SOURCE_TYPE when spawning agents (the orchestrator knows its own asset — `/extract-transcript` always passes `transcript` to agents, `/extract-8k` passes `8k`, etc.) | `/extract-transcript AAPL ... TYPES=guidance` spawns only guidance agents and emits result line |
 | 3.2 | Create `trigger-extract.py` (new file, based on `trigger-guidance.py`) | `--type guidance --asset transcript` produces correct payloads |
 | 3.3 | Create `extraction_worker.py` (new file, based on `earnings_worker.py`) | Reads new payload format, invokes `/extract-transcript` |
 | 3.4 | New queue `extract:pipeline` (old `earnings:trigger` stays until retirement) | KEDA config for new queue |
@@ -772,9 +796,15 @@ CURRENT                                    NEW
 | Step | Action | Validation |
 |------|--------|------------|
 | 4.1 | Create `/extract-8k` orchestrator | Spawns `extraction-guidance` with SOURCE_TYPE=8k |
-| 4.2 | Add `guidance_status` property to Report nodes | Trigger can find unprocessed 8-Ks |
-| 4.3 | Extend `trigger-extract.py`: `--asset 8k` | Query Reports with formType='8-K' |
-| 4.4 | Repeat for 10-Q/10-K (same `/extract-10q` orchestrator), News | |
+| 4.2 | Add `guidance_status` property to Report nodes (8-K) | Trigger can find unprocessed 8-Ks |
+| 4.3 | Extend `trigger-extract.py`: `--asset 8k` | Query `Report` WHERE `formType = '8-K'` AND `guidance_status IS NULL` |
+| 4.4 | Create `/extract-10q` orchestrator | Spawns `extraction-guidance` with SOURCE_TYPE=10q (handles both 10-Q and 10-K) |
+| 4.5 | Add `guidance_status` property to Report nodes (10-Q/10-K) | Trigger query: `Report` WHERE `formType IN ['10-Q', '10-K']` AND `guidance_status IS NULL` |
+| 4.6 | Extend `trigger-extract.py`: `--asset 10q` | |
+| 4.7 | Create `/extract-news` orchestrator | Spawns `extraction-guidance` with SOURCE_TYPE=news |
+| 4.8 | Add `guidance_status` property to News nodes | Trigger query: `News` WHERE `guidance_status IS NULL` + channel filter |
+| 4.9 | Extend `trigger-extract.py`: `--asset news` | |
+| 4.10 | **Cross-asset validation**: Run each new orchestrator on 3+ sources per asset | Golden checks pass per asset type |
 
 ### Phase 5: First Non-Guidance Extraction Type (future)
 
@@ -808,6 +838,7 @@ When approved: new Phase 1 files replace their frozen counterparts (see Phase 1 
 | 3 | Extraction types beyond guidance | PENDING | Focus on infra first. Guidance is gold standard. New types added when ready. |
 | 4 | Budget/cost optimization for K8s runs | OPEN | |
 | 5 | `earnings_trigger.py` status | PENDING | Shares `earnings:trigger` queue. Confirm dormant before Phase 3 queue rename. |
+| 6 | Rename `{type}-inventory` convention | POST-RETIREMENT | `guidance-inventory/` naming is ugly. Pick a cleaner convention (e.g., `extraction-contracts/{type}/`, `extract-{type}/`, or `{type}-contract/`) when renaming `guidance-inventory/` post-retirement. Applies to all future types too — don't propagate the `-inventory` pattern. |
 
 ---
 
