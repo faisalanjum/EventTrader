@@ -11,7 +11,7 @@
 3. **Plug-and-play** — trivially easy to add/remove any extraction type for any data asset
 4. **Always actionable** — every section points toward clear implementation; zero paralysis by analysis
 
-**Version**: 1.4 | 2026-03-04
+**Version**: 1.5 | 2026-03-04
 **Goal**: Generalize the guidance extraction pipeline into a reusable framework for ANY extraction type across ALL data assets.
 **Archive**: Full deliberation history in `extractionPipeline-v04-archive.md`
 
@@ -169,7 +169,11 @@ An agent is a robot worker. You hand it 3 instruction manuals:
 
 Everything in this plan generalizes these three layers so they work for ANY extraction type across ANY data asset.
 
+> **Terminology:** *Shared* = read by both old and new pipelines. *Frozen* = cannot be edited. Most shared files are also frozen. Exception: `QUERIES.md` is shared AND appendable (new queries added in Phase 4). If a file is listed as FROZEN, do not edit it regardless of whether it's also shared.
+
 ### The DRY Principle — What Lives Where
+
+> **This diagram shows TARGET-STATE architecture (after Phase 5).** Phase 1 copies asset profiles as-is without adding `## Extraction Rules:` section headers — those are added in Phase 5 when a second extraction type requires it.
 
 ```
                          SHARED BY EVERYONE
@@ -298,8 +302,9 @@ ADD A NEW DATA ASSET (e.g., "press-release"):
                     │    guidance_writer.py (MERGE patterns)        │
                     │    analyst_ids.py (future)                    │
                     │                                              │
-                    │  Shared (reused from existing pipeline):       │
+                    │  Shared today (guidance only):                  │
                     │    guidance_write.sh (venv + env setup)        │
+                    │    (future types: reuse or clone — Phase 5)   │
                     └──────────────────────────────────────────────┘
 ```
 
@@ -316,7 +321,7 @@ All knowledge about one asset stays co-located. Adding a type = appending a sect
 
 **D3: Per-type agents + per-asset orchestrators** — One orchestrator per data asset (`/extract-transcript`, `/extract-8k`, etc.), each spawns focused agents per extraction type (`extraction-guidance`, future `extraction-analyst`). Each agent loads ~1,730 lines of type-specific instructions — combining types in one LLM pass would dilute attention and risk cross-contamination. Orchestrators are per-asset because they need to know the data asset (how to fetch content, which asset profile); types just determine which agents to spawn.
 
-**D4: Two-phase enrichment is transcript-only and opt-in** — The PR → Q&A two-phase pattern only applies to transcripts (where the Q&A section can reveal new guidance items). Other assets (8-K, 10-Q, news) are single-pass. Each contract declares whether it needs enrichment. Currently only guidance + transcript uses it.
+**D4: Two-phase enrichment is transcript-only and opt-in** — The PR → Q&A two-phase pattern only applies to transcripts (where the Q&A section can reveal new guidance items). Other assets (8-K, 10-Q, news) are single-pass. There is no declarative "enrichment" flag — the orchestrator itself decides whether to spawn a second agent (e.g., `/extract-transcript` hardcodes the Q&A pass; `/extract-8k` does not). When adding a new orchestrator, simply include or omit the second agent spawn.
 
 **D5: news-driver pipeline is 100% separate** — The `/news-driver` attribution/analysis workflow is a different architecture entirely. Not part of this extraction framework.
 
@@ -400,7 +405,7 @@ The current `guidance-extract.md` agent (duplicated as `extraction-guidance.md` 
 | **Source fetch queries** | 3B/3C/3D | 4C/4E/4F/4G | 5B/5C | 6A/6B |
 | **Scan scope** | PR + Q&A (all speakers) | EX-99.* → sections → filing text | MD&A primary, bounded fallback | Title + body (channel-filtered) |
 | **given_date** | conference_datetime | r.created | r.created | n.created |
-| **source_key** | "full" | "EX-99.1", "Item 2.02" | "MD&A" | "title" |
+| **source_key** | "full" (entire transcript text) | "EX-99.1", "Item 2.02" | "MD&A" | "title" |
 | **Empty rules** | Both PR + Q&A empty | Strip == "" | MD&A strip == "" | Both title + body empty |
 | **Two-phase?** | Yes (PR → Q&A) | No | No | No |
 | **Trigger filter** | Node: `Transcript` | `Report` WHERE `formType = '8-K'` | `Report` WHERE `formType IN ['10-Q', '10-K']` | `News` WHERE channel filter (§ news profile) |
@@ -753,14 +758,15 @@ CURRENT                                    NEW
 | `.claude/skills/guidance-inventory/SKILL.md` | FROZEN — both old and new agents read this, but do NOT edit |
 | `.claude/skills/guidance-inventory/QUERIES.md` | SHARED — both old and new agents read this; new queries CAN be appended (e.g., Phase 4 adds 8-K queries) |
 | All scripts (`guidance_ids.py`, `guidance_writer.py`, etc.) | FROZEN — shared by both old and new agents |
+| `scripts/canary_sdk.py` | EDITABLE — test tool, not production pipeline. Updated in Phase 3.5 for new skill/payload. |
 
 | Step | Action | Validation |
 |------|--------|------------|
-| 1.1 | Create `extraction/assets/` directory (`extraction/` is a plain directory, not a skill — no SKILL.md at its root). Copy + rename PROFILE files → `extraction/assets/{asset}.md` | New copies exist, originals untouched |
+| 1.1 | Create `extraction/assets/` directory. Copy + rename PROFILE files → `extraction/assets/{asset}.md` | New copies exist, originals untouched |
 | 1.2 | Create new agents (`extraction-guidance.md`, `extraction-guidance-qa.md`). Copy from originals, then update the SOURCE_TYPE routing paths: `guidance-inventory/reference/PROFILE_TRANSCRIPT.md` → `extraction/assets/transcript.md`, `PROFILE_8K.md` → `8k.md`, `PROFILE_NEWS.md` → `news.md`, `PROFILE_10Q.md` → `10q.md`. Keep all other references unchanged: `guidance-inventory/QUERIES.md` (shared), `guidance-inventory/SKILL.md` (shared), scripts (shared). | Dry-run on 1 transcript, compare output |
 | 1.3 | Create `/extract-transcript` orchestrator skill that spawns new agents | Spawns same pipeline as `/guidance-transcript` |
 | 1.4 | **Baseline validation**: Run `/extract-transcript` on 5+ transcripts, diff output against `/guidance-transcript` | Golden checks pass (§4): same IDs, same fields, same edges, idempotent |
-| 1.5 | **Canary validation**: Run `canary_sdk.py` with new skill name | Canary green |
+| 1.5 | **Canary validation**: Edit `canary_sdk.py` to invoke `/extract-transcript` instead of `/guidance-transcript` (canary hardcodes the skill name — no CLI arg), run it, verify output matches | Canary green |
 
 **Retirement is NOT part of Phase 1.** The original pipeline stays frozen indefinitely. Retirement is a separate decision made only after extensive parallel running proves the new infrastructure matches or exceeds the original.
 
@@ -781,7 +787,7 @@ CURRENT                                    NEW
 
 | Step | Action | Validation |
 |------|--------|------------|
-| 3.1 | Update `/extract-transcript`: (a) parse TYPES from prompt, spawn only listed types, fail if TYPES missing (D11); (b) emit `EXTRACTION_RESULTS: {type}={status}` summary line in final output (D12) so the worker can parse per-type outcomes; (c) hardcode SOURCE_TYPE when spawning agents (the orchestrator knows its own asset — `/extract-transcript` always passes `transcript` to agents, `/extract-8k` passes `8k`, etc.) | `/extract-transcript AAPL ... TYPES=guidance` spawns only guidance agents and emits result line |
+| 3.1 | Update `/extract-transcript`: (a) change prompt format from Phase 1's `/extract-transcript {ticker} transcript {source_id} MODE={mode}` to `/extract-transcript {ticker} {source_id} TYPES=guidance MODE=write` (the `transcript` keyword drops — the orchestrator already knows its own asset); (b) parse TYPES from prompt, spawn only listed types, fail if TYPES missing (D11); (c) emit `EXTRACTION_RESULTS: {type}={status}` summary line in final output (D12) so the worker can parse per-type outcomes; (d) hardcode SOURCE_TYPE in the Task() prompt when spawning agents — e.g., `/extract-transcript` includes `SOURCE_TYPE=transcript` in the agent prompt; `/extract-8k` includes `SOURCE_TYPE=8k`; the agent parses it from the prompt text (same mechanism as today, see §1 "Asset Profile Dynamic Loading") | `/extract-transcript AAPL ... TYPES=guidance` spawns only guidance agents and emits result line |
 | 3.2 | Create `trigger-extract.py` (new file, based on `trigger-guidance.py`) | `--type guidance --asset transcript` produces correct payloads |
 | 3.3 | Create `extraction_worker.py` (new file, based on `earnings_worker.py`) | Reads new payload format, invokes `/extract-transcript` |
 | 3.4 | New queue `extract:pipeline` (old `earnings:trigger` stays until retirement) | KEDA config for new queue |
@@ -796,13 +802,13 @@ CURRENT                                    NEW
 | Step | Action | Validation |
 |------|--------|------------|
 | 4.1 | Create `/extract-8k` orchestrator | Spawns `extraction-guidance` with SOURCE_TYPE=8k |
-| 4.2 | Add `guidance_status` property to Report nodes (8-K) | Trigger can find unprocessed 8-Ks |
+| 4.2 | Extend trigger + worker to use `guidance_status` on Report nodes for 8-K (Neo4j is schema-free — no migration needed; the worker's `SET t.guidance_status = ...` and trigger's `WHERE t.guidance_status IS NULL` just work on first use) | Trigger can find unprocessed 8-Ks |
 | 4.3 | Extend `trigger-extract.py`: `--asset 8k` | Query `Report` WHERE `formType = '8-K'` AND `guidance_status IS NULL` |
 | 4.4 | Create `/extract-10q` orchestrator | Spawns `extraction-guidance` with SOURCE_TYPE=10q (handles both 10-Q and 10-K) |
-| 4.5 | Add `guidance_status` property to Report nodes (10-Q/10-K) | Trigger query: `Report` WHERE `formType IN ['10-Q', '10-K']` AND `guidance_status IS NULL` |
+| 4.5 | Extend trigger + worker for `guidance_status` on Report nodes (10-Q/10-K) — same pattern as 4.2 | Trigger query: `Report` WHERE `formType IN ['10-Q', '10-K']` AND `guidance_status IS NULL` |
 | 4.6 | Extend `trigger-extract.py`: `--asset 10q` | |
 | 4.7 | Create `/extract-news` orchestrator | Spawns `extraction-guidance` with SOURCE_TYPE=news |
-| 4.8 | Add `guidance_status` property to News nodes | Trigger query: `News` WHERE `guidance_status IS NULL` + channel filter |
+| 4.8 | Extend trigger + worker for `guidance_status` on News nodes — same pattern as 4.2 | Trigger query: `News` WHERE `guidance_status IS NULL` + channel filter |
 | 4.9 | Extend `trigger-extract.py`: `--asset news` | |
 | 4.10 | **Cross-asset validation**: Run each new orchestrator on 3+ sources per asset | Golden checks pass per asset type |
 
@@ -837,7 +843,7 @@ When approved: new Phase 1 files replace their frozen counterparts (see Phase 1 
 | 2 | Specific output quality issues with guidance-transcript | PENDING | User will specify. Baseline from pipeline runs + Neo4j audit. |
 | 3 | Extraction types beyond guidance | PENDING | Focus on infra first. Guidance is gold standard. New types added when ready. |
 | 4 | Budget/cost optimization for K8s runs | OPEN | |
-| 5 | `earnings_trigger.py` status | PENDING | Shares `earnings:trigger` queue. Confirm dormant before Phase 3 queue rename. |
+| 5 | `earnings_trigger.py` status | PENDING | Shares `earnings:trigger` queue. Confirm dormant before retirement (Phase 3 creates a NEW queue `extract:pipeline` — old queue stays until retirement). |
 | 6 | Rename `{type}-inventory` convention | POST-RETIREMENT | `guidance-inventory/` naming is ugly. Pick a cleaner convention (e.g., `extraction-contracts/{type}/`, `extract-{type}/`, or `{type}-contract/`) when renaming `guidance-inventory/` post-retirement. Applies to all future types too — don't propagate the `-inventory` pattern. |
 
 ---
