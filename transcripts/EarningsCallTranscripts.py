@@ -249,7 +249,11 @@ class EarningsCallProcessor:
             for speaker in transcript_level3.speakers:
                 if hasattr(speaker, "speaker_info"):
                     name = getattr(speaker.speaker_info, "name", "Unknown")
+                    if name is None:
+                        name = "Unknown"
                     title = getattr(speaker.speaker_info, "title", "")
+                    if title is None:
+                        title = ""
                     result["speakers"][name] = title
             
             # Classify speakers using LLM to get analyst, executive, or operator roles
@@ -423,9 +427,12 @@ class EarningsCallProcessor:
                     for speaker in transcript_level3.speakers:
                         if hasattr(speaker, "speaker_info"):
                             name = getattr(speaker.speaker_info, "name", "Unknown")
+                            if name is None:
+                                name = "Unknown"
                             title = getattr(speaker.speaker_info, "title", "")
-                            if name is not None:
-                                result["speakers"][name] = title
+                            if title is None:
+                                title = ""
+                            result["speakers"][name] = title
                 
                 # Simple fallback - try level 1 for text
                 basic_transcript = company_obj.get_transcript(event=event, level=1)

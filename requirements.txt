@@ -39,7 +39,7 @@ dockerpty==0.4.1
 docopt==0.6.2
 duckdb==0.7.1
 durationpy==0.9
-earningscall==1.2.1
+earningscall==1.4.0
 et_xmlfile==2.0.0
 -e git+https://github.com/faisalanjum/EventTrader.git@a31a64d81d7027acde1969639cb0b6c043bdcee1#egg=eventtrader
 exceptiongroup==1.2.2
