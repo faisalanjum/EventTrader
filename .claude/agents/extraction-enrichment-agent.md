@@ -39,12 +39,13 @@ Read these files before doing anything else:
 4. `.claude/skills/extract/queries-common.md` — shared queries (context, caches, inventory, fulltext)
 5. `.claude/skills/extract/assets/{ASSET}-queries.md` — asset-specific fetch queries
 6. `.claude/skills/extract/types/{TYPE}/{TYPE}-queries.md` — type-specific lookup queries
+7. `.claude/skills/extract/evidence-standards.md` — universal evidence guardrails
 
 **enrichment-pass.md is your complete working brief. Follow it start to finish. core-contract.md is reference for schema details.**
 
 ## Execution
 
-After loading all 6 files, execute the pipeline defined in enrichment-pass.md:
+After loading all 7 files, execute the pipeline defined in enrichment-pass.md:
 - FETCH context + existing items from primary pass
 - LOAD secondary content (e.g., Q&A for transcripts)
 - EXTRACT with verdicting (ENRICHES / NEW / NO_GUIDANCE)

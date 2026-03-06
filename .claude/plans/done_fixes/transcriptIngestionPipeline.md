@@ -31,9 +31,9 @@
   1B. DataManager Orchestration (config/DataManagerCentral.py:669)
 
   - DataManager.__init__() calls initialize_sources() then initialize_neo4j()
-  - IMPORTANT: Currently TranscriptsManager is commented out in production (line 693: # self.sources['transcripts'] =
-  TranscriptsManager(...)) — only Benzinga news is active (BENZINGA_ONLY mode)
-  - When active, it creates a TranscriptsManager(historical_range) instance
+  - IMPORTANT: ReportsManager is still commented out in production (line 692: # self.sources['reports'] =
+  ReportsManager(...)) — news and transcripts are active, reports disabled (BENZINGA_ONLY mode for reports only)
+  - TranscriptsManager re-enabled 2026-03-03 (commit fd7bfd4)
 
   1C. TranscriptsManager (config/DataManagerCentral.py:397-664)
 
@@ -69,7 +69,8 @@
   - Gets today's earnings calendar via get_earnings_events(today)
   - Filters to companies in the stock universe
   - Schedules each event 30 minutes after conference time in Redis sorted set admin:transcripts:schedule
-  - Event key format: {SYMBOL}_{conference_datetime_with_dots} (e.g., AAPL_2025-01-10 16.30.00-05.00)
+  - Event key format: canonical DATETIME via get_transcript_key_id() (e.g., AAPL_2025-01-10T16.30)
+  - Fixed 2026-03-03 (commit 5f732b8): was LONG format causing 5-min retry loops
   - Publishes notification to admin:transcripts:notifications
 
   2C. The actual API call chain: get_transcripts_for_single_date (line 92)
@@ -125,11 +126,11 @@
 
   Key construction:
   transcript_id = RedisKeys.get_transcript_key_id(symbol, conference_datetime)
-  # → "{SYMBOL}_{datetime_with_dots}" e.g. "AAPL_2025-01-10T16.30.00-05.00"
+  # → "{SYMBOL}_{YYYY-MM-DDTHH.MM}" e.g. "AAPL_2025-01-10T16.30" (DATETIME format, truncated to minute)
 
   raw_key = f"{client.prefix}raw:{transcript_id}"
-  # Live:  "transcripts:live:raw:AAPL_2025-01-10T16.30.00-05.00"
-  # Hist:  "transcripts:hist:raw:AAPL_2025-01-10T16.30.00-05.00"
+  # Live:  "transcripts:live:raw:AAPL_2025-01-10T16.30"
+  # Hist:  "transcripts:hist:raw:AAPL_2025-01-10T16.30"
 
   meta_key = f"tracking:meta:transcripts:{transcript_id}"
 
@@ -158,7 +159,8 @@
   1. Determine client: hist_client if key starts with transcripts:hist:, else live_client
   2. Fetch raw content: client.get(raw_key) → JSON parse
   3. Standardize fields (TranscriptProcessor._standardize_fields, line 336):
-    - Adds id = "{symbol}_{fiscal_year}_{fiscal_quarter}" (e.g., AAPL_2025_1)
+    - Adds id = RedisKeys.get_transcript_key_id(symbol, conference_datetime) → DATETIME format (e.g., AAPL_2025-01-10T16.30)
+    - Adds quarter_key = "{symbol}_{fiscal_year}_{fiscal_quarter}" (e.g., AAPL_2025_1)
     - Adds created and updated = conference_datetime in ISO format
     - Adds symbols = [symbol]
     - Adds formType = "TRANSCRIPT_Q{quarter}"
@@ -400,7 +402,8 @@
   0. CRITICAL: Transcript ingestion has LLM-in-the-loop — GPT-4o for speaker classification (every transcript, before Redis),
   GPT-4o-mini for QA filler filtering (during Neo4j insertion). News ingestion has NO LLM dependency. Both models are being
   retired by OpenAI — must migrate to successor models before re-enabling transcripts. See GAP-20.
-  1. TranscriptsManager is currently disabled in DataManagerCentral (BENZINGA_ONLY mode) — only news is active in production
+  1. Only ReportsManager is still disabled in DataManagerCentral (BENZINGA_ONLY mode) — news and transcripts are active.
+  Transcripts re-enabled 2026-03-03 (commit fd7bfd4). Search "BENZINGA_ONLY" for all 5 locations to re-enable reports.
   2. Standalone CLI path exists: scripts/process_transcripts.sh → Neo4jProcessor.py transcripts → process_transcript_data() —
   can process directly from Redis to Neo4j without the full pipeline
   3. Two Q&A boundary detection methods with 3-level fallback chain
@@ -438,35 +441,37 @@
     Safe to delete.
 
   ---
-  GAP-19: Re-enable Transcript Ingestion (Analysis 2026-03-03)
+  GAP-19: Re-enable Transcript Ingestion — DONE (2026-03-03)
 
-  STATUS: NOT NEEDED AS SEPARATE K8s POD — just uncomment in DataManagerCentral.py after GAP-20.
+  STATUS: COMPLETED. Transcripts enabled independent of reports (commits 5f732b8 + fd7bfd4).
 
-  ANALYSIS (2026-03-03):
-  All 3 data sources (news, reports, transcripts) use the identical architecture: daemon threads inside
-  a single `run_event_trader.py` process, managed by `watchdog.sh` (pgrep + restart up to 5x) and
-  `event_trader.sh` (PID file control script). None of them run as K8s pods.
+  WHAT WAS DONE (2026-03-03):
 
-  Current production architecture (DataManagerCentral.py):
-    BenzingaNewsManager.start() → Thread 1: processor + Thread 2: returns + Thread 3: WebSocket
-    ReportsManager.start()      → Thread 1: processor + Thread 2: returns + Thread 3: WebSocket + Thread 4: historical
-    TranscriptsManager.start()  → Thread 1: processor + Thread 2: returns + Thread 3: historical + schedule polling
-    All 3 share: one process, one Neo4j PubSub subscriber, one Redis connection pool.
+  Commit 5f732b8 — Fix transcript schedule key format:
+    All 4 manual transcript ID constructions replaced with canonical get_transcript_key_id():
+    1. config/DataManagerCentral.py:491 — schedule ZSET key (was LONG, now DATETIME)
+    2. redisDB/TranscriptProcessor.py:129 — _transcript_exists key_id
+    3. redisDB/TranscriptProcessor.py:263 — _handle_transcript_found key_id
+    4. redisDB/TranscriptProcessor.py:360 — _standardize_fields id field
 
-  News has been running fine in production with this architecture. Transcripts use the exact same
-  pattern — there is no architectural reason to move transcripts to a K8s pod if news doesn't need one.
+  Commit fd7bfd4 — Enable transcript ingestion independent of reports:
+    1. config/DataManagerCentral.py:693 — uncommented TranscriptsManager source
+    2. config/DataManagerCentral.py:727 — uncommented process_transcript_data() (already-initialized branch)
+    3. config/DataManagerCentral.py:744 — uncommented process_transcript_data() (fresh-init branch)
+    4. scripts/run_event_trader.py:199 — removed SOURCE_REPORTS from gap-fill monitor (would hang forever)
+    5. scripts/run_event_trader.py:306 — added SOURCE_TRANSCRIPTS to historical chunk monitor
+    6. neograph/mixins/reconcile.py:132 — fixed early return that skipped transcript reconciliation
+       when no report keys exist (changed `return results` to `if/else` guard)
 
-  TO RE-ENABLE TRANSCRIPTS:
-  1. Fix GAP-20 (replace retired OpenAI models) — this is the only real blocker
-  2. Uncomment 4 lines in DataManagerCentral.py:
-     - Line 692: self.sources['reports'] = ReportsManager(...)    (if reports also needed)
-     - Line 693: self.sources['transcripts'] = TranscriptsManager(...)
-     - Line 726: self.process_report_data()                       (if reports also needed)
-     - Line 727: self.process_transcript_data()
-  3. Update sources_to_check at run_event_trader.py:306 to include all 3 sources
-  4. Restart EventTrader via `event_trader.sh restart`
+  TO RE-ENABLE REPORTS IN THE FUTURE (search "BENZINGA_ONLY" for all 5 locations):
+    1. config/DataManagerCentral.py:692 — uncomment self.sources['reports'] = ReportsManager(...)
+    2. config/DataManagerCentral.py:726 — uncomment self.process_report_data()
+    3. config/DataManagerCentral.py:743 — uncomment self.process_report_data()
+    4. scripts/run_event_trader.py:200 — add SOURCE_REPORTS back to gap-fill sources list
+    5. scripts/run_event_trader.py:306 — add SOURCE_REPORTS back to historical chunk sources list
+    No reconcile.py edit needed — the if/else guard supports both states.
 
-  Effort: ~1 hour (GAP-20 model swap + uncomment + test)
+  Quick verification: rg -n "BENZINGA_ONLY" config/DataManagerCentral.py scripts/run_event_trader.py
 
   KNOWN LIMITATIONS OF CURRENT ARCHITECTURE (applies to ALL sources, not just transcripts):
   - Single process: if it OOMs or the machine reboots, all ingestion stops until watchdog restarts
@@ -511,7 +516,7 @@
      Each daemon thread writes a Redis key with its last-active timestamp (e.g.,
      `heartbeat:news:processor`, `heartbeat:news:returns`, `heartbeat:news:websocket`).
      A simple check script or Grafana query flags dead threads even when the process is alive.
-  3. Fix GAP-20 and uncomment transcripts (~1 hour)
+  3. GAP-20 model swap (transcripts are already enabled)
 
   Total: ~2.5 hours to get transcripts running with real alerting — vs. 2-3 days for K8s migration
   that solves the same visibility problem less directly.

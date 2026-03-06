@@ -15,10 +15,10 @@ Read `.claude/skills/extract/assets/{ASSET}.md` and find `## Asset Metadata` sec
 
 ## Step 2: Run primary pass
 
-Spawn via Task tool (wait for completion):
+Spawn via Agent tool (wait for completion):
 
 ```
-Task(extraction-primary-agent): {TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE}
+Agent(subagent_type=extraction-primary-agent): {TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE}
 ```
 
 Read the result file: `/tmp/extract_pass_{TYPE}_primary_{SOURCE_ID}.json`
@@ -31,10 +31,10 @@ Run enrichment ONLY IF both conditions are true:
 1. Asset has secondary sections (from Step 1)
 2. File exists: `.claude/skills/extract/types/{TYPE}/enrichment-pass.md`
 
-If both true, spawn via Task tool (wait for completion):
+If both true, spawn via Agent tool (wait for completion):
 
 ```
-Task(extraction-enrichment-agent): {TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE}
+Agent(subagent_type=extraction-enrichment-agent): {TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE}
 ```
 
 Read the result file: `/tmp/extract_pass_{TYPE}_enrichment_{SOURCE_ID}.json`

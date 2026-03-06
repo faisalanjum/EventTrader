@@ -804,6 +804,14 @@ trigger-extract.py
   -> LPUSH one message per (type, asset, source_id) to Redis "extract:pipeline"
 ```
 
+Queue-based dry-run smoke test:
+
+```bash
+python3 scripts/trigger-extract.py --type guidance --asset transcript --mode dry_run --source-id AAPL_2023-02-02T17.00
+```
+
+This pushes exactly one dry-run job onto `extract:pipeline` for that source. Use it to validate trigger -> queue -> worker -> `/extract` end-to-end without writing to Neo4j.
+
 **Asset-specific trigger queries** -- the trigger is a Python script, not an LLM. It cannot read markdown asset profiles. Per-asset MATCH patterns live in a dict:
 
 ```python
@@ -1113,6 +1121,19 @@ Items below are NOT blockers to Phase 1-2 implementation. OPEN/DEFERRED/PENDING 
 | Redundant content | 206 lines (accidental) | **~180 lines** (intentional, in pass files + 3 guardrails) |
 | Irrelevant context loaded | ~309 lines other-asset queries | **0** |
 | Failure visibility | status property only | **status + error property + DLQ** |
+
+---
+
+## Cleanup: Retire old claude-code-worker
+
+Once `extraction-worker` is confirmed reliable in production, remove the old guidance-only worker:
+
+```bash
+kubectl delete deployment claude-code-worker -n processing
+kubectl delete scaledobject claude-code-worker-scaler -n processing
+```
+
+The old worker (`claude-code-worker`) runs `earnings_worker.py` on the `earnings:trigger` queue. It can coexist with `extraction-worker` (`extract:pipeline` queue) indefinitely, but should be retired to avoid idle resource waste.
 
 ---
 
