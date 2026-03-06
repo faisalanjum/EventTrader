@@ -1,0 +1,148 @@
+---
+# Extraction Worker — Deployment
+# Processes extract:pipeline Redis queue via Claude Agent SDK
+# Based on claude-code-worker.yaml — generic extraction pipeline
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: extraction-worker
+  namespace: processing
+spec:
+  replicas: 0  # KEDA manages scaling (0→N)
+  selector:
+    matchLabels:
+      app: extraction-worker
+  template:
+    metadata:
+      labels:
+        app: extraction-worker
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum
+      priorityClassName: worker-standard
+      terminationGracePeriodSeconds: 300  # Allow in-flight extraction to complete
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: extraction-worker
+        image: python:3.11-slim
+        command:
+        - /bin/bash
+        - -c
+        - |
+          # Copy auth file to writable HOME (emptyDir) so CLI can update tokens
+          cp /mnt/claude-json /home/faisal/.claude.json
+          export PATH="/home/faisal/.local/bin:$PATH"
+          source /home/faisal/EventMarketDB/venv/bin/activate
+          exec python /home/faisal/EventMarketDB/scripts/extraction_worker.py
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        - name: HOME
+          value: /home/faisal
+        - name: SHELL
+          value: /bin/bash
+        - name: CLAUDE_PROJECT_DIR
+          value: /home/faisal/EventMarketDB
+        # In-cluster service DNS for Neo4j (overrides eventtrader-secrets NodePort URI)
+        - name: NEO4J_URI
+          value: bolt://neo4j-bolt.neo4j.svc.cluster.local:7687
+        - name: NEO4J_USERNAME
+          value: neo4j
+        # In-cluster Redis (overrides eventtrader-secrets NodePort values)
+        - name: REDIS_HOST
+          value: redis.infrastructure.svc.cluster.local
+        - name: REDIS_PORT
+          value: "6379"
+        # guidance_write.sh uses GUIDANCE_NEO4J_URI (falls back to bolt://localhost:30687)
+        - name: GUIDANCE_NEO4J_URI
+          value: bolt://neo4j-bolt.neo4j.svc.cluster.local:7687
+        # MCP HTTP endpoint (overrides .mcp.json stdio server)
+        - name: MCP_NEO4J_URL
+          value: http://mcp-neo4j-cypher-http.mcp-services.svc.cluster.local:8000/mcp
+        # CRITICAL: Blank out API key from eventtrader-secrets so CLI uses
+        # .credentials.json (Max subscription) instead of per-token billing.
+        # Also blank out expired CLAUDE_CODE_OAUTH_TOKEN from claude-auth secret.
+        - name: ANTHROPIC_API_KEY
+          value: ""
+        - name: CLAUDE_CODE_OAUTH_TOKEN
+          value: ""
+        envFrom:
+        - secretRef:
+            name: eventtrader-secrets
+        - secretRef:
+            name: claude-auth
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: "1"
+            memory: 2Gi
+        volumeMounts:
+        - name: home
+          mountPath: /home/faisal
+        - name: project
+          mountPath: /home/faisal/EventMarketDB
+        - name: claude-cli
+          mountPath: /home/faisal/.local
+          readOnly: true
+        - name: claude-state
+          mountPath: /home/faisal/.claude
+        - name: claude-json
+          mountPath: /mnt/claude-json
+          readOnly: true
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: home
+        emptyDir: {}
+      - name: project
+        hostPath:
+          path: /home/faisal/EventMarketDB
+          type: Directory
+      - name: claude-cli
+        hostPath:
+          path: /home/faisal/.local
+          type: Directory
+      - name: claude-state
+        hostPath:
+          path: /home/faisal/.claude
+          type: Directory
+      - name: claude-json
+        hostPath:
+          path: /home/faisal/.claude.json
+          type: File
+      - name: logs
+        hostPath:
+          path: /home/faisal/EventMarketDB/logs
+          type: DirectoryOrCreate
+
+---
+# KEDA ScaledObject — scales 1→7 based on extract:pipeline queue depth
+# minReplicaCount: 1 — prevents KEDA killing pods mid-processing when queue empties
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: extraction-worker-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: extraction-worker
+  minReplicaCount: 1    # Never scale to 0 — prevents KEDA killing pods mid-processing
+  maxReplicaCount: 7    # Parallel processing — safe for different tickers
+  cooldownPeriod: 300   # Only governs 7→6→...→1 scale-down, never kills last pod
+  pollingInterval: 30
+  triggers:
+  - type: redis
+    metadata:
+      address: redis.infrastructure.svc.cluster.local:6379
+      listName: extract:pipeline
+      listLength: "1"
+      databaseIndex: "0"
