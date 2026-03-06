@@ -4,6 +4,71 @@
 
 **Baseline lock**: The current `/guidance-transcript` pipeline stays FROZEN and untouched. We build ALONGSIDE the old. Originals are never moved, renamed, or edited. Retirement is quality-gated, not time-gated.
 
+## Top Notes
+
+### 1. Asset Files Are Not Yet Purely Asset-Only
+
+The clean conceptual split for this architecture is:
+
+- **TYPE decides**: what to extract, quality rules, validation, write logic, whether enrichment exists
+- **ASSET decides**: source structure, sections/views, fetch queries, empty rules
+
+The current implementation does **not** fully achieve that purity yet. The asset files under `extract/assets/*.md` were copied forward from the old guidance-tuned `PROFILE_*.md` files to preserve production extraction quality. As a result, they still contain some **guidance-specific reading heuristics** (for example speaker priority, "what to extract" examples, transcript Q&A guidance cues, and "do not extract" guidance filters), not just neutral source-structure information.
+
+This is an intentional quality-preserving compromise, not the ideal end-state separation. Treat it as known implementation debt:
+
+- acceptable for preserving guidance extraction quality
+- not evidence that asset files are already generic across future types
+- future non-guidance types may need asset-file cleanup or type-local overrides to remove guidance leakage
+- currently visible not just in `transcript.md`, but also in `8k.md`, `news.md`, and other asset files that still carry guidance-shaped "What to Extract" / "Do NOT Extract" sections
+
+Concrete examples of current asset-file pollution:
+
+- `transcript.md` includes guidance-priority speaker hierarchy, "What to Extract from Prepared Remarks", "What to Extract from Q&A", and corporate-announcement examples
+- `8k.md` includes guidance-specific "What to Extract" / "Do NOT Extract" sections
+- `news.md` includes guidance-specific extraction/acceptance rules for company guidance, reaffirmations, analyst-consensus exclusion, etc.
+
+Why this matters:
+
+- it was acceptable when `guidance` was the only extraction type
+- it will become a conflict as soon as a second type (for example `announcements` or `analyst`) is added, because the asset file will still be steering the model toward guidance-shaped extraction
+
+Clean end-state target:
+
+- asset files should contain only source structure, fetch/read rules, content format, empty-content handling, and asset-specific period/date interpretation
+- type-specific "What to Extract", "Do NOT Extract", and quality/acceptance logic should live in the type's pass files instead
+
+### 2. Known Issue — Corporate Announcements Polluting Guidance Extraction
+
+**Priority**: Medium (scope contamination, not data loss)  
+**Status**: Documented, not yet fixed  
+**Found**: 2026-03-06
+
+Guidance extraction currently includes rules that treat some **corporate announcements** (buyback authorizations, investment programs, facility/manufacturing plans) as extractable guidance items. These are management decisions, not forward-looking financial metric targets, and should become a **separate extraction type** instead of remaining inside `guidance`.
+
+Observed example:
+
+- `US Investment Commitment` (`$500B over 4 years`) was extracted from `AAPL_2025-07-31T17.00` as guidance
+
+Required removals / changes:
+
+- Remove the corporate-announcement examples from `extract/assets/transcript.md`
+- Remove the "Corporate announcements ARE extractable" rule from:
+  - `extract/types/guidance/primary-pass.md`
+  - `extract/types/guidance/enrichment-pass.md`
+- Remove the "Material corporate announcements" row from `extract/types/guidance/core-contract.md`
+- Add this replacement guidance rule to `core-contract.md` quality filters:
+
+```text
+| **Not guidance: strategic announcements** | Do NOT extract capital allocation announcements (buyback authorizations, investment programs, facility/manufacturing plans). These are management decisions, not financial metric targets — they will be a separate extraction type. |
+```
+
+Impact boundary:
+
+- **Keep as guidance**: Revenue, Gross Margin, OpEx, OINE, Tax Rate, CapEx, Tariff Cost Impact
+- **Keep as guidance**: Dividend Per Share (still qualifies independently as a forward-looking financial metric)
+- **Exclude from guidance**: US Investment Commitment, buyback authorizations, factory/facility plans, other strategic capital-allocation announcements
+
 ### Guiding Principles
 
 1. **Super minimalism** — zero over-engineering, simplest thing that works
