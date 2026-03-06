@@ -1,6 +1,6 @@
-# Extraction Pipeline — Implementation Plan
+# Extraction Pipeline — Implementation Plan (v1.5)
 
-**Status: APPROVED** — Implement phases in order. Each phase has a validation gate; do not start the next phase until the current gate passes.
+**Status: SUPERSEDED by v3.1** — See `extractionPipeline_v2.md` for the current approved plan.
 
 **Baseline lock**: The current `/guidance-transcript` pipeline produces near-optimal output. The entire existing pipeline — orchestrator skill, agents, reference files, scripts — stays FROZEN and untouched throughout all phases. We build the new infrastructure ALONGSIDE the old by duplicating files (with new names fitting the extraction framework). The originals are never moved, renamed, or edited. New files created by the framework (e.g., `/extract-transcript`, `extraction-guidance.md`) ARE editable in later phases — "frozen" only applies to originals. Retirement only happens much later, after thorough parallel-run verification proves the new infrastructure matches or exceeds the original output quality.
 
