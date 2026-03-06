@@ -6,37 +6,87 @@
 
 ## Top Notes
 
-### 1. Asset Files Are Not Yet Purely Asset-Only
+### 1. Generic Infrastructure Is Not Yet Fully Generic
 
 The clean conceptual split for this architecture is:
 
 - **TYPE decides**: what to extract, quality rules, validation, write logic, whether enrichment exists
 - **ASSET decides**: source structure, sections/views, fetch queries, empty rules
+- **Generic layer** (orchestrator, agents, worker, trigger, evidence-standards): zero type-specific content
 
-The current implementation does **not** fully achieve that purity yet. The asset files under `extract/assets/*.md` were copied forward from the old guidance-tuned `PROFILE_*.md` files to preserve production extraction quality. As a result, they still contain some **guidance-specific reading heuristics** (for example speaker priority, "what to extract" examples, transcript Q&A guidance cues, and "do not extract" guidance filters), not just neutral source-structure information.
+The current implementation does **not** fully achieve that purity yet. Guidance-specific content leaked into files that should be type-neutral. A full audit (2026-03-06) identified **three layers of pollution**. All three must be fixed before the infrastructure is truly generic.
 
-This is an intentional quality-preserving compromise, not the ideal end-state separation. Treat it as known implementation debt:
+**IMPORTANT**: When implementing these fixes, recheck everything thoroughly — verify each file before and after changes to ensure nothing relevant is accidentally removed and no guidance-specific content remains in the generic layer. Move content to pass files, don't just delete it. Merge with existing pass file content rather than duplicating.
 
-- acceptable for preserving guidance extraction quality
-- not evidence that asset files are already generic across future types
-- future non-guidance types may need asset-file cleanup or type-local overrides to remove guidance leakage
-- currently visible not just in `transcript.md`, but also in `8k.md`, `news.md`, and other asset files that still carry guidance-shaped "What to Extract" / "Do NOT Extract" sections
+#### Layer A: Asset Profile Pollution (HIGH — extraction instructions in asset files)
 
-Concrete examples of current asset-file pollution:
+The asset files under `extract/assets/*.md` were copied from old guidance-tuned `PROFILE_*.md` files. They contain guidance-specific extraction rules that belong in type pass files.
 
-- `transcript.md` includes guidance-priority speaker hierarchy, "What to Extract from Prepared Remarks", "What to Extract from Q&A", and corporate-announcement examples
-- `8k.md` includes guidance-specific "What to Extract" / "Do NOT Extract" sections
-- `news.md` includes guidance-specific extraction/acceptance rules for company guidance, reaffirmations, analyst-consensus exclusion, etc.
+| File | Pollution | Severity |
+|------|-----------|----------|
+| `transcript.md` | Speaker hierarchy for guidance priority, "What to Extract from Prepared Remarks" table, "What to Extract from Q&A" table, corporate-announcement examples | High |
+| `8k.md` | "What to Extract" / "Do NOT Extract" sections with guidance-specific rules | High |
+| `news.md` | Guidance extraction/acceptance rules, reaffirmation handling, analyst-consensus exclusion | High |
+| `10q.md` | Almost every line mentions guidance — "guidance extraction", "forward guidance", "zero guidance is acceptable" | High |
 
-Why this matters:
+**Fix**: Move "What to Extract", "Do NOT Extract", speaker hierarchy, and quality/acceptance rules from each asset file into the corresponding type pass files (`types/guidance/primary-pass.md` and `enrichment-pass.md`). Asset files should retain only: data structure, field descriptions, fetch queries, content format, empty-content handling, and period/date interpretation.
 
-- it was acceptable when `guidance` was the only extraction type
-- it will become a conflict as soon as a second type (for example `announcements` or `analyst`) is added, because the asset file will still be steering the model toward guidance-shaped extraction
+#### Layer B: Asset Query File Pollution (MEDIUM — guidance-flavored descriptions)
 
-Clean end-state target:
+The asset query files contain guidance-specific descriptions and instructions alongside their Cypher queries.
 
-- asset files should contain only source structure, fetch/read rules, content format, empty-content handling, and asset-specific period/date interpretation
-- type-specific "What to Extract", "Do NOT Extract", and quality/acceptance logic should live in the type's pass files instead
+| File | Example | Severity |
+|------|---------|----------|
+| `transcript-queries.md:48` | "Both must be scanned for guidance" | Medium — reads like an instruction |
+| `news-queries.md:17-19` | "Guidance-Channel News... contain company guidance" | Low — Benzinga channel name, but description is guidance-flavored |
+| `10q-queries.md:22,34,51` | "guidance extraction", "forward guidance", "Exclude from Guidance" | Medium |
+
+**Fix**: Rewrite query descriptions to be type-neutral. E.g., "Both must be scanned for guidance" → "Both fields contain extractable content." The Cypher queries themselves are generic data fetches — only the descriptions need updating.
+
+#### Layer C: Common Query File Pollution (LOW — guidance-flavored comments)
+
+`queries-common.md` has a few guidance-specific descriptions in otherwise generic query documentation.
+
+| Line | Example |
+|------|---------|
+| 55 | "Not required for guidance extraction (guidance uses calendar-based GuidancePeriod nodes)" |
+| 112 | "For each guidance metric, pattern-match against this cache" |
+| 206 | "guidance-related content across fulltext indexes" |
+| 308 | "Guidance-channel news" |
+
+**Fix**: Rewrite to type-neutral descriptions. E.g., "For each guidance metric" → "For each extracted metric."
+
+#### Already clean (verified 2026-03-06)
+
+These files have zero guidance leakage — no changes needed:
+
+- `SKILL.md` (orchestrator) ✓
+- `extraction-primary-agent.md` ✓
+- `extraction-enrichment-agent.md` ✓
+- `evidence-standards.md` ✓
+- `extraction_worker.py` ✓ (uses `{type}` generically, whitelist is expected)
+- `trigger-extract.py` ✓ (defaults to guidance, whitelist is expected)
+- `8k-queries.md` ✓
+
+#### Why this matters
+
+- Acceptable when `guidance` is the only extraction type
+- Becomes a conflict as soon as a second type (e.g., `announcements` or `analyst`) is added — asset files will steer the model toward guidance-shaped extraction regardless of the type being run
+
+#### Clean end-state target
+
+- Asset files: only source structure, fetch/read rules, content format, empty-content handling, period/date interpretation
+- Asset query files: type-neutral Cypher queries with type-neutral descriptions
+- Common query file: type-neutral descriptions
+- Type-specific "What to Extract", "Do NOT Extract", quality/acceptance logic: lives in the type's pass files only
+
+#### Estimated effort
+
+- Layer A (asset profiles): 30-40 min
+- Layer B (asset query descriptions): 15 min
+- Layer C (common query comments): 10 min
+- Re-run golden checks to confirm no regression: 30 min (automated)
+- **Total: ~1.5 hours**
 
 ### 2. Known Issue — Corporate Announcements Polluting Guidance Extraction
 
@@ -1166,6 +1216,9 @@ Items below are NOT blockers to Phase 1-2 implementation. OPEN/DEFERRED/PENDING 
 | 6 | Rename `{type}-inventory` convention | POST-RETIREMENT | Accept historical naming per retirement section. |
 | 7 | Asset `sections` declaration format | RESOLVED | Markdown `## Asset Metadata` section with `- sections: prepared_remarks, qa`. No YAML frontmatter. |
 | 8 | Shared write_cli.py abstraction | Phase 4+ | Evaluate when type #2 reveals actual shared pattern. Only if >50% code is shared. |
+| 9 | Enrichment pass JSON envelope format | RESOLVED | Enrichment agents consistently produced `{"company": {...}, "items": [...]}` instead of flat top-level `source_id`/`source_type`/`ticker` required by `guidance_write_cli.py`. Writer rejected with `Missing required top-level fields: source_id, source_type, ticker`. All 3 agents self-corrected (2-3 extra turns each, ~$0.30/run). **Fix**: Added explicit JSON envelope example with placeholders to `enrichment-pass.md` (2026-03-06). |
+| 10 | Query 2B (Member Profile Cache) Cypher syntax error | OPEN | `queries-common.md` line 122: `WITH ctx.dimension_u_ids[i] AS dim_u_id` — Neo4j returns `Variable dim_u_id not defined`. Error: `Neo.ClientError.Statement.SyntaxError`. Hit on all 3 AAPL transcript extractions (Jan/Oct/May). Agents work around it (member matching still succeeds via code fallback in `guidance_write_cli.py`), but the cache query wastes a turn and returns no data. Likely a Neo4j version incompatibility with list indexing + UNWIND pattern. |
+| 11 | Enrichment agent missing `Edit` tool | OPEN | `extraction-enrichment-agent.md` tools list includes `Write`, `Read`, `Bash` but not `Edit`. During AAPL Oct 2025 enrichment, agent attempted `Edit` to fix the JSON file and got `No such tool available: Edit`. Fell back to full-file `Write`. Low severity (Write works), but Edit would be more efficient for small JSON fixes. Add `Edit` to the tools list in `extraction-enrichment-agent.md`. |
 
 ---
 
