@@ -77,7 +77,19 @@ For new Q&A-only items: build from scratch using CIK/FYE from Step 1. Use `given
 
 2. **Resolve xbrl_qname** against concept cache, **member match** for segment items (same as primary pass validation).
 
-3. **Assemble JSON payload** and write to `/tmp/gu_{TICKER}_{SOURCE_ID}_qa.json`. Same JSON payload format as primary pass. Items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally.
+3. **Assemble JSON payload** and write to `/tmp/gu_{TICKER}_{SOURCE_ID}_qa.json`. **Use the exact same top-level envelope as primary pass** — the CLI requires `source_id`, `source_type`, `ticker`, and `fye_month` at top level:
+
+```json
+{
+    "source_id": "{SOURCE_ID}",
+    "source_type": "{ASSET}",
+    "ticker": "{TICKER}",
+    "fye_month": {FYE_MONTH from Step 1},
+    "items": [ ... ]
+}
+```
+
+Do NOT wrap items in a `company` object. Items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally.
 
 4. **Invoke CLI** — same invocation as primary pass:
 
