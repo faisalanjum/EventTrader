@@ -233,8 +233,9 @@ guidance-extract.md    285 lines     extraction-primary-agent.md  ~50 lines
 guidance-inventory/                  extract/types/guidance/
   SKILL.md             733 lines       core-contract.md          ~733 lines
 guidance-inventory/                    primary-pass.md            ~180 lines
-  QUERIES.md           755 lines     extract/
-                                       queries-common.md         ~414 lines
+  QUERIES.md           755 lines       guidance-queries.md        ~173 lines
+                                     extract/
+                                       queries-common.md         ~241 lines
 PROFILE_TRANSCRIPT.md  242 lines       transcript-queries        ~101 lines
                                      extract/assets/
                                        transcript.md              242 lines
@@ -258,8 +259,9 @@ guidance-qa-enrich.md  182 lines     extraction-enrichment-agent.md  ~50 lines
 guidance-inventory/                  extract/types/guidance/
   SKILL.md             733 lines       core-contract.md              ~733 lines
 guidance-inventory/                    enrichment-pass.md             ~110 lines
-  QUERIES.md           755 lines     extract/
-                                       queries-common.md             ~414 lines
+  QUERIES.md           755 lines       guidance-queries.md            ~173 lines
+                                     extract/
+                                       queries-common.md             ~241 lines
 PROFILE_TRANSCRIPT.md  242 lines       transcript-queries            ~101 lines
                                      extract/assets/
                                        transcript.md                  242 lines
@@ -337,12 +339,13 @@ extraction-primary-agent.md receives:
     Read extract/assets/{asset}.md                    <- how to read source
     Read extract/queries-common.md                    <- shared queries
     Read extract/assets/{asset}-queries.md             <- asset-specific queries
+    Read extract/types/{type}/{type}-queries.md        <- type-specific queries
     Read .claude/skills/evidence-standards/SKILL.md       <- [POST-PARITY]
 
   "primary-pass.md is your complete working brief. Follow it start to finish.
    core-contract.md is reference for schema details."
 
-  STEP 1: FETCH -- queries 1A, 1B, 2A, 2B, 7A + asset-specific queries
+  STEP 1: FETCH -- queries 1A, 1B, 2A, 2B, 7A + asset-specific + type-specific queries
   STEP 2: EXTRACT -- LLM reads text, applies rules from primary-pass.md
   STEP 3: VALIDATE -- call scripts from contract (types/{type}/*.py)
   STEP 4: WRITE -- call write script from contract
@@ -360,6 +363,7 @@ extraction-enrichment-agent.md receives:
     Read extract/assets/{asset}.md                    <- how to read source
     Read extract/queries-common.md                    <- shared queries
     Read extract/assets/{asset}-queries.md             <- asset-specific queries
+    Read extract/types/{type}/{type}-queries.md        <- type-specific queries
     Read .claude/skills/evidence-standards/SKILL.md       <- [POST-PARITY]
 
   "enrichment-pass.md is your complete working brief. Follow it start to finish.
@@ -443,7 +447,7 @@ A future type might NOT have `enrichment-pass.md`. In that case, even for transc
 
 **D11: Per-type scripts** -- `ids.py`, `writer.py`, `write_cli.py` are type-owned. No premature abstraction into shared write_cli.py. Revisit when type #2 reveals the actual shared pattern.
 
-**D12: Asset-owned queries** -- `queries-common.md` holds shared queries (context, caches, existing items, fulltext, keywords). Each asset owns its fetch queries in `assets/{asset}-queries.md`. Agent loads common + asset-specific. Reduces irrelevant context (~309 lines) per invocation. "Add an asset" = one directory, no shared file edits.
+**D12: Three-tier queries** -- `queries-common.md` holds genuinely shared queries (context, caches, S8A inventory, fulltext). Each asset owns its fetch queries in `assets/{asset}-queries.md`. Each type owns its lookup queries in `types/{type}/{type}-queries.md` (existing items, keywords). Agent loads common + asset-specific + type-specific. Zero irrelevant context per invocation. "Add an asset" = one directory, no shared file edits. "Add a type" = type-queries in the type folder.
 
 **D13: File-based result protocol** -- Worker generates a unique `RESULT_PATH` per job (UUID-suffixed, e.g., `/tmp/extract_result_{TYPE}_{SOURCE_ID}_{UUID}.json`) and passes it in the prompt. Orchestrator writes the combined result to that path. Result file MUST contain `type`, `source_id`, `status`. Missing or malformed file = mark as failed. This eliminates stale-file bugs on retry and collision on duplicate queue entries. Follows the existing `/tmp/gu_` payload pattern with deterministic Write tool (not LLM text generation).
 
@@ -460,9 +464,9 @@ A future type might NOT have `enrichment-pass.md`. In that case, even for transc
 |                                               /extract {TICKER} {ASSET} {SOURCE_ID}
 |                                               TYPE={type} MODE={mode}
 |
-|-- queries-common.md                         <- Shared queries: S1 context, S2 caches,
-|                                               S7 existing items, S8 inventory,
-|                                               S9 fulltext, S10 keywords (~414 lines)
+|-- queries-common.md                         <- Shared queries: preamble, S1 context,
+|                                               S2 caches, S8A inventory, S9 fulltext
+|                                               (~241 lines)
 |
 |-- types/
 |   \-- guidance/
@@ -475,9 +479,14 @@ A future type might NOT have `enrichment-pass.md`. In that case, even for transc
 |       |                                       extraction rules + bash templates +
 |       |                                       JSON example + output format
 |       |
-|       \-- enrichment-pass.md                <- Enrichment prompt packet (~110 lines)
-|                                               Near-verbatim from guidance-qa-enrich.md:
-|                                               verdicts + completeness + quote format
+|       |-- enrichment-pass.md                <- Enrichment prompt packet (~110 lines)
+|       |                                       Near-verbatim from guidance-qa-enrich.md:
+|       |                                       verdicts + completeness + quote format
+|       |
+|       \-- guidance-queries.md              <- Type-specific queries: S7 existing
+|                                               guidance lookup (7A-7F), S8B guidance
+|                                               node count, S10 extraction keywords
+|                                               (~173 lines)
 |
 \-- assets/
     |-- transcript.md                         <- Profile (data structure, scan scope, sections)
@@ -609,13 +618,14 @@ extraction-primary-agent.md (~50 lines)
 |     "NEVER write Cypher directly"
 |     "MUST invoke deterministic validation via scripts"
 |
-|-- Auto-Load (5 files for parity, 6 for end-state):
+|-- Auto-Load (6 files for parity, 7 for end-state):
 |     1. Read extract/types/{TYPE}/core-contract.md
 |     2. Read extract/types/{TYPE}/primary-pass.md
 |     3. Read extract/assets/{ASSET}.md
 |     4. Read extract/queries-common.md
 |     5. Read extract/assets/{ASSET}-queries.md
-|     6. Read .claude/skills/evidence-standards/SKILL.md  [POST-PARITY]
+|     6. Read extract/types/{TYPE}/{TYPE}-queries.md
+|     7. Read .claude/skills/evidence-standards/SKILL.md  [POST-PARITY]
 |
 |-- Input: {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}
 |
@@ -641,13 +651,14 @@ extraction-enrichment-agent.md (~50 lines)
 |     "MUST invoke deterministic validation via scripts"
 |     "ONLY write changed/new items"
 |
-|-- Auto-Load (5 files for parity, 6 for end-state):
+|-- Auto-Load (6 files for parity, 7 for end-state):
 |     1. Read extract/types/{TYPE}/core-contract.md
 |     2. Read extract/types/{TYPE}/enrichment-pass.md
 |     3. Read extract/assets/{ASSET}.md
 |     4. Read extract/queries-common.md
 |     5. Read extract/assets/{ASSET}-queries.md
-|     6. Read .claude/skills/evidence-standards/SKILL.md  [POST-PARITY]
+|     6. Read extract/types/{TYPE}/{TYPE}-queries.md
+|     7. Read .claude/skills/evidence-standards/SKILL.md  [POST-PARITY]
 |
 |-- Input: {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}
 |
@@ -663,14 +674,17 @@ extraction-enrichment-agent.md (~50 lines)
 Current `QUERIES.md` (755 lines, 42 queries) splits cleanly along existing section boundaries:
 
 ```
-queries-common.md (~414 lines):
+queries-common.md (~241 lines):
   Preamble (schema rules, parameter conventions)  31 lines   <- shared
   S1  Context Resolution (1A-1D)        56 lines   <- shared
   S2  Warmup Caches (2A-2B)             89 lines   <- shared
-  S7  Existing Guidance Lookup (7A-7F)  92 lines   <- shared
-  S8  Data Inventory (8A-8B)            40 lines   <- shared
+  S8A Data Inventory (comprehensive)    20 lines   <- shared
   S9  Fulltext / Keyword Recall (9A-9F) 76 lines   <- shared
-  S10 Guidance Extraction Keywords      61 lines   <- shared
+
+types/guidance/guidance-queries.md (~173 lines):
+  S7  Existing Guidance Lookup (7A-7F)  92 lines   <- type-specific
+  S8B Existing Guidance Node Count      20 lines   <- type-specific
+  S10 Guidance Extraction Keywords      61 lines   <- type-specific
 
 transcript-queries.md (~101 lines):
   S3  Source Content: Transcript (3A-3G)           <- asset-specific
@@ -701,6 +715,7 @@ CREATE:
     core-contract.md                       <- schema, fields, IDs, validation
     primary-pass.md                        <- primary extraction prompt packet
     enrichment-pass.md                     <- enrichment prompt packet (or omit if N/A)
+    analyst-queries.md                     <- type-specific queries (existing items, keywords)
   earnings-orchestrator/scripts/
     analyst_ids.py                         <- deterministic ID computation
     analyst_writer.py                      <- Neo4j MERGE patterns
@@ -715,7 +730,7 @@ ORCHESTRATOR: reused (/extract handles all types via TYPE= param)
 TRIGGER: reused (trigger-extract.py --type analyst)
 WORKER: reused (extraction_worker.py reads type from payload)
 
-TOTAL: 5-6 files created + 1 line added to 2 files. Everything else is reused.
+TOTAL: 6-7 files created + 1 line added to 2 files. Everything else is reused.
 ```
 
 ### Add a New Asset ("press-release")
@@ -978,9 +993,9 @@ Create the extraction framework alongside the existing pipeline. Nothing existin
 | Step | Action | Validation |
 |------|--------|------------|
 | 1.1 | Create `extract/assets/` directory. Copy + rename PROFILE files -> `assets/{asset}.md`. Add `## Asset Metadata` section with `sections:` to each. | New copies exist with metadata, originals untouched |
-| 1.2 | Split `guidance-inventory/QUERIES.md` into `queries-common.md` + per-asset query files (`transcript-queries.md`, `8k-queries.md`, `10q-queries.md`, `news-queries.md`). Cut along existing section boundaries. | Combined content byte-identical to original. No query lost. |
+| 1.2 | Split `guidance-inventory/QUERIES.md` three ways: `queries-common.md` (preamble + S1 + S2 + S8A + S9), per-asset query files (`transcript-queries.md`, `8k-queries.md`, `10q-queries.md`, `news-queries.md`), and `types/guidance/guidance-queries.md` (S7 + S8B + S10 — type-specific). Cut along existing section boundaries. | Combined content byte-identical to original. No query lost. |
 | 1.3 | Create `types/guidance/core-contract.md` from SKILL.md (733 lines). Create `types/guidance/primary-pass.md` (~180 lines, near-verbatim from `guidance-extract.md`: extraction rules + bash templates + JSON example + output format). Create `types/guidance/enrichment-pass.md` (~110 lines, near-verbatim from `guidance-qa-enrich.md`: verdicts + completeness + quote format). | Core has all SKILL.md content. Pass files preserve production-tuned agent content. |
-| 1.4 | Create two generic agents: `extraction-primary-agent.md` and `extraction-enrichment-agent.md` (~50 lines each), guardrail echoes, auto-load 5 files each (core-contract, pass brief, asset, common queries, asset queries). evidence-standards (6th file) omitted for parity — added post-parity in Phase 3. | Each agent loads only its own pass file. Primary never sees enrichment. |
+| 1.4 | Create two generic agents: `extraction-primary-agent.md` and `extraction-enrichment-agent.md` (~50 lines each), guardrail echoes, auto-load 6 files each (core-contract, pass brief, asset, common queries, asset queries, type queries). evidence-standards (7th file) omitted for parity — added post-parity in Phase 3. | Each agent loads only its own pass file. Primary never sees enrichment. |
 | 1.5 | Create `/extract` orchestrator: one skill, receives `TYPE` + `ASSET` in prompt, checks asset sections + `enrichment-pass.md` existence for two-pass, spawns appropriate agent, writes result file | Spawns same pipeline as `/guidance-transcript` |
 | 1.6 | **Baseline validation**: Run `/extract AAPL transcript AAPL_2025-01-30T17.00 TYPE=guidance MODE=dry_run` on 5+ transcripts, diff against `/guidance-transcript` | Golden checks pass (S7) |
 
@@ -1000,7 +1015,7 @@ Create the extraction framework alongside the existing pipeline. Nothing existin
 
 | Step | Action | Validation |
 |------|--------|------------|
-| 3.0 | **Post-parity**: Add evidence-standards as 6th auto-load in both agent shells. This changes prompt context and is NOT parity-neutral — added only after Phase 1-2 golden checks pass. | Both agents load 6 files. Output may differ slightly (stricter anti-hallucination). |
+| 3.0 | **Post-parity**: Add evidence-standards as 7th auto-load in both agent shells. This changes prompt context and is NOT parity-neutral — added only after Phase 1-2 golden checks pass. | Both agents load 7 files. Output may differ slightly (stricter anti-hallucination). |
 | 3.1 | Add `--asset 8k` entry to ASSET_QUERIES dict | Trigger finds unprocessed 8-Ks |
 | 3.2 | Run `/extract AAPL 8k {accession} TYPE=guidance MODE=dry_run` on 3+ 8-Ks | Golden checks pass |
 | 3.3 | Repeat for `--asset 10q` (10-Q + 10-K) | |
@@ -1052,13 +1067,13 @@ Decisions evaluated against the actual codebase with line-by-line reasoning.
 | 1 | Two-pass = type x asset | `guidance-qa-enrich.md` does readback (7E), verdicting (ENRICHES/NEW), completeness check (7F) -- all type-specific. A future analyst type would have different enrichment logic. Asset declares sections; type contract declares what to do with them. |
 | 2 | One job = one type | Multi-type jobs make retries ambiguous, status tracking complex, result parsing harder. Queue cost is negligible (Redis LPUSH is free; Claude SDK invocation cost is the same either way). |
 | 3 | Two focused agents (not one with PASS=) | Primary agent loads only `primary-pass.md`; enrichment loads only `enrichment-pass.md`. Zero cross-contamination — each agent's context is 100% relevant to its task. Matches the current system's signal density. Two ~50-line generic shells (~80% identical) is trivial maintenance cost for meaningful extraction quality benefit. |
-| 4 | Asset-owned queries | Clean separation of concerns. Agent loads only relevant queries (~100 lines) instead of all 42 queries (~755 lines). "Add an asset" = one directory, no shared file edits. Split follows existing section boundaries -- trivial cut. |
+| 4 | Three-tier queries (common + asset + type) | Clean separation of concerns. `queries-common.md` (~241 lines, genuinely shared). Asset-queries (~100 lines, fetch patterns). Type-queries (~173 lines, existing items + keywords). Agent loads only relevant queries — zero guidance-specific content when running a non-guidance type. Split follows existing section boundaries — trivial cut. |
 | 5 | Reject ExtractionStatus nodes | `{type}_status` is already generic via `f"{type}_status"` string interpolation. ExtractionStatus adds a label + relationship + query complexity for zero benefit with <5 types. |
 | 6 | Per-type scripts, not shared write_cli | ~70% of `guidance_write_cli.py` is guidance-specific (concept inheritance, member matching, guidance_ids imports). Revisit when type #2 reveals actual shared pattern. |
 | 7 | File-based result protocol | Write tool is deterministic; LLM text output is fragile (markdown wrapping, commentary, truncation). Worker generates unique RESULT_PATH per job (UUID-suffixed) to prevent stale-file/collision bugs on retry or duplicate queue entries. Result file must contain type, source_id, status. Missing/malformed = failed. |
 | 8 | Generic runtime + specialized prompt packets | Infrastructure is generic (two agent shells, one orchestrator). Pass files are specialized prompt packets — near-verbatim from current production agents, loaded in isolation. Preserves the prompt-engineering knowledge iterated through real extraction runs. Thin summaries ("see S4") lose signal density and cost recall/precision. The redundancy with core-contract IS the quality mechanism. |
 | 9 | Type whitelist | Defense-in-depth. `f"SET t.{type}_status"` is injection-shaped. Whitelist validates type before Cypher construction. 2 lines. |
-| 10 | evidence-standards as cross-type auto-load (post-parity) | 46-line anti-hallucination file applies to ALL extraction, not type-specific. Added as 5th auto-load AFTER parity golden checks pass (Phase 3.0), since any prompt context change is not parity-neutral. |
+| 10 | evidence-standards as cross-type auto-load (post-parity) | 46-line anti-hallucination file applies to ALL extraction, not type-specific. Added as 7th auto-load AFTER parity golden checks pass (Phase 3.0), since any prompt context change is not parity-neutral. |
 
 ---
 
@@ -1072,7 +1087,7 @@ Items below are NOT blockers to Phase 1-2 implementation. OPEN/DEFERRED/PENDING 
 | 2 | Budget/cost optimization | OPEN | |
 | 3 | `earnings_trigger.py` status | PENDING | Shares old queue. Confirm dormant before retirement. |
 | 4 | `guidance-inventory/SKILL.md` too long (733 lines) | DEFERRED | Split S9-S11 into separate reference file post-retirement. |
-| 5 | `evidence-standards` loading | RESOLVED | 6th auto-load file in generic agent (cross-type). Added post-parity only. |
+| 5 | `evidence-standards` loading | RESOLVED | 7th auto-load file in generic agent (cross-type). Added post-parity only. |
 | 6 | Rename `{type}-inventory` convention | POST-RETIREMENT | Accept historical naming per retirement section. |
 | 7 | Asset `sections` declaration format | RESOLVED | Markdown `## Asset Metadata` section with `- sections: prepared_remarks, qa`. No YAML frontmatter. |
 | 8 | Shared write_cli.py abstraction | Phase 4+ | Evaluate when type #2 reveals actual shared pattern. Only if >50% code is shared. |
@@ -1086,11 +1101,11 @@ Items below are NOT blockers to Phase 1-2 implementation. OPEN/DEFERRED/PENDING 
 | Orchestrator skills | 1 (per asset) | **1** (generic, all assets) |
 | Agent files | 2 per type (type-specific) | **2 total** (generic shells) |
 | Type contract | 1 monolithic (SKILL.md) | **3 files** (core + primary-pass + enrichment-pass) |
-| Query organization | 1 monolithic file | **common + per-asset** |
+| Query organization | 1 monolithic file | **common + per-asset + per-type** |
 | Jobs per queue message | 1 type implicit | **1 type explicit** |
 | Result protocol | LLM text parsing | **Deterministic file (UUID-suffixed)** |
 | Two-pass logic | Hardcoded in orchestrator | **Type x asset** |
-| Add a type | Create 2 agents + contract | **5-6 files + 1 line x2** (agents reused) |
+| Add a type | Create 2 agents + contract | **6-7 files + 1 line x2** (agents reused) |
 | Add an asset | Edit orchestrator + agent | **2 files + 1 line** |
 | Cross-contamination | None (separate agents) | **None** (separate pass files) |
 | Redundant content | 206 lines (accidental) | **~180 lines** (intentional, in pass files + 3 guardrails) |
