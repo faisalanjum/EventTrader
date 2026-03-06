@@ -230,13 +230,13 @@ The cost is minimal: two ~50-line agent shells (~80% identical) instead of one ~
 CURRENT (primary)                    NEW (primary agent)
 =================                    ==================
 guidance-extract.md    285 lines     extraction-primary-agent.md  ~50 lines
-guidance-inventory/                  extraction/types/guidance/
+guidance-inventory/                  extract/types/guidance/
   SKILL.md             733 lines       core-contract.md          ~733 lines
 guidance-inventory/                    primary-pass.md            ~180 lines
-  QUERIES.md           755 lines     extraction/
+  QUERIES.md           755 lines     extract/
                                        queries-common.md         ~414 lines
 PROFILE_TRANSCRIPT.md  242 lines       transcript-queries        ~101 lines
-                                     extraction/assets/
+                                     extract/assets/
                                        transcript.md              242 lines
 ------------------------------------  ----------------------------------
 TOTAL:                2,015 lines    TOTAL:                    ~1,720 lines
@@ -255,13 +255,13 @@ Post-parity addition:  evidence-standards  46 lines  -> ~1,766 lines total
 CURRENT (enrichment)                 NEW (enrichment agent)
 =================                    ==================
 guidance-qa-enrich.md  182 lines     extraction-enrichment-agent.md  ~50 lines
-guidance-inventory/                  extraction/types/guidance/
+guidance-inventory/                  extract/types/guidance/
   SKILL.md             733 lines       core-contract.md              ~733 lines
 guidance-inventory/                    enrichment-pass.md             ~110 lines
-  QUERIES.md           755 lines     extraction/
+  QUERIES.md           755 lines     extract/
                                        queries-common.md             ~414 lines
 PROFILE_TRANSCRIPT.md  242 lines       transcript-queries            ~101 lines
-                                     extraction/assets/
+                                     extract/assets/
                                        transcript.md                  242 lines
 ------------------------------------  ----------------------------------
 TOTAL:                1,912 lines    TOTAL:                        ~1,650 lines
@@ -305,22 +305,24 @@ IRRELEVANT:               0 lines    IRRELEVANT:                        0 lines
 ### ONE Orchestrator
 
 ```
-/extract {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode} RESULT_PATH={path}
+/extract {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode} [RESULT_PATH={path}]
 
   Read assets/{ASSET}.md -> check if it has secondary sections
 
   1. Spawn Task(extraction-primary-agent):
      "{TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}"
 
-  2. Check enrichment: Glob for extraction/types/{type}/enrichment-pass.md
+  2. Check enrichment: Glob for extract/types/{type}/enrichment-pass.md
      If file exists AND asset has secondary sections:
        Spawn Task(extraction-enrichment-agent):
        "{TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}"
 
   3. Clean up pass result files (/tmp/extract_pass_* for this job)
-  4. Write combined result file to RESULT_PATH (passed by worker, UUID-suffixed)
-     (deterministic via Write tool -- not LLM text generation)
-     Result MUST contain: type, source_id, status
+  4. If RESULT_PATH provided (worker invocation):
+       Write combined result file to RESULT_PATH (UUID-suffixed)
+       Result MUST contain: type, source_id, status
+     If RESULT_PATH absent (manual invocation):
+       Report results as text in the conversation
 ```
 
 ### How the Two Agents Work
@@ -330,11 +332,11 @@ extraction-primary-agent.md receives:
   {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}
 
   STEP 0: Load instructions
-    Read extraction/types/{type}/core-contract.md       <- shared schema, IDs, rules
-    Read extraction/types/{type}/primary-pass.md         <- primary prompt packet
-    Read extraction/assets/{asset}.md                    <- how to read source
-    Read extraction/queries-common.md                    <- shared queries
-    Read extraction/assets/{asset}-queries.md             <- asset-specific queries
+    Read extract/types/{type}/core-contract.md       <- shared schema, IDs, rules
+    Read extract/types/{type}/primary-pass.md         <- primary prompt packet
+    Read extract/assets/{asset}.md                    <- how to read source
+    Read extract/queries-common.md                    <- shared queries
+    Read extract/assets/{asset}-queries.md             <- asset-specific queries
     Read .claude/skills/evidence-standards/SKILL.md       <- [POST-PARITY]
 
   "primary-pass.md is your complete working brief. Follow it start to finish.
@@ -353,11 +355,11 @@ extraction-enrichment-agent.md receives:
   {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}
 
   STEP 0: Load instructions
-    Read extraction/types/{type}/core-contract.md       <- shared schema, IDs, rules
-    Read extraction/types/{type}/enrichment-pass.md      <- enrichment prompt packet
-    Read extraction/assets/{asset}.md                    <- how to read source
-    Read extraction/queries-common.md                    <- shared queries
-    Read extraction/assets/{asset}-queries.md             <- asset-specific queries
+    Read extract/types/{type}/core-contract.md       <- shared schema, IDs, rules
+    Read extract/types/{type}/enrichment-pass.md      <- enrichment prompt packet
+    Read extract/assets/{asset}.md                    <- how to read source
+    Read extract/queries-common.md                    <- shared queries
+    Read extract/assets/{asset}-queries.md             <- asset-specific queries
     Read .claude/skills/evidence-standards/SKILL.md       <- [POST-PARITY]
 
   "enrichment-pass.md is your complete working brief. Follow it start to finish.
@@ -452,7 +454,7 @@ A future type might NOT have `enrichment-pass.md`. In that case, even for transc
 ## S4: File Layout
 
 ```
-.claude/skills/extraction/                    <- NEW directory
+.claude/skills/extract/                       <- NEW directory (invoked as /extract)
 |
 |-- SKILL.md                                  <- Generic orchestrator (~25 lines)
 |                                               /extract {TICKER} {ASSET} {SOURCE_ID}
@@ -527,7 +529,7 @@ core-contract.md
 \-- S18: Reference Files
 ```
 
-This is the shared reference material. Both agents load it. It defines WHAT guidance is, HOW IDs are computed, and WHERE to write results. It does NOT contain pass-specific instructions.
+This is the shared reference material. Both agents load it. It defines WHAT guidance is, HOW IDs are computed, and WHERE to write results. It does NOT contain pass-specific instructions. Strip YAML frontmatter when copying from SKILL.md — core-contract is a Read-loaded reference doc, not a skill.
 
 **`types/guidance/primary-pass.md`** (~180 lines) = production-tuned primary prompt packet:
 
@@ -591,21 +593,28 @@ Core contracts should only be as long as needed. The guidance core is ~733 lines
 
 Both agent shells are ~50 lines, ~80% identical. The only difference is which pass file they load.
 
+**Path prefix**: All `Read` calls in the agent shells use full paths from project root: `.claude/skills/extract/types/{TYPE}/...`, `.claude/skills/extract/assets/{ASSET}.md`, `.claude/skills/extract/queries-common.md`. Abbreviated paths in diagrams below are for readability.
+
 ```
 extraction-primary-agent.md (~50 lines)
 |
-|-- Frontmatter (tools, model, permissionMode)
+|-- Frontmatter:
+|     tools: [mcp__neo4j-cypher__read_neo4j_cypher, Bash,
+|             TaskList, TaskGet, TaskUpdate, Write, Read]
+|     model: opus
+|     permissionMode: dontAsk
+|     (NO write_neo4j_cypher — writes go through scripts via Bash)
 |
 |-- GUARDRAILS (echoed from contract for emphasis):
 |     "NEVER write Cypher directly"
 |     "MUST invoke deterministic validation via scripts"
 |
 |-- Auto-Load (5 files for parity, 6 for end-state):
-|     1. Read extraction/types/{TYPE}/core-contract.md
-|     2. Read extraction/types/{TYPE}/primary-pass.md
-|     3. Read extraction/assets/{ASSET}.md
-|     4. Read extraction/queries-common.md
-|     5. Read extraction/assets/{ASSET}-queries.md
+|     1. Read extract/types/{TYPE}/core-contract.md
+|     2. Read extract/types/{TYPE}/primary-pass.md
+|     3. Read extract/assets/{ASSET}.md
+|     4. Read extract/queries-common.md
+|     5. Read extract/assets/{ASSET}-queries.md
 |     6. Read .claude/skills/evidence-standards/SKILL.md  [POST-PARITY]
 |
 |-- Input: {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}
@@ -620,7 +629,12 @@ extraction-primary-agent.md (~50 lines)
 ```
 extraction-enrichment-agent.md (~50 lines)
 |
-|-- Frontmatter (tools, model, permissionMode)
+|-- Frontmatter:
+|     tools: [mcp__neo4j-cypher__read_neo4j_cypher, Bash,
+|             TaskList, TaskGet, TaskUpdate, Write, Read]
+|     model: opus
+|     permissionMode: dontAsk
+|     (NO write_neo4j_cypher — writes go through scripts via Bash)
 |
 |-- GUARDRAILS (echoed from contract for emphasis):
 |     "NEVER write Cypher directly"
@@ -628,11 +642,11 @@ extraction-enrichment-agent.md (~50 lines)
 |     "ONLY write changed/new items"
 |
 |-- Auto-Load (5 files for parity, 6 for end-state):
-|     1. Read extraction/types/{TYPE}/core-contract.md
-|     2. Read extraction/types/{TYPE}/enrichment-pass.md
-|     3. Read extraction/assets/{ASSET}.md
-|     4. Read extraction/queries-common.md
-|     5. Read extraction/assets/{ASSET}-queries.md
+|     1. Read extract/types/{TYPE}/core-contract.md
+|     2. Read extract/types/{TYPE}/enrichment-pass.md
+|     3. Read extract/assets/{ASSET}.md
+|     4. Read extract/queries-common.md
+|     5. Read extract/assets/{ASSET}-queries.md
 |     6. Read .claude/skills/evidence-standards/SKILL.md  [POST-PARITY]
 |
 |-- Input: {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}
@@ -650,6 +664,7 @@ Current `QUERIES.md` (755 lines, 42 queries) splits cleanly along existing secti
 
 ```
 queries-common.md (~414 lines):
+  Preamble (schema rules, parameter conventions)  31 lines   <- shared
   S1  Context Resolution (1A-1D)        56 lines   <- shared
   S2  Warmup Caches (2A-2B)             89 lines   <- shared
   S7  Existing Guidance Lookup (7A-7F)  92 lines   <- shared
@@ -682,7 +697,7 @@ All extraction scripts stay in `.claude/skills/earnings-orchestrator/scripts/`. 
 
 ```
 CREATE:
-  extraction/types/analyst/
+  extract/types/analyst/
     core-contract.md                       <- schema, fields, IDs, validation
     primary-pass.md                        <- primary extraction prompt packet
     enrichment-pass.md                     <- enrichment prompt packet (or omit if N/A)
@@ -707,8 +722,8 @@ TOTAL: 5-6 files created + 1 line added to 2 files. Everything else is reused.
 
 ```
 CREATE:
-  extraction/assets/press-release.md             <- profile (data structure, scan scope, sections)
-  extraction/assets/press-release-queries.md     <- fetch queries
+  extract/assets/press-release.md             <- profile (data structure, scan scope, sections)
+  extract/assets/press-release-queries.md     <- fetch queries
 
 EDIT:
   trigger-extract.py                             <- add entry to ASSET_QUERIES dict
@@ -818,6 +833,8 @@ This is the one piece of asset-specific knowledge that lives in Python code, not
 10. On failure: retry up to 3x, then dead-letter
 ```
 
+On SIGTERM, worker finishes the current item (no batch to re-queue). If killed mid-SDK-call, item stays `in_progress` — trigger's next scan picks up `IS NULL OR = 'failed'`; use `--force` for stuck `in_progress` items.
+
 Worker inherits structured logging, usage/cost tracking, and duration metrics from `earnings_worker.py` patterns.
 
 ### Result Protocol (file-based, unique per job)
@@ -863,12 +880,29 @@ status_prop = f"{type}_status"
 label, alias = ASSET_QUERIES[asset][:2]
 query = f"MATCH ({alias}:{label}) WHERE {alias}.{status_prop} IS NULL ..."
 
+# Worker asset→label mapping (subset of trigger's ASSET_QUERIES — label + alias only):
+ASSET_LABELS = {
+    "transcript": ("Transcript", "t"),
+    "8k": ("Report", "r"),
+    "10q": ("Report", "r"),
+    "news": ("News", "n"),
+}
+label, alias = ASSET_LABELS[asset]
+
 # Worker set (generic — label resolved from payload's asset field):
 query = f"MATCH ({alias}:{label} {{id: $sid}}) SET {alias}.{status_prop} = $status"
 
 # On failure, also set error property:
 query = f"MATCH ({alias}:{label} {{id: $sid}}) SET {alias}.{status_prop} = 'failed', {alias}.{type}_error = $error"
 ```
+
+Status schema (all source-node properties):
+
+- `{type}_status = NULL` -> not yet queued / never processed
+- `{type}_status = 'in_progress'` -> job claimed by worker and currently running
+- `{type}_status = 'completed'` -> extraction finished successfully
+- `{type}_status = 'failed'` -> extraction finished unsuccessfully after retries
+- `{type}_error = NULL` when not failed; otherwise last error message for the failed run
 
 No ExtractionStatus nodes. No new labels. No new relationships. Adding a type adds one property per source node. Neo4j is schema-free.
 
@@ -896,6 +930,8 @@ After MAX_RETRIES (3) failures, worker LPUSHes to dead-letter queue with enriche
 Also sets `{type}_status = 'failed'` and `{type}_error` on the source node. Gives both queue-level and graph-level failure visibility.
 
 ### Concurrency
+
+Invariant: `extraction_worker.py` processes one job at a time per worker process/pod. There is no in-pod parallel source processing.
 
 BRPOP is atomic — multiple workers can safely consume from the same queue (each message goes to exactly one consumer). The real concurrency risk is **duplicate queue entries**: trigger run twice, or retry re-queues overlapping with new trigger runs, causing two workers to process the same source_id simultaneously. Mitigations:
 
@@ -929,7 +965,7 @@ Any reorganization MUST produce identical output:
 
 ### Validation Method
 
-Run both pipelines on the same 5+ transcripts in `dry_run` mode. Both write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`. Run old, rename output, run new, `diff` the two files.
+Run both pipelines on the same 5+ transcripts. Primary pass: compare in `dry_run` mode — both write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`, diff the two files. Enrichment pass: validate with a `write`-mode run on a small subset (dry_run enrichment hits PHASE_DEPENDENCY_FAILED because primary didn't write to Neo4j — same as current system). Golden checks mean functional equivalence: same GuidanceUpdate IDs, same key field values. Quote text may differ slightly at truncation boundaries — that's acceptable.
 
 ---
 
@@ -941,7 +977,7 @@ Create the extraction framework alongside the existing pipeline. Nothing existin
 
 | Step | Action | Validation |
 |------|--------|------------|
-| 1.1 | Create `extraction/assets/` directory. Copy + rename PROFILE files -> `assets/{asset}.md`. Add `## Asset Metadata` section with `sections:` to each. | New copies exist with metadata, originals untouched |
+| 1.1 | Create `extract/assets/` directory. Copy + rename PROFILE files -> `assets/{asset}.md`. Add `## Asset Metadata` section with `sections:` to each. | New copies exist with metadata, originals untouched |
 | 1.2 | Split `guidance-inventory/QUERIES.md` into `queries-common.md` + per-asset query files (`transcript-queries.md`, `8k-queries.md`, `10q-queries.md`, `news-queries.md`). Cut along existing section boundaries. | Combined content byte-identical to original. No query lost. |
 | 1.3 | Create `types/guidance/core-contract.md` from SKILL.md (733 lines). Create `types/guidance/primary-pass.md` (~180 lines, near-verbatim from `guidance-extract.md`: extraction rules + bash templates + JSON example + output format). Create `types/guidance/enrichment-pass.md` (~110 lines, near-verbatim from `guidance-qa-enrich.md`: verdicts + completeness + quote format). | Core has all SKILL.md content. Pass files preserve production-tuned agent content. |
 | 1.4 | Create two generic agents: `extraction-primary-agent.md` and `extraction-enrichment-agent.md` (~50 lines each), guardrail echoes, auto-load 5 files each (core-contract, pass brief, asset, common queries, asset queries). evidence-standards (6th file) omitted for parity — added post-parity in Phase 3. | Each agent loads only its own pass file. Primary never sees enrichment. |
