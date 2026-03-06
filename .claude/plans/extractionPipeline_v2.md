@@ -594,6 +594,8 @@ enrichment-pass.md — near-verbatim from guidance-qa-enrich.md
 
 **Implementation rule**: During implementation, `primary-pass.md` should be built by literally copying `guidance-extract.md`'s content and editing for structure, not by rewriting from scratch. Same for `enrichment-pass.md` from `guidance-qa-enrich.md`. Copy first, restructure minimally.
 
+**Implementation note**: Copy the `ALWAYS use ultrathink` instruction from the current production agents into both generic agent shells.
+
 **Attention weight trade-off**: The generic shell + pass brief design is close to the current system but not identical — the extraction rules move from the agent prompt (high attention weight) to a Read-loaded file (slightly lower attention weight). For extraction quality, the v1.5 approach of copying agents directly is marginally safer. The pass-brief design accepts this small trade-off in exchange for generic extensibility. Mitigate by keeping pass files as close to the original agent content as possible — copy, don't rewrite.
 
 Core contracts should only be as long as needed. The guidance core is ~733 lines because guidance extraction is genuinely complex. A simpler type might have a 200-line core. Pass files vary by complexity — guidance primary is ~180 lines; a simple type's primary might be 60 lines.
