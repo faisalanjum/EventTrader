@@ -1,6 +1,6 @@
 # Extraction Pipeline — Implementation Plan
 
-**Status: APPROVED v3.5** — Final end-state architecture. Generic runtime + specialized prompt packets. Ready for implementation.
+**Status: APPROVED v3.7** — Final end-state architecture. Generic runtime + specialized prompt packets. Phases 1-3 complete. Transcript pollution fix implemented (8a87a0f). 8k/news/10q cleanup remaining (see Pollution Fix Recipe in S8).
 
 **Baseline lock**: The current `/guidance-transcript` pipeline stays FROZEN and untouched. We build ALONGSIDE the old. Originals are never moved, renamed, or edited. Retirement is quality-gated, not time-gated.
 
@@ -14,13 +14,15 @@ The clean conceptual split for this architecture is:
 - **ASSET decides**: source structure, sections/views, fetch queries, empty rules
 - **Generic layer** (orchestrator, agents, worker, trigger, evidence-standards): zero type-specific content
 
-The current implementation does **not** fully achieve that purity yet. Guidance-specific content leaked into files that should be type-neutral. A full audit (2026-03-06) identified **three layers of pollution**. All three must be fixed before the infrastructure is truly generic.
+The initial implementation had guidance-specific content leaked into files that should be type-neutral. A full audit (2026-03-06) identified **three layers of pollution**. The transcript asset was fully cleaned in commit `8a87a0f` using the Pollution Fix Recipe (see S8). The remaining 3 assets (8k, news, 10q) follow the same recipe — see `extraction-pipeline-tracker.md` for exact line numbers per asset.
 
-**IMPORTANT**: When implementing these fixes, recheck everything thoroughly — verify each file before and after changes to ensure nothing relevant is accidentally removed and no guidance-specific content remains in the generic layer. Move content to pass files, don't just delete it. Merge with existing pass file content rather than duplicating.
+**IMPORTANT**: When implementing remaining fixes, follow the validated recipe in S8. Move content to intersection files (`types/guidance/assets/{ASSET}-primary.md`), don't just delete it. Agent shells, SKILL.md, enrichment-pass.md, and guidance-queries.md are already generic — zero changes needed for subsequent assets.
 
 #### Layer A: Asset Profile Pollution (HIGH — extraction instructions in asset files)
 
-The asset files under `extract/assets/*.md` were copied from old guidance-tuned `PROFILE_*.md` files. They contain guidance-specific extraction rules that belong in type pass files.
+**transcript.md**: DONE (commit `8a87a0f`). 84 guidance-specific lines removed, intersection files created.
+
+The remaining asset files under `extract/assets/*.md` still contain guidance-specific extraction rules that belong in type intersection files.
 
 | File | Pollution | Severity |
 |------|-----------|----------|
@@ -33,60 +35,47 @@ The asset files under `extract/assets/*.md` were copied from old guidance-tuned 
 
 #### Layer B: Asset Query File Pollution (MEDIUM — guidance-flavored descriptions)
 
-The asset query files contain guidance-specific descriptions and instructions alongside their Cypher queries.
+**transcript-queries.md**: DONE (commit `8a87a0f`). Remaining:
 
-| File | Example | Severity |
-|------|---------|----------|
-| `transcript-queries.md:48` | "Both must be scanned for guidance" | Medium — reads like an instruction |
-| `news-queries.md:17-19` | "Guidance-Channel News... contain company guidance" | Low — Benzinga channel name, but description is guidance-flavored |
-| `10q-queries.md:22,34,51` | "guidance extraction", "forward guidance", "Exclude from Guidance" | Medium |
+| File | Lines | Severity |
+|------|-------|----------|
+| `news-queries.md:17,19,51,55` | "Guidance-Channel News", "contain company guidance" | 4 lines to rewrite |
+| `10q-queries.md:22,34,51,53` | "guidance extraction", "forward guidance", "Exclude from Guidance" | 4 lines to rewrite |
 
-**Fix**: Rewrite query descriptions to be type-neutral. E.g., "Both must be scanned for guidance" → "Both fields contain extractable content." The Cypher queries themselves are generic data fetches — only the descriptions need updating.
+**Fix**: Rewrite descriptions only. Cypher queries themselves: zero changes.
 
 #### Layer C: Common Query File Pollution (LOW — guidance-flavored comments)
 
-`queries-common.md` has a few guidance-specific descriptions in otherwise generic query documentation.
+**DONE** (commit `8a87a0f`) — lines 55, 112, 206 rewritten. One remaining:
 
 | Line | Example |
 |------|---------|
-| 55 | "Not required for guidance extraction (guidance uses calendar-based GuidancePeriod nodes)" |
-| 112 | "For each guidance metric, pattern-match against this cache" |
-| 206 | "guidance-related content across fulltext indexes" |
-| 308 | "Guidance-channel news" |
+| 308 | "Guidance-channel news" → "Channel-filtered news" |
 
-**Fix**: Rewrite to type-neutral descriptions. E.g., "For each guidance metric" → "For each extracted metric."
-
-#### Already clean (verified 2026-03-06)
+#### Already clean (verified 2026-03-07)
 
 These files have zero guidance leakage — no changes needed:
 
 - `SKILL.md` (orchestrator) ✓
-- `extraction-primary-agent.md` ✓
-- `extraction-enrichment-agent.md` ✓
+- `extraction-primary-agent.md` ✓ (slot 4 + generic wording, commit `8a87a0f`)
+- `extraction-enrichment-agent.md` ✓ (slot 4 + generic wording, commit `8a87a0f`)
 - `evidence-standards.md` ✓
 - `extraction_worker.py` ✓ (uses `{type}` generically, whitelist is expected)
 - `trigger-extract.py` ✓ (defaults to guidance, whitelist is expected)
 - `8k-queries.md` ✓
+- `transcript.md` ✓ (cleaned commit `8a87a0f`)
+- `transcript-queries.md` ✓ (cleaned commit `8a87a0f`)
+- `queries-common.md` ✓ (L55/112/206 cleaned commit `8a87a0f`, L308 remaining)
+- `enrichment-pass.md` ✓ (genericized commit `8a87a0f`)
+- `guidance-queries.md` ✓ (7E/7F updated commit `8a87a0f`)
 
-#### Why this matters
+#### Remaining effort (8k + news + 10q only)
 
-- Acceptable when `guidance` is the only extraction type
-- Becomes a conflict as soon as a second type (e.g., `announcements` or `analyst`) is added — asset files will steer the model toward guidance-shaped extraction regardless of the type being run
+Per asset: create 1 intersection file, rewrite 6-13 lines, move 2-3 tables. ~1-1.5h each.
+See `extraction-pipeline-tracker.md` for exact line numbers per asset.
+Use the Pollution Fix Recipe in S8 — same pattern as transcript, no discovery needed.
 
-#### Clean end-state target
-
-- Asset files: only source structure, fetch/read rules, content format, empty-content handling, period/date interpretation
-- Asset query files: type-neutral Cypher queries with type-neutral descriptions
-- Common query file: type-neutral descriptions
-- Type-specific "What to Extract", "Do NOT Extract", quality/acceptance logic: lives in the type's pass files only
-
-#### Estimated effort
-
-- Layer A (asset profiles): 30-40 min
-- Layer B (asset query descriptions): 15 min
-- Layer C (common query comments): 10 min
-- Re-run golden checks to confirm no regression: 30 min (automated)
-- **Total: ~1.5 hours**
+- **Total remaining: ~4 hours** (3 assets + query file rewrites + verification)
 
 ### 2. Known Issue — Corporate Announcements Polluting Guidance Extraction
 
@@ -127,9 +116,10 @@ Impact boundary:
 4. **Always actionable** — every section points toward clear implementation; zero paralysis by analysis
 5. **Generic runtime, specialized prompt packets** — infrastructure (trigger, worker, queue, orchestrator, two agent shells) is generic and reusable. Prompt content (pass-specific brief files) is specialized and preserves production-tuned extraction rules near-verbatim from the current agents. Each agent loads only its own pass file — primary never sees enrichment instructions, enrichment never sees primary instructions. Pass files are self-contained working briefs, intentionally redundant with core-contract sections. The redundancy IS the quality mechanism.
 
-**Version**: 3.5 | 2026-03-06
+**Version**: 3.7 | 2026-03-07
 **Goal**: Generalize the guidance extraction pipeline into a reusable framework for ANY extraction type across ALL data assets.
 **Prior versions**: v1.5 in `extractionPipeline.md` (SUPERSEDED). v2.0-v3.0 superseded by this file.
+**v3.7 changes**: S2 architecture section updated to match actual implementation — agent load order shows 8 files (slot 4 = intersection file), enrichment gate uses dual file-existence (not sections parsing), "working brief" wording matches committed agents, result field `new_secondary_items`.
 
 ---
 
@@ -411,11 +401,12 @@ IRRELEVANT:               0 lines    IRRELEVANT:                        0 lines
 |    core-contract.md    |   |    primary-pass.md     |   |    transcript.md    |
 |                        |   |    enrichment-pass.md  |   |    transcript-      |
 |  Scripts (referenced   |   |                        |   |      queries.md     |
-|  by pass files, live   |   |  Near-verbatim from    |   |                     |
-|  in earnings-orch/     |   |  current production    |   |  "How to read +     |
-|  scripts/):            |   |  agents                |   |   fetch this kind   |
-|    guidance_ids.py     |   |                        |   |   of document"      |
-|    guidance_writer.py  |   |                        |   |                     |
+|  by pass files, live   |   |                        |   |                     |
+|  in earnings-orch/     |   |  INTERSECTION FILES    |   |  "How to read +     |
+|  scripts/):            |   |  (TYPE x ASSET, slot4) |   |   fetch this kind   |
+|    guidance_ids.py     |   |  types/guidance/assets/ |   |   of document"      |
+|    guidance_writer.py  |   |   transcript-primary.md |   |                     |
+|                        |   |   transcript-enrichment |   |                     |
 +=======================+   +=======================+   +====================+
 ```
 
@@ -424,13 +415,13 @@ IRRELEVANT:               0 lines    IRRELEVANT:                        0 lines
 ```
 /extract {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode} [RESULT_PATH={path}]
 
-  Read assets/{ASSET}.md -> check if it has secondary sections
-
   1. Spawn Task(extraction-primary-agent):
      "{TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}"
 
-  2. Check enrichment: Glob for extract/types/{type}/enrichment-pass.md
-     If file exists AND asset has secondary sections:
+  2. Check enrichment gate — BOTH files must exist:
+       a. extract/types/{type}/enrichment-pass.md
+       b. extract/types/{type}/assets/{ASSET}-enrichment.md
+     If both exist:
        Spawn Task(extraction-enrichment-agent):
        "{TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}"
 
@@ -448,20 +439,22 @@ IRRELEVANT:               0 lines    IRRELEVANT:                        0 lines
 extraction-primary-agent.md receives:
   {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}
 
-  STEP 0: Load instructions
-    Read extract/types/{type}/core-contract.md       <- shared schema, IDs, rules
-    Read extract/types/{type}/primary-pass.md         <- primary prompt packet
-    Read extract/assets/{asset}.md                    <- how to read source
-    Read extract/queries-common.md                    <- shared queries
-    Read extract/assets/{asset}-queries.md             <- asset-specific queries
-    Read extract/types/{type}/{type}-queries.md        <- type-specific queries
-    Read .claude/skills/evidence-standards/SKILL.md       <- [POST-PARITY]
+  STEP 0: Load instructions (8 files)
+    1. Read extract/types/{type}/core-contract.md       <- shared schema, IDs, rules
+    2. Read extract/types/{type}/primary-pass.md         <- primary prompt packet
+    3. Read extract/assets/{asset}.md                    <- how to read source
+    4. Read extract/types/{type}/assets/{ASSET}-primary.md  <- TYPE x ASSET rules (if exists)
+    5. Read extract/queries-common.md                    <- shared queries
+    6. Read extract/assets/{asset}-queries.md             <- asset-specific queries
+    7. Read extract/types/{type}/{type}-queries.md        <- type-specific queries
+    8. Read .claude/skills/evidence-standards/SKILL.md    <- [POST-PARITY]
 
-  "primary-pass.md is your complete working brief. Follow it start to finish.
-   core-contract.md is reference for schema details."
+  "primary-pass.md is your working brief — follow it start to finish.
+   If an intersection file was loaded at slot 4, it provides additional
+   asset-specific extraction rules. core-contract.md is reference for schema details."
 
   STEP 1: FETCH -- queries 1A, 1B, 2A, 2B, 7A + asset-specific + type-specific queries
-  STEP 2: EXTRACT -- LLM reads text, applies rules from primary-pass.md
+  STEP 2: EXTRACT -- LLM reads text, applies rules from primary-pass.md + intersection file
   STEP 3: VALIDATE -- call scripts from contract (types/{type}/*.py)
   STEP 4: WRITE -- call write script from contract
 
@@ -472,21 +465,23 @@ extraction-primary-agent.md receives:
 extraction-enrichment-agent.md receives:
   {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}
 
-  STEP 0: Load instructions
-    Read extract/types/{type}/core-contract.md       <- shared schema, IDs, rules
-    Read extract/types/{type}/enrichment-pass.md      <- enrichment prompt packet
-    Read extract/assets/{asset}.md                    <- how to read source
-    Read extract/queries-common.md                    <- shared queries
-    Read extract/assets/{asset}-queries.md             <- asset-specific queries
-    Read extract/types/{type}/{type}-queries.md        <- type-specific queries
-    Read .claude/skills/evidence-standards/SKILL.md       <- [POST-PARITY]
+  STEP 0: Load instructions (8 files)
+    1. Read extract/types/{type}/core-contract.md       <- shared schema, IDs, rules
+    2. Read extract/types/{type}/enrichment-pass.md      <- enrichment prompt packet
+    3. Read extract/assets/{asset}.md                    <- how to read source
+    4. Read extract/types/{type}/assets/{ASSET}-enrichment.md  <- TYPE x ASSET rules (required)
+    5. Read extract/queries-common.md                    <- shared queries
+    6. Read extract/assets/{asset}-queries.md             <- asset-specific queries
+    7. Read extract/types/{type}/{type}-queries.md        <- type-specific queries
+    8. Read .claude/skills/evidence-standards/SKILL.md    <- [POST-PARITY]
 
-  "enrichment-pass.md is your complete working brief. Follow it start to finish.
+  "enrichment-pass.md is your working brief — follow it start to finish.
+   The intersection file at slot 4 provides asset-specific extraction rules.
    core-contract.md is reference for schema details."
 
-  STEP 1: FETCH context + existing items (7E) + secondary content
+  STEP 1: FETCH context + existing items (7E) + secondary content (per intersection file)
   STEP 2: EXTRACT with verdicting (ENRICHES/NEW/NO_GUIDANCE)
-  STEP 3: VALIDATE + completeness check (7F)
+  STEP 3: VALIDATE + completeness check (7F, parameterized by source_type)
   STEP 4: WRITE -- only changed/new items
 
   Write result: /tmp/extract_pass_{TYPE}_enrichment_{SOURCE_ID}.json
@@ -494,43 +489,44 @@ extraction-enrichment-agent.md receives:
 
 ### How Two-Pass Works: Type x Asset Intersection
 
-Two-pass is determined by the COMBINATION of asset (has secondary sections) and type (defines enrichment behavior). Neither alone is sufficient.
+Two-pass is determined by the EXISTENCE of intersection files. The orchestrator checks for two files — if both exist, enrichment runs.
 
 ```
-Decision tree:
+Decision tree (file-existence gate, no sections parsing):
 
-  Does asset have secondary sections?
-    NO  -> 1 pass (primary only)
-    YES -> Does types/{type}/enrichment-pass.md exist?
-             NO  -> 1 pass (type doesn't use enrichment for this asset)
+  Does types/{type}/enrichment-pass.md exist?
+    NO  -> 1 pass (type doesn't define enrichment)
+    YES -> Does types/{type}/assets/{ASSET}-enrichment.md exist?
+             NO  -> 1 pass (this type has no enrichment rules for this asset)
              YES -> 2 passes (primary + enrichment)
 ```
 
-The asset declares WHAT sections exist (markdown metadata, not YAML frontmatter):
-
-```markdown
-## Asset Metadata
-- sections: prepared_remarks, qa
-- label: Transcript
-- neo4j_label: Transcript
-```
+The asset profile still declares sections as metadata, but the orchestrator does NOT parse it. Gate logic uses file existence only:
 
 ```
-transcript.md:  sections: prepared_remarks, qa     -> has secondary
-8k.md:          sections: full                      -> no secondary
-news.md:        sections: full                      -> no secondary
-10q.md:         sections: full                      -> no secondary
+transcript + guidance:
+  types/guidance/enrichment-pass.md         EXISTS
+  types/guidance/assets/transcript-enrichment.md  EXISTS  -> 2 passes ✓
+
+8k + guidance:
+  types/guidance/enrichment-pass.md         EXISTS
+  types/guidance/assets/8k-enrichment.md    MISSING       -> 1 pass
+
+news + guidance:
+  types/guidance/enrichment-pass.md         EXISTS
+  types/guidance/assets/news-enrichment.md  MISSING       -> 1 pass
 ```
 
-The type contract declares HOW to use those sections:
+The type contract declares HOW to use secondary content:
 ```
 types/guidance/
-  primary-pass.md:     "Extract from prepared_remarks only"
-  enrichment-pass.md:  readback, verdicting, completeness check
-                       (triggered when asset has secondary sections)
+  primary-pass.md:     working brief for primary extraction
+  enrichment-pass.md:  readback, verdicting, completeness check (generic)
+  assets/transcript-enrichment.md:  Q&A-specific rules, quote prefixes, queries
+  assets/transcript-primary.md:    speaker hierarchy, PR extraction rules
 ```
 
-A future type might NOT have `enrichment-pass.md`. In that case, even for transcripts, only one pass runs. No CapabilitySpec needed -- the orchestrator checks two things: asset sections and `enrichment-pass.md` file existence.
+A future type might NOT have `enrichment-pass.md`. A future asset might not have an `{ASSET}-enrichment.md` intersection file. Either missing file → single pass. No CapabilitySpec or sections parsing needed.
 
 ---
 
@@ -687,15 +683,15 @@ enrichment-pass.md — near-verbatim from guidance-qa-enrich.md
 |-- Step 1: Load existing items (7E readback)
 |-- Step 2: Load secondary content (asset-specific query)
 |-- Step 3: Verdict taxonomy (ENRICHES / NEW / NO_GUIDANCE)
-|-- Step 4: Q&A Analysis Log format (MANDATORY, with topic summary)
-|-- Step 5: Completeness check vs 7F baseline
-|-- Step 6: Quote enrichment format [PR]...[Q&A]
+|-- Step 4: Secondary Content Analysis Log format (MANDATORY, with verdict + topic summary)
+|-- Step 5: Completeness check vs 7F baseline (parameterized by source_type)
+|-- Step 6: Quote enrichment format (prefixes from intersection file)
 |-- Rule: "Only write changed/new items"
 |-- Extraction rules (from agent's 42 curated lines):
 |     - Quality / acceptance filters
 |     - No fabricated numbers
 |     - Quote max 500 chars, no citation = no node
-|     - Metric decomposition for new Q&A-only items
+|     - Metric decomposition for new secondary-only items
 |-- Practical how-to:
 |     - JSON payload assembly for enriched + new items
 |     - guidance_write.sh invocation
@@ -735,19 +731,21 @@ extraction-primary-agent.md (~50 lines)
 |     "NEVER write Cypher directly"
 |     "MUST invoke deterministic validation via scripts"
 |
-|-- Auto-Load (6 files for parity, 7 for end-state):
+|-- Auto-Load (8 files):
 |     1. Read extract/types/{TYPE}/core-contract.md
 |     2. Read extract/types/{TYPE}/primary-pass.md
 |     3. Read extract/assets/{ASSET}.md
-|     4. Read extract/queries-common.md
-|     5. Read extract/assets/{ASSET}-queries.md
-|     6. Read extract/types/{TYPE}/{TYPE}-queries.md
-|     7. Read .claude/skills/evidence-standards/SKILL.md  [POST-PARITY]
+|     4. Read extract/types/{TYPE}/assets/{ASSET}-primary.md  (if exists)
+|     5. Read extract/queries-common.md
+|     6. Read extract/assets/{ASSET}-queries.md
+|     7. Read extract/types/{TYPE}/{TYPE}-queries.md
+|     8. Read .claude/skills/evidence-standards/SKILL.md
 |
 |-- Input: {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}
 |
-|-- "primary-pass.md is your complete working brief.
-|    core-contract.md is reference. Follow primary-pass.md start to finish."
+|-- "primary-pass.md is your working brief — follow it start to finish.
+|    If intersection file loaded at slot 4, it has asset-specific rules.
+|    core-contract.md is reference."
 |
 |-- Result: Write /tmp/extract_pass_{TYPE}_primary_{SOURCE_ID}.json
 \-- Error handling: reference core-contract S17
@@ -768,19 +766,21 @@ extraction-enrichment-agent.md (~50 lines)
 |     "MUST invoke deterministic validation via scripts"
 |     "ONLY write changed/new items"
 |
-|-- Auto-Load (6 files for parity, 7 for end-state):
+|-- Auto-Load (8 files):
 |     1. Read extract/types/{TYPE}/core-contract.md
 |     2. Read extract/types/{TYPE}/enrichment-pass.md
 |     3. Read extract/assets/{ASSET}.md
-|     4. Read extract/queries-common.md
-|     5. Read extract/assets/{ASSET}-queries.md
-|     6. Read extract/types/{TYPE}/{TYPE}-queries.md
-|     7. Read .claude/skills/evidence-standards/SKILL.md  [POST-PARITY]
+|     4. Read extract/types/{TYPE}/assets/{ASSET}-enrichment.md  (required — gate ensures it exists)
+|     5. Read extract/queries-common.md
+|     6. Read extract/assets/{ASSET}-queries.md
+|     7. Read extract/types/{TYPE}/{TYPE}-queries.md
+|     8. Read .claude/skills/evidence-standards/SKILL.md
 |
 |-- Input: {TICKER} {ASSET} {SOURCE_ID} TYPE={type} MODE={mode}
 |
-|-- "enrichment-pass.md is your complete working brief.
-|    core-contract.md is reference. Follow enrichment-pass.md start to finish."
+|-- "enrichment-pass.md is your working brief — follow it start to finish.
+|    Intersection file at slot 4 has asset-specific rules.
+|    core-contract.md is reference."
 |
 |-- Result: Write /tmp/extract_pass_{TYPE}_enrichment_{SOURCE_ID}.json
 \-- Error handling: reference core-contract S17
@@ -847,7 +847,7 @@ ORCHESTRATOR: reused (/extract handles all types via TYPE= param)
 TRIGGER: reused (trigger-extract.py --type analyst)
 WORKER: reused (extraction_worker.py reads type from payload)
 
-TOTAL: 6-7 files created + 1 line added to 2 files. Everything else is reused.
+TOTAL: 6-8 files created + 1 line added to 2 files. Everything else is reused.
 ```
 
 ### Add a New Asset ("press-release")
@@ -996,7 +996,7 @@ Orchestrator:
   Deletes pass result files after combining (cleanup ownership: each layer
     cleans up what the layer below produced)
   Required fields: {"type": "guidance", "source_id": "...", "status": "completed",
-                     "primary_items": 12, "enriched_items": 3, "new_qa_items": 1}
+                     "primary_items": 12, "enriched_items": 3, "new_secondary_items": 1}
 
 Worker:
   Reads RESULT_PATH (it generated the path, knows exactly where to look)
@@ -1140,12 +1140,64 @@ Create the extraction framework alongside the existing pipeline. Nothing existin
 
 | Step | Action | Validation |
 |------|--------|------------|
-| 3.0 | **Post-parity**: Add evidence-standards as 7th auto-load in both agent shells. This changes prompt context and is NOT parity-neutral — added only after Phase 1-2 golden checks pass. | Both agents load 7 files. Output may differ slightly (stricter anti-hallucination). |
+| 3.0 | **Post-parity**: Add evidence-standards as 8th auto-load in both agent shells (slot 4 = intersection file, slot 8 = evidence-standards). NOT parity-neutral — added only after Phase 1-2 golden checks pass. | Both agents load 8 files. Output may differ slightly (stricter anti-hallucination). |
 | 3.1 | Add `--asset 8k` entry to ASSET_QUERIES dict | Trigger finds unprocessed 8-Ks |
 | 3.2 | Run `/extract AAPL 8k {accession} TYPE=guidance MODE=dry_run` on 3+ 8-Ks | Golden checks pass |
 | 3.3 | Repeat for `--asset 10q` (10-Q + 10-K) | |
 | 3.4 | Repeat for `--asset news` | |
 | 3.5 | **Cross-asset validation** | All assets produce valid output |
+
+### Pollution Fix Recipe (Validated — transcript implemented in commit 8a87a0f)
+
+Reusable pattern for cleaning any asset file. Copy this for 8k, news, 10q. See `extraction-pipeline-tracker.md` for per-asset line numbers.
+
+**Per asset, you do 3 things:**
+
+#### Step A: CREATE intersection file(s) — `types/guidance/assets/{ASSET}-primary.md`
+
+Template structure (copy from `transcript-primary.md`):
+
+```markdown
+# Guidance x {ASSET} — Primary Pass
+
+Rules for extracting guidance from {ASSET} {content type}. Loaded at slot 4 by the primary agent.
+
+## Scan Scope — {ASSET}
+{What to scan in this asset — moved from asset profile}
+
+## What to Extract from {Content Type}
+{The "What to Extract" table — moved verbatim from asset profile}
+
+## What NOT to Extract
+{The "Do NOT Extract" list — moved verbatim from asset profile}
+
+## Quote Prefix
+{Source-specific quote prefix rules}
+```
+
+If enrichment applies to this asset, also create `{ASSET}-enrichment.md` (see `transcript-enrichment.md` for template).
+
+**Naming**: `{ASSET}-{pass}.md`. No hyphens in asset names (collision with `-{pass}` delimiter).
+
+#### Step B: EDIT asset profile — remove guidance content, genericize vocabulary
+
+1. **Remove**: "What to Extract" table, "Do NOT Extract" list, quality/acceptance rules, speaker hierarchy
+2. **Keep**: Asset metadata, data structure, field descriptions, fetch order, period identification, given_date, source_key, empty-content handling, duplicate resolution
+3. **Rewrite**: Replace "guidance" → "extractable content" / "extracted item" / "content". Replace "See core-contract.md S6/S7" → "See your type's core-contract"
+
+#### Step C: VERIFY
+
+Checklist (reusable per asset):
+- [ ] Asset file: zero "guidance", "forward guidance", "guidance priority" references
+- [ ] Asset query file: zero guidance-flavored descriptions (Cypher unchanged)
+- [ ] Intersection file has: all content moved from asset profile + quote prefixes + scan scope
+- [ ] Dry-run regression: `--force --mode dry_run` on a known source, diff JSON output field-by-field
+
+**Agent shells, SKILL.md, enrichment-pass.md, guidance-queries.md**: Already generic from the transcript fix. NO CHANGES NEEDED for subsequent assets — just create intersection files and clean asset profiles.
+
+**Rollback**: Single `git revert` per asset commit.
+
+---
 
 ### Phase 4: First Non-Guidance Type (future)
 
@@ -1217,8 +1269,8 @@ Items below are NOT blockers to Phase 1-2 implementation. OPEN/DEFERRED/PENDING 
 | 7 | Asset `sections` declaration format | RESOLVED | Markdown `## Asset Metadata` section with `- sections: prepared_remarks, qa`. No YAML frontmatter. |
 | 8 | Shared write_cli.py abstraction | Phase 4+ | Evaluate when type #2 reveals actual shared pattern. Only if >50% code is shared. |
 | 9 | Enrichment pass JSON envelope format | RESOLVED | Enrichment agents consistently produced `{"company": {...}, "items": [...]}` instead of flat top-level `source_id`/`source_type`/`ticker` required by `guidance_write_cli.py`. Writer rejected with `Missing required top-level fields: source_id, source_type, ticker`. All 3 agents self-corrected (2-3 extra turns each, ~$0.30/run). **Fix**: Added explicit JSON envelope example with placeholders to `enrichment-pass.md` (2026-03-06). |
-| 10 | Query 2B (Member Profile Cache) Cypher syntax error | OPEN | `queries-common.md` line 122: `WITH ctx.dimension_u_ids[i] AS dim_u_id` — Neo4j returns `Variable dim_u_id not defined`. Error: `Neo.ClientError.Statement.SyntaxError`. Hit on all 3 AAPL transcript extractions (Jan/Oct/May). Agents work around it (member matching still succeeds via code fallback in `guidance_write_cli.py`), but the cache query wastes a turn and returns no data. Likely a Neo4j version incompatibility with list indexing + UNWIND pattern. |
-| 11 | Enrichment agent missing `Edit` tool | OPEN | `extraction-enrichment-agent.md` tools list includes `Write`, `Read`, `Bash` but not `Edit`. During AAPL Oct 2025 enrichment, agent attempted `Edit` to fix the JSON file and got `No such tool available: Edit`. Fell back to full-file `Write`. Low severity (Write works), but Edit would be more efficient for small JSON fixes. Add `Edit` to the tools list in `extraction-enrichment-agent.md`. |
+| 10 | Query 2B (Member Profile Cache) Cypher syntax error | RESOLVED (INVALID) | 2026-03-07 audit confirmed: `dim_u_id` IS properly defined via `WITH ctx.dimension_u_ids[i] AS dim_u_id` at line 122. Query syntax is correct Cypher. Runtime error was likely a Neo4j version quirk or transient issue — agents work around it regardless via code fallback in `guidance_write_cli.py`. No code change needed. |
+| 11 | Enrichment agent missing `Edit` tool | RESOLVED (N/A) | 2026-03-07 audit confirmed: enrichment-pass.md workflow never uses Edit — only Read (instructions), Write (output JSON), and Bash (scripts). Edit is for modifying existing files in-place, which the enrichment agent never does. Not a defect. |
 
 ### Possible Improvements (v2.1.70 features + skills reference patterns)
 
@@ -1332,7 +1384,7 @@ extraction_worker.py pops job, calls SDK:
 | Jobs per queue message | 1 type implicit | **1 type explicit** |
 | Result protocol | LLM text parsing | **Deterministic file (UUID-suffixed)** |
 | Two-pass logic | Hardcoded in orchestrator | **Type x asset** |
-| Add a type | Create 2 agents + contract | **6-7 files + 1 line x2** (agents reused) |
+| Add a type | Create 2 agents + contract | **6-8 files + 1 line x2** (agents reused) |
 | Add an asset | Edit orchestrator + agent | **2 files + 1 line** |
 | Cross-contamination | None (separate agents) | **None** (separate pass files) |
 | Redundant content | 206 lines (accidental) | **~180 lines** (intentional, in pass files + 3 guardrails) |
@@ -1354,4 +1406,65 @@ The old worker (`claude-code-worker`) runs `earnings_worker.py` on the `earnings
 
 ---
 
-*v3.5 | 2026-03-06 | Structural change: split from one PASS= agent + monolithic contract into two focused generic agent shells + split type contract (core-contract.md + primary-pass.md + enrichment-pass.md). Each agent loads only its own pass file — primary never sees enrichment instructions, enrichment never sees primary instructions. Zero cross-contamination matches current system's signal density. Pass files remain near-verbatim from current production agents. Architecture is now: generic runtime (trigger, worker, queue, orchestrator, two agent shells) + specialized prompt packets (pass files loaded in isolation) + type-owned scripts + asset-owned queries. Prior: v3.4 (thick S19/S20 in monolithic contract). v3.3 (S19/S20 checklists). v3.2 (unique RESULT_PATH, concurrency, post-parity). v3.1 (operational). v3.0 (core architecture).*
+## OPEN: Generic Extraction Type for Learner Integration
+
+**Status**: Future — blocked on learner plan (`learner.md`) reaching implementation stage.
+
+### Problem
+
+The learner agent (see `.claude/plans/learner.md`) needs to define new extraction categories and have them work automatically across all assets. Currently, adding a new extraction type requires creating 6+ files (contract, pass files, queries, Python scripts). The learner can't do that — it needs to update ONE file and have the pipeline fire.
+
+### Solution: `TYPE=generic`
+
+Create a `Generic` + `GenericUpdate` + `GenericPeriod` node family that mirrors the guidance schema exactly. The `GuidanceUpdate` schema is already general-purpose — label, low/mid/high, unit, period, segment, quote, qualitative covers most financial metric extraction. The field names say "guidance" but the shape is universal.
+
+### One-Time Setup (human does this once)
+
+1. **`types/generic/core-contract.md`** — Copy from guidance core-contract, swap `Guidance` → `Generic`, `GuidanceUpdate` → `GenericUpdate`, `GuidancePeriod` → `GenericPeriod` throughout.
+2. **`types/generic/primary-pass.md`** — Starts near-empty. Contains a "What to Extract" section that the learner appends lines to. Each line is one extraction instruction (e.g., `Extract "Analyst Revenue Estimate" — analyst consensus revenue target, numeric, forward-looking`).
+3. **`types/generic/generic-queries.md`** — Same 7A-7F query patterns with `Generic`/`GenericUpdate`/`GenericPeriod` labels.
+4. **`generic_ids.py`** — Copy from `guidance_ids.py`, swap label prefixes and ID formats.
+5. **`generic_writer.py`** — Copy from `guidance_writer.py`, swap MERGE patterns to `GenericUpdate` nodes.
+6. **`generic_write.sh`** — Boilerplate shell wrapper.
+7. **Add `generic` to `extraction_worker.py` type whitelist.**
+
+### What the Learner Does Each Iteration
+
+Edits ONE file: `types/generic/primary-pass.md`. Adds, removes, or refines extraction instructions. Example:
+
+```markdown
+## What to Extract
+
+- "Analyst Revenue Estimate" — analyst consensus revenue target, numeric, forward-looking
+- "Management Tone Shift" — qualitative change in management's forward language vs prior quarter
+- "Supply Chain Risk" — specific supply chain disruption with quantified impact
+```
+
+### Then the Pipeline Fires
+
+```bash
+python3 scripts/trigger-extract.py --type generic --source-id AAPL_2025-07-31T17.00
+```
+
+The entire chain works unchanged: trigger → Redis → worker → `/extract` → agent shells load `types/generic/core-contract.md` + `types/generic/primary-pass.md` → fetch → extract → validate → write `GenericUpdate` nodes.
+
+### Why This Works
+
+- The generic runtime is already fully type-agnostic (trigger, worker, orchestrator, agent shells)
+- Agent shells load files by path convention — `types/generic/*` works identically to `types/guidance/*`
+- The GuidanceUpdate schema shape (label + values + period + quote + segment) covers most financial extraction use cases
+- Asset profiles are already type-neutral — they describe source structure, not what to extract
+- The learner's single-file edit is the ONLY thing that varies between iterations
+
+### Constraint
+
+The learner's output must fit the `GenericUpdate` property shape. If the learner discovers things with fundamentally different structures (e.g., risk factors that have no numeric values, or management changes that have no periods), those would need a different node schema — which means a different type, not `generic`. The `generic` type is for "things shaped like financial metrics" that just haven't been formally categorized into their own type yet.
+
+### Estimated Effort
+
+- One-time setup: ~2-3 hours (copy-paste from guidance, swap labels, test)
+- Per-learner-iteration: 0 human effort (learner edits the file, trigger runs)
+
+---
+
+*v3.6 | 2026-03-07 | Added Pollution Fix Recipe (S8) with validated transcript pattern for copy-paste to other assets. Updated Top Note #1 with per-layer completion status (transcript DONE, 8k/news/10q remaining). Resolved S11 #10 (INVALID — query syntax correct) and #11 (N/A — Edit not needed). Added OPEN: Generic Extraction Type for Learner Integration. Consolidated tracker created: extraction-pipeline-tracker.md. Prior: v3.5 (two focused agent shells, split type contract, intersection files via 8a87a0f).*

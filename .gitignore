@@ -93,3 +93,16 @@ mcp_servers/local-*.sh
 
 # Claude Code plans (tracked - contains verified architecture docs)
 event_trader.pid
+event_trader_monitor.pid
+
+# Claude Code test artifacts
+.claude/agents/test-*
+.claude/skills/test-v170-*
+.claude/hooks/test_*
+.claude/hooks/test-*
+.claude/agent-memory*/test-*
+.claude/settings.test.json
+.claude/scheduled_tasks.lock
+.claude/tmp/
+.claude/worktrees/
+earnings-analysis/test-outputs/

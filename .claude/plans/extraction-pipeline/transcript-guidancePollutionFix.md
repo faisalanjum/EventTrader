@@ -499,3 +499,42 @@ The transcript-specific classifications (which block is generic, which is guidan
 3. **The verification approach** — Gates 1 & 2 are reusable as-is
 
 Once implemented, the file structure itself documents the pattern. Anyone looking at `types/guidance/assets/transcript-primary.md` sees exactly how to create `types/guidance/assets/8k-primary.md`.
+
+---
+
+## Future Work: 10Q/10K Asset Split
+
+Currently `10q` is a single asset that handles both 10-Q and 10-K filings. The `SOURCE_TYPE` plumbing was added specifically for this — `trigger-extract.py` maps 10-K filings to `asset=10q, source_type=10k`. This works but adds special-case logic in both the trigger and the worker.
+
+A cleaner end-state is splitting `10q` into two proper assets: `10q` and `10k`.
+
+### Required Steps
+
+1. **`trigger-extract.py`** — Remove the 10-K → 10q remapping. 10-K filings get `asset=10k` natively.
+2. **`extraction_worker.py`** — Add `10k` to the asset whitelist.
+3. **CREATE `assets/10k.md`** — 10-K asset profile. Copy from `10q.md`, adjust for annual filing specifics (full-year MD&A, annual financial statements, no quarterly comparisons).
+4. **CREATE `assets/10k-queries.md`** — 10-K fetch queries. May share most queries with 10q-queries.md but with `formType = '10-K'` filters.
+5. **EDIT `assets/10q.md`** — Remove any 10-K handling logic. Pure quarterly filing profile.
+6. **EDIT `assets/10q-queries.md`** — Remove any 10-K query variants. Pure `formType = '10-Q'` filters.
+7. **EDIT `types/guidance/core-contract.md`** — Update source routing table to list `10k` as a separate asset.
+8. **EDIT `types/guidance/primary-pass.md`** — Update source routing table (`10q / 10k` row splits into two rows).
+
+### Optional Steps
+
+9. **CREATE intersection files** — `types/guidance/assets/10q-primary.md` and `types/guidance/assets/10k-primary.md` if guidance extraction rules differ between quarterly and annual filings.
+10. **Update examples/docs** — Any hardcoded `10q` examples that should show both assets.
+
+### Benefits
+
+- ASSET and `source_type` become one-to-one — no remapping needed anywhere
+- Special-case logic in trigger and worker is eliminated
+- Each asset profile is focused on exactly one filing type
+- Follows the same pattern as transcript/8k/news (one asset = one source structure)
+
+### Safety Note
+
+Keep the `SOURCE_TYPE` plumbing even after the split — it's still needed for the 7F query (`gu.source_type`) and for any future case where asset and source_type might diverge.
+
+### Minimum File Count
+
+6 edits + 2 creates = 8 files. Single commit, single `git revert` rollback — same pattern as this plan.
