@@ -1220,6 +1220,105 @@ Items below are NOT blockers to Phase 1-2 implementation. OPEN/DEFERRED/PENDING 
 | 10 | Query 2B (Member Profile Cache) Cypher syntax error | OPEN | `queries-common.md` line 122: `WITH ctx.dimension_u_ids[i] AS dim_u_id` — Neo4j returns `Variable dim_u_id not defined`. Error: `Neo.ClientError.Statement.SyntaxError`. Hit on all 3 AAPL transcript extractions (Jan/Oct/May). Agents work around it (member matching still succeeds via code fallback in `guidance_write_cli.py`), but the cache query wastes a turn and returns no data. Likely a Neo4j version incompatibility with list indexing + UNWIND pattern. |
 | 11 | Enrichment agent missing `Edit` tool | OPEN | `extraction-enrichment-agent.md` tools list includes `Write`, `Read`, `Bash` but not `Edit`. During AAPL Oct 2025 enrichment, agent attempted `Edit` to fix the JSON file and got `No such tool available: Edit`. Fell back to full-file `Write`. Low severity (Write works), but Edit would be more efficient for small JSON fixes. Add `Edit` to the tools list in `extraction-enrichment-agent.md`. |
 
+### Possible Improvements (v2.1.70 features + skills reference patterns)
+
+Items below are enhancement opportunities identified from Claude Code v2.1.53-v2.1.70 changelog testing and the [skills reference](docs/claude/skills-reference.md). None are blockers. All are OPEN for future phases.
+
+| # | Enhancement | Status | Notes |
+|---|-------------|--------|-------|
+| 12 | `${CLAUDE_SKILL_DIR}` for portable paths in `/extract` orchestrator | OPEN | v2.1.69 added `${CLAUDE_SKILL_DIR}` — resolves to the skill's own directory at runtime. The `/extract` SKILL.md currently hardcodes `.claude/skills/extract/` prefixes for all file reads (`types/{TYPE}/core-contract.md`, `assets/{ASSET}.md`, etc). Replace with `${CLAUDE_SKILL_DIR}/types/{TYPE}/core-contract.md`, `${CLAUDE_SKILL_DIR}/assets/{ASSET}.md`, etc. Makes the skill self-relative — if the `extract/` directory is ever renamed or moved, zero paths break. **Caveat**: `${CLAUDE_SKILL_DIR}` only works inside SKILL.md content. The agents (`.claude/agents/`) still need project-relative paths in their own Read instructions, so the benefit is scoped to the orchestrator skill where it constructs the file list to pass to agents. |
+| 13 | `agent_type` in hooks for per-agent validation | OPEN | v2.1.69 added `agent_id`/`agent_type` to all hook event JSON. Current PreToolUse hooks (`validate_gx_output.sh`, `validate_judge_output.sh`, `guard_neo4j_delete.sh`) fire indiscriminately for all agents. With `agent_type` now available, each hook can differentiate: apply `validate_gx_output.sh` only for `extraction-primary-agent` (skip enrichment), apply `validate_judge_output.sh` only for `extraction-enrichment-agent` (skip primary), make `guard_neo4j_delete.sh` stricter for extraction agents than interactive sessions. Implementation: one `jq` check at top of each hook script: `agent_type=$(echo "$CLAUDE_TOOL_INPUT" \| jq -r '.agent_type // empty')`. |
+| 14 | `includeGitInstructions: false` in agent frontmatter | OPEN | v2.1.69 added `includeGitInstructions` setting — removes commit/PR instructions from system prompt. Neither extraction agent ever commits code. Add `includeGitInstructions: false` to both `extraction-primary-agent.md` and `extraction-enrichment-agent.md` frontmatter. Saves ~500 tokens per agent turn. Pure win, zero downside. |
+| 15 | `memory: project` on extraction agents — two-tier per-company memory | OPEN | See **S11.15 Detail** below. v2.1.52 fixed memory auto-preload. Two-tier design: shared MEMORY.md (auto-preloaded) + per-company topic files (`{TICKER}.md`, manual Read). Agents accumulate quality improvements across hundreds of runs without prompt engineering. |
+| 16 | `model:` field for per-agent cost optimization | OPEN | Addresses #2 (budget). `model:` field is now enforced (Feb 2026). Primary agent (heavy extraction): `model: opus` or `model: sonnet`. Enrichment agent (readback/verdicting): `model: sonnet` or `model: haiku`. Per-asset strategy: transcripts (long, complex) → opus; news (short, simple) → sonnet. Frontmatter is static per agent, so per-asset model control requires either variant agents (`extraction-primary-heavy.md` / `extraction-primary-light.md`) or SDK `model` override from the worker based on the asset field in the payload. |
+| 17 | `PostToolUseFailure` hook for error monitoring | OPEN | Add to both agent frontmatter. Fires when Neo4j MCP, Bash, or Write tools fail — hook JSON includes `tool_name`, `tool_input`, `error`, and `agent_type` (v2.1.69). Logs structured errors to a central file without parsing transcripts. Directly useful for debugging recurring issues like #10 (Query 2B Cypher syntax error). Implementation: `hooks: { PostToolUseFailure: [{ hooks: [{ type: command, command: "log_extraction_error.sh" }] }] }` in agent frontmatter. |
+| 18 | `skills:` field to auto-load `evidence-standards` | OPEN | Phase 3.0 adds evidence-standards as 7th auto-load. Currently requires a Read tool call at startup. With `skills: [evidence-standards]` in agent frontmatter, content is injected into context automatically — saves one turn per invocation. `evidence-standards` is already a skill (`.claude/skills/evidence-standards/`), so zero additional setup. |
+| 19 | `argument-hint` on `/extract` SKILL.md | OPEN | Skills reference recommends `argument-hint` for skills that accept arguments. `/extract` takes complex args but has no hint. Add `argument-hint: "<ticker> <asset> <source_id> TYPE=<type> MODE=<mode>"` to frontmatter. Shows expected format during `/extract` autocomplete — helps manual dry_run testing. One line, zero risk. |
+| 20 | `disable-model-invocation: true` on `/extract` | OPEN | `/extract` is only invoked explicitly — by SDK worker (`query("/extract ...")`) or manually (`/extract AAPL ...`). It should never auto-trigger from natural language. Setting `disable-model-invocation: true` removes its description from the context window budget at startup (~100 tokens freed). With 60+ skills in the project, budget is a real concern (2% of context window / ~16k chars). |
+| 21 | Stop hook on `/extract` as final quality gate | OPEN | `/extract` orchestrator writes the combined result file (`RESULT_PATH`) as its last step before returning to the worker. Currently, the worker validates the result file AFTER the SDK call completes (S6, steps 7-8). If the file is missing or malformed, the worker marks `failed` and retries — consuming an entire new SDK invocation. A **Stop hook** on `/extract` SKILL.md validates the result file BEFORE the skill returns: does RESULT_PATH exist? Is it valid JSON? Does it have `type`, `source_id`, `status` fields? If validation fails → hook blocks → orchestrator receives the error → auto-corrects (re-reads pass files, re-writes combined result) → retries. Failure recovery happens INSIDE the same SDK call instead of requiring the worker to re-queue the entire job. Directly implements the Block/Retry pattern (Infrastructure.md §6.4) at the most valuable point — the boundary between LLM execution and the Python worker. Saves full retry cost (~$0.30-1.00 per invocation). The result file protocol is already deterministic (S6), so the validator script is trivial (~20 lines). **Caveat**: RESULT_PATH is passed in the prompt, not in environment. The Stop hook script would need to discover the path — either via a convention (latest `/tmp/extract_result_*.json`) or by the orchestrator writing the path to a known location before stopping. Implementation: `hooks: { Stop: [{ hooks: [{ type: command, command: "./scripts/validate-extract-result.sh" }] }] }` in `/extract` SKILL.md frontmatter. |
+| 22 | `disallowedTools` on extraction agents for Neo4j write protection | OPEN | `disallowedTools` on agents is **NOW ENFORCED** (Feb 2026 retest; on skills it's still not enforced). Extraction agents read Neo4j via `mcp__neo4j-cypher__read_neo4j_cypher` (in their tools list) but write via CLI script through Bash (`guidance_write_cli.py`). The write MCP tool (`mcp__neo4j-cypher__write_neo4j_cypher`) is not in their tools list, but since `allowed-tools` restriction is NOT enforced, the agents could potentially discover and call it via ToolSearch. Adding `disallowedTools: [mcp__neo4j-cypher__write_neo4j_cypher]` to both `extraction-primary-agent.md` and `extraction-enrichment-agent.md` explicitly blocks the write MCP tool. All legitimate writes go through the CLI script (which has its own safeguards — type whitelist D9, MERGE-based idempotent writes). Defense-in-depth — directly matches the pipeline's design principle D9. These agents run autonomously with `permissionMode: dontAsk` on a K8s pod. One frontmatter line prevents accidental database mutations via the wrong path. Zero cost, pure safety. |
+
+### S11.15 Detail: Two-Tier Per-Company Agent Memory
+
+**Requires**: `memory: project` in agent frontmatter (v2.1.52+, fully working).
+
+**How it works**: Add `memory: project` to both `extraction-primary-agent.md` and `extraction-enrichment-agent.md`. Each agent gets its own persistent directory, committed to git, shared across all K8s worker pods.
+
+**Directory structure**:
+
+```
+.claude/agent-memory/extraction-primary-agent/
+├── MEMORY.md          ← Tier 1: auto-preloaded every run (200 lines max)
+├── AAPL.md            ← Tier 2: Read only when processing AAPL
+├── MSFT.md            ← Read only when processing MSFT
+├── CRM.md             ← Read only when processing CRM
+└── ...
+
+.claude/agent-memory/extraction-enrichment-agent/
+├── MEMORY.md          ← Same structure, separate learnings
+├── AAPL.md
+└── ...
+```
+
+**Tier 1 — MEMORY.md (auto-preloaded, free)**:
+
+Cross-company learnings shared by every run, injected into the agent's system prompt automatically. No Read call needed.
+
+```markdown
+# Extraction Learnings
+- Enrichment pass must use flat top-level JSON fields (not nested {"company": {...}})
+- Query 2B member cache often fails with SyntaxError, fallback to code matching works
+- When source has zero guidance items, still write result file with items_extracted: 0
+```
+
+**Tier 2 — Per-company topic files (one Read call per run)**:
+
+Ticker-specific patterns. The ticker is already in the prompt from the worker (`/extract AAPL transcript ...`). Agent instructions need one line:
+
+```
+At startup, Read `.claude/agent-memory/extraction-primary-agent/{TICKER}.md` if it exists.
+When done, Write updated findings back to that file.
+```
+
+Example `AAPL.md`:
+
+```markdown
+# AAPL Extraction Notes
+- Reports segments as Products/Services, not by geography
+- Q3 guidance always includes China revenue breakout
+- EPS guidance uses "diluted" basis, not "basic"
+- Revenue guidance often given as growth rate, not absolute — derive from prior period
+```
+
+**Data flow**:
+
+```
+trigger-extract.py pushes {"ticker": "AAPL", ...} to Redis
+    │
+    ▼
+extraction_worker.py pops job, calls SDK:
+  query("/extract AAPL transcript AAPL_2025-01-30T17.00 TYPE=guidance MODE=write ...")
+    │
+    ▼
+/extract orchestrator spawns extraction-primary-agent
+    │
+    ├── System auto-injects MEMORY.md (Tier 1, free)
+    ├── Agent reads .claude/agent-memory/extraction-primary-agent/AAPL.md (Tier 2, 1 Read call)
+    ├── Runs extraction with both general + AAPL-specific context
+    └── Writes back any new AAPL findings to AAPL.md before finishing
+```
+
+**What agents learn over time**:
+
+| Tier | Content | Grows How |
+|------|---------|-----------|
+| MEMORY.md | Common failure patterns, JSON format rules, query workarounds | Agent writes back when discovering cross-company patterns |
+| `{TICKER}.md` | Segment naming, guidance format quirks, reporting conventions | Agent writes back after each extraction for that ticker |
+
+**Cost**: One frontmatter line per agent + one instruction line in agent body. Per-company files created automatically as agents process new tickers. No manual setup per company.
+
+**Key constraint**: MEMORY.md is capped at 200 lines (system truncates beyond that with a warning). Keep it concise — use as an index. Per-company files have no size limit but should stay focused.
+
 ---
 
 ## S12: Why This Is Better

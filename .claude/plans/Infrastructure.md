@@ -10,7 +10,7 @@
 
 **What this is**: Multi-layer earnings analysis system using forked skills for context isolation.
 
-**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45):**
+**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70):**
 
 | What | Status | Workaround |
 |------|--------|------------|
@@ -108,6 +108,136 @@
 | **BashTool login shell skip** | ✅ **AUTOMATIC** (v2.1.51) | BashTool no longer uses `-l` (login shell) flag. `shopt login_shell`=off, `CLAUDE_BASH_NO_LOGIN` UNSET (skip is implicit). ~4x faster shell startup (0.001s vs 0.004s). No configuration needed. |
 | **ConfigChange hook event** | ✅ **NEW** (v2.1.49) | 13th hook event type. Fires when settings files change. Sources: `user_settings`, `project_settings`, `local_settings`, `policy_settings`, `skills`. Can block changes via `{"decision": "block"}` (except policy_settings). Chicken-and-egg: first edit that ADDS the hook itself does NOT trigger it. |
 | **Dynamic `CLAUDE_CODE_TASK_LIST_ID` mid-session** | ✅ **WORKS** (v2.1.52) | Changing env vars in `settings.json` mid-session takes effect IMMEDIATELY. Task tools use the new list directory without restart. Extends v2.1.41's "stale permission rules" fix. See Part 10.12. |
+| **`${CLAUDE_SKILL_DIR}` variable** | ✅ **NEW** (v2.1.69) | Skills can reference their own directory in SKILL.md content. Resolves to absolute path (e.g., `/path/.claude/skills/my-skill`). Use for relative file refs within skill dirs. |
+| **`InstructionsLoaded` hook event** | ✅ **NEW** (v2.1.69) | 14th hook event type. Fires when CLAUDE.md or `.claude/rules/*.md` loaded. JSON includes `file_path`, `memory_type` ("Project"), `load_reason` ("session_start"). Does NOT fire if no CLAUDE.md/rules exist. |
+| **`agent_id`/`agent_type` in hook events** | ✅ **NEW** (v2.1.69) | All hook events now include `agent_id` (subagents only) and `agent_type` (subagents + `--agent`). Main session hooks show neither field. |
+| **HTTP hooks** | ✅ **NEW** (v2.1.63) | New hook `type: "http"` — POSTs JSON to a URL and receives JSON response. Alternative to `type: "command"` shell scripts. |
+| **Opus 4.6 medium effort default** | ⚠️ **CHANGED** (v2.1.68) | Opus 4.6 defaults to medium effort for Max/Team. Use "ultrathink" keyword in prompt for high effort. `alwaysThinkingEnabled: true` may override. |
+| **"ultrathink" keyword** | ✅ **RE-INTRODUCED** (v2.1.68) | Say "ultrathink" in prompt to enable high effort for next turn. |
+| **Opus 4/4.1 removed** | ⚠️ **BREAKING** (v2.1.68) | Removed from first-party API. Users auto-migrated to Opus 4.6. |
+| **Sonnet 4.5 → 4.6 migration** | ⚠️ **CHANGED** (v2.1.70) | Pro/Max/Team Premium auto-migrated from Sonnet 4.5 to 4.6. |
+| **TaskCreate without `activeForm`** | ✅ **WORKS** (v2.1.69 SDK) | `activeForm` field no longer required. Spinner falls back to task subject. |
+| **Skill colon descriptions** | ✅ **FIXED** (v2.1.69) | Skill descriptions with colons (e.g., "Triggers include: X, Y") now parse correctly. |
+| **Skills without `description:` field** | ✅ **FIXED** (v2.1.69) | Skills without description now appear in available skills list. Content used as fallback. |
+| **`includeGitInstructions` setting** | ✅ **NEW** (v2.1.69) | Set to false (or `CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS` env var) to remove commit/PR workflow instructions from system prompt. Saves tokens for automation agents. |
+| **TeammateIdle/TaskCompleted stop** | ✅ **ENHANCED** (v2.1.69) | Hooks now support `{"continue": false, "stopReason": "..."}` to stop the teammate, matching Stop hook behavior. |
+| **WorktreeCreate/WorktreeRemove hooks** | ✅ **FIXED** (v2.1.69) | Plugin hooks were silently ignored; now fire correctly. |
+| **Nested skill from gitignored dirs** | ✅ **FIXED** (v2.1.69) | Security fix: skill discovery no longer loads from gitignored directories (e.g., `node_modules`). |
+| **AskUserQuestion in skill allowed-tools** | ✅ **FIXED** (v2.1.69) | Was silently auto-allowed with empty answers; now properly prompts. |
+| **Hooks settings.json live-reload** | ❌ **NOT LIVE-RELOADED** (v2.1.70) | Hooks added to settings.json mid-session do NOT take effect. Env vars DO live-reload, hooks do NOT. Must start new session. |
+| **FG tool presentation change** | ⚠️ **CHANGED** (v2.1.70) | FG agents now show 1 direct tool (ToolSearch) + 30 deferred. Was "7 base + 33 deferred". Same functional tool set; all require ToolSearch except ToolSearch itself. |
+| **Agent discovery session snapshot** | ❌ **STILL SNAPSHOT** (v2.1.70) | Agents created mid-session still NOT discoverable by Task tool. No change. |
+
+---
+
+### Retest Summary (2026-03-06, v2.1.70) — v2.1.53-v2.1.70 (18 versions)
+
+**11 capabilities tested:**
+
+| Feature | Status | Change from v2.1.52 |
+|---------|--------|---------------------|
+| `${CLAUDE_SKILL_DIR}` variable (v2.1.69) | ✅ **WORKS** | **NEW** — resolves to skill directory absolute path |
+| Skill colon descriptions (v2.1.69) | ✅ **FIXED** | Was broken (YAML parse error), now loads correctly |
+| Skills without `description:` (v2.1.69) | ✅ **FIXED** | Was invisible in skill list, now loads with content as fallback |
+| FG tool inventory (general-purpose) | 31 tools (1+30) | Was 40 (7+33). Presentation changed, not function |
+| BG tool inventory (general-purpose) | 22 tools (1+21) | Was 12 base. MCP now listed as deferred. Same built-in set |
+| BG TaskCreate/List/Get/Update | ❌ Still blocked | **No change** from v2.1.52 |
+| `agent_id`/`agent_type` in hooks | ✅ **WORKS** | **NEW** — confirmed in SubagentStart JSON |
+| `InstructionsLoaded` hook event | ✅ **WORKS** | **NEW** — 14th hook type. JSON: file_path, memory_type, load_reason |
+| TaskCreate without activeForm | ✅ **WORKS** | **NEW** — SDK simplification, spinner uses subject |
+| Agent discovery mid-session | ❌ Still snapshot | **No change** — must start new session |
+| Hooks live-reload from settings.json | ❌ **NOT live-reloaded** | **NEW finding** — env vars reload, hooks do NOT |
+
+**11 changelog-only items documented (not tested):**
+
+| Feature | Version | Details |
+|---------|---------|---------|
+| Auto-memory proactive saves | v2.1.59 | Claude saves useful context to auto-memory. `/memory` management |
+| HTTP hooks | v2.1.63 | `type: "http"` POSTs JSON to URL. Alternative to shell commands |
+| Worktree shared configs | v2.1.63 | Project configs & auto memory shared across git worktrees |
+| `ENABLE_CLAUDEAI_MCP_SERVERS=false` | v2.1.63 | Opt out of claude.ai MCP servers |
+| Opus 4.6 medium effort default | v2.1.68 | Max/Team default. "ultrathink" for high effort |
+| Opus 4/4.1 removed | v2.1.68 | Auto-migrated to Opus 4.6. Breaking for pinned models |
+| `includeGitInstructions` setting | v2.1.69 | Remove commit/PR instructions from system prompt |
+| TeammateIdle/TaskCompleted stop | v2.1.69 | `{"continue": false}` stops teammate |
+| WorktreeCreate/WorktreeRemove fixed | v2.1.69 | Plugin hooks were silently ignored |
+| Sonnet 4.5 → 4.6 migration | v2.1.70 | Auto-migration for Pro/Max/Team Premium |
+| ToolSearch empty response fix | v2.1.70 | Server-rendered schemas no longer confuse model |
+
+**FG vs BG tool comparison (v2.1.70):**
+
+| Category | FG (foreground) | BG (background) |
+|----------|-----------------|-----------------|
+| Direct tools | ToolSearch (1) | ToolSearch (1) |
+| Built-in deferred | 20 | 11 |
+| MCP deferred | 10 | 10 |
+| **Total** | **31** | **22** |
+| TaskCreate/List/Get/Update | ✅ Yes | ❌ No |
+| TeamCreate/TeamDelete | ✅ Yes | ❌ No |
+| SendMessage | ✅ Yes | ❌ No |
+| ListMcpResourcesTool | ✅ Yes | ❌ No |
+
+**InstructionsLoaded hook JSON schema:**
+```json
+{
+  "session_id": "...",
+  "transcript_path": "...",
+  "cwd": "/home/faisal/EventMarketDB",
+  "hook_event_name": "InstructionsLoaded",
+  "file_path": "/home/faisal/EventMarketDB/CLAUDE.md",
+  "memory_type": "Project",
+  "load_reason": "session_start"
+}
+```
+
+**SubagentStart hook JSON (v2.1.70 — with new fields):**
+```json
+{
+  "session_id": "...",
+  "transcript_path": "...",
+  "cwd": "/home/faisal/EventMarketDB",
+  "agent_id": "a387f1b9adaa2b65c",
+  "agent_type": "general-purpose",
+  "hook_event_name": "SubagentStart"
+}
+```
+
+**Test artifacts:**
+
+| File | What It Tests |
+|------|--------------|
+| `.claude/skills/test-v170-skill-dir/SKILL.md` | ${CLAUDE_SKILL_DIR} substitution |
+| `.claude/skills/test-v170-colon-desc/SKILL.md` | Colon in description |
+| `.claude/skills/test-v170-no-desc/SKILL.md` | No description field |
+| `.claude/agents/test-v170-tool-inventory.md` | Tool inventory agent |
+| `.claude/agents/test-v170-hook-agent.md` | Hook fields test agent |
+| `.claude/hooks/test-v170-hook-fields.sh` | Hook JSON capture script |
+| `earnings-analysis/test-outputs/test-v170-*.txt` | All test output files |
+| `earnings-analysis/test-outputs/test-v170-consolidated-results.txt` | Consolidated results |
+
+**Updated hook coverage (v2.1.70):**
+
+| Hook Event | Tested? | Status |
+|------------|---------|--------|
+| PreToolUse | ✅ | Works (command type). **prompt type REGRESSED v2.1.45**. agent type still not enforced. |
+| PostToolUse | ✅ | Works (command type) |
+| PostToolUseFailure | ✅ | Works (command type in agent FM) |
+| Stop/SubagentStop | ✅ | Works (blocking + stop_hook_active) |
+| SubagentStart | ✅ | Works (fires + additionalContext + **agent_id/agent_type NEW**) |
+| TaskCompleted | ✅ | Works. **NEW**: `{"continue": false}` stops teammate (v2.1.69) |
+| TeammateIdle | ✅ | Works. **NEW**: `{"continue": false}` stops teammate (v2.1.69) |
+| ConfigChange | ✅ | Works (v2.1.49) |
+| **InstructionsLoaded** | ✅ **NEW** | Works. Fires on CLAUDE.md/.claude/rules/ load. JSON: file_path, memory_type, load_reason |
+| SessionStart | ❌ | Untested |
+| SessionEnd | ❌ | Untested |
+| UserPromptSubmit | ❌ | Untested |
+| PermissionRequest | ❌ | Untested |
+| Notification | ❌ | Untested |
+| PreCompact | ❌ | Untested |
+| WorktreeCreate | ✅ | **FIXED** (v2.1.69) — plugin hooks were silently ignored |
+| WorktreeRemove | ✅ | **FIXED** (v2.1.69) — plugin hooks were silently ignored |
+
+**Total hook events: 17** (was 13 in v2.1.49). Added: InstructionsLoaded (v2.1.69), WorktreeCreate (v2.1.50), WorktreeRemove (v2.1.50), PreCompact (from docs). Note: ConfigChange was already the 13th.
 
 ---
 

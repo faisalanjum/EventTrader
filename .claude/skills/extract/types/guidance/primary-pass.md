@@ -1,6 +1,6 @@
 # Primary Pass Working Brief — Guidance Extraction
 
-This is your complete working brief. Follow it start to finish. core-contract.md is reference for schema details.
+This is your working brief. Follow it start to finish. core-contract.md is reference for schema details.
 
 ## Scope
 
