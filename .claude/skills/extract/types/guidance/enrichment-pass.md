@@ -4,9 +4,9 @@ This is your complete working brief. Follow it start to finish. core-contract.md
 
 ## Scope
 
-Discover new items and enrich existing items from secondary content (Q&A for transcripts).
+Discover new items and enrich existing items from secondary content (per intersection file).
 
-Discovery of Q&A-only items is co-equal with enrichment — management regularly reveals guidance in Q&A that never appears in prepared remarks.
+Discovery of secondary-only items is co-equal with enrichment — the secondary section often contains items not found in the primary section.
 
 ---
 
@@ -24,33 +24,33 @@ Discovery of Q&A-only items is co-equal with enrichment — management regularly
 
 ### STEP 2: LOAD EXISTING ITEMS — Readback Primary Pass Items
 
-Query 7E with `source_id = $SOURCE_ID`. These are the PR-extracted items written by the primary pass.
+Query 7E with `source_id = $SOURCE_ID`. These are the items written by the primary pass.
 
 7E returns: `period_u_id` (gp_ format), `gu.period_scope`, `gu.time_type`, `gp.start_date AS gp_start_date`, `gp.end_date AS gp_end_date`. No `period_node_type`.
 
 **If 7E returns 0 items**: Return error `PHASE_DEPENDENCY_FAILED — no primary pass items found for source {SOURCE_ID}. Run primary pass first.`
 
-Record `given_date` from existing items — all items share the same `conference_datetime`. Use this for any new Q&A-only items.
+Record `given_date` from existing items — all items from the same source share it. Use this for any new secondary-only items.
 
-**Prior-transcript baseline (query 7F)**: Load all labels previously extracted from this company's transcripts, with frequency and last-seen date. Used in the completeness check (Step 5).
+**Prior-source baseline (query 7F)**: Load all labels previously extracted from this company's sources of this asset type, with frequency and last-seen date. Pass `$source_type = {SOURCE_TYPE}` (the SOURCE_TYPE argument from your input). Used in the completeness check (Step 5).
 
-### STEP 3: LOAD SECONDARY CONTENT — Fetch Q&A
+### STEP 3: LOAD SECONDARY CONTENT
 
-Query 3F to get Q&A exchanges. If 3F returns empty, try 3C fallback (QuestionAnswer nodes — ~40 transcripts use `HAS_QA_SECTION` instead of `HAS_QA_EXCHANGE`).
+Fetch secondary content using queries defined in your intersection file.
 
-If both return empty: Return early with `NO_QA_CONTENT`.
+If no secondary content found: Return early with `NO_SECONDARY_CONTENT`.
 
-### STEP 4: Q&A ENRICHMENT — Process Each Exchange
+### STEP 4: ENRICHMENT — Process Secondary Content
 
-Process EACH Q&A exchange against the existing items from Step 2. For every exchange, produce a verdict:
+Process each piece of secondary content against the existing items from Step 2. For each, produce a verdict:
 
 #### Verdict Taxonomy
 
 | Verdict | Meaning | Action |
 |---------|---------|--------|
-| `ENRICHES {item}` | Q&A adds detail to an existing item | Update `qualitative`, `conditions`, `quote`, and/or numeric fields. Append `[Q&A]` detail in quote. |
-| `NEW ITEM` | Q&A contains guidance not in any existing item | Create new item with `[Q&A]` quote prefix. Apply metric decomposition — split qualified metrics into base `label` + `segment`. |
-| `NO GUIDANCE` | Exchange has no forward-looking content | Skip silently. |
+| `ENRICHES {item}` | Secondary content adds detail to an existing item | Update `qualitative`, `conditions`, `quote`, and/or numeric fields. Append detail with quote prefix from intersection file. |
+| `NEW ITEM` | Secondary content contains item not in any existing item | Create new item with quote prefix from intersection file. Apply metric decomposition — split qualified metrics into base `label` + `segment`. |
+| `NO GUIDANCE` | Content has no forward-looking material | Skip silently. |
 
 **Rule**: Never skip an ENRICHES verdict — all must be written even if idempotent. MERGE+SET handles idempotency safely.
 
@@ -58,31 +58,31 @@ Enrichment updates the item in place — do not create a second item for the sam
 
 ### STEP 5: COMPLETENESS CHECK — Compare vs 7F Baseline
 
-Load 7F baseline (all labels from prior transcripts, frequency + last-seen date). Compare against current extraction (primary pass items + any NEW ITEMs from Step 4).
+Load 7F baseline (all labels from prior sources of this asset type, frequency + last-seen date). Compare against current extraction (primary pass items + any NEW ITEMs from Step 4).
 
-For missing labels, re-scan Q&A exchanges for that metric. Append to the log:
+For missing labels, re-scan secondary content for that metric. Append to the log:
 
-- `NEW ITEM` — found in Q&A, created
+- `NEW ITEM` — found in secondary content, created
 - `DROPPED — {label} (last seen {date}, {N}x prior)` — company did not guide on this metric this quarter
 
 ### STEP 6: VALIDATE + WRITE — Only Changed/New Items
 
 **ONLY** items that changed or are new. Do NOT re-write items that were not enriched.
 
-For each enriched item: start from the FULL item read in Step 2. Apply Q&A enrichments to specific fields. Do NOT omit any field from the existing item — SET overwrites everything including null.
+For each enriched item: start from the FULL item read in Step 2. Apply secondary enrichments to specific fields. Do NOT omit any field from the existing item — SET overwrites everything including null.
 
-For new Q&A-only items: build from scratch using CIK/FYE from Step 1. Use `given_date` from Step 2.
+For new secondary-only items: build from scratch using CIK/FYE from Step 1. Use `given_date` from Step 2.
 
 1. **Period routing** (new items only — enriched items already have `period_u_id` from 7E): include LLM period fields (`fiscal_year`, `fiscal_quarter`, `half`, `month`, `long_range_start_year`, `long_range_end_year`, `calendar_override`, `sentinel_class`, `time_type`) in the item. The CLI computes `period_u_id` (gp_ format) via `build_guidance_period_id()` automatically.
 
 2. **Resolve xbrl_qname** against concept cache, **member match** for segment items (same as primary pass validation).
 
-3. **Assemble JSON payload** and write to `/tmp/gu_{TICKER}_{SOURCE_ID}_qa.json`. **Use the exact same top-level envelope as primary pass** — the CLI requires `source_id`, `source_type`, `ticker`, and `fye_month` at top level:
+3. **Assemble JSON payload** and write to `/tmp/gu_{TICKER}_{SOURCE_ID}_enrichment.json`. **Use the exact same top-level envelope as primary pass** — the CLI requires `source_id`, `source_type`, `ticker`, and `fye_month` at top level:
 
 ```json
 {
     "source_id": "{SOURCE_ID}",
-    "source_type": "{ASSET}",
+    "source_type": "{SOURCE_TYPE}",
     "ticker": "{TICKER}",
     "fye_month": {FYE_MONTH from Step 1},
     "items": [ ... ]
@@ -95,36 +95,34 @@ Do NOT wrap items in a `company` object. Items do NOT need pre-computed IDs or `
 
 ```bash
 # dry_run / shadow
-bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_{TICKER}_{SOURCE_ID}_qa.json --dry-run
+bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_{TICKER}_{SOURCE_ID}_enrichment.json --dry-run
 
 # write
-ENABLE_GUIDANCE_WRITES=true bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_{TICKER}_{SOURCE_ID}_qa.json --write
+ENABLE_GUIDANCE_WRITES=true bash .claude/skills/earnings-orchestrator/scripts/guidance_write.sh /tmp/gu_{TICKER}_{SOURCE_ID}_enrichment.json --write
 ```
 
 ---
 
-## Q&A Analysis Log Format (MANDATORY)
+## Secondary Content Analysis Log Format (MANDATORY)
 
-You MUST produce a Q&A Analysis Log. Every entry MUST include a topic summary:
+You MUST produce a Secondary Content Analysis Log. Format per intersection file. Every entry MUST include a verdict and topic summary:
 
 ```
-Q&A Analysis Log:
-#1 (analyst name): ENRICHES Revenue(iPhone) — CFO discusses supply-demand balance, normalized YoY growth excluding launch timing
-#2 (analyst name): NO GUIDANCE — asked about installed base size, CEO cited 2.2B active devices (historical, not forward-looking)
-#3 (analyst name): NEW ITEM — CapEx guidance, CFO says "approximately $2 billion" for next fiscal year
-...
+Secondary Content Analysis Log:
+#{N} (source): VERDICT — topic summary
 ```
+(see intersection file for source identifier)
 
 ---
 
 ## Quote Enrichment Format
 
-- Existing items enriched: `[PR] original text... [Q&A] additional detail...`
-- New Q&A-only items: `[Q&A] guidance text...`
+- Existing items enriched: use quote prefixes defined in your intersection file.
+- New secondary-only items: use secondary quote prefix from intersection file.
 - When enriching `qualitative` or `conditions`, merge the richer information from both sources.
-- If Q&A gives more precise numbers than PR, update `low`/`mid`/`high` and change `derivation` if appropriate.
-- `section` for enriched items becomes `CFO Prepared Remarks + Q&A` (or specific Q&A reference).
-- `source_refs`: array of QAExchange node IDs that contributed. Build each ID as `{SOURCE_ID}_qa__{sequence}` where `sequence` is the exchange number. Example: `"source_refs": ["AAPL_2023-11-03T17.00_qa__3", "AAPL_2023-11-03T17.00_qa__7"]`.
+- If secondary content gives more precise numbers than primary, update `low`/`mid`/`high` and change `derivation` if appropriate.
+- `section` for enriched items: see intersection file for section format.
+- `source_refs`: see intersection file for source_ref format.
 
 ---
 
@@ -152,7 +150,7 @@ Split qualified metrics into base `label` + `segment`. Business dimensions (prod
 - ONLY write changed/new items (not unchanged existing items)
 - Same CLI invocation as primary pass
 - Same JSON payload format
-- Complete items only — every item written must include ALL fields from the 7E readback plus Q&A enrichments
+- Complete items only — every item written must include ALL fields from the 7E readback plus secondary enrichments
 
 ---
 
@@ -161,9 +159,9 @@ Split qualified metrics into base `label` + `segment`. Business dimensions (prod
 ```
 Items from Phase 1: {count}
 Items enriched: {count}
-New Q&A-only items: {count}
+New secondary-only items: {count}
 Items written: {count}
-Q&A exchanges analyzed: {count} (enriched: {n}, new: {n}, no_guidance: {n})
+Secondary units analyzed: {count} (enriched: {n}, new: {n}, no_guidance: {n})
 ```
 
 If team task assigned, update via TaskUpdate with enrichment summary.

@@ -45,7 +45,7 @@ RETURN t.id AS transcript_id,
        prepared_remarks,
        qa_exchanges
 ```
-**Critical**: Returns `prepared_remarks` (JSON text with speaker statements) and `qa_exchanges` (array of Q&A objects). Both must be scanned for guidance. See PROFILE_TRANSCRIPT.md for extraction rules.
+**Critical**: Returns `prepared_remarks` (JSON text with speaker statements) and `qa_exchanges` (array of Q&A objects). Both contain extractable content. See transcript.md for source rules.
 
 **Empty check**: If `qa_exchanges` is empty list, try 3C (Q&A Section fallback) before concluding Q&A is missing. If BOTH `prepared_remarks` is null/empty AND no Q&A from either 3B or 3C, try 3D (full transcript text).
 

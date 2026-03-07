@@ -198,6 +198,8 @@ Write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
 }
 ```
 
+**`source_type`**: Use `{SOURCE_TYPE}` from your input arguments (not `{ASSET}`). These differ for 10-K filings routed through the `10q` asset pipeline.
+
 Items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally. Include `fye_month` at top level when items use LLM period fields instead of pre-computed `period_u_id`.
 
 **`source_refs`**: Array of sub-source node IDs that produced the item. For transcripts, use PreparedRemark ID (`{SOURCE_ID}_pr`) or QAExchange IDs (`{SOURCE_ID}_qa__{sequence}`). For 8-K reports, use exhibit/item IDs if available. Empty array `[]` when no sub-source granularity applies.

@@ -52,7 +52,7 @@ LIMIT 1
 
 ### 1C. Period Pre-Fetch
 
-Pre-fetch all Period nodes for a company. Used by XBRL pipeline for period classification. Not required for guidance extraction (guidance uses calendar-based GuidancePeriod nodes via `build_guidance_period_id()` instead).
+Pre-fetch all Period nodes for a company. Used by XBRL pipeline for period classification. Not required for all extraction types. Some types use calendar-based period nodes instead.
 
 ```cypher
 MATCH (ctx:Context)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
@@ -109,7 +109,7 @@ WITH con.qname AS qname, count(f) AS usage
 ORDER BY usage DESC
 RETURN qname, usage
 ```
-**Usage**: Build concept-to-qname lookup. For each guidance metric, pattern-match against this cache to set `xbrl_qname`.
+**Usage**: Build concept-to-qname lookup. For each extracted metric, pattern-match against this cache to set `xbrl_qname`.
 
 ### 2B. Member Profile Cache
 
@@ -203,7 +203,7 @@ RETURN c.ticker, c.name,
 
 ## 9. Fulltext / Keyword Recall
 
-Supplementary recall queries for finding guidance-related content across fulltext indexes.
+Supplementary recall queries for finding extractable content across fulltext indexes.
 
 ### 9A. Search Q&A Exchanges (Fulltext)
 

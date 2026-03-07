@@ -53,7 +53,7 @@ ORDER BY g.label
 
 ### 7E. Full GuidanceUpdate Readback for Source
 
-Reads back all properties of existing GuidanceUpdates from a source. Used by `guidance-qa-enrich` to load Phase 1 items as base for Q&A enrichment.
+Reads back all properties of existing GuidanceUpdates from a source. Used by enrichment agent to load primary pass items as base for secondary enrichment.
 
 ```cypher
 MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(src)
@@ -76,15 +76,16 @@ RETURN g.label, g.id AS guidance_id,
 ORDER BY g.label, gu.segment
 ```
 
-### 7F. Prior-Transcript Guidance Baseline (Completeness Check)
+### 7F. Prior-Source Guidance Baseline (Completeness Check)
 
-Returns all labels this company has ever guided on via transcripts, with frequency and recency. Used by `guidance-qa-enrich` to detect missing items after Q&A processing.
+Returns all labels this company has ever guided on from this asset type, with frequency
+and recency. Used by enrichment agent to detect missing items after secondary content processing.
 
 ```cypher
 MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance),
-      (gu)-[:FOR_COMPANY]->(c:Company {ticker: $ticker}),
-      (gu)-[:FROM_SOURCE]->(t:Transcript)
-WHERE gu.given_date < $current_given_date
+      (gu)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+WHERE gu.source_type = $source_type
+  AND gu.given_date < $current_given_date
 WITH g.label AS label,
      max(gu.given_date) AS last_seen,
      count(DISTINCT gu.given_date) AS frequency
@@ -92,7 +93,9 @@ RETURN label, last_seen, frequency
 ORDER BY frequency DESC
 ```
 
-**Usage**: After Step 4 Q&A processing, compare current extraction labels against this baseline. Any previously-guided label absent from the current set triggers a targeted re-scan of Q&A exchanges for that metric.
+**Usage**: After Step 4 enrichment processing, compare current extraction labels against
+this baseline. Any previously-guided label absent from the current set triggers a targeted
+re-scan of secondary content for that metric.
 
 ---
 
