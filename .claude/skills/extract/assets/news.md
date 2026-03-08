@@ -104,7 +104,7 @@ Body text may contain:
 |-------------|-------------|-------------|----------------|
 | "Q2 revenue" | quarter | Derive from context | Q2 |
 | "full-year outlook" | annual | From text or derive from date | `.` |
-| "FY25 guidance" | annual | 2025 | `.` |
+| "FY25 outlook" | annual | 2025 | `.` |
 | "second half" | half | From text | `.` |
 | "next quarter" | quarter | Derive from date + FYE | Next fiscal Q |
 | "fiscal 2026" | annual | 2026 | `.` |

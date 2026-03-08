@@ -285,9 +285,10 @@ Issues observed during production extraction runs. Non-fatal but worth tracking.
 
 | # | Issue | Severity | Frequency | Status |
 |---|-------|----------|-----------|--------|
-| E1 | **Recurring Cypher syntax error — `dim_u_id` not defined** | Medium | 3x across runs | OPEN — enrichment agent generates a query referencing undefined variable. Recovers each time (non-fatal). Bug in enrichment query template, not in `queries-common.md` 2B (which is syntactically correct). Likely the agent constructs a derived query that drops the `WITH` binding. |
+| E1 | **Recurring Cypher syntax error — `dim_u_id` not defined** | Medium | Every run (all workers) | OPEN — query 2B (member profile cache) hits `Variable dim_u_id not defined` on every worker during warmup. Not just enrichment — primary agents also hit it. Agents always self-recover by retrying with corrected syntax. Likely MCP tool mangles the backtick escaping in the multi-line Cypher. Query is syntactically correct in Neo4j browser. Non-fatal but wastes ~1 turn per agent. |
 | E2 | **"Missing required top-level fields" JSON envelope errors** | Medium | 2x | OPEN — agent produced malformed JSON missing `source_id`, `source_type`, `ticker`. Both times self-corrected on retry. Explicit envelope example was added to `enrichment-pass.md` (2026-03-06) but may still occur with new sources. |
 | E3 | **Member matching fallback warnings** | Low | Multiple | MONITORING — "resolved N items via code fallback". Member matcher couldn't find exact XBRL matches, fell back to fuzzy/code-based resolution. Not an error but watch for accuracy drift. |
+| E4 | **MCP output truncation → JSON parse tracebacks** | Low | 2x per batch | OPEN — MCP tool returns truncated output for large query results (member cache, concept cache). Agent's inline Python JSON parse fails with traceback. Self-healing: agents re-fetch via Bash+Python to `/tmp` and parse from file. Non-fatal but wastes 1-2 turns per occurrence. |
 
 ### Not Bugs (Confirmed Working-As-Designed)
 
