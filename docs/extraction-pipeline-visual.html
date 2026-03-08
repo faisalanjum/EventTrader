@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extraction Pipeline v3.5 — Visual Architecture</title>
+<style>
+  :root {
+    --common: #3b82f6;
+    --common-bg: #eff6ff;
+    --common-border: #93c5fd;
+    --type: #f59e0b;
+    --type-bg: #fffbeb;
+    --type-border: #fcd34d;
+    --asset: #10b981;
+    --asset-bg: #ecfdf5;
+    --asset-border: #6ee7b7;
+    --intersection: #ef4444;
+    --intersection-bg: #fef2f2;
+    --intersection-border: #fca5a5;
+    --infra: #8b5cf6;
+    --infra-bg: #f5f3ff;
+    --infra-border: #c4b5fd;
+    --gray: #64748b;
+    --gray-bg: #f8fafc;
+    --gray-border: #cbd5e1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 40px 20px;
+    line-height: 1.6;
+  }
+  .container { max-width: 1400px; margin: 0 auto; }
+  h1 { font-size: 2.2rem; text-align: center; margin-bottom: 8px; color: #f1f5f9; }
+  .subtitle { text-align: center; color: #94a3b8; font-size: 1.1rem; margin-bottom: 50px; }
+  h2 {
+    font-size: 1.5rem; margin: 60px 0 24px; color: #f1f5f9;
+    border-bottom: 2px solid #334155; padding-bottom: 8px;
+  }
+  h2 .num { color: #3b82f6; font-weight: 800; margin-right: 8px; }
+
+  /* Legend */
+  .legend {
+    display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 40px; padding: 16px 24px;
+    background: #1e293b; border-radius: 12px; border: 1px solid #334155;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+  .legend-dot {
+    width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0;
+  }
+
+  /* Diagram containers */
+  .diagram {
+    background: #1e293b; border-radius: 16px; padding: 32px;
+    border: 1px solid #334155; margin-bottom: 32px;
+    overflow-x: auto;
+  }
+  .diagram-title {
+    font-size: 1rem; color: #94a3b8; margin-bottom: 20px;
+    font-style: italic; text-align: center;
+  }
+
+  /* ===== DIAGRAM 1: Pipeline Overview ===== */
+  .pipeline-flow {
+    display: flex; align-items: flex-start; gap: 0;
+    justify-content: center; flex-wrap: nowrap;
+    min-width: 1100px;
+  }
+  .pipe-stage {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    min-width: 140px;
+  }
+  .pipe-box {
+    padding: 14px 18px; border-radius: 10px; text-align: center;
+    font-size: 0.85rem; font-weight: 600; min-width: 130px;
+    border: 2px solid; position: relative;
+  }
+  .pipe-box.infra { background: var(--infra-bg); color: var(--infra); border-color: var(--infra-border); }
+  .pipe-box.common { background: var(--common-bg); color: var(--common); border-color: var(--common-border); }
+  .pipe-box.agent { background: var(--type-bg); color: #b45309; border-color: var(--type-border); }
+  .pipe-box.result { background: var(--gray-bg); color: var(--gray); border-color: var(--gray-border); }
+  .pipe-label { font-size: 0.72rem; color: #64748b; max-width: 140px; text-align: center; }
+  .pipe-file { font-size: 0.68rem; color: #94a3b8; font-family: monospace; }
+  .pipe-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: #475569; font-size: 1.4rem; min-width: 40px;
+    padding-top: 8px;
+  }
+  .pipe-arrow-label { font-size: 0.65rem; color: #64748b; margin-top: -4px; }
+
+  /* ===== DIAGRAM 2: Content Loading Waterfall ===== */
+  .waterfall { display: flex; flex-direction: column; gap: 6px; }
+  .wf-row {
+    display: grid; grid-template-columns: 40px 1fr 260px 320px;
+    gap: 12px; align-items: center; padding: 8px 12px;
+    border-radius: 8px; font-size: 0.85rem;
+  }
+  .wf-row:hover { background: #0f172a; }
+  .wf-slot {
+    width: 32px; height: 32px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; font-weight: 800;
+    font-size: 0.8rem; flex-shrink: 0;
+  }
+  .wf-slot.common { background: var(--common); color: white; }
+  .wf-slot.type { background: var(--type); color: white; }
+  .wf-slot.asset { background: var(--asset); color: white; }
+  .wf-slot.intersection { background: var(--intersection); color: white; }
+  .wf-name { font-weight: 600; color: #e2e8f0; }
+  .wf-path { font-family: monospace; font-size: 0.75rem; color: #94a3b8; }
+  .wf-role { font-size: 0.78rem; color: #cbd5e1; }
+  .wf-header {
+    display: grid; grid-template-columns: 40px 1fr 260px 320px;
+    gap: 12px; padding: 0 12px 8px; font-size: 0.75rem;
+    color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;
+    border-bottom: 1px solid #334155; margin-bottom: 4px;
+  }
+
+  /* ===== DIAGRAM 3: File Tree ===== */
+  .file-tree {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.82rem; line-height: 1.9;
+  }
+  .ft-line { display: flex; gap: 8px; align-items: center; }
+  .ft-indent { color: #334155; white-space: pre; user-select: none; }
+  .ft-icon { width: 16px; text-align: center; flex-shrink: 0; }
+  .ft-name { font-weight: 500; }
+  .ft-desc { color: #64748b; font-size: 0.75rem; font-family: Inter, sans-serif; margin-left: 8px; }
+  .ft-common .ft-name { color: var(--common); }
+  .ft-type .ft-name { color: var(--type); }
+  .ft-asset .ft-name { color: var(--asset); }
+  .ft-intersection .ft-name { color: var(--intersection); }
+  .ft-infra .ft-name { color: var(--infra); }
+  .ft-dir .ft-name { color: #e2e8f0; font-weight: 700; }
+  .ft-new { background: rgba(239,68,68,0.1); border-radius: 4px; padding: 0 4px; }
+  .ft-existing { opacity: 0.6; }
+
+  /* ===== DIAGRAM 4: Agent Orchestration ===== */
+  .orch-flow { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .orch-node {
+    padding: 16px 24px; border-radius: 10px; text-align: center;
+    border: 2px solid; min-width: 280px; position: relative;
+  }
+  .orch-node.skill { background: var(--common-bg); color: var(--common); border-color: var(--common-border); }
+  .orch-node.agent-p { background: var(--type-bg); color: #b45309; border-color: var(--type-border); }
+  .orch-node.agent-e { background: var(--intersection-bg); color: var(--intersection); border-color: var(--intersection-border); }
+  .orch-node .title { font-weight: 700; font-size: 1rem; }
+  .orch-node .detail { font-size: 0.78rem; margin-top: 4px; opacity: 0.8; }
+  .orch-arrow {
+    display: flex; flex-direction: column; align-items: center;
+    color: #475569; padding: 4px 0;
+  }
+  .orch-arrow svg { width: 24px; height: 30px; }
+  .orch-arrow-label { font-size: 0.72rem; color: #64748b; }
+  .orch-branch {
+    display: flex; gap: 60px; align-items: flex-start; justify-content: center;
+    position: relative;
+  }
+  .orch-gate {
+    padding: 10px 20px; border-radius: 20px; font-size: 0.8rem;
+    background: #1e293b; border: 2px dashed #475569; color: #94a3b8;
+    text-align: center;
+  }
+
+  /* ===== DIAGRAM 5: New Job Recipe ===== */
+  .recipe { display: flex; gap: 40px; flex-wrap: wrap; }
+  .recipe-col {
+    flex: 1; min-width: 300px; background: #0f172a; border-radius: 12px;
+    padding: 24px; border: 1px solid #334155;
+  }
+  .recipe-col h3 {
+    font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 8px;
+    border-bottom: 1px solid #334155;
+  }
+  .recipe-col h3.create { color: var(--intersection); }
+  .recipe-col h3.reuse { color: var(--common); }
+  .recipe-item {
+    display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start;
+  }
+  .recipe-badge {
+    flex-shrink: 0; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem;
+    font-weight: 700; text-transform: uppercase; margin-top: 2px;
+  }
+  .recipe-badge.required { background: var(--intersection); color: white; }
+  .recipe-badge.optional { background: #475569; color: #e2e8f0; }
+  .recipe-badge.reuse { background: var(--common); color: white; }
+  .recipe-badge.infra { background: var(--infra); color: white; }
+  .recipe-text { font-size: 0.85rem; }
+  .recipe-text .path { font-family: monospace; color: #94a3b8; font-size: 0.78rem; display: block; }
+
+  /* ===== DIAGRAM 6: Query 3-tier ===== */
+  .query-tiers {
+    display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+  }
+  .query-tier {
+    flex: 1; min-width: 260px; max-width: 380px;
+    border-radius: 12px; padding: 20px; border: 2px solid;
+  }
+  .query-tier.t1 { background: var(--common-bg); border-color: var(--common-border); }
+  .query-tier.t2 { background: var(--asset-bg); border-color: var(--asset-border); }
+  .query-tier.t3 { background: var(--type-bg); border-color: var(--type-border); }
+  .query-tier h4 { font-size: 1rem; margin-bottom: 8px; }
+  .query-tier.t1 h4 { color: var(--common); }
+  .query-tier.t2 h4 { color: var(--asset); }
+  .query-tier.t3 h4 { color: var(--type); }
+  .query-tier ul { list-style: none; font-size: 0.8rem; color: #334155; }
+  .query-tier li { padding: 3px 0; }
+  .query-tier li::before { content: "▸ "; opacity: 0.5; }
+
+  /* ===== DIAGRAM 7: Two-pass visual ===== */
+  .two-pass { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; }
+  .pass-col {
+    flex: 1; min-width: 400px; max-width: 550px;
+    border-radius: 12px; padding: 24px; border: 2px solid;
+  }
+  .pass-col.primary { background: var(--type-bg); border-color: var(--type-border); }
+  .pass-col.enrichment { background: var(--intersection-bg); border-color: var(--intersection-border); }
+  .pass-col h4 { font-size: 1.1rem; margin-bottom: 14px; }
+  .pass-col.primary h4 { color: #b45309; }
+  .pass-col.enrichment h4 { color: var(--intersection); }
+  .pass-step {
+    display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;
+    font-size: 0.82rem; color: #334155;
+  }
+  .pass-step-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.75rem; color: white;
+  }
+  .pass-col.primary .pass-step-num { background: #b45309; }
+  .pass-col.enrichment .pass-step-num { background: var(--intersection); }
+  .pass-step-text { line-height: 1.5; }
+  .pass-step-text strong { font-weight: 700; }
+
+  /* ===== DIAGRAM 8: Variable Resolution ===== */
+  .var-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    font-size: 0.85rem;
+  }
+  .var-table th {
+    background: #0f172a; color: #94a3b8; text-align: left;
+    padding: 10px 14px; font-size: 0.75rem; text-transform: uppercase;
+    letter-spacing: 0.05em; border-bottom: 1px solid #334155;
+  }
+  .var-table td {
+    padding: 10px 14px; border-bottom: 1px solid #1e293b;
+    color: #e2e8f0;
+  }
+  .var-table tr:hover td { background: #0f172a; }
+  .var-table code {
+    background: #0f172a; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.8rem; color: #60a5fa;
+  }
+
+  /* Annotations */
+  .note {
+    background: #172554; border-left: 3px solid #3b82f6;
+    padding: 12px 16px; border-radius: 0 8px 8px 0;
+    font-size: 0.83rem; color: #93c5fd; margin: 16px 0;
+  }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-bottom: -1px; position: relative; z-index: 1; }
+  .tab {
+    padding: 10px 20px; border-radius: 8px 8px 0 0; cursor: pointer;
+    font-size: 0.85rem; font-weight: 600; border: 1px solid transparent;
+    background: #0f172a; color: #64748b; transition: all 0.2s;
+  }
+  .tab.active { background: #1e293b; color: #e2e8f0; border-color: #334155; border-bottom-color: #1e293b; }
+  .tab:hover:not(.active) { color: #94a3b8; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* SVG arrows */
+  .arrow-down {
+    text-align: center; padding: 4px 0; color: #475569;
+    font-size: 1.2rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .pipeline-flow { flex-direction: column; min-width: auto; align-items: center; }
+    .pipe-arrow { transform: rotate(90deg); min-width: auto; padding: 0; }
+  }
+
+  .section-intro { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; max-width: 800px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Extraction Pipeline v3.5</h1>
+<p class="subtitle">Generic Runtime + Specialized Prompt Packets</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--common)"></div> Common (shared by all jobs)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--asset)"></div> Asset-specific (per source type)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--type)"></div> Type-specific (per extraction type)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--intersection)"></div> Intersection (TYPE x ASSET)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--infra)"></div> Infrastructure (runtime)</div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">1</span> End-to-End Pipeline Flow</h2>
+<p class="section-intro">A job enters via trigger script, queues in Redis, gets picked up by the K8s worker, which invokes the orchestrator skill. The skill spawns agents that do the actual extraction.</p>
+
+<div class="diagram">
+  <div class="pipeline-flow">
+    <div class="pipe-stage">
+      <div class="pipe-box infra">trigger-extract.py</div>
+      <div class="pipe-label">Query Neo4j for unprocessed sources</div>
+      <div class="pipe-file">scripts/trigger-extract.py</div>
+    </div>
+    <div class="pipe-arrow">
+      <div>→</div>
+    </div>
+    <div class="pipe-stage">
+      <div class="pipe-box infra">Redis Queue</div>
+      <div class="pipe-label">extract:pipeline<br>(LPUSH / BRPOP)</div>
+      <div class="pipe-file">JSON payload per source</div>
+    </div>
+    <div class="pipe-arrow">
+      <div>→</div>
+    </div>
+    <div class="pipe-stage">
+      <div class="pipe-box infra">extraction_worker.py</div>
+      <div class="pipe-label">K8s pod, KEDA autoscale,<br>Claude Agent SDK</div>
+      <div class="pipe-file">scripts/extraction_worker.py</div>
+    </div>
+    <div class="pipe-arrow">
+      <div>→</div>
+    </div>
+    <div class="pipe-stage">
+      <div class="pipe-box common">/extract Skill</div>
+      <div class="pipe-label">Orchestrator — parses args, spawns agents</div>
+      <div class="pipe-file">skills/extract/SKILL.md</div>
+    </div>
+    <div class="pipe-arrow">
+      <div>→</div>
+    </div>
+    <div class="pipe-stage">
+      <div class="pipe-box agent">Primary Agent</div>
+      <div class="pipe-label">Loads 8 files,<br>extracts from main content</div>
+      <div class="pipe-file">agents/extraction-primary-agent.md</div>
+    </div>
+    <div class="pipe-arrow">
+      <div>→</div>
+    </div>
+    <div class="pipe-stage">
+      <div class="pipe-box agent" style="background:var(--intersection-bg); color:var(--intersection); border-color:var(--intersection-border);">Enrichment Agent</div>
+      <div class="pipe-label">Conditional — only if intersection file exists</div>
+      <div class="pipe-file">agents/extraction-enrichment-agent.md</div>
+    </div>
+    <div class="pipe-arrow">
+      <div>→</div>
+    </div>
+    <div class="pipe-stage">
+      <div class="pipe-box result">Result JSON</div>
+      <div class="pipe-label">Status + counts written to /tmp</div>
+      <div class="pipe-file">/tmp/extract_pass_*.json</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">2</span> Who Does the Extraction?</h2>
+<p class="section-intro">Three layers: a routing skill, and two identical agent shells that differ only in which "working brief" they load.</p>
+
+<div class="diagram">
+  <div class="orch-flow">
+    <div class="orch-node skill">
+      <div class="title">extract/SKILL.md</div>
+      <div class="detail">Orchestrator Skill (runs in main Claude session)</div>
+      <div class="detail">Parses args → spawns agents → combines results</div>
+    </div>
+
+    <div class="arrow-down">▼</div>
+    <div style="font-size:0.75rem; color:#64748b; text-align:center;">Agent tool (foreground, wait)</div>
+
+    <div class="orch-node agent-p" style="margin-top:8px;">
+      <div class="title">extraction-primary-agent</div>
+      <div class="detail">Sub-agent (Opus, ultrathink, dontAsk)</div>
+      <div class="detail">Loads primary-pass.md as working brief</div>
+      <div class="detail">Extracts from PRIMARY source content</div>
+    </div>
+
+    <div class="arrow-down">▼</div>
+
+    <div class="orch-gate">
+      Gate: do both files exist?<br>
+      <code style="font-size:0.75rem;">types/{TYPE}/enrichment-pass.md</code> AND <code style="font-size:0.75rem;">types/{TYPE}/assets/{ASSET}-enrichment.md</code>
+    </div>
+
+    <div style="display:flex; gap:60px; justify-content:center; margin-top:12px;">
+      <div style="text-align:center;">
+        <div style="font-size:0.8rem; color:#10b981; margin-bottom:8px;">YES → spawn</div>
+        <div class="orch-node agent-e">
+          <div class="title">extraction-enrichment-agent</div>
+          <div class="detail">Sub-agent (Opus, ultrathink, dontAsk)</div>
+          <div class="detail">Loads enrichment-pass.md as working brief</div>
+          <div class="detail">Extracts from SECONDARY content</div>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:0.8rem; color:#ef4444; margin-bottom:8px;">NO → skip</div>
+        <div style="padding:20px; border:2px dashed #334155; border-radius:10px; color:#64748b; font-size:0.85rem;">
+          Report primary-only results
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+  Both agent shells are <strong>identical generic code</strong>. The only difference is slot #2: primary loads <code>primary-pass.md</code>, enrichment loads <code>enrichment-pass.md</code>. All specialization comes from the files they read.
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">3</span> Content Loading — The 8-Slot Waterfall</h2>
+<p class="section-intro">Each agent reads exactly 8 files in order before starting work. The files are resolved by substituting <code>{TYPE}</code> and <code>{ASSET}</code> into path templates. This is what makes the pipeline generic.</p>
+
+<div class="diagram">
+  <div class="waterfall">
+    <div class="wf-header">
+      <div>Slot</div>
+      <div>File</div>
+      <div>Path Template</div>
+      <div>Role</div>
+    </div>
+
+    <div class="wf-row">
+      <div class="wf-slot type">1</div>
+      <div class="wf-name">core-contract.md</div>
+      <div class="wf-path">types/<strong>{TYPE}</strong>/core-contract.md</div>
+      <div class="wf-role">Schema, IDs, validation rules, write path (reference)</div>
+    </div>
+
+    <div class="wf-row" style="background:#0f172a;">
+      <div class="wf-slot type">2</div>
+      <div class="wf-name" style="font-weight:800;">primary-pass.md <span style="font-size:0.7rem; opacity:0.6;">or enrichment-pass.md</span></div>
+      <div class="wf-path">types/<strong>{TYPE}</strong>/{pass}-pass.md</div>
+      <div class="wf-role"><strong>THE WORKING BRIEF — agent follows this start-to-finish</strong></div>
+    </div>
+
+    <div class="wf-row">
+      <div class="wf-slot asset">3</div>
+      <div class="wf-name">{ASSET}.md</div>
+      <div class="wf-path">assets/<strong>{ASSET}</strong>.md</div>
+      <div class="wf-role">How to read this source document (structure, fallbacks, metadata)</div>
+    </div>
+
+    <div class="wf-row" style="background: rgba(239,68,68,0.05);">
+      <div class="wf-slot intersection">4</div>
+      <div class="wf-name">{ASSET}-{pass}.md</div>
+      <div class="wf-path">types/<strong>{TYPE}</strong>/assets/<strong>{ASSET}</strong>-{pass}.md</div>
+      <div class="wf-role">TYPE x ASSET extraction rules (optional — load if exists)</div>
+    </div>
+
+    <div class="wf-row">
+      <div class="wf-slot common">5</div>
+      <div class="wf-name">queries-common.md</div>
+      <div class="wf-path">queries-common.md</div>
+      <div class="wf-role">Shared Cypher: context, caches, inventory, fulltext</div>
+    </div>
+
+    <div class="wf-row">
+      <div class="wf-slot asset">6</div>
+      <div class="wf-name">{ASSET}-queries.md</div>
+      <div class="wf-path">assets/<strong>{ASSET}</strong>-queries.md</div>
+      <div class="wf-role">Asset-specific data fetch queries</div>
+    </div>
+
+    <div class="wf-row">
+      <div class="wf-slot type">7</div>
+      <div class="wf-name">{TYPE}-queries.md</div>
+      <div class="wf-path">types/<strong>{TYPE}</strong>/<strong>{TYPE}</strong>-queries.md</div>
+      <div class="wf-role">Type-specific lookup queries (existing items, baselines)</div>
+    </div>
+
+    <div class="wf-row">
+      <div class="wf-slot common">8</div>
+      <div class="wf-name">evidence-standards.md</div>
+      <div class="wf-path">evidence-standards.md</div>
+      <div class="wf-role">Universal anti-hallucination guardrails</div>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Variable resolution example:</strong> <code>TYPE=guidance</code>, <code>ASSET=transcript</code>, <code>pass=primary</code><br>
+  Slot 1 → <code>types/guidance/core-contract.md</code><br>
+  Slot 4 → <code>types/guidance/assets/transcript-primary.md</code> (exists ✓)
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">4</span> Content Loading Visualized for <code>guidance × transcript</code></h2>
+<p class="section-intro">Here's exactly what the primary and enrichment agents load for the most common job. Color = file category.</p>
+
+<div class="diagram">
+  <div class="two-pass">
+    <div class="pass-col primary">
+      <h4>Primary Agent loads:</h4>
+      <div class="pass-step">
+        <div class="pass-step-num">1</div>
+        <div class="pass-step-text"><strong>core-contract.md</strong> (850 lines)<br>Guidance schema, IDs, normalization, XBRL matching</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">2</div>
+        <div class="pass-step-text"><strong>primary-pass.md</strong> (~180 lines)<br>FETCH→EXTRACT→VALIDATE→WRITE playbook</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">3</div>
+        <div class="pass-step-text"><strong>transcript.md</strong> (~156 lines)<br>PR structure, Q&A fallbacks, period identification</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">4</div>
+        <div class="pass-step-text"><strong>transcript-primary.md</strong> (~38 lines)<br>Speaker hierarchy, what to extract from PR</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">5</div>
+        <div class="pass-step-text"><strong>queries-common.md</strong> (320 lines)<br>Company lookup, FYE, caches, fulltext</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">6</div>
+        <div class="pass-step-text"><strong>transcript-queries.md</strong> (~105 lines)<br>3A-3G: fetch transcript content</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">7</div>
+        <div class="pass-step-text"><strong>guidance-queries.md</strong> (~100 lines)<br>7A-7F: existing guidance lookup</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">8</div>
+        <div class="pass-step-text"><strong>evidence-standards.md</strong> (13 lines)<br>No fabrication, exact quotes, null if unsure</div>
+      </div>
+    </div>
+
+    <div class="pass-col enrichment">
+      <h4>Enrichment Agent loads:</h4>
+      <div class="pass-step">
+        <div class="pass-step-num">1</div>
+        <div class="pass-step-text"><strong>core-contract.md</strong> (same)</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">2</div>
+        <div class="pass-step-text"><strong>enrichment-pass.md</strong> (~110 lines)<br>FETCH→LOAD EXISTING→SECONDARY→VERDICT→WRITE</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">3</div>
+        <div class="pass-step-text"><strong>transcript.md</strong> (same)</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">4</div>
+        <div class="pass-step-text"><strong>transcript-enrichment.md</strong> (~95 lines)<br>Q&A extraction rules, verdicts, source_refs</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">5</div>
+        <div class="pass-step-text"><strong>queries-common.md</strong> (same)</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">6</div>
+        <div class="pass-step-text"><strong>transcript-queries.md</strong> (same)</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">7</div>
+        <div class="pass-step-text"><strong>guidance-queries.md</strong> (same)</div>
+      </div>
+      <div class="pass-step">
+        <div class="pass-step-num">8</div>
+        <div class="pass-step-text"><strong>evidence-standards.md</strong> (same)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+  Slots 1, 3, 5, 6, 7, 8 are <strong>identical</strong> between passes. Only slots 2 and 4 change — the working brief and the intersection file. This is the entire mechanism for two-pass extraction.
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">5</span> The 3-Tier Query System</h2>
+<p class="section-intro">Queries are split across three files so that each tier is independently reusable. Every agent gets all three tiers loaded into its context.</p>
+
+<div class="diagram">
+  <div class="query-tiers">
+    <div class="query-tier t1">
+      <h4>Tier 1 — Common</h4>
+      <div style="font-size:0.75rem; margin-bottom:8px; color:#1e40af;">queries-common.md (320 lines)</div>
+      <ul>
+        <li>1A-1D: Company/CIK/FYE/period resolution</li>
+        <li>2A-2B: XBRL concept + member caches</li>
+        <li>8A: Data inventory audit</li>
+        <li>9A-9F: Fulltext / keyword search</li>
+      </ul>
+      <div style="margin-top:12px; font-size:0.75rem; color:#1e40af; font-style:italic;">
+        Shared by every TYPE × ASSET combination
+      </div>
+    </div>
+    <div class="query-tier t2">
+      <h4>Tier 2 — Asset Queries</h4>
+      <div style="font-size:0.75rem; margin-bottom:8px; color:#065f46;">{ASSET}-queries.md</div>
+      <ul>
+        <li>transcript: 3A-3G (PR, Q&A, fallbacks)</li>
+        <li>8k: 4A-4G (items, exhibits, sections)</li>
+        <li>10q: 5A-5E (MD&A, financials)</li>
+        <li>news: 6A-6E (content, batch, context)</li>
+      </ul>
+      <div style="margin-top:12px; font-size:0.75rem; color:#065f46; font-style:italic;">
+        "How to fetch data from this source type"
+      </div>
+    </div>
+    <div class="query-tier t3">
+      <h4>Tier 3 — Type Queries</h4>
+      <div style="font-size:0.75rem; margin-bottom:8px; color:#92400e;">{TYPE}-queries.md</div>
+      <ul>
+        <li>guidance: 7A (existing tags)</li>
+        <li>guidance: 7B (latest per metric)</li>
+        <li>guidance: 7D (prior extractions)</li>
+        <li>guidance: 7E (full readback)</li>
+        <li>guidance: 7F (baseline frequency)</li>
+      </ul>
+      <div style="margin-top:12px; font-size:0.75rem; color:#92400e; font-style:italic;">
+        "How to look up existing items of this type"
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">6</span> Full File Tree (Color-Coded)</h2>
+<p class="section-intro">All files under <code>.claude/skills/extract/</code>. Colors match the legend at the top.</p>
+
+<div class="diagram">
+  <div class="file-tree">
+    <div class="ft-line ft-dir"><span class="ft-indent"></span><span class="ft-icon">📁</span><span class="ft-name">.claude/skills/extract/</span></div>
+
+    <div class="ft-line ft-common"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">SKILL.md</span><span class="ft-desc">— Orchestrator (routes to agents)</span></div>
+    <div class="ft-line ft-common"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">evidence-standards.md</span><span class="ft-desc">— Universal guardrails (slot 8)</span></div>
+    <div class="ft-line ft-common"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">queries-common.md</span><span class="ft-desc">— Shared Cypher queries (slot 5)</span></div>
+
+    <div class="ft-line ft-dir"><span class="ft-indent">  </span><span class="ft-icon">📁</span><span class="ft-name">assets/</span><span class="ft-desc">— One profile + one query file per source type</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">transcript.md</span><span class="ft-desc">— How to read transcripts (slot 3)</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">transcript-queries.md</span><span class="ft-desc">— Fetch transcript data (slot 6)</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">8k.md</span><span class="ft-desc">— How to read 8-K filings (slot 3)</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">8k-queries.md</span><span class="ft-desc">— Fetch 8-K data (slot 6)</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">10q.md</span><span class="ft-desc">— How to read 10-Q/10-K filings (slot 3)</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">10q-queries.md</span><span class="ft-desc">— Fetch 10-Q data (slot 6)</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">news.md</span><span class="ft-desc">— How to read news articles (slot 3)</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">news-queries.md</span><span class="ft-desc">— Fetch news data (slot 6)</span></div>
+
+    <div class="ft-line ft-dir"><span class="ft-indent">  </span><span class="ft-icon">📁</span><span class="ft-name">types/</span><span class="ft-desc">— One directory per extraction type</span></div>
+    <div class="ft-line ft-dir"><span class="ft-indent">    </span><span class="ft-icon">📁</span><span class="ft-name">guidance/</span><span class="ft-desc">— The "guidance" extraction type</span></div>
+    <div class="ft-line ft-type"><span class="ft-indent">      </span><span class="ft-icon">📄</span><span class="ft-name">core-contract.md</span><span class="ft-desc">— Schema, IDs, validation, write path (slot 1)</span></div>
+    <div class="ft-line ft-type"><span class="ft-indent">      </span><span class="ft-icon">📄</span><span class="ft-name">primary-pass.md</span><span class="ft-desc">— Primary working brief (slot 2)</span></div>
+    <div class="ft-line ft-type"><span class="ft-indent">      </span><span class="ft-icon">📄</span><span class="ft-name">enrichment-pass.md</span><span class="ft-desc">— Enrichment working brief (slot 2)</span></div>
+    <div class="ft-line ft-type"><span class="ft-indent">      </span><span class="ft-icon">📄</span><span class="ft-name">guidance-queries.md</span><span class="ft-desc">— Type-specific lookups (slot 7)</span></div>
+
+    <div class="ft-line ft-dir"><span class="ft-indent">      </span><span class="ft-icon">📁</span><span class="ft-name">assets/</span><span class="ft-desc">— Intersection files (TYPE x ASSET rules)</span></div>
+    <div class="ft-line ft-intersection"><span class="ft-indent">        </span><span class="ft-icon">📄</span><span class="ft-name">transcript-primary.md</span><span class="ft-desc">— Guidance from PR: speaker hierarchy (slot 4)</span></div>
+    <div class="ft-line ft-intersection"><span class="ft-indent">        </span><span class="ft-icon">📄</span><span class="ft-name">transcript-enrichment.md</span><span class="ft-desc">— Guidance from Q&A: verdicts, source_refs (slot 4)</span></div>
+    <div class="ft-line ft-intersection"><span class="ft-indent">        </span><span class="ft-icon">📄</span><span class="ft-name">8k-primary.md</span><span class="ft-desc">— Guidance from 8-K exhibits (slot 4)</span></div>
+    <div class="ft-line ft-intersection"><span class="ft-indent">        </span><span class="ft-icon">📄</span><span class="ft-name">news-primary.md</span><span class="ft-desc">— Guidance from news articles (slot 4)</span></div>
+    <div class="ft-line ft-intersection"><span class="ft-indent">        </span><span class="ft-icon">📄</span><span class="ft-name">10q-primary.md</span><span class="ft-desc">— Guidance from MD&A sections (slot 4)</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">7</span> How to Add a New Extraction Type</h2>
+<p class="section-intro">Say you want to extract "sentiment" instead of "guidance". Here's exactly what you create vs what you reuse.</p>
+
+<div class="diagram">
+  <div class="recipe">
+    <div class="recipe-col">
+      <h3 class="create">Files You CREATE (new)</h3>
+
+      <div class="recipe-item">
+        <div class="recipe-badge required">Required</div>
+        <div class="recipe-text">
+          <strong>core-contract.md</strong>
+          <span class="path">types/sentiment/core-contract.md</span>
+          Graph schema, node types, ID format, validation rules, write path
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge required">Required</div>
+        <div class="recipe-text">
+          <strong>primary-pass.md</strong>
+          <span class="path">types/sentiment/primary-pass.md</span>
+          Step-by-step execution playbook for primary extraction
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge required">Required</div>
+        <div class="recipe-text">
+          <strong>type-queries.md</strong>
+          <span class="path">types/sentiment/sentiment-queries.md</span>
+          Queries to look up existing sentiment items in Neo4j
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge required">Required</div>
+        <div class="recipe-text">
+          <strong>Writer script</strong>
+          <span class="path">scripts/sentiment_writer.py</span>
+          Deterministic Cypher MERGE writer for this type's nodes
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge optional">Optional</div>
+        <div class="recipe-text">
+          <strong>enrichment-pass.md</strong>
+          <span class="path">types/sentiment/enrichment-pass.md</span>
+          Only needed if two-pass extraction makes sense
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge optional">Optional</div>
+        <div class="recipe-text">
+          <strong>Intersection files</strong>
+          <span class="path">types/sentiment/assets/transcript-primary.md</span>
+          Only needed if extraction rules differ by source type
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe-col">
+      <h3 class="reuse">Files You REUSE (zero changes)</h3>
+
+      <div class="recipe-item">
+        <div class="recipe-badge reuse">Reuse</div>
+        <div class="recipe-text">
+          <strong>SKILL.md</strong> — Orchestrator routes automatically via <code>{TYPE}</code> variable
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge reuse">Reuse</div>
+        <div class="recipe-text">
+          <strong>extraction-primary-agent.md</strong> — Generic shell, loads files by convention
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge reuse">Reuse</div>
+        <div class="recipe-text">
+          <strong>extraction-enrichment-agent.md</strong> — Generic shell, same mechanism
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge reuse">Reuse</div>
+        <div class="recipe-text">
+          <strong>evidence-standards.md</strong> — Universal guardrails apply to all types
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge reuse">Reuse</div>
+        <div class="recipe-text">
+          <strong>queries-common.md</strong> — Context resolution, caches, fulltext
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge reuse">Reuse</div>
+        <div class="recipe-text">
+          <strong>assets/*.md</strong> — All asset profiles and queries remain as-is
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge infra">Reuse</div>
+        <div class="recipe-text">
+          <strong>trigger-extract.py</strong> — Add asset type to ASSET_QUERIES dict
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge infra">Reuse</div>
+        <div class="recipe-text">
+          <strong>extraction_worker.py</strong> — Already generic, no changes needed
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge infra">Reuse</div>
+        <div class="recipe-text">
+          <strong>K8s deployment</strong> — Same worker, same queue, same autoscaling
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">8</span> How to Add a New Asset (Source Type)</h2>
+<p class="section-intro">Say you want to extract from "press-release" documents. Here's what you create.</p>
+
+<div class="diagram">
+  <div class="recipe">
+    <div class="recipe-col">
+      <h3 class="create">Files You CREATE (new)</h3>
+
+      <div class="recipe-item">
+        <div class="recipe-badge required">Required</div>
+        <div class="recipe-text">
+          <strong>Asset profile</strong>
+          <span class="path">assets/press-release.md</span>
+          How to read this document type: structure, sections, fallbacks, metadata
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge required">Required</div>
+        <div class="recipe-text">
+          <strong>Asset queries</strong>
+          <span class="path">assets/press-release-queries.md</span>
+          Cypher queries to fetch document content from Neo4j
+        </div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge optional">Optional</div>
+        <div class="recipe-text">
+          <strong>Intersection files</strong> (per existing type)
+          <span class="path">types/guidance/assets/press-release-primary.md</span>
+          <span class="path">types/guidance/assets/press-release-enrichment.md</span>
+          Only if extraction from this asset requires special rules for a given type
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe-col">
+      <h3 class="reuse">Files You REUSE (zero changes)</h3>
+
+      <div class="recipe-item">
+        <div class="recipe-badge reuse">Reuse</div>
+        <div class="recipe-text">Everything from Diagram 7's reuse column — orchestrator, agents, queries-common, evidence-standards, infrastructure</div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge reuse">Reuse</div>
+        <div class="recipe-text">All existing type directories untouched — core-contract, working briefs, type-queries</div>
+      </div>
+
+      <div class="recipe-item">
+        <div class="recipe-badge infra">1-line</div>
+        <div class="recipe-text">
+          <strong>trigger-extract.py</strong> — Add entry to <code>ASSET_QUERIES</code> dict
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">9</span> The Reusability Matrix</h2>
+<p class="section-intro">Every cell in the TYPE × ASSET matrix uses the same runtime. Specialization comes entirely from which files exist on disk.</p>
+
+<div class="diagram">
+  <table class="var-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th style="color:var(--asset)">transcript</th>
+        <th style="color:var(--asset)">8k</th>
+        <th style="color:var(--asset)">10q</th>
+        <th style="color:var(--asset)">news</th>
+        <th style="color:var(--asset); opacity:0.4">press-release (new)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--type); font-weight:700;">guidance</td>
+        <td>
+          <code>transcript-primary.md</code><br>
+          <code>transcript-enrichment.md</code><br>
+          <span style="font-size:0.75rem; color:#10b981;">2-pass ✓</span>
+        </td>
+        <td>
+          <code>8k-primary.md</code><br>
+          <span style="font-size:0.75rem; color:#f59e0b;">1-pass only</span>
+        </td>
+        <td>
+          <code>10q-primary.md</code><br>
+          <span style="font-size:0.75rem; color:#f59e0b;">1-pass only</span>
+        </td>
+        <td>
+          <code>news-primary.md</code><br>
+          <span style="font-size:0.75rem; color:#f59e0b;">1-pass only</span>
+        </td>
+        <td style="opacity:0.4">
+          Create if needed<br>
+          <span style="font-size:0.75rem;">Or skip — runs without</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="color:var(--type); font-weight:700; opacity:0.4;">sentiment (new)</td>
+        <td style="opacity:0.4">Create if needed</td>
+        <td style="opacity:0.4">Create if needed</td>
+        <td style="opacity:0.4">Create if needed</td>
+        <td style="opacity:0.4">Create if needed</td>
+        <td style="opacity:0.4">Create if needed</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note" style="margin-top:20px;">
+    <strong>Key insight:</strong> The orchestrator checks for intersection files via <strong>file existence</strong>, not config.
+    If <code>types/{TYPE}/assets/{ASSET}-enrichment.md</code> exists → enrichment runs.
+    If it doesn't exist → primary-only. No config file, no registry, no code changes.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">10</span> Execution Timeline (Single Job)</h2>
+<p class="section-intro">What happens in order when <code>trigger-extract.py AAPL --type guidance --asset transcript</code> runs.</p>
+
+<div class="diagram">
+  <div style="max-width:700px; margin:0 auto;">
+
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:6px;">
+      <div style="min-width:32px; padding:6px 0; text-align:center; color:var(--infra); font-weight:800; font-size:0.8rem;">T0</div>
+      <div style="flex:1; padding:10px 16px; background:var(--infra-bg); border-radius:8px; border:1px solid var(--infra-border); color:var(--infra); font-size:0.85rem;">
+        <strong>trigger-extract.py</strong> queries Neo4j for AAPL transcripts with <code>guidance_status=null</code><br>
+        Sets <code>guidance_status='in_progress'</code>, pushes JSON to Redis <code>extract:pipeline</code>
+      </div>
+    </div>
+
+    <div style="text-align:center; color:#334155; padding:2px 0;">│</div>
+
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:6px;">
+      <div style="min-width:32px; padding:6px 0; text-align:center; color:var(--infra); font-weight:800; font-size:0.8rem;">T1</div>
+      <div style="flex:1; padding:10px 16px; background:var(--infra-bg); border-radius:8px; border:1px solid var(--infra-border); color:var(--infra); font-size:0.85rem;">
+        <strong>extraction_worker.py</strong> BRPOPs job, spawns Claude Agent SDK with:<br>
+        <code>/extract AAPL transcript {SOURCE_ID} TYPE=guidance MODE=write SOURCE_TYPE=transcript</code>
+      </div>
+    </div>
+
+    <div style="text-align:center; color:#334155; padding:2px 0;">│</div>
+
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:6px;">
+      <div style="min-width:32px; padding:6px 0; text-align:center; color:var(--common); font-weight:800; font-size:0.8rem;">T2</div>
+      <div style="flex:1; padding:10px 16px; background:var(--common-bg); border-radius:8px; border:1px solid var(--common-border); color:var(--common); font-size:0.85rem;">
+        <strong>SKILL.md</strong> parses args → spawns <code>extraction-primary-agent</code> via Agent tool
+      </div>
+    </div>
+
+    <div style="text-align:center; color:#334155; padding:2px 0;">│</div>
+
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:6px;">
+      <div style="min-width:32px; padding:6px 0; text-align:center; color:var(--type); font-weight:800; font-size:0.8rem;">T3</div>
+      <div style="flex:1; padding:10px 16px; background:var(--type-bg); border-radius:8px; border:1px solid var(--type-border); color:#92400e; font-size:0.85rem;">
+        <strong>Primary agent</strong> reads 8 files (slots 1-8) → executes primary-pass.md:<br>
+        FETCH context → FETCH transcript PR → EXTRACT guidance items → VALIDATE via scripts → WRITE via guidance_writer.py<br>
+        Writes result to <code>/tmp/extract_pass_guidance_primary_{SRC}.json</code>
+      </div>
+    </div>
+
+    <div style="text-align:center; color:#334155; padding:2px 0;">│</div>
+
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:6px;">
+      <div style="min-width:32px; padding:6px 0; text-align:center; color:var(--common); font-weight:800; font-size:0.8rem;">T4</div>
+      <div style="flex:1; padding:10px 16px; background:var(--common-bg); border-radius:8px; border:1px solid var(--common-border); color:var(--common); font-size:0.85rem;">
+        <strong>SKILL.md</strong> checks: do <code>enrichment-pass.md</code> AND <code>transcript-enrichment.md</code> exist? → <strong>YES</strong><br>
+        Spawns <code>extraction-enrichment-agent</code>
+      </div>
+    </div>
+
+    <div style="text-align:center; color:#334155; padding:2px 0;">│</div>
+
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:6px;">
+      <div style="min-width:32px; padding:6px 0; text-align:center; color:var(--intersection); font-weight:800; font-size:0.8rem;">T5</div>
+      <div style="flex:1; padding:10px 16px; background:var(--intersection-bg); border-radius:8px; border:1px solid var(--intersection-border); color:var(--intersection); font-size:0.85rem;">
+        <strong>Enrichment agent</strong> reads 8 files → executes enrichment-pass.md:<br>
+        FETCH context → LOAD primary items (query 7E) → LOAD Q&A content → VERDICT each exchange → COMPLETENESS check (7F) → VALIDATE → WRITE changed/new only
+      </div>
+    </div>
+
+    <div style="text-align:center; color:#334155; padding:2px 0;">│</div>
+
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:6px;">
+      <div style="min-width:32px; padding:6px 0; text-align:center; color:var(--infra); font-weight:800; font-size:0.8rem;">T6</div>
+      <div style="flex:1; padding:10px 16px; background:var(--infra-bg); border-radius:8px; border:1px solid var(--infra-border); color:var(--infra); font-size:0.85rem;">
+        <strong>Worker</strong> reads result file → sets <code>guidance_status='completed'</code> on Transcript node in Neo4j
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">11</span> The Core Design Principle</h2>
+
+<div class="diagram" style="text-align:center; padding:40px;">
+  <div style="font-size:1.4rem; color:#f1f5f9; font-weight:300; max-width:700px; margin:0 auto; line-height:1.8;">
+    <span style="color:var(--infra); font-weight:700;">Generic runtime</span>
+    <span style="color:#475569;">(trigger → queue → worker → skill → 2 agent shells)</span>
+    <br>+<br>
+    <span style="color:var(--type); font-weight:700;">Specialized prompt packets</span>
+    <span style="color:#475569;">(resolved at runtime via</span>
+    <code style="color:#60a5fa; font-size:1.1rem;">{TYPE}</code>
+    <span style="color:#475569;">×</span>
+    <code style="color:#60a5fa; font-size:1.1rem;">{ASSET}</code>
+    <span style="color:#475569;">path convention)</span>
+  </div>
+
+  <div style="margin-top:32px; display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
+    <div style="padding:12px 20px; border-radius:8px; background:#172554; border:1px solid #1e40af; color:#93c5fd; font-size:0.85rem;">
+      Zero code changes to add a type
+    </div>
+    <div style="padding:12px 20px; border-radius:8px; background:#172554; border:1px solid #1e40af; color:#93c5fd; font-size:0.85rem;">
+      Zero code changes to add an asset
+    </div>
+    <div style="padding:12px 20px; border-radius:8px; background:#172554; border:1px solid #1e40af; color:#93c5fd; font-size:0.85rem;">
+      Enrichment gated by file existence
+    </div>
+    <div style="padding:12px 20px; border-radius:8px; background:#172554; border:1px solid #1e40af; color:#93c5fd; font-size:0.85rem;">
+      Intersection rules are optional
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

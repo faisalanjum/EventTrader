@@ -2,7 +2,7 @@
 
 Single source of truth for all done/open/future items across the extraction pipeline.
 
-**Updated**: 2026-03-07 (post-team-audit of 6 plan files)
+**Updated**: 2026-03-08 (consolidated contagion audit: Categories A/B/C/E under single section)
 
 ---
 
@@ -47,6 +47,72 @@ Single source of truth for all done/open/future items across the extraction pipe
 | 9 | Enrichment pass JSON envelope format | Explicit example added to `enrichment-pass.md` |
 | 10 | Query 2B Cypher syntax error | INVALID — query is syntactically correct. Runtime error was Neo4j version quirk, agents work around it. |
 | 11 | Enrichment agent missing `Edit` tool | NOT APPLICABLE — enrichment workflow uses Write only, never Edit. |
+
+---
+
+## STILL OPEN — CONTAGION RISKS
+
+All remaining prompt-layer contamination across the extraction pipeline. Four categories by scope.
+
+### Category A: ASSET-specific content in COMMON files (loaded by ALL types × ALL assets)
+
+Every extraction agent loads `queries-common.md` at slot 5. These lines leak asset/type context into any future non-guidance type.
+
+| File:Line | Content | Impact |
+|-----------|---------|--------|
+| `queries-common.md:308` | "6B (Guidance-channel news, dates required)" | Guidance-flavored wording visible to all agents |
+| `queries-common.md:300-307` | Execution Order lists asset-specific query sequences (4A earnings 8-K, 3A transcripts, 5B MD&A) | Asset-specific workflow guide visible to all agents |
+| `queries-common.md:184` | `r.items CONTAINS 'Item 2.02'` in Section 8A inventory query | 8-K earnings-specific filter in common inventory query |
+
+### Category B: ASSET-specific content in TYPE-level files (loaded for ALL assets when TYPE=guidance)
+
+A new asset added to the guidance type sees instructions for other assets.
+
+| File:Line | Content | Impact |
+|-----------|---------|--------|
+| `primary-pass.md:7` | "prepared remarks for transcripts, full content for other assets" | Transcript-specific scope in type-wide scope statement |
+| `primary-pass.md:24-33` | STEP 2 routing table (transcript→3B, 8k→4G/4C, 10q→5B, news→6A) | New asset requires editing this table |
+| `primary-pass.md:37` | "For transcripts: Extract from Prepared Remarks only..." | Transcript-specific extraction scope; belongs in `transcript-primary.md` |
+| `primary-pass.md:93` | "News: company guidance only — ignore analyst estimates" | News-specific quality filter; belongs in `news-primary.md` |
+| `primary-pass.md:169-199` | JSON example uses `source_type: "transcript"`, `section: "CFO Prepared Remarks"`, `source_key: "full"` | Transcript-biased example in type-wide payload format |
+| `primary-pass.md:201` | "These differ for 10-K filings routed through the `10q` asset pipeline" | 10q/10k-specific remapping detail |
+| `primary-pass.md:205` | "For transcripts, use PreparedRemark ID... For 8-K reports, use exhibit/item IDs" | Asset-specific source_refs instructions |
+| `core-contract.md:99` | `source_refs` description: "e.g., QAExchange IDs for transcripts" | Transcript-specific example in schema definition |
+| `core-contract.md:124` | `section` field example: `"CFO Prepared Remarks"` | Transcript-biased example in extraction fields table |
+| `core-contract.md:509` | "Transcript \| Highest \| YES — full scan (PR + Q&A)" | Asset-specific richness table |
+| `core-contract.md:528-534` | Source Type Mapping table (source_key + given_date per asset) | Asset-specific mapping in type reference |
+| `core-contract.md:554` | "Transcripts: Two-pass extraction — prepared remarks via primary agent, Q&A enrichment" | Transcript-specific dedup rule |
+| `core-contract.md:571` | "News: company guidance only" | News-specific quality filter in type reference |
+| `core-contract.md:697-699` | Empty-Content Rules per Source Type (transcript, 8-K, news, 10q/10k conditions) | Asset-specific empty rules |
+| `primary-pass.md:116-118` | "In earnings calls and SEC filings, ALL period references are fiscal" | Scoped to transcripts/filings but loaded for news too |
+| `core-contract.md:125` | `source_key` examples: `"EX-99.1"`, `"full"`, `"title"`, `"MD&A"` | Hardcodes current asset source_keys in fields table |
+| `core-contract.md:127` | `source_type` enum: `8k, transcript, news, 10q, 10k` | Hardcodes current asset set; new asset needs edit |
+| `core-contract.md:517-524` | Routing table mapping source types → asset profile files | Hardcodes current 4-asset file map; new asset needs row |
+| `core-contract.md:651` | ASSET enum: `transcript, 8k, news, 10q` | Hardcodes current asset set in invocation spec |
+| `core-contract.md:710-723` | Reference Files table lists all 8 asset-specific files | Hardcodes current file inventory; new asset needs rows |
+
+### Category C: Cross-TYPE contagion (announcement rules in guidance type)
+
+`extraction_worker.py:78` envisions `announcement` as a separate type. These lines embed announcement extraction rules into guidance, causing overlap when `announcement` ships. See also [Top Note #2](#open--top-note-2-corporate-announcements) below.
+
+| File:Line | Content |
+|-----------|---------|
+| `primary-pass.md:92` | "Corporate announcements ARE extractable — management decisions that allocate specific capital..." |
+| `enrichment-pass.md:138` | "Corporate announcements ARE extractable — management decisions that allocate specific capital..." |
+| `core-contract.md:573` | "Material corporate announcements \| Extract management decisions that allocate specific capital..." |
+| `transcript-primary.md:42` | "Corporate announcement \| 'Share repurchase authorization of $XX billion'... \| Yes" |
+| `transcript-enrichment.md:51` | "Capital announcement or return decision \| 'We authorized a new buyback program'... \| Yes" |
+
+### Category E: Remaining 8k/news/10q asset profile pollution
+
+Transcript is clean. These 3 asset profiles still have guidance-specific content in files that should be generic. Full line-by-line breakdown in the [next section](#open--remaining-pollution-8knews10q).
+
+| Asset | Lines to Fix | Intersection Files to Create |
+|-------|-------------|------------------------------|
+| `8k.md` | 33 lines (6 rewrites + 2 tables to move) | `types/guidance/assets/8k-primary.md` |
+| `news.md` | 73 lines (8 rewrites + 3 tables to move) | `types/guidance/assets/news-primary.md` |
+| `10q.md` | 45 lines (13 rewrites + 3 tables to move) | `types/guidance/assets/10q-primary.md` |
+| Query files | 9 description-only rewrites | — |
 
 ---
 
@@ -186,6 +252,15 @@ Transcript is clean. These 3 assets still have guidance-specific content in gene
 
 ---
 
+## Open — Prompt / Contract Gaps
+
+| # | Issue | Severity | Status | Notes |
+|---|-------|----------|--------|-------|
+| C1 | Transcript 3C fallback sub-provenance is undefined | Medium | OPEN | Concrete gap: `assets/transcript.md` documents 3C fallback and says derived Q&A has no sequence numbers and should use `Q&A (derived)` section labeling; `assets/transcript-queries.md` 3C returns `qa.id, qa.content, qa.speaker_roles`; but `types/guidance/assets/transcript-enrichment.md` defines transcript `source_refs` only as QAExchange IDs in `{SOURCE_ID}_qa__{sequence}` format, and `types/guidance/primary-pass.md` documents transcript refs only as `{SOURCE_ID}_pr` or `{SOURCE_ID}_qa__{sequence}`. `guidance_writer.py` accepts empty `source_refs`, so writes still succeed, but 3C-derived items have no explicit deterministic sub-source provenance. Fix: define the 3C `source_refs` format explicitly, then update transcript docs and tests. |
+| C2 | Enrichment pass result schema is not fully standardized across the instruction stack | Low | OPEN | Concrete mismatch: `agents/extraction-enrichment-agent.md` shows pass results with `new_items`, while `skills/extract/SKILL.md` shows the combined worker-facing result with `new_secondary_items`. This is not currently a worker-breaking bug because `scripts/extraction_worker.py` validates only `type`, `source_id`, and `status`. Still, the instruction contract is inconsistent. Related docs are stale too: `plans/extraction-pipeline/extraction-instruction-stack.md` and the orchestrator example in `plans/extraction-pipeline/extractionPipeline_v2.md` still show prompts without `SOURCE_TYPE`, while the actual code now passes it. Fix: define pass-result schema vs combined-result schema explicitly and refresh the instruction-stack docs to match code. |
+
+---
+
 ## Future Work
 
 | Item | Source | Blocked On | Notes |
@@ -196,7 +271,7 @@ Transcript is clean. These 3 assets still have guidance-specific content in gene
 | 10Q/10K asset split | Pollution fix plan (Future Work) | Pollution cleanup first | 6 edits + 2 creates. ASSET=source_type one-to-one. |
 | Shared `write_cli.py` abstraction | Pipeline plan S11 #8 | Phase 4 (type #2 reveals pattern) | Only if >50% code shared |
 | Retirement of old worker/trigger | Pipeline plan (Cleanup section) | Quality-gated | `kubectl delete` old claude-code-worker |
-| Obsidian integration for agent artifacts | — | Design needed | Integrate Obsidian with all `/tmp` files agents write (JSON payloads, dry-run output, thinking tokens). Organized by task type, source, date. Makes agent work inspectable and auditable outside terminal. |
+| Obsidian integration for agent artifacts | — | Design needed | Primary/enrichment agents write full JSON payloads (all extracted items with every field: label, values, quotes, periods, etc.) to `/tmp/gu_{TICKER}_{SOURCE_ID}.json` and `/tmp/gu_{TICKER}_{SOURCE_ID}_enrichment.json`. These are ephemeral and lost on pod restart. Fix: save to persistent, organized storage — per-company folder (e.g., `extractions/AAPL/`) and/or per-job-type folder (e.g., `extractions/guidance/`), integrated with Obsidian vault so payloads, dry-run diffs, and thinking tokens are browsable/searchable alongside notes. |
 | Sonnet vs Opus output comparison | — | `model:` field working | Run same extraction with `model: sonnet` and `model: opus`, diff output quality. Determines cost-performance tradeoff per agent role (primary vs enrichment) and per asset complexity (transcript vs news). |
 | Trigger design for multi-source job creation | — | Generic type setup | Current triggers: auto on ingestion (`trigger-extract.py --all`), manual per-source (`--source-id`), per-ticker. Need: learner-initiated triggers (learner updates pass file, then triggers extraction across relevant sources), scheduled re-extraction (cron-based), event-driven (new data ingested → auto-queue for all registered types). Design should unify all trigger paths into one mechanism. |
 
