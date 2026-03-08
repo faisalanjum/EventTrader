@@ -10,7 +10,6 @@ KEDA: Scales 0->N based on queue depth
 Payload format (JSON) — one message = one job:
   {
       "asset": "transcript",
-      "source_type": "transcript",
       "ticker": "AAPL",
       "source_id": "AAPL_2025-01-30T17.00",
       "type": "guidance",
@@ -18,7 +17,7 @@ Payload format (JSON) — one message = one job:
   }
 
 Supported types: guidance, analyst, announcement
-Supported assets: transcript, 8k, 10q, news
+Supported assets: transcript, 8k, 10q, 10k, news
 
 Status tracking:
   Sets {type}_status property on the source node (e.g. guidance_status).
@@ -84,6 +83,7 @@ ASSET_LABELS = {
     "transcript": ("Transcript", "t"),
     "8k": ("Report", "r"),
     "10q": ("Report", "r"),
+    "10k": ("Report", "r"),
     "news": ("News", "n"),
 }
 
@@ -208,7 +208,6 @@ def read_result_file(result_path: str, type_name: str, source_id: str) -> dict:
 async def process_one(
     ticker: str,
     asset: str,
-    source_type: str,
     source_id: str,
     type_name: str,
     mode: str,
@@ -227,7 +226,7 @@ async def process_one(
     # Generate unique result file path
     result_path = f"/tmp/extract_result_{type_name}_{source_id}_{uuid.uuid4().hex[:8]}.json"
 
-    prompt = f"/extract {ticker} {asset} {source_id} TYPE={type_name} MODE={mode} SOURCE_TYPE={source_type} RESULT_PATH={result_path}"
+    prompt = f"/extract {ticker} {asset} {source_id} TYPE={type_name} MODE={mode} RESULT_PATH={result_path}"
     log.info("Processing: %s", prompt)
     start = time.monotonic()
 
@@ -416,12 +415,11 @@ async def main():
 
             ticker = payload["ticker"]
             asset = payload["asset"]
-            source_type = payload.get("source_type", asset)
             source_id = payload["source_id"]
             type_name = payload["type"]
             mode = payload.get("mode", DEFAULT_MODE)
 
-            success = await process_one(ticker, asset, source_type, source_id, type_name, mode, mgr)
+            success = await process_one(ticker, asset, source_id, type_name, mode, mgr)
 
             if not success:
                 retry_count = payload.get("_retry", 0) + 1

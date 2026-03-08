@@ -6,12 +6,56 @@ The extraction pipeline uses a single `asset=10q` bucket for both 10-Q and 10-K 
 
 This plan eliminates the special case by making `10k` a first-class asset. After the split, ASSET and source_type are always identical, making the SOURCE_TYPE pipeline parameter dead code. We remove it in the same commit.
 
-**Why single commit**: Zero production data exists (pipeline deployed 2 days ago, worker at 0 replicas, zero 10-K extractions). No backward compatibility concern. No historical backfill needed.
+**Why single commit**: All extraction data will be wiped before applying this change, and the worker will be paused during the transition. No backward compatibility concern. No historical backfill needed.
 
 **Key design decisions**:
 - Keep section numbers 5A-5H in both query files (no "5K*" renaming — files are namespaced by filename, agent loads only one)
 - `source_type` as a **graph property** on GuidanceUpdate nodes stays — it just gets its value from `{ASSET}` directly
 - `guidance_writer.py` already has `'10k': 'Report'` in SOURCE_LABEL_MAP — no change needed
+
+---
+
+## Prerequisites (before applying code changes)
+
+Execute in order:
+
+```bash
+# 1. Scale worker to zero — no jobs should be processing during transition
+kubectl scale deployment claude-code-worker -n processing --replicas=0
+
+# 2. Drain Redis queues — eliminate any old-format payloads with source_type field
+redis-cli -p 31379 DEL extract:pipeline extract:pipeline:dead
+
+# 3. Delete all extraction output nodes from Neo4j
+# (GuidanceUpdate, Guidance, GuidancePeriod — source nodes like Report/Transcript stay)
+```
+
+```cypher
+// Run via Neo4j bolt (port 30687) or MCP
+MATCH (gu:GuidanceUpdate) DETACH DELETE gu;
+MATCH (g:Guidance) DETACH DELETE g;
+MATCH (gp:GuidancePeriod) WHERE gp.id STARTS WITH 'gp_' DETACH DELETE gp;
+```
+
+```bash
+# 4. Clear status properties on source nodes so trigger-extract.py doesn't skip them
+```
+
+```cypher
+MATCH (r:Report) WHERE r.guidance_status IS NOT NULL
+REMOVE r.guidance_status, r.guidance_error
+RETURN count(r) AS reports_cleared;
+
+MATCH (t:Transcript) WHERE t.guidance_status IS NOT NULL
+REMOVE t.guidance_status, t.guidance_error
+RETURN count(t) AS transcripts_cleared;
+
+MATCH (n:News) WHERE n.guidance_status IS NOT NULL
+REMOVE n.guidance_status, n.guidance_error
+RETURN count(n) AS news_cleared;
+```
+
+**Do NOT scale worker back up until code changes are committed and verification is complete.**
 
 ---
 
@@ -441,6 +485,18 @@ Note: Now matches the 8k row pattern (inventory-first). 4F→5G, 4G→5F, exhibi
 **`source_type`**: Use `{ASSET}` — this is the source type identity written to the graph.
 ```
 
+### Change 4: Update JSON example source_type value (line 172)
+
+The example hardcodes `"transcript"` which is valid but misleading when reading in context of 10-K/10-Q extraction. Update to use the variable:
+
+```
+# BEFORE
+    "source_type": "transcript",
+
+# AFTER
+    "source_type": "{ASSET}",
+```
+
 ---
 
 ## FILE 8: EDIT `types/guidance/core-contract.md`
@@ -672,32 +728,25 @@ Post-split, each asset has its own 5A with a narrowed formType filter. A single 
 
 ### Historical Data — Pre-Split 10-K Guidance Check
 
-Before committing, verify no historical 10-K guidance was written with wrong source_type:
+**Skipped if Prerequisites were followed** (all extraction data deleted before code changes).
+
+If NOT starting from clean DB, verify no historical 10-K guidance was written with wrong source_type:
 
 ```cypher
-// Run via Neo4j bolt (port 30687) or MCP
 MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(r:Report)
 WHERE r.formType = '10-K' AND gu.source_type = '10q'
 RETURN count(gu) AS mismatched_rows
 ```
 
-**Expected: 0 rows** (pipeline deployed 2 days ago, worker at 0 replicas, zero production extractions).
-
-If non-zero, run this backfill BEFORE the code changes:
-```cypher
-MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(r:Report)
-WHERE r.formType = '10-K' AND gu.source_type = '10q'
-SET gu.source_type = '10k'
-RETURN count(gu) AS fixed_rows
-```
-
 ### End-to-End Dry Run
 
+**Worker must be at 0 replicas** — `--mode dry_run` still enqueues real messages to Redis via `trigger-extract.py:173`. Clean queue after verification.
+
 ```bash
-# Test 10-Q extraction
+# Test 10-Q extraction (will enqueue 1 message)
 python3 scripts/trigger-extract.py --source-id <10Q_ACCESSION> --asset 10q --type guidance --mode dry_run
 
-# Test 10-K extraction
+# Test 10-K extraction (will enqueue 1 message)
 python3 scripts/trigger-extract.py --source-id <10K_ACCESSION> --asset 10k --type guidance --mode dry_run
 
 # Negative test: mismatched asset/formType must be rejected
@@ -707,6 +756,24 @@ python3 scripts/trigger-extract.py --source-id <10K_ACCESSION> --asset 10q --typ
 
 # Verify payloads in queue (inspect without consuming)
 redis-cli -p 31379 LRANGE extract:pipeline 0 -1
+
+# Clean up verification messages before scaling worker back up
+redis-cli -p 31379 DEL extract:pipeline
+```
+
+### Transcript Smoke Test
+
+Shared runtime files were modified (extraction_worker.py, SKILL.md, extraction-primary-agent.md). Verify transcript extraction still works after changes — clean DB does not prove this.
+
+```bash
+# Transcript dry run — must successfully enqueue + resolve (if worker is up) or at minimum enqueue correctly
+python3 scripts/trigger-extract.py --source-id <TRANSCRIPT_SOURCE_ID> --asset transcript --type guidance --mode dry_run
+
+# Verify payload shape (no SOURCE_TYPE field, correct structure)
+redis-cli -p 31379 LRANGE extract:pipeline 0 -1
+
+# Clean up
+redis-cli -p 31379 DEL extract:pipeline
 ```
 
 ---

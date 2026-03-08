@@ -26,7 +26,7 @@ ALWAYS use `ultrathink`.
 
 ## Input
 
-Parse `$ARGUMENTS` as: `{TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE} SOURCE_TYPE={SOURCE_TYPE}`
+Parse `$ARGUMENTS` as: `{TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE}`
 
 ## Step 0: Load Instructions
 

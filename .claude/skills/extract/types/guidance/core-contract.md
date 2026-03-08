@@ -514,14 +514,15 @@ Run once per company per extraction run. See queries-common.md queries 2A (conce
 
 ### Routing
 
-Extraction MUST route by `source_type` before LLM processing. Each type has different scan scope and noise profiles. Per-source profiles in `reference/`:
+Extraction MUST route by asset type before LLM processing. Each type has different scan scope and noise profiles. Per-source profiles in `reference/`:
 
-| Source Type | Asset Profile |
+| Asset | Asset Profile |
 |-------------|---------------|
 | `transcript` | [transcript.md](../../assets/transcript.md) |
 | `8k` | [8k.md](../../assets/8k.md) |
 | `news` | [news.md](../../assets/news.md) |
-| `10q`, `10k` | [10q.md](../../assets/10q.md) |
+| `10q` | [10q.md](../../assets/10q.md) |
+| `10k` | [10k.md](../../assets/10k.md) |
 
 ### Source Type Mapping
 
@@ -648,7 +649,7 @@ Only needed if you want to remove ALL prior extractions and start fresh. Delete 
 | Parameter | Type | Examples |
 |-----------|------|---------|
 | `TICKER` | String | `AAPL`, `MSFT` |
-| `ASSET` | Enum | `transcript`, `8k`, `news`, `10q` |
+| `ASSET` | Enum | `transcript`, `8k`, `news`, `10q`, `10k` |
 | `SOURCE_ID` | String | `AAPL_2025-07-31T17.00.00-04.00`, `0001193125-25-000001`, `bzNews_50123456` |
 | `TYPE` | Enum | `guidance` |
 | `MODE` | Enum | `write`, `dry_run` |
@@ -696,7 +697,8 @@ Both must be permissive for writes to occur. `MODE=write` with `ENABLE_GUIDANCE_
 | `8k` (exhibit/section/filing_text) | `strip() == ""` |
 | `transcript` | BOTH `prepared_remarks` empty AND `qa_exchanges` empty |
 | `news` | BOTH `title` and `body` empty |
-| `10q`/`10k` | MD&A section `strip() == ""` |
+| `10q` | MD&A section `strip() == ""` |
+| `10k` | MD&A section `strip() == ""` |
 
 ### Handling
 
@@ -716,11 +718,13 @@ Both must be permissive for writes to occur. `MODE=write` with `ENABLE_GUIDANCE_
 | [transcript-queries.md](../../assets/transcript-queries.md) | Transcript fetch queries |
 | [8k-queries.md](../../assets/8k-queries.md) | 8-K fetch queries |
 | [news-queries.md](../../assets/news-queries.md) | News fetch queries |
-| [10q-queries.md](../../assets/10q-queries.md) | 10-Q/10-K fetch queries |
+| [10q-queries.md](../../assets/10q-queries.md) | 10-Q fetch queries |
+| [10k-queries.md](../../assets/10k-queries.md) | 10-K fetch queries |
 | [transcript.md](../../assets/transcript.md) | Transcript asset profile |
 | [8k.md](../../assets/8k.md) | 8-K asset profile |
 | [news.md](../../assets/news.md) | News asset profile |
-| [10q.md](../../assets/10q.md) | 10-Q/10-K asset profile |
+| [10q.md](../../assets/10q.md) | 10-Q asset profile |
+| [10k.md](../../assets/10k.md) | 10-K asset profile |
 
 ### Utility Scripts
 

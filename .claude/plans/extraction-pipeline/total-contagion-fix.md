@@ -28,13 +28,13 @@ Eliminate ALL prompt-layer contamination across the extraction pipeline. Four ca
 |-------|-------|-------|------------|
 | 1 | Create 4 intersection files (receive relocated content) | 4 creates | 10k split landed |
 | 2 | Clean 4 asset profiles (Category E) | 4 edits | Phase 1 |
-| 3 | Clean type-level pass files (Category B subset) | 2 edits | Phase 1 |
+| 3 | Clean type-level pass files (Category B subset) | 1 edit (FILE 10 is Category C only — see Phase 6) | Phase 1 |
 | 4 | Clean core-contract.md (Category B subset) | 1 edit | Phase 1 |
 | 5 | Clean common files + query descriptions (Category A) | 4 edits | — |
 | 6 | Remove corporate announcement rules (Category C) | 5 edits | — |
 | 7 | Update transcript primary intersection file | 1 edit | — |
 
-Phases 5-7 are independent of each other and of Phases 2-4. Total: 4 creates + 17 edits = 21 file operations.
+Phases 5-7 are independent of each other and of Phases 2-4. Total: 4 creates + 16 edit operations across 13 unique files = 20 file operations (some files edited in two phases).
 
 Single commit. All changes are prompt-file-only — zero script changes, one Cypher query change (inventory filter in 8A), zero runtime changes.
 
@@ -363,8 +363,8 @@ Remove guidance-specific content that was relocated to intersection files in Pha
 | 91 | "Prior guidance values for context (do NOT extract as new guidance)" | "Prior values for context (do NOT extract as new items)" |
 | 180 | "guidance became public" | "content became public" |
 | 184 | "regardless of whether guidance was found in title or body" | "regardless of whether content was found in title or body" |
-| 193 | "Most news guidance defaults to `unknown` basis" | "Most news extraction defaults to `unknown` basis" |
-| 194 | "the transcript or 8-K source provides the authoritative basis" | "another source type provides the authoritative basis" |
+| 194 | "Most news guidance defaults to `unknown` basis" | "Most news extraction defaults to `unknown` basis" |
+| 194 | "the transcript or 8-K source provides the authoritative basis" (same line) | "another source type provides the authoritative basis" |
 | 202 | "regardless of whether guidance was found in title or body" | "regardless of whether content was found in title or body" |
 | 99-111 | **"What to Extract" table** (13 lines) | DELETE — moved to `news-primary.md` |
 | 112 | `---` separator | DELETE |
@@ -391,7 +391,7 @@ Remove guidance-specific content that was relocated to intersection files in Pha
 | 85 | "10-Q/10-K guidance" | "10-Q extraction" |
 | 93 | "CapEx/FCF forward guidance" | "CapEx/FCF forward expectations" |
 | 97 | "zero guidance" | "zero extractable content" |
-| 100-103 | "guidance keywords" reference | "extraction keywords" |
+| 100 | "Search for guidance keywords (see S10 in QUERIES.md)" | "Search for extraction keywords (see S10 in QUERIES.md)" |
 | 105 | "### Step 5: Zero-Guidance Result" | "### Step 5: Zero-Item Result" |
 | 107 | "Zero guidance from a 10-Q" | "Zero items from a 10-Q" |
 | 107 | "no forward guidance beyond" | "no forward-looking content beyond" |
@@ -404,7 +404,7 @@ Remove guidance-specific content that was relocated to intersection files in Pha
 | 148 | `---` separator | DELETE |
 | 165, 169, 171 | "guidance" in period/source sections | "content" / "extraction" |
 | 183-185 | **"Forward-Looking Strictness" quality rule** (3 lines) | DELETE — moved to `10q-primary.md` |
-| 191 | "transcript guidance have already been extracted" | "transcript content has already been extracted" |
+| 191 | "8-K and transcript guidance have already been extracted" | "8-K and transcript content have already been extracted" |
 | 194 | "GuidanceUpdate node created (this IS new guidance)" | "extraction node created (this IS new content)" |
 | 206 | "zero guidance found" | "zero items found" |
 | 217 | "not operational guidance" | "not operational forward-looking content" |
@@ -536,6 +536,8 @@ No other Category B changes needed. Enrichment-pass.md was already genericized i
 |---------|---------|-----|
 | 184 | `WHERE r8k.items CONTAINS 'Item 2.02'` | DELETE this WHERE clause. Rename `earnings_8k_count` → `r8k_count` in RETURN (line 196). Query 8A becomes a general inventory counting ALL 8-Ks. Type-specific item filtering belongs in type queries. |
 | 196 | `count(DISTINCT r8k) AS earnings_8k_count` | `count(DISTINCT r8k) AS r8k_count` |
+
+**Alias rename note**: `earnings_8k_count` also exists in the frozen `guidance-inventory/QUERIES.md` (line 600) — no change needed there (frozen file). Verify no active extract pipeline file references this alias by name.
 | 300-308 | Execution Order "Initial Build" step 4 sub-bullets: asset-specific query sequences | Replace step 4 sub-bullets with single line: `- Asset-specific source queries (see asset query files for fetch order per source type)` |
 | 308 | "6B (Guidance-channel news, dates required)" | Absorbed into generic line above |
 
@@ -587,7 +589,9 @@ Remove rules that embed `announcement` extraction logic into the `guidance` type
 
 ### FILE 16: EDIT `types/guidance/primary-pass.md` (continued from Phase 3)
 
-| Line | Current | New |
+**Line number note**: Line 92 is the ORIGINAL line number (before Phase 3 deletions). Phase 3 deletes ~11 lines before this point (lines 24-33, 37), so the content shifts up by ~11 lines. Locate by content pattern: `"Corporate announcements ARE extractable"`.
+
+| Line (original) | Current | New |
 |------|---------|-----|
 | 92 | "**Corporate announcements ARE extractable** — management decisions that allocate specific capital or change shareholder returns (buyback authorizations, dividend declarations, investment announcements) should be extracted." | "**Corporate announcements** — Do NOT extract capital allocation announcements (buyback authorizations, investment programs, facility plans). These belong to the `announcement` extraction type. Dividend-per-share guidance IS extractable (it is guidance, not an announcement)." |
 
@@ -661,7 +665,8 @@ After all changes, these `grep` commands must return ZERO matches:
 ```bash
 # Category A: No guidance-flavored wording in common files
 grep -i "guidance" .claude/skills/extract/queries-common.md
-# Expected: 0 matches (was 1 at line 308)
+# Expected: 1 match — line 319 version note contains "GuidancePeriod" (graph node label in
+# changelog metadata, not an operational instruction). Was 2 matches before (line 308 + 319).
 
 # Category B: No asset-specific content in type-level files
 grep -i "transcript\|prepared.remarks\|Q&A\|qa_exchange\|CFO\|8-K\|8k\|EX-99\|news\|10q\|10k\|MD&A" .claude/skills/extract/types/guidance/primary-pass.md
@@ -723,7 +728,7 @@ To verify a hypothetical new type `analyst` would inherit ZERO contagion:
 | Metric | Count |
 |--------|-------|
 | New files created | 4 intersection files |
-| Files edited | 17 |
+| Files edited | 16 edit operations across 13 unique files (primary-pass, core-contract, transcript-primary each edited in 2 phases) |
 | Lines relocated to intersection files | ~134 (tables, rules, field mappings, dedup) |
 | Lines rewritten in-place | ~65 (word swaps: "guidance" → "content"/"extraction") |
 | Lines generalized | ~50 (hardcoded tables → generic references) |
@@ -769,4 +774,4 @@ Update `extraction-pipeline-tracker.md`:
 
 ---
 
-*Plan created 2026-03-08, revised 2026-03-08. Depends on: 10-K asset split (10k-split-source-type-removal.md). Scope: 4 creates + 17 edits = 21 file operations, single commit.*
+*Plan created 2026-03-08, revised 2026-03-08. Depends on: 10-K asset split (10k-split-source-type-removal.md). Scope: 4 creates + 16 edits across 13 unique files = 20 file operations, single commit.*

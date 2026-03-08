@@ -1,25 +1,25 @@
-# 10-Q Queries (S5)
+# 10-K Queries (S5)
 
-Source content queries for 10-Q quarterly filings.
+Source content queries for 10-K annual filings.
 
 ---
 
-## 5. Source Content: 10-Q
+## 5. Source Content: 10-K
 
-### 5A. 10-Q Filing List
+### 5A. 10-K Filing List
 
 ```cypher
 MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
-WHERE r.formType = '10-Q'
+WHERE r.formType = '10-K'
   AND ($start_date IS NULL OR r.created >= $start_date)
   AND ($end_date IS NULL OR r.created <= $end_date)
 RETURN r.accessionNo, r.formType, r.created, r.periodOfReport
 ORDER BY r.created
 ```
 
-### 5B. MD&A Section Content (Primary for 10-Q)
+### 5B. MD&A Section Content (Primary for 10-K)
 
-MD&A is the primary scan scope for 10-Q guidance extraction.
+MD&A is the primary scan scope for 10-K guidance extraction.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
@@ -27,7 +27,7 @@ WHERE s.section_name STARTS WITH 'Management'
   AND s.section_name CONTAINS 'DiscussionandAnalysisofFinancialCondition'
 RETURN s.content AS content, s.section_name, r.created AS filing_date
 ```
-**Note**: 10-Q uses the no-apostrophe variant.
+**Note**: 10-K uses the curly apostrophe variant (U+2019).
 
 ### 5C. Financial Statement Content (Supplementary)
 

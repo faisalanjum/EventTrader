@@ -47,7 +47,8 @@ ASSET_QUERIES = {
     #              label         alias  extra_where                               company_join
     "transcript": ("Transcript", "t",   None,                                     None),
     "8k":         ("Report",     "r",   "r.formType = '8-K'",                     ("PRIMARY_FILER", "out")),
-    "10q":        ("Report",     "r",   "r.formType IN ['10-Q', '10-K']",         ("PRIMARY_FILER", "out")),
+    "10q":        ("Report",     "r",   "r.formType = '10-Q'",                    ("PRIMARY_FILER", "out")),
+    "10k":        ("Report",     "r",   "r.formType = '10-K'",                    ("PRIMARY_FILER", "out")),
     "news":       ("News",       "n",   None,                                     ("INFLUENCES", "out")),
 }
 
@@ -75,17 +76,6 @@ def _company_join_clause(alias, company_join):
     return match, "c.ticker"
 
 
-def canonical_source_type(asset, form_type=None):
-    """Derive source_type from asset + actual formType.
-
-    ASSET is the routing key (which files to load).
-    source_type is the data identity (what gets written to the graph).
-    They differ only for 10q, which covers both 10-Q and 10-K filings.
-    """
-    if asset == "10q" and form_type == "10-K":
-        return "10k"
-    return asset
-
 
 def find_unprocessed(mgr, asset, extraction_type, tickers=None, source_id=None,
                      force=False, retry_failed=False):
@@ -97,8 +87,9 @@ def find_unprocessed(mgr, asset, extraction_type, tickers=None, source_id=None,
 
     if source_id:
         # Single asset lookup
+        extra_filter = f"WHERE {extra_where}" if extra_where else ""
         query = (
-            f"MATCH ({alias}:{label} {{id: $sid}}) {join_clause} "
+            f"MATCH ({alias}:{label} {{id: $sid}}) {join_clause} {extra_filter} "
             f"RETURN {alias}.id AS id, {ticker_expr} AS symbol, "
             f"       {alias}.{status_prop} AS status, {alias}.formType AS form_type"
         )
@@ -161,10 +152,8 @@ def push_to_queue(items, asset, extraction_type, mode="write"):
     pushed = 0
     for item in items:
         ticker = item["symbol"] or item["id"].split("_")[0]
-        source_type = canonical_source_type(asset, item.get("form_type"))
         payload = json.dumps({
             "asset": asset,
-            "source_type": source_type,
             "ticker": ticker,
             "source_id": item["id"],
             "type": extraction_type,

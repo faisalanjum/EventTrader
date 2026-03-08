@@ -2,16 +2,16 @@
 description: "Generic extraction orchestrator. Runs any extraction type against any data asset. Spawns primary + optional enrichment agents."
 ---
 
-Parse `$ARGUMENTS` as: `{TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE} [SOURCE_TYPE={SOURCE_TYPE}] [RESULT_PATH={PATH}]`
+Parse `$ARGUMENTS` as: `{TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE} [RESULT_PATH={PATH}]`
 
-Defaults: `MODE=dry_run`, `SOURCE_TYPE={ASSET}`
+Defaults: `MODE=dry_run`
 
 ## Step 1: Run primary pass
 
 Spawn via Agent tool (wait for completion):
 
 ```
-Agent(subagent_type=extraction-primary-agent): {TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE} SOURCE_TYPE={SOURCE_TYPE}
+Agent(subagent_type=extraction-primary-agent): {TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE}
 ```
 
 Read the result file: `/tmp/extract_pass_{TYPE}_primary_{SOURCE_ID}.json`
@@ -27,7 +27,7 @@ Run enrichment ONLY IF both conditions are true:
 If both true, spawn via Agent tool (wait for completion):
 
 ```
-Agent(subagent_type=extraction-enrichment-agent): {TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE} SOURCE_TYPE={SOURCE_TYPE}
+Agent(subagent_type=extraction-enrichment-agent): {TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE}
 ```
 
 Read the result file: `/tmp/extract_pass_{TYPE}_enrichment_{SOURCE_ID}.json`

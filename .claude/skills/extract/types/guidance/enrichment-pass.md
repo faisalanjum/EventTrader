@@ -32,7 +32,7 @@ Query 7E with `source_id = $SOURCE_ID`. These are the items written by the prima
 
 Record `given_date` from existing items — all items from the same source share it. Use this for any new secondary-only items.
 
-**Prior-source baseline (query 7F)**: Load all labels previously extracted from this company's sources of this asset type, with frequency and last-seen date. Pass `$source_type = {SOURCE_TYPE}` (the SOURCE_TYPE argument from your input). Used in the completeness check (Step 5).
+**Prior-source baseline (query 7F)**: Load all labels previously extracted from this company's sources of this asset type, with frequency and last-seen date. Pass `$source_type = {ASSET}`. Used in the completeness check (Step 5).
 
 ### STEP 3: LOAD SECONDARY CONTENT
 
@@ -82,7 +82,7 @@ For new secondary-only items: build from scratch using CIK/FYE from Step 1. Use 
 ```json
 {
     "source_id": "{SOURCE_ID}",
-    "source_type": "{SOURCE_TYPE}",
+    "source_type": "{ASSET}",
     "ticker": "{TICKER}",
     "fye_month": {FYE_MONTH from Step 1},
     "items": [ ... ]

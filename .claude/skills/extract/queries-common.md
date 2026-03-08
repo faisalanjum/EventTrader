@@ -14,6 +14,14 @@ Shared Cypher queries loaded by all extraction agents. Covers context resolution
 - Report.items is JSON string; use `CONTAINS` for item matching
 - Period.end_date can be string 'null' for instant periods
 - NaN exists in return fields; filter with `isNaN()` when needed
+- News timestamp is `n.created` (ISO string with TZ), NOT `n.published_utc` — common error
+- INFLUENCES relationships carry return properties (daily_stock, daily_macro, hourly_stock, etc.) — do NOT select them in extraction queries; they waste context and are irrelevant to content extraction
+- Transcript has TWO relationships to Company: `INFLUENCES` (carries return data) and `HAS_TRANSCRIPT` (navigation only). Extraction listing queries use INFLUENCES; content queries use transcript ID directly
+- QAExchange.sequence is String — use `toInteger()` for ordering
+- ExhibitContent.exhibit_number has dirty variants (`EX-99.01` alongside `EX-99.1`) — use discovery query 4D when exact match fails
+- ExtractedSectionContent.section_name uses no-space format (e.g., `ResultsofOperationsandFinancialCondition` not `Results of Operations...`)
+- PreparedRemark.content is a single text blob, not an array (unlike QAExchange.exchanges)
+- FinancialStatementContent.value is a JSON string — needs parsing, not direct field read
 
 ## Table of Contents
 
@@ -304,7 +312,8 @@ LIMIT 20
 4. **Sources** (chronological by filing date):
    - 4A (earnings 8-K) + 4B (pre-announcements) with null dates → for each: 4C/4E (content)
    - 3A with null dates (All transcripts) → for each: 3B (structured content), 3C if Q&A missing
-   - 5A with null dates (All 10-Q/10-K filings) → for each: 5B (MD&A)
+   - 5A with null dates (All 10-Q filings) → for each: 5B (MD&A)
+   - 5A with null dates (All 10-K filings) → for each: 5B (MD&A)
    - 6B (Guidance-channel news, dates required) → for each: 6A (content)
 5. **Write**: Type-specific writer scripts handle all graph writes (not Cypher in this file)
 

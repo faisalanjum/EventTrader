@@ -23,13 +23,14 @@ Extract from primary section only (prepared remarks for transcripts, full conten
 
 ### STEP 2: FETCH SOURCE — Route by Asset Type
 
-Route by `SOURCE_TYPE` to correct query section (asset-queries):
+Route by `ASSET` to correct query section (asset-queries):
 
-| Source Type | Primary | Fallbacks |
+| Asset | Primary | Fallbacks |
 |-------------|---------|-----------|
 | `transcript` | 3B (structured) | 3C (Q&A Section), 3D (full text) |
 | `8k` | 4G (inventory) → 4C (exhibit) | 4E (section), 4F (filing text) |
-| `10q` / `10k` | 5B (MD&A) | 5C (financial stmts), 4F (fallback) |
+| `10q` | 5F (inventory) → 5B (MD&A) | 5C (financial stmts), 5H (exhibits), 5G (filing text) |
+| `10k` | 5F (inventory) → 5B (MD&A) | 5C (financial stmts), 5H (exhibits), 5G (filing text) |
 | `news` | 6A (single item) | 6B (channel-filtered batch) |
 
 Apply empty-content rules (core-contract.md S17).
@@ -169,7 +170,7 @@ Write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
 ```json
 {
     "source_id": "AAPL_2023-11-03T17.00",
-    "source_type": "transcript",
+    "source_type": "{ASSET}",
     "ticker": "AAPL",
     "fye_month": 9,
     "items": [
@@ -198,7 +199,7 @@ Write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
 }
 ```
 
-**`source_type`**: Use `{SOURCE_TYPE}` from your input arguments (not `{ASSET}`). These differ for 10-K filings routed through the `10q` asset pipeline.
+**`source_type`**: Use `{ASSET}` — this is the source type identity written to the graph.
 
 Items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally. Include `fye_month` at top level when items use LLM period fields instead of pre-computed `period_u_id`.
 
