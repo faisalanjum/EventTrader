@@ -91,7 +91,7 @@ def find_unprocessed(mgr, asset, extraction_type, tickers=None, source_id=None,
         query = (
             f"MATCH ({alias}:{label} {{id: $sid}}) {join_clause} {extra_filter} "
             f"RETURN {alias}.id AS id, {ticker_expr} AS symbol, "
-            f"       {alias}.{status_prop} AS status, {alias}.formType AS form_type"
+            f"       {alias}.{status_prop} AS status"
         )
         rows = mgr.execute_cypher_query_all(query, {"sid": source_id})
         if not rows:
@@ -106,7 +106,7 @@ def find_unprocessed(mgr, asset, extraction_type, tickers=None, source_id=None,
             print(f"Currently in progress: {source_id}")
             print("Use --force to re-trigger.")
             return []
-        return [{"id": row["id"], "symbol": row["symbol"], "form_type": row.get("form_type")}]
+        return [{"id": row["id"], "symbol": row["symbol"]}]
 
     # --- Bulk query ---
     where_clauses = []
@@ -137,8 +137,7 @@ def find_unprocessed(mgr, asset, extraction_type, tickers=None, source_id=None,
 
     query = (
         f"MATCH ({alias}:{label}) {join_clause} {where_str} "
-        f"RETURN {alias}.id AS id, {ticker_expr} AS symbol, "
-        f"{alias}.formType AS form_type "
+        f"RETURN {alias}.id AS id, {ticker_expr} AS symbol "
         f"ORDER BY {ticker_expr}, {alias}.id"
     )
     return mgr.execute_cypher_query_all(query, params)
