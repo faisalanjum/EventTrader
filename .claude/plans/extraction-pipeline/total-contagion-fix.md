@@ -2,9 +2,11 @@
 
 Eliminate ALL prompt-layer contamination across the extraction pipeline. Four categories by scope: A (common files), B (type-level files), C (cross-type), E (asset profiles).
 
-**Prerequisite**: Land the 10-K asset split first (`virtual-splashing-treehouse.md`). This plan assumes `10k` is already a first-class asset with its own `10k.md`, `10k-queries.md`, and the `SOURCE_TYPE` parameter is removed.
+**Prerequisite**: Land the 10-K asset split first (`10k-split-source-type-removal.md`). This plan assumes `10k` is already a first-class asset with its own `10k.md`, `10k-queries.md`, and the `SOURCE_TYPE` parameter is removed.
 
-**Zero behavioral regression guarantee**: For every current TYPE×ASSET×PASS combination, the agent's concatenated prompt (slots 1-8) contains identical content before and after. Content removed from higher-scope files is relocated to lower-scope files the same agent already loads.
+**BEFORE value note**: Some BEFORE snippets in Phases 3-5 show pre-split text (e.g., `Source Type` headers, combined `10q/10k` rows, `{SOURCE_TYPE}` references). After the split lands, these will already be updated. When implementing, locate by content pattern rather than exact string match. All affected edits use DELETE or full-REPLACE actions, so the end result is correct regardless.
+
+**Content relocation guarantee**: For every current TYPE×ASSET×PASS combination, content removed from higher-scope files is relocated to lower-scope files the same agent already loads — the agent's functional prompt is equivalent. Word normalization (`guidance` → `extraction`/`content`) does not change agent behavior. Two intentional changes: (a) Category C reverses corporate announcement extraction (extract → exclude), (b) quote prefixes (`[8-K]`, `[News]`, `[10-Q]`, `[10-K]`) added for non-transcript assets (new convention, not relocation).
 
 **Agent load order (8 slots)**:
 1. `types/{TYPE}/core-contract.md` — type-level schema reference
@@ -30,11 +32,11 @@ Eliminate ALL prompt-layer contamination across the extraction pipeline. Four ca
 | 4 | Clean core-contract.md (Category B subset) | 1 edit | Phase 1 |
 | 5 | Clean common files + query descriptions (Category A) | 4 edits | — |
 | 6 | Remove corporate announcement rules (Category C) | 5 edits | — |
-| 7 | Update transcript intersection files (minor) | 2 edits | — |
+| 7 | Update transcript primary intersection file | 1 edit | — |
 
-Phases 5-7 are independent of each other and of Phases 2-4. Total: 4 creates + 18 edits = 22 file operations.
+Phases 5-7 are independent of each other and of Phases 2-4. Total: 4 creates + 17 edits = 21 file operations.
 
-Single commit. All changes are prompt-file-only — zero script changes, zero Cypher changes, zero runtime changes.
+Single commit. All changes are prompt-file-only — zero script changes, one Cypher query change (inventory filter in 8A), zero runtime changes.
 
 ---
 
@@ -209,8 +211,8 @@ Rules for extracting guidance from 10-Q quarterly filings. Loaded at slot 4 by t
 ## Routing — 10-Q Content Fetch
 
 Use the content fetch order in the asset profile (10q.md):
-1. Query 5B (MD&A section — primary)
-2. Fallbacks: 5C (financial statement footnotes), 4F (filing text)
+1. Query 5F (inventory) → 5B (MD&A section — primary)
+2. Fallbacks: 5C (financial statement footnotes), 5H (exhibits), 5G (filing text)
 
 Apply empty-content rules from the asset profile.
 
@@ -251,7 +253,7 @@ Example: `[10-Q] We expect fiscal 2025 revenue between $380 billion and $390 bil
 | Field | Value |
 |-------|-------|
 | `source_type` | `"10q"` |
-| `source_key` | `"MD&A"` (always, regardless of which sub-section). If from financial statement footnotes: `"footnotes"`. If from filing text fallback: `"filing_text"`. |
+| `source_key` | `"MD&A"` (always, regardless of which sub-section). If from financial statement footnotes: `"footnotes"`. If from filing text fallback (5G): `"filing_text"`. If from exhibit fallback (5H): use the exhibit number (e.g., `"EX-99.1"`). |
 | `given_date` | `r.created` (the filing date) |
 | `source_refs` | Empty array `[]` — 10-Q sections have no sub-source nodes. |
 ```
@@ -268,8 +270,8 @@ Rules for extracting guidance from 10-K annual filings. Loaded at slot 4 by the 
 ## Routing — 10-K Content Fetch
 
 Use the content fetch order in the asset profile (10k.md):
-1. Query 5B (MD&A section — primary)
-2. Fallbacks: 5C (financial statement footnotes), 4F (filing text)
+1. Query 5F (inventory) → 5B (MD&A section — primary)
+2. Fallbacks: 5C (financial statement footnotes), 5H (exhibits), 5G (filing text)
 
 Apply empty-content rules from the asset profile.
 
@@ -310,7 +312,7 @@ Example: `[10-K] We expect fiscal 2026 revenue between $400 billion and $420 bil
 | Field | Value |
 |-------|-------|
 | `source_type` | `"10k"` |
-| `source_key` | `"MD&A"` (always, regardless of which sub-section). If from financial statement footnotes: `"footnotes"`. If from filing text fallback: `"filing_text"`. |
+| `source_key` | `"MD&A"` (always, regardless of which sub-section). If from financial statement footnotes: `"footnotes"`. If from filing text fallback (5G): `"filing_text"`. If from exhibit fallback (5H): use the exhibit number (e.g., `"EX-99.1"`). |
 | `given_date` | `r.created` (the filing date) |
 | `source_refs` | Empty array `[]` — 10-K sections have no sub-source nodes. |
 ```
@@ -330,13 +332,21 @@ Remove guidance-specific content that was relocated to intersection files in Pha
 | 80 | "yielded zero guidance" | "yielded zero extractable content" |
 | 95 | "may mix actuals and guidance" | "may mix actuals and forward-looking statements" |
 | 96 | "concrete guidance" | "concrete forward-looking content" |
+| 104 | "Mid-quarter guidance updates" | "Mid-quarter forward-looking updates" |
+| 105 | "Raise/lower existing guidance" | "Raise/lower existing outlook" |
 | 113-127 | **"What to Extract" table** (15 lines) | DELETE — moved to `8k-primary.md` |
 | 128 | `---` separator after table | DELETE |
 | 130-136 | **"Do NOT Extract" list** (7 lines) | DELETE — moved to `8k-primary.md` |
 | 137 | `---` separator after list | DELETE |
+| 149 | `"Q2 FY2025 Guidance"` (table example) | `"Q2 FY2025 Outlook"` |
+| 153 | "when the guidance became public" | "when the content became public" |
+| 157 | "item key that contained the guidance" | "item key that contained the content" |
+| 171 | "each gets its own GuidanceUpdate node" | "each gets its own extraction node" |
+| 175 | "concrete guidance numbers/periods" | "concrete forward-looking numbers/periods" |
+| 179-187 | **"Duplicate Resolution"** section (8 lines + separator) | DELETE — moved to `8k-primary.md` Dedup Rule |
 
-**Lines deleted**: 27 (tables) + 2 (separators) = 29 lines removed
-**Lines rewritten**: 5 word swaps
+**Lines deleted**: 27 (tables) + 2 (separators) + 9 (Duplicate Resolution) = 38 lines removed
+**Lines rewritten**: 12 word swaps
 
 ---
 
@@ -350,18 +360,23 @@ Remove guidance-specific content that was relocated to intersection files in Pha
 | 34 | "Company forward-looking statements" | "Company statements" |
 | 41 | "may include prior guidance" | "Pre-earnings analysis" |
 | 75 | "contain complete guidance" | "contain complete forward-looking content" |
-| 91 | "Prior guidance values" | "Prior values for context" |
+| 91 | "Prior guidance values for context (do NOT extract as new guidance)" | "Prior values for context (do NOT extract as new items)" |
 | 180 | "guidance became public" | "content became public" |
+| 184 | "regardless of whether guidance was found in title or body" | "regardless of whether content was found in title or body" |
+| 193 | "Most news guidance defaults to `unknown` basis" | "Most news extraction defaults to `unknown` basis" |
+| 194 | "the transcript or 8-K source provides the authoritative basis" | "another source type provides the authoritative basis" |
+| 202 | "regardless of whether guidance was found in title or body" | "regardless of whether content was found in title or body" |
 | 99-111 | **"What to Extract" table** (13 lines) | DELETE — moved to `news-primary.md` |
 | 112 | `---` separator | DELETE |
 | 114-143 | **"Do NOT Extract" + analyst exclusion tables** (30 lines) | DELETE — moved to `news-primary.md` |
 | 144 | `---` separator | DELETE |
 | 146-162 | **"Reaffirmation Handling"** (17 lines) | DELETE — moved to `news-primary.md` |
 | 163 | `---` separator | DELETE |
+| 208 | "duplicate guidance from other sources" | "duplicate content from other sources" |
 | 208-213 | "GuidanceUpdate" references in duplicate resolution | Rewrite: "extraction item" instead of "GuidanceUpdate" (6 lines) |
 
 **Lines deleted**: 65 (tables + sections) + 3 (separators) = 68 lines removed
-**Lines rewritten**: 8 word swaps + 6 line generalizations
+**Lines rewritten**: 14 word swaps + 6 line generalizations
 
 ---
 
@@ -372,23 +387,32 @@ Remove guidance-specific content that was relocated to intersection files in Pha
 | Line(s) | Current | New |
 |---------|---------|-----|
 | 16 | "designated scan scope for guidance" | "designated scan scope for extraction" |
-| 62 | "Zero guidance from a 10-K" | DELETE (10-K content gone after split) |
-| 85 | "10-Q/10-K guidance" | "10-Q extraction" |
+| 62 | "Zero guidance from a 10-Q" (post-split value) | "Zero items from a 10-Q" |
+| 85 | "10-Q guidance" (post-split) | "10-Q extraction" |
 | 93 | "CapEx/FCF forward guidance" | "CapEx/FCF forward expectations" |
 | 97 | "zero guidance" | "zero extractable content" |
 | 100-103 | "guidance keywords" reference | "extraction keywords" |
-| 107 | "Zero guidance" | "Zero items" |
-| 115, 119-120, 122 | "Guidance Likelihood" column header + values | "Forward-Looking Likelihood" |
+| 105 | "### Step 5: Zero-Guidance Result" | "### Step 5: Zero-Item Result" |
+| 107 | "Zero guidance from a 10-Q" | "Zero items from a 10-Q" |
+| 107 | "no forward guidance beyond" | "no forward-looking content beyond" |
+| 115 | "Guidance Likelihood" column header | "Forward-Looking Likelihood" |
+| 120 | "CapEx/FCF guidance, debt targets" (Notes column) | "CapEx/FCF forward expectations, debt targets" |
+| 122 | "no guidance content" (Notes column) | "no extractable content" |
 | 124-138 | **"What to Extract from MD&A" table** (15 lines) | DELETE — moved to `10q-primary.md` |
 | 139 | `---` separator | DELETE |
 | 141-147 | **"Do NOT Extract" list** (7 lines) | DELETE — moved to `10q-primary.md` |
 | 148 | `---` separator | DELETE |
 | 165, 169, 171 | "guidance" in period/source sections | "content" / "extraction" |
 | 183-185 | **"Forward-Looking Strictness" quality rule** (3 lines) | DELETE — moved to `10q-primary.md` |
+| 191 | "transcript guidance have already been extracted" | "transcript content has already been extracted" |
+| 194 | "GuidanceUpdate node created (this IS new guidance)" | "extraction node created (this IS new content)" |
+| 206 | "zero guidance found" | "zero items found" |
+| 217 | "not operational guidance" | "not operational forward-looking content" |
+| 218 | "not forward guidance" | "not forward-looking content" |
 | 236-237 | "Guidance frequency" in comparison table | "Forward-looking content frequency" |
 
 **Lines deleted**: 27 (tables + rules) + 2 (separators) = 29 lines removed
-**Lines rewritten**: 13 word swaps
+**Lines rewritten**: 22 word swaps
 
 ---
 
@@ -420,11 +444,11 @@ Remove asset-specific content from files loaded for ALL assets when TYPE=guidanc
 | 7 | "Extract from primary section only (prepared remarks for transcripts, full content for other assets)." | "Extract from primary content section only (per intersection file for scan scope)." |
 | 24-33 | **STEP 2 routing table** — 4-row table mapping each asset to queries | Replace entire table with: `Route by \`ASSET\` — see your asset profile (slot 3) for content fetch order. The intersection file (slot 4) may provide additional routing guidance.` |
 | 35 | "Apply empty-content rules (core-contract.md S17)." | Keep as-is (generic reference) |
-| 37 | "**For transcripts**: Extract from Prepared Remarks only. Full Q&A analysis is handled by the enrichment pass. Only use `qa_exchanges` from 3B as fallback if prepared remarks are truncated or empty. If 3B result is truncated by the MCP tool, re-run the query via Bash+Python and save to `/tmp` for parsing." | DELETE — already in `transcript-primary.md` lines 7-12 |
+| 37 | "**For transcripts**: Extract from Prepared Remarks only. Full Q&A analysis is handled by the enrichment pass. Only use `qa_exchanges` from 3B as fallback if prepared remarks are truncated or empty. If 3B result is truncated by the MCP tool, re-run the query via Bash+Python and save to `/tmp` for parsing." | DELETE — transcript scope already in `transcript-primary.md` lines 7-12; MCP truncation workaround relocated to `transcript-primary.md` via FILE 21 |
 | 93 | "**News: company guidance only** — ignore analyst estimates ("Est $X", "consensus $Y"). Extract only company-issued guidance." | DELETE — moved to `news-primary.md` |
 | 116-118 | "### Fiscal Context Rule\n\nIn earnings calls and SEC filings, ALL period references are fiscal unless explicitly stated as calendar. "Second half" = fiscal H2. Only use calendar interpretation when text explicitly says "calendar year/quarter" — set `calendar_override: true`." | DELETE — already in `core-contract.md` line 412-414 (identical text). Zero content loss. |
 | 169-198 | JSON example payload with transcript-specific values | Replace with generic example (see below) |
-| 201 | "**`source_type`**: Use `{SOURCE_TYPE}` from your input arguments (not `{ASSET}`). These differ for 10-K filings routed through the `10q` asset pipeline." | "**`source_type`**: Use `{ASSET}` — this is the source type identity written to the graph." (Note: if 10k split landed first, this line is already updated per treehouse plan) |
+| 201 | "**`source_type`**: Use `{SOURCE_TYPE}` from your input arguments (not `{ASSET}`). These differ for 10-K filings routed through the `10q` asset pipeline." | "**`source_type`**: Use `{ASSET}` — this is the source type identity written to the graph." (Note: if 10k split landed first, this line is already updated per 10k-split-source-type-removal plan) |
 | 205 | "**`source_refs`**: Array of sub-source node IDs that produced the item. For transcripts, use PreparedRemark ID (`{SOURCE_ID}_pr`) or QAExchange IDs (`{SOURCE_ID}_qa__{sequence}`). For 8-K reports, use exhibit/item IDs if available. Empty array `[]` when no sub-source granularity applies." | "**`source_refs`**: Array of sub-source node IDs that produced the item. See intersection file for per-asset format. Empty array `[]` when no sub-source granularity applies." |
 
 **Generic JSON example** (replaces lines 169-198):
@@ -434,7 +458,7 @@ Remove asset-specific content from files loaded for ALL assets when TYPE=guidanc
     "source_id": "{SOURCE_ID}",
     "source_type": "{ASSET}",
     "ticker": "{TICKER}",
-    "fye_month": "{FYE_MONTH from Step 1}",
+    "fye_month": {FYE_MONTH from Step 1},
     "items": [
         {
             "label": "Revenue",
@@ -487,14 +511,14 @@ No other Category B changes needed. Enrichment-pass.md was already genericized i
 | 125 | `source_key` examples: `"EX-99.1"`, `"full"`, `"title"`, `"MD&A"` | `"{per intersection file}"` | B |
 | 127 | `source_type` enum: `8k, transcript, news, 10q, 10k` | `Matches \`{ASSET}\`. Extensible — add values as new source types are created.` | B |
 | 507-513 | Source Types and Richness table (5 rows: Transcript/8-K/News/10-Q/XBRL) | Replace with: `Source richness varies by asset type — see asset profiles for characteristics. XBRL contains actuals only (no forward guidance).` | B |
-| 517 | "Extraction MUST route by `source_type` before LLM processing. Each type has different scan scope and noise profiles. Per-source profiles in `reference/`:" | "Extraction MUST route by asset type before LLM processing. Per-source profiles loaded at slot 3 via `assets/{ASSET}.md`." | B |
-| 519-524 | Routing table (4 rows mapping source_type → asset profile file) | DELETE — routing is via file path convention, documented in agent shell | B |
+| 517 | "Extraction MUST route by asset type before LLM processing. Each type has different scan scope and noise profiles. Per-source profiles in `reference/`:" (post-split: `source_type` → `asset type` already applied) | "Extraction MUST route by asset type before LLM processing. Per-source profiles loaded at slot 3 via `assets/{ASSET}.md`." | B |
+| 519-524 | Routing table (5 rows post-split, mapping asset → profile file, `Asset` header) | DELETE — routing is via file path convention, documented in agent shell | B |
 | 528-534 | Source Type Mapping table (source_key + given_date per asset) | Replace with: `Source field mappings (source_key, given_date, source_refs) are defined per asset in the intersection file (slot 4).` | B |
 | 554 | "**Transcripts**: Two-pass extraction — prepared remarks via primary agent, Q&A enrichment via enrichment agent. MERGE+SET handles second write safely." | "**Two-pass assets**: Primary pass writes items, enrichment pass updates via MERGE+SET. The enrichment intersection file defines secondary content scope." | B |
 | 556 | "**All other source types**: Read all content first, extract the richest version per metric, write once per slot." | Keep as-is (generic) | — |
 | 571 | "**News: company guidance only** \| Ignore analyst estimates..." | DELETE — moved to `news-primary.md` | B |
 | 573 | "**Material corporate announcements** \| Extract management decisions..." | Phase 6 (Category C) — see below | C |
-| 651 | `ASSET \| Enum \| \`transcript\`, \`8k\`, \`news\`, \`10q\`` | `ASSET \| Enum \| Extensible. Current: \`transcript\`, \`8k\`, \`news\`, \`10q\`, \`10k\`` | B |
+| 651 | `ASSET \| Enum \| \`transcript\`, \`8k\`, \`news\`, \`10q\`, \`10k\`` (post-split: `10k` already added) | `ASSET \| Enum \| Extensible. Current: \`transcript\`, \`8k\`, \`news\`, \`10q\`, \`10k\`` | B |
 | 693-699 | Empty-Content Rules per Source Type table (4 rows) | Replace with: `Empty-content conditions are defined per asset in the asset profile (slot 3).` | B |
 | 710-723 | Reference Files table (hardcoded 8 asset-specific files + 4 utility scripts) | Replace file table with path patterns: `Asset profiles: \`assets/{ASSET}.md\``, `Asset queries: \`assets/{ASSET}-queries.md\``, `Intersection files: \`types/{TYPE}/assets/{ASSET}-{pass}.md\`` Keep utility scripts table as-is. | B |
 
@@ -523,7 +547,7 @@ No other Category B changes needed. Enrichment-pass.md was already genericized i
 |---------|---------|-----|
 | 17 | "### 6B. Guidance-Channel News (Pre-Filtered)" | "### 6B. Channel-Filtered News (Pre-Filtered)" |
 | 19 | "These channels most likely contain company guidance." | "These channels most likely contain forward-looking content." |
-| 51 | "### 6D. News with Body Content" description "body field is often empty" | Keep as-is (already generic) |
+| 51 | "title may contain complete guidance" | "title may contain complete forward-looking content" |
 | 55 | "### 6E. Earnings Beat/Miss News (for Context)" description "useful for cross-referencing guidance context" | "useful for cross-referencing extraction context" |
 
 Zero Cypher changes. Description-only rewrites.
@@ -534,10 +558,11 @@ Zero Cypher changes. Description-only rewrites.
 
 | Line(s) | Current | New |
 |---------|---------|-----|
-| 20 | "Primary for 10-Q/10-K" | "Primary for 10-Q" (if 10k split already landed, this is already done) |
-| 22 | "10-Q/10-K guidance extraction" | "10-Q extraction" |
+| 20 | "Primary for 10-Q" (post-split, already done) | NO-OP — skip this row |
+| 22 | "10-Q guidance extraction" (post-split) | "10-Q extraction" |
 | 34 | "look for footnotes/annotations with forward guidance" | "look for footnotes/annotations with forward-looking content" |
-| 51-53 | "Useful to identify so guidance scanner can skip this section" | "Useful to identify so the extraction scanner can skip this section" |
+| 51 | "### 5E. Risk Factors (Exclude from Guidance)" | "### 5E. Risk Factors (Exclude from Extraction)" |
+| 53 | "Useful to identify so guidance scanner can skip this section" | "Useful to identify so the extraction scanner can skip this section" |
 
 Zero Cypher changes. Description-only rewrites.
 
@@ -552,6 +577,7 @@ Apply same pattern as 10q-queries.md above. Exact lines depend on 10-K split out
 | "guidance extraction" | → "extraction" |
 | "guidance scanner" | → "extraction scanner" |
 | "forward guidance" | → "forward-looking content" |
+| "Exclude from Guidance" | → "Exclude from Extraction" |
 
 ---
 
@@ -591,11 +617,24 @@ Remove rules that embed `announcement` extraction logic into the `guidance` type
 
 ---
 
-## Phase 7: Update Transcript Intersection Files (Minor)
+## Phase 7: Update Transcript Primary Intersection File
 
-Add source_refs format to transcript-primary.md for completeness (currently only in transcript-enrichment.md).
+Add MCP truncation workaround (relocated from primary-pass.md line 37), fix dangling reference, and add source_refs format.
 
 ### FILE 21: EDIT `types/guidance/assets/transcript-primary.md`
+
+| Line | Current | New |
+|------|---------|-----|
+| 10 | "When falling back to Q&A data (prepared remarks empty/truncated per primary-pass.md)," | "When falling back to Q&A data (prepared remarks empty/truncated)," |
+
+Add after line 12 (after the Q&A fallback paragraph):
+
+```markdown
+
+## MCP Truncation Workaround
+
+If query 3B result is truncated by the MCP tool, re-run the query via Bash+Python and save to `/tmp` for parsing.
+```
 
 Add after line 51 (after the quote prefix section):
 
@@ -610,10 +649,6 @@ Add after line 51 (after the quote prefix section):
 | `given_date` | `t.conference_datetime` |
 | `source_refs` | PreparedRemark ID: `{SOURCE_ID}_pr`. For Q&A fallback items: QAExchange IDs `{SOURCE_ID}_qa__{sequence}`. |
 ```
-
-### FILE 22: EDIT `types/guidance/assets/transcript-enrichment.md`
-
-No changes needed — source_refs already documented at line 85.
 
 ---
 
@@ -641,9 +676,10 @@ grep -i "QAExchange\|CFO Prepared\|EX-99\|\"full\"\|\"title\"\|\"MD&A\"" .claude
 grep -i "ARE extractable\|capital announcement\|buyback.*extractable" .claude/skills/extract/types/guidance/*.md .claude/skills/extract/types/guidance/assets/*.md
 # Expected: 0 matches
 
-# Category E: No "guidance" in asset profiles (except "forward-looking" which is generic)
+# Category E: No "guidance" in asset profiles
 grep -w "guidance" .claude/skills/extract/assets/8k.md .claude/skills/extract/assets/news.md .claude/skills/extract/assets/10q.md .claude/skills/extract/assets/10k.md
-# Expected: 0 matches
+# Expected: 1 match — news.md line 63 (fulltext search keyword "guidance" in code block — data literal, not type label).
+# The Benzinga channel name 'Guidance' (capital G, line 51) does NOT match case-sensitive grep.
 ```
 
 ### Zero-Regression Matrix
@@ -652,7 +688,7 @@ For each agent configuration, verify the prompt stream contains all necessary co
 
 | TYPE | ASSET | PASS | Slot 4 File | Key Content Preserved |
 |------|-------|------|-------------|----------------------|
-| guidance | transcript | primary | transcript-primary.md | Speaker hierarchy, PR scope, What-to-Extract, quote prefix `[PR]`, source_refs format |
+| guidance | transcript | primary | transcript-primary.md | Speaker hierarchy, PR scope, What-to-Extract, quote prefix `[PR]`, source_refs format, MCP truncation workaround |
 | guidance | transcript | enrichment | transcript-enrichment.md | Q&A scope, What-to-Extract, quote prefix `[Q&A]`, section format, source_refs format |
 | guidance | 8k | primary | **8k-primary.md** (NEW) | What-to-Extract, Do-Not-Extract, quote prefix `[8-K]`, source fields, dedup rule |
 | guidance | news | primary | **news-primary.md** (NEW) | Company-only filter, What-to-Extract, analyst exclusion, reaffirmation handling, quote prefix `[News]`, source fields |
@@ -687,16 +723,16 @@ To verify a hypothetical new type `analyst` would inherit ZERO contagion:
 | Metric | Count |
 |--------|-------|
 | New files created | 4 intersection files |
-| Files edited | 18 |
-| Lines relocated to intersection files | ~126 (tables, rules, field mappings) |
-| Lines rewritten in-place | ~42 (word swaps: "guidance" → "content"/"extraction") |
+| Files edited | 17 |
+| Lines relocated to intersection files | ~134 (tables, rules, field mappings, dedup) |
+| Lines rewritten in-place | ~65 (word swaps: "guidance" → "content"/"extraction") |
 | Lines generalized | ~50 (hardcoded tables → generic references) |
 | Category C replacements | 5 (across 5 files) |
 | Net lines removed from type files | ~55 (core-contract.md + primary-pass.md) |
-| Net lines added to intersection files | ~320 (4 new files) |
+| Net lines added to intersection files | ~325 (4 new files + MCP workaround) |
 | Cypher query changes | 1 (remove Item 2.02 filter from 8A) |
 | Script changes | 0 |
-| Runtime behavior changes | 0 |
+| Intentional behavior changes | 2 (Category C announcement reversal + non-transcript quote prefixes) |
 
 ---
 
@@ -708,8 +744,8 @@ Eliminate all prompt-layer contagion across extraction pipeline (Categories A/B/
 Create 4 intersection files (8k/news/10q/10k-primary.md) receiving guidance-specific
 content from type-level and asset-profile files. Generalize primary-pass.md,
 core-contract.md, queries-common.md, and 4 asset profiles. Replace corporate
-announcement extraction rules with exclusion notes. Zero behavioral regression —
-agents see identical content from intersection files at slot 4.
+announcement extraction rules with exclusion notes. Content relocation guarantee —
+agents see equivalent content via intersection files at slot 4.
 ```
 
 ---
@@ -733,4 +769,4 @@ Update `extraction-pipeline-tracker.md`:
 
 ---
 
-*Plan created 2026-03-08. Depends on: 10-K asset split (virtual-splashing-treehouse.md). Scope: 4 creates + 18 edits = 22 file operations, single commit.*
+*Plan created 2026-03-08, revised 2026-03-08. Depends on: 10-K asset split (10k-split-source-type-removal.md). Scope: 4 creates + 17 edits = 21 file operations, single commit.*
