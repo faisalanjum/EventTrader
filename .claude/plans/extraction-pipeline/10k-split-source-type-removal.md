@@ -55,11 +55,16 @@ Copy `10q.md` and apply these changes:
 | 3 | `Per-source extraction rules for 10-Q and 10-K periodic filings. Loaded by the extraction agent when \`ASSET = 10q\`.` | `Per-source profile for 10-K annual filings. Loaded by the extraction agent when \`ASSET = 10k\`.` |
 | 7 | `label: 10-Q/10-K` | `label: 10-K` |
 | 12 | `10-Q/10-K content comes from multiple layers.` | `10-K content comes from multiple layers.` |
+| 12 | `Use the content inventory query (4G) first` | `Use the content inventory query (5F) first` |
 | 27 | `\`10-Q\` or \`10-K\`` | `\`10-K\`` |
 | 48-56 | Both 10-Q (~99%) and 10-K (~98%) coverage sections | Keep ONLY 10-K section. Retitle to `### MD&A Coverage: ~98%` |
 | 54 | `The same primary scan path (query 5B) works for both 10-Q and 10-K.` | `The primary scan path (query 5B) works reliably.` |
+| 61 | `use filing text (query 4F) with keyword-window scanning` | `use filing text (query 5G) with keyword-window scanning` |
 | 64-73 | Both MD&A variant rows | Keep ONLY curly apostrophe row (10-K) |
+| 66 | `Two naming variants exist for the same section. Query 5B checks both:` | `One naming variant applies to 10-K (curly apostrophe U+2019). Query 5B handles it:` |
+| 80-81 | `Run query 4G to see what content types exist` | `Run query 5F to see what content types exist` |
 | 85 | `primary scan scope for 10-Q/10-K` | `primary scan scope for 10-K` |
+| 97 | `Query 4F. Only if MD&A returned zero guidance` | `Query 5G. Only if MD&A returned zero guidance` |
 | 107 | `Zero guidance from a 10-Q/10-K` | `Zero guidance from a 10-K` |
 | 152 | `Common Patterns in 10-Q/10-K` | `Common Patterns in 10-K` |
 | 169 | `"MD&A" for 10-Q/10-K extractions` | `"MD&A" for 10-K extractions` |
@@ -69,12 +74,7 @@ Copy `10q.md` and apply these changes:
 | 195 | `the 10-Q/10-K may contain updated or more precise values` | `the 10-K may contain updated or more precise values` |
 | 207 | `EMPTY_CONTENT\|10q\|MD&A' or 'EMPTY_CONTENT\|10k\|MD&A'` | `EMPTY_CONTENT\|10k\|MD&A` |
 | 230-241 | Entire "10-K vs 10-Q Differences" section (12 lines) | DELETE |
-| 66 | `Two naming variants exist for the same section. Query 5B checks both:` | `One naming variant applies to 10-K (curly apostrophe U+2019). Query 5B handles it:` |
 | 242 | Version note referencing 10-K and 10-Q fixes | Update to 10-K-only version note |
-| 12 | `Use the content inventory query (4G) first` | `Use the content inventory query (5F) first` |
-| 61 | `use filing text (query 4F) with keyword-window scanning` | `use filing text (query 5G) with keyword-window scanning` |
-| 80-81 | `Run query 4G to see what content types exist` | `Run query 5F to see what content types exist` |
-| 97 | `Query 4F. Only if MD&A returned zero guidance` | `Query 5G. Only if MD&A returned zero guidance` |
 
 ---
 
@@ -142,30 +142,30 @@ Narrow to 10-Q only:
 | 3 | `Per-source extraction rules for 10-Q and 10-K periodic filings. Loaded by the extraction agent when \`ASSET = 10q\`.` | `Per-source profile for 10-Q quarterly filings. Loaded by the extraction agent when \`ASSET = 10q\`.` |
 | 7 | `label: 10-Q/10-K` | `label: 10-Q` |
 | 12 | `10-Q/10-K content comes from multiple layers.` | `10-Q content comes from multiple layers.` |
+| 12 | `Use the content inventory query (4G) first` | `Use the content inventory query (5F) first` |
 | 27 | `\`10-Q\` or \`10-K\`` | `\`10-Q\`` |
 | 48-56 | Both coverage sections | Keep ONLY 10-Q section. Retitle to `### MD&A Coverage: ~99%` |
 | 52-56 | 10-K coverage paragraph | DELETE |
 | 58 | `**Fallback for rare missing MD&A** (~2% of 10-K):` | `**Fallback for rare missing MD&A** (~1% of 10-Q):` |
 | 59 | `some 10-K filings have press releases attached` | `some filings have press releases attached` |
+| 61 | `use filing text (query 4F) with keyword-window scanning` | `use filing text (query 5G) with keyword-window scanning` |
 | 62 | `Zero guidance from a 10-K is an acceptable result` | `Zero guidance from a 10-Q is an acceptable result` |
 | 64-73 | Both MD&A variant rows | Keep ONLY no-apostrophe row (10-Q) |
+| 66 | `Two naming variants exist for the same section. Query 5B checks both:` | `One naming variant applies to 10-Q (no apostrophe). Query 5B handles it:` |
+| 80-81 | `Run query 4G to see what content types exist` | `Run query 5F to see what content types exist` |
 | 85 | `primary scan scope for 10-Q/10-K` | `primary scan scope for 10-Q` |
+| 97 | `Query 4F. Only if MD&A returned zero guidance` | `Query 5G. Only if MD&A returned zero guidance` |
 | 107 | `Zero guidance from a 10-Q/10-K` | `Zero guidance from a 10-Q` |
 | 152 | `Common Patterns in 10-Q/10-K` | `Common Patterns in 10-Q` |
 | 169 | `"MD&A" for 10-Q/10-K extractions` | `"MD&A" for 10-Q extractions` |
 | 179 | `10-Q/10-K Trap` | `10-Q Trap` |
 | 183 | `10-Q/10-K Quality Addition` | `10-Q Quality Addition` |
 | 191 | `10-Q/10-K filings arrive 25-45 days after the earnings event.` | `10-Q filings arrive 25-40 days after the quarter end.` |
-| 205 | `MD&A section missing (especially 10-K)` | `MD&A section missing` |
 | 195 | `the 10-Q/10-K may contain updated or more precise values` | `the 10-Q may contain updated or more precise values` |
+| 205 | `MD&A section missing (especially 10-K)` | `MD&A section missing` |
 | 207 | both EMPTY_CONTENT variants | `EMPTY_CONTENT\|10q\|MD&A` only |
 | 230-241 | Entire "10-K vs 10-Q Differences" section (12 lines) | DELETE |
-| 66 | `Two naming variants exist for the same section. Query 5B checks both:` | `One naming variant applies to 10-Q (no apostrophe). Query 5B handles it:` |
 | 242 | Version note referencing 10-K and 10-Q fixes | Update to 10-Q-only version note |
-| 12 | `Use the content inventory query (4G) first` | `Use the content inventory query (5F) first` |
-| 61 | `use filing text (query 4F) with keyword-window scanning` | `use filing text (query 5G) with keyword-window scanning` |
-| 80-81 | `Run query 4G to see what content types exist` | `Run query 5F to see what content types exist` |
-| 97 | `Query 4F. Only if MD&A returned zero guidance` | `Query 5G. Only if MD&A returned zero guidance` |
 
 ---
 
