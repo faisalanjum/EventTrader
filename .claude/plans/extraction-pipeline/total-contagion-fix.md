@@ -388,7 +388,7 @@ Remove guidance-specific content that was relocated to intersection files in Pha
 |---------|---------|-----|
 | 16 | "designated scan scope for guidance" | "designated scan scope for extraction" |
 | 62 | "Zero guidance from a 10-Q" (post-split value) | "Zero items from a 10-Q" |
-| 85 | "10-Q guidance" (post-split) | "10-Q extraction" |
+| 85 | "10-Q/10-K guidance" | "10-Q extraction" |
 | 93 | "CapEx/FCF forward guidance" | "CapEx/FCF forward expectations" |
 | 97 | "zero guidance" | "zero extractable content" |
 | 100-103 | "guidance keywords" reference | "extraction keywords" |
@@ -511,14 +511,14 @@ No other Category B changes needed. Enrichment-pass.md was already genericized i
 | 125 | `source_key` examples: `"EX-99.1"`, `"full"`, `"title"`, `"MD&A"` | `"{per intersection file}"` | B |
 | 127 | `source_type` enum: `8k, transcript, news, 10q, 10k` | `Matches \`{ASSET}\`. Extensible — add values as new source types are created.` | B |
 | 507-513 | Source Types and Richness table (5 rows: Transcript/8-K/News/10-Q/XBRL) | Replace with: `Source richness varies by asset type — see asset profiles for characteristics. XBRL contains actuals only (no forward guidance).` | B |
-| 517 | "Extraction MUST route by asset type before LLM processing. Each type has different scan scope and noise profiles. Per-source profiles in `reference/`:" (post-split: `source_type` → `asset type` already applied) | "Extraction MUST route by asset type before LLM processing. Per-source profiles loaded at slot 3 via `assets/{ASSET}.md`." | B |
-| 519-524 | Routing table (5 rows post-split, mapping asset → profile file, `Asset` header) | DELETE — routing is via file path convention, documented in agent shell | B |
+| 517 | "Extraction MUST route by `source_type` before LLM processing. Each type has different scan scope and noise profiles. Per-source profiles in `reference/`:" | "Extraction MUST route by asset type before LLM processing. Per-source profiles loaded at slot 3 via `assets/{ASSET}.md`." | B |
+| 519-524 | Routing table (4 rows mapping source_type → asset profile file) | DELETE — routing is via file path convention, documented in agent shell | B |
 | 528-534 | Source Type Mapping table (source_key + given_date per asset) | Replace with: `Source field mappings (source_key, given_date, source_refs) are defined per asset in the intersection file (slot 4).` | B |
 | 554 | "**Transcripts**: Two-pass extraction — prepared remarks via primary agent, Q&A enrichment via enrichment agent. MERGE+SET handles second write safely." | "**Two-pass assets**: Primary pass writes items, enrichment pass updates via MERGE+SET. The enrichment intersection file defines secondary content scope." | B |
 | 556 | "**All other source types**: Read all content first, extract the richest version per metric, write once per slot." | Keep as-is (generic) | — |
 | 571 | "**News: company guidance only** \| Ignore analyst estimates..." | DELETE — moved to `news-primary.md` | B |
 | 573 | "**Material corporate announcements** \| Extract management decisions..." | Phase 6 (Category C) — see below | C |
-| 651 | `ASSET \| Enum \| \`transcript\`, \`8k\`, \`news\`, \`10q\`, \`10k\`` (post-split: `10k` already added) | `ASSET \| Enum \| Extensible. Current: \`transcript\`, \`8k\`, \`news\`, \`10q\`, \`10k\`` | B |
+| 651 | `ASSET \| Enum \| \`transcript\`, \`8k\`, \`news\`, \`10q\`` | `ASSET \| Enum \| Extensible. Current: \`transcript\`, \`8k\`, \`news\`, \`10q\`, \`10k\`` | B |
 | 693-699 | Empty-Content Rules per Source Type table (4 rows) | Replace with: `Empty-content conditions are defined per asset in the asset profile (slot 3).` | B |
 | 710-723 | Reference Files table (hardcoded 8 asset-specific files + 4 utility scripts) | Replace file table with path patterns: `Asset profiles: \`assets/{ASSET}.md\``, `Asset queries: \`assets/{ASSET}-queries.md\``, `Intersection files: \`types/{TYPE}/assets/{ASSET}-{pass}.md\`` Keep utility scripts table as-is. | B |
 
@@ -558,8 +558,8 @@ Zero Cypher changes. Description-only rewrites.
 
 | Line(s) | Current | New |
 |---------|---------|-----|
-| 20 | "Primary for 10-Q" (post-split, already done) | NO-OP — skip this row |
-| 22 | "10-Q guidance extraction" (post-split) | "10-Q extraction" |
+| 20 | "Primary for 10-Q/10-K" | "Primary for 10-Q" (if 10k split already landed, this is already done) |
+| 22 | "10-Q/10-K guidance extraction" | "10-Q extraction" |
 | 34 | "look for footnotes/annotations with forward guidance" | "look for footnotes/annotations with forward-looking content" |
 | 51 | "### 5E. Risk Factors (Exclude from Guidance)" | "### 5E. Risk Factors (Exclude from Extraction)" |
 | 53 | "Useful to identify so guidance scanner can skip this section" | "Useful to identify so the extraction scanner can skip this section" |
