@@ -5,11 +5,13 @@ Rules for extracting guidance from transcript prepared remarks. Loaded at slot 4
 ## Scan Scope — Transcript
 
 Process all prepared remarks content from the transcript. Do not skip any speaker section.
-Transcripts are the richest source for extraction.
-
-When falling back to Q&A data (prepared remarks empty/truncated per primary-pass.md),
+When falling back to Q&A data (prepared remarks empty/truncated),
 apply your quality filters from the pass brief. Use quote prefix `[Q&A]` for any items
 extracted from Q&A fallback data. The enrichment agent handles specialized Q&A extraction.
+
+## MCP Truncation Workaround
+
+If query 3B result is truncated by the MCP tool, re-run the query via Bash+Python and save to `/tmp` for parsing.
 
 ## Speaker Hierarchy (Guidance Priority)
 
@@ -39,7 +41,7 @@ extracted from Q&A fallback data. The enrichment agent handles specialized Q&A e
 | Explicit range | "We expect Q2 revenue of $94-98 billion" | Yes: `derivation=explicit`, low/high from source |
 | Point guidance | "We expect gross margin of approximately 47%" | Yes: `derivation=point`, low=mid=high |
 | YoY comparison | "We expect services to grow double digits" | Yes: `derivation=implied`, qualitative="double digits" |
-| Corporate announcement | "Share repurchase authorization of $XX billion", "quarterly dividend of $X.XX per share" | Yes: `derivation=explicit`, material capital announcement |
+| Dividend guidance | "quarterly dividend of $X.XX per share" | Yes: `derivation=point`. Do NOT extract buyback authorizations or investment programs (separate type). |
 | Qualitative direction | "We see continued strength in iPhone" | No: lacks quantitative anchor |
 | Prior period results | "Q1 revenue was $124 billion" | No: past period, not forward guidance |
 | Safe harbor boilerplate | "These statements involve risks..." | No: but keep any concrete guidance adjacent to it |
@@ -49,3 +51,13 @@ extracted from Q&A fallback data. The enrichment agent handles specialized Q&A e
 All guidance extracted from prepared remarks MUST use quote prefix: `[PR]`
 
 Example: `[PR] We expect second quarter revenue to be between $94 billion and $98 billion`
+
+## Source Fields
+
+| Field | Value |
+|-------|-------|
+| `source_type` | `"transcript"` |
+| `source_key` | `"full"` |
+| `given_date` | `t.conference_datetime` |
+| `source_refs` | PreparedRemark ID: `{SOURCE_ID}_pr`. For Q&A fallback items: QAExchange IDs `{SOURCE_ID}_qa__{sequence}`. For 3C fallback (QuestionAnswer nodes): use `qa.id` directly — no sequence available. |
+| `section` | Speaker's section label (e.g., `"CFO Prepared Remarks"`, `"CEO Prepared Remarks"`) |

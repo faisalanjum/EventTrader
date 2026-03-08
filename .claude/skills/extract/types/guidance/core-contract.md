@@ -96,7 +96,7 @@ All 20 extraction fields (see [S2](#2-extraction-fields)) plus system identity p
 | `label` | String | Metric name (denormalized from Guidance parent) |
 | `label_slug` | String | `slug(label)` — enables `WHERE gu.label_slug = 'revenue'` without JOIN |
 | `segment_slug` | String | `slug(segment)` — enables `WHERE gu.segment_slug = 'iphone'` |
-| `source_refs` | String[] | IDs of sub-source nodes (e.g., QAExchange IDs for transcripts). Empty array if none. |
+| `source_refs` | String[] | IDs of sub-source nodes (per intersection file). Empty array if none. |
 
 ---
 
@@ -121,10 +121,10 @@ Every GuidanceUpdate carries these 20 properties. System identity properties (`i
 | 13 | `derivation` | String | See [S5](#5-derivation-rules) | `"calculated"` |
 | 14 | `qualitative` | String / null | What management expects (the prediction itself) | `"low to mid single digits"` |
 | 15 | `quote` | String | Max 500 chars, verbatim | `"We expect revenue between..."` |
-| 16 | `section` | String | Location within source | `"CFO Prepared Remarks"` |
-| 17 | `source_key` | String | Sub-document key | `"EX-99.1"`, `"full"`, `"title"`, `"MD&A"` |
+| 16 | `section` | String | Location within source | `"{section_identifier}"` |
+| 17 | `source_key` | String | Sub-document key | `"{per intersection file}"` |
 | 18 | `conditions` | String / null | Stated "if/assuming/excluding" caveats that qualify it | `"assumes no further rate hikes"` |
-| 19 | `source_type` | String | `8k`, `transcript`, `news`, `10q`, `10k` | `"transcript"` |
+| 19 | `source_type` | String | Matches `{ASSET}`. Extensible — add values as new source types are created. | `"transcript"` |
 | 20 | `created` | String | ISO timestamp of node creation | `"2026-02-18T14:30:00Z"` |
 
 **Rule**: No citation = no node. Every GuidanceUpdate MUST have `quote`, `FROM_SOURCE`, and `given_date`.
@@ -504,35 +504,15 @@ Run once per company per extraction run. See queries-common.md queries 2A (conce
 
 ### Source Types and Richness
 
-| Source | Richness | Extract? |
-|--------|----------|----------|
-| Transcript | Highest | YES — full scan (PR + Q&A) |
-| 8-K EX-99.* + Item text | High | YES — outlook/tables/footnotes |
-| News | Medium | YES — after channel filter |
-| 10-Q/10-K MD&A | Low | YES — MD&A primary, bounded fallback |
-| XBRL | None | NO — actuals only |
+Source richness varies by asset type — see asset profiles for characteristics. XBRL contains actuals only (no forward guidance).
 
 ### Routing
 
-Extraction MUST route by asset type before LLM processing. Each type has different scan scope and noise profiles. Per-source profiles in `reference/`:
-
-| Asset | Asset Profile |
-|-------------|---------------|
-| `transcript` | [transcript.md](../../assets/transcript.md) |
-| `8k` | [8k.md](../../assets/8k.md) |
-| `news` | [news.md](../../assets/news.md) |
-| `10q` | [10q.md](../../assets/10q.md) |
-| `10k` | [10k.md](../../assets/10k.md) |
+Extraction MUST route by asset type before LLM processing. Per-source profiles loaded at slot 3 via `assets/{ASSET}.md`.
 
 ### Source Type Mapping
 
-| source_type | source_key | given_date source |
-|-------------|------------|-------------------|
-| `8k` | `"EX-99.1"`, `"Item 2.02"`, `"Item 7.01"` | `r.created` |
-| `transcript` | `"full"` | `t.conference_datetime` |
-| `news` | `"title"` | `n.created` |
-| `10q` | `"MD&A"` | `r.created` |
-| `10k` | `"MD&A"` | `r.created` |
+Source field mappings (source_key, given_date, source_refs) are defined per asset in the intersection file (slot 4).
 
 ### Guidance Keywords
 
@@ -552,7 +532,7 @@ These keywords are common signals, not an exhaustive filter. Extract guidance re
 
 Deterministic slot-based `GuidanceUpdate.id` enforces dedup. Same slot = same ID → MERGE + SET updates properties.
 
-**Transcripts**: Two-pass extraction — prepared remarks via primary agent, Q&A enrichment via enrichment agent. MERGE+SET handles second write safely.
+**Two-pass assets**: Primary pass writes items, enrichment pass updates via MERGE+SET. The enrichment intersection file defines secondary content scope.
 
 **All other source types**: Read all content first, extract the richest version per metric, write once per slot.
 
@@ -569,9 +549,8 @@ Applied AFTER extraction, BEFORE writing to graph:
 | **No fabricated numbers** | If guidance is qualitative, use `derivation=implied`/`comparative`. Never invent numeric values. |
 | **Quote max 500 chars** | Truncate at sentence boundary with "..." if needed. |
 | **100% recall priority** | When in doubt, extract it. False positives > missed guidance. |
-| **News: company guidance only** | Ignore analyst estimates ("Est $X", "consensus $Y"). Extract only company-issued guidance. |
 | **Factors are conditions, not items** | If a forward-looking statement quantifies a factor affecting another guided metric (e.g., FX headwind, week count, commodity cost tailwind), capture it in that metric's `conditions` field — not as a standalone item. A factor already captured in a metric's `conditions` field is already extracted — do not also create a standalone item for it. |
-| **Material corporate announcements** | Extract management decisions that allocate specific capital or change shareholder returns (e.g., buyback authorizations, dividend declarations, major investment programs). These are announced actions, not forecasts — use `derivation=explicit` or `derivation=point` for stated amounts, `derivation=comparative` for directional changes. Apply the same specificity rules: a quantitative anchor is required. |
+| **Corporate announcements** | Do NOT extract capital allocation announcements (buyback authorizations, investment programs, facility plans) — these belong to the `announcement` extraction type. Dividend-per-share guidance IS extractable. |
 
 ---
 
@@ -649,7 +628,7 @@ Only needed if you want to remove ALL prior extractions and start fresh. Delete 
 | Parameter | Type | Examples |
 |-----------|------|---------|
 | `TICKER` | String | `AAPL`, `MSFT` |
-| `ASSET` | Enum | `transcript`, `8k`, `news`, `10q`, `10k` |
+| `ASSET` | Enum | Extensible. Current: `transcript`, `8k`, `news`, `10q`, `10k` |
 | `SOURCE_ID` | String | `AAPL_2025-07-31T17.00.00-04.00`, `0001193125-25-000001`, `bzNews_50123456` |
 | `TYPE` | Enum | `guidance` |
 | `MODE` | Enum | `write`, `dry_run` |
@@ -692,13 +671,7 @@ Both must be permissive for writes to occur. `MODE=write` with `ENABLE_GUIDANCE_
 
 ### Empty-Content Rules per Source Type
 
-| Source Type | Empty Condition |
-|-------------|----------------|
-| `8k` (exhibit/section/filing_text) | `strip() == ""` |
-| `transcript` | BOTH `prepared_remarks` empty AND `qa_exchanges` empty |
-| `news` | BOTH `title` and `body` empty |
-| `10q` | MD&A section `strip() == ""` |
-| `10k` | MD&A section `strip() == ""` |
+Empty-content conditions are defined per asset in the asset profile (slot 3).
 
 ### Handling
 
@@ -711,20 +684,12 @@ Both must be permissive for writes to occur. `MODE=write` with `ENABLE_GUIDANCE_
 
 ## 18. Reference Files
 
-| File | Purpose |
-|------|---------|
-| [queries-common.md](../../queries-common.md) | Shared Cypher queries (context, warmup, inventory, fulltext) |
-| [guidance-queries.md](guidance-queries.md) | Type-specific guidance lookup queries |
-| [transcript-queries.md](../../assets/transcript-queries.md) | Transcript fetch queries |
-| [8k-queries.md](../../assets/8k-queries.md) | 8-K fetch queries |
-| [news-queries.md](../../assets/news-queries.md) | News fetch queries |
-| [10q-queries.md](../../assets/10q-queries.md) | 10-Q fetch queries |
-| [10k-queries.md](../../assets/10k-queries.md) | 10-K fetch queries |
-| [transcript.md](../../assets/transcript.md) | Transcript asset profile |
-| [8k.md](../../assets/8k.md) | 8-K asset profile |
-| [news.md](../../assets/news.md) | News asset profile |
-| [10q.md](../../assets/10q.md) | 10-Q asset profile |
-| [10k.md](../../assets/10k.md) | 10-K asset profile |
+| Pattern | Purpose |
+|---------|---------|
+| `assets/{ASSET}.md` | Asset profiles |
+| `assets/{ASSET}-queries.md` | Asset-specific queries |
+| `types/{TYPE}/assets/{ASSET}-{pass}.md` | Intersection files |
+| `types/{TYPE}/{TYPE}-queries.md` | Type-specific queries |
 
 ### Utility Scripts
 

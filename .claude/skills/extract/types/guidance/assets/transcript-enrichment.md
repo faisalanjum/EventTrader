@@ -48,7 +48,7 @@ Q&A is often MORE valuable for guidance than prepared remarks because:
 | Segment detail | "Services growth will be in the mid-to-high teens" | Yes: segment="Services", qualitative |
 | Conditional guidance | "Assuming no FX headwinds, we'd see 2% higher growth" | Yes: note condition in `conditions` field |
 | Clarification of PR guidance | "To be more specific, that's on a non-GAAP basis" | Yes: updates basis for the PR guidance item |
-| Capital announcement or return decision | "We authorized a new buyback program", "we increased the dividend" | Yes: material capital/return announcement |
+| Dividend guidance | "we increased the dividend to $X.XX per share" | Yes: `derivation=point`. Do NOT extract buyback authorizations or investment programs (separate type). |
 | Analyst estimate repetition | "Your consensus shows $3.50" | No: analyst estimate, not company guidance |
 | Generic positive sentiment | "We feel good about the business" | No: no quantitative anchor |
 
@@ -81,7 +81,7 @@ If no Q&A content found, return early with NO_SECONDARY_CONTENT.
 ## Section Format
 
 - Enriched items: `CFO Prepared Remarks + Q&A` (or specific Q&A reference)
-- source_refs: array of QAExchange node IDs.
+- source_refs: array of QAExchange node IDs. For 3C fallback (QuestionAnswer nodes): use `qa.id` directly — no sequence available.
   Format: `{SOURCE_ID}_qa__{sequence}` (e.g., `AAPL_2023-11-03T17.00_qa__3`)
 
 ## Analysis Log Format

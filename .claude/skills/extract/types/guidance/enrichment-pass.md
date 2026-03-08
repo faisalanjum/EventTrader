@@ -135,7 +135,7 @@ Secondary Content Analysis Log:
 - **No fabricated numbers** — if guidance is qualitative, use `derivation=implied`/`comparative`. Never invent numeric values.
 - **Quote max 500 chars** — truncate at sentence boundary with "..." if needed. No citation = no node.
 - **100% recall priority** — when in doubt, extract it. False positives > missed guidance.
-- **Corporate announcements ARE extractable** — management decisions that allocate specific capital or change shareholder returns.
+- **Corporate announcements** — Do NOT extract capital allocation announcements (buyback authorizations, investment programs, facility plans). These belong to the `announcement` extraction type. Dividend-per-share guidance IS extractable.
 
 ### Metric Decomposition (for new items)
 

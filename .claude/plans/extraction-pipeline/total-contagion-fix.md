@@ -33,8 +33,9 @@ Eliminate ALL prompt-layer contamination across the extraction pipeline. Four ca
 | 5 | Clean common files + query descriptions (Category A) | 4 edits | — |
 | 6 | Remove corporate announcement rules (Category C) | 5 edits | — |
 | 7 | Update transcript primary intersection file | 1 edit | — |
+| 7.5 | Add `section` field + remove richness bias from intersection files | 6 edits | Phase 1 (for new files), Phase 7 (for transcript) |
 
-Phases 5-7 are independent of each other and of Phases 2-4. Total: 4 creates + 16 edit operations across 13 unique files = 20 file operations (some files edited in two phases).
+Phases 5-7.5 are independent of each other and of Phases 2-4. Total: 4 creates + 23 edit operations across 15 unique files = 27 file operations (some files edited in multiple phases).
 
 Single commit. All changes are prompt-file-only — zero script changes, one Cypher query change (inventory filter in 8A), zero runtime changes.
 
@@ -651,7 +652,65 @@ Add after line 51 (after the quote prefix section):
 | `source_type` | `"transcript"` |
 | `source_key` | `"full"` |
 | `given_date` | `t.conference_datetime` |
-| `source_refs` | PreparedRemark ID: `{SOURCE_ID}_pr`. For Q&A fallback items: QAExchange IDs `{SOURCE_ID}_qa__{sequence}`. |
+| `source_refs` | PreparedRemark ID: `{SOURCE_ID}_pr`. For Q&A fallback items: QAExchange IDs `{SOURCE_ID}_qa__{sequence}`. For 3C fallback (QuestionAnswer nodes): use `qa.id` directly — no sequence available. |
+```
+
+---
+
+## Phase 7.5: Add `section` Field + Remove Richness Bias from Intersection Files
+
+Add concrete `section` field values to each intersection file's Source Fields table (restoring illustrative context removed from core-contract.md line 124). Remove relative richness statement from transcript-primary.md (sub-agents see only one asset — ranking is meaningless and biases toward over-extraction).
+
+### FILE 22: EDIT `types/guidance/assets/transcript-primary.md`
+
+| Line | Current | New |
+|------|---------|-----|
+| 8 | "Transcripts are the richest source for extraction." | DELETE |
+
+Add `section` row to the Source Fields table added by Phase 7 (after the `source_refs` row):
+
+```
+| `section` | Speaker's section label (e.g., `"CFO Prepared Remarks"`, `"CEO Prepared Remarks"`) |
+```
+
+### FILE 22b: EDIT `types/guidance/assets/transcript-enrichment.md`
+
+Fix pre-existing gap: 3C fallback (QuestionAnswer nodes) provenance not documented in source_refs format.
+
+| Line | Current | New |
+|------|---------|-----|
+| 84 | `- source_refs: array of QAExchange node IDs.` | `- source_refs: array of QAExchange node IDs. For 3C fallback (QuestionAnswer nodes): use \`qa.id\` directly — no sequence available.` |
+
+### FILE 23: EDIT `types/guidance/assets/8k-primary.md`
+
+Add `section` row to Source Fields table (after `source_refs` row):
+
+```
+| `section` | Same as `source_key` — the exhibit/item identifier (e.g., `"EX-99.1"`, `"Item 2.02"`) |
+```
+
+### FILE 24: EDIT `types/guidance/assets/news-primary.md`
+
+Add `section` row to Source Fields table (after `source_refs` row):
+
+```
+| `section` | `"title"` when quote came from headline, `"body"` when from article body |
+```
+
+### FILE 25: EDIT `types/guidance/assets/10q-primary.md`
+
+Add `section` row to Source Fields table (after `source_refs` row):
+
+```
+| `section` | Sub-section name where content was found (e.g., `"MD&A"`, `"footnotes"`) |
+```
+
+### FILE 26: EDIT `types/guidance/assets/10k-primary.md`
+
+Add `section` row to Source Fields table (after `source_refs` row):
+
+```
+| `section` | Sub-section name where content was found (e.g., `"MD&A"`, `"footnotes"`) |
 ```
 
 ---
@@ -660,7 +719,7 @@ Add after line 51 (after the quote prefix section):
 
 ### Contagion-Free Assertions
 
-After all changes, these `grep` commands must return ZERO matches:
+After all changes, these `grep` commands must return only the documented exceptions (if any):
 
 ```bash
 # Category A: No guidance-flavored wording in common files
@@ -693,12 +752,12 @@ For each agent configuration, verify the prompt stream contains all necessary co
 
 | TYPE | ASSET | PASS | Slot 4 File | Key Content Preserved |
 |------|-------|------|-------------|----------------------|
-| guidance | transcript | primary | transcript-primary.md | Speaker hierarchy, PR scope, What-to-Extract, quote prefix `[PR]`, source_refs format, MCP truncation workaround |
+| guidance | transcript | primary | transcript-primary.md | Speaker hierarchy, PR scope, What-to-Extract, quote prefix `[PR]`, source fields + `section`, MCP truncation workaround |
 | guidance | transcript | enrichment | transcript-enrichment.md | Q&A scope, What-to-Extract, quote prefix `[Q&A]`, section format, source_refs format |
-| guidance | 8k | primary | **8k-primary.md** (NEW) | What-to-Extract, Do-Not-Extract, quote prefix `[8-K]`, source fields, dedup rule |
-| guidance | news | primary | **news-primary.md** (NEW) | Company-only filter, What-to-Extract, analyst exclusion, reaffirmation handling, quote prefix `[News]`, source fields |
-| guidance | 10q | primary | **10q-primary.md** (NEW) | What-to-Extract, Do-Not-Extract, forward-looking strictness, quote prefix `[10-Q]`, source fields |
-| guidance | 10k | primary | **10k-primary.md** (NEW) | What-to-Extract, Do-Not-Extract, forward-looking strictness, quote prefix `[10-K]`, source fields |
+| guidance | 8k | primary | **8k-primary.md** (NEW) | What-to-Extract, Do-Not-Extract, quote prefix `[8-K]`, source fields + `section`, dedup rule |
+| guidance | news | primary | **news-primary.md** (NEW) | Company-only filter, What-to-Extract, analyst exclusion, reaffirmation handling, quote prefix `[News]`, source fields + `section` |
+| guidance | 10q | primary | **10q-primary.md** (NEW) | What-to-Extract, Do-Not-Extract, forward-looking strictness, quote prefix `[10-Q]`, source fields + `section` |
+| guidance | 10k | primary | **10k-primary.md** (NEW) | What-to-Extract, Do-Not-Extract, forward-looking strictness, quote prefix `[10-K]`, source fields + `section` |
 
 For each row: concatenate the 8 slot files, diff against the pre-change concatenation. Every line removed from slots 1-2 or 5 must appear in slot 3 or 4.
 
@@ -721,6 +780,8 @@ To verify a hypothetical new type `analyst` would inherit ZERO contagion:
 3. New type gets its own `types/analyst/core-contract.md`, `primary-pass.md`, etc.
 4. No guidance-specific content inherited from any common or asset-level file
 
+**Note**: Asset query files (slot 6) contain source-structure queries organized around current use cases (e.g., Item 2.02 earnings, Guidance-channel news). These are shared across types by design — a new type may need additional queries but inherits no type-specific extraction logic. Slot-6 queries are data-access tools, not extraction instructions.
+
 ---
 
 ## Totals
@@ -728,7 +789,7 @@ To verify a hypothetical new type `analyst` would inherit ZERO contagion:
 | Metric | Count |
 |--------|-------|
 | New files created | 4 intersection files |
-| Files edited | 16 edit operations across 13 unique files (primary-pass, core-contract, transcript-primary each edited in 2 phases) |
+| Files edited | 23 edit operations across 15 unique files (primary-pass, core-contract, transcript-primary each edited in 3 phases; transcript-enrichment edited in 2 phases; 8k/news/10q/10k-primary each edited in Phase 7.5) |
 | Lines relocated to intersection files | ~134 (tables, rules, field mappings, dedup) |
 | Lines rewritten in-place | ~65 (word swaps: "guidance" → "content"/"extraction") |
 | Lines generalized | ~50 (hardcoded tables → generic references) |
@@ -774,4 +835,4 @@ Update `extraction-pipeline-tracker.md`:
 
 ---
 
-*Plan created 2026-03-08, revised 2026-03-08. Depends on: 10-K asset split (10k-split-source-type-removal.md). Scope: 4 creates + 16 edits across 13 unique files = 20 file operations, single commit.*
+*Plan created 2026-03-08, revised 2026-03-08. Depends on: 10-K asset split (10k-split-source-type-removal.md). Scope: 4 creates + 23 edits across 15 unique files = 27 file operations, single commit.*

@@ -4,7 +4,7 @@ This is your working brief. Follow it start to finish. core-contract.md is refer
 
 ## Scope
 
-Extract from primary section only (prepared remarks for transcripts, full content for other assets).
+Extract from primary content section only (per intersection file for scan scope).
 
 ---
 
@@ -23,19 +23,9 @@ Extract from primary section only (prepared remarks for transcripts, full conten
 
 ### STEP 2: FETCH SOURCE — Route by Asset Type
 
-Route by `ASSET` to correct query section (asset-queries):
-
-| Asset | Primary | Fallbacks |
-|-------------|---------|-----------|
-| `transcript` | 3B (structured) | 3C (Q&A Section), 3D (full text) |
-| `8k` | 4G (inventory) → 4C (exhibit) | 4E (section), 4F (filing text) |
-| `10q` | 5F (inventory) → 5B (MD&A) | 5C (financial stmts), 5H (exhibits), 5G (filing text) |
-| `10k` | 5F (inventory) → 5B (MD&A) | 5C (financial stmts), 5H (exhibits), 5G (filing text) |
-| `news` | 6A (single item) | 6B (channel-filtered batch) |
+Route by `ASSET` — see your asset profile (slot 3) for content fetch order. The intersection file (slot 4) may provide additional routing guidance.
 
 Apply empty-content rules (core-contract.md S17).
-
-**For transcripts**: Extract from Prepared Remarks only. Full Q&A analysis is handled by the enrichment pass. Only use `qa_exchanges` from 3B as fallback if prepared remarks are truncated or empty. If 3B result is truncated by the MCP tool, re-run the query via Bash+Python and save to `/tmp` for parsing.
 
 ### STEP 3: EXTRACT — LLM Extraction
 
@@ -90,8 +80,7 @@ Default segment is `Total`. Set segment only when text qualifies a metric with a
 - **No fabricated numbers** — if guidance is qualitative, use `derivation=implied`/`comparative`. Never invent numeric values.
 - **Quote max 500 chars** — truncate at sentence boundary with "..." if needed. No citation = no node.
 - **100% recall priority** — when in doubt, extract it. False positives > missed guidance.
-- **Corporate announcements ARE extractable** — management decisions that allocate specific capital or change shareholder returns (buyback authorizations, dividend declarations, investment announcements) should be extracted.
-- **News: company guidance only** — ignore analyst estimates ("Est $X", "consensus $Y"). Extract only company-issued guidance.
+- **Corporate announcements** — Do NOT extract capital allocation announcements (buyback authorizations, investment programs, facility plans). These belong to the `announcement` extraction type. Dividend-per-share guidance IS extractable (it is guidance, not an announcement).
 - **Factors are conditions, not items** — if a forward-looking statement quantifies a factor affecting another guided metric (e.g., FX headwind, week count), capture it in that metric's `conditions` field — not as a standalone item.
 
 ### Numeric Value Rules
@@ -113,10 +102,6 @@ Copy the number and unit exactly as printed in the source text. `"$10.3 billion"
 | `time_type` | string / null | Only for known balance-sheet items: `instant`. Omit for `duration` (default ~99%) |
 
 **Rules**: Set as many fiscal fields as text supports. `sentinel_class` ONLY when ALL fiscal fields are null (4-way judgment call). Known instant labels (not exhaustive — classify any balance-sheet stock metric as instant): `cash_and_equivalents`, `total_debt`, `long_term_debt`, `shares_outstanding`, `book_value`, `net_debt`.
-
-### Fiscal Context Rule
-
-In earnings calls and SEC filings, ALL period references are fiscal unless explicitly stated as calendar. "Second half" = fiscal H2. Only use calendar interpretation when text explicitly says "calendar year/quarter" — set `calendar_override: true`.
 
 ### Resolution Priority
 
@@ -169,14 +154,14 @@ Write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
 
 ```json
 {
-    "source_id": "AAPL_2023-11-03T17.00",
+    "source_id": "{SOURCE_ID}",
     "source_type": "{ASSET}",
-    "ticker": "AAPL",
-    "fye_month": 9,
+    "ticker": "{TICKER}",
+    "fye_month": {FYE_MONTH from Step 1},
     "items": [
         {
             "label": "Revenue",
-            "given_date": "2023-11-02",
+            "given_date": "{given_date per intersection file}",
             "fiscal_year": 2024,
             "fiscal_quarter": 1,
             "basis_norm": "unknown",
@@ -186,8 +171,8 @@ Write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
             "qualitative": "similar to last year",
             "conditions": null,
             "quote": "We expect revenue...",
-            "section": "CFO Prepared Remarks",
-            "source_key": "full",
+            "section": "{section per intersection file}",
+            "source_key": "{source_key per intersection file}",
             "derivation": "explicit",
             "basis_raw": null,
             "aliases": [],
@@ -203,7 +188,7 @@ Write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
 
 Items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally. Include `fye_month` at top level when items use LLM period fields instead of pre-computed `period_u_id`.
 
-**`source_refs`**: Array of sub-source node IDs that produced the item. For transcripts, use PreparedRemark ID (`{SOURCE_ID}_pr`) or QAExchange IDs (`{SOURCE_ID}_qa__{sequence}`). For 8-K reports, use exhibit/item IDs if available. Empty array `[]` when no sub-source granularity applies.
+**`source_refs`**: Array of sub-source node IDs that produced the item. See intersection file for per-asset format. Empty array `[]` when no sub-source granularity applies.
 
 **LLM period fields** (optional per item — only needed when `period_u_id` is not pre-computed): `fiscal_year`, `fiscal_quarter`, `half`, `month`, `long_range_start_year`, `long_range_end_year`, `calendar_override`, `sentinel_class`, `time_type`.
 

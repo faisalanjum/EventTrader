@@ -19,7 +19,7 @@ ORDER BY r.created
 
 ### 5B. MD&A Section Content (Primary for 10-Q)
 
-MD&A is the primary scan scope for 10-Q guidance extraction.
+MD&A is the primary scan scope for 10-Q extraction.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
@@ -31,7 +31,7 @@ RETURN s.content AS content, s.section_name, r.created AS filing_date
 
 ### 5C. Financial Statement Content (Supplementary)
 
-Structured JSON data — look for footnotes/annotations with forward guidance.
+Structured JSON data — look for footnotes/annotations with forward-looking content.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_FINANCIAL_STATEMENT]->(fs:FinancialStatementContent)
@@ -48,9 +48,9 @@ RETURN s.section_name, size(s.content) AS content_length
 ORDER BY s.section_name
 ```
 
-### 5E. Risk Factors (Exclude from Guidance)
+### 5E. Risk Factors (Exclude from Extraction)
 
-Useful to identify so guidance scanner can skip this section (legal/risk-heavy content).
+Useful to identify so the extraction scanner can skip this section (legal/risk-heavy content).
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)

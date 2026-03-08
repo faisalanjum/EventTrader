@@ -14,9 +14,9 @@ RETURN n.body AS content, n.created AS pub_date, n.title AS title, n.channels
 ```
 **Empty check**: If BOTH `title` and `body` are null/empty, return `EMPTY_CONTENT|news|full`.
 
-### 6B. Guidance-Channel News (Pre-Filtered)
+### 6B. Channel-Filtered News (Pre-Filtered)
 
-Filter by Benzinga channels BEFORE LLM processing. These channels most likely contain company guidance. **Dates are required** — news result sets are too large for unbounded queries.
+Filter by Benzinga channels BEFORE LLM processing. These channels most likely contain forward-looking content. **Dates are required** — news result sets are too large for unbounded queries.
 
 ```cypher
 MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
@@ -48,11 +48,11 @@ Full content fetch for a specific news item.
 MATCH (n:News {id: $news_id})
 RETURN n.id, n.title, n.body, n.teaser, n.created, n.channels, n.tags
 ```
-**Note**: `body` field is often empty — title may contain complete guidance. Always process both.
+**Note**: `body` field is often empty — title may contain complete forward-looking content. Always process both.
 
 ### 6E. Earnings Beat/Miss News (for Context)
 
-News tagged as earnings results, useful for cross-referencing guidance context.
+News tagged as earnings results, useful for cross-referencing extraction context.
 
 ```cypher
 MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})

@@ -189,8 +189,7 @@ Run first to understand what data exists for a company.
 ```cypher
 MATCH (c:Company {ticker: $ticker})
 OPTIONAL MATCH (r8k:Report {formType: '8-K'})-[:PRIMARY_FILER]->(c)
-  WHERE r8k.items CONTAINS 'Item 2.02'
-  AND ($start_date IS NULL OR r8k.created >= $start_date)
+  WHERE ($start_date IS NULL OR r8k.created >= $start_date)
   AND ($end_date IS NULL OR r8k.created <= $end_date)
 OPTIONAL MATCH (t:Transcript)-[:INFLUENCES]->(c)
   WHERE ($start_date IS NULL OR t.conference_datetime >= $start_date)
@@ -201,7 +200,7 @@ OPTIONAL MATCH (n:News)-[:INFLUENCES]->(c)
 OPTIONAL MATCH (rxbrl:Report)-[:PRIMARY_FILER]->(c)
   WHERE rxbrl.formType IN ['10-K', '10-Q']
 RETURN c.ticker, c.name,
-       count(DISTINCT r8k) AS earnings_8k_count,
+       count(DISTINCT r8k) AS r8k_count,
        count(DISTINCT t) AS transcript_count,
        count(DISTINCT n) AS news_count,
        count(DISTINCT rxbrl) AS xbrl_report_count
@@ -310,11 +309,7 @@ LIMIT 20
 2. **Warmup**: 2A (Concept cache) → 2B (Member cache)
 3. **Existing**: Type-specific lookup (see type queries)
 4. **Sources** (chronological by filing date):
-   - 4A (earnings 8-K) + 4B (pre-announcements) with null dates → for each: 4C/4E (content)
-   - 3A with null dates (All transcripts) → for each: 3B (structured content), 3C if Q&A missing
-   - 5A with null dates (All 10-Q filings) → for each: 5B (MD&A)
-   - 5A with null dates (All 10-K filings) → for each: 5B (MD&A)
-   - 6B (Guidance-channel news, dates required) → for each: 6A (content)
+   - Asset-specific source queries (see asset query files for fetch order per source type)
 5. **Write**: Type-specific writer scripts handle all graph writes (not Cypher in this file)
 
 ### Single Source Extraction
