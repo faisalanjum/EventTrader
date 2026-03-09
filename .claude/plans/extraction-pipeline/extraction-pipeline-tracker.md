@@ -2,7 +2,7 @@
 
 Single source of truth for all done/open/future items across the extraction pipeline.
 
-**Updated**: 2026-03-09 (runtime error fixes: E1/E4a/E4b DONE via warmup_cache.py, E2 hardened with CLI hint)
+**Updated**: 2026-03-09 (all 5 asset profiles decontaminated; runtime error fixes E1/E4a/E4b DONE via warmup_cache.py)
 
 ---
 
@@ -63,6 +63,21 @@ Single source of truth for all done/open/future items across the extraction pipe
 | `transcript-enrichment.md` — 3C fallback provenance note added | `84fc97f` | DONE |
 | Phase 7.5: `section` field + richness bias removal across all intersection files | `84fc97f` | DONE |
 
+### Full Asset Decontamination (3 Requirements)
+
+All 5 generic asset profiles decontaminated to the same standard: (1) any new extraction type works without new queries, (2) zero guidance-specific content in generic files, (3) guidance extraction remains immediately executable.
+
+| Item | Commit | Status |
+|------|--------|--------|
+| News: `news.md`, `news-queries.md` decontaminated; `news-primary.md` absorbs fulltext/withdrawn rules | `42ebdf6` | DONE |
+| Control plane: `trigger-extract.py`, `extraction_worker.py` — static `ALLOWED_TYPES` → dynamic `discover_allowed_types()` | `42ebdf6` | DONE |
+| 10-Q/10-K: `10q.md`, `10k.md` decontaminated; query 5I added for generic section access; `s.content_length` type fixed | `6c626d6` | DONE |
+| 10-Q/10-K: `10q-primary.md`, `10k-primary.md` absorb basis inheritance, filing text fallback, section exclusions | `6c626d6` | DONE |
+| Runtime: concept/member cache + transcript fetch routed through `warmup_cache.sh` to avoid MCP truncation | `6c626d6` | DONE |
+| Runtime: `guidance_write_cli.py` diagnostic hint for nested-vs-flat JSON mistakes | `6c626d6` | DONE |
+| 8-K: `8k.md`, `8k-queries.md` decontaminated; `8k-primary.md` absorbs content strategy, table columns, safe-harbor proximity | `4f5d7c3` | DONE |
+| Transcript: `transcript.md` decontaminated; `transcript-primary.md` absorbs basis context trap | `4f5d7c3` | DONE |
+
 ### First Production Run (5 AAPL transcripts)
 
 | Item | Status |
@@ -83,7 +98,7 @@ Single source of truth for all done/open/future items across the extraction pipe
 
 ---
 
-*All contagion categories (A/B/C/E) resolved — see Completed section above.*
+*All contagion categories (A/B/C/E) resolved. All 5 asset profiles (news, 10q, 10k, 8k, transcript) fully decontaminated.*
 
 ---
 
@@ -153,7 +168,7 @@ Single source of truth for all done/open/future items across the extraction pipe
 
 | Item | Source | Blocked On | Notes |
 |------|--------|------------|-------|
-| Phase 4: First non-guidance type | Pipeline plan S8 | Type selection | 5-6 files + whitelist entries |
+| Phase 4: First non-guidance type | Pipeline plan S8 | Type selection | 5-6 files (auto-discovered via `discover_allowed_types()`) |
 | Generic extraction type for learner | Pipeline plan (OPEN section) | `learner.md` implementation | Copy guidance schema → Generic/GenericUpdate/GenericPeriod. Learner edits 1 file. |
 | Learner-triggered job spawning | — | Generic type + trigger design | Learner adds extraction tasks on-the-fly to generic type. Needs trigger mechanism that supports both auto-ingestion triggers AND learner-initiated ad-hoc triggers. See Trigger Design below. |
 | Shared `write_cli.py` abstraction | Pipeline plan S11 #8 | Phase 4 (type #2 reveals pattern) | Only if >50% code shared |
@@ -208,6 +223,7 @@ Unique insights preserved from design proofs:
 | `extraction-pipeline-tracker.md` | **KEEP** (this file) | Consolidated tracking |
 | `extraction-instruction-stack.md` | **KEEP** (operational ref) | Unique: what each agent actually sees, message types, context accounting |
 | `10k-split-source-type-removal.md` | **ARCHIVE** | Fully implemented (`d3af160`). |
+| `10q-decontamination.md` | **ARCHIVE** | Fully implemented (`6c626d6`). |
 | `total-contagion-fix.md` | **ARCHIVE** | Fully implemented (`84fc97f`). |
 | `transcript-guidancePollutionFix.md` | **ARCHIVE** | Fully implemented (`8a87a0f`). Recipe extracted to pipeline plan. |
 | `extraction-pipeline-audit.md` | **DELETE** | All items absorbed into this tracker. |
@@ -216,4 +232,4 @@ Unique insights preserved from design proofs:
 
 ---
 
-*Consolidated 2026-03-07; updated 2026-03-08 (10-K split `d3af160`, contagion fix `84fc97f`, news.md fixup, tracker cleanup).*
+*Consolidated 2026-03-07; updated 2026-03-08 (10-K split `d3af160`, contagion fix `84fc97f`, news.md fixup, tracker cleanup). Updated 2026-03-09 (full decontamination: news `42ebdf6`, 10q/10k `6c626d6`, 8k/transcript `4f5d7c3`).*
