@@ -105,7 +105,7 @@ ORDER BY r.created
 
 ### 4I. Financial Statement Content
 
-Structured JSON financial statements attached to a report. Rare for 8-K but exists. Check 4G `financial_stmts` first.
+Structured JSON financial statements attached to a report. Not observed for 8-K; present for 10-K/10-Q. Check 4G `financial_stmts` first.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_FINANCIAL_STATEMENT]->(fs:FinancialStatementContent)
