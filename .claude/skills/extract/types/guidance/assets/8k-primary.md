@@ -70,7 +70,7 @@ Example: `[8-K] We expect second quarter revenue to be between $94 billion and $
 | Field | Value |
 |-------|-------|
 | `source_type` | `"8k"` |
-| `source_key` | `"EX-99.1"`, `"EX-99.2"`, `"Item 2.02"`, `"Item 7.01"` (whichever contained the guidance) |
+| `source_key` | `"EX-99.1"`, `"EX-99.2"`, `"Item 2.02"`, `"Item 7.01"`, `"Item 8.01"` (whichever contained the guidance) |
 | `given_date` | `r.created` (the filing date) |
 | `source_refs` | Exhibit or item IDs if available. Empty array `[]` when no sub-source granularity applies. |
 | `section` | Same as `source_key` — the exhibit/item identifier (e.g., `"EX-99.1"`, `"Item 2.02"`) |

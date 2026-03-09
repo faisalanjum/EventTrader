@@ -100,7 +100,7 @@ Body text may contain:
 
 ### Common Patterns in News
 
-| Source Text | period_type | fiscal_year | fiscal_quarter |
+| Source Text | period_scope | fiscal_year | fiscal_quarter |
 |-------------|-------------|-------------|----------------|
 | "Q2 revenue" | quarter | Derive from context | Q2 |
 | "full-year outlook" | annual | From text or derive from date | `.` |

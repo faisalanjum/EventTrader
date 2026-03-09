@@ -108,14 +108,14 @@ Transcripts cover multiple periods. Each extracted item references a target peri
 
 ### Common Patterns
 
-| Transcript Statement | period_type | fiscal_year | fiscal_quarter |
+| Transcript Statement | period_scope | fiscal_year | fiscal_quarter |
 |---------------------|-------------|-------------|----------------|
 | "For the December quarter" | quarter | Derive from FYE | Derive from FYE |
 | "For the full fiscal year" | annual | From t.fiscal_year | `.` |
 | "For the March quarter" | quarter | Derive from FYE | Derive from FYE |
 | "For the second half" | half | From t.fiscal_year | `.` |
-| "By fiscal 2027" | long-range | 2027 | `.` |
-| "Over the next several years" | long-range | Best-effort | `.` |
+| "By fiscal 2027" | long_range | 2027 | `.` |
+| "Over the next several years" | long_range | Best-effort | `.` |
 
 ### Calendar → Fiscal Mapping
 
