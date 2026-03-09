@@ -308,6 +308,87 @@ DISPLAY=:99 obsidian property:read file="attribution-report" name="primary_drive
 
 ---
 
+## Sub-Agent Thinking Capture (investigated 2026-03-09)
+
+### The Problem
+
+Sub-agent thinking blocks (extended thinking / chain-of-thought) no longer appear in sub-agent transcript files on Claude Code v2.1.68+. The SubagentStop hook reads `agent_transcript_path` correctly but finds 0 thinking blocks.
+
+### Root Cause (verified by decompiling v2.1.71 binary)
+
+Claude Code v2.1.68 introduced a hard-coded restriction in the Agent tool execution path:
+
+```javascript
+// Deobfuscated from v2.1.71 binary — agent spawning function IS()
+// Parameters: agentDefinition, useExactTools (X), isAsync (D), etc.
+
+// T = is_fork (true when spawned via Skill tool)
+// y = same-agent-type recursion (true when agent spawns its own type)
+
+thinkingConfig: (T || y) ? parentOptions.thinkingConfig : {type: "disabled"}
+//              ^^^^^^^^^                                  ^^^^^^^^^^^^^^^^
+//              fork/self-recurse → inherit parent         everything else → DISABLED
+```
+
+This means:
+
+| Spawn method | Thinking enabled? | Why |
+|---|---|---|
+| **Agent tool** (normal sub-agents) | **NO** | `useExactTools` = false → `{type: "disabled"}` |
+| **Skill tool** (forked skills) | **YES** | Fork context → inherits parent thinkingConfig |
+| Agent spawning same type (self-recursion) | **YES** | `y = true` → inherits parent thinkingConfig |
+| Hook agents (prompt/agent type) | **NO** | Explicitly set `thinkingConfig: {type: "disabled"}` |
+
+### What does NOT help
+
+| Setting | Location | Effect on sub-agents |
+|---|---|---|
+| `alwaysThinkingEnabled: true` | `~/.claude/settings.json` | Only affects parent main loop, not sub-agent options |
+| `effortLevel: "high"` | `~/.claude/settings.json` | Sets parent state, overridden by disabled thinkingConfig |
+| `MAX_THINKING_TOKENS: 31999` | `~/.claude/settings.json` env | Budget irrelevant when thinking is disabled |
+| `"ultrathink"` in agent prompt | Agent tool prompt field | Keyword processed by CLI layer for parent only |
+| `effort:` in agent frontmatter | `.claude/agents/*.md` | Sets effortValue in state but thinkingConfig still disabled |
+| `CLAUDE_CODE_ALWAYS_ENABLE_EFFORT` | env var | Affects effort check function, not sub-agent thinkingConfig |
+
+### Evidence
+
+**Old sessions (v2.1.52, opus-4-5, Feb 2026):**
+```
+agent-a96c6e5.jsonl: 3 thinking (1,044 chars), 2 text   ← THINKING PRESENT
+agent-ab0db5f.jsonl: 3 thinking (1,534 chars), 2 text
+agent-ad241eb.jsonl: 3 thinking (3,304 chars), 2 text
+Model: claude-opus-4-5-20251101
+```
+
+**Current sessions (v2.1.71, opus-4-6, Mar 2026):**
+```
+agent-a491aae.jsonl: 0 thinking, 6 text                 ← NO THINKING
+agent-a6785da.jsonl: 0 thinking, 1 text  (ultrathink in prompt — still nothing)
+agent-aa50571.jsonl: 0 thinking, 3 text  (ultrathink in prompt — still nothing)
+Model: claude-opus-4-6
+Parent transcript: 38 thinking blocks, 39,089 chars      ← Parent HAS thinking
+```
+
+### What the hook captures today
+
+The SubagentStop hook (`obsidian_capture.sh`) correctly:
+- Reads each agent's own `agent_transcript_path` (no inter-joining between agents)
+- Extracts thinking blocks when present (opus-4-5 sessions, future models)
+- Reports `thinking_blocks: 0` when none found (opus-4-6 sub-agents)
+- Captures output text, dynamic tags, frontmatter metadata regardless
+
+Each agent gets its own file: `2026-03-09_general-purpose_a6785dae.md` — one .jsonl → one .md note. No mixing.
+
+### Workarounds
+
+1. **Use Skills instead of Agents** — Skills invoked via Skill tool run as forks with thinking enabled. If a workflow needs thinking captured, structure it as `/earnings-attribution` (skill) rather than Agent tool spawning.
+
+2. **Extract parent thinking** — The parent transcript contains thinking blocks about each agent (why it was spawned, what the parent concluded from results). The hook could correlate parent thinking to specific agents by matching the Agent tool_use call containing the agent_id. This is the parent's reasoning, not the agent's own thinking, but is still valuable context.
+
+3. **Wait for upstream fix** — This is a deliberate cost-saving measure in v2.1.68+. Future Claude Code versions may add a configuration option to enable thinking for sub-agents.
+
+---
+
 ## CLI Command Audit (2026-03-09)
 
 **Tested every command from `obsidian --help` against live vault (earnings-analysis).**
