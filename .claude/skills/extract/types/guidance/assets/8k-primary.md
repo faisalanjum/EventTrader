@@ -10,6 +10,33 @@ Use the content fetch order in the asset profile (8k.md):
 
 Apply empty-content rules from the asset profile.
 
+## Scan Scope
+
+### Exhibit (EX-99.1 Press Release)
+
+Press releases have a consistent structure. Scan in this order:
+
+| Section | What to Look For | Priority |
+|---------|-----------------|----------|
+| **Outlook / Guidance** | Explicit forward-looking section, usually near bottom | Highest |
+| **Tables** | Revenue/EPS/margin projections, often GAAP vs non-GAAP side by side | High |
+| **Footnotes** | GAAP/non-GAAP reconciliation, basis clarification | Medium |
+| **Opening paragraphs** | Summary with key numbers (may mix actuals and forward-looking statements) | Medium |
+| **Safe harbor** | Skip boilerplate, but keep adjacent concrete forward-looking content | Filter |
+
+### Section Text (Item 2.02 / 7.01)
+
+Usually shorter than exhibits. Often duplicates exhibit content in condensed form. May contain additional context not in the exhibit.
+
+### Pre-Announcements (Item 7.01 / 8.01)
+
+Mid-quarter forward-looking updates — often market-moving. These filings may:
+- Raise/lower existing outlook
+- Provide preliminary results
+- Announce special items affecting outlook
+
+Query 4B finds these. Same extraction rules apply but be especially attentive to revision language.
+
 ## What to Extract from 8-K
 
 | Signal | Example | Extract? |
