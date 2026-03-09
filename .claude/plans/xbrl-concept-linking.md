@@ -3,6 +3,7 @@
 **Created**: 2026-03-09
 **Status**: PLANNED (not yet implemented)
 **Tracker refs**: E9 (concept inconsistency), E3 (member matching), Enhancement #23 (concept resolver)
+**Supersedes**: `xbrl-concept-linking-gpt.md` (its alternative hypotheses are merged into this file as additive notes)
 
 ---
 
@@ -18,6 +19,7 @@
 8. [Member Linking — Current State](#8-member-linking--current-state)
 9. [Regression & Edge Case Analysis](#9-regression--edge-case-analysis)
 10. [Why Every Alternative Fails](#10-why-every-alternative-fails)
+11. [Addendum — E4d and Member-Linking Alternatives](#11-addendum--e4d-and-member-linking-alternatives)
 
 ---
 
@@ -33,6 +35,27 @@ The extraction pipeline links GuidanceUpdate nodes to XBRL Concept and Member no
 **Concept linking**: LLM-driven, nondeterministic. 84.6% recall across production data. The agent sometimes resolves the correct concept, sometimes doesn't — even for the same metric in the same company across different extraction runs.
 
 **Goal**: 100% recall, 100% precision for both, with zero manual oversight and no new pipeline steps.
+
+### Alternative Framing — Strict Identity Model
+
+The parallel GPT analysis argued that the deeper problem is not only agent nondeterminism; it is also that guidance refers to stable business identities while the graph links to versioned `Concept` and `Member` nodes.
+
+Under that stricter framing:
+
+- concept truth would be the stable `xbrl_qname`
+- member truth would be a stable company-local identity such as `axis_qname|member_qname`
+- physical `MAPS_TO_CONCEPT` / `MAPS_TO_MEMBER` edges would be treated as materialized conveniences, not the ultimate source of truth
+
+Why this may be better:
+
+- it is semantically cleaner about taxonomy-version drift
+- it avoids treating an arbitrary `LIMIT 1` node edge as exact truth
+
+Why this may not be better for the current repo:
+
+- it is a schema/contract redesign, not a minimal fix
+- the existing architecture explicitly keeps both `xbrl_qname` and `MAPS_TO_CONCEPT`, and uses `member_u_ids` / `MAPS_TO_MEMBER`
+- the current implementation work is better scoped as deterministic resolution inside the existing contract
 
 ---
 
@@ -269,6 +292,28 @@ Output: {slug: qname} dict written to /tmp/concept_map_{TICKER}.json
 
 Labels not in the registry (e.g., a future `average_revenue_per_user`) pass through unchanged — the agent's value is preserved, same as today. When a new common metric emerges, adding one line to the registry takes 10 seconds.
 
+### Alternative — Exact-Link-Only Policy
+
+The GPT analysis proposed a stricter precision policy:
+
+- only emit exact concept links for labels that are semantically concept-equivalent
+- leave derived / comparative / ratio metrics null unless there is a truly exact XBRL concept
+
+Examples from that stricter policy:
+
+- exact-link candidates: `revenue`, `eps`, `opex`, `oine`, `tax_rate`, `dividend_per_share`, `restructuring_costs`, `restructuring_cash_payments`
+- likely null-by-policy: `gross_margin`, `operating_margin`, `fcf`, growth metrics, comparative metrics
+
+Why this may be better:
+
+- maximizes semantic precision
+- avoids storing an approximate anchor as if it were an exact concept match
+
+Why this may not be better here:
+
+- it intentionally gives up recall on currently useful links such as `gross_margin -> GrossProfit`
+- it would change the meaning of success in the scorecard and diverge from current repo behavior
+
 ---
 
 ## 6. Implementation — The 30-Line Fix
@@ -353,11 +398,21 @@ Replace lines 200-208 (concept inheritance block) with:
             item['xbrl_qname'] = concept_map[item['label']]
 ```
 
-### Total Changes
+### Total Changes (Concept Resolution Only)
 
 - `warmup_cache.py`: +25 lines (registry dict + resolve function + 3 lines in run_warmup)
 - `guidance_write_cli.py`: ~8 lines replaced (load map + apply + growth suffix + inheritance preserved)
 - **No new files. No new pipeline steps. No prompt changes required.**
+
+### Total Changes (Concept + Member — Full Plan)
+
+- `warmup_cache.py`: +45 lines (concept registry + resolve function + member resolve function + calls in run_warmup)
+- `guidance_write_cli.py`: ~18 lines net (concept map load+apply, member map load+apply replaces old write-mode-only block)
+- `guidance_ids.py`: 2 lines changed (normalize `&` → `and`, camelCase split)
+- `primary-pass.md`: 1 line changed (step 5: remove agent member matching)
+- `enrichment-pass.md`: 1 line removed (member cache row)
+- `core-contract.md`: 2 blocks updated (S7 member matching, S11 member matching gate)
+- **No new files. No new pipeline steps. No schema changes.**
 
 ---
 
@@ -424,74 +479,194 @@ Replace lines 200-208 (concept inheritance block) with:
 
 ---
 
-## 8. Member Linking — Current State
+## 8. Member Linking — Amendment: Code Owns Member Identity
 
-### Architecture
+### Problem: E4d + Split Ownership
 
-Member matching runs in `guidance_write_cli.py` lines 232-268 (write mode only):
+The original Section 8 described the current state and concluded "no action needed." That was wrong on two counts:
 
-```python
-# 1. Fetch company CIK
-cik_rec = manager.execute_cypher_query(
-    "MATCH (c:Company {ticker: $ticker}) RETURN c.cik AS cik LIMIT 1",
-    {'ticker': ticker},
-)
+1. **E4d (member cache truncation)**: CRM's member cache is 52.6KB — exceeds the ~50KB `<persisted-output>` threshold. The agent's `Read` hits truncation on **both** passes. The agent wastes 3-4 turns per pass trying to recover (~$0.50-$1.00 per extraction). For companies with many segments, truncation could cause the agent to miss valid segments entirely.
 
-# 2. Fetch all Members for company by CIK prefix (handles padding)
-cik = str(cik_rec['cik'])
-cik_stripped = cik.lstrip('0') or '0'
-member_rows = manager.execute_cypher_query_all(
-    "MATCH (m:Member) "
-    "WHERE m.u_id STARTS WITH $cp OR m.u_id STARTS WITH $cpp "
-    "RETURN m.label AS label, m.qname AS qname, "
-    "       head(collect(m.u_id)) AS u_id",
-    {'cp': cik_stripped + ':', 'cpp': cik + ':'},
-)
+2. **Split ownership**: Member matching is currently owned by TWO systems — the agent (reads cache, attempts matching during extraction) and the CLI (overwrites agent's results in write mode via all-members-by-CIK query). This split is the same architectural mistake that concept linking has — the LLM doing work that deterministic code does better. The CLI's authoritative overwrite masks the agent's failures today, but only in write mode. **Dry-run mode gets no member matching at all.**
 
-# 3. Normalize and match
-member_lookup = {}
-for row in member_rows:
-    if row['label']:
-        norm = normalize_for_member_match(row['label'])
-        if norm:
-            member_lookup.setdefault(norm, []).append(row['u_id'])
-matched = 0
-for item in valid_items:
-    seg = item.get('segment', 'Total')
-    if seg and seg != 'Total':
-        norm_seg = normalize_for_member_match(seg)
-        if norm_seg in member_lookup:
-            item['member_u_ids'] = member_lookup[norm_seg]
-            matched += 1
+### Design Decision: Code Owns Member Identity
+
+Following the same principle as concept resolution: shift member resolution LEFT into warmup, let the CLI apply it in both modes, and remove the agent from the loop entirely.
+
+**Key constraint**: Do NOT use the 2B context-only member lookup. Issue #61 (`guidance-extraction-issues.md:69`) proved that 2B misses real members (e.g., IBM's `RedHatMember` has 0 XBRL facts → absent from context-filtered 2B). The all-members-by-CIK query is the authoritative source.
+
+### Architecture: Shift Member Resolution LEFT into Warmup
+
+**Current flow:**
+```
+warmup → raw member cache (52.6KB) → agent reads (TRUNCATED) → agent matches → CLI overwrites in write mode
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^
+                                      BROKEN (E4d)               WASTED WORK
 ```
 
-### Normalization Function (`guidance_ids.py:198-204`)
+**Proposed flow:**
+```
+warmup → RESOLVED MEMBER MAP → agent extracts segment text only → CLI reads map → applies in BOTH modes
+         ^^^^^^^^^^^^^^^^^^^^                                      ^^^^^^^^^^^^^
+         DETERMINISTIC (warmup)                                    DICT LOOKUP
+```
+
+### Implementation
+
+#### Changes to `warmup_cache.py` (~20 lines)
+
+Add a member resolution step that runs the same all-members-by-CIK query currently in `guidance_write_cli.py:232-268`, applies the strengthened normalization, and writes a compact map:
+
+```python
+def _resolve_members(ticker, manager):
+    """Build normalized_segment → [u_ids] map. Uses all-members-by-CIK (not 2B-only)."""
+    cik_rec = manager.execute_cypher_query(
+        "MATCH (c:Company {ticker: $ticker}) RETURN c.cik AS cik LIMIT 1",
+        {'ticker': ticker},
+    )
+    if not cik_rec:
+        return {}
+    cik = str(cik_rec['cik'])
+    cik_stripped = cik.lstrip('0') or '0'
+    member_rows = manager.execute_cypher_query_all(
+        "MATCH (m:Member) "
+        "WHERE m.u_id STARTS WITH $cp OR m.u_id STARTS WITH $cpp "
+        "RETURN m.label AS label, m.qname AS qname, "
+        "       head(collect(m.u_id)) AS u_id",
+        {'cp': cik_stripped + ':', 'cpp': cik + ':'},
+    )
+    lookup = {}
+    for row in member_rows:
+        if row['label']:
+            norm = normalize_for_member_match(row['label'])
+            if norm:
+                lookup.setdefault(norm, []).append(row['u_id'])
+    return lookup
+```
+
+Add at end of `run_warmup()`:
+
+```python
+        mmap = _resolve_members(ticker, manager)
+        mmap_path = f'/tmp/member_map_{ticker}.json'
+        with open(mmap_path, 'w') as f:
+            json.dump(mmap, f)
+        print(f'Members: {len(mmap)} resolved → {mmap_path}')
+```
+
+#### Changes to `guidance_write_cli.py` (~10 lines)
+
+Load the pre-resolved member map and apply it **before the dry-run/write branch** (i.e., in both modes):
+
+```python
+    # Member resolution: load pre-computed map, apply to all segmented items
+    try:
+        mmap = json.load(open(f'/tmp/member_map_{ticker}.json'))
+    except FileNotFoundError:
+        mmap = {}
+    for item in valid_items:
+        seg = item.get('segment', 'Total')
+        if seg and seg != 'Total':
+            norm_seg = normalize_for_member_match(seg)
+            if norm_seg in mmap:
+                item['member_u_ids'] = mmap[norm_seg]
+```
+
+This replaces the current write-mode-only member matching block (lines 232-268). The Neo4j query moves to warmup; the CLI becomes a pure dict lookup.
+
+#### Fix `normalize_for_member_match()` (`guidance_ids.py:198-204`)
+
+Current normalization has a blind spot discovered by the GPT analysis: `Subscription & Support` → `subscriptionsupport` vs `SubscriptionandSupport` → `subscriptionandsupport`. These don't match.
 
 ```python
 def normalize_for_member_match(s: str) -> str:
     """Normalize for segment↔member matching: lowercase alphanum, strip XBRL tokens."""
-    n = re.sub(r'[^a-z0-9]', '', s.lower())
+    n = s.replace('&', 'and')           # NEW: & → and before stripping punctuation
+    n = re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', n)  # NEW: split camelCase
+    n = re.sub(r'[^a-z0-9]', '', n.lower())
     n = n.replace('member', '').replace('segment', '')
     if n.endswith('s'):
         n = n[:-1]
     return n
 ```
 
-### AAPL Member Matching — Verified
+Verification (CRM blind spot):
+- `Subscription & Support` → `subscription and support` → `subscriptionandsupport` → strip → `subscriptionandsupport`
+- `SubscriptionandSupport` → `Subscriptionand Support` → `subscriptionandsupport` → strip → `subscriptionandsupport`
+- **Match** ✓
 
-| Segment (extracted) | Normalized | Member Label | Normalized | Match? |
-|---|---|---|---|---|
-| iPhone | `iphone` | IPhone | `iphone` | YES |
-| iPad | `ipad` | IPad | `ipad` | YES |
-| Mac | `mac` | Mac | `mac` | YES |
-| Services | `service` | Service | `service` | YES |
-| Wearables, Home and Accessories | `wearableshomeandaccessorie` | WearablesHomeandAccessories | `wearableshomeandaccessorie` | YES |
+Verification (existing AAPL cases — no regressions):
+- `Wearables, Home and Accessories` → `wearableshomeandaccessorie` (unchanged — `&` not present, camelCase not present)
+- `WearablesHomeandAccessories` → `Wearables Homeand Accessories` → `wearableshomeandaccessorie` ✓
+- `IPhone` → `I Phone` → `iphone` ✓ (camelCase split adds space, stripped by `[^a-z0-9]`)
 
-**5/5 = 100% precision and recall.** No action needed.
+#### Remove Agent-Owned Member Matching from Pass Docs
 
-### Potential Edge Cases (not yet observed)
+Three doc locations must be updated:
+
+1. **`primary-pass.md:44`** — Remove step 5 ("Member match — for each item where segment != 'Total', scan the member cache..."). Replace with: "Member matching is handled by the CLI — do not attempt member resolution. Extract `segment` text only."
+
+2. **`enrichment-pass.md:22`** — Remove "Member cache" row from STEP 1 context table. Agent no longer reads the member cache.
+
+3. **`core-contract.md:309-316`** — Replace "Member Matching" subsection under S7 with: "Member matching is code-owned (CLI). The agent extracts segment text; the CLI resolves `member_u_ids` deterministically via pre-computed member map. See `warmup_cache.py` and `guidance_write_cli.py`."
+
+4. **`core-contract.md:491-497`** — Replace "Member Matching Gate" with: "Member matching is code-owned. CLI applies pre-resolved member map in both dry-run and write mode."
+
+### What This Fixes
+
+| Problem | Before | After |
+|---|---|---|
+| E4d (agent reads 52.6KB member cache) | Truncated on both passes, 3-4 wasted turns | Agent never reads member cache |
+| Dry-run member matching | None — dry-run skips Neo4j | Works — CLI loads pre-computed map |
+| Split ownership | Agent + CLI both attempt matching | CLI only (single authority) |
+| Normalization blind spot | `&` vs `and` mismatch | Fixed in `normalize_for_member_match()` |
+| Cost per extraction | ~$0.50-$1.00 wasted on cache recovery | Zero — cache not read by agent |
+
+### What This Does NOT Change
+
+- **All-members-by-CIK query** — same query, moved from CLI to warmup. Not replaced with 2B context-only (per #61).
+- **`MAPS_TO_MEMBER` edge creation** — still in `guidance_writer.py`, unchanged.
+- **Agent's segment extraction** — agent still extracts segment text from source documents. Only the matching step is removed.
+- **Graph schema** — no changes to node/edge types or properties.
+
+### Alternative — Stable Member Identity Model (Bigger Redesign)
+
+The GPT analysis proposed a stricter member-identity model:
+
+- authoritative member truth stored as a stable string such as `axis_qname|member_qname`
+- company already implied by `FOR_COMPANY`
+- physical `MAPS_TO_MEMBER` edges treated as derived/materialized links rather than the authoritative record
+
+Why this may be better:
+
+- it is cleaner about member-version drift
+- it decouples stored truth from a specific `Member.u_id`
+
+Why this may not be better for the current repo:
+
+- it requires a schema/contract redesign beyond the minimal fix here
+- existing readers and writers already operate on `member_u_ids` and `MAPS_TO_MEMBER`
+
+### Alternative — Context-Derived / 2B-Only Member Authority
+
+The GPT analysis also argued for a narrower company-local business-member approach derived from 2B-style context data and business-relevant axes.
+
+Why this may be better:
+
+- it is conceptually cleaner if the goal is "only members actually used in business segmentation contexts"
+- it avoids broad global member scans
+
+Why this may not be better for the current repo:
+
+- Issue #61 already documented a real regression where 2B/context-derived coverage missed valid members
+- IBM `RedHatMember` was the concrete counterexample
+- therefore this remains an architectural hypothesis, not the recommended implementation path here
+
+### Potential Edge Cases
 
 - **Abbreviation mismatch**: Agent writes "EMEA" but member label is "Europe, Middle East And Africa" → normalization produces different strings. Not observed in production. Fix if needed: add abbreviation alias table to `normalize_for_member_match`.
+- **Warmup run without Neo4j**: `_resolve_members` fails → empty map → no member edges. Same as current dry-run behavior. Acceptable.
+- **Member added between warmup and write**: Unlikely within a single extraction run. If it happens, the member is simply not linked — no incorrect link created.
 
 ---
 
@@ -508,7 +683,7 @@ From tracker E9 — already verified, zero risk:
 | C. Guard B (`_validate_item`) | `guidance_write_cli.py:85-102` | YES | Per-share concept vs m_usd check — resolver maps same metric types |
 | D. Concept inheritance | `guidance_write_cli.py:200-208` | YES | Resolver runs first, fills known labels; inheritance handles rest |
 | E. `_build_concept_query()` | `guidance_writer.py:188-205` | YES | MATCH + LIMIT 1, handles null/unknown gracefully |
-| F. Dry-run mode | `guidance_write_cli.py:210` | NO-OP | Resolver only runs in write mode |
+| F. Dry-run mode | `guidance_write_cli.py:210` | YES | Both concept and member resolvers now run before the dry-run/write branch |
 | G. Downstream queries | `guidance-queries.md:72`, `QUERIES.md:552` | YES | Both for display only, tolerate value changes |
 
 ### Edge Cases
@@ -686,3 +861,141 @@ RETURN member_qname, versions[0].member_u_id AS best_member_u_id,
 ---
 
 *Analysis completed 2026-03-09. All data queried live from production Neo4j. All claims verified against actual GuidanceUpdate nodes.*
+
+---
+
+## 11. Addendum — E4d and Member-Linking Alternatives
+
+This section is intentionally additive. The earlier sections are kept as written for historical traceability. The items below record later repo-fit corrections discovered while comparing this plan against E4d, the current extraction docs, and the already-implemented member-linking fix.
+
+### 11.1. What Is Definitively True
+
+1. **E4d is still open for agent-side member-cache reading.**
+
+   `extraction-pipeline-reference.md` records:
+
+   - CRM member cache = 143 members / 52.6 KB
+   - `warmup_cache.sh` writes correctly
+   - the agent's `Read` hits the threshold on both passes
+   - proposed recovery is still only "Bash-based reading or split into per-axis files"
+
+   This means prompt-owned "scan the member cache and match segments" remains operationally unreliable for larger tickers.
+
+2. **Actual write-mode member linking already bypasses that agent-side failure.**
+
+   The current authoritative write path in `guidance_write_cli.py` does **not** depend on the agent successfully reading `/tmp/member_cache_{TICKER}.json`.
+
+   Instead, in write mode it:
+
+   - queries all `Member` nodes for the company by CIK prefix
+   - normalizes member labels and segment text in Python
+   - overwrites agent-provided `member_u_ids`
+
+   So E4d is real, but it is primarily a prompt/runtime/dry-run problem, not the current write-path authority.
+
+3. **The extraction docs still describe the weaker agent-owned member path.**
+
+   `primary-pass.md` still says:
+
+   - scan the member cache from Step 1
+   - match the segment name
+   - add matched `u_id` to `member_u_ids`
+
+   Therefore the statement in Section 6 that this plan needs "No prompt changes required" is only true for the concept-resolver part. It is **not** true for a full member-linking cleanup.
+
+4. **Issue #61 already documented why 2B-only member lookup is insufficient.**
+
+   `done_fixes/guidance-extraction-issues.md` records that:
+
+   - NTAP/IBM exposed LLM member-matching unreliability
+   - IBM `RedHatMember` was absent from the 2B cache because it had 0 XBRL facts
+   - the fix was to query **all** Members by CIK prefix directly, not the context-filtered 2B cache
+   - this was verified across AAPL / IBM / NTAP
+
+   This matters because any redesign that moves member authority back to "2B-style cache only" risks reintroducing an already-fixed regression.
+
+5. **E4c is also open, but it is a different class of problem.**
+
+   `extraction-pipeline-reference.md` records that 10-K MD&A content can exceed the same output ceiling and that the agent currently recovers with Bash. The suggested durable fix is to extend `warmup_cache.py` so the large filing content is pre-split or pre-fetched in a more retrieval-friendly form.
+
+   This should be treated as:
+
+   - a source-content loading/runtime issue
+   - partially recoverable today
+   - worth fixing for extraction ergonomics and cost
+
+   But it is **not** the same as the E4d member-authority problem. E4c does not argue for or against code-owned member linking; it is orthogonal.
+
+### 11.2. Recommended Alternative (Repo-Fit, Recommended)
+
+If the goal is to keep the strongest parts of this plan while correcting the E4d/member-linking gap, the recommended alternative is:
+
+1. **Keep the deterministic concept resolver proposed in Sections 5-7.**
+
+   The concept problem is real, isolated, and can be fixed with the warmup-built registry map described above.
+
+2. **Keep member linking code-owned in `guidance_write_cli.py`.**
+
+   Do **not** make prompt-owned member matching authoritative.
+
+   Preferred authority remains:
+
+   - all-company member lookup by CIK prefix
+   - Python normalization
+   - overwrite of agent-provided `member_u_ids`
+
+3. **Do not revert member authority to 2B-only cache matching.**
+
+   Query 2B is still useful as a profile/cache, but it should not be the only source of truth for final member resolution.
+
+4. **Update extraction docs so the agent's role is advisory only for members.**
+
+   Two acceptable variants:
+
+   - **Preferred**: agent extracts only segment text; CLI owns final member resolution
+   - **Fallback**: agent may still attempt member matches from cache, but CLI is the authority and may overwrite them
+
+5. **If dry-run parity matters, extend the code-owned member path instead of relying on large cache reads.**
+
+   Practical options:
+
+   - allow the same member-resolution code path in dry-run when Neo4j is available
+   - or make warmup emit smaller per-axis member files for agent ergonomics
+
+   The first option is cleaner because it removes the E4d dependency entirely for member resolution.
+
+6. **Keep the existing graph contract for now.**
+
+   That means:
+
+   - keep `member_u_ids`
+   - keep `MAPS_TO_MEMBER`
+   - keep `xbrl_qname`
+   - keep `MAPS_TO_CONCEPT`
+
+   A broader stable-identity redesign can be evaluated later, but it is a different scope from the concept-resolver fix.
+
+### 11.3. Why This Alternative May Be Better
+
+- It fixes the actual open operational gap exposed by E4d instead of assuming the agent can always read large member caches.
+- It aligns with the current authoritative code path already implemented in `guidance_write_cli.py`.
+- It avoids undoing Issue #61's fix by keeping all-members-by-CIK lookup as the final authority.
+- It preserves the low-risk concept resolver from this document without forcing a schema or contract redesign.
+
+### 11.4. Why This Alternative May Not Be Better
+
+- If the real product requirement is "store only exact, stable business identities and never treat node edges as truth," then a broader redesign may still be preferable.
+- A stricter future design could separate:
+  - exact concept/member identity
+  - derived edge/materialized node link for convenience
+
+  That is a larger architectural change than the implementation plan in this file.
+
+### 11.5. Decision Guidance
+
+For the current repo, the best implementation sequence is:
+
+1. implement the deterministic concept resolver from this document
+2. explicitly document that member linking is code-owned, not prompt-owned
+3. preserve all-members-by-CIK member resolution as the final authority
+4. treat broader "stable identity" redesign ideas as a separate follow-up, not part of the minimal fix

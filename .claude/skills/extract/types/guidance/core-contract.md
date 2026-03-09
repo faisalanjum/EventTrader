@@ -704,4 +704,27 @@ Empty-content conditions are defined per asset in the asset profile (slot 3).
 
 ---
 
+## Additive Implementation Note (2026-03-09)
+
+This note is intentionally additive and does not replace the member-matching rules above.
+
+### Member Matching Authority
+
+- Agent-side member matching from Query 2B remains useful as a best-effort extraction aid.
+- It is **not** the final authority for write-mode member identity.
+- In write mode, `guidance_write_cli.py` may re-resolve and overwrite `member_u_ids` from Neo4j using company-wide `Member` lookup by CIK prefix plus Python normalization.
+
+### Why This Note Exists
+
+- Runtime issue `E4d` documents that large member-cache reads can still hit output-size limits.
+- Issue #61 documented that context-derived / 2B-only member lookup was insufficient for some real company members.
+- Therefore, prompt-owned member matching should be treated as advisory; the write path owns final member resolution.
+
+### Operational Rule
+
+- If member matching is uncertain, cache reads are truncated, or the member cache is unavailable, keep the extracted `segment` text and leave `member_u_ids` empty rather than inventing links.
+- `MAPS_TO_MEMBER` remains valid, but final edge creation is based on the write path's authoritative resolution.
+
+---
+
 *Version 3.1 | 2026-02-26 | v3.1: GuidancePeriod replaces Period — calendar-based (gp_ namespace), company-agnostic, with sentinel nodes (gp_ST/MT/LT/UNDEF). period_type renamed to period_scope (9-value enum). Added time_type field (duration/instant). build_guidance_period_id() replaces build_period_u_id(). fiscal_math.py extracted for clean imports. Prior: v3.0 (removed Context/Unit nodes, 6 edges, fiscal-keyed Period). v2.5 (MAPS_TO_CONCEPT). v2.3 (metric decomposition, segment rules).*

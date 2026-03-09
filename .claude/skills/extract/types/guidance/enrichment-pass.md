@@ -77,6 +77,14 @@ For new secondary-only items: build from scratch using CIK/FYE from Step 1. Use 
 
 2. **Resolve xbrl_qname** against concept cache, **member match** for segment items (same as primary pass validation).
 
+### Additive Implementation Note (2026-03-09)
+
+This note is additive and does not replace the instruction above.
+
+- Agent-side member matching remains optional/best-effort during enrichment.
+- If member cache reads are truncated or uncertain, preserve `segment` and leave `member_u_ids` unchanged or empty rather than guessing.
+- In write mode, `guidance_write_cli.py` remains the final authority for member resolution and may overwrite `member_u_ids`.
+
 3. **Assemble JSON payload** and write to `/tmp/gu_{TICKER}_{SOURCE_ID}_enrichment.json`. **Use the exact same top-level envelope as primary pass** — the CLI requires `source_id`, `source_type`, `ticker`, and `fye_month` at top level:
 
 ```json

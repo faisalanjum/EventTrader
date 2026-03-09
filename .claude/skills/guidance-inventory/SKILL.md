@@ -730,4 +730,28 @@ Both must be permissive for writes to occur. `MODE=write` with `ENABLE_GUIDANCE_
 
 ---
 
+## Additive Implementation Note (2026-03-09)
+
+This note is intentionally additive and does not replace the member-matching rules above.
+
+### Member Matching Authority
+
+- Query 2B member matching is a best-effort extraction aid.
+- It is not the final authority for write-mode member identity.
+- In write mode, `guidance_write_cli.py` may re-resolve and overwrite `member_u_ids` using company-wide `Member` lookup by CIK prefix plus Python normalization.
+
+### Why This Note Exists
+
+- Runtime issue `E4d` showed that large member-cache reads can still truncate.
+- Issue #61 showed that 2B-only/context-derived member lookup was not sufficient for all real members.
+- Therefore the final authority must stay in the write path rather than the prompt.
+
+### Operational Rule
+
+- Preserve `segment` text even when `member_u_ids` cannot be filled confidently.
+- Leave `member_u_ids` empty rather than guessing.
+- Treat `MAPS_TO_MEMBER` edges as write-path-resolved, not prompt-guaranteed.
+
+---
+
 *Version 3.1 | 2026-02-26 | v3.1: GuidancePeriod replaces Period — calendar-based (gp_ namespace), company-agnostic, with sentinel nodes (gp_ST/MT/LT/UNDEF). period_type renamed to period_scope (9-value enum). Added time_type field (duration/instant). build_guidance_period_id() replaces build_period_u_id(). fiscal_math.py extracted for clean imports. Prior: v3.0 (removed Context/Unit nodes, 6 edges, fiscal-keyed Period). v2.5 (MAPS_TO_CONCEPT). v2.3 (metric decomposition, segment rules).*

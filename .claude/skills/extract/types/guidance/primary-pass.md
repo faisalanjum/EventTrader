@@ -46,6 +46,15 @@ You MUST invoke `guidance_ids.py` via Bash for EVERY extracted item. Do not comp
 
 If uncertain on XBRL/member: keep core item, set `xbrl_qname=null`, skip member edges.
 
+### Additive Implementation Note (2026-03-09)
+
+This note is additive and does not replace the steps above.
+
+- Because `E4d` can truncate large member-cache reads, agent-side member matching should be treated as best-effort only.
+- Preserve `segment` text even if you cannot confidently populate `member_u_ids`.
+- In write mode, `guidance_write_cli.py` is the final authority for member resolution and may overwrite `member_u_ids` using live Neo4j lookup.
+- Do not invent member links just to fill the field. Empty `member_u_ids` is preferable to a guessed edge.
+
 ### STEP 5: WRITE — Batch Write via guidance_write.sh
 
 1. Assemble ALL extracted items into a single JSON payload (see JSON Payload Format below)
