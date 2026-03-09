@@ -474,14 +474,16 @@ Dual approach: `MAPS_TO_CONCEPT` edge (graph-native join to XBRL Concept) + `xbr
 | `OINE` | `OtherNonoperatingIncomeExpense` | — |
 | `D&A` | `DepreciationAmortization` | — |
 
-This maps the 12 common metrics. For metrics not in this table, set `xbrl_qname=null` — do NOT skip the item or force-fit it into a listed concept.
+This maps the 12 common metrics. For metrics not in this table, use the cache fallback below.
 
 ### Concept Resolution Gate
 
-1. Pattern-match against concept usage cache (queries-common.md query 2A)
-2. Exactly one match → use it
+**Two-tier matching** — pattern map first, then cache fallback:
+
+1. **Tier 1 — Pattern map**: Match extracted label against the table above. If a row matches, search concept cache qnames for the include pattern (excluding the exclude pattern). Pick highest usage if multiple matches.
+2. **Tier 2 — Cache fallback**: For metrics not in the table, search concept cache `label` and `qname` for a match to the same base business metric. Use a fallback match only when there is exactly one clearly plausible candidate. Do not use fallback for derived/growth/rate/margin/comparative metrics unless the underlying concept is explicitly obvious. If ambiguous or no clear single candidate, set `xbrl_qname = null`.
 3. Multiple matches → highest usage count wins
-4. Zero matches → `xbrl_qname = null`
+4. Zero matches after both tiers → `xbrl_qname = null`
 5. Mapping is **basis-independent** (GAAP, non-GAAP, unknown all get mapped)
 6. Set via `ON CREATE SET` only
 7. Concept resolution uses the **base metric label** after S4 decomposition, not the qualified name

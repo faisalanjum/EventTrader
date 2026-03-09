@@ -2,7 +2,7 @@
 
 Single source of truth for all done/open/future items across the extraction pipeline.
 
-**Updated**: 2026-03-09 (all 5 asset profiles decontaminated; runtime error fixes E1/E4a/E4b DONE via warmup_cache.py)
+**Updated**: 2026-03-09 (E9 regression verification complete: 7 code paths checked, zero regression risk confirmed; all 5 asset profiles decontaminated; runtime error fixes landed in `6c626d6`: E1/E4a/E4b DONE via warmup_cache.py, E2 hardened)
 
 ---
 
@@ -86,6 +86,29 @@ All 5 generic asset profiles decontaminated to the same standard: (1) any new ex
 | 46 GuidanceUpdate nodes written, all graph links correct | DONE |
 | KEDA parallel scaling (1→4 pods) verified | DONE |
 
+### CRM End-to-End Validation (all 5 asset types, 2026-03-09)
+
+| Asset | Source ID | Items | Result |
+|-------|-----------|-------|--------|
+| Transcript | `CRM_2026-02-25T17.00` | 5 (3 primary + 2 enrichment) | FY27 Revenue $46.2B, FY30 Revenue $63B, FCF, Gross Margin, Rev Growth |
+| 8-K (earnings) | `0001108524-25-000027` | 20 | Revenue, EPS (GAAP+non-GAAP), OpMargin, RevGrowth, cRPO, FCF, OCF, Tax Rate |
+| 8-K (non-earnings) | `0001108524-25-000040` | 0 | Correct NO_GUIDANCE (board appointment) |
+| 10-Q | `0001108524-25-000030` | 1 | Restructuring Costs $160-190M |
+| 10-K | `0001108524-25-000006` | 1 | Restructuring Cash Payments $300-325M |
+| News (guidance) | `bzNews_49196246` | 1 | FY2026 GAAP EPS $7.22-$7.24 |
+| News (analyst) | `bzNews_50977877` | 0 | Correct NO_GUIDANCE (analyst rating) |
+
+Total: 28 GuidanceUpdate nodes, all 5 asset types functional. KEDA scaled to 4 pods for parallel processing. Enrichment only ran for transcript (only asset with enrichment brief).
+
+**Manual verification (side-by-side against source content):**
+- 8-K (20 items): 100% recall (all guidance from press release tables + tax footnote), 100% precision, all values exact. Quote prefix `[8-K]` correct.
+- Transcript (5 items): 100% accurate. Primary (3 PR items) + enrichment (2 Q&A items). Correct `derivation=floor` for "at least" language. Qualitative items correctly have null values.
+- News (1 item): Values match title verbatim. Correct GAAP EPS identification.
+- 10-Q (1 item): Quote verified verbatim against MD&A section content. Values exact.
+- 10-K (1 item): Quote verified verbatim against MD&A section content. Values exact.
+
+**Systematic field issues found (E8-E10)**: cross-source inconsistencies in period codes / concept linking / entity naming between 10-Q and 10-K extractions of same disclosure type. E6/E7 were false alarms caused by query errors (wrong field name, wrong relationship name).
+
 ### Resolved S11 Items
 
 | # | Item | Resolution |
@@ -93,7 +116,7 @@ All 5 generic asset profiles decontaminated to the same standard: (1) any new ex
 | 5 | evidence-standards loading | 7th auto-load, post-parity (Phase 3.0) |
 | 7 | Asset `sections` declaration format | Markdown `## Asset Metadata` with `- sections:` |
 | 9 | Enrichment pass JSON envelope format | Explicit example added to `enrichment-pass.md` |
-| 10 | Query 2B Cypher syntax error | RESOLVED (`warmup_cache.py`) — query text in queries-common.md is valid Cypher. Runtime error was agent transcription fidelity failure: premature `dim_u_id AS axis_u_id` alias one WITH clause too early. Fixed by routing warmup to Bash helper that runs query verbatim via Bolt. |
+| 10 | Query 2B Cypher syntax error | RESOLVED (`6c626d6`, `warmup_cache.py`) — query text in queries-common.md is valid Cypher. Runtime error was agent transcription fidelity failure: premature `dim_u_id AS axis_u_id` alias one WITH clause too early. Fixed by routing warmup to Bash helper that runs query verbatim via Bolt. |
 | 11 | Enrichment agent missing `Edit` tool | NOT APPLICABLE — enrichment workflow uses Write only, never Edit. |
 
 ---
@@ -152,10 +175,11 @@ All 5 generic asset profiles decontaminated to the same standard: (1) any new ex
 | 17 | `PostToolUseFailure` hook for error monitoring | OPEN | Structured error logging without transcript parsing. |
 | 18 | `skills:` field to auto-load evidence-standards | OPEN | Saves 1 Read call per invocation. |
 | 21 | Stop hook as final quality gate on `/extract` | OPEN | Validates result file before returning. Saves full retry cost. Complex. |
+| 23 | Inline deterministic concept resolver in CLI | PLANNED | See E9 for full regression analysis. Mirrors member matching architecture (E3). Steps: (1) add `concept_resolver.py` next to `guidance_ids.py` with reviewed registry of `label_slug → (include_patterns, exclude_patterns)`; (2) call from `guidance_write_cli.py` in write mode, before concept inheritance; (3) reads `/tmp/concept_cache_{TICKER}.json` (already produced by warmup); (4) for registry labels: authoritative override (fill null, correct wrong, log diffs); for non-registry labels: leave agent value as-is; (5) derived metrics (Operating Margin, FCF) → null by policy; growth/rate/comparative → null until reviewed; (6) after code works: update core-contract.md S11 — remove Tier 2 prompt fallback, add "CLI handles concept resolution authoritatively" (same language as member matching). Initial registry: `revenue→Revenue!RemainingPerformanceObligation`, `eps→EarningsPerShareDiluted`, `gross_margin→GrossProfit`, `operating_income→OperatingIncomeLoss`, `net_income→NetIncome|ProfitLoss`, `opex→OperatingExpenses`, `tax_rate→EffectiveIncomeTaxRate!Reconciliation`, `capex→PaymentsToAcquirePropertyPlantAndEquipment`, `oine→OtherNonoperatingIncomeExpense`, `d_a→DepreciationAmortization`, `restructuring_costs→RestructuringCharges`, `restructuring_cash_payments→PaymentsForRestructuring`, `sbc→ShareBasedCompensation`, `crpo→RevenueRemainingPerformanceObligation`. Fail-closed: ambiguous = null. |
 
 ---
 
-## Open — Prompt / Contract Gaps
+## Resolved — Prompt / Contract Gaps
 
 | # | Issue | Severity | Status | Notes |
 |---|-------|----------|--------|-------|
@@ -185,13 +209,24 @@ Issues observed during production extraction runs. Non-fatal but worth tracking.
 
 ### Errors to Fix
 
+**E4 root cause**: `<persisted-output>` threshold (~50KB) applies to ALL tool outputs — MCP, Read, and Bash. `warmup_cache.sh` prevents MCP truncation (E4a/E4b), but the agent then tries to Read the `/tmp` file, which triggers the same limit. CRM's data is larger than AAPL's (143 members vs 83, 76.7KB transcript vs 55KB), so E4c/d/e surface for CRM but not AAPL.
+
 | # | Issue | Severity | Frequency | Status |
 |---|-------|----------|-----------|--------|
-| E1 | **Agent query mutation — `dim_u_id` not defined** | Medium | Every run | DONE — agent prematurely aliases `dim_u_id AS axis_u_id` at line 27 of 52-line query 2B (verified in agent transcript vs queries-common.md:148). Fixed by `warmup_cache.py` Bash helper — agents no longer transcribe the query. Pass briefs updated to point at `warmup_cache.sh` instead of QUERIES.md 2A/2B. |
-| E2 | **Nested envelope schema drift** | Medium | 2x | HARDENED — agent produced nested `{"company":{},"source":{},"items":[]}` instead of flat envelope. Partially fixed by explicit example in `enrichment-pass.md:80-92`. CLI error message now includes diagnostic `hint` field detecting nested objects. |
+| E1 | **Agent query mutation — `dim_u_id` not defined** | Medium | Every run | DONE (`6c626d6`) — agent prematurely aliases `dim_u_id AS axis_u_id` at line 27 of 52-line query 2B (verified in agent transcript vs queries-common.md:148). Fixed by `warmup_cache.py` Bash helper — agents no longer transcribe the query. Pass briefs updated to point at `warmup_cache.sh` instead of QUERIES.md 2A/2B. |
+| E2 | **Nested envelope schema drift** | Medium | 2x | HARDENED (`6c626d6`) — agent produced nested `{"company":{},"source":{},"items":[]}` instead of flat envelope. Partially fixed by explicit example in `enrichment-pass.md:80-92`. CLI error message now includes diagnostic `hint` field detecting nested objects. |
 | E3 | **Member matching fallback warnings** | Low | Multiple | MONITORING — "resolved N items via code fallback". CLI does authoritative member matching via direct Neo4j query, overwriting LLM-provided member_u_ids. Working as designed. |
-| E4a | **Cache truncation (warmup queries)** | Low | Not observed for AAPL | DONE — warmup caches (2A ~30KB, 2B ~40KB for AAPL) now fetched via `warmup_cache.py` Bash helper, bypassing MCP entirely. Prevents truncation for companies with larger XBRL profiles (>50KB). |
-| E4b | **Transcript content truncation (query 3B)** | Low | Every transcript run | DONE — AAPL transcripts are 54-62KB, exceeding SDK ~50KB persisted output threshold. `transcript-primary.md` updated to always fetch via `warmup_cache.sh --transcript`, bypassing MCP. |
+| E4a | **Cache truncation (warmup queries)** | Low | Not observed for AAPL | DONE (`6c626d6`) — warmup caches (2A ~30KB, 2B ~40KB for AAPL) now fetched via `warmup_cache.py` Bash helper, bypassing MCP entirely. Prevents truncation for companies with larger XBRL profiles (>50KB). |
+| E4b | **Transcript content truncation (query 3B)** | Low | Every transcript run | DONE (`6c626d6`) — AAPL transcripts are 54-62KB, exceeding SDK ~50KB persisted output threshold. `transcript-primary.md` updated to always fetch via `warmup_cache.sh --transcript`, bypassing MCP. |
+| E4c | **10-K MD&A section content truncation** | Low | CRM 10-K (52.2KB) | OPEN — 10-K `ExtractedSectionContent` for MD&A hit `<persisted-output>` (52.2KB). Agent worked around it via `cat | head/tail` in Bash. Not covered by `warmup_cache.sh` (only handles 2A/2B/3B). Fix: extend `warmup_cache.py` with `--10k-content ACCESSION` mode, or add separate 10-K content fetcher. |
+| E4d | **Member cache Read truncation** | Medium | CRM (52.6KB, 143 members) | OPEN — `warmup_cache.sh` correctly fetches to `/tmp/member_cache_{TICKER}.json` via Bash, but agent's subsequent `Read` of the /tmp file triggers `<persisted-output>` when file >50KB. Hit on BOTH primary and enrichment passes for CRM. AAPL (83 members, ~31KB) is under threshold. Fix: instruct agents to use `bash python3 -c "import json; ..."` to read member cache, or split output into per-axis files. |
+| E4e | **Transcript JSON Read truncation** | Medium | CRM (76.7KB) | OPEN — `warmup_cache.sh --transcript` correctly fetches to `/tmp/transcript_content_{ID}.json`, but agent's `Read` of the 76.7KB file triggers `<persisted-output>`. Even `Read` with offset/limit still truncated. Agent recovered via Bash+Python chunk parsing (3-4 extra tool turns). AAPL transcripts (54-62KB) may also hit this. Fix: update `transcript-primary.md` to instruct Bash-based reading (e.g., `cat | head -c 25000` / `tail -c 25000`), or have warmup_cache.py split transcript into prepared_remarks + qa chunks. |
+| E5 | **MCP and Python connect to different Neo4j databases** | High | Always | OPEN — MCP `neo4j-cypher` tool sees 0 GuidanceUpdate nodes; Python `get_manager()` sees 74 (28 for CRM). Report node queries also return different data (different accession numbers for same company+formType filter). All extraction writes go through Python (guidance_write.sh). MCP queries within extraction worker pods may use a different MCP instance that DOES see the same data. Local MCP definitely does not. Fix: verify Neo4j connection URIs in MCP server config vs `.env` — likely pointing to different databases or different Neo4j instances. |
+| E6 | **`unit` field null — FALSE ALARM** | — | — | RESOLVED — Query error: `gu.unit` doesn't exist in the schema (core-contract.md line 43: "Removed: `Unit` (demoted to `canonical_unit` property)"). Verified all 28 CRM items: `gu.canonical_unit` populated on 28/28 — `m_usd` (5), `usd` (5), `percent` (4), `percent_yoy` (11), `unknown` (3). `gu.unit_raw` populated on 25/28 with verbatim text (`"million"`, `"billion"`, `"dollars"`, `"$"`). 3 `unknown` items are transcript-enrichment qualitative (FCF floor, Gross Margin neutral, Rev FY30) — enrichment agent omission, not structural. |
+| E7 | **`period_scope` null on GuidancePeriod — FALSE ALARM** | — | — | RESOLVED — Two query errors: (1) wrong relationship name `FOR_PERIOD` queried instead of actual `HAS_PERIOD` (guidance_writer.py:182); (2) `period_scope` is a GuidanceUpdate field (contract S2 field #2, writer line 153), NOT a GuidancePeriod property (contract S9 defines only `id`, `u_id`, `start_date`, `end_date`). Verified all 28 CRM items: `gu.period_scope` populated on 28/28 — `annual` (14), `quarter` (8), `short_term` (2), `half` (1), `long_range` (1), `undefined` (1). All 6 of 9 applicable enum values correctly used. |
+| E8 | **Inconsistent period codes for same disclosure** | Low | 10-Q vs 10-K | OPEN — 10-Q restructuring uses `gp_UNDEF`, 10-K uses `gp_ST` for identical "future cash payments" disclosure. Both are "unspecified future" but coded differently. Fix: standardize in pass briefs — "future, no end date" → use one canonical period code. |
+| E9 | **Inconsistent concept linking across sources** | Low | 10-Q vs 10-K | OPEN — 10-Q restructuring → `us-gaap:RestructuringCharges`, 10-K restructuring → null. Same disclosure type, different concept linking. Root cause: agent nondeterminism with ambiguous cache entries (e.g., Tax Rate has `EffectiveIncomeTaxRateContinuingOperations` usage=2 vs confounding reconciliation concepts usage=3). `query 2A` can be enriched with `con.label` but that only helps prompt quality, not reliability. **Planned minimal fix (not implemented): inline deterministic concept resolver in `guidance_write_cli.py`, same pattern as member matching (lines 232-268).** Exact scope: (1) load `/tmp/concept_cache_{TICKER}.json` in write mode; (2) small deterministic registry mapping `label_slug` → include/exclude qname patterns, resolved against live cache rows, pick highest-usage after filtering; (3) runs BEFORE existing concept inheritance (lines 200-208); (4) for registry labels: authoritative (overrides agent value, same as member matching); for non-registry labels: leaves agent value as-is; (5) derived metrics (`Operating Margin`, `FCF`) → null by policy; growth/rate/comparative → null until reviewed; (6) no broad semantic fallback or wildcard matching. **Regression verification (7 code paths checked):** (A) `guidance_update_id` — SAFE, xbrl_qname not in ID formula (`gu:{source_id}:{label_slug}:{period_u_id}:{basis_norm}:{segment_slug}`); (B) `evhash16` — SAFE, hash inputs are low/mid/high/unit/qualitative/conditions only; (C) Guard B (`_validate_item` lines 85-102) — SAFE, correctly rejects per-share concepts with m_usd; resolver must never map non-per-share labels to per-share concepts, and doesn't (registry is label→include/exclude patterns for the same business metric); (D) concept inheritance (lines 200-208) — ORDER-DEPENDENT but safe: resolver runs first, fills known labels deterministically, then inheritance copies to segment items for non-registry labels where agent provided one; (E) writer `_build_concept_query()` (lines 188-205) — SAFE, `MATCH (con:Concept {qname: $xbrl_qname})` with LIMIT 1, already handles null (skip) and unknown qname (MATCH fails, no edge, no error); (F) dry-run mode — NO-OP, resolver only runs in write mode (same as member matching, which is in the `else` branch at line 223); (G) downstream graph consumers — only 2 query files read `gu.xbrl_qname` (guidance-queries.md:72, guidance-inventory/QUERIES.md:552), both for display only, tolerate value changes. **No consumers of xbrl_qname outside the 4 writer scripts (guidance_writer.py, guidance_write_cli.py, and their test files).** `SET gu.xbrl_qname = $xbrl_qname` (writer line 171) is idempotent on re-run. Test suite: 14 tests in test_guidance_writer.py + 7 in test_guidance_write_cli.py touch xbrl_qname — existing tests unaffected (resolver is additive, upstream of writer), new tests needed for resolver function only. **Verdict: zero regression risk for all identity, hashing, validation, and write-path consumers.** |
+| E10 | **Inconsistent guidance entity naming** | Low | 10-Q vs 10-K | OPEN — 10-Q → `guidance:restructuring_costs`, 10-K → `guidance:restructuring_cash_payments`. Same type of forward-looking disclosure with identical wording, but agents chose different labels creating separate Guidance entities. Fix: add label normalization table in pass briefs or post-processing dedup. |
 
 ### Not Bugs (Confirmed Working-As-Designed)
 
@@ -232,4 +267,4 @@ Unique insights preserved from design proofs:
 
 ---
 
-*Consolidated 2026-03-07; updated 2026-03-08 (10-K split `d3af160`, contagion fix `84fc97f`, news.md fixup, tracker cleanup). Updated 2026-03-09 (full decontamination: news `42ebdf6`, 10q/10k `6c626d6`, 8k/transcript `4f5d7c3`).*
+*Consolidated 2026-03-07; updated 2026-03-08 (10-K split `d3af160`, contagion fix `84fc97f`, news.md fixup, tracker cleanup). Updated 2026-03-09 (full decontamination: news `42ebdf6`, 10q/10k `6c626d6`, 8k/transcript `4f5d7c3`; CRM E2E validation: 28 GUs across all 5 assets, manual verification 100% value accuracy; E6/E7 resolved as false alarms — wrong field/relationship names in verification queries; E9 regression verification: 7 code paths checked across guidance_ids.py, guidance_writer.py, guidance_write_cli.py — zero regression risk for inline deterministic concept resolver; E8/E10 remain open).*

@@ -38,9 +38,9 @@ WHERE r.formType IN ['10-K','10-Q']
   AND r.created >= last_10k_date
   AND f.is_numeric = '1'
   AND (ctx.member_u_ids IS NULL OR ctx.member_u_ids = [])
-WITH con.qname AS qname, count(f) AS usage
+WITH con.qname AS qname, con.label AS label, count(f) AS usage
 ORDER BY usage DESC
-RETURN qname, usage
+RETURN qname, label, usage
 """
 
 # ---------------------------------------------------------------------------
