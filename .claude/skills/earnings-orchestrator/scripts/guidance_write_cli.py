@@ -172,7 +172,10 @@ def main():
     items = data.get('items', [])
 
     if not source_id or not source_type or not ticker:
-        print(json.dumps({"error": "Missing required top-level fields: source_id, source_type, ticker"}))
+        error_data = {"error": "Missing required top-level fields: source_id, source_type, ticker"}
+        if 'company' in data or 'source' in data:
+            error_data["hint"] = "Detected nested 'company'/'source' objects — use flat top-level fields instead. See enrichment-pass.md JSON example."
+        print(json.dumps(error_data))
         sys.exit(1)
 
     if not items:

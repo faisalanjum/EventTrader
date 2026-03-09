@@ -2,7 +2,7 @@
 
 Single source of truth for all done/open/future items across the extraction pipeline.
 
-**Updated**: 2026-03-08 (10k split + SOURCE_TYPE removal landed; total contagion fix landed; first production run complete)
+**Updated**: 2026-03-09 (runtime error fixes: E1/E4a/E4b DONE via warmup_cache.py, E2 hardened with CLI hint)
 
 ---
 
@@ -78,7 +78,7 @@ Single source of truth for all done/open/future items across the extraction pipe
 | 5 | evidence-standards loading | 7th auto-load, post-parity (Phase 3.0) |
 | 7 | Asset `sections` declaration format | Markdown `## Asset Metadata` with `- sections:` |
 | 9 | Enrichment pass JSON envelope format | Explicit example added to `enrichment-pass.md` |
-| 10 | Query 2B Cypher syntax error | INVALID — query is syntactically correct. Runtime error was Neo4j version quirk, agents work around it. |
+| 10 | Query 2B Cypher syntax error | RESOLVED (`warmup_cache.py`) — query text in queries-common.md is valid Cypher. Runtime error was agent transcription fidelity failure: premature `dim_u_id AS axis_u_id` alias one WITH clause too early. Fixed by routing warmup to Bash helper that runs query verbatim via Bolt. |
 | 11 | Enrichment agent missing `Edit` tool | NOT APPLICABLE — enrichment workflow uses Write only, never Edit. |
 
 ---
@@ -172,10 +172,11 @@ Issues observed during production extraction runs. Non-fatal but worth tracking.
 
 | # | Issue | Severity | Frequency | Status |
 |---|-------|----------|-----------|--------|
-| E1 | **Recurring Cypher syntax error — `dim_u_id` not defined** | Medium | Every run (all workers) | OPEN — query 2B (member profile cache) hits `Variable dim_u_id not defined` on every worker during warmup. Not just enrichment — primary agents also hit it. Agents always self-recover by retrying with corrected syntax. Likely MCP tool mangles the backtick escaping in the multi-line Cypher. Query is syntactically correct in Neo4j browser. Non-fatal but wastes ~1 turn per agent. |
-| E2 | **"Missing required top-level fields" JSON envelope errors** | Medium | 2x | OPEN — agent produced malformed JSON missing `source_id`, `source_type`, `ticker`. Both times self-corrected on retry. Explicit envelope example was added to `enrichment-pass.md` (2026-03-06) but may still occur with new sources. |
-| E3 | **Member matching fallback warnings** | Low | Multiple | MONITORING — "resolved N items via code fallback". Member matcher couldn't find exact XBRL matches, fell back to fuzzy/code-based resolution. Not an error but watch for accuracy drift. |
-| E4 | **MCP output truncation → JSON parse tracebacks** | Low | 2x per batch | OPEN — MCP tool returns truncated output for large query results (member cache, concept cache). Agent's inline Python JSON parse fails with traceback. Self-healing: agents re-fetch via Bash+Python to `/tmp` and parse from file. Non-fatal but wastes 1-2 turns per occurrence. |
+| E1 | **Agent query mutation — `dim_u_id` not defined** | Medium | Every run | DONE — agent prematurely aliases `dim_u_id AS axis_u_id` at line 27 of 52-line query 2B (verified in agent transcript vs queries-common.md:148). Fixed by `warmup_cache.py` Bash helper — agents no longer transcribe the query. Pass briefs updated to point at `warmup_cache.sh` instead of QUERIES.md 2A/2B. |
+| E2 | **Nested envelope schema drift** | Medium | 2x | HARDENED — agent produced nested `{"company":{},"source":{},"items":[]}` instead of flat envelope. Partially fixed by explicit example in `enrichment-pass.md:80-92`. CLI error message now includes diagnostic `hint` field detecting nested objects. |
+| E3 | **Member matching fallback warnings** | Low | Multiple | MONITORING — "resolved N items via code fallback". CLI does authoritative member matching via direct Neo4j query, overwriting LLM-provided member_u_ids. Working as designed. |
+| E4a | **Cache truncation (warmup queries)** | Low | Not observed for AAPL | DONE — warmup caches (2A ~30KB, 2B ~40KB for AAPL) now fetched via `warmup_cache.py` Bash helper, bypassing MCP entirely. Prevents truncation for companies with larger XBRL profiles (>50KB). |
+| E4b | **Transcript content truncation (query 3B)** | Low | Every transcript run | DONE — AAPL transcripts are 54-62KB, exceeding SDK ~50KB persisted output threshold. `transcript-primary.md` updated to always fetch via `warmup_cache.sh --transcript`, bypassing MCP. |
 
 ### Not Bugs (Confirmed Working-As-Designed)
 

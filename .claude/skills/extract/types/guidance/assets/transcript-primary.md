@@ -9,9 +9,16 @@ When falling back to Q&A data (prepared remarks empty/truncated),
 apply your quality filters from the pass brief. Use quote prefix `[Q&A]` for any items
 extracted from Q&A fallback data. The enrichment agent handles specialized Q&A extraction.
 
-## MCP Truncation Workaround
+## Content Fetch — Always Use Bash for 3B
 
-If query 3B result is truncated by the MCP tool, re-run the query via Bash+Python and save to `/tmp` for parsing.
+Transcript content (query 3B) typically exceeds 50KB and triggers SDK output persistence.
+Always fetch via Bash instead of MCP to avoid parse failures:
+
+```bash
+bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh $TICKER --transcript $TRANSCRIPT_ID
+```
+
+Result written to `/tmp/transcript_content_{TRANSCRIPT_ID}.json`. Read this file instead of parsing MCP output.
 
 ## Speaker Hierarchy (Guidance Priority)
 

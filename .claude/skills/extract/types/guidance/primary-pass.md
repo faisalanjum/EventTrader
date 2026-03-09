@@ -16,8 +16,8 @@ Extract from primary content section only (per intersection file for scan scope)
 |--------|-------|
 | Company + CIK | QUERIES.md 1A |
 | FYE from 10-K | QUERIES.md 1B — extract month from `periodOfReport` |
-| Concept cache | QUERIES.md 2A |
-| Member cache | QUERIES.md 2B |
+| Concept cache | `bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh $TICKER` → reads `/tmp/concept_cache_{TICKER}.json` |
+| Member cache | (same command — runs both 2A and 2B in one call) → reads `/tmp/member_cache_{TICKER}.json` |
 | Existing guidance tags | QUERIES.md 7A |
 | Prior extractions for this source | QUERIES.md 7D — if count > 0, log warning: "Source has {N} existing items — re-run will only add items with new values" |
 

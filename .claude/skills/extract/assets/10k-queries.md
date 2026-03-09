@@ -17,26 +17,40 @@ RETURN r.accessionNo, r.formType, r.created, r.periodOfReport
 ORDER BY r.created
 ```
 
-### 5B. MD&A Section Content (Primary for 10-K)
+### 5B. Canonical MD&A Section Content
 
-MD&A is the primary scan scope for 10-K extraction.
+Fetch the canonical management discussion section when it exists.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
 WHERE s.section_name STARTS WITH 'Management'
   AND s.section_name CONTAINS 'DiscussionandAnalysisofFinancialCondition'
-RETURN s.content AS content, s.section_name, r.created AS filing_date
+RETURN s.id AS section_id,
+       s.section_name,
+       s.content AS content,
+       size(s.content) AS content_length,
+       r.accessionNo,
+       r.formType,
+       r.created AS filing_date,
+       r.periodOfReport
 ```
-**Note**: 10-K uses the curly apostrophe variant (U+2019).
+**Note**: 10-K uses the curly apostrophe variant (U+2019). If this returns no rows, use 5D to discover available sections and 5I to fetch a specific section by name.
 
 ### 5C. Financial Statement Content (Supplementary)
 
-Structured JSON data — look for footnotes/annotations with forward-looking content.
+Structured JSON statement payload.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_FINANCIAL_STATEMENT]->(fs:FinancialStatementContent)
 WHERE fs.statement_type = $source_key
-RETURN fs.value AS content, r.created AS filing_date
+RETURN fs.id AS statement_id,
+       fs.statement_type,
+       fs.value AS content,
+       size(fs.value) AS content_length,
+       r.accessionNo,
+       r.formType,
+       r.created AS filing_date,
+       r.periodOfReport
 ```
 **statement_type values**: `BalanceSheets`, `StatementsOfIncome`, `StatementsOfCashFlows`, `StatementsOfShareholdersEquity`.
 
@@ -44,18 +58,18 @@ RETURN fs.value AS content, r.created AS filing_date
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
-RETURN s.section_name, size(s.content) AS content_length
+RETURN s.id AS section_id, s.section_name, size(s.content) AS content_length
 ORDER BY s.section_name
 ```
 
-### 5E. Risk Factors (Exclude from Extraction)
+### 5E. Risk Factors Section Lookup
 
-Useful to identify so the extraction scanner can skip this section (legal/risk-heavy content).
+Fetch the canonical Risk Factors section when present.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
 WHERE s.section_name = 'RiskFactors'
-RETURN size(s.content) AS risk_factors_length
+RETURN s.id AS section_id, s.section_name, size(s.content) AS content_length
 ```
 
 ### 5F. Content Inventory for Report
@@ -68,28 +82,61 @@ OPTIONAL MATCH (r)-[:HAS_EXHIBIT]->(e:ExhibitContent)
 OPTIONAL MATCH (r)-[:HAS_SECTION]->(s:ExtractedSectionContent)
 OPTIONAL MATCH (r)-[:HAS_FINANCIAL_STATEMENT]->(fs:FinancialStatementContent)
 OPTIONAL MATCH (r)-[:HAS_FILING_TEXT]->(ft:FilingTextContent)
-RETURN r.accessionNo, r.formType, r.created,
+RETURN r.accessionNo, r.formType, r.created, r.periodOfReport,
+       r.primaryDocumentUrl, r.linkToTxt, r.linkToHtml,
+       r.market_session, r.returns_schedule,
        collect(DISTINCT e.exhibit_number) AS exhibits,
        collect(DISTINCT s.section_name) AS sections,
        collect(DISTINCT fs.statement_type) AS financial_stmts,
        count(DISTINCT ft) AS filing_text_count
 ```
+**Note**: `returns_schedule` is a JSON string on the Report node.
 
 ### 5G. Filing Text Content (Fallback)
 
-Fallback when MD&A and financial statement parsing both fail. Average 690KB — large.
+Raw full filing text. This is typically much larger than section content and should usually be bounded before model input.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_FILING_TEXT]->(f:FilingTextContent)
-RETURN f.content AS content, r.created AS filing_date
+RETURN f.id AS filing_text_id,
+       f.content AS content,
+       size(f.content) AS content_length,
+       r.accessionNo,
+       r.formType,
+       r.created AS filing_date,
+       r.periodOfReport
 ```
 
 ### 5H. Exhibit Content (Fallback)
 
-Fetch exhibit content by number. Use when 5F inventory shows exhibits exist and MD&A is missing. Some 10-K filings have press releases (EX-99.1) attached.
+Fetch exhibit content by number.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_EXHIBIT]->(e:ExhibitContent)
 WHERE e.exhibit_number = $source_key
-RETURN e.content AS content, r.created AS filing_date
+RETURN e.id AS exhibit_id,
+       e.exhibit_number,
+       e.content AS content,
+       size(e.content) AS content_length,
+       r.accessionNo,
+       r.formType,
+       r.created AS filing_date,
+       r.periodOfReport
+```
+
+### 5I. Section Content by Name
+
+Fetch any specific extracted section after discovering available names with 5D.
+
+```cypher
+MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
+WHERE s.section_name = $section_name
+RETURN s.id AS section_id,
+       s.section_name,
+       s.content AS content,
+       size(s.content) AS content_length,
+       r.accessionNo,
+       r.formType,
+       r.created AS filing_date,
+       r.periodOfReport
 ```

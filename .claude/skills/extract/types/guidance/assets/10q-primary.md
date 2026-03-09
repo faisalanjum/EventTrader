@@ -6,9 +6,22 @@ Rules for extracting guidance from 10-Q quarterly filings. Loaded at slot 4 by t
 
 Use the content fetch order in the asset profile (10q.md):
 1. Query 5F (inventory) → 5B (MD&A section — primary)
-2. Fallbacks: 5C (financial statement footnotes), 5H (exhibits), 5G (filing text)
+2. If 5B returns no row, use 5D → 5I to inspect and fetch another narrative section before raw filing text
+3. Fallbacks: 5C (financial statement payloads), 5H (exhibits), 5G (filing text)
 
 Apply empty-content rules from the asset profile.
+
+## Periodic Filing Caution
+
+10-Qs are mostly retrospective. Zero guidance from a periodic filing is a valid result. Do not lower thresholds to force extraction.
+
+## Section Preference
+
+- Prefer canonical MD&A when it exists.
+- If MD&A is missing, inspect other long narrative sections via 5D → 5I before resorting to raw filing text.
+- Skip these section types as primary guidance targets: `RiskFactors`, `LegalProceedings`, `QuantitativeandQualitativeDisclosuresAboutMarketRisk`, `ControlsandProcedures`, `Exhibits`, `Signatures`.
+- Use financial statement payloads for note text or embedded narrative context, not just numeric tables.
+- Use raw filing text only as bounded fallback content.
 
 ## What to Extract from MD&A
 
@@ -36,6 +49,18 @@ Apply empty-content rules from the asset profile.
 
 MD&A is predominantly backward-looking. Apply the forward-looking filter strictly — target period must be after `r.created`. Zero guidance from a periodic filing is an acceptable result; do not lower thresholds to force extraction. Filter MD&A boilerplate aggressively.
 
+## Basis Context Inheritance
+
+MD&A sometimes establishes basis context once and then reuses it across the section. Inherit basis only when the connection is explicit and unambiguous. If there is any doubt, default to `basis_norm = "unknown"`.
+
+## Filing Text Fallback
+
+When using 5G, do not send the full filing text to the model. Use the guidance keyword seed from `guidance-queries.md` Section 10 to carve bounded windows first.
+
+## Cross-Asset Dedup
+
+Never suppress a 10-Q extraction because similar guidance already appeared in an 8-K or transcript. Deterministic IDs and evidence hashes handle no-op merges versus genuinely updated values.
+
 ## Quote Prefix
 
 All guidance extracted from 10-Q MUST use quote prefix: `[10-Q]`
@@ -47,7 +72,7 @@ Example: `[10-Q] We expect fiscal 2025 revenue between $380 billion and $390 bil
 | Field | Value |
 |-------|-------|
 | `source_type` | `"10q"` |
-| `source_key` | `"MD&A"` (always, regardless of which sub-section). If from financial statement footnotes: `"footnotes"`. If from filing text fallback (5G): `"filing_text"`. If from exhibit fallback (5H): use the exhibit number (e.g., `"EX-99.1"`). |
+| `source_key` | Canonical MD&A via 5B: `"MD&A"`. Other section text via 5I: `s.section_name`. Financial statement payloads via 5C: `fs.statement_type`. Filing text via 5G: `"filing_text"`. Exhibits via 5H: `e.exhibit_number`. |
 | `given_date` | `r.created` (the filing date) |
-| `source_refs` | Empty array `[]` — 10-Q sections have no sub-source nodes. |
-| `section` | Sub-section name where content was found (e.g., `"MD&A"`, `"footnotes"`) |
+| `source_refs` | Empty array `[]` for the current guidance write path. |
+| `section` | Canonical MD&A via 5B: `"MD&A"`. Otherwise use the actual section / statement / exhibit identifier that produced the quote. |
