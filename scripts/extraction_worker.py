@@ -4,8 +4,8 @@
 Listens on Redis queue `extract:pipeline` and runs the /extract skill
 via Claude Agent SDK for each incoming payload.
 
-Deployment: K8s `processing` namespace as `claude-code-worker`
-KEDA: Scales 0->N based on queue depth
+Deployment: K8s `processing` namespace as `extraction-worker`
+KEDA: Scales 1->7 based on queue depth
 
 Payload format (JSON) — one message = one job:
   {

@@ -58,7 +58,7 @@ After loading all files listed above, execute the pipeline defined in enrichment
 
 Write result to `/tmp/extract_pass_{TYPE}_enrichment_{SOURCE_ID}.json` via the Write tool:
 ```json
-{"status": "completed", "items_enriched": N, "new_items": N, "errors": 0}
+{"status": "completed", "items_enriched": N, "new_secondary_items": N, "errors": 0}
 ```
 
 If extraction fails, write:

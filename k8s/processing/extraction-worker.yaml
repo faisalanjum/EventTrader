@@ -8,7 +8,7 @@ metadata:
   name: extraction-worker
   namespace: processing
 spec:
-  replicas: 0  # KEDA manages scaling (0→N)
+  replicas: 0  # Initial value only; ScaledObject enforces effective scaling at 1→7
   selector:
     matchLabels:
       app: extraction-worker

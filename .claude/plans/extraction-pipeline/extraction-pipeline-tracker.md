@@ -145,7 +145,7 @@ Single source of truth for all done/open/future items across the extraction pipe
 | # | Issue | Severity | Status | Notes |
 |---|-------|----------|--------|-------|
 | C1 | Transcript 3C fallback sub-provenance | Medium | DONE | `transcript-enrichment.md:84` documents 3C fallback: "For 3C fallback (QuestionAnswer nodes): use `qa.id` directly — no sequence available." `primary-pass.md` is now asset-generic and defers per-asset `source_refs` format to the intersection file, so no unresolved transcript-specific provenance gap remains in the active prompt stack. |
-| C2 | Enrichment pass result schema inconsistency | Low | OPEN | Concrete mismatch between agent shell and SKILL.md result field names (`new_items` vs `new_secondary_items`). Not worker-breaking. Note: SOURCE_TYPE references in stale docs are now moot (SOURCE_TYPE removed in `d3af160`). |
+| C2 | Enrichment pass result schema inconsistency | Low | DONE | Agent shell result field now matches SKILL.md (`new_secondary_items`). SOURCE_TYPE note remains moot (`d3af160`). |
 
 ---
 

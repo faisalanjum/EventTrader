@@ -3,7 +3,7 @@
 
 Queries Neo4j to find assets not yet processed for a given extraction type,
 then pushes one message per (type, asset, source_id) to the extract:pipeline
-Redis queue. KEDA scales claude-code-worker pods automatically.
+Redis queue. KEDA scales extraction-worker pods automatically.
 
 Usage:
   python3 scripts/trigger-extract.py CRM                        # guidance/transcript for CRM
@@ -253,7 +253,7 @@ def main():
 
     if not args.list and total_queued > 0:
         print(f"\nTotal queued: {total_queued} message(s) -> {QUEUE_NAME}")
-        print(f"Watch progress: kubectl logs -f -l app=claude-code-worker -n processing")
+        print(f"Watch progress: kubectl logs -f -l app=extraction-worker -n processing")
 
 
 if __name__ == "__main__":
