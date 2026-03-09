@@ -53,6 +53,10 @@ Result written to `/tmp/transcript_content_{TRANSCRIPT_ID}.json`. Read this file
 | Prior period results | "Q1 revenue was $124 billion" | No: past period, not forward guidance |
 | Safe harbor boilerplate | "These statements involve risks..." | No: but keep any concrete guidance adjacent to it |
 
+## Basis Context Trap
+
+Executives can switch between GAAP and non-GAAP within the same paragraph without restating the basis for every metric. Determine basis per quoted metric span, not per paragraph. If a qualifier does not clearly attach to a specific metric, leave `basis_norm = "unknown"` for that metric.
+
 ## Quote Prefix — Prepared Remarks
 
 All guidance extracted from prepared remarks MUST use quote prefix: `[PR]`

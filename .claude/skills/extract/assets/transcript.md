@@ -60,12 +60,6 @@ Q&A exchanges arrive as an array of objects, each containing:
 
 ---
 
-## Duplicate Resolution (Two-Invocation)
-
-PR extraction handled by primary extraction agent. Q&A enrichment handled by enrichment agent. Two separate invocations, two writes. MERGE+SET ensures second write safely updates existing nodes.
-
----
-
 ## Empty Content Handling
 
 | Scenario | Action |
@@ -104,18 +98,18 @@ RETURN ft.content
 
 ## Period Identification
 
-Transcripts cover multiple periods. Each extracted item references a target period.
+Transcript statements can refer to different target periods.
 
 ### Common Patterns
 
-| Transcript Statement | period_scope | fiscal_year | fiscal_quarter |
-|---------------------|-------------|-------------|----------------|
-| "For the December quarter" | quarter | Derive from FYE | Derive from FYE |
-| "For the full fiscal year" | annual | From t.fiscal_year | `.` |
-| "For the March quarter" | quarter | Derive from FYE | Derive from FYE |
-| "For the second half" | half | From t.fiscal_year | `.` |
-| "By fiscal 2027" | long_range | 2027 | `.` |
-| "Over the next several years" | long_range | Best-effort | `.` |
+| Transcript Statement | Likely interpretation |
+|---------------------|-----------------------|
+| "For the December quarter" | Quarterly target period; derive fiscal quarter from FYE |
+| "For the full fiscal year" | Annual target period in the transcript fiscal year |
+| "For the March quarter" | Quarterly target period; derive fiscal quarter from FYE |
+| "For the second half" | Half-year target period in the transcript fiscal year |
+| "By fiscal 2027" | Long-range target year 2027 |
+| "Over the next several years" | Multi-year target period |
 
 ### Calendar → Fiscal Mapping
 
@@ -130,27 +124,15 @@ When source uses calendar quarter names ("December quarter"), use FYE to determi
 
 **Rule**: Q1 starts in FYE month + 1. When source says "Q1" or "Q2" explicitly, use as-is.
 
----
+## Source Identity
 
-## Basis, Segment, Quality Filters
-
-See your type's core-contract for basis, segment, and quality filter rules.
-
-### Transcript-Specific Trap: Implicit Basis Switches
-
-CFO may switch between GAAP and non-GAAP within the same paragraph without re-stating the basis. Each metric gets its own basis determination from its own quote span:
-```
-"On a GAAP basis, we expect EPS of $3.20. And revenue should be about $95 billion."
-```
-Here: EPS = `gaap`, Revenue = `unknown` (no explicit qualifier for revenue).
-
-### Transcript-Specific: given_date
+### given_date
 
 Always `t.conference_datetime`. This is the point-in-time stamp for when the content became public via earnings call.
 
-### Transcript-Specific: source_key
+### source_key
 
 Always `"full"` for transcripts.
 
 ---
-*Version 1.3 | 2026-02-21 | Fixed QuestionAnswer types: content/speaker_roles are JSON strings (not lists), speaker_roles nullable. v1.2: Added HAS_QA_SECTION fallback (3C). v1.1: Deduplicated → SKILL.md refs.*
+*Version 1.4 | 2026-03-09 | Decontaminated generic transcript asset profile. Removed two-pass write semantics and guidance-specific basis rules from the asset file. Neutralized period table headers and moved source identity to its own section. v1.3: Fixed QuestionAnswer types: content/speaker_roles are JSON strings (not lists), speaker_roles nullable. v1.2: Added HAS_QA_SECTION fallback (3C). v1.1: Deduplicated → SKILL.md refs.*

@@ -6,7 +6,7 @@ Source content queries for 8-K filings and their exhibits.
 
 ## 4. Source Content: 8-K / Exhibits
 
-### 4A. 8-K Filings with Item 2.02 (Earnings)
+### 4A. 8-K Filings with Item 2.02
 
 ```cypher
 MATCH (r:Report {formType: '8-K'})-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
@@ -16,11 +16,11 @@ WHERE r.items CONTAINS 'Item 2.02'
 RETURN r.accessionNo, r.created, r.items, r.market_session
 ORDER BY r.created
 ```
-**Usage**: Pass `null` for both dates to retrieve all historical 8-K earnings filings.
+**Usage**: Pass `null` for both dates to retrieve all historical 8-K filings carrying Item 2.02.
 
-### 4B. Pre-Announcements (Item 7.01 / 8.01)
+### 4B. 8-K Filings with Items 7.01 / 8.01
 
-Mid-quarter updates, often market-moving. Check between regular earnings dates.
+Fetch 8-K filings carrying Item 7.01 or 8.01.
 
 ```cypher
 MATCH (r:Report {formType: '8-K'})-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
@@ -31,9 +31,9 @@ RETURN r.accessionNo, r.created, r.items
 ORDER BY r.created
 ```
 
-### 4C. Exhibit Content (by Exhibit Number)
+### 4C. Exhibit Content by Exhibit Number
 
-Primary content source for 8-K earnings. 94% of Item 2.02 filings have data in EX-99.1.
+Fetch exhibit content by exhibit number.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_EXHIBIT]->(e:ExhibitContent)
@@ -54,7 +54,7 @@ ORDER BY e.exhibit_number
 
 ### 4E. Section Content (8-K Item Text)
 
-For items where data is in the section itself (33% of 8-Ks have section-only data).
+Fetch a specific named section from the 8-K filing body.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
@@ -65,7 +65,7 @@ RETURN s.content AS content, r.created AS filing_date
 
 ### 4F. Filing Text Content (Fallback)
 
-Fallback when exhibit and section parsing both fail. Average 690KB — large.
+Raw full filing text fallback. Average 690KB — large.
 
 ```cypher
 MATCH (r:Report {accessionNo: $accession})-[:HAS_FILING_TEXT]->(f:FilingTextContent)
@@ -101,7 +101,7 @@ WHERE r.items CONTAINS $item_code
 RETURN r.accessionNo, r.created, r.items, r.market_session
 ORDER BY r.created
 ```
-**Usage**: Pass item code as string, e.g., `$item_code = 'Item 1.01'`. For common items, prefer 4A (Item 2.02) or 4B (7.01/8.01) — they have tighter filters.
+**Usage**: Pass item code as string, e.g., `$item_code = 'Item 1.01'`. For Item 2.02 or Items 7.01 / 8.01, 4A and 4B are convenience wrappers.
 
 ### 4I. Financial Statement Content
 

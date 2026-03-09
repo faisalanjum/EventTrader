@@ -10,6 +10,21 @@ Use the content fetch order in the asset profile (8k.md):
 
 Apply empty-content rules from the asset profile.
 
+## Guidance-Specific 8-K Content Strategy
+
+Use these item-level tendencies when deciding which layer to read first:
+
+```text
+EXHIBIT-FIRST (check EX-99.x / EX-10.x first):
+  Item 2.02 (94% in exhibit), Item 7.01 (85%)
+
+CHECK BOTH (data may be in either):
+  Item 1.01 (51% in EX-10.x), Item 8.01 (64% exhibit), Item 5.02 (57% exhibit)
+
+SECTION-FIRST (data usually in section itself):
+  Item 5.07 (>99% section), Item 2.06 (98% section)
+```
+
 ## Scan Scope
 
 ### Exhibit (EX-99.1 Press Release)
@@ -37,6 +52,10 @@ Mid-quarter forward-looking updates — often market-moving. These filings may:
 
 Query 4B finds these. Same extraction rules apply but be especially attentive to revision language.
 
+## Table Columns
+
+When a table shows both GAAP and non-GAAP guidance columns, extract both if both are company-issued guidance. Do not prefer one column over the other.
+
 ## What to Extract from 8-K
 
 | Signal | Example | Extract? |
@@ -58,6 +77,10 @@ Query 4B finds these. Same extraction rules apply but be especially attentive to
 2. **Pure safe-harbor boilerplate** — but keep concrete guidance adjacent to disclaimers (safe-harbor proximity rule)
 3. **Analyst consensus references** — "versus analyst expectations of $X" is not company guidance
 4. **Historical comparisons without forward projection** — "compared to $90B last year" is context, not guidance (unless paired with a forward statement)
+
+## Safe Harbor Proximity
+
+Filter pure disclaimer blocks, but do not drop adjacent lines if they carry concrete guidance numbers or target periods.
 
 ## Quote Prefix
 
