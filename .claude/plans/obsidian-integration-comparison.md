@@ -1,8 +1,38 @@
-# Obsidian Integration: Before vs Now vs CLI Path
+# Obsidian Integration: Architecture & Setup Guide
 
 ## Current State (2026-03-09)
 
-Three layers of Obsidian integration are live. CLI runs as a bare systemd service (no container).
+Three layers of Obsidian integration are live. All work together.
+
+---
+
+## Architecture
+
+```
+┌───────────────────────────────────────────────────┐
+│  Linux Server (headless)                           │
+│                                                    │
+│  Obsidian 1.12.4 (Xvfb headless, systemd service) │
+│    └─ CLI: DISPLAY=:99 obsidian <command>          │
+│       100+ commands: create, search, tags,         │
+│       property:set, daily:append, eval, etc.       │
+│                                                    │
+│  Claude Code                                       │
+│    ├─ MCP: mcp-obsidian (14 tools, agent writes)   │
+│    ├─ CLI: via Bash tool or hooks                  │
+│    └─ SubagentStop hook (auto-capture + tags)      │
+│                                                    │
+│                ~/Obsidian/ (vault directory)        │
+│                      │                             │
+│                 Syncthing (P2P, free, real-time)    │
+└──────────────────────┬────────────────────────────┘
+                       │
+┌──────────────────────┴────────────────────────────┐
+│  Mac                                               │
+│  Syncthing → ~/Obsidian/ → Obsidian 1.12.4 GUI    │
+│                             (full app + CLI local)  │
+└───────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -10,22 +40,10 @@ Three layers of Obsidian integration are live. CLI runs as a bare systemd servic
 
 **Symlink + manual script**
 
-```
-earnings skill writes report
-  → earnings-analysis/Companies/AAPL/{accession}.md
-  → SYMLINK → ~/Obsidian/EventTrader/Earnings/earnings-analysis/Companies/
-  → Syncthing → Mac
-
-Thinking extraction:
-  → python3 scripts/build-thinking-index.py all   (MANUAL)
-  → scans ALL .jsonl transcripts
-  → writes ~/Obsidian/.../thinking/runs/{accession}.md
-```
-
 | Aspect | Detail |
 |--------|--------|
 | Scope | Earnings skills only (hardcoded patterns) |
-| Trigger | Manual — must run script yourself |
+| Trigger | Manual — `python3 scripts/build-thinking-index.py all` |
 | Vault access | Write-only via symlink |
 | Structure | Raw markdown, no frontmatter |
 | Files | `scripts/build-thinking-index.py`, `scripts/build-thinking-index.sh` |
@@ -33,25 +51,9 @@ Thinking extraction:
 
 ---
 
-## Layer 2: MCP + Hook (live, 2026-03-09)
+## Layer 2: MCP + Hook (live)
 
 **Automatic capture + bidirectional vault access + dynamic tagging**
-
-```
-ANY agent finishes
-  → SubagentStop hook fires automatically
-  → infers tags dynamically (ticker, skill type, domain)
-  → writes structured .md to ~/Obsidian/.../claude-logs/
-  → Syncthing → Mac (real-time)
-
-ANY agent/skill can also:
-  → mcp__obsidian__write_note   (create notes with frontmatter)
-  → mcp__obsidian__read_note    (read back previous notes)
-  → mcp__obsidian__search_notes (BM25 keyword search)
-  → mcp__obsidian__update_frontmatter / manage_tags
-  → mcp__obsidian__patch_note   (surgical edits)
-  → mcp__obsidian__list_directory / get_vault_stats
-```
 
 | Aspect | Detail |
 |--------|--------|
@@ -59,47 +61,35 @@ ANY agent/skill can also:
 | Trigger | Automatic (SubagentStop hook) |
 | Vault access | Read + write + search (14 MCP tools) |
 | Structure | YAML frontmatter + dynamic tags |
-| Tags | Auto-inferred: ticker (AAPL), skill type (prediction), domain (earnings, guidance, news) |
+| Tags | Auto-inferred: ticker (AAPL), skill type (prediction), domain (earnings) |
 | Files | `.claude/hooks/obsidian_capture.sh`, `.mcp.json` (obsidian entry) |
-| Vault path | `~/Obsidian/EventTrader/Earnings/earnings-analysis/` |
 | MCP server | `@mauricio.wolff/mcp-obsidian@latest` (npx, zero deps, Node 18+) |
 | Overhead | Zero — process starts/stops with Claude Code session |
-| Sync | Syncthing (already running, bidirectional, P2P, free) |
+| Best for | Agent writes, auto-capture, basic search |
 
-### Known limitations
+### MCP Tools (14)
 
-| Limitation | Detail | Workaround |
-|------------|--------|------------|
-| No thinking capture | Sub-agent transcripts strip thinking blocks; only parent has them | `Stop` hook on main session runs `build-thinking-index.py` automatically |
-| BM25 search only | Keyword matching, no property filters, no tag queries, no graph | Agents use frontmatter + tags for structure; grep-style search is sufficient for CRUD |
-| No template expansion | MCP writes raw markdown, no Obsidian template system | Agents format their own markdown (they're better at it anyway) |
-| No Dataview queries | Can't run `TABLE ... WHERE ticker = "AAPL"` | Agents use `search_notes` + `read_note` + `get_frontmatter` in sequence |
-| No wikilink auto-update | Moving a note doesn't fix [[links]] elsewhere | Agents rarely move notes; create-once pattern |
+`write_note`, `read_note`, `patch_note`, `delete_note`, `move_note`, `move_file`,
+`list_directory`, `read_multiple_notes`, `search_notes` (BM25), `get_frontmatter`,
+`update_frontmatter`, `get_notes_info`, `get_vault_stats`, `manage_tags`
 
 ---
 
-## Layer 3: Obsidian CLI (LIVE, 2026-03-09)
+## Layer 3: Obsidian CLI (live)
 
-**Obsidian 1.12.4 headless via Xvfb systemd service — 100+ CLI commands**
-
-```
-Obsidian runs as systemd user service (obsidian-headless.service)
-  → Xvfb :99 provides virtual display
-  → obsidian create/search/append/property:set/tags/daily:append
-  → Vault: ~/Obsidian/EventTrader/Earnings/earnings-analysis/
-  → Syncthing → Mac (real-time)
-```
+**Obsidian 1.12.4 headless via Xvfb systemd service — 100+ commands**
 
 | Aspect | Detail |
 |--------|--------|
 | Service | `systemctl --user status obsidian-headless` |
 | Config | `~/.config/obsidian/obsidian.json` (`"cli": true`) |
-| Display | Xvfb :99 (ExecStartPre in service) |
+| Display | Xvfb :99 (virtual framebuffer, started by service) |
 | RAM | ~220 MB (measured) |
-| Restart | `Restart=on-failure`, `RestartSec=10` |
-| Linger | Enabled (`loginctl enable-linger faisal`) |
+| Restart | `Restart=on-failure`, `RestartSec=10` (auto-heals) |
+| Linger | `loginctl enable-linger faisal` (survives logout + reboot) |
 | Version | 1.12.4 |
-| CLI usage | `DISPLAY=:99 obsidian <command>` from hooks/scripts |
+| Usage | `DISPLAY=:99 obsidian <command>` |
+| Best for | Indexed search, property queries, tags, daily notes, templates, Dataview |
 
 ### What CLI adds over MCP
 
@@ -107,114 +97,211 @@ Obsidian runs as systemd user service (obsidian-headless.service)
 |---------|:---:|:---:|
 | Create/read/write/delete | Y | Y |
 | Search (keyword) | Y | Y |
-| Frontmatter/tags | Y | Y |
+| Frontmatter/tags CRUD | Y | Y |
 | Append/prepend | Y | Y |
-| Template expansion | N | Y |
-| Daily note append | N | Y |
-| Wikilink auto-update on move | N | Y |
-| Tag rename across entire vault | N | Y |
-| Plugin execution (Dataview, Tasks) | N | Y |
-| Obsidian search index (property filters, tag queries) | N | Y |
-| eval (run JS in vault) | N | Y |
-| File history | N | Y |
+| **Indexed search** (instant, pre-built) | N | Y |
+| **Property-aware queries** | N | Y |
+| **Template expansion** | N | Y |
+| **Daily note append** | N | Y |
+| **Wikilink auto-update on move** | N | Y |
+| **Tag rename across vault** | N | Y |
+| **Plugin execution** (Dataview, Tasks) | N | Y |
+| **eval (run JS in vault)** | N | Y |
+| **File history** | N | Y |
+| **Backlinks/orphans/deadends** | N | Y |
+| **TUI mode** | N | Y |
 
-### Why NOT recommended for this project
+### When to use which
 
-**Reliability concerns:**
+| Use case | Use |
+|----------|-----|
+| Agent creates a note during a run | MCP (`write_note`) |
+| Auto-capture agent output | Hook → MCP |
+| Search for notes by content | CLI (`search query="..."`) |
+| Filter by tag or property | CLI (`tag name="#AAPL"`) |
+| Append to daily note | CLI (`daily:append content="..."`) |
+| Set/read YAML properties | CLI (`property:set`, `property:read`) |
+| Create from template | CLI (`create template="..."`) |
+| Bulk tag operations | CLI (`tags`, `tag`) |
+| Agent reads a known file | Either (both work) |
 
-| Risk | Severity | Detail |
-|------|----------|--------|
-| Headless Electron crashes | High | Electron under Xvfb is not a supported config. Memory leaks, zombie processes, segfaults are common. No official support from Obsidian team. |
-| Vault lock conflicts | High | Obsidian takes an exclusive lock on the vault. If the container's Obsidian AND Mac's Obsidian both open the same vault (via Syncthing), index corruption and `.obsidian/workspace.json` thrashing occur. |
-| CLI requires running app | Hard | The CLI is IPC to a running Electron process. If Obsidian crashes, CLI calls fail silently or hang. No retry/health mechanism built in. |
-| Xvfb display issues | Medium | Some Obsidian plugin initializations (canvas, graph view) require a real GPU context. Xvfb provides software rendering only. |
-| Update brittleness | Medium | Obsidian auto-updates break headless setups. Container must pin version and manually test upgrades. |
-| Plugin state drift | Medium | Plugins configured on Mac may not match container. Dataview index, Tasks cache, etc. are per-instance. |
-| Container image maintenance | Low-Med | Custom Dockerfile with Obsidian .deb + Xvfb + deps. Not a standard image; must rebuild on every Obsidian release. |
+---
 
-**Efficiency concerns:**
+## How to Use the CLI
 
-| Metric | MCP | CLI Container |
-|--------|-----|---------------|
-| RAM | 0 (starts with session) | 300-500 MB (always on) |
-| Startup | Instant (npx) | 5-15s (Electron boot) |
-| Search latency | ~100ms (file scan) | ~10ms (indexed) but + IPC overhead |
-| Failure mode | Tool returns error | Silent hang or crash; needs health check |
-| Moving parts | 1 (npx process) | 4 (Xvfb + Electron + IPC socket + vault mount) |
+### Prerequisites (already done on this server)
 
-**The 10ms index advantage doesn't matter** when:
-- Vault is small (~420 files, 10MB) — BM25 scan is fast enough
-- Agents make 1-5 search calls per run, not thousands
-- MCP search already returns ranked results with excerpts
-- Agents can compensate with `read_note` + `get_frontmatter` for structured filtering
+1. Install Obsidian 1.12.4: `sudo dpkg -i obsidian_1.12.4_amd64.deb`
+2. Install Xvfb: `sudo apt install xvfb` (provides virtual display)
+3. Set config key — edit `~/.config/obsidian/obsidian.json`:
+   ```json
+   {
+     "cli": true,
+     "updateDisabled": true,
+     "vaults": {
+       "earnings-analysis": {
+         "path": "/home/faisal/Obsidian/EventTrader/Earnings/earnings-analysis",
+         "open": true
+       }
+     }
+   }
+   ```
+   **IMPORTANT:** The key is `"cli": true`, NOT `"enableCli": true`. Found by reading the asar source — undocumented.
 
-### What WOULD justify the CLI
+4. Start Xvfb + Obsidian:
+   ```bash
+   Xvfb :99 -screen 0 1024x768x24 &
+   DISPLAY=:99 obsidian --no-sandbox &
+   sleep 10  # wait for Electron to boot
+   ```
 
-The CLI becomes worth it only if ALL of these are true:
-1. Vault grows to 10,000+ files where BM25 scanning is slow
-2. Agents need complex multi-property queries (`tag:#AAPL AND property:confidence > 70`)
-3. Template-based note creation is required (vs. agent-formatted markdown)
-4. Dataview queries are needed from the server side (vs. Mac GUI)
+5. Verify: `DISPLAY=:99 obsidian version` → `1.12.4 (installer 1.12.4)`
 
-None of these apply today. If they do in the future, revisit.
+### Systemd Service (already running)
+
+File: `~/.config/systemd/user/obsidian-headless.service`
+
+```ini
+[Unit]
+Description=Obsidian Headless (Xvfb + CLI)
+After=network.target
+
+[Service]
+Type=simple
+Environment=DISPLAY=:99
+ExecStartPre=/bin/bash -c 'pgrep -f "Xvfb :99" || Xvfb :99 -screen 0 1024x768x24 &'
+ExecStartPre=/bin/sleep 1
+ExecStart=/opt/Obsidian/obsidian --no-sandbox
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+```
+
+Commands:
+```bash
+systemctl --user start obsidian-headless
+systemctl --user stop obsidian-headless
+systemctl --user restart obsidian-headless
+systemctl --user status obsidian-headless
+journalctl --user -u obsidian-headless -f   # logs
+```
+
+### CLI Command Reference (commonly used)
+
+All commands require `DISPLAY=:99` prefix on headless Linux.
+
+```bash
+# === NOTES ===
+obsidian create path="folder/note" content="# Title\n\nBody"
+obsidian create path="folder/note" template="my-template" overwrite
+obsidian read file="note-name"                    # resolve by wikilink name
+obsidian read path="folder/note.md"               # resolve by exact path
+obsidian append file="note" content="new line"
+obsidian prepend file="note" content="top line"
+obsidian delete file="note"
+obsidian move file="note" to="new-folder/"
+obsidian rename file="note" name="new-name"
+
+# === SEARCH ===
+obsidian search query="earnings AAPL" limit=10
+obsidian search query="earnings" path="Companies/" format=json
+obsidian search:context query="guidance" limit=5   # shows matching lines
+
+# === PROPERTIES (YAML frontmatter) ===
+obsidian property:set file="note" name="ticker" value="AAPL"
+obsidian property:set file="note" name="tags" value="a, b, c" type=list
+obsidian property:read file="note" name="ticker"
+obsidian property:remove file="note" name="old-key"
+obsidian properties file="note" format=yaml        # show all properties
+
+# === TAGS ===
+obsidian tags                                       # list all tags
+obsidian tags counts sort=count                     # with counts
+obsidian tag name="#AAPL"                           # tag info + files
+obsidian tag name="#AAPL" verbose                   # list files with tag
+
+# === DAILY NOTES ===
+obsidian daily                                      # open/create today's note
+obsidian daily:read                                 # read today's note
+obsidian daily:append content="Log entry at $(date)"
+obsidian daily:prepend content="Priority item"
+obsidian daily:path                                 # get path
+
+# === VAULT INFO ===
+obsidian vault                                      # name, path, file count, size
+obsidian files folder="Companies/" ext=md           # list files
+obsidian folders                                    # list folders
+obsidian backlinks file="note"                      # what links to this note
+obsidian links file="note"                          # outgoing links
+obsidian orphans                                    # files with no incoming links
+obsidian deadends                                   # files with no outgoing links
+obsidian unresolved                                 # broken [[links]]
+
+# === PLUGINS ===
+obsidian plugins:enabled                            # list enabled plugins
+obsidian plugin:enable id="dataview"
+obsidian plugin:disable id="dataview"
+
+# === TEMPLATES ===
+obsidian templates                                  # list available templates
+obsidian template:read name="my-template" resolve   # read with variables resolved
+obsidian create path="new-note" template="my-template"
+
+# === ADVANCED ===
+obsidian eval code="app.vault.getMarkdownFiles().length"   # run JS
+obsidian command id="editor:toggle-bold"                    # execute command
+obsidian commands filter="editor"                           # list commands
+obsidian reload                                             # reload vault index
+```
+
+### Using CLI from Claude Code hooks
+
+In hook scripts, always set DISPLAY:
+```bash
+#!/usr/bin/env bash
+export DISPLAY=:99
+obsidian create path="logs/$(date +%Y-%m-%d)" content="$1"
+obsidian property:set file="$(date +%Y-%m-%d)" name="source" value="hook"
+```
+
+### Using CLI from Claude Code agents (via Bash tool)
+
+Agents can call CLI commands via the Bash tool:
+```bash
+DISPLAY=:99 obsidian search query="AAPL prediction confidence" limit=5
+DISPLAY=:99 obsidian property:read file="attribution-report" name="primary_driver"
+```
+
+### Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| `Missing X server or $DISPLAY` | Xvfb not running. Check: `pgrep -f "Xvfb :99"` |
+| `CLI is not enabled` | Wrong config key. Must be `"cli": true` in `~/.config/obsidian/obsidian.json` |
+| `Vault not found` | Check obsidian.json has correct vault path with `"open": true` |
+| `File not found` (with `file=`) | `file=` resolves by wikilink name (no path). Use `path=` for exact paths |
+| Segfault on startup | Missing `--no-sandbox` flag |
+| Search returns empty | Run `obsidian reload` to rebuild index |
+| Memory leak (>500MB) | `systemctl --user restart obsidian-headless` |
+| Service won't start after reboot | Check: `loginctl enable-linger faisal` |
+| GPU errors in logs | Normal — Xvfb is software rendering. Harmless. Ignore. |
 
 ---
 
 ## Comparison Summary
 
-| | Layer 1 (Legacy) | Layer 2 (MCP+Hook) | Layer 3 (CLI Container) |
+| | Layer 1 (Legacy) | Layer 2 (MCP+Hook) | Layer 3 (CLI) |
 |---|---|---|---|
-| **Status** | Live (deprecated) | **Live (primary)** | Rejected |
-| Captures | Earnings only | Everything | Everything |
-| Automatic | No | Yes (SubagentStop hook) | Yes (with hooks) |
-| Vault read/search | No | Yes (14 tools) | Yes (100+ commands) |
-| Dynamic tags | No | Yes (auto-inferred) | Yes |
-| Thinking capture | Manual script | Needs Stop hook (parent transcript) | Same limitation |
-| Templates/daily notes | No | No | Yes |
+| **Status** | Live (deprecated) | **Live** | **Live** |
+| Captures | Earnings only | Everything (auto) | Everything (manual/scripted) |
+| Vault read/search | No | Yes (14 tools, BM25) | Yes (100+ cmds, indexed) |
+| Dynamic tags | No | Yes (auto-inferred) | Yes (property:set, tags) |
+| Templates | No | No | Yes |
+| Daily notes | No | No | Yes |
 | Plugin execution | No | No | Yes |
-| Overhead | Zero | Zero | ~300-500MB RAM |
-| Reliability | 100% (filesystem) | 100% (filesystem + MCP) | ~95% (headless Electron) |
-| New infra | Symlink | 1 hook + 1 MCP config | Container + Xvfb + image |
-| Failure mode | N/A | Tool error (recoverable) | Silent crash (needs watchdog) |
+| Overhead | Zero | Zero | ~220 MB RAM |
+| Reliability | 100% | 100% | 99%+ (systemd auto-restart) |
 
----
-
-## Architecture (final)
-
-```
-┌──────────────────────────────────────────────┐
-│  Linux Server (headless, no Obsidian app)     │
-│                                               │
-│  Claude Code                                  │
-│    ├─ SubagentStop hook ──→ auto-log with     │
-│    │   (obsidian_capture.sh)  dynamic tags    │
-│    │                              │            │
-│    ├─ MCP: mcp-obsidian ──→ create/search/    │
-│    │        (14 tools)       read/tag notes   │
-│    │                              │            │
-│    └─ Stop hook (planned) ──→ thinking        │
-│         (build-thinking-index.py)  extraction │
-│                                   │            │
-│                    ~/Obsidian/ (vault dir)     │
-│                         │                      │
-│                    Syncthing (P2P, free)        │
-└─────────────────────┬────────────────────────┘
-                      │  real-time sync
-┌─────────────────────┴────────────────────────┐
-│  Mac                                          │
-│  Syncthing → ~/Obsidian/ → Obsidian 1.12.4   │
-│              (vault dir)   (GUI + CLI local)   │
-│                                               │
-│  CLI available here for:                      │
-│  - Dataview queries                           │
-│  - Template management                        │
-│  - Tag rename across vault                    │
-│  - Graph/backlink exploration                 │
-└───────────────────────────────────────────────┘
-```
-
-**Key insight:** CLI features (Dataview, templates, graph) are interactive/exploratory. Use them on the Mac where Obsidian runs natively. The Linux server's job is create + search + tag — MCP handles that at 100% reliability.
-
-## Decision: Layer 2 (MCP + Hook) — no container
-
-Reliability and zero-maintenance wins over CLI's power features. The CLI is available on the Mac for any power queries you want to run interactively.
+## Decision: All three layers live — MCP for agent writes, CLI for power queries
