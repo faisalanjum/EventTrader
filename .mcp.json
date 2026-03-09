@@ -18,6 +18,11 @@
     "alphavantage": {
       "type": "http",
       "url": "https://mcp.alphavantage.co/mcp?apikey=OEBNGLV527FIER4J"
+    },
+    "obsidian": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@mauricio.wolff/mcp-obsidian@latest", "/home/faisal/Obsidian/EventTrader/Earnings/earnings-analysis"]
     }
   }
 }

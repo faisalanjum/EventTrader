@@ -14,7 +14,8 @@
       "Task",
       "mcp__neo4j-cypher",
       "mcp__perplexity",
-      "mcp__alphavantage"
+      "mcp__alphavantage",
+      "mcp__obsidian"
     ]
   },
   "env": {
@@ -63,6 +64,16 @@
           {
             "type": "command",
             "command": "/home/faisal/EventMarketDB/.claude/hooks/cleanup_after_ok.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/obsidian_capture.sh"
           }
         ]
       }
