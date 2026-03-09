@@ -1,64 +1,103 @@
 # News Queries (S6)
 
-Source content queries for news articles.
+Source content queries for News nodes.
 
 ---
 
 ## 6. Source Content: News
 
-### 6A. News Content by ID
+### 6A. News Payload by ID
 
 ```cypher
 MATCH (n:News {id: $news_id})
-RETURN n.body AS content, n.created AS pub_date, n.title AS title, n.channels
+RETURN
+  n.id,
+  n.title,
+  n.body,
+  n.teaser,
+  n.created,
+  n.updated,
+  n.url,
+  n.authors,
+  n.channels,
+  n.tags,
+  n.market_session,
+  n.returns_schedule
 ```
-**Empty check**: If BOTH `title` and `body` are null/empty, return `EMPTY_CONTENT|news|full`.
+**Empty check**: If `title`, `body`, and `teaser` are all null/empty, return `EMPTY_CONTENT|news|full`.
+**Note**: `authors`, `channels`, `tags`, and `returns_schedule` are JSON strings in Neo4j.
 
-### 6B. Channel-Filtered News (Pre-Filtered)
+### 6B. All News for Company (Date Range Required)
 
-Filter by Benzinga channels BEFORE LLM processing. These channels most likely contain forward-looking content. **Dates are required** — news result sets are too large for unbounded queries.
+Dates are required. News result sets are too large for unbounded company queries.
 
 ```cypher
 MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
 WHERE n.created >= $start_date
   AND n.created <= $end_date
-  AND (n.channels CONTAINS 'Guidance'
-    OR n.channels CONTAINS 'Earnings'
-    OR n.channels CONTAINS 'Previews'
-    OR n.channels CONTAINS 'Management')
-RETURN n.id, n.title, n.created, n.channels
-ORDER BY n.created
-```
-
-### 6C. All News for Company (Date Range Required)
-
-```cypher
-MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
-WHERE n.created >= $start_date
-  AND n.created <= $end_date
-RETURN n.id, n.title, n.teaser, n.created, n.channels
+RETURN
+  n.id,
+  n.title,
+  n.teaser,
+  n.created,
+  n.updated,
+  n.channels,
+  n.market_session,
+  n.url
 ORDER BY n.created DESC
 ```
 
-### 6D. News with Body Content
+### 6C. Channel-Filtered Company News (Caller-Supplied Channels)
 
-Full content fetch for a specific news item.
-
-```cypher
-MATCH (n:News {id: $news_id})
-RETURN n.id, n.title, n.body, n.teaser, n.created, n.channels, n.tags
-```
-**Note**: `body` field is often empty — title may contain complete forward-looking content. Always process both.
-
-### 6E. Earnings Beat/Miss News (for Context)
-
-News tagged as earnings results, useful for cross-referencing extraction context.
+Use only when the extraction type defines a channel strategy. Dates are required.
 
 ```cypher
 MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
 WHERE n.created >= $start_date
   AND n.created <= $end_date
-  AND n.channels CONTAINS 'Earnings'
-RETURN n.id, n.title, n.created, n.channels
-ORDER BY n.created
+  AND ANY(channel IN $channels WHERE n.channels CONTAINS ('"' + channel + '"'))
+RETURN
+  n.id,
+  n.title,
+  n.created,
+  n.updated,
+  n.channels,
+  n.market_session
+ORDER BY n.created DESC
+```
+
+### 6D. News Influence Context by ID
+
+```cypher
+MATCH (n:News {id: $news_id})
+OPTIONAL MATCH (n)-[:INFLUENCES]->(c:Company)
+OPTIONAL MATCH (n)-[:INFLUENCES]->(s:Sector)
+OPTIONAL MATCH (n)-[:INFLUENCES]->(i:Industry)
+OPTIONAL MATCH (n)-[:INFLUENCES]->(m:MarketIndex)
+RETURN
+  n.id,
+  collect(DISTINCT c.ticker) AS company_tickers,
+  collect(DISTINCT c.name) AS company_names,
+  collect(DISTINCT s.name) AS sectors,
+  collect(DISTINCT i.name) AS industries,
+  collect(DISTINCT m.id) AS market_indexes
+```
+
+### 6E. Company News by Market Session
+
+Useful when an extraction type cares about pre-market, in-market, post-market, or closed-session timing.
+
+```cypher
+MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WHERE n.created >= $start_date
+  AND n.created <= $end_date
+  AND n.market_session = $market_session
+RETURN
+  n.id,
+  n.title,
+  n.created,
+  n.updated,
+  n.market_session,
+  n.channels
+ORDER BY n.created DESC
 ```

@@ -39,6 +39,7 @@ from neograph.Neo4jConnection import get_manager
 REDIS_HOST = os.environ.get("REDIS_HOST", "192.168.40.72")
 REDIS_PORT = int(os.environ.get("REDIS_PORT", "31379"))
 QUEUE_NAME = "extract:pipeline"
+TYPE_ROOT = Path(__file__).resolve().parent.parent / ".claude" / "skills" / "extract" / "types"
 
 # --- Asset config: label, alias, extra WHERE, company join ---
 # company_join: (relationship, direction) to reach Company node for ticker resolution.
@@ -52,9 +53,28 @@ ASSET_QUERIES = {
     "news":       ("News",       "n",   None,                                     ("INFLUENCES", "out")),
 }
 
-# Only extraction types that are actually implemented.
-# Defense-in-depth: reject anything not in this set before building queries.
-ALLOWED_TYPES = {"guidance"}
+def discover_allowed_types():
+    """Return extraction types with the minimum contract required by /extract."""
+    allowed = set()
+    if not TYPE_ROOT.exists():
+        return allowed
+
+    for type_dir in TYPE_ROOT.iterdir():
+        if not type_dir.is_dir():
+            continue
+
+        required = (
+            type_dir / "core-contract.md",
+            type_dir / "primary-pass.md",
+            type_dir / f"{type_dir.name}-queries.md",
+        )
+        if all(path.exists() for path in required):
+            allowed.add(type_dir.name)
+
+    return allowed
+
+
+ALLOWED_TYPES = discover_allowed_types()
 
 
 def _company_join_clause(alias, company_join):

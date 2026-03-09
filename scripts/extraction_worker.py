@@ -16,7 +16,7 @@ Payload format (JSON) — one message = one job:
       "mode": "write"
   }
 
-Supported types: guidance, analyst, announcement
+Supported types: discovered from `.claude/skills/extract/types`
 Supported assets: transcript, 8k, 10q, 10k, news
 
 Status tracking:
@@ -45,6 +45,7 @@ from pathlib import Path
 PROJECT_DIR = "/home/faisal/EventMarketDB"
 os.chdir(PROJECT_DIR)
 sys.path.insert(0, PROJECT_DIR)
+TYPE_ROOT = Path(PROJECT_DIR) / ".claude" / "skills" / "extract" / "types"
 
 import redis.asyncio as aioredis
 from claude_agent_sdk import ClaudeAgentOptions, query
@@ -74,7 +75,28 @@ WORKER_POD = platform.node()
 # ---------------------------------------------------------------------------
 # Type whitelist (defense-in-depth)
 # ---------------------------------------------------------------------------
-ALLOWED_TYPES = {"guidance", "analyst", "announcement"}
+def discover_allowed_types():
+    """Return extraction types with the minimum contract required by /extract."""
+    allowed = set()
+    if not TYPE_ROOT.exists():
+        return allowed
+
+    for type_dir in TYPE_ROOT.iterdir():
+        if not type_dir.is_dir():
+            continue
+
+        required = (
+            type_dir / "core-contract.md",
+            type_dir / "primary-pass.md",
+            type_dir / f"{type_dir.name}-queries.md",
+        )
+        if all(path.exists() for path in required):
+            allowed.add(type_dir.name)
+
+    return allowed
+
+
+ALLOWED_TYPES = discover_allowed_types()
 
 # ---------------------------------------------------------------------------
 # Asset -> Label mapping
