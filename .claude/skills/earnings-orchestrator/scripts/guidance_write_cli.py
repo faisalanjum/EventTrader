@@ -60,7 +60,14 @@ import sys
 sys.path.insert(0, "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts")
 sys.path.insert(0, "/home/faisal/EventMarketDB")
 
-from guidance_ids import build_guidance_ids, build_period_u_id, build_guidance_period_id, normalize_for_member_match
+from guidance_ids import (
+    build_guidance_ids,
+    build_period_u_id,
+    build_guidance_period_id,
+    normalize_for_member_match,
+    slug,
+)
+from concept_resolver import apply_concept_resolution, load_concept_cache
 import guidance_writer
 from guidance_writer import write_guidance_batch, write_guidance_item, create_guidance_constraints
 
@@ -197,15 +204,21 @@ def main():
         except ValueError as e:
             errors.append({"index": i, "label": item.get('label', '?'), "error": str(e)})
 
+    # Deterministic concept repair fills reviewed null/invalid cases first.
+    concept_rows = load_concept_cache(ticker)
+    apply_concept_resolution(valid_items, concept_rows, logger=logger)
+
     # Concept inheritance: if Revenue(Total) has xbrl_qname but Revenue(iPhone) doesn't,
     # copy it over. Same metric = same concept regardless of segment.
     concept_map = {}
     for item in valid_items:
-        if item.get('xbrl_qname') and item.get('label'):
-            concept_map.setdefault(item['label'], item['xbrl_qname'])
+        label_key = item.get('label_slug') or slug(item.get('label', ''))
+        if item.get('xbrl_qname') and label_key:
+            concept_map.setdefault(label_key, item['xbrl_qname'])
     for item in valid_items:
-        if not item.get('xbrl_qname') and item.get('label') in concept_map:
-            item['xbrl_qname'] = concept_map[item['label']]
+        label_key = item.get('label_slug') or slug(item.get('label', ''))
+        if not item.get('xbrl_qname') and label_key in concept_map:
+            item['xbrl_qname'] = concept_map[label_key]
 
     if dry_run:
         # Dry-run: validate + build params, no connection needed
