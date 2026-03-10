@@ -1,7 +1,7 @@
 # XBRL Concept & Member Linking — Analysis, Solution & Implementation
 
 **Created**: 2026-03-09
-**Status**: PLANNED (not yet implemented)
+**Status**: IMPLEMENTED (concept resolver — exact local-name matching, 2026-03-10)
 **Tracker refs**: E9 (concept inconsistency), E3 (member matching), Enhancement #23 (concept resolver)
 **Supersedes**: `xbrl-concept-linking-gpt.md` (its alternative hypotheses are merged into this file as additive notes)
 
@@ -20,6 +20,7 @@
 9. [Regression & Edge Case Analysis](#9-regression--edge-case-analysis)
 10. [Why Every Alternative Fails](#10-why-every-alternative-fails)
 11. [Addendum — E4d and Member-Linking Alternatives](#11-addendum--e4d-and-member-linking-alternatives)
+12. [Implementation Record — What Was Actually Built (2026-03-10)](#12-implementation-record--what-was-actually-built-2026-03-10)
 
 ---
 
@@ -999,3 +1000,205 @@ For the current repo, the best implementation sequence is:
 2. explicitly document that member linking is code-owned, not prompt-owned
 3. preserve all-members-by-CIK member resolution as the final authority
 4. treat broader "stable identity" redesign ideas as a separate follow-up, not part of the minimal fix
+
+---
+
+## 12. Implementation Record — What Was Actually Built (2026-03-10)
+
+This section documents what was implemented, the validation evidence, and what was intentionally **not** changed.
+
+### 12.1. Implementation Summary
+
+GPT (o3) implemented a **conservative exact local-name concept resolver** rather than the broader substring-based registry proposed in Sections 5-7 of this plan. The implementation was reviewed and validated by Claude (Opus 4.6) on 2026-03-10.
+
+**Approach**: Exact XBRL local-name matching against an ordered candidate list per label_slug.
+
+**Files created/modified**:
+
+| File | Action | Purpose |
+|------|--------|---------|
+| `scripts/concept_resolver.py` | NEW (184 lines) | Deterministic concept resolver with reviewed candidate lists |
+| `scripts/test_concept_resolver.py` | NEW (137 lines) | 10 unit tests covering all resolution paths |
+| `scripts/guidance_write_cli.py` | MODIFIED | Import + call `apply_concept_resolution()` before inheritance; inheritance keys changed from `label` to `label_slug` |
+
+**No files changed for member linking.** Member resolution remains code-owned in `guidance_write_cli.py:232-268`.
+
+### 12.2. How the Concept Resolver Works
+
+`concept_resolver.py` uses three data structures:
+
+1. **`CONCEPT_CANDIDATES`** — dict mapping label_slug → ordered tuple of XBRL local names. First match in the company's concept cache wins.
+
+   ```python
+   CONCEPT_CANDIDATES = {
+       'dividend_per_share': ('CommonStockDividendsPerShareDeclared',),
+       'eps': ('EarningsPerShareDiluted',),
+       'gross_margin': ('GrossProfit',),
+       'gross_profit': ('GrossProfit',),
+       'oine': ('NonoperatingIncomeExpense', 'OtherNonoperatingIncomeExpense'),
+       'operating_expenses': ('OperatingExpenses',),
+       'opex': ('OperatingExpenses',),
+       'restructuring_cash_payments': ('PaymentsForRestructuring',),
+       'restructuring_charges': ('RestructuringCharges',),
+       'restructuring_costs': ('RestructuringCharges',),
+       'revenue': ('RevenueFromContractWithCustomerExcludingAssessedTax',
+                   'RevenueFromContractWithCustomerIncludingAssessedTax',
+                   'SalesRevenueNet', 'Revenues'),
+       'tax_rate': ('EffectiveIncomeTaxRateContinuingOperations',
+                    'EffectiveIncomeTaxRate'),
+   }
+   ```
+
+2. **`NULL_QNAME_LABELS`** — set of labels that should always resolve to null (derived metrics with no XBRL concept): `adjusted_ebitda`, `ebitda`, `fcf`, `free_cash_flow`, `operating_margin`.
+
+3. **`NULL_QNAME_SUFFIXES`** — tuple of suffixes that should always resolve to null: `_change`, `_growth`, `_yoy`.
+
+**Resolution logic** (`resolve_xbrl_qname()`):
+- If label_slug is null → `UNHANDLED_CONCEPT` (passthrough)
+- If label_slug is in `NULL_QNAME_LABELS` or ends with `NULL_QNAME_SUFFIXES` → `FORCE_NULL_CONCEPT`
+- If label_slug has no entry in `CONCEPT_CANDIDATES` → `UNHANDLED_CONCEPT` (passthrough — unknown labels are not touched)
+- Otherwise: iterate candidates in order, strip namespace prefix from cache rows, exact local-name match. Usage tiebreak if multiple namespace hits for the same local name; fail-closed (return None) on usage ties.
+
+**Application logic** (`apply_concept_resolution()`):
+- `UNHANDLED_CONCEPT` → skip (preserve whatever the agent provided)
+- `FORCE_NULL_CONCEPT` → set `xbrl_qname = None`
+- Resolved qname + existing qname is missing/invalid → set to resolved
+- Resolved qname + existing qname is valid (present in cache) → keep existing (with log warning if different)
+
+### 12.3. Integration Point in guidance_write_cli.py
+
+Concept resolution runs **before** inheritance, at approximately line 207:
+
+```python
+concept_rows = load_concept_cache(ticker)
+apply_concept_resolution(valid_items, concept_rows, logger=logger)
+```
+
+Inheritance was also improved: keys changed from raw `item['label']` to `label_slug` via `item.get('label_slug') or slug(item.get('label', ''))`. This is strictly better — normalizes "Tax Rate" and "tax rate" to the same key.
+
+### 12.4. Validation Evidence — 762-Company Replay
+
+GPT ran a full audit across all 762 companies in the database:
+
+| Metric | Result |
+|--------|--------|
+| Companies tested | 762 |
+| Off-target matches (exact local-name) | **0** |
+| Recall fixes confirmed | **3** (CRM tax_rate ×2, AAPL gross_margin ×1) |
+| Existing correct links preserved | All |
+| Existing correct nulls preserved | All |
+
+### 12.5. Why the Broader Substring Registry (Sections 5-7) Was NOT Implemented
+
+This plan's Sections 5-7 proposed a substring include/exclude pattern registry with ~20 entries:
+
+```python
+# Example from plan Section 5 (NOT implemented):
+'revenue': (['RevenueFromContract', 'SalesRevenueNet', 'Revenues'], ['Remaining', 'Recognized']),
+'tax_rate': (['EffectiveIncomeTaxRate'], ['Reconciliation']),
+```
+
+GPT ran the same 762-company replay against this broader registry and found **920+ off-target matches**:
+
+| Label | Off-target hits | Example false match |
+|-------|----------------|---------------------|
+| revenue | 159 | Matches any qname containing "RevenueFromContract" including performance obligations |
+| sbc | 380 | Matches any qname containing "ShareBased" including reconciliation items |
+| d_a | 152 | Matches "Depreciation" broadly — hits accumulated depreciation, tax depreciation |
+| interest_expense | 105 | Matches broadly across interest-related concepts |
+| restructuring_costs | 51 | Matches restructuring reserve and liability concepts |
+| opex | 33 | Matches operating-expense subtypes |
+| crpo | 23 | Matches remaining performance obligation variants |
+| net_income | 17 | Matches net income attributable-to subtypes |
+
+**Root cause**: Substring matching (`candidate in qname`) is inherently fuzzy. XBRL taxonomies reuse stems extensively — "RevenueFromContract" appears in revenue concepts, performance obligations, contract liabilities, and deferred revenue. An exclude list can never be exhaustive because new taxonomy extensions and company-specific concepts appear regularly.
+
+The exact local-name approach has **zero** false matches by construction — it only matches the exact concept names that have been reviewed against live data.
+
+### 12.6. Discrepancies Between Plan and Implementation
+
+The plan's Section 5 pattern map and `core-contract.md` §11 pattern map both have discrepancies vs the implemented resolver:
+
+| Issue | Plan/Contract | Implementation | Notes |
+|-------|--------------|----------------|-------|
+| tax_rate exclude | No exclude for Reconciliation items | N/A — exact match on `EffectiveIncomeTaxRateContinuingOperations` only | Plan's substring match would need an exclude; exact match doesn't |
+| OINE pattern | Plan uses substring `NonoperatingIncome` | Exact: `NonoperatingIncomeExpense`, `OtherNonoperatingIncomeExpense` | Plan would match `NonoperatingIncomeExpenseOther` variants too |
+| sbc, d_a, interest_expense, net_income | In plan's registry | **Not in implementation** | Deliberately excluded — no evidence of recall failures for these labels. Adding them risks false matches without measurable benefit |
+
+**`core-contract.md` §11 has NOT been updated** to match the implementation. The §11 pattern map (12 entries with include/exclude substrings) is now superseded by `concept_resolver.py`'s exact local-name candidates. A future update should align §11 with the actual implementation, but the runtime behavior is correct because the CLI runs the resolver, not the §11 spec.
+
+### 12.7. Member Linking Decision — No Changes
+
+**What was analyzed**:
+
+1. **`&` vs `and` normalization gap** in `guidance_ids.py:normalize_for_member_match()`:
+   - `normalize_for_member_match("Research & Development")` → `researchdevelopment`
+   - `normalize_for_member_match("ResearchAndDevelopmentMember")` → `researchanddevelopment`
+   - These don't match because `&` is stripped but `and` is preserved.
+   - CRM has a `SubscriptionandSupport` member label — confirming the latent case is real for at least one company.
+
+2. **Impact assessment** (GPT, verified across 84,166 distinct member labels):
+   - The `&` vs `and` gap has **zero measurable impact** on current production data.
+   - CRM has 0 segmented guidance items (no member matches attempted).
+   - AAPL's segments (iPhone, iPad, Mac, Services, Wearables) don't contain `&` or `and`.
+   - No production item was found where this gap caused a missed member link.
+   - Claude's earlier proposal included camelCase word-boundary splitting (e.g., `GrossProfit` → `gross profit`). GPT checked: across all 84,166 distinct member labels, camelCase splitting produced **0 behavioral differences** vs `&`-only normalization. It is a no-op in practice.
+
+3. **Decision**: Do NOT change `normalize_for_member_match()` now. The only behavior-changing normalization worth considering in the future is a minimal `& -> and` substitution — not camelCase splitting or other broader changes. Even `& -> and` has zero current impact and should only be added when a real production case surfaces.
+
+**Member linking remains**:
+- Code-owned in `guidance_write_cli.py:232-268`
+- Final authority via all-Members-by-CIK query (not 2B cache)
+- Agent-provided `member_u_ids` are advisory only — CLI overwrites
+- 100% precision and recall on current data (AAPL's 5 segments all correct)
+
+### 12.8. What Changed vs What Didn't
+
+| Component | Changed? | Details |
+|-----------|----------|---------|
+| `concept_resolver.py` | **NEW** | Exact local-name concept resolution for 12 reviewed label_slugs |
+| `test_concept_resolver.py` | **NEW** | 10 unit tests |
+| `guidance_write_cli.py` | **MODIFIED** | Calls resolver before inheritance; inheritance uses label_slug keys |
+| `guidance_writer.py` | No | MAPS_TO_CONCEPT / MAPS_TO_MEMBER edge creation unchanged |
+| `guidance_ids.py` | **MODIFIED** | `normalize_for_member_match()`: added `& -> and` substitution (1 line, zero current impact, future recall hardening) |
+| `warmup_cache.py` | No | Query 2A/2B unchanged |
+| `core-contract.md` §11 | No | Still has old substring patterns — superseded at runtime by resolver |
+| Member linking code | No | Remains code-owned, all-Members-by-CIK, CLI authoritative |
+| Graph schema | No | Same nodes, edges, properties |
+
+### 12.9. Open Items
+
+1. **Align `core-contract.md` §11 with implementation** — the agent still reads §11 during extraction, which describes the old substring approach. The CLI resolver overrides agent mistakes, but aligning the spec would reduce wasted agent effort.
+
+2. **Expanding `CONCEPT_CANDIDATES` — Acceptance Bar & Process**
+
+   The resolver is deliberately narrow (12 entries covering all 16 production label_slugs). Expansion is expected as more companies are extracted, but each new entry must pass a strict gate.
+
+   **Acceptance bar (ALL must pass before promotion to code):**
+   - Exact local-name candidates ONLY — no substring, no prefix matching
+   - Full replay across all 762 company concept caches (Query 2A simulation)
+   - **0 off-target selections** across the entire replay
+   - **Semantic equivalence** — the candidate must mean the same thing as the label_slug, not merely be related. Examples of failures:
+     - `AllocatedShareBasedCompensationExpense` ≠ generic SBC (it's the IS allocation, not the CF add-back)
+     - `InterestIncomeExpenseNet` ≠ `interest_expense` (net includes income offset)
+     - `WeightedAverageNumberOfDilutedSharesOutstanding` ≠ generic `share_count` (diluted-only)
+   - No rewrites of already-valid current links
+   - Measurable recall improvement on current or expected labels
+
+   **Process:**
+   1. Inventory: identify uncovered label_slugs (from GuidanceUpdate nodes or anticipated labels)
+   2. Evidence table: candidate concepts per slug with company-count data
+   3. Replay report: validate across all 762 company caches
+   4. Propose: only slugs that pass the full acceptance bar
+
+   **Slug naming must match `guidance_ids.slug()` output** — e.g., `slug("SG&A")` == `sg_a`, not `sga`. Verify against the actual slug function before adding entries.
+
+   **Do NOT bulk-promote.** Presence counts (how many companies have a concept) are not correctness proofs. Each candidate needs individual semantic review.
+
+   **The registry is living, not finished** — future companies can use custom extension concepts, new labels, or derived metrics that should stay null. Runtime behavior is always company-specific (resolution only works if that candidate exists in that company's cache).
+
+3. ~~**Future low-risk hardening: `& -> and`**~~ **DONE (2026-03-10)** — Applied `s.lower().replace('&', 'and')` in `normalize_for_member_match()` at `guidance_ids.py:200`. Verified: 78/78 tests pass, 0 collision changes across 84,166 member labels, 0 current production impact. Future-facing: recovers matches like CRM's `Subscription & Support` → `SubscriptionandSupport`. CamelCase splitting NOT added — verified as no-op.
+
+4. **E9 tracker status**: RESOLVED by concept_resolver.py. The 3 recall failures (CRM tax_rate ×2, AAPL gross_margin ×1) are now deterministically filled. Enhancement #23 (inline concept resolver) is COMPLETE.
+
+5. **Do NOT expand member linking to a static dict** — member linking remains company-scoped code-owned lookup with normalization in `guidance_write_cli.py`. A universal static dict (like CONCEPT_CANDIDATES) is the wrong architecture for members because member labels are company-specific, not taxonomy-standardized.
