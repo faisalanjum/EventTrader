@@ -17,7 +17,7 @@ Extract from primary content section only (per intersection file for scan scope)
 | Company + CIK | QUERIES.md 1A |
 | FYE from 10-K | QUERIES.md 1B — extract month from `periodOfReport` |
 | Concept cache | `bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh $TICKER` → reads `/tmp/concept_cache_{TICKER}.json` |
-| Member cache | (same command — runs both 2A and 2B in one call) → reads `/tmp/member_cache_{TICKER}.json` |
+| Member map + cache | (same command — runs 2A, 2B, and member map in one call) → member map used by CLI at write time, no agent read needed |
 | Existing guidance tags | QUERIES.md 7A |
 | Prior extractions for this source | QUERIES.md 7D — if count > 0, log warning: "Source has {N} existing items — re-run will only add items with new values" |
 
@@ -41,19 +41,14 @@ You MUST invoke `guidance_ids.py` via Bash for EVERY extracted item. Do not comp
 2. **Canonicalize unit + values** — `guidance_ids.py` via Bash
 3. **Validate basis** — explicit-only qualifier from quote span, otherwise `unknown`
 4. **Resolve `xbrl_qname`** — match against concept cache (core-contract.md S11)
-5. **Member match** — for each item where segment != 'Total', scan the member cache from Step 1, match segment name to member name (case-insensitive, ignore 'Member' suffix), and add matched `u_id` to `member_u_ids`
+5. **Member match** — set `member_u_ids: []` for all items. The CLI resolves members from precomputed CIK-based maps at write time. Do not attempt agent-side member matching.
 6. **Compute deterministic IDs** — `guidance_ids.py:build_guidance_ids()` via Bash
 
 If uncertain on XBRL/member: keep core item, set `xbrl_qname=null`, skip member edges.
 
-### Additive Implementation Note (2026-03-09)
+### Member Resolution Note
 
-This note is additive and does not replace the steps above.
-
-- Because `E4d` can truncate large member-cache reads, agent-side member matching should be treated as best-effort only.
-- Preserve `segment` text even if you cannot confidently populate `member_u_ids`.
-- In write mode, `guidance_write_cli.py` is the final authority for member resolution and may overwrite `member_u_ids` using live Neo4j lookup.
-- Do not invent member links just to fill the field. Empty `member_u_ids` is preferable to a guessed edge.
+The CLI (`guidance_write_cli.py`) is the sole authority for member resolution. It uses a precomputed CIK-based member map (built during warmup) to resolve `segment` text → `member_u_ids`. In write mode, if the precomputed map is missing, it falls back to a live CIK query. Always set `member_u_ids: []` in the JSON payload — the CLI will populate it.
 
 ### STEP 5: WRITE — Batch Write via guidance_write.sh
 

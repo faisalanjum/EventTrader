@@ -96,6 +96,7 @@ All 20 extraction fields (see [§2](#2-extraction-fields)) plus system identity 
 | `id` | String | Deterministic key (see [§3](#3-deterministic-ids)) |
 | `evhash16` | String | First 16 hex chars of evidence hash |
 | `xbrl_qname` | String / null | Resolved XBRL concept qname (see [§11](#11-xbrl-matching)) |
+| `concept_family_qname` | String / null | Canonical XBRL concept family anchor (CLI-computed, do not set) |
 | `unit_raw` | String / null | Verbatim unit text, only when `canonical_unit='unknown'` |
 | `label` | String | Metric name (denormalized from Guidance parent) |
 | `label_slug` | String | `slug(label)` — enables `WHERE gu.label_slug = 'revenue'` without JOIN |
@@ -304,20 +305,17 @@ Mixed bases may appear in the same metric history. Never compare consecutive val
 
 ### Extraction
 
-After decomposition (§4), each qualifier becomes a member-match candidate:
+After decomposition (§4), each qualifier becomes a segment label. Set `member_u_ids: []` — the CLI resolves members at write time (see below).
 
-1. Split `segment` on ` | ` → list of qualifier strings
-2. For each qualifier, attempt member matching (below)
-3. Populate `member_u_ids` with all confident matches (0..N)
+### Member Matching (CLI-Owned)
 
-### Member Matching
+Member resolution is handled entirely by `guidance_write_cli.py` at write time. Agents set `member_u_ids: []`.
 
-For each qualifier, match against member cache (QUERIES.md 2B):
-
-1. **Normalize both sides**: lowercase, strip whitespace, remove tokens `member` and `segment` (case-insensitive), light singularization (`services`→`service`, `products`→`product`, `accessories`→`accessory`)
-2. **Compare** normalized qualifier against each normalized `member_label` from cache
-3. **Exact normalized match** → add `best_member_u_id` to `member_u_ids`
-4. **No match** → skip (no edge). Segment text preserved regardless.
+1. Warmup builds a CIK-based member map (`/tmp/member_map_{TICKER}.json`) — all `Member` nodes for the company by CIK prefix
+2. CLI normalizes each item's `segment` text: lowercase, strip whitespace, remove `member`/`segment` tokens, light singularization (`services`→`service`, `products`→`product`, `accessories`→`accessory`)
+3. Exact normalized match → populates `member_u_ids` with matching `u_id`(s)
+4. No match → no edge. Segment text preserved regardless.
+5. In write mode, if precomputed map is missing, falls back to live CIK query (self-healing)
 
 ### Multi-Axis
 

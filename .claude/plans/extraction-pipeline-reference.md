@@ -17,7 +17,7 @@ Use code first:
 - Orchestrator: `.claude/skills/extract/SKILL.md`
 - Generic agents: `.claude/agents/extraction-primary-agent.md`, `.claude/agents/extraction-enrichment-agent.md`
 - Active prompt stack: `.claude/skills/extract/assets/*`, `.claude/skills/extract/types/guidance/*`, `.claude/skills/extract/queries-common.md`, `.claude/skills/extract/evidence-standards.md`
-- Deterministic validation/write path: `.claude/skills/earnings-orchestrator/scripts/guidance_ids.py`, `guidance_write_cli.py`, `guidance_writer.py`, `guidance_write.sh`
+- Deterministic validation/write path: `.claude/skills/earnings-orchestrator/scripts/guidance_ids.py`, `guidance_write_cli.py`, `guidance_writer.py`, `guidance_write.sh`, `concept_resolver.py`
 - Warmup helpers: `.claude/skills/earnings-orchestrator/scripts/warmup_cache.py`, `warmup_cache.sh`
 - Global hooks/guardrails: `.claude/settings.json`
 
@@ -176,6 +176,7 @@ All skill/query paths relative to `.claude/skills/extract/`.
 | `guidance_writer.py` | MERGE patterns, param assembly, Neo4j writes (atomic per item) |
 | `guidance_write_cli.py` | CLI entry point: reads JSON, computes IDs, calls writer. Modes: `--dry-run` / `--write` |
 | `guidance_write.sh` | Shell wrapper (venv activation + Neo4j connection env vars) |
+| `concept_resolver.py` | Deterministic XBRL concept resolution (49-entry reviewed registry) + concept family mapping (19-entry canonical anchor table). Runs in `guidance_write_cli.py` before writer. |
 | `warmup_cache.py/.sh` | Pre-compute concept cache (2A), member cache (2B), transcript content (3B) to `/tmp/` — bypasses MCP truncation |
 | `fiscal_math.py` | Calendar-to-fiscal date math (FYE variants) |
 | `fiscal_resolve.py` | Period resolution from XBRL periods |
@@ -366,7 +367,7 @@ proxy-queries.md      # Asset-specific Cypher queries
 | E4e | Transcript JSON Read truncation | Medium | CRM transcript 76.7KB. Same root cause. Agent recovers with Bash+Python chunking (3-4 extra turns, ~$0.50–$1.00 wasted). Fix: have warmup split into chunks. |
 | E5 | MCP-vs-Python Neo4j divergence (re-verify) | **High if real** | Older validation notes reported MCP `neo4j-cypher` seeing different data than Python `get_manager()`, but this document was updated from repo audit rather than live infra checks. Re-verify before coding against it. |
 | E8 | Inconsistent period codes across sources | Low | Same disclosure: `gp_UNDEF` (10-Q) vs `gp_ST` (10-K) for "future cash payments". Fix: standardize "future, no end date" → one canonical code in pass briefs. |
-| E9 | Inconsistent concept linking | Low | Agent nondeterminism with ambiguous XBRL cache entries. Fix: inline deterministic concept resolver (see Enhancement #23). Full regression analysis done — 7 code paths checked, zero risk. |
+| E9 | ~~Inconsistent concept linking~~ | ~~Low~~ | **RESOLVED** — `concept_resolver.py` with 49-entry CONCEPT_CANDIDATES registry + concept family mapping. Deterministic, fail-closed. See S23. |
 | E10 | Inconsistent entity naming across sources | Low | Same disclosure → different labels (e.g., `restructuring_costs` vs `restructuring_cash_payments`). Fix: label normalization table or post-processing dedup. |
 
 **E4 shared root cause**: the `~50KB` `<persisted-output>` threshold applies to MCP output, `Read`, and large shell output. `warmup_cache.sh` helps by moving 2A/2B/3B results into `/tmp`, but large subsequent reads of those files can still hit the same ceiling.
@@ -391,7 +392,7 @@ proxy-queries.md      # Asset-specific Cypher queries
 | S17 | `PostToolUseFailure` hook | Structured error logging without transcript parsing. |
 | S18 | `skills:` field for evidence-standards | Auto-load. Saves 1 Read call per invocation. |
 | S21 | Stop hook as quality gate | Validate result JSON before returning to worker. Saves full retry cost. Complex. |
-| S23 | Inline deterministic concept resolver | `concept_resolver.py` with reviewed registry of `label_slug → (include/exclude qname patterns)`, resolved against concept cache. Same pattern as member matching. 14-metric initial registry. Fail-closed: ambiguous = null. Runs before concept inheritance in `guidance_write_cli.py`. Full regression analysis complete (7 code paths, zero risk). |
+| ~~S23~~ | ~~Inline deterministic concept resolver~~ | **DONE** — `concept_resolver.py` implemented: 49-entry CONCEPT_CANDIDATES registry (xbrl_qname resolution) + 19-entry CONCEPT_FAMILY table (concept_family_qname). Concept repair runs before inheritance; concept_family_qname assigned after inheritance, before writer. 19 tests pass. |
 
 ### 7.4. Pending Confirmations
 

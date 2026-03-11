@@ -434,6 +434,85 @@ def test_cli_dry_run_with_fye_month_and_routing():
         os.unlink(path)
 
 
+# ── Member resolution tests ──────────────────────────────────────────────
+
+from guidance_write_cli import _apply_member_map
+
+
+def test_apply_member_map_clears_stale_ids():
+    """Stale agent-provided member_u_ids are cleared even when map has no match."""
+    member_map = {'iphone': ['320193:IPhoneMember']}
+    items = [
+        _make_raw_item(segment='Unknown Segment', member_u_ids=['STALE_GARBAGE_ID']),
+        _make_raw_item(segment='iPhone', member_u_ids=['STALE_GARBAGE_ID']),
+        _make_raw_item(segment='Total'),
+    ]
+    _apply_member_map(items, member_map)
+    # Unknown Segment: stale ID cleared, no match → empty
+    assert items[0].get('member_u_ids') == []
+    # iPhone: stale ID cleared, then repopulated from map
+    assert items[1].get('member_u_ids') == ['320193:IPhoneMember']
+    # Total: untouched (no clearing for Total segments)
+    assert items[2].get('member_u_ids', []) != ['STALE_GARBAGE_ID'] or 'member_u_ids' not in items[2]
+
+
+def test_apply_member_map_dry_run_resolves():
+    """Member map resolves segments in dry-run mode (no Neo4j needed)."""
+    member_map = {
+        'iphone': ['320193:IPhoneMember'],
+        'service': ['320193:ServiceMember'],
+    }
+    items = [
+        _make_raw_item(segment='Total', member_u_ids=[]),
+        _make_raw_item(segment='iPhone', member_u_ids=[]),
+        _make_raw_item(segment='Services', member_u_ids=[]),
+    ]
+    matched = _apply_member_map(items, member_map)
+    assert matched == 2
+    assert items[0].get('member_u_ids') == []  # Total unchanged
+    assert items[1]['member_u_ids'] == ['320193:IPhoneMember']
+    assert items[2]['member_u_ids'] == ['320193:ServiceMember']
+
+
+def test_apply_member_map_missing_map_no_crash():
+    """When member_map is empty, all non-Total items get member_u_ids cleared to []."""
+    items = [
+        _make_raw_item(segment='iPhone', member_u_ids=['OLD_ID']),
+        _make_raw_item(segment='Total'),
+    ]
+    matched = _apply_member_map(items, {})
+    assert matched == 0
+    assert items[0].get('member_u_ids') == []  # Cleared even with empty map
+
+
+def test_apply_member_map_alias_redirect():
+    """Segment alias redirects normalized name before member map lookup."""
+    member_map = {
+        'digitalmedia': ['868365:DigitalMediaMember'],
+        'digitalexperience': ['868365:DigitalExperienceMember'],
+    }
+    aliases = {
+        'creativecloud': 'digitalmedia',
+        'documentcloud': 'digitalexperience',
+    }
+    items = [
+        _make_raw_item(segment='Creative Cloud', member_u_ids=[]),
+        _make_raw_item(segment='Document Cloud', member_u_ids=[]),
+        _make_raw_item(segment='Total'),
+    ]
+    matched = _apply_member_map(items, member_map, aliases=aliases)
+    assert matched == 2
+    assert items[0]['member_u_ids'] == ['868365:DigitalMediaMember']
+    assert items[1]['member_u_ids'] == ['868365:DigitalExperienceMember']
+
+
+def test_apply_member_map_alias_missing_file_no_crash():
+    """Missing alias file returns empty dict, no crash."""
+    from guidance_write_cli import _load_segment_aliases
+    aliases = _load_segment_aliases('NONEXISTENT_TICKER_XYZ')
+    assert aliases == {}
+
+
 # ── Run all tests ─────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

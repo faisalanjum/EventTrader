@@ -19,7 +19,7 @@ Discovery of secondary-only items is co-equal with enrichment — the secondary 
 | Company + CIK | QUERIES.md 1A |
 | FYE from 10-K | QUERIES.md 1B — extract month from `periodOfReport` |
 | Concept cache | `bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh $TICKER` → reads `/tmp/concept_cache_{TICKER}.json` |
-| Member cache | (same command — runs both 2A and 2B in one call) → reads `/tmp/member_cache_{TICKER}.json` |
+| Member map + cache | (same command — runs 2A, 2B, and member map in one call) → member map used by CLI at write time, no agent read needed |
 | Existing guidance tags | QUERIES.md 7A |
 
 ### STEP 2: LOAD EXISTING ITEMS — Readback Primary Pass Items
@@ -75,15 +75,11 @@ For new secondary-only items: build from scratch using CIK/FYE from Step 1. Use 
 
 1. **Period routing** (new items only — enriched items already have `period_u_id` from 7E): include LLM period fields (`fiscal_year`, `fiscal_quarter`, `half`, `month`, `long_range_start_year`, `long_range_end_year`, `calendar_override`, `sentinel_class`, `time_type`) in the item. The CLI computes `period_u_id` (gp_ format) via `build_guidance_period_id()` automatically.
 
-2. **Resolve xbrl_qname** against concept cache, **member match** for segment items (same as primary pass validation).
+2. **Resolve xbrl_qname** against concept cache. Set `member_u_ids: []` — the CLI resolves members from precomputed CIK-based maps at write time.
 
-### Additive Implementation Note (2026-03-09)
+### Member Resolution Note
 
-This note is additive and does not replace the instruction above.
-
-- Agent-side member matching remains optional/best-effort during enrichment.
-- If member cache reads are truncated or uncertain, preserve `segment` and leave `member_u_ids` unchanged or empty rather than guessing.
-- In write mode, `guidance_write_cli.py` remains the final authority for member resolution and may overwrite `member_u_ids`.
+The CLI (`guidance_write_cli.py`) is the sole authority for member resolution. Always set `member_u_ids: []` in the JSON payload — the CLI populates it from precomputed CIK-based maps (or live fallback in write mode).
 
 3. **Assemble JSON payload** and write to `/tmp/gu_{TICKER}_{SOURCE_ID}_enrichment.json`. **Use the exact same top-level envelope as primary pass** — the CLI requires `source_id`, `source_type`, `ticker`, and `fye_month` at top level:
 

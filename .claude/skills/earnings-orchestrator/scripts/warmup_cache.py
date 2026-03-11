@@ -44,7 +44,9 @@ RETURN qname, label, usage
 """
 
 # ---------------------------------------------------------------------------
-# Query 2B — Member Profile Cache (from queries-common.md:127-177)
+# Query 2B — Member Profile Cache (DIAGNOSTIC ONLY, from queries-common.md:127-177)
+# The authoritative member source is QUERY_MEMBER_MAP below.
+# 2B is retained for diagnostics (shows which members have XBRL context usage).
 # Verbatim copy. Do NOT edit — update queries-common.md first if needed.
 # ---------------------------------------------------------------------------
 QUERY_2B = """
@@ -53,13 +55,6 @@ WHERE size(ctx.dimension_u_ids) > 0 AND size(ctx.member_u_ids) > 0
 UNWIND range(0, size(ctx.member_u_ids)-1) AS i
 WITH ctx.dimension_u_ids[i] AS dim_u_id, ctx.member_u_ids[i] AS mem_u_id
 WHERE dim_u_id IS NOT NULL AND mem_u_id IS NOT NULL
-  AND (
-    dim_u_id CONTAINS 'Axis'
-    OR dim_u_id CONTAINS 'Segment'
-    OR dim_u_id CONTAINS 'Product'
-    OR dim_u_id CONTAINS 'Geography'
-    OR dim_u_id CONTAINS 'Region'
-  )
 WITH DISTINCT dim_u_id, mem_u_id
 WITH dim_u_id, mem_u_id,
      split(mem_u_id, ':')[0] AS mem_cik_raw
@@ -100,6 +95,36 @@ RETURN member_qname,
        versions[0].usage AS best_usage,
        reduce(total = 0, v IN versions | total + v.usage) AS total_usage
 """
+
+# ---------------------------------------------------------------------------
+# Member Map — Authoritative CIK-based member lookup (all company members)
+# Replaces inline Neo4j query in guidance_write_cli.py. Produces a precomputed
+# normalized_label -> [u_id, ...] dict for use in both dry-run and write modes.
+# ---------------------------------------------------------------------------
+QUERY_MEMBER_MAP = """
+MATCH (c:Company {ticker: $ticker})
+WITH toString(c.cik) AS cik
+WITH cik,
+     CASE WHEN cik =~ '^0+[1-9].*'
+          THEN toString(toInteger(cik))
+          ELSE cik END AS cik_stripped
+MATCH (m:Member)
+WHERE m.u_id STARTS WITH cik_stripped + ':' OR m.u_id STARTS WITH cik + ':'
+RETURN m.label AS label, m.qname AS qname, head(collect(m.u_id)) AS u_id
+"""
+
+
+def _build_member_map(rows):
+    """Build normalized label -> [u_id, ...] lookup dict from CIK-based Member query."""
+    from guidance_ids import normalize_for_member_match
+    member_map = {}
+    for row in rows:
+        if row.get('label'):
+            norm = normalize_for_member_match(row['label'])
+            if norm:
+                member_map.setdefault(norm, []).append(row['u_id'])
+    return member_map
+
 
 # ---------------------------------------------------------------------------
 # Query 3B — Structured Transcript Content (from transcript-queries.md:25-46)
@@ -146,6 +171,13 @@ def run_warmup(ticker):
         with open(member_path, 'w') as f:
             json.dump(members, f, default=str)
         print(f'2B: {len(members)} members → {member_path}')
+
+        member_rows = manager.execute_cypher_query_all(QUERY_MEMBER_MAP, {'ticker': ticker})
+        member_map = _build_member_map(member_rows)
+        map_path = f'/tmp/member_map_{ticker}.json'
+        with open(map_path, 'w') as f:
+            json.dump(member_map, f)
+        print(f'MemberMap: {len(member_map)} keys ({len(member_rows)} raw) → {map_path}')
     finally:
         manager.close()
 
