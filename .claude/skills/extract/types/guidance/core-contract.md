@@ -92,6 +92,7 @@ All 20 extraction fields (see [S2](#2-extraction-fields)) plus system identity p
 | `id` | String | Deterministic key (see [S3](#3-deterministic-ids)) |
 | `evhash16` | String | First 16 hex chars of evidence hash |
 | `xbrl_qname` | String / null | Resolved XBRL concept qname (see [S11](#11-xbrl-matching)) |
+| `concept_family_qname` | String / null | Canonical XBRL concept family anchor (CLI-computed, do not set) |
 | `unit_raw` | String / null | Verbatim unit text, only when `canonical_unit='unknown'` |
 | `label` | String | Metric name (denormalized from Guidance parent) |
 | `label_slug` | String | `slug(label)` — enables `WHERE gu.label_slug = 'revenue'` without JOIN |
@@ -300,20 +301,18 @@ Mixed bases may appear in the same metric history. Never compare consecutive val
 
 ### Extraction
 
-After decomposition (S4), each qualifier becomes a member-match candidate:
+After decomposition (S4), each qualifier becomes a segment label. Set `member_u_ids: []` — the CLI resolves members at write time (see below).
 
-1. Split `segment` on ` | ` → list of qualifier strings
-2. For each qualifier, attempt member matching (below)
-3. Populate `member_u_ids` with all confident matches (0..N)
+### Member Matching (CLI-Owned)
 
-### Member Matching
+Member resolution is handled entirely by `guidance_write_cli.py` at write time. Agents set `member_u_ids: []`.
 
-For each qualifier, match against member cache (queries-common.md 2B):
-
-1. **Normalize both sides**: lowercase, strip whitespace, remove tokens `member` and `segment` (case-insensitive), light singularization (`services`→`service`, `products`→`product`, `accessories`→`accessory`)
-2. **Compare** normalized qualifier against each normalized `member_label` from cache
-3. **Exact normalized match** → add `best_member_u_id` to `member_u_ids`
-4. **No match** → skip (no edge). Segment text preserved regardless.
+**How it works**:
+1. Warmup builds a CIK-based member map (`/tmp/member_map_{TICKER}.json`) — all `Member` nodes for the company by CIK prefix
+2. CLI normalizes each item's `segment` text: lowercase, strip whitespace, remove `member`/`segment` tokens, light singularization (`services`→`service`, `products`→`product`, `accessories`→`accessory`)
+3. Exact normalized match → populates `member_u_ids` with matching `u_id`(s)
+4. No match → no edge. Segment text preserved regardless.
+5. In write mode, if precomputed map is missing, falls back to live CIK query (self-healing)
 
 ### Multi-Axis
 
@@ -457,6 +456,10 @@ Dual approach: `MAPS_TO_CONCEPT` edge (graph-native join to XBRL Concept) + `xbr
 
 **Why both**: The edge enables graph-native joins between guidance and actuals via Concept nodes. The `xbrl_qname` property provides a stable cross-taxonomy fallback — same logical concept has separate Concept nodes per year, but qname never changes. If no Concept node matches, the edge is silently skipped (MATCH fails) but `xbrl_qname` is still written.
 
+### Concept Family (sets `concept_family_qname` — CLI-computed)
+
+For derived/composite metrics that have no exact XBRL concept (EBITDA, FCF, margins, growth rates), the CLI computes `concept_family_qname`: the canonical XBRL concept this metric most closely relates to. Resolution: direct table lookup → suffix strip (`_growth`, `_change`, `_yoy`) → prefix strip (`adjusted_`, `non_gaap_`, etc.) → fallback to `xbrl_qname` → null. Agents do not set this property.
+
 ### Concept Pattern Map
 
 | Guidance Label | qname include | qname exclude |
@@ -488,17 +491,18 @@ This maps the 12 common metrics. For metrics not in this table, use the cache fa
 6. Set via `ON CREATE SET` only
 7. Concept resolution uses the **base metric label** after S4 decomposition, not the qualified name
 
-### Member Matching Gate
+### Member Matching Gate (CLI-Owned)
 
-1. Extract segment candidates from quote/LLM output
-2. Normalize both sides (see [S7](#7-segment-rules))
-3. Match against member profile cache (queries-common.md query 2B)
-4. Write `MAPS_TO_MEMBER` edge only for confident matches
-5. Allow 0..N member edges per GuidanceUpdate
+Member resolution is entirely CLI-side. Agents extract `segment` text and set `member_u_ids: []`. The CLI:
+1. Loads precomputed CIK-based member map (built during warmup, all company Members)
+2. Normalizes segment text (see [S7](#7-segment-rules))
+3. Matches against normalized member labels
+4. Writes `MAPS_TO_MEMBER` edge only for confident matches
+5. Allows 0..N member edges per GuidanceUpdate
 
 ### Warmup Caches
 
-Run once per company per extraction run. See queries-common.md queries 2A (concept cache) and 2B (member cache).
+Run once per company per extraction run. See queries-common.md queries 2A (concept cache), 2B (member diagnostic cache), and Member Map (CIK-based authoritative member lookup).
 
 ---
 
@@ -597,6 +601,7 @@ No linked-list maintenance. No supersession chains. No action classification sto
    ├── Validate basis rule (explicit-only)
    ├── Build period via build_guidance_period_id() or pass LLM fields for CLI routing
    ├── Resolve xbrl_qname from concept cache
+   ├── Compute concept_family_qname (concept_resolver.py:resolve_concept_family)
    ├── Apply member confidence gate
    └── Uncertain? Keep core write, set xbrl_qname=null, skip member edges
 
@@ -704,26 +709,21 @@ Empty-content conditions are defined per asset in the asset profile (slot 3).
 
 ---
 
-## Additive Implementation Note (2026-03-09)
+## Member Resolution Architecture (2026-03-11)
 
-This note is intentionally additive and does not replace the member-matching rules above.
+Member resolution is **fully CLI-owned**. Agents extract `segment` text and set `member_u_ids: []`.
 
-### Member Matching Authority
+### Pipeline
+1. **Warmup** (`warmup_cache.py`): CIK-based query fetches ALL Member nodes for the company → builds normalized label→u_id map → `/tmp/member_map_{TICKER}.json`
+2. **CLI** (`guidance_write_cli.py`): loads precomputed map, normalizes each item's segment, resolves matches
+3. **Write-mode fallback**: if precomputed map missing (warmup skipped, /tmp cleaned), CLI builds map via live CIK query (self-healing)
+4. **Dry-run**: uses precomputed map only (no Neo4j needed). Graceful skip if map missing.
 
-- Agent-side member matching from Query 2B remains useful as a best-effort extraction aid.
-- It is **not** the final authority for write-mode member identity.
-- In write mode, `guidance_write_cli.py` may re-resolve and overwrite `member_u_ids` from Neo4j using company-wide `Member` lookup by CIK prefix plus Python normalization.
-
-### Why This Note Exists
-
-- Runtime issue `E4d` documents that large member-cache reads can still hit output-size limits.
-- Issue #61 documented that context-derived / 2B-only member lookup was insufficient for some real company members.
-- Therefore, prompt-owned member matching should be treated as advisory; the write path owns final member resolution.
-
-### Operational Rule
-
-- If member matching is uncertain, cache reads are truncated, or the member cache is unavailable, keep the extracted `segment` text and leave `member_u_ids` empty rather than inventing links.
-- `MAPS_TO_MEMBER` remains valid, but final edge creation is based on the write path's authoritative resolution.
+### Why CLI-Owned
+- Agent-side member matching from Query 2B was limited to context-derived members (~30-40% coverage)
+- CIK-based lookup is comprehensive (all company Members, 2-3x more)
+- Eliminates E4d truncation risk (large cache reads hitting output limits)
+- Deterministic Python normalization is more reliable than LLM-side matching
 
 ---
 
