@@ -521,13 +521,6 @@ WHERE size(ctx.dimension_u_ids) > 0 AND size(ctx.member_u_ids) > 0
 UNWIND range(0, size(ctx.member_u_ids)-1) AS i
 WITH ctx.dimension_u_ids[i] AS dim_u_id, ctx.member_u_ids[i] AS mem_u_id
 WHERE dim_u_id IS NOT NULL AND mem_u_id IS NOT NULL
-  AND (
-    dim_u_id CONTAINS 'Axis'
-    OR dim_u_id CONTAINS 'Segment'
-    OR dim_u_id CONTAINS 'Product'
-    OR dim_u_id CONTAINS 'Geography'
-    OR dim_u_id CONTAINS 'Region'
-  )
 WITH DISTINCT dim_u_id, mem_u_id
 WITH dim_u_id, mem_u_id,
      split(mem_u_id, ':')[0] AS mem_cik_raw

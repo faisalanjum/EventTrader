@@ -1,3 +1,87 @@
+# EXPLANATION in SUPER SIMPLE STEPS
+
+## Step 1: The 4-Phase Relay Race
+
+Linking a GuidanceUpdate to XBRL Concepts and Members is NOT one step. It's spread across 4 phases that run in order:
+
+```
+Phase 1: WARMUP    →  build lookup caches from Neo4j (before agent runs)
+Phase 2: EXTRACT   →  LLM agent reads source doc, extracts items, TRIES to match concepts
+Phase 3: CLI FIX   →  Python code repairs/overrides what the agent got wrong
+Phase 4: WRITE     →  create nodes + edges in Neo4j (MAPS_TO_CONCEPT, MAPS_TO_MEMBER)
+```
+
+Concept linking and Member linking both end up as edges in the graph, but they follow DIFFERENT paths through these 4 phases. They are two separate systems that happen to look similar from the outside.
+
+## Step 2: Phase 1 — WARMUP (building the lookup caches)
+
+Before the LLM agent runs, `warmup_cache.py` queries Neo4j and builds two JSON files:
+
+**Cache 2A — Concept cache** (`/tmp/concept_cache_{TICKER}.json`):
+- Asks: "What XBRL concepts does this company use in their SEC filings?"
+- Scoped to recent filings only (latest 10-K + subsequent 10-Qs), numeric facts only, consolidated (Total) only
+- No row limit — returns every concept that passes the filters (~160 for CRM, ~180 for AAPL)
+- Each entry has: `qname` (the official XBRL name), `label` (human-readable), `usage` (how many times used)
+
+**Cache 2B — Member cache** (`/tmp/member_cache_{TICKER}.json`):
+- Asks: "What dimensional Members does this company have?"
+- Returns ALL dimension/member pairs (no axis-type filter — fixed 2026-03-11, previously only returned segment-like axes)
+- No row limit
+
+**Q: Are these caches 100% comprehensive?**
+No — and this is important to understand precisely:
+
+- **Concept cache (2A)**: Scoped to recent filings only (latest 10-K + subsequent 10-Qs). Old concepts drop off. Numeric + consolidated only.
+- **Member cache (2B)**: Starts from Context nodes, so it only sees dimension/member pairs that actually appear in filed contexts. If a Member node exists in the graph but has 0 facts/contexts, 2B will miss it. (Example: IBM's `RedHatMember` — documented in `guidance-extraction-issues.md:69`.)
+
+**The clean mental model for member coverage:**
+
+| Source | What it covers | Completeness |
+|--------|---------------|--------------|
+| Query 2B (member cache) | Members that appear in filed XBRL contexts | Broader context-derived cache — good but NOT exhaustive |
+| All Members by CIK (`guidance_write_cli.py:245`) | Every Member node belonging to the company by CIK prefix | Truly authoritative, company-wide source |
+
+**Q: The old member cache had an axis filter (only Axis/Segment/Product/Geography/Region). Did removing it change anything?**
+No. Validated 2026-03-11 against live DB: CRM = 143/143, AAPL = 83/83. Zero dimensions in the entire DB lack "Axis" in their name (XBRL naming convention). The filter was dead code. Removed from 4 files for correctness, zero behavioral change.
+
+**Q: Should we consolidate member linking into fewer steps? Where is the best place?**
+Yes. Implemented 2026-03-11. The authoritative CIK-based member lookup is now precomputed during warmup and written to `/tmp/member_map_{TICKER}.json`. The CLI loads it as a simple dict lookup in BOTH dry-run and write mode. The old inline Neo4j member query in write mode was removed.
+
+Before (3 systems, split ownership):
+```
+warmup → 2B cache (context-derived, incomplete) → agent reads cache (truncated, wastes tokens)
+                                                  → CLI re-queries Neo4j in write mode only (authoritative but write-only)
+```
+
+After (1 system, single authority, self-healing):
+```
+warmup → member_map (CIK-based, authoritative) → CLI loads map (both modes, dict lookup)
+                                                  agent does NOT touch member matching
+                                                  write mode: live CIK fallback if map missing
+```
+
+Counts (validated):
+
+| Company | 2B (context) | CIK (all) | Normalized map keys | Map file size |
+|---------|-------------|-----------|--------------------:|-------------:|
+| CRM | 534 | 1,394 | 460 | 113 KB |
+| AAPL | 390 | 1,126 | 381 | 89 KB |
+| NTAP | 620 | 1,891 | 503 | 150 KB |
+
+No bloating risk. CIK returns 2-3x more raw members than 2B, but normalization collapses them to 380-500 keys. The largest map file is 150 KB.
+
+**Self-healing fallback** (added 2026-03-11): In write mode, if the precomputed `member_map_{TICKER}.json` is missing (warmup skipped, /tmp cleaned, pod restart), the CLI falls back to a live CIK query against Neo4j — same query, same normalization, same results. Dry-run mode gracefully skips member resolution if the map is missing (no Neo4j connection needed).
+
+2B is retained as a diagnostic cache (shows context usage counts) but is no longer consumed by any production code path.
+
+**Prompt docs updated** (2026-03-11): All three prompt files (primary-pass.md, enrichment-pass.md, core-contract.md) now instruct agents to set `member_u_ids: []` and document the CLI as sole authority for member resolution.
+
+---
+
+*(More steps will be added as we go through each phase in detail)*
+
+---
+
 # XBRL Concept & Member Linking — Analysis, Solution & Implementation
 
 **Created**: 2026-03-09

@@ -316,28 +316,51 @@ Sub-agent thinking blocks (extended thinking / chain-of-thought) no longer appea
 
 ### Root Cause (verified by decompiling v2.1.71 binary)
 
-Claude Code v2.1.68 introduced a hard-coded restriction in the Agent tool execution path:
+Claude Code v2.1.68+ hard-codes `thinkingConfig: {type: "disabled"}` for sub-agents. The control variable is `useExactTools` (param `X`) in the `IS()` function:
 
 ```javascript
 // Deobfuscated from v2.1.71 binary — agent spawning function IS()
-// Parameters: agentDefinition, useExactTools (X), isAsync (D), etc.
-
-// T = is_fork (true when spawned via Skill tool)
-// y = same-agent-type recursion (true when agent spawns its own type)
-
-thinkingConfig: (T || y) ? parentOptions.thinkingConfig : {type: "disabled"}
-//              ^^^^^^^^^                                  ^^^^^^^^^^^^^^^^
-//              fork/self-recurse → inherit parent         everything else → DISABLED
+thinkingConfig: X ? parentOptions.thinkingConfig : {type: "disabled"}
+//              ^ useExactTools — must be true to inherit thinking
 ```
 
-This means:
+**Two separate call sites invoke IS():**
 
-| Spawn method | Thinking enabled? | Why |
+```javascript
+// 1. Agent/Task tool caller — CAN pass useExactTools:
+IS({
+  ...(T || y) && {useExactTools: true},  // T=fork flag, y=self-recursion
+  forkContextMessages: T || v.forksParentContext ? w.messages : void 0,
+  ...
+})
+
+// 2. Skill tool fork caller (eo1 function) — DOES NOT pass useExactTools:
+IS({
+  agentDefinition: O,
+  promptMessages: X,
+  toolUseContext: {...L, getAppState: Y},
+  isAsync: false,
+  querySource: "agent:custom",
+  model: H.model,
+  availableTools: L.options.tools,
+  override: {agentId: M}
+  // ← useExactTools NOT PASSED (undefined = falsy)
+})
+```
+
+**Result:** Skill tool forks get `thinkingConfig: {type: "disabled"}` because `eo1` never passes `useExactTools: true`.
+
+| Spawn method | useExactTools | Thinking |
 |---|---|---|
-| **Agent tool** (normal sub-agents) | **NO** | `useExactTools` = false → `{type: "disabled"}` |
-| **Skill tool** (forked skills) | **YES** | Fork context → inherits parent thinkingConfig |
-| Agent spawning same type (self-recursion) | **YES** | `y = true` → inherits parent thinkingConfig |
-| Hook agents (prompt/agent type) | **NO** | Explicitly set `thinkingConfig: {type: "disabled"}` |
+| **Parent conversation** | N/A | **Enabled** |
+| **Non-fork skill** (inject into parent) | N/A | **Enabled** (via parent) |
+| **Fork skill** (eo1 → IS) | **NOT passed** | **DISABLED** |
+| **Agent/Task** sub-agent | Not passed | **DISABLED** |
+| Agent/Task with fork flag | Passed (T=true) | Enabled |
+| Self-recursive agent | Passed (y=true) | Enabled |
+| Hook agents (prompt/agent type) | N/A | Explicitly **DISABLED** |
+
+**Note:** "Non-fork skill" means skills without `context: fork` — their content is injected into the parent conversation which already has thinking enabled. "Fork skill" means skills with `context: fork` (like our earnings skills) which create a separate subprocess via eo1.
 
 ### What does NOT help
 
@@ -381,11 +404,20 @@ Each agent gets its own file: `2026-03-09_general-purpose_a6785dae.md` — one .
 
 ### Workarounds
 
-1. **Use Skills instead of Agents** — Skills invoked via Skill tool run as forks with thinking enabled. If a workflow needs thinking captured, structure it as `/earnings-attribution` (skill) rather than Agent tool spawning.
+1. **Use non-fork skills** — Skills WITHOUT `context: fork` inject their content into the parent conversation, which has thinking enabled. Remove `context: fork` from skill frontmatter to get thinking. Trade-off: no isolation, shares parent context window.
 
 2. **Extract parent thinking** — The parent transcript contains thinking blocks about each agent (why it was spawned, what the parent concluded from results). The hook could correlate parent thinking to specific agents by matching the Agent tool_use call containing the agent_id. This is the parent's reasoning, not the agent's own thinking, but is still valuable context.
 
-3. **Wait for upstream fix** — This is a deliberate cost-saving measure in v2.1.68+. Future Claude Code versions may add a configuration option to enable thinking for sub-agents.
+3. **Wait for upstream fix** — The `eo1` function appears to be missing `useExactTools: true` — likely a bug since it's inconsistent with the Agent/Task tool fork path which does pass it. Future Claude Code versions may fix this.
+
+### Verified by test (2026-03-09)
+
+Ran `test-child-thinking` skill (has `context: fork`, `model: claude-opus-4-6`, "ultrathink" in prompt) via Skill tool:
+- Fork transcript `agent-a3a0314cbdb1aadac.jsonl`: **0 thinking blocks**
+- Parent transcript same session: **87 thinking blocks**
+- All 8 Agent/Task sub-agents: **0 thinking blocks each**
+
+Confirmed: no spawn method currently produces thinking in sub-agent/fork transcripts.
 
 ---
 

@@ -2,7 +2,7 @@
 name: earnings-attribution
 description: Analyzes why stocks moved after 8-K earnings filings. Use ultrathink for all analyses. Invoke when asked to analyze stock movements, earnings reactions, or determine the primary driver of price changes.
 allowed-tools: Read, Write, Grep, Glob, Bash, Task, TaskCreate, TaskUpdate, mcp__perplexity__perplexity_ask, mcp__perplexity__perplexity_search, mcp__perplexity__perplexity_reason, mcp__perplexity__perplexity_research
-model: claude-opus-4-5
+model: claude-opus-4-6
 permissionMode: dontAsk
 ---
 

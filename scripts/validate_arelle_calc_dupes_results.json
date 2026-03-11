@@ -1,0 +1,4025 @@
+{
+  "item4_summary": {
+    "both_match": 4175,
+    "both_nonmatch": 155,
+    "old_match_new_nonmatch": 67,
+    "old_nonmatch_new_match": 6,
+    "new_undetermined": 0,
+    "total_summations": 4403,
+    "all_false_positives": [
+      {
+        "parent": "us-gaap:NetIncomeLoss",
+        "context": "iddfa00281d374203856c360265999cfe_D20210101-20211231",
+        "parent_value": "21979000000",
+        "parent_decimals": "-6",
+        "sum": "21980000000.0",
+        "old_pct_diff": "0.000045",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-6",
+          "tolerance": "500000",
+          "diff": "1000000.0"
+        },
+        "ticker": "pfe"
+      },
+      {
+        "parent": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+        "context": "ifd32821b5aa74fbfbe10209f8777cec0_D20220101-20221231",
+        "parent_value": "34729000000",
+        "parent_decimals": "-6",
+        "sum": "34727000000.0",
+        "old_pct_diff": "0.000058",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-6",
+          "tolerance": "500000",
+          "diff": "2000000.0"
+        },
+        "ticker": "pfe"
+      },
+      {
+        "parent": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+        "context": "i338b9b1935084c8baec24def224d52ba_D20200101-20201231",
+        "parent_value": "7036000000",
+        "parent_decimals": "-6",
+        "sum": "7037000000.0",
+        "old_pct_diff": "0.000142",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-6",
+          "tolerance": "500000",
+          "diff": "1000000.0"
+        },
+        "ticker": "pfe"
+      },
+      {
+        "parent": "us-gaap:ComprehensiveIncomeNetOfTax",
+        "context": "iddfa00281d374203856c360265999cfe_D20210101-20211231",
+        "parent_value": "21393000000",
+        "parent_decimals": "-6",
+        "sum": "21392000000.0",
+        "old_pct_diff": "0.000047",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-6",
+          "tolerance": "500000",
+          "diff": "1000000.0"
+        },
+        "ticker": "pfe"
+      },
+      {
+        "parent": "us-gaap:ComprehensiveIncomeNetOfTaxIncludingPortionAttributableToNoncontrollingInterest",
+        "context": "iddfa00281d374203856c360265999cfe_D20210101-20211231",
+        "parent_value": "21435000000",
+        "parent_decimals": "-6",
+        "sum": "21436000000.0",
+        "old_pct_diff": "0.000047",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-6",
+          "tolerance": "500000",
+          "diff": "1000000.0"
+        },
+        "ticker": "pfe"
+      },
+      {
+        "parent": "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding",
+        "context": "Duration_1_1_2022_To_3_31_2022_3XJB1ycwS0m38f2e_d7Oqg",
+        "parent_value": "142626000",
+        "parent_decimals": "-3",
+        "sum": "142560000.0",
+        "old_pct_diff": "0.000463",
+        "spec_details": {
+          "parent_decimals": "-3",
+          "min_decimals": "-5",
+          "tolerance": "50000",
+          "diff": "66000.0"
+        },
+        "ticker": "acm"
+      },
+      {
+        "parent": "us-gaap:NetIncomeLoss",
+        "context": "c-18",
+        "parent_value": "15388000000",
+        "parent_decimals": "-6",
+        "sum": "15389000000.0",
+        "old_pct_diff": "0.000065",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-6",
+          "tolerance": "500000",
+          "diff": "1000000.0"
+        },
+        "ticker": "cmcsa"
+      },
+      {
+        "parent": "us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+        "context": "c-18",
+        "parent_value": "20478000000",
+        "parent_decimals": "-6",
+        "sum": "20479000000.0",
+        "old_pct_diff": "0.000049",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-6",
+          "tolerance": "500000",
+          "diff": "1000000.0"
+        },
+        "ticker": "cmcsa"
+      },
+      {
+        "parent": "us-gaap:OperatingIncomeLoss",
+        "context": "c-19",
+        "parent_value": "14041000000",
+        "parent_decimals": "-6",
+        "sum": "14042000000.0",
+        "old_pct_diff": "0.000071",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-6",
+          "tolerance": "500000",
+          "diff": "1000000.0"
+        },
+        "ticker": "cmcsa"
+      },
+      {
+        "parent": "us-gaap:CostsAndExpenses",
+        "context": "c-1",
+        "parent_value": "100434000000",
+        "parent_decimals": "-6",
+        "sum": "100433000000.0",
+        "old_pct_diff": "0.000010",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-6",
+          "tolerance": "500000",
+          "diff": "1000000.0"
+        },
+        "ticker": "cmcsa"
+      },
+      {
+        "parent": "us-gaap:CostsAndExpenses",
+        "context": "c-19",
+        "parent_value": "107385000000",
+        "parent_decimals": "-6",
+        "sum": "107386000000.0",
+        "old_pct_diff": "0.000009",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-6",
+          "tolerance": "500000",
+          "diff": "1000000.0"
+        },
+        "ticker": "cmcsa"
+      }
+    ],
+    "all_false_negatives": [
+      {
+        "parent": "us-gaap:Assets",
+        "context": "ie3fa88b78c374a8fa50f59a2e7fca2fc_I20211231",
+        "parent_value": "181000000000",
+        "parent_decimals": "-9",
+        "sum": "181475000000.0",
+        "old_pct_diff": "0.002624",
+        "spec_details": {
+          "parent_decimals": "-9",
+          "min_decimals": "-9",
+          "tolerance": "500000000",
+          "diff": "475000000.0"
+        },
+        "ticker": "pfe"
+      },
+      {
+        "parent": "us-gaap:Assets",
+        "context": "i01169914e673413286fa55afbace0f2c_I20221231",
+        "parent_value": "197000000000",
+        "parent_decimals": "-9",
+        "sum": "197203000000.0",
+        "old_pct_diff": "0.001030",
+        "spec_details": {
+          "parent_decimals": "-9",
+          "min_decimals": "-9",
+          "tolerance": "500000000",
+          "diff": "203000000.0"
+        },
+        "ticker": "pfe"
+      },
+      {
+        "parent": "us-gaap:OtherNonoperatingIncomeExpense",
+        "context": "ifd32821b5aa74fbfbe10209f8777cec0_D20220101-20221231",
+        "parent_value": "-217000000",
+        "parent_decimals": "-6",
+        "sum": "-242000000.0",
+        "old_pct_diff": "0.115207",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-8",
+          "tolerance": "50000000",
+          "diff": "25000000.0"
+        },
+        "ticker": "pfe"
+      },
+      {
+        "parent": "us-gaap:OtherNonoperatingIncomeExpense",
+        "context": "iddfa00281d374203856c360265999cfe_D20210101-20211231",
+        "parent_value": "4878000000",
+        "parent_decimals": "-6",
+        "sum": "4834000000.0",
+        "old_pct_diff": "0.009020",
+        "spec_details": {
+          "parent_decimals": "-6",
+          "min_decimals": "-8",
+          "tolerance": "50000000",
+          "diff": "44000000.0"
+        },
+        "ticker": "pfe"
+      },
+      {
+        "parent": "us-gaap:EquitySecuritiesFvNiGainLoss",
+        "context": "ifd32821b5aa74fbfbe10209f8777cec0_D20220101-20221231",
+        "parent_value": "-1300000000",
+        "parent_decimals": "-8",
+        "sum": "-1274000000.0",
+        "old_pct_diff": "0.020000",
+        "spec_details": {
+          "parent_decimals": "-8",
+          "min_decimals": "-8",
+          "tolerance": "50000000",
+          "diff": "26000000.0"
+        },
+        "ticker": "pfe"
+      }
+    ]
+  },
+  "item5_summary": {
+    "total_facts": 66841,
+    "duplicate_groups": 4118,
+    "same_primary_selected": 4115,
+    "different_primary_selected": 1,
+    "old_nondeterministic_groups": 3919,
+    "new_inconsistent_groups": 0,
+    "all_nondeterminism_examples": [
+      {
+        "canonical_key": "us-gaap:DebtInstrumentInterestRateStatedPercentage:c-264:number",
+        "num_duplicates": 15,
+        "forward_pick_id": "f-928",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "0.05",
+        "reverse_pick_id": "f-959",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "0.05",
+        "ticker": "cik0"
+      },
+      {
+        "canonical_key": "us-gaap:DebtInstrumentInterestRateStatedPercentage:c-265:number",
+        "num_duplicates": 13,
+        "forward_pick_id": "f-929",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "0.03125",
+        "reverse_pick_id": "f-957",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "0.03125",
+        "ticker": "cik0"
+      },
+      {
+        "canonical_key": "us-gaap:RealizedGainLossInvestmentAndDerivativeOperatingBeforeTax:c-74:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-559",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "51800000.0",
+        "reverse_pick_id": "f-558",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "51800000.0",
+        "ticker": "cik0"
+      },
+      {
+        "canonical_key": "us-gaap:EquitySecuritiesWithoutReadilyDeterminableFairValueUpwardPriceAdjustmentAnnualAmount:c-8:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-560",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "137900000.0",
+        "reverse_pick_id": "f-1799",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "137900000.0",
+        "ticker": "cik0"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermDebt:c-164:eur",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-1035",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "90200000.0",
+        "reverse_pick_id": "f-779",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "90200000.0",
+        "ticker": "cik0"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-68:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-403",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "159822000.0",
+        "reverse_pick_id": "f-467",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "159822000.0",
+        "ticker": "frt"
+      },
+      {
+        "canonical_key": "us-gaap:SharesOutstanding:c-68:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-402",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "398878.0",
+        "reverse_pick_id": "f-466",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "398878.0",
+        "ticker": "frt"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-69:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-405",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "817000.0",
+        "reverse_pick_id": "f-469",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "817000.0",
+        "ticker": "frt"
+      },
+      {
+        "canonical_key": "us-gaap:SharesOutstanding:c-69:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-404",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "81204286.0",
+        "reverse_pick_id": "f-468",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "81204286.0",
+        "ticker": "frt"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-70:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-406",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "3794247000.0",
+        "reverse_pick_id": "f-470",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "3794247000.0",
+        "ticker": "frt"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermDebtFairValue:c-327:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-1161",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "348818000.0",
+        "reverse_pick_id": "f-1183",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "348818000.0",
+        "ticker": "invh"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermDebtFairValue:c-331:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-1165",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "3228291000.0",
+        "reverse_pick_id": "f-1185",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "3228291000.0",
+        "ticker": "invh"
+      },
+      {
+        "canonical_key": "us-gaap:DebtInstrumentUnamortizedDiscount:c-152:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-1168",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "20719000.0",
+        "reverse_pick_id": "f-932",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "20719000.0",
+        "ticker": "invh"
+      },
+      {
+        "canonical_key": "us-gaap:DebtInstrumentUnamortizedDiscount:c-153:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-1169",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "11934000.0",
+        "reverse_pick_id": "f-803",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "11934000.0",
+        "ticker": "invh"
+      },
+      {
+        "canonical_key": "us-gaap:DebtInstrumentUnamortizedDiscount:c-111:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-1172",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1320000.0",
+        "reverse_pick_id": "f-740",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1320000.0",
+        "ticker": "invh"
+      },
+      {
+        "canonical_key": "us-gaap:CashAndCashEquivalentsAtCarryingValue:i26834ee98c4d4a85827ebd4a0e6197b2_I20230331:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjVjZjZhNThhNzU4MDRhOThiNTM0NjQ2ZTc4YWJhMzI1L3NlYzo1Y2Y2YTU4YTc1ODA0YTk4YjUzNDY0NmU3OGFiYTMyNV8xNi9mcmFnOmQ5NTNjM2IyY2I5ZTQ3Y2VhZWRjOWI4NDIzZjZjN2M3L3RhYmxlOjdhODllZmNjZjY5MzRjMTA5YjM0N2ZkZjI4NWI0NThkL3RhYmxlcmFuZ2U6N2E4OWVmY2NmNjkzNGMxMDliMzQ3ZmRmMjg1YjQ1OGRfMy0xLTEtMS03ODY1Mg_9566c9dd-0cab-45ed-b692-8d9a1953de74",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "298800000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjVjZjZhNThhNzU4MDRhOThiNTM0NjQ2ZTc4YWJhMzI1L3NlYzo1Y2Y2YTU4YTc1ODA0YTk4YjUzNDY0NmU3OGFiYTMyNV8yNS9mcmFnOmI5YjE1Y2RhOGJlNzQyZTFiZTcwN2VjM2U0YzQ4MDAxL3RhYmxlOmMxOWUyMWVlOTRiMDQ0NjZhZTVhOWFmM2U3ZWFlNDczL3RhYmxlcmFuZ2U6YzE5ZTIxZWU5NGIwNDQ2NmFlNWE5YWYzZTdlYWU0NzNfNTAtMS0xLTEtNzg2NTI_9566c9dd-0cab-45ed-b692-8d9a1953de74",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "298800000.0",
+        "ticker": "akam"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:i26834ee98c4d4a85827ebd4a0e6197b2_I20230331:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjVjZjZhNThhNzU4MDRhOThiNTM0NjQ2ZTc4YWJhMzI1L3NlYzo1Y2Y2YTU4YTc1ODA0YTk4YjUzNDY0NmU3OGFiYTMyNV8yOC9mcmFnOmRlNGM0MjNhNmE0YzQ0ZmE5Y2U2ZmQ4Nzk0YjQ5ODRjL3RhYmxlOmFjOTE3MWYxODdmMDQ0YTY5MzNjZDg4YzU1MzQxYzhhL3RhYmxlcmFuZ2U6YWM5MTcxZjE4N2YwNDRhNjkzM2NkODhjNTUzNDFjOGFfMTYtMTMtMS0xLTc4NjUy_3fcf2fb2-99d3-4319-8008-41285587dcfc",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "4171341000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjVjZjZhNThhNzU4MDRhOThiNTM0NjQ2ZTc4YWJhMzI1L3NlYzo1Y2Y2YTU4YTc1ODA0YTk4YjUzNDY0NmU3OGFiYTMyNV8xNi9mcmFnOmQ5NTNjM2IyY2I5ZTQ3Y2VhZWRjOWI4NDIzZjZjN2M3L3RhYmxlOjcwZGRkZDBiNTk0ZjQxMDJiOTM3NjU1ZTg4ZGEwMjY0L3RhYmxlcmFuZ2U6NzBkZGRkMGI1OTRmNDEwMmI5Mzc2NTVlODhkYTAyNjRfMzktMS0xLTEtNzg2NTI_8c858944-95d0-418a-ae3e-ede4390129ac",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "4171341000.0",
+        "ticker": "akam"
+      },
+      {
+        "canonical_key": "us-gaap:AccountsReceivableNetCurrent:i26834ee98c4d4a85827ebd4a0e6197b2_I20230331:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjVjZjZhNThhNzU4MDRhOThiNTM0NjQ2ZTc4YWJhMzI1L3NlYzo1Y2Y2YTU4YTc1ODA0YTk4YjUzNDY0NmU3OGFiYTMyNV8xNi9mcmFnOmQ5NTNjM2IyY2I5ZTQ3Y2VhZWRjOWI4NDIzZjZjN2M3L3RhYmxlOjdhODllZmNjZjY5MzRjMTA5YjM0N2ZkZjI4NWI0NThkL3RhYmxlcmFuZ2U6N2E4OWVmY2NmNjkzNGMxMDliMzQ3ZmRmMjg1YjQ1OGRfNS0xLTEtMS03ODY1Mg_82d1d99c-c2cd-4ad1-9ff5-f82460bafd12",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "705817000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjVjZjZhNThhNzU4MDRhOThiNTM0NjQ2ZTc4YWJhMzI1L3NlYzo1Y2Y2YTU4YTc1ODA0YTk4YjUzNDY0NmU3OGFiYTMyNV80Ni9mcmFnOmRkZTg0ZDcyN2I0ZDRhYjdiNjk4MjQ2MWI1NWQ1YTkwL3RhYmxlOmVmNTMwZmIwNWJjMzRlYmViMDc1ZTc0ZTc4OWZmNTQ2L3RhYmxlcmFuZ2U6ZWY1MzBmYjA1YmMzNGViZWIwNzVlNzRlNzg5ZmY1NDZfNS0xLTEtMS03ODY1Mg_31069ae5-6901-4eb0-ab70-fca962b7be40",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "705817000.0",
+        "ticker": "akam"
+      },
+      {
+        "canonical_key": "us-gaap:AllowanceForDoubtfulAccountsReceivableCurrent:i26834ee98c4d4a85827ebd4a0e6197b2_I20230331:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjVjZjZhNThhNzU4MDRhOThiNTM0NjQ2ZTc4YWJhMzI1L3NlYzo1Y2Y2YTU4YTc1ODA0YTk4YjUzNDY0NmU3OGFiYTMyNV8xNi9mcmFnOmQ5NTNjM2IyY2I5ZTQ3Y2VhZWRjOWI4NDIzZjZjN2M3L3RhYmxlOjdhODllZmNjZjY5MzRjMTA5YjM0N2ZkZjI4NWI0NThkL3RhYmxlcmFuZ2U6N2E4OWVmY2NmNjkzNGMxMDliMzQ3ZmRmMjg1YjQ1OGRfNS0wLTEtMS03ODY1Mi90ZXh0cmVnaW9uOmY0ZmNhOTc1ZmY4ZDQ1MmU4ZWFlYWI1Zjg4NmU2MDkwXzQ0_21ddafea-e098-42f5-be4c-28290374cc65",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "5557000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjVjZjZhNThhNzU4MDRhOThiNTM0NjQ2ZTc4YWJhMzI1L3NlYzo1Y2Y2YTU4YTc1ODA0YTk4YjUzNDY0NmU3OGFiYTMyNV80Ni9mcmFnOmRkZTg0ZDcyN2I0ZDRhYjdiNjk4MjQ2MWI1NWQ1YTkwL3RhYmxlOmVmNTMwZmIwNWJjMzRlYmViMDc1ZTc0ZTc4OWZmNTQ2L3RhYmxlcmFuZ2U6ZWY1MzBmYjA1YmMzNGViZWIwNzVlNzRlNzg5ZmY1NDZfNC0xLTEtMS03ODY1Mg_caf0ae5f-c1bb-4673-8a4a-263e300f0181",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "5557000.0",
+        "ticker": "akam"
+      },
+      {
+        "canonical_key": "us-gaap:ClassOfWarrantOrRightExercisePriceOfWarrantsOrRights1:i685a64e8343f41e5ad81b3e1752bcf83_I20190831:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjVjZjZhNThhNzU4MDRhOThiNTM0NjQ2ZTc4YWJhMzI1L3NlYzo1Y2Y2YTU4YTc1ODA0YTk4YjUzNDY0NmU3OGFiYTMyNV82NC9mcmFnOmYzZmM0YjE1MzMzNjRhYjFhMTBkZGQwZmQyMTY5MDk1L3RleHRyZWdpb246ZjNmYzRiMTUzMzM2NGFiMWExMGRkZDBmZDIxNjkwOTVfNjUxNQ_3d2cf96b-536b-4602-b8c3-ddc38d4e9f86",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "178.74",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjVjZjZhNThhNzU4MDRhOThiNTM0NjQ2ZTc4YWJhMzI1L3NlYzo1Y2Y2YTU4YTc1ODA0YTk4YjUzNDY0NmU3OGFiYTMyNV82NC9mcmFnOmYzZmM0YjE1MzMzNjRhYjFhMTBkZGQwZmQyMTY5MDk1L3RleHRyZWdpb246ZjNmYzRiMTUzMzM2NGFiMWExMGRkZDBmZDIxNjkwOTVfNjc1OQ_0f0b91b0-9bd7-44dd-9ae2-332adeab08df",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "178.74",
+        "ticker": "akam"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:id48e675b36c64ff09227809e3dce8b10_D20221001-20221231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEyYzc4YWNmMWYwYTQ0NDNiMmI5OWVhNDEzMDFjNGUxL3NlYzphMmM3OGFjZjFmMGE0NDQzYjJiOTllYTQxMzAxYzRlMV8yMi9mcmFnOjEzNTY5ZWY5ZGQ1MzRhZDg4ZDRkYzMwZTQwZWZlYjdjL3RhYmxlOjE1ZjRmZTdkMTljNzRiNWJiOWYwNWRiZTA1YWM4ZDA4L3RhYmxlcmFuZ2U6MTVmNGZlN2QxOWM3NGI1YmI5ZjA1ZGJlMDVhYzhkMDhfMi0xLTEtMS0xMTMwODk_c7d8d94c-3d78-43a4-86fd-1b28750c6c28",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "260006000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEyYzc4YWNmMWYwYTQ0NDNiMmI5OWVhNDEzMDFjNGUxL3NlYzphMmM3OGFjZjFmMGE0NDQzYjJiOTllYTQxMzAxYzRlMV83MC9mcmFnOmQ5MWM4NGVkNTc1ODQ0NTQ5Yjc2MzIyMWJkZmQ1Y2MzL3RhYmxlOjAzN2UyOGE0YTlkMzQ5Njg4ODk4OWQ0Mjc1ZGVkMTRiL3RhYmxlcmFuZ2U6MDM3ZTI4YTRhOWQzNDk2ODg4OTg5ZDQyNzVkZWQxNGJfNi0xLTEtMS0xMTMwODk_9cf35eb0-e502-448e-a887-09bb54f103d1",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "260006000.0",
+        "ticker": "bill"
+      },
+      {
+        "canonical_key": "bill:DebtInstrumentPrincipalAmountDenominationForConversionIntoCommonStock:i2f0b079290004ca7a3afe4ac0ff93d73_D20210924-20210924:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEyYzc4YWNmMWYwYTQ0NDNiMmI5OWVhNDEzMDFjNGUxL3NlYzphMmM3OGFjZjFmMGE0NDQzYjJiOTllYTQxMzAxYzRlMV85MS9mcmFnOmNhMmY3MTMwMzllZTRjNzI5MjMxODYzMzFkOTc1MzQ0L3RleHRyZWdpb246Y2EyZjcxMzAzOWVlNGM3MjkyMzE4NjMzMWQ5NzUzNDRfMzEwMw_1c510a1b-6c23-4bc6-9654-d77939f9c5eb",
+        "forward_pick_decimals": "0",
+        "forward_pick_value": "1000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEyYzc4YWNmMWYwYTQ0NDNiMmI5OWVhNDEzMDFjNGUxL3NlYzphMmM3OGFjZjFmMGE0NDQzYjJiOTllYTQxMzAxYzRlMV85MS9mcmFnOmNhMmY3MTMwMzllZTRjNzI5MjMxODYzMzFkOTc1MzQ0L3RleHRyZWdpb246Y2EyZjcxMzAzOWVlNGM3MjkyMzE4NjMzMWQ5NzUzNDRfMzc0OA_1c510a1b-6c23-4bc6-9654-d77939f9c5eb",
+        "reverse_pick_decimals": "0",
+        "reverse_pick_value": "1000.0",
+        "ticker": "bill"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:i79259d0c1b774295a4856a8bb5411a77_D20210701-20211231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEyYzc4YWNmMWYwYTQ0NDNiMmI5OWVhNDEzMDFjNGUxL3NlYzphMmM3OGFjZjFmMGE0NDQzYjJiOTllYTQxMzAxYzRlMV8yMi9mcmFnOjEzNTY5ZWY5ZGQ1MzRhZDg4ZDRkYzMwZTQwZWZlYjdjL3RhYmxlOjE1ZjRmZTdkMTljNzRiNWJiOWYwNWRiZTA1YWM4ZDA4L3RhYmxlcmFuZ2U6MTVmNGZlN2QxOWM3NGI1YmI5ZjA1ZGJlMDVhYzhkMDhfMi03LTEtMS0xMTY4ODg_ed46a13c-be52-48ad-841b-2caca6533e42",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "274827000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEyYzc4YWNmMWYwYTQ0NDNiMmI5OWVhNDEzMDFjNGUxL3NlYzphMmM3OGFjZjFmMGE0NDQzYjJiOTllYTQxMzAxYzRlMV83MC9mcmFnOmQ5MWM4NGVkNTc1ODQ0NTQ5Yjc2MzIyMWJkZmQ1Y2MzL3RhYmxlOjAzN2UyOGE0YTlkMzQ5Njg4ODk4OWQ0Mjc1ZGVkMTRiL3RhYmxlcmFuZ2U6MDM3ZTI4YTRhOWQzNDk2ODg4OTg5ZDQyNzVkZWQxNGJfNi03LTEtMS0xMTY2MTY_ede0b4fd-add4-4dcf-b730-8b79bd843f3c",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "274827000.0",
+        "ticker": "bill"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:icac15c2a9f0343508bcf957aab43d33b_D20220701-20221231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEyYzc4YWNmMWYwYTQ0NDNiMmI5OWVhNDEzMDFjNGUxL3NlYzphMmM3OGFjZjFmMGE0NDQzYjJiOTllYTQxMzAxYzRlMV8yMi9mcmFnOjEzNTY5ZWY5ZGQ1MzRhZDg4ZDRkYzMwZTQwZWZlYjdjL3RhYmxlOjE1ZjRmZTdkMTljNzRiNWJiOWYwNWRiZTA1YWM4ZDA4L3RhYmxlcmFuZ2U6MTVmNGZlN2QxOWM3NGI1YmI5ZjA1ZGJlMDVhYzhkMDhfMi01LTEtMS0xMTY4ODQ_6f31a653-98ec-405b-b930-a865a479bf33",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "489930000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEyYzc4YWNmMWYwYTQ0NDNiMmI5OWVhNDEzMDFjNGUxL3NlYzphMmM3OGFjZjFmMGE0NDQzYjJiOTllYTQxMzAxYzRlMV83MC9mcmFnOmQ5MWM4NGVkNTc1ODQ0NTQ5Yjc2MzIyMWJkZmQ1Y2MzL3RhYmxlOjAzN2UyOGE0YTlkMzQ5Njg4ODk4OWQ0Mjc1ZGVkMTRiL3RhYmxlcmFuZ2U6MDM3ZTI4YTRhOWQzNDk2ODg4OTg5ZDQyNzVkZWQxNGJfNi01LTEtMS0xMTY2MjQ_2a244efa-b01a-405d-8674-2556360dbf04",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "489930000.0",
+        "ticker": "bill"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:i122002f351544d938dfac2e5417c26ee_D20211001-20211231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEyYzc4YWNmMWYwYTQ0NDNiMmI5OWVhNDEzMDFjNGUxL3NlYzphMmM3OGFjZjFmMGE0NDQzYjJiOTllYTQxMzAxYzRlMV8yMi9mcmFnOjEzNTY5ZWY5ZGQ1MzRhZDg4ZDRkYzMwZTQwZWZlYjdjL3RhYmxlOjE1ZjRmZTdkMTljNzRiNWJiOWYwNWRiZTA1YWM4ZDA4L3RhYmxlcmFuZ2U6MTVmNGZlN2QxOWM3NGI1YmI5ZjA1ZGJlMDVhYzhkMDhfMi0zLTEtMS0xMTMwODk_d0ef019d-eda5-45af-b7bb-36b4f824f5ec",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "156478000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEyYzc4YWNmMWYwYTQ0NDNiMmI5OWVhNDEzMDFjNGUxL3NlYzphMmM3OGFjZjFmMGE0NDQzYjJiOTllYTQxMzAxYzRlMV83MC9mcmFnOmQ5MWM4NGVkNTc1ODQ0NTQ5Yjc2MzIyMWJkZmQ1Y2MzL3RhYmxlOjAzN2UyOGE0YTlkMzQ5Njg4ODk4OWQ0Mjc1ZGVkMTRiL3RhYmxlcmFuZ2U6MDM3ZTI4YTRhOWQzNDk2ODg4OTg5ZDQyNzVkZWQxNGJfNi0zLTEtMS0xMTMwODk_3391169f-adc9-4b2b-84be-f1668c6b42c3",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "156478000.0",
+        "ticker": "bill"
+      },
+      {
+        "canonical_key": "us-gaap:AccountsReceivableNetCurrent:C_83391735-b89b-448d-b0a7-0bf0642931a0:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_4014b9d8-e757-419a-816e-655a0a3a567b",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "37988000.0",
+        "reverse_pick_id": "F_cd8ed11a-97b3-49c9-ab75-6ef05a50385c",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "37988000.0",
+        "ticker": "lesl"
+      },
+      {
+        "canonical_key": "us-gaap:AccountsReceivableNetCurrent:C_e3a6faf3-eda7-42b5-8b59-4908ab575765:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_fef1cbbc-50cf-413a-8fe9-6d3cb33332de",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "33619000.0",
+        "reverse_pick_id": "F_e182fb65-7ee1-4d88-82b9-9b2f12360050",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "33619000.0",
+        "ticker": "lesl"
+      },
+      {
+        "canonical_key": "us-gaap:AccountsReceivableNetCurrent:C_a0ae6e9b-bbbd-419a-aa80-c72b430cb965:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_27faf396-9618-4fd9-adfb-4de24d819a5e",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "45295000.0",
+        "reverse_pick_id": "F_20f26f67-f917-4f32-9e7e-550106a72db0",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "45295000.0",
+        "ticker": "lesl"
+      },
+      {
+        "canonical_key": "us-gaap:InventoryNet:C_e3a6faf3-eda7-42b5-8b59-4908ab575765:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_122df002-a2fa-4416-b344-7efae8bafd14",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "345046000.0",
+        "reverse_pick_id": "F_8b7a56d0-7858-464f-8167-712426da6db0",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "345046000.0",
+        "ticker": "lesl"
+      },
+      {
+        "canonical_key": "us-gaap:InventoryNet:C_a0ae6e9b-bbbd-419a-aa80-c72b430cb965:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_7ad5c85b-6064-48f5-ad2b-30c8008ec291",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "361686000.0",
+        "reverse_pick_id": "F_9ac9d266-3a30-4263-beab-b9c572b1b291",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "361686000.0",
+        "ticker": "lesl"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-34:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-275",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "6302376000.0",
+        "reverse_pick_id": "f-327",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "6302376000.0",
+        "ticker": "fslr"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-33:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-274",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-198970000.0",
+        "reverse_pick_id": "f-326",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-198970000.0",
+        "ticker": "fslr"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-32:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-273",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "3621827000.0",
+        "reverse_pick_id": "f-325",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "3621827000.0",
+        "ticker": "fslr"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-31:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-272",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "2879412000.0",
+        "reverse_pick_id": "f-324",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "2879412000.0",
+        "ticker": "fslr"
+      },
+      {
+        "canonical_key": "us-gaap:OtherComprehensiveIncomeLossNetOfTaxPortionAttributableToParent:c-1:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-285",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "5271000.0",
+        "reverse_pick_id": "f-132",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "5271000.0",
+        "ticker": "fslr"
+      },
+      {
+        "canonical_key": "us-gaap:InventoryNet:ia687c58bde834c42ab9a8d978528b6c1_I20221231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmQ0YzFlZjM3NzBmYjRjZmNhZGY4OGMzNjg1ZTYxMGViL3NlYzpkNGMxZWYzNzcwZmI0Y2ZjYWRmODhjMzY4NWU2MTBlYl80OS9mcmFnOjJlOTE5ZmYxYjAxZjQ4ZGNiMzM5NmYwNzhlNzcxZThhL3RhYmxlOmU4ODI0OTIxNzhhNDQ1NjhiZDY0MDQ1OGNjZWY2ZDAxL3RhYmxlcmFuZ2U6ZTg4MjQ5MjE3OGE0NDU2OGJkNjQwNDU4Y2NlZjZkMDFfNi0zLTEtMS0yMjE1Njg_2e9b16d9-f63d-4e90-80b5-362a307305eb",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "2401900000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmQ0YzFlZjM3NzBmYjRjZmNhZGY4OGMzNjg1ZTYxMGViL3NlYzpkNGMxZWYzNzcwZmI0Y2ZjYWRmODhjMzY4NWU2MTBlYl8xNi9mcmFnOjFiZTUwMWM1YzJlMDQ0ODRiNjUwOGZkOTI3ODYzNGM4L3RhYmxlOmM2MWNjYzE0MjBjMjRkYTJhNGRlZDgzMzE4ODhiOGM5L3RhYmxlcmFuZ2U6YzYxY2NjMTQyMGMyNGRhMmE0ZGVkODMzMTg4OGI4YzlfNy0zLTEtMS0yMjE1Njg_506e644d-e7db-4b35-9340-806044046a6a",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "2401900000.0",
+        "ticker": "regn"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareDiluted:ibb12656df12e495a99ae9761ff452049_D20230101-20230331:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmQ0YzFlZjM3NzBmYjRjZmNhZGY4OGMzNjg1ZTYxMGViL3NlYzpkNGMxZWYzNzcwZmI0Y2ZjYWRmODhjMzY4NWU2MTBlYl8xOS9mcmFnOjI1Y2UyMjliOWQ1MDQ3MjI5ODQzYmJiMDVjODkxZWI5L3RhYmxlOmUxMzdlZjM4YWRhMDRlMjI4NDEyYmQ0OGExMGMyMzVlL3RhYmxlcmFuZ2U6ZTEzN2VmMzhhZGEwNGUyMjg0MTJiZDQ4YTEwYzIzNWVfMzItNi0xLTEtMjIxNTY4_a6117a81-11fb-48b1-9865-c236e3dd9c02",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "7.17",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmQ0YzFlZjM3NzBmYjRjZmNhZGY4OGMzNjg1ZTYxMGViL3NlYzpkNGMxZWYzNzcwZmI0Y2ZjYWRmODhjMzY4NWU2MTBlYl80MC9mcmFnOmNlMjg4MmNjZjEyMjRmNDlhZWM2ZjVlNDJiZGIxZGIyL3RhYmxlOjI0MDQzNjNkMjk3MTRlY2E5OTMwMzNhNGY5OTYyOWJlL3RhYmxlcmFuZ2U6MjQwNDM2M2QyOTcxNGVjYTk5MzAzM2E0Zjk5NjI5YmVfMTEtNi0xLTEtMjIxNTY4_a6117a81-11fb-48b1-9865-c236e3dd9c02",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "7.17",
+        "ticker": "regn"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:ibb12656df12e495a99ae9761ff452049_D20230101-20230331:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmQ0YzFlZjM3NzBmYjRjZmNhZGY4OGMzNjg1ZTYxMGViL3NlYzpkNGMxZWYzNzcwZmI0Y2ZjYWRmODhjMzY4NWU2MTBlYl8xOS9mcmFnOjI1Y2UyMjliOWQ1MDQ3MjI5ODQzYmJiMDVjODkxZWI5L3RhYmxlOmUxMzdlZjM4YWRhMDRlMjI4NDEyYmQ0OGExMGMyMzVlL3RhYmxlcmFuZ2U6ZTEzN2VmMzhhZGEwNGUyMjg0MTJiZDQ4YTEwYzIzNWVfMzQtNi0xLTEtMjIxNTY4_68ef17e2-6e01-472c-9def-c4fce0d1c77d",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "107100000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmQ0YzFlZjM3NzBmYjRjZmNhZGY4OGMzNjg1ZTYxMGViL3NlYzpkNGMxZWYzNzcwZmI0Y2ZjYWRmODhjMzY4NWU2MTBlYl80MC9mcmFnOmNlMjg4MmNjZjEyMjRmNDlhZWM2ZjVlNDJiZGIxZGIyL3RhYmxlOjI0MDQzNjNkMjk3MTRlY2E5OTMwMzNhNGY5OTYyOWJlL3RhYmxlcmFuZ2U6MjQwNDM2M2QyOTcxNGVjYTk5MzAzM2E0Zjk5NjI5YmVfNC02LTEtMS0yMjE1Njg_68ef17e2-6e01-472c-9def-c4fce0d1c77d",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "107100000.0",
+        "ticker": "regn"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareDiluted:ic4c0422d40c54f0e92ba6370d8a1f70c_D20220101-20220331:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmQ0YzFlZjM3NzBmYjRjZmNhZGY4OGMzNjg1ZTYxMGViL3NlYzpkNGMxZWYzNzcwZmI0Y2ZjYWRmODhjMzY4NWU2MTBlYl8xOS9mcmFnOjI1Y2UyMjliOWQ1MDQ3MjI5ODQzYmJiMDVjODkxZWI5L3RhYmxlOmUxMzdlZjM4YWRhMDRlMjI4NDEyYmQ0OGExMGMyMzVlL3RhYmxlcmFuZ2U6ZTEzN2VmMzhhZGEwNGUyMjg0MTJiZDQ4YTEwYzIzNWVfMzItOC0xLTEtMjIxNTY4_15f5ef34-69dd-497d-b932-b3b766ade013",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "8.61",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmQ0YzFlZjM3NzBmYjRjZmNhZGY4OGMzNjg1ZTYxMGViL3NlYzpkNGMxZWYzNzcwZmI0Y2ZjYWRmODhjMzY4NWU2MTBlYl80MC9mcmFnOmNlMjg4MmNjZjEyMjRmNDlhZWM2ZjVlNDJiZGIxZGIyL3RhYmxlOjI0MDQzNjNkMjk3MTRlY2E5OTMwMzNhNGY5OTYyOWJlL3RhYmxlcmFuZ2U6MjQwNDM2M2QyOTcxNGVjYTk5MzAzM2E0Zjk5NjI5YmVfMTEtOC0xLTEtMjIxNTY4_15f5ef34-69dd-497d-b932-b3b766ade013",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "8.61",
+        "ticker": "regn"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding:ibb12656df12e495a99ae9761ff452049_D20230101-20230331:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmQ0YzFlZjM3NzBmYjRjZmNhZGY4OGMzNjg1ZTYxMGViL3NlYzpkNGMxZWYzNzcwZmI0Y2ZjYWRmODhjMzY4NWU2MTBlYl8xOS9mcmFnOjI1Y2UyMjliOWQ1MDQ3MjI5ODQzYmJiMDVjODkxZWI5L3RhYmxlOmUxMzdlZjM4YWRhMDRlMjI4NDEyYmQ0OGExMGMyMzVlL3RhYmxlcmFuZ2U6ZTEzN2VmMzhhZGEwNGUyMjg0MTJiZDQ4YTEwYzIzNWVfMzUtNi0xLTEtMjIxNTY4_c9e4eefb-1ca5-44cc-ba01-4ba52a9780a1",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "114000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmQ0YzFlZjM3NzBmYjRjZmNhZGY4OGMzNjg1ZTYxMGViL3NlYzpkNGMxZWYzNzcwZmI0Y2ZjYWRmODhjMzY4NWU2MTBlYl80MC9mcmFnOmNlMjg4MmNjZjEyMjRmNDlhZWM2ZjVlNDJiZGIxZGIyL3RhYmxlOjI0MDQzNjNkMjk3MTRlY2E5OTMwMzNhNGY5OTYyOWJlL3RhYmxlcmFuZ2U6MjQwNDM2M2QyOTcxNGVjYTk5MzAzM2E0Zjk5NjI5YmVfOC02LTEtMS0yMjE1Njg_7270f1a6-b17c-46b8-a4c8-480d71c7f234",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "114000000.0",
+        "ticker": "regn"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-44:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-315",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "2702980000.0",
+        "reverse_pick_id": "f-261",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "2702980000.0",
+        "ticker": "cflt"
+      },
+      {
+        "canonical_key": "us-gaap:PropertyPlantAndEquipmentNet:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-709",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "86962000.0",
+        "reverse_pick_id": "f-43",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "86962000.0",
+        "ticker": "cflt"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-43:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-314",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "3000.0",
+        "reverse_pick_id": "f-260",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "3000.0",
+        "ticker": "cflt"
+      },
+      {
+        "canonical_key": "us-gaap:SharesOutstanding:c-43:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-313",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "322232901.0",
+        "reverse_pick_id": "f-259",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "322232901.0",
+        "ticker": "cflt"
+      },
+      {
+        "canonical_key": "us-gaap:CapitalizedContractCostAmortization:c-1:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-327",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "28254000.0",
+        "reverse_pick_id": "f-911",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "28254000.0",
+        "ticker": "cflt"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermDebtCurrent:c-7:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-443",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "22413000.0",
+        "reverse_pick_id": "f-155",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "22413000.0",
+        "ticker": "fnko"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:c-4:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-617",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "0.08",
+        "reverse_pick_id": "f-91",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "0.08",
+        "ticker": "fnko"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:c-5:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-618",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "-0.31",
+        "reverse_pick_id": "f-92",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "-0.31",
+        "ticker": "fnko"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:c-1:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-619",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "-0.26",
+        "reverse_pick_id": "f-93",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "-0.26",
+        "ticker": "fnko"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:c-6:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-620",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "-3.01",
+        "reverse_pick_id": "f-94",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "-3.01",
+        "ticker": "fnko"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:C_a0f8ef8d-9ef0-479d-90b1-0e76ba3c7423:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_f61d8b3f-93e5-4024-8301-465fd15b5faa",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "561435000.0",
+        "reverse_pick_id": "F_05768ff1-35e2-4d09-b396-3276e13942c9",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "561435000.0",
+        "ticker": "alks"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:C_82e587b2-6a6f-4cbe-b06b-bcc865a0ebd8:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_e36193d5-ac2b-4f4a-9615-73ca918570e0",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "678026000.0",
+        "reverse_pick_id": "F_794eb971-188c-48dc-8736-9af6a386e62a",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "678026000.0",
+        "ticker": "alks"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:C_71a7150e-e70f-48a8-857e-c24c77baf82e:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_8d2d3712-79cb-4196-9df4-91102b0af084",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "149113000.0",
+        "reverse_pick_id": "F_3b6663f8-ca4a-4733-9d34-519c54380a93",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "149113000.0",
+        "ticker": "alks"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:C_b1107387-e8aa-4387-976b-dce7be558548:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_f1e81697-83e0-43f7-93d8-b56ca8d0dda0",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "52941000.0",
+        "reverse_pick_id": "F_4a4cc11f-27fa-44fc-81b0-d0b2fe6fdd36",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "52941000.0",
+        "ticker": "alks"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:C_55a7c478-081c-4e1a-be9c-e41ceed41c4f:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_6bcfa822-e089-432d-8d89-6d2cb9097cf1",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "607888000.0",
+        "reverse_pick_id": "F_f2549bfa-4ef5-4f6c-94f2-98f9998dddd8",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "607888000.0",
+        "ticker": "alks"
+      },
+      {
+        "canonical_key": "us-gaap:OperatingLeaseLiabilityNoncurrent:c-5:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-75",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "120770000.0",
+        "reverse_pick_id": "f-974",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "120770000.0",
+        "ticker": "twlo"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermDebt:c-5:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-79",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "988953000.0",
+        "reverse_pick_id": "f-1150",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "988953000.0",
+        "ticker": "twlo"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermDebt:c-6:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-80",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "987382000.0",
+        "reverse_pick_id": "f-1151",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "987382000.0",
+        "ticker": "twlo"
+      },
+      {
+        "canonical_key": "us-gaap:AssetImpairmentCharges:c-11:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-814",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "97700000.0",
+        "reverse_pick_id": "f-950",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "97700000.0",
+        "ticker": "twlo"
+      },
+      {
+        "canonical_key": "us-gaap:PreferredStockSharesAuthorized:c-6:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-89",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "100000000.0",
+        "reverse_pick_id": "f-1256",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "100000000.0",
+        "ticker": "twlo"
+      },
+      {
+        "canonical_key": "us-gaap:CommonStockParOrStatedValuePerShare:c-8:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-589",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "0.25",
+        "reverse_pick_id": "f-134",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "0.25",
+        "ticker": "vfc"
+      },
+      {
+        "canonical_key": "us-gaap:NetIncomeLoss:c-11:usd",
+        "num_duplicates": 4,
+        "forward_pick_id": "f-228",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-258886000.0",
+        "reverse_pick_id": "f-202",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-258886000.0",
+        "ticker": "vfc"
+      },
+      {
+        "canonical_key": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossReclassificationBeforeTax:c-11:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-220",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-13729000.0",
+        "reverse_pick_id": "f-989",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-13729000.0",
+        "ticker": "vfc"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-116:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-592",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-821189000.0",
+        "reverse_pick_id": "f-603",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-821189000.0",
+        "ticker": "vfc"
+      },
+      {
+        "canonical_key": "us-gaap:OtherComprehensiveIncomeLossNetOfTaxPortionAttributableToParent:c-1:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-223",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-59684000.0",
+        "reverse_pick_id": "f-618",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-59684000.0",
+        "ticker": "vfc"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-3:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-121",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1440146000.0",
+        "reverse_pick_id": "f-227",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1440146000.0",
+        "ticker": "five"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-5:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-123",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1162581000.0",
+        "reverse_pick_id": "f-279",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1162581000.0",
+        "ticker": "five"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-6:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-127",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "758981000.0",
+        "reverse_pick_id": "f-404",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "758981000.0",
+        "ticker": "five"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-8:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-130",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1308523000.0",
+        "reverse_pick_id": "f-422",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1308523000.0",
+        "ticker": "five"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-1:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-129",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1485228000.0",
+        "reverse_pick_id": "f-420",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1485228000.0",
+        "ticker": "five"
+      },
+      {
+        "canonical_key": "us-gaap:TaxCreditCarryforwardAmount:ibe86638de44744ee9bdb15b8aa9ff55b_I20221231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjc5MTFlYzhmZThjYjQ1NTM4NDhkMWI2ZmUwYWM5NGIzL3NlYzo3OTExZWM4ZmU4Y2I0NTUzODQ4ZDFiNmZlMGFjOTRiM18xMzYvZnJhZzo1OTc1MjIxZTMyYTM0MzE4OWEzMDM4ZmJlOGVkOGVjMS90YWJsZTo2ZDUxYWRlYzc1NjA0YjIyYTdmYzMyNjkzMDVkNjA3Yy90YWJsZXJhbmdlOjZkNTFhZGVjNzU2MDRiMjJhN2ZjMzI2OTMwNWQ2MDdjXzEtMS0xLTEtNDQ1MTM_41aa3022-cfcf-4603-8200-95e1e7336ab7",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "189800000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjc5MTFlYzhmZThjYjQ1NTM4NDhkMWI2ZmUwYWM5NGIzL3NlYzo3OTExZWM4ZmU4Y2I0NTUzODQ4ZDFiNmZlMGFjOTRiM18xMzYvZnJhZzo1OTc1MjIxZTMyYTM0MzE4OWEzMDM4ZmJlOGVkOGVjMS90ZXh0cmVnaW9uOjU5NzUyMjFlMzJhMzQzMTg5YTMwMzhmYmU4ZWQ4ZWMxXzEzNDY_41aa3022-cfcf-4603-8200-95e1e7336ab7",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "189800000.0",
+        "ticker": "ew"
+      },
+      {
+        "canonical_key": "us-gaap:IncomeTaxExpenseBenefit:ib728343d97d34a019dd689dc98701522_D20220101-20221231:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjc5MTFlYzhmZThjYjQ1NTM4NDhkMWI2ZmUwYWM5NGIzL3NlYzo3OTExZWM4ZmU4Y2I0NTUzODQ4ZDFiNmZlMGFjOTRiM18xMzYvZnJhZzo1OTc1MjIxZTMyYTM0MzE4OWEzMDM4ZmJlOGVkOGVjMS90YWJsZTo2YzEyMzc2NTgyYjQ0ZTNhOTJkZWQyN2JkYzJjZGE3YS90YWJsZXJhbmdlOjZjMTIzNzY1ODJiNDRlM2E5MmRlZDI3YmRjMmNkYTdhXzE3LTEtMS0xLTQ0NTEz_d6e2e06e-e129-4d57-9cc5-76faf3e758f8",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "245500000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjc5MTFlYzhmZThjYjQ1NTM4NDhkMWI2ZmUwYWM5NGIzL3NlYzo3OTExZWM4ZmU4Y2I0NTUzODQ4ZDFiNmZlMGFjOTRiM18xMzYvZnJhZzo1OTc1MjIxZTMyYTM0MzE4OWEzMDM4ZmJlOGVkOGVjMS90YWJsZTpkMDBlNTlkMWY5NzI0Y2NiOTJiOTExODA1NjlkMTk0MC90YWJsZXJhbmdlOmQwMGU1OWQxZjk3MjRjY2I5MmI5MTE4MDU2OWQxOTQwXzE0LTEtMS0xLTQ0NTEz_e4632b3c-4d60-466b-9199-08e60147306e",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "245500000.0",
+        "ticker": "ew"
+      },
+      {
+        "canonical_key": "us-gaap:IncomeTaxExpenseBenefit:i9cde3a3f602c4cc4b4fc91fa6ed56cc4_D20210101-20211231:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjc5MTFlYzhmZThjYjQ1NTM4NDhkMWI2ZmUwYWM5NGIzL3NlYzo3OTExZWM4ZmU4Y2I0NTUzODQ4ZDFiNmZlMGFjOTRiM18xMzYvZnJhZzo1OTc1MjIxZTMyYTM0MzE4OWEzMDM4ZmJlOGVkOGVjMS90YWJsZTo2YzEyMzc2NTgyYjQ0ZTNhOTJkZWQyN2JkYzJjZGE3YS90YWJsZXJhbmdlOjZjMTIzNzY1ODJiNDRlM2E5MmRlZDI3YmRjMmNkYTdhXzE3LTMtMS0xLTQ0NTEz_f6684468-d14a-4013-b9f0-ed640c821552",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "198900000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjc5MTFlYzhmZThjYjQ1NTM4NDhkMWI2ZmUwYWM5NGIzL3NlYzo3OTExZWM4ZmU4Y2I0NTUzODQ4ZDFiNmZlMGFjOTRiM18xMzYvZnJhZzo1OTc1MjIxZTMyYTM0MzE4OWEzMDM4ZmJlOGVkOGVjMS90YWJsZTpkMDBlNTlkMWY5NzI0Y2NiOTJiOTExODA1NjlkMTk0MC90YWJsZXJhbmdlOmQwMGU1OWQxZjk3MjRjY2I5MmI5MTE4MDU2OWQxOTQwXzE0LTMtMS0xLTQ0NTEz_eeb532bf-41d5-4a62-be30-9a35fd77c94f",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "198900000.0",
+        "ticker": "ew"
+      },
+      {
+        "canonical_key": "us-gaap:IncomeTaxExpenseBenefit:i4cdd8245221a48a8b1df50da3ef96e10_D20200101-20201231:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjc5MTFlYzhmZThjYjQ1NTM4NDhkMWI2ZmUwYWM5NGIzL3NlYzo3OTExZWM4ZmU4Y2I0NTUzODQ4ZDFiNmZlMGFjOTRiM18xMzYvZnJhZzo1OTc1MjIxZTMyYTM0MzE4OWEzMDM4ZmJlOGVkOGVjMS90YWJsZTo2YzEyMzc2NTgyYjQ0ZTNhOTJkZWQyN2JkYzJjZGE3YS90YWJsZXJhbmdlOjZjMTIzNzY1ODJiNDRlM2E5MmRlZDI3YmRjMmNkYTdhXzE3LTUtMS0xLTQ0NTEz_7b9cbd68-bdfe-4024-ba2a-3db00f7abae8",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "93300000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjc5MTFlYzhmZThjYjQ1NTM4NDhkMWI2ZmUwYWM5NGIzL3NlYzo3OTExZWM4ZmU4Y2I0NTUzODQ4ZDFiNmZlMGFjOTRiM18xMzYvZnJhZzo1OTc1MjIxZTMyYTM0MzE4OWEzMDM4ZmJlOGVkOGVjMS90YWJsZTpkMDBlNTlkMWY5NzI0Y2NiOTJiOTExODA1NjlkMTk0MC90YWJsZXJhbmdlOmQwMGU1OWQxZjk3MjRjY2I5MmI5MTE4MDU2OWQxOTQwXzE0LTUtMS0xLTQ0NTEz_0ae25767-f891-4f0b-86c0-dbe4e24b93d5",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "93300000.0",
+        "ticker": "ew"
+      },
+      {
+        "canonical_key": "us-gaap:UnrecognizedTaxBenefits:i9c0ad366d3c3495ca9bf9b71f8384c02_I20221231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjc5MTFlYzhmZThjYjQ1NTM4NDhkMWI2ZmUwYWM5NGIzL3NlYzo3OTExZWM4ZmU4Y2I0NTUzODQ4ZDFiNmZlMGFjOTRiM18xMzYvZnJhZzo1OTc1MjIxZTMyYTM0MzE4OWEzMDM4ZmJlOGVkOGVjMS90ZXh0cmVnaW9uOjU5NzUyMjFlMzJhMzQzMTg5YTMwMzhmYmU4ZWQ4ZWMxXzQzNDA_e22a9ebd-bdf4-4e6b-8036-fd8e4c321ef1",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "475300000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjc5MTFlYzhmZThjYjQ1NTM4NDhkMWI2ZmUwYWM5NGIzL3NlYzo3OTExZWM4ZmU4Y2I0NTUzODQ4ZDFiNmZlMGFjOTRiM18xMzYvZnJhZzo1OTc1MjIxZTMyYTM0MzE4OWEzMDM4ZmJlOGVkOGVjMS90YWJsZTo4M2I5NzMyZWE3NmM0YjA5OGFmMmJjNTEwOWNiNjM5OC90YWJsZXJhbmdlOjgzYjk3MzJlYTc2YzRiMDk4YWYyYmM1MTA5Y2I2Mzk4XzgtMS0xLTEtNDQ1MTM_148aba86-294a-4db7-ac22-c3013a39ae8d",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "475300000.0",
+        "ticker": "ew"
+      },
+      {
+        "canonical_key": "us-gaap:PaymentsToAcquireBusinessesGross:i684c88196e844f0c9778b020b9a87f9b_D20221003-20221003:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjgwNTBiMDljYThhMDQxMWRiY2IwYjY1NzZjZTFmYzdhL3NlYzo4MDUwYjA5Y2E4YTA0MTFkYmNiMGI2NTc2Y2UxZmM3YV8xNzIvZnJhZzpkZGZkZTAxYWM5OTk0NWE4ODRiYTI5MTI3NzAzYmRiMS90ZXh0cmVnaW9uOmRkZmRlMDFhYzk5OTQ1YTg4NGJhMjkxMjc3MDNiZGIxXzcxNDY4MjU2MzkwODI_23f0dfb9-0339-48c5-a97d-92161f4b6ff5",
+        "forward_pick_decimals": "-8",
+        "forward_pick_value": "11500000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjgwNTBiMDljYThhMDQxMWRiY2IwYjY1NzZjZTFmYzdhL3NlYzo4MDUwYjA5Y2E4YTA0MTFkYmNiMGI2NTc2Y2UxZmM3YV8xNzIvZnJhZzpkZGZkZTAxYWM5OTk0NWE4ODRiYTI5MTI3NzAzYmRiMS90ZXh0cmVnaW9uOmRkZmRlMDFhYzk5OTQ1YTg4NGJhMjkxMjc3MDNiZGIxXzU0OTc1NTg3NDQwNA_23f0dfb9-0339-48c5-a97d-92161f4b6ff5",
+        "reverse_pick_decimals": "-8",
+        "reverse_pick_value": "11500000000.0",
+        "ticker": "pfe"
+      },
+      {
+        "canonical_key": "us-gaap:BusinessAcquisitionSharePrice:i62f288f809fe46e899e452ecb916b5c0_I20221003:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjgwNTBiMDljYThhMDQxMWRiY2IwYjY1NzZjZTFmYzdhL3NlYzo4MDUwYjA5Y2E4YTA0MTFkYmNiMGI2NTc2Y2UxZmM3YV8xNzIvZnJhZzpkZGZkZTAxYWM5OTk0NWE4ODRiYTI5MTI3NzAzYmRiMS90ZXh0cmVnaW9uOmRkZmRlMDFhYzk5OTQ1YTg4NGJhMjkxMjc3MDNiZGIxXzcxNDY4MjU2MzkwNTY_d4311207-08e7-4d1d-8f61-72c9fafe4add",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "148.5",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjgwNTBiMDljYThhMDQxMWRiY2IwYjY1NzZjZTFmYzdhL3NlYzo4MDUwYjA5Y2E4YTA0MTFkYmNiMGI2NTc2Y2UxZmM3YV8xNzIvZnJhZzpkZGZkZTAxYWM5OTk0NWE4ODRiYTI5MTI3NzAzYmRiMS90ZXh0cmVnaW9uOmRkZmRlMDFhYzk5OTQ1YTg4NGJhMjkxMjc3MDNiZGIxXzU0OTc1NTg3NDM4OA_d4311207-08e7-4d1d-8f61-72c9fafe4add",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "148.5",
+        "ticker": "pfe"
+      },
+      {
+        "canonical_key": "pfe:ResearchandDevelopmentArrangementPercentageofCoststobeReimbursed:i9d112f66d246452e9c6c9a44c12e5e99_D20200409-20200409:number",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjgwNTBiMDljYThhMDQxMWRiY2IwYjY1NzZjZTFmYzdhL3NlYzo4MDUwYjA5Y2E4YTA0MTFkYmNiMGI2NTc2Y2UxZmM3YV8xNzIvZnJhZzpkZGZkZTAxYWM5OTk0NWE4ODRiYTI5MTI3NzAzYmRiMS90ZXh0cmVnaW9uOmRkZmRlMDFhYzk5OTQ1YTg4NGJhMjkxMjc3MDNiZGIxXzE2NjU3NjAxMTc5MjMzNg_3ff664df-9756-4562-85aa-37899942fa40",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "0.5",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjgwNTBiMDljYThhMDQxMWRiY2IwYjY1NzZjZTFmYzdhL3NlYzo4MDUwYjA5Y2E4YTA0MTFkYmNiMGI2NTc2Y2UxZmM3YV8xNzIvZnJhZzpkZGZkZTAxYWM5OTk0NWE4ODRiYTI5MTI3NzAzYmRiMS90ZXh0cmVnaW9uOmRkZmRlMDFhYzk5OTQ1YTg4NGJhMjkxMjc3MDNiZGIxXzE2NjU3NjAxMTc5MjYxMQ_3ff664df-9756-4562-85aa-37899942fa40",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "0.5",
+        "ticker": "pfe"
+      },
+      {
+        "canonical_key": "us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardEquityInstrumentsOtherThanOptionsGrantsInPeriodWeightedAverageGrantDateFairValue:i0932ce80508149f2a1284ed56aadd0a5_D20220101-20221231:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjgwNTBiMDljYThhMDQxMWRiY2IwYjY1NzZjZTFmYzdhL3NlYzo4MDUwYjA5Y2E4YTA0MTFkYmNiMGI2NTc2Y2UxZmM3YV8yMjkvZnJhZzpmOGRmMDViMjE2Yzc0ZjczODY0OWQ5NzE2MzI2MWE3MS90YWJsZTo5MWQ3MThjN2QxNDE0MWUxYTgxNzY0OTAwYzVmODVjZS90YWJsZXJhbmdlOjkxZDcxOGM3ZDE0MTQxZTFhODE3NjQ5MDBjNWY4NWNlXzYtNC0xLTEtNTExODYy_23b2f2ff-91da-4240-82f5-6bd724fcf128",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "11.72",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjgwNTBiMDljYThhMDQxMWRiY2IwYjY1NzZjZTFmYzdhL3NlYzo4MDUwYjA5Y2E4YTA0MTFkYmNiMGI2NTc2Y2UxZmM3YV8yMjkvZnJhZzpmOGRmMDViMjE2Yzc0ZjczODY0OWQ5NzE2MzI2MWE3MS90YWJsZTpjNmM5OTFiYjllMGU0ZDE2OTU3ZmIzYTM2NmU0ZTc2Yi90YWJsZXJhbmdlOmM2Yzk5MWJiOWUwZTRkMTY5NTdmYjNhMzY2ZTRlNzZiXzMtMi0xLTEtNTExODYy_6d333af1-a715-4529-a51f-a116b8caa99a",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "11.72",
+        "ticker": "pfe"
+      },
+      {
+        "canonical_key": "us-gaap:NumberOfOperatingSegments:ifd32821b5aa74fbfbe10209f8777cec0_D20220101-20221231:operatingsegment",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjgwNTBiMDljYThhMDQxMWRiY2IwYjY1NzZjZTFmYzdhL3NlYzo4MDUwYjA5Y2E4YTA0MTFkYmNiMGI2NTc2Y2UxZmM3YV8xNjkvZnJhZzo5OWVjNTRjNmNiYWU0ZDY4YWQxMGE4YTNhNzVhMzRiNS90ZXh0cmVnaW9uOjk5ZWM1NGM2Y2JhZTRkNjhhZDEwYThhM2E3NWEzNGI1XzExNjg_036f5ed8-7e9e-4b09-a5bc-41907da42d4a",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "2",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjgwNTBiMDljYThhMDQxMWRiY2IwYjY1NzZjZTFmYzdhL3NlYzo4MDUwYjA5Y2E4YTA0MTFkYmNiMGI2NTc2Y2UxZmM3YV8yNDEvZnJhZzphYzE0OThhOWViYTM0MzZhOTExNGNmZjA0ODZmYzNiMS90ZXh0cmVnaW9uOmFjMTQ5OGE5ZWJhMzQzNmE5MTE0Y2ZmMDQ4NmZjM2IxXzg2NA_d084cb03-e51a-482b-91db-e0708c375cde",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "2",
+        "ticker": "pfe"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax:ieba0293bdcd24097a2e5176513d24932_D20230101-20230401:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjAwYTYwZDJkMzc5YzQ4MmJiZjEzYjVhZGU5MWEzMThlL3NlYzowMGE2MGQyZDM3OWM0ODJiYmYxM2I1YWRlOTFhMzE4ZV84NS9mcmFnOmRhMDJiZWI0NjFkZjRmNWM5YTEzZTQ1M2IxZThmNjIzL3RhYmxlOmRlMzM0Yzg3ZGY0ZTQ4NjBhN2Q1NTNjYjk1MWQzZjkzL3RhYmxlcmFuZ2U6ZGUzMzRjODdkZjRlNDg2MGE3ZDU1M2NiOTUxZDNmOTNfNS0xLTEtMS00ODY5Ng_cbebaaca-193a-450f-8d90-3ae9b1d94c73",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "88210000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjAwYTYwZDJkMzc5YzQ4MmJiZjEzYjVhZGU5MWEzMThlL3NlYzowMGE2MGQyZDM3OWM0ODJiYmYxM2I1YWRlOTFhMzE4ZV84NS9mcmFnOmRhMDJiZWI0NjFkZjRmNWM5YTEzZTQ1M2IxZThmNjIzL3RhYmxlOjIzNGNhYWNiYjQyYTQyNmY4NjIyZmYwYjAwMjI4M2FhL3RhYmxlcmFuZ2U6MjM0Y2FhY2JiNDJhNDI2Zjg2MjJmZjBiMDAyMjgzYWFfNS0xLTEtMS00ODY5Ng_bbd7f8aa-cd70-462f-8f02-85b6a731d1b0",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "88210000.0",
+        "ticker": "nvee"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax:iaf5d80c7d7ea471cab375745ec312b2d_D20230101-20230401:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjAwYTYwZDJkMzc5YzQ4MmJiZjEzYjVhZGU5MWEzMThlL3NlYzowMGE2MGQyZDM3OWM0ODJiYmYxM2I1YWRlOTFhMzE4ZV84NS9mcmFnOmRhMDJiZWI0NjFkZjRmNWM5YTEzZTQ1M2IxZThmNjIzL3RhYmxlOmRlMzM0Yzg3ZGY0ZTQ4NjBhN2Q1NTNjYjk1MWQzZjkzL3RhYmxlcmFuZ2U6ZGUzMzRjODdkZjRlNDg2MGE3ZDU1M2NiOTUxZDNmOTNfNS0zLTEtMS00ODY5Ng_b2d7e18f-e5ab-4e17-a087-d7027b3cbca7",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "52846000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjAwYTYwZDJkMzc5YzQ4MmJiZjEzYjVhZGU5MWEzMThlL3NlYzowMGE2MGQyZDM3OWM0ODJiYmYxM2I1YWRlOTFhMzE4ZV84NS9mcmFnOmRhMDJiZWI0NjFkZjRmNWM5YTEzZTQ1M2IxZThmNjIzL3RhYmxlOjFjOWE4ZTllZmRiNjQ2OTQ4NDU5ZDVmNDE4MDU5YzY0L3RhYmxlcmFuZ2U6MWM5YThlOWVmZGI2NDY5NDg0NTlkNWY0MTgwNTljNjRfNC0zLTEtMS00ODY5Ng_771240d8-5b99-4417-8d79-c9eeb74d1800",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "52846000.0",
+        "ticker": "nvee"
+      },
+      {
+        "canonical_key": "us-gaap:AmortizationOfIntangibleAssets:i10f1f6ed9d864baab9598158dd2229b7_D20230101-20230401:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjAwYTYwZDJkMzc5YzQ4MmJiZjEzYjVhZGU5MWEzMThlL3NlYzowMGE2MGQyZDM3OWM0ODJiYmYxM2I1YWRlOTFhMzE4ZV81OC9mcmFnOjNkNWUwYjhiOTZhMDQ5ODE5ZDRkMTgwNDhjYzE2MjEzL3RleHRyZWdpb246M2Q1ZTBiOGI5NmEwNDk4MTlkNGQxODA0OGNjMTYyMTNfOTg3_30d6d83b-d334-45fe-8140-6261fabae4bf",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "9037000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjAwYTYwZDJkMzc5YzQ4MmJiZjEzYjVhZGU5MWEzMThlL3NlYzowMGE2MGQyZDM3OWM0ODJiYmYxM2I1YWRlOTFhMzE4ZV84NS9mcmFnOmRhMDJiZWI0NjFkZjRmNWM5YTEzZTQ1M2IxZThmNjIzL3RleHRyZWdpb246ZGEwMmJlYjQ2MWRmNGY1YzlhMTNlNDUzYjFlOGY2MjNfMTExOQ_30d6d83b-d334-45fe-8140-6261fabae4bf",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "9037000.0",
+        "ticker": "nvee"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax:i3720688943ce459d99099d4212da41c5_D20230101-20230401:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjAwYTYwZDJkMzc5YzQ4MmJiZjEzYjVhZGU5MWEzMThlL3NlYzowMGE2MGQyZDM3OWM0ODJiYmYxM2I1YWRlOTFhMzE4ZV84NS9mcmFnOmRhMDJiZWI0NjFkZjRmNWM5YTEzZTQ1M2IxZThmNjIzL3RhYmxlOmRlMzM0Yzg3ZGY0ZTQ4NjBhN2Q1NTNjYjk1MWQzZjkzL3RhYmxlcmFuZ2U6ZGUzMzRjODdkZjRlNDg2MGE3ZDU1M2NiOTUxZDNmOTNfNS01LTEtMS00ODY5Ng_3a0e3b37-6ea1-4090-93b6-36fc5cc13620",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "43261000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjAwYTYwZDJkMzc5YzQ4MmJiZjEzYjVhZGU5MWEzMThlL3NlYzowMGE2MGQyZDM3OWM0ODJiYmYxM2I1YWRlOTFhMzE4ZV84NS9mcmFnOmRhMDJiZWI0NjFkZjRmNWM5YTEzZTQ1M2IxZThmNjIzL3RhYmxlOjFjOWE4ZTllZmRiNjQ2OTQ4NDU5ZDVmNDE4MDU5YzY0L3RhYmxlcmFuZ2U6MWM5YThlOWVmZGI2NDY5NDg0NTlkNWY0MTgwNTljNjRfNC01LTEtMS00ODY5Ng_41134db8-4724-4a8b-9176-530035a99943",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "43261000.0",
+        "ticker": "nvee"
+      },
+      {
+        "canonical_key": "us-gaap:AmortizationOfIntangibleAssets:i657b8802c0a24e73b058a7a6ecd91a52_D20220102-20220402:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjAwYTYwZDJkMzc5YzQ4MmJiZjEzYjVhZGU5MWEzMThlL3NlYzowMGE2MGQyZDM3OWM0ODJiYmYxM2I1YWRlOTFhMzE4ZV81OC9mcmFnOjNkNWUwYjhiOTZhMDQ5ODE5ZDRkMTgwNDhjYzE2MjEzL3RleHRyZWdpb246M2Q1ZTBiOGI5NmEwNDk4MTlkNGQxODA0OGNjMTYyMTNfNTQ5NzU1ODE1MDg4_a6c7e1b3-f9eb-40b7-b6dd-a0eb4b638903",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "8263000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjAwYTYwZDJkMzc5YzQ4MmJiZjEzYjVhZGU5MWEzMThlL3NlYzowMGE2MGQyZDM3OWM0ODJiYmYxM2I1YWRlOTFhMzE4ZV84NS9mcmFnOmRhMDJiZWI0NjFkZjRmNWM5YTEzZTQ1M2IxZThmNjIzL3RleHRyZWdpb246ZGEwMmJlYjQ2MWRmNGY1YzlhMTNlNDUzYjFlOGY2MjNfNTQ5NzU1ODE1ODYy_a6c7e1b3-f9eb-40b7-b6dd-a0eb4b638903",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "8263000.0",
+        "ticker": "nvee"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:c-23:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-128",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "16277824000.0",
+        "reverse_pick_id": "f-376",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "16277824000.0",
+        "ticker": "aapl"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:c-1:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-127",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "15792497000.0",
+        "reverse_pick_id": "f-375",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "15792497000.0",
+        "ticker": "aapl"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:c-1:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-387",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "4.69",
+        "reverse_pick_id": "f-119",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "4.69",
+        "ticker": "aapl"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:c-22:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-126",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "16162945000.0",
+        "reverse_pick_id": "f-374",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "16162945000.0",
+        "ticker": "aapl"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:c-23:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-388",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "4.86",
+        "reverse_pick_id": "f-120",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "4.86",
+        "ticker": "aapl"
+      },
+      {
+        "canonical_key": "us-gaap:DerivativeNotionalAmount:c-139:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-642",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "0.0",
+        "reverse_pick_id": "f-599",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "0.0",
+        "ticker": "snx"
+      },
+      {
+        "canonical_key": "us-gaap:TreasuryStockCommonShares:c-3:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-90",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "14742000.0",
+        "reverse_pick_id": "f-474",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "14742000.0",
+        "ticker": "snx"
+      },
+      {
+        "canonical_key": "us-gaap:LineOfCredit:c-188:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-648",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "31000000.0",
+        "reverse_pick_id": "f-680",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "31000000.0",
+        "ticker": "snx"
+      },
+      {
+        "canonical_key": "us-gaap:TreasuryStockCommonShares:c-4:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-91",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "10343000.0",
+        "reverse_pick_id": "f-466",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "10343000.0",
+        "ticker": "snx"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-5:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-749",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "14684712000.0",
+        "reverse_pick_id": "f-102",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "14684712000.0",
+        "ticker": "snx"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:C_fb293817-5a3c-4488-b15d-1fbca701b866:U_USD",
+        "num_duplicates": 4,
+        "forward_pick_id": "F_22a73600-e82a-4e95-9d51-b99564904c2a",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "6039402000.0",
+        "reverse_pick_id": "F_12350900-75af-45cb-8da3-fd1e0e754c6d",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "6039402000.0",
+        "ticker": "skx"
+      },
+      {
+        "canonical_key": "us-gaap:NetIncomeLoss:C_d2f2bdae-1143-4de5-a883-23fdb9637ed3:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_964028d7-85ec-426d-9220-306b5ceaf557",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "540145000.0",
+        "reverse_pick_id": "F_bd478090-1e41-479c-ac54-52d77ebc9887",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "540145000.0",
+        "ticker": "skx"
+      },
+      {
+        "canonical_key": "us-gaap:NetIncomeLoss:C_fb293817-5a3c-4488-b15d-1fbca701b866:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_80efde17-ea08-46d6-abe5-37b8d9916e5f",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "458617000.0",
+        "reverse_pick_id": "F_e6013032-aced-40d9-8c40-3d6403e4c830",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "458617000.0",
+        "ticker": "skx"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:C_df8c403a-739b-4711-bf54-00694083e7ad:U_shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_a7b26a23-9730-4630-b20e-4c4aa39d386f",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "151831000.0",
+        "reverse_pick_id": "F_c29b1e66-9d18-45df-8047-0c45be960385",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "151831000.0",
+        "ticker": "skx"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:C_a5402ad0-c0ce-4baf-a2fc-1c54d6609b09:U_shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_00160aa5-7256-4b2a-b0c1-d17796a43126",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "154525000.0",
+        "reverse_pick_id": "F_1a62293f-a84e-40f4-9b0f-69c0a6c2788d",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "154525000.0",
+        "ticker": "skx"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-1:usd",
+        "num_duplicates": 6,
+        "forward_pick_id": "f-1163",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "8627824000.0",
+        "reverse_pick_id": "f-136",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "8627824000.0",
+        "ticker": "caci"
+      },
+      {
+        "canonical_key": "us-gaap:SellingGeneralAndAdministrativeExpense:c-7:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-144",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1590754000.0",
+        "reverse_pick_id": "f-1187",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1590754000.0",
+        "ticker": "caci"
+      },
+      {
+        "canonical_key": "us-gaap:PropertyPlantAndEquipmentNet:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-721",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "212035000.0",
+        "reverse_pick_id": "f-66",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "212035000.0",
+        "ticker": "caci"
+      },
+      {
+        "canonical_key": "us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardEquityInstrumentsOtherThanOptionsGrantsInPeriodWeightedAverageGrantDateFairValue:c-254:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-978",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "505.62",
+        "reverse_pick_id": "f-990",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "505.62",
+        "ticker": "caci"
+      },
+      {
+        "canonical_key": "us-gaap:SellingGeneralAndAdministrativeExpense:c-6:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-143",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1720439000.0",
+        "reverse_pick_id": "f-1184",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1720439000.0",
+        "ticker": "caci"
+      },
+      {
+        "canonical_key": "us-gaap:PaymentsToAcquirePropertyPlantAndEquipment:ied8cfeae93414f38a511dc0329245ad4_D20220101-20221231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmU5NjYzZWJmMGU0MjQ2YTBiZDY5YWI2ZDAzNTk1Y2U3L3NlYzplOTY2M2ViZjBlNDI0NmEwYmQ2OWFiNmQwMzU5NWNlN18yOTgvZnJhZzpmNWZmNzAyNGEyNTc0OTNmOThmOTVlOWE4ZTY3ZWZhZi90YWJsZTpjNTA3MWE0YzFmNTI0MjU4ODllMDM3NTdhODU0ZDI0OS90YWJsZXJhbmdlOmM1MDcxYTRjMWY1MjQyNTg4OWUwMzc1N2E4NTRkMjQ5XzktMS0xLTEtMTIwNDU3_9c1f6fb4-45d9-4571-8533-1c65e1d87ff6",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "1621000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmU5NjYzZWJmMGU0MjQ2YTBiZDY5YWI2ZDAzNTk1Y2U3L3NlYzplOTY2M2ViZjBlNDI0NmEwYmQ2OWFiNmQwMzU5NWNlN18yMzUvZnJhZzowZTI5OTNlNGFlODc0ODdhYTM5MTQyZTZkOWQyYjMzNy90YWJsZTo5YmNiZGU1ODkxOTM0ODljOTgzZWI3NmRmNGVhNTI1MC90YWJsZXJhbmdlOjliY2JkZTU4OTE5MzQ4OWM5ODNlYjc2ZGY0ZWE1MjUwXzMyLTEtMS0xLTEyMDQ1Nw_2b742795-8543-4094-b66b-bead1e73e0b2",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "1621000000.0",
+        "ticker": "kmi"
+      },
+      {
+        "canonical_key": "us-gaap:PropertyPlantAndEquipmentNet:if249bbb489ba44278751e6b8cf0a3ec5_I20221231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmU5NjYzZWJmMGU0MjQ2YTBiZDY5YWI2ZDAzNTk1Y2U3L3NlYzplOTY2M2ViZjBlNDI0NmEwYmQ2OWFiNmQwMzU5NWNlN18yMzIvZnJhZzphMDUwOTM2YmVjMDE0YTg4YmEyNTFkMTM3NGVhNTVlYS90YWJsZToxYTIyYzhhMzhlODI0NzE0YThlMjY2ZGZhMjg3NGMzZS90YWJsZXJhbmdlOjFhMjJjOGEzOGU4MjQ3MTRhOGUyNjZkZmEyODc0YzNlXzE0LTEtMS0xLTEyMDQ1Nw_b0876611-41cf-4b8e-8201-a8b9b7809f9c",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "35599000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmU5NjYzZWJmMGU0MjQ2YTBiZDY5YWI2ZDAzNTk1Y2U3L3NlYzplOTY2M2ViZjBlNDI0NmEwYmQ2OWFiNmQwMzU5NWNlN18yNTkvZnJhZzoxOGJmNzM4ZjY3NWU0YmFjOTFkNjM1MWYwMWYxYTQzZS90YWJsZTplOGRlZWFhODg2ZjA0NGEzYjdhNDk2YzZmYzkyNTJiMy90YWJsZXJhbmdlOmU4ZGVlYWE4ODZmMDQ0YTNiN2E0OTZjNmZjOTI1MmIzXzI3LTUtMS0xLTE3NDk4Mg_14d7e60b-87cc-4407-a7f0-816166a2f6de",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "35599000000.0",
+        "ticker": "kmi"
+      },
+      {
+        "canonical_key": "us-gaap:PaymentsToAcquirePropertyPlantAndEquipment:i76f6f54ddd1a489da8713f20b016b80b_D20210101-20211231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmU5NjYzZWJmMGU0MjQ2YTBiZDY5YWI2ZDAzNTk1Y2U3L3NlYzplOTY2M2ViZjBlNDI0NmEwYmQ2OWFiNmQwMzU5NWNlN18yOTgvZnJhZzpmNWZmNzAyNGEyNTc0OTNmOThmOTVlOWE4ZTY3ZWZhZi90YWJsZTpjNTA3MWE0YzFmNTI0MjU4ODllMDM3NTdhODU0ZDI0OS90YWJsZXJhbmdlOmM1MDcxYTRjMWY1MjQyNTg4OWUwMzc1N2E4NTRkMjQ5XzktMy0xLTEtMTIwNDU3_8bc70563-4190-45f2-98e2-78d2f7c56cf8",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "1281000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmU5NjYzZWJmMGU0MjQ2YTBiZDY5YWI2ZDAzNTk1Y2U3L3NlYzplOTY2M2ViZjBlNDI0NmEwYmQ2OWFiNmQwMzU5NWNlN18yMzUvZnJhZzowZTI5OTNlNGFlODc0ODdhYTM5MTQyZTZkOWQyYjMzNy90YWJsZTo5YmNiZGU1ODkxOTM0ODljOTgzZWI3NmRmNGVhNTI1MC90YWJsZXJhbmdlOjliY2JkZTU4OTE5MzQ4OWM5ODNlYjc2ZGY0ZWE1MjUwXzMyLTMtMS0xLTEyMDQ1Nw_464d5983-9b10-4d89-9542-e1f467b699df",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "1281000000.0",
+        "ticker": "kmi"
+      },
+      {
+        "canonical_key": "us-gaap:PaymentsToAcquirePropertyPlantAndEquipment:i1d801ae652ab4db8aebf0caa5d59df4c_D20200101-20201231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmU5NjYzZWJmMGU0MjQ2YTBiZDY5YWI2ZDAzNTk1Y2U3L3NlYzplOTY2M2ViZjBlNDI0NmEwYmQ2OWFiNmQwMzU5NWNlN18yOTgvZnJhZzpmNWZmNzAyNGEyNTc0OTNmOThmOTVlOWE4ZTY3ZWZhZi90YWJsZTpjNTA3MWE0YzFmNTI0MjU4ODllMDM3NTdhODU0ZDI0OS90YWJsZXJhbmdlOmM1MDcxYTRjMWY1MjQyNTg4OWUwMzc1N2E4NTRkMjQ5XzktNS0xLTEtMTIwNDU3_87ba4aa1-9a4a-4643-993f-0897b734c2a1",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "1707000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmU5NjYzZWJmMGU0MjQ2YTBiZDY5YWI2ZDAzNTk1Y2U3L3NlYzplOTY2M2ViZjBlNDI0NmEwYmQ2OWFiNmQwMzU5NWNlN18yMzUvZnJhZzowZTI5OTNlNGFlODc0ODdhYTM5MTQyZTZkOWQyYjMzNy90YWJsZTo5YmNiZGU1ODkxOTM0ODljOTgzZWI3NmRmNGVhNTI1MC90YWJsZXJhbmdlOjliY2JkZTU4OTE5MzQ4OWM5ODNlYjc2ZGY0ZWE1MjUwXzMyLTUtMS0xLTEyMDQ1Nw_df3cfa30-4dc6-45ec-b0c9-0b3fd426a345",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "1707000000.0",
+        "ticker": "kmi"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermInvestments:if249bbb489ba44278751e6b8cf0a3ec5_I20221231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmU5NjYzZWJmMGU0MjQ2YTBiZDY5YWI2ZDAzNTk1Y2U3L3NlYzplOTY2M2ViZjBlNDI0NmEwYmQ2OWFiNmQwMzU5NWNlN18yMzIvZnJhZzphMDUwOTM2YmVjMDE0YTg4YmEyNTFkMTM3NGVhNTVlYS90YWJsZToxYTIyYzhhMzhlODI0NzE0YThlMjY2ZGZhMjg3NGMzZS90YWJsZXJhbmdlOjFhMjJjOGEzOGU4MjQ3MTRhOGUyNjZkZmEyODc0YzNlXzE1LTEtMS0xLTEyMDQ1Nw_7956bda6-8f04-49a9-b10d-a1c6ca201760",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "7653000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmU5NjYzZWJmMGU0MjQ2YTBiZDY5YWI2ZDAzNTk1Y2U3L3NlYzplOTY2M2ViZjBlNDI0NmEwYmQ2OWFiNmQwMzU5NWNlN18yOTgvZnJhZzpmNWZmNzAyNGEyNTc0OTNmOThmOTVlOWE4ZTY3ZWZhZi90YWJsZTo1NzVmZDc4ZDE4ZjI0YzczYmM0MmUxNjgyOTczYzdhMC90YWJsZXJhbmdlOjU3NWZkNzhkMThmMjRjNzNiYzQyZTE2ODI5NzNjN2EwXzktMS0xLTEtMTIwNDU3_7fd5df79-f2a7-4e99-bdaf-ee229fdf1c75",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "7653000000.0",
+        "ticker": "kmi"
+      },
+      {
+        "canonical_key": "us-gaap:IndefiniteLivedIntangibleAssetsExcludingGoodwill:C_9a6889a5-0039-42f4-890b-b186d07e813a:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_0103d0b7-a3f5-467c-91f8-a76894f681d2",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "2023000.0",
+        "reverse_pick_id": "F_44d2cf51-b707-4efd-b911-3e94c5396292",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "2023000.0",
+        "ticker": "sfm"
+      },
+      {
+        "canonical_key": "us-gaap:IndefiniteLivedIntangibleAssetsExcludingGoodwill:C_acee5b95-f000-4ecd-a1d3-27556e2ad442:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_7914e8ad-254a-442a-91a1-16d36817d776",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "182937000.0",
+        "reverse_pick_id": "F_cd037e0f-97ad-49b7-a69f-ca4f87cee14a",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "182937000.0",
+        "ticker": "sfm"
+      },
+      {
+        "canonical_key": "sfm:OperatingLeaseLegallyBindingMinimumPaymentsForLeasesThatHaveNotYetCommenced:C_c42517f3-6430-4a3c-9395-0244001f7db2:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_46a46082-5572-433f-9e17-e7d4066907a9",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "584100000.0",
+        "reverse_pick_id": "F_56444570-1de3-4a2f-8167-8bb18e490c71",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "584100000.0",
+        "ticker": "sfm"
+      },
+      {
+        "canonical_key": "us-gaap:StockRepurchasedAndRetiredDuringPeriodShares:C_2f67f7b8-d855-415d-995c-06050821f802:U_shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_8db42a9e-c9ef-4bd0-ab1c-63a196d756c1",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "5864246.0",
+        "reverse_pick_id": "F_b4014bda-4693-4f4a-9775-a7e42e5b6056",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "5864246.0",
+        "ticker": "sfm"
+      },
+      {
+        "canonical_key": "us-gaap:CommonStockSharesIssued:C_c42517f3-6430-4a3c-9395-0244001f7db2:U_shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_bbab8f58-b9a3-48c0-96cf-a48b7166e4f3",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "101211984.0",
+        "reverse_pick_id": "F_a9297c43-da8c-4a2c-9071-eb99820e7d2c",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "101211984.0",
+        "ticker": "sfm"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:C_344b702b-584e-4a53-9359-81461de55cfe:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_7b59d2d2-1438-4aba-ad71-bcf4b66e907c",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "1978000000.0",
+        "reverse_pick_id": "F_7d319b50-a4e8-47b9-9012-3e9c044f6d10",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "1978000000.0",
+        "ticker": "dvn"
+      },
+      {
+        "canonical_key": "dvn:BusinessCombinationConsiderationTransferredExchangeRatio:C_dd67aeff-2cd7-4fdc-94fb-fa6abb1dffb2:U_pure",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_24601c83-51cd-4ec4-9d84-dfd2d523f137",
+        "forward_pick_decimals": "4",
+        "forward_pick_value": "0.5165",
+        "reverse_pick_id": "F_d0e155be-15f5-43b7-911a-cf8605849bd6",
+        "reverse_pick_decimals": "4",
+        "reverse_pick_value": "0.5165",
+        "ticker": "dvn"
+      },
+      {
+        "canonical_key": "dvn:LeaseLiabilities:C_d84d8bc5-a9e9-44f6-ad57-bd5ad284f64f:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_c5b2d688-e1ad-4540-8585-d1a9f95e5557",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "278000000.0",
+        "reverse_pick_id": "F_9241b48d-0182-446a-beb1-dcf3368c2eaa",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "278000000.0",
+        "ticker": "dvn"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermDebtNoncurrent:C_d84d8bc5-a9e9-44f6-ad57-bd5ad284f64f:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_dcdb9cb1-3cdd-4237-81ef-12a4b8f92937",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "6189000000.0",
+        "reverse_pick_id": "F_a1908c94-2029-46a9-8185-21dc5569af41",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "6189000000.0",
+        "ticker": "dvn"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermDebtNoncurrent:C_8e456f93-a224-4bd0-8cc3-8b8e7ed746ec:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_675951d4-69f6-4966-aca7-556d5e1152fc",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "6482000000.0",
+        "reverse_pick_id": "F_e1fe4499-918d-4743-bc32-073852624ed0",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "6482000000.0",
+        "ticker": "dvn"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:c-1:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-267",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "0.62",
+        "reverse_pick_id": "f-151",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "0.62",
+        "ticker": "hqy"
+      },
+      {
+        "canonical_key": "us-gaap:DebtInstrumentInterestRateStatedPercentage:c-50:number",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-357",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "0.045",
+        "reverse_pick_id": "f-376",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "0.045",
+        "ticker": "hqy"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:c-11:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-268",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "0.33",
+        "reverse_pick_id": "f-152",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "0.33",
+        "ticker": "hqy"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareDiluted:c-1:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-269",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "0.61",
+        "reverse_pick_id": "f-153",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "0.61",
+        "ticker": "hqy"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareDiluted:c-11:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-270",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "0.33",
+        "reverse_pick_id": "f-154",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "0.33",
+        "ticker": "hqy"
+      },
+      {
+        "canonical_key": "us-gaap:IncomeLossIncludingPortionAttributableToNoncontrollingInterest:c-1:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-66",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "895000000.0",
+        "reverse_pick_id": "f-517",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "895000000.0",
+        "ticker": "itw"
+      },
+      {
+        "canonical_key": "us-gaap:NonoperatingIncomeExpense:c-10:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-65",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "16000000.0",
+        "reverse_pick_id": "f-516",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "16000000.0",
+        "ticker": "itw"
+      },
+      {
+        "canonical_key": "us-gaap:NonoperatingIncomeExpense:c-1:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-64",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "12000000.0",
+        "reverse_pick_id": "f-515",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "12000000.0",
+        "ticker": "itw"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-26:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-426",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "-1878000000.0",
+        "reverse_pick_id": "f-183",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "-1878000000.0",
+        "ticker": "itw"
+      },
+      {
+        "canonical_key": "us-gaap:InterestExpenseNonoperating:c-1:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-62",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "68000000.0",
+        "reverse_pick_id": "f-513",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "68000000.0",
+        "ticker": "itw"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:c-3:shares",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-87",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "49500000.0",
+        "reverse_pick_id": "f-556",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "49500000.0",
+        "ticker": "coo"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:c-5:shares",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-90",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "49300000.0",
+        "reverse_pick_id": "f-559",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "49300000.0",
+        "ticker": "coo"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:c-1:shares",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-89",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "49500000.0",
+        "reverse_pick_id": "f-558",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "49500000.0",
+        "ticker": "coo"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:c-4:shares",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-88",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "49300000.0",
+        "reverse_pick_id": "f-557",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "49300000.0",
+        "ticker": "coo"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding:c-3:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-91",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "49900000.0",
+        "reverse_pick_id": "f-564",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "49900000.0",
+        "ticker": "coo"
+      },
+      {
+        "canonical_key": "us-gaap:ImpairmentLongLivedAssetHeldForUseStatementOfIncomeOrComprehensiveIncomeExtensibleEnumeration:iec6ce0252dcc4e88b59f331b2e732065_D20210101-20211231:None",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjFlN2Y4NWMyZjkxNTRiYjViODQ2NWU2YjUyMTNiMTBhL3NlYzoxZTdmODVjMmY5MTU0YmI1Yjg0NjVlNmI1MjEzYjEwYV8xODQvZnJhZzpiZDkzOTVmYjdhMTY0NjhjYmNhYjViYWFlN2M2YWYxMy90YWJsZTozYWY0ZWVkZjQwYjA0MzQ0ODk5MTZiNTRmOTRmNDBkOS90YWJsZXJhbmdlOjNhZjRlZWRmNDBiMDQzNDQ4OTkxNmI1NGY5NGY0MGQ5XzQtNC0xLTEtNDI4MTMw_f20cde64-05be-4503-98e6-a2963b9a0012",
+        "forward_pick_decimals": null,
+        "forward_pick_value": "http://fasb.org/us-gaap/2022#DepreciationDepletion",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjFlN2Y4NWMyZjkxNTRiYjViODQ2NWU2YjUyMTNiMTBhL3NlYzoxZTdmODVjMmY5MTU0YmI1Yjg0NjVlNmI1MjEzYjEwYV8xOTkvZnJhZzpiMTI2MmU5NDllZjc0MWIxODI4MzMzM2Y2OTdlMGE2Ny90ZXh0cmVnaW9uOmIxMjYyZTk0OWVmNzQxYjE4MjgzMzMzZjY5N2UwYTY3XzU0OTc1NTgxODcwOA_f20cde64-05be-4503-98e6-a2963b9a0012",
+        "reverse_pick_decimals": null,
+        "reverse_pick_value": "http://fasb.org/us-gaap/2022#DepreciationDepletion",
+        "ticker": "mpc"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:ia7c46f6313c34e91bba5944bd14ce62a_D20200101-20201231:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjFlN2Y4NWMyZjkxNTRiYjViODQ2NWU2YjUyMTNiMTBhL3NlYzoxZTdmODVjMmY5MTU0YmI1Yjg0NjVlNmI1MjEzYjEwYV8xNDgvZnJhZzplMThhZmNlZjAxOTI0ZGYzYjE0MTIxY2QxNmE3OWUxNC90YWJsZTowNDRlZmQ1NzJhZDk0YzdiOTdmYmRlNjFjNzYxYTVmYi90YWJsZXJhbmdlOjA0NGVmZDU3MmFkOTRjN2I5N2ZiZGU2MWM3NjFhNWZiXzItNS0xLTEtNDI4MTMw_743563e1-a9af-4c56-a5bf-5ee6a333639c",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "69779000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjFlN2Y4NWMyZjkxNTRiYjViODQ2NWU2YjUyMTNiMTBhL3NlYzoxZTdmODVjMmY5MTU0YmI1Yjg0NjVlNmI1MjEzYjEwYV8yMzIvZnJhZzo0ZDEzMDY2NjM5NTU0NmQzODY4MDAwNThiZjE1MWE2My90YWJsZTo2ZmI0N2NiNmQyM2U0MWJjYTc1ODI4ZDY2MDgzMTMyYS90YWJsZXJhbmdlOjZmYjQ3Y2I2ZDIzZTQxYmNhNzU4MjhkNjYwODMxMzJhXzExLTUtMS0xLTQyODEzMA_fbe9d877-c0fd-442a-abb1-d5af59192e22",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "69779000000.0",
+        "ticker": "mpc"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:if42b6936c12b451ab4888c41fac8155d_D20220101-20221231:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjFlN2Y4NWMyZjkxNTRiYjViODQ2NWU2YjUyMTNiMTBhL3NlYzoxZTdmODVjMmY5MTU0YmI1Yjg0NjVlNmI1MjEzYjEwYV8xNDgvZnJhZzplMThhZmNlZjAxOTI0ZGYzYjE0MTIxY2QxNmE3OWUxNC90YWJsZTowNDRlZmQ1NzJhZDk0YzdiOTdmYmRlNjFjNzYxYTVmYi90YWJsZXJhbmdlOjA0NGVmZDU3MmFkOTRjN2I5N2ZiZGU2MWM3NjFhNWZiXzItMS0xLTEtNDI4MTMw_8703ef56-7f95-46e8-b26a-1879f621645d",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "177453000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjFlN2Y4NWMyZjkxNTRiYjViODQ2NWU2YjUyMTNiMTBhL3NlYzoxZTdmODVjMmY5MTU0YmI1Yjg0NjVlNmI1MjEzYjEwYV8yMzIvZnJhZzo0ZDEzMDY2NjM5NTU0NmQzODY4MDAwNThiZjE1MWE2My90YWJsZTo2ZmI0N2NiNmQyM2U0MWJjYTc1ODI4ZDY2MDgzMTMyYS90YWJsZXJhbmdlOjZmYjQ3Y2I2ZDIzZTQxYmNhNzU4MjhkNjYwODMxMzJhXzExLTEtMS0xLTQyODEzMA_189a9cfb-6830-438f-a138-9cbb1231db9a",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "177453000000.0",
+        "ticker": "mpc"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:iaf5684900e754fdb8090c2e96fe4e3e1_D20210101-20211231:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjFlN2Y4NWMyZjkxNTRiYjViODQ2NWU2YjUyMTNiMTBhL3NlYzoxZTdmODVjMmY5MTU0YmI1Yjg0NjVlNmI1MjEzYjEwYV8xNDgvZnJhZzplMThhZmNlZjAxOTI0ZGYzYjE0MTIxY2QxNmE3OWUxNC90YWJsZTowNDRlZmQ1NzJhZDk0YzdiOTdmYmRlNjFjNzYxYTVmYi90YWJsZXJhbmdlOjA0NGVmZDU3MmFkOTRjN2I5N2ZiZGU2MWM3NjFhNWZiXzItMy0xLTEtNDI4MTMw_135cc66b-e32d-4869-842c-bb356c383aaf",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "119983000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjFlN2Y4NWMyZjkxNTRiYjViODQ2NWU2YjUyMTNiMTBhL3NlYzoxZTdmODVjMmY5MTU0YmI1Yjg0NjVlNmI1MjEzYjEwYV8yMzIvZnJhZzo0ZDEzMDY2NjM5NTU0NmQzODY4MDAwNThiZjE1MWE2My90YWJsZTo2ZmI0N2NiNmQyM2U0MWJjYTc1ODI4ZDY2MDgzMTMyYS90YWJsZXJhbmdlOjZmYjQ3Y2I2ZDIzZTQxYmNhNzU4MjhkNjYwODMxMzJhXzExLTMtMS0xLTQyODEzMA_aeb0b996-3485-49c1-8c45-03b9f512eda5",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "119983000000.0",
+        "ticker": "mpc"
+      },
+      {
+        "canonical_key": "us-gaap:IncomeLossFromEquityMethodInvestments:if42b6936c12b451ab4888c41fac8155d_D20220101-20221231:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjFlN2Y4NWMyZjkxNTRiYjViODQ2NWU2YjUyMTNiMTBhL3NlYzoxZTdmODVjMmY5MTU0YmI1Yjg0NjVlNmI1MjEzYjEwYV8xNDgvZnJhZzplMThhZmNlZjAxOTI0ZGYzYjE0MTIxY2QxNmE3OWUxNC90YWJsZTowNDRlZmQ1NzJhZDk0YzdiOTdmYmRlNjFjNzYxYTVmYi90YWJsZXJhbmdlOjA0NGVmZDU3MmFkOTRjN2I5N2ZiZGU2MWM3NjFhNWZiXzMtMS0xLTEtNDI4MTMw_06c9a706-6096-4373-bfad-3fb762d26226",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "655000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjFlN2Y4NWMyZjkxNTRiYjViODQ2NWU2YjUyMTNiMTBhL3NlYzoxZTdmODVjMmY5MTU0YmI1Yjg0NjVlNmI1MjEzYjEwYV8xNTcvZnJhZzo5ZjExMTEwYTE3MjM0MGI5ODlhMjIwOGJlZjhlMTlhMy90YWJsZTozNTBjMGVjNDc1YWM0YjdiOGMzYmYxNzA4YjE1NWE0ZC90YWJsZXJhbmdlOjM1MGMwZWM0NzVhYzRiN2I4YzNiZjE3MDhiMTU1YTRkXzEwLTEtMS0xLTQyODEzMA_33f76b4e-3e69-4835-a417-65544cfcbb3d",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "655000000.0",
+        "ticker": "mpc"
+      },
+      {
+        "canonical_key": "us-gaap:DepreciationDepletionAndAmortization:C_1eb0ab18-f886-4d66-b234-03795431fa88:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_2b7e6bc1-e95c-43e8-8465-161d97722d9d",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "348000000.0",
+        "reverse_pick_id": "F_91629036-12c4-4115-b3c7-2d9ec998d706",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "348000000.0",
+        "ticker": "slb"
+      },
+      {
+        "canonical_key": "us-gaap:DefinedBenefitPlanFairValueOfPlanAssets:C_f24fe173-6759-4246-a247-37fcdfd634e9:U_USD",
+        "num_duplicates": 3,
+        "forward_pick_id": "F_de4dc896-b4db-424f-b1c0-187aa1e50000",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "8390000000.0",
+        "reverse_pick_id": "F_68a9c672-eb0e-4105-8e67-4c07335bcb50",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "8390000000.0",
+        "ticker": "slb"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:C_d488473a-06c1-4255-a533-94e0407a6ab1:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_40e4c81f-32ce-4be2-84f4-e6ecec8505eb",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "5995000000.0",
+        "reverse_pick_id": "F_a2889380-ccbe-4791-a54b-2af8c27c20db",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "5995000000.0",
+        "ticker": "slb"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:C_0b76127a-8c18-4901-ade9-e95e811c6b47:U_USD",
+        "num_duplicates": 3,
+        "forward_pick_id": "F_458d7f15-ccef-40c4-a9d2-88d38778676e",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "28091000000.0",
+        "reverse_pick_id": "F_ac688191-39e9-4482-b568-e2b62f3201c5",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "28091000000.0",
+        "ticker": "slb"
+      },
+      {
+        "canonical_key": "us-gaap:DefinedBenefitPlanFairValueOfPlanAssets:C_73fe72f4-b313-4b94-b35f-dcdf047150b1:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_5900d6ca-4b7e-47f8-b1b9-9e7ea3ff5e98",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "7674000000.0",
+        "reverse_pick_id": "F_6139c255-878b-4fdc-963d-2a738fc42103",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "7674000000.0",
+        "ticker": "slb"
+      },
+      {
+        "canonical_key": "wgo:AdjustedEBITDA:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-514",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "648900000.0",
+        "reverse_pick_id": "f-578",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "648900000.0",
+        "ticker": "wgo"
+      },
+      {
+        "canonical_key": "us-gaap:LifeInsuranceCorporateOrBankOwnedAmount:c-7:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-990",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "28600000.0",
+        "reverse_pick_id": "f-104",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "28600000.0",
+        "ticker": "wgo"
+      },
+      {
+        "canonical_key": "wgo:DeferredCompensationArrangementWithIndividualVestingAge:c-167:None",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-974",
+        "forward_pick_decimals": null,
+        "forward_pick_value": "P55Y",
+        "reverse_pick_id": "f-976",
+        "reverse_pick_decimals": null,
+        "reverse_pick_value": "P55Y",
+        "ticker": "wgo"
+      },
+      {
+        "canonical_key": "us-gaap:OtherPostretirementDefinedBenefitPlanLiabilitiesNoncurrent:c-6:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-972",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "7900000.0",
+        "reverse_pick_id": "f-137",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "7900000.0",
+        "ticker": "wgo"
+      },
+      {
+        "canonical_key": "us-gaap:OtherPostretirementDefinedBenefitPlanLiabilitiesNoncurrent:c-7:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-973",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "8100000.0",
+        "reverse_pick_id": "f-138",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "8100000.0",
+        "ticker": "wgo"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:As_Of_3_31_2023_us-gaap_StatementEquityComponentsAxis_us-gaap_CommonStockMember_B8yswNcS8UOcqDvgh43saQ:Unit_Standard_USD_oZYQN6yXNEWFVUpUVfKDWA",
+        "num_duplicates": 2,
+        "forward_pick_id": "Tc_1jpFgUl1zUOHHAto2R9hwg_14_3",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1387000.0",
+        "reverse_pick_id": "Tc_179QHmtOvE2y4ZG1iRv9jA_14_3",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1387000.0",
+        "ticker": "acm"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:As_Of_3_31_2023_us-gaap_StatementEquityComponentsAxis_us-gaap_AdditionalPaidInCapitalMember_Srkd1K9bUE2PTOaSeiyjZA:Unit_Standard_USD_oZYQN6yXNEWFVUpUVfKDWA",
+        "num_duplicates": 2,
+        "forward_pick_id": "Tc_RQ3PuXKmwECUxxmTZOqyUw_14_6",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "4176931000.0",
+        "reverse_pick_id": "Tc_EbPvvVO96kK623I4fjXl5w_14_6",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "4176931000.0",
+        "ticker": "acm"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:As_Of_3_31_2023_us-gaap_StatementEquityComponentsAxis_us-gaap_AociIncludingPortionAttributableToNoncontrollingInterestMember_dp9vBPA9e0iRL88PxGIyfg:Unit_Standard_USD_oZYQN6yXNEWFVUpUVfKDWA",
+        "num_duplicates": 2,
+        "forward_pick_id": "Tc_QYG0vmWmV0SCo4D6k_dQ-Q_14_9",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-921087000.0",
+        "reverse_pick_id": "Tc_-FiEKfEtiUeCXNqcx8LTQg_14_9",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-921087000.0",
+        "ticker": "acm"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:As_Of_3_31_2023_us-gaap_StatementEquityComponentsAxis_us-gaap_RetainedEarningsMember_NhPSlRaT0USCFFj-TxZAxQ:Unit_Standard_USD_oZYQN6yXNEWFVUpUVfKDWA",
+        "num_duplicates": 2,
+        "forward_pick_id": "Tc_BiOLUaA1K0SToOZCa09JVA_14_12",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-662891000.0",
+        "reverse_pick_id": "Tc_wngMZjx5lECDPZfs8ZihWg_14_12",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-662891000.0",
+        "ticker": "acm"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:As_Of_3_31_2023_us-gaap_StatementEquityComponentsAxis_us-gaap_ParentMember_QzfqhY0IwUGEH0RDk66WOA:Unit_Standard_USD_oZYQN6yXNEWFVUpUVfKDWA",
+        "num_duplicates": 2,
+        "forward_pick_id": "Tc_ukgItPFEMkat8960aPnIXw_14_15",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "2594340000.0",
+        "reverse_pick_id": "Tc_3b5VBxSq7UCbTjH1MAoBdA_14_15",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "2594340000.0",
+        "ticker": "acm"
+      },
+      {
+        "canonical_key": "us-gaap:Revenues:C_80349760-cecd-418e-9191-bc459e185a6c:U_USD",
+        "num_duplicates": 4,
+        "forward_pick_id": "F_cce04ae5-173a-49f6-a034-61a35658cc71",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "685680000.0",
+        "reverse_pick_id": "F_1330490f-6914-4036-82ad-cf002aad54f5",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "685680000.0",
+        "ticker": "ter"
+      },
+      {
+        "canonical_key": "us-gaap:OtherComprehensiveIncomeLossNetOfTax:C_06f5e41e-af2b-490e-8561-17a65a2876a2:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_e0ba5349-ddcf-4c7a-9208-00f90b52a100",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-12761000.0",
+        "reverse_pick_id": "F_40d3a603-400d-4af2-b235-7ff4db2bb8f4",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-12761000.0",
+        "ticker": "ter"
+      },
+      {
+        "canonical_key": "us-gaap:Revenues:C_b34e3428-04dc-4439-bb97-9bb1ace1305d:U_USD",
+        "num_duplicates": 4,
+        "forward_pick_id": "F_962bab9e-3bb3-4d97-9ace-e3b519dfb088",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "599819000.0",
+        "reverse_pick_id": "F_f9cfdbd9-49a3-4810-8ac4-d47ea95499f5",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "599819000.0",
+        "ticker": "ter"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:C_1330a4c8-7fc7-4d19-9590-5c1d56b36f8d:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_db130986-e9b8-4393-af54-1371b32dd4ec",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-39739000.0",
+        "reverse_pick_id": "F_7fc8aeed-0497-4717-8d52-eea60dd4a507",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-39739000.0",
+        "ticker": "ter"
+      },
+      {
+        "canonical_key": "us-gaap:ReclassificationFromAociCurrentPeriodTax:C_10f17a5c-45c0-4134-b503-6436071d2fe6:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_8e01373b-a366-4957-ac4e-26bc53f333b7",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-30000.0",
+        "reverse_pick_id": "F_6465968b-fd6c-429b-92a9-24f9f643f392",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-30000.0",
+        "ticker": "ter"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:iffea44a44a6d4085afd6a5383c29c8d2_D20220701-20230331:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmNiYzliNTQyMDE2YTQ0MTM5M2UwNTY0ZmZjNDU5ZjEwL3NlYzpjYmM5YjU0MjAxNmE0NDEzOTNlMDU2NGZmYzQ1OWYxMF85MS9mcmFnOjcwYTViOGNkNWM0YzRhNzNiNTdjNjhhNDg0MmI1MDlmL3RhYmxlOjViYjdkNWMxNjEyNDQyNjM4NDU2YmFiOWFhZTFlODg5L3RhYmxlcmFuZ2U6NWJiN2Q1YzE2MTI0NDI2Mzg0NTZiYWI5YWFlMWU4ODlfMi01LTEtMS05OTEwNw_24526045-95f4-4a9a-ab26-d49f8a9a8846",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "8143728000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmNiYzliNTQyMDE2YTQ0MTM5M2UwNTY0ZmZjNDU5ZjEwL3NlYzpjYmM5YjU0MjAxNmE0NDEzOTNlMDU2NGZmYzQ1OWYxMF85MS9mcmFnOjcwYTViOGNkNWM0YzRhNzNiNTdjNjhhNDg0MmI1MDlmL3RhYmxlOmI0YWZlNjVmYjI0NjQ2MzI5ZWUzNjkxZTI3OGM3YzgxL3RhYmxlcmFuZ2U6YjRhZmU2NWZiMjQ2NDYzMjllZTM2OTFlMjc4YzdjODFfMTUtNS0xLTEtOTkxMDc_563f33cf-e4e1-4d95-acc6-c7c7f3a223e5",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "8143728000.0",
+        "ticker": "klac"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:ibf21a379b15c4d71b29ccba0aa352ac3_D20220101-20220331:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmNiYzliNTQyMDE2YTQ0MTM5M2UwNTY0ZmZjNDU5ZjEwL3NlYzpjYmM5YjU0MjAxNmE0NDEzOTNlMDU2NGZmYzQ1OWYxMF83MC9mcmFnOjQ4YmZjYTdmZTQ1YjRkZTY5MDExOGU0MjhhNmU0ZGQ3L3RhYmxlOjJiZTEzY2U2OGIwODRkM2RhMDg0OTQ5YzA4NmNkOGEzL3RhYmxlcmFuZ2U6MmJlMTNjZTY4YjA4NGQzZGEwODQ5NDljMDg2Y2Q4YTNfOC0zLTEtMS05OTEwNw_df83b1e0-e483-4b9d-9fea-fef9f96376b5",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "4.87",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmNiYzliNTQyMDE2YTQ0MTM5M2UwNTY0ZmZjNDU5ZjEwL3NlYzpjYmM5YjU0MjAxNmE0NDEzOTNlMDU2NGZmYzQ1OWYxMF8xOS9mcmFnOjNjYWRhZjFiNGY2OTRmNmU5ZjZjZDU1YjVmZTBiN2MzL3RhYmxlOmE2ZDRmNjhhNDViYjQ4ODNiNGIyY2NiNDQxNGI4OWY1L3RhYmxlcmFuZ2U6YTZkNGY2OGE0NWJiNDg4M2I0YjJjY2I0NDE0Yjg5ZjVfMjEtMy0xLTEtOTkxMDc_df83b1e0-e483-4b9d-9fea-fef9f96376b5",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "4.87",
+        "ticker": "klac"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:iddc087a97c844776b82127b1b979e06b_D20210701-20220331:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmNiYzliNTQyMDE2YTQ0MTM5M2UwNTY0ZmZjNDU5ZjEwL3NlYzpjYmM5YjU0MjAxNmE0NDEzOTNlMDU2NGZmYzQ1OWYxMF85MS9mcmFnOjcwYTViOGNkNWM0YzRhNzNiNTdjNjhhNDg0MmI1MDlmL3RhYmxlOjViYjdkNWMxNjEyNDQyNjM4NDU2YmFiOWFhZTFlODg5L3RhYmxlcmFuZ2U6NWJiN2Q1YzE2MTI0NDI2Mzg0NTZiYWI5YWFlMWU4ODlfMi03LTEtMS05OTEwNw_99e77a44-239e-4f9c-8ad3-f7c000ba8393",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "6725918000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmNiYzliNTQyMDE2YTQ0MTM5M2UwNTY0ZmZjNDU5ZjEwL3NlYzpjYmM5YjU0MjAxNmE0NDEzOTNlMDU2NGZmYzQ1OWYxMF85MS9mcmFnOjcwYTViOGNkNWM0YzRhNzNiNTdjNjhhNDg0MmI1MDlmL3RhYmxlOmI0YWZlNjVmYjI0NjQ2MzI5ZWUzNjkxZTI3OGM3YzgxL3RhYmxlcmFuZ2U6YjRhZmU2NWZiMjQ2NDYzMjllZTM2OTFlMjc4YzdjODFfMTUtNy0xLTEtOTkxMDc_295a1f1a-3e76-4d29-8c64-4016cef40542",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "6725918000.0",
+        "ticker": "klac"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:if18eb637c6a64966950e2115e920c2af_D20220701-20230331:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmNiYzliNTQyMDE2YTQ0MTM5M2UwNTY0ZmZjNDU5ZjEwL3NlYzpjYmM5YjU0MjAxNmE0NDEzOTNlMDU2NGZmYzQ1OWYxMF83MC9mcmFnOjQ4YmZjYTdmZTQ1YjRkZTY5MDExOGU0MjhhNmU0ZGQ3L3RhYmxlOjJiZTEzY2U2OGIwODRkM2RhMDg0OTQ5YzA4NmNkOGEzL3RhYmxlcmFuZ2U6MmJlMTNjZTY4YjA4NGQzZGEwODQ5NDljMDg2Y2Q4YTNfOC01LTEtMS05OTEwNw_f78892be-e151-4bb4-81b8-69bf688bc391",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "19.26",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmNiYzliNTQyMDE2YTQ0MTM5M2UwNTY0ZmZjNDU5ZjEwL3NlYzpjYmM5YjU0MjAxNmE0NDEzOTNlMDU2NGZmYzQ1OWYxMF8xOS9mcmFnOjNjYWRhZjFiNGY2OTRmNmU5ZjZjZDU1YjVmZTBiN2MzL3RhYmxlOmE2ZDRmNjhhNDViYjQ4ODNiNGIyY2NiNDQxNGI4OWY1L3RhYmxlcmFuZ2U6YTZkNGY2OGE0NWJiNDg4M2I0YjJjY2I0NDE0Yjg5ZjVfMjEtNS0xLTEtOTkxMDc_f78892be-e151-4bb4-81b8-69bf688bc391",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "19.26",
+        "ticker": "klac"
+      },
+      {
+        "canonical_key": "us-gaap:EarningsPerShareBasic:i6b318b06e9dd4ae68877b97a5cc890d2_D20210701-20220331:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmNiYzliNTQyMDE2YTQ0MTM5M2UwNTY0ZmZjNDU5ZjEwL3NlYzpjYmM5YjU0MjAxNmE0NDEzOTNlMDU2NGZmYzQ1OWYxMF83MC9mcmFnOjQ4YmZjYTdmZTQ1YjRkZTY5MDExOGU0MjhhNmU0ZGQ3L3RhYmxlOjJiZTEzY2U2OGIwODRkM2RhMDg0OTQ5YzA4NmNkOGEzL3RhYmxlcmFuZ2U6MmJlMTNjZTY4YjA4NGQzZGEwODQ5NDljMDg2Y2Q4YTNfOC03LTEtMS05OTEwNw_f0594fc9-11b2-441c-b242-4f7be3c86803",
+        "forward_pick_decimals": "2",
+        "forward_pick_value": "16.64",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmNiYzliNTQyMDE2YTQ0MTM5M2UwNTY0ZmZjNDU5ZjEwL3NlYzpjYmM5YjU0MjAxNmE0NDEzOTNlMDU2NGZmYzQ1OWYxMF8xOS9mcmFnOjNjYWRhZjFiNGY2OTRmNmU5ZjZjZDU1YjVmZTBiN2MzL3RhYmxlOmE2ZDRmNjhhNDViYjQ4ODNiNGIyY2NiNDQxNGI4OWY1L3RhYmxlcmFuZ2U6YTZkNGY2OGE0NWJiNDg4M2I0YjJjY2I0NDE0Yjg5ZjVfMjEtNy0xLTEtOTkxMDc_f0594fc9-11b2-441c-b242-4f7be3c86803",
+        "reverse_pick_decimals": "2",
+        "reverse_pick_value": "16.64",
+        "ticker": "klac"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-6:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-121",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "154967000.0",
+        "reverse_pick_id": "f-425",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "154967000.0",
+        "ticker": "qtwo"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-1:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-122",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "513419000.0",
+        "reverse_pick_id": "f-426",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "513419000.0",
+        "ticker": "qtwo"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-5:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-120",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "175021000.0",
+        "reverse_pick_id": "f-424",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "175021000.0",
+        "ticker": "qtwo"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-7:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-123",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "462506000.0",
+        "reverse_pick_id": "f-427",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "462506000.0",
+        "ticker": "qtwo"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-117",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "448479000.0",
+        "reverse_pick_id": "f-222",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "448479000.0",
+        "ticker": "qtwo"
+      },
+      {
+        "canonical_key": "us-gaap:OperatingIncomeLoss:i6719d44d6c384780909e53fb6e8d56c1_D20221226-20230326:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjg1ZDYwNjllOGIxYzRmOTliMmU4M2YyMmI0NTdjMjcxL3NlYzo4NWQ2MDY5ZThiMWM0Zjk5YjJlODNmMjJiNDU3YzI3MV82Ny9mcmFnOjhjZWY5MWE4NWM3YjRlZWRhOTEzYWZlMjVjMTQzMDE0L3RhYmxlOjE2ZjcxZDMzMjZjYjRiMjg5ZjBiZmFlZTVmMDI3OWNmL3RhYmxlcmFuZ2U6MTZmNzFkMzMyNmNiNGIyODlmMGJmYWVlNWYwMjc5Y2ZfMjQtNS0xLTEtOTg3Mzc_d9f8f7f4-a785-4a84-8fe8-6ad56a591dd9",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "37796000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjg1ZDYwNjllOGIxYzRmOTliMmU4M2YyMmI0NTdjMjcxL3NlYzo4NWQ2MDY5ZThiMWM0Zjk5YjJlODNmMjJiNDU3YzI3MV8xOS9mcmFnOmNjYWEwYjVkYTYzNDQ5OWNiMjQ3ZWYyNThkZTk3M2RiL3RhYmxlOjM3YmFmMTU3Yzc5NDRmNjE4NWU2ZjgzZDdiZmM2MWM0L3RhYmxlcmFuZ2U6MzdiYWYxNTdjNzk0NGY2MTg1ZTZmODNkN2JmYzYxYzRfMjAtNi0xLTEtOTg3Mzc_f4f47442-85a2-4d22-be4c-20a1f7c04de7",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "37796000.0",
+        "ticker": "pzza"
+      },
+      {
+        "canonical_key": "us-gaap:OperatingIncomeLoss:i4d41e18a10b7471ca36ccc89b65b5fc1_D20211227-20220327:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjg1ZDYwNjllOGIxYzRmOTliMmU4M2YyMmI0NTdjMjcxL3NlYzo4NWQ2MDY5ZThiMWM0Zjk5YjJlODNmMjJiNDU3YzI3MV82Ny9mcmFnOjhjZWY5MWE4NWM3YjRlZWRhOTEzYWZlMjVjMTQzMDE0L3RhYmxlOjE2ZjcxZDMzMjZjYjRiMjg5ZjBiZmFlZTVmMDI3OWNmL3RhYmxlcmFuZ2U6MTZmNzFkMzMyNmNiNGIyODlmMGJmYWVlNWYwMjc5Y2ZfMjQtNy0xLTEtOTg3Mzc_025761ed-4018-4a8f-8de0-3281c92a06dc",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "14435000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjg1ZDYwNjllOGIxYzRmOTliMmU4M2YyMmI0NTdjMjcxL3NlYzo4NWQ2MDY5ZThiMWM0Zjk5YjJlODNmMjJiNDU3YzI3MV8xOS9mcmFnOmNjYWEwYjVkYTYzNDQ5OWNiMjQ3ZWYyNThkZTk3M2RiL3RhYmxlOjM3YmFmMTU3Yzc5NDRmNjE4NWU2ZjgzZDdiZmM2MWM0L3RhYmxlcmFuZ2U6MzdiYWYxNTdjNzk0NGY2MTg1ZTZmODNkN2JmYzYxYzRfMjAtOC0xLTEtOTg3Mzc_d75d3fbc-38e3-49e4-b460-36eb5accafa4",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "14435000.0",
+        "ticker": "pzza"
+      },
+      {
+        "canonical_key": "us-gaap:CommonStockDividendsPerShareDeclared:i6719d44d6c384780909e53fb6e8d56c1_D20221226-20230326:usdPerShare",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjg1ZDYwNjllOGIxYzRmOTliMmU4M2YyMmI0NTdjMjcxL3NlYzo4NWQ2MDY5ZThiMWM0Zjk5YjJlODNmMjJiNDU3YzI3MV81Mi9mcmFnOjA3Yzg4YjMwZTJiZjRmYmRhY2E5ZGE5OTFlOTljZjY5L3RleHRyZWdpb246MDdjODhiMzBlMmJmNGZiZGFjYTlkYTk5MWU5OWNmNjlfMTY0OA_e7e933fc-a874-47b3-9ef1-960f73dde6c1",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "0.42",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjg1ZDYwNjllOGIxYzRmOTliMmU4M2YyMmI0NTdjMjcxL3NlYzo4NWQ2MDY5ZThiMWM0Zjk5YjJlODNmMjJiNDU3YzI3MV8xOS9mcmFnOmNjYWEwYjVkYTYzNDQ5OWNiMjQ3ZWYyNThkZTk3M2RiL3RhYmxlOjM3YmFmMTU3Yzc5NDRmNjE4NWU2ZjgzZDdiZmM2MWM0L3RhYmxlcmFuZ2U6MzdiYWYxNTdjNzk0NGY2MTg1ZTZmODNkN2JmYzYxYzRfNDEtNi0xLTEtOTg3Mzc_77b5620c-0cb8-4966-9060-9c29812aa30c",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "0.42",
+        "ticker": "pzza"
+      },
+      {
+        "canonical_key": "us-gaap:NetIncomeLoss:i6719d44d6c384780909e53fb6e8d56c1_D20221226-20230326:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjg1ZDYwNjllOGIxYzRmOTliMmU4M2YyMmI0NTdjMjcxL3NlYzo4NWQ2MDY5ZThiMWM0Zjk5YjJlODNmMjJiNDU3YzI3MV81NS9mcmFnOjA4YjRkYjhiMzc2YzQ2MTY4MzA4MDZhMDM0OGM0ZmI0L3RhYmxlOjQxN2UwOGMyYjRmZjQxNzY4NGQ1ODViYzRjZjFjNzMyL3RhYmxlcmFuZ2U6NDE3ZTA4YzJiNGZmNDE3Njg0ZDU4NWJjNGNmMWM3MzJfMy01LTEtMS05ODczNw_6a15b718-7e4e-4276-91df-14a6ce966825",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "22376000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjg1ZDYwNjllOGIxYzRmOTliMmU4M2YyMmI0NTdjMjcxL3NlYzo4NWQ2MDY5ZThiMWM0Zjk5YjJlODNmMjJiNDU3YzI3MV8xOS9mcmFnOmNjYWEwYjVkYTYzNDQ5OWNiMjQ3ZWYyNThkZTk3M2RiL3RhYmxlOjM3YmFmMTU3Yzc5NDRmNjE4NWU2ZjgzZDdiZmM2MWM0L3RhYmxlcmFuZ2U6MzdiYWYxNTdjNzk0NGY2MTg1ZTZmODNkN2JmYzYxYzRfMjktNi0xLTEtOTg3Mzc_8a3771a0-1c04-4084-86fa-ed9cda28dcf3",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "22376000.0",
+        "ticker": "pzza"
+      },
+      {
+        "canonical_key": "us-gaap:PropertyPlantAndEquipmentNet:ia6a2962fa74a4c32934358670bf59f89_I20230326:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjg1ZDYwNjllOGIxYzRmOTliMmU4M2YyMmI0NTdjMjcxL3NlYzo4NWQ2MDY5ZThiMWM0Zjk5YjJlODNmMjJiNDU3YzI3MV82Ny9mcmFnOjhjZWY5MWE4NWM3YjRlZWRhOTEzYWZlMjVjMTQzMDE0L3RhYmxlOjE2ZjcxZDMzMjZjYjRiMjg5ZjBiZmFlZTVmMDI3OWNmL3RhYmxlcmFuZ2U6MTZmNzFkMzMyNmNiNGIyODlmMGJmYWVlNWYwMjc5Y2ZfMzQtNi0xLTEtMTQwMDAz_f6c82145-af19-4837-92ac-fde70e156b4d",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "253144000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOjg1ZDYwNjllOGIxYzRmOTliMmU4M2YyMmI0NTdjMjcxL3NlYzo4NWQ2MDY5ZThiMWM0Zjk5YjJlODNmMjJiNDU3YzI3MV8xNi9mcmFnOjBkZjlhNDEyMGZhNTQ1Nzk5NmJkY2Y0ODExNzRlMWY3L3RhYmxlOjdlMDAzNzBmYTc1NTQyNzU5MTI4NDk3NjQ0NWVlY2I2L3RhYmxlcmFuZ2U6N2UwMDM3MGZhNzU1NDI3NTkxMjg0OTc2NDQ1ZWVjYjZfMTItMi0xLTEtOTg3Mzc_67fdc95a-7d8d-4299-9f60-9f5f58bda498",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "253144000.0",
+        "ticker": "pzza"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:C_0859413f-0969-48c1-98d1-4c7501ae0d21:U_shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_0fc86464-cb3b-487c-8df5-b9be1a7fd7e8",
+        "forward_pick_decimals": "0",
+        "forward_pick_value": "35095211.0",
+        "reverse_pick_id": "F_a158e243-43c3-497f-9f9d-27489952627d",
+        "reverse_pick_decimals": "0",
+        "reverse_pick_value": "35095211.0",
+        "ticker": "mtw"
+      },
+      {
+        "canonical_key": "us-gaap:IndefiniteLivedIntangibleAssetsExcludingGoodwill:C_2d432b9b-ec1e-404e-8105-f700113ed724:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_8dbe5a26-da2e-46e1-a32a-979db454403f",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "14000000.0",
+        "reverse_pick_id": "F_c834be36-8d0a-465f-b5b8-20c8fc5a3f1a",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "14000000.0",
+        "ticker": "mtw"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:C_8650870c-f720-4be3-839f-dd1ee60d55a3:U_shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_92b7dd64-38ff-4a16-a9fe-fa8a5dafe442",
+        "forward_pick_decimals": "0",
+        "forward_pick_value": "35181262.0",
+        "reverse_pick_id": "F_33940106-bcbf-408d-8bd9-38e262daf880",
+        "reverse_pick_decimals": "0",
+        "reverse_pick_value": "35181262.0",
+        "ticker": "mtw"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:C_29a295cf-a7d2-4fe6-adf8-2ff6bc492c1b:U_shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_e32bc3c5-f0f8-45a6-a056-e1a6c8217620",
+        "forward_pick_decimals": "0",
+        "forward_pick_value": "35199221.0",
+        "reverse_pick_id": "F_3a3f2fe3-bf1e-4030-b3dc-c7afdd7bff6f",
+        "reverse_pick_decimals": "0",
+        "reverse_pick_value": "35199221.0",
+        "ticker": "mtw"
+      },
+      {
+        "canonical_key": "us-gaap:PropertyPlantAndEquipmentNet:C_9d482dfe-21f3-4620-8f8f-7f0008d90e9a:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_a90a402a-73a3-4b47-a11a-bfc7f44ddad3",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "349200000.0",
+        "reverse_pick_id": "F_af05fea5-075b-4656-8bc5-9f5ad58bc6f0",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "349200000.0",
+        "ticker": "mtw"
+      },
+      {
+        "canonical_key": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents:c-20:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-276",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "6282000000.0",
+        "reverse_pick_id": "f-1440",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "6282000000.0",
+        "ticker": "cmcsa"
+      },
+      {
+        "canonical_key": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents:c-23:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-279",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "7377000000.0",
+        "reverse_pick_id": "f-1439",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "7377000000.0",
+        "ticker": "cmcsa"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-63:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-1370",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "-2043000000.0",
+        "reverse_pick_id": "f-450",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "-2043000000.0",
+        "ticker": "cmcsa"
+      },
+      {
+        "canonical_key": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents:c-21:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-277",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "4782000000.0",
+        "reverse_pick_id": "f-281",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "4782000000.0",
+        "ticker": "cmcsa"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-57:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-1371",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "-1253000000.0",
+        "reverse_pick_id": "f-444",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "-1253000000.0",
+        "ticker": "cmcsa"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-39:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-274",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "17707000.0",
+        "reverse_pick_id": "f-353",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "17707000.0",
+        "ticker": "nyt"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-40:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-275",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "245549000.0",
+        "reverse_pick_id": "f-354",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "245549000.0",
+        "ticker": "nyt"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-41:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-276",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1918152000.0",
+        "reverse_pick_id": "f-355",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1918152000.0",
+        "ticker": "nyt"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-42:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-277",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-251014000.0",
+        "reverse_pick_id": "f-356",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-251014000.0",
+        "ticker": "nyt"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-43:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-278",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-390041000.0",
+        "reverse_pick_id": "f-357",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-390041000.0",
+        "ticker": "nyt"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-7:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-745",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1818717000.0",
+        "reverse_pick_id": "f-949",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1818717000.0",
+        "ticker": "twlo"
+      },
+      {
+        "canonical_key": "us-gaap:OtherComprehensiveIncomeForeignCurrencyTransactionAndTranslationAdjustmentNetOfTaxPortionAttributableToParent:c-6:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-376",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-2289000.0",
+        "reverse_pick_id": "f-189",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-2289000.0",
+        "ticker": "twlo"
+      },
+      {
+        "canonical_key": "us-gaap:OtherComprehensiveIncomeLossCashFlowHedgeGainLossAfterReclassificationAndTaxParent:c-6:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-378",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-11106000.0",
+        "reverse_pick_id": "f-193",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-11106000.0",
+        "ticker": "twlo"
+      },
+      {
+        "canonical_key": "us-gaap:CashAndCashEquivalentsAtCarryingValue:c-3:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-471",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "675081000.0",
+        "reverse_pick_id": "f-31",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "675081000.0",
+        "ticker": "twlo"
+      },
+      {
+        "canonical_key": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents:c-63:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-476",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "800776000.0",
+        "reverse_pick_id": "f-466",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "800776000.0",
+        "ticker": "twlo"
+      },
+      {
+        "canonical_key": "us-gaap:OtherComprehensiveIncomeLossNetOfTax:i739004aedeb24b6188a20fc16d4481f3_D20220101-20220331:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEzZTQ0ZWExMzYxYzQwYzliMzYxZTQ1MDEwYWVjMGVkL3NlYzphM2U0NGVhMTM2MWM0MGM5YjM2MWU0NTAxMGFlYzBlZF8yNS9mcmFnOjk3ZWE2MjM4M2FiZTQxY2M4NTAwMDQ0NWI2N2YzZjViL3RhYmxlOjQ2ODUxZWFhY2E1MTRmMDY5ZjU2NWQ5OGY0YmI1ZmE5L3RhYmxlcmFuZ2U6NDY4NTFlYWFjYTUxNGYwNjlmNTY1ZDk4ZjRiYjVmYTlfOC03LTEtMS0xODQyNDM_3346bf24-94de-4807-8c5f-3e7cfe26e2e2",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "-263000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEzZTQ0ZWExMzYxYzQwYzliMzYxZTQ1MDEwYWVjMGVkL3NlYzphM2U0NGVhMTM2MWM0MGM5YjM2MWU0NTAxMGFlYzBlZF8zNC9mcmFnOjRmOThiZGZiZTM5NjQwNjM5MGU1ZTFkYjFhZWI0NmViL3RhYmxlOjUyMzdjNGNjMDhiZTQ5ZmRhODU4OGE3Yjg0NWIyYjE0L3RhYmxlcmFuZ2U6NTIzN2M0Y2MwOGJlNDlmZGE4NTg4YTdiODQ1YjJiMTRfMTgtMTUtMS0xLTE4NDI0Mw_67b13b11-8df4-4db0-95e6-7d3665246786",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "-263000000.0",
+        "ticker": "kmi"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:ic1d69acef1bb4c4f8d0a7418a9e093fe_I20221231:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEzZTQ0ZWExMzYxYzQwYzliMzYxZTQ1MDEwYWVjMGVkL3NlYzphM2U0NGVhMTM2MWM0MGM5YjM2MWU0NTAxMGFlYzBlZF81Mi9mcmFnOjUzNDJjNjczMGU4YzQwNGRhYmRkMDJiMDhhZTczMmUyL3RhYmxlOmRkY2UyNmMxM2Y5MzQ4ODg5MTkzZGNjY2QzN2M1MjkzL3RhYmxlcmFuZ2U6ZGRjZTI2YzEzZjkzNDg4ODkxOTNkY2NjZDM3YzUyOTNfMi03LTEtMS0xODQyNDM_f33daade-60d1-4264-a9c7-e2b869f88073",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "-402000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEzZTQ0ZWExMzYxYzQwYzliMzYxZTQ1MDEwYWVjMGVkL3NlYzphM2U0NGVhMTM2MWM0MGM5YjM2MWU0NTAxMGFlYzBlZF8zNC9mcmFnOjRmOThiZGZiZTM5NjQwNjM5MGU1ZTFkYjFhZWI0NmViL3RhYmxlOjVmOTU5ZWIxZmVmOTRhOTA5ODBiNjhiNDkwNjVkYTA5L3RhYmxlcmFuZ2U6NWY5NTllYjFmZWY5NGE5MDk4MGI2OGI0OTA2NWRhMDlfMi05LTEtMS0xODQyNDM_75e228b4-85ca-4388-a164-f008310322e3",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "-402000000.0",
+        "ticker": "kmi"
+      },
+      {
+        "canonical_key": "us-gaap:Revenues:i8b850527d7e44551b05d7f8505f718f3_D20230101-20230331:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEzZTQ0ZWExMzYxYzQwYzliMzYxZTQ1MDEwYWVjMGVkL3NlYzphM2U0NGVhMTM2MWM0MGM5YjM2MWU0NTAxMGFlYzBlZF81OC9mcmFnOjBhMmY2ZDBlY2MxYzQyNzZhZTc5ZWZiNzg3YThhMjI3L3RhYmxlOjUwNWQyNDhkMjhiZTQzNjhiZTY5OGY0ZjdkY2VkOWNkL3RhYmxlcmFuZ2U6NTA1ZDI0OGQyOGJlNDM2OGJlNjk4ZjRmN2RjZWQ5Y2RfMTktMTItMS0xLTE4NDI0Mw_57fa4431-6237-4e03-b9e7-a8ed5419a11f",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "3888000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEzZTQ0ZWExMzYxYzQwYzliMzYxZTQ1MDEwYWVjMGVkL3NlYzphM2U0NGVhMTM2MWM0MGM5YjM2MWU0NTAxMGFlYzBlZF8yMi9mcmFnOmVlYmIzM2YzNGQ1MjRiMzg5NjI2MThlM2JhMjBlM2QwL3RhYmxlOmJhNmQ5ZDNkZjlkODQ5MzY5YzNiMTIzODFhNGZlNGE3L3RhYmxlcmFuZ2U6YmE2ZDlkM2RmOWQ4NDkzNjljM2IxMjM4MWE0ZmU0YTdfNi01LTEtMS0xODQyNDM_945b8335-61c2-40c2-b65b-a53adb43c736",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "3888000000.0",
+        "ticker": "kmi"
+      },
+      {
+        "canonical_key": "us-gaap:CashAndCashEquivalentsAtCarryingValue:i306698a6e4004d7c9573be9b9191f4d4_I20230331:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEzZTQ0ZWExMzYxYzQwYzliMzYxZTQ1MDEwYWVjMGVkL3NlYzphM2U0NGVhMTM2MWM0MGM5YjM2MWU0NTAxMGFlYzBlZF8yOC9mcmFnOjQ5YTY3MzY1NDUwMDQ5NDU4NWIyOTY3MjJiZGVkY2M1L3RhYmxlOjgwZmU0MDkwMWU2MjQ4NzZiZTJkY2RlNDNhNjhjMjRjL3RhYmxlcmFuZ2U6ODBmZTQwOTAxZTYyNDg3NmJlMmRjZGU0M2E2OGMyNGNfMy0xLTEtMS0xODQyNDM_9b7a00b1-dcc8-42f4-939f-cbedce152c68",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "416000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEzZTQ0ZWExMzYxYzQwYzliMzYxZTQ1MDEwYWVjMGVkL3NlYzphM2U0NGVhMTM2MWM0MGM5YjM2MWU0NTAxMGFlYzBlZF8zMS9mcmFnOmU3ZTdhMmMwM2IzNDRiNTg5YzgzOTFhYjE2NTljZDE2L3RhYmxlOmIzZWYxMjljNGRkMTRkZGQ4MmViYjE4ZTdiNGQwNjExL3RhYmxlcmFuZ2U6YjNlZjEyOWM0ZGQxNGRkZDgyZWJiMThlN2I0ZDA2MTFfNjUtMS0xLTEtMTg0MjQz_638d2d0c-9f82-452a-8691-0aeeb1935701",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "416000000.0",
+        "ticker": "kmi"
+      },
+      {
+        "canonical_key": "us-gaap:RestrictedCashAndInvestmentsCurrent:i306698a6e4004d7c9573be9b9191f4d4_I20230331:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEzZTQ0ZWExMzYxYzQwYzliMzYxZTQ1MDEwYWVjMGVkL3NlYzphM2U0NGVhMTM2MWM0MGM5YjM2MWU0NTAxMGFlYzBlZF8yOC9mcmFnOjQ5YTY3MzY1NDUwMDQ5NDU4NWIyOTY3MjJiZGVkY2M1L3RhYmxlOjgwZmU0MDkwMWU2MjQ4NzZiZTJkY2RlNDNhNjhjMjRjL3RhYmxlcmFuZ2U6ODBmZTQwOTAxZTYyNDg3NmJlMmRjZGU0M2E2OGMyNGNfNC0xLTEtMS0xODQyNDM_27cb63c4-25f8-48d9-b4a2-fe52ac426e25",
+        "forward_pick_decimals": "-6",
+        "forward_pick_value": "22000000.0",
+        "reverse_pick_id": "id3VybDovL2RvY3MudjEvZG9jOmEzZTQ0ZWExMzYxYzQwYzliMzYxZTQ1MDEwYWVjMGVkL3NlYzphM2U0NGVhMTM2MWM0MGM5YjM2MWU0NTAxMGFlYzBlZF8zMS9mcmFnOmU3ZTdhMmMwM2IzNDRiNTg5YzgzOTFhYjE2NTljZDE2L3RhYmxlOmIzZWYxMjljNGRkMTRkZGQ4MmViYjE4ZTdiNGQwNjExL3RhYmxlcmFuZ2U6YjNlZjEyOWM0ZGQxNGRkZDgyZWJiMThlN2I0ZDA2MTFfNjYtMS0xLTEtMTg0MjQz_b5470d44-e111-4831-8910-093fce582d28",
+        "reverse_pick_decimals": "-6",
+        "reverse_pick_value": "22000000.0",
+        "ticker": "kmi"
+      },
+      {
+        "canonical_key": "us-gaap:IntangibleAssetsNetExcludingGoodwill:As_Of_12_31_2024_TG_h2OD_ZkCPF-X72GPBqw:Unit_Standard_USD_f0aZMETJCUGZjgcui40bHw",
+        "num_duplicates": 2,
+        "forward_pick_id": "Tc_K2EVYAg5vEq1AgtGuNcNVQ_16_3",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "113263000.0",
+        "reverse_pick_id": "Tc_j2SXcakVNkmB55wjlq7g1Q_6_3",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "113263000.0",
+        "ticker": "hrmy"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermDebtNoncurrent:As_Of_12_31_2024_TG_h2OD_ZkCPF-X72GPBqw:Unit_Standard_USD_f0aZMETJCUGZjgcui40bHw",
+        "num_duplicates": 2,
+        "forward_pick_id": "Tc_F28V6bApHEmNL6Yc11dVVg_7_3",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "163016000.0",
+        "reverse_pick_id": "Tc_SHHN2mEcAEa1aNseAAmf2A_30_3",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "163016000.0",
+        "ticker": "hrmy"
+      },
+      {
+        "canonical_key": "us-gaap:RestrictedCashNoncurrent:As_Of_12_31_2023_v0YguuePdke66X42yBWZmQ:Unit_Standard_USD_f0aZMETJCUGZjgcui40bHw",
+        "num_duplicates": 2,
+        "forward_pick_id": "Tc_Es26ay5kWEmWDYV4byw6wg_14_6",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "270000.0",
+        "reverse_pick_id": "Tc_gNEuTvfXWE-9KVwGlR_M4A_5_6",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "270000.0",
+        "ticker": "hrmy"
+      },
+      {
+        "canonical_key": "us-gaap:LongTermDebtCurrent:As_Of_12_31_2023_v0YguuePdke66X42yBWZmQ:Unit_Standard_USD_f0aZMETJCUGZjgcui40bHw",
+        "num_duplicates": 2,
+        "forward_pick_id": "Tc_QBUVTceE7UCjoGxGEy2vzw_6_6",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "15000000.0",
+        "reverse_pick_id": "Tc_Thfn3BsRzkWljak78jTkCg_26_6",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "15000000.0",
+        "ticker": "hrmy"
+      },
+      {
+        "canonical_key": "us-gaap:NetIncomeLoss:Duration_1_1_2022_To_12_31_2022_oAWQRcbvcEao22qboZEROA:Unit_Standard_USD_f0aZMETJCUGZjgcui40bHw",
+        "num_duplicates": 3,
+        "forward_pick_id": "Tc_bwfhrwAtZ0mkLPvF7RpkCQ_6_17",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "181468000.0",
+        "reverse_pick_id": "Tc_kDkxwz57s0mVrdoClPKH9A_4_9",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "181468000.0",
+        "ticker": "hrmy"
+      },
+      {
+        "canonical_key": "us-gaap:DeferredTaxAssetsValuationAllowance:C_439bfb79-a5c9-488e-bf1f-2d7cecdd193f:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_19b9cd4e-9cad-49c3-aa03-54e8c94fbaaa",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "75244000.0",
+        "reverse_pick_id": "F_e5155e54-a54b-4bfe-9589-48aa366ad896",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "75244000.0",
+        "ticker": "xpof"
+      },
+      {
+        "canonical_key": "us-gaap:DepreciationAndAmortization:C_405e6908-aad3-4b67-af4c-ba3e1f379db4:U_USD",
+        "num_duplicates": 3,
+        "forward_pick_id": "F_ab16dc4f-5f00-41c4-bbf7-f21fc88ca04b",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "15315000.0",
+        "reverse_pick_id": "F_b3fafed6-0170-444c-85ec-afe074db6bc7",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "15315000.0",
+        "ticker": "xpof"
+      },
+      {
+        "canonical_key": "us-gaap:ProfitLoss:C_543a2bab-7c4c-414e-a5c5-0c8babc25bb8:U_USD",
+        "num_duplicates": 3,
+        "forward_pick_id": "F_faf8d301-7dcc-48e4-83fd-27a342aafcb1",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-1774000.0",
+        "reverse_pick_id": "F_680dbe32-3fe8-4f7e-8263-7822a3433df6",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-1774000.0",
+        "ticker": "xpof"
+      },
+      {
+        "canonical_key": "us-gaap:AssetImpairmentCharges:C_b85f7d64-d9f2-454c-bab5-9997f270b465:U_USD",
+        "num_duplicates": 3,
+        "forward_pick_id": "F_39979edf-9457-40a6-9b06-07a06ea88952",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "62551000.0",
+        "reverse_pick_id": "F_6decf066-d73f-4e12-86e2-e482005a988d",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "62551000.0",
+        "ticker": "xpof"
+      },
+      {
+        "canonical_key": "us-gaap:DeferredTaxAssetsValuationAllowance:C_1a1e0f07-12fb-4a59-9612-e19210bf69fe:U_USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "F_d2da6118-d5b9-405b-9e49-f34ac9b12904",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "63168000.0",
+        "reverse_pick_id": "F_755f11d1-d9e7-4191-902e-469642bf6ac2",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "63168000.0",
+        "ticker": "xpof"
+      },
+      {
+        "canonical_key": "us-gaap:AvailableForSaleSecuritiesDebtSecurities:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-847",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "151639000.0",
+        "reverse_pick_id": "f-836",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "151639000.0",
+        "ticker": "snps"
+      },
+      {
+        "canonical_key": "us-gaap:AvailableForSaleDebtSecuritiesAmortizedCostBasis:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-846",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "152725000.0",
+        "reverse_pick_id": "f-832",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "152725000.0",
+        "ticker": "snps"
+      },
+      {
+        "canonical_key": "us-gaap:CashAndCashEquivalentsAtCarryingValue:c-5:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-886",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1417608000.0",
+        "reverse_pick_id": "f-37",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1417608000.0",
+        "ticker": "snps"
+      },
+      {
+        "canonical_key": "us-gaap:CashAndCashEquivalentsAtCarryingValue:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-885",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1438913000.0",
+        "reverse_pick_id": "f-36",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1438913000.0",
+        "ticker": "snps"
+      },
+      {
+        "canonical_key": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-891",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1441187000.0",
+        "reverse_pick_id": "f-467",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1441187000.0",
+        "ticker": "snps"
+      },
+      {
+        "canonical_key": "us-gaap:PreferredStockParOrStatedValuePerShare:c-3:usdPerShare",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-89",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "1e-05",
+        "reverse_pick_id": "f-492",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "1e-05",
+        "ticker": "zyme"
+      },
+      {
+        "canonical_key": "us-gaap:PreferredStockSharesAuthorized:c-3:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-91",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "100000000.0",
+        "reverse_pick_id": "f-490",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "100000000.0",
+        "ticker": "zyme"
+      },
+      {
+        "canonical_key": "us-gaap:OperatingLeaseLiability:c-3:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-654",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "25132000.0",
+        "reverse_pick_id": "f-626",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "25132000.0",
+        "ticker": "zyme"
+      },
+      {
+        "canonical_key": "us-gaap:NetIncomeLoss:c-1:usd",
+        "num_duplicates": 3,
+        "forward_pick_id": "f-185",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "-31653000.0",
+        "reverse_pick_id": "f-240",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "-31653000.0",
+        "ticker": "zyme"
+      },
+      {
+        "canonical_key": "zyme:ExchangeableSharesOutstanding:c-3:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-99",
+        "forward_pick_decimals": "INF",
+        "forward_pick_value": "570637.0",
+        "reverse_pick_id": "f-497",
+        "reverse_pick_decimals": "INF",
+        "reverse_pick_value": "570637.0",
+        "ticker": "zyme"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:c-1:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-361",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "231097000.0",
+        "reverse_pick_id": "f-54",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "231097000.0",
+        "ticker": "ame"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfSharesOutstandingBasic:c-3:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-362",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "230126000.0",
+        "reverse_pick_id": "f-55",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "230126000.0",
+        "ticker": "ame"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding:c-3:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-366",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "231229000.0",
+        "reverse_pick_id": "f-57",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "231229000.0",
+        "ticker": "ame"
+      },
+      {
+        "canonical_key": "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding:c-1:shares",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-365",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "232035000.0",
+        "reverse_pick_id": "f-56",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "232035000.0",
+        "ticker": "ame"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-176",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "8968215000.0",
+        "reverse_pick_id": "f-114",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "8968215000.0",
+        "ticker": "ame"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-64:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-447",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "2983262000.0",
+        "reverse_pick_id": "f-599",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "2983262000.0",
+        "ticker": "brx"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest:c-63:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-446",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "2952080000.0",
+        "reverse_pick_id": "f-629",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "2952080000.0",
+        "ticker": "brx"
+      },
+      {
+        "canonical_key": "us-gaap:RestrictedCashAndCashEquivalents:c-63:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-412",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "897000.0",
+        "reverse_pick_id": "f-700",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "897000.0",
+        "ticker": "brx"
+      },
+      {
+        "canonical_key": "us-gaap:CashAndCashEquivalentsAtCarryingValue:c-63:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-410",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "103889000.0",
+        "reverse_pick_id": "f-698",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "103889000.0",
+        "ticker": "brx"
+      },
+      {
+        "canonical_key": "us-gaap:CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-392",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "105870000.0",
+        "reverse_pick_id": "f-386",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "105870000.0",
+        "ticker": "brx"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-3:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-90",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "735200000.0",
+        "reverse_pick_id": "f-263",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "735200000.0",
+        "ticker": "mygn"
+      },
+      {
+        "canonical_key": "us-gaap:ShareBasedCompensationArrangementByShareBasedPaymentAwardAwardVestingPeriod1:c-212:None",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-708",
+        "forward_pick_decimals": null,
+        "forward_pick_value": "P3Y",
+        "reverse_pick_id": "f-706",
+        "reverse_pick_decimals": null,
+        "reverse_pick_value": "P3Y",
+        "ticker": "mygn"
+      },
+      {
+        "canonical_key": "us-gaap:StockholdersEquity:c-4:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-91",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "885800000.0",
+        "reverse_pick_id": "f-237",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "885800000.0",
+        "ticker": "mygn"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-6:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-98",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "183500000.0",
+        "reverse_pick_id": "f-360",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "183500000.0",
+        "ticker": "mygn"
+      },
+      {
+        "canonical_key": "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax:c-7:usd",
+        "num_duplicates": 2,
+        "forward_pick_id": "f-101",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "344200000.0",
+        "reverse_pick_id": "f-399",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "344200000.0",
+        "ticker": "mygn"
+      },
+      {
+        "canonical_key": "us-gaap:InvestmentBuildingAndBuildingImprovements:i_2022-12-31:USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "c106871968",
+        "forward_pick_decimals": "-5",
+        "forward_pick_value": "14332700000.0",
+        "reverse_pick_id": "c106873543",
+        "reverse_pick_decimals": "-5",
+        "reverse_pick_value": "14332700000.0",
+        "ticker": "kim20231231"
+      },
+      {
+        "canonical_key": "us-gaap:RealEstateInvestmentPropertyAtCost:i_2023-12-31:USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "c106871969",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "18937794000.0",
+        "reverse_pick_id": "c106873544",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "18937794000.0",
+        "ticker": "kim20231231"
+      },
+      {
+        "canonical_key": "us-gaap:OperatingLeaseLeaseIncome:d_2023-01-01_2023-12-31:USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "c106872032",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "1767057000.0",
+        "reverse_pick_id": "c106873991",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "1767057000.0",
+        "ticker": "kim20231231"
+      },
+      {
+        "canonical_key": "us-gaap:RealEstateInvestmentPropertyNet:i_2023-12-31:USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "c106871973",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "15094925000.0",
+        "reverse_pick_id": "c106873548",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "15094925000.0",
+        "ticker": "kim20231231"
+      },
+      {
+        "canonical_key": "us-gaap:RealEstateInvestmentPropertyAccumulatedDepreciation:i_2023-12-31:USD",
+        "num_duplicates": 2,
+        "forward_pick_id": "c106871971",
+        "forward_pick_decimals": "-3",
+        "forward_pick_value": "3842869000.0",
+        "reverse_pick_id": "c106873546",
+        "reverse_pick_decimals": "-3",
+        "reverse_pick_value": "3842869000.0",
+        "ticker": "kim20231231"
+      }
+    ],
+    "all_different_examples": [
+      {
+        "canonical_key": "us-gaap:IncomeLossFromDiscontinuedOperationsNetOfTax:C_7373308f-05a5-4b8c-810f-87708bb36e6f:U_USD",
+        "num_duplicates": 2,
+        "old_pick_id": "F_90caad3b-994d-427a-b0cc-bbc719e6cb22",
+        "old_pick_decimals": "-6",
+        "old_pick_value": "-0.0",
+        "new_pick_id": "F_7dab05fa-2b11-4b9b-9ac5-bece2b70ce85",
+        "new_pick_decimals": "-6",
+        "new_pick_value": "0.0",
+        "is_old_nondeterministic": false,
+        "arelle_consistent": true,
+        "arelle_complete": false,
+        "reason": null,
+        "ticker": "dvn"
+      }
+    ]
+  },
+  "per_filing": [
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/109177/000119312523016335/d428749d10ka_htm.xml",
+      "ticker": "d428749d10ka",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 0,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 0
+      },
+      "item5": {
+        "total_facts": 53,
+        "facts_with_duplicates": 0,
+        "duplicate_groups": 0,
+        "same_primary_selected": 0,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 0,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1584509/000158450923000237/cik0-20230929_htm.xml",
+      "ticker": "cik0",
+      "time_seconds": 0.7,
+      "item4": {
+        "both_match": 147,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 147
+      },
+      "item5": {
+        "total_facts": 1934,
+        "facts_with_duplicates": 370,
+        "duplicate_groups": 146,
+        "same_primary_selected": 146,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 123,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/34903/000003490323000064/frt-20230930_htm.xml",
+      "ticker": "frt",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 68,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 68
+      },
+      "item5": {
+        "total_facts": 1303,
+        "facts_with_duplicates": 227,
+        "duplicate_groups": 108,
+        "same_primary_selected": 108,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 108,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1687229/000168722923000081/invh-20230930_htm.xml",
+      "ticker": "invh",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 97,
+        "both_nonmatch": 16,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 113
+      },
+      "item5": {
+        "total_facts": 1290,
+        "facts_with_duplicates": 251,
+        "duplicate_groups": 118,
+        "same_primary_selected": 118,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 118,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1086222/000108622223000187/akam-20230331_htm.xml",
+      "ticker": "akam",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 64,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 64
+      },
+      "item5": {
+        "total_facts": 727,
+        "facts_with_duplicates": 99,
+        "duplicate_groups": 44,
+        "same_primary_selected": 44,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 40,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1786352/000178635223000009/bill-20221231_htm.xml",
+      "ticker": "bill",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 96,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 96
+      },
+      "item5": {
+        "total_facts": 1159,
+        "facts_with_duplicates": 107,
+        "duplicate_groups": 52,
+        "same_primary_selected": 52,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 52,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1821806/000095017023018002/lesl-20230401_htm.xml",
+      "ticker": "lesl",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 73,
+        "both_nonmatch": 3,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 76
+      },
+      "item5": {
+        "total_facts": 727,
+        "facts_with_duplicates": 103,
+        "duplicate_groups": 49,
+        "same_primary_selected": 49,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 49,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1274494/000127449424000038/fslr-20240930_htm.xml",
+      "ticker": "fslr",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 81,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 81
+      },
+      "item5": {
+        "total_facts": 1271,
+        "facts_with_duplicates": 245,
+        "duplicate_groups": 112,
+        "same_primary_selected": 112,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 109,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/872589/000180422023000016/regn-20230331_htm.xml",
+      "ticker": "regn",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 76,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 76
+      },
+      "item5": {
+        "total_facts": 668,
+        "facts_with_duplicates": 48,
+        "duplicate_groups": 21,
+        "same_primary_selected": 21,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 21,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1699838/000169983825000006/cflt-20250630_htm.xml",
+      "ticker": "cflt",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 89,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 89
+      },
+      "item5": {
+        "total_facts": 1111,
+        "facts_with_duplicates": 175,
+        "duplicate_groups": 80,
+        "same_primary_selected": 80,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 69,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1704711/000170471124000157/fnko-20240930_htm.xml",
+      "ticker": "fnko",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 54,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 54
+      },
+      "item5": {
+        "total_facts": 656,
+        "facts_with_duplicates": 163,
+        "duplicate_groups": 74,
+        "same_primary_selected": 74,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 57,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1520262/000095017023055178/alks-20230930_htm.xml",
+      "ticker": "alks",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 61,
+        "both_nonmatch": 2,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 63
+      },
+      "item5": {
+        "total_facts": 869,
+        "facts_with_duplicates": 98,
+        "duplicate_groups": 46,
+        "same_primary_selected": 46,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 43,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1447669/000144766924000034/twlo-20231231_htm.xml",
+      "ticker": "twlo",
+      "time_seconds": 0.6,
+      "item4": {
+        "both_match": 112,
+        "both_nonmatch": 4,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 116
+      },
+      "item5": {
+        "total_facts": 1600,
+        "facts_with_duplicates": 301,
+        "duplicate_groups": 136,
+        "same_primary_selected": 136,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 128,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/103379/000010337925000036/vfc-20250628_htm.xml",
+      "ticker": "vfc",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 83,
+        "both_nonmatch": 2,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 85
+      },
+      "item5": {
+        "total_facts": 1061,
+        "facts_with_duplicates": 195,
+        "duplicate_groups": 83,
+        "same_primary_selected": 83,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 81,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1177609/000117760923000022/five-20230729_htm.xml",
+      "ticker": "five",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 56,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 56
+      },
+      "item5": {
+        "total_facts": 592,
+        "facts_with_duplicates": 77,
+        "duplicate_groups": 36,
+        "same_primary_selected": 36,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 35,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1099800/000109980023000005/ew-20221231_htm.xml",
+      "ticker": "ew",
+      "time_seconds": 0.7,
+      "item4": {
+        "both_match": 200,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 200
+      },
+      "item5": {
+        "total_facts": 2034,
+        "facts_with_duplicates": 255,
+        "duplicate_groups": 108,
+        "same_primary_selected": 108,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 108,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/78003/000007800323000024/pfe-20221231_htm.xml",
+      "ticker": "pfe",
+      "time_seconds": 1.2,
+      "item4": {
+        "both_match": 180,
+        "both_nonmatch": 22,
+        "old_match_new_nonmatch": 42,
+        "old_nonmatch_new_match": 6,
+        "new_undetermined": 0,
+        "total_summations": 250
+      },
+      "item5": {
+        "total_facts": 3239,
+        "facts_with_duplicates": 288,
+        "duplicate_groups": 130,
+        "same_primary_selected": 130,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 125,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1532961/000162828023016102/nvee-20230401_htm.xml",
+      "ticker": "nvee",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 64,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 64
+      },
+      "item5": {
+        "total_facts": 695,
+        "facts_with_duplicates": 104,
+        "duplicate_groups": 45,
+        "same_primary_selected": 45,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 45,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019323000077/aapl-20230701_htm.xml",
+      "ticker": "aapl",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 104,
+        "both_nonmatch": 24,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 128
+      },
+      "item5": {
+        "total_facts": 835,
+        "facts_with_duplicates": 133,
+        "duplicate_groups": 63,
+        "same_primary_selected": 63,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 63,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1177394/000117739424000075/snx-20240831_htm.xml",
+      "ticker": "snx",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 52,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 52
+      },
+      "item5": {
+        "total_facts": 797,
+        "facts_with_duplicates": 133,
+        "duplicate_groups": 64,
+        "same_primary_selected": 64,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 59,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1065837/000095017024120080/skx-20240930_htm.xml",
+      "ticker": "skx",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 0,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 0
+      },
+      "item5": {
+        "total_facts": 1019,
+        "facts_with_duplicates": 172,
+        "duplicate_groups": 80,
+        "same_primary_selected": 80,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 77,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/16058/000162828025038739/caci-20250630_htm.xml",
+      "ticker": "caci",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 98,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 98
+      },
+      "item5": {
+        "total_facts": 1224,
+        "facts_with_duplicates": 218,
+        "duplicate_groups": 91,
+        "same_primary_selected": 91,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 89,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630723000023/kmi-20221231_htm.xml",
+      "ticker": "kmi",
+      "time_seconds": 0.9,
+      "item4": {
+        "both_match": 201,
+        "both_nonmatch": 4,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 205
+      },
+      "item5": {
+        "total_facts": 2791,
+        "facts_with_duplicates": 351,
+        "duplicate_groups": 147,
+        "same_primary_selected": 147,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 147,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1575515/000095017024018768/sfm-20231231_htm.xml",
+      "ticker": "sfm",
+      "time_seconds": 0.6,
+      "item4": {
+        "both_match": 81,
+        "both_nonmatch": 6,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 87
+      },
+      "item5": {
+        "total_facts": 1236,
+        "facts_with_duplicates": 224,
+        "duplicate_groups": 102,
+        "same_primary_selected": 102,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 93,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062024000041/auph-20231231_htm.xml",
+      "ticker": "auph",
+      "time_seconds": 0.0,
+      "item4": {
+        "both_match": 0,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 0
+      },
+      "item5": {
+        "total_facts": 35,
+        "facts_with_duplicates": 0,
+        "duplicate_groups": 0,
+        "same_primary_selected": 0,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 0,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1090012/000095017023002852/dvn-20221231_htm.xml",
+      "ticker": "dvn",
+      "time_seconds": 0.7,
+      "item4": {
+        "both_match": 115,
+        "both_nonmatch": 12,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 127
+      },
+      "item5": {
+        "total_facts": 1956,
+        "facts_with_duplicates": 236,
+        "duplicate_groups": 112,
+        "same_primary_selected": 111,
+        "different_primary_selected": 1,
+        "old_nondeterministic_groups": 109,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1428336/000142833625000022/hqy-20250430_htm.xml",
+      "ticker": "hqy",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 48,
+        "both_nonmatch": 10,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 58
+      },
+      "item5": {
+        "total_facts": 479,
+        "facts_with_duplicates": 50,
+        "duplicate_groups": 23,
+        "same_primary_selected": 23,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 19,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/49826/000004982625000014/itw-20250331_htm.xml",
+      "ticker": "itw",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 40,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 40
+      },
+      "item5": {
+        "total_facts": 571,
+        "facts_with_duplicates": 122,
+        "duplicate_groups": 55,
+        "same_primary_selected": 55,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 55,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/711404/000071140423000045/coo-20230731_htm.xml",
+      "ticker": "coo",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 59,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 59
+      },
+      "item5": {
+        "total_facts": 806,
+        "facts_with_duplicates": 146,
+        "duplicate_groups": 67,
+        "same_primary_selected": 67,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 67,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1510295/000151029523000012/mpc-20221231_htm.xml",
+      "ticker": "mpc",
+      "time_seconds": 0.8,
+      "item4": {
+        "both_match": 154,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 154
+      },
+      "item5": {
+        "total_facts": 2475,
+        "facts_with_duplicates": 354,
+        "duplicate_groups": 162,
+        "same_primary_selected": 162,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 162,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/87347/000095017025007638/slb-20241231_htm.xml",
+      "ticker": "slb",
+      "time_seconds": 0.6,
+      "item4": {
+        "both_match": 0,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 0
+      },
+      "item5": {
+        "total_facts": 2041,
+        "facts_with_duplicates": 256,
+        "duplicate_groups": 118,
+        "same_primary_selected": 118,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 115,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/107687/000010768723000028/wgo-20230826_htm.xml",
+      "ticker": "wgo",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 126,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 126
+      },
+      "item5": {
+        "total_facts": 1288,
+        "facts_with_duplicates": 251,
+        "duplicate_groups": 108,
+        "same_primary_selected": 108,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 108,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/868857/000110465923057746/acm-20230331x10q_htm.xml",
+      "ticker": "acm",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 113,
+        "both_nonmatch": 1,
+        "old_match_new_nonmatch": 1,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 115
+      },
+      "item5": {
+        "total_facts": 1225,
+        "facts_with_duplicates": 131,
+        "duplicate_groups": 62,
+        "same_primary_selected": 62,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 39,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/97210/000095017025062503/ter-20250330_htm.xml",
+      "ticker": "ter",
+      "time_seconds": 0.6,
+      "item4": {
+        "both_match": 0,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 0
+      },
+      "item5": {
+        "total_facts": 1423,
+        "facts_with_duplicates": 190,
+        "duplicate_groups": 90,
+        "same_primary_selected": 90,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 86,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/319201/000031920123000020/klac-20230331_htm.xml",
+      "ticker": "klac",
+      "time_seconds": 0.6,
+      "item4": {
+        "both_match": 142,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 142
+      },
+      "item5": {
+        "total_facts": 1869,
+        "facts_with_duplicates": 281,
+        "duplicate_groups": 123,
+        "same_primary_selected": 123,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 119,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1410384/000141038424000197/qtwo-20240930_htm.xml",
+      "ticker": "qtwo",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 78,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 78
+      },
+      "item5": {
+        "total_facts": 831,
+        "facts_with_duplicates": 83,
+        "duplicate_groups": 40,
+        "same_primary_selected": 40,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 38,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/901491/000162828023015436/pzza-20230326_htm.xml",
+      "ticker": "pzza",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 46,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 46
+      },
+      "item5": {
+        "total_facts": 759,
+        "facts_with_duplicates": 152,
+        "duplicate_groups": 72,
+        "same_primary_selected": 72,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 68,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/61986/000095017023058333/mtw-20230930_htm.xml",
+      "ticker": "mtw",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 123,
+        "both_nonmatch": 21,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 144
+      },
+      "item5": {
+        "total_facts": 1107,
+        "facts_with_duplicates": 200,
+        "duplicate_groups": 93,
+        "same_primary_selected": 93,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 93,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1166691/000116669125000011/cmcsa-20241231_htm.xml",
+      "ticker": "cmcsa",
+      "time_seconds": 0.6,
+      "item4": {
+        "both_match": 87,
+        "both_nonmatch": 4,
+        "old_match_new_nonmatch": 24,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 115
+      },
+      "item5": {
+        "total_facts": 1483,
+        "facts_with_duplicates": 251,
+        "duplicate_groups": 112,
+        "same_primary_selected": 112,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 100,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/71691/000007169123000034/nyt-20230930_htm.xml",
+      "ticker": "nyt",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 134,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 134
+      },
+      "item5": {
+        "total_facts": 1310,
+        "facts_with_duplicates": 238,
+        "duplicate_groups": 98,
+        "same_primary_selected": 98,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 92,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1447669/000144766923000171/twlo-20230630_htm.xml",
+      "ticker": "twlo",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 101,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 101
+      },
+      "item5": {
+        "total_facts": 1125,
+        "facts_with_duplicates": 238,
+        "duplicate_groups": 111,
+        "same_primary_selected": 111,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 98,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630723000036/kmi-20230331_htm.xml",
+      "ticker": "kmi",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 82,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 82
+      },
+      "item5": {
+        "total_facts": 964,
+        "facts_with_duplicates": 110,
+        "duplicate_groups": 51,
+        "same_primary_selected": 51,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 51,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837025001441/hrmy-20241231x10k_htm.xml",
+      "ticker": "hrmy",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 0,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 0
+      },
+      "item5": {
+        "total_facts": 1033,
+        "facts_with_duplicates": 128,
+        "duplicate_groups": 60,
+        "same_primary_selected": 60,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 59,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1802156/000095017025039541/xpof-20241231_htm.xml",
+      "ticker": "xpof",
+      "time_seconds": 0.6,
+      "item4": {
+        "both_match": 0,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 0
+      },
+      "item5": {
+        "total_facts": 2122,
+        "facts_with_duplicates": 477,
+        "duplicate_groups": 205,
+        "same_primary_selected": 205,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 205,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/883241/000088324123000019/snps-20231031_htm.xml",
+      "ticker": "snps",
+      "time_seconds": 0.6,
+      "item4": {
+        "both_match": 141,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 141
+      },
+      "item5": {
+        "total_facts": 1755,
+        "facts_with_duplicates": 181,
+        "duplicate_groups": 85,
+        "same_primary_selected": 85,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 79,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1937653/000193765324000028/zyme-20240331_htm.xml",
+      "ticker": "zyme",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 52,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 52
+      },
+      "item5": {
+        "total_facts": 706,
+        "facts_with_duplicates": 85,
+        "duplicate_groups": 41,
+        "same_primary_selected": 41,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 41,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1037868/000103786824000030/ame-20240331_htm.xml",
+      "ticker": "ame",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 48,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 48
+      },
+      "item5": {
+        "total_facts": 572,
+        "facts_with_duplicates": 56,
+        "duplicate_groups": 24,
+        "same_primary_selected": 24,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 21,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/1581068/000158106825000030/brx-20250630_htm.xml",
+      "ticker": "brx",
+      "time_seconds": 0.5,
+      "item4": {
+        "both_match": 160,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 160
+      },
+      "item5": {
+        "total_facts": 1312,
+        "facts_with_duplicates": 180,
+        "duplicate_groups": 78,
+        "same_primary_selected": 78,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 76,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/899923/000089992323000058/mygn-20230630_htm.xml",
+      "ticker": "mygn",
+      "time_seconds": 0.4,
+      "item4": {
+        "both_match": 76,
+        "both_nonmatch": 0,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 76
+      },
+      "item5": {
+        "total_facts": 841,
+        "facts_with_duplicates": 110,
+        "duplicate_groups": 52,
+        "same_primary_selected": 52,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 52,
+        "new_inconsistent_groups": 0
+      }
+    },
+    {
+      "url": "https://www.sec.gov/Archives/edgar/data/879101/000143774924005407/kim20231231_10k_htm.xml",
+      "ticker": "kim20231231",
+      "time_seconds": 1.8,
+      "item4": {
+        "both_match": 113,
+        "both_nonmatch": 24,
+        "old_match_new_nonmatch": 0,
+        "old_nonmatch_new_match": 0,
+        "new_undetermined": 0,
+        "total_summations": 137
+      },
+      "item5": {
+        "total_facts": 7862,
+        "facts_with_duplicates": 312,
+        "duplicate_groups": 141,
+        "same_primary_selected": 139,
+        "different_primary_selected": 0,
+        "old_nondeterministic_groups": 128,
+        "new_inconsistent_groups": 0
+      }
+    }
+  ],
+  "total_seconds": 30.2,
+  "errors": 0
+}
