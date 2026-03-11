@@ -417,93 +417,93 @@ class TranscriptsManager(DataSourceManager):
     
     def start(self):
         try:
-            # Initialize schedule at startup (Should this be conditional too? Seems safe to run always)
-            self._initialize_transcript_schedule()
+            self.processor.earnings_call_client = self.earnings_call_client
+            self.processor._last_rescan_hour = None
 
-            # Start processor thread (Always needed to process potential live scheduled items)
+            if feature_flags.ENABLE_LIVE_DATA:
+                if self._initialize_transcript_schedule():
+                    self.processor.last_date = datetime.now(
+                        pytz.timezone('America/New_York')
+                    ).date()
+
             self.processor_thread = threading.Thread(
-                target=self.processor.process_all_transcripts, 
+                target=self.processor.process_all_transcripts,
                 daemon=True
             )
-            
-            # Start returns processor thread (Always needed)
+
             self.returns_thread = threading.Thread(
-                target=self.returns_processor.process_all_returns, 
+                target=self.returns_processor.process_all_returns,
                 daemon=True
             )
-            
+
             threads_to_start = [self.processor_thread, self.returns_thread]
 
-            # --- CONDITIONALLY START HISTORICAL THREAD ---
             if feature_flags.ENABLE_HISTORICAL_DATA:
-                 self.logger.info("Historical data enabled, starting historical transcript fetch thread.")
-                 self.historical_thread = threading.Thread(
-                     target=self._fetch_historical_data,
-                     daemon=True
-                 )
-                 threads_to_start.append(self.historical_thread)
+                self.logger.info("Historical data enabled, starting historical transcript fetch thread.")
+                self.historical_thread = threading.Thread(
+                    target=self._fetch_historical_data,
+                    daemon=True
+                )
+                threads_to_start.append(self.historical_thread)
             else:
-                 self.logger.info("Historical data disabled, historical transcript fetch thread will not be started.")
-            # ------------------------------------------
-            
-            # Start threads
-            # self.processor_thread.start()
-            # self.returns_thread.start()
-            # self.historical_thread.start()
+                self.logger.info("Historical data disabled, historical transcript fetch thread will not be started.")
+
             for thread in threads_to_start:
-                 thread.start()
-            
-            self.logger.info(f"Started transcript processing threads")
+                thread.start()
+
+            self.logger.info("Started transcript processing threads")
             return True
-            
+
         except Exception as e:
             self.logger.error(f"Error starting {self.source_type}: {e}", exc_info=True)
             return False
 
     def _initialize_transcript_schedule(self):
-        """Schedule transcripts for today"""
+        """Schedule transcripts for today. Returns True on success, False on failure."""
         try:
-            # Use Eastern timezone consistently
             eastern_tz = pytz.timezone('America/New_York')
             today = datetime.now(eastern_tz).date()
-            
-            # Get events (already in Eastern time) and filter to our universe
+
             events = self.earnings_call_client.get_earnings_events(today)
             universe = set(s.upper() for s in self.redis.get_symbols())
             relevant = [e for e in events if e.symbol.upper() in universe]
-            
+
             if not relevant:
-                return
-                
-            # Set up Redis pipeline and clear previous schedule
-            pipe = self.redis.live_client.client.pipeline()
+                return True
+
+            schedule_key = "admin:transcripts:schedule"
             notification_channel = "admin:transcripts:notifications"
-            pipe.delete("admin:transcripts:schedule")
-            
-            # Schedule each relevant event
+            stale_cutoff = int(time.time()) - 48 * 3600
+
+            pruned = self.redis.live_client.client.zcount(schedule_key, 0, stale_cutoff)
+            if pruned:
+                self.logger.info(f"Pruning {pruned} stale schedule entries older than 48h")
+
+            pipe = self.redis.live_client.client.pipeline()
+            pipe.zremrangebyscore(schedule_key, 0, stale_cutoff)
+
             for event in relevant:
-                # Add 30 minutes to conference time for the processing schedule
-                # No timezone conversion needed since events are already in Eastern time
                 conf_date_eastern = event.conference_date
                 process_time = int(conf_date_eastern.timestamp() + 1800)
-                
-                # Create event key using canonical DATETIME format (matches Redis storage keys)
                 event_key = RedisKeys.get_transcript_key_id(event.symbol, conf_date_eastern)
-                pipe.zadd("admin:transcripts:schedule", {event_key: process_time})
-                
-                # Log with clear human-readable times
-                self.logger.info(f"Scheduled {event_key} - Conference: {conf_date_eastern.strftime('%Y-%m-%d %H:%M:%S %Z')}, Processing: {datetime.fromtimestamp(process_time, eastern_tz).strftime('%Y-%m-%d %H:%M:%S %Z')}")
-                
-                # Publish notification
+
+                pipe.zadd(schedule_key, {event_key: process_time})
+                self.logger.info(
+                    f"Scheduled {event_key} - Conference: "
+                    f"{conf_date_eastern.strftime('%Y-%m-%d %H:%M:%S %Z')}, "
+                    f"Processing: {datetime.fromtimestamp(process_time, eastern_tz).strftime('%Y-%m-%d %H:%M:%S %Z')}"
+                )
                 pipe.publish(notification_channel, event_key)
-            
-            # Execute all Redis commands and send final notification
+
             pipe.execute()
             self.redis.live_client.client.publish(notification_channel, "schedule_updated")
-            
+
             self.logger.info(f"Scheduled {len(relevant)} transcripts for {today}")
+            return True
+
         except Exception as e:
             self.logger.error(f"Error scheduling transcripts: {e}", exc_info=True)
+            return False
 
 
 

@@ -55,7 +55,7 @@ A key difference exists in how live data enters the system:
 
 *   **Transcripts: Scheduled/Polled Fetch**
     *   **No WebSocket.** Relies on fetching data based on known schedules or polling.
-    *   **Scheduling:** **`TranscriptsManager._initialize_transcript_schedule`** fetches *today's* earnings calendar, schedules processing times (call time + 30 min) in Redis ZSET (**`admin:transcripts:schedule`**). This runs on startup regardless of flags (considered safe).
+    *   **Scheduling:** **`TranscriptsManager._initialize_transcript_schedule`** fetches *today's* earnings calendar, schedules processing times (call time + 30 min) in Redis ZSET (**`admin:transcripts:schedule`**). Gated behind `ENABLE_LIVE_DATA` — historical-only runs do not touch the live schedule. Uses additive `zadd` + stale pruning (48h cutoff) instead of destructive delete+reseed. **`TranscriptProcessor._refresh_daily_schedule`** re-populates the schedule on date transitions and every 2 hours during 7AM–5PM ET to catch late calendar additions.
     *   **Fetching Trigger:** A background thread started by **`TranscriptProcessor`** (`_run_transcript_scheduling`) monitors the **`admin:transcripts:schedule`** ZSET and triggers fetching (`_fetch_and_process_transcript`) when an item's scheduled time is reached.
     *   **Result:** Higher latency, dependent on scheduling accuracy and background thread timing.
 

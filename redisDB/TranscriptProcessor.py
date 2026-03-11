@@ -24,7 +24,9 @@ class TranscriptProcessor(BaseProcessor):
         self.processed_set = "admin:transcripts:processed"
         self.ny_tz = pytz.timezone('America/New_York')
         self.last_date = None
-        
+        self.earnings_call_client = None
+        self._last_rescan_hour = None
+
         # Scheduling thread control
         self.scheduling_thread = None
         self.scheduling_thread_running = False
@@ -75,8 +77,18 @@ class TranscriptProcessor(BaseProcessor):
                     # Date transition check (once per day)
                     today = now.date()
                     if self.last_date != today:
-                        self.last_date = today
                         self.logger.info(f"Date transition detected: {today}")
+                        if self._refresh_daily_schedule(today):
+                            self.last_date = today
+                            self._last_rescan_hour = None
+
+                    # Intra-day rescan every 2h during 7AM-5PM ET (catches late calendar adds)
+                    elif (7 <= now.hour <= 17
+                          and now.hour % 2 == 1
+                          and self._last_rescan_hour != now.hour):
+                        self.logger.info(f"Intra-day calendar rescan at {now.strftime('%H:%M %Z')}")
+                        if self._refresh_daily_schedule(today):
+                            self._last_rescan_hour = now.hour
                     
                     # Process any due transcripts
                     self._process_due_transcripts(now_ts)
@@ -324,6 +336,48 @@ class TranscriptProcessor(BaseProcessor):
         except Exception as e:
             self.logger.error(f"Error in sleep operation: {e}", exc_info=True)
             time.sleep(1)  # Short error recovery sleep
+
+    def _refresh_daily_schedule(self, today):
+        """Returns True on success, False on failure."""
+        if self.earnings_call_client is None:
+            self.logger.error("earnings_call_client not injected")
+            return False
+
+        try:
+            events = self.earnings_call_client.get_earnings_events(today)
+            universe = set(s.upper() for s in self.event_trader_redis.get_symbols())
+            relevant = [e for e in events if e.symbol.upper() in universe]
+
+            if not relevant:
+                self.logger.info(f"No earnings events in universe for {today}")
+                return True
+
+            scheduled = 0
+            pipe = self.live_client.client.pipeline()
+            for event in relevant:
+                conf_date_eastern = event.conference_date
+                process_time = int(conf_date_eastern.timestamp() + 1800)
+                event_key = RedisKeys.get_transcript_key_id(event.symbol, conf_date_eastern)
+
+                if self.live_client.client.sismember(self.processed_set, event_key):
+                    continue
+
+                pipe.zadd(self.schedule_key, {event_key: process_time})
+                scheduled += 1
+                self.logger.info(
+                    f"Scheduled {event_key} - Conference: "
+                    f"{conf_date_eastern.strftime('%Y-%m-%d %H:%M:%S %Z')}, "
+                    f"Processing: {datetime.fromtimestamp(process_time, self.ny_tz).strftime('%Y-%m-%d %H:%M:%S %Z')}"
+                )
+
+            pipe.execute()
+            self.live_client.client.publish(self.notification_channel, "schedule_updated")
+            self.logger.info(f"Scheduled {scheduled} transcripts for {today}")
+            return True
+
+        except Exception as e:
+            self.logger.error(f"Error refreshing daily schedule: {e}", exc_info=True)
+            return False
 
     def _standardize_fields(self, content: dict) -> dict:
         """Transform transcript fields to standard format"""
