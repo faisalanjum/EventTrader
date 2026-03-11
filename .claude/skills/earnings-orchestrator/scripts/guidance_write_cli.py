@@ -177,8 +177,9 @@ def _apply_member_map(items, member_map, source_label="map", aliases=None):
             # Clear first — CLI is sole authority, discard any agent-provided IDs
             item['member_u_ids'] = []
             norm_seg = normalize_for_member_match(seg)
-            # Alias redirect: e.g. "creativecloud" → "digitalmedia"
-            norm_seg = aliases.get(norm_seg, norm_seg)
+            # Prefer direct match; only fall back to alias if no direct hit
+            if norm_seg not in member_map:
+                norm_seg = aliases.get(norm_seg, norm_seg)
             if norm_seg in member_map:
                 item['member_u_ids'] = member_map[norm_seg]
                 matched += 1

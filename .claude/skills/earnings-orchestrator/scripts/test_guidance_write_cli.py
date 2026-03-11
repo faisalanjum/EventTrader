@@ -506,6 +506,19 @@ def test_apply_member_map_alias_redirect():
     assert items[1]['member_u_ids'] == ['868365:DigitalExperienceMember']
 
 
+def test_apply_member_map_direct_match_preferred_over_alias():
+    """When XBRL updates and direct match exists, alias is skipped (future-safe)."""
+    member_map = {
+        'datafoundation': ['1108524:crm:DataFoundationMember'],  # new XBRL
+        'data': ['1108524:crm:DataMember'],  # old XBRL
+    }
+    aliases = {'datafoundation': 'data'}  # would redirect to old if applied
+    items = [_make_raw_item(segment='Data Foundation', member_u_ids=[])]
+    _apply_member_map(items, member_map, aliases=aliases)
+    # Direct match wins — should get NEW member, not old
+    assert items[0]['member_u_ids'] == ['1108524:crm:DataFoundationMember']
+
+
 def test_apply_member_map_alias_missing_file_no_crash():
     """Missing alias file returns empty dict, no crash."""
     from guidance_write_cli import _load_segment_aliases
