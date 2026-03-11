@@ -67,7 +67,7 @@ from guidance_ids import (
     normalize_for_member_match,
     slug,
 )
-from concept_resolver import apply_concept_resolution, load_concept_cache
+from concept_resolver import apply_concept_resolution, load_concept_cache, resolve_concept_family
 import guidance_writer
 from guidance_writer import write_guidance_batch, write_guidance_item, create_guidance_constraints
 
@@ -155,6 +155,68 @@ def _ensure_ids(item, fye_month=None):
     return item
 
 
+_ALIAS_DIR = "/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts/segment_aliases"
+
+
+def _load_segment_aliases(ticker):
+    """Load optional per-ticker segment alias map from repo. Returns {} if missing."""
+    try:
+        with open(f'{_ALIAS_DIR}/{ticker}.json') as f:
+            return json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _apply_member_map(items, member_map, source_label="map", aliases=None):
+    """Apply a normalized member map to items. Clears then repopulates member_u_ids."""
+    aliases = aliases or {}
+    matched = 0
+    for item in items:
+        seg = item.get('segment', 'Total')
+        if seg and seg != 'Total':
+            # Clear first — CLI is sole authority, discard any agent-provided IDs
+            item['member_u_ids'] = []
+            norm_seg = normalize_for_member_match(seg)
+            # Alias redirect: e.g. "creativecloud" → "digitalmedia"
+            norm_seg = aliases.get(norm_seg, norm_seg)
+            if norm_seg in member_map:
+                item['member_u_ids'] = member_map[norm_seg]
+                matched += 1
+    if matched:
+        logger.warning("Member resolution (%s): resolved %d items", source_label, matched)
+    return matched
+
+
+def _build_live_member_map(manager, ticker):
+    """Build member map via live CIK query (write-mode fallback when precomputed map missing)."""
+    try:
+        cik_rec = manager.execute_cypher_query(
+            "MATCH (c:Company {ticker: $ticker}) RETURN c.cik AS cik LIMIT 1",
+            {'ticker': ticker},
+        )
+        if not cik_rec:
+            return None
+        cik = str(cik_rec['cik'])
+        cik_stripped = cik.lstrip('0') or '0'
+        member_rows = manager.execute_cypher_query_all(
+            "MATCH (m:Member) "
+            "WHERE m.u_id STARTS WITH $cp OR m.u_id STARTS WITH $cpp "
+            "RETURN m.label AS label, m.qname AS qname, "
+            "       head(collect(m.u_id)) AS u_id",
+            {'cp': cik_stripped + ':', 'cpp': cik + ':'},
+        )
+        member_map = {}
+        for row in member_rows:
+            if row['label']:
+                norm = normalize_for_member_match(row['label'])
+                if norm:
+                    member_map.setdefault(norm, []).append(row['u_id'])
+        return member_map
+    except Exception as e:
+        logger.warning("Live member map build failed (non-fatal): %s", e)
+        return None
+
+
 def main():
     if len(sys.argv) < 2:
         print(json.dumps({"error": "Usage: guidance_write_cli.py <input.json> [--dry-run|--write]"}))
@@ -220,6 +282,29 @@ def main():
         if not item.get('xbrl_qname') and label_key in concept_map:
             item['xbrl_qname'] = concept_map[label_key]
 
+    # Concept family resolution: assign concept_family_qname to each item.
+    # Runs after concept resolution + inheritance so xbrl_qname is finalized.
+    for item in valid_items:
+        label_slug = item.get('label_slug') or slug(item.get('label', ''))
+        item['concept_family_qname'] = resolve_concept_family(
+            label_slug, item.get('xbrl_qname')
+        )
+
+    # Member resolution: precomputed CIK-based member map (works in both dry-run and write).
+    # Primary source — always overwrites agent-provided member_u_ids.
+    # In write mode, if the map file is missing, falls back to live CIK query (self-healing).
+    try:
+        with open(f'/tmp/member_map_{ticker}.json') as f:
+            member_map = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        member_map = None
+
+    # Optional per-ticker aliases for semantic renames (e.g. "creativecloud" → "digitalmedia")
+    segment_aliases = _load_segment_aliases(ticker)
+
+    if member_map is not None:
+        _apply_member_map(valid_items, member_map, "precomputed map", aliases=segment_aliases)
+
     if dry_run:
         # Dry-run: validate + build params, no connection needed
         results = []
@@ -242,43 +327,12 @@ def main():
             print(json.dumps({"error": f"Neo4j connection failed: {e}"}))
             sys.exit(1)
 
-        # Member matching: resolve segment text → Member u_ids (code-level, authoritative).
-        # Only in write mode (needs Neo4j). Always overwrites LLM-provided u_ids.
-        try:
-            cik_rec = manager.execute_cypher_query(
-                "MATCH (c:Company {ticker: $ticker}) RETURN c.cik AS cik LIMIT 1",
-                {'ticker': ticker},
-            )
-            if cik_rec:
-                cik = str(cik_rec['cik'])
-                cik_stripped = cik.lstrip('0') or '0'
-                member_rows = manager.execute_cypher_query_all(
-                    "MATCH (m:Member) "
-                    "WHERE m.u_id STARTS WITH $cp OR m.u_id STARTS WITH $cpp "
-                    "RETURN m.label AS label, m.qname AS qname, "
-                    "       head(collect(m.u_id)) AS u_id",
-                    {'cp': cik_stripped + ':', 'cpp': cik + ':'},
-                )
-                member_lookup = {}
-                for row in member_rows:
-                    if row['label']:
-                        norm = normalize_for_member_match(row['label'])
-                        if norm:
-                            member_lookup.setdefault(norm, []).append(row['u_id'])
-                matched = 0
-                for item in valid_items:
-                    seg = item.get('segment', 'Total')
-                    if seg and seg != 'Total':
-                        norm_seg = normalize_for_member_match(seg)
-                        if norm_seg in member_lookup:
-                            item['member_u_ids'] = member_lookup[norm_seg]
-                            matched += 1
-                if matched:
-                    logger.warning("Member matching: resolved %d items via code fallback", matched)
-            else:
-                logger.warning("Member matching: company %s not found in graph", ticker)
-        except Exception as e:
-            logger.warning("Member matching fallback failed (non-fatal): %s", e)
+        # Write-mode fallback: if precomputed member_map was missing, build it live.
+        # This ensures write mode is self-healing even if warmup was skipped or /tmp cleaned.
+        if member_map is None:
+            live_map = _build_live_member_map(manager, ticker)
+            if live_map is not None:
+                _apply_member_map(valid_items, live_map, "live CIK fallback", aliases=segment_aliases)
 
         try:
             create_guidance_constraints(manager)

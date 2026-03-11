@@ -10,6 +10,7 @@ from concept_resolver import (
     FORCE_NULL_CONCEPT,
     UNHANDLED_CONCEPT,
     apply_concept_resolution,
+    resolve_concept_family,
     resolve_xbrl_qname,
 )
 
@@ -80,7 +81,8 @@ def test_apply_fills_missing_qname():
     assert items[0]['xbrl_qname'] == 'us-gaap:EffectiveIncomeTaxRateContinuingOperations'
 
 
-def test_apply_preserves_existing_valid_qname():
+def test_apply_overwrites_with_deterministic_qname():
+    """Deterministic resolver always wins over agent-provided qname, even if agent's is cache-valid."""
     items = [{
         'label': 'Revenue',
         'label_slug': 'revenue',
@@ -91,7 +93,7 @@ def test_apply_preserves_existing_valid_qname():
         ('us-gaap:Revenues', 8),
     )
     apply_concept_resolution(items, rows)
-    assert items[0]['xbrl_qname'] == 'us-gaap:Revenues'
+    assert items[0]['xbrl_qname'] == 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
 
 
 def test_apply_replaces_invalid_existing_qname():
@@ -118,6 +120,72 @@ def test_apply_clears_qname_for_null_policy_label():
     )
     apply_concept_resolution(items, rows)
     assert items[0]['xbrl_qname'] is None
+
+
+# ── concept_family tests ──────────────────────────────────────────────────
+
+def test_family_direct_lookup():
+    """Direct table hit: revenue → us-gaap:Revenues."""
+    assert resolve_concept_family('revenue') == 'us-gaap:Revenues'
+
+
+def test_family_ebitda_maps_to_operating_income():
+    """EBITDA is an operating profitability proxy, not net income."""
+    assert resolve_concept_family('ebitda') == 'us-gaap:OperatingIncomeLoss'
+    assert resolve_concept_family('adjusted_ebitda') == 'us-gaap:OperatingIncomeLoss'
+
+
+def test_family_fcf_maps_to_operating_cash_flow():
+    """FCF = Operating Cash Flow - CapEx, so family is OCF."""
+    assert resolve_concept_family('fcf') == 'us-gaap:NetCashProvidedByOperatingActivities'
+    assert resolve_concept_family('free_cash_flow') == 'us-gaap:NetCashProvidedByOperatingActivities'
+
+
+def test_family_suffix_strip():
+    """revenue_growth strips _growth, resolves to revenue family."""
+    assert resolve_concept_family('revenue_growth') == 'us-gaap:Revenues'
+    assert resolve_concept_family('eps_yoy') == 'us-gaap:EarningsPerShareDiluted'
+    assert resolve_concept_family('operating_cash_flow_change') == 'us-gaap:NetCashProvidedByOperatingActivities'
+
+
+def test_family_prefix_strip():
+    """non_gaap_eps strips non_gaap_, resolves to eps family."""
+    assert resolve_concept_family('non_gaap_eps') == 'us-gaap:EarningsPerShareDiluted'
+    assert resolve_concept_family('diluted_eps') == 'us-gaap:EarningsPerShareDiluted'
+    assert resolve_concept_family('gaap_revenue') == 'us-gaap:Revenues'
+
+
+def test_family_prefix_and_suffix_strip():
+    """adjusted_ebitda_growth strips _growth then adjusted_, resolves via ebitda → direct hit."""
+    # After suffix strip: adjusted_ebitda → direct lookup hit (in CONCEPT_FAMILY)
+    # Actually: base starts as adjusted_ebitda_growth, strip _growth → adjusted_ebitda
+    # adjusted_ebitda is in CONCEPT_FAMILY directly? No wait — let me think:
+    # base = 'adjusted_ebitda_growth' → strip _growth → 'adjusted_ebitda'
+    # strip prefix adjusted_ → 'ebitda'
+    # base != label_slug → lookup 'ebitda' → hit
+    assert resolve_concept_family('adjusted_ebitda_growth') == 'us-gaap:OperatingIncomeLoss'
+    assert resolve_concept_family('non_gaap_operating_margin_growth') == 'us-gaap:OperatingIncomeLoss'
+
+
+def test_family_fallback_to_xbrl_qname():
+    """Unknown label with xbrl_qname falls back to that qname as its own family."""
+    assert (
+        resolve_concept_family('dividend_per_share', 'us-gaap:CommonStockDividendsPerShareDeclared')
+        == 'us-gaap:CommonStockDividendsPerShareDeclared'
+    )
+
+
+def test_family_unknown_no_qname_is_null():
+    """Unknown label without xbrl_qname → None."""
+    assert resolve_concept_family('crpo_growth') is None
+    assert resolve_concept_family('subscription_support_revenue_growth') is None
+
+
+def test_family_empty_label_returns_qname():
+    """Empty/None label returns xbrl_qname fallback."""
+    assert resolve_concept_family('', 'us-gaap:Revenues') == 'us-gaap:Revenues'
+    assert resolve_concept_family(None, 'us-gaap:Revenues') == 'us-gaap:Revenues'
+    assert resolve_concept_family(None) is None
 
 
 if __name__ == "__main__":
