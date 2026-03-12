@@ -100,10 +100,10 @@ if agent_transcript and os.path.exists(agent_transcript):
     except:
         pass
 
-# TODO: When prediction/attribution/learner agents are built, extract fiscal_quarter
-# from their structured output and add to frontmatter. This enables the Pipeline Overview
-# Dataview query to tie stages together: WHERE fiscal_quarter = "Q2FY2026"
-# Format TBD — wait until those agents have a defined output contract.
+# Fiscal quarter extraction — reliable for primary extraction agents, best-effort for others.
+# TODO: Add structured extraction when prediction/attribution/learner agents are built.
+_fq_match = re.search(r'Q([1-4])\s*FY(\d{4})', msg)
+fiscal_quarter = f'Q{_fq_match.group(1)}FY{_fq_match.group(2)}' if _fq_match else None
 
 # --- Build note ---
 timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
@@ -119,6 +119,8 @@ lines.append(f'agent_id: {agent_id}')
 lines.append(f'timestamp: {timestamp}')
 if tickers_str:
     lines.append(f'tickers: [{tickers_str}]')
+if fiscal_quarter:
+    lines.append(f'fiscal_quarter: {fiscal_quarter}')
 lines.append(f'thinking_blocks: {len(thinking_blocks)}')
 lines.append(f'thinking_chars: {total_thinking_chars}')
 lines.append(f'text_blocks: {len(text_blocks)}')
