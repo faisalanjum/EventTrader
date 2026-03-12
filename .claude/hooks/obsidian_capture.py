@@ -22,7 +22,7 @@ for skill in ['prediction', 'attribution', 'orchestrator', 'extraction', 'guidan
         tags.append(skill)
 
 # Ticker detection (whitelist approach — only tag known tickers)
-_wl_path = os.path.join(os.environ.get('HOME', ''), 'Obsidian/EventTrader/Earnings/earnings-analysis/claude-logs/.ticker-whitelist.txt')
+_wl_path = os.path.join(os.environ.get('HOME', ''), 'Obsidian/EventTrader/Earnings/earnings-analysis/.ticker-whitelist.txt')
 _known = set()
 if os.path.exists(_wl_path):
     with open(_wl_path) as _f:
@@ -99,6 +99,11 @@ if agent_transcript and os.path.exists(agent_transcript):
                     continue
     except:
         pass
+
+# TODO: When prediction/attribution/learner agents are built, extract fiscal_quarter
+# from their structured output and add to frontmatter. This enables the Pipeline Overview
+# Dataview query to tie stages together: WHERE fiscal_quarter = "Q2FY2026"
+# Format TBD — wait until those agents have a defined output contract.
 
 # --- Build note ---
 timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
@@ -180,11 +185,19 @@ if text_blocks or tool_blocks or thinking_blocks:
 vault = os.environ.get('HOME', '') + '/Obsidian/EventTrader/Earnings/earnings-analysis'
 
 # Folder routing by agent type
+# Pipeline agents → pipeline/{stage}, everything else → agents/
 FOLDER_ROUTING = {
-    'extraction-primary-agent': 'claude-logs/extractions',
-    'extraction-enrichment-agent': 'claude-logs/extractions',
+    'extraction-primary-agent': 'pipeline/extractions',
+    'extraction-enrichment-agent': 'pipeline/extractions',
+    'earnings-prediction': 'pipeline/predictions',
+    'earnings-attribution': 'pipeline/attributions',
+    'news-driver-web': 'pipeline/news-impact',
+    'news-driver-bz': 'pipeline/news-impact',
+    'news-driver-judge': 'pipeline/news-impact',
+    'news-driver-ppx': 'pipeline/news-impact',
+    'news-driver-final-judge': 'pipeline/news-impact',
 }
-subfolder = FOLDER_ROUTING.get(agent_type, 'claude-logs')
+subfolder = FOLDER_ROUTING.get(agent_type, 'agents')
 log_dir = vault + '/' + subfolder
 os.makedirs(log_dir, exist_ok=True)
 filepath = f'{log_dir}/{filename}'
