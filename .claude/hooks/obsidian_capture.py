@@ -100,10 +100,19 @@ if agent_transcript and os.path.exists(agent_transcript):
     except:
         pass
 
-# Fiscal quarter extraction — reliable for primary extraction agents, best-effort for others.
-# TODO: Add structured extraction when prediction/attribution/learner agents are built.
-_fq_match = re.search(r'Q([1-4])\s*FY(\d{4})', msg)
-fiscal_quarter = f'Q{_fq_match.group(1)}FY{_fq_match.group(2)}' if _fq_match else None
+# Fiscal quarter extraction — scans output + full transcript (text blocks + tool results).
+# Primary agents have "Q2 FY2026" in output. Enrichment agents have "fiscal_quarter": 2 in Neo4j results.
+_all_text = msg + ' '.join(b['text'] for b in text_blocks) + ' '.join(b['text'] for b in tool_blocks)
+fiscal_quarter = None
+_fq_match = re.search(r'Q([1-4])\s*FY(\d{4})', _all_text)
+if _fq_match:
+    fiscal_quarter = f'Q{_fq_match.group(1)}FY{_fq_match.group(2)}'
+else:
+    # Fallback: Neo4j JSON results contain "fiscal_quarter": 2, "fiscal_year": 2026
+    _fy = re.search(r'"(?:gu\.)?fiscal_year":\s*(\d{4})', _all_text)
+    _fqn = re.search(r'"(?:gu\.)?fiscal_quarter":\s*(\d)', _all_text)
+    if _fy and _fqn:
+        fiscal_quarter = f'Q{_fqn.group(1)}FY{_fy.group(1)}'
 
 # --- Build note ---
 timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
