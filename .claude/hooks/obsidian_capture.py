@@ -21,14 +21,13 @@ for skill in ['prediction', 'attribution', 'orchestrator', 'extraction', 'guidan
     if skill in agent_type:
         tags.append(skill)
 
-# Ticker detection
-tickers = set(re.findall(r'\b([A-Z]{1,5})\b', msg))
-noise = {'THE','AND','FOR','NOT','BUT','ALL','ARE','WAS','HAS','HAD','ITS','CEO',
-         'CFO','COO','CTO','SEC','ETF','IPO','GDP','EPS','USA','USD','API','SQL',
-         'MCP','CLI','RAM','CPU','LLM','PDF','CSV','JSON','YAML','HTML','HTTP',
-         'YES','THIS','THAT','WITH','FROM','THEY','WILL','BEEN','HAVE','DOES',
-         'WHAT','WHEN','WHERE','WHICH','ABOUT','AFTER','BEFORE','BETWEEN','INTO'}
-tickers -= noise
+# Ticker detection (whitelist approach — only tag known tickers)
+_wl_path = os.path.join(os.environ.get('HOME', ''), 'Obsidian/EventTrader/Earnings/earnings-analysis/claude-logs/.ticker-whitelist.txt')
+_known = set()
+if os.path.exists(_wl_path):
+    with open(_wl_path) as _f:
+        _known = set(line.strip() for line in _f if line.strip())
+tickers = set(re.findall(r'\b([A-Z]{1,5})\b', msg)) & _known
 for t in sorted(tickers)[:5]:
     tags.append(t)
 
@@ -179,7 +178,14 @@ if text_blocks or tool_blocks or thinking_blocks:
         written += len(text)
 
 vault = os.environ.get('HOME', '') + '/Obsidian/EventTrader/Earnings/earnings-analysis'
-log_dir = vault + '/claude-logs'
+
+# Folder routing by agent type
+FOLDER_ROUTING = {
+    'extraction-primary-agent': 'claude-logs/extractions',
+    'extraction-enrichment-agent': 'claude-logs/extractions',
+}
+subfolder = FOLDER_ROUTING.get(agent_type, 'claude-logs')
+log_dir = vault + '/' + subfolder
 os.makedirs(log_dir, exist_ok=True)
 filepath = f'{log_dir}/{filename}'
 

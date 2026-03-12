@@ -306,6 +306,12 @@ DISPLAY=:99 obsidian property:read file="attribution-report" name="primary_drive
 
 ## Decision: All three layers live — MCP for agent writes, CLI for power queries
 
+### Capture Scope (confirmed 2026-03-12)
+
+- **Sub-agents** (Agent tool, Task tool) → **auto-captured** via `SubagentStop` hook → `claude-logs/` in Obsidian vault
+- **Regular conversation** (main session) → **NOT captured** — no hook event fires for the main session
+- To capture main sessions, would need a `Stop` hook on the parent conversation or a manual trigger
+
 ---
 
 ## Sub-Agent Thinking Capture (investigated 2026-03-09)
