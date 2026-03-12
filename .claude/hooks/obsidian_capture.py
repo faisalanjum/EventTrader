@@ -108,9 +108,10 @@ _fq_match = re.search(r'Q([1-4])\s*FY(\d{4})', _all_text)
 if _fq_match:
     fiscal_quarter = f'Q{_fq_match.group(1)}FY{_fq_match.group(2)}'
 else:
-    # Fallback: Neo4j JSON results contain "fiscal_quarter": 2, "fiscal_year": 2026
-    _fy = re.search(r'"(?:gu\.)?fiscal_year":\s*(\d{4})', _all_text)
-    _fqn = re.search(r'"(?:gu\.)?fiscal_quarter":\s*(\d)', _all_text)
+    # Fallback: Neo4j results — handles JSON ("gu.fiscal_year": 2026),
+    # escaped JSON (\"gu.fiscal_year\": 2026), and plain text (fiscal_year: 2026)
+    _fy = re.search(r'\\?"?(?:gu\.)?fiscal_year\\?"?\s*:\s*(\d{4})', _all_text)
+    _fqn = re.search(r'\\?"?(?:gu\.)?fiscal_quarter\\?"?\s*:\s*(\d)', _all_text)
     if _fy and _fqn:
         fiscal_quarter = f'Q{_fqn.group(1)}FY{_fy.group(1)}'
 
