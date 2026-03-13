@@ -163,6 +163,12 @@ _extract_bn = None
 _is_extraction = agent_type in ('extraction-primary-agent', 'extraction-enrichment-agent')
 _is_primary = agent_type == 'extraction-primary-agent'
 _is_enrichment = agent_type == 'extraction-enrichment-agent'
+_extract_type = None  # e.g. 'guidance' from TYPE=guidance in /extract invocation
+
+if _is_extraction:
+    _type_match = re.search(r'TYPE=(\w+)', msg)
+    if _type_match:
+        _extract_type = _type_match.group(1)
 
 if _is_extraction:
     _pass_type = 'primary' if _is_primary else 'enrichment'
@@ -278,29 +284,36 @@ if text_blocks or tool_blocks or thinking_blocks:
     all_blocks.sort(key=lambda x: x[2])
 
     emoji = {'thinking': '\U0001f4ad', 'text': '\U0001f4dd', 'tool': '\U0001f527'}
+    callout_type = {'thinking': 'abstract', 'text': 'note', 'tool': 'example'}
     written = 0
     for i, (btype, text, ts, result) in enumerate(all_blocks, 1):
         if written > 40000:
             lines.append(f'*... {len(all_blocks) - i + 1} more blocks truncated*')
             break
         short_ts = ts[11:19] if len(ts) > 19 else ''
-        lines.append(f'{_h3} {emoji.get(btype, "?")} #{i} {short_ts}')
+        ct = callout_type.get(btype, 'note')
+        em = emoji.get(btype, '?')
         if btype == 'tool':
-            lines.append('```')
-            lines.append(text)
+            # Tool name as title hint
+            tool_hint = text.split('(')[0].split(':')[0][:40] if text else ''
+            lines.append(f'> [!{ct}]- {em} #{i} {short_ts} \u2014 {tool_hint}')
+            lines.append('> ```')
+            lines.append(f'> {text}')
             if result:
-                lines.append('')
-                lines.append(f'\u2192 {result}')
-            lines.append('```')
+                lines.append('>')
+                lines.append(f'> \u2192 {result}')
+            lines.append('> ```')
         elif btype == 'thinking':
             display = text[:5000]
             if len(text) > 5000:
                 display += f'\n\n*[truncated, {len(text) - 5000:,} more chars]*'
-            lines.append(f'*{len(text)} chars*')
-            lines.append('')
-            lines.append(display)
+            lines.append(f'> [!{ct}]- {em} #{i} {short_ts} \u2014 {len(text):,} chars')
+            for dline in display.split('\n'):
+                lines.append(f'> {dline}')
         else:
-            lines.append(_downgrade_headings(text[:2000]))
+            lines.append(f'> [!{ct}]- {em} #{i} {short_ts}')
+            for dline in _downgrade_headings(text[:2000]).split('\n'):
+                lines.append(f'> {dline}')
         lines.append('')
         written += len(text)
 
@@ -375,9 +388,10 @@ vault = os.environ.get('HOME', '') + '/Obsidian/EventTrader/Earnings/earnings-an
 
 # Folder routing by agent type
 # Pipeline agents -> pipeline/{stage}, everything else -> agents/
+_extraction_subfolder = f'pipeline/extractions/{_extract_type}' if _extract_type else 'pipeline/extractions'
 FOLDER_ROUTING = {
-    'extraction-primary-agent': 'pipeline/extractions',
-    'extraction-enrichment-agent': 'pipeline/extractions',
+    'extraction-primary-agent': _extraction_subfolder,
+    'extraction-enrichment-agent': _extraction_subfolder,
     'earnings-prediction': 'pipeline/predictions',
     'earnings-attribution': 'pipeline/learner',
     'earnings-learner': 'pipeline/learner',
