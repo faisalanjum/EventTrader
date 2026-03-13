@@ -10,12 +10,12 @@
 
 **What this is**: Multi-layer earnings analysis system using forked skills for context isolation.
 
-**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70):**
+**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74):**
 
 | What | Status | Workaround |
 |------|--------|------------|
 | Skill tool in fork | ✅ WORKS | Use for all layer chaining |
-| Task tool in fork | ❌ BLOCKED | Use Skill tool instead |
+| Agent spawner in fork | ❌ BLOCKED | Use Skill tool instead. Note: TaskCreate/Get/Update/List DO work in forks (Task #139 proof) — only the agent spawner is blocked |
 | AskUserQuestion in fork | ❌ BLOCKED | Non-interactive; use file-based communication |
 | Thinking capture | ✅ PRIMARY + SUBAGENTS | In both primary transcript AND agent files (if Opus used) |
 | Agent file agentIds | ⚠️ MISMATCH | Transcript IDs ≠ file IDs; match by sessionId |
@@ -55,8 +55,8 @@
 | **Cross-session task persistence** | ✅ **WORKS** | Via settings.json or env var (See Part 10.3) |
 | Parallel execution (Task tool) | ✅ PARALLEL | From main conversation only |
 | Parallel execution (Skill tool) | ❌ SEQUENTIAL | Always sequential |
-| Task tool in forked context | ❌ BLOCKED | Cannot use for parallelism |
-| Task→Task nesting | ❌ **STILL BLOCKED** (v2.1.47→v2.1.52) | Sub-agents do NOT get the Task spawner tool. FG gets **40 tools** (7 base + 33 deferred, incl. TaskCreate but NOT Task); BG gets **12 tools** (or fewer with `tools:` whitelist). Neither gets Task spawner. Listing `Task` in `tools:` frontmatter has no effect — runtime strips it. Use Skill chains for depth. |
+| Agent spawner in forked context | ❌ BLOCKED | Cannot spawn sub-agents from forks. **TaskCreate/Get/Update/List DO work** (Task #139 created by forked skill) — only the agent spawning mechanism is unavailable |
+| Task→Task nesting | ❌ **STILL BLOCKED** (v2.1.47→v2.1.74) | Agent spawner tool absent from ALL subagent tiers (FG, BG, team, non-team — exhaustively tested). v2.1.74 definitive matrix: FG non-team=**49 tools** (has TaskCreate but NO Agent), BG non-team=**37 tools** (no TaskCreate, no Agent), team agents=**6-38 tools** (has TaskCreate, no Agent). Use Skill chains for depth. |
 | MCP wildcards pre-load | ❌ NO | Only grants permission, still need ToolSearch |
 | Error propagation | ⚠️ TEXT ONLY | No exceptions, must parse response |
 | **Task deletion unblocks dependents** | ✅ WORKS | `status: "deleted"` removes task, unblocks dependents |
@@ -64,9 +64,9 @@
 | **Cross-agent task manipulation** | ✅ WORKS | Any agent can update/delete any task by ID |
 | **Upfront task creation pattern** | ✅ WORKS | Create all tasks upfront, skip via completed/deleted |
 | **Parallel foreground Task spawn** | ✅ PARALLEL | 194ms spread, full tool access (See Part 10.14) |
-| **Background agents: Write/MCP/Skill** | ✅ **WORKS** (Feb 2026, re-confirmed v2.1.52) | **12 direct tools** (was 11). +EnterWorktree. **Task/Team/SendMessage tools STILL REMOVED in v2.1.52** — not just blocked, completely absent from tool manifest (base AND deferred). Skill workaround also fails (forked skill inherits BG tool restriction). `tools` frontmatter whitelist cannot expand base set. Parallel write independence confirmed. 8 concurrent agents stable. |
+| **Background agents: Write/MCP/Skill** | ✅ **WORKS** (v2.1.52→v2.1.74) | **v2.1.74 definitive matrix**: FG non-team=**49 tools** (8 direct + 17 deferred + 24 MCP, HAS task tools). BG non-team GP=**37 tools** (8 direct + 5 deferred + 24 MCP, NO task tools). BG non-team custom=**1 tool** (Bash only). **TEAM-spawned BG agents** get TaskCreate/SendMessage (6 direct tools). FG≠BG for non-team agents. Parallel write independence confirmed. 8 concurrent agents stable. |
 | **Task `run_in_background` default** | ⚠️ MAY AUTO-ENABLE | Claude may choose background mode; explicitly set `run_in_background: false` if you need task tools |
-| **`background: true` frontmatter** | ✅ **NEW** (v2.1.49) | Declarative background scheduling. Auto-sets `run_in_background` on Task — even foreground Task spawns run in BG mode. Via `--agent` flag: full 27-tool set (no restriction). **3-tier hierarchy confirmed**: `--agent`=27, FG Task=21, BG Task=12 tools. `tools:` field = INTERSECTION with bg-allowed set (restricts but cannot expand). **Confirmed v2.1.52**: TaskCreate/List/Get/Update stripped regardless of `tools:` field. |
+| **`background: true` frontmatter** | ✅ **NEW** (v2.1.49) | Declarative background scheduling. Auto-sets `run_in_background` on Agent tool — even foreground spawns run in BG mode. Via `--agent` flag: full tool set (no restriction). `tools:` field = INTERSECTION with allowed set (restricts but cannot expand). **v2.1.74 update**: BG non-team GP=37 tools (no task tools), BG non-team custom=1 tool (Bash only), BG team=6 tools (HAS task tools). Team membership now unlocks task tools for BG agents. |
 | **`isolation: worktree` frontmatter** | ✅ **NEW** (v2.1.50) | Agent runs in temporary git worktree. Auto-cleanup if no changes. WorktreeCreate/WorktreeRemove hooks available. |
 | **Memory auto-preload** | ✅ **NOW WORKING** (v2.1.52, was broken v2.1.34→v2.1.50) | All 3 scopes (project, user, local) confirmed via `--agent` flag AND Task tool spawn. System injects `# Persistent Agent Memory` header + directory path + guidelines + `## MEMORY.md` (first 200 lines). User scope adds "keep learnings general" hint. Task tool spawn requires explicit `tools:` field (to exclude bad Perplexity MCP schemas). |
 | **Agent discovery (Task tool)** | ⚠️ **SESSION-START SNAPSHOT** | Task tool's `subagent_type` list is frozen at session start. Agents created mid-session or between continuations are NOT discoverable. Must start brand-new `claude` session. |
@@ -126,7 +126,379 @@
 | **AskUserQuestion in skill allowed-tools** | ✅ **FIXED** (v2.1.69) | Was silently auto-allowed with empty answers; now properly prompts. |
 | **Hooks settings.json live-reload** | ❌ **NOT LIVE-RELOADED** (v2.1.70) | Hooks added to settings.json mid-session do NOT take effect. Env vars DO live-reload, hooks do NOT. Must start new session. |
 | **FG tool presentation change** | ⚠️ **CHANGED** (v2.1.70) | FG agents now show 1 direct tool (ToolSearch) + 30 deferred. Was "7 base + 33 deferred". Same functional tool set; all require ToolSearch except ToolSearch itself. |
-| **Agent discovery session snapshot** | ❌ **STILL SNAPSHOT** (v2.1.70) | Agents created mid-session still NOT discoverable by Task tool. No change. |
+| **Agent discovery session snapshot** | ❌ **STILL SNAPSHOT** (v2.1.74) | Agents created mid-session still NOT discoverable by Task tool. No change. |
+| **CronCreate/CronList/CronDelete tools** | ✅ **NEW** (v2.1.71) | Session-level cron/scheduling tools. Available in main session only, NOT propagated to subagents. CronCreate schedules prompts via 5-field cron expression (local timezone). Session-only: jobs lost on exit. 3-day auto-expiry for recurring. |
+| **`/loop` command** | ✅ **NEW** (v2.1.71) | Run prompt or slash command on recurring interval (e.g., `/loop 5m /foo`). Defaults to 10m. Uses CronCreate internally. |
+| **`ExitWorktree` tool** | ✅ **NEW** (v2.1.72) | Companion to EnterWorktree. `action: "keep"` or `"remove"`. `discard_changes: true` for dirty worktrees. Available in both main session AND subagents. |
+| **Agent tool `model` parameter restored** | ✅ **RESTORED** (v2.1.72) | Spawn subagent with `model: haiku/sonnet/opus` override. Enum: short names only (not full IDs). Was removed, now restored. |
+| **Skill hooks double-fire fix** | ✅ **FIXED** (v2.1.72) | Skill hooks no longer fire twice per event. PostToolUse hook fires exactly once. |
+| **CLAUDE.md HTML comments hidden** | ✅ **NEW** (v2.1.72) | HTML comments (`<!-- ... -->`) in CLAUDE.md and `.claude/rules/*.md` are stripped before injection into model context. Regular text in same files is visible. |
+| **Parallel tool call fail isolation** | ✅ **FIXED** (v2.1.72) | Failed Read/WebFetch/Glob no longer cancels parallel sibling operations. Each completes independently. |
+| **Simplified effort levels** | ⚠️ **CHANGED** (v2.1.72) | Effort levels simplified to low/medium/high with symbols ○ ◐ ●. |
+| **`modelOverrides` setting** | ✅ **NEW** (v2.1.73) | Map model picker entries to custom provider model IDs. **TESTED**: Keys must be full model IDs (e.g., `claude-haiku-4-5-20251001`), NOT short names. Values must be valid model IDs. Works in both user and project settings. Picker label stays the same but API call uses the override. |
+| **Subagent model downgrade fix (Bedrock/Vertex)** | ✅ **FIXED** (v2.1.73) | `model: opus/sonnet/haiku` in agent frontmatter was silently downgraded on Bedrock, Vertex, Foundry. Now respected. |
+| **Full model IDs in agent `model:` field** | ✅ **FIXED** (v2.1.74) | Full model IDs (e.g., `claude-opus-4-5`) were silently ignored in agent frontmatter. Now respected. |
+| **`autoMemoryDirectory` setting** | ✅ **NEW** (v2.1.74) | Configure custom directory for auto-memory storage. **TESTED**: User-level settings ONLY (`~/.claude/settings.json`), NOT project-level. Absolute paths only (relative silently ignored). Dir doesn't need to pre-exist. MEMORY.md auto-loads from custom dir. **DYNAMIC PER-TICKER PROVEN**: 3-ticker test (AAPL/CRM/NVDA) with unique markers — read isolation ✅, write isolation ✅, zero cross-contamination ✅. Wrapper pattern: `jq` patch settings → run claude → restore. |
+| **`/context` command suggestions** | ✅ **NEW** (v2.1.74) | Actionable suggestions identifying context-heavy tools, memory bloat, capacity warnings. |
+| **Managed policy bypass fix** | ✅ **FIXED** (v2.1.74) | Managed policy `ask` rules were bypassed by user `allow` rules or skill `allowed-tools`. Now enforced. |
+| **SessionEnd hook timeout fix** | ✅ **FIXED** (v2.1.74) | SessionEnd hooks were killed after 1.5s regardless of `hook.timeout`. **TESTED**: Per-hook `timeout:` field NOT respected for SessionEnd. Fix is via `CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS` env var ONLY. 3-second hook: killed without env var, completed with env var set to 10000ms. |
+| **FG/BG subagent tool sets** | ⚠️ **CHANGED** (v2.1.74) | **Definitive matrix (8 configs tested)**: FG non-team GP=**49 tools** (has TaskCreate/Get/Update/List), BG non-team GP=**37 tools** (NO task tools), BG non-team custom=**1 tool** (Bash only). FG≠BG — they are NOT identical. **Team agents** (via `team_name` param): FG team GP=**38 tools**, BG team=**6 direct tools** — both have TaskCreate/SendMessage. **BG TEAM AGENTS NOW HAVE TaskCreate** — resolves #1 blocker since v2.1.47. Agent tool absent from ALL subagent tiers. |
+
+---
+
+### Retest Summary (2026-03-12, v2.1.74) — v2.1.71-v2.1.74 (4 versions)
+
+**19 capabilities tested (v2.1.71-v2.1.74, all with empirical proof):**
+
+| Feature | Status | Change from v2.1.70 |
+|---------|--------|---------------------|
+| CronCreate/CronList/CronDelete (v2.1.71) | ✅ **WORKS** | **NEW** — session-level only, not in subagents |
+| ExitWorktree tool (v2.1.72) | ✅ **WORKS** | **NEW** — companion to EnterWorktree, available in subagents too |
+| Agent tool `model` parameter (v2.1.72) | ✅ **WORKS** | **RESTORED** — `model: haiku` correctly runs Haiku |
+| Skill hooks double-fire fix (v2.1.72) | ✅ **FIXED** | Hook fires exactly once (was twice) |
+| CLAUDE.md HTML comments hidden (v2.1.72) | ✅ **WORKS** | **NEW** — HTML comments stripped from context |
+| Parallel fail isolation (v2.1.72) | ✅ **FIXED** | Failed sibling no longer cancels others |
+| FG/BG non-team tool sets | ⚠️ **CORRECTED** | **NOT identical**. FG non-team=49 tools (HAS task tools). BG non-team GP=37 (NO task tools). BG custom=1 (Bash only). Pre-compaction tests showed FG=37; post-compaction definitive probe shows FG=49 |
+| **BG TEAM agents have TaskCreate** | ✅ **BREAKTHROUGH** | **#1 blocker resolved**. BG team agents have TaskCreate/List/Get/Update + SendMessage. Task #138,#141,#144 as proof |
+| Task tool availability | ⚠️ **NUANCED** | FG non-team: HAS task tools. BG non-team: NO task tools. Team (FG or BG): HAS task tools. Team membership expands BG set but FG already has them |
+| Cron tools in subagents | ⚠️ **TEAM ONLY** | Team agents: YES. Non-team agents: NO |
+| Task→Task nesting | ❌ **Still blocked** | Agent spawner absent from ALL subagent tiers (team and non-team) |
+| autoMemoryDirectory (v2.1.74) | ✅ **TESTED** | User-level only, absolute path only, MEMORY.md auto-loads. **Dynamic per-ticker: 3-ticker test (AAPL/CRM/NVDA) — read ✅, write ✅, zero cross-contamination ✅.** Wrapper: jq patch → run → restore. |
+| modelOverrides (v2.1.73) | ✅ **TESTED** | Full model ID keys only (not short names). Works in both user + project settings. |
+| SessionStart double-fire fix (v2.1.73) | ✅ **TESTED** | Fresh session: 1 fire. --resume: 1 fire (not 2x). Hook fires exactly once on both fresh and resumed. Fix confirmed. |
+| SessionEnd hook timeout fix (v2.1.74) | ✅ **TESTED** | Per-hook `timeout:` field NOT respected for SessionEnd. ONLY `CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS` env var works. 3s hook: killed without env var, completed with 10000ms env var. |
+| Full model IDs in frontmatter (v2.1.74) | ✅ **TESTED** | `claude-haiku-4-5-20251001` in frontmatter respected via Agent tool spawn. `--agent` CLI flag ignores frontmatter `model:`. `--model` CLI flag accepts full IDs. |
+| JSON-output hooks fix (v2.1.73) | ✅ **TESTED** | JSON output clean, no system-reminder injection. Negative proof confirmed. |
+| Agent discovery mid-session | ❌ **Still snapshot** | **No change** — must start new session |
+
+**Changelog-only items (not tested, grouped by version):**
+
+**v2.1.71:**
+| Feature | Details |
+|---------|---------|
+| `/loop` command | Recurring prompt execution on interval (e.g., `/loop 5m /foo`) |
+| Cron scheduling tools | CronCreate/List/Delete for in-session scheduling |
+| BG agent notification fix | Completion notifications now include output file path |
+| `--print` + teams fix | `--print` no longer hangs when team agents configured |
+| "Tool loaded." REPL fix | ToolSearch no longer shows "Tool loaded." in REPL after every call |
+| Bash auto-approval additions | `fmt`, `comm`, `cmp`, `numfmt`, `expr`, `test`, `printf`, `seq`, etc. |
+| Startup freeze fixes | stdin freeze, CoreAudio 5-8s freeze, OAuth proxy freeze all fixed |
+| Forked plan file fix | Forked conversations no longer share/overwrite same plan file |
+
+**v2.1.72:**
+| Feature | Details |
+|---------|---------|
+| Simplified effort levels | low ○ / medium ◐ / high ● |
+| `CLAUDE_CODE_DISABLE_CRON` env var | Stop scheduled cron jobs mid-session |
+| `/plan` description argument | Enter plan mode with immediate start: `/plan implement auth` |
+| `/copy w` key | Write focused selection directly to file, bypassing clipboard |
+| Team agents inherit leader's model | Fix: team agents now use leader's model setting |
+| `--continue` after `--compact` fix | Session continuation now resumes from correct point after compaction |
+| `/clear` preserves BG agents | `/clear` no longer kills background agent/bash tasks |
+| Worktree isolation fixes | Task tool resume + BG notifications now work in worktrees |
+| "Always Allow" matching fix | Saved rules that never match again are now fixed |
+| Hooks directory fix | Correct directory used for hooks in resumed sessions |
+| Agent task progress fix | No longer stuck on "Initializing…" |
+| Bash auto-approval additions | `lsof`, `pgrep`, `tput`, `ss`, `fd`, `fdfind` |
+| SDK prompt cache fix | Prompt cache invalidation fixed in SDK `query()` calls |
+| Various fixes | Voice mode, plugin, sandbox permissions, CPU utilization, bash security |
+
+**v2.1.73:**
+| Feature | Details |
+|---------|---------|
+| ~~`modelOverrides` setting~~ | ~~Map model picker entries to custom provider model IDs~~ → **TESTED above** |
+| Subagent model downgrade fix | Bedrock/Vertex/Foundry now respects `model:` field |
+| ~~SessionStart double-fire fix~~ | ~~No longer fires twice on `--resume`/`--continue`~~ → **TESTED above** |
+| ~~JSON-output hooks no-op fix~~ | ~~No longer injects system-reminder messages into model context~~ → **TESTED**: JSON output clean, no system-reminder artifacts. Negative proof confirmed. |
+| BG bash process cleanup | Processes spawned by subagents now cleaned up on exit |
+| CPU freeze fix | Freezes and 100% CPU loops triggered by complex bash permission prompts fixed |
+| Bash output loss fix | Output no longer lost when multiple sessions run in same project |
+| Skill file deadlock fix | Deadlock when many skill files changed simultaneously fixed |
+| `/output-style` deprecated | Use `/config` instead; output style now fixed at session start |
+| Default Opus on Bedrock/Vertex → 4.6 | Changed default model on cloud providers |
+| `/effort` while responding | Can now change effort level while Claude is mid-response |
+| Up arrow after interrupt | Restores prompt and rewinds conversation after interrupting |
+
+**v2.1.74:**
+| Feature | Details |
+|---------|---------|
+| `/context` command | Actionable suggestions for context-heavy tools, memory bloat, capacity |
+| ~~`autoMemoryDirectory` setting~~ | ~~Custom auto-memory storage location~~ → **TESTED above** |
+| ~~Full model IDs in frontmatter fix~~ | ~~`claude-opus-4-5` no longer silently ignored in agent `model:` field~~ → **TESTED**: `claude-haiku-4-5-20251001` in frontmatter respected when spawned via Agent tool. `--agent` CLI flag still ignores frontmatter `model:`. |
+| Managed policy bypass fix | Security: `ask` rules no longer bypassed by user `allow` or skill `allowed-tools` |
+| ~~SessionEnd hook timeout fix~~ | ~~Respects `hook.timeout` instead of 1.5s kill~~ → **TESTED above** |
+| Streaming memory leak fix | API response buffers released on early termination |
+| MCP OAuth fixes | Callback port conflict + refresh token expiry now handled |
+| `--plugin-dir` override change | Local dev copies override marketplace plugins unless force-enabled |
+| RTL text fix | Hebrew, Arabic, RTL text renders correctly in Windows/VS Code terminals |
+| Windows LSP fix | LSP servers now work on Windows (malformed file URIs fixed) |
+
+---
+
+### Detailed Test Findings (2026-03-12, v2.1.74 session #2)
+
+All items below were empirically tested with proof files in `earnings-analysis/test-outputs/test-v174-*.txt`.
+
+#### 1. `autoMemoryDirectory` — Per-Ticker Memory Isolation (v2.1.74)
+
+**What it does:** Redirects Claude's auto-memory system to a custom directory instead of the default `~/.claude/projects/<hash>/memory/`. Each session reads and writes memory files from/to ONLY that directory.
+
+**How it works for stock analysis:**
+```
+.claude/memory-by-ticker/
+├── AAPL/          ← AAPL job ONLY sees Apple context
+│   ├── MEMORY.md  ← auto-loaded into session context
+│   └── aapl-context.md  ← "iPhone is ~52% of revenue"
+├── CRM/           ← CRM job ONLY sees Salesforce context
+│   ├── MEMORY.md
+│   └── crm-context.md  ← "Subscription revenue is ~94%"
+└── NVDA/          ← NVDA job ONLY sees NVIDIA context
+    ├── MEMORY.md
+    └── nvda-context.md  ← "Data Center is ~80% of revenue"
+```
+
+When an extraction job learns something new (e.g., "AAPL iPhone revenue dropped 3% QoQ"), it writes that to AAPL's folder only. CRM and NVDA sessions never see it.
+
+**Wrapper pattern (simple, single-job):**
+```bash
+claude-ticker() {
+  TICKER=$1; shift
+  DIR="/path/memory-by-ticker/$TICKER"
+  mkdir -p "$DIR"
+  jq --arg d "$DIR" '. + {autoMemoryDirectory: $d}' ~/.claude/settings.json > /tmp/s.json
+  cp ~/.claude/settings.json /tmp/s.bak
+  cp /tmp/s.json ~/.claude/settings.json
+  CLAUDECODE= claude "$@"
+  cp /tmp/s.bak ~/.claude/settings.json
+}
+# Usage: claude-ticker AAPL --print "Analyze Apple earnings"
+```
+
+**Concurrent-safe wrapper (flock):**
+```bash
+#!/bin/bash
+# Thread-safe per-ticker Claude launcher — tested with 2 concurrent jobs
+TICKER=$1; shift
+MEMORY_DIR="/path/memory-by-ticker/$TICKER"
+SETTINGS="$HOME/.claude/settings.json"
+LOCKFILE="/tmp/claude-settings.lock"
+mkdir -p "$MEMORY_DIR"
+
+(
+  flock -w 120 200 || { echo "ERROR: lock timeout"; exit 1; }
+  cp "$SETTINGS" /tmp/settings-backup-$$.json
+  jq --arg dir "$MEMORY_DIR" '. + {autoMemoryDirectory: $dir}' "$SETTINGS" > /tmp/settings-patched-$$.json
+  cp /tmp/settings-patched-$$.json "$SETTINGS"
+  CLAUDECODE= claude "$@"
+  cp /tmp/settings-backup-$$.json "$SETTINGS"
+  rm -f /tmp/settings-backup-$$.json /tmp/settings-patched-$$.json
+) 200>"$LOCKFILE"
+```
+
+**Concurrent test proof:** AAPL and CRM launched simultaneously with `flock` wrapper.
+- AAPL wrote `AAPL_CONCURRENT_PROOF` to `AAPL/concurrent-test.md` ✅
+- CRM wrote `CRM_CONCURRENT_PROOF` to `CRM/concurrent-test.md` ✅
+- Zero cross-contamination (`grep -r` for wrong markers = clean) ✅
+- `settings.json` restored cleanly after both completed ✅
+- Jobs serialized via lock: total 12s for both (one waited, then second ran)
+
+**Constraints:**
+- **User-level settings ONLY** (`~/.claude/settings.json`) — project-level `.claude/settings.json` ignores it
+- **Absolute paths ONLY** — relative paths silently fall back to default
+- **Directory doesn't need to pre-exist** — Claude creates files via Write tool
+- **Session-start only** — mid-session subagents still see the default path
+- **No env var support** — `CLAUDE_AUTO_MEMORY_DIRECTORY` does not work
+- **Concurrent safety** — `flock` serializes access to `settings.json`. Jobs queue behind the lock (120s timeout). K8s worker already serializes via Redis BRPOP so flock is optional there
+
+**Definitive proof (3-ticker isolation test):**
+
+| Test | AAPL | CRM | NVDA |
+|------|------|-----|------|
+| Session saw correct MEMORY.md | ✅ `"# AAPL Memory"` | ✅ `"# CRM Memory"` | ✅ `"# NVDA Memory"` |
+| Read correct unique marker | ✅ `UNIQUE_MARKER_AAPL_7291` | ✅ `UNIQUE_MARKER_CRM_4836` | ✅ `UNIQUE_MARKER_NVDA_5503` |
+| Wrote `session-probe.md` to correct dir | ✅ `AAPL/` | ✅ `CRM/` | ✅ `NVDA/` |
+| Cross-contamination (grep for wrong markers) | ✅ CLEAN | ✅ CLEAN | ✅ CLEAN |
+
+Proof file: `test-v174-autoMemoryDir.txt`
+
+#### 2. `modelOverrides` — Remap Model Picker to Custom IDs (v2.1.73)
+
+**What it does:** When you pick "haiku" in the model picker (or `--model haiku`), the API call actually uses whatever model ID you mapped it to. Designed for Bedrock inference profile ARNs.
+
+**Format:**
+```json
+"modelOverrides": {
+  "claude-haiku-4-5-20251001": "claude-opus-4-6"
+}
+```
+Keys MUST be full model IDs. Short names like `"haiku"` are silently ignored as keys.
+
+**Constraints:**
+- Works in BOTH user-level AND project-level settings
+- Picker label stays the same ("Haiku 4.5") but API call uses the overridden model
+- Invalid target model IDs silently accepted in config, error only on use
+- No validation at settings load time
+
+**Use case for this project:** Low-value since we use direct Anthropic API. Could map opus→sonnet project-wide for cost savings, or pin model versions.
+
+**Proof:** haiku→opus override: system prompt showed "Model name: Haiku 4.5, Model ID: claude-opus-4-6" — API used Opus while picker showed Haiku.
+
+Proof file: `test-v174-modelOverrides.txt`
+
+#### 3. SessionStart Double-Fire Fix (v2.1.73)
+
+**What was broken:** SessionStart hooks fired TWICE when resuming a session via `--resume` or `--continue`.
+
+**Fix:** Now fires exactly once on all session modes.
+
+| Mode | Fire count | Expected | Result |
+|------|-----------|----------|--------|
+| Fresh session | 1 | 1 | ✅ |
+| `--resume <id>` | 1 | 1 | ✅ |
+| `--continue` | 1 | 1 | ✅ |
+
+**Use case:** If you add a SessionStart hook (e.g., initialize logging, record session starts), it fires correctly — no duplicate state initialization.
+
+Proof file: `test-v174-sessionstart-doublefire.txt`
+
+#### 4. SessionEnd Hook Timeout Fix (v2.1.74)
+
+**What was broken:** SessionEnd hooks were killed after 1.5 seconds regardless of the configured `hook.timeout` setting.
+
+**Fix:** Respects timeout — but ONLY via environment variable, NOT per-hook config.
+
+| Config method | 3-second hook survives? | Result |
+|---------------|------------------------|--------|
+| No config (default) | ❌ Killed | Default ~1.5s limit |
+| Per-hook `"timeout": 10` in settings | ❌ Killed | NOT respected for SessionEnd |
+| `CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS=10000` env var | ✅ Completed | Fix works |
+
+**Key finding:** Per-hook `timeout:` field works for PreToolUse/PostToolUse hooks, but is IGNORED for SessionEnd. Only the env var works for SessionEnd.
+
+**Use case:** If your Obsidian capture hook ever moves from SubagentStop to SessionEnd, set `"CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS": "15000"` in settings `env` section.
+
+Proof file: `test-v174-sessionend-timeout.txt`
+
+#### 5. JSON-Output Hooks Fix (v2.1.73)
+
+**What was broken:** When using `--output-format json` with hooks configured, spurious system-reminder messages were injected into the model's context on every turn, wasting tokens.
+
+**Fix:** JSON output is clean — no system-reminder artifacts. Verified via `--output-format json --print` — output JSON contains only expected keys, no system-reminder strings.
+
+**Use case:** If extraction worker ever uses `claude --output-format json --print` (programmatic CLI mode) instead of the SDK, output will be clean.
+
+Proof file: `test-v174-json-output-hooks.txt`
+
+#### 6. Full Model IDs in Agent Frontmatter (v2.1.74)
+
+**What was broken:** Full model IDs (e.g., `claude-opus-4-5`) in agent frontmatter `model:` field were silently ignored. Agent would run on the default model instead.
+
+**Fix:** Full model IDs now respected when agent is spawned via Agent tool.
+
+| Method | `model:` value | Actual model | Result |
+|--------|---------------|--------------|--------|
+| Agent tool spawn (FG) | `claude-haiku-4-5-20251001` | Haiku 4.5 | ✅ Respected |
+| `--agent` CLI flag | `claude-haiku-4-5-20251001` | Opus 4.6 (default) | ❌ Ignored |
+| `--model` CLI flag | `claude-haiku-4-5-20251001` | Haiku 4.5 | ✅ Works |
+
+**Caveat:** The `--agent` CLI flag does NOT respect the frontmatter `model:` field at all (short or full IDs). Only the Agent tool spawn path respects it.
+
+**Use case:** You can pin production agents to specific model versions. E.g., `model: claude-haiku-4-5-20251001` in `news-driver-bz.md` ensures it always runs that exact version.
+
+Proof file: `test-v174-full-model-id.txt`
+
+---
+
+**Full tool comparison (v2.1.74) — DEFINITIVE MATRIX (8 configs tested with tangible proof):**
+
+| Category | Main session | FG non-team GP | FG team GP | BG team (any) | BG non-team GP | BG non-team custom |
+|----------|-------------|----------------|------------|---------------|----------------|-------------------|
+| Direct tools | 9 (+ Agent) | 8 | 8 | 6 | 8 | 1 (Bash only) |
+| Built-in deferred | 22 | 17 | 13 | 0 | 5 | 0 |
+| MCP deferred | 24 | 24 | 17 | 0 | 24 | 0 |
+| **Total** | **55** | **49** | **38** | **6** | **37** | **1** |
+| TaskCreate/Get/Update/List | ✅ Yes | ✅ **YES** | ✅ **YES** | ✅ **YES** | ❌ No | ❌ No |
+| SendMessage | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
+| CronCreate/List/Delete | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No | ❌ No | ❌ No |
+| TeamCreate/TeamDelete | ✅ Yes | ✅ Yes | ❌ No | ❌ No | ❌ No | ❌ No |
+| Agent tool | ✅ Yes | ❌ **No** | ❌ **No** | ❌ **No** | ❌ **No** | ❌ **No** |
+| ToolSearch | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No | ✅ Yes | ❌ No |
+| Read/Write/Edit/Glob/Grep | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No | ✅ Yes | ❌ No |
+| ExitWorktree | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No | ✅ Yes | ❌ No |
+
+**How to spawn each tier:**
+- Main session: `claude` or `claude --agent <name>`
+- FG non-team GP: `Agent prompt="..."` (no team_name)
+- FG team GP: `Agent name="worker" team_name="my-team" prompt="..."`
+- BG team: `Agent name="worker" team_name="my-team" prompt="..." run_in_background=true`
+- BG non-team GP: `Agent prompt="..." run_in_background=true`
+- BG non-team custom: `Agent subagent_type="my-agent" prompt="..." run_in_background=true`
+
+**Key architectural finding (v2.1.74, corrected after definitive retest)**:
+
+The tool hierarchy has **5 effective tiers**, not 3 or 4:
+1. **Main session (55 tools)**: Full access including Agent tool
+2. **FG non-team GP (49 tools)**: Has TaskCreate/Get/Update/List + SendMessage + TeamCreate + CronCreate. Missing: Agent, AskUserQuestion, EnterPlanMode, TaskStop/TaskOutput
+3. **FG team GP (38 tools)**: Has task tools + SendMessage. Fewer MCP tools than non-team (17 vs 24 MCP deferred)
+4. **BG non-team GP (37 tools)**: NO task tools, NO Agent. Has Read/Write/ToolSearch/MCP
+5. **BG team / BG non-team custom**: BG team gets **6 direct tools** (Bash + Task suite + SendMessage) — task tools WORK. BG non-team custom gets **1 tool** (Bash only) — most restrictive
+
+**The breakthrough**: BG team agents have TaskCreate/Get/Update/List (Task #141/#144 updated as proof). This was impossible since v2.1.47.
+
+**Agent tool**: ABSENT from ALL subagent tiers. Exhaustively tested with ToolSearch exact match and keyword search across FG, BG, team, non-team. Nested agent spawning is architecturally blocked.
+
+**Custom agent `tools:` field behavior**:
+- FG no-team: respected, task tools available as direct
+- BG no-team: **NOT respected** — only Bash available regardless of frontmatter
+- Team (FG or BG): tools field intersected with team-allowed set
+
+**Tangible proof**:
+- Task #137: Created by FG team agent
+- Task #138: Created by BG team agent
+- Task #139: Created by forked skill (TaskCreate works in forks)
+- Task #140: Updated by FG custom agent (no team)
+- Task #141: Updated by BG team custom agent
+- Task #143: Created AND deleted by FG GP agent (no team)
+- Task #144: Updated by BG team custom agent
+
+**Discrepancy note**: Pre-compaction tests (same session) showed FG non-team with 37 tools and NO task tools. Post-compaction definitive retest showed 49 tools WITH task tools. BG results are consistent across both (37 tools). The FG difference may be caused by task list context injection or session continuation state. All post-compaction results verified via actual tool calls (not just ToolSearch).
+
+**POST-COMPACTION RETEST (same session, 2026-03-12)** — 8 configs tested with tangible proof:
+
+| # | Agent Type | Mode | Team | Total | Task Tools | Agent | Proof |
+|---|-----------|------|------|-------|------------|-------|-------|
+| 1 | general-purpose | FG | No | **49** | **YES** | NO | Task #143 created+deleted |
+| 2 | general-purpose | BG | No | **37** | **NO** | NO | ToolSearch NOT_FOUND |
+| 3 | general-purpose | FG | Team | **38** | **YES** | NO | ToolSearch FOUND |
+| 4 | custom (bz) | FG | No | ~10 | **YES** | NO | Task #140 updated |
+| 5 | custom (bz) | BG | No | **1** | **NO** | NO | Bash ONLY |
+| 6 | custom (bz) | FG | Team | **6** | **YES** | NO | TaskGet #144 SUCCESS |
+| 7 | custom (bz) | BG | Team | **6** | **YES** | NO | Task #141,#144 updated |
+
+**CORRECTION**: FG non-team agents have **49 tools** (not 37) including TaskCreate/Get/Update/List as deferred tools. This was discovered post-context-compaction. Pre-compaction tests showed 37 tools without task tools. BG non-team consistently shows 37 tools without task tools across all tests. The FG/BG difference persists for non-team agents — they are NOT identical as initially reported. Possible cause: task list context injection or session continuation state.
+
+**BG custom agent (no team)** is the most restrictive: only **Bash** available. No ToolSearch, no Read/Write, no MCP. Custom agent frontmatter `tools:` field is NOT respected in BG non-team mode.
+
+**Production agents NOT broken**: All news-driver-* agents are spawned FG (no team needed). Forked skills (earnings-orchestrator/attribution/prediction) retain task tools (Task #139 proof). news-impact skill doesn't use task tools.
+
+Full matrix results: `earnings-analysis/test-outputs/test-v174-definitive-matrix.txt`
+
+**Test artifacts:**
+
+| File | What It Tests |
+|------|--------------|
+| `.claude/agents/test-v174-fg-tool-inventory.md` | FG tool inventory agent |
+| `.claude/agents/test-v174-bg-tool-inventory.md` | BG tool inventory agent |
+| `.claude/agents/test-v174-full-model-id.md` | Full model ID in frontmatter |
+| `.claude/agents/test-v174-cron-tools.md` | Cron tool availability |
+| `.claude/agents/test-v174-parallel-fail.md` | Parallel fail isolation |
+| `.claude/agents/test-v174-html-comments.md` | HTML comment visibility |
+| `.claude/agents/test-v174-auto-memory-dir.md` | autoMemoryDirectory setting |
+| `.claude/skills/test-v174-hook-count/SKILL.md` | Skill hook double-fire test |
+| `.claude/hooks/test-v174-hook-counter.sh` | Hook fire counter script |
+| `.claude/rules/test-v174-html-comments.md` | HTML comment test fixture |
+| `earnings-analysis/test-outputs/test-v174-*.txt` | All test output files |
+| `earnings-analysis/test-outputs/test-v174-consolidated-results.txt` | Consolidated results |
 
 ---
 
@@ -2144,9 +2516,9 @@ ls -la earnings-analysis/test-outputs/*.txt
 | **Task tool** | Main conversation | **PARALLEL** ✅ | 3 agents started within 0.5s, each slept 5s, total ~6s |
 | **Skill tool** | Main conversation | **SEQUENTIAL** ❌ | Child A at 17:57:36, Child B at 17:58:23 (47s gap) |
 | **Skill tool** | Forked context | **SEQUENTIAL** ❌ | Child A at 17:50:01, Child B at 17:50:16 (14s gap) |
-| **Task tool** | Forked context | **BLOCKED** ❌ | Cannot use Task in forked skills |
+| **Task tool (spawner)** | Forked context | **BLOCKED** ❌ | Cannot use Agent/Task spawner in forked skills. **BUT**: TaskCreate/Get/Update/List DO work (Task #139 proof, v2.1.74) |
 
-**Key insight**: Task tool IS parallel, but it's blocked in forked skills!
+**Key insight**: Task/Agent spawner IS parallel, but it's blocked in forked skills! Task CRUD tools (TaskCreate/Get/Update/List) DO work in forks.
 
 **Implications for architecture:**
 - Layer 0 (main conversation) CAN spawn parallel agents using Task tool
@@ -2562,7 +2934,7 @@ Orchestrators can use the shared task list to coordinate multiple sub-agents.
 
 ### Pattern 1: Sub-Agents See Shared Task List
 
-Sub-agents spawned via Task tool can see and update the same task list as the parent.
+Sub-agents spawned via Agent tool can see and update the same task list as the parent. **v2.1.74 note**: FG non-team agents and team agents (FG/BG) have TaskList/Get/Update access. BG non-team agents do NOT.
 
 ```
 Orchestrator creates Task #1 → Sub-agent sees Task #1 via TaskList
@@ -3014,7 +3386,7 @@ In Jan 2026, `run_in_background: true` gave agents only Bash. Most of those bugs
 | Use Case | Mode | Why |
 |----------|------|-----|
 | Agent needs Write, MCP, Skill, Bash | ✅ Background OK | These all work now |
-| Agent needs TaskCreate/Update | ❌ Use foreground | Task tools still blocked in background |
+| Agent needs TaskCreate/Update | ⚠️ FG or BG+team | BG non-team: blocked. **v2.1.74**: spawn with `team_name` → BG agent gets task tools |
 | Orchestrator needs to do other work while agents run | ✅ Background | Non-blocking |
 | Orchestrator just waits for results | Either works | Foreground blocks but agents still run in parallel |
 
@@ -3220,14 +3592,16 @@ Actual delivered        = Requested ∩ BG-Allowed = {Bash, Read, Write, Glob, G
 
 The `tools:` whitelist CAN restrict (Edit was bg-allowed but not requested → not delivered), but CANNOT expand beyond what the bg runtime permits. Task tools are unconditionally stripped regardless of frontmatter.
 
+**⚠️ v2.1.74 UPDATE**: This behavior changed. BG **team-spawned** agents now get TaskCreate/List/Get/Update (6 direct tools). BG non-team custom agents get only Bash. BG non-team GP agents get 37 tools (no task tools). FG non-team agents now have 49 tools including task tools. See definitive matrix in retest summary.
+
 Evidence: `test-bg-tasktools-background-v252.txt`, `test-bg-tasktools-foreground-v252.txt`
 
-### `background: true` Gotcha (CONFIRMED)
+### `background: true` Gotcha (PARTIALLY RESOLVED)
 
-**`run_in_background` MAY AUTO-ENABLE**: Infrastructure.md line 68 warns Claude may auto-enable background mode. This is now even more relevant because:
+**`run_in_background` MAY AUTO-ENABLE**: Infrastructure.md line 68 warns Claude may auto-enable background mode. **v2.1.74 update**: If you need TaskCreate/Update in BG mode, spawn with `team_name` parameter — team BG agents have full task tools. The old advice below applies to non-team BG agents:
 1. `background: true` in frontmatter FORCES background mode
-2. The Task tool ALSO has `run_in_background` parameter
-3. If you need TaskCreate/Update, you MUST: (a) NOT use `background: true` in frontmatter, AND (b) explicitly set `run_in_background: false` on the Task call
+2. The Agent tool ALSO has `run_in_background` parameter
+3. For non-team: (a) NOT use `background: true` in frontmatter, AND (b) explicitly set `run_in_background: false` on the Agent call. **OR**: spawn with `team_name` to unlock task tools in BG mode
 
 ### Memory Auto-preload Status (v2.1.50 — Definitive Retest)
 
@@ -3455,8 +3829,8 @@ knowledge across conversations.
 | BG agent tools | 11 tools | **12 tools (+EnterWorktree)** | Minor improvement |
 | FG agent tools | 20 tools | **40 tools** (7 base + 33 deferred incl. TaskCreate, MCP) | Major — FG agents have full deferred tools |
 | `--agent` tools | N/A | **27 tools (FULL SET)** | bg:true has no effect via CLI |
-| BG agent TaskCreate | ❌ BLOCKED | ❌ **STILL BLOCKED v2.1.52** (all models, all spawn methods, Skill workaround also fails) | No change — use foreground pattern |
-| `tools` field vs bg restriction | Unknown | **CONFIRMED: Cannot expand bg base set** (Actual = Requested ∩ BG-Allowed) | Don't rely on `tools` to grant TaskCreate in bg mode |
+| BG agent TaskCreate | ❌ BLOCKED | ❌ **STILL BLOCKED v2.1.52** → ✅ **RESOLVED v2.1.74 via teams** | Spawn with `team_name` → BG agent gets TaskCreate. Non-team BG: still blocked |
+| `tools` field vs bg restriction | Unknown | **CONFIRMED: Cannot expand bg base set** (Actual = Requested ∩ BG-Allowed) | **v2.1.74**: team membership expands BG-Allowed to include task tools |
 | Memory auto-preload | ❌ BROKEN | ✅ **NOW WORKING** (v2.1.52, all 3 scopes, Task tool + `--agent`) | **MAJOR FIX** — works via Task tool with `tools:` field |
 | BG + MCP (ToolSearch) | ✅ Works (v2.1.47) | ⚠️ **Perplexity MCP v0.14.0 schema** causes API 400 | FIX: Add `tools:` field excluding bad MCP. Or downgrade Perplexity to v0.2.2 |
 | `background: true` frontmatter | N/A | ✅ **NEW** — scheduling directive only | Auto-sets run_in_background; no independent tool restriction |
@@ -3469,13 +3843,15 @@ Custom agents created in the previous session (`test-bg-fm-tasktools`, `test-bg-
 
 **Workaround used**: `unset CLAUDECODE && claude -p --agent <name>` via Bash for frontmatter-specific tests; `general-purpose` subagent via Task tool for Task-tool-specific tests.
 
-#### 3-Tier Tool Hierarchy (CONFIRMED, Opus 4.6)
+#### 3-Tier Tool Hierarchy (v2.1.52, SUPERSEDED by v2.1.74 5-tier — see retest summary)
 
 | Spawn Method | Total Tools | Task Tools | Team Tools | Interactive | Nesting |
 |-------------|------------|-----------|-----------|------------|---------|
 | `claude --agent` (CLI) | **27** | ✅ All 4 | ✅ All 3 | ✅ All 3 | ✅ Task/TaskOutput/TaskStop |
 | Task tool (foreground) | **40** (7 base + 33 deferred) | ✅ All 4 (deferred) | ✅ All 3 (deferred) | ❌ None | ❌ No Task spawner |
 | Task tool (background) | **12** (base only, no deferred) | ❌ None | ❌ None | ❌ None | ❌ None |
+
+**⚠️ v2.1.74**: This 3-tier model is superseded. See definitive 5-tier matrix in retest summary. Key changes: FG non-team now has 49 tools (with task tools), BG team agents now have task tools (6 direct), BG non-team custom gets only Bash.
 
 Evidence files:
 - `--agent`: `test-bg-fm-vs-runtime-opus.txt` (27 tools)
@@ -3496,6 +3872,8 @@ Evidence files:
 | Task (BG, bg:true agent) | `test-bg-fm-tasktools` | 9 tools (incl. Task*) | **5** | ❌ Stripped |
 
 **Tool Set Algebra**: `Actual = Requested ∩ BG-Allowed`. The `tools:` field can RESTRICT (Edit was bg-allowed but not requested → not delivered) but CANNOT EXPAND beyond what the bg runtime permits. Task tools are unconditionally stripped.
+
+**⚠️ v2.1.74 UPDATE**: BG-Allowed now includes TaskCreate/Get/Update/List when agent is spawned with `team_name`. Formula becomes: `Actual = Requested ∩ BG-Team-Allowed` where BG-Team-Allowed includes task+message tools. Non-team BG agents still use old formula.
 
 **Key finding**: `background: true` in frontmatter FORCES bg mode even when Task tool spawns in foreground. Both FG and BG spawns of the same agent got identical 5-tool sets.
 

@@ -147,7 +147,7 @@ def _ensure_ids(item, fye_month=None):
         low=item.get('low'),
         mid=item.get('mid'),
         high=item.get('high'),
-        unit_raw=item.get('unit_raw', 'unknown'),
+        unit_raw=item.get('unit_raw') or item.get('canonical_unit') or 'unknown',
         qualitative=item.get('qualitative'),
         conditions=item.get('conditions'),
     )

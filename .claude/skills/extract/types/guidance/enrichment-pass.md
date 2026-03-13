@@ -69,7 +69,14 @@ For missing labels, re-scan secondary content for that metric. Append to the log
 
 **ONLY** items that changed or are new. Do NOT re-write items that were not enriched.
 
-For each enriched item: start from the FULL item read in Step 2. Apply secondary enrichments to specific fields. Do NOT omit any field from the existing item — SET overwrites everything including null.
+For each enriched item: start from the FULL 7E readback item as your semantic base. Apply secondary enrichments to specific fields. Do NOT omit any existing semantic/write field from that base item — `SET` overwrites everything including null.
+
+Preserve from 7E unless the Q&A changes it: `given_date`, `period_scope`, `time_type`, `fiscal_year`, `fiscal_quarter`, `segment`, `low`/`mid`/`high`, `basis_norm`, `basis_raw`, `derivation`, `qualitative`, `quote`, `section`, `source_key`, `source_type`, `conditions`, `xbrl_qname`, `unit_raw` (when present), `period_u_id`, `gp_start_date`, `gp_end_date`.
+
+Exceptions:
+- `member_u_ids`: always set `[]` in the payload — the CLI repopulates these deterministically
+- `source_refs`: rebuild per the intersection file for the new secondary evidence; 7E does not return prior `source_refs`
+- CLI-owned deterministic fields (`guidance_id`, `guidance_update_id`, `evhash16`, canonicalized numeric/unit fields): do NOT hand-maintain these from 7E
 
 For new secondary-only items: build from scratch using CIK/FYE from Step 1. Use `given_date` from Step 2.
 
@@ -93,7 +100,13 @@ The CLI (`guidance_write_cli.py`) is the sole authority for member resolution. A
 }
 ```
 
-Do NOT wrap items in a `company` object. Items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally.
+Do NOT wrap items in a `company` object.
+
+For enrichment, prefer this pattern:
+- Existing items: reuse `period_u_id` from 7E when the period is unchanged, but let the CLI recompute deterministic IDs/hash/canonical fields from the updated payload
+- New secondary-only items: items do NOT need pre-computed IDs or `period_u_id` — the CLI calls `build_guidance_period_id()` and `build_guidance_ids()` internally
+
+Do NOT rely on pre-computed `guidance_update_id`/`evhash16` from 7E as authoritative. Enrichment may change slot-defining fields (`basis_norm`, `segment`, `label`, `period_u_id`) or evidence-hash inputs (`low`/`mid`/`high`, unit, `qualitative`, `conditions`), so the CLI must remain the authority for recomputation.
 
 4. **Invoke CLI** — same invocation as primary pass:
 

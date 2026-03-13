@@ -1,6 +1,10 @@
 ---
 description: "Generic extraction orchestrator. Runs any extraction type against any data asset. Spawns primary + optional enrichment agents."
+disable-model-invocation: true
+argument-hint: "TICKER ASSET SOURCE_ID TYPE= MODE="
 ---
+
+ALWAYS use `ultrathink` for maximum reasoning depth.
 
 Parse `$ARGUMENTS` as: `{TICKER} {ASSET} {SOURCE_ID} TYPE={TYPE} MODE={MODE} [RESULT_PATH={PATH}]`
 

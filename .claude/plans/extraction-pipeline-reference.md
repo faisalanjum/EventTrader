@@ -219,6 +219,7 @@ All skill/query paths relative to `.claude/skills/extract/`.
 | D15 | Evidence hash (evhash16) | SHA-256 first 16 chars of evidence content. Cross-source change detection without affecting ID. |
 | D16 | Frozen originals archived | Old pipeline in `.claude/archive/`. Retirement quality-gated, not time-gated. |
 | D17 | KEDA min=1, max=7, cooldown 300s | min=1 prevents killing pods mid-extraction. max=7 safe for parallel tickers. |
+| D18 | FG agents, not BG | BG custom agents collapse to 1 tool (Bash only) — agents need 7 tools including MCP. Sequential primary→enrichment dependency means no parallelism benefit. KEDA handles cross-job parallelism at pod level. |
 
 ---
 
@@ -376,7 +377,7 @@ proxy-queries.md      # Asset-specific Cypher queries
 
 | # | Change | Where | Benefit |
 |---|--------|-------|---------|
-| S14 | `includeGitInstructions: false` | Both agent shells | ~500 tokens/turn saved |
+| S14 | `includeGitInstructions: false` | `settings.json` or env var `CLAUDE_CODE_INCLUDE_GIT_INSTRUCTIONS=false` | ~500 tokens/turn saved |
 | S19 | `argument-hint: "TICKER ASSET SOURCE_ID TYPE= MODE="` | `/extract` SKILL.md | Autocomplete help |
 | S20 | `disable-model-invocation: true` | `/extract` SKILL.md | ~100 tokens saved |
 | S22 | `disallowedTools: [mcp__neo4j-cypher__write_neo4j_cypher]` | Both agent shells | Defense-in-depth |

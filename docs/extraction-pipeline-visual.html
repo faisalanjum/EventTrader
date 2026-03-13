@@ -630,7 +630,7 @@
 
 <!-- ============================================================ -->
 <h2><span class="num">6</span> Full File Tree (Color-Coded)</h2>
-<p class="section-intro">All files under <code>.claude/skills/extract/</code>. Colors match the legend at the top.</p>
+<p class="section-intro">Every file in the extraction pipeline — prompt stack, agent shells, deterministic scripts, runtime infrastructure, and K8s manifest. Colors match the legend at the top.</p>
 
 <div class="diagram">
   <div class="file-tree">
@@ -645,8 +645,10 @@
     <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">transcript-queries.md</span><span class="ft-desc">— Fetch transcript data (slot 6)</span></div>
     <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">8k.md</span><span class="ft-desc">— How to read 8-K filings (slot 3)</span></div>
     <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">8k-queries.md</span><span class="ft-desc">— Fetch 8-K data (slot 6)</span></div>
-    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">10q.md</span><span class="ft-desc">— How to read 10-Q/10-K filings (slot 3)</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">10q.md</span><span class="ft-desc">— How to read 10-Q filings (slot 3)</span></div>
     <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">10q-queries.md</span><span class="ft-desc">— Fetch 10-Q data (slot 6)</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">10k.md</span><span class="ft-desc">— How to read 10-K filings (slot 3)</span></div>
+    <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">10k-queries.md</span><span class="ft-desc">— Fetch 10-K data (slot 6)</span></div>
     <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">news.md</span><span class="ft-desc">— How to read news articles (slot 3)</span></div>
     <div class="ft-line ft-asset"><span class="ft-indent">    </span><span class="ft-icon">📄</span><span class="ft-name">news-queries.md</span><span class="ft-desc">— Fetch news data (slot 6)</span></div>
 
@@ -663,6 +665,42 @@
     <div class="ft-line ft-intersection"><span class="ft-indent">        </span><span class="ft-icon">📄</span><span class="ft-name">8k-primary.md</span><span class="ft-desc">— Guidance from 8-K exhibits (slot 4)</span></div>
     <div class="ft-line ft-intersection"><span class="ft-indent">        </span><span class="ft-icon">📄</span><span class="ft-name">news-primary.md</span><span class="ft-desc">— Guidance from news articles (slot 4)</span></div>
     <div class="ft-line ft-intersection"><span class="ft-indent">        </span><span class="ft-icon">📄</span><span class="ft-name">10q-primary.md</span><span class="ft-desc">— Guidance from MD&A sections (slot 4)</span></div>
+    <div class="ft-line ft-intersection"><span class="ft-indent">        </span><span class="ft-icon">📄</span><span class="ft-name">10k-primary.md</span><span class="ft-desc">— Guidance from 10-K MD&A + multi-year targets (slot 4)</span></div>
+
+    <div style="border-top:1px solid #334155; margin:20px 0;"></div>
+
+    <div class="ft-line ft-dir"><span class="ft-indent"></span><span class="ft-icon">📁</span><span class="ft-name">.claude/agents/</span><span class="ft-desc">— Generic agent shells (spawned by orchestrator)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">extraction-primary-agent.md</span><span class="ft-desc">— Primary pass agent shell (66 lines)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">extraction-enrichment-agent.md</span><span class="ft-desc">— Enrichment pass agent shell (69 lines)</span></div>
+
+    <div style="border-top:1px solid #334155; margin:20px 0;"></div>
+
+    <div class="ft-line ft-dir"><span class="ft-indent"></span><span class="ft-icon">📁</span><span class="ft-name">.claude/skills/earnings-orchestrator/scripts/</span><span class="ft-desc">— Deterministic Python scripts</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">guidance_ids.py</span><span class="ft-desc">— ID generation, unit canonicalization, evidence hashing (552 lines)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">guidance_writer.py</span><span class="ft-desc">— MERGE patterns, param assembly, Neo4j writes (439 lines)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">guidance_write_cli.py</span><span class="ft-desc">— CLI entry: reads JSON, computes IDs, calls writer (356 lines)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">guidance_write.sh</span><span class="ft-desc">— Shell wrapper: venv + Neo4j env vars (24 lines)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">concept_resolver.py</span><span class="ft-desc">— XBRL concept resolution + concept family mapping (382 lines)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">warmup_cache.py</span><span class="ft-desc">— Pre-compute concept/member/transcript caches to /tmp (216 lines)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">warmup_cache.sh</span><span class="ft-desc">— Shell wrapper for warmup (24 lines)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">fiscal_math.py</span><span class="ft-desc">— Calendar-to-fiscal date math (140 lines)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">fiscal_resolve.py</span><span class="ft-desc">— Period resolution from XBRL periods (220 lines)</span></div>
+
+    <div style="border-top:1px solid #334155; margin:20px 0;"></div>
+
+    <div class="ft-line ft-dir"><span class="ft-indent"></span><span class="ft-icon">📁</span><span class="ft-name">scripts/</span><span class="ft-desc">— Runtime infrastructure</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">extraction_worker.py</span><span class="ft-desc">— K8s worker: Redis BRPOP → validate → Agent SDK → status (493 lines)</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">trigger-extract.py</span><span class="ft-desc">— CLI: query Neo4j for unprocessed → Redis LPUSH (280 lines)</span></div>
+
+    <div style="border-top:1px solid #334155; margin:20px 0;"></div>
+
+    <div class="ft-line ft-dir"><span class="ft-indent"></span><span class="ft-icon">📁</span><span class="ft-name">k8s/processing/</span><span class="ft-desc">— Kubernetes manifests</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">extraction-worker.yaml</span><span class="ft-desc">— Deployment + KEDA ScaledObject (min 1, max 7) (148 lines)</span></div>
+
+    <div style="border-top:1px solid #334155; margin:20px 0;"></div>
+
+    <div class="ft-line ft-dir"><span class="ft-indent"></span><span class="ft-icon">📁</span><span class="ft-name">.claude/plans/</span><span class="ft-desc">— Reference documentation</span></div>
+    <div class="ft-line ft-infra"><span class="ft-indent">  </span><span class="ft-icon">📄</span><span class="ft-name">extraction-pipeline-reference.md</span><span class="ft-desc">— Single source of truth: architecture, design, roadmap (478 lines)</span></div>
   </div>
 </div>
 

@@ -1,26 +1,27 @@
-Test Child Thinking Result (Layer 2)
-=====================================
+test-child-thinking skill (Layer 2) — Result
+=============================================
 
-Problem: What is 17 * 23?
+Problem: 17 * 23
 
 Calculation Steps:
-------------------
-Method 1 - Distributive Property:
-  17 * 23 = 17 * (20 + 3)
-          = (17 * 20) + (17 * 3)
-          = 340 + 51
-          = 391
 
-Method 2 - Standard Multiplication:
-      17
-    x 23
-    ----
-      51  (17 x 3)
-    340   (17 x 20)
-    ----
-     391
+  Method 1 — Distributive property:
+    17 * 23
+    = 17 * (20 + 3)
+    = (17 * 20) + (17 * 3)
+    = 340 + 51
+    = 391
+
+  Method 2 — Verification via alternate decomposition:
+    17 * 23
+    = (20 - 3) * 23
+    = (20 * 23) - (3 * 23)
+    = 460 - 69
+    = 391
+
+Both methods agree.
 
 Final Answer: 391
 
 Source: test-child-thinking skill (Layer 2)
-Timestamp: 2026-01-16
+Timestamp: 2026-03-09

@@ -506,6 +506,26 @@ def test_apply_member_map_alias_redirect():
     assert items[1]['member_u_ids'] == ['868365:DigitalExperienceMember']
 
 
+def test_apply_member_map_adbe_cmp_alias_redirect():
+    """ADBE transcript phrasing maps to the XBRL member via alias."""
+    member_map = {
+        'creativeprofessionalsandmarketer': [
+            '796343:http://adobe.com/20250228:adbe:CreativeProfessionalsAndMarketersMember'
+        ],
+    }
+    aliases = {
+        'creativeandmarketingprofessional': 'creativeprofessionalsandmarketer',
+    }
+    items = [
+        _make_raw_item(segment='Creative and Marketing Professionals', member_u_ids=[]),
+    ]
+    matched = _apply_member_map(items, member_map, aliases=aliases)
+    assert matched == 1
+    assert items[0]['member_u_ids'] == [
+        '796343:http://adobe.com/20250228:adbe:CreativeProfessionalsAndMarketersMember'
+    ]
+
+
 def test_apply_member_map_direct_match_preferred_over_alias():
     """When XBRL updates and direct match exists, alias is skipped (future-safe)."""
     member_map = {

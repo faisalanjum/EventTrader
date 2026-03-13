@@ -618,7 +618,7 @@ def test_concept_runs_on_existing_rerun():
 # ── Batch tests ───────────────────────────────────────────────────────────
 
 def test_batch_summary_counts():
-    """Batch correctly tallies created/skipped/errors."""
+    """Batch correctly tallies created/updated/errors for write mode."""
     old_val = guidance_writer.ENABLE_GUIDANCE_WRITES
     try:
         guidance_writer.ENABLE_GUIDANCE_WRITES = True
@@ -637,7 +637,8 @@ def test_batch_summary_counts():
                                        'AAPL', dry_run=False)
         assert summary['total'] == 3
         assert summary['created'] == 1
-        assert summary['skipped'] == 1
+        assert summary['updated'] == 1
+        assert summary['skipped'] == 0
         assert summary['errors'] == 1
     finally:
         guidance_writer.ENABLE_GUIDANCE_WRITES = old_val
@@ -649,7 +650,7 @@ def test_batch_empty():
     assert summary['created'] == 0
 
 def test_batch_dry_run():
-    """All items in dry-run → skipped count (not created, not errors)."""
+    """Dry-run items fall into the non-created skipped bucket."""
     items = [_make_item(), _make_item(guidance_update_id='gu:x')]
     mgr = MockManager()
     summary = write_guidance_batch(mgr, items, 'src1', 'transcript',

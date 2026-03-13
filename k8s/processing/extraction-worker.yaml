@@ -66,6 +66,9 @@ spec:
         # MCP HTTP endpoint (overrides .mcp.json stdio server)
         - name: MCP_NEO4J_URL
           value: http://mcp-neo4j-cypher-http.mcp-services.svc.cluster.local:8000/mcp
+        # Strip git commit/PR instructions from system prompt (~500 tokens/turn saved)
+        - name: CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS
+          value: "true"
         # CRITICAL: Blank out API key from eventtrader-secrets so CLI uses
         # .credentials.json (Max subscription) instead of per-token billing.
         # Also blank out expired CLAUDE_CODE_OAUTH_TOKEN from claude-auth secret.

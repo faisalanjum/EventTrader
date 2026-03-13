@@ -22,7 +22,7 @@ RETURN DISTINCT g.label, g.id
 ```cypher
 MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance)
 MATCH (gu)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
-WITH g, gu ORDER BY gu.given_date DESC, gu.id DESC
+WITH g, gu ORDER BY datetime(gu.given_date) DESC, gu.id DESC
 WITH g, collect(gu)[0] AS latest
 RETURN g.label, latest.given_date, latest.low, latest.mid, latest.high,
        latest.canonical_unit, latest.basis_norm, latest.segment,
@@ -85,7 +85,7 @@ and recency. Used by enrichment agent to detect missing items after secondary co
 MATCH (gu:GuidanceUpdate)-[:UPDATES]->(g:Guidance),
       (gu)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
 WHERE gu.source_type = $source_type
-  AND gu.given_date < $current_given_date
+  AND datetime(gu.given_date) < datetime($current_given_date)
 WITH g.label AS label,
      max(gu.given_date) AS last_seen,
      count(DISTINCT gu.given_date) AS frequency

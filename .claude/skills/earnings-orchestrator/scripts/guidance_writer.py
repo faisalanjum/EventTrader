@@ -130,6 +130,13 @@ MATCH (company:Company {{ticker: $ticker}})
 // Snapshot whether GuidanceUpdate already exists (for was_created)
 OPTIONAL MATCH (existing:GuidanceUpdate {{id: $guidance_update_id}})
 
+// Derive given_date from source node (writer-authoritative, UTC-normalized)
+WITH source, company, existing,
+     CASE $source_type
+       WHEN 'transcript' THEN source.conference_datetime
+       ELSE source.created
+     END AS raw_given_ts
+
 // MERGE nodes we own — Guidance
 MERGE (g:Guidance {{id: $guidance_id}})
   ON CREATE SET g.label = $label,
@@ -149,7 +156,7 @@ MERGE (gp:GuidancePeriod {{id: $period_u_id}})
 MERGE (gu:GuidanceUpdate {{id: $guidance_update_id}})
   ON CREATE SET gu.created = $created_ts
   SET gu.evhash16 = $evhash16,
-      gu.given_date = $given_date,
+      gu.given_date = toString(datetime({{epochMillis: datetime(raw_given_ts).epochMillis}})),
       gu.period_scope = $period_scope,
       gu.time_type = $time_type,
       gu.fiscal_year = $fiscal_year,
@@ -173,7 +180,7 @@ MERGE (gu:GuidanceUpdate {{id: $guidance_update_id}})
       gu.label = $label,
       gu.label_slug = $label_slug,
       gu.segment_slug = $segment_slug,
-      gu.source_refs = $source_refs,
+      gu.source_refs = CASE WHEN gu.source_refs IS NULL THEN $source_refs ELSE gu.source_refs + [x IN $source_refs WHERE NOT x IN gu.source_refs] END,
       gu.concept_family_qname = $concept_family_qname
 
 // Core edges (4 from GuidanceUpdate)
@@ -378,10 +385,10 @@ def write_guidance_batch(manager, items, source_id, source_type, ticker,
     Write a batch of guidance items. Calls write_guidance_item() per item.
 
     Returns:
-        dict {created, skipped, errors, concept_links, member_links, total, results}
+        dict {created, updated, skipped, errors, concept_links, member_links, total, results}
     """
     summary = {
-        'created': 0, 'skipped': 0, 'errors': 0,
+        'created': 0, 'updated': 0, 'skipped': 0, 'errors': 0,
         'concept_links': 0, 'member_links': 0,
         'total': len(items), 'results': [],
     }
@@ -396,6 +403,8 @@ def write_guidance_batch(manager, items, source_id, source_type, ticker,
             summary['errors'] += 1
         elif result.get('was_created'):
             summary['created'] += 1
+        elif result.get('was_created') is False:
+            summary['updated'] += 1
         else:
             summary['skipped'] += 1
         summary['concept_links'] += result.get('concept_links', 0)

@@ -107,7 +107,7 @@ Every GuidanceUpdate carries these 20 properties. System identity properties (`i
 
 | # | Field | Type | Constraint | Example |
 |---|-------|------|------------|---------|
-| 1 | `given_date` | String | ISO date | `"2025-01-30"` |
+| 1 | `given_date` | String | ISO timestamp (UTC), derived from source node at write time | `"2025-01-30T21:05:54Z"` |
 | 2 | `period_scope` | String | `quarter`, `annual`, `half`, `monthly`, `long_range`, `short_term`, `medium_term`, `long_term`, `undefined` | `"quarter"` |
 | 3 | `time_type` | String | `duration` (default ~99%), `instant` (balance-sheet items only) | `"duration"` |
 | 4 | `fiscal_year` | Integer | | `2025` |
@@ -568,11 +568,11 @@ GuidanceUpdate nodes do NOT maintain NEXT/PREVIOUS edges.
 
 All time-based reads MUST use:
 ```cypher
-ORDER BY gu.given_date, gu.id
+ORDER BY datetime(gu.given_date), gu.id
 ```
 Or latest-first:
 ```cypher
-ORDER BY gu.given_date DESC, gu.id DESC
+ORDER BY datetime(gu.given_date) DESC, gu.id DESC
 ```
 
 No linked-list maintenance. No supersession chains. No action classification storage. Latest by `given_date` (tie-break `id`) is current. First in timeline is implicit anchor.
