@@ -28,7 +28,12 @@ Query 7E with `source_id = $SOURCE_ID`. These are the items written by the prima
 
 7E returns: `period_u_id` (gp_ format), `gu.period_scope`, `gu.time_type`, `gp.start_date AS gp_start_date`, `gp.end_date AS gp_end_date`. No `period_node_type`.
 
-**If 7E returns 0 items**: Return error `PHASE_DEPENDENCY_FAILED — no primary pass items found for source {SOURCE_ID}. Run primary pass first.`
+**If 7E returns 0 items**:
+1. Read `/tmp/extract_pass_{TYPE}_primary_{SOURCE_ID}.json`.
+2. If `status == "completed"` and `items_written == 0`, return:
+   `{"status":"completed","items_enriched":0,"new_secondary_items":0,"errors":0,"message":"NO_PRIMARY_ITEMS"}`
+3. Otherwise, return:
+   `PHASE_DEPENDENCY_FAILED — no primary pass items found for source {SOURCE_ID}. Run primary pass first.`
 
 Record `given_date` from existing items — all items from the same source share it. Use this for any new secondary-only items.
 
