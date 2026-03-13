@@ -45,7 +45,7 @@ Q&A is often MORE valuable for guidance than prepared remarks because:
 
 The supporting quote for any Q&A-extracted item must be **management-answer text only**, not analyst-question text.
 
-Explicit management confirmations that count as affirmation: "we're comfortable with that", "that's right", "that's a fair way to think about it", "yes", "correct".
+Examples of strong confirmations: "we're comfortable with that", "that's right", "that's a fair way to think about it", "yes", "correct". These are examples, not an exhaustive whitelist. Use semantic judgment: if management clearly adopts the analyst-stated magnitude as its own view, it is extractable.
 
 Non-committal replies are **NOT** confirmation: "we'll see", "it depends", "that's one way to look at it", "time will tell" — treat as NO GUIDANCE unless management separately states or clearly affirms the magnitude.
 
