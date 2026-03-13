@@ -9,6 +9,8 @@ When falling back to Q&A data (prepared remarks empty/truncated),
 apply your quality filters from the pass brief. Use quote prefix `[Q&A]` for any items
 extracted from Q&A fallback data. The enrichment agent handles specialized Q&A extraction.
 
+**Q&A fallback analyst-framing rule**: Do not extract a numeric or qualitative guidance anchor from analyst wording unless management explicitly restates or clearly affirms it in the answer. The supporting quote must be management-answer text only.
+
 ## Content Fetch — Always Use Bash for 3B
 
 Transcript content (query 3B) typically exceeds 50KB and triggers SDK output persistence.

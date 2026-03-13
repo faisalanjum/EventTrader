@@ -8,7 +8,7 @@ from guidance_ids import (
     slug, canonicalize_unit, canonicalize_value, compute_evhash16,
     canonicalize_source_id, build_guidance_ids, build_period_u_id,
     build_guidance_period_id, KNOWN_INSTANT_LABELS, SENTINEL_MAP,
-    _normalize_text, _normalize_numeric,
+    _normalize_text, _normalize_numeric, _is_share_count_label,
     CANONICAL_UNITS, UNIT_ALIASES, VALID_UNITS,
 )
 
@@ -659,6 +659,68 @@ def test_gp_invalid_half_raises():
         assert False, "Should have raised ValueError"
     except ValueError:
         pass
+
+
+# ── Share-count canonicalization (Change 1-3 + Guard C) ─────────────────────
+
+def test_count_label_unit_billion_diluted_share_count():
+    """canonicalize_unit('billion', 'diluted_share_count') → 'count'"""
+    assert canonicalize_unit('billion', 'diluted_share_count') == 'count'
+
+def test_count_label_unit_million_share_count():
+    """canonicalize_unit('million', 'share_count') → 'count'"""
+    assert canonicalize_unit('million', 'share_count') == 'count'
+
+def test_count_label_unit_billion_revenue_negative():
+    """Negative control: revenue is NOT a count label."""
+    assert canonicalize_unit('billion', 'revenue') == 'm_usd'
+
+def test_count_label_unit_billion_share_repurchase_negative():
+    """Negative control: share_repurchase is NOT a count label."""
+    assert canonicalize_unit('billion', 'share_repurchase') == 'm_usd'
+
+def test_count_value_scaling_billion():
+    """4.94 billion diluted shares → 4,940,000,000.0 absolute."""
+    result = canonicalize_value(4.94, 'billion', 'count', 'diluted_share_count')
+    assert result == 4940000000.0, f"expected 4940000000.0, got {result}"
+
+def test_share_count_value_scaling_million():
+    """300 million share_count → 300,000,000.0 absolute."""
+    result = canonicalize_value(300, 'million', 'count', 'share_count')
+    assert result == 300000000.0, f"expected 300000000.0, got {result}"
+
+def test_is_share_count_label_classifier():
+    """_is_share_count_label matches reviewed share-count labels only."""
+    assert _is_share_count_label('diluted_share_count') is True
+    assert _is_share_count_label('share_count') is True
+    assert _is_share_count_label('diluted_shares') is True
+    assert _is_share_count_label('basic_shares') is True
+    assert _is_share_count_label('shares_outstanding') is True
+    # Negative controls
+    assert _is_share_count_label('subscriber_count') is False
+    assert _is_share_count_label('store_count') is False
+    assert _is_share_count_label('share_repurchase') is False
+    assert _is_share_count_label('share_based_compensation') is False
+    assert _is_share_count_label('revenue') is False
+    assert _is_share_count_label('eps') is False
+    assert _is_share_count_label('discount') is False
+
+def test_build_guidance_ids_avgo_share_count():
+    """Integration: AVGO diluted share count gets count, not m_usd."""
+    ids = build_guidance_ids(
+        label='Diluted Share Count',
+        source_id='AVGO_test',
+        period_u_id='gp_test',
+        unit_raw='billion',
+        low=4.94, mid=4.94, high=4.94,
+        basis_norm='unknown',
+    )
+    assert ids['canonical_unit'] == 'count', f"got {ids['canonical_unit']}"
+    assert ids['canonical_low'] == 4940000000.0, f"got {ids['canonical_low']}"
+    assert ids['canonical_mid'] == 4940000000.0
+    assert ids['canonical_high'] == 4940000000.0
+    # unit_raw should be stripped for known canonical units
+    assert 'unit_raw' not in ids or ids.get('unit_raw') is None
 
 
 # ── Run all tests ───────────────────────────────────────────────────────────

@@ -812,6 +812,25 @@ def test_params_source_refs_none_becomes_empty():
     assert params['source_refs'] == []
 
 
+def test_params_known_unit_raw_suppressed():
+    """Known canonical units must not persist unit_raw back into the graph."""
+    params = _build_params(
+        _make_item(canonical_unit='count', unit_raw='billion', label='Diluted Share Count',
+                   label_slug='diluted_share_count'),
+        'src1', 'transcript', 'AAPL'
+    )
+    assert params['unit_raw'] is None
+
+
+def test_params_unknown_unit_raw_preserved():
+    """Unknown canonical units keep the verbatim raw unit for troubleshooting."""
+    params = _build_params(
+        _make_item(canonical_unit='unknown', unit_raw='widgets'),
+        'src1', 'transcript', 'AAPL'
+    )
+    assert params['unit_raw'] == 'widgets'
+
+
 # ── Per-share validation guards (Issue #28) ──────────────────────────────
 
 def test_validate_per_share_label_with_m_usd():
@@ -874,6 +893,38 @@ def test_validate_per_share_label_with_unknown_unit():
         qualitative='continued strong growth',
         guidance_id='guidance:eps',
         guidance_update_id='gu:src:eps:gp_2025-01-01_2025-03-31:gaap:total',
+    )
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is True
+    assert err is None
+
+
+def test_validate_share_count_label_with_m_usd():
+    """Guard C: share-count label + canonical_unit='m_usd' must be rejected."""
+    item = _make_item(
+        label='Diluted Share Count',
+        label_slug='diluted_share_count',
+        canonical_unit='m_usd',
+        guidance_id='guidance:diluted_share_count',
+        guidance_update_id='gu:src:diluted_share_count:gp_2025-01-01_2025-03-31:non_gaap:total',
+    )
+    ok, err = _validate_item(item, 'src1', 'transcript')
+    assert ok is False
+    assert 'share-count' in err
+    assert 'diluted_share_count' in err
+
+
+def test_validate_share_count_label_with_count():
+    """Share-count label + canonical_unit='count' must pass."""
+    item = _make_item(
+        label='Diluted Share Count',
+        label_slug='diluted_share_count',
+        canonical_unit='count',
+        canonical_low=4940000000.0,
+        canonical_mid=4940000000.0,
+        canonical_high=4940000000.0,
+        guidance_id='guidance:diluted_share_count',
+        guidance_update_id='gu:src:diluted_share_count:gp_2025-01-01_2025-03-31:non_gaap:total',
     )
     ok, err = _validate_item(item, 'src1', 'transcript')
     assert ok is True

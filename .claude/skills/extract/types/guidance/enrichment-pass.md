@@ -153,6 +153,7 @@ Secondary Content Analysis Log:
 - **Quote max 500 chars** — truncate at sentence boundary with "..." if needed. No citation = no node.
 - **100% recall priority** — when in doubt, extract it. False positives > missed guidance.
 - **Corporate announcements** — Do NOT extract capital allocation announcements (buyback authorizations, investment programs, facility plans). These belong to the `announcement` extraction type. Dividend-per-share guidance IS extractable.
+- **Factors are conditions, not items** — if a forward-looking statement quantifies a factor affecting another guided metric (e.g., FX headwind, week count), capture it in that metric's `conditions` field — not as a standalone item.
 
 ### Metric Decomposition (for new items)
 

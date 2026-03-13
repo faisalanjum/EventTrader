@@ -39,6 +39,20 @@ Q&A is often MORE valuable for guidance than prepared remarks because:
 3. **Look for CFO responses** — these carry highest guidance authority in Q&A
 4. **Capture analyst name** — use in `section` field for citation (e.g., `Q&A #3 (analyst name)`)
 
+### Analyst-Framing Rule
+
+**Do not extract a numeric or qualitative guidance anchor from analyst wording unless management explicitly restates or clearly affirms it in the answer.** Analyst questions are context only — they help you understand what is being discussed, but they are not a source of guidance.
+
+The supporting quote for any Q&A-extracted item must be **management-answer text only**, not analyst-question text.
+
+Explicit management confirmations that count as affirmation: "we're comfortable with that", "that's right", "that's a fair way to think about it", "yes", "correct".
+
+Non-committal replies are **NOT** confirmation: "we'll see", "it depends", "that's one way to look at it", "time will tell" — treat as NO GUIDANCE unless management separately states or clearly affirms the magnitude.
+
+**Negative example**: Analyst says "so double-digit operating margins for the year?" and management responds by discussing drivers of leverage and improved profitability without restating the number → **NO GUIDANCE** (analyst-framed, not management-confirmed).
+
+**Positive example**: Analyst says "so around 12% operating margin?" and management responds "yes, that's a reasonable expectation" → **extractable** (management clearly affirmed the magnitude).
+
 ## What to Extract from Q&A
 
 | Signal | Example | Extract? |
@@ -49,6 +63,7 @@ Q&A is often MORE valuable for guidance than prepared remarks because:
 | Conditional guidance | "Assuming no FX headwinds, we'd see 2% higher growth" | Yes: note condition in `conditions` field |
 | Clarification of PR guidance | "To be more specific, that's on a non-GAAP basis" | Yes: updates basis for the PR guidance item |
 | Dividend guidance | "we increased the dividend to $X.XX per share" | Yes: `derivation=point`. Do NOT extract buyback authorizations or investment programs (separate type). |
+| Analyst-framed number, management does not confirm | Analyst: "double-digit margins?" Mgmt: "we see improving leverage" | No: analyst-framed, not management-confirmed |
 | Analyst estimate repetition | "Your consensus shows $3.50" | No: analyst estimate, not company guidance |
 | Generic positive sentiment | "We feel good about the business" | No: no quantitative anchor |
 
@@ -74,13 +89,18 @@ If no Q&A content found, return early with NO_SECONDARY_CONTENT.
 
 ## Quote Prefixes
 
-- Primary content (prepared remarks): `[PR]`
 - Secondary content (Q&A): `[Q&A]`
-- Enriched items: `[PR] original text... [Q&A] additional detail...`
+- Enriched items: keep the existing quote from the primary item as-is, then append `[Q&A] additional detail...`
+  - Primary had `[PR]`: → `[PR] original text... [Q&A] additional detail...`
+  - Primary had `[Q&A]` (Q&A fallback, no prepared remarks): → `[Q&A] original text... [Q&A] additional detail...`
+  - **Never rewrite an existing `[Q&A]` prefix to `[PR]`**
 
 ## Section Format
 
-- Enriched items: `CFO Prepared Remarks + Q&A` (or specific Q&A reference)
+- Enriched items: keep the existing section from the primary item, append `+ Q&A #N (analyst)`
+  - Primary had `CFO Prepared Remarks`: → `CFO Prepared Remarks + Q&A #3 (analyst)`
+  - Primary had `Q&A #12 (analyst)`: → `Q&A #12 (analyst) + Q&A #5 (analyst)`
+  - **Never insert `Prepared Remarks` when the primary item came from Q&A**
 - source_refs: array of QAExchange node IDs. For 3C fallback (QuestionAnswer nodes): use `qa.id` directly — no sequence available.
   Format: `{SOURCE_ID}_qa__{sequence}` (e.g., `AAPL_2023-11-03T17.00_qa__3`)
 

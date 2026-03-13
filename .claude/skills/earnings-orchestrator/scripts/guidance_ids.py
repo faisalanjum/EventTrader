@@ -87,6 +87,34 @@ def _is_per_share_label(label_slug: str) -> bool:
 # in case external code imports this name.
 PER_SHARE_LABELS = {'eps', 'dps', 'earnings_per_share', 'dividends_per_share'}
 
+
+# ── Share-count classifier ─────────────────────────────────────────────────
+
+_KNOWN_SHARE_COUNT_LABELS = frozenset({
+    'share_count',
+    'shares_outstanding',
+})
+
+
+def _is_share_count_label(label_slug: str) -> bool:
+    """Detect reviewed share-count metrics that should use 'count', not 'm_usd'.
+
+    Scope is intentionally narrow: only share-count labels proven in the current
+    pipeline, plus safe share-specific token variants.
+
+    Rules (any match → True):
+      1. Exact: in _KNOWN_SHARE_COUNT_LABELS
+      2. Suffix: ends with '_share_count' (diluted_share_count)
+      3. Suffix: ends with '_shares' (diluted_shares, basic_shares)
+    """
+    if label_slug in _KNOWN_SHARE_COUNT_LABELS:
+        return True
+    if label_slug.endswith('_share_count'):
+        return True
+    if label_slug.endswith('_shares'):
+        return True
+    return False
+
 # Scale multipliers for raw → m_usd conversion
 _SCALE_TO_MILLIONS = {
     'b': 1000.0,
@@ -157,6 +185,10 @@ def canonicalize_unit(unit_raw: str, label_slug: str) -> str:
     if canonical == 'm_usd' and _is_per_share_label(label_slug):
         return 'usd'
 
+    # 5. Share-count override: share-count labels with scale words → count, not m_usd
+    if canonical == 'm_usd' and _is_share_count_label(label_slug):
+        return 'count'
+
     return canonical
 
 
@@ -173,6 +205,17 @@ def canonicalize_value(value: Optional[float], unit_raw: str, canonical_unit: st
     """
     if value is None:
         return None
+
+    # Share-count scaling: scale to absolute when raw unit is a scale word
+    if canonical_unit == 'count' and _is_share_count_label(label_slug) and unit_raw:
+        _, multiplier = _parse_numeric_with_scale(f"{value}{unit_raw}")
+        if multiplier is not None:
+            if multiplier > 1 and value > 999:
+                raise ValueError(
+                    f"{value} with '{unit_raw}' looks pre-scaled — "
+                    f"pass the number exactly as stated in source"
+                )
+            return round(value * multiplier * 1e6, 6)
 
     if canonical_unit not in ('m_usd', 'usd'):
         return value

@@ -349,6 +349,29 @@ def main():
             except Exception:
                 pass
 
+    # Write post-canonicalization sidecar for observability hooks (Obsidian capture).
+    # Contains per-item post-_ensure_ids values so the hook can show what was actually
+    # written, not the agent's pre-write interpretation.
+    results_list = output.get('results', [])
+    written_summary = []
+    for i, item in enumerate(valid_items):
+        result = results_list[i] if i < len(results_list) else {}
+        written_summary.append({
+            'label': item.get('label', ''),
+            'segment': item.get('segment', 'Total'),
+            'canonical_unit': item.get('canonical_unit', ''),
+            'low': item.get('canonical_low'),
+            'mid': item.get('canonical_mid'),
+            'high': item.get('canonical_high'),
+            'was_created': result.get('was_created'),
+            'error': result.get('error'),
+        })
+    try:
+        with open(f'/tmp/gu_written_{source_id}.json', 'w') as f:
+            json.dump(written_summary, f, default=str)
+    except OSError:
+        pass  # Non-fatal — observability degradation only
+
     print(json.dumps(output, default=str))
 
 

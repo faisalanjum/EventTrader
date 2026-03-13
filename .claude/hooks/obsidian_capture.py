@@ -346,6 +346,30 @@ if _extract_source_id and _is_extraction and _extract_result_file:
     except Exception:
         pass
 
+# Post-write summary table (from CLI sidecar — shows actual canonical values, not agent interpretation)
+if _is_extraction and _extract_source_id:
+    _written_path = f'/tmp/gu_written_{_extract_source_id}.json'
+    if os.path.exists(_written_path):
+        try:
+            with open(_written_path) as _wf:
+                _written = json.load(_wf)
+            if _written:
+                lines.append('')
+                lines.append(f'{_h2} Written Items (Post-Canonical)')
+                lines.append('')
+                lines.append('| Label | Segment | Unit | Low | Mid | High | Status |')
+                lines.append('|-------|---------|------|-----|-----|------|--------|')
+                for _w in _written:
+                    _st = 'created' if _w.get('was_created') is True else (
+                        'error' if _w.get('error') else (
+                        'dry_run' if _w.get('was_created') is None else 'updated'))
+                    _lo = _w.get('low') if _w.get('low') is not None else ''
+                    _mi = _w.get('mid') if _w.get('mid') is not None else ''
+                    _hi = _w.get('high') if _w.get('high') is not None else ''
+                    lines.append(f"| {_w.get('label', '')} | {_w.get('segment', '')} | {_w.get('canonical_unit', '')} | {_lo} | {_mi} | {_hi} | {_st} |")
+        except Exception:
+            pass
+
 # --- Write to vault ---
 vault = os.environ.get('HOME', '') + '/Obsidian/EventTrader/Earnings/earnings-analysis'
 

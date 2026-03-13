@@ -346,7 +346,9 @@ usd, m_usd, percent, percent_yoy, percent_points, basis_points, x, count, unknow
 
 - Aggregate currency metrics (Revenue, Net Income, OpEx, CapEx, FCF, etc.) normalize to `m_usd`
 - Per-share metrics (EPS, DPS) normalize to `usd`
+- Share-count metrics (e.g. `Diluted Share Count`, `Share Count`, `Shares Outstanding`) normalize to absolute `count`
 - `$1.13B` and `1130 M USD` both → `1130` in `m_usd`
+- `4.94 billion shares` → `4940000000` in `count`
 - Percentages → `percent` or `percent_yoy` only
 
 ### Unknown Handling

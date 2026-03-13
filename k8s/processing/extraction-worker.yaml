@@ -103,6 +103,8 @@ spec:
           readOnly: true
         - name: logs
           mountPath: /app/logs
+        - name: obsidian-vault
+          mountPath: /home/faisal/Obsidian
       volumes:
       - name: home
         emptyDir: {}
@@ -125,6 +127,10 @@ spec:
       - name: logs
         hostPath:
           path: /home/faisal/EventMarketDB/logs
+          type: DirectoryOrCreate
+      - name: obsidian-vault
+        hostPath:
+          path: /home/faisal/Obsidian
           type: DirectoryOrCreate
 
 ---

@@ -21,7 +21,7 @@ import logging
 import os
 from datetime import datetime, timezone
 
-from guidance_ids import _is_per_share_label, slug
+from guidance_ids import _is_per_share_label, _is_share_count_label, slug
 
 logger = logging.getLogger(__name__)
 
@@ -100,6 +100,13 @@ def _validate_item(item, source_id, source_type):
                 f"xbrl_qname '{xbrl_qname}' indicates per-share but"
                 f" canonical_unit='m_usd' (expected 'usd')"
             )
+
+    # Guard C: share-count labels should never have m_usd.
+    if _is_share_count_label(label_slug) and canonical_unit == 'm_usd':
+        return False, (
+            f"share-count label '{label_slug}' has canonical_unit='m_usd'"
+            f" (expected 'count')"
+        )
 
     return True, None
 
@@ -278,7 +285,7 @@ def _build_params(item, source_id, source_type, ticker):
         'source_key': item.get('source_key', ''),
         'conditions': item.get('conditions'),
         'xbrl_qname': item.get('xbrl_qname'),
-        'unit_raw': item.get('unit_raw'),
+        'unit_raw': item.get('unit_raw') if item.get('canonical_unit') == 'unknown' else None,
         'source_refs': item.get('source_refs') or [],
         'concept_family_qname': item.get('concept_family_qname'),
         'created_ts': now,

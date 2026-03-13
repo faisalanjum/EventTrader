@@ -89,7 +89,7 @@ Default segment is `Total`. Set segment only when text qualifies a metric with a
 
 ### Numeric Value Rules
 
-Copy the number and unit exactly as printed in the source text. `"$10.3 billion"` → `low=10.3, unit_raw="billion"`. Never convert between units — the canonicalizer handles all scaling.
+Copy the number and unit exactly as printed in the source text. `"$10.3 billion"` → `low=10.3, unit_raw="billion"`. `"4.94 billion shares"` → `low=4.94, unit_raw="billion"` for a share-count label such as `Diluted Share Count`. Never convert between units — the canonicalizer handles all scaling.
 
 ### LLM Period Extraction Fields
 
