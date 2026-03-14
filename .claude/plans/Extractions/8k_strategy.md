@@ -80,116 +80,126 @@ Important distinction:
 So do **not** ask Haiku to rediscover `2.02`, `5.02`, `8.01`, etc.
 Ask it: **what economic event is this filing actually about?**
 
-### Canonical event taxonomy (v4 — Claude + GPT + Codex combined, final)
+### Canonical event taxonomy (v5 — final, all feedback incorporated)
 
 Single source of truth for event tags. Used across storage, routing, and evaluation.
 
-Built iteratively: Claude's database validation → GPT's naming improvements → Codex's safety findings → GPT's overlay refinement → final synthesis.
+Built iteratively across 5 versions: Claude database validation → GPT naming → Codex safety → GPT overlay refinement → GPT deterministic gap fixes → final data-validated synthesis.
 
-**Deterministic tags — item code alone, never sent to Haiku (10 tags)**
+**Pure deterministic tags — item code alone, never sent to Haiku (8 tags)**
 
-| Tag | Item Code | Filings | Why Deterministic |
+| Tag | Item Code | Filings | Notes |
 |---|---|---|---|
 | `EARNINGS` | 2.02 | 8,847 | IS earnings by SEC definition. 100% precision. |
-| `M_AND_A` | 2.01 | 189 | IS acquisition/disposition completion. Signing (1.01) ≠ closing (2.01). |
-| `DEBT_FINANCING` | 1.01+2.03 | 1,494 | IS debt creation. Private credit facilities, refinancings, covenant amendments. RESTORED per GPT — too structurally distinct to merge into MATERIAL_AGREEMENT. |
-| `SHAREHOLDER_VOTE` | 5.07 | 2,279 | IS shareholder vote results. Split from GOVERNANCE (GPT). |
-| `GOVERNANCE` | 5.03, remainder | 836+ | Bylaws, charter amendments, board committee changes |
-| `IMPAIRMENT` | 2.06 | 54 | IS material impairment by SEC definition |
-| `CYBERSECURITY` | 1.05 | 12 | IS cyber incident by SEC definition (Dec 2023 rule) |
-| `RESTATEMENT` | 4.02 | 15 | IS non-reliance on prior financials. High-signal red flag. |
-| `ACCOUNTANT_CHANGE` | 4.01 | 42 | IS auditor change by SEC definition |
-| `DELISTING` | 3.01 | 55 | IS delisting notice by SEC definition |
+| `M_AND_A` | 2.01 | 189 | IS acquisition/disposition completion. Signing ≠ closing. |
+| `SHAREHOLDER_VOTE` | 5.07 | 2,279 | IS shareholder vote results. Split from GOVERNANCE. |
+| `IMPAIRMENT` | 2.06 | 54 | IS material impairment by SEC definition. |
+| `CYBERSECURITY` | 1.05 | 12 | IS cyber incident (Dec 2023 rule). |
+| `RESTATEMENT_NON_RELIANCE` | 4.02 | 15 | IS non-reliance on prior financials. Renamed for precision (GPT). |
+| `ACCOUNTANT_CHANGE` | 4.01 | 42 | IS auditor change by SEC definition. |
+| `DELISTING` | 3.01 | 55 | IS delisting notice by SEC definition. |
 
-**Semantic primary tags — Haiku assigns as primary_event (13 tags)**
+**Dual-path tags — deterministic anchor + Haiku on ambiguous items (4 tags)**
+
+| Tag | Deterministic Anchor | Haiku Path | Notes |
+|---|---|---|---|
+| `DEBT_FINANCING` | 2.03 (with or without 1.01) | Haiku on 8.01/7.01 mentioning debt | Trigger changed: 2.03 alone, not just 1.01+2.03. 93 filings have 2.03 without 1.01 (draw-downs, off-balance-sheet). |
+| `SECURITIES_OFFERING` | 3.02 | Haiku on 8.01/7.01 mentioning offerings | Added 3.02 anchor: 304 unregistered equity sales (PIPEs, private placements). |
+| `GOVERNANCE` | 5.03, 3.03 | Haiku on board-level 5.02 | Expanded: 5.03 (bylaws, 836) + 3.03 (rights modifications, 127). Haiku classifies board appointments from 5.02 as GOVERNANCE vs EXECUTIVE_CHANGE. |
+| `RESTRUCTURING` | 2.05 | Haiku on 8.01/7.01/5.02 | 2.05 = always restructuring. Haiku catches restructuring announced under other items. |
+
+**Pure semantic tags — Haiku assigns (12 tags)**
 
 | Tag | What It Covers |
 |---|---|
+| `FINANCIAL_GUIDANCE` | Forward-looking FINANCIAL projections (revenue, EPS, margins, CapEx). NOT clinical timelines, NOT operational milestones. **Primary when sole content (mid-quarter revision), secondary when bundled with EARNINGS.** |
+| `INVESTOR_PRESENTATION` | Investor day decks, analyst day presentations, conference presentations. **Primary when filing is just a deck, secondary when bundled with another event.** |
 | `BUYBACK` | Share/stock repurchase program announcements, authorizations, expansions |
 | `DIVIDEND` | Cash dividend declarations, increases, special dividends |
-| `RESTRUCTURING` | Layoffs, workforce reductions, facility closures, restructuring plans. NOT "restructuring charges" as accounting line items. |
-| `EXECUTIVE_CHANGE` | C-suite and named executive officers ONLY (CEO, CFO, COO, President). Appointment, departure, compensation. Board directors = GOVERNANCE. |
-| `MATERIAL_AGREEMENT` | Business partnerships, technology licenses, JVs, and contracts. NOT M&A closings (→ M_AND_A), NOT public offerings (→ SECURITIES_OFFERING), NOT private credit facilities (→ DEBT_FINANCING). |
-| `SECURITIES_OFFERING` | Public bond/equity offerings, convertible notes, ATM programs, shelf registrations |
-| `LITIGATION` | Lawsuits, settlements, legal proceedings, consent decrees |
+| `EXECUTIVE_CHANGE` | C-suite and named executive officers ONLY (CEO, CFO, COO, President). Board directors = GOVERNANCE. |
+| `MATERIAL_AGREEMENT` | Business partnerships, technology licenses, JVs, contracts. NOT M&A closings, NOT public offerings, NOT credit facilities. |
+| `LITIGATION` | Lawsuits, settlements, legal proceedings, consent decrees. **Also covers government investigations** (SEC/DOJ subpoenas, consent decrees). |
 | `PRODUCT_PIPELINE` | Clinical trial data, FDA/EMA approvals, regulatory submissions, drug/device clearances, product launches |
-| `CREDIT_RATING` | Rating agency actions: downgrades, upgrades, outlook changes, credit watch |
-| `SPINOFF_SPLIT` | Spin-offs, stock splits, reverse splits, corporate separations |
-| `INVESTIGATION` | SEC/DOJ/government investigations, subpoenas, consent decrees |
+| `CREDIT_RATING` | Rating agency actions: downgrades, upgrades, outlook changes, credit watch. 341 filings — too many for OTHER. |
+| `SPINOFF_SPLIT` | Spin-offs, stock splits, reverse splits, corporate separations. 1,789 filings — too many for OTHER. |
 | `OTHER_MATERIAL_EVENT` | Real business events that don't fit above categories |
-| `ADMINISTRATIVE_ONLY` | Paperwork-only filings: 10b5-1 plans, exhibit corrections, plumbing filings with no business event. Skip in event timeline. |
+| `ADMINISTRATIVE_ONLY` | Paperwork-only filings: 10b5-1 plans, exhibit corrections. Skip in event timeline. |
 
-**Overlay / secondary-only tags — almost never primary (3 tags)**
+**Total: 24 tags** (8 pure deterministic + 4 dual-path + 12 pure semantic)
 
-| Tag | When Primary | When Secondary | Why Overlay |
-|---|---|---|---|
-| `FINANCIAL_GUIDANCE` | Only if filing is SOLELY a guidance revision (rare mid-quarter update) | Usually secondary to EARNINGS or PRODUCT_PIPELINE | A filing is rarely "primarily about guidance" — it's primarily earnings that contains guidance, or a pipeline update with revenue targets |
-| `INVESTOR_PRESENTATION` | Only if filing is literally just a deck with no stronger event | Secondary/context tag for filings that include a presentation alongside a real event | It's a document type, not an economic event |
-| `REGULATORY` | Only if filing is a non-pipeline regulatory event (EPA subpoena, trade compliance) | Secondary when a PRODUCT_PIPELINE event also has regulatory dimensions | PRODUCT_PIPELINE covers most cases; this is the escape hatch for non-pipeline regulatory events |
+**Optional future expansion (deferred — insufficient validation):**
 
-**Total: 26 tags** (10 deterministic + 13 semantic primary + 3 overlay)
+| Tag | Why Deferred |
+|---|---|
+| `INVESTIGATION` | Currently folded into LITIGATION. 27 filings. Split out if need to distinguish lawsuits from government probes. |
+| `REGULATORY` | Non-pipeline regulatory events (EPA, trade compliance). Untested. Defer until evidence supports it. |
 
 ### Design rules
 
 - Keep raw SEC item codes exactly as filed in `Report.items`
-- Haiku assigns one `haiku_primary` from the 13 semantic primary tags (or 3 overlays when no stronger primary exists)
-- Haiku assigns zero or more `haiku_secondary` from ALL 16 semantic + overlay tags
-- Deterministic tags are assigned directly from item codes (no Haiku needed)
-- A filing can have BOTH deterministic AND Haiku tags (e.g., deterministic `EARNINGS` + haiku_secondary `FINANCIAL_GUIDANCE`)
-- Use `OTHER_MATERIAL_EVENT` for real business events that don't fit the taxonomy
-- Use `ADMINISTRATIVE_ONLY` for paperwork — skip in event timeline entirely
-- Do NOT keep a generic `OTHER` — always classify as `OTHER_MATERIAL_EVENT` or `ADMINISTRATIVE_ONLY`
-- Overlay tags (FINANCIAL_GUIDANCE, INVESTOR_PRESENTATION, REGULATORY) should be secondary unless the filing has no stronger primary event
+- Pure deterministic tags are assigned from item codes alone — Haiku never sees these filings for that tag
+- Dual-path tags fire deterministically when the anchor item is present, AND go to Haiku when only ambiguous items (8.01/7.01/5.02) are present
+- Pure semantic tags are assigned only by Haiku
+- A filing can have BOTH deterministic AND semantic tags (e.g., `EARNINGS` from 2.02 + `FINANCIAL_GUIDANCE` from Haiku)
+- FINANCIAL_GUIDANCE and INVESTOR_PRESENTATION are primary-capable (not overlay-only) — a pure mid-quarter guidance revision IS primarily FINANCIAL_GUIDANCE
+- Use `OTHER_MATERIAL_EVENT` for real business events. Use `ADMINISTRATIVE_ONLY` for paperwork. Never use bare `OTHER`.
 
 ### What changed across versions
 
 | Version | Change | Reason |
 |---|---|---|
-| v2 | GUIDANCE → FINANCIAL_GUIDANCE | Avoid clinical trial "guidance" false positives (NTLA test case) |
-| v2 | CONTRACT_WIN → MATERIAL_AGREEMENT | Maps to SEC terminology (Item 1.01), broader coverage |
+| v2 | GUIDANCE → FINANCIAL_GUIDANCE | Avoid clinical "guidance" false positives (NTLA test) |
+| v2 | CONTRACT_WIN → MATERIAL_AGREEMENT | Maps to SEC terminology (Item 1.01) |
 | v2 | CAPITAL_RAISE → SECURITIES_OFFERING | Covers both equity and debt public offerings |
-| v2 | REGULATORY_UPDATE → PRODUCT_PIPELINE | Broader: captures clinical data + product launches |
-| v2 | Added SHAREHOLDER_VOTE | Split from GOVERNANCE — 2,279 filings (GPT) |
-| v2 | Added ADMINISTRATIVE_ONLY | Separates paperwork from material events (GPT) |
-| v2 | OTHER → OTHER_MATERIAL_EVENT | More descriptive (GPT) |
-| v3 | Kept SPINOFF_SPLIT, CREDIT_RATING, INVESTIGATION | GPT dropped — database shows 1,789 + 341 + 27 filings |
-| v3 | Kept EARNINGS, M_AND_A as deterministic | GPT omitted — most important tags |
-| v4 | **RESTORED DEBT_FINANCING** | GPT feedback: 1.01+2.03 is too structurally distinct for MATERIAL_AGREEMENT. Revolvers, term loans, refinancings deserve own tag. |
-| v4 | **FINANCIAL_GUIDANCE → overlay** | GPT feedback: almost always secondary to EARNINGS or PRODUCT_PIPELINE, rarely a primary event on its own |
-| v4 | **INVESTOR_PRESENTATION → overlay** | GPT feedback: document/context tag, not an economic event. Primary only when filing is just a deck. |
-| v4 | **Added REGULATORY overlay** | GPT feedback: escape hatch for non-pipeline regulatory events |
+| v2 | REGULATORY_UPDATE → PRODUCT_PIPELINE | Broader: clinical data + product launches |
+| v2 | Added SHAREHOLDER_VOTE, ADMINISTRATIVE_ONLY | GPT improvements |
+| v3 | Kept SPINOFF_SPLIT (1,789), CREDIT_RATING (341) | GPT dropped — data says keep |
+| v4 | Restored DEBT_FINANCING | Too distinct for MATERIAL_AGREEMENT |
+| v4 | Made FINANCIAL_GUIDANCE + INVESTOR_PRESENTATION overlay-only | GPT suggestion |
+| **v5** | **DEBT_FINANCING trigger → 2.03** (not just 1.01+2.03) | 93 filings have 2.03 without 1.01. GPT fix validated by data. |
+| **v5** | **SECURITIES_OFFERING anchor → 3.02** | 304 unregistered equity sales need a home. GPT fix. |
+| **v5** | **3.03 folded into GOVERNANCE** | 127 filings, 108 overlap with 5.03. Not worth separate tag. |
+| **v5** | **RESTATEMENT → RESTATEMENT_NON_RELIANCE** | More precise SEC language. GPT fix. |
+| **v5** | **GOVERNANCE → dual-path** (5.03+3.03 deterministic, board-level 5.02 semantic) | Some 5.02 filings are board composition, not exec changes. GPT fix. |
+| **v5** | **FINANCIAL_GUIDANCE + INVESTOR_PRESENTATION → primary-capable** | Overlay concept overcomplicates. A pure guidance revision IS primarily about guidance. GPT fix. |
+| **v5** | **INVESTIGATION folded into LITIGATION** | 27 filings. Same legal/enforcement domain. Simplifies. |
+| **v5** | **REGULATORY deferred** | Untested. Optional future expansion. |
 
-### Recommended Haiku prompt (v4)
+### Recommended Haiku prompt (v5)
 
 ```text
 Classify this 8-K filing into one primary event type and zero or more secondary types.
 
-PRIMARY choices (pick exactly one):
-BUYBACK, DIVIDEND, RESTRUCTURING, EXECUTIVE_CHANGE,
-MATERIAL_AGREEMENT, SECURITIES_OFFERING, LITIGATION,
-PRODUCT_PIPELINE, CREDIT_RATING, SPINOFF_SPLIT,
-INVESTIGATION, OTHER_MATERIAL_EVENT, ADMINISTRATIVE_ONLY
-
-SECONDARY / OVERLAY choices (pick zero or more):
-FINANCIAL_GUIDANCE, INVESTOR_PRESENTATION, REGULATORY
-(these can also be primary if no stronger event exists)
+Choices (pick one primary, zero or more secondary):
+FINANCIAL_GUIDANCE, INVESTOR_PRESENTATION, BUYBACK, DIVIDEND,
+RESTRUCTURING, EXECUTIVE_CHANGE, GOVERNANCE, MATERIAL_AGREEMENT,
+SECURITIES_OFFERING, DEBT_FINANCING, LITIGATION, PRODUCT_PIPELINE,
+CREDIT_RATING, SPINOFF_SPLIT, OTHER_MATERIAL_EVENT, ADMINISTRATIVE_ONLY
 
 Definitions:
 - FINANCIAL_GUIDANCE: Forward-looking FINANCIAL projections only
-  (revenue, EPS, margins, CapEx). NOT clinical timelines. Usually secondary.
-- EXECUTIVE_CHANGE: C-suite/named officers only. Board changes are not this.
+  (revenue, EPS, margins, CapEx). NOT clinical timelines.
+- EXECUTIVE_CHANGE: C-suite/named officers only (CEO, CFO, COO).
+  Board director changes = GOVERNANCE.
+- GOVERNANCE: Board composition, bylaws, charter amendments,
+  shareholder rights modifications.
 - PRODUCT_PIPELINE: Clinical trial data, FDA actions, product launches.
 - MATERIAL_AGREEMENT: Partnerships, licenses, JVs, contracts.
   NOT M&A closings, NOT public offerings, NOT credit facilities.
-- SECURITIES_OFFERING: Public bond/equity offerings, convertibles, ATM programs.
-- ADMINISTRATIVE_ONLY: Paperwork with no business event (10b5-1 plans, exhibit updates).
-- REGULATORY: Non-pipeline regulatory events (EPA, trade compliance, sanctions).
+- SECURITIES_OFFERING: Public or private bond/equity offerings,
+  convertibles, ATM programs, unregistered sales.
+- DEBT_FINANCING: Credit facilities, revolvers, term loans,
+  refinancings, covenant amendments, draw-downs.
+- LITIGATION: Lawsuits, settlements, legal proceedings,
+  government investigations, subpoenas, consent decrees.
+- ADMINISTRATIVE_ONLY: Paperwork with no business event
+  (10b5-1 plans, exhibit corrections, plumbing updates).
 
 Return JSON only:
 {"primary_event": "...", "secondary_events": [...], "confidence": 0.0-1.0}
 ```
 
-Note: EARNINGS, M_AND_A, DEBT_FINANCING, SHAREHOLDER_VOTE, GOVERNANCE, IMPAIRMENT, CYBERSECURITY, RESTATEMENT, ACCOUNTANT_CHANGE, DELISTING are NOT in the Haiku prompt — assigned deterministically from item codes.
+Note: EARNINGS, M_AND_A, SHAREHOLDER_VOTE, IMPAIRMENT, CYBERSECURITY, RESTATEMENT_NON_RELIANCE, ACCOUNTANT_CHANGE, DELISTING are NOT in the Haiku prompt — assigned deterministically from item codes. DEBT_FINANCING, SECURITIES_OFFERING, GOVERNANCE, RESTRUCTURING appear in BOTH the prompt (for ambiguous filings) AND as deterministic anchors (from specific item codes).
 
 ### Haiku output example
 
@@ -209,7 +219,7 @@ haiku_secondary:  String    '["FINANCIAL_GUIDANCE"]'
 haiku_confidence: Double    0.92
 ```
 
-Deterministic tags stored separately or derived at query time from `Report.items`.
+Deterministic tags derived at query time from `Report.items` (no separate storage needed — item codes already exist).
 
 ---
 
