@@ -260,6 +260,7 @@ async def process_one(
             setting_sources=["project"],
             cwd=PROJECT_DIR,
             permission_mode="bypassPermissions",
+            model="sonnet",
             max_turns=MAX_TURNS,
             max_budget_usd=MAX_BUDGET_USD,
             stderr=lambda line: stderr_lines.append(line),
