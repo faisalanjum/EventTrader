@@ -39,8 +39,7 @@ You send Haiku only this small packet:
 Prompt:
 
 ```text
-Classify this 8-K into one primary event type.
-Choices: EARNINGS, GUIDANCE, BUYBACK, DIVIDEND, RESTRUCTURING, M_AND_A, DEBT, EXECUTIVE_CHANGE, GOVERNANCE, OTHER.
+Classify this 8-K into one primary event type using the canonical event taxonomy in Section 1A below.
 Return JSON only.
 ```
 
@@ -70,6 +69,199 @@ That is the whole idea.
 - `2.01` → M&A
 - `1.01 + 2.03` → debt
 - `5.07` → governance
+
+## 1A. Freeze The Haiku Tag List Before Production
+
+Important distinction:
+
+- SEC item codes already exist in the filing metadata
+- Haiku tags should be the semantic event labels on top of those item codes
+
+So do **not** ask Haiku to rediscover `2.02`, `5.02`, `8.01`, etc.
+Ask it: **what economic event is this filing actually about?**
+
+### Canonical event taxonomy (v4 — Claude + GPT + Codex combined, final)
+
+Single source of truth for event tags. Used across storage, routing, and evaluation.
+
+Built iteratively: Claude's database validation → GPT's naming improvements → Codex's safety findings → GPT's overlay refinement → final synthesis.
+
+**Deterministic tags — item code alone, never sent to Haiku (10 tags)**
+
+| Tag | Item Code | Filings | Why Deterministic |
+|---|---|---|---|
+| `EARNINGS` | 2.02 | 8,847 | IS earnings by SEC definition. 100% precision. |
+| `M_AND_A` | 2.01 | 189 | IS acquisition/disposition completion. Signing (1.01) ≠ closing (2.01). |
+| `DEBT_FINANCING` | 1.01+2.03 | 1,494 | IS debt creation. Private credit facilities, refinancings, covenant amendments. RESTORED per GPT — too structurally distinct to merge into MATERIAL_AGREEMENT. |
+| `SHAREHOLDER_VOTE` | 5.07 | 2,279 | IS shareholder vote results. Split from GOVERNANCE (GPT). |
+| `GOVERNANCE` | 5.03, remainder | 836+ | Bylaws, charter amendments, board committee changes |
+| `IMPAIRMENT` | 2.06 | 54 | IS material impairment by SEC definition |
+| `CYBERSECURITY` | 1.05 | 12 | IS cyber incident by SEC definition (Dec 2023 rule) |
+| `RESTATEMENT` | 4.02 | 15 | IS non-reliance on prior financials. High-signal red flag. |
+| `ACCOUNTANT_CHANGE` | 4.01 | 42 | IS auditor change by SEC definition |
+| `DELISTING` | 3.01 | 55 | IS delisting notice by SEC definition |
+
+**Semantic primary tags — Haiku assigns as primary_event (13 tags)**
+
+| Tag | What It Covers |
+|---|---|
+| `BUYBACK` | Share/stock repurchase program announcements, authorizations, expansions |
+| `DIVIDEND` | Cash dividend declarations, increases, special dividends |
+| `RESTRUCTURING` | Layoffs, workforce reductions, facility closures, restructuring plans. NOT "restructuring charges" as accounting line items. |
+| `EXECUTIVE_CHANGE` | C-suite and named executive officers ONLY (CEO, CFO, COO, President). Appointment, departure, compensation. Board directors = GOVERNANCE. |
+| `MATERIAL_AGREEMENT` | Business partnerships, technology licenses, JVs, and contracts. NOT M&A closings (→ M_AND_A), NOT public offerings (→ SECURITIES_OFFERING), NOT private credit facilities (→ DEBT_FINANCING). |
+| `SECURITIES_OFFERING` | Public bond/equity offerings, convertible notes, ATM programs, shelf registrations |
+| `LITIGATION` | Lawsuits, settlements, legal proceedings, consent decrees |
+| `PRODUCT_PIPELINE` | Clinical trial data, FDA/EMA approvals, regulatory submissions, drug/device clearances, product launches |
+| `CREDIT_RATING` | Rating agency actions: downgrades, upgrades, outlook changes, credit watch |
+| `SPINOFF_SPLIT` | Spin-offs, stock splits, reverse splits, corporate separations |
+| `INVESTIGATION` | SEC/DOJ/government investigations, subpoenas, consent decrees |
+| `OTHER_MATERIAL_EVENT` | Real business events that don't fit above categories |
+| `ADMINISTRATIVE_ONLY` | Paperwork-only filings: 10b5-1 plans, exhibit corrections, plumbing filings with no business event. Skip in event timeline. |
+
+**Overlay / secondary-only tags — almost never primary (3 tags)**
+
+| Tag | When Primary | When Secondary | Why Overlay |
+|---|---|---|---|
+| `FINANCIAL_GUIDANCE` | Only if filing is SOLELY a guidance revision (rare mid-quarter update) | Usually secondary to EARNINGS or PRODUCT_PIPELINE | A filing is rarely "primarily about guidance" — it's primarily earnings that contains guidance, or a pipeline update with revenue targets |
+| `INVESTOR_PRESENTATION` | Only if filing is literally just a deck with no stronger event | Secondary/context tag for filings that include a presentation alongside a real event | It's a document type, not an economic event |
+| `REGULATORY` | Only if filing is a non-pipeline regulatory event (EPA subpoena, trade compliance) | Secondary when a PRODUCT_PIPELINE event also has regulatory dimensions | PRODUCT_PIPELINE covers most cases; this is the escape hatch for non-pipeline regulatory events |
+
+**Total: 26 tags** (10 deterministic + 13 semantic primary + 3 overlay)
+
+### Design rules
+
+- Keep raw SEC item codes exactly as filed in `Report.items`
+- Haiku assigns one `haiku_primary` from the 13 semantic primary tags (or 3 overlays when no stronger primary exists)
+- Haiku assigns zero or more `haiku_secondary` from ALL 16 semantic + overlay tags
+- Deterministic tags are assigned directly from item codes (no Haiku needed)
+- A filing can have BOTH deterministic AND Haiku tags (e.g., deterministic `EARNINGS` + haiku_secondary `FINANCIAL_GUIDANCE`)
+- Use `OTHER_MATERIAL_EVENT` for real business events that don't fit the taxonomy
+- Use `ADMINISTRATIVE_ONLY` for paperwork — skip in event timeline entirely
+- Do NOT keep a generic `OTHER` — always classify as `OTHER_MATERIAL_EVENT` or `ADMINISTRATIVE_ONLY`
+- Overlay tags (FINANCIAL_GUIDANCE, INVESTOR_PRESENTATION, REGULATORY) should be secondary unless the filing has no stronger primary event
+
+### What changed across versions
+
+| Version | Change | Reason |
+|---|---|---|
+| v2 | GUIDANCE → FINANCIAL_GUIDANCE | Avoid clinical trial "guidance" false positives (NTLA test case) |
+| v2 | CONTRACT_WIN → MATERIAL_AGREEMENT | Maps to SEC terminology (Item 1.01), broader coverage |
+| v2 | CAPITAL_RAISE → SECURITIES_OFFERING | Covers both equity and debt public offerings |
+| v2 | REGULATORY_UPDATE → PRODUCT_PIPELINE | Broader: captures clinical data + product launches |
+| v2 | Added SHAREHOLDER_VOTE | Split from GOVERNANCE — 2,279 filings (GPT) |
+| v2 | Added ADMINISTRATIVE_ONLY | Separates paperwork from material events (GPT) |
+| v2 | OTHER → OTHER_MATERIAL_EVENT | More descriptive (GPT) |
+| v3 | Kept SPINOFF_SPLIT, CREDIT_RATING, INVESTIGATION | GPT dropped — database shows 1,789 + 341 + 27 filings |
+| v3 | Kept EARNINGS, M_AND_A as deterministic | GPT omitted — most important tags |
+| v4 | **RESTORED DEBT_FINANCING** | GPT feedback: 1.01+2.03 is too structurally distinct for MATERIAL_AGREEMENT. Revolvers, term loans, refinancings deserve own tag. |
+| v4 | **FINANCIAL_GUIDANCE → overlay** | GPT feedback: almost always secondary to EARNINGS or PRODUCT_PIPELINE, rarely a primary event on its own |
+| v4 | **INVESTOR_PRESENTATION → overlay** | GPT feedback: document/context tag, not an economic event. Primary only when filing is just a deck. |
+| v4 | **Added REGULATORY overlay** | GPT feedback: escape hatch for non-pipeline regulatory events |
+
+### Recommended Haiku prompt (v4)
+
+```text
+Classify this 8-K filing into one primary event type and zero or more secondary types.
+
+PRIMARY choices (pick exactly one):
+BUYBACK, DIVIDEND, RESTRUCTURING, EXECUTIVE_CHANGE,
+MATERIAL_AGREEMENT, SECURITIES_OFFERING, LITIGATION,
+PRODUCT_PIPELINE, CREDIT_RATING, SPINOFF_SPLIT,
+INVESTIGATION, OTHER_MATERIAL_EVENT, ADMINISTRATIVE_ONLY
+
+SECONDARY / OVERLAY choices (pick zero or more):
+FINANCIAL_GUIDANCE, INVESTOR_PRESENTATION, REGULATORY
+(these can also be primary if no stronger event exists)
+
+Definitions:
+- FINANCIAL_GUIDANCE: Forward-looking FINANCIAL projections only
+  (revenue, EPS, margins, CapEx). NOT clinical timelines. Usually secondary.
+- EXECUTIVE_CHANGE: C-suite/named officers only. Board changes are not this.
+- PRODUCT_PIPELINE: Clinical trial data, FDA actions, product launches.
+- MATERIAL_AGREEMENT: Partnerships, licenses, JVs, contracts.
+  NOT M&A closings, NOT public offerings, NOT credit facilities.
+- SECURITIES_OFFERING: Public bond/equity offerings, convertibles, ATM programs.
+- ADMINISTRATIVE_ONLY: Paperwork with no business event (10b5-1 plans, exhibit updates).
+- REGULATORY: Non-pipeline regulatory events (EPA, trade compliance, sanctions).
+
+Return JSON only:
+{"primary_event": "...", "secondary_events": [...], "confidence": 0.0-1.0}
+```
+
+Note: EARNINGS, M_AND_A, DEBT_FINANCING, SHAREHOLDER_VOTE, GOVERNANCE, IMPAIRMENT, CYBERSECURITY, RESTATEMENT, ACCOUNTANT_CHANGE, DELISTING are NOT in the Haiku prompt — assigned deterministically from item codes.
+
+### Haiku output example
+
+```json
+{
+  "primary_event": "RESTRUCTURING",
+  "secondary_events": ["FINANCIAL_GUIDANCE"],
+  "confidence": 0.92
+}
+```
+
+### Storage (on Report node)
+
+```
+haiku_primary:    String    'RESTRUCTURING'
+haiku_secondary:  String    '["FINANCIAL_GUIDANCE"]'
+haiku_confidence: Double    0.92
+```
+
+Deterministic tags stored separately or derived at query time from `Report.items`.
+
+---
+
+## Guidance Extraction Routing — Complete Spec
+
+Guidance has NO item code. It hides inside other filings. Two paths combine for ~99%+ recall.
+
+### Path A: Earnings-Bundled Guidance (100% recall, already built)
+
+```
+IF 'Item 2.02' in filing.items:
+    → ALWAYS run guidance extraction on EX-99.1
+    → No pre-screening needed
+    → Recall: 100% for earnings-bundled guidance (~70-80% of all guidance)
+    → Precision: 100% — extraction prompt returns nothing if no guidance
+    → Pool: 8,847 filings
+```
+
+### Path B: Standalone Guidance (the hard part — mid-quarter revisions)
+
+```
+IF 'Item 7.01' OR 'Item 8.01' in filing.items (WITHOUT 2.02):
+    → Gate: Haiku says FINANCIAL_GUIDANCE  OR  keywords match
+    → Keywords: "guidance" OR "outlook" OR "preliminary results" OR
+      "revised" OR "updated outlook" OR "pre-announce" OR
+      "expects revenue" OR "expects earnings"
+    → Union routing: Haiku catches euphemisms, keywords catch what Haiku undercalls
+    → Recall: ~97-99% for standalone guidance
+    → Pool: ~500-1,000 filings after gating (from ~10,500 candidates)
+```
+
+### Path C: Rescue (optional, catches ~1% edge cases)
+
+```
+IF 'Item 5.02' with EX-99.1 exhibit (WITHOUT 2.02):
+    → Gate: keywords only ("guidance", "outlook")
+    → Catches: CEO departure press release that includes outlook revision
+    → Pool: ~50-100 additional filings
+```
+
+### Combined
+
+| Metric | Value |
+|---|---|
+| Recall | **~99%+** |
+| Precision | **100%** (extraction prompt handles — returns nothing if absent) |
+| Total extractions | ~9,500-10,000 |
+| Haiku pre-screen cost | ~$10-15 |
+| Remaining gap (~1%) | Implicit guidance ("comfortable with Street consensus"), misclassified 9.01-only filings, euphemistic language |
+| To get true 100% | Process all 23,836 filings through extraction prompt (expensive, diminishing returns) |
+
+---
 
 ## Super Simple: Real-Time Earnings Detection
 
@@ -108,6 +300,424 @@ So the practical answer is:
 - deterministic rules catch the candidates
 - Haiku or text confirmation separates real earnings from earnings-related noise
 - always inspect `EX-99.1` / `EX-99.2` when present
+
+## Super Simple: Guidance-Related 8-K Fetching
+
+Honest answer:
+
+there is no fully automated literal `100.00%` recall and `100.00%` precision rule for guidance-related 8-Ks.
+
+If you want true 100/100, a human has to review the candidate set.
+
+Best practical production rule:
+
+1. Fetch this candidate set:
+   - all `2.02`
+   - all `7.01`
+   - all `8.01`
+   - all `9.01`-only filings that have `EX-99.x`
+2. Read only:
+   - the trigger sections
+   - `EX-99.x`
+   - skip `EX-10.x`
+3. Call it `GUIDANCE` only if the content has explicit forward-looking guidance:
+   - numeric future range or target for revenue, EPS, margin, EBITDA, capex, volumes, etc.
+   - or explicit update language tied to future metrics:
+     - `raises`
+     - `lowers`
+     - `reaffirms`
+     - `updates`
+     - `expects`
+     - `outlook`
+     - `preliminary results` with forward targets
+4. Reject as non-guidance if it is only:
+   - historical results
+   - generic optimism / boilerplate outlook
+   - investor presentation with no new targets
+   - covenant or contract language
+5. Use Haiku only on ambiguous cases, mainly:
+   - `7.01`
+   - `8.01`
+   - `9.01`-only
+
+So the closest safe production rule is:
+
+`fetch = 2.02 OR 7.01 OR 8.01 OR (9.01-only with EX-99.x)`
+
+then confirm with explicit forward-looking quantitative guidance in the section or `EX-99.x`, with Haiku helping only on the messy middle.
+
+Why this is the right rule:
+
+- `2.02` catches guidance bundled with earnings
+- `7.01` and `8.01` catch standalone guidance revisions
+- `9.01`-only rescues rare leaks
+- keywords alone are too noisy
+- Haiku alone is not reliable enough as the only gate
+
+## Super Simple: Expected Hybrid Performance
+
+Important caveat:
+
+these are best operating estimates from the live validation and disagreement audits.
+They are **not** exact gold-set precision / recall metrics.
+
+If hybrid means:
+
+- deterministic anchors for obvious buckets
+- Haiku only for ambiguous buckets
+- narrow rescue heuristics where needed
+
+then the best overall estimate for the 4 validated event jobs is:
+
+- expected recall: about `99%+`
+- expected precision: about `high-80s / low-90s overall`
+
+Best estimated performance by event type:
+
+| Event type | Expected recall | Expected precision |
+| --- | ---: | ---: |
+| Earnings | `99.9%` | `95% to 99%` |
+| Buyback | `99.4% to 99.7%` | `80% to 90%` |
+| Dividend | `99.5% to 100%` | `75% to 90%` |
+| Restructuring | `98.8% to 99.5%` | `85% to 95%` |
+
+For the other event families, I am only comfortable saying the direction:
+
+- debt: anchored bucket is very strong, likely high-90s precision
+- M&A: anchored bucket is very strong, likely mid/high-90s precision
+- governance: anchored bucket is very strong, likely mid/high-90s precision
+- executive change: good but noisier, likely high-80s / low-90s precision
+
+Weakest category:
+
+- dividends
+
+Strongest categories:
+
+- earnings
+- debt
+- M&A
+- governance
+
+One more caveat:
+
+these estimates assume the **good hybrid design**:
+
+- rules for obvious filings
+- Haiku only on ambiguous filings
+
+If you use a naive union everywhere, recall may go up slightly but precision will get worse.
+
+Small exact manual check:
+
+- random non-earnings sample from the hybrid Haiku bucket: `10` filings
+- primary-label accuracy: `10/10 = 100.00%`
+- filing-level exact set match: `9/10 = 90.00%`
+- multi-label precision: `91.67%`
+- multi-label recall: `100.00%`
+
+Artifact:
+
+- `haiku_10sample_manual_validation.md`
+
+## Super Simple: Best Practical Guidance Fetch Rule
+
+There is no literal automated `100%` recall and `100%` precision rule for guidance. The only true `100/100` method is human review.
+
+Best practical approach is to separate:
+
+- guidance candidate fetch
+- true guidance confirmation
+
+### Candidate fetch
+
+Fetch an 8-K for guidance processing if:
+
+- it has `2.02`
+- or it has `7.01`
+- or it has `8.01`
+- or it is `9.01`-only **and** has an `EX-99.x` press-release-style exhibit
+
+Read only:
+
+- the `2.02` / `7.01` / `8.01` / `9.01` sections
+- `EX-99.1`, `EX-99.2`, other `EX-99.x`
+- skip `EX-10.x`
+
+Why this is the right fetch superset:
+
+- `2.02` catches earnings releases, which often contain guidance
+- standalone guidance revisions live mainly in `7.01` / `8.01`
+- there are rare real `9.01`-only guidance leaks
+
+### True guidance confirmation
+
+Within that candidate set, call it guidance only if there is actual forward company expectation, for example:
+
+- raise / lower / maintain / reaffirm / update / withdraw guidance
+- outlook / forecast / preliminary results / pre-announcement
+- expects revenue / EPS / EBITDA / margin / capex / sales / free cash flow
+- a clear future period like `Q2`, `FY2026`, `next quarter`, `full year`
+
+Reject it if it is only:
+
+- conference call scheduling
+- investor presentation with no new outlook
+- prepared remarks with no new forecast
+- safe-harbor boilerplate
+- historical results only
+
+### Best production rule
+
+`guidance_candidate = 2.02 OR 7.01 OR 8.01 OR (9.01_only AND EX_99x)`
+
+`guidance_true = guidance_candidate AND (Haiku says FINANCIAL_GUIDANCE OR explicit forward-metric signal)`
+
+Most important nuance:
+
+- do **not** label every `2.02` as true guidance
+- but do fetch every `2.02` for the guidance extractor, because many earnings releases contain guidance and missing them is worse than over-fetching
+
+### INVESTOR_PRESENTATION → also feed to guidance extraction
+
+Haiku-classified INVESTOR_PRESENTATION filings (~280) should also go to the guidance extraction pipeline as recall insurance.
+
+**Why:** Haiku has a ~5% miss rate. Some presentations that contain new financial targets get tagged INVESTOR_PRESENTATION instead of GUIDANCE. Feeding all ~280 to extraction catches these misses.
+
+**Cost:** ~$140 total (280 × ~$0.50). Negligible.
+
+**Risk:** Zero. The extraction LLM returns empty if no guidance is found. No false data produced.
+
+**The fuzzy boundary problem:** 100% accurate separation of INVESTOR_PRESENTATION from GUIDANCE is impossible because the boundary is semantic:
+
+```
+CLEARLY PRESENTATION (no guidance):
+  "Updated corporate overview deck for healthcare conferences"
+
+CLEARLY GUIDANCE:
+  "Company raises full-year revenue outlook to $50-52B"
+
+FUZZY MIDDLE (can't tell without reading every slide):
+  "Long-term financial framework: 5-7% revenue growth, 20%+ margins"
+  → New targets? Or the same slide from last year's deck?
+
+  "Investor Day: 2027 targets of $10B revenue, $3.00 EPS"
+  → Were these targets just set? Or recycled?
+```
+
+Rather than engineering complex rules to separate these, just send both to the extraction pipeline. The extraction LLM is the precision gate.
+
+### Updated guidance fetch formula
+
+```
+ALWAYS PROCESS (send to guidance extraction pipeline):
+  ✓ All Item 2.02 filings (earnings press releases)
+  ✓ All Haiku-classified GUIDANCE from 7.01/8.01
+  ✓ All Haiku-classified INVESTOR_PRESENTATION         ← $140 recall insurance
+  ✓ Keyword rescue on remaining 7.01/8.01:
+    'guidance', 'outlook', 'preliminary results', 'pre-announce',
+    'revised outlook', 'updated outlook', 'expects revenue',
+    'expects earnings', 'full-year outlook', 'raises guidance',
+    'lowers guidance', 'reaffirms guidance'
+
+SKIP:
+  ✗ Everything else (5.02, 5.07, 1.01, 2.03, etc.)
+
+Expected: ~100% recall, extraction LLM handles precision
+```
+
+### Honest estimates: INVESTOR_PRESENTATION → real GUIDANCE detection
+
+Conservative, realistic estimates for this specific sub-task: "does this investor presentation filing contain real guidance worth sending to guidance extraction?"
+
+**Haiku alone (strong prompt):**
+
+| Metric | Range |
+|---|---|
+| Recall | ~80-90% |
+| Precision | ~75-85% |
+
+**Haiku + explicit forward-target check (strong prompt + evidence span + numeric/forward-target confirmation):**
+
+| Metric | Range |
+|---|---|
+| Recall | ~88-95% |
+| Precision | ~85-93% |
+
+**Why not higher?** Investor presentations are messy:
+
+- Some repeat old guidance (recycled slides from prior quarter)
+- Some contain only broad strategy with no numbers
+- Some imply outlook without explicit targets ("we see continued momentum")
+- Some mix presentation content with other filing content
+- Some "guidance-like" language is just boilerplate safe-harbor text
+
+Even with a strong prompt, Haiku will still make mistakes on these edge cases.
+
+**Honest bottom line for investor presentations specifically:**
+
+- Haiku alone: useful but not reliable enough to trust blindly
+- Haiku + explicit target check: good enough as a cheap prefilter, still not 100/100
+- **Plan around: ~90% recall and ~90% precision** using strong Haiku prompt + numeric forward-guidance confirmation
+
+This is exactly why we send ALL INVESTOR_PRESENTATION to the guidance extraction pipeline ($140 insurance) rather than trying to pre-filter within this category. The extraction LLM is the final precision gate — it reads the full content and returns empty if no real guidance exists.
+
+---
+
+## Storage: Haiku Tags on Report Nodes
+
+Tags are 1:1 with the filing — every filing gets exactly one classification. No separate nodes needed. Store as properties on the Report node (same pattern as `market_session`, `formType`).
+
+```
+Report node — add 3 properties:
+  haiku_primary:    String    'EARNINGS'
+  haiku_secondary:  String    '["GUIDANCE","BUYBACK"]'  (JSON array, same as items)
+  haiku_confidence: Double    0.96
+```
+
+Query examples:
+
+```cypher
+// All guidance filings
+MATCH (r:Report {formType: '8-K'})
+WHERE r.haiku_primary = 'FINANCIAL_GUIDANCE'
+   OR r.haiku_secondary CONTAINS 'FINANCIAL_GUIDANCE'
+RETURN r.accessionNo, r.created
+
+// Earnings with secondary buyback
+MATCH (r:Report {haiku_primary: 'EARNINGS'})
+WHERE r.haiku_secondary CONTAINS 'BUYBACK'
+RETURN r.accessionNo
+```
+
+---
+
+## 2. Historical Coverage-Gap Search That Motivated The Frozen Taxonomy
+
+This section explains why the frozen taxonomy in Section 1A exists.
+
+Earlier drafts used a much smaller tag set and produced too much `OTHER`. The gap search across the 8-K corpus showed that several real event families needed to be promoted into the production taxonomy, especially `SHAREHOLDER_VOTE`, `SECURITIES_OFFERING`, `PRODUCT_PIPELINE`, and `ADMINISTRATIVE_ONLY`.
+
+### Coverage gaps found
+
+The gap search showed that the earlier compact taxonomy was missing several real event families, especially:
+
+- shareholder-vote filings that deserved their own tag rather than broad governance
+- securities-offering / ATM type filings that were neither clean debt nor generic agreements
+- product / pipeline milestone filings, especially in healthcare
+- purely administrative exhibit / disclosure updates that should not be forced into a business-event bucket
+
+That evidence is why the frozen taxonomy in Section 1A now includes `SHAREHOLDER_VOTE`, `SECURITIES_OFFERING`, `PRODUCT_PIPELINE`, and `ADMINISTRATIVE_ONLY`.
+
+### Updated Haiku prompt
+
+```text
+Classify this 8-K into one primary and zero or more secondary event types.
+
+Use the canonical event taxonomy from Section 1A.
+
+Return JSON only:
+{"primary_event": "...", "secondary_events": [...], "confidence": 0.0-1.0}
+```
+
+### Which tags need Haiku vs deterministic rules
+
+```
+Use the split already frozen in Section 1A:
+
+- deterministic supplemental tags are assigned directly from item codes
+- Haiku is used only for the prompt-routed semantic tags on ambiguous filings
+```
+
+---
+
+## 3. Guidance-Specific 8-K Fetch Strategy
+
+Guidance can appear in exactly three places in 8-K filings:
+
+```
+1. Item 2.02 (Earnings press release)
+   → "We expect Q3 revenue of $94-98B"
+   → EX-99.1 contains the outlook section
+   → 8,847 filings. Not all have guidance (some companies don't guide)
+
+2. Item 7.01 (Reg FD) WITHOUT 2.02
+   → Mid-quarter guidance revision, pre-announcement
+   → ~3,782 filings total, only ~149 contain actual guidance
+
+3. Item 8.01 (Other Events) WITHOUT 2.02
+   → Rare guidance updates
+   → ~15 filings with guidance
+```
+
+Guidance does NOT appear in other item codes (5.02, 5.07, 1.01, 2.03, etc.).
+
+### Why 100%/100% is not achievable with metadata alone
+
+"Guidance" is a semantic concept — you have to read the text to know if it's there. A filing can have Item 7.01 and be an investor presentation with zero forward-looking numbers. Another 7.01 can be a full guidance revision. The item code can't tell you which.
+
+### The 3-stage approach (practical ~99.5% recall, ~100% precision)
+
+```
+Stage 1: ITEM CODE FILTER (100% recall, ~5% precision)
+  Process ALL of these:
+    ✓ Every Item 2.02 filing                       → 8,847 filings
+    ✓ Every Item 7.01 filing (without 2.02)         → 3,782 filings
+    ✓ Every Item 8.01 filing (without 2.02)         → 3,949 filings
+                                                     ─────────────
+    Total superset:                                  ~16,578 filings
+  No guidance filing can escape this net.
+
+Stage 2: HAIKU + KEYWORD RESCUE (~99.5% recall, ~95% precision)
+  For 2.02: always process (guidance lives in EX-99.1)
+  For 7.01/8.01: Haiku classifies → GUIDANCE tag
+  Keyword rescue for Haiku misses (~5%):
+    'guidance', 'outlook', 'preliminary results', 'pre-announce',
+    'revised outlook', 'updated outlook', 'expects revenue',
+    'expects earnings', 'full-year outlook', 'raises guidance',
+    'lowers guidance', 'reaffirms guidance'
+  Route formula: Haiku_yes OR keyword_rescue_yes
+
+Stage 3: EXTRACTION LLM (~99.5% recall, ~100% precision)
+  Reads full EX-99.1 / section content
+  Extracts structured guidance (ranges, metrics, periods)
+  Returns empty if no guidance found → false positives produce no data
+```
+
+### Implementation
+
+```python
+def should_extract_guidance(filing):
+    items = filing.items
+
+    # Always process earnings — guidance lives in the press release
+    if 'Item 2.02' in items:
+        return True
+
+    # Haiku-gate Reg FD and Other Events
+    if 'Item 7.01' in items or 'Item 8.01' in items:
+        haiku_result = classify_with_haiku(filing)
+        if 'FINANCIAL_GUIDANCE' in haiku_result.categories:
+            return True
+        # Rescue: keyword fallback for Haiku misses (~5%)
+        if has_guidance_keywords(filing.content):
+            return True
+
+    return False
+
+def has_guidance_keywords(text):
+    keywords = [
+        'guidance', 'outlook', 'preliminary results',
+        'pre-announce', 'revised outlook', 'updated outlook',
+        'expects revenue', 'expects earnings', 'full-year outlook',
+        'raises guidance', 'lowers guidance', 'reaffirms guidance'
+    ]
+    return any(kw in text.lower() for kw in keywords)
+```
+
+### Why the extraction LLM handles precision
+
+The pipeline already has an LLM that reads content and extracts structured guidance. If no guidance is present, it returns empty. So false positives don't produce wrong data — they just waste tokens. The ONLY thing that matters for the fetch stage is RECALL. Precision is the extraction LLM's job.
 
 ---
 
@@ -478,28 +1088,33 @@ These are **generic** — any item code can have any exhibit stapled to it. But 
 The oversimplified rule "exhibit wins, section is fallback" breaks down on multi-item filings and edge cases. The real picture has four cases:
 
 ```
-Case 1: Section is a pointer (most Item 2.02 earnings — 93%)
-  Section (1 KB):  "See Exhibit 99.1"
-  Exhibit (24 KB): [full press release]
-  → Exhibit is sufficient, section is useless
+Case 1: Section is a pointer (Item 2.02 earnings — 99.7% of 8,126 filings)
+  Section (avg 322 B–899 B): "See Exhibit 99.1"
+  Exhibit (avg 31 KB):        [full press release]
+  → Exhibit is sufficient for THIS item
+  → But check for OTHER sections on the same filing (see Case 3)
 
-Case 2: Section adds context not in exhibit (rare but documented)
+Case 2: Section adds context not in exhibit (documented in extraction rules)
   Section: "Revenue guidance of $94-98B, subject to tariff resolution"
   Exhibit: "Revenue guidance of $94-98B"
   → Section adds a condition not found in the exhibit
+  → Extraction pipeline captures this via the `conditions` field
+  Source: 8k-primary.md: "Section may add context — annotate in conditions field"
 
-Case 3: Section and exhibit cover DIFFERENT events (multi-item filings)
+Case 3: Section and exhibit cover DIFFERENT events (910+ multi-item filings)
   Filing has Items 2.02 + 8.01 + 9.01
-  Exhibit EX-99.1: [earnings press release — covers Item 2.02]
-  Section "OtherEvents": [share buyback announcement — covers Item 8.01]
+  Exhibit EX-99.1 (31 KB): [earnings press release — covers Item 2.02]
+  Section "OtherEvents" (avg 1.2 KB): [share buyback — covers Item 8.01]
   → They cover COMPLETELY DIFFERENT events
   → Ignoring the section = losing the buyback info entirely
+  → Each section maps to ONE item code; exhibits may map to a DIFFERENT item
 
-Case 4: Section has substantive content, exhibit is complementary
+Case 4: Section IS the main document (786 filings, mostly Item 1.01)
   Filing has Item 1.01
-  Section (4.4 KB avg, up to 40 KB): [summary or full text of the deal]
-  Exhibit EX-99.1 (24 KB): [press release announcing the deal]
-  → They're complementary, not redundant
+  Section (avg 4.4 KB, up to 40 KB): [full merger agreement text]
+  Exhibit EX-99.1 (avg 23 KB):       [press release announcing the deal]
+  → Section has the legal contract, exhibit has the announcement
+  → Neither is a subset of the other — they're complementary
 ```
 
 **The corrected rule:**
@@ -968,16 +1583,31 @@ Stage 3: EXTRACTION PROMPT          per-type LLM, reads full content
 ### LLM Router Prompt (Stage 2)
 
 ```
-Classify this 8-K filing section into ALL applicable categories:
-EARNINGS, BUYBACK, DIVIDEND, RESTRUCTURING, M_AND_A, DEBT,
-GUIDANCE, LITIGATION, GOVERNANCE, INVESTOR_PRESENTATION, OTHER
+Classify this 8-K filing section into ALL applicable categories using the
+canonical event taxonomy in Section 1A.
 
 Section text: {section_text}
 
-Return: comma-separated list of categories, or OTHER if none apply.
+Return: comma-separated list of categories.
 ```
 
 One call per section. All categories in one pass. No keyword curation needed.
+
+Recommended production output fields:
+
+- `primary_event`
+- `secondary_events`
+- `event_date`
+- `confidence`
+
+Optional extended tags for the long-term event timeline, if needed later:
+
+- `CYBER_INCIDENT`
+- `RESTATEMENT`
+- `ACCOUNTANT_CHANGE`
+- `DELISTING_RIGHTS_CHANGE`
+- `IMPAIRMENT`
+- `SECURITIES_OFFERING`
 
 ### Why LLM Router > Keywords (empirically validated)
 
@@ -1240,12 +1870,12 @@ Fallback compound keywords:
 
 | Field             | Value                                          |
 |-------------------|------------------------------------------------|
-| LLM router label  | GOVERNANCE (sub-type: executive departure)     |
+| LLM router label  | EXECUTIVE_CHANGE                               |
 | Trigger items     | 5.02                                           |
 | Content           | Sections (57% section-only) + EX-10.x (employment agreements) |
 | Pool              | ~5,103 total, needs LLM to separate departures from routine board refresh |
 | Standalone impact | **1.84%** at item-code level (N=2,853), -0.24% negative bias |
-| Notes             | Content matters: CFO departure ≠ routine board committee rotation. Item-code level is too noisy. LLM must classify departure vs appointment vs routine. |
+| Notes             | Content matters: CFO departure ≠ routine board committee rotation. Item-code level is too noisy. LLM must classify departure vs appointment vs routine, with `GOVERNANCE` available only as a secondary tag when the filing is mainly board-structure rather than officer-change content. |
 
 #### Dividends — TIER 3
 
@@ -1269,7 +1899,7 @@ Fallback compound keywords:
 
 | Field             | Value                                          |
 |-------------------|------------------------------------------------|
-| LLM router label  | DEBT                                           |
+| LLM router label  | DEBT_FINANCING                                 |
 | Trigger items     | 1.01, 2.03, 8.01, 7.01                        |
 | Content           | Sections + EX-10.x exhibits                   |
 | Pool              | ~72 (8.01) + Item 2.03 (1,494)                |
@@ -1432,7 +2062,7 @@ Baseline (all 8-K): 4.02% avg absolute adjusted return. Non-earnings baseline: ~
 | UNCLASSIFIED | 306 | 2.77% | -0.46% | baseline |
 | GUIDANCE | 15 | 2.66% | -1.84% | baseline (small N) |
 | M&A | 182 | 2.63% | -0.35% | baseline |
-| DEBT | 72 | 2.44% | +0.54% | -8% |
+| DEBT_FINANCING | 72 | 2.44% | +0.54% | -8% |
 | **BUYBACK** | 86 | 2.42% | **+1.12%** | -9% (but consistently positive) |
 | DIVIDEND | 51 | 1.74% | -0.27% | **-34%** |
 
@@ -3582,14 +4212,14 @@ Evaluate whether a small-LLM router (Haiku) should replace deterministic routing
 
 | Group | N | Dominant Haiku primary | Dominant rate | Multi-label rate | Recommendation |
 |---|---:|---|---:|---:|---|
-| 1.01_2.03_debt | 119 | DEBT | 98.32% | 11.76% | deterministic_ok |
+| 1.01_2.03_debt | 119 | DEBT_FINANCING | 98.32% | 11.76% | deterministic_ok |
 | 2.01_ma | 119 | M_AND_A | 95.80% | 45.38% | deterministic_ok |
 | 2.02_core | 120 | EARNINGS | 99.17% | 65.00% | deterministic_ok |
 | 2.05_restructuring | 120 | RESTRUCTURING | 71.67% | 47.50% | hybrid_preferred |
 | 5.02_exec | 118 | EXECUTIVE_CHANGE | 88.98% | 5.93% | hybrid_preferred |
 | 5.07_governance | 120 | GOVERNANCE | 95.83% | 20.00% | deterministic_ok |
 | 7.01_ambiguous | 120 | INVESTOR_PRESENTATION | 25.83% | 21.67% | llm_needed |
-| 8.01_ambiguous | 120 | DEBT | 31.67% | 10.83% | llm_needed |
+| 8.01_ambiguous | 120 | DEBT_FINANCING | 31.67% | 10.83% | llm_needed |
 | 9.01_only | 89 | M_AND_A | 46.07% | 13.48% | llm_needed |
 | random_all | 149 | EARNINGS | 40.94% | 30.87% | llm_needed |
 | rare_other | 87 | GOVERNANCE | 64.37% | 11.49% | llm_needed |
@@ -3602,6 +4232,8 @@ Recommendation key:
 
 ## Category Comparison: Haiku vs Stronger Heuristic Baseline
 
+Note: this benchmark originally used the older label names `DEBT` and `OTHER`. In the frozen taxonomy from Section 1A, read those as `DEBT_FINANCING` and a pre-split residual bucket that is now divided into `OTHER_MATERIAL_EVENT` and `ADMINISTRATIVE_ONLY`.
+
 | Category | Haiku yes | Heuristic yes | Both yes | Haiku only | Heuristic only |
 |---|---:|---:|---:|---:|---:|
 | EARNINGS | 248 | 236 | 231 | 17 | 5 |
@@ -3610,11 +4242,11 @@ Recommendation key:
 | DIVIDEND | 52 | 30 | 28 | 24 | 2 |
 | RESTRUCTURING | 127 | 59 | 58 | 69 | 1 |
 | M_AND_A | 231 | 433 | 215 | 16 | 218 |
-| DEBT | 258 | 278 | 247 | 11 | 31 |
+| DEBT_FINANCING | 258 | 278 | 247 | 11 | 31 |
 | EXECUTIVE_CHANGE | 236 | 261 | 229 | 7 | 32 |
 | GOVERNANCE | 267 | 248 | 226 | 41 | 22 |
 | INVESTOR_PRESENTATION | 93 | 51 | 43 | 50 | 8 |
-| OTHER | 75 | 137 | 49 | 26 | 88 |
+| OTHER_MATERIAL_EVENT / ADMINISTRATIVE_ONLY | 75 | 137 | 49 | 26 | 88 |
 
 ## Practical Conclusion
 
@@ -3778,13 +4410,13 @@ Top findings:
 | Group | N | Dominant Haiku primary | Dominant rate | Recommendation |
 | --- | ---: | --- | ---: | --- |
 | `2.02_core` | 120 | `EARNINGS` | 99.17% | deterministic_ok |
-| `1.01_2.03_debt` | 119 | `DEBT` | 98.32% | deterministic_ok |
+| `1.01_2.03_debt` | 119 | `DEBT_FINANCING` | 98.32% | deterministic_ok |
 | `2.01_ma` | 119 | `M_AND_A` | 95.80% | deterministic_ok |
 | `5.07_governance` | 120 | `GOVERNANCE` | 95.83% | deterministic_ok |
 | `2.05_restructuring` | 120 | `RESTRUCTURING` | 71.67% | hybrid_preferred |
 | `5.02_exec` | 118 | `EXECUTIVE_CHANGE` | 88.98% | hybrid_preferred |
 | `7.01_ambiguous` | 120 | `INVESTOR_PRESENTATION` | 25.83% | llm_needed |
-| `8.01_ambiguous` | 120 | `DEBT` | 31.67% | llm_needed |
+| `8.01_ambiguous` | 120 | `DEBT_FINANCING` | 31.67% | llm_needed |
 | `9.01_only` | 89 | `M_AND_A` | 46.07% | llm_needed |
 | `rare_other` | 87 | `GOVERNANCE` | 64.37% | llm_needed |
 
