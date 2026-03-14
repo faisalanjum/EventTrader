@@ -9,7 +9,7 @@ tools:
   - TaskUpdate
   - Write
   - Read
-model: opus
+model: sonnet
 permissionMode: dontAsk
 ---
 
