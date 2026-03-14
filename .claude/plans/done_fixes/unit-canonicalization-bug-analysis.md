@@ -1,6 +1,6 @@
 # Unit Canonicalization Bug — Full Analysis (2026-03-13)
 
-Status: analysis complete, fix not yet implemented
+Status: DONE — all 4 changes implemented and verified (2026-03-14)
 
 ## Bug Summary
 

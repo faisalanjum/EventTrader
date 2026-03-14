@@ -10,7 +10,7 @@
 
 **What this is**: Multi-layer earnings analysis system using forked skills for context isolation.
 
-**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74):**
+**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74, retested 2026-03-14 v2.1.76):**
 
 | What | Status | Workaround |
 |------|--------|------------|
@@ -35,7 +35,7 @@
 | SubagentStart hook | ✅ **WORKS** (Feb 2026) | Fires when subagent spawns; additionalContext injection **confirmed working** for custom agents (context added to agent window, NOT logged in transcript) |
 | SubagentStop hook | ✅ **WORKS** (Feb 2026) | Fires when subagent completes; **blocking confirmed** (decision:block prevents stop, stop_hook_active=true on 2nd fire allows) |
 | **PostToolUseFailure hook** | ✅ **WORKS** (v2.1.37) | Fires when tool call fails; JSON has tool_name, tool_input, error, is_interrupt, tool_use_id |
-| **type: "prompt" hooks** | ⚠️ **REGRESSION** (v2.1.45) | Was WORKING in v2.1.37, **NO LONGER ENFORCED** in v2.1.45. Both safe and blocked commands execute without interception. Hook is simply not evaluated. |
+| **type: "prompt" hooks** | ✅ **FIXED** (v2.1.76) | Was WORKING in v2.1.37, regressed in v2.1.45 (not evaluated), **NOW FIXED in v2.1.76**. Safe commands pass, blocked commands correctly intercepted. Note: hook-blocked calls in parallel still cancel siblings (distinct from v2.1.72 tool fail isolation fix). |
 | **type: "agent" hooks** | ❌ **NOT ENFORCED** (v2.1.37→v2.1.45) | Still not enforced. Hook configured in agent frontmatter did not block in either version. |
 | **--agent flag + hooks** | ❌ **NOT WORKING** (v2.1.37) | Agent frontmatter hooks ONLY activate via Task tool subagent spawn; `--agent` flag starts main session without hooks |
 | Task→Skill nesting | ✅ **WORKS** (Feb 2026) | Sub-agents can invoke skills; combine parallel Task + Skill chains |
@@ -126,7 +126,7 @@
 | **AskUserQuestion in skill allowed-tools** | ✅ **FIXED** (v2.1.69) | Was silently auto-allowed with empty answers; now properly prompts. |
 | **Hooks settings.json live-reload** | ❌ **NOT LIVE-RELOADED** (v2.1.70) | Hooks added to settings.json mid-session do NOT take effect. Env vars DO live-reload, hooks do NOT. Must start new session. |
 | **FG tool presentation change** | ⚠️ **CHANGED** (v2.1.70) | FG agents now show 1 direct tool (ToolSearch) + 30 deferred. Was "7 base + 33 deferred". Same functional tool set; all require ToolSearch except ToolSearch itself. |
-| **Agent discovery session snapshot** | ❌ **STILL SNAPSHOT** (v2.1.74) | Agents created mid-session still NOT discoverable by Task tool. No change. |
+| **Agent discovery session snapshot** | ❌ **STILL SNAPSHOT** (v2.1.76) | Agents created mid-session still NOT discoverable by Task tool. No change through v2.1.76. |
 | **CronCreate/CronList/CronDelete tools** | ✅ **NEW** (v2.1.71) | Session-level cron/scheduling tools. Available in main session only, NOT propagated to subagents. CronCreate schedules prompts via 5-field cron expression (local timezone). Session-only: jobs lost on exit. 3-day auto-expiry for recurring. |
 | **`/loop` command** | ✅ **NEW** (v2.1.71) | Run prompt or slash command on recurring interval (e.g., `/loop 5m /foo`). Defaults to 10m. Uses CronCreate internally. |
 | **`ExitWorktree` tool** | ✅ **NEW** (v2.1.72) | Companion to EnterWorktree. `action: "keep"` or `"remove"`. `discard_changes: true` for dirty worktrees. Available in both main session AND subagents. |
@@ -142,7 +142,196 @@
 | **`/context` command suggestions** | ✅ **NEW** (v2.1.74) | Actionable suggestions identifying context-heavy tools, memory bloat, capacity warnings. |
 | **Managed policy bypass fix** | ✅ **FIXED** (v2.1.74) | Managed policy `ask` rules were bypassed by user `allow` rules or skill `allowed-tools`. Now enforced. |
 | **SessionEnd hook timeout fix** | ✅ **FIXED** (v2.1.74) | SessionEnd hooks were killed after 1.5s regardless of `hook.timeout`. **TESTED**: Per-hook `timeout:` field NOT respected for SessionEnd. Fix is via `CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS` env var ONLY. 3-second hook: killed without env var, completed with env var set to 10000ms. |
-| **FG/BG subagent tool sets** | ⚠️ **CHANGED** (v2.1.74) | **Definitive matrix (8 configs tested)**: FG non-team GP=**49 tools** (has TaskCreate/Get/Update/List), BG non-team GP=**37 tools** (NO task tools), BG non-team custom=**1 tool** (Bash only). FG≠BG — they are NOT identical. **Team agents** (via `team_name` param): FG team GP=**38 tools**, BG team=**6 direct tools** — both have TaskCreate/SendMessage. **BG TEAM AGENTS NOW HAVE TaskCreate** — resolves #1 blocker since v2.1.47. Agent tool absent from ALL subagent tiers. |
+| **FG/BG subagent tool sets** | ⚠️ **UPDATED** (v2.1.76) | **v2.1.76 matrix**: FG non-team GP=**51 tools** (+2 from v2.1.74: TeamCreate, TeamDelete), BG non-team GP=**39 tools** (+2: EnterWorktree, ExitWorktree). Task tools: FG=YES, BG=NO (unchanged). Agent tool absent from ALL subagent tiers (unchanged). |
+| **1M context window** | ✅ **NEW** (v2.1.75) | Opus 4.6 gets 1M context by default on Max, Team, Enterprise. Model ID: `claude-opus-4-6[1m]`. |
+| **Memory file last-modified timestamps** | ✅ **NEW** (v2.1.75) | Read-time `<system-reminder>` injection based on filesystem mtime. Files ≥2 days old get "This memory is N days old" warning. Does NOT modify file on disk. Threshold between 1-6 days. |
+| **Bash `!` fix** | ✅ **FIXED** (v2.1.75) | `jq 'select(.x != .y)'` and similar `!`-containing piped commands no longer mangled. |
+| **`-n`/`--name` CLI flag** | ✅ **NEW** (v2.1.76) | Set display name for sessions at startup. Shown in `/resume` and terminal title. |
+| **`PostCompact` hook** | ✅ **NEW** (v2.1.76) | 15th hook event type. Fires after context compaction completes. |
+| **`Elicitation`/`ElicitationResult` hooks** | ✅ **NEW** (v2.1.76) | 16th/17th hook event types. Intercept MCP server structured input requests (forms, browser URLs). |
+| **`worktree.sparsePaths` setting** | ✅ **NEW** (v2.1.76) | Sparse-checkout for worktrees — only check out specified directories. For large monorepos. |
+| **`/effort` slash command** | ✅ **NEW** (v2.1.76) | Set model effort level via slash command. |
+| **TeamCreate/TeamDelete tools** | ✅ **NEW** (v2.1.76) | Formalized team lifecycle tools. Available in main session + FG non-team GP. NOT in subagents. TeamCreate takes `team_name` (required), `description`, `agent_type`. TeamDelete takes no params (uses session context). |
+| **ListMcpResourcesTool/ReadMcpResourceTool** | ✅ **NEW** (v2.1.76) | Browse MCP server resources. ListMcpResourcesTool: optional `server` filter. ReadMcpResourceTool: requires `server` + `uri`. Both deferred. **TESTED**: tools work, but no MCP servers expose resources currently. |
+| **Deferred tools post-compaction fix** | ✅ **FIXED** (v2.1.76) | Deferred tools no longer lose input schemas after compaction (array/number params were rejected). |
+| **Auto-compaction circuit breaker** | ✅ **NEW** (v2.1.76) | Auto-compaction stops retrying after 3 consecutive failures. |
+| **Context limit fix for `model:` frontmatter on 1M** | ✅ **FIXED** (v2.1.76) | Spurious "Context limit reached" errors when invoking skills with `model:` frontmatter on 1M-context sessions fixed. |
+| **BG agent kill preserves results** | ✅ **IMPROVED** (v2.1.76) | Killing a background agent now preserves partial results in conversation context. |
+| **`feedbackSurveyRate` setting** | ✅ **NEW** (v2.1.76) | Enterprise admins configure session quality survey sample rate. |
+
+---
+
+### Retest Summary (2026-03-14, v2.1.76) — v2.1.75-v2.1.76 (2 versions)
+
+**22 capabilities tested (v2.1.75-v2.1.76, all with empirical proof unless noted):**
+
+| Feature | Status | Change from v2.1.74 |
+|---------|--------|---------------------|
+| 1M context window (v2.1.75) | ✅ **WORKS** | **NEW** — confirmed via model ID `claude-opus-4-6[1m]` |
+| Memory file timestamps (v2.1.75) | ✅ **WORKS** | **NEW** — read-time `<system-reminder>` injection. ≥2 days: "N days old" warning. ≤1 day: no tag. Elegant: no disk modification |
+| Bash `!` fix (v2.1.75) | ✅ **FIXED** | `jq 'select(.x != .y)'` works correctly |
+| `-n`/`--name` flag (v2.1.76) | ✅ **WORKS** | **NEW** — confirmed in `--help` output |
+| FG non-team GP tool count | **51** (+2) | **NEW tools**: TeamCreate, TeamDelete (were absent in v2.1.74) |
+| BG non-team GP tool count | **39** (+2) | **NEW tools**: EnterWorktree, ExitWorktree (were absent in v2.1.74 BG) |
+| TeamCreate/TeamDelete schemas | ✅ **DOCUMENTED** | TeamCreate: `team_name` (required), `description`, `agent_type`. TeamDelete: no params. Main session + FG only |
+| ListMcpResourcesTool/ReadMcpResourceTool | ✅ **WORKS** | **NEW** — MCP resource browsing. No resources from current MCP servers |
+| `type: "prompt"` hooks regression | ✅ **FIXED** | **MAJOR FIX** — was regressed since v2.1.45, now working again. Safe=allowed, BLOCK_ME=blocked |
+| `type: "agent"` hooks | ❌ **Still not enforced** | Both safe and blocked commands execute. Unchanged from v2.1.37 |
+| `allowed-tools` restriction (skills) | ❌ **Still not enforced** | Grep+Write both work despite only Read listed. Unchanged |
+| `disallowedTools` (skills) | ❌ **Still not enforced** | Write+Bash both work despite being listed. Unchanged |
+| `disallowedTools` (agents) | ✅ **Still enforced** | Write+Bash both BLOCKED. Read ALLOWED. Unchanged |
+| Subagent thinking | ❌ **Still disabled** | 0 thinking blocks. Model confirms `claude-opus-4-6[1m]`. Root cause unchanged: `IS()` hard-codes `thinkingConfig: {type: "disabled"}` |
+| Agent discovery mid-session | ❌ **Still snapshot** | v2.1.76 agents created mid-session NOT discoverable. Unchanged |
+| Hooks live-reload | ❌ **Still not live-reloaded** | No fix mentioned in v2.1.75/76. Unchanged |
+| Task→Task nesting | ❌ **Still blocked** | Agent tool absent from all subagent tiers. Unchanged |
+| PostCompact hook (v2.1.76) | ✅ **NEW** | Cannot trigger compaction in test — changelog-confirmed |
+| Elicitation hooks (v2.1.76) | ✅ **NEW** | Cannot trigger without elicitation-capable MCP server — changelog-confirmed |
+| `worktree.sparsePaths` (v2.1.76) | ✅ **NEW** | Cannot meaningfully test without large monorepo — changelog-confirmed |
+| `/effort` command (v2.1.76) | ✅ **NEW** | Set effort level via slash command |
+| Auto-compaction circuit breaker (v2.1.76) | ✅ **NEW** | Stops after 3 consecutive failures — changelog-confirmed |
+
+**Changelog-only items (not tested, grouped by version):**
+
+**v2.1.75:**
+| Feature | Details |
+|---------|---------|
+| `/color` command | Set prompt-bar color for sessions |
+| Session name on prompt bar | Displayed when using `/rename` |
+| Token estimation fix | Thinking and `tool_use` blocks over-counted, causing premature compaction. Fixed |
+| Voice mode fresh install fix | `/voice` required toggling twice on fresh installs |
+| Model name display fix | Header didn't update after `/model` or Option+P switch |
+| Session crash fix | Attachment message computation returning undefined |
+| Managed-disabled plugins in `/plugin` | No longer appear in Installed tab |
+| `/resume` session name loss | Fixed for forked/continued sessions |
+| Async hook messages suppressed | Visible only with `--verbose` |
+| macOS startup performance | Skip unnecessary subprocess spawns on non-MDM machines |
+| Deprecated Windows managed settings fallback | Removed `C:\ProgramData\ClaudeCode\managed-settings.json` |
+
+**v2.1.76:**
+| Feature | Details |
+|---------|---------|
+| MCP elicitation dialogs | MCP servers can request structured input mid-task |
+| Slash command "Unknown skill" fix | Slash commands no longer incorrectly show "Unknown skill" |
+| Plan mode re-approval fix | No longer asks for re-approval after plan already accepted |
+| Voice mode keypress fix | Voice mode no longer swallows keypresses during permission dialogs |
+| "Adaptive thinking not supported" fix | Fixed for non-standard model strings |
+| `Bash(cmd:*)` hash in quotes fix | Permission rules no longer fail matching when args contain `#` |
+| Auto-compaction circuit breaker | Stops after 3 consecutive failures |
+| MCP reconnect spinner fix | No longer persists after successful reconnection |
+| Clipboard tmux+SSH fix | Attempts both direct terminal write and tmux integration |
+| `/export` full path fix | Shows full file path instead of just filename |
+| `--worktree` startup improved | Read git refs directly, skip redundant `git fetch` |
+| Stale worktree cleanup | Auto-cleanup of worktrees left after interrupted parallel runs |
+| BG agent kill preserves results | Partial results preserved in conversation context |
+| Model fallback notifications | Now always visible with human-friendly model names |
+| `--plugin-dir` single path | Now accepts only one path; use repeated flags for multiple |
+| Multiple Remote Control fixes | Session dying, message batching, stale work items, JWT refresh |
+| Bridge session recovery | Fixed for extended WebSocket disconnects |
+
+---
+
+### Detailed Test Findings (2026-03-14, v2.1.76)
+
+All items below were empirically tested with proof files in `earnings-analysis/test-outputs/test-v176-*.txt`.
+
+#### 1. FG/BG Tool Matrix Update (v2.1.76)
+
+**FG non-team GP: 51 tools** (was 49 in v2.1.74)
+- 8 direct: Bash, Glob, Grep, Read, Edit, Write, Skill, ToolSearch
+- 43 deferred: CronCreate/Delete/List, EnterWorktree, ExitWorktree, ListMcpResourcesTool, NotebookEdit, ReadMcpResourceTool, SendMessage, TaskCreate/Get/List/Update, **TeamCreate**, **TeamDelete**, WebFetch, WebSearch, + 26 MCP tools
+- **NEW vs v2.1.74**: TeamCreate, TeamDelete (+2)
+- Agent: ABSENT. EnterPlanMode/ExitPlanMode: ABSENT.
+
+**BG non-team GP: 39 tools** (was 37 in v2.1.74)
+- 13 direct: Bash, Glob, Grep, Read, Edit, Write, Skill, ToolSearch, **EnterWorktree**, **ExitWorktree**, NotebookEdit, WebFetch, WebSearch
+- 26 MCP deferred
+- **NEW vs v2.1.74**: EnterWorktree, ExitWorktree (+2) — BG agents can now enter/exit worktrees
+- Task tools: STILL NO. Agent: ABSENT. Cron: ABSENT. SendMessage: ABSENT.
+
+Proof files: `test-v176-fg-inventory.txt`, `test-v176-bg-inventory.txt`
+
+#### 2. TeamCreate/TeamDelete Tool Schemas (v2.1.76)
+
+**TeamCreate** — Creates a team (1:1 with task list):
+- `team_name` (required): Name for the team
+- `description` (optional): Team purpose
+- `agent_type` (optional): Type/role of team lead
+- Creates: `~/.claude/teams/{name}.json` + `~/.claude/tasks/{name}/`
+
+**TeamDelete** — Removes team + task directories:
+- No parameters (uses current session context)
+- Fails if team still has active members
+- Clears team context from session
+
+**Availability**: Main session ✅, FG non-team GP ✅ (deferred), FG team GP ❌, BG ❌
+**Note**: Subagents cannot discover these via ToolSearch — main session + FG non-team only.
+
+Proof file: `test-v176-team-tools.txt`
+
+#### 3. Memory File Timestamps (v2.1.75)
+
+**Mechanism**: Read-time `<system-reminder>` injection based on filesystem mtime. NOT disk modification.
+
+**Format**: `<system-reminder>This memory is N days old. Memories are point-in-time observations, not live state — claims about code behavior or file:line citations may be outdated. Verify against current code before asserting as fact.</system-reminder>`
+
+**Threshold observations**:
+| File age | Tag injected? |
+|----------|--------------|
+| 0 days (today) | ❌ No |
+| 1 day | ❌ No |
+| 6 days | ✅ Yes |
+| 36 days | ✅ Yes |
+
+Threshold is between 1-6 days. Elegant design: file stays clean on disk, age always current on re-read.
+
+Proof file: `test-v176-memory-timestamps.txt`
+
+#### 4. `type: "prompt"` Hooks — REGRESSION FIXED (v2.1.76)
+
+Was broken since v2.1.45. Now working again:
+- `echo "SAFE_COMMAND"` → ALLOWED (executed normally)
+- `echo "BLOCK_ME please"` → BLOCKED (error: "PROMPT_HOOK_BLOCKED: Command contains BLOCK_ME")
+
+**Caveat**: When safe and blocked commands run in parallel, the hook-blocked command ALSO cancels the safe sibling ("Cancelled: parallel tool call Bash(...) errored"). This is distinct from v2.1.72's parallel fail isolation fix — hook errors behave differently from tool execution failures.
+
+Proof file: `test-v176-prompt-hooks.txt`
+
+#### 5. `type: "agent"` Hooks — Still Not Enforced (v2.1.76)
+
+Both safe and `AGENT_BLOCK_ME` commands executed without interception. Hook simply not evaluated. Unchanged from v2.1.37.
+
+Proof file: `test-v176-agent-hooks.txt`
+
+#### 6. ListMcpResourcesTool/ReadMcpResourceTool (v2.1.76)
+
+New deferred tools for browsing MCP server resources.
+- `ListMcpResourcesTool`: optional `server` filter → returns resources with standard MCP fields + server name
+- `ReadMcpResourceTool`: requires `server` + `uri` → reads specific resource, max 100K chars
+- **Test result**: "No resources found" — our MCP servers (Neo4j, Perplexity, Alpha Vantage, Obsidian, IDE) expose tools but not resources
+
+**Full updated tool comparison (v2.1.76):**
+
+| Category | Main session | FG non-team GP | BG non-team GP |
+|----------|-------------|----------------|----------------|
+| Direct tools | 9 (+ Agent) | 8 | 13 |
+| Built-in deferred | 22+ | 19 | 0 |
+| MCP deferred | 26 | 26 | 26 |
+| **Total** | **57+** | **51** | **39** |
+| TeamCreate/Delete | ✅ | ✅ | ❌ |
+| TaskCreate/Get/Update/List | ✅ | ✅ | ❌ |
+| CronCreate/List/Delete | ✅ | ✅ | ❌ |
+| EnterWorktree/ExitWorktree | ✅ | ✅ | ✅ (**NEW** in BG) |
+| Agent tool | ✅ | ❌ | ❌ |
+
+**Test artifacts:**
+
+| File | What It Tests |
+|------|--------------|
+| `.claude/agents/test-v176-fg-tool-inventory.md` | FG tool inventory agent |
+| `.claude/agents/test-v176-bg-tool-inventory.md` | BG tool inventory agent |
+| `.claude/agents/test-v176-postcompact-hook.md` | PostCompact hook probe |
+| `.claude/agents/test-v176-elicitation.md` | Elicitation hooks probe |
+| `earnings-analysis/test-outputs/test-v176-*.txt` | All v2.1.76 test output files |
 
 ---
 

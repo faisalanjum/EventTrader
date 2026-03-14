@@ -403,10 +403,10 @@ To be filled per transcript:
    - Evidence: the persisted quote only says operating margin is improving and profitability is accelerating.
    - Suggested fix: forbid extracting a numeric or qualitative target from analyst wording unless management explicitly repeats or unmistakably confirms that target in its own answer. Treat unconfirmed analyst framing as context, not guidance.
 
-7. No-guidance runs should use a non-error enrichment terminal state
+7. ~~No-guidance runs should use a non-error enrichment terminal state~~ — **FIXED** (2026-03-13)
    - Problem: `HCAT` was a valid `NO_GUIDANCE` run, but the enrichment pass emitted `PHASE_DEPENDENCY_FAILED` because there were no primary items.
    - Evidence: outer job completed successfully with `0` items and explicit `NO_GUIDANCE`, yet the enrichment phase still logged a failure-style status.
-   - Suggested fix: introduce a terminal state such as `skipped_no_primary` or `no_guidance`, and teach downstream dashboards/notes to treat it as a valid completion path rather than a failure.
+   - Fix applied: when 7E returns `0` items, enrichment now reads `/tmp/extract_pass_{TYPE}_primary_{SOURCE_ID}.json`; if primary completed with `items_written == 0`, it returns a completed zero-work result with `message="NO_PRIMARY_ITEMS"` instead of a failure-style status.
 
 ## Current Observations
 
