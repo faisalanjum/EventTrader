@@ -99,6 +99,33 @@ def discover_allowed_types():
 ALLOWED_TYPES = discover_allowed_types()
 
 # ---------------------------------------------------------------------------
+# Per-type model configuration
+# ---------------------------------------------------------------------------
+import yaml
+
+def load_type_config(type_name: str) -> dict:
+    """Load model config from types/{TYPE}/config.yaml. Returns defaults if missing."""
+    config_path = TYPE_ROOT / type_name / "config.yaml"
+    if not config_path.exists():
+        return {}
+    try:
+        with open(config_path) as f:
+            return yaml.safe_load(f) or {}
+    except Exception as e:
+        logging.getLogger(__name__).warning("Failed to load %s: %s", config_path, e)
+        return {}
+
+def resolve_models(config: dict, asset: str) -> dict:
+    """Resolve orchestrator/primary/enrichment models for a type×asset combo."""
+    defaults = {
+        "orchestrator": config.get("orchestrator", "sonnet"),
+        "primary": config.get("primary", "sonnet"),
+        "enrichment": config.get("enrichment", "sonnet"),
+    }
+    asset_overrides = config.get("assets", {}).get(asset, {})
+    return {k: asset_overrides.get(k, v) for k, v in defaults.items()}
+
+# ---------------------------------------------------------------------------
 # Asset -> Label mapping
 # ---------------------------------------------------------------------------
 ASSET_LABELS = {
@@ -245,10 +272,18 @@ async def process_one(
             log.warning("mark_status(in_progress) failed for %s/%s/%s: %s",
                         type_name, asset, source_id, e)
 
+    # Resolve per-type×asset model configuration
+    type_config = load_type_config(type_name)
+    models = resolve_models(type_config, asset)
+    log.info("Model config for %s/%s: orchestrator=%s primary=%s enrichment=%s",
+             type_name, asset, models["orchestrator"], models["primary"], models["enrichment"])
+
     # Generate unique result file path
     result_path = f"/tmp/extract_result_{type_name}_{source_id}_{uuid.uuid4().hex[:8]}.json"
 
-    prompt = f"/extract {ticker} {asset} {source_id} TYPE={type_name} MODE={mode} RESULT_PATH={result_path}"
+    prompt = (f"/extract {ticker} {asset} {source_id} TYPE={type_name} MODE={mode}"
+              f" PRIMARY_MODEL={models['primary']} ENRICHMENT_MODEL={models['enrichment']}"
+              f" RESULT_PATH={result_path}")
     log.info("Processing: %s", prompt)
     start = time.monotonic()
 
@@ -260,7 +295,7 @@ async def process_one(
             setting_sources=["project"],
             cwd=PROJECT_DIR,
             permission_mode="bypassPermissions",
-            model="sonnet",
+            model=models["orchestrator"],
             max_turns=MAX_TURNS,
             max_budget_usd=MAX_BUDGET_USD,
             stderr=lambda line: stderr_lines.append(line),

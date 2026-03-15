@@ -109,7 +109,61 @@ Currently only `guidance` × `transcript` has enrichment (Q&A secondary content)
 - **Termination**: 300s grace period (in-flight extraction completes)
 - **Auth**: 1-year refresh token via `setup-token`, auto-rotates
 
-### 2.7. Active Runtime Guardrails
+### 2.7. Model Configuration
+
+**Current production model: Sonnet 4.6** (validated 2026-03-15)
+
+Model is configured per type×asset via `config.yaml` with 3 independently controllable roles:
+
+| Role | What it controls | How it's set |
+|------|-----------------|--------------|
+| `orchestrator` | `/extract` skill session (SKILL.md) | `ClaudeAgentOptions(model=)` from config |
+| `primary` | extraction-primary-agent | Agent tool `model=` param (overrides frontmatter) |
+| `enrichment` | extraction-enrichment-agent | Agent tool `model=` param (overrides frontmatter) |
+
+**Config file**: `types/{TYPE}/config.yaml` — one per extraction type, auto-loaded by worker.
+
+```yaml
+# types/guidance/config.yaml
+orchestrator: sonnet        # default for all assets
+primary: sonnet
+enrichment: sonnet
+
+assets:                     # per-asset overrides (inherit from defaults)
+  news:
+    orchestrator: haiku
+    primary: haiku
+  # transcript inherits defaults (sonnet/sonnet/sonnet)
+```
+
+**Resolution order**: asset override > type default > hardcoded fallback (`sonnet`).
+
+**How it works**:
+1. Worker reads `types/{TYPE}/config.yaml` via `load_type_config()`
+2. `resolve_models(config, asset)` merges defaults with asset overrides
+3. Orchestrator model → `ClaudeAgentOptions(model=)`
+4. Agent models → passed as `PRIMARY_MODEL=` / `ENRICHMENT_MODEL=` in prompt args
+5. SKILL.md passes `model={PRIMARY_MODEL}` to Agent tool, overriding agent frontmatter
+
+**Verified 2026-03-15**: Same pod processed guidance/news (haiku) and guidance/transcript (sonnet) simultaneously. Worker log confirmed: `Model config for guidance/news: orchestrator=haiku primary=haiku enrichment=sonnet` and `Model config for guidance/transcript: orchestrator=sonnet primary=sonnet enrichment=sonnet`. All 36 news SDK messages showed `model=claude-haiku-4-5-20251001`, all transcript messages showed `model=claude-sonnet-4-6`.
+
+**Agent frontmatter** (`model: sonnet` in both agent `.md` files) serves as the **fallback default** — it applies when `PRIMARY_MODEL`/`ENRICHMENT_MODEL` are not passed (e.g., manual `/extract` invocation without the worker).
+
+**Parallel execution:** Redis queue + KEDA naturally supports different types/assets running in parallel on different pods. Each worker independently loads its type's config. No coordination needed.
+
+**Empirical model comparison (ADI transcript, 2026-03-14/15):**
+
+| Model | Items | XBRL Links | Members | Period Accuracy | basis_norm | Speed |
+|-------|-------|-----------|---------|-----------------|------------|-------|
+| Haiku 4.5 | 8 | 38% | 0% | Correct | Mixed | ~2 min |
+| **Sonnet 4.6** | **16** | **88%** | **38%** | **Correct** | **Best** | ~5 min |
+| Opus 4.6 | 14 (full pipeline retest) | 63% | 31% | **Wrong** (+1 month) | Often "unknown" | ~8 min |
+
+Opus period bug is reproducible (confirmed in 2 independent runs). Root cause: incorrect fiscal year-end math for non-standard FYE companies (ADI FYE=Oct 31).
+
+Full comparisons: `.claude/plans/Extractions/guidanceModelComp.md`, `adi_opus_vs_sonnet_comparison.md`, `adi_sonnet_backup.json`
+
+### 2.8. Active Runtime Guardrails
 
 These live outside the extraction prompt stack and apply globally. Do not reimplement inside contracts.
 
@@ -129,6 +183,7 @@ These live outside the extraction prompt stack and apply globally. Do not reimpl
 - Enrichment gating is file-existence based
 - Warmup helpers exist for concept/member caches and transcript query `3B`
 - Guidance writer/id tests passed locally on 2026-03-09 (`181 passed`)
+- Per-type×asset model configuration via `config.yaml` (2026-03-15) — 3 independent roles (orchestrator/primary/enrichment) configurable per asset. Verified: guidance/news→haiku and guidance/transcript→sonnet ran on same pod with correct model routing. See Section 2.7.
 
 ---
 
@@ -142,7 +197,7 @@ All skill/query paths relative to `.claude/skills/extract/`.
   extraction-enrichment-agent.md   (69 lines)    Generic enrichment agent shell
 
 .claude/skills/extract/
-  SKILL.md                         (48 lines)    Orchestrator: primary → conditional enrichment → report
+  SKILL.md                         (53 lines)    Orchestrator: primary → conditional enrichment → report (parses PRIMARY_MODEL/ENRICHMENT_MODEL)
   evidence-standards.md            (12 lines)    4 universal guardrails
   queries-common.md               (323 lines)    Shared queries: context (1A–1D), caches (2A–2B), inventory (8A), fulltext (9A–9F)
 
@@ -154,6 +209,7 @@ All skill/query paths relative to `.claude/skills/extract/`.
     news.md / news-queries.md                     (122 / 103 lines)  6A–6E queries
 
   types/guidance/                                 Guidance extraction type
+    config.yaml                    (17 lines)     Per-asset model config: orchestrator/primary/enrichment per asset
     core-contract.md               (707 lines)    Schema, fields, ID formula, XBRL/member matching, write path
     primary-pass.md                (229 lines)    FETCH → EXTRACT → VALIDATE → WRITE workflow
     enrichment-pass.md             (173 lines)    Existing items → secondary content → enrich → write
@@ -185,7 +241,7 @@ All skill/query paths relative to `.claude/skills/extract/`.
 
 | Script | Purpose |
 |--------|---------|
-| `extraction_worker.py` (493 lines) | K8s worker: Redis BRPOP → validate → Agent SDK → status tracking |
+| `extraction_worker.py` (~520 lines) | K8s worker: Redis BRPOP → load config.yaml → resolve models → Agent SDK → status tracking |
 | `trigger-extract.py` (280 lines) | Query Neo4j for unprocessed → LPUSH. Flags: `--all`, `--type`, `--asset`, `--list`, `--force`, `--retry-failed`, `--source-id` |
 
 ### K8s Manifest
@@ -389,7 +445,7 @@ proxy-queries.md      # Asset-specific Cypher queries
 | S12 | `${CLAUDE_SKILL_DIR}` for portable paths | v2.1.69+. Only helps SKILL.md; agents still need project-relative. |
 | S13 | `agent_type` in hooks for per-agent validation | v2.1.69+. `jq` check per hook script to differentiate primary vs enrichment. |
 | S15 | Per-company agent memory | Two-tier: shared MEMORY.md + per-company `{TICKER}.md`. `memory: project` scope. Agents accumulate company-specific patterns. |
-| S16 | `model:` field for cost optimization | Primary=opus (quality-critical), enrichment=sonnet (simpler verdicts). Gate: Sonnet vs Opus comparison run first. |
+| ~~S16~~ | ~~`model:` field for cost optimization~~ | **DONE** — `config.yaml` per type with per-asset overrides. 3 independent roles (orchestrator/primary/enrichment). Worker reads config, passes `PRIMARY_MODEL`/`ENRICHMENT_MODEL` to SKILL.md, which passes `model=` to Agent tool. Opus comparison completed: Sonnet wins (period bug, XBRL regression). See Section 2.7. |
 | S17 | `PostToolUseFailure` hook | Structured error logging without transcript parsing. |
 | S18 | `skills:` field for evidence-standards | Auto-load. Saves 1 Read call per invocation. |
 | S21 | Stop hook as quality gate | Validate result JSON before returning to worker. Saves full retry cost. Complex. |
@@ -425,7 +481,7 @@ proxy-queries.md      # Asset-specific Cypher queries
 | Old pipeline retirement | Quality-gated | `kubectl delete` old claude-code-worker. |
 | Quota guard | Design needed | Beyond MAX_BUDGET ($5) and MAX_TURNS (80). |
 | Obsidian integration | Design needed | Persist extraction JSON payloads per-company (currently ephemeral /tmp). |
-| Sonnet vs Opus comparison | `model:` field (S16) | Cost-performance tradeoff per agent role + asset complexity. |
+| ~~Sonnet vs Opus comparison~~ | ~~`model:` field (S16)~~ | **DONE** — 3-model comparison (Haiku/Sonnet/Opus) on PG/DECK/NSC + full-pipeline Opus retest on ADI. Sonnet wins. See `guidanceModelComp.md`, `adi_opus_vs_sonnet_comparison.md`. |
 | Multi-source trigger design | Generic type | Unify auto-ingestion, manual, learner, scheduled, event-driven triggers. |
 
 ---

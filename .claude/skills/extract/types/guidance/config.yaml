@@ -1,0 +1,17 @@
+# Model configuration for guidance extraction
+# Supported models: haiku, sonnet, opus
+# Each job (type × asset) resolves its 3 models independently:
+#   orchestrator — the /extract skill session
+#   primary      — the extraction-primary-agent
+#   enrichment   — the extraction-enrichment-agent (transcript only)
+
+# Defaults for all assets (used when no asset_override exists)
+orchestrator: sonnet
+primary: sonnet
+enrichment: sonnet
+
+# Per-asset overrides (any key not specified inherits from defaults above)
+assets:
+  news:
+    orchestrator: haiku
+    primary: haiku
