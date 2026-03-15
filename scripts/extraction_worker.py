@@ -62,7 +62,7 @@ DEAD_LETTER_QUEUE = f"{QUEUE_NAME}:dead"
 MAX_RETRIES = 3
 
 MAX_TURNS = int(os.environ.get("MAX_TURNS", "80"))
-MAX_BUDGET_USD = float(os.environ.get("MAX_BUDGET_USD", "5.0"))
+MAX_BUDGET_USD = float(os.environ.get("MAX_BUDGET_USD", "15.0"))
 DEFAULT_MODE = "write"
 
 MCP_NEO4J_URL = os.environ.get(

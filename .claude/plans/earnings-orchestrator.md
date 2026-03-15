@@ -232,9 +232,21 @@ The context bundle is the central data structure the orchestrator assembles and 
       "content": "(merged text from all sources in the tier that returned data)"
     },
     "consensus_context": {
-      "sources": ["alphavantage-earnings"],
+      "sources": ["alphavantage-earnings", "alphavantage-estimates"],
       "tier_used": 0,
-      "content": "(merged text)"
+      "content": "(structured: EPS/Revenue estimate avg/high/low, analyst count, revision history)"
+    },
+    "inter_quarter_8k": {
+      "sources": ["neo4j-report"],
+      "content": "(date + items + extracted_sections for each non-2.02 8-K filing between earnings)"
+    },
+    "significant_moves": {
+      "sources": ["neo4j-price"],
+      "content": "(date + adj_return + matched headline for each >1.5σ move day between earnings)"
+    },
+    "inter_quarter_news": {
+      "sources": ["neo4j-news"],
+      "content": "(date + title + channels for each channel-filtered article between earnings — see predictor.md §4b)"
     }
   },
 

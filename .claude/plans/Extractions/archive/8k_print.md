@@ -63,6 +63,6 @@ These are the exact strings the SEC uses. Verified 2026-03-14.
 
 **Total: 31 item codes defined by the SEC.**
 - 26 appear in our database (with at least 1 filing each)
-- 5 have zero filings: 5.06, 6.01, 6.02, 6.03, 6.04, 6.05
+- 6 have zero filings: 5.06, 6.01, 6.02, 6.03, 6.04, 6.05
 
 *Note: Section 6 names (6.01–6.05) are from the SEC Form 8-K instructions, not from our database (no ABS issuers tracked). All other names pulled verbatim from EDGAR filing data.*

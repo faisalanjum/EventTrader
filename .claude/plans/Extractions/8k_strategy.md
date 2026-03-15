@@ -86,12 +86,11 @@ Single source of truth for event tags. Used across storage, routing, and evaluat
 
 Built iteratively across 5 versions: Claude database validation → GPT naming → Codex safety → GPT overlay refinement → GPT deterministic gap fixes → final data-validated synthesis.
 
-**Pure deterministic tags — item code alone, never sent to Haiku (8 tags)**
+**Pure deterministic tags — item code alone, never sent to Haiku (7 tags)**
 
 | Tag | Item Code | Filings | Notes |
 |---|---|---|---|
 | `EARNINGS` | 2.02 | 8,847 | IS earnings by SEC definition. 100% precision. |
-| `M_AND_A` | 2.01 | 189 | IS acquisition/disposition completion. Signing ≠ closing. |
 | `SHAREHOLDER_VOTE` | 5.07 | 2,279 | IS shareholder vote results. Split from GOVERNANCE. |
 | `IMPAIRMENT` | 2.06 | 54 | IS material impairment by SEC definition. |
 | `CYBERSECURITY` | 1.05 | 12 | IS cyber incident (Dec 2023 rule). |
@@ -99,33 +98,46 @@ Built iteratively across 5 versions: Claude database validation → GPT naming �
 | `ACCOUNTANT_CHANGE` | 4.01 | 42 | IS auditor change by SEC definition. |
 | `DELISTING` | 3.01 | 55 | IS delisting notice by SEC definition. |
 
-**Dual-path tags — deterministic anchor + Haiku on ambiguous items (4 tags)**
+**Dual-path tags — deterministic anchor + Haiku on ambiguous items (5 tags)**
 
 | Tag | Deterministic Anchor | Haiku Path | Notes |
 |---|---|---|---|
-| `DEBT_FINANCING` | 2.03 (with or without 1.01) | Haiku on 8.01/7.01 mentioning debt | Trigger changed: 2.03 alone, not just 1.01+2.03. 93 filings have 2.03 without 1.01 (draw-downs, off-balance-sheet). |
+| `M_AND_A` | 2.01 | Haiku on 1.01/8.01 mentioning M&A | 2.01 = deal closing (deterministic). Deal announcements/signings live in 1.01 (Haiku classifies). 77 filings have both 1.01+2.01, confirming lifecycle pattern. Validated: 4/5 delta samples true M&A (80% keyword precision, Haiku expected higher). |
+| `DEBT_FINANCING` | 2.03 (with or without 1.01) | Haiku on 8.01/7.01 mentioning debt | 2.03 alone triggers (not just 1.01+2.03). 93 filings have 2.03 without 1.01. Broadened to cover full lifecycle: repayments, early redemptions, covenant amendments, refinancing completions under 8.01 (no new obligation = no 2.03 trigger). Validated: 4/5 delta samples true debt events. |
 | `SECURITIES_OFFERING` | 3.02 | Haiku on 8.01/7.01 mentioning offerings | Added 3.02 anchor: 304 unregistered equity sales (PIPEs, private placements). |
 | `GOVERNANCE` | 5.03, 3.03 | Haiku on board-level 5.02 | Expanded: 5.03 (bylaws, 836) + 3.03 (rights modifications, 127). Haiku classifies board appointments from 5.02 as GOVERNANCE vs EXECUTIVE_CHANGE. |
-| `RESTRUCTURING` | 2.05 | Haiku on 8.01/7.01/5.02 | 2.05 = always restructuring. Haiku catches restructuring announced under other items. |
+| `RESTRUCTURING` | 2.05 | Haiku on 8.01/7.01/5.02 | 2.05 = always restructuring. Broadened to cover full lifecycle: announcements before charges are recognized ("plan to reduce workforce by 15%" under 8.01). Keyword "restructuring" alone = 20% precision (fires on EPS boilerplate). Haiku handles precision. |
 
 **Pure semantic tags — Haiku assigns (12 tags)**
 
 | Tag | What It Covers |
 |---|---|
 | `FINANCIAL_GUIDANCE` | Forward-looking FINANCIAL projections (revenue, EPS, margins, CapEx). NOT clinical timelines, NOT operational milestones. **Primary when sole content (mid-quarter revision), secondary when bundled with EARNINGS.** |
+
+> **Improvement (2026-03-15):** Broaden FINANCIAL_GUIDANCE to include guidance withdrawals ("Company withdraws full-year outlook") and suspensions. A withdrawal IS a guidance event — signals uncertainty, highly market-moving. Validated: "withdraw"/"suspend" keywords hit 0/5 true positives (0% precision) — fires on legal, clinical, regulatory text. No keyword rescue — Haiku handles precision.
 | `INVESTOR_PRESENTATION` | Investor day decks, analyst day presentations, conference presentations. **Primary when filing is just a deck, secondary when bundled with another event.** |
 | `BUYBACK` | Share/stock repurchase program announcements, authorizations, expansions |
+
+> **Improvement (2026-03-15):** BUYBACK covers new authorizations, expansions, and program announcements. NOT execution updates ("repurchased 1M shares this quarter") — those are capital allocation mechanics already visible in the earnings press release the prediction LLM reads. Tagging execution mentions as secondary BUYBACK would affect ~37% of earnings filings (~3,270), diluting the already-weak -0.72pp conditioning signal. **Keyword rescue retained** — Haiku misses ~30% of real buybacks (Codex 840-sample validation: VRTX $3B authorization missed). Rescue keywords: "share repurchase program", "stock repurchase", "buyback authorization", "repurchase of up to".
 | `DIVIDEND` | Cash dividend declarations, increases, special dividends |
+
+> **Improvement (2026-03-15):** Broaden DIVIDEND to cover all dividend activity — declarations, increases, special dividends, AND cuts, suspensions, eliminations, stock dividends. A dividend cut or suspension is MORE market-moving than a routine declaration. **Keyword rescue retained** — Haiku misses ~35% of real dividends (Codex 840-sample validation: OVV, EPC, TPG, H declarations missed). Rescue keywords: "declared a dividend", "declared a quarterly", "quarterly cash dividend", "cash dividend of", "special dividend", "increased the dividend".
 | `EXECUTIVE_CHANGE` | C-suite and named executive officers ONLY (CEO, CFO, COO, President). Board directors = GOVERNANCE. |
+
+> **Improvement (2026-03-15):** Broaden EXECUTIVE_CHANGE to include all material officer changes — CEO, CFO, COO, President, AND CLO, CTO, CMO, CHRO, Chief Medical Officer. The current C-suite-only definition misses 126 filings. Validated: 5/5 delta samples were true executive changes (100% precision) — CCO resignation, CMO retirement (pharma), CLO resignation, CTO agreement. Board directors remain GOVERNANCE. No keyword rescue — Haiku handles precision.
 | `MATERIAL_AGREEMENT` | Business partnerships, technology licenses, JVs, contracts. NOT M&A closings, NOT public offerings, NOT credit facilities. |
 | `LITIGATION` | Lawsuits, settlements, legal proceedings, consent decrees. **Also covers government investigations** (SEC/DOJ subpoenas, consent decrees). |
 | `PRODUCT_PIPELINE` | Clinical trial data, FDA/EMA approvals, regulatory submissions, drug/device clearances, product launches |
+
+> **Improvement (2026-03-15):** Broaden PRODUCT_PIPELINE to cover the full lifecycle — approvals AND failures/setbacks. Include clinical trial failures, FDA rejections (Complete Response Letters), product recalls, safety warnings, and manufacturing halts. Negative pipeline events are MORE market-moving than approvals (negative surprises). Validated: 3/5 delta samples were true pipeline events (60% precision from keywords — bare "recall" is noisy). No keyword rescue — Haiku handles precision.
 | `CREDIT_RATING` | Rating agency actions: downgrades, upgrades, outlook changes, credit watch. 341 filings — too many for OTHER. |
 | `SPINOFF_SPLIT` | Spin-offs, stock splits, reverse splits, corporate separations. 1,789 filings — too many for OTHER. |
 | `OTHER_MATERIAL_EVENT` | Real business events that don't fit above categories |
 | `ADMINISTRATIVE_ONLY` | Paperwork-only filings: 10b5-1 plans, exhibit corrections. Skip in event timeline. |
 
-**Total: 24 tags** (8 pure deterministic + 4 dual-path + 12 pure semantic)
+**Total: 24 tags** (7 pure deterministic + 5 dual-path + 12 pure semantic)
+
+> **Architecture decision (2026-03-15, updated):** Two separate routing systems. **Guidance extraction:** item code filter only (2.02 OR 7.01 OR 8.01 → extract). No Haiku gate, no keywords — the extraction LLM (Sonnet 4.6) IS the precision gate. Validated: Haiku classification unreliable on raw 8-K content (33% accuracy 24-way, 59% precision binary). See `guidance-extraction-plan.md`. **Event timeline (future):** two steps for most tags, three for buyback/dividend. (1) Deterministic tags from item codes. (2) Haiku classifies ALL filings for semantic tags. (3) **Keyword rescue ONLY for buyback and dividend** — the two tags where Haiku has proven ~30-35% recall gaps (Codex 840-sample validation) AND no deterministic anchor exists. All other tags: Haiku + deterministic anchors are sufficient. 24-tag taxonomy: designed and shelved for event timeline, not abandoned. For future data: monitor Haiku recall quarterly by sampling; add keyword rescue for any tag that develops a proven recall gap.
 
 **Optional future expansion (deferred — insufficient validation):**
 
@@ -172,24 +184,32 @@ Classify this 8-K filing into one primary event type and zero or more secondary 
 
 Choices (pick one primary, zero or more secondary):
 FINANCIAL_GUIDANCE, INVESTOR_PRESENTATION, BUYBACK, DIVIDEND,
-RESTRUCTURING, EXECUTIVE_CHANGE, GOVERNANCE, MATERIAL_AGREEMENT,
-SECURITIES_OFFERING, DEBT_FINANCING, LITIGATION, PRODUCT_PIPELINE,
-CREDIT_RATING, SPINOFF_SPLIT, OTHER_MATERIAL_EVENT, ADMINISTRATIVE_ONLY
+RESTRUCTURING, EXECUTIVE_CHANGE, GOVERNANCE, M_AND_A,
+MATERIAL_AGREEMENT, SECURITIES_OFFERING, DEBT_FINANCING, LITIGATION,
+PRODUCT_PIPELINE, CREDIT_RATING, SPINOFF_SPLIT,
+OTHER_MATERIAL_EVENT, ADMINISTRATIVE_ONLY
 
 Definitions:
-- FINANCIAL_GUIDANCE: Forward-looking FINANCIAL projections only
-  (revenue, EPS, margins, CapEx). NOT clinical timelines.
-- EXECUTIVE_CHANGE: C-suite/named officers only (CEO, CFO, COO).
+- FINANCIAL_GUIDANCE: Forward-looking FINANCIAL projections
+  (revenue, EPS, margins, CapEx) AND guidance withdrawals/suspensions.
+  NOT clinical timelines, NOT operational milestones.
+- EXECUTIVE_CHANGE: Material officer changes — CEO, CFO, COO,
+  President, CLO, CTO, CMO, CHRO, Chief Medical Officer.
   Board director changes = GOVERNANCE.
 - GOVERNANCE: Board composition, bylaws, charter amendments,
   shareholder rights modifications.
-- PRODUCT_PIPELINE: Clinical trial data, FDA actions, product launches.
+- PRODUCT_PIPELINE: Clinical trial data, FDA actions, product launches,
+  AND failures/setbacks — trial failures, FDA rejections (CRLs),
+  product recalls, safety warnings, manufacturing halts.
 - MATERIAL_AGREEMENT: Partnerships, licenses, JVs, contracts.
-  NOT M&A closings, NOT public offerings, NOT credit facilities.
+  NOT M&A deals (use M_AND_A), NOT public offerings, NOT credit facilities.
+- M_AND_A: Acquisitions, dispositions, mergers — deal announcements
+  AND closings. Covers full deal lifecycle (1.01 signing through 2.01 closing).
 - SECURITIES_OFFERING: Public or private bond/equity offerings,
   convertibles, ATM programs, unregistered sales.
 - DEBT_FINANCING: Credit facilities, revolvers, term loans,
-  refinancings, covenant amendments, draw-downs.
+  refinancings, covenant amendments, draw-downs, AND debt repayments,
+  early redemptions, refinancing completions.
 - LITIGATION: Lawsuits, settlements, legal proceedings,
   government investigations, subpoenas, consent decrees.
 - ADMINISTRATIVE_ONLY: Paperwork with no business event
@@ -199,7 +219,7 @@ Return JSON only:
 {"primary_event": "...", "secondary_events": [...], "confidence": 0.0-1.0}
 ```
 
-Note: EARNINGS, M_AND_A, SHAREHOLDER_VOTE, IMPAIRMENT, CYBERSECURITY, RESTATEMENT_NON_RELIANCE, ACCOUNTANT_CHANGE, DELISTING are NOT in the Haiku prompt — assigned deterministically from item codes. DEBT_FINANCING, SECURITIES_OFFERING, GOVERNANCE, RESTRUCTURING appear in BOTH the prompt (for ambiguous filings) AND as deterministic anchors (from specific item codes).
+Note: EARNINGS, SHAREHOLDER_VOTE, IMPAIRMENT, CYBERSECURITY, RESTATEMENT_NON_RELIANCE, ACCOUNTANT_CHANGE, DELISTING are NOT in the Haiku prompt — assigned deterministically from item codes. M_AND_A, DEBT_FINANCING, SECURITIES_OFFERING, GOVERNANCE, RESTRUCTURING appear in BOTH the prompt (for ambiguous filings) AND as deterministic anchors (from specific item codes).
 
 ### Haiku output example
 
@@ -225,51 +245,33 @@ Deterministic tags derived at query time from `Report.items` (no separate storag
 
 ## Guidance Extraction Routing — Complete Spec
 
-Guidance has NO item code. It hides inside other filings. Two paths combine for ~99%+ recall.
+> **SUPERSEDED (2026-03-15):** The Paths A/B/C design below was replaced by a simpler approach after validation testing proved Haiku classification unreliable (33% accuracy on 24-way, 59% precision on binary). See `guidance-extraction-plan.md` for the current design.
 
-### Path A: Earnings-Bundled Guidance (100% recall, already built)
-
-```
-IF 'Item 2.02' in filing.items:
-    → ALWAYS run guidance extraction on EX-99.1
-    → No pre-screening needed
-    → Recall: 100% for earnings-bundled guidance (~70-80% of all guidance)
-    → Precision: 100% — extraction prompt returns nothing if no guidance
-    → Pool: 8,847 filings
-```
-
-### Path B: Standalone Guidance (the hard part — mid-quarter revisions)
+### Current Design: Item Code Filter + Extraction LLM (no classification gate)
 
 ```
-IF 'Item 7.01' OR 'Item 8.01' in filing.items (WITHOUT 2.02):
-    → Gate: Haiku says FINANCIAL_GUIDANCE  OR  keywords match
-    → Keywords: "guidance" OR "outlook" OR "preliminary results" OR
-      "revised" OR "updated outlook" OR "pre-announce" OR
-      "expects revenue" OR "expects earnings"
-    → Union routing: Haiku catches euphemisms, keywords catch what Haiku undercalls
-    → Recall: ~97-99% for standalone guidance
-    → Pool: ~500-1,000 filings after gating (from ~10,500 candidates)
+EXTRACT GUIDANCE FROM 8-K IF:
+  Item 2.02 OR Item 7.01 OR Item 8.01 is present.
+  Skip everything else.
+
+  Covered:  16,561 filings (69.5%)
+  Skipped:   7,275 filings (30.5%)
+  Recall:   ~99.9%
+  Precision: 100% (extraction LLM returns empty if no guidance)
+
+  No Haiku. No keywords. No classification gate.
+  The extraction LLM (Sonnet 4.6) IS the precision gate.
 ```
 
-### Path C: Rescue (optional, catches ~1% edge cases)
+### Why Paths A/B/C Were Replaced
 
-```
-IF 'Item 5.02' with EX-99.1 exhibit (WITHOUT 2.02):
-    → Gate: keywords only ("guidance", "outlook")
-    → Catches: CEO departure press release that includes outlook revision
-    → Pool: ~50-100 additional filings
-```
+| Original Design | Problem | Resolution |
+|---|---|---|
+| Path A (2.02 always) | Correct — kept as part of the item code filter | ✓ |
+| Path B (Haiku gate on 7.01/8.01) | Haiku hallucinates on raw content (33-59% accuracy) | Eliminated — extract ALL 7.01/8.01 directly |
+| Path C (keyword rescue on 5.02) | Keywords 31% precision, mostly boilerplate matches | Eliminated — 5.02 without 7.01 has ~0.1% guidance leak (negligible) |
 
-### Combined
-
-| Metric | Value |
-|---|---|
-| Recall | **~99%+** |
-| Precision | **100%** (extraction prompt handles — returns nothing if absent) |
-| Total extractions | ~9,500-10,000 |
-| Haiku pre-screen cost | ~$10-15 |
-| Remaining gap (~1%) | Implicit guidance ("comfortable with Street consensus"), misclassified 9.01-only filings, euphemistic language |
-| To get true 100% | Process all 23,836 filings through extraction prompt (expensive, diminishing returns) |
+### Historical Paths A/B/C (preserved for reference)
 
 ---
 
@@ -312,6 +314,8 @@ So the practical answer is:
 - always inspect `EX-99.1` / `EX-99.2` when present
 
 ## Super Simple: Guidance-Related 8-K Fetching
+
+> **SUPERSEDED (2026-03-15):** This section's multi-gate approach was replaced. Current rule: `Item 2.02 OR 7.01 OR 8.01 → extract`. No Haiku, no keywords, no 9.01 rescue. See `guidance-extraction-plan.md`.
 
 Honest answer:
 
@@ -431,6 +435,8 @@ Artifact:
 - `haiku_10sample_manual_validation.md`
 
 ## Super Simple: Best Practical Guidance Fetch Rule
+
+> **SUPERSEDED (2026-03-15):** This section's multi-gate approach was replaced. Current rule: `Item 2.02 OR 7.01 OR 8.01 → extract`. See `guidance-extraction-plan.md`.
 
 There is no literal automated `100%` recall and `100%` precision rule for guidance. The only true `100/100` method is human review.
 
@@ -643,6 +649,8 @@ Use the split already frozen in Section 1A:
 
 ## 3. Guidance-Specific 8-K Fetch Strategy
 
+> **SUPERSEDED (2026-03-15):** This section's 3-stage approach (item filter → Haiku + keywords → extraction LLM) was replaced. Current design: `Item 2.02 OR 7.01 OR 8.01 → extract directly`. No Haiku gate, no keyword rescue. The extraction LLM handles precision. See `guidance-extraction-plan.md`.
+
 Guidance can appear in exactly three places in 8-K filings:
 
 ```
@@ -743,15 +751,16 @@ The pipeline already has an LLM that reads content and extracts structured guida
 
 ---
 
-## Final Bottom Line (from all three analyses)
+## Final Bottom Line (from all three analyses + 2026-03-15 improvements)
 
-- **Guidance extraction pipeline** — already built, keep it. Single most valuable input.
-- **Build a $15 Haiku event timeline** — classify all non-earnings 8-Ks. Tags, not full extraction.
+- **Guidance extraction pipeline** — already built, keep it. Single most valuable input. Routing simplified: item code filter only (2.02 OR 7.01 OR 8.01 → extract), no Haiku gate or keywords. See `guidance-extraction-plan.md`.
+- **Build a $15 enriched Haiku event timeline** — classify all 8-Ks with broadened definitions (M&A lifecycle, debt lifecycle, restructuring pre-announcements, guidance withdrawals, pipeline failures, expanded exec scope). Add direction/subtype/scale detail fields at $0 marginal cost.
 - **Restructuring + litigation** — the two highest-value new extraction types (if building more).
-- **Haiku is useful but not safe alone** — misses ~30-35% of buybacks/dividends (Codex finding). Hybrid wins.
+- **Haiku is useful but not safe alone for buyback/dividend** — misses ~30-35% (Codex finding). Keyword rescue retained for these two tags in event timeline. Guidance extraction bypasses Haiku entirely (item code filter + extraction LLM). All other tags: Haiku + deterministic anchors are sufficient.
 - **The amplifier effect** — restructuring/exec changes AT earnings amplify reactions 28-39%. Prior restructuring is the ONLY event proven to predict worse subsequent earnings (+20%).
 - **Transparency effect** — more inter-quarter filings = less earnings surprise (monotonic -23%).
-- **Don't build separate pipelines** for buybacks, dividends, M&A, debt — the earnings press release already contains them.
+- **Don't build separate pipelines** for buybacks, dividends, M&A, debt — enriched event tags + earnings press release cover them.
+- **No ManagementAnnouncements pipeline** — enriched Haiku timeline captures what matters at $0 marginal cost vs $2,500 full extraction.
 
 ---
 ---
@@ -4622,18 +4631,29 @@ That is the strongest option found so far.
 
 **Codex 2 only:** Haiku safety analysis at scale (840 filings). Manual spot-checks proving specific tickers where Haiku missed real events (VRTX $3B buyback, OVV dividend increase). The critical finding that Haiku's ~30-35% buyback/dividend miss rate makes it unsafe as sole router.
 
-## The Definitive Architecture
+## The Definitive Architecture (updated 2026-03-15)
 
 ```
 WHAT TO BUILD (in priority order):
 
   1. GUIDANCE EXTRACTION — already built, keep it
      (structured data essential — LLM needs exact numbers)
+     Routing: item code filter only (2.02 OR 7.01 OR 8.01 → extract)
+     No Haiku gate, no keywords — extraction LLM handles precision
+     See guidance-extraction-plan.md for current spec
 
-  2. EVENT TIMELINE via HYBRID ROUTER — build next
+  2. ENRICHED EVENT TIMELINE via HYBRID ROUTER — build next
      Stage 1: Item codes (deterministic recall guards)
-     Stage 2: Haiku classifier (semantic fan-out)
-     Stage 3: Keyword rescue (for buyback/dividend where Haiku is weak)
+     Stage 2: Haiku classifier (semantic fan-out + enriched details)
+       → Broadened definitions: M&A lifecycle, debt lifecycle,
+         restructuring pre-announcements, guidance withdrawals,
+         pipeline failures, expanded exec officer scope
+       → Enriched output: direction (dividend), subtype (exec change),
+         scale (restructuring), amount (securities offering)
+     Stage 3: Keyword rescue — ONLY for buyback + dividend
+       → Haiku misses ~30-35% of these (Codex 840-sample validation)
+       → No deterministic anchor exists for either
+       → All other tags: Haiku + deterministic anchors are sufficient
      Route formula: deterministic OR haiku_yes OR rescue_keyword
      NEVER let Haiku veto a deterministic guard
 
@@ -4645,10 +4665,18 @@ WHAT TO BUILD (in priority order):
      Highest standalone non-earnings impact: 4.65%
      Earnings conditioning not yet tested
 
-  5. EVERYTHING ELSE — event tags only, no full extraction
+  5. EVERYTHING ELSE — enriched event tags only, no full extraction
      Buybacks, dividends, M&A, debt, exec changes, governance
-     Binary signal + date is sufficient
+     Tag + date + 2-3 detail fields (direction, subtype, scale)
+     at $0 marginal cost (Haiku already reading the excerpt)
      Earnings press release already contains these topics
+
+  NO: ManagementAnnouncements as a separate pipeline ($2,500)
+     Enriched Haiku timeline captures what matters at $0 marginal cost
+     Prediction LLM fills in rest from earnings press release
+
+  FUTURE DATA: Monitor Haiku recall quarterly by sampling.
+     Add keyword rescue for any tag that develops a proven recall gap.
 ```
 
 ## Test Artifacts
@@ -4660,3 +4688,81 @@ WHAT TO BUILD (in priority order):
 | `8k_codex_analysis_data.json` | Codex 2 | Raw Codex analysis data |
 | `8k_reference.md` | Claude 1 | Pure reference (taxonomy, numbers, queries) |
 | `8k_print.md` | Claude 1 | SEC item codes from EDGAR |
+
+## Why NOT a Full ManagementAnnouncements Pipeline
+
+### The question
+
+Does the DETAIL of an announcement matter for prediction, or just its existence?
+
+| Announcement | Existence alone predicts? | Detail changes prediction? |
+|---|---|---|
+| Restructuring | Yes (+20% volatility) | Maybe — "10% layoff" vs "2% layoff" untested |
+| Dividend | Weak as aggregate (-0.51pp) | YES — a cut is opposite signal from an increase |
+| CEO departure | Not proven standalone | YES — "resigned immediately" vs "retiring in 6 months" |
+| Buyback | Weak (-0.72pp) | Probably not — $1B vs $10B doesn't change direction |
+
+Dividend direction and CEO departure timing are the two cases where a binary tag genuinely loses information.
+
+### Why not a full pipeline
+
+The earnings press release usually recaps prior events:
+
+- "As previously announced, we reduced our workforce by 10%..."
+- "Following the CEO transition announced in February..."
+- "The Board increased our quarterly dividend to $0.72..."
+
+The prediction LLM reads the full EX-99.1 at prediction time. It gets the detail for free.
+
+| Approach | Cost | Output | Value for prediction |
+|---|---|---|---|
+| Full extraction pipeline | ~$0.50/filing x ~5,000 = $2,500 | Detailed structured records | Marginal — LLM reads press release anyway |
+| Enriched Haiku timeline | ~$0 marginal (already running) | Tag + 2-3 detail fields | Captures what matters (direction, subtype, scale) |
+
+### The answer: enriched event timeline
+
+Add 2-3 detail fields to the existing Haiku classification pass (same $0.001/filing):
+
+```json
+// Before (binary tag):
+{"event_type": "DIVIDEND", "date": "2025-02-15", "ticker": "AAPL"}
+
+// After (enriched tag — same cost):
+{"event_type": "DIVIDEND", "date": "2025-02-15", "ticker": "AAPL",
+ "direction": "increase",
+ "detail": "from $0.24 to $0.26 per share"}
+
+{"event_type": "EXECUTIVE_CHANGE", "date": "2025-02-01", "ticker": "AAPL",
+ "subtype": "departure_immediate",
+ "detail": "CFO resigned effective immediately"}
+
+{"event_type": "RESTRUCTURING", "date": "2025-01-15", "ticker": "AAPL",
+ "scale": "10%_workforce",
+ "detail": "$500M in expected charges"}
+```
+
+### Updated Haiku prompt addition
+
+For these event types, also extract key details:
+- DIVIDEND: include `direction` (increase/decrease/special/same)
+- EXECUTIVE_CHANGE: include `subtype` (departure/appointment/interim)
+- RESTRUCTURING: include `scale` (percentage or headcount if stated)
+- SECURITIES_OFFERING: include `amount` if stated
+
+Updated output schema:
+
+```json
+{
+  "primary_event": "DIVIDEND",
+  "secondary_events": [],
+  "confidence": 0.95,
+  "detail": {
+    "direction": "increase",
+    "summary": "quarterly dividend increased from $0.24 to $0.26"
+  }
+}
+```
+
+### Bottom line
+
+No to ManagementAnnouncements as a separate pipeline. Yes to enriching the Haiku event timeline with the 3-4 details that actually matter for prediction. Same cost, captures what the binary tag misses, and the prediction LLM fills in the rest from the earnings press release.

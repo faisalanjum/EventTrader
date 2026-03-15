@@ -4,9 +4,16 @@ Rules for extracting guidance from 8-K earnings filings. Loaded at slot 4 by the
 
 ## Routing — 8-K Content Fetch
 
-Use the content fetch order in the asset profile (8k.md):
-1. Query 4G (inventory) → 4C (exhibit EX-99.1)
-2. Fallbacks: 4E (section text), 4F (filing text)
+Fetch ALL content linked to the filing — the extraction LLM needs the complete picture.
+
+1. Query **4G** (inventory) — see what exists
+2. Query **4J** — fetch ALL section text (every item's body text)
+3. Query **4K** — fetch ALL EX-99.x exhibits (press releases, presentations, supplemental data)
+4. Fallback: 4F (filing text) — only if steps 2-3 return nothing
+
+Skip EX-10.x (legal contracts) — never contains guidance or investor presentation content.
+
+**Do NOT fetch only EX-99.1.** Multi-item filings (e.g., 2.02+7.01+9.01) often have guidance spread across EX-99.1 (press release) AND EX-99.2 (investor presentation / supplemental data). Read everything.
 
 Apply empty-content rules from the asset profile.
 

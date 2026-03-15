@@ -141,6 +141,197 @@ Every bot implementing Predictor must read these first:
 
 ---
 
+## 4b) Prediction Context Design (decided 2026-03-15, revised 2026-03-15)
+
+### Strategic Decision
+
+**Do NOT pre-engineer features or build a tag/classification system for non-guidance events.** Pass raw inter-quarter events as text context. Let the LLM reason over them naturally, and let U1 discover which event types are actually predictive from real trading results.
+
+**Reasoning**: Building a structured feature system upfront (e.g., "count of restructuring events", "net analyst sentiment score") risks: (1) engineering cost for features that may not be predictive, (2) information loss from premature categorization — the raw headline carries more signal than a tag, (3) maintenance burden for a taxonomy that may need constant revision.
+
+**What to build later (only if U1 proves it)**: Formalize specific event types into structured features. Until then, raw context is sufficient.
+
+### The Complete Prediction Bundle
+
+Six inputs, each serving a distinct purpose. Total context: ~5-8K tokens. Negligible in 1M window.
+
+**Input 1: Guidance history (extracted)**
+From the extraction pipeline (transcripts + 8-K + 10-Q/10-K). The company's own forward projections across quarters. This is the core structured input.
+
+**Input 2: Consensus estimates (AlphaVantage — structured)**
+
+```
+CRM Q1 FY26:
+  EPS consensus: $2.55 (40 analysts), was $2.62 ninety days ago
+  Revenue consensus: $9.75B (41 analysts)
+```
+
+Source: `EARNINGS` endpoint for PIT-safe final EPS (`estimatedEPS` frozen at reporting time). `EARNINGS_ESTIMATES` endpoint for revenue estimates and revision history (7/30/60/90 day lookbacks, analyst counts). ~100 tokens.
+
+**PIT note**: For historical backtesting, `EARNINGS.estimatedEPS` is verified PIT-safe. `EARNINGS_ESTIMATES` revision history is LIKELY relative to reporting date (CRM evidence: 90-day-ago = $2.62 matches Feb headline) but not conclusively verified for all cases. Benzinga headlines (Input 5) provide a verified PIT backstop for both EPS and revenue via the "Vs $X.XX Est" pattern.
+
+**Known gap**: AlphaVantage does NOT cover cash flow, EBITDA, or margin consensus. Company guidance for these metrics comes from Input 1. Street consensus for them is only available via Bloomberg/FactSet ($24K+/year). Log this — revisit if U1 flags prediction failures due to missing operating metric consensus.
+
+**Input 3: Non-earnings 8-K filings with extracted_sections (0-5 per quarter)**
+
+```cypher
+MATCH (r:Report)
+WHERE r.symbols CONTAINS $ticker
+  AND r.formType = '8-K'
+  AND r.created > $last_earnings_date
+  AND r.created < $current_earnings_date
+  AND NOT r.description CONTAINS 'Item 2.02'
+RETURN r.created, r.items, r.extracted_sections
+ORDER BY r.created
+```
+
+**Must use `r.extracted_sections`, NOT `r.description`.** The description is just "Form 8-K - Current report - Item 7.01 Item 9.01" (useless). The extracted_sections contains the actual filing text — e.g., "Salesforce and Informatica issued a joint press release announcing a definitive agreement pursuant to which the Company will acquire Informatica." Typically 0-5 rows, 0.5-3 KB per filing.
+
+**Input 4: Significant-move days with matched headlines (~5-6 per quarter)**
+
+```cypher
+// Significant move days (adjusted return > threshold)
+MATCH (d:Date)-[r:HAS_PRICE]->(c:Company {ticker: $ticker})
+WHERE d.date >= date($last_earnings) AND d.date < date($current_earnings)
+MATCH (d)-[m:HAS_PRICE]->(idx:MarketIndex {ticker: 'SPY'})
+WHERE r.daily_return IS NOT NULL AND m.daily_return IS NOT NULL
+WITH d.date AS date, r.daily_return AS stock_return,
+     r.daily_return - m.daily_return AS adj_return
+WHERE abs(adj_return) >= 0.03  // or 1.5σ volatility-adjusted per newsImpact.md
+RETURN date, stock_return, adj_return
+ORDER BY date
+```
+
+Rendered with matched headlines from Input 5 (join on date):
+
+```
+Significant inter-quarter moves (|adj return| > 1.5σ):
+  Feb 26: -4.2% — Salesforce Sees FY26 EPS $11.09-$11.17 Vs $11.19 Est
+  Feb 27: -2.6% — 15 analyst PT cuts in one day
+  Mar 21: +15.8% — no news
+  Apr 8:  -3.1% — DA Davidson downgrades to Underperform ($200 PT)
+  May 14: +2.8% — CRM acquires Convergence.ai
+```
+
+Purpose: what MOVED the stock + gap days (big moves with no news = hidden information flow). The LLM sees price impact alongside events. ~200 tokens.
+
+**Why gap days matter**: "+15.8% with no news" is MORE informative than analyzed "Unknown driver, 0% confidence." It tells the LLM: "hidden information flow — insiders or institutions acted without public catalyst."
+
+**Input 5: All channel-filtered news headlines (titles only, ~20-60 per quarter)**
+
+```cypher
+MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WITH n, apoc.convert.fromJsonList(n.channels) AS chList
+WHERE n.created > $last_earnings_date
+  AND n.created < $current_earnings_date
+  AND ANY(ch IN chList WHERE ch IN [
+    'Analyst Ratings', 'Upgrades', 'Downgrades', 'Price Target',
+    'M&A', 'Management', 'Short Sellers', 'Dividends',
+    'Contracts', 'Offerings', 'Buybacks', 'Legal', 'Guidance'
+  ])
+RETURN n.title, n.created, chList
+ORDER BY n.created
+```
+
+Purpose: the full inter-quarter narrative. This serves THREE functions:
+1. **Analyst sentiment pattern** — 20+ PT cuts over 3 months is a stronger signal than "Feb 27: 15 cuts" alone. The LLM sees the sustained pattern.
+2. **Non-significant events that carry signal** — a dividend raise that doesn't move the stock still signals management confidence in forward cash flows. A dividend CUT on a flat day would be an enormously bearish signal for next earnings. These only appear here, not in Input 4.
+3. **Embedded consensus numbers** — Guidance-channel headlines contain "Vs $X.XX Est" (e.g., "Sees FY26 EPS $11.09-$11.17 Vs $11.19 Est."). These are PIT-safe (timestamped at publication) and give the LLM consensus for both EPS and revenue without any extraction pipeline.
+
+~2K tokens for titles only. No bodies needed.
+
+**Input 6: U1 feedback from prior quarters**
+From the Attribution/Learner. Prior `predictor_lessons`, `what_worked`, `what_failed`. Already defined in orchestrator §2a.
+
+### Why BOTH Input 4 AND Input 5
+
+Input 4 (significant moves) tells the LLM what the MARKET cared about — price reactions + gap days. Input 5 (all headlines) tells the LLM what HAPPENED — the full event history including things the market may have under-reacted to.
+
+- Gap days (+15.8% no news) are ONLY visible from Input 4
+- Non-significant events (dividend raise, Guggenheim upgrade on flat day) are ONLY visible from Input 5
+- Consensus numbers ("Vs $X.XX Est") in guidance headlines are ONLY visible from Input 5
+- Price impact data is ONLY visible from Input 4
+
+Together: ~2.5K tokens. The LLM gets both the market's revealed preferences AND the complete information set.
+
+### Channel Selection Rationale
+
+The 12 channels carry **company-specific fundamental information** that could shift earnings expectations:
+
+| Channel | Why included |
+|---|---|
+| `Analyst Ratings` / `Upgrades` / `Downgrades` / `Price Target` | Street sentiment shifts |
+| `M&A` | Revenue/cost structure changing |
+| `Management` | Leadership stability |
+| `Short Sellers` | Bearish thesis active |
+| `Dividends` / `Buybacks` | Capital allocation signals (confidence or desperation) |
+| `Contracts` / `Offerings` | Business activity |
+| `Legal` | Risk factors |
+| `Guidance` | Forward-looking statements + embedded consensus numbers ("Vs $X Est") |
+
+Excluded: `News` (too generic, on 75% of articles), `Movers`/`Trading Ideas`/`General` (stock movement without fundamental content), `Options` (flow data), `Earnings` (would pull other companies' results), sector tags (`Tech`, `Biotech`).
+
+**REVISIT NOTE**: After 50-100 predictions with U1 attribution, check if:
+- Any included channel is consistently irrelevant (drop it)
+- Any excluded channel (e.g., `Analyst Color`, `Earnings Beats/Misses`) shows up in attributor feedback as missing context (add it)
+- Whether dropping the channel filter entirely performs comparably (~3K tokens for 200 titles is still negligible)
+
+### Context Bundle Integration
+
+Four new entries in `fetched_data` (orchestrator §2a):
+
+```json
+{
+  "consensus": {
+    "sources": ["alphavantage-earnings", "alphavantage-estimates"],
+    "content": "(structured: EPS/Revenue estimate avg/high/low, analyst count, revision history)"
+  },
+  "inter_quarter_8k": {
+    "sources": ["neo4j-report"],
+    "content": "(rendered: date + items + extracted_sections for each non-2.02 filing)"
+  },
+  "significant_moves": {
+    "sources": ["neo4j-price"],
+    "content": "(rendered: date + adj_return + matched headline for each >1.5σ move day)"
+  },
+  "inter_quarter_news": {
+    "sources": ["neo4j-news"],
+    "content": "(rendered: date + title + channels for each channel-filtered article)"
+  }
+}
+```
+
+All four are **optional context** — if empty, the predictor proceeds without them. They feed reasoning but do not gate the prediction.
+
+### CRM Example (Feb 26 → May 28, 2025)
+
+**Without context:** "CRM guided FY26 EPS $11.09-$11.17 vs $11.19 consensus" → coin flip.
+
+**With all 6 inputs, the LLM sees:**
+- Guidance below street → consensus has been dropping (AV: was $2.62, now $2.55)
+- 20+ analyst PT cuts over 3 months → sustained bearish pressure
+- DA Davidson downgraded to Underperform ($200 PT) → outlier bear
+- BUT: Guggenheim flipped Sell→Neutral → contrarian turn
+- Dividend raised 4% → management confident in cash flows
+- Convergence.ai acquisition → investing in AI narrative
+- Gap day: +15.8% with no news → hidden positive information flow
+- Net: the bar has been LOWERED → beat more likely
+
+**Actual result:** CRM reported $2.58 vs $2.55 consensus → beat by $0.03 (+1.2% surprise). Stock moved accordingly.
+
+### Decisions Log (2026-03-15)
+
+| Decision | Answer | Reasoning |
+|---|---|---|
+| News guidance extraction | **Skip** | Reports ON guidance, doesn't create it. 8-K + transcript + 10-Q/10-K cover 99%+. Headlines provide consensus via "Vs $X Est" pattern for free. |
+| News consensus extraction | **Skip** | AlphaVantage covers EPS + Revenue. Headlines carry embedded consensus naturally. No extraction pipeline needed. |
+| Operating metric consensus (CF, EBITDA, margins) | **Known gap** | No source available outside Bloomberg/FactSet. Company guidance extracted; street consensus unavailable. Revisit if U1 flags it. |
+| News-impact analyzed output | **Don't feed to predictor** | Raw data > pre-analyzed interpretation. Feed returns + headlines (Input 4+5), not LLM-generated "driver: X, confidence: Y". Keep news-impact as standalone research tool. |
+| Non-significant events | **Include** | A dividend raise/cut that doesn't move the stock still signals management outlook. The LLM should see all events and weigh them itself. Cost: ~2K tokens. |
+| 8-K tag system (24 Haiku tags) | **Defer for non-guidance tags** | Only FINANCIAL_GUIDANCE + INVESTOR_PRESENTATION Haiku classification needed now (for guidance extraction routing). Other tags can be retroactively classified anytime — data isn't going anywhere. |
+
+---
+
 ## 5) Design Rules
 
 1. Core dimensions guide reasoning; they are not rigid output fields.

@@ -68,6 +68,16 @@
         ]
       }
     ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/faisal/EventMarketDB/.claude/hooks/notify_done.sh"
+          }
+        ]
+      }
+    ],
     "SubagentStop": [
       {
         "hooks": [

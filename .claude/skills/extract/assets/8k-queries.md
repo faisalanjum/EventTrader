@@ -89,6 +89,38 @@ RETURN r.accessionNo, r.formType, r.created,
        count(DISTINCT ft) AS filing_text_count
 ```
 
+### 4J. All Sections for Report
+
+Fetch ALL section text from a filing in one query. Use instead of 4E when you need the complete picture.
+
+```cypher
+MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
+RETURN s.section_name, s.content AS content
+ORDER BY s.section_name
+```
+
+### 4K. All EX-99.x Exhibits for Report
+
+Fetch ALL narrative exhibits (press releases, presentations, supplemental data) in one query. Use instead of 4C when you need everything.
+
+```cypher
+MATCH (r:Report {accessionNo: $accession})-[:HAS_EXHIBIT]->(e:ExhibitContent)
+WHERE e.exhibit_number STARTS WITH 'EX-99'
+RETURN e.exhibit_number, e.content AS content
+ORDER BY e.exhibit_number
+```
+
+### 4L. All EX-10.x Exhibit Previews for Report (first 2500 chars)
+
+Legal contracts are large (80-205 KB avg). Fetch previews to check if they contain relevant content without blowing up context.
+
+```cypher
+MATCH (r:Report {accessionNo: $accession})-[:HAS_EXHIBIT]->(e:ExhibitContent)
+WHERE e.exhibit_number STARTS WITH 'EX-10'
+RETURN e.exhibit_number, left(e.content, 2500) AS content_preview, size(e.content) AS full_size
+ORDER BY e.exhibit_number
+```
+
 ### 4H. 8-K Filings by Item Code (Generic)
 
 Parameterized version of 4A/4B for any SEC item code. Use when extraction targets items beyond 2.02/7.01/8.01.

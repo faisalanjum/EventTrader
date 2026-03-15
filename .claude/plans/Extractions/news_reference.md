@@ -171,19 +171,216 @@ Articles carry 0–15 channels (median 3, avg 2.7).
 | 117 | `Small Cap Analysis` | 2 |
 | 118 | `Specialty ETFs` | 1 |
 
-### Guidance Channel Filter
+### Guidance News Filter — FINAL (validated 2026-03-14, 250+ articles manually audited)
 
-The `Guidance` channel (21,757 articles, rank #7) is the primary way to filter guidance-related news:
+#### Guidance Universe
+
+**18,161 articles** across **742 companies** (median 24 per company, max 103).
+From total News corpus of 342,953 articles (5.3%).
+Precision **~97%**. Event recall **~98.7%**.
+
+#### The Algorithm
+
+Two-stage filter: Benzinga `Guidance` channel (recall anchor) + title keyword whitelist (precision filter).
+
+**Production query — fetch guidance articles for a company:**
+
+```cypher
+MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WITH n, apoc.convert.fromJsonList(n.channels) AS chList, toLower(n.title) AS t
+WHERE 'Guidance' IN chList
+  AND (
+    n.title =~ '.*\\$[0-9].*'
+    OR t CONTAINS 'sees '
+    OR t CONTAINS 'expects ' OR t CONTAINS 'expected ' OR t CONTAINS 'expect '
+    OR t CONTAINS 'guidanc'
+    OR t CONTAINS 'guides'
+    OR t CONTAINS 'outlook'
+    OR t CONTAINS 'forecast'
+    OR t CONTAINS 'prelim'
+    OR t CONTAINS 'raise'
+    OR t CONTAINS 'reaffirm'
+    OR t CONTAINS 'reiterat'
+    OR t CONTAINS 'narrow'
+    OR t CONTAINS 'widen'
+    OR t CONTAINS 'revis'
+    OR t CONTAINS 'anticipat'
+    OR t CONTAINS 'slash'
+    OR t CONTAINS 'predict'
+  )
+RETURN n.id, n.title, n.created, n.body, n.url
+ORDER BY n.created DESC
+```
+
+**Count all guidance articles:**
 
 ```cypher
 MATCH (n:News)
-WHERE apoc.convert.fromJsonList(n.channels) IS NOT NULL
-WITH n, apoc.convert.fromJsonList(n.channels) AS chList
+WITH n, apoc.convert.fromJsonList(n.channels) AS chList, toLower(n.title) AS t
 WHERE 'Guidance' IN chList
-RETURN n.title, n.created
+  AND (
+    n.title =~ '.*\\$[0-9].*'
+    OR t CONTAINS 'sees '
+    OR t CONTAINS 'expects ' OR t CONTAINS 'expected ' OR t CONTAINS 'expect '
+    OR t CONTAINS 'guidanc'
+    OR t CONTAINS 'guides'
+    OR t CONTAINS 'outlook'
+    OR t CONTAINS 'forecast'
+    OR t CONTAINS 'prelim'
+    OR t CONTAINS 'raise'
+    OR t CONTAINS 'reaffirm'
+    OR t CONTAINS 'reiterat'
+    OR t CONTAINS 'narrow'
+    OR t CONTAINS 'widen'
+    OR t CONTAINS 'revis'
+    OR t CONTAINS 'anticipat'
+    OR t CONTAINS 'slash'
+    OR t CONTAINS 'predict'
+  )
+RETURN count(n) AS guidance_articles
 ```
 
-Note: Some earnings-related guidance may only carry the `Earnings` channel (50,779) without `Guidance`. The tag `earnings guidance` (12 articles) and `profit guidance` (5 articles) are too sparse to be useful filters.
+**Guidance articles for a company within a date range:**
+
+```cypher
+MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WITH n, apoc.convert.fromJsonList(n.channels) AS chList, toLower(n.title) AS t
+WHERE 'Guidance' IN chList
+  AND n.created >= $start_date AND n.created < $end_date
+  AND (
+    n.title =~ '.*\\$[0-9].*'
+    OR t CONTAINS 'sees '
+    OR t CONTAINS 'expects ' OR t CONTAINS 'expected ' OR t CONTAINS 'expect '
+    OR t CONTAINS 'guidanc'
+    OR t CONTAINS 'guides'
+    OR t CONTAINS 'outlook'
+    OR t CONTAINS 'forecast'
+    OR t CONTAINS 'prelim'
+    OR t CONTAINS 'raise'
+    OR t CONTAINS 'reaffirm'
+    OR t CONTAINS 'reiterat'
+    OR t CONTAINS 'narrow'
+    OR t CONTAINS 'widen'
+    OR t CONTAINS 'revis'
+    OR t CONTAINS 'anticipat'
+    OR t CONTAINS 'slash'
+    OR t CONTAINS 'predict'
+  )
+RETURN n.id, n.title, n.created, n.body, n.url
+ORDER BY n.created DESC
+```
+
+#### How it works
+
+1. **`Guidance` channel** (Benzinga curated): 21,757 articles. Captures ~99.5% of guidance events but includes ~3,600 non-guidance articles (movers, earnings recaps, exec commentary, dividends).
+2. **Title keyword whitelist** (17 stems + $ regex): Removes the ~3,600 noise articles by requiring the title to contain at least one guidance-related signal. Retains 18,161 articles at ~97% precision.
+
+#### Keyword contribution (articles overlap across keywords)
+
+| Keyword | Articles | % of 18,161 | Example |
+|---|---|---|---|
+| `$[0-9]` (regex) | 13,517 | 74.4% | "AAPL Sees FY25 EPS $6.50-$6.70" |
+| `sees ` | 8,437 | 46.5% | "Nvidia Sees Q1 2025 GAAP $3.5B" |
+| `guidanc` | 4,838 | 26.6% | "First Solar Cuts FY Guidance Due To Tariffs" |
+| `expect` (space forms) | 2,754 | 15.2% | "GM Expects To Reach 160GwH By Mid-Decade" |
+| `raise` | 2,536 | 14.0% | "Lululemon Raises FY2025 EPS Guidance" |
+| `outlook` | 2,055 | 11.3% | "Tyson Foods Eyes Top End Of FY22 Sales Outlook" |
+| `reaffirm` | 821 | 4.5% | "Molina Healthcare Reaffirms 2024 Guidance" |
+| `forecast` | 482 | 2.7% | "IDEXX Laboratories Forecast 2023 EPS $9.27-$9.75" |
+| `narrow` | 350 | 1.9% | "Dover Narrows FY2025 EPS Guidance" |
+| `prelim` | 262 | 1.4% | "Boeing Reports Preliminary Q4 Results" |
+| `reiterat` | 261 | 1.4% | "Tyson Foods Reiterated FY2026 Sales Guidance" |
+| `revis` | 231 | 1.3% | "Rockwell Automation Revised FY23 Sales Growth" |
+| `anticipat` | 187 | 1.0% | "American Airlines Anticipates 2024 CapEx $3B-$3.5B" |
+| `slash` | 49 | 0.3% | "Sealed Air Slashes FY23 Revenue From $5.85B" |
+| `guides` | 39 | 0.2% | "Delta Air Lines Guides 2024 FCF Of $3B-$4B" |
+| `predict` | 24 | 0.1% | "Southwest Predicts Profitability In Remaining Quarters" |
+| `widen` | 22 | 0.1% | "Widens FY25 EPS Range" |
+
+#### Keyword design decisions
+
+**Included (17 stems + $ regex) — adversarial tested:**
+
+| Keyword | Noise when sole match | Why included |
+|---|---|---|
+| `$[0-9]` | ~5% (divestitures) | Heaviest lifter; 74% of filter |
+| `sees ` (trailing space) | ~5% | "Company Sees FY25..." — core pattern |
+| `expects ` / `expected ` / `expect ` | <5% | **Must use space-terminated forms** — `expect` alone matches "expectations" (348 false keeps eliminated by this fix) |
+| `guidanc` | ~0% | Matches "guidance" but not "guides" |
+| `guides` | ~0% (15/15 verified) | **Critical addition** — 38 articles missed by `guidanc` |
+| `outlook` | ~10% | "Grim Outlook" in movers is minor noise |
+| `forecast` | ~5% | Rare analyst "slash forecasts" noise |
+| `prelim` | ~5% | "Preliminary Results" |
+| `raise` | ~40-60% | Dividend/analyst noise BUT 17/30 genuine when sole match — worth the tradeoff |
+| `reaffirm` | ~0% | Clean — only company guidance actions |
+| `reiterat` | ~0% | Clean |
+| `narrow` | ~0% | Clean — "narrows guidance range" |
+| `widen` | ~0% | Clean |
+| `revis` | ~5% | "Revises FY25 EPS" |
+| `anticipat` | ~5% | "Anticipates FY25 Revenue" |
+| `slash` | ~10% | Rare analyst noise |
+| `predict` | ~5% | "Predicts Profitability" |
+
+**Removed after adversarial testing (7 keywords):**
+
+| Keyword | Noise rate | Failure mode |
+|---|---|---|
+| `lower` | **100%** | Matches "trading lower" (movers), "slower" (substring!), "lower demand/income" |
+| `affirm` | **73%** | Matches company name "Affirm Holdings" (AFRM) — movers articles about AFRM |
+| `adjust` | **97%** | Matches "adjusted EPS" in earnings results — almost never used as verb "adjusts guidance" |
+| `boost` | **90%** | Matches buybacks, dividends, analyst PTs, "boosts stock" |
+| `lift` | **75%** | Matches analyst upgrades ("lifts rating"), FDA actions ("lifts clinical hold"), dividends |
+| `on track` | **60%** | Matches Tesla operational timelines ("Cybertruck on track"), factory buildout |
+| `target` | **22%** | Matches "price target" (analyst actions) |
+
+#### Empirical precision (250+ articles manually classified)
+
+| Test | Sample | True Guidance | False Keep | Precision |
+|---|---|---|---|---|
+| **Random from final filter** | **60** | **58** | **2** | **96.7%** |
+| "raise"-only (sole keyword) | 30 | 17 | 13 | 57% (13 dividends/analyst PTs) |
+| Group A (title kw + body) | 20 | 19 | 1 | 95% |
+| Group B (title kw + no body) | 20 | 20 | 0 | 100% |
+| "affirm"-only (REMOVED) | 11 | 3 | 8 | 27% |
+| "lower"-only (REMOVED) | 20 | 0 | 20 | 0% |
+| "boost"-only (REMOVED) | 20 | 2 | 18 | 10% |
+| "lift"-only (REMOVED) | 8 | 2 | 6 | 25% |
+| "on track"-only (REMOVED) | 20 | 8 | 12 | 40% |
+
+Remaining ~3% false keeps: analyst "slash forecasts" articles, $ amounts in divestitures/charges.
+
+#### Empirical recall
+
+Filter excludes 3,596 articles from the channel. From 40 randomly sampled exclusions:
+- 36/40 correctly excluded (movers, earnings recaps, exec commentary)
+- 3/40 real guidance lost: analyst day targets ("Quadrupling Of Business By 2026"), "warns on reduced earnings", "targeting" statements
+- 1/40 borderline
+
+Estimated recall loss from filter: ~270 articles (~1.2% of channel). From total guidance events: **~98.7% recall** (channel 99.5% × filter 99.2% retention).
+
+#### What the filter cannot catch (accepted gaps)
+
+- Investor day long-term targets using non-standard language ("Quadrupling", "2030 Vision", "Lays Out")
+- Qualitative guidance via "warns", "targeting" (removed keywords due to noise)
+- Conference call snippets without standard keywords ("CEO Says Growth Will Continue")
+- Guidance outside the `Guidance` channel: ~300 articles exist but all have companion channel articles for the same event (10/10 verified)
+
+#### What the filter removes (correctly)
+
+- "Why X Stock Is Moving Today" movers articles (~1,000)
+- "X Q4 Earnings Beat Expectations" earnings recaps (~800)
+- "CEO Says Growth Is Strong" exec commentary (~600)
+- "Raises Quarterly Dividend" / "Boosts Buyback" corporate actions (~400)
+- "Analyst Boosts Price Target" analyst actions (~300)
+- Miscellaneous: FDA actions, activist statements, product timelines (~500)
+
+#### Embedding approach — not useful (tested 2026-03-14, GDS 2.13.2)
+
+Vector index `news_vector_index` (ONLINE, 100% populated, vector-2.0) clusters by **company identity, not content type**. A guidance article about Conagra returns Conagra earnings/dividends at 0.83-0.91 similarity, not guidance from other companies. Cross-company guidance only appears at 0.79-0.80 after 500+ neighbors, and surfaces the same articles already found by keyword matching. No value for guidance discovery.
+
+#### Tags — not useful
+
+`earnings guidance` (12), `profit guidance` (5), `Outlook` (8) — too sparse to serve as filters.
 
 ---
 
