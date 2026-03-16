@@ -5,11 +5,23 @@ Rules for extracting guidance from 10-K annual filings. Loaded at slot 4 by the 
 ## Routing — 10-K Content Fetch
 
 Use the content fetch order in the asset profile (10k.md):
-1. Query 5F (inventory) → 5B (MD&A section — primary)
-2. If 5B returns no row, use 5D → 5I to inspect and fetch another narrative section before raw filing text
+1. Query 5F (inventory) → MD&A via Bash (see below)
+2. If MD&A missing, use 5D → 5I to inspect and fetch another narrative section before raw filing text
 3. Fallbacks: 5C (financial statement payloads), 5H (exhibits), 5G (filing text)
 
 Apply empty-content rules from the asset profile.
+
+## Content Fetch — Always Use Bash for MD&A
+
+MD&A content typically exceeds 50KB (p90 ~92KB, max ~372KB) and triggers MCP persisted-output truncation.
+Always fetch via Bash instead of MCP query 5B to avoid parse failures:
+
+```bash
+bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh $TICKER --mda $ACCESSION
+```
+
+Result written to `/tmp/mda_content_{ACCESSION}.json`. Read this file instead of parsing MCP output.
+The file contains a JSON array with one record. Key fields: `content` (full MD&A text), `content_length` (integer), `section_name`, `filing_date`, `formType`, `periodOfReport`, `accessionNo`.
 
 ## Periodic Filing Caution
 

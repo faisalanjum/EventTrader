@@ -6,16 +6,29 @@ Rules for extracting guidance from 8-K earnings filings. Loaded at slot 4 by the
 
 Fetch ALL content linked to the filing — the extraction LLM needs the complete picture.
 
-1. Query **4G** (inventory) — see what exists
-2. Query **4J** — fetch ALL section text (every item's body text)
-3. Query **4K** — fetch ALL EX-99.x exhibits (press releases, presentations, supplemental data)
-4. Fallback: 4F (filing text) — only if steps 2-3 return nothing
+1. Query **4G** (inventory) via MCP — see what exists (small metadata, no truncation risk)
+2. Fetch ALL sections + ALL EX-99.x exhibits via **Bash** (see below)
+3. Fallback: 4F (filing text) — only if step 2 returns nothing
 
 Do not categorically skip EX-10.x. Use 4L previews when present, especially for Item 1.01 / 5.02 / 8.01 filings, and inspect further only if the preview shows relevant forward-looking narrative.
 
 **Do NOT fetch only EX-99.1.** Multi-item filings (e.g., 2.02+7.01+9.01) often have guidance spread across EX-99.1 (press release) AND EX-99.2 (investor presentation / supplemental data). Read everything.
 
 Apply empty-content rules from the asset profile.
+
+## Content Fetch — Always Use Bash for Section and Exhibit Content
+
+Combined section + exhibit payloads frequently exceed 80KB (4,248 filings > 80KB, p95 ~175KB) and trigger MCP persisted-output truncation.
+Always fetch via Bash instead of MCP queries 4J/4K to avoid parse failures:
+
+```bash
+bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh $TICKER --8k $ACCESSION
+```
+
+Result written to `/tmp/8k_content_{ACCESSION}.json`. Read this file instead of running MCP queries 4J/4K.
+The file contains a JSON object with two arrays:
+- `sections`: each with `section_name` and `content`
+- `exhibits`: each with `exhibit_number` and `content`
 
 ## Guidance-Specific 8-K Content Strategy
 

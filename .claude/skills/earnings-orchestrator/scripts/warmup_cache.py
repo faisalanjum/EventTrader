@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pre-fetch extraction caches and transcript content via direct Bolt connection.
+"""Pre-fetch extraction caches and content via direct Bolt connection.
 
 Eliminates agent transcription errors (E1) and MCP persisted-output truncation (E4)
 by running queries verbatim from a script instead of through MCP.
@@ -7,11 +7,15 @@ by running queries verbatim from a script instead of through MCP.
 Usage:
     warmup_cache.py TICKER                           # Runs queries 2A + 2B
     warmup_cache.py TICKER --transcript TRANSCRIPT_ID # Runs query 3B
+    warmup_cache.py TICKER --mda ACCESSION           # Runs query 5B (MD&A content)
+    warmup_cache.py TICKER --8k ACCESSION            # Runs queries 4J + 4K (8-K content)
 
 Outputs:
     /tmp/concept_cache_{TICKER}.json                  (query 2A)
     /tmp/member_cache_{TICKER}.json                   (query 2B)
     /tmp/transcript_content_{TRANSCRIPT_ID}.json      (query 3B, --transcript mode)
+    /tmp/mda_content_{ACCESSION}.json                 (query 5B, --mda mode)
+    /tmp/8k_content_{ACCESSION}.json                  (queries 4J+4K, --8k mode)
 """
 
 import json
@@ -195,9 +199,91 @@ def run_transcript(ticker, transcript_id):
         manager.close()
 
 
+# ---------------------------------------------------------------------------
+# Query 5B — Canonical MD&A Section (from 10k-queries.md / 10q-queries.md)
+# Handles both 10-K (curly apostrophe) and 10-Q (no apostrophe) variants.
+# Verbatim match logic. Do NOT edit — update asset query files first if needed.
+# ---------------------------------------------------------------------------
+QUERY_5B = """
+MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
+WHERE s.section_name STARTS WITH 'Management'
+  AND s.section_name CONTAINS 'DiscussionandAnalysisofFinancialCondition'
+RETURN s.id AS section_id,
+       s.section_name AS section_name,
+       s.content AS content,
+       size(s.content) AS content_length,
+       r.accessionNo AS accessionNo,
+       r.formType AS formType,
+       r.created AS filing_date,
+       r.periodOfReport AS periodOfReport
+"""
+
+
+def run_mda(accession):
+    """Run query 5B via direct Bolt, write MD&A content file.
+
+    Bypasses MCP to avoid persisted-output truncation on large MD&A sections
+    (p90 ~90KB, max ~372KB). Same pattern as run_transcript().
+    """
+    manager = get_manager()
+    try:
+        rows = manager.execute_cypher_query_all(QUERY_5B, {'accession': accession})
+        out_path = f'/tmp/mda_content_{accession}.json'
+        with open(out_path, 'w') as f:
+            json.dump(rows, f, default=str)
+        if rows:
+            print(f'5B: MD&A {rows[0].get("content_length", "?")} chars → {out_path}')
+        else:
+            print(f'5B: No MD&A section found → {out_path} (empty)')
+    finally:
+        manager.close()
+
+
+# ---------------------------------------------------------------------------
+# Queries 4J + 4K — 8-K Sections + EX-99.x Exhibits (from 8k-queries.md)
+# Verbatim match logic. Do NOT edit — update 8k-queries.md first if needed.
+# ---------------------------------------------------------------------------
+QUERY_4J = """
+MATCH (r:Report {accessionNo: $accession})-[:HAS_SECTION]->(s:ExtractedSectionContent)
+RETURN s.section_name AS section_name, s.content AS content
+ORDER BY s.section_name
+"""
+
+QUERY_4K = """
+MATCH (r:Report {accessionNo: $accession})-[:HAS_EXHIBIT]->(e:ExhibitContent)
+WHERE e.exhibit_number STARTS WITH 'EX-99'
+RETURN e.exhibit_number AS exhibit_number, e.content AS content
+ORDER BY e.exhibit_number
+"""
+
+
+def run_8k(accession):
+    """Run queries 4J + 4K via direct Bolt, write combined 8-K content file.
+
+    Bypasses MCP to avoid persisted-output truncation on large aggregate payloads
+    (p95 ~175KB combined, 4,248 filings > 80KB). Same pattern as run_transcript().
+    """
+    manager = get_manager()
+    try:
+        sections = manager.execute_cypher_query_all(QUERY_4J, {'accession': accession})
+        exhibits = manager.execute_cypher_query_all(QUERY_4K, {'accession': accession})
+        result = {
+            'sections': sections,
+            'exhibits': exhibits,
+        }
+        out_path = f'/tmp/8k_content_{accession}.json'
+        with open(out_path, 'w') as f:
+            json.dump(result, f, default=str)
+        sec_total = sum(len(s.get('content', '')) for s in sections)
+        ex_total = sum(len(e.get('content', '')) for e in exhibits)
+        print(f'4J+4K: {len(sections)} sections ({sec_total // 1000}KB) + {len(exhibits)} exhibits ({ex_total // 1000}KB) → {out_path}')
+    finally:
+        manager.close()
+
+
 def main():
     if len(sys.argv) < 2:
-        print("Usage: warmup_cache.py TICKER [--transcript TRANSCRIPT_ID]", file=sys.stderr)
+        print("Usage: warmup_cache.py TICKER [--transcript TID | --mda ACCESSION | --8k ACCESSION]", file=sys.stderr)
         sys.exit(1)
 
     ticker = sys.argv[1]
@@ -208,6 +294,18 @@ def main():
             print("Error: --transcript requires TRANSCRIPT_ID argument", file=sys.stderr)
             sys.exit(1)
         run_transcript(ticker, sys.argv[idx + 1])
+    elif '--mda' in sys.argv:
+        idx = sys.argv.index('--mda')
+        if idx + 1 >= len(sys.argv):
+            print("Error: --mda requires ACCESSION argument", file=sys.stderr)
+            sys.exit(1)
+        run_mda(sys.argv[idx + 1])
+    elif '--8k' in sys.argv:
+        idx = sys.argv.index('--8k')
+        if idx + 1 >= len(sys.argv):
+            print("Error: --8k requires ACCESSION argument", file=sys.stderr)
+            sys.exit(1)
+        run_8k(sys.argv[idx + 1])
     else:
         run_warmup(ticker)
 
