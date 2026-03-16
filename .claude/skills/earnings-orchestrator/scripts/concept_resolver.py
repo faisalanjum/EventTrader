@@ -24,14 +24,17 @@ CONCEPT_CANDIDATES = {
     'capex': (
         'PaymentsToAcquirePropertyPlantAndEquipment',
         'CapitalExpenditure',
+        'PaymentsToAcquireProductiveAssets',
     ),
     'capital_expenditures': (
         'PaymentsToAcquirePropertyPlantAndEquipment',
         'CapitalExpenditure',
+        'PaymentsToAcquireProductiveAssets',
     ),
     'capital_spending': (
         'PaymentsToAcquirePropertyPlantAndEquipment',
         'CapitalExpenditure',
+        'PaymentsToAcquireProductiveAssets',
     ),
     'cash_from_operations': (
         'NetCashProvidedByOperatingActivities',
@@ -82,6 +85,7 @@ CONCEPT_CANDIDATES = {
     ),
     'dividends_per_share': (
         'CommonStockDividendsPerShareDeclared',
+        'CommonStockDividendsPerShareCashPaid',
     ),
     'eps': (
         'EarningsPerShareDiluted',

@@ -473,29 +473,94 @@ proxy-queries.md      # Asset-specific Cypher queries
 
 ### 7.7. Post-Extraction Batch Fix: XBRL Concept Linking (Priority 1 — after historical extraction completes)
 
-**Problem:** Some companies use XBRL concept variants not in the `CONCEPT_CANDIDATES` alias table (e.g., KSS uses `CommonStockDividendsPerShareCashPaid` instead of `CommonStockDividendsPerShareDeclared`). These GuidanceUpdate nodes get `xbrl_qname=NULL` despite having a valid mapping.
+**Problem:** Some companies use XBRL concept variants not in the `CONCEPT_CANDIDATES` alias table. The resolver only matches EXACT local names from the company's concept cache. If the company uses a variant not listed, the link fails.
 
-**Root cause:** `concept_resolver.py` checks candidates in order but only matches EXACT local names from the company's concept cache. If the company uses a variant not listed, the resolver returns None. Validated empirically: KSS CapEx (company uses lease concepts, no standard CapEx XBRL — unfixable), KSS Dividend Per Share (uses `CashPaid` not `Declared` — fixed by adding second candidate).
+**Validated examples (2026-03-15, KSS + DELL empirical testing):**
+- KSS Dividend Per Share: uses `CommonStockDividendsPerShareCashPaid` (not `Declared`) — **fixed** by adding second candidate
+- KSS CapEx: uses `PaymentsToAcquireProductiveAssets` (not `PropertyPlantAndEquipment`) — **fixed** by adding third candidate
+- Both fixes verified: DELL resolves to candidate #1, KSS resolves to new candidates. Zero regression.
 
-**What to do (single session, after all historical extractions complete):**
+**Why after, not now:** All extraction data (values, quotes, periods, source links) is correct. Only the XBRL concept link property (`xbrl_qname`) may be missing or non-standard. More companies processed = more variants surface = easier batch fix. Once fixed, all future live extractions immediately benefit (the resolver runs at write time).
 
-1. **Find all unlinked items that SHOULD have links:**
+**Two classes of gaps to find:**
+
+| Gap Class | What | How to find | Example |
+|---|---|---|---|
+| **Direct miss** | Label IS in alias table, no candidate matched, `xbrl_qname=NULL` | Query 1 | KSS "Dividend Per Share" before fix |
+| **Survivor** | Label IS in alias table, resolver returned None, but agent's cache-valid qname was preserved (line 293-296). Graph has a valid link, but the alias table is incomplete. | Query 2 | Agent finds `PaymentsToAcquireProductiveAssets`, resolver doesn't know it, agent value kept |
+
+**Step-by-step fix (single session):**
+
+**Step 1: Find direct misses (null xbrl_qname)**
 ```cypher
+-- Query 1: Items where concept link is missing
 MATCH (gu:GuidanceUpdate)
 WHERE gu.xbrl_qname IS NULL
 RETURN gu.label, count(*) AS unlinked
 ORDER BY unlinked DESC
 ```
+For each high-count label: check if `slug(label)` IS in `CONCEPT_CANDIDATES`. If yes → variant is missing. If no → unreviewed label (add to alias table or confirm it's correctly null).
 
-2. **For each high-count label:** check if the label_slug IS in `CONCEPT_CANDIDATES`. If yes, the variant is missing. Regenerate concept caches for a few affected companies, run the resolver test (`resolve_xbrl_qname(slug, cache)`), identify the missing variant.
+**Step 2: Find survivors (non-standard links the agent found)**
+```cypher
+-- Query 2: All (label, qname) pairs across all companies
+MATCH (gu:GuidanceUpdate)
+WHERE gu.xbrl_qname IS NOT NULL
+RETURN gu.label, gu.xbrl_qname, count(*) AS cnt
+ORDER BY gu.label, cnt DESC
+```
+Cross-reference against `CONCEPT_CANDIDATES`. If CapEx maps to 3 different qnames across companies but only 2 are in the alias table → add the third. The graph data is already correct (agent found the right concept); this just makes the resolver complete.
 
-3. **Add missing variants to `concept_resolver.py` CONCEPT_CANDIDATES** (append to tuple — curated candidates tried first, new variant tried last).
+**Step 3: Discover missing variants**
 
-4. **Batch-update historical nodes** via Cypher or re-run the resolver on all items.
+For each unresolved label from Step 1:
+```bash
+# Regenerate concept cache for an affected company
+bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh $TICKER
 
-5. **Optional: build shared-prefix auto-discovery** (20 lines) to catch future variants automatically. Design validated: ≥25 char shared prefix between failed candidate and cache concept. 8/8 edge cases correct. See session notes 2026-03-15.
+# Search cache for the missing variant
+python3 -c "
+import json
+with open('/tmp/concept_cache_$TICKER.json') as f:
+    data = json.load(f)
+for r in data:
+    if 'KEYWORD' in r.get('label', '') or 'KEYWORD' in r.get('qname', ''):
+        print(r)
+"
+```
 
-**Why after, not now:** Extraction data (values, quotes, periods, source links) is all correct. Only the XBRL concept link property is missing. More companies processed = more variants discovered = easier batch fix. Once fixed, all future live extractions immediately benefit.
+**Step 4: Add variants to alias table**
+
+Append to `CONCEPT_CANDIDATES` tuple in `concept_resolver.py`. Curated candidates tried first, new variant tried last. Same pattern as the KSS fixes.
+
+**Step 5: Backfill historical nodes**
+
+Option A — Re-run extraction with `--force` on affected companies (idempotent, re-resolves concepts).
+
+Option B — Direct Cypher update for known fixes:
+```cypher
+// Example: backfill CapEx with PaymentsToAcquireProductiveAssets for companies that have it
+MATCH (gu:GuidanceUpdate)
+WHERE gu.xbrl_qname IS NULL AND gu.label =~ '(?i)capex|capital expenditures?|capital spending'
+MATCH (gu)-[:FOR_COMPANY]->(c:Company)
+// Check if company has the variant in their XBRL
+MATCH (c)<-[:PRIMARY_FILER]-(r:Report)-[:HAS_XBRL]->(x)-[:USES_CONCEPT]->(con:Concept)
+WHERE con.qname = 'us-gaap:PaymentsToAcquireProductiveAssets'
+SET gu.xbrl_qname = 'us-gaap:PaymentsToAcquireProductiveAssets'
+RETURN gu.id, c.ticker
+```
+
+**Step 6: Link Concept edges for backfilled items**
+```cypher
+MATCH (gu:GuidanceUpdate)
+WHERE gu.xbrl_qname IS NOT NULL
+AND NOT (gu)-[:MAPS_TO_CONCEPT]->(:Concept)
+MATCH (con:Concept {qname: gu.xbrl_qname})
+MERGE (gu)-[:MAPS_TO_CONCEPT]->(con)
+RETURN count(*) AS edges_created
+```
+
+**Rationale for no runtime audit/capture system:** All evidence needed for this fix is permanent — GuidanceUpdate nodes persist in Neo4j with label/xbrl_qname properties, concept caches are regeneratable from XBRL data, alias table is in git. Survivor cases are discoverable via Query 2 (qname diversity analysis). No ephemeral data is lost between extraction and fix. Evaluated 3 alternative approaches (shared-prefix auto-discovery, full forensic audit, non-heuristic miss logger) — all add runtime complexity for evidence that's already derivable from persistent data.
 
 ### 7.8. Future Work
 
