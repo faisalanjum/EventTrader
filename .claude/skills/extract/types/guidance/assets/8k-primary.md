@@ -11,7 +11,7 @@ Fetch ALL content linked to the filing — the extraction LLM needs the complete
 3. Query **4K** — fetch ALL EX-99.x exhibits (press releases, presentations, supplemental data)
 4. Fallback: 4F (filing text) — only if steps 2-3 return nothing
 
-Skip EX-10.x (legal contracts) — never contains guidance or investor presentation content.
+Do not categorically skip EX-10.x. Use 4L previews when present, especially for Item 1.01 / 5.02 / 8.01 filings, and inspect further only if the preview shows relevant forward-looking narrative.
 
 **Do NOT fetch only EX-99.1.** Multi-item filings (e.g., 2.02+7.01+9.01) often have guidance spread across EX-99.1 (press release) AND EX-99.2 (investor presentation / supplemental data). Read everything.
 

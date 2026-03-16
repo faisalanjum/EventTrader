@@ -78,6 +78,7 @@ CONCEPT_CANDIDATES = {
     ),
     'dividend_per_share': (
         'CommonStockDividendsPerShareDeclared',
+        'CommonStockDividendsPerShareCashPaid',
     ),
     'dividends_per_share': (
         'CommonStockDividendsPerShareDeclared',
