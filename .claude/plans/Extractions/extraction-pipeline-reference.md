@@ -471,7 +471,33 @@ proxy-queries.md      # Asset-specific Cypher queries
 
 **Principle-based extraction rules**: Replace enumerated positive/negative example tables across 8 intersection files with 8 abstract principles in `core-contract.md`. Reduces ~140 lines. Principles: Forward-looking, From management, Quantitative anchor, Guidance not actions, Verbatim evidence, No fabrication, Factors are conditions, Recall over precision. Risk: 6 regression scenarios at boundary cases. Speaker hierarchy + Prior Period Values tables KEPT (asset/type-specific edge cases). Full plan in git history.
 
-### 7.7. Future Work
+### 7.7. Post-Extraction Batch Fix: XBRL Concept Linking (Priority 1 — after historical extraction completes)
+
+**Problem:** Some companies use XBRL concept variants not in the `CONCEPT_CANDIDATES` alias table (e.g., KSS uses `CommonStockDividendsPerShareCashPaid` instead of `CommonStockDividendsPerShareDeclared`). These GuidanceUpdate nodes get `xbrl_qname=NULL` despite having a valid mapping.
+
+**Root cause:** `concept_resolver.py` checks candidates in order but only matches EXACT local names from the company's concept cache. If the company uses a variant not listed, the resolver returns None. Validated empirically: KSS CapEx (company uses lease concepts, no standard CapEx XBRL — unfixable), KSS Dividend Per Share (uses `CashPaid` not `Declared` — fixed by adding second candidate).
+
+**What to do (single session, after all historical extractions complete):**
+
+1. **Find all unlinked items that SHOULD have links:**
+```cypher
+MATCH (gu:GuidanceUpdate)
+WHERE gu.xbrl_qname IS NULL
+RETURN gu.label, count(*) AS unlinked
+ORDER BY unlinked DESC
+```
+
+2. **For each high-count label:** check if the label_slug IS in `CONCEPT_CANDIDATES`. If yes, the variant is missing. Regenerate concept caches for a few affected companies, run the resolver test (`resolve_xbrl_qname(slug, cache)`), identify the missing variant.
+
+3. **Add missing variants to `concept_resolver.py` CONCEPT_CANDIDATES** (append to tuple — curated candidates tried first, new variant tried last).
+
+4. **Batch-update historical nodes** via Cypher or re-run the resolver on all items.
+
+5. **Optional: build shared-prefix auto-discovery** (20 lines) to catch future variants automatically. Design validated: ≥25 char shared prefix between failed candidate and cache concept. 8/8 edge cases correct. See session notes 2026-03-15.
+
+**Why after, not now:** Extraction data (values, quotes, periods, source links) is all correct. Only the XBRL concept link property is missing. More companies processed = more variants discovered = easier batch fix. Once fixed, all future live extractions immediately benefit.
+
+### 7.8. Future Work
 
 | Item | Blocked On | Notes |
 |------|------------|-------|
