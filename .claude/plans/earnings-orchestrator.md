@@ -31,6 +31,7 @@ Bot-to-bot notes (append-only; mark handled, do not delete history):
 - [2026-02-07 00:00] [Claude] Q8+Q9 resolved: aggregation is NOT orchestrator scope. Separate `build_summary.py` reads result.json → summary.csv. Automatable via hook later. Legacy files (predictions.csv, prediction_processed.csv, guidance_processed.csv, news_processed.csv) marked as OLD DESIGN — superseded by per-quarter result.json and per-ticker guidance-inventory.md.
 - [2026-02-07 00:00] [Claude] Planner output contract finalized: replaced ChatGPT draft (source_chain + execution field) with tiered array-of-arrays schema after deep analysis of all data fetching patterns in codebase (news-impact, news-driver, guidance-inventory, filtered-data, DataSubAgents). Key insight: `fetch` is array of tiers — within tier = parallel Task fan-out, across tiers = sequential fallback. Eliminates redundant `execution` field and ambiguous `when: if_empty`. `agent` field maps directly to Task `subagent_type`.
 - [2026-02-18 00:00] [Claude] Q13 updated: guidance-inventory decoupled from orchestrator (per guidanceWIP.md R8/Q1). Orchestrator does NOT invoke the guidance-inventory skill — it simply reads the pre-existing `guidance-inventory.md` file. Guidance build/update is a separate workflow run independently. Step 0 removed; file-read moved into Step 3a bundle assembly.
+- [2026-03-17 00:00] [Codex] Live learner timing clarified: delayed post-event timer is intended to land after normal Q1-Q3 10-Q availability, while annual quarters do not block on 10-K and instead write `missing_inputs` when the annual filing is not yet available.
 
 ---
 
@@ -175,8 +176,9 @@ SDK wrapper: top-level session, `permission_mode="bypassPermissions"`.
    e. Verify result
 4. Attribution/Learner loop — for predicted quarters without attribution:
       - Historical mode: run immediately (data exists). Sequential processing ensures Q(n) attribution completes before Q(n+1) prediction, so U1 feedback is available.
-      - Live mode: triggered N days after 8-K (N=35). Runs with whatever data is available at trigger time — no source-gating.
-      - Hard-fail gate: `prediction/result.json` + `daily_stock` label must exist. Without these, attribution cannot compare prediction vs reality. Everything else (transcript, 10-Q, news) enriches but is not required.
+      - Live mode: delayed post-event timer, intended to run after normal Q1-Q3 10-Q availability. Current default remains N=35 days after 8-K. No source-gating — learner runs with whatever data is available at trigger time.
+      - Annual-quarter exception: do not block learner on 10-K availability. If the annual filing is not yet available at trigger time, run learner anyway and record `"10-K"` in `missing_inputs`.
+      - Hard-fail gate: `prediction/result.json` + `daily_stock` label must exist. Without these, attribution cannot compare prediction vs reality. Everything else (transcript, 10-Q, 10-K, news) enriches but is not required.
       - Attribution/Learner writes `missing_inputs` array in output (e.g., `["transcript", "10-Q"]`) so U1 feedback carries context about what data was available.
 5. Validation — outputs present + schema-valid
 6. `ORCHESTRATOR_COMPLETE {TICKER}`
@@ -824,12 +826,13 @@ Phase 2: add OpenAI as parallel independent learner + deliberation. Measure if f
 
 **Learning trigger (Q28 resolved)**:
 - Historical: same-run (data exists, sequential quarters give U1 for free)
-- Live: N-day timer after 8-K filing (N=35 days)
+- Live: delayed post-event timer intended to land after normal Q1-Q3 10-Q availability (current default N=35 days after 8-K)
+- Annual quarters: do not delay learner waiting for 10-K; if the annual filing is still unavailable at trigger time, run and record the gap in `missing_inputs`
 - No source-gating — run with whatever's available, note gaps
 - Hard-fail gate: `prediction/result.json` + `daily_stock` label
 - `missing_inputs` array in learner output for U1 context
 
-Why N=35: transcript available (days), analyst coverage settled (1-2 weeks), 10-Q available for most filers (~10-25 days after 8-K). Leaves 30-day buffer before P5 inter-quarter gap (65 days).
+Why N=35: transcript available (days), analyst coverage settled (1-2 weeks), and normal Q1-Q3 10-Q filing usually lands before the learner timer fires. Annual quarters are treated differently because the 10-K has a much longer deadline, so v1 does not block the learner waiting for it.
 
 **Failure policy (Q10+Q15 resolved)**:
 

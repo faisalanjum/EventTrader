@@ -1,0 +1,47 @@
+# Guidance Trigger Daemon — K8s Deployment
+# Reads trade_ready:entries, finds unprocessed guidance assets in Neo4j,
+# pushes to extract:pipeline queue. 60s sweep loop, always-on.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guidance-trigger
+  namespace: processing
+  labels:
+    app: guidance-trigger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guidance-trigger
+  template:
+    metadata:
+      labels:
+        app: guidance-trigger
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum
+      restartPolicy: Always
+      containers:
+      - name: daemon
+        image: python:3.11-slim
+        command: ["/project/venv/bin/python3", "/project/scripts/guidance_trigger_daemon.py"]
+        env:
+        - name: REDIS_HOST
+          value: "redis.infrastructure.svc.cluster.local"
+        - name: REDIS_PORT
+          value: "6379"
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+        volumeMounts:
+        - name: project
+          mountPath: /project
+      volumes:
+      - name: project
+        hostPath:
+          path: /home/faisal/EventMarketDB

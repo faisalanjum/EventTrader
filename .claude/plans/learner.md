@@ -16,6 +16,7 @@
 Bot-to-bot notes (append-only; mark handled, do not delete history):
 - [2026-02-08] [Claude] Initial scaffold created. L1+L2 resolved: full attribution schema locked by I6, learner inputs locked by I4 in master plan.
 - [2026-03-16] [Claude] L4 resolved: hybrid 4-layer enforcement (prompt + TaskCreate + PreToolUse + SubagentStop). Empirically confirmed SubagentStop does NOT fire for Skill forks — learner must be an Agent. See §12.
+- [2026-03-17] [Codex] Parent-plan timing clarified: live learner timer is intended to land after normal Q1-Q3 10-Q availability; annual quarters do not block on 10-K and instead record the gap in `missing_inputs`.
 
 ---
 
@@ -88,7 +89,7 @@ Every bot implementing Learner must read these first:
 ## 2) SDK and Automation Contract (LOCKED)
 
 1. Learner must run non-interactively.
-2. Trigger policy follows master plan: historical same-run, live delayed timer.
+2. Trigger policy follows master plan: historical same-run, live delayed timer intended to land after normal Q1-Q3 10-Q availability.
 3. Missing optional sources cannot block indefinitely; gaps must be explicit.
 4. Keep compatibility with SDK-triggered orchestrator automation.
 
@@ -141,6 +142,7 @@ Every bot implementing Learner must read these first:
 1. Feedback must be generalizable (no quarter-specific command rules).
 2. Feedback is advisory, not hard lock.
 3. Preserve raw history (no lossy digest step in plan).
+4. Annual quarters do not block learner execution on 10-K availability; if the annual filing is unavailable at trigger time, learner writes a partial result and records `"10-K"` in `missing_inputs`.
 
 ---
 
