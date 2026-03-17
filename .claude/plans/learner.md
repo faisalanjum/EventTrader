@@ -15,6 +15,7 @@
 
 Bot-to-bot notes (append-only; mark handled, do not delete history):
 - [2026-02-08] [Claude] Initial scaffold created. L1+L2 resolved: full attribution schema locked by I6, learner inputs locked by I4 in master plan.
+- [2026-03-16] [Claude] L4 resolved: hybrid 4-layer enforcement (prompt + TaskCreate + PreToolUse + SubagentStop). Empirically confirmed SubagentStop does NOT fire for Skill forks — learner must be an Agent. See §12.
 
 ---
 
@@ -212,7 +213,7 @@ Required changes vs current attribution skill:
 | L1 | Full `attribution/result.json` schema beyond feedback block? | P0 | **Resolved** — locked by I6 in `earnings-orchestrator.md` (§2d schema). |
 | L2 | Exact orchestrator -> learner input bundle schema? | P0 | **Resolved** — locked by I4 in `earnings-orchestrator.md §2a` (3 minimal inputs; learner fetches autonomously). |
 | L3 | How to normalize `missing_inputs` categories for downstream use? | P1 | Open |
-| L4 | Where to enforce feedback cap validation (prompt vs post-validator vs SubagentStop hook)? | P1 | Open — three options: (a) prompt instruction only, (b) orchestrator post-validator rejects and re-invokes, (c) SubagentStop hook blocks stop and forces self-correction in-context (requires Task-spawned learner; tested in Infrastructure.md). Option (c) is cheapest retry path since learner keeps context. |
+| L4 | Where to enforce feedback cap validation (prompt vs post-validator vs SubagentStop hook)? | P1 | **Resolved** — Approach C (hybrid 4-layer). SubagentStop requires Task-spawned agent, NOT Skill-fork (**empirically confirmed 2026-03-16**: SubagentStop does not fire for Skill forks). See §12. |
 | L5 | What migration policy for legacy markdown attribution outputs? | P1 | Open |
 
 ---
@@ -236,3 +237,60 @@ Learner module plan is done when:
 4. `DataSubAgents.md`
 5. `.claude/skills/earnings-attribution/SKILL.md`
 6. `.claude/skills/earnings-orchestrator/SKILL.md`
+
+---
+
+## 12) Step Enforcement Architecture (L4 Resolved, 2026-03-16)
+
+### Empirical Finding
+
+**SubagentStop does NOT fire for Skill-forked contexts. Only for Task-spawned agents.**
+
+| Test | Invocation | SubagentStop fired? |
+|---|---|---|
+| `/test-v176-stop-on-skill` via Skill tool | Skill fork | **NO** — marker file not created |
+| `test-hook-stop-block` via Task tool | Task spawn | **YES** — marker created with full JSON (`agent_id`, `agent_type`, `last_assistant_message`) |
+
+Test date: 2026-03-16. Global SubagentStop hook in `settings.json` with marker script writing to `/tmp/`. Definitive: the hook fires for Task-spawned agents only.
+
+**Consequence**: The learner must be defined as an **agent** (`.claude/agents/earnings-learner.md`) and invoked via Task tool — not the current Skill-forked `earnings-attribution` pattern. This also fixes the existing design mismatch where the attribution skill lists `Task` (agent spawner) in allowed-tools but the agent spawner is blocked in forks.
+
+### The 4-Layer Pattern
+
+| Layer | What | Enforces | Deterministic? |
+|---|---|---|---|
+| 1. Prompt checklist | Instructions in agent body | Step ordering, investigation depth | No (LLM honor) |
+| 2. TaskCreate/TaskUpdate | Tool-based progress tracking | Visibility, compaction-proof state | Partially (claims not validated) |
+| 3. PreToolUse on Write | Hook validates JSON before write | Schema, required fields, array caps | **Yes** (shell script, external) |
+| 4. SubagentStop hook | Hook validates before agent can complete | File existence, final schema check, one retry | **Yes** (shell script, external) |
+
+Layer 1 guides. Layer 2 tracks. Layer 3 blocks bad writes. Layer 4 blocks bad completions.
+
+Layers 3-4 run **outside** the LLM context as shell scripts — the LLM cannot skip, override, or hallucinate past them. This is what no prompt-level pattern (including LangChain TodoListMiddleware) can provide.
+
+### What's deterministic vs what's LLM judgment
+
+**Enforced by code** (Layers 3-4):
+- `attribution/result.json` exists before completion
+- JSON parseable, all required fields present
+- `feedback` block has all 6 sub-fields
+- Array caps (what_worked ≤ 2, what_failed ≤ 3, predictor_lessons ≤ 3, planner_lessons ≤ 3)
+- `missing_inputs` is an array
+- `schema_version` matches expected
+
+**LLM judgment only** (no hook can validate):
+- Causal correctness of attribution
+- Lesson quality and generalizability
+- Investigation depth within each source
+
+### Cost
+
+~3,500 tokens overhead (~2% of learner budget). One SubagentStop retry adds ~1,000 tokens. Learner has no speed constraint.
+
+### Existing patterns to reuse
+
+| Pattern | File | Reuse for |
+|---|---|---|
+| PreToolUse Write validation | `.claude/hooks/validate_gx_output.sh` | Attribution output validation hook |
+| Agent with Stop hook in frontmatter | `.claude/agents/test-hook-stop-block.md` | Learner agent frontmatter |
+| SubagentStop global hook | `.claude/settings.json` (obsidian_capture.sh) | Coexists — learner uses agent-scoped Stop hook |
