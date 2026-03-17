@@ -378,7 +378,18 @@ kubectl scale deployment extraction-worker -n processing --replicas=0  # stop pr
 # 10. Resume (daemon re-sweeps, skips completed, re-queues expired leases)
 kubectl scale deployment guidance-trigger -n processing --replicas=1
 kubectl scale deployment extraction-worker -n processing --replicas=1   # KEDA auto-scales from here
+
+# 11. Recover failed items (rate limit, credits exhausted, bad source data)
+# See all failed items with error messages:
+python3 scripts/trigger-extract.py --retry-failed --type guidance --asset all --list --all
+# Re-queue every failed item (KEDA scales workers, they process normally):
+python3 scripts/trigger-extract.py --retry-failed --type guidance --asset all --all
+
+# Nuclear option: reset all failed back to NULL, daemon picks them up automatically
+# (manual --retry-failed above is cleaner and already proven)
 ```
+
+**Failed item behavior**: Once the worker marks an item `failed` (after 3 retries + dead-letter), the daemon **never re-queues it** (D1: `IS NULL OR in_progress` only). Items sit as `failed` in Neo4j until you explicitly run `--retry-failed`. This prevents infinite retry loops during API outages or credit exhaustion.
 
 ---
 
