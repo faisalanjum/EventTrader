@@ -370,6 +370,14 @@ kubectl logs -f -l app=guidance-trigger -n processing
 
 # 8. End-to-end: verify extraction worker picks up and processes
 kubectl logs -f -l app=extraction-worker -n processing
+
+# 9. Stop extraction (queue items persist in Redis, resume anytime)
+kubectl scale deployment guidance-trigger -n processing --replicas=0   # stop queuing
+kubectl scale deployment extraction-worker -n processing --replicas=0  # stop processing
+
+# 10. Resume (daemon re-sweeps, skips completed, re-queues expired leases)
+kubectl scale deployment guidance-trigger -n processing --replicas=1
+kubectl scale deployment extraction-worker -n processing --replicas=1   # KEDA auto-scales from here
 ```
 
 ---
