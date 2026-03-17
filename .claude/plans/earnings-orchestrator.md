@@ -1122,4 +1122,170 @@ Do this AFTER all module details are locked. Mechanical, not architectural.
 
 ---
 
-*Refs: `DataSubAgents.md` · `Infrastructure.md` · `AgentTeams.md` · `guidanceInventory.md`*
+## 9. TradeReady → Planner Integration (Future Options)
+
+**Context**: The Trade-Ready Scanner (`TRIGGER.md`) runs 4x/day and maintains a persistent Redis list of upcoming earnings tickers with `earnings_date`, `time_of_day`, and `conference_date`. Two enhancement options below could feed richer data directly to the planner, potentially eliminating redundant fetches at prediction time.
+
+### Option A: Pre-fetch consensus estimates into TradeReady entries
+
+Currently the scanner captures only the earnings date/time. AV and Yahoo both provide consensus data that the planner/predictor currently fetches at game time via the `alphavantage-earnings` agent. If we pre-fetch into TradeReady, the planner could read consensus directly from Redis — zero API calls at prediction time.
+
+**Available consensus fields (complete inventory):**
+
+| Field | AV `EARNINGS_ESTIMATES` | Yahoo `get_calendar` | AV `EARNINGS_CALENDAR` |
+|---|---|---|---|
+| EPS avg | `estimatedAvg` | `Earnings Average` | `estimate` (single value) |
+| EPS high | `estimatedHigh` | `Earnings High` | — |
+| EPS low | `estimatedLow` | `Earnings Low` | — |
+| Revenue avg | `revenueAvg` | `Revenue Average` | — |
+| Revenue high | `revenueHigh` | `Revenue High` | — |
+| Revenue low | `revenueLow` | `Revenue Low` | — |
+| Analyst count (EPS) | `numberAnalysts` | — | — |
+| Analyst count (revenue) | `revenueAnalysts` | — | — |
+| Revision 7d ago | `eps_7_days_ago` | — | — |
+| Revision 30d ago | `eps_30_days_ago` | — | — |
+| Revision 60d ago | `eps_60_days_ago` | — | — |
+| Revision 90d ago | `eps_90_days_ago` | — | — |
+| YoY growth | `estimatedChangePercent` | — | — |
+| Year-ago EPS | `yearAgoEPS` | — | — |
+
+**AV `EARNINGS_ESTIMATES` is the richest source** — everything Yahoo has plus analyst counts, revision drift, and YoY growth. Yahoo is a strict subset.
+
+**API cost strategy**: AV Estimates requires per-ticker calls. Fetch once on discovery, refresh once/day on 9 PM anchor scan only. Other 3 scans skip estimate calls. Cost: ~5-15 AV calls/day (paid quota).
+
+**Enriched TradeReady entry would look like:**
+
+```json
+{
+  "ticker": "LULU",
+  "earnings_date": "2026-03-17",
+  "time_of_day": "post-market",
+  "conference_date": "2026-03-17T16:30:00-04:00",
+  "sources": ["alphavantage", "earningscall"],
+  "date_agreement": 2,
+  "added_at": "2026-03-16T23:20:18-04:00",
+  "updated_at": "2026-03-16T23:29:03-04:00",
+  "reported_at": null,
+  "consensus": {
+    "eps_avg": 2.55,
+    "eps_high": 2.62,
+    "eps_low": 2.48,
+    "revenue_avg": 9750000000,
+    "revenue_high": 9900000000,
+    "revenue_low": 9600000000,
+    "analyst_count": 40,
+    "revision_7d": 2.55,
+    "revision_30d": 2.57,
+    "revision_60d": 2.60,
+    "revision_90d": 2.62,
+    "yoy_growth_pct": 12.5,
+    "year_ago_eps": 2.27,
+    "fetched_at": "2026-03-16T21:00:05-04:00",
+    "source": "alphavantage_estimates"
+  }
+}
+```
+
+**Rethink for planner/predictor design**: If consensus is pre-fetched into TradeReady, the planner may not need to request `alphavantage-earnings` agent at all for consensus data. The orchestrator could inject `consensus` from the Redis entry directly into the context bundle. This simplifies the fetch plan (one fewer agent call) and guarantees consensus is always available (no fetch failure risk). Requires revisiting `predictor.md` §4b Input 2 and the planner's default consensus question. Not a locked decision — evaluate when implementing the planner.
+
+**PIT safety**: Scanner fetches consensus the night before earnings → naturally PIT-safe for live mode (earnings haven't been reported yet). `consensus.fetched_at` records the exact capture time for audit.
+
+**PIT caveat for historical backtesting**: Pre-fetched consensus from the scanner is only PIT-safe for LIVE predictions (fetched before earnings drop). For HISTORICAL backtesting, the planner/predictor still needs PIT-gated consensus — i.e., "what was the street estimate at the time of the 8-K filing?" This is already handled by the `alphavantage-earnings` agent with `--pit` mode (AV revision buckets are coarsely PIT-safe). **Yahoo Finance has no PIT mechanism** — `yfinance` returns current-state data only, with no way to query "what was consensus on date X." If Yahoo is ever used as a data source for the planner/predictor (beyond the scanner's tie-break role), it would need a PIT wrapper — either (a) capture and persist snapshots from the scanner's nightly runs and serve those as historical PIT data, or (b) restrict Yahoo to live-mode only. AV's revision buckets (7/30/60/90d) remain the only PIT-verifiable consensus source for historical mode.
+
+### Option B: Track `reported_at` for downstream consumers
+
+Add `reported_at: null` to every TradeReady entry. The scanner always sets it to `null`. A separate downstream process updates it when the 8-K is detected.
+
+**Detection methods (for the future downstream process):**
+
+| Method | Source | Reliability |
+|---|---|---|
+| Neo4j 8-K check | `MATCH (r:Report {formType:'8-K'})-[:PRIMARY_FILER]->(c {ticker:$t}) WHERE r.created > $earnings_date` | **Best** — definitive |
+| AV `EARNINGS` | `reportedEPS` becomes non-null after report | Good, slight delay |
+| Yahoo `get_earnings_dates` | `Reported EPS` becomes non-null | Free but less reliable |
+
+**Use case**: When `reported_at` is set, downstream can auto-trigger the earnings orchestrator (`earnings:trigger` queue push) for that ticker. This bridges the TradeReady scanner (Phase 1-2, live) to the orchestrator pipeline (Phase 3, future).
+
+---
+
+## 8. MCP Server Access from K8s Workers (2026-03-17)
+
+### Problem
+
+All SDK-spawned Claude Code instances (extraction worker, future orchestrator/planner/learner/predictor workers) use `ClaudeAgentOptions.mcp_servers` which **overrides** the project `.mcp.json` entirely. Only servers explicitly listed in the `mcp_servers` dict are available — the stdio entries in `.mcp.json` are ignored.
+
+The extraction worker currently only lists `neo4j-cypher`. Any future worker that follows the same SDK pattern will face the same limitation.
+
+### Available In-Cluster MCP Servers
+
+| Server | K8s Service | In-Cluster URL | What it provides |
+|--------|-------------|----------------|------------------|
+| Neo4j Cypher | `mcp-neo4j-cypher-http.mcp-services` | `http://mcp-neo4j-cypher-http.mcp-services.svc.cluster.local:8000/mcp` | Graph reads/writes (Cypher) |
+| Yahoo Finance | `mcp-yahoo-finance.mcp-services` | `http://mcp-yahoo-finance.mcp-services.svc.cluster.local:8000/mcp` | 20 tools: quotes, estimates, financials, options, news, SEC filings (live, no API key) |
+
+All require `{"Host": "localhost:8000"}` header (StreamableHTTP routing).
+
+### What Each Module Needs
+
+| Module | Neo4j | Yahoo Finance | Notes |
+|--------|-------|---------------|-------|
+| `/extract` (extraction worker) | **Yes** (reads graph, writes via scripts) | No | Extraction is graph-in, graph-out. No live market data needed. |
+| Planner | **Yes** (reads 8-K, guidance history) | Maybe | Planner reads graph context. Yahoo consensus could supplement AV for live mode tie-breaking (see §7 PIT caveat). |
+| Predictor | No (bundle-only, doesn't fetch) | No | Receives pre-assembled context bundle. No direct data access. |
+| Learner/Attribution | **Yes** (reads realized returns, transcripts) | **Yes** | Post-event analysis benefits from live analyst targets, recommendations, earnings history, institutional holder changes. |
+| Orchestrator | **Yes** (status tracking, discovery) | Maybe | Step 3b data fetch fan-out may use Yahoo as a data source via sub-agents. |
+
+### How to Wire It
+
+Each worker's SDK call needs its own `mcp_servers` dict. Pattern from extraction worker (`scripts/extraction_worker.py:299-305`):
+
+```python
+options = ClaudeAgentOptions(
+    ...
+    mcp_servers={
+        "neo4j-cypher": {
+            "type": "http",
+            "url": os.environ.get("MCP_NEO4J_URL",
+                "http://mcp-neo4j-cypher-http.mcp-services.svc.cluster.local:8000/mcp"),
+            "headers": {"Host": "localhost:8000"},
+        },
+        "yahoo-finance": {
+            "type": "http",
+            "url": os.environ.get("MCP_YAHOO_URL",
+                "http://mcp-yahoo-finance.mcp-services.svc.cluster.local:8000/mcp"),
+            "headers": {"Host": "localhost:8000"},
+        },
+    },
+)
+```
+
+**Options for centralizing** (decide at implementation time):
+
+- **Option A: Shared config module** — `scripts/mcp_k8s_config.py` exports `MCP_SERVERS` dict. Each worker imports it. One edit to add a new server → all workers get it. Trade-off: all workers get all servers (harmless — deferred tools only load schemas on invocation, zero overhead if unused).
+- **Option B: Per-worker config** — each worker explicitly lists only the MCP servers it needs. More control, more places to edit.
+- **Option C: Hybrid** — shared config module with per-worker filtering: `mcp_servers={k: v for k, v in MCP_SERVERS.items() if k in needed}`.
+
+**Recommendation**: Option A for simplicity unless a worker has a specific reason to exclude a server. The extraction worker doesn't need Yahoo but there's no harm in it being available.
+
+### PIT Constraint (Critical)
+
+Yahoo Finance returns **current-state data only** — no way to query "what was consensus on date X." This means:
+
+- **Live mode**: Yahoo data is PIT-safe by definition (future data doesn't exist yet). Safe for planner, predictor, learner.
+- **Historical backtesting**: Yahoo data is **NOT PIT-safe**. Must not be used for historical predictions. Alpha Vantage revision buckets (7/30/60/90d) remain the only PIT-verifiable consensus source for historical mode.
+- **Learner**: Always post-event, so PIT is not a constraint. Yahoo is fully safe here.
+
+Any worker using Yahoo Finance in historical mode must either (a) gate it behind a `mode == "live"` check, or (b) use it only for non-PIT-sensitive data (e.g., company info, sector classification, insider roster — things that don't change materially around earnings).
+
+### K8s Deployment Status
+
+Yahoo Finance MCP server deployed 2026-03-17:
+- Pod: `mcp-yahoo-finance` in `mcp-services` namespace, `minisforum` node
+- Resources: 100m/256Mi → 250m/512Mi (matches neo4j-cypher-http)
+- Health: TCP liveness/readiness probes on port 8000
+- Server: `mcp_servers/yahoo_finance_server.py` — single-file FastMCP, 20 tools, yfinance 1.2.0
+- Manifest: `k8s/mcp-services/mcp-yahoo-finance-deployment.yaml`
+
+---
+
+*Refs: `DataSubAgents.md` · `Infrastructure.md` · `AgentTeams.md` · `guidanceInventory.md` · `TRIGGER.md`*

@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 AGENTS_DIR = ROOT / ".claude" / "agents"
 SKILLS_DIR = ROOT / ".claude" / "skills"
-AGENT_GLOBS = ["neo4j-*.md", "bz-news-api.md", "perplexity-*.md", "alphavantage-*.md"]
+AGENT_GLOBS = ["neo4j-*.md", "bz-news-api.md", "perplexity-*.md", "alphavantage-*.md", "yahoo-*.md"]
 
 PIT_DONE = {
     "neo4j-news": {
@@ -77,6 +77,11 @@ PIT_DONE = {
         "post": ["Bash"],
     },
     "alphavantage-earnings": {
+        "skills": ["pit-envelope"],
+        "pre": [],
+        "post": ["Bash"],
+    },
+    "yahoo-earnings": {
         "skills": ["pit-envelope"],
         "pre": [],
         "post": ["Bash"],

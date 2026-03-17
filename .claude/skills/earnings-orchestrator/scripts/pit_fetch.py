@@ -81,6 +81,9 @@ AV_ESTIMATE_BUCKETS: list[tuple[int, str]] = [
     (90, "eps_estimate_average_90_days_ago"),
 ]
 
+# --- Yahoo Finance constants ---
+YAHOO_OPS: set[str] = {"earnings", "upgrades"}
+
 # --- Perplexity constants ---
 PPLX_SEARCH_URL = "https://api.perplexity.ai/search"
 PPLX_CHAT_URL = "https://api.perplexity.ai/chat/completions"
@@ -618,6 +621,120 @@ def _process_av_response(raw_text: str, op: str, pit_dt: datetime | None,
                 envelope["data"].append(item)
 
 
+# ── Yahoo Finance fetch + PIT processing ──
+
+def _fetch_yahoo_earnings(symbol: str, limit: int = 12) -> list[dict[str, Any]]:
+    """Fetch earnings dates from yfinance. Returns list of dicts."""
+    import yfinance as yf
+    t = yf.Ticker(symbol)
+    df = t.get_earnings_dates(limit=limit)
+    if df is None or df.empty:
+        return []
+    records = json.loads(df.reset_index().to_json(orient="records", date_format="iso"))
+    return records
+
+
+
+def _process_yahoo_response(symbol: str, op: str, pit_dt: datetime | None,
+                            envelope: dict[str, Any], args: argparse.Namespace) -> None:
+    """Process Yahoo Finance data with PIT filtering.
+
+    For --op earnings: historical items PIT-filtered by Earnings Date (frozen at report time).
+    For --op estimates/calendar: GAPPED in PIT mode (current-state only, no historical snapshots).
+    """
+    if op == "earnings":
+        try:
+            records = _fetch_yahoo_earnings(symbol, limit=getattr(args, "limit", 12))
+        except Exception as exc:
+            envelope["gaps"].append({"type": "upstream_error", "reason": f"yfinance earnings failed: {exc}"})
+            return
+
+        for raw in records:
+            # Earnings Date is the index, comes as ISO string
+            ed_str = raw.get("Earnings Date") or raw.get("index")
+            if not ed_str:
+                continue
+
+            ed_dt = _parse_dt(ed_str)
+            if ed_dt is None:
+                continue
+
+            reported_eps = raw.get("Reported EPS")
+            is_upcoming = reported_eps is None or (isinstance(reported_eps, float) and reported_eps != reported_eps)  # NaN check
+
+            # PIT filter: exclude items with Earnings Date > PIT datetime
+            if pit_dt is not None and ed_dt > pit_dt:
+                continue
+
+            # In PIT mode, also exclude upcoming (unreported) items — they represent current state
+            if pit_dt is not None and is_upcoming:
+                continue
+
+            item = {
+                "available_at": _to_new_york_iso(ed_dt),
+                "available_at_source": "provider_metadata",
+                "record_type": "yahoo_earnings",
+                "symbol": symbol,
+                "earnings_date": ed_str[:10] if len(ed_str) >= 10 else ed_str,
+                "estimatedEPS": raw.get("EPS Estimate"),
+                "reportedEPS": reported_eps if not is_upcoming else None,
+                "surprisePercentage": raw.get("Surprise(%)") if not is_upcoming else None,
+            }
+            envelope["data"].append(item)
+
+    elif op == "upgrades":
+        try:
+            import yfinance as yf
+            t = yf.Ticker(symbol)
+            ud = t.upgrades_downgrades
+        except Exception as exc:
+            envelope["gaps"].append({"type": "upstream_error", "reason": f"yfinance upgrades failed: {exc}"})
+            return
+
+        if ud is None or ud.empty:
+            envelope["gaps"].append({"type": "no_data", "reason": f"No upgrades/downgrades for {symbol}"})
+            return
+
+        for i in range(len(ud)):
+            row = ud.iloc[i]
+            grade_dt = ud.index[i]
+
+            # Parse GradeDate — no timezone from yfinance, assume NY
+            try:
+                if hasattr(grade_dt, 'tzinfo') and grade_dt.tzinfo is not None:
+                    pub_dt = grade_dt
+                else:
+                    import pandas as pd
+                    pub_dt = pd.Timestamp(grade_dt).tz_localize(NY_TZ)
+            except Exception:
+                continue
+
+            # PIT filter: date-only comparison (exclude PIT day — no reliable tz)
+            if pit_dt is not None:
+                pit_date = pit_dt.astimezone(NY_TZ).date()
+                grade_date = pub_dt.date() if hasattr(pub_dt, 'date') else pub_dt
+                if grade_date >= pit_date:
+                    continue
+
+            item = {
+                "available_at": _to_new_york_iso(pub_dt),
+                "available_at_source": "provider_metadata",
+                "record_type": "yahoo_upgrade",
+                "symbol": symbol,
+                "grade_date": str(grade_dt)[:19],
+                "firm": row.get("Firm"),
+                "to_grade": row.get("ToGrade"),
+                "from_grade": row.get("FromGrade"),
+                "action": row.get("Action"),
+                "price_target_action": row.get("priceTargetAction"),
+                "current_price_target": row.get("currentPriceTarget"),
+                "prior_price_target": row.get("priorPriceTarget"),
+            }
+            envelope["data"].append(item)
+
+
+
+
 # ── Filters (BZ-specific) ──
 
 def _matches_filters(
@@ -844,7 +961,7 @@ def _load_pplx_input(path: str, is_chat: bool) -> tuple[list[Any], str, list[str
 def _make_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="PIT-aware external data fetch wrapper")
     p.add_argument("--source", required=True,
-                   choices=["bz-news-api", "benzinga", "benzinga-news", "perplexity", "alphavantage"])
+                   choices=["bz-news-api", "benzinga", "benzinga-news", "perplexity", "alphavantage", "yahoo"])
     p.add_argument("--pit", help="ISO8601 PIT timestamp (optional)")
     p.add_argument("--date-from", dest="date_from", help="YYYY-MM-DD")
     p.add_argument("--date-to", dest="date_to", help="YYYY-MM-DD")
@@ -866,8 +983,8 @@ def _make_parser() -> argparse.ArgumentParser:
     p.add_argument("--input-file", help="Optional local JSON file for offline testing")
     # Perplexity / Alpha Vantage operation mode
     p.add_argument("--op", choices=["search", "ask", "reason", "research",
-                                     "earnings", "estimates", "calendar"],
-                   help="Operation mode (perplexity: search/ask/reason/research; alphavantage: earnings/estimates/calendar)")
+                                     "earnings", "estimates", "calendar", "upgrades"],
+                   help="Operation mode (perplexity: search/ask/reason/research; alphavantage: earnings/estimates/calendar; yahoo: earnings/estimates/calendar/upgrades)")
     # Alpha Vantage-specific
     p.add_argument("--symbol", help="Single ticker symbol (alphavantage)")
     p.add_argument("--horizon", choices=["3month", "6month", "12month"],
@@ -899,9 +1016,10 @@ def main() -> None:
 
     is_pplx = args.source == "perplexity"
     is_av = args.source == "alphavantage"
+    is_yahoo = args.source == "yahoo"
 
-    # BZ-specific filter setup (only when not perplexity or alphavantage)
-    if not is_pplx and not is_av:
+    # BZ-specific filter setup (only when not perplexity, alphavantage, or yahoo)
+    if not is_pplx and not is_av and not is_yahoo:
         args.tickers = [t.upper() for t in _csv(args.tickers)]
         requested_tickers = set(args.tickers)
         requested_channels = {c.lower() for c in _csv(args.channels)}
@@ -1013,6 +1131,18 @@ def main() -> None:
 
                 if raw_text is not None:
                     _process_av_response(raw_text, args.op, pit_dt, envelope, args)
+    elif is_yahoo:
+        if not args.op or args.op not in YAHOO_OPS:
+            envelope["gaps"].append({"type": "config", "reason": f"--op required, one of: {sorted(YAHOO_OPS)}"})
+        else:
+            symbol = args.symbol or (args.tickers.split(",")[0].strip().upper() if getattr(args, 'tickers', None) and args.tickers else None)
+            if not symbol:
+                envelope["gaps"].append({"type": "config", "reason": "--symbol required for yahoo"})
+            else:
+                try:
+                    _process_yahoo_response(symbol, args.op, pit_dt, envelope, args)
+                except Exception as exc:
+                    envelope["gaps"].append({"type": "upstream_error", "reason": f"Yahoo failed: {exc}"})
     else:
         # Existing BZ path
         if args.input_file:
@@ -1155,6 +1285,14 @@ def main() -> None:
     if is_av:
         meta: dict[str, Any] = {
             "source": "alphavantage",
+            "op": args.op,
+            "mode": "pit" if args.pit else "open",
+            "pit": args.pit,
+            "symbol": args.symbol,
+        }
+    elif is_yahoo:
+        meta = {
+            "source": "yahoo",
             "op": args.op,
             "mode": "pit" if args.pit else "open",
             "pit": args.pit,

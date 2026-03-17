@@ -1,0 +1,171 @@
+# Trade-Ready Earnings Scanner — K8s CronJobs
+# 4 market-aware scans per day, Sun–Fri (America/New_York).
+# YAML anchors don't work across --- boundaries, so pod spec is repeated.
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: trade-ready-morning
+  namespace: processing
+  labels:
+    app: trade-ready-scanner
+spec:
+  timeZone: "America/New_York"
+  schedule: "0 7 * * 0-5"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  startingDeadlineSeconds: 600
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 120
+      template:
+        spec:
+          nodeSelector:
+            kubernetes.io/hostname: minisforum
+          restartPolicy: OnFailure
+          containers:
+          - name: scanner
+            image: python:3.11-slim
+            command: ["/project/venv/bin/python3", "/project/scripts/trade_ready_scanner.py"]
+            env:
+            - name: REDIS_HOST
+              value: "redis.infrastructure.svc.cluster.local"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: NEO4J_URI
+              value: "bolt://neo4j.infrastructure.svc.cluster.local:7687"
+            volumeMounts:
+            - name: project
+              mountPath: /project
+          volumes:
+          - name: project
+            hostPath:
+              path: /home/faisal/EventMarketDB
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: trade-ready-midday
+  namespace: processing
+  labels:
+    app: trade-ready-scanner
+spec:
+  timeZone: "America/New_York"
+  schedule: "0 12 * * 0-5"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  startingDeadlineSeconds: 600
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 120
+      template:
+        spec:
+          nodeSelector:
+            kubernetes.io/hostname: minisforum
+          restartPolicy: OnFailure
+          containers:
+          - name: scanner
+            image: python:3.11-slim
+            command: ["/project/venv/bin/python3", "/project/scripts/trade_ready_scanner.py"]
+            env:
+            - name: REDIS_HOST
+              value: "redis.infrastructure.svc.cluster.local"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: NEO4J_URI
+              value: "bolt://neo4j.infrastructure.svc.cluster.local:7687"
+            volumeMounts:
+            - name: project
+              mountPath: /project
+          volumes:
+          - name: project
+            hostPath:
+              path: /home/faisal/EventMarketDB
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: trade-ready-close
+  namespace: processing
+  labels:
+    app: trade-ready-scanner
+spec:
+  timeZone: "America/New_York"
+  schedule: "30 16 * * 0-5"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  startingDeadlineSeconds: 600
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 120
+      template:
+        spec:
+          nodeSelector:
+            kubernetes.io/hostname: minisforum
+          restartPolicy: OnFailure
+          containers:
+          - name: scanner
+            image: python:3.11-slim
+            command: ["/project/venv/bin/python3", "/project/scripts/trade_ready_scanner.py"]
+            env:
+            - name: REDIS_HOST
+              value: "redis.infrastructure.svc.cluster.local"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: NEO4J_URI
+              value: "bolt://neo4j.infrastructure.svc.cluster.local:7687"
+            volumeMounts:
+            - name: project
+              mountPath: /project
+          volumes:
+          - name: project
+            hostPath:
+              path: /home/faisal/EventMarketDB
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: trade-ready-evening
+  namespace: processing
+  labels:
+    app: trade-ready-scanner
+spec:
+  timeZone: "America/New_York"
+  schedule: "0 21 * * 0-5"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  startingDeadlineSeconds: 600
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 120
+      template:
+        spec:
+          nodeSelector:
+            kubernetes.io/hostname: minisforum
+          restartPolicy: OnFailure
+          containers:
+          - name: scanner
+            image: python:3.11-slim
+            command: ["/project/venv/bin/python3", "/project/scripts/trade_ready_scanner.py"]
+            env:
+            - name: REDIS_HOST
+              value: "redis.infrastructure.svc.cluster.local"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: NEO4J_URI
+              value: "bolt://neo4j.infrastructure.svc.cluster.local:7687"
+            volumeMounts:
+            - name: project
+              mountPath: /project
+          volumes:
+          - name: project
+            hostPath:
+              path: /home/faisal/EventMarketDB

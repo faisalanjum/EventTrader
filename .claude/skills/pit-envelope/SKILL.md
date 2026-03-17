@@ -59,6 +59,10 @@ Standard JSON envelope for all data sub-agent responses. Validated by `pit_gate.
 | alphavantage (estimates, forward) | — | gapped in PIT | — | Forward-looking snapshot; not PIT-verifiable |
 | alphavantage (calendar) | — | gapped in PIT | — | Forward-looking snapshot; gapped entirely in PIT mode |
 | alphavantage (series) | per-datapoint timestamp | direct | `time_series_timestamp` | Full datetime |
+| yahoo (earnings, reported) | `Earnings Date` | direct (date → start-of-day NY) | `provider_metadata` | PIT: filter `Earnings Date <= PIT`; upcoming (unreported) excluded. `EPS Estimate` frozen at report time. |
+| yahoo (earnings, upcoming) | — | excluded in PIT | — | Unreported items represent current state; excluded when `--pit` present |
+| yahoo (estimates) | — | gapped in PIT | — | Current-state snapshot only; no revision history. Redirect to `--source alphavantage --op estimates` for PIT-safe consensus. |
+| yahoo (calendar) | — | gapped in PIT | — | Forward-looking snapshot; gapped entirely in PIT mode |
 
 ## Forbidden Keys (NEVER include in PIT mode output)
 

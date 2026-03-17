@@ -317,6 +317,7 @@ Each data subagent matches only its retrieval tools:
 | perplexity-sec | `Bash` (pit_fetch.py `--source perplexity --op search --search-mode sec`) |
 | bz-news-api | `Bash` (pit_fetch.py `--source bz-news-api`) |
 | alphavantage-earnings | `Bash` (pit_fetch.py `--source alphavantage`) |
+| yahoo-earnings | `Bash` (pit_fetch.py `--source yahoo`) |
 
 **Write-block matcher** (all agents): `mcp__neo4j-cypher__write_neo4j_cypher` via PreToolUse
 
@@ -366,7 +367,8 @@ python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source bz-ne
 | Alpha Vantage EARNINGS (quarterly) | `reportedDate` | ✅ | Date-only start-of-day NY; AV has no reportTime field. Annual cross-referenced via Q4 quarterly reportedDate (`available_at_source: cross_reference`) |
 | Alpha Vantage EARNINGS_ESTIMATES | revision buckets (7/30/60/90d before fiscal end) | ✅ | Coarse PIT: nearest bucket ≤ PIT selected; returns `pit_consensus_eps` + `pit_bucket`. `available_at_source: coarse_pit`. Forward-looking gapped. **Methodology note:** looks true from data, but AV docs don't clearly guarantee it. |
 | Benzinga News API | `created` | ✅ | Use `provider_metadata`; drop items with unparseable/missing timestamp |
-| Yahoo | provider-specific | ⚠️ | Use Lane 3: URL/citation -> WebFetch timestamp extraction; if unverifiable datetime, gap |
+| Yahoo (earnings, reported) | `Earnings Date` | ✅ | PIT: filter `Earnings Date <= PIT`; upcoming excluded. `EPS Estimate` frozen at report time. `available_at_source: provider_metadata` |
+| Yahoo (estimates/calendar) | — | gapped in PIT | — | Current-state snapshot only; no revision history. Redirect to AV estimates for PIT-safe consensus |
 
 ### Hook YAML examples
 
@@ -602,6 +604,29 @@ Key design decisions:
 ### Remaining
 
 - ~~Alpha Vantage (`alphavantage-earnings`)~~ **DONE** — Bash-wrapper archetype, 3 ops (earnings/estimates/calendar), PIT filtering via reportedDate (date-only, no reportTime in API), annual cross-referenced via Q4 quarterly reportedDate, estimates coarse PIT via revision buckets (7/30/60/90d), 21/21 offline tests. Methodology caveat for estimate buckets: looks true from data, but AV docs don't clearly guarantee it.
+- ~~Yahoo Finance (`yahoo-earnings`)~~ **DONE** — Bash-wrapper archetype, 3 ops (earnings/estimates/calendar). Uses `yfinance` library directly (free, no API key, external API — does NOT query Neo4j). No dedicated query skill (reuses `alphavantage-earnings` skill for shared wrapper patterns). Tested: 12/12 tests (open mode, PIT mode, gapping, edge cases, cross-source parity, pit_gate compatibility, frontmatter compliance, multi-ticker, linter).
+
+  **Yahoo PIT capability per yfinance tool:**
+
+  | yfinance tool | pit_fetch op | PIT-enforceable? | Reason |
+  |---|---|---|---|
+  | `get_earnings_dates()` | `--op earnings` | **Yes** | `EPS Estimate` frozen at report time. Filter: `Earnings Date <= PIT`. Upcoming (null `Reported EPS`) excluded in PIT mode. |
+  | `earnings_estimate` | `--op estimates` | **No — gapped** | Returns current consensus only. No revision history, no as-of-date query. Redirects to `--source alphavantage --op estimates` (has coarse PIT via 7/30/60/90d revision buckets). |
+  | `revenue_estimate` | `--op estimates` | **No — gapped** | Same as earnings_estimate — current-state snapshot only. |
+  | `eps_trend` | `--op estimates` | **No — gapped** | 7/30/90d revision data, but always relative to TODAY, not queryable at a historical date. |
+  | `get_calendar()` | `--op calendar` | **No — gapped** | Forward-looking snapshot (next earnings date + current consensus ranges). No historical state. |
+  | `earnings_history` | not exposed | N/A | Subset of `get_earnings_dates` — no additional PIT value. |
+  | `get_financial_statement()` | not exposed | **No** | Returns period-end dates (e.g., 2025-09-30), NOT filing dates. PIT requires filing/publication date. Cross-referencing via `sec_filings` is heuristic (30-60 day gap, no direct link). Neo4j XBRL has authoritative filing dates (`Report.created`). |
+  | `recommendations` (summary) | not exposed | **No** | Rolling windows relative to TODAY (0m, -1m, -2m). No fixed dates. Cannot query historical distribution. Current-state only. |
+  | `upgrades_downgrades` | `--op upgrades` | **Yes** (date-only) | Each row has `GradeDate` datetime (e.g., `2026-03-05 13:56:15`). 966+ rows going back years. No timezone (assumed ET). PIT: date-only filter (exclude PIT day, same approach as AV). Tested: open (966 items), PIT (868 items filtered), pit_gate compatible. |
+  | `history()` (OHLCV) | not exposed | **Yes** (built-in) | `end` param is exclusive upper bound. Timezone-aware index (`America/New_York`). yfinance does the filtering natively. Not exposed — Neo4j entity (`HAS_PRICE`) already covers this with full PIT. |
+  | `earnings_history` | not exposed | **No** (redundant) | Strict subset of `get_earnings_dates` with fewer fields and quarter-label index instead of datetime. Zero additional PIT value. Already fully covered by `--op earnings`. |
+
+  **Summary (empirically verified 2026-03-17)**:
+  - **PIT-enforceable and exposed**: `get_earnings_dates()` → `--op earnings`, `upgrades_downgrades` → `--op upgrades`
+  - **PIT-gapped (current-state only)**: `earnings_estimate`, `revenue_estimate`, `eps_trend`, `get_calendar()` → redirect to AV
+  - **PIT-enforceable but NOT exposed** (Neo4j already covers): `history()` (built-in PIT via `end` param)
+  - **NOT PIT-enforceable**: `get_financial_statement` (period-end ≠ filing date), `recommendations` summary (rolling windows), `earnings_history` (redundant subset)
 - SEC full-text search adapter scaffold (HTTP wrapper first; MCP optional later) — placeholder
 - Slide deck API adapter (earningscall.biz) — placeholder
 
@@ -652,7 +677,7 @@ TODO (leave as placeholders until API wiring step):
 1. **Hook format** (decided in §4.4):
    - All sources: `type: command` + `pit_gate.py` (Python, stdlib-only) for deterministic allow/block based on structured publication fields.
 
-*Plan Version 3.0 | 2026-02-16 | Phase 0-2 DONE. Phase 3: 5/5 DONE (all Neo4j agents PIT-complete). Phase 4: 5/5 Perplexity DONE + 1/1 Alpha Vantage DONE. Agent count: 13 (Neo4j 6 + AV 1 + BZ 1 + Perplexity 5). PIT-complete: 13/13 (neo4j-news, neo4j-vector-search, bz-news-api, neo4j-report, neo4j-transcript, neo4j-xbrl, neo4j-entity, perplexity-search, perplexity-ask, perplexity-reason, perplexity-research, perplexity-sec, alphavantage-earnings). Exhaustive testing: 60/60 (56 individual + 4 cross-agent) + 52/52 pit_fetch tests (31 existing + 21 AV). pit_gate.py: 41/41 tests. AV rework: removed phantom reportTime, added cross-reference for annual earnings, coarse PIT via revision buckets for estimates, added `cross_reference` + `coarse_pit` to VALID_SOURCES.*
+*Plan Version 3.1 | 2026-03-17 | Phase 0-2 DONE. Phase 3: 5/5 DONE (all Neo4j agents PIT-complete). Phase 4: 5/5 Perplexity DONE + 1/1 Alpha Vantage DONE + 1/1 Yahoo Finance DONE. Agent count: 14 (Neo4j 6 + AV 1 + Yahoo 1 + BZ 1 + Perplexity 5). PIT-complete: 14/14 (neo4j-news, neo4j-vector-search, bz-news-api, neo4j-report, neo4j-transcript, neo4j-xbrl, neo4j-entity, perplexity-search, perplexity-ask, perplexity-reason, perplexity-research, perplexity-sec, alphavantage-earnings, yahoo-earnings). Yahoo: pit_fetch.py `--source yahoo` with 3 ops (earnings/estimates/calendar), Earnings Date PIT filtering, estimates/calendar gapped. Uses yfinance (free, no API key).*
 
 ---
 
@@ -758,7 +783,7 @@ hooks:
 ## 10.5 Add a lint-only guard (no generator, no autofix)
 
 - New file: `.claude/skills/earnings-orchestrator/scripts/lint_data_agents.py`.
-- Scope: only the 13 data agents (`.claude/agents/neo4j-*.md`, `bz-news-api.md`, `perplexity-*.md`, `alphavantage-*.md`) and their `skills:` entries.
+- Scope: only the 14 data agents (`.claude/agents/neo4j-*.md`, `bz-news-api.md`, `perplexity-*.md`, `alphavantage-*.md`, `yahoo-*.md`) and their `skills:` entries.
 - Deterministic, stdlib-only, no network.
 - ~100 lines.
 
@@ -782,6 +807,7 @@ hooks:
 - **neo4j-transcript**: same as neo4j-news. PIT field: `t.conference_datetime` → `available_at` (source: `neo4j_created`).
 - **neo4j-xbrl**: same as neo4j-news. PIT field: parent Report `r.created` → `available_at` (source: `edgar_accepted`).
 - **neo4j-entity**: same as neo4j-news. PIT field: `Date.market_close_current_day` → `available_at` (source: `time_series_timestamp`). Metadata queries use open mode pass-through.
+- **yahoo-earnings**: `pit-envelope` in skills, `pit_gate.py` PostToolUse on `Bash` matcher. PIT field: `Earnings Date` → `available_at` (source: `provider_metadata`). Estimates/calendar gapped in PIT mode.
 
 ## 10.7 What is explicitly dropped
 
