@@ -19,6 +19,11 @@
       "type": "http",
       "url": "https://mcp.alphavantage.co/mcp?apikey=OEBNGLV527FIER4J"
     },
+    "yahoo-finance": {
+      "type": "stdio",
+      "command": "/home/faisal/EventMarketDB/mcp_servers/local-yahoo-finance-server.sh",
+      "args": []
+    },
     "obsidian": {
       "type": "stdio",
       "command": "npx",
