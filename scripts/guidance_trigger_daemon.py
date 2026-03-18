@@ -46,7 +46,7 @@ log = logging.getLogger("guidance_trigger")
 
 POLL_INTERVAL = 60           # seconds between sweeps
 LEASE_TTL = 14400            # 4-hour enqueue lease (covers backfill burst + extraction)
-ACTIVE_WINDOW_DAYS = 45      # covers SEC 10-Q filing deadline (40-45d after quarter end)
+ACTIVE_WINDOW_DAYS = int(os.environ.get("ACTIVE_WINDOW_DAYS", "1"))  # 1=upcoming only, 45=backfill
 QUEUE_NAME = "extract:pipeline"
 EXTRACTION_TYPE = "guidance"
 

@@ -114,7 +114,7 @@ python3 scripts/trade_ready_scanner.py --cleanup     # Manual purge of past entr
 
 ## §2: Guidance Auto-Trigger
 
-**Status**: Ready for implementation
+**Status**: LIVE since 2026-03-17. 14 tickers fully extracted (ASO, DLTR, DOCU, FIVE, GIS, HQY, LULU, MU, NFE, SAIC, SMTC, ACN, DRI, FDX). Usage-aware throttling deployed 2026-03-18.
 
 ### Context
 
@@ -397,6 +397,26 @@ python3 scripts/trigger-extract.py --retry-failed --type guidance --asset all --
 
 ---
 
+### §2 Environment Variables (Live)
+
+Three configurable env vars control the system without code changes:
+
+| Env var | File | Default | What it does |
+|---|---|---|---|
+| `ACTIVE_WINDOW_DAYS` | `guidance-trigger.yaml` | `1` | How far back to scan TradeReady tickers: `earnings_date >= today - N days`. **1** = upcoming only (just-in-time extraction). **45** = backfill mode (covers SEC 10-Q filing deadline). |
+| `DAILY_INTERACTIVE_PCT` | `extraction-worker.yaml` | `10` | Reserve this % of all-models weekly budget per day for interactive use. Worker pauses extraction when `usage >= 100 - (PCT × days_until_reset)`. |
+| `DAILY_INTERACTIVE_PCT_SONNET` | `extraction-worker.yaml` | `5` | Same for Sonnet-specific weekly limit. Lower because interactive use is mostly Opus. |
+
+**Quick adjust:**
+```bash
+kubectl set env deployment/guidance-trigger -n processing ACTIVE_WINDOW_DAYS=45   # backfill mode
+kubectl set env deployment/extraction-worker -n processing DAILY_INTERACTIVE_PCT=15  # more interactive reserve
+```
+
+**Usage-aware throttling** (added 2026-03-17): Worker reads cached plan usage from `logs/claude-usage/claude_usage_summary.json` before each job. Dynamic threshold adapts to days-until-reset — tighter early in the week, relaxed near reset. On rate limit hit mid-extraction, item is re-queued without retry penalty and worker sleeps 5 min before re-checking.
+
+---
+
 ### §2 Explicitly Locked Decisions
 
 | # | Decision | Rationale |
@@ -404,7 +424,7 @@ python3 scripts/trigger-extract.py --retry-failed --type guidance --asset all --
 | D1 | `IS NULL OR in_progress` (not `= 'failed'`) | NULL = normal trigger. `in_progress` + expired lease = stale recovery (worker crash). `failed` excluded = prevents infinite retry loops. |
 | D2 | 4 batched queries per sweep (not per-ticker) | `ticker IN $tickers` = 4 queries total. Same Neo4j load as one manual trigger-extract run. |
 | D3 | Lease-based dedup with 14400s (4h) TTL | Atomic (`SET NX`), self-healing (TTL expires). Covers earnings-season backfill burst (400 items / 7 pods = ~3h) + extraction + margin. Two-phase lease (separate pending/processing TTLs) would be ideal but requires worker modification (violates D5). |
-| D4 | `ACTIVE_WINDOW_DAYS = 45` | Covers SEC 10-Q filing deadline (40-45d). Ensures complete guidance extraction including late 10-Q filings. Configurable constant. |
+| D4 | `ACTIVE_WINDOW_DAYS` (env var, default 1) | Default 1 = upcoming tickers only (just-in-time). Set to 45 for weekend backfill (covers SEC 10-Q deadline). |
 | D5 | No changes to existing files | Zero regression risk. Daemon is fully additive. |
 | D6 | No incremental `created > last_check` | Broken for this data model (timestamps ≠ insertion time). |
 | D7 | No Neo4j hooks | Lowest risk. Add as Phase 2 only if sub-60s detection proven necessary. |

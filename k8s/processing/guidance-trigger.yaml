@@ -31,6 +31,11 @@ spec:
           value: "redis.infrastructure.svc.cluster.local"
         - name: REDIS_PORT
           value: "6379"
+        # How far back to look for TradeReady tickers: earnings_date >= today - N days
+        # 1 = only upcoming tickers (normal mode — just-in-time extraction)
+        # 45 = backfill mode (covers SEC 10-Q filing deadline, use for weekend catchup)
+        - name: ACTIVE_WINDOW_DAYS
+          value: "1"
         resources:
           requests:
             cpu: "50m"

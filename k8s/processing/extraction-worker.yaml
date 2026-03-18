@@ -66,6 +66,14 @@ spec:
         # MCP HTTP endpoint (overrides .mcp.json stdio server)
         - name: MCP_NEO4J_URL
           value: http://mcp-neo4j-cypher-http.mcp-services.svc.cluster.local:8000/mcp
+        # Usage-aware throttling: reserve this % of all-models weekly budget per day for interactive use
+        # Formula: threshold = 100 - (PCT * days_until_reset). Worker pauses extraction above threshold.
+        # Example: 10%/day with 3 days left → threshold=70% → extraction pauses at 70% weekly usage
+        - name: DAILY_INTERACTIVE_PCT
+          value: "10"
+        # Same for Sonnet-specific weekly limit (lower because interactive use is mostly Opus)
+        - name: DAILY_INTERACTIVE_PCT_SONNET
+          value: "5"
         # Strip git commit/PR instructions from system prompt (~500 tokens/turn saved)
         - name: CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS
           value: "true"

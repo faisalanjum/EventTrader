@@ -38,7 +38,7 @@ import signal
 import sys
 import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Project root — must chdir before importing SDK so setting_sources finds .claude/
@@ -71,6 +71,83 @@ MCP_NEO4J_URL = os.environ.get(
 )
 
 WORKER_POD = platform.node()
+
+# ---------------------------------------------------------------------------
+# Usage-aware throttling
+# ---------------------------------------------------------------------------
+DAILY_INTERACTIVE_PCT = float(os.environ.get("DAILY_INTERACTIVE_PCT", "10"))
+DAILY_INTERACTIVE_PCT_SONNET = float(os.environ.get("DAILY_INTERACTIVE_PCT_SONNET", "5"))
+USAGE_SCRIPT = Path(PROJECT_DIR) / "scripts" / "claude_usage_fetch.py"
+USAGE_CACHE_DIR = Path(PROJECT_DIR) / "logs" / "claude-usage"
+USAGE_SUMMARY_PATH = USAGE_CACHE_DIR / "claude_usage_summary.json"
+USAGE_CHECK_INTERVAL = 300  # seconds — matches script's cache TTL
+USAGE_PAUSE_SLEEP = 300     # seconds to sleep when over threshold
+
+RATE_LIMIT_PATTERN = "hit your limit"
+
+
+def read_usage() -> dict | None:
+    """Read cached usage summary JSON. Returns parsed dict or None (fail-open)."""
+    try:
+        if not USAGE_SUMMARY_PATH.exists():
+            return None
+        return json.loads(USAGE_SUMMARY_PATH.read_text())
+    except Exception:
+        return None
+
+
+def is_over_usage_threshold() -> tuple[bool, str]:
+    """Dynamic threshold: reserve DAILY_INTERACTIVE_PCT per day until reset.
+
+    threshold = 100 - (DAILY_INTERACTIVE_PCT × days_until_reset)
+    Near reset → threshold relaxes (less to reserve). Week start → tighter.
+    """
+    data = read_usage()
+    if data is None:
+        return False, ""
+    buckets = [
+        ("seven_day", "7-day", DAILY_INTERACTIVE_PCT),
+        ("seven_day_sonnet", "Sonnet", DAILY_INTERACTIVE_PCT_SONNET),
+    ]
+    now_utc = datetime.now(timezone.utc)
+    for key, name, reserve_pct in buckets:
+        bucket = data.get(key) or {}
+        pct = bucket.get("percent")
+        resets_at = bucket.get("resets_at_utc")
+        if pct is None or resets_at is None:
+            continue
+        try:
+            reset_dt = datetime.fromisoformat(resets_at.replace("Z", "+00:00"))
+            days_left = max((reset_dt - now_utc).total_seconds() / 86400, 0)
+            threshold = max(100 - (reserve_pct * days_left), 10)
+            if pct >= threshold:
+                return True, (f"{name}={pct:.0f}%>{threshold:.0f}% "
+                              f"(reserve {reserve_pct:.0f}%/d × {days_left:.1f}d)")
+        except Exception:
+            continue
+    return False, ""
+
+
+async def refresh_usage_cache():
+    """Call claude_usage_fetch.py to refresh cache if stale (>5 min old)."""
+    try:
+        if USAGE_SUMMARY_PATH.exists():
+            age = time.time() - USAGE_SUMMARY_PATH.stat().st_mtime
+            if age < USAGE_CHECK_INTERVAL:
+                return
+    except Exception:
+        pass
+    try:
+        proc = await asyncio.create_subprocess_exec(
+            sys.executable, str(USAGE_SCRIPT), "--json",
+            "--out-dir", str(USAGE_CACHE_DIR),
+            stdout=asyncio.subprocess.DEVNULL,
+            stderr=asyncio.subprocess.DEVNULL,
+        )
+        await asyncio.wait_for(proc.wait(), timeout=15)
+    except Exception:
+        pass
+
 
 # ---------------------------------------------------------------------------
 # Type whitelist (defense-in-depth)
@@ -261,8 +338,8 @@ async def process_one(
     type_name: str,
     mode: str,
     mgr,
-) -> bool:
-    """Run /extract for a single job. Returns True on success."""
+) -> bool | str:
+    """Run /extract for a single job. Returns True on success, False on failure, 'rate_limited' on rate limit."""
     is_write = mode == "write"
 
     if is_write and mgr:
@@ -288,6 +365,7 @@ async def process_one(
     start = time.monotonic()
 
     stderr_lines = []
+    rate_limit_detected = False
 
     try:
         options = ClaudeAgentOptions(
@@ -312,6 +390,15 @@ async def process_one(
         result_msg = None
         async for msg in query(prompt=prompt, options=options):
             msg_type = type(msg).__name__
+
+            # Rate limit detection — scan all messages
+            if not rate_limit_detected:
+                msg_content = str(getattr(msg, "content", ""))
+                if RATE_LIMIT_PATTERN in msg_content.lower():
+                    rate_limit_detected = True
+                    log.warning("Rate limit detected in %s for %s/%s/%s",
+                                msg_type, type_name, asset, source_id)
+
             if msg_type == "SystemMessage" and getattr(msg, "subtype", "") == "init":
                 d = msg.data
                 log.info("  [Init] model=%s apiKeySource=%s version=%s",
@@ -326,6 +413,19 @@ async def process_one(
                 log.info("  [%s] %s", msg_type, str(msg.content)[:200])
 
         elapsed = time.monotonic() - start
+
+        # Also check result_text for rate limit
+        if result_text and RATE_LIMIT_PATTERN in result_text.lower():
+            rate_limit_detected = True
+
+        if rate_limit_detected:
+            log.warning("Rate limit — returning for re-queue: %s/%s/%s (elapsed: %.0fs)",
+                        type_name, asset, source_id, elapsed)
+            try:
+                Path(result_path).unlink(missing_ok=True)
+            except Exception:
+                pass
+            return "rate_limited"
 
         if result_msg:
             u = result_msg.usage or {}
@@ -391,6 +491,17 @@ async def process_one(
 
     except Exception as e:
         elapsed = time.monotonic() - start
+
+        # Rate limit is not a failure — return for re-queue
+        if rate_limit_detected:
+            log.warning("Rate limit hit (exception) for %s/%s/%s after %.0fs",
+                        type_name, asset, source_id, elapsed)
+            try:
+                Path(result_path).unlink(missing_ok=True)
+            except Exception:
+                pass
+            return "rate_limited"
+
         log.error("Failed %s/%s/%s after %.0fs", type_name, asset, source_id, elapsed, exc_info=True)
         for line in stderr_lines[-20:]:
             log.error("  CLI stderr: %s", line)
@@ -422,6 +533,9 @@ async def main():
     log.info("  Default mode: %s", DEFAULT_MODE)
     log.info("  Allowed types: %s", ALLOWED_TYPES)
     log.info("  Asset labels: %s", set(ASSET_LABELS.keys()))
+    log.info("  Usage reserve: %s%%/day all-models, %s%%/day Sonnet",
+             DAILY_INTERACTIVE_PCT, DAILY_INTERACTIVE_PCT_SONNET)
+    log.info("  Usage cache: %s", USAGE_SUMMARY_PATH)
     log.info("=" * 60)
 
     # Neo4j connection for status tracking
@@ -446,6 +560,17 @@ async def main():
 
     while not shutdown_event.is_set():
         try:
+            # --- Usage-aware throttling ---
+            await refresh_usage_cache()
+            over, reason = is_over_usage_threshold()
+            if over:
+                log.info("Usage threshold exceeded (%s), pausing %ds", reason, USAGE_PAUSE_SLEEP)
+                try:
+                    await asyncio.wait_for(shutdown_event.wait(), timeout=USAGE_PAUSE_SLEEP)
+                    break  # shutdown requested
+                except asyncio.TimeoutError:
+                    continue  # re-check usage
+
             result = await r.brpop(QUEUE_NAME, timeout=5)
             if result is None:
                 continue
@@ -477,9 +602,20 @@ async def main():
             type_name = payload["type"]
             mode = payload.get("mode", DEFAULT_MODE)
 
-            success = await process_one(ticker, asset, source_id, type_name, mode, mgr)
+            outcome = await process_one(ticker, asset, source_id, type_name, mode, mgr)
 
-            if not success:
+            if outcome == "rate_limited":
+                # Re-queue without retry penalty — rate limit is not a failure
+                await r.lpush(QUEUE_NAME, json.dumps(payload))
+                log.warning("Rate-limited — re-queued (no retry increment): %s %s/%s/%s",
+                            ticker, type_name, asset, source_id)
+                try:
+                    await asyncio.wait_for(shutdown_event.wait(), timeout=USAGE_PAUSE_SLEEP)
+                    break  # shutdown requested
+                except asyncio.TimeoutError:
+                    continue  # loop back to pre-flight usage check
+
+            if not outcome:
                 retry_count = payload.get("_retry", 0) + 1
                 error_message = f"Failed processing {type_name}/{asset}/{source_id}"
                 if retry_count <= MAX_RETRIES:
