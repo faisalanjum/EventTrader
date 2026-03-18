@@ -89,19 +89,20 @@ def get_redis():
 
 
 def get_active_tickers(r, override_tickers=None):
-    """Read trade_ready:entries, filter to active window. Returns set of uppercase tickers."""
+    """Read trade_ready:entries, filter to active window. Returns dict of ticker → earnings_date."""
     if override_tickers:
-        return {t.upper() for t in override_tickers}
+        today_str = date.today().isoformat()
+        return {t.upper(): today_str for t in override_tickers}
 
     cutoff = (date.today() - timedelta(days=ACTIVE_WINDOW_DAYS)).isoformat()
     all_entries = r.hgetall("trade_ready:entries")
-    active = set()
+    active = {}
     for ticker, raw in all_entries.items():
         try:
             entry = json.loads(raw)
             ed = entry.get("earnings_date", "")
             if ed >= cutoff:
-                active.add(ticker.upper())
+                active[ticker.upper()] = ed
         except (json.JSONDecodeError, TypeError):
             continue
     return active
@@ -203,38 +204,49 @@ def enqueue_with_lease(r, source_id, asset, ticker, status, queue, dry_run=False
 
 
 def sweep_once(r, mgr, tickers, route, dry_run=False):
-    """One full sweep: query all 4 assets, enqueue eligible items. Returns count."""
-    total = 0
+    """One full sweep: query all 4 assets, sort by earnings date (nearest first), enqueue. Returns count."""
     queue = route["queue"]
     status_prop = route["status_prop"]
     assets = route["assets"]
 
+    # Collect all eligible items across all assets
+    to_enqueue = []
     for asset_name, asset_cfg in assets.items():
-        items = find_eligible(mgr, asset_name, asset_cfg, tickers, status_prop)
-        if not items:
-            continue
+        for item in find_eligible(mgr, asset_name, asset_cfg, tickers, status_prop):
+            to_enqueue.append((item, asset_name))
 
-        queued = 0
-        skipped = 0
-        stale = 0
-        for item in items:
-            sid = item["id"]
-            sym = item["symbol"] or sid.split("_")[0]
-            st = item["status"]
+    if not to_enqueue:
+        return 0
 
-            enqueued = enqueue_with_lease(r, sid, asset_name, sym, st, queue, dry_run)
-            if enqueued:
-                queued += 1
-                if st == "in_progress":
-                    stale += 1
-            else:
-                skipped += 1
+    # Sort by earnings_date — nearest first gets LPUSH'd first = BRPOP'd first (FIFO)
+    to_enqueue.sort(key=lambda x: tickers.get(
+        x[0]["symbol"] or x[0]["id"].split("_")[0], "9999-12-31"))
 
-        if queued > 0 or skipped > 0:
-            stale_str = f" ({stale} stale recovery)" if stale else ""
+    # Enqueue in priority order, track per-asset stats
+    total = 0
+    stats = {}  # asset_name → [queued, skipped, stale]
+    for item, asset_name in to_enqueue:
+        sid = item["id"]
+        sym = item["symbol"] or sid.split("_")[0]
+        st = item["status"]
+
+        enqueued = enqueue_with_lease(r, sid, asset_name, sym, st, queue, dry_run)
+        s = stats.setdefault(asset_name, [0, 0, 0])
+        if enqueued:
+            s[0] += 1
+            if st == "in_progress":
+                s[2] += 1
+            total += 1
+        else:
+            s[1] += 1
+
+    # Log per-asset stats (same format as before)
+    for asset_name in assets:
+        s = stats.get(asset_name)
+        if s and (s[0] > 0 or s[1] > 0):
+            stale_str = f" ({s[2]} stale recovery)" if s[2] else ""
             action = "would queue" if dry_run else "queued"
-            log.info(f"  [{asset_name}] {action}: {queued}{stale_str}, skipped (lease active): {skipped}")
-        total += queued
+            log.info(f"  [{asset_name}] {action}: {s[0]}{stale_str}, skipped (lease active): {s[1]}")
 
     return total
 
