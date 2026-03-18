@@ -218,9 +218,12 @@ def sweep_once(r, mgr, tickers, route, dry_run=False):
     if not to_enqueue:
         return 0
 
-    # Sort by earnings_date — nearest first gets LPUSH'd first = BRPOP'd first (FIFO)
-    to_enqueue.sort(key=lambda x: tickers.get(
-        x[0]["symbol"] or x[0]["id"].split("_")[0], "9999-12-31"))
+    # Sort: future/today earnings first (nearest first), then past earnings last.
+    # Ensures upcoming tickers always take precedence over backfill items.
+    today_str = date.today().isoformat()
+    to_enqueue.sort(key=lambda x: (
+        0 if tickers.get(x[0]["symbol"] or x[0]["id"].split("_")[0], "9999-12-31") >= today_str else 1,
+        tickers.get(x[0]["symbol"] or x[0]["id"].split("_")[0], "9999-12-31")))
 
     # Enqueue in priority order, track per-asset stats
     total = 0
