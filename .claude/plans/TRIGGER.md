@@ -372,12 +372,16 @@ kubectl logs -f -l app=guidance-trigger -n processing
 kubectl logs -f -l app=extraction-worker -n processing
 
 # 9. Stop extraction (queue items persist in Redis, resume anytime)
+#    IMPORTANT: scaling worker to 0 alone does NOT work — KEDA overrides it.
+#    You MUST pause the ScaledObject first, then scale both to 0.
+kubectl annotate scaledobject extraction-worker-scaler -n processing autoscaling.keda.sh/paused-replicas="0" --overwrite  # pause KEDA
 kubectl scale deployment guidance-trigger -n processing --replicas=0   # stop queuing
 kubectl scale deployment extraction-worker -n processing --replicas=0  # stop processing
 
-# 10. Resume (daemon re-sweeps, skips completed, re-queues expired leases)
-kubectl scale deployment guidance-trigger -n processing --replicas=1
-kubectl scale deployment extraction-worker -n processing --replicas=1   # KEDA auto-scales from here
+# 10. Resume (unpause KEDA, then scale both back up)
+kubectl annotate scaledobject extraction-worker-scaler -n processing autoscaling.keda.sh/paused-replicas-  # unpause KEDA
+kubectl scale deployment guidance-trigger -n processing --replicas=1   # daemon re-sweeps, skips completed
+kubectl scale deployment extraction-worker -n processing --replicas=1  # KEDA auto-scales from here
 
 # 11. Recover failed items (rate limit, credits exhausted, bad source data)
 # See all failed items with error messages:
