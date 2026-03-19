@@ -169,7 +169,7 @@ SDK wrapper: top-level session, `permission_mode="bypassPermissions"`.
 1. Discovery — `get_quarterly_filings {TICKER}` → `event.json` (hook auto-builds)
 2. Filter — skip quarters with existing `result.json`
 3. For each pending quarter (chronological):
-   a. Load all prior quarters' attribution `feedback` + guidance history (read `guidance-inventory.md` if it exists, empty string if not) for this ticker and include in the context bundle.
+   a. Load all prior quarters' attribution `feedback` + guidance history (query Neo4j Guidance/GuidanceUpdate nodes for this ticker; empty if none exist — **note**: original design referenced `guidance-inventory.md` but that file does not exist; extraction pipeline writes directly to Neo4j graph via `guidance_writer.py`) and include in the context bundle.
    b. Planner (forked skill) → returns fetch plan
    c. Orchestrator executes fetch plan via parallel Task sub-agents (DataSubAgents)
    d. Predictor (forked skill) receives 8-K + merged data bundle → result.json
@@ -212,8 +212,8 @@ The context bundle is the central data structure the orchestrator assembles and 
 
   "8k_content": "(raw 8-K EX-99.1 text)",
 
-  "guidance_history": "(raw guidance-inventory.md file contents — full passthrough, no extraction)",
-  "guidance_history_source": "earnings-analysis/Companies/NOG/guidance-inventory.md",
+  "guidance_history": "(structured guidance data from Neo4j Guidance/GuidanceUpdate nodes — see STALE REFERENCE note below)",
+  "guidance_history_source": "neo4j:Guidance+GuidanceUpdate nodes for ticker",
 
   "u1_feedback": [
     {
@@ -252,6 +252,13 @@ The context bundle is the central data structure the orchestrator assembles and 
     }
   },
 
+  "anchor_flags": {
+    "has_consensus": true,
+    "has_prior_guidance": true,
+    "has_prior_financials": true,
+    "has_transcript_context": false
+  },
+
   "fetch_plan_ref": "planner/fetch_plan.json"
 }
 ```
@@ -267,13 +274,22 @@ The context bundle is the central data structure the orchestrator assembles and 
 | `decision_cutoff_ts` | Live only | Auto-recorded at prediction-start. Null for historical. |
 | `assembled_at` | Yes | ISO timestamp when bundle was built |
 | `8k_content` | Yes | Raw 8-K EX-99.1 text. Hard-fail if missing (§2c). |
-| `guidance_history` | Yes | Raw `guidance-inventory.md` file contents — full passthrough, no extraction (I5 resolved). Empty string `""` if file missing, unreadable, or empty (= no guidance anchor available; predictor missing-data policy handles this). |
-| `guidance_history_source` | Yes | Absolute path to the source file. For audit trail. Empty string if no file. |
+| `guidance_history` | Yes | **STALE REFERENCE (2026-03-19)**: This field originally said "raw guidance-inventory.md file contents." Verified: **zero** `guidance-inventory.md` files exist on disk. The extraction pipeline writes structured guidance directly to Neo4j graph nodes (327 Guidance + 5,163 GuidanceUpdate + 173 GuidancePeriod nodes) via `guidance_writer.py`. The orchestrator should query Neo4j for this ticker's Guidance/GuidanceUpdate data and render it as text for the bundle. Empty if no Guidance nodes exist for the ticker. |
+| `guidance_history_source` | Yes | `"neo4j"` — queried from Guidance/GuidanceUpdate graph nodes. |
 | `u1_feedback` | Yes | Array of prior quarters' `feedback` blocks from attribution/result.json. Empty `[]` for first quarter. Chronological order. |
 | `fetched_data` | Yes | Object keyed by `output_key` from fetch_plan. Each value has `sources` (agent names), `tier_used` (0-indexed, -1 if all tiers empty), `content` (merged text or null). |
+| `anchor_flags` | Yes | Deterministic orchestrator-derived booleans used by predictor missing-data policy. Not LLM judgment. |
 | `fetch_plan_ref` | Yes | Relative path to persisted fetch_plan.json. Audit trail: bundle → plan → planner reasoning. |
 
-**Persistence**: orchestrator writes `prediction/context_bundle.json` once per quarter (alongside context.json). This is the audit/replay artifact. Never overwritten if it exists (same idempotency rule as context.json).
+**Anchor flags (v1)**:
+- `has_consensus`: `true` when a canonical consensus question returned usable pre-filing expectation data.
+- `has_prior_guidance`: `true` when `guidance_history` is non-empty.
+- `has_prior_financials`: `true` when the canonical `prior_financials` question returned usable data.
+- `has_transcript_context`: `true` when the canonical `prior_transcript_context` question returned usable data.
+
+These flags are deterministic convenience metadata for the predictor. They reduce accidental overconfidence by making key-anchor availability explicit instead of forcing the predictor to infer it from prose.
+
+**Persistence**: orchestrator writes `prediction/context_bundle.json` once per quarter. This is the audit/replay artifact. Write-once, never overwrite.
 
 **Rendering to text**: for Skill invocation, orchestrator renders the JSON to sectioned text:
 
@@ -286,6 +302,12 @@ Mode: {mode} | PIT: {pit_datetime} | Assembled: {assembled_at}
 
 ## GUIDANCE HISTORY
 {guidance_history}
+
+## ANCHOR FLAGS
+has_consensus: {has_consensus}
+has_prior_guidance: {has_prior_guidance}
+has_prior_financials: {has_prior_financials}
+has_transcript_context: {has_transcript_context}
 
 ## PRIOR FEEDBACK (U1)
 ### Q2_FY2024
@@ -309,7 +331,7 @@ Sources: alphavantage-earnings (tier 0)
 ```
 
 Rendering rules:
-1. Fixed sections always present in this order: 8-K → guidance → U1 → fetched data.
+1. Fixed sections always present in this order: 8-K → guidance → anchor flags → U1 → fetched data.
 2. U1 feedback rendered chronologically (oldest first — same as processing order).
 3. Fetched data sections rendered in fetch_plan question order.
 4. Each fetched data section includes source attribution line (which agents, which tier).
@@ -317,8 +339,8 @@ Rendering rules:
 6. Renderer is deterministic: same JSON → same text, always.
 
 **Planner vs Predictor delivery**:
-- Planner receives: `8k_content` + `u1_feedback` (planner_lessons only) + `guidance_history`. No `fetched_data` (planner produces the fetch plan, doesn't consume fetched results).
-- Predictor receives: full bundle (all sections).
+- Planner receives: `8k_content` + `u1_feedback` (planner_lessons only) + `guidance_history`. No `fetched_data` or `anchor_flags` (planner produces the fetch plan, doesn't consume fetched results).
+- Predictor receives: full bundle, including `anchor_flags`.
 
 **Learner does NOT receive a context bundle** (I4 resolved):
 The learner is fundamentally different from the predictor — no speed constraint, no PIT, multi-turn, follows evidence trails. Pre-assembling a bundle would constrain it unnecessarily. Instead, the orchestrator passes 3 minimal inputs:
@@ -358,6 +380,7 @@ async for msg in query(
 SDK/runtime rules (locked):
 - Live mode is **not PIT-gated**. It may use any data available during the live run.
 - For deterministic replay, orchestrator records `decision_cutoff_ts` automatically at prediction-start for that quarter and includes it in context/result metadata (no extra SDK arg required). Why: without a fixed cutoff, two live re-runs can see different late-arriving data and produce non-comparable outputs.
+- **Live mode must write `live_state.json`** after prediction completes (see §4). This is the contract between orchestrator and external trigger daemon (`EarningsTrigger.md`). The daemon reads it to locate result files without deriving fiscal quarter identity. The orchestrator derives `quarter_label` internally (it has full context: Neo4j access, fiscal math, minutes of runtime for 10-Q/10-K to arrive).
 - Use the **latest validated** `claude-agent-sdk` version listed in `Infrastructure.md` (must satisfy Task-tools requirements).
 - Fail fast on missing/invalid required args with no partial writes:
   - Historical requires ticker.
@@ -457,6 +480,24 @@ Execution semantics:
 5. **Sanity check** (R5, lightweight, code-only — not an LLM call): verify fetch plan includes at least one question targeting consensus data and one targeting prior financials. These are core data types the predictor almost always needs. If missing, log a warning (not a block) — the planner may have valid reasons to omit them, and U1 will self-correct if it was a mistake.
 6. **PIT handling**: not in the schema — orchestrator concern. In historical mode, orchestrator appends `--pit {filed_8k}` to each Task sub-agent's prompt. The planner does not need to know about PIT.
 
+**Canonical planner question IDs (v1)**:
+
+Reuse these IDs whenever the question matches the standard family. New IDs are allowed only when no canonical family fits; they must be stable `snake_case` labels and must not encode ticker/quarter.
+
+| ID | Use |
+|----|-----|
+| `guidance_delta` | Current-quarter guidance vs prior guidance |
+| `consensus_vs_actual` | Current-quarter consensus expectations + reported actuals |
+| `prior_financials` | Prior-quarter / historical financial baselines from XBRL |
+| `prior_transcript_context` | Prior earnings-call commentary / management tone context |
+| `peer_earnings` | Relevant peer earnings or peer reaction context |
+| `sector_context` | Broader sector or macro context that should frame the event |
+| `inter_quarter_8k` | Non-earnings 8-K events between earnings dates |
+| `significant_moves` | Significant inter-quarter stock-move days |
+| `inter_quarter_news` | Channel-filtered inter-quarter news narrative |
+
+`anchor_flags` derive from these canonical IDs plus `guidance_history`, so the planner should reuse them instead of inventing near-duplicates.
+
 **Valid `fetch.agent` values (I7 — locked catalog)**:
 
 The planner must only use agent names from this catalog. Any other value is a validation error. Catalog is extensible — new agents are added here when built.
@@ -475,6 +516,7 @@ The planner must only use agent names from this catalog. Any other value is a va
 | `neo4j-xbrl` | Structured financials | EPS, revenue, margins, balance sheet items from 10-K/10-Q | Prior-quarter financials, YoY comparisons, trend data | **DONE** |
 | `neo4j-entity` | Company metadata | Sector, industry, market cap, price series, dividends, splits | Peer identification, sector context, historical price data | **DONE** |
 | `alphavantage-earnings` | Consensus estimates | EPS/revenue consensus, actuals, surprise, earnings calendar | Beat/miss analysis, expectation anchors | **DONE** |
+| `yahoo-earnings` | Yahoo Finance wrapper | Earnings dates with EPS estimate/actual/surprise, analyst upgrades/downgrades | Beat/miss history, earnings date confirmation, analyst rating/PT history | **DONE** — PIT-safe for exposed ops (`earnings`, `upgrades`); current-state estimates/calendar remain excluded from the agent |
 | `perplexity-search` | Web search | Raw URLs and snippets from web search | Broad coverage gap-fill, recent events not in structured sources | **DONE** |
 | `perplexity-ask` | Web Q&A | Single-fact answers with citations | Quick lookups (e.g., "What is {TICKER}'s current dividend yield?") | **DONE** |
 | `perplexity-reason` | Web reasoning | Multi-step analysis with chain-of-thought | "Why" questions, causal analysis, comparisons | **DONE** |
@@ -500,8 +542,13 @@ Note: planned agent names are provisional — final names locked when built. Cur
 
 **Tier guidance** (soft — planner decides, but these are typical priority patterns):
 - **Tier 0 (primary)**: `neo4j-*` and `alphavantage-earnings` — structured, fast, reliable
-- **Tier 1 (fallback)**: `bz-news-api`, `perplexity-search`, `perplexity-ask`, `perplexity-sec` — broader coverage, slower
+- **Tier 1 (fallback)**: `yahoo-earnings`, `bz-news-api`, `perplexity-search`, `perplexity-ask`, `perplexity-sec` — broader coverage or cross-checks, slower
 - **Tier 2 (last resort)**: `perplexity-research`, `perplexity-reason` — expensive, use when structured sources returned empty
+
+**Yahoo planner usage rule (v1)**:
+- `yahoo-earnings` is valid for planner use, but only for the agent's exposed PIT-safe wrapper ops: `earnings` and `upgrades`.
+- Do **not** use `yahoo-earnings` as the primary source for historical consensus estimates or calendar snapshots. For historical consensus, use `alphavantage-earnings`.
+- In live mode, Yahoo may still be useful as a cross-check, but the planner should treat it as supplemental rather than default.
 
 ### 2c. Predictor — DRAFT
 
@@ -590,7 +637,7 @@ Core dimensions are the predictor's reasoning framework, not a rigid checklist. 
     "Beat consensus EPS by 15% — largest surprise in 8 quarters",
     "FY guidance raised, first time in 3 quarters"
   ],
-  "data_gaps": ["sector peer earnings", "management tone from transcript"],
+  "data_gaps": ["peer_earnings", "transcript_context"],
   "analysis": "Free-form synthesis. No forced dimensions.",
   "predicted_at": "2024-11-07T14:30:00Z",
   "model_version": "claude-opus-4-6",
@@ -599,6 +646,20 @@ Core dimensions are the predictor's reasoning framework, not a rigid checklist. 
 ```
 
 Required fields: all fields above are required. `data_gaps` is required but can be empty (`[]`).
+
+**Canonical `data_gaps` values (v1)**:
+- `consensus`
+- `prior_guidance`
+- `prior_financials`
+- `transcript_context`
+- `peer_earnings`
+- `sector_context`
+- `inter_quarter_8k`
+- `significant_moves`
+- `inter_quarter_news`
+- `operating_metric_consensus`
+
+Use these exact strings where applicable. Avoid prose in `data_gaps`; free-form explanation belongs in `analysis`.
 
 Deterministic rules (must hold):
 1. `confidence_bucket` from `confidence_score`: `low 0-24`, `moderate 25-49`, `high 50-74`, `extreme 75-100`.
@@ -759,6 +820,18 @@ The core of the system's ability to improve. Each attribution writes a `feedback
 Caps enforce signal quality — force the learner to prioritize the most important observations rather than dumping everything.
 Required array fields may be empty when no valid item exists; do not add filler just to hit caps.
 
+**Canonical `missing_inputs` values (v1)**:
+- `transcript`
+- `10-Q`
+- `10-K`
+- `presentation`
+- `post_event_news`
+- `peer_reactions`
+- `sector_context`
+- `xbrl_actuals`
+
+Use these exact strings for optional unavailable learner inputs. Hard blockers (`prediction/result.json`, `daily_stock`) should block execution rather than appear in `missing_inputs`.
+
 Flow:
 ```
 Q(n) attribution/result.json [with feedback]
@@ -849,7 +922,7 @@ Validation (Q10) — block when output can't be trusted for its purpose, continu
 Crash recovery (Q15) — file-authoritative state makes this simple:
 - `result.json` existence = done. No result.json = not done.
 - Crash mid-quarter → next run re-processes from scratch (planner → fetch → predictor). Idempotent.
-- `context.json` without `result.json` = partial state, safe to overwrite.
+- `context_bundle.json` without `result.json` = partial state, safe to overwrite.
 - Write result.json via temp file + atomic rename to prevent half-written files.
 
 ---
@@ -883,14 +956,29 @@ How data is fetched, sources available, PIT enforcement: see `DataSubAgents.md`.
 
 ```
 earnings-analysis/Companies/{TICKER}/events/
-  event.json                         ← rebuilt each run
+  event.json                         ← rebuilt each run (historical discovery via get_quarterly_filings)
+  live_state.json                    ← written by orchestrator in live mode after prediction completes
   {quarter_label}/
     planner/fetch_plan.json          ← persisted for debugging/auditing what data was requested vs received
-    prediction/context.json          ← written once, never overwritten
+    prediction/context_bundle.json   ← written once, never overwritten
     prediction/result.json           ← existence = done
     attribution/context.json
     attribution/result.json          ← contains embedded `feedback` block consumed in later-quarter planner/predictor context
 ```
+
+**`live_state.json`** (live mode only): Written by the orchestrator after live prediction completes. Maps the live 8-K accession to the derived quarter_label so the external trigger daemon (`EarningsTrigger.md`) can locate result files without deriving fiscal quarter identity itself.
+
+```json
+{
+    "accession_8k": "0001234-26-000123",
+    "quarter_label": "Q1_FY2026",
+    "filed_8k": "2026-03-18T16:30:00-05:00",
+    "predicted_at": "2026-03-18T16:45:00Z",
+    "accession_10q": "0001234-26-000100"  // filled if 10-Q already existed at prediction time, null if not yet filed (4.9% of cases have 10-Q before 8-K)
+}
+```
+
+Not written in historical mode (historical uses `event.json` for quarter identity). Write-once per live cycle; overwritten if a new live 8-K triggers a new prediction.
 
 **Aggregation tooling (Q8+Q9 resolved — separate from orchestrator)**:
 
@@ -902,6 +990,7 @@ The orchestrator's job is predict + learn. Aggregation (building cross-quarter s
   - Output: `earnings-analysis/summary.csv` (single file, all tickers, all quarters)
   - Fields: `ticker|quarter|direction|confidence_score|confidence_bucket|magnitude_bucket|signal|actual_return|correct`
   - Invoke: `python3 scripts/earnings/build_summary.py` (no args = all tickers, or `--ticker NOG`)
+  - Build timing: implement this early, before predictor/learner calibration work. Measurement should come before prompt iteration.
 - **Automation hook (future)**: a PostToolUse or Stop hook on the orchestrator could auto-trigger `build_summary.py` after each run. Not required for v1 — run manually when needed.
 
 **Legacy file status**:
@@ -934,7 +1023,7 @@ One question at a time. Reprioritize after every input.
 | Q12 | Confidence representation: bucket-only or numeric+bucket? (prediction and attribution) | P0 | **Resolved**: Numeric conviction score (0-100) + bucket (`low` 0-24, `moderate` 25-49, `high` 50-74, `extreme` 75-100). Score is ranking, not probability. Bucket drives action; score enables calibration and within-bucket ranking. |
 | Q13 | `guidance-inventory` wired in or gap? | P1 | **Resolved**: Decoupled (per guidanceWIP.md R8). Orchestrator reads pre-existing `guidance-inventory.md` file at bundle assembly time — does NOT invoke the skill. Guidance build/update is a separate workflow. Empty string if file missing. Implementation details in `guidanceWIP.md`. |
 | Q14 | Skip historical pattern when no prior attribution? | P1 | **Resolved**: No special handling. First quarter for a ticker simply has empty U1 arrays (no `predictor_lessons`, no `planner_lessons`). Planner and predictor already handle empty feedback naturally — they reason from 8-K + available data alone. No skip logic needed. |
-| Q15 | Crash mid-quarter — retry or cleanup? | P0 | **Resolved**: File-authoritative = idempotent. No result.json = not done → re-process from scratch. context.json without result.json = safe to overwrite. Atomic write (temp + rename) prevents half-written files. See §2d failure policy. |
+| Q15 | Crash mid-quarter — retry or cleanup? | P0 | **Resolved**: File-authoritative = idempotent. No result.json = not done → re-process from scratch. context_bundle.json without result.json = safe to overwrite. Atomic write (temp + rename) prevents half-written files. See §2d failure policy. |
 | Q16 | State — file-based or hybrid with Claude Tasks? | P0 | **Resolved**: File-authoritative state. Claude Tasks optional as in-run mirror only; files are the durable source of truth and win on conflict. See §2a, §6. |
 | Q17 | Multi-ticker — batch or single? | P2 | Open |
 | Q18 | Prediction call enum — `up/down/flat` or `long/short/hold` (or both)? | P0 | **Resolved**: `long/short/hold` — trading action language, not market description. |
@@ -1024,11 +1113,20 @@ Note: Interface contracts use I-prefix (I1-I7) to avoid collision with §6 Archi
 | I4 | **Orchestrator → Learner input** | Learner does NOT get a bundle. 3 minimal inputs: prediction/result.json path, actual returns, context_bundle.json path (reference only). Fetches its own data. | **Resolved** — spec in §2a. |
 | I5 | **Guidance → Orchestrator bridge** | Raw markdown passthrough. Full `guidance-inventory.md` content into `guidance_history`. Empty string if missing. | **Resolved** — spec in §2a. |
 | I6 | **Full attribution/result.json schema** | Full `attribution_result.v1` schema: actual_return, primary_driver (with evidence_refs), contributing_factors, surprise_analysis (nullable), analysis_summary, missing_inputs, feedback block, audit refs. | **Resolved** — full schema in §2d. |
-| I7 | **Planner agent catalog** | 13 valid agents across 4 domains (Neo4j 6, Alpha Vantage 1, Benzinga API 1, Perplexity 5). Tier guidance for priority patterns. Excluded agents listed. | **Resolved** — catalog in §2b. |
+| I7 | **Planner agent catalog** | 14 valid agents across 5 domains (Neo4j 6, Alpha Vantage 1, Yahoo 1, Benzinga API 1, Perplexity 5). Tier guidance for priority patterns. Exposed Yahoo ops are PIT-safe; Yahoo consensus/calendar remain excluded from historical use. | **Resolved** — catalog in §2b. |
 
 ### Phase B: Module Implementation Details (one at a time, in order)
 
 Each module gets its own plan file. Fill details there, not in this master doc.
+
+**B0: Summary / Evaluation Tooling** (do early)
+
+Build this before calibration-heavy prompt iteration so improvements can be measured immediately.
+
+Key items to resolve:
+- Implement `scripts/earnings/build_summary.py`
+- Define the minimal eval view built from `prediction/result.json` + `attribution/result.json`
+- Ensure summary generation is deterministic and rerunnable from files alone
 
 **B1: Planner + Predictor** (together — tightly coupled core loop)
 
@@ -1112,7 +1210,7 @@ Do this AFTER all module details are locked. Mechanical, not architectural.
 
 18. §8 added: planning roadmap with Phase A (interface contracts), Phase B (module details), Phase C (consistency pass). Driven by gap analysis of what's locked (outputs) vs what's missing (inputs, prompts, frontmatter).
 19. I1-I6 resolved (renamed from A-prefix to I-prefix to avoid collision with §6 Architecture Decisions). `context_bundle.v1` JSON schema locked in §2a. Planner receives subset (8k + u1 + guidance). Predictor receives full bundle. Learner does NOT get a bundle — receives 3 minimal inputs (prediction result, actual returns, context_bundle ref) and fetches its own data. Guidance bridge (I5): raw markdown passthrough. Full `attribution_result.v1` schema locked in §2d (I6): primary_driver + contributing_factors with evidence_refs, nullable surprise_analysis, analysis_summary (1-3 paragraphs), prediction_comparison fields aligned with predictor output. "Ready-to-build" line updated (was stale).
-20. I7 resolved: Planner agent catalog locked in §2b. 13 valid agents across 4 domains (Neo4j 6, Alpha Vantage 1, Benzinga API 1, Perplexity 5). Added `neo4j-vector-search` (semantic similarity across News + QAExchange). Source: DataSubAgents.md matcher table + actual `.claude/agents/*.md` files. Tier guidance included. Excluded agents listed. **All Phase A interface contracts (I1-I7) now resolved.** §5 next-question pointer updated to Phase B.
+20. I7 resolved: Planner agent catalog locked in §2b. 14 valid agents across 5 domains (Neo4j 6, Alpha Vantage 1, Yahoo 1, Benzinga API 1, Perplexity 5). Added `neo4j-vector-search` (semantic similarity across News + QAExchange) and later confirmed `yahoo-earnings` is planner-safe for exposed wrapper ops (`earnings`, `upgrades`). Source: DataSubAgents.md matcher table + actual `.claude/agents/*.md` files. Tier guidance included. Excluded agents listed. **All Phase A interface contracts (I1-I7) now resolved.** §5 next-question pointer updated to Phase B.
 
 ### Open Items (migrated from audit-fixes.md 2026-02-15)
 
@@ -1193,7 +1291,7 @@ Currently the scanner captures only the earnings date/time. AV and Yahoo both pr
 
 **PIT safety**: Scanner fetches consensus the night before earnings → naturally PIT-safe for live mode (earnings haven't been reported yet). `consensus.fetched_at` records the exact capture time for audit.
 
-**PIT caveat for historical backtesting**: Pre-fetched consensus from the scanner is only PIT-safe for LIVE predictions (fetched before earnings drop). For HISTORICAL backtesting, the planner/predictor still needs PIT-gated consensus — i.e., "what was the street estimate at the time of the 8-K filing?" This is already handled by the `alphavantage-earnings` agent with `--pit` mode (AV revision buckets are coarsely PIT-safe). **Yahoo Finance has no PIT mechanism** — `yfinance` returns current-state data only, with no way to query "what was consensus on date X." If Yahoo is ever used as a data source for the planner/predictor (beyond the scanner's tie-break role), it would need a PIT wrapper — either (a) capture and persist snapshots from the scanner's nightly runs and serve those as historical PIT data, or (b) restrict Yahoo to live-mode only. AV's revision buckets (7/30/60/90d) remain the only PIT-verifiable consensus source for historical mode.
+**PIT caveat for historical backtesting**: Pre-fetched consensus from the scanner is only PIT-safe for LIVE predictions (fetched before earnings drop). For HISTORICAL backtesting, the planner/predictor still needs PIT-gated consensus — i.e., "what was the street estimate at the time of the 8-K filing?" This is already handled by the `alphavantage-earnings` agent with `--pit` mode (AV revision buckets are coarsely PIT-safe). Yahoo is now more nuanced than the old design: the `yahoo-earnings` wrapper exposes PIT-safe `earnings` and conservative PIT-safe `upgrades`, but Yahoo **current-state** estimates/calendar still have no as-of-date query. AV's revision buckets (7/30/60/90d) remain the only PIT-verifiable consensus source for historical mode.
 
 ### Option B: Track `reported_at` for downstream consumers
 
@@ -1233,7 +1331,7 @@ All require `{"Host": "localhost:8000"}` header (StreamableHTTP routing).
 | Module | Neo4j | Yahoo Finance | Notes |
 |--------|-------|---------------|-------|
 | `/extract` (extraction worker) | **Yes** (reads graph, writes via scripts) | No | Extraction is graph-in, graph-out. No live market data needed. |
-| Planner | **Yes** (reads 8-K, guidance history) | Maybe | Planner reads graph context. Yahoo consensus could supplement AV for live mode tie-breaking (see §7 PIT caveat). |
+| Planner | **Yes** (reads 8-K, guidance history) | Maybe | Planner reads graph context. Yahoo is valid as a supplemental data agent for earnings history and upgrades; use AV, not Yahoo, for historical consensus. |
 | Predictor | No (bundle-only, doesn't fetch) | No | Receives pre-assembled context bundle. No direct data access. |
 | Learner/Attribution | **Yes** (reads realized returns, transcripts) | **Yes** | Post-event analysis benefits from live analyst targets, recommendations, earnings history, institutional holder changes. |
 | Orchestrator | **Yes** (status tracking, discovery) | Maybe | Step 3b data fetch fan-out may use Yahoo as a data source via sub-agents. |
@@ -1272,13 +1370,18 @@ options = ClaudeAgentOptions(
 
 ### PIT Constraint (Critical)
 
-Yahoo Finance returns **current-state data only** — no way to query "what was consensus on date X." This means:
+Yahoo Finance is split into two classes of behavior:
+
+- `yahoo-earnings` wrapper ops `earnings` and `upgrades` are PIT-safe for historical use. `earnings` uses `Earnings Date <= PIT` and excludes upcoming rows; `upgrades` uses a conservative date-only filter that excludes the PIT day.
+- Yahoo current-state estimates/calendar tools remain non-PIT for historical use because they do not provide an as-of-date query.
+
+This means:
 
 - **Live mode**: Yahoo data is PIT-safe by definition (future data doesn't exist yet). Safe for planner, predictor, learner.
-- **Historical backtesting**: Yahoo data is **NOT PIT-safe**. Must not be used for historical predictions. Alpha Vantage revision buckets (7/30/60/90d) remain the only PIT-verifiable consensus source for historical mode.
+- **Historical backtesting**: Yahoo wrapper ops `earnings` and `upgrades` are safe. Yahoo current-state estimates/calendar are **NOT** PIT-safe. Alpha Vantage revision buckets (7/30/60/90d) remain the only PIT-verifiable consensus source for historical mode.
 - **Learner**: Always post-event, so PIT is not a constraint. Yahoo is fully safe here.
 
-Any worker using Yahoo Finance in historical mode must either (a) gate it behind a `mode == "live"` check, or (b) use it only for non-PIT-sensitive data (e.g., company info, sector classification, insider roster — things that don't change materially around earnings).
+Any worker using Yahoo Finance in historical mode must either (a) use only the PIT-safe wrapper ops (`earnings`, `upgrades`), or (b) gate current-state Yahoo tools behind `mode == "live"`.
 
 ### K8s Deployment Status
 
