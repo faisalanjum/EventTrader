@@ -674,6 +674,16 @@ QUEUE_MAP = {
 
 **Daemon high availability**: Unlike the guidance daemon (single replica), the earnings daemon runs **2 replicas** with pod anti-affinity (prefer different nodes). The daemon is stateless — Redis leases prevent duplicate enqueues, so concurrent instances are safe. This minimizes the risk of missing the tight ~77-minute `hourly_stock IS NULL` detection window — survives single-node failures without widening the detection query. Step B1.5 (recovery via `daily_stock IS NULL`) provides a safety net for any events that slip through. At default cutoff (60min), missed events are logged explicitly rather than silently dropped; set `LIVE_PREDICTION_CUTOFF_MINS` > 77 for actual recovery processing.
 
+**Cross-pipeline throttling**: All workers share the same Claude API quota and the same `is_over_usage_threshold()` mechanism (`extraction_worker.py:99`). Priority is achieved through **differential `DAILY_INTERACTIVE_PCT` env vars** per K8s deployment — lower value = more aggressive (pauses later, consumes more budget):
+
+```
+extraction-worker (guidance):      DAILY_INTERACTIVE_PCT=10    ← unchanged (0% regression)
+earnings-worker-historical:        DAILY_INTERACTIVE_PCT=7.5   ← slightly aggressive (has deadline)
+earnings-worker-live:              DAILY_INTERACTIVE_PCT=2     ← most aggressive (trade signal)
+```
+
+Effect at 55% usage, 5 days left: live threshold=90% (runs), guidance threshold=50% (pauses), historical threshold=62.5% (runs). Live almost always runs. Historical gets more room than guidance (it has a deadline — must finish before 8-K arrives). Within each pipeline, both daemons sort enqueue order by nearest earnings date, so imminent tickers' prerequisite chains complete first. Rate limit detection (`RATE_LIMIT_PATTERN`) is the universal safety net if all thresholds are exceeded.
+
 **Dead-letter queue**: Worker retries up to `MAX_RETRIES` (default 3). After exhaustion, payload goes to `{queue}:dead`. Daemon checks dead-letter before enqueueing all modes (historical, live, learn) — skips tickers with terminal failures. For learn mode, dead-letter matching is per-pair (8-K + 10-Q accession) so a different 10-Q filing won't be blocked. `--force` flag overrides all dead-letter checks. Mirrors `extraction_worker.py:61-62,621-630`.
 
 **Learner 7-day minimum**: Learner never fires earlier than 7 days after 8-K, even if 10-Q already exists. Ensures market settled, analyst coverage published, post-event news available. Rule: `max(filed_8k + 7d, 10-Q arrival)`. Configurable via `LEARNER_MIN_DAYS`.
