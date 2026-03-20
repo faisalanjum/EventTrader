@@ -762,6 +762,19 @@ This is the CLI equivalent of the SDK's `settings=` parameter. Both are runtime-
 | 2 | **`--settings` CLI flag** | Inherently | No | Bash scripts, manual invocation |
 | 3 | `settings.json` patch + flock | Via flock | Yes | Legacy, not recommended |
 
+**5-pod concurrent test (simulating K8s multi-pod):**
+
+5 tickers (AAPL/CRM/MSFT/NVDA/AMZN) launched simultaneously, each as a separate `claude -p` process with its own `--settings` overlay. Results:
+
+| Check | Result |
+|-------|--------|
+| Read isolation (5/5 correct markers) | ✅ |
+| Write isolation (5/5 pod-proof.md in correct dirs) | ✅ |
+| Cross-contamination (25 pair checks) | ✅ ALL CLEAN |
+| settings.json modified? | ✅ NOT SET (untouched) |
+
+This proves the pattern works at production concurrency levels. Each pod/process is fully independent — no shared state, no locks, no file patching.
+
 Proof files: `earnings-analysis/test-outputs/test-v180-memory-*.txt`
 
 #### 2. `modelOverrides` — Remap Model Picker to Custom IDs (v2.1.73)
