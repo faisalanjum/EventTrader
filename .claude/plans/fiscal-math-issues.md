@@ -1,8 +1,20 @@
-# Fiscal Math — Remaining Issues
+# Fiscal Math Issues
 
 Date: 2026-03-19
 Status: Investigation complete, fix TBD
-Related: Session `get_quarterly_filings` (this session)
+Related: Session `get_quarterly_filings`
+
+---
+
+## TL;DR
+
+**Fixed today:** `get_quarterly_filings.py` — fiscal labeling (XBRL-direct, 99.94% accurate) and dedup (min-lag, 0 wrong picks). Fully fixed and ready for the earnings orchestrator.
+
+**Still broken:** One live function — `build_guidance_period_id()` in `guidance_ids.py` — calls `_compute_fiscal_dates()` with the wrong FYE month for 18 retailers. Guidance-only issue; does not affect `get_quarterly_filings.py` or the earnings orchestrator.
+
+**~3.3% of guidance items** (~173 / 5,227) are on the wrong period convention (~28-day offset). ~23% of guidance data is from affected tickers where future extractions could also produce inconsistent periods.
+
+**Functions with issues:** 2 live (`build_guidance_period_id()`, `get_derived_fye()`), 2 dead code (`fiscal_to_dates()`, `fiscal_resolve.py`) — same bugs but zero production impact.
 
 ---
 

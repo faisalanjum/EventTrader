@@ -21,7 +21,8 @@
   "env": {
     "CLAUDE_CODE_ENABLE_TASKS": "true",
     "CLAUDE_CODE_TASK_LIST_ID": "earnings-orchestrator",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "MAX_THINKING_TOKENS": "63999"
   },
   "hooks": {
     "PreToolUse": [

@@ -906,8 +906,8 @@ RETURN gu
 <h3>Reuse (Existing Code)</h3>
 <table>
 <tr><th>Content</th><th>Source</th><th>Action</th></tr>
-<tr><td><code>period_to_fiscal()</code></td><td>get_quarterly_filings.py:66</td><td><span class="tag tag-reuse">REUSE</span> calendar→fiscal</td></tr>
-<tr><td><code>get_derived_fye()</code></td><td>get_quarterly_filings.py:370</td><td><span class="tag tag-reuse">REUSE</span></td></tr>
+<tr><td><code>period_to_fiscal()</code></td><td>fiscal_math.py:13</td><td><span class="tag tag-reuse">REUSE</span> calendar→fiscal</td></tr>
+<tr><td><code>get_derived_fye()</code></td><td>get_quarterly_filings.py:244</td><td><span class="tag tag-reuse">REUSE</span></td></tr>
 <tr><td>Metric normalization</td><td>guidance-extract.md:258-269</td><td><span class="tag tag-reuse">CARRY</span> forward (§4)</td></tr>
 <tr><td>Source extraction hints</td><td>guidance-extract.md:146-199</td><td><span class="tag tag-reuse">CARRY</span> forward (§3)</td></tr>
 <tr><td>Derivation rules</td><td>guidance-extract.md:229-237</td><td><span class="tag tag-reuse">CARRY</span> forward (§5)</td></tr>
@@ -924,7 +924,7 @@ RETURN gu
 <h3>Must Build (New Code)</h3>
 <table>
 <tr><th>Content</th><th>Priority</th><th>Description</th></tr>
-<tr><td><code>fiscal_to_dates()</code></td><td><span class="tag tag-reuse">DONE</span></td><td>Implemented in get_quarterly_filings.py. XBRL lookup + deterministic fallback. 150/150 validated.</td></tr>
+<tr><td><code>fiscal_to_dates()</code></td><td><span class="tag tag-reuse">DONE</span></td><td>Implemented in the canonical orchestrator copy of get_quarterly_filings.py. XBRL lookup + deterministic fallback. 150/150 validated.</td></tr>
 <tr><td>ID normalization utility</td><td><span class="tag tag-new">P0</span></td><td>Shared helper for slugging, unit/scale canonicalization, evhash16, guidance_update_id assembly.</td></tr>
 </table>
 `

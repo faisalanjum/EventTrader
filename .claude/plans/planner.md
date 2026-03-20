@@ -72,9 +72,9 @@ Planner role: read 8-K plus prior learning context, output one `fetch_plan.json`
 
 **I7 (Planner agent catalog) is locked in `earnings-orchestrator.md §2b`.**
 
-12 available agents across 4 domains (Neo4j 5, Alpha Vantage 1, Benzinga API 1, Perplexity 5) + planned families (`WEB_SEARCH`, `SEC_API_FREE_TEXT_SEARCH`, `PRESENTATIONS`; IDs provisional and may expand). Any `fetch.agent` value not in the catalog is a validation error. Tier guidance for priority patterns included.
+14 available agents across 5 domains (Neo4j 6, Alpha Vantage 1, Yahoo 1, Benzinga API 1, Perplexity 5) + planned families (`WEB_SEARCH`, `SEC_API_FREE_TEXT_SEARCH`, `PRESENTATIONS`; IDs provisional and may expand). Any `fetch.agent` value not in the catalog is a validation error. Tier guidance for priority patterns included.
 
-**Key dependency**: All 12 existing agents need rework (PIT compliance, JSON envelope, `available_at` fields) and all 3 planned agents need to be built. This work is owned by `DataSubAgents.md` implementation — not by the planner or orchestrator. The planner consumes the catalog; it does not maintain agents. As agents are reworked/built under DataSubAgents, they become available to the planner automatically.
+**Key dependency**: The planner consumes the catalog from `earnings-orchestrator.md`; it does not build or maintain agents. Available agents are implemented under `DataSubAgents.md`. Planned agents remain invalid `fetch.agent` values until they are built and moved into the available table.
 
 Planner should only reference agents in the "available" table. Planned agents are not valid `fetch.agent` values until they are built and moved to "available."
 
@@ -204,9 +204,9 @@ Validation lives in orchestrator pipeline; planner output must be machine-checka
 
 | ID | Question | Priority | Status |
 |---|---|---|---|
-| P0 | I7 Planner agent catalog: exact allowed `fetch.agent` values + purpose + invalid-name behavior | P0 | **Resolved** — 12 agents locked in `earnings-orchestrator.md §2b`. Invalid name = validation error (block). |
+| P0 | I7 Planner agent catalog: exact allowed `fetch.agent` values + purpose + invalid-name behavior | P0 | **Resolved** — 14 agents locked in `earnings-orchestrator.md §2b`. Invalid name = validation error (block). |
 | P1 | Exact planner input payload schema from orchestrator? | P0 | **Resolved** — locked by I2 in `earnings-orchestrator.md §2a`. |
-| P2 | Agent catalog delivery: static list in prompt or external file? | P1 | Open — catalog locked (P0); delivery mechanism TBD. Recommend static embed (12 agents, changes rarely). |
+| P2 | Agent catalog delivery: static list in prompt or external file? | P1 | Open — catalog locked (P0); delivery mechanism TBD. Recommend static embed (14 agents, changes rarely). |
 | P3 | Canonical question IDs vs free-form IDs? | P1 | Open |
 | P4 | 8-K truncation/sectioning rules for large filings? | P1 | Open |
 | P5 | Sanity check policy: warn-only or block in edge cases? | P1 | **Resolved** — master plan R5: log warning, not block. Planner may have valid reasons to omit common data types; U1 self-corrects. |

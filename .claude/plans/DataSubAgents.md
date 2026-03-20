@@ -604,7 +604,7 @@ Key design decisions:
 ### Remaining
 
 - ~~Alpha Vantage (`alphavantage-earnings`)~~ **DONE** — Bash-wrapper archetype, 3 ops (earnings/estimates/calendar), PIT filtering via reportedDate (date-only, no reportTime in API), annual cross-referenced via Q4 quarterly reportedDate, estimates coarse PIT via revision buckets (7/30/60/90d), 21/21 offline tests. Methodology caveat for estimate buckets: looks true from data, but AV docs don't clearly guarantee it.
-- ~~Yahoo Finance (`yahoo-earnings`)~~ **DONE** — Bash-wrapper archetype, 3 ops (earnings/estimates/calendar). Uses `yfinance` library directly (free, no API key, external API — does NOT query Neo4j). No dedicated query skill (reuses `alphavantage-earnings` skill for shared wrapper patterns). Tested: 12/12 tests (open mode, PIT mode, gapping, edge cases, cross-source parity, pit_gate compatibility, frontmatter compliance, multi-ticker, linter).
+- ~~Yahoo Finance (`yahoo-earnings`)~~ **DONE** — Bash-wrapper archetype with 2 exposed PIT-safe ops (`earnings`, `upgrades`). Uses `yfinance` library directly (free, no API key, external API — does NOT query Neo4j). Current-state Yahoo estimates/calendar remain intentionally unexposed because they are not PIT-safe for historical use. Tested: 12/12 tests (open mode, PIT mode, gapping, edge cases, cross-source parity, pit_gate compatibility, frontmatter compliance, multi-ticker, linter).
 
   **Yahoo PIT capability per yfinance tool:**
 
@@ -677,7 +677,7 @@ TODO (leave as placeholders until API wiring step):
 1. **Hook format** (decided in §4.4):
    - All sources: `type: command` + `pit_gate.py` (Python, stdlib-only) for deterministic allow/block based on structured publication fields.
 
-*Plan Version 3.1 | 2026-03-17 | Phase 0-2 DONE. Phase 3: 5/5 DONE (all Neo4j agents PIT-complete). Phase 4: 5/5 Perplexity DONE + 1/1 Alpha Vantage DONE + 1/1 Yahoo Finance DONE. Agent count: 14 (Neo4j 6 + AV 1 + Yahoo 1 + BZ 1 + Perplexity 5). PIT-complete: 14/14 (neo4j-news, neo4j-vector-search, bz-news-api, neo4j-report, neo4j-transcript, neo4j-xbrl, neo4j-entity, perplexity-search, perplexity-ask, perplexity-reason, perplexity-research, perplexity-sec, alphavantage-earnings, yahoo-earnings). Yahoo: pit_fetch.py `--source yahoo` with 3 ops (earnings/estimates/calendar), Earnings Date PIT filtering, estimates/calendar gapped. Uses yfinance (free, no API key).*
+*Plan Version 3.1 | 2026-03-17 | Phase 0-2 DONE. Phase 3: 5/5 DONE (all Neo4j agents PIT-complete). Phase 4: 5/5 Perplexity DONE + 1/1 Alpha Vantage DONE + 1/1 Yahoo Finance DONE. Agent count: 14 (Neo4j 6 + AV 1 + Yahoo 1 + BZ 1 + Perplexity 5). PIT-complete: 14/14 (neo4j-news, neo4j-vector-search, bz-news-api, neo4j-report, neo4j-transcript, neo4j-xbrl, neo4j-entity, perplexity-search, perplexity-ask, perplexity-reason, perplexity-research, perplexity-sec, alphavantage-earnings, yahoo-earnings). Yahoo: pit_fetch.py `--source yahoo` with 2 exposed PIT-safe ops (`earnings`, `upgrades`); current-state estimates/calendar remain intentionally unexposed and gapped for historical use. Uses yfinance (free, no API key).*
 
 ---
 

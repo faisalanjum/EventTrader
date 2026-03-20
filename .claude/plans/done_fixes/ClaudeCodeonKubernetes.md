@@ -148,7 +148,7 @@ Two options:
 
 **For dry-run canary (`MODE=dry_run`):** The write path doesn't connect to Neo4j, so no `hostNetwork` needed. Test SDK + HTTP MCP in clean pod networking first.
 
-**For production write mode:** Apply the #37 fix (`GUIDANCE_NEO4J_URI` env var), eliminating `hostNetwork` entirely. Same fix needed for `get_quarterly_filings.py:50` (`NEO4J_URI` env var).
+**For production write mode:** Apply the #37 fix (`GUIDANCE_NEO4J_URI` env var), eliminating `hostNetwork` entirely. Same fix needed for the canonical orchestrator copy of `get_quarterly_filings.py` (its `NEO4J_URI` env var handling).
 
 ### Reliability
 

@@ -984,7 +984,7 @@ def _make_parser() -> argparse.ArgumentParser:
     # Perplexity / Alpha Vantage operation mode
     p.add_argument("--op", choices=["search", "ask", "reason", "research",
                                      "earnings", "estimates", "calendar", "upgrades"],
-                   help="Operation mode (perplexity: search/ask/reason/research; alphavantage: earnings/estimates/calendar; yahoo: earnings/estimates/calendar/upgrades)")
+                   help="Operation mode (perplexity: search/ask/reason/research; alphavantage: earnings/estimates/calendar; yahoo wrapper exposes earnings/upgrades only)")
     # Alpha Vantage-specific
     p.add_argument("--symbol", help="Single ticker symbol (alphavantage)")
     p.add_argument("--horizon", choices=["3month", "6month", "12month"],

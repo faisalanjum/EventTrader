@@ -882,9 +882,9 @@ For normal reruns: just rerun. MERGE + SET overwrites properties automatically. 
 
 | Content | Source | Action |
 |---------|--------|--------|
-| `period_to_fiscal()` | `get_quarterly_filings.py:66` | Reuse directly (calendar→fiscal) |
-| `get_derived_fye()` | `get_quarterly_filings.py:370` | Reuse directly |
-| `fiscal_to_dates()` | `get_quarterly_filings.py:196` | Not used by guidance extraction (fiscal-keyed Periods eliminate date computation). Kept for future actuals comparison process. |
+| `period_to_fiscal()` | `fiscal_math.py:13` | Reuse directly (calendar→fiscal) |
+| `get_derived_fye()` | `get_quarterly_filings.py:244` | Reuse directly |
+| `fiscal_to_dates()` | `get_quarterly_filings.py:67` | Not used by guidance extraction (fiscal-keyed Periods eliminate date computation). Kept for future actuals comparison process. |
 | Metric normalization | `guidance-extract.md:258-269` | Carry forward (§4) |
 | `Neo4jManager` session/driver | `neograph/Neo4jManager.py` | Reuse session plumbing, retry decorators, `execute_cypher_query()`. Do NOT use `merge_nodes()`/`merge_relationships()` for guidance writes — use direct Cypher MERGE (Decision #33). |
 | News write pattern | `neograph/mixins/news.py:278-329` | Reference pattern: direct `MERGE (n:Label {id: $id}) ON CREATE SET ... ON MATCH SET ...` via `self.manager.driver.session()`. Follow this for guidance. |

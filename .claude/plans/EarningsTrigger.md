@@ -146,7 +146,7 @@ Q2 cycle (3 months later):
 
 **Fix 1 — Live detection via `hourly_stock IS NULL` (was: "latest 8-K" query)**
 
-The original Query 2 found the "latest 8-K 2.02 per ticker." Before a new live 8-K arrives, this returns the previous quarter's historical 8-K — causing a fake live enqueue. Fixed: use `hourly_stock IS NULL` as the live signal. `hourly_stock` is computed ~77 minutes after filing (`event_time + 60min + 17min Polygon delay`). This gives a tight freshness window = "this 8-K literally just arrived," aligning with the time-sensitive trading use case. Historical uses `daily_stock IS NOT NULL` (`get_quarterly_filings.py:184`). The gap between hourly and daily computed (~1-24h) is bridged by the watch key. Daemon HA (2 replicas, pod anti-affinity) minimizes the risk of missing the ~77-minute detection window. Step B1.5 (recovery query) detects any that slip through (processes if within cutoff, logs skip if expired).
+The original Query 2 found the "latest 8-K 2.02 per ticker." Before a new live 8-K arrives, this returns the previous quarter's historical 8-K — causing a fake live enqueue. Fixed: use `hourly_stock IS NULL` as the live signal. `hourly_stock` is computed ~77 minutes after filing (`event_time + 60min + 17min Polygon delay`). This gives a tight freshness window = "this 8-K literally just arrived," aligning with the time-sensitive trading use case. Historical uses `daily_stock IS NOT NULL` in the canonical orchestrator discovery script [`get_quarterly_filings.py`](/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py#L328). The gap between hourly and daily computed (~1-24h) is bridged by the watch key. Daemon HA (2 replicas, pod anti-affinity) minimizes the risk of missing the ~77-minute detection window. Step B1.5 (recovery query) detects any that slip through (processes if within cutoff, logs skip if expired).
 
 **Fix 2 — Guidance gate scoped to historical only (was: gates everything)**
 
@@ -259,7 +259,7 @@ RETURN ticker, first.accession AS accession, first.filed AS filed
 
 **Why `hourly_stock IS NULL`**: Tight ~77-minute freshness window for trading speed. Daemon HA (2 replicas) minimizes missed-window risk; Step B1.5 detects any that slip through.
 
-**Historical boundary stays `daily_stock IS NOT NULL`** (`get_quarterly_filings.py:184`, unchanged). Daemon HA minimizes the risk of missing the ~77min window; Step B1.5 detects any that slip through.
+**Historical boundary stays `daily_stock IS NOT NULL`** in the canonical orchestrator discovery script [`get_quarterly_filings.py`](/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py#L328). Daemon HA minimizes the risk of missing the ~77min window; Step B1.5 detects any that slip through.
 
 **7-day recency filter is correctness**: Prevents false live detection of legacy NULL-return 8-Ks in the database.
 
@@ -653,7 +653,7 @@ python3 scripts/earnings_trigger_daemon.py --force            # Re-enqueue even 
 
 - `scripts/guidance_trigger_daemon.py` — untouched
 - `scripts/extraction_worker.py` — untouched
-- `scripts/earnings/get_quarterly_filings.py` — already updated separately (`MAX_LAG_HOURS=90`); daemon assumes current behavior
+- `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` — already updated separately (`MAX_LAG_HOURS=90`); daemon assumes current behavior
 - `.claude/hooks/build_orchestrator_event_json.py` — untouched
 - Any Neo4j schema — no new properties
 

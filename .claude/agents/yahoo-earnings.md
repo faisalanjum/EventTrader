@@ -1,6 +1,6 @@
 ---
 name: yahoo-earnings
-description: "Yahoo Finance earnings data: historical EPS estimates/actuals/surprise, forward consensus (EPS + revenue ranges). Use for beat/miss history, earnings date confirmation, and consensus cross-reference."
+description: "Yahoo Finance wrapper for PIT-safe earnings history and analyst upgrades/downgrades. Use for beat/miss history, earnings date confirmation, and analyst rating/PT history."
 tools:
   - Bash
 model: opus
@@ -26,9 +26,9 @@ Query earnings data through `$CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchest
 | Op | yfinance source | Returns |
 |----|----------------|---------|
 | `--op earnings` | `get_earnings_dates()` | Historical + upcoming: EPS estimate (frozen at report time), reported EPS, surprise %. PIT-safe for reported quarters. |
-| `--op upgrades` | `upgrades_downgrades` | Analyst upgrades/downgrades with firm, grade, action, price targets. 966+ rows. PIT-safe (date-only filter, excludes PIT day). |
+| `--op upgrades` | `upgrades_downgrades` | Analyst upgrades/downgrades with firm, grade, action, price targets. PIT-safe with a conservative date-only filter that excludes the PIT day. |
 
-For consensus estimates and calendar (current-state, non-PIT), use the Yahoo Finance MCP tools directly (`get_earnings_estimate`, `get_revenue_estimate`, `get_calendar`). No pit_fetch.py wrapper needed for open-mode-only data.
+Current-state Yahoo estimates/calendar are intentionally NOT part of this agent. They are not PIT-safe for historical use and should not be routed through `yahoo-earnings`.
 
 ## Workflow
 1. Parse request into wrapper arguments:
@@ -56,4 +56,4 @@ See pit-envelope skill for envelope contract, field mappings, and forbidden keys
 - Do not call MCP tools directly. Do not call raw HTTP/curl.
 - Authentication: none required (yfinance is free/unauthenticated). `pit_fetch.py` handles all access.
 - In PIT mode, never bypass hook validation.
-- For consensus estimates (non-PIT), use Yahoo Finance MCP tools directly. For PIT-safe consensus, use `--source alphavantage --op estimates`.
+- For historical consensus, use `--source alphavantage --op estimates`.

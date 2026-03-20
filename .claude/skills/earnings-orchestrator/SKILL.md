@@ -126,8 +126,11 @@ Echo `ORCHESTRATOR_COMPLETE {TICKER}`.
 
 ## Scripts
 
-Available in `scripts/earnings/`:
-- `get_quarterly_filings.py` - Get 8-K earnings events with matched 10-Q/10-K filings
+Canonical discovery script:
+- `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` - Get 8-K earnings events with matched 10-Q/10-K filings
+
+Exposed on PATH as:
+- `get_quarterly_filings`
 
 ---
 
