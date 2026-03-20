@@ -14,10 +14,11 @@ Usage: ./get_quarterly_filings.py TICKER [--all]
 Matches each 8-K to the most recent 10-Q/10-K by periodOfReport before the 8-K filing date.
 This is deterministic: the 10-Q/10-K represents the quarter whose results the 8-K announces.
 
-Validation: Filters out records where 10-Q/10-K is missing or stale (lag > 45 days from 8-K).
+Validation: Filters out records where 10-Q/10-K is missing or stale (lag > 90 days from 8-K).
 
 Fiscal year/quarter calculation:
 - FYE (fiscal year end month) is derived from 10-K period months, NOT from stored database field
+- Prefer matched filing XBRL fiscal year/period focus when available
 - 10-K = Q4 (always), 10-Q = Q1/Q2/Q3
 - Fiscal year = period.year + 1 if period_month > fye_month, else period.year
 """
@@ -256,32 +257,71 @@ def get_derived_fye(session, ticker: str) -> int:
     row = result.single()
     return row['m'] if row else 12  # Default to December if no 10-K data
 
-# Maximum allowed lag (hours) between 8-K and 10-Q filing dates
-# Normal lag is 0-7 days; >45 days indicates missing 10-Q data
-MAX_LAG_HOURS = 45 * 24  # 45 days in hours
 
-USE_FIRST_TICKERS = {
-    'ADI', 'ADSK', 'AEE', 'AFL', 'AI', 'AJG', 'ALGT', 'ALK', 'ALSN', 'ALT', 'AMD', 'AME', 'AMRC', 'AMZN', 'APO',
-    'BAH', 'BDX', 'BFAM', 'BILL', 'BLDR', 'BLMN', 'BOOT', 'BRBR', 'BSY', 'BWA',
-    'CAKE', 'CARG', 'CAT', 'CC', 'CDLX', 'CDW', 'CGNX', 'CHGG', 'CHRW', 'CHWY', 'CIEN', 'CLX', 'CMCSA', 'COUR', 'CPB', 'CSTL', 'CTVA', 'CVNA', 'CWH',
-    'DAL', 'DAN', 'DAR', 'DASH', 'DGX', 'DKS', 'DOCU', 'DOMO', 'DRI', 'DT', 'DV', 'DVN', 'DY',
-    'ECL', 'EMN', 'ENPH', 'EPAM', 'ESTC', 'ETSY', 'EVER', 'EW', 'EXPE', 'EYE',
-    'FCPT', 'FDS', 'FE', 'FLYW', 'FMC', 'FNKO', 'FRPT', 'FRSH', 'FSLY', 'FUN',
-    'GDRX', 'GKOS', 'GLW', 'GM', 'GMS',
-    'HAIN', 'HCAT', 'HII', 'HPP', 'HRMY', 'HUM', 'HXL',
-    'IBM', 'IEX', 'IIPR', 'INTU', 'IRTC', 'ISRG',
-    'JBLU', 'KSS',
-    'LII', 'LNC', 'LUV', 'LYV',
-    'MAA', 'MASI', 'MDT', 'MET', 'MKTX', 'MMM', 'MOS', 'MPW', 'MPWR', 'MRCY', 'MTCH', 'MTW', 'MUR',
-    'NBR', 'NCNO', 'NDAQ', 'NSC', 'NSP', 'NTNX', 'NUE', 'NWL',
-    'O', 'OLLI', 'OLN', 'OMCL', 'OVV', 'OXM',
-    'PANW', 'PATH', 'PFGC', 'PH', 'PHM', 'PHR', 'PK', 'PLAY', 'PLNT', 'PLTK', 'POR', 'PTEN', 'PX',
-    'RBLX', 'RGA', 'RGEN', 'RIVN', 'RKLB', 'RSG', 'RVLV',
-    'S', 'SFM', 'SHAK', 'SHLS', 'SNAP', 'SONO', 'SPR', 'SPT', 'SRE', 'SSTK', 'STT', 'SWK',
-    'TEAM', 'TECH', 'TEX', 'TFX', 'TNDM', 'TREE', 'TROW', 'TRU', 'TSLA', 'TTD', 'TWST',
-    'UPS', 'UTHR', 'VFC', 'VICI', 'VNO',
-    'WAT', 'WHR', 'WLK', 'WMG', 'WMS', 'WSO', 'ZS',
+def parse_xbrl_fiscal_identity(xbrl_year_focus, xbrl_period_focus):
+    """
+    Parse SEC XBRL fiscal identity from dei facts when available.
+
+    Returns:
+        (fiscal_year: int, fiscal_quarter: str) or None when values are missing/invalid.
+    """
+    if xbrl_year_focus is None or xbrl_period_focus is None:
+        return None
+
+    year_str = str(xbrl_year_focus).strip()
+    if not year_str.isdigit():
+        return None
+
+    period = str(xbrl_period_focus).strip().upper()
+    if period == "FY":
+        quarter = "Q4"
+    elif period in {"Q1", "Q2", "Q3", "Q4"}:
+        quarter = period
+    else:
+        return None
+
+    return int(year_str), quarter
+
+
+def should_use_xbrl_fiscal(fallback_fiscal, xbrl_fiscal) -> bool:
+    """
+    Use XBRL fiscal identity only when it is plausibly close to the period-based fallback.
+
+    This preserves the retailer/year-convention fixes (typically year delta = 1 or quarter delta = 1)
+    while filtering obvious bad-XBRL outliers documented in test_fiscal_rootcause.py.
+    """
+    if xbrl_fiscal is None:
+        return False
+
+    q_num = {"Q1": 1, "Q2": 2, "Q3": 3, "Q4": 4}
+    fallback_year, fallback_quarter = fallback_fiscal
+    xbrl_year, xbrl_quarter = xbrl_fiscal
+
+    year_diff = xbrl_year - fallback_year
+    quarter_diff = q_num[xbrl_quarter] - q_num[fallback_quarter]
+    return abs(year_diff) <= 1 and abs(quarter_diff) <= 1
+
+# Matched 10-Q/10-K filings whose XBRL fiscal identity is known-bad and
+# still leaks through should_use_xbrl_fiscal().  Keyed by periodic filing
+# accession (accession_10q), never by ticker.
+XBRL_DENY_PERIODIC_ACCESSIONS = {
+    # AES: stale FY2022 Q2 leaks through proximity guard on 2023 Q1-Q3
+    "0000874761-23-000039",
+    "0000874761-23-000071",
+    "0000874761-23-000080",
+    # WMS: stale/repeated quarter labels that still pass the proximity guard
+    "0001604028-23-000050",
+    "0001604028-24-000005",
+    "0001604028-25-000030",
+    # URBN: FY2024 labels on FY2025 periods (yd=-1, qd=0 leaks)
+    "0000950170-24-104783",
+    "0000950170-24-134967",
 }
+
+# Maximum allowed lag (hours) between 8-K and 10-Q filing dates
+# Normal lag is 0-7 days; up to 90 days covers slow filers (e.g. Q4 10-K filed 60-67 days after 8-K)
+MAX_LAG_HOURS = 90 * 24  # 90 days in hours
+
 
 QUERY = """
 MATCH (r:Report)-[pf:PRIMARY_FILER]->(c:Company)
@@ -291,11 +331,19 @@ WITH r, c ORDER BY r.created ASC
 OPTIONAL CALL (r, c) {
   MATCH (q:Report)-[:PRIMARY_FILER]->(c)
   WHERE q.formType IN ['10-Q', '10-K'] AND date(q.periodOfReport) < date(datetime(r.created))
-  RETURN q ORDER BY q.periodOfReport DESC LIMIT 1
+  WITH q ORDER BY q.periodOfReport DESC LIMIT 1
+  OPTIONAL MATCH (q)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(fp:Fact {qname: 'dei:DocumentFiscalPeriodFocus'})
+  WITH q, collect(DISTINCT fp.value) AS xbrl_periods
+  OPTIONAL MATCH (q)-[:HAS_XBRL]->(:XBRLNode)<-[:REPORTS]-(fy:Fact {qname: 'dei:DocumentFiscalYearFocus'})
+  WITH q, xbrl_periods, collect(DISTINCT fy.value) AS xbrl_years
+  RETURN q,
+         CASE WHEN size(xbrl_periods) = 1 THEN head(xbrl_periods) END AS xbrl_period_focus,
+         CASE WHEN size(xbrl_years) = 1 THEN head(xbrl_years) END AS xbrl_year_focus
 }
 RETURN r.accessionNo AS accession_8k, r.created AS filed_8k, r.market_session AS market_session_8k,
        q.accessionNo AS accession_10q, q.created AS filed_10q, q.market_session AS market_session_10q,
-       q.formType AS form_type, q.periodOfReport AS period_10q
+       q.formType AS form_type, q.periodOfReport AS period_10q,
+       xbrl_period_focus, xbrl_year_focus
 ORDER BY r.created ASC
 """
 
@@ -338,7 +386,7 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
 
                 lag_hours = (dt_10q - dt_8k).total_seconds() / 3600
 
-                # Valid if 10-Q filed within -24h to +45 days of 8-K
+                # Valid if 10-Q/10-K filed within -24h to +90 days of 8-K
                 if -24 <= lag_hours <= MAX_LAG_HOURS:
                     valid_10q = True
                     secs = abs(int(lag_hours * 3600))
@@ -347,9 +395,8 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
                 pass  # Invalid lag calculation -> treat as invalid match
 
         if valid_10q:
-            # Valid 10-Q match: calculate fiscal year/quarter
+            # Valid 10-Q/10-K match: prefer XBRL fiscal identity, fall back to period math.
             filed_10q_str = filed_10q.isoformat() if hasattr(filed_10q, "isoformat") else str(filed_10q)
-
             if hasattr(period_10q, 'year'):
                 period_year = period_10q.year
                 period_month = period_10q.month
@@ -362,7 +409,15 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
                 period_day = period_date.day
 
             form_type = r["form_type"] or "10-Q"
-            fiscal_year, fiscal_quarter = period_to_fiscal(period_year, period_month, period_day, derived_fye, form_type)
+            fallback_fiscal = period_to_fiscal(period_year, period_month, period_day, derived_fye, form_type)
+            xbrl_fiscal = parse_xbrl_fiscal_identity(r["xbrl_year_focus"], r["xbrl_period_focus"])
+            periodic_accession = (r["accession_10q"] or "").strip()
+            if periodic_accession in XBRL_DENY_PERIODIC_ACCESSIONS:
+                fiscal_year, fiscal_quarter = fallback_fiscal
+            elif should_use_xbrl_fiscal(fallback_fiscal, xbrl_fiscal):
+                fiscal_year, fiscal_quarter = xbrl_fiscal
+            else:
+                fiscal_year, fiscal_quarter = fallback_fiscal
             fiscal_year = str(fiscal_year)
 
             accession_10q = r["accession_10q"] or "N/A"
@@ -383,6 +438,7 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
 
         processed.append({
             "fiscal_key": fiscal_key,
+            "lag_hours": lag_hours if valid_10q else 99999.0,
             "row": "|".join([
                 r["accession_8k"] or "N/A",
                 filed_8k_str,
@@ -399,15 +455,11 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
 
     if dedupe:
         seen = {}
-        use_first = ticker.upper() in USE_FIRST_TICKERS
         for item in processed:
             key = item["fiscal_key"]
-            if use_first:
-                if key not in seen:
-                    seen[key] = item["row"]
-            else:
-                seen[key] = item["row"]
-        rows = list(seen.values())
+            if key not in seen or abs(item["lag_hours"]) < abs(seen[key]["lag_hours"]):
+                seen[key] = item
+        rows = [item["row"] for item in seen.values()]
     else:
         rows = [item["row"] for item in processed]
 
