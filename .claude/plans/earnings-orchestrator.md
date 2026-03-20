@@ -167,7 +167,7 @@ SDK wrapper: top-level session, `permission_mode="bypassPermissions"`.
 
 **Steps**:
 1. Discovery — `get_quarterly_filings {TICKER}` → `event.json` (hook auto-builds)
-2. Filter — skip quarters with existing `result.json`
+2. Filter — skip prediction for quarters with existing `prediction/result.json`
 3. For each pending quarter (chronological):
    a. Load all prior quarters' attribution `feedback` + guidance history (query Neo4j Guidance/GuidanceUpdate nodes for this ticker; empty if none exist — **note**: original design referenced `guidance-inventory.md` but that file does not exist; extraction pipeline writes directly to Neo4j graph via `guidance_writer.py`) and include in the context bundle.
    b. Planner (forked skill) → returns fetch plan
@@ -897,15 +897,14 @@ Tested capabilities (from AgentTeams.md):
 Phase 1: single-model learning (Claude Opus). Get calibration data, measure quality.
 Phase 2: add OpenAI as parallel independent learner + deliberation. Measure if feedback quality improves.
 
-**Learning trigger (Q28 resolved)**:
+**Learning trigger (Q28 resolved, updated 2026-03-20)**:
 - Historical: same-run (data exists, sequential quarters give U1 for free)
-- Live: delayed post-event timer intended to land after normal Q1-Q3 10-Q availability (current default N=35 days after 8-K)
-- Annual quarters: do not delay learner waiting for 10-K; if the annual filing is still unavailable at trigger time, run and record the gap in `missing_inputs`
+- Live: **deferred to next historical bootstrap** (originally N=35 day timer; replaced to avoid live-queue token competition — see `EarningsTrigger.md`). The daemon enqueues HISTORICAL when the ticker re-enters trade_ready; the orchestrator catches the missing attribution during sequential processing.
 - No source-gating — run with whatever's available, note gaps
 - Hard-fail gate: `prediction/result.json` + `daily_stock` label
 - `missing_inputs` array in learner output for U1 context
 
-Why N=35: transcript available (days), analyst coverage settled (1-2 weeks), and normal Q1-Q3 10-Q filing usually lands before the learner timer fires. Annual quarters are treated differently because the 10-K has a much longer deadline, so v1 does not block the learner waiting for it.
+Why deferred (was N=35): learner competing with live predictions on the same queue wastes urgent token budget. By deferring to the next historical bootstrap, learners run on the historical queue (batch priority) and the data is richer — 10-Q/10-K and analyst coverage are available by then. Annual quarters (10-K filed 60-90 days) are handled naturally without special exceptions.
 
 **Failure policy (Q10+Q15 resolved)**:
 
@@ -1036,7 +1035,7 @@ One question at a time. Reprioritize after every input.
 | Q25 | Planner: single-turn or multi-turn? | P0 | **Resolved**: Single-turn. Reads 8-K + U1 feedback, outputs complete fetch plan. U1 planner_lessons handles gaps across quarters. See §2b. |
 | Q26 | Judge component — which modules need one, what does it check? | P1 | **Deferred**: Reconsider later after additional calibration data. |
 | Q27 | Task creation from forked skills — validate against Infrastructure.md | P0 | **Resolved**: TaskCreate/List/Get/Update works; Task spawn blocked. See §3. |
-| Q28 | Attribution trigger policy — same run, delayed scheduled run (20-30d), or hybrid? | P0 | **Resolved**: Hybrid. Historical = same-run (data exists). Live = 35-day timer after 8-K. No source-gating; Attribution/Learner runs with available data, writes `missing_inputs` array. Hard-fail gate: `prediction/result.json` + `daily_stock` label. See §2a step 4, §2d. |
+| Q28 | Attribution trigger policy — same run, delayed scheduled run (20-30d), or hybrid? | P0 | **Resolved**: Hybrid. Historical = same-run (data exists). Live = ~~35-day timer~~ **deferred to next historical bootstrap** (updated 2026-03-20, see `EarningsTrigger.md`). No source-gating; Attribution/Learner runs with available data, writes `missing_inputs` array. Hard-fail gate: `prediction/result.json` + `daily_stock` label. See §2a step 4, §2d. |
 | Q29 | Transcript requirement by phase | — | **Resolved**: not required for prediction; useful for attribution. |
 | Q30 | Dimensions model: fixed closed set or core set + extensible additional signals? | P0 | **Resolved**: Core dimensions are soft reasoning guidance. Output extensibility handled by existing fields (`key_drivers`, `analysis`). No separate structure needed. See §2c. |
 | Q31 | Prediction horizon contract: fixed (e.g., 24h) or multi-horizon output? | P0 | **Resolved**: First full trading session (close-to-close, session-aware). Measured by `daily_stock_return` in DB. Max hold = session close (4 PM ET). Handles pre/in/post market + weekends. |
@@ -1053,7 +1052,7 @@ One question at a time. Reprioritize after every input.
 |---|----------|---------|---------|-----|
 | A1 | State | File / Tasks / Hybrid | **File-authoritative** (optional in-run task mirror) | Q16 |
 | A2 | Concurrency | Sequential / Parallel-quarter / Parallel-ticker | **Sequential** (locked) | Q5 |
-| A3 | Learning trigger | Same run / Delayed / Hybrid | **Hybrid** (historical=same-run, live=35-day timer, no source-gating) | Q28 |
+| A3 | Learning trigger | Same run / Delayed / Hybrid | **Hybrid** (historical=same-run, live=~~35-day timer~~ **deferred to next historical bootstrap**, no source-gating) | Q28 |
 | A4 | Validation | JSON Schema / Inline / Hook | **Tiered + inline** (block untrusted, continue with gaps, warn+write partial; inline code checks for cross-field deterministic rules) | Q10 Q11 |
 | A5 | Aggregation | CSV / JSON / Both / Separate | **Separate tooling** (standalone script + optional hook; not orchestrator scope) | Q8 Q9 |
 | A6 | Feedback loop | Prompt / Files / Library | **Embedded in attribution result.json** (all raw, no digest, no curation) | Q6 Q7 |
