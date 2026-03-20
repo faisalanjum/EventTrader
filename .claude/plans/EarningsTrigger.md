@@ -669,7 +669,7 @@ Additionally, the orchestrator must write `live_state.json` after live predictio
 
 This is a prerequisite tracked separately in `earnings-orchestrator.md` (Phase B). The daemon design is correct regardless — when the orchestrator is built to spec, the daemon will drive it.
 
-**Sync note**: `earnings-orchestrator.md` operational sections have been updated to reflect the deferred learner design (2026-03-20). Remaining N=35 references are in append-only bot notes (lines 18, 34) which are historical records, not active specifications.
+**Sync note**: `earnings-orchestrator.md` has been updated to reflect the deferred learner design (2026-03-20). Both plans are aligned.
 
 ### What I Deliberately Did NOT Include
 

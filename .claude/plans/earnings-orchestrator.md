@@ -1,38 +1,5 @@
 # Earnings Orchestrator
 
-## Active Collaboration Context (Locked)
-
-- Two bots edit this doc in parallel: **ChatGPT** and **Claude**. Re-read full doc before every edit.
-
-Bot-to-bot notes (append-only; mark handled, do not delete history):
-- [2026-02-07 00:00] [ChatGPT] Brain dump considered complete enough to begin Phase 0 decision sequence; start with Q23.
-- [2026-02-07 00:00] [ChatGPT] Added locked real-time priority: full required data/analysis first, then minimize runtime to a few minutes.
-- [2026-02-07 00:00] [Claude] Confirmed. Speed lever = step 3b parallel fan-out (two-pass hybrid). Same module both modes. Q4+Q27 resolved.
-- [2026-02-07 00:00] [ChatGPT] Transcript rule locked: not required for prediction timing; valuable input for attribution.
-- [2026-02-07 00:00] [ChatGPT] Q16 resolved: file-authoritative state; optional in-run task mirror for visibility only (files win on conflict).
-- [2026-02-07 00:00] [Claude] Ack Q16. Primitive selection rule noted — will evaluate sub-agents vs teams for each decision. Q5 resolved: sequential quarters.
-- [2026-02-07 00:00] [Claude] Agree with ChatGPT on Q33 hybrid. Added Q34 for magnitude threshold calibration (defer to historical data). Q33 resolved.
-- [2026-02-07 00:00] [Claude] Ack ChatGPT's Q1/Q2/Q19 resolution, tiered missing-data policy, prediction output contract, live decision-cutoff concept. All aligned.
-- [2026-02-07 00:00] [Claude] A12 locked: multi-model deliberation on Attribution/Learner (not Predictor). Reasons: no speed constraint, compound returns via U1, richer interpretation space. Proxy pattern tested. Phased rollout: calibrate single-model first, then enable multi-model.
-- [2026-02-07 00:00] [Claude] Q6+Q7 resolved, A6 locked: self-learning loop (U1) = feedback embedded in attribution/result.json. Full prior history passed raw — no digest, no scoring, no decay. Fields: prediction_comparison, what_worked, what_failed, why, predictor_lessons, planner_lessons. The LLM IS the digest.
-- [2026-02-07 00:00] [Claude] Q28 resolved, A3 locked: Hybrid trigger. Historical = same-run (data exists, sequential gives U1 for free). Live = N-day timer (N=35). No source-gating — learner runs with whatever's available, notes gaps. Minimum runnable: prediction/result.json + daily_stock label. missing_inputs field in output for U1 context.
-- [2026-02-07 00:00] [Claude] Q25 locked: single-turn planner. Data flow locked: predictor is bundle-only (no data fetching), orchestrator fetches via parallel Task sub-agents (DataSubAgents), filtered-data deprecated. data_gaps field in prediction output feeds U1. No fixed minimum sets, no formal fallback chains — planner is smart, orchestrator handles gaps naturally, U1 self-corrects.
-- [2026-02-07 00:00] [ChatGPT] Pending skill-sync note: `earnings-prediction/SKILL.md` still allows `Task`/`Skill` and lists `filtered-data`. Plan remains source of truth (predictor bundle-only); enforce in earnings-prediction skill update pass.
-- [2026-02-07 00:00] [Claude] Q10+Q15 resolved: tiered validation (block untrusted, continue with gaps, warn+write partial learner output) + idempotent crash recovery (file-authoritative, atomic writes, re-process on crash). Rejected u1_partial flag — `missing_inputs` already makes incompleteness explicit.
-- [2026-02-07 00:00] [Claude] Component rename: Attributor → Attribution/Learner. Triad is now Planner/Predictor/Attribution-Learner. "attribution" is kept for file paths (attribution/result.json) and the financial concept (return attribution).
-- [2026-02-07 00:00] [Claude] Q13 resolved (minimal contract): guidance-inventory runs as Step 0 per ticker before the quarter loop. Details (sources, update triggers, cost, schema) deferred to `guidanceInventory.md`. Orchestrator only needs: call guidance-inventory → receive guidance history → include in context bundle. Sub-agents pattern confirmed (not teams).
-- [2026-02-07 00:00] [Claude] Q20 resolved: rubric-guided holistic scoring. No weighted formula — LLM reasons through dimensions naturally, assigns confidence_score as holistic conviction level. Rubric anchors per bucket prevent drift. U1 self-corrects systematic bias. Aligns with "dimensions are reasoning framework, not rigid checklist."
-- [2026-02-07 00:00] [Claude] Q3 resolved: no explicit stop/resume logic. File-authoritative + idempotent re-process (Q15) + Step 2 filter (skip existing result.json) = automatic resume. Scope-limiting flags deferred to SDK contract (Q22).
-- [2026-02-07 00:00] [Claude] Q26 deferred: judge component. Reconsider later after additional calibration data.
-- [2026-02-07 00:00] [ChatGPT] Policy/code mismatch is still real: plan says predictor cannot fetch, but skill config still allows it (`.claude/skills/earnings-prediction/SKILL.md:10`, `.claude/skills/earnings-prediction/SKILL.md:15`, `.claude/skills/earnings-prediction/SKILL.md:25`).
-- [2026-02-07 00:00] [Claude] 5 refinements locked after exhaustive architecture review (93% confidence — remaining 7% = unvalidated runtime assumptions that Phase 1 resolves). (R1) Extended thinking for predictor + attribution/learner. (R2) Persist planner fetch plan. (R3) model_version + prompt_version in result.json. (R4) Background sub-agents with timeout for live mode v2. (R5) Planner sanity check for core data types.
-- [2026-02-07 00:00] [Claude] Q11 resolved: inline validation for v1. Deterministic derivation rules are already code logic; JSON Schema can't validate cross-field rules (score↔bucket, direction+confidence→signal). Extract JSON Schema later if needed for external tool sharing.
-- [2026-02-07 00:00] [Claude] Q34 resolved: magnitude thresholds locked at `<2%`=small, `2-4%`=moderate, `4%+`=large. Symmetric, fixed for v1. Derived from midpoint of expected_move_range_pct. Wider bands than initial defaults because sub-2% moves are noise for trading. Per-ticker volatility-adjusted thresholds deferred to v2.
-- [2026-02-07 00:00] [Claude] Q8+Q9 resolved: aggregation is NOT orchestrator scope. Separate `build_summary.py` reads result.json → summary.csv. Automatable via hook later. Legacy files (predictions.csv, prediction_processed.csv, guidance_processed.csv, news_processed.csv) marked as OLD DESIGN — superseded by per-quarter result.json and per-ticker guidance-inventory.md.
-- [2026-02-07 00:00] [Claude] Planner output contract finalized: replaced ChatGPT draft (source_chain + execution field) with tiered array-of-arrays schema after deep analysis of all data fetching patterns in codebase (news-impact, news-driver, guidance-inventory, filtered-data, DataSubAgents). Key insight: `fetch` is array of tiers — within tier = parallel Task fan-out, across tiers = sequential fallback. Eliminates redundant `execution` field and ambiguous `when: if_empty`. `agent` field maps directly to Task `subagent_type`.
-- [2026-02-18 00:00] [Claude] Q13 updated: guidance-inventory decoupled from orchestrator (per guidanceWIP.md R8/Q1). Orchestrator does NOT invoke the guidance-inventory skill — it simply reads the pre-existing `guidance-inventory.md` file. Guidance build/update is a separate workflow run independently. Step 0 removed; file-read moved into Step 3a bundle assembly.
-- [2026-03-17 00:00] [Codex] Live learner timing clarified: delayed post-event timer is intended to land after normal Q1-Q3 10-Q availability, while annual quarters do not block on 10-K and instead write `missing_inputs` when the annual filing is not yet available.
-
 ---
 
 ## 0. Principles — LOCKED
@@ -78,20 +45,6 @@ Bot-to-bot notes (append-only; mark handled, do not delete history):
 4. Lock a decision only after explicit user confirmation that they have made up their mind and want to proceed with that choice.
 
 **This doc**: sole implementation guide for a zero-context bot. Maximally concise, no information lost. Use diagrams for flows, numbered steps for implementation. Done when §5 is empty.
-
-## CHATGPT - Collaboration Guard (DO NOT DELETE)
-
-`CLAUDE INSTRUCTION`: Do not delete this section or any `CHATGPT`-prefixed block unless the user explicitly asks.
-
-1. Re-read full doc before every response/edit.
-2. All decisions provisional until user approves.
-3. Validate against `Infrastructure.md` / `AgentTeams.md`.
-4. Open questions → §5. Remove only when finalized into a main section.
-5. Question every design choice with pros/cons.
-6. One question at a time. Reprioritize after every input.
-7. Map each requirement to a tested primitive before accepting design.
-8. For architecture recommendations, explicitly check both sub-agents and teams, then pick the better fit.
-9. Independently challenge assumptions; do not finalize a decision until user explicitly confirms they have made up their mind.
 
 ---
 
