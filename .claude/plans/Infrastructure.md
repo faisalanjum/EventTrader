@@ -10,7 +10,7 @@
 
 **What this is**: Multi-layer earnings analysis system using forked skills for context isolation.
 
-**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74, retested 2026-03-14 v2.1.76):**
+**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74, retested 2026-03-14 v2.1.76, retested 2026-03-18 v2.1.78, retested 2026-03-19 v2.1.80):**
 
 | What | Status | Workaround |
 |------|--------|------------|
@@ -119,7 +119,7 @@
 | **TaskCreate without `activeForm`** | ✅ **WORKS** (v2.1.69 SDK) | `activeForm` field no longer required. Spinner falls back to task subject. |
 | **Skill colon descriptions** | ✅ **FIXED** (v2.1.69) | Skill descriptions with colons (e.g., "Triggers include: X, Y") now parse correctly. |
 | **Skills without `description:` field** | ✅ **FIXED** (v2.1.69) | Skills without description now appear in available skills list. Content used as fallback. |
-| **`includeGitInstructions` setting** | ✅ **NEW** (v2.1.69) | Set to false (or `CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS` env var) to remove commit/PR workflow instructions from system prompt. Saves tokens for automation agents. |
+| **`includeGitInstructions` setting** | ✅ **FULLY FIXED** (v2.1.69, fix v2.1.78) | Set to false (or `CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS` env var) to remove ALL git instructions from system prompt (commit/PR sections AND gitStatus). **v2.1.78 fix**: git status section was previously still appearing; now fully suppressed. Saves tokens for automation agents. |
 | **TeammateIdle/TaskCompleted stop** | ✅ **ENHANCED** (v2.1.69) | Hooks now support `{"continue": false, "stopReason": "..."}` to stop the teammate, matching Stop hook behavior. |
 | **WorktreeCreate/WorktreeRemove hooks** | ✅ **FIXED** (v2.1.69) | Plugin hooks were silently ignored; now fire correctly. |
 | **Nested skill from gitignored dirs** | ✅ **FIXED** (v2.1.69) | Security fix: skill discovery no longer loads from gitignored directories (e.g., `node_modules`). |
@@ -138,7 +138,7 @@
 | **`modelOverrides` setting** | ✅ **NEW** (v2.1.73) | Map model picker entries to custom provider model IDs. **TESTED**: Keys must be full model IDs (e.g., `claude-haiku-4-5-20251001`), NOT short names. Values must be valid model IDs. Works in both user and project settings. Picker label stays the same but API call uses the override. |
 | **Subagent model downgrade fix (Bedrock/Vertex)** | ✅ **FIXED** (v2.1.73) | `model: opus/sonnet/haiku` in agent frontmatter was silently downgraded on Bedrock, Vertex, Foundry. Now respected. |
 | **Full model IDs in agent `model:` field** | ✅ **FIXED** (v2.1.74) | Full model IDs (e.g., `claude-opus-4-5`) were silently ignored in agent frontmatter. Now respected. |
-| **`autoMemoryDirectory` setting** | ✅ **NEW** (v2.1.74) | Configure custom directory for auto-memory storage. **TESTED**: User-level settings ONLY (`~/.claude/settings.json`), NOT project-level. Absolute paths only (relative silently ignored). Dir doesn't need to pre-exist. MEMORY.md auto-loads from custom dir. **DYNAMIC PER-TICKER PROVEN**: 3-ticker test (AAPL/CRM/NVDA) with unique markers — read isolation ✅, write isolation ✅, zero cross-contamination ✅. Wrapper pattern: `jq` patch settings → run claude → restore. |
+| **`autoMemoryDirectory` setting** | ✅ **NEW** (v2.1.74) | Configure custom directory for auto-memory storage. **TESTED**: User-level settings ONLY (`~/.claude/settings.json`), NOT project-level. Absolute paths only (relative silently ignored). Dir doesn't need to pre-exist. MEMORY.md auto-loads from custom dir. **DYNAMIC PER-TICKER PROVEN**: 3-ticker test (AAPL/CRM/NVDA) with unique markers — read isolation ✅, write isolation ✅, zero cross-contamination ✅. **v2.1.80 RETEST (6 tests)**: `--settings` flag works as overlay → **eliminates jq-patching and flock**. Pattern: `claude -p --settings '{"autoMemoryDirectory":"/path/TICKER"}' "prompt"`. Concurrent 2-session test: zero cross-contamination, settings.json never modified. Write persistence across sessions confirmed. Both inline JSON and file path work. |
 | **`/context` command suggestions** | ✅ **NEW** (v2.1.74) | Actionable suggestions identifying context-heavy tools, memory bloat, capacity warnings. |
 | **Managed policy bypass fix** | ✅ **FIXED** (v2.1.74) | Managed policy `ask` rules were bypassed by user `allow` rules or skill `allowed-tools`. Now enforced. |
 | **SessionEnd hook timeout fix** | ✅ **FIXED** (v2.1.74) | SessionEnd hooks were killed after 1.5s regardless of `hook.timeout`. **TESTED**: Per-hook `timeout:` field NOT respected for SessionEnd. Fix is via `CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS` env var ONLY. 3-second hook: killed without env var, completed with env var set to 10000ms. |
@@ -158,6 +158,178 @@
 | **Context limit fix for `model:` frontmatter on 1M** | ✅ **FIXED** (v2.1.76) | Spurious "Context limit reached" errors when invoking skills with `model:` frontmatter on 1M-context sessions fixed. |
 | **BG agent kill preserves results** | ✅ **IMPROVED** (v2.1.76) | Killing a background agent now preserves partial results in conversation context. |
 | **`feedbackSurveyRate` setting** | ✅ **NEW** (v2.1.76) | Enterprise admins configure session quality survey sample rate. |
+| **Output token limits increased** | ⚠️ **CHANGED** (v2.1.77) | Opus 4.6 default max output now 64k tokens (was 32k). Upper bound for Opus/Sonnet 4.6: 128k tokens. `MAX_THINKING_TOKENS=31999` may be updatable to ~63999. |
+| **PreToolUse "allow" vs deny fix** | ✅ **FIXED** (v2.1.77) | PreToolUse hooks returning `{"decision": "allow"}` were bypassing `deny` permission rules (including enterprise managed settings). **TESTED**: deny rule now correctly wins — hook "allow" cannot override deny. |
+| **`deny` MCP permission removes tools** | ✅ **FIXED** (v2.1.78) | `deny: ["mcp__servername"]` now correctly removes MCP tools from model context (was only hiding but still visible). **TESTED**: `deny: ["mcp__yahoo-finance"]` removed all 20 tools from available-deferred-tools list. |
+| **`includeGitInstructions` full suppression** | ✅ **FIXED** (v2.1.78) | Was only suppressing commit/PR sections; git status section still appeared. **TESTED**: Both env var (`CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=true`) and setting (`includeGitInstructions: false`) now suppress ALL git sections including gitStatus. |
+| **`StopFailure` hook event** | ✅ **NEW** (v2.1.78) | 18th hook event type. Fires when turn ends due to API error (rate limit, auth failure). Cannot empirically test (requires API error). |
+| **Agent `effort`/`maxTurns`/`disallowedTools` frontmatter (plugins)** | ⚠️ **PLUGIN-ONLY** (v2.1.78) | New frontmatter fields for **plugin-shipped agents only**. **TESTED**: `maxTurns: 2` and `maxTurns: 3` NOT enforced for regular `.claude/agents/` — all steps completed. `effort:` field shows no visible effect for regular agents. |
+| **`--worktree` skills/hooks loading** | ✅ **FIXED** (v2.1.78) | Skills and hooks from the worktree directory were not loading. Now fixed. Changelog-confirmed (not empirically tested). |
+| **`--resume` subagent truncation** | ✅ **FIXED** (v2.1.78) | `cc log` and `--resume` silently truncated history on large sessions (>5MB) with subagents. Changelog-confirmed. |
+| **Stop hook infinite loop** | ✅ **FIXED** (v2.1.78) | API errors triggering stop hooks that re-fed blocking errors to the model caused infinite loops. Changelog-confirmed. |
+| **Protected dirs in `bypassPermissions`** | ✅ **HARDENED** (v2.1.78) | `.git`, `.claude`, and other protected directories were writable without prompt in `bypassPermissions` mode. Now protected. Changelog-confirmed. |
+| **`ANTHROPIC_CUSTOM_MODEL_OPTION` env var** | ✅ **NEW** (v2.1.78) | Adds custom entry to `/model` picker. Optional `_NAME` and `_DESCRIPTION` suffixed vars for display. UI-only feature. |
+| **FG/BG built-in tool sets** | ⚠️ **UNCHANGED** (v2.1.78) | **TESTED**: Built-in tools identical to v2.1.76. FG non-team: 25 built-in (8 direct + 17 deferred). BG non-team: 13 built-in (8 direct + 5 deferred). Agent tool still absent from all subagent tiers. MCP tool counts vary by configured servers. |
+| **`--resume` memory-extraction race** | ✅ **FIXED** (v2.1.77) | Recent conversation history truncated due to race between memory-extraction writes and main transcript. Changelog-confirmed. |
+| **Progress messages through compaction** | ✅ **FIXED** (v2.1.77) | Progress messages survived compaction, growing memory in long sessions. Now cleaned up. Changelog-confirmed. |
+| **Sandbox `allowRead` setting** | ✅ **NEW** (v2.1.77) | Re-allow read access within `denyRead` sandbox regions. |
+| **Streaming response text** | ✅ **NEW** (v2.1.78) | Response text now streams line-by-line as generated. |
+| **Plugin `${CLAUDE_PLUGIN_DATA}` variable** | ✅ **NEW** (v2.1.78) | Persistent state for plugins that survives updates. `/plugin uninstall` prompts before deleting. |
+| **Agent tool `resume` param removed** | ⚠️ **BREAKING** (v2.1.77) | Agent tool no longer accepts `resume` parameter. **TESTED**: Parameter ABSENT from schema. Must use `SendMessage({to: agentId})` to continue previously spawned agents. |
+| **`SendMessage` auto-resumes stopped agents** | ⚠️ **CHANGED** (v2.1.77) | SendMessage to stopped/completed agent now auto-resumes it in background instead of returning error. **TESTED**: `SendMessage({to: "resume-test-agent"})` returned `{success: true}` on completed agent (was error before). Resumed agent work execution INCONCLUSIVE (BG context may restrict tools). |
+| **`/fork` renamed to `/branch`** | ⚠️ **CHANGED** (v2.1.77) | `/fork` still works as alias. Changelog-confirmed. |
+| **`--console` auth flag** | ✅ **NEW** (v2.1.79) | `claude auth login --console` for Anthropic Console (API billing) authentication. **TESTED**: Flag present in `--help` output. Alternative to `--claudeai` (Claude subscription, default). |
+| **`claude -p` subprocess hanging fix** | ✅ **FIXED** (v2.1.79) | `claude -p` no longer hangs when spawned as subprocess without explicit stdin. **TESTED**: `subprocess.run(['claude', '-p', ...], capture_output=True)` completed in ~1.8s, return code 0. SDK/K8s relevant. |
+| **Non-streaming API fallback timeout** | ✅ **IMPROVED** (v2.1.79) | 2-minute per-attempt timeout prevents indefinite hangs during API streaming fallback. Changelog-confirmed. |
+| **Enterprise 429 retry fix** | ✅ **FIXED** (v2.1.79) | Enterprise users unable to retry on rate limit (429) errors. Changelog-confirmed. |
+| **`SessionEnd` hooks on `/resume` switch** | ✅ **FIXED** (v2.1.79) | SessionEnd hooks were not firing when switching sessions via interactive `/resume`. Changelog-confirmed. |
+| **`CLAUDE_CODE_PLUGIN_SEED_DIR` multi-path** | ✅ **ENHANCED** (v2.1.79) | Now supports multiple seed directories separated by `:` (Unix) or `;` (Windows). **TESTED**: `"/dir-a:/dir-b"` accepted without error. |
+| **`effort` frontmatter for skills/slash commands** | ✅ **NOW WORKS** (v2.1.80) | Was PLUGIN-ONLY for agents (v2.1.78). **TESTED**: `effort: high` → thinking block ACTIVE; `effort: low` → thinking block INACTIVE. Clear behavioral difference confirmed. Skills can now use `effort:` to override model effort level. |
+| **`--channels` (research preview)** | ✅ **NEW** (v2.1.80) | Allow MCP servers to push `notifications/message` into session. **TESTED**: Hidden flag, takes `<servers...>`. MCP traffic capture confirms notifications ARE received by Claude Code. **LIMITATION**: In `-p` mode, pushed messages are NOT injected into model context (no next turn). Designed for INTERACTIVE sessions only. Client sends `protocolVersion: "2025-11-25"`. Does NOT affect our extraction pipeline (uses `-p` mode). See `test-v180-channels-deep-analysis.txt` for full investigation. |
+| **`rate_limits` in statusline scripts** | ✅ **NEW** (v2.1.80) | 5-hour and 7-day rate limit windows with `used_percentage` and `resets_at` fields. Changelog-confirmed. |
+| **`source: 'settings'` plugin marketplace** | ✅ **NEW** (v2.1.80) | Declare plugin entries inline in `settings.json` without needing a marketplace git repo. Changelog-confirmed. |
+| **`--resume` parallel tool results fix** | ✅ **FIXED** (v2.1.80) | Sessions with parallel tool calls now restore all `tool_use`/`tool_result` pairs instead of showing `[Tool result missing]` placeholders on resume. Changelog-confirmed. |
+| **FG/BG built-in tool sets** | ⚠️ **UNCHANGED** (v2.1.80) | **TESTED**: FG non-team: **25** built-in (1 direct ToolSearch + 24 deferred). BG non-team: **13** built-in (1 direct ToolSearch + 12 deferred). MCP: 44 across 5 servers. No new built-in tools. Agent tool still absent from all subagent tiers. |
+
+---
+
+### Retest Summary (2026-03-19, v2.1.80) — v2.1.79-v2.1.80 (2 versions, plus v2.1.77 missed items)
+
+**16 capabilities tested (12 empirically confirmed, 1 partially confirmed, 2 changelog-confirmed, 1 deep-investigated):**
+
+| Feature | Status | Change from v2.1.78 |
+|---------|--------|---------------------|
+| FG non-team built-in tool count | **25** (unchanged) | No new built-in tools |
+| BG non-team built-in tool count | **13** (unchanged) | No new built-in tools |
+| `effort` frontmatter for skills (v2.1.80) | ✅ **NOW WORKS** | **TESTED**: `effort: high` = thinking ON, `effort: low` = thinking OFF. Was plugin-only for agents |
+| Agent tool `resume` param (v2.1.77) | ⚠️ **REMOVED** | **TESTED**: Parameter absent from schema. Use SendMessage to continue agents |
+| `SendMessage` auto-resume (v2.1.77) | ⚠️ **PARTIALLY CONFIRMED** | **TESTED**: Accepted on stopped agent (no error). Resumed work INCONCLUSIVE |
+| `--console` auth flag (v2.1.79) | ✅ **NEW** | **TESTED**: Present in `claude auth login --help` |
+| `--channels` research preview (v2.1.80) | ✅ **DEEP INVESTIGATED** | **TESTED**: MCP traffic capture proves notifications received. `-p` mode: NOT injected into context (interactive-only). See deep analysis |
+| `claude -p` subprocess fix (v2.1.79) | ✅ **FIXED** | **TESTED**: Python subprocess.run without stdin completed in ~1.8s |
+| `CLAUDE_CODE_PLUGIN_SEED_DIR` multi-path (v2.1.79) | ✅ **ENHANCED** | **TESTED**: Colon-separated multi-path accepted |
+| `source: 'settings'` plugin (v2.1.80) | ✅ **NEW** | Changelog-confirmed — inline plugin entries in settings.json |
+| `autoMemoryDirectory` via `--settings` flag | ✅ **GAME-CHANGER** | **6 TESTS**: read isolation (3 tickers), write isolation + cross-contamination, `--settings` inline JSON, concurrent lock-free, write persistence, `--settings` file path. ALL PASS. Eliminates jq-patching and flock. |
+
+**Changelog-only items (not tested, grouped by version):**
+
+**v2.1.77 (missed from previous retest):**
+| Feature | Details |
+|---------|---------|
+| Agent tool `resume` parameter removed | **BREAKING**: Must use `SendMessage({to: agentId})` instead |
+| `SendMessage` auto-resumes stopped agents | **BREAKING**: Auto-resumes in background, no error returned |
+| `/fork` renamed to `/branch` | `/fork` still works as alias |
+| Background bash tasks killed at 5GB | Prevents runaway processes filling disk |
+| Sessions auto-named from plan content | When accepting a plan |
+
+**v2.1.79:**
+| Feature | Details |
+|---------|---------|
+| "Show turn duration" toggle | New `/config` menu option |
+| Ctrl+C fix in `-p` mode | Was not working |
+| `/btw` streaming fix | Was returning main agent output instead of side answer |
+| Voice mode startup fix | `voiceEnabled: true` now activates correctly |
+| Enterprise 429 retry fix | Users can now retry on rate limit errors |
+| `SessionEnd` hooks on `/resume` | Now fires when switching sessions via interactive `/resume` |
+| Terminal title disable fix | `CLAUDE_CODE_DISABLE_TERMINAL_TITLE` now works on startup |
+| Custom status line workspace trust fix | Shows content when trust is blocking |
+| Startup memory improvement | ~18MB less across all scenarios |
+| Non-streaming API 2-min timeout | Prevents indefinite hangs |
+| VS Code: `/remote-control` bridge | Bridge session to claude.ai/code from VS Code |
+| VS Code: AI-generated session titles | First message generates tab title |
+
+**v2.1.80:**
+| Feature | Details |
+|---------|---------|
+| `rate_limits` in statusline | 5-hour/7-day windows: `used_percentage`, `resets_at` |
+| CLI tool usage detection for plugin tips | In addition to file pattern matching |
+| `--resume` parallel tool results fix | All `tool_use`/`tool_result` pairs restored |
+| Voice mode WebSocket fix | Cloudflare bot detection on non-browser TLS |
+| Fine-grained tool streaming 400 fix | Proxies, Bedrock, Vertex |
+| `/remote-control` visibility fix | Hidden for unsupported deployments |
+| `/sandbox` tab navigation fix | Tab/arrow keys now work |
+| Managed settings startup fix | Applied on startup with cached `remote-settings.json` |
+| `@` file autocomplete improvement | Faster in large git repos |
+| `/effort` auto resolution display | Shows what auto resolves to |
+| Startup memory reduction | ~80MB saved on 250k-file repos |
+
+**Test artifacts:**
+
+| File | What It Tests |
+|------|---------------|
+| `.claude/agents/test-v180-fg-tool-inventory.md` | FG tool inventory agent |
+| `.claude/agents/test-v180-bg-tool-inventory.md` | BG tool inventory agent |
+| `.claude/skills/test-v180-effort-high/SKILL.md` | effort=high skill frontmatter |
+| `.claude/skills/test-v180-effort-low/SKILL.md` | effort=low skill frontmatter |
+| `earnings-analysis/test-outputs/test-v180-*.txt` | All v2.1.80 test output files |
+| `earnings-analysis/test-outputs/test-v180-consolidated-results.txt` | Consolidated results |
+
+---
+
+### Retest Summary (2026-03-18, v2.1.78) — v2.1.77-v2.1.78 (2 versions)
+
+**13 capabilities tested (v2.1.77-v2.1.78, 6 with empirical proof, 2 inconclusive, 5 changelog-confirmed):**
+
+| Feature | Status | Change from v2.1.76 |
+|---------|--------|---------------------|
+| FG non-team built-in tool count | **25** (unchanged) | No new built-in tools. MCP count varies by server config |
+| BG non-team built-in tool count | **13** (unchanged) | No new built-in tools. Same task/team/cron absences |
+| `includeGitInstructions` full fix (v2.1.78) | ✅ **FIXED** | **TESTED**: Both env var and setting suppress ALL git sections including gitStatus |
+| `deny` MCP permission (v2.1.78) | ✅ **FIXED** | **TESTED**: `deny: ["mcp__yahoo-finance"]` removes all tools from deferred list |
+| PreToolUse "allow" vs deny (v2.1.77) | ✅ **FIXED** | **TESTED**: Deny wins — allow-returning hook cannot override deny permission |
+| `maxTurns` frontmatter (v2.1.78) | ⚠️ **PLUGIN-ONLY** | **TESTED**: maxTurns:2 and :3 NOT enforced for regular agents. All steps complete |
+| `effort` frontmatter (v2.1.78) | ⚠️ **PLUGIN-ONLY** | **TESTED**: No visible effect for regular agents. Inconclusive — likely plugin-only |
+| Output token limits (v2.1.77) | ✅ **CHANGED** | Sonnet reports 64k knowledge. Changelog: 64k default, 128k upper bound |
+| StopFailure hook (v2.1.78) | ✅ **NEW** | 18th hook type. Cannot trigger (needs API error) — changelog-confirmed |
+| `--resume` subagent truncation (v2.1.78) | ✅ **FIXED** | Changelog-confirmed — affects our >5MB sessions with subagents |
+| Stop hook infinite loop (v2.1.78) | ✅ **FIXED** | Changelog-confirmed — relevant to our agent frontmatter Stop hooks |
+| Protected dirs in bypassPermissions (v2.1.78) | ✅ **HARDENED** | Changelog-confirmed — affects our K8s/SDK automation |
+| ANTHROPIC_CUSTOM_MODEL_OPTION (v2.1.78) | ✅ **NEW** | UI-only feature for /model picker. Not testable in non-interactive mode |
+
+**Changelog-only items (not tested, grouped by version):**
+
+**v2.1.77:**
+| Feature | Details |
+|---------|---------|
+| Sandbox `allowRead` setting | Re-allow reads within `denyRead` regions |
+| `/copy N` enhancement | Copy Nth-latest assistant response |
+| "Always Allow" compound bash fix | Per-subcommand rules instead of full string |
+| Auto-updater memory leak fix | Overlapping downloads during slash-command overlay |
+| Write tool CRLF fix | No longer silently converts line endings |
+| Cost tracking non-streaming fix | Usage tracked during API streaming fallback |
+| Faster macOS startup (~60ms) | Keychain credentials read in parallel |
+| Faster `--resume` (45% faster) | Fork-heavy and large sessions use ~100-150MB less peak memory |
+| Various UI fixes | Paste loss, Ctrl+D, vim mode, tmux, ordered lists, CJK text |
+
+**v2.1.78:**
+| Feature | Details |
+|---------|---------|
+| Terminal notifications in tmux | Popups/progress reach outer terminal with `allow-passthrough on` |
+| Streaming response text | Line-by-line streaming |
+| Plugin persistent state | `${CLAUDE_PLUGIN_DATA}` survives plugin updates |
+| `--worktree` skills/hooks fix | Skills and hooks from worktree dir now load |
+| git log/status sandbox fix | No more "ambiguous argument" or stub file pollution |
+| Various security fixes | Silent sandbox disable warning, heredoc parsing |
+| Various permission fixes | `sandbox.filesystem.allowWrite` absolute paths, ctrl+u readline |
+| Voice mode fixes | WSL2/WSLg support, modifier-combo push-to-talk |
+| VS Code fixes | Login screen flash, Opus 1M context for unknown plan tiers |
+| Session resume improvements | Better memory usage on large session resume |
+
+**Test artifacts:**
+
+| File | What It Tests |
+|------|---------------|
+| `.claude/agents/test-v178-effort-frontmatter.md` | effort frontmatter (v2.1.78) |
+| `.claude/agents/test-v178-effort-low.md` | effort=low comparison agent |
+| `.claude/agents/test-v178-effort-high.md` | effort=high comparison agent |
+| `.claude/agents/test-v178-maxturns-frontmatter.md` | maxTurns=3 frontmatter |
+| `.claude/agents/test-v178-maxturns-tight.md` | maxTurns=2 frontmatter |
+| `.claude/agents/test-v178-fg-tool-inventory.md` | FG tool inventory agent |
+| `.claude/agents/test-v178-bg-tool-inventory.md` | BG tool inventory agent |
+| `.claude/hooks/test-v178-pretooluse-allow.sh` | PreToolUse allow-returning hook |
+| `.claude/hooks/test-v178-stopfailure.sh` | StopFailure hook capture script |
+| `earnings-analysis/test-outputs/test-v178-*.txt` | All v2.1.78 test output files |
+| `earnings-analysis/test-outputs/test-v178-consolidated-results.txt` | Consolidated results |
 
 ---
 
@@ -352,7 +524,7 @@ New deferred tools for browsing MCP server resources.
 | Task tool availability | ⚠️ **NUANCED** | FG non-team: HAS task tools. BG non-team: NO task tools. Team (FG or BG): HAS task tools. Team membership expands BG set but FG already has them |
 | Cron tools in subagents | ⚠️ **TEAM ONLY** | Team agents: YES. Non-team agents: NO |
 | Task→Task nesting | ❌ **Still blocked** | Agent spawner absent from ALL subagent tiers (team and non-team) |
-| autoMemoryDirectory (v2.1.74) | ✅ **TESTED** | User-level only, absolute path only, MEMORY.md auto-loads. **Dynamic per-ticker: 3-ticker test (AAPL/CRM/NVDA) — read ✅, write ✅, zero cross-contamination ✅.** Wrapper: jq patch → run → restore. |
+| autoMemoryDirectory (v2.1.74) | ✅ **TESTED** | User-level only, absolute path only, MEMORY.md auto-loads. **Dynamic per-ticker: 3-ticker test (AAPL/CRM/NVDA) — read ✅, write ✅, zero cross-contamination ✅.** Wrapper: jq patch → run → restore. **v2.1.80 retest**: `ClaudeAgentOptions(settings=...)` parameter works — no file patching needed. See detailed findings below. |
 | modelOverrides (v2.1.73) | ✅ **TESTED** | Full model ID keys only (not short names). Works in both user + project settings. |
 | SessionStart double-fire fix (v2.1.73) | ✅ **TESTED** | Fresh session: 1 fire. --resume: 1 fire (not 2x). Hook fires exactly once on both fresh and resumed. Fix confirmed. |
 | SessionEnd hook timeout fix (v2.1.74) | ✅ **TESTED** | Per-hook `timeout:` field NOT respected for SessionEnd. ONLY `CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS` env var works. 3s hook: killed without env var, completed with 10000ms env var. |
@@ -496,10 +668,11 @@ mkdir -p "$MEMORY_DIR"
 - **Absolute paths ONLY** — relative paths silently fall back to default
 - **Directory doesn't need to pre-exist** — Claude creates files via Write tool
 - **Session-start only** — mid-session subagents still see the default path
-- **No env var support** — `CLAUDE_AUTO_MEMORY_DIRECTORY` does not work
+- **No env var support** — `CLAUDE_AUTO_MEMORY_DIRECTORY` and `CLAUDE_CODE_AUTO_MEMORY_DIRECTORY` do not work (tested v2.1.74 + v2.1.80, independently verified twice)
 - **Concurrent safety** — `flock` serializes access to `settings.json`. Jobs queue behind the lock (120s timeout). K8s worker already serializes via Redis BRPOP so flock is optional there
+- **`settings=` parameter (SDK) and `--settings` flag (CLI) bypass all concurrent concerns** — runtime-only overlay, `settings.json` never modified. **Recommended method.** See v2.1.80 retest below
 
-**Definitive proof (3-ticker isolation test):**
+**Definitive proof (3-ticker isolation test, v2.1.74):**
 
 | Test | AAPL | CRM | NVDA |
 |------|------|-----|------|
@@ -509,6 +682,87 @@ mkdir -p "$MEMORY_DIR"
 | Cross-contamination (grep for wrong markers) | ✅ CLEAN | ✅ CLEAN | ✅ CLEAN |
 
 Proof file: `test-v174-autoMemoryDir.txt`
+
+#### 1b. `autoMemoryDirectory` — v2.1.80 Retest: `settings=` Parameter Discovery
+
+**Retested 2026-03-19 on v2.1.80.** All v2.1.74 behaviors confirmed still working. One major new finding:
+
+**`ClaudeAgentOptions(settings=...)` works for `autoMemoryDirectory`** — no `settings.json` patching or flock needed:
+
+```python
+options = ClaudeAgentOptions(
+    ...existing options...,
+    settings=json.dumps({"autoMemoryDirectory": f"/path/memory-by-ticker/{ticker}"}),
+)
+```
+
+This is a runtime-only override. `settings.json` is never read or written for this value. Each `query()` call gets its own isolated memory directory. Zero concurrency concerns.
+
+**The extraction worker already uses `ClaudeAgentOptions`** (`extraction_worker.py:371`). Adding per-ticker memory requires only one line added to the existing constructor. The `ticker` variable is already available at that scope (`extraction_worker.py:599`).
+
+**v2.1.80 test matrix (11 tests):**
+
+| # | Test | Method | Result |
+|---|---|---|---|
+| 1-3 | Read isolation (AAPL/CRM/NVDA) | CLI `settings.json` patch | ✅ Each saw only its own marker |
+| 4 | Write (AAPL) | CLI `settings.json` patch | ✅ `write-test.md` landed in AAPL dir only |
+| 5 | Read-back (AAPL) | CLI `settings.json` patch | ✅ Read `AAPL_WRITE_PROOF_v280_99123` from prior session |
+| 6 | Negative (CRM sees no AAPL data) | CLI `settings.json` patch | ✅ Replied NO |
+| 7a-7b | SDK read (AAPL, CRM) | Python SDK `settings.json` patch | ✅ Correct markers |
+| 9 | Concurrent (AAPL+NVDA) | bash flock | ✅ Both correct, settings clean |
+| 10A | Env var `CLAUDE_AUTO_MEMORY_DIRECTORY` | `env=` on SDK | ❌ Ignored |
+| 10B | Env var `CLAUDE_CODE_AUTO_MEMORY_DIRECTORY` | `env=` on SDK | ❌ Ignored |
+| **10C** | **`settings=` parameter (AAPL/CRM/NVDA)** | **`ClaudeAgentOptions(settings=...)`** | **✅ 3/3 correct, `settings.json` untouched before AND after** |
+| 11 | Cross-contamination (grep all dirs) | grep | ✅ Zero leaks |
+
+**Two working methods for SDK usage:**
+
+| Method | How | Concurrent-safe? | File patching? |
+|--------|-----|-------------------|----------------|
+| `settings.json` patch + flock | jq patch → run → restore | Yes (via flock) | Yes |
+| **`settings=` parameter (recommended)** | **`ClaudeAgentOptions(settings=json.dumps({...}))`** | **Inherently safe** | **No** |
+
+Test fixtures at `/tmp/automem-test/`. No proof file persisted (tests run interactively in session).
+
+**Cross-validation (2026-03-19, second independent session, v2.1.80):**
+
+All 11 findings above were independently verified in a separate session with 6 additional tests:
+
+| # | Test | Method | Result |
+|---|---|---|---|
+| V1-V3 | Read isolation (AAPL/CRM/MSFT) | `--settings` CLI flag (inline JSON) | ✅ 3/3 correct markers |
+| V4 | Write isolation + cross-contamination | `--settings` CLI flag | ✅ Zero leaks (grep -r CLEAN) |
+| V5 | Write persistence across sessions | `--settings` CLI flag | ✅ Session 2 read Session 1's `PERSIST_PROBE_v180_99887` |
+| V6 | `--settings` as file path | `/tmp/settings-AAPL.json` | ✅ Identical to inline JSON |
+| V7 | Concurrent lock-free (AAPL+CRM) | `--settings` (no flock) | ✅ Both correct, zero cross-contamination, settings.json untouched |
+| V8 | SDK `ClaudeAgentOptions(settings=...)` | Python SDK direct | ✅ 3/3 (AAPL/CRM/MSFT), settings.json stays clean |
+| V9 | Env var `CLAUDE_AUTO_MEMORY_DIRECTORY` | env= on CLI | ❌ Ignored (confirms original finding) |
+| V10 | Env var `CLAUDE_CODE_AUTO_MEMORY_DIRECTORY` | env= on CLI | ❌ Ignored (confirms original finding) |
+
+**Incremental finding: `--settings` CLI flag works for `autoMemoryDirectory`**
+
+The `--settings` flag (accepts inline JSON or file path) provides the same overlay behavior as the SDK `settings=` parameter:
+
+```bash
+# Inline JSON — simplest approach for CLI/bash scripts:
+claude -p --settings '{"autoMemoryDirectory":"/path/memory/AAPL"}' "prompt"
+
+# File path — for complex settings:
+echo '{"autoMemoryDirectory":"/path/memory/AAPL"}' > /tmp/settings-AAPL.json
+claude -p --settings /tmp/settings-AAPL.json "prompt"
+```
+
+This is the CLI equivalent of the SDK's `settings=` parameter. Both are runtime-only overlays — `settings.json` is never modified.
+
+**Three working methods (ranked):**
+
+| Rank | Method | Concurrent-safe? | File patching? | Best for |
+|------|--------|-------------------|----------------|----------|
+| 1 | **`ClaudeAgentOptions(settings=...)`** | Inherently | No | SDK/Python (extraction worker) |
+| 2 | **`--settings` CLI flag** | Inherently | No | Bash scripts, manual invocation |
+| 3 | `settings.json` patch + flock | Via flock | Yes | Legacy, not recommended |
+
+Proof files: `earnings-analysis/test-outputs/test-v180-memory-*.txt`
 
 #### 2. `modelOverrides` — Remap Model Picker to Custom IDs (v2.1.73)
 
@@ -798,7 +1052,7 @@ Full matrix results: `earnings-analysis/test-outputs/test-v174-definitive-matrix
 | WorktreeCreate | ✅ | **FIXED** (v2.1.69) — plugin hooks were silently ignored |
 | WorktreeRemove | ✅ | **FIXED** (v2.1.69) — plugin hooks were silently ignored |
 
-**Total hook events: 17** (was 13 in v2.1.49). Added: InstructionsLoaded (v2.1.69), WorktreeCreate (v2.1.50), WorktreeRemove (v2.1.50), PreCompact (from docs). Note: ConfigChange was already the 13th.
+**Total hook events: 18** (was 17 in v2.1.76). Added: StopFailure (v2.1.78) — fires when turn ends due to API error. Previous additions: InstructionsLoaded (v2.1.69), WorktreeCreate (v2.1.50), WorktreeRemove (v2.1.50), PreCompact (from docs), PostCompact (v2.1.76), Elicitation/ElicitationResult (v2.1.76).
 
 ---
 
