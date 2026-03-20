@@ -72,7 +72,11 @@ This creates duplicate GuidancePeriod nodes for the same quarter — ~28 day off
 - CAKE FY2023 Q4: returns a 462-day period (should be ~90 days)
 - AAPL FY2024 Q1: correct
 
-**No production impact** since nothing calls it. **100% safe to delete** — zero callers, zero importers, no doc references instruct any agent to call it.
+**No production impact** since nothing calls it. Zero callers, zero importers at runtime. **Safe to delete from a runtime perspective**, but has stale documentation references that should be cleaned:
+- `guidance-extraction-flow.html:570` — HTML doc reference
+- `.claude/plans/guidanceInventory.md:917` — plan doc describing it as "kept for future actuals comparison"
+
+To fully remove: delete function + caches from `get_quarterly_filings.py`, then clean the 2 doc references above.
 
 ### 3. `fiscal_resolve.py` (CLI wrapper)
 
