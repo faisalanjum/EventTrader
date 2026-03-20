@@ -20,6 +20,18 @@ Related: Session `get_quarterly_filings`
 
 ---
 
+## Orchestrator Readiness
+
+**`get_quarterly_filings.py` is ready for the earnings orchestrator as-is.** The hook (`build_orchestrator_event_json.py`) already parses its output and builds `event.json` with `quarter_label`, so no JSON mode or format changes needed.
+
+**Known gaps (not blockers):**
+- `daily_stock`/`hourly_stock` not in discovery output (removed when switching to min-lag dedup). Orchestrator fetches returns separately at learner time. Could be re-added as optimization if needed.
+- 8-K/A amendments excluded by query design (`formType = '8-K'`), not specially handled. This is intentional per `8k_reference.md:388`.
+- No automated tests for `get_earnings_with_10q()`, the XBRL deny list, or min-lag dedup. Empirical validation was done this session (248 content-verified disagreements, 7,926 XBRL ground truth comparisons) but not persisted as repo tests.
+- Hardcoded `.env` path — works in current K8s deployment (hostPath mount). Portability smell, not a break.
+
+---
+
 ## What We Fixed Today
 
 ### `get_quarterly_filings.py` — the 8-K earnings discovery function
