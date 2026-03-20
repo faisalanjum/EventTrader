@@ -154,7 +154,7 @@ The original design gated ALL phases on guidance. Problem: the fresh live 8-K ha
 
 **Fix 3 — Filesystem for completion truth, Redis for coordination only (was: permanent Redis done markers)**
 
-The master plan (earnings-orchestrator.md §2a, line 194) says: *"durable progress and resume are derived from filesystem outputs."* Fixed: historical done = filesystem check (event.json + all prediction/result.json + attribution/result.json). Live prediction done = filesystem check (live_state.json + prediction/result.json). Redis is only for leases and the live watch registry — never completion truth.
+The master plan (earnings-orchestrator.md §2a, line 194) says: *"durable progress and resume are derived from filesystem outputs."* Fixed: historical done = filesystem check (event.json quarters + live_state.json deferred learner — see `is_historical_done()` pseudocode). Live prediction done = filesystem check (live_state.json + prediction/result.json). Redis is only for leases and the live watch registry — never completion truth.
 
 **Fix 4 — Live watch registry for prediction tracking**
 
@@ -177,7 +177,7 @@ The daemon uses the tighter signal:
 
 | Check | Source | Why |
 |---|---|---|
-| Historical done? | **Filesystem**: `event.json` exists + all quarters have `prediction/result.json` AND `attribution/result.json` | File-authoritative per master plan. Single source of truth. Includes deferred learners from prior live cycles. |
+| Historical done? | **Filesystem**: `event.json` quarters all have both result files + `live_state.json` deferred learner check (if prediction exists without attribution → not done) | File-authoritative. Two checks: event.json for known quarters, live_state.json for deferred learner from prior live cycle. See `is_historical_done()` pseudocode. |
 | Live prediction done? | **Filesystem**: `live_state.json` exists + `prediction/result.json` in the quarter dir it names | Orchestrator writes both. No stall: if `live_state.json` missing, prediction hasn't completed → lease expires → re-enqueue. |
 | Which accession is live? | **Redis**: `earnings:watch:live:{TICKER}` | Pure detection bookkeeping (accession, filed_8k, detected_at). Short-lived — deleted on prediction completion or cutoff. |
 | Live quarter_label? | **Filesystem**: `live_state.json` → `quarter_label` (written by orchestrator) | Orchestrator owns quarter identity — it has full context. Daemon never derives fiscal quarter. |
