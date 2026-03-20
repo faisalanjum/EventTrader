@@ -84,9 +84,11 @@ This creates duplicate GuidancePeriod nodes for the same quarter — ~28 day off
 
 ### 4. `_compute_fiscal_dates()` in `fiscal_math.py:102`
 
-**Status: LIVE — called by `build_guidance_period_id()` and `fiscal_resolve.py`**
+**Status: LIVE — called by `build_guidance_period_id()`. Also called by `fiscal_resolve.py` (dead code).**
 
 The pure math function that converts (fye_month, fiscal_year, fiscal_quarter) → (start_date, end_date). Uses standard month boundaries (e.g., Q1 = first 3 months after FYE). This function itself is correct GIVEN correct inputs — the issue is that its callers pass the wrong FYE month (raw instead of adjusted).
+
+**Important distinction:** The live guidance issue comes from `_compute_fiscal_dates()` (deterministic month-boundary math), NOT from the XBRL Period lookup/classification logic that exists in `fiscal_to_dates()` and `fiscal_resolve.py`. Those are dead code with additional complexity (Period node scanning, `period_to_fiscal()` classification). The live path is simpler but shares the same FYE input problem.
 
 ### 5. `period_to_fiscal()` in `fiscal_math.py:13`
 
@@ -141,3 +143,5 @@ The FYE derivation query that uses raw 10-K period months. The root source of Is
 3. **Is the year labeling convention (Issue B) a real problem for guidance?** The guidance extraction agent labels fiscal years based on what the company says in its filings. If the company says "Fiscal 2024" and `_compute_fiscal_dates` interprets that differently from the company's convention, the dates will be off by a year. Empirically, the production data (FIVE, LULU, ASO, DLTR) shows correct dates — suggesting the convention happens to align for these tickers. But it may not for all.
 
 4. **Should we delete `fiscal_to_dates()` and `fiscal_resolve.py` now?** They're dead code. Deleting them removes 390 lines and eliminates confusion. The "future actuals comparison" use case they were kept for hasn't been built and can be re-implemented when needed.
+
+5. **Docs are internally inconsistent.** Some plan docs (guidanceInventory.md §6, §15) still describe the old fiscal-keyed/no-date-computation design ("simple string concatenation", "no `fiscal_resolve.py` dependency"), while the current v3.1 code and contract (core-contract.md:394, :442) use calendar-based `gp_{start}_{end}` with `_compute_fiscal_dates()`. The docs should be reconciled to reflect the current reality: the guidance pipeline DOES use date math via `build_guidance_period_id()`.
