@@ -16,6 +16,8 @@ Related: Session `get_quarterly_filings`
 
 **Functions with issues:** 2 live (`build_guidance_period_id()`, `get_derived_fye()`), 2 dead code (`fiscal_to_dates()`, `fiscal_resolve.py`) — same bugs but zero production impact.
 
+**Preferred fix direction:** Go for exact 52-week dates by reviving the XBRL Period lookup path (what `fiscal_to_dates()` and `fiscal_resolve.py` attempted), rather than accepting the ±5-day month-boundary limit and just fixing the FYE input. The month-boundary approach will always be approximate for 52-week companies; the XBRL Period nodes have the exact dates.
+
 ---
 
 ## What We Fixed Today
