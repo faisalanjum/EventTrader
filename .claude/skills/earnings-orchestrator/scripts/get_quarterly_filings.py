@@ -459,7 +459,7 @@ def get_earnings_with_10q(ticker: str, dedupe: bool = True) -> str:
             key = item["fiscal_key"]
             if key not in seen or abs(item["lag_hours"]) < abs(seen[key]["lag_hours"]):
                 seen[key] = item
-        rows = [item["row"] for item in seen.values()]
+        rows = [item["row"] for item in sorted(seen.values(), key=lambda x: x["row"].split("|")[1])]
     else:
         rows = [item["row"] for item in processed]
 
