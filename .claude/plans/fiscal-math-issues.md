@@ -29,6 +29,7 @@ Related: Session `get_quarterly_filings`
 - 8-K/A amendments excluded by query design (`formType = '8-K'`), not specially handled. This is intentional per `8k_reference.md:388`.
 - No automated tests for `get_earnings_with_10q()`, the XBRL deny list, or min-lag dedup. Empirical validation was done this session (248 content-verified disagreements, 7,926 XBRL ground truth comparisons) but not persisted as repo tests.
 - Hardcoded `.env` path — works in current K8s deployment (hostPath mount). Portability smell, not a break.
+- `neo4j_session()` context manager (lines 49-63) has a latent double-yield bug: if an exception propagates from inside the `with` block back to the generator, the `except` tries to yield a second time → would crash with `RuntimeError`. Currently masked because `get_earnings_with_10q()` catches all exceptions internally. Zero risk today (one caller), but would break any future caller without its own try/except.
 
 ---
 
