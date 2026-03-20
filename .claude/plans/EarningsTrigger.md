@@ -138,9 +138,9 @@ Q2 cycle (3 months later):
 1. **No token competition**: Learners run on the HISTORICAL queue. Live predictions have the live queue entirely to themselves.
 2. **Simpler daemon**: No Query 3 (10-Q detection), no LEARNER_MIN_DAYS, no 10-Q/10-K monitoring, no learn dead-letter. Step B2 is 3 checks instead of 7.
 3. **Same U1 outcome**: Feedback is available before the next prediction (just-in-time during historical bootstrap).
-4. **Q4/10-K works correctly**: No special handling for annual filings. The 10-K will have been filed by the time the next historical bootstrap runs. Requires `MAX_LAG_HOURS=90` prerequisite (see below).
+4. **Q4/10-K works correctly**: No special handling for annual filings. The 10-K will have been filed by the time the next historical bootstrap runs. Assumes `MAX_LAG_HOURS=90` in `get_quarterly_filings.py` (now in place; see note below).
 
-**Prerequisite**: `get_quarterly_filings.py` MAX_LAG_HOURS should be increased from 45 to 90 days to ensure Q4 quarters (where the 10-K files 60-90 days after the 8-K) are properly matched. This is a one-number change with zero regression risk for Q1-Q3 (their 10-Qs always file within 45 days).
+**Implemented prerequisite**: `get_quarterly_filings.py` now uses `MAX_LAG_HOURS=90` so Q4 quarters (where the 10-K files 60-90 days after the 8-K) are properly matched. This preserves Q1-Q3 behavior while covering slow annual-file timing.
 
 ### Key Design Decisions
 
@@ -623,7 +623,7 @@ The extraction worker has rate limit detection (`extraction_worker.py:86`: `RATE
 | **Daemon down >77min during live 8-K** | Step B1.5 recovery: Query 2b catches 8-Ks missed during hourly window. Staleness cutoff applies. Daemon HA minimizes this. |
 | **Live prediction cutoff expired** | Step B2 logs "prediction window expired", deletes watch key. No silent miss — always logged. |
 | **Deferred learner for Q1-Q3** | 10-Q files within 45 days. By next historical bootstrap (~90 days), 10-Q is available. Orchestrator runs learner with full post-event data. |
-| **Deferred learner for Q4 (10-K)** | 10-K files within 90 days. Requires `get_quarterly_filings.py` MAX_LAG_HOURS=90 (one-number fix). By next historical bootstrap, 10-K is available. |
+| **Deferred learner for Q4 (10-K)** | 10-K files within 90 days. `get_quarterly_filings.py` uses `MAX_LAG_HOURS=90`, so by next historical bootstrap the 10-K is available. |
 | **Cross-cycle stale live_state.json** | `has_live_prediction()` compares `current_accession` with `live_state.json.accession_8k`. Prior cycle's data doesn't confuse current cycle. |
 | **Cross-cycle stale dead-letter** | `is_dead_lettered()` for live mode matches on `accession_8k`. Prior cycle's dead-letter doesn't block current cycle. |
 | **Learner fails during historical** | Orchestrator's attribution failure policy: "warn + write" for incomplete output. Partial attribution with `missing_inputs` is written → `is_historical_done()` sees the file → proceeds. |
@@ -639,7 +639,7 @@ python3 scripts/earnings_trigger_daemon.py --skip-guidance    # Bypass guidance 
 python3 scripts/earnings_trigger_daemon.py --force            # Re-enqueue even if filesystem says done
 ```
 
-### Files to Create (5 new, 0 modified)
+### Files to Create (5 new)
 
 | File | Lines (est) | Purpose |
 |---|---|---|
@@ -649,11 +649,11 @@ python3 scripts/earnings_trigger_daemon.py --force            # Re-enqueue even 
 | `k8s/processing/earnings-worker-live.yaml` | ~80 | Deployment + KEDA ScaledObject on `earnings:pipeline:live` (maxReplicas: 2) |
 | `k8s/processing/earnings-worker-historical.yaml` | ~80 | Deployment + KEDA ScaledObject on `earnings:pipeline:historical` (maxReplicas: 2) |
 
-### Files NOT Modified (0% regression risk)
+### Files NOT Modified by Daemon Implementation
 
 - `scripts/guidance_trigger_daemon.py` — untouched
 - `scripts/extraction_worker.py` — untouched
-- `scripts/earnings/get_quarterly_filings.py` — untouched (MAX_LAG_HOURS fix is a separate task)
+- `scripts/earnings/get_quarterly_filings.py` — already updated separately (`MAX_LAG_HOURS=90`); daemon assumes current behavior
 - `.claude/hooks/build_orchestrator_event_json.py` — untouched
 - Any Neo4j schema — no new properties
 
@@ -669,7 +669,7 @@ Additionally, the orchestrator must write `live_state.json` after live predictio
 
 This is a prerequisite tracked separately in `earnings-orchestrator.md` (Phase B). The daemon design is correct regardless — when the orchestrator is built to spec, the daemon will drive it.
 
-**Sync note**: `earnings-orchestrator.md` references a "delayed N=35 day timer" and "same-cycle live learner" for live learner triggering. The daemon now defers learners to the next historical bootstrap instead. Update the orchestrator plan during implementation.
+**Sync note**: `earnings-orchestrator.md` operational sections have been updated to reflect the deferred learner design (2026-03-20). Remaining N=35 references are in append-only bot notes (lines 18, 34) which are historical records, not active specifications.
 
 ### What I Deliberately Did NOT Include
 

@@ -177,7 +177,7 @@ SDK wrapper: top-level session, `permission_mode="bypassPermissions"`.
 4. Attribution/Learner loop — for predicted quarters without attribution:
       - Historical mode: run immediately (data exists). Sequential processing ensures Q(n) attribution completes before Q(n+1) prediction, so U1 feedback is available.
       - Live mode: deferred to next historical bootstrap. The external trigger daemon (`EarningsTrigger.md`) enqueues HISTORICAL when the ticker re-enters trade_ready; the orchestrator catches the missing attribution during sequential processing. No source-gating — learner runs with whatever data is available at that time. (Original design was N=35 day timer; replaced by deferred approach to avoid live-queue token competition.)
-      - Annual-quarter exception: do not block learner on 10-K availability. If the annual filing is not yet available at trigger time, run learner anyway and record `"10-K"` in `missing_inputs`.
+      - Annual-quarter note: with the deferred approach, the 10-K is typically available by the time the next historical bootstrap runs (~90 days). No special exception needed. If the 10-K is still unavailable, the orchestrator runs the learner with available data and records `"10-K"` in `missing_inputs`.
       - Hard-fail gate: `prediction/result.json` + `daily_stock` label must exist. Without these, attribution cannot compare prediction vs reality. Everything else (transcript, 10-Q, 10-K, news) enriches but is not required.
       - Attribution/Learner writes `missing_inputs` array in output (e.g., `["transcript", "10-Q"]`) so U1 feedback carries context about what data was available.
 5. Validation — outputs present + schema-valid
@@ -562,7 +562,7 @@ Note: planned agent names are provisional — final names locked when built. Cur
 **Allowed inputs** (both modes):
 - 8-K earnings report (trigger event)
 - Pre-filing consensus baseline (EPS/revenue by default; include other key reported metric consensus when relevant)
-- Prior guidance (guidance-inventory or previous 8-K)
+- Prior guidance (from Neo4j Guidance/GuidanceUpdate nodes, or previous 8-K outlook)
 - Historical financials (prior 10-K/10-Q via XBRL)
 - Prior earnings transcripts (previous quarters only)
 - Pre-filing news and sector context
@@ -1076,8 +1076,8 @@ One question at a time. Reprioritize after every input.
 4. Q15 + Q10 — resolved: tiered validation + idempotent crash recovery. See §2d failure policy.
 5. Q6 + Q7 — resolved: feedback embedded in attribution result.json, all raw, no digest. See §2d U1.
 6. Q25 + Q23 + Q24 — resolved: single-turn planner, tiered missing-data, relevance-based noise policy. See §2b, §2c.
-7. Q28 — resolved: hybrid trigger (historical=same-run, live=35-day timer). See §2a, §2d.
-8. Q13 — updated: guidance-inventory decoupled from orchestrator (guidanceWIP.md R8). Orchestrator reads file, does not invoke skill. See §2a.
+7. Q28 — resolved: hybrid trigger (historical=same-run, live=deferred to next historical bootstrap). See §2a, §2d.
+8. Q13 — updated: guidance data from Neo4j Guidance/GuidanceUpdate nodes (original guidance-inventory.md file does not exist). See §2a.
 9. Q14 — resolved: first quarter has empty U1 arrays, no special handling.
 10. Q20 — resolved: rubric-guided holistic scoring. See §2c scoring method.
 11. Q3 — resolved: no explicit stop/resume; file-authoritative = automatic resume.
