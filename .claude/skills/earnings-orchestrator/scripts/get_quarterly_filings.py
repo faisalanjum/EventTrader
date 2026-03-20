@@ -316,6 +316,13 @@ XBRL_DENY_PERIODIC_ACCESSIONS = {
     # URBN: FY2024 labels on FY2025 periods (yd=-1, qd=0 leaks)
     "0000950170-24-104783",
     "0000950170-24-134967",
+    # Fiscal year transition collisions: two 10-Ks get same XBRL year
+    # CAKE: 52-week→standard calendar switch, both labeled FY2024
+    "0001104659-24-027565",  # 2024-01-02 10-K (fallback→FY2023 Q4)
+    # PLCE: Jan-FYE retailer, consecutive 10-Ks both labeled FY2024
+    "0001628280-25-018195",  # 2025-02-01 10-K (fallback→FY2025 Q4)
+    # RH: Jan-FYE retailer, consecutive 10-Ks both labeled FY2024
+    "0001558370-25-004329",  # 2025-02-01 10-K (fallback→FY2025 Q4)
 }
 
 # Maximum allowed lag (hours) between 8-K and 10-Q filing dates
