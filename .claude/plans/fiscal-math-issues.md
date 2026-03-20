@@ -12,7 +12,7 @@ Related: Session `get_quarterly_filings`
 
 **Still broken:** One live function — `build_guidance_period_id()` in `guidance_ids.py` — calls `_compute_fiscal_dates()` with the wrong FYE month for 18 retailers. Guidance-only issue; does not affect `get_quarterly_filings.py` or the earnings orchestrator.
 
-**~3.3% of guidance items** (~173 / 5,227) are on the wrong period convention (~28-day offset). ~23% of guidance data is from affected tickers where future extractions could also produce inconsistent periods.
+**~3.3% of guidance items** (~173 / 5,227) are on the wrong period convention (~28-day offset). ~30% of guidance data is from affected tickers (FIVE, ASO, LULU, DLTR) where this bug can produce inconsistent periods.
 
 **Functions with issues:** 2 live (`build_guidance_period_id()`, `get_derived_fye()`), 2 dead code (`fiscal_to_dates()`, `fiscal_resolve.py`) — same bugs but zero production impact.
 
@@ -78,15 +78,15 @@ ASO and DLTR (both FYE=2 raw, should be 1) show **two different period conventio
 This creates duplicate GuidancePeriod nodes for the same quarter — ~28 day offset between them. Data is usable but inconsistent — guidance items for the same quarter can land on different period nodes.
 
 Scope:
-- 3 of 18 affected retailers currently have guidance data: FIVE (468), ASO (387), DLTR (351) = 1,206 items
-- 1,206 / 5,227 total GuidanceUpdate nodes = **~23% of all guidance data is from affected tickers**
+- 4 of 18 affected retailers currently have guidance data: FIVE (468), ASO (387), LULU (355), DLTR (351) = 1,561 items
+- 1,561 / 5,227 total GuidanceUpdate nodes = **~29.9% of all guidance data is from affected tickers**
 - Within those tickers, ~15-27% of items use the FYE=1 convention instead of FYE=2:
   - ASO: 55 FYE=1 vs 269 FYE=2 (17.0% of XBRL-dated items on alternate convention; 14.2% of all ASO guidance)
   - DLTR: 90 FYE=1 vs 158 FYE=2 (36.3% of XBRL-dated items; 25.6% of all DLTR guidance)
   - FIVE: 28 FYE=1 vs 266 FYE=2 (9.5% of XBRL-dated items; 6.0% of all FIVE guidance)
 - **~173 items (~3.3% of all guidance) are on the wrong period convention**
-- The remaining 15 of 18 retailers have no guidance yet — when processed, the affected share grows
-- **High estimate: ~23% of guidance data is from tickers where this bug can produce inconsistent period boundaries (~28-day offset)**
+- The remaining 14 of 18 retailers have no guidance yet — when processed, the affected share grows
+- **High estimate: ~30% of guidance data is from tickers where this bug can produce inconsistent period boundaries (~28-day offset)**
 
 **Inherent accuracy limit:** Even with a correct FYE input, `_compute_fiscal_dates()` always returns month boundaries (1st to last day of month). For 52-week calendar companies (AAPL, COST, TSLA, retailers), actual quarter boundaries are ±5 days off from month boundaries. This is inherent to the function's design (`fiscal_math.py:105`: "Gives standard month boundaries") and can only be solved by the XBRL Period lookup path (which is what `fiscal_to_dates()` and `fiscal_resolve.py` attempted, but those are dead code). So the best-case accuracy for the live `build_guidance_period_id()` path is **±5 days even if the FYE input is fixed.**
 
