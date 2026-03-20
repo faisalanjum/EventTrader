@@ -63,24 +63,28 @@ This creates duplicate GuidancePeriod nodes for the same quarter — ~28 day off
 
 ### 2. `fiscal_to_dates()` in `get_quarterly_filings.py:70`
 
-**Status: DEAD CODE — zero runtime callers**
+**Status: DEAD CODE — zero runtime callers, zero importers (verified exhaustively)**
 
-170-line function that was intended for the earnings orchestrator's "actuals comparison" feature (not yet built). It queries Neo4j Period nodes and classifies them using `period_to_fiscal()` with the raw FYE.
+~175-line function + 2 module-level caches (`_FYE_CACHE`, `_PERIOD_SCAN_CACHE`) only used within this function. Was intended for the earnings orchestrator's "actuals comparison" feature (not yet built). Queries Neo4j Period nodes and classifies them using `period_to_fiscal()` with the raw FYE. Has additional XBRL Period lookup/classification logic NOT shared with the live guidance path.
 
-**Measured impact:** When tested empirically:
+**Measured impact (empirical, not theoretical):**
 - ANF FY2023 Q4: returns Oct 2022 - Jan 2023 (off by 1 year — should be Oct 2023 - Jan 2024)
 - CAKE FY2023 Q4: returns a 462-day period (should be ~90 days)
 - AAPL FY2024 Q1: correct
 
-**No production impact** since nothing calls it. Can be deleted.
+**No production impact** since nothing calls it. **100% safe to delete** — zero callers, zero importers, no doc references instruct any agent to call it.
 
 ### 3. `fiscal_resolve.py` (CLI wrapper)
 
-**Status: DEAD CODE — zero runtime callers**
+**Status: DEAD CODE — zero Python/shell callers, BUT referenced in LLM-facing skill docs**
 
-220-line CLI wrapper that replicates `fiscal_to_dates()` Phase 1 logic using pre-fetched Period data. Documented in `queries-common.md` and `QUERIES.md` as a usage example, but the extraction pipeline switched to `build_guidance_period_id()` and no longer calls it.
+220-line CLI wrapper that replicates `fiscal_to_dates()` Phase 1 logic using pre-fetched Period data via stdin. Has its own XBRL Period lookup/classification logic (same as `fiscal_to_dates()`, different from the live guidance path).
 
-**No production impact.** Can be deleted.
+**Doc references that could cause LLM agents to invoke it:**
+- `.claude/skills/extract/queries-common.md:72-74` — usage example with bash invocation
+- `.claude/skills/guidance-inventory/QUERIES.md:67-69` — same pattern
+
+**No current production impact.** NOT safe to delete until doc references are removed first (agent could read docs and call it). Companion `test_fiscal_resolve.py` (29 tests) should be deleted with it.
 
 ### 4. `_compute_fiscal_dates()` in `fiscal_math.py:102`
 
@@ -142,6 +146,8 @@ The FYE derivation query that uses raw 10-K period months. The root source of Is
 
 3. **Is the year labeling convention (Issue B) a real problem for guidance?** The guidance extraction agent labels fiscal years based on what the company says in its filings. If the company says "Fiscal 2024" and `_compute_fiscal_dates` interprets that differently from the company's convention, the dates will be off by a year. Empirically, the production data (FIVE, LULU, ASO, DLTR) shows correct dates — suggesting the convention happens to align for these tickers. But it may not for all.
 
-4. **Should we delete `fiscal_to_dates()` and `fiscal_resolve.py` now?** They're dead code. Deleting them removes 390 lines and eliminates confusion. The "future actuals comparison" use case they were kept for hasn't been built and can be re-implemented when needed.
+4. **`fiscal_to_dates()` is 100% safe to delete now.** Zero callers, zero importers, verified exhaustively. ~175 lines + 2 cache dicts (`_FYE_CACHE`, `_PERIOD_SCAN_CACHE`) only used within the function. No doc references tell any agent to call it.
+
+5. **`fiscal_resolve.py` is NOT safe to delete yet.** Zero Python/shell callers, but referenced in 2 LLM-facing skill docs (`queries-common.md:74` and `guidance-inventory/QUERIES.md:69`) as usage examples. An extraction agent could read those docs and invoke it. Must remove doc references first, then the file. Also has `test_fiscal_resolve.py` (29 tests) that should be deleted with it.
 
 5. **Docs are internally inconsistent.** Some plan docs (guidanceInventory.md §6, §15) still describe the old fiscal-keyed/no-date-computation design ("simple string concatenation", "no `fiscal_resolve.py` dependency"), while the current v3.1 code and contract (core-contract.md:394, :442) use calendar-based `gp_{start}_{end}` with `_compute_fiscal_dates()`. The docs should be reconciled to reflect the current reality: the guidance pipeline DOES use date math via `build_guidance_period_id()`.
