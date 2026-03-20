@@ -126,7 +126,7 @@ Market-session reality (user dataset: 8,172 filings / 770 tickers): `post_market
   │    │                   multi-turn reasoning across core (non-exhaustive) dimensions
   │    │                   → direction + confidence + magnitude + signal
   │    │
-  │    └─ 4. Attribution/Learner ─ historical: same-pass; live: N=35 days later
+  │    └─ 4. Attribution/Learner ─ historical: same-pass; live: deferred to next historical bootstrap
   │                        identifies primary drivers
   │                        writes feedback in result.json:
   │                          what_worked, what_failed, why,
@@ -140,7 +140,7 @@ Market-session reality (user dataset: 8,172 filings / 770 tickers): `post_market
   │              └─────────→ next quarter's planner + predictor
   │
   └─ Discovery: get_quarterly_filings → event.json (hook auto-builds)
-     Filter: skip quarters with existing result.json
+     Filter: skip prediction for quarters with existing prediction/result.json
      Validation: outputs present + schema-valid
      ORCHESTRATOR_COMPLETE {TICKER}
 ```
@@ -176,7 +176,7 @@ SDK wrapper: top-level session, `permission_mode="bypassPermissions"`.
    e. Verify result
 4. Attribution/Learner loop — for predicted quarters without attribution:
       - Historical mode: run immediately (data exists). Sequential processing ensures Q(n) attribution completes before Q(n+1) prediction, so U1 feedback is available.
-      - Live mode: delayed post-event timer, intended to run after normal Q1-Q3 10-Q availability. Current default remains N=35 days after 8-K. No source-gating — learner runs with whatever data is available at trigger time.
+      - Live mode: deferred to next historical bootstrap. The external trigger daemon (`EarningsTrigger.md`) enqueues HISTORICAL when the ticker re-enters trade_ready; the orchestrator catches the missing attribution during sequential processing. No source-gating — learner runs with whatever data is available at that time. (Original design was N=35 day timer; replaced by deferred approach to avoid live-queue token competition.)
       - Annual-quarter exception: do not block learner on 10-K availability. If the annual filing is not yet available at trigger time, run learner anyway and record `"10-K"` in `missing_inputs`.
       - Hard-fail gate: `prediction/result.json` + `daily_stock` label must exist. Without these, attribution cannot compare prediction vs reality. Everything else (transcript, 10-Q, 10-K, news) enriches but is not required.
       - Attribution/Learner writes `missing_inputs` array in output (e.g., `["transcript", "10-Q"]`) so U1 feedback carries context about what data was available.
@@ -692,7 +692,7 @@ The rubric is embedded in the predictor prompt, not in code. Calibration (Phase 
 
 **Behavior** (preliminary):
 - Historical mode: run in same orchestrator pass when data exists.
-- Live mode: run on N-day timer after 8-K filing (`N=35` currently).
+- Live mode: deferred to next historical bootstrap (originally N=35 day timer; see `EarningsTrigger.md` for rationale).
 - Extended thinking (ultrathink) required — causal analysis of multi-factor market reactions benefits from deep reasoning. No speed constraint (batch mode).
 - No PIT gate — uses all available post-event data
 - Job 1: identify primary driver(s) of actual move
@@ -920,7 +920,7 @@ Validation (Q10) — block when output can't be trusted for its purpose, continu
 | Attribution/Learner output missing feedback fields | Warn + write — output still provides value. `missing_inputs` makes gaps explicit. |
 
 Crash recovery (Q15) — file-authoritative state makes this simple:
-- `result.json` existence = done. No result.json = not done.
+- Per-step completion: `prediction/result.json` = prediction done, `attribution/result.json` = attribution done. A quarter with prediction but no attribution is partially done — orchestrator runs the missing attribution (this is how deferred live learners are caught during the next historical bootstrap).
 - Crash mid-quarter → next run re-processes from scratch (planner → fetch → predictor). Idempotent.
 - `context_bundle.json` without `result.json` = partial state, safe to overwrite.
 - Write result.json via temp file + atomic rename to prevent half-written files.
@@ -996,7 +996,7 @@ The orchestrator's job is predict + learn. Aggregation (building cross-quarter s
 **Legacy file status**:
 - `earnings-analysis/predictions.csv` — **OLD DESIGN**. Created during ad-hoc prediction runs before this plan existed. Not maintained by the new orchestrator. Do not depend on it. Will be superseded by `summary.csv` when the aggregation script is built.
 - `earnings-analysis/prediction_processed.csv` — **OLD DESIGN**. Same status.
-- `earnings-analysis/guidance_processed.csv` — **OLD DESIGN**. Superseded by per-ticker `guidance-inventory.md` files.
+- `earnings-analysis/guidance_processed.csv` — **OLD DESIGN**. Superseded by Neo4j Guidance/GuidanceUpdate nodes (written by `guidance_writer.py`).
 - `earnings-analysis/news_processed.csv` — **OLD DESIGN**. Superseded by per-quarter context bundles.
 
 ---
@@ -1021,7 +1021,7 @@ One question at a time. Reprioritize after every input.
 | Q10 | Validation — block or warn? | P0 | **Resolved**: Tiered — block when output can't be trusted (8-K missing, unparseable plan, invalid prediction), continue with gap for data sources, warn+write for incomplete learner output. See §2d failure policy. |
 | Q11 | Schema enforcement — JSON Schema or inline? | P1 | **Resolved**: Inline validation for v1. Deterministic derivation rules (score→bucket, direction+confidence→signal) are already code logic that JSON Schema cannot express. Inline checks cover: required fields present, types correct, cross-field consistency (5 deterministic rules in §2c). Extract JSON Schema later if needed for external tool sharing. |
 | Q12 | Confidence representation: bucket-only or numeric+bucket? (prediction and attribution) | P0 | **Resolved**: Numeric conviction score (0-100) + bucket (`low` 0-24, `moderate` 25-49, `high` 50-74, `extreme` 75-100). Score is ranking, not probability. Bucket drives action; score enables calibration and within-bucket ranking. |
-| Q13 | `guidance-inventory` wired in or gap? | P1 | **Resolved**: Decoupled (per guidanceWIP.md R8). Orchestrator reads pre-existing `guidance-inventory.md` file at bundle assembly time — does NOT invoke the skill. Guidance build/update is a separate workflow. Empty string if file missing. Implementation details in `guidanceWIP.md`. |
+| Q13 | `guidance-inventory` wired in or gap? | P1 | **Resolved**: Decoupled. Orchestrator queries Neo4j Guidance/GuidanceUpdate nodes at bundle assembly time (§2a step 3a). Original design referenced `guidance-inventory.md` but that file does not exist — extraction pipeline writes directly to Neo4j via `guidance_writer.py`. Empty if no Guidance nodes exist. |
 | Q14 | Skip historical pattern when no prior attribution? | P1 | **Resolved**: No special handling. First quarter for a ticker simply has empty U1 arrays (no `predictor_lessons`, no `planner_lessons`). Planner and predictor already handle empty feedback naturally — they reason from 8-K + available data alone. No skip logic needed. |
 | Q15 | Crash mid-quarter — retry or cleanup? | P0 | **Resolved**: File-authoritative = idempotent. No result.json = not done → re-process from scratch. context_bundle.json without result.json = safe to overwrite. Atomic write (temp + rename) prevents half-written files. See §2d failure policy. |
 | Q16 | State — file-based or hybrid with Claude Tasks? | P0 | **Resolved**: File-authoritative state. Claude Tasks optional as in-run mirror only; files are the durable source of truth and win on conflict. See §2a, §6. |
@@ -1111,7 +1111,7 @@ Note: Interface contracts use I-prefix (I1-I7) to avoid collision with §6 Archi
 | I2 | **Orchestrator → Planner input** | Planner receives subset: 8k_content + u1_feedback (planner_lessons) + guidance_history. | **Resolved** — delivery spec in §2a. |
 | I3 | **Orchestrator → Predictor input** | Predictor receives full bundle (all sections). | **Resolved** — delivery spec in §2a. |
 | I4 | **Orchestrator → Learner input** | Learner does NOT get a bundle. 3 minimal inputs: prediction/result.json path, actual returns, context_bundle.json path (reference only). Fetches its own data. | **Resolved** — spec in §2a. |
-| I5 | **Guidance → Orchestrator bridge** | Raw markdown passthrough. Full `guidance-inventory.md` content into `guidance_history`. Empty string if missing. | **Resolved** — spec in §2a. |
+| I5 | **Guidance → Orchestrator bridge** | Query Neo4j Guidance/GuidanceUpdate nodes, render as text for `guidance_history`. Empty if no nodes exist. Original design referenced `guidance-inventory.md` (file does not exist). | **Resolved** — spec in §2a. |
 | I6 | **Full attribution/result.json schema** | Full `attribution_result.v1` schema: actual_return, primary_driver (with evidence_refs), contributing_factors, surprise_analysis (nullable), analysis_summary, missing_inputs, feedback block, audit refs. | **Resolved** — full schema in §2d. |
 | I7 | **Planner agent catalog** | 14 valid agents across 5 domains (Neo4j 6, Alpha Vantage 1, Yahoo 1, Benzinga API 1, Perplexity 5). Tier guidance for priority patterns. Exposed Yahoo ops are PIT-safe; Yahoo consensus/calendar remain excluded from historical use. | **Resolved** — catalog in §2b. |
 
