@@ -59,7 +59,16 @@ Extraction agent → guidance_write_cli.py:94 → _ensure_period() → build_gui
 
 This creates duplicate GuidancePeriod nodes for the same quarter — ~28 day offset between them. Not catastrophic (both cover approximately the right timeframe), but guidance items for the same quarter can land on different period nodes.
 
-**Estimated scope:** Affects ~18 retailers × ~4 quarters with guidance data = ~72 potentially duplicated periods. Approximately 2-3% of all GuidancePeriod nodes for these tickers.
+**Measured scope (from Neo4j):**
+- 3 of 18 affected retailers currently have guidance data: FIVE (468), ASO (387), DLTR (351) = 1,206 items
+- 1,206 / 5,227 total GuidanceUpdate nodes = **23.1% of all guidance data is from affected tickers**
+- Within those tickers, ~15-27% of items use the FYE=1 convention instead of FYE=2:
+  - ASO: 55 FYE=1 vs 269 FYE=2 (15.5% on alternate convention)
+  - DLTR: 90 FYE=1 vs 158 FYE=2 (26.5%)
+  - FIVE: 28 FYE=1 vs 266 FYE=2 (6.2%)
+- **~173 items (3.3% of all guidance) are on the wrong period convention**
+- The remaining 15 of 18 retailers have no guidance yet — when processed, the affected share grows
+- **High estimate: ~23% of guidance data is from tickers where this bug can produce inconsistent period boundaries (~28-day offset)**
 
 ### 2. `fiscal_to_dates()` in `get_quarterly_filings.py:70`
 
