@@ -116,27 +116,29 @@ The daemon does NOT monitor for 10-Q/10-K arrival or fire a separate learner job
 ```
 Q1 cycle:
   Jan 15: Q1 8-K files → daemon enqueues LIVE → prediction runs → watch key deleted
-  Jan 15: attribution/result.json does NOT exist for Q1. That's fine.
+  Jan 15: live_state.json written (Q1_FY2026). attribution/result.json does NOT exist. That's fine.
 
 Q2 cycle (3 months later):
   Apr 10: Ticker re-enters trade_ready
-  Apr 10: Orchestrator runs get_quarterly_filings → rebuilds event.json
-          Q1 now has daily_stock IS NOT NULL → appears in event.json
-          Q1: prediction/result.json ✅, attribution/result.json ❌
-  Apr 10: is_historical_done() → FALSE (Q1 attribution missing)
+  Apr 10: is_historical_done() checks:
+          1. event.json (stale — Q1 not in it yet) → all old quarters done ✅
+          2. live_state.json → Q1 → prediction exists ✅, attribution missing ❌ → returns FALSE
   Apr 10: Daemon enqueues HISTORICAL
-  Apr 10: Orchestrator processes sequentially:
+  Apr 10: Orchestrator runs get_quarterly_filings → rebuilds event.json (Q1 now in it)
+          Processes sequentially:
           Q1: prediction exists (skip). Attribution missing → RUN LEARNER → U1 written
-          All done → is_historical_done() → TRUE
+          All done → is_historical_done() → TRUE (both checks pass)
   Apr 15: Q2 8-K files → daemon enqueues LIVE
           Orchestrator has Q1 U1 feedback → better Q2 prediction ✅
 ```
+
+**Key**: The trigger is `is_historical_done()` checking `live_state.json` for the deferred learner — NOT event.json (which is stale between cycles). The orchestrator rebuilds event.json only after being enqueued.
 
 **Why this is better than same-cycle learner monitoring:**
 1. **No token competition**: Learners run on the HISTORICAL queue. Live predictions have the live queue entirely to themselves.
 2. **Simpler daemon**: No Query 3 (10-Q detection), no LEARNER_MIN_DAYS, no 10-Q/10-K monitoring, no learn dead-letter. Step B2 is 3 checks instead of 7.
 3. **Same U1 outcome**: Feedback is available before the next prediction (just-in-time during historical bootstrap).
-4. **Q4/10-K works automatically**: No special handling for annual filings. The 10-K will have been filed by the time the next historical bootstrap runs.
+4. **Q4/10-K works correctly**: No special handling for annual filings. The 10-K will have been filed by the time the next historical bootstrap runs. Requires `MAX_LAG_HOURS=90` prerequisite (see below).
 
 **Prerequisite**: `get_quarterly_filings.py` MAX_LAG_HOURS should be increased from 45 to 90 days to ensure Q4 quarters (where the 10-K files 60-90 days after the 8-K) are properly matched. This is a one-number change with zero regression risk for Q1-Q3 (their 10-Qs always file within 45 days).
 
@@ -144,7 +146,7 @@ Q2 cycle (3 months later):
 
 **Fix 1 — Live detection via `hourly_stock IS NULL` (was: "latest 8-K" query)**
 
-The original Query 2 found the "latest 8-K 2.02 per ticker." Before a new live 8-K arrives, this returns the previous quarter's historical 8-K — causing a fake live enqueue. Fixed: use `hourly_stock IS NULL` as the live signal. `hourly_stock` is computed ~77 minutes after filing (`event_time + 60min + 17min Polygon delay`). This gives a tight freshness window = "this 8-K literally just arrived," aligning with the time-sensitive trading use case. Historical uses `daily_stock IS NOT NULL` (`get_quarterly_filings.py:184`). The gap between hourly and daily computed (~1-24h) is bridged by the watch key. Daemon HA (2 replicas, pod anti-affinity) minimizes the risk of missing the ~77-minute detection window. Step B1.5 (recovery query) catches any that slip through.
+The original Query 2 found the "latest 8-K 2.02 per ticker." Before a new live 8-K arrives, this returns the previous quarter's historical 8-K — causing a fake live enqueue. Fixed: use `hourly_stock IS NULL` as the live signal. `hourly_stock` is computed ~77 minutes after filing (`event_time + 60min + 17min Polygon delay`). This gives a tight freshness window = "this 8-K literally just arrived," aligning with the time-sensitive trading use case. Historical uses `daily_stock IS NOT NULL` (`get_quarterly_filings.py:184`). The gap between hourly and daily computed (~1-24h) is bridged by the watch key. Daemon HA (2 replicas, pod anti-affinity) minimizes the risk of missing the ~77-minute detection window. Step B1.5 (recovery query) detects any that slip through (processes if within cutoff, logs skip if expired).
 
 **Fix 2 — Guidance gate scoped to historical only (was: gates everything)**
 
@@ -255,9 +257,9 @@ WITH ticker, collect({accession: r.accessionNo, filed: toString(r.created)})[0] 
 RETURN ticker, first.accession AS accession, first.filed AS filed
 ```
 
-**Why `hourly_stock IS NULL`**: Tight ~77-minute freshness window for trading speed. Daemon HA (2 replicas) minimizes missed-window risk; Step B1.5 catches any that slip through.
+**Why `hourly_stock IS NULL`**: Tight ~77-minute freshness window for trading speed. Daemon HA (2 replicas) minimizes missed-window risk; Step B1.5 detects any that slip through.
 
-**Historical boundary stays `daily_stock IS NOT NULL`** (`get_quarterly_filings.py:184`, unchanged). Daemon HA minimizes the risk of missing the ~77min window; Step B1.5 catches any that slip through.
+**Historical boundary stays `daily_stock IS NOT NULL`** (`get_quarterly_filings.py:184`, unchanged). Daemon HA minimizes the risk of missing the ~77min window; Step B1.5 detects any that slip through.
 
 **7-day recency filter is correctness**: Prevents false live detection of legacy NULL-return 8-Ks in the database.
 
@@ -338,9 +340,13 @@ def get_watched_tickers(r):
     return watched
 
 def is_historical_done(ticker):
-    """File-authoritative: event.json exists + all resolvable quarters have both result files.
-    This naturally catches deferred learners: a prior live quarter with prediction but no
-    attribution will cause this to return False, triggering historical bootstrap which runs the learner."""
+    """File-authoritative: event.json + live_state.json checked for completeness.
+    Two checks:
+    1. All resolvable quarters in event.json have both prediction + attribution result files.
+    2. If live_state.json exists, its quarter also has attribution (deferred learner check).
+    The deferred learner check is critical: event.json is stale between live cycles (only
+    rebuilt when orchestrator runs get_quarterly_filings). Without this check, a prior live
+    quarter's missing attribution would never trigger a historical catch-up."""
     event_path = COMPANIES_DIR / ticker / "events" / "event.json"
     if not event_path.exists():
         return False
@@ -361,7 +367,20 @@ def is_historical_done(ticker):
             return False
         if not (base / "attribution" / "result.json").exists():
             return False
-    return resolvable > 0
+    if resolvable == 0:
+        return False
+    # Deferred learner check: if a prior live cycle left prediction without attribution,
+    # historical is NOT done — orchestrator needs to run learner for that quarter.
+    # This catches the case where event.json is stale (doesn't include the live quarter yet).
+    ls = get_live_state(ticker)
+    if ls:
+        ql = ls.get("quarter_label")
+        if ql:
+            attr = COMPANIES_DIR / ticker / "events" / ql / "attribution" / "result.json"
+            pred = COMPANIES_DIR / ticker / "events" / ql / "prediction" / "result.json"
+            if pred.exists() and not attr.exists():
+                return False  # deferred learner pending
+    return True
 
 
 def get_live_state(ticker):
@@ -645,6 +664,8 @@ The current `.claude/skills/earnings-orchestrator/SKILL.md` is v1.0 (2026-02-04)
 - **Live**: `"/earnings-orchestrator {TICKER} --live --accession {ACC}"` → runs prediction if missing, no-op if already done
 
 Additionally, the orchestrator must write `live_state.json` after live prediction with the derived `quarter_label`. This is the contract between orchestrator and daemon.
+
+**Note**: Non-earnings 8-Ks (e.g., leadership changes filed shortly before earnings) are NOT detected by this daemon — it only triggers on Item 2.02. These filings reach the predictor through the orchestrator's context bundle (`inter_quarter_8k` canonical planner question, see `earnings-orchestrator.md` §2b).
 
 This is a prerequisite tracked separately in `earnings-orchestrator.md` (Phase B). The daemon design is correct regardless — when the orchestrator is built to spec, the daemon will drive it.
 
