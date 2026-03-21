@@ -20,7 +20,7 @@ Related: Session `get_quarterly_filings`
 build_guidance_period_id(ticker, fiscal_year, fiscal_quarter):
 
   Step 1 — SEC quarter cache (EXACT, for any filed quarter):
-    Local Redis cache, refreshed daily from SEC XBRL Company Concept API
+    Local Redis cache (no TTL), populated on initial bootstrap + incremental via TradeReady scanner
     83,091 quarters across 739 tickers, 100% coverage, zero anomalies
     → If found: return exact (start_date, end_date). DONE.
 
@@ -133,12 +133,14 @@ No current consumer queries GuidancePeriod by exact date range. The dates are fo
 | KR Q1, COST Q3 (old worst cases) | **Exact (0d)** | **PROVEN** — SEC has their irregular calendar dates |
 
 **To implement:**
-1. Build `scripts/sec_quarter_cache_loader.py` (~200 lines)
-2. Deploy `k8s/processing/sec-quarter-refresh.yaml` (daily CronJob, 6 AM ET)
-3. **Add fiscal-identity lookup** in `_ensure_period()` (`guidance_write_cli.py:~78`) — query existing GuidancePeriod by (ticker, fiscal_year, fiscal_quarter) before calling `build_guidance_period_id()`
-4. Modify `build_guidance_period_id()` in `guidance_ids.py:376` (Steps 1→2→3 for new periods only)
-5. Run one-time migration for 1,858 existing wrong guidance items
-6. Keep graph v3 query as offline fallback only
+1. Build `scripts/sec_quarter_cache_loader.py` (~200 lines) — initial bootstrap + manual refresh
+2. Add ~20 lines to `scripts/trade_ready_scanner.py` — incremental SEC fetch when ticker enters TradeReady (piggybacks on existing 4x/day CronJob, no new deployment)
+3. Run initial bootstrap: `python3 sec_quarter_cache_loader.py` once (~90 sec, all 739 tickers)
+4. **Add fiscal-identity lookup** in `_ensure_period()` (`guidance_write_cli.py:~78`) — query existing GuidancePeriod by (ticker, fiscal_year, fiscal_quarter) before calling `build_guidance_period_id()`
+5. Modify `build_guidance_period_id()` in `guidance_ids.py:376` (Steps 1→2→3 for new periods only)
+6. Run one-time migration for 1,858 existing wrong guidance items
+7. Keep graph v3 query as offline fallback only
+8. Optionally deploy `sec-quarter-refresh.yaml` as weekly safety net (Sunday 6 AM) for cache corruption recovery
 
 ---
 
@@ -834,7 +836,7 @@ Cross-validated: 27/27 quarters vs Neo4j v3 = exact start, end +1d (systematic c
 build_guidance_period_id(ticker, fiscal_year, fiscal_quarter):
 
   Step 1 — SEC quarter cache lookup (primary):
-    Local cache (Redis or Neo4j), refreshed daily by CronJob
+    Local cache (Redis, no TTL), populated by initial bootstrap + incremental via TradeReady scanner
     Key: (ticker, fy_label, quarter) → (start_date, end_date)
     Source: SEC XBRL Company Concept API
     Coverage: 83,091 quarters, 739 tickers, avg 112 quarters/ticker
@@ -881,7 +883,7 @@ Full refresh: ~739 tickers / 8 req/sec = ~92 seconds
 # Exact quarter boundaries (from SEC XBRL)
 fiscal_quarter:{TICKER}:{FY}:{QN} → {"start":"2024-02-04","end":"2024-05-04"}
   Example: fiscal_quarter:FIVE:2024:Q1 → {"start":"2024-02-04","end":"2024-05-04"}
-  TTL: none (refreshed daily by cron)
+  TTL: none (persists forever, populated on initial bootstrap + incremental via TradeReady scanner)
 
 # Median quarter lengths (computed from SEC data)
 fiscal_quarter_length:{TICKER}:{QN} → 91
@@ -897,7 +899,9 @@ fiscal_year_end:{TICKER} → {"raw":"0201","month_adj":1}
 sec_cik:{TICKER} → "0001177609"
 ```
 
-**File 2: `k8s/processing/sec-quarter-refresh.yaml` (~40 lines)**
+**File 2 (OPTIONAL): `k8s/processing/sec-quarter-refresh.yaml` (~40 lines)**
+
+Safety net only — the primary refresh is piggybacked on TradeReady scanner. This CronJob is a weekly full-refresh fallback for cache corruption or extended SEC outage recovery.
 
 ```yaml
 apiVersion: batch/v1
@@ -906,7 +910,7 @@ metadata:
   name: sec-quarter-refresh
   namespace: processing
 spec:
-  schedule: "0 6 * * *"          # 6 AM ET daily
+  schedule: "0 6 * * 0"          # Sunday 6 AM ET weekly (safety net only)
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
