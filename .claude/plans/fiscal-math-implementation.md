@@ -37,8 +37,8 @@ The order matters: Step 1 MUST run before Step 2, otherwise a later SEC-exact lo
 | `scripts/guidance_trigger_daemon.py` | **MODIFY** | ~30 | Asset-aware SEC cache refresh on enqueue |
 | `k8s/processing/guidance-trigger.yaml` | **MODIFY** | 1 line | `ACTIVE_WINDOW_DAYS: "1"` → `"45"` |
 | `guidance_write_cli.py` | **MODIFY** | ~35 (or ~55 with optional Step C) | Thread ticker, lazy Neo4j/Redis, fiscal-identity lookup, SEC cache, corrected FYE fallback. Optional: prediction from prev Q. |
-| Migration script | **NEW** | ~60 | Rekey GuidanceUpdate.id + re-point HAS_PERIOD + collision preflight |
-| `scripts/trigger-extract.py` | **MODIFY** | ~10 | SEC cache prefetch for manual runs (after find, before queue) |
+| Migration script | **NEW** | ~80 | Rekey GuidanceUpdate.id + re-point HAS_PERIOD + collision preflight + dynamic ticker discovery |
+| `scripts/trigger-extract.py` | **MODIFY** | ~20 | SEC cache prefetch for manual runs (deduped per ticker, before processing loops) |
 | `scripts/trade_ready_scanner.py` | **OPTIONAL** | ~25 | Prewarm SEC cache on TradeReady entry |
 | **Total** | | **~375** | **~8-10 hours** |
 
@@ -163,7 +163,7 @@ for item, asset_name in to_enqueue:
 
 **Why**: With `ACTIVE_WINDOW_DAYS=1`, the daemon stops considering a ticker 1 day after earnings. The 10-Q arrives ~40 days later → daemon ignores it → never triggers SEC cache refresh or 10-Q guidance extraction. Setting to 45 covers the SEC 10-Q filing deadline for all filer categories (large accelerated: 40d, non-accelerated: 45d).
 
-**Reference**: `GuidanceTrigger.md` line 166 documents this: "default=1 in deployed code, design doc originally said 45 for backfill."
+**Reference**: `GuidanceTrigger.md` line 176 documents this: "default=1 in deployed code, design doc originally said 45 for backfill."
 
 ---
 
@@ -431,12 +431,23 @@ def _get_sec_corrected_fye(ticker):
 
 ## File 5: Migration script (~60 lines, NEW)
 
-**Purpose**: Fix existing 1,858 wrong guidance items on 5 tickers (FIVE, ASO, LULU, DLTR, SAIC).
+**Purpose**: Fix ALL tickers with duplicate GuidancePeriod groups. As of 2026-03-21: 15 tickers with ~3,106 items in duplicate groups (was 5 tickers when investigation started — the bug is still live and more tickers have been extracted since). The migration MUST discover affected tickers dynamically, NOT hardcode a list.
 
 **What it must do**:
 
 1. Load SEC exact dates from Redis cache (run `sec_quarter_cache_loader.py` first)
-2. For each affected ticker, find all GuidanceUpdate nodes with wrong GuidancePeriod (~28d offset)
+2. Discover affected tickers dynamically (do NOT hardcode):
+   ```cypher
+   MATCH (gu:GuidanceUpdate)-[:FOR_COMPANY]->(c:Company)
+   MATCH (gu)-[:HAS_PERIOD]->(gp:GuidancePeriod)
+   WITH c.ticker AS ticker, gu.fiscal_year AS fy,
+        CASE WHEN gu.fiscal_quarter IS NOT NULL
+             THEN 'Q' + toString(gu.fiscal_quarter) ELSE 'FY' END AS scope,
+        collect(DISTINCT gp.u_id) AS period_ids
+   WHERE size(period_ids) > 1
+   RETURN DISTINCT ticker
+   ```
+3. For each affected ticker, find all GuidanceUpdate nodes with wrong GuidancePeriod (~28d offset)
 3. For each GuidanceUpdate:
    a. Look up correct dates from SEC cache by `(ticker, gu.fiscal_year, gu.fiscal_quarter or 'FY')`
    b. Compute correct `period_u_id` = `gp_{correct_start}_{correct_end}`
@@ -469,24 +480,34 @@ If only `HAS_PERIOD` is re-pointed but `gu.id` still contains the old `period_u_
 
 **WHAT**:
 ```python
-# After items are found but before queuing — prefetch SEC cache for unique tickers
-# ONLY for guidance extraction (not news or other types)
+# WHERE: In main(), BEFORE the outer `for extraction_type in types:` loop (~line 241).
+# NOT inside the asset loop — otherwise the same ticker refreshes up to 4x with --asset all.
+#
 # trigger-extract.py already imports redis (line 36) and defines REDIS_HOST/REDIS_PORT
-if (not args.list and items
-        and extraction_type == "guidance"
-        and asset in ("transcript", "8k", "10q", "10k")):
-    unique_tickers = sorted({item["symbol"] or item["id"].split("_")[0] for item in items})
+if not args.list and args.type == "guidance":
+    # Precompute all tickers we'll process across all assets
+    _sec_refreshed = set()
     import redis as _redis
     _r = _redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
-    for t in unique_tickers:
-        try:
-            from sec_quarter_cache_loader import refresh_ticker
-            refresh_ticker(_r, t)
-        except Exception as e:
-            print(f"SEC cache prefetch failed for {t}: {e}", file=sys.stderr)
+
+    # Collect tickers from all guidance assets
+    mgr = get_manager()  # already created at line 238
+    for asset in resolve_assets(args.asset):
+        if asset not in ("transcript", "8k", "10q", "10k"):
+            continue
+        for item in find_unprocessed(mgr, asset=asset, extraction_type="guidance",
+                                      tickers=[t.upper() for t in args.tickers] if args.tickers else None):
+            t = item["symbol"] or item["id"].split("_")[0]
+            if t not in _sec_refreshed:
+                try:
+                    from sec_quarter_cache_loader import refresh_ticker
+                    refresh_ticker(_r, t)
+                except Exception as e:
+                    print(f"SEC cache prefetch failed for {t}: {e}", file=sys.stderr)
+                _sec_refreshed.add(t)
 ```
 
-**Note**: `trigger-extract.py` uses `print(..., file=sys.stderr)` for output (line 118+), not a `log` logger. Redis is created inline — the script already imports `redis` at line 36 and creates clients inside `push_to_queue()` at line 168.
+**Note**: `trigger-extract.py` uses `print(..., file=sys.stderr)` for output (line 118+), not a `log` logger. The `_sec_refreshed` set ensures each ticker is refreshed exactly once, even with `--asset all` (4 asset iterations). Placed BEFORE the main processing loops so cache is warm when extraction runs.
 
 **Why**: Manual `trigger-extract.py --ticker XYZ` bypasses TradeReady and the daemon. Without this, a non-TradeReady ticker has no SEC cache → Steps A/B miss → Step D runs with potentially buggy FYE.
 
@@ -529,7 +550,7 @@ def _prewarm_sec_cache(r, entries):
 
 1. **Build `sec_quarter_cache_loader.py`** — the foundation everything depends on
 2. **Run initial bootstrap**: `python3 sec_quarter_cache_loader.py` (all tickers, ~90 sec)
-3. **Run migration** — fix 1,858 existing wrong items on 5 tickers
+3. **Run migration** — dynamically discover and fix ALL tickers with duplicate period groups (15 tickers as of 2026-03-21, more possible before migration runs)
 4. **Verify migration**: zero duplicate GuidancePeriod nodes per (ticker, fiscal_year, fiscal_quarter)
 5. **Implement and run new unit tests** (see Required New Tests section) — run locally with mocked Neo4j/Redis BEFORE production deploy
 6. **Deploy ALL code changes + ACTIVE_WINDOW_DAYS=45 together (atomic rollout)**:
