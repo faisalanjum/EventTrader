@@ -648,16 +648,18 @@ These can be unit tests (mocking Neo4j/Redis) or integration tests against the l
 
 ---
 
-## Phase 2 — Optional Future Improvements
+## Phase 2 — Can Be Included In Initial Implementation
+
+**Rationale for including now:** If you're already building the loader and touching `_ensure_period()`, adding Step C in the same pass is cheaper than coming back later. The code is verified (exact match on FIVE Q2, FIVE Q3, KR Q2 against actual SEC data). The only cost: ~20 more lines + `fiscal_quarter_length` Redis keys + one more test case for 53-week transitions.
 
 ### Step C: Prediction from previous quarter + historical length
 
-Improves unfiled-quarter accuracy from ±3-5d (Step D) to ±1d. No known orchestrator impact. Add when/if a consumer needs ±1d precision on GuidancePeriod dates for unfiled quarters.
+Improves unfiled-quarter accuracy from ±3-5d (Step D) to ±1d. No known orchestrator impact.
 
 **What to add:**
-1. `fiscal_quarter_length:{TICKER}:Q{N}` Redis keys — median quarter span computed from SEC cache
+1. `fiscal_quarter_length:{TICKER}:Q{N}` Redis keys — median quarter span computed from SEC cache in the loader
 2. `_predict_from_prev_quarter()` function in `guidance_write_cli.py`
-3. Step C block between Step B and Step D in `_ensure_period()`
+3. Step C block between Step B and Step D in `_ensure_period()`, guarded by `is_standard_period and fiscal_quarter is not None` (prediction only works for quarters, not annuals — annuals use Step B or Step D)
 
 **Prediction math (SEC inclusive convention):**
 ```python
@@ -679,6 +681,13 @@ def _predict_from_prev_quarter(ticker, fiscal_year, fiscal_quarter):
 **Accuracy:** 98.4% within ±1d, 99.2% within ±3d (tested on 5,673 quarters).
 **One assumption:** Quarter lengths stable across FYs. Breaks ±7d on 53-week transitions (~1 per ticker per 6yr).
 **Lines:** ~20 added to guidance_write_cli.py + median computation in sec_quarter_cache_loader.py.
+
+**Verified against actual SEC data (2026-03-21):**
+```
+FIVE Q2: prev_end=2024-05-04 + 1 = May 5, + 91-1 = Aug 3  → predicted 2024-05-05 → 2024-08-03 ✓ EXACT
+FIVE Q3: prev_end=2024-08-03 + 1 = Aug 4, + 91-1 = Nov 2  → predicted 2024-08-04 → 2024-11-02 ✓ EXACT
+KR   Q2: prev_end=2024-05-25 + 1 = May 26, + 84-1 = Aug 17 → predicted 2024-05-26 → 2024-08-17 ✓ EXACT
+```
 
 ### Decouple GuidanceUpdate identity from period assignment
 
