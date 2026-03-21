@@ -1,8 +1,17 @@
-# Fiscal Math Issues
+# Fiscal Math Issues — Historical Investigation & Analysis
 
 Date: 2026-03-19 (updated 2026-03-21)
-Status: Fix designed, validated & finalized. Implementation TBD.
+Status: Investigation complete. **For the finalized implementation plan, see `fiscal-math-implementation.md`.**
 Related: Session `get_quarterly_filings`
+
+> **NOTE**: This document is the historical investigation record. It contains the full bug analysis,
+> empirical validation, and evolution of fix approaches (v1→v2→v3→v4). Some sections describe
+> earlier approaches that were superseded. The authoritative implementation spec is in
+> `fiscal-math-implementation.md`. Key differences from this doc:
+> - The fix modifies `_ensure_period()` in `guidance_write_cli.py`, not `build_guidance_period_id()` directly
+> - SEC cache refresh is driven by the guidance trigger daemon (asset-aware), not the scanner
+> - Migration scope is 15+ tickers (dynamically discovered), not hardcoded 5
+> - Step C (prediction) is included in initial implementation, not deferred
 
 ---
 
