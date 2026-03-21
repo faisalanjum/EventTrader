@@ -199,8 +199,10 @@ def cleanup_orphaned_periods(mgr, dry_run):
     return len(orphans)
 
 
-def verify_no_duplicates(mgr):
-    """Verify zero duplicate duration quarter/annual period groups remain."""
+def verify_no_duplicates(mgr, expected_skipped=None):
+    """Verify zero duplicate duration quarter/annual period groups remain,
+    excluding known unfiled groups that were intentionally skipped.
+    """
     result = mgr.execute_cypher_query_all("""
         MATCH (gu:GuidanceUpdate)-[:FOR_COMPANY]->(c:Company)
         WHERE gu.fiscal_year IS NOT NULL
@@ -219,13 +221,58 @@ def verify_no_duplicates(mgr):
                CASE WHEN fq IS NOT NULL THEN 'Q' + toString(fq) ELSE 'FY' END AS label,
                size(period_ids) AS dup_count
     """)
-    if result:
-        log.error(f"VERIFICATION FAILED: {len(result)} duplicate groups remain!")
-        for row in result[:10]:
-            log.error(f"  {row['ticker']} FY{row['fy']} {row['scope']}: {row['dup_count']} periods")
+
+    # Filter out known skipped unfiled groups
+    skip_keys = set()
+    if expected_skipped:
+        for g in expected_skipped:
+            skip_keys.add((g["ticker"], g["fy"], g["suffix"]))
+
+    unexpected = [row for row in result
+                  if (row["ticker"], row["fy"], row["label"]) not in skip_keys]
+
+    if unexpected:
+        log.error(f"VERIFICATION FAILED: {len(unexpected)} unexpected duplicate groups remain!")
+        for row in unexpected:
+            log.error(f"  {row['ticker']} FY{row['fy']} {row['label']}: {row['dup_count']} periods")
         return False
-    log.info("VERIFICATION PASSED: zero duplicate period groups")
+
+    remaining_skipped = len(result) - len(unexpected)
+    if remaining_skipped:
+        log.info(f"VERIFICATION PASSED: {remaining_skipped} remaining duplicates are all "
+                 f"known unfiled groups (expected)")
+    else:
+        log.info("VERIFICATION PASSED: zero duplicate period groups")
     return True
+
+
+def classify_groups(mgr, r):
+    """Classify duplicate groups into exact (SEC-cached) and skipped (unfiled).
+
+    Returns (exact, skipped) where each is a list of
+    {"ticker", "fy", "fq", "suffix", "period_ids", "update_count"}.
+    """
+    exact = []
+    skipped = []
+    tickers = discover_affected_tickers(mgr)
+
+    for ticker in tickers:
+        for group in get_duplicate_groups(mgr, ticker):
+            fy = group["fy"]
+            fq = group["fq"]
+            suffix = f"Q{fq}" if fq is not None else "FY"
+            key = f"fiscal_quarter:{ticker}:{fy}:{suffix}"
+            entry = {
+                "ticker": ticker, "fy": fy, "fq": fq,
+                "suffix": suffix, "period_ids": group["period_ids"],
+                "update_count": group["update_count"],
+            }
+            if r.exists(key):
+                exact.append(entry)
+            else:
+                skipped.append(entry)
+
+    return exact, skipped
 
 
 def main():
@@ -237,40 +284,51 @@ def main():
     r.ping()
     mgr = get_manager()
 
-    # Step 1: Discover affected tickers dynamically
-    tickers = discover_affected_tickers(mgr)
-    log.info(f"Found {len(tickers)} tickers with duplicate period groups: {tickers}")
+    # Classify: only migrate groups with SEC exact cache
+    exact, skipped = classify_groups(mgr, r)
 
-    if not tickers:
+    if not exact and not skipped:
         log.info("Nothing to migrate.")
+        mgr.close()
         return
 
-    # Step 2: Migrate each ticker
+    log.info(f"Duplicate groups: {len(exact)} exact (SEC-cached), "
+             f"{len(skipped)} skipped (unfiled/no SEC data)")
+
+    # Migrate exact groups only
     total_migrated = 0
     total_collisions = 0
-    for ticker in tickers:
-        groups = get_duplicate_groups(mgr, ticker)
-        log.info(f"\n{ticker}: {len(groups)} duplicate groups")
-        for group in groups:
-            fy = group["fy"]
-            fq = group["fq"]
-            suffix = f"Q{fq}" if fq is not None else "FY"
-            log.info(f"  FY{fy} {suffix}: {len(group['period_ids'])} periods, "
-                     f"IDs: {group['period_ids'][:3]}...")
-            migrated, collisions = migrate_group(
-                mgr, r, ticker, fy, fq, group["period_ids"], args.dry_run)
-            total_migrated += migrated
-            total_collisions += collisions
+    current_ticker = None
+    for group in exact:
+        ticker = group["ticker"]
+        if ticker != current_ticker:
+            current_ticker = ticker
+            ticker_groups = [g for g in exact if g["ticker"] == ticker]
+            log.info(f"\n{ticker}: {len(ticker_groups)} exact groups to migrate")
+        fy, fq, suffix = group["fy"], group["fq"], group["suffix"]
+        log.info(f"  FY{fy} {suffix}: {len(group['period_ids'])} periods, "
+                 f"IDs: {group['period_ids'][:3]}...")
+        migrated, collisions = migrate_group(
+            mgr, r, ticker, fy, fq, group["period_ids"], args.dry_run)
+        total_migrated += migrated
+        total_collisions += collisions
 
     log.info(f"\nMigration complete: {total_migrated} updates migrated, "
              f"{total_collisions} collisions skipped")
 
-    # Step 3: Cleanup orphaned periods
+    # Report skipped groups explicitly
+    if skipped:
+        log.info(f"\nSkipped {len(skipped)} unfiled groups (no SEC exact data yet):")
+        for g in skipped:
+            log.info(f"  {g['ticker']} FY{g['fy']} {g['suffix']} "
+                     f"({g['update_count']} updates, {len(g['period_ids'])} periods)")
+
+    # Cleanup orphaned periods
     cleanup_orphaned_periods(mgr, args.dry_run)
 
-    # Step 4: Verify
+    # Verify: migrated groups should have zero duplicates; skipped unfiled are expected
     if not args.dry_run:
-        verify_no_duplicates(mgr)
+        verify_no_duplicates(mgr, expected_skipped=skipped)
 
     mgr.close()
 
