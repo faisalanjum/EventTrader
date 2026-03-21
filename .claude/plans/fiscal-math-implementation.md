@@ -10,7 +10,12 @@
 
 Fix `build_guidance_period_id()` in `guidance_ids.py:376` to produce correct fiscal quarter/annual calendar dates for ~41-44 affected tickers (currently off by ~28 days). Uses SEC EDGAR APIs for exact dates, with prediction and corrected-FYE fallbacks.
 
-**Strategy**: SEC cache primary → fiscal-identity reuse (first-write-wins) → prediction → corrected FYE math.
+**Strategy (in this order for dedup correctness)**:
+1. Existing period reuse (first-write-wins via Neo4j fiscal-identity lookup)
+2. SEC cache exact dates (for filed quarters/annuals)
+3. Corrected FYE month-boundary math (last resort)
+
+The order matters: Step 1 MUST run before Step 2, otherwise a later SEC-exact lookup could bypass an already-written period and recreate the duplicate problem.
 
 **Key design decisions**:
 - First-write-wins: once a GuidancePeriod is created for a (ticker, FY, quarter), all subsequent extractions reuse it — zero duplicates
@@ -47,7 +52,10 @@ Fix `build_guidance_period_id()` in `guidance_ids.py:376` to produce correct fis
    - GET `https://data.sec.gov/api/xbrl/companyconcept/CIK{cik}/us-gaap/EarningsPerShareBasic.json`
    - Fallback concept: `NetIncomeLoss` (~10 tickers without EPS)
 3. Filter BOTH quarterly AND annual:
-   - `fp in ['Q1','Q2','Q3','Q4']` with span 60-130d → quarterly cache
+   - `fp in ['Q1','Q2','Q3']` with span 60-130d → quarterly cache
+     (Note: SEC XBRL has no `fp='Q4'` — Q4 results are in the 10-K which uses `fp='FY'`.
+      Q4 standalone dates are derived: Q4.start = Q3.end + 1d, Q4.end = FY.end.
+      The loader should compute and cache Q4 from this derivation.)
    - `fp = 'FY'` with span 300-400d → annual cache
    - Deduplicate by `(fy, fp)`: keep latest `filed` date (handles amendments)
 4. Write to Redis:
@@ -89,45 +97,53 @@ python3 sec_quarter_cache_loader.py --ticker FIVE # single ticker (<1 sec)
 **WHAT**: Asset-aware SEC cache refresh:
 
 ```python
-def _maybe_refresh_sec_cache(r, ticker, asset_name):
-    """Refresh SEC quarter cache based on asset type.
+def _precompute_sec_refresh(r, to_enqueue, dry_run):
+    """Precompute one SEC cache refresh decision per ticker per sweep.
 
-    - 10q/10k: FORCE refresh (new periodic filing just appeared → SEC has new data)
-    - transcript/8k: fill if missing only (no new SEC data from these filings)
+    Rules:
+      - If any pending asset for a ticker is 10q/10k → fill-if-missing (new filing may have new data)
+      - If only transcript/8k → fill-if-missing
+      - --list mode → no-op (no Redis writes during dry-run)
+
+    Called ONCE before the enqueue loop, not per-item.
     """
-    if asset_name in ("10q", "10k"):
-        # Periodic filing appeared → SEC EDGAR just processed it → force refresh
-        try:
-            from sec_quarter_cache_loader import refresh_ticker
-            refresh_ticker(r, ticker)  # always fetches, updates last_refreshed
-        except Exception as e:
-            log.warning(f"SEC cache refresh failed for {ticker}: {e}")
-    elif asset_name in ("transcript", "8k"):
-        # No new filing data, but ensure cache exists for this ticker
+    if dry_run:
+        return  # no side effects during --list
+
+    # Collect unique tickers and whether they have periodic filings pending
+    tickers_seen = {}  # ticker → bool (has_periodic)
+    for item, asset_name in to_enqueue:
+        sym = item["symbol"] or item["id"].split("_")[0]
+        if sym not in tickers_seen:
+            tickers_seen[sym] = False
+        if asset_name in ("10q", "10k"):
+            tickers_seen[sym] = True
+
+    # Refresh once per ticker
+    for ticker, has_periodic in tickers_seen.items():
         last_key = f"fiscal_quarter:{ticker}:last_refreshed"
-        if not r.exists(last_key):
+        if not r.exists(last_key) or has_periodic:
             try:
                 from sec_quarter_cache_loader import refresh_ticker
                 refresh_ticker(r, ticker)
             except Exception as e:
-                log.warning(f"SEC cache fill failed for {ticker}: {e}")
+                log.warning(f"SEC cache refresh failed for {ticker}: {e}")
 ```
 
-**Call site**: Inside `sweep_once()`, before `enqueue_with_lease()`:
+**Call site**: Inside `sweep_once()`, BEFORE the enqueue loop (not inside it):
 ```python
-# Line ~236, inside the for loop:
+# Line ~228, after to_enqueue is sorted but before the for loop:
+_precompute_sec_refresh(r, to_enqueue, dry_run)  # NEW LINE — once per sweep
+
 for item, asset_name in to_enqueue:
     sid = item["id"]
     sym = item["symbol"] or sid.split("_")[0]
     st = item["status"]
-
-    _maybe_refresh_sec_cache(r, sym, asset_name)  # NEW LINE
-
     enqueued = enqueue_with_lease(r, sid, asset_name, sym, st, queue, dry_run)
     ...
 ```
 
-**Import**: Add `from sec_quarter_cache_loader import refresh_ticker` (lazy import inside the function to avoid startup dependency).
+**Import**: `from sec_quarter_cache_loader import refresh_ticker` (lazy import inside the function to avoid startup dependency).
 
 ---
 
@@ -306,29 +322,43 @@ def _lookup_existing_period(ticker, fiscal_year, fiscal_quarter):
     (both persisted at guidance_writer.py:169-170).
 
     Handles both quarterly (fiscal_quarter is int) and annual (fiscal_quarter is None).
+
+    IMPORTANT: Uses execute_cypher_query_all() (returns list[dict], not a Record).
+    execute_cypher_query() returns a single Record — not dict-indexable with [0].
+    See neograph/Neo4jManager.py:1091 vs :1107.
+
+    IMPORTANT: Must be deterministic. The live graph has 28 duplicate quarter groups
+    and 34 duplicate annual groups (from the FYE bug). LIMIT 1 without ORDER BY
+    could pick the wrong period. ORDER BY: most GuidanceUpdate references first
+    (majority = most likely correct), then latest end_date, then u_id for tiebreak.
+    After migration cleans up duplicates, the ORDER BY is harmless (only one result).
     """
     mgr = _get_neo4j()
     if not mgr:
         return None
     try:
         if fiscal_quarter is not None:
-            result = mgr.execute_cypher_query("""
+            result = mgr.execute_cypher_query_all("""
                 MATCH (gu:GuidanceUpdate)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
                 WHERE gu.fiscal_year = $fy AND gu.fiscal_quarter = $fq
                 MATCH (gu)-[:HAS_PERIOD]->(gp:GuidancePeriod)
+                WITH gp, count(gu) AS ref_count
+                ORDER BY ref_count DESC, gp.end_date DESC, gp.u_id
                 RETURN gp.u_id AS period_u_id, gp.start_date AS start_date,
-                       gp.end_date AS end_date, gu.period_scope AS period_scope
+                       gp.end_date AS end_date
                 LIMIT 1
             """, {'ticker': ticker, 'fy': fiscal_year, 'fq': fiscal_quarter})
         else:
             # Annual: fiscal_quarter IS NULL and period_scope = 'annual'
-            result = mgr.execute_cypher_query("""
+            result = mgr.execute_cypher_query_all("""
                 MATCH (gu:GuidanceUpdate)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
                 WHERE gu.fiscal_year = $fy AND gu.fiscal_quarter IS NULL
                   AND gu.period_scope = 'annual'
                 MATCH (gu)-[:HAS_PERIOD]->(gp:GuidancePeriod)
+                WITH gp, count(gu) AS ref_count
+                ORDER BY ref_count DESC, gp.end_date DESC, gp.u_id
                 RETURN gp.u_id AS period_u_id, gp.start_date AS start_date,
-                       gp.end_date AS end_date, gu.period_scope AS period_scope
+                       gp.end_date AS end_date
                 LIMIT 1
             """, {'ticker': ticker, 'fy': fiscal_year})
         return result[0] if result else None
@@ -404,8 +434,8 @@ def _get_sec_corrected_fye(ticker):
 - `guidance_writer.py` (MERGE queries, Cypher, write logic) — zero changes
 - `_ensure_ids()` body — only signature adds `ticker=None` (backward compatible)
 - Step D code path — identical to current `_ensure_period()` body, just uses `effective_fye` instead of `fye_month`
-- Dry-run mode — lazy connections return None on failure → Steps A/B/C skip → Step D runs unchanged
-- All 146 existing tests — pass unchanged (`ticker=None` default preserves old behavior)
+- Dry-run mode — now attempts lazy Neo4j/Redis connections (graceful fallback: fails silently → Steps A/B skip → Step D runs as before). Output unchanged, but external connections are attempted.
+- All 200 existing tests (86 guidance_ids + 31 write_cli + 83 writer) — pass unchanged (`ticker=None` default preserves old behavior)
 
 ---
 
@@ -425,7 +455,8 @@ def _get_sec_corrected_fye(ticker):
    e. Create new `(gu)-[:HAS_PERIOD]->(correct_gp)` relationship
    f. Recompute `guidance_update_id` with new `period_u_id` (using `build_guidance_ids()`)
    g. **PREFLIGHT**: check if another node already has the target `guidance_update_id`
-      - If collision exists: merge nodes (union `source_refs`, preserve concept/member edges, keep one, delete duplicate)
+      - If collision exists: **ABORT for this node** and log for manual review. Do NOT auto-merge.
+        Full merge logic (union source_refs, preserve edges) can be added later if collisions are actually observed.
       - If no collision: `SET gu.id = $new_guidance_update_id` (in-place property update)
 4. Delete orphaned wrong-date GuidancePeriod nodes (`WHERE NOT ()-[:HAS_PERIOD]->()`)
 5. Verify: zero duplicate periods per (ticker, fiscal_year, fiscal_quarter)
@@ -453,10 +484,12 @@ try:
     from sec_quarter_cache_loader import refresh_ticker
     refresh_ticker(redis_client, ticker)
 except Exception as e:
-    log.warning(f"SEC cache prefetch failed for {ticker}: {e}")
+    print(f"SEC cache prefetch failed for {ticker}: {e}", file=sys.stderr)
 ```
 
-**Why**: Manual `trigger-extract.py --ticker XYZ` bypasses TradeReady and the daemon. Without this, a non-TradeReady ticker has no SEC cache → Steps A/B/C miss → Step D runs with potentially buggy FYE.
+**Note**: `trigger-extract.py` uses `print(..., file=sys.stderr)` for output, not a `log` logger.
+
+**Why**: Manual `trigger-extract.py --ticker XYZ` bypasses TradeReady and the daemon. Without this, a non-TradeReady ticker has no SEC cache → Steps A/B miss → Step D runs with potentially buggy FYE.
 
 ---
 
@@ -491,15 +524,17 @@ for ticker, entry in entries.items():
 
 ## Execution Order
 
+**CRITICAL**: Migration (step 4) must run BEFORE enabling Step A (fiscal-identity lookup) in production. The live graph has 28 duplicate quarter groups and 34 duplicate annual groups from the FYE bug. If Step A runs before migration, LIMIT 1 could return the WRONG (buggy) period, and first-write-wins would fossilize it. The ORDER BY (most references first) mitigates this, but migration-first is the safe path.
+
 1. **Build `sec_quarter_cache_loader.py`** — the foundation everything depends on
 2. **Run initial bootstrap**: `python3 sec_quarter_cache_loader.py` (all tickers, ~90 sec)
-3. **Modify `guidance_write_cli.py`** — 4-step cascade with lazy connections
-4. **Modify `guidance_trigger_daemon.py`** — asset-aware SEC refresh
-5. **Update `k8s/processing/guidance-trigger.yaml`** — `ACTIVE_WINDOW_DAYS=45`
-6. **Modify `trigger-extract.py`** — SEC prefetch for manual runs
-7. **Test**: extract guidance for one affected ticker (e.g., FIVE), verify correct period dates
-8. **Run migration** — fix 1,858 existing wrong items on 5 tickers
-9. **Verify**: zero duplicate GuidancePeriod nodes, correct dates on all affected items
+3. **Update `k8s/processing/guidance-trigger.yaml`** — `ACTIVE_WINDOW_DAYS=45` (REQUIRED before daemon changes)
+4. **Run migration** — fix 1,858 existing wrong items on 5 tickers (BEFORE enabling Step A)
+5. **Verify migration**: zero duplicate GuidancePeriod nodes per (ticker, fiscal_year, fiscal_quarter)
+6. **Modify `guidance_write_cli.py`** — 3-step cascade with lazy connections (NOW safe — no duplicates for Step A to pick wrong)
+7. **Modify `guidance_trigger_daemon.py`** — per-ticker SEC refresh, skip in --list
+8. **Modify `trigger-extract.py`** — SEC prefetch for manual runs
+9. **Test**: extract guidance for one affected ticker (e.g., FIVE), verify correct period dates
 10. **(Optional)** Modify `trade_ready_scanner.py` for prewarm
 
 ---
@@ -533,8 +568,8 @@ end = start + length - 1
 | `guidance_ids.py` (`build_guidance_period_id`, `build_guidance_ids`) | **Unchanged** | Still called by Step D exactly as today |
 | `guidance_writer.py` (MERGE queries, Cypher, write logic) | **Unchanged** | The writer receives the same fields; only the input values change |
 | `fiscal_math.py` (`_compute_fiscal_dates`, `period_to_fiscal`) | **Unchanged** | Still used by Step D; SEC-corrected FYE fixes the input, not the function |
-| Dry-run mode in `guidance_write_cli.py` | **Unchanged** | Lazy connections return None → Steps A/B/C skip → Step D runs as today |
-| All 146 existing tests | **Pass unchanged** | `ticker=None` default preserves old `_ensure_period` behavior |
+| Dry-run mode in `guidance_write_cli.py` | **Graceful fallback** | Lazy connections now attempt Neo4j/Redis but fail silently (None) → Steps A/B skip → Step D runs. Output unchanged. |
+| All 200 existing tests (86+31+83) | **Pass unchanged** | `ticker=None` default preserves old `_ensure_period` and `_ensure_ids` behavior |
 | `get_quarterly_filings.py` (already fixed with XBRL-direct) | **Unchanged** | Separate fix, unrelated to this implementation |
 | Extraction agent prompts / pass files | **Unchanged** | The agent still extracts the same fields; ID computation happens downstream |
 
