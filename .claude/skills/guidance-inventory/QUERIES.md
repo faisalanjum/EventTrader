@@ -64,11 +64,7 @@ WHERE p.period_type = 'duration'
 WITH DISTINCT p.u_id AS u_id, p.start_date AS start_date, p.end_date AS end_date
 RETURN u_id, start_date, end_date
 ```
-**Usage**: Pipe output as JSON array to `fiscal_resolve.py` via Bash:
-```bash
-echo '$periods_json' | python3 .claude/skills/earnings-orchestrator/scripts/fiscal_resolve.py $TICKER $FISCAL_YEAR $FISCAL_QUARTER $FYE_MONTH
-```
-Returns: `{"start_date": "...", "end_date": "...", "period_u_id": "duration_...", "period_node_type": "duration", "source": "lookup|fallback"}`
+**Note**: This query provides raw Period data for XBRL pipeline use. Guidance extraction does not use this — period resolution is handled by `guidance_write_cli.py` via the SEC cache + FYE cascade.
 
 ### 1D. All 10-K/10-Q Periods (Alternative Pre-Fetch)
 

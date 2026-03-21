@@ -2,8 +2,8 @@
 Pure fiscal math functions — zero external dependencies.
 
 Extracted from get_quarterly_filings.py to allow clean imports from
-guidance_ids.py, fiscal_resolve.py, and any future consumer without
-triggering neo4j/dotenv top-level imports.
+guidance_ids.py and any future consumer without triggering neo4j/dotenv
+top-level imports.
 """
 
 from datetime import date
