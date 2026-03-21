@@ -953,16 +953,66 @@ GuidancePeriod node IDs become: `gp_2024-02-04_2024-05-04` (not `_2024-05-05`).
 
 1,858 guidance items on 5 tickers (FIVE, ASO, LULU, DLTR, SAIC) have wrong GuidancePeriod nodes (~28d offset).
 
+**Critical: migration must update GuidanceUpdate.id, not just re-point edges.**
+
+The `guidance_update_id` embeds `period_u_id` (see §Critical Code Detail below). If migration only re-points `HAS_PERIOD` edges to the correct GuidancePeriod but leaves the old `period_u_id` baked into `GuidanceUpdate.id`, the next extraction with the fiscal-identity lookup will:
+1. Find the correct GuidancePeriod (via re-pointed edge) → get correct `period_u_id`
+2. Compute a `guidance_update_id` with the correct `period_u_id` embedded
+3. MERGE finds NO match (old node still has old `period_u_id` in its `id`) → creates DUPLICATE GuidanceUpdate
+
+Verified empirically — FIVE FY2025 Q1 has:
+```
+Current gu.id: gu:FIVE_2024-03-20T08.30:revenue:gp_2024-03-01_2024-05-31:unknown:total
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+                                                 old wrong period embedded
+
+After edge-only migration, new extraction would compute:
+           gu:FIVE_2024-03-20T08.30:revenue:gp_2024-02-04_2024-05-04:unknown:total
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^
+                                            correct SEC period — DIFFERENT ID → duplicate
+```
+
+**Migration steps (handles both levels):**
+
 ```
 1. Load SEC quarter cache (run sec_quarter_cache_loader.py)
-2. For each affected GuidancePeriod node:
-   a. Parse the u_id: gp_{start}_{end} → extract start/end dates
-   b. Find the correct quarter from SEC cache by date proximity
-   c. MERGE correct GuidancePeriod node with SEC-derived dates
-   d. Re-point GuidanceUpdate relationships: wrong period → correct period
-3. Delete orphaned wrong-date GuidancePeriod nodes
-4. Verify: zero duplicate periods per (ticker, quarter)
+
+2. For each affected (ticker, fiscal_year, fiscal_quarter) group:
+   a. Query: find all GuidanceUpdate nodes on wrong-date GuidancePeriod
+      MATCH (gu:GuidanceUpdate)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+      WHERE gu.fiscal_year = $fy AND gu.fiscal_quarter = $fq
+      MATCH (gu)-[old_hp:HAS_PERIOD]->(old_gp:GuidancePeriod)
+      WHERE old_gp.id = $old_period_id
+
+   b. MERGE correct GuidancePeriod node with SEC-derived dates:
+      MERGE (new_gp:GuidancePeriod {id: $new_period_id})
+        ON CREATE SET new_gp.u_id = $new_period_id,
+                      new_gp.start_date = $sec_start,
+                      new_gp.end_date = $sec_end
+
+   c. Update GuidanceUpdate.id in-place (replace old period_u_id segment):
+      SET gu.id = replace(gu.id, $old_period_id, $new_period_id)
+
+   d. Re-point HAS_PERIOD edge:
+      DELETE old_hp
+      MERGE (gu)-[:HAS_PERIOD]->(new_gp)
+
+3. Delete orphaned wrong-date GuidancePeriod nodes (only if no other
+   GuidanceUpdate still references them — shared by calendar-month tickers)
+
+4. Verify:
+   - Zero duplicate periods per (ticker, fiscal_year, fiscal_quarter)
+   - Every GuidanceUpdate.id contains the period_u_id that matches
+     its HAS_PERIOD target's gp.id
+   - Uniqueness constraint on GuidanceUpdate.id still holds
+     (no collisions from the string replacement)
 ```
+
+**Why in-place `SET gu.id` is safe:**
+- Neo4j allows changing property values including those under uniqueness constraints, as long as the new value doesn't collide
+- The new ID (with correct SEC period) has never been written before (no prior extraction used SEC dates), so no collision
+- Future MERGE calls with the new ID will find the updated node correctly
+- Future MERGE calls with the old ID won't find it (correct — old dates should never be used again)
 
 ### Accuracy Summary — Final (v4)
 
@@ -979,15 +1029,54 @@ GuidancePeriod node IDs become: `gp_2024-02-04_2024-05-04` (not `_2024-05-05`).
 | COST Q3 (old ±19d case) | SEC cache (Step 1) | **Exact (0d)** | **PROVEN** |
 | SEC API unavailable | Graph v3 offline fallback | **99.7%** | **PROVEN** — v3 as backup |
 
+### SEC Cache Refresh Strategy — Piggyback on TradeReady Scanner
+
+**No separate CronJob needed.** The TradeReady scanner (`scripts/trade_ready_scanner.py`) already runs 4x/day and identifies every ticker with upcoming earnings 1-3 days before the 8-K fires. Piggyback the SEC cache refresh on it:
+
+```
+TradeReady scanner runs (4x/day, already live in K8s):
+  For each newly added ticker:
+    If NOT in SEC quarter cache (or cache is stale):
+      Fetch SEC XBRL Company Concept API → write to Redis (~1 API call, <1 sec)
+```
+
+**Why this is sufficient:**
+- The guidance trigger daemon is driven BY TradeReady — it only extracts guidance for tickers in TradeReady
+- So every ticker that will call `build_guidance_period_id()` has already been through TradeReady → cache is warm
+- 1-3 day lead time before 8-K fires = plenty of time for the SEC fetch
+- Cache has no TTL — once fetched, stays forever. No re-fetch needed for historical quarters
+- ~5-15 new tickers per day during earnings season = <2 seconds of SEC API calls
+
+**Why NOT a full daily refresh of 739 tickers:**
+- 83,091 historical quarters don't change — fetching them daily wastes 90 seconds and 739 API calls
+- Only ~5-15 tickers per day have new filings
+- SEC rate limit (10 req/sec) is better spent on incremental fetches
+
+**Setup:**
+1. **One-time full refresh** — run `sec_quarter_cache_loader.py` once to populate entire cache (~90 sec, 739 tickers, ~83K quarters). This is the initial bootstrap.
+2. **Incremental via TradeReady** — add ~20 lines to `trade_ready_scanner.py`: after adding a ticker, check Redis for SEC cache → if missing, fetch from SEC API and write. The existing 4x/day K8s CronJob schedule handles everything.
+3. **Manual fallback** — `sec_quarter_cache_loader.py --ticker LULU` for ad-hoc refreshes or manual `trigger-extract.py` runs.
+
+**Gaps (minor, with mitigations):**
+
+| Gap | Impact | Mitigation |
+|---|---|---|
+| Manual `trigger-extract.py --ticker XYZ` for non-TradeReady ticker | Cache miss → Step 2/3 | Add SEC fetch to manual trigger script, or run cache loader for that ticker first |
+| 10-Q files Day 40 after ticker dropped from TradeReady window | New quarter not in cache | First-write-wins already created the period on Day 0 — no new period needed |
+| Brand new ticker, no earnings yet | No TradeReady entry, no cache | Step 3 FYE fallback until first earnings cycle |
+| SEC down during TradeReady scan | Fetch fails | Cache from previous scans persists (no TTL). Retry on next scan (4x/day). Step 2/3 fallback if still down. |
+| Extended SEC outage or cache corruption | Multiple tickers uncached | Run `sec_quarter_cache_loader.py` manually — full refresh of all 739 tickers in ~90 sec. Also available as K8s CronJob fallback (see below). |
+
 ### Implementation Order
 
-1. **Build `scripts/sec_quarter_cache_loader.py`** — fetch SEC data, write to Redis (~200 lines)
-2. **Deploy `k8s/processing/sec-quarter-refresh.yaml`** — daily CronJob at 6 AM ET
-3. **Add fiscal-identity lookup** in `_ensure_period()` (`guidance_write_cli.py:~78`) — before calling `build_guidance_period_id()`, query Neo4j for existing GuidancePeriod by `(ticker, fiscal_year, fiscal_quarter)` via GuidanceUpdate relationships. If found, reuse its `period_u_id`. This prevents duplicate GuidancePeriod AND GuidanceUpdate nodes when date computation changes (predicted → exact). Requires code change — NOT automatic from MERGE.
-4. **Modify `build_guidance_period_id()` in `guidance_ids.py:376`** — Step 1 SEC cache lookup, Step 2 prediction, Step 3 FYE fallback (only reached when fiscal-identity lookup finds no existing period)
-5. **Run migration** — fix existing 1,858 guidance items on 5 tickers
-6. **Keep v3 Cypher query** as offline fallback (if SEC unavailable)
-7. **Remove** XBRL reprocessing prerequisite and HAS_XBRL gate requirement (no longer needed)
+1. **Build `scripts/sec_quarter_cache_loader.py`** — full SEC fetch for all tickers, write to Redis (~200 lines). Three uses: (a) initial bootstrap, (b) manual ad-hoc refreshes (`--ticker LULU`), (c) fallback full-refresh if incremental pipeline fails or cache is corrupted (`python3 sec_quarter_cache_loader.py` with no args = all tickers). Optionally deploy as a weekly K8s CronJob (`sec-quarter-refresh.yaml`, Sunday 6 AM) as a safety net behind the incremental TradeReady piggyback.
+2. **Add SEC incremental fetch to `trade_ready_scanner.py`** (~20 lines) — after adding ticker to TradeReady, fetch its SEC quarter data if not cached. Piggybacks on existing 4x/day K8s CronJob. No new deployment needed.
+3. **Run initial bootstrap** — `python3 sec_quarter_cache_loader.py` once (~90 sec) to populate cache with all 83K historical quarters.
+4. **Add fiscal-identity lookup** in `_ensure_period()` (`guidance_write_cli.py:~78`) — before calling `build_guidance_period_id()`, query Neo4j for existing GuidancePeriod by `(ticker, fiscal_year, fiscal_quarter)` via GuidanceUpdate relationships. If found, reuse its `period_u_id`. This prevents duplicate GuidancePeriod AND GuidanceUpdate nodes when date computation changes (predicted → exact). Requires code change — NOT automatic from MERGE.
+5. **Modify `build_guidance_period_id()` in `guidance_ids.py:376`** — Step 1 SEC cache lookup, Step 2 prediction, Step 3 FYE fallback (only reached when fiscal-identity lookup finds no existing period)
+6. **Run migration** — fix existing 1,858 guidance items on 5 tickers
+7. **Keep v3 Cypher query** as offline fallback (if SEC unavailable)
+8. **Remove** XBRL reprocessing prerequisite and HAS_XBRL gate requirement (no longer needed)
 
 ### Critical Code Detail: Why MERGE Alone Doesn't Prevent Duplicates
 
