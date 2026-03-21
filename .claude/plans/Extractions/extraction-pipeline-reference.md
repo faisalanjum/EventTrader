@@ -235,7 +235,7 @@ All skill/query paths relative to `.claude/skills/extract/`.
 | `concept_resolver.py` | Deterministic XBRL concept resolution (49-entry reviewed registry) + concept family mapping (19-entry canonical anchor table). Runs in `guidance_write_cli.py` before writer. |
 | `warmup_cache.py/.sh` | Pre-compute concept cache (2A), member cache (2B), transcript content (3B) to `/tmp/` — bypasses MCP truncation |
 | `fiscal_math.py` | Calendar-to-fiscal date math (FYE variants) |
-| `fiscal_resolve.py` | Period resolution from XBRL periods |
+| ~~`fiscal_resolve.py`~~ | **DELETED (2026-03-21)** — was dead code with FYE bugs. Period resolution now handled by `guidance_write_cli.py` 4-step cascade (SEC cache + prediction + corrected FYE). Agent-facing doc refs removed from `queries-common.md` and `QUERIES.md`. |
 
 ### Runtime Infrastructure (`scripts/`)
 

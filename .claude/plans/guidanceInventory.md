@@ -914,7 +914,7 @@ For normal reruns: just rerun. MERGE + SET overwrites properties automatically. 
 | `guidance-inventory/reference/PROFILE_NEWS.md` | **DONE** (v1.1) | Channel filter, analyst exclusion, reaffirmation handling, title/body scan. |
 | `guidance-inventory/reference/PROFILE_10Q.md` | **DONE** (v1.2) | MD&A primary (10-Q ~99%, 10-K ~98%), bounded fallback, 10-K apostrophe variant, forward-looking strictness. |
 | `guidance_ids.py` | **DONE** (60 tests) | `build_guidance_ids()` + `build_period_u_id()` + unit canonicalization + evhash16. Fiscal-keyed Period u_id construction. |
-| `fiscal_resolve.py` | **DONE** (29 tests) | CLI wrapper for fiscal-to-calendar resolution. Not used by guidance extraction (fiscal-keyed Periods). Kept for future actuals comparison. |
+| ~~`fiscal_resolve.py`~~ | **DELETED (2026-03-21)** | Was dead code with FYE bugs. Period resolution now in `guidance_write_cli.py` 4-step cascade (SEC cache + prediction + corrected FYE). |
 | `guidance_writer.py` | **DONE** (62 tests) | v3.0 architecture: direct FOR_COMPANY edge, fiscal-keyed Period MERGE, canonical_unit property, MAPS_TO_CONCEPT edge (0..1), MAPS_TO_MEMBER edges (0..N). |
 | `guidance_write_cli.py` | **DONE** (18 tests) | CLI wrapper: reads JSON, computes IDs via `build_guidance_ids()`, calls `write_guidance_batch()`. Concept inheritance (same label → same xbrl_qname). Supports `--dry-run` / `--write`. Overrides feature flag at runtime. |
 | `guidance_write.sh` | **DONE** | Shell wrapper: activates venv, force-sets Neo4j env vars to match MCP server (`bolt://localhost:30687`), runs CLI. |
