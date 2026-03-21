@@ -65,8 +65,8 @@ The order matters: Step 1 MUST run before Step 2, otherwise a later SEC-exact lo
    ```
    fiscal_quarter:{TICKER}:{FY}:Q{N} → {"start":"2024-02-04","end":"2024-05-04"}  (inclusive end)
    fiscal_quarter:{TICKER}:{FY}:FY   → {"start":"2024-02-04","end":"2025-02-01"}  (annual)
-   fiscal_quarter_length:{TICKER}:Q{N} → 91  (median span across all FYs)
-   fiscal_quarter_length:{TICKER}:FY   → 364
+   # fiscal_quarter_length keys — PHASE 2 only (for Step C prediction)
+   # fiscal_quarter_length:{TICKER}:Q{N} → 91  (median span across all FYs)
    fiscal_year_end:{TICKER} → {"raw":"0201","month_adj":1}  (SEC fiscalYearEnd, day<=5 adjusted)
    fiscal_quarter:{TICKER}:last_refreshed → timestamp (no TTL — daemon manages freshness)
    ```
@@ -204,8 +204,8 @@ def _ensure_period(item, fye_month, ticker=None):
          Adds ~20 lines + fiscal_quarter_length Redis keys. Can be added later if needed.
       D. Corrected FYE math (last resort — sentinels, long-range, half, monthly, uncached)
 
-    Steps A/B (and optional C) are additive. If all return None (Neo4j down, Redis down,
-    cache empty), Step D runs exactly as the current code does today.
+    Steps A/B are additive. If both return None (Neo4j down, Redis down, cache empty),
+    Step D runs — same code path as today, but now may use SEC-corrected FYE input.
     """
     if item.get('period_u_id'):
         return item
@@ -237,16 +237,12 @@ def _ensure_period(item, fye_month, ticker=None):
             item['gp_end_date'] = sec_dates['end']
             return item
 
-    # Step C: Predict from previous quarter + historical length (unfiled quarters)
-    if ticker and fiscal_year and fiscal_quarter:
-        predicted = _predict_from_prev_quarter(ticker, fiscal_year, fiscal_quarter)
-        if predicted:
-            item['period_u_id'] = f"gp_{predicted['start']}_{predicted['end']}"
-            item['period_scope'] = 'quarter'
-            item['time_type'] = 'duration'
-            item['gp_start_date'] = predicted['start']
-            item['gp_end_date'] = predicted['end']
-            return item
+    # [PHASE 2 — not in initial implementation]
+    # Step C: Predict from previous quarter end + historical length
+    # Improves unfiled-quarter accuracy from +-3-5d to +-1d.
+    # No known orchestrator impact. Add when/if a consumer needs +-1d.
+    # Requires: _predict_from_prev_quarter() + fiscal_quarter_length Redis keys.
+    # See "Phase 2" section at end of this document.
 
     # Step D: FYE math (last resort)
     # Handles: sentinel, long_range, monthly, half, and uncached quarter/annual
@@ -384,34 +380,8 @@ def _lookup_sec_cache(ticker, fiscal_year, suffix):
         return None
 
 
-def _predict_from_prev_quarter(ticker, fiscal_year, fiscal_quarter):
-    """Predict current quarter from previous quarter end + historical length.
-
-    Uses SEC inclusive end-date convention:
-      next_start = prev_end + 1 day
-      next_end = next_start + length - 1
-
-    Accuracy: 98.4% within +-1d, 99.2% within +-3d.
-    One assumption: quarter lengths stable across FYs.
-    Breaks +-7d on 53-week year transitions (~1 per ticker per 6yr).
-    """
-    r = _get_redis()
-    if not r:
-        return None
-    try:
-        prev_q = fiscal_quarter - 1 if fiscal_quarter > 1 else 4
-        prev_fy = fiscal_year if fiscal_quarter > 1 else fiscal_year - 1
-        prev_data = r.get(f"fiscal_quarter:{ticker}:{prev_fy}:Q{prev_q}")
-        length = r.get(f"fiscal_quarter_length:{ticker}:Q{fiscal_quarter}")
-        if prev_data and length:
-            prev = json.loads(prev_data)
-            # SEC inclusive convention: next quarter starts prev_end + 1 day
-            start = (date.fromisoformat(prev['end']) + timedelta(days=1)).isoformat()
-            end = (date.fromisoformat(start) + timedelta(days=int(length) - 1)).isoformat()
-            return {"start": start, "end": end}
-    except Exception:
-        pass
-    return None
+# _predict_from_prev_quarter() — PHASE 2, not in initial implementation.
+# See "Phase 2" section at end of document.
 
 
 def _get_sec_corrected_fye(ticker):
@@ -486,8 +456,11 @@ If only `HAS_PERIOD` is re-pointed but `gu.id` still contains the old `period_u_
 **WHAT**:
 ```python
 # After items are found but before queuing — prefetch SEC cache for unique tickers
+# ONLY for guidance extraction (not news or other types)
 # trigger-extract.py already imports redis (line 36) and defines REDIS_HOST/REDIS_PORT
-if not args.list and items:
+if (not args.list and items
+        and extraction_type == "guidance"
+        and asset in ("transcript", "8k", "10q", "10k")):
     unique_tickers = sorted({item["symbol"] or item["id"].split("_")[0] for item in items})
     import redis as _redis
     _r = _redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
@@ -536,18 +509,22 @@ def _prewarm_sec_cache(r, entries):
 
 ## Execution Order
 
-**CRITICAL**: Migration (step 4) must run BEFORE enabling Step A (fiscal-identity lookup) in production. The live graph has 28 duplicate quarter groups and 34 duplicate annual groups from the FYE bug. If Step A runs before migration, LIMIT 1 could return the WRONG (buggy) period, and first-write-wins would fossilize it. The ORDER BY (most references first) mitigates this, but migration-first is the safe path.
+**TWO CRITICAL ordering constraints:**
+1. Migration must run BEFORE enabling Step A — the live graph has 28+34 duplicate fiscal-identity groups from the FYE bug. Step A without migration could fossilize the wrong period.
+2. Code changes and ACTIVE_WINDOW_DAYS=45 must deploy TOGETHER — deploying 45 with old buggy code widens the extraction window, creating MORE wrong items with the old ±28d bug before the fix is live.
 
 1. **Build `sec_quarter_cache_loader.py`** — the foundation everything depends on
 2. **Run initial bootstrap**: `python3 sec_quarter_cache_loader.py` (all tickers, ~90 sec)
-3. **Update `k8s/processing/guidance-trigger.yaml`** — `ACTIVE_WINDOW_DAYS=45` (REQUIRED before daemon changes)
-4. **Run migration** — fix 1,858 existing wrong items on 5 tickers (BEFORE enabling Step A)
-5. **Verify migration**: zero duplicate GuidancePeriod nodes per (ticker, fiscal_year, fiscal_quarter)
-6. **Modify `guidance_write_cli.py`** — 3-step cascade with lazy connections (NOW safe — no duplicates for Step A to pick wrong)
-7. **Modify `guidance_trigger_daemon.py`** — per-ticker SEC refresh, skip in --list
-8. **Modify `trigger-extract.py`** — SEC prefetch for manual runs
-9. **Test**: extract guidance for one affected ticker (e.g., FIVE), verify correct period dates
-10. **(Optional)** Modify `trade_ready_scanner.py` for prewarm
+3. **Run migration** — fix 1,858 existing wrong items on 5 tickers
+4. **Verify migration**: zero duplicate GuidancePeriod nodes per (ticker, fiscal_year, fiscal_quarter)
+5. **Deploy ALL code changes + ACTIVE_WINDOW_DAYS=45 together (atomic rollout)**:
+   - `guidance_write_cli.py` — 3-step cascade
+   - `guidance_trigger_daemon.py` — per-ticker SEC refresh, skip in --list
+   - `trigger-extract.py` — SEC prefetch (gated on guidance type)
+   - `k8s/processing/guidance-trigger.yaml` — `ACTIVE_WINDOW_DAYS=45`
+6. **Test**: extract guidance for one affected ticker (e.g., FIVE), verify correct period dates
+7. **Run new tests** (see Required New Tests section)
+8. **(Optional)** Modify `trade_ready_scanner.py` for prewarm
 
 ---
 
@@ -605,15 +582,33 @@ end = start + length - 1
 
 ---
 
+## Required New Tests
+
+The 200 existing tests protect the old Step D path. They do NOT prove new Steps A/B, daemon refresh, or manual prefetch work. These new tests are required before signoff:
+
+| Test | What it proves | File |
+|---|---|---|
+| Step A returns existing period over SEC exact | fiscal-identity lookup works, first-write-wins dedup | `test_guidance_write_cli.py` |
+| Step B returns SEC exact quarter dates | SEC cache lookup works for quarters | `test_guidance_write_cli.py` |
+| Step B returns SEC exact annual dates | SEC cache lookup works for annuals (61.5% of items) | `test_guidance_write_cli.py` |
+| Step A/B skip when ticker=None | Old behavior preserved (test backward compat) | `test_guidance_write_cli.py` |
+| Step A/B skip when Neo4j/Redis unavailable | Graceful degradation → Step D | `test_guidance_write_cli.py` |
+| Daemon --list does not write Redis | No side effects during dry-run | `test_guidance_trigger_daemon.py` (or manual) |
+| Daemon refreshes once per ticker per sweep | No redundant API calls for multi-asset tickers | `test_guidance_trigger_daemon.py` (or manual) |
+| trigger-extract.py prefetch gates on guidance type | SEC prefetch skips non-guidance extraction types | Manual verification |
+
+These can be unit tests (mocking Neo4j/Redis) or integration tests against the live graph. Minimum: the first 5 (unit-testable without external dependencies).
+
+---
+
 ## Accuracy After Implementation
 
 | Scenario | Accuracy | Source |
 |---|---|---|
 | Filed quarter/annual (all data assets) | **Exact (0d)** | SEC cache (Step B) |
 | 8-K/transcript past-quarter reference | **Exact (0d)** | SEC cache (prior 10-Q already filed) |
-| 8-K/transcript current quarter (unfiled) | **+-3-5d normal case (Step D)** or **+-0-1d normal case (optional Step C)**, fossilized | Step D: corrected FYE math (uniform 13-week companies). Step C: prev Q end + historical length. Irregular calendars (COST, KR) may be worse if SEC cache AND Step A both miss — see worst cases below. |
+| 8-K/transcript current quarter (unfiled) | **+-3-5d normal case**, fossilized | Step D with corrected FYE (uniform 13-week). Irregular calendars (COST, KR) can be worse (+-11-24d) if SEC cache AND Step A both miss. Phase 2 Step C improves to +-1d. |
 | 8-K/transcript forward guidance | Same as above | Same |
-| 53-week transition quarter (if Step C used) | **+-7d, fossilized** | Step C assumption breaks once per ~6yr. Does not apply if only Step D used. |
 | Sentinel/long-range/half/monthly | **Same as today** | Step D unchanged |
 | KR Q1 (old +-24d worst case) | **Exact (0d) if SEC cache hit** | SEC cache has KR's 111d Q1 exact dates. If SEC cache misses AND Step A misses: Step D = +-24d (irregular calendar). |
 | COST Q3 (old +-19d worst case) | **Exact (0d) if SEC cache hit** | SEC cache has COST's 84d Q3 exact dates. If SEC cache misses AND Step A misses: Step D = +-19d. |
@@ -635,3 +630,41 @@ end = start + length - 1
 - `trade_ready_scanner.py:368` — `added_at` preservation for returning tickers
 - `/tmp/sec_fye_scale_test.py` — SEC EDGAR cross-validation script (737/738 = 99.86%)
 - `/tmp/sec_fye_full_results.json` — full SEC cross-validation results
+
+---
+
+## Phase 2 — Optional Future Improvements
+
+### Step C: Prediction from previous quarter + historical length
+
+Improves unfiled-quarter accuracy from ±3-5d (Step D) to ±1d. No known orchestrator impact. Add when/if a consumer needs ±1d precision on GuidancePeriod dates for unfiled quarters.
+
+**What to add:**
+1. `fiscal_quarter_length:{TICKER}:Q{N}` Redis keys — median quarter span computed from SEC cache
+2. `_predict_from_prev_quarter()` function in `guidance_write_cli.py`
+3. Step C block between Step B and Step D in `_ensure_period()`
+
+**Prediction math (SEC inclusive convention):**
+```python
+def _predict_from_prev_quarter(ticker, fiscal_year, fiscal_quarter):
+    r = _get_redis()
+    if not r: return None
+    prev_q = fiscal_quarter - 1 if fiscal_quarter > 1 else 4
+    prev_fy = fiscal_year if fiscal_quarter > 1 else fiscal_year - 1
+    prev_data = r.get(f"fiscal_quarter:{ticker}:{prev_fy}:Q{prev_q}")
+    length = r.get(f"fiscal_quarter_length:{ticker}:Q{fiscal_quarter}")
+    if prev_data and length:
+        prev = json.loads(prev_data)
+        start = (date.fromisoformat(prev['end']) + timedelta(days=1)).isoformat()
+        end = (date.fromisoformat(start) + timedelta(days=int(length) - 1)).isoformat()
+        return {"start": start, "end": end}
+    return None
+```
+
+**Accuracy:** 98.4% within ±1d, 99.2% within ±3d (tested on 5,673 quarters).
+**One assumption:** Quarter lengths stable across FYs. Breaks ±7d on 53-week transitions (~1 per ticker per 6yr).
+**Lines:** ~20 added to guidance_write_cli.py + median computation in sec_quarter_cache_loader.py.
+
+### Decouple GuidanceUpdate identity from period assignment
+
+Long-term architectural improvement. Remove `period_u_id` from `guidance_update_id` formula and replace with fiscal-identity-based key (`fy2025_q3`). Makes period dates fully mutable without affecting GuidanceUpdate identity. Requires schema migration of all GuidanceUpdate nodes. See `fiscal-math-issues.md` for full analysis.
