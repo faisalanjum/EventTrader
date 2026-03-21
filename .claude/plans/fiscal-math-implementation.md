@@ -13,9 +13,12 @@ Fix `build_guidance_period_id()` in `guidance_ids.py:376` to produce correct fis
 **Strategy (in this order for dedup correctness)**:
 1. Existing period reuse (first-write-wins via Neo4j fiscal-identity lookup)
 2. SEC cache exact dates (for filed quarters/annuals)
-3. Corrected FYE month-boundary math (last resort)
+3. [Optional] Predict from previous quarter end + historical length (±1d vs ±3-5d, zero functional impact)
+4. Corrected FYE month-boundary math with SEC-corrected FYE (last resort)
 
 The order matters: Step 1 MUST run before Step 2, otherwise a later SEC-exact lookup could bypass an already-written period and recreate the duplicate problem.
+
+**Minimal vs full implementation**: Without optional Step 3, the plan is ~315 lines across 6 files. With Step 3: ~355 lines. Step 3 improves unfiled-quarter accuracy from ±3-5d to ±1d but has zero impact on the earnings orchestrator (queries by ticker, not date range). Recommended: implement without Step 3 first, add later if a consumer needs ±1d.
 
 **Key design decisions**:
 - First-write-wins: once a GuidancePeriod is created for a (ticker, FY, quarter), all subsequent extractions reuse it — zero duplicates
@@ -33,7 +36,7 @@ The order matters: Step 1 MUST run before Step 2, otherwise a later SEC-exact lo
 | `scripts/sec_quarter_cache_loader.py` | **NEW** | ~200 | Bootstrap + manual SEC cache refresh |
 | `scripts/guidance_trigger_daemon.py` | **MODIFY** | ~30 | Asset-aware SEC cache refresh on enqueue |
 | `k8s/processing/guidance-trigger.yaml` | **MODIFY** | 1 line | `ACTIVE_WINDOW_DAYS: "1"` → `"45"` |
-| `guidance_write_cli.py` | **MODIFY** | ~55 | Thread ticker, lazy Neo4j/Redis, fiscal-identity lookup, SEC cache, prediction, corrected FYE fallback |
+| `guidance_write_cli.py` | **MODIFY** | ~35 (or ~55 with optional Step C) | Thread ticker, lazy Neo4j/Redis, fiscal-identity lookup, SEC cache, corrected FYE fallback. Optional: prediction from prev Q. |
 | Migration script | **NEW** | ~60 | Rekey GuidanceUpdate.id + re-point HAS_PERIOD + collision preflight |
 | `scripts/trigger-extract.py` | **MODIFY** | ~5 | SEC cache prefetch for manual runs |
 | `scripts/trade_ready_scanner.py` | **OPTIONAL** | ~25 | Prewarm SEC cache on TradeReady entry |
@@ -192,14 +195,17 @@ def _ensure_period(item, fye_month, ticker=None):
     """
     Compute period_u_id + GuidancePeriod fields if not already present.
 
-    4-step cascade:
+    3-step cascade (Step C is optional — see note):
       A. Reuse existing period (first-write-wins dedup via Neo4j fiscal-identity lookup)
       B. SEC cache lookup (exact dates for filed quarters and annuals)
-      C. Predict from previous quarter end + historical length (unfiled quarters)
+      C. [OPTIONAL] Predict from previous quarter end + historical length (unfiled quarters)
+         Improves accuracy from +-3-5d to +-1d on current-quarter transcripts/8-Ks.
+         Zero functional impact on orchestrator (queries by ticker, not date range).
+         Adds ~20 lines + fiscal_quarter_length Redis keys. Can be added later if needed.
       D. Corrected FYE math (last resort — sentinels, long-range, half, monthly, uncached)
 
-    Steps A/B/C are additive. If all return None (Neo4j down, Redis down, cache empty),
-    Step D runs exactly as the current code does today.
+    Steps A/B (and optional C) are additive. If all return None (Neo4j down, Redis down,
+    cache empty), Step D runs exactly as the current code does today.
     """
     if item.get('period_u_id'):
         return item
@@ -572,6 +578,24 @@ end = start + length - 1
 | All 200 existing tests (86+31+83) | **Pass unchanged** | `ticker=None` default preserves old `_ensure_period` and `_ensure_ids` behavior |
 | `get_quarterly_filings.py` (already fixed with XBRL-direct) | **Unchanged** | Separate fix, unrelated to this implementation |
 | Extraction agent prompts / pass files | **Unchanged** | The agent still extracts the same fields; ID computation happens downstream |
+| Neo4j connection count in write mode | **No change** | `get_manager()` is a singleton (`Neo4jConnection.py:15-17`). The lazy `_get_neo4j()` and the existing write-mode `get_manager()` at line 326 share the same instance. Zero duplicate connections. |
+
+---
+
+## Regression Risks
+
+| Risk | Severity | Mitigation |
+|---|---|---|
+| **Step A returns wrong period from pre-migration duplicates** | HIGH if migration hasn't run | Execution order: migration (step 4) BEFORE code deploy (step 6). ORDER BY ref_count DESC as fallback. |
+| **Dry-run attempts external connections** | LOW | `_get_neo4j()` and `_get_redis()` fail silently (return None). Output unchanged. Slightly slower on first call (~100ms timeout). |
+| **Daemon SEC refresh fails (SEC down)** | LOW | try/except swallows error, logs warning, enqueue proceeds. Extraction uses Step D fallback. |
+| **Daemon SEC refresh in --list mode** | NONE (fixed) | `_precompute_sec_refresh()` checks `dry_run` flag and no-ops. |
+| **Same ticker refreshed multiple times per sweep** | NONE (fixed) | `_precompute_sec_refresh()` dedupes per-ticker before the enqueue loop. |
+| **`_lookup_existing_period` nondeterministic** | NONE (fixed) | ORDER BY ref_count DESC, end_date DESC, u_id. Deterministic even with duplicates. |
+| **`_ensure_period` signature change breaks tests** | NONE | `ticker=None` default. All 200 tests call without ticker → Steps A/B skip → Step D unchanged. |
+| **`_ensure_ids` signature change breaks tests** | NONE | `ticker=None` default. 11 test call sites all use positional/keyword args without ticker. |
+| **Migration collision on GuidanceUpdate.id rekey** | LOW | Preflight check before SET. Abort + log on collision for manual review. No auto-merge. |
+| **ACTIVE_WINDOW_DAYS=45 increases daemon workload** | LOW | ~225 active tickers in `IN` clause at peak. Negligible Neo4j load — documented in GuidanceTrigger.md:172 ("most have all assets completed"). |
 
 ---
 
@@ -581,9 +605,9 @@ end = start + length - 1
 |---|---|---|
 | Filed quarter/annual (all data assets) | **Exact (0d)** | SEC cache (Step B) |
 | 8-K/transcript past-quarter reference | **Exact (0d)** | SEC cache (prior 10-Q already filed) |
-| 8-K/transcript current quarter (unfiled) | **+-0-1d (98.4%), fossilized** | Prediction (Step C) + first-write-wins (Step A) |
-| 8-K/transcript forward guidance | **+-0-1d (98.4%), fossilized** | Same |
-| 53-week transition quarter | **+-7d, fossilized** | Step C assumption breaks once per ~6yr |
+| 8-K/transcript current quarter (unfiled) | **+-3-5d (Step D)** or **+-0-1d (optional Step C)**, fossilized | Step D: corrected FYE math. Step C (if implemented): prev Q end + historical length. |
+| 8-K/transcript forward guidance | Same as above | Same |
+| 53-week transition quarter (if Step C used) | **+-7d, fossilized** | Step C assumption breaks once per ~6yr. Does not apply if only Step D used. |
 | Sentinel/long-range/half/monthly | **Same as today** | Step D unchanged |
 | KR Q1 (old +-24d worst case) | **Exact (0d)** | SEC cache has KR's 111d Q1 exact dates |
 | COST Q3 (old +-19d worst case) | **Exact (0d)** | SEC cache has COST's 84d Q3 exact dates |
