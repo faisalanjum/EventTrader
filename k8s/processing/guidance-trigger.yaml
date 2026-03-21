@@ -35,7 +35,7 @@ spec:
         # 1 = only upcoming tickers (normal mode — just-in-time extraction)
         # 45 = backfill mode (covers SEC 10-Q filing deadline, use for weekend catchup)
         - name: ACTIVE_WINDOW_DAYS
-          value: "1"
+          value: "45"
         resources:
           requests:
             cpu: "50m"

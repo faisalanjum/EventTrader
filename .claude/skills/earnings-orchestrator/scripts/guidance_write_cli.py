@@ -74,25 +74,203 @@ from guidance_writer import write_guidance_batch, write_guidance_item, create_gu
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
+# ── Lazy connections for Steps A/B/C/D fiscal period resolution ──
+import os
+from datetime import date, timedelta
 
-def _ensure_period(item, fye_month):
+_neo4j_mgr = None
+_redis_cli = None
+
+
+def _get_neo4j():
+    """Lazy Neo4j connection. Returns None on failure (graceful degradation)."""
+    global _neo4j_mgr
+    if _neo4j_mgr is None:
+        try:
+            from neograph.Neo4jConnection import get_manager
+            _neo4j_mgr = get_manager()
+        except Exception:
+            pass
+    return _neo4j_mgr
+
+
+def _get_redis():
+    """Lazy Redis connection. Returns None on failure (graceful degradation)."""
+    global _redis_cli
+    if _redis_cli is None:
+        try:
+            import redis
+            _redis_cli = redis.Redis(
+                host=os.environ.get('REDIS_HOST', '192.168.40.72'),
+                port=int(os.environ.get('REDIS_PORT', '31379')),
+                decode_responses=True)
+            _redis_cli.ping()
+        except Exception:
+            _redis_cli = None
+    return _redis_cli
+
+
+def _lookup_existing_period(ticker, fiscal_year, fiscal_quarter):
+    """Check Neo4j for existing GuidancePeriod for this fiscal identity.
+
+    Deterministic: ORDER BY ref_count DESC, end_date DESC, u_id.
+    Uses execute_cypher_query_all() which returns list[dict].
+    """
+    mgr = _get_neo4j()
+    if not mgr:
+        return None
+    try:
+        if fiscal_quarter is not None:
+            result = mgr.execute_cypher_query_all("""
+                MATCH (gu:GuidanceUpdate)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+                WHERE gu.fiscal_year = $fy AND gu.fiscal_quarter = $fq
+                MATCH (gu)-[:HAS_PERIOD]->(gp:GuidancePeriod)
+                WITH gp, count(gu) AS ref_count
+                ORDER BY ref_count DESC, gp.end_date DESC, gp.u_id
+                RETURN gp.u_id AS period_u_id, gp.start_date AS start_date,
+                       gp.end_date AS end_date
+                LIMIT 1
+            """, {'ticker': ticker, 'fy': fiscal_year, 'fq': fiscal_quarter})
+        else:
+            result = mgr.execute_cypher_query_all("""
+                MATCH (gu:GuidanceUpdate)-[:FOR_COMPANY]->(c:Company {ticker: $ticker})
+                WHERE gu.fiscal_year = $fy AND gu.fiscal_quarter IS NULL
+                  AND gu.period_scope = 'annual'
+                MATCH (gu)-[:HAS_PERIOD]->(gp:GuidancePeriod)
+                WITH gp, count(gu) AS ref_count
+                ORDER BY ref_count DESC, gp.end_date DESC, gp.u_id
+                RETURN gp.u_id AS period_u_id, gp.start_date AS start_date,
+                       gp.end_date AS end_date
+                LIMIT 1
+            """, {'ticker': ticker, 'fy': fiscal_year})
+        return result[0] if result else None
+    except Exception:
+        return None
+
+
+def _lookup_sec_cache(ticker, fiscal_year, suffix):
+    """Check Redis for SEC-derived exact dates. suffix is 'Q1'-'Q4' or 'FY'."""
+    r = _get_redis()
+    if not r:
+        return None
+    try:
+        data = r.get(f"fiscal_quarter:{ticker}:{fiscal_year}:{suffix}")
+        return json.loads(data) if data else None
+    except Exception:
+        return None
+
+
+def _predict_from_prev_quarter(ticker, fiscal_year, fiscal_quarter):
+    """Predict current quarter from previous quarter end + historical length.
+
+    SEC inclusive convention: start = prev_end + 1d, end = start + length - 1.
+    Returns None if prev-quarter data or length missing -> caller falls to Step D.
+    """
+    r = _get_redis()
+    if not r:
+        return None
+    try:
+        prev_q = fiscal_quarter - 1 if fiscal_quarter > 1 else 4
+        prev_fy = fiscal_year if fiscal_quarter > 1 else fiscal_year - 1
+        prev_data = r.get(f"fiscal_quarter:{ticker}:{prev_fy}:Q{prev_q}")
+        length = r.get(f"fiscal_quarter_length:{ticker}:Q{fiscal_quarter}")
+        if prev_data and length:
+            prev = json.loads(prev_data)
+            start = (date.fromisoformat(prev['end']) + timedelta(days=1)).isoformat()
+            end = (date.fromisoformat(start) + timedelta(days=int(length) - 1)).isoformat()
+            return {"start": start, "end": end}
+    except Exception:
+        pass
+    return None
+
+
+def _get_sec_corrected_fye(ticker):
+    """Get SEC-adjusted FYE month from Redis cache."""
+    r = _get_redis()
+    if not r:
+        return None
+    try:
+        data = r.get(f"fiscal_year_end:{ticker}")
+        if data:
+            return json.loads(data).get('month_adj')
+    except Exception:
+        pass
+    return None
+
+
+def _ensure_period(item, fye_month, ticker=None):
     """
     Compute period_u_id + GuidancePeriod fields if not already present.
 
-    If item already has period_u_id, do nothing.
-    Otherwise, call build_guidance_period_id() using LLM extraction fields.
-    Requires fye_month from top-level payload.
+    4-step cascade:
+      A. Reuse existing period (first-write-wins dedup via Neo4j)
+      B. SEC cache lookup (exact dates for filed quarters and annuals)
+      C. Predict from previous quarter end + historical length (unfiled quarters)
+      D. Corrected FYE math (last resort — sentinels, long-range, half, monthly, uncached)
 
-    Sets on item: period_u_id, period_scope, time_type, gp_start_date, gp_end_date.
+    Steps A/B/C are additive. If all miss, Step D runs (same code as before).
     """
     if item.get('period_u_id'):
         return item
 
-    if fye_month is None:
+    fiscal_year = item.get('fiscal_year')
+    fiscal_quarter = item.get('fiscal_quarter')
+
+    # Guard: Steps A/B/C only handle standard quarter and annual duration items.
+    is_standard_period = (
+        item.get('time_type') != 'instant'
+        and not item.get('half')
+        and not item.get('month')
+        and not item.get('sentinel_class')
+        and not item.get('long_range_end_year')
+    )
+
+    # Step A: Reuse existing period (first-write-wins dedup)
+    if is_standard_period and ticker and fiscal_year:
+        existing = _lookup_existing_period(ticker, fiscal_year, fiscal_quarter)
+        if existing:
+            item['period_u_id'] = existing['period_u_id']
+            item['period_scope'] = existing.get('period_scope', 'quarter' if fiscal_quarter else 'annual')
+            item['time_type'] = existing.get('time_type', 'duration')
+            item['gp_start_date'] = existing.get('start_date')
+            item['gp_end_date'] = existing.get('end_date')
+            return item
+
+    # Step B: SEC cache lookup (quarter or annual)
+    if is_standard_period and ticker and fiscal_year:
+        suffix = f"Q{fiscal_quarter}" if fiscal_quarter else "FY"
+        sec_dates = _lookup_sec_cache(ticker, fiscal_year, suffix)
+        if sec_dates:
+            item['period_u_id'] = f"gp_{sec_dates['start']}_{sec_dates['end']}"
+            item['period_scope'] = 'quarter' if fiscal_quarter else 'annual'
+            item['time_type'] = 'duration'
+            item['gp_start_date'] = sec_dates['start']
+            item['gp_end_date'] = sec_dates['end']
+            return item
+
+    # Step C: Predict from previous quarter end + historical length
+    if is_standard_period and ticker and fiscal_year and fiscal_quarter:
+        predicted = _predict_from_prev_quarter(ticker, fiscal_year, fiscal_quarter)
+        if predicted:
+            item['period_u_id'] = f"gp_{predicted['start']}_{predicted['end']}"
+            item['period_scope'] = 'quarter'
+            item['time_type'] = 'duration'
+            item['gp_start_date'] = predicted['start']
+            item['gp_end_date'] = predicted['end']
+            return item
+
+    # Step D: FYE math (last resort)
+    effective_fye = fye_month
+    if ticker:
+        sec_fye = _get_sec_corrected_fye(ticker)
+        if sec_fye is not None:
+            effective_fye = sec_fye
+
+    if effective_fye is None:
         raise ValueError("Cannot compute period: fye_month required at top level when items lack period_u_id")
 
     period = build_guidance_period_id(
-        fye_month=fye_month,
+        fye_month=effective_fye,
         fiscal_year=item.get('fiscal_year'),
         fiscal_quarter=item.get('fiscal_quarter'),
         half=item.get('half'),
@@ -112,20 +290,20 @@ def _ensure_period(item, fye_month):
     return item
 
 
-def _ensure_ids(item, fye_month=None):
+def _ensure_ids(item, fye_month=None, ticker=None):
     """
     Compute IDs if not already present in the item.
 
     If guidance_update_id is already set, skip ID computation (agent pre-computed).
     Otherwise:
-      1. Compute period (if needed) via build_guidance_period_id()
+      1. Compute period (if needed) via 4-step cascade (A/B/C/D)
       2. Compute IDs via build_guidance_ids()
     """
     if item.get('guidance_update_id'):
         return item
 
     # Step 1: Ensure period_u_id exists
-    _ensure_period(item, fye_month)
+    _ensure_period(item, fye_month, ticker)
 
     # Step 2: Require fields for ID computation
     required = ['label', 'period_u_id', 'basis_norm']
@@ -262,7 +440,7 @@ def main():
     valid_items = []
     for i, item in enumerate(items):
         try:
-            item = _ensure_ids(item, fye_month=fye_month)
+            item = _ensure_ids(item, fye_month=fye_month, ticker=ticker)
             valid_items.append(item)
         except ValueError as e:
             errors.append({"index": i, "label": item.get('label', '?'), "error": str(e)})

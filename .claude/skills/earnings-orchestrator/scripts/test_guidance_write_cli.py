@@ -546,6 +546,198 @@ def test_apply_member_map_alias_missing_file_no_crash():
     assert aliases == {}
 
 
+# ── Steps A/B/C/D cascade tests ──────────────────────────────────────────
+
+def _make_period_item(**overrides):
+    """Build item needing period computation (no period_u_id)."""
+    item = {
+        'label': 'Revenue',
+        'source_id': 'TEST_SRC',
+        'fiscal_year': 2025,
+        'fiscal_quarter': 2,
+        'basis_norm': 'unknown',
+        'segment': 'Total',
+        'low': 10.0, 'mid': None, 'high': 12.0,
+        'unit_raw': 'billion',
+        'qualitative': None,
+        'conditions': None,
+        'given_date': '2025-06-15',
+        'quote': 'test',
+    }
+    item.update(overrides)
+    return item
+
+
+def test_step_a_reuses_existing_period(monkeypatch):
+    """Step A returns existing period from Neo4j, overriding SEC cache."""
+    import guidance_write_cli as cli
+    monkeypatch.setattr(cli, '_lookup_existing_period', lambda t, fy, fq: {
+        'period_u_id': 'gp_2024-05-05_2024-08-03',
+        'start_date': '2024-05-05',
+        'end_date': '2024-08-03',
+    })
+    monkeypatch.setattr(cli, '_lookup_sec_cache', lambda t, fy, s: {
+        'start': '2024-05-05', 'end': '2024-08-02'  # different end
+    })
+    item = _make_period_item()
+    result = _ensure_period(item, fye_month=1, ticker='FIVE')
+    assert result['period_u_id'] == 'gp_2024-05-05_2024-08-03'  # Step A wins
+
+
+def test_step_b_sec_cache_quarter(monkeypatch):
+    """Step B returns SEC exact quarter dates when Step A misses."""
+    import guidance_write_cli as cli
+    monkeypatch.setattr(cli, '_lookup_existing_period', lambda t, fy, fq: None)
+    monkeypatch.setattr(cli, '_lookup_sec_cache', lambda t, fy, s: {
+        'start': '2025-05-04', 'end': '2025-08-02'
+    })
+    item = _make_period_item()
+    result = _ensure_period(item, fye_month=1, ticker='FIVE')
+    assert result['period_u_id'] == 'gp_2025-05-04_2025-08-02'
+    assert result['period_scope'] == 'quarter'
+
+
+def test_step_b_sec_cache_annual(monkeypatch):
+    """Step B returns SEC exact annual dates (fiscal_quarter=None)."""
+    import guidance_write_cli as cli
+    monkeypatch.setattr(cli, '_lookup_existing_period', lambda t, fy, fq: None)
+    monkeypatch.setattr(cli, '_lookup_sec_cache', lambda t, fy, s: {
+        'start': '2025-02-02', 'end': '2026-01-31'
+    })
+    item = _make_period_item(fiscal_quarter=None)
+    result = _ensure_period(item, fye_month=1, ticker='FIVE')
+    assert result['period_u_id'] == 'gp_2025-02-02_2026-01-31'
+    assert result['period_scope'] == 'annual'
+
+
+def test_step_c_prediction_exact(monkeypatch):
+    """Step C predicts from prev quarter + median length."""
+    import guidance_write_cli as cli
+    monkeypatch.setattr(cli, '_lookup_existing_period', lambda t, fy, fq: None)
+    monkeypatch.setattr(cli, '_lookup_sec_cache', lambda t, fy, s: None)
+    # Mock Redis for prediction
+    class FakeRedis:
+        def get(self, key):
+            data = {
+                'fiscal_quarter:FIVE:2025:Q1': '{"start":"2025-02-02","end":"2025-05-03"}',
+                'fiscal_quarter_length:FIVE:Q2': '91',
+            }
+            return data.get(key)
+        def ping(self): pass
+    monkeypatch.setattr(cli, '_redis_cli', FakeRedis())
+    item = _make_period_item()
+    result = _ensure_period(item, fye_month=1, ticker='FIVE')
+    assert result['period_u_id'] == 'gp_2025-05-04_2025-08-02'
+    assert result['period_scope'] == 'quarter'
+
+
+def test_step_c_cache_miss_falls_to_step_d(monkeypatch):
+    """Step C returns None when prev-quarter data missing → Step D runs."""
+    import guidance_write_cli as cli
+    monkeypatch.setattr(cli, '_lookup_existing_period', lambda t, fy, fq: None)
+    monkeypatch.setattr(cli, '_lookup_sec_cache', lambda t, fy, s: None)
+    class EmptyRedis:
+        def get(self, key): return None
+        def ping(self): pass
+    monkeypatch.setattr(cli, '_redis_cli', EmptyRedis())
+    monkeypatch.setattr(cli, '_get_sec_corrected_fye', lambda t: None)
+    item = _make_period_item()
+    result = _ensure_period(item, fye_month=1, ticker='FIVE')
+    assert result['period_u_id'].startswith('gp_')  # Step D computed it
+    assert result['period_scope'] == 'quarter'
+
+
+def test_steps_abc_skip_when_ticker_none():
+    """Steps A/B/C skip when ticker=None → Step D runs (backward compat)."""
+    item = _make_period_item()
+    result = _ensure_period(item, fye_month=1, ticker=None)
+    assert result['period_u_id'].startswith('gp_')
+    assert result['period_scope'] == 'quarter'
+
+
+def test_steps_abc_skip_when_neo4j_redis_down(monkeypatch):
+    """Steps A/B/C skip gracefully when connections fail → Step D."""
+    import guidance_write_cli as cli
+    monkeypatch.setattr(cli, '_neo4j_mgr', None)
+    monkeypatch.setattr(cli, '_redis_cli', None)
+    # Force _get_neo4j and _get_redis to fail
+    monkeypatch.setattr(cli, '_get_neo4j', lambda: None)
+    monkeypatch.setattr(cli, '_get_redis', lambda: None)
+    item = _make_period_item()
+    result = _ensure_period(item, fye_month=1, ticker='FIVE')
+    assert result['period_u_id'].startswith('gp_')
+
+
+def test_non_standard_periods_skip_abc(monkeypatch):
+    """Half, sentinel, long_range, monthly, instant → skip A/B/C → Step D."""
+    import guidance_write_cli as cli
+    # These should NEVER be called for non-standard items
+    def should_not_call(*a, **kw):
+        raise AssertionError("Steps A/B/C should not be called for non-standard items")
+    monkeypatch.setattr(cli, '_lookup_existing_period', should_not_call)
+    monkeypatch.setattr(cli, '_lookup_sec_cache', should_not_call)
+    monkeypatch.setattr(cli, '_predict_from_prev_quarter', should_not_call)
+
+    # Half item
+    item = _make_period_item(half=1, fiscal_quarter=None)
+    result = _ensure_period(item, fye_month=1, ticker='FIVE')
+    assert result['period_scope'] == 'half'
+
+    # Sentinel item
+    item2 = _make_period_item(sentinel_class='long_term', fiscal_quarter=None,
+                               fiscal_year=None)
+    result2 = _ensure_period(item2, fye_month=1, ticker='FIVE')
+    assert result2['period_scope'] == 'long_term'
+
+    # Long range item
+    item3 = _make_period_item(long_range_start_year=2025, long_range_end_year=2027,
+                               fiscal_quarter=None)
+    result3 = _ensure_period(item3, fye_month=1, ticker='FIVE')
+    assert result3['period_scope'] == 'long_range'
+
+
+def test_step_c_skips_annual_items(monkeypatch):
+    """Step C only fires for quarterly items (fiscal_quarter not None)."""
+    import guidance_write_cli as cli
+    monkeypatch.setattr(cli, '_lookup_existing_period', lambda t, fy, fq: None)
+    monkeypatch.setattr(cli, '_lookup_sec_cache', lambda t, fy, s: None)
+    def should_not_call(*a, **kw):
+        raise AssertionError("Step C should not be called for annual items")
+    monkeypatch.setattr(cli, '_predict_from_prev_quarter', should_not_call)
+    monkeypatch.setattr(cli, '_get_sec_corrected_fye', lambda t: None)
+    item = _make_period_item(fiscal_quarter=None)
+    result = _ensure_period(item, fye_month=1, ticker='FIVE')
+    assert result['period_scope'] == 'annual'
+
+
+def test_step_d_uses_sec_corrected_fye(monkeypatch):
+    """Step D uses SEC-corrected FYE over payload fye_month."""
+    import guidance_write_cli as cli
+    monkeypatch.setattr(cli, '_lookup_existing_period', lambda t, fy, fq: None)
+    monkeypatch.setattr(cli, '_lookup_sec_cache', lambda t, fy, s: None)
+    monkeypatch.setattr(cli, '_predict_from_prev_quarter', lambda t, fy, fq: None)
+    monkeypatch.setattr(cli, '_get_sec_corrected_fye', lambda t: 1)
+    item = _make_period_item()
+    # fye_month=2 (wrong), but SEC corrects to 1
+    result = _ensure_period(item, fye_month=2, ticker='FIVE')
+    # With corrected FYE=1 (January), Q2 of FY2025 should start around May
+    assert '05' in result['gp_start_date'][:7] or '04' in result['gp_start_date'][:7]
+
+
+def test_ensure_ids_passes_ticker(monkeypatch):
+    """_ensure_ids passes ticker through to _ensure_period."""
+    import guidance_write_cli as cli
+    captured = {}
+    original = cli._ensure_period
+    def spy(item, fye, ticker=None):
+        captured['ticker'] = ticker
+        return original(item, fye, ticker)
+    monkeypatch.setattr(cli, '_ensure_period', spy)
+    item = _make_period_item()
+    _ensure_ids(item, fye_month=1, ticker='FIVE')
+    assert captured['ticker'] == 'FIVE'
+
+
 # ── Run all tests ─────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

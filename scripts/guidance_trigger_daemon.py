@@ -203,6 +203,35 @@ def enqueue_with_lease(r, source_id, asset, ticker, status, queue, dry_run=False
     return True
 
 
+def _precompute_sec_refresh(r, to_enqueue, dry_run):
+    """Precompute one SEC cache refresh decision per ticker per sweep.
+
+    Rules:
+      - If any NEW pending asset (status=None) for a ticker is 10q/10k → force refresh
+      - Otherwise → fill-if-missing only
+      - --list mode → no-op (no Redis writes during dry-run)
+    """
+    if dry_run:
+        return
+
+    tickers_seen = {}  # ticker → has_new_periodic
+    for item, asset_name in to_enqueue:
+        sym = item["symbol"] or item["id"].split("_")[0]
+        if sym not in tickers_seen:
+            tickers_seen[sym] = False
+        if asset_name in ("10q", "10k") and item.get("status") is None:
+            tickers_seen[sym] = True
+
+    for ticker, has_periodic in tickers_seen.items():
+        last_key = f"fiscal_quarter:{ticker}:last_refreshed"
+        if not r.exists(last_key) or has_periodic:
+            try:
+                from sec_quarter_cache_loader import refresh_ticker
+                refresh_ticker(r, ticker)
+            except Exception as e:
+                log.warning(f"SEC cache refresh failed for {ticker}: {e}")
+
+
 def sweep_once(r, mgr, tickers, route, dry_run=False):
     """One full sweep: query all 4 assets, sort by earnings date (nearest first), enqueue. Returns count."""
     queue = route["queue"]
@@ -224,6 +253,9 @@ def sweep_once(r, mgr, tickers, route, dry_run=False):
     to_enqueue.sort(key=lambda x: (
         0 if tickers.get(x[0]["symbol"] or x[0]["id"].split("_")[0], "9999-12-31") >= today_str else 1,
         tickers.get(x[0]["symbol"] or x[0]["id"].split("_")[0], "9999-12-31")))
+
+    # Precompute SEC cache refresh (once per ticker, before enqueue loop)
+    _precompute_sec_refresh(r, to_enqueue, dry_run)
 
     # Enqueue in priority order, track per-asset stats
     total = 0

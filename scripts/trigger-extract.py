@@ -237,6 +237,8 @@ def main():
 
     mgr = get_manager()
     total_queued = 0
+    _sec_refreshed = set()  # dedup SEC cache refresh per ticker
+    _sec_r = None  # lazy Redis for SEC prefetch
 
     for extraction_type in types:
         for asset in assets:
@@ -263,6 +265,23 @@ def main():
 
             if args.list:
                 continue
+
+            # SEC cache prefetch (guidance only, deduped per ticker)
+            if (extraction_type == "guidance"
+                    and asset in ("transcript", "8k", "10q", "10k")):
+                if _sec_r is None:
+                    _sec_r = redis.Redis(
+                        host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+                for item in items:
+                    t = item["symbol"] or item["id"].split("_")[0]
+                    if t not in _sec_refreshed:
+                        try:
+                            from sec_quarter_cache_loader import refresh_ticker
+                            refresh_ticker(_sec_r, t)
+                        except Exception as e:
+                            print(f"SEC cache prefetch failed for {t}: {e}",
+                                  file=sys.stderr)
+                        _sec_refreshed.add(t)
 
             # Push to queue — one message per source_id
             pushed = push_to_queue(items, asset, extraction_type, mode=args.mode)
