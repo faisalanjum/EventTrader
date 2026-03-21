@@ -213,9 +213,21 @@ def _ensure_period(item, fye_month, ticker=None):
     fiscal_year = item.get('fiscal_year')
     fiscal_quarter = item.get('fiscal_quarter')
 
+    # Guard: Steps A/B only handle standard quarter and annual duration items.
+    # Half (88 items), monthly (2), sentinel (235), long_range (150), and instant
+    # items need special routing that only Step D provides. Without this guard,
+    # Step B would give annual dates to half-year items (fiscal_quarter=None → suffix="FY").
+    is_standard_period = (
+        item.get('time_type') != 'instant'
+        and not item.get('half')
+        and not item.get('month')
+        and not item.get('sentinel_class')
+        and not item.get('long_range_end_year')
+    )
+
     # Step A: Reuse existing period (first-write-wins dedup)
     # Prevents duplicate GuidancePeriod AND GuidanceUpdate nodes when dates change
-    if ticker and fiscal_year:
+    if is_standard_period and ticker and fiscal_year:
         existing = _lookup_existing_period(ticker, fiscal_year, fiscal_quarter)
         if existing:
             item['period_u_id'] = existing['period_u_id']
@@ -226,7 +238,7 @@ def _ensure_period(item, fye_month, ticker=None):
             return item
 
     # Step B: SEC cache lookup (quarter or annual — covers 89.9% of guidance items)
-    if ticker and fiscal_year:
+    if is_standard_period and ticker and fiscal_year:
         suffix = f"Q{fiscal_quarter}" if fiscal_quarter else "FY"
         sec_dates = _lookup_sec_cache(ticker, fiscal_year, suffix)
         if sec_dates:
@@ -569,7 +581,8 @@ end = start + length - 1
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| **Step A returns wrong period from pre-migration duplicates** | HIGH if migration hasn't run | Execution order: migration (step 4) BEFORE code deploy (step 6). ORDER BY ref_count DESC as fallback. |
+| **Steps A/B give annual dates to half/monthly/sentinel/long_range items** | HIGH if unguarded | `is_standard_period` guard skips Steps A/B for non-quarter/non-annual items. 475 items (9.1%) protected. |
+| **Step A returns wrong period from pre-migration duplicates** | HIGH if migration hasn't run | Execution order: migration (step 3) BEFORE code deploy (step 5). ORDER BY ref_count DESC as fallback. |
 | **Dry-run attempts external connections** | LOW | `_get_neo4j()` and `_get_redis()` fail silently (return None). Output unchanged. Slightly slower on first call (~100ms timeout). |
 | **Daemon SEC refresh fails (SEC down)** | LOW | try/except swallows error, logs warning, enqueue proceeds. Extraction uses Step D fallback. |
 | **Daemon SEC refresh in --list mode** | NONE (fixed) | `_precompute_sec_refresh()` checks `dry_run` flag and no-ops. |
