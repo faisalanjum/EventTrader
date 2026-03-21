@@ -197,7 +197,7 @@ def _ensure_period(item, fye_month, ticker=None):
     """
     Compute period_u_id + GuidancePeriod fields if not already present.
 
-    3-step cascade (Step C is optional — see note):
+    4-step cascade (A/B required, C optional — see Phase 2 section):
       A. Reuse existing period (first-write-wins dedup via Neo4j fiscal-identity lookup)
       B. SEC cache lookup (exact dates for filed quarters and annuals)
       C. [OPTIONAL] Predict from previous quarter end + historical length (unfiled quarters)
@@ -533,7 +533,7 @@ def _prewarm_sec_cache(r, entries):
 4. **Verify migration**: zero duplicate GuidancePeriod nodes per (ticker, fiscal_year, fiscal_quarter)
 5. **Implement and run new unit tests** (see Required New Tests section) — run locally with mocked Neo4j/Redis BEFORE production deploy
 6. **Deploy ALL code changes + ACTIVE_WINDOW_DAYS=45 together (atomic rollout)**:
-   - `guidance_write_cli.py` — 3-step cascade
+   - `guidance_write_cli.py` — 4-step cascade (A/B required, C optional)
    - `guidance_trigger_daemon.py` — per-ticker SEC refresh, skip in --list
    - `trigger-extract.py` — SEC prefetch (gated on guidance type)
    - `k8s/processing/guidance-trigger.yaml` — `ACTIVE_WINDOW_DAYS=45`
@@ -611,6 +611,8 @@ The 200 existing tests protect the old Step D path. They do NOT prove new Steps 
 | Daemon --list does not write Redis | No side effects during dry-run | `test_guidance_trigger_daemon.py` (or manual) |
 | Daemon refreshes once per ticker per sweep | No redundant API calls for multi-asset tickers | `test_guidance_trigger_daemon.py` (or manual) |
 | trigger-extract.py prefetch gates on guidance type | SEC prefetch skips non-guidance extraction types | Manual verification |
+| Non-standard periods skip Steps A/B (is_standard_period guard) | half, monthly, sentinel, long_range, instant items go directly to Step D — protects 475 items (9.1%) | `test_guidance_write_cli.py` |
+| Daemon: in_progress 10-Q/10-K does not force SEC refresh when cache exists | Prevents repeated SEC API calls every 60s sweep for already-processing items | `test_guidance_trigger_daemon.py` (or manual) |
 
 These can be unit tests (mocking Neo4j/Redis) or integration tests against the live graph. Minimum: the first 5 (unit-testable without external dependencies).
 
