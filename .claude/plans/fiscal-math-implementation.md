@@ -13,7 +13,7 @@ Fix guidance period resolution in `_ensure_period()` (`guidance_write_cli.py:78`
 **Strategy (in this order for dedup correctness)**:
 1. Existing period reuse (first-write-wins via Neo4j fiscal-identity lookup)
 2. SEC cache exact dates (for filed quarters/annuals)
-3. [Optional] Predict from previous quarter end + historical length (±1d vs ±3-5d, zero functional impact)
+3. [Optional, Phase 2] Predict from previous quarter end + historical length (±1d vs ±3-5d, no known orchestrator impact)
 4. Corrected FYE month-boundary math with SEC-corrected FYE (last resort)
 
 The order matters: Step 1 MUST run before Step 2, otherwise a later SEC-exact lookup could bypass an already-written period and recreate the duplicate problem.
@@ -25,7 +25,7 @@ The order matters: Step 1 MUST run before Step 2, otherwise a later SEC-exact lo
 - SEC cache refresh driven by the guidance trigger daemon (asset-aware), not by age-based TTL
 - ACTIVE_WINDOW_DAYS must be 45 (not 1) to cover the 40-day 10-Q filing window
 - SEC inclusive end-date convention (industry standard)
-- All new steps are additive short-circuits — if they all miss, the original code path runs unchanged
+- All new steps are additive short-circuits — if they all miss, Step D runs (same code path as today, but may use SEC-corrected FYE input when available)
 
 ---
 
@@ -119,7 +119,9 @@ def _precompute_sec_refresh(r, to_enqueue, dry_run):
         sym = item["symbol"] or item["id"].split("_")[0]
         if sym not in tickers_seen:
             tickers_seen[sym] = False
-        if asset_name in ("10q", "10k"):
+        if asset_name in ("10q", "10k") and item.get("status") is None:
+            # Only force-refresh for NEW periodic filings (status=None).
+            # in_progress means already processing — SEC data hasn't changed since last refresh.
             tickers_seen[sym] = True
 
     # Refresh once per ticker
@@ -529,13 +531,13 @@ def _prewarm_sec_cache(r, entries):
 2. **Run initial bootstrap**: `python3 sec_quarter_cache_loader.py` (all tickers, ~90 sec)
 3. **Run migration** — fix 1,858 existing wrong items on 5 tickers
 4. **Verify migration**: zero duplicate GuidancePeriod nodes per (ticker, fiscal_year, fiscal_quarter)
-5. **Deploy ALL code changes + ACTIVE_WINDOW_DAYS=45 together (atomic rollout)**:
+5. **Implement and run new unit tests** (see Required New Tests section) — run locally with mocked Neo4j/Redis BEFORE production deploy
+6. **Deploy ALL code changes + ACTIVE_WINDOW_DAYS=45 together (atomic rollout)**:
    - `guidance_write_cli.py` — 3-step cascade
    - `guidance_trigger_daemon.py` — per-ticker SEC refresh, skip in --list
    - `trigger-extract.py` — SEC prefetch (gated on guidance type)
    - `k8s/processing/guidance-trigger.yaml` — `ACTIVE_WINDOW_DAYS=45`
-6. **Test**: extract guidance for one affected ticker (e.g., FIVE), verify correct period dates
-7. **Run new tests** (see Required New Tests section)
+7. **Smoke test**: extract guidance for one affected ticker (e.g., FIVE), verify correct period dates against SEC cache
 8. **(Optional)** Modify `trade_ready_scanner.py` for prewarm
 
 ---
