@@ -8,7 +8,7 @@
 
 ## Summary
 
-Fix `build_guidance_period_id()` in `guidance_ids.py:376` to produce correct fiscal quarter/annual calendar dates for ~41-44 affected tickers (currently off by ~28 days). Uses SEC EDGAR APIs for exact dates, with prediction and corrected-FYE fallbacks.
+Fix guidance period resolution in `_ensure_period()` (`guidance_write_cli.py:78`) to produce correct fiscal quarter/annual calendar dates for ~41-44 affected tickers (currently off by ~28 days). Adds SEC EDGAR exact-date lookup and fiscal-identity dedup BEFORE the existing `build_guidance_period_id()` call, which itself remains unchanged.
 
 **Strategy (in this order for dedup correctness)**:
 1. Existing period reuse (first-write-wins via Neo4j fiscal-identity lookup)
@@ -38,7 +38,7 @@ The order matters: Step 1 MUST run before Step 2, otherwise a later SEC-exact lo
 | `k8s/processing/guidance-trigger.yaml` | **MODIFY** | 1 line | `ACTIVE_WINDOW_DAYS: "1"` → `"45"` |
 | `guidance_write_cli.py` | **MODIFY** | ~35 (or ~55 with optional Step C) | Thread ticker, lazy Neo4j/Redis, fiscal-identity lookup, SEC cache, corrected FYE fallback. Optional: prediction from prev Q. |
 | Migration script | **NEW** | ~60 | Rekey GuidanceUpdate.id + re-point HAS_PERIOD + collision preflight |
-| `scripts/trigger-extract.py` | **MODIFY** | ~5 | SEC cache prefetch for manual runs |
+| `scripts/trigger-extract.py` | **MODIFY** | ~10 | SEC cache prefetch for manual runs (after find, before queue) |
 | `scripts/trade_ready_scanner.py` | **OPTIONAL** | ~25 | Prewarm SEC cache on TradeReady entry |
 | **Total** | | **~375** | **~8-10 hours** |
 
@@ -481,19 +481,25 @@ If only `HAS_PERIOD` is re-pointed but `gu.id` still contains the old `period_u_
 
 **Purpose**: SEC cache prefetch for manual (non-TradeReady) runs.
 
-**WHERE**: At the start of per-ticker processing loop.
+**WHERE**: In `main()`, after `items = find_unprocessed(...)` returns and before `push_to_queue()` (around line ~267). The script has no per-ticker loop — it finds items first, then queues them. SEC prefetch goes between those steps.
 
 **WHAT**:
 ```python
-# Ensure SEC cache exists for this ticker before extraction
-try:
-    from sec_quarter_cache_loader import refresh_ticker
-    refresh_ticker(redis_client, ticker)
-except Exception as e:
-    print(f"SEC cache prefetch failed for {ticker}: {e}", file=sys.stderr)
+# After items are found but before queuing — prefetch SEC cache for unique tickers
+# trigger-extract.py already imports redis (line 36) and defines REDIS_HOST/REDIS_PORT
+if not args.list and items:
+    unique_tickers = sorted({item["symbol"] or item["id"].split("_")[0] for item in items})
+    import redis as _redis
+    _r = _redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+    for t in unique_tickers:
+        try:
+            from sec_quarter_cache_loader import refresh_ticker
+            refresh_ticker(_r, t)
+        except Exception as e:
+            print(f"SEC cache prefetch failed for {t}: {e}", file=sys.stderr)
 ```
 
-**Note**: `trigger-extract.py` uses `print(..., file=sys.stderr)` for output, not a `log` logger.
+**Note**: `trigger-extract.py` uses `print(..., file=sys.stderr)` for output (line 118+), not a `log` logger. Redis is created inline — the script already imports `redis` at line 36 and creates clients inside `push_to_queue()` at line 168.
 
 **Why**: Manual `trigger-extract.py --ticker XYZ` bypasses TradeReady and the daemon. Without this, a non-TradeReady ticker has no SEC cache → Steps A/B miss → Step D runs with potentially buggy FYE.
 
@@ -503,28 +509,28 @@ except Exception as e:
 
 **Purpose**: Prewarm SEC cache when tickers enter TradeReady. This is an **optimization**, not the correctness hook (that's the daemon in File 2).
 
-**WHERE**: After line 382 (`pipe.hset("trade_ready:entries", ticker, json.dumps(entry))`).
+**WHERE**: AFTER `pipe.execute()` completes (around line 390), NOT inside the Redis pipeline batching loop. Placing SEC HTTP fetches inside the pipeline loop would block the fast pipeline-building path with slow external calls.
 
 **WHAT**:
 ```python
-def _ensure_sec_cache(r, ticker):
-    """Prewarm SEC quarter data if cache missing. Fill-if-missing only."""
-    last_key = f"fiscal_quarter:{ticker}:last_refreshed"
-    if r.exists(last_key):
-        return  # already cached
-    try:
-        from sec_quarter_cache_loader import refresh_ticker
-        refresh_ticker(r, ticker)
-    except Exception as e:
-        log.warning(f"SEC cache prewarm failed for {ticker}: {e}")
+def _prewarm_sec_cache(r, entries):
+    """Prewarm SEC quarter data for active tickers if cache missing. Fill-if-missing only."""
+    for ticker in entries:
+        last_key = f"fiscal_quarter:{ticker}:last_refreshed"
+        if r.exists(last_key):
+            continue  # already cached
+        try:
+            from sec_quarter_cache_loader import refresh_ticker
+            refresh_ticker(r, ticker)
+        except Exception as e:
+            log.warning(f"SEC cache prewarm failed for {ticker}: {e}")
 
-# Call site: for each active ticker in the scan
-for ticker, entry in entries.items():
-    _ensure_sec_cache(r, ticker)
-    ...existing code...
+# Call site: AFTER pipe.execute() and the existing Redis writes complete
+# write_to_redis(r, entries)  # existing function
+# _prewarm_sec_cache(r, entries)  # NEW — separate from the pipeline
 ```
 
-**Note**: This is fill-if-missing, not force-refresh. The daemon handles force-refresh on 10-Q/10-K arrival. The scanner just ensures the cache is warm before the 8-K fires (1-3 day lead time).
+**Note**: This is fill-if-missing, not force-refresh. The daemon handles force-refresh on 10-Q/10-K arrival. The scanner just ensures the cache is warm before the 8-K fires (1-3 day lead time). Placed after pipe.execute() to avoid mixing slow SEC HTTP calls into the fast Redis pipeline.
 
 ---
 
@@ -605,13 +611,13 @@ end = start + length - 1
 |---|---|---|
 | Filed quarter/annual (all data assets) | **Exact (0d)** | SEC cache (Step B) |
 | 8-K/transcript past-quarter reference | **Exact (0d)** | SEC cache (prior 10-Q already filed) |
-| 8-K/transcript current quarter (unfiled) | **+-3-5d (Step D)** or **+-0-1d (optional Step C)**, fossilized | Step D: corrected FYE math. Step C (if implemented): prev Q end + historical length. |
+| 8-K/transcript current quarter (unfiled) | **+-3-5d normal case (Step D)** or **+-0-1d normal case (optional Step C)**, fossilized | Step D: corrected FYE math (uniform 13-week companies). Step C: prev Q end + historical length. Irregular calendars (COST, KR) may be worse if SEC cache AND Step A both miss — see worst cases below. |
 | 8-K/transcript forward guidance | Same as above | Same |
 | 53-week transition quarter (if Step C used) | **+-7d, fossilized** | Step C assumption breaks once per ~6yr. Does not apply if only Step D used. |
 | Sentinel/long-range/half/monthly | **Same as today** | Step D unchanged |
-| KR Q1 (old +-24d worst case) | **Exact (0d)** | SEC cache has KR's 111d Q1 exact dates |
-| COST Q3 (old +-19d worst case) | **Exact (0d)** | SEC cache has COST's 84d Q3 exact dates |
-| Step D fallback (all tiers miss) | **+-3-5d (was +-28d)** | SEC-corrected FYE fixes the month |
+| KR Q1 (old +-24d worst case) | **Exact (0d) if SEC cache hit** | SEC cache has KR's 111d Q1 exact dates. If SEC cache misses AND Step A misses: Step D = +-24d (irregular calendar). |
+| COST Q3 (old +-19d worst case) | **Exact (0d) if SEC cache hit** | SEC cache has COST's 84d Q3 exact dates. If SEC cache misses AND Step A misses: Step D = +-19d. |
+| Step D fallback (all tiers miss) | **+-3-5d normal case (was +-28d)** | SEC-corrected FYE fixes the month. Normal case = uniform 13-week. Irregular calendars can be worse (+-11-24d). |
 
 ---
 
