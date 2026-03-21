@@ -18,7 +18,7 @@ Fix guidance period resolution in `_ensure_period()` (`guidance_write_cli.py:78`
 
 The order matters: Step 1 MUST run before Step 2, otherwise a later SEC-exact lookup could bypass an already-written period and recreate the duplicate problem.
 
-**Minimal vs full implementation**: Without optional Step 3, the plan is ~315 lines across 6 files. With Step 3: ~355 lines. Step 3 improves unfiled-quarter accuracy from ±3-5d to ±1d but has zero impact on the earnings orchestrator (queries by ticker, not date range). Recommended: implement without Step 3 first, add later if a consumer needs ±1d.
+**Minimal vs full implementation**: Without optional Step C, the plan is ~315 lines across 6 files. With Step C: ~355 lines. Step C improves unfiled-quarter accuracy from ±3-5d to ±1d with no known orchestrator impact (queries by ticker, not date range). Can be included in initial implementation since the loader and `_ensure_period()` are already being modified — see Phase 2 section.
 
 **Key design decisions**:
 - First-write-wins: once a GuidancePeriod is created for a (ticker, FY, quarter), all subsequent extractions reuse it — zero duplicates
@@ -104,8 +104,8 @@ def _precompute_sec_refresh(r, to_enqueue, dry_run):
     """Precompute one SEC cache refresh decision per ticker per sweep.
 
     Rules:
-      - If any pending asset for a ticker is 10q/10k → fill-if-missing (new filing may have new data)
-      - If only transcript/8k → fill-if-missing
+      - If any NEW pending asset (status=None) for a ticker is 10q/10k → force refresh (new filing means new SEC data)
+      - If only transcript/8k or in_progress periodic → fill-if-missing only
       - --list mode → no-op (no Redis writes during dry-run)
 
     Called ONCE before the enqueue loop, not per-item.
@@ -584,7 +584,7 @@ end = start + length - 1
 | Risk | Severity | Mitigation |
 |---|---|---|
 | **Steps A/B give annual dates to half/monthly/sentinel/long_range items** | HIGH if unguarded | `is_standard_period` guard skips Steps A/B for non-quarter/non-annual items. 475 items (9.1%) protected. |
-| **Step A returns wrong period from pre-migration duplicates** | HIGH if migration hasn't run | Execution order: migration (step 3) BEFORE code deploy (step 5). ORDER BY ref_count DESC as fallback. |
+| **Step A returns wrong period from pre-migration duplicates** | HIGH if migration hasn't run | Execution order: migration (step 3) BEFORE code deploy (step 6). ORDER BY ref_count DESC as fallback. |
 | **Dry-run attempts external connections** | LOW | `_get_neo4j()` and `_get_redis()` fail silently (return None). Output unchanged. Slightly slower on first call (~100ms timeout). |
 | **Daemon SEC refresh fails (SEC down)** | LOW | try/except swallows error, logs warning, enqueue proceeds. Extraction uses Step D fallback. |
 | **Daemon SEC refresh in --list mode** | NONE (fixed) | `_precompute_sec_refresh()` checks `dry_run` flag and no-ops. |
