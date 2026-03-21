@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiscal Math Issues — Interactive Explainer v2</title>
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
+  --text: #e6edf3; --text2: #8b949e; --accent: #58a6ff; --green: #3fb950;
+  --yellow: #d29922; --orange: #db6d28; --red: #f85149; --purple: #bc8cff;
+  --pink: #f778ba; --cyan: #39d2c0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+h1 { font-size: 28px; margin-bottom: 8px; }
+h2 { font-size: 20px; color: var(--accent); margin: 24px 0 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+h3 { font-size: 16px; color: var(--text); margin: 16px 0 8px; }
+.subtitle { color: var(--text2); font-size: 14px; margin-bottom: 24px; }
+.tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab { padding: 8px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; color: var(--text2); font-size: 13px; transition: all 0.2s; }
+.tab:hover { background: var(--surface2); color: var(--text); }
+.tab.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+.panel { display: none; }
+.panel.active { display: block; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.card-header { font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.badge-proven { background: rgba(63,185,80,0.15); color: var(--green); }
+.badge-high { background: rgba(210,153,34,0.15); color: var(--yellow); }
+.badge-sim { background: rgba(219,109,40,0.15); color: var(--orange); }
+.badge-unproven { background: rgba(248,81,73,0.15); color: var(--red); }
+.badge-new { background: rgba(57,210,192,0.15); color: var(--cyan); }
+.badge-eliminated { background: rgba(139,148,158,0.15); color: var(--text2); text-decoration: line-through; }
+.grid { display: grid; gap: 16px; }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+@media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+.timeline { position: relative; padding: 20px 0; }
+.timeline-bar { height: 40px; border-radius: 6px; position: relative; overflow: hidden; margin: 8px 0; }
+.timeline-segment { position: absolute; top: 0; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; transition: all 0.3s; }
+.timeline-label { font-size: 11px; color: var(--text2); margin-top: 4px; display: flex; justify-content: space-between; }
+.meter { height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; margin: 4px 0; }
+.meter-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+.stat { text-align: center; padding: 12px; }
+.stat-value { font-size: 32px; font-weight: 700; }
+.stat-label { font-size: 12px; color: var(--text2); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; padding: 8px 12px; background: var(--surface2); color: var(--text2); font-weight: 600; border-bottom: 1px solid var(--border); }
+td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+tr:hover td { background: rgba(88,166,255,0.05); }
+.code { font-family: 'SF Mono', 'Fira Code', monospace; background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+.code-block { font-family: 'SF Mono', 'Fira Code', monospace; background: var(--surface2); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre; line-height: 1.5; margin: 8px 0; }
+select, input { background: var(--surface2); color: var(--text); border: 1px solid var(--border); padding: 6px 10px; border-radius: 4px; font-size: 13px; }
+.highlight { padding: 12px 16px; border-radius: 6px; margin: 8px 0; border-left: 3px solid; }
+.highlight-green { background: rgba(63,185,80,0.08); border-color: var(--green); }
+.highlight-yellow { background: rgba(210,153,34,0.08); border-color: var(--yellow); }
+.highlight-red { background: rgba(248,81,73,0.08); border-color: var(--red); }
+.highlight-blue { background: rgba(88,166,255,0.08); border-color: var(--accent); }
+.highlight-cyan { background: rgba(57,210,192,0.08); border-color: var(--cyan); }
+.qtr-block { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin: 2px; min-width: 120px; text-align: center; }
+.flow-arrow { color: var(--text2); margin: 0 8px; }
+.confidence-bar { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+.confidence-bar .label { font-size: 12px; min-width: 220px; }
+.confidence-bar .bar { flex: 1; height: 20px; background: var(--surface2); border-radius: 4px; overflow: hidden; position: relative; }
+.confidence-bar .fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; font-size: 10px; font-weight: 700; }
+.toggle-group { display: flex; gap: 2px; background: var(--surface2); border-radius: 6px; padding: 2px; }
+.toggle-btn { padding: 6px 12px; border: none; background: transparent; color: var(--text2); cursor: pointer; border-radius: 4px; font-size: 12px; }
+.toggle-btn.active { background: var(--accent); color: #000; font-weight: 600; }
+.search-box { width: 100%; padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 14px; margin-bottom: 12px; }
+.search-box::placeholder { color: var(--text2); }
+.ticker-result { padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; }
+.node-id { font-family: monospace; padding: 6px 10px; border-radius: 4px; font-size: 13px; display: inline-block; margin: 4px 0; }
+.wrong-node { background: rgba(248,81,73,0.15); color: var(--red); text-decoration: line-through; }
+.right-node { background: rgba(63,185,80,0.15); color: var(--green); }
+.struck { text-decoration: line-through; color: var(--text2); }
+.vs-table td.old { color: var(--text2); text-decoration: line-through; }
+.vs-table td.new { color: var(--green); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Fiscal Math Issues — Interactive Explainer <span style="color:var(--cyan);font-size:18px;">v2</span></h1>
+<p class="subtitle">EventMarketDB · <span class="code">build_guidance_period_id()</span> bug & SEC EDGAR fix · Last validated: 2026-03-21</p>
+
+<div class="highlight highlight-cyan" style="margin-bottom:20px;">
+  <strong>v2 update:</strong> SEC EDGAR provides a free public API with exact quarter boundaries for <strong>100% of tickers</strong> (739/739). This eliminates the need for local XBRL reprocessing, the HAS_XBRL race condition gate, and all Tier 3 worst cases (KR ±24d, COST ±19d). The 3-tier cascade collapses to: SEC lookup → historical prediction → SEC FYE fallback.
+</div>
+
+<div class="tabs" id="mainTabs">
+  <div class="tab active" data-tab="problem">The Bug</div>
+  <div class="tab" data-tab="scope">Who's Affected</div>
+  <div class="tab" data-tab="fix">The Fix <span style="color:var(--cyan);font-size:10px;">v2</span></div>
+  <div class="tab" data-tab="compare">v1 vs v2</div>
+  <div class="tab" data-tab="timeline">Timeline Gap</div>
+  <div class="tab" data-tab="assets">By Data Asset</div>
+  <div class="tab" data-tab="lookup">Ticker Lookup</div>
+  <div class="tab" data-tab="confidence">Confidence</div>
+  <div class="tab" data-tab="worst">Worst Cases</div>
+</div>
+
+<!-- ==================== TAB 1: THE BUG ==================== -->
+<div class="panel active" id="panel-problem">
+  <h2>What's the Bug?</h2>
+  <div class="card">
+    <div class="card-header">The Core Issue: Wrong Fiscal Year End (FYE) Month</div>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:12px;">
+      <span class="code">build_guidance_period_id()</span> converts fiscal labels (like "FY2025 Q1") to calendar date boundaries. It needs the company's FYE month. The FYE month is derived from the 10-K filing's <span class="code">periodOfReport</span> — but for 52-week calendar companies, this date can fall in the WRONG month.
+    </p>
+    <div class="highlight highlight-red">
+      <strong>Example:</strong> Five Below (FIVE) — fiscal year ends late January. But the 10-K's <span class="code">periodOfReport</span> = <strong>2025-02-01</strong> (February 1, day &le; 5). Raw month = <strong>2</strong> (February). Correct FYE = <strong>1</strong> (January).
+    </div>
+    <div class="highlight highlight-cyan">
+      <strong>v2 fix:</strong> SEC EDGAR's <span class="code">fiscalYearEnd</span> field gives <strong>0131</strong> for FIVE — a single, fixed registration value. Apply day&le;5 adjustment &rarr; month 1 (January). No mode voting, no latest-filing flip risk. Tested on <strong>737/738</strong> tickers (99.86%). And the SEC XBRL API gives <strong>exact quarter dates</strong> directly — bypassing the FYE math entirely.
+    </div>
+  </div>
+
+  <h3>Interactive: See How Wrong Dates Shift Quarter Boundaries</h3>
+  <div class="card">
+    <div style="display:flex;gap:16px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
+      <label>Ticker: <select id="bugTicker" onchange="updateBugViz()">
+        <option value="FIVE">FIVE (Jan FYE, uniform 13-week)</option>
+        <option value="COST">COST (Aug FYE, 4-4-5 calendar)</option>
+        <option value="KR">KR (Jan FYE, 4-5-4 calendar)</option>
+        <option value="ADBE">ADBE (Nov FYE)</option>
+        <option value="CAKE">CAKE (Dec FYE, 52-week wobble)</option>
+      </select></label>
+      <label>Fiscal Year: <select id="bugFY" onchange="updateBugViz()">
+        <option value="2025">FY2025</option>
+        <option value="2024" selected>FY2024</option>
+        <option value="2023">FY2023</option>
+      </select></label>
+    </div>
+
+    <div style="margin-bottom:8px;font-size:13px;color:var(--cyan);font-weight:600;">SEC XBRL exact boundaries:</div>
+    <div class="timeline-bar" id="actualBar" style="background:var(--surface2);"></div>
+    <div class="timeline-label" id="actualLabels"></div>
+
+    <div style="margin:12px 0 8px;font-size:13px;color:var(--red);">Buggy computed boundaries (current code, wrong FYE):</div>
+    <div class="timeline-bar" id="buggyBar" style="background:var(--surface2);"></div>
+    <div class="timeline-label" id="buggyLabels"></div>
+
+    <div style="margin-top:16px;" id="bugSummary"></div>
+
+    <div style="margin-top:12px;">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:4px;">GuidancePeriod Node IDs:</div>
+      <div id="nodeIds"></div>
+    </div>
+  </div>
+
+  <h3>Why Does This Happen?</h3>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-header">52-Week Fiscal Calendar</div>
+      <p style="font-size:13px;color:var(--text2);">Many companies use a 52/53-week fiscal calendar instead of calendar months. Their fiscal year ends on "the Saturday nearest to January 31" — which lands on Jan 28, Jan 29, Feb 1, Feb 2, etc. depending on the year.</p>
+      <div class="code-block">2023: periodOfReport = 2023-01-28 &rarr; month=1 ✓
+2024: periodOfReport = 2024-02-03 &rarr; month=2 ✗ (should be 1)
+2025: periodOfReport = 2025-02-01 &rarr; month=2 ✗ (should be 1)</div>
+    </div>
+    <div class="card">
+      <div class="card-header">v2: SEC EDGAR Bypasses the Problem</div>
+      <p style="font-size:13px;color:var(--text2);">Instead of deriving the FYE from varying filing dates, we use two SEC sources:</p>
+      <div class="code-block">// 1. SEC Submissions API — fixed FYE per company
+fiscalYearEnd: "0131"  // FIVE = Jan 31, always
+
+// 2. SEC XBRL Company Concept API — exact per-quarter
+EarningsPerShareBasic:
+  fy=2025  fp=Q1  start=2025-02-02  end=2025-05-03
+  fy=2025  fp=Q2  start=2025-05-04  end=2025-08-02
+  // No FYE math needed at all!</div>
+    </div>
+  </div>
+
+  <h3>Not Just January &rarr; February</h3>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:8px;">The bug is <strong>month-agnostic</strong>. Any 52-week company whose period crosses a month boundary with day &le; 5 is affected:</p>
+    <table>
+      <tr><th>Ticker</th><th>Sector</th><th>Raw FYE</th><th>Correct FYE</th><th>SEC fiscalYearEnd</th><th>SEC adjusted</th></tr>
+      <tr><td>FIVE, ASO, BBY, TJX, ...</td><td>Retail</td><td>February (2)</td><td>January (1)</td><td>0131 or 0201</td><td style="color:var(--green)">1 ✓</td></tr>
+      <tr><td>ADBE</td><td>Software</td><td>December (12)</td><td>November (11)</td><td>1128</td><td style="color:var(--green)">11 ✓</td></tr>
+      <tr><td>CAKE</td><td>Restaurants</td><td>January (1)</td><td>December (12)</td><td>1230</td><td style="color:var(--green)">12 ✓</td></tr>
+      <tr><td>COST</td><td>Retail/Wholesale</td><td>September (9)</td><td>August (8)</td><td>0830</td><td style="color:var(--green)">8 ✓</td></tr>
+      <tr><td>ADI, AVGO, CIEN</td><td>Semiconductors</td><td>November (11)</td><td>October (10)</td><td>1101 or 1031</td><td style="color:var(--green)">10 ✓</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== TAB 2: SCOPE ==================== -->
+<div class="panel" id="panel-scope">
+  <h2>Who's Affected?</h2>
+  <div class="grid grid-3">
+    <div class="card stat"><div class="stat-value" style="color:var(--red)">41</div><div class="stat-label">Tickers with FYE bug</div></div>
+    <div class="card stat"><div class="stat-value" style="color:var(--yellow)">1,858</div><div class="stat-label">Existing guidance items on affected tickers</div></div>
+    <div class="card stat"><div class="stat-value" style="color:var(--green)">739</div><div class="stat-label">Tickers with SEC exact quarter data</div></div>
+  </div>
+
+  <h3>Two Code Paths, Two Different Scopes</h3>
+  <div class="card">
+    <table>
+      <tr><th>Code Path</th><th>How it gets FYE</th><th>Affected</th><th>Mechanism</th></tr>
+      <tr>
+        <td><span class="code">get_derived_fye()</span></td>
+        <td>MODE of all 10-K periodOfReport months</td>
+        <td><strong>29 tickers</strong></td>
+        <td>Mode flips when majority of filings have day&le;5</td>
+      </tr>
+      <tr>
+        <td>Guidance extraction Query 1B</td>
+        <td>LATEST single 10-K periodOfReport month</td>
+        <td><strong>36 tickers</strong></td>
+        <td>Latest filing has day&le;5 regardless of mode</td>
+      </tr>
+      <tr>
+        <td><strong>Union (either path)</strong></td>
+        <td></td>
+        <td><strong>41 tickers</strong></td>
+        <td></td>
+      </tr>
+    </table>
+    <div class="highlight highlight-cyan" style="margin-top:12px;">
+      <strong>v2:</strong> SEC <span class="code">fiscalYearEnd</span> is a <strong>single fixed registration value</strong> per company. It can't flip on mode votes or latest-filing changes. Both code paths become irrelevant — neither is needed when using SEC data.
+    </div>
+  </div>
+
+  <h3>Ticker Universe Breakdown</h3>
+  <div class="card">
+    <div id="universeViz" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;"></div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px;">
+      <span style="color:var(--red)">&#9632;</span> FYE-bug affected (41)
+      <span style="color:var(--orange)">&#9632;</span> At-risk / could flip (15)
+      <span style="color:var(--green)">&#9632;</span> Safe (~683)
+      <span style="color:var(--cyan)">&#9632;</span> All 739 have SEC exact data
+    </div>
+  </div>
+
+  <h3>5 Tickers Already Have Wrong Guidance Data</h3>
+  <div class="card">
+    <table>
+      <tr><th>Ticker</th><th>Items</th><th>From Transcripts</th><th>From Reports</th><th>Wrong Convention</th></tr>
+      <tr><td><strong>FIVE</strong></td><td>468</td><td>243 (52%)</td><td>225 (48%)</td><td>~28d offset on affected items</td></tr>
+      <tr><td><strong>ASO</strong></td><td>387</td><td>188 (49%)</td><td>199 (51%)</td><td>~28d offset</td></tr>
+      <tr><td><strong>LULU</strong></td><td>355</td><td>243 (68%)</td><td>112 (32%)</td><td>~28d offset</td></tr>
+      <tr><td><strong>DLTR</strong></td><td>351</td><td>213 (61%)</td><td>138 (39%)</td><td>~28d offset</td></tr>
+      <tr><td><strong>SAIC</strong></td><td>297</td><td>157 (53%)</td><td>140 (47%)</td><td>~28d offset</td></tr>
+      <tr style="font-weight:600;"><td>Total</td><td>1,858</td><td>1,044 (56%)</td><td>814 (44%)</td><td>~173 confirmed on wrong nodes</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== TAB 3: THE FIX (v2) ==================== -->
+<div class="panel" id="panel-fix">
+  <h2>The Fix <span style="color:var(--cyan);">(v2 — SEC EDGAR)</span></h2>
+  <div class="card">
+    <p style="font-size:14px;color:var(--text2);margin-bottom:16px;">Each tier is tried in order. SEC XBRL data covers <strong>100% of tickers</strong> for filed quarters — Tier 2 is only needed for current/forward quarters not yet filed. Tier 3 is a last resort for tickers without SEC CIK mapping (33 of 772).</p>
+    <div class="toggle-group" style="margin-bottom:16px;">
+      <button class="toggle-btn active" onclick="showTier('all')">All Tiers</button>
+      <button class="toggle-btn" onclick="showTier(1)">Tier 1: SEC XBRL</button>
+      <button class="toggle-btn" onclick="showTier(2)">Tier 2: Prediction</button>
+      <button class="toggle-btn" onclick="showTier(3)">Tier 3: FYE Fallback</button>
+    </div>
+  </div>
+
+  <div class="tier-panel" data-tier="1">
+    <div class="card" style="border-left:3px solid var(--cyan);">
+      <div class="card-header"><span class="badge badge-proven">PROVEN</span> <span class="badge badge-new">NEW in v2</span> Tier 1 — SEC EDGAR XBRL Company Concept API</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;"><strong>What it does:</strong> One HTTP call per ticker to <span class="code">data.sec.gov/api/xbrl/companyconcept/</span>. Returns every quarterly period with exact start/end dates and fiscal labels (fy, fp). No local XBRL processing. No graph traversal. No span anomalies.</p>
+      <div class="code-block" style="font-size:11px;">GET data.sec.gov/api/xbrl/companyconcept/CIK{cik}/us-gaap/EarningsPerShareBasic.json
+
+Response includes per-fact period data:
+  fy=2025  fp=Q1  start=2025-02-02  end=2025-05-03  (90d)  form=10-Q
+  fy=2025  fp=Q2  start=2025-05-04  end=2025-08-02  (90d)  form=10-Q
+  fy=2025  fp=Q3  start=2025-08-03  end=2025-11-01  (90d)  form=10-Q
+
+No FYE derivation. No month-boundary math. Just exact dates from SEC.</div>
+      <div class="grid grid-4" style="margin-top:12px;">
+        <div class="stat"><div class="stat-value" style="color:var(--green);font-size:24px;">739/739</div><div class="stat-label">Ticker coverage</div></div>
+        <div class="stat"><div class="stat-value" style="color:var(--green);font-size:24px;">83,091</div><div class="stat-label">Standalone quarters</div></div>
+        <div class="stat"><div class="stat-value" style="color:var(--green);font-size:24px;">0</div><div class="stat-label">Span anomalies</div></div>
+        <div class="stat"><div class="stat-value" style="color:var(--green);font-size:24px;">112</div><div class="stat-label">Avg quarters/ticker</div></div>
+      </div>
+
+      <h3 style="margin-top:16px;">Cross-Validation: SEC vs Neo4j Tier 1</h3>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:8px;">27 quarters across 6 tickers (AAPL, ADBE, ANF, COST, FIVE, KR) compared between SEC XBRL API and Neo4j DEI-anchored query:</p>
+      <div class="grid grid-2">
+        <div class="stat"><div class="stat-value" style="color:var(--green);font-size:24px;">27/27</div><div class="stat-label">Start dates exact match</div></div>
+        <div class="stat"><div class="stat-value" style="color:var(--green);font-size:24px;">27/27</div><div class="stat-label">End dates +1d (XBRL convention)</div></div>
+      </div>
+      <p style="font-size:12px;color:var(--text2);margin-top:4px;">The +1d end date difference is the XBRL inclusive vs exclusive convention — SEC facts use inclusive ends (last day of quarter), XBRL Period nodes use exclusive ends (first day of next quarter). Pick one and be consistent.</p>
+
+      <div class="highlight highlight-green"><strong>When it works:</strong> Any quarter where a 10-Q or 10-K has been filed with XBRL. SEC processes XBRL automatically — no dependency on our local pipeline.</div>
+      <div class="highlight highlight-yellow"><strong>When it doesn't cover:</strong> Current/forward quarters whose 10-Q hasn't been filed yet. Falls to Tier 2.</div>
+      <div class="highlight highlight-cyan"><strong>Key advantage over v1 Tier 1:</strong> No XBRL reprocessing prerequisite. No HAS_XBRL race condition. No 19 span anomalies from FY label collisions. SEC data is always up-to-date and free.</div>
+    </div>
+  </div>
+
+  <div class="tier-panel" data-tier="2">
+    <div class="card" style="border-left:3px solid var(--yellow);">
+      <div class="card-header"><span class="badge badge-sim">SIMULATION</span> Tier 2 — Previous Quarter End + Historical Length</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;"><strong>What it does:</strong> When Tier 1 doesn't have the requested quarter (10-Q not yet filed), predict it from the previous quarter's exact end date + the company's historical quarter length pattern. Now powered by SEC historical data (avg 112 quarters per ticker vs ~8 from local XBRL).</p>
+      <div class="code-block" style="font-size:11px;">start = previous quarter's end_date (EXACT, from SEC Tier 1)
+end   = start + median(historical quarter length for this ticker + quarter number)
+
+Example: FIVE Q3 FY2025 (8-K fires Nov 2024, Q3 10-Q not filed yet)
+  Q2 end from SEC = 2025-08-02 (exact)
+  FIVE Q3 median length from SEC = 90d (consistent across 15+ FYs)
+  Predicted Q3 end = 2025-08-02 + 90 = 2025-10-31
+  Actual Q3 end (from later 10-Q) = 2025-11-01 &larr; off by 1 day</div>
+      <div class="grid grid-3" style="margin-top:12px;">
+        <div class="stat"><div class="stat-value" style="color:var(--green);font-size:24px;">98.4%</div><div class="stat-label">Within &plusmn;1 day</div></div>
+        <div class="stat"><div class="stat-value" style="color:var(--green);font-size:24px;">99.2%</div><div class="stat-label">Within &plusmn;3 days</div></div>
+        <div class="stat"><div class="stat-value" style="color:var(--yellow);font-size:24px;">99.8%</div><div class="stat-label">Within &plusmn;7 days</div></div>
+      </div>
+      <div class="highlight highlight-green"><strong>v2 improvement:</strong> SEC historical data spans 10-18 fiscal years per ticker (avg 112 quarters). More data = more stable median length. No span anomaly contamination in historical data.</div>
+      <div class="highlight highlight-yellow"><strong>One assumption:</strong> Quarter lengths are stable across fiscal years. Breaks during 53-week year transitions (~1 quarter per ticker per 6 years, &plusmn;7d shift).</div>
+      <div class="highlight highlight-blue"><strong>Confidence:</strong> SIMULATION only. Validated by predicting known quarters from other quarters. NOT tested end-to-end through actual <span class="code">build_guidance_period_id()</span> during transcript extraction.</div>
+    </div>
+  </div>
+
+  <div class="tier-panel" data-tier="3">
+    <div class="card" style="border-left:3px solid var(--text2);">
+      <div class="card-header"><span class="badge badge-high">RARELY REACHED</span> Tier 3 — SEC FYE + Month-Boundary Math</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;"><strong>What it does:</strong> For the 33 tickers without SEC CIK mapping (name changes, delistings), or brand-new tickers with no SEC XBRL history. Uses SEC <span class="code">fiscalYearEnd</span> (or derived FYE with day&le;5 adjustment) + <span class="code">_compute_fiscal_dates()</span>.</p>
+      <div class="grid grid-2" style="margin-top:12px;">
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Calendar-month companies</div>
+          <div class="stat"><div class="stat-value" style="color:var(--green);font-size:24px;">0d</div><div class="stat-label">Month boundaries = actual boundaries</div></div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px;">52-week companies (if any reach Tier 3)</div>
+          <div class="stat"><div class="stat-value" style="color:var(--yellow);font-size:24px;">&plusmn;3-5d</div><div class="stat-label">Month-boundary approximation</div></div>
+        </div>
+      </div>
+      <div class="highlight highlight-green"><strong>In practice:</strong> The 33 unmapped tickers are mostly name changes and delistings. None of the 41 FYE-affected tickers are in this group. None of the 52-week irregular calendars (KR, COST) reach Tier 3.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 4: v1 vs v2 COMPARISON ==================== -->
+<div class="panel" id="panel-compare">
+  <h2>v1 vs v2 Comparison</h2>
+
+  <div class="card">
+    <table class="vs-table">
+      <tr><th style="width:30%">Aspect</th><th style="width:35%">v1 (3-Tier Cascade)</th><th style="width:35%">v2 (SEC EDGAR)</th></tr>
+      <tr>
+        <td><strong>Tier 1 data source</strong></td>
+        <td class="old">Complex DEI-anchored YTD differencing Cypher query through Neo4j graph</td>
+        <td class="new">One HTTP call to SEC XBRL API per ticker</td>
+      </tr>
+      <tr>
+        <td><strong>Tier 1 coverage</strong></td>
+        <td class="old">84.8% of filings</td>
+        <td class="new">100% of tickers (739/739)</td>
+      </tr>
+      <tr>
+        <td><strong>Span anomalies</strong></td>
+        <td class="old">19 across 17 tickers (FY label collisions)</td>
+        <td class="new">Zero</td>
+      </tr>
+      <tr>
+        <td><strong>KR Q1 worst case</strong></td>
+        <td class="old">&plusmn;24d (Tier 3, 16-week Q1)</td>
+        <td class="new">&plusmn;0-1d (SEC has exact 111d Q1)</td>
+      </tr>
+      <tr>
+        <td><strong>COST Q3 worst case</strong></td>
+        <td class="old">&plusmn;19d (Tier 3, 4-4-5 calendar)</td>
+        <td class="new">&plusmn;0-1d (SEC has exact 83d Q3)</td>
+      </tr>
+      <tr>
+        <td><strong>Prerequisites</strong></td>
+        <td class="old">Reprocess XBRL (stopped Aug 2025) + HAS_XBRL gate on trigger daemon</td>
+        <td class="new">None</td>
+      </tr>
+      <tr>
+        <td><strong>Race condition</strong></td>
+        <td class="old">Filing arrives &rarr; XBRL not yet processed &rarr; Tier 3 approximate dates &rarr; duplicate GuidancePeriod nodes</td>
+        <td class="new">None. SEC processes XBRL independently.</td>
+      </tr>
+      <tr>
+        <td><strong>If local XBRL stops</strong></td>
+        <td class="old">Degradation: &plusmn;4d/year accumulating for 47 tickers</td>
+        <td class="new">No impact. SEC data is independent of local pipeline.</td>
+      </tr>
+      <tr>
+        <td><strong>External dependency</strong></td>
+        <td>None (local graph)</td>
+        <td>SEC EDGAR API (free, public, no auth)</td>
+      </tr>
+      <tr>
+        <td><strong>Historical depth</strong></td>
+        <td class="old">~8 quarters per ticker (local XBRL)</td>
+        <td class="new">~112 quarters per ticker (all SEC XBRL history)</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>What v1 Problems Are Eliminated</h3>
+  <div class="grid grid-2">
+    <div class="card" style="border-left:3px solid var(--green);">
+      <div class="card-header" style="color:var(--green);">Eliminated</div>
+      <ul style="font-size:13px;color:var(--text2);list-style:none;">
+        <li style="margin:6px 0;"><span style="color:var(--green);">&#10003;</span> XBRL reprocessing prerequisite</li>
+        <li style="margin:6px 0;"><span style="color:var(--green);">&#10003;</span> HAS_XBRL race condition gate</li>
+        <li style="margin:6px 0;"><span style="color:var(--green);">&#10003;</span> 19 span anomalies from FY label collisions</li>
+        <li style="margin:6px 0;"><span style="color:var(--green);">&#10003;</span> KR &plusmn;24d worst case</li>
+        <li style="margin:6px 0;"><span style="color:var(--green);">&#10003;</span> COST &plusmn;19d worst case</li>
+        <li style="margin:6px 0;"><span style="color:var(--green);">&#10003;</span> 13 Q1 Tier 2 &rarr; Tier 3 cascade failures</li>
+        <li style="margin:6px 0;"><span style="color:var(--green);">&#10003;</span> "If XBRL stops" degradation concern</li>
+        <li style="margin:6px 0;"><span style="color:var(--green);">&#10003;</span> Mode-based and latest-filing FYE derivation bugs</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--yellow);">
+      <div class="card-header" style="color:var(--yellow);">Still Present</div>
+      <ul style="font-size:13px;color:var(--text2);list-style:none;">
+        <li style="margin:6px 0;"><span style="color:var(--yellow);">&#9679;</span> Current/forward quarter prediction (&plusmn;0-1d, 98.4%)</li>
+        <li style="margin:6px 0;"><span style="color:var(--yellow);">&#9679;</span> 53-week year transitions (&plusmn;7d, ~1 Q per ticker per 6 years)</li>
+        <li style="margin:6px 0;"><span style="color:var(--yellow);">&#9679;</span> &plusmn;1d XBRL inclusive/exclusive end convention</li>
+        <li style="margin:6px 0;"><span style="color:var(--yellow);">&#9679;</span> Tier 2 not yet E2E tested through production</li>
+        <li style="margin:6px 0;"><span style="color:var(--yellow);">&#9679;</span> 33 tickers without SEC CIK mapping</li>
+        <li style="margin:6px 0;"><span style="color:var(--yellow);">&#9679;</span> MSTR stale SEC registration (detectable)</li>
+        <li style="margin:6px 0;"><span style="color:var(--yellow);">&#9679;</span> ~173 existing wrong guidance items need migration</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 5: TIMELINE GAP ==================== -->
+<div class="panel" id="panel-timeline">
+  <h2>The 40-Day Gap: Why Current-Quarter Dates Are Predictions</h2>
+
+  <div class="card">
+    <p style="font-size:14px;color:var(--text2);margin-bottom:16px;">Earnings 8-Ks and transcripts fire <strong>40 days before</strong> the 10-Q that defines the current quarter's exact end date. For <strong>past quarters</strong>, SEC XBRL has exact dates. For the <strong>current quarter</strong>, we predict.</p>
+
+    <div style="margin-bottom:8px;font-size:13px;">Select a scenario:</div>
+    <select id="timelineScenario" onchange="updateTimeline()" style="margin-bottom:16px;">
+      <option value="current">FIVE Q3 FY2025 — Transcript references current quarter results</option>
+      <option value="forward">FIVE Q4 FY2025 — Transcript references next quarter guidance</option>
+      <option value="previous">FIVE Q2 FY2025 — Transcript references previous quarter</option>
+      <option value="annual">FIVE FY2026 — Transcript references full-year forward guidance</option>
+    </select>
+
+    <div id="timelineViz"></div>
+    <div id="timelineExplanation" style="margin-top:16px;"></div>
+  </div>
+
+  <h3>Which Tier Handles Each Reference Type?</h3>
+  <div class="card">
+    <table>
+      <tr><th>Guidance says...</th><th>Filed?</th><th>Tier used</th><th>Accuracy</th><th>Data type</th></tr>
+      <tr><td>"Q2 revenue was $5B"</td><td>Yes (Q2 10-Q filed)</td><td style="color:var(--cyan)">Tier 1 (SEC exact)</td><td>&plusmn;1d</td><td><span class="badge badge-proven">PAST</span></td></tr>
+      <tr><td>"Q3 EPS $1.50" (just reported)</td><td>No (10-Q in 40 days)</td><td style="color:var(--yellow)">Tier 2 (prediction)</td><td>&plusmn;0-1d (98.4%)</td><td><span class="badge badge-sim">CURRENT</span></td></tr>
+      <tr><td>"Q4 outlook $1.60-$1.70"</td><td>No (future quarter)</td><td style="color:var(--yellow)">Tier 2 (prediction)</td><td>&plusmn;0-1d (98.4%)</td><td><span class="badge badge-sim">FUTURE</span></td></tr>
+      <tr><td>"FY2026 long-term target"</td><td>No (nothing filed)</td><td style="color:var(--yellow)">Tier 2 (chained)</td><td>&plusmn;1d/quarter accumulated</td><td><span class="badge badge-unproven">FAR FUTURE</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== TAB 6: BY DATA ASSET ==================== -->
+<div class="panel" id="panel-assets">
+  <h2>Accuracy by Data Asset</h2>
+
+  <div class="card">
+    <div class="toggle-group" style="margin-bottom:16px;">
+      <button class="toggle-btn active" onclick="showAsset('all')">All Assets</button>
+      <button class="toggle-btn" onclick="showAsset('10q')">10-Q</button>
+      <button class="toggle-btn" onclick="showAsset('10k')">10-K</button>
+      <button class="toggle-btn" onclick="showAsset('8k')">8-K</button>
+      <button class="toggle-btn" onclick="showAsset('transcript')">Transcript</button>
+    </div>
+  </div>
+
+  <div class="asset-panel" data-asset="10q">
+    <div class="card" style="border-left:3px solid var(--green);">
+      <div class="card-header"><span class="badge badge-proven">PROVEN</span> 10-Q (Quarterly Reports)</div>
+      <p style="font-size:13px;color:var(--text2);">SEC XBRL API has the exact period data from this filing. Lookup is a direct cache hit &mdash; no graph traversal, no XBRL processing dependency.</p>
+      <div class="highlight highlight-green"><strong>Accuracy: &plusmn;1d</strong> for all 739 tickers. The &plusmn;1d is the XBRL inclusive/exclusive end convention. <strong>Confidence: PROVEN.</strong></div>
+    </div>
+  </div>
+
+  <div class="asset-panel" data-asset="10k">
+    <div class="card" style="border-left:3px solid var(--green);">
+      <div class="card-header"><span class="badge badge-proven">PROVEN</span> 10-K (Annual Reports)</div>
+      <p style="font-size:13px;color:var(--text2);">Same as 10-Q &mdash; SEC XBRL API has exact dates including Q4 derivation from comparative data.</p>
+      <div class="highlight highlight-green"><strong>Accuracy: &plusmn;1d</strong> for all 739 tickers. <strong>Confidence: PROVEN.</strong></div>
+    </div>
+  </div>
+
+  <div class="asset-panel" data-asset="8k">
+    <div class="card" style="border-left:3px solid var(--yellow);">
+      <div class="card-header"><span class="badge badge-sim">SIMULATION</span> 8-K (Earnings Announcements)</div>
+      <p style="font-size:13px;color:var(--text2);">8-Ks fire on earnings day &mdash; 40 days before the 10-Q. Past quarter references resolve via SEC Tier 1. Current/forward references use Tier 2.</p>
+      <table style="margin-top:8px;">
+        <tr><th>Reference</th><th>Tier</th><th>Accuracy</th><th>Confidence</th></tr>
+        <tr><td>Previous quarter</td><td style="color:var(--cyan)">Tier 1 (SEC)</td><td>&plusmn;1d</td><td><span class="badge badge-proven">PROVEN</span></td></tr>
+        <tr><td>Current quarter</td><td style="color:var(--yellow)">Tier 2</td><td>&plusmn;0-1d (98.4%)</td><td><span class="badge badge-sim">SIMULATION</span></td></tr>
+        <tr><td>Next quarter / FY</td><td style="color:var(--yellow)">Tier 2</td><td>&plusmn;0-1d (98.4%)</td><td><span class="badge badge-sim">SIMULATION</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="asset-panel" data-asset="transcript">
+    <div class="card" style="border-left:3px solid var(--yellow);">
+      <div class="card-header"><span class="badge badge-sim">SIMULATION</span> Transcript (Earnings Calls)</div>
+      <p style="font-size:13px;color:var(--text2);">Same timing as 8-K. Transcripts are the #1 source of guidance data (56% of existing items). Same tier breakdown as 8-K.</p>
+      <div class="highlight highlight-yellow"><strong>Note:</strong> Tier 2 validation (98.4% &plusmn;1d) is from a simulation. NOT tested end-to-end through actual <span class="code">build_guidance_period_id()</span> during transcript extraction.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 7: TICKER LOOKUP ==================== -->
+<div class="panel" id="panel-lookup">
+  <h2>Ticker Lookup</h2>
+  <input type="text" class="search-box" id="tickerSearch" placeholder="Type a ticker (e.g., FIVE, COST, AAPL, KR)..." oninput="lookupTicker()">
+  <div id="tickerResult"></div>
+</div>
+
+<!-- ==================== TAB 8: CONFIDENCE ==================== -->
+<div class="panel" id="panel-confidence">
+  <h2>Confidence Levels — What's Proven vs Hypothesized</h2>
+
+  <div class="card">
+    <div style="margin-bottom:16px;font-size:13px;color:var(--text2);">
+      <span style="color:var(--green)">&#9632;</span> PROVEN = empirically tested against real data, zero doubt &nbsp;
+      <span style="color:var(--yellow)">&#9632;</span> HIGH CONFIDENCE = strong evidence, minor uncertainty &nbsp;
+      <span style="color:var(--orange)">&#9632;</span> SIMULATION = validated in test harness, not production &nbsp;
+      <span style="color:var(--red)">&#9632;</span> NOT PROVEN = claimed but not independently verified
+    </div>
+
+    <div id="confidenceBars"></div>
+  </div>
+</div>
+
+<!-- ==================== TAB 9: WORST CASES ==================== -->
+<div class="panel" id="panel-worst">
+  <h2>Worst Case Scenarios</h2>
+
+  <h3>With v2 fix deployed</h3>
+  <div class="card">
+    <table>
+      <tr><th>Scenario</th><th>How often</th><th>Error</th><th>Impact</th></tr>
+      <tr><td>Normal operation &mdash; filed quarter (Tier 1 SEC)</td><td>~85% of lookups</td><td style="color:var(--green)">&plusmn;0-1d</td><td>None (XBRL convention only)</td></tr>
+      <tr><td>Current/forward quarter (Tier 2 prediction)</td><td>~14% of lookups</td><td style="color:var(--green)">&plusmn;0-1d (98.4%)</td><td>None for 98.4%; &plusmn;7d for 53-week transitions</td></tr>
+      <tr><td>53-week year, extended quarter</td><td>~1 Q per ticker per 6 years</td><td style="color:var(--yellow)">&plusmn;7d</td><td>One quarter slightly off; self-corrects when filed</td></tr>
+      <tr><td>Brand new ticker, no SEC history</td><td>First quarter only</td><td style="color:var(--yellow)">&plusmn;3-5d</td><td>Resolves after first filing</td></tr>
+      <tr><td>33 unmapped tickers (Tier 3)</td><td>Rare</td><td style="color:var(--yellow)">&plusmn;0-5d</td><td>All calendar-month; month math is exact</td></tr>
+      <tr><td>MSTR (stale SEC registration)</td><td>1 ticker</td><td style="color:var(--yellow)">&plusmn;0d</td><td>Detectable; falls to Neo4j-derived FYE (Dec, correct)</td></tr>
+    </table>
+  </div>
+
+  <h3>v1 Worst Cases — Now Eliminated</h3>
+  <div class="card" style="opacity:0.6;">
+    <table>
+      <tr><th>v1 Scenario</th><th>v1 Error</th><th>v2 Status</th></tr>
+      <tr><td class="struck">KR Q1 via Tier 3 (16-week Q1 + FY label collision)</td><td class="struck">&plusmn;24d</td><td style="color:var(--green)">ELIMINATED &mdash; SEC has exact KR Q1 (111d)</td></tr>
+      <tr><td class="struck">COST Q3 via Tier 3 (4-4-5 calendar)</td><td class="struck">&plusmn;19d</td><td style="color:var(--green)">ELIMINATED &mdash; SEC has exact COST Q3 (83d)</td></tr>
+      <tr><td class="struck">Span anomaly Q1 &rarr; Tier 3 (6 tickers)</td><td class="struck">&plusmn;3-5d</td><td style="color:var(--green)">ELIMINATED &mdash; no span anomalies in SEC data</td></tr>
+      <tr><td class="struck">13 Q1 Tier 2 cascade failures (&plusmn;364d)</td><td class="struck">&plusmn;364d</td><td style="color:var(--green)">ELIMINATED &mdash; SEC Tier 1 has clean Q4 data</td></tr>
+      <tr><td class="struck">XBRL processing stops &rarr; degradation</td><td class="struck">&plusmn;4d/year</td><td style="color:var(--green)">ELIMINATED &mdash; independent of local pipeline</td></tr>
+    </table>
+  </div>
+
+  <h3>The Remaining Limit</h3>
+  <div class="card">
+    <div class="highlight highlight-yellow">
+      <strong>For current and forward quarter guidance from transcripts/8-Ks:</strong> The current quarter's exact end date isn't in the SEC XBRL API until the 10-Q is filed (~40 days later). Tier 2 predicts to &plusmn;0-1d for 98.4% of cases, but this is inherently a prediction. The only way to get exact dates is to wait for the 10-Q to be filed and processed by SEC.
+    </div>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<script>
+// ==================== TAB NAVIGATION ====================
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ==================== TIER TOGGLE ====================
+function showTier(tier) {
+  document.querySelectorAll('.tier-panel').forEach(p => {
+    p.style.display = (tier === 'all' || p.dataset.tier == tier) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.card:has(.toggle-group) .toggle-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ==================== ASSET TOGGLE ====================
+function showAsset(asset) {
+  document.querySelectorAll('.asset-panel').forEach(p => {
+    p.style.display = (asset === 'all' || p.dataset.asset === asset) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.asset-panel').forEach(p => p.closest('.panel').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active')));
+  event.target.classList.add('active');
+}
+
+// ==================== BUG VISUALIZATION ====================
+const tickerData = {
+  FIVE: {
+    rawFYE: 2, correctFYE: 1, secFYE: '0131', calendarType: 'uniform 13-week',
+    actual: { 2024: {Q1:['2024-02-04','2024-05-04'],Q2:['2024-05-05','2024-08-03'],Q3:['2024-08-04','2024-11-02'],Q4:['2024-11-03','2025-02-01']},
+              2025: {Q1:['2025-02-02','2025-05-03'],Q2:['2025-05-04','2025-08-02'],Q3:['2025-08-03','2025-11-01']},
+              2023: {Q1:['2023-01-29','2023-04-29'],Q2:['2023-04-30','2023-07-29'],Q3:['2023-07-30','2023-10-28'],Q4:['2023-10-29','2024-02-03']} },
+    buggy: { 2024: {Q1:['2024-03-01','2024-05-31'],Q2:['2024-06-01','2024-08-31'],Q3:['2024-09-01','2024-11-30'],Q4:['2024-12-01','2025-02-28']},
+             2025: {Q1:['2025-03-01','2025-05-31'],Q2:['2025-06-01','2025-08-31']},
+             2023: {Q1:['2023-03-01','2023-05-31'],Q2:['2023-06-01','2023-08-31'],Q3:['2023-09-01','2023-11-30'],Q4:['2023-12-01','2024-02-29']} }
+  },
+  COST: {
+    rawFYE: 9, correctFYE: 8, secFYE: '0830', calendarType: '4-4-5',
+    actual: { 2024: {Q1:['2023-09-04','2023-11-26'],Q2:['2023-11-27','2024-02-18'],Q3:['2024-02-19','2024-05-12'],Q4:['2024-05-13','2024-09-01']} },
+    buggy: { 2024: {Q1:['2023-10-01','2023-12-31'],Q2:['2024-01-01','2024-03-31'],Q3:['2024-04-01','2024-06-30'],Q4:['2024-07-01','2024-09-30']} }
+  },
+  KR: {
+    rawFYE: 2, correctFYE: 1, secFYE: '0131', calendarType: '4-5-4 (16-week Q1)',
+    actual: { 2024: {Q1:['2024-02-04','2024-05-25'],Q2:['2024-05-26','2024-08-17'],Q3:['2024-08-18','2024-11-09']},
+              2025: {Q1:['2025-02-02','2025-05-24']},
+              2023: {Q1:['2023-01-29','2023-05-20'],Q2:['2023-05-21','2023-08-12'],Q3:['2023-08-13','2023-11-04']} },
+    buggy: { 2024: {Q1:['2024-03-01','2024-05-31'],Q2:['2024-06-01','2024-08-31'],Q3:['2024-09-01','2024-11-30']},
+             2025: {Q1:['2025-03-01','2025-05-31']},
+             2023: {Q1:['2023-03-01','2023-05-31'],Q2:['2023-06-01','2023-08-31'],Q3:['2023-09-01','2023-11-30']} }
+  },
+  ADBE: {
+    rawFYE: 12, correctFYE: 11, secFYE: '1128', calendarType: 'uniform',
+    actual: { 2024: {Q1:['2023-12-02','2024-03-01'],Q2:['2024-03-02','2024-05-31'],Q3:['2024-06-01','2024-08-30'],Q4:['2024-08-31','2024-11-29']},
+              2025: {Q1:['2024-11-30','2025-02-28'],Q2:['2025-03-01','2025-05-30'],Q3:['2025-05-31','2025-08-29']} },
+    buggy: { 2024: {Q1:['2024-01-01','2024-03-31'],Q2:['2024-04-01','2024-06-30'],Q3:['2024-07-01','2024-09-30'],Q4:['2024-10-01','2024-12-31']},
+             2025: {Q1:['2025-01-01','2025-03-31'],Q2:['2025-04-01','2025-06-30'],Q3:['2025-07-01','2025-09-30']} }
+  },
+  CAKE: {
+    rawFYE: 1, correctFYE: 12, secFYE: '1230', calendarType: '52-week wobble',
+    actual: { 2024: {Q1:['2024-01-03','2024-04-02'],Q2:['2024-04-03','2024-07-02'],Q3:['2024-07-03','2024-10-01']},
+              2025: {Q1:['2025-01-01','2025-04-01'],Q2:['2025-04-02','2025-07-01'],Q3:['2025-07-02','2025-09-30']} },
+    buggy: { 2024: {Q1:['2024-02-01','2024-04-30'],Q2:['2024-05-01','2024-07-31'],Q3:['2024-08-01','2024-10-31']},
+             2025: {Q1:['2025-02-01','2025-04-30'],Q2:['2025-05-01','2025-07-31'],Q3:['2025-08-01','2025-10-31']} }
+  }
+};
+
+const qColors = {Q1:'#1f6feb',Q2:'#238636',Q3:'#a371f7',Q4:'#f0883e'};
+
+function updateBugViz() {
+  const ticker = document.getElementById('bugTicker').value;
+  const fy = document.getElementById('bugFY').value;
+  const data = tickerData[ticker];
+  if (!data) return;
+
+  const actual = data.actual[fy];
+  const buggy = data.buggy[fy];
+  if (!actual) {
+    document.getElementById('actualBar').innerHTML = '<div style="padding:10px;color:var(--text2);font-size:12px;">No data for this FY</div>';
+    document.getElementById('buggyBar').innerHTML = '';
+    document.getElementById('bugSummary').innerHTML = '';
+    document.getElementById('nodeIds').innerHTML = '';
+    return;
+  }
+
+  function renderBar(containerId, quarters, labelId) {
+    const bar = document.getElementById(containerId);
+    const labels = document.getElementById(labelId);
+    const allDates = [];
+    // Collect from both actual and buggy for consistent scale
+    Object.values(actual).forEach(([s,e]) => { allDates.push(new Date(s), new Date(e)); });
+    if (buggy) Object.values(buggy).forEach(([s,e]) => { allDates.push(new Date(s), new Date(e)); });
+    const minDate = new Date(Math.min(...allDates));
+    const maxDate = new Date(Math.max(...allDates));
+    const totalMs = maxDate - minDate;
+    bar.innerHTML = '';
+    Object.entries(quarters).forEach(([q, [s, e]]) => {
+      const startPct = ((new Date(s) - minDate) / totalMs * 100);
+      const widthPct = ((new Date(e) - new Date(s)) / totalMs * 100);
+      const days = Math.round((new Date(e) - new Date(s)) / 86400000);
+      const seg = document.createElement('div');
+      seg.className = 'timeline-segment';
+      seg.style.left = startPct + '%';
+      seg.style.width = widthPct + '%';
+      seg.style.background = qColors[q];
+      seg.style.color = '#fff';
+      seg.textContent = `${q} (${days}d)`;
+      bar.appendChild(seg);
+    });
+    const firstQ = Object.values(quarters)[0];
+    const lastQ = Object.values(quarters)[Object.keys(quarters).length - 1];
+    labels.innerHTML = `<span>${firstQ[0]}</span><span>${lastQ[1]}</span>`;
+  }
+
+  renderBar('actualBar', actual, 'actualLabels');
+  if (buggy) renderBar('buggyBar', buggy, 'buggyLabels');
+
+  // Summary
+  const q1a = actual.Q1, q1b = buggy ? buggy.Q1 : null;
+  if (q1a && q1b) {
+    const startDiff = Math.round(Math.abs(new Date(q1a[0]) - new Date(q1b[0])) / 86400000);
+    const endDiff = Math.round(Math.abs(new Date(q1a[1]) - new Date(q1b[1])) / 86400000);
+    document.getElementById('bugSummary').innerHTML = `
+      <div class="highlight highlight-red">
+        <strong>Q1 offset:</strong> Start off by ${startDiff} days, End off by ${endDiff} days.
+        Raw FYE = ${data.rawFYE}, Correct FYE = ${data.correctFYE}.
+        SEC fiscalYearEnd = <span class="code">${data.secFYE}</span>.
+        Calendar type: ${data.calendarType}.
+      </div>`;
+  }
+
+  // Node IDs
+  if (q1a && q1b) {
+    document.getElementById('nodeIds').innerHTML = `
+      <span class="node-id wrong-node">gp_${q1b[0]}_${q1b[1]}</span> <span style="color:var(--text2);font-size:12px;">&larr; buggy (current code)</span><br>
+      <span class="node-id right-node">gp_${q1a[0]}_${q1a[1]}</span> <span style="color:var(--text2);font-size:12px;">&larr; correct (from SEC XBRL)</span>`;
+  }
+}
+
+// ==================== TIMELINE VISUALIZATION ====================
+function updateTimeline() {
+  const scenario = document.getElementById('timelineScenario').value;
+  const viz = document.getElementById('timelineViz');
+  const exp = document.getElementById('timelineExplanation');
+
+  const scenarios = {
+    current: {
+      title: 'Current quarter results — "Q3 EPS was $1.50"',
+      events: [
+        {date:'Q2 10-Q filed\n(Sep 2024)',pos:15,color:'var(--cyan)',label:'Q2 in SEC XBRL\n→ Tier 1 exact'},
+        {date:'Q3 ends\n(Nov 1, 2024)',pos:40,color:'var(--text2)',label:'Fiscal quarter ends'},
+        {date:'8-K + Transcript\n(Nov 2024)',pos:48,color:'var(--yellow)',label:'Guidance extracted HERE\nQ3 10-Q not filed yet\n→ Tier 2 prediction'},
+        {date:'Q3 10-Q filed\n(Dec 2024)',pos:72,color:'var(--cyan)',label:'Q3 in SEC XBRL\n→ Tier 1 exact NOW'},
+      ],
+      explanation: `<div class="highlight highlight-yellow"><strong>At extraction time:</strong> Q3 10-Q hasn't been filed. SEC XBRL doesn't have Q3 yet. Tier 2 predicts: start = Q2.end from SEC (exact) + Q3 historical length from SEC (90d median) = &plusmn;0-1d for 98.4% of cases.</div>`
+    },
+    forward: {
+      title: 'Next quarter guidance — "Q4 outlook $1.60-$1.70"',
+      events: [
+        {date:'Q2 10-Q filed\n(Sep 2024)',pos:10,color:'var(--cyan)',label:'Q2 in SEC XBRL'},
+        {date:'8-K + Transcript\n(Nov 2024)',pos:40,color:'var(--yellow)',label:'Guidance extracted HERE\nQ4 is FUTURE\n→ Tier 2 chained'},
+        {date:'Q3 10-Q filed\n(Dec 2024)',pos:55,color:'var(--cyan)',label:'Q3 in SEC XBRL'},
+        {date:'Q4 10-K filed\n(Apr 2025)',pos:90,color:'var(--cyan)',label:'Q4 in SEC XBRL\n→ Tier 1 exact'},
+      ],
+      explanation: `<div class="highlight highlight-yellow"><strong>At extraction time:</strong> Q4 hasn't even started. Tier 2 chains predictions: Q3 predicted end + Q4 historical length. <strong>Inherently a prediction — no data source has these dates yet.</strong></div>`
+    },
+    previous: {
+      title: 'Previous quarter reference — "vs Q2 guidance of $1.40"',
+      events: [
+        {date:'Q2 10-Q filed\n(Sep 2024)',pos:20,color:'var(--cyan)',label:'Q2 in SEC XBRL\n→ Tier 1 HAS exact dates'},
+        {date:'8-K + Transcript\n(Nov 2024)',pos:60,color:'var(--green)',label:'Guidance extracted HERE\nQ2 dates available!\n→ SEC Tier 1 exact'},
+      ],
+      explanation: `<div class="highlight highlight-green"><strong>At extraction time:</strong> Q2 10-Q was filed months ago. SEC XBRL API has exact dates. <strong>This is PAST data — proven facts from SEC.</strong></div>`
+    },
+    annual: {
+      title: 'Far-future guidance — "FY2026 long-term revenue target"',
+      events: [
+        {date:'Latest SEC XBRL\n(Q2 FY2025)',pos:10,color:'var(--cyan)',label:'Last known exact data'},
+        {date:'8-K + Transcript\n(Nov 2024)',pos:25,color:'var(--orange)',label:'Guidance extracted HERE\nFY2026 = 5+ quarters away\n→ Tier 2 chained'},
+        {date:'FY2026 10-K\n(~Apr 2027)',pos:85,color:'var(--text2)',label:'FY2026 in SEC XBRL\n(years from now)'},
+      ],
+      explanation: `<div class="highlight highlight-yellow"><strong>At extraction time:</strong> FY2026 is 5+ quarters ahead. Tier 2 chains multiple predictions: error accumulates at ~&plusmn;1d per quarter. After 5 quarters: ~&plusmn;5d. After a 53-week year: could jump &plusmn;7d.</div>`
+    }
+  };
+
+  const s = scenarios[scenario];
+  let html = `<div style="font-size:14px;font-weight:600;margin-bottom:12px;">${s.title}</div>`;
+  html += '<div style="position:relative;height:120px;background:var(--surface2);border-radius:8px;padding:8px;">';
+  html += '<div style="position:absolute;top:50%;left:5%;right:5%;height:2px;background:var(--border);"></div>';
+  s.events.forEach(e => {
+    html += `<div style="position:absolute;left:${e.pos}%;top:10px;transform:translateX(-50%);text-align:center;">
+      <div style="width:12px;height:12px;border-radius:50%;background:${e.color};margin:0 auto 4px;position:relative;top:30px;z-index:1;"></div>
+      <div style="font-size:10px;color:var(--text2);white-space:pre-line;line-height:1.3;position:relative;top:32px;">${e.date}</div>
+      <div style="font-size:10px;color:${e.color};white-space:pre-line;line-height:1.3;position:relative;top:34px;font-weight:600;">${e.label}</div>
+    </div>`;
+  });
+  html += '</div>';
+  viz.innerHTML = html;
+  exp.innerHTML = s.explanation;
+}
+
+// ==================== TICKER LOOKUP ====================
+const affectedTickers = {
+  ANF:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  ASO:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected',hasGuidance:387},
+  BBY:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  BJ:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  BURL:{path:'M+G',fye:'2→1',secFYE:'0201',cal:'uniform',error:'±0-1d',group:'affected'},
+  CAKE:{path:'M only',fye:'1→12',secFYE:'1230',cal:'52wk wobble',error:'±0-1d',group:'affected'},
+  CBRL:{path:'G only',fye:'8→7',secFYE:'0731',cal:'uniform',error:'±0-1d',group:'affected'},
+  CHWY:{path:'G only',fye:'2→1',secFYE:'0201',cal:'uniform',error:'±0-1d',group:'affected'},
+  CIEN:{path:'G only',fye:'11→10',secFYE:'1031',cal:'uniform',error:'±0-1d',group:'affected'},
+  CNM:{path:'G only',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  COST:{path:'M only',fye:'9→8',secFYE:'0830',cal:'4-4-5',error:'±0-1d',group:'affected'},
+  DELL:{path:'M+G',fye:'2→1',secFYE:'0130',cal:'uniform',error:'±0-1d',group:'affected'},
+  DKS:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  DLTR:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected',hasGuidance:351},
+  EXEL:{path:'G only',fye:'1→12',secFYE:'0102',cal:'uniform',error:'±0-1d',group:'affected'},
+  FIVE:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected',hasGuidance:468},
+  GME:{path:'M+G',fye:'2→1',secFYE:'0201',cal:'uniform',error:'±0-1d',group:'affected'},
+  IOT:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  KBR:{path:'G only',fye:'1→12',secFYE:'0102',cal:'uniform',error:'±0-1d',group:'affected'},
+  KR:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'4-5-4',error:'±0-1d',group:'affected'},
+  KSS:{path:'M+G',fye:'2→1',secFYE:'0129',cal:'uniform',error:'±0-1d',group:'affected'},
+  LEVI:{path:'G only',fye:'12→11',secFYE:'1201',cal:'uniform',error:'±0-1d',group:'affected'},
+  LOW:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  LULU:{path:'G only',fye:'2→1',secFYE:'0202',cal:'uniform',error:'±0-1d',group:'affected',hasGuidance:355},
+  MRVL:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  OLLI:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  OXM:{path:'M+G',fye:'2→1',secFYE:'0201',cal:'uniform',error:'±0-1d',group:'affected'},
+  PLAY:{path:'M+G',fye:'2→1',secFYE:'0202',cal:'uniform',error:'±0-1d',group:'affected'},
+  PLCE:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  PSTG:{path:'M+G',fye:'2→1',secFYE:'0201',cal:'uniform',error:'±0-1d',group:'affected'},
+  PVH:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  RH:{path:'M+G',fye:'2→1',secFYE:'0131',cal:'uniform',error:'±0-1d',group:'affected'},
+  ROST:{path:'M+G',fye:'2→1',secFYE:'0201',cal:'uniform',error:'±0-1d',group:'affected'},
+  SAIC:{path:'M+G',fye:'2→1',secFYE:'0130',cal:'uniform',error:'±0-1d',group:'affected',hasGuidance:297},
+  TJX:{path:'M+G',fye:'2→1',secFYE:'0201',cal:'uniform',error:'±0-1d',group:'affected'},
+  TRMB:{path:'G only',fye:'1→12',secFYE:'0102',cal:'uniform',error:'±0-1d',group:'affected'},
+  ULTA:{path:'M+G',fye:'2→1',secFYE:'0201',cal:'uniform',error:'±0-1d',group:'affected'},
+  UNFI:{path:'G only',fye:'8→7',secFYE:'0731',cal:'uniform',error:'±0-1d',group:'affected'},
+  ADBE:{path:'M only',fye:'12→11',secFYE:'1128',cal:'uniform',error:'±0-1d',group:'affected'},
+  ADI:{path:'G only',fye:'11→10',secFYE:'1101',cal:'uniform',error:'±0-1d',group:'affected'},
+  AVGO:{path:'G only',fye:'11→10',secFYE:'1101',cal:'uniform',error:'±0-1d',group:'affected'},
+};
+
+const atRisk = ['BOOT','DNUT','HAE','ILMN','MSM','PFGC','QDEL','QRVO','RL','SBUX','SFM','SYY','TDY','UTZ','VFC'];
+
+function lookupTicker() {
+  const query = document.getElementById('tickerSearch').value.trim().toUpperCase();
+  const result = document.getElementById('tickerResult');
+  if (!query) { result.innerHTML = ''; return; }
+
+  if (affectedTickers[query]) {
+    const t = affectedTickers[query];
+    let html = `<div class="ticker-result" style="border-left:3px solid var(--red);">`;
+    html += `<div style="font-size:18px;font-weight:700;color:var(--red);">${query} — FYE BUG AFFECTED</div>`;
+    html += `<table style="margin:8px 0;">
+      <tr><td style="color:var(--text2);width:200px;">Bug path</td><td>${t.path}</td></tr>
+      <tr><td style="color:var(--text2);">FYE shift</td><td>Raw ${t.fye.split('→')[0]} → Correct ${t.fye.split('→')[1]}</td></tr>
+      <tr><td style="color:var(--text2);">SEC fiscalYearEnd</td><td><span class="code">${t.secFYE}</span></td></tr>
+      <tr><td style="color:var(--text2);">Calendar type</td><td>${t.cal}</td></tr>
+      <tr><td style="color:var(--text2);">With v2 fix (SEC Tier 1)</td><td style="color:var(--green);font-weight:600;">${t.error} (exact dates from SEC XBRL)</td></tr>
+      ${t.hasGuidance ? `<tr><td style="color:var(--text2);">Existing guidance items</td><td>${t.hasGuidance} (~28d offset, needs migration)</td></tr>` : ''}
+    </table>`;
+    html += `<div class="highlight highlight-green">With SEC v2 fix: all filed quarters = &plusmn;1d exact. Current/forward = &plusmn;0-1d via Tier 2 prediction.</div>`;
+    html += `</div>`;
+    result.innerHTML = html;
+  } else if (atRisk.includes(query)) {
+    result.innerHTML = `<div class="ticker-result" style="border-left:3px solid var(--yellow);">
+      <div style="font-size:18px;font-weight:700;color:var(--yellow);">${query} — AT RISK (mode could flip)</div>
+      <p style="font-size:13px;color:var(--text2);">Has the day&le;5 pattern in some historical filings. Currently safe. With SEC v2 fix, this is irrelevant &mdash; SEC fiscalYearEnd is fixed, can't flip.</p>
+      <div class="highlight highlight-green">v2 eliminates the "at risk" category entirely. SEC registration value doesn't change with new filings.</div>
+    </div>`;
+  } else {
+    result.innerHTML = `<div class="ticker-result" style="border-left:3px solid var(--green);">
+      <div style="font-size:18px;font-weight:700;color:var(--green);">${query} — SAFE</div>
+      <p style="font-size:13px;color:var(--text2);">SEC XBRL API has exact quarter boundaries. Filed quarters = &plusmn;1d. Current/forward = Tier 2 prediction (&plusmn;0-1d, 98.4%).</p>
+    </div>`;
+  }
+}
+
+// ==================== UNIVERSE VISUALIZATION ====================
+function renderUniverse() {
+  const container = document.getElementById('universeViz');
+  const allTickers = [];
+  Object.keys(affectedTickers).forEach(t => allTickers.push({t,color:'#f85149',group:'FYE bug'}));
+  atRisk.forEach(t => allTickers.push({t,color:'#db6d28',group:'At risk'}));
+  for (let i = allTickers.length; i < 739; i++) allTickers.push({t:'',color:'#238636',group:'Safe'});
+
+  container.innerHTML = allTickers.map(({t,color}) =>
+    `<div style="width:8px;height:8px;background:${color};border-radius:2px;outline:1px solid rgba(57,210,192,0.15);" title="${t}"></div>`
+  ).join('');
+}
+
+// ==================== CONFIDENCE BARS ====================
+function renderConfidence() {
+  const claims = [
+    {label:'SEC XBRL has exact quarter dates',pct:99,color:'var(--green)',status:'PROVEN',note:'739/739 tickers, 83,091 quarters. Cross-validated against Neo4j Tier 1: 27/27 start exact.'},
+    {label:'SEC fiscalYearEnd = correct FYE',pct:99,color:'var(--green)',status:'PROVEN',note:'737/738 after day≤5 adjustment. 1 exception (MSTR) is stale registration, detectable.'},
+    {label:'41 tickers have FYE bug',pct:95,color:'var(--green)',status:'PROVEN',note:'Every 10-K tested. Independent rerun found 44. SEC confirms all 41.'},
+    {label:'SEC cross-validates Neo4j Tier 1',pct:99,color:'var(--green)',status:'PROVEN',note:'27/27 start dates exact match. 27/27 end dates +1d (XBRL convention). Zero real discrepancies.'},
+    {label:'Tier 2 gives ±0-1d',pct:85,color:'var(--orange)',status:'SIMULATION',note:'98.4% in test harness with SEC data. Not production-tested through build_guidance_period_id().'},
+    {label:'~650 calendar-month = 0d error',pct:95,color:'var(--green)',status:'PROVEN',note:'SEC XBRL confirms. Month boundaries = actual boundaries for these tickers.'},
+    {label:'KR/COST exact via SEC',pct:99,color:'var(--green)',status:'PROVEN',note:'KR Q1=111d, COST Q3=83d — exact from SEC XBRL API. No Tier 3 needed.'},
+    {label:'Transcript E2E works',pct:40,color:'var(--red)',status:'NOT PROVEN',note:'Simulation only. No production test through actual extraction pipeline.'},
+    {label:'33 unmapped tickers handled',pct:70,color:'var(--yellow)',status:'HIGH',note:'Name changes / delistings. Can use CIK from Company nodes. None in affected 41.'},
+  ];
+
+  const container = document.getElementById('confidenceBars');
+  container.innerHTML = claims.map(c => `
+    <div class="confidence-bar">
+      <div class="label">${c.label}</div>
+      <div class="bar">
+        <div class="fill" style="width:${c.pct}%;background:${c.color};">${c.pct}%</div>
+      </div>
+      <span class="badge badge-${c.status === 'PROVEN' ? 'proven' : c.status === 'HIGH' ? 'high' : c.status === 'SIMULATION' ? 'sim' : 'unproven'}">${c.status}</span>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin:0 0 12px 228px;">${c.note}</div>
+  `).join('');
+}
+
+// ==================== INIT ====================
+updateBugViz();
+updateTimeline();
+renderUniverse();
+renderConfidence();
+</script>
+</body>
+</html>

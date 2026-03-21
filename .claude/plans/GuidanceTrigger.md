@@ -2,6 +2,16 @@
 
 ---
 
+> **TODO — XBRL Gate on Guidance Trigger (from fiscal-math-issues.md)**
+>
+> The guidance trigger daemon has a race condition: if extraction fires before XBRL processing completes for a new filing, `build_guidance_period_id()` falls to approximate month-boundary dates (±3-5d off for 52-week companies). If guidance is later re-extracted after XBRL is ready, exact dates are used → different GuidancePeriod node ID → duplicate node for the same quarter.
+>
+> **Fix**: Add `AND EXISTS { MATCH (r)-[:HAS_XBRL]->() }` to the eligibility queries in `guidance_trigger_daemon.py` (the 4 `ASSET_CONFIGS` queries at lines ~135-185). This gates extraction on XBRL readiness. A filing without HAS_XBRL is skipped and picked up on the next 60-second sweep after XBRL processing completes. Zero race condition, zero duplicates.
+>
+> **Applies to**: 10-K and 10-Q assets only (transcripts and 8-Ks don't have XBRL). The gate should only be added to the `10k` and `10q` asset configs, NOT to `transcript` or `8k`.
+
+---
+
 ## §1: Trade-Ready Scanner
 
 **Status**: Phase 1+2 COMPLETE. Live in K8s since 2026-03-16.
