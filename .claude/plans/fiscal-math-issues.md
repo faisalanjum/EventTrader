@@ -134,7 +134,7 @@ No current consumer queries GuidancePeriod by exact date range. The dates are fo
 
 **To implement:**
 1. Build `scripts/sec_quarter_cache_loader.py` (~200 lines) — initial bootstrap + manual refresh
-2. Add ~20 lines to `scripts/trade_ready_scanner.py` — incremental SEC fetch when ticker enters TradeReady (piggybacks on existing 4x/day CronJob, no new deployment)
+2. Add ~20 lines to `scripts/trade_ready_scanner.py` — for each active TradeReady ticker, fetch SEC data if cache is missing or stale (>90 days). Covers both new and returning tickers. Piggybacks on existing 4x/day CronJob, no new deployment.
 3. Run initial bootstrap: `python3 sec_quarter_cache_loader.py` once (~90 sec, all 739 tickers)
 4. **Add fiscal-identity lookup** in `_ensure_period()` (`guidance_write_cli.py:~78`) — query existing GuidancePeriod by (ticker, fiscal_year, fiscal_quarter) before calling `build_guidance_period_id()`
 5. Modify `build_guidance_period_id()` in `guidance_ids.py:376` (Steps 1→2→3 for new periods only)
@@ -1039,10 +1039,12 @@ After edge-only migration, new extraction would compute:
 
 ```
 TradeReady scanner runs (4x/day, already live in K8s):
-  For each newly added ticker:
-    If NOT in SEC quarter cache (or cache is stale):
+  For each active TradeReady ticker (new or returning):
+    If SEC quarter cache is missing OR stale (e.g., last fetch > 90 days ago):
       Fetch SEC XBRL Company Concept API → write to Redis (~1 API call, <1 sec)
 ```
+
+**Important:** TradeReady preserves `added_at` for existing tickers and only updates `updated_at` (`trade_ready_scanner.py:368`). A returning ticker (next quarter's earnings) is NOT "newly added" but may have a new 10-Q filed since the last cache fetch. The trigger condition is **cache missing or stale**, not **first-ever add**.
 
 **Why this is sufficient:**
 - The guidance trigger daemon is driven BY TradeReady — it only extracts guidance for tickers in TradeReady
