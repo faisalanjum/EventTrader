@@ -1120,29 +1120,461 @@ bash warmup_cache.sh $TICKER --guidance-history [--pit ISO8601] [--out-path /pat
 
 ---
 
-### Step 5: Inter-Quarter Context Inputs
+### Step 5: Inter-Quarter Context — `build_inter_quarter_context()` (LOCKED)
 
-**What**: Additional context the predictor needs beyond 8-K + guidance + consensus. Defined in `predictor.md §4b` as inputs 3-5.
+**What**: A unified chronological timeline of EVERYTHING that happened between the previous and current earnings dates — daily prices, news, filings, dividends, splits — assembled as a planner input so it can generate targeted fetch plan questions based on what actually occurred.
 
-These are NOT planner inputs — the planner generates QUESTIONS about them in the fetch plan. But the planner needs to know what categories exist so it can map 8-K claims to the right data requests.
+**Design decision**: Instead of 3 separate categories (inter_quarter_8k, significant_moves, inter_quarter_news), we build ONE unified timeline. The planner sees the complete picture and generates targeted questions like "Investigate the gap day on Jan 27" or "Fetch full details on the CFO change 8-K" instead of blind generic questions.
 
-**Input 3: Non-earnings 8-K filings** (canonical ID: `inter_quarter_8k`)
-- 8-K filings between earnings dates, excluding Item 2.02
-- Must use `r.extracted_sections` NOT `r.description` (description is useless metadata)
-- Source: `neo4j-report` agent
-- Typically 0-5 filings per quarter
+#### Architecture
 
-**Input 4: Significant-move days** (canonical ID: `significant_moves`)
-- Days with |adjusted return| > threshold between earnings dates
-- Rendered with matched headlines from news (join on date)
-- Source: `neo4j-entity` (price data) + `neo4j-news` (headline matching)
-- **Resolved**: The planner does NOT receive price data directly — it generates a fetch plan question for `significant_moves` and the DataSubAgents fetch the actual data for the predictor bundle. The planner just needs to know this canonical question ID exists.
+```
+build_inter_quarter_context(ticker, prev_8k_date, current_8k_date, out_path=None)
+  │
+  ├─ 1. Query all trading days: Date-[HAS_PRICE]->Company + SPY + Sector
+  │
+  ├─ 2. Query all news: News-[INFLUENCES]->Company in date range
+  │
+  ├─ 3. Query all filings: Report-[PRIMARY_FILER]->Company in date range (all types)
+  │     + PRIMARY_FILER return properties (hourly/session/daily stock + sector + industry + macro)
+  │
+  ├─ 4. Query dividends: Company-[DECLARED_DIVIDEND]->Dividend in date range
+  │
+  ├─ 5. Merge all by date → chronological timeline
+  │
+  ├─ 6. Annotate: *** for |adj_return| ≥ 2%, GAP for significant move with no headlines
+  │
+  ├─ 7. Write JSON (inter_quarter_context.v1) + rendered text
+  │
+  └─ 8. Atomic write (temp + rename) to out_path
+```
 
-**Input 5: Inter-quarter news** (canonical ID: `inter_quarter_news`)
-- **Resolved**: Start with channel filter per `predictor.md §4b` (12 channels). The planner generates a fetch plan question for `inter_quarter_news`. The DataSubAgents (neo4j-news, bz-news-api) handle the actual filtering. U1 will flag if the channel filter is too narrow or too broad.
-- Note (user): "we may not even filter by channel and only provide headlines (headlines, datetime, returns?) — to be revisited based on U1 data."
+#### Date Range and PIT
 
-**Ref**: `predictor.md §4b` (inputs 3-5, channel selection rationale), `earnings-orchestrator.md §2a` (fetched_data schema), `EarningsTrigger.md` (non-earnings 8-Ks noted as reaching predictor via inter_quarter_8k).
+- **Window**: `prev_8k_date` (exclusive) → `current_8k_date` (exclusive)
+- **Naturally PIT-safe**: all events in this window predate the current 8-K filing
+- Orchestrator gets both dates from `event.json` (prior quarter's `filed_8k` and current quarter's `filed_8k`)
+
+#### Graph Traversals (verified against live Neo4j, 2026-03-22)
+
+**Layer 1: Daily prices** (every trading day in window)
+```
+Date-[HAS_PRICE]->Company {ticker}     : open, high, low, close, daily_return, volume, vwap, transactions, timestamp
+Date-[HAS_PRICE]->MarketIndex {SPY}    : daily_return, close
+Company-[:BELONGS_TO]->Industry-[:BELONGS_TO]->Sector
+Date-[HAS_PRICE]->Sector               : daily_return (7,544 relationships, good coverage)
+Date-[HAS_PRICE]->Industry             : daily_return (35,541 relationships, but some industries have gaps)
+```
+
+Note: Industry HAS_PRICE may return null for some industries (e.g., SoftwareApplication). Sector is the reliable comparison. Include industry when available, omit gracefully when null.
+
+**Layer 2: News events** (matched to dates)
+```
+News-[:INFLUENCES]->Company {ticker}
+Properties: created (datetime), title, channels, market_session
+```
+
+**Layer 3: Filing events** (all types — 8-K, 10-Q, 10-K)
+```
+Report-[PRIMARY_FILER]->Company {ticker}
+Report properties: created, formType, items, market_session, accessionNo, exhibits (keys), periodOfReport
+PRIMARY_FILER return properties:
+  hourly_stock, session_stock, daily_stock      (stock reaction to this specific filing)
+  hourly_sector, session_sector, daily_sector   (sector context)
+  hourly_industry, session_industry, daily_industry
+  hourly_macro, session_macro, daily_macro      (broad market context)
+```
+
+These PRIMARY_FILER returns are specific to EACH filing — they measure the market reaction to THAT filing event, not just the day. Critical for the planner: "this 8-K caused a -4.92% daily reaction."
+
+**Layer 4: Dividend events**
+```
+Company-[:DECLARED_DIVIDEND]->Dividend
+Properties: declaration_date, ex_dividend_date, cash_amount, currency, frequency, dividend_type, pay_date, record_date
+```
+
+**Layer 5: Split events** (if any exist for this ticker)
+```
+Company-[*SPLIT*]->Split (relationship name varies — check during implementation)
+```
+
+#### Rendered Text Format (LOCKED)
+
+**Every trading day gets a day header.** Events are indented below their date with exact datetime and market_session.
+
+```
+=== INTER-QUARTER TIMELINE: CRM (2024-12-04 → 2025-02-26) ===
+Industry: SoftwareApplication | Sector: Technology
+55 trading days | 65 news | 2 filings | 0 dividends
+
+═══════════════════════════════════════════════════════════════════════
+2025-02-05 | CRM +1.10% (adj: +0.69%)
+  open=345.72  high=348.04  low=338.87  close=347.93
+  vol=4,521,009  vwap=344.95  txns=91,660
+  SPY +0.41% | Technology +1.39%
+═══════════════════════════════════════════════════════════════════════
+
+  17:05 post_market | [8-K] Item 5.02: Departure of Directors; Appointment of Officers
+    accession: 0001193125-25-020881 | period: 2025-02-05
+    exhibits: EX-10.1
+    returns → hourly: -0.15%  session: -2.18%  daily: -4.92%
+    sector  → hourly: +0.21%  session: +0.31%  daily: +0.27%
+    industry→ hourly: +0.04%  session: +0.02%  daily: +0.18%
+    macro   → hourly: -0.04%  session: +0.17%  daily: +0.32%
+
+  17:09 post_market | 📰 Salesforce Says Robin Washington Will Become President
+                         And Chief Operating And Financial Officer [Management]
+
+═══════════════════════════════════════════════════════════════════════
+2025-02-06 | CRM -4.92% (adj: -5.27%)  ***
+  open=337.48  high=337.48  low=329.10  close=330.81
+  vol=13,240,635  vwap=332.66  txns=214,731
+  SPY +0.35% | Technology +0.27%
+═══════════════════════════════════════════════════════════════════════
+
+  07:32 pre_market | 📰 Needham Reiterates Buy, Maintains $400 PT [Analyst Ratings, Price Target]
+  09:00 pre_market | 📰 Where Salesforce Stands With Analysts [Analyst Ratings]
+  10:00 in_market  | 📰 Salesforce Unusual Options Activity [Options]
+
+═══════════════════════════════════════════════════════════════════════
+2025-01-27 | CRM +3.96% (adj: +5.37%)  ***  GAP
+  open=332.00  high=353.00  low=330.00  close=347.00
+  vol=15,661,109  vwap=...  txns=...
+  SPY -1.41% | Technology -4.9%
+═══════════════════════════════════════════════════════════════════════
+
+  (no events — gap day: significant move with zero headlines or filings)
+```
+
+**Null handling**:
+- **JSON**: Include ALL fields in every event, use `null` when unavailable. Consistent schema — consumers never need to handle missing keys.
+- **Render**: Omit null/empty lines. Don't render "industry→ hourly: null". Only show fields with actual values. If industry_return is null for a day, skip that column.
+
+**Non-trading days**: Weekends and holidays have no HAS_PRICE data but may still have events (8-K filings, news published on weekends). Include these days in the timeline with `price: null` and only the events listed below. Render as:
+```
+2025-01-20 | (non-trading day — MLK Day)
+  09:15 pre_market | 📰 Salesforce Announces Partnership With... [News]
+```
+
+**Format rules**:
+- Every trading day gets a day header with full HAS_PRICE data + SPY + Sector
+- `***` marker on days where |adj_return| ≥ 2% (draws planner attention to significant moves)
+- `GAP` marker on *** days with zero news headlines and zero filings (hidden information flow)
+- Events indented below their date, chronologically by timestamp
+- Filing events include PRIMARY_FILER return properties (hourly/session/daily × stock/sector/industry/macro)
+- Filing events list exhibit keys (EX-10.1, EX-99.1, etc.) — planner can decide whether to fetch full content
+- News events: time, market_session, title, channels
+- Dividend events: declaration_date, ex_dividend_date, cash_amount, type
+
+#### Day Header Fields
+
+| Field | Source | Purpose |
+|---|---|---|
+| `date` | Date node | Calendar date |
+| `daily_return` | `hp.daily_return` | Stock daily return |
+| `adj_return` | `daily_return - spy_return` | Market-adjusted (CRM-specific vs broad market) |
+| `open, high, low, close` | `hp.*` | Price context (intraday range, gap up/down from prior close) |
+| `volume` | `hp.volume` | Activity level (high volume = conviction) |
+| `vwap` | `hp.vwap` | Volume-weighted average price |
+| `transactions` | `hp.transactions` | Trade count |
+| `spy_return` | SPY `HAS_PRICE` | Broad market context |
+| `sector_return` | Sector `HAS_PRICE` | Sector context (move with or against sector?) |
+| `industry_return` | Industry `HAS_PRICE` | Industry context (null for some industries — omit if unavailable) |
+
+#### Event Fields
+
+**Report events** (all types — 8-K, 10-Q, 10-K):
+
+| Field | Source | In render | In JSON | Purpose |
+|---|---|---|---|---|
+| `created` (datetime) | `r.created` | ✅ | ✅ | Exact filing time |
+| `market_session` | `r.market_session` | ✅ | ✅ | pre_market, in_market, post_market |
+| `form_type` | `r.formType` | ✅ | ✅ | 8-K, 10-Q, 10-K, 8-K/A, etc. |
+| `items` | `r.items` | ✅ | ✅ | Which items (e.g., "Item 5.02: Departure of Directors") |
+| `accession` | `r.accessionNo` | ✅ | ✅ | Filing identifier (planner can request full content via neo4j-report) |
+| `period_of_report` | `r.periodOfReport` | ✅ | ✅ | Fiscal period this filing covers (e.g., "2025-01-31" for Q4) |
+| `is_amendment` | `r.isAmendment` | ✅ (flag if true) | ✅ | 8-K/A vs 8-K — amendments are different events |
+| `exhibit_keys` | `r.exhibits` (inline keys) | ✅ | ✅ | Exhibit numbers (EX-10.1, EX-99.1) — not full content, just what exists |
+| `hourly_stock` | `pf.hourly_stock` | ✅ | ✅ | Stock reaction in first hour after filing |
+| `session_stock` | `pf.session_stock` | ✅ | ✅ | Stock reaction over the session |
+| `daily_stock` | `pf.daily_stock` | ✅ | ✅ | Stock reaction over the full day |
+| `hourly/session/daily_sector` | `pf.*_sector` | ✅ | ✅ | Sector comparison for same time windows |
+| `hourly/session/daily_industry` | `pf.*_industry` | ✅ | ✅ | Industry comparison |
+| `hourly/session/daily_macro` | `pf.*_macro` | ✅ | ✅ | Broad market (SPY) comparison |
+| `id` | `r.id` | — | ✅ | Internal ID (same as accession in practice, preserved for completeness) |
+| `filing_links` | `r.primaryDocumentUrl`, `r.linkToTxt`, `r.linkToHtml`, `r.linkToFilingDetails` | — | ✅ | Audit/debug — direct EDGAR links |
+| `section_names` | via OPTIONAL MATCH `r-[:HAS_SECTION]->s` | — | ✅ | Content inventory: which sections exist (for 10-Q/10-K, shows Item 7, Item 8, etc.) |
+| `has_filing_text` | via OPTIONAL MATCH `r-[:HAS_FILING_TEXT]->ft` | — | ✅ | Boolean: does raw filing text fallback exist? |
+| `xbrl_status` | `r.xbrl_status` | — | ✅ | XBRL availability: "COMPLETED", "SKIPPED", etc. |
+| `financial_statement_count` | via OPTIONAL MATCH `r-[:HAS_FINANCIAL_STATEMENT]->fs` | — | ✅ | Count of structured financial statement nodes (relevant for 10-Q/10-K) |
+
+**News events**:
+
+| Field | Source | In render | In JSON | Purpose |
+|---|---|---|---|---|
+| `created` (datetime) | `n.created` | ✅ | ✅ | Exact publish time |
+| `market_session` | `n.market_session` | ✅ | ✅ | pre_market, in_market, post_market |
+| `title` | `n.title` | ✅ | ✅ | Headline text |
+| `channels` | `n.channels` | ✅ | ✅ | Category tags (Analyst Ratings, M&A, Guidance, etc.) |
+| `id` | `n.id` | — | ✅ | Benzinga ID (bzNews_*) — for follow-up full article fetch |
+| `url` | `n.url` | — | ✅ | Article URL — audit/debug |
+| `authors` | `n.authors` | — | ✅ | Author attribution (note: field is `authors`, not `author`) |
+
+**Dividend events**:
+
+| Field | Source | Purpose |
+|---|---|---|
+| `declaration_date` | `div.declaration_date` | When declared |
+| `ex_dividend_date` | `div.ex_dividend_date` | Ex-date (price adjustment) |
+| `cash_amount` | `div.cash_amount` | Amount per share |
+| `frequency` | `div.frequency` | Quarterly, Annual, etc. |
+| `dividend_type` | `div.dividend_type` | Regular, Special, etc. |
+
+#### JSON Schema: `inter_quarter_context.v1`
+
+```json
+{
+  "schema_version": "inter_quarter_context.v1",
+  "ticker": "CRM",
+  "window_start": "2024-12-04",
+  "window_end": "2025-02-26",
+  "industry": "SoftwareApplication",
+  "sector": "Technology",
+  "days": [
+    {
+      "date": "2025-02-05",
+      "price": {
+        "open": 345.72, "high": 348.04, "low": 338.87, "close": 347.93,
+        "daily_return": 1.10, "volume": 4521009, "vwap": 344.95, "transactions": 91660,
+        "timestamp": "2025-02-05 16:00:00-0500"
+      },
+      "spy_return": 0.41,
+      "sector_return": 1.39,
+      "industry_return": null,
+      "adj_return": 0.69,
+      "is_significant": false,
+      "is_gap_day": false,
+      "events": [
+        {
+          "type": "filing",
+          "created": "2025-02-05T17:05:59-05:00",
+          "market_session": "post_market",
+          "form_type": "8-K",
+          "items": ["Item 5.02: Departure of Directors; Appointment of Officers"],
+          "accession": "0001193125-25-020881",
+          "period_of_report": "2025-02-05",
+          "is_amendment": false,
+          "exhibit_keys": ["EX-10.1"],
+          "returns": {
+            "hourly_stock": -0.15, "session_stock": -2.18, "daily_stock": -4.92,
+            "hourly_sector": 0.21, "session_sector": 0.31, "daily_sector": 0.27,
+            "hourly_industry": 0.04, "session_industry": 0.02, "daily_industry": 0.18,
+            "hourly_macro": -0.04, "session_macro": 0.17, "daily_macro": 0.32
+          },
+          "id": "0001193125-25-020881",
+          "filing_links": {
+            "primary_doc_url": "https://www.sec.gov/Archives/edgar/data/1108524/...",
+            "link_to_txt": "https://www.sec.gov/Archives/edgar/data/1108524/...",
+            "link_to_html": "https://www.sec.gov/Archives/edgar/data/1108524/...",
+            "link_to_filing_details": "https://www.sec.gov/Archives/edgar/data/1108524/..."
+          },
+          "section_names": ["Item 5.02"],
+          "has_filing_text": true,
+          "xbrl_status": "SKIPPED",
+          "financial_statement_count": 0
+        },
+        {
+          "type": "news",
+          "created": "2025-02-05T17:09:48-05:00",
+          "market_session": "post_market",
+          "title": "Salesforce Says Robin Washington Will Become President And COO/CFO",
+          "channels": ["News", "Management"],
+          "id": "bzNews_43514109",
+          "url": "https://www.benzinga.com/news/25/02/43514109/...",
+          "authors": ["Benzinga Newsdesk"]
+        }
+      ]
+    },
+    {
+      "date": "2025-02-06",
+      "price": {
+        "open": 337.48, "high": 337.48, "low": 329.10, "close": 330.81,
+        "daily_return": -4.92, "volume": 13240635, "vwap": 332.66, "transactions": 214731,
+        "timestamp": "2025-02-06 16:00:00-0500"
+      },
+      "spy_return": 0.35,
+      "sector_return": 0.27,
+      "industry_return": null,
+      "adj_return": -5.27,
+      "is_significant": true,
+      "is_gap_day": false,
+      "events": [
+        {
+          "type": "news",
+          "created": "2025-02-06T07:32:16-05:00",
+          "market_session": "pre_market",
+          "title": "Needham Reiterates Buy on Salesforce, Maintains $400 Price Target",
+          "channels": ["News", "Price Target", "Reiteration", "Analyst Ratings"]
+        }
+      ]
+    },
+    {
+      "date": "2025-01-27",
+      "price": {"open": 332, "close": 347, "daily_return": 3.96, "...": "..."},
+      "spy_return": -1.41,
+      "sector_return": -4.9,
+      "adj_return": 5.37,
+      "is_significant": true,
+      "is_gap_day": true,
+      "events": []
+    }
+  ],
+  "summary": {
+    "total_trading_days": 55,
+    "significant_move_days": 7,
+    "gap_days": 3,
+    "total_news": 65,
+    "total_filings": 2,
+    "total_dividends": 0,
+    "price_change_pct": -10.2,
+    "spy_change_pct": 1.3
+  },
+  "assembled_at": "2026-03-22T16:00:00Z"
+}
+```
+
+#### Queries
+
+```python
+# 1. All trading days with stock + SPY + sector returns
+QUERY_INTER_QUARTER_PRICES = """
+MATCH (d:Date)-[hp:HAS_PRICE]->(c:Company {ticker: $ticker})
+WHERE d.date > $start AND d.date < $end
+OPTIONAL MATCH (d)-[spy:HAS_PRICE]->(idx:MarketIndex {ticker: 'SPY'})
+OPTIONAL MATCH (c)-[:BELONGS_TO]->(ind:Industry)-[:BELONGS_TO]->(sec:Sector)
+OPTIONAL MATCH (d)-[sec_hp:HAS_PRICE]->(sec)
+OPTIONAL MATCH (d)-[ind_hp:HAS_PRICE]->(ind)
+RETURN d.date AS date,
+       hp.open AS open, hp.high AS high, hp.low AS low, hp.close AS close,
+       hp.daily_return AS daily_return, hp.volume AS volume,
+       hp.vwap AS vwap, hp.transactions AS transactions, hp.timestamp AS timestamp,
+       spy.daily_return AS spy_return,
+       sec_hp.daily_return AS sector_return, sec.name AS sector_name,
+       ind_hp.daily_return AS industry_return, ind.name AS industry_name
+ORDER BY d.date
+"""
+
+# 2. All news in date range (with id/url/authors for JSON-only fields)
+QUERY_INTER_QUARTER_NEWS = """
+MATCH (n:News)-[:INFLUENCES]->(c:Company {ticker: $ticker})
+WHERE toString(n.created) > $start AND toString(n.created) < $end
+RETURN n.created AS created, n.title AS title, n.channels AS channels,
+       n.market_session AS market_session,
+       n.id AS news_id, n.url AS url, n.authors AS authors
+ORDER BY n.created
+"""
+
+# 3. All filings with PRIMARY_FILER return properties + content inventory
+QUERY_INTER_QUARTER_FILINGS = """
+MATCH (r:Report)-[pf:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+WHERE toString(r.created) > $start AND toString(r.created) < $end
+OPTIONAL MATCH (r)-[:HAS_SECTION]->(sec:ExtractedSectionContent)
+OPTIONAL MATCH (r)-[:HAS_FILING_TEXT]->(ft:FilingTextContent)
+OPTIONAL MATCH (r)-[:HAS_FINANCIAL_STATEMENT]->(fs:FinancialStatementContent)
+RETURN r.created AS created, r.formType AS form_type, r.items AS items,
+       r.accessionNo AS accession, r.id AS report_id,
+       r.market_session AS market_session,
+       r.exhibits AS exhibits, r.periodOfReport AS period_of_report,
+       r.isAmendment AS is_amendment, r.xbrl_status AS xbrl_status,
+       r.primaryDocumentUrl AS primary_doc_url, r.linkToTxt AS link_to_txt,
+       r.linkToHtml AS link_to_html, r.linkToFilingDetails AS link_to_filing_details,
+       collect(DISTINCT sec.section_name) AS section_names,
+       count(DISTINCT ft) > 0 AS has_filing_text,
+       count(DISTINCT fs) AS financial_statement_count,
+       pf.hourly_stock AS hourly_stock, pf.session_stock AS session_stock,
+       pf.daily_stock AS daily_stock,
+       pf.hourly_sector AS hourly_sector, pf.session_sector AS session_sector,
+       pf.daily_sector AS daily_sector,
+       pf.hourly_industry AS hourly_industry, pf.session_industry AS session_industry,
+       pf.daily_industry AS daily_industry,
+       pf.hourly_macro AS hourly_macro, pf.session_macro AS session_macro,
+       pf.daily_macro AS daily_macro
+ORDER BY r.created
+"""
+
+# 4. Dividends in date range
+QUERY_INTER_QUARTER_DIVIDENDS = """
+MATCH (c:Company {ticker: $ticker})-[:DECLARED_DIVIDEND]->(div:Dividend)
+WHERE div.declaration_date >= $start AND div.declaration_date < $end
+RETURN div.declaration_date AS declaration_date, div.ex_dividend_date AS ex_date,
+       div.cash_amount AS cash_amount, div.currency AS currency,
+       div.frequency AS frequency, div.dividend_type AS dividend_type,
+       div.pay_date AS pay_date, div.record_date AS record_date
+ORDER BY div.declaration_date
+"""
+```
+
+Note: `Date.date` is stored as STRING in Neo4j (verified). String comparison `>` / `<` works correctly for ISO date format.
+
+#### Storage Path
+
+```
+earnings-analysis/Companies/{TICKER}/events/{quarter}/inter_quarter_context.json
+```
+
+Same pattern as 8k_packet and guidance_history. Quarter directory, explicit `out_path`, `/tmp/` default for debug.
+
+#### Empty Handling
+
+If no trading days exist in the window (unlikely but defensive):
+- JSON: `{"schema_version": "inter_quarter_context.v1", "ticker": "...", "days": [], "summary": {"total_trading_days": 0, ...}, "assembled_at": "..."}`
+- Text: `=== INTER-QUARTER TIMELINE: {TICKER} ===\n(no data available for window)`
+
+#### Ownership Comment
+
+```python
+# ─────────────────────────────────────────────────────────────────────
+# build_inter_quarter_context() — EARNINGS ORCHESTRATION only
+# Reads Date/HAS_PRICE, News/INFLUENCES, Report/PRIMARY_FILER,
+# Dividend nodes. Read-only — never writes to Neo4j.
+# ─────────────────────────────────────────────────────────────────────
+```
+
+#### CLI Interface
+
+```bash
+bash warmup_cache.sh $TICKER --inter-quarter --prev-8k 2024-12-03T16:05:00-05:00 --current-8k 2025-02-26T16:05:00-05:00 [--out-path PATH]
+```
+
+#### Tests (7 cases)
+
+| # | Case | What to verify |
+|---|---|---|
+| 1 | CRM Dec 2024 → Feb 2025 | Full timeline with 55 days, 65 news, 2 filings. Significant moves marked. Gap days annotated. |
+| 2 | Day with filing + news + significant move | Feb 5-6 2025: 8-K with PRIMARY_FILER returns, news below, *** on Feb 6 |
+| 3 | Gap day | Jan 27 2025: +5.37% adj, zero headlines → GAP marker |
+| 4 | Filing PRIMARY_FILER returns | 8-K Item 5.02: hourly=-0.15%, session=-2.18%, daily=-4.92% present and correct |
+| 5 | Sector/Industry returns | Sector (Technology) returns present. Industry null handled gracefully. |
+| 6 | Dividend in window | Test ticker with dividend declaration in inter-quarter window |
+| 7 | Empty window | Non-existent ticker or date range with no data → empty artifact |
+
+#### Implementation Order
+
+1. Add 4 query constants to `warmup_cache.py`
+2. Add `build_inter_quarter_context(ticker, prev_8k_date, current_8k_date, out_path=None)` function
+3. Merge price/news/filings/dividends by date
+4. Annotate *** and GAP markers
+5. Add render function for text output
+6. Add `--inter-quarter` CLI flag with `--prev-8k` and `--current-8k` parameters
+7. Add ownership comment
+8. Atomic write (temp + rename)
+9. Run 7 test cases
+
+#### Function Location
+
+`warmup_cache.py` — same file as `build_8k_packet()` and `build_guidance_history()`. Same Bolt connection via `get_manager()`.
+
+**Ref**: `predictor.md §4b` (inputs 3-5), `earnings-orchestrator.md §2a` (fetched_data schema), `entity-queries/SKILL.md` (HAS_PRICE patterns), `news-queries/SKILL.md` (INFLUENCES patterns), `report-queries/SKILL.md` (PRIMARY_FILER patterns).
 
 ---
 
