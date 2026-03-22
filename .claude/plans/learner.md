@@ -16,7 +16,7 @@
 Bot-to-bot notes (append-only; mark handled, do not delete history):
 - [2026-02-08] [Claude] Initial scaffold created. L1+L2 resolved: full attribution schema locked by I6, learner inputs locked by I4 in master plan.
 - [2026-03-16] [Claude] L4 resolved: hybrid 4-layer enforcement (prompt + TaskCreate + PreToolUse + SubagentStop). Empirically confirmed SubagentStop does NOT fire for Skill forks — learner must be an Agent. See §12.
-- [2026-03-17] [Codex] Parent-plan timing clarified: live learner timer is intended to land after normal Q1-Q3 10-Q availability; annual quarters do not block on 10-K and instead record the gap in `missing_inputs`.
+- [2026-03-17] [Codex] Parent-plan timing clarified: live learner timer is intended to land after normal Q1-Q3 10-Q availability; annual quarters do not block on 10-K and instead record the gap in `missing_inputs`. **SUPERSEDED 2026-03-20**: live learner timer replaced by deferred-to-next-historical-bootstrap approach. See earnings-orchestrator.md §2a/§2d and EarningsTrigger.md.
 
 ---
 
@@ -89,7 +89,7 @@ Every bot implementing Learner must read these first:
 ## 2) SDK and Automation Contract (LOCKED)
 
 1. Learner must run non-interactively.
-2. Trigger policy follows master plan: historical same-run, live delayed timer intended to land after normal Q1-Q3 10-Q availability.
+2. Trigger policy follows master plan: historical same-run, live deferred to next historical bootstrap (updated 2026-03-20; was 35-day timer). The daemon enqueues HISTORICAL when the ticker re-enters trade_ready; the orchestrator catches the missing attribution during sequential processing.
 3. Missing optional sources cannot block indefinitely; gaps must be explicit.
 4. Keep compatibility with SDK-triggered orchestrator automation.
 
@@ -296,3 +296,80 @@ Layers 3-4 run **outside** the LLM context as shell scripts — the LLM cannot s
 | PreToolUse Write validation | `.claude/hooks/validate_gx_output.sh` | Attribution output validation hook |
 | Agent with Stop hook in frontmatter | `.claude/agents/test-hook-stop-block.md` | Learner agent frontmatter |
 | SubagentStop global hook | `.claude/settings.json` (obsidian_capture.sh) | Coexists — learner uses agent-scoped Stop hook |
+
+---
+
+## 13) Planner Lesson Quality — Fetch Plan Audit (2026-03-22)
+
+### Problem
+
+Without closed-loop verification, the same vague `planner_lesson` repeats indefinitely:
+
+1. Q(n) learner writes: "fetch analyst concerns"
+2. Q(n+1) planner reads lesson, adds question, fetches from `neo4j-news` only (headlines)
+3. Q(n+1) predictor still misses transcript Q&A where analyst asked about margin pressure
+4. Q(n+1) learner sees same gap → writes "fetch analyst concerns" again
+5. Never converges — planner keeps misinterpreting the lesson
+
+The root cause: the learner writes lessons but never checks whether the planner **correctly implemented** its previous lessons. It only checks whether the prediction was right or wrong.
+
+### Behavioral Requirement
+
+Before writing `planner_lessons`, the learner MUST:
+
+1. Read the current quarter's `planner/fetch_plan.json` (accessible via `context_bundle.json → fetch_plan_ref`)
+2. Compare against prior `planner_lessons` from `u1_feedback[]` in the context bundle
+3. If a prior lesson was acted on but with insufficient source coverage, write a **more specific** lesson that addresses the gap
+
+For the first quarter of a ticker (no prior lessons), skip this step.
+
+### Source Naming Rule
+
+When the learner identifies a source coverage failure:
+
+- **Expected** (common case): Name the source family or agent when the learner found the relevant data during its own analysis. The learner already queries these sources for attribution — it knows where it found the evidence.
+  - Example: *"fetch analyst concerns from neo4j-transcript Q&A AND news, not just news headlines — prior quarter missed Goldman's margin pressure question (found in transcript Q&A exchange #7)"*
+- **Optional** (rare case): Omit source if the learner identifies a conceptual gap but didn't find the data itself during attribution.
+  - Example: *"consider adding sector peer earnings to fetch plan"*
+- **Never**: Fabricate a source recommendation when unsure. A vague-but-honest lesson is better than a wrong source recommendation.
+
+### Why This Works (No Schema Change)
+
+The learner already has everything it needs:
+
+1. It receives `context_bundle.json` (input #3) which contains `fetch_plan_ref` pointing to the planner's actual plan
+2. `u1_feedback[]` within the bundle shows what the learner recommended last time
+3. During its own analysis, the learner queries the same data sources and knows where it found evidence
+
+This is a **prompt-level behavioral instruction**, not a structural change. `planner_lessons` stays free-text (max 3 items). The convergence guarantee comes from the learner seeing the delta between its recommendation and the planner's execution.
+
+### Convergence Example
+
+```
+Q3 Learner:
+  planner_lesson = "fetch analyst concerns"
+
+Q4 Planner:
+  reads lesson → adds question → fetches from neo4j-news only
+
+Q4 Learner:
+  reads fetch_plan.json → sees only neo4j-news was used
+  reads prior planner_lesson → "fetch analyst concerns"
+  found key analyst question in neo4j-transcript during own analysis
+  REFINED lesson = "fetch analyst concerns from neo4j-transcript Q&A
+    AND neo4j-news — prior quarter used only news and missed margin
+    pressure question from Goldman analyst"
+
+Q5 Planner:
+  reads refined lesson → adds both neo4j-transcript and neo4j-news
+  as parallel tier-0 sources for analyst concerns
+  ✓ Converges in 2 iterations
+```
+
+### Why SHOULD, Not MUST for Source Naming
+
+Source naming is expected behavior, not a hard gate (unlike the Layer 3-4 enforcement in §12). Reasons:
+
+1. The learner might identify a conceptual gap without knowing the best agent (e.g., "peer earnings would help" — is that `neo4j-xbrl`, `alphavantage-earnings`, or `perplexity-search`?). Forcing a source name would produce bad recommendations.
+2. The learner's primary job is causal attribution, not fetch plan architecture. Source naming is a quality bonus when naturally available from its own analysis.
+3. The 4-layer enforcement (§12) already validates structural output quality. This section adds lesson *content* quality, which is inherently LLM judgment.

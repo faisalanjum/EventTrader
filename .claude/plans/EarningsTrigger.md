@@ -13,7 +13,7 @@ a. Before we run this step, we need to ensure all guidance for that ticker is al
 b. Must run sequentially starting from oldest 8-K earnings report (except for the latest live earnings report which we need to trade). This helps to build the learner.
 c. This sequential run for all older 8-K earnings reports must already be ready before we can run the prediction on live earnings report.
 d. Can we run automatically as soon as the ticker is ingested into trade_ready but post all its guidance_status is completed.
-e. This essentially has 3 components to it — see earnings-orchestrator.md in plans — for each historical report we run planner+predictor using only data on and prior to that 8-K earnings date (and that is the reason we have PIT enabled data subagents). For learner, it runs assuming it was done post 10-q/10-k relating to this specific 8-k earnings report (so the idea is learner needs to know what actually happened and by then we have more analysts and data commenting about this). As such the PIT enabled date for this learner component is the 10q/k related datetime. These 3 combined make one earnings cycle.
+e. This essentially has 3 components to it — see earnings-orchestrator.md in plans — for each historical report we run planner+predictor using only data on and prior to that 8-K earnings date (and that is the reason we have PIT enabled data subagents). The learner has **no PIT gate** — it uses all available data for the richest possible causal analysis. The predictor's PIT gate is the contamination boundary: lessons only affect attention allocation, the predictor can only act on PIT-safe data. Richer learner context → better lessons → better live predictions (historical lessons carry forward into live U1). Deferred timing naturally ensures 10-Q/10-K availability. These 3 combined make one earnings cycle.
 
 ### 2. Live Earnings Report
 a. As soon as a 8-k earnings report is ingested, we fire planner + predictor without using any PIT
@@ -104,7 +104,7 @@ The guidance daemon is flat: discover N independent items, enqueue them all. The
 | 1b. Sequential oldest-first | The orchestrator does this internally (get_quarterly_filings → process chronologically) |
 | 1c. Historical before live | Phase A must complete before Phase B runs |
 | 1d. Auto-trigger after TradeReady + guidance | Phase A: guidance ready triggers historical automatically |
-| 1e. Predictor PIT=8K, Learner PIT=10Q | Orchestrator's concern (event.json has both accessions/dates) |
+| 1e. Predictor PIT=8K, Learner no PIT | Predictor PIT is the contamination boundary. Learner uses all available data — richer context produces better U1 lessons without leaking into PIT-gated predictions. |
 | 2a. Fire on 8-K ingestion, no PIT | Phase B — daemon detects fresh 8-K (`hourly_stock IS NULL`), enqueues live. **No guidance gate** — predictor reads raw 8-K directly |
 | 2b. Historical learner already built | Phase A → Phase B ordering enforces this |
 | 2c. Learner for live quarter | Deferred to next historical bootstrap. Orchestrator processes sequentially: finds prediction without attribution → runs learner → U1 available for next prediction. |
