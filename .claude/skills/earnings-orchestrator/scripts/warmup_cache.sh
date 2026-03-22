@@ -3,6 +3,8 @@
 # Called by extraction agents via:
 #   Bash("bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh TICKER")
 #   Bash("bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh TICKER --transcript TID")
+#   Bash("bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh TICKER --8k-packet ACC [--out-path PATH]")
+#   Bash("bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh TICKER --guidance-history [--pit ISO8601] [--out-path PATH]")
 
 set -euo pipefail
 
