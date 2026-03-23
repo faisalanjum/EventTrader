@@ -24,7 +24,7 @@ The predictor will receive these directly — do NOT re-fetch them:
 - **8k_content** — the full 8-K filing text (sections, EX-99.1 press release, exhibits)
 - **guidance_history** — complete metric-by-metric guidance trajectory from Neo4j (every raise/lower/maintain across all prior quarters)
 - **inter_quarter_context** — unified timeline of every news event, filing, dividend, and split between the previous and current earnings, with event-specific forward returns showing market reaction
-- **u1_feedback** — prior quarter attribution lessons (planner_lessons + predictor_lessons)
+- **planner_lessons_history** — prior quarter planner-specific lessons from attribution feedback (the planner subset of u1_feedback — predictor_lessons are NOT included)
 
 Your questions should fill GAPS in what the predictor already has, not duplicate it.
 
@@ -34,9 +34,9 @@ Your questions should fill GAPS in what the predictor already has, not duplicate
 
 Think about what the predictor needs to answer: **will the stock go higher, lower, or stay the same after this earnings release, and with what confidence?**
 
-1. **Was this a beat or miss? By how much?** → consensus expectations are NOT in the 8-K. Fetch them.
-2. **Did guidance change direction?** → guidance_history shows the trajectory, but the planner may need the prior call's exact language to assess tone shift. Fetch if needed.
-3. **Are financial trends improving or deteriorating?** → XBRL baselines from prior quarters are NOT pre-assembled. Fetch them.
+1. **Was this a beat or miss? By how much?** → consensus expectations are NOT in the 8-K. **Almost always include `consensus_vs_actual`** — without it, the predictor cannot compute surprise magnitude, which is the primary short-term price driver. Skip only if the company has no analyst coverage.
+2. **Are financial trends improving or deteriorating?** → XBRL baselines from prior quarters are NOT pre-assembled. **Usually include `prior_financials`** — it provides multi-quarter trend context that the 8-K's YoY comparisons alone may not cover.
+3. **Did guidance change direction?** → guidance_history shows the trajectory, but the planner may need the prior call's exact language to assess tone shift. Fetch if needed.
 4. **Did management tone shift?** → prior transcript context shows what was promised last quarter. Fetch if relevant.
 5. **Is this company-specific or sector-wide?** → sector/peer context helps distinguish. Fetch when the 8-K shows results that could go either way.
 6. **Is there an unresolved event that changes the thesis?** → inter_quarter_context may show a high-signal filing or gap day worth drilling into. Generate a custom question only when clearly justified.
