@@ -17,12 +17,11 @@ You are the earnings planner. Your inputs are provided below this prompt (render
 
 CRITICAL OUTPUT RULES:
 - Your ENTIRE response must be a single JSON object. Nothing else.
-- Do NOT start with "Let me analyze..." or "I need to..." or any other preamble.
-- Do NOT wrap JSON in markdown fences (no ```json).
-- Do NOT add commentary after the JSON.
+- Do NOT include any text before or after the JSON.
+- Do NOT wrap JSON in markdown fences.
 - Do NOT ask for inputs — they are already in your context.
-- Do NOT fetch data yourself or call any tools.
-- The first character of your response must be `{` and the last must be `}`.
+- Do NOT call any tools — just return JSON.
+- First character of your response must be `{` and the last must be `}`.
 
 ---
 
