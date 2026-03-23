@@ -665,7 +665,9 @@ The current `.claude/skills/earnings-orchestrator/SKILL.md` is v1.0 (2026-02-04)
 
 Additionally, the orchestrator must write `live_state.json` after live prediction with the derived `quarter_label`. This is the contract between orchestrator and daemon.
 
-**Note**: Non-earnings 8-Ks (e.g., leadership changes filed shortly before earnings) are NOT detected by this daemon — it only triggers on Item 2.02. These filings reach the predictor through the orchestrator's context bundle (`inter_quarter_8k` canonical planner question, see `earnings-orchestrator.md` §2b).
+**Note**: Non-earnings 8-Ks (e.g., leadership changes filed shortly before earnings) are NOT detected by this daemon — it only triggers on Item 2.02. These filings reach the predictor through the orchestrator's unified inter-quarter timeline (`inter_quarter_context`, pre-assembled by `build_inter_quarter_context()` — see `plannerStep5.md` and `earnings-orchestrator.md` §2b).
+
+**Cutoff clarification**: The daemon's `LIVE_PREDICTION_CUTOFF_MINS` is only an enqueue staleness window — it controls how long after an 8-K filing the daemon will still attempt to enqueue a live prediction. It is NOT the LLM context cutoff. The orchestrator computes `context_cutoff_ts` independently (see `plannerStep5.md` "Context Cutoff" section).
 
 This is a prerequisite tracked separately in `earnings-orchestrator.md` (Phase B). The daemon design is correct regardless — when the orchestrator is built to spec, the daemon will drive it.
 

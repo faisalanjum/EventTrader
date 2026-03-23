@@ -161,6 +161,8 @@ The context bundle is the central data structure the orchestrator assembles and 
   "mode": "historical",
   "pit_datetime": "2024-11-07T13:01:00Z",
   "decision_cutoff_ts": null,
+  "context_cutoff_ts": "2024-11-07T09:00:00Z",
+  "context_cutoff_reason": "historical_release_session_floor",
   "assembled_at": "2026-02-08T14:30:00Z",
 
   "8k_content": "(raw 8-K EX-99.1 text)",
@@ -191,17 +193,9 @@ The context bundle is the central data structure the orchestrator assembles and 
       "tier_used": 0,
       "content": "(structured: EPS/Revenue estimate avg/high/low, analyst count, revision history)"
     },
-    "inter_quarter_8k": {
-      "sources": ["neo4j-report"],
-      "content": "(date + items + extracted_sections for each non-2.02 8-K filing between earnings)"
-    },
-    "significant_moves": {
-      "sources": ["neo4j-price"],
-      "content": "(date + adj_return + matched headline for each >1.5σ move day between earnings)"
-    },
-    "inter_quarter_news": {
-      "sources": ["neo4j-news"],
-      "content": "(date + title + channels for each channel-filtered article between earnings — see predictor.md §4b)"
+    "inter_quarter_context": {
+      "sources": ["build_inter_quarter_context()"],
+      "content": "(unified timeline: day-level market tape + news + filings + dividends + splits with event-specific forward returns — see plannerStep5.md)"
     }
   },
 
@@ -225,6 +219,8 @@ The context bundle is the central data structure the orchestrator assembles and 
 | `mode` | Yes | `"historical"` or `"live"` |
 | `pit_datetime` | Yes | Historical = `filed_8k`. Live = null (no PIT gate). |
 | `decision_cutoff_ts` | Live only | Auto-recorded at prediction-start. Null for historical. |
+| `context_cutoff_ts` | Yes | Effective upper bound for timestamped context (inter-quarter timeline, etc.). Live = `decision_cutoff_ts`. Historical = release-session floor derived from current 8-K timestamp + market_session. See `plannerStep5.md` "Context Cutoff" section. |
+| `context_cutoff_reason` | Yes | `"live_decision_cutoff"` or `"historical_release_session_floor"` |
 | `assembled_at` | Yes | ISO timestamp when bundle was built |
 | `8k_content` | Yes | Raw 8-K EX-99.1 text. Hard-fail if missing (§2c). |
 | `guidance_history` | Yes | **STALE REFERENCE (2026-03-19)**: This field originally said "raw guidance-inventory.md file contents." Verified: **zero** `guidance-inventory.md` files exist on disk. The extraction pipeline writes structured guidance directly to Neo4j graph nodes (327 Guidance + 5,163 GuidanceUpdate + 173 GuidancePeriod nodes) via `guidance_writer.py`. The orchestrator should query Neo4j for this ticker's Guidance/GuidanceUpdate data and render it as text for the bundle. Empty if no Guidance nodes exist for the ticker. |
@@ -445,9 +441,7 @@ Reuse these IDs whenever the question matches the standard family. New IDs are a
 | `prior_transcript_context` | Prior earnings-call commentary / management tone context |
 | `peer_earnings` | Relevant peer earnings or peer reaction context |
 | `sector_context` | Broader sector or macro context that should frame the event |
-| `inter_quarter_8k` | Non-earnings 8-K events between earnings dates |
-| `significant_moves` | Significant inter-quarter stock-move days |
-| `inter_quarter_news` | Channel-filtered inter-quarter news narrative |
+| `inter_quarter_context` | Unified inter-quarter timeline (day-level market tape + news + filings + dividends + splits with event-specific forward returns). Pre-assembled by `build_inter_quarter_context()` — see `plannerStep5.md`. Replaces the old separate `inter_quarter_8k`, `significant_moves`, `inter_quarter_news`. |
 
 `anchor_flags` derive from these canonical IDs plus `guidance_history`, so the planner should reuse them instead of inventing near-duplicates.
 
@@ -551,6 +545,8 @@ Edge case: if consensus is null or zero, log as missing and use fallback scoring
 2. Predictor never consumes return labels (`daily_stock`, `hourly_stock`)
 3. Consensus from pre-filing sources only
 4. Output `signal` is deterministically derived from `direction` + `confidence_bucket` + `magnitude_bucket` — never a separate LLM judgment
+5. Inter-quarter context events with forward-return windows extending past `context_cutoff_ts` have those horizons nulled (return-window validation — see `plannerStep5.md`). This prevents prev-day post_market news from leaking earnings reactions via daily/session return values.
+6. Live replay must reuse the persisted `inter_quarter_context.json` artifact, NOT rebuild from Neo4j. Reason: News/Report nodes have `created`/`updated` but no ingestion timestamp — a later rebuild could include items not present in Neo4j at prediction time.
 
 **Tiered missing-data policy** (Q2/Q19/Q23 resolved):
 1. Hard fail only when 8-K actuals are missing/unreadable.
@@ -607,9 +603,7 @@ Required fields: all fields above are required. `data_gaps` is required but can 
 - `transcript_context`
 - `peer_earnings`
 - `sector_context`
-- `inter_quarter_8k`
-- `significant_moves`
-- `inter_quarter_news`
+- `inter_quarter_context`
 - `operating_metric_consensus`
 
 Use these exact strings where applicable. Avoid prose in `data_gaps`; free-form explanation belongs in `analysis`.

@@ -40,6 +40,7 @@
 Bot-to-bot notes (append-only; mark handled, do not delete history):
 - [2026-02-08] [Claude] Initial scaffold created. I7 resolved: agent catalog locked in master plan §2b. P0, P1, P5 marked resolved.
 - [2026-03-22] [Claude] P2, P3, P4 resolved. §11 added: 12 detailed implementation steps covering skill frontmatter, 8-K content assembly (warmup_cache.py), planner lessons placeholder, guidance history (new function needed), inter-quarter context, agent catalog static embed, fetch_plan.json placeholder, orchestrator validation, context pollution management, expanded rules, canonical IDs + anchor flags, and testing plan.
+- [2026-03-23] [Claude] §11 Step 5 updated with verified Neo4j data type findings. Added "Neo4j Data Type Reference" section with exact field types, row counts, and parsing helpers (`_parse_json_field`, `_fmt_vol`, `_fmt_txn`). Key findings: channels/authors/items/exhibits are JSON strings requiring `json.loads()`; volume is fractional 3.10% of the time (mostly 2026+ Polygon artifact); transactions is always integer-valued. Test case counts corrected from live CRM run (74 news, 4 filings, 1 dividend). Added CLI parsing code, test cases 8-9 (JSON parsing + volume formatting). Implementation order expanded to 11 steps with full self-contained instructions for zero-context implementor.
 
 ---
 
@@ -1122,14 +1123,24 @@ bash warmup_cache.sh $TICKER --guidance-history [--pit ISO8601] [--out-path /pat
 
 ### Step 5: Inter-Quarter Context — `build_inter_quarter_context()` (LOCKED)
 
-**What**: A unified chronological timeline of EVERYTHING that happened between the previous and current earnings dates — daily prices, news, filings, dividends, splits — assembled as a planner input so it can generate targeted fetch plan questions based on what actually occurred.
+**Full implementation spec**: [`plannerStep5.md`](plannerStep5.md) — self-contained, supersedes this section where they conflict.
+
+**What**: A unified chronological timeline of EVERYTHING that happened between the previous earnings and the context cutoff — daily prices, news, filings, dividends, splits — assembled as a planner input so it can generate targeted fetch plan questions based on what actually occurred.
 
 **Design decision**: Instead of 3 separate categories (inter_quarter_8k, significant_moves, inter_quarter_news), we build ONE unified timeline. The planner sees the complete picture and generates targeted questions like "Investigate the gap day on Jan 27" or "Fetch full details on the CFO change 8-K" instead of blind generic questions.
+
+**Dual-mode cutoff**: The function is mode-unaware. The orchestrator passes `context_cutoff_ts`:
+- **Live**: `decision_cutoff_ts` (include everything available before prediction starts)
+- **Historical**: release-session floor (exclude the entire current earnings release cluster, stay PIT-clean)
+
+**Return-window validation (PIT safety)**: Even with the correct event-inclusion cutoff, a previous-day post_market news item's daily/session return windows can extend past the cutoff into the earnings reaction. The builder nulls any return horizon whose `end_ts > context_cutoff_ts`. This prevents 939 return value leaks across pre_market and in_market 8-K cases. See `plannerStep5.md` for exact implementation.
+
+See `plannerStep5.md` "Context Cutoff" section for the exact floor rules.
 
 #### Architecture
 
 ```
-build_inter_quarter_context(ticker, prev_8k_date, current_8k_date, out_path=None)
+build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts, out_path=None)
   │
   ├─ 1. Query all trading days: Date-[HAS_PRICE]->Company + SPY + Sector
   │
@@ -1148,6 +1159,8 @@ build_inter_quarter_context(ticker, prev_8k_date, current_8k_date, out_path=None
   │
   └─ 8. Atomic write (temp + rename) to out_path
 ```
+
+#### ⚠️ STALE — The sections below (Date Range, Graph Traversals, Neo4j Data Type Reference, Rendered Text, Queries, Tests, Implementation Order) are from the original Step 5 draft. They use outdated window semantics (`current_8k_date` instead of `context_cutoff_ts`), old counts (74 news / 4 filings), and lack return-window validation. **Use [`plannerStep5.md`](plannerStep5.md) as the sole implementation reference.** The sections below are retained only as historical context.
 
 #### Date Range and PIT
 
@@ -1171,13 +1184,14 @@ Note: Industry HAS_PRICE may return null for some industries (e.g., SoftwareAppl
 **Layer 2: News events** (matched to dates)
 ```
 News-[:INFLUENCES]->Company {ticker}
-Properties: created (datetime), title, channels, market_session
+Properties: created (datetime), title, channels, market_session, authors, url, id
 ```
+**CAUTION**: `channels` and `authors` are stored as **JSON strings** in Neo4j (e.g., `'["News", "Management"]'`), NOT native lists. Must `json.loads()` before use. See "Neo4j Data Type Reference" below.
 
 **Layer 3: Filing events** (all types — 8-K, 10-Q, 10-K)
 ```
 Report-[PRIMARY_FILER]->Company {ticker}
-Report properties: created, formType, items, market_session, accessionNo, exhibits (keys), periodOfReport
+Report properties: created, formType, items, market_session, accessionNo, exhibits, periodOfReport
 PRIMARY_FILER return properties:
   hourly_stock, session_stock, daily_stock      (stock reaction to this specific filing)
   hourly_sector, session_sector, daily_sector   (sector context)
@@ -1186,6 +1200,8 @@ PRIMARY_FILER return properties:
 ```
 
 These PRIMARY_FILER returns are specific to EACH filing — they measure the market reaction to THAT filing event, not just the day. Critical for the planner: "this 8-K caused a -4.92% daily reaction."
+
+**CAUTION**: `items` and `exhibits` are stored as **JSON strings** in Neo4j. `items` is a JSON array string (e.g., `'["Item 2.02: ...", "Item 9.01: ..."]'`); 8,011 Report nodes have `items IS NULL` (10-Q/10-K). `exhibits` is a JSON object string (e.g., `'{"EX-99.1": "https://..."}'`); use `sorted(json.loads(exhibits).keys())` for exhibit_keys. Must `json.loads()` before use. See "Neo4j Data Type Reference" below.
 
 **Layer 4: Dividend events**
 ```
@@ -1198,14 +1214,99 @@ Properties: declaration_date, ex_dividend_date, cash_amount, currency, frequency
 Company-[*SPLIT*]->Split (relationship name varies — check during implementation)
 ```
 
+#### Neo4j Data Type Reference (verified 2026-03-23)
+
+Field storage types that require parsing at read time. All counts verified against live production Neo4j.
+
+**JSON String Fields** — stored as raw JSON strings in Neo4j, require `json.loads()`:
+
+| Field | Node.property | Storage type | Example raw value | Parsed result | Verification |
+|---|---|---|---|---|---|
+| `channels` | `News.channels` | JSON array string | `'["News", "Management"]'` | `["News", "Management"]` | 343,825 News nodes. ALL are JSON_ARRAY strings. 0 NULLs. |
+| `authors` | `News.authors` | JSON array string | `'["Benzinga Newsdesk"]'` | `["Benzinga Newsdesk"]` | Same storage type as channels. |
+| `items` | `Report.items` | JSON array string | `'["Item 2.02: ...", "Item 9.01: ..."]'` | `["Item 2.02: ...", "Item 9.01: ..."]` | 25,936 JSON_ARRAY strings. 8,011 NULLs (10-Q/10-K filings lack items). |
+| `exhibits` | `Report.exhibits` | JSON object string | `'{"EX-99.1": "https://..."}'` | `{"EX-99.1": "https://..."}` | 33,947 JSON_OBJECT strings. 0 NULLs. Keys are exhibit numbers (EX-10.1, EX-99.1, etc.), values are EDGAR URLs. |
+
+**Parse helper** (add to `warmup_cache.py` — use for ALL four JSON string fields above):
+
+```python
+def _parse_json_field(raw, fallback=None):
+    """Parse a JSON string field from Neo4j. Returns parsed value or fallback.
+
+    Neo4j stores channels, authors, items, exhibits as raw JSON strings.
+    This helper handles None, already-parsed values, and parse errors.
+    """
+    if raw is None:
+        return fallback
+    if isinstance(raw, (list, dict)):
+        return raw  # already parsed (defensive)
+    try:
+        return json.loads(raw)
+    except (json.JSONDecodeError, TypeError):
+        return fallback
+```
+
+Usage in event assembly:
+```python
+# News events
+channels = _parse_json_field(n['channels'], [])           # → list of strings
+authors = _parse_json_field(n['authors'], [])             # → list of strings
+
+# Filing events
+items = _parse_json_field(r['items'], [])                 # → list of strings
+exhibits = _parse_json_field(r['exhibits'], {})           # → dict
+exhibit_keys = sorted(exhibits.keys()) if isinstance(exhibits, dict) else []
+```
+
+**Numeric Fields** — Neo4j Bolt driver returns ALL numbers as Python `float`, even integer-valued ones:
+
+| Field | Has fractional values? | JSON output rule | Rendered text rule | Verification |
+|---|---|---|---|---|
+| `hp.volume` | **YES** — 16,763 / 540,015 rows (3.10%) are fractional. Mostly 2026+ data (Polygon API artifact: 3,815 in 2026-02, 11,419 in 2026-03). CRM has 20 fractional rows (all 2026-02-23+). CRM Dec 2024–Feb 2025 window: 0 fractional. | Keep raw float | `int(v)` when `v == int(v)`, else `f'{v:,.2f}'` | Exact counts verified 2026-03-23 |
+| `hp.transactions` | **NO** — 0 / 540,015 fractional rows. Always integer-valued float (e.g., `173551.0`). | Keep raw float | Always safe to `int(v)` | Exact count verified 2026-03-23 |
+| `hp.open/high/low/close/vwap` | Yes — inherently decimal (prices) | Keep raw float | Keep decimal as-is | N/A |
+| `hp.daily_return`, `spy/sector/industry.daily_return` | Yes — inherently decimal (percentages) | Keep raw float | `f'{v:+.2f}%'` | N/A |
+| All `pf.*` return properties | Yes — inherently decimal (percentages) | Keep raw float | `f'{v}%'` (keep precision from graph) | N/A |
+
+**Volume/transactions formatting helper** (for rendered text only):
+
+```python
+def _fmt_vol(v):
+    """Format volume for rendered text. Int when whole, 2-decimal otherwise."""
+    if v is None:
+        return '?'
+    if v == int(v):
+        return f'{int(v):,}'
+    return f'{v:,.2f}'
+
+def _fmt_txn(v):
+    """Format transactions for rendered text. Always int (verified: 0 fractional rows)."""
+    if v is None:
+        return '?'
+    return f'{int(v):,}'
+```
+
+**Date/datetime fields** — all stored as strings in Neo4j:
+
+| Field | Format | Example |
+|---|---|---|
+| `Date.date` | ISO date string | `'2025-02-05'` |
+| `News.created` | ISO datetime with TZ | `'2025-02-05T17:09:48-05:00'` |
+| `Report.created` | ISO datetime with TZ | `'2025-02-05T17:05:54-04:00'` |
+| `Dividend.declaration_date` | ISO date string | `'2024-12-05'` |
+| `Dividend.ex_dividend_date` | ISO date string | `'2024-12-18'` |
+
+String comparison `>` / `<` works correctly for ISO format. To extract calendar day from a datetime: `str(value)[:10]`.
+
 #### Rendered Text Format (LOCKED)
 
 **Every trading day gets a day header.** Events are indented below their date with exact datetime and market_session.
 
 ```
-=== INTER-QUARTER TIMELINE: CRM (2024-12-04 → 2025-02-26) ===
+=== INTER-QUARTER TIMELINE: CRM (2024-12-03 → 2025-02-26) ===
 Industry: SoftwareApplication | Sector: Technology
-55 trading days | 65 news | 2 filings | 0 dividends
+55 trading days | 74 news | 4 filings | 1 dividends
+7 significant move days | 3 gap days
 
 ═══════════════════════════════════════════════════════════════════════
 2025-02-05 | CRM +1.10% (adj: +0.69%)
@@ -1336,7 +1437,7 @@ Industry: SoftwareApplication | Sector: Technology
 {
   "schema_version": "inter_quarter_context.v1",
   "ticker": "CRM",
-  "window_start": "2024-12-04",
+  "window_start": "2024-12-03",
   "window_end": "2025-02-26",
   "industry": "SoftwareApplication",
   "sector": "Technology",
@@ -1433,9 +1534,9 @@ Industry: SoftwareApplication | Sector: Technology
     "total_trading_days": 55,
     "significant_move_days": 7,
     "gap_days": 3,
-    "total_news": 65,
-    "total_filings": 2,
-    "total_dividends": 0,
+    "total_news": 74,
+    "total_filings": 4,
+    "total_dividends": 1,
     "price_change_pct": -10.2,
     "spy_change_pct": 1.3
   },
@@ -1514,7 +1615,7 @@ ORDER BY div.declaration_date
 """
 ```
 
-Note: `Date.date` is stored as STRING in Neo4j (verified). String comparison `>` / `<` works correctly for ISO date format.
+Note: `Date.date` is stored as STRING in Neo4j (verified 2026-03-23, sample: `'2025-02-05'`). String comparison `>` / `<` works correctly for ISO date format. The price query uses `d.date > $start AND d.date < $end` (both exclusive). The news and filings queries use `toString(n.created)` / `toString(r.created)` for the same comparison — these are ISO datetime strings with timezone (e.g., `'2025-02-05T17:09:48-05:00'`) and string comparison works correctly because the format is lexicographically orderable.
 
 #### Storage Path
 
@@ -1543,32 +1644,95 @@ If no trading days exist in the window (unlikely but defensive):
 #### CLI Interface
 
 ```bash
-bash warmup_cache.sh $TICKER --inter-quarter --prev-8k 2024-12-03T16:05:00-05:00 --current-8k 2025-02-26T16:05:00-05:00 [--out-path PATH]
+# Add to warmup_cache.py module docstring:
+#   warmup_cache.py TICKER --inter-quarter --prev-8k ISO8601 --current-8k ISO8601 [--out-path PATH]
+
+# Add to warmup_cache.sh usage comment:
+#   Bash("bash .claude/skills/earnings-orchestrator/scripts/warmup_cache.sh TICKER --inter-quarter --prev-8k ISO8601 --current-8k ISO8601 [--out-path PATH]")
+
+# Example:
+bash warmup_cache.sh CRM --inter-quarter --prev-8k 2024-12-03T16:03:38-05:00 --current-8k 2025-02-26T16:03:55-05:00
+bash warmup_cache.sh CRM --inter-quarter --prev-8k 2024-12-03T16:03:38-05:00 --current-8k 2025-02-26T16:03:55-05:00 --out-path earnings-analysis/Companies/CRM/events/Q4_FY2025/inter_quarter_context.json
+
+# Default output (no --out-path):
+#   /tmp/earnings_inter_quarter_{TICKER}.json
 ```
 
-#### Tests (7 cases)
+**CLI parsing in `main()`** — add BEFORE the `--guidance-history` branch (so `--inter-quarter` is checked first):
+
+```python
+if '--inter-quarter' in sys.argv:
+    prev_8k = None
+    if '--prev-8k' in sys.argv:
+        idx = sys.argv.index('--prev-8k')
+        if idx + 1 >= len(sys.argv):
+            print("Error: --prev-8k requires ISO8601 argument", file=sys.stderr)
+            sys.exit(1)
+        prev_8k = sys.argv[idx + 1]
+    else:
+        print("Error: --inter-quarter requires --prev-8k", file=sys.stderr)
+        sys.exit(1)
+    current_8k = None
+    if '--current-8k' in sys.argv:
+        idx = sys.argv.index('--current-8k')
+        if idx + 1 >= len(sys.argv):
+            print("Error: --current-8k requires ISO8601 argument", file=sys.stderr)
+            sys.exit(1)
+        current_8k = sys.argv[idx + 1]
+    else:
+        print("Error: --inter-quarter requires --current-8k", file=sys.stderr)
+        sys.exit(1)
+    out_path = None
+    if '--out-path' in sys.argv:
+        op_idx = sys.argv.index('--out-path')
+        if op_idx + 1 >= len(sys.argv):
+            print("Error: --out-path requires PATH argument", file=sys.stderr)
+            sys.exit(1)
+        out_path = sys.argv[op_idx + 1]
+    build_inter_quarter_context(ticker, prev_8k, current_8k, out_path)
+```
+
+#### Tests (9 cases)
+
+All test case counts verified against live Neo4j on 2026-03-23.
 
 | # | Case | What to verify |
 |---|---|---|
-| 1 | CRM Dec 2024 → Feb 2025 | Full timeline with 55 days, 65 news, 2 filings. Significant moves marked. Gap days annotated. |
-| 2 | Day with filing + news + significant move | Feb 5-6 2025: 8-K with PRIMARY_FILER returns, news below, *** on Feb 6 |
-| 3 | Gap day | Jan 27 2025: +5.37% adj, zero headlines → GAP marker |
-| 4 | Filing PRIMARY_FILER returns | 8-K Item 5.02: hourly=-0.15%, session=-2.18%, daily=-4.92% present and correct |
-| 5 | Sector/Industry returns | Sector (Technology) returns present. Industry null handled gracefully. |
-| 6 | Dividend in window | Test ticker with dividend declaration in inter-quarter window |
-| 7 | Empty window | Non-existent ticker or date range with no data → empty artifact |
+| 1 | CRM Dec 2024 → Feb 2025 | Full timeline with 55 trading days, **74** news, **4** filings, **1** dividend. 7 significant move days, 3 gap days. |
+| 2 | Day with filing + news + significant move | Feb 5-6 2025: 8-K Item 5.02 with PRIMARY_FILER returns (hourly=-0.15%, session=-2.18%, daily=-4.92%), news below, *** on Feb 6 (-5.27% adj) |
+| 3 | Gap day | Jan 27 2025: +5.37% adj, zero headlines, zero filings → GAP marker |
+| 4 | Filing PRIMARY_FILER returns | All 12 return fields present (hourly/session/daily × stock/sector/industry/macro). Sector context shows CRM-specific vs broad market. |
+| 5 | Sector/Industry returns | Sector (Technology) returns present on all trading days. Industry (SoftwareApplication) returns may be null — render omits null gracefully (no "industry→ hourly: None" lines). |
+| 6 | Dividend in window | CRM Dec 5 2024: $0.40 Regular Quarterly dividend declared, ex-date 2024-12-18. Event appears under the Dec 5 trading day. |
+| 7 | Empty window | Non-existent ticker or date range with no data → empty JSON + text `(no data available for window)` |
+| 8 | JSON string field parsing | `channels` renders as `[News, Management]` not `[, ", N, e, w, s, ...]`. `items` renders as parsed list. `exhibits` keys extracted correctly. `authors` in JSON output is a list not raw string. Verify with any CRM news/filing event. |
+| 9 | Volume formatting | For the CRM Dec 2024–Feb 2025 window: all volumes should render as integers (0 fractional in this window). For 2026+ data: fractional volumes render with 2 decimals (e.g., `15,498,141.34`). `transactions` always renders as integer. |
 
 #### Implementation Order
 
-1. Add 4 query constants to `warmup_cache.py`
-2. Add `build_inter_quarter_context(ticker, prev_8k_date, current_8k_date, out_path=None)` function
-3. Merge price/news/filings/dividends by date
-4. Annotate *** and GAP markers
-5. Add render function for text output
-6. Add `--inter-quarter` CLI flag with `--prev-8k` and `--current-8k` parameters
-7. Add ownership comment
-8. Atomic write (temp + rename)
-9. Run 7 test cases
+1. Add `_parse_json_field(raw, fallback=None)` helper function (see "Neo4j Data Type Reference" above for exact code)
+2. Add `_fmt_vol(v)` and `_fmt_txn(v)` helper functions (see "Neo4j Data Type Reference" above for exact code)
+3. Add 4 query constants to `warmup_cache.py` (`QUERY_INTER_QUARTER_PRICES`, `QUERY_INTER_QUARTER_NEWS`, `QUERY_INTER_QUARTER_FILINGS`, `QUERY_INTER_QUARTER_DIVIDENDS`)
+4. Add `build_inter_quarter_context(ticker, prev_8k_date, current_8k_date, out_path=None)` function:
+   a. Extract calendar-day start/end from datetime params: `start = str(prev_8k_date)[:10]`, `end = str(current_8k_date)[:10]`
+   b. Run 4 queries with `{'ticker': ticker, 'start': start, 'end': end}`
+   c. Build day_map from prices (keyed by `d.date` string); compute `adj_return = daily_return - spy_return`
+   d. Parse and merge news events into day_map — use `_parse_json_field()` for `channels` and `authors`; extract calendar day from `str(created)[:10]`; create non-trading-day entries for news on weekends/holidays
+   e. Parse and merge filing events into day_map — use `_parse_json_field()` for `items` and `exhibits`; extract `exhibit_keys = sorted(parsed_exhibits.keys())`
+   f. Merge dividend events into day_map by `declaration_date`
+   g. Sort all days chronologically; annotate `is_significant` (`|adj_return| >= 2.0`) and `is_gap_day` (significant + zero events)
+   h. Sort events within each day by `created` timestamp
+5. Add `render_inter_quarter_text(packet)` function:
+   - Day headers: use `_fmt_vol()` for volume, `_fmt_txn()` for transactions
+   - News channels: render parsed list as `[Ch1, Ch2]` (already a Python list after `_parse_json_field()`)
+   - Filing items: render parsed list joined by `; `
+   - Omit null industry/sector lines in render (JSON keeps them as `null`)
+6. Add `--inter-quarter` CLI flag with `--prev-8k` and `--current-8k` parameters to `main()`
+7. Add ownership comment (see exact text in "Ownership Comment" section above)
+8. Atomic write (temp file + `os.replace()`) — same pattern as `build_8k_packet()` and `build_guidance_history()`
+9. Update shell wrapper `warmup_cache.sh` usage comment to include `--inter-quarter`
+10. Update `warmup_cache.py` module docstring to include `--inter-quarter` usage example
+11. Run 9 test cases
 
 #### Function Location
 
@@ -1724,7 +1888,7 @@ RULES:
 
 ### Step 11: Canonical Question IDs and Anchor Flags
 
-**9 canonical IDs** (from `earnings-orchestrator.md §2b`):
+**7 canonical IDs** (from `earnings-orchestrator.md §2b`; reduced from 9 after unifying the 3 inter-quarter fields into one):
 
 | ID | output_key | Drives anchor_flag? | Typical Tier 0 agents |
 |---|---|---|---|
@@ -1734,9 +1898,7 @@ RULES:
 | `prior_transcript_context` | `prior_transcript_context` | `has_transcript_context` | neo4j-transcript |
 | `peer_earnings` | `peer_earnings` | — | neo4j-entity |
 | `sector_context` | `sector_context` | — | perplexity-search/ask |
-| `inter_quarter_8k` | `inter_quarter_8k` | — | neo4j-report |
-| `significant_moves` | `significant_moves` | — | neo4j-entity |
-| `inter_quarter_news` | `inter_quarter_news` | — | neo4j-news, bz-news-api |
+| `inter_quarter_context` | `inter_quarter_context` | — | (pre-assembled by Step 5 `build_inter_quarter_context()` — unified timeline replaces the old separate `inter_quarter_8k`, `significant_moves`, `inter_quarter_news`) |
 
 **Not limited to 9**: Custom IDs allowed for non-standard data needs. Must be `snake_case`, must not encode ticker/quarter. Examples: `acquisition_context`, `regulatory_risk`, `management_change`.
 

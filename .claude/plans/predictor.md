@@ -172,6 +172,8 @@ Source: `EARNINGS` endpoint for PIT-safe final EPS (`estimatedEPS` frozen at rep
 
 **Known gap**: AlphaVantage does NOT cover cash flow, EBITDA, or margin consensus. Company guidance for these metrics comes from Input 1. Street consensus for them is only available via Bloomberg/FactSet ($24K+/year). Log this — revisit if U1 flags prediction failures due to missing operating metric consensus.
 
+**⚠️ Inputs 3-5 below are superseded by the unified `inter_quarter_context` timeline (see "Context Bundle Integration" section below and `plannerStep5.md`). The separate queries for non-earnings 8-Ks, significant moves, and channel-filtered news are replaced by one pre-assembled artifact with event-specific forward returns, exact timestamps, and stable `event_ref` IDs. The sections below are retained as historical design context.**
+
 **Input 3: Non-earnings 8-K filings with extracted_sections (0-5 per quarter)**
 
 ```cypher
@@ -278,30 +280,30 @@ Excluded: `News` (too generic, on 75% of articles), `Movers`/`Trading Ideas`/`Ge
 
 ### Context Bundle Integration
 
-Four new entries in `fetched_data` (orchestrator §2a):
+Two entries in `fetched_data` relevant to inter-quarter context (orchestrator §2a):
 
 ```json
 {
-  "consensus": {
+  "consensus_context": {
     "sources": ["alphavantage-earnings", "alphavantage-estimates"],
     "content": "(structured: EPS/Revenue estimate avg/high/low, analyst count, revision history)"
   },
-  "inter_quarter_8k": {
-    "sources": ["neo4j-report"],
-    "content": "(rendered: date + items + extracted_sections for each non-2.02 filing)"
-  },
-  "significant_moves": {
-    "sources": ["neo4j-price"],
-    "content": "(rendered: date + adj_return + matched headline for each >1.5σ move day)"
-  },
-  "inter_quarter_news": {
-    "sources": ["neo4j-news"],
-    "content": "(rendered: date + title + channels for each channel-filtered article)"
+  "inter_quarter_context": {
+    "sources": ["build_inter_quarter_context()"],
+    "content": "(unified timeline: day-level market tape + news + filings + dividends + splits with event-specific forward returns — see plannerStep5.md)"
   }
 }
 ```
 
-All four are **optional context** — if empty, the predictor proceeds without them. They feed reasoning but do not gate the prediction.
+All are **optional context** — if empty, the predictor proceeds without them. They feed reasoning but do not gate the prediction.
+
+Note: `inter_quarter_context` replaces the old separate `inter_quarter_8k`, `significant_moves`, and `inter_quarter_news` fields. It is one pre-assembled rendered timeline with exact timestamps, forward returns, and stable `event_ref` IDs for follow-up.
+
+**Nulled return horizons**: In historical mode, some events may have individual forward_returns horizons set to `null` (e.g., `daily: null` while `hourly` is kept). This means that horizon's measurement window extends past the PIT cutoff and would leak the earnings reaction. The predictor should treat these as "return not available for PIT reasons" — not as missing data. The event itself is legitimate pre-cutoff context; only the contaminated return window is suppressed.
+
+**Live replay**: For exact reproducibility, the predictor should consume the persisted `inter_quarter_context.json` artifact, not a rebuilt query. The graph has no ingestion timestamps, so a later rebuild could include items that arrived after the original prediction.
+
+**Render detail level**: The default rendered text uses compact 1-line news returns (best safe horizon only) and full 3-line filing returns. This is optimized for the planner's needs (significance detection, fetch-plan decisions). A separate predictor-optimized renderer may be added later to show full 3-horizon detail on all events — the canonical JSON already contains all horizons, so this is a pure rendering change with no data or pipeline impact.
 
 ### CRM Example (Feb 26 → May 28, 2025)
 
