@@ -122,11 +122,23 @@ SDK wrapper: top-level session, `permission_mode="bypassPermissions"`.
 1. Discovery — `get_quarterly_filings {TICKER}` → `event.json` (hook auto-builds)
 2. Filter — skip prediction for quarters with existing `prediction/result.json`
 3. For each pending quarter (chronological):
-   a. Load all prior quarters' attribution `feedback` + guidance history (query Neo4j Guidance/GuidanceUpdate nodes for this ticker; empty if none exist — **note**: original design referenced `guidance-inventory.md` but that file does not exist; extraction pipeline writes directly to Neo4j graph via `guidance_writer.py`) and include in the context bundle.
-   b. Planner (forked skill) → returns fetch plan
-   c. Orchestrator executes fetch plan via parallel Task sub-agents (DataSubAgents)
-   d. Predictor (forked skill) receives 8-K + merged data bundle → result.json
-   e. Verify result
+   a. **Pre-assemble baseline inputs** (always, both modes):
+      - `8k_packet` via `build_8k_packet()` — the 8-K content
+      - `guidance_history` via `build_guidance_history()` — company guidance trajectory from Neo4j
+      - `inter_quarter_context` via `build_inter_quarter_context()` — unified inter-quarter timeline
+      - `planner_lessons_history` — from prior attribution/result.json files (empty `[]` if none exist)
+   b. **Baseline fetch: consensus** (always, both modes, in parallel with planner call):
+      - `alphavantage-earnings` → consensus EPS + revenue estimates for this quarter
+      - This runs in parallel with the planner skill call — by the time the planner returns, consensus is already fetched
+      - If the planner also includes `consensus_vs_actual` in its fetch plan, the orchestrator deduplicates (use whichever is more specific)
+      - Rationale: consensus is the #1 input for computing surprise magnitude, which drives ~60-70% of short-term reaction. It must never be missing.
+   c. **Planner** (forked skill) → returns fetch plan with additional questions beyond baseline
+   d. Orchestrator executes planner's fetch plan via parallel Task sub-agents (DataSubAgents)
+   e. **Assemble context bundle** — combine pre-assembled inputs + baseline fetch + planner-fetched data
+   f. **Predictor** (forked skill) receives full context bundle → result.json
+   g. Verify result
+
+**Single pipeline for both modes**: The steps above are identical for historical and live. The only mode-specific difference is how `context_cutoff_ts` is computed (session floor vs decision_cutoff) and whether `--pit` is appended to agent calls. The pipeline structure, baseline fetches, and planner invocation are the same.
 4. Attribution/Learner loop — for predicted quarters without attribution:
       - Historical mode: run immediately (data exists). Sequential processing ensures Q(n) attribution completes before Q(n+1) prediction, so U1 feedback is available.
       - Live mode: deferred to next historical bootstrap. The external trigger daemon (`EarningsTrigger.md`) enqueues HISTORICAL when the ticker re-enters trade_ready; the orchestrator catches the missing attribution during sequential processing. No source-gating — learner runs with whatever data is available at that time. (Original design was N=35 day timer; replaced by deferred approach to avoid live-queue token competition.)

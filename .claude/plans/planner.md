@@ -144,9 +144,19 @@ Every bot implementing Planner must read these first:
 
 ### Hard Constraints
 
-1. Planner is single-turn.
+1. Planner is single-turn (v1). **TODO**: Consider multi-turn planner (2 iterations) where the planner sees first-round fetch results and can request targeted follow-ups. Would help for complex quarters (M&A, restructuring) where initial data reveals new questions. Evaluate after v1 historical backtest shows whether single-turn misses critical context.
 2. Planner does not fetch data itself.
 3. PIT handling remains orchestrator concern, not planner concern.
+
+### Baseline Fetches (orchestrator-guaranteed)
+
+These are always fetched regardless of planner output. Single standardized pipeline for both historical and live.
+
+- **guidance_history** — pre-assembled by `build_guidance_history()` (top-level bundle field, not a planner question)
+- **inter_quarter_context** — pre-assembled by `build_inter_quarter_context()` (top-level bundle field, not a planner question)
+- **consensus** — always fetched via `alphavantage-earnings` in parallel with planner call. If the planner also includes `consensus_vs_actual`, orchestrator deduplicates. Consensus must never be missing — it's the #1 input for computing surprise magnitude.
+
+The planner focuses on questions BEYOND the baseline — custom context that the orchestrator can't determine by default.
 
 ---
 
