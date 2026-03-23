@@ -1243,12 +1243,10 @@ Exact render rules:
   - render fragments in this exact order:
     - horizon label (`daily`, `session`, or `hourly`)
     - `stock`
-    - `sector` if non-null
-    - `industry` if non-null
     - `SPY` if macro is non-null
     - `adj_macro` if non-null
     - window label `(start->end)`
-  - omit any fragment whose value is null
+  - news react lines intentionally omit `sector` and `industry` for compactness — those stay in JSON and in full filing renders
 - if all 3 horizons are null or have null `stock`, keep only the header line (no react line)
 
 #### Filing
