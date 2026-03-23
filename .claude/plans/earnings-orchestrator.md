@@ -122,23 +122,21 @@ SDK wrapper: top-level session, `permission_mode="bypassPermissions"`.
 1. Discovery — `get_quarterly_filings {TICKER}` → `event.json` (hook auto-builds)
 2. Filter — skip prediction for quarters with existing `prediction/result.json`
 3. For each pending quarter (chronological):
-   a. **Pre-assemble baseline inputs** (always, both modes):
+   a. **Pre-assemble planner inputs** (always, both modes, before planner runs):
       - `8k_packet` via `build_8k_packet()` — the 8-K content
       - `guidance_history` via `build_guidance_history()` — company guidance trajectory from Neo4j
       - `inter_quarter_context` via `build_inter_quarter_context()` — unified inter-quarter timeline
+      - `consensus` via `alphavantage-earnings` — consensus EPS + revenue estimates for this quarter. Pre-fetched so the planner can see beat/miss magnitude and make smarter fetch decisions.
       - `planner_lessons_history` — from prior attribution/result.json files (empty `[]` if none exist)
-   b. **Baseline fetch: consensus** (always, both modes, in parallel with planner call):
-      - `alphavantage-earnings` → consensus EPS + revenue estimates for this quarter
-      - This runs in parallel with the planner skill call — by the time the planner returns, consensus is already fetched
-      - If the planner also includes `consensus_vs_actual` in its fetch plan, the orchestrator deduplicates (use whichever is more specific)
-      - Rationale: consensus is the #1 input for computing surprise magnitude, which drives ~60-70% of short-term reaction. It must never be missing.
-   c. **Planner** (forked skill) → returns fetch plan with additional questions beyond baseline
-   d. Orchestrator executes planner's fetch plan via parallel Task sub-agents (DataSubAgents)
-   e. **Assemble context bundle** — combine pre-assembled inputs + baseline fetch + planner-fetched data
-   f. **Predictor** (forked skill) receives full context bundle → result.json
-   g. Verify result
+   b. **Planner** (forked skill) receives ALL pre-assembled inputs → returns fetch plan
+   c. Orchestrator executes planner's fetch plan via parallel Task sub-agents (DataSubAgents)
+   d. **Assemble context bundle** — combine pre-assembled inputs + planner-fetched data
+   e. **Predictor** (forked skill) receives full context bundle → result.json
+   f. Verify result
 
-**Single pipeline for both modes**: The steps above are identical for historical and live. The only mode-specific difference is how `context_cutoff_ts` is computed (session floor vs decision_cutoff) and whether `--pit` is appended to agent calls. The pipeline structure, baseline fetches, and planner invocation are the same.
+**Single pipeline for both modes**: The steps above are identical for historical and live. The only mode-specific difference is how `context_cutoff_ts` is computed (session floor vs decision_cutoff) and whether `--pit` is appended to agent calls. The pipeline structure, pre-assembled inputs, and planner invocation are the same.
+
+**Why consensus is pre-assembled**: Consensus is the #1 input for computing surprise magnitude (~60-70% of short-term reaction). Pre-fetching it means: (1) the planner knows the beat/miss before deciding what else to fetch — e.g., a large EPS beat shifts focus to guidance/margins; (2) it's guaranteed to be in the bundle regardless of planner output; (3) the planner no longer needs to include `consensus_vs_actual` as a question (it's already provided).
 4. Attribution/Learner loop — for predicted quarters without attribution:
       - Historical mode: run immediately (data exists). Sequential processing ensures Q(n) attribution completes before Q(n+1) prediction, so U1 feedback is available.
       - Live mode: deferred to next historical bootstrap. The external trigger daemon (`EarningsTrigger.md`) enqueues HISTORICAL when the ticker re-enters trade_ready; the orchestrator catches the missing attribution during sequential processing. No source-gating — learner runs with whatever data is available at that time. (Original design was N=35 day timer; replaced by deferred approach to avoid live-queue token competition.)
@@ -304,7 +302,7 @@ Rendering rules:
 6. Renderer is deterministic: same JSON → same text, always.
 
 **Planner vs Predictor delivery**:
-- Planner receives: `8k_content` + `u1_feedback` (planner_lessons only) + `guidance_history` + `inter_quarter_context`. No `fetched_data` or `anchor_flags` (planner produces the fetch plan, doesn't consume fetched results).
+- Planner receives: `8k_content` + `u1_feedback` (planner_lessons only) + `guidance_history` + `inter_quarter_context` + `consensus` (pre-fetched). No `fetched_data` or `anchor_flags` (planner produces the fetch plan, doesn't consume fetched results).
 - Predictor receives: full bundle, including `anchor_flags`.
 
 **Learner does NOT receive a context bundle** (I4 resolved):
@@ -1086,7 +1084,7 @@ Note: Interface contracts use I-prefix (I1-I7) to avoid collision with §6 Archi
 | # | Contract | Gap | Status |
 |---|----------|-----|--------|
 | I1 | **Context bundle format** | JSON contract + rendered text delivery. Schema, persistence, rendering rules. | **Resolved** — `context_bundle.v1` in §2a. |
-| I2 | **Orchestrator → Planner input** | Planner receives subset: 8k_content + u1_feedback (planner_lessons) + guidance_history + inter_quarter_context. | **Resolved** — delivery spec in §2a. |
+| I2 | **Orchestrator → Planner input** | Planner receives: 8k_content + u1_feedback (planner_lessons) + guidance_history + inter_quarter_context + consensus (pre-fetched). | **Resolved** — delivery spec in §2a. |
 | I3 | **Orchestrator → Predictor input** | Predictor receives full bundle (all sections). | **Resolved** — delivery spec in §2a. |
 | I4 | **Orchestrator → Learner input** | Learner does NOT get a bundle. 3 minimal inputs: prediction/result.json path, actual returns, context_bundle.json path (reference only). Fetches its own data. | **Resolved** — spec in §2a. |
 | I5 | **Guidance → Orchestrator bridge** | Query Neo4j Guidance/GuidanceUpdate nodes, render as text for `guidance_history`. Empty if no nodes exist. Original design referenced `guidance-inventory.md` (file does not exist). | **Resolved** — spec in §2a. |

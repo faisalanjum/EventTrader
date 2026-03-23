@@ -25,16 +25,17 @@ CRITICAL OUTPUT RULES:
 
 ---
 
-## What The Predictor Already Has
+## What You And The Predictor Already Have
 
-The predictor will receive these directly — do NOT re-fetch them:
+These are pre-assembled by the orchestrator and provided to you as input. The predictor will also receive them. Do NOT re-fetch them:
 
 - **8k_content** — the full 8-K filing text (sections, EX-99.1 press release, exhibits)
 - **guidance_history** — complete metric-by-metric guidance trajectory from Neo4j (every raise/lower/maintain across all prior quarters)
 - **inter_quarter_context** — unified timeline of every news event, filing, dividend, and split between the previous and current earnings, with event-specific forward returns showing market reaction
+- **consensus** — EPS and revenue consensus estimates from AlphaVantage, pre-fetched by the orchestrator. You can see the beat/miss magnitude and use it to decide what additional context matters most.
 - **prior lessons** — what worked and what was missed in prior quarters' fetch plans (if any exist; empty for first quarter)
 
-Your questions should fill GAPS in what the predictor already has, not duplicate it.
+Your questions should fill GAPS beyond these pre-assembled inputs.
 
 ---
 
@@ -42,8 +43,7 @@ Your questions should fill GAPS in what the predictor already has, not duplicate
 
 Think about what the predictor needs to answer: **will the stock go higher, lower, or stay the same after this earnings release, and with what confidence?**
 
-1. **Was this a beat or miss? By how much?** → consensus expectations are NOT in the 8-K. **Almost always include `consensus_vs_actual`** — without it, the predictor cannot compute surprise magnitude, which is the primary short-term price driver. Skip only if the company has no analyst coverage.
-2. **Are financial trends improving or deteriorating?** → XBRL baselines from prior quarters are NOT pre-assembled. **Usually include `prior_financials`** — it provides multi-quarter trend context that the 8-K's YoY comparisons alone may not cover.
+1. **Are financial trends improving or deteriorating?** → XBRL baselines from prior quarters are NOT pre-assembled. **Usually include `prior_financials`** — it provides multi-quarter trend context that the 8-K's YoY comparisons alone may not cover.
 3. **Did guidance change direction?** → guidance_history shows the trajectory, but the planner may need the prior call's exact language to assess tone shift. Fetch if needed.
 4. **Did management tone shift?** → prior transcript context shows what was promised last quarter. Fetch if relevant.
 5. **Is this company-specific or sector-wide?** → sector/peer context helps distinguish. Fetch when the 8-K shows results that could go either way.
@@ -148,7 +148,7 @@ The `query` field is a natural language prompt sent to the data agent. Follow th
 - Target **5-8 questions**. Exceeding 10 should be rare and justified.
 - Question **order matters** — highest-priority questions first. The predictor sees fetched data in this order.
 - Do NOT fetch return labels (`daily_stock`, `hourly_stock`) — these are prediction outcomes
-- Do NOT request `inter_quarter_context` or `guidance_history` — they are already provided as inputs
+- Do NOT request `inter_quarter_context`, `guidance_history`, or `consensus` — they are already provided as pre-assembled inputs
 
 ---
 

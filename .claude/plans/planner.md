@@ -131,7 +131,8 @@ Every bot implementing Planner must read these first:
 5. `planner_lessons_history` — chronological per-quarter array from prior attribution feedback. See §11 Step 3.
 6. `guidance_history.json` — structured guidance trajectory from Neo4j, assembled by `build_guidance_history()`. See §11 Step 4.
 7. `inter_quarter_context` — unified timeline of news, filings, dividends, splits with forward returns, assembled by `build_inter_quarter_context()`. See `plannerStep5.md`.
-8. Agent catalog (static embed in prompt — 14 valid `fetch[].agent` values with tier guidance). See §11 Step 6 and `earnings-orchestrator.md §2b`.
+8. `consensus` — EPS + revenue consensus estimates from `alphavantage-earnings`, pre-fetched by orchestrator. The planner sees beat/miss magnitude before deciding what else to fetch.
+9. Agent catalog (static embed in prompt — 14 valid `fetch[].agent` values with tier guidance). See §11 Step 6 and `earnings-orchestrator.md §2b`.
 
 ### Required Output (to orchestrator)
 
@@ -148,15 +149,17 @@ Every bot implementing Planner must read these first:
 2. Planner does not fetch data itself.
 3. PIT handling remains orchestrator concern, not planner concern.
 
-### Baseline Fetches (orchestrator-guaranteed)
+### Pre-Assembled Planner Inputs (orchestrator-provided)
 
-These are always fetched regardless of planner output. Single standardized pipeline for both historical and live.
+These are always assembled by the orchestrator BEFORE calling the planner. The planner receives all of them as input and uses them to decide what additional data to fetch. Single standardized pipeline for both historical and live.
 
-- **guidance_history** — pre-assembled by `build_guidance_history()` (top-level bundle field, not a planner question)
-- **inter_quarter_context** — pre-assembled by `build_inter_quarter_context()` (top-level bundle field, not a planner question)
-- **consensus** — always fetched via `alphavantage-earnings` in parallel with planner call. If the planner also includes `consensus_vs_actual`, orchestrator deduplicates. Consensus must never be missing — it's the #1 input for computing surprise magnitude.
+- **8k_packet** — the current quarter's 8-K content (sections, EX-99.1, exhibits)
+- **guidance_history** — company guidance trajectory from Neo4j
+- **inter_quarter_context** — unified timeline of events between earnings with forward returns
+- **consensus** — EPS + revenue consensus estimates from `alphavantage-earnings`, pre-fetched so the planner can see beat/miss magnitude and make smarter fetch decisions (e.g., large EPS beat shifts focus to guidance/margins)
+- **planner_lessons_history** — prior quarter planner lessons (empty `[]` for first quarter)
 
-The planner focuses on questions BEYOND the baseline — custom context that the orchestrator can't determine by default.
+The planner focuses on questions BEYOND these pre-assembled inputs — additional context the predictor needs that isn't already provided.
 
 ---
 
