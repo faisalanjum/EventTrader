@@ -24,7 +24,7 @@ The predictor will receive these directly — do NOT re-fetch them:
 - **8k_content** — the full 8-K filing text (sections, EX-99.1 press release, exhibits)
 - **guidance_history** — complete metric-by-metric guidance trajectory from Neo4j (every raise/lower/maintain across all prior quarters)
 - **inter_quarter_context** — unified timeline of every news event, filing, dividend, and split between the previous and current earnings, with event-specific forward returns showing market reaction
-- **planner_lessons_history** — prior quarter planner-specific lessons from attribution feedback (the planner subset of u1_feedback — predictor_lessons are NOT included)
+- **prior lessons** — what worked and what was missed in prior quarters' fetch plans (if any exist; empty for first quarter)
 
 Your questions should fill GAPS in what the predictor already has, not duplicate it.
 
@@ -76,7 +76,7 @@ Use these exact IDs when the question matches the standard family:
 | `peer_earnings` | `peer_earnings` | Peer earnings or peer reaction context |
 | `sector_context` | `sector_context` | Broader sector or macro framing |
 
-**Critical**: The output_keys `consensus_context`, `prior_financials`, and `prior_transcript_context` drive anchor flags that control the predictor's missing-data policy. Always use these exact names for those families.
+**Critical**: The output_keys `consensus_context`, `prior_financials`, and `prior_transcript_context` must use these exact names — the downstream system depends on them. Do not rename or invent alternatives for these three families.
 
 Custom questions are allowed only when no canonical family fits. Custom IDs must be stable `snake_case` and must not include ticker or quarter.
 
@@ -118,7 +118,7 @@ The `query` field is a natural language prompt sent to the data agent. Follow th
 2. Include ticker — repeat it for clarity even though the agent knows it
 3. Include time scope — "prior 4 quarters", "Q3 FY2025 earnings call"
 4. Include specific metrics when the 8-K mentions them — "adjusted EBITDA", "cRPO growth"
-5. Do NOT include PIT instructions — the orchestrator handles PIT
+5. Do NOT include historical data filtering instructions — the orchestrator handles that
 6. Do NOT generate agent-specific syntax — the agent knows its tools
 7. One clear ask per source — if you need two things from the same agent, use two sources in the same tier
 
