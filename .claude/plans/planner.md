@@ -130,7 +130,8 @@ Every bot implementing Planner must read these first:
 4. `8k_packet.json` — canonical 8-K content packet assembled by `build_8k_packet()`. See §11 Step 2.
 5. `planner_lessons_history` — chronological per-quarter array from prior attribution feedback. See §11 Step 3.
 6. `guidance_history.json` — structured guidance trajectory from Neo4j, assembled by `build_guidance_history()`. See §11 Step 4.
-7. Agent catalog (static embed in prompt — 14 valid `fetch[].agent` values with tier guidance). See §11 Step 6 and `earnings-orchestrator.md §2b`.
+7. `inter_quarter_context` — unified timeline of news, filings, dividends, splits with forward returns, assembled by `build_inter_quarter_context()`. See `plannerStep5.md`.
+8. Agent catalog (static embed in prompt — 14 valid `fetch[].agent` values with tier guidance). See §11 Step 6 and `earnings-orchestrator.md §2b`.
 
 ### Required Output (to orchestrator)
 
@@ -201,7 +202,7 @@ Validation lives in orchestrator pipeline; planner output must be machine-checka
 | P0 | I7 Planner agent catalog: exact allowed `fetch.agent` values + purpose + invalid-name behavior | P0 | **Resolved** — 14 agents locked in `earnings-orchestrator.md §2b`. Invalid name = validation error (block). |
 | P1 | Exact planner input payload schema from orchestrator? | P0 | **Resolved** — locked by I2 in `earnings-orchestrator.md §2a`. |
 | P2 | Agent catalog delivery: static list in prompt or external file? | P1 | **Resolved** — static embed in planner SKILL.md prompt. 14 agents with one-line descriptions + tier guidance. Changes rarely; no external file needed. See §11 Step 6. |
-| P3 | Canonical question IDs vs free-form IDs? | P1 | **Resolved** — 9 canonical IDs for standard families + custom IDs allowed (`snake_case`, no ticker/quarter). 4 anchor-flag-linked output_keys MUST use canonical names. See §11 Step 11. |
+| P3 | Canonical question IDs vs free-form IDs? | P1 | **Resolved** — 6 canonical planner question IDs + custom IDs allowed (`snake_case`, no ticker/quarter). 3 anchor-flag-linked output_keys MUST use canonical names. See §11 Step 11. |
 | P4 | 8-K truncation/sectioning rules for large filings? | P1 | **Resolved** — no truncation (1M context window). Use `build_8k_packet()` which assembles sections + EX-99.x + EX-10.x previews + filing text fallback via direct Bolt. Orchestrator caches once in quarter directory, planner + predictor share. See §11 Step 2. |
 | P5 | Sanity check policy: warn-only or block in edge cases? | P1 | **Resolved** — master plan R5: log warning, not block. Planner may have valid reasons to omit common data types; U1 self-corrects. |
 
@@ -1784,39 +1785,186 @@ RULES:
 
 ---
 
-### Step 7: fetch_plan.json Output Schema
+### Step 7: fetch_plan.json Output Schema (LOCKED)
 
-**Status**: Placeholder. Schema is locked in `earnings-orchestrator.md §2b`. Requires deep walkthrough of every field before implementation.
+**Status**: Finalized. Schema, field semantics, constraints, and examples are locked.
 
-**Schema reference** (`fetch_plan.v1`):
+**Parent contract**: `earnings-orchestrator.md §2b` defines the schema shape, tiered execution semantics, and 4 fetch patterns. This section adds field-level validation, query construction rules, constraints, and a complete example.
+
+#### Field Semantics
+
+**Top-level fields** (echo-back metadata from orchestrator inputs):
+
+| Field | Type | Required | Validation |
+|---|---|---|---|
+| `schema_version` | string | Yes | Must be `"fetch_plan.v1"` |
+| `ticker` | string | Yes | Echoed from orchestrator input |
+| `quarter` | string | Yes | Echoed from orchestrator input (e.g., `"Q4_FY2025"`) |
+| `filed_8k` | string | Yes | Echoed from orchestrator input (ISO8601) |
+| `questions` | array | Yes | Non-empty array of question objects |
+
+**Per-question fields**:
+
+| Field | Type | Required | Validation |
+|---|---|---|---|
+| `id` | string | Yes | `snake_case`, no ticker/quarter encoding. **Must be unique within the plan.** Use canonical ID when it fits; custom otherwise. |
+| `question` | string | Yes | Natural language question the planner wants answered. For audit/logging — agents receive the `query` field, not this. |
+| `why` | string | Yes | Justification linking this to an 8-K claim, core dimension, or U1 lesson. For audit and learner feedback. |
+| `output_key` | string | Yes | Key in `fetched_data{}` where results are written. **Must be unique within the plan.** Anchor-flag-linked keys MUST use exact canonical names (see below). |
+| `fetch` | array of arrays | Yes | Tiered array-of-arrays. Non-empty. Each tier is a non-empty array of source objects. Max 3 tiers (hard cap). |
+
+**Per-source fields** (within `fetch` tiers):
+
+| Field | Type | Required | Validation |
+|---|---|---|---|
+| `agent` | string | Yes | Must be in the 14-agent catalog (`earnings-orchestrator.md §2b`). Invalid name = validation block. |
+| `query` | string | Yes | Natural language prompt for the agent. See "Query Construction Rules" below. |
+
+#### Uniqueness Constraints
+
+- `questions[].id` must be unique within the plan — otherwise log/audit and result mapping become ambiguous.
+- `questions[].output_key` must be unique within the plan — otherwise the second question silently overwrites the first in `fetched_data{}`.
+- Both are validation blocks (Step 8).
+
+#### output_key → fetched_data → anchor_flags Mapping
+
+```
+output_key in fetch_plan  →  key in fetched_data{}  →  anchor_flag (if canonical)
+─────────────────────────────────────────────────────────────────────────────────
+"consensus_context"       →  fetched_data.consensus_context  →  has_consensus
+"prior_financials"        →  fetched_data.prior_financials   →  has_prior_financials
+"prior_transcript_context"→  fetched_data.prior_transcript_context → has_transcript_context
+"guidance_context"        →  fetched_data.guidance_context   →  (none — has_prior_guidance from Step 4)
+"peer_earnings"           →  fetched_data.peer_earnings      →  (none)
+"sector_context"          →  fetched_data.sector_context     →  (none)
+any custom key            →  fetched_data.{custom_key}       →  (none)
+```
+
+Anchor flag rule: `has_X = true` when `fetched_data[canonical_key].content` is non-null and non-empty. Deterministic — orchestrator sets it after all fetches complete.
+
+**Critical**: The 3 anchor-flag-linked output_keys (`consensus_context`, `prior_financials`, `prior_transcript_context`) MUST use their exact canonical names. If the planner invents a different key for consensus data, the anchor flag won't trigger and the predictor's missing-data policy will misfire.
+
+#### `inter_quarter_context` is NOT a Planner Question
+
+`inter_quarter_context` and `guidance_history` are **pre-assembled orchestrator inputs**, not planner-fetchable questions. The planner receives them as reasoning context and uses them to decide which questions to ask — it does not request fetching them.
+
+#### Query Construction Rules
+
+The `query` field in each fetch source is the prompt sent to the data sub-agent. Follow these rules:
+
+1. **Natural language** — the query is a prompt for the agent LLM, not code or Cypher
+2. **Include ticker** — even though the agent knows the ticker from context, repeat it for clarity
+3. **Include time scope** — "prior 4 quarters", "Q3 FY2025 earnings call", etc.
+4. **Include specific metrics** when the 8-K mentions them — "adjusted EBITDA", "free cash flow", "cRPO growth"
+5. **Do NOT include PIT instructions** — orchestrator handles PIT by appending `--pit` in historical mode
+6. **Do NOT generate agent-specific syntax** (Cypher queries, API parameters) — the agent knows its tools
+7. **One clear ask per source** — if you need two different things from the same agent, use two sources in the same tier
+
+#### Constraints
+
+| Constraint | Type | Limit | Rationale |
+|---|---|---|---|
+| Max questions | Soft warning | >10 triggers orchestrator warning (target 5-8) | Content judgment, not structural error. U1 self-corrects if wasteful. |
+| Max tiers per question | Hard block | 3 (Tier 0, Tier 1, Tier 2) | Matches agent catalog tiers. If 3 rounds found nothing, a 4th won't help. |
+| Question order | Preserved | Highest-priority questions first | Fetched data sections in context_bundle are rendered in this order (earnings-orchestrator.md line 285). |
+
+#### Complete CRM Example
+
 ```json
 {
   "schema_version": "fetch_plan.v1",
-  "ticker": "...",
-  "quarter": "...",
-  "filed_8k": "...",
+  "ticker": "CRM",
+  "quarter": "Q4_FY2025",
+  "filed_8k": "2025-02-26T16:03:55-05:00",
   "questions": [
     {
       "id": "guidance_delta",
-      "question": "...",
-      "why": "...",
+      "question": "Did CRM raise, maintain, or lower FY26 guidance vs prior quarter?",
+      "why": "8-K shows FY26 EPS guidance $11.09-$11.17 and revenue $40.5-$40.9B — need prior to compute delta",
       "output_key": "guidance_context",
       "fetch": [
-        [{"agent": "neo4j-report", "query": "..."}, {"agent": "neo4j-transcript", "query": "..."}],
-        [{"agent": "perplexity-search", "query": "..."}]
+        [
+          {"agent": "neo4j-transcript", "query": "Fetch CRM Q3 FY2025 earnings call transcript guidance discussions — prior quarter outlook for EPS, revenue, operating margin, and cRPO"}
+        ],
+        [
+          {"agent": "perplexity-search", "query": "CRM Salesforce FY2026 guidance history from Q3 FY2025 earnings call — EPS and revenue outlook"}
+        ]
+      ]
+    },
+    {
+      "id": "consensus_vs_actual",
+      "question": "How did CRM Q4 FY2025 results compare to consensus?",
+      "why": "8-K shows EPS $2.78 and revenue $9.99B — need consensus to compute beat/miss",
+      "output_key": "consensus_context",
+      "fetch": [
+        [
+          {"agent": "alphavantage-earnings", "query": "Get CRM consensus EPS and revenue estimates for Q4 FY2025 (fiscal quarter ending January 2025)"}
+        ]
+      ]
+    },
+    {
+      "id": "prior_financials",
+      "question": "What were CRM's key financial metrics for the prior 4 quarters?",
+      "why": "Need revenue growth trajectory, margin trend, and FCF baseline to contextualize Q4 results",
+      "output_key": "prior_financials",
+      "fetch": [
+        [
+          {"agent": "neo4j-xbrl", "query": "Fetch CRM quarterly revenue, operating income, net income, EPS diluted, and free cash flow for Q1-Q3 FY2025 and Q4 FY2024 from XBRL filings"}
+        ]
+      ]
+    },
+    {
+      "id": "prior_transcript_context",
+      "question": "What was management's tone and key themes in the prior earnings call?",
+      "why": "Need to compare Q4 messaging vs Q3 tone — especially on AI/Agentforce momentum and margin outlook",
+      "output_key": "prior_transcript_context",
+      "fetch": [
+        [
+          {"agent": "neo4j-transcript", "query": "Fetch CRM Q3 FY2025 earnings call — CEO prepared remarks and analyst Q&A on Agentforce adoption, AI revenue contribution, and operating margin trajectory"}
+        ]
+      ]
+    },
+    {
+      "id": "sector_context",
+      "question": "How are enterprise software peers performing this earnings season?",
+      "why": "8-K shows revenue miss ($9.99B vs $10.04B est) — need to know if CRM-specific or sector-wide",
+      "output_key": "sector_context",
+      "fetch": [
+        [
+          {"agent": "perplexity-ask", "query": "How did major enterprise software companies (MSFT, ORCL, NOW, WDAY) perform in their most recent earnings vs consensus? Focus on revenue growth and guidance trends as of February 2025"}
+        ]
+      ]
+    },
+    {
+      "id": "cfo_transition_context",
+      "question": "What is the market context around the CFO/COO leadership transition?",
+      "why": "Inter-quarter timeline shows 8-K Item 5.02 (Robin Washington appointment) with -4.92% daily reaction — need to assess if priced in",
+      "output_key": "cfo_transition_context",
+      "fetch": [
+        [
+          {"agent": "neo4j-report", "query": "Fetch full content of CRM 8-K accession 0001193125-25-020881 — Item 5.02 about Robin Washington appointment and Brian Millham retirement"}
+        ],
+        [
+          {"agent": "perplexity-ask", "query": "How do large-cap tech stocks typically react to CFO transitions? Is the initial selloff usually absorbed within days?"}
+        ]
       ]
     }
   ]
 }
 ```
 
-**Key points to flesh out later**:
-- Every field's exact semantics and validation rules
-- How `output_key` maps to `fetched_data{}` keys and `anchor_flags`
-- How the `query` string is constructed (natural language prompt for the agent)
-- Examples for all 4 fetch patterns (single, parallel, fallback, parallel+fallback)
+**Patterns used in this example**:
 
-**Ref**: `earnings-orchestrator.md §2b` (full contract with examples and 4 fetch patterns).
+| Question | Pattern | `fetch` shape | Why |
+|---|---|---|---|
+| `guidance_delta` | Sequential fallback | `[[{transcript}], [{perplexity}]]` | Try transcript first (structured); fall back to web search |
+| `consensus_vs_actual` | Single source | `[[{alphavantage}]]` | AlphaVantage is the authoritative consensus source |
+| `prior_financials` | Single source | `[[{neo4j-xbrl}]]` | XBRL is the only structured financials source |
+| `prior_transcript_context` | Single source | `[[{neo4j-transcript}]]` | Direct transcript fetch |
+| `sector_context` | Single source | `[[{perplexity-ask}]]` | Web-grounded peer comparison |
+| `cfo_transition_context` | Sequential fallback | `[[{neo4j-report}], [{perplexity-ask}]]` | Try filing content first; fall back to web for market pattern |
+
+**Ref**: `earnings-orchestrator.md §2b` (authoritative schema, execution semantics, agent catalog).
 
 ---
 
@@ -1824,16 +1972,27 @@ RULES:
 
 **What**: After the planner returns, the orchestrator validates `fetch_plan.json` before executing it.
 
-**Validation checks** (from `earnings-orchestrator.md §2b`):
-1. Valid JSON? → **Block** if not
-2. Required top-level fields present (`schema_version`, `ticker`, `quarter`, `filed_8k`, `questions`)? → **Block** if missing
-3. Every `fetch[].agent` value in the 14-agent catalog? → **Block** if invalid name
-4. Each question has required fields (`id`, `question`, `why`, `output_key`, `fetch`)? → **Block** if missing
-5. **Sanity check** (R5): At least one question targeting consensus data AND one targeting prior financials? → **Warn** (log, not block). Planner may have valid reasons to omit; U1 self-corrects.
+**Validation checks** (from `earnings-orchestrator.md §2b` + Step 7 constraints):
+
+| # | Check | Action |
+|---|---|---|
+| 1 | Valid JSON? | **Block** |
+| 2 | Required top-level fields present (`schema_version`, `ticker`, `quarter`, `filed_8k`, `questions`)? | **Block** |
+| 3 | Every `fetch[].agent` value in the 14-agent catalog? | **Block** |
+| 4 | Each question has required fields (`id`, `question`, `why`, `output_key`, `fetch`)? | **Block** |
+| 5 | `questions[].id` unique within the plan? | **Block** — duplicate IDs make log/audit and result mapping ambiguous |
+| 6 | `questions[].output_key` unique within the plan? | **Block** — duplicates cause silent data overwrite in `fetched_data{}` |
+| 7 | Any question has >3 tiers in `fetch[]`? | **Block** — hard cap at 3 tiers (Tier 0, 1, 2) |
+| 8 | `schema_version` == `"fetch_plan.v1"`? | **Block** — catches version drift or typos |
+| 9 | `fetch` array non-empty? Each tier non-empty? | **Block** — empty fetch/tier crashes orchestrator execution |
+| 10 | Every `fetch` source has non-empty `query` string? | **Block** — empty query spawns agent with no instructions |
+| 11 | **Sanity check** (R5): consensus + prior financials present? | **Warn** (log, not block). U1 self-corrects. |
+| 12 | >10 questions total? | **Warn** (log, not block). Target 5-8. Content judgment, not structural error. |
+| 13 | Canonical ID uses non-canonical output_key? (e.g., `consensus_vs_actual` with output_key != `consensus_context`) | **Warn** — anchor flag may not trigger, but plan still executes. U1 self-corrects. |
 
 **Where validation lives**: Inline Python in the orchestrator. Not a hook (planner is a Skill fork, returns output to orchestrator context — no file write to hook on until orchestrator persists it).
 
-**Ref**: `earnings-orchestrator.md §2b` (execution semantics point 4, sanity check point 5).
+**Ref**: `earnings-orchestrator.md §2b` (execution semantics point 4, sanity check point 5), Step 7 (constraints).
 
 ---
 
@@ -1880,7 +2039,7 @@ RULES:
 8. U1 `planner_lessons` are strong soft priors — if a lesson says "add peer data," the planner should include it unless current-quarter 8-K evidence clearly makes it irrelevant. Lessons carry weight because they come from actual attribution analysis, but current-quarter evidence still wins (consistent with Step 3 guardrail).
 9. Do NOT fetch return labels (`daily_stock`, `hourly_stock`) — these are prediction outcomes, not inputs.
 10. Do NOT worry about PIT — orchestrator appends `--pit` to agent prompts in historical mode. Planner is PIT-unaware.
-11. Custom question IDs are allowed (stable `snake_case`, no ticker/quarter encoding). Use canonical IDs for the 4 anchor-flag-linked questions (`consensus_vs_actual`, `prior_financials`, `prior_transcript_context`, and `guidance_delta`/`guidance_context` output_key). Custom IDs for everything else.
+11. Custom question IDs are allowed (stable `snake_case`, no ticker/quarter encoding). Use canonical IDs for the 3 anchor-flag-linked output_keys (`consensus_vs_actual` → `consensus_context`, `prior_financials` → `prior_financials`, `prior_transcript_context` → `prior_transcript_context`). The 4th anchor flag (`has_prior_guidance`) comes from Step 4 `guidance_history`, not from a planner fetch. Custom IDs for everything else.
 
 **Ref**: `earnings-orchestrator.md §2b` (noise policy, canonical IDs, tier guidance), `predictor.md §4b` (XBRL timing note).
 
@@ -1888,7 +2047,7 @@ RULES:
 
 ### Step 11: Canonical Question IDs and Anchor Flags
 
-**7 canonical IDs** (from `earnings-orchestrator.md §2b`; reduced from 9 after unifying the 3 inter-quarter fields into one):
+**6 canonical planner question IDs** (from `earnings-orchestrator.md §2b`):
 
 | ID | output_key | Drives anchor_flag? | Typical Tier 0 agents |
 |---|---|---|---|
@@ -1898,9 +2057,12 @@ RULES:
 | `prior_transcript_context` | `prior_transcript_context` | `has_transcript_context` | neo4j-transcript |
 | `peer_earnings` | `peer_earnings` | — | neo4j-entity |
 | `sector_context` | `sector_context` | — | perplexity-search/ask |
-| `inter_quarter_context` | `inter_quarter_context` | — | (pre-assembled by Step 5 `build_inter_quarter_context()` — unified timeline replaces the old separate `inter_quarter_8k`, `significant_moves`, `inter_quarter_news`) |
 
-**Not limited to 9**: Custom IDs allowed for non-standard data needs. Must be `snake_case`, must not encode ticker/quarter. Examples: `acquisition_context`, `regulatory_risk`, `management_change`.
+**Pre-assembled orchestrator inputs** (not planner question IDs — the planner receives these as inputs, it does not fetch them):
+- `inter_quarter_context` — built by Step 5 `build_inter_quarter_context()`, passed to planner as reasoning context and to predictor in the context bundle
+- `guidance_history` — built by Step 4 `build_guidance_history()`, same pattern
+
+**Custom IDs allowed** for non-standard data needs. Must be `snake_case`, must not encode ticker/quarter. Examples: `acquisition_context`, `regulatory_risk`, `management_change`.
 
 **Critical**: 3 anchor flags are driven by planner output_keys (`consensus_context` → `has_consensus`, `prior_financials` → `has_prior_financials`, `prior_transcript_context` → `has_transcript_context`). These output_keys MUST use their canonical names — if the planner invents a different key for consensus data, the anchor flag won't trigger. The 4th anchor flag (`has_prior_guidance`) is driven by the `guidance_history` bundle field from Step 4 (assembled by the orchestrator, not a planner output_key).
 
@@ -1912,7 +2074,7 @@ RULES:
 
 **Phase 1: Smoke test** (single quarter, interactive)
 1. Pick a well-known ticker with rich data (e.g., CRM Q1 FY2025)
-2. Manually assemble planner inputs (8k_packet.json via `build_8k_packet()`, guidance_history.json via `build_guidance_history()`, empty `planner_lessons_history: []`, agent catalog in prompt)
+2. Manually assemble planner inputs (8k_packet.json via `build_8k_packet()`, guidance_history.json via `build_guidance_history()`, inter_quarter_context via `build_inter_quarter_context()`, empty `planner_lessons_history: []`, agent catalog in prompt)
 3. Invoke planner skill interactively
 4. Verify: valid JSON, all required fields, agent names in catalog, reasonable question set
 

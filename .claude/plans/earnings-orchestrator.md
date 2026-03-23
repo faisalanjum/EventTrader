@@ -170,6 +170,9 @@ The context bundle is the central data structure the orchestrator assembles and 
   "guidance_history": "(structured guidance data from Neo4j Guidance/GuidanceUpdate nodes — see STALE REFERENCE note below)",
   "guidance_history_source": "neo4j:Guidance+GuidanceUpdate nodes for ticker",
 
+  "inter_quarter_context": "(unified timeline: day-level market tape + news + filings + dividends + splits with event-specific forward returns — pre-assembled by build_inter_quarter_context(), see plannerStep5.md)",
+  "inter_quarter_context_ref": "path/to/inter_quarter_context.json",
+
   "u1_feedback": [
     {
       "quarter": "Q2_FY2024",
@@ -192,10 +195,6 @@ The context bundle is the central data structure the orchestrator assembles and 
       "sources": ["alphavantage-earnings", "alphavantage-estimates"],
       "tier_used": 0,
       "content": "(structured: EPS/Revenue estimate avg/high/low, analyst count, revision history)"
-    },
-    "inter_quarter_context": {
-      "sources": ["build_inter_quarter_context()"],
-      "content": "(unified timeline: day-level market tape + news + filings + dividends + splits with event-specific forward returns — see plannerStep5.md)"
     }
   },
 
@@ -225,6 +224,8 @@ The context bundle is the central data structure the orchestrator assembles and 
 | `8k_content` | Yes | Raw 8-K EX-99.1 text. Hard-fail if missing (§2c). |
 | `guidance_history` | Yes | **STALE REFERENCE (2026-03-19)**: This field originally said "raw guidance-inventory.md file contents." Verified: **zero** `guidance-inventory.md` files exist on disk. The extraction pipeline writes structured guidance directly to Neo4j graph nodes (327 Guidance + 5,163 GuidanceUpdate + 173 GuidancePeriod nodes) via `guidance_writer.py`. The orchestrator should query Neo4j for this ticker's Guidance/GuidanceUpdate data and render it as text for the bundle. Empty if no Guidance nodes exist for the ticker. |
 | `guidance_history_source` | Yes | `"neo4j"` — queried from Guidance/GuidanceUpdate graph nodes. |
+| `inter_quarter_context` | Yes | Pre-assembled unified timeline (news + filings + dividends + splits with forward returns). Built by `build_inter_quarter_context()` — see `plannerStep5.md`. Top-level field, NOT inside `fetched_data`. |
+| `inter_quarter_context_ref` | Yes | Relative path to persisted `inter_quarter_context.json`. |
 | `u1_feedback` | Yes | Array of prior quarters' `feedback` blocks from attribution/result.json. Empty `[]` for first quarter. Chronological order. |
 | `fetched_data` | Yes | Object keyed by `output_key` from fetch_plan. Each value has `sources` (agent names), `tier_used` (0-indexed, -1 if all tiers empty), `content` (merged text or null). |
 | `anchor_flags` | Yes | Deterministic orchestrator-derived booleans used by predictor missing-data policy. Not LLM judgment. |
@@ -251,6 +252,9 @@ Mode: {mode} | PIT: {pit_datetime} | Assembled: {assembled_at}
 
 ## GUIDANCE HISTORY
 {guidance_history}
+
+## INTER-QUARTER CONTEXT
+{inter_quarter_context}
 
 ## ANCHOR FLAGS
 has_consensus: {has_consensus}
@@ -280,7 +284,7 @@ Sources: alphavantage-earnings (tier 0)
 ```
 
 Rendering rules:
-1. Fixed sections always present in this order: 8-K → guidance → anchor flags → U1 → fetched data.
+1. Fixed sections always present in this order: 8-K → guidance → inter-quarter context → anchor flags → U1 → fetched data.
 2. U1 feedback rendered chronologically (oldest first — same as processing order).
 3. Fetched data sections rendered in fetch_plan question order.
 4. Each fetched data section includes source attribution line (which agents, which tier).
@@ -288,7 +292,7 @@ Rendering rules:
 6. Renderer is deterministic: same JSON → same text, always.
 
 **Planner vs Predictor delivery**:
-- Planner receives: `8k_content` + `u1_feedback` (planner_lessons only) + `guidance_history`. No `fetched_data` or `anchor_flags` (planner produces the fetch plan, doesn't consume fetched results).
+- Planner receives: `8k_content` + `u1_feedback` (planner_lessons only) + `guidance_history` + `inter_quarter_context`. No `fetched_data` or `anchor_flags` (planner produces the fetch plan, doesn't consume fetched results).
 - Predictor receives: full bundle, including `anchor_flags`.
 
 **Learner does NOT receive a context bundle** (I4 resolved):
@@ -368,7 +372,7 @@ Planner returns JSON only (no prose wrapper), one object:
 {
   "schema_version": "fetch_plan.v1",
   "ticker": "NOG",
-  "quarter": "FY2024-Q3",
+  "quarter": "Q3_FY2024",
   "filed_8k": "2024-11-07T13:01:00Z",
   "questions": [
     {
@@ -426,8 +430,16 @@ Execution semantics:
    d. If ALL sources returned empty → advance to next tier.
 3. After all tiers processed, write merged results under `output_key` into the context bundle for predictor.
 4. If planner output is not valid JSON or missing required fields, Q10 policy applies (block quarter, log error).
-5. **Sanity check** (R5, lightweight, code-only — not an LLM call): verify fetch plan includes at least one question targeting consensus data and one targeting prior financials. These are core data types the predictor almost always needs. If missing, log a warning (not a block) — the planner may have valid reasons to omit them, and U1 will self-correct if it was a mistake.
-6. **PIT handling**: not in the schema — orchestrator concern. In historical mode, orchestrator appends `--pit {filed_8k}` to each Task sub-agent's prompt. The planner does not need to know about PIT.
+5. `questions[].id` must be unique within the plan — **block** if duplicates (ambiguous result mapping).
+6. `questions[].output_key` must be unique within the plan — **block** if duplicates (silent data overwrite).
+7. Max 3 tiers per question in `fetch[]` — **block** if >3 (hard cap; matches agent catalog tiers).
+8. `schema_version` must equal `"fetch_plan.v1"` — **block** (catches version drift or typos).
+9. `fetch` array must be non-empty; each tier must be non-empty — **block** (empty fetch/tier crashes execution).
+10. Every `fetch` source must have a non-empty `query` string — **block** (empty query spawns agent with no instructions).
+11. **Sanity check** (R5, lightweight, code-only — not an LLM call): verify fetch plan includes at least one question targeting consensus data and one targeting prior financials. These are core data types the predictor almost always needs. If missing, log a warning (not a block) — the planner may have valid reasons to omit them, and U1 will self-correct if it was a mistake.
+12. >10 questions total — **warn** (log, not block). Target 5-8 questions. Content judgment, not structural error.
+13. Canonical ID uses non-canonical output_key (e.g., `consensus_vs_actual` with output_key != `consensus_context`) — **warn** (anchor flag may not trigger; U1 self-corrects).
+14. **PIT handling**: not in the schema — orchestrator concern. In historical mode, orchestrator appends `--pit {filed_8k}` to each Task sub-agent's prompt. The planner does not need to know about PIT.
 
 **Canonical planner question IDs (v1)**:
 
@@ -441,9 +453,14 @@ Reuse these IDs whenever the question matches the standard family. New IDs are a
 | `prior_transcript_context` | Prior earnings-call commentary / management tone context |
 | `peer_earnings` | Relevant peer earnings or peer reaction context |
 | `sector_context` | Broader sector or macro context that should frame the event |
-| `inter_quarter_context` | Unified inter-quarter timeline (day-level market tape + news + filings + dividends + splits with event-specific forward returns). Pre-assembled by `build_inter_quarter_context()` — see `plannerStep5.md`. Replaces the old separate `inter_quarter_8k`, `significant_moves`, `inter_quarter_news`. |
 
-`anchor_flags` derive from these canonical IDs plus `guidance_history`, so the planner should reuse them instead of inventing near-duplicates.
+**Pre-assembled orchestrator inputs** (not planner question IDs — the planner receives these as inputs, it does not fetch them):
+- `inter_quarter_context` — built by `build_inter_quarter_context()` (see `plannerStep5.md`). Passed to planner as reasoning context and to predictor in the context bundle as a top-level field.
+- `guidance_history` — built by `build_guidance_history()` (see `planner.md` Step 4). Same pattern.
+
+These are assembled by the orchestrator before the planner runs. They appear in the context bundle as top-level fields alongside `8k_content` and `u1_feedback`, NOT inside `fetched_data{}`.
+
+`anchor_flags` derive from the canonical planner question output_keys plus `guidance_history`, so the planner should reuse canonical IDs instead of inventing near-duplicates.
 
 **Valid `fetch.agent` values (I7 — locked catalog)**:
 
@@ -479,8 +496,11 @@ Alpha Vantage estimates methodology note: coarse PIT uses fixed revision buckets
 | `web-search` | General web | WebSearch + WebFetch results with citation metadata | General-purpose web research not covered by Perplexity |
 | `sec-fulltext` | SEC EDGAR | Full-text search across EDGAR filings | Direct EDGAR access when Neo4j coverage is incomplete |
 | `presentations` | Slide decks | Earnings presentations / investor day slides | Visual and strategic content not in filings or transcripts |
+| `gemini-live-research` | Real-time web + grounding | Gemini-powered live web search with Google Search grounding | Live mode: real-time event context, breaking news synthesis, current market narrative. Uses `agent-run` with `--provider gemini` |
 
-Note: planned agent names are provisional — final names locked when built. Current planned families: `WEB_SEARCH`, `SEC_API_FREE_TEXT_SEARCH`, `PRESENTATIONS` (and possibly more later). Working IDs above are temporary implementation names until DataSubAgents finalizes them. The planner should not reference planned agents until they appear in the "available" table above.
+Note: planned agent names are provisional — final names locked when built. Current planned families: `WEB_SEARCH`, `SEC_API_FREE_TEXT_SEARCH`, `PRESENTATIONS`, `GEMINI_LIVE_RESEARCH` (and possibly more later). Working IDs above are temporary implementation names until DataSubAgents finalizes them. The planner should not reference planned agents until they appear in the "available" table above.
+
+**Gemini live-research rationale**: In live mode, the prediction window is minutes — Perplexity is powerful but adds 30s+ latency per deep query. Gemini with Google Search grounding provides near-instant access to breaking headlines, real-time analyst commentary, and current market narrative that may not yet be in Neo4j or Benzinga. Primary use case: live-mode Tier 1 fallback for time-sensitive context that structured sources haven't ingested yet. Not useful for historical mode (no PIT guarantee from web grounding). Implementation: thin agent wrapping `agent-run --provider gemini` via the existing multi-provider CLI.
 
 **Excluded** (not valid for `fetch.agent`):
 - `news-driver-*` — composite analysis agents for news-impact workflow, not raw data fetchers
@@ -573,7 +593,7 @@ Core dimensions are the predictor's reasoning framework, not a rigid checklist. 
 {
   "schema_version": "prediction_result.v1",
   "ticker": "NOG",
-  "quarter": "FY2024-Q3",
+  "quarter": "Q3_FY2024",
   "filed_8k": "2024-11-07",
   "direction": "long",
   "confidence_score": 68,
@@ -1054,7 +1074,7 @@ Note: Interface contracts use I-prefix (I1-I7) to avoid collision with §6 Archi
 | # | Contract | Gap | Status |
 |---|----------|-----|--------|
 | I1 | **Context bundle format** | JSON contract + rendered text delivery. Schema, persistence, rendering rules. | **Resolved** — `context_bundle.v1` in §2a. |
-| I2 | **Orchestrator → Planner input** | Planner receives subset: 8k_content + u1_feedback (planner_lessons) + guidance_history. | **Resolved** — delivery spec in §2a. |
+| I2 | **Orchestrator → Planner input** | Planner receives subset: 8k_content + u1_feedback (planner_lessons) + guidance_history + inter_quarter_context. | **Resolved** — delivery spec in §2a. |
 | I3 | **Orchestrator → Predictor input** | Predictor receives full bundle (all sections). | **Resolved** — delivery spec in §2a. |
 | I4 | **Orchestrator → Learner input** | Learner does NOT get a bundle. 3 minimal inputs: prediction/result.json path, actual returns, context_bundle.json path (reference only). Fetches its own data. | **Resolved** — spec in §2a. |
 | I5 | **Guidance → Orchestrator bridge** | Query Neo4j Guidance/GuidanceUpdate nodes, render as text for `guidance_history`. Empty if no nodes exist. Original design referenced `guidance-inventory.md` (file does not exist). | **Resolved** — spec in §2a. |
