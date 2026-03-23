@@ -147,7 +147,7 @@ Every bot implementing Planner must read these first:
 
 1. Planner is single-turn (v1). **TODO (v2 options)**:
    - **Multi-turn planner**: 2 iterations where the planner sees first-round fetch results and can request targeted follow-ups. Would help for complex quarters (M&A, restructuring) where initial data reveals new questions. ~20 lines of orchestrator code. Evaluate after v1 historical backtest shows whether single-turn misses critical context.
-   - **Parallel predictor start**: Spawn predictor with pre-assembled baselines (8-K + consensus + guidance + inter-quarter) immediately, while planner + agent fetches run in parallel. When fetch results arrive, use `SendMessage` to send them to the already-running predictor. Saves ~20-25s of predictor wait time. Use FG agent or team-spawned agent (not BG) to ensure full tool access. `SendMessage` auto-resume confirmed working (Infrastructure.md v2.1.77). See Infrastructure.md lines 178-179.
+   - **Parallel predictor start**: Spawn predictor as background Agent with pre-assembled baselines immediately, while planner Skill fork + agent fetches run in parallel. When fetch results arrive, use `SendMessage` to send them to the already-running predictor. Saves ~20-25s. Requires: (1) orchestrator runs as main session (has Agent tool — confirmed for SDK-triggered sessions), (2) background Agent + Skill fork can run concurrently (individual pieces confirmed, specific combination untested), (3) `SendMessage` auto-resume works (confirmed v2.1.77). Test before committing to this pattern.
 2. Planner does not fetch data itself.
 3. PIT handling remains orchestrator concern, not planner concern.
 
