@@ -280,17 +280,15 @@ Excluded: `News` (too generic, on 75% of articles), `Movers`/`Trading Ideas`/`Ge
 
 ### Context Bundle Integration
 
-Two entries in `fetched_data` relevant to inter-quarter context (orchestrator §2a):
+`inter_quarter_context` is a **top-level field** in the context bundle (alongside `8k_content`, `guidance_history`, `u1_feedback`), NOT inside `fetched_data`. It is pre-assembled by the orchestrator via `build_inter_quarter_context()`.
+
+Planner-fetched results go in `fetched_data` (orchestrator §2a):
 
 ```json
 {
   "consensus_context": {
     "sources": ["alphavantage-earnings", "alphavantage-estimates"],
     "content": "(structured: EPS/Revenue estimate avg/high/low, analyst count, revision history)"
-  },
-  "inter_quarter_context": {
-    "sources": ["build_inter_quarter_context()"],
-    "content": "(unified timeline: day-level market tape + news + filings + dividends + splits with event-specific forward returns — see plannerStep5.md)"
   }
 }
 ```

@@ -829,3 +829,33 @@ hooks:
 - Thin agent bodies (~15-20 lines domain-specific).
 - Single source of truth for common behavior in existing shared layer (`pit-envelope`, `evidence-standards`, `pit_gate.py`).
 - Automatic regression protection against real, historical failure modes.
+
+---
+
+# 11) Planned: Gemini Live-Research Agent
+
+**Agent**: `gemini-live-research`
+**Domain**: Real-time web search with Google Search grounding
+**Model**: Gemini (via `agent-run --provider gemini`)
+**Mode**: **Live only** — not valid for historical runs (no PIT guarantee from web grounding)
+
+### Why Gemini
+
+Live predictions operate under a minutes-long window between 8-K filing and decision cutoff. The current Tier 2 agents (`perplexity-research`, `perplexity-reason`) are thorough but slow (30s+). Gemini with Google Search grounding provides near-instant access to:
+
+- Breaking post-earnings headlines not yet ingested into Neo4j or Benzinga
+- Real-time analyst reactions on financial news sites
+- Current market narrative and sentiment (social, commentary)
+- Same-day macro context (Fed, tariffs, sector moves) that may be minutes old
+
+### Design
+
+- Thin agent: frontmatter + prompt template, wraps `agent-run --provider gemini`
+- No PIT gate needed — live mode has no PIT ceiling by design
+- Response envelope: same `data[]/gaps[]` structure as other agents via `pit-envelope` skill
+- Planner tier: **Tier 1 (live only)** — fast, broad, complements structured Neo4j/AV sources
+- Invalid in historical mode — planner must not reference it when `mode == 'historical'`
+
+### Implementation
+
+Depends on the existing `agent-run` skill which already supports `--provider gemini`. The agent would be a ~15-line thin agent body following the §10.3 pattern. Build when live mode is activated.
