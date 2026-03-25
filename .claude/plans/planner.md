@@ -147,7 +147,7 @@ Every bot implementing Planner must read these first:
 
 1. Planner is single-turn (v1). **TODO (v2 options)**:
    - **Multi-turn planner**: 2 iterations where the planner sees first-round fetch results and can request targeted follow-ups. Would help for complex quarters (M&A, restructuring) where initial data reveals new questions. ~20 lines of orchestrator code. Evaluate after v1 historical backtest shows whether single-turn misses critical context.
-   - **Parallel predictor start** (TESTED — pattern works): Spawn predictor as named background Agent with pre-assembled baselines via `Agent(name="predictor", run_in_background=true)`. While planner Skill fork + agent fetches run in parallel. When fetch results arrive, use `SendMessage(to="predictor", message=fetched_data)` to send them to the already-running predictor — auto-resumes with full context preserved. No Teams required. Saves ~20-25s. Tested 2026-03-23: named Agent spawn → phase 1 work → SendMessage with new data → phase 2 work. All confirmed working.
+   - **Parallel predictor start** (TESTED mechanically, BLOCKED by thinking constraint): The `Agent(name="x") + SendMessage(to="x")` pattern works (tested 2026-03-23). However, **Agent-spawned subagents have thinking DISABLED** (Infrastructure.md: `thinkingConfig: {type:"disabled"}` for all non-fork spawns, still true as of v2.1.80). The predictor needs ultrathink for deep reasoning — spawning it as an Agent would cripple prediction quality. Same reason the planner is a Skill (needs `effort: high` thinking). This pattern becomes viable only if/when Claude Code enables thinking for Agent-spawned subagents. Monitor Infrastructure.md for changes to `useExactTools` / `thinkingConfig` behavior.
 2. Planner does not fetch data itself.
 3. PIT handling remains orchestrator concern, not planner concern.
 
@@ -2104,3 +2104,92 @@ The `query` field in each fetch source is the prompt sent to the data sub-agent.
 2. End-to-end test: does the predictor receive a well-formed context bundle?
 
 **Ref**: `earnings-orchestrator.md §7` (Phase B1: Planner + Predictor), `§8` (module readiness snapshot).
+
+---
+
+## TODO: Architecture Delta — Analyst Notes + Peer Snapshot (2026-03-25)
+
+**Status**: APPROVED — pending implementation. Changes below have NOT been applied to the sections above yet. When implementing, update the referenced sections and remove this TODO block.
+
+### T1: New pre-assembled input — `peer_earnings_snapshot`
+
+**What**: Compact PIT-safe summary of top 3-5 same-industry peers' recent earnings results.
+
+**Peer universe**: `neo4j-entity` — query same Industry, rank by market cap, top 5 excluding target ticker.
+
+**Data per peer**: report date, EPS estimate vs actual, revenue estimate vs actual, surprise %, stock reaction (daily_stock from PRIMARY_FILER), guidance direction if available.
+
+**Source options (decide during implementation)**:
+- Alpha Vantage EARNINGS endpoint (`pit_fetch.py --source alphavantage`) — has `reportedDate`, `estimatedEPS`, `reportedEPS`, `surprise`, `surprisePercentage`. Structured, clean.
+- Neo4j earnings headlines (`News` with channels `Earnings Beats`/`Earnings Misses`/`Earnings`) + `Report` PRIMARY_FILER returns — free, no API calls, headlines contain beat/miss info ("EPS $1.47 Beats $1.41 Estimate").
+- Hybrid: graph for peer universe + AV for structured beat/miss + one headline per peer for color.
+
+**PIT rule**: Only peers who reported BEFORE target `filed_8k`. Conservative for same-day peers — exclude unless exact filing time is known and precedes target.
+
+**Build function**: `build_peer_earnings_snapshot()` in `warmup_cache.py`. Same pattern as `build_guidance_history()` and `build_inter_quarter_context()` — query, assemble, atomic write.
+
+**Storage path**: `earnings-analysis/Companies/{TICKER}/events/{quarter}/peer_earnings_snapshot.json`
+
+**Sections to update in this file when implementing**:
+- §4 Required Input: add item 10 (`peer_earnings_snapshot`)
+- §4 Pre-Assembled Planner Inputs: add description
+- §11: add new Step for `build_peer_earnings_snapshot()` (query, schema, tests, CLI, ownership comment)
+
+### T2: New planner output — `analyst_notes.json`
+
+**What**: Planner outputs TWO files — `planner/fetch_plan.json` (unchanged) + `planner/analyst_notes.json` (NEW).
+
+**Schema: `analyst_notes.v1`**:
+
+```json
+{
+  "schema_version": "analyst_notes.v1",
+  "ticker": "CRM",
+  "quarter": "Q4_FY2025",
+  "macro_read": "Regime assessment from inter_quarter_context SPY/sector returns...",
+  "sector_read": "Peer dynamics from peer_earnings_snapshot + inter_quarter_context...",
+  "financial_read": "Company patterns from 8K + guidance_history + consensus...",
+  "key_tensions": [
+    "Revenue miss vs EPS beat — which dominates this quarter?",
+    "CFO transition (-4.9% reaction) — priced in or overhang?"
+  ],
+  "what_to_verify_after_fetch": [
+    "Is ORCL cloud deceleration confirmed in transcript Q&A?",
+    "Did prior quarter analyst call mention cRPO specifically?"
+  ],
+  "attention_priorities": [
+    "cRPO growth rate — the forward metric the street watches for CRM",
+    "Guidance range narrowing — 3 consecutive quarters of tightening"
+  ],
+  "confidence_flags": [
+    "guidance_history: comprehensive (85 series, 6 quarters)",
+    "peer_earnings: 4 of 5 peers reported (WDAY pending)",
+    "inter_quarter_context: 1 unexplained gap day (+15.8% Jan 27)"
+  ]
+}
+```
+
+**Guardrail — briefing, not recommendation**: Must NOT include `initial_lean`, directional bias, expected move, bullish/bearish call, or anything resembling a prediction. The planner writes hypotheses and questions, not answers.
+
+**Why no initial_lean**: Anchoring risk — predictor inherits planner's bias instead of independently judging the bundle. Planner is optimized for retrieval, not trading synthesis. Notes are written before fetched data arrives; if they sound too final, they mislead the predictor.
+
+**Macro read source**: Planner derives macro/regime assessment from existing `inter_quarter_context` (SPY + sector returns per day). If significant SPY moves need explanation, planner triggers macro research via `fetch_plan` question targeting `bz-news-api` with `--tickers SPY --channels "Macro Notification"`. No default macro_headlines pre-assembled input.
+
+**Sections to update in this file when implementing**:
+- §4 Required Output: add `planner/analyst_notes.json`
+- §11: add new Step for analyst_notes output contract, validation, and rendering
+- §11 Step 1 (Skill Frontmatter): verify no changes needed (Read + Write already sufficient)
+
+### T3: Sections to update in `predictor.md`
+
+See TODO in that file.
+
+### T4: Sections to update in `learner.md`
+
+See TODO in that file.
+
+### T5: Richer query construction for smart graph retrievers
+
+When implementing §11 Step 7 (Query Construction Rules), the planner should write richer `query` fields for narrative sources (neo4j-news, neo4j-transcript, neo4j-report). Include retrieval intent (`why`), entity focus, and what evidence would be useful. These agents can iterate and summarize — give them context to work with.
+
+For structured sources (neo4j-xbrl, neo4j-entity, alphavantage, yahoo) and external wrappers (bz-news-api, perplexity-*), keep queries mechanical. See `DataSubAgents.md` TODO for the full three-tier strategy.

@@ -1371,3 +1371,36 @@ Yahoo Finance MCP server deployed 2026-03-17:
 ---
 
 *Refs: `DataSubAgents.md` · `Infrastructure.md` · `AgentTeams.md` · `guidanceInventory.md` · `TRIGGER.md`*
+
+---
+
+## TODO: Architecture Delta — Analyst Notes + Peer Snapshot (2026-03-25)
+
+**Status**: APPROVED — pending implementation. Changes below have NOT been applied to the sections above yet. When implementing, update the referenced sections and remove this TODO block.
+
+**One-line summary**:
+`pre-assembled + peer_snapshot → planner(fetch_plan + analyst_notes) → fetch → predictor(stress-tests notes) → learner(note + fetch + prediction feedback)`
+
+### Changes required in this file
+
+| Section | What to change |
+|---|---|
+| §2a step 3a (pre-assemble planner inputs) | Add `peer_earnings_snapshot` to the list alongside guidance_history, inter_quarter_context, consensus |
+| §2a context_bundle.v1 JSON schema | Add `peer_earnings_snapshot` field with description |
+| §2a "Planner vs Predictor delivery" | Planner receives peer_earnings_snapshot; predictor receives analyst_notes.json in addition to current bundle |
+| §2b Planner behavior | Add: planner outputs `planner/analyst_notes.json` alongside `planner/fetch_plan.json` |
+| §2b Planner output contract | Reference `analyst_notes.v1` schema (full spec in `planner.md`) |
+| §2c Predictor behavior | Add: predictor must engage with analyst_notes before prediction (structured confirm/refute/complicate) |
+| §2c Predictor allowed inputs | Add analyst_notes.json to the list |
+| §2d Attribution/Learner feedback block | Expand `planner_lessons` scope description to include note quality (usefulness, misses, what_to_verify hit rate) |
+| §4 File Layout | Add `planner/analyst_notes.json` to the quarter directory tree |
+| §8 Phase B1 (Planner + Predictor) | Note that B1 now includes analyst_notes contract and peer_earnings_snapshot build |
+
+### What was considered and rejected
+
+- **macro_headlines as default pre-assembled input** — planner already sees SPY/sector returns in inter_quarter_context; triggers macro research via fetch_plan when needed (more targeted, avoids noisy default dump)
+- **Parallel specialist API calls** — deferred to v2 escalation if analyst notes prove insufficient
+- **Agent Teams for prediction** — wrong tool; bidirectional messaging unused, thinking disabled, 7x cost
+- **SendMessage specialist choreography** — thinking disabled for Task-spawned agents
+- **Pi harness migration** — premature; 3 days old, would rebuild entire infrastructure
+- **`initial_lean` in analyst_notes** — anchoring risk; planner writes briefing, not recommendation

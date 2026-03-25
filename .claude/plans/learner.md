@@ -373,3 +373,39 @@ Source naming is expected behavior, not a hard gate (unlike the Layer 3-4 enforc
 1. The learner might identify a conceptual gap without knowing the best agent (e.g., "peer earnings would help" — is that `neo4j-xbrl`, `alphavantage-earnings`, or `perplexity-search`?). Forcing a source name would produce bad recommendations.
 2. The learner's primary job is causal attribution, not fetch plan architecture. Source naming is a quality bonus when naturally available from its own analysis.
 3. The 4-layer enforcement (§12) already validates structural output quality. This section adds lesson *content* quality, which is inherently LLM judgment.
+
+---
+
+## TODO: Architecture Delta — Note Quality Feedback (2026-03-25)
+
+**Status**: APPROVED — pending implementation. Changes below have NOT been applied to the sections above yet. When implementing, update the referenced sections and remove this TODO block.
+
+### T1: Learner now receives `analyst_notes.json`
+
+The learner receives `planner/analyst_notes.json` as an additional input (alongside prediction/result.json, actual returns, and context_bundle.json ref). This enables the learner to assess note quality against the actual outcome.
+
+**Sections to update**: §4 Required Input — add `planner/analyst_notes.json` path.
+
+### T2: Expanded `planner_lessons` scope — fetch quality + note quality
+
+`planner_lessons` currently covers fetch plan quality only. Expand to also cover analyst note quality. The learner should assess:
+
+- **Note usefulness**: Did the planner's domain reads (macro_read, sector_read, financial_read) correctly frame the key dynamics? Did they help or mislead the predictor?
+- **Note misses**: What did the planner fail to flag that turned out to be the primary driver?
+- **`what_to_verify` hit rate**: How many of the planner's verification hypotheses were confirmed by fetched data? Were the right questions asked?
+- **Tension resolution**: Did `key_tensions` capture the actual tension that determined the stock reaction?
+
+**Example planner_lessons that reference note quality**:
+- "Your sector_read missed that MSFT Azure reaccelerated — peer_earnings_snapshot showed mixed signals, not uniform deceleration as your note claimed"
+- "Your macro_read correctly identified risk-off regime but failed to flag the consumer confidence collapse as the dominant factor — future notes should check Econ #s data releases"
+- "what_to_verify asked about cRPO — confirmed in transcript as the key metric. Good call, keep using this pattern"
+- "key_tensions missed the CFO transition overhang — inter_quarter_context showed -4.9% reaction but your notes didn't flag it as unresolved"
+
+**Sections to update**:
+- §4 Required Output / feedback block: expand `planner_lessons` description to include note quality
+- §13 Planner Lesson Quality: expand to cover notes — learner compares analyst_notes against actual outcome
+- §3 Step 3 (Lesson Authoring Contract): planner lessons can now reference note quality
+
+### T3: `predictor_lessons` unchanged
+
+`predictor_lessons` still covers synthesis quality — how well the predictor reasoned over the full evidence set. No change needed. The predictor's structured engagement with notes (confirm/refute/complicate) gives the learner visibility into whether the predictor properly challenged the notes or blindly inherited them.

@@ -420,3 +420,54 @@ Predictor module plan is done when:
 5. `guidanceInventory.md`
 6. `.claude/skills/earnings-prediction/SKILL.md`
 7. `.claude/skills/earnings-orchestrator/SKILL.md`
+
+---
+
+## TODO: Architecture Delta — Analyst Notes Engagement (2026-03-25)
+
+**Status**: APPROVED — pending implementation. Changes below have NOT been applied to the sections above yet. When implementing, update the referenced sections and remove this TODO block.
+
+### T1: New predictor input — `analyst_notes.json`
+
+Predictor receives `planner/analyst_notes.json` in addition to the current bundle (pre-assembled data + fetched data). The notes contain the planner's pre-fetch observations: `macro_read`, `sector_read`, `financial_read`, `key_tensions`, `what_to_verify_after_fetch`, `attention_priorities`, `confidence_flags`. No directional lean.
+
+**Sections to update**: §4 Required Input — add analyst_notes.json (from planner).
+
+### T2: New predictor behavior — structured engagement
+
+Before forming its prediction, the predictor MUST explicitly engage with the analyst notes. This is the mechanism that turns notes from passive context into active reasoning improvement.
+
+**Required prompt structure**:
+
+```
+STEP 1: Engage with planner's analyst notes.
+
+For each domain read (macro_read, sector_read, financial_read):
+  - State the planner's pre-fetch hypothesis
+  - State whether fetched data CONFIRMED, REFUTED, or COMPLICATED it
+  - State what the fetched data ADDED that the planner didn't have
+
+For each key_tension:
+  - Which side does the full evidence favor?
+  - Is it resolved or still ambiguous?
+
+For each what_to_verify_after_fetch item:
+  - Was it verified? What did you find?
+  - Did the verification change your view?
+
+STEP 2: Form independent prediction.
+  - Synthesize all evidence (pre-assembled + fetched + notes engagement)
+  - Output prediction/result.json per prediction_result.v1 contract
+```
+
+**Why this structure matters**: Without it, the predictor skims notes passively — minimal benefit. With it, the predictor is forced to address each domain perspective and resolve tensions explicitly. This reduces anchoring on a single signal (e.g., EPS beat) by forcing multi-dimensional engagement.
+
+**Guardrail**: The predictor may DISAGREE with any note. Notes are hypotheses the planner wrote before seeing fetched data. The predictor has strictly more information and should override notes when the evidence warrants it.
+
+**Sections to update**: §4b (new subsection for Analyst Notes Engagement), §7 Skill Sync Requirements (predictor prompt must include engagement structure).
+
+### T3: New input — `peer_earnings_snapshot`
+
+Predictor also receives `peer_earnings_snapshot` as part of the pre-assembled bundle. This provides sector peer context (beat/miss, guidance direction, stock reactions) that informs the predictor's sector reasoning.
+
+**Sections to update**: §4 Required Input, §4b Prediction Context Design (add peer context as a data source alongside existing inputs).

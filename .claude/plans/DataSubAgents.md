@@ -859,3 +859,45 @@ Live predictions operate under a minutes-long window between 8-K filing and deci
 ### Implementation
 
 Depends on the existing `agent-run` skill which already supports `--provider gemini`. The agent would be a ~15-line thin agent body following the §10.3 pattern. Build when live mode is activated.
+
+---
+
+## TODO: Data Sub-Agent Tiering — Smart Retrieval vs Thin Wrappers (2026-03-25)
+
+**Status**: APPROVED — implementation guidance for when the orchestrator fetch execution is built. Not an architecture change — this is how agent prompts should be constructed during fetch plan execution.
+
+### Three-tier agent strategy
+
+| Tier | Agents | Behavior | Returns |
+|---|---|---|---|
+| **Thin external wrappers** | bz-news-api, alphavantage-earnings, yahoo-earnings, perplexity-* | One call, PIT envelope, return as-is. No improvisation. Planner rationale used only to improve filters (tickers, channels, date window, keywords). | Raw JSON envelope |
+| **Smart graph retrievers** | neo4j-news, neo4j-transcript, neo4j-report | Can iterate within graph, follow up on findings, return short factual source-local summaries. NOT mini-predictors — summarize what's IN the data, don't interpret what it means for the prediction. | `source_summary`, `key_evidence`, `data_gaps` |
+| **Mechanical graph retrievers** | neo4j-xbrl, neo4j-entity | Return exact numbers/data. No summarization — predictor needs precision. | Raw structured data |
+
+### Planner writes richer queries for smart retrievers
+
+The orchestrator should pass the planner's `why` field (retrieval intent) into the agent prompt for neo4j-news, neo4j-transcript, and neo4j-report. This helps focus iterative queries without making agents reason deeply.
+
+Example — current:
+```
+query: "Fetch CRM Q3 FY2025 earnings call transcript guidance discussions"
+```
+
+Better:
+```
+query: "Fetch CRM Q3 FY2025 earnings call transcript guidance discussions around EPS, revenue, and cRPO outlook. CONTEXT: CRM guided FY26 EPS $11.09-$11.17, narrowing from prior $11.20-$11.25. FOCUS: Find analyst Q&A exchanges that challenged forward guidance — summarize the key pushback and management response."
+```
+
+### Smart retriever summary contract
+
+For neo4j-news, neo4j-transcript, neo4j-report — when returning summaries:
+
+- `source_summary`: 2-5 sentence factual summary of what was found (source-bounded, no interpretation)
+- `key_evidence`: specific quotes, numbers, or facts that support the summary
+- `data_gaps`: what was looked for but not found
+
+### What NOT to change
+
+- External wrapper agents stay thin and deterministic — no summarization
+- neo4j-xbrl and neo4j-entity stay mechanical — return exact numbers
+- Reasoning stays in planner (thinking) / predictor (thinking) / learner (thinking) — never in data sub-agents (no thinking)
