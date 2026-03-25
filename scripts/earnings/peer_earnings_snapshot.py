@@ -302,7 +302,13 @@ def render_text(packet: dict) -> str:
     summary = packet.get('summary', {})
 
     lines.append(f'=== PEER EARNINGS: {industry} (top {summary.get("total_peers", 0)} by market cap, PIT {packet["pit_cutoff"][:10]}) ===')
+    # Find most common FY end month — only show tag for outliers
+    fy_months = [p.get('fy_end_month') for p in peers if p.get('fy_end_month')]
+    most_common_fy = max(set(fy_months), key=fy_months.count) if fy_months else None
+
     lines.append(f'Target: {ticker} | Window: {packet.get("window_start", "?")} → {packet["pit_cutoff"][:10]}')
+    if most_common_fy:
+        lines.append(f'Most peers: FY ends {_month_abbr(most_common_fy)}')
     lines.append('')
 
     current_ticker = None
@@ -311,7 +317,8 @@ def render_text(packet: dict) -> str:
         if t != current_ticker:
             cap_str = p.get('mkt_cap', '?')
             fy_month = p.get('fy_end_month')
-            fy_tag = f', FY ends {_month_abbr(fy_month)}' if fy_month else ''
+            # Only show FY tag if different from majority
+            fy_tag = f', FY ends {_month_abbr(fy_month)}' if fy_month and fy_month != most_common_fy else ''
             lines.append(f'{t} ({p.get("name", "")}, ${cap_str}{fy_tag})')
             current_ticker = t
 
