@@ -49,6 +49,7 @@ WITH ind.name AS industry,
      peer.ticker AS ticker, peer.name AS name, peer.mkt_cap AS mkt_cap,
      r.created AS filed, r.market_session AS session,
      r.periodOfReport AS period_of_report, r.returns_schedule AS returns_schedule,
+     peer.fiscal_year_end_month AS fy_end_month,
      pf.daily_stock AS daily_stock, pf.hourly_stock AS hourly_stock,
      pf.session_stock AS session_stock,
      pf.daily_sector AS daily_sector, pf.daily_macro AS daily_macro,
@@ -61,13 +62,22 @@ WITH ind.name AS industry,
 ORDER BY toInteger(replace(peer.mkt_cap, ',', '')) DESC, r.created
 
 RETURN industry, ticker, name, mkt_cap, filed, session, period_of_report,
-       returns_schedule,
+       returns_schedule, fy_end_month,
        daily_stock, hourly_stock, session_stock,
        daily_sector, daily_macro, hourly_sector, hourly_macro,
        raw_headlines
 """
 
 # ── Helpers ───────────────────────────────────────────────────────────
+
+_MONTH_ABBR = {
+    '1': 'Jan', '2': 'Feb', '3': 'Mar', '4': 'Apr', '5': 'May', '6': 'Jun',
+    '7': 'Jul', '8': 'Aug', '9': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec',
+}
+
+def _month_abbr(m: str | None) -> str:
+    return _MONTH_ABBR.get(str(m), str(m)) if m else '?'
+
 
 def _parse_mkt_cap(s: str | None) -> float:
     if not s:
@@ -243,6 +253,7 @@ def build_peer_earnings_snapshot(ticker: str, pit_cutoff: str,
                 'best_sector_pct': best_sector,
                 'best_macro_pct': best_macro,
                 'context_horizon': context_horizon,
+                'fy_end_month': row.get('fy_end_month'),
                 'headlines': headlines,
                 'headline_coverage': coverage,
             })
@@ -299,7 +310,9 @@ def render_text(packet: dict) -> str:
         t = p['ticker']
         if t != current_ticker:
             cap_str = p.get('mkt_cap', '?')
-            lines.append(f'{t} ({p.get("name", "")}, ${cap_str})')
+            fy_month = p.get('fy_end_month')
+            fy_tag = f', FY ends {_month_abbr(fy_month)}' if fy_month else ''
+            lines.append(f'{t} ({p.get("name", "")}, ${cap_str}{fy_tag})')
             current_ticker = t
 
         filed = p.get('filed', '?')
