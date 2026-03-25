@@ -227,8 +227,33 @@ INDICATOR_TICKERS = {
 BZ_CHANNELS = 'Macro Notification,Federal Reserve,Econ #s,Macro Economic Events'
 
 
-def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str,
+def _infer_market_session(pit_cutoff: str) -> str:
+    """Infer market session from PIT timestamp.
+    Regular market: 9:30 AM - 4:00 PM ET."""
+    try:
+        import pytz
+        ET = pytz.timezone('US/Eastern')
+        pit_dt = datetime.fromisoformat(pit_cutoff.replace('Z', '+00:00'))
+        pit_et = pit_dt.astimezone(ET)
+        hour, minute = pit_et.hour, pit_et.minute
+        market_open = 9 * 60 + 30   # 9:30 AM
+        market_close = 16 * 60       # 4:00 PM
+        pit_mins = hour * 60 + minute
+        if pit_mins < market_open:
+            return 'pre_market'
+        elif pit_mins >= market_close:
+            return 'post_market'
+        else:
+            return 'in_market'
+    except Exception:
+        return 'post_market'  # safe default
+
+
+def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | None = None,
                           out_path: str | None = None) -> dict:
+    if not market_session:
+        market_session = _infer_market_session(pit_cutoff)
+
     pit_date = pit_cutoff[:10]
 
     try:
@@ -492,8 +517,9 @@ def render_text(packet: dict) -> str:
 
 def main():
     if len(sys.argv) < 2 or '--help' in sys.argv:
-        print('Usage: macro_snapshot.py TICKER --pit ISO8601 --session post_market|in_market|pre_market [--out-path PATH]',
+        print('Usage: macro_snapshot.py TICKER --pit ISO8601 [--session post_market|in_market|pre_market] [--out-path PATH]',
               file=sys.stderr)
+        print('  --session is optional — inferred from PIT timestamp if omitted', file=sys.stderr)
         sys.exit(1)
 
     ticker = sys.argv[1].upper()
@@ -514,9 +540,6 @@ def main():
 
     if not pit:
         print('Error: --pit required', file=sys.stderr)
-        sys.exit(1)
-    if not session:
-        print('Error: --session required (post_market|in_market|pre_market)', file=sys.stderr)
         sys.exit(1)
 
     packet = build_macro_snapshot(ticker, pit, session, out_path)
