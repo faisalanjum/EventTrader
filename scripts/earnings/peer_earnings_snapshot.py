@@ -354,7 +354,7 @@ def render_text(packet: dict) -> str:
             ctx_line = ' | '.join(parts)
             adj_line = ' | '.join(adj_parts) if adj_parts else ''
             if adj_line:
-                lines.append(f'  Context{horizon_label}: {ctx_line} → adj: {adj_line}')
+                lines.append(f'  Context{horizon_label}: {ctx_line} → relative: {adj_line}')
             else:
                 lines.append(f'  Context{horizon_label}: {ctx_line}')
 
