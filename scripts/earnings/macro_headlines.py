@@ -71,6 +71,7 @@ def fetch_macro_headlines(date_from: str, date_to: str, pit: str,
         headlines.append({
             'date': item.get('available_at', item.get('created', '')),
             'title': item.get('title', ''),
+            'bz_id': item.get('id', ''),
             'channels': item.get('channels', []),
         })
 
@@ -123,7 +124,9 @@ def render_text(packet: dict) -> str:
             current_date = date_str
 
         title = h.get('title', '')
-        lines.append(f'  {time_str} {title}')
+        bz_id = h.get('bz_id', '')
+        id_tag = f' [bz:{bz_id}]' if bz_id else ''
+        lines.append(f'  {time_str} {title}{id_tag}')
 
     return '\n'.join(lines)
 

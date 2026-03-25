@@ -48,6 +48,7 @@ WHERE n IS NULL OR ANY(ch IN chList WHERE ch IN ['Earnings Beats', 'Earnings Mis
 WITH ind.name AS industry,
      peer.ticker AS ticker, peer.name AS name, peer.mkt_cap AS mkt_cap,
      r.created AS filed, r.market_session AS session,
+     r.accessionNo AS accession,
      r.periodOfReport AS period_of_report, r.returns_schedule AS returns_schedule,
      peer.fiscal_year_end_month AS fy_end_month,
      pf.daily_stock AS daily_stock, pf.hourly_stock AS hourly_stock,
@@ -57,11 +58,12 @@ WITH ind.name AS industry,
      collect(DISTINCT {
        date: toString(n.created),
        title: n.title,
+       news_id: n.id,
        channels: [ch IN chList WHERE ch IN ['Earnings Beats','Earnings Misses','Earnings','Guidance']]
      }) AS raw_headlines
 ORDER BY toInteger(replace(peer.mkt_cap, ',', '')) DESC, r.created
 
-RETURN industry, ticker, name, mkt_cap, filed, session, period_of_report,
+RETURN industry, ticker, name, mkt_cap, filed, session, accession, period_of_report,
        returns_schedule, fy_end_month,
        daily_stock, hourly_stock, session_stock,
        daily_sector, daily_macro, hourly_sector, hourly_macro,
@@ -241,6 +243,7 @@ def build_peer_earnings_snapshot(ticker: str, pit_cutoff: str,
                 'name': row['name'],
                 'mkt_cap': row.get('mkt_cap'),
                 'filed': row['filed'],
+                'accession': row.get('accession'),
                 'period_of_report': row.get('period_of_report'),
                 'market_session': row.get('session'),
                 'daily_stock_pct': daily,
@@ -347,7 +350,9 @@ def render_text(packet: dict) -> str:
         daily_s = f'{daily:+.1f}%' if daily is not None else 'n/a (PIT)'
         hourly_s = f'{hourly:+.1f}%' if hourly is not None else 'n/a (PIT)'
 
-        lines.append(f'  Filed: {filed_short} {session}{t_minus}')
+        accession = p.get('accession', '')
+        acc_short = f' [{accession}]' if accession else ''
+        lines.append(f'  Filed: {filed_short} {session}{t_minus}{acc_short}')
         lines.append(f'  Reaction: hourly {hourly_s} → daily {daily_s}')
 
         if best_sector is not None or best_macro is not None:
@@ -383,7 +388,9 @@ def render_text(packet: dict) -> str:
             for h in p.get('headlines', []):
                 date_s = str(h.get('date', ''))[:16] if h.get('date') else ''
                 title = h.get('title', '')
-                lines.append(f'  → {date_s} {title}')
+                news_id = h.get('news_id', '')
+                id_tag = f' [{news_id}]' if news_id else ''
+                lines.append(f'  → {date_s} {title}{id_tag}')
         else:
             lines.append(f'  (no earnings/guidance headlines available)')
 
