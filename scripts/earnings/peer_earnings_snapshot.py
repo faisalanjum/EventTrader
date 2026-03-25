@@ -311,12 +311,15 @@ def render_text(packet: dict) -> str:
         best_macro = p.get('best_macro_pct')
         ctx_horizon = p.get('context_horizon')
 
-        # Relative timing: T-3d, T-0d, etc.
+        # Relative timing: T-3d, T-0d, etc. (calendar days, not hours)
         t_minus = ''
         try:
-            filed_dt = datetime.fromisoformat(str(filed).replace('Z', '+00:00'))
-            pit_dt = datetime.fromisoformat(packet['pit_cutoff'].replace('Z', '+00:00'))
-            days_before = (pit_dt - filed_dt).days
+            filed_date = str(filed)[:10]  # "2024-11-05"
+            pit_date = packet['pit_cutoff'][:10]  # "2024-11-07"
+            from datetime import date as date_cls
+            fd = date_cls.fromisoformat(filed_date)
+            pd = date_cls.fromisoformat(pit_date)
+            days_before = (pd - fd).days
             t_minus = f' (T-{days_before}d)' if days_before > 0 else ' (T-0d)'
         except (ValueError, TypeError):
             pass
