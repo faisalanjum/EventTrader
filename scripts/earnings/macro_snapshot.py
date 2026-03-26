@@ -358,18 +358,19 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
                     indicators[label] = metric
             time.sleep(0.3)
 
-    # ── 3b. VIX absolute level (yfinance — last settled close, reference only) ──
+    # ── 3b. VIX absolute level (yfinance — previous day's settled close only) ──
+    # VIX settles at 4:15 PM ET. Even post_market filings (e.g., 4:03 PM) are
+    # before VIX settlement. So ALWAYS use the previous day's close — never today's.
     vix_level = None
     try:
         import yfinance as yf
-        # Fetch a few days to ensure we get the last settled close before PIT
-        vix_start = (pit_d - timedelta(days=5)).isoformat()
-        vix_end = (pit_d + timedelta(days=1)).isoformat()
+        vix_start = (pit_d - timedelta(days=7)).isoformat()
+        vix_end = pit_d.isoformat()  # exclusive — excludes PIT date entirely
         vix_hist = yf.Ticker('^VIX').history(start=vix_start, end=vix_end)
         if not vix_hist.empty:
-            # Use last close on or before PIT date
             vix_hist.index = vix_hist.index.tz_localize(None) if vix_hist.index.tz else vix_hist.index
-            valid = vix_hist[vix_hist.index.date <= pit_d]
+            # Strictly before PIT date — previous day's settled close
+            valid = vix_hist[vix_hist.index.date < pit_d]
             if not valid.empty:
                 vix_level = round(float(valid['Close'].iloc[-1]), 2)
     except Exception as e:
