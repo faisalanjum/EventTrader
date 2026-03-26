@@ -278,15 +278,15 @@ def _compute_indicator_daily(daily_bars: list[dict], pit_date: str,
 # ── Main build ───────────────────────────────────────────────────────
 
 INDICATOR_TICKERS = {
-    'Vol proxy (VIXY)': 'VIXY',
-    'Rates long (TLT)': 'TLT',   # 20Y+ Treasury — long end
-    'Rates short (SHY)': 'SHY',  # 1-3Y Treasury — short end. SHY/TLT divergence = curve shape
-    'Credit (HYG)': 'HYG',       # High Yield — THE risk/fragility signal
-    'Small Cap (IWM)': 'IWM',    # Russell 2000 — rotation/broad risk appetite
-    'Breadth (RSP)': 'RSP',      # Equal-weight SPY — narrow vs broad market
-    'Oil proxy (USO)': 'USO',
-    'Dollar proxy (UUP)': 'UUP',
-    'Gold proxy (GLD)': 'GLD',
+    'Volatility (VIXY)': 'VIXY',
+    'Rates long (TLT)': 'TLT',
+    'Rates short (SHY)': 'SHY',
+    'Credit (HYG)': 'HYG',
+    'Small Cap (IWM)': 'IWM',
+    'Breadth (RSP)': 'RSP',
+    'Oil (USO)': 'USO',
+    'Dollar (UUP)': 'UUP',
+    'Gold (GLD)': 'GLD',
 }
 
 # Broader channels for catalysts — catches Fed, economic data, macro events
