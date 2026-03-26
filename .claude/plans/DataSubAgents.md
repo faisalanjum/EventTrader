@@ -627,6 +627,26 @@ Key design decisions:
   - **PIT-gapped (current-state only)**: `earnings_estimate`, `revenue_estimate`, `eps_trend`, `get_calendar()` → redirect to AV
   - **PIT-enforceable but NOT exposed** (Neo4j already covers): `history()` (built-in PIT via `end` param)
   - **NOT PIT-enforceable**: `get_financial_statement` (period-end ≠ filing date), `recommendations` summary (rolling windows), `earnings_history` (redundant subset)
+
+  **TODO: Expose pre/post market price fields from `get_stock_info`**
+
+  `get_quote` does NOT return extended-hours data. `get_stock_info` does — use it for earnings reaction tracking. Exact field shape (from yfinance `info` dict):
+
+  | Field | Example | Notes |
+  |---|---|---|
+  | `postMarketPrice` | 32.3 | After-hours price |
+  | `postMarketChange` | 0.41 | Absolute change from regular close |
+  | `postMarketChangePercent` | 1.29 | Percent change from regular close |
+  | `postMarketTime` | 1774562003 | Unix epoch (ET) |
+  | `preMarketPrice` | — | Pre-open price (present when `marketState` = `PRE`) |
+  | `preMarketChange` | — | Absolute change from prior close |
+  | `preMarketChangePercent` | — | Percent change from prior close |
+  | `preMarketTime` | — | Unix epoch (ET) |
+  | `marketState` | `POST` / `PRE` / `REGULAR` / `CLOSED` | Indicates which session is active |
+  | `hasPrePostMarketData` | true | Whether extended-hours data is available for this ticker |
+
+  **Action**: Wire these fields into `yahoo-earnings` agent or a dedicated `yahoo-quote` op so earnings reaction workflows can capture the immediate post-market (or pre-market for AM reporters) move without needing IBKR.
+
 - SEC full-text search adapter scaffold (HTTP wrapper first; MCP optional later) — placeholder
 - Slide deck API adapter (earningscall.biz) — placeholder
 
