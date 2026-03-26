@@ -176,7 +176,8 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
 
     if minute_bars and pit_ms:
         # Filter to bars at or before PIT
-        pit_bars = [b for b in minute_bars if b['ts_ms'] <= pit_ms]
+        # Only include bars fully settled before PIT (bar start + 60s <= PIT)
+        pit_bars = [b for b in minute_bars if b['ts_ms'] + 60_000 <= pit_ms]
 
         if pit_bars:
             level_at_pit = pit_bars[-1]['close']
@@ -187,7 +188,7 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
 
             # Last 60 min
             sixty_min_ago = pit_ms - (60 * 60 * 1000)
-            bars_60m_ago = [b for b in pit_bars if b['ts_ms'] <= sixty_min_ago]
+            bars_60m_ago = [b for b in pit_bars if b['ts_ms'] + 60_000 <= sixty_min_ago]
             if bars_60m_ago:
                 last_60m = _pct(bars_60m_ago[-1]['close'], level_at_pit)
 
@@ -376,7 +377,7 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
                         _pit_ms = None
                     sec_minute = _polygon_minute(sector_etf, pit_date, api_key)
                     if sec_minute and _pit_ms:
-                        sec_pit_bars = [b for b in sec_minute if b['ts_ms'] <= _pit_ms]
+                        sec_pit_bars = [b for b in sec_minute if b['ts_ms'] + 60_000 <= _pit_ms]
                         if sec_pit_bars and sec_minute:
                             sec_open_to_pit = _pct(sec_minute[0]['open'], sec_pit_bars[-1]['close'])
 
