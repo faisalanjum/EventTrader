@@ -212,6 +212,19 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
         if today_open and yest_close:
             overnight_gap = _pct(yest_close, today_open)
 
+    # Trend context: SPY vs 50d / 200d moving averages
+    ma_50 = None
+    ma_200 = None
+    closes = [b['close'] for b in settled_daily if b.get('close')]
+    if len(closes) >= 50:
+        ma_50 = round(sum(closes[-50:]) / 50, 2)
+    if len(closes) >= 200:
+        ma_200 = round(sum(closes[-200:]) / 200, 2)
+
+    ref_price = level_at_pit or (settled_daily[-1]['close'] if settled_daily else None)
+    vs_50d = round(((ref_price - ma_50) / ma_50) * 100, 2) if ref_price and ma_50 else None
+    vs_200d = round(((ref_price - ma_200) / ma_200) * 100, 2) if ref_price and ma_200 else None
+
     return {
         'level_at_pit': round(level_at_pit, 2) if level_at_pit else None,
         'open_to_pit': open_to_pit,
@@ -222,6 +235,10 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
         'change_5d': change_5d,
         'change_20d': change_20d,
         'change_ytd': change_ytd,
+        'ma_50': ma_50,
+        'ma_200': ma_200,
+        'vs_50d': vs_50d,
+        'vs_200d': vs_200d,
         'volume_5d_avg': vol_5d,
         'volume_20d_avg': vol_20d,
         'volume_ratio': round(vol_5d / vol_20d, 2) if vol_5d and vol_20d and vol_20d > 0 else None,
@@ -263,6 +280,8 @@ def _compute_indicator_daily(daily_bars: list[dict], pit_date: str,
 INDICATOR_TICKERS = {
     'Vol proxy (VIXY)': 'VIXY',
     'Rates proxy (TLT)': 'TLT',
+    'Credit (HYG)': 'HYG',       # High Yield — THE risk/fragility signal
+    'Small Cap (IWM)': 'IWM',    # Russell 2000 — rotation/broad risk appetite
     'Oil proxy (USO)': 'USO',
     'Dollar proxy (UUP)': 'UUP',
     'Gold proxy (GLD)': 'GLD',
@@ -307,7 +326,8 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
         pit_d = date_cls.today()
 
     year_start = f"{pit_d.year}-01-01"
-    daily_from = min((pit_d - timedelta(days=30)).isoformat(), year_start)
+    # 300 days back to cover 200-day MA + YTD
+    daily_from = min((pit_d - timedelta(days=300)).isoformat(), year_start)
     api_key = _load_polygon_key()
 
     # ── 1. SPY minute bars for MARKET NOW ──
@@ -521,7 +541,17 @@ def render_text(packet: dict) -> str:
         parts = [p for p in [o2p, l60, gap, today, yest] if p]
         lines.append(f'  SPY {level} | {" | ".join(parts)}')
 
-        # Volume
+        # Trend + Volume
+        trend_parts = []
+        if spy.get('vs_50d') is not None:
+            pos = 'above' if spy['vs_50d'] >= 0 else 'below'
+            trend_parts.append(f'{pos} 50d MA ({spy["vs_50d"]:+.1f}%)')
+        if spy.get('vs_200d') is not None:
+            pos = 'above' if spy['vs_200d'] >= 0 else 'below'
+            trend_parts.append(f'{pos} 200d MA ({spy["vs_200d"]:+.1f}%)')
+        if trend_parts:
+            lines.append(f'  Trend: {" | ".join(trend_parts)}')
+
         vr = spy.get('volume_ratio')
         if vr:
             desc = 'elevated' if vr > 1.2 else 'normal' if vr > 0.8 else 'low'
