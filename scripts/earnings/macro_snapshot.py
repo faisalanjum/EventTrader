@@ -601,7 +601,7 @@ def render_text(packet: dict) -> str:
     # Small caps: IWM vs SPY
     iwm = indicators.get('Small Cap (IWM)', {})
     iwm_ret = iwm.get('last_return')
-    spy_ret = spy.get('today_return') or spy.get('yesterday') if spy else None
+    spy_ret = (spy.get('today_return') if spy.get('today_return') is not None else spy.get('yesterday')) if spy else None
     if iwm_ret is not None and spy_ret is not None:
         iwm_vs_spy = round(iwm_ret - spy_ret, 1)
         regime_lines.append(f'Small caps: IWM vs SPY {iwm_vs_spy:+.1f}%')
