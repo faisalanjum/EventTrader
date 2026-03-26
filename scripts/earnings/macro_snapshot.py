@@ -283,6 +283,7 @@ INDICATOR_TICKERS = {
     'Rates short (SHY)': 'SHY',  # 1-3Y Treasury — short end. SHY/TLT divergence = curve shape
     'Credit (HYG)': 'HYG',       # High Yield — THE risk/fragility signal
     'Small Cap (IWM)': 'IWM',    # Russell 2000 — rotation/broad risk appetite
+    'Breadth (RSP)': 'RSP',      # Equal-weight SPY — narrow vs broad market
     'Oil proxy (USO)': 'USO',
     'Dollar proxy (UUP)': 'UUP',
     'Gold proxy (GLD)': 'GLD',
@@ -583,6 +584,47 @@ def render_text(packet: dict) -> str:
         if sec.get('vs_spy_5d') is not None:
             parts.append(f'vs SPY {sec["vs_spy_5d"]:+.1f}%')
         lines.append(f'  Sector ({sec["name"]}{etf_tag}): {" | ".join(parts)}')
+
+    # Derived regime clues (computed from existing data, no labels)
+    indicators = packet.get('market_now', {}).get('indicators', {})
+    regime_lines = []
+
+    # Breadth: RSP vs SPY
+    rsp = indicators.get('Breadth (RSP)', {})
+    if rsp.get('last_return') is not None and spy and spy.get('today_return') is not None:
+        rsp_vs_spy = round(rsp['last_return'] - spy['today_return'], 1)
+        regime_lines.append(f'Breadth: RSP vs SPY {rsp_vs_spy:+.1f}%')
+    elif rsp.get('last_return') is not None and spy and spy.get('yesterday') is not None:
+        rsp_vs_spy = round(rsp['last_return'] - spy['yesterday'], 1)
+        regime_lines.append(f'Breadth: RSP vs SPY {rsp_vs_spy:+.1f}%')
+
+    # Small caps: IWM vs SPY
+    iwm = indicators.get('Small Cap (IWM)', {})
+    iwm_ret = iwm.get('last_return')
+    spy_ret = spy.get('today_return') or spy.get('yesterday') if spy else None
+    if iwm_ret is not None and spy_ret is not None:
+        iwm_vs_spy = round(iwm_ret - spy_ret, 1)
+        regime_lines.append(f'Small caps: IWM vs SPY {iwm_vs_spy:+.1f}%')
+
+    # Curve: SHY vs TLT direction
+    shy_data = indicators.get('Rates short (SHY)', {})
+    tlt_data = indicators.get('Rates long (TLT)', {})
+    shy_ret = shy_data.get('last_return')
+    tlt_ret = tlt_data.get('last_return')
+    if shy_ret is not None and tlt_ret is not None:
+        spread_chg = round(tlt_ret - shy_ret, 1)
+        if spread_chg > 0.2:
+            curve_dir = 'bull steepening' if tlt_ret > 0 else 'bear flattening'
+        elif spread_chg < -0.2:
+            curve_dir = 'bear steepening' if tlt_ret < 0 else 'bull flattening'
+        else:
+            curve_dir = 'stable'
+        regime_lines.append(f'Curve proxy: {curve_dir} (TLT-SHY spread {spread_chg:+.1f}%)')
+
+    if regime_lines:
+        lines.append('')
+        for rl in regime_lines:
+            lines.append(f'  {rl}')
 
     # ── CATALYSTS ──
     catalysts = packet.get('catalysts', {})
