@@ -382,7 +382,8 @@ async def modify_order(req: ModifyOrderRequest) -> dict:
     try:
         return await ib_interface.modify_order(req.order_id, req.limit_price, req.stop_price, req.quantity)
     except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e)) from e
+        code = 404 if "not found" in str(e).lower() else 400
+        raise HTTPException(status_code=code, detail=str(e)) from e
     except Exception as e:
         logger.error("Error modifying order: {}", str(e))
         raise HTTPException(status_code=500, detail=str(e)) from e
