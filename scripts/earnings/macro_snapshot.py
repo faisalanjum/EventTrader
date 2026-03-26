@@ -199,10 +199,23 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
             if not open_to_pit and today_bar['open']:
                 open_to_pit = _pct(today_bar['open'], today_bar['close'])
 
+    # Fallback: if still no level (pre_market with no minute bars), use last settled close
+    if level_at_pit is None and settled_daily:
+        level_at_pit = settled_daily[-1]['close']
+
+    # Overnight gap: yesterday's close → today's open (captures after-hours + pre-market)
+    overnight_gap = None
+    if minute_bars and settled_daily:
+        today_open = minute_bars[0]['open']
+        yest_close = settled_daily[-1]['close'] if market_session != 'post_market' else (settled_daily[-2]['close'] if len(settled_daily) >= 2 else None)
+        if today_open and yest_close:
+            overnight_gap = _pct(yest_close, today_open)
+
     return {
         'level_at_pit': round(level_at_pit, 2) if level_at_pit else None,
         'open_to_pit': open_to_pit,
         'last_60m': last_60m,
+        'overnight_gap': overnight_gap,
         'today_return': today_return,  # post_market only (session settled)
         'yesterday': yesterday_return,
         'change_5d': change_5d,
@@ -297,8 +310,9 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
     api_key = _load_polygon_key()
 
     # ── 1. SPY minute bars for MARKET NOW ──
+    # Fetch for ALL sessions — pre_market has extended hours from 4 AM ET
     spy_minute = []
-    if api_key and market_session in ('in_market', 'post_market'):
+    if api_key:
         spy_minute = _polygon_minute('SPY', pit_date, api_key)
         time.sleep(0.3)  # rate limit courtesy
 
@@ -397,17 +411,27 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
                 # PIT filter: only headlines before PIT timestamp
                 if avail and avail <= pit_cutoff:
                     day = avail[:10]
+                    channels = item.get('channels', [])
                     headlines_by_day.setdefault(day, []).append({
                         'time': avail[11:16] if len(avail) > 16 else '',
                         'title': item.get('title', ''),
                         'bz_id': item.get('id', ''),
+                        'channels': channels,
                     })
     except Exception as e:
         print(f'Benzinga error: {e}', file=sys.stderr)
 
-    # Sort within each day (newest first)
+    # Rank within each day by channel importance, then recency
+    # Economic data > Fed > bellwether events > general macro
+    CHANNEL_PRIORITY = {'Econ #s': 0, 'Federal Reserve': 1, 'Macro Notification': 2, 'Macro Economic Events': 3}
+
+    def _headline_sort_key(h):
+        chs = h.get('channels', [])
+        best_priority = min((CHANNEL_PRIORITY.get(ch, 99) for ch in chs), default=99)
+        return (best_priority, h.get('time', ''))  # priority first, then time
+
     for day in headlines_by_day:
-        headlines_by_day[day].sort(key=lambda h: h.get('time', ''), reverse=True)
+        headlines_by_day[day].sort(key=_headline_sort_key)
 
     # Group: TODAY, YESTERDAY, EARLIER
     sorted_days = sorted(headlines_by_day.keys(), reverse=True)
@@ -490,9 +514,10 @@ def render_text(packet: dict) -> str:
         level = f'{spy["level_at_pit"]:.2f}' if spy.get('level_at_pit') else '?'
         o2p = f'open→PIT {spy["open_to_pit"]:+.1f}%' if spy.get('open_to_pit') is not None else ''
         l60 = f'last 60m {spy["last_60m"]:+.1f}%' if spy.get('last_60m') is not None else ''
+        gap = f'overnight gap {spy["overnight_gap"]:+.1f}%' if spy.get('overnight_gap') is not None else ''
         today = f'today {spy["today_return"]:+.1f}%' if spy.get('today_return') is not None else ''
         yest = f'yesterday {spy["yesterday"]:+.1f}%' if spy.get('yesterday') is not None else ''
-        parts = [p for p in [o2p, l60, today, yest] if p]
+        parts = [p for p in [o2p, l60, gap, today, yest] if p]
         lines.append(f'  SPY {level} | {" | ".join(parts)}')
 
         # Volume
