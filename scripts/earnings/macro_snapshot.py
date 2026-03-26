@@ -358,6 +358,23 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
                     indicators[label] = metric
             time.sleep(0.3)
 
+    # ── 3b. VIX absolute level (yfinance — last settled close, reference only) ──
+    vix_level = None
+    try:
+        import yfinance as yf
+        # Fetch a few days to ensure we get the last settled close before PIT
+        vix_start = (pit_d - timedelta(days=5)).isoformat()
+        vix_end = (pit_d + timedelta(days=1)).isoformat()
+        vix_hist = yf.Ticker('^VIX').history(start=vix_start, end=vix_end)
+        if not vix_hist.empty:
+            # Use last close on or before PIT date
+            vix_hist.index = vix_hist.index.tz_localize(None) if vix_hist.index.tz else vix_hist.index
+            valid = vix_hist[vix_hist.index.date <= pit_d]
+            if not valid.empty:
+                vix_level = round(float(valid['Close'].iloc[-1]), 2)
+    except Exception as e:
+        print(f'VIX (yfinance) error: {e}', file=sys.stderr)
+
     # ── 4. Sector from Neo4j + Polygon intraday for sector ETF ──
     sector_info = None
     manager = get_manager()
@@ -488,6 +505,7 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
 
         'market_now': {
             'spy': spy_now,
+            'vix_close': vix_level,  # last settled CBOE VIX close (reference, not live)
             'indicators': indicators,
             'sector': sector_info,
         },
@@ -553,6 +571,11 @@ def render_text(packet: dict) -> str:
             trend_parts.append(f'{pos} 200d MA ({spy["vs_200d"]:+.1f}%)')
         if trend_parts:
             lines.append(f'  Trend: {" | ".join(trend_parts)}')
+
+        # VIX absolute level (last settled CBOE close — reference, not live)
+        vix = packet.get('market_now', {}).get('vix_close')
+        if vix is not None:
+            lines.append(f'  VIX: {vix:.1f} (last settled close)')
 
         vr = spy.get('volume_ratio')
         if vr:
