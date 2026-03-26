@@ -131,17 +131,24 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
     else:
         settled_daily = all_daily
 
-    yesterday_return = None
-    yesterday_close = None
+    today_return = None   # close-to-close for today (post_market only)
+    yesterday_return = None  # close-to-close for the day before
     change_5d = None
     change_20d = None
     change_ytd = None
     vol_5d = None
     vol_20d = None
 
-    if len(settled_daily) >= 2:
-        yesterday_close = settled_daily[-1]['close']
-        yesterday_return = _pct(settled_daily[-2]['close'], settled_daily[-1]['close'])
+    if market_session == 'post_market':
+        # settled_daily includes today's bar
+        if len(settled_daily) >= 2:
+            today_return = _pct(settled_daily[-2]['close'], settled_daily[-1]['close'])
+        if len(settled_daily) >= 3:
+            yesterday_return = _pct(settled_daily[-3]['close'], settled_daily[-2]['close'])
+    else:
+        # settled_daily excludes today — [-1] IS yesterday
+        if len(settled_daily) >= 2:
+            yesterday_return = _pct(settled_daily[-2]['close'], settled_daily[-1]['close'])
 
     if len(settled_daily) >= 6:
         change_5d = _pct(settled_daily[-6]['close'], settled_daily[-1]['close'])
@@ -196,6 +203,7 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
         'level_at_pit': round(level_at_pit, 2) if level_at_pit else None,
         'open_to_pit': open_to_pit,
         'last_60m': last_60m,
+        'today_return': today_return,  # post_market only (session settled)
         'yesterday': yesterday_return,
         'change_5d': change_5d,
         'change_20d': change_20d,
@@ -313,16 +321,17 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
                     indicators[label] = metric
             time.sleep(0.3)
 
-    # ── 4. Sector from Neo4j ──
+    # ── 4. Sector from Neo4j + Polygon intraday for sector ETF ──
     sector_info = None
     manager = get_manager()
     try:
         sector_rows = manager.execute_cypher_query_all(
-            'MATCH (c:Company {ticker: $ticker})-[:BELONGS_TO]->(:Industry)-[:BELONGS_TO]->(s:Sector) '
-            'RETURN s.name AS sector, s.ticker AS sector_etf',
+            'MATCH (c:Company {ticker: $ticker}) '
+            'RETURN c.sector AS sector, c.sector_etf AS sector_etf',
             {'ticker': ticker}
         )
         sector_name = sector_rows[0]['sector'] if sector_rows else None
+        sector_etf = sector_rows[0].get('sector_etf') if sector_rows else None
 
         if sector_name:
             sec_rows = manager.execute_cypher_query_all('''
@@ -332,8 +341,8 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
                 ORDER BY d.date
             ''', {'sector': sector_name, 'from': (pit_d - timedelta(days=10)).isoformat(), 'pit_date': pit_date})
 
+            # PIT-safe: for in/pre_market, exclude today's unsettled bar
             if sec_rows:
-                # PIT-safe: for in/pre_market, exclude today's unsettled bar
                 if market_session != 'post_market':
                     settled_sec = [r for r in sec_rows if r['date'] < pit_date]
                 else:
@@ -343,10 +352,26 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
                 sec_5d = settled_sec[-5:] if len(settled_sec) >= 5 else settled_sec
                 sum_5d = round(sum(r['ret'] for r in sec_5d if r['ret']), 2)
                 sec_label = 'today' if market_session == 'post_market' else 'last close'
+                # Sector ETF intraday for in_market (e.g., XLK for Technology)
+                sec_open_to_pit = None
+                if market_session == 'in_market' and sector_etf and api_key:
+                    try:
+                        _pit_dt = datetime.fromisoformat(pit_cutoff.replace('Z', '+00:00'))
+                        _pit_ms = int(_pit_dt.timestamp() * 1000)
+                    except ValueError:
+                        _pit_ms = None
+                    sec_minute = _polygon_minute(sector_etf, pit_date, api_key)
+                    if sec_minute and _pit_ms:
+                        sec_pit_bars = [b for b in sec_minute if b['ts_ms'] <= _pit_ms]
+                        if sec_pit_bars and sec_minute:
+                            sec_open_to_pit = _pct(sec_minute[0]['open'], sec_pit_bars[-1]['close'])
+
                 sector_info = {
                     'name': sector_name,
+                    'etf': sector_etf,
                     'last_return': last_sec,
                     'return_label': sec_label,
+                    'open_to_pit': sec_open_to_pit,  # in_market only
                     'change_5d': sum_5d,
                     'vs_spy_5d': round(sum_5d - spy_now.get('change_5d', 0), 2) if spy_now.get('change_5d') is not None else None,
                 }
@@ -465,8 +490,9 @@ def render_text(packet: dict) -> str:
         level = f'{spy["level_at_pit"]:.2f}' if spy.get('level_at_pit') else '?'
         o2p = f'open→PIT {spy["open_to_pit"]:+.1f}%' if spy.get('open_to_pit') is not None else ''
         l60 = f'last 60m {spy["last_60m"]:+.1f}%' if spy.get('last_60m') is not None else ''
+        today = f'today {spy["today_return"]:+.1f}%' if spy.get('today_return') is not None else ''
         yest = f'yesterday {spy["yesterday"]:+.1f}%' if spy.get('yesterday') is not None else ''
-        parts = [p for p in [o2p, l60, yest] if p]
+        parts = [p for p in [o2p, l60, today, yest] if p]
         lines.append(f'  SPY {level} | {" | ".join(parts)}')
 
         # Volume
@@ -488,14 +514,18 @@ def render_text(packet: dict) -> str:
     sec = packet.get('market_now', {}).get('sector')
     if sec and sec.get('name'):
         parts = []
-        rl = sec.get('return_label', 'today')
-        if sec.get('last_return') is not None:
-            parts.append(f'{rl} {sec["last_return"]:+.1f}%')
+        etf_tag = f', {sec["etf"]}' if sec.get('etf') else ''
+        if sec.get('open_to_pit') is not None:
+            parts.append(f'open→PIT {sec["open_to_pit"]:+.1f}%')
+        else:
+            rl = sec.get('return_label', 'today')
+            if sec.get('last_return') is not None:
+                parts.append(f'{rl} {sec["last_return"]:+.1f}%')
         if sec.get('change_5d') is not None:
             parts.append(f'5d {sec["change_5d"]:+.1f}%')
         if sec.get('vs_spy_5d') is not None:
             parts.append(f'vs SPY {sec["vs_spy_5d"]:+.1f}%')
-        lines.append(f'  Sector ({sec["name"]}): {" | ".join(parts)}')
+        lines.append(f'  Sector ({sec["name"]}{etf_tag}): {" | ".join(parts)}')
 
     # ── CATALYSTS ──
     catalysts = packet.get('catalysts', {})
