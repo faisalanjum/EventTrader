@@ -500,7 +500,7 @@ def render_text(packet: dict) -> str:
 
     session_note = {
         'post_market': 'session settled',
-        'in_market': 'session in progress — open→PIT from minute bars',
+        'in_market': 'session in progress — session so far from minute bars',
         'pre_market': 'session not started — yesterday is last session',
     }.get(session, session)
 
@@ -513,7 +513,7 @@ def render_text(packet: dict) -> str:
     spy = packet.get('market_now', {}).get('spy', {})
     if spy:
         level = f'{spy["level_at_pit"]:.2f}' if spy.get('level_at_pit') else '?'
-        o2p = f'open→PIT {spy["open_to_pit"]:+.1f}%' if spy.get('open_to_pit') is not None else ''
+        o2p = f'session so far {spy["open_to_pit"]:+.1f}%' if spy.get('open_to_pit') is not None else ''
         l60 = f'last 60m {spy["last_60m"]:+.1f}%' if spy.get('last_60m') is not None else ''
         gap = f'overnight gap {spy["overnight_gap"]:+.1f}%' if spy.get('overnight_gap') is not None else ''
         today = f'today {spy["today_return"]:+.1f}%' if spy.get('today_return') is not None else ''
@@ -542,7 +542,7 @@ def render_text(packet: dict) -> str:
         parts = []
         etf_tag = f', {sec["etf"]}' if sec.get('etf') else ''
         if sec.get('open_to_pit') is not None:
-            parts.append(f'open→PIT {sec["open_to_pit"]:+.1f}%')
+            parts.append(f'session so far {sec["open_to_pit"]:+.1f}%')
         else:
             rl = sec.get('return_label', 'today')
             if sec.get('last_return') is not None:
