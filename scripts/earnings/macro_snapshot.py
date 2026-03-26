@@ -12,8 +12,12 @@ Session-aware:
   pre_market   → session not started, yesterday is "last session"
 
 Usage:
-    # Orchestrator: pass --session explicitly from 8-K's r.market_session (source of truth)
+    # PIT-safe historical (Polygon — default):
     python3 scripts/earnings/macro_snapshot.py CRM --pit 2025-02-26T16:03:55-05:00 --session post_market
+
+    # Live real-time (Yahoo Finance):
+    python3 scripts/earnings/macro_snapshot.py SPY --pit now
+    python3 scripts/earnings/macro_snapshot.py AAPL --pit now --source yahoo
 
     # Manual CLI: --session omitted, auto-inferred from PIT timestamp (fallback only)
     python3 scripts/earnings/macro_snapshot.py NOG --pit 2024-11-07T13:01:00-05:00
@@ -23,9 +27,12 @@ Note:
     from the 8-K Report node in Neo4j. Clock-time inference is only for manual/CLI convenience.
     The script behavior changes materially by session (which bars are PIT-safe, which are not).
 
+    --source yahoo provides real-time data via yfinance. Minute bars are limited to ~7 days
+    of history. For historical PIT analysis, use --source polygon (default).
+
 Environment:
     NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
-    POLYGON_API_KEY
+    POLYGON_API_KEY (polygon source only)
     BENZINGA_API_KEY (via pit_fetch.py)
 """
 from __future__ import annotations
@@ -98,6 +105,62 @@ def _polygon_minute(ticker: str, date_str: str, api_key: str) -> list[dict]:
             'close': r.get('c'), 'volume': r.get('v'),
         })
     return bars
+
+
+# ── Yahoo Finance helpers ────────────────────────────────────────────
+
+def _yahoo_daily(ticker: str, from_date: str, to_date: str) -> list[dict]:
+    """Fetch daily bars from Yahoo Finance (yfinance).
+    Returns same format as _polygon_daily for drop-in compatibility."""
+    import yfinance as yf
+    try:
+        # yfinance end is EXCLUSIVE — add 1 day to include to_date
+        end_dt = date_cls.fromisoformat(to_date) + timedelta(days=1)
+        df = yf.Ticker(ticker).history(start=from_date, end=end_dt.isoformat(),
+                                        auto_adjust=True)
+        if df is None or df.empty:
+            return []
+        bars = []
+        for idx, row in df.iterrows():
+            dt = idx.tz_localize(None) if hasattr(idx, 'tz_localize') and idx.tzinfo else idx
+            bars.append({
+                'date': dt.strftime('%Y-%m-%d'),
+                'open': float(row['Open']), 'high': float(row['High']),
+                'low': float(row['Low']), 'close': float(row['Close']),
+                'volume': int(row['Volume']),
+            })
+        return bars
+    except Exception as e:
+        print(f'Yahoo daily error ({ticker}): {e}', file=sys.stderr)
+        return []
+
+
+def _yahoo_minute(ticker: str, date_str: str) -> list[dict]:
+    """Fetch minute bars for a single day from Yahoo Finance.
+    Returns same format as _polygon_minute for drop-in compatibility.
+    Note: yfinance only provides ~7 days of 1-minute history."""
+    import yfinance as yf
+    try:
+        end_dt = date_cls.fromisoformat(date_str) + timedelta(days=1)
+        df = yf.Ticker(ticker).history(start=date_str, end=end_dt.isoformat(),
+                                        interval='1m')
+        if df is None or df.empty:
+            return []
+        bars = []
+        for idx, row in df.iterrows():
+            # .timestamp() converts timezone-aware datetime to UTC epoch
+            ts_ms = int(idx.timestamp() * 1000)
+            bars.append({
+                'ts_ms': ts_ms,
+                'ts_iso': idx.astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+                'open': float(row['Open']), 'high': float(row['High']),
+                'low': float(row['Low']), 'close': float(row['Close']),
+                'volume': int(row['Volume']),
+            })
+        return bars
+    except Exception as e:
+        print(f'Yahoo minute error ({ticker}): {e}', file=sys.stderr)
+        return []
 
 
 def _pct(a: float | None, b: float | None) -> float | None:
@@ -316,7 +379,7 @@ def _infer_market_session(pit_cutoff: str) -> str:
 
 
 def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | None = None,
-                          out_path: str | None = None) -> dict:
+                          out_path: str | None = None, source: str = 'polygon') -> dict:
     if not market_session:
         market_session = _infer_market_session(pit_cutoff)
 
@@ -330,49 +393,70 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
     year_start = f"{pit_d.year}-01-01"
     # 300 days back to cover 200-day MA + YTD
     daily_from = min((pit_d - timedelta(days=300)).isoformat(), year_start)
-    api_key = _load_polygon_key()
+
+    use_yahoo = source == 'yahoo'
+    api_key = '' if use_yahoo else _load_polygon_key()
+
+    # For live yahoo mode, treat today's partial bar as settled so current
+    # prices flow into all computations. Keep real market_session for display.
+    effective_session = 'post_market' if use_yahoo else market_session
 
     # ── 1. SPY minute bars for MARKET NOW ──
-    # Fetch for ALL sessions — pre_market has extended hours from 4 AM ET
     spy_minute = []
-    if api_key:
+    if use_yahoo:
+        spy_minute = _yahoo_minute('SPY', pit_date)
+    elif api_key:
         spy_minute = _polygon_minute('SPY', pit_date, api_key)
         time.sleep(0.3)  # rate limit courtesy
 
     # ── 2. SPY daily bars ──
     spy_daily = []
-    if api_key:
+    if use_yahoo:
+        spy_daily = _yahoo_daily('SPY', daily_from, pit_date)
+    elif api_key:
         spy_daily = _polygon_daily('SPY', daily_from, pit_date, api_key)
         time.sleep(0.3)
 
-    spy_now = _compute_spy_now(spy_minute, spy_daily, pit_cutoff, market_session)
+    spy_now = _compute_spy_now(spy_minute, spy_daily, pit_cutoff, effective_session)
 
     # ── 3. Other indicators (daily only) ──
     indicators = {}
-    if api_key:
-        for label, poly_ticker in INDICATOR_TICKERS.items():
-            bars = _polygon_daily(poly_ticker, daily_from, pit_date, api_key)
-            if bars:
-                metric = _compute_indicator_daily(bars, pit_date, market_session)
-                if metric:
-                    indicators[label] = metric
+    for label, ind_ticker in INDICATOR_TICKERS.items():
+        if use_yahoo:
+            bars = _yahoo_daily(ind_ticker, daily_from, pit_date)
+        elif api_key:
+            bars = _polygon_daily(ind_ticker, daily_from, pit_date, api_key)
+        else:
+            bars = []
+        if bars:
+            metric = _compute_indicator_daily(bars, pit_date, effective_session)
+            if metric:
+                indicators[label] = metric
+        if not use_yahoo and api_key:
             time.sleep(0.3)
 
-    # ── 3b. VIX absolute level (yfinance — previous day's settled close only) ──
-    # VIX settles at 4:15 PM ET. Even post_market filings (e.g., 4:03 PM) are
-    # before VIX settlement. So ALWAYS use the previous day's close — never today's.
+    # ── 3b. VIX level ──
     vix_level = None
+    vix_label = 'last settled close'
     try:
         import yfinance as yf
-        vix_start = (pit_d - timedelta(days=7)).isoformat()
-        vix_end = pit_d.isoformat()  # exclusive — excludes PIT date entirely
-        vix_hist = yf.Ticker('^VIX').history(start=vix_start, end=vix_end)
-        if not vix_hist.empty:
-            vix_hist.index = vix_hist.index.tz_localize(None) if vix_hist.index.tz else vix_hist.index
-            # Strictly before PIT date — previous day's settled close
-            valid = vix_hist[vix_hist.index.date < pit_d]
-            if not valid.empty:
-                vix_level = round(float(valid['Close'].iloc[-1]), 2)
+        if use_yahoo:
+            # Live mode: current VIX level
+            vix_level = round(float(yf.Ticker('^VIX').fast_info.last_price), 2)
+            vix_label = 'live'
+        else:
+            # PIT mode: previous day's settled close only.
+            # VIX settles at 4:15 PM ET. Even post_market filings (e.g., 4:03 PM)
+            # are before VIX settlement. ALWAYS use the previous day's close.
+            vix_start = (pit_d - timedelta(days=7)).isoformat()
+            vix_end = pit_d.isoformat()  # exclusive — excludes PIT date entirely
+            vix_hist = yf.Ticker('^VIX').history(start=vix_start, end=vix_end)
+            if not vix_hist.empty:
+                vix_hist.index = vix_hist.index.tz_localize(None) if vix_hist.index.tz else vix_hist.index
+                # Strictly before PIT date — previous day's settled close
+                valid = vix_hist[vix_hist.index.date < pit_d]
+                if not valid.empty:
+                    vix_level = round(float(valid['Close'].iloc[-1]), 2)
     except Exception as e:
         print(f'VIX (yfinance) error: {e}', file=sys.stderr)
 
@@ -397,8 +481,9 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
             ''', {'sector': sector_name, 'from': (pit_d - timedelta(days=10)).isoformat(), 'pit_date': pit_date})
 
             # PIT-safe: for in/pre_market, exclude today's unsettled bar
+            # (live yahoo mode uses effective_session=post_market to include today)
             if sec_rows:
-                if market_session != 'post_market':
+                if effective_session != 'post_market':
                     settled_sec = [r for r in sec_rows if r['date'] < pit_date]
                 else:
                     settled_sec = sec_rows
@@ -406,16 +491,16 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
                 last_sec = round(settled_sec[-1]['ret'], 2) if settled_sec else None
                 sec_5d = settled_sec[-5:] if len(settled_sec) >= 5 else settled_sec
                 sum_5d = round(sum(r['ret'] for r in sec_5d if r['ret']), 2)
-                sec_label = 'today' if market_session == 'post_market' else 'last close'
+                sec_label = 'today' if effective_session == 'post_market' else 'last close'
                 # Sector ETF intraday for in_market (e.g., XLK for Technology)
                 sec_open_to_pit = None
-                if market_session == 'in_market' and sector_etf and api_key:
+                if market_session == 'in_market' and sector_etf and (api_key or use_yahoo):
                     try:
                         _pit_dt = datetime.fromisoformat(pit_cutoff.replace('Z', '+00:00'))
                         _pit_ms = int(_pit_dt.timestamp() * 1000)
                     except ValueError:
                         _pit_ms = None
-                    sec_minute = _polygon_minute(sector_etf, pit_date, api_key)
+                    sec_minute = _yahoo_minute(sector_etf, pit_date) if use_yahoo else _polygon_minute(sector_etf, pit_date, api_key)
                     if sec_minute and _pit_ms:
                         sec_pit_bars = [b for b in sec_minute if b['ts_ms'] + 60_000 <= _pit_ms]
                         if sec_pit_bars and sec_minute:
@@ -503,10 +588,12 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
         'pit_cutoff': pit_cutoff,
         'pit_date': pit_date,
         'market_session': market_session,
+        'source': source,
 
         'market_now': {
             'spy': spy_now,
-            'vix_close': vix_level,  # last settled CBOE VIX close (reference, not live)
+            'vix_close': vix_level,
+            'vix_label': vix_label,
             'indicators': indicators,
             'sector': sector_info,
         },
@@ -539,11 +626,19 @@ def render_text(packet: dict) -> str:
     ticker = packet.get('ticker', '?')
     session = packet.get('market_session', '?')
 
-    session_note = {
-        'post_market': 'session settled',
-        'in_market': 'session in progress — session so far from minute bars',
-        'pre_market': 'session not started — yesterday is last session',
-    }.get(session, session)
+    is_live = packet.get('source') == 'yahoo'
+    if is_live:
+        session_note = {
+            'post_market': 'live — session settled',
+            'in_market': 'live — market open',
+            'pre_market': 'live — pre-market',
+        }.get(session, f'live — {session}')
+    else:
+        session_note = {
+            'post_market': 'session settled',
+            'in_market': 'session in progress — session so far from minute bars',
+            'pre_market': 'session not started — yesterday is last session',
+        }.get(session, session)
 
     lines.append(f'=== MACRO CONTEXT at {pit} ({ticker}, {session}) ===')
     lines.append('')
@@ -573,10 +668,10 @@ def render_text(packet: dict) -> str:
         if trend_parts:
             lines.append(f'  Trend: {" | ".join(trend_parts)}')
 
-        # VIX absolute level (last settled CBOE close — reference, not live)
         vix = packet.get('market_now', {}).get('vix_close')
+        vix_lbl = packet.get('market_now', {}).get('vix_label', 'last settled close')
         if vix is not None:
-            lines.append(f'  VIX: {vix:.1f} (last settled close)')
+            lines.append(f'  VIX: {vix:.1f} ({vix_lbl})')
 
         vr = spy.get('volume_ratio')
         if vr:
@@ -703,13 +798,16 @@ def render_text(packet: dict) -> str:
 
 def main():
     if len(sys.argv) < 2 or '--help' in sys.argv:
-        print('Usage: macro_snapshot.py TICKER --pit ISO8601 [--session post_market|in_market|pre_market] [--out-path PATH]',
+        print('Usage: macro_snapshot.py TICKER --pit ISO8601|now [--session post_market|in_market|pre_market]',
               file=sys.stderr)
-        print('  --session is optional — inferred from PIT timestamp if omitted', file=sys.stderr)
+        print('       [--source polygon|yahoo] [--out-path PATH]', file=sys.stderr)
+        print('  --pit now     use current time + auto-select yahoo source', file=sys.stderr)
+        print('  --source      polygon (default, PIT-safe) or yahoo (live, real-time)', file=sys.stderr)
+        print('  --session     optional — inferred from PIT timestamp if omitted', file=sys.stderr)
         sys.exit(1)
 
     ticker = sys.argv[1].upper()
-    pit = session = out_path = None
+    pit = session = out_path = source = None
 
     if '--pit' in sys.argv:
         idx = sys.argv.index('--pit')
@@ -723,12 +821,25 @@ def main():
         idx = sys.argv.index('--out-path')
         if idx + 1 < len(sys.argv):
             out_path = sys.argv[idx + 1]
+    if '--source' in sys.argv:
+        idx = sys.argv.index('--source')
+        if idx + 1 < len(sys.argv):
+            source = sys.argv[idx + 1]
 
     if not pit:
         print('Error: --pit required', file=sys.stderr)
         sys.exit(1)
 
-    packet = build_macro_snapshot(ticker, pit, session, out_path)
+    # --pit now: resolve to current timestamp, default to yahoo
+    if pit == 'now':
+        pit = datetime.now(timezone.utc).astimezone().isoformat()
+        if not source:
+            source = 'yahoo'
+
+    if not source:
+        source = 'polygon'
+
+    packet = build_macro_snapshot(ticker, pit, session, out_path, source)
     print(render_text(packet))
 
 
