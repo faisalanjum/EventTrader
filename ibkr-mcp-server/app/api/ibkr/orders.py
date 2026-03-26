@@ -80,9 +80,12 @@ class AdvancedOrderRequest(BaseModel):
 
     To add a field: uncomment it below. The service auto-maps it.
     """
-    # ── Contract (required) ──
-    symbol: str = Field(description="Ticker symbol")
-    sec_type: str = Field(default="STK", description="Security type (STK for stocks/ETFs, use conId for options/futures)")
+    model_config = {"extra": "forbid"}  # reject unknown/misspelled fields
+
+    # ── Contract (required — use EITHER symbol OR conId) ──
+    symbol: str | None = Field(default=None, description="Ticker symbol (e.g. AAPL). Use symbol OR conId, not both.")
+    conId: int | None = Field(default=None, description="Contract ID — use for options, futures, or any unambiguous contract lookup. Overrides symbol if both provided.")
+    sec_type: str = Field(default="STK", description="Security type (STK for stocks/ETFs, OPT, FUT, etc.)")
     exchange: str = Field(default="SMART", description="Exchange")
     currency: str = Field(default="USD", description="Currency")
 
@@ -347,10 +350,11 @@ async def place_advanced_order(req: AdvancedOrderRequest) -> dict:
       Adaptive: orderType="LMT", lmtPrice=250, algoStrategy="Adaptive",
                algoParams={"adaptivePriority": "Normal"}
       Trailing limit: orderType="TRAIL LIMIT", auxPrice=2, lmtPriceOffset=0.50
-      WhatIf: any order + whatIf=true (returns margin/commission, no fill)
+      WhatIf: any order + whatIf=true (simulates only, order NOT placed)
+      Options/Futures: use conId instead of symbol (e.g. conId=265598 for AAPL stock)
     """
     # Extract contract fields
-    contract_fields = {"symbol", "sec_type", "exchange", "currency", "action", "quantity", "orderType"}
+    contract_fields = {"symbol", "conId", "sec_type", "exchange", "currency", "action", "quantity", "orderType"}
     order_fields = {}
     for field_name, value in req.model_dump(exclude_none=True).items():
         if field_name not in contract_fields:
@@ -360,6 +364,7 @@ async def place_advanced_order(req: AdvancedOrderRequest) -> dict:
         return await ib_interface.advanced_order(
             req.symbol, req.sec_type, req.exchange, req.currency,
             req.action.value, req.quantity, req.orderType,
+            conId=req.conId,
             **order_fields,
         )
     except ValueError as e:

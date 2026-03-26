@@ -139,26 +139,36 @@ class OrderClient:
 
     # ── Generic advanced order (handles ALL order types) ─────────────
 
-    async def advanced_order(self, symbol: str, sec_type: str, exchange: str,
+    async def advanced_order(self, symbol: str | None, sec_type: str, exchange: str,
                               currency: str, action: str, quantity: float,
-                              order_type: str, **order_fields) -> dict:
+                              order_type: str, conId: int | None = None,
+                              **order_fields) -> dict:
         """Place any order type by setting fields directly on ib_async Order.
 
         Args:
-            symbol, sec_type, exchange, currency: Contract identification.
+            symbol: Ticker symbol (for stocks/ETFs). Use symbol OR conId.
+            conId: Contract ID (for options, futures, or unambiguous lookup).
+            sec_type, exchange, currency: Contract identification.
             action: BUY or SELL.
             quantity: Number of shares/contracts.
             order_type: IB order type string (MKT, LMT, STP, STP LMT, TRAIL,
                         TRAIL LIMIT, MOC, LOC, MIT, LIT, MKT PRT, MIDPRICE, etc.)
             **order_fields: Any ib_async Order field name → value.
-                            Only non-None values are set. Field names must match
-                            ib_async exactly (camelCase).
 
         Returns:
             dict with order status, fill info, and IDs.
         """
+        if not symbol and not conId:
+            raise ValueError("Either symbol or conId must be provided")
+
         await self._connect_orders()
-        contract = await self._qualify(symbol, sec_type, exchange, currency)
+
+        if conId:
+            from ib_async.contract import Contract
+            contract = Contract(conId=conId)
+            [contract] = await self._order_ib.qualifyContractsAsync(contract)
+        else:
+            contract = await self._qualify(symbol, sec_type, exchange, currency)
 
         order = Order(
             action=action.upper(),
