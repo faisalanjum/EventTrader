@@ -46,7 +46,10 @@ from datetime import datetime, timedelta, date as date_cls, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from neograph.Neo4jConnection import get_manager
+try:
+    from neograph.Neo4jConnection import get_manager
+except ImportError:
+    sys.exit('macro_snapshot requires the project venv — run: source venv/bin/activate')
 
 PIT_FETCH = str(Path(__file__).resolve().parents[2] / '.claude' / 'skills' / 'earnings-orchestrator' / 'scripts' / 'pit_fetch.py')
 
@@ -491,7 +494,10 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
                 last_sec = round(settled_sec[-1]['ret'], 2) if settled_sec else None
                 sec_5d = settled_sec[-5:] if len(settled_sec) >= 5 else settled_sec
                 sum_5d = round(sum(r['ret'] for r in sec_5d if r['ret']), 2)
-                sec_label = 'today' if effective_session == 'post_market' else 'last close'
+                # Only label "today" if the latest sector row is actually from today
+                # (Neo4j sector data may lag behind live Yahoo market data)
+                has_today = settled_sec and settled_sec[-1]['date'] == pit_date
+                sec_label = 'today' if effective_session == 'post_market' and has_today else 'last close'
                 # Sector ETF intraday for in_market (e.g., XLK for Technology)
                 sec_open_to_pit = None
                 if market_session == 'in_market' and sector_etf and (api_key or use_yahoo):
@@ -830,9 +836,11 @@ def main():
         print('Error: --pit required', file=sys.stderr)
         sys.exit(1)
 
-    # --pit now: resolve to current timestamp, default to yahoo
+    # --pit now: resolve to current timestamp in US/Eastern (market TZ),
+    # not host-local TZ — avoids wrong trading date on UTC servers.
     if pit == 'now':
-        pit = datetime.now(timezone.utc).astimezone().isoformat()
+        import pytz
+        pit = datetime.now(pytz.timezone('US/Eastern')).isoformat()
         if not source:
             source = 'yahoo'
 
