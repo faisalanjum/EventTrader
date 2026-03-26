@@ -31,12 +31,13 @@ Permissions pre-allowed in `.claude/settings.json`: `mcp__ibkr-live`, `mcp__ibkr
 - **Live**: READ_ONLY_API=no. Account summary, positions, historical bars, scanner all work. **Prices return null** — IB API market data subscription not enabled (TWS-only subscription). Enable in IB Account Management for real-time.
 - **Paper**: Full access. Prices, positions, account ($1.1M CAD paper balance), historical, scanner all work. Trading enabled.
 - **Market data types**: Live = type 1 (real-time) / type 2 (frozen post-market). Paper = type 3 (delayed). This is hardcoded in `app/services/history.py` and `app/services/market_data.py`.
-- **Custom code** in `/home/faisal/ibkr-mcp-server/` (local fork of omdv, committed locally, Docker image deployed):
+- **Custom code** in `ibkr-mcp-server/` (local fork of omdv, also at `/home/faisal/ibkr-mcp-server/`):
   - `get_account_summary` — balances, margins, PnL
   - `get_positions` null crash fix
-  - Full order management: market, limit, stop, bracket, trailing stop, bracket+trailing, advanced (any IB type), modify, cancel, open orders
+  - Order management: market, limit, stop, bracket, trailing stop, bracket+trailing, advanced (any IB type via conId or symbol), modify, cancel, open orders
   - OrderClient uses dedicated IB() connection (clientId=1) separate from market data
-  - Advanced endpoint auto-maps any ib_async Order field — ~40 more commented for easy activation
+  - Advanced endpoint: `extra="forbid"` rejects typos, conId for options/futures, auto-maps any ib_async Order field
+  - ~40 more Order fields commented in AdvancedOrderRequest for easy activation
 
 ## K8s Files
 
@@ -69,10 +70,10 @@ Both gateways auto-restart daily at 06:00 AM via `AUTO_RESTART_TIME`.
 
 ## Enable Live Trading
 
+Live currently has `READ_ONLY_API=no` (account data works, order endpoints exist but untested on live).
 ```bash
-# Already set to no — this is the current state
-# To revert to read-only: change "no" to "yes"
-kubectl set env deployment/ibkr-ib-gateway -n mcp-services READ_ONLY_API=no
+# To lock down to read-only:
+kubectl set env deployment/ibkr-ib-gateway -n mcp-services READ_ONLY_API=yes
 ```
 
 ## Rebuild MCP Server After Code Changes
