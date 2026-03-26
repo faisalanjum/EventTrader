@@ -1,0 +1,63 @@
+[project]
+name = "ibkr-mcp-server"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "fastapi>=0.68.2",
+  "uvicorn[standard]>=0.15.0",
+  "requests>=2.31.0",
+  "python-dotenv>=1.0.0",
+  "ib_async>=0.3.0",
+  "pydantic>=1.10.13",
+  "httpx>=0.18.2",
+  "docker>=7.1.0",
+  "asyncio>=3.4.3",
+  "pydantic-settings>=2.10.1",
+  "loguru>=0.7.3",
+  "mcp>=1.10.1",
+  "pandas>=2.3.0",
+  "exchange-calendars>=4.10.1",
+  "defusedxml>=0.7.1",
+  "fastapi-mcp>=0.3.4",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+indent-width = 2
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "I001",
+  "G004",
+  "INP001",
+  "S603",
+  "S301",
+  "PLR2004",
+  "F403",
+  "N815", # mixed case in class variables
+  "E402", # module level import not at top of file
+  "BLE001", # blind exceptions
+  "FBT001", # boolean positional arg — unavoidable for FastAPI query params
+  "FBT002", # boolean default positional arg — same reason
+  "PLR0913", # too many arguments — FastAPI endpoints routinely exceed 5
+  "TRY003", # long exception messages — acceptable for clear error messages
+  "EM101",  # string literal in exception — pairs with TRY003
+  "DTZ011", # date.today() without timezone — date has no tz concept
+  "COM812", # trailing comma — conflicts with ruff formatter
+]
+
+# Formatter settings
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.1",
+]

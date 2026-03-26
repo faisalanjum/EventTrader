@@ -1,0 +1,37 @@
+{{- if .Values.mcpServer.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "ibkr.fullname" . }}-ingress
+  labels:
+    {{- include "ibkr.labels" . | nindent 4 }}
+  {{- with .Values.mcpServer.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.mcpServer.ingress.className }}
+  ingressClassName: {{ .Values.mcpServer.ingress.className }}
+  {{- end }}
+  {{- if .Values.mcpServer.ingress.tls }}
+  tls:
+  {{- range .Values.mcpServer.ingress.tls }}
+  - hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    secretName: {{ .secretName }}
+  {{- end }}
+  {{- end }}
+  rules:
+  - host: {{ .Values.mcpServer.ingress.host }}
+    http:
+      paths:
+      - path: {{ .Values.mcpServer.ingress.path }}
+        pathType: {{ .Values.mcpServer.ingress.pathType }}
+        backend:
+          service:
+            name: {{ include "ibkr.fullname" . }}
+            port:
+              number: {{ .Values.mcpServer.service.port }}
+{{- end }}

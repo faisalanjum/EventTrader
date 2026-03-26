@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ibkr.fullname" . }}-ib-gateway
+  labels:
+    {{- include "ibkr.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ib-gateway
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "ibkr.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: ib-gateway
+  template:
+    metadata:
+      labels:
+        {{- include "ibkr.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: ib-gateway
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: ib-gateway
+        image: "{{ .Values.ibGateway.image.repository }}:{{ .Values.ibGateway.image.tag }}"
+        imagePullPolicy: {{ .Values.ibGateway.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.ibGateway.service.ports.vnc }}
+        - containerPort: {{ .Values.ibGateway.service.ports.api }}
+        - containerPort: {{ .Values.ibGateway.service.ports.command }}
+        securityContext:
+          capabilities:
+            add:
+              - SYS_RESOURCE
+        resources:
+          {{- toYaml .Values.ibGateway.resources | nindent 10 }}
+        env:
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "ibkr.gatewaySecretName" . }}
+              key: username
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "ibkr.gatewaySecretName" . }}
+              key: password
+        envFrom:
+        - configMapRef:
+            name: {{ include "ibkr.fullname" . }}-config
+        startupProbe:
+          tcpSocket:
+            port: 4001
+          periodSeconds: {{ .Values.ibGateway.startupProbe.periodSeconds }}
+          failureThreshold: {{ .Values.ibGateway.startupProbe.failureThreshold }}
+          timeoutSeconds: {{ .Values.ibGateway.startupProbe.timeoutSeconds }}
+        readinessProbe:
+          tcpSocket:
+            port: 4001
+          periodSeconds: 30
+          failureThreshold: 3
+          timeoutSeconds: 5
+      restartPolicy: Always

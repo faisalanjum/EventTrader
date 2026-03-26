@@ -1,0 +1,41 @@
+# Run once: podman compose -f docker-compose.gateway.yaml up -d
+# The gateway container stays alive independently of the MCP server.
+---
+services:
+  ib-gateway:
+    image: ghcr.io/extrange/ibkr:10.39
+    ports:
+      - "6080:6080"
+      - "8888:8888"
+      - "7462:7462"
+    ulimits:
+      nofile: 10000
+    environment:
+      USERNAME: ${IBKR_IB_GATEWAY_USERNAME}
+      PASSWORD: ${IBKR_IB_GATEWAY_PASSWORD}
+      TWOFA_TIMEOUT_ACTION: restart
+      GATEWAY_OR_TWS: gateway
+      IBC_TradingMode: live
+      IBC_ReadOnlyApi: "no"
+      IBC_ReloginAfterSecondFactorAuthenticationTimeout: "yes"
+      IBC_AutoRestartTime: "08:35 AM"
+      IBC_ColdRestartTime: "10:00"
+      IBC_ExistingSessionDetectedAction: primaryoverride
+      IBC_AcceptIncomingConnectionAction: accept
+      IBC_AcceptBidAskLastSizeDisplayUpdateNotification: defer
+      IBC_CommandServerPort: 7462
+      IBC_ControlFrom: "0.0.0.0"
+      IBC_BindAddress: "0.0.0.0"
+    restart: always
+    healthcheck:
+      test: timeout 3 bash -c 'echo > /dev/tcp/localhost/8888' || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+    networks:
+      - ibkr-net
+
+networks:
+  ibkr-net:
+    name: ibkr-net

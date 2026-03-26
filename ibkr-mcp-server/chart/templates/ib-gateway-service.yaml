@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ibkr.fullname" . }}-ib-gateway
+  labels:
+    {{- include "ibkr.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ib-gateway
+spec:
+  selector:
+    {{- include "ibkr.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: ib-gateway
+  ports:
+  - name: vnc
+    port: {{ .Values.ibGateway.service.ports.vnc }}
+    targetPort: {{ .Values.ibGateway.service.ports.vnc }}
+  - name: api
+    port: {{ .Values.ibGateway.service.ports.api }}
+    targetPort: {{ .Values.ibGateway.service.ports.api }}
+  - name: command
+    port: {{ .Values.ibGateway.service.ports.command }}
+    targetPort: {{ .Values.ibGateway.service.ports.command }}
+  type: {{ .Values.ibGateway.service.type }}

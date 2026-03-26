@@ -1,0 +1,29 @@
+{{- if .Values.networkPolicy.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "ibkr.fullname" . }}-ib-gateway-network-policy
+  labels:
+    {{- include "ibkr.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "ibkr.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: ib-gateway
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          {{- include "ibkr.selectorLabels" . | nindent 10 }}
+    ports:
+    - protocol: TCP
+      port: {{ .Values.ibGateway.service.ports.api }}
+    - protocol: TCP
+      port: {{ .Values.ibGateway.service.ports.command }}
+  - from: []
+    ports:
+    - protocol: TCP
+      port: {{ .Values.ibGateway.service.ports.vnc }}
+{{- end }}

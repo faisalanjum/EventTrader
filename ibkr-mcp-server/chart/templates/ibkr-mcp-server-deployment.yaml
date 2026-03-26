@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ibkr.fullname" . }}
+  labels:
+    {{- include "ibkr.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.mcpServer.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "ibkr.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ibkr.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: ibkr-mcp-server
+        image: "{{ .Values.mcpServer.image.repository }}:{{ .Values.mcpServer.image.tag }}"
+        imagePullPolicy: {{ .Values.mcpServer.image.pullPolicy }}
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+        resources:
+          {{- toYaml .Values.mcpServer.resources | nindent 10 }}
+        ports:
+        - containerPort: {{ .Values.mcpServer.service.port }}
+        env:
+        - name: IBKR_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "ibkr.mcpAuthSecretName" . }}
+              key: authToken
+        - name: IBKR_CORS_ALLOWED_ORIGINS
+          value: {{ .Values.config.corsAllowedOrigins | quote }}
+        envFrom:
+        - configMapRef:
+            name: {{ include "ibkr.fullname" . }}-config
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.mcpServer.service.port }}
+          initialDelaySeconds: {{ .Values.mcpServer.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.mcpServer.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.mcpServer.livenessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.mcpServer.livenessProbe.failureThreshold }}
+        readinessProbe:
+          httpGet:
+            path: /gateway/status
+            port: {{ .Values.mcpServer.service.port }}
+          initialDelaySeconds: {{ .Values.mcpServer.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.mcpServer.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.mcpServer.readinessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.mcpServer.readinessProbe.failureThreshold }}
+      restartPolicy: Always
+      initContainers:
+      - name: wait-for-ib-gateway
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nc -z -w 5 {{ include "ibkr.fullname" . }}-ib-gateway {{ .Values.ibGateway.service.ports.api }}; do echo "Waiting for ib-gateway API..."; sleep 5; done; echo "ib-gateway API is ready."']

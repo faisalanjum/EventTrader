@@ -1,0 +1,14 @@
+apiVersion: v2
+name: ibkr
+description: A Helm chart for IBKR MCP Server with IB Gateway
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - ibkr
+  - interactive-brokers
+  - mcp-server
+  - trading
+home: https://github.com/omdv/ibkr-mcp-server
+maintainers:
+  - name: omdv

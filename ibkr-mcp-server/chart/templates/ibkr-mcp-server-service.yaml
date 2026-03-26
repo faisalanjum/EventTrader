@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ibkr.fullname" . }}
+  labels:
+    {{- include "ibkr.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "ibkr.selectorLabels" . | nindent 4 }}
+  ports:
+  - name: http
+    port: {{ .Values.mcpServer.service.port }}
+    targetPort: {{ .Values.mcpServer.service.port }}
+  type: {{ .Values.mcpServer.service.type }}
