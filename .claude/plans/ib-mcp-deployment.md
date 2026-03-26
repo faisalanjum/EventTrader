@@ -31,7 +31,12 @@ Permissions pre-allowed in `.claude/settings.json`: `mcp__ibkr-live`, `mcp__ibkr
 - **Live**: READ_ONLY_API=no. Account summary, positions, historical bars, scanner all work. **Prices return null** — IB API market data subscription not enabled (TWS-only subscription). Enable in IB Account Management for real-time.
 - **Paper**: Full access. Prices, positions, account ($1.1M CAD paper balance), historical, scanner all work. Trading enabled.
 - **Market data types**: Live = type 1 (real-time) / type 2 (frozen post-market). Paper = type 3 (delayed). This is hardcoded in `app/services/history.py` and `app/services/market_data.py`.
-- **Custom code**: We added `get_account_summary` endpoint and fixed `get_positions` null crash in the local omdv clone at `/home/faisal/ibkr-mcp-server/`.
+- **Custom code** in `/home/faisal/ibkr-mcp-server/` (local fork of omdv, committed locally, Docker image deployed):
+  - `get_account_summary` — balances, margins, PnL
+  - `get_positions` null crash fix
+  - Full order management: market, limit, stop, bracket, trailing stop, bracket+trailing, advanced (any IB type), modify, cancel, open orders
+  - OrderClient uses dedicated IB() connection (clientId=1) separate from market data
+  - Advanced endpoint auto-maps any ib_async Order field — ~40 more commented for easy activation
 
 ## K8s Files
 
