@@ -1,0 +1,88 @@
+# IBKR MCP Server — Helm Values (Live MCP only)
+# Paper gateway + paper MCP are managed via separate manifests:
+#   k8s/mcp-services/ibkr-paper-gateway.yaml
+#   k8s/mcp-services/ibkr-paper-mcp.yaml
+#
+# This Helm chart manages: ibkr-ib-gateway (live) + ibkr MCP server (live)
+# NodePort 31100 = live MCP, NodePort 31101 = paper MCP (separate manifest)
+
+ibGateway:
+  image:
+    repository: ghcr.io/gnzsnz/ib-gateway
+    tag: "stable"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    ports:
+      vnc: 6080
+      api: 8888
+      command: 7462
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 2Gi
+  startupProbe:
+    periodSeconds: 30
+    failureThreshold: 40
+    timeoutSeconds: 5
+
+mcpServer:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/omdv/ibkr-mcp-server
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  service:
+    type: NodePort
+    port: 8000
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  ingress:
+    enabled: false
+
+config:
+  twoFaTimeoutAction: "restart"
+  ibcTradingMode: "live"
+  ibcReadOnlyApi: "yes"
+  ibcReloginAfterSecondFactorAuthenticationTimeout: "yes"
+  ibcAutoRestartTime: "06:00 AM"
+  ibcColdRestartTime: "10:00"
+  ibcExistingSessionDetectedAction: "primaryoverride"
+  ibcAcceptIncomingConnectionAction: "accept"
+  ibcAcceptBidAskLastSizeDisplayUpdateNotification: "defer"
+  ibcCommandServerPort: "7462"
+  ibcControlFrom: "127.0.0.1"
+  ibcBindAddress: "127.0.0.1"
+  ibkrLogLevel: "INFO"
+  corsAllowedOrigins: "*"
+  enableMcp: "true"
+
+gatewaySecret:
+  existingSecret: "ibkr-credentials"
+
+mcpAuth:
+  create: true
+  authToken: ""
+
+networkPolicy:
+  enabled: false
+
+nodeSelector:
+  kubernetes.io/hostname: minisforum
+
+tolerations:
+- effect: NoSchedule
+  key: node-role.kubernetes.io/control-plane
+  operator: Exists
+- effect: NoSchedule
+  key: dedicated
+  operator: Equal
+  value: graph

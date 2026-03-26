@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibkr-paper
+  namespace: mcp-services
+  labels:
+    app.kubernetes.io/instance: ibkr
+    app.kubernetes.io/name: ibkr
+    app.kubernetes.io/component: mcp-paper
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ibkr
+      app.kubernetes.io/component: mcp-paper
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: ibkr
+        app.kubernetes.io/name: ibkr
+        app.kubernetes.io/component: mcp-paper
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      - effect: NoSchedule
+        key: dedicated
+        operator: Equal
+        value: graph
+      initContainers:
+      - name: wait-for-ib-gateway
+        image: busybox:1.28
+        command: ["sh", "-c", "until nc -z -w 5 ibkr-paper-gateway 4004; do echo 'Waiting for IB Gateway paper API...'; sleep 5; done; echo 'IB Gateway paper API ready.'"]
+      containers:
+      - name: ibkr-mcp-server
+        image: ghcr.io/omdv/ibkr-mcp-server:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: IBKR_GATEWAY_MODE
+          value: "external"
+        - name: IBKR_IB_GATEWAY_HOST
+          value: "ibkr-paper-gateway"
+        - name: IBKR_IB_GATEWAY_PORT
+          value: "4004"
+        - name: IBKR_APPLICATION_HOST
+          value: "0.0.0.0"
+        - name: IBKR_APPLICATION_PORT
+          value: "8000"
+        - name: IBKR_LOG_LEVEL
+          value: "INFO"
+        - name: IBKR_ENABLE_MCP
+          value: "true"
+        - name: IBKR_CORS_ALLOWED_ORIGINS
+          value: "*"
+        - name: IBKR_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: ibkr-paper-mcp-auth
+              key: authToken
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /gateway/status
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 25
+          failureThreshold: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ibkr-paper
+  namespace: mcp-services
+  labels:
+    app.kubernetes.io/instance: ibkr
+    app.kubernetes.io/component: mcp-paper
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/instance: ibkr
+    app.kubernetes.io/component: mcp-paper
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+    nodePort: 31101
+    protocol: TCP

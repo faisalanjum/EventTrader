@@ -28,6 +28,20 @@
       "type": "stdio",
       "command": "npx",
       "args": ["@mauricio.wolff/mcp-obsidian@latest", "/home/faisal/Obsidian/EventTrader/Earnings/earnings-analysis"]
+    },
+    "ibkr-live": {
+      "type": "sse",
+      "url": "http://localhost:31100/mcp",
+      "headers": {
+        "Authorization": "Bearer HAZ9nnRxbhBCwWiMTFGWb05YqTEY134d"
+      }
+    },
+    "ibkr-paper": {
+      "type": "sse",
+      "url": "http://localhost:31101/mcp",
+      "headers": {
+        "Authorization": "Bearer Lgqn5pk8GRb1504c1k0LOEs6hTqjyva"
+      }
     }
   }
 }

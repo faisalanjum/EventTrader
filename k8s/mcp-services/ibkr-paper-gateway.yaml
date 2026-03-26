@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibkr-paper-gateway
+  namespace: mcp-services
+  labels:
+    app.kubernetes.io/instance: ibkr
+    app.kubernetes.io/component: paper-gateway
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ibkr
+      app.kubernetes.io/component: paper-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: ibkr
+        app.kubernetes.io/component: paper-gateway
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minisforum
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      containers:
+      - name: ib-gateway
+        image: ghcr.io/gnzsnz/ib-gateway:stable
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 4002
+        - containerPort: 4004
+        securityContext:
+          capabilities:
+            add:
+            - SYS_RESOURCE
+        env:
+        - name: TWS_USERID
+          valueFrom:
+            secretKeyRef:
+              name: ibkr-credentials
+              key: username
+        - name: TWS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ibkr-credentials
+              key: password
+        - name: TRADING_MODE
+          value: "paper"
+        - name: READ_ONLY_API
+          value: "no"
+        - name: TWOFA_TIMEOUT_ACTION
+          value: "restart"
+        - name: RELOGIN_AFTER_TWOFA_TIMEOUT
+          value: "yes"
+        - name: EXISTING_SESSION_DETECTED_ACTION
+          value: "secondary"
+        - name: AUTO_RESTART_TIME
+          value: "06:00 AM"
+        - name: ACCEPT_NON_BROKERAGE_ACCOUNT_WARNING
+          value: "yes"
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+          limits:
+            cpu: 1
+            memory: 2Gi
+        startupProbe:
+          tcpSocket:
+            port: 4002
+          periodSeconds: 30
+          failureThreshold: 40
+          timeoutSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 4002
+          periodSeconds: 30
+          failureThreshold: 3
+          timeoutSeconds: 5
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ibkr-paper-gateway
+  namespace: mcp-services
+  labels:
+    app.kubernetes.io/instance: ibkr
+    app.kubernetes.io/component: paper-gateway
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/instance: ibkr
+    app.kubernetes.io/component: paper-gateway
+  ports:
+  - name: tws-paper
+    port: 4004
+    targetPort: 4004
+  - name: tws-paper-internal
+    port: 4002
+    targetPort: 4002

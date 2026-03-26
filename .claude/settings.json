@@ -15,7 +15,9 @@
       "mcp__neo4j-cypher",
       "mcp__perplexity",
       "mcp__alphavantage",
-      "mcp__obsidian"
+      "mcp__obsidian",
+      "mcp__ibkr-live",
+      "mcp__ibkr-paper"
     ]
   },
   "env": {
