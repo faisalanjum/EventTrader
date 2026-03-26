@@ -95,7 +95,7 @@ class OrderClient:
         trades = []
         for order in bracket:
             trades.append(self._order_ib.placeOrder(contract, order))
-        await asyncio.sleep(2)
+        await self._wait_for_status(trades[0])  # wait for parent
         return [_trade_to_dict(t) for t in trades]
 
     async def place_bracket_with_trailing_stop(self, symbol, sec_type, exchange, currency, action, quantity,
@@ -134,7 +134,7 @@ class OrderClient:
         trades = []
         for order in [parent, take_profit, trail_stop]:
             trades.append(self._order_ib.placeOrder(contract, order))
-        await asyncio.sleep(2)
+        await self._wait_for_status(trades[0])  # wait for parent
         return [_trade_to_dict(t) for t in trades]
 
     # ── Generic advanced order (handles ALL order types) ─────────────
@@ -187,7 +187,7 @@ class OrderClient:
                 raise ValueError(f"Unknown Order field '{field_name}' — check ib_async Order docs")
 
         trade = self._order_ib.placeOrder(contract, order)
-        await asyncio.sleep(2)
+        await self._wait_for_status(trade)
         return _trade_to_dict(trade)
 
     # ── Order management ─────────────────────────────────────────────
@@ -197,26 +197,53 @@ class OrderClient:
             raise ValueError("At least one of limit_price, stop_price, or quantity must be provided")
         await self._connect_orders()
         target = self._find_trade(order_id)
+        otype = target.order.orderType
+
+        # Validate field applicability per order type
         if limit_price is not None:
+            if otype not in ("LMT", "STP LMT", "LIT", "LOC", "MIDPRICE", "TRAIL LIMIT"):
+                raise ValueError(f"limit_price not applicable to {otype} orders")
             target.order.lmtPrice = limit_price
         if stop_price is not None:
+            if otype not in ("STP", "STP LMT", "MIT", "LIT", "TRAIL"):
+                raise ValueError(f"stop_price not applicable to {otype} orders")
             target.order.auxPrice = stop_price
         if quantity is not None:
             target.order.totalQuantity = quantity
+
         self._order_ib.placeOrder(target.contract, target.order)
-        await asyncio.sleep(2)
-        return _trade_to_dict(target)
+        trade = target
+        await self._wait_for_status(trade)
+        return _trade_to_dict(trade)
 
     async def cancel_order(self, order_id: int):
         await self._connect_orders()
         target = self._find_trade(order_id)
         self._order_ib.cancelOrder(target.order)
-        await asyncio.sleep(2)
+        await self._wait_for_status(target)
         return _trade_to_dict(target)
 
     async def get_open_orders(self):
         await self._connect_orders()
         return [_trade_to_dict(t) for t in self._order_ib.openTrades()]
+
+    async def _wait_for_status(self, trade: Trade, timeout: float = 5.0) -> None:
+        """Wait for trade status to change from initial state, or timeout.
+
+        Uses await asyncio.sleep() to yield to the event loop, which lets
+        ib_async process incoming TWS messages and update trade status.
+        No IB.sleep() — that calls run_until_complete() which crashes
+        inside an already-running async context.
+        """
+        deadline = asyncio.get_event_loop().time() + timeout
+        initial = trade.orderStatus.status
+        while asyncio.get_event_loop().time() < deadline:
+            await asyncio.sleep(0.1)  # yield — ib_async processes messages
+            current = trade.orderStatus.status
+            if current != initial:
+                return
+            if current in ("Filled", "Cancelled", "Inactive", "ApiCancelled"):
+                return
 
     def _find_trade(self, order_id: int) -> Trade:
         for trade in self._order_ib.openTrades():
