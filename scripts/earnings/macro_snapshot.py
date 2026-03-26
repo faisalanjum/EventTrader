@@ -279,7 +279,8 @@ def _compute_indicator_daily(daily_bars: list[dict], pit_date: str,
 
 INDICATOR_TICKERS = {
     'Vol proxy (VIXY)': 'VIXY',
-    'Rates proxy (TLT)': 'TLT',
+    'Rates long (TLT)': 'TLT',   # 20Y+ Treasury — long end
+    'Rates short (SHY)': 'SHY',  # 1-3Y Treasury — short end. SHY/TLT divergence = curve shape
     'Credit (HYG)': 'HYG',       # High Yield — THE risk/fragility signal
     'Small Cap (IWM)': 'IWM',    # Russell 2000 — rotation/broad risk appetite
     'Oil proxy (USO)': 'USO',
