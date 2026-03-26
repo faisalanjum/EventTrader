@@ -12,8 +12,16 @@ Session-aware:
   pre_market   → session not started, yesterday is "last session"
 
 Usage:
+    # Orchestrator: pass --session explicitly from 8-K's r.market_session (source of truth)
     python3 scripts/earnings/macro_snapshot.py CRM --pit 2025-02-26T16:03:55-05:00 --session post_market
-    python3 scripts/earnings/macro_snapshot.py NOG --pit 2024-11-07T13:01:00-05:00 --session in_market
+
+    # Manual CLI: --session omitted, auto-inferred from PIT timestamp (fallback only)
+    python3 scripts/earnings/macro_snapshot.py NOG --pit 2024-11-07T13:01:00-05:00
+
+Note:
+    --session should always be passed by the orchestrator using the stored r.market_session
+    from the 8-K Report node in Neo4j. Clock-time inference is only for manual/CLI convenience.
+    The script behavior changes materially by session (which bars are PIT-safe, which are not).
 
 Environment:
     NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD
