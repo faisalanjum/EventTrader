@@ -114,8 +114,15 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
 
     pit_date = pit_cutoff[:10]
 
-    # Daily bars: yesterday, 5d, 20d, YTD
-    valid_daily = [b for b in daily_bars if b['date'] <= pit_date]
+    # Daily bars for regime. PIT-SAFE: for in_market/pre_market, exclude today's
+    # daily bar (it includes post-PIT trading). Only post_market can use today's bar.
+    all_daily = [b for b in daily_bars if b['date'] <= pit_date]
+    if market_session != 'post_market':
+        # Exclude today — not settled at PIT time
+        settled_daily = [b for b in all_daily if b['date'] < pit_date]
+    else:
+        settled_daily = all_daily
+
     yesterday_return = None
     yesterday_close = None
     change_5d = None
@@ -124,26 +131,23 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
     vol_5d = None
     vol_20d = None
 
-    if len(valid_daily) >= 2:
-        yesterday_close = valid_daily[-2]['close'] if market_session != 'post_market' else valid_daily[-1]['close']
-        if market_session == 'post_market':
-            yesterday_return = _pct(valid_daily[-2]['close'], valid_daily[-1]['close']) if len(valid_daily) >= 2 else None
-        else:
-            yesterday_return = _pct(valid_daily[-3]['close'], valid_daily[-2]['close']) if len(valid_daily) >= 3 else None
+    if len(settled_daily) >= 2:
+        yesterday_close = settled_daily[-1]['close']
+        yesterday_return = _pct(settled_daily[-2]['close'], settled_daily[-1]['close'])
 
-    if len(valid_daily) >= 6:
-        change_5d = _pct(valid_daily[-6]['close'], valid_daily[-1]['close'])
-    if len(valid_daily) >= 21:
-        change_20d = _pct(valid_daily[-21]['close'], valid_daily[-1]['close'])
+    if len(settled_daily) >= 6:
+        change_5d = _pct(settled_daily[-6]['close'], settled_daily[-1]['close'])
+    if len(settled_daily) >= 21:
+        change_20d = _pct(settled_daily[-21]['close'], settled_daily[-1]['close'])
 
-    # YTD
+    # YTD — also from settled bars only
     pit_year = pit_date[:4]
-    ytd_bars = [b for b in valid_daily if b['date'].startswith(pit_year)]
+    ytd_bars = [b for b in settled_daily if b['date'].startswith(pit_year)]
     if ytd_bars and len(ytd_bars) >= 2:
         change_ytd = _pct(ytd_bars[0]['close'], ytd_bars[-1]['close'])
 
-    # Volume
-    vols = [b['volume'] for b in valid_daily if b['volume']]
+    # Volume — from settled bars only
+    vols = [b['volume'] for b in settled_daily if b['volume']]
     if len(vols) >= 5:
         vol_5d = round(sum(vols[-5:]) / 5)
     if len(vols) >= 20:
@@ -173,8 +177,8 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
                 last_60m = _pct(bars_60m_ago[-1]['close'], level_at_pit)
 
     # For post_market: today's close IS the level (session settled)
-    if market_session == 'post_market' and valid_daily:
-        today_bar = valid_daily[-1]
+    if market_session == 'post_market' and all_daily:
+        today_bar = all_daily[-1]
         if today_bar['date'] == pit_date:
             level_at_pit = level_at_pit or today_bar['close']
             if not open_to_pit and today_bar['open']:
@@ -196,21 +200,32 @@ def _compute_spy_now(minute_bars: list[dict], daily_bars: list[dict],
 
 # ── Indicator daily state ─────────────────────────────────────────────
 
-def _compute_indicator_daily(daily_bars: list[dict], pit_date: str) -> dict | None:
-    """Compute indicator level + today/5d/YTD from daily bars."""
-    valid = [b for b in daily_bars if b['date'] <= pit_date]
-    if not valid:
+def _compute_indicator_daily(daily_bars: list[dict], pit_date: str,
+                             market_session: str = 'post_market') -> dict | None:
+    """Compute indicator level + changes from daily bars.
+    PIT-safe: for in_market/pre_market, excludes today's unsettled bar."""
+    all_valid = [b for b in daily_bars if b['date'] <= pit_date]
+    if market_session != 'post_market':
+        settled = [b for b in all_valid if b['date'] < pit_date]
+    else:
+        settled = all_valid
+
+    if not settled:
         return None
 
-    level = valid[-1]['close']
-    today = _pct(valid[-2]['close'], level) if len(valid) >= 2 else None
-    d5 = _pct(valid[-6]['close'], level) if len(valid) >= 6 else None
+    level = settled[-1]['close']
+    last_return = _pct(settled[-2]['close'], level) if len(settled) >= 2 else None
+    d5 = _pct(settled[-6]['close'], level) if len(settled) >= 6 else None
 
     pit_year = pit_date[:4]
-    ytd_bars = [b for b in valid if b['date'].startswith(pit_year)]
+    ytd_bars = [b for b in settled if b['date'].startswith(pit_year)]
     ytd = _pct(ytd_bars[0]['close'], level) if ytd_bars and len(ytd_bars) >= 2 else None
 
-    return {'level': round(level, 2), 'today': today, 'change_5d': d5, 'change_ytd': ytd}
+    # Label: "today" for post_market (settled), "last close" for in/pre_market
+    label = 'today' if market_session == 'post_market' else 'last close'
+
+    return {'level': round(level, 2), 'last_return': last_return, 'return_label': label,
+            'change_5d': d5, 'change_ytd': ytd}
 
 
 # ── Main build ───────────────────────────────────────────────────────
@@ -285,7 +300,7 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
         for label, poly_ticker in INDICATOR_TICKERS.items():
             bars = _polygon_daily(poly_ticker, daily_from, pit_date, api_key)
             if bars:
-                metric = _compute_indicator_daily(bars, pit_date)
+                metric = _compute_indicator_daily(bars, pit_date, market_session)
                 if metric:
                     indicators[label] = metric
             time.sleep(0.3)
@@ -310,12 +325,20 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
             ''', {'sector': sector_name, 'from': (pit_d - timedelta(days=10)).isoformat(), 'pit_date': pit_date})
 
             if sec_rows:
-                today_sec = sec_rows[-1]['ret'] if sec_rows[-1]['date'] == pit_date else None
-                sec_5d = sec_rows[-5:] if len(sec_rows) >= 5 else sec_rows
+                # PIT-safe: for in/pre_market, exclude today's unsettled bar
+                if market_session != 'post_market':
+                    settled_sec = [r for r in sec_rows if r['date'] < pit_date]
+                else:
+                    settled_sec = sec_rows
+
+                last_sec = round(settled_sec[-1]['ret'], 2) if settled_sec else None
+                sec_5d = settled_sec[-5:] if len(settled_sec) >= 5 else settled_sec
                 sum_5d = round(sum(r['ret'] for r in sec_5d if r['ret']), 2)
+                sec_label = 'today' if market_session == 'post_market' else 'last close'
                 sector_info = {
                     'name': sector_name,
-                    'today': round(today_sec, 2) if today_sec is not None else None,
+                    'last_return': last_sec,
+                    'return_label': sec_label,
                     'change_5d': sum_5d,
                     'vs_spy_5d': round(sum_5d - spy_now.get('change_5d', 0), 2) if spy_now.get('change_5d') is not None else None,
                 }
@@ -355,7 +378,7 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
 
     # Group: TODAY, YESTERDAY, EARLIER
     sorted_days = sorted(headlines_by_day.keys(), reverse=True)
-    today_headlines = headlines_by_day.get(pit_date, [])
+    today_headlines = headlines_by_day.get(pit_date, [])[:5]  # cap: max 5 today
 
     # Yesterday = last trading day before PIT date
     yesterday_date = None
@@ -367,13 +390,13 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
             continue
         if yesterday_date is None:
             yesterday_date = d
-            yesterday_headlines = headlines_by_day[d]
+            yesterday_headlines = headlines_by_day[d][:5]  # cap: max 5 yesterday
         else:
             for h in headlines_by_day[d]:
                 earlier_items.append((d, h))
 
-    # Cap earlier to most significant 5
-    earlier_items = earlier_items[:5]
+    # Cap earlier to max 3
+    earlier_items = earlier_items[:3]
 
     # ── Assemble ──
     packet = {
@@ -447,17 +470,19 @@ def render_text(packet: dict) -> str:
     # Other indicators
     for label, ind in packet.get('market_now', {}).get('indicators', {}).items():
         level = f'{ind["level"]:.2f}'
-        today = f'today {ind["today"]:+.1f}%' if ind.get('today') is not None else ''
+        rl = ind.get('return_label', 'today')
+        ret = f'{rl} {ind["last_return"]:+.1f}%' if ind.get('last_return') is not None else ''
         d5 = f'5d {ind["change_5d"]:+.1f}%' if ind.get('change_5d') is not None else ''
-        parts = [p for p in [today, d5] if p]
+        parts = [p for p in [ret, d5] if p]
         lines.append(f'  {label}: {level} | {" | ".join(parts)}')
 
     # Sector
     sec = packet.get('market_now', {}).get('sector')
     if sec and sec.get('name'):
         parts = []
-        if sec.get('today') is not None:
-            parts.append(f'today {sec["today"]:+.1f}%')
+        rl = sec.get('return_label', 'today')
+        if sec.get('last_return') is not None:
+            parts.append(f'{rl} {sec["last_return"]:+.1f}%')
         if sec.get('change_5d') is not None:
             parts.append(f'5d {sec["change_5d"]:+.1f}%')
         if sec.get('vs_spy_5d') is not None:
