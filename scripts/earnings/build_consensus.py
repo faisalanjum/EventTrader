@@ -710,11 +710,12 @@ def _build_quarterly_rows(earnings_data: dict | None,
                 rev_est = _safe_float(row.get("revenue_estimate_average"))
                 if rev_est is not None:
                     estimate_rev_map[fde] = rev_est
-                # Store full detail for current-quarter enrichment
+                # Store full detail for current-quarter enrichment (quarterly only —
+                # DO NOT use fiscal-year rows here. AV puts Q4 under "fiscal year"
+                # horizon, but those are annual aggregates, not quarterly. Injecting
+                # annual epsEstimateHigh/revenueEstimateHigh into a quarterly row
+                # would be materially misleading for the predictor.)
                 estimate_detail_map[fde] = row
-            elif "year" in horizon:
-                # Also check FY-level for Q4 revenue (AV puts Q4 under fiscal year)
-                estimate_detail_map.setdefault(fde, row)
 
     is_historical = as_of_ts is not None
     as_of_date = as_of_ts.strftime("%Y-%m-%d") if as_of_ts else None
