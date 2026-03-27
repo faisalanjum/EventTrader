@@ -316,7 +316,7 @@ def _get_fye_month(ticker: str, gaps: list) -> int | None:
 
 
 def _build_quarter_ends(fye_month: int) -> list[str]:
-    """Generate all quarter-end dates (2020-2028) using fiscal_math. Month-end convention."""
+    """Generate quarter-end dates (now-10y to now+3y) using fiscal_math. Month-end convention."""
     try:
         scripts_dir = Path(__file__).resolve().parents[2] / ".claude/skills/earnings-orchestrator/scripts"
         if str(scripts_dir) not in sys.path:
@@ -450,7 +450,8 @@ def _yahoo_session_from_utc(earnings_date_str: str) -> str | None:
 def _fetch_yahoo_fallback(ticker: str, gaps: list) -> tuple:
     """Fetch EPS history + forward estimates + revenue from Yahoo as AV fallback.
 
-    Uses Neo4j fiscal calendar for 100% reliable fiscal date mapping.
+    Uses FYE month (Redis SEC cache → Yahoo info fallback) + fiscal_math for
+    100% reliable fiscal date mapping. No Neo4j quarter-date dependency.
     Returns (earnings_data, estimates_data, income_data) — all reshaped to AV-like dicts.
     """
     try:
@@ -588,7 +589,7 @@ def _merge_yahoo_estimates(eps_est, rev_est, trend_est,
     """Merge Yahoo EPS/revenue/trend DataFrames into AV-like estimates dict.
 
     Yahoo DataFrames use relative period index: 0q, +1q, 0y, +1y.
-    fde_map provides the actual fiscalDateEnding for each period (from Neo4j fiscal calendar).
+    fde_map provides the actual fiscalDateEnding for each period (from FYE month + fiscal_math).
     """
     if fde_map is None:
         fde_map = {}
@@ -991,7 +992,7 @@ def build_consensus(
             yahoo_used = True
         if yahoo_used:
             gaps.append({"type": "source_fallback",
-                         "reason": "AV rate-limited — using Yahoo Finance fallback (no revision tracking, no reportTime)"})
+                         "reason": "AV rate-limited — using Yahoo Finance fallback (no EPS revision tracking for current quarter enrichment)"})
 
     # If period_of_report not provided, derive from AV quarterly rows
     if not period_of_report and earnings_data:
