@@ -695,18 +695,26 @@ def _build_quarterly_rows(earnings_data: dict | None,
             if fde and rev is not None:
                 revenue_map[fde] = rev
 
-    # Revenue estimate map from ESTIMATES (fiscal quarter horizon only)
+    # Revenue estimate map + full estimate detail map from ESTIMATES
     estimate_rev_map: dict[str, float] = {}
+    estimate_detail_map: dict[str, dict] = {}  # FDE → full revision/dispersion fields
     if estimates_data:
         for row in estimates_data.get("data", estimates_data.get("estimates", [])):
             if not isinstance(row, dict):
                 continue
             fde = row.get("date", row.get("fiscalDateEnding"))
             horizon = str(row.get("horizon", "")).lower()
-            if "quarter" in horizon and fde:
+            if not fde:
+                continue
+            if "quarter" in horizon:
                 rev_est = _safe_float(row.get("revenue_estimate_average"))
                 if rev_est is not None:
                     estimate_rev_map[fde] = rev_est
+                # Store full detail for current-quarter enrichment
+                estimate_detail_map[fde] = row
+            elif "year" in horizon:
+                # Also check FY-level for Q4 revenue (AV puts Q4 under fiscal year)
+                estimate_detail_map.setdefault(fde, row)
 
     is_historical = as_of_ts is not None
     as_of_date = as_of_ts.strftime("%Y-%m-%d") if as_of_ts else None
@@ -765,7 +773,7 @@ def _build_quarterly_rows(earnings_data: dict | None,
             elif revenue_actual is not None and revenue_estimate is None:
                 gaps.append({"type": "missing_revenue_estimate", "fiscalDateEnding": fde})
 
-        rows.append({
+        row_dict = {
             "fiscalDateEnding": fde,
             "reportedDate": reported_date,
             "reportTime": report_time,
@@ -779,7 +787,40 @@ def _build_quarterly_rows(earnings_data: dict | None,
             "revenueSurprise": revenue_surprise,
             "revenueSurprisePct": revenue_surprise_pct,
             "revenueSurpriseQuality": quality,
-        })
+        }
+
+        # Current quarter only (live): add pre-release estimate drift + dispersion.
+        # Tells the predictor "was the bar moving up or down into the print?"
+        # Not included for historical (revision data may not be frozen at report time).
+        if is_current and not is_historical:
+            detail = estimate_detail_map.get(fde, {})
+            if detail:
+                eps_avg = _safe_float(detail.get("eps_estimate_average"))
+                eps_7d = _safe_float(detail.get("eps_estimate_average_7_days_ago"))
+                eps_30d = _safe_float(detail.get("eps_estimate_average_30_days_ago"))
+                eps_60d = _safe_float(detail.get("eps_estimate_average_60_days_ago"))
+                eps_90d = _safe_float(detail.get("eps_estimate_average_90_days_ago"))
+                row_dict.update({
+                    # Dispersion: how wide is the analyst range?
+                    "epsEstimateHigh": _safe_float(detail.get("eps_estimate_high")),
+                    "epsEstimateLow": _safe_float(detail.get("eps_estimate_low")),
+                    "epsAnalystCount": _safe_int(detail.get("eps_estimate_analyst_count")),
+                    "revenueEstimateHigh": _safe_float(detail.get("revenue_estimate_high")),
+                    "revenueEstimateLow": _safe_float(detail.get("revenue_estimate_low")),
+                    "revenueAnalystCount": _safe_int(detail.get("revenue_estimate_analyst_count")),
+                    # Drift: where was consensus N days ago?
+                    "epsRevision7dAgo": eps_7d,
+                    "epsRevision30dAgo": eps_30d,
+                    "epsRevision60dAgo": eps_60d,
+                    "epsRevision90dAgo": eps_90d,
+                    # Computed: direction and magnitude of revision
+                    "epsRevisionDelta7d": round(eps_avg - eps_7d, 4) if eps_avg is not None and eps_7d is not None else None,
+                    "epsRevisionDelta30d": round(eps_avg - eps_30d, 4) if eps_avg is not None and eps_30d is not None else None,
+                    "epsRevisionDelta60d": round(eps_avg - eps_60d, 4) if eps_avg is not None and eps_60d is not None else None,
+                    "epsRevisionDelta90d": round(eps_avg - eps_90d, 4) if eps_avg is not None and eps_90d is not None else None,
+                })
+
+        rows.append(row_dict)
 
         if len(rows) >= _HISTORY_QUARTERS:
             break
