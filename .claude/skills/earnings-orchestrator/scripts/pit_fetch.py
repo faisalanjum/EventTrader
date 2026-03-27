@@ -243,16 +243,16 @@ def _normalize_pplx_result(raw: Any) -> tuple[dict[str, Any] | None, datetime | 
 def _normalize_av_quarterly(raw: dict[str, Any]) -> tuple[dict[str, Any] | None, datetime | None, str | None]:
     """Normalize a quarterlyEarnings item into PIT envelope format.
 
-    The AV EARNINGS API returns 6 fields per quarterly item:
-    fiscalDateEnding, reportedDate, reportedEPS, estimatedEPS, surprise, surprisePercentage.
-    No reportTime field exists — all items use date-only available_at.
+    The AV EARNINGS API returns 7 fields per quarterly item:
+    fiscalDateEnding, reportedDate, reportedEPS, estimatedEPS, surprise,
+    surprisePercentage, reportTime (pre-market/post-market).
     """
     reported_date = raw.get("reportedDate")
     if not isinstance(reported_date, str) or not reported_date.strip():
         fiscal = raw.get("fiscalDateEnding", "unknown")
         return None, None, f"quarterly item {fiscal} missing reportedDate"
 
-    # Date-only available_at (AV EARNINGS has no time-of-day info)
+    # Date-only available_at (reportTime gives session but not exact clock time)
     try:
         pub_dt = datetime.strptime(reported_date.strip(), "%Y-%m-%d").replace(tzinfo=NY_TZ)
     except ValueError:
@@ -268,6 +268,7 @@ def _normalize_av_quarterly(raw: dict[str, Any]) -> tuple[dict[str, Any] | None,
         "estimatedEPS": raw.get("estimatedEPS"),
         "surprise": raw.get("surprise"),
         "surprisePercentage": raw.get("surprisePercentage"),
+        "reportTime": raw.get("reportTime"),
     }
     return item, pub_dt, None
 

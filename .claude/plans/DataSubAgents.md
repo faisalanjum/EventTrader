@@ -364,7 +364,7 @@ python3 .claude/skills/earnings-orchestrator/scripts/pit_fetch.py --source bz-ne
 | Perplexity MCP search (`mcp__perplexity__perplexity_search`) | ❌ none reliable | ⚠️ | Treat as Lane 3: normalize from citations/URLs, else gap |
 | Perplexity Ask/Research/Reason (via pit_fetch.py) | `search_results[].date` | ⚠️→✅ | Lane 2 (structured-by-provider) for search_results portion — pit_fetch.py calls API directly, gets full `search_results[]` with per-result `date` fields. Synthesis answer excluded in PIT mode (available_at = now > PIT). |
 | Alpha Vantage TIME_SERIES_* | per-datapoint timestamp | ✅ | Filter to `<= PIT`; keep only timestamps with full datetime semantics |
-| Alpha Vantage EARNINGS (quarterly) | `reportedDate` | ✅ | Date-only start-of-day NY; AV has no reportTime field. Annual cross-referenced via Q4 quarterly reportedDate (`available_at_source: cross_reference`) |
+| Alpha Vantage EARNINGS (quarterly) | `reportedDate` + `reportTime` | ✅ | `reportedDate` is date-only; `reportTime` gives market session (`pre-market`/`post-market`). Together they enable session-aware PIT. Annual cross-referenced via Q4 quarterly reportedDate (`available_at_source: cross_reference`) |
 | Alpha Vantage EARNINGS_ESTIMATES | revision buckets (7/30/60/90d before fiscal end) | ✅ | Coarse PIT: nearest bucket ≤ PIT selected; returns `pit_consensus_eps` + `pit_bucket`. `available_at_source: coarse_pit`. Forward-looking gapped. **Methodology note:** looks true from data, but AV docs don't clearly guarantee it. |
 | Benzinga News API | `created` | ✅ | Use `provider_metadata`; drop items with unparseable/missing timestamp |
 | Yahoo (earnings, reported) | `Earnings Date` | ✅ | PIT: filter `Earnings Date <= PIT`; upcoming excluded. `EPS Estimate` frozen at report time. `available_at_source: provider_metadata` |
@@ -603,7 +603,7 @@ Key design decisions:
 
 ### Remaining
 
-- ~~Alpha Vantage (`alphavantage-earnings`)~~ **DONE** — Bash-wrapper archetype, 3 ops (earnings/estimates/calendar), PIT filtering via reportedDate (date-only, no reportTime in API), annual cross-referenced via Q4 quarterly reportedDate, estimates coarse PIT via revision buckets (7/30/60/90d), 21/21 offline tests. Methodology caveat for estimate buckets: looks true from data, but AV docs don't clearly guarantee it.
+- ~~Alpha Vantage (`alphavantage-earnings`)~~ **DONE** — Bash-wrapper archetype, 3 ops (earnings/estimates/calendar), PIT filtering via reportedDate + reportTime (session: `pre-market`/`post-market`), annual cross-referenced via Q4 quarterly reportedDate, estimates coarse PIT via revision buckets (7/30/60/90d), 21/21 offline tests. Methodology caveat for estimate buckets: looks true from data, but AV docs don't clearly guarantee it.
 - ~~Yahoo Finance (`yahoo-earnings`)~~ **DONE** — Bash-wrapper archetype with 2 exposed PIT-safe ops (`earnings`, `upgrades`). Uses `yfinance` library directly (free, no API key, external API — does NOT query Neo4j). Current-state Yahoo estimates/calendar remain intentionally unexposed because they are not PIT-safe for historical use. Tested: 12/12 tests (open mode, PIT mode, gapping, edge cases, cross-source parity, pit_gate compatibility, frontmatter compliance, multi-ticker, linter).
 
   **Yahoo PIT capability per yfinance tool:**
@@ -642,8 +642,21 @@ Key design decisions:
   | `preMarketChange` | — | Absolute change from prior close |
   | `preMarketChangePercent` | — | Percent change from prior close |
   | `preMarketTime` | — | Unix epoch (ET) |
-  | `marketState` | `POST` / `PRE` / `REGULAR` / `CLOSED` | Indicates which session is active |
+  | `marketState` | see lifecycle below | Indicates which session is active |
   | `hasPrePostMarketData` | true | Whether extended-hours data is available for this ticker |
+
+  **`marketState` lifecycle** (observed via OXM earnings 2026-03-26):
+
+  | State | Meaning | Confirmed |
+  |---|---|---|
+  | `PREPRE` | Before pre-market opens (~midnight–4 AM ET) | inferred (standard yfinance) |
+  | `PRE` | Pre-market session (4 AM–9:30 AM ET) | inferred (standard yfinance) |
+  | `REGULAR` | Regular trading hours (9:30 AM–4 PM ET) | inferred (standard yfinance) |
+  | `POST` | After-hours session active (4 PM–8 PM ET) | **observed** — OXM 2026-03-26 |
+  | `POSTPOST` | After-hours closed, before next pre-market | **observed** — OXM 2026-03-26 ~8 PM ET |
+  | `CLOSED` | Market closed (weekends/holidays) | inferred (standard yfinance) |
+
+  Key finding: `postMarketPrice`/`postMarketChange` fields persist through `POSTPOST` — they freeze at the last after-hours trade, not nulled out. The `postMarketTime` epoch tells you when the last trade actually printed. Also: `quoteSourceName` transitions from `"Nasdaq Real Time Price"` → `"Delayed Quote"` during the session.
 
   **Action**: Wire these fields into `yahoo-earnings` agent or a dedicated `yahoo-quote` op so earnings reaction workflows can capture the immediate post-market (or pre-market for AM reporters) move without needing IBKR.
 

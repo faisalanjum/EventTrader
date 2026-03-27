@@ -53,7 +53,7 @@ Standard JSON envelope for all data sub-agent responses. Validated by `pit_gate.
 | neo4j-entity (metadata) | — | open mode pass-through | — | Company properties: no `pit` in params → gate allows |
 | perplexity-* (search) | result `date` | YYYY-MM-DD -> start-of-day NY tz | `provider_metadata` | PIT: exclude PIT day entirely (prior-day items pass) |
 | perplexity-* (chat) | `search_results[].date` | same | `provider_metadata` | Chat ops add synthesis item (`record_type: "synthesis"`) in open mode (appended separately from `--limit`); excluded in PIT mode |
-| alphavantage (earnings quarterly) | `reportedDate` | date-only start-of-day NY | `provider_metadata` | PIT: date-only → exclude PIT day (AV has no time-of-day field) |
+| alphavantage (earnings quarterly) | `reportedDate` + `reportTime` | date + session (`pre-market`/`post-market`) | `provider_metadata` | `reportTime` enables session-aware PIT when combined with `reportedDate` |
 | alphavantage (earnings annual) | Q4 quarterly `reportedDate` | cross-reference | `cross_reference` | Matched via fiscalDateEnding; unmatched → gaps[] |
 | alphavantage (estimates, historical) | revision bucket (7/30/60/90d before fiscal end) | coarse PIT bucket date | `coarse_pit` | Nearest bucket ≤ PIT selected; returns `pit_consensus_eps` + `pit_bucket`; >90d → gap |
 | alphavantage (estimates, forward) | — | gapped in PIT | — | Forward-looking snapshot; not PIT-verifiable |
