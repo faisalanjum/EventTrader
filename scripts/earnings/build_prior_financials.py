@@ -70,6 +70,7 @@ _CASH_FLOW_YTD_CONCEPTS = {
 # EPS/shares — NEVER derive by subtraction
 _EPS_CONCEPTS = {
     "us-gaap:EarningsPerShareDiluted",
+    "us-gaap:IncomeLossFromContinuingOperationsPerDilutedShare",
     "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding",
 }
 
@@ -93,7 +94,7 @@ METRIC_REGISTRY = [
     ("income_tax", ["us-gaap:IncomeTaxExpenseBenefit"], "income"),
     ("operating_income", ["us-gaap:OperatingIncomeLoss"], "income"),
     ("net_income", ["us-gaap:NetIncomeLoss", "us-gaap:ProfitLoss", "us-gaap:NetIncomeLossAvailableToCommonStockholdersBasic"], "income"),
-    ("eps_diluted", ["us-gaap:EarningsPerShareDiluted"], "income"),
+    ("eps_diluted", ["us-gaap:EarningsPerShareDiluted", "us-gaap:IncomeLossFromContinuingOperationsPerDilutedShare"], "income"),
     ("diluted_shares", ["us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding"], "income"),
     # Balance Sheet
     ("total_assets", ["us-gaap:Assets"], "balance"),
