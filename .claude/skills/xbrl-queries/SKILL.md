@@ -128,6 +128,83 @@ RETURN con.label, m.label AS segment, toFloat(f.value) AS value, f.period_ref
 ORDER BY segment
 ```
 
+### Segment values by member across quarters (PIT-safe)
+Use when the planner provides exact concept_qname + member_qnames from segment_inventory.
+Members MUST be from the same axis (e.g., all product members OR all geo members — never mixed).
+Returns deduplicated quarterly values for specific segment members.
+Q4 segments may be unavailable for ~94% of companies (10-K has annual-only periods for most).
+```cypher
+// Use ALL filings per period (not just best) for per-fact amendment overlay:
+// if amendment has the fact, it wins; if only original has it, original comes through.
+MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+WHERE r.formType IN ['10-Q', '10-K', '10-Q/A', '10-K/A'] AND r.xbrl_status = 'COMPLETED'
+  AND ($pit IS NULL OR datetime(r.created) <= datetime($pit))
+// Limit to the N most recent DISTINCT periods
+WITH r.periodOfReport AS period, r
+ORDER BY period DESC
+WITH collect(DISTINCT period)[..$num_quarters] AS target_periods, collect(r) AS all_filings
+UNWIND all_filings AS r
+WHERE r.periodOfReport IN target_periods
+// Extract segment facts from ALL filings for target periods
+MATCH (r)-[:HAS_XBRL]->(x:XBRLNode)<-[:REPORTS]-(f:Fact)
+MATCH (f)-[:HAS_CONCEPT]->(con:Concept {qname: $concept_qname})
+MATCH (f)-[:FACT_MEMBER]->(m:Member)
+MATCH (f)-[:IN_CONTEXT]->(ctx:Context)-[:HAS_PERIOD]->(p:Period)
+WHERE m.qname IN $member_qnames
+  AND p.end_date IS NOT NULL AND p.end_date <> 'null'
+  // Target period: current quarter only, not prior-year comparative
+  AND abs(duration.inDays(date(p.end_date), date(r.periodOfReport)).days) <= 7
+  // Quarterly duration (handles 52-week calendars returning 2 months)
+  AND duration.between(date(p.start_date), date(p.end_date)).months >= 2
+  AND duration.between(date(p.start_date), date(p.end_date)).months <= 4
+  // Note: some companies (e.g., NKE) have multi-axis facts like product×geography.
+  // The axis-grouped inventory ensures $member_qnames are from ONE axis,
+  // so cross-axis facts are only returned when the requested member appears
+  // in a multi-dimensional breakdown. These are valid sub-totals.
+  // If the agent needs strictly 1D data, add: AND count { (f)-[:FACT_MEMBER]->() } = 1
+// Per-fact amendment overlay + dimensionality preference:
+// - Fewer FACT_MEMBER rels = more consolidated (1D total > 2D sub-total)
+// - Newest filing wins (amendment over original)
+// - Highest decimals wins (more precise)
+WITH r, r.periodOfReport AS quarter, datetime(r.created) AS filed,
+     m.qname AS member, m.label AS member_label,
+     f.value AS value, toInteger(f.decimals) AS dec,
+     count { (f)-[:FACT_MEMBER]->() } AS member_count
+ORDER BY quarter DESC, member, member_count ASC, filed DESC, dec DESC
+WITH quarter, member, collect({
+  available_at: filed,
+  available_at_source: 'edgar_accepted',
+  label: member_label,
+  value: value,
+  mc: member_count
+})[0] AS best
+// Wrap in PIT envelope format (data[] + gaps[])
+WITH collect({
+  available_at: toString(best.available_at),
+  available_at_source: best.available_at_source,
+  quarter: quarter,
+  member: member,
+  member_label: best.label,
+  value: best.value,
+  dimensionality: best.mc
+}) AS items
+RETURN items AS data, [] AS gaps
+```
+Parameters:
+- `$ticker` (string)
+- `$concept_qname` (string from segment_inventory, e.g., `'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'`)
+- `$member_qnames` (list of strings from ONE axis in segment_inventory — never mix product + geo)
+- `$num_quarters` (int, typically 4-8)
+- `$pit` (ISO8601 or null for live — matches agent PIT contract, passed as `pit` in params dict)
+
+Design notes:
+- **Per-fact amendment overlay**: queries ALL filings per period, newest `created` wins per quarter+member. If amendment has the fact, it wins. If only original has it, original comes through. This handles partial amendments correctly.
+- **Multi-axis collapse prevention**: `member_count ASC` in the ORDER BY ensures 1D facts (totals) are preferred over 2D+ cross-dimensional facts (sub-totals). If SalesCloudMember appears in both a 1-member fact ($2B total) and a 3-member fact (SalesCloud×Americas = $1.5B), the 1-member fact wins. For companies like NKE where geographic segments are ALWAYS 3+ members, those still come through (no 1D alternative exists). The `dimensionality` column in the output lets the agent verify.
+- **Deduplicates**: one row per quarter+member after amendment overlay, highest decimals wins.
+- **Target-period selector**: `period_end` within 7 days of `periodOfReport` (excludes prior-year comparatives).
+- **Q4 limitation**: 93.6% of 10-Ks have annual-only periods, so Q4 segment data is often unavailable via this template.
+Validated across CRM (cloud products), AAPL (iPhone/Mac/Services), AMZN (AWS/North America), WMT (operating segments), with PIT filtering.
+
 ## Context and Period
 
 ### Facts with period details
@@ -327,7 +404,7 @@ Queries for PIT (Point-in-Time) mode. All use `<= $pit` on parent Report (bounda
 ### XBRL Metrics (PIT)
 ```cypher
 MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
-WHERE r.formType IN ['10-K', '10-Q']
+WHERE r.formType IN ['10-K', '10-Q', '10-K/A', '10-Q/A']
   AND r.created <= $pit
 MATCH (r)-[:HAS_XBRL]->(x:XBRLNode)<-[:REPORTS]-(f:Fact)-[:HAS_CONCEPT]->(con:Concept)
 MATCH (f)-[:IN_CONTEXT]->(:Context)
@@ -353,7 +430,7 @@ RETURN items AS data, [] AS gaps
 ### Specific Metric (PIT)
 ```cypher
 MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
-WHERE r.formType IN ['10-K', '10-Q']
+WHERE r.formType IN ['10-K', '10-Q', '10-K/A', '10-Q/A']
   AND r.created <= $pit
 MATCH (r)-[:HAS_XBRL]->(x:XBRLNode)<-[:REPORTS]-(f:Fact)-[:HAS_CONCEPT]->(con:Concept)
 MATCH (f)-[:IN_CONTEXT]->(:Context)
@@ -384,7 +461,7 @@ YIELD node, score
 MATCH (f:Fact)-[:HAS_CONCEPT]->(node)
 MATCH (f)-[:REPORTS]->(x:XBRLNode)<-[:HAS_XBRL]-(r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
 MATCH (f)-[:IN_CONTEXT]->(:Context)
-WHERE r.formType IN ['10-K', '10-Q']
+WHERE r.formType IN ['10-K', '10-Q', '10-K/A', '10-Q/A']
   AND r.created <= $pit
 OPTIONAL MATCH (f)-[:HAS_PERIOD]->(p:Period)
 WITH r, f, node, p, score ORDER BY score DESC LIMIT 20
@@ -408,7 +485,7 @@ RETURN items AS data, [] AS gaps
 - Filter on parent Report: `r.created <= $pit` (XBRL has no own timestamp)
 - NEVER include PRIMARY_FILER relationship properties (daily_stock, daily_macro, etc.)
 - Always include `available_at: r.created` and `available_at_source: 'edgar_accepted'`
-- XBRL only in 10-K/10-Q: always `WHERE r.formType IN ['10-K','10-Q']`
+- XBRL in 10-K/10-Q and their amendments: always `WHERE r.formType IN ['10-K','10-Q','10-K/A','10-Q/A']`
 - Use `collect({...})` to produce `data[]` array
 - Always `RETURN items AS data, [] AS gaps`
 - Pass `pit` in the `params` dict alongside other Cypher parameters
@@ -421,7 +498,7 @@ RETURN items AS data, [] AS gaps
 - **Unit.is_simple_unit/is_divide** are string booleans ('0'/'1').
 - **Some Facts lack Context**: 12,939 Facts have no `IN_CONTEXT` relationship; filter with `MATCH (f)-[:IN_CONTEXT]->(:Context)`.
 - **Period.end_date** can be string 'null' for `period_type='instant'` (2,776 rows).
-- **XBRL only in 10-K/10-Q**: 8-K filings have no XBRL data.
+- **XBRL only in 10-K/10-Q and their amendments (10-K/A, 10-Q/A)**: 8-K filings have no XBRL data.
 - Fulltext indexes: `concept_ft` (label/qname), `fact_textblock_ft` (value/qname), `abstract_ft` (label).
 
 ## Known Data Gaps

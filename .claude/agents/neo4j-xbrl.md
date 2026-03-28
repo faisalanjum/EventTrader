@@ -46,7 +46,7 @@ Query XBRL financial line items from 10-K/10-Q filings. Use patterns from the xb
 See pit-envelope skill for envelope contract, field mappings, and forbidden keys.
 
 ## Notes
-- XBRL only in 10-K/10-Q (8-K has no XBRL data)
+- XBRL only in 10-K/10-Q/10-K/A/10-Q/A (8-K has no XBRL data). Always include amendments in queries.
 - PIT field mapping: parent Report `r.created` → `available_at`, source = `edgar_accepted` (requires JOIN)
 - PIT mode: NEVER include PRIMARY_FILER relationship properties — forbidden
 - Fact.value is String: use `toFloat(f.value)` when `f.is_numeric = '1'`
