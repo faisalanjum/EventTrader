@@ -148,6 +148,23 @@ else:
     → Fallback 2 (only if --allow-yahoo): Yahoo. Otherwise → gap.
 ```
 
+**FSC-only period discovery**: The main XBRL query filters `xbrl_status = 'COMPLETED'` in period discovery, so periods with ONLY non-COMPLETED filings are invisible. Run a **second period-discovery query** without the `xbrl_status` filter to find any additional periods. Process these exclusively via FSC fallback. This covers the ~112 XBRL gap filings.
+
+```python
+# After XBRL extraction, check for missed periods
+xbrl_periods = {row['period'] for row in xbrl_results}
+all_periods_query = """
+MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+WHERE r.formType IN ['10-Q', '10-K', '10-Q/A', '10-K/A']
+  AND r.periodOfReport < $current_period
+  AND ($as_of IS NULL OR datetime(r.created) <= datetime($as_of))
+RETURN DISTINCT r.periodOfReport AS period ORDER BY period DESC LIMIT 8
+"""
+all_periods = {row['period'] for row in run_query(all_periods_query)}
+fsc_only_periods = all_periods - xbrl_periods  # periods missed by XBRL
+# Process fsc_only_periods via §6 FSC fallback
+```
+
 **Denylist** (2 known zero-fact anomalies, from ChatGPT's audit):
 - `0000885725-24-000073` (filed 2024-11-01)
 - `0001616707-24-000054` (filed 2024-11-01)
@@ -662,9 +679,9 @@ OPTIONAL MATCH (r)-[:HAS_XBRL]->(x)<-[:REPORTS]-(fy_fact:Fact)-[:HAS_CONCEPT]->(
 
 - `period`: the fiscal period end date (from `Report.periodOfReport`)
 - `fiscal_label`: human-readable label. Preferred source: `dei:DocumentFiscalPeriodFocus` + `dei:DocumentFiscalYearFocus` from XBRL (99.97% coverage). Fallback: `period_to_fiscal()` computation (99.1%).
-- `primary_form`: the main filing type for this quarter (10-Q, 10-K, 10-Q/A, 10-K/A)
-- `primary_accession`: the main filing's accession number
-- `primary_filed`: exact filing timestamp (from `Report.created`)
+- `primary_form`: the **newest** filing's form type for this quarter (10-Q, 10-K, 10-Q/A, 10-K/A). If amendment exists, this is the amendment's type.
+- `primary_accession`: the newest filing's accession number
+- `primary_filed`: the newest filing's timestamp (from `Report.created`)
 - `_provenance`: per-metric dict mapping output field → source info. Three shapes:
   - **Simple** (single filing): `{"revenue": {"accession": "...", "form": "10-Q"}}` — when amendment overlay caused different metrics to come from different filings
   - **Derived** (Q4 from multiple filings): `{"revenue": {"derived": true, "method": "fy_minus_9m_ytd", "inputs": [{"accession": "10K-acc", "form": "10-K", "source": "xbrl", "role": "annual"}, {"accession": "Q3-acc", "form": "10-Q", "source": "xbrl", "role": "9m_ytd"}]}}`
@@ -716,8 +733,8 @@ def build_prior_financials(ticker: str, quarter_info: dict,
 ### Dependencies
 
 - `neograph.Neo4jConnection.get_manager()` — for XBRL Fact queries
-- `fiscal_math.period_to_fiscal()`, `fiscal_math._compute_fiscal_dates()` — for quarter labeling
-- `_get_fye_month()` — reuse from build_consensus (or extract to shared module)
+- `fiscal_math.period_to_fiscal()`, `fiscal_math._compute_fiscal_dates()` — for quarter labeling. Import via `sys.path.insert(0, str(Path(__file__).resolve().parents[2] / ".claude/skills/earnings-orchestrator/scripts"))` then `from fiscal_math import ...` (same pattern as build_consensus.py:324)
+- `_get_fye_month()` — copy from build_consensus.py (same function, ~50 lines). Do NOT import from build_consensus to avoid circular dependency.
 - `yfinance` — for Yahoo fallback (only when `--allow-yahoo`)
 - `redis` — for FYE month cache (Tier 1)
 - Standard library: `json`, `os`, `sys`, `datetime`, `tempfile`
@@ -857,7 +874,7 @@ To get quarterly cash flow:
 - Q3: 9M YTD - H1 YTD
 - Q4: FY - 9M YTD
 
-This applies to `operating_cash_flow` and `capex`. The builder must detect YTD periods and derive quarterly values by subtraction when needed.
+This applies to `operating_cash_flow`, `capex`, and `buybacks` — all cash flow statement items reported as YTD in Q2/Q3 10-Qs. `dividends_per_share` (CommonStockDividendsPerShareDeclared) is a per-share declaration amount, NOT a cumulative cash flow — no YTD derivation needed for it.
 
 **Where YTD values come from**: The SAME filing that reports for that quarter. A Q2 10-Q contains both the Q2 target-period facts AND the H1 YTD facts — they're in the same query results, from the same `periodOfReport`. No separate filing lookup needed. The builder groups all facts by `(periodOfReport, concept)`, classifies each by period type, and picks quarterly if available or derives from YTD if not.
 
