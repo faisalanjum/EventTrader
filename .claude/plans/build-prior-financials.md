@@ -19,7 +19,7 @@ Provide the predictor with 4-8 prior quarters of exact-as-filed financial metric
 | Priority | Source | Stored in | Coverage | PIT-safe? |
 |---|---|---|---|---|
 | **Primary** | XBRL Fact graph (our pipeline) | `Fact → Concept → Context → Period` nodes | 760/772 companies (98.4%) | Yes — `Report.created` timestamp |
-| **Fallback 1** | FinancialStatementContent (sec-api) | `fs.value` JSON blob per statement type | Patches ~112 XBRL gaps | Yes — `fs.filed_at` timestamp |
+| **Fallback 1** | FinancialStatementContent (sec-api) | `fs.value` JSON blob per statement type | Patches ~112 XBRL gaps | Yes — `fs.filed_at` is always identical to `r.created` (verified: 0 mismatches across 30K+ records, both set from `report_data['created']` in `report.py:897`). Therefore `r.created <= as_of_ts` is sufficient for PIT — no separate `fs.filed_at` filter needed. |
 | **Fallback 2 (OPT-IN)** | Yahoo Finance `quarterly_income_stmt` | External API (yfinance) | All companies | No filing dates — cross-ref needed |
 
 **Rule**: Never mix sources within the same filing. Always emit `source: "xbrl"` or `source: "fsc"` or `source: "yahoo"` per quarter row.
