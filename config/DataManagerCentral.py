@@ -690,7 +690,8 @@ class DataManager:
         self.sources['news'] = BenzingaNewsManager(self.historical_range)
         # Reports re-enabled 2026-03-28 (was BENZINGA_ONLY since Aug 2025)
         self.sources['reports'] = ReportsManager(self.historical_range)
-        self.sources['transcripts'] = TranscriptsManager(self.historical_range)
+        # SKIP_TRANSCRIPTS_BACKFILL — disabled for backfill (EarningsCall API takes 12h+/chunk)
+        # self.sources['transcripts'] = TranscriptsManager(self.historical_range)
 
     def initialize_neo4j(self):
         """Initialize Neo4j processor"""
@@ -724,7 +725,8 @@ class DataManager:
                 self.process_news_data()
                 # Reports re-enabled 2026-03-28
                 self.process_report_data()
-                self.process_transcript_data()
+                # SKIP_TRANSCRIPTS_BACKFILL
+                # self.process_transcript_data()
             else:
                 # Initialize Neo4j if not already initialized
                 self.logger.info("Neo4j not initialized, initializing database")
@@ -741,7 +743,8 @@ class DataManager:
                 self.process_news_data()
                 # Reports re-enabled 2026-03-28
                 self.process_report_data()
-                self.process_transcript_data()
+                # SKIP_TRANSCRIPTS_BACKFILL
+                # self.process_transcript_data()
             
             # Start the PubSub-based continuous processing thread
             self.neo4j_thread = threading.Thread(
