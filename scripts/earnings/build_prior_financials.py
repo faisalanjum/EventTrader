@@ -1023,10 +1023,13 @@ def _get_fiscal_labels(manager, ticker: str, periods: list[str], as_of: str | No
             rec.get("fiscal_year"), rec.get("fiscal_period"))
 
         # Step 3: Choose — exact logic from get_quarterly_filings.py
+        # Guard: fallback_fiscal can be None when fye_month is unavailable
         if accession in XBRL_DENY_PERIODIC_ACCESSIONS:
             chosen = fallback_fiscal
-        elif should_use_xbrl_fiscal(fallback_fiscal, xbrl_fiscal):
+        elif fallback_fiscal is not None and should_use_xbrl_fiscal(fallback_fiscal, xbrl_fiscal):
             chosen = xbrl_fiscal
+        elif fallback_fiscal is None and xbrl_fiscal is not None:
+            chosen = xbrl_fiscal  # No fallback available, trust XBRL
         else:
             chosen = fallback_fiscal
 
@@ -1081,6 +1084,8 @@ def _parse_xbrl_fiscal_identity_fallback(xbrl_year_focus, xbrl_period_focus):
 def _should_use_xbrl_fiscal_fallback(fallback_fiscal, xbrl_fiscal) -> bool:
     """Local fallback — identical to get_quarterly_filings.should_use_xbrl_fiscal."""
     if xbrl_fiscal is None:
+        return False
+    if fallback_fiscal is None:
         return False
     q_num = {"Q1": 1, "Q2": 2, "Q3": 3, "Q4": 4}
     fallback_year, fallback_quarter = fallback_fiscal
