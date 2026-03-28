@@ -22,7 +22,7 @@ Provide the predictor with 4-8 prior quarters of exact-as-filed financial metric
 | **Fallback 1** | FinancialStatementContent (sec-api) | `fs.value` JSON blob per statement type | Patches ~112 XBRL gaps | Yes — `fs.filed_at` is always identical to `r.created` (verified: 0 mismatches across 30K+ records, both set from `report_data['created']` in `report.py:897`). Therefore `r.created <= as_of_ts` is sufficient for PIT — no separate `fs.filed_at` filter needed. |
 | **Fallback 2 (OPT-IN)** | Yahoo Finance `quarterly_income_stmt` | External API (yfinance) | All companies | No filing dates — cross-ref needed |
 
-**Rule**: Never mix sources within the same filing. Always emit `source: "xbrl"` or `source: "fsc"` or `source: "yahoo"` per quarter row.
+**Rule**: Never mix sources within the same filing. Always emit `primary_source: "xbrl"` or `"fsc"` or `"yahoo"` per quarter row, with per-metric `source` in `_provenance` when metrics come from different filings/sources.
 
 **Yahoo is OPT-IN only** (`--allow-yahoo` flag). Default production path: XBRL → FSC → gap. Rationale: Yahoo is vendor-normalized data, not exact-as-filed. A predictor seeing explicit gaps is more honest than silently degraded data. The `source: "yahoo"` tag mitigates this, but for "perfect predictor context" the default should be SEC-only.
 
@@ -683,7 +683,7 @@ OPTIONAL MATCH (r)-[:HAS_XBRL]->(x)<-[:REPORTS]-(fy_fact:Fact)-[:HAS_CONCEPT]->(
 - `primary_accession`: the newest filing's accession number
 - `primary_filed`: the newest filing's timestamp (from `Report.created`)
 - `_provenance`: per-metric dict mapping output field → source info. Three shapes:
-  - **Simple** (single filing): `{"revenue": {"accession": "...", "form": "10-Q"}}` — when amendment overlay caused different metrics to come from different filings
+  - **Simple** (single filing): `{"revenue": {"accession": "...", "form": "10-Q", "source": "xbrl"}}` — when amendment overlay caused different metrics to come from different filings
   - **Derived** (Q4 from multiple filings): `{"revenue": {"derived": true, "method": "fy_minus_9m_ytd", "inputs": [{"accession": "10K-acc", "form": "10-K", "source": "xbrl", "role": "annual"}, {"accession": "Q3-acc", "form": "10-Q", "source": "xbrl", "role": "9m_ytd"}]}}`
   - **Omitted** (empty {} or absent): when all metrics come from the same filing and none are derived
 - `primary_source`: the dominant data source for this quarter (`xbrl`, `fsc`, `yahoo`). In rare cases where per-metric amendment overlay mixes sources, individual `_provenance` entries carry their own `source` field.
