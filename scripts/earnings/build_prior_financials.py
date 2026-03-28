@@ -816,7 +816,7 @@ def _derive_q4(q4_period: str, q4_facts: list[dict],
                     delta_range=(0, 400))  # wide range — we already know the period
                 if fval is not None:
                     prior_q_vals.append(fval)
-                    prior_q_inputs.append({"accession": facc, "form": fform, "source": fsrc, "role": f"q{offset}"})
+                    prior_q_inputs.append({"accession": facc, "form": fform, "source": fsrc, "role": f"q{4 - offset}"})
                 else:
                     break
 
