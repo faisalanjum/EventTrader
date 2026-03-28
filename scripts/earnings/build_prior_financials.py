@@ -1049,9 +1049,11 @@ def _get_fiscal_labels(manager, ticker: str, periods: list[str], as_of: str | No
             fy, q = period_to_fiscal(d.year, d.month, d.day, fye_month, form_hint)
             labels[period] = f"{q}_FY{fy}"
 
-    # Step 5: Dedup by fiscal_key — keep the newest period per fiscal_key.
+    # Step 5: Dedup by fiscal_key — keep the chronologically newest period per key.
     # This handles 52-week edge cases where two periods map to the same label.
-    # Builder tiebreaker: keep the period closest to the fiscal quarter's expected end.
+    # Tiebreaker rationale: the newer period has the more recent filing data,
+    # matching the guidance extractor's "smallest lag" preference (newest period
+    # from the current earnings cycle is closest to the actual fiscal quarter end).
     fiscal_key_to_period: dict[str, str] = {}
     for period in sorted(labels.keys(), reverse=True):  # newest first
         fk = labels[period]
@@ -1319,7 +1321,7 @@ def build_prior_financials(ticker: str, quarter_info: dict,
     # Reason: within an XBRL period, an amendment (10-Q/A) may lack COMPLETED XBRL
     # but have FSC data. The per-metric amendment overlay needs these FSC facts
     # alongside the XBRL facts from the original filing.
-    all_target_periods = sorted(all_periods | xbrl_periods, reverse=True)[:_HISTORY_QUARTERS]
+    all_target_periods = sorted(all_periods | xbrl_periods, reverse=True)[:_OVERFETCH_QUARTERS]
     fsc_facts: dict[str, list[dict]] = {}
     if all_target_periods:
         fsc_facts = _extract_fsc(manager, ticker, all_target_periods, as_of_ts, gaps)
@@ -1341,8 +1343,9 @@ def build_prior_financials(ticker: str, quarter_info: dict,
 
     sorted_periods = sorted(all_period_facts.keys(), reverse=True)
 
-    # Cap at 8 total
-    sorted_periods = sorted_periods[:_HISTORY_QUARTERS]
+    # Keep overfetch pool — fiscal-key dedup in Step 7 may drop periods,
+    # and we cap to _HISTORY_QUARTERS after dedup, not before.
+    sorted_periods = sorted_periods[:_OVERFETCH_QUARTERS]
 
     quarters: list[dict] = []
     revenue_concept_found: str | None = None  # For segment inventory
