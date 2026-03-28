@@ -297,7 +297,7 @@ def _get_fye_month(ticker: str, gaps: list) -> int | None:
         import yfinance as yf
         fye_ts = yf.Ticker(ticker).info.get("lastFiscalYearEnd")
         if fye_ts:
-            dt = datetime.utcfromtimestamp(fye_ts)
+            dt = datetime.fromtimestamp(fye_ts, tz=timezone.utc)
             month = dt.month
             if dt.day <= 5:
                 month = month - 1 if month > 1 else 12
