@@ -196,8 +196,8 @@ def main():
                 
             # Monitoring loop
             date_range_key = f"{date_from}-{date_to}"
-            # >>> BENZINGA_ONLY: Add SOURCE_REPORTS back when reports are re-enabled
-            sources = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_TRANSCRIPTS]
+            # Reports re-enabled 2026-03-28 (was BENZINGA_ONLY since Aug 2025)
+            sources = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS, RedisKeys.SOURCE_TRANSCRIPTS]
             
             while True:
                 all_complete = True
@@ -302,8 +302,8 @@ def main():
             
             # Construct the expected fetch complete key format for this chunk
             date_range_key = f"{args.from_date}-{args.to_date}"
-            # >>> BENZINGA_ONLY: Add SOURCE_REPORTS back when reports are re-enabled
-            sources_to_check = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_TRANSCRIPTS]
+            # Reports re-enabled 2026-03-28 (was BENZINGA_ONLY since Aug 2025)
+            sources_to_check = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS, RedisKeys.SOURCE_TRANSCRIPTS]
             
             # Run initial Redis stats to see the state before processing
             logger.info("Getting initial Redis and Neo4j stats before processing...")
