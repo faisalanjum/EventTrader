@@ -42,6 +42,7 @@ if _FM_DIR not in sys.path:
 # ── Constants ────────────────────────────────────────────────────────────
 
 _HISTORY_QUARTERS = 8
+_OVERFETCH_QUARTERS = 10  # Fetch extra to survive fiscal-key dedup dropping periods
 
 ZERO_FACT_DENYLIST = {
     "0000885725-24-000073",
@@ -389,6 +390,7 @@ OPTIONAL MATCH (r)-[:HAS_XBRL]->(x:XBRLNode)<-[:REPORTS]-(fp:Fact)-[:HAS_CONCEPT
 OPTIONAL MATCH (r)-[:HAS_XBRL]->(x)<-[:REPORTS]-(fy:Fact)-[:HAS_CONCEPT]->(fyc:Concept {qname: 'dei:DocumentFiscalYearFocus'})
 RETURN r.periodOfReport AS period,
        r.formType AS form,
+       r.accessionNo AS accession,
        r.created AS filed,
        fp.value AS fiscal_period,
        fy.value AS fiscal_year
@@ -431,7 +433,7 @@ def _extract_xbrl(manager, ticker: str, current_period: str, as_of: str | None,
         _XBRL_FACTS_QUERY,
         {"ticker": ticker, "current_period": current_period,
          "as_of": as_of, "concept_list": ALL_CONCEPT_QNAMES,
-         "limit": _HISTORY_QUARTERS},
+         "limit": _OVERFETCH_QUARTERS},
     )
     # Group by period
     by_period: dict[str, list[dict]] = {}
@@ -962,129 +964,130 @@ def _extract_fsc(manager, ticker: str, periods: list[str], as_of: str | None,
 
 def _get_fiscal_labels(manager, ticker: str, periods: list[str], as_of: str | None,
                         fye_month: int | None) -> dict[str, str]:
-    """Get fiscal labels for periods. Prefer dei: facts, fallback to period_to_fiscal().
+    """Get fiscal labels for periods using the exact guidance extractor pattern.
+
+    Logic from get_quarterly_filings.py:
+    1. Compute fallback via period_to_fiscal(period, fye_month, form_type)
+    2. Parse XBRL DEI identity via parse_xbrl_fiscal_identity()
+    3. Check XBRL_DENY_PERIODIC_ACCESSIONS denylist
+    4. Use should_use_xbrl_fiscal() proximity guard to choose XBRL vs fallback
+    5. Dedup by fiscal_key (keep newest period per key)
 
     Returns: {period_str: "Q1_FY2026"}
     """
-    labels: dict[str, str] = {}
+    # Import the exact functions from the guidance extractor
+    try:
+        from get_quarterly_filings import (
+            parse_xbrl_fiscal_identity,
+            should_use_xbrl_fiscal,
+            XBRL_DENY_PERIODIC_ACCESSIONS,
+        )
+    except ImportError:
+        # Fallback: define locally if import fails (shouldn't happen — same sys.path)
+        parse_xbrl_fiscal_identity = _parse_xbrl_fiscal_identity_fallback
+        should_use_xbrl_fiscal = _should_use_xbrl_fiscal_fallback
+        XBRL_DENY_PERIODIC_ACCESSIONS = set()
 
-    # Query dei: facts
-    result = manager.execute_cypher_query_all(
+    try:
+        from fiscal_math import period_to_fiscal
+    except ImportError:
+        period_to_fiscal = None
+
+    # Query DEI facts — returns per-filing (period, form, accession, fiscal_period, fiscal_year)
+    dei_rows = manager.execute_cypher_query_all(
         _DEI_FISCAL_QUERY,
         {"ticker": ticker, "periods": periods, "as_of": as_of},
     )
 
-    for rec in result:
+    # Build per-period label: newest filing first (query ORDER BY filed DESC)
+    labels: dict[str, str] = {}
+    for rec in dei_rows:
         period = rec["period"]
         if period in labels:
-            continue  # Already got it (newest filing first due to ORDER BY)
-        fp = rec.get("fiscal_period")
-        fy = rec.get("fiscal_year")
-        if fp and fy:
-            if fp == "FY":
-                labels[period] = f"Q4_FY{fy}"
-            else:
-                labels[period] = f"{fp}_FY{fy}"
+            continue  # Already resolved (newest filing wins)
 
-    # Track which labels came from DEI (authoritative) vs fallback (heuristic)
-    dei_periods = set(labels.keys())
+        form_type = rec.get("form", "10-Q")
+        accession = rec.get("accession", "")
 
-    # Fallback for missing periods
-    if fye_month is not None:
-        try:
-            from fiscal_math import period_to_fiscal
-            for period in periods:
-                if period in labels:
-                    continue
-                d = date.fromisoformat(period)
-                # If the period month matches FYE month (±1 for day<=5 adjustment),
-                # this is likely a 10-K (Q4). period_to_fiscal needs correct form_type
-                # because 10-K is always Q4 while 10-Q can be Q1-Q3.
-                adj_month = (d.month - 1 if d.month > 1 else 12) if d.day <= 5 else d.month
-                form_hint = "10-K" if adj_month == fye_month else "10-Q"
-                fy, q = period_to_fiscal(d.year, d.month, d.day, fye_month, form_hint)
-                labels[period] = f"{q}_FY{fy}"
-        except ImportError:
-            pass
+        # Step 1: Compute fallback from period_to_fiscal
+        fallback_fiscal = None
+        if period_to_fiscal and fye_month is not None:
+            d = date.fromisoformat(period)
+            # Use actual form_type from the filing (not a heuristic)
+            base_form = form_type.replace("/A", "")  # 10-Q/A → 10-Q, 10-K/A → 10-K
+            fy, q = period_to_fiscal(d.year, d.month, d.day, fye_month, base_form)
+            fallback_fiscal = (fy, q)
 
-    # Post-pass: resolve duplicate fiscal labels.
-    # Adopted from get_quarterly_filings.py: DEI labels are authoritative.
-    # For 52-week calendar edge cases (AAP, ACI), period_to_fiscal can produce
-    # a label that collides with a DEI-sourced label on a different period.
-    label_to_periods: dict[str, list[str]] = {}
-    for period, label in labels.items():
-        label_to_periods.setdefault(label, []).append(period)
+        # Step 2: Parse XBRL DEI identity
+        xbrl_fiscal = parse_xbrl_fiscal_identity(
+            rec.get("fiscal_year"), rec.get("fiscal_period"))
 
-    for label, period_list in label_to_periods.items():
-        if len(period_list) <= 1:
-            continue
-        # Collision: keep DEI-sourced, fix fallback-sourced
-        dei_winners = [p for p in period_list if p in dei_periods]
-        fallback_losers = [p for p in period_list if p not in dei_periods]
-        if not fallback_losers:
-            # Both from DEI (shouldn't happen) — keep both, append period suffix
-            for i, p in enumerate(period_list[1:], 1):
-                labels[p] = f"{label}_{p}"
-            continue
-        # Infer correct label for fallback periods from sequence position.
-        # Sort all periods chronologically, find where the fallback period sits
-        # relative to DEI-labeled neighbors.
-        sorted_all = sorted(labels.keys())
-        for fp in fallback_losers:
-            fp_idx = sorted_all.index(fp)
-            # Look at neighbors for DEI-sourced labels to infer correct quarter
-            inferred = _infer_quarter_from_neighbors(fp, fp_idx, sorted_all, labels, dei_periods)
-            if inferred:
-                labels[fp] = inferred
-            else:
-                # Last resort: append period date to disambiguate
-                labels[fp] = f"{label}_{fp}"
+        # Step 3: Choose — exact logic from get_quarterly_filings.py
+        if accession in XBRL_DENY_PERIODIC_ACCESSIONS:
+            chosen = fallback_fiscal
+        elif should_use_xbrl_fiscal(fallback_fiscal, xbrl_fiscal):
+            chosen = xbrl_fiscal
+        else:
+            chosen = fallback_fiscal
 
-    return labels
+        if chosen:
+            fiscal_year, fiscal_quarter = chosen
+            labels[period] = f"{fiscal_quarter}_FY{fiscal_year}"
+
+    # Handle periods not in DEI results (FSC-only periods with no XBRL filings)
+    if period_to_fiscal and fye_month is not None:
+        for period in periods:
+            if period in labels:
+                continue
+            d = date.fromisoformat(period)
+            # No filing metadata available — use FYE heuristic for form_type
+            adj_month = (d.month - 1 if d.month > 1 else 12) if d.day <= 5 else d.month
+            form_hint = "10-K" if adj_month == fye_month else "10-Q"
+            fy, q = period_to_fiscal(d.year, d.month, d.day, fye_month, form_hint)
+            labels[period] = f"{q}_FY{fy}"
+
+    # Step 5: Dedup by fiscal_key — keep the newest period per fiscal_key.
+    # This handles 52-week edge cases where two periods map to the same label.
+    # Builder tiebreaker: keep the period closest to the fiscal quarter's expected end.
+    fiscal_key_to_period: dict[str, str] = {}
+    for period in sorted(labels.keys(), reverse=True):  # newest first
+        fk = labels[period]
+        if fk not in fiscal_key_to_period:
+            fiscal_key_to_period[fk] = period
+        # else: older period with same key is dropped (newest wins)
+
+    # Rebuild labels with only deduplicated entries
+    deduped_labels = {period: labels[period] for period in fiscal_key_to_period.values()}
+    return deduped_labels
 
 
-def _infer_quarter_from_neighbors(period: str, idx: int, sorted_periods: list[str],
-                                    labels: dict[str, str], dei_periods: set[str]) -> str | None:
-    """Infer a fiscal label from DEI-labeled neighbors in chronological sequence.
+def _parse_xbrl_fiscal_identity_fallback(xbrl_year_focus, xbrl_period_focus):
+    """Local fallback — identical to get_quarterly_filings.parse_xbrl_fiscal_identity."""
+    if xbrl_year_focus is None or xbrl_period_focus is None:
+        return None
+    year_str = str(xbrl_year_focus).strip()
+    if not year_str.isdigit():
+        return None
+    period = str(xbrl_period_focus).strip().upper()
+    if period == "FY":
+        quarter = "Q4"
+    elif period in {"Q1", "Q2", "Q3", "Q4"}:
+        quarter = period
+    else:
+        return None
+    return int(year_str), quarter
 
-    If the next period is Q2_FY2024, this one is probably Q1_FY2024.
-    If the previous period is Q4_FY2023, this one is probably Q1_FY2024.
-    """
-    q_order = ["Q1", "Q2", "Q3", "Q4"]
 
-    # Check next period (chronologically later = higher quarter number)
-    if idx + 1 < len(sorted_periods):
-        next_p = sorted_periods[idx + 1]
-        if next_p in dei_periods:
-            next_label = labels[next_p]
-            parts = next_label.split("_FY")
-            if len(parts) == 2:
-                next_q, next_fy = parts[0], parts[1]
-                if next_q in q_order:
-                    qi = q_order.index(next_q)
-                    if qi > 0:
-                        return f"{q_order[qi - 1]}_FY{next_fy}"
-                    else:
-                        # Next is Q1 → this must be Q4 of previous FY
-                        return f"Q4_FY{int(next_fy) - 1}"
-
-    # Check previous period
-    if idx > 0:
-        prev_p = sorted_periods[idx - 1]
-        if prev_p in dei_periods:
-            prev_label = labels[prev_p]
-            parts = prev_label.split("_FY")
-            if len(parts) == 2:
-                prev_q, prev_fy = parts[0], parts[1]
-                if prev_q in q_order:
-                    qi = q_order.index(prev_q)
-                    if qi < 3:
-                        return f"{q_order[qi + 1]}_FY{prev_fy}"
-                    else:
-                        # Previous is Q4 → this must be Q1 of next FY
-                        return f"Q1_FY{int(prev_fy) + 1}"
-
-    return None
+def _should_use_xbrl_fiscal_fallback(fallback_fiscal, xbrl_fiscal) -> bool:
+    """Local fallback — identical to get_quarterly_filings.should_use_xbrl_fiscal."""
+    if xbrl_fiscal is None:
+        return False
+    q_num = {"Q1": 1, "Q2": 2, "Q3": 3, "Q4": 4}
+    fallback_year, fallback_quarter = fallback_fiscal
+    xbrl_year, xbrl_quarter = xbrl_fiscal
+    year_diff = xbrl_year - fallback_year
+    quarter_diff = q_num[xbrl_quarter] - q_num[fallback_quarter]
+    return abs(year_diff) <= 1 and abs(quarter_diff) <= 1
 
 
 # ── Segment Inventory ────────────────────────────────────────────────────
@@ -1302,7 +1305,7 @@ def build_prior_financials(ticker: str, quarter_info: dict,
     all_periods_result = manager.execute_cypher_query_all(
         _ALL_PERIODS_QUERY,
         {"ticker": ticker, "current_period": current_period,
-         "as_of": as_of_ts, "limit": _HISTORY_QUARTERS},
+         "as_of": as_of_ts, "limit": _OVERFETCH_QUARTERS},
     )
     all_periods = {rec["period"] for rec in all_periods_result}
     fsc_only_periods = all_periods - xbrl_periods
@@ -1438,8 +1441,15 @@ def build_prior_financials(ticker: str, quarter_info: dict,
     for q in quarters:
         _compute_derived(q["metrics"])
 
-    # ── Step 7: Fiscal labels ──
+    # ── Step 7: Fiscal labels (exact guidance extractor logic + dedup by fiscal_key) ──
     fiscal_labels = _get_fiscal_labels(manager, ticker, sorted_periods, as_of_ts, fye_month)
+
+    # Filter out quarters whose periods were dropped by fiscal-key dedup,
+    # then cap at _HISTORY_QUARTERS. This handles 52-week edge cases where
+    # two raw periods collapse to the same fiscal key.
+    valid_periods = set(fiscal_labels.keys())
+    quarters = [q for q in quarters if q["period"] in valid_periods]
+    quarters = quarters[:_HISTORY_QUARTERS]
 
     # ── Step 8: Provenance cleanup ──
     for q in quarters:
