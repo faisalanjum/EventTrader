@@ -986,6 +986,9 @@ def _get_fiscal_labels(manager, ticker: str, periods: list[str], as_of: str | No
             else:
                 labels[period] = f"{fp}_FY{fy}"
 
+    # Track which labels came from DEI (authoritative) vs fallback (heuristic)
+    dei_periods = set(labels.keys())
+
     # Fallback for missing periods
     if fye_month is not None:
         try:
@@ -1004,7 +1007,84 @@ def _get_fiscal_labels(manager, ticker: str, periods: list[str], as_of: str | No
         except ImportError:
             pass
 
+    # Post-pass: resolve duplicate fiscal labels.
+    # Adopted from get_quarterly_filings.py: DEI labels are authoritative.
+    # For 52-week calendar edge cases (AAP, ACI), period_to_fiscal can produce
+    # a label that collides with a DEI-sourced label on a different period.
+    label_to_periods: dict[str, list[str]] = {}
+    for period, label in labels.items():
+        label_to_periods.setdefault(label, []).append(period)
+
+    for label, period_list in label_to_periods.items():
+        if len(period_list) <= 1:
+            continue
+        # Collision: keep DEI-sourced, fix fallback-sourced
+        dei_winners = [p for p in period_list if p in dei_periods]
+        fallback_losers = [p for p in period_list if p not in dei_periods]
+        if not fallback_losers:
+            # Both from DEI (shouldn't happen) — keep both, append period suffix
+            for i, p in enumerate(period_list[1:], 1):
+                labels[p] = f"{label}_{p}"
+            continue
+        # Infer correct label for fallback periods from sequence position.
+        # Sort all periods chronologically, find where the fallback period sits
+        # relative to DEI-labeled neighbors.
+        sorted_all = sorted(labels.keys())
+        for fp in fallback_losers:
+            fp_idx = sorted_all.index(fp)
+            # Look at neighbors for DEI-sourced labels to infer correct quarter
+            inferred = _infer_quarter_from_neighbors(fp, fp_idx, sorted_all, labels, dei_periods)
+            if inferred:
+                labels[fp] = inferred
+            else:
+                # Last resort: append period date to disambiguate
+                labels[fp] = f"{label}_{fp}"
+
     return labels
+
+
+def _infer_quarter_from_neighbors(period: str, idx: int, sorted_periods: list[str],
+                                    labels: dict[str, str], dei_periods: set[str]) -> str | None:
+    """Infer a fiscal label from DEI-labeled neighbors in chronological sequence.
+
+    If the next period is Q2_FY2024, this one is probably Q1_FY2024.
+    If the previous period is Q4_FY2023, this one is probably Q1_FY2024.
+    """
+    q_order = ["Q1", "Q2", "Q3", "Q4"]
+
+    # Check next period (chronologically later = higher quarter number)
+    if idx + 1 < len(sorted_periods):
+        next_p = sorted_periods[idx + 1]
+        if next_p in dei_periods:
+            next_label = labels[next_p]
+            parts = next_label.split("_FY")
+            if len(parts) == 2:
+                next_q, next_fy = parts[0], parts[1]
+                if next_q in q_order:
+                    qi = q_order.index(next_q)
+                    if qi > 0:
+                        return f"{q_order[qi - 1]}_FY{next_fy}"
+                    else:
+                        # Next is Q1 → this must be Q4 of previous FY
+                        return f"Q4_FY{int(next_fy) - 1}"
+
+    # Check previous period
+    if idx > 0:
+        prev_p = sorted_periods[idx - 1]
+        if prev_p in dei_periods:
+            prev_label = labels[prev_p]
+            parts = prev_label.split("_FY")
+            if len(parts) == 2:
+                prev_q, prev_fy = parts[0], parts[1]
+                if prev_q in q_order:
+                    qi = q_order.index(prev_q)
+                    if qi < 3:
+                        return f"{q_order[qi + 1]}_FY{prev_fy}"
+                    else:
+                        # Previous is Q4 → this must be Q1 of next FY
+                        return f"Q1_FY{int(prev_fy) + 1}"
+
+    return None
 
 
 # ── Segment Inventory ────────────────────────────────────────────────────
