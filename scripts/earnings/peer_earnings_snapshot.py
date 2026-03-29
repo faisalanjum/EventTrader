@@ -100,6 +100,18 @@ def _parse_returns_schedule(raw: str | None) -> dict | None:
         return None
 
 
+def _parse_dt_for_pit(ts_str):
+    """Parse ISO timestamp to timezone-aware datetime for PIT comparison.
+
+    CRITICAL: Never compare timestamps as strings — timezone offsets (-04:00 vs -05:00)
+    make lexicographic comparison unreliable across DST boundaries.
+    """
+    s = str(ts_str)
+    if s.endswith('Z'):
+        s = s[:-1] + '+00:00'
+    return datetime.fromisoformat(s)
+
+
 def _pick_best_headlines(raw_headlines: list[dict]) -> list[dict]:
     """Pick best earnings + guidance headlines with fallback chain.
 
@@ -222,13 +234,14 @@ def build_peer_earnings_snapshot(ticker: str, pit_cutoff: str,
 
             rs = _parse_returns_schedule(row.get('returns_schedule'))
             if rs:
-                if rs.get('daily') and str(rs['daily']) > pit_cutoff:
+                pit_dt = _parse_dt_for_pit(pit_cutoff)
+                if rs.get('daily') and _parse_dt_for_pit(rs['daily']) > pit_dt:
                     daily = None
                     daily_sector = None
                     daily_macro = None
-                if rs.get('session') and str(rs['session']) > pit_cutoff:
+                if rs.get('session') and _parse_dt_for_pit(rs['session']) > pit_dt:
                     session_ret = None
-                if rs.get('hourly') and str(rs['hourly']) > pit_cutoff:
+                if rs.get('hourly') and _parse_dt_for_pit(rs['hourly']) > pit_dt:
                     hourly = None
                     hourly_sector = None
                     hourly_macro = None
