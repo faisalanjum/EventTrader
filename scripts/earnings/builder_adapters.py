@@ -55,6 +55,22 @@ def _ensure_dir(path: str) -> None:
         os.makedirs(d, exist_ok=True)
 
 
+class _SuppressStdout:
+    """Context manager to suppress builder stdout noise (prints, rendered text).
+
+    Redirects stdout to /dev/null during legacy builder calls.
+    Stderr is left open for genuine errors.
+    """
+    def __enter__(self):
+        self._orig = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+        return self
+
+    def __exit__(self, *args):
+        sys.stdout.close()
+        sys.stdout = self._orig
+
+
 # ═══════════════════════════════════════════════════════════════════════
 # Builder #1: 8k_packet
 # ═══════════════════════════════════════════════════════════════════════
@@ -75,7 +91,8 @@ def build_8k_packet(ticker: str, quarter_info: dict,
 
     # Legacy builder calls sys.exit(1) on missing report — catch it
     try:
-        _legacy(accession, ticker, out_path=out)
+        with _SuppressStdout():
+            _legacy(accession, ticker, out_path=out)
     except SystemExit as e:
         raise ValueError(
             f"8-K not found for accession={accession} ticker={ticker} "
@@ -107,7 +124,8 @@ def build_guidance_history(ticker: str, quarter_info: dict,
     _ensure_dir(out)
 
     # Translate: pit_cutoff → legacy 'pit' param
-    _legacy(ticker, pit=pit_cutoff, out_path=out)
+    with _SuppressStdout():
+        _legacy(ticker, pit=pit_cutoff, out_path=out)
 
     # Legacy returns None — read packet from disk
     with open(out, encoding="utf-8") as f:
@@ -145,8 +163,9 @@ def build_inter_quarter_context(ticker: str, quarter_info: dict,
     _ensure_dir(out)
 
     # Legacy returns (out_path, rendered) tuple — we discard rendered
-    _legacy(ticker, prev_8k_ts, context_cutoff,
-            out_path=out, context_cutoff_reason=cutoff_reason)
+    with _SuppressStdout():
+        _legacy(ticker, prev_8k_ts, context_cutoff,
+                out_path=out, context_cutoff_reason=cutoff_reason)
 
     # Read packet from disk
     with open(out, encoding="utf-8") as f:
@@ -175,9 +194,11 @@ def build_peer_earnings_snapshot(ticker: str, quarter_info: dict,
     effective = pit_cutoff or _now_iso()
 
     out = out_path or f"/tmp/peer_earnings_snapshot_{ticker}.json"
+    _ensure_dir(out)
 
     # Pass through builder-specific kwargs (top_n, window_start)
-    packet = _legacy(ticker, effective, out_path=out, **kwargs)
+    with _SuppressStdout():
+        packet = _legacy(ticker, effective, out_path=out, **kwargs)
 
     # Output packet shows original pit_cutoff (None for live), not the derived anchor
     return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
@@ -203,11 +224,14 @@ def build_macro_snapshot(ticker: str, quarter_info: dict,
 
     # Default source policy (overridable)
     source = kwargs.pop("source", "polygon" if pit_cutoff else "yahoo")
-    market_session = quarter_info.get("market_session")
+    # Historical: use the filing's market_session. Live: let builder auto-infer from now()
+    market_session = quarter_info.get("market_session") if pit_cutoff else None
 
     out = out_path or f"/tmp/macro_snapshot_{ticker}.json"
+    _ensure_dir(out)
 
-    packet = _legacy(ticker, effective, market_session, out_path=out, source=source, **kwargs)
+    with _SuppressStdout():
+        packet = _legacy(ticker, effective, market_session, out_path=out, source=source, **kwargs)
 
     return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
 
@@ -237,7 +261,8 @@ def build_consensus(ticker: str, quarter_info: dict,
 
     packet = _legacy(ticker, qi_for_legacy, as_of_ts=pit_cutoff, out_path=out)
 
-    # Normalize: legacy uses as_of_ts in packet, we add pit_cutoff
+    # Normalize: remove legacy as_of_ts, replace with pit_cutoff
+    packet.pop("as_of_ts", None)
     effective = pit_cutoff if pit_cutoff else None
     return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
 
@@ -268,5 +293,7 @@ def build_prior_financials(ticker: str, quarter_info: dict,
     # Pass through builder-specific kwargs (allow_yahoo)
     packet = _legacy(ticker, qi_for_legacy, as_of_ts=pit_cutoff, out_path=out, **kwargs)
 
+    # Normalize: remove legacy as_of_ts, replace with pit_cutoff
+    packet.pop("as_of_ts", None)
     effective = pit_cutoff if pit_cutoff else None
     return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
