@@ -488,10 +488,38 @@ def test_edge_cases(R: Results):
     except Exception as e:
         R.record("D", "build_guidance_history", "crm_empty_test", False, str(e)[:200], "CRM")
 
-    # E5: Unique nested out_path — adapters must mkdir parent dirs
+    # E5: On-disk packet has enrichment fields (not just in-memory return)
     import tempfile, shutil
-    test_dir = tempfile.mkdtemp()
+    test_dir_disk = tempfile.mkdtemp()
     qi_five = _make_qi(FIXTURES["FIVE"])
+    try:
+        for name, fn, kw in [
+            ("build_peer_earnings_snapshot", A.build_peer_earnings_snapshot, {}),
+            ("build_prior_financials", A.build_prior_financials, {}),
+            ("build_consensus", A.build_consensus, {}) if os.environ.get("ALPHAVANTAGE_API_KEY") else (None, None, None),
+        ]:
+            if name is None:
+                continue
+            disk_path = os.path.join(test_dir_disk, f"{name}_disk.json")
+            try:
+                fn("FIVE", qi_five, pit_cutoff=qi_five["filed_8k"], out_path=disk_path, **kw)
+                with open(disk_path) as f:
+                    disk_pkt = json.load(f)
+                has_enrichment = all(k in disk_pkt for k in REQUIRED_ENRICHMENT_KEYS)
+                R.record("D", name, "disk_has_enrichment_keys",
+                         has_enrichment,
+                         f"on-disk keys: {[k for k in REQUIRED_ENRICHMENT_KEYS if k in disk_pkt]}", "FIVE")
+                if name == "build_prior_financials":
+                    R.record("D", name, "disk_no_legacy_as_of_ts",
+                             "as_of_ts" not in disk_pkt,
+                             f"as_of_ts {'present' if 'as_of_ts' in disk_pkt else 'removed'} on disk", "FIVE")
+            except Exception as e:
+                R.record("D", name, "disk_enrichment_test", False, str(e)[:200], "FIVE")
+    finally:
+        shutil.rmtree(test_dir_disk)
+
+    # E6: Unique nested out_path — adapters must mkdir parent dirs
+    test_dir = tempfile.mkdtemp()
     try:
         nested = os.path.join(test_dir, "run123", "subdir", "peer.json")
         try:

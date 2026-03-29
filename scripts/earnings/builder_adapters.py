@@ -49,6 +49,15 @@ def _enrich_packet(packet: dict, pit_cutoff: str | None,
     return packet
 
 
+def _write_enriched(packet: dict, out_path: str) -> None:
+    """Write the enriched packet to disk (atomic temp+rename)."""
+    _ensure_dir(out_path)
+    tmp = out_path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(packet, f, indent=2, default=str, ensure_ascii=False)
+    os.replace(tmp, out_path)
+
+
 def _ensure_dir(path: str) -> None:
     d = os.path.dirname(path)
     if d:
@@ -60,15 +69,23 @@ class _SuppressStdout:
 
     Redirects stdout to /dev/null during legacy builder calls.
     Stderr is left open for genuine errors.
+
+    Thread-safety note: sys.stdout is global, so swapping it from concurrent
+    threads in ThreadPoolExecutor can race. For the orchestrator's parallel
+    execution, each builder runs in its own thread — the race window is small
+    (only during enter/exit) and the worst case is a few lines of builder noise
+    leaking through, not data corruption. For true isolation, the orchestrator
+    should use subprocess-level redirection or capture at a lower level.
     """
     def __enter__(self):
         self._orig = sys.stdout
-        sys.stdout = open(os.devnull, 'w')
+        self._devnull = open(os.devnull, 'w')
+        sys.stdout = self._devnull
         return self
 
     def __exit__(self, *args):
-        sys.stdout.close()
         sys.stdout = self._orig
+        self._devnull.close()
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -103,7 +120,9 @@ def build_8k_packet(ticker: str, quarter_info: dict,
     with open(out, encoding="utf-8") as f:
         packet = json.load(f)
 
-    return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=None)
+    _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=None)
+    _write_enriched(packet, out)
+    return packet
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -132,7 +151,9 @@ def build_guidance_history(ticker: str, quarter_info: dict,
         packet = json.load(f)
 
     effective = pit_cutoff if pit_cutoff else None
-    return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _write_enriched(packet, out)
+    return packet
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -172,7 +193,9 @@ def build_inter_quarter_context(ticker: str, quarter_info: dict,
         packet = json.load(f)
 
     effective = pit_cutoff if pit_cutoff else filed_8k
-    return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _write_enriched(packet, out)
+    return packet
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -201,7 +224,9 @@ def build_peer_earnings_snapshot(ticker: str, quarter_info: dict,
         packet = _legacy(ticker, effective, out_path=out, **kwargs)
 
     # Output packet shows original pit_cutoff (None for live), not the derived anchor
-    return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _write_enriched(packet, out)
+    return packet
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -233,7 +258,9 @@ def build_macro_snapshot(ticker: str, quarter_info: dict,
     with _SuppressStdout():
         packet = _legacy(ticker, effective, market_session, out_path=out, source=source, **kwargs)
 
-    return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _write_enriched(packet, out)
+    return packet
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -259,12 +286,15 @@ def build_consensus(ticker: str, quarter_info: dict,
 
     out = out_path or f"/tmp/consensus_{ticker}.json"
 
-    packet = _legacy(ticker, qi_for_legacy, as_of_ts=pit_cutoff, out_path=out)
+    with _SuppressStdout():
+        packet = _legacy(ticker, qi_for_legacy, as_of_ts=pit_cutoff, out_path=out)
 
     # Normalize: remove legacy as_of_ts, replace with pit_cutoff
     packet.pop("as_of_ts", None)
     effective = pit_cutoff if pit_cutoff else None
-    return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _write_enriched(packet, out)
+    return packet
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -291,9 +321,12 @@ def build_prior_financials(ticker: str, quarter_info: dict,
     out = out_path or f"/tmp/prior_financials_{ticker}.json"
 
     # Pass through builder-specific kwargs (allow_yahoo)
-    packet = _legacy(ticker, qi_for_legacy, as_of_ts=pit_cutoff, out_path=out, **kwargs)
+    with _SuppressStdout():
+        packet = _legacy(ticker, qi_for_legacy, as_of_ts=pit_cutoff, out_path=out, **kwargs)
 
     # Normalize: remove legacy as_of_ts, replace with pit_cutoff
     packet.pop("as_of_ts", None)
     effective = pit_cutoff if pit_cutoff else None
-    return _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _enrich_packet(packet, pit_cutoff, effective_cutoff_ts=effective)
+    _write_enriched(packet, out)
+    return packet
