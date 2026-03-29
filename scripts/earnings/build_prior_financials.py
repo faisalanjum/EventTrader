@@ -49,17 +49,6 @@ ZERO_FACT_DENYLIST = {
     "0001616707-24-000054",
 }
 
-# Balance sheet concepts — need instant period handling (not duration)
-_BALANCE_SHEET_CONCEPTS = {
-    "us-gaap:Assets",
-    "us-gaap:CashAndCashEquivalentsAtCarryingValue",
-    "us-gaap:CashCashEquivalentsAndShortTermInvestments",
-    "us-gaap:LongTermDebt",
-    "us-gaap:LongTermDebtNoncurrent",
-    "us-gaap:LongTermDebtAndCapitalLeaseObligations",
-    "us-gaap:StockholdersEquity",
-}
-
 # Cash flow concepts — need YTD derivation for Q2/Q3
 _CASH_FLOW_YTD_CONCEPTS = {
     "us-gaap:NetCashProvidedByUsedInOperatingActivities",
@@ -913,6 +902,8 @@ def _extract_fsc(manager, ticker: str, periods: list[str], as_of: str | None,
                     if not isinstance(entries, list):
                         continue
                     for entry in entries:
+                        if not isinstance(entry, dict):
+                            continue
                         # Consolidated filter: skip entries with segment
                         if "segment" in entry:
                             continue
