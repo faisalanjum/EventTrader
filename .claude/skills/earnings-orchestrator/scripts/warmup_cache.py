@@ -1133,6 +1133,18 @@ def _day_from_ts(ts):
     return str(ts)[:10] if ts else None
 
 
+def _parse_dt_for_pit(ts_str):
+    """Parse ISO timestamp to timezone-aware datetime for PIT comparison.
+
+    CRITICAL: Never compare timestamps as strings — timezone offsets (-04:00 vs -05:00)
+    make lexicographic comparison unreliable across DST boundaries.
+    """
+    s = str(ts_str)
+    if s.endswith('Z'):
+        s = s[:-1] + '+00:00'
+    return datetime.fromisoformat(s)
+
+
 def _build_forward_returns(created, market_session_val, returns_schedule_raw, metrics,
                            session_helper, context_cutoff_ts):
     """Build forward returns for a news or filing event.
@@ -1178,7 +1190,7 @@ def _build_forward_returns(created, market_session_val, returns_schedule_raw, me
         ('daily', 'daily', daily_start.isoformat(), daily_end),
     ]:
         # PIT safety: null the entire horizon if its window extends past the cutoff
-        if str(end_ts) > context_cutoff_ts:
+        if _parse_dt_for_pit(end_ts) > _parse_dt_for_pit(context_cutoff_ts):
             result[horizon] = None
         else:
             result[horizon] = pack(prefix, start_ts, end_ts)

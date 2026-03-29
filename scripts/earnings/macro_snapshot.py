@@ -587,6 +587,13 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
     # Cap earlier to max 3
     earlier_items = earlier_items[:3]
 
+    # ── Data quality warnings ──
+    gaps = []
+    if not spy_minute and not spy_daily:
+        gaps.append({'type': 'missing_spy_data', 'reason': f'No SPY bars returned from {source} for {pit_date} — all market_now.spy metrics are null'})
+    if vix_level is None:
+        gaps.append({'type': 'missing_vix', 'reason': 'VIX data unavailable'})
+
     # ── Assemble ──
     packet = {
         'schema_version': 'macro_snapshot.v2',
@@ -610,6 +617,7 @@ def build_macro_snapshot(ticker: str, pit_cutoff: str, market_session: str | Non
             'earlier': earlier_items,
         },
 
+        'gaps': gaps,
         'assembled_at': datetime.utcnow().isoformat() + 'Z',
     }
 
