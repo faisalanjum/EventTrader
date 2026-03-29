@@ -1,0 +1,238 @@
+{
+  "revenue": {
+    "total_quarters": 6151,
+    "filled_quarters": 6001,
+    "null_quarters": 150,
+    "filled_tickers": 766,
+    "null_tickers": 83,
+    "current_qnames": [
+      "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+      "us-gaap:Revenues",
+      "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
+      "us-gaap:RevenuesNetOfInterestExpense",
+      "us-gaap:OperatingLeaseLeaseIncome",
+      "us-gaap:RegulatedOperatingRevenue"
+    ],
+    "fill_rate_pct": 97.6
+  },
+  "cost_of_revenue": {
+    "total_quarters": 6151,
+    "filled_quarters": 4170,
+    "null_quarters": 1981,
+    "filled_tickers": 547,
+    "null_tickers": 310,
+    "current_qnames": [
+      "us-gaap:CostOfGoodsAndServicesSold",
+      "us-gaap:CostOfRevenue"
+    ],
+    "fill_rate_pct": 67.8
+  },
+  "gross_profit": {
+    "total_quarters": 6151,
+    "filled_quarters": 2915,
+    "null_quarters": 3236,
+    "filled_tickers": 387,
+    "null_tickers": 444,
+    "current_qnames": [
+      "us-gaap:GrossProfit"
+    ],
+    "fill_rate_pct": 47.4
+  },
+  "sga": {
+    "total_quarters": 6151,
+    "filled_quarters": 4389,
+    "null_quarters": 1762,
+    "filled_tickers": 567,
+    "null_tickers": 277,
+    "current_qnames": [
+      "us-gaap:SellingGeneralAndAdministrativeExpense",
+      "us-gaap:SellingAndMarketingExpense"
+    ],
+    "fill_rate_pct": 71.4
+  },
+  "rd_expense": {
+    "total_quarters": 6151,
+    "filled_quarters": 2438,
+    "null_quarters": 3713,
+    "filled_tickers": 317,
+    "null_tickers": 494,
+    "current_qnames": [
+      "us-gaap:ResearchAndDevelopmentExpense"
+    ],
+    "fill_rate_pct": 39.6
+  },
+  "depreciation_amortization": {
+    "total_quarters": 6151,
+    "filled_quarters": 3368,
+    "null_quarters": 2783,
+    "filled_tickers": 609,
+    "null_tickers": 554,
+    "current_qnames": [
+      "us-gaap:DepreciationAndAmortization",
+      "us-gaap:DepreciationDepletionAndAmortization"
+    ],
+    "fill_rate_pct": 54.8
+  },
+  "interest_expense": {
+    "total_quarters": 6151,
+    "filled_quarters": 3994,
+    "null_quarters": 2157,
+    "filled_tickers": 560,
+    "null_tickers": 371,
+    "current_qnames": [
+      "us-gaap:InterestExpense",
+      "us-gaap:InterestExpenseNonoperating",
+      "us-gaap:InterestExpenseDebt"
+    ],
+    "fill_rate_pct": 64.9
+  },
+  "income_tax": {
+    "total_quarters": 6151,
+    "filled_quarters": 5844,
+    "null_quarters": 307,
+    "filled_tickers": 751,
+    "null_tickers": 110,
+    "current_qnames": [
+      "us-gaap:IncomeTaxExpenseBenefit"
+    ],
+    "fill_rate_pct": 95.0
+  },
+  "operating_income": {
+    "total_quarters": 6151,
+    "filled_quarters": 5200,
+    "null_quarters": 951,
+    "filled_tickers": 670,
+    "null_tickers": 182,
+    "current_qnames": [
+      "us-gaap:OperatingIncomeLoss"
+    ],
+    "fill_rate_pct": 84.5
+  },
+  "net_income": {
+    "total_quarters": 6151,
+    "filled_quarters": 6085,
+    "null_quarters": 66,
+    "filled_tickers": 772,
+    "null_tickers": 61,
+    "current_qnames": [
+      "us-gaap:NetIncomeLoss",
+      "us-gaap:ProfitLoss",
+      "us-gaap:NetIncomeLossAvailableToCommonStockholdersBasic"
+    ],
+    "fill_rate_pct": 98.9
+  },
+  "eps_diluted": {
+    "total_quarters": 6151,
+    "filled_quarters": 4609,
+    "null_quarters": 1542,
+    "filled_tickers": 758,
+    "null_tickers": 740,
+    "current_qnames": [
+      "us-gaap:EarningsPerShareDiluted",
+      "us-gaap:IncomeLossFromContinuingOperationsPerDilutedShare"
+    ],
+    "fill_rate_pct": 74.9
+  },
+  "diluted_shares": {
+    "total_quarters": 6151,
+    "filled_quarters": 4485,
+    "null_quarters": 1666,
+    "filled_tickers": 754,
+    "null_tickers": 762,
+    "current_qnames": [
+      "us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding"
+    ],
+    "fill_rate_pct": 72.9
+  },
+  "total_assets": {
+    "total_quarters": 6151,
+    "filled_quarters": 6149,
+    "null_quarters": 2,
+    "filled_tickers": 772,
+    "null_tickers": 2,
+    "current_qnames": [
+      "us-gaap:Assets"
+    ],
+    "fill_rate_pct": 100.0
+  },
+  "cash_and_equivalents": {
+    "total_quarters": 6151,
+    "filled_quarters": 5600,
+    "null_quarters": 551,
+    "filled_tickers": 719,
+    "null_tickers": 88,
+    "current_qnames": [
+      "us-gaap:CashAndCashEquivalentsAtCarryingValue",
+      "us-gaap:CashCashEquivalentsAndShortTermInvestments"
+    ],
+    "fill_rate_pct": 91.0
+  },
+  "long_term_debt": {
+    "total_quarters": 6151,
+    "filled_quarters": 4446,
+    "null_quarters": 1705,
+    "filled_tickers": 592,
+    "null_tickers": 258,
+    "current_qnames": [
+      "us-gaap:LongTermDebt",
+      "us-gaap:LongTermDebtNoncurrent",
+      "us-gaap:LongTermDebtAndCapitalLeaseObligations"
+    ],
+    "fill_rate_pct": 72.3
+  },
+  "stockholders_equity": {
+    "total_quarters": 6151,
+    "filled_quarters": 5784,
+    "null_quarters": 367,
+    "filled_tickers": 742,
+    "null_tickers": 67,
+    "current_qnames": [
+      "us-gaap:StockholdersEquity"
+    ],
+    "fill_rate_pct": 94.0
+  },
+  "operating_cash_flow": {
+    "total_quarters": 6151,
+    "filled_quarters": 5802,
+    "null_quarters": 349,
+    "filled_tickers": 765,
+    "null_tickers": 266,
+    "current_qnames": [
+      "us-gaap:NetCashProvidedByUsedInOperatingActivities"
+    ],
+    "fill_rate_pct": 94.3
+  },
+  "capex": {
+    "total_quarters": 6151,
+    "filled_quarters": 4449,
+    "null_quarters": 1702,
+    "filled_tickers": 600,
+    "null_tickers": 399,
+    "current_qnames": [
+      "us-gaap:PaymentsToAcquirePropertyPlantAndEquipment"
+    ],
+    "fill_rate_pct": 72.3
+  },
+  "buybacks": {
+    "total_quarters": 6151,
+    "filled_quarters": 3486,
+    "null_quarters": 2665,
+    "filled_tickers": 560,
+    "null_tickers": 512,
+    "current_qnames": [
+      "us-gaap:PaymentsForRepurchaseOfCommonStock"
+    ],
+    "fill_rate_pct": 56.7
+  },
+  "dividends_per_share": {
+    "total_quarters": 6151,
+    "filled_quarters": 2062,
+    "null_quarters": 4089,
+    "filled_tickers": 325,
+    "null_tickers": 636,
+    "current_qnames": [
+      "us-gaap:CommonStockDividendsPerShareDeclared"
+    ],
+    "fill_rate_pct": 33.5
+  }
+}

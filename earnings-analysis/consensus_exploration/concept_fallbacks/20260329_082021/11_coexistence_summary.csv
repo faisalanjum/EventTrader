@@ -1,0 +1,4 @@
+metric,candidate_qname,match_count,mismatch_count,total_pairs,ticker_count,match_ticker_count,classification
+capex,us-gaap:PaymentsToAcquireProductiveAssets,12,15,27,16,8,different_metric
+depreciation_amortization,us-gaap:Depreciation,46,580,626,184,23,different_metric
+dividends_per_share,us-gaap:CommonStockDividendsPerShareCashPaid,248,19,267,52,51,different_metric
