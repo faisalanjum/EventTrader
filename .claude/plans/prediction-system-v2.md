@@ -55,21 +55,32 @@ DEFERRED:
 No pre-warming. The orchestrator runs all 9 builders in parallel at trigger time. Always fresh, zero infrastructure.
 
 ```python
-def build_prediction_bundle(ticker, accession, quarter_info, as_of_ts=None):
-    """Assemble full 9-item bundle. Builders are sync — run in parallel via ThreadPoolExecutor."""
-    # Existing builders have different signatures; wrap each call explicitly.
-    # as_of_ts = PIT cutoff (ISO timestamp) for historical, None for live.
+from builder_adapters import (
+    build_8k_packet, build_guidance_history, build_inter_quarter_context,
+    build_peer_earnings_snapshot, build_macro_snapshot, build_consensus,
+    build_prior_financials,
+)
+
+def build_prediction_bundle(ticker, quarter_info, pit_cutoff=None):
+    """Assemble full 9-item bundle via standardized adapters.
+
+    All adapters share one signature: build_X(ticker, quarter_info, pit_cutoff=None, out_path=None)
+    pit_cutoff: None=live (unrestricted), str=historical (PIT-gated).
+    """
+    run_id = datetime.now().strftime('%Y%m%d_%H%M%S')
+    def out(name): return f"/tmp/earnings/{run_id}/{name}.json"
+
     with ThreadPoolExecutor(max_workers=9) as pool:
         futures = {
-            "8k_packet":                 pool.submit(build_8k_packet, accession, ticker),
-            "guidance_history":          pool.submit(build_guidance_history, ticker, as_of_ts),
-            "inter_quarter_context":     pool.submit(build_inter_quarter_context, ticker, quarter_info, as_of_ts),
-            "peer_earnings_snapshot":    pool.submit(build_peer_earnings_snapshot, ticker, quarter_info, as_of_ts),
-            "macro_snapshot":            pool.submit(build_macro_snapshot, as_of_ts),
-            "consensus":                 pool.submit(build_consensus, ticker, quarter_info, as_of_ts),
-            "previous_earnings":         pool.submit(build_previous_earnings, ticker, quarter_info, as_of_ts),
-            "previous_earnings_lessons": pool.submit(build_previous_earnings_lessons, ticker),
-            "prior_financials":          pool.submit(build_prior_financials, ticker, quarter_info, as_of_ts),
+            "8k_packet":                 pool.submit(build_8k_packet, ticker, quarter_info, pit_cutoff, out("8k_packet")),
+            "guidance_history":          pool.submit(build_guidance_history, ticker, quarter_info, pit_cutoff, out("guidance_history")),
+            "inter_quarter_context":     pool.submit(build_inter_quarter_context, ticker, quarter_info, pit_cutoff, out("inter_quarter_context")),
+            "peer_earnings_snapshot":    pool.submit(build_peer_earnings_snapshot, ticker, quarter_info, pit_cutoff, out("peer_earnings_snapshot")),
+            "macro_snapshot":            pool.submit(build_macro_snapshot, ticker, quarter_info, pit_cutoff, out("macro_snapshot")),
+            "consensus":                 pool.submit(build_consensus, ticker, quarter_info, pit_cutoff, out("consensus")),
+            "previous_earnings":         pool.submit(build_previous_earnings, ticker, quarter_info, pit_cutoff, out("previous_earnings")),
+            "previous_earnings_lessons": pool.submit(build_previous_earnings_lessons, ticker, quarter_info, pit_cutoff, out("previous_earnings_lessons")),
+            "prior_financials":          pool.submit(build_prior_financials, ticker, quarter_info, pit_cutoff, out("prior_financials")),
         }
         bundle = {k: f.result() for k, f in futures.items()}
 
@@ -79,27 +90,36 @@ def build_prediction_bundle(ticker, accession, quarter_info, as_of_ts=None):
     return bundle
 ```
 
-**Note**: The 5 DONE builders have varying real signatures (see builder inventory). The wrapper calls above are illustrative — actual calls must match each builder's API. New builders (6-9) should follow a normalized signature: `build_X(ticker, quarter_info, as_of_ts=None)`.
+**Standardized adapter contract** (implemented in `scripts/earnings/builder_adapters.py`):
+- All 7 built adapters share: `build_X(ticker, quarter_info, pit_cutoff=None, out_path=None, **kwargs) → dict`
+- `pit_cutoff=None` = live (unrestricted). `pit_cutoff=str` = historical (PIT-gated).
+- `source_mode` derived internally (`"historical" if pit_cutoff else "live"`), not passed.
+- Output packet always includes: `schema_version`, `ticker`, `pit_cutoff`, `effective_cutoff_ts`, `source_mode`, `assembled_at`.
+- Enriched packet written to disk AND returned in-memory.
+- Stdout suppressed via thread-safe `_SuppressStdout` (reference-counted).
 
 **Builder inventory**:
 
-| # | Item | Builder | Location | Status |
-|---|------|---------|----------|--------|
-| 1 | 8k_packet | `build_8k_packet()` | `warmup_cache.py:463` | DONE |
-| 2 | guidance_history | `build_guidance_history()` | `warmup_cache.py:707` | DONE |
-| 3 | inter_quarter_context | `build_inter_quarter_context()` | `warmup_cache.py:1472` | DONE |
-| 4 | peer_earnings_snapshot | `build_peer_earnings_snapshot()` | `scripts/earnings/peer_earnings_snapshot.py:154` | DONE |
-| 5 | macro_snapshot | `build_macro_snapshot()` | `scripts/earnings/macro_snapshot.py:384` | DONE |
-| 6 | consensus | `build_consensus()` | — | NOT BUILT |
-| 7 | previous_earnings | `build_previous_earnings()` | — | NOT BUILT |
-| 8 | previous_earnings_lessons | `build_previous_earnings_lessons()` | — | NOT BUILT (returns `[]` until learner exists) |
-| 9 | prior_financials | `build_prior_financials()` | — | NOT BUILT — 8-K financial metrics for YoY/QoQ comparison (EPS, revenue, margins as reported in prior 8-Ks) |
+| # | Item | Builder | Location | Adapter | Status |
+|---|------|---------|----------|---------|--------|
+| 1 | 8k_packet | `build_8k_packet()` | `warmup_cache.py:463` | `builder_adapters.py` | DONE + STANDARDIZED |
+| 2 | guidance_history | `build_guidance_history()` | `warmup_cache.py:701` | `builder_adapters.py` | DONE + STANDARDIZED |
+| 3 | inter_quarter_context | `build_inter_quarter_context()` | `warmup_cache.py:1472` | `builder_adapters.py` | DONE + STANDARDIZED |
+| 4 | peer_earnings_snapshot | `build_peer_earnings_snapshot()` | `scripts/earnings/peer_earnings_snapshot.py:154` | `builder_adapters.py` | DONE + STANDARDIZED |
+| 5 | macro_snapshot | `build_macro_snapshot()` | `scripts/earnings/macro_snapshot.py:384` | `builder_adapters.py` | DONE + STANDARDIZED |
+| 6 | consensus | `build_consensus()` | `scripts/earnings/build_consensus.py` | `builder_adapters.py` | DONE + STANDARDIZED |
+| 7 | previous_earnings | `build_previous_earnings()` | — | — | NOT BUILT |
+| 8 | previous_earnings_lessons | `build_previous_earnings_lessons()` | — | — | NOT BUILT (stub `[]`) |
+| 9 | prior_financials | `build_prior_financials()` | `scripts/earnings/build_prior_financials.py` | `builder_adapters.py` | DONE + STANDARDIZED |
 
-**Builder contract (LOCK BEFORE IMPLEMENTATION)**:
-- Every builder returns a **packet dict** with at minimum: `assembled_at` (ISO timestamp), `source_mode` (`"live"` or `"historical"`), and the data payload.
-- Every builder accepts explicit `ticker`, `quarter_info`, and `as_of_ts` (replaces vague `pit_date` — this is the PIT cutoff timestamp for historical, `None` for live).
-- Every builder optionally accepts `out_path` to persist the packet for audit.
+**Builder contract (LOCKED)**:
+- Every adapter returns a **packet dict** with: `schema_version`, `ticker`, `pit_cutoff`, `effective_cutoff_ts`, `source_mode`, `assembled_at`, and the data payload.
+- Every adapter accepts: `build_X(ticker, quarter_info, pit_cutoff=None, out_path=None, **kwargs)`.
+- `pit_cutoff=None` = live (unrestricted). `pit_cutoff=str` = historical (PIT-gated).
+- Native builders (Phase 4): all 7 now return packet dicts, no sys.exit, no stdout noise.
+- Every adapter accepts `out_path` to persist the enriched packet for audit.
 - Per-item metadata enables packet-level freshness tracking without a monolithic cache file.
+- Enriched packets include `pit_cutoff`, `effective_cutoff_ts`, `source_mode` on disk AND in memory.
 
 **Rate-limit note**: Most builders hit Neo4j (local, unlimited, fast). `consensus` (6) calls AlphaVantage (rate-limited, 1-2 calls per ticker). Live predictions are queued (one at a time), so no burst risk. If rate limits bite during peak earnings season, add response caching with TTL inside the builder (~10 lines).
 
@@ -465,8 +485,9 @@ The following schemas from `earnings-orchestrator.md` are adopted unchanged:
 
 ## 12. Implementation Order
 
-1. **Build remaining 4 builders**: ~~consensus~~, previous_earnings, previous_earnings_lessons (stub), prior_financials
-2. **Build earnings_orchestrator.py**: Python pipeline — run builders in parallel, invoke predictor via SDK, handle questions, validate, write
+1. ~~**Build remaining 4 builders**~~: ~~consensus~~, ~~prior_financials~~ DONE. **previous_earnings + previous_earnings_lessons (stub)** remaining.
+2. ~~**Standardize builder interfaces**~~: DONE (2026-03-29). Adapter layer + Phase 4 native cleanup. See `builder-standardisation.md`.
+3. **Build earnings_orchestrator.py**: Python pipeline — run builders in parallel via adapters, invoke predictor via SDK, handle questions, validate, write
 4. **Write predictor prompt**: render 9-item bundle as sectioned text + prediction instructions + question protocol
 5. **Write learner prompt**: render inputs + investigation instructions + simple lesson format
 6. **Historical backtest**: run on 3-5 tickers to calibrate
@@ -477,6 +498,19 @@ Each step is independently testable. No step requires the next to be complete.
 ### Builder #6 (consensus) — DONE (2026-03-28)
 
 `scripts/earnings/build_consensus.py` — 3-source AV join (EARNINGS + ESTIMATES + INCOME_STATEMENT) with live-only Yahoo fallback. PIT-safe via session-aware MarketSessionClassifier. Fiscal date mapping via Redis SEC cache FYE month + fiscal_math (verified 1522/1522 across 28 companies). Commits: `74d8122`, `f417361`, `f837880`, `dab6ce6`.
+
+### Builder #9 (prior_financials) — DONE (2026-03-28)
+
+`scripts/earnings/build_prior_financials.py` — XBRL Fact graph → FSC fallback → Yahoo opt-in. 19 metrics + 7 computed ratios, 4-8 prior quarters, per-metric amendment overlay. See `build-prior-financials.md`.
+
+### Builder standardisation — DONE (2026-03-29)
+
+`scripts/earnings/builder_adapters.py` — 7 uniform adapters wrapping all built builders. `scripts/earnings/test_builder_validation.py` (130 tests) + `scripts/earnings/test_adapter_validation.py` (511 tests). See `builder-standardisation.md` for full plan + Phase 1 findings.
+
+Key fixes applied during standardisation:
+- **C1**: PIT forward-return nulling used string comparison → fixed to datetime comparison (`warmup_cache.py`, `peer_earnings_snapshot.py`)
+- **H5**: macro_snapshot silent SPY data loss → added `gaps` field with structured warnings
+- **Phase 4**: 3 legacy builders now return packet dicts natively (no sys.exit, no stdout noise)
 
 ---
 
