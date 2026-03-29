@@ -163,7 +163,7 @@ class Results:
 # A. CONTRACT TESTS — required fields, return type, both modes
 # ═══════════════════════════════════════════════════════════════════════
 
-def test_contract(R: Results, tickers: list[str], save_dir: str | None):
+def test_contract(R: Results, tickers: list[str], save_dir: str | None, allow_av: bool = False):
     """Every adapter returns dict with enrichment fields in both modes."""
     print("\n── A. Contract Tests ──", file=sys.stderr)
 
@@ -187,9 +187,11 @@ def test_contract(R: Results, tickers: list[str], save_dir: str | None):
         ("build_inter_quarter_context", A.build_inter_quarter_context, {}),
         ("build_peer_earnings_snapshot", A.build_peer_earnings_snapshot, {}),
         ("build_macro_snapshot", A.build_macro_snapshot, {"source": "yahoo"}),
-        # consensus skipped here (AV-gated)
         ("build_prior_financials", A.build_prior_financials, {}),
     ]
+    # Include consensus in contract matrix when AV is allowed
+    if allow_av:
+        ADAPTERS.append(("build_consensus", A.build_consensus, {}))
 
     for ticker in tickers:
         fix = FIXTURES[ticker]
@@ -410,12 +412,28 @@ def test_consensus_av(R: Results, save_dir: str | None):
     except Exception as e:
         R.record("C", "build_consensus", "hist_run", False, str(e)[:200], ticker)
 
+    # Live consensus — verify forward estimates present, source_mode=live
+    try:
+        pkt = A.build_consensus(ticker, qi, pit_cutoff=None,
+                                 out_path="/tmp/adapter_validation/consensus_live.json")
+        qr = len(pkt.get("quarterly_rows", []))
+        fe = len(pkt.get("forward_estimates", []))
+        R.record("C", "build_consensus", "live_returns_dict", isinstance(pkt, dict), ticker=ticker)
+        R.record("C", "build_consensus", "live_source_mode",
+                 pkt.get("source_mode") == "live", ticker=ticker)
+        R.record("C", "build_consensus", "live_forward_estimates_present",
+                 fe > 0, f"{fe} forward estimates", ticker)
+        R.record("C", "build_consensus", "live_pit_cutoff_null",
+                 pkt.get("pit_cutoff") is None, ticker=ticker)
+    except Exception as e:
+        R.record("C", "build_consensus", "live_run", False, str(e)[:200], ticker)
+
 
 # ═══════════════════════════════════════════════════════════════════════
 # D. EDGE CASES
 # ═══════════════════════════════════════════════════════════════════════
 
-def test_edge_cases(R: Results):
+def test_edge_cases(R: Results, allow_av: bool = False):
     """Test adapter error handling and edge cases."""
     print("\n── D. Edge Cases ──", file=sys.stderr)
 
@@ -496,7 +514,7 @@ def test_edge_cases(R: Results):
         for name, fn, kw in [
             ("build_peer_earnings_snapshot", A.build_peer_earnings_snapshot, {}),
             ("build_prior_financials", A.build_prior_financials, {}),
-            ("build_consensus", A.build_consensus, {}) if os.environ.get("ALPHAVANTAGE_API_KEY") else (None, None, None),
+            ("build_consensus", A.build_consensus, {}) if allow_av else (None, None, None),
         ]:
             if name is None:
                 continue
@@ -556,7 +574,7 @@ def test_edge_cases(R: Results):
         R.record("D", "build_prior_financials", "as_of_ts_cleanup", False, str(e)[:200], "FIVE")
 
     # E7: consensus adapter removes legacy as_of_ts from packet
-    if os.environ.get("ALPHAVANTAGE_API_KEY"):
+    if allow_av:
         try:
             pkt = A.build_consensus("FIVE", qi_five, pit_cutoff=qi_five["filed_8k"])
             has_as_of = "as_of_ts" in pkt
@@ -600,7 +618,7 @@ def main():
 
     try:
         sys.stdout = devnull
-        test_contract(R, tickers, save_dir)
+        test_contract(R, tickers, save_dir, allow_av=args.allow_av)
         sys.stdout = original_stdout
 
         sys.stdout = devnull
@@ -613,7 +631,7 @@ def main():
             sys.stdout = original_stdout
 
         sys.stdout = devnull
-        test_edge_cases(R)
+        test_edge_cases(R, allow_av=args.allow_av)
         sys.stdout = original_stdout
 
     except Exception as e:

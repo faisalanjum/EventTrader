@@ -64,28 +64,43 @@ def _ensure_dir(path: str) -> None:
         os.makedirs(d, exist_ok=True)
 
 
+import threading
+
+# Reference-counted stdout suppression — thread-safe for ThreadPoolExecutor.
+# First thread to enter redirects stdout. Last thread to exit restores it.
+# No overlapping contexts can leave sys.stdout pointing to a closed file.
+_suppress_lock = threading.Lock()
+_suppress_count = 0
+_suppress_orig = None
+_suppress_devnull = None
+
+
 class _SuppressStdout:
-    """Context manager to suppress builder stdout noise (prints, rendered text).
+    """Thread-safe context manager to suppress builder stdout noise.
 
-    Redirects stdout to /dev/null during legacy builder calls.
-    Stderr is left open for genuine errors.
-
-    Thread-safety note: sys.stdout is global, so swapping it from concurrent
-    threads in ThreadPoolExecutor can race. For the orchestrator's parallel
-    execution, each builder runs in its own thread — the race window is small
-    (only during enter/exit) and the worst case is a few lines of builder noise
-    leaking through, not data corruption. For true isolation, the orchestrator
-    should use subprocess-level redirection or capture at a lower level.
+    Uses reference counting: first entry redirects stdout to /dev/null,
+    last exit restores original stdout. Safe under ThreadPoolExecutor —
+    no closed-fd bugs from overlapping contexts.
     """
     def __enter__(self):
-        self._orig = sys.stdout
-        self._devnull = open(os.devnull, 'w')
-        sys.stdout = self._devnull
+        global _suppress_count, _suppress_orig, _suppress_devnull
+        with _suppress_lock:
+            _suppress_count += 1
+            if _suppress_count == 1:
+                _suppress_orig = sys.stdout
+                _suppress_devnull = open(os.devnull, 'w')
+                sys.stdout = _suppress_devnull
         return self
 
     def __exit__(self, *args):
-        sys.stdout = self._orig
-        self._devnull.close()
+        global _suppress_count, _suppress_orig, _suppress_devnull
+        with _suppress_lock:
+            _suppress_count -= 1
+            if _suppress_count == 0:
+                sys.stdout = _suppress_orig
+                _suppress_devnull.close()
+                _suppress_orig = None
+                _suppress_devnull = None
 
 
 # ═══════════════════════════════════════════════════════════════════════
