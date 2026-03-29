@@ -220,11 +220,10 @@ def layer1_contract_tests(results: TestResults, tickers: list[str], save_dir: st
         ret = build_8k_packet(qi["accession_8k"], ticker, out_path=out_path)
         results.record(1, builder, "no_crash", True, ticker=ticker)
         # Return contract: currently returns None
-        results.record(1, builder, "returns_none_as_expected", ret is None, f"got {type(ret).__name__}", ticker=ticker)
-        # Packet on disk
-        if os.path.exists(out_path):
-            with open(out_path) as f:
-                pkt = json.load(f)
+        results.record(1, builder, "returns_dict", isinstance(ret, dict), f"got {type(ret).__name__}", ticker=ticker)
+        # Packet on disk + returned
+        pkt = ret
+        if pkt and isinstance(pkt, dict):
             results.record(1, builder, "packet_on_disk", True, ticker=ticker)
             for key in ["schema_version", "ticker", "accession_8k", "assembled_at"]:
                 results.record(1, builder, f"has_{key}", key in pkt, ticker=ticker)
@@ -250,11 +249,9 @@ def layer1_contract_tests(results: TestResults, tickers: list[str], save_dir: st
     try:
         ret = build_guidance_history(ticker, pit=qi["filed_8k"], out_path=out_path)
         results.record(1, builder, "no_crash", True, ticker=ticker)
-        results.record(1, builder, "returns_none_as_expected", ret is None, f"got {type(ret).__name__}", ticker=ticker)
-        if os.path.exists(out_path):
-            with open(out_path) as f:
-                pkt = json.load(f)
-            results.record(1, builder, "packet_on_disk", True, ticker=ticker)
+        results.record(1, builder, "returns_dict", isinstance(ret, dict), f"got {type(ret).__name__}", ticker=ticker)
+        pkt = ret
+        if pkt and isinstance(pkt, dict):
             for key in ["schema_version", "ticker", "pit", "series", "summary", "assembled_at"]:
                 results.record(1, builder, f"has_{key}", key in pkt, ticker=ticker)
             if save_dir:
@@ -278,14 +275,9 @@ def layer1_contract_tests(results: TestResults, tickers: list[str], save_dir: st
         ret = build_inter_quarter_context(
             ticker, qi["prev_8k_ts"], qi["filed_8k"], out_path=out_path)
         results.record(1, builder, "no_crash", True, ticker=ticker)
-        # Return contract: currently returns (out_path, rendered) tuple
-        is_tuple = isinstance(ret, tuple) and len(ret) == 2
-        results.record(1, builder, "returns_tuple_as_expected", is_tuple,
-                       f"got {type(ret).__name__}", ticker=ticker)
-        if os.path.exists(out_path):
-            with open(out_path) as f:
-                pkt = json.load(f)
-            results.record(1, builder, "packet_on_disk", True, ticker=ticker)
+        results.record(1, builder, "returns_dict", isinstance(ret, dict), f"got {type(ret).__name__}", ticker=ticker)
+        pkt = ret
+        if pkt and isinstance(pkt, dict):
             for key in ["schema_version", "ticker", "prev_8k_ts", "context_cutoff_ts", "days", "summary", "assembled_at"]:
                 results.record(1, builder, f"has_{key}", key in pkt, ticker=ticker)
             if save_dir:

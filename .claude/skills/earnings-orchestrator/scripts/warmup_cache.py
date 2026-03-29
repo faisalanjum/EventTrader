@@ -464,6 +464,7 @@ def build_8k_packet(accession, ticker, out_path=None):
     """Assemble canonical 8k_packet.v1 for earnings orchestration.
 
     Steps: 4G metadata → _fetch_8k_core() → non-99 exhibits → filing text fallback → assemble → atomic write.
+    Returns: packet dict (8k_packet.v1).
     """
     if out_path is None:
         out_path = f'/tmp/earnings_8k_packet_{accession}.json'
@@ -475,8 +476,7 @@ def build_8k_packet(accession, ticker, out_path=None):
             'accession': accession, 'ticker': ticker,
         })
         if not meta_rows:
-            print(f'ERROR: No Report found for accession={accession} ticker={ticker}', file=sys.stderr)
-            sys.exit(1)
+            raise ValueError(f'No Report found for accession={accession} ticker={ticker}')
         meta = meta_rows[0]
 
         # Parse r.items from JSON string to array; normalize nulls
@@ -553,13 +553,7 @@ def build_8k_packet(accession, ticker, out_path=None):
             json.dump(packet, f, default=str)
         os.replace(tmp_path, out_path)
 
-        sec_total = sum(len(s.get('content', '')) for s in sections)
-        ex99_total = sum(len(e.get('content', '')) for e in exhibits_99)
-        print(f'8k_packet.v1: {len(sections)} sections ({sec_total // 1000}KB) + '
-              f'{len(exhibits_99)} EX-99 ({ex99_total // 1000}KB) + '
-              f'{len(exhibits_other)} other exhibits'
-              f'{" + filing_text fallback" if filing_text else ""}'
-              f' → {out_path}')
+        return packet
     finally:
         manager.close()
 
@@ -708,6 +702,7 @@ def build_guidance_history(ticker, pit=None, out_path=None):
     """Assemble canonical guidance_history.v1 for earnings orchestration.
 
     Steps: query → resolve units → 6D grouping → collapse duplicates → sort → JSON → atomic write.
+    Returns: packet dict (guidance_history.v1).
     """
     if out_path is None:
         out_path = f'/tmp/earnings_guidance_{ticker}.json'
@@ -741,10 +736,7 @@ def build_guidance_history(ticker, pit=None, out_path=None):
             with open(tmp_path, 'w') as f:
                 json.dump(packet, f, default=str)
             os.replace(tmp_path, out_path)
-            text = render_guidance_text(packet)
-            print(text)
-            print(f'guidance_history.v1: 0 series, 0 events → {out_path}')
-            return
+            return packet
 
         # 2. Resolve unit groups
         rows = resolve_unit_groups(rows)
@@ -928,11 +920,7 @@ def build_guidance_history(ticker, pit=None, out_path=None):
             json.dump(packet, f, default=str)
         os.replace(tmp_path, out_path)
 
-        # Print rendered text + summary
-        text = render_guidance_text(packet)
-        print(text)
-        print(f'\nguidance_history.v1: {len(all_series)} series, '
-              f'{total_raw} raw → {total_collapsed} collapsed → {out_path}')
+        return packet
     finally:
         manager.close()
 
@@ -1485,6 +1473,8 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
                                 out_path=None, context_cutoff_reason=None):
     """Build inter-quarter context timeline artifact (inter_quarter_context.v1).
 
+    Returns: packet dict (inter_quarter_context.v1).
+
     Args:
         ticker: Company ticker (e.g. 'CRM')
         prev_8k_ts: ISO8601 timestamp of previous earnings 8-K
@@ -1849,14 +1839,7 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
             json.dump(packet, f, default=str, indent=2)
         os.replace(tmp_path, out_path)
 
-        # 17. Render text from JSON
-        rendered = render_inter_quarter_text(packet)
-        print(rendered)
-        print(f'\ninter_quarter_context.v1: {len(sorted_days)} days, '
-              f'{total_news} news, {total_filings} filings, '
-              f'{total_dividends} dividends, {total_splits} splits → {out_path}')
-
-        return out_path, rendered
+        return packet
 
     finally:
         manager.close()
@@ -1908,7 +1891,13 @@ def main():
                 sys.exit(1)
             cutoff_reason = sys.argv[ridx + 1]
 
-        build_inter_quarter_context(ticker, prev_8k, context_cutoff, out_path, cutoff_reason)
+        packet = build_inter_quarter_context(ticker, prev_8k, context_cutoff, out_path, cutoff_reason)
+        rendered = render_inter_quarter_text(packet)
+        print(rendered)
+        summary = packet.get('summary', {})
+        print(f'\ninter_quarter_context.v1: {summary.get("total_day_blocks", 0)} days, '
+              f'{summary.get("total_news", 0)} news, {summary.get("total_filings", 0)} filings, '
+              f'{summary.get("total_dividends", 0)} dividends, {summary.get("total_splits", 0)} splits → {out_path or "/tmp/..."}')
 
     elif '--guidance-history' in sys.argv:
         pit = None
@@ -1925,7 +1914,12 @@ def main():
                 print("Error: --out-path requires PATH argument", file=sys.stderr)
                 sys.exit(1)
             out_path = sys.argv[op_idx + 1]
-        build_guidance_history(ticker, pit, out_path)
+        packet = build_guidance_history(ticker, pit, out_path)
+        text = render_guidance_text(packet)
+        print(text)
+        summary = packet.get('summary', {})
+        print(f'\nguidance_history.v1: {summary.get("total_series", 0)} series, '
+              f'{summary.get("total_updates_raw", 0)} raw → {summary.get("total_updates_collapsed", 0)} collapsed → {out_path or "/tmp/..."}')
     elif '--transcript' in sys.argv:
         idx = sys.argv.index('--transcript')
         if idx + 1 >= len(sys.argv):
@@ -1951,7 +1945,17 @@ def main():
                 print("Error: --out-path requires PATH argument", file=sys.stderr)
                 sys.exit(1)
             out_path = sys.argv[op_idx + 1]
-        build_8k_packet(accession, ticker, out_path)
+        packet = build_8k_packet(accession, ticker, out_path)
+        sections = packet.get('sections', [])
+        exhibits_99 = packet.get('exhibits_99', [])
+        exhibits_other = packet.get('exhibits_other', [])
+        sec_total = sum(len(s.get('content', '')) for s in sections)
+        ex99_total = sum(len(e.get('content', '')) for e in exhibits_99)
+        print(f'8k_packet.v1: {len(sections)} sections ({sec_total // 1000}KB) + '
+              f'{len(exhibits_99)} EX-99 ({ex99_total // 1000}KB) + '
+              f'{len(exhibits_other)} other exhibits'
+              f'{" + filing_text fallback" if packet.get("filing_text") else ""}'
+              f' → {out_path or "/tmp/..."}')
     elif '--8k' in sys.argv:
         idx = sys.argv.index('--8k')
         if idx + 1 >= len(sys.argv):
