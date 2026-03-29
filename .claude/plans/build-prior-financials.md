@@ -1078,3 +1078,114 @@ All design decisions are locked (including fixes from ChatGPT validation round):
 - Distinct-period query: no hard LIMIT, logically airtight period selection ✓
 - segment_inventory: 3-tier axis resolution (FSC → standard map → unknown) ✓
 - segment_inventory in top-level schema ✓
+
+---
+
+## 18) Concept Fallback Discovery — Safe Coverage Expansion
+
+**Goal**: Increase metric coverage by finding alternative `us-gaap:` concept names that companies use instead of our primary concepts. Only add candidates where we can be very confident they are semantically the same metric. If certainty drops, stop.
+
+### Acceptance standard
+
+A candidate concept is allowed only if it passes **all 3 gates**:
+
+1. **Structural match**: same namespace (`us-gaap:`), unit family, period type, and consolidated context (no Member dimension)
+2. **Non-interference**: adding it as last-priority fallback causes only `null → value`, never `value → different value`
+3. **Semantic evidence**: when primary and candidate coexist in the same filing/quarter, their values match closely enough to act as synonyms
+
+If a candidate fails any gate → reject.
+
+### Plan
+
+**Step 1: Build metric-by-metric candidate inventory**
+
+For each of the 19 builder metrics, scan all COMPLETED 10-Q/10-K filings:
+- Which companies already get a value from our current concept list?
+- Which companies get NULL?
+- For NULL companies: what `us-gaap:` numeric concepts do they have that could be the same metric?
+
+Output: `earnings-analysis/consensus_exploration/concept_gap_analysis.json`
+
+**Step 2: Apply hard deterministic filters**
+
+Keep only candidates that are:
+- `us-gaap:*` namespace (not company-specific extensions)
+- Numeric facts (`is_numeric = '1'`)
+- Same unit family (USD for financial items, usdPerShare for EPS, shares for share count)
+- Same period shape (duration for income/cashflow, instant for balance sheet)
+- Consolidated only (no FACT_MEMBER relationship)
+
+Drop obvious non-synonyms early:
+- `Depreciation` alone ≠ `DepreciationAndAmortization`
+- Continuing-ops EPS ≠ total diluted EPS (for companies with discontinued operations)
+
+**Step 3: Coexistence audit (the deterministic proof)**
+
+For each surviving candidate, find filings where BOTH our primary concept AND the candidate appear in the same quarter, with the same period and consolidated context. Compare values:
+
+| Result | Classification | Action |
+|---|---|---|
+| Values match consistently (within rounding) | **Safe synonym** | Proceed to Step 4 |
+| Values match often but have exceptions | **Conditional** | Reject unless exception rate < 1% |
+| Values materially differ | **Different metric** | Reject |
+| No coexistence found anywhere | **Cannot prove** | Reject (not worth the risk) |
+
+Output: `earnings-analysis/consensus_exploration/concept_coexistence_audit.json`
+
+**Step 4: Non-interference simulation**
+
+For one candidate at a time:
+1. Run builder on all 772 companies → save outputs (before)
+2. Append candidate as last-priority fallback in metric registry
+3. Run builder again → save outputs (after)
+4. Semantic diff (ignore `assembled_at`, allow provenance/summary changes from recovery):
+   - **Allowed**: `null → value`, provenance updates caused by recovery
+   - **Forbidden**: any existing `non-null → different non-null`
+
+**Step 5: Manual review of recovered cases**
+
+For every `null → value` recovery, spot-check a sample against the actual SEC filing/XBRL/FSC. Yahoo only as a loose sanity check — never as primary truth source.
+
+**Step 6: Decision ledger**
+
+For each candidate, record:
+- Metric it applies to
+- Candidate qname
+- Structural pass/fail
+- Coexistence results (match count, mismatch count)
+- Recovered company count
+- Final decision: **add**, **reject**, or **needs manual case rule**
+
+Output: `earnings-analysis/consensus_exploration/concept_candidate_decisions.md`
+
+### Safety tiers (execution order)
+
+**Low-risk (start here)** — concept variants are obvious synonyms:
+- `revenue`: `RevenueFromContractWithCustomer...` vs `Revenues` vs `RevenuesNetOfInterestExpense`
+- `operating_cash_flow`: only 1 concept, rarely has alternatives
+- `cost_of_revenue`: `CostOfGoodsAndServicesSold` vs `CostOfRevenue`
+
+**Medium-risk**:
+- `capex`: rarely has alternatives
+- `dividends_per_share`: per-share items are straightforward
+- `sga`: `SellingGeneralAndAdministrative` vs `SellingAndMarketing`
+
+**High-risk (reject unless evidence is overwhelming)**:
+- `eps_diluted`: `EarningsPerShareDiluted` vs `IncomeLossFromContinuingOperationsPerDilutedShare` — continuing-ops ≠ total for companies with discontinued operations
+- `depreciation_amortization`: `DepreciationAndAmortization` vs `Depreciation` alone (narrows scope)
+- Anything that narrows economic scope (continuing vs total, GAAP vs non-GAAP)
+
+### Decision rule
+
+Ship only candidates that are:
+- Mechanically safe (non-interference proven)
+- Semantically well-supported (coexistence match or no coexistence + low risk tier)
+- Low-maintenance (standard `us-gaap:` concepts, not edge cases)
+
+**If a candidate improves coverage but introduces semantic doubt → do not add it.**
+
+### Deliverables (before any code change)
+
+1. `concept_gap_analysis.json` — per-metric inventory of NULL companies + candidates
+2. `concept_coexistence_audit.json` — per-candidate match/mismatch counts
+3. `concept_candidate_decisions.md` — final accept/reject with reasoning
