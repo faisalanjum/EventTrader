@@ -1481,9 +1481,6 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
         context_cutoff_ts: Upper bound for event inclusion (exclusive)
         out_path: Output file path (default: /tmp/earnings_inter_quarter_{ticker}.json)
         context_cutoff_reason: Optional metadata label (e.g. 'historical_release_session_floor')
-
-    Returns:
-        (out_path, rendered_text)
     """
     from utils.market_session import MarketSessionClassifier
 
@@ -1499,32 +1496,25 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
     manager = get_manager()
     try:
         # 3. Query
-        print(f'Querying inter-quarter data for {ticker} ({prev_day} -> {cutoff_day})...')
-
         price_rows = manager.execute_cypher_query_all(QUERY_IQ_PRICES, {
             'ticker': ticker, 'prev_day': prev_day, 'cutoff_day': cutoff_day
         })
-        print(f'  prices: {len(price_rows)} trading days')
 
         news_rows = manager.execute_cypher_query_all(QUERY_IQ_NEWS, {
             'ticker': ticker, 'prev_8k_ts': prev_8k_ts, 'context_cutoff_ts': context_cutoff_ts
         })
-        print(f'  news: {len(news_rows)} events')
 
         filing_rows = manager.execute_cypher_query_all(QUERY_IQ_FILINGS, {
             'ticker': ticker, 'prev_8k_ts': prev_8k_ts, 'context_cutoff_ts': context_cutoff_ts
         })
-        print(f'  filings: {len(filing_rows)} events')
 
         div_rows = manager.execute_cypher_query_all(QUERY_IQ_DIVIDENDS, {
             'ticker': ticker, 'prev_day': prev_day, 'cutoff_day': cutoff_day
         })
-        print(f'  dividends: {len(div_rows)} events')
 
         split_rows = manager.execute_cypher_query_all(QUERY_IQ_SPLITS, {
             'ticker': ticker, 'prev_day': prev_day, 'cutoff_day': cutoff_day
         })
-        print(f'  splits: {len(split_rows)} events')
 
         # 4. Build base day_map from price rows
         day_map = {}
@@ -1897,7 +1887,7 @@ def main():
         summary = packet.get('summary', {})
         print(f'\ninter_quarter_context.v1: {summary.get("total_day_blocks", 0)} days, '
               f'{summary.get("total_news", 0)} news, {summary.get("total_filings", 0)} filings, '
-              f'{summary.get("total_dividends", 0)} dividends, {summary.get("total_splits", 0)} splits → {out_path or "/tmp/..."}')
+              f'{summary.get("total_dividends", 0)} dividends, {summary.get("total_splits", 0)} splits → {out_path or f"/tmp/earnings_inter_quarter_{ticker}.json"}')
 
     elif '--guidance-history' in sys.argv:
         pit = None
@@ -1919,7 +1909,7 @@ def main():
         print(text)
         summary = packet.get('summary', {})
         print(f'\nguidance_history.v1: {summary.get("total_series", 0)} series, '
-              f'{summary.get("total_updates_raw", 0)} raw → {summary.get("total_updates_collapsed", 0)} collapsed → {out_path or "/tmp/..."}')
+              f'{summary.get("total_updates_raw", 0)} raw → {summary.get("total_updates_collapsed", 0)} collapsed → {out_path or f"/tmp/earnings_guidance_{ticker}.json"}')
     elif '--transcript' in sys.argv:
         idx = sys.argv.index('--transcript')
         if idx + 1 >= len(sys.argv):
@@ -1955,7 +1945,7 @@ def main():
               f'{len(exhibits_99)} EX-99 ({ex99_total // 1000}KB) + '
               f'{len(exhibits_other)} other exhibits'
               f'{" + filing_text fallback" if packet.get("filing_text") else ""}'
-              f' → {out_path or "/tmp/..."}')
+              f' → {out_path or f"/tmp/earnings_8k_packet_{accession}.json"}')
     elif '--8k' in sys.argv:
         idx = sys.argv.index('--8k')
         if idx + 1 >= len(sys.argv):
