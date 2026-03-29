@@ -184,12 +184,16 @@ def main():
             logger.info("Gap-fill mode: Will wait for data fetching and initial processing")
             interval = 30  # Check interval in seconds
             
-            # Get Redis connection
+            # Get Redis connection from any available source
             try:
-                if 'news' not in manager_instance.sources or not manager_instance.sources['news'].redis:
+                redis = None
+                for src_name, src_mgr in manager_instance.sources.items():
+                    if hasattr(src_mgr, 'redis') and src_mgr.redis and src_mgr.redis.live_client:
+                        redis = src_mgr.redis.live_client.client
+                        redis.ping()
+                        break
+                if not redis:
                     raise ConnectionError("Can't access Redis client")
-                redis = manager_instance.sources['news'].redis.live_client.client
-                redis.ping()  # Verify connection
             except Exception as e:
                 logger.error(f"Redis connection error: {e}", exc_info=True)
                 return False
@@ -198,7 +202,8 @@ def main():
             date_range_key = f"{date_from}-{date_to}"
             # Reports re-enabled 2026-03-28 (was BENZINGA_ONLY since Aug 2025)
             # SKIP_TRANSCRIPTS_BACKFILL — transcripts disabled (EarningsCall API 12h+/chunk)
-            sources = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS]
+            # SKIP_NEWS_BACKFILL — news disabled (already ingested via live mode, re-fetch is redundant)
+            sources = [RedisKeys.SOURCE_REPORTS]
             
             while True:
                 all_complete = True
@@ -285,14 +290,17 @@ def main():
                 # chunk_monitor_interval = 30 # Seconds between checks
                 chunk_monitor_interval = feature_flags.CHUNK_MONITOR_INTERVAL # Seconds between checks
             
-            # --- Get Redis connection from existing manager --- 
+            # --- Get Redis connection from existing manager ---
             try:
-                # Use the live client associated with the news source (any valid client works)
-                if 'news' in manager.sources and manager.sources['news'].redis and manager.sources['news'].redis.live_client:
-                    redis_conn = manager.sources['news'].redis.live_client.client
-                    redis_conn.ping() # Verify connection
-                    logger.info("Using existing Redis connection for monitoring.")
-                else:
+                # Use any available source's live client for monitoring (all share the same Redis)
+                redis_conn = None
+                for source_name, source_mgr in manager.sources.items():
+                    if hasattr(source_mgr, 'redis') and source_mgr.redis and source_mgr.redis.live_client:
+                        redis_conn = source_mgr.redis.live_client.client
+                        redis_conn.ping()
+                        logger.info(f"Using existing Redis connection from {source_name} for monitoring.")
+                        break
+                if not redis_conn:
                     raise ConnectionError("Could not access Redis client via DataManager for monitoring")
             except Exception as redis_err:
                 logger.error(f"Failed to get/verify Redis connection for monitoring: {redis_err}", exc_info=True)
@@ -305,7 +313,8 @@ def main():
             date_range_key = f"{args.from_date}-{args.to_date}"
             # Reports re-enabled 2026-03-28 (was BENZINGA_ONLY since Aug 2025)
             # SKIP_TRANSCRIPTS_BACKFILL — transcripts disabled (EarningsCall API 12h+/chunk)
-            sources_to_check = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS]
+            # SKIP_NEWS_BACKFILL — news disabled (already ingested via live mode, re-fetch is redundant)
+            sources_to_check = [RedisKeys.SOURCE_REPORTS]
             
             # Run initial Redis stats to see the state before processing
             logger.info("Getting initial Redis and Neo4j stats before processing...")

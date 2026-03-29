@@ -687,7 +687,8 @@ class DataManager:
         self._setup_signal_handlers()
         
     def initialize_sources(self):
-        self.sources['news'] = BenzingaNewsManager(self.historical_range)
+        # SKIP_NEWS_BACKFILL — news disabled (already ingested via live mode, re-fetch is redundant)
+        # self.sources['news'] = BenzingaNewsManager(self.historical_range)
         # Reports re-enabled 2026-03-28 (was BENZINGA_ONLY since Aug 2025)
         self.sources['reports'] = ReportsManager(self.historical_range)
         # SKIP_TRANSCRIPTS_BACKFILL — disabled for backfill (EarningsCall API takes 12h+/chunk)
@@ -722,7 +723,8 @@ class DataManager:
             if self.neo4j_processor.is_initialized():
                 self.logger.info("Neo4j already initialized, skipping initialization")
                 # Even if initialized, process news and report data
-                self.process_news_data()
+                # SKIP_NEWS_BACKFILL — news disabled (already ingested via live mode)
+                # self.process_news_data()
                 # Reports re-enabled 2026-03-28
                 self.process_report_data()
                 # SKIP_TRANSCRIPTS_BACKFILL
@@ -740,7 +742,8 @@ class DataManager:
                 self.logger.info("Neo4j initialization completed successfully")
                 
                 # Process news and report data after successful initialization
-                self.process_news_data()
+                # SKIP_NEWS_BACKFILL — news disabled (already ingested via live mode)
+                # self.process_news_data()
                 # Reports re-enabled 2026-03-28
                 self.process_report_data()
                 # SKIP_TRANSCRIPTS_BACKFILL
