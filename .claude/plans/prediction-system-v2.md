@@ -566,6 +566,23 @@ CRM end-to-end: 9/9 builders, 284K char bundle, correct `period_of_report=2025-0
 - **#8 None period_of_report validation → FIXED**: `validate_quarter_info()` now rejects None `period_of_report` and None `quarter_label` before launching builders.
 - **#9 Neo4j singleton close race → FIXED**: `Neo4jManager._singleton` flag makes `close()` a no-op for consumers of the shared singleton. Builders keep calling `manager.close()` in `finally` blocks (harmless). `ensure_healthy_connection()` bypasses guard for driver refresh. `reset()` clears flag for real shutdown. Result: zero defunct connection warnings, 12.8s → 8.7s.
 
+**AlphaVantage consensus status (2026-03-30):**
+
+Current free-tier key is rate-limited (25 req/day). Upgrade to $49.99/mo premium removes limit. AV endpoints relevant to the prediction pipeline:
+
+| Endpoint | What it provides | Status in `build_consensus.py` |
+|---|---|---|
+| **EARNINGS** | 87 quarters of actuals vs estimates, beat/miss history, surprise % | Already wired. Rate-limited on free tier. |
+| **ESTIMATES** | Consensus high/low/avg, analyst count, revision momentum (7/30/60/90d), up/down revision counts, revenue estimates | **NOT yet wired.** Builder uses EARNINGS + INCOME_STATEMENT only. |
+| **INCOME_STATEMENT** | Quarterly revenue actuals for revenue surprise calc | Already wired. |
+| **EARNINGS_CALENDAR** | Upcoming earnings dates | Not wired. Useful for trigger daemon (step 7). |
+
+**Historical vs live behavior:**
+- **Live**: No PIT filter. All AV data flows through including current-quarter ESTIMATES revision fields.
+- **Historical**: Actuals + estimates for all prior quarters + beat/miss history. Current-quarter revision momentum intentionally excluded (not PIT-safe — AV returns current state, not point-in-time). Q4 revenue surprise null due to AV putting Q4 revenue estimates under "fiscal year" horizon (known AV data convention, documented at `:252-255`).
+
+**Next step**: Upgrade AV key → wire ESTIMATES endpoint into `build_consensus.py` for live predictions. Historical mode keeps EARNINGS-only (PIT-safe).
+
 **Known deferred issues:**
 - **#3 Denylist over-correction (CAKE/PLCE/RH)**: Impacts both historical and live. In historical, the denylist blocks valid XBRL. In live, `fiscal_math` has the same wrong FY number. The issue is the FY naming convention itself — neither path gets it right for these 3 retailers. `period_to_fiscal()` assigns FY2025 but SEC says FY2024 (retail convention: FY named for the calendar year when most of the fiscal year occurred). Fix requires either narrowing the denylist (so XBRL overrides) or changing `period_to_fiscal()` for Jan/Feb FYE companies. 3 filings across 3 companies.
 - **#7 Stale detection too coarse (COST-style)**: Primarily historical with backfill gaps. The matched periodic filing is from the wrong quarter because the correct 10-Q hasn't been ingested yet. The 150-day threshold catches obvious cases (ABM 222d) but misses closer gaps (COST 102d). Once backfill completes, the correct filing exists and the match is correct. In live mode, the resolver already falls back to `fiscal_math` (no matched periodic), which gives the right quarter for COST. ~5-15 filings across ~5 companies with non-standard FYE during backfill gaps.
