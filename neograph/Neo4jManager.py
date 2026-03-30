@@ -81,6 +81,7 @@ class Neo4jManager:
     username: str
     password: str
     driver: Driver = field(init=False)
+    _singleton: bool = field(init=False, default=False, repr=False)
 
     PRESENTATION_CONSTRAINT_NAME = "constraint_presentation_edge_unique"
     CALCULATION_CONSTRAINT_NAME = "constraint_calculation_edge_unique"
@@ -133,6 +134,8 @@ class Neo4jManager:
             raise ConnectionError(f"Neo4j initialization failed: {e}")
     
     def close(self):
+        if self._singleton:
+            return  # Singleton lifecycle managed by Neo4jConnection.reset()
         if hasattr(self, 'driver'):
             self.driver.close()
     
@@ -149,8 +152,9 @@ class Neo4jManager:
                 logger.warning(f"Detected unhealthy connection: {e}")
                 logger.info("Attempting to refresh Neo4j driver...")
                 try:
-                    # Close existing driver
-                    self.close()
+                    # Close existing driver directly (bypass singleton guard)
+                    if hasattr(self, 'driver'):
+                        self.driver.close()
                     # Reinitialize the driver
                     self.__post_init__()
                     logger.info("Successfully refreshed Neo4j driver")

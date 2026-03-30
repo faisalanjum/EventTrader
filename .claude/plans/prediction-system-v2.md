@@ -487,7 +487,7 @@ The following schemas from `earnings-orchestrator.md` are adopted unchanged:
 
 1. ~~**Build remaining 4 builders**~~: ~~consensus~~, ~~prior_financials~~ DONE. **previous_earnings + previous_earnings_lessons (stub)** remaining.
 2. ~~**Standardize builder interfaces**~~: DONE (2026-03-29). Adapter layer + Phase 4 native cleanup. See `builder-standardisation.md`.
-3. **Build earnings_orchestrator.py**: Python pipeline — run builders in parallel via adapters, invoke predictor via SDK, handle questions, validate, write
+3. ~~**Build earnings_orchestrator.py**~~: DONE (2026-03-30). Bundle assembly + rendering. See below.
 4. **Write predictor prompt**: render 9-item bundle as sectioned text + prediction instructions + question protocol
 5. **Write learner prompt**: render inputs + investigation instructions + simple lesson format
 6. **Historical backtest**: run on 3-5 tickers to calibrate
@@ -505,12 +505,70 @@ Each step is independently testable. No step requires the next to be complete.
 
 ### Builder standardisation — DONE (2026-03-29)
 
-`scripts/earnings/builder_adapters.py` — 7 uniform adapters wrapping all built builders. `scripts/earnings/test_builder_validation.py` (130 tests) + `scripts/earnings/test_adapter_validation.py` (511 tests). See `builder-standardisation.md` for full plan + Phase 1 findings.
+`scripts/earnings/builder_adapters.py` — 7 uniform adapters wrapping all built builders.
 
 Key fixes applied during standardisation:
 - **C1**: PIT forward-return nulling used string comparison → fixed to datetime comparison (`warmup_cache.py`, `peer_earnings_snapshot.py`)
 - **H5**: macro_snapshot silent SPY data loss → added `gaps` field with structured warnings
 - **Phase 4**: 3 legacy builders now return packet dicts natively (no sys.exit, no stdout noise)
+
+**`quarter_info` shape** (built by `resolve_quarter_info()` in `quarter_identity.py`, passed to all adapters):
+
+```python
+{
+    "accession_8k": str,        # the trigger filing
+    "filed_8k": str,            # ISO8601 — when 8-K was filed
+    "market_session": str,      # pre_market / in_market / post_market
+    "period_of_report": str,    # YYYY-MM-DD — fiscal period end date
+    "prev_8k_ts": str | None,   # ISO8601 — previous 8-K filing time (required by inter_quarter adapter)
+    "quarter_label": str | None, # e.g. "FY2026-Q1" (display only)
+}
+```
+
+**Validation harnesses**:
+
+```bash
+# Builder contract + integration + differential PIT (130 tests, no external APIs)
+python3 scripts/earnings/test_builder_validation.py
+
+# Adapter validation — all 7 adapters × 4 tickers (511 tests, no external APIs)
+python3 scripts/earnings/test_adapter_validation.py
+
+# Common flags:
+#   --allow-av       Include consensus tests (3 AV API calls)
+#   --ticker FIVE    Single ticker only
+#   --layer 3        Specific test layer (builder harness: 1=contract, 2=historical, 3=diff PIT, 4=live smoke)
+#   --save           Save packets to /tmp/builder_validation/ or /tmp/adapter_validation/
+
+# Requires: NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD (or .env)
+# Optional: ALPHAVANTAGE_API_KEY (--allow-av), POLYGON_API_KEY (macro polygon mode)
+```
+
+**Test tickers**: FIVE (primary, 52/53-week stress), DOCU (standard path), CRM (no guidance), COST (non-standard fiscal calendar)
+
+### Step 3: earnings_orchestrator.py + quarter_identity.py — DONE (2026-03-30)
+
+**`scripts/earnings/quarter_identity.py`** — shared quarter identity resolver. Single Cypher query returns 8-K metadata + matched 10-Q/10-K + XBRL fiscal identity + FYE month + prev 8-K. Two resolution paths:
+
+- **Primary (historical/backfill)**: matched periodic filing + XBRL-preferred fiscal label (99.73% across 8,806 filings)
+- **Fallback (live)**: FYE month + fiscal_math quarter-end mapping (93% label accuracy, correct quarter-end dates)
+
+Stale-match detection (>150d gap) auto-falls back to fiscal math. `2.02` filter rejects non-earnings 8-Ks.
+
+Validated via `scripts/earnings/test_quarter_identity.py` — full-DB test against XBRL ground truth (8,806 evaluable rows, 24 mismatches all classifiable as bad XBRL or denylist over-corrections).
+
+**`scripts/earnings/earnings_orchestrator.py`** — bundle assembly. Runs 9 builders in parallel via `ThreadPoolExecutor`, renders as sectioned text. Orchestrator-level retry for transient Neo4j connection errors.
+
+CRM end-to-end: 9/9 builders, 284K char bundle, correct `period_of_report=2025-01-31`, `quarter_label=Q4_FY2025`.
+
+**Resolved issues (2026-03-30):**
+- **#2 Raw FYE month → FIXED**: Extracted shared `scripts/earnings/fye_month.py` (Redis `month_adj` → SEC refresh → Yahoo fallback). Used by `quarter_identity.py` for both matched-periodic and live fallback paths. Raw Neo4j FYE kept as final fallback only.
+- **#8 None period_of_report validation → FIXED**: `validate_quarter_info()` now rejects None `period_of_report` and None `quarter_label` before launching builders.
+- **#9 Neo4j singleton close race → FIXED**: `Neo4jManager._singleton` flag makes `close()` a no-op for consumers of the shared singleton. Builders keep calling `manager.close()` in `finally` blocks (harmless). `ensure_healthy_connection()` bypasses guard for driver refresh. `reset()` clears flag for real shutdown. Result: zero defunct connection warnings, 12.8s → 8.7s.
+
+**Known deferred issues:**
+- **#3 Denylist over-correction (CAKE/PLCE/RH)**: Impacts both historical and live. In historical, the denylist blocks valid XBRL. In live, `fiscal_math` has the same wrong FY number. The issue is the FY naming convention itself — neither path gets it right for these 3 retailers. `period_to_fiscal()` assigns FY2025 but SEC says FY2024 (retail convention: FY named for the calendar year when most of the fiscal year occurred). Fix requires either narrowing the denylist (so XBRL overrides) or changing `period_to_fiscal()` for Jan/Feb FYE companies. 3 filings across 3 companies.
+- **#7 Stale detection too coarse (COST-style)**: Primarily historical with backfill gaps. The matched periodic filing is from the wrong quarter because the correct 10-Q hasn't been ingested yet. The 150-day threshold catches obvious cases (ABM 222d) but misses closer gaps (COST 102d). Once backfill completes, the correct filing exists and the match is correct. In live mode, the resolver already falls back to `fiscal_math` (no matched periodic), which gives the right quarter for COST. ~5-15 filings across ~5 companies with non-standard FYE during backfill gaps.
 
 ---
 

@@ -27,7 +27,8 @@ def get_manager():
         # password = os.getenv("NEO4J_PASSWORD", NEO4J_PASSWORD)
 
         _manager = Neo4jManager(uri=uri, username=username, password=password)
-    
+        _manager._singleton = True
+
     # Always check connection health before returning
     if _manager is not None:
         try:
@@ -42,6 +43,7 @@ def reset():
     global _manager
     if _manager is not None:
         try:
+            _manager._singleton = False  # Allow actual close
             _manager.close()
         except:
             pass
