@@ -573,7 +573,7 @@ Current free-tier key is rate-limited (25 req/day). Upgrade to $49.99/mo premium
 | Endpoint | What it provides | Status in `build_consensus.py` |
 |---|---|---|
 | **EARNINGS** | 87 quarters of actuals vs estimates, beat/miss history, surprise % | Already wired. Rate-limited on free tier. |
-| **ESTIMATES** | Consensus high/low/avg, analyst count, revision momentum (7/30/60/90d), up/down revision counts, revenue estimates | **NOT yet wired.** Builder uses EARNINGS + INCOME_STATEMENT only. |
+| **ESTIMATES** | Consensus high/low/avg, analyst count, revision momentum (7/30/60/90d), up/down revision counts, revenue estimates | Already wired. **Live only** — revision/dispersion fields gated by `not is_historical` (not PIT-safe). |
 | **INCOME_STATEMENT** | Quarterly revenue actuals for revenue surprise calc | Already wired. |
 | **EARNINGS_CALENDAR** | Upcoming earnings dates | Not wired. Useful for trigger daemon (step 7). |
 
@@ -581,7 +581,7 @@ Current free-tier key is rate-limited (25 req/day). Upgrade to $49.99/mo premium
 - **Live**: No PIT filter. All AV data flows through including current-quarter ESTIMATES revision fields.
 - **Historical**: Actuals + estimates for all prior quarters + beat/miss history. Current-quarter revision momentum intentionally excluded (not PIT-safe — AV returns current state, not point-in-time). Q4 revenue surprise null due to AV putting Q4 revenue estimates under "fiscal year" horizon (known AV data convention, documented at `:252-255`).
 
-**Next step**: Upgrade AV key → wire ESTIMATES endpoint into `build_consensus.py` for live predictions. Historical mode keeps EARNINGS-only (PIT-safe).
+**Next step**: Upgrade AV key ($49.99/mo) → all 3 endpoints already wired, just rate-limited on free tier.
 
 **Known deferred issues:**
 - **#3 Denylist over-correction (CAKE/PLCE/RH)**: Impacts both historical and live. In historical, the denylist blocks valid XBRL. In live, `fiscal_math` has the same wrong FY number. The issue is the FY naming convention itself — neither path gets it right for these 3 retailers. `period_to_fiscal()` assigns FY2025 but SEC says FY2024 (retail convention: FY named for the calendar year when most of the fiscal year occurred). Fix requires either narrowing the denylist (so XBRL overrides) or changing `period_to_fiscal()` for Jan/Feb FYE companies. 3 filings across 3 companies.
