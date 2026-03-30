@@ -581,7 +581,28 @@ Current free-tier key is rate-limited (25 req/day). Upgrade to $49.99/mo premium
 - **Live**: No PIT filter. All AV data flows through including current-quarter ESTIMATES revision fields.
 - **Historical**: Actuals + estimates for all prior quarters + beat/miss history. Current-quarter revision momentum intentionally excluded (not PIT-safe — AV returns current state, not point-in-time). Q4 revenue surprise null due to AV putting Q4 revenue estimates under "fiscal year" horizon (known AV data convention, documented at `:252-255`).
 
-**Next step**: Upgrade AV key ($49.99/mo) → all 3 endpoints already wired, just rate-limited on free tier.
+**Next step**: Upgrade AV key ($49.99/mo) → all 3 consensus endpoints already wired, just rate-limited on free tier.
+
+**Full AV premium inventory — what's available beyond consensus (123 endpoints, $49.99/mo):**
+
+| Endpoint | Relevance to prediction pipeline | Currently used? |
+|---|---|---|
+| **EARNINGS_CALL_TRANSCRIPT** | Transcripts with LLM sentiment, 15+ years. Could replace/supplement Neo4j transcript builder. | No |
+| **NEWS_SENTIMENT** | Market news with sentiment scores, filterable by ticker/topic/time. | No |
+| **INSIDER_TRANSACTIONS** | SEC Form 4 insider buys/sells. Pre-earnings insider activity signal. | No |
+| **COMPANY_OVERVIEW** | 59+ key metrics (PE, market cap, etc.). Refreshed same-day as earnings. | No |
+| **REALTIME_OPTIONS** | Options chains with Greeks/IV. Implied move signal. | No |
+| **TREASURY_YIELD** | 3mo/2yr/5yr/10yr/30yr, daily. For macro_snapshot. | No (macro uses Yahoo/Polygon) |
+| **FEDERAL_FUNDS_RATE** | Daily. For macro context. | No |
+| **CPI / UNEMPLOYMENT / NONFARM_PAYROLL** | Monthly economic indicators from FRED. Updated same-day as government release. | No |
+| **WTI / BRENT / NATURAL_GAS** | Daily energy commodity prices. | No |
+| **Technical indicators (53)** | SMA, EMA, RSI, MACD, BBANDS, etc. Computed on-demand. | No |
+
+**Freshness notes:**
+- Economic indicators: sourced from FRED, NOT realtime. Updated same-day as government releases (hours, not minutes). Fine for daily macro context. Not for CPI-day 8:30 AM trading.
+- Treasury yields / fed funds: daily granularity, updated on business days.
+- Fundamentals (EARNINGS, INCOME_STATEMENT, etc.): refreshed same calendar day a company reports.
+- Stock price: realtime on premium, 15-min delayed on free.
 
 **Known deferred issues:**
 - **#3 Denylist over-correction (CAKE/PLCE/RH)**: Impacts both historical and live. In historical, the denylist blocks valid XBRL. In live, `fiscal_math` has the same wrong FY number. The issue is the FY naming convention itself — neither path gets it right for these 3 retailers. `period_to_fiscal()` assigns FY2025 but SEC says FY2024 (retail convention: FY named for the calendar year when most of the fiscal year occurred). Fix requires either narrowing the denylist (so XBRL overrides) or changing `period_to_fiscal()` for Jan/Feb FYE companies. 3 filings across 3 companies.
