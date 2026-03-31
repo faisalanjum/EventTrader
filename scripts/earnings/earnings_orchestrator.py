@@ -617,8 +617,8 @@ def _render_consensus_history(bundle: dict) -> str:
         tbl_rows = []
         for r in prior_rows:
             fy_end = r.get("fiscalDateEnding", "?")
-            eps_est = f"${r['estimatedEPS']}" if r.get("estimatedEPS") is not None else "—"
-            eps_act = f"${r['reportedEPS']}" if r.get("reportedEPS") is not None else "—"
+            eps_est = _fmt_financial_cell(r.get("estimatedEPS"), "usd")
+            eps_act = _fmt_financial_cell(r.get("reportedEPS"), "usd")
             eps_surp = _fmt_pct(r.get("epsSurprisePct")) if r.get("epsSurprisePct") is not None else "—"
             rev_est = _fmt_money(r["revenueEstimate"]) if r.get("revenueEstimate") is not None else "—"
             rev_act = _fmt_money(r["revenueActual"]) if r.get("revenueActual") is not None else "—"
@@ -699,7 +699,8 @@ def _fmt_financial_cell(value, fmt_type: str) -> str:
     if fmt_type == "money":
         return _fmt_money(v)
     if fmt_type == "usd":
-        return f"${v:.2f}"
+        sign = "-" if v < 0 else ""
+        return f"{sign}${abs(v):.2f}"
     if fmt_type == "pct":
         return f"{v:.1f}%"
     if fmt_type == "count":
