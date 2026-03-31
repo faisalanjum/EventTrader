@@ -118,7 +118,8 @@ class Results:
 def _metric_id(row: dict) -> str:
     metric_id = row.get("metric_id")
     if metric_id:
-        return str(metric_id).lower()
+        bare = str(metric_id).lower().replace("guidance:", "", 1)
+        return bare
     return slug(str(row.get("metric") or ""))
 
 
@@ -215,7 +216,7 @@ def main() -> int:
             "per_share_bad": len(per_share_bad),
             "share_count_bad": len(share_count_bad),
             "count_like_money": len(count_like_money),
-            "dollar_leaks": len(dollar_leaks),
+            "count_like_money_rows": len(count_like_money),
         }
     )
     return R.finish()
