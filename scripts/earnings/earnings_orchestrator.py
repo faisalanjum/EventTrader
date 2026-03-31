@@ -325,7 +325,7 @@ def _fmt_guidance_value(update: dict, resolved_unit: str) -> str:
 
     # Inline conditions (truncated)
     if conditions:
-        cond = conditions[:200] + ("..." if len(conditions) > 200 else "")
+        cond = conditions[:450] + ("..." if len(conditions) > 450 else "")
         result += f" ({cond})"
 
     return result
