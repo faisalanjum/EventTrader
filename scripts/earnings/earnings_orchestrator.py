@@ -13,6 +13,7 @@ import asyncio
 import argparse
 import json
 import logging
+import math
 import os
 import sys
 import time
@@ -210,6 +211,8 @@ def _fmt_num(val, prefix="", suffix="") -> str:
     if val is None:
         return "—"
     v = float(val)
+    if not math.isfinite(v):
+        return "—"
     abs_v = abs(v)
     sign = "-" if v < 0 else ""
     abs_v_use = abs_v
@@ -238,8 +241,11 @@ def _fmt_pct(val) -> str:
     """Format a percentage for display."""
     if val is None:
         return "—"
-    sign = "+" if float(val) > 0 else ""
-    return f"{sign}{float(val):.1f}%"
+    v = float(val)
+    if not math.isfinite(v):
+        return "—"
+    sign = "+" if v > 0 else ""
+    return f"{sign}{v:.1f}%"
 
 
 def _fmt_guidance_value(update: dict, resolved_unit: str) -> str:
@@ -247,8 +253,8 @@ def _fmt_guidance_value(update: dict, resolved_unit: str) -> str:
     low = update.get("low")
     mid = update.get("mid")
     high = update.get("high")
-    qual = update.get("qualitative")
-    conditions = update.get("conditions")
+    qual = (update.get("qualitative") or "").replace("\n", " ").strip() or None
+    conditions = (update.get("conditions") or "").replace("\n", " ").strip() or None
 
     # Numeric formatting based on unit
     numeric = None
@@ -273,11 +279,18 @@ def _fmt_guidance_value(update: dict, resolved_unit: str) -> str:
                 return _fmt_money(v)
             if pct_suffix:
                 pv = float(v)
+                if not math.isfinite(pv):
+                    return "—"
                 return f"{pv:.0f}{pct_suffix}" if pv == int(pv) else f"{pv:.1f}{pct_suffix}"
             if resolved_unit == "x":
-                return f"{v:g}x"
+                xv = float(v)
+                if not math.isfinite(xv):
+                    return "—"
+                return f"{xv:g}x"
             # count, unknown — compact scaling for large values, comma format for smaller
             fv = float(v)
+            if not math.isfinite(fv):
+                return "—"
             abs_fv = abs(fv)
             if abs_fv >= 1e9:
                 return _fmt_num(v)
