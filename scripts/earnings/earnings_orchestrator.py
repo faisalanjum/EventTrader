@@ -447,7 +447,7 @@ def _render_forward_guidance(bundle: dict) -> str:
     summary = gh.get("summary", {})
     parts = [
         f"## 3. Forward Guidance",
-        f"{summary.get('total_series', '?')} series | "
+        f"Guidance packet: {summary.get('total_series', '?')} series | "
         f"{summary.get('total_updates_collapsed', '?')} updates | "
         f"{summary.get('earliest_date', '?')} to {summary.get('latest_date', '?')}",
     ]
