@@ -408,6 +408,16 @@ File-based result protocol:
 - **Historical backtest**: run on 3-5 tickers to calibrate
 - **Integrate with trigger daemon**: wire live mode
 
+### Future: Live-only valuation context (AV COMPANY_OVERVIEW)
+
+AV Premium COMPANY_OVERVIEW provides 55 fields including ForwardPE (14.84), PEGRatio (1.06), Beta (1.307), 52WeekHigh/Low, AnalystTargetPrice ($273.85), AnalystRatingBuy/Hold/Sell (35/12/0), ShortPercentFloat. These help the predictor assess valuation vulnerability and expected move magnitude.
+
+**Not PIT-safe** — returns current snapshot, not point-in-time. Only usable in live mode.
+
+Implementation: new `build_valuation_context(ticker, pit_cutoff)` builder that returns null when `pit_cutoff` is set (historical) and calls AV COMPANY_OVERVIEW when None (live). Renderer shows section in live, `[NO DATA — live only]` in historical. One `if pit_cutoff` check — same pattern as consensus forward estimates.
+
+Add after first backtest confirms magnitude estimation needs improvement.
+
 ---
 
 ## 14. Bundle Rendering — Deep Analysis (DOCU Q1_FY2024 case study)
