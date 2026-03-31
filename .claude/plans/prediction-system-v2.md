@@ -121,7 +121,9 @@ def build_prediction_bundle(ticker, quarter_info, pit_cutoff=None):
 - Per-item metadata enables packet-level freshness tracking without a monolithic cache file.
 - Enriched packets include `pit_cutoff`, `effective_cutoff_ts`, `source_mode` on disk AND in memory.
 
-**Rate-limit note**: Most builders hit Neo4j (local, unlimited, fast). `consensus` (6) calls AlphaVantage (rate-limited, 1-2 calls per ticker). Live predictions are queued (one at a time), so no burst risk. If rate limits bite during peak earnings season, add response caching with TTL inside the builder (~10 lines).
+**Rate-limit note**: Most builders hit Neo4j (local, unlimited, fast). `consensus` (6) calls AlphaVantage (rate-limited, 3 calls per ticker). Live predictions are queued (one at a time), so no burst risk. If rate limits bite during peak earnings season, add response caching with TTL inside the builder (~10 lines).
+
+**AV retry mandate (2026-03-30)**: Any builder calling Alpha Vantage MUST retry once (2s delay) when the response has the ticker symbol key but 0 data rows. AV silently returns empty JSON under load instead of errors — empirically confirmed: bulk test at 70 req/min showed 108/796 false empties that all succeeded on retry. This applies to `build_consensus.py` (`_fetch_av`) and any future builder using AV endpoints. Do NOT treat 0-row responses as definitive "no data" without retry.
 
 ### 2b. Python Orchestrator
 
@@ -488,10 +490,21 @@ The following schemas from `earnings-orchestrator.md` are adopted unchanged:
 1. ~~**Build remaining 4 builders**~~: ~~consensus~~, ~~prior_financials~~ DONE. **previous_earnings + previous_earnings_lessons (stub)** remaining.
 2. ~~**Standardize builder interfaces**~~: DONE (2026-03-29). Adapter layer + Phase 4 native cleanup. See `builder-standardisation.md`.
 3. ~~**Build earnings_orchestrator.py**~~: DONE (2026-03-30). Bundle assembly + rendering. See below.
-4. **Write predictor prompt**: render 9-item bundle as sectioned text + prediction instructions + question protocol
-5. **Write learner prompt**: render inputs + investigation instructions + simple lesson format
-6. **Historical backtest**: run on 3-5 tickers to calibrate
-7. **Integrate with trigger daemon**: wire live mode
+4. ~~**Write predictor prompt**~~: DONE (2026-03-31). `earnings-prediction/SKILL.md` — 3-phase reasoning, 7-field output, abstract example. See `predictor-revamp.md`.
+5. **Bundle renderers** (in `earnings_orchestrator.py`):
+   - ~~Section 1: Header~~ DONE
+   - ~~Section 2: Results & Expectations~~ DONE (consensus bar + EX-99.1)
+   - ~~Section 3: Forward Guidance~~ DONE (quarterly/annual/other horizons tables)
+   - ~~Section 4: Consensus History~~ DONE (beat/miss table + summary)
+   - ~~Section 5: Prior Financial Trends~~ DONE (4 sub-tables, 26 metrics, 8 quarters)
+   - **Section 6: Inter-Quarter Events** — TODO. Biggest section (~2600 lines raw JSON). Needs decision-salience filtering, compact table for significant moves + analyst actions + gap days
+   - **Section 7: Peer Earnings** — TODO. Compact table of sector peer results + reactions
+   - **Section 8: Macro Snapshot** — TODO. SPY, VIX, sector, indicators as compact summary
+   - ~~Section 9: Reference~~ DONE (other exhibits, 8-K sections, filing metadata)
+6. **Wire SDK invocation**: update `validate_prediction_result()` and `_run_predictor_via_sdk()` to match current skill contract (7 predictor-owned fields, orchestrator stamps the rest)
+7. **Write learner prompt**: render inputs + investigation instructions + simple lesson format
+8. **Historical backtest**: run on 3-5 tickers to calibrate
+9. **Integrate with trigger daemon**: wire live mode
 
 Each step is independently testable. No step requires the next to be complete.
 
@@ -566,22 +579,54 @@ CRM end-to-end: 9/9 builders, 284K char bundle, correct `period_of_report=2025-0
 - **#8 None period_of_report validation → FIXED**: `validate_quarter_info()` now rejects None `period_of_report` and None `quarter_label` before launching builders.
 - **#9 Neo4j singleton close race → FIXED**: `Neo4jManager._singleton` flag makes `close()` a no-op for consumers of the shared singleton. Builders keep calling `manager.close()` in `finally` blocks (harmless). `ensure_healthy_connection()` bypasses guard for driver refresh. `reset()` clears flag for real shutdown. Result: zero defunct connection warnings, 12.8s → 8.7s.
 
-**AlphaVantage consensus status (2026-03-30):**
+**AlphaVantage consensus status (2026-03-30) — UPGRADED TO PREMIUM:**
 
-Current free-tier key is rate-limited (25 req/day). Upgrade to $49.99/mo premium removes limit. AV endpoints relevant to the prediction pipeline:
+Premium key active ($49.99/mo, 75 req/min, no daily limit). Key: in `.env` + k8s `eventtrader-secrets`.
 
 | Endpoint | What it provides | Status in `build_consensus.py` |
 |---|---|---|
-| **EARNINGS** | 87 quarters of actuals vs estimates, beat/miss history, surprise % | Already wired. Rate-limited on free tier. |
-| **ESTIMATES** | Consensus high/low/avg, analyst count, revision momentum (7/30/60/90d), up/down revision counts, revenue estimates | Already wired. **Live only** — revision/dispersion fields gated by `not is_historical` (not PIT-safe). |
-| **INCOME_STATEMENT** | Quarterly revenue actuals for revenue surprise calc | Already wired. |
+| **EARNINGS** | Historical actuals vs estimates, beat/miss history, surprise % | Already wired. **95.7% coverage** (762/796 tickers). |
+| **EARNINGS_ESTIMATES** | Consensus high/low/avg, analyst count, revision momentum (7/30/60/90d), up/down revision counts, revenue estimates | Already wired. **93.3% coverage** (743/796). **Live only** — revision/dispersion fields gated by `not is_historical` (not PIT-safe). |
+| **INCOME_STATEMENT** | Quarterly revenue actuals for revenue surprise calc | Already wired. **95.7% coverage** (762/796). |
+| **EARNINGS_CALL_TRANSCRIPT** | Full call transcripts, 15+ years | Not wired. Available — could replace earnings.biz. |
 | **EARNINGS_CALENDAR** | Upcoming earnings dates | Not wired. Useful for trigger daemon (step 7). |
+
+**Empirical coverage (tested 2026-03-30, 796 tickers, 3 rounds with retries — FINAL):**
+
+| Endpoint | Coverage | Genuine Gaps |
+|---|---|---|
+| **EARNINGS** (beat/miss) | **762/796 (95.7%)** | 34 tickers — zero data |
+| **EARNINGS_ESTIMATES** (forward consensus) | **743/796 (93.3%)** | 19 more — no forward estimates |
+| **INCOME_STATEMENT** (revenue actuals) | **762/796 (95.7%)** | Same 34 as EARNINGS |
+| **All 3 endpoints** | **743/796 (93.3%)** | 53 total gaps |
+
+**34 tickers with zero AV data** (no EARNINGS, no ESTIMATES, no INCOME_STATEMENT):
+ACCD, ALEX, AMED, AXL, AZEK, BECN, BERY, BIGC, BPMC, CFLT, DNB, EXAS, GMS, IAS, ITCI, JAMF, JNPR, MMC, MPW, MRUS, NOVA, NVEE, NVRO, PDCO, PINC, PX, RDFN, SAGE, SKX, SPR, VRNT, X, YMAB, ZI
+Cause: AV doesn't recognize these tickers — likely acquired, delisted, class share mismatches, or AV uses different symbols.
+
+**19 tickers with earnings history but no forward estimates** (need Yahoo fallback):
+ALK, ALT, BAND, CPRX, **CRM**, CWH, CYRX, EMR, ENTA, EOLS, GRPN, HL, MIDD, MTH, NCLH, O, OXM, VNOM, ZM
+Cause: Real AV data gap — AV has their historical beat/miss but no analyst consensus for forward quarters.
+
+Full per-ticker results: `earnings-analysis/consensus_exploration/av_definitive_coverage.json`, `av_final_retest.json`
+
+**Known issues + fixes:**
+1. **Transient empty responses under load** — AV silently returns `{"symbol":"X","quarterlyEarnings":[]}` at high request rates. Empirically confirmed: first bulk run at 70 req/min showed 108/796 false empties, all succeeded on retry. Fix: add retry in `_fetch_av()` when response has symbol key but 0 rows.
+2. **19 tickers with no forward estimates** — real AV data gap (confirmed across 3 test rounds). Fix: enable Yahoo fallback in historical mode (currently live-only at line 982). Yahoo `get_earnings_estimate`/`get_eps_trend` covers these.
+3. **34 tickers with zero data** — AV ticker convention mismatches. Fix: map Neo4j tickers to AV symbols (check for class shares, name changes, delistings). Low priority — most are smaller/niche companies.
+4. **REALTIME_BULK_QUOTES not available** — requires $99.99/mo plan (150 req/min), not included in $49.99 plan. Use GLOBAL_QUOTE (no entitlement, current-day OHLCV) or Yahoo MCP for watcher price checks.
+5. **15-min delayed entitlement enabled** — `entitlement=delayed` works for INTRADAY and DAILY_ADJUSTED. Not truly real-time. Real-time requires $99.99/mo plan.
 
 **Historical vs live behavior:**
 - **Live**: No PIT filter. All AV data flows through including current-quarter ESTIMATES revision fields.
 - **Historical**: Actuals + estimates for all prior quarters + beat/miss history. Current-quarter revision momentum intentionally excluded (not PIT-safe — AV returns current state, not point-in-time). Q4 revenue surprise null due to AV putting Q4 revenue estimates under "fiscal year" horizon (known AV data convention, documented at `:252-255`).
 
-**Next step**: Upgrade AV key ($49.99/mo) → all 3 consensus endpoints already wired, just rate-limited on free tier.
+**Data source architecture (2026-03-30):**
+- **AV Premium ($49.99/mo)**: Consensus (93.3%), transcripts, news sentiment, intraday bars (15-min delayed), 75 req/min
+- **Polygon/Massive (Stocks Developer, existing)**: Fundamentals (SEC XBRL), historical aggregates, reference data. Benzinga earnings/consensus is a separate paid add-on — NOT included, and lacks revision momentum even if purchased
+- **Yahoo Finance MCP (free)**: Fallback for AV gaps (19 tickers), near-real-time price quotes for watcher
+- **IBKR MCP (existing, delayed until funded)**: Execution + real-time streaming when $500 funded. Free non-consolidated US data (Cboe One + IEX)
+- **Total new spend: $49.99/mo**
 
 **Full AV premium inventory — what's available beyond consensus (123 endpoints, $49.99/mo):**
 
