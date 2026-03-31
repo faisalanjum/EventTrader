@@ -648,6 +648,123 @@ def _render_consensus_history(bundle: dict) -> str:
     return "\n".join(parts)
 
 
+# ── Section 5: Prior Financial Trends ────────────────────────────────
+
+_FINANCIAL_SECTIONS = [
+    ("Income Statement Trend", [
+        ("revenue", "Revenue", "money"),
+        ("cost_of_revenue", "Cost of Revenue", "money"),
+        ("gross_profit", "Gross Profit", "money"),
+        ("sga", "SG&A", "money"),
+        ("rd_expense", "R&D", "money"),
+        ("depreciation_amortization", "D&A", "money"),
+        ("interest_expense", "Interest Expense", "money"),
+        ("income_tax", "Income Tax", "money"),
+        ("operating_income", "Operating Income", "money"),
+        ("net_income", "Net Income", "money"),
+        ("eps_diluted", "EPS Diluted", "usd"),
+    ]),
+    ("Margins and Efficiency", [
+        ("gross_margin_pct", "Gross Margin %", "pct"),
+        ("operating_margin_pct", "Operating Margin %", "pct"),
+        ("net_margin_pct", "Net Margin %", "pct"),
+        ("rd_pct_revenue", "R&D % Revenue", "pct"),
+        ("effective_tax_rate", "Effective Tax Rate", "pct"),
+        ("diluted_shares", "Diluted Shares", "count"),
+    ]),
+    ("Cash Flow and Capital", [
+        ("operating_cash_flow", "Operating Cash Flow", "money"),
+        ("capex", "Capex", "money"),
+        ("free_cash_flow", "Free Cash Flow", "money"),
+        ("buybacks", "Buybacks", "money"),
+        ("dividends_per_share", "Dividends / Share", "usd"),
+    ]),
+    ("Balance Sheet", [
+        ("cash_and_equivalents", "Cash & Equivalents", "money"),
+        ("total_assets", "Total Assets", "money"),
+        ("stockholders_equity", "Stockholders' Equity", "money"),
+        ("long_term_debt", "Long-Term Debt", "money"),
+        ("debt_to_equity", "Debt / Equity", "ratio"),
+    ]),
+]
+
+
+def _fmt_financial_cell(value, fmt_type: str) -> str:
+    """Format a single financial metric cell."""
+    if value is None:
+        return "—"
+    v = float(value)
+    if not math.isfinite(v):
+        return "—"
+    if fmt_type == "money":
+        return _fmt_money(v)
+    if fmt_type == "usd":
+        return f"${v:.2f}"
+    if fmt_type == "pct":
+        return f"{v:.1f}%"
+    if fmt_type == "count":
+        return _fmt_num(v)
+    if fmt_type == "ratio":
+        return f"{v:.2f}"
+    return str(value)
+
+
+def _render_prior_financials(bundle: dict) -> str:
+    """Section 5: Prior Financial Trends — multi-quarter trend tables."""
+    errors = bundle.get("builder_errors") or {}
+    pf = bundle.get("prior_financials")
+
+    if "prior_financials" in errors:
+        return f"## 5. Prior Financial Trends\n[BUILDER ERROR: {errors['prior_financials']}]"
+    if not pf or not isinstance(pf, dict):
+        return "## 5. Prior Financial Trends\n[NO DATA]"
+
+    quarters = pf.get("quarters", [])
+    if not quarters:
+        return "## 5. Prior Financial Trends\n[NO DATA — 0 quarters]"
+
+    summary = pf.get("summary", {})
+    gaps = pf.get("gaps", [])
+
+    parts = ["## 5. Prior Financial Trends"]
+
+    # Coverage line
+    src = summary.get("primary_source_breakdown", {})
+    src_parts = [f"{k}={v}" for k, v in src.items() if v]
+    parts.append(
+        f"Coverage: {summary.get('quarter_count', len(quarters))} quarters"
+        f" | Sources: {', '.join(src_parts) if src_parts else '?'}"
+    )
+
+    # Quarter column headers
+    q_labels = [q.get("fiscal_label", "?") for q in quarters]
+
+    # Render each metric family as a sub-table
+    for section_name, metrics in _FINANCIAL_SECTIONS:
+        tbl_rows = []
+        for key, label, fmt_type in metrics:
+            values = []
+            has_any = False
+            for q in quarters:
+                val = q.get(key)
+                if val is not None:
+                    has_any = True
+                values.append(_fmt_financial_cell(val, fmt_type))
+            if has_any:
+                tbl_rows.append([label] + values)
+
+        if not tbl_rows:
+            continue
+
+        parts.append(f"\n### {section_name}")
+        parts.append(_md_table(["Metric"] + q_labels, tbl_rows))
+
+    if gaps:
+        parts.append(f"\nData notes: {len(gaps)} gaps in packet")
+
+    return "\n".join(parts)
+
+
 def _render_results_and_expectations(bundle: dict) -> str:
     """Section 2: Consensus bar (estimates only) + EX-99.1 reported results."""
     parts = ["## 2. Results & Expectations"]
@@ -771,10 +888,13 @@ def render_bundle_text(bundle: dict) -> str:
     # 4. Consensus History
     sections.append(_render_consensus_history(bundle))
 
-    # 5-8: TODO — remaining builder sections render as raw JSON until replaced
+    # 5. Prior Financial Trends
+    sections.append(_render_prior_financials(bundle))
+
+    # 6-8: TODO — remaining builder sections render as raw JSON until replaced
     remaining = [n for n in BUNDLE_ITEM_ORDER
-                 if n not in ("8k_packet", "consensus", "guidance_history")]
-    for i, name in enumerate(remaining, 5):
+                 if n not in ("8k_packet", "consensus", "guidance_history", "prior_financials")]
+    for i, name in enumerate(remaining, 6):
         title = SECTION_TITLES[name]
         sections.append(f"## {i}. {title}")
 
