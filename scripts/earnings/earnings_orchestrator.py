@@ -271,6 +271,8 @@ def _fmt_guidance_value(update: dict, resolved_unit: str) -> str:
                 elif resolved_unit == "k_usd":
                     return _fmt_money(v * 1e3)
                 return _fmt_money(v)
+            if resolved_unit == "count_millions":
+                return _fmt_num(v * 1e6)
             if pct_suffix:
                 pv = float(v)
                 return f"{pv:.0f}{pct_suffix}" if pv == int(pv) else f"{pv:.1f}{pct_suffix}"
@@ -316,6 +318,51 @@ def _fmt_guidance_value(update: dict, resolved_unit: str) -> str:
         result += f" ({cond})"
 
     return result
+
+
+def _display_guidance_unit(series: dict) -> str:
+    """Defensive display-only unit override for known misclassified count metrics.
+
+    GuidanceUpdate.canonical_unit is not perfectly clean in the live graph yet.
+    A small set of count-like metrics currently arrive as m_usd because the
+    upstream parser interpreted "million" as monetary scale. We keep the
+    underlying value untouched but render these as million-counts instead of
+    dollars to avoid obviously wrong output like "$97.4M" shares.
+    """
+    resolved_unit = series.get("resolved_unit", "unknown")
+    if resolved_unit != "m_usd":
+        return resolved_unit
+
+    metric_id = str(series.get("metric_id") or "").lower()
+    metric = str(series.get("metric") or "").lower()
+    # Strip guidance: prefix for matching
+    mid_bare = metric_id.replace("guidance:", "", 1)
+
+    # Share-count patterns (metric_id suffix)
+    if mid_bare.endswith("_share_count") or mid_bare.endswith("_shares_outstanding"):
+        return "count_millions"
+
+    # Explicit known misclassified metrics
+    _KNOWN_COUNT_IDS = {
+        "loyalty_members", "hsa_count", "total_accounts",
+        "net_active_customer_additions_per_quarter",
+        "basic_share_count", "diluted_share_count",
+        "weighted_average_basic_shares_outstanding",
+        "weighted_average_diluted_shares_outstanding",
+        "diluted_weighted_average_shares_outstanding",
+        "basic_shares_outstanding",
+    }
+    if mid_bare in _KNOWN_COUNT_IDS:
+        return "count_millions"
+
+    # Broad label heuristics — these are never money
+    _COUNT_KEYWORDS = ("shares outstanding", "share count", "members",
+                       "accounts", "customers", "subscribers", "units sold",
+                       "guest count", "passenger")
+    if any(kw in metric for kw in _COUNT_KEYWORDS):
+        return "count_millions"
+
+    return resolved_unit
 
 
 def _compute_change(current: dict, prior: dict | None) -> str:
@@ -459,7 +506,7 @@ def _render_forward_guidance(bundle: dict) -> str:
 
     for s in series_list:
         scope = s.get("period_scope", "")
-        unit = s.get("resolved_unit", "unknown")
+        unit = _display_guidance_unit(s)
         label = _fmt_metric_label(s)
         updates = s.get("updates", [])
 
