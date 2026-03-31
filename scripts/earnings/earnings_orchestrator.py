@@ -206,6 +206,16 @@ def _render_header(bundle: dict) -> str:
     return "\n".join(lines)
 
 
+def _md_table(headers: list[str], rows: list[list[str]]) -> str:
+    """Render a column-aligned markdown table."""
+    all_rows = [headers] + rows
+    widths = [max(len(str(row[i])) for row in all_rows) for i in range(len(headers))]
+    hdr = "| " + " | ".join(h.ljust(w) for h, w in zip(headers, widths)) + " |"
+    sep = "|" + "|".join("-" * (w + 2) for w in widths) + "|"
+    body = ["| " + " | ".join(str(c).ljust(w) for c, w in zip(row, widths)) + " |" for row in rows]
+    return "\n".join([hdr, sep] + body)
+
+
 def _fmt_num(val, prefix="", suffix="") -> str:
     """Format a number with optional prefix/suffix, smart magnitude scaling."""
     if val is None:
@@ -602,8 +612,8 @@ def _render_consensus_history(bundle: dict) -> str:
     prior_rows = [r for r in qrows if not r.get("is_current_quarter")]
     if prior_rows:
         parts.append("\n### Beat/Miss History")
-        parts.append("| Quarter | EPS Est | EPS Act | EPS Surprise | Rev Est | Rev Act | Rev Surprise |")
-        parts.append("|---------|---------|---------|--------------|---------|---------|--------------|")
+        headers = ["Quarter", "EPS Est", "EPS Act", "EPS Surprise", "Rev Est", "Rev Act", "Rev Surprise"]
+        tbl_rows = []
         for r in prior_rows:
             fy_end = r.get("fiscalDateEnding", "?")
             eps_est = f"${r['estimatedEPS']}" if r.get("estimatedEPS") is not None else "—"
@@ -612,7 +622,8 @@ def _render_consensus_history(bundle: dict) -> str:
             rev_est = _fmt_money(r["revenueEstimate"]) if r.get("revenueEstimate") is not None else "—"
             rev_act = _fmt_money(r["revenueActual"]) if r.get("revenueActual") is not None else "—"
             rev_surp = _fmt_pct(r.get("revenueSurprisePct")) if r.get("revenueSurprisePct") is not None else "—"
-            parts.append(f"| {fy_end} | {eps_est} | {eps_act} | {eps_surp} | {rev_est} | {rev_act} | {rev_surp} |")
+            tbl_rows.append([fy_end, eps_est, eps_act, eps_surp, rev_est, rev_act, rev_surp])
+        parts.append(_md_table(headers, tbl_rows))
 
     # ── Forward Estimates (live mode only) ──
     if forward:
