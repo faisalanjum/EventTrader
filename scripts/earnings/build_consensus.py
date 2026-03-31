@@ -24,9 +24,12 @@ Environment:
 from __future__ import annotations
 
 import json
+import logging
 import os
 import sys
 import time
+
+log = logging.getLogger(__name__)
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -178,8 +181,32 @@ def _resolve_pub_ts(reported_date: str,
 
 # ── AV API ───────────────────────────────────────────────────────────────
 
+def _is_false_empty(data: dict, function: str, symbol: str) -> bool:
+    """Detect likely transient AV false-empty responses for known endpoints.
+
+    AV silently returns valid JSON with 0 data rows under load instead of
+    errors. Empirically confirmed: 108/796 false empties at 70 req/min,
+    all succeeded on retry. Only checks the expected list keys for each
+    endpoint to avoid treating legitimate no-coverage as transient.
+    """
+    if str(data.get("symbol", "")).upper() != symbol.upper():
+        return False
+
+    expected_lists = {
+        "EARNINGS": ("quarterlyEarnings", "annualEarnings"),
+        "EARNINGS_ESTIMATES": ("data", "estimates"),
+        "INCOME_STATEMENT": ("quarterlyReports", "annualReports"),
+    }.get(function)
+
+    if not expected_lists:
+        return False
+
+    lists = [data.get(key) for key in expected_lists if isinstance(data.get(key), list)]
+    return len(lists) > 0 and all(len(v) == 0 for v in lists)
+
+
 def _fetch_av(api_key: str, function: str, symbol: str) -> dict | None:
-    """Fetch one AV endpoint with retry on rate limit."""
+    """Fetch one AV endpoint with retry on rate limit and false-empty."""
     params = {"function": function, "symbol": symbol, "apikey": api_key}
     url = f"{_AV_BASE_URL}?{urlencode(params)}"
     req = Request(url, headers={"User-Agent": "build-consensus/2.0"}, method="GET")
@@ -198,6 +225,12 @@ def _fetch_av(api_key: str, function: str, symbol: str) -> dict | None:
                                 time.sleep(_AV_RETRY_SPACING)
                                 continue
                         return None
+                # False-empty: AV returns valid JSON with symbol but 0 data rows
+                if attempt < _AV_MAX_RETRIES and _is_false_empty(data, function, symbol):
+                    log.warning("AV %s for %s returned false-empty (attempt %d) — retrying in %.1fs",
+                                function, symbol, attempt + 1, _AV_RETRY_SPACING)
+                    time.sleep(_AV_RETRY_SPACING)
+                    continue
             return data
         except (HTTPError, URLError, TimeoutError, json.JSONDecodeError):
             if attempt < _AV_MAX_RETRIES:
