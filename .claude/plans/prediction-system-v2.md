@@ -497,14 +497,8 @@ The following schemas from `earnings-orchestrator.md` are adopted unchanged:
    - ~~Section 3: Forward Guidance~~ DONE (quarterly/annual/other horizons tables)
    - ~~Section 4: Consensus History~~ DONE (beat/miss table + summary)
    - ~~Section 5: Prior Financial Trends~~ DONE (4 sub-tables, 26 metrics, 8 quarters)
-   - **Section 6: Inter-Quarter Events** — TODO. Biggest section (~2600 lines raw JSON). Needs decision-salience filtering, compact table for significant moves + analyst actions + gap days
-   - **Section 7: Peer Earnings** — TODO. Compact table of sector peer results + reactions
-   - **Section 8: Macro Snapshot** — TODO. SPY, VIX, sector, indicators as compact summary
    - ~~Section 9: Reference~~ DONE (other exhibits, 8-K sections, filing metadata)
-6. **Wire SDK invocation**: update `validate_prediction_result()` and `_run_predictor_via_sdk()` to match current skill contract (7 predictor-owned fields, orchestrator stamps the rest)
-7. **Write learner prompt**: render inputs + investigation instructions + simple lesson format
-8. **Historical backtest**: run on 3-5 tickers to calibrate
-9. **Integrate with trigger daemon**: wire live mode
+   - Sections 6-8 + SDK wiring + remaining tasks → see `predictor-revamp.md` §14
 
 Each step is independently testable. No step requires the next to be complete.
 

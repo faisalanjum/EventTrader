@@ -370,7 +370,47 @@ File-based result protocol:
 
 ---
 
-## 13. Bundle Rendering — Deep Analysis (DOCU Q1_FY2024 case study)
+## 13. Remaining Tasks
+
+### Renderer sections still TODO
+
+| # | Section | Builder | Notes |
+|---|---------|---------|-------|
+| 6 | Inter-Quarter Events | `inter_quarter_context` | Biggest section (~2600 lines raw JSON). Needs decision-salience filtering, compact table for significant moves + analyst actions + gap days |
+| 7 | Peer Earnings | `peer_earnings_snapshot` | Compact table of sector peer results + reactions. Straightforward |
+| 8 | Macro Snapshot | `macro_snapshot` | SPY, VIX, sector, indicators as compact summary. Straightforward |
+
+### Wire SDK invocation
+
+**`validate_prediction_result()`** (currently at ~line 747) needs to:
+- Accept only the 7 predictor-owned fields: `direction`, `confidence_score`, `expected_move_range_pct`, `key_drivers`, `data_gaps`, `evidence_ledger`, `analysis`
+- Stop requiring the old expanded schema fields: `schema_version`, `ticker`, `quarter_label`, `confidence_bucket`, `magnitude_bucket`, `predicted_at`, `model_version`, `prompt_version`, `signal`
+- After validation, the orchestrator should stamp the derived/metadata fields:
+  - `confidence_bucket` — derived from `confidence_score` (70-100=high, 40-69=moderate, 1-39=low)
+  - `magnitude_bucket` — derived from `expected_move_range_pct` (<2%=small, 2-4%=medium, 4%+=large)
+  - `signal` — derived via `derive_signal(direction, confidence_bucket, magnitude_bucket)`
+  - `ticker`, `quarter_label` — from `quarter_info`
+  - `schema_version`, `predicted_at`, `model_version`, `prompt_version` — stamped by orchestrator
+  - `horizon` — always `"next_session"`
+
+**`_run_predictor_via_sdk()`** (currently at ~line 815) needs to:
+- Send only `BUNDLE_PATH` and `RESULT_PATH` in the prompt (currently sends `RENDERED_BUNDLE_PATH` too, which doesn't match the skill contract)
+- The prompt format should be: `/earnings-prediction BUNDLE_PATH={path} RESULT_PATH={path}`
+- Use `permission_mode="bypassPermissions"` (matching extraction worker pattern)
+- Read the result file after SDK completes
+- Pass the raw 7-field JSON to `validate_prediction_result()`
+- Stamp the derived fields
+- Write the enriched result back
+
+### After SDK wiring
+
+- **Write learner prompt**: render inputs + investigation instructions + simple lesson format
+- **Historical backtest**: run on 3-5 tickers to calibrate
+- **Integrate with trigger daemon**: wire live mode
+
+---
+
+## 14. Bundle Rendering — Deep Analysis (DOCU Q1_FY2024 case study)
 
 ### The Problem: What the predictor currently sees
 
