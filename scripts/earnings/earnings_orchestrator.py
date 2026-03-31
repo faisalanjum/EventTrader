@@ -530,39 +530,48 @@ def _render_forward_guidance(bundle: dict) -> str:
                 history_extras.append((label, target_label, middle, unit))
 
     # ── Render Quarterly Guidance ──
-    _4COL = ["Metric", "Current", "Prior", "Change"]
+    # Note: guidance tables use simple pipes (not _md_table) because conditions
+    # text creates extreme column widths that hurt readability when padded.
     if quarterly:
         parts.append("\n### Quarterly Guidance")
         for (fy, fq) in sorted(quarterly.keys()):
             parts.append(f"\n#### Q{fq} FY{fy}")
+            parts.append("| Metric | Current | Prior | Change |")
+            parts.append("|--------|---------|-------|--------|")
             rows = sorted(quarterly[(fy, fq)], key=lambda r: (r["segmented"], r["label"]))
-            parts.append(_md_table(_4COL, [[r["label"], r["current"], r["prior"], r["change"]] for r in rows]))
+            for row in rows:
+                parts.append(f"| {row['label']} | {row['current']} | {row['prior']} | {row['change']} |")
 
     # ── Render Full Year Guidance ──
     if annual:
         parts.append("\n### Full Year Guidance")
         for fy in sorted(annual.keys()):
             parts.append(f"\n#### FY{fy}")
+            parts.append("| Metric | Current | Prior | Change |")
+            parts.append("|--------|---------|-------|--------|")
             rows = sorted(annual[fy], key=lambda r: (r["segmented"], r["label"]))
-            parts.append(_md_table(_4COL, [[r["label"], r["current"], r["prior"], r["change"]] for r in rows]))
+            for row in rows:
+                parts.append(f"| {row['label']} | {row['current']} | {row['prior']} | {row['change']} |")
 
     # ── Render Other Horizons ──
     if other:
         parts.append("\n### Other Horizons")
+        parts.append("| Metric | Horizon | Current | Prior | Change |")
+        parts.append("|--------|---------|---------|-------|--------|")
         other.sort(key=lambda r: (r["horizon"], r["segmented"], r["label"]))
-        parts.append(_md_table(
-            ["Metric", "Horizon", "Current", "Prior", "Change"],
-            [[r["label"], r["horizon"], r["current"], r["prior"], r["change"]] for r in other],
-        ))
+        for row in other:
+            parts.append(f"| {row['label']} | {row['horizon']} | {row['current']} | {row['prior']} | {row['change']} |")
 
     # ── Render History Appendix (only when 3+ updates exist) ──
     if history_extras:
         parts.append("\n### Guidance History (earlier updates)")
-        hist_rows = []
+        parts.append("| Metric | Period | Date | Value |")
+        parts.append("|--------|--------|------|-------|")
         for label, target_label, middle_updates, unit in history_extras:
             for u in middle_updates:
-                hist_rows.append([label, target_label, u.get("given_day", "?"), _fmt_guidance_value(u, unit)])
-        parts.append(_md_table(["Metric", "Period", "Date", "Value"], hist_rows))
+                val = _fmt_guidance_value(u, unit)
+                day = u.get("given_day", "?")
+                parts.append(f"| {label} | {target_label} | {day} | {val} |")
 
     return "\n".join(parts)
 
