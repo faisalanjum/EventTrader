@@ -192,6 +192,9 @@ class ReconcileMixin:
                                         self.event_trader_redis.history_client.mark_lifecycle_timestamp(
                                             meta_key, "inserted_into_neo4j_at"
                                         )
+                                        # Durable no-TTL dedup SET (keyed by accessionNo only)
+                                        accession_no = full_id.split('.')[0]
+                                        self.event_trader_redis.history_client.client.sadd("reports:confirmed_in_neo4j", accession_no)
                                     except Exception:
                                         pass
 

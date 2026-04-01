@@ -231,12 +231,9 @@ class RedisClient:
             try:
                 filed_at = filing.filedAt.replace(':', '.') # 2025-02-13T08:07:15-05:00 -> 2025-02-13T08.07.15-05.00
 
-                # Check processed queue for duplicates
-                processed_key = f"{self.prefix}processed:{filing.accessionNo}.{filed_at}"
-                processed_items = self.client.lrange(self.PROCESSED_QUEUE, 0, -1)
-            
-                if processed_key in processed_items:
-                    self.logger.info(f"Skipping duplicate filing: {processed_key}")
+                # Check if already successfully written to Neo4j (accessionNo-based, no timestamp ambiguity)
+                if self.client.sismember("reports:confirmed_in_neo4j", filing.accessionNo):
+                    self.logger.info(f"Skipping filing already confirmed in Neo4j: {filing.accessionNo}")
                     return False  # ✅ Clearly indicates "not processed"
                 
                 storage_key = f"{self.prefix}raw:{filing.accessionNo}.{filed_at}"

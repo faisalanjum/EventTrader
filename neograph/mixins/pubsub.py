@@ -388,6 +388,11 @@ class PubSubMixin:
                         meta_key,
                         "inserted_into_neo4j_at",
                         external_pipe=pipe) or pipe
+                # Durable no-TTL dedup SET (reports only — this method is shared by news/reports/transcripts)
+                if f":{RedisKeys.SOURCE_REPORTS}:" in meta_key:
+                    meta_id = meta_key.split(':')[-1]  # "ACCNO.FILED_AT"
+                    accession_no = meta_id.split('.')[0]  # "ACCNO"
+                    pipe.sadd("reports:confirmed_in_neo4j", accession_no)
             else:
                 pipe = delete_client.mark_lifecycle_timestamp(
                         meta_key,

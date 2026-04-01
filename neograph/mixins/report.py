@@ -55,6 +55,10 @@ class ReportMixin:
                     pipe.delete(redis_key)
                     logger.info(f"(Pipeline) Queued deletion for processed withreturns key: {redis_key}")
                 
+                # Step 3: Add to durable no-TTL dedup SET (keyed by accessionNo only)
+                accession_no = report_id.split('.')[0]
+                pipe.sadd("reports:confirmed_in_neo4j", accession_no)
+
                 pipe.execute()
                 logger.info(f"Successfully finalized report {report_id} (success path).")
 
@@ -312,6 +316,9 @@ class ReportMixin:
                 self.event_trader_redis.history_client.mark_lifecycle_timestamp(
                     meta_key, "inserted_into_neo4j_at"
                 )
+                # Durable no-TTL dedup SET (keyed by accessionNo only — no timezone ambiguity)
+                accession_no = report_id.split('.')[0]
+                self.event_trader_redis.history_client.client.sadd("reports:confirmed_in_neo4j", accession_no)
 
             return success
         except Exception as e:
