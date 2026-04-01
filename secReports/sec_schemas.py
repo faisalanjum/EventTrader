@@ -228,11 +228,19 @@ class SECFilingSchema(BaseModel):
         # entities associated with filing
         entities = self.entities if self.entities else None
 
-        # Extract CIK from first entity if available AND valid
-        # Only overwrite self.cik if entity has a valid CIK
-        if self.entities and self.entities[0].cik:
-            # Format CIK with leading zeros to ensure 10 digits
-            self.cik = str(self.entities[0].cik).zfill(10)
+        # Normalize CIK: prefer top-level (parent company from ticker search),
+        # fallback to entities[0] only if top-level is empty/non-digit.
+        # For combined filings, entities[0] is often a subsidiary — top-level is correct.
+        def _normalize_cik(value: object) -> str:
+            s = "".join(ch for ch in str(value or "").strip() if ch.isdigit())
+            return s.zfill(10) if s else ""
+
+        primary_cik = _normalize_cik(self.cik)
+        entity0_cik = (
+            _normalize_cik(self.entities[0].cik)
+            if self.entities and self.entities[0].cik else ""
+        )
+        self.cik = primary_cik or entity0_cik
 
         return UnifiedReport(
             # Required fields

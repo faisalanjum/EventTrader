@@ -359,6 +359,7 @@ class ReportMixin:
         
         # Build ON MATCH SET parts with conditional updates for content fields
         on_match_parts = [
+            "r.cik = CASE WHEN (r.cik IS NULL OR r.cik = '') AND $cik IS NOT NULL AND $cik <> '' THEN $cik ELSE r.cik END",
             "r.description = CASE WHEN $updated > r.updated THEN $description ELSE r.description END",
             "r.formType = CASE WHEN $updated > r.updated THEN $formType ELSE r.formType END",
             "r.periodOfReport = CASE WHEN $updated > r.updated THEN $periodOfReport ELSE r.periodOfReport END",

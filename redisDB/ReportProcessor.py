@@ -647,7 +647,32 @@ class ReportProcessor(BaseProcessor):
                     else:
                         standardized['ticker'] = None
                 else:
-                    standardized['ticker'] = standardized['cik'] = None
+                    # Primary CIK not in universe — for 10-K/10-Q combined filings,
+                    # if exactly one entity matches our universe, promote it as primary.
+                    # Scoped to 10-K/10-Q only to avoid false PRIMARY_FILER on 13D/425/SC TO-I.
+                    promoted = False
+                    if content.get('formType') in ['10-K', '10-Q', '10-K/A', '10-Q/A']:
+                        entity_match = None
+                        for entity in content.get('entities', []):
+                            try:
+                                ecik = int(entity.get('cik'))
+                                matches = self.stock_universe[self.stock_universe.cik == ecik]
+                                if not matches.empty:
+                                    t = matches.iloc[0]['symbol'].strip().upper()
+                                    if t in self.allowed_symbols:
+                                        if entity_match is not None:
+                                            entity_match = None  # multiple matches — can't determine
+                                            break
+                                        entity_match = (ecik, t)
+                            except (ValueError, TypeError):
+                                continue
+                        if entity_match:
+                            standardized['cik'] = str(entity_match[0]).zfill(10)
+                            standardized['ticker'] = entity_match[1]
+                            symbols.add(entity_match[1])
+                            promoted = True
+                    if not promoted:
+                        standardized['ticker'] = standardized['cik'] = None
 
             except (ValueError, TypeError):
                 standardized['ticker'] = standardized['cik'] = None

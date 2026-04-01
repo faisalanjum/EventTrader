@@ -304,27 +304,76 @@ The no-TTL SET keyed by `accessionNo` can only contain entries added after succe
 
 ## Backfill Strategy
 
-### Recommended order
+### Status
 
-1. **Deploy Phase 4 code fix** (Steps 1+2) — change `set_filing()` dedup + add no-TTL SET
-2. **Finish current backfill** (Aug 2025 → Mar 2026) — in progress, ~70% done
-3. **Run targeted backfills** for remaining gaps:
-   - `chunked-historical 2023-01-01 2023-12-31` (91 gaps)
-   - `chunked-historical 2024-04-25 2024-05-15` (110 gaps)
-   - `chunked-historical 2024-07-25 2024-09-01` (541 gaps)
-   - `chunked-historical 2024-10-25 2024-12-01` (261 gaps)
-   - `chunked-historical 2025-10-25 2025-12-05` (722 + 23 gaps)
-4. No flushing, no LREM, no PROCESSED_QUEUE rebuilding needed post-fix
+- **Phase 4 code fix**: ✅ DEPLOYED (2026-03-31 ~20:30 EDT, commit `d84dad2`)
+- **Current backfill** (Aug 2025 → Mar 2026): ~72% done, ETA Wed Apr 2 ~15:00 EDT. Let it finish.
+- **Targeted gap backfills**: Run AFTER current backfill completes (see below).
 
-### Pipeline flow (100% proven — all strategies)
+### After current backfill finishes — run these targeted backfills
+
+No flushing needed. No PROCESSED_QUEUE surgery. The new `set_filing()` checks the `reports:confirmed_in_neo4j` SET — reports already in Neo4j get skipped automatically (SISMEMBER), missing ones flow through the normal pipeline.
+
+```bash
+# 1. Nov 2025 (722 gaps — the big one)
+bash scripts/event_trader.sh chunked-historical 2025-10-25 2025-12-05
+
+# 2. 2024-08 (541 gaps — Q2 earnings)
+bash scripts/event_trader.sh chunked-historical 2024-07-25 2024-09-01
+
+# 3. 2024-11 (261 gaps — Q3 earnings)
+bash scripts/event_trader.sh chunked-historical 2024-10-25 2024-12-01
+
+# 4. 2024-05 (110 gaps)
+bash scripts/event_trader.sh chunked-historical 2024-04-25 2024-05-15
+
+# 5. 2023 scattered (91 gaps)
+bash scripts/event_trader.sh chunked-historical 2023-01-01 2023-12-31
+```
+
+**Before running**: re-seed the SET once to catch any reports from the old-code chunk:
+```bash
+# One-time re-seed (captures reports written by the Jan 11-15 chunk which used old code)
+source venv/bin/activate && python3 -c "
+from neo4j import GraphDatabase; import redis, os
+driver = GraphDatabase.driver('bolt://192.168.40.73:30687', auth=('neo4j', os.getenv('NEO4J_PASSWORD')))
+r = redis.Redis(host='192.168.40.73', port=31379, decode_responses=True)
+with driver.session() as s:
+    for rec in s.run('MATCH (r:Report) WHERE r.accessionNo IS NOT NULL RETURN r.accessionNo AS a'):
+        r.sadd('reports:confirmed_in_neo4j', rec['a'])
+print(f'SET size: {r.scard(\"reports:confirmed_in_neo4j\")}')
+driver.close()
+"
+```
+
+**After all targeted backfills complete**: re-run the gap analysis to verify gaps are closed:
+```bash
+source venv/bin/activate && python3 scripts/report_gap_secapi.py --start-date 2023-01-01 --end-date 2026-03-28
+```
+
+### Expected results
+
+| Gap period | Gaps before | Expected after targeted backfill |
+|---|---|---|
+| 2025-11 | 722 | ~10 (only SOURCE_GAP remaining) |
+| 2024-08 | 541 | ~6 (only SOURCE_GAP) |
+| 2024-11 | 261 | ~5 (only SOURCE_GAP) |
+| 2024-05 | 110 | ~3 (only SOURCE_GAP) |
+| 2023 scattered | 91 | ~75 (some SOURCE_GAP + ZI unfetchable) |
+
+Total PIPELINE_LOST should drop from ~4,696 to near zero. Only ~440 SOURCE_GAP (EDGAR has, sec-api.io doesn't) remains — unfixable by re-run.
+
+### Pipeline flow (100% proven)
 
 ```
 chunked-historical → sec-api.io fetch (normal)
-  → set_filing() dedup gate (HEXISTS + SISMEMBER post-fix)
+  → set_filing() → SISMEMBER reports:confirmed_in_neo4j
+      → found: skip (already in Neo4j)
+      → not found: proceed through normal pipeline
   → RAW_QUEUE → ReportProcessor → ENRICH_QUEUE
   → K8s enricher (normal enrichment)
   → withreturns → Neo4j batch writer (normal MERGE)
-  → SADD to no-TTL SET (new, Step 2)
+  → SADD to reports:confirmed_in_neo4j (new, durable)
   → XBRL queue → XBRL workers (normal)
 ```
 
