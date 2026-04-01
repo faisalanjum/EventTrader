@@ -647,30 +647,50 @@ class ReportProcessor(BaseProcessor):
                     else:
                         standardized['ticker'] = None
                 else:
-                    # Primary CIK not in universe — for 10-K/10-Q combined filings,
-                    # if exactly one entity matches our universe, promote it as primary.
-                    # Scoped to 10-K/10-Q only to avoid false PRIMARY_FILER on 13D/425/SC TO-I.
                     promoted = False
-                    if content.get('formType') in ['10-K', '10-Q', '10-K/A', '10-Q/A']:
-                        entity_match = None
-                        for entity in content.get('entities', []):
-                            try:
-                                ecik = int(entity.get('cik'))
-                                matches = self.stock_universe[self.stock_universe.cik == ecik]
-                                if not matches.empty:
-                                    t = matches.iloc[0]['symbol'].strip().upper()
-                                    if t in self.allowed_symbols:
-                                        if entity_match is not None:
-                                            entity_match = None  # multiple matches — can't determine
-                                            break
-                                        entity_match = (ecik, t)
-                            except (ValueError, TypeError):
-                                continue
-                        if entity_match:
-                            standardized['cik'] = str(entity_match[0]).zfill(10)
-                            standardized['ticker'] = entity_match[1]
-                            symbols.add(entity_match[1])
+                    form_type = content.get('formType')
+                    source_ticker = (content.get('ticker') or '').strip().upper()
+
+                    # Collect all universe-matched entities with their positions.
+                    entity_matches = {}
+                    for idx, entity in enumerate(content.get('entities', [])):
+                        try:
+                            ecik = int(entity.get('cik'))
+                        except (ValueError, TypeError):
+                            continue
+
+                        matches = self.stock_universe[self.stock_universe.cik == ecik]
+                        if matches.empty:
+                            continue
+
+                        t = matches.iloc[0]['symbol'].strip().upper()
+                        if t not in self.allowed_symbols:
+                            continue
+
+                        entity_matches.setdefault((ecik, t), []).append(idx)
+
+                    if len(entity_matches) == 1:
+                        (ecik, t), positions = next(iter(entity_matches.items()))
+
+                        # Periodic reports: safe to promote the sole tracked company.
+                        if form_type in ['10-K', '10-Q', '10-K/A', '10-Q/A']:
+                            standardized['cik'] = str(ecik).zfill(10)
+                            standardized['ticker'] = t
+                            symbols.add(t)
                             promoted = True
+
+                        # 8-Ks: only promote when the sole tracked company is present,
+                        # but not at entities[0], and the source ticker agrees if provided.
+                        elif (
+                            form_type in ['8-K', '8-K/A']
+                            and all(pos > 0 for pos in positions)
+                            and (not source_ticker or source_ticker == t)
+                        ):
+                            standardized['cik'] = str(ecik).zfill(10)
+                            standardized['ticker'] = t
+                            symbols.add(t)
+                            promoted = True
+
                     if not promoted:
                         standardized['ticker'] = standardized['cik'] = None
 

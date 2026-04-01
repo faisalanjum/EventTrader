@@ -256,7 +256,7 @@ class SECFilingSchema(BaseModel):
             description=self.description,
             
             # Company info
-            ticker=None, # ReportProcessor will set it
+            ticker=self.ticker,  # keep source ticker from sec-api
             companyName=self.companyName,
             entities=entities, 
             

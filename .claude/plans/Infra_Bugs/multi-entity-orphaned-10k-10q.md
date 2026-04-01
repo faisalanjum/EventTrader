@@ -1,8 +1,35 @@
-# Multi-Entity Filing Bug: Orphaned 10-K/10-Q Reports
+# Multi-Entity Filing Bug: Orphaned 10-K/10-Q/8-K Reports
 
 **Discovered**: 2026-03-29
-**Severity**: HIGH — ~25 companies have 10-K/10-Q reports with no PRIMARY_FILER
-**Status**: Root cause confirmed; 5-part production-safe fix designed (Section 12); apply after current backfill completes
+**Severity**: HIGH — ~27 companies had 10-K/10-Q/8-K reports with no PRIMARY_FILER
+**Status**: ✅ FULLY FIXED (code + Cypher for both 10-K/10-Q and 8-K)
+
+### Current Status (updated 2026-04-01)
+- ✅ **Part 1 deployed**: CIK normalization in `sec_schemas.py` + source ticker preserved (`ticker=self.ticker`).
+- ✅ **Part 2 deployed**: Unified entity fallback in `ReportProcessor.py` — 10-K/10-Q (sole match) + 8-K (sole match, index > 0, source_ticker agreement).
+- ✅ **Part 3 deployed**: Conditional CIK update on ON MATCH in `report.py`.
+- ✅ **Part 4 applied**: Cypher patch — 257 10-K/10-Q orphans repaired (PRIMARY_FILER created, return properties preserved).
+- ✅ **Part 5 applied**: XBRL status reset — 257 10-K/10-Q reports set to NULL (eligible for queueing). All 257 now XBRL COMPLETED.
+- ✅ **Part 6 applied**: 8-K Cypher patch — 569 8-K orphans repaired (PRIMARY_FILER created, return properties preserved, xbrl_status=SKIPPED).
+- ✅ **XBRL complete**: 257 10-K/10-Q all processed. 569 8-K correctly SKIPPED (no XBRL for 8-K).
+
+### How to verify fully done
+```cypher
+-- Check zero multi-entity orphans remain:
+MATCH (r:Report)
+WHERE r.formType IN ['10-K','10-K/A','10-Q','10-Q/A']
+  AND NOT (r)-[:PRIMARY_FILER]->(:Company)
+  AND (r.cik IS NULL OR r.cik = '')
+RETURN count(r) AS remaining_orphans
+-- Expected: 0
+
+-- Check XBRL processing completed for repaired reports:
+MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company)
+WHERE c.ticker IN ['AAL','AEE','CEG','CNK','CTVA','D','DOW','DTE','DUK','ED','EIX','ETR','FE','HTZ','HUN','OGE','PEG','PNW','PPL','SBGI','SPG','SRE','URI','WMB','XRX']
+  AND r.formType IN ['10-K','10-K/A','10-Q','10-Q/A']
+RETURN r.xbrl_status AS status, count(r) AS cnt
+-- Expected: mostly COMPLETED or QUEUED, zero REFERENCE_ONLY
+```
 **Authoritative fix**: Section 12 (all earlier fix sections are superseded)
 
 ---
