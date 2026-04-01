@@ -1198,7 +1198,7 @@ def _render_peer_earnings(bundle: dict) -> str:
         adj_d = _iq_val(round(d_stk - d_mac, 2)) if d_stk is not None and d_mac is not None else "—"
         rows.append([
             _iq_val(p.get("ticker")),
-            _iq_cell((p.get("name") or "—")[:30]),
+            _iq_cell((p.get("name") or "—").replace("\n", " ").strip()),
             _iq_val(p.get("mkt_cap")),
             _iq_val((p.get("filed") or "—")[:10]),
             _iq_val(p.get("accession")),
@@ -1222,14 +1222,14 @@ def _render_peer_earnings(bundle: dict) -> str:
     if has_headlines:
         parts.append("")
         parts.append("### Peer Headlines")
-        hl_headers = ["Peer", "Date", "Title", "Channels"]
+        hl_headers = ["Peer", "Time", "Title", "Channels"]
         hl_rows = []
         for p in peers:
             ticker = p.get("ticker", "—")
             for h in (p.get("headlines") or []):
                 hl_rows.append([
                     ticker,
-                    (h.get("date") or "—")[:10],
+                    _iq_val(h.get("date")),
                     _iq_cell((h.get("title") or "—").replace("\n", " ").strip()),
                     _iq_join(h.get("channels")),
                 ])
