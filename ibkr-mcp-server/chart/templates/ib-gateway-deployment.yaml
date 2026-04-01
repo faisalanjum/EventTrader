@@ -23,6 +23,14 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: ib-gateway
         image: "{{ .Values.ibGateway.image.repository }}:{{ .Values.ibGateway.image.tag }}"
@@ -30,27 +38,54 @@ spec:
         ports:
         - containerPort: {{ .Values.ibGateway.service.ports.vnc }}
         - containerPort: {{ .Values.ibGateway.service.ports.api }}
-        - containerPort: {{ .Values.ibGateway.service.ports.command }}
         securityContext:
           capabilities:
             add:
               - SYS_RESOURCE
         resources:
           {{- toYaml .Values.ibGateway.resources | nindent 10 }}
+        # gnzsnz/ib-gateway env vars — verified against config.ini.tmpl on 2026-04-01
+        # DO NOT use envFrom with configmap — gateway and MCP server have different env contracts
         env:
-        - name: USERNAME
+        - name: TWS_USERID
           valueFrom:
             secretKeyRef:
               name: {{ include "ibkr.gatewaySecretName" . }}
               key: username
-        - name: PASSWORD
+        - name: TWS_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ include "ibkr.gatewaySecretName" . }}
               key: password
-        envFrom:
-        - configMapRef:
-            name: {{ include "ibkr.fullname" . }}-config
+        - name: TRADING_MODE
+          value: {{ .Values.gatewayConfig.tradingMode | quote }}
+        - name: READ_ONLY_API
+          value: {{ .Values.gatewayConfig.readOnlyApi | quote }}
+        - name: TWOFA_TIMEOUT_ACTION
+          value: {{ .Values.gatewayConfig.twofaTimeoutAction | quote }}
+        - name: RELOGIN_AFTER_TWOFA_TIMEOUT
+          value: {{ .Values.gatewayConfig.reloginAfterTwofaTimeout | quote }}
+        - name: EXISTING_SESSION_DETECTED_ACTION
+          value: {{ .Values.gatewayConfig.existingSessionDetectedAction | quote }}
+        - name: AUTO_RESTART_TIME
+          value: {{ .Values.gatewayConfig.autoRestartTime | quote }}
+        - name: TWS_COLD_RESTART
+          value: {{ .Values.gatewayConfig.coldRestartTime | quote }}
+        - name: TWS_ACCEPT_INCOMING
+          value: {{ .Values.gatewayConfig.acceptIncoming | quote }}
+        - name: ACCEPT_NON_BROKERAGE_ACCOUNT_WARNING
+          value: "yes"
+        - name: VNC_SERVER_PASSWORD
+          value: {{ .Values.gatewayConfig.vncPassword | quote }}
+        - name: IBC_SCRIPTS
+          value: "ibc-scripts"
+        - name: TWS_SETTINGS_PATH
+          value: /home/ibgateway/tws_settings
+        volumeMounts:
+        - name: dismiss-script
+          mountPath: /home/ibgateway/ibc-scripts
+        - name: tws-settings
+          mountPath: /home/ibgateway/tws_settings
         startupProbe:
           tcpSocket:
             port: 4001
@@ -63,4 +98,13 @@ spec:
           periodSeconds: 30
           failureThreshold: 3
           timeoutSeconds: 5
+        # NO liveness probe on live gateway — restart = 2FA
+      volumes:
+      - name: dismiss-script
+        configMap:
+          name: ibkr-login-dismiss-script
+          defaultMode: 0755
+      - name: tws-settings
+        persistentVolumeClaim:
+          claimName: ibkr-live-jts-home
       restartPolicy: Always

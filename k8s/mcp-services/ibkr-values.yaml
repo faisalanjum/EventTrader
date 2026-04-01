@@ -8,15 +8,17 @@
 
 ibGateway:
   image:
-    repository: ghcr.io/gnzsnz/ib-gateway
+    # Custom image: gnzsnz/ib-gateway + xdotool for Login Messages dismissal
+    # Build: docker build -t ibkr-gateway-xdotool:stable docker/ibkr-gateway-xdotool/
+    # Import: docker save ibkr-gateway-xdotool:stable | ctr -n k8s.io images import -
+    repository: ibkr-gateway-xdotool
     tag: "stable"
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
     ports:
       vnc: 6080
-      api: 8888
-      command: 7462
+      api: 4003    # socat forwards 4003→4001 inside the container
   resources:
     requests:
       cpu: 200m
@@ -48,20 +50,25 @@ mcpServer:
   ingress:
     enabled: false
 
-config:
-  twoFaTimeoutAction: "restart"
-  ibcTradingMode: "live"
-  ibcReadOnlyApi: "yes"
-  ibcReloginAfterSecondFactorAuthenticationTimeout: "yes"
-  ibcAutoRestartTime: "06:00 AM"
-  ibcColdRestartTime: "10:00"
-  ibcExistingSessionDetectedAction: "primaryoverride"
-  ibcAcceptIncomingConnectionAction: "accept"
-  ibcAcceptBidAskLastSizeDisplayUpdateNotification: "defer"
-  ibcCommandServerPort: "7462"
-  ibcControlFrom: "127.0.0.1"
-  ibcBindAddress: "127.0.0.1"
-  ibkrLogLevel: "INFO"
+# Gateway config — gnzsnz/ib-gateway env vars (UPPER_SNAKE_CASE, no IBC_ prefix)
+# Verified against config.ini.tmpl envsubst variables on 2026-04-01
+gatewayConfig:
+  tradingMode: "live"
+  readOnlyApi: "no"
+  twofaTimeoutAction: "restart"
+  reloginAfterTwofaTimeout: "yes"
+  existingSessionDetectedAction: "primary"   # was: primaryoverride (caused re-login loop)
+  autoRestartTime: "05:45 AM"                # daily IBC re-auth before IBKR's forced disconnect
+  coldRestartTime: "10:00"
+  acceptIncoming: "accept"                   # was: empty (silently broken!)
+  vncPassword: "ibkr123"
+  # CommandServerPort, ControlFrom, BindAddress, SuppressInfoMessages,
+  # DismissNSEComplianceNotice, AcceptBidAskLastSizeDisplayUpdateNotification
+  # are HARDCODED in gnzsnz config.ini template — not configurable via env vars.
+
+# MCP server config — omdv/ibkr-mcp-server env vars (IBKR_ prefix)
+mcpConfig:
+  logLevel: "INFO"
   corsAllowedOrigins: "*"
   enableMcp: "true"
 
@@ -69,8 +76,8 @@ gatewaySecret:
   existingSecret: "ibkr-credentials"
 
 mcpAuth:
-  create: true
-  authToken: ""
+  create: false
+  existingSecret: "ibkr-mcp-auth-static"  # external secret — Helm doesn't manage or rotate this
 
 networkPolicy:
   enabled: false

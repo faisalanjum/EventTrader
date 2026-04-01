@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ibkr-login-dismiss-script
+  namespace: mcp-services
+data:
+  dismiss-login-messages.sh: |
+    #!/bin/bash
+    # Dismiss the "Login Messages" dialog that IBC can't handle.
+    # IBC has 28 registered WindowHandlers — none for "Login Messages".
+    # Called by gnzsnz/ib-gateway via IBC_SCRIPTS after login.
+    #
+    # IMPORTANT: gnzsnz run_scripts() is synchronous (iterates *.sh with bash).
+    # This script MUST self-background or gateway startup hangs.
+    (
+      sleep 30  # wait for login dialogs to appear
+      echo "[dismiss] Starting Login Messages dismisser (DISPLAY=$DISPLAY)"
+      while true; do
+        for TITLE in "Login Messages" "Important Notice" "Bulletin" "TWS Message"; do
+          WID=$(xdotool search --name "$TITLE" 2>/dev/null | head -1)
+          if [ -n "$WID" ]; then
+            echo "[dismiss] Found '$TITLE' dialog (WID=$WID), closing..."
+            # windowclose sends WM_DELETE_WINDOW — the only method that works
+            # on IB Gateway's Java Swing dialogs. alt+F4/Escape/Return all fail.
+            xdotool windowclose "$WID" 2>/dev/null
+            echo "[dismiss] Dismissed '$TITLE' at $(date)"
+            sleep 2
+          fi
+        done
+        sleep 10
+      done
+    ) &

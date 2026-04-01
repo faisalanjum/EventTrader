@@ -2,16 +2,15 @@ imagePullSecrets: []
 
 ibGateway:
   image:
-    repository: ghcr.io/extrange/ibkr
-    tag: "10.39"
+    repository: ibkr-gateway-xdotool
+    tag: "stable"
     pullPolicy: IfNotPresent
 
   service:
     type: ClusterIP
     ports:
       vnc: 6080
-      api: 8888
-      command: 7462
+      api: 4003    # socat forwards 4003→4001 inside the container
 
   resources: {}
     # limits:
@@ -56,11 +55,6 @@ mcpServer:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     tls: []
-    # Example TLS configuration:
-    # tls:
-    # - secretName: ibkr-mcp-server-tls
-    #   hosts:
-    #   - ibkr-mcp-server.local
 
   livenessProbe:
     enabled: true
@@ -76,43 +70,32 @@ mcpServer:
     timeoutSeconds: 25
     failureThreshold: 10
 
-config:
-  # IB Gateway Configuration
-  twoFaTimeoutAction: "restart"
-  ibcTradingMode: "live"
-  ibcReadOnlyApi: "no"
-  ibcReloginAfterSecondFactorAuthenticationTimeout: "yes"
-  ibcAutoRestartTime: "06:00 AM"
-  ibcColdRestartTime: "10:00"
-  ibcExistingSessionDetectedAction: "primaryoverride"
-  ibcAcceptIncomingConnectionAction: "accept"
-  ibcAcceptBidAskLastSizeDisplayUpdateNotification: "defer"
-  ibcCommandServerPort: "7462"
-  ibcControlFrom: "127.0.0.1"
-  ibcBindAddress: "127.0.0.1"
+# Gateway config — gnzsnz/ib-gateway env vars (UPPER_SNAKE_CASE, no IBC_ prefix)
+gatewayConfig:
+  tradingMode: "live"
+  readOnlyApi: "no"
+  twofaTimeoutAction: "restart"
+  reloginAfterTwofaTimeout: "yes"
+  existingSessionDetectedAction: "primary"
+  autoRestartTime: "06:00 AM"
+  coldRestartTime: "10:00"
+  acceptIncoming: "accept"
+  vncPassword: ""
 
-  # MCP Server Configuration
-  ibkrLogLevel: "INFO"
+# MCP server config — omdv/ibkr-mcp-server env vars (IBKR_ prefix)
+mcpConfig:
+  logLevel: "INFO"
   corsAllowedOrigins: "*"
   enableMcp: "false"
 
 # IB Gateway credentials
 gatewaySecret:
-  # Name of existing secret containing IB Gateway credentials
-  # The secret must contain 'username' and 'password' keys
   existingSecret: ""
 
 # MCP Server authentication
 mcpAuth:
-  # Set to true to create a new auth secret with auto-generated token
-  # Set to false to use an existing secret (specify name in existingSecret)
   create: true
-
-  # Name of existing secret to use (only used when create: false)
-  # The secret must contain 'authToken' key
   existingSecret: ""
-
-  # Auth token value (leave empty to auto-generate a secure random token)
   authToken: ""
 
 networkPolicy:

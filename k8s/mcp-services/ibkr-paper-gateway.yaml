@@ -28,7 +28,10 @@ spec:
         operator: Exists
       containers:
       - name: ib-gateway
-        image: ghcr.io/gnzsnz/ib-gateway:stable
+        # Custom image: gnzsnz/ib-gateway + xdotool for Login Messages dismissal
+        # Build: docker build -t ibkr-gateway-xdotool:stable docker/ibkr-gateway-xdotool/
+        # Import: docker save ibkr-gateway-xdotool:stable | ctr -n k8s.io images import -
+        image: ibkr-gateway-xdotool:stable
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 4002
@@ -37,6 +40,7 @@ spec:
           capabilities:
             add:
             - SYS_RESOURCE
+        # gnzsnz/ib-gateway env vars — verified against config.ini.tmpl on 2026-04-01
         env:
         - name: TWS_USERID
           valueFrom:
@@ -60,8 +64,15 @@ spec:
           value: "secondary"
         - name: AUTO_RESTART_TIME
           value: "06:00 AM"
+        - name: TWS_ACCEPT_INCOMING
+          value: "accept"
         - name: ACCEPT_NON_BROKERAGE_ACCOUNT_WARNING
           value: "yes"
+        - name: IBC_SCRIPTS
+          value: "ibc-scripts"
+        volumeMounts:
+        - name: dismiss-script
+          mountPath: /home/ibgateway/ibc-scripts
         resources:
           requests:
             cpu: 200m
@@ -81,6 +92,18 @@ spec:
           periodSeconds: 30
           failureThreshold: 3
           timeoutSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 4002
+          initialDelaySeconds: 300
+          periodSeconds: 60
+          failureThreshold: 5
+          timeoutSeconds: 5
+      volumes:
+      - name: dismiss-script
+        configMap:
+          name: ibkr-login-dismiss-script
+          defaultMode: 0755
       restartPolicy: Always
 ---
 apiVersion: v1

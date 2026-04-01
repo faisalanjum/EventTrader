@@ -5,26 +5,11 @@ metadata:
   labels:
     {{- include "ibkr.labels" . | nindent 4 }}
 data:
-  # IB Gateway Configuration
-  TWOFA_TIMEOUT_ACTION: {{ .Values.config.twoFaTimeoutAction | quote }}
-  GATEWAY_OR_TWS: "gateway"
-  IBC_TradingMode: {{ .Values.config.ibcTradingMode | quote }}
-  IBC_ReadOnlyApi: {{ .Values.config.ibcReadOnlyApi | quote }}
-  IBC_ReloginAfterSecondFactorAuthenticationTimeout: {{ .Values.config.ibcReloginAfterSecondFactorAuthenticationTimeout | quote }}
-  IBC_AutoRestartTime: {{ .Values.config.ibcAutoRestartTime | quote }}
-  IBC_ColdRestartTime: {{ .Values.config.ibcColdRestartTime | quote }}
-  IBC_ExistingSessionDetectedAction: {{ .Values.config.ibcExistingSessionDetectedAction | quote }}
-  IBC_AcceptIncomingConnectionAction: {{ .Values.config.ibcAcceptIncomingConnectionAction | quote }}
-  IBC_AcceptBidAskLastSizeDisplayUpdateNotification: {{ .Values.config.ibcAcceptBidAskLastSizeDisplayUpdateNotification | quote }}
-  IBC_CommandServerPort: {{ .Values.config.ibcCommandServerPort | quote }}
-  IBC_ControlFrom: {{ .Values.config.ibcControlFrom | quote }}
-  IBC_BindAddress: {{ .Values.config.ibcBindAddress | quote }}
-
-  # MCP Server Configuration
+  # MCP Server Configuration only — gateway uses direct env vars
   IBKR_GATEWAY_MODE: "external"
   IBKR_IB_GATEWAY_HOST: {{ include "ibkr.fullname" . }}-ib-gateway
-  IBKR_IB_GATEWAY_PORT: "8888"
+  IBKR_IB_GATEWAY_PORT: "4003"
   IBKR_APPLICATION_HOST: "0.0.0.0"
   IBKR_APPLICATION_PORT: "8000"
-  IBKR_LOG_LEVEL: {{ .Values.config.ibkrLogLevel | quote }}
-  IBKR_ENABLE_MCP: {{ .Values.config.enableMcp | quote }}
+  IBKR_LOG_LEVEL: {{ .Values.mcpConfig.logLevel | quote }}
+  IBKR_ENABLE_MCP: {{ .Values.mcpConfig.enableMcp | quote }}

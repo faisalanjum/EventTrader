@@ -16,7 +16,5 @@ spec:
   - name: api
     port: {{ .Values.ibGateway.service.ports.api }}
     targetPort: {{ .Values.ibGateway.service.ports.api }}
-  - name: command
-    port: {{ .Values.ibGateway.service.ports.command }}
-    targetPort: {{ .Values.ibGateway.service.ports.command }}
+  # CommandServerPort is hardcoded to 0 (disabled) in gnzsnz template — no port to expose
   type: {{ .Values.ibGateway.service.type }}
