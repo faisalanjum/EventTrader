@@ -1126,11 +1126,31 @@ def _parse_dt_for_pit(ts_str):
 
     CRITICAL: Never compare timestamps as strings — timezone offsets (-04:00 vs -05:00)
     make lexicographic comparison unreliable across DST boundaries.
+
+    Handles both standard (-04:00) and compact (-0400) timezone offsets,
+    as well as space-separated datetime formats from Polygon price bars.
     """
-    s = str(ts_str)
+    s = str(ts_str).strip()
     if s.endswith('Z'):
         s = s[:-1] + '+00:00'
+    # Normalize compact timezone offset: -0400 → -04:00, +0530 → +05:30
+    if len(s) >= 5 and s[-5] in ('+', '-') and s[-4:].isdigit():
+        s = s[:-2] + ':' + s[-2:]
     return datetime.fromisoformat(s)
+
+
+def _is_price_pit_safe(price_ts, cutoff_ts):
+    """Check if a daily price bar settled before the PIT cutoff.
+
+    Returns True if the bar is PIT-safe (settled at or before cutoff).
+    Returns False (fail-closed) if timestamp is missing, unparseable, or post-cutoff.
+    """
+    if not price_ts:
+        return False
+    try:
+        return _parse_dt_for_pit(price_ts) <= _parse_dt_for_pit(cutoff_ts)
+    except (ValueError, TypeError):
+        return False
 
 
 def _build_forward_returns(created, market_session_val, returns_schedule_raw, metrics,
@@ -1591,6 +1611,26 @@ def build_inter_quarter_context(ticker, prev_8k_ts, context_cutoff_ts,
         cutoff_pr = _cutoff_boundary_price_role(context_cutoff_ts)
         if day_map[cutoff_day]['is_trading_day']:
             day_map[cutoff_day]['price_role'] = cutoff_pr
+
+        # 7b. PIT safety — null cutoff day price data if bar settles after cutoff
+        #     Uses actual bar settlement timestamp (hp.timestamp), not hour heuristic.
+        #     Matches the same principled approach _build_forward_returns uses for events.
+        #     Fail-closed: if timestamp missing/unparseable, data is nulled.
+        cutoff_entry = day_map[cutoff_day]
+        if (cutoff_entry['is_trading_day']
+                and cutoff_entry.get('price')
+                and not _is_price_pit_safe(
+                    cutoff_entry['price'].get('timestamp'), context_cutoff_ts)):
+            cutoff_entry['price'] = None
+            cutoff_entry['spy_return'] = None
+            cutoff_entry['sector_return'] = None
+            cutoff_entry['industry_return'] = None
+            cutoff_entry['adj_return'] = None
+            cutoff_entry['price_role'] = 'reference_only'
+        elif cutoff_entry['is_trading_day'] and cutoff_entry.get('price'):
+            # Bar is PIT-safe — ensure price_role reflects this (fixes
+            # early-close days where hour heuristic wrongly sets reference_only)
+            cutoff_entry['price_role'] = 'ordinary'
 
         # 8. Merge news events
         for row in news_rows:
