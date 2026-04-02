@@ -1097,12 +1097,14 @@ class Neo4jInitializer:
                 logger.warning("No entity nodes found for price relationships")
                 return 0
                 
-            # Create simple ticker to entity ID mapping
+            # Create ticker to (entity_id, entity_type) mapping
             ticker_to_id = {}
+            ticker_to_type = {}
             for r in entity_results:
                 ticker = r["ticker"]
                 if ticker:
                     ticker_to_id[ticker] = r["id"]
+                    ticker_to_type[ticker] = r["type"]
             
             today = datetime.now().strftime('%Y-%m-%d')
             total_rels = 0
@@ -1156,6 +1158,7 @@ class Neo4jInitializer:
                     batch_params.append({
                         "date_id": date_node.id,
                         "entity_id": ticker_to_id[ticker],
+                        "entity_type": ticker_to_type.get(ticker, "Company"),
                         "properties": props
                     })
 

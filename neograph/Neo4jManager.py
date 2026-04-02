@@ -1394,41 +1394,69 @@ class Neo4jManager:
     def create_price_relationships_batch(self, batch_params):
         """
         Create HAS_PRICE relationships between Date nodes and entity nodes.
-        Uses proper transaction management to prevent deadlocks.
-        
+        Uses label-specific indexed queries to avoid AllNodesScan.
+        All writes for one batch execute in a single atomic transaction.
+
         Args:
-            batch_params: List of dictionaries with date_id, entity_id, and properties
-            
+            batch_params: List of dicts with date_id, entity_id, entity_type, properties.
+                          entity_type must be one of: Company, Sector, Industry, MarketIndex.
+                          If entity_type is missing, falls back to unlabeled match.
+
         Returns:
             int: Number of relationships created
         """
         if not batch_params:
             return 0
-            
-        # Create the query to execute
-        query = """
-        UNWIND $params AS param
-        MATCH (d:Date {id: param.date_id})
-        MATCH (e) WHERE e.id = param.entity_id
-        MERGE (d)-[r:HAS_PRICE]->(e)
-        SET r += param.properties
-        RETURN count(r) as count
-        """
-        
-        # Use session with write transaction for proper deadlock handling
+
+        # Group params by entity type for indexed queries
+        from collections import defaultdict
+        params_by_type = defaultdict(list)
+        fallback_params = []
+        for p in batch_params:
+            etype = p.get("entity_type")
+            if etype in ("Company", "Sector", "Industry", "MarketIndex"):
+                params_by_type[etype].append(p)
+            else:
+                fallback_params.append(p)
+
         with self.driver.session() as session:
             def create_rels_tx(tx):
-                result = tx.run(query, {"params": batch_params})
-                record = result.single()
-                return record["count"] if record else 0
-                
+                total = 0
+                # Label-specific indexed queries
+                for label, params in params_by_type.items():
+                    query = f"""
+                    UNWIND $params AS param
+                    MATCH (d:Date {{id: param.date_id}})
+                    MATCH (e:{label} {{id: param.entity_id}})
+                    MERGE (d)-[r:HAS_PRICE]->(e)
+                    SET r += param.properties
+                    RETURN count(r) as count
+                    """
+                    result = tx.run(query, {"params": params})
+                    record = result.single()
+                    total += record["count"] if record else 0
+
+                # Fallback for params without entity_type (backward compatibility)
+                if fallback_params:
+                    query = """
+                    UNWIND $params AS param
+                    MATCH (d:Date {id: param.date_id})
+                    MATCH (e) WHERE e.id = param.entity_id
+                    MERGE (d)-[r:HAS_PRICE]->(e)
+                    SET r += param.properties
+                    RETURN count(r) as count
+                    """
+                    result = tx.run(query, {"params": fallback_params})
+                    record = result.single()
+                    total += record["count"] if record else 0
+
+                return total
+
             try:
-                # execute_write automatically retries on deadlock
                 count = session.execute_write(create_rels_tx)
                 return count
             except Exception as e:
-                # Use the module logger
-                logger.error(f"Error creating price relationships: {e}", exc_info=True) # Changed logger, added exc_info
+                logger.error(f"Error creating price relationships: {e}", exc_info=True)
                 return 0
 
     @retry_on_neo4j_transient_error

@@ -35,16 +35,16 @@ BAD_DATES = [
 
 ENTITY_QUERY = """
 MATCH (e:Company) WHERE e.ticker IN $symbols
-RETURN e.id AS id, e.ticker AS ticker
+RETURN e.id AS id, e.ticker AS ticker, 'Company' AS type
 UNION
 MATCH (e:Sector) WHERE e.etf IN $symbols
-RETURN e.id AS id, e.etf AS ticker
+RETURN e.id AS id, e.etf AS ticker, 'Sector' AS type
 UNION
 MATCH (e:Industry) WHERE e.etf IN $symbols
-RETURN e.id AS id, e.etf AS ticker
+RETURN e.id AS id, e.etf AS ticker, 'Industry' AS type
 UNION
 MATCH (e:MarketIndex) WHERE e.id IN $symbols
-RETURN e.id AS id, e.id AS ticker
+RETURN e.id AS id, e.id AS ticker, 'MarketIndex' AS type
 """
 
 
@@ -81,9 +81,11 @@ def main():
             ).data()
 
         ticker_to_id = {}
+        ticker_to_type = {}
         for row in entity_results:
             if row["ticker"]:
                 ticker_to_id[row["ticker"]] = row["id"]
+                ticker_to_type[row["ticker"]] = row.get("type", "Company")
 
         logger.info(f"Universe: {len(ticker_to_id)} unique priceable symbols")
 
@@ -135,6 +137,7 @@ def main():
                 batch_params.append({
                     "date_id": meta["date_id"],
                     "entity_id": entity_id,
+                    "entity_type": ticker_to_type.get(ticker, "Company"),
                     "properties": props,
                 })
 
