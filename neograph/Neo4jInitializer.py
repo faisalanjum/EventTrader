@@ -218,13 +218,13 @@ class Neo4jInitializer:
         self._create_ticker_to_cik_mapping()
         
         # Create a unique list of all symbols (companies, sector ETFs, industry ETFs, and SPY)
-        all_symbols_array = pd.unique([*self.universe_data, 
-                                   *[v.get('sector_etf') for v in self.universe_data.values()], 
-                                   *[v.get('industry_etf') for v in self.universe_data.values()], 
-                                   'SPY'])
-        
-        # Convert numpy array to list immediately to avoid boolean context errors later
-        self.all_symbols = all_symbols_array.tolist() if hasattr(all_symbols_array, 'tolist') else list(all_symbols_array)
+        all_symbols_list = list(dict.fromkeys([
+            *self.universe_data,
+            *[v.get('sector_etf') for v in self.universe_data.values()],
+            *[v.get('industry_etf') for v in self.universe_data.values()],
+            'SPY'
+        ]))
+        self.all_symbols = [s for s in all_symbols_list if s is not None]
         
         logger.info(f"Processed universe data: {len(self.sector_mapping)} sectors, {len(self.industry_mapping)} industries")
     

@@ -1438,6 +1438,10 @@ class Neo4jManager:
 
                 # Fallback for params without entity_type (backward compatibility)
                 if fallback_params:
+                    logger.warning(
+                        f"create_price_relationships_batch: {len(fallback_params)} params "
+                        f"missing entity_type — using slow unlabeled match"
+                    )
                     query = """
                     UNWIND $params AS param
                     MATCH (d:Date {id: param.date_id})
