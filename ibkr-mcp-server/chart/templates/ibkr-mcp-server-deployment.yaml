@@ -56,7 +56,7 @@ spec:
             name: {{ include "ibkr.fullname" . }}-config
         livenessProbe:
           httpGet:
-            path: /
+            path: /livez
             port: {{ .Values.mcpServer.service.port }}
           initialDelaySeconds: {{ .Values.mcpServer.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.mcpServer.livenessProbe.periodSeconds }}
@@ -64,7 +64,7 @@ spec:
           failureThreshold: {{ .Values.mcpServer.livenessProbe.failureThreshold }}
         readinessProbe:
           httpGet:
-            path: /gateway/status
+            path: /readyz
             port: {{ .Values.mcpServer.service.port }}
           initialDelaySeconds: {{ .Values.mcpServer.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.mcpServer.readinessProbe.periodSeconds }}

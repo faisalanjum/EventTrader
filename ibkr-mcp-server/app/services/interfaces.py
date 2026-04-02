@@ -17,7 +17,7 @@ class IBInterface(
   HistoryClient,
   AccountClient,
 ):
-  """Main IB interface for market data (shared IB connection, random clientId).
+  """Main IB interface for market data (shared IB connection, fixed clientId=10).
 
   Order operations use a SEPARATE OrderClient with its own IB() instance
   and fixed clientId=1 to ensure reliable order tracking.
@@ -57,3 +57,9 @@ class IBInterface(
 
   async def advanced_order(self, *args, **kwargs):
     return await self.orders.advanced_order(*args, **kwargs)
+
+  async def shutdown(self) -> None:
+    """Shutdown both market data and order connections."""
+    await super().shutdown()
+    if self.orders._order_ib.isConnected():
+      self.orders._order_ib.disconnect()

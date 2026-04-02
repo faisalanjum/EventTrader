@@ -1,6 +1,5 @@
 """Market data operations."""
 
-import asyncio
 import pandas as pd
 from ib_async import util
 from ib_async.contract import Contract
@@ -75,47 +74,23 @@ class MarketDataClient(IBClient):
       contracts = [Contract(conId=contract_id) for contract_id in contract_ids]
       qualified_contracts = await self.ib.qualifyContractsAsync(*contracts)
 
-      # First attempt to get tickers
       if self._is_market_open():
         logger.debug("Market is open, requesting live market data")
         self.ib.reqMarketDataType(1)
       else:
-        logger.debug("Market is closed, requesting delayed market data")
-        self.ib.reqMarketDataType(2)
+        logger.debug("Market is closed, requesting delayed-frozen market data")
+        self.ib.reqMarketDataType(4)
       tickers = await self.ib.reqTickersAsync(*qualified_contracts)
 
-      # Process tickers
       result = self._process_tickers(tickers)
 
-      # Check if we got any greeks data (only for options contracts)
+      # Check greeks for options — log warning if missing, but don't restart gateway
       options_contracts = [ticker for ticker in result if ticker.secType == "OPT"]
-      has_greeks = False
-      if options_contracts:
-        has_greeks = any(ticker.greeks for ticker in options_contracts)
-
-      # Only restart if we have options contracts but no greeks data
-      if options_contracts and not has_greeks:
-        logger.warning("No greeks data for options contracts, restarting gateway...")
-        await self.send_command_to_ibc("RESTART")
-        await asyncio.sleep(30)
-        await self._connect()
-
-        # Second attempt
-        if self._is_market_open():
-          self.ib.reqMarketDataType(1)
-        else:
-          self.ib.reqMarketDataType(2)
-        tickers = await self.ib.reqTickersAsync(*qualified_contracts)
-
-        # Process tickers again
-        result = self._process_tickers(tickers)
-        # Check if we got greeks data after restart (only for options)
-        options_contracts = [ticker for ticker in result if ticker.secType == "OPT"]
-        has_greeks = False
-        if options_contracts:
-          has_greeks = any(ticker.greeks for ticker in options_contracts)
-        if options_contracts and not has_greeks:
-          logger.warning("Still no greeks data after gateway restart")
+      if options_contracts and not any(ticker.greeks for ticker in options_contracts):
+        logger.warning(
+          "No greeks data for options contracts. "
+          "This may be a data entitlement or after-hours issue, not a gateway failure."
+        )
 
       result_dict = [ticker.model_dump() for ticker in result]
 

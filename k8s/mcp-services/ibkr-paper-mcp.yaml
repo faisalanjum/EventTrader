@@ -38,7 +38,7 @@ spec:
         command: ["sh", "-c", "until nc -z -w 5 ibkr-paper-gateway 4004; do echo 'Waiting for IB Gateway paper API...'; sleep 5; done; echo 'IB Gateway paper API ready.'"]
       containers:
       - name: ibkr-mcp-server
-        image: ghcr.io/omdv/ibkr-mcp-server:latest
+        image: ibkr-mcp-server:phase2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
@@ -78,7 +78,7 @@ spec:
             memory: 512Mi
         livenessProbe:
           httpGet:
-            path: /
+            path: /livez
             port: 8000
           initialDelaySeconds: 10
           periodSeconds: 10
@@ -86,7 +86,7 @@ spec:
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /gateway/status
+            path: /readyz
             port: 8000
           initialDelaySeconds: 30
           periodSeconds: 30

@@ -9,6 +9,8 @@ from app.core.config import get_config
 UNPROTECTED_PATHS = [
   "/",
   "/health",
+  "/livez",
+  "/readyz",
   "/gateway/status",
 ]
 

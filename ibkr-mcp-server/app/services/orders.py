@@ -20,6 +20,7 @@ from ib_async import (
     StopOrder,
     TagValue,
     Trade,
+    util,
 )
 
 from app.core.config import get_config
@@ -39,22 +40,45 @@ class OrderClient:
         self._order_ib = IB()
         self._config = get_config()
         self._contract_cache: dict[tuple[str, str, str, str], object] = {}
+        self._order_reconnect_lock = asyncio.Lock()
+        self._order_ib.disconnectedEvent += self._on_order_disconnected
+
+    def _on_order_disconnected(self) -> None:
+        logger.warning("Order IB connection lost — will reconnect on next order")
+        self._contract_cache.clear()
 
     async def _connect_orders(self) -> None:
         if self._order_ib.isConnected():
             return
-        try:
-            await self._order_ib.connectAsync(
-                host=self._config.ib_gateway_host,
-                port=self._config.ib_gateway_port,
-                clientId=ORDER_CLIENT_ID,
-                timeout=20, readonly=False,
-            )
-            self._order_ib.RequestTimeout = 20
-            logger.info("Order connection established (clientId={})", ORDER_CLIENT_ID)
-        except Exception as e:
-            logger.error("Error connecting order client: {}", e)
-            raise
+
+        async with self._order_reconnect_lock:
+            # Re-check after acquiring lock — another request may have reconnected
+            if self._order_ib.isConnected():
+                return
+
+            delays = [1, 2, 5, 10, 30]
+            for attempt, delay in enumerate(delays, 1):
+                try:
+                    if attempt > 1:
+                        await asyncio.sleep(delay)
+                    if hasattr(util.getLoop, "cache_clear"):
+                        util.getLoop.cache_clear()
+                    await self._order_ib.connectAsync(
+                        host=self._config.ib_gateway_host,
+                        port=self._config.ib_gateway_port,
+                        clientId=ORDER_CLIENT_ID,
+                        timeout=20,
+                        readonly=False,
+                    )
+                    self._order_ib.RequestTimeout = 20
+                    logger.info("Order connection established (clientId={}, attempt={})",
+                                ORDER_CLIENT_ID, attempt)
+                    return
+                except Exception as e:
+                    logger.warning("Order connect attempt {}/{} failed: {}",
+                                   attempt, len(delays), e)
+
+            raise ConnectionError("Failed to connect order client after all retries")
 
     async def _qualify(self, symbol: str, sec_type: str, exchange: str, currency: str):
         from ib_async.contract import Contract
@@ -143,21 +167,7 @@ class OrderClient:
                               currency: str, action: str, quantity: float,
                               order_type: str, conId: int | None = None,
                               **order_fields) -> dict:
-        """Place any order type by setting fields directly on ib_async Order.
-
-        Args:
-            symbol: Ticker symbol (for stocks/ETFs). Use symbol OR conId.
-            conId: Contract ID (for options, futures, or unambiguous lookup).
-            sec_type, exchange, currency: Contract identification.
-            action: BUY or SELL.
-            quantity: Number of shares/contracts.
-            order_type: IB order type string (MKT, LMT, STP, STP LMT, TRAIL,
-                        TRAIL LIMIT, MOC, LOC, MIT, LIT, MKT PRT, MIDPRICE, etc.)
-            **order_fields: Any ib_async Order field name → value.
-
-        Returns:
-            dict with order status, fill info, and IDs.
-        """
+        """Place any order type by setting fields directly on ib_async Order."""
         if not symbol and not conId:
             raise ValueError("Either symbol or conId must be provided")
 
@@ -228,17 +238,11 @@ class OrderClient:
         return [_trade_to_dict(t) for t in self._order_ib.openTrades()]
 
     async def _wait_for_status(self, trade: Trade, timeout: float = 5.0) -> None:
-        """Wait for trade status to change from initial state, or timeout.
-
-        Uses await asyncio.sleep() to yield to the event loop, which lets
-        ib_async process incoming TWS messages and update trade status.
-        No IB.sleep() — that calls run_until_complete() which crashes
-        inside an already-running async context.
-        """
-        deadline = asyncio.get_event_loop().time() + timeout
+        """Wait for trade status to change from initial state, or timeout."""
+        deadline = asyncio.get_running_loop().time() + timeout
         initial = trade.orderStatus.status
-        while asyncio.get_event_loop().time() < deadline:
-            await asyncio.sleep(0.1)  # yield — ib_async processes messages
+        while asyncio.get_running_loop().time() < deadline:
+            await asyncio.sleep(0.1)
             current = trade.orderStatus.status
             if current != initial:
                 return

@@ -34,8 +34,8 @@ ibGateway:
 mcpServer:
   replicaCount: 1
   image:
-    repository: ghcr.io/omdv/ibkr-mcp-server
-    tag: "latest"
+    repository: ibkr-mcp-server
+    tag: "phase2"
     pullPolicy: IfNotPresent
   service:
     type: NodePort

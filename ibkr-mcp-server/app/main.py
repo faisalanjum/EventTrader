@@ -1,13 +1,15 @@
 """Main module for the IBKR MCP Server."""
 
-from fastapi import FastAPI, Depends
+import asyncio
+
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_mcp import FastApiMCP
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 from app.api import gateway
-from app.api.ibkr import ibkr_router
+from app.api.ibkr import ibkr_router, ib_interface
 from app.core.config import get_config
 from app.core.auth import auth_dependency
 from app.core.setup_logging import logger
@@ -29,12 +31,21 @@ async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
   else:
     logger.info("External gateway mode - connection will be established on-demand")
 
+  # Establish initial IB connection
+  try:
+    await ib_interface._connect()
+    logger.info("IB connection established")
+  except Exception:
+    logger.warning("Initial IB connection failed — heartbeat will retry")
+
+  # Always start heartbeat — it handles reconnection when disconnected
+  await ib_interface.start_heartbeat()
+
   yield
 
   # Shutdown
   logger.info("Shutting down IBKR MCP Server...")
-
-  # Cleanup gateway
+  await ib_interface.shutdown()
   try:
     await gateway.gateway_manager.cleanup()
   except Exception:
@@ -79,6 +90,29 @@ def read_root() -> dict:
   }
 
 
+@app.get("/livez", include_in_schema=False)
+def livez() -> dict:
+  """K8s liveness: process is alive."""
+  return {"status": "ok"}
+
+
+@app.get("/readyz", include_in_schema=False)
+async def readyz() -> dict:
+  """K8s readiness: MCP has a usable IB session."""
+  if not ib_interface or not ib_interface.ib.isConnected():
+    raise HTTPException(status_code=503, detail="IB disconnected")
+
+  try:
+    await asyncio.wait_for(ib_interface.ib.reqCurrentTimeAsync(), timeout=5)
+  except Exception as exc:
+    raise HTTPException(
+      status_code=503, detail=f"IB heartbeat failed: {exc}"
+    ) from exc
+
+  return {"status": "ok", "ib_connected": True}
+
+
+# Keep /health as alias for /livez for backwards compatibility
 @app.get("/health", include_in_schema=False)
 def health() -> dict:
   """Liveness check — proves the Python process is alive."""
