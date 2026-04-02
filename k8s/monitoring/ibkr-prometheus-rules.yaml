@@ -1,0 +1,83 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: ibkr-alerts
+  namespace: monitoring
+  labels:
+    release: prometheus  # must match Prometheus ruleSelector
+    service: ibkr
+spec:
+  groups:
+  - name: ibkr-gateway
+    rules:
+
+    # ── Live (critical) ────────────────────────────────────────────
+
+    - alert: IBKRLiveGatewayDown
+      expr: |
+        kube_deployment_status_replicas_ready{namespace="mcp-services", deployment="ibkr-ib-gateway"} == 0
+      for: 5m
+      labels:
+        severity: critical
+        service: ibkr
+        component: live-gateway
+      annotations:
+        summary: "IBKR Live gateway not ready for 5m"
+        description: "Deployment ibkr-ib-gateway has 0 ready replicas. May need 2FA approval on phone (IB Key)."
+        runbook: "Check phone for 2FA push. If no push: kubectl -n mcp-services logs deploy/ibkr-ib-gateway --tail=50"
+
+    - alert: IBKRLiveMCPDown
+      expr: |
+        kube_deployment_status_replicas_ready{namespace="mcp-services", deployment="ibkr"} == 0
+      for: 5m
+      labels:
+        severity: critical
+        service: ibkr
+        component: live-mcp
+      annotations:
+        summary: "IBKR Live MCP server not ready for 5m"
+        description: "Deployment ibkr has 0 ready replicas. /readyz is failing — IB connection may be down."
+        runbook: "kubectl -n mcp-services logs deploy/ibkr --tail=50 | grep -E 'reconnect|error|disconnect'"
+
+    # ── Paper (warning) ────────────────────────────────────────────
+
+    - alert: IBKRPaperGatewayDown
+      expr: |
+        kube_deployment_status_replicas_ready{namespace="mcp-services", deployment="ibkr-paper-gateway"} == 0
+      for: 15m
+      labels:
+        severity: warning
+        service: ibkr
+        component: paper-gateway
+      annotations:
+        summary: "IBKR Paper gateway not ready for 15m"
+        description: "Deployment ibkr-paper-gateway has 0 ready replicas. Paper trading unavailable."
+        runbook: "kubectl -n mcp-services rollout restart deploy/ibkr-paper-gateway"
+
+    - alert: IBKRPaperMCPDown
+      expr: |
+        kube_deployment_status_replicas_ready{namespace="mcp-services", deployment="ibkr-paper"} == 0
+      for: 15m
+      labels:
+        severity: warning
+        service: ibkr
+        component: paper-mcp
+      annotations:
+        summary: "IBKR Paper MCP server not ready for 15m"
+        description: "Deployment ibkr-paper has 0 ready replicas. Paper MCP unavailable."
+        runbook: "kubectl -n mcp-services logs deploy/ibkr-paper --tail=50"
+
+    # ── CrashLoop detection ────────────────────────────────────────
+
+    - alert: IBKRPodCrashLooping
+      expr: |
+        rate(kube_pod_container_status_restarts_total{namespace="mcp-services", pod=~"ibkr.*"}[15m]) > 0
+      for: 5m
+      labels:
+        severity: warning
+        service: ibkr
+        component: crashloop
+      annotations:
+        summary: "IBKR pod {{ $labels.pod }} is crash-looping"
+        description: "Pod {{ $labels.pod }} has restarted in the last 15 minutes."
+        runbook: "kubectl -n mcp-services describe pod {{ $labels.pod }} && kubectl -n mcp-services logs {{ $labels.pod }} --previous --tail=50"

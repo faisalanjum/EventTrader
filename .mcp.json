@@ -33,7 +33,7 @@
       "type": "sse",
       "url": "http://localhost:31100/mcp",
       "headers": {
-        "Authorization": "Bearer HAZ9nnRxbhBCwWiMTFGWb05YqTEY134d"
+        "Authorization": "Bearer oMSIAFhSdgb7I4LTP4c7r6tAb1lZgPn6"
       }
     },
     "ibkr-paper": {

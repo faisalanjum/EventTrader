@@ -1,0 +1,35 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: ibkr-telegram
+  namespace: monitoring
+  labels:
+    service: ibkr
+spec:
+  route:
+    receiver: ibkr-telegram
+    matchers:
+    - name: service
+      value: ibkr
+      matchType: "="
+    groupBy: ["alertname", "severity", "component"]
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 1h
+
+  receivers:
+  - name: ibkr-telegram
+    telegramConfigs:
+    - botToken:
+        name: ibkr-telegram-bot
+        key: token
+      chatID: 8785259384
+      parseMode: HTML
+      message: |
+        {{ if eq .Status "firing" }}🔴{{ else }}🟢{{ end }} <b>{{ .CommonLabels.alertname }}</b>
+        <b>Severity:</b> {{ .CommonLabels.severity }}
+        <b>Component:</b> {{ .CommonLabels.component }}
+        {{ range .Alerts }}
+        {{ .Annotations.summary }}
+        <i>{{ .Annotations.runbook }}</i>
+        {{ end }}
