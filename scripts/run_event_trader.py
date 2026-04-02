@@ -157,9 +157,14 @@ def main():
                 if redis_client.llen(f"{source}:{RedisKeys.RAW_QUEUE}") > 0:
                     return False
                 
-                # 3. Check pending returns
-                if redis_client.zcard(RedisKeys.get_returns_keys(source)['pending']) > 0:
-                    return False
+                # 3. Observe pending returns for visibility, but do not block reconciliation.
+                pending_count = redis_client.zcard(RedisKeys.get_returns_keys(source)['pending'])
+                if pending_count > 0:
+                    logger.info(
+                        "Ignoring pending_returns during only_withreturns_remain check for %s: %s",
+                        source,
+                        pending_count,
+                    )
                 
                 # 4. Check withoutreturns namespace
                 withoutreturns_pattern = f"{source}:{RedisKeys.SUFFIX_WITHOUTRETURNS}:*"
@@ -336,14 +341,18 @@ def main():
                             all_complete = False
                             continue
                             
-                        # 4. Check Pending Returns Set (indicates ReturnsProcessor work)
+                        # 4. Observe pending returns for visibility, but do not block chunk completion.
                         pending_key_base = RedisKeys.get_returns_keys(source)['pending']
                         pending_zset = pending_key_base # Key already includes source
                         pending_count = redis_conn.zcard(pending_zset)
+                        pending_note = ""
                         if pending_count > 0:
-                            all_complete = False
-                            completion_status[source] = f"Pending Returns Not Empty (Count: {pending_count})"
-                            continue
+                            pending_note = f" (Ignoring Pending Returns Count: {pending_count})"
+                            logger.info(
+                                "Ignoring pending_returns during historical completion check for %s: %s",
+                                source,
+                                pending_count,
+                            )
                             
                         # --- ADDED CHECKS for returns namespaces ---
                         # 5. Check withreturns Namespace (should be empty if Neo4j is consuming)
@@ -378,7 +387,7 @@ def main():
                         # --- END ADDED CHECKS ---
                             
                         # If all checks pass for this source
-                        completion_status[source] = "Complete"
+                        completion_status[source] = f"Complete{pending_note}"
 
                     except Exception as e:
                         logger.warning(f"Redis check failed for source {source}: {e}. Assuming incomplete.")

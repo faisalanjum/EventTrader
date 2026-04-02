@@ -1,7 +1,7 @@
 # IBKR Gateway Reliability — Live & Paper
 
 **Created**: 2026-04-01
-**Status**: OPEN — needs dedicated session to implement monitoring + fixes
+**Status**: RESOLVED / ARCHIVED
 **Impact**: Paper gateway was down 4 days (Mar 28 → Apr 1) undetected. Live gateway requires manual 2FA on every restart.
 
 ---

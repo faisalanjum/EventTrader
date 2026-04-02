@@ -1,13 +1,32 @@
 # Transcript Daily Schedule Refresh — Bug Report & Fix Plan
 
 **Date**: 2026-03-11
-**Severity**: Critical (data loss)
-**Status**: Validated, fix pending approval
+**Updated**: 2026-04-02
+**Severity**: Critical when present (data loss)
+**Status**: PARTIALLY RECONCILED — the original day-transition bug is fixed in the current code on disk; production/runtime verification still pending
 **Affected files**: `redisDB/TranscriptProcessor.py`, `config/DataManagerCentral.py`
 
 ---
 
-## Background
+## Verified Facts (2026-04-02)
+
+The following statements are confirmed directly from the current code on disk:
+
+- `TranscriptProcessor._run_transcript_scheduling()` now checks for a New York date transition and calls `_refresh_daily_schedule(today)` when the day changes.
+- `last_date` is now advanced only after `_refresh_daily_schedule(today)` returns `True`.
+- The scheduler now performs periodic intra-day rescans every 2 hours during the 7AM-5PM ET window.
+- `TranscriptsManager.start()` seeds today's transcript schedule at startup and sets `processor.last_date` after successful initialization.
+- Therefore, the original headline bug, "the live scheduler only seeded the startup day and never scheduled future days," no longer matches the current code on disk.
+
+What is not yet proven by this document:
+
+- that the currently running live process has already been restarted onto this newer code
+- that multi-day production runtime has been observed end-to-end with no missed transcript days
+- that every historical finding below still applies unchanged to the latest code
+
+## Historical Background
+
+The notes below were written while auditing an earlier patch snapshot. Treat them as historical analysis unless re-verified against the current runtime and current file contents.
 
 The transcript ingestion pipeline uses a sorted set (`admin:transcripts:schedule`) to schedule fetches
 30 minutes after each earnings call's conference time. On startup, `TranscriptsManager._initialize_transcript_schedule()`
@@ -27,13 +46,13 @@ were all missed by the live scheduler.
 KR, RGNX, BJ, CIEN, ALT, KURA, MRVL, COO. The root cause is NOT "live scheduling never worked" —
 it is "live scheduling was seeded only for the startup day, then stopped advancing."
 
-A previous bot added a `_refresh_daily_schedule()` method to fix the multi-day gap. The fix is on
-disk as uncommitted changes but the running process still has the old code.
+A previous bot added a `_refresh_daily_schedule()` method to address the multi-day gap. The current
+code on disk now includes that method plus additional guard logic around `last_date` updates.
 
-## Defects in the Current Patch
+## Historical Patch Review
 
-The patch adds the right capability (daily schedule refresh) but introduces 5 defects in the patch
-itself plus 1 pre-existing defect in the startup path.
+The findings below were written against an earlier patch snapshot and have not all been re-verified
+against the current code on disk.
 
 ---
 
