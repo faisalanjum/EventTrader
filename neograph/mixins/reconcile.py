@@ -402,6 +402,147 @@ class ReconcileMixin:
             logger.error(f"Error reconciling date nodes: {e}", exc_info=True)
             return 0
 
+    def reconcile_full_date_coverage(self, start_date="2023-01-01", end_date=None):
+        """
+        Ensure the Date calendar is continuous from start_date through today,
+        all consecutive dates are linked with NEXT, and every historical trading
+        day has prices.
+
+        Runs on every startup even when Neo4j is already initialized.
+        All operations are idempotent (MERGE-based). Safe to call repeatedly.
+        """
+        try:
+            if end_date is None:
+                end_date = datetime.now().strftime('%Y-%m-%d')
+
+            today = end_date
+
+            start_day = datetime.strptime(start_date, "%Y-%m-%d").date()
+            end_day = datetime.strptime(end_date, "%Y-%m-%d").date()
+
+            if start_day > end_day:
+                logger.warning(
+                    f"Skipping date coverage reconciliation: "
+                    f"start_date {start_date} > end_date {end_date}"
+                )
+                return 0
+
+            # --- Setup initializer ---
+            if not self.universe_data:
+                self.universe_data = self._get_universe()
+                if not self.universe_data:
+                    return 0
+
+            initializer = Neo4jInitializer(
+                uri=self.uri,
+                username=self.username,
+                password=self.password,
+                universe_data=self.universe_data
+            )
+
+            if not initializer.connect():
+                return 0
+
+            try:
+                initializer.prepare_universe_data()
+
+                # --- Step 1: Generate expected date range ---
+                expected_dates = []
+                current_day = start_day
+                while current_day <= end_day:
+                    expected_dates.append(current_day.strftime("%Y-%m-%d"))
+                    current_day += timedelta(days=1)
+
+                # --- Step 2: Find missing Date nodes ---
+                with self.manager.driver.session() as session:
+                    rows = session.run(
+                        "MATCH (d:Date) "
+                        "WHERE d.date >= $start AND d.date <= $end "
+                        "RETURN d.date AS date",
+                        {"start": start_date, "end": end_date}
+                    ).data()
+
+                existing_dates = {row["date"] for row in rows}
+                missing_dates = [d for d in expected_dates if d not in existing_dates]
+
+                # --- Step 3: Create missing dates (with prices via create_single_date) ---
+                created_count = 0
+                if missing_dates:
+                    logger.info(f"Found {len(missing_dates)} missing date nodes, creating")
+                    for date_str in missing_dates:
+                        if initializer.create_single_date(date_str):
+                            created_count += 1
+                        else:
+                            logger.warning(
+                                f"Failed to create date node for {date_str}"
+                            )
+
+                # --- Step 4: Repair NEXT chain for all consecutive dates ---
+                next_pairs = [
+                    {"source_id": expected_dates[i],
+                     "target_id": expected_dates[i + 1]}
+                    for i in range(len(expected_dates) - 1)
+                ]
+
+                if next_pairs:
+                    with self.manager.driver.session() as session:
+                        def _repair_next_chain(tx):
+                            tx.run(
+                                "UNWIND $pairs AS pair "
+                                "MATCH (s:Date {id: pair.source_id}) "
+                                "MATCH (t:Date {id: pair.target_id}) "
+                                "MERGE (s)-[:NEXT]->(t)",
+                                {"pairs": next_pairs}
+                            )
+                        session.execute_write(_repair_next_chain)
+
+                # --- Step 5: Price zero-price historical trading days ---
+                with self.manager.driver.session() as session:
+                    zero_rows = session.run(
+                        "MATCH (d:Date) "
+                        "WHERE d.date >= $start AND d.date < $today "
+                        "  AND coalesce(toString(d.is_trading_day), '') "
+                        "      IN ['1', 'true', 'True'] "
+                        "OPTIONAL MATCH (d)-[r:HAS_PRICE]->() "
+                        "WITH d, count(r) AS cnt WHERE cnt = 0 "
+                        "RETURN d.date AS date ORDER BY d.date",
+                        {"start": start_date, "today": today}
+                    ).data()
+
+                zero_price_dates = [row["date"] for row in zero_rows]
+                priced_count = 0
+
+                if zero_price_dates:
+                    logger.info(
+                        f"Found {len(zero_price_dates)} zero-price trading days, "
+                        f"loading prices"
+                    )
+                    dates_to_price = {
+                        d: initializer._prepare_date_node(d)
+                        for d in zero_price_dates
+                    }
+                    initializer.add_price_relationships_to_dates(
+                        dates_to_price, skip_latest=False
+                    )
+                    priced_count = len(zero_price_dates)
+
+                logger.info(
+                    f"Date coverage reconciliation complete: "
+                    f"created={created_count} missing dates, "
+                    f"priced={priced_count} zero-price trading days"
+                )
+
+                return created_count + priced_count
+
+            finally:
+                initializer.close()
+
+        except Exception as e:
+            logger.error(
+                f"Error in full date coverage reconciliation: {e}",
+                exc_info=True
+            )
+            return 0
 
 
     def reconcile_dividend_nodes(self):

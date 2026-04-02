@@ -722,32 +722,27 @@ class DataManager:
             # Check if Neo4j is already initialized
             if self.neo4j_processor.is_initialized():
                 self.logger.info("Neo4j already initialized, skipping initialization")
-                # Even if initialized, process news and report data
-                # SKIP_NEWS_BACKFILL
-                # self.process_news_data()
-                # Reports re-enabled 2026-03-28
-                self.process_report_data()
-                # SKIP_TRANSCRIPTS_BACKFILL
-                # self.process_transcript_data()
             else:
                 # Initialize Neo4j if not already initialized
                 self.logger.info("Neo4j not initialized, initializing database")
-                # Pass the start date from historical range
                 start_date = self.historical_range.get('from')
                 self.logger.info(f"Using start date for date nodes: {start_date}")
                 if not self.neo4j_processor.initialize(start_date=start_date):
                     self.logger.error("Failed to initialize Neo4j database")
                     return False
-                    
                 self.logger.info("Neo4j initialization completed successfully")
-                
-                # Process news and report data after successful initialization
-                # SKIP_NEWS_BACKFILL
-                # self.process_news_data()
-                # Reports re-enabled 2026-03-28
-                self.process_report_data()
-                # SKIP_TRANSCRIPTS_BACKFILL
-                # self.process_transcript_data()
+
+            # Always ensure full date coverage on startup (fills gaps from downtime)
+            self.logger.info("Running startup date coverage reconciliation")
+            self.neo4j_processor.reconcile_full_date_coverage(start_date="2023-01-01")
+
+            # Process report data regardless of initialization path
+            # SKIP_NEWS_BACKFILL
+            # self.process_news_data()
+            # Reports re-enabled 2026-03-28
+            self.process_report_data()
+            # SKIP_TRANSCRIPTS_BACKFILL
+            # self.process_transcript_data()
             
             # Start the PubSub-based continuous processing thread
             self.neo4j_thread = threading.Thread(

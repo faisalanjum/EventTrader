@@ -881,59 +881,94 @@ class Neo4jInitializer:
 
             # Process in batches to avoid memory issues
             total_created = 0
+            today = datetime.now().strftime('%Y-%m-%d')
+            prev_batch_last_node = None
+
             for i in range(0, len(date_strings), batch_size):
                 batch = date_strings[i:i+batch_size]
                 date_nodes = [self._prepare_date_node(date_str) for date_str in batch]
-                
+
                 # Store dates by date_str for relationship creation
                 dates_by_id = {node.date_str: node for node in date_nodes}
-                
+
                 # Merge nodes into Neo4j
                 self.manager.merge_nodes(date_nodes)
                 total_created += len(date_nodes)
-                
-                # Create NEXT relationships (requires the nodes to exist first)
+
+                # Create NEXT relationships
                 next_rels = []
+
+                # Cross-batch link: previous batch's last node -> this batch's first
+                if prev_batch_last_node is not None:
+                    next_rels.append(
+                        (prev_batch_last_node, dates_by_id[batch[0]], RelationType.NEXT)
+                    )
+
+                # Intra-batch links
                 for j in range(len(batch) - 1):
                     curr_date = batch[j]
                     next_date = batch[j + 1]
-                    next_rels.append((dates_by_id[curr_date], dates_by_id[next_date], RelationType.NEXT))
-                
+                    next_rels.append(
+                        (dates_by_id[curr_date], dates_by_id[next_date], RelationType.NEXT)
+                    )
+
                 if next_rels:
                     self.manager.merge_relationships(next_rels)
-                    
-                # Add price relationships if requested and we have multiple dates
-                if add_prices and len(batch) > 1 and hasattr(self, 'all_symbols'):
-                    # First check if any date nodes already have price relationships
-                    date_ids = [node.id for node in date_nodes]
-                    with self.manager.driver.session() as session:
-                        check_query = """
-                        MATCH (d:Date)-[r:HAS_PRICE]->(e)
-                        WHERE d.id IN $date_ids
-                        WITH d.id AS date_id, count(r) AS rel_count
-                        WHERE rel_count > 0
-                        RETURN collect(date_id) AS dates_with_relationships
-                        """
-                        result = session.run(check_query, {"date_ids": date_ids}).single()
-                        dates_with_rels = result["dates_with_relationships"] if result else []
-                        
-                        # Filter out dates that already have relationships
+
+                prev_batch_last_node = dates_by_id[batch[-1]]
+
+                # Add price relationships if requested
+                if add_prices and hasattr(self, 'all_symbols'):
+                    # Pre-filter to historical trading days (Python bool, not Neo4j string)
+                    dates_to_price = {
+                        date_str: node for date_str, node in dates_by_id.items()
+                        if date_str < today and node.is_trading_day
+                    }
+
+                    if dates_to_price:
+                        # Check which dates already have price relationships
+                        date_ids = [node.id for node in dates_to_price.values()]
+                        with self.manager.driver.session() as session:
+                            check_query = """
+                            MATCH (d:Date)-[r:HAS_PRICE]->(e)
+                            WHERE d.id IN $date_ids
+                            WITH d.id AS date_id, count(r) AS rel_count
+                            WHERE rel_count > 0
+                            RETURN collect(date_id) AS dates_with_relationships
+                            """
+                            result = session.run(check_query, {"date_ids": date_ids}).single()
+                            dates_with_rels = result["dates_with_relationships"] if result else []
+
                         if dates_with_rels:
-                            filtered_dates = {date_str: node for date_str, node in dates_by_id.items() 
-                                             if node.id not in dates_with_rels}
-                            
+                            filtered_dates = {
+                                date_str: node for date_str, node in dates_to_price.items()
+                                if node.id not in dates_with_rels
+                            }
+
                             if not filtered_dates:
-                                logger.info(f"All {len(dates_by_id)} dates already have price relationships, skipping")
+                                logger.info(
+                                    f"All {len(dates_to_price)} dates already have "
+                                    f"price relationships, skipping"
+                                )
                             else:
-                                logger.info(f"Found {len(dates_with_rels)} dates with existing price relationships, processing {len(filtered_dates)} remaining dates")
-                                self.add_price_relationships_to_dates(filtered_dates)
+                                logger.info(
+                                    f"Found {len(dates_with_rels)} dates with existing "
+                                    f"prices, processing {len(filtered_dates)} remaining"
+                                )
+                                self.add_price_relationships_to_dates(
+                                    filtered_dates, skip_latest=False
+                                )
                         else:
-                            # No dates have relationships yet, process all
-                            self.add_price_relationships_to_dates(dates_by_id)
-                            logger.info(f"Added price relationships for batch of {len(batch)} dates")
-                    
+                            self.add_price_relationships_to_dates(
+                                dates_to_price, skip_latest=False
+                            )
+                            logger.info(
+                                f"Added price relationships for batch of "
+                                f"{len(dates_to_price)} dates"
+                            )
+
                 logger.info(f"Created batch of {len(batch)} date nodes with relationships")
-                
+
             return total_created
         except Exception as e:
             logger.error(f"Error creating date nodes: {e}", exc_info=True)
