@@ -6,9 +6,10 @@
 **Cleaned:** 2026-03-05 (manual one-time cleanup, 919 news + 327 reports removed)
 **Also cleaned:** 2026-03-30 (`reports:pending_returns` ZSET flushed — 28 stale entries blocking chunked-historical chunks)
 
-### Current Status (updated 2026-04-01)
+### Current Status (updated 2026-04-02)
 - ✅ **Manual flush applied**: `reports:pending_returns` ZSET and `reports:withoutreturns:*` keys flushed during Mar 2026 backfill.
 - ❌ **No permanent code fix**: When live mode resumes, stale `pending_returns` entries from after-hours/weekend filings will accumulate again. The chunk completion check (`run_event_trader.py:342` ZCARD) would block future chunked-historical runs.
+- ⚠️ **BLOCKING the 7 targeted gap-fill runs**: Must flush `pending_returns` before AND between each run. Without the permanent fix, any chunk timeout leaves stale entries that block subsequent chunks. See `report-ingestion-gaps.md` for the 7-run plan.
 - The `tracking:pending:*` SET accumulation (original bug) also has no permanent fix.
 
 ### How to verify / when it recurs
@@ -24,11 +25,25 @@ kubectl exec -n infrastructure redis-79d9c8d68f-z256d -- redis-cli SCARD trackin
 # If growing unbounded → manual cleanup needed
 ```
 
-### Permanent fix needed
+### Permanent fix needed — WRITE BEFORE running targeted backfills or resuming live mode
 The chunk completion check at `run_event_trader.py:340-346` should either:
 1. Ignore `pending_returns` entries older than N hours (stale from previous live-mode sessions), or
 2. Only check `pending_returns` entries that belong to the current chunk's date range, or
-3. Flush `pending_returns` automatically at chunk start in historical mode
+3. **Flush `pending_returns` automatically at chunk start in historical mode** ← simplest, recommended
+
+Option 3 implementation (in `run_event_trader.py`, at the start of each chunk in historical mode):
+```python
+# At chunk start, flush stale pending_returns from previous sessions
+if args.historical:
+    for source in sources:
+        pending_key = RedisKeys.get_returns_keys(source)['pending']
+        count = redis_conn.zcard(pending_key)
+        if count > 0:
+            redis_conn.delete(pending_key)
+            logger.info(f"Flushed {count} stale pending_returns entries from {pending_key}")
+```
+
+**Why this is safe in historical mode:** Historical chunks process date ranges sequentially. Stale `pending_returns` entries are always from a PREVIOUS session (live mode or crashed chunk). They will never be processed — their `withreturns` data has already expired or been consumed. Flushing at chunk start is equivalent to what we've been doing manually.
 
 ## What Happens
 

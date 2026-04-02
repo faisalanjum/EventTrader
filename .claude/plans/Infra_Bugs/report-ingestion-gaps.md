@@ -5,12 +5,14 @@
 **Scripts**: `scripts/report_gap_analysis.py` (EDGAR comparison), `scripts/report_gap_secapi.py` (three-way)
 **Output**: `earnings-analysis/gap_analysis/`
 
-### Current Status (updated 2026-04-01)
+### Current Status (updated 2026-04-02)
 - ✅ **Code fix deployed**: `set_filing()` uses accessionNo-based SET (`reports:confirmed_in_neo4j`). Commit `d84dad2`.
-- ✅ **SET seeded**: 37,492 accessions from Neo4j (growing as backfill adds more).
-- ✅ **Current backfill running**: Aug 2025 → Mar 2026, ~86% done (chunk 37 of ~43).
-- ❌ **Targeted re-runs NOT done yet**: Nov 2025 (722), 2024-08 (541), 2024-11 (261), 2024-05 (110), 2023 (91) = ~1,725 reports still missing.
+- ✅ **SET seeded**: 38,520+ accessions (growing as backfill adds more).
+- ✅ **Current backfill**: Aug 2025 → Mar 2026, ~96% done (chunk 43 of 45). Finishing today.
+- ⚠️ **10 of 45 chunks never fetched from sec-api**: Spent 3h timeout draining withreturns backlogs. Feb/Mar 2026 mostly unfetched.
+- ❌ **9 targeted re-runs needed**: 3,409 unique missing accessions across all dates (2023 → Mar 2026). Exhaustive accession-by-accession analysis verified 100% coverage with zero uncovered.
 - ❌ **Re-seed SET**: Need one more seed after current backfill finishes.
+- ❌ **pending_returns auto-flush**: Must be written before targeted runs (see `pending-set-orphan-accumulation.md`).
 
 ### How to verify fully done
 ```bash
@@ -329,33 +331,37 @@ The no-TTL SET keyed by `accessionNo` can only contain entries added after succe
 ### Status
 
 - **Phase 4 code fix**: ✅ DEPLOYED (2026-03-31 ~20:30 EDT, commit `d84dad2`)
-- **Current backfill** (Aug 2025 → Mar 2026): ~72% done, ETA Wed Apr 2 ~15:00 EDT. Let it finish.
+- **Current backfill** (Aug 2025 → Mar 2026): ~93% done (chunk 42/45), ETA Wed Apr 2. Let it finish.
 - **Targeted gap backfills**: Run AFTER current backfill completes (see below).
 
-### After current backfill finishes — run these targeted backfills
+### Exhaustive gap analysis (Apr 2, 2026 — accession-by-accession, revised)
 
-No flushing needed. No PROCESSED_QUEUE surgery. The new `set_filing()` checks the `reports:confirmed_in_neo4j` SET — reports already in Neo4j get skipped automatically (SISMEMBER), missing ones flow through the normal pipeline.
+Compared 40,028 sec-api.io filings against 38,522 Neo4j reports by accession number.
+Then verified EVERY chunk log to determine if the sec-api.io fetch actually ran.
 
+**Key discovery:** 10 of 45 chunks in the current backfill **never queried sec-api.io** — they spent their entire 3h timeout draining withreturns backlogs from previous chunks. This means Feb and Mar 2026 data was mostly never fetched despite being in the backfill window.
+
+| Category | Count | Explanation |
+|---|---|---|
+| **PRE_BACKFILL** | 1,129 | Before Aug 25 2025 — not in current backfill window |
+| **NO_FETCH** | 2,205 | In backfill window but sec-api fetch never ran (withreturns consumed 3h timeout) |
+| **FETCH_BUT_MISSING** | 142 | Fetch ran but still missing (135 from unfinished Mar chunks, 7 edge cases) |
+| **Total PIPELINE_LOST** | **3,476** | |
+
+**Chunks that never fetched (verified from chunk logs):**
+- `2025-11-02→11-06` (284 withreturns drained), `2025-11-07→11-11` (185), `2025-11-27→12-01` (109)
+- `2026-02-05→02-09` (215), `2026-02-15→02-19` (313), `2026-02-20→02-24` (249), `2026-02-25→03-01` (174)
+- `2026-03-02→03-06` (110), `2026-03-13→03-17` (149), `2026-03-18→03-22` (running)
+
+- Detailed per-filing CSV: `earnings-analysis/gap_analysis/pipeline_lost_2026-04-02.csv` (3,476 rows with `category` column)
+
+### After current backfill finishes — run these 9 targeted backfills
+
+The `set_filing()` SISMEMBER check skips existing reports automatically. These 9 runs cover **100% of all 3,409 unique missing accessions** with zero uncovered (verified programmatically).
+
+**⚠️ BEFORE running — complete this pre-flight checklist:**
 ```bash
-# 1. Nov 2025 (722 gaps — the big one)
-bash scripts/event_trader.sh chunked-historical 2025-10-25 2025-12-05
-
-# 2. 2024-08 (541 gaps — Q2 earnings)
-bash scripts/event_trader.sh chunked-historical 2024-07-25 2024-09-01
-
-# 3. 2024-11 (261 gaps — Q3 earnings)
-bash scripts/event_trader.sh chunked-historical 2024-10-25 2024-12-01
-
-# 4. 2024-05 (110 gaps)
-bash scripts/event_trader.sh chunked-historical 2024-04-25 2024-05-15
-
-# 5. 2023 scattered (91 gaps)
-bash scripts/event_trader.sh chunked-historical 2023-01-01 2023-12-31
-```
-
-**Before running**: re-seed the SET once to catch any reports from the old-code chunk:
-```bash
-# One-time re-seed (captures reports written by the Jan 11-15 chunk which used old code)
+# 1. Re-seed SET (captures any reports written by old-code chunks)
 source venv/bin/activate && python3 -c "
 from neo4j import GraphDatabase; import redis, os
 driver = GraphDatabase.driver('bolt://192.168.40.73:30687', auth=('neo4j', os.getenv('NEO4J_PASSWORD')))
@@ -366,24 +372,70 @@ with driver.session() as s:
 print(f'SET size: {r.scard(\"reports:confirmed_in_neo4j\")}')
 driver.close()
 "
+
+# 2. Flush pending_returns if > 0 (no permanent auto-flush yet — see pending-set-orphan-accumulation.md)
+kubectl exec -n infrastructure redis-79d9c8d68f-z256d -- redis-cli ZCARD reports:pending_returns
+# If > 0: kubectl exec -n infrastructure redis-79d9c8d68f-z256d -- redis-cli DEL reports:pending_returns
+
+# 3. Flush stale withoutreturns keys
+kubectl exec -n infrastructure redis-79d9c8d68f-z256d -- redis-cli EVAL \
+  "local k=redis.call('KEYS','reports:withoutreturns:*'); for _,v in ipairs(k) do redis.call('DEL',v) end; return #k" 0
 ```
 
-**After all targeted backfills complete**: re-run the gap analysis to verify gaps are closed:
+**The 9 targeted runs (ordered by gap count, biggest first):**
 ```bash
+# 1. Feb 2026 (1,052 gaps — 4 of 5 chunks never fetched from sec-api)
+bash scripts/event_trader.sh chunked-historical 2026-02-01 2026-02-28
+
+# 2. Nov-Dec 2025 (738 gaps — NO_FETCH chunks + withreturns overflow from Oct earnings)
+bash scripts/event_trader.sh chunked-historical 2025-10-25 2025-12-31
+
+# 3. Aug 2024 (538 gaps — Q2 earnings)
+bash scripts/event_trader.sh chunked-historical 2024-07-25 2024-09-01
+
+# 4. Mar 2026 (515 gaps — 3+ chunks never fetched from sec-api)
+bash scripts/event_trader.sh chunked-historical 2026-03-01 2026-03-28
+
+# 5. Q4 2024 (250 gaps — Q3 earnings + Sep-Dec scattered)
+bash scripts/event_trader.sh chunked-historical 2024-09-08 2024-12-08
+
+# 6. 2024 H1 (158 gaps — Jan-Jul scattered + May cluster)
+bash scripts/event_trader.sh chunked-historical 2024-01-01 2024-07-24
+
+# 7. 2023 full year (124 gaps — scattered)
+bash scripts/event_trader.sh chunked-historical 2023-01-01 2023-12-31
+
+# 8. 2025 Q1-Q2 (30 gaps — Feb-Jun scattered)
+bash scripts/event_trader.sh chunked-historical 2025-02-05 2025-06-26
+
+# 9. 2025 Aug (4 gaps — boundary edge cases)
+bash scripts/event_trader.sh chunked-historical 2025-08-05 2025-08-25
+```
+
+**⚠️ Between runs:** Check `ZCARD reports:pending_returns`. If > 0, flush before starting next run. The permanent auto-flush has NOT been written yet — see `pending-set-orphan-accumulation.md`.
+
+**After all 9 runs complete**: re-run the exhaustive gap analysis to verify:
+```bash
+# Re-run accession-by-accession comparison
 source venv/bin/activate && python3 scripts/report_gap_secapi.py --start-date 2023-01-01 --end-date 2026-03-28
+# PIPELINE_LOST should be near zero. Only ~440 SOURCE_GAP (EDGAR-only, unfixable) remains.
 ```
 
 ### Expected results
 
-| Gap period | Gaps before | Expected after targeted backfill |
-|---|---|---|
-| 2025-11 | 722 | ~10 (only SOURCE_GAP remaining) |
-| 2024-08 | 541 | ~6 (only SOURCE_GAP) |
-| 2024-11 | 261 | ~5 (only SOURCE_GAP) |
-| 2024-05 | 110 | ~3 (only SOURCE_GAP) |
-| 2023 scattered | 91 | ~75 (some SOURCE_GAP + ZI unfetchable) |
+| Run | Date range | Gaps | Category | Expected after |
+|---|---|---|---|---|
+| 1 | 2026-02-01 → 2026-02-28 | 1,052 | NO_FETCH | ~10 (SOURCE_GAP only) |
+| 2 | 2025-10-25 → 2025-12-31 | 738 | NO_FETCH + edge | ~10 |
+| 3 | 2024-07-25 → 2024-09-01 | 538 | PRE_BACKFILL | ~6 |
+| 4 | 2026-03-01 → 2026-03-28 | 515 | NO_FETCH | ~10 |
+| 5 | 2024-09-08 → 2024-12-08 | 250 | PRE_BACKFILL | ~5 |
+| 6 | 2024-01-01 → 2024-07-24 | 158 | PRE_BACKFILL | ~5 |
+| 7 | 2023-01-01 → 2023-12-31 | 124 | PRE_BACKFILL | ~75 (SOURCE_GAP + ZI) |
+| 8 | 2025-02-05 → 2025-06-26 | 30 | PRE_BACKFILL | ~3 |
+| 9 | 2025-08-05 → 2025-08-25 | 4 | FETCH_BUT_MISSING | ~0 |
 
-Total PIPELINE_LOST should drop from ~4,696 to near zero. Only ~440 SOURCE_GAP (EDGAR has, sec-api.io doesn't) remains — unfixable by re-run.
+Total PIPELINE_LOST should drop from ~3,409 to near zero. Only ~440 SOURCE_GAP remains (unfixable).
 
 ### Pipeline flow (100% proven)
 
