@@ -1,6 +1,6 @@
 # Agent Teams Orchestration Plan
 
-## Date: 2026-02-05 (Updated 2026-02-18, v2.1.45 retest)
+## Date: 2026-02-05 (Updated 2026-02-18 v2.1.45, Updated 2026-03-25 v2.1.83)
 
 ---
 
@@ -364,15 +364,16 @@ These were discovered while researching Agent Teams docs. They are new subagent/
 - [x] Does `memory: local` create the directory? **YES** — dir created at `.claude/agent-memory-local/<name>/`
 - [x] Can subagent write/read from memory directory? **YES** — Write + Read both work
 - [x] Does memory persist across sessions? **YES** — files survive restarts
-- [x] Does MEMORY.md auto-load on next invocation? **NO — CONFIRMED NOT WORKING**
+- [x] Does MEMORY.md auto-load on next invocation? **YES — FIXED in v2.1.52, re-confirmed v2.1.83**
 
-**Definitive auto-preload test** (4 separate tests):
-1. `test-memory-local` agent wrote `MEMORY_LOCAL_TEST=mango_2026_local` to MEMORY.md → restarted → re-ran same agent → agent reports NO memory content in system prompt
-2. `test-re-memory-agent` agent wrote `MEMORY_TEST_VALUE=banana_2026` to MEMORY.md → restarted → re-ran same agent → agent reports NO memory content in system prompt
-3. Both agents explicitly searched entire system prompt for the memory strings → zero matches
-4. Both `local` and `project` scopes behave identically: storage works, recall doesn't
+**v2.1.34→v2.1.50 (BROKEN)**: 4 separate tests all showed NO auto-preload.
 
-**Status**: ⚠️ **STORAGE ONLY** — Dir + files persist; auto-preload into system prompt does NOT work.
+**v2.1.52+ (FIXED)**: Memory auto-preload NOW WORKS. Re-confirmed v2.1.83 with `test-v183-memory-preload` agent:
+- Phase 1: Wrote `MEMORY_MARKER_V183=pineapple_2026_march` to `agent-memory-local/test-v183-memory-preload/MEMORY.md`
+- Phase 2: Re-ran same agent → `PRELOAD_IN_CONTEXT=YES`, `MEMORY_HEADER_FOUND=YES`, `MEMORY_CONTENT_FOUND=YES`
+- System injects `# Persistent Agent Memory` header + MEMORY.md (first 200 lines) into agent system prompt
+
+**Status**: ✅ **FULLY WORKING** (v2.1.52+) — Dir + files persist; auto-preload into system prompt WORKS.
 
 **Workaround**: Agent manually `Read`s its memory dir at startup. This actually gives more control (per-company files, selective loading, no 200-line limit):
 ```yaml
@@ -1166,7 +1167,7 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 | 12 | Broadcast messaging | **YES** | Reaches all teammates, wakes idle ones |
 | 13 | Shared task list (cross-visibility) | **YES** | Both use `CLAUDE_CODE_TASK_LIST_ID` |
 | 14 | Task dependencies (`addBlockedBy`) | **YES** | Blocks correctly, unblocks when blocker completes |
-| 15 | Teammate model override | **NO** | Config stores it, runtime ignores it |
+| 15 | Teammate model override | **NOW WORKS (v2.1.83)** | Was IGNORED in v2.1.45. Fixed v2.1.47/v2.1.72. `model: haiku` → runs Haiku |
 | 16 | Teammate permission mode override (`bypassPermissions`) | **NO** | `mode` param ignored, inherits lead |
 | 17 | Permission allow rules propagation | **YES** | Settings.json allow rules inherited |
 | 18 | Team cleanup | **YES** | Removes team + task dirs, leaves shared list |
@@ -1188,8 +1189,8 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 | 34 | TaskCompleted hook (v2.1.33) | **YES** | Fires on task completion; JSON has task_id, subject, description |
 | 35 | TeammateIdle hook (v2.1.33) | **YES** | Fires when teammate goes idle; JSON has teammate_name, team_name |
 | 36 | Agent `Task(AgentType)` restriction (v2.1.33) | **YES (HARD)** | `tools: [Task(Explore)]` blocks unlisted sub-agent types. Hard enforcement. |
-| 37 | `memory: local` scope (v2.1.33) | **STORAGE ONLY** | Dir + files persist; auto-preload NOT working (v2.1.34→v2.1.45) |
-| 38 | `memory: project` scope | **STORAGE ONLY** | Dir + files persist; auto-preload NOT working (v2.1.34→v2.1.45) |
+| 37 | `memory: local` scope (v2.1.33) | **FULLY WORKING (v2.1.52+)** | Dir + files persist; auto-preload FIXED in v2.1.52, re-confirmed v2.1.83 |
+| 38 | `memory: project` scope | **FULLY WORKING (v2.1.52+)** | Dir + files persist; auto-preload FIXED in v2.1.52, re-confirmed v2.1.83 |
 | 39 | Mixed-provider team (native) | **NO** | Task tool has no `provider` param; only `model: sonnet\|opus\|haiku` |
 | 40 | Mixed-provider team (proxy via `./agent`) | **YES** | Claude teammate delegates to `./agent --provider openai`; full comms work |
 | 41 | Cross-provider peer messaging | **YES** | Claude-worker ↔ OpenAI-worker bidirectional messaging confirmed |
@@ -1227,6 +1228,23 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 | 73 | Prompt cache hit improvement (v2.1.42) | **IMPROVED** | Date moved out of system prompt → better cache hits → lower cost |
 | 74 | Large shell output memory usage (v2.1.45) | **FIXED** | RSS no longer grows unboundedly with shell output size |
 | 75 | ENAMETOOLONG for deep paths (v2.1.44) | **FIXED** | Deeply-nested directory paths no longer cause errors |
+| 76 | Teammate model override (v2.1.47/v2.1.72/v2.1.83) | **NOW WORKS** | `model: haiku` → actually runs Haiku. Was IGNORED in v2.1.45 |
+| 77 | TeamCreate/TeamDelete tools (v2.1.76) | **YES** | Formalized team lifecycle. Replaces Teammate(spawnTeam)/cleanup |
+| 78 | Teammate tool count v2.1.83 | **25 built-in** | ALL DIRECT — no ToolSearch needed. +CronCreate, +EnterWorktree |
+| 79 | Teammate MCP pre-loaded (v2.1.83) | **YES — ALL DIRECT** | 50 MCP tools loaded immediately, no ToolSearch needed |
+| 80 | Memory auto-preload (v2.1.52→v2.1.83) | **FIXED** | Was broken v2.1.34→v2.1.50. Now WORKING. Marker preloaded on 2nd run |
+| 81 | `initialPrompt` agent frontmatter (v2.1.83) | **YES** | Auto-submits first turn on spawn |
+| 82 | `type: "prompt"` hooks re-fixed (v2.1.76) | **YES** | Was regressed v2.1.45, fixed in v2.1.76 |
+| 83 | Teammate CronCreate/CronList/CronDelete (v2.1.83) | **YES** | NEW — was main-session-only |
+| 84 | Teammate EnterWorktree/ExitWorktree (v2.1.83) | **YES** | NEW — worktree management from teammates |
+| 85 | TaskOutput deprecated (v2.1.83) | **ABSENT** | Removed from subagents. Use Read on output file |
+| 86 | RemoteTrigger NEW in FG subagents (v2.1.83) | **YES** | New tool for FG subagents |
+| 87 | Concurrent OAuth re-auth fix (v2.1.81) | **FIXED** | Multiple sessions no longer fight over token refresh |
+| 88 | BG subagents invisible after compaction (v2.1.83) | **FIXED** | No longer invisible/duplicated |
+| 89 | Teammate panes close on leader exit (v2.1.77) | **FIXED** | tmux panes properly cleaned up |
+| 90 | SUBPROCESS_ENV_SCRUB safe for teams (v2.1.83) | **YES** | Strips cloud secrets, preserves app vars |
+| 91 | CwdChanged hook event (v2.1.83) | **YES** | 19th hook type. Fires on Bash cd |
+| 92 | FileChanged hook event (v2.1.83) | **PARTIAL** | 20th hook type. NOT firing in -p mode |
 
 ---
 
@@ -1295,6 +1313,28 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 55. **Large shell output memory usage**: Fixed in v2.1.45. RSS no longer grows unboundedly with shell command output size; matters for long-running agents. **ANSWERED: FIXED.**
 56. **ENAMETOOLONG for deep paths**: Fixed in v2.1.44. Deeply-nested directory paths no longer cause errors. **ANSWERED: FIXED.**
 
+### Answered (v2.1.83, 2026-03-25) — Comprehensive Retest
+
+57. **Teammate model override NOW WORKS**: `model: haiku` on Agent tool with `team_name` → teammate actually runs `claude-haiku-4-5-20251001`. Previously (v2.1.45) model param was stored in config but IGNORED at runtime. **v2.1.47 fixed `model:` field for team teammates**, **v2.1.72 fixed team agents inheriting leader's model**. **ANSWERED: NOW ENFORCED.** TESTED: `ACTUAL_MODEL=claude-haiku-4-5-20251001`, `REQUESTED_MODEL=haiku`, `MODEL_MATCH=YES`.
+58. **TeamCreate/TeamDelete tools (v2.1.76)**: Formalized team lifecycle. `TeamCreate({team_name, description, agent_type})` replaces old `Teammate(spawnTeam)`. `TeamDelete()` replaces `Teammate(cleanup)` — takes no params, uses session context. TeamDelete fails if active members exist. Both available in main session + FG non-team subagents. **ANSWERED: WORKING. TESTED.**
+59. **Teammate tool inventory v2.1.83**: **25 built-in tools, ALL DIRECT** (no ToolSearch/deferred needed). Major change from v2.1.45 where MCP tools were deferred. Tools: Bash, Read, Write, Edit, Glob, Grep, TaskCreate/List/Get/Update, SendMessage, Skill, CronCreate/List/Delete, EnterWorktree, ExitWorktree, WebSearch, WebFetch, NotebookEdit. **50 MCP tools ALL DIRECT** (no ToolSearch!). ABSENT: Agent (can't spawn sub-agents), TeamCreate, TeamDelete, TaskOutput, RemoteTrigger. **ANSWERED: MAJOR CHANGE — all tools pre-loaded.** TESTED.
+60. **Teammate CronCreate/CronDelete/CronList**: NEW for teammates (was main-session-only in v2.1.71). **ANSWERED: NOW AVAILABLE TO TEAMMATES.** TESTED.
+61. **Teammate EnterWorktree/ExitWorktree**: NEW for teammates (v2.1.72). **ANSWERED: AVAILABLE.** TESTED.
+62. **Memory auto-preload FIXED (v2.1.52→v2.1.83)**: Was BROKEN in v2.1.34→v2.1.50. **NOW WORKING**: Phase 1 wrote marker to `agent-memory-local/MEMORY.md`, Phase 2 re-ran same agent → `PRELOAD_IN_CONTEXT=YES`, `MEMORY_HEADER_FOUND=YES`, `MEMORY_CONTENT_FOUND=YES`. System injects `# Persistent Agent Memory` header + MEMORY.md content into agent context. **ANSWERED: FIXED since v2.1.52, re-confirmed v2.1.83.** TESTED.
+63. **`initialPrompt` agent frontmatter (v2.1.83)**: Agents can declare `initialPrompt` in frontmatter to auto-submit first turn. **TESTED**: Agent with `initialPrompt: "Write INITIAL_PROMPT_FIRED=true..."` auto-executed without explicit prompt. `INITIAL_PROMPT_FIRED=true` confirmed in output file. **ANSWERED: WORKING.**
+64. **`type: "prompt"` hooks FIXED (v2.1.76)**: Was regressed in v2.1.45 (not evaluating). Fixed in v2.1.76. Changelog-confirmed. **ANSWERED: RE-FIXED.**
+65. **Concurrent OAuth re-auth fix (v2.1.81)**: Multiple concurrent sessions no longer require repeated re-auth. Critical for teams with many teammates sharing OAuth. Changelog-confirmed. **ANSWERED: FIXED.**
+66. **BG subagents invisible after compaction fix (v2.1.83)**: Background subagents no longer become invisible after context compaction (could cause duplicate spawns). Relevant for long-running team sessions. Changelog-confirmed. **ANSWERED: FIXED.**
+67. **Teammate panes not closing when leader exits (v2.1.77)**: FIXED — tmux panes now close properly. Changelog-confirmed. **ANSWERED: FIXED.**
+68. **SendMessage auto-resumes stopped agents (v2.1.77)**: `SendMessage({to: stopped_agent})` now auto-resumes in background instead of returning error. **ANSWERED: CONFIRMED.** (Previously tested v2.1.80.)
+69. **Agent tool `resume` param REMOVED (v2.1.77)**: Must use SendMessage to continue previously spawned agents. **ANSWERED: REMOVED.** (Previously tested v2.1.80.)
+70. **`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` (v2.1.83)**: Strips secret cloud credentials from Bash/hook/MCP subprocess envs. Does NOT strip app-level vars (Neo4j, Redis). **ANSWERED: WORKING, safe for extraction pipeline.** TESTED.
+71. **`CwdChanged` hook event (v2.1.83)**: 19th hook type. Fires on Bash `cd`. JSON: `{old_cwd, new_cwd}`. **ANSWERED: WORKING.** TESTED.
+72. **`FileChanged` hook event (v2.1.83)**: 20th hook type. Did NOT fire in `-p` mode when CLAUDE.md modified externally. **ANSWERED: NOT FIRING in `-p` mode.** Likely interactive-only. TESTED.
+73. **FG subagent tool set v2.1.83**: 26 built-in (was 25 in v2.1.80). +1 RemoteTrigger, -1 TaskOutput (deprecated). **ANSWERED: UPDATED.** TESTED.
+74. **BG subagent tool set v2.1.83**: 13 built-in (unchanged from v2.1.80). **ANSWERED: UNCHANGED.** TESTED.
+75. **TaskOutput deprecated (v2.1.83)**: ABSENT from FG subagent tools. Still present in main session. Use Read on output file instead. **ANSWERED: DEPRECATED.** TESTED.
+
 ### Still Open
 
 2. **Team + SDK**: Can teams be created via the Agent SDK, or only interactively?
@@ -1303,7 +1343,6 @@ Teammates inherit these allow rules from the lead. This eliminates permission pr
 10. **Teammate context window**: Do teammates get the same context window size as the lead?
 14. **Team task dir purpose**: The `_internal: true` task — used for anything beyond tracking?
 15. **Idle reliability**: Direct message to idle teammate sometimes lost — race condition?
-26. **Memory auto-preload**: Will this be fixed in a future version? Feature exists in docs but STILL doesn't work (retested v2.1.45).
 27. **`memory: user` scope**: Untested — does it write to `~/.claude/agent-memory/<name>/`?
 
 ---

@@ -1,9 +1,34 @@
 # Pending Set Orphan Accumulation
 
 **Priority:** Low
-**Status:** Documented (not blocking anything)
+**Status:** ⚠️ WORKAROUND APPLIED, NO PERMANENT FIX
 **Discovered:** 2026-03-05
 **Cleaned:** 2026-03-05 (manual one-time cleanup, 919 news + 327 reports removed)
+**Also cleaned:** 2026-03-30 (`reports:pending_returns` ZSET flushed — 28 stale entries blocking chunked-historical chunks)
+
+### Current Status (updated 2026-04-01)
+- ✅ **Manual flush applied**: `reports:pending_returns` ZSET and `reports:withoutreturns:*` keys flushed during Mar 2026 backfill.
+- ❌ **No permanent code fix**: When live mode resumes, stale `pending_returns` entries from after-hours/weekend filings will accumulate again. The chunk completion check (`run_event_trader.py:342` ZCARD) would block future chunked-historical runs.
+- The `tracking:pending:*` SET accumulation (original bug) also has no permanent fix.
+
+### How to verify / when it recurs
+```bash
+# Check if pending_returns has stale entries:
+kubectl exec -n infrastructure redis-79d9c8d68f-z256d -- redis-cli ZCARD reports:pending_returns
+# If > 0 during a chunked-historical run → flush it:
+kubectl exec -n infrastructure redis-79d9c8d68f-z256d -- redis-cli DEL reports:pending_returns
+
+# Check tracking:pending sets:
+kubectl exec -n infrastructure redis-79d9c8d68f-z256d -- redis-cli SCARD tracking:pending:reports
+kubectl exec -n infrastructure redis-79d9c8d68f-z256d -- redis-cli SCARD tracking:pending:news
+# If growing unbounded → manual cleanup needed
+```
+
+### Permanent fix needed
+The chunk completion check at `run_event_trader.py:340-346` should either:
+1. Ignore `pending_returns` entries older than N hours (stale from previous live-mode sessions), or
+2. Only check `pending_returns` entries that belong to the current chunk's date range, or
+3. Flush `pending_returns` automatically at chunk start in historical mode
 
 ## What Happens
 

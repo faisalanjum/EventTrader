@@ -1,8 +1,30 @@
 # SEC Report Ingestion Gaps — Full Analysis & Fix Plan
 
 **Date**: 2026-03-31
+**Status**: ⚠️ CODE FIXED, DATA PARTIALLY FIXED
 **Scripts**: `scripts/report_gap_analysis.py` (EDGAR comparison), `scripts/report_gap_secapi.py` (three-way)
 **Output**: `earnings-analysis/gap_analysis/`
+
+### Current Status (updated 2026-04-01)
+- ✅ **Code fix deployed**: `set_filing()` uses accessionNo-based SET (`reports:confirmed_in_neo4j`). Commit `d84dad2`.
+- ✅ **SET seeded**: 37,492 accessions from Neo4j (growing as backfill adds more).
+- ✅ **Current backfill running**: Aug 2025 → Mar 2026, ~86% done (chunk 37 of ~43).
+- ❌ **Targeted re-runs NOT done yet**: Nov 2025 (722), 2024-08 (541), 2024-11 (261), 2024-05 (110), 2023 (91) = ~1,725 reports still missing.
+- ❌ **Re-seed SET**: Need one more seed after current backfill finishes.
+
+### How to verify fully done
+```bash
+# 1. Re-seed SET after backfill completes
+# (see Backfill Strategy section for script)
+
+# 2. Run all targeted backfills (see Backfill Strategy section for commands)
+
+# 3. Re-run gap analysis to verify gaps closed:
+source venv/bin/activate && python3 scripts/report_gap_secapi.py --start-date 2023-01-01 --end-date 2026-03-28
+
+# 4. Check: PIPELINE_LOST should be near zero (only SOURCE_GAP ~440 remaining)
+# If PIPELINE_LOST > 500 → some gaps remain, re-run those date ranges
+```
 
 ---
 

@@ -1374,33 +1374,172 @@ Yahoo Finance MCP server deployed 2026-03-17:
 
 ---
 
-## TODO: Architecture Delta — Analyst Notes + Peer Snapshot (2026-03-25)
+## TODO: Architecture Delta (2026-03-26, rev 2)
 
 **Status**: APPROVED — pending implementation. Changes below have NOT been applied to the sections above yet. When implementing, update the referenced sections and remove this TODO block.
 
 **One-line summary**:
-`pre-assembled + peer_snapshot → planner(fetch_plan + analyst_notes) → fetch → predictor(stress-tests notes) → learner(note + fetch + prediction feedback)`
+`8 pre-assembled inputs → planner(fetch_plan + analyst_notes) → fetch → predictor(stress-tests notes) → learner(note + fetch + prediction feedback)`
 
-### Changes required in this file
+---
+
+### Pre-Assembled Inputs — Complete Inventory
+
+Eight inputs assembled by the orchestrator BEFORE calling the planner. Both modes use the same pipeline — only timestamp arguments differ.
+
+| # | Input | Builder | Location | Schema | Status |
+|---|---|---|---|---|---|
+| 1 | `8k_packet` | `build_8k_packet()` | `warmup_cache.py:463` | `8k_packet.v1` | ✅ Built |
+| 2 | `guidance_history` | `build_guidance_history()` | `warmup_cache.py:707` | `guidance_history.v1` | ✅ Built |
+| 3 | `inter_quarter_context` | `build_inter_quarter_context()` | `warmup_cache.py:1472` | `inter_quarter_context.v1` | ✅ Built |
+| 4 | `peer_earnings_snapshot` | `build_peer_earnings_snapshot()` | `scripts/earnings/peer_earnings_snapshot.py:154` | `peer_earnings_snapshot.v1` | ✅ Built |
+| 5 | `macro_snapshot` | `build_macro_snapshot()` | `scripts/earnings/macro_snapshot.py:318` | `macro_snapshot.v2` | ✅ Built |
+| 6 | `consensus` | `build_consensus()` | `scripts/earnings/` (to create) | `consensus.v1` | To build |
+| 7 | `previous_earnings` | `build_previous_earnings()` | `scripts/earnings/` (to create) | `previous_earnings.v1` | To build |
+| 8 | `planner_lessons_history` | Assembly logic in orchestrator | orchestrator skill | (array) | To build |
+
+**Helper** (NOT pre-assembled — planner-triggered only via bz-news-api agent):
+- `scripts/earnings/macro_headlines.py` — Benzinga SPY macro news. Explicitly NOT a default input.
+
+**Location split**: `warmup_cache.py` = graph-only (Neo4j via `get_manager()`). `scripts/earnings/` = external APIs (Polygon, AlphaVantage, Benzinga via pit_fetch.py, yfinance) + filesystem reads.
+
+---
+
+### Code Review — 5 Built Functions (2026-03-26)
+
+#### 1. `build_8k_packet()` — warmup_cache.py:463
+
+Fetches 8-K metadata (4G), sections + EX-99.x via shared `_fetch_8k_core()`, non-99 exhibit previews (2500 chars), filing text fallback. Writes `8k_packet.v1`.
+
+- ✅ Validates ticker owns accession via JOIN in QUERY_4G_META
+- ✅ Parses `r.items` from JSON string to array; strips nulls from inventory arrays
+- ✅ Non-99 exhibits detected via inventory diff (auto-detects any exhibit type)
+- ✅ Filing text fallback only when sections + all exhibits empty
+- ✅ Atomic write (temp + replace)
+- ✅ No mode difference — fetches the trigger 8-K by accession regardless of mode
+
+**Issues**: None.
+
+#### 2. `build_guidance_history()` — warmup_cache.py:707
+
+Queries all GuidanceUpdate nodes, resolves unknown units, groups by 6D key, collapses same-day cross-source duplicates. Writes `guidance_history.v1`.
+
+- ✅ Two query variants: PIT-filtered (`datetime(gu.given_date) <= datetime($pit)`) and unfiltered
+- ✅ Unit resolution absorbs `unknown` canonical_unit into real unit when unambiguous
+- ✅ 6D grouping key: `(metric_id, basis_norm, segment_slug, period_scope, resolved_unit, time_type)`
+- ✅ Collapse: numeric = same series + fiscal period + given_day + low/mid/high; qualitative = normalized
+- ✅ Sources sorted by fixed priority: 8k > transcript > 10q > 10k > news
+- ✅ Display segment: most frequent label, tie-break lexicographic
+- ✅ Historical: `pit=filed_8k` → PIT query. Live: `pit=None` → unfiltered (no future guidance exists)
+
+**Issues**:
+- MINOR: Returns `None` on empty ticker (early return after write) but returns nothing on success. Orchestrator must re-read the file to get the packet. Should return `packet` consistently.
+
+#### 3. `build_inter_quarter_context()` — warmup_cache.py:1472
+
+Unified chronological timeline: daily prices + SPY/sector/industry + news (with forward returns) + filings (with PRIMARY_FILER returns) + dividends + splits. Writes `inter_quarter_context.v1`.
+
+- ✅ `_build_forward_returns()`: Nulls any return horizon where `end_ts > context_cutoff_ts` — critical PIT safety gate
+- ✅ Boundary days (prev and cutoff) always included with appropriate roles
+- ✅ Non-trading days with events (weekend news) included as synthetic entries
+- ✅ Significance: `|adj_return| >= 2.0`. Gap day: significant + zero news + zero filings
+- ✅ Returns `(out_path, rendered_text)` — orchestrator gets both
+- ✅ Historical: `context_cutoff_ts=release_session_floor`. Live: `context_cutoff_ts=decision_cutoff_ts`. Same code path.
+
+**Issues**: None.
+
+#### 4. `build_peer_earnings_snapshot()` — scripts/earnings/peer_earnings_snapshot.py:154
+
+Queries same-industry peers by market cap from Neo4j, gets 8-K 2.02 filings + Benzinga earnings/guidance headlines + stock reactions. Writes `peer_earnings_snapshot.v1`.
+
+- ✅ Peer universe: same Industry node, ranked by market cap, top N (default 5)
+- ✅ Window: 45 days before PIT cutoff (current earnings season, not stale prior season)
+- ✅ Keeps only MOST RECENT filing per peer (prevents pulling prior quarter)
+- ✅ Headline fallback chain: Earnings Beats/Misses → broad Earnings → None. Guidance separate.
+- ✅ PIT-safe return nulling via `returns_schedule` JSON from Report node (same approach as `_build_forward_returns()`)
+- ✅ Best available horizon: `daily > hourly` for sector/macro context
+
+**Issues**:
+- MEDIUM: Cypher `ORDER BY toInteger(replace(peer.mkt_cap, ',', ''))` is fragile with NULL mkt_cap. Not a correctness bug (Python re-sorts) but Cypher ordering is unreliable.
+- MINOR: `datetime.utcnow()` deprecated in Python 3.12+. Use `datetime.now(timezone.utc)`.
+
+#### 5. `build_macro_snapshot()` — scripts/earnings/macro_snapshot.py:318
+
+Three sections: MARKET NOW (SPY intraday via Polygon minute bars + 9 indicator ETFs + VIX + sector), CATALYSTS (Benzinga macro headlines today/yesterday/earlier), REGIME (5d/20d/YTD). Session-aware PIT safety. Writes `macro_snapshot.v2`.
+
+- ✅ Session-aware: `post_market` uses settled bars including today; `in_market`/`pre_market` excludes today's unsettled daily bar
+- ✅ Minute bars PIT-filtered: `bar_ts + 60s <= pit_ms` (only fully settled bars)
+- ✅ VIX: Always previous day's settled close (VIX settles 4:15 PM ET — even post_market 4:03 PM filings are before settlement)
+- ✅ Sector: Neo4j Company→Industry→Sector + sector ETF intraday for in_market from Polygon
+- ✅ Catalysts: Benzinga headlines via pit_fetch.py. PIT filter: `avail <= pit_cutoff`. Channel priority: Econ #s > Fed > Macro Notification > Macro Events
+- ✅ Derived regime clues: breadth (RSP-SPY), small caps (IWM-SPY), curve proxy (TLT-SHY)
+- ✅ 9 indicator ETFs: VIXY, TLT, SHY, HYG, IWM, RSP, USO, UUP, GLD
+
+**Issues**:
+- MEDIUM: 11 Polygon API calls × 0.3s sleep = ~3.3s. Plus Benzinga + Neo4j. Total ~5-8s. Fine for live, adds up in historical batch. Consider caching daily indicator bars by date range (indicators are shared across tickers).
+- MEDIUM: Polygon free plan has ~15min delay on minute bars. Paid plan needed for live-mode intraday accuracy. Function degrades gracefully (falls back to last settled close).
+- MINOR: `datetime.utcnow()` deprecated.
+- NOTE: `macro_snapshot.v2` schema version — was iterated from v1 during development.
+
+---
+
+### Live Mode — Open Questions
+
+Live mode for the original 3 warmup_cache.py functions is defined in §2a above. Live mode for the 5 new/expanded inputs is **undefined**. Key questions:
+
+| Input | Open Question |
+|---|---|
+| `peer_earnings_snapshot` | What timestamp to pass as `pit_cutoff`? `decision_cutoff_ts`? `filed_8k` of the live 8-K? Does the 45-day default window change? |
+| `macro_snapshot` | What timestamp for `pit_cutoff`? Which `market_session` value — from the 8-K Report node (may not exist yet in live) or inferred from clock? |
+| `consensus` | Read from TradeReady Redis cache (pre-fetched by scanner)? Direct AV API call? Both with fallback? AV `actual` fields are NULL before results — does the planner need actuals or just estimates? |
+| `previous_earnings` | Is this even mode-dependent? Prior quarter is always historical. Does it read prior prediction/attribution results (which may not exist for first-ever live run)? |
+| `planner_lessons_history` | Same question — prior attributions are always historical. But a deferred live learner may be missing. Does the orchestrator skip the missing quarter or pass empty feedback for it? |
+| All inputs | Does the orchestrator assemble all 8 sequentially or can some run in parallel (e.g., macro_snapshot + peer_snapshot + consensus concurrently)? |
+| All inputs | What is the error policy per input? Hard-fail (block prediction) vs soft-fail (proceed without, note in data_gaps)? Currently only `8k_packet` is hard-fail. |
+
+---
+
+### Section Changes Required in This File
 
 | Section | What to change |
 |---|---|
-| §2a step 3a (pre-assemble planner inputs) | Add `peer_earnings_snapshot` to the list alongside guidance_history, inter_quarter_context, consensus |
-| §2a context_bundle.v1 JSON schema | Add `peer_earnings_snapshot` field with description |
-| §2a "Planner vs Predictor delivery" | Planner receives peer_earnings_snapshot; predictor receives analyst_notes.json in addition to current bundle |
+| §2a step 3a (pre-assemble planner inputs) | Expand from 5 to 8: add `peer_earnings_snapshot`, `macro_snapshot`, `previous_earnings` |
+| §2a context_bundle.v1 JSON schema | Add 3 new top-level fields + `_ref` paths for the 3 new inputs |
+| §2a "Planner vs Predictor delivery" | Both receive all 8 pre-assembled inputs; predictor also gets `analyst_notes.json` |
 | §2b Planner behavior | Add: planner outputs `planner/analyst_notes.json` alongside `planner/fetch_plan.json` |
 | §2b Planner output contract | Reference `analyst_notes.v1` schema (full spec in `planner.md`) |
-| §2c Predictor behavior | Add: predictor must engage with analyst_notes before prediction (structured confirm/refute/complicate) |
-| §2c Predictor allowed inputs | Add analyst_notes.json to the list |
-| §2d Attribution/Learner feedback block | Expand `planner_lessons` scope description to include note quality (usefulness, misses, what_to_verify hit rate) |
-| §4 File Layout | Add `planner/analyst_notes.json` to the quarter directory tree |
-| §8 Phase B1 (Planner + Predictor) | Note that B1 now includes analyst_notes contract and peer_earnings_snapshot build |
+| §2c Predictor behavior | Add: predictor engages with analyst_notes before prediction (confirm/refute/complicate) |
+| §2c Predictor allowed inputs | Add analyst_notes.json, macro_snapshot, peer_earnings_snapshot, previous_earnings |
+| §2d Attribution/Learner feedback block | Expand `planner_lessons` scope to include note quality |
+| §4 File Layout | Add `peer_earnings_snapshot.json`, `macro_snapshot.json`, `consensus.json`, `previous_earnings.json`, `planner/analyst_notes.json` |
+| §8 Phase B1 | Now includes all 8 pre-assembled inputs + analyst_notes contract |
 
 ### What was considered and rejected
 
-- **macro_headlines as default pre-assembled input** — planner already sees SPY/sector returns in inter_quarter_context; triggers macro research via fetch_plan when needed (more targeted, avoids noisy default dump)
+- **`macro_headlines` as default pre-assembled input** — **Replaced by `macro_snapshot`**: quantitative regime fingerprint (SPY intraday + 9 ETFs + VIX + sector + catalysts), not a headline dump. `macro_headlines.py` preserved as opt-in planner fetch tool.
 - **Parallel specialist API calls** — deferred to v2 escalation if analyst notes prove insufficient
 - **Agent Teams for prediction** — wrong tool; bidirectional messaging unused, thinking disabled, 7x cost
 - **SendMessage specialist choreography** — thinking disabled for Task-spawned agents
 - **Pi harness migration** — premature; 3 days old, would rebuild entire infrastructure
 - **`initial_lean` in analyst_notes** — anchoring risk; planner writes briefing, not recommendation
+
+### File Layout (Updated)
+
+```
+earnings-analysis/Companies/{TICKER}/events/{quarter}/
+  8k_packet.json
+  guidance_history.json
+  inter_quarter_context.json
+  peer_earnings_snapshot.json
+  macro_snapshot.json
+  consensus.json
+  previous_earnings.json
+  planner/
+    fetch_plan.json
+    analyst_notes.json
+  prediction/
+    context_bundle.json
+    result.json
+  attribution/
+    result.json
+```

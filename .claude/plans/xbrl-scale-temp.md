@@ -16,7 +16,7 @@ kubectl patch scaledobject -n processing xbrl-worker-heavy-scaler --type merge -
 # Heavy workers — memory limit back to 7Gi (was 7Gi → 10Gi → 12Gi during backfill)
 kubectl patch deploy -n processing xbrl-worker-heavy --type json -p '[{"op":"replace","path":"/spec/template/spec/containers/0/resources/limits/memory","value":"7Gi"}]'
 
-# Medium workers — replicas + KEDA
+# Medium workers — replicas + KEDA (was 3 → 5 → 7 during backfill)
 kubectl scale deploy -n processing xbrl-worker-medium --replicas=3
 kubectl patch scaledobject -n processing xbrl-worker-medium-scaler --type merge -p '{"spec":{"maxReplicaCount":3}}'
 ```

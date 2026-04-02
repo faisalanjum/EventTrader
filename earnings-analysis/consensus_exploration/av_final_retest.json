@@ -1,0 +1,397 @@
+{
+  "results": {
+    "ACCD": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "ALEX": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "ALK": {
+      "earnings": 120,
+      "estimates": 0,
+      "income": 81
+    },
+    "ALT": {
+      "earnings": 79,
+      "estimates": 0,
+      "income": 81
+    },
+    "AMED": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "AXL": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "AZEK": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "BAND": {
+      "earnings": 35,
+      "estimates": 0,
+      "income": 40
+    },
+    "BECN": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "BERY": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "BIGC": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "BPMC": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "CFLT": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "CPRX": {
+      "earnings": 75,
+      "estimates": 0,
+      "income": 81
+    },
+    "CRM": {
+      "earnings": 87,
+      "estimates": 0,
+      "income": 81
+    },
+    "CWH": {
+      "earnings": 38,
+      "estimates": 0,
+      "income": 47
+    },
+    "CYRX": {
+      "earnings": 83,
+      "estimates": 0,
+      "income": 81
+    },
+    "DNB": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "EMR": {
+      "earnings": 120,
+      "estimates": 0,
+      "income": 81
+    },
+    "ENTA": {
+      "earnings": 52,
+      "estimates": 0,
+      "income": 59
+    },
+    "EOLS": {
+      "earnings": 36,
+      "estimates": 0,
+      "income": 41
+    },
+    "EXAS": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "GMS": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "GRPN": {
+      "earnings": 58,
+      "estimates": 0,
+      "income": 64
+    },
+    "HL": {
+      "earnings": 120,
+      "estimates": 0,
+      "income": 81
+    },
+    "IAS": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "ITCI": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "JAMF": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "JNPR": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "MIDD": {
+      "earnings": 118,
+      "estimates": 0,
+      "income": 81
+    },
+    "MMC": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "MPW": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "MRUS": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "MTH": {
+      "earnings": 112,
+      "estimates": 0,
+      "income": 81
+    },
+    "NCLH": {
+      "earnings": 53,
+      "estimates": 0,
+      "income": 69
+    },
+    "NOVA": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "NVEE": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "NVRO": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "O": {
+      "earnings": 112,
+      "estimates": 0,
+      "income": 81
+    },
+    "OXM": {
+      "earnings": 119,
+      "estimates": 0,
+      "income": 81
+    },
+    "PDCO": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "PINC": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "PX": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "RDFN": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "SAGE": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "SKX": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "SPR": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "VNOM": {
+      "earnings": 47,
+      "estimates": 0,
+      "income": 49
+    },
+    "VRNT": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "X": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "YMAB": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "ZI": {
+      "earnings": 0,
+      "estimates": 0,
+      "income": 0
+    },
+    "ZM": {
+      "earnings": 29,
+      "estimates": 0,
+      "income": 32
+    }
+  },
+  "still_no_earn": [
+    "ACCD",
+    "ALEX",
+    "AMED",
+    "AXL",
+    "AZEK",
+    "BECN",
+    "BERY",
+    "BIGC",
+    "BPMC",
+    "CFLT",
+    "DNB",
+    "EXAS",
+    "GMS",
+    "IAS",
+    "ITCI",
+    "JAMF",
+    "JNPR",
+    "MMC",
+    "MPW",
+    "MRUS",
+    "NOVA",
+    "NVEE",
+    "NVRO",
+    "PDCO",
+    "PINC",
+    "PX",
+    "RDFN",
+    "SAGE",
+    "SKX",
+    "SPR",
+    "VRNT",
+    "X",
+    "YMAB",
+    "ZI"
+  ],
+  "still_no_est": [
+    "ACCD",
+    "ALEX",
+    "ALK",
+    "ALT",
+    "AMED",
+    "AXL",
+    "AZEK",
+    "BAND",
+    "BECN",
+    "BERY",
+    "BIGC",
+    "BPMC",
+    "CFLT",
+    "CPRX",
+    "CRM",
+    "CWH",
+    "CYRX",
+    "DNB",
+    "EMR",
+    "ENTA",
+    "EOLS",
+    "EXAS",
+    "GMS",
+    "GRPN",
+    "HL",
+    "IAS",
+    "ITCI",
+    "JAMF",
+    "JNPR",
+    "MIDD",
+    "MMC",
+    "MPW",
+    "MRUS",
+    "MTH",
+    "NCLH",
+    "NOVA",
+    "NVEE",
+    "NVRO",
+    "O",
+    "OXM",
+    "PDCO",
+    "PINC",
+    "PX",
+    "RDFN",
+    "SAGE",
+    "SKX",
+    "SPR",
+    "VNOM",
+    "VRNT",
+    "X",
+    "YMAB",
+    "ZI",
+    "ZM"
+  ],
+  "still_no_inc": [
+    "ACCD",
+    "ALEX",
+    "AMED",
+    "AXL",
+    "AZEK",
+    "BECN",
+    "BERY",
+    "BIGC",
+    "BPMC",
+    "CFLT",
+    "DNB",
+    "EXAS",
+    "GMS",
+    "IAS",
+    "ITCI",
+    "JAMF",
+    "JNPR",
+    "MMC",
+    "MPW",
+    "MRUS",
+    "NOVA",
+    "NVEE",
+    "NVRO",
+    "PDCO",
+    "PINC",
+    "PX",
+    "RDFN",
+    "SAGE",
+    "SKX",
+    "SPR",
+    "VRNT",
+    "X",
+    "YMAB",
+    "ZI"
+  ],
+  "fully_ok": []
+}

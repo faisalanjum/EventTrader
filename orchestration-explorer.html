@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Claude Code Orchestration Explorer</title>
+<style>
+:root {
+  --bg:#0d1117; --sf:#161b22; --bd:#30363d; --tx:#c9d1d9; --dim:#8b949e; --br:#f0f6fc;
+  --blue:#58a6ff; --green:#3fb950; --purple:#bc8cff; --orange:#f0883e;
+  --pink:#f778ba; --red:#f85149; --yellow:#d29922; --gray:#484f58;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden}
+.page{max-width:1140px;margin:0 auto;padding:12px 20px 0}
+
+/* Header */
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.hdr h1{font-size:16px;color:var(--br);white-space:nowrap}
+.hdr h1 span{color:var(--dim);font-weight:400;font-size:12px;margin-left:6px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{padding:5px 11px;font-size:11px;background:var(--sf);border:1px solid var(--bd);color:var(--dim);border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab:hover{background:#21262d;color:var(--tx)}
+.tab.on{background:#1f6feb22;border-color:var(--blue);color:var(--blue)}
+
+/* Diagram */
+.dia{position:relative;height:470px;margin-bottom:8px}
+.dia svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+
+/* Nodes */
+.nd{position:absolute;background:var(--sf);border:1.5px solid var(--bd);border-radius:10px;padding:8px 10px;font-size:11px;line-height:1.45;transition:opacity .2s,border-color .2s;cursor:default;z-index:2}
+.nd:hover{z-index:10;border-color:var(--tx)}
+.nd .nm{font-weight:700;font-size:12px;margin-bottom:2px}
+.nd .row{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.nd .blk{color:var(--red);font-size:9px;margin-top:3px;line-height:1.3}
+.tg{display:inline-block;padding:0 5px;border-radius:3px;font-size:9px;font-family:'SF Mono',monospace;line-height:1.7}
+.tg-g{background:#23883320;color:var(--green)}.tg-r{background:#f8514920;color:var(--red)}
+.tg-b{background:#1f6feb20;color:var(--blue)}.tg-o{background:#d2992220;color:var(--orange)}
+.tg-p{background:#8957e520;color:var(--purple)}.tg-k{background:#db61a220;color:var(--pink)}
+.dim{opacity:.12!important}
+
+/* Arrow labels */
+.albl{font-size:10px;fill:var(--dim);font-family:system-ui;pointer-events:none}
+.abadge{font-size:8px;font-family:'SF Mono',monospace;pointer-events:none}
+
+/* Context Bars */
+.ctx{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.ctx-card{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:10px 12px}
+.ctx-card h3{font-size:10px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.ctx-card .it{font-size:11px;padding:1px 0;display:flex;gap:5px;align-items:baseline}
+.ctx-card .dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:4px}
+
+/* Matrix */
+.mtx{margin-bottom:8px}
+.mtx table{width:100%;border-collapse:collapse;font-size:11px;background:var(--sf);border-radius:8px;overflow:hidden}
+.mtx th,.mtx td{padding:5px 8px;border:1px solid var(--bd);text-align:center}
+.mtx th{background:#21262d;color:var(--dim);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.mtx td:first-child{text-align:left;font-weight:600;color:var(--br);background:#21262d}
+.mtx .y{color:var(--green)}.mtx .n{color:var(--red)}.mtx .w{color:var(--yellow)}
+
+/* Timing */
+.timing{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.tm-card{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:10px 12px}
+.tm-card h3{font-size:10px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.tm-row{display:flex;gap:6px;align-items:center;margin:3px 0}
+.tm-lbl{font-size:10px;color:var(--dim);width:46px;text-align:right;flex-shrink:0}
+.tm-track{flex:1;height:16px;position:relative;background:#21262d;border-radius:3px;overflow:hidden}
+.tm-bar{position:absolute;height:100%;border-radius:3px;font-size:8px;color:var(--bg);font-weight:700;display:flex;align-items:center;justify-content:center;letter-spacing:.02em}
+
+/* Earnings flow */
+.earn{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.earn h3{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:8px}
+.flow-steps{display:flex;gap:0;align-items:stretch;overflow-x:auto}
+.fstep{flex:0 0 auto;min-width:120px;padding:8px 10px;border:1px solid var(--bd);border-radius:6px;font-size:10px;line-height:1.4;position:relative;background:var(--bg)}
+.fstep .fn{font-weight:700;font-size:11px;margin-bottom:3px}
+.farr{display:flex;align-items:center;padding:0 4px;color:var(--dim);font-size:14px;flex-shrink:0}
+
+/* Prompt */
+.pbar{display:flex;gap:12px;align-items:flex-start;background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;margin-bottom:12px}
+.ptxt{flex:1;font-family:'SF Mono',monospace;font-size:10px;color:var(--dim);line-height:1.5;white-space:pre-wrap;max-height:70px;overflow-y:auto}
+.cbtn{padding:5px 12px;background:#21262d;border:1px solid var(--bd);color:var(--tx);border-radius:6px;cursor:pointer;font-size:11px;flex-shrink:0;transition:all .15s}
+.cbtn:hover{background:#30363d}
+.cbtn.ok{background:#23883340;border-color:var(--green);color:var(--green)}
+
+/* Pattern description */
+.pdesc{font-size:11px;color:var(--dim);background:var(--sf);border:1px solid var(--bd);border-radius:6px;padding:8px 12px;margin-bottom:8px;line-height:1.5;min-height:32px;transition:all .2s}
+.pdesc strong{color:var(--br)}
+.pdesc .hl{color:var(--blue)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="hdr">
+  <h1>Orchestration Explorer<span>from Infrastructure.md</span></h1>
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-p="all">All</button>
+    <button class="tab" data-p="fanout">Fan-Out</button>
+    <button class="tab" data-p="chain">Skill Chain</button>
+    <button class="tab" data-p="task">Task Coord</button>
+    <button class="tab" data-p="earn">Earnings</button>
+    <button class="tab" data-p="blocked">Blocked</button>
+  </div>
+</div>
+
+<!-- PATTERN DESCRIPTION -->
+<div class="pdesc" id="pdesc">
+  <strong>All Contexts.</strong> Main Session is the only context with the Agent tool. Sub-agents can call Skills but never other agents. Forked skills are the only sub-context with thinking enabled. Click tabs to explore specific patterns.
+</div>
+
+<!-- DIAGRAM -->
+<div class="dia" id="dia">
+
+  <!-- Main Session -->
+  <div class="nd" id="n-main" style="left:460px;top:0;width:180px;border-color:var(--blue)" data-g="main,fanout,chain,task,earn">
+    <div class="nm" style="color:var(--blue)">\u25C9 Main Session</div>
+    <div class="row"><span class="tg tg-b">57+ tools</span><span class="tg tg-g">Think: caller</span></div>
+    <div style="margin-top:3px;font-size:10px;color:var(--yellow)">\u2605 ONLY context with Agent tool</div>
+    <div class="row" style="margin-top:2px"><span class="tg tg-b">TaskCreate</span><span class="tg tg-b">TeamCreate</span><span class="tg tg-b">CronCreate</span></div>
+  </div>
+
+  <!-- FG Agent -->
+  <div class="nd" id="n-fg" style="left:10px;top:175px;width:148px" data-g="fanout,earn">
+    <div class="nm" style="color:var(--green)">\u25B7 FG Agent</div>
+    <div class="row"><span class="tg tg-g">51 tools</span><span class="tg tg-r">Think: OFF</span></div>
+    <div class="row"><span class="tg tg-g">Tasks \u2713</span><span class="tg tg-g">Skills \u2713</span></div>
+    <div style="font-size:10px;color:var(--dim);margin-top:2px">Blocking. Parallel spawn.</div>
+    <div class="blk">\u2717 No Agent tool</div>
+  </div>
+
+  <!-- Forked Skill -->
+  <div class="nd" id="n-fork" style="left:210px;top:175px;width:155px;border-color:var(--pink)" data-g="chain,earn">
+    <div class="nm" style="color:var(--pink)">\u2699 Forked Skill</div>
+    <div class="row"><span class="tg tg-k">14 tools</span><span class="tg tg-g">Think: ON \u2713</span></div>
+    <div class="row"><span class="tg tg-g">TaskCRUD \u2713</span><span class="tg tg-g">Chain \u2713</span></div>
+    <div style="font-size:10px;color:var(--dim);margin-top:2px">Isolated context. Sequential.</div>
+    <div class="blk">\u2717 No Agent tool \u2717 No AskUser</div>
+  </div>
+
+  <!-- Inline Skill -->
+  <div class="nd" id="n-inl" style="left:415px;top:195px;width:140px;border-style:dashed" data-g="all">
+    <div class="nm" style="color:var(--gray)">\u2699 Inline Skill</div>
+    <div style="font-size:10px;color:var(--dim)">= Caller's context</div>
+    <div style="font-size:10px;color:var(--dim)">No isolation. Injects</div>
+    <div style="font-size:10px;color:var(--dim)">instructions into caller.</div>
+    <div style="font-size:10px;color:var(--yellow);margin-top:2px">Tools = caller's tools</div>
+  </div>
+
+  <!-- BG Agent -->
+  <div class="nd" id="n-bg" style="left:680px;top:175px;width:148px" data-g="fanout">
+    <div class="nm" style="color:var(--purple)">\u25B7 BG Agent</div>
+    <div class="row"><span class="tg tg-p">39 tools</span><span class="tg tg-r">Think: OFF</span></div>
+    <div class="row"><span class="tg tg-r">Tasks \u2717</span><span class="tg tg-g">Skills \u2713</span></div>
+    <div style="font-size:10px;color:var(--dim);margin-top:2px">Async. Non-blocking.</div>
+    <div class="blk">\u2717 No Agent \u2717 No TaskCreate</div>
+  </div>
+
+  <!-- Team Agent -->
+  <div class="nd" id="n-team" style="left:880px;top:175px;width:148px;border-color:var(--orange)" data-g="fanout,task">
+    <div class="nm" style="color:var(--orange)">\u25B7 Team Agent</div>
+    <div class="row"><span class="tg tg-o">6+ tools</span><span class="tg tg-r">Think: OFF</span></div>
+    <div class="row"><span class="tg tg-g">Tasks \u2713!</span><span class="tg tg-g">SendMsg</span></div>
+    <div style="font-size:10px;color:var(--orange);margin-top:2px">\u2605 BG unlock for coordination</div>
+    <div class="blk">\u2717 No Agent tool</div>
+  </div>
+
+  <!-- Skill L2 -->
+  <div class="nd" id="n-l2" style="left:175px;top:345px;width:140px" data-g="chain,earn">
+    <div class="nm" style="color:#ff9bce">Skill L2 (chain)</div>
+    <div class="row"><span class="tg tg-k">14 tools</span><span class="tg tg-g">Think: ON</span></div>
+    <div style="font-size:10px;color:var(--dim)">Isolated from L1.</div>
+    <div style="font-size:10px;color:var(--dim)">Can chain further.</div>
+  </div>
+
+  <!-- Skill L3 -->
+  <div class="nd" id="n-l3" style="left:355px;top:380px;width:120px" data-g="chain">
+    <div class="nm" style="color:#ffb3d9">Skill L3</div>
+    <div class="row"><span class="tg tg-k">14 tools</span><span class="tg tg-g">Think: ON</span></div>
+    <div style="font-size:10px;color:var(--dim)">Deepest verified.</div>
+    <div style="font-size:10px;color:var(--dim)">Return \u2191\u2191\u2191 to caller</div>
+  </div>
+
+  <!-- Blocked indicators -->
+  <div id="blk-fg" style="position:absolute;left:60px;top:310px;font-size:9px;color:var(--red);opacity:.6;z-index:1" data-g="blocked">\u2717 Agent\u2192Agent</div>
+  <div id="blk-bg" style="position:absolute;left:730px;top:310px;font-size:9px;color:var(--red);opacity:.6;z-index:1" data-g="blocked">\u2717 Agent\u2192Agent</div>
+  <div id="blk-sk" style="position:absolute;left:250px;top:310px;font-size:9px;color:var(--red);opacity:.6;z-index:1" data-g="blocked">\u2717 Skill\u2192Agent</div>
+  <div id="blk-nest" style="position:absolute;left:570px;top:340px;font-size:10px;color:var(--red);background:#f8514918;border:1px solid #f8514940;border-radius:6px;padding:4px 10px;z-index:1;line-height:1.4" data-g="blocked">
+    <strong>Task\u2192Task Nesting: BLOCKED</strong><br>
+    Agent tool absent from ALL sub-contexts.<br>
+    Workaround: Skill chains for depth.
+  </div>
+
+  <!-- SVG Arrows -->
+  <svg viewBox="0 0 1100 470">
+    <defs>
+      <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L8,5L0,9z" fill="var(--green)"/></marker>
+      <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L8,5L0,9z" fill="var(--pink)"/></marker>
+      <marker id="av" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L8,5L0,9z" fill="var(--purple)"/></marker>
+      <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L8,5L0,9z" fill="var(--orange)"/></marker>
+      <marker id="ay" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L8,5L0,9z" fill="var(--gray)"/></marker>
+      <marker id="ak" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L8,5L0,9z" fill="#ff9bce"/></marker>
+      <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L8,5L0,9z" fill="var(--red)"/></marker>
+    </defs>
+
+    <!-- Main → FG Agent (solid green) -->
+    <line x1="510" y1="95" x2="100" y2="175" stroke="var(--green)" stroke-width="2" marker-end="url(#ag)" data-g="fanout,earn" class="al"/>
+    <text x="290" y="120" class="albl" text-anchor="middle" data-g="fanout,earn">Agent tool</text>
+    <text x="290" y="132" class="abadge" text-anchor="middle" fill="var(--green)" data-g="fanout,earn">\u2225 PARALLEL</text>
+
+    <!-- Main → Forked Skill (solid pink) -->
+    <line x1="530" y1="95" x2="305" y2="175" stroke="var(--pink)" stroke-width="2" marker-end="url(#ap)" data-g="chain,earn" class="al"/>
+    <text x="435" y="120" class="albl" text-anchor="middle" data-g="chain,earn">Skill (fork)</text>
+    <text x="435" y="132" class="abadge" text-anchor="middle" fill="var(--pink)" data-g="chain,earn">SEQUENTIAL</text>
+
+    <!-- Main → Inline Skill (dashed gray) -->
+    <line x1="550" y1="95" x2="490" y2="195" stroke="var(--gray)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ay)" data-g="all" class="al"/>
+    <text x="540" y="150" class="albl" text-anchor="start" data-g="all">inline</text>
+
+    <!-- Main → BG Agent (dashed purple) -->
+    <line x1="580" y1="95" x2="740" y2="175" stroke="var(--purple)" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#av)" data-g="fanout" class="al"/>
+    <text x="670" y="118" class="albl" text-anchor="middle" data-g="fanout">Agent (bg)</text>
+    <text x="670" y="130" class="abadge" text-anchor="middle" fill="var(--purple)" data-g="fanout">ASYNC</text>
+
+    <!-- Main → Team Agent (dashed orange) -->
+    <line x1="600" y1="95" x2="940" y2="175" stroke="var(--orange)" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#ao)" data-g="fanout,task" class="al"/>
+    <text x="800" y="112" class="albl" text-anchor="middle" data-g="fanout,task">Agent (team)</text>
+    <text x="800" y="124" class="abadge" text-anchor="middle" fill="var(--orange)" data-g="fanout,task">ASYNC + TASKS</text>
+
+    <!-- FG Agent → Skill (skill from agent) -->
+    <line x1="100" y1="300" x2="230" y2="345" stroke="var(--pink)" stroke-width="1.5" marker-end="url(#ap)" data-g="earn" class="al"/>
+    <text x="150" y="330" class="albl" text-anchor="middle" data-g="earn">Skill</text>
+
+    <!-- Forked Skill → L2 (chain) -->
+    <line x1="290" y1="300" x2="260" y2="345" stroke="#ff9bce" stroke-width="1.5" marker-end="url(#ak)" data-g="chain,earn" class="al"/>
+    <text x="252" y="325" class="albl" text-anchor="end" data-g="chain,earn">chain</text>
+
+    <!-- L2 → L3 (chain) -->
+    <line x1="305" y1="410" x2="370" y2="380" stroke="#ffb3d9" stroke-width="1.5" marker-end="url(#ak)" data-g="chain" class="al"/>
+    <text x="345" y="375" class="albl" text-anchor="middle" data-g="chain">chain</text>
+
+    <!-- Task list coordination (self-loop on Main) -->
+    <path d="M 640,40 Q 690,10 690,55 Q 690,80 650,70" fill="none" stroke="var(--dim)" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#ay)" data-g="task" class="al"/>
+    <text x="700" y="35" class="albl" text-anchor="start" data-g="task">Shared Task List</text>
+
+    <!-- Blocked: red X lines -->
+    <line x1="100" y1="300" x2="100" y2="340" stroke="var(--red)" stroke-width="1" stroke-dasharray="3,3" opacity=".4" data-g="blocked"/>
+    <text x="100" y="355" fill="var(--red)" font-size="12" text-anchor="middle" opacity=".5" data-g="blocked">\u2717</text>
+    <line x1="740" y1="300" x2="740" y2="340" stroke="var(--red)" stroke-width="1" stroke-dasharray="3,3" opacity=".4" data-g="blocked"/>
+    <text x="740" y="355" fill="var(--red)" font-size="12" text-anchor="middle" opacity=".5" data-g="blocked">\u2717</text>
+  </svg>
+</div>
+
+<!-- CONTEXT BARS -->
+<div class="ctx">
+  <div class="ctx-card">
+    <h3 style="color:var(--green)">\u2713 Always Shared</h3>
+    <div class="it"><div class="dot" style="background:var(--green)"></div> Filesystem (read/write by all)</div>
+    <div class="it"><div class="dot" style="background:var(--green)"></div> CLAUDE.md (injected into all)</div>
+    <div class="it"><div class="dot" style="background:var(--green)"></div> MCP servers (via ToolSearch)</div>
+    <div class="it"><div class="dot" style="background:var(--green)"></div> Settings + env vars</div>
+    <div class="it"><div class="dot" style="background:var(--green)"></div> Git status snapshot</div>
+  </div>
+  <div class="ctx-card">
+    <h3 style="color:var(--red)">\u2717 Always Isolated</h3>
+    <div class="it"><div class="dot" style="background:var(--red)"></div> Conversation history</div>
+    <div class="it"><div class="dot" style="background:var(--red)"></div> Files parent already read</div>
+    <div class="it"><div class="dot" style="background:var(--red)"></div> Intermediate tool calls</div>
+    <div class="it"><div class="dot" style="background:var(--red)"></div> Sibling context (forks)</div>
+    <div class="it"><div class="dot" style="background:var(--red)"></div> Thinking tokens (per-context)</div>
+  </div>
+  <div class="ctx-card">
+    <h3 style="color:var(--blue)">\u25B8 Communication Channels</h3>
+    <div class="it"><div class="dot" style="background:var(--blue)"></div> <strong>$ARGUMENTS</strong> \u2192 data IN to skills</div>
+    <div class="it"><div class="dot" style="background:var(--blue)"></div> <strong>Return value</strong> \u2192 text OUT to caller</div>
+    <div class="it"><div class="dot" style="background:var(--yellow)"></div> <strong>File IPC</strong> \u2192 write file, read file</div>
+    <div class="it"><div class="dot" style="background:var(--orange)"></div> <strong>Task list</strong> \u2192 shared task board</div>
+    <div class="it"><div class="dot" style="background:var(--purple)"></div> <strong>SendMessage</strong> \u2192 resume agents</div>
+  </div>
+</div>
+
+<!-- TIMING: Parallel vs Sequential -->
+<div class="timing">
+  <div class="tm-card">
+    <h3 style="color:var(--green)">Agent Tool = Parallel</h3>
+    <div class="tm-row"><span class="tm-lbl">A</span><div class="tm-track"><div class="tm-bar" style="left:0;width:65%;background:var(--green)">Agent A</div></div></div>
+    <div class="tm-row"><span class="tm-lbl">B</span><div class="tm-track"><div class="tm-bar" style="left:0;width:50%;background:#2ea043">Agent B</div></div></div>
+    <div class="tm-row"><span class="tm-lbl">C</span><div class="tm-track"><div class="tm-bar" style="left:0;width:72%;background:#196c2e">Agent C</div></div></div>
+    <div style="font-size:9px;color:var(--dim);margin-top:4px">All start simultaneously. 8 concurrent stable. 194ms spread.</div>
+  </div>
+  <div class="tm-card">
+    <h3 style="color:var(--pink)">Skill Tool = Sequential</h3>
+    <div class="tm-row"><span class="tm-lbl">A</span><div class="tm-track"><div class="tm-bar" style="left:0;width:30%;background:var(--pink)">Skill A</div></div></div>
+    <div class="tm-row"><span class="tm-lbl">B</span><div class="tm-track"><div class="tm-bar" style="left:30%;width:25%;background:#e5739b">Skill B</div></div></div>
+    <div class="tm-row"><span class="tm-lbl">C</span><div class="tm-track"><div class="tm-bar" style="left:55%;width:35%;background:#c75588">Skill C</div></div></div>
+    <div style="font-size:9px;color:var(--dim);margin-top:4px">Each waits for previous. Even if called "in parallel" \u2014 always sequential.</div>
+  </div>
+</div>
+
+<!-- WHO-CALLS-WHOM MATRIX -->
+<div class="mtx">
+  <table>
+    <tr><th>From \\ To</th><th>FG Agent</th><th>BG Agent</th><th>Team Agent</th><th>Forked Skill</th><th>Inline Skill</th><th>Skill Chain</th></tr>
+    <tr><td style="color:var(--blue)">Main Session</td><td class="y">Agent \u2225</td><td class="y">Agent (bg)</td><td class="y">Agent+team</td><td class="y">Skill \u2713</td><td class="y">Skill \u2713</td><td class="w">via Skill</td></tr>
+    <tr><td style="color:var(--green)">FG Agent</td><td class="n">\u2717 BLOCKED</td><td class="n">\u2717 BLOCKED</td><td class="n">\u2717 BLOCKED</td><td class="y">Skill \u2713</td><td class="y">Skill \u2713</td><td class="w">via Skill</td></tr>
+    <tr><td style="color:var(--purple)">BG / Team</td><td class="n">\u2717 BLOCKED</td><td class="n">\u2717 BLOCKED</td><td class="n">\u2717 BLOCKED</td><td class="y">Skill \u2713</td><td class="y">Skill \u2713</td><td class="w">via Skill</td></tr>
+    <tr><td style="color:var(--pink)">Forked Skill</td><td class="n">\u2717 BLOCKED</td><td class="n">\u2717 BLOCKED</td><td class="n">\u2717 BLOCKED</td><td class="n">\u2014</td><td class="n">\u2014</td><td class="y">Skill \u2713</td></tr>
+  </table>
+</div>
+
+<!-- EARNINGS ORCHESTRATOR FLOW -->
+<div class="earn" id="earn-section">
+  <h3 style="color:var(--orange)">Your Earnings Orchestrator Pattern (from earnings-orchestrator.md)</h3>
+  <div class="flow-steps">
+    <div class="fstep" style="border-color:var(--blue)">
+      <div class="fn" style="color:var(--blue)">\u25C9 Orchestrator</div>
+      <div>Main Session or SDK</div>
+      <div style="color:var(--dim)">Pre-assembles 8-K,</div>
+      <div style="color:var(--dim)">guidance, consensus</div>
+    </div>
+    <div class="farr">\u2192</div>
+    <div class="fstep" style="border-color:var(--pink)">
+      <div class="fn" style="color:var(--pink)">\u2699 Planner</div>
+      <div>Forked Skill</div>
+      <div style="color:var(--dim)">Reads 8-K + U1</div>
+      <div style="color:var(--dim)">\u2192 fetch_plan.json</div>
+      <div><span class="tg tg-g">Think: ON</span></div>
+    </div>
+    <div class="farr">\u2192</div>
+    <div class="fstep" style="border-color:var(--green)">
+      <div class="fn" style="color:var(--green)">Data Fetch</div>
+      <div>\u2225 Parallel Agents</div>
+      <div style="color:var(--dim)">neo4j-report</div>
+      <div style="color:var(--dim)">neo4j-transcript</div>
+      <div style="color:var(--dim)">alphavantage</div>
+      <div style="color:var(--dim)">perplexity-*</div>
+      <div><span class="tg tg-g">Fan-out</span> <span class="tg tg-o">Tier fallback</span></div>
+    </div>
+    <div class="farr">\u2192</div>
+    <div class="fstep" style="border-color:var(--pink)">
+      <div class="fn" style="color:var(--pink)">\u2699 Predictor</div>
+      <div>Forked Skill</div>
+      <div style="color:var(--dim)">Full context bundle</div>
+      <div style="color:var(--dim)">\u2192 result.json</div>
+      <div><span class="tg tg-g">Think: ON</span> <span class="tg tg-r">PIT-bound</span></div>
+    </div>
+    <div class="farr">\u2192</div>
+    <div class="fstep" style="border-color:var(--purple)">
+      <div class="fn" style="color:var(--purple)">\u2699 Learner</div>
+      <div>Deferred / Post-event</div>
+      <div style="color:var(--dim)">Compares prediction</div>
+      <div style="color:var(--dim)">vs actual. U1 feedback.</div>
+      <div><span class="tg tg-g">Think: ON</span> <span class="tg tg-b">No PIT</span></div>
+    </div>
+  </div>
+  <div style="font-size:10px;color:var(--dim);margin-top:8px;line-height:1.5">
+    <strong style="color:var(--br)">Primitives used:</strong>
+    Skill tool (fork) for Planner + Predictor + Learner (context isolation + thinking).
+    Agent tool (\u2225 parallel) for Data Fetch fan-out (14 data sub-agents).
+    File IPC for context_bundle.json + result.json.
+    Task list for in-run progress tracking.
+    $ARGUMENTS for prompt/data passing.
+    Sequential quarters so U1 feedback flows forward.
+  </div>
+</div>
+
+<!-- PROMPT -->
+<div class="pbar">
+  <div class="ptxt" id="ptxt">Claude Code Orchestration — 4 core rules:
+
+1. Only Main Session has Agent tool (sub-agent spawner)
+2. Sub-agents CANNOT spawn sub-agents (Task→Task nesting BLOCKED since v2.1.47)
+3. Skill→Skill chains = ONLY way to add depth (verified up to L3)
+4. Forked skills = ONLY sub-context with thinking enabled (hard-coded off elsewhere)
+
+Parallelism: Agent tool = parallel, Skill tool = always sequential
+Coordination: Shared task list (team agents), file IPC, $ARGUMENTS/return values
+Key unlock: Team-spawned BG agents get TaskCreate (non-team BG agents don't)</div>
+  <button class="cbtn" id="cbtn" onclick="copyP()">Copy</button>
+</div>
+
+</div><!-- .page -->
+
+<script>
+const DESCS = {
+  all: '<strong>All Contexts.</strong> Main Session is the only context with the Agent tool. Sub-agents can call Skills but never other agents. Forked skills are the only sub-context with thinking enabled.',
+  fanout: '<strong>Fan-Out Pattern.</strong> Main spawns multiple agents <span class="hl">in parallel</span> via Agent tool. FG agents block (caller waits). BG agents run async (caller continues). Team agents are BG + TaskCreate. Up to 8 concurrent agents stable.',
+  chain: '<strong>Skill Chain Pattern.</strong> The <span class="hl">only way to add depth</span> beyond 1 level. Main \u2192 Skill L1 \u2192 L2 \u2192 L3 (verified). Each layer is fully isolated. Thinking ON at every layer. Return values bubble up. Used for context-isolated multi-stage processing.',
+  task: '<strong>Task Coordination.</strong> All FG agents + team agents see the <span class="hl">same shared task list</span> (via CLAUDE_CODE_TASK_LIST_ID). Agents update task descriptions to pass info forward. Cross-agent manipulation works. Dynamic per-ticker task lists via settings.json edit.',
+  earn: '<strong>Your Earnings Pattern.</strong> Hybrid: Skill forks for isolated reasoning (Planner, Predictor, Learner with thinking ON) + Agent fan-out for parallel data fetching (14 data sub-agents). File IPC (context_bundle.json, result.json) for structured data passing. Sequential quarters for U1 self-learning loop.',
+  blocked: '<strong>Hard Constraints (as of v2.1.84).</strong> <span style="color:var(--red)">Agent tool absent from ALL sub-agent tiers</span> \u2014 no Task\u2192Task nesting, no nested agent spawning. Skill execution always sequential. BG non-team agents have no TaskCreate. Subagent thinking hard-coded OFF. Workaround: Skill chains for depth, Team agents for BG coordination.',
+};
+
+const PROMPTS = {
+  all: `Claude Code Orchestration \u2014 4 core rules:\n\n1. Only Main Session has Agent tool (sub-agent spawner)\n2. Sub-agents CANNOT spawn sub-agents (Task\u2192Task nesting BLOCKED since v2.1.47)\n3. Skill\u2192Skill chains = ONLY way to add depth (verified up to L3)\n4. Forked skills = ONLY sub-context with thinking enabled (hard-coded off elsewhere)\n\nParallelism: Agent tool = parallel, Skill tool = always sequential\nCoordination: Shared task list (team agents), file IPC, $ARGUMENTS/return values\nKey unlock: Team-spawned BG agents get TaskCreate (non-team BG agents don't)`,
+  fanout: `I want to implement a fan-out pattern where Main Session spawns multiple agents in parallel.\n\nKey constraints:\n- FG agents: blocking, 51 tools, has TaskCreate, thinking OFF\n- BG agents: async, 39 tools, NO TaskCreate (unless team-spawned)\n- Team agents: async, 6+ tools, HAS TaskCreate + SendMessage (the BG unlock)\n- Up to 8 concurrent agents stable, 194ms spread\n- None of these can spawn further agents (Agent tool absent)\n\nPlease design the fan-out pattern for my specific use case.`,
+  chain: `I want to implement a Skill chain for multi-layer isolated processing.\n\nKey facts:\n- Each layer gets its own context (conversation isolated)\n- Thinking enabled at EVERY layer (unique to forked skills)\n- $ARGUMENTS flow in, text return value flows out\n- File IPC for structured data passing between layers\n- Verified working up to 3 layers (L1 \u2192 L2 \u2192 L3)\n- Always SEQUENTIAL (even if called "in parallel")\n- Cannot spawn agents from within a skill (Agent tool absent)\n\nPlease help me design the chain structure.`,
+  task: `I want to use the shared task list for multi-agent coordination.\n\nKey facts:\n- CLAUDE_CODE_TASK_LIST_ID sets the shared directory\n- All FG agents + team agents see same tasks\n- BG non-team agents CANNOT use task tools\n- Agents can update any task by ID (cross-agent manipulation)\n- Task dependencies work (blockers, wave patterns)\n- Dynamic per-ticker lists via settings.json edit mid-session\n- Per-ticker isolation via autoMemoryDirectory setting\n\nPlease design the task coordination pattern.`,
+  earn: `I'm building an earnings orchestrator using these Claude Code primitives:\n\n1. Skill forks for: Planner, Predictor, Learner (context isolation + thinking ON)\n2. Agent fan-out for: 14 parallel data sub-agents (neo4j-*, perplexity-*, alphavantage)\n3. File IPC for: context_bundle.json (Planner\u2192Predictor), result.json (Predictor\u2192Learner)\n4. Task list for: in-run progress tracking\n5. Sequential quarters for: U1 self-learning loop (attribution feedback \u2192 next prediction)\n6. Tiered fetch: parallel within tier, sequential fallback across tiers\n\nThis pattern achieves: context isolation (PIT safety), thinking for reasoning, parallelism for speed, file IPC for structured data, self-learning loop for improvement.`,
+  blocked: `Hard constraints in Claude Code orchestration (v2.1.84):\n\n\u2717 Agent\u2192Agent nesting: BLOCKED (Agent tool absent from ALL sub-contexts)\n\u2717 Task\u2192Task nesting: BLOCKED (same reason)\n\u2717 Parallel Skill execution: SEQUENTIAL always\n\u2717 BG non-team TaskCreate: BLOCKED\n\u2717 Subagent thinking: OFF (hard-coded in binary)\n\u2717 allowed-tools restriction: NOT ENFORCED (skills)\n\u2717 Agent discovery mid-session: SNAPSHOT only\n\u2717 Hooks live-reload: NO\n\nWorkarounds:\n- Depth: Skill chains (not agent nesting)\n- BG coordination: Team-spawn agents (unlocks TaskCreate)\n- Thinking: Use forked skills (only context where it works)`,
+};
+
+// Tab switching
+document.getElementById('tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  const p = btn.dataset.p;
+
+  // Update tabs
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t === btn));
+
+  // Update description
+  document.getElementById('pdesc').innerHTML = DESCS[p] || DESCS.all;
+
+  // Update prompt
+  document.getElementById('ptxt').textContent = PROMPTS[p] || PROMPTS.all;
+
+  // Highlight relevant elements
+  const all = p === 'all';
+  document.querySelectorAll('[data-g]').forEach(el => {
+    const groups = el.dataset.g.split(',');
+    if (all || p === 'blocked') {
+      el.classList.remove('dim');
+    } else {
+      el.classList.toggle('dim', !groups.includes(p));
+    }
+  });
+
+  // Show/hide blocked indicators
+  document.querySelectorAll('[data-g*="blocked"]').forEach(el => {
+    if (p === 'blocked') el.style.display = '';
+    else if (!el.dataset.g.split(',').some(g => g === p || p === 'all')) el.style.display = 'none';
+    else el.style.display = '';
+  });
+});
+
+// Initialize: hide blocked indicators
+document.querySelectorAll('[data-g]').forEach(el => {
+  const groups = el.dataset.g.split(',');
+  if (groups.includes('blocked') && !groups.includes('all') && groups.length === 1) {
+    el.style.display = 'none';
+  }
+});
+
+// Copy
+function copyP() {
+  navigator.clipboard.writeText(document.getElementById('ptxt').textContent).then(() => {
+    const b = document.getElementById('cbtn');
+    b.textContent = 'Copied!'; b.classList.add('ok');
+    setTimeout(() => { b.textContent = 'Copy'; b.classList.remove('ok'); }, 1500);
+  });
+}
+</script>
+</body>
+</html>

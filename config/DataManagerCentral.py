@@ -723,7 +723,7 @@ class DataManager:
             if self.neo4j_processor.is_initialized():
                 self.logger.info("Neo4j already initialized, skipping initialization")
                 # Even if initialized, process news and report data
-                # SKIP_NEWS_BACKFILL — news disabled (already ingested via live mode)
+                # SKIP_NEWS_BACKFILL
                 # self.process_news_data()
                 # Reports re-enabled 2026-03-28
                 self.process_report_data()
@@ -742,7 +742,7 @@ class DataManager:
                 self.logger.info("Neo4j initialization completed successfully")
                 
                 # Process news and report data after successful initialization
-                # SKIP_NEWS_BACKFILL — news disabled (already ingested via live mode)
+                # SKIP_NEWS_BACKFILL
                 # self.process_news_data()
                 # Reports re-enabled 2026-03-28
                 self.process_report_data()

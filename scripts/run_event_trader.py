@@ -197,12 +197,10 @@ def main():
             except Exception as e:
                 logger.error(f"Redis connection error: {e}", exc_info=True)
                 return False
-                
+
             # Monitoring loop
             date_range_key = f"{date_from}-{date_to}"
-            # Reports re-enabled 2026-03-28 (was BENZINGA_ONLY since Aug 2025)
-            # SKIP_TRANSCRIPTS_BACKFILL — transcripts disabled (EarningsCall API 12h+/chunk)
-            # SKIP_NEWS_BACKFILL — news disabled (already ingested via live mode, re-fetch is redundant)
+            # SKIP_NEWS_BACKFILL + SKIP_TRANSCRIPTS_BACKFILL
             sources = [RedisKeys.SOURCE_REPORTS]
             
             while True:
@@ -292,7 +290,7 @@ def main():
             
             # --- Get Redis connection from existing manager ---
             try:
-                # Use any available source's live client for monitoring (all share the same Redis)
+                # Use the live client associated with the news source (any valid client works)
                 redis_conn = None
                 for source_name, source_mgr in manager.sources.items():
                     if hasattr(source_mgr, 'redis') and source_mgr.redis and source_mgr.redis.live_client:
@@ -308,12 +306,11 @@ def main():
                 manager.stop() # Attempt cleanup
                 sys.exit(1)
             # -------------------------------------------------
-            
+
             # Construct the expected fetch complete key format for this chunk
             date_range_key = f"{args.from_date}-{args.to_date}"
-            # Reports re-enabled 2026-03-28 (was BENZINGA_ONLY since Aug 2025)
-            # SKIP_TRANSCRIPTS_BACKFILL — transcripts disabled (EarningsCall API 12h+/chunk)
-            # SKIP_NEWS_BACKFILL — news disabled (already ingested via live mode, re-fetch is redundant)
+            # SKIP_NEWS_BACKFILL + SKIP_TRANSCRIPTS_BACKFILL
+            # sources_to_check = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS, RedisKeys.SOURCE_TRANSCRIPTS]
             sources_to_check = [RedisKeys.SOURCE_REPORTS]
             
             # Run initial Redis stats to see the state before processing

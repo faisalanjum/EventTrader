@@ -10,7 +10,7 @@
 
 **What this is**: Multi-layer earnings analysis system using forked skills for context isolation.
 
-**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74, retested 2026-03-14 v2.1.76, retested 2026-03-18 v2.1.78, retested 2026-03-19 v2.1.80):**
+**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74, retested 2026-03-14 v2.1.76, retested 2026-03-18 v2.1.78, retested 2026-03-19 v2.1.80, retested 2026-03-26 v2.1.84, retested 2026-03-27 v2.1.85):**
 
 | What | Status | Workaround |
 |------|--------|------------|
@@ -37,6 +37,8 @@
 | **PostToolUseFailure hook** | ✅ **WORKS** (v2.1.37) | Fires when tool call fails; JSON has tool_name, tool_input, error, is_interrupt, tool_use_id |
 | **type: "prompt" hooks** | ✅ **FIXED** (v2.1.76) | Was WORKING in v2.1.37, regressed in v2.1.45 (not evaluated), **NOW FIXED in v2.1.76**. Safe commands pass, blocked commands correctly intercepted. Note: hook-blocked calls in parallel still cancel siblings (distinct from v2.1.72 tool fail isolation fix). |
 | **type: "agent" hooks** | ❌ **NOT ENFORCED** (v2.1.37→v2.1.45) | Still not enforced. Hook configured in agent frontmatter did not block in either version. |
+| **Conditional `if` field for hooks** | ✅ **NEW** (v2.1.85) | Filter when hooks fire using permission rule syntax (e.g., `"if": "Bash(git *)"` only fires for git commands). Reduces process spawning overhead. |
+| **PreToolUse `updatedInput` for AskUserQuestion** | ⚠️ **NEW** (v2.1.85) | Hook can provide answers headlessly via `updatedInput`. **HARD-BLOCKED in `-p` mode** — interactive sessions only (web UI, VS Code). |
 | **--agent flag + hooks** | ❌ **NOT WORKING** (v2.1.37) | Agent frontmatter hooks ONLY activate via Task tool subagent spawn; `--agent` flag starts main session without hooks |
 | Task→Skill nesting | ✅ **WORKS** (Feb 2026) | Sub-agents can invoke skills; combine parallel Task + Skill chains |
 | MCP in fork | ✅ WORKS | Either use allowed-tools OR ToolSearch |
@@ -190,6 +192,297 @@
 | **`source: 'settings'` plugin marketplace** | ✅ **NEW** (v2.1.80) | Declare plugin entries inline in `settings.json` without needing a marketplace git repo. Changelog-confirmed. |
 | **`--resume` parallel tool results fix** | ✅ **FIXED** (v2.1.80) | Sessions with parallel tool calls now restore all `tool_use`/`tool_result` pairs instead of showing `[Tool result missing]` placeholders on resume. Changelog-confirmed. |
 | **FG/BG built-in tool sets** | ⚠️ **UNCHANGED** (v2.1.80) | **TESTED**: FG non-team: **25** built-in (1 direct ToolSearch + 24 deferred). BG non-team: **13** built-in (1 direct ToolSearch + 12 deferred). MCP: 44 across 5 servers. No new built-in tools. Agent tool still absent from all subagent tiers. |
+| **`TaskCreated` hook event** | ✅ **NEW** (v2.1.84) | 21st hook event type. Fires on TaskCreate call — main session AND subagents. Payload: task_id, task_subject, task_description, session_id, transcript_path, cwd. MUST be in project/user settings.json (--settings overlay does NOT register hooks). |
+| **YAML list of globs in frontmatter** | ✅ **NEW** (v2.1.84) | `rules:` and `skills:` fields in agent/skill frontmatter now accept YAML lists of glob patterns. **TESTED**: `rules: [".claude/rules/test-v184-*.md"]` loaded matching rules correctly. |
+| **`CLAUDE_STREAM_IDLE_TIMEOUT_MS` env var** | ✅ **NEW** (v2.1.84) | Configure streaming idle watchdog threshold (default 90s). **TESTED**: Env var accepted, passes through to subprocess. |
+| **`ANTHROPIC_DEFAULT_*_MODEL_SUPPORTS` env vars** | ✅ **NEW** (v2.1.84) | Override effort/thinking detection for 3P providers. Plus `_MODEL_NAME`/`_DESCRIPTION` for /model picker labels. **TESTED**: All 3 variants accepted without errors. |
+| **MCP tool descriptions 2KB cap** | ✅ **NEW** (v2.1.84) | Prevents OpenAPI-generated MCP servers from bloating context. Our servers unaffected (max 473 chars). |
+| **`--settings` overlay and hooks** | ⚠️ **CLARIFICATION** (v2.1.84) | **TESTED**: `--settings` does NOT register new hook events. 3 tests failed. Existing project settings hooks STILL fire when --settings used. |
+
+### v2.1.81/v2.1.83 findings (Mar 25, 2026):
+- **`--bare` flag for scripted `-p` calls** | ✅ **NEW** (v2.1.81) | Skips hooks, LSP, plugin sync, skill walks. **TESTED**: Flag present in `--help`. **REQUIRES `ANTHROPIC_API_KEY`** — OAuth disabled. Returns "Not logged in" without API key. Incompatible with Max subscription OAuth pipeline. ~14% faster to API request (v2.1.83).
+- **Concurrent OAuth re-auth fix** | ✅ **FIXED** (v2.1.81) | Multiple concurrent sessions no longer require repeated re-auth when one refreshes token. Critical for KEDA-scaled extraction workers (1→7 pods sharing `.credentials.json`). Changelog-confirmed.
+- **`initialPrompt` agent frontmatter** | ✅ **NOW WORKS** (v2.1.83) | **TESTED**: Agent with `initialPrompt: "Write INITIAL_PROMPT_FIRED=true..."` auto-executed on spawn via `claude -p --agent`. File created with `INITIAL_PROMPT_FIRED=true` + `AGENT_EXECUTED=true`. No explicit prompt needed — agent auto-submits first turn.
+- **`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1`** | ✅ **NEW** (v2.1.83) | Strips secret credentials from Bash/hook/MCP subprocess environments. **TESTED with control group**: `AWS_SECRET_ACCESS_KEY` → STRIPPED. `GOOGLE_APPLICATION_CREDENTIALS` → STRIPPED. `AWS_ACCESS_KEY_ID` → NOT stripped (identifier, not secret). `AZURE_CLIENT_ID` → NOT stripped. `NEO4J_PASSWORD` → NOT stripped (app-level). `REDIS_HOST/PORT` → NOT stripped. Safe for extraction pipeline — Neo4j/Redis vars survive.
+- **`CwdChanged` hook event** | ✅ **NEW** (v2.1.83) | **TESTED**: Fires when Bash `cd` changes working directory. JSON payload: `{"hook_event_name":"CwdChanged","old_cwd":"/path/a","new_cwd":"/path/b"}`. Confirmed via `--settings` inline hook injection.
+- **`FileChanged` hook event** | ⚠️ **NEW** (v2.1.83) | **TESTED**: Did NOT fire in `-p` mode when CLAUDE.md was modified externally mid-session. Likely **interactive-only** or watches specific file types (.envrc). Designed for direnv-style reactive management. Not applicable to SDK/extraction pipeline.
+- **`disableDeepLinkRegistration` setting** | ✅ **NEW** (v2.1.83) | Prevents `claude-cli://` protocol handler registration. No `.desktop` files exist on headless server. Setting recognized in `--help`. Recommended for Docker/K8s containers to skip pointless registration attempt.
+- **`sandbox.failIfUnavailable` setting** | ✅ **NEW** (v2.1.83) | Exits with error when sandbox can't start. **DO NOT ENABLE** in Docker/K8s — sandbox likely unavailable in containers, would crash worker.
+- **`TaskOutput` tool deprecated** | ✅ **CONFIRMED** (v2.1.83) | **TESTED**: `TaskOutput` ABSENT from FG subagent tool set (was present in v2.1.80). Still present in main session. Use `Read` on background task output file instead.
+- **`RemoteTrigger` tool NEW in subagents** | ✅ **NEW** (v2.1.83) | **TESTED**: Present in FG subagent deferred tool list. Was NOT in v2.1.80 inventory.
+- **`managed-settings.d/` drop-in directory** | ✅ **NEW** (v2.1.83) | Separate policy fragments merge alphabetically alongside `managed-settings.json`. Enterprise/team feature. Changelog-confirmed.
+- **Memory auto-preload re-confirmed** | ✅ **STILL WORKING** (v2.1.83) | **TESTED**: Phase 1 wrote `MEMORY_MARKER_V183=pineapple_2026_march` to agent-memory-local. Phase 2 re-ran same agent — `PRELOAD_IN_CONTEXT=YES`, `MEMORY_HEADER_FOUND=YES`, `MEMORY_CONTENT_FOUND=YES`. Auto-preload confirmed working since v2.1.52.
+- **MEMORY.md 25KB truncation** | ✅ **NEW** (v2.1.83) | Index now truncates at 25KB as well as 200 lines. Changelog-confirmed.
+- **`CLAUDE_CODE_DISABLE_NONSTREAMING_FALLBACK` env var** | ✅ **NEW** (v2.1.83) | Disable non-streaming fallback when streaming fails. Changelog-confirmed.
+- **Non-streaming fallback cap increased** | ✅ **IMPROVED** (v2.1.83) | Token cap 21k→64k, timeout 120s→300s local. Changelog-confirmed.
+- **Faster `claude -p` startup with HTTP/SSE MCP** | ✅ **IMPROVED** (v2.1.83) | ~600ms saved. Relevant for extraction worker (uses HTTP MCP for neo4j). Changelog-confirmed.
+- **MCP SSE connection drop hang fix** | ✅ **FIXED** (v2.1.83) | MCP tool calls no longer hang indefinitely when SSE connection drops. Changelog-confirmed.
+- **BG subagents invisible after compaction fix** | ✅ **FIXED** (v2.1.83) | Background subagents no longer become invisible after context compaction. Changelog-confirmed.
+- **BG agent tasks stuck in "running" fix** | ✅ **FIXED** (v2.1.83) | Background agent tasks no longer stay stuck when git/API calls hang during cleanup. Changelog-confirmed.
+- **SDK session history loss fix** | ✅ **FIXED** (v2.1.83) | Hook progress/attachment messages no longer fork parentUuid chain on resume. Changelog-confirmed.
+- **Tool result file cleanup fix** | ✅ **FIXED** (v2.1.83) | Tool result files now respect `cleanupPeriodDays` setting (was ignoring it). Changelog-confirmed.
+- **ALSA errors in Docker/headless Linux** | ✅ **FIXED** (v2.1.83) | Voice mode no longer corrupts terminal UI on Linux without audio hardware. Changelog-confirmed.
+- **FG/BG built-in tool sets** | ⚠️ **UPDATED** (v2.1.83) | **TESTED**: FG non-team: **26** built-in (1 direct ToolSearch + 25 deferred; +1 RemoteTrigger, -1 TaskOutput vs v2.1.80). BG non-team: **13** built-in (unchanged). MCP: 46 across 6 servers. Agent tool still absent from all subagent tiers.
+
+### Still broken (as of v2.1.83):
+- `allowed-tools` restriction: NOT ENFORCED (skills only)
+- `disallowedTools`: NOT ENFORCED (skills only; agents: ENFORCED)
+- `type: "agent"` hooks: NOT ENFORCED
+- Task→Task nesting: BLOCKED (Agent spawner absent from ALL subagent tiers)
+- Parallel Skill execution: SEQUENTIAL
+- MCP wildcards pre-load: NO
+- Tool inheritance parent↔child: NO
+- Hooks live-reload from settings.json: NO
+- Agent discovery mid-session: STILL SNAPSHOT
+- BG non-team task management: BLOCKED
+- Nested agent spawning: BLOCKED everywhere
+- Subagent thinking: STILL DISABLED (v2.1.68+→v2.1.83). Root cause: `IS()` hard-codes `thinkingConfig: {type: "disabled"}`
+- `effort`/`maxTurns` frontmatter for agents: PLUGIN-ONLY (skills: effort NOW WORKS as of v2.1.80)
+- Agent tool `resume` param: REMOVED (v2.1.77) — must use SendMessage
+- `FileChanged` hook: NOT FIRING in `-p` mode (likely interactive-only)
+- `--bare` flag: INCOMPATIBLE with OAuth (requires ANTHROPIC_API_KEY)
+
+### Test agents/skills location (v2.1.83):
+- `.claude/agents/test-v183-fg-tool-inventory.md`
+- `.claude/agents/test-v183-bg-tool-inventory.md`
+- `.claude/agents/test-v183-initial-prompt.md`
+- `.claude/agents/test-v183-env-scrub.md`
+- `.claude/agents/test-v183-memory-preload.md`
+- `.claude/agents/test-v183-teammate-inventory.md`
+- `.claude/agents/test-v183-teammate-model.md`
+- `.claude/skills/test-v183-deep-link/SKILL.md`
+- `.claude/hooks/test-v183-cwdchanged.sh`
+- `.claude/hooks/test-v183-filechanged.sh`
+
+### v2.1.84 findings (Mar 26, 2026):
+- **`TaskCreated` hook event** | ✅ **NEW** (v2.1.84) | **TESTED**: 21st hook event type. Fires when a task is created via TaskCreate. Payload: `{"hook_event_name":"TaskCreated","task_id":"244","task_subject":"...","task_description":"...","session_id":"...","transcript_path":"...","cwd":"..."}`. Fires for **both main session AND subagent** task creation. **MUST be in project/user/local settings.json** — `--settings` overlay does NOT register new hook events.
+- **`CLAUDE_STREAM_IDLE_TIMEOUT_MS` env var** | ✅ **NEW** (v2.1.84) | **TESTED**: Set to 30000, session started without errors, env var visible in Bash subprocess. Configures streaming idle watchdog threshold (default 90s).
+- **YAML list of globs in frontmatter** | ✅ **NEW** (v2.1.84) | **TESTED**: `rules: [".claude/rules/test-v184-*.md"]` in agent frontmatter successfully loaded matching rules. Marker `YAML_GLOB_MARKER_v184` found in agent context. Also works for `skills:` paths.
+- **`ANTHROPIC_DEFAULT_{OPUS,SONNET,HAIKU}_MODEL_SUPPORTS` env vars** | ✅ **NEW** (v2.1.84) | **TESTED**: All 3 variants accepted (SUPPORTS, MODEL_NAME, MODEL_DESCRIPTION). Session started without errors. For 3P providers (Bedrock, Vertex, Foundry) to override effort/thinking detection.
+- **MCP tool descriptions 2KB cap** | ✅ **NEW** (v2.1.84) | **TESTED**: No descriptions exceed 2KB in our 6 MCP servers (longest: 473 chars for perplexity_reason). Cap targets OpenAPI-generated servers that bloat context. Cannot empirically verify truncation with current config.
+- **PowerShell tool** | ⚠️ **NEW** (v2.1.84) | **TESTED**: NOT visible in FG/BG tool inventories on Linux. Expected — opt-in Windows preview only.
+- **WorktreeCreate hook type: "http"** | ✅ **NEW** (v2.1.84) | Return worktree path via `hookSpecificOutput.worktreePath` in HTTP hook response JSON. Changelog-confirmed (needs HTTP endpoint to test).
+- **`allowedChannelPlugins` managed setting** | ✅ **NEW** (v2.1.84) | Team/enterprise admin channel plugin allowlist. Changelog-confirmed.
+- **`x-client-request-id` header** | ✅ **NEW** (v2.1.84) | Added to API requests for debugging timeouts. Not directly observable.
+- **idle-return prompt** | ✅ **NEW** (v2.1.84) | Nudges users returning after 75+ minutes to /clear. Reduces unnecessary token re-caching.
+- **Fixed workflow subagents with `--json-schema`** | ✅ **FIXED** (v2.1.84) | Subagents no longer fail with API 400 when outer session uses --json-schema. Changelog-confirmed.
+- **Fixed cold-start race (Edit/Write deferred)** | ✅ **FIXED** (v2.1.84) | Core tools no longer deferred without bypass active on cold start. Prevents InputValidationError on typed params.
+- **MCP server deduplication** | ✅ **NEW** (v2.1.84) | Local config wins when same server configured locally and via claude.ai connectors.
+- **Deep links preferred terminal** | ✅ **IMPROVED** (v2.1.84) | `claude-cli://` opens in preferred terminal instead of first detected.
+- **Global system-prompt caching with ToolSearch** | ✅ **IMPROVED** (v2.1.84) | Cache now works when ToolSearch enabled + MCP tools configured.
+- **`--settings` overlay and hooks** | ⚠️ **CLARIFICATION** (v2.1.84) | **TESTED**: `--settings` (both inline JSON and file path) does NOT register new hook events. 3 tests failed (TaskCreated + PostToolUse control). BUT: existing project settings.json hooks still fire when `--settings` is used (tested: TaskCreated from project settings fired with `--settings '{"env":{"DUMMY":"1"}}'`). `--settings` is an overlay for non-hook settings only.
+- **FG/BG built-in tool sets** | ⚠️ **UNCHANGED** (v2.1.84) | **TESTED**: FG non-team: **26** built-in (8 direct + 18 deferred). BG non-team: **13** built-in (9 direct + 4 deferred). MCP: 44-46. Agent tool still absent from all subagent tiers. No new built-in tools.
+
+### v2.1.85 findings (Mar 27, 2026):
+- **Conditional `if` field for hooks** | ✅ **NEW** (v2.1.85) | **TESTED**: Major new hook feature. Individual hook entries now accept `if` field using permission rule syntax (e.g., `"if": "Bash(git *)"`) to filter when they fire. **Test**: PostToolUse hook with `if: "Bash(git *)"` alongside control hook (no `if`). 3 Bash calls: `echo HELLO`, `git log --oneline -1`, `echo GOODBYE`. **Result**: Control hook fired 3 times (all Bash calls). Conditional hook fired 1 time (only `git log`). `echo` commands correctly filtered out. Reduces process spawning overhead — hooks only spawn for matching tool invocations.
+- **`CLAUDE_CODE_MCP_SERVER_NAME`/`CLAUDE_CODE_MCP_SERVER_URL` env vars** | ✅ **NEW** (v2.1.85) | Environment variables injected into MCP `headersHelper` scripts only (NOT general Bash subprocess). Allows one helper script to serve multiple MCP servers by checking which server it's called for. No headersHelper configured in our setup — changelog-confirmed.
+- **PreToolUse `updatedInput` for AskUserQuestion** | ⚠️ **PARTIALLY CONFIRMED** (v2.1.85) | **TESTED**: PreToolUse hook for AskUserQuestion matcher fires correctly, returns `{"permissionDecision":"allow","updatedInput":{...questions..., "answers":{"question text":"answer text"}}}`. Hook mechanism works (log confirms fire + correct JSON). **BUT**: AskUserQuestion is HARD-BLOCKED in `-p` mode regardless of permissions — `permission_denials` array always includes it, even with `--allowedTools AskUserQuestion` CLI flag and `allow: ["AskUserQuestion"]` in project settings. Feature is designed for **interactive headless integrations** (web UI, VS Code extension, Remote Control) where the hook's external UI collects answers, **NOT for `-p`/SDK mode**. Not applicable to extraction pipeline.
+- **Timestamp markers in transcripts** | ✅ **NEW** (v2.1.85) | Timestamps now appear in transcripts when `/loop` or `CronCreate` scheduled tasks fire. Changelog-confirmed.
+- **Deep link queries up to 5,000 chars** | ✅ **EXPANDED** (v2.1.85) | `claude-cli://open?q=…` now supports up to 5,000 characters (was smaller). Includes "scroll to review" warning for long prompts. Changelog-confirmed.
+- **MCP OAuth RFC 9728** | ✅ **IMPROVED** (v2.1.85) | Follows Protected Resource Metadata discovery to find authorization server. Changelog-confirmed.
+- **Org-blocked plugins hidden** | ✅ **NEW** (v2.1.85) | Plugins blocked by `managed-settings.json` can no longer be installed/enabled and are hidden from marketplace. Changelog-confirmed.
+- **`OTEL_LOG_TOOL_DETAILS=1` gating** | ✅ **NEW** (v2.1.85) | `tool_parameters` in OpenTelemetry `tool_result` events now gated behind env var (was always emitted). Privacy/security improvement. Changelog-confirmed.
+- **`/compact` context exceeded fix** | ✅ **FIXED** (v2.1.85) | `/compact` failing with "context exceeded" when conversation too large for compact request itself. Changelog-confirmed.
+- **`/plugin enable`/`disable` location fix** | ✅ **FIXED** (v2.1.85) | Was failing when install location differs from declaration location. Changelog-confirmed.
+- **`--worktree` non-git repos fix** | ✅ **FIXED** (v2.1.85) | `--worktree` exited with error in non-git repos before WorktreeCreate hook could run. Changelog-confirmed.
+- **`deniedMcpServers` claude.ai fix** | ✅ **FIXED** (v2.1.85) | `deniedMcpServers` setting now correctly blocks claude.ai connector MCP servers (was only blocking local). Not testable without claude.ai connectors. Changelog-confirmed.
+- **`switch_display` multi-monitor fix** | ✅ **FIXED** (v2.1.85) | Computer-use tool `switch_display` on multi-monitor setups. Changelog-confirmed.
+- **OTEL exporter `none` crash fix** | ✅ **FIXED** (v2.1.85) | Crash when `OTEL_LOGS_EXPORTER`, `OTEL_METRICS_EXPORTER`, or `OTEL_TRACES_EXPORTER` set to `none`. Changelog-confirmed.
+- **MCP step-up auth fix** | ✅ **FIXED** (v2.1.85) | MCP servers requesting elevated scopes via 403 `insufficient_scope` now correctly trigger re-authorization when refresh token exists. Changelog-confirmed.
+- **Remote session memory leak fix** | ✅ **FIXED** (v2.1.85) | Memory leak in remote sessions when streaming response interrupted. Changelog-confirmed.
+- **ECONNRESET retry fix** | ✅ **FIXED** (v2.1.85) | Persistent ECONNRESET errors during edge connection churn — uses fresh TCP on retry. Changelog-confirmed.
+- **Prompts stuck after slash commands fix** | ✅ **FIXED** (v2.1.85) | Prompts getting stuck in queue after certain slash commands, up-arrow unable to retrieve them. Changelog-confirmed.
+- **Python SDK type:'sdk' MCP fix** | ✅ **FIXED** (v2.1.85) | `type:'sdk'` MCP servers via `--mcp-config` were dropped during startup. Changelog-confirmed. SDK/K8s relevant.
+- **Raw key sequences SSH/VS Code fix** | ✅ **FIXED** (v2.1.85) | Raw key sequences appearing in prompt over SSH or VS Code integrated terminal. Changelog-confirmed.
+- **Remote Control stuck status fix** | ✅ **FIXED** (v2.1.85) | Session status staying stuck on "Requires Action" after permission resolved. Changelog-confirmed.
+- **Shift+enter typeahead fix** | ✅ **FIXED** (v2.1.85) | Shift+enter and meta+enter intercepted by typeahead suggestions instead of inserting newlines. Changelog-confirmed.
+- **Scroll/streaming stale content fix** | ✅ **FIXED** (v2.1.85) | Stale content bleeding through when scrolling up during streaming. Changelog-confirmed.
+- **Terminal enhanced keyboard mode fix** | ✅ **FIXED** (v2.1.85) | Terminal left in enhanced keyboard mode after exit in Ghostty, Kitty, WezTerm (Kitty keyboard protocol). Ctrl+C/Ctrl+D now work correctly after quitting. Changelog-confirmed.
+- **@-mention autocomplete performance** | ✅ **IMPROVED** (v2.1.85) | File autocomplete performance improved on large repositories. Changelog-confirmed.
+- **Scroll performance (yoga-layout)** | ✅ **IMPROVED** (v2.1.85) | WASM yoga-layout replaced with pure TypeScript implementation. Reduced UI stutter on compaction. Changelog-confirmed.
+- **FG/BG built-in tool sets** | ⚠️ **UNCHANGED** (v2.1.85) | **TESTED**: FG non-team: **26** built-in (8 direct + 18 deferred). BG non-team: **13** built-in (8 direct + 5 deferred). MCP: 94 (FG). Agent tool still absent from all subagent tiers. No new built-in tools.
+
+### v2.1.88 findings (Mar 31, 2026):
+- **`PermissionDenied` hook event** | ⚠️ **NEW, UNTESTABLE in `-p` mode** (v2.1.88) | 22nd hook type. Fires after auto mode classifier denials. Can return `{retry: true}` to let model retry. **TESTED (5 attempts)**: `--permission-mode auto` flag is **IGNORED in `-p` mode** — hook payloads show `permission_mode: "default"` regardless of flag value. Even `--permission-mode plan` doesn't block Bash in `-p` mode. The auto mode classifier does not run in non-interactive mode. `git push origin main` executed successfully without denial. Model self-censors for truly dangerous commands (`.git` deletion) before classifier can evaluate. Hook is **interactive-only** — requires live auto mode session where classifier evaluates and denies tool calls. `permission_denials: []` field always empty in `-p` output.
+- **Hooks `if` compound command fix** | ✅ **CONFIRMED** (v2.1.88) | **TESTED**: `Bash(git *)` pattern now matches INSIDE compound commands (`ls && git status`, `echo pre && git log`) and env-var prefixed commands (`GIT_PAGER=cat git log`). Previously only matched if command literally started with `git`. Correctly does NOT match non-git commands (`echo test`, `echo a && echo b`). Control hook fired for all Bash calls, conditional hook fired only for git-containing commands (4/10). Note: literal `&&` in glob pattern (`Bash(* && git *)`) does NOT work — use simple `Bash(git *)` and let the fix look inside compound/env-prefixed commands.
+- **PreToolUse/PostToolUse `file_path` absolute** | ✅ **CONFIRMED** (v2.1.88) | **TESTED**: PreToolUse hook on Read fires with `tool_input.file_path` as absolute path. All observed paths absolute: `/home/faisal/EventMarketDB/CLAUDE.md`, `/home/faisal/EventMarketDB/config/DataManagerCentral.py`. No separate top-level `file_path` field — the fix ensures `tool_input.file_path` is always resolved to absolute before reaching hooks.
+- **SDK `is_error: true` for error results** | ✅ **CONFIRMED** (v2.1.88) | **TESTED**: `claude -p --max-turns 1 --output-format json` with multi-step task. Result: `"is_error": true`, `"subtype": "error_max_turns"`, `"errors": ["Reached maximum number of turns (1)"]`, exit code 1. Previously `is_error` was not set for error conditions, making programmatic error detection unreliable. Fix affects `error_during_execution` and `error_max_turns` subtypes. Relevant to extraction worker SDK usage.
+- **`permission_denials` field in `-p` JSON output** | ✅ **NEW** (v2.1.88) | **TESTED**: Output JSON from `claude -p --output-format json` now includes `permission_denials: []` array. Tracks auto mode permission denials during the session. Empty in our tests (no denials occurred). Useful metadata for SDK automation.
+- **`CLAUDE_CODE_NO_FLICKER=1` env var** | ✅ **NEW** (v2.1.88) | Opt-in flicker-free alt-screen rendering with virtualized scrollback. Changelog-confirmed.
+- **Named subagents in `@` typeahead** | ✅ **NEW** (v2.1.88) | Named subagents appear in `@` mention autocomplete suggestions. UI convenience only — does NOT fix agent discovery session snapshot for Task tool. Changelog-confirmed.
+- **`showThinkingSummaries` setting** | ⚠️ **CHANGED DEFAULT** (v2.1.88) | Thinking summaries no longer generated by default in interactive sessions. Set `showThinkingSummaries: true` in settings to restore. Display-only — does NOT affect subagent thinking (still architecturally disabled). Changelog-confirmed.
+- **Prompt cache stability fix** | ✅ **FIXED** (v2.1.88) | Prompt cache misses in long sessions caused by tool schema bytes changing mid-session. Cost/latency improvement for long sessions. Changelog-confirmed.
+- **Nested CLAUDE.md de-duplication fix** | ✅ **FIXED** (v2.1.88) | Nested CLAUDE.md files were being re-injected dozens of times in long sessions that read many files. Context efficiency fix. Changelog-confirmed.
+- **Edit/Write CRLF fix** | ✅ **FIXED** (v2.1.88) | Edit/Write tools doubling CRLF on Windows and stripping Markdown hard line breaks (two trailing spaces). Changelog-confirmed.
+- **StructuredOutput schema cache fix** | ✅ **FIXED** (v2.1.88) | ~50% failure rate in workflows with multiple schemas. Changelog-confirmed.
+- **Memory leak fix (LRU cache)** | ✅ **FIXED** (v2.1.88) | Large JSON inputs retained as LRU cache keys in long-running sessions. Changelog-confirmed.
+- **OOM crash on large Edit (>1 GiB)** | ✅ **FIXED** (v2.1.88) | Changelog-confirmed.
+- **`--resume` crash fix** | ✅ **FIXED** (v2.1.88) | Crash when transcript contains tool result from older CLI version or interrupted write. Changelog-confirmed.
+- **Rate limit error message fix** | ✅ **FIXED** (v2.1.88) | Misleading "Rate limit reached" when API returned entitlement error — now shows actual error with actionable hints. Changelog-confirmed.
+- **LSP zombie restart fix** | ✅ **FIXED** (v2.1.88) | LSP server now restarts on next request after crash instead of failing until session restart. Changelog-confirmed.
+- **Hooks `if` compound commands fix (detail)** | ✅ **FIXED** (v2.1.88) | Also fixes env-var prefixes (`FOO=bar git push`). Changelog-confirmed + empirically verified.
+- **`/stats` subagent token counting** | ✅ **FIXED** (v2.1.88) | Was undercounting tokens by excluding subagent/fork usage. Changelog-confirmed.
+- **`/stats` historical data fix** | ✅ **FIXED** (v2.1.88) | Historical data beyond 30 days lost when stats cache format changes. Changelog-confirmed.
+- **Task notifications with Ctrl+B** | ✅ **FIXED** (v2.1.88) | Notifications lost when backgrounding a session. UI fix, not architectural BG change. Changelog-confirmed.
+- **SDK error messages fix** | ✅ **FIXED** (v2.1.88) | `error_during_execution`, `error_max_turns` now correctly set `is_error: true` with descriptive messages. **TESTED + confirmed**.
+- **Auto mode denied commands notification** | ✅ **NEW** (v2.1.88) | Denied commands show notification and appear in `/permissions` → Recent tab. Changelog-confirmed.
+- **FG/BG built-in tool sets** | ⚠️ **UNCHANGED** (v2.1.88) | No new built-in tools mentioned. Agent tool still absent from all subagent tiers.
+
+### Still broken (as of v2.1.88):
+- `allowed-tools` restriction: NOT ENFORCED (skills only)
+- `disallowedTools`: NOT ENFORCED (skills only; agents: ENFORCED)
+- `type: "agent"` hooks: NOT ENFORCED
+- Task→Task nesting: BLOCKED (Agent spawner absent from ALL subagent tiers)
+- Parallel Skill execution: SEQUENTIAL
+- MCP wildcards pre-load: NO
+- Tool inheritance parent↔child: NO
+- Hooks live-reload from settings.json: NO
+- Agent discovery mid-session: STILL SNAPSHOT (named subagents in `@` typeahead is UI-only)
+- BG non-team task management: BLOCKED
+- Nested agent spawning: BLOCKED everywhere
+- Subagent thinking: STILL DISABLED (v2.1.68+→v2.1.88). Root cause: `IS()` hard-codes `thinkingConfig: {type: "disabled"}`
+- `effort`/`maxTurns` frontmatter for agents: PLUGIN-ONLY (skills: effort NOW WORKS as of v2.1.80)
+- Agent tool `resume` param: REMOVED (v2.1.77) — must use SendMessage
+- `FileChanged` hook: NOT FIRING in `-p` mode (likely interactive-only)
+- `--bare` flag: INCOMPATIBLE with OAuth (requires ANTHROPIC_API_KEY)
+- `--settings` overlay: does NOT register new hook events (hooks require settings.json files)
+- AskUserQuestion in `-p` mode: HARD-BLOCKED (v2.1.85 `updatedInput` feature is interactive-only)
+- PermissionDenied hook: INTERACTIVE-ONLY (`--permission-mode` flag IGNORED in `-p` mode — payload shows "default" regardless)
+- `--permission-mode` flag in `-p` mode: SILENTLY IGNORED (tested: auto, plan — both show "default" in hook payloads, no blocking)
+
+### Test agents/hooks location (v2.1.88):
+- `.claude/agents/test-v188-permission-denied.md`
+- `.claude/agents/test-v188-if-compound.md`
+- `.claude/agents/test-v188-filepath-absolute.md`
+- `.claude/agents/test-v188-sdk-error.md`
+- `.claude/hooks/test-v188-permission-denied.sh`
+- `.claude/hooks/test-v188-if-compound.sh`
+- `.claude/hooks/test-v188-if-control.sh`
+- `.claude/hooks/test-v188-filepath-log.sh`
+- `.claude/plans/test-v188-run-plan.md`
+
+### Test agents/hooks location (v2.1.85):
+- `.claude/agents/test-v185-fg-tool-inventory.md`
+- `.claude/agents/test-v185-bg-tool-inventory.md`
+- `.claude/hooks/test-v185-conditional-hook.sh`
+- `.claude/hooks/test-v185-conditional-control.sh`
+
+### Test agents/skills/hooks location (v2.1.84):
+- `.claude/agents/test-v184-fg-tool-inventory.md`
+- `.claude/agents/test-v184-bg-tool-inventory.md`
+- `.claude/agents/test-v184-taskcreated-hook.md`
+- `.claude/agents/test-v184-yaml-globs.md`
+- `.claude/agents/test-v184-mcp-cap.md`
+- `.claude/agents/test-v184-stream-idle.md`
+- `.claude/rules/test-v184-yaml-rule.md`
+- `.claude/hooks/test-v184-taskcreated.sh`
+
+---
+
+### Retest Summary (2026-03-31, v2.1.88) — v2.1.88 (3 versions: v2.1.86–v2.1.88)
+
+**4 capabilities tested (3 empirically confirmed, 1 inconclusive, ~20 changelog-confirmed):**
+
+| Feature | Status | Details |
+|---------|--------|---------|
+| `PermissionDenied` hook (#22) | ⚠️ UNTESTABLE in `-p` | `--permission-mode auto` IGNORED in `-p` mode (payload shows "default"). Auto classifier doesn't run non-interactively. Interactive-only feature |
+| Hooks `if` compound commands | ✅ CONFIRMED | `Bash(git *)` matches `ls && git status` and `GIT_PAGER=cat git log`. 4/10 fires correct |
+| PreToolUse/PostToolUse `file_path` absolute | ✅ CONFIRMED | `tool_input.file_path` always absolute in hook payloads for Read/Write/Edit |
+| SDK `is_error: true` for error results | ✅ CONFIRMED | `error_max_turns` → `is_error: true`, `errors: [...]`, exit code 1 |
+| `permission_denials` output field | ✅ NEW | Array in `-p --output-format json` output. Empty when no denials |
+| `CLAUDE_CODE_NO_FLICKER=1` | ✅ NEW | Changelog-confirmed |
+| Named subagents in `@` typeahead | ✅ NEW | UI only, does NOT fix session snapshot |
+| `showThinkingSummaries` default OFF | ⚠️ CHANGED | Display-only setting. Does NOT affect subagent thinking |
+| Prompt cache stability | ✅ FIXED | Tool schema bytes no longer change mid-session |
+| Nested CLAUDE.md de-dupe | ✅ FIXED | No longer re-injected dozens of times |
+| `/stats` subagent counting | ✅ FIXED | Was excluding subagent/fork token usage |
+| Edit/Write CRLF + hard line breaks | ✅ FIXED | Windows CRLF doubling + trailing spaces stripped |
+| StructuredOutput schema cache | ✅ FIXED | ~50% failure rate with multiple schemas |
+| Memory leak (LRU cache keys) | ✅ FIXED | Large JSON inputs retained in long sessions |
+| OOM crash on large Edit | ✅ FIXED | >1 GiB files |
+| `--resume` crash | ✅ FIXED | Old tool results / interrupted writes |
+| Rate limit error message | ✅ FIXED | Shows actual entitlement error now |
+| LSP zombie restart | ✅ FIXED | Restarts on next request after crash |
+| Task notifications Ctrl+B | ✅ FIXED | No longer lost when backgrounding session |
+
+**Nothing unblocked** from the "Still broken" list. All existing limitations remain. Primarily a stability/polish release.
+
+---
+
+### Retest Summary (2026-03-27, v2.1.85) — v2.1.85 (1 version)
+
+**27 capabilities tested (3 empirically confirmed, 1 partially confirmed, 23 changelog-confirmed):**
+
+| Feature | Status | Change from v2.1.84 |
+|---------|--------|---------------------|
+| FG non-team built-in tool count | **26** (unchanged) | No change |
+| BG non-team built-in tool count | **13** (unchanged) | No change |
+| Conditional `if` field for hooks | **NEW** | Filters hook firing by permission rule syntax. TESTED: `Bash(git *)` correctly filters |
+| PreToolUse `updatedInput` for AskUserQuestion | **NEW (partial)** | Hook mechanism works; AskUserQuestion HARD-BLOCKED in `-p` mode |
+| MCP server name/URL env vars | **NEW** | For headersHelper scripts only. Changelog-confirmed |
+| `deniedMcpServers` claude.ai fix | **FIXED** | Blocks claude.ai connector MCP servers. Changelog-confirmed |
+| `/compact` context exceeded fix | **FIXED** | Changelog-confirmed |
+| `--worktree` non-git repos fix | **FIXED** | Changelog-confirmed |
+| MCP step-up auth refresh token fix | **FIXED** | Changelog-confirmed |
+| Python SDK type:'sdk' MCP fix | **FIXED** | Changelog-confirmed |
+| ECONNRESET retry fix | **FIXED** | Uses fresh TCP on retry. Changelog-confirmed |
+| Terminal enhanced keyboard mode fix | **FIXED** | Ghostty/Kitty/WezTerm. Changelog-confirmed |
+| Scroll performance (yoga-layout) | **IMPROVED** | WASM → pure TypeScript. Changelog-confirmed |
+| @-mention autocomplete performance | **IMPROVED** | Changelog-confirmed |
+| `OTEL_LOG_TOOL_DETAILS=1` gating | **NEW** | tool_parameters in OTEL gated. Changelog-confirmed |
+| Timestamp markers in transcripts | **NEW** | For /loop and CronCreate. Changelog-confirmed |
+| Deep link 5000 chars | **EXPANDED** | Changelog-confirmed |
+| Org-blocked plugins hidden | **NEW** | Changelog-confirmed |
+| MCP OAuth RFC 9728 | **IMPROVED** | Changelog-confirmed |
+
+**Nothing unblocked** from the "Still broken" list. All existing limitations remain.
+
+---
+
+### Retest Summary (2026-03-26, v2.1.84) — v2.1.84 (1 version)
+
+**17 capabilities tested (8 empirically confirmed, 1 partially confirmed, 8 changelog-confirmed):**
+
+| Feature | Status | Change from v2.1.83 |
+|---------|--------|---------------------|
+| FG non-team built-in tool count | **26** (unchanged) | No change |
+| BG non-team built-in tool count | **13** (unchanged) | No change |
+| `TaskCreated` hook event | **NEW** | 21st hook event. Fires main + subagent. Payload: task_id/subject/description |
+| `CLAUDE_STREAM_IDLE_TIMEOUT_MS` | **NEW** | Env var for streaming idle watchdog (default 90s) |
+| YAML list of globs in frontmatter | **NEW** | `rules:` and `skills:` accept YAML list of glob patterns |
+| `ANTHROPIC_DEFAULT_*_MODEL_SUPPORTS` | **NEW** | 3P provider effort/thinking override env vars |
+| MCP descriptions 2KB cap | **NEW** | Not triggered by our servers (max 473 chars) |
+| PowerShell tool | **NEW (Windows)** | Not visible on Linux. Opt-in preview |
+| `--settings` overlay hooks | **CLARIFICATION** | Does NOT register new hooks. Project hooks still fire |
+| WorktreeCreate hook type: http | **NEW** | Changelog-confirmed |
+| Fixed workflow subagents + --json-schema | **FIXED** | Changelog-confirmed |
+| Fixed cold-start Edit/Write deferred | **FIXED** | Changelog-confirmed |
+| MCP server deduplication | **NEW** | Changelog-confirmed |
+| idle-return prompt (75+ min) | **NEW** | Changelog-confirmed |
+| x-client-request-id header | **NEW** | Changelog-confirmed |
+| Global prompt cache with ToolSearch | **IMPROVED** | Changelog-confirmed |
+| Deep links preferred terminal | **IMPROVED** | Changelog-confirmed |
+
+---
+
+### Retest Summary (2026-03-25, v2.1.83) — v2.1.81-v2.1.83 (2 versions)
+
+**22 capabilities tested (12 empirically confirmed, 10 changelog-confirmed):**
+
+| Feature | Status | Change from v2.1.80 |
+|---------|--------|---------------------|
+| FG non-team built-in tool count | **26** (+1) | +RemoteTrigger, -TaskOutput (deprecated) |
+| BG non-team built-in tool count | **13** (unchanged) | No change |
+| MCP tool count | **46** (+2) | +obsidian (14), +ide (2) servers |
+| `initialPrompt` agent frontmatter | **NEW** | Auto-submits first turn |
+| `SUBPROCESS_ENV_SCRUB` | **NEW** | Strips secret creds only, preserves app vars |
+| `CwdChanged` hook | **NEW** | Fires on Bash cd |
+| `FileChanged` hook | **NEW (partial)** | NOT firing in `-p` mode |
+| `--bare` flag | **NEW** | Requires API key, incompatible with OAuth |
+| `disableDeepLinkRegistration` | **NEW** | Setting recognized, no-op on headless |
+| `sandbox.failIfUnavailable` | **NEW** | Do NOT enable in Docker/K8s |
+| Memory auto-preload | **STILL WORKING** | Re-confirmed at v2.1.83 |
+| MEMORY.md 25KB truncation | **NEW** | Additional limit alongside 200-line |
 
 ---
 
