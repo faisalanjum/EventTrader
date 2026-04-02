@@ -238,7 +238,7 @@ class NewsMixin:
                     # Always canonicalize to UTC for the meta key
                     full_news_id_for_meta = canonicalise_news_full_id(raw_full_id)
                 
-                meta_key = f"tracking:meta:{self.event_trader_redis.source}:{full_news_id_for_meta}"
+                meta_key = f"tracking:meta:{RedisKeys.SOURCE_NEWS}:{full_news_id_for_meta}"
                 try:
                     # Use TTL defined in Redis client configuration (if any)
                     self.event_trader_redis.history_client.mark_lifecycle_timestamp(meta_key, "inserted_into_neo4j_at")

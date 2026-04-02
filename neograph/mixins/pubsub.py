@@ -46,7 +46,7 @@ class PubSubMixin:
             if content_type == 'news':
                 # Get the news data using standard key format
                 key = RedisKeys.get_key(
-                    source_type=self.event_trader_redis.source,
+                    source_type=RedisKeys.SOURCE_NEWS,
                     key_type=namespace,
                     identifier=item_id
                 )
@@ -251,7 +251,7 @@ class PubSubMixin:
         pubsub = self.event_trader_redis.live_client.create_pubsub_connection()
         
         # Subscribe to news channels using consistent RedisKeys methods
-        news_returns_keys = RedisKeys.get_returns_keys(self.event_trader_redis.source)
+        news_returns_keys = RedisKeys.get_returns_keys(RedisKeys.SOURCE_NEWS)
         withreturns_channel = news_returns_keys['withreturns']
         withoutreturns_channel = news_returns_keys['withoutreturns']
         pubsub.subscribe(withreturns_channel, withoutreturns_channel)

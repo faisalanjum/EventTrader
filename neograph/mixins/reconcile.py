@@ -36,7 +36,7 @@ class ReconcileMixin:
             with self.manager.driver.session() as session:
                 # 1. NEWS RECONCILIATION
                 for namespace in ['withreturns', 'withoutreturns']:
-                    pattern = RedisKeys.get_key(source_type=self.event_trader_redis.source, 
+                    pattern = RedisKeys.get_key(source_type=RedisKeys.SOURCE_NEWS,
                                             key_type=namespace, identifier="*")
                     
                     # Get news IDs from Redis
@@ -92,7 +92,7 @@ class ReconcileMixin:
                             
                             # Try both namespaces
                             for ns in ['withreturns', 'withoutreturns']:
-                                key = RedisKeys.get_key(source_type=self.event_trader_redis.source,
+                                key = RedisKeys.get_key(source_type=RedisKeys.SOURCE_NEWS,
                                                     key_type=ns, identifier=original_id)
                                 raw_data = self.event_trader_redis.history_client.get(key)
                                 if raw_data:
