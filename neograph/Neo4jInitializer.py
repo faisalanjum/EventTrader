@@ -1158,18 +1158,12 @@ class Neo4jInitializer:
                         "entity_id": ticker_to_id[ticker],
                         "properties": props
                     })
-                    
-                    # Execute batch when size reached
-                    if len(batch_params) >= batch_size:
-                        count = self.manager.create_price_relationships_batch(batch_params)
-                        total_rels += len(batch_params)
-                        batch_params = []
-                
-                # Process remaining items
+
+                # Write all rows for this date in one atomic transaction
                 if batch_params:
                     count = self.manager.create_price_relationships_batch(batch_params)
-                    total_rels += len(batch_params)
-                    
+                    total_rels += count
+
                 logger.info(f"Added price relationships for date {date_str}")
                 
             if total_rels > 0:
