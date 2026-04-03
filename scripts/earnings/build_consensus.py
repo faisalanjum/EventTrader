@@ -32,18 +32,16 @@ import time
 log = logging.getLogger(__name__)
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
-
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+# ── AV client import ─────────────────────────────────────────────────────
+from av_client import fetch_av_json, make_false_empty_checker
 
 # ── Constants ────────────────────────────────────────────────────────────
 
 _HISTORY_QUARTERS = 8      # total including current, newest first
 _FORWARD_QUARTERS = 4
 _FORWARD_YEARS = 2
-_AV_BASE_URL = "https://www.alphavantage.co/query"
 _AV_REQUEST_SPACING = 1.2  # seconds between API calls
 _AV_RETRY_SPACING = 2.0    # seconds before retry on rate limit
 _AV_MAX_RETRIES = 2
@@ -179,66 +177,7 @@ def _resolve_pub_ts(reported_date: str,
     return None
 
 
-# ── AV API ───────────────────────────────────────────────────────────────
-
-def _is_false_empty(data: dict, function: str, symbol: str) -> bool:
-    """Detect likely transient AV false-empty responses for known endpoints.
-
-    AV silently returns valid JSON with 0 data rows under load instead of
-    errors. Empirically confirmed: 108/796 false empties at 70 req/min,
-    all succeeded on retry. Only checks the expected list keys for each
-    endpoint to avoid treating legitimate no-coverage as transient.
-    """
-    if str(data.get("symbol", "")).upper() != symbol.upper():
-        return False
-
-    expected_lists = {
-        "EARNINGS": ("quarterlyEarnings", "annualEarnings"),
-        "EARNINGS_ESTIMATES": ("data", "estimates"),
-        "INCOME_STATEMENT": ("quarterlyReports", "annualReports"),
-    }.get(function)
-
-    if not expected_lists:
-        return False
-
-    lists = [data.get(key) for key in expected_lists if isinstance(data.get(key), list)]
-    return len(lists) > 0 and all(len(v) == 0 for v in lists)
-
-
-def _fetch_av(api_key: str, function: str, symbol: str) -> dict | None:
-    """Fetch one AV endpoint with retry on rate limit and false-empty."""
-    params = {"function": function, "symbol": symbol, "apikey": api_key}
-    url = f"{_AV_BASE_URL}?{urlencode(params)}"
-    req = Request(url, headers={"User-Agent": "build-consensus/2.0"}, method="GET")
-
-    for attempt in range(_AV_MAX_RETRIES + 1):
-        try:
-            with urlopen(req, timeout=_AV_TIMEOUT) as resp:
-                raw = resp.read().decode("utf-8")
-            data = json.loads(raw)
-            if isinstance(data, dict):
-                for key in ("Error Message", "Information", "Note"):
-                    if key in data and len(data) <= 2:
-                        msg = str(data[key]).lower()
-                        if "rate limit" in msg or "spreading out" in msg or "25 requests" in msg:
-                            if attempt < _AV_MAX_RETRIES:
-                                time.sleep(_AV_RETRY_SPACING)
-                                continue
-                        return None
-                # False-empty: AV returns valid JSON with symbol but 0 data rows
-                if attempt < _AV_MAX_RETRIES and _is_false_empty(data, function, symbol):
-                    log.warning("AV %s for %s returned false-empty (attempt %d) — retrying in %.1fs",
-                                function, symbol, attempt + 1, _AV_RETRY_SPACING)
-                    time.sleep(_AV_RETRY_SPACING)
-                    continue
-            return data
-        except (HTTPError, URLError, TimeoutError, json.JSONDecodeError):
-            if attempt < _AV_MAX_RETRIES:
-                time.sleep(_AV_RETRY_SPACING)
-                continue
-            return None
-    return None
-
+# ── AV API (via av_client.py) ─────────────────────────────────────────────
 
 def _fetch_all_av(api_key: str, ticker: str, gaps: list) -> tuple:
     """Fetch EARNINGS, ESTIMATES, INCOME_STATEMENT with throttling."""
@@ -251,7 +190,13 @@ def _fetch_all_av(api_key: str, ticker: str, gaps: list) -> tuple:
     for i, (function, label) in enumerate(endpoints):
         if i > 0:
             time.sleep(_AV_REQUEST_SPACING)
-        data = _fetch_av(api_key, function, ticker)
+        data = fetch_av_json(
+            api_key, function, {"symbol": ticker},
+            timeout=_AV_TIMEOUT,
+            max_retries=_AV_MAX_RETRIES,
+            retry_spacing=_AV_RETRY_SPACING,
+            should_retry_response=make_false_empty_checker(function, ticker),
+        )
         if data is None:
             gaps.append({"type": "upstream_error", "reason": f"AV {function} failed for {ticker}"})
         results.append(data)
