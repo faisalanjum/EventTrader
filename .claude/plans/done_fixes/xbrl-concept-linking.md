@@ -89,6 +89,8 @@ No bloating risk. CIK returns 2-3x more raw members than 2B, but normalization c
 **Tracker refs**: E9 (concept inconsistency), E3 (member matching), Enhancement #23 (concept resolver)
 **Supersedes**: `xbrl-concept-linking-gpt.md` (its alternative hypotheses are merged into this file as additive notes)
 
+**2026-04-02 follow-up**: the deterministic resolver described in this file is deployed, but reviewed coverage is still incomplete in live data. The active follow-up work is tracked in `.claude/plans/Infra_Bugs/guidance-xbrl-reviewed-coverage-gaps.md`.
+
 ---
 
 ## Table of Contents

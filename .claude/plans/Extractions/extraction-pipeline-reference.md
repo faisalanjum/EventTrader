@@ -473,7 +473,13 @@ proxy-queries.md      # Asset-specific Cypher queries
 
 ### 7.7. Post-Extraction Batch Fix: XBRL Concept Linking (Priority 1 — after historical extraction completes)
 
-**Problem:** Some companies use XBRL concept variants not in the `CONCEPT_CANDIDATES` alias table. The resolver only matches EXACT local names from the company's concept cache. If the company uses a variant not listed, the link fails.
+**Problem:** Some companies use XBRL concept variants or label slugs not covered by the current reviewed table. The resolver only matches exact reviewed local names from the company's concept cache. If the company uses a variant not listed, or if the concept cache is missing/empty, the link fails or falls back to agent behavior.
+
+**2026-04-02 note:** the active evidence-backed follow-up is now tracked in `.claude/plans/Infra_Bugs/guidance-xbrl-reviewed-coverage-gaps.md`. The main open buckets are:
+
+- unreviewed live labels such as `adjusted_eps`, `effective_tax_rate`, `net_sales`, and share-count variants
+- reviewed "survivor" qnames preserved from agent output because the reviewed table is incomplete
+- no concept self-healing fallback when `/tmp/concept_cache_{ticker}.json` is missing or empty
 
 **Validated examples (2026-03-15, KSS + DELL empirical testing):**
 - KSS Dividend Per Share: uses `CommonStockDividendsPerShareCashPaid` (not `Declared`) — **fixed** by adding second candidate
