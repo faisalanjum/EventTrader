@@ -1,6 +1,147 @@
 # Earnings Trigger Daemon — Implementation Plan
 
-**Status**: PLAN (v12 — simplified 2-mode design, 2026-03-20)
+**Status**: PLAN (v13 — trade system contract alignment, 2026-04-06)
+
+---
+
+## Current Reality vs Target Design (added v13)
+
+### What's Running Today
+
+| Component | Status | File |
+|---|---|---|
+| `guidance_trigger_daemon.py` | **RUNNING** on K8s | `scripts/guidance_trigger_daemon.py` (354 lines) |
+| `extraction_worker.py` | **RUNNING** on K8s (KEDA 1→7) | `scripts/extraction_worker.py` (666 lines) |
+| `earnings_trigger.py` | **EXISTS but NAIVE** — simple Redis listener, no gating, no modes | `scripts/earnings_trigger.py` (139 lines) |
+| `earnings_orchestrator.py` | **EXISTS** — builds bundle + runs predictor. No sequential processing, no live_state.json, no learner. | `scripts/earnings/earnings_orchestrator.py` (1,677 lines) |
+| `earnings-prediction` skill | **EXISTS** — outputs prediction, but schema does not match trade system contract (see below) | `.claude/skills/earnings-prediction/SKILL.md` |
+| Full earnings trigger daemon (v12 plan) | **NOT CODED** — the entire two-phase architecture below is still a plan | — |
+
+**The plan below (v12 target architecture) is CORRECT but NOT IMPLEMENTED.** Do not confuse plan with runtime.
+
+### Minimum Upstream Contract Required for Trading
+
+The trade execution system (`.claude/plans/trade-execution-system.md`) needs these from the upstream pipeline:
+
+**CONTRACT BLOCKERS** (the trade daemon cannot function correctly without these):
+
+1. **prediction/result.json** with trade-aligned schema (see Prediction Output Contract below)
+2. **Deterministic `prediction_id`** in prediction output for idempotency
+3. **Optional `predictor_session_id`** in prediction/result.json (for reassessment resume; absent = safe fallback)
+
+**AUTOMATION BLOCKERS** (the trade daemon works without these but requires manual prediction triggering):
+
+4. **Redis `trades:pending` push** after prediction completes (fast path only — trade daemon has 30s filesystem fallback)
+5. **Live 8-K detection** so predictions fire automatically (not manual)
+6. Watch keys + stale prediction recovery
+7. `live_state.json` with quarter_label
+
+**QUALITY BLOCKERS** (trading works but prediction quality is degraded):
+
+8. Historical-first processing for U1 feedback
+9. Deferred learner catch-up before next live cycle
+
+### Prediction Output Contract (v13 — aligned with trade system Block 4A)
+
+The `earnings-prediction` skill currently outputs:
+
+```json
+{
+  "direction": "short",
+  "confidence_score": 45,
+  "expected_move_range_pct": [1.0, 3.0],
+  "key_drivers": [...],
+  "data_gaps": [...],
+  "evidence_ledger": [...],
+  "analysis": "..."
+}
+```
+
+The trade system requires these fields in `prediction/result.json`:
+
+```json
+{
+  "prediction_id": "AAPL_Q1_FY2026_20260406T1603",
+  "ticker": "AAPL",
+  "quarter_label": "Q1_FY2026",
+  "filed_8k": "2026-04-06T16:03:00-04:00",
+  "direction": "long",
+  "confidence": 82,
+  "expected_move_range": [5, 8],
+  "key_drivers": [
+    {"driver": "EPS beat 15%", "direction": "long"}
+  ],
+  "rationale_summary": "Strong beat with raised guidance in calm macro.",
+  "model_version": "claude-opus-4-6",
+  "prompt_version": "earnings-prediction-v3.2",
+  "predicted_at": "2026-04-06T16:13:00-04:00"
+}
+```
+
+**Field mapping (old → new):**
+
+| Old field | New field | Change |
+|---|---|---|
+| `confidence_score` | `confidence` | Rename |
+| `expected_move_range_pct` | `expected_move_range` | Rename |
+| `analysis` | `rationale_summary` | Rename + shorten |
+| `key_drivers` | `key_drivers` | Same ✓ |
+| `data_gaps` | Keep for attribution | Not used by trade daemon |
+| `evidence_ledger` | Keep for attribution | Not used by trade daemon |
+| (missing) | `prediction_id` | ADD — deterministic `{ticker}_{quarter}_{filed_8k_ts}` |
+| (missing) | `ticker` | ADD — from orchestrator context |
+| (missing) | `quarter_label` | ADD — from orchestrator context |
+| (missing) | `filed_8k` | ADD — from orchestrator context |
+| (missing) | `model_version` | ADD — from runtime |
+| (missing) | `prompt_version` | ADD — from skill version |
+| (missing) | `predicted_at` | ADD — timestamp when prediction completes |
+
+**Who adds the missing fields?**
+- `prediction_id`, `ticker`, `quarter_label`, `filed_8k`: the **orchestrator** passes these as arguments to the prediction skill, OR the orchestrator post-processes the prediction output to inject them.
+- `model_version`, `prompt_version`, `predicted_at`: the **prediction skill or orchestrator** adds these at write time.
+
+The prediction skill itself only knows about the bundle. The orchestrator knows the event context (ticker, quarter, filing time). The orchestrator is the natural place to ensure the full contract is met.
+
+### Predictor Session ID — Where It Lives
+
+For trade reassessment (resuming the predictor session with new evidence):
+
+- **Single source**: optional `predictor_session_id` field in `prediction/result.json`
+  - Written by the orchestrator after the SDK prediction call completes (SDK returns the session/agent ID)
+  - No sibling file (no `prediction/session.json` at launch)
+  - The trade daemon reads it directly from prediction/result.json — no dependency on live_state.json
+- `live_state.json` may optionally mirror it, but the canonical source is always prediction/result.json
+- **If field is missing** (prediction ran before this feature, or old-format result.json): trade daemon applies no_change + no_escalation fallback — safe. Reassessment is an enhancement, not a dependency.
+
+### trades:pending Redis Push
+
+After a LIVE prediction completes and `prediction/result.json` is written:
+
+```
+LPUSH trades:pending {"prediction_id": "AAPL_Q1_FY2026_20260406T1603", "ticker": "AAPL", "quarter_label": "Q1_FY2026"}
+```
+Field name is `quarter_label` (NOT `quarter`). Consistent across both plans.
+
+**Who pushes?** The **orchestrator** — the component that writes and validates `prediction/result.json` is the sole pusher. It pushes immediately after confirming the prediction file is valid. NOT the prediction skill (no Redis access) and NOT the earnings trigger daemon (it doesn't know when prediction completes).
+
+**Trade daemon consumes** via BRPOP (fast path). Filesystem scan every 30s is the fallback.
+
+### Guidance Gate Resolution (v13)
+
+**Resolved ambiguity**: completed AND failed both count as "ready enough" for the guidance gate.
+
+- `guidance_status IS NULL` = not ready (never attempted)
+- `guidance_status = 'in_progress'` = not ready (still running)
+- `guidance_status = 'completed'` = ready
+- `guidance_status = 'failed'` = ready (extraction was attempted; predictor handles any data gaps)
+
+A broken guidance extraction should NOT deadlock live prediction forever.
+
+**Note**: XBRL extraction readiness is a separate concern. The guidance gate checks `guidance_status`, not XBRL completeness. If XBRL is needed for guidance quality, that dependency is inside the guidance extraction pipeline, not at the earnings trigger level. See `.claude/plans/GuidanceTrigger.md` for XBRL-related TODOs.
+
+---
+
+*The target architecture below (v12) remains unchanged. It is the correct design — just not yet implemented.*
 
 ---
 

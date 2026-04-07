@@ -126,12 +126,13 @@ Confidence decides WHETHER to trade, not HOW to size. All trades that pass the g
 All values are fetched fresh at detection time. Stop price and share count computed from these immediately before order placement. No pre-fetching during prediction — the daemon only starts work after prediction/result.json exists.
 
 **Prediction detection** — two-layer trigger: Redis for speed, filesystem for truth.
-- **Fast path (Redis)**: the orchestrator (or the component that finalizes prediction/result.json) pushes a small event to `trades:pending` Redis queue: `{"prediction_id": "...", "ticker": "...", "quarter": "..."}`. The daemon does BRPOP → wakes immediately → evaluates the trade.
+- **Fast path (Redis)**: the **orchestrator** (sole owner: the component that writes and validates prediction/result.json) pushes a small event to `trades:pending` Redis queue: `{"prediction_id": "...", "ticker": "...", "quarter_label": "..."}`. The daemon does BRPOP → wakes immediately → evaluates the trade.
 - **Safety net (filesystem)**: the daemon also scans the filesystem every 30 seconds for any `prediction/result.json` without a corresponding `trade/plan.json` or `trade/skipped.json`. This catches anything Redis missed (message lost, daemon restarted before consuming).
 - **Startup recovery**: on restart, the daemon scans filesystem FIRST (not Redis) to rebuild state from authoritative files.
 - **Idempotency**: `prediction_id` prevents double-trading. If plan.json or skipped.json already exists for a prediction_id, the daemon skips regardless of how many Redis events arrive.
 - **Ownership split**:
-  - `earnings_trigger_daemon.py` detects fresh 8-K → runs orchestrator → writes prediction/result.json + pushes Redis event
+  - `earnings_trigger_daemon.py` detects fresh 8-K → triggers the orchestrator
+  - the **orchestrator** writes and validates `prediction/result.json` → then pushes the `trades:pending` Redis event
   - `trade_daemon.py` consumes Redis event (fast) OR detects via filesystem scan (fallback) → begins trade lifecycle
 - Redis = fast trigger. Filesystem = authoritative truth.
 
@@ -1079,7 +1080,8 @@ This file is OWNED by the prediction pipeline (orchestrator/predictor). The trad
   "rationale_summary": "Strong beat with raised guidance in calm macro environment.",
   "model_version": "claude-opus-4-6",
   "prompt_version": "earnings-prediction-v3.2",
-  "predicted_at": "2026-04-06T16:13:00-04:00"
+  "predicted_at": "2026-04-06T16:13:00-04:00",
+  "predictor_session_id": "session_abc123"
 }
 ```
 
@@ -1097,6 +1099,7 @@ This file is OWNED by the prediction pipeline (orchestrator/predictor). The trad
 | prompt_version | Logged in trade files for attribution | Yes |
 | filed_8k | Market session determination (post/pre/during) | Yes |
 | predicted_at | Latency tracking (filed_8k → predicted_at → trade entry) | Yes |
+| predictor_session_id | Reassessment resume (SendMessage to original session) | Optional — absent = safe fallback (no_change + no_escalation) |
 
 ### 4B. trade/plan.json — Live Trade State (Daemon-Owned)
 
@@ -1871,4 +1874,3 @@ Each phase is independently deployable, but Phase 1 + Phase 2 together are the m
 ---
 
 **END OF PLAN — All 6 blocks complete.**
-
