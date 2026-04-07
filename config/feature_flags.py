@@ -163,7 +163,7 @@ SYMBOLS_CSV_PATH = os.path.join(CONFIG_DIR, "final_symbols.csv")
 
 # --- Neo4j Driver Configuration ---
 # Ideally : NEO4J_MAX_CONNECTION_LIFETIME ≥ CHUNK_MAX_WAIT_SECONDS
-NEO4J_MAX_CONNECTION_LIFETIME = 10800  # Max connection lifetime in seconds (3 hours to match CHUNK_MAX_WAIT_SECONDS)
+NEO4J_MAX_CONNECTION_LIFETIME = 86400  # Max connection lifetime in seconds (24 hours to match CHUNK_MAX_WAIT_SECONDS)
 NEO4J_KEEP_ALIVE = True               # Enable TCP keep-alive for connections
 NEO4J_MAX_CONNECTION_POOL_SIZE = 250  # Maximum number of connections in the pool
 # --- End Neo4j Driver Configuration ---
@@ -199,7 +199,7 @@ CHUNK_MONITOR_INTERVAL = 60
 
 
 # Maximum time (in seconds) to wait for a single historical chunk to complete
-CHUNK_MAX_WAIT_SECONDS = 10800 # Default: 3 hours
+CHUNK_MAX_WAIT_SECONDS = 86400 # 24 hours (no practical timeout — let Neo4j finish regardless of chunk density)
 
 
 # Max time for processing all sections of one filing (300s)
