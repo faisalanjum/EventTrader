@@ -1873,4 +1873,115 @@ Each phase is independently deployable, but Phase 1 + Phase 2 together are the m
 
 ---
 
-**END OF PLAN — All 6 blocks complete.**
+---
+
+## Appendix A: IBKR Integration Decisions
+
+These decisions close the IBKR integration gap. All implementation reuses existing code from `ibkr-mcp-server/`.
+
+### A0. Isolation Rule — Do Not Impact Running IBKR Services
+
+**The trade daemon MUST NOT affect the existing IBKR Paper or Live MCP services.**
+
+Safe approach:
+- **Copy/adapt** code patterns from `ibkr-mcp-server/` into a new daemon-specific module (e.g., `scripts/trade/ibkr_client.py`)
+- **Do NOT modify** the running MCP server code (`ibkr-mcp-server/app/`) in ways that alter existing behavior
+- **Use separate clientIds** (20/21 for daemon, existing 10/1 for MCP) — IBKR Gateway supports multiple simultaneous clients
+- **Connect as a separate API client** to the same gateway — this is normal IBKR multi-client usage
+
+What COULD break existing services (avoid):
+- Editing shared MCP code in-place (changes clientId, order behavior, connection params)
+- Reusing clientId=1 or clientId=10 (session collision)
+- Modifying gateway K8s config used by deployed MCP services
+
+What is SAFE:
+- Copying the same connection/order/qualification logic into a daemon-owned module
+- Connecting as another client to the same gateway
+- Using the same ib_async library independently
+
+### A1. Connection
+
+- **Reuse patterns** from `ibkr-mcp-server/app/services/client.py` — copy/adapt into daemon-specific module, do NOT import from or modify the running MCP server code
+- **Direct gateway connection** — NOT through MCP HTTP API. No extra hop in the trading path.
+- ACCOUNT_MODE selects endpoint:
+  - `paper` → `ibkr-paper-gateway:4004`
+  - `live` → live gateway `:4003`
+- **Daemon-specific clientIds**: market data = 20, orders = 21 (avoids collision with MCP server's 10/1)
+- **Dependencies**: `ib_async`, `exchange_calendars` (same as MCP server)
+
+### A2. Contracts
+
+- `Stock(symbol, 'SMART', 'USD')` + `qualifyContractsAsync()`
+- Reuse existing qualification pattern from `ibkr-mcp-server/app/services/orders.py`
+- SMART routing by default (no venue-specific exchange at launch)
+
+### A3. ATR Calculation
+
+- **Primary source**: Neo4j/Polygon daily OHLCV — query last N+1 trading days, compute standard ATR_14
+- **Fallback**: IBKR historical daily bars via `ibkr-mcp-server/app/services/history.py` (only if Neo4j data missing/stale)
+- **Existing script**: `scripts/atr_compare_sources.py` already compares Neo4j vs Polygon vs IBKR ATR
+
+### A4. Order Types
+
+**Marketable limit (default for ALL entries + normal exits):**
+- BUY: limit = ask + max(1 tick, ask × LIMIT_BUFFER_PCT), rounded to valid tick size
+- SELL: limit = bid - max(1 tick, bid × LIMIT_BUFFER_PCT), rounded to valid tick size
+- Side-aware and tick-aware
+
+**Market order (emergencies ONLY):**
+- Account kill-switch close-all
+- Fail-closed flatten (stop placement failure, stop repair failure during reconciliation)
+
+Reuse existing order helpers from `ibkr-mcp-server/app/services/orders.py`.
+
+### A5. Bracket Orders
+
+- Existing `place_bracket_order()` in orders.py is 3-leg (entry + TP + stop). **Adapt to 2-leg** (entry + stop only, no take-profit — "let winners run").
+- Reuse existing `bracketOrder()` internals, don't build from scratch.
+- Daemon uses clientId 21 for orders (NOT MCP server's ORDER_CLIENT_ID=1).
+- If bracket placement unavailable → fail-closed choreography (entry → stop → flatten if stop fails).
+
+### A6. Streaming Market Data (Realtime Mode — NEW CODE)
+
+**Reuse from existing code:**
+- IB connection, reconnect, heartbeat, contract qualification/cache
+
+**New to build:**
+- Persistent `reqMktData()` subscriptions for held stock + sector ETF + SPY
+- Callback/event handlers that check registered thresholds on each quote update
+- Subscription lifecycle: subscribe on trade open, unsubscribe on trade close
+- `cancelMktData()` cleanup
+
+**Delayed mode:** No streaming. Use existing `reqTickersAsync` snapshot polling from `market_data.py`.
+
+### A7. Reconnection — Trading State Recovery
+
+Existing `client.py` handles transport-level reconnect. Trade daemon adds 4 behaviors:
+
+1. **On disconnect**: stop new trade acceptance, mark data degraded, continue file state machine, rely on broker-native stops
+2. **On reconnect**: re-qualify/rebuild all active subscriptions, refresh account + positions + open orders, verify every open position has active stop → repair or flatten
+3. **Stale quote detection**: confirm quote flow actually resumed (not just socket reconnected), else fall back to polling temporarily
+4. **Persist events**: log disconnect, reconnect, resubscribe, repair, fallback actions into plan.json trigger_log
+
+### A8. Paper vs Live Switching
+
+Same code path, different endpoint + clientId namespace:
+
+| Config | Gateway | Port | Market Data clientId | Orders clientId |
+|---|---|---|---|---|
+| `ACCOUNT_MODE=paper` | ibkr-paper-gateway | 4004 | 20 | 21 |
+| `ACCOUNT_MODE=live` | live gateway | 4003 | 22 | 23 |
+
+Config also adds to Section G:
+```
+IBKR_PAPER_HOST = ibkr-paper-gateway
+IBKR_PAPER_PORT = 4004
+IBKR_LIVE_HOST = ibkr-live-gateway
+IBKR_LIVE_PORT = 4003
+IBKR_DAEMON_MKTDATA_CLIENT_ID = 20
+IBKR_DAEMON_ORDER_CLIENT_ID = 21
+LIMIT_BUFFER_PCT = 0.15
+ORDER_TIMEOUT_SEC = 60
+```
+
+**END OF PLAN — All 6 blocks + Appendix A complete.**
