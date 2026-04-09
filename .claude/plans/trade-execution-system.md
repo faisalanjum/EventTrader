@@ -1,6 +1,6 @@
 # Trade Execution System — Design Plan
 
-**Status:** ALL 6 BLOCKS LOCKED ✓ — PLAN COMPLETE
+**Status:** ALL 6 BLOCKS LOCKED ✓ — IMPLEMENTATION IN PROGRESS
 
 ---
 
@@ -20,8 +20,8 @@ Our existing `earnings-prediction` pipeline reads 8-K filings and outputs a pred
 
 **B2. Cut losses fast, protect capital**
 - Volatility-aware stops via clamped ATR: `stop_distance = clamp(k × ATR_14, min_stop_pct × entry, max_stop_pct × entry)`. Pure ATR can be too tight for post-earnings noise or too loose for quiet names. The clamp keeps stops in a sane range.
-- Dollar-risk sizing: decide how much you're willing to LOSE per trade (a fixed dollar amount from config), then: `per_share_risk = stop_distance + execution_buffer`, `shares = floor(dollar_risk / per_share_risk)`. Wider stop = fewer shares = same dollar at risk. Risk is always ~$X regardless of stock volatility.
-- Aggregate risk is implicitly bounded at launch: DOLLAR_RISK_PER_TRADE × MAX_POSITIONS = max aggregate exposure ($500 × 2 = $1,000 on a $50K account = 2%). An explicit total-capital-at-risk gate is deferred until MAX_POSITIONS increases beyond 2.
+- Dollar-risk sizing: decide how much you're willing to LOSE per trade (a percentage of account equity), then: `dollar_risk = account_equity × RISK_PER_TRADE_PCT / 100`, `per_share_risk = stop_distance + execution_buffer`, `shares = floor(dollar_risk / per_share_risk)`. Wider stop = fewer shares = same dollar at risk. Risk scales with account size.
+- Aggregate risk is implicitly bounded at launch: RISK_PER_TRADE_PCT × MAX_POSITIONS = max planned risk (2% × 2 = 4%). Actual risk may be higher due to gap/slippage (earnings stocks can gap past stops in extended hours). Account kill-switch at 15% provides buffer. An explicit total-capital-at-risk gate is deferred until MAX_POSITIONS increases beyond 2.
 - Broker-protected stop placement: preferred implementation is a linked bracket order when supported. If a given entry path cannot link the stop atomically, the daemon must use fail-closed choreography: if entry fills and stop is not confirmed immediately, flatten the trade. There must never be an unprotected live position.
 - Account-level emergency kill-switch: if total account equity drops below a threshold, close ALL positions immediately.
 
@@ -156,9 +156,11 @@ Stop distance is volatility-aware:
 ```
 stop_distance = clamp(k × ATR_14, min_stop_pct × entry_price, max_stop_pct × entry_price)
 per_share_risk = stop_distance + EXECUTION_BUFFER_PER_SHARE
-shares = floor(dollar_risk_per_trade / per_share_risk)
+dollar_risk = account_equity × RISK_PER_TRADE_PCT / 100
+shares = floor(dollar_risk / per_share_risk)
 ```
-Example: stock at $185, ATR=$4.50, risk=$500, buffer=$0.30 → stop=$9, per_share_risk=$9.30 → 53 shares → max loss $493.
+Example: $50K account, 2% risk → dollar_risk=$1,000. Stock at $185, ATR=$4.50, buffer=$0.30 → stop=$9, per_share_risk=$9.30 → 107 shares → max loss $995.
+Example: $2.5K account, 2% risk → dollar_risk=$50. Same stock → 5 shares → max loss $46.50.
 
 **D6. Benchmark policy** — One fixed rule, fully daemon-owned:
 - Sector ETF: looked up from Neo4j (Company → sector → ETF mapping, e.g., AAPL → Technology → XLK). Accept ~10% misclassification at launch — hard stop still protects.
@@ -175,7 +177,7 @@ Checks:
 - IBKR account has sufficient free capital
 - Bid-ask spread: three-tier liquidity policy (see D8a below)
 - Chase protection: stock hasn't already moved most of predicted range
-- Under `MAX_POSITIONS` (e.g., 2). Justification for 2: captures the most common multi-filing overlap (peak earnings = 2-3 filings same evening), limits aggregate risk to $1,000 ($500 × 2) while uncalibrated, keeps operational complexity low. Configurable upward after paper trading validates. Aggregate risk is implicitly bounded: DOLLAR_RISK × MAX_POSITIONS = max exposure.
+- Under `MAX_POSITIONS` (e.g., 2). Justification for 2: captures the most common multi-filing overlap (peak earnings = 2-3 filings same evening), limits aggregate planned risk to 4% (2% × 2) while uncalibrated, keeps operational complexity low. Configurable upward after paper trading validates. Aggregate risk is implicitly bounded: RISK_PER_TRADE_PCT × MAX_POSITIONS = max planned exposure.
 
 Gate checks are split into two classes:
 - **Fixed** (from prediction, won't change): direction, confidence, magnitude. If any fail → skip permanently.
@@ -258,6 +260,61 @@ Fail-safe chain: LLM failure → no_change + no_escalation. Daemon failure → b
 
 **D13. U1 feedback loop** — Existing attribution mechanism enriched with trade data (P&L, exit reason, monitor effectiveness, reassessment accuracy, slippage). Attribution runs during the next historical bootstrap when the ticker re-enters trade_ready in Redis — not immediately after trade close. No resources consumed until needed.
 
+**D13a. Learning loop interface (v1)** — Raw attribution remains per-trade (`attribution/result.json`), but consumers do NOT read all prior raw feedback directly. After each attribution cycle, the **learner/compactor** rewrites two distilled artifacts. The learner/compactor owns ALL intelligence around learning content — it reads raw trade files, analyzes, distills, and writes compiled learning files. The orchestrator is a reader/forwarder only. The trade daemon is a reader/applier only for bounded numeric policy (`global.json.auto_tune`). No consumer writes or compiles learning content.
+
+```text
+earnings-analysis/learnings/
+├── global.json
+└── ticker/{TICKER}.json
+```
+
+`global.json` contains:
+- `schema_version`, `updated_at`
+- `trades_analyzed`, `historical_trades`, `live_trades`
+- `prediction_lessons` (free-form text)
+- `reassessment_lessons` (free-form text)
+- `auto_tune` (structured numeric overrides)
+- `candidates` (structured, not auto-applied)
+
+`ticker/{TICKER}.json` contains:
+- `schema_version`, `updated_at`
+- `ticker`, `trades_analyzed`
+- `lessons` (distilled free-form text, rewritten each cycle, not append-only history)
+
+Consumers:
+- Predictor reads `global.json.prediction_lessons` + `ticker/{TICKER}.json.lessons`
+- Reassessment reads `global.json.reassessment_lessons` + `ticker/{TICKER}.json.lessons`
+- Trade daemon reads `global.json.auto_tune` only
+
+Three tiers:
+- **Auto**: `ATR_MULTIPLIER`, `MIN_STOP_PCT`, `MAX_STOP_PCT`, `MAX_HOLD_SESSIONS`, `GAP_FADE_PCT`
+- **Candidate-only**: `CONFIDENCE_THRESHOLD`, `MAGNITUDE_THRESHOLD`, `SPREAD_EDGE_RATIO`, `BENCHMARK_ATR_MULT`, `MACRO_ATR_MULT`, `REVERSAL_ATR_MULT`, `REVERSAL_MOVE_SHARE`, `CHASE_MAX_CONSUMED_PCT`
+- **Never learner-controlled**: `RISK_PER_TRADE_PCT`, `ACCOUNT_KILL_SWITCH_PCT`, `MAX_POSITIONS`, `ACCOUNT_MODE`, `DATA_MODE`
+
+Rules:
+- LLM lessons are always consumed. Evidence strength stays in prose, e.g. `(n=18)` or `tentative from one case`.
+- Auto-tune activates only when `trades_analyzed >= 30`. Historical PIT trades count for bootstrap; the learner is responsible for weighting live evidence higher if it conflicts with historical.
+- Auto-tune is global-only at launch. No per-ticker numeric overrides.
+- The daemon whitelists allowed `auto_tune` keys, clamps to hard bounds, ignores unknown/out-of-bounds values, and logs rejections:
+
+| Parameter | Min | Max | Tier |
+|---|---|---|---|
+| ATR_MULTIPLIER | 1.5 | 3.0 | auto |
+| MIN_STOP_PCT | 2.0 | 5.0 | auto |
+| MAX_STOP_PCT | 10.0 | 20.0 | auto |
+| MAX_HOLD_SESSIONS | 1 | 3 | auto |
+| GAP_FADE_PCT | 30 | 70 | auto |
+| CONFIDENCE_THRESHOLD | 60 | 90 | candidate |
+| MAGNITUDE_THRESHOLD | 1.0 | 5.0 | candidate |
+| SPREAD_EDGE_RATIO | 0.15 | 0.40 | candidate |
+| BENCHMARK_ATR_MULT | 1.0 | 3.0 | candidate |
+| MACRO_ATR_MULT | 1.0 | 3.0 | candidate |
+| REVERSAL_ATR_MULT | 0.3 | 1.0 | candidate |
+| REVERSAL_MOVE_SHARE | 0.15 | 0.50 | candidate |
+| CHASE_MAX_CONSUMED_PCT | 50 | 90 | candidate |
+- Applied values are frozen into `trade/plan.json` at entry. New learning files affect only new trades, never open ones.
+- `candidates` are logged for human review and are never auto-applied by the daemon.
+
 **D14. Prediction ID** — Deterministic: `{ticker}_{quarter_label}_{filed_8k_timestamp}`. NOT a random UUID. Reruns produce the same ID. The daemon checks if `trade/plan.json` exists for this ID before acting — prevents duplicate trades. Separate from `predictor_session_id` (which is for session resume, not idempotency).
 
 **D15. Reference snapshot** — Market prices captured at trade entry: stock price, sector ETF price, SPY price, timestamp. All monitoring thresholds (benchmark stress, gap fade, etc.) measure changes relative to this snapshot.
@@ -297,6 +354,10 @@ If `DATA_MODE=delayed`, treat profitability and timing metrics as provisional un
 ```
 earnings-analysis/
 ├── trade_daemon_state.json      ← global daemon state (starting_equity, pod_id, startup time)
+├── learnings/
+│   ├── global.json              ← distilled global lessons + bounded auto_tune/candidates
+│   └── ticker/
+│       └── {TICKER}.json        ← distilled per-ticker lessons
 │
 └── Companies/{TICKER}/events/{quarter_label}/
     ├── prediction/
@@ -317,6 +378,8 @@ earnings-analysis/
 
 ### G. Configuration (all tunable, one config file)
 
+These are the base defaults. The daemon may apply bounded overrides from `earnings-analysis/learnings/global.json:auto_tune` on startup for NEW trades only. Open trades keep the values frozen in their `trade/plan.json`.
+
 ```
 # Account & Data
 ACCOUNT_MODE = paper              # paper | live
@@ -334,11 +397,13 @@ SPREAD_DEFER_WINDOW_MIN = 10      # minutes after next open to retry
 CHASE_MAX_CONSUMED_PCT = 70       # skip if >70% of predicted range already moved
 
 # Sizing & Risk
-DOLLAR_RISK_PER_TRADE = 500
+RISK_PER_TRADE_PCT = 2.0          # 2% of account equity per trade (same for paper and live)
+                                  # Planned aggregate: 2% × MAX_POSITIONS(2) = 4%
+                                  # Gap risk buffer: 15% kill-switch - 4% planned = 11% headroom
+                                  # Increase to 3% only after 20+ trades with measured slippage data
 ATR_MULTIPLIER = 2.0
 MIN_STOP_PCT = 3.0
 MAX_STOP_PCT = 15.0
-# MAX_TOTAL_RISK_PCT deferred — redundant while MAX_POSITIONS=2 (aggregate risk = $500×2 = $1,000)
 ACCOUNT_KILL_SWITCH_PCT = 15.0    # close ALL if account drops this much
 
 # Monitoring — fixed thresholds
@@ -775,7 +840,8 @@ Step 3: Calculate per-share risk (includes buffer for slippage + fees)
   This keeps actual max loss closer to the intended budget.
 
 Step 4: Calculate shares from risk budget
-  shares = floor(DOLLAR_RISK_PER_TRADE / per_share_risk)
+  dollar_risk = account_equity × RISK_PER_TRADE_PCT / 100
+  shares = floor(dollar_risk / per_share_risk)
 
 Step 5: Verify position value fits account
   position_value = shares × entry_price
@@ -788,14 +854,16 @@ Step 7: Calculate stop price
   stop_price = entry_price - stop_distance  (for long trades)
 ```
 
-Example: stock ask at $185.20, ATR=$4.50, risk budget=$500, execution buffer=$0.30/share
+Example: $50K account, RISK_PER_TRADE_PCT=2%, stock ask at $185.20, ATR=$4.50, buffer=$0.30/share
+- dollar_risk = $50,000 × 2% = $1,000
 - entry_price = $185.20 (expected fill)
 - stop_distance = clamp(2.0 × $4.50, 3% × $185.20, 15% × $185.20) = clamp($9.00, $5.56, $27.78) = $9.00
 - per_share_risk = $9.00 + $0.30 = $9.30
-- shares = floor($500 / $9.30) = 53
-- position = 53 × $185.20 = $9,815.60
+- shares = floor($1,000 / $9.30) = 107
+- position = 107 × $185.20 = $19,816.40
 - stop_price = $185.20 - $9.00 = $176.20
-- max loss = 53 × $9.30 = $492.90 (within $500 budget including slippage buffer)
+- max planned loss = 107 × $9.30 = $995.10 (within $1,000 budget)
+- note: actual loss may exceed planned if stock gaps past stop (earnings/extended-hours risk)
 
 ### 3C. Execution — Order Placement
 
@@ -1207,7 +1275,8 @@ Single most important file. Created when trade first needs persistent state (DEF
 
   "edge_pct": 5.0,
   "per_share_risk": 9.30,
-  "dollar_risk_budget": 500,
+  "risk_per_trade_pct": 2.0,
+  "dollar_risk_budget": 1000,
   "account_mode": "paper",
   "data_mode": "delayed",
 
@@ -1724,7 +1793,7 @@ All tunable parameters live in the config file (Section G). Changes require conf
 |---|---|---|
 | CONFIDENCE_THRESHOLD | Too many skips (too high) or too many losers (too low) | Start 75, adjust by 5 |
 | MAGNITUDE_THRESHOLD | Skipping profitable small-move trades (too high) or taking unprofitable ones (too low) | Start 3%, adjust by 0.5% |
-| DOLLAR_RISK_PER_TRADE | Max drawdown too high (reduce) or P&L too small to matter (increase) | Start $500 |
+| RISK_PER_TRADE_PCT | Max drawdown too high (reduce) or P&L too small to matter (increase) | Start 2%, consider 3% after 20+ trades |
 | ATR_MULTIPLIER | Stops firing too often on normal noise (increase) or not protecting enough (decrease) | Start 2.0 |
 | BENCHMARK_ATR_MULT | Exiting on normal sector fluctuation (increase) or missing real sector stress (decrease) | Start 2.0 |
 | GAP_FADE_PCT | Exiting on minor pullbacks (increase) or missing real fades (decrease) | Start 50% |
@@ -1785,12 +1854,12 @@ Step 3: Switch to live + realtime
   Deploy with the SAME config validated in paper+realtime.
 
 Step 4: Start with reduced risk
-  DOLLAR_RISK_PER_TRADE = 50% of paper-validated value
+  RISK_PER_TRADE_PCT = same as paper (2%). No change needed — same % used everywhere.
   MAX_POSITIONS = 1 (not 2)
   Run for 10 trades at reduced risk.
 
 Step 5: If 10 live trades confirm paper results
-  Increase to full DOLLAR_RISK_PER_TRADE.
+  Consider increasing RISK_PER_TRADE_PCT to 3% if data supports it.
   Increase MAX_POSITIONS to 2.
 
 Step 6: Ongoing
@@ -1823,11 +1892,22 @@ What to build first, in dependency order:
 ```
 Phase 1: Entry-capable skeleton
 ├── trade_daemon.py main loop (detect, gate, size)
-├── IBKR integration (ib_insync: orders, positions, account, delayed prices)
-├── Bracket order placement + fail-closed logic
+├── ✅ IBKR integration — scripts/trade/ibkr_client.py (DONE 2026-04-07)
+│   ├── Dual connection (mktdata=20, orders=21), paper/live switching
+│   ├── Contract qualification + cache (SMART routing)
+│   ├── Snapshot quotes (delayed mode) + streaming quotes (realtime mode)
+│   ├── Marketable limit orders (side-aware, tick-aware, outsideRth)
+│   ├── Market orders (emergency only)
+│   ├── 2-leg bracket orders (entry + stop, no TP)
+│   ├── BracketPlacementResult with deterministic safety properties
+│   ├── Reconnect + heartbeat + auto-resubscribe streaming
+│   ├── DATA_MODE controls reqMarketDataType (not market hours)
+│   ├── Smoke test: 8/8 passed against paper gateway
+│   └── Integration test: real bracket order placed + cancelled on paper
+├── Bracket order placement + fail-closed logic (primitives in ibkr_client, daemon choreography TBD)
 ├── plan.json / skipped.json file writing
 ├── Gate logic (all checks from 3A)
-├── Sizing logic (ATR stop + dollar-risk from 3B)
+├── Sizing logic (ATR stop + dollar-risk from 3B) — ATR script exists: scripts/atr_compare_sources.py
 ├── Config file loading
 ├── Redis singleton lock
 ├── Prediction detection (Redis BRPOP + filesystem scan)
@@ -1871,7 +1951,34 @@ Phase 5: Go-live
 
 Each phase is independently deployable, but Phase 1 + Phase 2 together are the minimum viable paper trading system.
 
----
+### Implementation Progress (updated 2026-04-07)
+
+Immediate first-build scope is defined in `trade-execution-phase1.md`. If this destination plan and the phase-1 plan differ, the phase-1 plan wins for the initial implementation.
+
+**Upstream changes (orchestrator-boundary normalization):**
+- U1-U2 (merged): Orchestrator normalizes predictor output into canonical prediction/result.json
+  - Renames fields at write time (confidence_score→confidence, expected_move_range_pct→expected_move_range, analysis→rationale_summary)
+  - Injects event metadata (prediction_id, ticker, quarter_label, filed_8k, model_version, prompt_version, predicted_at, predictor_session_id)
+  - Predictor skill stays as-is — NO upstream schema changes needed
+  - NOT STARTED
+- U3: trades:pending Redis push from orchestrator — NOT STARTED
+- U4: Verify existing predictions against canonical schema — NOT STARTED
+
+**Completed:**
+- ✅ Phase 1 Step 1.3: IBKR client (`scripts/trade/ibkr_client.py`)
+  - Design-complete and integration-tested against paper gateway
+  - Remaining: open-market validation (full fill, partial fill, flatten)
+- ✅ ATR comparison script (`scripts/atr_compare_sources.py`)
+- ✅ EarningsTrigger.md v13: upstream contract alignment
+
+**Gap closure status:**
+- Gap 1 (IBKR integration): ✅ ~95% — design-complete, needs market-hours validation only
+- Gap 2 (Neo4j queries): NOT STARTED
+- Gap 3 (Claude SDK reassessment): NOT STARTED
+- Gap 4 (DevOps): NOT STARTED
+- Gap 5 (Data sources): ✅ ATR decided (Neo4j primary, IBKR fallback)
+- Gap 6 (Testing): PARTIAL — smoke test + integration test exist
+- Gap 7 (Existing code integration): PARTIAL — IBKR patterns mapped
 
 ---
 

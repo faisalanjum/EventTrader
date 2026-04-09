@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade Execution System — Architecture Explorer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:#30363d;
+  --text:#e6edf3;--dim:#8b949e;--blue:#58a6ff;--green:#3fb950;
+  --orange:#d29922;--red:#f85149;--purple:#bc8cff;--cyan:#39d353;
+  --pink:#f778ba;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+code,.mono{font-family:'SF Mono',SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;font-size:0.85em}
+
+/* Layout */
+.app{display:flex;flex:1;overflow:hidden}
+#sidebar{width:240px;min-width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 16px;overflow-y:auto}
+#sidebar h1{font-size:15px;font-weight:600;margin-bottom:4px;color:var(--text)}
+#sidebar .subtitle{font-size:11px;color:var(--dim);margin-bottom:20px}
+#canvas{flex:1;overflow-y:auto;padding:32px 40px}
+
+/* Level navigation */
+.nav-group{margin-bottom:20px}
+.nav-group h3{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--dim);margin-bottom:8px}
+.nav-btn{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;color:var(--dim);padding:7px 10px;border-radius:6px;cursor:pointer;font-size:12.5px;text-align:left;transition:all .15s;font-family:inherit}
+.nav-btn:hover{background:var(--surface2);color:var(--text)}
+.nav-btn.active{background:var(--surface2);color:var(--text);font-weight:600}
+.nav-btn .num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:var(--border);color:var(--dim);flex-shrink:0}
+.nav-btn.active .num{background:var(--blue);color:#fff}
+.nav-btn.visited .num{background:var(--green);color:#fff}
+
+/* Legend */
+#legend{margin-top:auto;padding-top:16px;border-top:1px solid var(--border)}
+#legend h3{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--dim);margin-bottom:10px}
+.legend-item{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px;color:var(--dim)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* Levels */
+.level{display:none;animation:fadeIn .3s ease}
+.level.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.level-title{font-size:24px;font-weight:700;margin-bottom:6px}
+.level-subtitle{font-size:14px;color:var(--dim);margin-bottom:28px;max-width:700px;line-height:1.5}
+
+/* Boxes */
+.box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px;transition:all .15s;position:relative}
+.box:hover{border-color:var(--dim)}
+.box.clickable{cursor:pointer}
+.box.clickable:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.box h4{font-size:13px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.box p,.box li{font-size:12px;color:var(--dim);line-height:1.5}
+.box ul{padding-left:16px}
+.box.llm{border-left:3px solid var(--blue)}
+.box.daemon{border-left:3px solid var(--green)}
+.box.broker{border-left:3px solid var(--orange)}
+.box.infra{border-left:3px solid var(--dim)}
+.box.files{border-left:3px solid var(--purple)}
+.box.done{border-left:3px solid var(--cyan)}
+.box.safety{border-left:3px solid var(--red)}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;margin-left:4px}
+.tag.blue{background:rgba(88,166,255,.15);color:var(--blue)}
+.tag.green{background:rgba(63,185,80,.15);color:var(--green)}
+.tag.orange{background:rgba(210,153,34,.15);color:var(--orange)}
+.tag.red{background:rgba(248,81,73,.15);color:var(--red)}
+.tag.purple{background:rgba(188,140,255,.15);color:var(--purple)}
+.tag.dim{background:rgba(139,148,158,.15);color:var(--dim)}
+.tag.cyan{background:rgba(57,211,83,.15);color:var(--cyan)}
+
+/* Flow layouts */
+.flow-h{display:flex;align-items:stretch;gap:0}
+.flow-v{display:flex;flex-direction:column;gap:0}
+.arrow-d{text-align:center;padding:6px 0;color:var(--dim);font-size:18px;line-height:1}
+.arrow-r{display:flex;align-items:center;padding:0 10px;color:var(--dim);font-size:16px;flex-shrink:0}
+.arrow-label{font-size:10px;color:var(--dim);text-align:center;padding:2px 0}
+
+/* Grid layouts */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+.gap-16{gap:16px}
+.gap-12{gap:12px}
+.mt-20{margin-top:20px}
+.mt-12{margin-top:12px}
+.mb-16{margin-bottom:16px}
+.mb-8{margin-bottom:8px}
+
+/* State machine */
+.sm{display:flex;flex-direction:column;align-items:center;gap:0;max-width:800px;margin:0 auto}
+.sm-row{display:flex;align-items:flex-start;gap:20px;width:100%}
+.sm-center{display:flex;flex-direction:column;align-items:center}
+.state{padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;text-align:center;min-width:140px;font-family:'SF Mono',Consolas,monospace}
+.state.detected{background:rgba(88,166,255,.12);border:1px solid var(--blue);color:var(--blue)}
+.state.gate{background:rgba(210,153,34,.12);border:1px solid var(--orange);color:var(--orange)}
+.state.deferred{background:rgba(188,140,255,.12);border:1px solid var(--purple);color:var(--purple)}
+.state.entering{background:rgba(63,185,80,.12);border:1px solid var(--green);color:var(--green)}
+.state.open{background:rgba(63,185,80,.15);border:2px solid var(--green);color:var(--green)}
+.state.exiting{background:rgba(210,153,34,.12);border:1px solid var(--orange);color:var(--orange)}
+.state.closed{background:rgba(139,148,158,.12);border:1px solid var(--dim);color:var(--dim)}
+.state.skipped{background:rgba(248,81,73,.12);border:1px solid var(--red);color:var(--red)}
+.sm-branch{display:flex;justify-content:center;gap:40px;width:100%;padding:4px 0}
+.sm-path{display:flex;flex-direction:column;align-items:center;gap:4px}
+.sm-path .arrow-label{font-size:10px;color:var(--dim)}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;padding:8px 12px;border-bottom:2px solid var(--border);color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:.8px}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.tbl tr:hover td{background:var(--surface2)}
+.tbl .mono{color:var(--blue)}
+
+/* Formula box */
+.formula{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;font-family:'SF Mono',Consolas,monospace;font-size:12.5px;line-height:1.7;color:var(--text);overflow-x:auto;white-space:pre}
+
+/* Highlight text */
+.hl-blue{color:var(--blue)}
+.hl-green{color:var(--green)}
+.hl-orange{color:var(--orange)}
+.hl-red{color:var(--red)}
+.hl-purple{color:var(--purple)}
+.hl-dim{color:var(--dim)}
+
+/* Detail/Prompt panel */
+#prompt-bar{background:var(--surface);border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;min-height:52px}
+#prompt-text{flex:1;font-size:12px;color:var(--dim);line-height:1.5;font-family:'SF Mono',Consolas,monospace;max-height:60px;overflow-y:auto}
+#copy-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;white-space:nowrap;transition:all .15s}
+#copy-btn:hover{background:var(--border)}
+#copy-btn.copied{background:rgba(63,185,80,.2);border-color:var(--green);color:var(--green)}
+
+/* Progress sidebar */
+.progress-item{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--dim);margin-bottom:5px}
+.progress-bar{height:4px;background:var(--border);border-radius:2px;flex:1}
+.progress-fill{height:100%;border-radius:2px;transition:width .3s}
+
+/* File tree */
+.tree{font-family:'SF Mono',Consolas,monospace;font-size:12px;line-height:2}
+.tree .dir{color:var(--blue)}
+.tree .file{color:var(--dim)}
+.tree .owner{color:var(--green);font-size:10px;margin-left:8px}
+.tree .indent{display:inline-block}
+
+/* Check list */
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.check-item:last-child{border:none}
+.check-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px}
+.check-icon.pass{background:rgba(63,185,80,.15);color:var(--green)}
+.check-icon.pending{background:rgba(139,148,158,.15);color:var(--dim)}
+.check-icon.done{background:rgba(57,211,83,.2);color:var(--cyan)}
+.check-text{font-size:12px;line-height:1.5}
+.check-text strong{color:var(--text)}
+.check-text span{color:var(--dim)}
+
+/* Section headers within levels */
+.section-hdr{font-size:14px;font-weight:600;margin-top:28px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section-hdr .dot{width:8px;height:8px;border-radius:50%}
+
+/* Callout */
+.callout{background:var(--surface2);border-left:3px solid var(--blue);padding:12px 16px;border-radius:0 6px 6px 0;font-size:12px;color:var(--dim);line-height:1.6}
+.callout.warn{border-left-color:var(--orange)}
+.callout.safe{border-left-color:var(--green)}
+.callout.danger{border-left-color:var(--red)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--dim)}
+
+/* Responsive */
+@media(max-width:900px){#sidebar{width:200px;min-width:200px}#canvas{padding:24px 20px}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Sidebar -->
+<nav id="sidebar">
+  <h1>Trade Execution System</h1>
+  <div class="subtitle">Architecture Explorer &mdash; 8 progressive levels</div>
+
+  <div class="nav-group">
+    <h3>Understanding</h3>
+    <button class="nav-btn active" data-level="1"><span class="num">1</span>The Problem</button>
+    <button class="nav-btn" data-level="2"><span class="num">2</span>Three Layers</button>
+    <button class="nav-btn" data-level="3"><span class="num">3</span>Components</button>
+    <button class="nav-btn" data-level="4"><span class="num">4</span>Trade Lifecycle</button>
+  </div>
+
+  <div class="nav-group">
+    <h3>Mechanics</h3>
+    <button class="nav-btn" data-level="5"><span class="num">5</span>Entry Decision</button>
+    <button class="nav-btn" data-level="6"><span class="num">6</span>Active Trade</button>
+    <button class="nav-btn" data-level="7"><span class="num">7</span>Safety Net</button>
+  </div>
+
+  <div class="nav-group">
+    <h3>Execution</h3>
+    <button class="nav-btn" data-level="8"><span class="num">8</span>Roadmap</button>
+  </div>
+
+  <div id="legend">
+    <h3>Ownership Colors</h3>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>LLM layer (opinions)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Python daemon (state)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Broker / IBKR (risk)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Files on disk</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--dim)"></div>Infrastructure</div>
+  </div>
+</nav>
+
+<!-- Main canvas -->
+<main id="canvas">
+
+<!-- ═══════════════ LEVEL 1: THE PROBLEM ═══════════════ -->
+<section class="level active" id="level-1">
+  <div class="level-title">The Problem</div>
+  <div class="level-subtitle">Our pipeline predicts earnings moves but doesn't trade them. We need automation from signal to P&L.</div>
+
+  <div class="flow-h" style="justify-content:center;gap:0;margin-bottom:32px">
+    <div class="box clickable" style="text-align:center;min-width:130px" data-detail="8k">
+      <h4 style="justify-content:center">8-K Filed</h4>
+      <p>SEC earnings form</p>
+    </div>
+    <div class="arrow-r">&rarr;</div>
+    <div class="box clickable llm" style="text-align:center;min-width:130px" data-detail="prediction">
+      <h4 style="justify-content:center">Prediction</h4>
+      <p>LLM analyzes filing</p>
+    </div>
+    <div class="arrow-r">&rarr;</div>
+    <div class="box clickable daemon" style="text-align:center;min-width:140px" data-detail="daemon">
+      <h4 style="justify-content:center">Trade Daemon</h4>
+      <p>Gate &rarr; Size &rarr; Execute</p>
+    </div>
+    <div class="arrow-r">&rarr;</div>
+    <div class="box clickable broker" style="text-align:center;min-width:130px" data-detail="ibkr">
+      <h4 style="justify-content:center">IBKR</h4>
+      <p>Orders + stops</p>
+    </div>
+    <div class="arrow-r">&rarr;</div>
+    <div class="box clickable files" style="text-align:center;min-width:130px" data-detail="result">
+      <h4 style="justify-content:center">Result</h4>
+      <p>P&L recorded</p>
+    </div>
+    <div class="arrow-r">&rarr;</div>
+    <div class="box clickable llm" style="text-align:center;min-width:130px" data-detail="learner">
+      <h4 style="justify-content:center">Learner</h4>
+      <p>Lessons &rarr; next trade</p>
+    </div>
+  </div>
+
+  <div class="section-hdr"><div class="dot" style="background:var(--green)"></div>The 7-Step Lifecycle</div>
+  <div class="grid-4" style="grid-template-columns:repeat(7,1fr);gap:8px">
+    <div class="box" style="padding:10px;text-align:center"><h4 style="justify-content:center;font-size:11px">1. Detect</h4><p style="font-size:10px">Find new prediction</p></div>
+    <div class="box" style="padding:10px;text-align:center"><h4 style="justify-content:center;font-size:11px">2. Gate</h4><p style="font-size:10px">Should we trade?</p></div>
+    <div class="box" style="padding:10px;text-align:center"><h4 style="justify-content:center;font-size:11px">3. Size</h4><p style="font-size:10px">How many shares?</p></div>
+    <div class="box" style="padding:10px;text-align:center"><h4 style="justify-content:center;font-size:11px">4. Execute</h4><p style="font-size:10px">Place bracket order</p></div>
+    <div class="box" style="padding:10px;text-align:center"><h4 style="justify-content:center;font-size:11px">5. Monitor</h4><p style="font-size:10px">Watch thresholds</p></div>
+    <div class="box" style="padding:10px;text-align:center"><h4 style="justify-content:center;font-size:11px">6. Reassess</h4><p style="font-size:10px">New text evidence?</p></div>
+    <div class="box" style="padding:10px;text-align:center"><h4 style="justify-content:center;font-size:11px">7. Exit</h4><p style="font-size:10px">Close + record P&L</p></div>
+  </div>
+
+  <div class="section-hdr"><div class="dot" style="background:var(--orange)"></div>Priority Order</div>
+  <div class="grid-3">
+    <div class="box clickable" data-detail="b1"><h4>B1. Maximize profit</h4><p>Enter fast after 8-K (72% win at 5-min, 54% at 60-min). Recalibrate on transcript/news evidence.</p></div>
+    <div class="box clickable" data-detail="b2"><h4>B2. Cut losses fast</h4><p>ATR-clamped stops. Dollar-risk sizing. Broker-native stop enforcement. Kill-switch at account level.</p></div>
+    <div class="box clickable" data-detail="b3"><h4>B3. Let winners run</h4><p>Average winner +12.1%. A 5% cap destroys 80% of returns. Default action = HOLD. Wide thresholds.</p></div>
+  </div>
+
+  <div class="grid-3 mt-12">
+    <div class="box clickable" data-detail="b4"><h4>B4. Text recalibration</h4><p>Reassess on transcript + whitelisted Benzinga news. Not price noise. 2-3 reassessments max per trade.</p></div>
+    <div class="box clickable" data-detail="b5"><h4>B5. Keep it minimal</h4><p>One daemon. Files on disk. Broker handles real-time stops. Three-layer ownership model.</p></div>
+    <div class="box clickable" data-detail="b6"><h4>B6. Paper first</h4><p>Paper trading validates plumbing. Two independent flags: ACCOUNT_MODE + DATA_MODE.</p></div>
+  </div>
+
+  <div class="section-hdr"><div class="dot" style="background:var(--red)"></div>Explicitly Out</div>
+  <div style="display:flex;flex-wrap:wrap;gap:6px">
+    <span class="tag dim">No continuous LLM monitoring</span>
+    <span class="tag dim">No custom per-trade thresholds</span>
+    <span class="tag dim">No portfolio optimizer</span>
+    <span class="tag dim">No re-entry after exit</span>
+    <span class="tag dim">Long-only at launch</span>
+    <span class="tag dim">No trailing stop</span>
+    <span class="tag dim">No competing trade replacement</span>
+    <span class="tag dim">No FAST/CONTESTED profiles</span>
+  </div>
+</section>
+
+<!-- ═══════════════ LEVEL 2: THREE LAYERS ═══════════════ -->
+<section class="level" id="level-2">
+  <div class="level-title">Three-Layer Ownership</div>
+  <div class="level-subtitle">Each layer has one job. Each failure makes the system more conservative, never more aggressive.</div>
+
+  <div style="max-width:700px;margin:0 auto">
+    <div class="box llm clickable" data-detail="layer-llm" style="text-align:center;padding:20px">
+      <h4 style="justify-content:center"><span class="tag blue">LLM</span> Writes Opinions</h4>
+      <p style="margin-top:6px">direction, confidence, magnitude, key_drivers, rationale_summary</p>
+      <p style="margin-top:4px">Reassessment: confirmed / unchanged / invalidated</p>
+      <p style="margin-top:6px"><strong class="hl-blue">Never touches:</strong> trade state, orders, prices, broker</p>
+    </div>
+    <div class="arrow-d" style="font-size:22px">&#9660;<br><span style="font-size:10px;color:var(--dim)">structured JSON</span></div>
+
+    <div class="box daemon clickable" data-detail="layer-python" style="text-align:center;padding:20px">
+      <h4 style="justify-content:center"><span class="tag green">Python</span> Writes State</h4>
+      <p style="margin-top:6px">plan.json, result.json, skipped.json, reassessments/*.json</p>
+      <p style="margin-top:4px">Decides: gate, size, execute, monitor, exit</p>
+      <p style="margin-top:6px"><strong class="hl-green">Never:</strong> generates opinions, modifies prediction files</p>
+    </div>
+    <div class="arrow-d" style="font-size:22px">&#9660;<br><span style="font-size:10px;color:var(--dim)">orders via API</span></div>
+
+    <div class="box broker clickable" data-detail="layer-broker" style="text-align:center;padding:20px">
+      <h4 style="justify-content:center"><span class="tag orange">Broker</span> Executes Risk</h4>
+      <p style="margin-top:6px">Native stop-loss enforcement, fill execution, position management</p>
+      <p style="margin-top:6px"><strong class="hl-orange">Protects even when daemon is down.</strong> 24/7 enforcement.</p>
+    </div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--red)"></div>Fail-Safe Chain</div>
+  <div class="grid-3">
+    <div class="box safety clickable" data-detail="fail-llm">
+      <h4>LLM fails <span class="tag red">safe</span></h4>
+      <p>Reassessment API error, session expired, rate limit</p>
+      <p class="mt-12"><strong>Action:</strong> no_change + no_escalation. Hold position. Hard stops remain active. System correct without reassessment.</p>
+    </div>
+    <div class="box safety clickable" data-detail="fail-daemon">
+      <h4>Daemon fails <span class="tag red">safe</span></h4>
+      <p>Pod crash, OOM, network partition</p>
+      <p class="mt-12"><strong>Action:</strong> Broker-native stop still protects. Restart reads plan.json, reconciles with IBKR, resumes monitoring.</p>
+    </div>
+    <div class="box safety clickable" data-detail="fail-all">
+      <h4>Everything fails <span class="tag red">safe</span></h4>
+      <p>LLM down + daemon crash + Redis down</p>
+      <p class="mt-12"><strong>Action:</strong> IBKR stop fires at set price regardless. Worst case = stop loss. No runaway position ever.</p>
+    </div>
+  </div>
+
+  <div class="callout safe mt-20">
+    <strong>Core invariant:</strong> There is never a live position without a broker-native stop. If stop placement fails after entry, the daemon flattens immediately. Broker stop is the bottom of the safety stack.
+  </div>
+</section>
+
+<!-- ═══════════════ LEVEL 3: COMPONENTS ═══════════════ -->
+<section class="level" id="level-3">
+  <div class="level-title">Components &amp; Communication</div>
+  <div class="level-subtitle">4 active components + 3 infrastructure services. Each file has exactly one writer.</div>
+
+  <div style="max-width:800px;margin:0 auto">
+    <!-- Trigger daemon -->
+    <div class="box llm clickable" data-detail="comp-trigger" style="text-align:center">
+      <h4 style="justify-content:center">Earnings Trigger Daemon <span class="tag blue">existing</span></h4>
+      <p>Detects fresh 8-K &rarr; runs orchestrator &rarr; orchestrator runs predictor &rarr; normalizes output to canonical schema</p>
+      <p class="mt-12"><strong>Writes:</strong> <code>prediction/result.json</code>, <code>context_bundle.json</code> &nbsp;|&nbsp; <strong>Pushes:</strong> <code>trades:pending</code> Redis</p>
+    </div>
+
+    <div class="arrow-d">&#9660; <span style="font-size:10px">prediction/result.json + Redis notification</span></div>
+
+    <!-- Trade daemon -->
+    <div class="box daemon clickable" data-detail="comp-daemon" style="padding:20px">
+      <h4>Trade Daemon <span class="tag green">NEW &mdash; the core</span></h4>
+      <div class="grid-2 mt-12" style="gap:12px">
+        <div>
+          <p><strong class="hl-green">Lifecycle:</strong></p>
+          <p>Detect &rarr; Gate &rarr; Size &rarr; Execute &rarr; Monitor &rarr; Reassess &rarr; Exit &rarr; Record</p>
+        </div>
+        <div>
+          <p><strong class="hl-green">Writes:</strong></p>
+          <p><code>trade/plan.json</code>, <code>result.json</code>, <code>skipped.json</code>, <code>reassessments/*.json</code></p>
+        </div>
+      </div>
+      <div class="grid-3 mt-12" style="gap:8px">
+        <div class="box infra" style="padding:8px;text-align:center"><p><strong>IBKR</strong><br><span style="font-size:10px">orders, quotes, positions</span></p></div>
+        <div class="box infra" style="padding:8px;text-align:center"><p><strong>Neo4j</strong><br><span style="font-size:10px">sector, transcripts, news</span></p></div>
+        <div class="box infra" style="padding:8px;text-align:center"><p><strong>Redis</strong><br><span style="font-size:10px">lock, events, triggers</span></p></div>
+      </div>
+    </div>
+
+    <div class="arrow-d">&#9660; <span style="font-size:10px">trade/result.json (after close)</span></div>
+
+    <!-- Attribution -->
+    <div class="box clickable" data-detail="comp-attr" style="text-align:center;border-left:3px solid var(--pink)">
+      <h4 style="justify-content:center">Attribution <span class="tag dim">existing, needs redo</span></h4>
+      <p>Post-trade analysis: was prediction correct? Enriched with P&L, slippage, exit reason, reassessment accuracy.</p>
+    </div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--blue)"></div>Learning Loop (feeds back into next trade)</div>
+  <div class="grid-2">
+    <div class="box clickable llm" data-detail="learner-files">
+      <h4>Learner/Compactor writes</h4>
+      <p><code>learnings/global.json</code> &mdash; cross-ticker patterns + auto_tune config + candidates</p>
+      <p><code>learnings/ticker/{TICKER}.json</code> &mdash; per-ticker distilled lessons</p>
+      <p class="mt-12">Learner owns ALL intelligence. Rewrites each cycle. Not append-only.</p>
+    </div>
+    <div class="box clickable daemon" data-detail="learner-consumers">
+      <h4>Consumers read only</h4>
+      <p><strong>Orchestrator</strong> (reader/forwarder): loads learner files, passes to prediction</p>
+      <p><strong>Trade daemon</strong> reassessment uses the same files downstream</p>
+      <p><strong>Daemon</strong> (reader/applier): reads <code>auto_tune</code>, applies within bounds if &ge;30 trades</p>
+      <p class="mt-12">No consumer writes or compiles learning content.</p>
+    </div>
+  </div>
+  <div class="grid-3 mt-12">
+    <div class="box" style="padding:10px;text-align:center;border-left:3px solid var(--green)"><h4 style="justify-content:center;font-size:11px">Auto (5 params)</h4><p style="font-size:10px">ATR_MULT, MIN/MAX_STOP, MAX_HOLD, GAP_FADE</p></div>
+    <div class="box" style="padding:10px;text-align:center;border-left:3px solid var(--orange)"><h4 style="justify-content:center;font-size:11px">Candidate (8 params)</h4><p style="font-size:10px">Gate thresholds, benchmark/macro/reversal, spread</p></div>
+    <div class="box" style="padding:10px;text-align:center;border-left:3px solid var(--red)"><h4 style="justify-content:center;font-size:11px">Never (5 params)</h4><p style="font-size:10px">RISK_PCT, KILL_SWITCH, MAX_POS, MODE flags</p></div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--dim)"></div>Communication &amp; Truth Hierarchy</div>
+  <div class="grid-2">
+    <div>
+      <table class="tbl">
+        <tr><th>From &rarr; To</th><th>Mechanism</th></tr>
+        <tr><td>Trigger &rarr; Daemon</td><td>Redis <code>trades:pending</code> + filesystem scan</td></tr>
+        <tr><td>Daemon &rarr; IBKR</td><td>Direct API (<code>ib_async</code>), NOT via MCP</td></tr>
+        <tr><td>Ingestion &rarr; Daemon</td><td>Redis event + Neo4j backstop scan</td></tr>
+        <tr><td>Daemon &rarr; Claude API</td><td>Session resume (reassessment)</td></tr>
+        <tr><td>Daemon &rarr; Neo4j</td><td>Bolt driver (sector, transcripts, news)</td></tr>
+        <tr><td>Daemon &rarr; Attribution</td><td>Filesystem only (read trade files)</td></tr>
+      </table>
+    </div>
+    <div>
+      <table class="tbl">
+        <tr><th>Data</th><th>Authoritative Source</th></tr>
+        <tr><td>Prediction/trade state</td><td><span class="tag purple">Filesystem</span></td></tr>
+        <tr><td>Transcript/news existence</td><td><span class="tag dim">Neo4j</span></td></tr>
+        <tr><td>Positions, orders, fills</td><td><span class="tag orange">IBKR</span></td></tr>
+        <tr><td>Fast wake-up signals</td><td><span class="tag dim">Redis (never truth)</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--orange)"></div>Infrastructure Failure Modes</div>
+  <div class="grid-2" style="grid-template-columns:1fr 1fr 1fr;gap:10px">
+    <div class="box safety" style="padding:12px">
+      <h4>IBKR down <span class="tag red">hard dep</span></h4>
+      <p>Cannot trade. Wait/retry. Existing positions protected by native stops.</p>
+    </div>
+    <div class="box" style="padding:12px;border-left:3px solid var(--orange)">
+      <h4>Neo4j down <span class="tag orange">degraded</span></h4>
+      <p>Cannot map sector. Miss reassessment triggers. SPY-only fallback. Fail-safe holds.</p>
+    </div>
+    <div class="box" style="padding:12px;border-left:3px solid var(--orange)">
+      <h4>Redis down <span class="tag orange">degraded</span></h4>
+      <p>Active monitoring unaffected. New trades stop. Events degrade to Neo4j backstop.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ LEVEL 4: TRADE LIFECYCLE ═══════════════ -->
+<section class="level" id="level-4">
+  <div class="level-title">Trade Lifecycle</div>
+  <div class="level-subtitle">The state machine. Every state transition is owned exclusively by trade_daemon.py. On restart, status tells daemon exactly where to resume.</div>
+
+  <div class="sm">
+    <div class="state detected">DETECTED</div>
+    <div class="arrow-d">&#9660; <span class="arrow-label">run gate</span></div>
+    <div class="state gate">GATE_CHECKING</div>
+
+    <div class="sm-branch">
+      <div class="sm-path">
+        <div class="arrow-label hl-red">fixed check fails<br>or dynamic fail</div>
+        <div class="arrow-d">&#9660;</div>
+        <div class="state skipped">SKIPPED</div>
+        <div class="arrow-label" style="font-size:9px;max-width:120px">Terminal. Writes skipped.json.<br>Never retried.</div>
+      </div>
+
+      <div class="sm-path">
+        <div class="arrow-label hl-purple">spread-only failure<br>(other checks pass)</div>
+        <div class="arrow-d">&#9660;</div>
+        <div class="state deferred">DEFERRED</div>
+        <div class="arrow-label" style="font-size:9px;max-width:140px">Retry ALL checks until<br>next open + window.<br>If window expires &rarr; SKIPPED</div>
+      </div>
+
+      <div class="sm-path">
+        <div class="arrow-label hl-green">all checks pass</div>
+        <div class="arrow-d">&#9660;</div>
+        <div class="state entering">ENTERING</div>
+        <div class="arrow-label" style="font-size:9px;max-width:140px">Placing bracket order.<br>plan.json created.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div class="arrow-d">&#9660; <span class="arrow-label">fill + stop confirmed</span></div>
+      <div class="state open" style="padding:14px 28px">OPEN</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;margin-top:8px;max-width:500px;text-align:center">
+        <p style="font-size:11px;color:var(--dim)"><strong class="hl-green">Monitoring loop:</strong> stop fired? | benchmark stress? | macro stress? | gap fade? | session reversal? | max hold?</p>
+        <p style="font-size:11px;color:var(--dim);margin-top:4px"><strong class="hl-blue">Event checks:</strong> transcript ingested? | whitelisted Benzinga? &rarr; reassessment</p>
+        <p style="font-size:11px;color:var(--dim);margin-top:4px"><strong class="hl-orange">Reconciliation:</strong> IBKR positions match plan.json?</p>
+      </div>
+    </div>
+
+    <div class="arrow-d" style="margin-top:8px">&#9660; <span class="arrow-label">any exit condition</span></div>
+    <div class="state exiting">EXITING</div>
+    <div class="arrow-d">&#9660; <span class="arrow-label">fill confirmed</span></div>
+    <div class="state closed">CLOSED</div>
+    <div class="arrow-label" style="font-size:10px">&#9660; attribution picks up via trade_ready cycle</div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--orange)"></div>Restart Recovery Per State</div>
+  <div class="grid-2" style="grid-template-columns:140px 1fr;gap:8px">
+    <div style="font-weight:600;font-size:12px;color:var(--blue);padding-top:4px">DETECTED</div><div style="font-size:12px;color:var(--dim)">No persisted state &mdash; daemon re-discovers via filesystem scan</div>
+    <div style="font-weight:600;font-size:12px;color:var(--purple);padding-top:4px">DEFERRED</div><div style="font-size:12px;color:var(--dim)">Check retry_deadline. Expired &rarr; skip. Not expired &rarr; resume retry loop.</div>
+    <div style="font-weight:600;font-size:12px;color:var(--green);padding-top:4px">ENTERING</div><div style="font-size:12px;color:var(--dim)">Query IBKR: filled + stop active &rarr; open. Filled + no stop &rarr; FLATTEN. Not filled &rarr; cancel, skip.</div>
+    <div style="font-weight:600;font-size:12px;color:var(--green);padding-top:4px">OPEN</div><div style="font-size:12px;color:var(--dim)">Position exists + stop active &rarr; resume. Position exists + no stop &rarr; repair or flatten. Position gone &rarr; record exit.</div>
+    <div style="font-weight:600;font-size:12px;color:var(--orange);padding-top:4px">EXITING</div><div style="font-size:12px;color:var(--dim)">Exit filled &rarr; write result. Not filled &rarr; re-place exit. Position gone &rarr; record.</div>
+    <div style="font-weight:600;font-size:12px;color:var(--dim);padding-top:4px">CLOSED / SKIPPED</div><div style="font-size:12px;color:var(--dim)">Nothing to do.</div>
+  </div>
+</section>
+
+<!-- ═══════════════ LEVEL 5: ENTRY DECISION ═══════════════ -->
+<section class="level" id="level-5">
+  <div class="level-title">Entry Decision</div>
+  <div class="level-subtitle">Gate checks &rarr; sizing math &rarr; order placement. One conservative edge input used everywhere: <code>edge = low_end(expected_move_range)</code>.</div>
+
+  <div class="section-hdr"><div class="dot" style="background:var(--orange)"></div>Gate &mdash; Two Classes of Checks</div>
+  <div class="grid-2">
+    <div class="box clickable" data-detail="gate-fixed">
+      <h4>Fixed Checks <span class="tag orange">from prediction, won't change</span></h4>
+      <ul class="mt-12">
+        <li><code>direction == long</code> &nbsp;(short logged, not traded)</li>
+        <li><code>confidence &ge; 75</code></li>
+        <li><code>edge &ge; 3%</code> &nbsp;(low end of expected_move_range)</li>
+      </ul>
+      <p class="mt-12"><strong class="hl-red">Any fail &rarr; skip permanently</strong></p>
+    </div>
+    <div class="box clickable" data-detail="gate-dynamic">
+      <h4>Dynamic Checks <span class="tag green">from market, may change</span></h4>
+      <ul class="mt-12">
+        <li><strong>Spread:</strong> three-tier policy (trade now / defer / skip)</li>
+        <li><strong>Chase:</strong> stock moved &gt; 70% of predicted range? &rarr; skip</li>
+        <li><strong>Capital:</strong> enough free cash? &rarr; skip</li>
+        <li><strong>Positions:</strong> under MAX_POSITIONS (2)? &rarr; skip</li>
+      </ul>
+      <p class="mt-12"><strong class="hl-purple">Only spread triggers DEFER.</strong> All other dynamic = permanent skip.</p>
+    </div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--purple)"></div>Three-Tier Spread Policy</div>
+  <div class="formula mb-16">soft_max = min(1.0%, 25% &times; edge)
+hard_max = min(2.0%, 40% &times; edge)
+
+Example: prediction [5%, 8%] &rarr; edge = 5%
+  soft_max = min(1.0%, 1.25%) = 1.0%
+  hard_max = min(2.0%, 2.0%)  = 2.0%</div>
+  <table class="tbl">
+    <tr><th>Tier</th><th>Condition</th><th>Action</th></tr>
+    <tr><td><span class="tag green">Trade Now</span></td><td>spread &le; soft_max</td><td>Enter immediately with marketable limit</td></tr>
+    <tr><td><span class="tag purple">Defer</span></td><td>soft_max &lt; spread &le; hard_max</td><td>Retry until next open + 10 min. Re-run ALL checks each retry.</td></tr>
+    <tr><td><span class="tag red">Skip</span></td><td>spread &gt; hard_max</td><td>Skip permanently. Friction exceeds opportunity.</td></tr>
+  </table>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--green)"></div>Sizing &mdash; Dollar-Risk Formula</div>
+  <div class="formula mb-16">0. dollar_risk = account_equity &times; RISK_PER_TRADE_PCT / 100
+1. entry_price = current ask (+ buffer in extended hours)
+2. stop_distance = clamp(2.0 &times; ATR_14, 3% &times; price, 15% &times; price)
+3. per_share_risk = stop_distance + $0.30 execution buffer
+4. shares = floor(dollar_risk / per_share_risk)
+5. stop_price = entry_price - stop_distance</div>
+  <div class="callout">
+    <strong>Example:</strong> $50K account, 2% risk &rarr; dollar_risk=$1,000. AAPL ask $185.20, ATR=$4.50 &rarr; stop=$9.00 &rarr; per_share_risk=$9.30 &rarr; shares=<strong>107</strong> &rarr; max planned loss=$995.
+    <br><strong>Small account:</strong> $2.5K account, 2% risk &rarr; dollar_risk=$50 &rarr; shares=<strong>5</strong> &rarr; max planned loss=$46.50.
+    <br><span style="color:var(--orange)">Note: actual loss may exceed planned if stock gaps past stop (earnings/extended-hours risk).</span>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--orange)"></div>Order Placement</div>
+  <div class="grid-2">
+    <div class="box broker clickable" data-detail="bracket">
+      <h4>Preferred: 2-Leg Bracket</h4>
+      <p>Parent: BUY shares @ marketable limit</p>
+      <p>Child: SELL shares @ STOP stop_price</p>
+      <p class="mt-12">Placed atomically. If entry fills, stop is automatically active. No take-profit leg &mdash; "let winners run."</p>
+    </div>
+    <div class="box safety clickable" data-detail="failclosed">
+      <h4>Fallback: Fail-Closed</h4>
+      <p>1. Place entry &rarr; wait for fill</p>
+      <p>2. Immediately place stop for filled qty</p>
+      <p>3. If stop NOT confirmed &rarr; <strong class="hl-red">FLATTEN immediately</strong></p>
+      <p class="mt-12">Partial fill: stop matches FILLED shares. Cancel unfilled remainder.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ LEVEL 6: ACTIVE TRADE ═══════════════ -->
+<section class="level" id="level-6">
+  <div class="level-title">Active Trade</div>
+  <div class="level-subtitle">Once OPEN: 7 price checks (continuous) + 2 event checks (text-triggered). One monitoring template for all trades.</div>
+
+  <div class="section-hdr"><div class="dot" style="background:var(--green)"></div>Price Checks &mdash; Every Monitoring Cycle</div>
+  <table class="tbl">
+    <tr><th>Check</th><th>Threshold</th><th>Type</th><th>Action</th></tr>
+    <tr><td><strong>Stop fired</strong></td><td>IBKR native stop</td><td>Fixed</td><td>Record exit</td></tr>
+    <tr><td><strong>Kill-switch</strong></td><td>Account equity &lt; starting &times; (1 - 15%)</td><td>Fixed</td><td>Close ALL positions</td></tr>
+    <tr><td><strong>Benchmark stress</strong></td><td>Sector ETF down &gt; <code class="mono">computed threshold</code></td><td>Computed</td><td>EXIT this trade</td></tr>
+    <tr><td><strong>Macro stress</strong></td><td>SPY down &gt; <code class="mono">computed threshold</code></td><td>Computed</td><td>EXIT this trade</td></tr>
+    <tr><td><strong>Gap fade</strong></td><td>Stock gave back &gt; 50% of initial move</td><td>Fixed</td><td>EXIT (delayed start)</td></tr>
+    <tr><td><strong>Session reversal</strong></td><td>Stock against us &gt; <code class="mono">computed threshold</code></td><td>Computed</td><td>EXIT (at open+5 only)</td></tr>
+    <tr><td><strong>Max hold</strong></td><td>Current time &ge; Nth market close</td><td>Fixed</td><td>EXIT at close</td></tr>
+  </table>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--purple)"></div>Computed Thresholds (calculated once at entry, never recalculated)</div>
+  <div class="formula">benchmark_threshold = min(
+  clamp(2.0 &times; sector_atr_pct, 1.0%, 4.0%),
+  0.50 &times; edge
+)
+
+macro_threshold = min(
+  clamp(2.0 &times; spy_atr_pct, 1.0%, 4.0%),
+  0.50 &times; edge
+)
+
+reversal_threshold = max(
+  stock_atr_pct &times; 0.5,
+  initial_move_pct &times; 0.30
+)</div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--blue)"></div>Event Checks &mdash; Reassessment Engine</div>
+  <div class="grid-2">
+    <div class="box llm clickable" data-detail="reassess-trigger">
+      <h4>Triggers</h4>
+      <ul>
+        <li><strong>Transcript ingested</strong> &mdash; max 1 per trade, matched by prediction_id</li>
+        <li><strong>Whitelisted Benzinga</strong> &mdash; analyst upgrade/downgrade, guidance revision, SEC investigation, earnings revision. 2h cooldown, deduped by article ID.</li>
+      </ul>
+      <p class="mt-12">Detection: Redis event (fast) + Neo4j backstop scan (fallback)</p>
+    </div>
+    <div class="box llm clickable" data-detail="reassess-flow">
+      <h4>Flow</h4>
+      <ol style="padding-left:16px">
+        <li>Load evidence (compact) from Neo4j</li>
+        <li>Build message: new evidence + original thesis + trade state</li>
+        <li>Resume predictor session (SendMessage)</li>
+        <li>Parse: <code>thesis_status</code>, <code>confidence</code>, <code>delta_summary</code></li>
+      </ol>
+      <p class="mt-12"><strong>If session resume fails:</strong> no_change + no_escalation</p>
+    </div>
+  </div>
+  <div class="grid-3 mt-12">
+    <div class="box" style="text-align:center;border-left:3px solid var(--green)"><h4 style="justify-content:center">confirmed</h4><p>HOLD</p></div>
+    <div class="box" style="text-align:center;border-left:3px solid var(--dim)"><h4 style="justify-content:center">unchanged</h4><p>HOLD</p></div>
+    <div class="box" style="text-align:center;border-left:3px solid var(--red)"><h4 style="justify-content:center">invalidated</h4><p>EXIT</p></div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--orange)"></div>Market Session Handling</div>
+  <table class="tbl">
+    <tr><th>Filing Time</th><th>53% of filings</th><th>Monitoring</th><th>Max Hold Exit</th></tr>
+    <tr><td><strong>Post-market</strong> (after 4 PM)</td><td>Enter in after-hours</td><td>Benchmark/macro: continuous. Gap fade: next open+30m. Reversal: open+5m.</td><td>Next market close (~24h)</td></tr>
+    <tr><td><strong>Pre-market</strong> (before 9:30 AM)</td><td>Enter in pre-market</td><td>Benchmark/macro: continuous. Gap fade: open+30m. Reversal: open+5m.</td><td>Same-day close (~8.5h)</td></tr>
+    <tr><td><strong>During hours</strong> (9:30-4:00)</td><td>Enter immediately</td><td>Benchmark/macro: immediately. Gap fade: entry+30m. Reversal: N/A.</td><td>Same-day or next-day (cutoff: 2 PM)</td></tr>
+  </table>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--dim)"></div>Data Mode Determines Monitoring Style</div>
+  <div class="grid-2">
+    <div class="box infra"><h4>DATA_MODE=delayed <span class="tag dim">launch</span></h4><p>Poll IBKR every 30s. Check thresholds each cycle. 15-min delayed prices. Good for plumbing test.</p></div>
+    <div class="box broker"><h4>DATA_MODE=realtime <span class="tag orange">goal</span></h4><p>IBKR streaming quotes. Callback on each update. Sub-second threshold detection. Required for go-live.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════════ LEVEL 7: SAFETY NET ═══════════════ -->
+<section class="level" id="level-7">
+  <div class="level-title">Safety Net</div>
+  <div class="level-subtitle">Singleton lock, startup recovery, reconciliation, kill switch. Every failure path either resolves safely or escalates to manual intervention.</div>
+
+  <div class="section-hdr"><div class="dot" style="background:var(--red)"></div>Daemon Singleton (Redis Lock)</div>
+  <div class="box safety" style="max-width:700px">
+    <div class="formula">startup:   redis.set("trade_daemon:lock", pod_id, nx=True, ex=60)
+running:   every 30s &rarr; atomic compare-and-renew (Lua script)
+shutdown:  atomic compare-and-delete (Lua script)
+
+Redis down at startup &rarr; refuse to start (safe: no duplicate risk)
+Redis down during operation &rarr; monitoring continues, new trades stop</div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--green)"></div>Startup Recovery (5 Steps)</div>
+  <div style="max-width:700px">
+    <div class="check-item"><div class="check-icon pass">1</div><div class="check-text"><strong>Acquire Redis lock</strong> <span>&mdash; prevents duplicate daemons</span></div></div>
+    <div class="check-item"><div class="check-icon pass">2</div><div class="check-text"><strong>Scan ALL trade/plan.json files</strong> <span>&mdash; reconcile each by status (see Level 4)</span></div></div>
+    <div class="check-item"><div class="check-icon pass">3</div><div class="check-text"><strong>Crash safety: DEFERRED &rarr; SKIPPED</strong> <span>&mdash; if both plan.json (deferred) AND skipped.json exist, skipped wins</span></div></div>
+    <div class="check-item"><div class="check-icon pass">4</div><div class="check-text"><strong>Scan for untraded predictions</strong> <span>&mdash; result.json without plan.json or skipped.json &rarr; process normally</span></div></div>
+    <div class="check-item"><div class="check-icon pass">5</div><div class="check-text"><strong>Resume normal operation</strong> <span>&mdash; Redis BRPOP + monitoring for active trades</span></div></div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--orange)"></div>IBKR Reconciliation (every 5 minutes)</div>
+  <div style="max-width:700px">
+    <div class="check-item"><div class="check-icon pass">1</div><div class="check-text"><strong>Position check</strong> <span>&mdash; IBKR position exists? Size matches plan.json? Missing = stop fired.</span></div></div>
+    <div class="check-item"><div class="check-icon pass">2</div><div class="check-text"><strong>Stop order status</strong> <span>&mdash; Still active? Cancelled/expired &rarr; re-place immediately. Repair fails &rarr; FLATTEN.</span></div></div>
+    <div class="check-item"><div class="check-icon pass">3</div><div class="check-text"><strong>Orphan detection</strong> <span>&mdash; IBKR position with no matching plan.json &rarr; log CRITICAL. Do NOT auto-close.</span></div></div>
+    <div class="check-item"><div class="check-icon pass">4</div><div class="check-text"><strong>Timestamp update</strong> <span>&mdash; Update last_reconciled_at in plan.json</span></div></div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--red)"></div>Account Kill-Switch</div>
+  <div class="callout danger">
+    If <code>account_equity &lt; starting_equity &times; (1 - 15%)</code>: close ALL positions with market orders. Daemon enters HALTED mode &mdash; no new trades, only reconciliation. Requires manual restart.
+    <br><br><code>starting_equity</code> captured once at first startup, persisted to <code>earnings-analysis/trade_daemon_state.json</code>. Does NOT reset on restart.
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--dim)"></div>Order Failure Handling</div>
+  <table class="tbl">
+    <tr><th>Failure</th><th>Action</th></tr>
+    <tr><td>Entry rejected by IBKR</td><td>Log reason, write skipped.json</td></tr>
+    <tr><td>Entry times out (no fill)</td><td>Cancel order, write skipped.json. <strong>Terminal.</strong></td></tr>
+    <tr><td>Stop fails after entry fills</td><td class="hl-red"><strong>FLATTEN immediately</strong></td></tr>
+    <tr><td>Partial entry fill</td><td>Stop for FILLED shares. Cancel unfilled remainder.</td></tr>
+    <tr><td>Exit order rejected</td><td>Retry with market order. Still fails &rarr; CRITICAL alert.</td></tr>
+    <tr><td>IBKR gateway disconnected</td><td>Broker stops protect. Retry connection. No new trades.</td></tr>
+  </table>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--red)"></div>Requires Human Intervention</div>
+  <div class="grid-3">
+    <div class="box safety"><h4>Exit fails twice</h4><p>Order rejected on retry &rarr; CRITICAL alert &rarr; manual close</p></div>
+    <div class="box safety"><h4>Orphan position</h4><p>IBKR position with no plan.json &rarr; manual investigation</p></div>
+    <div class="box safety"><h4>Kill-switch fired</h4><p>Daemon halted &rarr; manual restart required</p></div>
+  </div>
+</section>
+
+<!-- ═══════════════ LEVEL 8: ROADMAP ═══════════════ -->
+<section class="level" id="level-8">
+  <div class="level-title">Roadmap &amp; Progress</div>
+  <div class="level-subtitle">5 implementation phases. Phase 1+2 = minimum viable paper trading. Currently: IBKR client done, 33 steps remaining.</div>
+
+  <div class="section-hdr"><div class="dot" style="background:var(--green)"></div>Upstream (Orchestrator Boundary)</div>
+  <div style="max-width:700px">
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>U1-U2: Orchestrator normalizes output</strong> <span>&mdash; rename 3 fields, inject 8 metadata fields. Predictor unchanged.</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>U3: trades:pending Redis push</strong> <span>&mdash; orchestrator pushes after writing result.json</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>U4: Verify existing predictions</strong> <span>&mdash; validate against canonical schema</span></div></div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--cyan)"></div>Phase 1: Entry-Capable Skeleton</div>
+  <div class="callout warn mb-8">Phase 1 can ENTER trades but cannot monitor or exit. Must complete Phase 2 before any paper trading.</div>
+  <div style="max-width:700px">
+    <div class="check-item"><div class="check-icon done">&#10003;</div><div class="check-text"><strong>IBKR client</strong> <span>&mdash; scripts/trade/ibkr_client.py. Dual connection, brackets, streaming. 8/8 smoke tests.</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Config module</strong> <span>&mdash; load all Section G params</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Redis singleton lock</strong></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Prediction detection</strong> <span>&mdash; Redis BRPOP + filesystem scan fallback</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Gate logic</strong> <span>&mdash; fixed + dynamic + three-tier spread</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Sizing logic</strong> <span>&mdash; ATR from Neo4j + dollar-risk formula</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Order execution</strong> <span>&mdash; bracket via ibkr_client + state machine + plan.json</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>K8s deployment</strong> <span>&mdash; paper mode manifest</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Integration test</strong></div></div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--green)"></div>Phase 2: Minimum Viable Paper Trading</div>
+  <div style="max-width:700px">
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Monitoring loop</strong> <span>&mdash; polling price checks (delayed mode)</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Computed thresholds</strong> <span>&mdash; benchmark, macro, reversal at entry</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Monitoring schedule</strong> <span>&mdash; filing session &rarr; check activation times</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>trigger_log recording</strong></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Exit logic</strong> <span>&mdash; all 8 exit paths + result.json writing</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Startup recovery</strong> <span>&mdash; 5B full flow</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>IBKR reconciliation</strong></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Order-status callbacks</strong> <span>&mdash; stop cancellation detection</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Account kill-switch</strong></div></div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--blue)"></div>Phase 3: Reassessment</div>
+  <div style="max-width:700px">
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Transcript detection</strong> <span>&mdash; Redis + Neo4j backstop</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Benzinga news detection</strong> <span>&mdash; Redis + Neo4j backstop</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Reassessment message building</strong></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Predictor session resume</strong> <span>&mdash; Claude SDK SendMessage</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Result handling + reassessments/*.json</strong></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Upstream pipeline change</strong> <span>&mdash; push Redis events on ingest</span></div></div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--orange)"></div>Phase 4: Realtime Mode</div>
+  <div style="max-width:700px">
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>IBKR streaming subscriptions</strong> <span>&mdash; replace polling with callbacks</span></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Threshold-based callbacks</strong></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>Order-status callbacks</strong></div></div>
+    <div class="check-item"><div class="check-icon pending">-</div><div class="check-text"><strong>DATA_MODE=realtime testing</strong></div></div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--red)"></div>Phase 5: Go-Live</div>
+  <div class="grid-2" style="max-width:700px">
+    <div class="box" style="padding:10px"><p><strong>Stage 1:</strong> Paper + Delayed (50+ trades)</p></div>
+    <div class="box" style="padding:10px"><p><strong>Stage 2:</strong> Paper + Realtime (20+ trades)</p></div>
+    <div class="box" style="padding:10px"><p><strong>Stage 3:</strong> Live + Realtime (10 at reduced risk, then full)</p></div>
+    <div class="box safety" style="padding:10px"><p><strong>Prerequisites:</strong> positive expectancy, zero safety failures, 2-week config freeze</p></div>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--dim)"></div>Open Gaps</div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px">
+    <span class="tag dim">Gap 2: Neo4j query patterns</span>
+    <span class="tag dim">Gap 3: Claude SDK reassessment</span>
+    <span class="tag dim">Gap 4: DevOps (Dockerfile)</span>
+    <span class="tag dim">Gap 6: Testing strategy</span>
+    <span class="tag orange">Market-hours IBKR validation</span>
+    <span class="tag orange">Earnings trigger daemon (not coded)</span>
+    <span class="tag purple">Attribution skill rebuild</span>
+    <span class="tag blue">Learner/compactor (writes learning files)</span>
+  </div>
+
+  <div class="section-hdr mt-20"><div class="dot" style="background:var(--blue)"></div>Learning Loop (interface ready, learner built later)</div>
+  <div class="grid-2" style="max-width:700px">
+    <div class="box llm" style="padding:10px"><p><strong>Interface defined:</strong> global.json + ticker/*.json schemas, 3-tier bounds, consumer contracts</p></div>
+    <div class="box" style="padding:10px;border-left:3px solid var(--dim)"><p><strong>Built later:</strong> learner/compactor that reads trade results and writes learning files. Historical PIT runs bootstrap it.</p></div>
+  </div>
+</section>
+
+</main><!-- /canvas -->
+</div><!-- /app -->
+
+<!-- Prompt bar -->
+<div id="prompt-bar">
+  <div id="prompt-text">Level 1: The trade execution system automates the path from earnings prediction to P&L: detect prediction &rarr; gate (should we trade?) &rarr; size (dollar-risk) &rarr; execute (bracket order) &rarr; monitor (7 threshold checks) &rarr; reassess (on transcript/news) &rarr; exit &rarr; record result.</div>
+  <button id="copy-btn" onclick="copyPrompt()">Copy</button>
+</div>
+
+<script>
+const prompts = {
+  1: "Level 1 — The Problem: Our earnings-prediction pipeline outputs direction, confidence, and magnitude from 8-K filings, but no trades are placed. The trade execution system automates: detect prediction → gate (confidence≥75, edge≥3%, spread policy, chase protection) → size (ATR-clamped stop, 2% equity risk per trade) → execute (2-leg bracket: entry + stop) → monitor (7 price checks + 2 text-event checks) → reassess (on transcript/Benzinga) → exit → record P&L. Priorities: maximize profit (enter fast), cut losses (ATR stops), let winners run (no profit cap), recalibrate on text evidence. Explicitly out: no continuous LLM monitoring, no portfolio optimizer, long-only at launch, no trailing stops.",
+  2: "Level 2 — Three-Layer Ownership: (1) LLM writes opinions (direction, confidence, magnitude, reassessment judgments) — never touches trade state or orders. (2) Python daemon writes state (plan.json, result.json) — decides gate/size/execute/monitor/exit. (3) Broker executes risk (IBKR native stops, fills) — protects even when daemon is down. Fail-safe chain: LLM fails → no_change + no_escalation. Daemon fails → broker stop still protects. Each layer failing makes system MORE conservative, never more aggressive. Core invariant: never a live position without a broker-native stop.",
+  3: "Level 3 — Components: 4 active (earnings trigger daemon → trade daemon → IBKR → attribution) + learner/compactor + 3 infrastructure (Redis, Neo4j, IBKR). Learning loop: learner writes global.json (patterns + auto_tune + candidates) + ticker/{TICKER}.json (per-ticker lessons). Orchestrator is reader/forwarder only — loads learner files, passes to prediction/reassessment. Daemon is reader/applier only — reads auto_tune, applies within bounds (≥30 trades). Three tiers: auto (5 stop/horizon params), candidate (8 gate/monitoring params), never (risk/safety). No consumer writes or compiles learning content. Truth hierarchy: filesystem for state, Neo4j for content, IBKR for execution, Redis for triggers only.",
+  4: "Level 4 — Trade Lifecycle State Machine: DETECTED (found prediction) → GATE_CHECKING (fixed + dynamic checks) → [DEFERRED if spread-only fail, retry until window expires] → [SKIPPED if any permanent fail] → ENTERING (placing bracket order, plan.json created) → OPEN (monitoring active: stop/benchmark/macro/gap-fade/reversal/max-hold + transcript/news reassessment) → EXITING (closing position) → CLOSED (result.json written). Restart safety: each status has deterministic recovery — ENTERING reconciles with IBKR fills, OPEN verifies position + stop, EXITING re-places exit order. Pre-entry states re-discovered via filesystem scan.",
+  5: "Level 5 — Entry Decision: Gate has fixed checks (direction=long, confidence≥75, edge≥3%) and dynamic checks (three-tier spread, chase <70% consumed, capital, positions <2). Spread policy: soft_max = min(1%, 25%×edge), hard_max = min(2%, 40%×edge). Below soft → trade now. Between → defer until next open+10min. Above → skip. Only spread triggers defer; all other dynamic failures are permanent skip. Sizing: dollar_risk = equity × 2% (same for paper and live). stop_distance = clamp(2×ATR_14, 3%×price, 15%×price). per_share_risk = stop_distance + $0.30 buffer. shares = floor(dollar_risk / per_share_risk). Actual loss may exceed planned if stock gaps past stop. Order: 2-leg bracket (entry marketable limit + stop). If bracket unavailable → fail-closed choreography (flatten if stop not confirmed).",
+  6: "Level 6 — Active Trade: 7 price checks every cycle: stop fired, account kill-switch (equity <85% of start), benchmark stress (sector ETF down > computed threshold), macro stress (SPY down > computed threshold), gap fade (stock gave back >50% of initial move), session reversal (stock against us > computed threshold at open+5), max hold (Nth market close). Computed thresholds: benchmark = min(clamp(2×sector_atr_pct, 1%, 4%), 50%×edge). Reassessment: transcript arrival (max 1/trade) or whitelisted Benzinga news (2h cooldown). Resume predictor session → confirmed=HOLD, unchanged=HOLD, invalidated=EXIT. LLM failure → no_change + no_escalation.",
+  7: "Level 7 — Safety Net: Singleton via Redis lock (atomic Lua scripts). Startup: acquire lock → scan plan.json files → reconcile per status → scan untraded predictions → resume. Reconciliation every 5min: position exists? stop active? orphan detection (CRITICAL log, don't auto-close). Kill-switch: equity <85% start → market-order close ALL → HALTED mode → manual restart. Order failures: entry rejected → skip. Entry timeout → cancel + skip. Stop fails after fill → FLATTEN. Exit fails → retry market order → CRITICAL if still fails. Only 3 scenarios need human: exit fails twice, orphan position, kill-switch fired.",
+  8: "Level 8 — Roadmap: Upstream (U1-U4): orchestrator normalizes predictor output to canonical schema + Redis push. Phase 1 (entry skeleton): config, Redis lock, detection, gate, sizing, execution, K8s deploy — IBKR client DONE. Phase 2 (paper trading): monitoring loop, computed thresholds, exit logic, startup recovery, reconciliation, kill-switch. Phase 3 (reassessment): transcript/news detection, session resume, result handling. Phase 4 (realtime): streaming subscriptions, callbacks. Phase 5 (go-live): paper+delayed (50 trades) → paper+realtime (20 trades) → live+realtime (10 at reduced risk → full). Learning loop: interface defined (global.json + ticker/*.json, 3-tier bounds, consumer contracts). Learner/compactor built separately — historical PIT runs bootstrap it. Open gaps: Neo4j queries, Claude SDK reassessment, DevOps, testing strategy, learner/compactor."
+};
+
+const details = {
+  "8k": "8-K Filing: SEC form filed when a company reports earnings. Contains revenue, EPS, and forward guidance. This triggers the entire pipeline. 53% post-market, 45% pre-market, 2% during hours.",
+  "prediction": "Prediction: Output of the earnings-prediction skill. Fields: prediction_id, direction, confidence (0-100), expected_move_range ([5,8] = +5% to +8%), key_drivers, rationale_summary. The orchestrator normalizes predictor output and injects metadata (prediction_id, ticker, quarter_label, filed_8k, model_version, prompt_version, predicted_at, predictor_session_id).",
+  "daemon": "Trade Daemon (trade_daemon.py): The ONE new Python script. Runs on K8s. Handles entire lifecycle: detect → gate → size → execute → monitor → reassess → exit → record. Single owner of all trade state. Reassessment Engine is internal (not separate service).",
+  "ibkr": "IBKR: Two accounts — live (real money) and paper (simulated). Daemon connects via ib_async with separate clientIds (20/21 for daemon vs 10/1 for MCP). Paper gateway: 10.244.0.72:4004. Live gateway: 10.244.0.63:4003.",
+  "result": "Result: trade/result.json written once on close. Contains P&L, slippage, exit reason, monitors triggered, reassessment outcomes. Attribution picks this up later to feed the learning loop (U1 feedback). 100% capture rate required.",
+  "b1": "B1 Maximize Profit: Enter fast — backtest: 72% win rate at 5-min entry, drops to 54% at 60-min. 88% of the earnings move is done by next market open. Recalibrate when transcript or whitelisted Benzinga news arrives. Support both long and short in code; long-only execution at launch.",
+  "b2": "B2 Cut Losses Fast: stop_distance = clamp(k × ATR_14, min_stop_pct × entry, max_stop_pct × entry). Dollar-risk sizing: dollar_risk = equity × 2%, shares = floor(dollar_risk / per_share_risk). Wider stop = fewer shares = same % at risk. Aggregate planned risk: 2% × 2 positions = 4%. Kill-switch at 15% (11% headroom for gap risk). Increase to 3% only after 20+ trades with measured slippage.",
+  "b3": "B3 Let Winners Run: Backtest: average winner +12.1%. A 5% profit cap would destroy 80% of returns. No take-profit leg on bracket orders. Default monitoring action = HOLD. Wide thresholds. Never close a thesis-valid trade to fund a new one — skip the new trade if at max positions.",
+  "b4": "B4 Text Recalibration: Two triggers only — (1) earnings call transcript (1-2h after filing) and (2) whitelisted Benzinga categories (analyst upgrade/downgrade, guidance revision, SEC investigation, earnings revision). Resume original predictor session. Max 2-3 reassessments per trade. This is NOT continuous monitoring — it's focused, text-triggered delta judgment.",
+  "b5": "B5 Minimal: One LLM call at entry (already exists). Optional reassessment calls (2-3 max). One Python daemon. Files on disk as truth. Broker handles real-time stop enforcement. Three-layer ownership: LLM opinions → Python state → Broker risk.",
+  "b6": "B6 Paper First: Two independent flags — ACCOUNT_MODE (paper/live) and DATA_MODE (delayed/realtime). Launch: paper+delayed. Goal: live+realtime. Paper+realtime useful for testing. Live+delayed must be blocked (unsafe). Architecture identical in all modes.",
+  "layer-llm": "LLM Layer: Outputs structured judgments only — direction, confidence, expected_move_range, key_drivers, rationale_summary (prediction) and thesis_status, confidence, delta_summary (reassessment). Never touches plan.json, never places orders, never reads prices. Predictor session can be resumed for reassessment but this is PREFERRED not required.",
+  "layer-python": "Python Layer (trade_daemon.py): Sole owner of trade state. Writes plan.json (created at DEFERRED or ENTERING). All numeric policy lives here — thresholds, sizing, timing. Acts on LLM output deterministically: confirmed→HOLD, invalidated→EXIT. Fetches market data, runs gate checks, calculates position size, places orders, monitors thresholds.",
+  "layer-broker": "Broker Layer (IBKR): Enforces native stop-losses 24/7 regardless of daemon state. If daemon crashes mid-trade, stop fires at set price. Two accounts: paper (simulated, $1.1M CAD) and live ($128 USD). Gateway runs on K8s cluster. Daemon connects with separate clientIds to avoid collision with MCP services.",
+  "fail-llm": "LLM Failure: API error, timeout, rate limit, session expired. Action: no_change (hold position) + no_escalation (don't relax rules, extend hold, or take optional actions). Hard stops and time exits remain active. System is correct even without reassessment — it's an enhancement, not a dependency.",
+  "fail-daemon": "Daemon Failure: Pod crash, OOM, restart. On restart: scan plan.json files, reconcile each by status with IBKR. ENTERING → check if filled + stop active. OPEN → verify position + stop, repair if needed. Positions always protected by broker-native stops during downtime.",
+  "fail-all": "Total Failure: LLM down, daemon crashed, Redis gone. The IBKR broker-native stop fires at the pre-set price regardless. This is the absolute floor of the safety stack. Worst case = the defined stop loss. No runaway position ever exists.",
+  "comp-trigger": "Earnings Trigger Daemon: Existing planned component (EarningsTrigger.md v13). Watches trade_ready:entries Redis. Detects fresh 8-K (hourly_stock IS NULL). Runs orchestrator which runs predictor and normalizes output. Writes canonical prediction/result.json with renamed fields + injected metadata. Pushes to trades:pending Redis. NOT yet coded — plan only.",
+  "comp-daemon": "Trade Daemon: THE central component. 10 responsibilities: detect, fetch market data, gate, size, execute, monitor, reassess, exit, record, reconcile. Reads: prediction/result.json, Neo4j, Redis events, IBKR API. Writes: trade/plan.json, result.json, skipped.json, reassessments/*.json. Does NOT: run predictions, modify prediction files, invoke attribution inline.",
+  "comp-attr": "Attribution Skill: Existing but needs redo for trade data. Post-trade analysis: was prediction correct? Enriched with P&L, exit reason, slippage, reassessment accuracy, monitor effectiveness. Runs on next trade_ready/historical bootstrap cycle — NOT invoked inline by trade daemon (avoids competing for resources with live predictions).",
+  "gate-fixed": "Fixed Gate Checks: From prediction, won't change for this signal. direction == long (short logged, not traded at launch). confidence ≥ CONFIDENCE_THRESHOLD (75). edge ≥ MAGNITUDE_THRESHOLD (3%), where edge = low_end(expected_move_range). Any fail → skip permanently — no retries for fundamentally weak signals.",
+  "gate-dynamic": "Dynamic Gate Checks: Market-dependent. Spread: three-tier policy — trade now / defer / skip based on edge ratio. Only spread triggers DEFER (temporary illiquidity may resolve at open). Chase: stock moved >70% of predicted range → skip (unfavorable risk/reward). Capital: not enough free cash → skip. Positions: at MAX_POSITIONS (2) → skip. These are structural constraints, not temporary — permanent skip.",
+  "bracket": "2-Leg Bracket Order: Parent BUY @ marketable limit (ask + buffer, tick-rounded) + Child SELL @ STOP stop_price. No take-profit leg — 'let winners run.' Placed atomically via IBKR. Entry always uses marketable limit (caps worst-case fill), never market orders for normal entries. outsideRth=True for extended hours.",
+  "failclosed": "Fail-Closed Fallback: If bracket unavailable: (1) place entry → wait fill, (2) immediately place stop for filled qty, (3) if stop NOT confirmed → FLATTEN immediately. Partial fill: stop matches FILLED shares only. Cancel unfilled remainder. Proceed with partial quantity. There must NEVER be an unprotected live position.",
+  "reassess-trigger": "Reassessment Triggers: (1) Transcript — matched by prediction_id (ticker + quarter + 8-K timestamp), not just ticker+date. Max 1 per trade. (2) Whitelisted Benzinga — categories: analyst_downgrade/upgrade, guidance_revision, sec_investigation, earnings_revision. Ticker match: held stock OR sector ETF OR SPY. 2h cooldown per trade. Deduped by article ID. Detection: Redis event (fast) + Neo4j backstop scan (fallback).",
+  "reassess-flow": "Reassessment Flow: (1) Load evidence compact from Neo4j — transcript Q&A or Benzinga article. (2) Build message: new evidence + original thesis (rationale_summary + key_drivers) + current trade state (entry_price, P&L%, time in trade). (3) Resume predictor session via SendMessage(session_id). (4) Parse: thesis_status (confirmed/unchanged/invalidated), confidence, delta_summary. If resume fails: no_change + no_escalation. No second LLM call at launch.",
+  "learner": "Learning Loop: After trades close, the learner/compactor analyzes results and writes two files: global.json (cross-ticker patterns, prediction/reassessment lessons, auto_tune config, candidates) + ticker/{TICKER}.json (per-ticker distilled lessons). Orchestrator loads these before each prediction — LLM sees past mistakes and patterns. Daemon reads auto_tune at startup — stop/horizon params self-adjust within bounds. Three tiers: Auto (ATR_MULT, MIN/MAX_STOP, MAX_HOLD, GAP_FADE), Candidate (gate/monitoring thresholds — logged not applied), Never (risk%, kill-switch, max positions). Min 30 trades for config auto-tune. Historical PIT runs count for bootstrap. Learner owns all intelligence; orchestrator and daemon are readers only.",
+  "learner-files": "Learner Files: (1) global.json — prediction_lessons (free-form text with evidence strength like n=18), reassessment_lessons (same), auto_tune (structured: param→value for 5 stop/horizon params), candidates (structured: param→{value, reason} for 8 gate/monitoring params). (2) ticker/{TICKER}.json — per-ticker distilled lessons (free-form text). Rewritten each cycle, not append-only. Learner reads raw trade files (result.json, skipped.json, reassessments/), analyzes, distills, writes. No per-ticker numeric overrides — too few data points per stock.",
+  "learner-consumers": "Consumer Contracts: Orchestrator is reader/forwarder — loads global.prediction_lessons + ticker/{ticker}.json lessons and passes them in the prediction bundle. Trade-daemon reassessment uses the same global+ticker lesson files downstream. Daemon is reader/applier — loads global.auto_tune at startup, whitelists 5 allowed keys, clamps to bounds, ignores out-of-range values, logs rejections. Applied values frozen into plan.json at entry — new learnings only affect new trades. Candidates logged for human review, never auto-applied."
+};
+
+let currentLevel = 1;
+const visited = new Set([1]);
+
+function setLevel(n) {
+  currentLevel = n;
+  visited.add(n);
+  document.querySelectorAll('.level').forEach(el => el.classList.remove('active'));
+  document.getElementById('level-' + n).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    const lvl = parseInt(btn.dataset.level);
+    btn.classList.toggle('active', lvl === n);
+    btn.classList.toggle('visited', visited.has(lvl) && lvl !== n);
+  });
+  document.getElementById('prompt-text').innerHTML = prompts[n] || '';
+  // Scroll canvas to top
+  document.getElementById('canvas').scrollTop = 0;
+}
+
+function copyPrompt() {
+  const text = document.getElementById('prompt-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+// Navigation
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLevel(parseInt(btn.dataset.level)));
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+    e.preventDefault();
+    if (currentLevel < 8) setLevel(currentLevel + 1);
+  } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    if (currentLevel > 1) setLevel(currentLevel - 1);
+  }
+});
+
+// Clickable detail elements
+document.querySelectorAll('[data-detail]').forEach(el => {
+  el.addEventListener('click', () => {
+    const key = el.dataset.detail;
+    if (details[key]) {
+      document.getElementById('prompt-text').innerHTML = details[key];
+    }
+  });
+});
+</script>
+</body>
+</html>

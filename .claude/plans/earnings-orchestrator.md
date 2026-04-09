@@ -81,16 +81,17 @@ Market-session reality (user dataset: 8,172 filings / 770 tickers): `post_market
   │    │
   │    └─ 4. Attribution/Learner ─ historical: same-pass; live: deferred to next historical bootstrap
   │                        identifies primary drivers
-  │                        writes feedback in result.json:
-  │                          what_worked, what_failed, why,
-  │                          predictor_lessons, planner_lessons
+  │                        writes attribution/result.json
+  │                        compacts reusable learnings into:
+  │                          learnings/global.json
+  │                          learnings/ticker/{TICKER}.json
   │                        ↓
   │              ┌─────────┘
   │              │ SELF-LEARNING LOOP (U1)
-  │              │ orchestrator reads ALL prior feedback raw
-  │              │ passes to next quarter's planner + predictor
-  │              │ guardrail: generalizable principles, not hard rules
-  │              └─────────→ next quarter's planner + predictor
+  │              │ predictor reads distilled global+ticker lessons
+  │              │ reassessment reads the same lessons downstream
+  │              │ trade daemon reads bounded global auto_tune only
+  │              └─────────→ next quarter's prediction + reassessment
   │
   └─ Discovery: get_quarterly_filings → event.json (hook auto-builds)
      Filter: skip prediction for quarters with existing prediction/result.json
@@ -122,13 +123,13 @@ SDK wrapper: top-level session, `permission_mode="bypassPermissions"`.
 1. Discovery — `get_quarterly_filings {TICKER}` → `event.json` (hook auto-builds)
 2. Filter — skip prediction for quarters with existing `prediction/result.json`
 3. For each pending quarter (chronological):
-   a. **Pre-assemble planner inputs** (always, both modes, before planner runs):
+   a. **Pre-assemble orchestrator inputs** (always, both modes, before planner runs):
       - `8k_packet` via `build_8k_packet()` — the 8-K content
       - `guidance_history` via `build_guidance_history()` — company guidance trajectory from Neo4j
       - `inter_quarter_context` via `build_inter_quarter_context()` — unified inter-quarter timeline
       - `consensus` via `alphavantage-earnings` — consensus EPS + revenue estimates for this quarter. Pre-fetched so the planner can see beat/miss magnitude and make smarter fetch decisions.
-      - `planner_lessons_history` — from prior attribution/result.json files (empty `[]` if none exist)
-   b. **Planner** (forked skill) receives ALL pre-assembled inputs → returns fetch plan
+      - `learning_context` — distilled learnings loaded from `earnings-analysis/learnings/global.json` + `earnings-analysis/learnings/ticker/{TICKER}.json` (empty if none exist). Included in the predictor bundle only. Reassessment uses the same learning files later in the trade-daemon flow. Not a planner input at launch.
+   b. **Planner** (forked skill) receives the planner subset of pre-assembled inputs → returns fetch plan
    c. Orchestrator executes planner's fetch plan via parallel Task sub-agents (DataSubAgents)
    d. **Assemble context bundle** — combine pre-assembled inputs + planner-fetched data
    e. **Predictor** (forked skill) receives full context bundle → result.json
@@ -142,7 +143,11 @@ SDK wrapper: top-level session, `permission_mode="bypassPermissions"`.
       - Live mode: deferred to next historical bootstrap. The external trigger daemon (`EarningsTrigger.md`) enqueues HISTORICAL when the ticker re-enters trade_ready; the orchestrator catches the missing attribution during sequential processing. No source-gating — learner runs with whatever data is available at that time. (Original design was N=35 day timer; replaced by deferred approach to avoid live-queue token competition.)
       - Annual-quarter note: with the deferred approach, the 10-K is typically available by the time the next historical bootstrap runs (~90 days). No special exception needed. If the 10-K is still unavailable, the orchestrator runs the learner with available data and records `"10-K"` in `missing_inputs`.
       - Hard-fail gate: `prediction/result.json` + `daily_stock` label must exist. Without these, attribution cannot compare prediction vs reality. Everything else (transcript, 10-Q, 10-K, news) enriches but is not required.
-      - Attribution/Learner writes `missing_inputs` array in output (e.g., `["transcript", "10-Q"]`) so U1 feedback carries context about what data was available.
+      - Attribution/Learner writes `missing_inputs` array in output (e.g., `["transcript", "10-Q"]`) so later learnings carry context about what data was available.
+      - After attribution completes, the learner/compactor rewrites the distilled consumer artifacts:
+        - `earnings-analysis/learnings/global.json`
+        - `earnings-analysis/learnings/ticker/{TICKER}.json`
+        These are rewritten summaries, not append-only history dumps.
 5. Validation — outputs present + schema-valid
 6. `ORCHESTRATOR_COMPLETE {TICKER}`
 
@@ -183,17 +188,13 @@ The context bundle is the central data structure the orchestrator assembles and 
   "inter_quarter_context": "(unified timeline: day-level market tape + news + filings + dividends + splits with event-specific forward returns — pre-assembled by build_inter_quarter_context(), see plannerStep5.md)",
   "inter_quarter_context_ref": "path/to/inter_quarter_context.json",
 
-  "u1_feedback": [
-    {
-      "quarter": "Q2_FY2024",
-      "prediction_comparison": { "predicted_signal": "lean_long", "actual_move_pct": 3.2, "correct": true },
-      "what_worked": ["..."],
-      "what_failed": ["..."],
-      "why": "...",
-      "predictor_lessons": ["..."],
-      "planner_lessons": ["..."]
-    }
-  ],
+  "learning_context": {
+    "global_prediction_lessons": "Tech: you overestimate magnitude by ~3pts when guidance is maintained not raised (n=18).",
+    "global_reassessment_lessons": "Transcript reassessments have been more valuable than Benzinga (n=12).",
+    "ticker_lessons": "Q1 FY2026: direction right, magnitude too high because guidance was maintained not raised.",
+    "global_ref": "earnings-analysis/learnings/global.json",
+    "ticker_ref": "earnings-analysis/learnings/ticker/NOG.json"
+  },
 
   "fetched_data": {
     "guidance_context": {
@@ -236,7 +237,7 @@ The context bundle is the central data structure the orchestrator assembles and 
 | `guidance_history_source` | Yes | `"neo4j"` — queried from Guidance/GuidanceUpdate graph nodes. |
 | `inter_quarter_context` | Yes | Pre-assembled unified timeline (news + filings + dividends + splits with forward returns). Built by `build_inter_quarter_context()` — see `plannerStep5.md`. Top-level field, NOT inside `fetched_data`. |
 | `inter_quarter_context_ref` | Yes | Relative path to persisted `inter_quarter_context.json`. |
-| `u1_feedback` | Yes | Array of prior quarters' `feedback` blocks from attribution/result.json. Empty `[]` for first quarter. Chronological order. |
+| `learning_context` | Yes | Distilled learnings from `earnings-analysis/learnings/global.json` + `earnings-analysis/learnings/ticker/{TICKER}.json`. Empty strings/null refs when no prior learnings exist. |
 | `fetched_data` | Yes | Object keyed by `output_key` from fetch_plan. Each value has `sources` (agent names), `tier_used` (0-indexed, -1 if all tiers empty), `content` (merged text or null). |
 | `anchor_flags` | Yes | Deterministic orchestrator-derived booleans used by predictor missing-data policy. Not LLM judgment. |
 | `fetch_plan_ref` | Yes | Relative path to persisted fetch_plan.json. Audit trail: bundle → plan → planner reasoning. |
@@ -272,17 +273,12 @@ has_prior_guidance: {has_prior_guidance}
 has_prior_financials: {has_prior_financials}
 has_transcript_context: {has_transcript_context}
 
-## PRIOR FEEDBACK (U1)
-### Q2_FY2024
-prediction_comparison: predicted lean_long, actual +3.2%, correct
-what_worked: [...]
-what_failed: [...]
-why: ...
-predictor_lessons: [...]
-planner_lessons: [...]
+## LEARNINGS (U1)
+### GLOBAL PREDICTION LESSONS
+{global_prediction_lessons}
 
-### Q1_FY2024
-(same structure)
+### TICKER LESSONS
+{ticker_lessons}
 
 ## FETCHED DATA: guidance_context
 Sources: neo4j-report, neo4j-transcript (tier 0)
@@ -294,16 +290,16 @@ Sources: alphavantage-earnings (tier 0)
 ```
 
 Rendering rules:
-1. Fixed sections always present in this order: 8-K → guidance → inter-quarter context → anchor flags → U1 → fetched data.
-2. U1 feedback rendered chronologically (oldest first — same as processing order).
+1. Fixed sections always present in this order: 8-K → guidance → inter-quarter context → anchor flags → learnings → fetched data.
+2. Learning sections are rendered exactly once each: global prediction lessons, then ticker lessons.
 3. Fetched data sections rendered in fetch_plan question order.
 4. Each fetched data section includes source attribution line (which agents, which tier).
 5. If `content` is null for a fetched data section, render `(no data returned)`.
 6. Renderer is deterministic: same JSON → same text, always.
 
 **Planner vs Predictor delivery**:
-- Planner receives: `8k_content` + `u1_feedback` (planner_lessons only) + `guidance_history` + `inter_quarter_context` + `consensus` (pre-fetched). No `fetched_data` or `anchor_flags` (planner produces the fetch plan, doesn't consume fetched results).
-- Predictor receives: full bundle, including `anchor_flags`.
+- Planner receives: `8k_content` + `guidance_history` + `inter_quarter_context` + `consensus` (pre-fetched). No `fetched_data`, `anchor_flags`, or `learning_context` at launch.
+- Predictor receives: full bundle, including `anchor_flags` + `learning_context`.
 
 **Learner does NOT receive a context bundle** (I4 resolved):
 The learner is fundamentally different from the predictor — no speed constraint, no PIT, multi-turn, follows evidence trails. Pre-assembling a bundle would constrain it unnecessarily. Instead, the orchestrator passes 3 minimal inputs:
@@ -361,15 +357,15 @@ Required env vars (set in `.claude/settings.json`, NOT manual export):
 
 **Behavior** (locked):
 - Runs first per quarter, before predictor
-- Single-turn. Reads 8-K + U1 feedback → outputs complete fetch plan in one shot.
+- Single-turn. Reads 8-K + pre-assembled context → outputs complete fetch plan in one shot.
 - Returns structured fetch plan: list of data questions with tiered sources (see `fetch_plan.json` contract below)
 - Orchestrator (not planner) executes the fetch plan — planner cannot spawn sub-agents (§3)
 - If calibration shows single-turn consistently misses critical data that U1 can't fix, revisit.
 
-**Self-learning input**: Planner reads `planner_lessons` from all prior quarters' attribution feedback (passed by orchestrator in context bundle). Uses them to adjust fetch priorities — e.g., adding sector peer data if past feedback flagged it as a gap. Lessons are soft priors, not hard rules.
+**Self-learning input**: Planner does NOT consume separate learnings at launch. Keep v1 minimal: the predictor and reassessment consume the distilled learnings; the planner remains 8-K-driven. If planner gaps become a repeated bottleneck later, add planner-specific lessons then.
 
 **Noise policy (Q24 resolved, both modes)**:
-- Planner relevance principle (soft guidance): every fetch should be justified by an explicit 8-K claim, a core dimension (§2c), or a prior U1 `planner_lesson`. This is the planner's reasoning framework, not a validation gate.
+- Planner relevance principle (soft guidance): every fetch should be justified by an explicit 8-K claim or a core dimension (§2c). This is the planner's reasoning framework, not a validation gate.
 - Hard exclusions (already locked, enforced structurally): return labels (`daily_stock`, `hourly_stock`), post-filing artifacts in historical mode (PIT).
 - Always included: 8-K content (trigger, always in bundle).
 - Same policy both modes. Mode differences are handled by PIT, not noise filtering.
@@ -468,7 +464,7 @@ Reuse these IDs whenever the question matches the standard family. New IDs are a
 - `inter_quarter_context` — built by `build_inter_quarter_context()` (see `plannerStep5.md`). Passed to planner as reasoning context and to predictor in the context bundle as a top-level field.
 - `guidance_history` — built by `build_guidance_history()` (see `planner.md` Step 4). Same pattern.
 
-These are assembled by the orchestrator before the planner runs. They appear in the context bundle as top-level fields alongside `8k_content` and `u1_feedback`, NOT inside `fetched_data{}`.
+These are assembled by the orchestrator before the planner runs. They appear in the context bundle as top-level fields alongside `8k_content` and `learning_context`, NOT inside `fetched_data{}`.
 
 `anchor_flags` derive from the canonical planner question output_keys plus `guidance_history`, so the planner should reuse canonical IDs instead of inventing near-duplicates.
 
@@ -543,7 +539,7 @@ Note: planned agent names are provisional — final names locked when built. Cur
 - Historical financials (prior 10-K/10-Q via XBRL)
 - Prior earnings transcripts (previous quarters only)
 - Pre-filing news and sector context
-- Self-learning feedback from previous quarters' attribution cycles (U1) — `predictor_lessons` + `what_failed` + `why` from all prior attribution/result.json feedback sections, passed raw by orchestrator
+- Distilled self-learning context from prior quarters — `global_prediction_lessons` + `ticker_lessons` from `earnings-analysis/learnings/`
 
 **Mode-specific expansion**:
 - Historical mode: strict PIT at filing timestamp; no post-filing artifacts.
@@ -554,9 +550,9 @@ Note: planned agent names are provisional — final names locked when built. Cur
 - Any realized outcome label or direct derivative of realized post-filing return target
 
 **Data access policy (locked)**:
-Predictor is bundle-only. It receives the 8-K + merged context bundle + U1 feedback from the orchestrator. It does not fetch data. One job: read and reason. If the predictor identifies missing context during reasoning, it records it in `data_gaps` (prediction output). Attribution/Learner reads this → `planner_lessons` → next quarter the planner includes it. Self-correction through U1, not in-flight follow-up.
+Predictor is bundle-only. It receives the 8-K + merged context bundle + distilled `learning_context` from the orchestrator. It does not fetch data. One job: read and reason. If the predictor identifies missing context during reasoning, it records it in `data_gaps` (prediction output). Attribution/Learner reads this and incorporates it into the next compaction cycle. Self-correction through U1, not in-flight follow-up.
 
-**Why bundle-only is safe**: two independent safety nets. (1) Q23 missing-data policy — when context is insufficient, predictor caps confidence or forces hold. Missing data = missed opportunity, not loss. (2) U1 self-correction — predictor flags gaps in `data_gaps`, attribution converts to `planner_lessons`, planner includes it next quarter. Converges within 1-2 quarters per company. The alternative (predictor fetches its own data) costs every prediction: sequential queries (slow), two PIT surfaces (risk), LLM over-requesting (noise). Bundle-only costs only the rare first-time gap, which the safety nets handle.
+**Why bundle-only is safe**: two independent safety nets. (1) Q23 missing-data policy — when context is insufficient, predictor caps confidence or forces hold. Missing data = missed opportunity, not loss. (2) U1 self-correction — predictor flags gaps in `data_gaps`, attribution incorporates them into the next compaction cycle, and the distilled learnings improve later predictions. Converges within 1-2 quarters per company. The alternative (predictor fetches its own data) costs every prediction: sequential queries (slow), two PIT surfaces (risk), LLM over-requesting (noise). Bundle-only costs only the rare first-time gap, which the safety nets handle.
 
 **Skill config enforcement**: `earnings-prediction/SKILL.md` must remove `Skill`, `Task`, and `filtered-data` from allowed-tools/skills. Predictor keeps `Read`, `Write`, `Glob`, `Grep`, `Bash` for file operations only. This enforces bundle-only structurally, not just by instruction.
 
@@ -690,7 +686,17 @@ Use `hourly_stock` as a contextual calculation for immediacy analysis/attributio
 
 **Self-learning loop (U1) — LOCKED**:
 
-The core of the system's ability to improve. Each attribution writes a `feedback` section inside its `result.json`. The orchestrator reads ALL prior quarters' feedback and passes it raw to the planner and predictor. No digest, no filtering, no separate files. The LLM does the pattern recognition.
+The core of the system's ability to improve. Each attribution still writes a raw `feedback` section inside its own `result.json` for audit and traceability. But consumers do NOT read all prior raw feedback directly. Instead, after each attribution cycle, the learner/compactor rewrites two distilled artifacts:
+
+- `earnings-analysis/learnings/global.json`
+- `earnings-analysis/learnings/ticker/{TICKER}.json`
+
+These are the only consumer-facing U1 artifacts:
+- Predictor reads `global.json.prediction_lessons` + `ticker/{TICKER}.json.lessons`
+- Reassessment reads `global.json.reassessment_lessons` + `ticker/{TICKER}.json.lessons`
+- Trade daemon reads `global.json.auto_tune` only
+
+This keeps the learning loop compact, replayable, and token-efficient while preserving raw attribution files for audit.
 
 **Attribution/Learner output contract (`attribution_result.v1`)** — full schema (I6 resolved):
 
@@ -811,32 +817,33 @@ Use these exact strings for optional unavailable learner inputs. Hard blockers (
 
 Flow:
 ```
-Q(n) attribution/result.json [with feedback]
-Q(n-1) attribution/result.json [with feedback]
+Q(n) attribution/result.json [raw feedback, audit]
+Q(n-1) attribution/result.json [raw feedback, audit]
 ...all prior quarters...
         │
         ▼
-Q(n+1) orchestrator reads ALL prior feedback, passes raw into context bundle
+learner/compactor rewrites:
+  learnings/global.json
+  learnings/ticker/{TICKER}.json
         │
-    ┌───┴───┐
-    ▼       ▼
- Planner  Predictor
- reads     reads
- planner_  predictor_lessons
- lessons   + what_failed + why
+    ┌───┴───────────────┐
+    ▼                   ▼
+ Predictor         Reassessment
+ reads             reads
+ global + ticker   global + ticker
+ lessons           lessons
 ```
 
 Guardrails:
-1. Lessons must be generalizable principles, not quarter-specific commands. ("Weight guidance higher for NOG" not "In Q3, guidance was cut to $4.50")
-2. Feedback is guidance, never hard lock. Current-quarter evidence can override any past lesson.
-3. No lossy compression. Pass all raw feedback — the LLM weights repeated patterns, discounts stale info, and identifies contradictions naturally.
-4. Contradictions are allowed. The model weighs evidence.
+1. Lessons must be generalizable principles, not quarter-specific commands.
+2. Compiled learnings are guidance, never hard lock. Current-quarter evidence can override any past lesson.
+3. Ticker learnings are rewritten distilled summaries each cycle, not append-only dumps.
+4. Raw attribution remains on disk for audit and replay even though consumers read the distilled files.
 
-Why no digest/scoring/decay:
-- 10 quarters × ~14 items each = ~140 items. Still trivial context for an LLM.
-- The LLM IS the digest — it naturally weights repeated patterns and discounts stale info.
-- A digest is lossy compression that could throw away useful lessons.
-- `why` captures rich context (macro events, external factors) that a digest would strip.
+Why compiled learnings instead of raw passthrough:
+- Keeps predictor/reassessment context compact and stable.
+- Separates free-form LLM lessons from structured daemon `auto_tune` / `candidates`.
+- Preserves raw attribution for audit without forcing later LLM calls to read every past quarter verbatim.
 - Per-field caps handle signal quality; no additional filtering needed.
 
 PIT safety: reading Q(n-1)'s attribution (including actual returns) while predicting Q(n) is historical data, not lookahead. PIT-safe by definition.
@@ -990,15 +997,15 @@ One question at a time. Reprioritize after every input.
 | Q3 | Partial runs — stop/resume? | P1 | **Resolved**: No explicit stop/resume logic. File-authoritative state (Q16) + idempotent re-process (Q15) + Step 2 filter = automatic resume. Re-run orchestrator and it skips completed quarters. Scope-limiting (run N quarters, stop at X) deferred to SDK contract (Q22). |
 | Q4 | DataSubAgent integration under fork constraints — invocation pattern? | P0 | **Resolved**: Two-pass hybrid. Planner returns fetch plan; orchestrator executes via parallel Tasks. See §2a, §2b. |
 | Q5 | Quarter concurrency — parallel or sequential? | P0 | **Resolved**: Sequential. Attribution/Learner output from Q(n) feeds Q(n+1) prediction via self-learning loop. Parallel data fetches within each quarter. |
-| Q6 | Feedback target — prompt, per-company file, or pattern library? | P0 | **Resolved**: Per-company, embedded in `attribution/result.json` feedback section. Orchestrator passes ALL prior quarters' feedback raw into planner + predictor context bundle. No separate files, no digest, no pattern library. See §2d U1. |
-| Q7 | Attribution output format consumable by planner + predictor? | P0 | **Resolved**: `attribution/result.json` includes `feedback` block with `prediction_comparison`, `what_worked`, `what_failed`, `why`, `predictor_lessons`, `planner_lessons`. See §2d U1. |
+| Q6 | Feedback target — prompt, per-company file, or pattern library? | P0 | **Resolved**: Compiled files. Raw `attribution/result.json` remains the audit artifact, but consumer-facing U1 uses `earnings-analysis/learnings/global.json` + `earnings-analysis/learnings/ticker/{TICKER}.json`. See §2d U1. |
+| Q7 | Attribution output format consumable by planner + predictor? | P0 | **Resolved**: `attribution/result.json` keeps the raw `feedback` block, but the consumable interface is the distilled learnings files. Predictor reads global+ticker lessons; planner does not consume learnings at launch. See §2d U1. |
 | Q8 | Aggregated views for v1? | P1 | **Resolved**: Not orchestrator scope. Separate `build_summary.py` script reads all `result.json` → flat CSV. Automatable via hook later. See §4 aggregation tooling. |
 | Q9 | Aggregate location + format? | P1 | **Resolved**: `earnings-analysis/summary.csv`, pipe-delimited. Built by standalone script, not orchestrator. Legacy `predictions.csv` is old design — superseded. See §4. |
 | Q10 | Validation — block or warn? | P0 | **Resolved**: Tiered — block when output can't be trusted (8-K missing, unparseable plan, invalid prediction), continue with gap for data sources, warn+write for incomplete learner output. See §2d failure policy. |
 | Q11 | Schema enforcement — JSON Schema or inline? | P1 | **Resolved**: Inline validation for v1. Deterministic derivation rules (score→bucket, direction+confidence→signal) are already code logic that JSON Schema cannot express. Inline checks cover: required fields present, types correct, cross-field consistency (5 deterministic rules in §2c). Extract JSON Schema later if needed for external tool sharing. |
 | Q12 | Confidence representation: bucket-only or numeric+bucket? (prediction and attribution) | P0 | **Resolved**: Numeric conviction score (0-100) + bucket (`low` 0-24, `moderate` 25-49, `high` 50-74, `extreme` 75-100). Score is ranking, not probability. Bucket drives action; score enables calibration and within-bucket ranking. |
 | Q13 | `guidance-inventory` wired in or gap? | P1 | **Resolved**: Decoupled. Orchestrator queries Neo4j Guidance/GuidanceUpdate nodes at bundle assembly time (§2a step 3a). Original design referenced `guidance-inventory.md` but that file does not exist — extraction pipeline writes directly to Neo4j via `guidance_writer.py`. Empty if no Guidance nodes exist. |
-| Q14 | Skip historical pattern when no prior attribution? | P1 | **Resolved**: No special handling. First quarter for a ticker simply has empty U1 arrays (no `predictor_lessons`, no `planner_lessons`). Planner and predictor already handle empty feedback naturally — they reason from 8-K + available data alone. No skip logic needed. |
+| Q14 | Skip historical pattern when no prior attribution? | P1 | **Resolved**: No special handling. First quarter for a ticker simply has empty learning files / empty lesson strings. Predictor handles that naturally and reasons from 8-K + available data alone. No skip logic needed. |
 | Q15 | Crash mid-quarter — retry or cleanup? | P0 | **Resolved**: File-authoritative = idempotent. No result.json = not done → re-process from scratch. context_bundle.json without result.json = safe to overwrite. Atomic write (temp + rename) prevents half-written files. See §2d failure policy. |
 | Q16 | State — file-based or hybrid with Claude Tasks? | P0 | **Resolved**: File-authoritative state. Claude Tasks optional as in-run mirror only; files are the durable source of truth and win on conflict. See §2a, §6. |
 | Q17 | Multi-ticker — batch or single? | P2 | Open |
@@ -1008,8 +1015,8 @@ One question at a time. Reprioritize after every input.
 | Q21 | Reliability vs minimalism tie-break | — | Resolved: reliability wins |
 | Q22 | SDK contract — exact args historical vs live? | P0 | **Resolved**: Historical = `"/earnings-orchestrator {TICKER}"` (all pending quarters). Live = `"/earnings-orchestrator {TICKER} --live --accession {accession_no}"` (single quarter). SDK requires `setting_sources=["project"]`, `permission_mode="bypassPermissions"`, `tools` preset, latest validated SDK version from `Infrastructure.md`. Live is not PIT-gated; orchestrator auto-records `decision_cutoff_ts` at prediction-start. Missing required args fail fast (no partial writes). See §2a. |
 | Q23 | On-time + right-signal contract: trigger/SLA and minimum signal set? | P0 | **Resolved**: 8-K actuals are mandatory. For directional calls, require at least one expectation anchor (`consensus` or `prior guidance`); if both missing, force `hold`+`low`. Historical mode enforces PIT at filing. Live mode may use additional data before decision cutoff. See §2c, §2d. |
-| Q24 | Noise policy: excluded vs required for predictor? | P0 | **Resolved**: Planner relevance principle — every fetch justified by 8-K claim, core dimension, or U1 planner_lesson. Soft guidance, not validation gate. Hard exclusions (return labels, PIT) enforced structurally. Same policy both modes. See §2b. |
-| Q25 | Planner: single-turn or multi-turn? | P0 | **Resolved**: Single-turn. Reads 8-K + U1 feedback, outputs complete fetch plan. U1 planner_lessons handles gaps across quarters. See §2b. |
+| Q24 | Noise policy: excluded vs required for predictor? | P0 | **Resolved**: Planner relevance principle — every fetch justified by 8-K claim or core dimension. Soft guidance, not validation gate. Hard exclusions (return labels, PIT) enforced structurally. Same policy both modes. See §2b. |
+| Q25 | Planner: single-turn or multi-turn? | P0 | **Resolved**: Single-turn. Reads 8-K + pre-assembled context, outputs complete fetch plan. Planner does not consume separate learnings at launch. See §2b. |
 | Q26 | Judge component — which modules need one, what does it check? | P1 | **Deferred**: Reconsider later after additional calibration data. |
 | Q27 | Task creation from forked skills — validate against Infrastructure.md | P0 | **Resolved**: TaskCreate/List/Get/Update works; Task spawn blocked. See §3. |
 | Q28 | Attribution trigger policy — same run, delayed scheduled run (20-30d), or hybrid? | P0 | **Resolved**: Hybrid. Historical = same-run (data exists). Live = ~~35-day timer~~ **deferred to next historical bootstrap** (updated 2026-03-20, see `EarningsTrigger.md`). No source-gating; Attribution/Learner runs with available data, writes `missing_inputs` array. Hard-fail gate: `prediction/result.json` + `daily_stock` label. See §2a step 4, §2d. |
@@ -1032,7 +1039,7 @@ One question at a time. Reprioritize after every input.
 | A3 | Learning trigger | Same run / Delayed / Hybrid | **Hybrid** (historical=same-run, live=~~35-day timer~~ **deferred to next historical bootstrap**, no source-gating) | Q28 |
 | A4 | Validation | JSON Schema / Inline / Hook | **Tiered + inline** (block untrusted, continue with gaps, warn+write partial; inline code checks for cross-field deterministic rules) | Q10 Q11 |
 | A5 | Aggregation | CSV / JSON / Both / Separate | **Separate tooling** (standalone script + optional hook; not orchestrator scope) | Q8 Q9 |
-| A6 | Feedback loop | Prompt / Files / Library | **Embedded in attribution result.json** (all raw, no digest, no curation) | Q6 Q7 |
+| A6 | Feedback loop | Prompt / Files / Library | **Compiled files** (`learnings/global.json` + `learnings/ticker/{TICKER}.json`; raw attribution retained for audit) | Q6 Q7 |
 | A7 | Error handling | Retry / Skip+log / Manual / Tiered | **Tiered + idempotent** (block critical, continue with gaps, atomic writes, re-process on crash) | Q15 Q10 |
 | A8 | SDK contract | Minimal / Rich | **Minimal** (single prompt string per mode; SDK params locked) | Q22 |
 | A9 | Planner turns | Single / Multi | **Single-turn** (locked; U1 for gaps) | Q25 |
@@ -1051,7 +1058,7 @@ One question at a time. Reprioritize after every input.
 2. Q4 + Q5 + Q16 — resolved: two-pass hybrid + sequential quarters + file-authoritative state.
 3. Output contract core resolved: Q1 + Q12 + Q18 + Q31 + Q32 + Q33 (Q34 remains threshold calibration)
 4. Q15 + Q10 — resolved: tiered validation + idempotent crash recovery. See §2d failure policy.
-5. Q6 + Q7 — resolved: feedback embedded in attribution result.json, all raw, no digest. See §2d U1.
+5. Q6 + Q7 — resolved: raw attribution retained for audit, but consumer-facing U1 uses compiled learnings files. See §2d U1.
 6. Q25 + Q23 + Q24 — resolved: single-turn planner, tiered missing-data, relevance-based noise policy. See §2b, §2c.
 7. Q28 — resolved: hybrid trigger (historical=same-run, live=deferred to next historical bootstrap). See §2a, §2d.
 8. Q13 — updated: guidance data from Neo4j Guidance/GuidanceUpdate nodes (original guidance-inventory.md file does not exist). See §2a.
@@ -1084,7 +1091,7 @@ Note: Interface contracts use I-prefix (I1-I7) to avoid collision with §6 Archi
 | # | Contract | Gap | Status |
 |---|----------|-----|--------|
 | I1 | **Context bundle format** | JSON contract + rendered text delivery. Schema, persistence, rendering rules. | **Resolved** — `context_bundle.v1` in §2a. |
-| I2 | **Orchestrator → Planner input** | Planner receives: 8k_content + u1_feedback (planner_lessons) + guidance_history + inter_quarter_context + consensus (pre-fetched). | **Resolved** — delivery spec in §2a. |
+| I2 | **Orchestrator → Planner input** | Planner receives: 8k_content + guidance_history + inter_quarter_context + consensus (pre-fetched). No separate learnings at launch. | **Resolved** — delivery spec in §2a. |
 | I3 | **Orchestrator → Predictor input** | Predictor receives full bundle (all sections). | **Resolved** — delivery spec in §2a. |
 | I4 | **Orchestrator → Learner input** | Learner does NOT get a bundle. 3 minimal inputs: prediction/result.json path, actual returns, context_bundle.json path (reference only). Fetches its own data. | **Resolved** — spec in §2a. |
 | I5 | **Guidance → Orchestrator bridge** | Query Neo4j Guidance/GuidanceUpdate nodes, render as text for `guidance_history`. Empty if no nodes exist. Original design referenced `guidance-inventory.md` (file does not exist). | **Resolved** — spec in §2a. |
@@ -1396,7 +1403,7 @@ Eight inputs assembled by the orchestrator BEFORE calling the planner. Both mode
 | 5 | `macro_snapshot` | `build_macro_snapshot()` | `scripts/earnings/macro_snapshot.py:318` | `macro_snapshot.v2` | ✅ Built |
 | 6 | `consensus` | `build_consensus()` | `scripts/earnings/` (to create) | `consensus.v1` | To build |
 | 7 | `previous_earnings` | `build_previous_earnings()` | `scripts/earnings/` (to create) | `previous_earnings.v1` | To build |
-| 8 | `planner_lessons_history` | Assembly logic in orchestrator | orchestrator skill | (array) | To build |
+| 8 | `learning_context` | Assembly logic in orchestrator | orchestrator skill | `learning_context.v1` | To build |
 
 **Helper** (NOT pre-assembled — planner-triggered only via bz-news-api agent):
 - `scripts/earnings/macro_headlines.py` — Benzinga SPY macro news. Explicitly NOT a default input.
@@ -1493,7 +1500,7 @@ Live mode for the original 3 warmup_cache.py functions is defined in §2a above.
 | `macro_snapshot` | What timestamp for `pit_cutoff`? Which `market_session` value — from the 8-K Report node (may not exist yet in live) or inferred from clock? |
 | `consensus` | Read from TradeReady Redis cache (pre-fetched by scanner)? Direct AV API call? Both with fallback? AV `actual` fields are NULL before results — does the planner need actuals or just estimates? |
 | `previous_earnings` | Is this even mode-dependent? Prior quarter is always historical. Does it read prior prediction/attribution results (which may not exist for first-ever live run)? |
-| `planner_lessons_history` | Same question — prior attributions are always historical. But a deferred live learner may be missing. Does the orchestrator skip the missing quarter or pass empty feedback for it? |
+| `learning_context` | Load `learnings/global.json` + `learnings/ticker/{TICKER}.json` if present; otherwise pass empty lesson strings and null refs. |
 | All inputs | Does the orchestrator assemble all 8 sequentially or can some run in parallel (e.g., macro_snapshot + peer_snapshot + consensus concurrently)? |
 | All inputs | What is the error policy per input? Hard-fail (block prediction) vs soft-fail (proceed without, note in data_gaps)? Currently only `8k_packet` is hard-fail. |
 

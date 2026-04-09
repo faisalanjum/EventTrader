@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Loop — Visual Explainer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:#30363d;
+  --text:#e6edf3;--dim:#8b949e;--blue:#58a6ff;--green:#3fb950;
+  --orange:#d29922;--red:#f85149;--purple:#bc8cff;--cyan:#39d353;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);padding:40px;max-width:1100px;margin:0 auto;line-height:1.6}
+code{font-family:'SF Mono',Consolas,monospace;font-size:0.85em;background:var(--surface2);padding:2px 6px;border-radius:4px}
+h1{font-size:28px;margin-bottom:8px}
+h2{font-size:20px;margin-top:40px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+h3{font-size:15px;margin-top:24px;margin-bottom:10px;color:var(--dim)}
+.subtitle{color:var(--dim);font-size:14px;margin-bottom:40px}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px;margin-bottom:12px}
+.box p{font-size:13px;color:var(--dim);line-height:1.6}
+.box.blue{border-left:3px solid var(--blue)}
+.box.green{border-left:3px solid var(--green)}
+.box.orange{border-left:3px solid var(--orange)}
+.box.red{border-left:3px solid var(--red)}
+.box.purple{border-left:3px solid var(--purple)}
+.label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.label.blue{color:var(--blue)}
+.label.green{color:var(--green)}
+.label.orange{color:var(--orange)}
+.label.red{color:var(--red)}
+.arrow{text-align:center;color:var(--dim);font-size:20px;padding:4px 0}
+.arrow span{font-size:11px;display:block;margin-top:-2px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.formula{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px 18px;font-family:'SF Mono',Consolas,monospace;font-size:12.5px;line-height:1.8;color:var(--text);white-space:pre;overflow-x:auto;margin:12px 0}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.tag.blue{background:rgba(88,166,255,.15);color:var(--blue)}
+.tag.green{background:rgba(63,185,80,.15);color:var(--green)}
+.tag.orange{background:rgba(210,153,34,.15);color:var(--orange)}
+.tag.red{background:rgba(248,81,73,.15);color:var(--red)}
+.callout{background:var(--surface2);border-left:3px solid var(--blue);padding:12px 16px;border-radius:0 6px 6px 0;font-size:13px;color:var(--dim);line-height:1.6;margin:16px 0}
+.callout.warn{border-left-color:var(--orange)}
+.callout.safe{border-left-color:var(--green)}
+.timeline{position:relative;padding-left:30px;margin:20px 0}
+.timeline::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;background:var(--border)}
+.step{position:relative;margin-bottom:20px}
+.step::before{content:'';position:absolute;left:-25px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:var(--bg)}
+.step.blue::before{border-color:var(--blue);background:rgba(88,166,255,.2)}
+.step.green::before{border-color:var(--green);background:rgba(63,185,80,.2)}
+.step.orange::before{border-color:var(--orange);background:rgba(210,153,34,.2)}
+.step.purple::before{border-color:var(--purple);background:rgba(188,140,255,.2)}
+.step h4{font-size:13px;margin-bottom:4px}
+.step p{font-size:12px;color:var(--dim)}
+.divider{border:none;border-top:1px solid var(--border);margin:40px 0}
+.json-block{background:#1a1f29;border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'SF Mono',Consolas,monospace;font-size:12px;line-height:1.7;overflow-x:auto;margin:12px 0}
+.json-key{color:var(--blue)}
+.json-str{color:var(--green)}
+.json-num{color:var(--orange)}
+.json-comment{color:var(--dim);font-style:italic}
+</style>
+</head>
+<body>
+
+<h1>Learning Loop — How It Works</h1>
+<div class="subtitle">Two types of learning, one flow. The learner writes files. Consumers read them. That's the whole system.</div>
+
+<!-- ═══════════════ THE BIG PICTURE ═══════════════ -->
+
+<h2><div class="dot" style="background:var(--blue)"></div>The Big Picture</h2>
+
+<div style="max-width:800px;margin:0 auto">
+  <div class="box blue" style="text-align:center">
+    <div class="label blue">Trade Happens</div>
+    <p>Prediction → gate → size → execute → monitor → exit → <strong>result.json written</strong></p>
+  </div>
+  <div class="arrow">▼<span>trade closes, result.json has everything</span></div>
+
+  <div class="box purple" style="text-align:center">
+    <div class="label" style="color:var(--purple)">Learner Analyzes (built later)</div>
+    <p>Reads result.json + skipped.json + reassessments/*.json across all trades</p>
+    <p>Asks: what went right? what went wrong? what would have been better?</p>
+  </div>
+  <div class="arrow">▼<span>writes two files</span></div>
+
+  <div class="grid-2">
+    <div class="box green" style="text-align:center">
+      <div class="label green">global.json</div>
+      <p>Cross-ticker patterns<br>+ config adjustments</p>
+    </div>
+    <div class="box green" style="text-align:center">
+      <div class="label green">ticker/AAPL.json</div>
+      <p>Per-ticker lessons<br>(distilled summary)</p>
+    </div>
+  </div>
+  <div class="arrow">▼<span>next trade reads these</span></div>
+
+  <div class="grid-2">
+    <div class="box orange" style="text-align:center">
+      <div class="label orange">LLM reads lessons → makes better prediction</div>
+      <p><strong>In-context learning</strong> — the LLM sees its track record</p>
+    </div>
+    <div class="box orange" style="text-align:center">
+      <div class="label orange">Daemon reads auto_tune → adjusts stop/horizon</div>
+      <p><strong>Parameter learning</strong> — config self-tunes within bounds</p>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════ TWO TYPES OF LEARNING ═══════════════ -->
+
+<h2><div class="dot" style="background:var(--green)"></div>Two Types of Learning</h2>
+
+<div class="grid-2">
+  <div>
+    <div class="box blue">
+      <div class="label blue">Type 1: In-Context Learning (LLM)</div>
+      <p><strong>What:</strong> The prediction LLM sees free-form text about its past performance before making the next prediction.</p>
+      <p style="margin-top:8px"><strong>How:</strong> Orchestrator loads learner files → injects into prediction bundle as context.</p>
+      <p style="margin-top:8px"><strong>Example:</strong> "Last time you predicted AAPL +5-8%, actual was +7.2%. You assumed guidance was raised but it was merely maintained."</p>
+      <p style="margin-top:8px"><strong>Effect:</strong> LLM naturally recalibrates — like a human reading their past mistakes before making a decision.</p>
+    </div>
+    <div class="callout">
+      <strong>No minimum sample needed.</strong> Even 1 past trade is useful context. The LLM decides how much weight to give it.
+    </div>
+  </div>
+  <div>
+    <div class="box orange">
+      <div class="label orange">Type 2: Parameter Learning (Daemon Config)</div>
+      <p><strong>What:</strong> Numeric config values (stop distance, hold time) auto-adjust based on trade outcomes.</p>
+      <p style="margin-top:8px"><strong>How:</strong> Daemon reads <code>auto_tune</code> from global.json at startup → applies within hard bounds.</p>
+      <p style="margin-top:8px"><strong>Example:</strong> "17% of stops fired on noise at ATR×2.0. Recommendation: ATR×2.3"</p>
+      <p style="margin-top:8px"><strong>Effect:</strong> Stops get slightly wider → fewer noise stop-outs → more winners held.</p>
+    </div>
+    <div class="callout warn">
+      <strong>Minimum 30 trades required.</strong> Config changes need statistical evidence. One data point doesn't change anything.
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════ WHAT THE LEARNER WRITES ═══════════════ -->
+
+<h2><div class="dot" style="background:var(--purple)"></div>What the Learner Writes</h2>
+
+<h3>File 1: global.json — cross-ticker patterns + config</h3>
+
+<div class="json-block">
+{
+  <span class="json-key">"schema_version"</span>: <span class="json-str">"v1"</span>,
+  <span class="json-key">"updated_at"</span>: <span class="json-str">"2026-04-08T15:30:00Z"</span>,
+  <span class="json-key">"trades_analyzed"</span>: <span class="json-num">47</span>,
+  <span class="json-key">"historical_trades"</span>: <span class="json-num">35</span>,
+  <span class="json-key">"live_trades"</span>: <span class="json-num">12</span>,
+
+  <span class="json-comment">// FREE-FORM TEXT — LLM reads this before every prediction</span>
+  <span class="json-key">"prediction_lessons"</span>: <span class="json-str">"Tech sector: you overestimate magnitude
+    by ~3pts when guidance is maintained not raised (n=18).
+    EPS surprise >10% is your strongest signal at 82% accuracy (n=11).
+    Confidence 75-80 actually wins 68%, not 75-80% (n=23)."</span>,
+
+  <span class="json-comment">// FREE-FORM TEXT — LLM reads this before every reassessment</span>
+  <span class="json-key">"reassessment_lessons"</span>: <span class="json-str">"Your confirmed calls are reliable
+    at 85% (n=12). Transcript reassessments more valuable than
+    Benzinga news reassessments."</span>,
+
+  <span class="json-comment">// STRUCTURED — daemon applies these automatically within bounds</span>
+  <span class="json-key">"auto_tune"</span>: {
+    <span class="json-key">"ATR_MULTIPLIER"</span>: <span class="json-num">2.3</span>,
+    <span class="json-key">"GAP_FADE_PCT"</span>: <span class="json-num">55</span>
+  },
+
+  <span class="json-comment">// STRUCTURED — daemon logs these, human reviews later</span>
+  <span class="json-key">"candidates"</span>: {
+    <span class="json-key">"CONFIDENCE_THRESHOLD"</span>: {
+      <span class="json-key">"value"</span>: <span class="json-num">72</span>,
+      <span class="json-key">"reason"</span>: <span class="json-str">"5 skipped trades at 72-74 averaged +6.1%"</span>
+    }
+  }
+}
+</div>
+
+<h3>File 2: ticker/AAPL.json — per-ticker history</h3>
+
+<div class="json-block">
+{
+  <span class="json-key">"schema_version"</span>: <span class="json-str">"v1"</span>,
+  <span class="json-key">"updated_at"</span>: <span class="json-str">"2026-04-08T15:30:00Z"</span>,
+  <span class="json-key">"ticker"</span>: <span class="json-str">"AAPL"</span>,
+  <span class="json-key">"trades_analyzed"</span>: <span class="json-num">3</span>,
+
+  <span class="json-comment">// FREE-FORM TEXT — LLM reads this when predicting AAPL specifically</span>
+  <span class="json-key">"lessons"</span>: <span class="json-str">"Q1 FY2026: predicted +5-8% conf 82,
+    actual +7.2%. Direction correct but assumed guidance raised
+    when it was maintained — magnitude overestimated.
+    Q4 FY2025: predicted +3-5% conf 71, actual -2.1%.
+    Direction wrong — missed services revenue deceleration.
+    Summary: 2/3 winners. Weight revenue composition more
+    when services >25% of total."</span>
+}
+</div>
+
+<div class="callout safe">
+  <strong>Key rule:</strong> Lessons are free-form text. The learner writes whatever it thinks is useful. No rigid schema — the LLM interprets it naturally. Evidence strength stays in prose: <code>(n=18)</code> or <code>tentative from one case</code>.
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════ WHO READS WHAT WHEN ═══════════════ -->
+
+<h2><div class="dot" style="background:var(--orange)"></div>Who Reads What, When</h2>
+
+<h3>Flow 1: Prediction (in-context learning)</h3>
+
+<div class="timeline">
+  <div class="step blue">
+    <h4>8-K filing detected → orchestrator starts</h4>
+    <p>Orchestrator builds the prediction data bundle (8-K text, financials, consensus, etc.)</p>
+  </div>
+  <div class="step green">
+    <h4>Orchestrator loads learner files</h4>
+    <p>Reads <code>global.json</code> → extracts <code>prediction_lessons</code></p>
+    <p>Reads <code>ticker/AAPL.json</code> → extracts <code>lessons</code></p>
+    <p>Adds both to the prediction bundle as context</p>
+  </div>
+  <div class="step purple">
+    <h4>Prediction LLM receives bundle + lessons</h4>
+    <p>The LLM sees the 8-K data AND its past track record for AAPL AND global patterns.</p>
+    <p>It naturally adjusts: "last time I overestimated AAPL when guidance was maintained..."</p>
+  </div>
+  <div class="step blue">
+    <h4>LLM outputs prediction</h4>
+    <p>direction, confidence, expected_move_range — now informed by past mistakes</p>
+  </div>
+</div>
+
+<h3>Flow 2: Reassessment (in-context learning)</h3>
+
+<div class="timeline">
+  <div class="step blue">
+    <h4>Transcript or Benzinga news arrives during open trade</h4>
+    <p>Trade daemon detects the event</p>
+  </div>
+  <div class="step green">
+    <h4>Daemon loads learner files</h4>
+    <p>Reads <code>global.json</code> → extracts <code>reassessment_lessons</code></p>
+    <p>Reads <code>ticker/AAPL.json</code> → extracts <code>lessons</code></p>
+    <p>Includes in the reassessment message alongside the new evidence</p>
+  </div>
+  <div class="step purple">
+    <h4>LLM reassesses thesis with lessons</h4>
+    <p>Sees: new evidence + original thesis + trade state + "your confirmed calls are 85% reliable"</p>
+    <p>Outputs: confirmed / unchanged / invalidated</p>
+  </div>
+  <div class="step orange">
+    <h4>Daemon acts deterministically</h4>
+    <p>confirmed → HOLD. invalidated → EXIT. LLM failure → no_change.</p>
+  </div>
+</div>
+
+<h3>Flow 3: Daemon startup (parameter learning)</h3>
+
+<div class="timeline">
+  <div class="step orange">
+    <h4>Daemon starts (or restarts)</h4>
+    <p>Loads config file with default values (ATR_MULTIPLIER=2.0, etc.)</p>
+  </div>
+  <div class="step green">
+    <h4>Reads global.json auto_tune</h4>
+    <p>Finds: <code>"ATR_MULTIPLIER": 2.3</code></p>
+    <p>Checks: trades_analyzed ≥ 30? Yes (47). Within bounds [1.5, 3.0]? Yes. Apply.</p>
+  </div>
+  <div class="step orange">
+    <h4>Config updated for this session</h4>
+    <p>ATR_MULTIPLIER is now 2.3 instead of 2.0 for all NEW trades this session</p>
+    <p>Open trades keep their original values (frozen in plan.json at entry)</p>
+  </div>
+  <div class="step orange">
+    <h4>Reads global.json candidates</h4>
+    <p>Finds: <code>"CONFIDENCE_THRESHOLD": 72</code></p>
+    <p>Logs: "Candidate: CONFIDENCE_THRESHOLD → 72 (reason: 5 skipped trades at 72-74 averaged +6.1%)"</p>
+    <p><strong>Does NOT apply.</strong> Human reviews later.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════ THREE TIERS ═══════════════ -->
+
+<h2><div class="dot" style="background:var(--red)"></div>Three Tiers — What Can Auto-Adjust</h2>
+
+<div class="grid-3">
+  <div class="box green">
+    <div class="label green">Auto (5 params)</div>
+    <p style="margin-top:8px"><strong>These manage HOW a trade runs.</strong> Observable from price action. Don't change which trades you take.</p>
+    <div class="formula" style="font-size:11px;padding:10px">ATR_MULTIPLIER    [1.5 — 3.0]
+MIN_STOP_PCT      [2.0 — 5.0]
+MAX_STOP_PCT      [10 — 20]
+MAX_HOLD_SESSIONS [1 — 3]
+GAP_FADE_PCT      [30 — 70]</div>
+    <p><span class="tag green">Applied automatically</span> at daemon startup if ≥30 trades and within bounds</p>
+  </div>
+
+  <div class="box orange">
+    <div class="label orange">Candidate (8 params)</div>
+    <p style="margin-top:8px"><strong>These change WHICH trades you take</strong> or have noisy counterfactuals. Feedback loop risk.</p>
+    <div class="formula" style="font-size:11px;padding:10px">CONFIDENCE_THRESHOLD  [60 — 90]
+MAGNITUDE_THRESHOLD   [1.0 — 5.0]
+SPREAD_EDGE_RATIO     [0.15 — 0.40]
+BENCHMARK_ATR_MULT    [1.0 — 3.0]
+MACRO_ATR_MULT        [1.0 — 3.0]
+REVERSAL_ATR_MULT     [0.3 — 1.0]
+REVERSAL_MOVE_SHARE   [0.15 — 0.50]
+CHASE_MAX_CONSUMED_PCT[50 — 90]</div>
+    <p><span class="tag orange">Logged only</span> — human reviews and promotes when confident</p>
+  </div>
+
+  <div class="box red">
+    <div class="label red">Never (5 params)</div>
+    <p style="margin-top:8px"><strong>Leverage and safety.</strong> Auto-adjusting these is the fastest path to blowing up.</p>
+    <div class="formula" style="font-size:11px;padding:10px">RISK_PER_TRADE_PCT
+ACCOUNT_KILL_SWITCH_PCT
+MAX_POSITIONS
+ACCOUNT_MODE
+DATA_MODE</div>
+    <p><span class="tag red">Human-only</span> — never in global.json, never auto-applied</p>
+  </div>
+</div>
+
+<div class="callout warn" style="margin-top:16px">
+  <strong>Why the split?</strong><br>
+  <strong>Auto</strong> = "stop was too tight, trade would have won" — clear single-stock counterfactual, low risk.<br>
+  <strong>Candidate</strong> = "we skipped a trade that would have won" — changes the population, creates feedback loops.<br>
+  <strong>Never</strong> = "trades are going well, increase leverage" — the classic blow-up pattern.
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════ CONCRETE EXAMPLE ═══════════════ -->
+
+<h2><div class="dot" style="background:var(--cyan)"></div>Concrete Example: Trade #48</h2>
+
+<div class="box" style="background:var(--surface2)">
+<p><strong>Setup:</strong> AAPL files 8-K at 4:15 PM. 47 prior trades exist. The learner has already analyzed them.</p>
+</div>
+
+<h3>What the prediction LLM sees (in-context learning):</h3>
+
+<div class="json-block" style="border-color:var(--blue)">
+<span class="json-comment">// From global.json → prediction_lessons</span>
+<span class="json-str">"Tech sector: you overestimate magnitude by ~3pts when
+guidance is maintained not raised (n=18). EPS surprise >10%
+is your strongest signal at 82% accuracy (n=11)."</span>
+
+<span class="json-comment">// From ticker/AAPL.json → lessons</span>
+<span class="json-str">"3 prior AAPL trades. 2/3 winners. Last time you assumed
+guidance raised when it was merely maintained — magnitude
+overestimated. Weight revenue composition when services >25%."</span>
+
+<span class="json-comment">// Plus the actual 8-K data, financials, consensus, etc.</span>
+</div>
+
+<p style="color:var(--dim);margin:12px 0">The LLM reads this and thinks: "AAPL beat EPS by 12%, guidance language says 'maintained'... last time I overestimated when guidance was maintained. I'll be more conservative on magnitude."</p>
+<p style="color:var(--dim)">Outputs: direction=long, confidence=78, expected_move_range=[4, 6] instead of [5, 8].</p>
+
+<h3>What the daemon uses (parameter learning):</h3>
+
+<div class="json-block" style="border-color:var(--orange)">
+<span class="json-comment">// From global.json → auto_tune (loaded at last daemon startup)</span>
+<span class="json-key">"ATR_MULTIPLIER"</span>: <span class="json-num">2.3</span>   <span class="json-comment">// was 2.0 default, learner widened it</span>
+<span class="json-key">"GAP_FADE_PCT"</span>: <span class="json-num">55</span>     <span class="json-comment">// was 50 default, learner relaxed it</span>
+</div>
+
+<p style="color:var(--dim);margin:12px 0">Effect on this trade:</p>
+<div class="formula" style="font-size:11px">With ATR_MULT=2.0 (old): stop_distance = 2.0 × $4.50 = $9.00 → stop at $176.20
+With ATR_MULT=2.3 (learned): stop_distance = 2.3 × $4.50 = $10.35 → stop at $174.85
+
+Result: stop is $1.35 wider. This trade survives a noise dip to $175.50
+that would have stopped out the old config. Trade ends +$840 instead of -$490.</div>
+
+<hr class="divider">
+
+<!-- ═══════════════ BEFORE LEARNER EXISTS ═══════════════ -->
+
+<h2><div class="dot" style="background:var(--dim)"></div>Before the Learner Exists (Stage 0)</h2>
+
+<div class="grid-2">
+  <div class="box" style="border-left:3px solid var(--dim)">
+    <div class="label" style="color:var(--dim)">In-context learning</div>
+    <p>Orchestrator loads last 5 raw <code>trade/result.json</code> files for this ticker. Passes compact one-line summaries as context.</p>
+    <p style="margin-top:8px"><em>"AAPL Q1: predicted +5-8%, actual +7.2%, exit=max_hold"</em></p>
+    <p style="margin-top:8px">Not as good as learner-distilled lessons, but still useful. The LLM sees raw outcomes.</p>
+  </div>
+  <div class="box" style="border-left:3px solid var(--dim)">
+    <div class="label" style="color:var(--dim)">Parameter learning</div>
+    <p>No <code>global.json</code> exists → daemon uses default config values.</p>
+    <p style="margin-top:8px">ATR_MULTIPLIER=2.0, GAP_FADE_PCT=50, etc. — all hardcoded defaults from Section G.</p>
+    <p style="margin-top:8px">No auto-tuning happens. Manual tuning via config file changes (Block 6C protocol).</p>
+  </div>
+</div>
+
+<div class="callout" style="margin-top:16px">
+  <strong>Historical PIT runs can bootstrap the learner.</strong> Run the prediction pipeline on past earnings (using only data available at filing time). The results feed the learner before a single live trade happens. 30 historical trades → learner can write global.json + ticker files → system starts learning from day 1 of live trading.
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════ SUMMARY ═══════════════ -->
+
+<h2><div class="dot" style="background:var(--cyan)"></div>One-Page Summary</h2>
+
+<div class="box" style="background:var(--surface2);padding:24px">
+<div class="formula" style="background:transparent;border:none;padding:0;margin:0;line-height:2.2;font-size:13px">
+<strong style="color:var(--text)">TRADE CLOSES</strong>
+  └─ result.json written (P&L, slippage, exit reason, monitors, reassessments)
+
+<strong style="color:var(--purple)">LEARNER RUNS</strong> (separate process, built later)
+  ├─ reads all result.json + skipped.json + reassessments/*.json
+  ├─ analyzes: what went right, what went wrong, what would be better
+  └─ writes:
+      ├─ <strong style="color:var(--green)">global.json</strong>
+      │   ├─ prediction_lessons    → <span style="color:var(--blue)">free text, LLM reads</span>
+      │   ├─ reassessment_lessons  → <span style="color:var(--blue)">free text, LLM reads</span>
+      │   ├─ auto_tune             → <span style="color:var(--orange)">5 params, daemon applies within bounds</span>
+      │   └─ candidates            → <span style="color:var(--orange)">8 params, daemon logs for human review</span>
+      └─ <strong style="color:var(--green)">ticker/AAPL.json</strong>
+          └─ lessons               → <span style="color:var(--blue)">free text, LLM reads for this ticker</span>
+
+<strong style="color:var(--text)">NEXT TRADE STARTS</strong>
+  ├─ <strong style="color:var(--blue)">Orchestrator</strong> loads global.prediction_lessons + ticker lessons
+  │   └─ passes to prediction LLM as context (<span style="color:var(--blue)">in-context learning</span>)
+  ├─ <strong style="color:var(--orange)">Daemon</strong> loads global.auto_tune at startup
+  │   └─ applies within bounds if ≥30 trades (<span style="color:var(--orange)">parameter learning</span>)
+
+<strong style="color:var(--text)">LATER, IF REASSESSMENT EVENT FIRES</strong>
+  └─ <strong style="color:var(--orange)">Daemon</strong> loads global.reassessment_lessons + ticker lessons
+      └─ includes in reassessment message when transcript/news event arrives (<span style="color:var(--blue)">in-context learning</span>)
+
+<strong style="color:var(--red)">SAFETY</strong>
+  ├─ Auto params:     bounded [min, max], only 5 stop/horizon params
+  ├─ Candidate params: logged not applied, human promotes
+  ├─ Never params:    RISK_PCT, KILL_SWITCH, MAX_POS — human only
+  ├─ Min sample:      30 trades globally for auto-tune
+  └─ Frozen at entry: new learnings affect new trades, never open ones
+</div>
+</div>
+
+</body>
+</html>

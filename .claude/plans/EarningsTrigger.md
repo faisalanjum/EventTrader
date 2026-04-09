@@ -27,7 +27,10 @@ The trade execution system (`.claude/plans/trade-execution-system.md`) needs the
 
 1. **prediction/result.json** with trade-aligned schema (see Prediction Output Contract below)
 2. **Deterministic `prediction_id`** in prediction output for idempotency
-3. **Optional `predictor_session_id`** in prediction/result.json (for reassessment resume; absent = safe fallback)
+
+**OPTIONAL ENHANCEMENTS** (daemon works without these, safe fallback applies):
+
+3. **`predictor_session_id`** in prediction/result.json (for reassessment session resume; absent = no_change + no_escalation fallback)
 
 **AUTOMATION BLOCKERS** (the trade daemon works without these but requires manual prediction triggering):
 
@@ -74,9 +77,12 @@ The trade system requires these fields in `prediction/result.json`:
   "rationale_summary": "Strong beat with raised guidance in calm macro.",
   "model_version": "claude-opus-4-6",
   "prompt_version": "earnings-prediction-v3.2",
-  "predicted_at": "2026-04-06T16:13:00-04:00"
+  "predicted_at": "2026-04-06T16:13:00-04:00",
+  "predictor_session_id": "session_abc123"
 }
 ```
+
+Note: `predictor_session_id` is optional. If absent, trade daemon applies safe fallback (no_change + no_escalation for reassessment).
 
 **Field mapping (old → new):**
 
@@ -97,10 +103,12 @@ The trade system requires these fields in `prediction/result.json`:
 | (missing) | `predicted_at` | ADD — timestamp when prediction completes |
 
 **Who adds the missing fields?**
-- `prediction_id`, `ticker`, `quarter_label`, `filed_8k`: the **orchestrator** passes these as arguments to the prediction skill, OR the orchestrator post-processes the prediction output to inject them.
-- `model_version`, `prompt_version`, `predicted_at`: the **prediction skill or orchestrator** adds these at write time.
+The **orchestrator** is the sole owner of canonical `prediction/result.json` normalization:
+- Renames fields at write time: `confidence_score`→`confidence`, `expected_move_range_pct`→`expected_move_range`, `analysis`→`rationale_summary`
+- Injects metadata: `prediction_id`, `ticker`, `quarter_label`, `filed_8k`, `model_version`, `prompt_version`, `predicted_at`, `predictor_session_id`
+- The predictor skill stays unchanged — orchestrator normalizes its output
 
-The prediction skill itself only knows about the bundle. The orchestrator knows the event context (ticker, quarter, filing time). The orchestrator is the natural place to ensure the full contract is met.
+The prediction skill only knows about the bundle. The orchestrator knows the event context (ticker, quarter, filing time) and owns the write to disk.
 
 ### Predictor Session ID — Where It Lives
 
