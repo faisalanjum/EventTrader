@@ -169,6 +169,8 @@ TIMEZONE = America/New_York
 NYSE_CALENDAR = XNYS
 ```
 
+Phase 1 currency assumption: the IBKR paper account base currency is CAD, but all traded stocks are USD (SMART/USD). `AccountSummary.net_liquidation` and `buying_power` are returned in the account's base currency by IBKR. Phase 1 uses these values directly — no currency conversion. All stock prices, stop distances, and P&L are in USD. The sizing math uses `net_liquidation` as-is (CAD ≈ USD within ~25% — acceptable for paper trading plumbing validation). For live trading, ensure the account base currency is USD or add explicit conversion.
+
 ## 7. Exact Formulas
 
 ### 7.1 Edge
@@ -190,17 +192,76 @@ Source:
 
 - primary: Neo4j/Polygon daily OHLC
 - no fallback in phase 1
+- reference implementation: `scripts/atr_compare_sources.py` (has working Neo4j query)
 
-Implement:
+Neo4j connection:
 
 ```python
-def load_atr14(symbol: str, before: datetime) -> float | None: ...
-def load_pre_event_close(symbol: str, before: datetime) -> float | None: ...
+from neo4j import GraphDatabase
+# Env vars: NEO4J_URI (bolt://minisforum3:30687), NEO4J_USER, NEO4J_PASSWORD
+# Reuse the same env vars already used by other scripts in this repo.
+driver = GraphDatabase.driver(os.environ["NEO4J_URI"],
+                              auth=(os.environ["NEO4J_USER"], os.environ["NEO4J_PASSWORD"]))
 ```
 
-Both use the same daily OHLC data. `load_pre_event_close` returns the regular-session close of the last completed trading day before `event_time`.
+Session-cutoff rule for the `before` parameter:
 
-If fewer than 15 valid daily bars exist, `load_atr14` returns `None`.
+```python
+def trading_date_cutoff(event_time: datetime) -> date:
+    """Convert event_time to the last completed trading day's date.
+    If event_time is after 4:00 PM ET (post-market), the SAME calendar date
+    is a completed trading day. If before 4:00 PM ET, use the previous trading day.
+    Use exchange_calendars to handle weekends/holidays."""
+    ...
+```
+
+Neo4j query pattern (Company node → HAS_PRICE → DailyBar):
+
+```cypher
+MATCH (c:Company {ticker: $symbol})-[:HAS_PRICE]->(bar:DailyBar)
+WHERE bar.date <= date($cutoff_date)
+ORDER BY bar.date DESC
+LIMIT 15
+RETURN bar.date, bar.open, bar.high, bar.low, bar.close
+```
+
+Note: uses `<=` not `<`. For an 8:15 PM filing, `cutoff_date` = that same day (trading is complete). For a 2:00 PM filing, `cutoff_date` = previous trading day.
+
+Node properties: `bar.open`, `bar.high`, `bar.low`, `bar.close` (floats), `bar.date` (date).
+
+Spread formula (from the quote already fetched for entry_reference_price):
+
+```text
+spread_pct = (ask - bid) / ask * 100
+```
+
+Implement in `scripts/trade/trade_daemon.py` (or a helper module imported by it):
+
+```python
+def load_daily_bars(symbol: str, cutoff_date: date, limit: int = 15) -> list[dict]:
+    """Query Neo4j for daily OHLC bars where bar.date <= cutoff_date.
+    Returns list of {date, open, high, low, close}, newest first.
+    Returns empty list if no data."""
+    ...
+
+def compute_atr14(bars: list[dict]) -> float | None:
+    """Compute ATR-14 from bars. Returns None if fewer than 15 bars."""
+    ...
+
+def load_atr14(symbol: str, event_time: datetime) -> float | None:
+    cutoff = trading_date_cutoff(event_time)
+    bars = load_daily_bars(symbol, cutoff, limit=15)
+    return compute_atr14(bars)
+
+def load_pre_event_close(symbol: str, event_time: datetime) -> float | None:
+    cutoff = trading_date_cutoff(event_time)
+    bars = load_daily_bars(symbol, cutoff, limit=1)
+    return bars[0]["close"] if bars else None
+```
+
+Both use the same daily OHLC data via `load_daily_bars`. `load_pre_event_close` returns the `close` of the most recent bar.
+
+If fewer than 15 valid daily bars exist, `compute_atr14` returns `None`.
 
 ### 7.3 Entry reference price
 
@@ -219,6 +280,7 @@ max_stop_distance = MAX_STOP_PCT * entry_reference_price / 100
 stop_distance = clamp(raw_stop_distance, min_stop_distance, max_stop_distance)
 
 per_share_risk = stop_distance + EXECUTION_BUFFER_PER_SHARE
+account_equity = AccountSummary.net_liquidation
 dollar_risk = account_equity * RISK_PER_TRADE_PCT / 100
 shares = floor(dollar_risk / per_share_risk)
 stop_price = entry_reference_price - stop_distance
@@ -237,6 +299,14 @@ entry_limit_price = round_to_tick(entry_reference_price + limit_buffer)
 ```
 
 ## 8. IBKR
+
+Read `scripts/trade/ibkr_client.py` for all return types, dataclass definitions, and error handling. Key classes:
+
+- `BracketPlacementResult` — returned by `place_entry_with_stop()`. Fields: `status` ("filled", "partial_fill", "timeout_no_fill", "entry_rejected", "filled_stop_inactive"), `filled_quantity`, `intended_quantity`, `stop_active`, `entry` (OrderResult), `stop` (OrderResult), `message`. Properties: `needs_flatten` (filled but no stop), `needs_stop_qty_adjustment` (partial fill)
+- `AccountSummary` — returned by `get_account_summary()`. Fields: `net_liquidation`, `available_funds`, `buying_power`
+- `Position` — returned by `get_positions()`. Fields: `symbol`, `quantity`, `avg_cost`
+- `QuoteSnapshot` — returned by `get_quote()`. Fields: `bid`, `ask`, `last`, `spread_pct`, `close`
+- `OrderResult` — returned by `get_open_orders()`. Fields: `symbol`, `order_id`, `action`, `order_type`, `quantity`, `status`
 
 Create client:
 
@@ -306,13 +376,27 @@ def atomic_write_json(path: Path, data: dict) -> None: ...
 
 Rules:
 
-- if file does not exist and there are no open trades, create it from current account net liquidation
 - if file exists, reuse `starting_equity`
+- if file does not exist and there are no open trades (`entering` or `open` plan.json files), create it from current `AccountSummary.net_liquidation`
+- if file does not exist BUT open trades exist: log CRITICAL and refuse to start. The operator must manually create the file with the correct `starting_equity` before restarting. Reason: current equity may already reflect trade losses, so using it as `starting_equity` would silently reset the kill-switch baseline.
 - do not reset it automatically while daemon is active
 
 ## 12. Deadlines
 
-### 12.1 Entry deadline
+### 12.1 Exchange calendar usage
+
+```python
+import exchange_calendars as xcals
+nyse = xcals.get_calendar("XNYS")
+
+def next_close(after: datetime) -> datetime:
+    """Return the next NYSE regular-session close at or after `after`."""
+    # If `after` is during a session, return that session's close.
+    # If `after` is after close or on a non-trading day, return the next session's close.
+    ...
+```
+
+### 12.2 Entry deadline
 
 Orders are placed immediately with `outsideRth=True`.
 
@@ -320,7 +404,7 @@ If the market is not currently matching the order, queued entry is allowed.
 
 Entry deadline rule:
 
-- `entry_deadline_at` = the first NYSE regular close after order placement
+- `entry_deadline_at` = `next_close(order_placement_time)`
 
 If the bracket has zero fills at `entry_deadline_at`, cancel it and write `trade/skipped.json`.
 
@@ -330,14 +414,15 @@ If the bracket has zero fills at `entry_deadline_at`, cancel it and write `trade
 
 It is **not** the final entry deadline.
 
-### 12.2 Max-hold deadline
+### 12.3 Max-hold deadline
 
 Use `exchange_calendars.get_calendar("XNYS")`.
 
 Rule (based on entry fill time, not event_time):
 
-- if entry fill time is before that session regular close, `exit_deadline_at` = that same session close
-- if entry fill time is after regular close, `exit_deadline_at` = next trading session close
+- `exit_deadline_at` = `next_close(entry_fill_time)`
+- if fill is during a session → that session's close
+- if fill is after close → next session's close
 
 Timezone: `America/New_York`
 
@@ -357,8 +442,8 @@ Startup:
 
 1. acquire file lock
 2. register SIGTERM handler (sets `shutdown_requested = True`)
-3. create/reuse `trade_daemon_state.json`
-4. connect IBKR client
+3. connect IBKR client (needed before step 4 — state file creation may require `AccountSummary.net_liquidation`)
+4. create/reuse `trade_daemon_state.json`
 5. recover all existing `trade/plan.json`
 6. enter loop
 
@@ -369,6 +454,8 @@ Loop:
 3. monitor `open` plans
 4. scan for new `prediction/result.json` (skip if `shutdown_requested`)
 5. sleep `SCAN_INTERVAL_SEC`
+
+Error handling: wrap each step (2, 3, 4) in try/except. If one trade's monitoring throws (e.g., IBKR disconnected), log the error, skip that trade, continue to the next. Do not crash the loop. Reconnect to IBKR on next cycle if needed.
 
 Shutdown (after loop exits):
 
@@ -397,26 +484,35 @@ For each `prediction/result.json`:
    - pre_earnings_close (from same daily OHLC data as ATR)
 10. if quote invalid, write `trade/skipped.json` reason `quote_unavailable`
 11. if ATR missing, write `trade/skipped.json` reason `atr_unavailable`
-12. if open long positions count `>= MAX_POSITIONS`, write `trade/skipped.json` reason `max_positions`
+12. if daemon-managed open trade count `>= MAX_POSITIONS`, write `trade/skipped.json` reason `max_positions`
+    (count = number of `trade/plan.json` files with status `entering` or `open`, NOT raw IBKR positions)
 13. compute shares and stop
 14. if `shares < 1`, write `trade/skipped.json` reason `shares_too_small`
-15. if `buying_power < shares * entry_limit_price`, write `trade/skipped.json` reason `insufficient_capital`
-16. write initial `trade/plan.json` with status `entering`
-17. set:
+15. if `AccountSummary.buying_power < shares * entry_limit_price`, write `trade/skipped.json` reason `insufficient_capital`
+16. capture `order_placement_time = datetime.now(tz=ZoneInfo("America/New_York"))` — this is the reference for entry deadline
+17. write initial `trade/plan.json` with status `entering`
+18. set:
    - `entry_order_id = null`
    - `stop_order_id = null`
-   - `entry_deadline_at = first NYSE close after order placement time`
+   - `entry_deadline_at = next_close(order_placement_time)`
    - `exit_deadline_at = null`
-18. call `place_entry_with_stop(...)`
-19. update `trade/plan.json` with returned `entry_order_id` and `stop_order_id`
-20. handle result:
+   - `order_placement_time = order_placement_time`
+19. call `place_entry_with_stop(...)`
+20. update `trade/plan.json` with returned `entry_order_id` and `stop_order_id`
+21. handle result:
    - `filled` and stop active -> update `trade/plan.json` to `open`
-   - `partial_fill` and stop active -> cancel parent remainder, adjust stop quantity, update `trade/plan.json` to `open`
+   - `partial_fill` and stop active -> cancel parent remainder, adjust stop quantity via `modify_stop_quantity()`, update `trade/plan.json` to `open`. If cancel or stop-qty adjustment fails (returns None), treat as `needs_flatten` — flatten immediately, write `trade/result.json` exit reason `stop_repair_failed`
    - any filled quantity with inactive stop -> flatten immediately, write `trade/result.json` exit reason `stop_placement_failed`, update `trade/plan.json` to `closed`
    - `timeout_no_fill` -> keep `trade/plan.json` as `entering`
    - `entry_rejected` with zero fills -> delete `trade/plan.json`, write `trade/skipped.json` reason `entry_rejected`
 
-## 16. Entering Plan Monitoring
+## 16. Position Matching Rule
+
+Phase 1 assumes a dedicated paper account (no external positions). Match broker positions to trades by **symbol only** (`Position.symbol == plan.symbol`). Match stop orders by `plan.stop_order_id == OrderResult.order_id`.
+
+If a future phase shares the account with other systems, switch to contract ID matching (`conId`).
+
+## 17. Entering Plan Monitoring (status = entering)
 
 For each `trade/plan.json` with status `entering`:
 
@@ -437,19 +533,20 @@ For each `trade/plan.json` with status `entering`:
    - delete `trade/plan.json`
    - write `trade/skipped.json` reason `entry_expired_unfilled`
 
-## 17. Open Plan Monitoring
+## 18. Open Plan Monitoring (status = open)
 
 For each `trade/plan.json` with status `open`:
 
 1. fetch current positions
 2. fetch current account summary
-3. if account equity < `starting_equity * (1 - ACCOUNT_KILL_SWITCH_PCT / 100)`:
+3. if no broker position exists for the symbol:
+   - write `trade/result.json` exit reason `stop_fired`
+   - update `trade/plan.json` to `closed`
+   - **skip remaining checks for this trade** (position is gone)
+4. if `AccountSummary.net_liquidation < starting_equity * (1 - ACCOUNT_KILL_SWITCH_PCT / 100)`:
    - flatten position
    - if flatten fails, log CRITICAL, skip (broker stop protects, retry next cycle)
    - write `trade/result.json` exit reason `account_killswitch`
-   - update `trade/plan.json` to `closed`
-4. if no broker position exists for the symbol:
-   - write `trade/result.json` exit reason `stop_fired`
    - update `trade/plan.json` to `closed`
 5. if current time >= `exit_deadline_at`:
    - flatten position
@@ -457,7 +554,7 @@ For each `trade/plan.json` with status `open`:
    - write `trade/result.json` exit reason `max_hold`
    - update `trade/plan.json` to `closed`
 
-## 18. Recovery
+## 19. Recovery
 
 Recover only `trade/plan.json` files with status `entering` or `open`.
 
@@ -488,7 +585,7 @@ Recover `open`:
    - write `trade/result.json` exit reason `stop_fired`
    - update `trade/plan.json` to `closed`
 
-## 19. Exact File Schemas
+## 20. Exact File Schemas
 
 ### 19.1 `trade/plan.json`
 
@@ -623,7 +720,7 @@ entry_expired_unfilled
 entry_recovery_cancelled
 ```
 
-## 20. Learning
+## 21. Learning
 
 Phase 1 **trade execution** reads no learner files. Phase 1 writes only:
 
@@ -653,7 +750,7 @@ If no prior lessons exist, prediction still runs normally.
 - Per-parameter learning policy (`auto` / `log` / `never`) is controlled by a config value per parameter, not hardcoded tiers
 - Future components (reassessment, compactor, alternate signal sources) build on `result.json` + `skipped.json` without changing the Phase 1 trade loop
 
-## 21. Future Extension Hooks
+## 22. Future Extension Hooks
 
 These interfaces are reserved now so later components plug in without rewriting phase 1.
 
@@ -708,7 +805,7 @@ REASSESSMENT_MODE = off | python_triggers | external_engine
 PARAMETER_LEARNING_POLICY[param] = auto | log | never
 ```
 
-## 22. ToDo
+## 23. ToDo
 
 After phase 1, add one component at a time:
 
@@ -736,7 +833,7 @@ After phase 1, add one component at a time:
    - realtime mode
    - broader risk/monitoring logic
 
-## 23. Acceptance Test
+## 24. Acceptance Test
 
 Phase 1 is correct when all of the following work in paper + delayed mode:
 
