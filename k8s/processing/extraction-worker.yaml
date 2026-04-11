@@ -76,7 +76,7 @@ spec:
           value: "5"
         # V2 unit resolution mode: v1 (legacy), shadow (V1 write + V2 diff log), v2 (full V2)
         - name: GUIDANCE_UNIT_RESOLUTION_MODE
-          value: "shadow"
+          value: "v2"
         # Strip git commit/PR instructions from system prompt (~500 tokens/turn saved)
         - name: CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS
           value: "true"
