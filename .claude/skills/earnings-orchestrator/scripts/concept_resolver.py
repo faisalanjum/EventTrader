@@ -64,11 +64,29 @@ CONCEPT_CANDIDATES = {
         'DepreciationAndAmortization',
         'Depreciation',
     ),
+    'adjusted_diluted_earnings_per_share': (
+        'EarningsPerShareDiluted',
+    ),
+    'adjusted_diluted_eps': (
+        'EarningsPerShareDiluted',
+    ),
+    'adjusted_eps': (
+        'EarningsPerShareDiluted',
+    ),
+    'adjusted_eps_diluted': (
+        'EarningsPerShareDiluted',
+    ),
     'basic_eps': (
         'EarningsPerShareBasic',
     ),
+    'basic_share_count': (
+        'WeightedAverageNumberOfSharesOutstandingBasic',
+    ),
     'basic_shares': (
         'CommonStockSharesOutstanding',
+    ),
+    'basic_shares_outstanding': (
+        'WeightedAverageNumberOfSharesOutstandingBasic',
     ),
     'cash': (
         'CashAndCashEquivalentsAtCarryingValue',
@@ -79,6 +97,12 @@ CONCEPT_CANDIDATES = {
     'diluted_shares': (
         'WeightedAverageNumberOfDilutedSharesOutstanding',
     ),
+    'diluted_eps': (
+        'EarningsPerShareDiluted',
+    ),
+    'diluted_weighted_average_shares_outstanding': (
+        'WeightedAverageNumberOfDilutedSharesOutstanding',
+    ),
     'dividend_per_share': (
         'CommonStockDividendsPerShareDeclared',
         'CommonStockDividendsPerShareCashPaid',
@@ -86,6 +110,10 @@ CONCEPT_CANDIDATES = {
     'dividends_per_share': (
         'CommonStockDividendsPerShareDeclared',
         'CommonStockDividendsPerShareCashPaid',
+    ),
+    'effective_tax_rate': (
+        'EffectiveIncomeTaxRateContinuingOperations',
+        'EffectiveIncomeTaxRate',
     ),
     'eps': (
         'EarningsPerShareDiluted',
@@ -113,6 +141,12 @@ CONCEPT_CANDIDATES = {
     'net_income': (
         'NetIncomeLoss',
         'ProfitLoss',
+    ),
+    'non_gaap_eps': (
+        'EarningsPerShareDiluted',
+    ),
+    'non_gaap_net_income_per_share': (
+        'EarningsPerShareDiluted',
     ),
     'oine': (
         'NonoperatingIncomeExpense',
@@ -153,6 +187,21 @@ CONCEPT_CANDIDATES = {
     ),
     'restructuring_costs': (
         'RestructuringCharges',
+    ),
+    'reported_eps': (
+        'EarningsPerShareDiluted',
+    ),
+    'housing_revenue': (
+        'RevenueFromContractWithCustomerExcludingAssessedTax',
+        'RevenueFromContractWithCustomerIncludingAssessedTax',
+        'SalesRevenueNet',
+        'Revenues',
+    ),
+    'net_sales': (
+        'RevenueFromContractWithCustomerExcludingAssessedTax',
+        'RevenueFromContractWithCustomerIncludingAssessedTax',
+        'SalesRevenueNet',
+        'Revenues',
     ),
     'revenue': (
         'RevenueFromContractWithCustomerExcludingAssessedTax',
@@ -195,6 +244,12 @@ CONCEPT_CANDIDATES = {
     'tax_rate': (
         'EffectiveIncomeTaxRateContinuingOperations',
         'EffectiveIncomeTaxRate',
+    ),
+    'weighted_average_basic_shares_outstanding': (
+        'WeightedAverageNumberOfSharesOutstandingBasic',
+    ),
+    'weighted_average_diluted_shares_outstanding': (
+        'WeightedAverageNumberOfDilutedSharesOutstanding',
     ),
 }
 

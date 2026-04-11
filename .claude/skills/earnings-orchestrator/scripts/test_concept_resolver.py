@@ -122,6 +122,119 @@ def test_apply_clears_qname_for_null_policy_label():
     assert items[0]['xbrl_qname'] is None
 
 
+# ── new slug coverage tests (2026-04-11 batch) ──────────────────────────
+
+def test_adjusted_eps_resolves_to_diluted():
+    rows = _rows(('us-gaap:EarningsPerShareDiluted', 10))
+    assert resolve_xbrl_qname('adjusted_eps', rows) == 'us-gaap:EarningsPerShareDiluted'
+
+
+def test_non_gaap_eps_resolves_to_diluted():
+    rows = _rows(('us-gaap:EarningsPerShareDiluted', 10))
+    assert resolve_xbrl_qname('non_gaap_eps', rows) == 'us-gaap:EarningsPerShareDiluted'
+
+
+def test_adjusted_eps_diluted_resolves():
+    rows = _rows(('us-gaap:EarningsPerShareDiluted', 10))
+    assert resolve_xbrl_qname('adjusted_eps_diluted', rows) == 'us-gaap:EarningsPerShareDiluted'
+
+
+def test_adjusted_diluted_eps_resolves():
+    rows = _rows(('us-gaap:EarningsPerShareDiluted', 10))
+    assert resolve_xbrl_qname('adjusted_diluted_eps', rows) == 'us-gaap:EarningsPerShareDiluted'
+
+
+def test_adjusted_diluted_earnings_per_share_resolves():
+    rows = _rows(('us-gaap:EarningsPerShareDiluted', 10))
+    assert resolve_xbrl_qname('adjusted_diluted_earnings_per_share', rows) == 'us-gaap:EarningsPerShareDiluted'
+
+
+def test_diluted_eps_resolves():
+    rows = _rows(('us-gaap:EarningsPerShareDiluted', 10))
+    assert resolve_xbrl_qname('diluted_eps', rows) == 'us-gaap:EarningsPerShareDiluted'
+
+
+def test_reported_eps_resolves():
+    rows = _rows(('us-gaap:EarningsPerShareDiluted', 10))
+    assert resolve_xbrl_qname('reported_eps', rows) == 'us-gaap:EarningsPerShareDiluted'
+
+
+def test_non_gaap_net_income_per_share_resolves():
+    rows = _rows(('us-gaap:EarningsPerShareDiluted', 10))
+    assert resolve_xbrl_qname('non_gaap_net_income_per_share', rows) == 'us-gaap:EarningsPerShareDiluted'
+
+
+def test_weighted_average_basic_shares_outstanding_resolves():
+    rows = _rows(('us-gaap:WeightedAverageNumberOfSharesOutstandingBasic', 8))
+    assert resolve_xbrl_qname('weighted_average_basic_shares_outstanding', rows) == 'us-gaap:WeightedAverageNumberOfSharesOutstandingBasic'
+
+
+def test_weighted_average_diluted_shares_outstanding_resolves():
+    rows = _rows(('us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding', 8))
+    assert resolve_xbrl_qname('weighted_average_diluted_shares_outstanding', rows) == 'us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding'
+
+
+def test_basic_share_count_resolves():
+    rows = _rows(('us-gaap:WeightedAverageNumberOfSharesOutstandingBasic', 8))
+    assert resolve_xbrl_qname('basic_share_count', rows) == 'us-gaap:WeightedAverageNumberOfSharesOutstandingBasic'
+
+
+def test_basic_shares_outstanding_resolves():
+    rows = _rows(('us-gaap:WeightedAverageNumberOfSharesOutstandingBasic', 8))
+    assert resolve_xbrl_qname('basic_shares_outstanding', rows) == 'us-gaap:WeightedAverageNumberOfSharesOutstandingBasic'
+
+
+def test_diluted_weighted_average_shares_outstanding_resolves():
+    rows = _rows(('us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding', 8))
+    assert resolve_xbrl_qname('diluted_weighted_average_shares_outstanding', rows) == 'us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding'
+
+
+def test_effective_tax_rate_resolves():
+    rows = _rows(
+        ('us-gaap:EffectiveIncomeTaxRateReconciliationFdiiAmount', 3),
+        ('us-gaap:EffectiveIncomeTaxRateContinuingOperations', 2),
+    )
+    assert resolve_xbrl_qname('effective_tax_rate', rows) == 'us-gaap:EffectiveIncomeTaxRateContinuingOperations'
+
+
+def test_effective_tax_rate_falls_back_to_shorter_name():
+    rows = _rows(('us-gaap:EffectiveIncomeTaxRate', 5))
+    assert resolve_xbrl_qname('effective_tax_rate', rows) == 'us-gaap:EffectiveIncomeTaxRate'
+
+
+def test_net_sales_resolves_to_revenue():
+    rows = _rows(('us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax', 20))
+    assert resolve_xbrl_qname('net_sales', rows) == 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+
+
+def test_net_sales_falls_back_to_revenues():
+    rows = _rows(('us-gaap:Revenues', 10))
+    assert resolve_xbrl_qname('net_sales', rows) == 'us-gaap:Revenues'
+
+
+def test_housing_revenue_resolves_to_revenue():
+    rows = _rows(('us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax', 15))
+    assert resolve_xbrl_qname('housing_revenue', rows) == 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax'
+
+
+def test_new_eps_slugs_fail_closed_when_concept_missing():
+    """All new EPS slugs return None when concept not in company cache."""
+    rows = _rows(('us-gaap:Revenues', 10))  # no EPS concept
+    for s in ('adjusted_eps', 'non_gaap_eps', 'adjusted_eps_diluted',
+              'adjusted_diluted_eps', 'diluted_eps', 'reported_eps',
+              'adjusted_diluted_earnings_per_share', 'non_gaap_net_income_per_share'):
+        assert resolve_xbrl_qname(s, rows) is None, f'{s} should return None when EPS not in cache'
+
+
+def test_new_share_slugs_fail_closed_when_concept_missing():
+    """All new share slugs return None when concept not in company cache."""
+    rows = _rows(('us-gaap:Revenues', 10))  # no share concept
+    for s in ('weighted_average_basic_shares_outstanding', 'basic_share_count',
+              'basic_shares_outstanding', 'weighted_average_diluted_shares_outstanding',
+              'diluted_weighted_average_shares_outstanding'):
+        assert resolve_xbrl_qname(s, rows) is None, f'{s} should return None when shares not in cache'
+
+
 # ── concept_family tests ──────────────────────────────────────────────────
 
 def test_family_direct_lookup():
