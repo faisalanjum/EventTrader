@@ -80,13 +80,13 @@ When a table shows both GAAP and non-GAAP guidance columns, extract both if both
 
 | Signal | Example | Extract? |
 |--------|---------|----------|
-| Explicit range | "We expect Q2 revenue of $94-98 billion" | Yes: `derivation=explicit`, low=94000, high=98000 |
-| Point guidance | "CapEx of approximately $2 billion" | Yes: `derivation=point`, mid=2000 |
+| Explicit range | "We expect Q2 revenue of $94-98 billion" | Yes: `derivation=explicit`, low=94, high=98, `unit_raw="billion"`, `unit_kind_hint="money"`, `money_mode_hint="aggregate"` |
+| Point guidance | "CapEx of approximately $2 billion" | Yes: `derivation=point`, mid=2, `unit_raw="billion"`, `unit_kind_hint="money"`, `money_mode_hint="aggregate"` |
 | Table projections | Revenue guidance row: `$94B - $98B` | Yes: extract from table context |
-| GAAP vs non-GAAP pair | "GAAP EPS $3.20; non-GAAP EPS $3.50" | Yes: extract BOTH with appropriate `basis_norm` |
-| Growth rate guidance | "Revenue growth of 5-7% year-over-year" | Yes: `unit=percent_yoy`, low=5, high=7 |
-| Margin guidance | "Gross margin between 46.5% and 47.5%" | Yes: `unit=percent`, low=46.5, high=47.5 |
-| Floor/ceiling | "At least $150M in free cash flow" | Yes: `derivation=floor`, low=150 |
+| GAAP vs non-GAAP pair | "GAAP EPS $3.20; non-GAAP EPS $3.50" | Yes: extract BOTH with appropriate `basis_norm`, `unit_kind_hint="money"`, `money_mode_hint="price_like"` |
+| Growth rate guidance | "Revenue growth of 5-7% year-over-year" | Yes: `unit_raw="% yoy"`, `unit_kind_hint="ratio"`, low=5, high=7 |
+| Margin guidance | "Gross margin between 46.5% and 47.5%" | Yes: `unit_raw="%"`, `unit_kind_hint="ratio"`, low=46.5, high=47.5 |
+| Floor/ceiling | "At least $150M in free cash flow" | Yes: `derivation=floor`, low=150, `unit_raw="million"`, `unit_kind_hint="money"`, `money_mode_hint="aggregate"` |
 | Qualitative direction | "We see continued momentum" | No: lacks quantitative anchor |
 | Prior quarter results | "Q1 revenue was $124 billion" | No: past period, not forward guidance |
 | Safe harbor only | "Forward-looking statements involve risks..." | No: boilerplate disclaimer |

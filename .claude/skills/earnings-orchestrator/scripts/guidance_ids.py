@@ -115,6 +115,306 @@ def _is_share_count_label(label_slug: str) -> bool:
         return True
     return False
 
+
+# ── V2 Unit Resolution (spec V2 §3–§6) ───────────────────────────────────
+
+VALID_UNIT_KIND_HINTS = {'money', 'ratio', 'count', 'multiplier', 'unknown'}
+VALID_MONEY_MODE_HINTS = {'aggregate', 'price_like', 'unknown'}
+
+
+def _normalize_unit_text(text: Optional[str]) -> str:
+    """Lowercase, strip, collapse whitespace. None/empty → ''."""
+    if not text:
+        return ''
+    s = text.lower().strip()
+    return re.sub(r'\s+', ' ', s)
+
+
+# ── V2 scale table (absolute multipliers, mode-independent) ──────────────
+
+_ABSOLUTE_SCALE = {
+    'trillion': 1e12, 'trillions': 1e12, 't': 1e12,
+    'billion': 1e9, 'billions': 1e9, 'bn': 1e9, 'b': 1e9,
+    'million': 1e6, 'millions': 1e6, 'mm': 1e6, 'mn': 1e6, 'm': 1e6,
+    'thousand': 1e3, 'thousands': 1e3, 'k': 1e3,
+    'cent': 0.01, 'cents': 0.01,
+}
+
+
+def _extract_scale_factor(unit_raw: str) -> Optional[float]:
+    """Return the raw absolute scale multiplier from unit_raw, or None."""
+    text = _normalize_unit_text(unit_raw)
+    if not text:
+        return None
+    for token in text.split():
+        if token in _ABSOLUTE_SCALE:
+            return _ABSOLUTE_SCALE[token]
+    return None
+
+
+# ── V2 surface / evidence detectors ──────────────────────────────────────
+
+def _has_ratio_surface(unit_raw: str) -> bool:
+    """§5.1 P1: ratio markers in unit_raw (token/word level)."""
+    text = _normalize_unit_text(unit_raw)
+    if not text:
+        return False
+    if '%' in text:
+        return True
+    if any(p in text for p in (
+        'basis point', 'percentage point',
+        'year over year', 'year-over-year',
+    )):
+        return True
+    tokens = set(text.split())
+    return bool(tokens & {
+        'pct', 'percent', 'percentage',
+        'yoy', 'y/y', 'yr/yr',
+        'bp', 'bps', 'pp', 'ppt', 'ppts',
+    })
+
+
+def _has_multiplier_surface(unit_raw: str) -> bool:
+    """§5.1 P2: multiplier markers (isolated x, 2.5x, times, multiple)."""
+    text = _normalize_unit_text(unit_raw)
+    if not text:
+        return False
+    for token in text.split():
+        if token in ('x', 'times', 'multiple'):
+            return True
+        if token.endswith('x') and len(token) > 1:
+            try:
+                float(token[:-1])
+                return True
+            except ValueError:
+                pass
+    return False
+
+
+def _has_money_surface(unit_raw: str) -> bool:
+    """§5.1 P3: money markers (token level — cent/cents never substring of percent)."""
+    text = _normalize_unit_text(unit_raw)
+    if not text:
+        return False
+    if '$' in text:
+        return True
+    tokens = set(text.split())
+    return bool(tokens & {'usd', 'dollar', 'dollars', 'cent', 'cents'})
+
+
+_XBRL_PER_SHARE_MARKERS = ('PerShare', 'PerUnit', 'PerDilutedShare', 'PerBasicShare')
+
+_XBRL_COUNT_RE = re.compile(
+    r'SharesOutstanding|ShareCount'
+    r'|WeightedAverage\w*Shares'
+    r'|NumberOf\w*Shares'
+)
+
+
+def _has_price_like_surface(unit_raw: str, xbrl_qname: Optional[str] = None) -> bool:
+    """§5.2 P1–P2: XBRL per-share markers OR surface 'per <noun>'."""
+    if xbrl_qname:
+        for marker in _XBRL_PER_SHARE_MARKERS:
+            if marker in xbrl_qname:
+                return True
+    text = _normalize_unit_text(unit_raw)
+    if text and ' per ' in f' {text} ':
+        return True
+    return False
+
+
+def _has_hard_label_money_signal(label_slug: str) -> bool:
+    """§5.1 P6: isolated eps/dps token, or slug contains per_share/per_unit."""
+    if not label_slug:
+        return False
+    if 'per_share' in label_slug or 'per_unit' in label_slug:
+        return True
+    tokens = label_slug.split('_')
+    return 'eps' in tokens or 'dps' in tokens
+
+
+def _has_hard_label_price_like_signal(label_slug: str) -> bool:
+    """§5.2 P3: isolated per/eps/dps token, or per_share/per_unit in slug."""
+    if not label_slug:
+        return False
+    if 'per_share' in label_slug or 'per_unit' in label_slug:
+        return True
+    tokens = set(label_slug.split('_'))
+    return bool(tokens & {'per', 'eps', 'dps'})
+
+
+# ── V2 resolvers ─────────────────────────────────────────────────────────
+
+_COUNT_LABEL_PRIORS = frozenset({'shares_outstanding', 'share_count', 'headcount'})
+_PRICE_LIKE_LABEL_PRIORS = frozenset({
+    'average_selling_price', 'average_daily_rate', 'asp', 'adr', 'arpu', 'revpar',
+})
+
+
+def _resolve_kind(unit_kind_hint: Optional[str], unit_raw: str,
+                  xbrl_qname: Optional[str], label_slug: str) -> str:
+    """§5.1: resolve semantic kind from all evidence, contradictions → unknown.
+
+    Contradiction detection uses surface (P1-P3) + XBRL (P4-P5) only.
+    Label evidence (P6) participates in precedence, not contradiction,
+    because compound labels like 'eps_growth' contain 'eps' as a modifier
+    of a ratio metric, not as a standalone money signal.
+    """
+    # P1–P3 + P4–P5: hard evidence (participates in contradiction check)
+    hard_evidence = set()
+
+    if _has_ratio_surface(unit_raw):
+        hard_evidence.add('ratio')
+    if _has_multiplier_surface(unit_raw):
+        hard_evidence.add('multiplier')
+    if _has_money_surface(unit_raw):
+        hard_evidence.add('money')
+
+    if xbrl_qname:
+        has_ps = any(m in xbrl_qname for m in _XBRL_PER_SHARE_MARKERS)
+        if not has_ps and _XBRL_COUNT_RE.search(xbrl_qname):
+            hard_evidence.add('count')
+        elif has_ps:
+            hard_evidence.add('money')
+
+    # Contradiction among hard evidence → unknown
+    if len(hard_evidence) > 1:
+        return 'unknown'
+    if hard_evidence:
+        return hard_evidence.pop()
+
+    # P6: label evidence (precedence only, not contradiction)
+    if _has_hard_label_money_signal(label_slug):
+        return 'money'
+
+    # P7: LLM hint
+    if unit_kind_hint and unit_kind_hint in VALID_UNIT_KIND_HINTS and unit_kind_hint != 'unknown':
+        return unit_kind_hint
+
+    # P8: conservative count prior
+    if label_slug in _COUNT_LABEL_PRIORS:
+        return 'count'
+
+    # P9: fallback
+    return 'unknown'
+
+
+def _resolve_money_mode(money_mode_hint: Optional[str], unit_raw: str,
+                        xbrl_qname: Optional[str], label_slug: str,
+                        resolved_kind: str) -> str:
+    """§5.2: resolve aggregate vs price_like (only when kind==money)."""
+    if resolved_kind != 'money':
+        return 'unknown'
+
+    # P1–P2: XBRL per-share / surface denominator
+    if _has_price_like_surface(unit_raw, xbrl_qname):
+        return 'price_like'
+
+    # P3: strong label evidence
+    if _has_hard_label_price_like_signal(label_slug):
+        return 'price_like'
+
+    # P4: LLM hint
+    if money_mode_hint and money_mode_hint in VALID_MONEY_MODE_HINTS and money_mode_hint != 'unknown':
+        return money_mode_hint
+
+    # P5: narrow label prior
+    if label_slug in _PRICE_LIKE_LABEL_PRIORS:
+        return 'price_like'
+
+    # P6: fallback
+    return 'aggregate'
+
+
+def _resolve_ratio_subtype(unit_raw: str, quote: Optional[str] = None) -> str:
+    """§5.3: resolve ratio subtype. Quote restricted to YoY context only."""
+    text = _normalize_unit_text(unit_raw)
+    tokens = set(text.split()) if text else set()
+
+    # P1: bps markers (unit_raw only)
+    if tokens & {'bp', 'bps'} or 'basis point' in text:
+        return 'basis_points'
+
+    # P2: points markers (unit_raw only)
+    if (tokens & {'pp', 'ppt', 'ppts', 'point', 'points'}
+            or 'percentage point' in text):
+        return 'percent_points'
+
+    # P3: YoY markers (unit_raw only)
+    if (tokens & {'yoy', 'y/y', 'yr/yr'}
+            or 'year over year' in text
+            or 'year-over-year' in text):
+        return 'percent_yoy'
+
+    # Secondary: quote for YoY temporal context ONLY (never bps/points)
+    if quote:
+        qt = _normalize_unit_text(quote)
+        qt_tokens = set(qt.split()) if qt else set()
+        if (qt_tokens & {'yoy', 'y/y', 'yr/yr'}
+                or 'year over year' in qt
+                or 'year-over-year' in qt):
+            return 'percent_yoy'
+
+    # P4: fallback
+    return 'percent'
+
+
+def _combine_resolved_unit(resolved_kind: str, resolved_money_mode: str,
+                           resolved_ratio_subtype: str) -> str:
+    """§4 mapping table: axes → canonical_unit."""
+    if resolved_kind == 'money':
+        return 'usd' if resolved_money_mode == 'price_like' else 'm_usd'
+    if resolved_kind == 'ratio':
+        return resolved_ratio_subtype
+    if resolved_kind == 'count':
+        return 'count'
+    if resolved_kind == 'multiplier':
+        return 'x'
+    return 'unknown'
+
+
+# ── V2 scale functions ───────────────────────────────────────────────────
+
+def _scale_aggregate_money(value: float, unit_raw: str) -> float:
+    """§6.1: scale to millions of USD. Guards: cents contradiction + pre-scaled."""
+    text = _normalize_unit_text(unit_raw)
+    if text and set(text.split()) & {'cent', 'cents'}:
+        raise ValueError(
+            f"aggregate money cannot use cents scale (unit_raw='{unit_raw}')")
+
+    factor = _extract_scale_factor(unit_raw)
+    if factor is None:
+        return value
+
+    to_millions = factor / 1e6
+    if to_millions > 1 and value > 999:
+        raise ValueError(
+            f"{value} with '{unit_raw}' looks pre-scaled — "
+            f"pass the number exactly as stated in source")
+    return round(value * to_millions, 6)
+
+
+def _scale_price_like_money(value: float, unit_raw: str) -> float:
+    """§6.2: scale to face dollars. No pre-scaled guard."""
+    factor = _extract_scale_factor(unit_raw)
+    if factor is None:
+        return value
+    return round(value * factor, 6)
+
+
+def _scale_count_absolute(value: float, unit_raw: str) -> float:
+    """§6.3: scale to absolute quantity. Pre-scaled guard (billion+)."""
+    factor = _extract_scale_factor(unit_raw)
+    if factor is None:
+        return value
+
+    if factor > 1e6 and value > 999:
+        raise ValueError(
+            f"{value} with '{unit_raw}' looks pre-scaled — "
+            f"pass the number exactly as stated in source")
+    return round(value * factor, 6)
+
+
 # Scale multipliers for raw → m_usd conversion
 _SCALE_TO_MILLIONS = {
     'b': 1000.0,
@@ -193,18 +493,30 @@ def canonicalize_unit(unit_raw: str, label_slug: str) -> str:
 
 
 def canonicalize_value(value: Optional[float], unit_raw: str, canonical_unit: str,
-                       label_slug: str) -> Optional[float]:
+                       label_slug: str,
+                       resolved_kind: Optional[str] = None,
+                       resolved_money_mode: Optional[str] = None) -> Optional[float]:
     """
     Normalize a numeric value to canonical scale.
 
-    Rules:
-      - Aggregate currency metrics: value expressed in millions (m_usd).
-        $1.13B → 1130.0, $94M → 94.0, $2000 (bare) → treated as already in millions.
-      - Per-share labels: value in usd (no scale change).
-      - Percent/count/x: no scale change.
+    V2 path (when resolved_kind is provided): scale according to resolved axes.
+    V1 fallback (when resolved_kind is None): preserve legacy behavior.
     """
     if value is None:
         return None
+
+    # ── V2 path: scale by resolved axes ──
+    if resolved_kind is not None:
+        if resolved_kind == 'money':
+            if resolved_money_mode == 'price_like':
+                return _scale_price_like_money(value, unit_raw)
+            if resolved_money_mode == 'aggregate':
+                return _scale_aggregate_money(value, unit_raw)
+        if resolved_kind == 'count':
+            return _scale_count_absolute(value, unit_raw)
+        return value
+
+    # ── V1 fallback path (preserve existing legacy behavior) ──
 
     # Share-count scaling: scale to absolute when raw unit is a scale word
     if canonical_unit == 'count' and _is_share_count_label(label_slug) and unit_raw:
@@ -512,20 +824,33 @@ def build_guidance_ids(
     unit_raw: str = 'unknown',
     qualitative: Optional[str] = None,
     conditions: Optional[str] = None,
+    # V2 optional params
+    unit_kind_hint: Optional[str] = None,
+    money_mode_hint: Optional[str] = None,
+    quote: Optional[str] = None,
+    xbrl_qname: Optional[str] = None,
+    existing_guidance_id: Optional[str] = None,
+    existing_resolved_kind: Optional[str] = None,
+    existing_resolved_money_mode: Optional[str] = None,
+    existing_resolved_ratio_subtype: Optional[str] = None,
+    existing_resolution_version: Optional[str] = None,
+    resolution_mode: str = 'v1',
 ) -> dict:
     """
     Single entry point for all ID normalization.
 
+    Supports resolution_mode:
+      'v1':     V1 behavior only (UNIT_ALIASES + label overrides)
+      'v2':     V2 resolver (3-axis evidence chain)
+      'shadow': V1 as effective payload + nested V2 diff for observability
+
     Returns dict with:
-        guidance_id:        "guidance:{label_slug}"
-        guidance_update_id: "gu:{source_id}:{label_slug}:{period_u_id}:{basis_norm}:{segment_slug}"
-        evhash16:           16-char hex string
-        label_slug:         normalized label
-        segment_slug:       normalized segment
-        canonical_unit:     canonical unit enum value
-        canonical_low:      value in canonical scale (or None)
-        canonical_mid:      value in canonical scale (or None)
-        canonical_high:     value in canonical scale (or None)
+        guidance_id, guidance_update_id, evhash16,
+        label_slug, segment_slug,
+        canonical_unit, canonical_low, canonical_mid, canonical_high,
+        (V2/shadow): resolved_kind, resolved_money_mode,
+                     resolved_ratio_subtype, resolution_version
+        (shadow only): shadow_v2 nested diff block
     """
     # Validate required fields
     if not label or not label.strip():
@@ -540,23 +865,91 @@ def build_guidance_ids(
     if basis_norm not in valid_bases:
         raise ValueError(f"basis_norm must be one of {valid_bases}, got '{basis_norm}'")
 
-    # Slugs
+    # 1. Validate hint enums if present
+    if unit_kind_hint and unit_kind_hint not in VALID_UNIT_KIND_HINTS:
+        raise ValueError(f"invalid unit_kind_hint: '{unit_kind_hint}'")
+    if money_mode_hint and money_mode_hint not in VALID_MONEY_MODE_HINTS:
+        raise ValueError(f"invalid money_mode_hint: '{money_mode_hint}'")
+
+    # 2. Compute slugs
     label_slug = slug(label)
     segment_slug = slug(segment) if segment and segment.strip() else 'total'
 
-    # Unit canonicalization
-    canonical_unit = canonicalize_unit(unit_raw, label_slug)
+    # ── V1 path ──────────────────────────────────────────────────────
+    def _compute_v1():
+        cu = canonicalize_unit(unit_raw, label_slug)
+        cl = canonicalize_value(low, unit_raw, cu, label_slug)
+        cm = canonicalize_value(mid, unit_raw, cu, label_slug)
+        ch = canonicalize_value(high, unit_raw, cu, label_slug)
+        if cm is None and cl is not None and ch is not None:
+            cm = round((cl + ch) / 2, 6)
+        return cu, cl, cm, ch
 
-    # Value canonicalization (scale normalization)
-    canonical_low = canonicalize_value(low, unit_raw, canonical_unit, label_slug)
-    canonical_mid = canonicalize_value(mid, unit_raw, canonical_unit, label_slug)
-    canonical_high = canonicalize_value(high, unit_raw, canonical_unit, label_slug)
+    # ── V2 path ──────────────────────────────────────────────────────
+    def _compute_v2():
+        # 3. Resolve axes
+        rk = _resolve_kind(unit_kind_hint, unit_raw, xbrl_qname, label_slug)
+        rmm = _resolve_money_mode(money_mode_hint, unit_raw, xbrl_qname, label_slug, rk)
+        rrs = _resolve_ratio_subtype(unit_raw, quote) if rk == 'ratio' else 'unknown'
 
-    # Compute mid if not provided but low+high are
-    if canonical_mid is None and canonical_low is not None and canonical_high is not None:
-        canonical_mid = round((canonical_low + canonical_high) / 2, 6)
+        # 4. Existing resolved-axis fallback (V2-written rows only)
+        if rk == 'unknown' and existing_resolution_version and existing_resolution_version >= 'v2':
+            if existing_guidance_id and existing_guidance_id == f'guidance:{label_slug}':
+                if existing_resolved_kind and existing_resolved_kind != 'unknown':
+                    rk = existing_resolved_kind
+                    if rk == 'money' and existing_resolved_money_mode:
+                        rmm = existing_resolved_money_mode
+                    if rk == 'ratio' and existing_resolved_ratio_subtype:
+                        rrs = existing_resolved_ratio_subtype
 
-    # Evidence hash
+        # 5. Derive canonical_unit
+        cu = _combine_resolved_unit(rk, rmm, rrs)
+
+        # 6. Compute canonical values using resolved axes
+        cl = canonicalize_value(low, unit_raw, cu, label_slug,
+                                resolved_kind=rk, resolved_money_mode=rmm)
+        cm = canonicalize_value(mid, unit_raw, cu, label_slug,
+                                resolved_kind=rk, resolved_money_mode=rmm)
+        ch = canonicalize_value(high, unit_raw, cu, label_slug,
+                                resolved_kind=rk, resolved_money_mode=rmm)
+        if cm is None and cl is not None and ch is not None:
+            cm = round((cl + ch) / 2, 6)
+        return cu, cl, cm, ch, rk, rmm, rrs
+
+    # ── Mode dispatch ────────────────────────────────────────────────
+    if resolution_mode == 'v1':
+        canonical_unit, canonical_low, canonical_mid, canonical_high = _compute_v1()
+        resolved_kind = None
+        resolved_money_mode = None
+        resolved_ratio_subtype = None
+        shadow_v2 = None
+
+    elif resolution_mode == 'v2':
+        (canonical_unit, canonical_low, canonical_mid, canonical_high,
+         resolved_kind, resolved_money_mode, resolved_ratio_subtype) = _compute_v2()
+        shadow_v2 = None
+
+    elif resolution_mode == 'shadow':
+        # V1 is the effective write payload
+        canonical_unit, canonical_low, canonical_mid, canonical_high = _compute_v1()
+        resolved_kind = None
+        resolved_money_mode = None
+        resolved_ratio_subtype = None
+        # V2 computed for diff only
+        v2_cu, v2_cl, v2_cm, v2_ch, v2_rk, v2_rmm, v2_rrs = _compute_v2()
+        shadow_v2 = {
+            'canonical_unit': v2_cu,
+            'canonical_low': v2_cl,
+            'canonical_mid': v2_cm,
+            'canonical_high': v2_ch,
+            'resolved_kind': v2_rk,
+            'resolved_money_mode': v2_rmm,
+            'resolved_ratio_subtype': v2_rrs,
+        }
+    else:
+        raise ValueError(f"resolution_mode must be 'v1', 'v2', or 'shadow', got '{resolution_mode}'")
+
+    # 7. Evidence hash (from effective canonical_unit)
     evhash16 = compute_evhash16(
         canonical_low, canonical_mid, canonical_high,
         canonical_unit, qualitative, conditions,
@@ -576,6 +969,7 @@ def build_guidance_ids(
     assert guidance_id.startswith('guidance:'), f"Bad guidance_id: {guidance_id}"
     assert guidance_update_id.startswith('gu:'), f"Bad guidance_update_id: {guidance_update_id}"
 
+    # 8. Build result
     result = {
         'guidance_id': guidance_id,
         'guidance_update_id': guidance_update_id,
@@ -591,5 +985,16 @@ def build_guidance_ids(
     # Preserve raw unit when canonicalization produced 'unknown' (§15F)
     if canonical_unit == 'unknown' and unit_raw and unit_raw.strip().lower() != 'unknown':
         result['unit_raw'] = unit_raw.strip()
+
+    # 8a. V2 additive fields (writer-authoritative, not raw hints)
+    if resolution_mode == 'v2' and resolved_kind is not None:
+        result['resolved_kind'] = resolved_kind
+        result['resolved_money_mode'] = resolved_money_mode
+        result['resolved_ratio_subtype'] = resolved_ratio_subtype
+        result['resolution_version'] = 'v2'
+
+    # 8b. Shadow diff block (observability only, not written to graph)
+    if shadow_v2 is not None:
+        result['shadow_v2'] = shadow_v2
 
     return result

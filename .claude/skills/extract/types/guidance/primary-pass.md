@@ -87,6 +87,14 @@ Default segment is `Total`. Set segment only when text qualifies a metric with a
 - **Corporate announcements** — Do NOT extract capital allocation announcements (buyback authorizations, investment programs, facility plans). These belong to the `announcement` extraction type. Dividend-per-share guidance IS extractable (it is guidance, not an announcement).
 - **Factors are conditions, not items** — if a forward-looking statement quantifies a factor affecting another guided metric (e.g., FX headwind, week count), capture it in that metric's `conditions` field — not as a standalone item.
 
+### V2 Unit Hint Fields (REQUIRED)
+
+Every extracted item MUST include these fields:
+
+- **`unit_kind_hint`**: REQUIRED. One of `money`, `ratio`, `count`, `multiplier`, `unknown`. Classifies what kind of thing the metric measures.
+- **`money_mode_hint`**: REQUIRED when `unit_kind_hint == "money"`. One of `aggregate`, `price_like`, `unknown`. Must be `null` or omitted for non-money kinds.
+- **`unit_raw`**: REQUIRED. Verbatim surface scale/unit text from source. Preserve denominator phrases when present, for example `"cents per share"` or `"$ per metric ton"`. Used for scale parsing and denominator-surface detection, not final semantic classification.
+
 ### Numeric Value Rules
 
 Copy the number and unit exactly as printed in the source text. `"$10.3 billion"` → `low=10.3, unit_raw="billion"`. `"4.94 billion shares"` → `low=4.94, unit_raw="billion"` for a share-count label such as `Diluted Share Count`. Never convert between units — the canonicalizer handles all scaling.
@@ -143,7 +151,7 @@ Supports all LLM fields: `half=`, `month=`, `long_range_start_year=`, `long_rang
 python3 -c "
 import sys; sys.path.insert(0, '.claude/skills/earnings-orchestrator/scripts')
 from guidance_ids import build_guidance_ids; import json
-result = build_guidance_ids(label='$LABEL', source_id='$SOURCE_ID', period_u_id='$PERIOD_UID', basis_norm='$BASIS', segment='$SEGMENT', low=$LOW, mid=$MID, high=$HIGH, unit_raw='$UNIT', qualitative=$QUALITATIVE, conditions=$CONDITIONS)
+result = build_guidance_ids(label='$LABEL', source_id='$SOURCE_ID', period_u_id='$PERIOD_UID', basis_norm='$BASIS', segment='$SEGMENT', low=$LOW, mid=$MID, high=$HIGH, unit_raw='$UNIT', qualitative=$QUALITATIVE, conditions=$CONDITIONS, unit_kind_hint='$UNIT_KIND_HINT', money_mode_hint=$MONEY_MODE_HINT, quote=$QUOTE, xbrl_qname=$XBRL_QNAME, resolution_mode='v2')
 print(json.dumps(result))
 "
 ```
@@ -162,6 +170,7 @@ Write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
     "source_type": "{ASSET}",
     "ticker": "{TICKER}",
     "fye_month": {FYE_MONTH from Step 1},
+    "payload_origin": "extract_v2",
     "items": [
         {
             "label": "Revenue",
@@ -172,6 +181,8 @@ Write to `/tmp/gu_{TICKER}_{SOURCE_ID}.json`:
             "segment": "Total",
             "low": 89.0, "mid": null, "high": 93.0,
             "unit_raw": "billion",
+            "unit_kind_hint": "money",
+            "money_mode_hint": "aggregate",
             "qualitative": "similar to last year",
             "conditions": null,
             "quote": "We expect revenue...",

@@ -94,6 +94,10 @@ All 20 extraction fields (see [S2](#2-extraction-fields)) plus system identity p
 | `xbrl_qname` | String / null | Resolved XBRL concept qname (see [S11](#11-xbrl-matching)) |
 | `concept_family_qname` | String / null | Canonical XBRL concept family anchor (CLI-computed, do not set) |
 | `unit_raw` | String / null | Verbatim unit text, only when `canonical_unit='unknown'` |
+| `resolved_kind` | String / null | V2 resolved semantic kind: `money`, `ratio`, `count`, `multiplier`, `unknown`. Only present on V2-written rows |
+| `resolved_money_mode` | String / null | V2 resolved money mode: `aggregate`, `price_like`, `unknown`. Only when `resolved_kind='money'` |
+| `resolved_ratio_subtype` | String / null | V2 resolved ratio subtype: `percent`, `percent_yoy`, `percent_points`, `basis_points`. Only when `resolved_kind='ratio'` |
+| `resolution_version` | String / null | Resolution version that produced this row's canonical values (e.g., `"v2"`) |
 | `label` | String | Metric name (denormalized from Guidance parent) |
 | `label_slug` | String | `slug(label)` — enables `WHERE gu.label_slug = 'revenue'` without JOIN |
 | `segment_slug` | String | `slug(segment)` — enables `WHERE gu.segment_slug = 'iphone'` |
@@ -351,13 +355,23 @@ usd, m_usd, percent, percent_yoy, percent_points, basis_points, x, count, unknow
 - `4.94 billion shares` → `4940000000` in `count`
 - Percentages → `percent` or `percent_yoy` only
 
+### V2 Extraction Hint Fields
+
+The extraction payload includes these LLM-produced hint fields. They are NOT stored on the graph — they are consumed by the CLI resolver during ID computation:
+
+| Field | Type | When to set |
+|---|---|---|
+| `unit_kind_hint` | String | REQUIRED. One of `money`, `ratio`, `count`, `multiplier`, `unknown` |
+| `money_mode_hint` | String / null | REQUIRED when `unit_kind_hint == "money"`. One of `aggregate`, `price_like`, `unknown` |
+| `payload_origin` | String (top-level) | REQUIRED for post-upgrade batches. One of `extract_v2`, `readback`, `legacy_extract` |
+
 ### Unknown Handling
 
 No alias match → `canonical_unit = 'unknown'`, raw unit preserved in `unit_raw` property on GuidanceUpdate. `unit_raw` is NOT part of `evhash16` (canonical `canonical_unit` is used).
 
 ### Implementation
 
-Use `guidance_ids.py:canonicalize_unit()`. Adding new units: one entry in `CANONICAL_UNITS` + alias(es) in `UNIT_ALIASES` + test case.
+Use `guidance_ids.py:canonicalize_unit()` for V1 legacy callers. V2 resolution uses `build_guidance_ids(..., resolution_mode='v2')` which runs the 3-axis resolver. Adding new units: one entry in `CANONICAL_UNITS` + alias(es) in `UNIT_ALIASES` + test case.
 
 ---
 

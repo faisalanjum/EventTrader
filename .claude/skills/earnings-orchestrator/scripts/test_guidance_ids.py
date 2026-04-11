@@ -723,6 +723,257 @@ def test_build_guidance_ids_avgo_share_count():
     assert 'unit_raw' not in ids or ids.get('unit_raw') is None
 
 
+# ── V2 resolver tests (spec §7.6) ───────────────────────────────────────────
+
+def test_v2_adjusted_eps_diluted():
+    """Adjusted EPS Diluted + hints → usd."""
+    r = build_guidance_ids(label='Adjusted EPS Diluted', source_id='s', period_u_id='gp_t',
+        basis_norm='non_gaap', unit_raw='$', low=3.2, high=3.4,
+        unit_kind_hint='money', money_mode_hint='price_like', resolution_mode='v2')
+    assert r['canonical_unit'] == 'usd'
+    assert r['canonical_low'] == 3.2
+    assert r['resolved_kind'] == 'money'
+    assert r['resolved_money_mode'] == 'price_like'
+    assert r['resolution_version'] == 'v2'
+
+def test_v2_weighted_avg_shares():
+    """Shares outstanding + count hint + million → count, scaled absolute."""
+    r = build_guidance_ids(label='Weighted Average Basic Shares Outstanding', source_id='s',
+        period_u_id='gp_t', basis_norm='unknown', unit_raw='million', low=300,
+        unit_kind_hint='count', resolution_mode='v2')
+    assert r['canonical_unit'] == 'count'
+    assert r['canonical_low'] == 300_000_000.0
+
+def test_v2_loyalty_members():
+    """Loyalty Members + count hint + million → count, scaled absolute."""
+    r = build_guidance_ids(label='Loyalty Members', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='million', low=13,
+        unit_kind_hint='count', resolution_mode='v2')
+    assert r['canonical_unit'] == 'count'
+    assert r['canonical_low'] == 13_000_000.0
+
+def test_v2_average_selling_price():
+    """ASP + money+price_like → usd."""
+    r = build_guidance_ids(label='Average Selling Price', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='$', low=490000,
+        unit_kind_hint='money', money_mode_hint='price_like', resolution_mode='v2')
+    assert r['canonical_unit'] == 'usd'
+    assert r['canonical_low'] == 490000
+
+def test_v2_average_daily_rate():
+    """ADR + money+price_like → usd."""
+    r = build_guidance_ids(label='Average Daily Rate', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='$', low=175,
+        unit_kind_hint='money', money_mode_hint='price_like', resolution_mode='v2')
+    assert r['canonical_unit'] == 'usd'
+
+def test_v2_arpu():
+    """ARPU + money+price_like → usd."""
+    r = build_guidance_ids(label='ARPU', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='$', low=14.5,
+        unit_kind_hint='money', money_mode_hint='price_like', resolution_mode='v2')
+    assert r['canonical_unit'] == 'usd'
+
+def test_v2_fuel_cost_per_metric_ton():
+    """Fuel Cost per Metric Ton: label 'per' forces price_like over bad aggregate hint."""
+    r = build_guidance_ids(label='Fuel Cost per Metric Ton', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='$', low=675,
+        unit_kind_hint='money', money_mode_hint='aggregate', resolution_mode='v2')
+    assert r['canonical_unit'] == 'usd', f"got {r['canonical_unit']}"
+    assert r['resolved_money_mode'] == 'price_like'
+
+def test_v2_dividend_per_share_cents():
+    """Dividend Per Share + cents → usd, value / 100."""
+    r = build_guidance_ids(label='Dividend Per Share', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='cents', low=32,
+        unit_kind_hint='money', money_mode_hint='price_like', resolution_mode='v2')
+    assert r['canonical_unit'] == 'usd'
+    assert r['canonical_low'] == 0.32
+
+def test_v2_eps_growth_ratio():
+    """EPS growth with % surface → ratio (percent), not money via eps label token."""
+    r = build_guidance_ids(label='EPS growth', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='%', low=4, high=5,
+        unit_kind_hint='ratio', resolution_mode='v2')
+    assert r['canonical_unit'] in ('percent', 'percent_yoy')
+    assert r['resolved_kind'] == 'ratio'
+
+def test_v2_content_per_vehicle_money():
+    """Content Per Vehicle with money hint → usd (label 'per' → price_like)."""
+    r = build_guidance_ids(label='Content Per Vehicle', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='$', low=1500,
+        unit_kind_hint='money', money_mode_hint='price_like', resolution_mode='v2')
+    assert r['canonical_unit'] == 'usd'
+
+def test_v2_content_per_vehicle_ratio():
+    """Content Per Vehicle with % surface → ratio, not money."""
+    r = build_guidance_ids(label='Content Per Vehicle', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='%', low=5,
+        unit_kind_hint='ratio', resolution_mode='v2')
+    assert r['resolved_kind'] == 'ratio'
+
+def test_v2_cruise_cost_growth_ratio():
+    """Cruise Costs Per ALBD Growth with % → ratio even though label has 'per'."""
+    r = build_guidance_ids(label='Adjusted Cruise Costs Excluding Fuel Per ALBD Growth',
+        source_id='s', period_u_id='gp_t', basis_norm='unknown', unit_raw='%', low=3,
+        unit_kind_hint='ratio', resolution_mode='v2')
+    assert r['resolved_kind'] == 'ratio'
+
+def test_v2_net_customer_additions_count():
+    """Net Active Customer Additions Per Quarter + count hint → count; per must not influence."""
+    r = build_guidance_ids(label='Net Active Customer Additions Per Quarter',
+        source_id='s', period_u_id='gp_t', basis_norm='unknown', unit_raw='million', low=2,
+        unit_kind_hint='count', resolution_mode='v2')
+    assert r['canonical_unit'] == 'count'
+    assert r['canonical_low'] == 2_000_000.0
+
+def test_v2_revenue_quote_not_kind():
+    """Revenue: kind uses unit_raw not quote, even if quote has both $ and %."""
+    r = build_guidance_ids(label='Revenue', source_id='s', period_u_id='gp_t',
+        basis_norm='gaap', unit_raw='billion', low=89,
+        quote='Revenue was $89 billion, up 15% year-over-year',
+        unit_kind_hint='money', money_mode_hint='aggregate', resolution_mode='v2')
+    assert r['resolved_kind'] == 'money'
+    assert r['canonical_unit'] == 'm_usd'
+
+def test_v2_percent_no_cent_leak():
+    """unit_raw='percent' → ratio; cent substring must not leak into money."""
+    from guidance_ids import _has_ratio_surface, _has_money_surface
+    assert _has_ratio_surface('percent') is True
+    assert _has_money_surface('percent') is False
+
+def test_v2_multiplier_2_5x():
+    """unit_raw='2.5x' → multiplier."""
+    r = build_guidance_ids(label='Leverage', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='2.5x', low=2.5,
+        unit_kind_hint='multiplier', resolution_mode='v2')
+    assert r['canonical_unit'] == 'x'
+
+def test_v2_bps_yoy_subtype():
+    """50 bps yoy → basis_points (bps wins over yoy)."""
+    from guidance_ids import _resolve_ratio_subtype
+    assert _resolve_ratio_subtype('50 bps yoy') == 'basis_points'
+
+def test_v2_ppts_yoy_subtype():
+    """1.5 percentage points yoy → percent_points."""
+    from guidance_ids import _resolve_ratio_subtype
+    assert _resolve_ratio_subtype('1.5 percentage points yoy') == 'percent_points'
+
+def test_v2_pct_yoy_subtype():
+    """2% yoy → percent_yoy."""
+    from guidance_ids import _resolve_ratio_subtype
+    assert _resolve_ratio_subtype('2% yoy') == 'percent_yoy'
+
+def test_v2_revenue_run_rate():
+    """Revenue Run Rate + money hints → m_usd; 'rate' must not trigger ratio."""
+    r = build_guidance_ids(label='Revenue Run Rate', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='billion', low=10,
+        unit_kind_hint='money', money_mode_hint='aggregate', resolution_mode='v2')
+    assert r['canonical_unit'] == 'm_usd'
+
+def test_v2_empty_unit_raw_with_hints():
+    """Empty unit_raw + valid hints → resolves correctly (legacy/readback path)."""
+    r = build_guidance_ids(label='Revenue', source_id='s', period_u_id='gp_t',
+        basis_norm='gaap', unit_raw='', qualitative='strong growth expected',
+        unit_kind_hint='money', money_mode_hint='aggregate', resolution_mode='v2')
+    assert r['canonical_unit'] == 'm_usd'
+
+def test_v2_mixed_case_billion():
+    """Mixed-case 'Billion' resolves like 'billion'."""
+    from guidance_ids import _extract_scale_factor
+    assert _extract_scale_factor('Billion') == 1e9
+
+def test_v2_trillion_scale():
+    """trillion and t both scale correctly."""
+    from guidance_ids import _extract_scale_factor
+    assert _extract_scale_factor('trillion') == 1e12
+    assert _extract_scale_factor('t') == 1e12
+
+def test_v2_count_billion_scale():
+    """Count item + billion → absolute quantity."""
+    from guidance_ids import _scale_count_absolute
+    assert _scale_count_absolute(4.94, 'billion') == 4_940_000_000.0
+
+def test_v2_plural_millions():
+    """Plural 'millions' resolves like 'million'."""
+    from guidance_ids import _extract_scale_factor
+    assert _extract_scale_factor('millions') == 1e6
+
+def test_v2_price_like_thousand():
+    """Price-like money + thousand → absolute dollars."""
+    from guidance_ids import _scale_price_like_money
+    assert _scale_price_like_money(490, 'thousand') == 490_000.0
+
+def test_v2_tax_rate_ratio():
+    """Tax Rate + % → ratio regardless of money hints."""
+    r = build_guidance_ids(label='Tax Rate', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='%', low=25.5,
+        unit_kind_hint='money', resolution_mode='v2')
+    assert r['resolved_kind'] == 'ratio'
+    assert r['canonical_unit'] == 'percent'
+
+def test_v2_aggregate_cents_fails():
+    """money+aggregate + cents → ValueError (impossible state)."""
+    try:
+        from guidance_ids import _scale_aggregate_money
+        _scale_aggregate_money(32, 'cents')
+        assert False, "should have raised"
+    except ValueError:
+        pass
+
+def test_v2_bad_hint_pct_surface():
+    """Bad money hint + % surface → ratio."""
+    from guidance_ids import _resolve_kind
+    assert _resolve_kind('money', '%', None, 'gross_margin') == 'ratio'
+
+def test_v2_conflicting_hard_evidence():
+    """Conflicting hard count (XBRL) + hard money (surface $) → unknown."""
+    from guidance_ids import _resolve_kind
+    assert _resolve_kind(None, '$', 'us-gaap:CommonStockSharesOutstanding', 'test') == 'unknown'
+
+def test_v2_old_payload_fallback():
+    """Old payload with no hints still works via V1 fallback."""
+    r = build_guidance_ids(label='Revenue', source_id='s', period_u_id='gp_t',
+        basis_norm='gaap', unit_raw='billion', low=94, resolution_mode='v1')
+    assert r['canonical_unit'] == 'm_usd'
+    assert r['canonical_low'] == 94000.0
+
+def test_v2_readback_asp_fallback():
+    """ASP readback from 7E with resolved axes, no hints/unit_raw → usd."""
+    r = build_guidance_ids(label='Average Selling Price', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='unknown',
+        existing_guidance_id='guidance:average_selling_price',
+        existing_resolved_kind='money', existing_resolved_money_mode='price_like',
+        existing_resolution_version='v2', resolution_mode='v2')
+    assert r['canonical_unit'] == 'usd'
+
+def test_v2_readback_ratio_fallback():
+    """Readback ratio item with resolved axes → preserves ratio family."""
+    r = build_guidance_ids(label='Gross Margin Growth', source_id='s', period_u_id='gp_t',
+        basis_norm='unknown', unit_raw='unknown',
+        existing_guidance_id='guidance:gross_margin_growth',
+        existing_resolved_kind='ratio', existing_resolved_ratio_subtype='percent_yoy',
+        existing_resolution_version='v2', resolution_mode='v2')
+    assert r['canonical_unit'] == 'percent_yoy'
+
+def test_v2_stale_precomputed_id_overwritten():
+    """Pre-computed guidance_update_id → CLI overwrites with recomputed."""
+    r = build_guidance_ids(label='Revenue', source_id='NEW_SRC', period_u_id='gp_t',
+        basis_norm='gaap', unit_raw='billion', low=94,
+        unit_kind_hint='money', money_mode_hint='aggregate', resolution_mode='v2')
+    assert 'NEW_SRC' in r['guidance_update_id']
+
+def test_v2_shadow_mode():
+    """Shadow mode: V1 effective + V2 diff block."""
+    r = build_guidance_ids(label='Revenue', source_id='s', period_u_id='gp_t',
+        basis_norm='gaap', unit_raw='billion', low=94,
+        unit_kind_hint='money', money_mode_hint='aggregate', resolution_mode='shadow')
+    assert r['canonical_unit'] == 'm_usd'  # V1 effective
+    assert 'shadow_v2' in r
+    assert r['shadow_v2']['canonical_unit'] == 'm_usd'
+    assert r.get('resolved_kind') is None  # V1 mode: no resolved_*
+
+
 # ── Run all tests ───────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

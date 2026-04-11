@@ -35,7 +35,7 @@ This document is the implementation handoff for the V2 guidance unit-resolution 
 - if existing code comments, older tests, or older guidance docs conflict with this spec, follow this spec
 - preserve backward compatibility only where this spec explicitly requires it
 
-### 2.2 Implement Exactly These 14 Files
+### 2.2 Implement Exactly These 15 Files
 
 Required implementation surface:
 
@@ -46,13 +46,14 @@ Required implementation surface:
 5. `.claude/skills/extract/types/guidance/enrichment-pass.md`
 6. `.claude/skills/extract/types/guidance/core-contract.md`
 7. `.claude/skills/extract/types/guidance/guidance-queries.md`
-8. `.claude/skills/earnings-orchestrator/scripts/test_guidance_ids.py`
-9. `.claude/skills/earnings-orchestrator/scripts/test_guidance_write_cli.py`
-10. `.claude/skills/earnings-orchestrator/scripts/test_guidance_writer.py`
-11. `scripts/earnings/test_guidance_unit_safety.py`
-12. `.claude/plans/Infra_Bugs/guidance-unit-resolution-v2-spec.md`
-13. `.claude/skills/earnings-orchestrator/scripts/warmup_cache.py` (optional downstream cleanup only)
-14. `scripts/earnings/earnings_orchestrator.py` (optional downstream cleanup only)
+8. `.claude/skills/extract/types/guidance/assets/8k-primary.md`
+9. `.claude/skills/earnings-orchestrator/scripts/test_guidance_ids.py`
+10. `.claude/skills/earnings-orchestrator/scripts/test_guidance_write_cli.py`
+11. `.claude/skills/earnings-orchestrator/scripts/test_guidance_writer.py`
+12. `scripts/earnings/test_guidance_unit_safety.py`
+13. `.claude/plans/Infra_Bugs/guidance-unit-resolution-v2-spec.md`
+14. `.claude/skills/earnings-orchestrator/scripts/warmup_cache.py` (optional downstream cleanup only)
+15. `scripts/earnings/earnings_orchestrator.py` (optional downstream cleanup only)
 
 ### 2.3 Implementation Order
 
@@ -61,7 +62,7 @@ Implement in this order:
 1. `guidance_ids.py`
 2. `guidance_write_cli.py`
 3. `guidance_writer.py`
-4. guidance extraction/readback docs (`primary-pass.md`, `enrichment-pass.md`, `core-contract.md`, `guidance-queries.md`)
+4. guidance extraction/readback docs (`primary-pass.md`, `enrichment-pass.md`, `core-contract.md`, `guidance-queries.md`, `assets/8k-primary.md`)
 5. tests
 6. optional downstream cleanup only after the write path is correct
 
@@ -169,7 +170,7 @@ Mapping:
 | multiplier | n/a | n/a | `x` |
 | unknown | unknown | unknown | `unknown` |
 
-### 3.1 `resolved_money_mode` semantics
+### 4.1 `resolved_money_mode` semantics
 
 `resolved_money_mode` is intentionally **not** a denominator field.
 
@@ -195,7 +196,7 @@ V2 resolves each axis independently.
 
 Implementation rule: collect all hard-evidence hits for an axis first, detect contradictions second, and only then apply precedence. Do not short-circuit on the first substring match; conflicting hard evidence must fail closed to `unknown`.
 
-### 4.1 `resolved_kind`
+### 5.1 `resolved_kind`
 
 | Priority | Evidence source | Rule | Output |
 |---|---|---|---|
@@ -209,7 +210,7 @@ Implementation rule: collect all hard-evidence hits for an axis first, detect co
 | 8 | conservative label prior | narrow count families only: `shares_outstanding`, `share_count`, `headcount` | prior value |
 | 9 | fallback | no reliable evidence | `unknown` |
 
-### 4.2 `resolved_money_mode`
+### 5.2 `resolved_money_mode`
 
 Only evaluated when `resolved_kind == "money"`.
 
@@ -230,7 +231,7 @@ Important safety rule:
 - live labels such as `price_contribution`, `price_mix`, and `average_selling_price_increase` prove broad `price` matching is unsafe
 - `cost_per_*` does not need a special prior because isolated `per` already acts as strong hard evidence once `resolved_kind == "money"`
 
-### 4.3 `resolved_ratio_subtype`
+### 5.3 `resolved_ratio_subtype`
 
 Only evaluated when `resolved_kind == "ratio"`.
 
@@ -243,7 +244,7 @@ Important rule: unit subtype wins over time qualifier. `yoy` describes temporal 
 | 3 | explicit YoY markers | `unit_raw` tokenized match contains `yoy`, `y/y`, `year over year`, `year-over-year`, `yr/yr` | `percent_yoy` |
 | 4 | fallback | plain percentage level | `percent` |
 
-### 4.4 Scale Parsing
+### 5.4 Scale Parsing
 
 Scale is parsed from `unit_raw` only. It must not determine semantic kind.
 
@@ -271,7 +272,7 @@ Implementation rules:
 - `million shares` -> `million`
 - `cents per share` -> `cents`
 
-### 4.5 Contradiction Policy
+### 5.5 Contradiction Policy
 
 The resolver must never silently prefer a weak hint over strong evidence.
 
@@ -297,7 +298,7 @@ Examples:
 
 Once axes are resolved:
 
-### 5.1 Money, aggregate
+### 6.1 Money, aggregate
 
 - canonical unit: `m_usd`
 - normalization target: millions of USD
@@ -308,7 +309,7 @@ Examples:
 - `94 million` -> `94.0`
 - `2000` with no scale -> `2000.0` (assumed already in millions per existing contract)
 
-### 5.2 Money, price-like
+### 6.2 Money, price-like
 
 - canonical unit: `usd`
 - normalization target: face dollars
@@ -319,7 +320,7 @@ Examples:
 - `32 cents` -> `0.32`
 - `490000` -> `490000`
 
-### 5.2A Scale conversion tables
+### 6.2A Scale conversion tables
 
 For clarity, V2 uses two distinct scale interpretations for money:
 
@@ -339,7 +340,7 @@ Guard rule:
 - writer validation then acts as belt-and-suspenders for any item that reaches the write path in that impossible state
 - do not silently reinterpret aggregate money as price-like inside normalization
 
-### 5.3 Count
+### 6.3 Count
 
 - canonical unit: `count`
 - normalization target: absolute quantity
@@ -360,12 +361,12 @@ Count scale conversion table:
 | thousand | `1e3` |
 | none | `1` |
 
-### 5.4 Ratio and multiplier
+### 6.4 Ratio and multiplier
 
 - `percent*` -> preserve numeric face value
 - `x` -> preserve numeric face value
 
-### 5.5 Ambiguous / unknown
+### 6.5 Ambiguous / unknown
 
 - preserve numeric face value unchanged
 - do not invent scaling
@@ -384,7 +385,7 @@ Count scale conversion table:
 ### Add helper functions
 
 - `_normalize_unit_text(text: Optional[str]) -> str`
-- `_extract_scale_factor(unit_raw: str) -> Optional[float]`
+- `_extract_scale_factor(unit_raw: str) -> Optional[float]` — returns the raw absolute scale multiplier per §5.4's scale table (e.g., `1e9` for "billion", `1e6` for "million", `0.01` for "cents", `None` for no scale word). Mode-independent; the `_scale_*` functions apply mode-specific normalization.
 - `_scale_aggregate_money(value: float, unit_raw: str) -> float`
 - `_scale_price_like_money(value: float, unit_raw: str) -> float`
 - `_scale_count_absolute(value: float, unit_raw: str) -> float`
@@ -405,16 +406,17 @@ Implementation notes:
 - `_has_ratio_surface()` must use token/word matching so `percent` is ratio, not money via `cent`
 - `_has_money_surface()` must match `cent` / `cents` as isolated words or symbols, never as substrings inside `percent`
 - `_has_multiplier_surface()` must recognize isolated `x` and numeric suffix forms like `2.5x`, with behavior equivalent to whole-word `x` or a numeric token ending in `x`; it must not match false positives such as `tax`, `max`, `next`, or `index`
-- `_resolve_ratio_subtype()` may use `quote` only as secondary context after `resolved_kind == 'ratio'`; it must not be allowed to change family classification. This is the only resolver that may consult `quote`.
-- `_scale_price_like_money()` must implement the absolute-dollar column of table 5.2A and preserve the current pre-scaled safety guard (`raw_scale > 1 and value > 999` -> `ValueError`)
-- `_scale_aggregate_money()` must implement the millions-normalized column of table 5.2A and preserve the current pre-scaled safety guard (`raw_scale > 1 and value > 999` -> `ValueError`)
-- `_scale_count_absolute()` must preserve the current pre-scaled safety guard (`raw_scale > 1 and value > 999` -> `ValueError`)
+- `_resolve_ratio_subtype()` may use `quote` only to supply YoY temporal context after all explicit `unit_raw` subtype checks fail; never inspect `quote` for `bp` / `bps` / `point` / `points` / `percentage point(s)` markers; `quote` must never override an explicit `unit_raw` subtype hit
+- `_scale_aggregate_money()` must implement the millions-normalized column of table 6.2A and preserve the legacy pre-scaled guard semantics relative to the millions target unit. In practice, compare the scale-to-millions factor, not the raw absolute scale token, so the guard still fires for billion/trillion but not for ordinary million-scale inputs.
+- `_scale_count_absolute()` must preserve the same legacy pre-scaled guard semantics used by the current count path. Do not apply a literal `raw_scale > 1` check to absolute factors, or valid inputs like `1500 million shares` will be rejected.
+- `_scale_price_like_money()` must implement the absolute-dollar column of table 6.2A. Do not inherit the legacy guard literally from V1, because V1 had no equivalent price-like scaling path and a raw absolute-factor check would incorrectly reject valid `cents` / `thousand` inputs.
 - keep `_parse_numeric_with_scale()` for backward-compatible legacy fallback paths when resolved axes are absent; V2 paths should prefer `_extract_scale_factor()`
 
 ### Keep for backward compatibility
 
 - `canonicalize_unit(unit_raw, label_slug)` must remain callable
-- implement it as a wrapper into V2 with all hints/evidence absent
+- keep the existing legacy behavior / alias semantics for this function so current callers and tests still work for scale-only words like `billion`, `million`, `bn`, and `m`
+- do **not** make `canonicalize_unit()` a thin wrapper around the V2 resolver with all hints/evidence absent; that would break backward compatibility on legacy callers that rely on V1 alias behavior
 
 ### Change `canonicalize_value(...)`
 
@@ -444,21 +446,30 @@ New behavior:
 - scale according to resolved axes when provided
 - preserve current fallback behavior when axes are absent
 
-Required branching when resolved axes are present:
+Required branching structure:
 
 ```python
 if value is None:
     return None
 
-if resolved_kind == 'money':
-    if resolved_money_mode == 'price_like':
-        return _scale_price_like_money(value, unit_raw)
-    if resolved_money_mode == 'aggregate':
-        return _scale_aggregate_money(value, unit_raw)
+if resolved_kind is not None:
+    # V2 path
+    if resolved_kind == 'money':
+        if resolved_money_mode == 'price_like':
+            return _scale_price_like_money(value, unit_raw)
+        if resolved_money_mode == 'aggregate':
+            return _scale_aggregate_money(value, unit_raw)
+    if resolved_kind == 'count':
+        return _scale_count_absolute(value, unit_raw)
+    return value
 
-if resolved_kind == 'count':
-    return _scale_count_absolute(value, unit_raw)
-
+# V1 fallback path (preserve existing legacy behavior when axes are absent)
+if canonical_unit == 'count' and _is_share_count_label(label_slug) and unit_raw:
+    ...
+if _is_per_share_label(label_slug):
+    return value
+if canonical_unit == 'm_usd' and unit_raw:
+    ...
 return value
 ```
 
@@ -585,7 +596,7 @@ resolution_mode=resolution_mode,
 
 Add deterministic payload-origin classification before enforcing hint requirements.
 
-Recommended top-level CLI input field:
+Required top-level CLI input field for post-upgrade batches:
 
 ```json
 {"payload_origin": "extract_v2 | legacy_extract | readback"}
@@ -596,14 +607,21 @@ Classification rules:
 - if `payload_origin == "extract_v2"`, treat items as fresh post-upgrade extraction output
 - if `payload_origin == "readback"`, treat items as 7E enrichment/readback payloads
 - if `payload_origin == "legacy_extract"`, treat items as pre-upgrade / backward-compatible extraction payloads
-- if `payload_origin` is absent, infer `readback` only when existing graph identity fields are present (`guidance_id`, `guidance_update_id`, or `resolution_version`); otherwise default to `legacy_extract`
+
+Fallback inference is only for backward compatibility:
+
+- if `payload_origin` is absent and `resolution_version == "v2"`, infer `readback`
+- otherwise default to `legacy_extract`
+- do **not** infer `readback` from `guidance_id` or `guidance_update_id` alone
 
 Add pre-ID validation:
 
 - if `unit_kind_hint` invalid -> `ValueError`
 - if `money_mode_hint` present but invalid -> `ValueError`
 - if `unit_kind_hint != 'money'` and `money_mode_hint` present non-null -> `ValueError`
+- if payload origin is `extract_v2` and `unit_kind_hint` is absent -> `ValueError`
 - if payload origin is `extract_v2` and `unit_kind_hint == 'money'` and `money_mode_hint` is absent -> `ValueError`
+- if payload origin is `extract_v2` and any of `low`, `mid`, `high` is numeric and `unit_raw` is absent, blank, or literal `"unknown"` -> `ValueError`
 - if payload origin is `legacy_extract` or `readback`, allow missing `money_mode_hint`; those may fall through to deterministic evidence and conservative fallback
 
 Implementation note: this payload-origin classification must be explicit and shared so every CLI implementation makes the same decision about whether missing hints are an error.
@@ -691,14 +709,24 @@ V2 explicitly changes the authoritative Neo4j write path:
 
 ### `_build_params(...)`
 
+Required signature change:
+
+```python
+def _build_params(item, source_id, source_type, ticker, resolution_mode='v2'):
+```
+
+`write_guidance_item()` and `write_guidance_batch()` must also accept and forward `resolution_mode` so the CLI can thread it through from the top-level env var.
+
 Required additions:
 
 - map `resolved_kind`
 - map `resolved_money_mode`
 - map `resolved_ratio_subtype`
 - map `resolution_version`
+- in `v1` and `shadow`, `_build_params()` must suppress `resolved_kind`, `resolved_money_mode`, `resolved_ratio_subtype`, and `resolution_version` even if those keys are present on the item
+- only `resolution_mode == "v2"` may map those fields into Cypher params / `SET` clauses
 
-`_build_core_query(...)` must add matching `SET` clauses on `gu` for those additive properties.
+`_build_core_query(...)` must add matching `SET` clauses on `gu` for those additive properties (V2 mode only).
 
 Keep this logic unchanged by design:
 
@@ -745,9 +773,10 @@ Same field additions as primary pass.
 
 Special rule:
 
-- 7E readback batches should identify themselves as `payload_origin=readback` when possible
-- for 7E readback items, hints may be absent
-- enrichment-created items should populate hints
+- enrichment Step 6 output (changed + new items) should use `payload_origin=extract_v2` because every emitted item was actively processed by the enrichment agent and must carry hints
+- pure 7E readback used as agent input (not the CLI write payload) is a separate concern; if a readback-only batch is ever written directly, it should use `payload_origin=readback`
+- for `readback` items, hints may be absent
+- for `extract_v2` items (including enrichment output), `unit_kind_hint` is required; `unit_raw` is required for numeric items (any of `low`/`mid`/`high` non-null) per §7.2 validation
 - CLI fallback must remain safe when hints are absent
 
 Enrichment round-trip rule:
@@ -757,6 +786,7 @@ Enrichment round-trip rule:
 - existing items should preserve returned resolved-axis fields from 7E as fallback semantic context only when `resolution_version >= "v2"`
 - if enrichment changes label/unit semantics materially, the new payload should include fresh hints and/or raw surface evidence so old resolved-axis fallback is not relied on
 - after the Phase-4 V2 flip, pre-V2 readback items without fresh hints/raw surface evidence or validated V2 resolved-axis context must not be V2-rewritten during enrichment; skip rewrite or leave the legacy row untouched until targeted re-extraction/backfill upgrades that source
+- **control point**: in `guidance_write_cli.py`, before an item is added to `valid_items` for `resolution_mode='v2'`, if `payload_origin == 'readback'` and the item lacks both (a) fresh incoming hints/raw surface evidence and (b) `resolution_version == "v2"` fallback context, the CLI must skip the item, must not pass it to `write_guidance_batch()`, and must record `pre_v2_readback_skip` in `id_errors`
 - update `.claude/skills/extract/types/guidance/guidance-queries.md` query 7E accordingly
 
 ## 7.6 Tests
@@ -790,7 +820,7 @@ Enrichment round-trip rule:
 - `unit_raw="1.5 percentage points yoy"` resolves to `percent_points`
 - `unit_raw="2% yoy"` resolves to `percent_yoy`
 - `Revenue Run Rate` with money hints resolves to `m_usd`; `rate` in label must not trigger ratio
-- empty `unit_raw` / `None` with valid V2 hints still resolves correctly
+- empty `unit_raw` / `None` with valid V2 hints still resolves correctly for `legacy_extract` or `readback` payloads (extract_v2 numeric items are rejected at validation per §7.2; qualitative-only extract_v2 items may also lack `unit_raw`)
 - mixed-case `unit_raw="Billion"` resolves like `billion`
 - `unit_raw="trillion"` and `unit_raw="t"` both scale correctly
 - count item with `unit_raw="billion"` scales to absolute quantity
@@ -888,12 +918,19 @@ Update all guidance extraction/reference docs together:
 - `.claude/skills/extract/types/guidance/enrichment-pass.md`
 - `.claude/skills/extract/types/guidance/core-contract.md`
 - `.claude/skills/extract/types/guidance/guidance-queries.md`
+- `.claude/skills/extract/types/guidance/assets/8k-primary.md`
 
 Add / document emitted fields:
 
 - `unit_kind_hint`
 - `money_mode_hint`
 - top-level `payload_origin=extract_v2` for fresh post-upgrade extraction batches
+
+Required explicit replacements in `assets/8k-primary.md`:
+
+- replace `"$94-98 billion"` example: change `low=94000, high=98000` to `low=94, high=98, unit_raw="billion"`
+- replace `"$2 billion"` example: change `mid=2000` to `mid=2, unit_raw="billion"`
+- replace `"at least $150M"` example: change `low=150` to `low=150, unit_raw="million"`
 
 Prepare the 7E readback contract to expose, for V2-written / backfilled rows:
 
@@ -938,6 +975,42 @@ Re-run the known bad families first, using pattern/family selection rather than 
 - operational count families such as `hsa_count`, `loyalty_members`, `total_accounts`, `active_customers`, `net_active_customer_additions_per_quarter`
 - price-like money families such as `average_selling_price`, `average_daily_rate`, `arpu`, `revpar`, `fuel_cost_per_metric_ton`, `content_per_vehicle`
 - any additional live rows surfaced by the shadow diff / safety queries as `m_usd` leaks, numeric `unknown`, or count-like money mismatches
+
+Operational note for the known 885 source docs that already have guidance:
+
+- validated on the live graph on 2026-04-10: the query below returned `885` distinct source docs on three consecutive runs, and the grouped source listing also returned `885` rows
+- once V2 is finalized, setting `guidance_status = NULL` on those specific source docs is sufficient to let them re-enter normal guidance extraction / merge flow without `--force`
+- this works because both the daemon and the default bulk trigger treat `guidance_status IS NULL` as eligible for requeue
+- caveat: the source still must be otherwise eligible for routing, and the daemon may defer immediate requeue if a Redis guidance lease is still active
+
+Discovery query for the exact source-doc population:
+
+```cypher
+MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(src)
+WITH labels(src) AS source_labels,
+     src.id AS source_id,
+     src.guidance_status AS guidance_status,
+     count(gu) AS guidance_update_count
+RETURN source_labels, source_id, guidance_status, guidance_update_count
+ORDER BY source_id;
+```
+
+Count query used to validate the population size:
+
+```cypher
+MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(src)
+WITH DISTINCT src
+RETURN count(src) AS source_doc_count;
+```
+
+Reset query for that discovered population:
+
+```cypher
+MATCH (gu:GuidanceUpdate)-[:FROM_SOURCE]->(src)
+WITH DISTINCT src
+SET src.guidance_status = NULL
+RETURN count(src) AS reset_count;
+```
 
 ## Phase 6: Historical Backfill
 

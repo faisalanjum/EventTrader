@@ -1996,5 +1996,67 @@ def main():
         run_warmup(ticker)
 
 
+def _run_v2_regression_tests():
+    """V2 regression tests for formatting/grouping with corrected canonical_unit values.
+    Verifies downstream behavior once V2 resolver produces correct units.
+    Run: python3 warmup_cache.py --test"""
+
+    passed = failed = 0
+    def check(name, actual, expected):
+        nonlocal passed, failed
+        if actual == expected:
+            passed += 1
+        else:
+            failed += 1
+            print(f"  FAIL {name}: expected {expected!r}, got {actual!r}")
+
+    # _format_value: corrected usd metrics (was m_usd in V1)
+    check("fmt_asp_usd_point", _format_value(490000, 490000, 490000, 'usd', None, 'point'), '$490000')
+    check("fmt_dps_usd_point", _format_value(0.32, 0.32, 0.32, 'usd', None, 'point'), '$0.32')
+    check("fmt_eps_usd_range", _format_value(3.2, None, 3.4, 'usd', None, 'explicit'), '$3.2-$3.4')
+
+    # _format_value: corrected count metrics (was m_usd in V1)
+    check("fmt_count_point", _format_value(300e6, 300e6, 300e6, 'count', None, 'point'), '3e+08')
+
+    # _format_value: m_usd unchanged
+    check("fmt_musd_range", _format_value(94000, None, 98000, 'm_usd', None, 'explicit'), '$94-$98B')
+    check("fmt_musd_point", _format_value(2000, 2000, 2000, 'm_usd', None, 'point'), '$2B')
+
+    # _format_value: ratio metrics
+    check("fmt_pct", _format_value(42, 42, 42, 'percent', None, 'point'), '42%')
+    check("fmt_pct_yoy_range", _format_value(5, None, 7, 'percent_yoy', None, 'explicit'), '5-7% YoY')
+    check("fmt_bps", _format_value(50, 50, 50, 'basis_points', None, 'point'), '+50 bps')
+    check("fmt_pp", _format_value(1.5, 1.5, 1.5, 'percent_points', None, 'point'), '1.5 pp')
+    check("fmt_x", _format_value(2.5, 2.5, 2.5, 'x', None, 'point'), '2.5x')
+
+    # resolve_unit_groups: unknown remap via resolved_unit
+    rows = [
+        {'metric_id': 'revenue', 'basis_norm': 'gaap', 'segment_slug': 'total',
+         'period_scope': 'quarter', 'time_type': 'duration', 'canonical_unit': 'm_usd'},
+        {'metric_id': 'revenue', 'basis_norm': 'gaap', 'segment_slug': 'total',
+         'period_scope': 'quarter', 'time_type': 'duration', 'canonical_unit': 'unknown'},
+    ]
+    resolve_unit_groups(rows)
+    check("remap_resolved_unit", rows[1]['resolved_unit'], 'm_usd')
+    check("remap_known_passthrough", rows[0]['resolved_unit'], 'm_usd')
+
+    # No remap when mixed non-unknown units
+    rows2 = [
+        {'metric_id': 'mixed', 'basis_norm': 'gaap', 'segment_slug': 'total',
+         'period_scope': 'quarter', 'time_type': 'duration', 'canonical_unit': 'm_usd'},
+        {'metric_id': 'mixed', 'basis_norm': 'gaap', 'segment_slug': 'total',
+         'period_scope': 'quarter', 'time_type': 'duration', 'canonical_unit': 'usd'},
+        {'metric_id': 'mixed', 'basis_norm': 'gaap', 'segment_slug': 'total',
+         'period_scope': 'quarter', 'time_type': 'duration', 'canonical_unit': 'unknown'},
+    ]
+    resolve_unit_groups(rows2)
+    check("no_remap_mixed", rows2[2]['resolved_unit'], 'unknown')
+
+    print(f"\n{passed} passed, {failed} failed out of {passed + failed}")
+    return failed == 0
+
+
 if __name__ == '__main__':
+    if len(sys.argv) > 1 and sys.argv[1] == '--test':
+        sys.exit(0 if _run_v2_regression_tests() else 1)
     main()

@@ -76,7 +76,17 @@ For missing labels, re-scan secondary content for that metric. Append to the log
 
 For each enriched item: start from the FULL 7E readback item as your semantic base. Apply secondary enrichments to specific fields. Do NOT omit any existing semantic/write field from that base item — `SET` overwrites everything including null.
 
-Preserve from 7E unless the Q&A changes it: `given_date`, `period_scope`, `time_type`, `fiscal_year`, `fiscal_quarter`, `segment`, `low`/`mid`/`high`, `basis_norm`, `basis_raw`, `derivation`, `qualitative`, `quote`, `section`, `source_key`, `source_type`, `conditions`, `xbrl_qname`, `unit_raw` (when present), `period_u_id`, `gp_start_date`, `gp_end_date`.
+Preserve from 7E unless the Q&A changes it: `given_date`, `period_scope`, `time_type`, `fiscal_year`, `fiscal_quarter`, `segment`, `low`/`mid`/`high`, `basis_norm`, `basis_raw`, `derivation`, `qualitative`, `quote`, `section`, `source_key`, `source_type`, `conditions`, `xbrl_qname`, `unit_raw` (when present), `period_u_id`, `gp_start_date`, `gp_end_date`, `resolved_kind`, `resolved_money_mode`, `resolved_ratio_subtype`, `resolution_version`.
+
+### V2 Unit Hint Fields
+
+Enrichment output (this Step 6 payload) should use `payload_origin=extract_v2` at the top level because every emitted item was actively processed by the enrichment agent.
+
+For ALL items in the enrichment output (both modified readback and new secondary-only):
+
+- **`unit_kind_hint`**: REQUIRED. One of `money`, `ratio`, `count`, `multiplier`, `unknown`.
+- **`money_mode_hint`**: REQUIRED when `unit_kind_hint == "money"`. One of `aggregate`, `price_like`, `unknown`.
+- **`unit_raw`**: REQUIRED for numeric items. Verbatim surface scale/unit text. Preserve denominator phrases (e.g., `"cents per share"`).
 
 Exceptions:
 - `member_u_ids`: always set `[]` in the payload — the CLI repopulates these deterministically
@@ -93,7 +103,7 @@ For new secondary-only items: build from scratch using CIK/FYE from Step 1. Use 
 
 The CLI (`guidance_write_cli.py`) is the sole authority for member resolution. Always set `member_u_ids: []` in the JSON payload — the CLI populates it from precomputed CIK-based maps (or live fallback in write mode).
 
-3. **Assemble JSON payload** and write to `/tmp/gu_{TICKER}_{SOURCE_ID}_enrichment.json`. **Use the exact same top-level envelope as primary pass** — the CLI requires `source_id`, `source_type`, `ticker`, and `fye_month` at top level:
+3. **Assemble JSON payload** and write to `/tmp/gu_{TICKER}_{SOURCE_ID}_enrichment.json`. **Use the exact same top-level envelope as primary pass** — the CLI requires `source_id`, `source_type`, `ticker`, `fye_month`, and `payload_origin` at top level:
 
 ```json
 {
@@ -101,6 +111,7 @@ The CLI (`guidance_write_cli.py`) is the sole authority for member resolution. A
     "source_type": "{ASSET}",
     "ticker": "{TICKER}",
     "fye_month": {FYE_MONTH from Step 1},
+    "payload_origin": "extract_v2",
     "items": [ ... ]
 }
 ```

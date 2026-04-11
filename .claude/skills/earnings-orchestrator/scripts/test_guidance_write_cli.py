@@ -48,10 +48,13 @@ def test_ensure_ids_computes_when_missing():
     assert result['guidance_update_id'].startswith('gu:TEST_SRC:revenue:gp_')
 
 
-def test_ensure_ids_skips_when_present():
+def test_ensure_ids_always_recomputes():
+    """V2: _ensure_ids always recomputes, never early-returns on pre-computed IDs."""
     item = _make_raw_item(guidance_update_id='gu:pre_computed:id')
     result = _ensure_ids(item)
-    assert result['guidance_update_id'] == 'gu:pre_computed:id'
+    # Pre-computed ID should be overwritten with CLI-authoritative result
+    assert result['guidance_update_id'] != 'gu:pre_computed:id'
+    assert result['guidance_update_id'].startswith('gu:')
 
 
 def test_ensure_ids_computes_canonical_values():
@@ -736,6 +739,108 @@ def test_ensure_ids_passes_ticker(monkeypatch):
     item = _make_period_item()
     _ensure_ids(item, fye_month=1, ticker='FIVE')
     assert captured['ticker'] == 'FIVE'
+
+
+# ── V2 CLI tests (spec §7.2 + §7.6) ─────────────────────────────────────
+
+def test_v2_classify_payload_origin_explicit():
+    """Explicit payload_origin is used directly."""
+    from guidance_write_cli import _classify_payload_origin
+    assert _classify_payload_origin({'payload_origin': 'extract_v2'}, []) == 'extract_v2'
+    assert _classify_payload_origin({'payload_origin': 'readback'}, []) == 'readback'
+    assert _classify_payload_origin({'payload_origin': 'legacy_extract'}, []) == 'legacy_extract'
+
+def test_v2_classify_payload_origin_fallback():
+    """Fallback: resolution_version='v2' → readback; else legacy_extract."""
+    from guidance_write_cli import _classify_payload_origin
+    assert _classify_payload_origin({}, [{'resolution_version': 'v2'}]) == 'readback'
+    assert _classify_payload_origin({}, [{'guidance_id': 'guidance:eps'}]) == 'legacy_extract'
+    assert _classify_payload_origin({}, []) == 'legacy_extract'
+
+def test_v2_validate_extract_v2_missing_hint():
+    """extract_v2 + missing unit_kind_hint → ValueError."""
+    from guidance_write_cli import _validate_item_hints
+    try:
+        _validate_item_hints({'low': 10}, 'extract_v2')
+        assert False, "should raise"
+    except ValueError as e:
+        assert 'unit_kind_hint' in str(e)
+
+def test_v2_validate_extract_v2_missing_money_mode():
+    """extract_v2 + money + missing money_mode_hint → ValueError."""
+    from guidance_write_cli import _validate_item_hints
+    try:
+        _validate_item_hints({'unit_kind_hint': 'money', 'low': 10, 'unit_raw': '$'}, 'extract_v2')
+        assert False, "should raise"
+    except ValueError as e:
+        assert 'money_mode_hint' in str(e)
+
+def test_v2_validate_extract_v2_missing_unit_raw():
+    """extract_v2 + numeric + missing unit_raw → ValueError."""
+    from guidance_write_cli import _validate_item_hints
+    try:
+        _validate_item_hints({'unit_kind_hint': 'money', 'money_mode_hint': 'price_like', 'low': 32}, 'extract_v2')
+        assert False, "should raise"
+    except ValueError as e:
+        assert 'unit_raw' in str(e)
+
+def test_v2_validate_extract_v2_unit_raw_unknown():
+    """extract_v2 + numeric + unit_raw='unknown' → ValueError."""
+    from guidance_write_cli import _validate_item_hints
+    try:
+        _validate_item_hints({'unit_kind_hint': 'money', 'money_mode_hint': 'price_like',
+                              'low': 32, 'unit_raw': 'unknown'}, 'extract_v2')
+        assert False, "should raise"
+    except ValueError as e:
+        assert 'unit_raw' in str(e)
+
+def test_v2_validate_legacy_allows_missing():
+    """legacy_extract allows missing hints."""
+    from guidance_write_cli import _validate_item_hints
+    _validate_item_hints({'low': 10}, 'legacy_extract')  # should not raise
+
+def test_v2_skip_gate_pre_v2_readback():
+    """Pre-V2 readback with no evidence → skip in v2 mode."""
+    from guidance_write_cli import _should_skip_pre_v2_readback
+    assert _should_skip_pre_v2_readback({}, 'readback', 'v2') is True
+    assert _should_skip_pre_v2_readback({'unit_kind_hint': 'money'}, 'readback', 'v2') is False
+    assert _should_skip_pre_v2_readback({'resolution_version': 'v2'}, 'readback', 'v2') is False
+    assert _should_skip_pre_v2_readback({}, 'readback', 'v1') is False
+    assert _should_skip_pre_v2_readback({}, 'extract_v2', 'v2') is False
+
+def test_v2_ensure_ids_always_recomputes():
+    """Pre-computed guidance_update_id → CLI overwrites with recomputed."""
+    from guidance_write_cli import _ensure_ids
+    item = {
+        'guidance_update_id': 'gu:OLD_STALE_ID',
+        'guidance_id': 'guidance:old',
+        'label': 'Revenue',
+        'source_id': 'NEW_SRC',
+        'period_u_id': 'gp_2025-01-01_2025-03-31',
+        'basis_norm': 'gaap',
+        'unit_raw': 'billion',
+        'low': 94.0, 'high': 98.0,
+    }
+    _ensure_ids(item, resolution_mode='v1')
+    assert 'NEW_SRC' in item['guidance_update_id']
+    assert item['guidance_update_id'] != 'gu:OLD_STALE_ID'
+
+def test_v2_ensure_ids_no_canonical_unit_proxy():
+    """unit_raw fallback no longer uses canonical_unit as proxy."""
+    from guidance_write_cli import _ensure_ids
+    item = {
+        'label': 'Revenue',
+        'source_id': 'src',
+        'period_u_id': 'gp_test',
+        'basis_norm': 'gaap',
+        'canonical_unit': 'm_usd',  # should NOT be used as unit_raw
+        # no unit_raw set
+        'low': 94.0,
+    }
+    _ensure_ids(item, resolution_mode='v1')
+    # Without unit_raw, defaults to 'unknown' → V1 produces 'unknown' canonical_unit
+    # (not 'm_usd' which would happen if canonical_unit was used as unit_raw proxy)
+    assert item['canonical_unit'] == 'unknown'
 
 
 # ── Run all tests ─────────────────────────────────────────────────────────

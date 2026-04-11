@@ -70,6 +70,8 @@ RETURN g.label, g.id AS guidance_id,
        gu.qualitative, gu.quote, gu.section,
        gu.source_key, gu.source_type, gu.conditions,
        gu.xbrl_qname, gu.unit_raw,
+       gu.resolved_kind, gu.resolved_money_mode,
+       gu.resolved_ratio_subtype, gu.resolution_version,
        gp.u_id AS period_u_id,
        gp.start_date AS gp_start_date, gp.end_date AS gp_end_date,
        collect(DISTINCT m.u_id) AS member_u_ids

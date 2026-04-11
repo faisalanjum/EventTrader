@@ -1010,6 +1010,92 @@ def test_validate_xbrl_aggregate_unchanged():
     assert err is None
 
 
+# ── V2 writer tests (spec §7.3 + §7.6) ──────────────────────────────────
+
+def test_v2_guard_d_numeric_pershare_unknown():
+    """Guard D: numeric per-share label + unknown → reject."""
+    item = _make_item(label='EPS', label_slug='eps', canonical_unit='unknown',
+                      resolved_kind='money', canonical_low=3.22)
+    ok, err = _validate_item(item, 'src', 'transcript')
+    assert not ok and 'per-share' in err
+
+def test_v2_guard_d_qualitative_pershare_ok():
+    """Guard D: qualitative per-share + unknown → pass (no numeric values)."""
+    item = _make_item(label='EPS', label_slug='eps', canonical_unit='unknown',
+                      resolved_kind='money',
+                      canonical_low=None, canonical_mid=None, canonical_high=None)
+    ok, _ = _validate_item(item, 'src', 'transcript')
+    assert ok
+
+def test_v2_guard_e_pricelike_musd():
+    """Guard E: price_like + m_usd → reject."""
+    item = _make_item(label_slug='average_selling_price', canonical_unit='m_usd',
+                      resolved_kind='money', resolved_money_mode='price_like',
+                      canonical_low=490000)
+    ok, err = _validate_item(item, 'src', 'transcript')
+    assert not ok and 'price_like' in err
+
+def test_v2_guard_f_aggregate_cents():
+    """Guard F: aggregate money + cents in unit_raw → reject."""
+    item = _make_item(label_slug='revenue', canonical_unit='m_usd',
+                      resolved_kind='money', resolved_money_mode='aggregate',
+                      canonical_low=32, unit_raw='cents')
+    ok, err = _validate_item(item, 'src', 'transcript')
+    assert not ok and 'cents' in err
+
+def test_v2_guard_g_ratio_musd():
+    """Guard G: ratio + m_usd → reject."""
+    item = _make_item(label_slug='gross_margin', canonical_unit='m_usd',
+                      resolved_kind='ratio', canonical_low=42)
+    ok, err = _validate_item(item, 'src', 'transcript')
+    assert not ok and 'ratio' in err
+
+def test_v2_guard_h_count_musd():
+    """Guard H: count + m_usd → reject."""
+    item = _make_item(label_slug='shares_outstanding', canonical_unit='m_usd',
+                      resolved_kind='count', canonical_low=300e6)
+    ok, err = _validate_item(item, 'src', 'transcript')
+    assert not ok and 'count' in err
+
+def test_v2_params_v2_mode_includes_resolved():
+    """_build_params in v2 mode maps resolved_* fields."""
+    item = _make_item(resolved_kind='money', resolved_money_mode='price_like',
+                      resolved_ratio_subtype='unknown', resolution_version='v2')
+    params = _build_params(item, 'src', 'transcript', 'AAPL', resolution_mode='v2')
+    assert params['resolved_kind'] == 'money'
+    assert params['resolved_money_mode'] == 'price_like'
+    assert params['resolution_version'] == 'v2'
+
+def test_v2_params_v1_mode_suppresses_resolved():
+    """_build_params in v1 mode suppresses resolved_* even if present on item."""
+    item = _make_item(resolved_kind='money', resolution_version='v2')
+    params = _build_params(item, 'src', 'transcript', 'AAPL', resolution_mode='v1')
+    assert 'resolved_kind' not in params
+    assert 'resolution_version' not in params
+
+def test_v2_params_shadow_mode_suppresses_resolved():
+    """_build_params in shadow mode suppresses resolved_*."""
+    item = _make_item(resolved_kind='money', resolution_version='v2')
+    params = _build_params(item, 'src', 'transcript', 'AAPL', resolution_mode='shadow')
+    assert 'resolved_kind' not in params
+
+def test_v2_query_v2_mode_has_set_clauses():
+    """_build_core_query in v2 mode includes resolved_* SET clauses."""
+    q = _build_core_query('transcript', resolution_mode='v2')
+    assert 'gu.resolved_kind = $resolved_kind' in q
+    assert 'gu.resolution_version = $resolution_version' in q
+
+def test_v2_query_v1_mode_no_set_clauses():
+    """_build_core_query in v1 mode does NOT include resolved_* SET clauses."""
+    q = _build_core_query('transcript', resolution_mode='v1')
+    assert 'resolved_kind' not in q
+
+def test_v2_query_shadow_mode_no_set_clauses():
+    """_build_core_query in shadow mode does NOT include resolved_* SET clauses."""
+    q = _build_core_query('transcript', resolution_mode='shadow')
+    assert 'resolved_kind' not in q
+
+
 # ── Run all tests ─────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

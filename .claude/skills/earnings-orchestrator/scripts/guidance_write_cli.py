@@ -66,6 +66,8 @@ from guidance_ids import (
     build_guidance_period_id,
     normalize_for_member_match,
     slug,
+    VALID_UNIT_KIND_HINTS,
+    VALID_MONEY_MODE_HINTS,
 )
 from concept_resolver import apply_concept_resolution, load_concept_cache, resolve_concept_family
 import guidance_writer
@@ -290,19 +292,63 @@ def _ensure_period(item, fye_month, ticker=None):
     return item
 
 
-def _ensure_ids(item, fye_month=None, ticker=None):
-    """
-    Compute IDs if not already present in the item.
+def _classify_payload_origin(data, items):
+    """Classify payload origin per spec §7.2. Returns 'extract_v2'|'readback'|'legacy_extract'."""
+    origin = data.get('payload_origin')
+    if origin in ('extract_v2', 'readback', 'legacy_extract'):
+        return origin
+    # Fallback inference (backward compat only)
+    for item in items:
+        if item.get('resolution_version') == 'v2':
+            return 'readback'
+    return 'legacy_extract'
 
-    If guidance_update_id is already set, skip ID computation (agent pre-computed).
-    Otherwise:
-      1. Compute period (if needed) via 4-step cascade (A/B/C/D)
-      2. Compute IDs via build_guidance_ids()
-    """
-    if item.get('guidance_update_id'):
-        return item
 
-    # Step 1: Ensure period_u_id exists
+def _validate_item_hints(item, payload_origin):
+    """Pre-ID validation of V2 hint fields per spec §7.2. Raises ValueError on failure."""
+    ukh = item.get('unit_kind_hint')
+    mmh = item.get('money_mode_hint')
+
+    if ukh and ukh not in VALID_UNIT_KIND_HINTS:
+        raise ValueError(f"invalid unit_kind_hint: '{ukh}'")
+    if mmh and mmh not in VALID_MONEY_MODE_HINTS:
+        raise ValueError(f"invalid money_mode_hint: '{mmh}'")
+    if mmh and (not ukh or ukh != 'money'):
+        raise ValueError(f"money_mode_hint='{mmh}' present but unit_kind_hint='{ukh or '(absent)'}' is not money")
+
+    if payload_origin == 'extract_v2':
+        if not ukh:
+            raise ValueError("extract_v2 payload requires unit_kind_hint")
+        if ukh == 'money' and not mmh:
+            raise ValueError("extract_v2 money item requires money_mode_hint")
+        has_numeric = any(item.get(k) is not None for k in ('low', 'mid', 'high'))
+        ur = item.get('unit_raw')
+        if has_numeric and (not ur or not ur.strip() or ur.strip().lower() == 'unknown'):
+            raise ValueError("extract_v2 numeric item requires non-empty unit_raw (not 'unknown')")
+
+
+def _should_skip_pre_v2_readback(item, payload_origin, resolution_mode):
+    """Skip gate for pre-V2 readback items in v2 mode per spec §7.5 control point."""
+    if resolution_mode != 'v2' or payload_origin != 'readback':
+        return False
+    has_hints = bool(item.get('unit_kind_hint'))
+    ur = item.get('unit_raw', '')
+    has_surface = bool(ur and ur.strip() and ur.strip().lower() != 'unknown')
+    has_v2_fallback = item.get('resolution_version') == 'v2'
+    return not has_hints and not has_surface and not has_v2_fallback
+
+
+def _ensure_ids(item, fye_month=None, ticker=None, resolution_mode='v1'):
+    """
+    Always recompute deterministic fields from current payload.
+
+    V2 changes (spec §7.2):
+      - No early-return on pre-computed IDs (CLI is sole authority)
+      - Preserve period_u_id when already present
+      - Fix unit_raw fallback (no canonical_unit proxy)
+      - Pass V2 params to build_guidance_ids
+    """
+    # Step 1: Ensure period_u_id exists (preserved if already set)
     _ensure_period(item, fye_month, ticker)
 
     # Step 2: Require fields for ID computation
@@ -311,11 +357,11 @@ def _ensure_ids(item, fye_month=None, ticker=None):
         if not item.get(f):
             raise ValueError(f"Cannot compute IDs: missing '{f}' in item")
 
-    # source_id comes from the item or must be passed
     source_id = item.get('source_id')
     if not source_id:
         raise ValueError("Cannot compute IDs: missing 'source_id' in item")
 
+    # Step 3: Compute IDs (always recompute, overwrite stale pre-computed fields)
     ids = build_guidance_ids(
         label=item['label'],
         source_id=source_id,
@@ -325,9 +371,20 @@ def _ensure_ids(item, fye_month=None, ticker=None):
         low=item.get('low'),
         mid=item.get('mid'),
         high=item.get('high'),
-        unit_raw=item.get('unit_raw') or item.get('canonical_unit') or 'unknown',
+        unit_raw=item.get('unit_raw') or 'unknown',
         qualitative=item.get('qualitative'),
         conditions=item.get('conditions'),
+        # V2 params
+        unit_kind_hint=item.get('unit_kind_hint'),
+        money_mode_hint=item.get('money_mode_hint'),
+        quote=item.get('quote'),
+        xbrl_qname=item.get('xbrl_qname'),
+        existing_guidance_id=item.get('guidance_id'),
+        existing_resolved_kind=item.get('resolved_kind'),
+        existing_resolved_money_mode=item.get('resolved_money_mode'),
+        existing_resolved_ratio_subtype=item.get('resolved_ratio_subtype'),
+        existing_resolution_version=item.get('resolution_version'),
+        resolution_mode=resolution_mode,
     )
     item.update(ids)
     return item
@@ -405,6 +462,11 @@ def main():
     mode = sys.argv[2] if len(sys.argv) > 2 else '--dry-run'
     dry_run = mode != '--write'
 
+    # V2: read resolution mode from env (default v1 for Phase 0 safety)
+    resolution_mode = os.environ.get('GUIDANCE_UNIT_RESOLUTION_MODE', 'v1')
+    if resolution_mode not in ('v1', 'v2', 'shadow'):
+        resolution_mode = 'v1'
+
     # Load input
     try:
         with open(input_path) as f:
@@ -430,75 +492,103 @@ def main():
         print(json.dumps({"error": "No items to write", "total": 0}))
         sys.exit(0)
 
-    # Inject source_id into each item (for ID computation if needed)
-    for item in items:
-        if 'source_id' not in item:
-            item['source_id'] = source_id
+    # V2: classify payload origin (spec §7.2)
+    payload_origin = _classify_payload_origin(data, items)
 
-    # Compute IDs for items that don't have them
+    # ── Phase A: inject source_id, label_slug, period, hint validation ──
+    # (concept repair needs label_slug; V2 ID computation needs repaired xbrl_qname)
     errors = []
-    valid_items = []
+    period_items = []
     for i, item in enumerate(items):
         try:
-            item = _ensure_ids(item, fye_month=fye_month, ticker=ticker)
-            valid_items.append(item)
+            # 1. Inject source_id
+            if 'source_id' not in item:
+                item['source_id'] = source_id
+
+            # 2. Compute label_slug early
+            if item.get('label'):
+                item['label_slug'] = slug(item['label'])
+
+            # 3. Ensure period (preserved if already set)
+            _ensure_period(item, fye_month, ticker)
+
+            # 4. Validate hints (pre-ID validation per spec §7.2)
+            _validate_item_hints(item, payload_origin)
+
+            period_items.append(item)
         except ValueError as e:
             errors.append({"index": i, "label": item.get('label', '?'), "error": str(e)})
 
-    # Deterministic concept repair fills reviewed null/invalid cases first.
+    # ── Concept repair (batch — runs on label_slug, does NOT need IDs) ──
     concept_rows = load_concept_cache(ticker)
-    apply_concept_resolution(valid_items, concept_rows, logger=logger)
+    apply_concept_resolution(period_items, concept_rows, logger=logger)
 
-    # Concept inheritance: if Revenue(Total) has xbrl_qname but Revenue(iPhone) doesn't,
-    # copy it over. Same metric = same concept regardless of segment.
+    # Concept inheritance: same metric = same concept regardless of segment
     concept_map = {}
-    for item in valid_items:
+    for item in period_items:
         label_key = item.get('label_slug') or slug(item.get('label', ''))
         if item.get('xbrl_qname') and label_key:
             concept_map.setdefault(label_key, item['xbrl_qname'])
-    for item in valid_items:
+    for item in period_items:
         label_key = item.get('label_slug') or slug(item.get('label', ''))
         if not item.get('xbrl_qname') and label_key in concept_map:
             item['xbrl_qname'] = concept_map[label_key]
 
-    # Concept family resolution: assign concept_family_qname to each item.
-    # Runs after concept resolution + inheritance so xbrl_qname is finalized.
+    # ── Phase B: skip gate + compute IDs (xbrl_qname now repaired) ──
+    valid_items = []
+    for i, item in enumerate(period_items):
+        try:
+            # Skip gate: pre-V2 readback items in v2 mode (spec §7.5)
+            if _should_skip_pre_v2_readback(item, payload_origin, resolution_mode):
+                errors.append({
+                    "index": i, "label": item.get('label', '?'),
+                    "error": "pre_v2_readback_skip",
+                })
+                continue
+
+            # Compute IDs + canonical fields (V2-aware)
+            _ensure_ids(item, fye_month=fye_month, ticker=ticker,
+                        resolution_mode=resolution_mode)
+            valid_items.append(item)
+        except ValueError as e:
+            errors.append({"index": i, "label": item.get('label', '?'), "error": str(e)})
+
+    # Concept family resolution (runs after IDs so xbrl_qname is finalized)
     for item in valid_items:
-        label_slug = item.get('label_slug') or slug(item.get('label', ''))
+        label_slug_val = item.get('label_slug') or slug(item.get('label', ''))
         item['concept_family_qname'] = resolve_concept_family(
-            label_slug, item.get('xbrl_qname')
+            label_slug_val, item.get('xbrl_qname')
         )
 
-    # Member resolution: precomputed CIK-based member map (works in both dry-run and write).
-    # Primary source — always overwrites agent-provided member_u_ids.
-    # In write mode, if the map file is missing, falls back to live CIK query (self-healing).
+    # Member resolution: precomputed CIK-based member map
     try:
         with open(f'/tmp/member_map_{ticker}.json') as f:
             member_map = json.load(f)
     except (OSError, json.JSONDecodeError):
         member_map = None
 
-    # Optional per-ticker aliases for semantic renames (e.g. "creativecloud" → "digitalmedia")
     segment_aliases = _load_segment_aliases(ticker)
-
     if member_map is not None:
         _apply_member_map(valid_items, member_map, "precomputed map", aliases=segment_aliases)
 
+    # ── Write ──
     if dry_run:
-        # Dry-run: validate + build params, no connection needed
         results = []
         for item in valid_items:
-            result = write_guidance_item(None, item, source_id, source_type, ticker, dry_run=True)
+            result = write_guidance_item(
+                None, item, source_id, source_type, ticker,
+                dry_run=True, resolution_mode=resolution_mode)
             results.append(result)
         output = {
             "mode": "dry_run",
+            "resolution_mode": resolution_mode,
+            "payload_origin": payload_origin,
             "total": len(items),
             "valid": len(valid_items),
             "id_errors": errors,
             "results": results,
         }
     else:
-        # Actual write: connect to Neo4j
         try:
             from neograph.Neo4jConnection import get_manager
             manager = get_manager()
@@ -506,8 +596,6 @@ def main():
             print(json.dumps({"error": f"Neo4j connection failed: {e}"}))
             sys.exit(1)
 
-        # Write-mode fallback: if precomputed member_map was missing, build it live.
-        # This ensures write mode is self-healing even if warmup was skipped or /tmp cleaned.
         if member_map is None:
             live_map = _build_live_member_map(manager, ticker)
             if live_map is not None:
@@ -516,10 +604,12 @@ def main():
         try:
             create_guidance_constraints(manager)
             summary = write_guidance_batch(
-                manager, valid_items, source_id, source_type, ticker, dry_run=False
-            )
+                manager, valid_items, source_id, source_type, ticker,
+                dry_run=False, resolution_mode=resolution_mode)
             summary['id_errors'] = errors
             summary['mode'] = 'write'
+            summary['resolution_mode'] = resolution_mode
+            summary['payload_origin'] = payload_origin
             output = summary
         finally:
             try:
@@ -527,14 +617,12 @@ def main():
             except Exception:
                 pass
 
-    # Write post-canonicalization sidecar for observability hooks (Obsidian capture).
-    # Contains per-item post-_ensure_ids values so the hook can show what was actually
-    # written, not the agent's pre-write interpretation.
+    # ── Observability sidecar (extended for V2) ──
     results_list = output.get('results', [])
     written_summary = []
     for i, item in enumerate(valid_items):
         result = results_list[i] if i < len(results_list) else {}
-        written_summary.append({
+        entry = {
             'label': item.get('label', ''),
             'segment': item.get('segment', 'Total'),
             'canonical_unit': item.get('canonical_unit', ''),
@@ -543,7 +631,18 @@ def main():
             'high': item.get('canonical_high'),
             'was_created': result.get('was_created'),
             'error': result.get('error'),
-        })
+        }
+        # V2 additive fields
+        if resolution_mode in ('v2', 'shadow'):
+            entry['unit_kind_hint'] = item.get('unit_kind_hint')
+            entry['money_mode_hint'] = item.get('money_mode_hint')
+            entry['resolved_kind'] = item.get('resolved_kind')
+            entry['resolved_money_mode'] = item.get('resolved_money_mode')
+            entry['resolved_ratio_subtype'] = item.get('resolved_ratio_subtype')
+            entry['resolution_version'] = item.get('resolution_version')
+        if resolution_mode == 'shadow' and item.get('shadow_v2'):
+            entry['shadow_v2'] = item['shadow_v2']
+        written_summary.append(entry)
     try:
         with open(f'/tmp/gu_written_{source_id}.json', 'w') as f:
             json.dump(written_summary, f, default=str)

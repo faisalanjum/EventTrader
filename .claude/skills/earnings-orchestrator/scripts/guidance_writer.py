@@ -108,12 +108,59 @@ def _validate_item(item, source_id, source_type):
             f" (expected 'count')"
         )
 
+    # ── V2 guards (use resolved axes when available, else skip) ──
+    resolved_kind = item.get('resolved_kind')
+    has_numeric = any(item.get(k) is not None for k in ('canonical_low', 'canonical_mid', 'canonical_high'))
+
+    if resolved_kind and has_numeric:
+        resolved_money_mode = item.get('resolved_money_mode')
+
+        # Guard D: numeric per-share labels cannot write as unknown
+        if _is_per_share_label(label_slug) and canonical_unit == 'unknown':
+            return False, (
+                f"numeric per-share label '{label_slug}' has canonical_unit='unknown'"
+                f" (V2 should resolve to 'usd')"
+            )
+
+        # Guard E: numeric price-like cannot write as m_usd
+        if resolved_kind == 'money' and resolved_money_mode == 'price_like' and canonical_unit == 'm_usd':
+            return False, (
+                f"price_like item '{label_slug}' has canonical_unit='m_usd'"
+                f" (expected 'usd')"
+            )
+
+        # Guard F: aggregate money cannot have cent/cents in unit_raw
+        if resolved_kind == 'money' and resolved_money_mode == 'aggregate':
+            ur = item.get('unit_raw', '')
+            if ur:
+                from guidance_ids import _normalize_unit_text
+                ur_tokens = set(_normalize_unit_text(ur).split())
+                if ur_tokens & {'cent', 'cents'}:
+                    return False, (
+                        f"aggregate money '{label_slug}' has unit_raw='{ur}'"
+                        f" containing cents (impossible for aggregate)"
+                    )
+
+        # Guard G: explicit ratio evidence cannot write as m_usd/usd/count
+        if resolved_kind == 'ratio' and canonical_unit in ('m_usd', 'usd', 'count'):
+            return False, (
+                f"ratio item '{label_slug}' has canonical_unit='{canonical_unit}'"
+                f" (expected percent/percent_yoy/percent_points/basis_points)"
+            )
+
+        # Guard H: explicit count evidence cannot write as m_usd
+        if resolved_kind == 'count' and canonical_unit == 'm_usd':
+            return False, (
+                f"count item '{label_slug}' has canonical_unit='m_usd'"
+                f" (expected 'count')"
+            )
+
     return True, None
 
 
 # ── Cypher query builders ─────────────────────────────────────────────────
 
-def _build_core_query(source_type):
+def _build_core_query(source_type, resolution_mode='v1'):
     """
     Build the single atomic Cypher MERGE query for one GuidanceUpdate.
 
@@ -126,8 +173,20 @@ def _build_core_query(source_type):
       6. No Context node — direct FOR_COMPANY edge
       7. No Unit node — canonical_unit is a property on GuidanceUpdate
       8. GuidancePeriod is calendar-based, company-agnostic (gp_ namespace)
+
+    V2 additive: resolved_* SET clauses only when resolution_mode='v2'.
+    In v1/shadow, these properties are not touched (preserves existing values).
     """
     source_label = SOURCE_LABEL_MAP[source_type]
+
+    # V2-only SET clauses for resolved axes
+    v2_set = ""
+    if resolution_mode == 'v2':
+        v2_set = """,
+      gu.resolved_kind = $resolved_kind,
+      gu.resolved_money_mode = $resolved_money_mode,
+      gu.resolved_ratio_subtype = $resolved_ratio_subtype,
+      gu.resolution_version = $resolution_version"""
 
     return f"""
 // MATCH pre-existing targets (label-specific source, company by ticker)
@@ -188,7 +247,7 @@ MERGE (gu:GuidanceUpdate {{id: $guidance_update_id}})
       gu.label_slug = $label_slug,
       gu.segment_slug = $segment_slug,
       gu.source_refs = CASE WHEN gu.source_refs IS NULL THEN $source_refs ELSE gu.source_refs + [x IN $source_refs WHERE NOT x IN gu.source_refs] END,
-      gu.concept_family_qname = $concept_family_qname
+      gu.concept_family_qname = $concept_family_qname{v2_set}
 
 // Core edges (4 from GuidanceUpdate)
 MERGE (gu)-[:UPDATES]->(g)
@@ -239,12 +298,12 @@ RETURN count(*) AS linked
 
 # ── Parameter assembly ────────────────────────────────────────────────────
 
-def _build_params(item, source_id, source_type, ticker):
+def _build_params(item, source_id, source_type, ticker, resolution_mode='v1'):
     """Assemble the Cypher parameter dict from a validated item."""
     now = datetime.now(timezone.utc).isoformat()
     today = now[:10]
 
-    return {
+    params = {
         # Source + company
         'source_id': source_id,
         'source_type': source_type,
@@ -291,11 +350,20 @@ def _build_params(item, source_id, source_type, ticker):
         'created_ts': now,
     }
 
+    # V2 resolved axes: only mapped in v2 mode (suppressed in v1/shadow per spec §7.3)
+    if resolution_mode == 'v2':
+        params['resolved_kind'] = item.get('resolved_kind')
+        params['resolved_money_mode'] = item.get('resolved_money_mode')
+        params['resolved_ratio_subtype'] = item.get('resolved_ratio_subtype')
+        params['resolution_version'] = item.get('resolution_version')
+
+    return params
+
 
 # ── Core write functions ──────────────────────────────────────────────────
 
 def write_guidance_item(manager, item, source_id, source_type, ticker,
-                        dry_run=True):
+                        dry_run=True, resolution_mode='v1'):
     """
     Write a single validated/canonicalized guidance item atomically to Neo4j.
 
@@ -321,8 +389,8 @@ def write_guidance_item(manager, item, source_id, source_type, ticker,
                 'concept_links': 0, 'member_links': 0}
 
     # 2. Build query + params (needed for dry-run logging too)
-    query = _build_core_query(source_type)
-    params = _build_params(item, source_id, source_type, ticker)
+    query = _build_core_query(source_type, resolution_mode=resolution_mode)
+    params = _build_params(item, source_id, source_type, ticker, resolution_mode=resolution_mode)
 
     # 3. Dry-run (works regardless of feature flag)
     if dry_run:
@@ -387,7 +455,7 @@ def write_guidance_item(manager, item, source_id, source_type, ticker,
 
 
 def write_guidance_batch(manager, items, source_id, source_type, ticker,
-                         dry_run=True):
+                         dry_run=True, resolution_mode='v1'):
     """
     Write a batch of guidance items. Calls write_guidance_item() per item.
 
@@ -402,7 +470,8 @@ def write_guidance_batch(manager, items, source_id, source_type, ticker,
 
     for item in items:
         result = write_guidance_item(
-            manager, item, source_id, source_type, ticker, dry_run=dry_run,
+            manager, item, source_id, source_type, ticker,
+            dry_run=dry_run, resolution_mode=resolution_mode,
         )
         summary['results'].append(result)
 

@@ -1673,5 +1673,45 @@ def main():
         )
 
 
+def _run_v2_regression_tests():
+    """V2 regression tests for _fmt_guidance_value with corrected canonical_unit values.
+    Verifies renderer behavior once V2 resolver produces correct units.
+    Run with full env: python3 scripts/earnings/earnings_orchestrator.py --test"""
+
+    passed = failed = 0
+    def check(name, actual, expected_substr):
+        nonlocal passed, failed
+        if expected_substr in actual:
+            passed += 1
+        else:
+            failed += 1
+            print(f"  FAIL {name}: expected '{expected_substr}' in {actual!r}")
+
+    # Corrected usd: face-value dollar formatting (was m_usd → billions in V1)
+    check("fmt_eps_usd", _fmt_guidance_value({'low': 3.2, 'high': 3.4}, 'usd'), '$3.20-$3.40')
+    check("fmt_dps_usd", _fmt_guidance_value({'low': 0.32, 'high': 0.32}, 'usd'), '$0.32')
+
+    # Corrected count: absolute quantity (was m_usd → $300M in V1)
+    r_count = _fmt_guidance_value({'low': 300e6, 'high': 300e6}, 'count')
+    check("fmt_count_300m", r_count, '300')
+
+    # m_usd unchanged: aggregate money still formatted in B/M
+    check("fmt_rev_musd", _fmt_guidance_value({'low': 94000, 'high': 98000}, 'm_usd'), 'B')
+
+    # Ratios
+    check("fmt_pct", _fmt_guidance_value({'low': 42, 'high': 42}, 'percent'), '42%')
+    check("fmt_pct_yoy", _fmt_guidance_value({'low': 5, 'high': 7}, 'percent_yoy'), 'YoY')
+    check("fmt_bps", _fmt_guidance_value({'low': 50, 'high': 50}, 'basis_points'), 'bps')
+    check("fmt_x", _fmt_guidance_value({'low': 2.5, 'high': 2.5}, 'x'), '2.5x')
+
+    # Qualitative-only
+    check("fmt_qual", _fmt_guidance_value({'qualitative': 'strong growth expected'}, 'unknown'), 'strong growth')
+
+    print(f"\n{passed} passed, {failed} failed out of {passed + failed}")
+    return failed == 0
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == '--test':
+        sys.exit(0 if _run_v2_regression_tests() else 1)
     main()
