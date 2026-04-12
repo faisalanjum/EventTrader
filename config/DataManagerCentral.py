@@ -687,12 +687,10 @@ class DataManager:
         self._setup_signal_handlers()
         
     def initialize_sources(self):
-        # SKIP_NEWS_BACKFILL — news disabled (already ingested via live mode, re-fetch is redundant)
-        # self.sources['news'] = BenzingaNewsManager(self.historical_range)
-        # Reports re-enabled 2026-03-28 (was BENZINGA_ONLY since Aug 2025)
+        # All 3 sources enabled 2026-04-12 (prepared for live mode — news + reports + transcripts)
+        self.sources['news'] = BenzingaNewsManager(self.historical_range)
         self.sources['reports'] = ReportsManager(self.historical_range)
-        # SKIP_TRANSCRIPTS_BACKFILL — disabled for backfill (EarningsCall API takes 12h+/chunk)
-        # self.sources['transcripts'] = TranscriptsManager(self.historical_range)
+        self.sources['transcripts'] = TranscriptsManager(self.historical_range)
 
     def initialize_neo4j(self):
         """Initialize Neo4j processor"""
@@ -736,13 +734,10 @@ class DataManager:
             self.logger.info("Running startup date coverage reconciliation")
             self.neo4j_processor.reconcile_full_date_coverage(start_date="2023-01-01")
 
-            # Process report data regardless of initialization path
-            # SKIP_NEWS_BACKFILL
-            # self.process_news_data()
-            # Reports re-enabled 2026-03-28
+            # All 3 sources enabled 2026-04-12 (prepared for live mode)
+            self.process_news_data()
             self.process_report_data()
-            # SKIP_TRANSCRIPTS_BACKFILL
-            # self.process_transcript_data()
+            self.process_transcript_data()
             
             # Start the PubSub-based continuous processing thread
             self.neo4j_thread = threading.Thread(

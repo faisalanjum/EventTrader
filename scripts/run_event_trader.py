@@ -205,8 +205,8 @@ def main():
 
             # Monitoring loop
             date_range_key = f"{date_from}-{date_to}"
-            # SKIP_NEWS_BACKFILL + SKIP_TRANSCRIPTS_BACKFILL
-            sources = [RedisKeys.SOURCE_REPORTS]
+            # All 3 sources enabled 2026-04-12
+            sources = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS, RedisKeys.SOURCE_TRANSCRIPTS]
             
             while True:
                 all_complete = True
@@ -314,9 +314,8 @@ def main():
 
             # Construct the expected fetch complete key format for this chunk
             date_range_key = f"{args.from_date}-{args.to_date}"
-            # SKIP_NEWS_BACKFILL + SKIP_TRANSCRIPTS_BACKFILL
-            # sources_to_check = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS, RedisKeys.SOURCE_TRANSCRIPTS]
-            sources_to_check = [RedisKeys.SOURCE_REPORTS]
+            # All 3 sources enabled 2026-04-12
+            sources_to_check = [RedisKeys.SOURCE_NEWS, RedisKeys.SOURCE_REPORTS, RedisKeys.SOURCE_TRANSCRIPTS]
             
             # Run initial Redis stats to see the state before processing
             logger.info("Getting initial Redis and Neo4j stats before processing...")
