@@ -316,14 +316,42 @@ class XbrlMixin:
                                     raise  # bubble to outer except => status FAILED
                                 time.sleep(2)  # brief back-off before retry
                         # --- end retry loop ---
-                        
-                        # Mark as completed - using transaction function for automatic retry
-                        def update_completed_status(tx):
-                            tx.run(
-                                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status",
-                                id=report_id, status="COMPLETED"
+
+                        # Self-healing retry for silent Arelle failures (schema load returns no facts without raising).
+                        # The above loop catches raised exceptions; this one catches silent zero-fact runs.
+                        SILENT_RETRY_MAX = 2
+                        SILENT_RETRY_DELAY_S = 60
+                        for silent_retry in range(SILENT_RETRY_MAX):
+                            facts_so_far = len(xbrl_processor.facts) if xbrl_processor and xbrl_processor.facts else 0
+                            if facts_so_far > 0:
+                                break
+                            logger.warning(
+                                f"0 facts for {report_id} (silent failure) — "
+                                f"retry {silent_retry + 1}/{SILENT_RETRY_MAX} after {SILENT_RETRY_DELAY_S}s"
                             )
-                        session.execute_write(update_completed_status)
+                            time.sleep(SILENT_RETRY_DELAY_S)
+                            try:
+                                if xbrl_processor:
+                                    xbrl_processor.close_resources()
+                            except Exception:
+                                pass
+                            xbrl_processor = process_report(
+                                neo4j=neo4j_manager,
+                                cik=processed_cik,
+                                accessionNo=processed_accessionNo,
+                                testing=False
+                            )
+
+                        # Classify final outcome using in-memory processor state
+                        from neograph.xbrl_status_helper import classify_xbrl_run
+                        final_status, final_error = classify_xbrl_run(xbrl_processor)
+
+                        def update_status(tx):
+                            tx.run(
+                                "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
+                                id=report_id, status=final_status, error=final_error
+                            )
+                        session.execute_write(update_status)
                         
                         # Log completion time
                         elapsed = time.time() - start_time

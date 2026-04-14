@@ -129,20 +129,53 @@ def main():
                 accessionNo=accession,
                 testing=False
             )
-            
-            # Update status to COMPLETED
+
+            # Self-healing retry for silent Arelle failures (e.g. SEC 503 that didn't raise).
+            # Existing load_xbrl retry only fires on raised exceptions; this catches the
+            # "finished successfully but built zero facts" case.
+            SILENT_RETRY_MAX = 2
+            SILENT_RETRY_DELAY_S = 60
+            for silent_retry in range(SILENT_RETRY_MAX):
+                facts_so_far = len(processor.facts) if processor and processor.facts else 0
+                if facts_so_far > 0:
+                    break
+                logger.warning(
+                    f"[Kube]: 0 facts for {accession} (silent failure) — "
+                    f"retry {silent_retry + 1}/{SILENT_RETRY_MAX} after {SILENT_RETRY_DELAY_S}s"
+                )
+                time.sleep(SILENT_RETRY_DELAY_S)
+                try:
+                    if processor:
+                        processor.close_resources()
+                except Exception:
+                    pass
+                processor = process_report(
+                    neo4j=neo4j_manager,
+                    cik=cik,
+                    accessionNo=accession,
+                    testing=False
+                )
+
+            # Classify final outcome based on in-memory fact count
+            from neograph.xbrl_status_helper import classify_xbrl_run
+            final_status, final_error = classify_xbrl_run(processor)
+
             with neo4j_manager.driver.session() as session:
-                def update_completed_status(tx):
+                def update_status(tx):
                     tx.run(
-                        "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = NULL",
-                        id=report_id, status="COMPLETED"
+                        "MATCH (r:Report {id: $id}) SET r.xbrl_status = $status, r.xbrl_error = $error",
+                        id=report_id, status=final_status, error=final_error
                     )
-                session.execute_write(update_completed_status)
-            
+                session.execute_write(update_status)
+
             # Log completion with timing information
             elapsed = time.time() - start_time
             mins, secs = divmod(int(elapsed), 60)
-            logger.info(f"[Kube]: Successfully processed XBRL for accession: {accession} in {mins}m {secs}s")
+            facts_final = len(processor.facts) if processor and processor.facts else 0
+            logger.info(
+                f"[Kube]: {final_status} XBRL for accession: {accession} "
+                f"in {mins}m {secs}s (facts={facts_final})"
+            )
             
             # Add delay after processing for resource cleanup, matching original behavior
             time.sleep(3)  # 3 second delay to allow for resource cleanup
