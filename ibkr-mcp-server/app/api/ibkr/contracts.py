@@ -42,7 +42,7 @@ async def get_contract_details(
     )
   except Exception as e:
     logger.error("Error in get_contract_details: {!s}", str(e))
-    return "Error getting contract details"
+    return f"Error getting contract details: {e!s}"
   else:
     logger.debug("Contract details: {details}", details=details)
     return f"The contract details for the symbol are: {details}"

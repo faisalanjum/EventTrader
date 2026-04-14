@@ -19,7 +19,7 @@ import asyncio
 import logging
 import math
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Callable
 
 from ib_async import IB, LimitOrder, MarketOrder, Order, StopOrder, Trade, util
 from ib_async.contract import Contract
@@ -244,8 +244,27 @@ class TradeDaemonIBClient:
     and vice versa.
     """
 
-    def __init__(self, config: IBKRConfig) -> None:
+    def __init__(
+        self,
+        config: IBKRConfig,
+        primary_exchange_resolver: Callable[[str], str | None] | None = None,
+    ) -> None:
+        """Construct the trade-daemon IB client.
+
+        Args:
+            config: Connection config (paper/live, ports, client IDs, etc.).
+            primary_exchange_resolver: Optional callable that maps a ticker
+                to its IBKR primary exchange name (e.g. "NASDAQ", "NYSE",
+                "ARCA"). When supplied and it returns a non-empty string,
+                contracts are qualified with exchange="SMART:<primary>" so
+                IBKR can disambiguate US-listed stocks. When None or when
+                the resolver returns None/"", falls back to bare "SMART"
+                with currency="USD" (original behavior). Callers typically
+                inject a Neo4j-backed resolver — no ticker→exchange table
+                is hardcoded in this module.
+        """
         self.config = config
+        self._primary_exchange_resolver = primary_exchange_resolver
 
         # Market data connection
         self._mktdata_ib = IB()
@@ -425,14 +444,36 @@ class TradeDaemonIBClient:
 
     # ── Contracts ───────────────────────────────────────────────────────
 
+    def _build_stock_contract(self, symbol_upper: str) -> Contract:
+        """Build an unqualified US-equity Contract.
+
+        If a primary_exchange_resolver was injected and returns a primary
+        exchange for this ticker, uses exchange='SMART:<primary>' to let
+        IBKR disambiguate (required for some US-listed names). Otherwise
+        falls back to bare 'SMART' + currency='USD' (original behavior).
+        """
+        exchange = "SMART"
+        if self._primary_exchange_resolver is not None:
+            try:
+                primary = self._primary_exchange_resolver(symbol_upper)
+            except Exception as e:
+                logger.warning(
+                    "primary_exchange_resolver(%s) raised %s — falling back to SMART",
+                    symbol_upper, e,
+                )
+                primary = None
+            if primary:
+                exchange = f"SMART:{primary}"
+        return Contract(
+            symbol=symbol_upper, secType="STK", exchange=exchange, currency="USD"
+        )
+
     async def qualify_stock(self, symbol: str) -> Contract:
         """Qualify a US equity contract. Cached to avoid redundant round-trips."""
         key = symbol.upper()
         if key not in self._contract_cache:
             await self._connect_mktdata()
-            contract = Contract(
-                symbol=key, secType="STK", exchange="SMART", currency="USD"
-            )
+            contract = self._build_stock_contract(key)
             [qualified] = await self._mktdata_ib.qualifyContractsAsync(contract)
             self._contract_cache[key] = qualified
             logger.debug(
@@ -891,9 +932,7 @@ class TradeDaemonIBClient:
         # We reuse the mktdata cache since contract objects are portable
         if key in self._contract_cache:
             return self._contract_cache[key]
-        contract = Contract(
-            symbol=key, secType="STK", exchange="SMART", currency="USD"
-        )
+        contract = self._build_stock_contract(key)
         [qualified] = await self._order_ib.qualifyContractsAsync(contract)
         self._contract_cache[key] = qualified
         return qualified

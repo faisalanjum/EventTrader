@@ -19,6 +19,7 @@ import sys
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[2]))
 
 from scripts.trade.ibkr_client import IBKRConfig, TradeDaemonIBClient
+from scripts.trade.neo4j_exchange_resolver import Neo4jExchangeResolver
 
 
 logging.basicConfig(
@@ -28,9 +29,13 @@ logging.basicConfig(
 logger = logging.getLogger("smoke_test")
 
 
-async def run_smoke_test(config: IBKRConfig, symbols: list[str]) -> bool:
+async def run_smoke_test(
+    config: IBKRConfig,
+    symbols: list[str],
+    resolver: Neo4jExchangeResolver | None = None,
+) -> bool:
     """Run smoke test. Returns True if all tests pass."""
-    client = TradeDaemonIBClient(config)
+    client = TradeDaemonIBClient(config, primary_exchange_resolver=resolver)
     passed = 0
     failed = 0
 
@@ -208,6 +213,13 @@ def main():
     parser.add_argument("--symbols", nargs="+", default=["AAPL", "MSFT", "SPY"])
     parser.add_argument("--host", help="Override IBKR Gateway host")
     parser.add_argument("--port", type=int, help="Override IBKR Gateway port")
+    parser.add_argument(
+        "--use-resolver",
+        action="store_true",
+        help="Inject the Neo4jExchangeResolver so contracts qualify with "
+             "exchange='SMART:<primary>' instead of bare SMART. Requires "
+             "NEO4J_URI / NEO4J_USERNAME / NEO4J_PASSWORD in env.",
+    )
     args = parser.parse_args()
 
     overrides = {}
@@ -221,7 +233,19 @@ def main():
                 config.host, config.port, args.account_mode, args.data_mode,
                 config.mktdata_client_id, config.order_client_id)
 
-    success = asyncio.run(run_smoke_test(config, args.symbols))
+    resolver = None
+    if args.use_resolver:
+        resolver = Neo4jExchangeResolver()
+        # Prime the cache for the symbols we know we'll qualify, so the
+        # first qualify_stock call has zero Neo4j latency on the hot path.
+        primed = resolver.preload(args.symbols)
+        logger.info("Neo4j resolver primed: %s", primed)
+
+    try:
+        success = asyncio.run(run_smoke_test(config, args.symbols, resolver=resolver))
+    finally:
+        if resolver is not None:
+            resolver.close()
     sys.exit(0 if success else 1)
 
 

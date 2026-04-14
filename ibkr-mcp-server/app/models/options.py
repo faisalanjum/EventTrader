@@ -103,7 +103,11 @@ class ContractDetailsRequest(BaseModel):
   )
   exchange: str = Field(
     ...,
-    description="Exchange (CBOE, NYSE, ARCA, BATS, NASDAQ)",
+    description=(
+      "Exchange. Use primary venue (CBOE/NYSE/ARCA/BATS/NASDAQ) or "
+      "'SMART:<primary>' (e.g. 'SMART:NASDAQ', 'SMART:NYSE', 'SMART:ARCA'). "
+      "Bare 'SMART' is rejected — a primary exchange is required to disambiguate."
+    ),
   )
   options: ContractOptions | None = Field(
     default=None,

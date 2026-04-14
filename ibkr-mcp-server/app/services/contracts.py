@@ -34,12 +34,12 @@ class ContractClient(IBClient):
         - BOND: Bond
         - FUT: Future
         - OPT: Option
-      exchange: Exchange to get contract details for, supported exchanges are:
-        - CBOE: CBOE
-        - NYSE: NYSE
-        - ARCA: ARCA
-        - BATS: BATS
-        - NASDAQ: NASDAQ
+      exchange: Exchange to get contract details for. Supported values:
+        - Primary listing venue: CBOE, NYSE, ARCA, BATS, NASDAQ
+        - "SMART:<primary>" for SmartRouter-qualified US equities
+          (e.g. "SMART:NASDAQ" for AAPL, "SMART:NYSE" for IBM,
+          "SMART:ARCA" for ETFs like SPY). Bare "SMART" is rejected
+          because IBKR needs a primary exchange to disambiguate.
       options: Dictionary of options to get contract details for.
         - strike: Strike price to get contract details for.
         - right: Right to get contract details for.
@@ -71,19 +71,27 @@ class ContractClient(IBClient):
         **contract_params,
       )
 
-      contracts = await self.ib.qualifyContractsAsync(contract)
-      contracts = util.df(contracts)
-      contracts = contracts[
-        [
-          "conId",
-          "symbol",
-          "secType",
-          "exchange",
-          "currency",
-          "localSymbol",
-          "multiplier",
-        ]
+      qualified = await self.ib.qualifyContractsAsync(contract)
+      qualified = [c for c in qualified if c is not None]
+      if not qualified:
+        raise ValueError(
+          f"no contracts resolved for symbol={symbol} "
+          f"secType={sec_type} exchange={exchange} — "
+          f"check symbol validity or pass exchange='SMART:<primary>' "
+          f"(e.g. 'SMART:NASDAQ') to disambiguate"
+        )
+
+      contracts = util.df(qualified)
+      wanted = [
+        "conId",
+        "symbol",
+        "secType",
+        "exchange",
+        "currency",
+        "localSymbol",
+        "multiplier",
       ]
+      contracts = contracts[[col for col in wanted if col in contracts.columns]]
     except Exception as e:
       logger.error("Error getting contract details: {}", str(e))
       raise
