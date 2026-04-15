@@ -92,7 +92,17 @@ def main():
         logger.info(f"Starting EventTrader for dates: {args.from_date} to {args.to_date}")
         logger.info(f"Data sources: Historical={feature_flags.ENABLE_HISTORICAL_DATA}, Live={feature_flags.ENABLE_LIVE_DATA}")
         logger.info(f"Logs will be written to: {log_path}")
-        
+
+        # Polygon subscription gate — refuse to start ingestion if key is dead.
+        # Skipped for pure Neo4j initialization (does not use Polygon).
+        if not args.neo4j_init_only:
+            from utils.polygon_health import check_at_startup, enable_fatal_shutdown
+            if not check_at_startup():
+                logger.critical("Polygon subscription probe FAILED at startup. "
+                                "Not launching ingestion. Renew subscription and retry.")
+                sys.exit(1)
+            enable_fatal_shutdown()  # only the live runner self-terminates on mid-run death
+
         # Create and initialize DataManager
         logger.info("Creating DataManager...")
         manager = DataManager(date_from=args.from_date, date_to=args.to_date)

@@ -143,6 +143,13 @@ class Polygon:
             
         except Exception as e:
             error_msg = str(e)
+            if "NOT_AUTHORIZED" in error_msg:
+                from utils.polygon_health import on_auth_failure
+                on_auth_failure(e)
+                # Intentionally NOT cached — auth failure is not a ticker
+                # property. If transient, next call retries cleanly; if
+                # confirmed dead, process is already SIGTERM-ing.
+                return (False, f"Auth error validating {ticker}")
             if "NOT_FOUND" in error_msg:
                 result = (False, f"Ticker not found: {ticker}")
             else:
@@ -231,23 +238,11 @@ class Polygon:
                     self.logger.error(f"Exact error for {ticker}: {error_msg}", exc_info=True)
 
                     if "NOT_AUTHORIZED" in error_msg:
-                        # To be Removed
-                        self.logger.info(f"NOT AUTHORIZED in error_msg")
-                        self.logger.info(f"Ticker: {ticker}")
-                        self.logger.info(f"Window size: {window_size}s")
-                        self.logger.info(f"Max window: {max_window}s")
-                        self.logger.info(f"Current end: {current_end}")
-                        self.logger.info(f"Current start: {current_start}")
-                        self.logger.info(f"Error message: {error_msg}")
-                        self.logger.info(f"--------------------------------")
+                        from utils.polygon_health import on_auth_failure
+                        on_auth_failure(e)
+                        return np.nan
 
-                        window_size = max(window_size // 2, 10)                    
-                        # if current_end < min_allowed_end: return np.nan # Safety check for NOT_AUTHORIZED
-
-                    else:
-                        window_size = min(window_size * growth_factor, max_window)
-                        # if current_end < min_allowed_end: return np.nan  # Add safety check here too
-                        
+                    window_size = min(window_size * growth_factor, max_window)
                     continue
             
             # print(f"No price found for {ticker} in the last {max_days_back} days before {timestamp}")

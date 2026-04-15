@@ -476,6 +476,20 @@ class ReturnsProcessor:
 
 
 
+    @staticmethod
+    def _has_missing_leaves(obj) -> bool:
+        """True iff obj is None or any nested leaf value is None.
+        Used by the completeness checks so items whose inner return dicts
+        are all-None (e.g., during a Polygon auth blip) are NOT falsely
+        marked complete and promoted to withreturns."""
+        if obj is None:
+            return True
+        if isinstance(obj, dict):
+            return any(ReturnsProcessor._has_missing_leaves(v) for v in obj.values())
+        if isinstance(obj, (list, tuple)):
+            return any(ReturnsProcessor._has_missing_leaves(v) for v in obj)
+        return False
+
     def _calculate_available_returns(self, processed_dict: dict) -> dict:
         """Calculate returns based on available timestamps"""
         try:
@@ -553,11 +567,9 @@ class ReturnsProcessor:
                         self.logger.info(f"Data not yet available for {return_type}, will process later at {schedule_dt + timedelta(seconds=self.polygon_subscription_delay)}")
                         all_complete = False
 
-            # 9. Check if all returns are complete
-            for symbol_returns in returns_data['symbols'].values():
-                if any(ret is None for ret in symbol_returns.values()):
-                    all_complete = False
-                    break
+            # 9. Check if all returns are complete (deep — catches all-None inner dicts)
+            if self._has_missing_leaves(returns_data.get('symbols')):
+                all_complete = False
 
             return {
                 'returns': returns_data,
@@ -638,11 +650,9 @@ class ReturnsProcessor:
                     # else:
                     #     all_complete = False  # Time hasn't passed yet
 
-            # 6. Final completion check (same as live)
-            for symbol_returns in returns_data['symbols'].values():
-                if any(ret is None for ret in symbol_returns.values()):
-                    all_complete = False
-                    break
+            # 6. Final completion check (same as live, deep)
+            if self._has_missing_leaves(returns_data.get('symbols')):
+                all_complete = False
 
             return {
                 'returns': returns_data,
@@ -802,20 +812,24 @@ class ReturnsProcessor:
             updated_returns = self._calculate_specific_return(news_data, return_type)
             if not updated_returns:
                 return False
-                
+
+            # This specific return_type is only "done" if every leaf is populated.
+            # If partial (e.g., Polygon flake), we still write the partial data to
+            # withoutreturns below, but we return False so the caller does NOT zrem
+            # the ZSET entry — the next scheduler cycle will retry.
+            return_complete = not self._has_missing_leaves(updated_returns)
+
             # Use MetadataFields mapping instead of hardcoded dict
             return_key = MetadataFields.RETURN_TYPE_MAP[return_type]
-                
+
             # Update returns in news data using the mapped return key
             # 3. Updates returns in news data
             for symbol, values in updated_returns.items():
                 news_data['returns']['symbols'][symbol][return_key] = values
-                
-            # 4. If all returns complete, moves to withreturns
-            all_complete = all(
-                all(ret is not None for ret in symbol_returns.values()) 
-                for symbol_returns in news_data['returns']['symbols'].values()
-            )
+
+            # 4. If all returns complete, moves to withreturns (deep check)
+            all_complete = not self._has_missing_leaves(
+                news_data.get('returns', {}).get('symbols'))
             
             # ------------------------------------------------------------------
             # ReturnsProcessor._update_return  ➜  atomic, fully-tracked
@@ -847,7 +861,11 @@ class ReturnsProcessor:
             else:
                 self.logger.error("Redis pipeline failed while moving %s → %s", key, namespace)
 
-            return success
+            # Only zrem the pending-ZSET entry when BOTH Redis succeeded AND
+            # the specific return_type was actually populated. Partial data is
+            # already saved to withoutreturns above; returning False here keeps
+            # the ZSET entry so the next scheduler cycle retries.
+            return success and return_complete
 
                 
         except Exception as e:
