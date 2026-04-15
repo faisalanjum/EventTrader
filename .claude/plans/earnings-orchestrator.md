@@ -593,7 +593,34 @@ Edge case: if consensus is null or zero, log as missing and use fallback scoring
 
 Core dimensions are the predictor's reasoning framework, not a rigid checklist. Output extensibility is handled by `key_drivers` (any number of factors, any content) and `analysis` (free-form). No separate "additional signals" structure needed (Q30 resolved).
 
-**Prediction output contract (Q1 resolved)**:
+**Predictor raw output contract (Q1 resolved)**:
+
+This section describes the predictor skill's direct output before orchestrator normalization.
+
+The final `prediction/result.json` written by the orchestrator must include the canonical TES producer fields required by Phase 1:
+
+- `signal_id`
+- `source_type`
+- `symbol`
+- `event_id`
+- `event_time`
+- `issued_at`
+- `direction`
+- `confidence`
+- `expected_move_range`
+
+Predictor-specific fields may remain in the file as additional metadata for learning, audit, and debugging.
+
+Producer responsibility:
+
+- `earnings_orchestrator.py` is responsible for writing the final canonical
+  producer artifact consumed by TES
+- predictor raw output is not the TES contract until the orchestrator
+  normalizes and validates it
+- if predictor output and TES contract ever diverge, TES contract wins and the
+  orchestrator must adapt
+- this keeps TES isolated from alpha-generation details and lets future signal
+  sources share the same execution engine
 
 ```json
 {
@@ -944,7 +971,7 @@ earnings-analysis/Companies/{TICKER}/events/
   {quarter_label}/
     planner/fetch_plan.json          ← persisted for debugging/auditing what data was requested vs received
     prediction/context_bundle.json   ← written once, never overwritten
-    prediction/result.json           ← existence = done
+    prediction/result.json           ← orchestrator-written producer artifact; must include canonical TES fields; existence = done
     attribution/context.json
     attribution/result.json          ← contains embedded `feedback` block consumed in later-quarter planner/predictor context
 ```

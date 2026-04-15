@@ -34,6 +34,9 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "eventmarket")
 SEC_API_KEY = os.getenv("SEC_API_KEY")
 
 PRIMARY_FORM_TYPES = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A']
+# All 12 valid form types (swap with above to check full universe):
+# PRIMARY_FORM_TYPES = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A',
+#                       'SCHEDULE 13D', 'SCHEDULE 13D/A', '425', '6-K', 'SC TO-I', 'SC 14D9']
 MAX_PAGE_SIZE = 50
 
 OUTPUT_DIR = Path("earnings-analysis/gap_analysis")

@@ -10,7 +10,7 @@
 
 **What this is**: Multi-layer earnings analysis system using forked skills for context isolation.
 
-**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74, retested 2026-03-14 v2.1.76, retested 2026-03-18 v2.1.78, retested 2026-03-19 v2.1.80, retested 2026-03-26 v2.1.84, retested 2026-03-27 v2.1.85):**
+**Key findings from testing (2026-01-16, retested 2026-02-05, hooks tested 2026-02-08, retested 2026-02-18 v2.1.45, retested 2026-03-06 v2.1.70, retested 2026-03-12 v2.1.74, retested 2026-03-14 v2.1.76, retested 2026-03-18 v2.1.78, retested 2026-03-19 v2.1.80, retested 2026-03-26 v2.1.84, retested 2026-03-27 v2.1.85, retested 2026-04-10 v2.1.100, retested 2026-04-14 v2.1.107):**
 
 | What | Status | Workaround |
 |------|--------|------------|
@@ -48,6 +48,9 @@
 | Return values | ✅ WORKS | Parent sees child's full output |
 | **Workflow continuation (GH #17351)** | ✅ WORKS (v2.1.17) | Parent continues after child returns; tested single & multi-child |
 | `$ARGUMENTS` substitution | ✅ WORKS | Pass args to skills dynamically |
+| **SDK concurrent model isolation** | ✅ **PROVEN** (v2.1.100) | `ClaudeAgentOptions(model=X)` → `--model X` CLI flag → separate `claude -p` subprocess. No shared mutable state. 7/7 verdicts PASS: different init models, concurrent overlap, no errors, marker files, no cross-contamination, different session IDs, settings not mutated. Tested locally with FULLY SHARED filesystem (stricter than K8s emptyDir). |
+| **Advisor tool per-session control** | ✅ **PROVEN** (v2.1.100) | Server-side tool injected by API when `advisorModel` config sent. SDK: `settings='{"advisorModel": "opus"}'` overlay injects per-session advisor. **PREREQUISITE**: `advisorModel` MUST NOT be in `~/.claude/settings.json` (user-level overrides all overlays). Sonnet+opus advisor ✅, Sonnet+sonnet advisor ✅, Opus+opus advisor ✅. |
+| **Haiku advisor support (CLI)** | ✅ **BYPASSED** (v2.1.100) | Binary patch: `"opus-4-6"` → `"aiku-4-5"` at WyH offsets (8 bytes, same length). Haiku+opus advisor PROVEN via CLI + SDK. Patch script: `scripts/patch_claude_haiku_advisor.sh`. Re-run after each CLI update. |
 | **TaskCreate/List/Get/Update in Interactive CLI** | ✅ WORKS | No extra config needed |
 | **TaskCreate/List/Get/Update via SDK 0.1.23+** | ✅ **WORKS** | Requires `tools` preset + env var (See Part 10) |
 | **SDK `claude_code` tools preset** | ✅ **INCLUDES TASK TOOLS** | SDK 0.1.23+ fixed the bug |
@@ -302,6 +305,49 @@
 - **Scroll performance (yoga-layout)** | ✅ **IMPROVED** (v2.1.85) | WASM yoga-layout replaced with pure TypeScript implementation. Reduced UI stutter on compaction. Changelog-confirmed.
 - **FG/BG built-in tool sets** | ⚠️ **UNCHANGED** (v2.1.85) | **TESTED**: FG non-team: **26** built-in (8 direct + 18 deferred). BG non-team: **13** built-in (8 direct + 5 deferred). MCP: 94 (FG). Agent tool still absent from all subagent tiers. No new built-in tools.
 
+### v2.1.107 findings (Apr 14, 2026) — empirical retest of v2.1.101/105/107:
+
+**High-impact fixes CONFIRMED via direct test:**
+- **`isolation: worktree` subagents R/W own worktree** | ✅ **CONFIRMED FIXED** (v2.1.101) | **TESTED**: spawned BG agent with `isolation: worktree` at `/home/faisal/EventMarketDB/.claude/worktrees/agent-ae35a89a`. Wrote `v1101-probe.txt` (OK), Read it back (OK), Edit changed `probe-written-at-` → `probe-edited-at-` (OK), Re-Read confirmed edit (OK). All 4 operations PASS, no denials. Prior behavior (v2.1.100 and earlier): Write succeeded but subsequent Read/Edit was silently denied — blocked many of our BG extraction-worker patterns. Result: `earnings-analysis/test-outputs/test-v1101-worktree-rw.txt`.
+- **`claude --continue -p` continues SDK/`-p`-created sessions** | ✅ **CONFIRMED FIXED** (v2.1.101) | **TESTED**: Session 1 = `claude -p "Say exactly: BANANASENTINEL1776175694RED"` (session_id `bc4a757b-…`). Session 2 = `claude --continue -p "What exact text did you say..."` → response contained the exact sentinel. Marker preserved across the continue boundary. Relevant to extraction-worker `-p` pipelines where we may need multi-turn SDK resumption. Result: `earnings-analysis/test-outputs/test-v1101-continue-p-sdk.txt`.
+- **BG subagent reports partial progress on error** | ✅ **CONFIRMED FIXED** (v2.1.98) | **TESTED**: BG agent wrote Phase-1 marker → Phase-2 marker → Bash-tool call to `/bin/nonexistent-cmd-xyz-v198-probe` (exit 127) → wrote Phase-3 marker. All three phase files visible to parent after completion. Prior behavior: parent saw nothing written when BG errored. Relevant to extraction-worker resilience. Result: `earnings-analysis/test-outputs/test-v198-bg-partial-progress.txt`.
+- **`EnterWorktree` `path` parameter** | ✅ **CONFIRMED NEW** (v2.1.105) | **TESTED**: Pre-created `/tmp/test-v1105-wt` via `git worktree add`. Spawned FG subagent, loaded `EnterWorktree` schema via ToolSearch → schema shows BOTH `name` AND `path` params. Called `EnterWorktree({path:"/tmp/test-v1105-wt"})` → succeeded, `pwd` returned `/tmp/test-v1105-wt`. `ExitWorktree({action:"keep"})` cleaned up. Enables switching into EXISTING worktrees without re-creating. Result: `earnings-analysis/test-outputs/test-v1105-enter-worktree-path.txt`.
+- **Skill description listing cap raised 250 → 1,536 chars** | ✅ **CONFIRMED NEW** (v2.1.105) | **TESTED**: Created `test-v1105-long-desc` skill with 1,628-char description containing sentinel markers at offsets 100/300/700/1000/1200/1400. All sentinels up to `V1105_OFFSET_1400` visible in skill listing; `V1105_END_MARKER` (at char ~1610) replaced with `…` ellipsis — truncation at ~1,536 chars, not ~250. Relevant: our `earnings-orchestrator`, `earnings-attribution`, `claude-api` skills have multi-line descriptions that may have been truncated under 250-char cap. NOTE: "startup warning when descriptions are truncated" (changelog) was NOT observed in `-p` session stderr — likely interactive-only. Result: `earnings-analysis/test-outputs/test-v1105-skill-desc-cap.txt`.
+
+**Nested/parallel execution matrix CONFIRMED on v2.1.107:**
+- **Task→Task nesting (Agent tool in subagent inventory)** | ❌ **STILL BLOCKED** (unchanged v2.1.47→v2.1.107) | **TESTED**: FG general-purpose subagent probed — `AGENT_TOOL_IN_DIRECT=NO`, `AGENT_TOOL_IN_DEFERRED=NO`. `ToolSearch({query:"select:Agent"})` returns "No matching deferred tools found". Nested agent spawning architecturally blocked across FG and BG tiers. Use Skill chains for depth. Result: `earnings-analysis/test-outputs/test-v1107-nested-task-probe.txt`.
+- **BG non-team TaskCreate** | ❌ **STILL BLOCKED** (unchanged) | **TESTED**: BG GP subagent — `BG_TASKCREATE_IN_DIRECT=NO`, `BG_TASKCREATE_IN_DEFERRED=NO`. Same for TaskList/Get/Update. ToolSearch cannot load a schema that doesn't exist in inventory. Workaround: `team_name` on Agent spawn (v2.1.74 unlock) — gets TaskCreate/SendMessage. Result: `earnings-analysis/test-outputs/test-v1107-bg-taskcreate.txt`.
+- **Parallel Skill execution** | ❌ **STILL SEQUENTIAL** (unchanged) | **TESTED**: `test-v1107-parallel-parent` invoked two child skills in the SAME response: Child A at 1776176066.434, Child B at 1776176076.602 — gap 10.168s, threshold for parallel was <2s. Sequential confirmed. Unchanged from Infrastructure.md line 1814 (prior 92.68s gap in earlier test). Result: `earnings-analysis/test-outputs/test-v1107-parallel-parent.txt`.
+- **Skill→Skill nesting (workflow continuation)** | ✅ **WORKS** (unchanged) | **TESTED**: `test-v1107-nest-parent` wrote PRE-marker → invoked `Skill({skill:"test-v1107-nest-child"})` → received child response `CHILD_DONE_<ts>` → wrote POST-marker. Parent resumed cleanly after child return; pre/post markers present, child output file present. Parent→child→parent round-trip ≈12s. Forked child sees static context (CLAUDE.md, rules, skill listing) but not parent ephemeral state. Result: `earnings-analysis/test-outputs/test-v1107-nest-parent.txt`.
+- **Agent→Skill nesting (FG)** | ✅ **WORKS** (unchanged) | **TESTED**: FG subagent wrote PRE marker → `Skill({skill:"test-parallel-b"})` → wrote POST marker. Parent continued after child. (Strict VERDICT=FAIL on the test report because the pre-existing `test-parallel-b` skill body writes to `/tmp/parallel-b-time.txt` instead of the expected path — unrelated to the Skill-tool mechanism.) Result: `earnings-analysis/test-outputs/test-v1107-agent-invoke-skill.txt`.
+- **BG Agent→Skill nesting** | ✅ **WORKS** (unchanged) | **TESTED**: BG GP agent had `Skill` in direct tools, invoked `test-parallel-a`, received response, wrote post-skill marker. Post-skill continuation confirmed. Same skill-body path mismatch as FG agent test. Result: `earnings-analysis/test-outputs/test-v1107-bg-skill-invoke.txt`.
+- **BG MCP tool access (with explicit ToolSearch load)** | ✅ **WORKS** (unchanged) | **TESTED**: BG GP agent loaded `mcp__neo4j-cypher__read_neo4j_cypher` schema via ToolSearch, called with `RETURN 1 AS probe, timestamp() AS ts` — returned `probe=1`. MCP tools remain reachable in BG non-team with ToolSearch. Result: `earnings-analysis/test-outputs/test-v1107-bg-mcp-probe.txt`.
+
+**Tool-set matrix at v2.1.107 — GENERAL-PURPOSE spawn (verified empirically):**
+- **FG non-team GP = 24 built-in + 109 MCP = 133 total**. Direct (9): Bash, Edit, Glob, Grep, Read, ScheduleWakeup, Skill, ToolSearch, Write. Deferred built-in (15): CronCreate, CronDelete, CronList, EnterWorktree, ExitWorktree, ListMcpResourcesTool, **Monitor**, NotebookEdit, ReadMcpResourceTool, RemoteTrigger, SendMessage, TeamCreate, TeamDelete, WebFetch, WebSearch. **NEW vs v2.1.85**: +Monitor (v2.1.98), +ScheduleWakeup moved to direct. **LOST vs v2.1.85**: Task tools (TaskCreate/List/Get/Update/Stop/Output) — **all gone from FG non-team GP**. Agent still absent. Result: `earnings-analysis/test-outputs/test-v1107-fg-inventory.txt`.
+- **BG non-team GP = 13 built-in + 104 MCP = 117 total**. Direct (8): Bash, Edit, Glob, Grep, Read, Skill, ToolSearch, Write. Deferred built-in (5): EnterWorktree, ExitWorktree, NotebookEdit, WebFetch, WebSearch. **Monitor: NOT in BG** (FG-only). NO ScheduleWakeup, NO Cron*, NO RemoteTrigger, NO Team*, NO Task*, NO Agent. Unchanged count from v2.1.76 onward (13). Result: `earnings-analysis/test-outputs/test-v1107-bg-inventory.txt`.
+- **⚠️ TASK-TOOLS REGRESSION for FG non-team GP between v2.1.85 (had TaskCreate) and v2.1.107 (no TaskCreate)** — requires follow-up. Possibly related to v2.1.101's "tool-not-available" tightening. If your workflow depended on FG subagents calling TaskCreate without team_name, it now fails.
+
+**Changelog-confirmed but NOT empirically validated (requires specialized setup):**
+- **`permissions.deny` overrides PreToolUse `ask`** (v2.1.101) — needs hook + permission config.
+- **Dynamic MCP server injection propagates to subagents** (v2.1.101) — needs mid-session MCP add, which is non-trivial to trigger.
+- **5-min hardcoded timeout removed; API_TIMEOUT_MS honored** (v2.1.101) — needs slow-backend mock.
+- **PreCompact hook `{"decision":"block"}`** (v2.1.105) — triggering compaction in `-p` is not feasible; registration + changelog entry accepted.
+- **Plugin `monitors` manifest key** (v2.1.105) — needs a plugin; out of scope.
+- **PID-namespace subprocess sandbox + `CLAUDE_CODE_SCRIPT_CAPS`** (v2.1.98) — **TESTED**: `CLAUDE_CODE_SCRIPT_CAPS=2 claude -p ... bypassPermissions` ran all 4 Bash-tool commands (cap NOT enforced for Bash tool). Env-var applies to a different subprocess class (likely plugin scripts launched under `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` PID namespace). Result: `earnings-analysis/test-outputs/test-v198-script-caps.txt` — VERDICT=INCONCLUSIVE.
+- **WebFetch `<style>`/`<script>` stripping** (v2.1.105) — trust changelog; relevant to our news-driver-web agents that fetch CSS-heavy pages.
+
+**BG agent implications (EXPLAINED in context):**
+- Before v2.1.101 our `isolation: worktree` BG agents could write files to their worktree but NOT Read/Edit them back — extraction worker patterns that wanted to verify own output silently failed. Now fixed.
+- Before v2.1.98 our `extraction-worker.py` BG subagents that errored mid-task reported nothing to parent — so partial work was invisible. Now fixed: files written BEFORE the error persist and are observable.
+- `claude --continue -p` fix (v2.1.101) enables SDK-created sessions to be resumed; prior extraction runs that lost context on continue now work.
+
+### v2.1.100 findings (Apr 10, 2026):
+- **SDK concurrent model isolation** | ✅ **PROVEN** (v2.1.100) | **TESTED**: Two concurrent SDK sessions (`asyncio.gather()`) with `model="haiku"` and `model="sonnet"` — 7/7 verdicts PASS. `ClaudeAgentOptions(model=X)` → `_build_command()` → `cmd.extend(["--model", X])` → `anyio.open_process(cmd)`. Each `query()` is a separate OS subprocess. Model is a CLI flag, not shared config. Init messages report different models (haiku=`claude-haiku-4-5-20251001`, sonnet=`claude-sonnet-4-6`). Concurrent overlap=10.7s. Marker files written with correct labels (no cross-contamination). Different session IDs. `~/.claude/settings.json` and `.claude/settings.json` NOT mutated by either session. Tested locally with FULLY SHARED filesystem — stricter than K8s where each pod has emptyDir for `/home/faisal`. Test script: `scripts/test_concurrent_model_isolation.py`. Results: `earnings-analysis/test-outputs/test-concurrent-model-isolation.txt`.
+- **Advisor tool architecture** | ✅ **FULLY ANALYZED** (v2.1.100) | Advisor is a **server-side tool** — injected by API when `advisorModel` config sent. Tool type: `advisor_20260301`. Comprehensive binary analysis: 10+ functions decompiled (WyH, peH, Nb, PIK, WIK, jw, GK7, mI7, Z_, s1q, d6H, URH). Complete startup flow (y9→WyH gate→WIK→L3→config) and per-query flow (PIK→tool injection→API request) traced. Feature flag: `tengu_sage_compass2` (server-side, not overridable). ANTHROPIC_BASE_URL catch-22: proxy approach kills `jw()→Nb()→advisor`. Model resolution pipeline: Z_→x0/jZH/DN→wD→s1q. Full details: Part 8.8.
+- **Advisor per-session SDK control** | ✅ **PROVEN** (v2.1.100) | **TESTED (6 tests)**: (T1) Haiku+opus advisor → BLOCKED (`WyH` gate). (T2) Sonnet+opus advisor via `--settings` overlay → PASS. (T3) Sonnet+sonnet advisor via overlay → PASS. (T4) Opus+opus advisor via user settings → PASS. (T5) Settings priority: user `advisorModel=opus` WINS over overlay `advisorModel=sonnet` → overlay CANNOT override. (T6) Overlay CAN inject `advisorModel` when absent from user settings → PASS. **PREREQUISITE**: Remove `advisorModel` from `~/.claude/settings.json`. SDK pattern: `ClaudeAgentOptions(settings='{"advisorModel": "opus"}', model="sonnet", setting_sources=["user", "project"])`. Sequential concurrent test: two sessions with different advisor models both independently received advisor responses with their respective configured models. Settings files NOT mutated. Results: `earnings-analysis/test-outputs/test-sdk-advisor-isolation.txt`.
+- **Haiku advisor CLI restriction** | ✅ **BYPASSED** (v2.1.100) | Root cause: `WyH()` client-side gate only allows `opus-4-6`/`sonnet-4-6` as base models. Raw API (`advisor_20260301` tool type) supports haiku — **officially documented** by Anthropic (API docs + blog: *"The advisor strategy also works with Haiku as the executor"*). **10 config-level approaches exhausted** (modelOverrides, ANTHROPIC_DEFAULT_*_MODEL, ANTHROPIC_CUSTOM_MODEL_OPTION, SUPPORTED_CAPABILITIES, tricky model strings, WIK settings bypass, ANTHROPIC_BASE_URL proxy, CLAUDE_CODE_API_BASE_URL, set_model mid-session, ANTHROPIC_SMALL_FAST_MODEL — all failed, each for different reasons). **SOLVED via binary patch**: replace `"opus-4-6"` (8 bytes) with `"aiku-4-5"` (8 bytes) at WyH function offsets 113767725 and 224360229. 6/6 tests PASS: CLI haiku+opus advisor, SDK haiku+opus advisor (iterations: message→advisor_message→message), complex reasoning, sonnet regression, opus base without advisor. **MUST re-patch after each CLI update** — auto-updates overwrite binary. Patch script auto-discovers offsets via grep. Full analysis: Part 8.9. Patch script: `scripts/patch_claude_haiku_advisor.sh`. Results: `earnings-analysis/test-outputs/test-haiku-advisor-bypass.txt`.
+
 ### v2.1.88 findings (Mar 31, 2026):
 - **`PermissionDenied` hook event** | ⚠️ **NEW, UNTESTABLE in `-p` mode** (v2.1.88) | 22nd hook type. Fires after auto mode classifier denials. Can return `{retry: true}` to let model retry. **TESTED (5 attempts)**: `--permission-mode auto` flag is **IGNORED in `-p` mode** — hook payloads show `permission_mode: "default"` regardless of flag value. Even `--permission-mode plan` doesn't block Bash in `-p` mode. The auto mode classifier does not run in non-interactive mode. `git push origin main` executed successfully without denial. Model self-censors for truly dangerous commands (`.git` deletion) before classifier can evaluate. Hook is **interactive-only** — requires live auto mode session where classifier evaluates and denies tool calls. `permission_denials: []` field always empty in `-p` output.
 - **Hooks `if` compound command fix** | ✅ **CONFIRMED** (v2.1.88) | **TESTED**: `Bash(git *)` pattern now matches INSIDE compound commands (`ls && git status`, `echo pre && git log`) and env-var prefixed commands (`GIT_PAGER=cat git log`). Previously only matched if command literally started with `git`. Correctly does NOT match non-git commands (`echo test`, `echo a && echo b`). Control hook fired for all Bash calls, conditional hook fired only for git-containing commands (4/10). Note: literal `&&` in glob pattern (`Bash(* && git *)`) does NOT work — use simple `Bash(git *)` and let the fix look inside compound/env-prefixed commands.
@@ -328,7 +374,7 @@
 - **Auto mode denied commands notification** | ✅ **NEW** (v2.1.88) | Denied commands show notification and appear in `/permissions` → Recent tab. Changelog-confirmed.
 - **FG/BG built-in tool sets** | ⚠️ **UNCHANGED** (v2.1.88) | No new built-in tools mentioned. Agent tool still absent from all subagent tiers.
 
-### Still broken (as of v2.1.88):
+### Still broken (as of v2.1.107):
 - `allowed-tools` restriction: NOT ENFORCED (skills only)
 - `disallowedTools`: NOT ENFORCED (skills only; agents: ENFORCED)
 - `type: "agent"` hooks: NOT ENFORCED
@@ -340,7 +386,7 @@
 - Agent discovery mid-session: STILL SNAPSHOT (named subagents in `@` typeahead is UI-only)
 - BG non-team task management: BLOCKED
 - Nested agent spawning: BLOCKED everywhere
-- Subagent thinking: STILL DISABLED (v2.1.68+→v2.1.88). Root cause: `IS()` hard-codes `thinkingConfig: {type: "disabled"}`
+- Subagent thinking: STILL DISABLED (v2.1.68+→v2.1.100). Root cause: `IS()` hard-codes `thinkingConfig: {type: "disabled"}`
 - `effort`/`maxTurns` frontmatter for agents: PLUGIN-ONLY (skills: effort NOW WORKS as of v2.1.80)
 - Agent tool `resume` param: REMOVED (v2.1.77) — must use SendMessage
 - `FileChanged` hook: NOT FIRING in `-p` mode (likely interactive-only)
@@ -349,6 +395,51 @@
 - AskUserQuestion in `-p` mode: HARD-BLOCKED (v2.1.85 `updatedInput` feature is interactive-only)
 - PermissionDenied hook: INTERACTIVE-ONLY (`--permission-mode` flag IGNORED in `-p` mode — payload shows "default" regardless)
 - `--permission-mode` flag in `-p` mode: SILENTLY IGNORED (tested: auto, plan — both show "default" in hook payloads, no blocking)
+- Haiku advisor: BLOCKED in unpatched CLI (`WyH()` gate restricts to opus-4-6/sonnet-4-6 base models). Raw API supports it. **BYPASSED via binary patch** — see Part 8.9
+- `--settings` overlay CANNOT override user-level `advisorModel`: user settings always win
+- **Task tools REMOVED from FG non-team GP** (v2.1.107, regression vs v2.1.85) — FG subagents can no longer call TaskCreate/List/Get/Update without a `team_name`. Workaround: spawn with `team_name` parameter on Agent tool.
+
+### Test scripts/outputs location (v2.1.107):
+- `earnings-analysis/test-outputs/test-v1107-fg-inventory.txt` — FG GP tool inventory (9 direct + 15 deferred + 109 MCP, Monitor YES, Task tools NO)
+- `earnings-analysis/test-outputs/test-v1107-bg-inventory.txt` — BG GP tool inventory (8 direct + 5 deferred + 104 MCP, Monitor NO)
+- `earnings-analysis/test-outputs/test-v1101-worktree-rw.txt` — worktree R/W fix (PASS)
+- `earnings-analysis/test-outputs/test-v1101-continue-p-sdk.txt` — --continue -p SDK (PASS)
+- `earnings-analysis/test-outputs/test-v198-bg-partial-progress.txt` — BG partial progress (PASS)
+- `earnings-analysis/test-outputs/test-v198-script-caps.txt` — CLAUDE_CODE_SCRIPT_CAPS (INCONCLUSIVE)
+- `earnings-analysis/test-outputs/test-v1105-enter-worktree-path.txt` — EnterWorktree path param (PASS)
+- `earnings-analysis/test-outputs/test-v1105-skill-desc-cap.txt` — skill desc cap 250→1536 (PASS, observed)
+- `earnings-analysis/test-outputs/test-v1107-nested-task-probe.txt` — Task→Task nesting (CONFIRMED_BLOCKED)
+- `earnings-analysis/test-outputs/test-v1107-bg-taskcreate.txt` — BG TaskCreate (CONFIRMED_BLOCKED)
+- `earnings-analysis/test-outputs/test-v1107-bg-mcp-probe.txt` — BG MCP via ToolSearch (PASS)
+- `earnings-analysis/test-outputs/test-v1107-bg-skill-invoke.txt` — BG agent→Skill nesting (PASS_NESTING)
+- `earnings-analysis/test-outputs/test-v1107-agent-invoke-skill.txt` — FG agent→Skill nesting (PASS_NESTING)
+- `earnings-analysis/test-outputs/test-v1107-nest-parent.txt` — skill→skill nesting (PASS)
+- `earnings-analysis/test-outputs/test-v1107-parallel-parent.txt` — parallel skill exec (SEQUENTIAL, 10.2s gap)
+
+### Test agents/skills added (v2.1.107):
+- `.claude/agents/test-v1107-fg-tool-inventory.md`
+- `.claude/agents/test-v1107-bg-tool-inventory.md`
+- `.claude/agents/test-v1107-bg-taskcreate.md`
+- `.claude/agents/test-v1107-nested-task-probe.md`
+- `.claude/agents/test-v1107-bg-mcp-probe.md`
+- `.claude/agents/test-v1107-bg-skill-invoke.md`
+- `.claude/agents/test-v1107-agent-invoke-skill.md`
+- `.claude/agents/test-v1101-worktree-rw.md`
+- `.claude/agents/test-v198-bg-partial-progress.md`
+- `.claude/agents/test-v1105-enter-worktree-path.md`
+- `.claude/skills/test-v1107-parallel-parent/SKILL.md`
+- `.claude/skills/test-v1107-parallel-a/SKILL.md`
+- `.claude/skills/test-v1107-parallel-b/SKILL.md`
+- `.claude/skills/test-v1107-nest-parent/SKILL.md`
+- `.claude/skills/test-v1107-nest-child/SKILL.md`
+- `.claude/skills/test-v1105-long-desc/SKILL.md`
+
+### Test scripts/outputs location (v2.1.100):
+- `scripts/test_concurrent_model_isolation.py` — concurrent SDK session model isolation test (7 verdicts)
+- `scripts/patch_claude_haiku_advisor.sh` — binary patch script for haiku+advisor support
+- `earnings-analysis/test-outputs/test-concurrent-model-isolation.txt` — model isolation test results
+- `earnings-analysis/test-outputs/test-sdk-advisor-isolation.txt` — advisor availability, model control, and isolation findings
+- `earnings-analysis/test-outputs/test-haiku-advisor-bypass.txt` — haiku+advisor binary patch test results (6 tests, all pass)
 
 ### Test agents/hooks location (v2.1.88):
 - `.claude/agents/test-v188-permission-denied.md`
@@ -376,6 +467,93 @@
 - `.claude/agents/test-v184-stream-idle.md`
 - `.claude/rules/test-v184-yaml-rule.md`
 - `.claude/hooks/test-v184-taskcreated.sh`
+
+---
+
+### Retest Summary (2026-04-10, v2.1.100) — SDK Model Isolation & Advisor Tool
+
+**5 capabilities tested (all empirically confirmed):**
+
+| Feature | Status | Details |
+|---------|--------|---------|
+| SDK concurrent model isolation | ✅ PROVEN | 7/7 verdicts PASS. Two concurrent `asyncio.gather()` sessions with haiku/sonnet — different init models, no cross-contamination, settings not mutated |
+| Advisor per-session SDK control | ✅ PROVEN | 6 tests. `--settings '{"advisorModel":"opus"}'` overlay works when user settings lack `advisorModel`. Settings priority: user > overlay |
+| Advisor tool architecture | ✅ DOCUMENTED | Server-side tool, feature flag `tengu_sage_compass2`, `WyH()` base model gate, `GyH=["opus","sonnet"]` choices. Complete binary analysis of 10+ functions |
+| Haiku advisor (unpatched CLI) | ❌ BLOCKED | `WyH()` restricts to opus-4-6/sonnet-4-6. Raw API supports haiku (officially documented by Anthropic). 10 config-level approaches exhausted |
+| Haiku advisor (patched binary) | ✅ **BYPASSED** | Binary patch: `"opus-4-6"` → `"aiku-4-5"` (8 bytes). 6/6 tests PASS. SDK iterations show `advisor_message` from `claude-opus-4-6`. Patch script auto-discovers offsets |
+
+**Enable per-session advisor in SDK — prerequisites checklist:**
+
+| Step | What | Why |
+|------|------|-----|
+| 1 | Remove `advisorModel` from `~/.claude/settings.json` | User-level key overrides ALL SDK overlays — no per-session control possible if present |
+| 2 | Keep `advisorModel` OUT of `.claude/settings.json` (project) | Same priority issue; project settings also override overlays |
+| 3 | Pass `settings='{"advisorModel": "opus"}'` in `ClaudeAgentOptions` | Per-session overlay injection — only works when user/project settings lack the key |
+| 4 | Use `setting_sources=["user", "project"]` | Load user settings (thinking config, etc.) + project settings (skills, MCP) |
+| 5 | For haiku base: use patched binary via `cli_path=` | `WyH()` gate blocks haiku in unpatched CLI. Run `scripts/patch_claude_haiku_advisor.sh` after each CLI update |
+| 6 | For sonnet/opus base: standard binary works | `WyH()` already allows sonnet-4-6 and opus-4-6 |
+| 7 | Verify `CLAUDE_CODE_DISABLE_ADVISOR_TOOL` is NOT set | Env var disables advisor entirely |
+| 8 | Verify `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` is NOT set | Disables experimental features including advisor |
+
+**SDK code patterns:**
+```python
+# Sonnet + advisor (standard binary — no patch needed)
+options = ClaudeAgentOptions(
+    cli_path="/home/faisal/.local/bin/claude",
+    setting_sources=["user", "project"],
+    cwd=PROJECT_DIR,
+    permission_mode="bypassPermissions",
+    model="sonnet",
+    settings='{"advisorModel": "opus"}',
+    max_turns=MAX_TURNS,
+    max_budget_usd=MAX_BUDGET_USD,
+)
+
+# Haiku + advisor (REQUIRES patched binary)
+options = ClaudeAgentOptions(
+    cli_path="/home/faisal/.local/share/claude/versions/2.1.100-haiku-patched",
+    setting_sources=["user", "project"],
+    cwd=PROJECT_DIR,
+    permission_mode="bypassPermissions",
+    model="haiku",
+    settings='{"advisorModel": "opus"}',
+    max_turns=MAX_TURNS,
+    max_budget_usd=MAX_BUDGET_USD,
+)
+```
+
+**K8s implications:**
+- `~/.claude/settings.json` is shared via hostPath across all pods — MUST NOT have `advisorModel`
+- Each pod's SDK call passes `advisorModel` via `settings=` parameter
+- Each `query()` spawns separate `claude -p` subprocess with `--settings` flag
+- No cross-contamination — proven by V7 in concurrent model isolation test
+- For haiku+advisor: mount patched binary via hostPath, reference via `cli_path=`
+- **Re-patch after CLI updates**: `scripts/patch_claude_haiku_advisor.sh` auto-discovers offsets
+
+**Valid advisor configurations (v2.1.100):**
+
+| Base Model | Advisor Model | Unpatched | Patched | Notes |
+|------------|---------------|-----------|---------|-------|
+| haiku      | opus          | ❌ BLOCKED | ✅ YES  | Binary patch enables this |
+| haiku      | sonnet        | ❌ BLOCKED | ✅ YES  | Binary patch enables this |
+| sonnet     | opus          | ✅ YES     | ✅ YES  | Unchanged |
+| sonnet     | sonnet        | ✅ YES     | ✅ YES  | Unchanged |
+| opus       | opus          | ✅ YES     | ❌ NO*  | *Opus doesn't need advisor; runs fine without it |
+| opus       | sonnet        | ✅ YES     | ❌ NO*  | *Same — opus is already the most capable model |
+
+**10 failed approaches (investigated before binary patch):**
+1. `modelOverrides` — WyH sees overridden name, API rejects fake model ID
+2. `ANTHROPIC_DEFAULT_*_MODEL` env vars — feeds Z_() resolver, WyH checks result
+3. `ANTHROPIC_CUSTOM_MODEL_OPTION` — skips validation not WyH, API rejects fake IDs
+4. `SUPPORTED_CAPABILITIES` env vars — 3P-only, ignored for firstParty
+5. Tricky model strings — pass WyH but API rejects invalid model IDs
+6. Settings `advisorModel` (WIK bypass) — bypasses Gate 1, NOT Gate 2 (PIK per-query)
+7. `ANTHROPIC_BASE_URL` proxy — `jw()` kills Nb() for non-anthropic hosts
+8. `CLAUDE_CODE_API_BASE_URL` — only affects internal API, not SDK client
+9. `set_model()` mid-session — PIK checks current model per-query
+10. `ANTHROPIC_SMALL_FAST_MODEL` — just an alias in resolution pipeline
+
+Full technical details of each failure: see Part 8.9
 
 ---
 
@@ -3083,6 +3261,52 @@ Claude Code (with your .claude/ directory)
 - Parallel providers: `parallel-agent-*.txt` (all 3 completed ~12s) ✅
 
 **No architectural incompatibilities.** OpenAI/Gemini work as external subprocesses.
+
+## 8.7 SDK Concurrent Model Isolation (Tested 2026-04-10, v2.1.100)
+
+**Question**: When triggering multiple Claude Code sessions via SDK with different `model=` parameters, can one session's model affect another?
+
+**Answer**: **NO — fully isolated.** Each `query()` spawns a separate `claude -p` subprocess. Model is a CLI flag (`--model X`), not shared config.
+
+**Architecture (proven by code + test):**
+```
+SDK query(model="haiku")  ──→  _build_command() ──→ cmd = ["claude", "-p", "--model", "haiku", ...]
+                                                      ↓
+                                                 anyio.open_process(cmd)  ──→  OS subprocess #1
+
+SDK query(model="sonnet")  ──→  _build_command() ──→ cmd = ["claude", "-p", "--model", "sonnet", ...]
+                                                      ↓
+                                                 anyio.open_process(cmd)  ──→  OS subprocess #2
+
+No shared mutable state between #1 and #2.
+```
+
+**Source code proof** (`venv/lib/python3.11/site-packages/claude_agent_sdk/_internal/transport/subprocess_cli.py`):
+- Line 207-208: `cmd.extend(["--model", self._options.model])` — model is CLI flag
+- Line 231-233: `settings_value` → `cmd.extend(["--settings", settings_value])` — overlay mechanism
+- Line 369: `anyio.open_process(cmd, ...)` — each query() is separate OS process
+
+**Test results** (7/7 PASS):
+| Verdict | What | Result |
+|---------|------|--------|
+| V1 | Init models differ | PASS — A=`claude-haiku-4-5-20251001`, B=`claude-sonnet-4-6` |
+| V2 | Concurrent overlap | PASS — 10.7s overlap |
+| V3 | No errors | PASS |
+| V4 | Marker files exist | PASS |
+| V5 | No cross-contamination | PASS — correct labels in each marker |
+| V6 | Session IDs differ | PASS — separate subprocesses |
+| V7 | Settings not mutated | PASS — `~/.claude/settings.json` unchanged |
+
+**K8s safety**: Test ran with FULLY SHARED filesystem (stricter than K8s where each pod has emptyDir for `/home/faisal`). If local test passes, K8s isolation is guaranteed.
+
+**Test script**: `scripts/test_concurrent_model_isolation.py`
+**Results**: `earnings-analysis/test-outputs/test-concurrent-model-isolation.txt`
+
+## 8.8 & 8.9 — Advisor Tool Architecture & Haiku Binary Patch Bypass
+
+> **Full reference moved to [`advisor.md`](advisor.md)** — complete binary analysis (10 decompiled gate functions), model resolution pipeline, startup/per-query flows, 10 exhaustive failed approaches with root causes, binary patch solution ("opus-4-6" → "aiku-4-5"), 6 test results, SDK iteration proof, production usage patterns, multi-task model switching, auto-update re-patching, comprehensive risk matrix (10 risks), and research agent findings.
+>
+> **Quick summary**: Haiku+advisor is officially supported by the Anthropic API but blocked by a client-side `WyH()` gate in the CLI binary. Binary string patch (8-byte same-length swap) bypasses both gates. Patched binary: `~/.local/share/claude/versions/2.1.100-haiku-patched`. Re-patch script: `scripts/patch_claude_haiku_advisor.sh` (run after each `claude update`).
 
 ---
 

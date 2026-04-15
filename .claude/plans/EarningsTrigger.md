@@ -21,20 +21,20 @@
 
 ### Minimum Upstream Contract Required for Trading
 
-The trade execution system (`.claude/plans/trade-execution-system.md`) needs these from the upstream pipeline:
+The Phase 1 trade execution system (`.claude/plans/trade-execution-phase1.md`) needs these from the upstream pipeline:
 
 **CONTRACT BLOCKERS** (the trade daemon cannot function correctly without these):
 
-1. **prediction/result.json** with trade-aligned schema (see Prediction Output Contract below)
-2. **Deterministic `prediction_id`** in prediction output for idempotency
+1. **prediction/result.json** with the canonical TES producer schema (see Prediction Output Contract below)
+2. **Deterministic `signal_id`** in prediction output for idempotency
 
 **OPTIONAL ENHANCEMENTS** (daemon works without these, safe fallback applies):
 
-3. **`predictor_session_id`** in prediction/result.json (for reassessment session resume; absent = no_change + no_escalation fallback)
+3. **`predictor_session_id`** in prediction/result.json (reserved for future reassessment; Phase 1 trade daemon ignores it)
 
-**AUTOMATION BLOCKERS** (the trade daemon works without these but requires manual prediction triggering):
+**AUTOMATION / FUTURE FAST-PATH** (not required by the Phase 1 trade daemon):
 
-4. **Redis `trades:pending` push** after prediction completes (fast path only — trade daemon has 30s filesystem fallback)
+4. **Redis `trades:pending` push** after prediction completes (future fast path only — Phase 1 trade daemon uses 30s filesystem scan)
 5. **Live 8-K detection** so predictions fire automatically (not manual)
 6. Watch keys + stale prediction recovery
 7. `live_state.json` with quarter_label
@@ -44,7 +44,7 @@ The trade execution system (`.claude/plans/trade-execution-system.md`) needs the
 8. Historical-first processing for U1 feedback
 9. Deferred learner catch-up before next live cycle
 
-### Prediction Output Contract (v13 — aligned with trade system Block 4A)
+### Prediction Output Contract (v14 — aligned with Phase 1 TES canonical contract)
 
 The `earnings-prediction` skill currently outputs:
 
@@ -60,17 +60,23 @@ The `earnings-prediction` skill currently outputs:
 }
 ```
 
-The trade system requires these fields in `prediction/result.json`:
+The orchestrator must normalize that predictor output into a final `prediction/result.json` whose canonical TES fields include:
 
 ```json
 {
-  "prediction_id": "AAPL_Q1_FY2026_20260406T1603",
-  "ticker": "AAPL",
-  "quarter_label": "Q1_FY2026",
-  "filed_8k": "2026-04-06T16:03:00-04:00",
+  "signal_id": "AAPL_Q1_FY2026_2026-04-06T20:03:00Z",
+  "source_type": "earnings",
+  "symbol": "AAPL",
+  "event_id": "Q1_FY2026",
+  "event_time": "2026-04-06T20:03:00Z",
+  "issued_at": "2026-04-06T20:13:00Z",
   "direction": "long",
   "confidence": 82,
   "expected_move_range": [5, 8],
+
+  "ticker": "AAPL",
+  "quarter_label": "Q1_FY2026",
+  "filed_8k": "2026-04-06T16:03:00-04:00",
   "key_drivers": [
     {"driver": "EPS beat 15%", "direction": "long"}
   ],
@@ -82,7 +88,9 @@ The trade system requires these fields in `prediction/result.json`:
 }
 ```
 
-Note: `predictor_session_id` is optional. If absent, trade daemon applies safe fallback (no_change + no_escalation for reassessment).
+`ticker`, `quarter_label`, `filed_8k`, `key_drivers`, `rationale_summary`, and model metadata may remain as extra producer metadata. Phase 1 TES reads the canonical fields directly and ignores extras it does not use.
+
+Note: `predictor_session_id` is optional and is reserved for future reassessment. Phase 1 TES does not depend on it.
 
 **Field mapping (old → new):**
 
@@ -94,10 +102,13 @@ Note: `predictor_session_id` is optional. If absent, trade daemon applies safe f
 | `key_drivers` | `key_drivers` | Same ✓ |
 | `data_gaps` | Keep for attribution | Not used by trade daemon |
 | `evidence_ledger` | Keep for attribution | Not used by trade daemon |
-| (missing) | `prediction_id` | ADD — deterministic `{ticker}_{quarter}_{filed_8k_ts}` |
-| (missing) | `ticker` | ADD — from orchestrator context |
-| (missing) | `quarter_label` | ADD — from orchestrator context |
-| (missing) | `filed_8k` | ADD — from orchestrator context |
+| (missing) | `signal_id` | ADD — deterministic canonical ID derived from event identity |
+| (missing) | `source_type` | ADD — `"earnings"` |
+| `ticker` | `symbol` | Canonical TES field name |
+| `quarter_label` | `event_id` | Canonical TES field name |
+| `filed_8k` | `event_time` | Normalize filing timestamp for TES |
+| `predicted_at` | `issued_at` | Canonical TES field name |
+| (optional extra) | `ticker` / `quarter_label` / `filed_8k` | May be retained for audit/debugging |
 | (missing) | `model_version` | ADD — from runtime |
 | (missing) | `prompt_version` | ADD — from skill version |
 | (missing) | `predicted_at` | ADD — timestamp when prediction completes |
@@ -105,34 +116,35 @@ Note: `predictor_session_id` is optional. If absent, trade daemon applies safe f
 **Who adds the missing fields?**
 The **orchestrator** is the sole owner of canonical `prediction/result.json` normalization:
 - Renames fields at write time: `confidence_score`→`confidence`, `expected_move_range_pct`→`expected_move_range`, `analysis`→`rationale_summary`
-- Injects metadata: `prediction_id`, `ticker`, `quarter_label`, `filed_8k`, `model_version`, `prompt_version`, `predicted_at`, `predictor_session_id`
+- Injects canonical TES fields: `signal_id`, `source_type`, `symbol`, `event_id`, `event_time`, `issued_at`
+- May also retain helpful earnings-specific metadata: `ticker`, `quarter_label`, `filed_8k`, `model_version`, `prompt_version`, `predicted_at`, `predictor_session_id`
 - The predictor skill stays unchanged — orchestrator normalizes its output
 
 The prediction skill only knows about the bundle. The orchestrator knows the event context (ticker, quarter, filing time) and owns the write to disk.
 
 ### Predictor Session ID — Where It Lives
 
-For trade reassessment (resuming the predictor session with new evidence):
+For future trade reassessment (resuming the predictor session with new evidence):
 
 - **Single source**: optional `predictor_session_id` field in `prediction/result.json`
   - Written by the orchestrator after the SDK prediction call completes (SDK returns the session/agent ID)
   - No sibling file (no `prediction/session.json` at launch)
-  - The trade daemon reads it directly from prediction/result.json — no dependency on live_state.json
+  - A future reassessment layer may read it directly from prediction/result.json — no dependency on live_state.json
 - `live_state.json` may optionally mirror it, but the canonical source is always prediction/result.json
-- **If field is missing** (prediction ran before this feature, or old-format result.json): trade daemon applies no_change + no_escalation fallback — safe. Reassessment is an enhancement, not a dependency.
+- **If field is missing** (prediction ran before this feature, or old-format result.json): that is still safe. Reassessment is an enhancement, not a Phase 1 dependency.
 
 ### trades:pending Redis Push
 
-After a LIVE prediction completes and `prediction/result.json` is written:
+If a future Redis fast path is added, after a LIVE prediction completes and `prediction/result.json` is written:
 
 ```
-LPUSH trades:pending {"prediction_id": "AAPL_Q1_FY2026_20260406T1603", "ticker": "AAPL", "quarter_label": "Q1_FY2026"}
+LPUSH trades:pending {"signal_id": "AAPL_Q1_FY2026_2026-04-06T20:03:00Z", "symbol": "AAPL", "event_id": "Q1_FY2026"}
 ```
-Field name is `quarter_label` (NOT `quarter`). Consistent across both plans.
+Use canonical TES identifiers in the queue payload.
 
 **Who pushes?** The **orchestrator** — the component that writes and validates `prediction/result.json` is the sole pusher. It pushes immediately after confirming the prediction file is valid. NOT the prediction skill (no Redis access) and NOT the earnings trigger daemon (it doesn't know when prediction completes).
 
-**Trade daemon consumes** via BRPOP (fast path). Filesystem scan every 30s is the fallback.
+Phase 1 trade daemon does **not** consume Redis. It uses filesystem scan every 30s. BRPOP is a possible future fast path only.
 
 ### Guidance Gate Resolution (v13)
 
