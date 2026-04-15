@@ -143,8 +143,9 @@ class Polygon:
             
         except Exception as e:
             error_msg = str(e)
-            if "NOT_AUTHORIZED" in error_msg:
-                from utils.polygon_health import on_auth_failure
+            from utils.polygon_health import (
+                exception_looks_like_auth_failure, on_auth_failure)
+            if exception_looks_like_auth_failure(e):
                 on_auth_failure(e)
                 # Intentionally NOT cached — auth failure is not a ticker
                 # property. If transient, next call retries cleanly; if
@@ -237,8 +238,9 @@ class Polygon:
                     error_msg = str(e)
                     self.logger.error(f"Exact error for {ticker}: {error_msg}", exc_info=True)
 
-                    if "NOT_AUTHORIZED" in error_msg:
-                        from utils.polygon_health import on_auth_failure
+                    from utils.polygon_health import (
+                        exception_looks_like_auth_failure, on_auth_failure)
+                    if exception_looks_like_auth_failure(e):
                         on_auth_failure(e)
                         return np.nan
 

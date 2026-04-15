@@ -793,7 +793,14 @@ class ReturnsProcessor:
     def _update_return(self, key: str, return_type: str) -> bool:
         """Update returns for a specific return type"""
         try:
-            
+            # Sample the polygon-health auth-suspect counter BEFORE any
+            # Polygon-touching work. If it changes by decision time, an
+            # auth event occurred during this call — even if verification
+            # resolved transiently back to ALIVE before we could observe
+            # _state. Race-free retry-preservation guard.
+            from utils.polygon_health import get_auth_suspect_counter
+            auth_counter_at_entry = get_auth_suspect_counter()
+
             identifier = key.split(':')[-1]
 
 
@@ -861,11 +868,33 @@ class ReturnsProcessor:
             else:
                 self.logger.error("Redis pipeline failed while moving %s → %s", key, namespace)
 
-            # Only zrem the pending-ZSET entry when BOTH Redis succeeded AND
-            # the specific return_type was actually populated. Partial data is
-            # already saved to withoutreturns above; returning False here keeps
-            # the ZSET entry so the next scheduler cycle retries.
-            return success and return_complete
+            # Auth-suspect retry protection (counter-latched, race-free):
+            # if the auth-suspect counter moved during this call, an auth
+            # failure was observed. Reschedule the ZSET entry past the
+            # verification window (now+30s) so the retry ticket is preserved
+            # even when verification resolves transiently back to ALIVE
+            # before this decision point.
+            # Non-auth partials (counter unchanged, e.g. legit "no trades at
+            # timestamp") keep pre-existing single-shot semantics: zrem on
+            # Redis success. This matches behavior before commit 6fef815 and
+            # avoids the hot-loop regression that "return success and
+            # return_complete" introduced.
+            if not return_complete and get_auth_suspect_counter() != auth_counter_at_entry:
+                try:
+                    future_ts = datetime.now(timezone.utc).timestamp() + 30
+                    pending_key = f"{identifier}:{return_type}"
+                    self.live_client.client.zadd(
+                        self.pending_zset,
+                        {pending_key: future_ts},
+                        xx=True,  # only update if entry still exists
+                    )
+                except Exception as zadd_err:
+                    self.logger.warning(
+                        "Failed to bump pending ZSET score for %s: %s",
+                        identifier, zadd_err)
+                return False  # caller will NOT zrem; entry rescheduled
+
+            return success
 
                 
         except Exception as e:

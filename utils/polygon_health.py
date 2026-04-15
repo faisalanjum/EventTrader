@@ -34,7 +34,55 @@ _state = _STATE_ALIVE
 _lock = threading.Lock()
 _is_live_runner = False  # opt-in set by run_event_trader after startup probe
 
+# Monotonic counter — bumped at the TOP of on_auth_failure() (before the
+# state check), so every caller is recorded whether or not they trigger
+# verification. Callers (ReturnsProcessor._update_return) sample this at
+# entry; a delta at decision time means auth was suspected during their
+# call, race-free even if verification resolves back to ALIVE before the
+# caller observes _state.
+_auth_suspect_counter = 0
+
 _PROBE_TIMEOUT = 8
+
+_AUTH_ERROR_MARKERS = (
+    "NOT_AUTHORIZED",      # Polygon canonical status for plan/auth failures
+    "UNAUTHORIZED",        # HTTP 401 reason phrase
+    "FORBIDDEN",           # HTTP 403 reason phrase
+    "UNKNOWN API KEY",     # observed body on invalid/expired key
+    "INVALID API KEY",     # variant
+    "NOT_ENTITLED",        # variant for plan mismatches
+)
+
+
+def exception_looks_like_auth_failure(exc) -> bool:
+    """Classify a Polygon SDK exception as auth failure. polygon-api-client's
+    BadResponse wraps only the response body (HTTP status stripped at
+    polygon/rest/base.py), so we parse body.status + body.error with a
+    string-level fallback. Aligned with _looks_like_auth_failure which
+    handles Response objects directly."""
+    msg = str(exc)
+    try:
+        import json
+        body = json.loads(msg)
+    except (ValueError, TypeError):
+        body = None
+    if isinstance(body, dict):
+        status = (body.get("status") or "").upper()
+        if status == "NOT_AUTHORIZED":
+            return True
+        if status == "ERROR":
+            err = (body.get("error") or body.get("message") or "").upper()
+            if any(m in err for m in _AUTH_ERROR_MARKERS):
+                return True
+    upper = msg.upper()
+    return any(m in upper for m in _AUTH_ERROR_MARKERS)
+
+
+def get_auth_suspect_counter() -> int:
+    """Monotonic counter incremented every time on_auth_failure() is entered
+    (before the state check). Callers sample at entry, compare at decision
+    time — any delta means an auth suspicion occurred during the call."""
+    return _auth_suspect_counter
 
 
 def enable_fatal_shutdown() -> None:
@@ -110,8 +158,11 @@ def on_auth_failure(trigger_exc: Exception) -> None:
     this process has opted-in via enable_fatal_shutdown(), we SIGTERM
     ourselves so the existing signal handler runs manager.stop() for
     a clean drain. Later callers (other threads) return immediately."""
-    global _state
+    global _state, _auth_suspect_counter
     with _lock:
+        # Latch every caller BEFORE the state check, so callers that arrive
+        # while another thread is already verifying still get counted.
+        _auth_suspect_counter += 1
         if _state != _STATE_ALIVE:
             return
         _state = _STATE_VERIFYING
