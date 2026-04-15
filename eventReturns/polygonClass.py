@@ -575,6 +575,17 @@ class Polygon:
         # Validate ticker
         is_valid, error_msg = self.validate_ticker(ticker)
         if not is_valid:
+            # Honor the HOURLY contract (lists keyed by horizon) even on the
+            # invalid-ticker fallback. Without this, scalar np.nan violates
+            # the shape consumers depend on (ReturnsProcessor.py:549 and
+            # :710 both do `v[0]` for hourly). SESSION/DAILY remain scalars
+            # as before.
+            if return_type == MetadataFields.HOURLY:
+                horizon_minutes = horizon_minutes or [60]
+                return {
+                    k: [np.nan] * len(horizon_minutes)
+                    for k in ['stock', 'sector', 'industry', 'macro']
+                }
             return {k: np.nan for k in ['stock', 'sector', 'industry', 'macro']}
 
         # Define asset order
