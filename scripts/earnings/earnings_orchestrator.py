@@ -1600,6 +1600,268 @@ def get_learnings_paths(ticker: str) -> dict[str, Path]:
 from validate_attribution import validate_attribution_result  # noqa: F401 — stdlib-only, hook-safe
 
 
+# ── PIT Cutoff Derivation (three-tier rule per learner-final.md §3) ──
+
+
+def derive_learner_pit(events: list[dict], current_index: int,
+                       live_state_path: Path | None = None
+                       ) -> tuple[str | None, str]:
+    """Derive the PIT cutoff for the learner at position current_index.
+
+    Three-tier rule:
+      1. Q(n+1) exists in events → use Q(n+1)'s filed_8k
+      2. No Q(n+1), but a live cycle exists → use live quarter's filed_8k
+      3. No Q(n+1) and no live cycle → use current invocation time
+
+    Returns (pit_cutoff, pit_boundary_source).
+    For live mode (caller decides), returns (None, "").
+    ⚠️ HUMAN REVIEW GATE — verify correctness across all tickers.
+    """
+    # Tier 1: next quarter in the events list
+    if current_index + 1 < len(events):
+        next_event = events[current_index + 1]
+        next_filed = next_event.get("filed_8k")
+        if next_filed:
+            return next_filed, "next_quarter"
+
+    # Tier 2: live cycle exists (live_state.json has a filed_8k for a quarter
+    # that's not yet in the events list)
+    if live_state_path and live_state_path.exists():
+        try:
+            ls = json.loads(live_state_path.read_text(encoding="utf-8"))
+            live_filed = ls.get("filed_8k")
+            if live_filed:
+                return live_filed, "live_cycle"
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # Tier 3: fallback to current invocation time
+    return datetime.now(timezone.utc).isoformat(), "invocation_time"
+
+
+# ── actual_return Normalization (Neo4j PUBLISHED_AS → normalized packet) ─
+
+
+_RETURN_FIELD_MAP = {
+    "daily_stock": "daily_stock_pct",
+    "hourly_stock": "hourly_stock_pct",
+    "session_stock": "session_stock_pct",
+    "daily_macro": "daily_macro_pct",
+    "daily_sector": "daily_sector_pct",
+    "daily_industry": "daily_industry_pct",
+}
+
+
+def normalize_actual_return(neo4j_record: dict) -> dict:
+    """Normalize Neo4j PUBLISHED_AS relationship fields to the learner contract.
+
+    Input: dict with raw Neo4j field names (daily_stock, hourly_stock, etc.)
+    Output: dict with normalized names (daily_stock_pct, hourly_stock_pct, etc.)
+    """
+    result: dict[str, Any] = {}
+    for neo4j_name, normalized_name in _RETURN_FIELD_MAP.items():
+        val = neo4j_record.get(neo4j_name)
+        result[normalized_name] = float(val) if val is not None else None
+    result["market_session"] = neo4j_record.get("market_session") or neo4j_record.get("market_session_8k")
+    return result
+
+
+def fetch_actual_return(ticker: str, accession: str) -> dict | None:
+    """Fetch actual return data from Neo4j for a given 8-K accession.
+
+    Queries the PUBLISHED_AS relationship on the 8-K report.
+    Returns normalized actual_return dict, or None if not found or daily_stock missing.
+    """
+    try:
+        from neo4j import GraphDatabase
+    except ImportError:
+        log.error("neo4j driver not available — cannot fetch actual_return")
+        return None
+
+    uri = os.environ.get("NEO4J_URI", "bolt://minisforum3:30687")
+    user = os.environ.get("NEO4J_USER", "neo4j")
+    password = os.environ.get("NEO4J_PASSWORD", "")
+
+    query_str = """
+    MATCH (r:Report {accession_number: $accession})-[p:PUBLISHED_AS]->(c:Company {ticker: $ticker})
+    RETURN p.daily_stock AS daily_stock,
+           p.hourly_stock AS hourly_stock,
+           p.session_stock AS session_stock,
+           p.daily_macro AS daily_macro,
+           p.daily_sector AS daily_sector,
+           p.daily_industry AS daily_industry,
+           r.market_session AS market_session
+    LIMIT 1
+    """
+    try:
+        driver = GraphDatabase.driver(uri, auth=(user, password))
+        with driver.session() as session:
+            result = session.run(query_str, accession=accession, ticker=ticker.upper())
+            record = result.single()
+        driver.close()
+    except Exception as e:
+        log.error("Neo4j query failed for actual_return: %s", e)
+        return None
+
+    if not record:
+        log.warning("No PUBLISHED_AS relationship found for %s / %s", ticker, accession)
+        return None
+
+    raw = dict(record)
+    if raw.get("daily_stock") is None:
+        log.warning("daily_stock is NULL for %s / %s — hard gate not met", ticker, accession)
+        return None
+
+    return normalize_actual_return(raw)
+
+
+# ── Learner Orchestration (post-prediction sequential flow) ─────────
+
+
+def run_learner_for_quarter(
+    ticker: str,
+    quarter_info: dict,
+    events: list[dict],
+    current_index: int,
+    pit_mode: str = "historical",
+    live_state_path: Path | None = None,
+) -> dict | None:
+    """Run the full learner pipeline for one quarter.
+
+    1. Check hard gates (prediction/result.json + daily_stock)
+    2. Derive PIT cutoff
+    3. Fetch actual_return from Neo4j
+    4. Invoke learner via SDK
+    5. Validate attribution/result.json (post-return)
+    6. Append ticker + global lessons
+
+    Returns the validated attribution result dict, or None on failure.
+    """
+    ticker = ticker.upper()
+    attr_paths = get_attribution_paths(ticker, quarter_info)
+    learn_paths = get_learnings_paths(ticker)
+    accession = quarter_info.get("accession_8k", "")
+
+    # ── Hard gate 1: prediction must exist ──
+    if not attr_paths["prediction_result_path"].exists():
+        log.warning("Learner skip %s %s: prediction/result.json does not exist",
+                     ticker, quarter_info.get("quarter_label"))
+        return None
+
+    # ── Hard gate 2: actual returns (daily_stock must exist) ──
+    actual_return = fetch_actual_return(ticker, accession)
+    if actual_return is None:
+        log.warning("Learner skip %s %s: daily_stock not available (hard gate)",
+                     ticker, quarter_info.get("quarter_label"))
+        return None
+
+    # ── PIT cutoff derivation ──
+    if pit_mode == "historical":
+        pit_cutoff, pit_boundary_source = derive_learner_pit(
+            events, current_index, live_state_path
+        )
+    else:
+        pit_cutoff, pit_boundary_source = None, "live"
+
+    # ── Skip if attribution already exists ──
+    if attr_paths["result_path"].exists():
+        log.info("Learner skip %s %s: attribution/result.json already exists",
+                  ticker, quarter_info.get("quarter_label"))
+        return json.loads(attr_paths["result_path"].read_text(encoding="utf-8"))
+
+    # ── Invoke learner via SDK ──
+    log.info("Running learner for %s %s (PIT=%s, source=%s)",
+             ticker, quarter_info.get("quarter_label"), pit_cutoff, pit_boundary_source)
+
+    result_path = attr_paths["result_path"]
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+
+    run_learner_via_sdk(
+        ticker=ticker,
+        quarter_info=quarter_info,
+        actual_return=actual_return,
+        pit_mode=pit_mode,
+        pit_cutoff=pit_cutoff,
+        pit_boundary_source=pit_boundary_source,
+        result_path=result_path,
+        prediction_result_path=attr_paths["prediction_result_path"],
+        context_bundle_path=attr_paths["context_bundle_path"],
+        prior_lessons_path=learn_paths["ticker_lessons_path"],
+    )
+
+    # ── Post-return validation ──
+    if not result_path.exists():
+        log.error("Learner failed %s %s: attribution/result.json not written",
+                   ticker, quarter_info.get("quarter_label"))
+        return None
+
+    try:
+        payload = json.loads(result_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        log.error("Learner failed %s %s: result.json not valid JSON: %s",
+                   ticker, quarter_info.get("quarter_label"), e)
+        return None
+
+    errors = validate_attribution_result(
+        payload, ticker, quarter_info.get("quarter_label", "")
+    )
+    if errors:
+        log.error("Learner failed %s %s: validation errors: %s",
+                   ticker, quarter_info.get("quarter_label"), "; ".join(errors[:3]))
+        # Retry once: delete bad file, re-invoke
+        result_path.unlink(missing_ok=True)
+        log.info("Retrying learner for %s %s (1 retry)", ticker, quarter_info.get("quarter_label"))
+        run_learner_via_sdk(
+            ticker=ticker,
+            quarter_info=quarter_info,
+            actual_return=actual_return,
+            pit_mode=pit_mode,
+            pit_cutoff=pit_cutoff,
+            pit_boundary_source=pit_boundary_source,
+            result_path=result_path,
+            prediction_result_path=attr_paths["prediction_result_path"],
+            context_bundle_path=attr_paths["context_bundle_path"],
+            prior_lessons_path=learn_paths["ticker_lessons_path"],
+        )
+        if not result_path.exists():
+            log.error("Learner retry failed %s %s: no result.json after retry",
+                       ticker, quarter_info.get("quarter_label"))
+            return None
+        try:
+            payload = json.loads(result_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            log.error("Learner retry failed %s %s: result.json still invalid JSON",
+                       ticker, quarter_info.get("quarter_label"))
+            return None
+        errors = validate_attribution_result(
+            payload, ticker, quarter_info.get("quarter_label", "")
+        )
+        if errors:
+            log.error("Learner retry failed %s %s: still invalid after retry: %s",
+                       ticker, quarter_info.get("quarter_label"), "; ".join(errors[:3]))
+            return None
+
+    # ── Derived writes: ticker.json + global.json ──
+    try:
+        append_ticker_lesson(ticker, payload)
+        log.info("Appended ticker lesson for %s %s", ticker, quarter_info.get("quarter_label"))
+    except Exception as e:
+        log.error("Ticker lesson append failed for %s %s: %s",
+                   ticker, quarter_info.get("quarter_label"), e)
+        return None
+
+    try:
+        append_global_lessons(payload)
+        log.info("Appended global lessons for %s %s", ticker, quarter_info.get("quarter_label"))
+    except Exception as e:
+        log.error("Global lesson append failed for %s %s: %s",
+                   ticker, quarter_info.get("quarter_label"), e)
+        return None
+
+    log.info("Learner complete for %s %s", ticker, quarter_info.get("quarter_label"))
+    return payload
+
+
 # ── Lesson File Operations (Python owns all derived writes) ─────────
 
 import fcntl
