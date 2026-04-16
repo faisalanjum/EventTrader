@@ -840,6 +840,8 @@ These must exist for the learner to function but are built elsewhere:
 
 Manual single-quarter runs via CLI: `python3 scripts/earnings/earnings_orchestrator.py TICKER ACCESSION --save --predict --learn`. Full sequential automation is pending (daemon, §12).
 
+**Sequential execution is REQUIRED for calibration**: Quarters must run one-at-a-time in chronological order (Q1 → Q2 → Q3 → …). This is not optional — each quarter's learner writes lessons that the NEXT quarter's predictor reads via `learning_context`. Running in parallel or out of order breaks the U1 loop (Q(n) predictor would miss Q(n-1)'s lessons). For a batch run, shell-chain commands: `cmd1 && cmd2 && cmd3` (AND-chain so a failure stops the chain). Never `&` (background) or multi-terminal parallel runs.
+
 **Progress (AVGO sequential calibration, 2026-04-16):**
 - Q1_FY2023: learner-only (legacy prediction), schema-valid, primary_driver=`ai_narrative_rerating`, direction_correct=False. Uncovered real predictor data-freshness bug via investigation.
 - Q2_FY2023: **first clean full-pipeline end-to-end success.** Bundle 7/7, predict+learn via SDK on Opus 4.7, predictor validation passed, learner validation passed, U1 loop verified (Q1 lesson flowed into Q2 bundle, Q2 direction_correct=True, magnitude_error=0.0 with actual inside predicted range).
