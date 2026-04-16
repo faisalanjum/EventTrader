@@ -815,12 +815,12 @@ These must exist for the learner to function but are built elsewhere:
 
 ### Phase 2: Lesson Infrastructure
 
-- [ ] Create `earnings-analysis/learnings/` directory structure
-- [ ] Implement ticker.json atomic append in orchestrator Python (extract feedback from result.json, `fcntl.flock` + temp file + `os.replace`)
-- [ ] Implement global.json atomic append in orchestrator Python (extract global_observations, enrich with source_ticker/quarter_label/attributed_at)
-- [ ] Add `build_learning_context()` to `builder_adapters.py` (with per-scope caps and exact-text dedupe)
-- [ ] Add `_render_learning_context()` to `earnings_orchestrator.py`
-- [ ] Add `learning_context` as 8th bundle item in `BUNDLE_ITEM_ORDER`
+- [x] Create `earnings-analysis/learnings/` directory structure
+- [x] Implement ticker.json atomic append in `earnings_orchestrator.py` (extract feedback, temp file + `os.replace` — no flock needed, single-ticker sequential)
+- [x] Implement global.json atomic append in `earnings_orchestrator.py` (extract global_observations, enrich metadata, `fcntl.flock` + atomic write for concurrency safety)
+- [x] Add `build_learning_context()` in `earnings_orchestrator.py` (lightweight file read, not in `builder_adapters.py` — no external deps). Per-scope caps, exact-text dedupe, quarter_label dedupe for rerun idempotency
+- [x] Add `_render_learning_context()` in `earnings_orchestrator.py`
+- [x] Wire `learning_context` as logical 8th bundle field in `build_prediction_bundle()` (post-build, not in `BUNDLE_ITEM_ORDER` which stays at 7 parallel builders)
 
 ### Phase 3: Orchestrator Inputs + Integration
 
