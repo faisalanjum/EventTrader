@@ -572,7 +572,7 @@ Process MSFT Q2 → predictor reads global.json → sees AAPL's sector insight �
 
 ## 9. `build_learning_context()` Adapter
 
-**Location**: `scripts/earnings/builder_adapters.py` (new function, 8th bundle item)
+**Location**: `scripts/earnings/earnings_orchestrator.py` (not `builder_adapters.py` — this is a lightweight local file read, not a parallel builder that hits Neo4j/APIs)
 **Role**: Read-time compatibility layer that transforms append-only lesson files into predictor-ready compact context.
 
 ### Interface
@@ -645,16 +645,14 @@ When neither file exists (first-ever ticker prediction), returns:
 
 ### Integration with predictor bundle
 
-Add as the **8th builder** in `BUNDLE_ITEM_ORDER` in `earnings_orchestrator.py`:
+`BUNDLE_ITEM_ORDER` remains the 7 parallel builders (Neo4j/API). `learning_context` is the logical 8th bundle field, added after builder execution in `build_prediction_bundle()` as a lightweight file read:
+
 ```python
-BUNDLE_ITEM_ORDER = [
-    "8k_packet", "guidance_history", "inter_quarter_context",
-    "peer_earnings_snapshot", "macro_snapshot", "consensus",
-    "prior_financials", "learning_context"  # NEW
-]
+# In build_prediction_bundle(), after parallel builders complete:
+bundle["learning_context"] = build_learning_context(ticker, sector=sector)
 ```
 
-Add corresponding renderer `_render_learning_context()` that formats ticker + global lessons as a readable section in the prediction bundle text.
+Corresponding renderer `_render_learning_context()` formats ticker + global lessons as Section 10 in the prediction bundle text.
 
 ---
 

@@ -81,6 +81,9 @@ def validate_quarter_info(quarter_info: dict[str, Any]) -> None:
 
 # ── Bundle assembly ──────────────────────────────────────────────────
 
+# The 7 parallel builders — each hits Neo4j/APIs and runs in ThreadPoolExecutor.
+# learning_context is the logical 8th bundle field but is NOT a parallel builder:
+# it's a lightweight local file read added after builder execution (see build_prediction_bundle).
 BUNDLE_ITEM_ORDER = [
     "8k_packet",
     "guidance_history",
@@ -169,7 +172,9 @@ def build_prediction_bundle(ticker: str, quarter_info: dict,
     for name in BUNDLE_ITEM_ORDER:
         bundle[name] = results.get(name)
 
-    # learning_context is a lightweight file read, not a parallel builder
+    # learning_context is the logical 8th bundle field. Not in BUNDLE_ITEM_ORDER
+    # because it's a lightweight local file read (no Neo4j/API), not a parallel builder.
+    # Lives in earnings_orchestrator.py (not builder_adapters.py) for the same reason.
     try:
         sector = (results.get("8k_packet") or {}).get("sector")
         bundle["learning_context"] = build_learning_context(ticker, sector=sector)
