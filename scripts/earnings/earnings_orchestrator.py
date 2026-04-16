@@ -1748,22 +1748,8 @@ def run_learner_for_quarter(
                      ticker, quarter_info.get("quarter_label"))
         return None
 
-    # ── Hard gate 2: actual returns (daily_stock must exist) ──
-    actual_return = fetch_actual_return(ticker, accession)
-    if actual_return is None:
-        log.warning("Learner skip %s %s: daily_stock not available (hard gate)",
-                     ticker, quarter_info.get("quarter_label"))
-        return None
-
-    # ── PIT cutoff derivation ──
-    if pit_mode == "historical":
-        pit_cutoff, pit_boundary_source = derive_learner_pit(
-            events, current_index, live_state_path
-        )
-    else:
-        pit_cutoff, pit_boundary_source = None, "invocation_time"
-
-    # ── If attribution already exists, run derived-write recovery ──
+    # ── If attribution already exists, run derived-write recovery FIRST ──
+    # Runs before fetch_actual_return() so recovery works even if Neo4j is down.
     # A prior run may have written result.json but crashed before ticker/global appends.
     # Completion requires all 3 artifacts (plan §10 completion semantics).
     if attr_paths["result_path"].exists():
@@ -1792,6 +1778,21 @@ def run_learner_for_quarter(
                     log.error("Derived-write recovery failed for %s %s: %s", ticker, quarter_info.get("quarter_label"), e)
                     return None
                 return existing
+
+    # ── Hard gate 2: actual returns (daily_stock must exist) ──
+    actual_return = fetch_actual_return(ticker, accession)
+    if actual_return is None:
+        log.warning("Learner skip %s %s: daily_stock not available (hard gate)",
+                     ticker, quarter_info.get("quarter_label"))
+        return None
+
+    # ── PIT cutoff derivation ──
+    if pit_mode == "historical":
+        pit_cutoff, pit_boundary_source = derive_learner_pit(
+            events, current_index, live_state_path
+        )
+    else:
+        pit_cutoff, pit_boundary_source = None, "invocation_time"
 
     # ── Invoke learner via SDK ──
     log.info("Running learner for %s %s (PIT=%s, source=%s)",
@@ -2330,6 +2331,8 @@ def main():
     parser.add_argument("--save", action="store_true", help="Write bundle artifacts to disk")
     parser.add_argument("--predict", action="store_true",
                         help="Save bundle artifacts and run one predictor SDK call")
+    parser.add_argument("--learn", action="store_true",
+                        help="Run learner/attribution after prediction for this quarter")
     parser.add_argument("--save-dir", default=None,
                         help="Optional output directory for saved bundle artifacts")
     args = parser.parse_args()
@@ -2410,6 +2413,53 @@ def main():
             f"confidence: {prediction['confidence_score']} ({prediction['confidence_bucket']}) | "
             f"magnitude: {prediction['magnitude_bucket']}"
         )
+
+    if args.learn:
+        # Load event.json for PIT derivation (needs chronological quarter list)
+        event_json_path = COMPANIES_DIR / args.ticker.upper() / "events" / "event.json"
+        if not event_json_path.exists():
+            raise RuntimeError(f"event.json not found at {event_json_path} — run get_quarterly_filings first")
+        event_data = json.loads(event_json_path.read_text(encoding="utf-8"))
+        events = event_data.get("events", [])
+
+        # Find current quarter's index in the chronological events list
+        target_ql = quarter_info["quarter_label"]
+        target_acc = quarter_info["accession_8k"]
+        current_index = None
+        for i, e in enumerate(events):
+            if e.get("quarter_label") == target_ql or e.get("accession_8k") == target_acc:
+                current_index = i
+                break
+        if current_index is None:
+            raise RuntimeError(
+                f"Quarter {target_ql} ({target_acc}) not found in event.json — "
+                f"rebuild with get_quarterly_filings"
+            )
+
+        live_state_path = COMPANIES_DIR / args.ticker.upper() / "events" / "live_state.json"
+
+        print(f"\nRunning learner for {args.ticker} {target_ql} ...", flush=True)
+        t2 = datetime.now()
+        attribution = run_learner_for_quarter(
+            ticker=args.ticker,
+            quarter_info=quarter_info,
+            events=events,
+            current_index=current_index,
+            pit_mode="historical",
+            live_state_path=live_state_path,
+        )
+        learn_elapsed = (datetime.now() - t2).total_seconds()
+
+        if attribution:
+            print(f"Learner complete in {learn_elapsed:.1f}s")
+            pd = attribution.get("primary_driver", {})
+            fb = attribution.get("feedback", {})
+            pc = fb.get("prediction_comparison", {})
+            print(f"  primary_driver: {pd.get('category', '?')} — {pd.get('summary', '?')[:80]}")
+            print(f"  direction_correct: {pc.get('direction_correct')}")
+            print(f"  predictor_lessons: {len(fb.get('predictor_lessons', []))}")
+        else:
+            print(f"Learner failed or skipped for {args.ticker} {target_ql} after {learn_elapsed:.1f}s")
 
 
 def _run_v2_regression_tests():

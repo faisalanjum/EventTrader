@@ -824,11 +824,15 @@ These must exist for the learner to function but are built elsewhere:
 
 ### Phase 3: Orchestrator Inputs + Integration
 
-- [ ] Add PIT cutoff derivation from `get_quarterly_filings()` output (three-tier rule per §3). **⚠️ HUMAN REVIEW GATE — must verify correctness across all tickers**
-- [ ] Add `actual_return` normalization (Neo4j PUBLISHED_AS query + field name mapping to `_pct` suffix)
-- [ ] Add learner invocation after prediction in orchestrator sequential flow
-- [ ] Wire post-return validation (`validate_attribution_result()`) + derived writes (ticker.json, global.json appends)
-- [ ] Wire deferred learner detection in trigger daemon
+- [x] Add `derive_learner_pit()`: three-tier PIT rule (next_quarter → live_cycle → invocation_time). Verified on 11 AAPL quarters. **⚠️ HUMAN REVIEW GATE — must verify correctness across all tickers**
+- [x] Add `normalize_actual_return()` + `fetch_actual_return()`: Neo4j PUBLISHED_AS query + field name mapping to `_pct` suffix + daily_stock hard gate
+- [x] Add `run_learner_for_quarter()`: full pipeline with hard gates, PIT derivation, existing-result recovery (derived-write recovery before Neo4j fetch), SDK invocation, post-return validation (1 retry), ticker+global lesson appends
+- [x] Add `--learn` CLI flag to `main()` — single-quarter learner invocation (loads event.json for PIT derivation)
+- [x] Update orchestrator SKILL.md invariants to reflect derived-write recovery behavior
+
+### Pending (separate from Phase 3)
+
+- [ ] Wire deferred learner detection in trigger daemon (`is_historical_done()` checks attribution/result.json existence)
 
 ### Phase 4: Calibration — **⚠️ HUMAN REVIEW GATE**
 

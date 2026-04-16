@@ -160,7 +160,7 @@ See `.claude/filters/rules.json` for:
 
 - If `prediction/result.json` exists, prediction is skipped.
 - `prediction/context.json` is written only if missing (never overwritten by orchestrator).
-- If `attribution/result.json` exists, attribution is skipped.
+- If `attribution/result.json` exists and is valid, derived-write recovery runs (ticker/global lesson appends) then attribution analysis is skipped. If the existing file is invalid or corrupt, it is deleted and the learner re-runs.
 
 ---
 
