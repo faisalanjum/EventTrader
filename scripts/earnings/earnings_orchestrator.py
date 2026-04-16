@@ -2241,7 +2241,7 @@ async def _run_learner_via_sdk(
         prompt=prompt,
         options=ClaudeAgentOptions(
             model="claude-opus-4-7",
-            effort="high",
+            effort="xhigh",  # Anthropic-recommended for long-horizon agentic reasoning (learner investigates 8+ min)
             thinking={"type": "adaptive"},
             setting_sources=["project"],
             permission_mode="bypassPermissions",
@@ -2487,6 +2487,7 @@ async def _run_predictor_via_sdk(bundle_path: Path,
         prompt=prompt,
         options=ClaudeAgentOptions(
             model=PREDICTOR_MODEL_ID,
+            effort="xhigh",  # Anthropic-recommended for agentic reasoning; matches learner's config
             thinking={"type": "adaptive"},
             setting_sources=["project"],
             permission_mode="bypassPermissions",

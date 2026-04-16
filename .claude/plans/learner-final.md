@@ -697,6 +697,120 @@ All SDK options verified against installed `claude_agent_sdk==0.1.44` (2026-04-1
 
 **Current pin: `claude-opus-4-7`** on subscription auth via system CLI. See "Critical: bundled CLI vs system CLI" below.
 
+### Complete `ClaudeAgentOptions` inventory (SDK v0.1.44)
+
+All available parameters, and whether we set them in the predictor/learner SDK calls:
+
+| Parameter | Type | Our value | Rationale |
+|-----------|------|-----------|-----------|
+| **Auth & model** | | | |
+| `model` | str | `"claude-opus-4-7"` | Pinned; see above |
+| `fallback_model` | str | not set | Intentional: want failures to surface, not silently downgrade |
+| `cli_path` | str/Path | `shutil.which("claude")` | Force system CLI (newer + OAuth; not bundled) |
+| `env` | dict | `{"ANTHROPIC_API_KEY": "", "ANTHROPIC_AUTH_TOKEN": ""}` | Scrubbed subprocess env so API-key fallback is structurally impossible |
+| **Reasoning / budget** | | | |
+| `effort` | Literal | **`"xhigh"`** (both predictor + learner) | Anthropic-recommended for long-horizon agentic reasoning |
+| `thinking` | dict | `{"type": "adaptive"}` | Opus 4.7 requires adaptive (rejects `enabled` with budget_tokens) |
+| `max_thinking_tokens` | int | not set | Superseded by `thinking`; `thinking` takes precedence |
+| `max_turns` | int | predictor=20, learner=50 | Learner has harder work (spawns Data SubAgents); predictor is read-bundle-write-result |
+| `max_budget_usd` | float | not set | Billed via OAuth subscription (not USD-metered) |
+| `betas` | list | not set | Opus 4.7 has 1M context by default; no beta header needed |
+| **Permissions & tools** | | | |
+| `permission_mode` | Literal | `"bypassPermissions"` | Automated pipeline; no interactive prompts |
+| `tools`, `allowed_tools`, `disallowed_tools` | list | not set | Full tool set needed (Data SubAgents, Write, etc.). Skill prompt handles scoping. |
+| `can_use_tool` | callable | not set | No per-call permission logic needed |
+| `permission_prompt_tool_name` | str | not set | No interactive prompting |
+| **Observability** | | | |
+| `stderr` | callable | `_stderr_sink` (log.info) | **DO NOT REMOVE** — drains subprocess stderr pipe. Without this, chatty subprocess output fills the buffer and subprocess dies with opaque "exit code 1". |
+| `debug_stderr` | Any | not set | Using `stderr` callback instead |
+| `include_partial_messages` | bool | not set (default False) | Set to True in future if we want live streaming of thinking/tool calls |
+| **Context & I/O** | | | |
+| `setting_sources` | list | `["project"]` | Load project's `.claude/settings.json` (hooks, MCP servers) |
+| `cwd` | str/Path | not set | Default = process cwd (repo root) |
+| `add_dirs` | list | not set | Not needed for our invocation |
+| `settings` | str | not set | Project settings loaded via `setting_sources` |
+| `user` | str | not set | Not needed |
+| **Advanced / unused** | | | |
+| `system_prompt` | str | not set | Use the skill's default system prompt |
+| `mcp_servers` | dict | not set | MCP servers loaded via project settings |
+| `continue_conversation` | bool | not set (False) | Each invocation is fresh |
+| `resume` | str | not set | Not resuming prior sessions |
+| `fork_session` | bool | not set (False) | Each call is its own session |
+| `hooks` | dict | not set | Hooks loaded via project `.claude/settings.json` |
+| `agents` | dict | not set | Agents loaded from `.claude/agents/` via project settings |
+| `plugins` | list | not set | Plugins loaded via project settings |
+| `sandbox` | SandboxSettings | not set | No sandboxing needed |
+| `output_format` | dict | not set | Free-form output; validation done by our own code |
+| `extra_args` | dict | not set | Escape hatch; not needed currently |
+| `max_buffer_size` | int | not set | Default OK for our output sizes |
+| `enable_file_checkpointing` | bool | not set (False) | Not using checkpointing |
+
+**Summary of what we actively control**: 10 of 34 options are set. The rest use SDK defaults because our project's `.claude/settings.json` handles MCP/hooks/agents, and we don't need streaming/sandboxing/checkpointing yet.
+
+### Deep-dive: thinking vs effort (two distinct parameters)
+
+These are often conflated but do **different** things:
+
+**`thinking`** — controls WHETHER/HOW extended thinking runs:
+- `{"type": "adaptive"}` ← our choice. Model decides when to think deeply. **Required for Opus 4.7** (4.7 rejects the older `enabled` variant).
+- `{"type": "enabled", "budget_tokens": N}` — manual budget. **NOT ACCEPTED by Opus 4.7** (400 error). Works on 4.6.
+- `{"type": "disabled"}` — no thinking. Wrong for our use case.
+
+**`effort`** — controls DEPTH/COST of all tokens (reasoning AND output):
+- `low` / `medium` / `high` (default) / **`xhigh`** / `max`
+- `xhigh` ← our choice. Anthropic-recommended for "long-horizon agentic tasks" (our learner: 8+ min, Data SubAgent spawning, evidence chasing).
+- `max` = "absolute maximum, no constraints" but docs: *"adds significant cost for relatively small quality gains."* Use only if evals show `xhigh` is insufficient.
+- Note: SDK v0.1.44's Python Literal type lists only `['low','medium','high','max']` — `xhigh` is missing from the type annotation but accepted at runtime (empirically verified).
+
+**Our combo**: `thinking={"type": "adaptive"}` + `effort="xhigh"` = Anthropic-optimal for Opus 4.7 agentic reasoning.
+
+### Permission modes: `auto` is available — but we stay on `bypassPermissions` for now
+
+CLI v2.1.112+ offers 6 modes: `default`, `acceptEdits`, `plan`, **`auto`**, `dontAsk`, `bypassPermissions`.
+
+**`auto`** is the newer recommended default per Anthropic docs:
+- Server-side safety classifier (not interactive prompts)
+- **Works in `-p`/SDK non-interactive mode** (fixed since v2.1.88 era)
+- Blocks genuinely dangerous operations (`curl | bash`, force push, exfiltration) while allowing normal pipeline ops (local file writes, Task spawning, MCP queries)
+- Requires `autoMode.environment` config in `.claude/settings.json` describing trusted infrastructure for best results
+
+**`bypassPermissions`** (current):
+- No classifier, all tools allowed except writes to protected dirs (`.git`, `.claude`)
+- Proven working across 5 AVGO quarters today
+- Vulnerable to prompt injection (classifier not defending)
+
+**Decision (2026-04-16)**: stay on `bypassPermissions` until we explicitly test `auto` on a full pipeline run. Switching mid-calibration is too risky — the classifier could block a Data SubAgent or Write call and we'd have to debug. Switch to `auto` as a follow-up after we've evaluated it on at least one full AVGO+MSFT sweep.
+
+**To test `auto` later**:
+1. Add `autoMode.environment` to `.claude/settings.json`:
+   ```json
+   {
+     "autoMode": {
+       "environment": [
+         "Organization: EventMarketDB. Primary use: earnings analysis and stock-move attribution.",
+         "Trusted infra: Neo4j on minisforum3, Redis queue, K8s cluster minisforum*",
+         "Local writes to earnings-analysis/Companies/*/events/*/attribution/result.json are routine."
+       ]
+     }
+   }
+   ```
+2. Change `permission_mode="bypassPermissions"` → `permission_mode="auto"` in both SDK calls
+3. Run one full `--predict --learn` quarter and confirm: (a) no classifier blocks, (b) learner still spawns Data SubAgents, (c) attribution/result.json still writes cleanly
+4. If clean, switch permanently. If blocked, review the classifier reason and either tune `autoMode.environment` or revert.
+
+### History of SDK-option changes (for audit)
+
+| Date | Change | Reason |
+|------|--------|--------|
+| 2026-04-16 | Added `stderr=_stderr_sink` to both | Without it, SDK surfaces opaque "exit code 1" on subprocess errors |
+| 2026-04-16 | Added `cli_path=_sdk_cli_path()` (system CLI) | Bundled CLI v2.1.59 was outdated + routed billing to API |
+| 2026-04-16 | Added `env={"ANTHROPIC_API_KEY": "", ...}` | Defense-in-depth against env leak into subprocess |
+| 2026-04-16 | `model="claude-opus-4-6"` → `"claude-opus-4-7"` | 4.7 released today; newer CLI handles its stricter thinking API |
+| 2026-04-16 | `thinking` explicit `{"type": "adaptive"}` on predictor | 4.7 requires adaptive; predictor had no thinking config before |
+| 2026-04-16 | `effort="high"` (learner only) → `effort="xhigh"` (both) | Docs recommend xhigh for long-horizon agentic reasoning |
+| 2026-04-16 | `_assert_claude_code_oauth_ready()` guard before SDK calls | Fail-closed if API-only auth detected |
+| 2026-04-16 | `ANTHROPIC_API_KEY` removed from `.env` | Root cause: dotenv was auto-injecting into subprocess |
+
 ### Critical: use SYSTEM claude CLI via `cli_path`, NOT the bundled one (2026-04-16)
 
 **This is a billing + compatibility issue. Must not regress.**
