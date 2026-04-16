@@ -109,3 +109,4 @@ earnings-analysis/test-outputs/
 
 # K8s disaster recovery contains secrets - never commit
 k8s-disaster-recovery/
+.env.bak*
