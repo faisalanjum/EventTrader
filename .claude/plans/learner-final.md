@@ -693,6 +693,8 @@ async for msg in query(
 
 All SDK options verified against installed `claude_agent_sdk==0.1.44` (2026-04-16). The prompt body should also include "ultrathink" as a belt-and-suspenders instruction alongside the SDK `effort`/`thinking` parameters.
 
+**Model ID pinning (not "latest" aliases)**: The SDK does NOT accept `"opus"` or `"claude-opus-latest"` for `ClaudeAgentOptions.model` — only full version IDs like `"claude-opus-4-7"`. Production code pins to a specific version. Rationale: (1) **audit trail** — the `model_version` field in attribution/result.json records exactly which model produced each lesson; (2) **U1 loop integrity** — silently swapping models mid-loop breaks lesson-chain attribution; (3) **validator stability** — new models may shift JSON shapes, and pinning means breakage is caught at version-bump time, not silently. When a new Opus ships, update `PREDICTOR_MODEL_ID` constant and the learner `model=` string (two-line change).
+
 This is operationally similar to the predictor SDK path but NOT the same runtime path. The predictor uses `"Run /earnings-prediction ..."` which triggers a Skill tool fork (14 tools, sufficient for read-bundle-write-result). The learner embeds SKILL.md content directly as prompt text, staying in the main session with full tools (27 built-in + MCP), enabling Agent tool access for all 14 Data SubAgents.
 
 ### Critical caveat: frontmatter is documentation, not runtime enforcement
@@ -836,7 +838,11 @@ These must exist for the learner to function but are built elsewhere:
 
 ### Phase 4: Calibration — **⚠️ HUMAN REVIEW GATE**
 
-Manual single-quarter runs via CLI: `python3 scripts/earnings/earnings_orchestrator.py TICKER --quarter-info-json QI.json --save --predict --learn`. Full sequential automation is pending (daemon, §12).
+Manual single-quarter runs via CLI: `python3 scripts/earnings/earnings_orchestrator.py TICKER ACCESSION --save --predict --learn`. Full sequential automation is pending (daemon, §12).
+
+**Progress (AVGO sequential calibration, 2026-04-16):**
+- Q1_FY2023: learner-only (legacy prediction), schema-valid, primary_driver=`ai_narrative_rerating`, direction_correct=False. Uncovered real predictor data-freshness bug via investigation.
+- Q2_FY2023: **first clean full-pipeline end-to-end success.** Bundle 7/7, predict+learn via SDK on Opus 4.7, predictor validation passed, learner validation passed, U1 loop verified (Q1 lesson flowed into Q2 bundle, Q2 direction_correct=True, magnitude_error=0.0 with actual inside predicted range).
 
 - [ ] Run learner on 3-5 historical quarters for one ticker
 - [ ] Verify lesson quality — learner uses full evidence surface and produces reusable high-signal guidance, not quarter-specific summaries

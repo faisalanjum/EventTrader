@@ -1669,7 +1669,7 @@ def normalize_actual_return(neo4j_record: dict) -> dict:
 def fetch_actual_return(ticker: str, accession: str) -> dict | None:
     """Fetch actual return data from Neo4j for a given 8-K accession.
 
-    Queries the PUBLISHED_AS relationship on the 8-K report.
+    Queries the PRIMARY_FILER relationship on the 8-K report.
     Returns normalized actual_return dict, or None if not found or daily_stock missing.
     """
     try:
@@ -1683,7 +1683,7 @@ def fetch_actual_return(ticker: str, accession: str) -> dict | None:
     password = os.environ.get("NEO4J_PASSWORD", "")
 
     query_str = """
-    MATCH (r:Report {accession_number: $accession})-[p:PUBLISHED_AS]->(c:Company {ticker: $ticker})
+    MATCH (r:Report {accessionNo: $accession})-[p:PRIMARY_FILER]->(c:Company {ticker: $ticker})
     RETURN p.daily_stock AS daily_stock,
            p.hourly_stock AS hourly_stock,
            p.session_stock AS session_stock,
@@ -2233,7 +2233,7 @@ async def _run_learner_via_sdk(
     async for msg in query(
         prompt=prompt,
         options=ClaudeAgentOptions(
-            model="claude-opus-4-6",
+            model="claude-opus-4-7",
             effort="high",
             thinking={"type": "adaptive"},
             setting_sources=["project"],
@@ -2278,6 +2278,97 @@ def run_learner_via_sdk(
         ) from e
 
 
+# ── Predictor Canonicalization Layer (Option A) ─────────────────────
+# SKILL.md is UNCHANGED. LLM writes the 7 analytic fields. Python adds
+# 8 metadata/derived fields after SDK write, before validation.
+# Thresholds from .claude/plans/predictor-revamp.md §389-390 (canonical).
+
+import hashlib
+
+PREDICTOR_MODEL_ID = "claude-opus-4-7"
+_PREDICTOR_SKILL_PATH = Path(".claude/skills/earnings-prediction/SKILL.md")
+
+
+def _derive_confidence_bucket(direction: str, score: int | float) -> str:
+    """Per predictor-revamp.md: 70-100=high, 40-69=moderate, 0-39=low, no_call=no_call."""
+    if direction == "no_call":
+        return "no_call"
+    if score >= 70:
+        return "high"
+    if score >= 40:
+        return "moderate"
+    return "low"
+
+
+def _derive_magnitude_bucket(direction: str, move_range: list) -> str:
+    """Per predictor-revamp.md: <2%=small, 2-4%=medium, >=4%=large, no_call=none.
+    Midpoint of expected_move_range_pct used as the magnitude."""
+    if direction == "no_call":
+        return "none"
+    try:
+        midpoint = (float(move_range[0]) + float(move_range[1])) / 2.0
+    except (TypeError, ValueError, IndexError):
+        return "none"
+    if midpoint >= 4.0:
+        return "large"
+    if midpoint >= 2.0:
+        return "medium"
+    return "small"
+
+
+def _hash_prompt_version(skill_path: Path = _PREDICTOR_SKILL_PATH) -> str:
+    """Deterministic prompt_version: short sha256 hash of SKILL.md content.
+    Auto-invalidates when SKILL.md changes. Fallback to 'v1' if unreadable."""
+    try:
+        content = skill_path.read_bytes()
+        return "v1-" + hashlib.sha256(content).hexdigest()[:12]
+    except OSError:
+        return "v1"
+
+
+def finalize_prediction_result(
+    result_path: Path,
+    ticker: str,
+    quarter_info: dict,
+    model: str = PREDICTOR_MODEL_ID,
+) -> None:
+    """Enrich LLM-written prediction with deterministic metadata.
+
+    LLM writes 7 analytic fields per SKILL.md; Python adds 8 fields here.
+    Runs AFTER SDK write, BEFORE validator. Does not change /earnings-prediction.
+    """
+    if not result_path.exists():
+        raise RuntimeError(f"Predictor did not write {result_path}")
+
+    payload = json.loads(result_path.read_text(encoding="utf-8"))
+
+    # Required LLM-written fields (must be present — predictor's job)
+    for required in ("direction", "confidence_score", "expected_move_range_pct"):
+        if required not in payload:
+            raise ValueError(
+                f"LLM output missing required analytic field '{required}' — predictor SKILL.md contract violation"
+            )
+
+    # Python-owned metadata
+    payload["schema_version"] = "prediction_result.v1"
+    payload["ticker"] = ticker.upper()
+    payload["quarter_label"] = quarter_info["quarter_label"]
+    payload["predicted_at"] = datetime.now(timezone.utc).isoformat()
+    payload["model_version"] = model
+    payload["prompt_version"] = _hash_prompt_version()
+
+    # Deterministic derivations from LLM output
+    payload["confidence_bucket"] = _derive_confidence_bucket(
+        payload["direction"], payload["confidence_score"]
+    )
+    payload["magnitude_bucket"] = _derive_magnitude_bucket(
+        payload["direction"], payload["expected_move_range_pct"]
+    )
+
+    # Atomic write back (temp file + os.replace)
+    _atomic_write_json(result_path, payload)
+
+
 async def _run_predictor_via_sdk(bundle_path: Path,
                                  rendered_path: Path,
                                  result_path: Path) -> str | None:
@@ -2296,6 +2387,8 @@ async def _run_predictor_via_sdk(bundle_path: Path,
     async for msg in query(
         prompt=prompt,
         options=ClaudeAgentOptions(
+            model=PREDICTOR_MODEL_ID,
+            thinking={"type": "adaptive"},
             setting_sources=["project"],
             permission_mode="bypassPermissions",
             max_turns=20,
@@ -2397,6 +2490,15 @@ def main():
 
         if not paths["result_path"].exists():
             raise RuntimeError("Predictor finished without writing prediction/result.json")
+
+        # Canonicalize: LLM wrote 7 analytic fields; Python adds 8 metadata/derived.
+        # See finalize_prediction_result() for the contract split.
+        finalize_prediction_result(
+            result_path=paths["result_path"],
+            ticker=args.ticker,
+            quarter_info=quarter_info,
+            model=PREDICTOR_MODEL_ID,
+        )
 
         with open(paths["result_path"], encoding="utf-8") as f:
             prediction = json.load(f)
