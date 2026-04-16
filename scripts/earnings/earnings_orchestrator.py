@@ -168,6 +168,16 @@ def build_prediction_bundle(ticker: str, quarter_info: dict,
     }
     for name in BUNDLE_ITEM_ORDER:
         bundle[name] = results.get(name)
+
+    # learning_context is a lightweight file read, not a parallel builder
+    try:
+        sector = (results.get("8k_packet") or {}).get("sector")
+        bundle["learning_context"] = build_learning_context(ticker, sector=sector)
+    except Exception as e:
+        log.warning("learning_context builder failed (non-fatal): %s", e)
+        bundle["learning_context"] = {"ticker_lessons": [], "global_lessons": [],
+                                       "ticker_ref": None, "global_ref": None}
+
     return bundle
 
 
@@ -1419,6 +1429,11 @@ def render_bundle_text(bundle: dict) -> str:
     # 9. Reference — other exhibits, 8-K sections, lower-signal content
     sections.append(_render_reference(bundle))
 
+    # 10. Prior Lessons (from learner — if available)
+    learning_ctx = bundle.get("learning_context")
+    if learning_ctx and (learning_ctx.get("ticker_lessons") or learning_ctx.get("global_lessons")):
+        sections.append(_render_learning_context(learning_ctx))
+
     return "\n\n".join(sections)
 
 
@@ -1578,6 +1593,266 @@ def get_learnings_paths(ticker: str) -> dict[str, Path]:
 # ── Attribution Result Validator (re-exported from standalone module) ─
 
 from validate_attribution import validate_attribution_result  # noqa: F401 — stdlib-only, hook-safe
+
+
+# ── Lesson File Operations (Python owns all derived writes) ─────────
+
+import fcntl
+import tempfile
+
+
+def _atomic_write_json(path: Path, data: Any) -> None:
+    """Write JSON atomically: temp file + os.replace. Creates parents."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = tempfile.NamedTemporaryFile(
+        dir=path.parent, suffix=".tmp", mode="w", encoding="utf-8", delete=False
+    )
+    try:
+        json.dump(data, tmp, indent=2, default=str, ensure_ascii=False)
+        tmp.close()
+        os.replace(tmp.name, path)
+    except BaseException:
+        tmp.close()
+        try:
+            os.unlink(tmp.name)
+        except OSError:
+            pass
+        raise
+
+
+def append_ticker_lesson(ticker: str, attribution_result: dict) -> Path:
+    """Extract feedback from attribution result and append to ticker lessons file.
+
+    Atomic write. No locking needed (single-ticker sequential processing).
+    Returns the path written.
+    """
+    paths = get_learnings_paths(ticker)
+    path = paths["ticker_lessons_path"]
+
+    # Read existing or create skeleton
+    if path.exists():
+        data = json.loads(path.read_text(encoding="utf-8"))
+    else:
+        data = {
+            "schema_version": "ticker_lessons.v1",
+            "ticker": ticker.upper(),
+            "updated_at": None,
+            "lessons": [],
+        }
+
+    # Extract compact lesson entry from attribution result
+    fb = attribution_result.get("feedback", {})
+    pc = fb.get("prediction_comparison", {})
+    entry = {
+        "quarter_label": attribution_result.get("quarter_label"),
+        "attributed_at": attribution_result.get("attributed_at"),
+        "direction_correct": pc.get("direction_correct"),
+        "actual_daily_pct": (attribution_result.get("actual_return") or {}).get("daily_stock_pct"),
+        "predicted_direction": pc.get("predicted_direction"),
+        "predicted_confidence_score": pc.get("predicted_confidence_score"),
+        "primary_driver_summary": (attribution_result.get("primary_driver") or {}).get("summary"),
+        "primary_driver_category": (attribution_result.get("primary_driver") or {}).get("category"),
+        "what_worked": fb.get("what_worked", []),
+        "what_failed": fb.get("what_failed", []),
+        "predictor_lessons": fb.get("predictor_lessons", []),
+        "data_lessons": fb.get("data_lessons", []),
+        "why": fb.get("why"),
+    }
+
+    data["lessons"].append(entry)
+    data["updated_at"] = attribution_result.get("attributed_at")
+    _atomic_write_json(path, data)
+    return path
+
+
+def append_global_lessons(attribution_result: dict) -> Path | None:
+    """Extract global_observations from attribution result and append to global lessons.
+
+    Uses fcntl.flock for concurrent ticker processing safety.
+    Returns the path written, or None if no observations.
+    """
+    observations = attribution_result.get("global_observations", [])
+    if not observations:
+        return None
+
+    path = LEARNINGS_DIR / "global.json"
+
+    # Enrich each observation with source metadata
+    enriched = []
+    for obs in observations:
+        enriched.append({
+            "scope": obs.get("scope"),
+            "scope_key": obs.get("scope_key"),
+            "source_ticker": attribution_result.get("ticker"),
+            "quarter_label": attribution_result.get("quarter_label"),
+            "attributed_at": attribution_result.get("attributed_at"),
+            "lesson": obs.get("lesson"),
+        })
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Locked read-modify-write for concurrency safety
+    lock_path = path.with_suffix(".lock")
+    with open(lock_path, "w") as lock_fd:
+        fcntl.flock(lock_fd, fcntl.LOCK_EX)
+        try:
+            if path.exists():
+                data = json.loads(path.read_text(encoding="utf-8"))
+            else:
+                data = {
+                    "schema_version": "global_lessons.v1",
+                    "updated_at": None,
+                    "entries": [],
+                }
+            data["entries"].extend(enriched)
+            data["updated_at"] = attribution_result.get("attributed_at")
+            _atomic_write_json(path, data)
+        finally:
+            fcntl.flock(lock_fd, fcntl.LOCK_UN)
+
+    return path
+
+
+# ── Learning Context Builder (read-time filtering for predictor) ─────
+
+
+def build_learning_context(ticker: str, sector: str | None = None,
+                           base_dir: Path | None = None) -> dict:
+    """Build learning context for predictor consumption.
+
+    Reads ticker lessons and global lessons, filters by recency and relevance,
+    returns compact context suitable for inclusion in the prediction bundle.
+    This is the read-time compatibility layer: append-only writes, filtering on read.
+    """
+    learnings_dir = base_dir or LEARNINGS_DIR
+    ticker_path = learnings_dir / "ticker" / f"{ticker.upper()}.json"
+    global_path = learnings_dir / "global.json"
+
+    result: dict[str, Any] = {
+        "ticker_lessons": [],
+        "global_lessons": [],
+        "ticker_ref": str(ticker_path) if ticker_path.exists() else None,
+        "global_ref": str(global_path) if global_path.exists() else None,
+    }
+
+    # ── Ticker lessons: most recent 8 ──
+    if ticker_path.exists():
+        try:
+            data = json.loads(ticker_path.read_text(encoding="utf-8"))
+            lessons = data.get("lessons", [])
+            # Sort by attributed_at descending, dedupe by quarter_label (keep most recent),
+            # then take most recent 8. Dedup handles re-bootstrap/retry reruns.
+            lessons.sort(key=lambda x: x.get("attributed_at", ""), reverse=True)
+            seen_quarters: set[str] = set()
+            deduped: list[dict] = []
+            for lesson in lessons:
+                ql = lesson.get("quarter_label", "")
+                if ql not in seen_quarters:
+                    seen_quarters.add(ql)
+                    deduped.append(lesson)
+            result["ticker_lessons"] = deduped[:8]
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # ── Global lessons: filtered by sector relevance, per-scope caps ──
+    # Macro lessons always loaded regardless of sector. Sector/cross_ticker need sector.
+    if global_path.exists():
+        try:
+            data = json.loads(global_path.read_text(encoding="utf-8"))
+            entries = data.get("entries", [])
+
+            # Filter by relevance
+            sector_entries = []
+            macro_entries = []
+            cross_entries = []
+            for e in entries:
+                scope = e.get("scope")
+                if scope == "sector" and sector and e.get("scope_key") == sector:
+                    sector_entries.append(e)
+                elif scope == "macro":
+                    macro_entries.append(e)
+                elif scope == "cross_ticker" and sector:
+                    # Omit cross_ticker when no sector — over-inclusion is worse
+                    # than under-inclusion. When sector is known, keep only entries
+                    # where source_ticker's scope_key matches current sector.
+                    # (scope_key for cross_ticker is the related ticker, not sector,
+                    #  so we can't filter by sector here without a lookup table.
+                    #  For now, omit all cross_ticker — safer than polluting context.)
+                    pass
+
+            # Sort each bucket by recency, apply per-scope caps
+            for bucket in (sector_entries, macro_entries, cross_entries):
+                bucket.sort(key=lambda x: x.get("attributed_at", ""), reverse=True)
+
+            # Dedupe within each scope: exact text match after normalization
+            def _dedupe(entries: list[dict]) -> list[dict]:
+                seen: set[str] = set()
+                out = []
+                for e in entries:
+                    key = (e.get("lesson") or "").strip().lower()
+                    if key and key not in seen:
+                        seen.add(key)
+                        out.append(e)
+                return out
+
+            sector_entries = _dedupe(sector_entries)[:4]
+            macro_entries = _dedupe(macro_entries)[:4]
+            cross_entries = _dedupe(cross_entries)[:2]
+
+            result["global_lessons"] = sector_entries + macro_entries + cross_entries
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    return result
+
+
+# ── Learning Context Renderer (for prediction bundle text) ──────────
+
+
+def _render_learning_context(learning_ctx: dict) -> str:
+    """Render learning context into a readable section for the prediction bundle."""
+    parts: list[str] = []
+    parts.append("## Prior Lessons (from learner)")
+
+    ticker_lessons = learning_ctx.get("ticker_lessons", [])
+    global_lessons = learning_ctx.get("global_lessons", [])
+
+    if not ticker_lessons and not global_lessons:
+        parts.append("\nNo prior lessons available (first prediction for this ticker).")
+        return "\n".join(parts)
+
+    # ── Ticker-specific lessons ──
+    if ticker_lessons:
+        parts.append(f"\n### Ticker Lessons ({len(ticker_lessons)} most recent quarters)\n")
+        for lesson in ticker_lessons:
+            ql = lesson.get("quarter_label", "?")
+            correct = lesson.get("direction_correct")
+            actual = lesson.get("actual_daily_pct")
+            pred_dir = lesson.get("predicted_direction", "?")
+            cat = lesson.get("primary_driver_category", "?")
+            icon = "correct" if correct else "wrong"
+            parts.append(f"**{ql}** — prediction {icon} ({pred_dir}), actual {actual:+.2f}%, driver: {cat}")
+            for pl in lesson.get("predictor_lessons", []):
+                parts.append(f"  - Predictor: {pl}")
+            for dl in lesson.get("data_lessons", []):
+                parts.append(f"  - Data: {dl}")
+            why = lesson.get("why")
+            if why:
+                parts.append(f"  - Why: {why}")
+            parts.append("")
+
+    # ── Global lessons ──
+    if global_lessons:
+        parts.append(f"\n### Cross-Ticker Insights ({len(global_lessons)} entries)\n")
+        for entry in global_lessons:
+            scope = entry.get("scope", "?")
+            key = entry.get("scope_key", "?")
+            src = entry.get("source_ticker", "?")
+            lesson = entry.get("lesson", "")
+            parts.append(f"- [{scope}:{key}] ({src}) {lesson}")
+        parts.append("")
+
+    return "\n".join(parts)
 
 
 # ── Learner SDK Invocation ───────────────────────────────────────────
