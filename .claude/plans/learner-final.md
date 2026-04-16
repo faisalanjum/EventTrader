@@ -2,6 +2,12 @@
 
 **Created**: 2026-04-16
 **Status**: APPROVED — all decisions locked, ready for implementation
+
+### Human Review Gates (must be validated by user before calibration)
+
+1. **SKILL.md prompt quality** — every single line of `.claude/skills/earnings-learner/SKILL.md` must be reviewed and approved. This is the learner's reasoning contract — no bot-only sign-off.
+2. **PIT cutoff correctness** — verify that `get_quarterly_filings()` produces the correct next-quarter boundary across all tickers, including edge cases (annual quarters, deferred learners, first/last quarter).
+3. **Lesson quality and evidence surface** — validate that the learner uses the full relevant evidence surface (all Data SubAgents, context bundle, post-event data) and converts findings into reusable, high-signal guidance rather than quarter-specific summaries.
 **Parent plan**: `earnings-orchestrator.md` — this file supersedes the attribution/learner sections (§2d, §4) in the parent plan for all learner contract decisions
 **Replaces**: `learner.md` (planning scaffold, now superseded)
 
@@ -801,33 +807,35 @@ These must exist for the learner to function but are built elsewhere:
 
 ## 13. Implementation Checklist
 
-### Phase 1: Core Learner
+### Phase 1: Learner Contract
 
-- [ ] Create `.claude/skills/earnings-learner/SKILL.md` — compact prompt with 5-phase workflow, evidence rules, generalizability guardrail. Frontmatter documents intent (`model: opus`, `effort: high`, `allowed-tools`) but is not runtime enforcement (§10)
+- [ ] Create `.claude/skills/earnings-learner/SKILL.md` — compact prompt with 5-phase workflow, evidence rules, generalizability guardrail. Frontmatter documents intent (`model: opus`, `effort: high`) but is not runtime enforcement (§10). **⚠️ HUMAN REVIEW GATE — every line must be approved before proceeding**
+- [ ] Add `get_attribution_paths()` and learning-file path helpers in `earnings_orchestrator.py` (deterministic result locations from day one)
+- [ ] Add `validate_attribution_result()` in Python — canonical schema check (required fields, feedback sub-fields, array caps, evidence_refs resolution, non-empty evidence_ledger). The PreToolUse hook mirrors this contract
+- [ ] Create PreToolUse validation hook for `attribution/result.json` writes (shell script calling the same checks)
 - [ ] Create `_run_learner_via_sdk()` in `earnings_orchestrator.py` — loads SKILL.md content, strips frontmatter, embeds as prompt text with runtime inputs, invokes via SDK with `model="claude-opus-4-6"`, `effort="high"`, `thinking={"type": "adaptive"}`, `max_turns=50`
-- [ ] Create PreToolUse validation hook for `attribution/result.json` writes (schema check, caps, evidence_refs resolution)
 
 ### Phase 2: Lesson Infrastructure
 
 - [ ] Create `earnings-analysis/learnings/` directory structure
-- [ ] Implement ticker.json atomic append in orchestrator Python (extract feedback from result.json)
+- [ ] Implement ticker.json atomic append in orchestrator Python (extract feedback from result.json, `fcntl.flock` + temp file + `os.replace`)
 - [ ] Implement global.json atomic append in orchestrator Python (extract global_observations, enrich with source_ticker/quarter_label/attributed_at)
-- [ ] Add `build_learning_context()` to `builder_adapters.py` (with per-scope caps and dedupe)
+- [ ] Add `build_learning_context()` to `builder_adapters.py` (with per-scope caps and exact-text dedupe)
 - [ ] Add `_render_learning_context()` to `earnings_orchestrator.py`
 - [ ] Add `learning_context` as 8th bundle item in `BUNDLE_ITEM_ORDER`
 
-### Phase 3: Orchestrator Integration
+### Phase 3: Orchestrator Inputs + Integration
 
+- [ ] Add PIT cutoff derivation from `get_quarterly_filings()` output (three-tier rule per §3). **⚠️ HUMAN REVIEW GATE — must verify correctness across all tickers**
+- [ ] Add `actual_return` normalization (Neo4j PUBLISHED_AS query + field name mapping to `_pct` suffix)
 - [ ] Add learner invocation after prediction in orchestrator sequential flow
-- [ ] Add PIT cutoff derivation from `get_quarterly_filings()` output
-- [ ] Add `actual_return` normalization (Neo4j query + field mapping)
-- [ ] Add post-return validation of `attribution/result.json`
+- [ ] Wire post-return validation (`validate_attribution_result()`) + derived writes (ticker.json, global.json appends)
 - [ ] Wire deferred learner detection in trigger daemon
 
-### Phase 4: Calibration
+### Phase 4: Calibration — **⚠️ HUMAN REVIEW GATE**
 
 - [ ] Run learner on 3-5 historical quarters for one ticker
-- [ ] Verify lesson quality and specificity
+- [ ] Verify lesson quality — learner uses full evidence surface and produces reusable high-signal guidance, not quarter-specific summaries
 - [ ] Verify PIT enforcement (no post-boundary evidence in historical runs)
 - [ ] Verify `build_learning_context()` produces useful predictor context
 - [ ] Run predictor WITH lessons vs WITHOUT — compare prediction quality

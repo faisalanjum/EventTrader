@@ -1538,6 +1538,179 @@ def validate_prediction_result(payload: dict[str, Any],
         raise ValueError("analysis must be a non-empty string")
 
 
+# ── Attribution / Learner Helpers ────────────────────────────────────
+
+
+COMPANIES_DIR = Path("earnings-analysis/Companies")
+LEARNINGS_DIR = Path("earnings-analysis/learnings")
+
+
+def get_attribution_dir(ticker: str, quarter_info: dict,
+                        save_dir: str | None = None) -> Path:
+    """Return the attribution artifact directory for this event."""
+    if save_dir:
+        return Path(save_dir)
+    quarter_dir = quarter_info.get("quarter_label") or quarter_info["accession_8k"]
+    return COMPANIES_DIR / ticker.upper() / "events" / quarter_dir / "attribution"
+
+
+def get_attribution_paths(ticker: str, quarter_info: dict,
+                          save_dir: str | None = None) -> dict[str, Path]:
+    """Return canonical paths for learner result + lesson artifacts."""
+    attr_dir = get_attribution_dir(ticker, quarter_info, save_dir)
+    pred_dir = attr_dir.parent / "prediction"
+    return {
+        "base_dir": attr_dir,
+        "result_path": attr_dir / "result.json",
+        "prediction_result_path": pred_dir / "result.json",
+        "context_bundle_path": pred_dir / "context_bundle.json",
+    }
+
+
+def get_learnings_paths(ticker: str) -> dict[str, Path]:
+    """Return canonical paths for ticker + global lesson files."""
+    return {
+        "ticker_lessons_path": LEARNINGS_DIR / "ticker" / f"{ticker.upper()}.json",
+        "global_lessons_path": LEARNINGS_DIR / "global.json",
+    }
+
+
+# ── Attribution Result Validator (re-exported from standalone module) ─
+
+from validate_attribution import validate_attribution_result  # noqa: F401 — stdlib-only, hook-safe
+
+
+# ── Learner SDK Invocation ───────────────────────────────────────────
+
+_LEARNER_SKILL_PATH = Path(".claude/skills/earnings-learner/SKILL.md")
+
+
+def _load_learner_skill_content() -> str:
+    """Load SKILL.md content, stripping YAML frontmatter."""
+    raw = _LEARNER_SKILL_PATH.read_text(encoding="utf-8")
+    # Strip frontmatter (--- ... ---)
+    if raw.startswith("---"):
+        end = raw.find("---", 3)
+        if end != -1:
+            raw = raw[end + 3:].lstrip("\n")
+    return raw
+
+
+def _build_learner_prompt(
+    skill_content: str,
+    ticker: str,
+    quarter_info: dict,
+    actual_return: dict,
+    pit_mode: str,
+    pit_cutoff: str | None,
+    pit_boundary_source: str,
+    result_path: Path,
+    prediction_result_path: Path,
+    context_bundle_path: Path,
+    prior_lessons_path: Path,
+) -> str:
+    """Assemble the full learner prompt: SKILL.md instructions + runtime INPUTS."""
+    actual_return_json = json.dumps(actual_return, indent=2, default=str)
+    inputs_section = f"""--- INPUTS ---
+TICKER: {ticker}
+QUARTER: {quarter_info.get('quarter_label', 'UNKNOWN')}
+FILED_8K: {quarter_info.get('filed_8k', 'UNKNOWN')}
+ACCESSION: {quarter_info.get('accession_8k', 'UNKNOWN')}
+PIT_MODE: {pit_mode}
+PIT_CUTOFF: {pit_cutoff or 'null'}
+PIT_BOUNDARY_SOURCE: {pit_boundary_source}
+RESULT_PATH: {result_path}
+PREDICTION_RESULT: {prediction_result_path}
+CONTEXT_BUNDLE: {context_bundle_path}
+ACTUAL_RETURN: {actual_return_json}
+PRIOR_LESSONS: {prior_lessons_path}
+"""
+    return f"{skill_content}\n\n{inputs_section}"
+
+
+async def _run_learner_via_sdk(
+    ticker: str,
+    quarter_info: dict,
+    actual_return: dict,
+    pit_mode: str,
+    pit_cutoff: str | None,
+    pit_boundary_source: str,
+    result_path: Path,
+    prediction_result_path: Path,
+    context_bundle_path: Path,
+    prior_lessons_path: Path,
+) -> str | None:
+    """Invoke the learner via SDK embed (main session, full tool access).
+
+    Loads SKILL.md content as prompt text — NOT via /earnings-learner fork.
+    This gives the session Agent tool access for all 14 Data SubAgents.
+    """
+    from claude_agent_sdk import query, ClaudeAgentOptions
+
+    skill_content = _load_learner_skill_content()
+    prompt = _build_learner_prompt(
+        skill_content=skill_content,
+        ticker=ticker,
+        quarter_info=quarter_info,
+        actual_return=actual_return,
+        pit_mode=pit_mode,
+        pit_cutoff=pit_cutoff,
+        pit_boundary_source=pit_boundary_source,
+        result_path=result_path,
+        prediction_result_path=prediction_result_path,
+        context_bundle_path=context_bundle_path,
+        prior_lessons_path=prior_lessons_path,
+    )
+
+    final_result = None
+    async for msg in query(
+        prompt=prompt,
+        options=ClaudeAgentOptions(
+            model="claude-opus-4-6",
+            effort="high",
+            thinking={"type": "adaptive"},
+            setting_sources=["project"],
+            permission_mode="bypassPermissions",
+            max_turns=50,
+        ),
+    ):
+        if hasattr(msg, "result"):
+            final_result = str(msg.result)
+    return final_result
+
+
+def run_learner_via_sdk(
+    ticker: str,
+    quarter_info: dict,
+    actual_return: dict,
+    pit_mode: str,
+    pit_cutoff: str | None,
+    pit_boundary_source: str,
+    result_path: Path,
+    prediction_result_path: Path,
+    context_bundle_path: Path,
+    prior_lessons_path: Path,
+) -> str | None:
+    """Sync wrapper for the learner SDK call."""
+    try:
+        return asyncio.run(_run_learner_via_sdk(
+            ticker=ticker,
+            quarter_info=quarter_info,
+            actual_return=actual_return,
+            pit_mode=pit_mode,
+            pit_cutoff=pit_cutoff,
+            pit_boundary_source=pit_boundary_source,
+            result_path=result_path,
+            prediction_result_path=prediction_result_path,
+            context_bundle_path=context_bundle_path,
+            prior_lessons_path=prior_lessons_path,
+        ))
+    except ImportError as e:
+        raise RuntimeError(
+            "claude_agent_sdk is not available; cannot run learner"
+        ) from e
+
+
 async def _run_predictor_via_sdk(bundle_path: Path,
                                  rendered_path: Path,
                                  result_path: Path) -> str | None:

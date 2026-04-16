@@ -38,6 +38,10 @@
           {
             "type": "command",
             "command": "/home/faisal/EventMarketDB/.claude/hooks/validate_judge_output.sh"
+          },
+          {
+            "type": "command",
+            "command": "python3 /home/faisal/EventMarketDB/.claude/hooks/validate_attribution_output.py"
           }
         ]
       },
