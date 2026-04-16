@@ -836,6 +836,8 @@ These must exist for the learner to function but are built elsewhere:
 
 ### Phase 4: Calibration — **⚠️ HUMAN REVIEW GATE**
 
+Manual single-quarter runs via CLI: `python3 scripts/earnings/earnings_orchestrator.py TICKER --quarter-info-json QI.json --save --predict --learn`. Full sequential automation is pending (daemon, §12).
+
 - [ ] Run learner on 3-5 historical quarters for one ticker
 - [ ] Verify lesson quality — learner uses full evidence surface and produces reusable high-signal guidance, not quarter-specific summaries
 - [ ] Verify PIT enforcement (no post-boundary evidence in historical runs)
