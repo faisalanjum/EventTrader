@@ -2213,6 +2213,8 @@ async def _run_learner_via_sdk(
     This gives the session Agent tool access for all 14 Data SubAgents.
     """
     from claude_agent_sdk import query, ClaudeAgentOptions
+    cli_path, creds_path = _assert_claude_code_oauth_ready()
+    log.info("Learner SDK auth mode: Claude Code OAuth via %s (creds %s)", cli_path, creds_path)
 
     skill_content = _load_learner_skill_content()
     prompt = _build_learner_prompt(
@@ -2245,7 +2247,8 @@ async def _run_learner_via_sdk(
             permission_mode="bypassPermissions",
             max_turns=50,
             stderr=_stderr_sink,
-            cli_path=_sdk_cli_path(),  # use system CLI (newer + subscription)
+            cli_path=cli_path,
+            env=_sdk_subprocess_env(),
         ),
     ):
         if hasattr(msg, "result"):
@@ -2295,18 +2298,87 @@ import shutil
 
 PREDICTOR_MODEL_ID = "claude-opus-4-7"
 _PREDICTOR_SKILL_PATH = Path(".claude/skills/earnings-prediction/SKILL.md")
+_CLAUDE_CREDS_PATH = Path.home() / ".claude" / ".credentials.json"
+_SYSTEM_CLAUDE_CANDIDATES = [
+    Path.home() / ".local" / "bin" / "claude",
+    Path(shutil.which("claude")) if shutil.which("claude") else None,
+]
 
-# System CLI path — use the user's installed (newer) claude CLI, NOT the
-# bundled older CLI inside claude_agent_sdk. The bundled CLI is outdated:
-#  (a) it doesn't handle Opus 4.7's stricter thinking-config API
-#  (b) it may route through API billing instead of OAuth subscription
-# Falling back to the bundled CLI only if the system one isn't found.
-_SYSTEM_CLAUDE_CLI = shutil.which("claude") or None
+# System CLI path — use the user's installed Claude Code CLI with local OAuth
+# credentials, not the SDK's bundled fallback.
+_SYSTEM_CLAUDE_CLI = next(
+    (str(path) for path in _SYSTEM_CLAUDE_CANDIDATES if path and path.exists()),
+    None,
+)
 
 
 def _sdk_cli_path() -> str | None:
     """Return the claude CLI path for SDK invocation (system CLI if available)."""
     return _SYSTEM_CLAUDE_CLI
+
+
+def _sdk_subprocess_env() -> dict[str, str]:
+    """Strip Anthropic API-key auth from the Claude Code subprocess environment.
+
+    The earnings predictor/learner must run through local Claude Code OAuth
+    credentials, not direct Anthropic API-key auth.
+    """
+    return {
+        "ANTHROPIC_API_KEY": "",
+        "ANTHROPIC_AUTH_TOKEN": "",
+    }
+
+
+def _strip_anthropic_api_auth_env() -> list[str]:
+    """Remove direct Anthropic API auth from the current process environment."""
+    stripped: list[str] = []
+    for env_key in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN"):
+        if os.environ.pop(env_key, None):
+            stripped.append(env_key)
+    return stripped
+
+
+def _assert_claude_code_oauth_ready() -> tuple[str, str]:
+    """Fail closed unless Claude Code OAuth credentials are available.
+
+    Returns:
+        tuple[str, str]: (cli_path, credentials_path)
+    """
+    stripped = _strip_anthropic_api_auth_env()
+    if stripped:
+        log.warning(
+            "Stripped direct Anthropic API auth from orchestrator process before "
+            "Claude Code SDK invocation: %s",
+            ", ".join(stripped),
+        )
+
+    cli_path = _sdk_cli_path()
+    if not cli_path:
+        raise RuntimeError(
+            "Claude Code CLI not found. Expected ~/.local/bin/claude or a "
+            "'claude' binary on PATH for OAuth-backed execution."
+        )
+
+    if not _CLAUDE_CREDS_PATH.exists():
+        raise RuntimeError(
+            f"Claude Code OAuth credentials not found: {_CLAUDE_CREDS_PATH}"
+        )
+
+    try:
+        creds = json.loads(_CLAUDE_CREDS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as e:
+        raise RuntimeError(
+            f"Could not read Claude Code credentials at {_CLAUDE_CREDS_PATH}"
+        ) from e
+
+    oauth = creds.get("claudeAiOauth") or {}
+    if not oauth.get("accessToken"):
+        raise RuntimeError(
+            "Claude Code OAuth credentials are missing claudeAiOauth.accessToken; "
+            "predictor/learner will not run in API-key mode."
+        )
+
+    return cli_path, str(_CLAUDE_CREDS_PATH)
 
 
 def _derive_confidence_bucket(direction: str, score: int | float) -> str:
@@ -2394,6 +2466,8 @@ async def _run_predictor_via_sdk(bundle_path: Path,
                                  result_path: Path) -> str | None:
     """Invoke the predictor skill once via Claude Agent SDK."""
     from claude_agent_sdk import query, ClaudeAgentOptions
+    cli_path, creds_path = _assert_claude_code_oauth_ready()
+    log.info("Predictor SDK auth mode: Claude Code OAuth via %s (creds %s)", cli_path, creds_path)
 
     prompt = (
         "Run /earnings-prediction with these exact paths:\n"
@@ -2418,7 +2492,8 @@ async def _run_predictor_via_sdk(bundle_path: Path,
             permission_mode="bypassPermissions",
             max_turns=20,
             stderr=_stderr_sink,
-            cli_path=_sdk_cli_path(),  # use system CLI (newer + subscription)
+            cli_path=cli_path,
+            env=_sdk_subprocess_env(),
         ),
     ):
         if hasattr(msg, "result"):
