@@ -695,6 +695,100 @@ All SDK options verified against installed `claude_agent_sdk==0.1.44` (2026-04-1
 
 **Model ID pinning (not "latest" aliases)**: The SDK does NOT accept `"opus"` or `"claude-opus-latest"` for `ClaudeAgentOptions.model` — only full version IDs like `"claude-opus-4-7"`. Production code pins to a specific version. Rationale: (1) **audit trail** — the `model_version` field in attribution/result.json records exactly which model produced each lesson; (2) **U1 loop integrity** — silently swapping models mid-loop breaks lesson-chain attribution; (3) **validator stability** — new models may shift JSON shapes, and pinning means breakage is caught at version-bump time, not silently. When a new Opus ships, update `PREDICTOR_MODEL_ID` constant and the learner `model=` string (two-line change).
 
+**Current pin: `claude-opus-4-7`** on subscription auth via system CLI. See "Critical: bundled CLI vs system CLI" below.
+
+### Critical: use SYSTEM claude CLI via `cli_path`, NOT the bundled one (2026-04-16)
+
+**This is a billing + compatibility issue. Must not regress.**
+
+`claude_agent_sdk==0.1.44` ships a BUNDLED `claude` binary at `venv/lib/python3.11/site-packages/claude_agent_sdk/_bundled/claude`. That bundled CLI is **v2.1.59** — months old. The user's system CLI (at `~/.local/bin/claude`) is v2.1.112 or newer.
+
+**Two separate problems caused by using the old bundled CLI**:
+
+1. **BILLING**: The old v2.1.59 bundled CLI does not correctly use the current OAuth subscription token format from `~/.claude/.credentials.json` (`claudeAiOauth`). Result: calls billed to ANTHROPIC API, not the Claude subscription. **User saw real API charges on 2026-04-16.**
+2. **OPUS 4.7 COMPATIBILITY**: The old v2.1.59 CLI sends `thinking.type.enabled` + `budget_tokens` for internal tool-use / subagent API calls. Opus 4.7 rejects this — only accepts `thinking.type.adaptive`. Result: subprocess crashes with opaque "exit code 1" (real error only visible with `stderr=` callback: `API Error 400: "thinking.type.enabled" is not supported for this model. Use "thinking.type.adaptive"`).
+
+**Fix (applied 2026-04-16)**: Pass `cli_path=shutil.which("claude")` to both `_run_predictor_via_sdk()` and `_run_learner_via_sdk()` so the SDK uses the system CLI. A module-level helper `_sdk_cli_path()` returns the system CLI path (or `None`, which falls back to bundled). See `earnings_orchestrator.py` constants near `PREDICTOR_MODEL_ID`.
+
+**DO NOT**:
+- Remove `cli_path=_sdk_cli_path()` from SDK calls without replacing it with a newer bundled CLI — doing so will silently revert to API billing.
+- Remove `stderr=_stderr_sink` callbacks — without them, any future CLI issue will be opaque "exit code 1" instead of a real error.
+
+**When upgrading `claude_agent_sdk` in the future**:
+1. Check the new bundled CLI version: `ls venv/lib/python3.11/site-packages/claude_agent_sdk/_bundled/` and inspect its `--version` output
+2. If bundled CLI is newer than system CLI, consider dropping `cli_path=` (the bundled will be fine)
+3. **But** verify subscription billing either way by running a test quarter and checking the Anthropic console — do NOT assume
+4. Test Opus 4.7 compatibility with a direct SDK test before enabling in production
+
+**Environment audit baseline (for comparison on future debugging)**:
+- `ANTHROPIC_API_KEY` env var: NOT SET (good — presence would force API billing)
+- `~/.claude/.credentials.json`: contains `claudeAiOauth` (OAuth subscription token)
+- `~/.claude.json`: `hasAvailableSubscription`, `oauthAccount` present (user is on subscription plan)
+
+**How to diagnose "am I being billed API?"**: Run any SDK call with `stderr=print_lambda` capture, then check Anthropic API console (console.anthropic.com) for usage spikes. If console shows usage, API billing is happening. Subscription billing doesn't appear there.
+
+### (Former) Known issue: Opus 4.7 thinking config — RESOLVED via system CLI above
+
+**Encountered 2026-04-16 (Opus 4.7 release day).** Attempted upgrade from `claude-opus-4-6` → `claude-opus-4-7` in both predictor and learner SDK calls. Failed. Details preserved here so future migrations don't re-derive.
+
+**Symptom**: `claude -p` subprocess exits with code 1 after ~3 seconds. SDK surfaces only `Fatal error in message reader: Command failed with exit code 1`. No visible context.
+
+**Real error** (only surfaces with `stderr=` callback on `ClaudeAgentOptions` — confirmed via direct SDK test with stderr capture):
+```
+API Error: 400 {"type":"error","error":{"type":"invalid_request_error",
+  "message":"\"thinking.type.enabled\" is not supported for this model.
+   Use \"thinking.type.adaptive\""}}
+```
+
+**Root cause**: The bundled Claude Code CLI inside `claude_agent_sdk==0.1.44` (installed before 4.7 released) internally generates API calls with `thinking.type.enabled` + `budget_tokens` for SOME paths — most likely when the orchestrator spawns tool calls / Task-spawned subagents during the learner's Data SubAgent investigation flow. Opus 4.7 rejects this pattern; it only accepts `thinking.type.adaptive`. Opus 4.6 accepts both, so it works with the older bundled CLI.
+
+**Why our top-level `thinking={"type": "adaptive"}` didn't fix it**: That setting controls the top-level conversation's thinking config. But the CLI generates SEPARATE internal API calls for tool use and subagent spawning — and those use the older `enabled` + `budget_tokens` pattern baked into the bundled CLI. 4.7 rejects them even though the top-level call is configured correctly.
+
+**Workaround applied**: Reverted to `claude-opus-4-6` in two places:
+- `PREDICTOR_MODEL_ID = "claude-opus-4-6"` (constant near the top of `earnings_orchestrator.py`)
+- `model="claude-opus-4-6"` inside `_run_learner_via_sdk()` in `earnings_orchestrator.py`
+
+**How to retry the upgrade later**:
+1. Check SDK version: `pip show claude-agent-sdk`. Upgrade if newer available: `pip install --upgrade claude-agent-sdk`
+2. Check bundled CLI: `ls venv/lib/python3.11/site-packages/claude_agent_sdk/_bundled/` and note version. Newer SDK bundles newer CLI which should handle 4.7's stricter API.
+3. **Before flipping the production constants, run a gated test**:
+   ```bash
+   unset CLAUDECODE && source venv/bin/activate && python3 -c "
+   import asyncio
+   from claude_agent_sdk import query, ClaudeAgentOptions
+   def stderr_cb(s): print(f'[STDERR] {s!r}', flush=True)
+   async def test():
+       async for msg in query(
+           prompt='Use Task tool to check weather. Reply short.',
+           options=ClaudeAgentOptions(
+               model='claude-opus-4-7',
+               effort='high',
+               thinking={'type': 'adaptive'},
+               setting_sources=['project'],
+               permission_mode='bypassPermissions',
+               max_turns=5,
+               stderr=stderr_cb,
+           ),
+       ):
+           if hasattr(msg, 'result'):
+               print('RESULT:', str(msg.result)[:200])
+               return
+   asyncio.run(test())
+   "
+   ```
+   If this returns a clean RESULT without `400 thinking.type.enabled`, the CLI handles 4.7.
+4. Then flip the two constants to `claude-opus-4-7` and re-run Phase 4 calibration on a single quarter to validate end-to-end.
+5. Commit with the date and SDK version for audit trail.
+
+**Debug-aid note — keep `stderr=` callbacks in place**: The SDK swallows the actual 400 error without a stderr callback. Both `_run_predictor_via_sdk()` and `_run_learner_via_sdk()` now have `stderr=_stderr_sink` callbacks. Do NOT remove them. Any future model upgrade issue will be opaque "exit code 1" without the callback.
+
+**Alternate workarounds NOT chosen** (documented for future reference):
+- Downgrade thinking to `None` (loses quality — predictor/learner need reasoning depth)
+- Add a specific `betas=[...]` flag per Anthropic's Opus 4.7 migration guide — only defer to this if the SDK upgrade doesn't fix it
+- Patch the bundled CLI to translate `thinking.type.enabled` → `thinking.type.adaptive` for 4.7 — hacky, brittle, should never be needed
+
+**Bottom line**: Opus 4.6 is the production pin until `claude-agent-sdk` ships a version with a bundled CLI that handles 4.7's stricter thinking API. Expect this within days-to-weeks of 4.7's release.
+
 This is operationally similar to the predictor SDK path but NOT the same runtime path. The predictor uses `"Run /earnings-prediction ..."` which triggers a Skill tool fork (14 tools, sufficient for read-bundle-write-result). The learner embeds SKILL.md content directly as prompt text, staying in the main session with full tools (27 built-in + MCP), enabling Agent tool access for all 14 Data SubAgents.
 
 ### Critical caveat: frontmatter is documentation, not runtime enforcement

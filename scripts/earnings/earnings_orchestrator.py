@@ -2229,6 +2229,11 @@ async def _run_learner_via_sdk(
         prior_lessons_path=prior_lessons_path,
     )
 
+    # Drain stderr via callback — without this, a chatty subprocess stderr
+    # pipe fills and the child dies with "Command failed with exit code 1".
+    def _stderr_sink(line: str) -> None:
+        log.info("learner stderr: %s", line.rstrip())
+
     final_result = None
     async for msg in query(
         prompt=prompt,
@@ -2239,6 +2244,8 @@ async def _run_learner_via_sdk(
             setting_sources=["project"],
             permission_mode="bypassPermissions",
             max_turns=50,
+            stderr=_stderr_sink,
+            cli_path=_sdk_cli_path(),  # use system CLI (newer + subscription)
         ),
     ):
         if hasattr(msg, "result"):
@@ -2284,9 +2291,22 @@ def run_learner_via_sdk(
 # Thresholds from .claude/plans/predictor-revamp.md §389-390 (canonical).
 
 import hashlib
+import shutil
 
 PREDICTOR_MODEL_ID = "claude-opus-4-7"
 _PREDICTOR_SKILL_PATH = Path(".claude/skills/earnings-prediction/SKILL.md")
+
+# System CLI path — use the user's installed (newer) claude CLI, NOT the
+# bundled older CLI inside claude_agent_sdk. The bundled CLI is outdated:
+#  (a) it doesn't handle Opus 4.7's stricter thinking-config API
+#  (b) it may route through API billing instead of OAuth subscription
+# Falling back to the bundled CLI only if the system one isn't found.
+_SYSTEM_CLAUDE_CLI = shutil.which("claude") or None
+
+
+def _sdk_cli_path() -> str | None:
+    """Return the claude CLI path for SDK invocation (system CLI if available)."""
+    return _SYSTEM_CLAUDE_CLI
 
 
 def _derive_confidence_bucket(direction: str, score: int | float) -> str:
@@ -2383,6 +2403,11 @@ async def _run_predictor_via_sdk(bundle_path: Path,
         "Read the bundle, write RESULT_PATH as JSON, and stop."
     )
 
+    # Drain stderr via callback — without this, a chatty subprocess stderr
+    # pipe fills and the child dies with "Command failed with exit code 1".
+    def _stderr_sink(line: str) -> None:
+        log.debug("predictor stderr: %s", line.rstrip())
+
     final_result = None
     async for msg in query(
         prompt=prompt,
@@ -2392,6 +2417,8 @@ async def _run_predictor_via_sdk(bundle_path: Path,
             setting_sources=["project"],
             permission_mode="bypassPermissions",
             max_turns=20,
+            stderr=_stderr_sink,
+            cli_path=_sdk_cli_path(),  # use system CLI (newer + subscription)
         ),
     ):
         if hasattr(msg, "result"):
