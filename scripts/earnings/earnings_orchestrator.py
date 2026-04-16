@@ -1761,13 +1761,37 @@ def run_learner_for_quarter(
             events, current_index, live_state_path
         )
     else:
-        pit_cutoff, pit_boundary_source = None, "live"
+        pit_cutoff, pit_boundary_source = None, "invocation_time"
 
-    # ── Skip if attribution already exists ──
+    # ── If attribution already exists, run derived-write recovery ──
+    # A prior run may have written result.json but crashed before ticker/global appends.
+    # Completion requires all 3 artifacts (plan §10 completion semantics).
     if attr_paths["result_path"].exists():
-        log.info("Learner skip %s %s: attribution/result.json already exists",
+        log.info("Learner %s %s: attribution/result.json exists, running derived-write recovery",
                   ticker, quarter_info.get("quarter_label"))
-        return json.loads(attr_paths["result_path"].read_text(encoding="utf-8"))
+        try:
+            existing = json.loads(attr_paths["result_path"].read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError) as e:
+            log.error("Existing result.json unreadable for %s %s: %s — deleting and re-running",
+                       ticker, quarter_info.get("quarter_label"), e)
+            attr_paths["result_path"].unlink(missing_ok=True)
+            existing = None
+        if existing is not None:
+            errors = validate_attribution_result(existing, ticker, quarter_info.get("quarter_label", ""))
+            if errors:
+                log.error("Existing result.json invalid for %s %s: %s — deleting and re-running",
+                           ticker, quarter_info.get("quarter_label"), "; ".join(errors[:3]))
+                attr_paths["result_path"].unlink(missing_ok=True)
+            else:
+                # Valid result exists — ensure derived writes are complete
+                try:
+                    append_ticker_lesson(ticker, existing)
+                    append_global_lessons(existing)
+                    log.info("Derived-write recovery complete for %s %s", ticker, quarter_info.get("quarter_label"))
+                except Exception as e:
+                    log.error("Derived-write recovery failed for %s %s: %s", ticker, quarter_info.get("quarter_label"), e)
+                    return None
+                return existing
 
     # ── Invoke learner via SDK ──
     log.info("Running learner for %s %s (PIT=%s, source=%s)",
