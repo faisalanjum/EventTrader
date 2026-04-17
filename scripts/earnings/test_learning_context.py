@@ -48,12 +48,21 @@ def _attribution(
     quarter="Q1_FY2023",
     globals_=None,
     attributed_at="2026-04-17T12:00:00Z",
+    filed_8k=None,
+    pit_cutoff=None,
 ):
-    """Minimal attribution-result shape sufficient for append_* tests."""
+    """Minimal attribution-result shape sufficient for append_* tests.
+
+    ``filed_8k`` and ``pit_cutoff`` default to None for compatibility with
+    pre-T1.5b tests; new R17 tests pass real values so the writer can stamp
+    ``source_filed_8k`` / ``source_pit_cutoff`` onto entries.
+    """
     return {
         "ticker": ticker,
         "quarter_label": quarter,
         "attributed_at": attributed_at,
+        "filed_8k": filed_8k,
+        "pit_cutoff": pit_cutoff,
         "global_observations": globals_ if globals_ is not None else [],
         "feedback": {
             "prediction_comparison": {},
@@ -577,6 +586,353 @@ class IntegrationTests(unittest.TestCase):
         # Numbered listing:
         self.assertIn("1.", retry)
         self.assertIn("2.", retry)
+
+
+# ── R17 suite: T1.5b PIT filter + schema stamping ────────────────────
+
+
+SRC_FILED = "2024-03-07T16:18:09-05:00"   # AVGO Q1_FY2024 filed_8k
+SRC_PIT   = "2024-06-12T16:19:05-04:00"   # Q2_FY2024 filed_8k = Q1's pit_cutoff
+PRED_PIT_BEFORE_SRC = "2024-01-01T00:00:00Z"   # predictor cutoff BEFORE src event
+PRED_PIT_AFTER_SRC  = "2025-01-01T00:00:00Z"   # predictor cutoff AFTER src pit
+
+
+class PITFilterTests(unittest.TestCase):
+    """R17a–R17e — T1.5b per .claude/plans/learner.md §🔥."""
+
+    def setUp(self):
+        self.tmp, self._orig = _tmp_learnings()
+
+    def tearDown(self):
+        _restore(self._orig)
+        import shutil
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _write_global(self, entries):
+        (self.tmp / "global.json").write_text(json.dumps({
+            "schema_version": "global_lessons.v1",
+            "updated_at": "2026-04-17T00:00:00Z",
+            "entries": entries,
+        }))
+
+    def _log_capture(self):
+        stream = io.StringIO()
+        handler = logging.StreamHandler(stream)
+        handler.setLevel(logging.INFO)
+        logger = orch.log
+        logger.addHandler(handler)
+        prior_level = logger.level
+        logger.setLevel(logging.INFO)
+        return handler, stream, logger, prior_level
+
+    def _log_uninstall(self, handler, logger, prior_level):
+        logger.removeHandler(handler)
+        logger.setLevel(prior_level)
+
+    def _entry(self, scope, *, src_pit=SRC_PIT, src_filed=SRC_FILED,
+               source_ticker="AVGO", quarter_label="Q1_FY2024",
+               target_sector=None, related_tickers=None, lesson="demo"):
+        """Build a global-entry shape with the new T1.5b fields."""
+        e = {
+            "scope": scope,
+            "source_ticker": source_ticker,
+            "source_sector": "Technology",
+            "quarter_label": quarter_label,
+            "attributed_at": "2026-04-17T12:00:00Z",
+            "source_filed_8k": src_filed,
+            "source_pit_cutoff": src_pit,
+            "lesson": lesson,
+        }
+        if target_sector is not None:
+            e["target_sector"] = target_sector
+        if related_tickers is not None:
+            e["related_tickers"] = related_tickers
+        return e
+
+    # ── R17a — writer stamps source_filed_8k + source_pit_cutoff ──
+
+    def test_R17a_global_writer_stamps_pit_fields(self):
+        """append_global_lessons stamps source_filed_8k + source_pit_cutoff on every entry."""
+        attr = _attribution(
+            filed_8k=SRC_FILED, pit_cutoff=SRC_PIT,
+            globals_=[
+                {"scope": "macro", "lesson": "m1"},
+                {"scope": "sector", "target_sector": "Technology", "lesson": "s1"},
+                {"scope": "cross_ticker", "related_tickers": ["NVDA"], "lesson": "c1"},
+            ],
+        )
+        with mock.patch.object(orch, "_lookup_company_sector", return_value="Technology"):
+            orch.append_global_lessons(attr)
+        data = json.loads((self.tmp / "global.json").read_text())
+        self.assertEqual(len(data["entries"]), 3)
+        for e in data["entries"]:
+            self.assertEqual(e["source_filed_8k"], SRC_FILED)
+            self.assertEqual(e["source_pit_cutoff"], SRC_PIT)
+
+    def test_R17a_ticker_writer_stamps_pit_fields(self):
+        """append_ticker_lesson stamps the same fields on the ticker-lesson entry."""
+        attr = _attribution(filed_8k=SRC_FILED, pit_cutoff=SRC_PIT)
+        orch.append_ticker_lesson("AVGO", attr)
+        data = json.loads((self.tmp / "ticker" / "AVGO.json").read_text())
+        self.assertEqual(len(data["lessons"]), 1)
+        e = data["lessons"][0]
+        self.assertEqual(e["source_filed_8k"], SRC_FILED)
+        self.assertEqual(e["source_pit_cutoff"], SRC_PIT)
+
+    # ── R17b — historical filter across all 4 scopes ──
+
+    def test_R17b_historical_filter_excludes_all_scopes(self):
+        """When predictor.pit_cutoff < entry.source_pit_cutoff, entry is excluded.
+        Covers sector, macro, cross_ticker (global.json) — and ticker.json."""
+        # Global: one entry per scope, all stamped with src_pit in the FUTURE
+        # relative to predictor's cutoff.
+        self._write_global([
+            self._entry("sector", target_sector="Technology", lesson="s-future"),
+            self._entry("macro", lesson="m-future"),
+            self._entry("cross_ticker", related_tickers=["AAPL"], lesson="c-future"),
+        ])
+        # Ticker: one lesson stamped in the future
+        ticker_dir = self.tmp / "ticker"
+        ticker_dir.mkdir(exist_ok=True)
+        (ticker_dir / "AAPL.json").write_text(json.dumps({
+            "schema_version": "ticker_lessons.v1",
+            "ticker": "AAPL",
+            "updated_at": "2026-04-17T00:00:00Z",
+            "lessons": [{
+                "quarter_label": "Q1_FY2024",
+                "attributed_at": "2026-04-17T12:00:00Z",
+                "source_filed_8k": SRC_FILED,
+                "source_pit_cutoff": SRC_PIT,
+                "why": "future",
+            }],
+        }))
+
+        h, stream, logger, prior = self._log_capture()
+        try:
+            ctx = orch.build_learning_context(
+                "AAPL", sector="Technology", base_dir=self.tmp,
+                pit_cutoff=PRED_PIT_BEFORE_SRC,
+            )
+        finally:
+            self._log_uninstall(h, logger, prior)
+
+        # Everything excluded:
+        self.assertEqual(ctx["global_lessons"], [])
+        self.assertEqual(ctx["ticker_lessons"], [])
+        log_text = stream.getvalue()
+        self.assertIn("global_post_cutoff=", log_text)
+        self.assertIn("ticker_post_cutoff=", log_text)
+
+    def test_R17b_historical_filter_keeps_entries_before_cutoff(self):
+        """Entries with source_pit_cutoff <= predictor.pit_cutoff are kept."""
+        self._write_global([
+            self._entry("sector", target_sector="Technology", lesson="s-past"),
+            self._entry("macro", lesson="m-past"),
+            self._entry("cross_ticker", related_tickers=["AAPL"], lesson="c-past"),
+        ])
+        ctx = orch.build_learning_context(
+            "AAPL", sector="Technology", base_dir=self.tmp,
+            pit_cutoff=PRED_PIT_AFTER_SRC,
+        )
+        lessons = [e["lesson"] for e in ctx["global_lessons"]]
+        self.assertIn("s-past", lessons)
+        self.assertIn("m-past", lessons)
+        self.assertIn("c-past", lessons)
+
+    # ── R17c — live preservation: pit_cutoff=None → no filter ──
+
+    def test_R17c_live_bypass_shows_all_entries(self):
+        """pit_cutoff=None bypasses the filter. Production real-time behavior preserved."""
+        self._write_global([
+            self._entry("sector", target_sector="Technology", lesson="s-any"),
+            self._entry("macro", lesson="m-any"),
+        ])
+        # pit_cutoff omitted (None) — live-mode path
+        ctx = orch.build_learning_context(
+            "AAPL", sector="Technology", base_dir=self.tmp,
+        )
+        lessons = [e["lesson"] for e in ctx["global_lessons"]]
+        self.assertIn("s-any", lessons)
+        self.assertIn("m-any", lessons)
+
+    # ── R17d — macro scope explicit (regression guard) ──
+
+    def test_R17d_macro_filtered_in_historical(self):
+        """Macro entries MUST respect the filter in historical mode. Regression
+        guard — macro was the scope easiest to miss during implementation."""
+        self._write_global([
+            self._entry("macro", lesson="m-future"),
+        ])
+        h, stream, logger, prior = self._log_capture()
+        try:
+            ctx = orch.build_learning_context(
+                "AAPL", sector="Technology", base_dir=self.tmp,
+                pit_cutoff=PRED_PIT_BEFORE_SRC,
+            )
+        finally:
+            self._log_uninstall(h, logger, prior)
+        self.assertEqual(ctx["global_lessons"], [])
+        self.assertIn("global_post_cutoff=1", stream.getvalue())
+
+    # ── R17e — observability: counters always present ──
+
+    def test_R17e_counters_in_log_even_when_zero(self):
+        """Both new counters appear in the observability log line, zero or not."""
+        self._write_global([])  # empty
+        h, stream, logger, prior = self._log_capture()
+        try:
+            orch.build_learning_context(
+                "AAPL", sector="Technology", base_dir=self.tmp,
+                pit_cutoff=PRED_PIT_BEFORE_SRC,
+            )
+        finally:
+            self._log_uninstall(h, logger, prior)
+        log_text = stream.getvalue()
+        self.assertIn("ticker_post_cutoff=0", log_text)
+        self.assertIn("global_post_cutoff=0", log_text)
+
+    # ── Defensive: legacy entries (no source_pit_cutoff) ──
+
+    def test_R17_legacy_entry_historical_excluded(self):
+        """Pre-T1.5b entries without source_pit_cutoff are excluded in
+        historical mode and counted toward global_post_cutoff."""
+        # Legacy shape — no source_filed_8k / source_pit_cutoff
+        self._write_global([
+            {"scope": "macro", "source_ticker": "AVGO", "source_sector": "Technology",
+             "quarter_label": "Q1_FY2024", "attributed_at": "2026-04-17T12:00:00Z",
+             "lesson": "legacy"},
+        ])
+        h, stream, logger, prior = self._log_capture()
+        try:
+            ctx = orch.build_learning_context(
+                "AAPL", sector="Technology", base_dir=self.tmp,
+                pit_cutoff=PRED_PIT_BEFORE_SRC,
+            )
+        finally:
+            self._log_uninstall(h, logger, prior)
+        self.assertEqual(ctx["global_lessons"], [])
+        self.assertIn("global_post_cutoff=1", stream.getvalue())
+
+    def test_R17_legacy_entry_live_passed_through(self):
+        """Legacy entries pass through in live mode (pit_cutoff=None) — no
+        behavior change for production real-time callers."""
+        self._write_global([
+            {"scope": "macro", "source_ticker": "AVGO", "source_sector": "Technology",
+             "quarter_label": "Q1_FY2024", "attributed_at": "2026-04-17T12:00:00Z",
+             "lesson": "legacy"},
+        ])
+        ctx = orch.build_learning_context(
+            "AAPL", sector="Technology", base_dir=self.tmp,
+        )
+        self.assertEqual(
+            [e["lesson"] for e in ctx["global_lessons"]], ["legacy"],
+        )
+
+    # ── R17f — mixed-offset & Z-suffix regression guards ──
+    # Reported by external review 2026-04-17. Repro: naive string compare
+    # of "...-04:00" vs "...+00:00" diverges from chronological order when
+    # instants are close. Two directions + Z-suffix + malformed.
+
+    def test_R17f_mixed_offset_source_later_excluded(self):
+        """src = 2024-06-12T16:19:05-04:00 (20:19:05 UTC) is 65s AFTER
+        pit = 2024-06-12T20:18:00+00:00 (20:18:00 UTC) and MUST be excluded.
+        Raw string compare would include it ('16' < '20' lexically)."""
+        self._write_global([
+            self._entry(
+                "macro",
+                src_pit="2024-06-12T16:19:05-04:00",
+                lesson="offset-trap",
+            ),
+        ])
+        h, stream, logger, prior = self._log_capture()
+        try:
+            ctx = orch.build_learning_context(
+                "AAPL", sector="Technology", base_dir=self.tmp,
+                pit_cutoff="2024-06-12T20:18:00+00:00",
+            )
+        finally:
+            self._log_uninstall(h, logger, prior)
+        self.assertEqual(
+            ctx["global_lessons"], [],
+            "Chronologically later source must be excluded regardless of offset",
+        )
+        self.assertIn("global_post_cutoff=1", stream.getvalue())
+
+    def test_R17f_mixed_offset_source_earlier_included(self):
+        """src = 2024-06-12T20:18:00+00:00 (20:18:00 UTC) is 65s BEFORE
+        pit = 2024-06-12T16:19:05-04:00 (20:19:05 UTC) and MUST be included.
+        Raw string compare would exclude it ('20' > '16' lexically)."""
+        self._write_global([
+            self._entry(
+                "macro",
+                src_pit="2024-06-12T20:18:00+00:00",
+                lesson="offset-ok",
+            ),
+        ])
+        ctx = orch.build_learning_context(
+            "AAPL", sector="Technology", base_dir=self.tmp,
+            pit_cutoff="2024-06-12T16:19:05-04:00",
+        )
+        lessons = [e["lesson"] for e in ctx["global_lessons"]]
+        self.assertIn(
+            "offset-ok", lessons,
+            "Chronologically earlier source must be included regardless of offset",
+        )
+
+    def test_R17f_z_suffix_parsed_as_utc(self):
+        """'Z' suffix (Zulu) parses to UTC and compares correctly."""
+        self._write_global([
+            self._entry(
+                "macro",
+                src_pit="2023-01-01T12:00:00Z",
+                lesson="zulu-past",
+            ),
+            self._entry(
+                "macro",
+                src_pit="2025-01-01T12:00:00Z",
+                lesson="zulu-future",
+            ),
+        ])
+        ctx = orch.build_learning_context(
+            "AAPL", sector="Technology", base_dir=self.tmp,
+            pit_cutoff="2024-01-01T00:00:00Z",
+        )
+        lessons = [e["lesson"] for e in ctx["global_lessons"]]
+        self.assertIn("zulu-past", lessons)
+        self.assertNotIn("zulu-future", lessons)
+
+    def test_R17f_malformed_timestamp_excluded(self):
+        """Unparseable source_pit_cutoff → defensive exclude in historical mode."""
+        self._write_global([
+            self._entry(
+                "macro", src_pit="not-a-timestamp", lesson="malformed",
+            ),
+        ])
+        h, stream, logger, prior = self._log_capture()
+        try:
+            ctx = orch.build_learning_context(
+                "AAPL", sector="Technology", base_dir=self.tmp,
+                pit_cutoff="2024-06-12T20:18:00+00:00",
+            )
+        finally:
+            self._log_uninstall(h, logger, prior)
+        self.assertEqual(ctx["global_lessons"], [])
+        self.assertIn("global_post_cutoff=1", stream.getvalue())
+
+    def test_R17f_naive_timestamp_excluded(self):
+        """tz-naive source_pit_cutoff → defensive exclude (ambiguous instant)."""
+        self._write_global([
+            self._entry(
+                "macro",
+                src_pit="2024-06-12T16:19:05",  # no offset, no Z
+                lesson="naive",
+            ),
+        ])
+        ctx = orch.build_learning_context(
+            "AAPL", sector="Technology", base_dir=self.tmp,
+            pit_cutoff="2024-06-12T20:18:00+00:00",
+        )
+        self.assertEqual(ctx["global_lessons"], [])
 
 
 if __name__ == "__main__":

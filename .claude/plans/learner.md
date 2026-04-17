@@ -16,7 +16,107 @@
 
 Canonical actionable backlog for the learner subsystem. Supersedes the backlog lists in `learner-edits.md` §10 and §12 (those sections now cross-reference here). Items grouped by priority; detailed designs and rejected-alternatives remain in `learner-edits.md`.
 
-### 🔴 Next up — highest EV, do after §8.3 operator re-run closes
+### 🔥 Blocker — T1.5: PIT correctness end-to-end (blocks T1, T2, T3, T4, and any historical re-run)
+
+**Status as of 2026-04-17**: design-complete, implementation-pending. Discovered during post-§8.3-migration verification of the AVGO 3-quarter corpus. Must ship before any further historical re-run or A/B measurement.
+
+#### Summary of the defect
+
+The historical re-run pipeline has two independent PIT-leak bugs and one residual graph-state leak that together make every prediction + lesson produced under §8.3 hindsight-contaminated:
+
+| # | Item | Severity | Summary | Where to start |
+|---|---|---|---|---|
+| T1.5a | **Bundle-PIT default** in `earnings_orchestrator.main()` | 🔴 Root cause — dominant | Orchestrator takes `args.pit` literally; when `--predict`/`--learn` is set without `--pit`, every builder silently falls into live mode and anchors to `_now_iso()`. Every bundle surface except `8k_packet` (accession-anchored) and `inter_quarter_context` (self-anchored to filing) reads data as of run-time wall-clock. | `scripts/earnings/earnings_orchestrator.py::main()` argparse / pre-dispatch block: default `args.pit = quarter_info['filed_8k']` when `--predict`/`--learn` is set and `--pit` is absent. Add `--live` opt-in to preserve intentional live-mode use. |
+| T1.5b | **Lesson-PIT plumb-through + schema** in `build_learning_context()` | 🔴 Secondary | Function has no `pit_cutoff` parameter; read path is unfiltered across **all four** scopes (ticker, sector, macro, cross_ticker). Even with T1.5a fixed, chronologically-later lessons leak into earlier predictor contexts. Neither `source_filed_8k` nor `source_pit_cutoff` is stored on entries — no correct field exists to filter on. | `scripts/earnings/earnings_orchestrator.py:2174` signature + writers at `append_global_lessons` (line 2085) / `append_ticker_lesson` (line 2035). Schema extension to entry shape; visibility predicate `source_pit_cutoff <= pit_cutoff`. |
+| T1.5c | **Residual graph-state leaks** in peer selection and sector lookup | 🟡 Acknowledge, defer | Even with T1.5a+b merged, `peer_earnings_snapshot` Cypher selects peers via current `BELONGS_TO` Industry edges and ranks by current `peer.mkt_cap`; `_lookup_company_sector` returns current sector; write-side `source_sector` stamp is today's sector. Practical impact is small for AVGO/NVDA/BURL (stable classifications); systemically real for cohort expansion. | Documented as **T20** in the 🟡 Backlog below. No immediate fix required. |
+
+#### Evidence (empirical, verified from actual bundles in the current corpus)
+
+All three AVGO quarters (Q1/Q2/Q3 FY2023, events filed Mar/Jun/Aug **2023**) share the same signature:
+
+```
+context_bundle.pit_cutoff              = null
+peer_earnings_snapshot.source_mode     = "live"
+peer_earnings_snapshot.effective_cutoff_ts = "2026-04-17T..." (today)
+peer_earnings_snapshot.window_start    = "2026-03-03"       (today − 45d)
+peer_earnings_snapshot.peer_tickers    = ["MU","MRVL","SMTC"]  (2026 rankings)
+macro_snapshot.effective_cutoff_ts     = "2026-04-17T..." (today)
+guidance_history.source_mode           = "live"
+consensus.source_mode                  = "live"
+prior_financials.source_mode           = "live"
+```
+
+Root-cause pointers:
+- `/tmp/rerun_master.sh:128` invokes orchestrator **without** `--pit`.
+- `earnings_orchestrator.main()` passes `args.pit=None` straight through to `run_core_flow(pit_cutoff=None)` → `build_prediction_bundle(pit_cutoff=None)` → every adapter cascades into live mode.
+- Lesson read path at `earnings_orchestrator.py:2174` (signature) and the for-loop over `entries` (lines ~2243–2280) has no timestamp filter on any scope — not just cross_ticker/sector, but **also macro and ticker**.
+
+Asymmetry observation: the LEARNER side correctly derived PIT via `derive_learner_pit()` at line 1711; stored attribution results have `pit_cutoff: "2023-06-01T..."` for Q1_FY2023. Learner honest, predictor dishonest → lessons are produced by honest reasoning over hindsight-assisted predictions → **doubly contaminated**.
+
+#### Visibility predicate (decided, principled)
+
+```
+lesson visible at predictor.pit_cutoff iff lesson.source_pit_cutoff <= predictor.pit_cutoff
+```
+
+Chosen over the looser `source_filed_8k <= predictor.pit_cutoff` because it simulates production learner-write timing: a lesson cannot be produced in production until the next quarter's data arrives (the learner's own pit_cutoff). Ignoring SDK latency, this is the tightest honest bound. When `predictor.pit_cutoff is None` (live production), the filter is bypassed entirely — real-time behavior preserved exactly.
+
+#### Schema note — where the new fields live and what validates them
+
+`source_filed_8k` and `source_pit_cutoff` are **Python-stamped storage metadata on global.json / ticker/*.json entries**, *not* new fields in the learner's output contract. `attribution_result.v2` already carries `filed_8k` and `pit_cutoff` as top-level fields (required by SKILL.md §"Required top-level fields"); Python's `append_global_lessons` / `append_ticker_lesson` simply copy those values into each entry and rename them with the `source_` prefix (meaningful at entry scope — "the lesson's source event's filed_8k / pit_cutoff").
+
+Implications:
+- **No change to `validate_attribution.py`.** The learner-output contract is untouched; existing V-rules continue to enforce `filed_8k` / `pit_cutoff` at top level.
+- **Validation of the new entry fields happens in `test_learning_context.py` (R17a below)** and at read-time in `build_learning_context`, which treats absent fields as legacy — counted and dropped in historical mode, passed through in live mode.
+- If a dedicated storage-schema validator is later desirable (e.g., a `validate_global_entry.py` helper), it lives **outside** the learner contract layer. Out of scope for T1.5.
+
+#### Tests (TDD, write before implementation)
+
+- `R17a` — schema round-trip: both `source_filed_8k` and `source_pit_cutoff` present on every new global/ticker entry (writer-side assertion in `test_learning_context.py`, not `validate_attribution.py`).
+- `R17b` — historical filter: two entries straddling a pit_cutoff; only the earlier returned; assert across **all four** scopes (ticker, sector, macro, cross_ticker).
+- `R17c` — live preservation: `pit_cutoff=None` bypasses filter; production behavior unchanged.
+- `R17d` — macro-scope coverage: explicit assertion that macro entries respect the filter (regression guard — macro was the scope most easily missed).
+- `R17e` — observability: two new exclusion counters (`ticker_post_cutoff`, `global_post_cutoff`) appear in the always-fires log line even when zero.
+- `R18a` — orchestrator default: invoking without `--pit` defaults `pit_cutoff = quarter_info.filed_8k`; stored bundle reflects it; all live-mode surfaces switch to historical anchoring.
+- `R18b` — live opt-in: `--live` preserves `pit_cutoff=None` behavior (explicit intent required).
+- `R18c` — CLI override: explicit `--pit ISO` wins over default.
+- `R18d` — rerun harness parity: `/tmp/rerun_master.sh` unchanged; its invocations now produce PIT-safe bundles automatically.
+
+#### Corpus implications
+
+- **Current 3-AVGO quarter corpus is PIT-poisoned and must be wiped before T4.** `global.json` (9 entries) + `ticker/AVGO.json` (3 lessons) are artifacts of hindsight-assisted predictions; they cannot be salvaged through read-side filtering.
+- Backup `earnings-analysis/learnings.backup.1776447824` is unaffected and remains the rollback source for the pre-migration legacy-schema corpus.
+- Any future historical re-run (3 AVGO, 15-quarter, or expansion) **requires T1.5a + T1.5b merged first**. Without them, re-contamination is guaranteed.
+- Behavior changes by caller type (T1.5a is the only one with production-visible effects; T1.5b is purely additive when `pit_cutoff=None`):
+  - **Genuine real-time invocations** (a fresh 8-K firing now, `--predict`/`--learn` without `--pit`): effectively unchanged — new default `pit_cutoff = filed_8k ≈ now`, so peer/macro/guidance windows match old live-mode output to within seconds.
+  - **Manual CLI runs against historical accessions** (`--predict`/`--learn` without `--pit`): behavior DOES change — they now become PIT-safe by default instead of silently live-built. This is the intended correction (old behavior was the bug we're fixing).
+  - **Intentional live-mode on a historical accession** ("what would we predict today about this 2023 event?"): now requires the new `--live` flag to preserve old behavior.
+  - **Lesson-PIT (T1.5b) read path**: truly unchanged in production — `pit_cutoff=None` bypasses the filter entirely.
+- **Open verification item before merge**: confirm whether any K8s worker / cron / `sdk_trigger*.py` caller invokes `earnings_orchestrator` without `--pit` in a way that deliberately relies on live mode; those call sites need an explicit `--live` (or documented migration) before T1.5a ships. Audit target: any use site of `earnings_orchestrator.py main()` across `k8s/`, `scripts/`, and cron drivers.
+- T1 / T2 / T3 (below) are not technically code-blocked by T1.5, but running them against a PIT-poisoned corpus produces misleading signal. Recommend: T1.5 first, then corpus re-run, then T1/T2/T3 against honest baseline.
+
+#### Rollout sequence
+
+1. **PR 1 — T1.5a**: bundle-PIT default + `--live` opt-in flag + R18 tests.
+2. **PR 2 — T1.5b** (depends on T1.5a): entry schema extension (`source_filed_8k` + `source_pit_cutoff`) + writer updates + reader filter across all four scopes + two new observability counters + R17 tests.
+3. Fresh backup + wipe of `earnings-analysis/learnings/` (new backup timestamp; old one retained).
+4. Re-run via existing `/tmp/rerun_master.sh` (unchanged — orchestrator default handles PIT automatically). 3 AVGO quarters minimum; full 15 if committing to T4.
+5. T4 A/B measurement becomes possible against an honest baseline.
+
+#### What does NOT change
+
+- SKILL.md contracts for learner or predictor (attribution_result.v2 top-level fields are already `filed_8k` + `pit_cutoff`; no new learner output contract).
+- `validate_attribution.py` V-rules (T1.5b's new fields are storage-layer metadata — see "Schema note" above).
+- Concurrency / atomic-write / `fcntl.flock` semantics in `append_global_lessons`.
+- Lesson-PIT read path for live-mode callers — `pit_cutoff=None → no filter` branch preserves current production semantics exactly.
+- Existing 62+ test suite.
+- The `learner-edits.md` schema-structured-routing fix from 2026-04-17 — T1.5 is strictly additive to that work.
+
+> ⚠ Explicit non-invariant: the bundle-PIT default in T1.5a DOES change behavior for manual CLI callers that invoke `--predict`/`--learn` on historical accessions without `--pit`. This is intentional — the old behavior is the root cause of the corpus PIT poisoning. Callers that intentionally want live-mode against a historical accession must now pass `--live`. See "Behavior changes by caller type" in Corpus implications above.
+
+---
+
+### 🔴 Next up — highest EV, **blocked on T1.5 shipping + corpus re-run**
 
 | # | Item | Summary | Where to start |
 |---|---|---|---|
@@ -28,7 +128,7 @@ Canonical actionable backlog for the learner subsystem. Supersedes the backlog l
 
 | # | Item | Summary | Where to start |
 |---|---|---|---|
-| T4 | **Fresh WITH-vs-WITHOUT A/B evaluation** after the full 15-quarter re-run | The current BURL A/B was confounded (Opus 4.6/high vs AVGO/NVDA on 4.7/xhigh). After the §8.3 re-run on unified prod config, re-run the A/B harness for a clean measurement. Required before any claim that "the learner now helps prediction." | `scripts/run_avgo_ab_sequential.py` / `run_nvda_ab_sequential.py` / `run_burl_ab_sequential.py` against the new post-wipe data. |
+| T4 | **Fresh WITH-vs-WITHOUT A/B evaluation** after the full 15-quarter re-run | Two confounds block an honest measurement today: (1) BURL A/B used Opus 4.6/high vs AVGO/NVDA on 4.7/xhigh, and (2) **the entire existing corpus is PIT-poisoned** — every prediction was made with 2026 peer/macro/guidance data against 2023–2024 events (see T1.5 above). A/B can only produce honest signal after **T1.5a+b ship → corpus wipe → full 15-quarter re-run completes with PIT-safe defaults**. Required before any claim that "the learner helps prediction." | `scripts/run_avgo_ab_sequential.py` / `run_nvda_ab_sequential.py` / `run_burl_ab_sequential.py` against the new post-wipe, post-T1.5 data. |
 | T5 | **obsidian_thinking.md ship coordination** | When that plan lands, it renames `validate_attribution.py` → `validate_learning.py`, `validate_attribution_output.py` → `validate_learning_output.py`, `attribution/` dir → `learning/`, `finalize_attribution_result` → `finalize_learning_result`, etc. | Mechanical ~15-min `sed`-style pass against the rename table in `learner-edits.md` §0. No logical conflict — learner-edits ships first. |
 | T6 | **Predictor-side of labeled consumption** (completes T1) | Strict follow-on to T1 — the predictor emits `lesson_labels[]`, the validator enforces the three-value enum on `label`, and an offline `audit_lesson_labels()` utility flags `confirmed`-rate > 70% as potential rubber-stamping. | Treat as the same PR as T1 (they're one deliverable split across learner + predictor skills). |
 | T7 | **CI workflow — `.github/workflows/`** | Add a minimal `pytest` workflow that runs `test_validate_attribution.py`, `test_learning_context.py`, and `test_canonical_sectors_consistency.py` on every PR. Today's enforcement is pre-commit-checklist-only (operator-dependent). | ~30-line YAML. Low priority until repo starts seeing more contributors. |
@@ -44,6 +144,7 @@ Canonical actionable backlog for the learner subsystem. Supersedes the backlog l
 | T17 | **Thinking-token capture for audit** | Enable `include_partial_messages=True` on SDK options to capture extended-thinking blocks for label-honesty auditing (most useful post-T1). | One SDK-option flip + a capture pipeline. Non-blocking. |
 | T18 | **PIT tier-3 non-stationarity** | Most-recent-quarter learner uses `invocation_time` cutoff → re-running an old last-quarter at a different time yields different attribution. Design tradeoff documented in §3. | Revisit only if observed downstream effect emerges. |
 | T19 | **Lesson refinement vs replacement (predictor-side)** | ticker.json is upsert-by-quarter now, but predictor still sees older-but-preserved lessons alongside newer corrective ones. Instruct predictor (in SKILL.md) to prefer newer corrective lessons when they reference the same mechanism. | Predictor SKILL.md instruction, adjacent to T1. |
+| T20 | **Event-time graph state for peer selection + sector lookup** (T1.5c residual) | Three residual PIT holes that persist after T1.5a+b ship: (a) `peer_earnings_snapshot.py` Cypher selects peers via current `BELONGS_TO` Industry edges and ranks by current `peer.mkt_cap` — peer SET is today's membership, not event-time; (b) `_lookup_company_sector` returns current sector, affecting sector-lesson matching and `source_sector` stamping; (c) write-side `source_sector` on new entries is today's sector, not event-time. Practical impact for AVGO/NVDA/BURL is small (stable classifications); systemically real for cohort expansion across sector reclassifications, IPOs, delistings, and M&A. | Requires timestamped company-industry edges + historical `mkt_cap` series + event-time sector resolution in Neo4j. Tier-3; revisit when cohort expands beyond semiconductors/retail or when post-reclass ticker enters the universe. |
 
 ### 🗑️ Declined — documented in `learner-edits.md` Appendix C
 
