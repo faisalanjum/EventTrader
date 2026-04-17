@@ -1082,6 +1082,64 @@ Manual single-quarter runs via CLI: `python3 scripts/earnings/earnings_orchestra
 
 **Raw A/B data**: `earnings-analysis/test-outputs/ab_baseline_AVGO.json`
 
+### Proposed mitigation for template overfit — "labeled lesson consumption"
+
+**Do NOT apply this yet.** This is the designed fix IF a second ticker (NVDA, AAPL, ...) shows recurring Q3-style overfit. Documented here so future bots know the exact intervention and can implement it directly, not re-derive.
+
+**What it does**: Before the predictor uses any prior lesson in its final call, it must explicitly label each lesson as `confirmed`, `contradicted`, or `irrelevant` based on whether the CURRENT-quarter bundle independently shows the lesson's mechanism. Only `confirmed` lessons may influence the directional call.
+
+**Why this is better than the other considered fixes**:
+
+| Option considered | Why rejected (at time of writing) |
+|---|---|
+| Drop success-quarter lessons (keep only wrong-quarter) | Crude — loses genuine positive signal like Q2's "differentiate narrative-fading vs narrative-priced-in" |
+| Strip `predictor_lessons` + `why` + `category` from render | Amputates U1 loop — learner becomes a pure error ledger with no forward guidance |
+| Add SKILL.md hard rule "ignore lesson if bundle doesn't show mechanism" | LLMs are poor at following soft meta-rules in prose. SKILL.md already says "soft priors" and Q3 overfit happened anyway. |
+| **Labeled lesson consumption (THIS)** | Structured metacognitive step — LLMs handle classify tasks better than soft rules. Produces audit trail. Keeps all lessons intact. |
+
+**Mechanism trace (why it would have caught Q3)**:
+- Lesson from Q1 (AVGO): *"When company first quantifies AI revenue, treat as narrative re-rating signal."*
+- Q3 bundle (independent check): does Q3 show FIRST quantification? No — AI already quantified in Q1 and Q2.
+- Label: `irrelevant` (mechanism not present)
+- Predictor doesn't apply → weighs bundle evidence → may catch non-AI segment weakness
+- Instead of silently pattern-matching "AI lesson + some AI in bundle → apply"
+
+**Honest limitations — this is not a silver bullet**:
+1. **Confirmation bias**: the same LLM that wants to apply a lesson also decides if it applies. May label `confirmed` too liberally.
+2. **Label noise**: LLMs misclassify. Some fraction of `irrelevant` lessons will be mislabeled `confirmed`. Overfit reduced, not eliminated.
+3. **Cost**: adds ~20-30% to predictor token usage (labeling step) and ~30s latency per prediction.
+4. **Estimated impact**: honest guess is 50-70% reduction in Q3-style overfit failures if labels are reasonable. Not 100%.
+
+**Implementation requirements (when the time comes)**:
+
+1. **Predictor SKILL.md changes** (`.claude/skills/earnings-prediction/SKILL.md`):
+   - Add new Phase between "Load Context" and "Analyze": **"Label Prior Lessons."**
+   - For each lesson in `ticker_lessons[]` and `global_lessons[]` received via `learning_context`, the predictor emits a label `{lesson_id, label, bundle_evidence}` where:
+     - `label`: `"confirmed"` / `"contradicted"` / `"irrelevant"`
+     - `bundle_evidence`: 1-sentence citation of what in the current bundle supports the label (or "no relevant evidence")
+   - Hard rule: **only `confirmed` lessons may be cited as reasoning in the final call.** `contradicted` and `irrelevant` lessons must be ignored for directional decisions.
+
+2. **`prediction_result.v1` schema extension**:
+   - Add optional top-level field `lesson_labels: [{lesson_id, label, bundle_evidence}]`
+   - Populated by the predictor LLM
+   - Audit data — lets us check label quality post-hoc
+
+3. **Python-side changes**:
+   - `finalize_prediction_result()` preserves `lesson_labels` if the LLM wrote it
+   - `validate_prediction_result()` — optional: validate label values are in the allowed enum
+   - New `audit_lesson_labels()` utility (offline) that samples labels across quarters and reports `confirmed` rate — if it's >80%, classifier is biased and we need harder intervention
+
+4. **Learner unchanged**: the learner keeps producing lessons the same way. Only the PREDICTOR's consumption changes. This is a one-sided change.
+
+5. **A/B test plan once implemented**:
+   - Re-run 10+ quarters across 2+ tickers with the labeled-consumption predictor
+   - Compare to existing no-label results on same bundles
+   - Audit 20+ lesson labels manually for honesty
+   - If `confirmed`-rate is sensibly distributed (e.g., 30-60% labeled `confirmed`) AND hit rate improves OR overfit cases reduce, mitigation works
+   - If `confirmed`-rate is >80% (label-everything-confirmed), approach is compromised — need a separate classifier LLM run
+
+**Alternative if labels are dishonest (confirmation bias too strong)**: instead of the predictor labeling its own lessons, use a separate SDK call to a LABEL-ONLY LLM that sees only `(lesson, bundle)` pairs and returns labels. That LLM has no stake in the prediction, no confirmation bias. More expensive but more honest.
+
 - [ ] Run learner on 3-5 historical quarters for one ticker
 - [ ] Verify lesson quality — learner uses full evidence surface and produces reusable high-signal guidance, not quarter-specific summaries
 - [ ] Verify PIT enforcement (no post-boundary evidence in historical runs)
