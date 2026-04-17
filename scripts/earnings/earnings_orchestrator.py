@@ -2240,8 +2240,8 @@ async def _run_learner_via_sdk(
     async for msg in query(
         prompt=prompt,
         options=ClaudeAgentOptions(
-            model="claude-opus-4-6",
-            effort="high",  # xhigh is Opus 4.7-only; high is the max supported on 4.6
+            model="claude-opus-4-7",
+            effort="xhigh",  # Anthropic-recommended for long-horizon agentic reasoning (learner investigates 8+ min)
             thinking={"type": "adaptive"},
             setting_sources=["project"],
             permission_mode="bypassPermissions",
@@ -2296,7 +2296,7 @@ def run_learner_via_sdk(
 import hashlib
 import shutil
 
-PREDICTOR_MODEL_ID = "claude-opus-4-6"
+PREDICTOR_MODEL_ID = "claude-opus-4-7"
 _PREDICTOR_SKILL_PATH = Path(".claude/skills/earnings-prediction/SKILL.md")
 _CLAUDE_CREDS_PATH = Path.home() / ".claude" / ".credentials.json"
 _SYSTEM_CLAUDE_CANDIDATES = [
@@ -2487,7 +2487,7 @@ async def _run_predictor_via_sdk(bundle_path: Path,
         prompt=prompt,
         options=ClaudeAgentOptions(
             model=PREDICTOR_MODEL_ID,
-            effort="high",  # xhigh is Opus 4.7-only; high is the max supported on 4.6; matches learner's config
+            effort="xhigh",  # Anthropic-recommended for agentic reasoning; matches learner's config
             thinking={"type": "adaptive"},
             setting_sources=["project"],
             permission_mode="bypassPermissions",
