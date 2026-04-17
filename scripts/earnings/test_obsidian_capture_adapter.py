@@ -177,3 +177,73 @@ def test_empty_string_path_returns_empty_never_raises():
     from obsidian_capture_adapter import parse_transcript_for_hook, HookBlocks
     hb = parse_transcript_for_hook("")
     assert hb == HookBlocks([], [], [], 0)
+
+
+# ── File-order invariant (clock-skew regression guard) ───────────────────
+# Belt-and-suspenders: the learner fixture's 2-orphan baseline already proves
+# file-order pairing indirectly, but this synthetic case makes the invariant
+# explicit and survivable past fixture churn.
+
+def test_adapter_preserves_file_order_orphan_on_clock_skew(tmp_path):
+    """Synthetic case: tool_result appears earlier in FILE order than its
+    matching tool_use, but has a LATER timestamp (simulating the learner
+    fixture's ~7-9ms clock skew). Legacy hook orphans it because it processes
+    in file order; adapter must reproduce that orphan — NOT pair via ts sort."""
+    p = tmp_path / "skew.jsonl"
+    p.write_text(
+        # Line 1 (file order: first): tool_result with LATER ts
+        json.dumps({
+            "type": "user",
+            "message": {"content": [{
+                "type": "tool_result", "tool_use_id": "tu_skew",
+                "content": "result-body-that-is-nonempty",
+            }]},
+            "timestamp": "2026-01-01T00:00:00.500Z",
+        }) + "\n"
+        # Line 2 (file order: second): tool_use with EARLIER ts
+        + json.dumps({
+            "type": "assistant",
+            "message": {"content": [{
+                "type": "tool_use", "id": "tu_skew", "name": "Bash",
+                "input": {"command": "echo x"},
+            }]},
+            "timestamp": "2026-01-01T00:00:00.000Z",
+        }) + "\n"
+    )
+    from obsidian_capture_adapter import parse_transcript_for_hook
+    hb = parse_transcript_for_hook(p)
+    # Expect 2 tool entries: (a) orphan tool_result with ↳ prefix, (b) unpaired tool_use
+    assert len(hb.tool) == 2
+    orphans = [t for t in hb.tool if t["text"].startswith("\u21b3")]
+    paired = [t for t in hb.tool if t.get("result") is not None]
+    assert len(orphans) == 1, f"expected 1 orphan, got tool={hb.tool}"
+    assert len(paired) == 0, f"expected 0 paired, got tool={hb.tool}"
+    assert orphans[0]["text"] == "\u21b3 result-body-that-is-nonempty"
+
+
+def test_adapter_pairs_when_file_order_matches_ts_order(tmp_path):
+    """Control case: tool_use first in BOTH file and ts order → normal pairing."""
+    p = tmp_path / "ok.jsonl"
+    p.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{
+                "type": "tool_use", "id": "tu_ok", "name": "Bash",
+                "input": {"command": "echo y"},
+            }]},
+            "timestamp": "2026-01-01T00:00:00.000Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "user",
+            "message": {"content": [{
+                "type": "tool_result", "tool_use_id": "tu_ok",
+                "content": "happy-path-result",
+            }]},
+            "timestamp": "2026-01-01T00:00:00.500Z",
+        }) + "\n"
+    )
+    from obsidian_capture_adapter import parse_transcript_for_hook
+    hb = parse_transcript_for_hook(p)
+    assert len(hb.tool) == 1
+    assert hb.tool[0]["result"] == "happy-path-result"
+    assert not hb.tool[0]["text"].startswith("\u21b3")

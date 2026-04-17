@@ -181,3 +181,32 @@ def test_missing_file_raises_filenotfound(tmp_path):
     import pytest
     with pytest.raises(FileNotFoundError):
         parse_session_blocks(tmp_path / "does-not-exist.jsonl")
+
+
+# ── preserve_file_order kwarg (for the hook adapter) ──────────────────────
+
+def test_preserve_file_order_true_keeps_jsonl_order_when_ts_and_file_differ(tmp_path):
+    """Default (preserve_file_order=False) sorts by ts; True preserves JSONL
+    write order. Synthetic case: later ts listed first in file."""
+    import json as _json
+    from thinking_blocks import parse_session_blocks
+    p = tmp_path / "swap.jsonl"
+    # Line 1 has LATER ts, line 2 has EARLIER ts
+    p.write_text(
+        _json.dumps({
+            "type": "assistant",
+            "message": {"content": [{"type": "text", "text": "FIRST_IN_FILE"}]},
+            "timestamp": "2026-01-01T00:00:00.500Z",
+        }) + "\n"
+        + _json.dumps({
+            "type": "assistant",
+            "message": {"content": [{"type": "text", "text": "SECOND_IN_FILE"}]},
+            "timestamp": "2026-01-01T00:00:00.000Z",
+        }) + "\n"
+    )
+    # Default: ts-sorted → SECOND_IN_FILE (earlier ts) comes first
+    default_order = [b["content"] for b in parse_session_blocks(p)]
+    assert default_order == ["SECOND_IN_FILE", "FIRST_IN_FILE"]
+    # preserve_file_order=True → file order retained
+    file_order = [b["content"] for b in parse_session_blocks(p, preserve_file_order=True)]
+    assert file_order == ["FIRST_IN_FILE", "SECOND_IN_FILE"]
