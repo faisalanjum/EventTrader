@@ -1,0 +1,414 @@
+{
+  "schema_version": "global_lessons.v1",
+  "updated_at": "2026-04-17T04:45:00.000000+00:00",
+  "entries": [
+    {
+      "scope": "sector",
+      "scope_key": "semiconductors",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q1_FY2023",
+      "attributed_at": "2026-04-16T20:30:00-04:00",
+      "lesson": "When a semiconductor company first explicitly quantifies AI-related revenue at scale during an early-cycle AI infrastructure buildout, the narrative re-rating can produce outsized positive reactions (+3-6% excess) even when headline growth is decelerating — the market reprices forward growth trajectory, not current quarter momentum."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "AVGO_NVDA_AMD",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q1_FY2023",
+      "attributed_at": "2026-04-16T20:30:00-04:00",
+      "lesson": "AVGO's +6.6% outperformance vs NVDA +3.8% and AMD +3.7% in the same week suggests that AI beneficiary status was being priced incrementally — companies newly identified as AI plays saw larger re-ratings than those already trading on the AI thesis."
+    },
+    {
+      "scope": "macro",
+      "scope_key": "consensus_data_quality",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q1_FY2023",
+      "attributed_at": "2026-04-16T20:30:00-04:00",
+      "lesson": "Context bundle consensus estimates sourced from live API snapshots can diverge materially from PIT-accurate estimates when significant post-event analyst revisions occur — always cross-check guidance-vs-consensus with real-time news headlines as the PIT-safe source of truth."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "semiconductors",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q2_FY2023",
+      "attributed_at": "2026-04-16T21:15:00-04:00",
+      "lesson": "For AI-levered semiconductor names with large pre-earnings run-ups, the post-earnings reaction magnitude compresses but direction holds if the company delivers above-consensus guidance — AVGO's reaction shrank from +5.54% (Q1, after modest run-up) to +2.87% (Q2, after 32% run-up) while remaining positive both times."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "ai_infrastructure",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q2_FY2023",
+      "attributed_at": "2026-04-16T21:15:00-04:00",
+      "lesson": "When management reaffirms an existing AI revenue target mid-year rather than raising it, the market treats confirmation of the trajectory as a mild positive but not a fresh re-rating catalyst — the new information that moves the stock is incremental quantification details (quarterly milestones, penetration rate trajectory) rather than reiteration of prior aggregate figures."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "semiconductors",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:45:00+00:00",
+      "lesson": "For semiconductor companies with a dual-narrative structure (AI growth + legacy business), the market increasingly prices the two segments independently. When the growth segment merely continues its trajectory while the legacy segment explicitly stagnates, the stock can sell off even on aggregate beat-and-guide-in-line results because the narrative premium requires continuous escalation."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "high_momentum_earnings",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:45:00+00:00",
+      "lesson": "Stocks entering earnings with 15%+ excess returns vs their sector face an asymmetric reaction profile: the magnitude of positive surprise needed to sustain the rally is structurally larger than the magnitude of miss needed to trigger profit-taking. Model this as a shifted prior where the default outcome for in-line results is negative."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "semiconductors",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q4_FY2023",
+      "attributed_at": "2026-04-16T22:20:00+00:00",
+      "lesson": "When semiconductor companies disclose a multi-billion-dollar AI revenue trajectory inflection on an earnings call (e.g., $1.5B→$10B+), the market grants a multi-day rally pattern rather than pricing it fully on Day 1 — the single-day return captures direction but the analyst-validated magnitude unfolds over 2-4 trading days as institutional investors process the TAM implications."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "large_cap_acquisitions",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q4_FY2023",
+      "attributed_at": "2026-04-16T22:20:00+00:00",
+      "lesson": "Transformational acquisitions that inflate headline revenue guidance by 30%+ trigger a dilution-discounting mechanism: the market separates organic growth from inorganic addition and prices the per-share math (share dilution + margin compression), constraining Day 1 gains to moderate levels even when the headline guidance beat exceeds 9%."
+    },
+    {
+      "scope": "macro",
+      "scope_key": "ai_infrastructure_cycle",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q4_FY2023",
+      "attributed_at": "2026-04-16T22:20:00+00:00",
+      "lesson": "In the early-to-mid AI infrastructure buildout (2023-2024), each successive earnings call quantifying AI revenue at a materially higher level drives a positive reaction regardless of whether traditional metrics disappoint — the market is pricing a TAM re-rating where the AI growth rate trajectory matters more than the current-quarter margin or revenue beat/miss."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "semiconductors",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:45:00+00:00",
+      "lesson": "For semiconductor companies with a dual-narrative structure (AI growth + legacy business), the market increasingly prices the two segments independently. When the growth segment merely continues its trajectory while the legacy segment explicitly stagnates, the stock can sell off even on aggregate beat-and-guide-in-line results because the narrative premium requires continuous escalation."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "high_momentum_earnings",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:45:00+00:00",
+      "lesson": "Stocks entering earnings with 15%+ excess returns vs their sector face an asymmetric reaction profile: the magnitude of positive surprise needed to sustain the rally is structurally larger than the magnitude of miss needed to trigger profit-taking. Model this as a shifted prior where the default outcome for in-line results is negative."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "semiconductors_ai_2023",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:24:05Z",
+      "lesson": "Within the AI-levered semi cohort (Aug-Dec 2023), reactions became path-dependent on Nvidia's most-recent print — the peer that sets the expectations bar highest determines whether 'AI continuation' reads as positive or negative for subsequent peers. When Nvidia has just escalated, AI continuation without escalation is a sell signal for the next peer to report."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "narrative_stock_reiteration",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:24:05Z",
+      "lesson": "For stocks trading on a structural narrative premium (AI, GLP-1, EV), management reiteration of prior numerical targets is asymmetrically negative: re-rating upside requires escalation, while flat reiteration lets air out of the premium. Model reiteration as a modest negative, not a neutral, in any quarter where peer prints have escalated the category's expectations."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "post_market_earnings_with_rally_into_print",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:24:05Z",
+      "lesson": "When a name rallies 2%+ on earnings day INTO a post-market print, the next-day reaction function is asymmetric: a beat-and-in-line delivers flat-to-down, a beat-and-raise delivers modestly-up, and only a beat-and-escalate-narrative delivers meaningfully up. The pre-print rally front-runs the expected beat, so the print must exceed the already-embedded expectation to deliver a positive Day 1."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "semiconductors",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:40:00+00:00",
+      "lesson": "AI-levered semiconductor names can sell off sharply on a narrative-confirming print when the non-AI core deteriorates faster than AI can mask. The AI growth is a necessary-but-insufficient condition for the rally to continue; when management openly concedes a non-AI plateau, the narrative premium deflates even if the AI numbers themselves are strong."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "conglomerate_earnings",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:40:00+00:00",
+      "lesson": "Post-earnings reactions for diversified issuers follow a veto-condition pattern, not an additive one — the weakest segment guide dominates the reaction. Default framework for any conglomerate earnings prediction: identify all reportable sub-segments, find the worst Q-forward guide, and weight that disproportionately vs. the strongest segment's color."
+    },
+    {
+      "scope": "macro",
+      "scope_key": "post_rally_earnings",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:40:00+00:00",
+      "lesson": "When a stock has rallied into its own print AND carries recent analyst PT raises (aggregate >10% in prior 2 weeks), the probability of a sell-the-news decline exceeds 50% even on a clean headline beat. Base case should be compressed-upside or flat/short unless the print delivers a fresh, quantifiable positive catalyst to the primary narrative driver."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "large_cap_mega_deal_closes",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q4_FY2023",
+      "attributed_at": "2026-04-16T22:00:00+00:00",
+      "lesson": "When a large-cap announces a completed transformational acquisition (>20% revenue step-change) together with the first post-close combined guidance, the first-session reaction is structurally compressed vs the 3-day total because the market prices the direction fast but arithmetic-gates the per-share EPS power over multiple sessions. Range the filing-day lower bound 1-2pp below the full 3-day re-rating estimate."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "semiconductors_ai_infrastructure",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q4_FY2023",
+      "attributed_at": "2026-04-16T22:00:00+00:00",
+      "lesson": "AI infrastructure semiconductor names (AVGO, NVDA, MRVL) that first quantify custom-ASIC-for-hyperscaler economics under NDA on the earnings call tend to set the narrative floor for subsequent quarters. Custom ASIC language ('one size doesn't fit all... we begin to see the effect') is a leading indicator of 2-4 quarter re-rating support, not a one-print catalyst."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "transcript_vs_release_asymmetry",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q4_FY2023",
+      "attributed_at": "2026-04-16T22:00:00+00:00",
+      "lesson": "For diversified semi conglomerates (AVGO/TXN/ADI/MCHP), press-release guidance without transcript context systematically under-weights the directional signal because critical narrative amplifiers (EBITDA pull-ins, AI TAM doubling, custom-ASIC disclosures) live only on the call. If the 8-K headline is unambiguously positive, transcript missing is a confidence floor, not a confidence cap; if the 8-K is ambiguous, transcript missing IS a cap (per Q3 FY23 lesson)."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "Semiconductors",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q1_FY2024",
+      "attributed_at": "2026-04-16T22:15:00+00:00",
+      "lesson": "Through FY2024 the diversified-semi conglomerates (AVGO, TXN, MCHP, ADI, ON) are structurally split between rapidly re-rating AI-exposed sub-segments and cyclically troughing non-AI sub-segments (broadband, server-storage, industrial, auto); a 'reiterated' consolidated guide on these names should be read as bearish for the non-AI base rather than neutral, because reiterations during this period increasingly require hidden AI upshifts to offset incremental non-AI deterioration."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "diversified_conglomerates_with_narrative_segment",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q1_FY2024",
+      "attributed_at": "2026-04-16T22:15:00+00:00",
+      "lesson": "For any conglomerate where one segment is narrative-driven re-rating and others are cyclical (applies to AVGO/AI, AMD/DC-GPU vs gaming, INTC/DCAI vs client, TSM/HPC vs mature): the post-earnings move is set by the weakest guided segment on the call, not the headline number. When the narrative segment raise is mathematically needed to hold the headline, position for a negative reaction regardless of what the press release shows."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "positioning_unwind_template",
+      "source_ticker": "AVGO",
+      "quarter_label": "Q1_FY2024",
+      "attributed_at": "2026-04-16T22:15:00+00:00",
+      "lesson": "A pre-print run-up >15% combined with 4+ sell-side PT raises in the prior 10 sessions creates a positioning ceiling where any 'reiteration' print triggers a buy-side unwind. The unwind magnitude is nonlinear in run-up size — typically 1.5-2x the classic 'sell-the-news' envelope — and is distinguishable from a rating downgrade because next-morning sell-side actions are uniformly bullish PT raises (as opposed to cuts/downgrades)."
+    },
+    {
+      "scope": "macro",
+      "scope_key": "ai_cycle_guidance_inflection",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q4_FY2023",
+      "attributed_at": "2026-04-17T01:15:00+00:00",
+      "lesson": "Within the post-ChatGPT inflection window (Nov 2022 onward for the 12-18 months that follow), any AI-compute supplier whose CEO explicitly quantifies a <=90-day demand-curve shift AND whose forward guide breaks a declining trajectory gets re-rated TAM-wise in a single session. The mechanical guide-vs-consensus delta understates the reaction because institutional models shift from cyclical-semi multiples to secular-growth multiples on the inflection language, not on the beat magnitude."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "narrative_inflection_squeeze",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q4_FY2023",
+      "attributed_at": "2026-04-17T01:15:00+00:00",
+      "lesson": "Bearish pre-print options positioning + narrative-inflection catalyst + sub-consensus trailing headline = elevated squeeze risk. Expected-move range should widen upward by ~1.5x (not 1.0x) of the fundamental estimate in this configuration. The asymmetry matters: bullish positioning into a bullish catalyst does NOT get the same expansion — it gets compressed upside, often capping at the lower bound of the fundamental range."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "semi_cycle_trough",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q4_FY2023",
+      "attributed_at": "2026-04-17T01:15:00+00:00",
+      "lesson": "When a semiconductor name simultaneously (a) names the inventory-correction trough quarter and (b) guides sequential revenue growth, the enabling mechanism for a >10% move is breadth of the sell-side cascade (10+ PT raises within 24 hours), not just presence of raises. Count the number of maintained-rating PT raises and the number of true upgrades separately — a single rating upgrade (e.g., Goldman Neutral->Buy) from a top-tier shop unlocks ~2-3x the institutional flow of a dozen maintained-rating PT raises."
+    },
+    {
+      "scope": "macro",
+      "scope_key": "tam_rerating_extreme_guide",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q1_FY2024",
+      "attributed_at": "2026-04-17T01:30:00+00:00",
+      "lesson": "Mega-cap AI/compute suppliers can re-rate to an entirely new multiple regime in a single session when forward guide delta exceeds ~30% above consensus. At this magnitude, positioning (bullish or bearish) flips from a directional constraint to an accelerant — bullish positioning amplifies via FOMO/chase, bearish via forced covering. Do not apply sell-the-news caps to extreme-guide prints."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "semiconductors",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q1_FY2024",
+      "attributed_at": "2026-04-17T01:30:00+00:00",
+      "lesson": "When a bellwether semiconductor (NVDA, AVGO, MU, TSM) prints an extreme guide shock, the entire Semiconductors industry re-rates within the same session (here industry +6.67% vs macro +0.82% on 2023-05-25). For peers printing in the following ~4 weeks, expect compressed upside (the read-through is already priced in) unless they deliver their own distinct guide-level surprise."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "epochal_language_terminal_value",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q1_FY2024",
+      "attributed_at": "2026-04-17T01:30:00+00:00",
+      "lesson": "Time-stamped demand-acceleration language ('last 60 days,' 'gone through the roof') is a forward-multiple signal; epochal TAM-redefining language ('trillion-dollar transition,' 'entire industry will transition') is a terminal-value signal. These are distinct narrative types and stack multiplicatively. Epochal language occurs only 1-2x per cycle per secular theme and drives multi-year DCF re-rates, not just multiple re-rates — score independently of the guide delta."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "NVDA",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q2_FY2024",
+      "attributed_at": "2026-04-17T01:45:00+00:00",
+      "lesson": "TAM re-rating is one-time-per-issuer within a cycle: once a mega-cap AI bellwether has printed a ≥20% single-print re-rate on the narrative, its NEXT print reverts to a normal beat-and-raise regime. Sub-linear power law between guide-delta and stock move does NOT continue to apply across consecutive prints — the stock trades against the NEW elevated baseline, not against pre-re-rate anchors."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "Semiconductors",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q2_FY2024",
+      "attributed_at": "2026-04-17T01:45:00+00:00",
+      "lesson": "Mega-cap AI-bellwether peer read-through is asymmetric across the re-rating cycle: first-print = peers co-move with leader (+5-7% on print day); subsequent prints = peers revert to trading on macro/sector beta (semis -2 to -7% even when leader beats). Monitor the peer-vs-macro spread on print day as a regime indicator for whether the TAM re-rating is still propagating or has been absorbed."
+    },
+    {
+      "scope": "macro",
+      "scope_key": "earnings_on_macro_risk_day",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q2_FY2024",
+      "attributed_at": "2026-04-17T01:45:00+00:00",
+      "lesson": "When an earnings print coincides with a scheduled macro catalyst (Jackson Hole, FOMC, CPI, large Treasury auction), macro-risk-off can absorb 1-3pp of absolute return regardless of print quality. Forecast sector-adjusted (alpha) returns in parallel with absolute returns on these days and disclose both — otherwise a correct fundamental call gets scored as a magnitude miss."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "semiconductors_regulatory_rotation",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q3_FY2024",
+      "attributed_at": "2026-04-17T01:18:43Z",
+      "lesson": "When a mega-cap's print follows an issuer-specific regulatory shock by 30+ days and the shock prohibits that issuer's SKUs (not sector-wide), same-day peer reactions can INVERT: peers without exposure rally as 'beneficiaries' while the reporting stock fades on pre-discounted news. AMD +2.81% on NVDA's -2.46% day illustrates this zero-sum TAM rotation — the ratio test is: if (peer_return - reporting_stock_return) > 3pp on the print day without a peer-specific catalyst, treat as regulatory-rotation confirmation and weight the reporting stock's idiosyncratic fade"
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "priced_to_perfection_sign_flip",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q3_FY2024",
+      "attributed_at": "2026-04-17T01:18:43Z",
+      "lesson": "Priced-to-perfection fade is a 2+ quarter pattern, not a one-quarter anomaly. If Q(N-1) printed flat-at-upper-bound on a strong beat/raise, Q(N) with similar or worse positioning plus any new negative tends to flip sign to negative, not compress further toward zero. The sign-flip regime engages at the second consecutive priced-in print absent a brand-new incremental narrative amplifier. Predictors should maintain per-issuer state: {last_print_direction_correct, consecutive_compressed_prints, last_narrative_amplifier_date} and trigger directional flip rules, not just range compression"
+    },
+    {
+      "scope": "macro",
+      "scope_key": "regulatory_overhang_discount_timing",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q3_FY2024",
+      "attributed_at": "2026-04-17T01:18:43Z",
+      "lesson": "For issuers with a named regulatory overhang, the market's reaction pivot point is NOT the disclosure itself (it's already in the tape by print time if shock predated print by >=2 weeks) — it is management's ability or inability to quantify a replacement/mitigation timeline in live Q&A. Forward-timing quantification ability is the binary feature that separates 'digestible overhang' (management provides a quarter for replacement, market re-rates up) from 'expanding overhang' (management hedges on timeline, market extends overhang in its discount). Score this feature live during the call transcript review"
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "mega_cap_ai_earnings_sector_spillover",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q4_FY2024",
+      "attributed_at": "2026-04-16T21:30:00+00:00",
+      "lesson": "A mega-cap AI-cycle beat-and-raise print produces a coordinated 1-2 day sector-wide re-rate beyond the reporting company: NVDA +16.4% coincided with SMCI +32.87%, AMD +10.70%, SOXX +4.93%, XLK +3.27%. Peer earnings prints in the following 2-4 weeks should have upper bounds COMPRESSED (read-through already in tape) unless they deliver a distinct guide-level surprise. Applies symmetrically: a mega-cap AI miss/fade would compress peer upper bounds before their own prints."
+    },
+    {
+      "scope": "macro",
+      "scope_key": "tam_rerate_repeats_within_cycle_with_narrative_evolution",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q4_FY2024",
+      "attributed_at": "2026-04-16T21:30:00+00:00",
+      "lesson": "TAM re-rating is NOT a one-time event within a single issuer's cycle when the underlying demand curve is still expanding. Distinct re-rate mechanisms can fire in successive quarters: Q1 FY2024 = guidance-shock (+54% delta), Q4 FY2024 = narrative-reconfirmation-against-reset-positioning (+8% delta but new sovereign-AI + software layer + epochal framing). Re-rates repeat when (a) the narrative evolves with new demand vectors or monetization layers, AND (b) the positioning channel has reset through a prior failed fade. Do not treat prior re-rates as 'already done' — check for narrative novelty and positioning reset."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "preprint_pullback_as_positioning_reset_signal",
+      "source_ticker": "NVDA",
+      "quarter_label": "Q4_FY2024",
+      "attributed_at": "2026-04-16T21:30:00+00:00",
+      "lesson": "In AI-cycle semiconductor names entering a print, a 5-10% 1-2 day pre-print selloff on vague 'positioning' or 'caution' headlines is a positioning-RESET signal (reload), not a negative fundamentals signal. It lowers the PT-cluster anchor below eventually-raised PTs and creates chase-room if the print is strong. Sign-flip rule: pre-print pullback + strong print = upper-bound widener (not risk); pre-print rally + strong print = upper-bound compressor (saturated). This inverts the naive reading of pre-print tape action."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "off_price_retail",
+      "source_ticker": "BURL",
+      "quarter_label": "Q4_FY2024",
+      "attributed_at": "2026-04-17T03:15:00.000000+00:00",
+      "lesson": "Off-price retailers (BURL, ROST, TJX) have a structurally different reaction function to conservative forward guidance than specialty or branded retailers: the market interprets macro uncertainty as a net positive for the off-price model because disruption creates better buying opportunities, so guide-downs paired with strong execution are discounted rather than punished."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "BURL_vs_ROST",
+      "source_ticker": "BURL",
+      "quarter_label": "Q4_FY2024",
+      "attributed_at": "2026-04-17T03:15:00.000000+00:00",
+      "lesson": "BURL and ROST showed nearly identical reactions (+8.54% and +8.03% respectively) to Q4 beats in the same reporting cycle, despite different guidance messaging, confirming that the off-price sector trades as a cohort on execution quality and that ROST is the correct primary analog for BURL reaction prediction."
+    },
+    {
+      "scope": "macro",
+      "scope_key": "tariff_uncertainty_regime",
+      "source_ticker": "BURL",
+      "quarter_label": "Q4_FY2024",
+      "attributed_at": "2026-04-17T03:15:00.000000+00:00",
+      "lesson": "During periods of escalating tariff uncertainty, off-price retailers receive a valuation tailwind because the market prices in incremental merchandise availability from disrupted supply chains; management narratives explicitly positioning as tariff beneficiaries amplify this effect and should be weighted as a positive catalyst rather than neutral commentary."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "off_price_retail",
+      "source_ticker": "BURL",
+      "quarter_label": "Q1_FY2025",
+      "attributed_at": "2026-04-17T03:45:00.000000+00:00",
+      "lesson": "Off-price retailers that deliver headline EPS beats but voluntarily disclose timing-driven quality degradation trade more like guide-down stories than beat stories. The market's quality filter for off-price beats is especially high because the sector's variable buying model naturally creates quarterly timing noise that investors have learned to look through."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "ROST_BURL",
+      "source_ticker": "BURL",
+      "quarter_label": "Q1_FY2025",
+      "attributed_at": "2026-04-17T03:45:00.000000+00:00",
+      "lesson": "ROST and BURL are structurally similar off-price peers, but their earnings reactions diverge sharply when beat quality differs. ROST's clean-beat reactions should not be used as BURL analogs when BURL management explicitly flags timing components — quality match is a prerequisite for peer analog validity in this subsector."
+    },
+    {
+      "scope": "macro",
+      "scope_key": "tariff_conditional_guidance",
+      "source_ticker": "BURL",
+      "quarter_label": "Q1_FY2025",
+      "attributed_at": "2026-04-17T03:45:00.000000+00:00",
+      "lesson": "When companies condition forward guidance on specific tariff rate assumptions (e.g., '30% China, 10% other, no increase'), the market treats the guidance range as less credible and applies a wider uncertainty discount. A guidance affirmation conditional on external policy stability is worth less than an unconditional affirmation of the same range."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "off_price_retail",
+      "source_ticker": "BURL",
+      "quarter_label": "Q2_FY2025",
+      "attributed_at": "2026-04-17T03:15:00.000000+00:00",
+      "lesson": "In a tariff-disruption environment, off-price retailers that demonstrate agile category pivoting and elevated reserve inventory at pre-tariff pricing get rewarded with a valuation premium over their conservative guidance. The market treats tariff uncertainty as a structural positive for off-price (trade-down + opportunistic buying) rather than a headwind, provided management demonstrates tangible agility rather than just asserting it."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "sequential_beat_quality",
+      "source_ticker": "BURL",
+      "quarter_label": "Q2_FY2025",
+      "attributed_at": "2026-04-17T03:15:00.000000+00:00",
+      "lesson": "When a company follows a timing-compromised beat (which caused a selloff) with a clean beat the next quarter, the market reaction includes a 'doubt resolution' premium beyond the normal beat response. The two-quarter sequence — tainted then clean — functions as a natural experiment that proves operational strength is structural, triggering re-rating. Watch for this pattern at any company where management proactively flagged beat-quality issues in a prior quarter."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "off_price_retail",
+      "source_ticker": "BURL",
+      "quarter_label": "Q3_FY2025",
+      "attributed_at": "2026-04-17T04:30:00.000000+00:00",
+      "lesson": "When all three major off-price retailers report within the same week, the one that significantly lags on comps faces amplified punishment because investors can immediately rotate capital to the outperformers with near-identical sector exposure. The penalty is additive: the laggard absorbs its own negative reaction plus a rotation premium of 3-5 additional percentage points."
+    },
+    {
+      "scope": "cross_ticker",
+      "scope_key": "margin_vs_sales_tradeoff_disclosure",
+      "source_ticker": "BURL",
+      "quarter_label": "Q3_FY2025",
+      "attributed_at": "2026-04-17T04:30:00.000000+00:00",
+      "lesson": "When management explicitly confirms deliberate margin-for-sales tradeoffs in response to cost pressures (tariffs, input costs), the market discounts the EPS beat and reprices the forward growth trajectory. The disclosure itself is the signal — companies that proactively admit they sacrificed topline are telling the market not to capitalize the margin upside into forward estimates."
+    },
+    {
+      "scope": "sector",
+      "scope_key": "off_price_retail",
+      "source_ticker": "BURL",
+      "quarter_label": "Q4_FY2025",
+      "attributed_at": "2026-04-17T04:45:00.000000+00:00",
+      "lesson": "When all three off-price majors (TJX, ROST, BURL) beat in the same reporting cycle while full-price and club retailers flag tariff headwinds, each sequential beat amplifies confidence in the off-price-specific thesis that macro disruption is their tailwind — model the sector as receiving a compounding re-rating premium rather than treating each company's reaction independently."
+    },
+    {
+      "scope": "macro",
+      "scope_key": "tariff_adaptation_premium",
+      "source_ticker": "BURL",
+      "quarter_label": "Q4_FY2025",
+      "attributed_at": "2026-04-17T04:45:00.000000+00:00",
+      "lesson": "Companies that can demonstrate quantified, successful adaptation to tariffs (margin expansion despite tariff headwinds) receive a 1-2pp stock reaction premium relative to companies still flagging tariffs as forward risk, because the market rewards demonstrated resilience over forward uncertainty."
+    }
+  ]
+}

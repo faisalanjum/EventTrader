@@ -1,0 +1,157 @@
+{
+  "schema_version": "ticker_lessons.v1",
+  "ticker": "AVGO",
+  "updated_at": "2026-04-16T22:15:00+00:00",
+  "lessons": [
+    {
+      "quarter_label": "Q1_FY2023",
+      "attributed_at": "2026-04-16T20:30:00-04:00",
+      "direction_correct": false,
+      "actual_daily_pct": 5.54,
+      "predicted_direction": "short",
+      "predicted_confidence_score": 42,
+      "primary_driver_summary": "First explicit quantification of Broadcom's AI revenue opportunity — CEO Hock Tan forecast AI Ethernet switch shipments to grow 4x to $800M+ and compute offload ASICs to exceed $3B, describing 'exponential demand' and 'urgency in the last 90 days' from hyperscalers. Coming just months after ChatGPT's launch, this was the pivotal call that established AVGO as a direct AI infrastructure beneficiary, triggering a narrative re-rating from 'mature diversified semiconductor' to 'AI networking play' that dominated the traditional beat/miss arithmetic.",
+      "primary_driver_category": "ai_narrative_rerating",
+      "what_worked": [
+        "Correctly identified strong cash generation ($3.9B FCF, 44% yield) and shareholder returns as providing a valuation floor, which was consistent with the stock not selling off",
+        "Correctly identified the EPS beat as moderate (+2.3%) and revenue beat as negligible (+0.17%), both of which were accurate characterizations of the Q1 results themselves"
+      ],
+      "what_failed": [
+        "Used a live (2026-era) Q2 consensus estimate of $8.71B when the real-time consensus at filing was $8.59B, causing the predictor to misread a meaningful +1.3% guidance beat as in-line — this single data error flipped the guidance signal from negative to positive",
+        "Treated the AI/networking narrative as background context rather than the primary catalyst, failing to recognize that this was the pivotal call where Broadcom first explicitly quantified its AI revenue opportunity ($800M Ethernet + $3B compute offload) during the early AI infrastructure buildout wave post-ChatGPT",
+        "Focused narrowly on topline deceleration (16% → 8% YoY growth) without recognizing that the composition of growth was shifting toward higher-multiple AI-driven revenue, which the market valued more highly than the headline growth rate"
+      ],
+      "predictor_lessons": [
+        "When a company first quantifies a large, rapidly growing emerging segment (like AI networking), treat the narrative re-rating potential as a primary signal that can dominate traditional beat/miss and guidance arithmetic — especially when the emerging theme has strong macro momentum",
+        "Always verify that consensus estimates in the context bundle reflect the point-in-time consensus at filing, not post-revision snapshots — even a 1-2% guidance beat vs actual consensus can flip the market reaction direction for premium-valued names",
+        "For diversified semiconductor companies, decompose the growth story by segment and end-market; a decelerating headline growth rate can mask an accelerating high-value subsegment (AI networking) that the market will price at a premium multiple"
+      ],
+      "data_lessons": [
+        "Fetch PIT-correct consensus estimates contemporaneous with the filing date — the forward_estimates in the context bundle used live data from 2026, not the March 2023 consensus, causing a critical misread of guidance vs expectations",
+        "Fetch pre-earnings news and recent analyst price target changes to gauge the expectations setup going into the report — the pre-earnings short interest declining 10.7% and Susquehanna raising its PT to $685 pre-report signaled positive positioning that the predictor missed",
+        "Weight earnings call transcript commentary on emerging technology themes (AI, custom silicon) as a primary signal for premium semiconductor names during technology adoption cycles — the $800M Ethernet and $3B compute offload quantifications were the most market-moving disclosures on the call"
+      ],
+      "why": "The predictor applied a traditional 'beat-and-raise' framework that focuses on guidance vs consensus for the next quarter. In this case, the dominant market response mechanism was not quarterly guidance arithmetic but a structural narrative shift: this was the first major semiconductor earnings call to explicitly quantify a multi-billion-dollar AI revenue opportunity at scale, arriving months after ChatGPT catalyzed massive investor interest in AI infrastructure. The deceleration from 16% to 8% growth that anchored the short thesis was overwhelmed by the forward-looking AI TAM disclosure, which reset how investors valued the company's growth trajectory."
+    },
+    {
+      "quarter_label": "Q2_FY2023",
+      "attributed_at": "2026-04-16T21:15:00-04:00",
+      "direction_correct": true,
+      "actual_daily_pct": 2.87,
+      "predicted_direction": "long",
+      "predicted_confidence_score": 52,
+      "primary_driver_summary": "Broadcom's Q3 revenue guidance of ~$8.85B beat the $8.72B Street consensus by 1.5%, combined with detailed AI revenue quantification on the earnings call — CEO Tan reaffirmed the $3.8B FY23 AI revenue forecast, projected quarterly AI revenue exceeding $1B in Q3 and doubling from start to end of fiscal 2023, and disclosed AI revenue growing from 15% to a projected >25% of semiconductor revenue by FY24. The guidance beat resolved the market's central uncertainty: whether the 32% pre-report run-up was supported by fundamental delivery above expectations, not just narrative momentum. Networking revenue at $2.6B (+20% YoY) provided the concrete proof point that AI demand was translating into financial results.",
+      "primary_driver_category": "ai_revenue_trajectory",
+      "what_worked": [
+        "Correctly identified AI narrative continuation as the primary long catalyst and followed the Q1 lesson to treat AI revenue quantification as a primary signal rather than background context — this was the dominant market mechanism on the call",
+        "Appropriately sized the expected range at [+2.0%, +5.0%] with the lower bound capturing the magnitude compression from the massive pre-report run-up, resulting in the actual +2.87% falling within range"
+      ],
+      "what_failed": [
+        "Confidence of 52 was too conservative given the structural alignment: 8-quarter beat streak, management explicitly reinforcing AI narrative, Q3 guidance beating consensus ($8.85B vs $8.72B), and the prior quarter lesson establishing that AVGO's AI calls move the stock — these factors collectively warranted confidence in the mid-60s",
+        "Framed the 32% pre-report run-up as a symmetric sell-the-news risk rather than recognizing it primarily compresses magnitude while leaving direction intact for consistent beat-and-raise names — the initial -3.03% AH dip was noise that reversed within hours",
+        "Could not assess the earnings call's AI quantification granularity (AI revenue trajectory, >$1B quarterly target, doubling within FY23) due to missing transcript data, which limited the predictor's ability to distinguish between narrative reiteration and fresh quantification"
+      ],
+      "predictor_lessons": [
+        "When a stock has had a massive pre-report run-up but the company continues to deliver above-consensus guidance, assign higher directional confidence while compressing the expected range — pre-report rallies primarily dampen magnitude, not direction, for companies with consistent beat-and-raise track records",
+        "Differentiate between 'AI narrative fading' risk (which warrants lower directional confidence) and 'AI narrative already priced in' risk (which warrants a lower magnitude range but not lower confidence) — calibrate these two dimensions independently rather than bundling them into a single sell-the-news discount",
+        "For AVGO specifically, the initial after-hours reaction is unreliable: both Q1 and Q2 FY2023 showed AH volatility that reversed by next-day open — treat the next-morning analyst consensus as the true signal, not the initial AH print"
+      ],
+      "data_lessons": [
+        "Fetch pre-earnings analyst consensus for the next quarter's revenue guidance target — the $8.72B Q3 consensus was only available from a Benzinga headline, not structured data, yet the 1.5% guidance beat was the most concrete numerical catalyst for the positive reaction",
+        "Weight earnings call transcript AI quantification details as the primary catalyst differentiator for AI-levered names — without the transcript, the predictor could not distinguish between management reiterating prior targets ($3.8B FY23) versus adding new granularity (>$1B quarterly, doubling trajectory, >25% FY24 share), which together amplified the bull case beyond what the press release alone conveyed",
+        "Track the after-hours to next-day reversal pattern as a separate data input — AVGO's Q1 (+5.54% daily after AH volatility) and Q2 (+2.87% daily after -3.03% AH) both showed AH moves that poorly predicted the next-day close, making overnight analyst response the more reliable signal"
+      ],
+      "why": "The prediction correctly captured the direction and magnitude range because it followed the Q1 lesson to treat AI revenue quantification as a primary signal. The moderate confidence reflected genuine uncertainty about whether the 32% run-up had already discounted the beat, but in practice, the guidance beat ($8.85B vs $8.72B consensus) and detailed AI trajectory disclosures on the call provided enough incremental information to sustain the long thesis. The sell-the-news risk the predictor feared materialized briefly as a -3.03% after-hours dip, but was overwhelmed overnight by the unanimous analyst upgrade wave validating the AI story."
+    },
+    {
+      "quarter_label": "Q3_FY2023",
+      "attributed_at": "2026-04-16T21:40:00+00:00",
+      "direction_correct": false,
+      "actual_daily_pct": -5.38,
+      "predicted_direction": "long",
+      "predicted_confidence_score": 40,
+      "primary_driver_summary": "The earnings call reframed AVGO from a 'beat-and-raise AI narrative stock' into an 'AI segment masking a broadly decelerating non-AI core.' Management explicitly conceded a $6B/quarter non-AI plateau (E5), stated that ex-AI semiconductor revenue was approximately FLAT year-on-year (E6), and then guided Q4 to YoY declines in three of the four non-AI sub-segments — broadband high-single-digit DOWN after nine quarters of double-digit growth (E7), wireless low-single-digit DOWN in the iPhone launch quarter (E8), and server storage mid-teens DOWN (E9). With AI networking (+20% YoY to $2.8B, E3) carrying essentially all the growth, a thin headline beat (E1) and a revenue guide slightly BELOW consensus (E2) could no longer sustain the narrative premium. Because AVGO had rallied +3.43% into its own print (E17) and carried pre-event PT raises from Susquehanna and Piper (E15, E16), expectations required a clean beat on BOTH AI and non-AI; the non-AI guide package delivered the opposite. The selloff was idiosyncratic (peers flat-to-positive, E19) and driven by buy-side positioning unwind — sell-side did not downgrade (E20) — which is the classic signature of an expectations reset rather than a fundamental rating change.",
+      "primary_driver_category": "non_ai_segment_weakness_exposed",
+      "what_worked": [
+        "Accurately characterized the Q3 print as a thin beat (+1.15% EPS, +0.18% revenue) and the Q4 guide as essentially in-line — the quantitative reading of the 8-K itself was correct",
+        "Explicitly flagged the missing transcript as the critical data gap and cited the Q2 learner lesson that AVGO's AI-quantification language is the primary catalyst differentiator — the concern was right, but it was used to lower confidence rather than lower direction conviction"
+      ],
+      "what_failed": [
+        "Defaulted to LONG on a 'modest beat + in-line guide + AI durability' profile when the correct default for a stock rallying into its own print on a thin beat is flat-to-short; the predictor treated the AI narrative as a floor rather than a condition that must be affirmatively reinforced each quarter",
+        "Missed that the critical transcript variable this quarter was not incremental AI quantification (the Q2 pattern) but the NON-AI segment guide package — broadband/wireless/server-storage Q4 guides — which only the transcript could reveal; the predictor inherited the Q1/Q2 'look for AI quantification' heuristic without asking what else the call might disclose",
+        "Did not size pre-event positioning as a risk multiplier: +3.43% filing-day rally + Susquehanna $910->$1010 (Aug 24) + Piper $830->$925 (Aug 29) + unusual options flow (Aug 30) together formed a concentrated long positioning profile that required a clean beat-and-RAISE to sustain; the evidence was in the context bundle but treated as confirming narrative strength rather than as an expectations ceiling"
+      ],
+      "predictor_lessons": [
+        "For diversified-semiconductor names, default to FLAT or SHORT on a 'thin beat + in-line guide + stock rallied into the print' profile; the long default is only appropriate when an affirmative positive catalyst is visible (raised AI TAM, new hyperscale customer, segment re-acceleration). A narrative premium requires fresh fuel each quarter — absence of a new catalyst on an already-extended stock is a short signal, not a neutral one",
+        "Treat the non-hyped segment as a veto condition for conglomerate earnings: a diversified company's post-earnings reaction is disproportionately set by its WEAKEST segment guide, not its strongest. When the hyped segment is already priced in, the marginal information is always about the unloved segments. For any AVGO/TXN/MCHP/ADI print, explicitly ask 'what are the sub-segment Q4 guides?' before committing to a direction",
+        "Size pre-event positioning as an expectations-ceiling multiplier, not a bullish signal: filing-day rally + two pre-event PT raises + unusual options flow together mean the buy-side is already long into the print. In this setup, a beat that merely confirms consensus is a NEGATIVE surprise relative to positioning; only a beat-AND-RAISE on the primary narrative driver sustains the rally"
+      ],
+      "data_lessons": [
+        "For AVGO/TXN/MCHP/ADI and other sub-segment-reporting semi conglomerates, if the earnings call transcript is unavailable at prediction time, CAP confidence at 30 and label the prediction 'direction-uncertain' — sub-segment Q4 guides are the dominant variable and they live only on the call. Do not commit to a direction when the decisive signal is structurally unavailable",
+        "Fetch post-market conference-call headline feeds (Benzinga intraday tape) between 8-K filing time and the next morning — the 'Networking +20% YoY to $2.8B' standalone headline (bzNews_34158417) alone would have implied non-networking ~$6B was flat-to-down YoY when compared against consolidated +5% YoY, and flipped the prediction. Title-only wire data is often sufficient",
+        "Weight pre-event analyst PT revisions in the 5-10 trading days before the print as expectations markers that must be cleared, not as confirmation of the bull case. Build a lightweight 'pre-event sell-side delta' feature: sum of PT-raise magnitudes in the 10 days pre-print — when >10% aggregate and the stock also rallies into the print, the expectations bar is materially above consensus regardless of what the consensus number shows"
+      ],
+      "why": "The predictor applied a 'beat-and-streak-continues' template that worked in Q1 and Q2 FY2023 when AI quantification was expanding. But this Q3 call was the inflection point where Tan openly admitted the non-AI semi base is a $6B plateau and guided three of four non-AI sub-segments to YoY declines in Q4 — including wireless DOWN in the iPhone launch quarter. Without the transcript, the predictor could not see this segment-guide package, and the prior-quarter heuristic ('AI will bail out a modest beat') inverted: with AI already priced in and non-AI revealed as cyclically weak, the narrative premium deflated in an idiosyncratic -5.38% move while peers rallied."
+    },
+    {
+      "quarter_label": "Q4_FY2023",
+      "attributed_at": "2026-04-16T22:00:00+00:00",
+      "direction_correct": true,
+      "actual_daily_pct": 2.61,
+      "predicted_direction": "long",
+      "predicted_confidence_score": 65,
+      "primary_driver_summary": "FY24 revenue guide of ~$50B (+9.3% vs $45.76B consensus; +40% YoY off a $35.8B FY23 base) combined with a pulled-in VMware $8.5B EBITDA run-rate target (from 3-year plan to FY24-exit) reset AVGO's 2024 earnings power materially above buy-side expectations. The transcript converted a press-release-only headline into a multi-pronged narrative escalation — AI $7.5B+ FY24 (+80% YoY), AI networking doubling to ~$8B, VMware $12B contribution growing double-digits for three years, plus the first explicit disclosure that hyperscalers are designing custom AVGO AI ASICs under NDA. The stock was not priced for perfection (-0.37% 5-day run-up), no peers rallied alongside (idiosyncratic +2pp vs semi basket), and sell-side responded with unanimous PT hikes (Rosenblatt to $1160, Truist $1015, TD Cowen $1000, Summit upgrade, Citi $1100). Direction was decisively long; magnitude compressed below our 3-7% predicted range because (a) the filing-day session captured only the first tranche of a 3-day re-rating that delivered +16.3% cumulatively by Dec 12, and (b) near-term optics — FY24 60% EBITDA margin vs FY23 65%, 15.7% share dilution to 494M, and non-AI segment sub-declines mid-to-high teens — rationally throttled the first-day absorption.",
+      "primary_driver_category": "guidance_step_change_vmware_ai_rerating",
+      "what_worked": [
+        "Correctly weighted the FY24 $50B guidance beat and VMware narrative as the dominant drivers despite the backward-looking Q4 revenue miss — explicitly internalized the Q1/Q2 FY23 learner lessons that AVGO moves on forward narrative escalation, not beat/miss arithmetic",
+        "Correctly flagged margin compression (65%→60%) and the share-count dilution (+15.7%) as real near-term headwinds — these were the precise mechanism that compressed the filing-day magnitude below the predicted range"
+      ],
+      "what_failed": [
+        "Set the expected range lower bound at 3.0% when the correct anchor for a +40% YoY guide with real margin/dilution offsets and no pre-print run-up is ~2.0-2.5% — magnitude overshot by underestimating the first-session 'digestion drag' from simultaneously positive and negative mechanical inputs",
+        "Missed that a structural step-change of this scale typically plays out over 2-3 sessions for mega-caps because sell-side PT revisions and Monday-morning reallocation flows are the amplifiers — predicting only the filing-day daily window systematically under-weights the multi-session absorption profile",
+        "Did not explicitly reason about the +15.7% share dilution as a compressor of per-share economics in the first-session reaction — the prediction mentioned 12% dilution but framed it as partial offset rather than as a calibrating force on magnitude"
+      ],
+      "predictor_lessons": [
+        "For large-cap step-change guidance announcements (>30% YoY revenue step-change) combined with meaningful share dilution (>10%) and margin compression (>300bps), set the expected-range lower bound 1-2pp BELOW a pure-narrative base case — the first-session reaction compresses because the market arithmetic-gates the net EPS power, even when the direction is obvious and the sell-side is unanimously positive",
+        "Distinguish between filing-day and multi-session re-rating windows: when the catalyst is a structural re-rating (VMware close + FY24 step-change + AI TAM re-quantification), expect 2-3 sessions of absorption with sell-side PT waves and Monday-open reallocation flows as the amplifiers. The daily_stock_pct captures only the first tranche — range the lower bound accordingly",
+        "When dilution and margin compression are quantified in the same 8-K as the positive guidance, treat them as magnitude compressors on the first-session window, not as direction hedges. Direction stays long; magnitude compresses. Adjust range, not confidence"
+      ],
+      "data_lessons": [
+        "Fetch the full earnings call transcript — for AVGO/TXN/MCHP/ADI-class names, transcripts are the primary source of narrative amplification (VMware EBITDA pull-in from 3yr to FY24 exit was ONLY on the call; it is the single most market-moving disclosure post-press-release). The Q3 FY23 learner lesson to CAP confidence at 30 when transcript is missing was correctly overridden here only because the 8-K FY24 guide was unambiguously positive — but in general, weight transcript quantification of structural targets (EBITDA run-rate timing, AI TAM doubling) as the highest-tier input",
+        "Fetch multi-day post-event analyst PT action tape (bz-news-api analyst ratings channel) and model the 'expected 3-day sell-side PT wave' for large-cap step-change prints — the Dec 8 Rosenblatt $1160 + Dec 11 Citi $1100 reinstatement together explain most of the Dec 11 +8.99% tranche. Knowing the PT wave exists is part of the directional conviction, but also calibrates the first-session compression",
+        "Fetch pre-print 5-day return and short-interest delta as a positioning feature — AVGO's -0.37% 5-day run-up and no crowded long positioning was the signal that the reaction would be clean and sustainable. This directly corrects the Q3 FY23 error where pre-event positioning was a ceiling; here, lack of positioning was a floor"
+      ],
+      "why": "The prediction correctly identified what would drive the move but mis-calibrated the timing and compression forces that shape the first-session daily window. A +40% YoY consolidated revenue step-change combined with 15.7% dilution and 500bps of margin compression creates a net positive that is structurally back-loaded in the reaction — the market needs multiple sessions and sell-side PT revisions to bridge the 'how much of this hits EPS' arithmetic. In AVGO's case, ~85% of the 3-day +16.3% move came on Dec 11-12 after the Citi reinstate and aggregated PT waves, leaving only ~15% of the total rerating in the filing-day session that the daily_stock_pct window captures."
+    },
+    {
+      "quarter_label": "Q1_FY2024",
+      "attributed_at": "2026-04-16T22:15:00+00:00",
+      "direction_correct": true,
+      "actual_daily_pct": -6.99,
+      "predicted_direction": "short",
+      "predicted_confidence_score": 55,
+      "primary_driver_summary": "On the earnings call, CEO Hock Tan delivered two incremental FY24 SUB-SEGMENT guide CUTS — broadband from 'down mid-teens' to 'down 30% YoY' (E4), and server storage from 'high-teens decline' to 'mid-20s decline' (E5) — while keeping the consolidated $50B headline unchanged only because AI revenue was simultaneously raised from $7.5B/25% to >$10B/35% of semi (E6). Framed in the press release as a 'reiteration', the reality disclosed on the call was a composition shift where the AI bucket had to absorb 15-20pp of incremental cuts in the non-AI buckets just to mathematically hold the original number. Because AVGO had rallied +19.2% into the print (E8) on five pre-print sell-side PT raises (E9) loading the buy-side long, the transcript revelation that 'the non-AI base is deteriorating faster than December' forced a concentrated positioning unwind. The move was idiosyncratic (-6.99% vs industry -3.96%, E11), flipped from +1.8% AH to -6.99% RTH through the conference call window (E12), and came with UNANIMOUS sell-side PT raises next morning (E10, 14+ raises, zero downgrades) — the classic signature of a buy-side expectations reset, not a fundamental rating change. This is a direct magnified replay of the Q3 FY23 template (E13) that prior-learner lessons already identified as AVGO's signature short setup.",
+      "primary_driver_category": "sub_segment_guide_cut_positioning_unwind",
+      "what_worked": [
+        "Correctly defaulted to SHORT on the 'thin beat + reiterated-not-raised guide + stock rallied into the print' template, explicitly internalizing the Q3 FY23 learner lesson that this profile is the signature AVGO short setup — direction conviction came from pattern recognition on the prior-quarter template, exactly how the learner is meant to compound",
+        "Correctly flagged the missing transcript as a data gap and cited that AVGO's call-time sub-segment guides are the decisive signal — the concern was right; the gap just proved to be the magnitude-driver rather than a direction-flipper this quarter"
+      ],
+      "what_failed": [
+        "Magnitude range [1.5%, 4.0%] was too tight for a +19% 5-week run-up combined with a reiteration-only print — when pre-print positioning is this extreme, a successful short direction call routinely overshoots the standard 'sell-the-news' envelope because the positioning unwind is nonlinear in run-up magnitude",
+        "Confidence at 55 was slightly under-calibrated given how precisely the setup mapped onto the Q3 FY23 template (same ticker, same ingredients, same sell-side PT-raise ceiling) — the learner had already labeled this pattern and the predictor hedged rather than leaning in",
+        "Did not model the composition-shift signal as a distinct negative: a reiteration that mathematically requires a big AI raise to offset non-AI cuts is not neutral — it is bearish for the non-AI base and the predictor treated 'reiteration' as a binary rather than decomposing what was needed to produce the reiteration"
+      ],
+      "predictor_lessons": [
+        "For diversified semi-conglomerates, treat a consolidated-guide REITERATION as a raw composition question, not a neutral signal: decompose what the reiteration implies about each segment vs the prior guide. If a big raise in the hyped segment is mathematically required to offset cuts in the unhyped segments, the print is bearish — the non-hyped base is deteriorating faster than priced, and the hyped raise is being consumed rather than flowing to incremental upside",
+        "When a short direction call is driven by a template match (e.g., 'thin beat + reiteration + rallied-into-print') AND the pre-print run-up is extreme (>15% in ≤6 weeks), scale the magnitude range 2-3x wider on the short side (e.g., 3-7% rather than 1.5-4%) because positioning unwinds are nonlinear in run-up magnitude — the standard sell-the-news envelope under-predicts by a factor that grows with pre-print return",
+        "When the current setup maps precisely onto a prior-quarter template that produced an idiosyncratic move, lean IN on confidence rather than hedging: the learner's job is to compound pattern recognition, so a tight match to a labelled prior pattern warrants confidence in the 60-70 range, not 50-55. Hedging against what could go different dilutes the signal that the template already captures"
+      ],
+      "data_lessons": [
+        "Fetch the earnings call transcript OR same-evening Benzinga post-call headline tape for AVGO/TXN/MCHP/ADI/ON prints BEFORE committing a direction. For these diversified-semi names, the prepared-remarks sub-segment FY-guide revisions (broadband, wireless, server-storage, industrial) are the dominant idiosyncratic driver; when the headline guide is reiterated, the sub-segment revisions are the ENTIRE signal. If the transcript is unavailable at prediction time, cap magnitude range at the tight end but widen confidence intervals",
+        "Build an explicit 'pre-print positioning index' feature and weight it in magnitude sizing: 5-week stock return + count of sell-side PT raises in the 10 trading days before filing + any unusual-options flags. When the index is in the top decile (>15% run-up AND ≥4 PT raises), magnitude range should be widened 2-3x on the side of the directional call",
+        "For any 'reiterated' consolidated guide, fetch or reconstruct the SEGMENT-LEVEL prior-guide baseline from the prior 8-K/transcript and compute the implied segment deltas. A reiteration that requires a >20% change in hyped-segment contribution vs prior guide is a composition-shift signal that should be weighted as bearish for the non-hyped segments regardless of the consolidated number"
+      ],
+      "why": "The press release was deliberately anodyne — $50B FY24 held, EPS beat, dividend declared — but the earnings call turned out to be materially worse than the December baseline in three specific ways that only the transcript reveals: broadband FY24 cut by another ~15pp, server storage cut by another ~5-7pp, and the consolidated hold required a +$2.5B AI bucket raise that simultaneously compressed semi GM by 190bps. Against an already-loaded buy-side position (+19% run-up, 5 pre-print PT raises), this composition shift triggered a concentrated positioning unwind. Sell-side PT raises next morning (14+, zero downgrades) confirmed the move was buy-side positioning reset, not a rating/fundamentals downgrade — the exact Q3 FY23 signature now replaying at 1.3x the magnitude because the pre-print rally was 5.5x larger this quarter."
+    }
+  ]
+}
