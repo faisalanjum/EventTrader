@@ -1119,10 +1119,15 @@ Manual single-quarter runs via CLI: `python3 scripts/earnings/earnings_orchestra
      - `bundle_evidence`: 1-sentence citation of what in the current bundle supports the label (or "no relevant evidence")
    - Hard rule: **only `confirmed` lessons may be cited as reasoning in the final call.** `contradicted` and `irrelevant` lessons must be ignored for directional decisions.
 
-2. **`prediction_result.v1` schema extension**:
-   - Add optional top-level field `lesson_labels: [{lesson_id, label, bundle_evidence}]`
-   - Populated by the predictor LLM
-   - Audit data — lets us check label quality post-hoc
+2. **`prediction_result.v1` schema extension — STRUCTURED, not prose**:
+   - Add top-level field `lesson_labels: [{quarter_label, lesson_text_or_id, label, bundle_evidence}]`
+   - `quarter_label`: the source quarter of the lesson (so auditors know which prior quarter's advice is being labeled — e.g., `"Q3_FY2023"`)
+   - `lesson_text_or_id`: the actual lesson string OR a stable identifier that maps back to the lesson text
+   - `label`: **strictly one of** `"confirmed"`, `"contradicted"`, `"irrelevant"` — no synonyms, no freeform values
+   - `bundle_evidence`: 1-sentence citation from the current-quarter bundle that supports the label (or `"no relevant evidence"` for `irrelevant`)
+   - One entry per lesson consumed from `learning_context.ticker_lessons[]` and `learning_context.global_lessons[]`
+   - **Rationale**: the fix's value is not JUST better reasoning — it's that we can INSPECT whether the model is labeling honestly or rubber-stamping everything as `confirmed`. Prose-hidden labels are un-auditable.
+   - Validator enforces the enum on `label` field
 
 3. **Python-side changes**:
    - `finalize_prediction_result()` preserves `lesson_labels` if the LLM wrote it
