@@ -189,6 +189,45 @@ class WriterTests(unittest.TestCase):
         entries = json.loads(path.read_text())["entries"]
         self.assertNotIn("scope_key", entries[0])
 
+    # W9: sector-scope entry stored WITHOUT null-padded related_tickers key.
+    # Amendment 2026-04-17 follow-up: writer mirrors source-observation
+    # key-presence rather than always stamping. Keeps stored shape clean and
+    # honors the schema contract ("MUST NOT be present" on off-scope) in
+    # storage as well as in-transit.
+    def test_W9_sector_entry_omits_related_tickers(self):
+        with self._patch_sector({"AVGO": "Technology"}):
+            path = orch.append_global_lessons(_attribution(globals_=[
+                {"scope": "sector", "target_sector": "Technology", "lesson": "s"},
+            ]))
+        entry = json.loads(path.read_text())["entries"][0]
+        self.assertNotIn("related_tickers", entry,
+                         "sector entry must NOT carry a null-padded related_tickers key")
+        self.assertEqual(entry["target_sector"], "Technology")
+
+    # W10: macro-scope entry stored WITHOUT either routing field.
+    def test_W10_macro_entry_omits_both_routing_fields(self):
+        with self._patch_sector({"AVGO": "Technology"}):
+            path = orch.append_global_lessons(_attribution(globals_=[
+                {"scope": "macro", "lesson": "m"},
+            ]))
+        entry = json.loads(path.read_text())["entries"][0]
+        self.assertNotIn("related_tickers", entry,
+                         "macro entry must NOT carry a null-padded related_tickers key")
+        self.assertNotIn("target_sector", entry,
+                         "macro entry must NOT carry a null-padded target_sector key")
+
+    # W11: cross_ticker-scope entry stored with related_tickers but WITHOUT
+    # a null-padded target_sector key.
+    def test_W11_cross_ticker_entry_omits_target_sector(self):
+        with self._patch_sector({"AVGO": "Technology"}):
+            path = orch.append_global_lessons(_attribution(globals_=[
+                {"scope": "cross_ticker", "related_tickers": ["ROST"], "lesson": "c"},
+            ]))
+        entry = json.loads(path.read_text())["entries"][0]
+        self.assertEqual(entry["related_tickers"], ["ROST"])
+        self.assertNotIn("target_sector", entry,
+                         "cross_ticker entry must NOT carry a null-padded target_sector key")
+
     # Extra: upsert runs even with empty observations (purge stale entries)
     def test_empty_observations_still_purges(self):
         with self._patch_sector({"AVGO": "Technology"}):

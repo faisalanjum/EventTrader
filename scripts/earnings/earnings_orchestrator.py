@@ -2063,18 +2063,26 @@ def append_global_lessons(attribution_result: dict) -> Path | None:
 
     # Enrich each observation with structured routing + audit fields.
     # NOTE: scope_key is DROPPED here — never passed through to global.json.
+    # Routing fields (related_tickers, target_sector) are passed through by
+    # key-presence only, so stored entries don't get null-padded on their
+    # non-owning scopes. The upstream validator + PreToolUse hook guarantee
+    # each routing field appears only on its owning scope before this writer
+    # runs; we simply mirror that contract into storage.
     enriched = []
     for obs in observations:
-        enriched.append({
+        entry = {
             "scope":            obs.get("scope"),
-            "related_tickers":  obs.get("related_tickers"),   # may be None on non-cross_ticker
-            "target_sector":    obs.get("target_sector"),     # may be None on non-sector
             "source_ticker":    src_ticker,
             "source_sector":    _lookup_company_sector(src_ticker),  # audit-only, NOT routing
             "quarter_label":    src_quarter,
             "attributed_at":    attribution_result.get("attributed_at"),
             "lesson":           obs.get("lesson"),
-        })
+        }
+        if "related_tickers" in obs:
+            entry["related_tickers"] = obs["related_tickers"]
+        if "target_sector" in obs:
+            entry["target_sector"] = obs["target_sector"]
+        enriched.append(entry)
 
     path = LEARNINGS_DIR / "global.json"
     path.parent.mkdir(parents=True, exist_ok=True)
