@@ -1218,22 +1218,13 @@ Between STEP 3 (wipe) and completion of STEP 5 (~2–3 hours of sequential re-ru
 
 ## 10. Out of scope / future work
 
-This plan solves **global-lessons routing and storage correctness**. It does NOT address broader questions about whether the learner-predictor loop is net-helpful on prediction quality. Those remain open and are tracked separately:
+This plan solves **global-lessons routing and storage correctness**. It does NOT address broader questions about whether the learner-predictor loop is net-helpful on prediction quality.
 
-- **§11 "labeled lesson consumption" mitigation** (from `learner.md`). Separate PR. Independent of this change. The core fix for template overfit.
-- **Guidance data-freshness fix** (populate `guidance_history.series`). Independent PR, plausibly higher-EV than lesson-routing fixes — predictors on all 15 calibration quarters were inferring guide-vs-consensus from press-release prose because structured guidance was empty.
-- **Fresh WITH-vs-WITHOUT A/B evaluation of learner uplift** post this fix. This plan rebuilds derived data but does NOT define a formal A/B harness. Needed before any claim that "the learner now helps prediction."
-- **Fix `builder_adapters.build_8k_packet` to populate sector at source** — would eliminate `build_prediction_bundle`'s `_lookup_company_sector` fallback. Until fixed, fallback stays.
-- **Industry-level routing** (finer-grained than the 11-sector enum). Requires a new `Industry` node chain. Not needed yet.
-- **Dotted / hyphenated tickers** (`BRK-B`, `BF-B`, etc.). Validator's `_ok_ticker` enforces `.isalpha()` + 1–5 chars, so these shapes are rejected. Not a regression today — such tickers are not in the 796-company universe. If the universe ever expands to class-B/dotted symbols, relax `_ok_ticker` to allow `-` and `.` as intra-symbol punctuation and add corresponding validator tests. Tracked here so the limitation is not invisible.
-- **CI workflow infrastructure**. This plan introduces three test files but there is currently no `.github/workflows/` CI pipeline in the repo. Enforcement is via the pre-commit checklist in §8.1, executed by the operator before merge. Treating these as "CI-enforced" would be over-claiming; the tests exist and must be run pre-commit, but nothing runs them automatically. A follow-up PR to add a minimal `pytest` workflow is the right next step if CI becomes available.
-- **Dual-read migration mode** — explicitly declined. Clean-slate wipe accepted.
-- **Predictor's side of labeled lesson consumption** — separate PR per `learner.md §11`.
-- **Audit of actual learner adherence to the scope-choice rule** — run offline after 2+ weeks of production data (same-sector-eligible lessons written as cross_ticker would be visible via exclusion counters).
-- **PIT correctness audits** — unchanged by this plan; tracked in `learner.md §3`.
-- **Prediction-bundle quality defects** (missing consensus, wrong-horizon reasoning, etc.) — unchanged by this plan.
+**Actionable TODO backlog moved to `learner.md` "Outstanding Follow-Ups / TODO" section (top of file)** — that location is the single canonical source. Items such as the labeled-lesson-consumption mitigation (T1), `guidance_history.series` fix (T2), `build_8k_packet.sector` source fix (T3), fresh A/B (T4), obsidian_thinking.md rename coordination (T5), CI workflow (T7), and every other follow-up originally listed here are now tracked under numbered tiers (🔴 Next up / 🟡 Backlog / 🗑️ Declined) in `learner.md`.
 
-For a full concern-by-concern tracking of the open learner-utility questions, see §12.
+Items DECLINED by this plan (documented here for local-context reference, also in Appendix C): dual-read migration mode, same-sector fallback for cross_ticker, schema version bump for `global_lessons.v1`, concrete worked examples in SKILL.md, keeping `scope_key` as vestigial display field.
+
+For a full concern-by-concern historical audit (C16–C29), see §12.
 
 ---
 
@@ -1305,7 +1296,9 @@ Plus every sector-scope entry written with non-canonical `scope_key` (`semicondu
 
 ---
 
-## 12. Known concerns OUTSIDE the scope of this plan
+## 12. Known concerns OUTSIDE the scope of this plan — historical audit
+
+> **NOTE**: the ACTIONABLE backlog moved to `learner.md` "Outstanding Follow-Ups / TODO" (top of file). This section is preserved as the historical concern audit that informed the priority tiers in that TODO list — i.e., this is the "why" behind T1–T19 in `learner.md`. Individual concerns below map directly to those Ts (T-prefix cross-refs in the right-hand column where applicable).
 
 This plan is narrowly scoped to **routing/storage correctness for global lessons**. A broader earlier review raised numerous concerns about the learner's actual utility for prediction. Many of those are NOT addressed here. This section tracks them explicitly so future readers know what remains open.
 

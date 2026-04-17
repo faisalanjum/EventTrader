@@ -12,6 +12,45 @@
 
 ---
 
+## Outstanding Follow-Ups / TODO
+
+Canonical actionable backlog for the learner subsystem. Supersedes the backlog lists in `learner-edits.md` §10 and §12 (those sections now cross-reference here). Items grouped by priority; detailed designs and rejected-alternatives remain in `learner-edits.md`.
+
+### 🔴 Next up — highest EV, do after §8.3 operator re-run closes
+
+| # | Item | Summary | Where to start |
+|---|---|---|---|
+| T1 | **Template-overfit mitigation — "labeled lesson consumption"** | Predictor labels each prior lesson as `confirmed` / `contradicted` / `irrelevant` with a bundle-evidence citation BEFORE using it in the directional call. Only `confirmed` lessons may influence direction. Directly attacks the empirically-observed 3-of-15-quarter overfit pattern that the routing fix alone cannot solve. | Full design already in this file — §13 Phase 4 subsection "Proposed mitigation for template overfit — labeled lesson consumption". Predictor SKILL.md + additive `lesson_labels[]` field on `prediction_result.v1` + offline audit script. |
+| T2 | **Populate `guidance_history.series`** — structured guidance extraction | 100% of calibration quarters currently have `series = []`; predictor is inferring guide-vs-consensus from press-release prose. Plausibly higher EV than any lesson-routing change: lessons cannot compensate for missing structured fields. | New builder or enrichment on top of existing guidance pipeline. Trace `build_guidance_history` flow; populate `series` from XBRL/transcript/8-K fields. |
+| T3 | **Fix `builder_adapters.build_8k_packet` to populate `sector` at source** | Legacy builder returns `sector=None` on 100% of bundles, making `_lookup_company_sector` fallback in `build_prediction_bundle` load-bearing rather than defensive. | Trace delegation to `warmup_cache.build_8k_packet` and add sector-stamping. When fixed, `_lookup_company_sector` becomes truly optional and can be scoped to the write-side `source_sector` stamp only. |
+
+### 🟡 Backlog — tracked, post-re-run or opportunistic
+
+| # | Item | Summary | Where to start |
+|---|---|---|---|
+| T4 | **Fresh WITH-vs-WITHOUT A/B evaluation** after the full 15-quarter re-run | The current BURL A/B was confounded (Opus 4.6/high vs AVGO/NVDA on 4.7/xhigh). After the §8.3 re-run on unified prod config, re-run the A/B harness for a clean measurement. Required before any claim that "the learner now helps prediction." | `scripts/run_avgo_ab_sequential.py` / `run_nvda_ab_sequential.py` / `run_burl_ab_sequential.py` against the new post-wipe data. |
+| T5 | **obsidian_thinking.md ship coordination** | When that plan lands, it renames `validate_attribution.py` → `validate_learning.py`, `validate_attribution_output.py` → `validate_learning_output.py`, `attribution/` dir → `learning/`, `finalize_attribution_result` → `finalize_learning_result`, etc. | Mechanical ~15-min `sed`-style pass against the rename table in `learner-edits.md` §0. No logical conflict — learner-edits ships first. |
+| T6 | **Predictor-side of labeled consumption** (completes T1) | Strict follow-on to T1 — the predictor emits `lesson_labels[]`, the validator enforces the three-value enum on `label`, and an offline `audit_lesson_labels()` utility flags `confirmed`-rate > 70% as potential rubber-stamping. | Treat as the same PR as T1 (they're one deliverable split across learner + predictor skills). |
+| T7 | **CI workflow — `.github/workflows/`** | Add a minimal `pytest` workflow that runs `test_validate_attribution.py`, `test_learning_context.py`, and `test_canonical_sectors_consistency.py` on every PR. Today's enforcement is pre-commit-checklist-only (operator-dependent). | ~30-line YAML. Low priority until repo starts seeing more contributors. |
+| T8 | **Audit of learner scope-choice adherence** | Offline audit after 2+ weeks of post-migration data: did the learner ever under-route a sector-wide lesson as cross_ticker (would have been sector-eligible but got narrow routing instead)? Exclusion counters in the observability log are the primary signal. | Simple jq/grep over log archive + global.json. Observational, not intervention — unless patterns emerge. |
+| T9 | **Industry-level routing** (finer than the 11-sector enum) | `semiconductors` as a subset of `Technology`, etc. Requires new `Industry` enum + corresponding validator checks. | Deferred until demand emerges. Current granularity is sufficient for 3-ticker calibration. |
+| T10 | **Confidence-drift monitoring** | Track WITH-lessons confidence delta vs WITHOUT per quarter. BURL Q3_2025 flagged this (WITH=62 vs WITHOUT=58 on a wrong call = lessons inflated a losing bet). | Offline script over `prediction_result.v1` files. Most useful after T1 lands. |
+| T11 | **Template-overfit rate monitoring** | After T1 lands and `lesson_labels[]` is populated, track the rate at which prior lessons match a quarter's outcome vs. how often the predictor applies them. High `confirmed`-rate with low hit-rate = rubber-stamping. | Offline audit leveraging T1's structured labels. |
+| T12 | **SKILL.md frontmatter-vs-runtime drift note** | Add one-line note in `.claude/skills/earnings-learner/SKILL.md` clarifying that frontmatter (`model: opus`, `effort: high`) is documentation-only; authoritative runtime source is `config/llm_models.py::LEARNER`. | Trivial prose edit. Prevents future-editor confusion. |
+| T13 | **Hindsight contamination audit** — label-only LLM as alternative | Structural risk: the learner sees the realized return and may construct post-hoc narratives that look predictive but aren't. Separate label-only LLM seeing only `(lesson, bundle)` without the outcome would remove this bias. | Design sketch in §13 Phase 4 "Alternative if labels are dishonest". Reserve for the `>85%` rubber-stamp failure mode. |
+| T14 | **`data_lessons` signal split** | Learner's `data_lessons` currently conflates "fetch X" (bundle-builder work) vs "weight X more" (predictor-reasoning work). These are different interventions. | Split into two fields in `attribution_result.v2`, or route separately at read time. Minor contract tightening. |
+| T15 | **`magnitude_error_pct` semantics for `no_call`** | SKILL.md says use `\|actual_daily_stock_pct\|` when predicted_direction is `no_call`; validator doesn't enforce. | Add validator branch. Rare code path. |
+| T16 | **Dotted / hyphenated tickers** (`BRK-B`, `BF-B`) | Validator's `_ok_ticker` rejects them via `.isalpha()`. Not in 796-universe today. | Relax `_ok_ticker` if universe expands. |
+| T17 | **Thinking-token capture for audit** | Enable `include_partial_messages=True` on SDK options to capture extended-thinking blocks for label-honesty auditing (most useful post-T1). | One SDK-option flip + a capture pipeline. Non-blocking. |
+| T18 | **PIT tier-3 non-stationarity** | Most-recent-quarter learner uses `invocation_time` cutoff → re-running an old last-quarter at a different time yields different attribution. Design tradeoff documented in §3. | Revisit only if observed downstream effect emerges. |
+| T19 | **Lesson refinement vs replacement (predictor-side)** | ticker.json is upsert-by-quarter now, but predictor still sees older-but-preserved lessons alongside newer corrective ones. Instruct predictor (in SKILL.md) to prefer newer corrective lessons when they reference the same mechanism. | Predictor SKILL.md instruction, adjacent to T1. |
+
+### 🗑️ Declined — documented in `learner-edits.md` Appendix C
+
+For the record (not actionable): same-sector fallback for cross_ticker routing, dual-read migration mode, concrete worked examples in SKILL.md, keeping `scope_key` as vestigial display field, schema version bump for `global_lessons.v1`→v2. See `learner-edits.md` Appendix C for the full rationale per rejected alternative.
+
+---
+
 ## Calibration Artifacts Index (session of 2026-04-16 / 2026-04-17)
 
 Navigation aid for reviewing every prediction + attribution pair produced in this session across 3 tickers × 5 quarters = **15 quarter-level A/B runs**.
