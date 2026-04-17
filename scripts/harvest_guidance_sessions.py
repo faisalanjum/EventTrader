@@ -316,7 +316,13 @@ def derive_quarter_label_for_guidance(
             )
             if not rows:
                 return None
-            return _normalize_fq_fy(rows[0].get("fq"), rows[0].get("fy"))
+            direct = _normalize_fq_fy(rows[0].get("fq"), rows[0].get("fy"))
+            if direct:
+                return direct
+            # Fallback — derive via periodOfReport + Company FYE month + period_to_fiscal.
+            # Needed when the XBRL-populated fiscal_quarter/fiscal_year fields are NULL
+            # (rare but observed on some 10-Q / 10-K Report nodes).
+            return _derive_via_period_to_fiscal(mgr, source_id)
 
         if asset == "transcript":
             rows = mgr.execute_cypher_query_all(
@@ -331,6 +337,37 @@ def derive_quarter_label_for_guidance(
         return None  # unrecognized asset
     except Exception as e:
         log.debug("Quarter derivation failed for %s/%s: %s", asset, source_id, e)
+        return None
+
+
+def _derive_via_period_to_fiscal(mgr, source_id: str) -> str | None:
+    """Fallback for 10-Q/10-K when Report.fiscal_quarter/fiscal_year are NULL.
+
+    Queries periodOfReport + formType + Company.fiscal_year_end_month, then
+    calls the shared ``period_to_fiscal`` helper from fiscal_math.py. Returns
+    ``"Q{n}_FY{YYYY}"`` or ``None`` if any piece is missing.
+    """
+    try:
+        rows = mgr.execute_cypher_query_all(
+            "MATCH (r:Report {id: $sid})-[:PRIMARY_FILER]->(c:Company) "
+            "RETURN r.periodOfReport AS por, r.formType AS ft, "
+            "       c.fiscal_year_end_month AS fye_m",
+            {"sid": source_id},
+        )
+        if not rows:
+            return None
+        por = rows[0].get("por")
+        ft = rows[0].get("ft")
+        fye_m = rows[0].get("fye_m")
+        if not por or not ft or not fye_m:
+            return None
+        from datetime import date
+        d = date.fromisoformat(str(por)[:10])
+        from fiscal_math import period_to_fiscal  # lazy import
+        fy, q_label = period_to_fiscal(d.year, d.month, d.day, int(fye_m), ft)
+        return f"{q_label}_FY{fy}"
+    except Exception as e:
+        log.debug("period_to_fiscal fallback failed for %s: %s", source_id, e)
         return None
 
 
@@ -432,6 +469,31 @@ def _get_neo4j_manager_best_effort():
         return None
 
 
+def _ensure_mgr(current_mgr):
+    """Self-healing Neo4j manager: if current_mgr is None, attempt recovery.
+
+    Called before each harvest in --watch mode so the daemon heals after a
+    transient Neo4j outage at startup without needing a service restart.
+    Returns whatever the factory produces (may still be None if Neo4j is
+    truly unavailable — caller then gracefully degrades to ``skipped_no_quarter``).
+    """
+    if current_mgr is not None:
+        return current_mgr
+    return _get_neo4j_manager_best_effort()
+
+
+# Exit code map for cmd_one (Finding 3 — ChatGPT 2026-04-17):
+# make exit status meaningful so manual verification is trustworthy.
+_STATUS_EXIT_CODES: dict[str, int] = {
+    "harvested": 0,                   # success
+    "skipped_already_harvested": 0,   # idempotent no-op = success
+    "skipped_incomplete": 2,          # session still in progress
+    "skipped_not_guidance": 3,        # not a /extract guidance session
+    "skipped_no_quarter": 4,          # Neo4j unavailable / data missing (actionable)
+    "error": 1,                       # real failure
+}
+
+
 def cmd_scan(args: argparse.Namespace) -> int:
     """--scan: one-shot reconciliation over recent top-level JSONLs."""
     projects_root = Path(args.projects_root)
@@ -499,7 +561,7 @@ def cmd_one(args: argparse.Namespace) -> int:
         mgr=mgr,
     )
     log.info("harvest_one_session status: %s", status)
-    return 0
+    return _STATUS_EXIT_CODES.get(status, 1)
 
 
 def cmd_watch(args: argparse.Namespace) -> int:
@@ -570,6 +632,11 @@ def cmd_watch(args: argparse.Namespace) -> int:
             ready = [p for p, t in pending.items() if (now - t) >= debounce]
             for p in ready:
                 pending.pop(p, None)
+                # Self-healing mgr (ChatGPT Finding 2) — if Neo4j was down
+                # at daemon startup or dropped afterward, re-attempt before
+                # each harvest. Keeps the watcher functional across transient
+                # Neo4j outages without needing a service restart.
+                mgr = _ensure_mgr(mgr)
                 status = harvest_one_session(
                     jsonl_path=p, vault_root=vault_root,
                     projects_root=projects_root, mgr=mgr,

@@ -383,6 +383,124 @@ def test_derive_quarter_mgr_none_returns_none():
     assert derive_quarter_label_for_guidance(None, "8k", "id") is None
 
 
+# ── Finding 1 (ChatGPT 2026-04-17): 10-Q/10-K period_to_fiscal fallback ──
+
+def test_derive_quarter_10q_falls_back_to_period_to_fiscal_when_fq_null(monkeypatch):
+    """If Report.fiscal_quarter is NULL, derive via periodOfReport + FYE month + period_to_fiscal."""
+    from harvest_guidance_sessions import derive_quarter_label_for_guidance
+
+    mgr = MagicMock()
+    # First call: direct fq/fy query → NULL. Fallback reads por + ft + fye_m.
+    mgr.execute_cypher_query_all.side_effect = [
+        [{"fq": None, "fy": None}],                           # direct call
+        [{"por": "2024-07-31", "ft": "10-Q", "fye_m": 1}],    # fallback lookup
+    ]
+    # Patch period_to_fiscal to avoid needing the real fiscal_math module
+    fake_mod = type(sys)("fiscal_math")
+    fake_mod.period_to_fiscal = lambda y, m, d, fye, ft: (2024, "Q2")
+    monkeypatch.setitem(sys.modules, "fiscal_math", fake_mod)
+
+    assert derive_quarter_label_for_guidance(mgr, "10q", "acc") == "Q2_FY2024"
+
+
+def test_derive_quarter_10k_falls_back_to_period_to_fiscal_when_fq_null(monkeypatch):
+    from harvest_guidance_sessions import derive_quarter_label_for_guidance
+    mgr = MagicMock()
+    mgr.execute_cypher_query_all.side_effect = [
+        [{"fq": None, "fy": None}],
+        [{"por": "2024-01-31", "ft": "10-K", "fye_m": 1}],
+    ]
+    fake_mod = type(sys)("fiscal_math")
+    fake_mod.period_to_fiscal = lambda y, m, d, fye, ft: (2023, "Q4")
+    monkeypatch.setitem(sys.modules, "fiscal_math", fake_mod)
+
+    assert derive_quarter_label_for_guidance(mgr, "10k", "acc") == "Q4_FY2023"
+
+
+def test_derive_quarter_10q_fallback_returns_none_when_por_missing():
+    """If fq/fy NULL AND periodOfReport is also NULL → give up."""
+    from harvest_guidance_sessions import derive_quarter_label_for_guidance
+    mgr = MagicMock()
+    mgr.execute_cypher_query_all.side_effect = [
+        [{"fq": None, "fy": None}],
+        [{"por": None, "ft": "10-Q", "fye_m": 1}],
+    ]
+    assert derive_quarter_label_for_guidance(mgr, "10q", "acc") is None
+
+
+def test_derive_quarter_10q_fallback_returns_none_when_fye_missing():
+    """If fq/fy NULL AND Company.fiscal_year_end_month is NULL → give up."""
+    from harvest_guidance_sessions import derive_quarter_label_for_guidance
+    mgr = MagicMock()
+    mgr.execute_cypher_query_all.side_effect = [
+        [{"fq": None, "fy": None}],
+        [{"por": "2024-07-31", "ft": "10-Q", "fye_m": None}],
+    ]
+    assert derive_quarter_label_for_guidance(mgr, "10q", "acc") is None
+
+
+# ── Finding 2 (ChatGPT): watch mode mgr self-healing ──────────────────────
+
+def test_ensure_mgr_returns_existing_when_non_none():
+    from harvest_guidance_sessions import _ensure_mgr
+    existing = MagicMock()
+    assert _ensure_mgr(existing) is existing
+
+
+def test_ensure_mgr_reattempts_when_none(monkeypatch):
+    """If current mgr is None, call the factory to attempt recovery."""
+    from harvest_guidance_sessions import _ensure_mgr
+    call_count = [0]
+    def _fake_factory():
+        call_count[0] += 1
+        return MagicMock(name="recovered")
+    monkeypatch.setattr("harvest_guidance_sessions._get_neo4j_manager_best_effort",
+                        _fake_factory)
+    result = _ensure_mgr(None)
+    assert result is not None
+    assert call_count[0] == 1
+
+
+def test_ensure_mgr_returns_none_when_factory_also_fails(monkeypatch):
+    from harvest_guidance_sessions import _ensure_mgr
+    monkeypatch.setattr("harvest_guidance_sessions._get_neo4j_manager_best_effort",
+                        lambda: None)
+    assert _ensure_mgr(None) is None
+
+
+# ── Finding 3 (ChatGPT): cmd_one exit codes reflect actual status ─────────
+
+@pytest.mark.parametrize("status,expected_exit", [
+    ("harvested", 0),
+    ("skipped_already_harvested", 0),  # idempotent no-op = success
+    ("skipped_incomplete", 2),         # session still in progress
+    ("skipped_not_guidance", 3),       # not a guidance session
+    ("skipped_no_quarter", 4),         # Neo4j unavailable / data missing
+    ("error", 1),                      # real failure
+])
+def test_cmd_one_exit_codes_reflect_status(tmp_path, monkeypatch, status, expected_exit):
+    from harvest_guidance_sessions import cmd_one
+
+    projects = tmp_path / "projects"
+    projects.mkdir()
+    sid = "test-sid"
+    (projects / f"{sid}.jsonl").write_text("{}\n")
+
+    monkeypatch.setattr("harvest_guidance_sessions.harvest_one_session",
+                        lambda **kw: status)
+
+    args = argparse.Namespace(
+        session_id=sid, projects_root=projects, vault_root=tmp_path / "vault",
+    )
+    try:
+        rc = cmd_one(args)
+    except SystemExit as e:
+        rc = e.code
+    assert rc == expected_exit, (
+        f"status={status} expected_exit={expected_exit} got={rc}"
+    )
+
+
 # ── 5. harvest_one_session — orchestration for a single session ──────────
 
 def _write_guidance_jsonl_complete(path: Path, ticker, asset, source_id, *, mode="write"):
