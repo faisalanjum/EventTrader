@@ -12,6 +12,96 @@
 
 ---
 
+## Calibration Artifacts Index (session of 2026-04-16 / 2026-04-17)
+
+Navigation aid for reviewing every prediction + attribution pair produced in this session across 3 tickers × 5 quarters = **15 quarter-level A/B runs**.
+
+**Path convention** (relative to repo root): `earnings-analysis/Companies/{TICKER}/events/{QUARTER}/`
+
+For each quarter, three artifact kinds exist:
+
+| Kind | Relative path inside quarter dir | What it contains |
+|---|---|---|
+| **WITH-lessons prediction** | `prediction/result.json` | predictor output using the prior lessons bundle |
+| **WITHOUT-lessons prediction** (A/B baseline) | `prediction/ab_baseline/result_NO_LESSONS.json` | re-predicted with `learning_context` blanked |
+| **Attribution / learner output** | `attribution/result.json` | post-event causal diagnosis; source of new lessons |
+| Context bundle (input to predictor) | `prediction/context_bundle.json` + `context_bundle_rendered.txt` | what the predictor read |
+
+### AVGO — Opus 4.7 + `effort=xhigh` — 5 quarters
+
+| Q | Actual daily | WITH | WITHOUT | Notable |
+|---|---|---|---|---|
+| Q1_FY2023 | +5.54% (long) | short(42) ✗ | no_call(28) ✗ | both wrong; first quarter, no ticker lessons yet |
+| Q2_FY2023 | +2.87% (long) | long(52) ✓ | short(58) ✗ | lessons helped (DIFF) |
+| Q3_FY2023 | −5.38% (short) | long(40) ✗ | short(58) ✓ | **template overfit** (AVGO ticker lesson from Q1/Q2 over-applied) |
+| Q4_FY2023 | +2.61% (long) | long(65) ✓ | long(62) ✓ | both right |
+| Q1_FY2024 | −6.99% (short) | short(55) ✓ | short(48) ✓ | both right |
+
+**A/B result**: WITH 3/5 (60%), WITHOUT 3/5 (60%), Delta 0. Summary: `earnings-analysis/test-outputs/ab_baseline_AVGO.json`
+
+### NVDA — Opus 4.7 + `effort=xhigh` — 5 quarters
+
+| Q | Actual daily | WITH | WITHOUT | Notable |
+|---|---|---|---|---|
+| Q4_FY2023 | +14.02% (long) | long(68) ✓ | long(62) ✓ | SAME |
+| Q1_FY2024 | +24.37% (long) | long(82) ✓ | long(82) ✓ | IDENTICAL confidence |
+| Q2_FY2024 | +0.08% (long) | long(72) ✓ | long(62) ✓ | direction right, magnitude overshot |
+| Q3_FY2024 | −2.46% (short) | long(45) ✗ | long(58) ✗ | both wrong (SAME — bundle misread, not lesson overfit) |
+| Q4_FY2024 | +16.40% (long) | long(70) ✓ | long(72) ✓ | SAME |
+
+**A/B result**: WITH 4/5 (80%), WITHOUT 4/5 (80%), Delta 0. Summary: `earnings-analysis/test-outputs/ab_NVDA.json`
+
+### BURL — Opus 4.6 + `effort=high` — 5 quarters (most recent 5 events)
+
+| Q | Actual daily | WITH | WITHOUT | Notable |
+|---|---|---|---|---|
+| Q4_FY2024 | +8.54% (long) | short(55) ✗ | short(55) ✗ | SAME — bundle misread (guide-below-consensus dominated) |
+| Q1_FY2025 | −4.54% (short) | long(52) ✗ | short(55) ✓ | **template overfit** (Q4 "compressed spring" lesson over-applied) |
+| Q2_FY2025 | +5.28% (long) | long(58) ✓ | long(55) ✓ | SAME |
+| Q3_FY2025 | −12.16% (short) | long(62) ✗ | long(58) ✗ | SAME — tail miss, both fooled by sandbagging analog |
+| Q4_FY2025 | +6.72% (long) | long(68) ✓ | long(62) ✓ | SAME |
+
+**A/B result**: WITH 2/5 (40%), WITHOUT 3/5 (60%), Delta −1. Summary: `earnings-analysis/test-outputs/ab_BURL.json`
+
+### Cross-run totals
+
+- **WITH lessons**: 9/15 correct (60%)
+- **WITHOUT lessons**: 10/15 correct (67%)
+- **Delta**: −1 — break-even-to-slightly-negative at n=15; within LLM variance
+
+### Ticker lesson banks (accumulated across sequential runs)
+
+| Path | Description |
+|---|---|
+| `earnings-analysis/learnings/ticker/AVGO.json` | 5 lessons accumulated over AVGO A/B |
+| `earnings-analysis/learnings/ticker/NVDA.json` | 5 lessons accumulated over NVDA A/B |
+| `earnings-analysis/learnings/ticker/BURL.json` | 5 lessons accumulated over BURL A/B |
+| `earnings-analysis/learnings/global.json` | Cross-ticker lessons (observations marked `affects_all_tickers: true`) |
+
+### Config used per run (for reviewer context)
+
+| Ticker | Dates run | SDK | Model | Effort | Notes |
+|---|---|---|---|---|---|
+| AVGO | 2026-04-16 | `claude-agent-sdk==0.1.44` | `claude-opus-4-7` | `xhigh` | Used `cli_path=<system CLI v2.1.112>` workaround |
+| NVDA | 2026-04-16 | `claude-agent-sdk==0.1.44` | `claude-opus-4-7` | `xhigh` | Same workaround as AVGO |
+| BURL | 2026-04-16 | `claude-agent-sdk==0.1.44` | `claude-opus-4-6` | `high` | Briefly reverted to 4.6 before SDK upgrade |
+| **Current prod** | 2026-04-17 onward | `claude-agent-sdk==0.1.61` | `claude-opus-4-7` | `xhigh` | Bundled CLI v2.1.112; no workaround needed |
+
+### Known-finding flags for quick navigation
+
+- **Template-overfit cases** (reference for "labeled lesson consumption" mitigation decision in §10):
+  - AVGO Q3_FY2023 — `Companies/AVGO/events/Q3_FY2023/attribution/result.json`
+  - BURL Q1_FY2025 — `Companies/BURL/events/Q1_FY2025/attribution/result.json`
+- **Learner self-correction examples** (quarter after an overfit where the learner scoped the prior rule):
+  - AVGO Q4_FY2023 lesson scoping the Q1/Q2 AI-narrative template
+  - BURL Q2_FY2025 lesson scoping the Q4 "compressed spring" rule to clean-beats only
+
+### Caveat (read before drawing conclusions)
+
+All 15 quarters had **`guidance_history.series = []`** (structured guidance extraction not yet populated). The predictor had to infer guide-vs-consensus deltas from free-text press releases rather than structured fields. Fixing this is likely higher-EV than any lesson-consumption mitigation. See §11 "Proposed mitigation for template overfit" for the design of the mitigation before implementation.
+
+---
+
 ## 1. Purpose
 
 The earnings learner (`/earnings-learner`) is the post-event causal attribution module. It explains **why** a stock moved after an 8-K earnings filing, compares the realized move against the prediction, and produces reusable lessons that improve future predictions.
