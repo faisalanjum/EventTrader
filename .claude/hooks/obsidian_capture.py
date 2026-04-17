@@ -54,104 +54,29 @@ tags = list(dict.fromkeys(tags))
 
 # --- Helpers ---
 
-def _clean_tool_result(text):
-    """Strip MCP envelope, clean persisted-output refs, mark errors."""
-    # Strip MCP envelope: {"result":[{"type":"text","text":"ACTUAL",...}]}
-    try:
-        parsed = json.loads(text)
-        if isinstance(parsed, dict) and 'result' in parsed:
-            inner = parsed['result']
-            if isinstance(inner, list) and inner and isinstance(inner[0], dict):
-                text = inner[0].get('text', text)
-    except (json.JSONDecodeError, KeyError, IndexError, TypeError):
-        pass
-    # Handle <persisted-output> — replace with size note
-    po = re.search(r'<persisted-output>\s*Output too large \(([^)]+)\)', text)
-    if po:
-        return f'[output too large \u2014 {po.group(1)}]'
-    # Handle <tool_use_error> — mark with prefix
-    if '<tool_use_error>' in text:
-        err = re.search(r'<tool_use_error>(.*?)</tool_use_error>', text, re.DOTALL)
-        return f'ERROR: {err.group(1).strip()}' if err else text
-    return text
-
-
 def _downgrade_headings(text):
     """Shift #/##/### headings down 3 levels so agent text doesn't break note outline."""
     return re.sub(r'^(#{1,3}) ', lambda m: '#' * (len(m.group(1)) + 3) + ' ', text, flags=re.MULTILINE)
 
 
-# --- Extract all blocks from agent's own transcript ---
-# TODO (2026-04-17): Phase 9 (d) of obsidian_thinking.md calls for this inline
-# parsing loop to be replaced with `from scripts.earnings.thinking_blocks import
-# parse_session_blocks` while preserving the tool_use↔tool_result pairing
-# logic below. Deferred to a follow-up commit because the hook's output shape
-# has downstream consumers (Obsidian notes) and a full behavior-preserving
-# refactor needs its own regression test. The harvester (which is the
-# load-bearing consumer of the plan) already uses parse_session_blocks.
-thinking_blocks = []
-text_blocks = []
-tool_blocks = []  # each entry: {text, ts, result}
-total_thinking_chars = 0
-_pending_calls = {}  # tool_use id -> index in tool_blocks
+# --- Extract all blocks from agent's own transcript via shared adapter ---
+# Phase 9(d) of obsidian_thinking.md — the inline parse loop was extracted
+# into scripts/earnings/obsidian_capture_adapter.parse_transcript_for_hook()
+# which internally delegates to scripts/earnings/thinking_blocks.parse_session_blocks
+# (with preserve_file_order=True to match legacy pairing semantics).
+# Zero behaviour change: see scripts/earnings/test_obsidian_capture_adapter.py
+# for the frozen baselines.
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_EARNINGS_DIR = os.path.join(_REPO_ROOT, 'scripts', 'earnings')
+if _EARNINGS_DIR not in sys.path:
+    sys.path.insert(0, _EARNINGS_DIR)
+from obsidian_capture_adapter import parse_transcript_for_hook  # noqa: E402
 
-if agent_transcript and os.path.exists(agent_transcript):
-    try:
-        with open(agent_transcript) as f:
-            for line in f:
-                try:
-                    entry = json.loads(line)
-                    etype = entry.get('type')
-                    ts = entry.get('timestamp', '')
-                    if etype == 'assistant':
-                        content = entry.get('message', {}).get('content', [])
-                        if not isinstance(content, list):
-                            continue
-                        for block in content:
-                            if not isinstance(block, dict):
-                                continue
-                            btype = block.get('type')
-                            if btype == 'thinking':
-                                text = block.get('thinking', '')
-                                total_thinking_chars += len(text)
-                                thinking_blocks.append({'text': text, 'ts': ts})
-                            elif btype == 'text':
-                                text = block.get('text', '').strip()
-                                if text:
-                                    text_blocks.append({'text': text, 'ts': ts})
-                            elif btype == 'tool_use':
-                                name = block.get('name', 'unknown')
-                                call_id = block.get('id', '')
-                                inp = block.get('input', {})
-                                if name == 'Bash':
-                                    summary = f"{name}: {inp.get('command', '')[:500]}"
-                                else:
-                                    summary = f"{name}({json.dumps(inp)[:500]})"
-                                tool_blocks.append({'text': summary, 'ts': ts, 'result': None})
-                                if call_id:
-                                    _pending_calls[call_id] = len(tool_blocks) - 1
-                    elif etype == 'user':
-                        content = entry.get('message', {}).get('content', [])
-                        if not isinstance(content, list):
-                            continue
-                        for block in content:
-                            if isinstance(block, dict) and block.get('type') == 'tool_result':
-                                call_id = block.get('tool_use_id', '')
-                                result_content = block.get('content', '')
-                                if isinstance(result_content, list):
-                                    result_content = ' '.join(
-                                        c.get('text', '') for c in result_content if isinstance(c, dict)
-                                    )
-                                text = _clean_tool_result(str(result_content))[:2000]
-                                # Pair with its tool_use call
-                                if call_id and call_id in _pending_calls:
-                                    tool_blocks[_pending_calls[call_id]]['result'] = text
-                                elif text.strip():
-                                    tool_blocks.append({'text': f'\u21b3 {text}', 'ts': ts, 'result': None})
-                except:
-                    continue
-    except:
-        pass
+_hb = parse_transcript_for_hook(agent_transcript)
+thinking_blocks = _hb.thinking
+text_blocks = _hb.text
+tool_blocks = _hb.tool
+total_thinking_chars = _hb.total_thinking_chars
 
 # Fiscal quarter extraction — scans output + full transcript (text blocks + tool results).
 # Primary agents have "Q2 FY2026" in output. Enrichment agents have "fiscal_quarter": 2 in Neo4j results.

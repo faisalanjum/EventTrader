@@ -35,14 +35,29 @@ from typing import Any
 BlockKind = str  # Literal["thinking","thinking_redacted","text","tool_use","tool_result"]
 
 
-def parse_session_blocks(jsonl_path: Path) -> list[dict[str, Any]]:
+def parse_session_blocks(
+    jsonl_path: Path,
+    *,
+    preserve_file_order: bool = False,
+) -> list[dict[str, Any]]:
     """Parse a Claude Agent SDK session JSONL into an ordered list of Blocks.
 
     Args:
         jsonl_path: Path to the session .jsonl file (primary OR subagent).
+        preserve_file_order: When True, return blocks in strict JSONL file
+            order (skipping the default timestamp sort). Required by
+            ``.claude/hooks/obsidian_capture.py`` (via the adapter) because
+            its legacy tool_use↔tool_result pairing relies on encountering
+            tool_use BEFORE tool_result in file order. Harvester callers keep
+            the default (timestamp-sorted) because they need deterministic
+            time order, not SDK-write order.
 
     Returns:
-        List of Block dicts ordered by timestamp. Malformed lines are skipped.
+        List of Block dicts. Order depends on ``preserve_file_order``:
+            - False (default): ordered by timestamp (stable within ties).
+            - True: ordered by JSONL line position, then by within-entry
+              block position.
+        Malformed lines are skipped.
 
     Raises:
         FileNotFoundError: If the path does not exist.
@@ -142,6 +157,7 @@ def parse_session_blocks(jsonl_path: Path) -> list[dict[str, Any]]:
                             },
                         })
 
-    # Stable timestamp sort — entries with empty ts fall at the start.
-    blocks.sort(key=lambda b: b["ts"])
+    if not preserve_file_order:
+        # Stable timestamp sort — entries with empty ts fall at the start.
+        blocks.sort(key=lambda b: b["ts"])
     return blocks
