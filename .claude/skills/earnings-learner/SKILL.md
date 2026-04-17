@@ -53,7 +53,7 @@ Write ONE file: `attribution/result.json` at `RESULT_PATH`. Schema `attribution_
 - `primary_driver`: `{summary, category, evidence_refs}`
 - `contributing_factors`: array max 3, same shape. Can be `[]`
 - `feedback`: nested block (see below)
-- `global_observations`: array max 3 of `{scope, scope_key, lesson}`. Can be `[]`
+- `global_observations`: array max 3. Each entry is scope-conditional: `{scope:"sector", target_sector, lesson}` OR `{scope:"macro", lesson}` OR `{scope:"cross_ticker", related_tickers, lesson}`. **Do NOT emit `scope_key`** — see the Global observations section below. Can be `[]`
 - `missing_inputs`: array of strings. Can be `[]`
 - `data_sources_used`: array of agent/source names queried
 - `context_bundle_ref`: always `"prediction/context_bundle.json"` (canonical relative path, not the absolute INPUTS path)
@@ -83,7 +83,62 @@ Free-form snake_case label for the reaction mechanism. Use familiar labels when 
 
 ### Global observations
 
-0-3 entries. Each: `{scope, scope_key, lesson}`. Scope: `"sector"` / `"macro"` / `"cross_ticker"`. Write only generalizable cross-ticker insights. Keep `lesson` to 1-2 sentences.
+0–3 entries per attribution. Each entry has exactly `scope`, `lesson` (1–2 sentences), and the scope-specific routing field below. **Do NOT emit `scope_key` — the field has been removed from the schema; the validator rejects it across every scope.**
+
+**Canonical sector enum** — `target_sector` MUST be exactly one of these 11 values (case- and whitespace-sensitive):
+
+```
+Technology
+Healthcare
+ConsumerCyclical
+Industrials
+FinancialServices
+ConsumerDefensive
+RealEstate
+Energy
+BasicMaterials
+CommunicationServices
+Utilities
+```
+
+**Per-scope field rules:**
+
+| scope | REQUIRED extra field | MUST NOT be present |
+|---|---|---|
+| `"sector"` | `target_sector` (one of the 11 canonical labels above) | `related_tickers`, `scope_key` |
+| `"cross_ticker"` | `related_tickers` (non-empty list of UPPERCASE alphabetic tickers, 1–5 chars each, max 8, no duplicates) | `target_sector`, `scope_key` |
+| `"macro"` | — | `related_tickers`, `target_sector`, `scope_key` |
+
+**Shape examples — field layout ONLY. Do NOT copy the placeholder phrasings.** Every `lesson` string must be generated from THIS quarter's specific evidence (primary driver, evidence ledger, actual return). A lesson that could have been written for a different company, sector, or quarter is too generic. A lesson that reuses any noun phrase from these placeholders is mechanical pattern-matching, not attribution. The placeholders below show length, structure, and what KIND of content belongs in each slot — they do NOT show valid output.
+
+```json
+{
+  "scope": "sector",
+  "target_sector": "<one of the 11 canonical values listed above>",
+  "lesson": "<1-2 sentences describing a causal mechanism observed in THIS quarter that plausibly generalizes to peers in target_sector; must be grounded in cited evidence, not boilerplate>"
+}
+```
+
+```json
+{
+  "scope": "cross_ticker",
+  "related_tickers": ["<TICKER_A>", "<TICKER_B>"],
+  "lesson": "<1-2 sentences explaining why THIS quarter's result ties these specific tickers together; the lesson should NOT apply to unrelated tickers — if it does, choose scope=sector instead>"
+}
+```
+
+```json
+{
+  "scope": "macro",
+  "lesson": "<1-2 sentences; a regime-level observation that genuinely applies across sectors and is evidenced in THIS quarter's data, not a generic market truism>"
+}
+```
+
+**Scope-choice rule (mandatory):**
+- Use `cross_ticker` ONLY when the lesson is about specific named tickers. The lesson will only flow to those tickers' future predictions.
+- Use `sector` when the lesson generalizes across a whole sector — every future company in `target_sector` receives it.
+- Use `macro` for regime-wide observations that apply to every future prediction regardless of sector.
+- Sector-generalizable lessons written as `cross_ticker` are under-routed; prefer `sector` scope for broad lessons. There is NO same-sector fallback for cross_ticker — the routing is strict on `related_tickers` membership only.
 
 ---
 

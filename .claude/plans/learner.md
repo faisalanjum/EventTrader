@@ -23,7 +23,7 @@ For each quarter, three artifact kinds exist:
 | Kind | Relative path inside quarter dir | What it contains |
 |---|---|---|
 | **WITH-lessons prediction** | `prediction/result.json` | predictor output using the prior lessons bundle |
-| **WITHOUT-lessons prediction** (A/B baseline) | `prediction/ab_baseline/result_NO_LESSONS.json` | re-predicted with `learning_context` blanked |
+| **WITHOUT-lessons prediction** (A/B baseline) | `experiments/prediction_no_lessons/result.json` | re-predicted with `learning_context` blanked |
 | **Attribution / learner output** | `attribution/result.json` | post-event causal diagnosis; source of new lessons |
 | Context bundle (input to predictor) | `prediction/context_bundle.json` + `context_bundle_rendered.txt` | what the predictor read |
 
@@ -415,15 +415,17 @@ The learner should investigate exhaustively within its max_turns guardrail (40-5
   "global_observations": [
     {
       "scope": "sector",
-      "scope_key": "Technology",
-      "lesson": "Tariff cost quantification dominated tech reactions in Q1 FY2025 — first-time management disclosures of cost magnitude were primary drivers"
+      "target_sector": "Technology",
+      "lesson": "..."
     },
     {
       "scope": "macro",
-      "scope_key": "trade_tensions",
-      "lesson": "During elevated trade tensions, forward cost guidance dominates backward EPS beats by ~2x in attribution weight"
+      "lesson": "..."
     }
   ],
+  // Amended 2026-04-17: scope_key REMOVED; routing is via target_sector
+  // (sector scope) or related_tickers (cross_ticker scope). Shape-only
+  // placeholder `lesson` text per learner-edits.md §6.7 — do not copy.
 
   "missing_inputs": ["10-K"],
 
@@ -452,7 +454,7 @@ The learner should investigate exhaustively within its max_turns guardrail (40-5
 | `primary_driver` | Yes | `summary` (free text) + `category` (snake_case string, see below) + `evidence_refs` (array of ledger IDs). Drivers may cite current-quarter filings, prior-quarter filings, peer returns, transcript passages, predictor context bundle evidence, and post-event coverage — but every cited claim must resolve to a ledger ID. |
 | `contributing_factors` | Yes | Array (max 3, same shape as primary_driver). Can be `[]`. |
 | `feedback` | Yes | Nested block — see below |
-| `global_observations` | Yes | Array (max 3) of `{scope, scope_key, lesson}` for cross-ticker learning. Can be `[]`. Python extracts these and appends to `global.json`. |
+| `global_observations` | Yes | Array (max 3), scope-conditional shape per `.claude/plans/learner-edits.md` §4.1: `{scope:"sector", target_sector, lesson}` / `{scope:"macro", lesson}` / `{scope:"cross_ticker", related_tickers, lesson}`. `scope_key` REMOVED (amendment 2026-04-17 — validator rejects). Can be `[]`. Python upserts these into `global.json` by `(source_ticker, quarter_label)`. |
 | `missing_inputs` | Yes | Array of canonical strings. Can be `[]`. |
 | `data_sources_used` | Yes | Array of agent names actually queried |
 | `context_bundle_ref` | Yes | Relative path to prediction's context bundle |
@@ -595,52 +597,58 @@ Q4 writes: "China revenue requires 4-quarter trend analysis — deceleration
 
 ## 8. Global Lessons: `learnings/global.json`
 
-**File path**: `earnings-analysis/learnings/global.json`
-**Write mode**: Append-only. The learner does NOT write this file directly. The orchestrator Python extracts `global_observations[]` from `attribution/result.json`, enriches each entry with `source_ticker`, `quarter_label`, and `attributed_at` from the result metadata, and atomically appends to this file. This prevents data loss from concurrent ticker processing.
-**Read-time cap**: `build_learning_context()` selects the most recent **10 entries** filtered by relevance to the current ticker's sector.
+> **AMENDED 2026-04-17** — the schema below reflects the **structured-routing** contract from `.claude/plans/learner-edits.md`. `scope_key` has been removed; routing is by `target_sector` (sector scope) or `related_tickers` (cross_ticker scope). See `learner-edits.md` §4 for the full authoritative schema and §6.2 for the writer semantics.
 
-### Schema
+**File path**: `earnings-analysis/learnings/global.json`
+**Write mode**: Upsert-by-`(source_ticker, quarter_label)` (amendment 2026-04-17 — was "append-only"). The learner does NOT write this file directly. The orchestrator Python extracts `global_observations[]` from `attribution/result.json`, enriches each entry with `source_ticker`, `source_sector` (Neo4j lookup), `quarter_label`, and `attributed_at`, and atomically upserts to this file. The upsert purges any prior entries for the same `(source_ticker, quarter_label)` before extending — idempotent under derived-write recovery or any re-run. Concurrency-safe via `fcntl.flock`.
+**Read-time cap**: `build_learning_context()` selects up to **4 sector + 4 macro + 2 cross_ticker = 10 entries** filtered per-scope by structured routing fields.
+
+### Schema (amended)
 
 ```json
 {
   "schema_version": "global_lessons.v1",
-  "updated_at": "2026-04-16T14:30:00-04:00",
+  "updated_at": "2026-04-17T14:30:00-04:00",
   "entries": [
     {
       "scope": "sector",
-      "scope_key": "Technology",
+      "target_sector": "Technology",
       "source_ticker": "AAPL",
+      "source_sector": "Technology",
       "quarter_label": "Q1_FY2025",
-      "attributed_at": "2026-04-16T14:30:00-04:00",
+      "attributed_at": "2026-04-17T14:30:00-04:00",
       "lesson": "Tariff cost quantification dominated tech reactions in Q1 FY2025 — management first-time disclosures of cost magnitude were primary drivers across AAPL and MSFT"
     },
     {
       "scope": "macro",
-      "scope_key": "trade_tensions",
       "source_ticker": "AAPL",
+      "source_sector": "Technology",
       "quarter_label": "Q1_FY2025",
-      "attributed_at": "2026-04-16T14:30:00-04:00",
+      "attributed_at": "2026-04-17T14:30:00-04:00",
       "lesson": "During elevated trade tension regime, forward cost guidance dominates backward-looking EPS beats by ~2x in attribution weight"
     },
     {
       "scope": "cross_ticker",
-      "scope_key": "MSFT",
+      "related_tickers": ["AAPL", "MSFT"],
       "source_ticker": "AAPL",
+      "source_sector": "Technology",
       "quarter_label": "Q1_FY2025",
-      "attributed_at": "2026-04-16T14:30:00-04:00",
+      "attributed_at": "2026-04-17T14:30:00-04:00",
       "lesson": "MSFT guided cautiously on Azure capex 2 weeks before AAPL's filing — this was a leading signal for AAPL tariff exposure that the predictor missed"
     }
   ]
 }
 ```
 
-### Scope types
+**Removed fields**: `scope_key` (validator rejects across every scope). **Added fields**: `related_tickers` (cross_ticker only, required non-empty UPPER 1–5 char list, max 8, no duplicates), `target_sector` (sector only, required, must be in the 11-value canonical enum from `config/canonical_sectors.py`), `source_sector` (Python-stamped audit metadata — NOT used for routing).
 
-| Scope | Purpose | `scope_key` | When to write |
-|-------|---------|-------------|---------------|
-| `sector` | Sector-wide pattern | Sector name (e.g., "Technology", "Energy") | When the learner identifies a pattern that likely applies to other companies in the same sector |
-| `macro` | Macro-regime observation | Regime/indicator label (e.g., "risk_off", "rate_hike", "trade_tensions") | When macro conditions were a significant driver or amplifier |
-| `cross_ticker` | Peer/competitor signal | Related ticker symbol | When another company's earnings/news was a leading signal for this ticker |
+### Scope types (amended)
+
+| Scope | Purpose | Routing field | Validator check |
+|-------|---------|---------------|-----------------|
+| `sector` | Sector-wide pattern | `target_sector` | Must be one of the 11 `CANONICAL_SECTORS` values |
+| `macro` | Regime-wide observation | (none — always included) | Rejects `target_sector` and `related_tickers` |
+| `cross_ticker` | Peer/competitor lesson bound to specific tickers | `related_tickers` | Non-empty, UPPER, 1–5 chars each, max 8, no duplicates |
 
 ### Guidelines for global entries
 
@@ -661,8 +669,10 @@ Process MSFT Q2 → predictor reads global.json → sees AAPL's sector insight �
 
 ## 9. `build_learning_context()` Adapter
 
-**Location**: `scripts/earnings/earnings_orchestrator.py` (not `builder_adapters.py` — this is a lightweight local file read, not a parallel builder that hits Neo4j/APIs)
-**Role**: Read-time compatibility layer that transforms append-only lesson files into predictor-ready compact context.
+> **AMENDED 2026-04-17** — routing is now structured-field based (no regex, no `scope_key` matching). See `.claude/plans/learner-edits.md` §4.3 and §6.3 for the authoritative filter logic and observability contract. The `sector_lookup` callable parameter has been removed from the signature.
+
+**Location**: `scripts/earnings/earnings_orchestrator.py` (not `builder_adapters.py` — this is a lightweight local file read; bundle-level current-ticker sector resolution uses the Neo4j-backed `_lookup_company_sector` fallback when `8k_packet.sector` is None, which is the common case).
+**Role**: Read-time compatibility layer that transforms derived lesson files into predictor-ready compact context. Emits one structured-counter log line per call.
 
 ### Interface
 
@@ -683,15 +693,17 @@ def build_learning_context(ticker: str, sector: str = None,
 - Select most recent **8 entries** (by `attributed_at`)
 - Return as `ticker_lessons[]`
 
-**Global lessons** (`learnings/global.json`):
+**Global lessons** (`learnings/global.json`) — AMENDED 2026-04-17:
 - Read all entries from `entries[]`
-- Filter by relevance:
-  - `scope=sector` where `scope_key` matches current ticker's sector → include
+- Filter by structured-field routing (NO regex, NO `scope_key`):
+  - `scope=sector` → include iff `_normalize_sector(entry.target_sector) == _normalize_sector(current_sector)`
   - `scope=macro` → always include (regime matters for all tickers)
-  - `scope=cross_ticker` where `scope_key` is a ticker in the same sector → include
-- Deduplicate: within each scope, skip entries whose `lesson` text is an exact match after lowercase + whitespace normalization against an already-selected entry (deterministic, no fuzzy/semantic matching needed — per-scope caps handle the rest)
+  - `scope=cross_ticker` → include iff `ticker in entry.related_tickers`
+- **No same-sector fallback** for cross_ticker — broad lessons belong in `scope=sector`. See `learner-edits.md` Appendix C "rejected alternatives" for the pollution rationale.
+- Every exclusion increments a named counter (`sector_mismatch`, `current_sector_unknown`, `cross_ticker_not_listed`, `cross_ticker_missing_related`, `unknown_scope`, `legacy_schema`). An observability log line fires on every call — even when `global.json` is absent.
+- Deduplicate within each scope by normalized lesson text.
 - Per-scope cap: max **4 sector** + **4 macro** + **2 cross_ticker** = **10 entries** total
-- Sort by recency within each scope bucket
+- Sort by recency (`attributed_at`) within each scope bucket before capping.
 - Return as `global_lessons[]`
 
 ### Output shape
@@ -712,8 +724,9 @@ def build_learning_context(ticker: str, sector: str = None,
   "global_lessons": [
     {
       "scope": "sector",
-      "scope_key": "Technology",
+      "target_sector": "Technology",
       "source_ticker": "AAPL",
+      "source_sector": "Technology",
       "lesson": "..."
     }
   ],

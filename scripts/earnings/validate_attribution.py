@@ -3,9 +3,42 @@
 This is the SINGLE CANONICAL validator. Both the orchestrator Python and the
 PreToolUse hook import from here. Only stdlib imports — no Neo4j, no builders,
 no SDK. This ensures the hook never fails-open due to missing dependencies.
+
+Schema invariants enforced on ``global_observations[]`` (amendment 2026-04-17,
+per .claude/plans/learner-edits.md):
+
+  - ``scope_key`` is REMOVED — rejected across ALL scopes.
+  - ``scope="cross_ticker"`` REQUIRES non-empty ``related_tickers`` (uppercase
+    alphabetic strings, 1-5 chars, max 8, no duplicates). ``target_sector``
+    MUST NOT be present.
+  - ``scope="sector"`` REQUIRES ``target_sector`` ∈ ``CANONICAL_SECTORS``.
+    ``related_tickers`` MUST NOT be present.
+  - ``scope="macro"`` rejects BOTH ``related_tickers`` and ``target_sector``.
+
+Validator is the single authority for ``related_tickers`` dedupe (writer is a
+pure pass-through — see orchestrator ``append_global_lessons``).
 """
 from __future__ import annotations
+from difflib import get_close_matches
 from typing import Any
+
+from config.canonical_sectors import CANONICAL_SECTORS
+
+
+def _ok_ticker(t: object) -> bool:
+    """Validate a single ticker symbol shape: uppercase alphabetic, 1-5 chars."""
+    return isinstance(t, str) and t.isupper() and t.isalpha() and 1 <= len(t) <= 5
+
+
+_MAX_RELATED_TICKERS = 8
+_REJECTED_SCOPE_KEY_MSG = "scope_key has been removed from the schema; do not emit"
+# Separator characters used to tokenize a malformed string-instead-of-list
+# related_tickers value into a "did you mean [...]?" hint. Known separator set
+# (str.translate + split — deliberately no regex).
+_RELATED_TICKERS_SEPARATORS = "_ ,/|-"
+_RELATED_TICKERS_SEP_TABLE = str.maketrans(
+    {c: " " for c in _RELATED_TICKERS_SEPARATORS}
+)
 
 _ATTRIBUTION_REQUIRED_FIELDS = [
     "schema_version", "ticker", "quarter_label", "filed_8k", "accession_8k",
@@ -208,6 +241,9 @@ def validate_attribution_result(payload: dict[str, Any],
             errors.append("feedback.why must be a string")
 
     # ── Global observations ──
+    # Schema-v2 amendment (2026-04-17): scope_key REMOVED (rejected on every
+    # scope). Structured routing fields: related_tickers (cross_ticker) and
+    # target_sector (sector). See module docstring for full invariants.
     go = payload["global_observations"]
     if not isinstance(go, list):
         errors.append("global_observations must be an array")
@@ -218,11 +254,107 @@ def validate_attribution_result(payload: dict[str, Any],
             if not isinstance(obs, dict):
                 errors.append(f"global_observations[{i}] is not an object")
                 continue
-            for key in ("scope", "scope_key", "lesson"):
+            # ── Required fields: scope + lesson only (scope_key removed) ──
+            for key in ("scope", "lesson"):
                 if key not in obs:
                     errors.append(f"global_observations[{i}] missing '{key}'")
-            if obs.get("scope") not in _VALID_SCOPES:
-                errors.append(f"global_observations[{i}].scope invalid: {obs.get('scope')}")
+            scope = obs.get("scope")
+            if scope not in _VALID_SCOPES:
+                errors.append(f"global_observations[{i}].scope invalid: {scope}")
+
+            rt = obs.get("related_tickers")
+            ts = obs.get("target_sector")
+
+            # ── scope_key: must NEVER be present (rejected across all scopes) ──
+            if "scope_key" in obs:
+                errors.append(
+                    f"global_observations[{i}].scope_key: {_REJECTED_SCOPE_KEY_MSG}"
+                )
+
+            # ── Per-scope routing-field requirements ──
+            if scope == "cross_ticker":
+                if not isinstance(rt, list) or not rt:
+                    errors.append(
+                        f"global_observations[{i}].related_tickers must be a "
+                        f"non-empty list for cross_ticker scope"
+                    )
+                    # "Did you mean [...]?" hint if a string was passed instead
+                    # of a list. REGEX-FREE: str.translate + split on known
+                    # separator set only.
+                    if isinstance(rt, str):
+                        normalized = rt.upper().translate(_RELATED_TICKERS_SEP_TABLE)
+                        tokens = [t for t in normalized.split() if _ok_ticker(t)]
+                        if tokens:
+                            errors.append(
+                                f"global_observations[{i}].related_tickers: "
+                                f"did you mean {tokens!r}?"
+                            )
+                else:
+                    if len(rt) > _MAX_RELATED_TICKERS:
+                        errors.append(
+                            f"global_observations[{i}].related_tickers exceeds "
+                            f"cap {_MAX_RELATED_TICKERS} (got {len(rt)})"
+                        )
+                    bad = [t for t in rt if not _ok_ticker(t)]
+                    if bad:
+                        errors.append(
+                            f"global_observations[{i}].related_tickers contains "
+                            f"invalid tickers (must be uppercase alphabetic, "
+                            f"1-5 chars): {bad}"
+                        )
+                    # Validator-authoritative dedupe (writer does NOT dedupe):
+                    if len(set(rt)) != len(rt):
+                        errors.append(
+                            f"global_observations[{i}].related_tickers contains "
+                            f"duplicates"
+                        )
+                # Key-presence check (amendment 2026-04-17): contract says the
+                # field "MUST NOT be present". `is not None` would silently
+                # permit an explicit-null injection like "target_sector": null
+                # — which is still a form of presence. Use `in obs` so null
+                # is also rejected, matching the scope_key check above.
+                if "target_sector" in obs:
+                    errors.append(
+                        f"global_observations[{i}].target_sector must not be "
+                        f"present for cross_ticker scope"
+                    )
+
+            elif scope == "sector":
+                if not isinstance(ts, str) or ts not in CANONICAL_SECTORS:
+                    # "Did you mean ..." hint via stdlib difflib (no new deps).
+                    hint = ""
+                    if isinstance(ts, str):
+                        suggestions = get_close_matches(
+                            ts, CANONICAL_SECTORS, n=2, cutoff=0.5
+                        )
+                        if suggestions:
+                            hint = (
+                                f" (did you mean: "
+                                f"{', '.join(repr(s) for s in suggestions)}?)"
+                            )
+                    errors.append(
+                        f"global_observations[{i}].target_sector must be one "
+                        f"of {sorted(CANONICAL_SECTORS)} (got {ts!r}){hint}"
+                    )
+                # Key-presence rejection (see cross_ticker comment above).
+                if "related_tickers" in obs:
+                    errors.append(
+                        f"global_observations[{i}].related_tickers must not be "
+                        f"present for sector scope"
+                    )
+
+            elif scope == "macro":
+                # Key-presence rejection (see cross_ticker comment above).
+                if "related_tickers" in obs:
+                    errors.append(
+                        f"global_observations[{i}].related_tickers must not be "
+                        f"present for macro scope"
+                    )
+                if "target_sector" in obs:
+                    errors.append(
+                        f"global_observations[{i}].target_sector must not be "
+                        f"present for macro scope"
+                    )
 
     # ── Simple type checks ──
     if not isinstance(payload["missing_inputs"], list):

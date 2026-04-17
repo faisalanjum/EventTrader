@@ -40,6 +40,7 @@ from builder_adapters import (
 )
 from config.llm_models import LEARNER, PREDICTOR
 from quarter_identity import resolve_quarter_info
+from scripts.earnings.utils import neo4j_session
 
 from dotenv import load_dotenv
 load_dotenv(str(_PROJECT_ROOT / ".env"), override=True)
@@ -108,11 +109,66 @@ BUILDERS = {
 
 _TRANSIENT_MARKERS = ("defunct connection", "serviceunavailable", "connection refused",
                       "connection reset", "broken pipe", "timed out", "pool")
+_COMPANY_SECTOR_QUERY = """
+MATCH (c:Company {ticker: $ticker})
+OPTIONAL MATCH (c)-[:BELONGS_TO]->(:Industry)-[:BELONGS_TO]->(sec:Sector)
+RETURN coalesce(c.sector, sec.name) AS sector
+"""
 
 
 def _is_transient(exc: Exception) -> bool:
     msg = str(exc).lower()
     return any(m in msg for m in _TRANSIENT_MARKERS)
+
+
+# Anti-poisoning cache (amendment 2026-04-17): we use a manual dict that caches
+# ONLY successful lookups. Failed lookups (Neo4j down, ticker absent, empty
+# string) are re-queried on every call so a single transient Neo4j hiccup does
+# NOT poison the cache for the lifetime of the process.
+_SECTOR_CACHE: dict[str, str] = {}
+
+
+def _lookup_company_sector(ticker: str) -> str | None:
+    """Best-effort sector lookup for learning-context filtering and source_sector
+    stamping. Only successful results are cached; None results are re-queried
+    on every call to prevent transient-Neo4j-failure cache poisoning.
+    """
+    symbol = str(ticker or "").upper().strip()
+    if not symbol:
+        return None
+    if symbol in _SECTOR_CACHE:
+        return _SECTOR_CACHE[symbol]
+
+    try:
+        with neo4j_session() as (session, err):
+            if err or session is None:
+                log.warning("Sector lookup unavailable for %s: %s", symbol, err)
+                return None  # intentionally NOT cached
+            row = session.run(_COMPANY_SECTOR_QUERY, ticker=symbol).single()
+    except Exception as e:
+        log.warning("Sector lookup failed for %s: %s", symbol, e)
+        return None  # intentionally NOT cached
+
+    if not row:
+        log.warning("Sector lookup returned no row for %s (ticker may be out-of-universe)", symbol)
+        return None
+
+    sector = row.data().get("sector")
+    if sector is None:
+        log.warning("source_sector is None for %s (ticker may be out-of-universe)", symbol)
+        return None
+    sector_text = str(sector).strip()
+    if not sector_text:
+        return None
+    _SECTOR_CACHE[symbol] = sector_text  # success only
+    return sector_text
+
+
+def _normalize_sector(sector: str | None) -> str | None:
+    if sector is None:
+        return None
+    normalized = " ".join(str(sector).split()).casefold()
+    return normalized or None
 
 
 def _run_builder(fn, ticker, quarter_info, pit_cutoff, out_path,
@@ -173,11 +229,11 @@ def build_prediction_bundle(ticker: str, quarter_info: dict,
     for name in BUNDLE_ITEM_ORDER:
         bundle[name] = results.get(name)
 
-    # learning_context is the logical 8th bundle field. Not in BUNDLE_ITEM_ORDER
-    # because it's a lightweight local file read (no Neo4j/API), not a parallel builder.
-    # Lives in earnings_orchestrator.py (not builder_adapters.py) for the same reason.
+    # learning_context is the logical 8th bundle field. It remains outside
+    # BUNDLE_ITEM_ORDER because the main work is local lesson-file loading;
+    # sector-aware filtering may do a cached company-metadata lookup when needed.
     try:
-        sector = (results.get("8k_packet") or {}).get("sector")
+        sector = (results.get("8k_packet") or {}).get("sector") or _lookup_company_sector(ticker)
         bundle["learning_context"] = build_learning_context(ticker, sector=sector)
     except Exception as e:
         log.warning("learning_context builder failed (non-fatal): %s", e)
@@ -1834,9 +1890,14 @@ def run_learner_for_quarter(
     if errors:
         log.error("Learner failed %s %s: validation errors: %s",
                    ticker, quarter_info.get("quarter_label"), "; ".join(errors[:3]))
-        # Retry once: delete bad file, re-invoke
+        # Retry once: delete bad file, re-invoke WITH validation errors fed
+        # back into the prompt (H2 informed retry, amendment 2026-04-17 per
+        # .claude/plans/learner-edits.md §6.6).
         result_path.unlink(missing_ok=True)
-        log.info("Retrying learner for %s %s (1 retry)", ticker, quarter_info.get("quarter_label"))
+        log.info(
+            "Retrying learner for %s %s (1 retry, feeding %d validation errors back)",
+            ticker, quarter_info.get("quarter_label"), len(errors),
+        )
         run_learner_via_sdk(
             ticker=ticker,
             quarter_info=quarter_info,
@@ -1848,6 +1909,7 @@ def run_learner_for_quarter(
             prediction_result_path=attr_paths["prediction_result_path"],
             context_bundle_path=attr_paths["context_bundle_path"],
             prior_lessons_path=learn_paths["ticker_lessons_path"],
+            prior_validation_errors=errors,
         )
         if not result_path.exists():
             log.error("Learner retry failed %s %s: no result.json after retry",
@@ -1958,6 +2020,11 @@ def append_ticker_lesson(ticker: str, attribution_result: dict) -> Path:
         "why": fb.get("why"),
     }
 
+    # Idempotent upsert-by-quarter_label (amendment 2026-04-17): remove any
+    # prior entry for this quarter before appending, so derived-write recovery
+    # or a re-run replaces rather than duplicates.
+    target_ql = entry["quarter_label"]
+    data["lessons"] = [l for l in data["lessons"] if l.get("quarter_label") != target_ql]
     data["lessons"].append(entry)
     data["updated_at"] = attribution_result.get("attributed_at")
     _atomic_write_json(path, data)
@@ -1965,32 +2032,55 @@ def append_ticker_lesson(ticker: str, attribution_result: dict) -> Path:
 
 
 def append_global_lessons(attribution_result: dict) -> Path | None:
-    """Extract global_observations from attribution result and append to global lessons.
+    """Upsert global_observations into learnings/global.json for this quarter.
 
-    Uses fcntl.flock for concurrent ticker processing safety.
-    Returns the path written, or None if no observations.
+    Amendment 2026-04-17 (per .claude/plans/learner-edits.md §6.2):
+
+      - **Always returns the path** on success (was: returned None when
+        observations were empty). Docstring change is intentional — the
+        function now runs the flock-protected upsert UNCONDITIONALLY so that a
+        re-run producing zero global_observations still purges stale prior
+        entries for (source_ticker, quarter_label).
+      - **Upsert-by-source-key** (source_ticker, quarter_label): prior entries
+        for the same key are removed before the new ones are appended.
+        Idempotent under derived-write recovery or any re-run.
+      - Enrichment dict passes through structured routing fields
+        (related_tickers, target_sector) and stamps source_sector via
+        _lookup_company_sector. `scope_key` is NOT passed through (removed
+        from schema; validator rejects it on writes).
+
+    Uses fcntl.flock for concurrent-ticker safety. Return type annotation
+    stays Path | None — the function can still return None if an exception
+    propagates after the lock releases, even though the contract on success
+    is "always returns path".
     """
     observations = attribution_result.get("global_observations", [])
-    if not observations:
-        return None
+    # Normalize src_ticker to UPPER for consistent upsert-key integrity.
+    # Mixed-case tickers (e.g., "AAPL" from one call, "aapl" from another) would
+    # otherwise produce distinct upsert keys and leave duplicate entries.
+    src_ticker = (attribution_result.get("ticker") or "").upper().strip()
+    src_quarter = attribution_result.get("quarter_label")
 
-    path = LEARNINGS_DIR / "global.json"
-
-    # Enrich each observation with source metadata
+    # Enrich each observation with structured routing + audit fields.
+    # NOTE: scope_key is DROPPED here — never passed through to global.json.
     enriched = []
     for obs in observations:
         enriched.append({
-            "scope": obs.get("scope"),
-            "scope_key": obs.get("scope_key"),
-            "source_ticker": attribution_result.get("ticker"),
-            "quarter_label": attribution_result.get("quarter_label"),
-            "attributed_at": attribution_result.get("attributed_at"),
-            "lesson": obs.get("lesson"),
+            "scope":            obs.get("scope"),
+            "related_tickers":  obs.get("related_tickers"),   # may be None on non-cross_ticker
+            "target_sector":    obs.get("target_sector"),     # may be None on non-sector
+            "source_ticker":    src_ticker,
+            "source_sector":    _lookup_company_sector(src_ticker),  # audit-only, NOT routing
+            "quarter_label":    src_quarter,
+            "attributed_at":    attribution_result.get("attributed_at"),
+            "lesson":           obs.get("lesson"),
         })
 
+    path = LEARNINGS_DIR / "global.json"
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Locked read-modify-write for concurrency safety
+    # Locked read-modify-write for concurrency safety.
+    # Upsert step — always runs, even when enriched == [] (purges stale entries).
     lock_path = path.with_suffix(".lock")
     with open(lock_path, "w") as lock_fd:
         fcntl.flock(lock_fd, fcntl.LOCK_EX)
@@ -2003,6 +2093,13 @@ def append_global_lessons(attribution_result: dict) -> Path | None:
                     "updated_at": None,
                     "entries": [],
                 }
+            # Remove any prior entries for this (source_ticker, quarter_label)
+            # before extending — deterministic upsert-by-source-key.
+            key = (src_ticker, src_quarter)
+            data["entries"] = [
+                e for e in data["entries"]
+                if (e.get("source_ticker"), e.get("quarter_label")) != key
+            ]
             data["entries"].extend(enriched)
             data["updated_at"] = attribution_result.get("attributed_at")
             _atomic_write_json(path, data)
@@ -2019,12 +2116,22 @@ def build_learning_context(ticker: str, sector: str | None = None,
                            base_dir: Path | None = None) -> dict:
     """Build learning context for predictor consumption.
 
-    Reads ticker lessons and global lessons, filters by recency and relevance,
-    returns compact context suitable for inclusion in the prediction bundle.
-    This is the read-time compatibility layer: append-only writes, filtering on read.
+    Amendment 2026-04-17 (per .claude/plans/learner-edits.md §4.3 / §6.3):
+      - Structured-field routing: cross_ticker by ``related_tickers`` list
+        membership; sector by ``target_sector`` enum (normalized compare); macro
+        always included. No regex. No per-entry Neo4j calls.
+      - ``sector_lookup`` parameter DROPPED (was codex-era threading).
+      - Six named exclusion counters; observability log ALWAYS fires (even when
+        global.json is absent).
+      - ``except JSONDecodeError / OSError`` now log ``log.error`` (was silent).
     """
+    # Normalize ticker case at function entry. Stored related_tickers are
+    # validator-enforced UPPERCASE, and the ticker-lessons filename is UPPERCASE.
+    # Without this normalization, a caller passing "aapl" would silently drop
+    # every ["AAPL"] cross_ticker lesson and miss its own ticker.json.
+    ticker = (ticker or "").upper().strip()
     learnings_dir = base_dir or LEARNINGS_DIR
-    ticker_path = learnings_dir / "ticker" / f"{ticker.upper()}.json"
+    ticker_path = learnings_dir / "ticker" / f"{ticker}.json"
     global_path = learnings_dir / "global.json"
 
     result: dict[str, Any] = {
@@ -2050,34 +2157,68 @@ def build_learning_context(ticker: str, sector: str | None = None,
                     seen_quarters.add(ql)
                     deduped.append(lesson)
             result["ticker_lessons"] = deduped[:8]
-        except (json.JSONDecodeError, OSError):
-            pass
+        except json.JSONDecodeError as e:
+            log.error("ticker.json malformed — no ticker lessons loaded for %s: %s", ticker, e)
+        except OSError as e:
+            log.error("ticker.json read failed — no ticker lessons loaded for %s: %s", ticker, e)
 
-    # ── Global lessons: filtered by sector relevance, per-scope caps ──
-    # Macro lessons always loaded regardless of sector. Sector/cross_ticker need sector.
+    # ── Global lessons: structured-field routing, per-scope caps ──
+    # Counters initialized to zero BEFORE the file-exists check so the
+    # observability log at the end always fires with a full, consistent shape
+    # — even if global.json is absent (first-ever run / post-wipe state).
+    sector_entries: list[dict] = []
+    macro_entries: list[dict] = []
+    cross_entries: list[dict] = []
+    excluded = {
+        "sector_mismatch": 0,
+        "current_sector_unknown": 0,
+        "cross_ticker_not_listed": 0,
+        "cross_ticker_missing_related": 0,
+        "unknown_scope": 0,
+        "legacy_schema": 0,
+    }
+    normalized_current_sector = _normalize_sector(sector)
+
     if global_path.exists():
         try:
             data = json.loads(global_path.read_text(encoding="utf-8"))
             entries = data.get("entries", [])
 
-            # Filter by relevance
-            sector_entries = []
-            macro_entries = []
-            cross_entries = []
             for e in entries:
                 scope = e.get("scope")
-                if scope == "sector" and sector and e.get("scope_key") == sector:
-                    sector_entries.append(e)
+
+                if scope == "sector":
+                    ts = e.get("target_sector")
+                    if ts is None:
+                        # Legacy/old-schema entry (pre-fix) — transparently excluded
+                        excluded["legacy_schema"] += 1
+                        continue
+                    if not normalized_current_sector:
+                        # CURRENT ticker's sector unknown — cannot route sector-scope.
+                        # (Distinct from legacy_schema, which is about the ENTRY.)
+                        excluded["current_sector_unknown"] += 1
+                        continue
+                    if _normalize_sector(ts) == normalized_current_sector:
+                        sector_entries.append(e)
+                    else:
+                        excluded["sector_mismatch"] += 1
+
                 elif scope == "macro":
                     macro_entries.append(e)
-                elif scope == "cross_ticker" and sector:
-                    # Omit cross_ticker when no sector — over-inclusion is worse
-                    # than under-inclusion. When sector is known, keep only entries
-                    # where source_ticker's scope_key matches current sector.
-                    # (scope_key for cross_ticker is the related ticker, not sector,
-                    #  so we can't filter by sector here without a lookup table.
-                    #  For now, omit all cross_ticker — safer than polluting context.)
-                    pass
+
+                elif scope == "cross_ticker":
+                    rt = e.get("related_tickers")
+                    if not rt:
+                        # Legacy/old-schema entry OR learner error past validator
+                        excluded["cross_ticker_missing_related"] += 1
+                        continue
+                    if ticker in rt:
+                        cross_entries.append(e)
+                    else:
+                        excluded["cross_ticker_not_listed"] += 1
+
+                else:
+                    excluded["unknown_scope"] += 1
 
             # Sort each bucket by recency, apply per-scope caps
             for bucket in (sector_entries, macro_entries, cross_entries):
@@ -2088,9 +2229,9 @@ def build_learning_context(ticker: str, sector: str | None = None,
                 seen: set[str] = set()
                 out = []
                 for e in entries:
-                    key = (e.get("lesson") or "").strip().lower()
-                    if key and key not in seen:
-                        seen.add(key)
+                    k = (e.get("lesson") or "").strip().lower()
+                    if k and k not in seen:
+                        seen.add(k)
                         out.append(e)
                 return out
 
@@ -2099,8 +2240,29 @@ def build_learning_context(ticker: str, sector: str | None = None,
             cross_entries = _dedupe(cross_entries)[:2]
 
             result["global_lessons"] = sector_entries + macro_entries + cross_entries
-        except (json.JSONDecodeError, OSError):
-            pass
+        except json.JSONDecodeError as e:
+            log.error("global.json malformed — no global lessons loaded for %s: %s", ticker, e)
+        except OSError as e:
+            log.error("global.json read failed — no global lessons loaded for %s: %s", ticker, e)
+
+    # Observability log — fires ALWAYS, even if global_path didn't exist.
+    # Names must match §4.5 contract exactly. Six exclusion counters so any
+    # future silent-drop regression appears immediately as an anomalous count.
+    log.info(
+        "learning_context %s(sector=%s): "
+        "included[sector=%d macro=%d cross=%d] "
+        "excluded[sector_mismatch=%d current_sector_unknown=%d "
+        "cross_ticker_not_listed=%d cross_ticker_missing_related=%d "
+        "unknown_scope=%d legacy_schema=%d]",
+        ticker, sector,
+        len(sector_entries), len(macro_entries), len(cross_entries),
+        excluded["sector_mismatch"],
+        excluded["current_sector_unknown"],
+        excluded["cross_ticker_not_listed"],
+        excluded["cross_ticker_missing_related"],
+        excluded["unknown_scope"],
+        excluded["legacy_schema"],
+    )
 
     return result
 
@@ -2140,15 +2302,34 @@ def _render_learning_context(learning_ctx: dict) -> str:
                 parts.append(f"  - Why: {why}")
             parts.append("")
 
-    # ── Global lessons ──
+    # ── Global lessons — split into three sub-sections by scope (amendment
+    # 2026-04-17): heading was previously "Cross-Ticker Insights" for all three
+    # scopes which was misleading. scope_key removed from display — rendering
+    # uses routing fields (target_sector, related_tickers) only.
     if global_lessons:
-        parts.append(f"\n### Cross-Ticker Insights ({len(global_lessons)} entries)\n")
+        by_scope: dict[str, list[dict]] = {"sector": [], "macro": [], "cross_ticker": []}
         for entry in global_lessons:
-            scope = entry.get("scope", "?")
-            key = entry.get("scope_key", "?")
-            src = entry.get("source_ticker", "?")
-            lesson = entry.get("lesson", "")
-            parts.append(f"- [{scope}:{key}] ({src}) {lesson}")
+            by_scope.setdefault(entry.get("scope"), []).append(entry)
+
+        if by_scope["sector"]:
+            parts.append(f"\n### Sector Lessons ({len(by_scope['sector'])} entries)\n")
+            for entry in by_scope["sector"]:
+                ts = entry.get("target_sector") or "?"
+                src = entry.get("source_ticker") or "?"
+                parts.append(f"- [sector:{ts}] ({src}) {entry.get('lesson', '')}")
+
+        if by_scope["macro"]:
+            parts.append(f"\n### Macro Lessons ({len(by_scope['macro'])} entries)\n")
+            for entry in by_scope["macro"]:
+                src = entry.get("source_ticker") or "?"
+                parts.append(f"- [macro] ({src}) {entry.get('lesson', '')}")
+
+        if by_scope["cross_ticker"]:
+            parts.append(f"\n### Cross-Ticker Lessons ({len(by_scope['cross_ticker'])} entries)\n")
+            for entry in by_scope["cross_ticker"]:
+                rt = entry.get("related_tickers") or []
+                src = entry.get("source_ticker") or "?"
+                parts.append(f"- [cross:{','.join(rt)}] ({src}) {entry.get('lesson', '')}")
         parts.append("")
 
     return "\n".join(parts)
@@ -2182,8 +2363,15 @@ def _build_learner_prompt(
     prediction_result_path: Path,
     context_bundle_path: Path,
     prior_lessons_path: Path,
+    prior_validation_errors: list[str] | None = None,
 ) -> str:
-    """Assemble the full learner prompt: SKILL.md instructions + runtime INPUTS."""
+    """Assemble the full learner prompt: SKILL.md instructions + runtime INPUTS.
+
+    ``prior_validation_errors`` (amendment 2026-04-17, H2 informed retry per
+    .claude/plans/learner-edits.md §6.6): when non-empty, appended as a
+    dedicated "YOUR PRIOR OUTPUT WAS REJECTED" block so the 1-retry path is
+    informed rather than blind. Default None for first-attempt calls.
+    """
     actual_return_json = json.dumps(actual_return, indent=2, default=str)
     inputs_section = f"""--- INPUTS ---
 TICKER: {ticker}
@@ -2199,6 +2387,18 @@ CONTEXT_BUNDLE: {context_bundle_path}
 ACTUAL_RETURN: {actual_return_json}
 PRIOR_LESSONS: {prior_lessons_path}
 """
+    if prior_validation_errors:
+        numbered = "\n".join(
+            f"  {i + 1}. {e}" for i, e in enumerate(prior_validation_errors)
+        )
+        retry_block = (
+            "\n--- YOUR PRIOR OUTPUT WAS REJECTED ---\n"
+            "The previous attempt failed schema validation with these errors:\n"
+            f"{numbered}\n\n"
+            "Fix these EXACT errors and re-emit attribution/result.json. "
+            "Do not change other fields; only correct the listed shape issues.\n"
+        )
+        return f"{skill_content}\n\n{inputs_section}{retry_block}"
     return f"{skill_content}\n\n{inputs_section}"
 
 
@@ -2213,11 +2413,16 @@ async def _run_learner_via_sdk(
     prediction_result_path: Path,
     context_bundle_path: Path,
     prior_lessons_path: Path,
+    prior_validation_errors: list[str] | None = None,
 ) -> str | None:
     """Invoke the learner via SDK embed (main session, full tool access).
 
     Loads SKILL.md content as prompt text — NOT via /earnings-learner fork.
     This gives the session Agent tool access for all 14 Data SubAgents.
+
+    ``prior_validation_errors`` threads through to ``_build_learner_prompt`` so
+    the retry path in ``run_learner_for_quarter`` can feed the previous
+    attempt's validation errors back into the prompt (H2, informed retry).
     """
     from claude_agent_sdk import query, ClaudeAgentOptions
     cli_path, creds_path = _assert_claude_code_oauth_ready()
@@ -2236,6 +2441,7 @@ async def _run_learner_via_sdk(
         prediction_result_path=prediction_result_path,
         context_bundle_path=context_bundle_path,
         prior_lessons_path=prior_lessons_path,
+        prior_validation_errors=prior_validation_errors,
     )
 
     # Drain stderr via callback — without this, a chatty subprocess stderr
@@ -2271,8 +2477,13 @@ def run_learner_via_sdk(
     prediction_result_path: Path,
     context_bundle_path: Path,
     prior_lessons_path: Path,
+    prior_validation_errors: list[str] | None = None,
 ) -> str | None:
-    """Sync wrapper for the learner SDK call."""
+    """Sync wrapper for the learner SDK call.
+
+    ``prior_validation_errors`` threads through to ``_run_learner_via_sdk`` for
+    the H2 informed-retry path. Default None for first-attempt calls.
+    """
     try:
         return asyncio.run(_run_learner_via_sdk(
             ticker=ticker,
@@ -2285,6 +2496,7 @@ def run_learner_via_sdk(
             prediction_result_path=prediction_result_path,
             context_bundle_path=context_bundle_path,
             prior_lessons_path=prior_lessons_path,
+            prior_validation_errors=prior_validation_errors,
         ))
     except ImportError as e:
         raise RuntimeError(

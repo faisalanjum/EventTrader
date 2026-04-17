@@ -56,6 +56,10 @@ def main():
     # Import the canonical validator (stdlib-only, no heavy deps)
     # FAIL CLOSED: if import fails, block the write — do NOT allow bad output through
     project_dir = os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd())
+    # Amendment 2026-04-17: project_dir must be on sys.path BEFORE scripts/earnings,
+    # because validate_attribution now imports `from config.canonical_sectors import ...`
+    # and `config/` lives at the repo root.
+    sys.path.insert(0, project_dir)
     sys.path.insert(0, os.path.join(project_dir, "scripts", "earnings"))
 
     try:
