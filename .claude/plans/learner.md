@@ -18,7 +18,7 @@ Canonical actionable backlog for the learner subsystem. Supersedes the backlog l
 
 ### 🔥 Blocker — T1.5: PIT correctness end-to-end (blocks T1, T2, T3, T4, and any historical re-run)
 
-**Status as of 2026-04-17**: design-complete, implementation-pending. Discovered during post-§8.3-migration verification of the AVGO 3-quarter corpus. Must ship before any further historical re-run or A/B measurement.
+**Status as of 2026-04-17**: ✅ **code + tests shipped on `origin/main`** — T1.5a + T1.5b implementation in `1b79614` (bundled with the external-harvester commit; PIT work not mentioned in that commit message); tests + plan + datetime-aware filter fix in `fe0326a`. 86 targeted tests green (13 R18 + 14 R17 + 59 pre-existing). Discovered during post-§8.3-migration verification of the AVGO 3-quarter corpus. **Pending operational step**: corpus wipe + PIT-safe rerun (task #356) — required before T4 A/B measurement; optional for T1/T2/T3 development since T1.5b's legacy-entry filter soft-quarantines contaminated entries in historical mode.
 
 #### Summary of the defect
 
@@ -70,17 +70,28 @@ Implications:
 - **Validation of the new entry fields happens in `test_learning_context.py` (R17a below)** and at read-time in `build_learning_context`, which treats absent fields as legacy — counted and dropped in historical mode, passed through in live mode.
 - If a dedicated storage-schema validator is later desirable (e.g., a `validate_global_entry.py` helper), it lives **outside** the learner contract layer. Out of scope for T1.5.
 
-#### Tests (TDD, write before implementation)
+#### Tests shipped (`test_learning_context.py::PITFilterTests` + `test_orchestrator_pit_mode.py::ResolvePITMode`)
 
-- `R17a` — schema round-trip: both `source_filed_8k` and `source_pit_cutoff` present on every new global/ticker entry (writer-side assertion in `test_learning_context.py`, not `validate_attribution.py`).
-- `R17b` — historical filter: two entries straddling a pit_cutoff; only the earlier returned; assert across **all four** scopes (ticker, sector, macro, cross_ticker).
+**14 R17 tests** — read-side lesson filter + writer-side schema stamping:
+
+- `R17a` — writer stamps `source_filed_8k` + `source_pit_cutoff` on new global **and** ticker entries (two sub-tests).
+- `R17b` — historical filter includes/excludes entries correctly across **all four** scopes (ticker, sector, macro, cross_ticker) (two sub-tests: straddle-exclusion and straddle-inclusion).
 - `R17c` — live preservation: `pit_cutoff=None` bypasses filter; production behavior unchanged.
-- `R17d` — macro-scope coverage: explicit assertion that macro entries respect the filter (regression guard — macro was the scope most easily missed).
-- `R17e` — observability: two new exclusion counters (`ticker_post_cutoff`, `global_post_cutoff`) appear in the always-fires log line even when zero.
-- `R18a` — orchestrator default: invoking without `--pit` defaults `pit_cutoff = quarter_info.filed_8k`; stored bundle reflects it; all live-mode surfaces switch to historical anchoring.
-- `R18b` — live opt-in: `--live` preserves `pit_cutoff=None` behavior (explicit intent required).
-- `R18c` — CLI override: explicit `--pit ISO` wins over default.
-- `R18d` — rerun harness parity: `/tmp/rerun_master.sh` unchanged; its invocations now produce PIT-safe bundles automatically.
+- `R17d` — macro-scope regression guard (the scope easiest to miss during implementation).
+- `R17e` — observability: `ticker_post_cutoff` + `global_post_cutoff` appear in the always-fires log line even when zero.
+- **`R17_legacy`** — legacy entries (no `source_pit_cutoff`) excluded in historical mode, passed through in live mode (two sub-tests).
+- **`R17f` (post-external-review regression suite)** — datetime-aware comparison correctness: (i) mixed-offset source chronologically later → excluded; (ii) mixed-offset source chronologically earlier → included (both guard against naive string comparison); (iii) `Z` suffix parsed as UTC; (iv) malformed timestamp defensively excluded; (v) tz-naive timestamp defensively excluded.
+
+**13 R18 tests** — `_resolve_pit_mode(args, quarter_info) -> (pit_cutoff, mode)`:
+
+- `R18a` — historical default fires on `--predict`, `--learn`, or both (three sub-tests).
+- `R18b` — `--live` opt-in produces `(None, "live")` with or without `--predict` (two sub-tests).
+- `R18c` — explicit `--pit` ISO wins over default, with or without `--predict` (two sub-tests).
+- `R18d` — `--live` and `--pit` are mutually exclusive → `ValueError` (two sub-tests; XOR guard per external review).
+- **`R18e`** — no flags → inspection mode stays live (`--save` alone doesn't trigger historical default).
+- **`R18f`** — missing `filed_8k` in quarter_info: raises on default path; OK under explicit `--live` or `--pit` (three sub-tests).
+
+**Bonus**: `R18d`'s rerun-harness parity check (`/tmp/rerun_master.sh` unchanged, its invocations now produce PIT-safe bundles automatically) verified via the smoke script (`/tmp/smoke_t1_5.py`, not versioned).
 
 #### Corpus implications
 
@@ -97,11 +108,11 @@ Implications:
 
 #### Rollout sequence
 
-1. **PR 1 — T1.5a**: bundle-PIT default + `--live` opt-in flag + R18 tests.
-2. **PR 2 — T1.5b** (depends on T1.5a): entry schema extension (`source_filed_8k` + `source_pit_cutoff`) + writer updates + reader filter across all four scopes + two new observability counters + R17 tests.
-3. Fresh backup + wipe of `earnings-analysis/learnings/` (new backup timestamp; old one retained).
-4. Re-run via existing `/tmp/rerun_master.sh` (unchanged — orchestrator default handles PIT automatically). 3 AVGO quarters minimum; full 15 if committing to T4.
-5. T4 A/B measurement becomes possible against an honest baseline.
+1. ✅ **T1.5a + T1.5b code** — bundle-PIT default + `--live` opt-in flag + XOR guard (T1.5a); entry schema stamping + reader filter across all four scopes + two new observability counters (T1.5b); datetime-aware `_passes_pit` comparison (post-external-review fix for mixed-offset correctness). Landed in commit `1b79614` (bundled with external-harvester work; PIT work not referenced in that commit message).
+2. ✅ **T1.5 tests + this plan section** — 27 new tests (R17a–f + R17_legacy + R18a–f) + Status/Tests/Rollout documentation. Landed in commit `fe0326a`.
+3. ⏳ **Corpus wipe** — fresh backup + wipe of `earnings-analysis/learnings/` (new backup timestamp; old `learnings.backup.1776447824` retained). Task #356. Not started.
+4. ⏳ **Re-run** — via existing `/tmp/rerun_master.sh` (unchanged — orchestrator default handles PIT automatically). 3 AVGO quarters minimum; full 15 if committing to T4.
+5. ⏳ **T4 A/B measurement** — becomes possible against an honest baseline.
 
 #### What does NOT change
 
@@ -164,7 +175,7 @@ For each quarter, three artifact kinds exist:
 |---|---|---|
 | **WITH-lessons prediction** | `prediction/result.json` | predictor output using the prior lessons bundle |
 | **WITHOUT-lessons prediction** (A/B baseline) | `experiments/prediction_no_lessons/result.json` | re-predicted with `learning_context` blanked |
-| **Attribution / learner output** | `attribution/result.json` | post-event causal diagnosis; source of new lessons |
+| **Attribution / learner output** | `learning/result.json` | post-event causal diagnosis; source of new lessons |
 | Context bundle (input to predictor) | `prediction/context_bundle.json` + `context_bundle_rendered.txt` | what the predictor read |
 
 ### AVGO — Opus 4.7 + `effort=xhigh` — 5 quarters
@@ -230,8 +241,8 @@ For each quarter, three artifact kinds exist:
 ### Known-finding flags for quick navigation
 
 - **Template-overfit cases** (reference for "labeled lesson consumption" mitigation decision in §10):
-  - AVGO Q3_FY2023 — `Companies/AVGO/events/Q3_FY2023/attribution/result.json`
-  - BURL Q1_FY2025 — `Companies/BURL/events/Q1_FY2025/attribution/result.json`
+  - AVGO Q3_FY2023 — `Companies/AVGO/events/Q3_FY2023/learning/result.json`
+  - BURL Q1_FY2025 — `Companies/BURL/events/Q1_FY2025/learning/result.json`
 - **Learner self-correction examples** (quarter after an overfit where the learner scoped the prior rule):
   - AVGO Q4_FY2023 lesson scoping the Q1/Q2 AI-narrative template
   - BURL Q2_FY2025 lesson scoping the Q4 "compressed spring" rule to clean-beats only
@@ -263,7 +274,7 @@ Q(n) prediction → Q(n) learner → Q(n+1) prediction → Q(n+1) learner → ..
 ```
 Q(n) learner **must** complete before Q(n+1) prediction starts, ensuring U1 feedback is available.
 
-**Historical failure policy**: If Q(n) learner fails after one retry (no valid `attribution/result.json`), the ticker's sequential processing **stops at Q(n)**. It does NOT skip to Q(n+1). The failure is logged for investigation. After the underlying issue is fixed (bad data, unusual filing format, etc.), the ticker can be re-bootstrapped. Other tickers are unaffected. There is no time pressure in historical mode — chain integrity is more important than throughput.
+**Historical failure policy**: If Q(n) learner fails after one retry (no valid `learning/result.json`), the ticker's sequential processing **stops at Q(n)**. It does NOT skip to Q(n+1). The failure is logged for investigation. After the underlying issue is fixed (bad data, unusual filing format, etc.), the ticker can be re-bootstrapped. Other tickers are unaffected. There is no time pressure in historical mode — chain integrity is more important than throughput.
 
 **Live prediction is never blocked**: The live-quarter learner is deferred (§2 Live mode), so live prediction fires regardless of any learner state. The deferred learner runs during the next historical bootstrap, where the historical failure policy above applies.
 
@@ -349,7 +360,7 @@ Ticker AAPL, historical bootstrap:
     Q1 prediction (PIT=Q1 filed_8k) → Q1 learner (PIT=Q2 filed_8k: 2024-05-02T16:30)
       → Learner sees: transcript, 10-Q, all news between Q1 and Q2 earnings
       → Learner does NOT see: anything from Q2's 8-K day onward
-      → Writes attribution/result.json → Python appends to ticker.json, global.json
+      → Writes learning/result.json → Python appends to ticker.json, global.json
 
     Q2 prediction (PIT=Q2 filed_8k, reads Q1 lessons) → Q2 learner (PIT=Q3 filed_8k)
     ...
@@ -452,7 +463,7 @@ The learner should investigate exhaustively within its max_turns guardrail (40-5
 
 **Phase 5 — Finalize**
 11. **Record gaps**: Any unavailable sources go to `missing_inputs[]`
-12. **Write `attribution/result.json`**: Single output file containing all of the above. Python handles derived writes (ticker.json, global.json).
+12. **Write `learning/result.json`**: Single output file containing all of the above. Python handles derived writes (ticker.json, global.json).
 
 ### Key principles
 
@@ -465,10 +476,10 @@ The learner should investigate exhaustively within its max_turns guardrail (40-5
 
 ---
 
-## 6. Output Contract: `attribution/result.json`
+## 6. Output Contract: `learning/result.json`
 
 **Schema version**: `attribution_result.v2`
-**File path**: `earnings-analysis/Companies/{TICKER}/events/{quarter_label}/attribution/result.json`
+**File path**: `earnings-analysis/Companies/{TICKER}/events/{quarter_label}/learning/result.json`
 
 ### Full schema
 
@@ -662,7 +673,7 @@ If none of these fit, coin a precise new label — there is no `other` category.
 ## 7. Ticker Lessons: `learnings/ticker/{TICKER}.json`
 
 **File path**: `earnings-analysis/learnings/ticker/{TICKER}.json`
-**Write mode**: Append-only. The learner does NOT write this file. The orchestrator Python extracts feedback from `attribution/result.json` and atomically appends one entry to the `lessons[]` array.
+**Write mode**: Append-only. The learner does NOT write this file. The orchestrator Python extracts feedback from `learning/result.json` and atomically appends one entry to the `lessons[]` array.
 **Read-time cap**: `build_learning_context()` selects the most recent **8 entries** for predictor context.
 
 ### Schema
@@ -676,6 +687,8 @@ If none of these fit, coin a precise new label — there is no `other` category.
     {
       "quarter_label": "Q4_FY2024",
       "attributed_at": "2026-03-15T10:00:00-04:00",
+      "source_filed_8k": "2024-11-01T16:30:00-04:00",
+      "source_pit_cutoff": "2025-02-01T16:30:00-04:00",
       "direction_correct": true,
       "actual_daily_pct": 3.2,
       "predicted_direction": "long",
@@ -691,6 +704,8 @@ If none of these fit, coin a precise new label — there is no `other` category.
     {
       "quarter_label": "Q1_FY2025",
       "attributed_at": "2026-04-16T14:30:00-04:00",
+      "source_filed_8k": "2025-02-01T16:30:00-04:00",
+      "source_pit_cutoff": "2025-05-02T16:30:00-04:00",
       "direction_correct": false,
       "actual_daily_pct": -5.28,
       "predicted_direction": "long",
@@ -715,7 +730,9 @@ If none of these fit, coin a precise new label — there is no `other` category.
 
 ### What goes into each entry
 
-Each entry is a compact extract from `attribution/result.json`'s feedback block plus key metadata. It contains exactly the information the predictor needs to learn from this quarter — no evidence ledger, no full analysis. The `primary_driver_category` enables the predictor to see driver-type patterns across quarters (e.g., "guidance_change dominated 3/4 AAPL quarters").
+Each entry is a compact extract from `learning/result.json`'s feedback block plus key metadata. It contains exactly the information the predictor needs to learn from this quarter — no evidence ledger, no full analysis. The `primary_driver_category` enables the predictor to see driver-type patterns across quarters (e.g., "guidance_change dominated 3/4 AAPL quarters").
+
+**`source_filed_8k` / `source_pit_cutoff` (T1.5b, 2026-04-17)**: Python-stamped at write time. Copied verbatim from the `filed_8k` + `pit_cutoff` top-level fields on `attribution_result.v2`. Used by the read-side PIT filter in `build_learning_context` — a lesson is visible to a predictor at `predictor.pit_cutoff` iff `source_pit_cutoff <= predictor.pit_cutoff` (chronological, tz-aware). Legacy entries missing these fields are treated as post-cutoff in historical mode (excluded) and passed through in live mode (preserves real-time semantics).
 
 ### Lesson refinement
 
@@ -740,7 +757,7 @@ Q4 writes: "China revenue requires 4-quarter trend analysis — deceleration
 > **AMENDED 2026-04-17** — the schema below reflects the **structured-routing** contract from `.claude/plans/learner-edits.md`. `scope_key` has been removed; routing is by `target_sector` (sector scope) or `related_tickers` (cross_ticker scope). See `learner-edits.md` §4 for the full authoritative schema and §6.2 for the writer semantics.
 
 **File path**: `earnings-analysis/learnings/global.json`
-**Write mode**: Upsert-by-`(source_ticker, quarter_label)` (amendment 2026-04-17 — was "append-only"). The learner does NOT write this file directly. The orchestrator Python extracts `global_observations[]` from `attribution/result.json`, enriches each entry with `source_ticker`, `source_sector` (Neo4j lookup), `quarter_label`, and `attributed_at`, and atomically upserts to this file. The upsert purges any prior entries for the same `(source_ticker, quarter_label)` before extending — idempotent under derived-write recovery or any re-run. Concurrency-safe via `fcntl.flock`.
+**Write mode**: Upsert-by-`(source_ticker, quarter_label)` (amendment 2026-04-17 — was "append-only"). The learner does NOT write this file directly. The orchestrator Python extracts `global_observations[]` from `learning/result.json`, enriches each entry with `source_ticker`, `source_sector` (Neo4j lookup), `quarter_label`, and `attributed_at`, and atomically upserts to this file. The upsert purges any prior entries for the same `(source_ticker, quarter_label)` before extending — idempotent under derived-write recovery or any re-run. Concurrency-safe via `fcntl.flock`.
 **Read-time cap**: `build_learning_context()` selects up to **4 sector + 4 macro + 2 cross_ticker = 10 entries** filtered per-scope by structured routing fields.
 
 ### Schema (amended)
@@ -757,6 +774,8 @@ Q4 writes: "China revenue requires 4-quarter trend analysis — deceleration
       "source_sector": "Technology",
       "quarter_label": "Q1_FY2025",
       "attributed_at": "2026-04-17T14:30:00-04:00",
+      "source_filed_8k": "2025-02-01T16:30:00-04:00",
+      "source_pit_cutoff": "2025-05-02T16:30:00-04:00",
       "lesson": "Tariff cost quantification dominated tech reactions in Q1 FY2025 — management first-time disclosures of cost magnitude were primary drivers across AAPL and MSFT"
     },
     {
@@ -765,6 +784,8 @@ Q4 writes: "China revenue requires 4-quarter trend analysis — deceleration
       "source_sector": "Technology",
       "quarter_label": "Q1_FY2025",
       "attributed_at": "2026-04-17T14:30:00-04:00",
+      "source_filed_8k": "2025-02-01T16:30:00-04:00",
+      "source_pit_cutoff": "2025-05-02T16:30:00-04:00",
       "lesson": "During elevated trade tension regime, forward cost guidance dominates backward-looking EPS beats by ~2x in attribution weight"
     },
     {
@@ -774,6 +795,8 @@ Q4 writes: "China revenue requires 4-quarter trend analysis — deceleration
       "source_sector": "Technology",
       "quarter_label": "Q1_FY2025",
       "attributed_at": "2026-04-17T14:30:00-04:00",
+      "source_filed_8k": "2025-02-01T16:30:00-04:00",
+      "source_pit_cutoff": "2025-05-02T16:30:00-04:00",
       "lesson": "MSFT guided cautiously on Azure capex 2 weeks before AAPL's filing — this was a leading signal for AAPL tariff exposure that the predictor missed"
     }
   ]
@@ -935,7 +958,7 @@ async for msg in query(
 
 All SDK options verified against installed `claude_agent_sdk==0.1.44` (2026-04-16). The prompt body should also include "ultrathink" as a belt-and-suspenders instruction alongside the SDK `effort`/`thinking` parameters.
 
-**Model ID pinning (not "latest" aliases)**: The SDK does NOT accept `"opus"` or `"claude-opus-latest"` for `ClaudeAgentOptions.model` — only full version IDs like `"claude-opus-4-7"`. Production code pins to a specific version. Rationale: (1) **audit trail** — the `model_version` field in attribution/result.json records exactly which model produced each lesson; (2) **U1 loop integrity** — silently swapping models mid-loop breaks lesson-chain attribution; (3) **validator stability** — new models may shift JSON shapes, and pinning means breakage is caught at version-bump time, not silently. When a new Opus ships, update `PREDICTOR_MODEL_ID` constant and the learner `model=` string (two-line change).
+**Model ID pinning (not "latest" aliases)**: The SDK does NOT accept `"opus"` or `"claude-opus-latest"` for `ClaudeAgentOptions.model` — only full version IDs like `"claude-opus-4-7"`. Production code pins to a specific version. Rationale: (1) **audit trail** — the `model_version` field in learning/result.json records exactly which model produced each lesson; (2) **U1 loop integrity** — silently swapping models mid-loop breaks lesson-chain attribution; (3) **validator stability** — new models may shift JSON shapes, and pinning means breakage is caught at version-bump time, not silently. When a new Opus ships, update `PREDICTOR_MODEL_ID` constant and the learner `model=` string (two-line change).
 
 **Current pin: `claude-opus-4-7`** on subscription auth via system CLI. See "Critical: bundled CLI vs system CLI" below.
 
@@ -1031,13 +1054,13 @@ CLI v2.1.112+ offers 6 modes: `default`, `acceptEdits`, `plan`, **`auto`**, `don
        "environment": [
          "Organization: EventMarketDB. Primary use: earnings analysis and stock-move attribution.",
          "Trusted infra: Neo4j on minisforum3, Redis queue, K8s cluster minisforum*",
-         "Local writes to earnings-analysis/Companies/*/events/*/attribution/result.json are routine."
+         "Local writes to earnings-analysis/Companies/*/events/*/learning/result.json are routine."
        ]
      }
    }
    ```
 2. Change `permission_mode="bypassPermissions"` → `permission_mode="auto"` in both SDK calls
-3. Run one full `--predict --learn` quarter and confirm: (a) no classifier blocks, (b) learner still spawns Data SubAgents, (c) attribution/result.json still writes cleanly
+3. Run one full `--predict --learn` quarter and confirm: (a) no classifier blocks, (b) learner still spawns Data SubAgents, (c) learning/result.json still writes cleanly
 4. If clean, switch permanently. If blocked, review the classifier reason and either tune `autoMode.environment` or revert.
 
 ### History of SDK-option changes (for audit)
@@ -1140,16 +1163,16 @@ SDK sessions cannot nest inside Claude Code sessions (`CLAUDECODE` env var check
 
 ### Write ownership model
 
-The learner writes **only** `attribution/result.json`. The orchestrator Python handles all derived writes:
+The learner writes **only** `learning/result.json`. The orchestrator Python handles all derived writes:
 
-1. **Learner** writes `attribution/result.json` (validated by PreToolUse Write hook before disk write)
+1. **Learner** writes `learning/result.json` (validated by PreToolUse Write hook before disk write)
 2. **Python** reads result.json after learner returns → validates schema
 3. **Python** extracts `feedback` block + metadata → atomic append to `learnings/ticker/{TICKER}.json`
 4. **Python** extracts `global_observations[]` → atomic append to `learnings/global.json`
 
 This separation ensures: atomic file operations, safe concurrent ticker processing (global.json), simpler learner prompt (no file I/O instructions), and keeps the Skill vs Agent decision independent of file management.
 
-**Completion semantics (happy path)**: When the learner produces valid output, a quarter is learner-complete only after: (1) `attribution/result.json` is validated, AND (2) ticker.json append succeeds, AND (3) global.json append succeeds. The next quarter's prediction must not proceed until all three are confirmed — otherwise lessons are "written" but not actually available. If a derived write fails (e.g., ticker.json append), retry the append (not the full learner) — the valid result.json is the source of truth.
+**Completion semantics (happy path)**: When the learner produces valid output, a quarter is learner-complete only after: (1) `learning/result.json` is validated, AND (2) ticker.json append succeeds, AND (3) global.json append succeeds. The next quarter's prediction must not proceed until all three are confirmed — otherwise lessons are "written" but not actually available. If a derived write fails (e.g., ticker.json append), retry the append (not the full learner) — the valid result.json is the source of truth.
 
 **Completion semantics (failure path)**: If the learner itself fails (no valid result.json after one retry), the historical failure policy in §2 applies: the ticker's sequential processing stops at this quarter. The failure is logged. Re-bootstrap after investigation.
 
@@ -1158,7 +1181,7 @@ This separation ensures: atomic file operations, safe concurrent ticker processi
 ### Validation strategy regardless of choice
 
 **Layer 3 — PreToolUse Write hook** (works for both Skill and Agent):
-Validates `attribution/result.json` JSON before disk write. Checks:
+Validates `learning/result.json` JSON before disk write. Checks:
 - JSON parseable
 - All required fields present
 - `feedback` block has all 6 sub-fields
@@ -1169,7 +1192,7 @@ Validates `attribution/result.json` JSON before disk write. Checks:
 
 **Post-return validation** (orchestrator Python):
 After learner returns, orchestrator checks:
-- `attribution/result.json` exists at expected path
+- `learning/result.json` exists at expected path
 - JSON valid and schema matches
 - If validation fails: log warning, re-invoke with corrective prompt (max 1 retry). If still invalid, stop ticker's bootstrap per §2 historical failure policy
 
@@ -1189,7 +1212,7 @@ Set `max_turns: 50` as a guardrail. This is a safety cap, not a target. The lear
 - Neo4j subagent spawning patterns: parallel fetch, PIT-aware, resume for follow-up → retained
 
 **Discard (stale contract)**:
-- Markdown report output → replaced by JSON-first `attribution/result.json`
+- Markdown report output → replaced by JSON-first `learning/result.json`
 - `subagent-history.csv` tracking → no longer needed
 - `predictions.csv` / `8k_fact_universe.csv` tracking → no longer needed
 - Step 10 (mark completed in CSV) → orchestrator handles completion tracking
@@ -1226,7 +1249,7 @@ These must exist for the learner to function but are built elsewhere:
 - [ ] Create `.claude/skills/earnings-learner/SKILL.md` — compact prompt with 5-phase workflow, evidence rules, generalizability guardrail. Frontmatter documents intent (`model: opus`, `effort: high`) but is not runtime enforcement (§10). **⚠️ HUMAN REVIEW GATE — every line must be approved before proceeding**
 - [ ] Add `get_attribution_paths()` and learning-file path helpers in `earnings_orchestrator.py` (deterministic result locations from day one)
 - [ ] Add `validate_attribution_result()` in Python — canonical schema check (required fields, feedback sub-fields, array caps, evidence_refs resolution, non-empty evidence_ledger). The PreToolUse hook mirrors this contract
-- [ ] Create PreToolUse validation hook for `attribution/result.json` writes (shell script calling the same checks)
+- [ ] Create PreToolUse validation hook for `learning/result.json` writes (shell script calling the same checks)
 - [ ] Create `_run_learner_via_sdk()` in `earnings_orchestrator.py` — loads SKILL.md content, strips frontmatter, embeds as prompt text with runtime inputs, invokes via SDK with `model="claude-opus-4-6"`, `effort="high"`, `thinking={"type": "adaptive"}`, `max_turns=50`
 
 ### Phase 2: Lesson Infrastructure
@@ -1248,7 +1271,7 @@ These must exist for the learner to function but are built elsewhere:
 
 ### Pending (separate from Phase 3)
 
-- [ ] Wire deferred learner detection in trigger daemon (`is_historical_done()` checks attribution/result.json existence)
+- [ ] Wire deferred learner detection in trigger daemon (`is_historical_done()` checks learning/result.json existence)
 
 ### Phase 4: Calibration — **⚠️ HUMAN REVIEW GATE**
 
@@ -1440,7 +1463,7 @@ earnings-analysis/
           prediction/
             context_bundle.json             ← predictor input bundle
             result.json                     ← predictor output
-          attribution/
+          learning/                         ← renamed from attribution/ per obsidian_thinking.md 2026-04-17
             result.json                     ← LEARNER OUTPUT (this plan)
         Q2_FY2025/
           ...

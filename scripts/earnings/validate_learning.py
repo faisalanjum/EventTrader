@@ -80,7 +80,7 @@ _VALID_SCOPES = {"sector", "macro", "cross_ticker"}
 def validate_attribution_result(payload: dict[str, Any],
                                 expected_ticker: str,
                                 expected_quarter: str) -> list[str]:
-    """Validate attribution/result.json against the attribution_result.v2 contract.
+    """Validate learning/result.json (renamed from attribution/ per obsidian_thinking.md) against the attribution_result.v2 contract.
 
     Returns a list of error strings. Empty list = valid.
     This is the SINGLE CANONICAL validator — the PreToolUse hook calls it too.

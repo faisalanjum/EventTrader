@@ -565,9 +565,9 @@ Views are implemented as rendering logic in the orchestrator (when building the 
 
 #### Assembly rules (orchestrator responsibility)
 
-1. Orchestrator reads all prior `attribution/result.json` files for this ticker, in chronological order (oldest → newest).
-2. Skip quarters where `attribution/result.json` does not exist (no attribution yet — common during first historical bootstrap).
-3. For each existing attribution file, extract `quarter_label` + `feedback.planner_lessons`.
+1. Orchestrator reads all prior `learning/result.json` files (path renamed from `attribution/` per obsidian_thinking.md 2026-04-17) for this ticker, in chronological order (oldest → newest).
+2. Skip quarters where `learning/result.json` does not exist (no learning/attribution yet — common during first historical bootstrap).
+3. For each existing learning-result file, extract `quarter_label` + `feedback.planner_lessons`.
 4. Skip entries where `planner_lessons` is empty (`[]`) — no value in passing empty arrays per quarter.
 5. Preserve chronological order of remaining entries (oldest → newest). Do NOT flatten or dedupe across quarters — repeated lessons across quarters signal importance.
 6. Pass the assembled array to the planner as `planner_lessons_history`.

@@ -260,7 +260,7 @@ Fail-safe chain: LLM failure → no_change + no_escalation. Daemon failure → b
 
 **D13. U1 feedback loop** — Existing attribution mechanism enriched with trade data (P&L, exit reason, monitor effectiveness, reassessment accuracy, slippage). Attribution runs during the next historical bootstrap when the ticker re-enters trade_ready in Redis — not immediately after trade close. No resources consumed until needed.
 
-**D13a. Learning loop interface (v1)** — Raw attribution remains per-trade (`attribution/result.json`), but consumers do NOT read all prior raw feedback directly. After each attribution cycle, the **learner/compactor** rewrites two distilled artifacts. The learner/compactor owns ALL intelligence around learning content — it reads raw trade files, analyzes, distills, and writes compiled learning files. The orchestrator is a reader/forwarder only. The trade daemon is a reader/applier only for bounded numeric policy (`global.json.auto_tune`). No consumer writes or compiles learning content.
+**D13a. Learning loop interface (v1)** — Raw attribution remains per-trade (`learning/result.json` — path renamed from `attribution/` per obsidian_thinking.md 2026-04-17), but consumers do NOT read all prior raw feedback directly. After each attribution cycle, the **learner/compactor** rewrites two distilled artifacts. The learner/compactor owns ALL intelligence around learning content — it reads raw trade files, analyzes, distills, and writes compiled learning files. The orchestrator is a reader/forwarder only. The trade daemon is a reader/applier only for bounded numeric policy (`global.json.auto_tune`). No consumer writes or compiles learning content.
 
 ```text
 earnings-analysis/learnings/
@@ -372,7 +372,7 @@ earnings-analysis/
     │   └── reassessments/           ← append-only delta reviews
     │       ├── 001_transcript.json
     │       └── 002_benzinga_12345.json
-    └── attribution/
+    └── learning/                    ← renamed from attribution/ per obsidian_thinking.md 2026-04-17
         └── result.json              ← enriched with trade + reassessment + slippage data
 ```
 
@@ -624,7 +624,7 @@ Note: the Reassessment Engine is a call path INSIDE trade_daemon.py, not a separ
 │                                                             │
 │ Reads: prediction/result.json, trade/result.json,           │
 │        trade/reassessments/*.json                           │
-│ Writes: attribution/result.json                             │
+│ Writes: learning/result.json (renamed from attribution/)    │
 │ Feeds: U1 loop → improves next prediction                   │
 └─────────────────────────────────────────────────────────────┘
 ```

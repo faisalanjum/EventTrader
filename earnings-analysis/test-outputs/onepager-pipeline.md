@@ -10,7 +10,7 @@
    3a. Planner       reads 8-K + U1 planner_lessons + guidance → structured fetch_plan.json
    3b. DataFetch     orchestrator executes fetch plan via parallel Task sub-agents
    3c. Predictor     reads 8-K + full context bundle → prediction/result.json
-4. Attribution  post-event learner writes feedback into attribution/result.json
+4. Attribution  post-event learner writes feedback into learning/result.json (renamed from attribution/ per obsidian_thinking.md 2026-04-17)
 5. Validation   outputs present + schema-valid (inline, not JSON Schema)
 6. Complete     ORCHESTRATOR_COMPLETE {TICKER}
 ```
@@ -38,7 +38,7 @@ Planner receives a subset (8-K + U1 planner_lessons + guidance). Predictor recei
 
 ### U1 Self-Learning Loop
 
-Attribution writes a `feedback` block per quarter into `attribution/result.json`:
+Attribution writes a `feedback` block per quarter into `learning/result.json` (renamed from `attribution/`):
 
 - `prediction_comparison` — predicted vs actual (signal, direction, move%)
 - `what_worked` (max 2), `what_failed` (max 3), `why` (1-3 sentences)

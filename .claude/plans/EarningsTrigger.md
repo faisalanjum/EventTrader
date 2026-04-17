@@ -179,7 +179,7 @@ e. This essentially has 3 components to it — see earnings-orchestrator.md in p
 ### 2. Live Earnings Report
 a. As soon as a 8-k earnings report is ingested, we fire planner + predictor without using any PIT
 b. This assumes we have already built the learner component for that ticker using historical back testing above.
-c. The learner for the live quarter is deferred — it runs during the NEXT historical bootstrap when the ticker re-enters trade_ready. The orchestrator's sequential processing naturally catches the missing attribution (prediction exists but no attribution/result.json). This ensures U1 feedback is available before the next quarter's prediction without competing with live predictions for Claude API tokens.
+c. The learner for the live quarter is deferred — it runs during the NEXT historical bootstrap when the ticker re-enters trade_ready. The orchestrator's sequential processing naturally catches the missing attribution (prediction exists but no `learning/result.json` — path renamed from `attribution/` per obsidian_thinking.md 2026-04-17). This ensures U1 feedback is available before the next quarter's prediction without competing with live predictions for Claude API tokens.
 
 Overall we need earnings_trigger.py to have the same production finesse as guidance_trigger_daemon.py or even better since its usecase is more elaborate.
 
@@ -277,7 +277,7 @@ The daemon does NOT monitor for 10-Q/10-K arrival or fire a separate learner job
 ```
 Q1 cycle:
   Jan 15: Q1 8-K files → daemon enqueues LIVE → prediction runs → watch key deleted
-  Jan 15: live_state.json written (Q1_FY2026). attribution/result.json does NOT exist. That's fine.
+  Jan 15: live_state.json written (Q1_FY2026). learning/result.json does NOT exist. That's fine.
 
 Q2 cycle (3 months later):
   Apr 10: Ticker re-enters trade_ready

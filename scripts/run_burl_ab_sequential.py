@@ -7,7 +7,7 @@ as the sharper test — mega-cap AI default-long base rate does not apply.
 
 For each of 5 BURL quarters in chronological order:
   1. Full pipeline via CLI: --save --predict --learn
-     (produces prediction/result.json WITH lessons + attribution/result.json)
+     (produces prediction/result.json WITH lessons + learning/result.json)
   2. Strip learning_context from the bundle, re-predict
      (produces experiments/prediction_no_lessons/result.json)
   3. Compare WITH vs WITHOUT on the same bundle

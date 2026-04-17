@@ -81,7 +81,7 @@ Market-session reality (user dataset: 8,172 filings / 770 tickers): `post_market
   │    │
   │    └─ 4. Attribution/Learner ─ historical: same-pass; live: deferred to next historical bootstrap
   │                        identifies primary drivers
-  │                        writes attribution/result.json
+  │                        writes learning/result.json (renamed from attribution/)
   │                        compacts reusable learnings into:
   │                          learnings/global.json
   │                          learnings/ticker/{TICKER}.json
@@ -844,8 +844,8 @@ Use these exact strings for optional unavailable learner inputs. Hard blockers (
 
 Flow:
 ```
-Q(n) attribution/result.json [raw feedback, audit]
-Q(n-1) attribution/result.json [raw feedback, audit]
+Q(n) learning/result.json [raw feedback, audit]  (renamed from attribution/ per obsidian_thinking.md 2026-04-17)
+Q(n-1) learning/result.json [raw feedback, audit]
 ...all prior quarters...
         │
         ▼
@@ -930,7 +930,7 @@ Validation (Q10) — block when output can't be trusted for its purpose, continu
 | Attribution/Learner output missing feedback fields | Warn + write — output still provides value. `missing_inputs` makes gaps explicit. |
 
 Crash recovery (Q15) — file-authoritative state makes this simple:
-- Per-step completion: `prediction/result.json` = prediction done, `attribution/result.json` = attribution done. A quarter with prediction but no attribution is partially done — orchestrator runs the missing attribution (this is how deferred live learners are caught during the next historical bootstrap).
+- Per-step completion: `prediction/result.json` = prediction done, `learning/result.json` = attribution/learner done (path renamed from `attribution/` per obsidian_thinking.md 2026-04-17). A quarter with prediction but no learning is partially done — orchestrator runs the missing learner (this is how deferred live learners are caught during the next historical bootstrap).
 - Crash mid-quarter → next run re-processes from scratch (planner → fetch → predictor). Idempotent.
 - `context_bundle.json` without `result.json` = partial state, safe to overwrite.
 - Write result.json via temp file + atomic rename to prevent half-written files.
@@ -972,8 +972,8 @@ earnings-analysis/Companies/{TICKER}/events/
     planner/fetch_plan.json          ← persisted for debugging/auditing what data was requested vs received
     prediction/context_bundle.json   ← written once, never overwritten
     prediction/result.json           ← orchestrator-written producer artifact; must include canonical TES fields; existence = done
-    attribution/context.json
-    attribution/result.json          ← contains embedded `feedback` block consumed in later-quarter planner/predictor context
+    learning/context.json             ← renamed from attribution/ per obsidian_thinking.md 2026-04-17
+    learning/result.json             ← contains embedded `feedback` block consumed in later-quarter planner/predictor context
 ```
 
 **`live_state.json`** (live mode only): Written by the orchestrator after live prediction completes. Maps the live 8-K accession to the derived quarter_label so the external trigger daemon (`EarningsTrigger.md`) can locate result files without deriving fiscal quarter identity itself.
@@ -1024,8 +1024,8 @@ One question at a time. Reprioritize after every input.
 | Q3 | Partial runs — stop/resume? | P1 | **Resolved**: No explicit stop/resume logic. File-authoritative state (Q16) + idempotent re-process (Q15) + Step 2 filter = automatic resume. Re-run orchestrator and it skips completed quarters. Scope-limiting (run N quarters, stop at X) deferred to SDK contract (Q22). |
 | Q4 | DataSubAgent integration under fork constraints — invocation pattern? | P0 | **Resolved**: Two-pass hybrid. Planner returns fetch plan; orchestrator executes via parallel Tasks. See §2a, §2b. |
 | Q5 | Quarter concurrency — parallel or sequential? | P0 | **Resolved**: Sequential. Attribution/Learner output from Q(n) feeds Q(n+1) prediction via self-learning loop. Parallel data fetches within each quarter. |
-| Q6 | Feedback target — prompt, per-company file, or pattern library? | P0 | **Resolved**: Compiled files. Raw `attribution/result.json` remains the audit artifact, but consumer-facing U1 uses `earnings-analysis/learnings/global.json` + `earnings-analysis/learnings/ticker/{TICKER}.json`. See §2d U1. |
-| Q7 | Attribution output format consumable by planner + predictor? | P0 | **Resolved**: `attribution/result.json` keeps the raw `feedback` block, but the consumable interface is the distilled learnings files. Predictor reads global+ticker lessons; planner does not consume learnings at launch. See §2d U1. |
+| Q6 | Feedback target — prompt, per-company file, or pattern library? | P0 | **Resolved**: Compiled files. Raw `learning/result.json` (renamed from `attribution/` per obsidian_thinking.md 2026-04-17) remains the audit artifact, but consumer-facing U1 uses `earnings-analysis/learnings/global.json` + `earnings-analysis/learnings/ticker/{TICKER}.json`. See §2d U1. |
+| Q7 | Attribution output format consumable by planner + predictor? | P0 | **Resolved**: `learning/result.json` (renamed from `attribution/`) keeps the raw `feedback` block, but the consumable interface is the distilled learnings files. Predictor reads global+ticker lessons; planner does not consume learnings at launch. See §2d U1. |
 | Q8 | Aggregated views for v1? | P1 | **Resolved**: Not orchestrator scope. Separate `build_summary.py` script reads all `result.json` → flat CSV. Automatable via hook later. See §4 aggregation tooling. |
 | Q9 | Aggregate location + format? | P1 | **Resolved**: `earnings-analysis/summary.csv`, pipe-delimited. Built by standalone script, not orchestrator. Legacy `predictions.csv` is old design — superseded. See §4. |
 | Q10 | Validation — block or warn? | P0 | **Resolved**: Tiered — block when output can't be trusted (8-K missing, unparseable plan, invalid prediction), continue with gap for data sources, warn+write for incomplete learner output. See §2d failure policy. |
@@ -1105,7 +1105,7 @@ Ready-to-build = all above done + §8 interface contracts resolved (I1-I7 comple
 
 ## 8. Planning Roadmap — What Remains Before Implementation
 
-**Status**: All P0/P1 architecture decisions resolved. OUTPUT contracts locked (fetch_plan.json, prediction/result.json, attribution/result.json feedback block). What remains: lock INPUT assembly contracts, then fill module implementation details.
+**Status**: All P0/P1 architecture decisions resolved. OUTPUT contracts locked (fetch_plan.json, prediction/result.json, learning/result.json feedback block — path renamed from `attribution/` per obsidian_thinking.md 2026-04-17). What remains: lock INPUT assembly contracts, then fill module implementation details.
 
 **Principle**: Interface-first. Lock all boundaries between modules before filling internals. This prevents rework.
 
@@ -1122,7 +1122,7 @@ Note: Interface contracts use I-prefix (I1-I7) to avoid collision with §6 Archi
 | I3 | **Orchestrator → Predictor input** | Predictor receives full bundle (all sections). | **Resolved** — delivery spec in §2a. |
 | I4 | **Orchestrator → Learner input** | Learner does NOT get a bundle. 3 minimal inputs: prediction/result.json path, actual returns, context_bundle.json path (reference only). Fetches its own data. | **Resolved** — spec in §2a. |
 | I5 | **Guidance → Orchestrator bridge** | Query Neo4j Guidance/GuidanceUpdate nodes, render as text for `guidance_history`. Empty if no nodes exist. Original design referenced `guidance-inventory.md` (file does not exist). | **Resolved** — spec in §2a. |
-| I6 | **Full attribution/result.json schema** | Full `attribution_result.v1` schema: actual_return, primary_driver (with evidence_refs), contributing_factors, surprise_analysis (nullable), analysis_summary, missing_inputs, feedback block, audit refs. | **Resolved** — full schema in §2d. |
+| I6 | **Full learning/result.json schema** (path renamed from `attribution/`) | Full `attribution_result.v1` schema (schema name unchanged): actual_return, primary_driver (with evidence_refs), contributing_factors, surprise_analysis (nullable), analysis_summary, missing_inputs, feedback block, audit refs. | **Resolved** — full schema in §2d. |
 | I7 | **Planner agent catalog** | 14 valid agents across 5 domains (Neo4j 6, Alpha Vantage 1, Yahoo 1, Benzinga API 1, Perplexity 5). Tier guidance for priority patterns. Exposed Yahoo ops are PIT-safe; Yahoo consensus/calendar remain excluded from historical use. | **Resolved** — catalog in §2b. |
 
 ### Phase B: Module Implementation Details (one at a time, in order)
@@ -1135,7 +1135,7 @@ Build this before calibration-heavy prompt iteration so improvements can be meas
 
 Key items to resolve:
 - Implement `scripts/earnings/build_summary.py`
-- Define the minimal eval view built from `prediction/result.json` + `attribution/result.json`
+- Define the minimal eval view built from `prediction/result.json` + `learning/result.json` (path renamed from `attribution/`)
 - Ensure summary generation is deterministic and rerunnable from files alone
 
 **B1: Planner + Predictor** (together — tightly coupled core loop)
@@ -1574,6 +1574,6 @@ earnings-analysis/Companies/{TICKER}/events/{quarter}/
   prediction/
     context_bundle.json
     result.json
-  attribution/
+  learning/                               ← renamed from attribution/ per obsidian_thinking.md 2026-04-17
     result.json
 ```

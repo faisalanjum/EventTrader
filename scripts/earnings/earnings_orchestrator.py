@@ -1842,7 +1842,7 @@ def run_learner_for_quarter(
     2. Derive PIT cutoff
     3. Fetch actual_return from Neo4j
     4. Invoke learner via SDK
-    5. Validate attribution/result.json (post-return)
+    5. Validate learning/result.json (post-return; renamed from attribution/ per obsidian_thinking.md)
     6. Append ticker + global lessons
 
     Returns the validated attribution result dict, or None on failure.
@@ -1863,7 +1863,7 @@ def run_learner_for_quarter(
     # A prior run may have written result.json but crashed before ticker/global appends.
     # Completion requires all 3 artifacts (plan §10 completion semantics).
     if attr_paths["result_path"].exists():
-        log.info("Learner %s %s: attribution/result.json exists, running derived-write recovery",
+        log.info("Learner %s %s: learning/result.json exists, running derived-write recovery",
                   ticker, quarter_info.get("quarter_label"))
         try:
             existing = json.loads(attr_paths["result_path"].read_text(encoding="utf-8"))
@@ -1926,7 +1926,7 @@ def run_learner_for_quarter(
 
     # ── Post-return validation ──
     if not result_path.exists():
-        log.error("Learner failed %s %s: attribution/result.json not written",
+        log.error("Learner failed %s %s: learning/result.json not written",
                    ticker, quarter_info.get("quarter_label"))
         return None
 
@@ -2535,7 +2535,7 @@ PRIOR_LESSONS: {prior_lessons_path}
             "\n--- YOUR PRIOR OUTPUT WAS REJECTED ---\n"
             "The previous attempt failed schema validation with these errors:\n"
             f"{numbered}\n\n"
-            "Fix these EXACT errors and re-emit attribution/result.json. "
+            "Fix these EXACT errors and re-emit learning/result.json. "
             "Do not change other fields; only correct the listed shape issues.\n"
         )
         return f"{skill_content}\n\n{inputs_section}{retry_block}"

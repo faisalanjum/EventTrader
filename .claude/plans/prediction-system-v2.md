@@ -40,7 +40,7 @@ ON 8-K TRIGGER:
 
 DEFERRED:
   Learner via SDK                          (~5-10 min)
-    → attribution/result.json with lessons
+    → learning/result.json with lessons
     → U1 feeds next cycle
 ```
 
@@ -202,7 +202,7 @@ def build_prediction_bundle(ticker, quarter_info, pit_cutoff=None):
 
 **Learner data access**: Has MCP tools available (neo4j-cypher, yahoo-finance, etc.) for post-event investigation. Fetches transcripts, 10-Q, analyst reactions autonomously. No PIT gate (post-event, uses all available data).
 
-**Output validation**: Learner returns JSON only. Python orchestrator validates schema and writes attribution/result.json. No hooks — all validation in Python.
+**Output validation**: Learner returns JSON only. Python orchestrator validates schema and writes `learning/result.json` (path renamed from `attribution/` per obsidian_thinking.md 2026-04-17). No hooks — all validation in Python.
 
 ### 2e. Trigger Daemon (unchanged)
 
@@ -435,7 +435,7 @@ earnings-analysis/Companies/{TICKER}/
         context_bundle.json                ← the 9-item bundle the predictor received
         supplementary.json                 ← answers to predictor questions (if any)
         result.json                        ← prediction output (existence = done)
-      attribution/
+      learning/                            ← renamed from attribution/ per obsidian_thinking.md 2026-04-17
         result.json                        ← learner output with feedback block
 ```
 
