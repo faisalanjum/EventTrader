@@ -280,8 +280,10 @@ def derive_quarter_label_for_guidance(
       - ``8k``: Report.fiscal_quarter/fiscal_year are typically NULL. Derive
         via ``resolve_quarter_info(ticker, accession)`` which uses
         periodOfReport + XBRL fallback.
-      - ``10q`` / ``10k``: Report.fiscal_quarter/fiscal_year are usually
-        populated by the XBRL-aware ingestion path. Read directly.
+      - ``10q`` / ``10k``: try direct Report.fiscal_quarter/fiscal_year first
+        (usually populated by XBRL ingestion); if NULL, fall back to
+        ``period_to_fiscal(periodOfReport, FYE_month, formType)`` via
+        ``_derive_via_period_to_fiscal``.
       - ``transcript``: Transcript.fiscal_quarter/fiscal_year populated.
         Direct read.
       - ``news``: cross-cutting; return None (raw capture in pipeline/extractions/).
@@ -470,16 +472,38 @@ def _get_neo4j_manager_best_effort():
 
 
 def _ensure_mgr(current_mgr):
-    """Self-healing Neo4j manager: if current_mgr is None, attempt recovery.
+    """Self-healing Neo4j manager with full liveness probe.
 
-    Called before each harvest in --watch mode so the daemon heals after a
-    transient Neo4j outage at startup without needing a service restart.
-    Returns whatever the factory produces (may still be None if Neo4j is
-    truly unavailable — caller then gracefully degrades to ``skipped_no_quarter``).
+    Called before each harvest in --watch mode so the daemon heals after
+    both (a) startup-time Neo4j outage (current_mgr is None) AND (b) runtime
+    connection death where the mgr object exists but its driver/pool is
+    defunct (ChatGPT Finding A, 2026-04-17).
+
+    Strategy:
+      - None → attempt factory recovery
+      - non-None → ping with ``RETURN 1`` (cheapest possible query). On
+        success, keep existing mgr (no rebuild cost). On exception, rebuild
+        via factory — the old mgr's driver pool may be exhausted, auth may
+        have expired, or the Neo4j server may have restarted.
+
+    Cost: one ``RETURN 1`` per harvest attempt (sub-ms). Watch mode typically
+    fires < 1 event per minute, so the probe overhead is negligible.
+
+    Returns whatever the factory ultimately produces (possibly None if Neo4j
+    is truly unavailable — caller then gracefully degrades to
+    ``skipped_no_quarter``).
     """
-    if current_mgr is not None:
+    if current_mgr is None:
+        return _get_neo4j_manager_best_effort()
+    try:
+        current_mgr.execute_cypher_query_all("RETURN 1 AS ok", {})
         return current_mgr
-    return _get_neo4j_manager_best_effort()
+    except Exception as e:
+        log.warning(
+            "Existing Neo4j mgr appears defunct (%s) — rebuilding via factory",
+            e,
+        )
+        return _get_neo4j_manager_best_effort()
 
 
 # Exit code map for cmd_one (Finding 3 — ChatGPT 2026-04-17):

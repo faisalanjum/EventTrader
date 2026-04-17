@@ -468,6 +468,31 @@ def test_ensure_mgr_returns_none_when_factory_also_fails(monkeypatch):
     assert _ensure_mgr(None) is None
 
 
+def test_ensure_mgr_recovers_from_defunct_non_none_mgr(monkeypatch):
+    """ChatGPT Finding A: if existing mgr object raises on a liveness ping,
+    rebuild via the factory. Previously only None triggered recovery, leaving
+    the daemon stuck with a defunct connection until restart."""
+    from harvest_guidance_sessions import _ensure_mgr
+    defunct = MagicMock()
+    defunct.execute_cypher_query_all.side_effect = Exception("connection broken")
+    recovered = MagicMock(name="recovered")
+    monkeypatch.setattr("harvest_guidance_sessions._get_neo4j_manager_best_effort",
+                        lambda: recovered)
+    result = _ensure_mgr(defunct)
+    assert result is recovered
+    # The liveness probe was attempted
+    defunct.execute_cypher_query_all.assert_called_once()
+
+
+def test_ensure_mgr_keeps_live_mgr_via_liveness_probe():
+    """Healthy mgr: liveness ping succeeds → return existing (no rebuild)."""
+    from harvest_guidance_sessions import _ensure_mgr
+    live = MagicMock()
+    live.execute_cypher_query_all.return_value = [{"ok": 1}]
+    assert _ensure_mgr(live) is live
+    live.execute_cypher_query_all.assert_called_once()
+
+
 # ── Finding 3 (ChatGPT): cmd_one exit codes reflect actual status ─────────
 
 @pytest.mark.parametrize("status,expected_exit", [
