@@ -110,3 +110,7 @@ earnings-analysis/test-outputs/
 # K8s disaster recovery contains secrets - never commit
 k8s-disaster-recovery/
 .env.bak*
+
+# Learner runtime artifacts (fcntl.flock lockfile + operator backup copies per learner-edits.md §8.3/R12)
+earnings-analysis/learnings/*.lock
+earnings-analysis/learnings.backup.*
