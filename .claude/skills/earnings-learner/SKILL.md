@@ -27,9 +27,9 @@ Provided in the `--- INPUTS ---` section appended to this prompt:
 | `PIT_MODE` | `historical` or `live` |
 | `PIT_CUTOFF` | ISO timestamp (historical) or `null` (live) |
 | `PIT_BOUNDARY_SOURCE` | `next_quarter`, `live_cycle`, or `invocation_time` |
-| `RESULT_PATH` | Where to write `attribution/result.json` |
+| `RESULT_PATH` | Where to write `learning/result.json` |
 | `PREDICTION_RESULT` | Path to `prediction/result.json` |
-| `CONTEXT_BUNDLE` | Path to `prediction/context_bundle.json` |
+| `CONTEXT_BUNDLE` | Path to `context_bundle.json` (at quarter root) |
 | `ACTUAL_RETURN` | JSON: `{daily_stock_pct, hourly_stock_pct, session_stock_pct, daily_macro_pct, daily_sector_pct, daily_industry_pct, market_session}` |
 | `PRIOR_LESSONS` | Path to `learnings/ticker/{TICKER}.json` (may not exist) |
 
@@ -37,7 +37,7 @@ Provided in the `--- INPUTS ---` section appended to this prompt:
 
 ## Output
 
-Write ONE file: `attribution/result.json` at `RESULT_PATH`. Schema `attribution_result.v2`. Do NOT write to any other path — Python handles `ticker.json` and `global.json` appends.
+Write ONE file: `learning/result.json` at `RESULT_PATH`. Schema `attribution_result.v2` (schema name unchanged; only the folder path was renamed from `attribution/` to `learning/` per obsidian_thinking.md 2026-04-17). Do NOT write to any other path — Python handles `ticker.json` and `global.json` appends.
 
 **Format**: Write a raw JSON object only. No markdown fences, no commentary, no trailing text. The file must parse as valid JSON directly.
 
@@ -56,7 +56,7 @@ Write ONE file: `attribution/result.json` at `RESULT_PATH`. Schema `attribution_
 - `global_observations`: array max 3. Each entry is scope-conditional: `{scope:"sector", target_sector, lesson}` OR `{scope:"macro", lesson}` OR `{scope:"cross_ticker", related_tickers, lesson}`. **Do NOT emit `scope_key`** — see the Global observations section below. Can be `[]`
 - `missing_inputs`: array of strings. Can be `[]`
 - `data_sources_used`: array of agent/source names queried
-- `context_bundle_ref`: always `"prediction/context_bundle.json"` (canonical relative path, not the absolute INPUTS path)
+- `context_bundle_ref`: always `"context_bundle.json"` (canonical relative path at quarter root, not the absolute INPUTS path)
 - `prediction_result_ref`: always `"prediction/result.json"` (canonical relative path, not the absolute INPUTS path)
 
 ### Feedback block
@@ -190,7 +190,7 @@ Utilities
 
 13. Record **missing_inputs** — any unavailable sources (canonical values: `transcript`, `10-Q`, `10-K`, `presentation`, `post_event_news`, `peer_reactions`, `sector_context`, `xbrl_actuals`)
 14. Record **data_sources_used** — all agents/sources actually queried
-15. Write `attribution/result.json` to `RESULT_PATH`. This is the ONLY file you write.
+15. Write `learning/result.json` to `RESULT_PATH`. This is the ONLY file you write.
 
 ---
 

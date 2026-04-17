@@ -151,16 +151,17 @@ See `.claude/filters/rules.json` for:
 ## Output
 
 **Events manifest**: `earnings-analysis/Companies/{TICKER}/events/event.json` (rebuilt every run)
-**Prediction**: `earnings-analysis/Companies/{TICKER}/events/{quarter_label}/prediction/{context.json,result.json}`
-**Attribution**: `earnings-analysis/Companies/{TICKER}/events/{quarter_label}/attribution/{context.json,result.json}`
+**Context bundle** (shared by predictor + learner): `earnings-analysis/Companies/{TICKER}/events/{quarter_label}/context_bundle.{json,txt}` (promoted to quarter root per obsidian_thinking.md 2026-04-17)
+**Prediction**: `earnings-analysis/Companies/{TICKER}/events/{quarter_label}/prediction/result.json`
+**Learning** (renamed from `attribution/` per obsidian_thinking.md 2026-04-17): `earnings-analysis/Companies/{TICKER}/events/{quarter_label}/learning/result.json`
 
 ---
 
 ## Invariants (Must Always Hold)
 
 - If `prediction/result.json` exists, prediction is skipped.
-- `prediction/context.json` is written only if missing (never overwritten by orchestrator).
-- If `attribution/result.json` exists and is valid, derived-write recovery runs (ticker/global lesson appends) then attribution analysis is skipped. If the existing file is invalid or corrupt, it is deleted and the learner re-runs.
+- `context_bundle.json` (quarter root) is written only if missing (never overwritten by orchestrator).
+- If `learning/result.json` exists and is valid, derived-write recovery runs (ticker/global lesson appends) then learning analysis is skipped. If the existing file is invalid or corrupt, it is deleted and the learner re-runs.
 
 ---
 

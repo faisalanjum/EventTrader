@@ -41,7 +41,7 @@
           },
           {
             "type": "command",
-            "command": "python3 /home/faisal/EventMarketDB/.claude/hooks/validate_attribution_output.py"
+            "command": "python3 /home/faisal/EventMarketDB/.claude/hooks/validate_learning_output.py"
           }
         ]
       },

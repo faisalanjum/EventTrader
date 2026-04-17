@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
-"""BURL sequential calibration with per-quarter A/B (WITH vs WITHOUT lessons).
+"""NVDA sequential calibration with per-quarter A/B (WITH vs WITHOUT lessons).
 
-Runs on Opus 4.6 (reverted from 4.7 on 2026-04-16 after NVDA A/B).
-Uses the LAST 5 BURL events (most recent, mixed 3-up/2-down directions)
-as the sharper test — mega-cap AI default-long base rate does not apply.
-
-For each of 5 BURL quarters in chronological order:
+For each of 5 NVDA quarters in chronological order:
   1. Full pipeline via CLI: --save --predict --learn
      (produces prediction/result.json WITH lessons + attribution/result.json)
   2. Strip learning_context from the bundle, re-predict
      (produces experiments/prediction_no_lessons/result.json)
   3. Compare WITH vs WITHOUT on the same bundle
 
-Lessons flow: AVGO+NVDA accumulated global.json + (BURL Q1, Q2, ...) ticker.json
-feed each successive BURL quarter's WITH-lessons run.
+Lessons flow: AVGO's accumulated global.json + (NVDA Q1, Q2, ...) ticker.json
+feed each successive NVDA quarter's WITH-lessons run.
 """
 import json
 import logging
@@ -34,9 +30,9 @@ from earnings_orchestrator import (
 )
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
-log = logging.getLogger("burl_ab")
+log = logging.getLogger("nvda_ab")
 
-TICKER = "BURL"
+TICKER = "NVDA"
 
 
 def _load_events():
@@ -94,8 +90,7 @@ def run_baseline(accession: str, label: str, quarter_info: dict) -> None:
     baseline_dir.mkdir(parents=True, exist_ok=True)
     stripped_bundle = baseline_dir / "context_bundle.json"
     stripped_rendered = baseline_dir / "context_bundle_rendered.txt"
-    # Context bundle is at QUARTER ROOT (ev_dir), not under prediction/, per
-    # obsidian_thinking.md (2026-04-17).
+    # Context bundle is at QUARTER ROOT per obsidian_thinking.md (2026-04-17).
     strip_learning_context(ev_dir / "context_bundle.json", stripped_bundle, stripped_rendered)
     test_result_path = baseline_dir / "result.json"
     if test_result_path.exists():
@@ -118,7 +113,6 @@ def run_baseline(accession: str, label: str, quarter_info: dict) -> None:
 
 
 def compare(label: str) -> dict:
-    # Learner output post-rename is under learning/ (not attribution/).
     attr = json.loads((COMPANIES_DIR / TICKER / "events" / label / "learning" / "result.json").read_text())
     with_pred = json.loads((COMPANIES_DIR / TICKER / "events" / label / "prediction" / "result.json").read_text())
     without_pred = json.loads((COMPANIES_DIR / TICKER / "events" / label / "experiments" / "prediction_no_lessons" / "result.json").read_text())
@@ -146,18 +140,14 @@ def compare(label: str) -> dict:
 
 def main():
     events = _load_events()
-    # BURL has 13 events; use the LAST 5 (most recent, mixed direction) for the A/B.
-    window = events[-5:]
-    base_idx = len(events) - 5  # absolute index into `events` for prev_8k_ts
-    targets = [(e["accession_8k"], e["quarter_label"]) for e in window]
-    log.info("=== BURL sequential calibration (5 quarters with A/B) ===")
+    targets = [(e["accession_8k"], e["quarter_label"]) for e in events[:5]]
+    log.info("=== NVDA sequential calibration (5 quarters with A/B) ===")
     for acc, lbl in targets:
         log.info("  %s (%s)", lbl, acc)
 
     results = []
-    for local_idx, (accession, label) in enumerate(targets):
-        idx = base_idx + local_idx
-        log.info("\n===== BURL %s (%d/5) =====", label, local_idx + 1)
+    for idx, (accession, label) in enumerate(targets):
+        log.info("\n===== NVDA %s (%d/5) =====", label, idx + 1)
         qi = {
             "accession_8k": accession,
             "filed_8k": events[idx]["filed_8k"],
@@ -176,7 +166,7 @@ def main():
 
     # Final summary
     log.info("\n============================================================")
-    log.info("BURL A/B FINAL on %d quarters:", len(results))
+    log.info("NVDA A/B FINAL on %d quarters:", len(results))
     w_correct = sum(1 for r in results if r["with"]["correct"])
     wo_correct = sum(1 for r in results if r["without"]["correct"])
     n = len(results)
@@ -185,7 +175,7 @@ def main():
     log.info("  Delta: %+d", w_correct - wo_correct)
     log.info("============================================================")
 
-    summary_path = Path("earnings-analysis/test-outputs/ab_BURL.json")
+    summary_path = Path("earnings-analysis/test-outputs/ab_NVDA.json")
     summary_path.parent.mkdir(parents=True, exist_ok=True)
     summary_path.write_text(json.dumps(results, indent=2, default=str), encoding="utf-8")
     log.info("Summary written to %s", summary_path)

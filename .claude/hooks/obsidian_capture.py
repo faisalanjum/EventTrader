@@ -13,6 +13,14 @@ msg = d.get('last_assistant_message', '')[:3000]
 if agent_type in ('', 'unknown') or any(x in agent_type for x in ('prompt_suggestion', 'compact', 'warmup')):
     sys.exit(0)
 
+# thinking_harvester owns these agent_types now (2026-04-17, obsidian_thinking.md).
+# Skip-list strings are FROZEN runtime identifiers — do NOT rename even though
+# the attribution/ path was renamed to learning/. The skip-list matches on
+# exact string equality.
+SKIP_AGENT_TYPES = {"earnings-prediction", "earnings-attribution", "earnings-learner"}
+if agent_type in SKIP_AGENT_TYPES:
+    sys.exit(0)
+
 # --- Dynamic tag inference ---
 tags = ['claude-log']
 if agent_type:
@@ -74,6 +82,13 @@ def _downgrade_headings(text):
 
 
 # --- Extract all blocks from agent's own transcript ---
+# TODO (2026-04-17): Phase 9 (d) of obsidian_thinking.md calls for this inline
+# parsing loop to be replaced with `from scripts.earnings.thinking_blocks import
+# parse_session_blocks` while preserving the tool_use↔tool_result pairing
+# logic below. Deferred to a follow-up commit because the hook's output shape
+# has downstream consumers (Obsidian notes) and a full behavior-preserving
+# refactor needs its own regression test. The harvester (which is the
+# load-bearing consumer of the plan) already uses parse_session_blocks.
 thinking_blocks = []
 text_blocks = []
 tool_blocks = []  # each entry: {text, ts, result}
@@ -376,8 +391,15 @@ vault = os.environ.get('HOME', '') + '/Obsidian/EventTrader/Earnings/earnings-an
 # Folder routing by agent type
 # Pipeline agents -> pipeline/{stage}, everything else -> agents/
 FOLDER_ROUTING = {
-    'extraction-primary-agent': 'pipeline/extractions',
-    'extraction-enrichment-agent': 'pipeline/extractions',
+    # guidance extraction agents — type-sharded under pipeline/extractions/guidance/
+    # (2026-04-17 obsidian_thinking.md). News/risk extraction gets its own subfolder
+    # when those extraction types land.
+    'extraction-primary-agent': 'pipeline/extractions/guidance',
+    'extraction-enrichment-agent': 'pipeline/extractions/guidance',
+    # Note: earnings-prediction / earnings-attribution / earnings-learner are
+    # handled by SKIP_AGENT_TYPES at the top of main() — thinking_harvester
+    # owns them. The entries below are retained as a safety fallback in case
+    # the skip-list is ever bypassed.
     'earnings-prediction': 'pipeline/predictions',
     'earnings-attribution': 'pipeline/learner',
     'earnings-learner': 'pipeline/learner',
@@ -393,8 +415,11 @@ os.makedirs(log_dir, exist_ok=True)
 
 # Extraction agents: one file per source_id, enrichment appends
 # Non-extraction agents: one file per agent_id (unchanged)
+# Filename simplification (2026-04-17): drop the redundant `_extraction_`
+# segment since the folder name (pipeline/extractions/guidance/) already
+# encodes the type.
 if _is_extraction and _extract_source_id:
-    filename = f'{date}_extraction_{_extract_source_id}.md'
+    filename = f'{date}_{_extract_source_id}.md'
     filepath = f'{log_dir}/{filename}'
     mode = 'w' if _is_primary else 'a'
 else:

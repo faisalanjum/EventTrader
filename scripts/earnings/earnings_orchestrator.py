@@ -1535,14 +1535,33 @@ def get_prediction_dir(ticker: str, quarter_info: dict, save_dir: str | None = N
     return Path("earnings-analysis/Companies") / ticker.upper() / "events" / quarter_dir / "prediction"
 
 
+def get_quarter_dir(ticker: str, quarter_info: dict, save_dir: str | None = None) -> Path:
+    """Return the top-level quarter directory (parent of prediction/, learning/, experiments/).
+
+    Added 2026-04-17 per obsidian_thinking.md: context_bundle.{json,txt} are
+    PROMOTED from events/{Q}/prediction/ up to events/{Q}/ (quarter root) so
+    they are shared by predictor + learner + future readers.
+    """
+    if save_dir:
+        return Path(save_dir).parent
+    quarter_dir = quarter_info.get("quarter_label") or quarter_info["accession_8k"]
+    return Path("earnings-analysis/Companies") / ticker.upper() / "events" / quarter_dir
+
+
 def get_prediction_paths(ticker: str, quarter_info: dict,
                          save_dir: str | None = None) -> dict[str, Path]:
-    """Return canonical paths for predictor bundle + result artifacts."""
+    """Return canonical paths for predictor bundle + result artifacts.
+
+    As of obsidian_thinking.md (2026-04-17), ``context_bundle.{json,txt}``
+    live at the QUARTER ROOT (``events/{Q}/``), not under ``prediction/``.
+    ``result.json`` stays under ``prediction/``.
+    """
     base_dir = get_prediction_dir(ticker, quarter_info, save_dir)
+    q_dir = get_quarter_dir(ticker, quarter_info, save_dir)
     return {
         "base_dir": base_dir,
-        "bundle_path": base_dir / "context_bundle.json",
-        "rendered_path": base_dir / "context_bundle_rendered.txt",
+        "bundle_path": q_dir / "context_bundle.json",
+        "rendered_path": q_dir / "context_bundle_rendered.txt",
         "result_path": base_dir / "result.json",
     }
 
@@ -1622,26 +1641,55 @@ COMPANIES_DIR = Path("earnings-analysis/Companies")
 LEARNINGS_DIR = Path("earnings-analysis/learnings")
 
 
-def get_attribution_dir(ticker: str, quarter_info: dict,
-                        save_dir: str | None = None) -> Path:
-    """Return the attribution artifact directory for this event."""
+def get_learning_dir(ticker: str, quarter_info: dict,
+                     save_dir: str | None = None) -> Path:
+    """Return the learning artifact directory for this event.
+
+    Renamed from ``get_attribution_dir`` per obsidian_thinking.md
+    (2026-04-17). The folder name changed from ``attribution/`` to
+    ``learning/``; the schema name ``attribution_result.v2`` is preserved
+    (schema versions are not renamed per plan).
+    """
     if save_dir:
         return Path(save_dir)
     quarter_dir = quarter_info.get("quarter_label") or quarter_info["accession_8k"]
-    return COMPANIES_DIR / ticker.upper() / "events" / quarter_dir / "attribution"
+    return COMPANIES_DIR / ticker.upper() / "events" / quarter_dir / "learning"
 
 
+# Thin alias for 1-release backward compat. Existing callers using the
+# old name continue to work transparently. Remove after callers migrate.
+def get_attribution_dir(ticker: str, quarter_info: dict,
+                        save_dir: str | None = None) -> Path:
+    """DEPRECATED alias for get_learning_dir (1-release backward compat)."""
+    return get_learning_dir(ticker, quarter_info, save_dir)
+
+
+def get_learning_paths(ticker: str, quarter_info: dict,
+                       save_dir: str | None = None) -> dict[str, Path]:
+    """Return canonical paths for learner result + lesson artifacts.
+
+    As of obsidian_thinking.md (2026-04-17):
+      - ``base_dir`` is ``events/{Q}/learning/`` (renamed from attribution/)
+      - ``context_bundle_path`` is at the QUARTER ROOT (promoted from
+        prediction/)
+    """
+    learn_dir = get_learning_dir(ticker, quarter_info, save_dir)
+    q_dir = learn_dir.parent
+    pred_dir = q_dir / "prediction"
+    return {
+        "base_dir": learn_dir,
+        "result_path": learn_dir / "result.json",
+        "prediction_result_path": pred_dir / "result.json",
+        "context_bundle_path": q_dir / "context_bundle.json",
+    }
+
+
+# Thin alias — preserves "get_attribution_paths" import for 1 release.
+# Remove once all callers migrate.
 def get_attribution_paths(ticker: str, quarter_info: dict,
                           save_dir: str | None = None) -> dict[str, Path]:
-    """Return canonical paths for learner result + lesson artifacts."""
-    attr_dir = get_attribution_dir(ticker, quarter_info, save_dir)
-    pred_dir = attr_dir.parent / "prediction"
-    return {
-        "base_dir": attr_dir,
-        "result_path": attr_dir / "result.json",
-        "prediction_result_path": pred_dir / "result.json",
-        "context_bundle_path": pred_dir / "context_bundle.json",
-    }
+    """DEPRECATED alias for get_learning_paths (1-release backward compat)."""
+    return get_learning_paths(ticker, quarter_info, save_dir)
 
 
 def get_learnings_paths(ticker: str) -> dict[str, Path]:
@@ -1795,7 +1843,7 @@ def run_learner_for_quarter(
     Returns the validated attribution result dict, or None on failure.
     """
     ticker = ticker.upper()
-    attr_paths = get_attribution_paths(ticker, quarter_info)
+    attr_paths = get_learning_paths(ticker, quarter_info)
     learn_paths = get_learnings_paths(ticker)
     accession = quarter_info.get("accession_8k", "")
 
@@ -1858,7 +1906,7 @@ def run_learner_for_quarter(
     result_path = attr_paths["result_path"]
     result_path.parent.mkdir(parents=True, exist_ok=True)
 
-    run_learner_via_sdk(
+    _sdk_result, learner_session_id = run_learner_via_sdk(
         ticker=ticker,
         quarter_info=quarter_info,
         actual_return=actual_return,
@@ -1898,7 +1946,7 @@ def run_learner_for_quarter(
             "Retrying learner for %s %s (1 retry, feeding %d validation errors back)",
             ticker, quarter_info.get("quarter_label"), len(errors),
         )
-        run_learner_via_sdk(
+        _sdk_retry_result, learner_session_id = run_learner_via_sdk(
             ticker=ticker,
             quarter_info=quarter_info,
             actual_return=actual_return,
@@ -1929,10 +1977,13 @@ def run_learner_for_quarter(
                        ticker, quarter_info.get("quarter_label"), "; ".join(errors[:3]))
             return None
 
-    # Stamp authoritative model_version from central config. The learner's
-    # SKILL.md may write any value; Python overrides with what actually ran.
-    payload = finalize_attribution_result(
-        result_path=result_path, model=LEARNER.model,
+    # Stamp authoritative model_version + sdk_session_id; side-effect render + harvest.
+    payload = finalize_learning_result(
+        result_path=result_path,
+        model=LEARNER.model,
+        sdk_session_id=learner_session_id,
+        ticker=ticker,
+        quarter_label=quarter_info.get("quarter_label"),
     )
 
     # ── Derived writes: ticker.json + global.json ──
@@ -2422,7 +2473,7 @@ async def _run_learner_via_sdk(
     context_bundle_path: Path,
     prior_lessons_path: Path,
     prior_validation_errors: list[str] | None = None,
-) -> str | None:
+) -> tuple[str | None, str | None]:
     """Invoke the learner via SDK embed (main session, full tool access).
 
     Loads SKILL.md content as prompt text — NOT via /earnings-learner fork.
@@ -2431,6 +2482,14 @@ async def _run_learner_via_sdk(
     ``prior_validation_errors`` threads through to ``_build_learner_prompt`` so
     the retry path in ``run_learner_for_quarter`` can feed the previous
     attempt's validation errors back into the prompt (H2, informed retry).
+
+    Returns:
+        Tuple of ``(final_result, session_id)``. ``session_id`` is captured
+        using the hybrid approach (per obsidian_thinking.md locked decision §6):
+        primary path is ``getattr(msg, "session_id", None)`` which works
+        against SDK v0.1.61 where every message class exposes it; fallback to
+        the older ``SystemMessage(subtype="init").data.get("session_id")``
+        shape for SDK-version resilience.
     """
     from claude_agent_sdk import query, ClaudeAgentOptions
     cli_path, creds_path = _assert_claude_code_oauth_ready()
@@ -2457,7 +2516,8 @@ async def _run_learner_via_sdk(
     def _stderr_sink(line: str) -> None:
         log.info("learner stderr: %s", line.rstrip())
 
-    final_result = None
+    final_result: str | None = None
+    session_id: str | None = None
     async for msg in query(
         prompt=prompt,
         options=ClaudeAgentOptions(
@@ -2469,9 +2529,15 @@ async def _run_learner_via_sdk(
             env=_sdk_subprocess_env(),
         ),
     ):
+        # Hybrid session_id capture — primary path (SDK v0.1.61+) + fallback.
+        if session_id is None:
+            session_id = getattr(msg, "session_id", None) or getattr(msg, "sessionId", None)
+        if session_id is None and getattr(msg, "subtype", "") == "init":
+            data = getattr(msg, "data", {}) or {}
+            session_id = data.get("session_id") or data.get("sessionId")
         if hasattr(msg, "result"):
             final_result = str(msg.result)
-    return final_result
+    return final_result, session_id
 
 
 def run_learner_via_sdk(
@@ -2486,11 +2552,13 @@ def run_learner_via_sdk(
     context_bundle_path: Path,
     prior_lessons_path: Path,
     prior_validation_errors: list[str] | None = None,
-) -> str | None:
+) -> tuple[str | None, str | None]:
     """Sync wrapper for the learner SDK call.
 
     ``prior_validation_errors`` threads through to ``_run_learner_via_sdk`` for
     the H2 informed-retry path. Default None for first-attempt calls.
+
+    Returns ``(final_result, session_id)`` tuple — see ``_run_learner_via_sdk``.
     """
     try:
         return asyncio.run(_run_learner_via_sdk(
@@ -2644,30 +2712,81 @@ def _hash_prompt_version(skill_path: Path = _PREDICTOR_SKILL_PATH) -> str:
         return "v1"
 
 
-def finalize_attribution_result(
+def finalize_learning_result(
     *,
     result_path: Path,
     model: str,
+    sdk_session_id: str | None = None,
+    ticker: str | None = None,
+    quarter_label: str | None = None,
+    experiment_name: str | None = None,
 ) -> dict:
-    """Stamp authoritative model_version onto attribution/result.json.
+    """Stamp authoritative metadata onto learning/result.json + side-effects.
 
     Mirrors the predictor's finalize_prediction_result() in principle but
-    intentionally narrowly scoped: ONLY overwrites ``model_version``. Does
-    NOT rewrite any other learner-authored field (evidence_ledger,
-    primary_driver, feedback, global_observations, etc.). The learner's
-    prompt controls everything else; Python is only the source of truth
-    for which model actually ran.
+    intentionally narrow: ONLY overwrites ``model_version`` + adds
+    ``sdk_session_id`` flat top-level field. Does NOT rewrite any other
+    learner-authored field. The learner's prompt controls everything else;
+    Python is only the source of truth for which model actually ran + the
+    SDK session id for thinking harvest linkage.
 
-    Called after the learner's SDK call returns and validation passes.
+    Side-effects (best-effort, try/except so neither blocks the JSON write):
+      - Generates ``result.md`` sidecar via result_md_renderer
+      - Calls thinking_harvester.harvest() to produce ``thinking.md`` +
+        ``subagents/`` under ``events/{Q}/learning/``
+
+    Added 2026-04-17 per obsidian_thinking.md. Old name
+    ``finalize_attribution_result`` is kept as a thin alias for 1 release.
     """
     if not result_path.exists():
         raise RuntimeError(f"Learner did not write {result_path}")
     payload = json.loads(result_path.read_text(encoding="utf-8"))
     payload["model_version"] = model
+    # sdk_session_id: never overwrite an existing non-null value with None
+    # (protects resume paths where the caller doesn't re-capture a session id).
+    # Rule: stamp when caller provides a real value OR when the key is missing;
+    # otherwise preserve whatever is already there.
+    existing_sid = payload.get("sdk_session_id")
+    if sdk_session_id is not None:
+        payload["sdk_session_id"] = sdk_session_id
+    elif "sdk_session_id" not in payload:
+        payload["sdk_session_id"] = None
+    # else: payload already has a value (None or real); keep it unchanged.
+    effective_sid = payload.get("sdk_session_id")
     result_path.write_text(
         json.dumps(payload, indent=2, default=str), encoding="utf-8"
     )
+
+    _render_and_harvest_best_effort(
+        component="learning",
+        result_path=result_path,
+        ticker=ticker or payload.get("ticker"),
+        quarter_label=quarter_label or payload.get("quarter_label"),
+        sdk_session_id=effective_sid,
+        experiment_name=experiment_name,
+    )
     return payload
+
+
+# Thin alias — 1-release backward-compat for any caller still using the old name.
+def finalize_attribution_result(
+    *,
+    result_path: Path,
+    model: str,
+    sdk_session_id: str | None = None,
+    ticker: str | None = None,
+    quarter_label: str | None = None,
+    experiment_name: str | None = None,
+) -> dict:
+    """DEPRECATED alias for finalize_learning_result (1-release compat)."""
+    return finalize_learning_result(
+        result_path=result_path,
+        model=model,
+        sdk_session_id=sdk_session_id,
+        ticker=ticker,
+        quarter_label=quarter_label,
+        experiment_name=experiment_name,
+    )
 
 
 def finalize_prediction_result(
@@ -2675,11 +2794,20 @@ def finalize_prediction_result(
     ticker: str,
     quarter_info: dict,
     model: str = PREDICTOR_MODEL_ID,
+    sdk_session_id: str | None = None,
+    experiment_name: str | None = None,
 ) -> None:
     """Enrich LLM-written prediction with deterministic metadata.
 
-    LLM writes 7 analytic fields per SKILL.md; Python adds 8 fields here.
+    LLM writes 7 analytic fields per SKILL.md; Python adds 8 fields here
+    plus ``sdk_session_id`` (flat top-level; nullable).
     Runs AFTER SDK write, BEFORE validator. Does not change /earnings-prediction.
+
+    Side-effects (best-effort, try/except so neither blocks the JSON write):
+      - Generates ``result.md`` sidecar via result_md_renderer
+      - Calls thinking_harvester.harvest() to produce ``thinking.md`` under
+        ``events/{Q}/prediction/`` (or under ``experiments/{experiment_name}/``
+        when ``experiment_name`` is provided — used by A/B baseline callsites).
     """
     if not result_path.exists():
         raise RuntimeError(f"Predictor did not write {result_path}")
@@ -2700,6 +2828,15 @@ def finalize_prediction_result(
     payload["predicted_at"] = datetime.now(timezone.utc).isoformat()
     payload["model_version"] = model
     payload["prompt_version"] = _hash_prompt_version()
+    # sdk_session_id: never overwrite an existing non-null value with None.
+    # Protects resume paths (e.g., run_ab_baseline.py) where caller passes
+    # None because the SDK wasn't re-invoked.
+    if sdk_session_id is not None:
+        payload["sdk_session_id"] = sdk_session_id
+    elif "sdk_session_id" not in payload:
+        payload["sdk_session_id"] = None
+    # else: existing value (None or real) preserved.
+    effective_sid = payload.get("sdk_session_id")
 
     # Deterministic derivations from LLM output
     payload["confidence_bucket"] = _derive_confidence_bucket(
@@ -2712,11 +2849,76 @@ def finalize_prediction_result(
     # Atomic write back (temp file + os.replace)
     _atomic_write_json(result_path, payload)
 
+    _render_and_harvest_best_effort(
+        component="prediction" if experiment_name is None else "prediction_no_lessons",
+        result_path=result_path,
+        ticker=ticker,
+        quarter_label=quarter_info["quarter_label"],
+        sdk_session_id=effective_sid,
+        experiment_name=experiment_name,
+    )
+
+
+def _render_and_harvest_best_effort(
+    *,
+    component: str,
+    result_path: Path,
+    ticker: str | None,
+    quarter_label: str | None,
+    sdk_session_id: str | None,
+    experiment_name: str | None,
+) -> None:
+    """Run result_md render + thinking_harvester in try/except.
+
+    Neither failure blocks the result.json write (per locked decision:
+    "Silent-fail semantics on harvest").
+    """
+    # result.md sidecar
+    try:
+        from result_md_renderer import render as _render
+        md_path = result_path.with_name("result.md")
+        _render(component, result_path, md_path)
+    except Exception as e:
+        log.warning("result.md render failed for %s: %s", result_path, e)
+
+    # thinking.md harvest — requires ticker + quarter + session_id
+    if not (ticker and quarter_label):
+        log.info("Skipping thinking harvest (missing ticker/quarter): %s", result_path)
+        return
+    try:
+        from thinking_harvester import harvest as _harvest
+        # Map renderer component name to harvester thinking_type
+        if component == "prediction_no_lessons":
+            harv_type = "prediction"
+            harv_exp = experiment_name or "prediction_no_lessons"
+        elif component in ("prediction", "learning", "guidance"):
+            harv_type = component
+            harv_exp = experiment_name
+        else:
+            log.info("Unknown component for harvest: %s", component)
+            return
+        _harvest(
+            thinking_type=harv_type,
+            ticker=ticker,
+            quarter=quarter_label,
+            session_id=sdk_session_id,
+            experiment_name=harv_exp,
+        )
+    except Exception as e:
+        log.warning(
+            "thinking_harvester failed for %s %s (session=%s): %s",
+            ticker, quarter_label, sdk_session_id, e,
+        )
+
 
 async def _run_predictor_via_sdk(bundle_path: Path,
                                  rendered_path: Path,
-                                 result_path: Path) -> str | None:
-    """Invoke the predictor skill once via Claude Agent SDK."""
+                                 result_path: Path) -> tuple[str | None, str | None]:
+    """Invoke the predictor skill once via Claude Agent SDK.
+
+    Returns ``(final_result, session_id)`` — session_id is captured via the
+    hybrid approach (per obsidian_thinking.md locked decision §6).
+    """
     from claude_agent_sdk import query, ClaudeAgentOptions
     cli_path, creds_path = _assert_claude_code_oauth_ready()
     log.info("Predictor SDK auth mode: Claude Code OAuth via %s (creds %s)", cli_path, creds_path)
@@ -2734,7 +2936,8 @@ async def _run_predictor_via_sdk(bundle_path: Path,
     def _stderr_sink(line: str) -> None:
         log.debug("predictor stderr: %s", line.rstrip())
 
-    final_result = None
+    final_result: str | None = None
+    session_id: str | None = None
     async for msg in query(
         prompt=prompt,
         options=ClaudeAgentOptions(
@@ -2746,15 +2949,24 @@ async def _run_predictor_via_sdk(bundle_path: Path,
             env=_sdk_subprocess_env(),
         ),
     ):
+        # Hybrid session_id capture — primary path (SDK v0.1.61+) + fallback.
+        if session_id is None:
+            session_id = getattr(msg, "session_id", None) or getattr(msg, "sessionId", None)
+        if session_id is None and getattr(msg, "subtype", "") == "init":
+            data = getattr(msg, "data", {}) or {}
+            session_id = data.get("session_id") or data.get("sessionId")
         if hasattr(msg, "result"):
             final_result = str(msg.result)
-    return final_result
+    return final_result, session_id
 
 
 def run_predictor_via_sdk(bundle_path: Path,
                           rendered_path: Path,
-                          result_path: Path) -> str | None:
-    """Sync wrapper for the one-turn predictor SDK call."""
+                          result_path: Path) -> tuple[str | None, str | None]:
+    """Sync wrapper for the one-turn predictor SDK call.
+
+    Returns ``(final_result, session_id)`` tuple.
+    """
     try:
         return asyncio.run(_run_predictor_via_sdk(bundle_path, rendered_path, result_path))
     except ImportError as e:
@@ -2837,19 +3049,22 @@ def main():
 
         print("Running predictor via SDK ...", flush=True)
         t1 = datetime.now()
-        run_predictor_via_sdk(paths["bundle_path"], paths["rendered_path"], paths["result_path"])
+        _pred_result, predictor_session_id = run_predictor_via_sdk(
+            paths["bundle_path"], paths["rendered_path"], paths["result_path"]
+        )
         pred_elapsed = (datetime.now() - t1).total_seconds()
 
         if not paths["result_path"].exists():
             raise RuntimeError("Predictor finished without writing prediction/result.json")
 
-        # Canonicalize: LLM wrote 7 analytic fields; Python adds 8 metadata/derived.
-        # See finalize_prediction_result() for the contract split.
+        # Canonicalize: LLM wrote 7 analytic fields; Python adds 8 metadata/derived + sdk_session_id.
+        # Side-effects (best-effort): result.md sidecar + thinking.md harvest.
         finalize_prediction_result(
             result_path=paths["result_path"],
             ticker=args.ticker,
             quarter_info=quarter_info,
             model=PREDICTOR_MODEL_ID,
+            sdk_session_id=predictor_session_id,
         )
 
         with open(paths["result_path"], encoding="utf-8") as f:
