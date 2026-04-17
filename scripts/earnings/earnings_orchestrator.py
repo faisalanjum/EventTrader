@@ -1601,7 +1601,7 @@ def get_learnings_paths(ticker: str) -> dict[str, Path]:
 from validate_attribution import validate_attribution_result  # noqa: F401 — stdlib-only, hook-safe
 
 
-# ── PIT Cutoff Derivation (three-tier rule per learner-final.md §3) ──
+# ── PIT Cutoff Derivation (three-tier rule per learner.md §3) ──
 
 
 def derive_learner_pit(events: list[dict], current_index: int,

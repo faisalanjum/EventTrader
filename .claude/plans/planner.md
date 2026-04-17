@@ -596,9 +596,9 @@ Each `planner_lesson` string must be a **specific, actionable, sentence-form ins
 - "check transcript Q&A" — for what? what was the failure that triggered this?
 - "add analyst data" — too vague to act on
 
-**Enforcement (to be implemented in learner)**: The learner's SubagentStop hook (learner.md §12, Layer 4) must validate that each `planner_lessons` string meets minimum quality: non-empty, minimum 50 characters, and contains source/agent reference. The learner's prompt (Layer 1) must include the sentence template. Short fragments must be blocked before the learner can complete. **This enforcement does not exist yet** — it must be built when implementing the learner agent (§B2 in master plan).
+**Enforcement (OBSOLETE — see note below)**: The historical plan required a learner SubagentStop hook to validate `planner_lessons` quality. **This is stale**: (1) the learner is no longer defined as a Task-spawned agent — it runs as a main-session SDK embed, so SubagentStop does not fire for it (see `learner.md` §10); (2) `planner_lessons` was replaced by `data_lessons` in the final attribution schema (see `learner.md` §6 "Changes from attribution_result.v1"); (3) the planner module itself is no longer in the live pipeline — the predictor consumes `data_lessons` and `predictor_lessons` directly from the learner's attribution output. Quality enforcement for the replacement fields lives in the learner's PreToolUse Write validator (`.claude/hooks/validate_attribution_output.py`).
 
-**Cross-reference**: This authoring contract must be added to `learner.md` as a hard output requirement for the `feedback.planner_lessons` field when the learner is implemented. The planner consumes what the learner produces — quality must be enforced at the source.
+**Cross-reference (OBSOLETE)**: This authoring contract was originally intended for `feedback.planner_lessons`. `planner_lessons` was removed from the attribution schema in favor of `data_lessons` and `predictor_lessons` (see `learner.md` §6 "Changes from attribution_result.v1"). The sentence-template quality bar above is preserved as historical guidance; the live enforcement for the replacement fields is handled by the learner SKILL.md prompt + PreToolUse Write validator, not this planner doc.
 
 #### Planner prompt behavior
 
@@ -610,7 +610,7 @@ Each `planner_lesson` string must be a **specific, actionable, sentence-form ins
 
 Per `earnings-orchestrator.md §2d`: `planner_lessons` is capped at 3 items per quarter. With ~10 quarters of history, maximum payload is ~30 sentence-form strings — trivial context even with richer per-lesson content.
 
-**Ref**: `earnings-orchestrator.md §2b` (self-learning input), `§2d` (U1 loop, feedback block — `planner_lessons` max 3 items per quarter), `learner.md §4` (learner output contract — must mirror the authoring contract above).
+**Ref**: `earnings-orchestrator.md §2b` (self-learning input), `§2d` (U1 loop, feedback block). Note: the original "`planner_lessons` max 3 items per quarter" cap and `learner.md §4` output-contract reference are stale — see the OBSOLETE notes above; the current output contract lives in `learner.md` §6 (field `data_lessons` replaces `planner_lessons`).
 
 ---
 
@@ -2184,9 +2184,9 @@ The `query` field in each fetch source is the prompt sent to the data sub-agent.
 
 See TODO in that file.
 
-### T4: Sections to update in `learner.md`
+### T4: Sections to update in `learner.md` (OBSOLETE)
 
-See TODO in that file.
+The original task was to cross-wire `planner_lessons` sections between these docs. That schema field no longer exists — `learner.md` §6 now describes `data_lessons` (+ `predictor_lessons`) which superseded it. No active action remains from this TODO.
 
 ### T5: Richer query construction for smart graph retrievers
 
