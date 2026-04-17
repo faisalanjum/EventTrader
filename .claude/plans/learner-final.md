@@ -1054,6 +1054,34 @@ Manual single-quarter runs via CLI: `python3 scripts/earnings/earnings_orchestra
 - Q1_FY2023: learner-only (legacy prediction), schema-valid, primary_driver=`ai_narrative_rerating`, direction_correct=False. Uncovered real predictor data-freshness bug via investigation.
 - Q2_FY2023: **first clean full-pipeline end-to-end success.** Bundle 7/7, predict+learn via SDK on Opus 4.7, predictor validation passed, learner validation passed, U1 loop verified (Q1 lesson flowed into Q2 bundle, Q2 direction_correct=True, magnitude_error=0.0 with actual inside predicted range).
 
+### ⚠️ Empirical finding: template-overfit risk from lesson accumulation (2026-04-16)
+
+**A/B baseline on AVGO Q1–Q5 showed zero net uplift** from lessons:
+- WITH lessons: 3/5 direction-correct (60%)
+- WITHOUT lessons: 3/5 direction-correct (60%)
+- Delta: 0 on 5 quarters (statistically indistinguishable from LLM variance)
+
+**The trade behind the zero net**:
+- Lessons HELPED on Q2_FY2023 (+1): Q1's "AI narrative quantification as primary signal" lesson correctly steered the predictor to long.
+- Lessons HURT on Q3_FY2023 (−1): the AI-narrative template that worked for Q2 became a bias that overrode the bundle's non-AI segment weakness signal. Predictor stayed long when the actual signal was a segment inflection.
+- Neutral on Q1 (both wrong, no prior context either way), Q4, Q1_FY2024 (both right — the bundle signal was strong enough without lesson help).
+
+**Risk name: "template overfit"**. Once a pattern is in the lesson bank AND matched to the current quarter's bundle, the predictor may over-commit to the template even when fundamental evidence contradicts. The learner's own Q3 attribution recognized this post-hoc ("default to FLAT or SHORT on thin beat + rallied-into-print") — but that lesson came too late to rescue Q3 itself; it benefits Q4+.
+
+**What this implies for the design**:
+1. **Lessons are not free alpha.** At this sample size they appear breakeven; at larger samples they might help or hurt. No claim of uplift is warranted yet.
+2. **Template matching can become a crutch.** The predictor should treat lessons as *soft priors*, not *hard rules* — if bundle evidence contradicts a lesson, the bundle evidence must win. Today's SKILL.md already says "soft priors" but the empirical behavior in Q3 shows the LLM can still over-weight template fits.
+3. **The fix is NOT more guardrails in the SKILL.md prompt** — prompting an LLM harder to "ignore the lesson" creates an unstable incentive. The right fix is to **accumulate enough lessons that contradictions across them force the predictor to weigh bundle evidence directly**, and to keep lessons compact and non-dominant in the prompt budget.
+4. **Monitoring needed**: track the "same direction as most recent lesson" rate vs hit rate over time. If the predictor just parrots the most recent lesson regardless of bundle, that's the overfit failure mode.
+5. **No new code change today.** This is an observation for calibration monitoring, not an architectural red flag. Real evaluation needs ≥30 quarters across ≥5 tickers and sectors, with A/B on each.
+
+**What NOT to conclude**:
+- "Lessons don't work" — n=5 is not enough data.
+- "Lessons are harmful" — the one hurt case has a natural explanation (first time a multi-quarter template failed), and the Q3 learner corrected itself.
+- "We should remove the learner" — the infrastructure value (audit trail, evidence, U1 feedback) is independent of current predictor uplift.
+
+**Raw A/B data**: `earnings-analysis/test-outputs/ab_baseline_AVGO.json`
+
 - [ ] Run learner on 3-5 historical quarters for one ticker
 - [ ] Verify lesson quality — learner uses full evidence surface and produces reusable high-signal guidance, not quarter-specific summaries
 - [ ] Verify PIT enforcement (no post-boundary evidence in historical runs)
