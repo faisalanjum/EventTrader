@@ -114,3 +114,25 @@ def test_hook_sh_wrapper_creates_note_with_guidance_redacted_fixture(tmp_path):
     assert "thinking_chars: 0" in content
     assert "text_blocks: 2" in content
     assert "tool_blocks: 7" in content
+
+
+def test_hook_sh_wrapper_creates_note_with_predictor_fork_fixture(tmp_path):
+    """Predictor fixture: FORK pattern (1 Skill tool_use). Exercises the adapter's
+    fork-handling path through the real .sh wrapper."""
+    hook_input = _build_hook_input(
+        FIXTURES / "predictor_session.jsonl", agent_type="smoke-test-agent-generic"
+    )
+    result, fake_home = _run_hook(tmp_path, hook_input)
+
+    assert result.returncode == 0, f"Hook crashed: {result.stderr!r}"
+
+    notes = list(
+        (fake_home / "Obsidian/EventTrader/Earnings/earnings-analysis/agents").glob("*.md")
+    )
+    assert len(notes) == 1
+    content = notes[0].read_text(encoding="utf-8")
+    # Predictor baseline: 2 thinking / 177 chars / 1 text / 1 tool (the Skill call)
+    assert "thinking_blocks: 2" in content, content[:600]
+    assert "thinking_chars: 177" in content
+    assert "text_blocks: 1" in content
+    assert "tool_blocks: 1" in content
