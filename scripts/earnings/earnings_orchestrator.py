@@ -232,9 +232,14 @@ def build_prediction_bundle(ticker: str, quarter_info: dict,
     # learning_context is the logical 8th bundle field. It remains outside
     # BUNDLE_ITEM_ORDER because the main work is local lesson-file loading;
     # sector-aware filtering may do a cached company-metadata lookup when needed.
+    # T1.5b: pit_cutoff flows in from the bundle caller so historical reruns
+    # filter out lessons stamped after the predictor's cutoff. Live mode
+    # (pit_cutoff=None) bypasses the filter entirely.
     try:
         sector = (results.get("8k_packet") or {}).get("sector") or _lookup_company_sector(ticker)
-        bundle["learning_context"] = build_learning_context(ticker, sector=sector)
+        bundle["learning_context"] = build_learning_context(
+            ticker, sector=sector, pit_cutoff=pit_cutoff,
+        )
     except Exception as e:
         log.warning("learning_context builder failed (non-fatal): %s", e)
         bundle["learning_context"] = {"ticker_lessons": [], "global_lessons": [],
@@ -2058,6 +2063,10 @@ def append_ticker_lesson(ticker: str, attribution_result: dict) -> Path:
     entry = {
         "quarter_label": attribution_result.get("quarter_label"),
         "attributed_at": attribution_result.get("attributed_at"),
+        # T1.5b: stamp source event's PIT metadata for read-side filtering.
+        # Copied verbatim from attribution_result.v2 top-level fields.
+        "source_filed_8k": attribution_result.get("filed_8k"),
+        "source_pit_cutoff": attribution_result.get("pit_cutoff"),
         "direction_correct": pc.get("direction_correct"),
         "actual_daily_pct": (attribution_result.get("actual_return") or {}).get("daily_stock_pct"),
         "predicted_direction": pc.get("predicted_direction"),
@@ -2119,6 +2128,12 @@ def append_global_lessons(attribution_result: dict) -> Path | None:
     # non-owning scopes. The upstream validator + PreToolUse hook guarantee
     # each routing field appears only on its owning scope before this writer
     # runs; we simply mirror that contract into storage.
+    # T1.5b: stamp source event's PIT metadata from attribution_result top-level
+    # fields. These are storage metadata used by build_learning_context's
+    # read-side filter; they are NOT new learner-output contract fields.
+    src_filed_8k = attribution_result.get("filed_8k")
+    src_pit_cutoff = attribution_result.get("pit_cutoff")
+
     enriched = []
     for obs in observations:
         entry = {
@@ -2127,6 +2142,8 @@ def append_global_lessons(attribution_result: dict) -> Path | None:
             "source_sector":    _lookup_company_sector(src_ticker),  # audit-only, NOT routing
             "quarter_label":    src_quarter,
             "attributed_at":    attribution_result.get("attributed_at"),
+            "source_filed_8k":  src_filed_8k,
+            "source_pit_cutoff": src_pit_cutoff,
             "lesson":           obs.get("lesson"),
         }
         if "related_tickers" in obs:
@@ -2172,7 +2189,8 @@ def append_global_lessons(attribution_result: dict) -> Path | None:
 
 
 def build_learning_context(ticker: str, sector: str | None = None,
-                           base_dir: Path | None = None) -> dict:
+                           base_dir: Path | None = None,
+                           pit_cutoff: str | None = None) -> dict:
     """Build learning context for predictor consumption.
 
     Amendment 2026-04-17 (per .claude/plans/learner-edits.md §4.3 / §6.3):
@@ -2183,6 +2201,17 @@ def build_learning_context(ticker: str, sector: str | None = None,
       - Six named exclusion counters; observability log ALWAYS fires (even when
         global.json is absent).
       - ``except JSONDecodeError / OSError`` now log ``log.error`` (was silent).
+
+    Amendment 2026-04-17 T1.5b (per .claude/plans/learner.md §🔥):
+      - New ``pit_cutoff`` parameter. When not None, filter lessons whose
+        ``source_pit_cutoff`` is strictly after ``pit_cutoff`` across ALL four
+        scopes (ticker, sector, macro, cross_ticker). Legacy entries without
+        ``source_pit_cutoff`` are treated as post-cutoff in historical mode
+        (excluded) and passed through in live mode.
+      - When pit_cutoff is None (production real-time path), NO filter is
+        applied — preserves pre-T1.5b behavior exactly.
+      - Two new observability counters: ``ticker_post_cutoff``,
+        ``global_post_cutoff``.
     """
     # Normalize ticker case at function entry. Stored related_tickers are
     # validator-enforced UPPERCASE, and the ticker-lessons filename is UPPERCASE.
@@ -2200,6 +2229,41 @@ def build_learning_context(ticker: str, sector: str | None = None,
         "global_ref": str(global_path) if global_path.exists() else None,
     }
 
+    # T1.5b PIT filter helper. Returns True iff the entry passes the cutoff.
+    # Live mode (pit_cutoff is None) → always True (no filter).
+    # Historical mode → entry must have source_pit_cutoff AND it must be
+    # chronologically <= pit_cutoff.
+    #
+    # IMPORTANT: naive string comparison is UNSAFE across different UTC
+    # offsets (e.g., "...-04:00" vs "...+00:00") — lexical order diverges
+    # from chronological order when timestamps are close in real time but
+    # differ in offset. Reported by external review 2026-04-17 with this
+    # repro: src=2024-06-12T16:19:05-04:00 (20:19:05 UTC) and
+    # pit=2024-06-12T20:18:00+00:00 (20:18:00 UTC) — src is chronologically
+    # 65s LATER but lexically appears earlier ('16' < '20'). Must parse to
+    # tz-aware datetime before comparing. This mirrors the existing PIT
+    # pattern in peer_earnings_snapshot._parse_dt_for_pit().
+    def _passes_pit(entry: dict) -> bool:
+        if pit_cutoff is None:
+            return True
+        src_pit_raw = entry.get("source_pit_cutoff")
+        if src_pit_raw is None:
+            return False  # legacy: no bound → cannot be trusted in historical mode
+        try:
+            # "Z" suffix → "+00:00" for portability across Python versions.
+            src_dt = datetime.fromisoformat(str(src_pit_raw).replace("Z", "+00:00"))
+            cut_dt = datetime.fromisoformat(str(pit_cutoff).replace("Z", "+00:00"))
+        except (ValueError, AttributeError, TypeError):
+            return False  # malformed → defensive exclude in historical mode
+        # Both must be tz-aware — comparing naive + aware raises TypeError
+        # and would hide the bug silently.
+        if src_dt.tzinfo is None or cut_dt.tzinfo is None:
+            return False
+        return src_dt <= cut_dt
+
+    ticker_post_cutoff = 0
+    global_post_cutoff = 0
+
     # ── Ticker lessons: most recent 8 ──
     if ticker_path.exists():
         try:
@@ -2215,7 +2279,14 @@ def build_learning_context(ticker: str, sector: str | None = None,
                 if ql not in seen_quarters:
                     seen_quarters.add(ql)
                     deduped.append(lesson)
-            result["ticker_lessons"] = deduped[:8]
+            # T1.5b: apply PIT filter; count exclusions.
+            filtered: list[dict] = []
+            for lesson in deduped:
+                if _passes_pit(lesson):
+                    filtered.append(lesson)
+                else:
+                    ticker_post_cutoff += 1
+            result["ticker_lessons"] = filtered[:8]
         except json.JSONDecodeError as e:
             log.error("ticker.json malformed — no ticker lessons loaded for %s: %s", ticker, e)
         except OSError as e:
@@ -2244,6 +2315,12 @@ def build_learning_context(ticker: str, sector: str | None = None,
             entries = data.get("entries", [])
 
             for e in entries:
+                # T1.5b: PIT filter fires BEFORE scope routing for all scopes,
+                # so global_post_cutoff is disjoint from scope-specific counters.
+                if not _passes_pit(e):
+                    global_post_cutoff += 1
+                    continue
+
                 scope = e.get("scope")
 
                 if scope == "sector":
@@ -2307,13 +2384,15 @@ def build_learning_context(ticker: str, sector: str | None = None,
     # Observability log — fires ALWAYS, even if global_path didn't exist.
     # Names must match §4.5 contract exactly. Six exclusion counters so any
     # future silent-drop regression appears immediately as an anomalous count.
+    # T1.5b adds two more: ticker_post_cutoff, global_post_cutoff.
     log.info(
-        "learning_context %s(sector=%s): "
+        "learning_context %s(sector=%s, pit=%s): "
         "included[sector=%d macro=%d cross=%d] "
         "excluded[sector_mismatch=%d current_sector_unknown=%d "
         "cross_ticker_not_listed=%d cross_ticker_missing_related=%d "
-        "unknown_scope=%d legacy_schema=%d]",
-        ticker, sector,
+        "unknown_scope=%d legacy_schema=%d "
+        "ticker_post_cutoff=%d global_post_cutoff=%d]",
+        ticker, sector, pit_cutoff,
         len(sector_entries), len(macro_entries), len(cross_entries),
         excluded["sector_mismatch"],
         excluded["current_sector_unknown"],
@@ -2321,6 +2400,8 @@ def build_learning_context(ticker: str, sector: str | None = None,
         excluded["cross_ticker_missing_related"],
         excluded["unknown_scope"],
         excluded["legacy_schema"],
+        ticker_post_cutoff,
+        global_post_cutoff,
     )
 
     return result
@@ -2977,6 +3058,45 @@ def run_predictor_via_sdk(bundle_path: Path,
 
 # ── CLI ──────────────────────────────────────────────────────────────
 
+def _resolve_pit_mode(args, quarter_info):
+    """Resolve ``(pit_cutoff, mode_label)`` from CLI args + quarter_info.
+
+    Implements T1.5a per ``.claude/plans/learner.md`` §🔥. Rules:
+
+    - ``--live`` and ``--pit`` are mutually exclusive → ``ValueError``.
+    - ``--live`` → ``(None, "live")`` regardless of other flags.
+    - ``--pit X`` → ``(X, "historical")`` regardless of other flags.
+    - No ``--pit`` / ``--live`` with ``--predict`` or ``--learn``
+      → ``(quarter_info["filed_8k"], "historical")``.  This is the default
+      that closes the T1.5a bug: manual CLI runs against historical
+      accessions no longer silently fall into live mode.
+    - No ``--pit`` / ``--live`` / ``--predict`` / ``--learn``
+      → ``(None, "live")``.  Preserves bundle-inspection mode (``--save``
+      alone) where the caller explicitly didn't ask for a prediction.
+
+    Raises ``ValueError`` if the default branch would fire but
+    ``quarter_info`` is missing ``filed_8k`` — the caller must then pass
+    ``--pit`` or ``--live`` explicitly.
+    """
+    if args.live and args.pit:
+        raise ValueError(
+            "--live and --pit are mutually exclusive. Pass exactly one."
+        )
+    if args.live:
+        return None, "live"
+    if args.pit:
+        return args.pit, "historical"
+    if args.predict or args.learn:
+        filed_8k = (quarter_info or {}).get("filed_8k")
+        if not filed_8k:
+            raise ValueError(
+                "Cannot default pit_cutoff to filed_8k: quarter_info is "
+                "missing filed_8k. Pass --pit explicitly or --live."
+            )
+        return filed_8k, "historical"
+    return None, "live"
+
+
 def main():
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
     parser = argparse.ArgumentParser(description="Earnings prediction bundle assembly")
@@ -2985,6 +3105,9 @@ def main():
     parser.add_argument("--quarter-info-json", default=None,
                         help="Path to a quarter_info JSON file (alternative to accession)")
     parser.add_argument("--pit", default=None, help="PIT cutoff (ISO8601) for historical mode")
+    parser.add_argument("--live", action="store_true",
+                        help="Force live mode (pit_cutoff=None). Mutually exclusive with --pit. "
+                             "Required to preserve old accidental-live behavior on historical accessions.")
     parser.add_argument("--save", action="store_true", help="Write bundle artifacts to disk")
     parser.add_argument("--predict", action="store_true",
                         help="Save bundle artifacts and run one predictor SDK call")
@@ -3016,12 +3139,24 @@ def main():
             print(f"  GAP: {g['type']}: {g['reason']}")
     print()
 
+    # T1.5a: resolve PIT mode (default=filed_8k for --predict/--learn; --live opt-in;
+    # --pit CLI wins). Historical calibration is now PIT-safe by construction.
+    try:
+        pit_cutoff, pit_mode = _resolve_pit_mode(args, quarter_info)
+    except ValueError as e:
+        parser.error(str(e))
+    log.info("PIT mode resolved: mode=%s cutoff=%s (cli_pit=%s cli_live=%s)",
+             pit_mode, pit_cutoff, args.pit, args.live)
+    print(f"  pit_mode:    {pit_mode}")
+    print(f"  pit_cutoff:  {pit_cutoff}")
+    print()
+
     print(f"Building prediction bundle ({len(BUILDERS)} builders in parallel) ...", flush=True)
     t0 = datetime.now()
     bundle, rendered = run_core_flow(
         ticker=args.ticker,
         quarter_info=quarter_info,
-        pit_cutoff=args.pit,
+        pit_cutoff=pit_cutoff,
         out_dir=args.save_dir,
     )
     elapsed = (datetime.now() - t0).total_seconds()

@@ -539,3 +539,325 @@ def test_fixture_completeness_invariant_jsonl_has_sibling_meta():
         for jsonl in subagents.glob("*.jsonl"):
             meta = jsonl.with_suffix(".meta.json")
             assert meta.exists(), f"fixture drift: {jsonl.name} has no sibling .meta.json in {fixture}"
+
+
+# ── FORK-with-nested-Agents (latent-bug regression tests) ────────────────
+
+def _make_fork_with_nested_agents(tmp_path: Path, *, flat_layout: bool):
+    """Build a synthetic session: worker's primary has Skill tool_use →
+    skill-fork → skill-fork spawns 2 Agent subagents.
+
+    ``flat_layout=True`` places nested children as siblings to the skill-fork
+    at ``{session}/subagents/agent-{id}.jsonl``. ``flat_layout=False`` nests
+    them one level deeper: ``{session}/subagents/{skill_fork_id}/subagents/...``.
+
+    Returns the projects_root path.
+    """
+    projects_root = tmp_path / "projects"
+    sid = "worker-fork-nested"
+    sub_dir = projects_root / sid / "subagents"
+    sub_dir.mkdir(parents=True)
+
+    SKILL_FORK_ID = "f0" * 8
+    AGENT_PRIMARY_ID = "a1" * 8
+    AGENT_ENRICH_ID = "a2" * 8
+
+    # Worker primary session: 1 Skill tool_use + matching tool_result
+    primary = projects_root / f"{sid}.jsonl"
+    primary.write_text("\n".join([
+        json.dumps({
+            "type": "assistant", "timestamp": "2026-01-01T00:00:01Z",
+            "message": {"content": [
+                {"type": "tool_use", "id": "tu-S", "name": "Skill",
+                 "input": {"skill": "extract", "args": "BURL 8k 0001..."}}
+            ]}
+        }),
+        json.dumps({
+            "type": "user", "timestamp": "2026-01-01T00:00:10Z",
+            "message": {"content": [
+                {"type": "tool_result", "tool_use_id": "tu-S",
+                 "content": [{"type": "text", "text": "done"}]}
+            ]},
+            "toolUseResult": {"agentId": SKILL_FORK_ID, "agentType": None},
+        }),
+    ]) + "\n")
+
+    # Skill-fork session: first-user Base-directory marker + Agent tool_uses
+    # to extraction-primary + extraction-enrichment.
+    skill_fork_jsonl = sub_dir / f"agent-{SKILL_FORK_ID}.jsonl"
+    skill_fork_jsonl.write_text("\n".join([
+        json.dumps({
+            "type": "user", "timestamp": "2026-01-01T00:00:02Z",
+            "message": {"content": "Base directory for this skill: /home/x/.claude/skills/extract\n..."},
+        }),
+        json.dumps({
+            "type": "assistant", "timestamp": "2026-01-01T00:00:03Z",
+            "message": {"content": [
+                {"type": "tool_use", "id": "tu-P", "name": "Agent",
+                 "input": {"subagent_type": "extraction-primary-agent"}}
+            ]}
+        }),
+        json.dumps({
+            "type": "assistant", "timestamp": "2026-01-01T00:00:04Z",
+            "message": {"content": [
+                {"type": "tool_use", "id": "tu-E", "name": "Agent",
+                 "input": {"subagent_type": "extraction-enrichment-agent"}}
+            ]}
+        }),
+        json.dumps({
+            "type": "user", "timestamp": "2026-01-01T00:00:06Z",
+            "message": {"content": [
+                {"type": "tool_result", "tool_use_id": "tu-P",
+                 "content": [{"type": "text", "text": "primary done"}]}
+            ]},
+            "toolUseResult": {"agentId": AGENT_PRIMARY_ID, "agentType": "extraction-primary-agent"},
+        }),
+        json.dumps({
+            "type": "user", "timestamp": "2026-01-01T00:00:07Z",
+            "message": {"content": [
+                {"type": "tool_result", "tool_use_id": "tu-E",
+                 "content": [{"type": "text", "text": "enrich done"}]}
+            ]},
+            "toolUseResult": {"agentId": AGENT_ENRICH_ID, "agentType": "extraction-enrichment-agent"},
+        }),
+    ]) + "\n")
+    # Skill-fork meta.json → general-purpose (dual-signal detection)
+    (sub_dir / f"agent-{SKILL_FORK_ID}.meta.json").write_text(
+        json.dumps({"agentType": "general-purpose"})
+    )
+
+    # Nested subagent JSONLs — flat or nested layout
+    if flat_layout:
+        nested_dir = sub_dir
+    else:
+        nested_dir = sub_dir / SKILL_FORK_ID / "subagents"
+        nested_dir.mkdir(parents=True)
+    for aid, atype in [(AGENT_PRIMARY_ID, "extraction-primary-agent"),
+                        (AGENT_ENRICH_ID, "extraction-enrichment-agent")]:
+        (nested_dir / f"agent-{aid}.jsonl").write_text(
+            json.dumps({
+                "type": "user", "timestamp": "2026-01-01T00:00:05Z",
+                "message": {"content": f"Extraction pass for {atype}"},
+            }) + "\n"
+        )
+        (nested_dir / f"agent-{aid}.meta.json").write_text(
+            json.dumps({"agentType": atype, "description": f"{atype} pass"})
+        )
+
+    return projects_root, sid
+
+
+def test_fork_with_nested_agents_flat_layout_emits_subagent_files(tmp_path):
+    """FORK pattern where primary has Skill tool_use → skill-fork spawns
+    Agent subagents at FLAT layout. Harvester must emit subagent files for
+    the Agent children even though they're nested inside skill-fork's
+    session, not the primary's.
+    """
+    from thinking_harvester import harvest
+    projects_root, sid = _make_fork_with_nested_agents(tmp_path, flat_layout=True)
+    vault_root = tmp_path / "vault"
+
+    harvest(
+        thinking_type="guidance", ticker="BURL", quarter="Q4_FY2025",
+        session_id=sid, vault_root=vault_root, projects_root=projects_root,
+    )
+
+    comp_dir = vault_root / "BURL" / "events" / "Q4_FY2025" / "guidance"
+    thinking_md = comp_dir / "thinking.md"
+    subagents_dir = comp_dir / "subagents"
+
+    assert thinking_md.exists(), "thinking.md must exist for FORK-with-nested-Agents"
+    assert subagents_dir.exists(), \
+        "FORK-with-nested-Agents MUST emit subagents/ (extraction-primary + enrichment)"
+    subagent_files = sorted(p.name for p in subagents_dir.iterdir())
+    assert len(subagent_files) == 2, f"expected 2 subagent files, got {subagent_files}"
+    assert any("extraction-primary-agent" in n for n in subagent_files)
+    assert any("extraction-enrichment-agent" in n for n in subagent_files)
+
+
+def test_fork_with_nested_agents_nested_layout_recursive_fallback(tmp_path):
+    """Same as above but nested children live one level deeper. Harvester
+    recursive fallback must locate them via glob.
+    """
+    from thinking_harvester import harvest
+    projects_root, sid = _make_fork_with_nested_agents(tmp_path, flat_layout=False)
+    vault_root = tmp_path / "vault"
+
+    harvest(
+        thinking_type="guidance", ticker="BURL", quarter="Q4_FY2025",
+        session_id=sid, vault_root=vault_root, projects_root=projects_root,
+    )
+
+    comp_dir = vault_root / "BURL" / "events" / "Q4_FY2025" / "guidance"
+    subagents_dir = comp_dir / "subagents"
+    assert subagents_dir.exists(), \
+        "FORK-with-nested-Agents (nested layout) must still emit subagents/ via recursive glob"
+    assert len(list(subagents_dir.iterdir())) == 2
+
+
+# ── source_asset / source_id guidance-only params (strict validation) ────
+
+def test_source_asset_requires_thinking_type_guidance(tmp_path):
+    from thinking_harvester import harvest
+    with pytest.raises(ValueError, match="guidance"):
+        harvest(
+            thinking_type="prediction", ticker="X", quarter="Q",
+            session_id="sid", source_asset="8k",
+            vault_root=tmp_path / "v", projects_root=tmp_path / "p",
+        )
+
+
+def test_source_id_requires_thinking_type_guidance(tmp_path):
+    from thinking_harvester import harvest
+    with pytest.raises(ValueError, match="guidance"):
+        harvest(
+            thinking_type="learning", ticker="X", quarter="Q",
+            session_id="sid", source_id="some-id",
+            vault_root=tmp_path / "v", projects_root=tmp_path / "p",
+        )
+
+
+def test_source_asset_whitelist_rejects_unknown(tmp_path):
+    from thinking_harvester import harvest
+    with pytest.raises(ValueError, match="one of"):
+        harvest(
+            thinking_type="guidance", ticker="X", quarter="Q",
+            session_id="sid", source_asset="9k",
+            vault_root=tmp_path / "v", projects_root=tmp_path / "p",
+        )
+
+
+def test_source_id_without_source_asset_rejected(tmp_path):
+    from thinking_harvester import harvest
+    with pytest.raises(ValueError, match="both-or-neither|complete provenance|requires"):
+        harvest(
+            thinking_type="guidance", ticker="X", quarter="Q",
+            session_id="sid",
+            source_id="0001234-56-789",   # source_asset missing
+            vault_root=tmp_path / "v", projects_root=tmp_path / "p",
+        )
+
+
+def test_source_asset_whitelist_accepts_all_five(tmp_path):
+    """All 5 valid assets must pass validation (even if harvest is skipped for
+    missing session)."""
+    from thinking_harvester import harvest
+    for valid in ("8k", "10q", "10k", "transcript", "news"):
+        # No session so harvest returns early — but validation must not raise.
+        harvest(
+            thinking_type="guidance", ticker="X", quarter="Q",
+            session_id="does-not-exist",
+            source_asset=valid,
+            vault_root=tmp_path / f"v-{valid}",
+            projects_root=tmp_path / f"p-{valid}",
+        )  # must not raise
+
+
+def test_guidance_per_asset_shards_filename_to_thinking_suffix(tmp_path):
+    """When source_asset is set on guidance, thinking.md becomes thinking_{asset}.md
+    and subagents/ becomes subagents_{asset}/.
+    """
+    from thinking_harvester import harvest
+    projects_root, sid = _make_fork_with_nested_agents(tmp_path, flat_layout=True)
+    vault_root = tmp_path / "vault"
+
+    harvest(
+        thinking_type="guidance", ticker="BURL", quarter="Q4_FY2025",
+        session_id=sid,
+        source_asset="8k",
+        source_id="0001193125-26-092488",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    comp_dir = vault_root / "BURL" / "events" / "Q4_FY2025" / "guidance"
+    # Sharded names
+    assert (comp_dir / "thinking_8k.md").exists()
+    assert (comp_dir / "subagents_8k").is_dir()
+    # Default names must NOT exist
+    assert not (comp_dir / "thinking.md").exists()
+    assert not (comp_dir / "subagents").exists()
+    # Subagent files under the sharded dir
+    subagent_files = list((comp_dir / "subagents_8k").iterdir())
+    assert len(subagent_files) == 2
+
+
+def test_guidance_frontmatter_includes_source_asset_and_source_id(tmp_path):
+    from thinking_harvester import harvest
+    projects_root, sid = _make_fork_with_nested_agents(tmp_path, flat_layout=True)
+    vault_root = tmp_path / "vault"
+
+    harvest(
+        thinking_type="guidance", ticker="BURL", quarter="Q4_FY2025",
+        session_id=sid,
+        source_asset="8k",
+        source_id="0001193125-26-092488",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    md = (vault_root / "BURL" / "events" / "Q4_FY2025" / "guidance" / "thinking_8k.md").read_text()
+    assert "source_asset: 8k" in md
+    assert "source_id: 0001193125-26-092488" in md
+
+
+def test_guidance_per_asset_coexist_on_same_quarter(tmp_path):
+    """Two guidance extractions on the same quarter with different source_assets
+    should coexist as separate files (Option B — per-asset subfiles)."""
+    from thinking_harvester import harvest
+    projects_root, sid = _make_fork_with_nested_agents(tmp_path, flat_layout=True)
+    vault_root = tmp_path / "vault"
+
+    # First extraction: 8-K
+    harvest(
+        thinking_type="guidance", ticker="BURL", quarter="Q4_FY2025",
+        session_id=sid,
+        source_asset="8k", source_id="0001193125-26-092488",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    # Second extraction: transcript (same quarter, different source)
+    # We reuse the fixture but with different asset — no overwrite expected.
+    harvest(
+        thinking_type="guidance", ticker="BURL", quarter="Q4_FY2025",
+        session_id=sid,
+        source_asset="transcript", source_id="BURL_2026-03-05T09.00",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    comp_dir = vault_root / "BURL" / "events" / "Q4_FY2025" / "guidance"
+    # Both files exist, no overwrite
+    assert (comp_dir / "thinking_8k.md").exists()
+    assert (comp_dir / "thinking_transcript.md").exists()
+    assert (comp_dir / "subagents_8k").is_dir()
+    assert (comp_dir / "subagents_transcript").is_dir()
+
+
+def test_guidance_without_source_asset_still_uses_default_shape(tmp_path):
+    """Backward-compat: guidance call without source_asset produces default
+    thinking.md + subagents/ (matches CLI-harvest invocation like our earlier
+    BURL fixture demo)."""
+    from thinking_harvester import harvest
+    projects_root, sid = _make_fork_with_nested_agents(tmp_path, flat_layout=True)
+    vault_root = tmp_path / "vault"
+
+    harvest(
+        thinking_type="guidance", ticker="BURL", quarter="Q4_FY2025",
+        session_id=sid,
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    comp_dir = vault_root / "BURL" / "events" / "Q4_FY2025" / "guidance"
+    assert (comp_dir / "thinking.md").exists()
+    assert (comp_dir / "subagents").is_dir()
+
+
+def test_prediction_and_learning_unchanged_by_source_asset_addition(tmp_path):
+    """Changing harvester signature must not affect prediction/learning shape."""
+    from thinking_harvester import harvest
+    projects_root = _stage_fixture_session(tmp_path, "learner_session", LEARNER_SID)
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="learning", ticker="BURL", quarter="Q4_FY2025",
+        session_id=LEARNER_SID,
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    comp = vault_root / "BURL" / "events" / "Q4_FY2025" / "learning"
+    assert (comp / "thinking.md").exists()
+    assert (comp / "subagents").is_dir()
+    # No sharded files
+    assert not list(comp.glob("thinking_*.md"))
+    assert not list(comp.glob("subagents_*"))

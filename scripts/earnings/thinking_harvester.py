@@ -58,6 +58,15 @@ _DEFAULT_VAULT_ROOT = _HERE.parents[1] / "earnings-analysis" / "Companies"
 
 _SKILL_FORK_FIRST_USER_PREFIX = "Base directory for this skill:"
 
+# Valid values for the guidance-only ``source_asset`` param — matches the
+# ASSET_QUERIES dict in scripts/trigger-extract.py. News is in the whitelist
+# because it's a valid asset type, though the worker's
+# _derive_guidance_quarter_label() returns None for it (so harvest is never
+# called for news in practice).
+_VALID_SOURCE_ASSETS: frozenset[str] = frozenset(
+    {"8k", "10q", "10k", "transcript", "news"}
+)
+
 
 # ── Primary public API ───────────────────────────────────────────────────
 
@@ -68,6 +77,8 @@ def harvest(
     quarter: str,
     session_id: str | None,
     experiment_name: str | None = None,
+    source_asset: str | None = None,
+    source_id: str | None = None,
     vault_root: Path | None = None,
     projects_root: Path | None = None,
 ) -> None:
@@ -81,6 +92,15 @@ def harvest(
         experiment_name: Optional variant tag (e.g., ``"prediction_no_lessons"``); when
             provided, writes under ``experiments/{experiment_name}/`` and must begin
             with ``f"{thinking_type}_"`` (enforced via validate_experiment_name).
+        source_asset: **GUIDANCE-ONLY.** One of {8k, 10q, 10k, transcript, news}.
+            When provided, output filenames shard to ``thinking_{source_asset}.md`` +
+            ``subagents_{source_asset}/`` — Option B per-asset per obsidian_thinking
+            plan. Raises ValueError if set on non-guidance thinking_type, or if
+            value is not in the whitelist.
+        source_id: **GUIDANCE-ONLY.** The Neo4j source node id that produced the
+            guidance extraction (e.g., 8-K accession, transcript id). Emitted
+            into the thinking frontmatter for provenance. **Requires source_asset
+            to also be set** (both-or-neither provenance integrity).
         vault_root: Where ``Companies/{ticker}/events/...`` lives. Defaults to
             the repo's ``earnings-analysis/Companies/`` symlink.
         projects_root: SDK projects dir. Defaults to
@@ -91,8 +111,17 @@ def harvest(
         when Agent-spawned children exist). Idempotent — re-running overwrites
         thinking.md and clears + rewrites the subagents/ dir.
 
-    Never raises — every internal error becomes a WARNING log line.
+    Never raises on downstream errors (session missing, parse failure, render failure)
+    — those become WARNING log lines. Raises only on upfront validation failures
+    (``thinking_type``, ``experiment_name``, ``source_asset``, ``source_id``).
     """
+    # Upfront validation — raise early on contract violations.
+    _validate_harvest_args(
+        thinking_type=thinking_type,
+        experiment_name=experiment_name,
+        source_asset=source_asset,
+        source_id=source_id,
+    )
     try:
         _harvest_inner(
             thinking_type=thinking_type,
@@ -100,6 +129,8 @@ def harvest(
             quarter=quarter,
             session_id=session_id,
             experiment_name=experiment_name,
+            source_asset=source_asset,
+            source_id=source_id,
             vault_root=vault_root or _DEFAULT_VAULT_ROOT,
             projects_root=projects_root or _DEFAULT_PROJECTS_ROOT,
         )
@@ -110,6 +141,40 @@ def harvest(
         )
 
 
+def _validate_harvest_args(
+    *,
+    thinking_type: str,
+    experiment_name: str | None,
+    source_asset: str | None,
+    source_id: str | None,
+) -> None:
+    """Strict upfront validation per Option B + source_asset refinements.
+
+    Three guards:
+      A. source_asset + source_id are guidance-only
+      B. source_asset must be in the whitelist
+      C. source_id requires source_asset (both-or-neither provenance)
+    """
+    # Guard A — guidance-only
+    if (source_asset is not None or source_id is not None) and thinking_type != "guidance":
+        raise ValueError(
+            f"source_asset / source_id are only valid for thinking_type='guidance'; "
+            f"got thinking_type={thinking_type!r}"
+        )
+    # Guard B — whitelist
+    if source_asset is not None and source_asset not in _VALID_SOURCE_ASSETS:
+        raise ValueError(
+            f"source_asset must be one of {sorted(_VALID_SOURCE_ASSETS)}; "
+            f"got {source_asset!r}"
+        )
+    # Guard C — both-or-neither provenance
+    if source_id is not None and source_asset is None:
+        raise ValueError(
+            "source_id requires source_asset to be set (both-or-neither "
+            "provenance integrity)"
+        )
+
+
 def _harvest_inner(
     *,
     thinking_type: str,
@@ -117,6 +182,8 @@ def _harvest_inner(
     quarter: str,
     session_id: str | None,
     experiment_name: str | None,
+    source_asset: str | None,
+    source_id: str | None,
     vault_root: Path,
     projects_root: Path,
 ) -> None:
@@ -204,7 +271,26 @@ def _harvest_inner(
                         )
                     break
 
-    # Assemble subagent outputs — Agent-spawned only (NOT skill-forks)
+    # ── FORK-with-nested-Agents coverage (fix 2026-04-17) ────────────────
+    # For FORK pattern, the skill-fork session may itself spawn Agent tool_uses
+    # (e.g., the worker's /extract skill forks extraction-primary-agent +
+    # extraction-enrichment-agent). Those Agent children are NOT in the
+    # primary session — they're in the skill-fork's block stream.
+    # Extend the agent_tool_uses list + linkage with contributions from the
+    # skill-fork so subagents/ materializes correctly.
+    if session_pattern == "FORK" and skill_fork_jsonl is not None and skill_fork_blocks:
+        fork_agent_tool_uses = [
+            b for b in skill_fork_blocks
+            if b["kind"] == "tool_use" and b["meta"].get("name") == "Agent"
+        ]
+        if fork_agent_tool_uses:
+            agent_tool_uses.extend(fork_agent_tool_uses)
+            # Merge linkage from the skill-fork's tool_results too.
+            fork_linkage = _build_agent_linkage(skill_fork_jsonl)
+            for k, v in fork_linkage.items():
+                linkage.setdefault(k, v)
+
+    # Assemble subagent outputs — Agent-spawned only (NOT skill-forks themselves)
     subagent_outputs: list[tuple[str, str]] = []  # (filename, content)
     orphan_warnings: list[str] = []
     for au in agent_tool_uses:
@@ -218,10 +304,11 @@ def _harvest_inner(
                 f"had no tool_result — possible crash / rate-limit fast-fail; skipped."
             )
             continue
-        sub_jsonl = projects_root / session_id / "subagents" / f"agent-{agent_id}.jsonl"
-        sub_meta = projects_root / session_id / "subagents" / f"agent-{agent_id}.meta.json"
+        sub_jsonl, sub_meta = _locate_subagent_files(
+            projects_root / session_id, agent_id
+        )
         # Prefer meta.json agentType when available (most localized)
-        if sub_meta.exists():
+        if sub_meta is not None and sub_meta.exists():
             try:
                 meta_data = json.loads(sub_meta.read_text())
                 meta_type = meta_data.get("agentType")
@@ -241,8 +328,18 @@ def _harvest_inner(
     # ── Write outputs ─────────────────────────────────────────────────────
     component_dir.mkdir(parents=True, exist_ok=True)
 
-    # Clear stale subagents/ before rewriting (idempotency)
-    subagents_dir = component_dir / "subagents"
+    # Per-asset sharding (Option B) — filenames differ only for guidance with
+    # a source_asset. Default (no source_asset) keeps thinking.md + subagents/.
+    if source_asset:
+        thinking_filename = f"thinking_{source_asset}.md"
+        subagents_dirname = f"subagents_{source_asset}"
+    else:
+        thinking_filename = "thinking.md"
+        subagents_dirname = "subagents"
+
+    # Clear stale subagents/ (only the SHARD for this source_asset, to preserve
+    # sibling shards for other assets on the same quarter)
+    subagents_dir = component_dir / subagents_dirname
     if subagents_dir.exists():
         shutil.rmtree(subagents_dir)
 
@@ -260,12 +357,14 @@ def _harvest_inner(
         session_id=session_id,
         session_pattern=session_pattern,
         experiment_name=experiment_name,
+        source_asset=source_asset,
+        source_id=source_id,
         primary_blocks=primary_blocks,
         skill_fork_blocks=skill_fork_blocks,
         orphan_warnings=orphan_warnings,
         subagents_count=len(subagent_outputs),
     )
-    (component_dir / "thinking.md").write_text(thinking_md, encoding="utf-8")
+    (component_dir / thinking_filename).write_text(thinking_md, encoding="utf-8")
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────
@@ -278,6 +377,54 @@ def _destination_dir(
     if experiment_name is not None:
         return base / "experiments" / experiment_name
     return base / thinking_type
+
+
+def _locate_subagent_files(
+    session_dir: Path, agent_id: str
+) -> tuple[Path, Path | None]:
+    """Find ``agent-<id>.jsonl`` + its ``.meta.json`` under ``{session}/subagents/``.
+
+    Flat-first / recursive-fallback strategy (added 2026-04-17 for FORK-with-
+    nested-Agents coverage):
+      1. Try the expected flat location ``{session}/subagents/agent-<id>.jsonl``
+      2. On miss, recursively glob ``{session}/subagents/**/agent-<id>.jsonl``
+         (handles the case where Claude Code nests child sessions one level
+         deeper under the skill-fork's own subagents/)
+      3. On second miss, return the expected-flat jsonl path anyway
+         (caller will detect non-existence + emit WARNING in the rendered
+         subagent trace — harvest never crashes)
+
+    Returns ``(jsonl_path, meta_path_or_None)``. ``meta_path`` is the sibling
+    ``.meta.json`` at the same location as the found ``.jsonl``; ``None`` if
+    the meta file doesn't exist.
+    """
+    flat_subagents = session_dir / "subagents"
+    expected = flat_subagents / f"agent-{agent_id}.jsonl"
+    if expected.exists():
+        meta = expected.with_suffix(".meta.json")
+        return expected, (meta if meta.exists() else None)
+
+    # Recursive fallback — one glob under subagents/
+    try:
+        matches = list(flat_subagents.glob(f"**/agent-{agent_id}.jsonl"))
+    except OSError:
+        matches = []
+    if matches:
+        found = matches[0]
+        meta = found.with_suffix(".meta.json")
+        log.info(
+            "thinking_harvester: located subagent jsonl via recursive fallback "
+            "(expected %s, found %s)",
+            expected, found,
+        )
+        return found, (meta if meta.exists() else None)
+
+    # Second miss — return expected path; caller handles missing-file case
+    log.warning(
+        "thinking_harvester: subagent JSONL not found at %s or under %s/**",
+        expected, flat_subagents,
+    )
+    return expected, None
 
 
 def _build_agent_linkage(primary_jsonl: Path) -> dict[str, str]:
@@ -469,6 +616,8 @@ def _render_thinking_md(
     session_id: str,
     session_pattern: str,
     experiment_name: str | None,
+    source_asset: str | None,
+    source_id: str | None,
     primary_blocks: list[dict[str, Any]],
     skill_fork_blocks: list[dict[str, Any]],
     orphan_warnings: list[str],
@@ -496,6 +645,11 @@ def _render_thinking_md(
     fm.append(f"component: {_yaml_scalar(thinking_type)}")
     if experiment_name is not None:
         fm.append(f"experiment_name: {_yaml_scalar(experiment_name)}")
+    # Guidance-only provenance (per Option B + ChatGPT's frontmatter refinement)
+    if source_asset is not None:
+        fm.append(f"source_asset: {_yaml_scalar(source_asset)}")
+    if source_id is not None:
+        fm.append(f"source_id: {_yaml_scalar(source_id)}")
     fm.append(f"ticker: {_yaml_scalar(ticker)}")
     fm.append(f"quarter: {_yaml_scalar(quarter)}")
     fm.append(f"sdk_session_id: {_yaml_scalar(session_id)}")
