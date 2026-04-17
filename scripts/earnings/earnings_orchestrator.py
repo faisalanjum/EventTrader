@@ -38,6 +38,7 @@ from builder_adapters import (
     build_consensus,
     build_prior_financials,
 )
+from config.llm_models import LEARNER, PREDICTOR
 from quarter_identity import resolve_quarter_info
 
 from dotenv import load_dotenv
@@ -1866,6 +1867,12 @@ def run_learner_for_quarter(
                        ticker, quarter_info.get("quarter_label"), "; ".join(errors[:3]))
             return None
 
+    # Stamp authoritative model_version from central config. The learner's
+    # SKILL.md may write any value; Python overrides with what actually ran.
+    payload = finalize_attribution_result(
+        result_path=result_path, model=LEARNER.model,
+    )
+
     # ── Derived writes: ticker.json + global.json ──
     try:
         append_ticker_lesson(ticker, payload)
@@ -2240,12 +2247,9 @@ async def _run_learner_via_sdk(
     async for msg in query(
         prompt=prompt,
         options=ClaudeAgentOptions(
-            model="claude-opus-4-7",
-            effort="xhigh",  # Anthropic-recommended for long-horizon agentic reasoning (learner investigates 8+ min)
-            thinking={"type": "adaptive"},
+            **LEARNER.as_sdk_kwargs(),
             setting_sources=["project"],
             permission_mode="bypassPermissions",
-            max_turns=50,
             stderr=_stderr_sink,
             cli_path=cli_path,
             env=_sdk_subprocess_env(),
@@ -2296,7 +2300,9 @@ def run_learner_via_sdk(
 import hashlib
 import shutil
 
-PREDICTOR_MODEL_ID = "claude-opus-4-7"
+# Backward-compat alias for existing callers — authoritative source is
+# config.llm_models.PREDICTOR.model
+PREDICTOR_MODEL_ID = PREDICTOR.model
 _PREDICTOR_SKILL_PATH = Path(".claude/skills/earnings-prediction/SKILL.md")
 _CLAUDE_CREDS_PATH = Path.home() / ".claude" / ".credentials.json"
 _SYSTEM_CLAUDE_CANDIDATES = [
@@ -2418,6 +2424,32 @@ def _hash_prompt_version(skill_path: Path = _PREDICTOR_SKILL_PATH) -> str:
         return "v1"
 
 
+def finalize_attribution_result(
+    *,
+    result_path: Path,
+    model: str,
+) -> dict:
+    """Stamp authoritative model_version onto attribution/result.json.
+
+    Mirrors the predictor's finalize_prediction_result() in principle but
+    intentionally narrowly scoped: ONLY overwrites ``model_version``. Does
+    NOT rewrite any other learner-authored field (evidence_ledger,
+    primary_driver, feedback, global_observations, etc.). The learner's
+    prompt controls everything else; Python is only the source of truth
+    for which model actually ran.
+
+    Called after the learner's SDK call returns and validation passes.
+    """
+    if not result_path.exists():
+        raise RuntimeError(f"Learner did not write {result_path}")
+    payload = json.loads(result_path.read_text(encoding="utf-8"))
+    payload["model_version"] = model
+    result_path.write_text(
+        json.dumps(payload, indent=2, default=str), encoding="utf-8"
+    )
+    return payload
+
+
 def finalize_prediction_result(
     result_path: Path,
     ticker: str,
@@ -2486,12 +2518,9 @@ async def _run_predictor_via_sdk(bundle_path: Path,
     async for msg in query(
         prompt=prompt,
         options=ClaudeAgentOptions(
-            model=PREDICTOR_MODEL_ID,
-            effort="xhigh",  # Anthropic-recommended for agentic reasoning; matches learner's config
-            thinking={"type": "adaptive"},
+            **PREDICTOR.as_sdk_kwargs(),
             setting_sources=["project"],
             permission_mode="bypassPermissions",
-            max_turns=20,
             stderr=_stderr_sink,
             cli_path=cli_path,
             env=_sdk_subprocess_env(),

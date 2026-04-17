@@ -1,1 +1,1 @@
-# This file makes the redisDB directory a Python package. 
+# This file makes the config directory a Python package. 
