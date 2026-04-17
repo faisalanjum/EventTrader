@@ -805,6 +805,8 @@ Q4 writes: "China revenue requires 4-quarter trend analysis — deceleration
 
 **Removed fields**: `scope_key` (validator rejects across every scope). **Added fields**: `related_tickers` (cross_ticker only, required non-empty UPPER 1–5 char list, max 8, no duplicates), `target_sector` (sector only, required, must be in the 11-value canonical enum from `config/canonical_sectors.py`), `source_sector` (Python-stamped audit metadata — NOT used for routing).
 
+**T1.5b storage-metadata fields (2026-04-17)** — `source_filed_8k` and `source_pit_cutoff` are Python-stamped on every new entry (both scopes), copied verbatim from the `filed_8k` + `pit_cutoff` top-level fields on `attribution_result.v2`. They are NOT learner-output contract fields and are NOT validated by `validate_attribution.py`. The read-side PIT filter in `build_learning_context` uses `source_pit_cutoff` (with tz-aware chronological comparison) to exclude lessons whose source event's pit_cutoff is after the predictor's pit_cutoff. Legacy entries missing these fields are excluded in historical mode and passed through in live mode (preserving pre-T1.5b production behavior).
+
 ### Scope types (amended)
 
 | Scope | Purpose | Routing field | Validator check |
@@ -840,12 +842,22 @@ Process MSFT Q2 → predictor reads global.json → sees AAPL's sector insight �
 ### Interface
 
 ```python
-def build_learning_context(ticker: str, sector: str = None,
-                           base_dir: Path = None) -> dict:
+def build_learning_context(ticker: str, sector: str | None = None,
+                           base_dir: Path | None = None,
+                           pit_cutoff: str | None = None) -> dict:
     """Build learning context for predictor consumption.
 
     Reads ticker lessons and global lessons, filters by recency and relevance,
     returns compact context suitable for inclusion in the prediction bundle.
+
+    T1.5b (2026-04-17): pit_cutoff enables PIT filtering at read time.
+    - None  → live mode: no filter applied (production real-time preserved).
+    - ISO-8601 string → historical mode: entry visible iff
+      `source_pit_cutoff <= pit_cutoff` via tz-aware datetime comparison.
+      Entries missing `source_pit_cutoff` (legacy) → excluded; both naive
+      and malformed timestamps → defensively excluded.
+    Applies uniformly to ticker lessons and all four global scopes
+    (ticker, sector, macro, cross_ticker).
     """
 ```
 
@@ -863,7 +875,7 @@ def build_learning_context(ticker: str, sector: str = None,
   - `scope=macro` → always include (regime matters for all tickers)
   - `scope=cross_ticker` → include iff `ticker in entry.related_tickers`
 - **No same-sector fallback** for cross_ticker — broad lessons belong in `scope=sector`. See `learner-edits.md` Appendix C "rejected alternatives" for the pollution rationale.
-- Every exclusion increments a named counter (`sector_mismatch`, `current_sector_unknown`, `cross_ticker_not_listed`, `cross_ticker_missing_related`, `unknown_scope`, `legacy_schema`). An observability log line fires on every call — even when `global.json` is absent.
+- Every exclusion increments a named counter. Six scope-routing counters (`sector_mismatch`, `current_sector_unknown`, `cross_ticker_not_listed`, `cross_ticker_missing_related`, `unknown_scope`, `legacy_schema`) plus two T1.5b PIT-filter counters (`ticker_post_cutoff`, `global_post_cutoff`) — the latter fires BEFORE scope routing for any entry whose `source_pit_cutoff` is after the predictor's `pit_cutoff`, so PIT exclusions are disjoint from scope exclusions. An observability log line fires on every call — even when `global.json` is absent.
 - Deduplicate within each scope by normalized lesson text.
 - Per-scope cap: max **4 sector** + **4 macro** + **2 cross_ticker** = **10 entries** total
 - Sort by recency (`attributed_at`) within each scope bucket before capping.
