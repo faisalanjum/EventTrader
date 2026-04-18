@@ -172,18 +172,36 @@ def _parse_extract_guidance_text(text: str) -> dict[str, str] | None:
 
 # ── Completion gate ───────────────────────────────────────────────────────
 
-def is_session_complete(jsonl_path: Path, tail_lines: int = 10) -> bool:
-    """Return True iff the session JSONL looks like a cleanly-ended session.
+def is_session_complete(jsonl_path: Path) -> bool:
+    """Return True iff the session JSONL has reached a cleanly-ended state.
 
-    Empirically verified 2026-04-17 against real sessions: the tail always
-    contains either a ``type=='last-prompt'`` terminal marker OR an assistant
-    message whose ``message.stop_reason == 'end_turn'``. Either signal is
-    sufficient — we check the last ``tail_lines`` entries.
+    Correct definition (hardened 2026-04-17 after AVGO live-extraction bug):
+      - The LAST ``assistant`` entry in the JSONL has
+        ``message.stop_reason == "end_turn"``.
+      - ``last-prompt`` entries are SDK-internal prompt markers that can
+        appear MULTIPLE times mid-session (verified empirically against the
+        AVGO_2023-03-02T17.00 skill-fork — 3 last-prompt entries appeared
+        before extraction completed). They are NOT a reliable completion
+        signal and are IGNORED by this gate.
+      - Intermediate assistant turns with ``stop_reason=="end_turn"`` (e.g.,
+        a text-only "primary succeeded" reply mid-session) are also not a
+        reliable signal — we must check the LAST assistant entry specifically,
+        not any of the last 10 lines.
+
+    Why this matters: the guidance ``/extract`` skill-fork spawns primary +
+    enrichment Agent tool_uses sequentially. The OLD "any terminal marker in
+    last 10 lines" heuristic would fire TRUE during the window between
+    primary completion and enrichment return, causing the harvester to run
+    prematurely — it would then see the enrichment Agent tool_use as an
+    orphan (no matching tool_result yet) and write a thinking_transcript.md
+    that's missing the enrichment subagent trace. Idempotency then prevented
+    the reconciliation cron from re-harvesting after enrichment finished.
 
     Returns False for:
-      - File not found
-      - Partial session (no terminal marker in tail)
-      - Any malformed / unreadable JSONL
+      - File not found / unreadable
+      - No assistant entries yet
+      - Last assistant entry has stop_reason != "end_turn" (e.g., tool_use
+        while an Agent spawn is in flight)
     """
     if not Path(jsonl_path).exists():
         return False
@@ -192,8 +210,9 @@ def is_session_complete(jsonl_path: Path, tail_lines: int = 10) -> bool:
             lines = f.readlines()
     except OSError:
         return False
-    # Reverse-walk last `tail_lines` lines to find the terminal signal
-    for raw in reversed(lines[-tail_lines:]):
+    # Scan in reverse; the first assistant entry we hit is the LAST one
+    # written (i.e., most recent). Its stop_reason is the source of truth.
+    for raw in reversed(lines):
         raw = raw.strip()
         if not raw:
             continue
@@ -201,12 +220,10 @@ def is_session_complete(jsonl_path: Path, tail_lines: int = 10) -> bool:
             entry = json.loads(raw)
         except json.JSONDecodeError:
             continue
-        if entry.get("type") == "last-prompt":
-            return True
-        if entry.get("type") == "assistant":
-            msg = entry.get("message") or {}
-            if isinstance(msg, dict) and msg.get("stop_reason") == "end_turn":
-                return True
+        if entry.get("type") != "assistant":
+            continue
+        msg = entry.get("message") or {}
+        return isinstance(msg, dict) and msg.get("stop_reason") == "end_turn"
     return False
 
 

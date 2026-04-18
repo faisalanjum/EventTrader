@@ -236,6 +236,80 @@ def test_is_session_complete_missing_file_returns_false(tmp_path):
     assert is_session_complete(tmp_path / "does-not-exist.jsonl") is False
 
 
+def test_is_session_complete_enrichment_in_flight_returns_false(tmp_path):
+    """Regression guard (2026-04-17 AVGO bug). The /extract skill-fork goes
+    through a window between primary completion and enrichment return where:
+      - Primary Agent finished (tool_result written)
+      - 'Primary succeeded' text reply with stop_reason=end_turn has landed
+      - last-prompt marker(s) appear mid-session
+      - Enrichment Agent has been SPAWNED (tool_use) but its tool_result has
+        NOT been written yet — skill-fork is still waiting
+    Old heuristic (any terminal marker in last 10 lines) would fire TRUE and
+    the harvester would produce a thinking_transcript.md with orphan warnings
+    and no enrichment subagent file; idempotency then blocked retries.
+
+    Correct behaviour: LAST assistant stop_reason=tool_use → NOT complete.
+    """
+    from harvest_guidance_sessions import is_session_complete
+    p = _write_jsonl(tmp_path / "fork.jsonl", [
+        {"type": "user", "message": {"content": "/extract AVGO transcript ..."}},
+        # Primary Agent spawn
+        {"type": "assistant", "message": {
+            "content": [{"type": "tool_use", "name": "Agent", "id": "tu_primary"}],
+            "stop_reason": "tool_use",
+        }},
+        {"type": "user", "message": {"content": [
+            {"type": "tool_result", "tool_use_id": "tu_primary", "content": "done"}
+        ]}},
+        # Mid-session: text-only reply summarising primary (stop_reason=end_turn
+        # for a text-ending turn — this is NOT final-session completion)
+        {"type": "assistant", "message": {
+            "content": [{"type": "text", "text": "Primary succeeded. Checking enrichment."}],
+            "stop_reason": "end_turn",
+        }},
+        # SDK writes a last-prompt marker mid-session (verified empirically)
+        {"type": "last-prompt", "lastPrompt": "checkpoint"},
+        # Enrichment Agent spawn — tool_result NOT yet written
+        {"type": "assistant", "message": {
+            "content": [{"type": "tool_use", "name": "Agent", "id": "tu_enrich"}],
+            "stop_reason": "tool_use",
+        }},
+    ])
+    assert is_session_complete(p) is False, (
+        "mid-enrichment window must defer harvest; "
+        "last assistant stop_reason=tool_use means the skill-fork is still active"
+    )
+
+
+def test_is_session_complete_trailing_last_prompt_after_end_turn_returns_true(tmp_path):
+    """Real completed sessions end with assistant end_turn followed by one or
+    more last-prompt markers (SDK-internal). The gate must still return True.
+    """
+    from harvest_guidance_sessions import is_session_complete
+    p = _write_jsonl(tmp_path / "done.jsonl", [
+        {"type": "user", "message": {"content": "hi"}},
+        {"type": "assistant", "message": {
+            "content": [{"type": "text", "text": "all done"}],
+            "stop_reason": "end_turn",
+        }},
+        {"type": "last-prompt", "lastPrompt": "x"},
+        {"type": "last-prompt", "lastPrompt": "y"},
+    ])
+    assert is_session_complete(p) is True
+
+
+def test_is_session_complete_only_last_prompt_returns_false(tmp_path):
+    """A file containing ONLY last-prompt markers (no assistant turns yet) is
+    NOT complete. Prior heuristic incorrectly treated bare last-prompt as
+    terminal.
+    """
+    from harvest_guidance_sessions import is_session_complete
+    p = _write_jsonl(tmp_path / "only_marker.jsonl", [
+        {"type": "last-prompt", "lastPrompt": "x"},
+    ])
+    assert is_session_complete(p) is False
+
+
 # ── 3. is_already_harvested (idempotency via frontmatter sdk_session_id) ──
 
 def test_is_already_harvested_same_session_id_returns_true(tmp_path):
