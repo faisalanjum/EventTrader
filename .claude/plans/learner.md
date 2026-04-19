@@ -131,7 +131,7 @@ Implications:
 
 | # | Item | Summary | Where to start |
 |---|---|---|---|
-| T1 | **Template-overfit mitigation — "labeled lesson consumption"** | Predictor labels each prior lesson as `confirmed` / `contradicted` / `irrelevant` with a bundle-evidence citation BEFORE using it in the directional call. Only `confirmed` lessons may influence direction. Directly attacks the empirically-observed 3-of-15-quarter overfit pattern that the routing fix alone cannot solve. | Full design already in this file — §13 Phase 4 subsection "Proposed mitigation for template overfit — labeled lesson consumption". Predictor SKILL.md + additive `lesson_labels[]` field on `prediction_result.v1` + offline audit script. |
+| T1 | **Template-overfit mitigation — "labeled lesson consumption"** | ✅ **IMPLEMENTED 2026-04-19** — structural enforcement via validator (positional equality + `cites_lesson_indices` confirmed-only + `bundle_evidence` sentinel discipline + `analysis` substring floor). Authoritative spec: `.claude/plans/labeled-lesson-consumption.md` (rev 3.6). Phase 0 added to predictor SKILL.md; `validate_prediction_result` extended; all 6 call sites wired with `expected_lesson_texts=` kwarg. | SHIPPED — see labeled-lesson-consumption.md §§7-8 for full implementation. Offline audit script deferred to separate PR after ≥10 T1 quarters exist. |
 | T2 | **Populate `guidance_history.series`** — structured guidance extraction | 100% of calibration quarters currently have `series = []`; predictor is inferring guide-vs-consensus from press-release prose. Plausibly higher EV than any lesson-routing change: lessons cannot compensate for missing structured fields. | New builder or enrichment on top of existing guidance pipeline. Trace `build_guidance_history` flow; populate `series` from XBRL/transcript/8-K fields. |
 | T3 | **Fix `builder_adapters.build_8k_packet` to populate `sector` at source** | Legacy builder returns `sector=None` on 100% of bundles, making `_lookup_company_sector` fallback in `build_prediction_bundle` load-bearing rather than defensive. | Trace delegation to `warmup_cache.build_8k_packet` and add sector-stamping. When fixed, `_lookup_company_sector` becomes truly optional and can be scoped to the write-side `source_sector` stamp only. |
 
@@ -1324,6 +1324,9 @@ Manual single-quarter runs via CLI: `python3 scripts/earnings/earnings_orchestra
 **Raw A/B data**: `earnings-analysis/test-outputs/ab_baseline_AVGO.json`
 
 ### Proposed mitigation for template overfit — "labeled lesson consumption"
+
+> **STATUS**: ✅ SHIPPED 2026-04-19. Authoritative spec: `.claude/plans/labeled-lesson-consumption.md` (rev 3.6). The design sketch below is retained for historical context only — ALL references to "future", "propose", "when the time comes", etc., are obsolete. Refer to the consumption plan file for the implemented contract.
+
 
 **Do NOT apply this yet.** This is the designed fix IF a second ticker (NVDA, AAPL, ...) shows recurring Q3-style overfit. Documented here so future bots know the exact intervention and can implement it directly, not re-derive.
 

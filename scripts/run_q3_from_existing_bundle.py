@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent / "earnings"))
 from earnings_orchestrator import (
     COMPANIES_DIR,
     LearnerOutcome,
+    _render_learning_context,
     finalize_prediction_result,
     get_attribution_paths,
     get_prediction_paths,
@@ -81,7 +82,11 @@ def main():
     )
 
     prediction = json.loads(paths["result_path"].read_text())
-    validate_prediction_result(prediction, TICKER, quarter_info["quarter_label"])
+    # T1: load bundle to derive expected lesson list for positional validation
+    bundle = json.loads(paths["bundle_path"].read_text(encoding="utf-8"))
+    _, _expected_lessons = _render_learning_context((bundle or {}).get("learning_context") or {})
+    validate_prediction_result(prediction, TICKER, quarter_info["quarter_label"],
+                               expected_lesson_texts=_expected_lessons)
     log.info("Prediction: %s | confidence=%s (%s) | magnitude=%s",
              prediction["direction"], prediction["confidence_score"],
              prediction["confidence_bucket"], prediction["magnitude_bucket"])

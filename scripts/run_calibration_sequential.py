@@ -16,6 +16,7 @@ from earnings_orchestrator import (
     LearnerFailed,
     LearnerOutcome,
     LearnerSkipped,
+    _render_learning_context,
     finalize_prediction_result,
     get_attribution_paths,
     get_prediction_paths,
@@ -73,7 +74,11 @@ def finalize_and_learn(accession, quarter_label):
         model=PREDICTOR_MODEL_ID,
     )
     prediction = json.loads(paths["result_path"].read_text())
-    validate_prediction_result(prediction, TICKER, quarter_label)
+    # T1: load bundle to derive expected lesson list for positional validation
+    bundle = json.loads(paths["bundle_path"].read_text(encoding="utf-8"))
+    _, _expected_lessons = _render_learning_context((bundle or {}).get("learning_context") or {})
+    validate_prediction_result(prediction, TICKER, quarter_label,
+                               expected_lesson_texts=_expected_lessons)
     log.info("[%s] Prediction: %s | %s | %s",
              quarter_label, prediction["direction"],
              prediction["confidence_bucket"], prediction["magnitude_bucket"])

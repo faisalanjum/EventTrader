@@ -27,6 +27,7 @@ sys.path.insert(0, str(Path(__file__).parent / "earnings"))
 from earnings_orchestrator import (
     COMPANIES_DIR,
     PREDICTOR_MODEL_ID,
+    _render_learning_context,
     finalize_prediction_result,
     render_bundle_text,
     run_predictor_via_sdk,
@@ -114,7 +115,11 @@ def run_baseline(accession: str, label: str, quarter_info: dict) -> None:
         sdk_session_id=baseline_session_id,
         experiment_name="prediction_no_lessons",
     )
-    validate_prediction_result(json.loads(test_result_path.read_text()), TICKER, label)
+    # T1: load stripped bundle to derive expected lesson list (=[] for A/B)
+    bundle = json.loads(stripped_bundle.read_text(encoding="utf-8"))
+    _, _expected_lessons = _render_learning_context((bundle or {}).get("learning_context") or {})
+    validate_prediction_result(json.loads(test_result_path.read_text()), TICKER, label,
+                               expected_lesson_texts=_expected_lessons)
 
 
 def compare(label: str) -> dict:

@@ -1499,7 +1499,8 @@ def render_bundle_text(bundle: dict) -> str:
     # 10. Prior Lessons (from learner — if available)
     learning_ctx = bundle.get("learning_context")
     if learning_ctx and (learning_ctx.get("ticker_lessons") or learning_ctx.get("global_lessons")):
-        sections.append(_render_learning_context(learning_ctx))
+        _text, _ = _render_learning_context(learning_ctx)
+        sections.append(_text)
 
     return "\n\n".join(sections)
 
@@ -1573,8 +1574,24 @@ def get_prediction_paths(ticker: str, quarter_info: dict,
 
 def validate_prediction_result(payload: dict[str, Any],
                                expected_ticker: str,
-                               expected_quarter: str) -> None:
-    """Light validation for the first predictor MVP output."""
+                               expected_quarter: str,
+                               *,
+                               expected_lesson_texts: list[str] | None = None) -> None:
+    """Validator for prediction_result.v1 including T1 labeled-lesson-consumption contract.
+
+    T1 (added 2026-04-19 per .claude/plans/labeled-lesson-consumption.md):
+      - `lesson_labels[]` is required (no backward-compat — corpus wiped).
+      - Each entry validated for shape/enum/sentinel discipline.
+      - If `expected_lesson_texts` is provided (kwarg), positional equality is
+        enforced against the renderer-emitted list (same source of truth).
+      - Every `key_drivers[i].cites_lesson_indices[j]` must point to a
+        `confirmed` label.
+      - `analysis` must not verbatim-quote a non-confirmed lesson ≥30 chars.
+
+    `expected_lesson_texts=None` skips only the positional check — shape/
+    enum/citation/analysis-floor still fire. Used for offline audit reads
+    without the bundle in scope.
+    """
     required = [
         "schema_version",
         "ticker",
@@ -1588,6 +1605,7 @@ def validate_prediction_result(payload: dict[str, Any],
         "data_gaps",
         "evidence_ledger",
         "analysis",
+        "lesson_labels",           # T1
         "predicted_at",
         "model_version",
         "prompt_version",
@@ -1637,6 +1655,106 @@ def validate_prediction_result(payload: dict[str, Any],
 
     if not isinstance(payload["analysis"], str) or not payload["analysis"].strip():
         raise ValueError("analysis must be a non-empty string")
+
+    # ══════════════════════════════════════════════════════════════════
+    # T1 — lesson_labels validation (template-overfit mitigation)
+    # Spec: .claude/plans/labeled-lesson-consumption.md §6.3 / §8.4
+    # ══════════════════════════════════════════════════════════════════
+    _LABEL_ENUM = {"confirmed", "contradicted", "irrelevant"}
+
+    labels = payload.get("lesson_labels")
+    if labels is None:
+        raise ValueError("lesson_labels must be a list, got null")
+    if not isinstance(labels, list):
+        raise ValueError(f"lesson_labels must be a list, got {type(labels).__name__}")
+
+    # ─ Shape + enum + non-empty + sentinel discipline ─
+    for i, entry in enumerate(labels):
+        if not isinstance(entry, dict):
+            raise ValueError(f"lesson_labels[{i}] must be an object")
+        for req in ("lesson_text", "label", "bundle_evidence"):
+            if req not in entry:
+                raise ValueError(f"lesson_labels[{i}] missing required field: {req}")
+        lbl = entry["label"]
+        if lbl not in _LABEL_ENUM:
+            raise ValueError(
+                f"lesson_labels[{i}].label must be one of {sorted(_LABEL_ENUM)}, got {lbl!r}"
+            )
+        for sf in ("lesson_text", "bundle_evidence"):
+            if not isinstance(entry[sf], str):
+                raise ValueError(f"lesson_labels[{i}].{sf} must be a string")
+        if not entry["lesson_text"].strip():
+            raise ValueError(f"lesson_labels[{i}].lesson_text must be non-empty")
+        evidence = entry["bundle_evidence"].strip()
+        if not evidence:
+            raise ValueError(f"lesson_labels[{i}].bundle_evidence must be non-empty")
+        # Sentinel discipline: 'no relevant evidence' reserved for irrelevant
+        if lbl in ("confirmed", "contradicted") and evidence.lower() == "no relevant evidence":
+            raise ValueError(
+                f"lesson_labels[{i}]: {lbl!r} requires specific bundle_evidence; "
+                f"'no relevant evidence' sentinel is reserved for 'irrelevant'"
+            )
+
+    # ─ Positional equality against renderer-emitted expected list ─
+    if expected_lesson_texts is not None:
+        if len(labels) != len(expected_lesson_texts):
+            raise ValueError(
+                f"lesson_labels has {len(labels)} entries; "
+                f"expected {len(expected_lesson_texts)} (from bundle.learning_context render order)"
+            )
+        for i, (got, want) in enumerate(zip(labels, expected_lesson_texts)):
+            if _normalize_lesson_text(got["lesson_text"]) != _normalize_lesson_text(want):
+                raise ValueError(
+                    f"lesson_labels[{i}].lesson_text does not match expected "
+                    f"(normalized comparison failed at position {i})"
+                )
+
+    # ─ cites_lesson_indices: confirmed-only on every key_drivers[i] ─
+    for i, kd in enumerate(payload["key_drivers"]):
+        if "cites_lesson_indices" not in kd:
+            raise ValueError(
+                f"key_drivers[{i}].cites_lesson_indices is required (may be empty list)"
+            )
+        cites = kd["cites_lesson_indices"]
+        if not isinstance(cites, list):
+            raise ValueError(
+                f"key_drivers[{i}].cites_lesson_indices must be a list"
+            )
+        for j, idx in enumerate(cites):
+            # Reject bool-as-int (Python quirk: isinstance(True, int) is True)
+            if not isinstance(idx, int) or isinstance(idx, bool):
+                raise ValueError(
+                    f"key_drivers[{i}].cites_lesson_indices[{j}] must be int, "
+                    f"got {type(idx).__name__}"
+                )
+            if not (0 <= idx < len(labels)):
+                raise ValueError(
+                    f"key_drivers[{i}].cites_lesson_indices[{j}] = {idx} out of range "
+                    f"(len(lesson_labels)={len(labels)})"
+                )
+            if labels[idx]["label"] != "confirmed":
+                raise ValueError(
+                    f"key_drivers[{i}].cites_lesson_indices[{j}] = {idx} cites lesson "
+                    f"with label={labels[idx]['label']!r}; only 'confirmed' labels may be cited"
+                )
+
+    # ─ Analysis-field substring floor: reject verbatim quote of non-confirmed lesson ─
+    # Length guard at 30 chars: below, substring match risks innocent collision
+    # on common short phrases. Real learner lessons are 80-150 chars.
+    # See plan §3 invariant 6 + §8.4.
+    _ANALYSIS_MIN_LEN = 30
+    analysis_norm = _normalize_lesson_text(payload["analysis"])
+    for i, entry in enumerate(labels):
+        if entry["label"] == "confirmed":
+            continue
+        lt_norm = _normalize_lesson_text(entry["lesson_text"])
+        if len(lt_norm) < _ANALYSIS_MIN_LEN:
+            continue  # too short — paraphrase-evasion already acknowledged (§2.2)
+        if lt_norm in analysis_norm:
+            raise ValueError(
+                f"analysis contains verbatim lesson_labels[{i}].lesson_text "
+                f"(label={entry['label']!r}); paraphrase or omit — may not quote"
+            )
 
 
 # ── Attribution / Learner Helpers ────────────────────────────────────
@@ -2482,9 +2600,37 @@ def build_learning_context(ticker: str, sector: str | None = None,
 # ── Learning Context Renderer (for prediction bundle text) ──────────
 
 
-def _render_learning_context(learning_ctx: dict) -> str:
-    """Render learning context into a readable section for the prediction bundle."""
+def _normalize_lesson_text(s: str) -> str:
+    """Whitespace-collapse + strip + case-fold for stable comparison.
+
+    Used by T1 labeled-lesson-consumption contract for:
+      (a) positional equality between LLM-emitted lesson_text and the
+          renderer's expected list,
+      (b) the analysis-field substring floor (rejects verbatim quotes of
+          non-confirmed lessons in the predictor's free-text analysis).
+
+    Case-folding absorbs harmless capitalization drift — LLMs do not
+    reliably preserve case, and an intentional verbatim quote survives
+    .lower(). See .claude/plans/labeled-lesson-consumption.md §5.3.
+    """
+    return " ".join((s or "").strip().split()).lower()
+
+
+def _render_learning_context(learning_ctx: dict) -> tuple[str, list[str]]:
+    """Render learning context and emit the ordered list of LABELED lesson texts.
+
+    Returns (rendered_text, ordered_lesson_texts). The list is the authoritative
+    source of truth for T1 lesson_labels positional validation — by
+    construction, it is emitted in the same traversal order the render emits.
+    Excludes data_lessons, why, and quarter-header metadata per T1 scope rules.
+
+    Traversal order (must match SKILL.md Phase 0):
+      1. Each ticker_lesson, walking predictor_lessons[] in array order
+      2. Globals by scope: sector → macro → cross_ticker (recency within scope)
+    """
     parts: list[str] = []
+    ordered: list[str] = []  # T1: labeled lesson texts in render order
+
     parts.append("## Prior Lessons (from learner)")
 
     ticker_lessons = learning_ctx.get("ticker_lessons", [])
@@ -2492,7 +2638,7 @@ def _render_learning_context(learning_ctx: dict) -> str:
 
     if not ticker_lessons and not global_lessons:
         parts.append("\nNo prior lessons available (first prediction for this ticker).")
-        return "\n".join(parts)
+        return "\n".join(parts), ordered
 
     # ── Ticker-specific lessons ──
     if ticker_lessons:
@@ -2507,11 +2653,13 @@ def _render_learning_context(learning_ctx: dict) -> str:
             parts.append(f"**{ql}** — prediction {icon} ({pred_dir}), actual {actual:+.2f}%, driver: {cat}")
             for pl in lesson.get("predictor_lessons", []):
                 parts.append(f"  - Predictor: {pl}")
+                if isinstance(pl, str) and pl.strip():
+                    ordered.append(pl)                     # T1: LABELED
             for dl in lesson.get("data_lessons", []):
-                parts.append(f"  - Data: {dl}")
+                parts.append(f"  - Data: {dl}")            # T1: NOT labeled (fetch/weight heuristic)
             why = lesson.get("why")
             if why:
-                parts.append(f"  - Why: {why}")
+                parts.append(f"  - Why: {why}")            # T1: NOT labeled (metadata)
             parts.append("")
 
     # ── Global lessons — split into three sub-sections by scope (amendment
@@ -2528,23 +2676,32 @@ def _render_learning_context(learning_ctx: dict) -> str:
             for entry in by_scope["sector"]:
                 ts = entry.get("target_sector") or "?"
                 src = entry.get("source_ticker") or "?"
-                parts.append(f"- [sector:{ts}] ({src}) {entry.get('lesson', '')}")
+                lesson_text = entry.get("lesson", "")
+                parts.append(f"- [sector:{ts}] ({src}) {lesson_text}")
+                if isinstance(lesson_text, str) and lesson_text.strip():
+                    ordered.append(lesson_text)            # T1: LABELED
 
         if by_scope["macro"]:
             parts.append(f"\n### Macro Lessons ({len(by_scope['macro'])} entries)\n")
             for entry in by_scope["macro"]:
                 src = entry.get("source_ticker") or "?"
-                parts.append(f"- [macro] ({src}) {entry.get('lesson', '')}")
+                lesson_text = entry.get("lesson", "")
+                parts.append(f"- [macro] ({src}) {lesson_text}")
+                if isinstance(lesson_text, str) and lesson_text.strip():
+                    ordered.append(lesson_text)            # T1: LABELED
 
         if by_scope["cross_ticker"]:
             parts.append(f"\n### Cross-Ticker Lessons ({len(by_scope['cross_ticker'])} entries)\n")
             for entry in by_scope["cross_ticker"]:
                 rt = entry.get("related_tickers") or []
                 src = entry.get("source_ticker") or "?"
-                parts.append(f"- [cross:{','.join(rt)}] ({src}) {entry.get('lesson', '')}")
+                lesson_text = entry.get("lesson", "")
+                parts.append(f"- [cross:{','.join(rt)}] ({src}) {lesson_text}")
+                if isinstance(lesson_text, str) and lesson_text.strip():
+                    ordered.append(lesson_text)            # T1: LABELED
         parts.append("")
 
-    return "\n".join(parts)
+    return "\n".join(parts), ordered
 
 
 # ── Learner SDK Invocation ───────────────────────────────────────────
@@ -3292,10 +3449,15 @@ def main():
             with open(paths["result_path"], encoding="utf-8") as f:
                 prediction = json.load(f)
 
+            # T1: extract renderer-emitted expected list for positional validation
+            _, _expected_lessons = _render_learning_context(
+                (bundle or {}).get("learning_context") or {}
+            )
             validate_prediction_result(
                 prediction,
                 expected_ticker=args.ticker,
                 expected_quarter=quarter_info["quarter_label"],
+                expected_lesson_texts=_expected_lessons,
             )
 
             print(f"Prediction written in {pred_elapsed:.1f}s: {paths['result_path']}")
