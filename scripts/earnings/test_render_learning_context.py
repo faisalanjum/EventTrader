@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """R1-R4 tests for _render_learning_context tuple refactor (T1).
 
-Per .claude/plans/labeled-lesson-consumption.md §9.2:
+Per .claude/plans/learner.md Appendix B §9.2:
   R1: Empty learning_context → (text_with_first_prediction_message, [])
   R2: Ticker lessons with predictor_lessons + data_lessons + why → list excludes data + why
   R3: Globals: 2 sector + 1 macro + 2 cross_ticker → list order is sector, sector, macro, cross, cross

@@ -2,7 +2,7 @@
 """V1–V20 validator tests for attribution_result.v2 schema.
 
 Enforces the structured-routing + scope_key-removal contract from
-.claude/plans/learner-edits.md §6.1.
+.claude/plans/learner.md Appendix A §6.1.
 """
 from __future__ import annotations
 
@@ -13,9 +13,9 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root (for config.*)
-sys.path.insert(0, str(Path(__file__).resolve().parent))       # this dir (for validate_attribution)
+sys.path.insert(0, str(Path(__file__).resolve().parent))       # this dir (for validate_learning)
 
-from validate_attribution import validate_attribution_result
+from validate_learning import validate_attribution_result
 
 
 # Minimal-valid attribution skeleton — every required top-level field present
@@ -72,7 +72,7 @@ def _validate(payload):
 
 
 class ValidatorTests(unittest.TestCase):
-    """V1–V20 per .claude/plans/learner-edits.md §7.1."""
+    """V1–V20 per .claude/plans/learner.md Appendix A §7.1."""
 
     # ── V1: Full valid attribution, zero global_observations ──
     def test_V1_valid_no_globals(self):

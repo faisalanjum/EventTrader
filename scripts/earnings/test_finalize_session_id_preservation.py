@@ -197,20 +197,6 @@ def test_finalize_learning_stamps_fresh_sid(tmp_path):
     assert payload["sdk_session_id"] == "fresh-learning-sid-aaa"
 
 
-# ── finalize_attribution_result alias must inherit the preservation rule ──
-
-def test_finalize_attribution_result_alias_also_preserves(tmp_path):
-    """The 1-release backward-compat alias must have identical semantics."""
-    from earnings_orchestrator import finalize_attribution_result
-    p = tmp_path / "result.json"
-    _write_learning_payload(p, with_sid="alias-preserved-sid-123")
-
-    finalize_attribution_result(
-        result_path=p,
-        model="new-model",
-        sdk_session_id=None,
-        ticker="AVGO",
-        quarter_label="Q1_FY2023",
-    )
-    payload = json.loads(p.read_text())
-    assert payload["sdk_session_id"] == "alias-preserved-sid-123"
+# ── finalize_attribution_result alias removed 2026-04-19 (T5 cleanup).
+# The alias was "1-release backward-compat" per its own docstring; its
+# dedicated alias-preservation test was removed alongside the alias itself.

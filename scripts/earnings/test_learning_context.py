@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Writer / Reader / Integration tests for learning-context machinery.
 
-Covers W1–W8, R1–R15, I7–I10 per .claude/plans/learner-edits.md §7.2–§7.4.
+Covers W1–W8, R1–R15, I7–I10 per .claude/plans/learner.md Appendix A §7.2–§7.4.
 
 I1–I6 require a real SDK round-trip and are covered by the post-commit smoke
 test in §8.3 STEP 1. These tests are self-contained and do NOT require Neo4j.

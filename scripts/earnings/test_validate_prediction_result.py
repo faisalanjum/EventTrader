@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """V1-V24 tests for validate_prediction_result T1 lesson_labels contract.
 
-Per .claude/plans/labeled-lesson-consumption.md §9.1:
+Per .claude/plans/learner.md Appendix B §9.1:
   V1-V2: valid shapes (empty / populated with confirmed/contradicted/irrelevant)
   V3-V10: shape + enum + non-empty + sentinel discipline
   V11-V14: positional equality with expected_lesson_texts

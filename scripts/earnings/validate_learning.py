@@ -5,7 +5,7 @@ PreToolUse hook import from here. Only stdlib imports — no Neo4j, no builders,
 no SDK. This ensures the hook never fails-open due to missing dependencies.
 
 Schema invariants enforced on ``global_observations[]`` (amendment 2026-04-17,
-per .claude/plans/learner-edits.md):
+per .claude/plans/learner.md Appendix A):
 
   - ``scope_key`` is REMOVED — rejected across ALL scopes.
   - ``scope="cross_ticker"`` REQUIRES non-empty ``related_tickers`` (uppercase

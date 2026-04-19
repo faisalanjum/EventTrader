@@ -1579,7 +1579,7 @@ def validate_prediction_result(payload: dict[str, Any],
                                expected_lesson_texts: list[str] | None = None) -> None:
     """Validator for prediction_result.v1 including T1 labeled-lesson-consumption contract.
 
-    T1 (added 2026-04-19 per .claude/plans/labeled-lesson-consumption.md):
+    T1 (added 2026-04-19 per .claude/plans/learner.md Appendix B):
       - `lesson_labels[]` is required (no backward-compat — corpus wiped).
       - Each entry validated for shape/enum/sentinel discipline.
       - If `expected_lesson_texts` is provided (kwarg), positional equality is
@@ -1658,7 +1658,7 @@ def validate_prediction_result(payload: dict[str, Any],
 
     # ══════════════════════════════════════════════════════════════════
     # T1 — lesson_labels validation (template-overfit mitigation)
-    # Spec: .claude/plans/labeled-lesson-consumption.md §6.3 / §8.4
+    # Spec: .claude/plans/learner.md Appendix B §6.3 / §8.4
     # ══════════════════════════════════════════════════════════════════
     _LABEL_ENUM = {"confirmed", "contradicted", "irrelevant"}
 
@@ -1779,14 +1779,6 @@ def get_learning_dir(ticker: str, quarter_info: dict,
     return COMPANIES_DIR / ticker.upper() / "events" / quarter_dir / "learning"
 
 
-# Thin alias for 1-release backward compat. Existing callers using the
-# old name continue to work transparently. Remove after callers migrate.
-def get_attribution_dir(ticker: str, quarter_info: dict,
-                        save_dir: str | None = None) -> Path:
-    """DEPRECATED alias for get_learning_dir (1-release backward compat)."""
-    return get_learning_dir(ticker, quarter_info, save_dir)
-
-
 def get_learning_paths(ticker: str, quarter_info: dict,
                        save_dir: str | None = None) -> dict[str, Path]:
     """Return canonical paths for learner result + lesson artifacts.
@@ -1807,14 +1799,6 @@ def get_learning_paths(ticker: str, quarter_info: dict,
     }
 
 
-# Thin alias — preserves "get_attribution_paths" import for 1 release.
-# Remove once all callers migrate.
-def get_attribution_paths(ticker: str, quarter_info: dict,
-                          save_dir: str | None = None) -> dict[str, Path]:
-    """DEPRECATED alias for get_learning_paths (1-release backward compat)."""
-    return get_learning_paths(ticker, quarter_info, save_dir)
-
-
 def get_learnings_paths(ticker: str) -> dict[str, Path]:
     """Return canonical paths for ticker + global lesson files."""
     return {
@@ -1823,9 +1807,9 @@ def get_learnings_paths(ticker: str) -> dict[str, Path]:
     }
 
 
-# ── Attribution Result Validator (re-exported from standalone module) ─
+# ── Attribution Result Validator (canonical standalone module) ─
 
-from validate_attribution import validate_attribution_result  # noqa: F401 — stdlib-only, hook-safe
+from validate_learning import validate_attribution_result  # noqa: F401 — stdlib-only, hook-safe
 
 
 # ── PIT Cutoff Derivation (three-tier rule per learner.md §3) ──
@@ -2135,7 +2119,7 @@ def run_learner_for_quarter(
                    ticker, quarter_info.get("quarter_label"), "; ".join(errors[:3]))
         # Retry once: delete bad file, re-invoke WITH validation errors fed
         # back into the prompt (H2 informed retry, amendment 2026-04-17 per
-        # .claude/plans/learner-edits.md §6.6).
+        # .claude/plans/learner.md Appendix A §6.6).
         result_path.unlink(missing_ok=True)
         log.info(
             "Retrying learner for %s %s (1 retry, feeding %d validation errors back)",
@@ -2284,7 +2268,7 @@ def append_ticker_lesson(ticker: str, attribution_result: dict) -> Path:
 def append_global_lessons(attribution_result: dict) -> Path | None:
     """Upsert global_observations into learnings/global.json for this quarter.
 
-    Amendment 2026-04-17 (per .claude/plans/learner-edits.md §6.2):
+    Amendment 2026-04-17 (per .claude/plans/learner.md Appendix A §6.2):
 
       - **Always returns the path** on success (was: returned None when
         observations were empty). Docstring change is intentional — the
@@ -2383,7 +2367,7 @@ def build_learning_context(ticker: str, sector: str | None = None,
                            pit_cutoff: str | None = None) -> dict:
     """Build learning context for predictor consumption.
 
-    Amendment 2026-04-17 (per .claude/plans/learner-edits.md §4.3 / §6.3):
+    Amendment 2026-04-17 (per .claude/plans/learner.md Appendix A §4.3 / §6.3):
       - Structured-field routing: cross_ticker by ``related_tickers`` list
         membership; sector by ``target_sector`` enum (normalized compare); macro
         always included. No regex. No per-entry Neo4j calls.
@@ -2611,7 +2595,7 @@ def _normalize_lesson_text(s: str) -> str:
 
     Case-folding absorbs harmless capitalization drift — LLMs do not
     reliably preserve case, and an intentional verbatim quote survives
-    .lower(). See .claude/plans/labeled-lesson-consumption.md §5.3.
+    .lower(). See .claude/plans/learner.md Appendix B §5.3.
     """
     return " ".join((s or "").strip().split()).lower()
 
@@ -2737,7 +2721,7 @@ def _build_learner_prompt(
     """Assemble the full learner prompt: SKILL.md instructions + runtime INPUTS.
 
     ``prior_validation_errors`` (amendment 2026-04-17, H2 informed retry per
-    .claude/plans/learner-edits.md §6.6): when non-empty, appended as a
+    .claude/plans/learner.md Appendix A §6.6): when non-empty, appended as a
     dedicated "YOUR PRIOR OUTPUT WAS REJECTED" block so the 1-retry path is
     informed rather than blind. Default None for first-attempt calls.
     """
@@ -3045,8 +3029,9 @@ def finalize_learning_result(
       - Calls thinking_harvester.harvest() to produce ``thinking.md`` +
         ``subagents/`` under ``events/{Q}/learning/``
 
-    Added 2026-04-17 per obsidian_thinking.md. Old name
-    ``finalize_attribution_result`` is kept as a thin alias for 1 release.
+    Added 2026-04-17 per obsidian_thinking.md (renamed from
+    ``finalize_attribution_result``; the old alias was retired 2026-04-19
+    in the T5 cleanup).
     """
     if not result_path.exists():
         raise RuntimeError(f"Learner did not write {result_path}")
@@ -3076,27 +3061,6 @@ def finalize_learning_result(
         experiment_name=experiment_name,
     )
     return payload
-
-
-# Thin alias — 1-release backward-compat for any caller still using the old name.
-def finalize_attribution_result(
-    *,
-    result_path: Path,
-    model: str,
-    sdk_session_id: str | None = None,
-    ticker: str | None = None,
-    quarter_label: str | None = None,
-    experiment_name: str | None = None,
-) -> dict:
-    """DEPRECATED alias for finalize_learning_result (1-release compat)."""
-    return finalize_learning_result(
-        result_path=result_path,
-        model=model,
-        sdk_session_id=sdk_session_id,
-        ticker=ticker,
-        quarter_label=quarter_label,
-        experiment_name=experiment_name,
-    )
 
 
 def finalize_prediction_result(
