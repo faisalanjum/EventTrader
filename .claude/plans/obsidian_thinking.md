@@ -826,3 +826,1025 @@ The tests construct a temporary vault-root dir per run and pass it as `vault_roo
 - [x] Pre-flight verification addendum (10 locked decisions) accepted
 
 **Status**: plan is locked. Awaiting explicit "go implement" from user before any code/filesystem changes. Implementation proceeds in the build order specified in the Implementation reference section.
+
+
+---
+
+# Appendix A — Obsidian Thinking Revamp (formerly `obsidian_thinking_revamp.md`)
+
+> **Status**: Merged into this file on 2026-04-19 (was `.claude/plans/obsidian_thinking_revamp.md`).
+> Section numbering below is SELF-CONTAINED to this appendix — do not confuse with obsidian_thinking.md §N.
+
+
+> **STATUS: ✅ SHIPPED (2026-04-19)** — all 3 approved changes are executed on `main`; 184/184 pytest lock green; 2 orphaned `.pyc` files swept.
+>
+> | Change | Commit | Notes |
+> |---|---|---|
+> | 1. Harvester dedupe (`_first_user_matches_skill_prefix` → delegation) | `a3f2cf7` | bundled in the unified-layout feature commit |
+> | 2. Orchestrator → canonical validator import | `cd33014` (T5) | **alias sunset happened earlier than this plan's text describes** — `validate_attribution.py` was DELETED (not "kept for 1 release"); orchestrator at `earnings_orchestrator.py:1812` now imports from `validate_learning` directly |
+> | 3. Delete 5 dead legacy `build-*-thinking` files | `3802113` | guidance + news pairs + `build-thinking-on-complete.sh` |
+> | Orphaned `.pyc` sweep | post-ship | `build-guidance-thinking.cpython-310.pyc` + `build-news-thinking.cpython-310.pyc` removed; `build-thinking-index.cpython-310.pyc` intentionally retained (live `.py` still referenced by `earnings-attribution/SKILL.md:438`) |
+>
+> **Reader notes:**
+> - Treat body text below as HISTORICAL REFERENCE. Where Change 2 still says "keep `validate_attribution.py` in place" / "sunset after one release cycle", the shim was actually removed earlier in T5 — reality is already past the sunset point.
+> - The validation grep `rg -n "build-guidance-thinking|build-news-thinking|build-thinking-on-complete" .claude scripts` now self-matches the plan file inside `.claude/plans/` and the pre-existing `.claude/archive/skills/earnings-orchestrator-v2/SKILL.md`. These are semantic hits in documentation, not live runtime references — expected.
+
+This document is the **implementation authority for the current Obsidian thinking / extraction cleanup**.
+
+It is intentionally based on the **live implemented code and current tests**, not on older plans. If this document conflicts with an older plan, **the implemented code and tests win**.
+
+## Purpose
+
+Give a new bot enough context to make the Obsidian extraction / thinking system leaner **without changing behavior** and without accidentally “cleaning up” code that is still live, still intentional, or still required for compatibility.
+
+The goal is:
+
+- production-grade
+- minimal
+- no over-engineering
+- no behavior drift
+- no speculative refactors
+
+This is **not** a redesign. It is a **surgical cleanup guide**.
+
+## Scope Boundary
+
+Review and act only on the **currently implemented runtime and test surface**:
+
+- `.claude/settings.json`
+- `.claude/hooks/obsidian_capture.py`
+- `.claude/hooks/obsidian_capture.sh`
+- `.claude/hooks/validate_learning_output.py`
+- `scripts/earnings/thinking_blocks.py`
+- `scripts/earnings/obsidian_capture_adapter.py`
+- `scripts/earnings/thinking_harvester.py`
+- `scripts/earnings/result_md_renderer.py`
+- `scripts/earnings/validate_learning.py`
+- `scripts/earnings/validate_attribution.py`
+- `scripts/earnings/earnings_orchestrator.py`
+- `scripts/extraction_worker.py`
+- `scripts/harvest_guidance_sessions.py`
+- `.claude/skills/earnings-orchestrator/scripts/` (touched by Change 3)
+- the relevant tests under `scripts/earnings/` and `scripts/`
+
+Do **not** treat older plans as architecture truth. They are background only.
+
+## Current Live Architecture
+
+### 1. Raw hook capture is live and supplemental
+
+`SubagentStop` in `.claude/settings.json` calls `.claude/hooks/obsidian_capture.sh`, which shells into `.claude/hooks/obsidian_capture.py`.
+
+That hook:
+
+- skips `earnings-prediction`, `earnings-attribution`, and `earnings-learner`
+- still captures extraction agents and general agents
+- writes raw reviewer-facing notes into:
+  - `pipeline/extractions/guidance/`
+  - `pipeline/news-impact/`
+  - `agents/`
+
+This hook is **live** and covered by smoke tests.
+
+### 2. Transcript parsing is centralized
+
+`scripts/earnings/thinking_blocks.py` is the shared parser.
+
+It is currently responsible for:
+
+- reading SDK JSONL
+- turning entries into normalized block dicts
+- handling redacted thinking detection
+- preserving file order optionally for the hook adapter
+
+This module is a **parser module**, not a generic formatting/utilities module.
+
+### 3. Hook adaptation is separate on purpose
+
+`scripts/earnings/obsidian_capture_adapter.py` converts parsed blocks into the legacy hook bucket shape.
+
+It owns hook-specific behavior such as:
+
+- result cleaning
+- 2000-char tool_result truncation
+- hook pairing semantics
+
+This is the right boundary for hook-specific shaping.
+
+### 4. Canonical thinking notes come from the harvester
+
+`scripts/earnings/thinking_harvester.py` is the canonical writer for:
+
+- `thinking.md`
+- `thinking_{asset}.md`
+- `subagents/*.md`
+- `subagents_{asset}/*.md`
+
+It handles the three real session patterns:
+
+- `EMBED-visible`
+- `EMBED-redacted`
+- `FORK`
+
+It also owns:
+
+- skill-fork detection
+- subagent linkage
+- thinking markdown composition
+- subagent trace rendering
+
+### 5. Canonical result sidecars come from the renderer
+
+`scripts/earnings/result_md_renderer.py` is the canonical writer for `result.md` sidecars from `result.json`.
+
+It covers:
+
+- prediction
+- learning
+- guidance
+- baseline experiment
+
+### 6. Prediction and learning are finalized inline
+
+`scripts/earnings/earnings_orchestrator.py` is the live owner for prediction / learning finalization.
+
+It already does:
+
+- session-id stamping
+- metadata stamping
+- `result.md` render
+- `thinking.md` harvest
+
+### 7. Guidance is still split across three live pieces
+
+Guidance is **not** fully inline yet.
+
+Live flow today:
+
+1. `scripts/extraction_worker.py` runs `/extract`
+2. raw hook notes are produced by `obsidian_capture.py`
+3. `scripts/harvest_guidance_sessions.py` post-hoc harvests canonical company-tree `thinking_{asset}.md`
+
+This split is real and intentional for now. Do **not** mistake it for dead code.
+
+### 8. Compatibility shims are still carrying real load
+
+These are still intentionally present:
+
+- `scripts/earnings/validate_attribution.py`
+- `earnings_orchestrator.get_attribution_paths()`
+- `earnings_orchestrator.finalize_attribution_result()`
+
+Some helper scripts still import them. They are not dead yet.
+
+## What Was Revalidated
+
+The following targeted test net was run against the current repo state:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 venv/bin/python -m pytest \
+  scripts/earnings/test_thinking_blocks.py \
+  scripts/earnings/test_obsidian_capture_adapter.py \
+  scripts/earnings/test_obsidian_capture_hook_smoke.py \
+  scripts/earnings/test_result_md_renderer.py \
+  scripts/earnings/test_thinking_harvester.py \
+  scripts/test_harvest_guidance_sessions.py -q
+```
+
+Result at review time:
+
+- `184 passed`
+- only Neo4j deprecation warnings from test process teardown
+
+That test net is the behavioral lock for this cleanup.
+
+## Approved Changes
+
+These are the only cleanup changes that are recommended as part of this revamp.
+
+## Change 1: Simplify `_first_user_matches_skill_prefix()`
+
+### File
+
+- `scripts/earnings/thinking_harvester.py`
+
+### Current situation
+
+There are two helpers in the harvester:
+
+- `_read_first_user_content()`
+- `_first_user_matches_skill_prefix()`
+
+The second is a near-duplicate JSONL walker that differs only in the final predicate.
+
+### Required change
+
+Replace `_first_user_matches_skill_prefix()` with a tiny delegation wrapper around `_read_first_user_content()`.
+
+Target shape:
+
+```python
+def _first_user_matches_skill_prefix(sub_jsonl: Path) -> bool:
+    try:
+        return _read_first_user_content(sub_jsonl).startswith(_SKILL_FORK_FIRST_USER_PREFIX)
+    except Exception:
+        return False
+```
+
+### Why this is good
+
+- removes true local duplication
+- reduces drift risk between two JSONL readers in the same module
+- preserves current behavior
+
+### Why this is regression-safe
+
+- `_read_first_user_content()` already implements the same string/list handling
+- wrapper keeps broad `except Exception` behavior
+- no caller contract changes
+- existing harvester tests already pin skill-fork behavior
+
+### Validation
+
+Run the full focused test net above.
+
+## Change 2: Use the canonical validator import in core runtime code
+
+### File
+
+- `scripts/earnings/earnings_orchestrator.py`
+
+### Current situation
+
+Core runtime code still imports:
+
+```python
+from validate_attribution import validate_attribution_result
+```
+
+But the canonical module is now `validate_learning.py`, and `validate_attribution.py` is only a compatibility shim.
+
+### Required change
+
+Change only the **core runtime import** in `earnings_orchestrator.py` to:
+
+```python
+from validate_learning import validate_attribution_result
+```
+
+### Why this is good
+
+- makes core runtime point at the canonical module
+- leaves the alias file in place for compatibility
+- reduces conceptual debt without breaking helper scripts
+
+### Why this is regression-safe
+
+- function name stays the same
+- module contents are the same canonical validator
+- compatibility shim remains for helpers/tests that still import it
+
+### Important constraint
+
+Do **not** remove the alias module in this revamp.
+
+### Post-change note
+
+After this import switch lands, the shim should have **zero core runtime consumers**.
+
+That does **not** mean it is safe to remove immediately, because:
+
+- helper / one-off scripts may still be migrated later
+- the alias may still be intentionally referenced by dedicated compatibility tests
+
+Treat this change as the beginning of the shim sunset, not the end of it.
+
+## Change 3: Delete the dead legacy guidance + news thinking stack
+
+### Files
+
+- `.claude/hooks/build-thinking-on-complete.sh`
+- `scripts/earnings/build-guidance-thinking.py`
+- `.claude/skills/earnings-orchestrator/scripts/build-guidance-thinking.py`
+- `scripts/earnings/build-news-thinking.py`
+- `.claude/skills/earnings-orchestrator/scripts/build-news-thinking.py`
+
+### Current situation
+
+This stack targets the old layout:
+
+- `Companies/{TICKER}/thinking/{QUARTER}/...`
+
+It is not part of the active runtime path anymore. The only non-archive references are self-references and the dormant hook script itself.
+
+The `build-news-thinking` pair is same-era as the `build-guidance-thinking` pair (identical old-layout target, same dormant-hook wiring pattern) and is only referenced by the dormant path.
+
+### Required change
+
+**Delete all 5 files** in the same cleanup. Do not archive in-tree.
+
+### Why delete, not archive
+
+Archiving in-tree was considered and **rejected**:
+
+- whole-repo grep/search would still return hits inside `archive/`, so every future bot has to re-reason "is this live?" — exactly the fake complexity this revamp removes
+- git history already is the audit trail (`git log --follow -- <path>`, `git show <sha>:<path>`); an in-tree archive adds no recovery capability that git doesn't already provide
+- these files target a retired layout (`Companies/{TICKER}/thinking/{QUARTER}/...`), not a paused feature — there is no plausible resurrection path without a rewrite
+- the revamp's stated goal is "the codebase reflects the real architecture instead of mixed old/new paths"; archiving violates that goal, deleting satisfies it
+
+Archiving is therefore not an acceptable alternative for this cleanup.
+
+### Why this is good
+
+- removes truly obsolete code
+- reduces confusion for future bots
+- eliminates the biggest source of fake architectural complexity
+
+### Why this is regression-safe
+
+- active settings do not invoke `build-thinking-on-complete.sh`
+- active runtime uses `thinking_harvester.py`, not `build-guidance-thinking.py`
+- current canonical guidance path is:
+  - `extraction_worker.py`
+  - `harvest_guidance_sessions.py`
+  - `thinking_harvester.py`
+
+### Bytecode note
+
+If matching orphaned bytecode files exist after removal, clean up only the stale targets, for example:
+
+- `build-guidance-thinking*.pyc`
+- `build-news-thinking*.pyc`
+
+Do **not** blindly remove the whole `__pycache__` directory in the skill scripts folder, because it may also contain bytecode for still-live modules (notably `build-thinking-index*.pyc`, which is intentionally retained — see the matching non-goal below).
+
+### Important constraint
+
+This cleanup does **not** mean guidance canonicalization is inline yet. It only removes the old obsolete path.
+
+## Explicit Non-Goals
+
+These are the tempting changes that should **not** be part of this revamp.
+
+## Do not move `_truncate_safe_fence()` into `thinking_blocks.py`
+
+### Why not
+
+Yes, it is duplicated between:
+
+- `scripts/earnings/thinking_harvester.py`
+- `scripts/earnings/obsidian_capture_adapter.py`
+
+But `thinking_blocks.py` is the shared **parser** module. Moving markdown/fence rendering helpers there makes the module less coherent.
+
+This would be a DRY win on paper but a boundary regression in practice.
+
+### Keep instead
+
+Leave the two local copies alone.
+
+## Do not move `_yaml_scalar()` into `thinking_blocks.py`
+
+### Why not
+
+Yes, it is duplicated between:
+
+- `scripts/earnings/thinking_harvester.py`
+- `scripts/earnings/result_md_renderer.py`
+
+But this is frontmatter-rendering logic, not transcript parsing logic.
+
+If these are ever unified, they should go into a dedicated markdown/frontmatter utility module, **not** into the parser.
+
+That is outside this cleanup.
+
+### Keep instead
+
+Leave the two local copies alone.
+
+## Do not mutate `parse_session_blocks()` just to eliminate `_build_agent_linkage()`
+
+### Why not
+
+Adding extra outer-entry linkage metadata to parser output is possible, but it changes the shared parser contract for:
+
+- hook adapter
+- harvester
+- parser tests
+
+That is not a cleanup cut. It is a shared-module behavior extension.
+
+Not worth the risk in this revamp.
+
+## Do not remove `harvest_guidance_sessions.py`
+
+### Why not
+
+It is currently part of the real live guidance canonicalization path.
+
+Removing it would break guidance company-tree thinking generation.
+
+## Do not remove compatibility aliases yet
+
+Do not remove in this revamp:
+
+- `validate_attribution.py`
+- `get_attribution_paths()`
+- `finalize_attribution_result()`
+
+They still have live helper-script/tests consumers.
+
+### Sunset rule for `validate_attribution.py`
+
+Safe removal target:
+
+- after Change 2 has shipped
+- after one release cycle
+- and only if grep shows no remaining non-test consumers
+
+If a dedicated alias-compatibility test is still intentionally present at that point, remove or rewrite the test in the same change that removes the shim.
+
+## Do not refactor the defensive harvester helpers
+
+Keep as-is:
+
+- `_validate_harvest_args()`
+- `_locate_subagent_files()`
+- `_is_skill_fork()`
+- `_tool_use_annotation()`
+
+These may look verbose, but the current structure is readable and heavily exercised by tests.
+
+## Do not “fix” guidance split ownership in this cleanup
+
+Guidance split ownership is the main architectural rough edge, but it is a **separate structural change**, not a safe cleanup.
+
+Do not bundle it into this revamp.
+
+## Do not remove the `build-thinking-index` stack in this revamp
+
+### Files intentionally retained
+
+- `scripts/build-thinking-index.py`
+- `scripts/build-thinking-index.sh`
+- `.claude/skills/earnings-orchestrator/scripts/build-thinking-index.py`
+
+### Why not
+
+Although these files are same-era as the dead guidance/news-thinking builders, they are still referenced by the active `.claude/skills/earnings-attribution/SKILL.md:438`:
+
+```
+python3 $CLAUDE_PROJECT_DIR/.claude/skills/earnings-orchestrator/scripts/build-thinking-index.py {accession_no}
+```
+
+Removing them in this cleanup would fail the 0%-regression bar because the active attribution skill still invokes them.
+
+If these should ever be removed, it must happen in a separate change that first retires or rewrites that skill call site.
+
+## Do not archive the one-shot migration tooling in this revamp
+
+### Files intentionally left in place
+
+- `scripts/migrate_unified_layout.py`
+- `scripts/earnings/test_migrate_unified_layout.py`
+
+### Why not
+
+Archiving them is not dangerous — they have zero live imports — but it also gives no production benefit. The move only shifts operator / test paths for historical tooling without improving live runtime behavior.
+
+Under this revamp's strict standard (maximum minimalism, zero regression risk, production-grade), "safe but pointless" changes do not belong in the approved set. If repo-hygiene housekeeping is ever done separately, that is a different exercise.
+
+### Keep instead
+
+Leave both files where they are. The `.migration-manifest.json` in the vault continues to cover any reverse need.
+
+## Do not consolidate the 3 A/B scripts
+
+### Files
+
+- `scripts/run_ab_baseline.py`
+- `scripts/run_nvda_ab_sequential.py`
+- `scripts/run_burl_ab_sequential.py`
+
+### Why not
+
+They look DRY-tempting at a glance, but they are not pure ticker-constant clones:
+
+- NVDA uses `events[:5]` (oldest 5 quarters)
+- BURL uses `events[-5:]` with a `base_idx = len(events) - 5` offset for `prev_8k_ts` tracking
+- Event-window selection logic and index semantics differ by script
+
+Unifying them would require a parameterization layer roughly the same total size, with added indirection. Not a lean cleanup — leave as-is.
+
+## Recommended Implementation Order
+
+Apply in this exact order:
+
+1. simplify `_first_user_matches_skill_prefix()` in `thinking_harvester.py`
+2. switch `earnings_orchestrator.py` to import from `validate_learning`
+3. delete the dead legacy guidance + news thinking stack
+
+## Commit Strategy
+
+Use one commit per logical change:
+
+1. `refactor(thinking-harvester): dedupe first-user skill prefix reader`
+2. `refactor(orchestrator): import canonical learning validator directly`
+3. `cleanup(obsidian): remove dead legacy guidance + news thinking builders`
+
+This keeps every cleanup independently revertible.
+
+## Validation Gate
+
+After each behavior-preserving code change, run:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 venv/bin/python -m pytest \
+  scripts/earnings/test_thinking_blocks.py \
+  scripts/earnings/test_obsidian_capture_adapter.py \
+  scripts/earnings/test_obsidian_capture_hook_smoke.py \
+  scripts/earnings/test_result_md_renderer.py \
+  scripts/earnings/test_thinking_harvester.py \
+  scripts/test_harvest_guidance_sessions.py -q
+```
+
+Expected:
+
+- all tests pass
+- no snapshot/golden drift
+- only the existing Neo4j deprecation warnings may appear
+
+For the dead-code removal step, also run:
+
+```bash
+rg -n "build-guidance-thinking|build-news-thinking|build-thinking-on-complete" .claude scripts
+```
+
+Expected after cleanup:
+
+- zero hits for `build-guidance-thinking`, `build-news-thinking`, and `build-thinking-on-complete` anywhere under `.claude/` or `scripts/`
+- the only remaining references allowed to survive are historical doc snapshots outside these trees (e.g. `docs/claude/earnings-orchestrator-review-2026-02-01.md`), which are intentionally frozen as dated reviews
+- `build-thinking-index` is intentionally NOT in this grep — it is still referenced by the active `earnings-attribution/SKILL.md` and must survive this cleanup (see non-goal)
+
+## Success Criteria
+
+This revamp is successful if all of the following are true:
+
+1. active runtime behavior is unchanged
+2. active tests stay green
+3. dead legacy guidance- and news-thinking code + its dormant hook wrapper are no longer sitting in the live surface (`build-thinking-index` stack intentionally retained per non-goal)
+4. the core runtime points at canonical modules where possible
+5. no shared parser contract was changed
+6. no guidance ownership rewrite was attempted
+
+## Final Instruction To The New Bot
+
+Be conservative.
+
+This cleanup is **not** a “make everything DRY” exercise. The right result is:
+
+- smaller live surface
+- clearer ownership
+- zero behavior drift
+
+If a change requires touching shared parser semantics, changing guidance ownership, or removing compatibility shims that still have callers, it does **not** belong in this revamp.
+
+
+---
+
+# Appendix B — Obsidian Implementation Checklist (formerly `obsidian_implementation_checklist.md`)
+
+> **Status**: Merged into this file on 2026-04-19 (was `.claude/plans/obsidian_implementation_checklist.md`).
+> Section numbering below is SELF-CONTAINED to this appendix — do not confuse with obsidian_thinking.md §N or Appendix A §N.
+
+
+  Plan is implementation-ready. All 10 locked decisions + the fixture/meta.json fix are in place. No structural gaps remain. Below is
+  the exact TDD route — test-first for every new file, test-alongside for every edit, ending with a live end-to-end smoke test.
+
+  ---
+  TDD Route — Red → Green → Refactor, phase by phase
+
+  Each phase has: (T) test written first → (I) implementation → (V) validation gate that MUST be green before moving to next phase.
+
+  Phase 0 — Pre-flight snapshot + fixtures
+
+  Actions (no tests yet):
+  - git stash or confirm clean tree baseline.
+  - Create scripts/earnings/tests/fixtures/.
+  - Copy the 3 session JSONLs + both *.jsonl AND *.meta.json for each session's subagent tree (per fixture-completeness invariant).
+  - Run find scripts/earnings/tests/fixtures -name "*.meta.json" | wc -l — expect 6 + 2 + 1 = 9 meta.json files (6 learner + 2 guidance
+  + 1 predictor).
+
+  V-gate: fixture dir exists with correct counts; no code changes yet.
+
+  ---
+  Phase 1 — config/pipeline_contracts.py (~30 lines)
+
+  (T) Write first: 3 assertions at top of test_thinking_harvester.py (only the registry section runnable initially):
+  def test_registry_has_three_types():         assert KNOWN_TYPES == frozenset({"guidance","prediction","learning"})
+  def test_experiment_name_requires_prefix():  validate_experiment_name("prediction", "prediction_no_lessons")  # must not raise
+  def test_unknown_type_rejected():            with pytest.raises(ValueError): validate_experiment_name("prediction",
+  "learning_variant")
+  Run → ImportError (expected red).
+
+  (I) Create config/pipeline_contracts.py with KNOWN_TYPES frozenset + validate_experiment_name().
+
+  (V-gate): 3 tests pass. Any type outside KNOWN_TYPES or any experiment_name not starting with {parent_type}_ raises ValueError.
+
+  Edge cases covered: unknown thinking_type, missing prefix, case mismatch ("Prediction" ≠ "prediction"), empty string.
+
+  ---
+  Phase 2 — scripts/earnings/thinking_blocks.py (~60 lines)
+
+  (T) Write first: fixture-based test cases in test_thinking_blocks.py:
+  1. Parse learner fixture → 6 thinking blocks with chars totaling 17,682
+  2. Parse guidance fixture → 0 visible thinking blocks, 4 redacted (thinking_redacted kind for blocks with empty content + signature
+  key)
+  3. Parse predictor primary → 2 thinking blocks, 177 chars
+  4. Parse predictor skill-fork → 4 text blocks, largest 1,926 chars, 0 thinking
+  5. Ordered by timestamp (assert strict monotonicity)
+  6. tool_use + tool_result kinds both surfaced (don't lose pairing info)
+
+  Run → ImportError (red).
+
+  (I) Implement parse_session_blocks(jsonl_path) -> list[Block] where Block = {kind, ts, content, meta} and kind ∈ {thinking,
+  thinking_redacted, text, tool_use, tool_result}.
+
+  (V-gate): all 6 cases pass. Also run obsidian_capture.py hook against a mock SubagentStop input and diff output against a
+  pre-migration golden — zero behavior change for the hook's block-parsing path (Phase 9 imports this module).
+
+  Edge cases covered: redacted thinking detection, empty content preserved with signature, timestamp ordering, malformed JSONL lines
+  skipped gracefully (don't crash on bad line).
+
+  ---
+  Phase 3 — scripts/earnings/result_md_renderer.py (~100 lines)
+
+  (T) Write first: golden-output tests in test_result_md_renderer.py:
+  1. render_prediction(json_path, md_path) — fixture JSON → exact MD (byte-for-byte)
+  2. render_learning — same, from a learning/result.json fixture
+  3. render_baseline_experiment — same, from experiments/prediction_no_lessons/result.json
+  4. render_guidance — same, tolerating minimal Neo4j-denormalized shape
+  5. Determinism: render twice, assert identical bytes
+  6. Frontmatter shape: autogenerated: true, source: result.json, generator: scripts/earnings/result_md_renderer.py, correct component,
+  correct experiment_name (present for experiment; null/absent for component)
+  7. Read-only marker: ⚠ AUTOGENERATED FROM result.json comment block present
+  8. Dataview-queryable fields: ticker, quarter, direction, confidence_score, sdk_session_id all in frontmatter
+
+  Run → ImportError (red).
+
+  (I) Implement renderer with 4 functions + a dispatch render(component, json_path, md_path).
+
+  (V-gate): all 8 tests pass. Determinism verified.
+
+  Edge cases covered: missing optional fields (sdk_session_id=null → frontmatter value is null, not "None"), experiment vs component
+  frontmatter split, guidance's minimal shape.
+
+  ---
+  Phase 4 — scripts/earnings/thinking_harvester.py (~220 lines) — the most complex
+
+  (T) Write first: 11+ test cases in test_thinking_harvester.py (extends Phase 1's file):
+
+  ┌─────┬────────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │  #  │          Case          │                                            Assertion                                             │
+  ├─────┼────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ a   │ EMBED-visible (learner │ thinking_blocks=6, thinking_chars=17,682; 6 subagent files materialized; each named              │
+  │     │  fixture)              │ {subagent_type}_{agentId[:8]}.md; all 6 subagents labeled correctly via agentId linkage          │
+  ├─────┼────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ b   │ EMBED-redacted         │ redacted_thinking_blocks=4, falls back to 1,684 text chars; "content redacted (signed)" marker   │
+  │     │ (guidance)             │ present; 2 subagent files materialized                                                           │
+  ├─────┼────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ c   │ FORK (predictor)       │ skill-fork JSONL content composes thinking.md (3,604 text chars + primary's 177 thinking chars); │
+  │     │                        │  NO subagents/ dir emitted                                                                       │
+  ├─────┼────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ d   │ agentId linkage is     │ synthetic fixture where completion order ≠ spawn order (simulate alphavantage rate-limit         │
+  │     │ load-bearing           │ fast-fail) — assert each subagent still labeled correctly via agentId, not by position           │
+  ├─────┼────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ e   │ Experiment routing         │ experiment_name="prediction_no_lessons" → writes to                                          │
+  │     │                            │ experiments/prediction_no_lessons/thinking.md, not prediction_no_lessons/thinking.md         │
+  ├─────┼────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ f   │ Idempotent re-harvest      │ run harvest twice on same session → second run overwrites cleanly, subagents/ dir contents   │
+  │     │                            │ identical (no duplicates, no orphans from first run)                                         │
+  ├─────┼────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ g   │ Missing session_id →       │ harvest called with session_id=None → logs WARNING, returns without raising, no file written │
+  │     │ WARNING                    │                                                                                              │
+  ├─────┼────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ h   │ Predictor FORK produces NO │ explicit negative test: assert subagents/ dir does NOT exist after FORK harvest              │
+  │     │  subagents/                │                                                                                              │
+  ├─────┼────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ i   │ Skill-fork dual-signal     │ predictor fixture triggers both meta.json=general-purpose AND first-user="Base directory..." │
+  │     │ agreement                  │  → no WARNING logged                                                                         │
+  ├─────┼────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ j   │ Skill-fork dual-signal     │ synthetic fixture where meta.json says "general-purpose" but first-user does NOT match →     │
+  │     │ disagreement               │ WARNING logged, harvest still proceeds (don't fail)                                          │
+  ├─────┼────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ k   │ Missing meta.json          │ delete one fixture's meta.json → harvester falls back to first-user scan + logs WARNING      │
+  │     │                            │ about missing meta; test doesn't crash                                                       │
+  ├─────┼────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ l   │ Orphan Agent tool_use      │ synthetic fixture: Agent tool_use without matching tool_result → WARNING in thinking.md, no  │
+  │     │                            │ subagent file for it, other subagents still processed                                        │
+  ├─────┼────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ m   │ Fixture-completeness       │ for every agent-<id>.jsonl in fixtures, assert a sibling agent-<id>.meta.json exists (guards │
+  │     │ invariant                  │  against cp-omission regression)                                                             │
+  └─────┴────────────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  Run → ImportError (red).
+
+  (I) Implement harvest(*, thinking_type, ticker, quarter, session_id, experiment_name=None, vault_root=None):
+  - Pattern detection: Skill tool_use in primary → FORK; else Agent tool_use → EMBED (redacted vs visible determined per-block)
+  - Skill-fork detection: dual-signal with WARNING on disagreement
+  - Linkage: toolUseResult.agentId top-level lookup
+  - Output: thinking.md with frontmatter + ordered content + tool_use annotation table
+  - subagents/ only for Agent-spawned (not skill-fork content source)
+  - Idempotent: clear subagents/ dir before writing
+
+  (V-gate): all 13 tests pass. Additionally run ruff check + mypy for type safety on the harvester module.
+
+  Edge cases covered: all 5 degraded scenarios (missing session, missing meta, dual-signal mismatch, orphan tool_use, completion-order
+  skew) + happy path for all 3 patterns + experiment routing + idempotency.
+
+  ---
+  Phase 5 — scripts/migrate_unified_layout.py (~160 lines)
+
+  (T) Write first: integration-style tests in test_migrate_unified_layout.py using a temp vault root:
+
+  ┌─────┬──────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │  #  │         Case         │                                             Assertion                                              │
+  ├─────┼────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 1   │ --dry-run output   │ Prints the ops; writes no file; lists correct counts (15/30/0/45/45/1289)                            │
+  ├─────┼────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 2   │ --apply happy path │ Manifest written; filesystem matches expected post-state; .migration-manifest.json schema valid      │
+  ├─────┼────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 3   │ --apply            │ Running --apply twice → second run detects already-migrated + records no new ops (manifest says "0   │
+  │     │ idempotency        │ steps")                                                                                              │
+  ├─────┼────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 4   │ --reverse          │ After --apply then --reverse, filesystem state == pre-apply state (byte-for-byte on json files,      │
+  │     │ round-trip         │ os.stat on dirs)                                                                                     │
+  ├─────┼────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 5   │ Baseline-absent    │ With no ab_baseline/ in fixture vault, --apply records 0 baseline-move ops; --reverse does NOT       │
+  │     │ path               │ recreate ab_baseline/                                                                                │
+  ├─────┼────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 6   │ Baseline-present   │ With synthetic ab_baseline/* in fixture, --apply records the moves; --reverse restores ab_baseline/  │
+  │     │ path               │ exactly                                                                                              │
+  ├─────┼────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 7   │ Null-stamp scope   │ After --apply, all 45 result.json files (3 × 15) have sdk_session_id key present with value null     │
+  ├─────┼────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 8   │ result.md scope    │ After --apply, all 45 result.md sidecars exist with correct frontmatter                              │
+  ├─────┼────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 9   │ Extraction filter  │ 8 anomalous *_extraction-primary-agent_* files untouched; Extraction Runs.md untouched; .capture.log │
+  │     │                    │  untouched                                                                                           │
+  ├─────┼────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 10  │ Mid-run failure    │ Inject failure at step 20 of 1,400 → script halts, manifest has first 19 steps, remaining steps      │
+  │     │                    │ printed; --reverse on partial manifest restores first 19                                             │
+  └─────┴────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  Run → ImportError (red).
+
+  (I) Implement the migration script with all 3 modes.
+
+  (V-gate): all 10 tests pass. Then run --dry-run against the real vault (read-only, no changes) and visually verify counts match
+  addendum: 15 / 30 / 0 / 45 / 45 / 1,289.
+
+  Edge cases covered: all 3 modes, idempotency, conditional baseline moves, partial-run recovery, anomalous-file filtering.
+
+  ---
+  Phase 6 — Edit scripts/earnings/earnings_orchestrator.py
+
+  (T) Write first / alongside: test_orchestrator_integration.py:
+
+  ┌─────┬─────────────────────────────────────────────┬──────────────────────────────────────────────────────────────────────────────┐
+  │  #  │                    Case                     │                                  Assertion                                   │
+  ├─────┼─────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ 1   │ get_prediction_paths() after edit           │ bundle_path == events/{Q}/context_bundle.json (quarter root), not under      │
+  │     │                                             │ prediction/                                                                  │
+  ├─────┼─────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ 2   │ get_learning_paths() (renamed)              │ base_dir ends in learning/, not attribution/                                 │
+  ├─────┼─────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ 3   │ get_learning_paths()['context_bundle_path'] │ == events/{Q}/context_bundle.json (quarter root)                             │
+  ├─────┼─────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ 4   │ finalize_attribution_result alias           │ Thin alias still callable; emits DeprecationWarning optionally               │
+  ├─────┼─────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ 5   │ finalize_learning_result with session_id    │ payload.sdk_session_id stamped; result.md generated; harvest called (mock)   │
+  ├─────┼─────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ 6   │ finalize_prediction_result with session_id  │ Same as above for prediction                                                 │
+  ├─────┼─────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ 7   │ _run_predictor_via_sdk returns tuple        │ (result: str, session_id: str | None) — type-check the return                │
+  ├─────┼─────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ 8   │ Harvester failure must not block finalize   │ Inject exception inside harvest call → finalize still writes result.json +   │
+  │     │                                             │ result.md; WARNING logged                                                    │
+  ├─────┼─────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ 9   │ SDK session_id hybrid capture               │ Mock messages expose .session_id directly → captured; mock with only         │
+  │     │                                             │ data.get("session_id") → also captured                                       │
+  └─────┴─────────────────────────────────────────────┴──────────────────────────────────────────────────────────────────────────────┘
+
+  (I) Make the edits per insertion-point map I compiled in the pre-flight.
+
+  (V-gate): 9 tests pass + existing tests still pass (run full pytest scripts/earnings/).
+
+  Edge cases covered: harvester-failure isolation, dual SDK-version capture, rename alias transparency.
+
+  ---
+  Phase 7 — Edit 3 A/B scripts identically
+
+  (T) Write first: test_ab_baseline_paths.py:
+  1. Reads attribution path from events/{Q}/learning/result.json (not attribution/)
+  2. Reads context_bundle from quarter root (not under prediction/)
+  3. Unpacks session_id tuple from run_predictor_via_sdk
+  4. Calls harvester with experiment_name="prediction_no_lessons"
+
+  (I) Apply 5 identical edits to each of the 3 A/B scripts.
+
+  (V-gate): tests pass; diff the 3 scripts' delta patches — they should be structurally identical (differ only in ticker constant +
+  QUARTERS list).
+
+  ---
+  Phase 8 — Validator rename + hook path update
+
+  (T) Write first: Hook round-trip test using subprocess.run on the hook script:
+  1. Input JSON with tool_input.file_path = ".../learning/result.json" + valid payload → {} (allow)
+  2. Input JSON with same path + malformed payload → {"decision":"block","reason":...}
+  3. Input JSON with .../attribution/result.json (OLD path) → {} (not matched — passes through, since the rename is part of the cutover)
+
+  (I) — **MODULE rename only; function name stays `validate_attribution_result`** (it maps to schema `attribution_result.v2` which is not renamed; the function is schema-shaped, not path-shaped):
+  - git mv scripts/earnings/validate_attribution.py scripts/earnings/validate_learning.py
+  - Create alias scripts/earnings/validate_attribution.py with single line: `from validate_learning import *  # noqa: F401,F403 — 1-release alias` (absolute import; scripts/earnings has no __init__.py)
+  - git mv .claude/hooks/validate_attribution_output.py .claude/hooks/validate_learning_output.py
+  - Update hook:
+      - path match: `"/attribution/result.json"` → `"/learning/result.json"`
+      - import line: `from validate_attribution import validate_attribution_result` → `from validate_learning import validate_attribution_result` (module changed, function unchanged)
+  - Update .claude/settings.json:79 hook command path (validate_attribution_output.py → validate_learning_output.py)
+
+  **Why function name is NOT renamed**: the three requirements can only coexist consistently if the function name stays. (1) Alias file is `from validate_learning import *` — re-exports every public name. (2) If we renamed the function to `validate_learning_result`, then the `*` re-export would expose only that name and `from validate_attribution import validate_attribution_result` would fail — contradicting backward compat. (3) Keeping the function name as `validate_attribution_result` inside the renamed module lets the `*` re-export preserve it through the alias, all three claims hold.
+
+  (V-gate): hook tests pass; `python -c "from validate_attribution import validate_attribution_result"` still succeeds via alias + `*` re-export; `python -c "from validate_learning import validate_attribution_result"` also succeeds (new canonical import path); existing orchestrator line `from validate_attribution import validate_attribution_result` unchanged — transparent.
+
+  Edge cases covered: absolute-import correctness (no silent ModuleNotFoundError from attempted relative form), hook path match on new `/learning/` literal, settings.json registration points to renamed hook, schema-shaped function name preserved for 1-release overlap.
+
+  ---
+  Phase 9 — Edit .claude/hooks/obsidian_capture.py (4 changes)
+
+  (T) Write first: test_obsidian_capture.sh or Python hook-spawner test:
+  1. Agent_type=extraction-primary-agent + source_id → file lands in pipeline/extractions/guidance/{date}_{sid}.md, no _extraction_ in
+  filename
+  2. Agent_type=earnings-learner → hook exits 0, writes nothing (skip-list)
+  3. Agent_type=earnings-attribution → hook exits 0, writes nothing (skip-list FROZEN strings)
+  4. Agent_type=earnings-prediction → hook exits 0, writes nothing
+  5. Agent_type=general-purpose → file lands in agents/ (fallback unchanged)
+  6. Uses shared parse_session_blocks (integration — compare block counts in output to Phase 2's parser output)
+
+  (I) Apply 4 edits:
+  - FOLDER_ROUTING updates (line 379-380)
+  - SKIP_AGENT_TYPES near top of main (line ~8-15)
+  - filename drops _extraction_ (line 397)
+  - from scripts.earnings.thinking_blocks import parse_session_blocks (replace inline loop ~76-139)
+
+  (V-gate): 6 hook tests pass + run 1 real SubagentStop event (e.g., via a quick /extract trigger with a trivial source) and verify
+  output lands correctly.
+
+  Edge cases covered: FROZEN skip-list strings, no-source-id fallback path (the 6 anomalous historical files at `pipeline/extractions/*_extraction-primary-agent_*.md` remind us this branch has fired in production), agents/ fallback unchanged.
+
+  ---
+  Phase 10 — Skill files (4) + plan docs (12) mechanical sweep
+
+  (T) Write first: a grep-based pre/post sanity check:
+  # Before: count "attribution/" path literals in each skill file + plan doc
+  # After: count should decrease OR match rewrites; prose mentions of "attribution" concept should be UNCHANGED.
+
+  (I) Path-literal sweep per the discipline header. For each of the 16 files (4 skills + 12 plan docs):
+  - Edit path literals attribution/ → learning/, prediction/context_bundle.* → context_bundle.* (quarter root)
+  - LEAVE prose mentions (causal attribution, return attribution, attribution analysis, context bundle concept)
+
+  (V-gate): git diff --stat reasonable per-file change counts; manual spot-check 3 files (learner.md, earnings-orchestrator.md,
+  trade-execution-system.md — the largest) for any false-positive prose rewrites.
+
+  ---
+  Phase 11 — Migration dry-run against real vault
+
+  Run (read-only, no state change):
+  python scripts/migrate_unified_layout.py --dry-run
+
+  (V-gate): stdout lists exact op counts reflecting the POST-WIPE state: **15 (rename_dir) / 30 (context_bundle) / 0 (ab_baseline — absent) / 33 (null-stamps: 15 pred + 3 learn + 15 exp) / 33 (result.md) / 1,289 (extractions)**. Zero unexpected files touched. Zero references to `Extraction Runs.md`, `.capture.log`, or the 6 anomalous `_extraction-primary-agent_` files. Dry-run should also LOG the 1 legacy AVGO Q2_FY2024 prediction stub as "skipped — no schema_version" + the 2 AVGO legacy quarters (Q2/Q3 FY2024) as "skipped — no context_bundle.json".
+
+  ---
+  Phase 12 — Apply migration + assert post-state
+
+  python scripts/migrate_unified_layout.py --apply
+
+  Run validation script (write as part of the test suite, run automatically):
+  1. `find -L earnings-analysis/Companies -maxdepth 5 -type d -name "attribution"` → count **0**
+  2. `find -L earnings-analysis/Companies -maxdepth 5 -type d -name "learning"` → count **15** (all 15, including 12 empty dirs that were renamed structurally)
+  3. `find -L earnings-analysis/Companies -maxdepth 4 -name "context_bundle.json"` → count **15** (quarter root; 2 AVGO legacy quarters with `context.json` untouched at pre-existing locations)
+  4. `find -L earnings-analysis/Companies -maxdepth 5 -path "*prediction/context_bundle.json"` → count **0** (all promoted)
+  5. All **33 modern** result.json files (15 prediction + 3 learning + 15 experiment) have `sdk_session_id` field present (value = valid session id OR null). The 1 legacy AVGO Q2_FY2024 stub + the 12 empty learning dirs are NOT stamped.
+  6. All **33 modern** result.md sidecars exist with `autogenerated: true` frontmatter. Legacy stub + empty dirs have NO sidecar.
+  6a. Count check: `find -L earnings-analysis/Companies -maxdepth 5 -name "result.md" -type f | wc -l` == **33**.
+  7. `find pipeline/extractions -maxdepth 2 -type f -name "*.md" \| wc -l` == **1,296** exactly (1,289 moved into `guidance/` + 6 anomalous `*_extraction-primary-agent_*.md` at root + 1 `Extraction Runs.md` at root). Non-`.md` files in root: 1 (`.capture.log`). Total files `-type f` in `pipeline/extractions/` tree = 1,297 (1,289 + 6 + 1 + 1). Verified pre-migration counts: 1,289 conforming + 6 anomalous + 1 manual note + 1 log = 1,297 total.
+  8. .migration-manifest.json exists with expected op counts
+
+  (V-gate): all 8 validation checks pass.
+
+  ---
+  Phase 13 — Reverse migration DRY RUN only
+
+  python scripts/migrate_unified_layout.py --reverse --dry-run
+
+  (V-gate): output describes exactly the inverse of the applied ops. Do not actually reverse — we want to keep the migration applied.
+
+  This confirms reverse is wired up without disturbing state.
+
+  ---
+  Phase 14 — Live end-to-end smoke test
+
+  Fresh BURL Q4_FY2025 end-to-end:
+  python3 scripts/earnings/earnings_orchestrator.py BURL <Q4_FY2025-accession> --save --predict --learn
+
+  Then A/B baseline:
+  python3 scripts/run_burl_ab_sequential.py  # or a single-quarter variant
+
+  Validation per the 12+ acceptance checks in the plan (now 14 with 3d/3e added):
+  1-3. sdk_session_id stamped on all three fresh result.json files
+  3a. result.md sidecars with marker + frontmatter
+  3b-3c. Historical baseline files still intact with null session_id
+  3d. 45 null-stamp coverage
+  3e. 45 sidecar coverage
+  4-5. prediction + experiments/prediction_no_lessons thinking.md sourced from skill-fork, NO subagents/ dir
+  6-7. learning/thinking.md + learning/subagents/.md with correct agentId-based filenames
+  8. No top-level attribution/, no ab_baseline/, no thinking/ parent
+  9. Zero API 400s; runtime timings comparable to pre-change
+  10. obsidian_capture.py: extraction captures route to guidance/ with simplified filenames; earnings- skipped
+  11. No regression on AVGO/NVDA/BURL existing artifacts (git diff shows only expected files changed)
+  12. pytest scripts/earnings/ all green
+
+  (V-gate): ALL 14 acceptance checks green. If any red, halt + diagnose.
+
+  ---
+  Phase 15 — Commit
+
+  Single commit title: feat(obsidian): unified thinking capture + events/ layout migration
+
+  (V-gate): git diff --stat matches expected scope (7 new + ~28 edited files). Commit message body references obsidian_thinking.md plan.
+
+  ---
+  Explicit edge-case coverage matrix
+
+  ┌──────────────────────────────────────┬───────────────────────┬─────────────────────────────────────────────────────────────────┐
+  │              Edge case               │     Phase tested      │                               How                               │
+  ├──────────────────────────────────────┼───────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ SDK returns session_id=None          │ 4 (case g) + 6 (case  │ Harvest called with None → WARNING, no crash                    │
+  │                                      │ 9)                    │                                                                 │
+  ├──────────────────────────────────────┼───────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ SDK exposes .session_id as direct    │ 6 (case 9)            │ Mock AssistantMessage; hybrid capture path primary              │
+  │ attr                                 │                       │                                                                 │
+  ├──────────────────────────────────────┼───────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ data.get(...)                          │                      │                                                                │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Redacted thinking (empty + signature)  │ 2 + 4 (case b)       │ Fixture with empty thinking + signature key detected + marker  │
+  │                                        │                      │ emitted                                                        │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ FORK with NO nested agents             │ 4 (case c, h)        │ Predictor fixture — no subagents/ dir                          │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ FORK with nested Agents                │ 4 (can add case n)   │ Synthetic fixture if needed                                    │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ EMBED completion order ≠ spawn order   │ 4 (case d)           │ Synthetic fixture — agentId linkage correct despite skew       │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Orphan Agent tool_use                  │ 4 (case l)           │ Synthetic fixture — WARNING, continue                          │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ meta.json missing                      │ 4 (case k)           │ Delete meta from one fixture — fall back + WARNING             │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ meta.json + first-user disagree        │ 4 (case j)           │ Synthetic fixture — WARNING, continue                          │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Idempotent re-harvest                  │ 4 (case f)           │ Run harvest twice, state identical                             │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Idempotent re-migration                │ 5 (case 3)           │ --apply twice, 2nd run is no-op                                │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Partial migration failure              │ 5 (case 10)          │ Inject failure mid-run, reverse restores                       │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Baseline-absent quarters (current      │ 5 (case 5)           │ --apply records 0 baseline ops, --reverse leaves alone         │
+  │ reality)                               │                      │                                                                │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Baseline-present quarter (future-safe) │ 5 (case 6)           │ Synthetic ab_baseline/ → migrated + reversible                 │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Anomalous 8 + manual notes in          │ 5 (case 9)           │ Left in place; 11 (dry-run verify)                             │
+  │ extractions                            │                      │                                                                │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Validator alias transparency           │ 8                    │ Old import path still works                                    │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Hook skip-list for FROZEN strings      │ 9 (cases 2-4)        │ 3 earnings-* agent_types skipped                               │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Harvester failure doesn't block        │ 6 (case 8)           │ Inject exception, finalize still writes                        │
+  │ finalize                               │                      │                                                                │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Determinism of renderer                │ 3 (case 5)           │ Run twice, assert byte-equal                                   │
+  ├────────────────────────────────────────┼──────────────────────┼────────────────────────────────────────────────────────────────┤
+  │ Fixture completeness invariant         │ 4 (case m)           │ Assert every .jsonl has sibling .meta.json                     │
+  └────────────────────────────────────────┴──────────────────────┴────────────────────────────────────────────────────────────────┘
+
+  ---
+  Abort criteria (any of these = STOP, diagnose before proceeding)
+
+  - Phase 1–5 gates any red → do not edit production code.
+  - Phase 6–9 gates red → revert just that file, retry.
+  - Phase 11 dry-run counts don't match addendum expectations → investigate BEFORE --apply.
+  - Phase 12 apply produces unexpected filesystem deltas → run --reverse immediately.
+  - Phase 14 acceptance checks any red → halt; do not commit; diagnose.
+
+  ---
