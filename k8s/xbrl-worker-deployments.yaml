@@ -6,6 +6,11 @@ metadata:
   namespace: processing
 spec:
   replicas: 0  # KEDA will manage replica count
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0          # terminate old pod before creating new (avoid double-memory)
+      maxUnavailable: 1    # queue workers tolerate brief gap
   selector:
     matchLabels:
       app: xbrl-worker-heavy
@@ -53,10 +58,10 @@ spec:
         resources:
           requests:
             cpu: "2"
-            memory: "6Gi"
+            memory: "4Gi"
           limits:
             cpu: "3"
-            memory: "8Gi"
+            memory: "20Gi"
         volumeMounts:
         - name: logs
           mountPath: /app/logs
@@ -75,6 +80,11 @@ metadata:
   namespace: processing
 spec:
   replicas: 0  # KEDA will manage replica count
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: xbrl-worker-medium
@@ -120,10 +130,10 @@ spec:
         resources:
           requests:
             cpu: "1500m"
-            memory: "3Gi"
+            memory: "1Gi"
           limits:
             cpu: "2"
-            memory: "4Gi"
+            memory: "8Gi"
         volumeMounts:
         - name: logs
           mountPath: /app/logs

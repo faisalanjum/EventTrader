@@ -1,11 +1,11 @@
 {
   "stats": {
-    "tickers_processed": 665,
-    "classifications_total": 46990,
-    "sections_matched": 40812,
+    "tickers_processed": 666,
+    "classifications_total": 47122,
+    "sections_matched": 40944,
     "sections_unmatched": 6178,
-    "spans_found": 36279,
-    "spans_missed": 4533,
+    "spans_found": 36396,
+    "spans_missed": 4548,
     "unmatched_details": [
       {
         "ticker": "A",
@@ -389,5 +389,5 @@
       }
     ]
   },
-  "write_count": 40812
+  "write_count": 40944
 }

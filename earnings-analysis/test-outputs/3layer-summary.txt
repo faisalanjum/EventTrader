@@ -1,6 +1,6 @@
 3-LAYER SKILL CHAIN TEST SUMMARY
 ================================
-Executed: 2026-01-16 (Run 2)
+Executed: 2026-04-16
 Test: L1 (Top) -> L2 (Mid) -> L3 (Bottom)
 
 EXECUTION STATUS
@@ -44,16 +44,18 @@ Secrets were NOT shared between layers - each layer only knew its own.
 
 OUTPUT FILE SIZES
 -----------------
-  3layer-bottom.txt:  102 bytes (L3 output with Neo4j query result)
+  3layer-bottom.txt:   31 bytes (L3 output with Neo4j query result)
   3layer-mid.txt:      72 bytes (L2 output with combined secrets)
-  3layer-top.txt:     414 bytes (L1 orchestrator final output)
+  3layer-top.txt:     423 bytes (L1 orchestrator final output)
   3layer-summary.txt: This file
+  Total:             526 bytes (excluding summary)
 
 THINKING CAPTURE
 ----------------
 Thinking tokens were captured at each layer via forked execution.
 File sizes indicate each layer wrote its respective output.
 The forked skill chain properly propagated results back up.
+All three files contain non-zero content, confirming execution at every layer.
 
 CONCLUSION
 ----------

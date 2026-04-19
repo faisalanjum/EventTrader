@@ -51,18 +51,25 @@ kubectl patch scaledobject -n processing xbrl-worker-medium-scaler --type merge 
 
 ---
 
-## News Disabled for Backfill (SKIP_NEWS_BACKFILL)
+## News Disabled for Backfill (SKIP_NEWS_BACKFILL) — REVERTED 2026-04-12 via d6bc3b9
 
-Same pattern as SKIP_TRANSCRIPTS_BACKFILL. Search tag: `SKIP_NEWS_BACKFILL`
+**Status: REVERTED.** All 3 sources (news + reports + transcripts) are active in live mode.
+No `SKIP_NEWS_BACKFILL` tags remain in the code — verify with `grep -r SKIP_NEWS_BACKFILL`.
+Historical context preserved below for audit trail.
 
-5 code locations (search `SKIP_NEWS_BACKFILL`):
-- `config/DataManagerCentral.py` line ~690: commented out BenzingaNewsManager init
-- `config/DataManagerCentral.py` line ~726: commented out process_news_data() (already-init path)
-- `config/DataManagerCentral.py` line ~745: commented out process_news_data() (first-init path)
-- `scripts/run_event_trader.py` line ~201: removed SOURCE_NEWS from sources
-- `scripts/run_event_trader.py` line ~309: removed SOURCE_NEWS from sources_to_check
+---
 
-Revert: uncomment all 5 locations (search for SKIP_NEWS_BACKFILL)
+~~Same pattern as SKIP_TRANSCRIPTS_BACKFILL. Search tag: `SKIP_NEWS_BACKFILL`~~
 
-Rationale: News already exists in Neo4j from live mode (2,447-7,945 articles/month).
-Re-fetching during backfill is redundant — all deduped. Saves API calls + chunk time.
+~~5 code locations (search `SKIP_NEWS_BACKFILL`):~~
+- ~~`config/DataManagerCentral.py` line ~690: commented out BenzingaNewsManager init~~
+- ~~`config/DataManagerCentral.py` line ~726: commented out process_news_data() (already-init path)~~
+- ~~`config/DataManagerCentral.py` line ~745: commented out process_news_data() (first-init path)~~
+- ~~`scripts/run_event_trader.py` line ~201: removed SOURCE_NEWS from sources~~
+- ~~`scripts/run_event_trader.py` line ~309: removed SOURCE_NEWS from sources_to_check~~
+
+~~Revert: uncomment all 5 locations (search for SKIP_NEWS_BACKFILL)~~
+
+Original rationale (for historical reference): News already exists in Neo4j from live mode
+(2,447-7,945 articles/month). Re-fetching during backfill was redundant — all deduped.
+Saved API calls + chunk time during the late-March 2026 SEC backfill operation.

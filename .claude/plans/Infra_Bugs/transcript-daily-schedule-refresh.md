@@ -1,9 +1,9 @@
 # Transcript Daily Schedule Refresh — Bug Report & Fix Plan
 
 **Date**: 2026-03-11
-**Updated**: 2026-04-02
+**Updated**: 2026-04-16
 **Severity**: Critical when present (data loss)
-**Status**: PARTIALLY RECONCILED — the original day-transition bug is fixed in the current code on disk; production/runtime verification still pending
+**Status**: ALL 6 FINDINGS FIXED in code. Phase 2 (client reuse in `_fetch_and_process_transcript`) still open — line 212 still constructs a new `EarningsCallProcessor` per fetch instead of reusing `self.earnings_call_client`.
 **Affected files**: `redisDB/TranscriptProcessor.py`, `config/DataManagerCentral.py`
 
 ---

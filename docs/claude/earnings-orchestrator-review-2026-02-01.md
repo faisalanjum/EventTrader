@@ -25,7 +25,7 @@ This note captures the in-depth review of the earnings orchestrator, Claude Code
   - Guidance: Task subagents with guidance-extract reading Neo4j via MCP, returning 18-field pipe lines.
   - News attribution: news-driver-* agents if there are significant moves.
 - Thinking hooks:
-  - .claude/hooks/build-thinking-on-complete.sh expects ORCHESTRATOR_COMPLETE <TICKER> to build thinking files.
+  - Current raw capture is handled by `.claude/hooks/obsidian_capture.sh`; canonical component thinking files are built by the live harvester/finalizer path, not the old `build-thinking-on-complete.sh` hook.
 
 ## Why The 2026-02-01 Run Produced No news.csv And Less Guidance
 

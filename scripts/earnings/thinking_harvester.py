@@ -599,30 +599,11 @@ def _read_first_user_content(jsonl_path: Path) -> str:
 
 def _first_user_matches_skill_prefix(sub_jsonl: Path) -> bool:
     try:
-        with open(sub_jsonl, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                try:
-                    entry = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
-                if entry.get("type") != "user":
-                    continue
-                content = entry.get("message", {}).get("content", "")
-                if isinstance(content, str):
-                    return content.startswith(_SKILL_FORK_FIRST_USER_PREFIX)
-                if isinstance(content, list):
-                    for item in content:
-                        if isinstance(item, dict) and item.get("type") == "text":
-                            return str(item.get("text", "")).startswith(_SKILL_FORK_FIRST_USER_PREFIX)
-                        if isinstance(item, str):
-                            return item.startswith(_SKILL_FORK_FIRST_USER_PREFIX)
-                return False  # first user message encountered, no match
+        return _read_first_user_content(sub_jsonl).startswith(
+            _SKILL_FORK_FIRST_USER_PREFIX
+        )
     except Exception:
         return False
-    return False
 
 
 # ── thinking.md composition ───────────────────────────────────────────────

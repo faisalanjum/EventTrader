@@ -1,0 +1,36 @@
+=== THREE-WAY COMPARISON SUMMARY ===
+Date Range,2026-04-19 to 2026-04-19
+Companies,1
+
+=== TOTALS ===
+sec-api.io filings found,0
+sec-api + Neo4j (have it),0
+sec-api but NOT Neo4j (PIPELINE LOST),0
+EDGAR but NOT sec-api (SOURCE GAP),41
+EDGAR not sec-api not Neo4j (UNFIXABLE),41
+
+"=== PIPELINE GAPS BY MONTH (sec-api HAS it, we DON'T) ==="
+Month,8-K,10-Q,10-K,Other,Total
+
+"=== SOURCE GAPS BY MONTH (EDGAR has, sec-api DOESN'T, we don't) ==="
+Month,8-K,10-Q,10-K,Other,Total
+2023-02,1,1,0,0,2
+2023-03,1,0,0,0,1
+2023-05,2,1,0,0,3
+2023-08,1,1,0,0,2
+2023-11,1,0,1,0,2
+2024-02,2,1,0,0,3
+2024-05,2,1,0,0,3
+2024-08,3,1,0,0,4
+2024-09,1,0,0,0,1
+2024-10,1,0,0,0,1
+2024-11,0,0,1,0,1
+2025-01,2,1,0,0,3
+2025-02,1,0,0,0,1
+2025-05,2,1,0,0,3
+2025-07,3,0,0,0,3
+2025-08,0,1,0,0,1
+2025-10,1,0,1,0,2
+2025-12,1,0,0,0,1
+2026-01,2,1,0,0,3
+2026-02,1,0,0,0,1

@@ -1,3 +1,62 @@
+## TODO — Fresh Guidance + Prediction + Learning Cleanup (2026-04-19)
+
+Goal: make `thinking.md` the canonical reviewer artifact for fresh **guidance**, **prediction**, and **learning** runs with maximum clarity, zero ambiguity, minimal code, and high reliability. Favor surfacing existing transcript data over inventing new reconstruction logic.
+
+### Shipped today (2026-04-19) — committed + pushed to `main`
+
+Ordered by commit sha (chronological). All verified by end-to-end re-harvest of live AVGO Q2 FY2023 guidance + BURL Q3 FY2025 8-K/transcript guidance + BURL Q3 FY2025 prediction + BURL Q3 FY2025 learner. 143/143 targeted tests green after each commit.
+
+| Commit | Fix | Evidence |
+|---|---|---|
+| `603d13c` | **Completion gate**: `is_session_complete` now requires the LAST `assistant` entry to have `stop_reason=="end_turn"`; stops treating mid-session `last-prompt` markers as completion. Root cause of AVGO Q1 FY2023 enrichment subagent being permanently orphaned. | Re-harvested → both primary + enrichment subagent files present, no orphan warnings |
+| `ee4e51c` | **Heading downgrade in harvester**: content-authored `#/##/###` shifted +3 levels (matching hook). Eliminates outline pollution in Obsidian sidebar. | Measured — AVGO Q1 thinking_transcript.md: 6 H2s → 1 structural H2 |
+| `2d4d1a5` | **Fence-safe truncation @4000 chars** in subagent text/thinking/prompt render — closes unbalanced ``` at the cut. | `_truncate_safe_fence` helper + regression test |
+| `5b4fc8a` | **Fence-safe truncation @300 chars** in tool_result preview (same bug as 2d4d1a5, different call site). | Same helper |
+| `6dd188a` | **Fence-safe truncation @2000 chars** in hook adapter tool_result (pre-existing hook bug). | Local `_truncate_safe_fence` in adapter |
+| `0eeba9f` | **Subagent thinking coverage**: subagent frontmatter now reports `thinking_blocks` / `thinking_chars` / `redacted_thinking_blocks`. Subagent body now renders `🔒` placeholder for `thinking_redacted` (previously silently dropped). | Audit: 51% of 10k subagent JSONLs had visible thinking but were not surfaced in frontmatter |
+| `13da3d1` | **Primary thinking.md `## Prompt` section**: new `_read_first_user_content` helper; primary thinking.md now shows the original user-invoked command (previously only subagent traces showed prompts). | Partial-fix for P0 "prediction prompt completeness" / "learner prompt de-noising" — raw prompt now visible but boilerplate noise still present |
+| `ccb8e8a` | **Hook `fiscal_quarter` removed**: regex-based derivation deleted; zero Python consumers read this field from markdown. Negative smoke test (`test_hook_note_never_emits_fiscal_quarter_field`) locks the invariant. Vault hygiene sweep stripped the field from 1,030 pre-fix hook notes (882 `pipeline/extractions/guidance/*.md` + 148 `agents/*.md`). | P0 item below ✅ |
+
+Guardrail held throughout: zero behaviour change for the harvester path beyond the targeted fix each commit; zero new runtime dependencies; zero new files except 1 adapter module + 3 targeted tests.
+
+### P0 — Fix Now
+
+- [x] **Drop hook `fiscal_quarter` for extraction notes**: the hook cannot derive source quarter reliably from agent output. Fresh proof: `pipeline/extractions/guidance/2026-04-19_0001193125-25-294501.md` stamped `Q4FY2025` for the BURL **Q3_FY2025** 8-K because the regex matched forward-guidance content before source-quarter context. Keep `source_id`; treat `Companies/.../quarter:` as authoritative. — **SHIPPED `ccb8e8a` (2026-04-19): delete-only fix in `.claude/hooks/obsidian_capture.py`, negative smoke test added, 1,030 stale notes swept.**
+- [ ] **Guidance prompt rendering**: stop rendering raw `<command-message>/<command-name>/<command-args>` XML in `## Prompt`. Render a readable `/extract ...` command instead. If the immediately following user/meta entry contains the expanded extract brief, render that too in a separate section. Do not synthesize prompt text.
+- [ ] **Learner prompt de-noising**: the learner `## Prompt` is currently dominated by static skill boilerplate and truncates before the actual run-specific `--- INPUTS ---` block. For learner prompts, surface the dynamic inputs (`TICKER`, `QUARTER`, `PIT_CUTOFF`, paths, etc.) instead of the static skill preamble when truncation would otherwise hide the actionable run context.
+- [ ] **Prediction prompt completeness**: keep the outer wrapper prompt, but also render the predictor skill-fork's own first-user prompt in a dedicated section so reviewers can see the actual prediction contract.
+- [ ] **Agent spawn rationale**: include `Agent.description` in top-level `- 🤖 Agent(...)` bullets and near the top of each subagent trace. Reviewer should see why a subagent was spawned without opening raw JSONL. This also disambiguates repeated learner subagent types such as multiple `neo4j-news` calls.
+- [ ] **Guidance results section**: if the final assistant text block is an extraction summary (`Extraction Complete`, `| Pass |`, `Result written to`, etc.), promote it to a top-level `## Results` section at the end of the note instead of leaving it buried as downgraded assistant markdown inside reasoning.
+- [ ] **Reviewer navigation**: keep `thinking.md` as the canonical reviewer landing page. Add a short "Subagent traces" section with Obsidian links from each top-level guidance note to its subagent trace files, and add bidirectional links between any sibling `thinking.md` and `result.md` pair that coexist (`prediction`, `learning`; `guidance` too once canonical guidance result artifacts exist).
+- [ ] **Guidance title disambiguation**: include `source_asset` in the visible H1/title (`guidance / 8k`, `guidance / transcript`, etc.) so sibling notes are distinguishable in the vault.
+- [ ] **FORK summary semantics**: replace misleading `Primary thinking` label with a FORK-aware summary that reflects the real split (primary redacted/meta-thinking vs skill-fork visible text reasoning). Make visible/redacted counts use one consistent scope.
+- [ ] **Live guidance completeness**: write canonical `guidance/result.json` + `guidance/result.md` during the live flow if the worker already has the result payload in hand. Do this at the worker boundary; do not rebuild guidance results later from notes.
+
+### P1 — Next, Still Worth Doing
+
+- [ ] **Guidance outcome frontmatter**: add optional guidance-only fields such as `items_extracted`, `items_written`, and `enrichment_status` when they are derivable from the session transcript itself. Do not depend on `/tmp` files that are already deleted by the time harvest runs.
+- [ ] **Prediction + learning outcome frontmatter**: when sibling `result.json` exists, copy a minimal outcome summary into `thinking.md` frontmatter. Prediction: `direction`, `confidence_score`, `expected_move_range_pct`. Learning: `direction_correct`, `primary_driver_category`, `magnitude_error_pct`. Omit fields when unavailable; source of truth remains `result.json`.
+- [ ] **Primary `text_chars` frontmatter**: add `text_chars` to top-level `thinking.md` frontmatter so FORK sessions do not look "empty" when `thinking_chars=0` but visible skill-fork reasoning is large.
+- [ ] **Subagent identity metadata**: add `agent_input_description` to subagent-trace frontmatter so repeated types (`neo4j-news`, `extraction-primary-agent`, etc.) are distinguishable from directory listing / properties view without changing filenames.
+- [ ] **Shard migration cleanup**: when guidance is harvested into per-asset shards (`thinking_8k.md`, `thinking_transcript.md`), proactively remove stale legacy non-sharded artifacts (`thinking.md`, `subagents/`) left from pre-sharding runs so old dry-run/test notes cannot coexist under a current quarter and mislead reviewers.
+- [ ] **Hook note ticker noise**: ticker tagging in `obsidian_capture.py` is still noisy on fresh notes (for example `tickers: [A, BURL, D]`). Keep hook notes supplemental until ticker extraction is tightened or reduced.
+
+### P2 — Cosmetic / Latent
+
+- [ ] **Spacing cleanup**: insert a blank line after tool-use bullets before the next heading/text block for easier scanning in Obsidian.
+- [ ] **Subagent truncation marker parity**: when subagent text/thinking blocks are truncated at 4000 chars, append the same `*[truncated — X more chars]*` marker used in primary prompt rendering. Today subagent traces silently cut off long blocks.
+
+### Guardrails
+
+- [ ] Do **not** merge hook and harvester systems. Keep harvester output as the canonical reviewer artifact; link to hook notes only when useful.
+- [ ] Do **not** build a generic parser framework. Implement the smallest reliable helpers for the actual transcript shapes we already see in production.
+- [ ] Do **not** synthesize or paraphrase prompts when exact prompt text already exists in SDK JSONL.
+- [ ] Prefer fixes in `thinking_harvester.py` and the live worker path over adding post-hoc cleanup layers.
+- [ ] Do **not** broaden skill-fork handling for hypothetical multi-skill sessions unless a real occurrence appears. The current gap is latent/YAGNI.
+- [ ] **Learner capture reality**: do not design reviewer UX around visible learner primary thinking. Current learner runs are arriving as `EMBED-redacted` in practice, so the durable reviewer surfaces are `result.md` plus subagent traces, not rich visible top-level reasoning.
+
+---
+
 # Obsidian Thinking Capture — Standardization Plan
 
 **Created**: 2026-04-17

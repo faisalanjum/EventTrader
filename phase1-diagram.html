@@ -38,7 +38,7 @@ h2{font-size:18px;margin-top:36px;margin-bottom:14px;display:flex;align-items:ce
 .callout.safe{border-left-color:var(--green)}
 .callout.warn{border-left-color:var(--orange)}
 .callout.danger{border-left-color:var(--red)}
-.flow{display:flex;flex-direction:column;align-items:center;gap:0;max-width:600px;margin:0 auto}
+.flow{display:flex;flex-direction:column;align-items:center;gap:0;max-width:620px;margin:0 auto}
 .flow .box{width:100%;text-align:center}
 .branch{display:flex;gap:16px;width:100%;justify-content:center}
 .branch .box{flex:1;text-align:center}
@@ -52,29 +52,68 @@ h2{font-size:18px;margin-top:36px;margin-bottom:14px;display:flex;align-items:ce
 <body>
 
 <h1>Phase 1 — Trade Execution System</h1>
-<div class="subtitle">One daemon. One dependency (IBKR + Neo4j for ATR). Three monitoring checks. Everything recorded for learning.</div>
+<div class="subtitle">One daemon &middot; <code>ib_async</code> + Neo4j &middot; 3 exit rules &middot; con_id matching &middot; write-once files &middot; no adapter, no Redis, no streaming</div>
 
-<!-- ═══════════ MAIN FLOW ═══════════ -->
-<h2><div class="dot" style="background:var(--green)"></div>The Flow</h2>
+<!-- ═══════════ STARTUP ═══════════ -->
+<h2><div class="dot" style="background:var(--orange)"></div>Startup</h2>
+
+<div class="flow">
+  <div class="box orange" style="text-align:left">
+    <h4>Daemon Startup Sequence</h4>
+    <p>1. Acquire file lock (<code>fcntl.flock</code>) &mdash; exit if another instance running</p>
+    <p>2. Register SIGTERM handler</p>
+    <p>3. Connect IBKR client</p>
+    <p>4. Fetch <code>AccountSummary</code> &mdash; <strong>require <code>base_currency == "USD"</code></strong>; refuse to start if not</p>
+    <p>5. Create/reuse <code>trade_daemon_state.json</code> (captures <code>starting_equity</code>)</p>
+    <p>6. Load all <code>entering</code>/<code>open</code> plans &rarr; run canonical handlers (same as monitoring) once</p>
+    <p>7. Enter main loop</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════ MAIN LOOP ═══════════ -->
+<h2><div class="dot" style="background:var(--green)"></div>Main Loop (every 30s)</h2>
+
+<div class="flow">
+
+  <div class="box" style="border-left:3px solid var(--dim)">
+    <h4>Loop Steps</h4>
+    <p>1. If <code>shutdown_requested</code> &rarr; break</p>
+    <p>2. If disconnected &rarr; <code>await client.connect()</code></p>
+    <p>3. Monitor all <code>entering</code> plans (Section 17)</p>
+    <p>4. Monitor all <code>open</code> plans (Section 18)</p>
+    <p>5. Broker-state cleanliness check: every position/order matched by <code>con_id</code>?</p>
+    <p>6. If clean &rarr; scan for new <code>prediction/result.json</code> files</p>
+    <p>7. Sleep <code>SCAN_INTERVAL_SEC</code></p>
+  </div>
+
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════ NEW PREDICTION FLOW ═══════════ -->
+<h2><div class="dot" style="background:var(--green)"></div>New Prediction Processing</h2>
 
 <div class="flow">
 
   <div class="box blue">
     <h4>Prediction Exists on Disk</h4>
-    <p><code>prediction/result.json</code> — produced by upstream orchestrator/predictor</p>
+    <p><code>prediction/result.json</code> &mdash; producer emits canonical TES fields directly</p>
+    <p style="font-size:10px;margin-top:4px">TES never translates field names. Missing required field &rarr; log error, skip.</p>
   </div>
-  <div class="arrow">&#9660;<span>filesystem scan every 30s</span></div>
+  <div class="arrow">&#9660;<span>found result.json with no plan/skipped/result in trade/</span></div>
 
   <div class="box green">
-    <h4>Detect &amp; Adapt</h4>
-    <p>Found <code>result.json</code> without <code>trade/plan.json</code> or <code>trade/skipped.json</code></p>
-    <p>Adapt earnings fields → canonical signal: <code>signal_id</code>, <code>symbol</code>, <code>event_id</code>, <code>issued_at</code>, <code>event_time</code></p>
+    <h4>Read Canonical Fields Directly</h4>
+    <p><code>signal_id</code>, <code>source_type</code>, <code>symbol</code>, <code>event_id</code>, <code>event_time</code>, <code>issued_at</code>, <code>direction</code>, <code>confidence</code>, <code>expected_move_range</code></p>
   </div>
   <div class="arrow">&#9660;</div>
 
   <div class="box orange">
-    <h4>Gate (5 checks)</h4>
-    <p><code>direction == long</code> &nbsp;|&nbsp; <code>confidence &ge; 75</code> &nbsp;|&nbsp; <code>edge &ge; 3%</code> &nbsp;|&nbsp; <code>positions &lt; 2</code> &nbsp;|&nbsp; <code>capital ok</code></p>
+    <h4>Gate (9 checks)</h4>
+    <p><code>direction == long</code> &nbsp;|&nbsp; <code>confidence &ge; 75</code> &nbsp;|&nbsp; <code>edge &ge; 3%</code> &nbsp;|&nbsp; qualify contract (<code>con_id</code>)</p>
+    <p>quote valid &nbsp;|&nbsp; ATR available &nbsp;|&nbsp; <code>daemon-managed open trades &lt; MAX_POSITIONS</code> &nbsp;|&nbsp; <code>buying_power ok</code> &nbsp;|&nbsp; <code>shares &ge; 1</code></p>
   </div>
 
   <div class="branch" style="margin-top:8px">
@@ -82,53 +121,48 @@ h2{font-size:18px;margin-top:36px;margin-bottom:14px;display:flex;align-items:ce
       <div class="arrow" style="color:var(--red)">&#9660;<span>any fail</span></div>
       <div class="box red" style="padding:10px">
         <h4>SKIPPED</h4>
-        <p><code>trade/skipped.json</code><br>with reason + snapshot</p>
+        <p><code>write_skipped_if_missing(...)</code><br>with reason code</p>
       </div>
     </div>
     <div>
       <div class="arrow" style="color:var(--green)">&#9660;<span>all pass</span></div>
       <div class="box green" style="padding:10px">
-        <h4>FETCH DATA</h4>
-        <p>quote, account, positions,<br>ATR₁₄, pre-earnings close</p>
+        <h4>SIZE</h4>
+        <p>stop = clamp(2&times;ATR, 3%, 15%)<br>shares = floor(risk / per_share_risk)</p>
       </div>
     </div>
   </div>
 
-  <div class="arrow">&#9660;</div>
-
-  <div class="box purple">
-    <h4>Size</h4>
-    <p>stop = clamp(2 &times; ATR, 3%, 15%) &nbsp;|&nbsp; risk = equity &times; 2% &nbsp;|&nbsp; shares = floor(risk / per_share_risk)</p>
-    <p>If shares &lt; 1 → <span class="tag red">SKIPPED</span></p>
-  </div>
-  <div class="arrow">&#9660;<span>write plan.json status=entering</span></div>
+  <div class="arrow">&#9660;<span>write plan.json status=entering, con_id, submission_uncertain=false</span></div>
 
   <div class="box orange">
     <h4>Execute: Bracket Order</h4>
     <p><strong>Entry:</strong> marketable limit (ask + buffer, tick-rounded, outsideRth=True)</p>
-    <p><strong>Stop:</strong> native IBKR stop at stop_price</p>
+    <p><strong>Stop:</strong> native IBKR stop at stop_price, linked via parentId</p>
+    <p style="font-size:10px;margin-top:4px"><strong>Entry deadline:</strong> <code>order_placement_time + 300s</code> (not next close)</p>
+    <p style="font-size:10px"><strong>Exception before result:</strong> set <code>submission_uncertain = true</code>, never re-submit, reconcile by <code>con_id</code></p>
   </div>
 
   <div class="branch" style="margin-top:8px">
     <div>
-      <div class="arrow" style="color:var(--red)">&#9660;<span>rejected / no fill by close</span></div>
+      <div class="arrow" style="color:var(--red)">&#9660;<span>rejected / timeout</span></div>
       <div class="box red" style="padding:10px">
         <h4>SKIPPED</h4>
-        <p><code>entry_rejected</code> or<br><code>entry_expired_unfilled</code></p>
+        <p><code>entry_rejected</code><br><code>entry_timeout</code><br><code>entry_unresolved</code></p>
       </div>
     </div>
     <div>
-      <div class="arrow" style="color:var(--green)">&#9660;<span>fill + stop confirmed</span></div>
+      <div class="arrow" style="color:var(--green)">&#9660;<span>fill + stop active</span></div>
       <div class="box green" style="padding:10px">
         <h4>OPEN</h4>
-        <p>plan.json status=open<br>exit_deadline_at set</p>
+        <p>plan.json status=open<br>exit_deadline_at = next_close(fill_time)</p>
       </div>
     </div>
     <div>
-      <div class="arrow" style="color:var(--red)">&#9660;<span>fill but no stop</span></div>
+      <div class="arrow" style="color:var(--red)">&#9660;<span>fill, no stop</span></div>
       <div class="box red" style="padding:10px">
         <h4>FLATTEN</h4>
-        <p><code>stop_placement_failed</code><br>exit immediately</p>
+        <p><code>stop_placement_failed</code><br>or <code>stop_repair_failed</code></p>
       </div>
     </div>
   </div>
@@ -136,30 +170,44 @@ h2{font-size:18px;margin-top:36px;margin-bottom:14px;display:flex;align-items:ce
   <div class="arrow" style="margin-top:8px">&#9660;</div>
 
   <div class="box" style="border-left:3px solid var(--cyan);padding:16px">
-    <h4 style="color:var(--cyan)">Monitor (3 checks, every 30s — in this order)</h4>
+    <h4 style="color:var(--cyan)">Monitor (3 checks, every 30s &mdash; in this order)</h4>
     <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
-      <div class="box dim" style="padding:8px;text-align:center;flex:1"><p><strong>1. Position gone?</strong><br><span style="font-size:10px">stop fired → record + skip rest</span></p></div>
-      <span style="color:var(--dim)">→</span>
-      <div class="box dim" style="padding:8px;text-align:center;flex:1"><p><strong>2. Account &lt; 85%?</strong><br><span style="font-size:10px">kill-switch → flatten</span></p></div>
-      <span style="color:var(--dim)">→</span>
-      <div class="box dim" style="padding:8px;text-align:center;flex:1"><p><strong>3. Market close?</strong><br><span style="font-size:10px">max hold → flatten</span></p></div>
+      <div class="box dim" style="padding:8px;text-align:center;flex:1"><p><strong>1. Position gone?</strong><br><span style="font-size:10px">stop_fired &rarr; close</span></p></div>
+      <span style="color:var(--dim)">&rarr;</span>
+      <div class="box dim" style="padding:8px;text-align:center;flex:1"><p><strong>2. Kill-switch?</strong><br><span style="font-size:10px">equity &lt; 85% &rarr; account_killswitch exit</span></p></div>
+      <span style="color:var(--dim)">&rarr;</span>
+      <div class="box dim" style="padding:8px;text-align:center;flex:1"><p><strong>3. Max hold?</strong><br><span style="font-size:10px">past exit_deadline &rarr; flatten</span></p></div>
     </div>
-    <p style="font-size:10px;color:var(--dim);margin-top:6px;text-align:center">Order matters: check position-gone first to avoid flattening a non-existent position</p>
+    <p style="font-size:10px;color:var(--dim);margin-top:6px;text-align:center">Check position-gone first to avoid flattening nothing. <code>pending_terminal_reason</code> persists intent across crashes.</p>
   </div>
-  <div class="arrow">&#9660;<span>one of 3 triggers</span></div>
+  <div class="arrow">&#9660;<span>any exit trigger</span></div>
 
   <div class="box green" style="text-align:center">
     <h4>CLOSED</h4>
-    <p>Write <code>trade/result.json</code> (P&amp;L + all prediction fields + mode flags)</p>
+    <p><code>write_result_if_missing(...)</code> &mdash; P&amp;L + all prediction fields + mode flags</p>
     <p>Update <code>plan.json</code> status=closed</p>
   </div>
-  <div class="arrow">&#9660;</div>
 
-  <div class="box blue" style="text-align:center">
-    <h4>Learner reads this later</h4>
-    <p>result.json is self-contained — learner doesn't need plan.json</p>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════ FLATTEN RETRY ═══════════ -->
+<h2><div class="dot" style="background:var(--red)"></div>Flatten Retry Policy</h2>
+
+<div class="grid-2">
+  <div class="box orange">
+    <h4>Protected exit (stop still active)</h4>
+    <p><code>max_hold</code> or <code>account_killswitch</code></p>
+    <p style="margin-top:6px">Retry up to <strong>3 times</strong> per daemon lifecycle.<br>After 3 failures: <code>CRITICAL: MANUAL INTERVENTION REQUIRED</code> &mdash; stop retrying.</p>
+    <p style="font-size:10px;color:var(--dim);margin-top:4px">Broker stop still protects. Daemon restart resets counter.</p>
   </div>
-
+  <div class="box red">
+    <h4>Unprotected position (no stop)</h4>
+    <p><code>stop_placement_failed</code> or <code>stop_repair_failed</code></p>
+    <p style="margin-top:6px"><strong>Never stop retrying.</strong> Keep trying every cycle until flat.</p>
+    <p style="font-size:10px;color:var(--dim);margin-top:4px">No broker stop to protect &mdash; must keep attempting.</p>
+  </div>
 </div>
 
 <hr class="divider">
@@ -167,24 +215,44 @@ h2{font-size:18px;margin-top:36px;margin-bottom:14px;display:flex;align-items:ce
 <!-- ═══════════ RECOVERY ═══════════ -->
 <h2><div class="dot" style="background:var(--orange)"></div>Recovery (on daemon restart)</h2>
 
+<div class="callout safe" style="margin-bottom:14px">
+  <strong>One rule:</strong> Recovery uses the <em>same canonical handlers</em> as normal monitoring (Sections 17 &amp; 18). No separate recovery decision tree. Same broker reads, same branching, same terminal-write rules.
+</div>
+
 <div class="grid-2">
   <div class="box orange">
     <h4>plan.json status = entering</h4>
-    <p>Position + stop exist → promote to <code>open</code></p>
-    <p>Position exists, no stop → <strong>FLATTEN</strong></p>
-    <p>No position, no order → <code>skipped.json</code></p>
-    <p>No position, order working → keep <code>entering</code></p>
+    <p><code>pending_terminal_reason</code> set + position &rarr; flatten &amp; close</p>
+    <p><code>pending_terminal_reason</code> set + no position &rarr; close</p>
+    <p>Position + stop active &rarr; promote to <code>open</code></p>
+    <p>Position + no stop &rarr; <strong>FLATTEN</strong> (stop_repair_failed)</p>
+    <p>No position + deadline expired &rarr; <code>entry_timeout</code> / <code>entry_unresolved</code></p>
+    <p>No position + deadline pending &rarr; keep <code>entering</code></p>
   </div>
   <div class="box orange">
     <h4>plan.json status = open</h4>
-    <p>Position + stop exist → resume monitoring</p>
-    <p>Position exists, no stop → <strong>FLATTEN</strong></p>
-    <p>No position → record as <code>stop_fired</code></p>
+    <p><code>pending_terminal_reason</code> set + position &rarr; flatten &amp; close</p>
+    <p>No position &rarr; <code>stop_fired</code></p>
+    <p>Position + stop active &rarr; resume monitoring</p>
+    <p>Position + no stop &rarr; <strong>FLATTEN</strong> (stop_repair_failed)</p>
   </div>
 </div>
 
 <div class="callout safe" style="margin-top:14px">
-  <strong>Safety invariant:</strong> There is never a live position without a broker-native stop. If stop is missing → flatten immediately. Broker stop protects even when daemon is down.
+  <strong>Safety invariant:</strong> There is never a live position without a broker-native stop. If stop is missing &rarr; flatten immediately. Broker stop protects even when daemon is down.
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════ WRITE-ONCE ═══════════ -->
+<h2><div class="dot" style="background:var(--purple)"></div>Write-Once Rule</h2>
+
+<div class="box purple" style="max-width:620px;margin:0 auto">
+  <h4>Terminal files are write-once</h4>
+  <p><code>trade/result.json</code> and <code>trade/skipped.json</code> &mdash; if the file already exists, the daemon must NOT rewrite it.</p>
+  <p style="margin-top:6px">All terminal branches use <code>write_result_if_missing()</code> or <code>write_skipped_if_missing()</code>.</p>
+  <p style="margin-top:6px">This prevents crash-recovery from overwriting a result that already captured real fill prices with a recovery result that has <code>null</code> fill prices.</p>
+  <p style="margin-top:8px;font-size:11px"><strong>Retry paths remain idempotent:</strong> they may cancel lingering orders, they may update plan.json to closed, but they must not create a second terminal record.</p>
 </div>
 
 <hr class="divider">
@@ -195,23 +263,24 @@ h2{font-size:18px;margin-top:36px;margin-bottom:14px;display:flex;align-items:ce
 <div class="grid-2">
   <div class="box blue">
     <h4>Canonical Signal Contract</h4>
-    <p>TES reads only generic fields:</p>
-    <div class="formula" style="font-size:11px">signal_id, source_type, symbol, event_id
-issued_at, event_time, direction
-confidence, expected_move_range
-thesis_summary, context_ref, session_id</div>
-    <p style="margin-top:6px">Source-specific data stays behind <code>context_ref</code></p>
+    <p>TES reads only these fields from <code>prediction/result.json</code>:</p>
+    <div class="formula" style="font-size:11px">Required:
+  signal_id, source_type, symbol
+  event_id, event_time, issued_at
+  direction, confidence, expected_move_range
+
+Optional:
+  thesis_summary, context_ref, session_id</div>
+    <p style="margin-top:6px"><strong>Producer emits canonical fields directly.</strong><br>TES never translates field names.</p>
   </div>
   <div class="box green">
-    <h4>Phase 1: Earnings Adapter</h4>
-    <p>Maps earnings prediction → canonical:</p>
-    <div class="formula" style="font-size:11px">prediction_id    → signal_id
-ticker           → symbol
-quarter_label    → event_id
-predicted_at     → issued_at
-filed_at         → event_time
-source_type      → "earnings"</div>
-    <p style="margin-top:6px">Future: news adapter, macro adapter, etc.</p>
+    <h4>Matching by con_id</h4>
+    <p>Before entry: qualify contract &rarr; persist <code>con_id</code></p>
+    <p style="margin-top:6px">All position/order matching uses <code>con_id</code>.<br><code>symbol</code> is for logging only.</p>
+    <div class="formula" style="font-size:11px">Position match: Position.con_id == plan.con_id
+Stop match:    plan.stop_order_id == order.order_id
+Fallback:      order.con_id + order_type == "STP"</div>
+    <p style="margin-top:6px"><strong>Broker-state invariant:</strong> unmatched positions/orders block new entries.</p>
   </div>
 </div>
 
@@ -224,12 +293,12 @@ source_type      → "earnings"</div>
   <div class="box purple">
     <h4>trade/plan.json</h4>
     <p>Live trade state. Daemon-owned.</p>
-    <p style="margin-top:6px;font-size:10px">signal_id, status, shares, entry/stop prices, ATR, spread, pre-close, deadlines, mode flags, session refs</p>
+    <p style="margin-top:6px;font-size:10px">signal_id, con_id, status, shares, entry/stop prices, ATR, deadlines, pending_terminal_reason, submission_uncertain, mode flags</p>
   </div>
   <div class="box purple">
     <h4>trade/result.json</h4>
     <p>Final P&amp;L. Written once on close.</p>
-    <p style="margin-top:6px;font-size:10px">Self-contained: P&amp;L + prediction fields + stop params + mode flags + timestamps</p>
+    <p style="margin-top:6px;font-size:10px">Self-contained: P&amp;L + con_id + prediction fields + stop params + mode flags</p>
   </div>
   <div class="box purple">
     <h4>trade/skipped.json</h4>
@@ -239,8 +308,9 @@ source_type      → "earnings"</div>
 </div>
 
 <div style="margin-top:12px;font-size:12px;color:var(--dim)">
-  <strong>Idempotency:</strong> if any trade file exists for a signal_id → daemon skips. No duplicate trades. No reprocessing.
-  <br><strong>Atomic writes:</strong> write to .tmp → fsync → rename. Crash-safe.
+  <strong>Idempotency:</strong> if any trade file exists for a signal_id &rarr; daemon skips. No duplicate trades.
+  <br><strong>Atomic writes:</strong> write to .tmp &rarr; fsync &rarr; rename. Crash-safe.
+  <br><strong>No schema_version.</strong> Add when the first breaking change happens.
 </div>
 
 <hr class="divider">
@@ -256,20 +326,23 @@ source_type      → "earnings"</div>
       <div class="file dep">Neo4j (ATR data)</div>
       <div class="file dep">exchange_calendars</div>
     </div>
-    <p style="font-size:11px;color:var(--dim);margin-top:8px">No Redis. No Claude API. No streaming. File lock for singleton.</p>
-    <p style="font-size:11px;color:var(--dim);margin-top:4px"><strong>Startup:</strong> lock file → SIGTERM handler → connect IBKR → create/reuse state file → recover open trades → loop</p>
-    <p style="font-size:11px;color:var(--orange);margin-top:4px"><strong>Currency:</strong> paper account is CAD, stocks are USD. Phase 1 uses net_liquidation as-is (no conversion). Acceptable for paper validation.</p>
+    <p style="font-size:11px;color:var(--dim);margin-top:8px">No Redis. No Claude API. No streaming. No adapter. File lock for singleton.</p>
+    <p style="font-size:11px;color:var(--dim);margin-top:4px"><strong>USD required:</strong> <code>AccountSummary.base_currency == "USD"</code> or refuse to start.</p>
   </div>
   <div>
-    <h4 style="font-size:13px;margin-bottom:8px">Key Config Values</h4>
-    <div class="formula" style="font-size:11px;padding:10px">RISK_PER_TRADE_PCT    = 2.0
-ATR_MULTIPLIER        = 2.0
-CONFIDENCE_THRESHOLD  = 75
-MAGNITUDE_THRESHOLD   = 3.0
-MAX_POSITIONS         = 2
-KILL_SWITCH_PCT       = 15.0
-MAX_HOLD_SESSIONS     = 1
-SCAN_INTERVAL_SEC     = 30</div>
+    <h4 style="font-size:13px;margin-bottom:8px">Config (12 params)</h4>
+    <div class="formula" style="font-size:11px;padding:10px">ACCOUNT_MODE            = paper
+DATA_MODE               = delayed
+RISK_PER_TRADE_PCT      = 2.0
+ATR_MULTIPLIER          = 2.0
+MIN_STOP_PCT / MAX      = 3.0 / 15.0
+CONFIDENCE_THRESHOLD    = 75
+MAGNITUDE_THRESHOLD     = 3.0
+MAX_POSITIONS           = 2
+KILL_SWITCH_PCT         = 15.0
+SCAN_INTERVAL_SEC       = 30
+BROKER_RESPONSE_TIMEOUT = 60
+ENTRY_FILL_TIMEOUT      = 300</div>
   </div>
 </div>
 
@@ -280,15 +353,15 @@ SCAN_INTERVAL_SEC     = 30</div>
 
 <div class="grid-3">
   <div class="box dim" style="padding:10px;text-align:center"><p><strong>Learner</strong><br><span style="font-size:10px">per-trade lessons<br>append-only</span></p></div>
+  <div class="box dim" style="padding:10px;text-align:center"><p><strong>Monitor Decision</strong><br><span style="font-size:10px">generic packet: hold/exit/escalate<br>LLM or Python trigger</span></p></div>
   <div class="box dim" style="padding:10px;text-align:center"><p><strong>Reassessment</strong><br><span style="font-size:10px">generic event packet<br>transcript/news/price/macro</span></p></div>
-  <div class="box dim" style="padding:10px;text-align:center"><p><strong>More Signals</strong><br><span style="font-size:10px">news adapter<br>macro adapter</span></p></div>
   <div class="box dim" style="padding:10px;text-align:center"><p><strong>Extra Monitoring</strong><br><span style="font-size:10px">gap fade, SPY macro<br>benchmark, reversal</span></p></div>
   <div class="box dim" style="padding:10px;text-align:center"><p><strong>Parameter Learning</strong><br><span style="font-size:10px">auto/log/never<br>per config key</span></p></div>
   <div class="box dim" style="padding:10px;text-align:center"><p><strong>Realtime Mode</strong><br><span style="font-size:10px">streaming quotes<br>Redis fast-trigger</span></p></div>
 </div>
 
 <div class="callout" style="margin-top:14px">
-  <strong>Extension rule:</strong> future components plug in without rewriting Phase 1. All signal sources adapt into the canonical contract. All config-driven behavior switches by config, not by rewriting the daemon.
+  <strong>Ownership rule:</strong> TES owns execution state and all broker actions. Monitors own thesis review only. No component may bypass TES to place, cancel, or flatten orders. All future signal sources emit the canonical contract. All behavior switches by config, not by rewriting the daemon.
 </div>
 
 </body>

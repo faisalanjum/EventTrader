@@ -1,7 +1,7 @@
 # BUG: Live mode re-queues already-ingested transcripts every poll cycle
 
 **Discovered**: 2026-03-04
-**Status**: OPEN
+**Status**: OPEN — verified 2026-04-16, still no pre-check. `store_transcript_in_redis()` (EarningsCallTranscripts.py:776) unconditionally `lpush`es to RAW_QUEUE without checking processed set.
 **Severity**: Low — no data impact, just log noise and minor wasted work
 
 ---
