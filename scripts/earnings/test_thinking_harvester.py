@@ -861,3 +861,147 @@ def test_prediction_and_learning_unchanged_by_source_asset_addition(tmp_path):
     # No sharded files
     assert not list(comp.glob("thinking_*.md"))
     assert not list(comp.glob("subagents_*"))
+
+
+# ── Heading-downgrade (content-authored markdown must not pollute outline) ──
+
+def test_downgrade_headings_shifts_h1_h2_h3_by_three(tmp_path):
+    """Content-authored H1/H2/H3 collides with the harvester's structural
+    outline in Obsidian. The harvester must shift them down by 3 (matching
+    .claude/hooks/obsidian_capture.py::_downgrade_headings) so structural
+    H1-H3 remain unambiguous."""
+    from thinking_harvester import _downgrade_headings
+    src = "# Top\n## Sub\n### Deep\nplain\n#### Already4\n##### Already5"
+    out = _downgrade_headings(src)
+    assert out == "#### Top\n##### Sub\n###### Deep\nplain\n#### Already4\n##### Already5"
+
+
+def test_harvested_thinking_md_no_content_authored_h1_h2_h3_headings(tmp_path):
+    """End-to-end regression: construct a minimal fixture where the assistant's
+    text block contains an H2 heading. After harvest, thinking.md must not
+    contain any H1/H2/H3 headings BEYOND the harvester's own structural ones.
+
+    Structural H1-H3 the harvester emits: H1 title, H2 section (1-2),
+    H3 block labels (💭/📝). Any additional top-level (<=H3) heading in the
+    final file indicates pollution from content — the downgrade failed.
+    """
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    projects_root.mkdir()
+    session_id = "11111111-2222-3333-4444-555555555555"
+    jsonl = projects_root / f"{session_id}.jsonl"
+
+    # Minimal session: one assistant text block whose content contains an H2.
+    # Plus a second assistant turn with stop_reason=end_turn so the session
+    # is "complete" shape-wise (harvester itself doesn't check this, but good hygiene).
+    jsonl.write_text("\n".join([
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{
+                "type": "text",
+                "text": "## Step 1: Do the thing\nparagraph under it\n### Sub-step\nmore text",
+            }], "stop_reason": "end_turn"},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }),
+    ]) + "\n")
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="guidance", ticker="TEST", quarter="Q1_FY2025",
+        session_id=session_id, source_asset="transcript",
+        source_id="TEST_src",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "TEST" / "events" / "Q1_FY2025" / "guidance"
+           / "thinking_transcript.md").read_text(encoding="utf-8")
+
+    # Post-fix: content-authored H2/H3 must be downgraded → become H5/H6.
+    # Use line-anchored regex — plain "in" substring-matches "##### X" for "## X".
+    import re as _re
+    assert _re.search(r"^## Step 1: Do the thing$", out, _re.MULTILINE) is None, (
+        "content-authored H2 leaked into the harvester outline"
+    )
+    assert _re.search(r"^### Sub-step$", out, _re.MULTILINE) is None, (
+        "content-authored H3 leaked into the harvester outline"
+    )
+    # Must still be rendered — just at a deeper level (shifted +3)
+    assert _re.search(r"^##### Step 1: Do the thing$", out, _re.MULTILINE)
+    assert _re.search(r"^###### Sub-step$", out, _re.MULTILINE)
+
+    # Structural headings must still be intact
+    assert _re.search(r"^## Primary session reasoning$", out, _re.MULTILINE)
+    assert "### 📝 Text" in out
+
+
+def test_subagent_trace_text_headings_downgraded(tmp_path):
+    """Subagent trace must also downgrade content headings in both the prompt
+    and the transcript text blocks."""
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    projects_root.mkdir()
+    session_id = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+
+    # Primary session: one assistant with Agent spawn
+    primary = projects_root / f"{session_id}.jsonl"
+    primary.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{
+                "type": "tool_use", "id": "tu_sub", "name": "Agent",
+                "input": {"subagent_type": "test-sub", "description": "x",
+                          "prompt": "## Heading in prompt"},
+            }], "stop_reason": "tool_use"},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "user",
+            "message": {"content": [{"type": "tool_result", "tool_use_id": "tu_sub", "content": "ok"}]},
+            "timestamp": "2026-01-01T00:00:01Z",
+            "toolUseResult": {"agentId": "a1b2c3d4e5f67890a"},
+        }) + "\n"
+    )
+
+    # Subagent session: prompt + text with headings
+    sub_dir = projects_root / session_id / "subagents"
+    sub_dir.mkdir(parents=True)
+    sub_jsonl = sub_dir / "agent-a1b2c3d4e5f67890a.jsonl"
+    sub_jsonl.write_text(
+        json.dumps({
+            "type": "user",
+            "message": {"content": "## Prompt heading\nsome text\n### Sub"},
+            "timestamp": "2026-01-01T00:00:00.100Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "assistant",
+            "message": {"content": [{
+                "type": "text", "text": "## Result heading\nfinal",
+            }], "stop_reason": "end_turn"},
+            "timestamp": "2026-01-01T00:00:00.200Z",
+        }) + "\n"
+    )
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="guidance", ticker="TEST", quarter="Q1_FY2025",
+        session_id=session_id, source_asset="transcript",
+        source_id="TEST_src2",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    subs_dir = vault_root / "TEST" / "events" / "Q1_FY2025" / "guidance" / "subagents_transcript"
+    files = list(subs_dir.glob("*.md"))
+    assert len(files) == 1
+    out = files[0].read_text(encoding="utf-8")
+
+    # Content headings must be downgraded (line-anchored to avoid substring match)
+    import re as _re
+    assert _re.search(r"^## Prompt heading$", out, _re.MULTILINE) is None
+    assert _re.search(r"^## Result heading$", out, _re.MULTILINE) is None
+    assert _re.search(r"^##### Prompt heading$", out, _re.MULTILINE)
+    assert _re.search(r"^##### Result heading$", out, _re.MULTILINE)
+    # Structural headings intact
+    assert _re.search(r"^## Prompt$", out, _re.MULTILINE)
+    assert _re.search(r"^## Transcript$", out, _re.MULTILINE)

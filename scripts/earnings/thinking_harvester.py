@@ -31,11 +31,28 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+
+def _downgrade_headings(text: str) -> str:
+    """Shift ``#/##/###`` headings in assistant-authored content down 3 levels
+    so they don't collide with the harvester's own H1-H3 structural headings
+    (which would pollute the Obsidian outline).
+
+    Mirrors the equivalent helper in .claude/hooks/obsidian_capture.py:79.
+    Only touches H1-H3 — H4+ would already sit below the structural range.
+    """
+    return re.sub(
+        r"^(#{1,3}) ",
+        lambda m: "#" * (len(m.group(1)) + 3) + " ",
+        text,
+        flags=re.MULTILINE,
+    )
 
 # scripts/earnings is not a package — absolute sibling imports via sys.path.
 _HERE = Path(__file__).resolve().parent
@@ -716,7 +733,9 @@ def _append_reasoning_blocks(lines: list[str], blocks: list[dict[str, Any]]) -> 
                 continue
             lines.append(f"### 💭 Thinking ({len(b['content']):,} chars)")
             lines.append("")
-            lines.append(text)
+            # Thinking is usually prose, rarely markdown-structured, but downgrade
+            # to be consistent with text blocks (safe: idempotent if no headings).
+            lines.append(_downgrade_headings(text))
             lines.append("")
         elif kind == "text":
             text = b["content"].strip()
@@ -724,7 +743,9 @@ def _append_reasoning_blocks(lines: list[str], blocks: list[dict[str, Any]]) -> 
                 continue
             lines.append(f"### 📝 Text ({len(b['content']):,} chars)")
             lines.append("")
-            lines.append(text)
+            # Downgrade H1-H3 in assistant-authored text so they don't collide
+            # with the harvester's structural outline in Obsidian.
+            lines.append(_downgrade_headings(text))
             lines.append("")
         elif kind == "tool_use":
             lines.append(f"- {_tool_use_annotation(b)}")
@@ -814,7 +835,7 @@ def _render_subagent_trace(
     if first_user_content:
         lines.append("## Prompt")
         lines.append("")
-        lines.append(first_user_content[:4000])
+        lines.append(_downgrade_headings(first_user_content[:4000]))
         if len(first_user_content) > 4000:
             lines.append(f"\n*[truncated — {len(first_user_content)-4000:,} more chars]*")
         lines.append("")
@@ -829,7 +850,7 @@ def _render_subagent_trace(
             if text:
                 lines.append(f"### 📝 Text ({len(b['content']):,} chars)")
                 lines.append("")
-                lines.append(text[:4000])
+                lines.append(_downgrade_headings(text[:4000]))
                 lines.append("")
         elif kind == "tool_use":
             lines.append(f"- {_tool_use_annotation(b)}")
@@ -841,7 +862,7 @@ def _render_subagent_trace(
             if text:
                 lines.append(f"### 💭 Thinking ({len(b['content']):,} chars)")
                 lines.append("")
-                lines.append(text[:4000])
+                lines.append(_downgrade_headings(text[:4000]))
                 lines.append("")
 
     return "\n".join(lines) + "\n"
