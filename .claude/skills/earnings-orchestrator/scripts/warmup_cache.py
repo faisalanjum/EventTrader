@@ -274,6 +274,8 @@ ORDER BY e.exhibit_number
 # ---------------------------------------------------------------------------
 QUERY_4G_META = """
 MATCH (r:Report {accessionNo: $accession})-[:PRIMARY_FILER]->(c:Company {ticker: $ticker})
+OPTIONAL MATCH (c)-[:BELONGS_TO]->(:Industry)-[:BELONGS_TO]->(sec:Sector)
+WITH r, c, coalesce(c.sector, head(collect(DISTINCT sec.name))) AS sector
 OPTIONAL MATCH (r)-[:HAS_EXHIBIT]->(e:ExhibitContent)
 OPTIONAL MATCH (r)-[:HAS_SECTION]->(s:ExtractedSectionContent)
 OPTIONAL MATCH (r)-[:HAS_FILING_TEXT]->(ft:FilingTextContent)
@@ -284,6 +286,7 @@ RETURN r.created AS filed_8k,
        r.market_session AS market_session,
        r.isAmendment AS is_amendment,
        r.cik AS cik,
+       sector AS sector,
        collect(DISTINCT e.exhibit_number) AS exhibit_numbers,
        collect(DISTINCT s.section_name) AS section_names,
        count(DISTINCT ft) > 0 AS has_filing_text
@@ -533,6 +536,7 @@ def build_8k_packet(accession, ticker, out_path=None):
             'market_session': meta.get('market_session'),
             'is_amendment': bool(meta.get('is_amendment')),
             'cik': meta.get('cik'),
+            'sector': meta.get('sector'),
             'content_inventory': {
                 'section_names': section_names,
                 'exhibit_numbers': exhibit_numbers,

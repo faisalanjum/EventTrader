@@ -225,8 +225,14 @@ def layer1_contract_tests(results: TestResults, tickers: list[str], save_dir: st
         pkt = ret
         if pkt and isinstance(pkt, dict):
             results.record(1, builder, "packet_on_disk", True, ticker=ticker)
-            for key in ["schema_version", "ticker", "accession_8k", "assembled_at"]:
+            for key in ["schema_version", "ticker", "accession_8k", "assembled_at", "sector"]:
                 results.record(1, builder, f"has_{key}", key in pkt, ticker=ticker)
+            # T3: sector must resolve to a canonical value at source (not rely on build_prediction_bundle fallback)
+            from config.canonical_sectors import CANONICAL_SECTORS
+            sector_val = pkt.get("sector")
+            results.record(1, builder, "sector_canonical",
+                           sector_val in CANONICAL_SECTORS,
+                           f"got {sector_val!r}", ticker=ticker)
             if save_dir:
                 _save_packet(save_dir, builder, ticker, "L1", pkt)
         else:
