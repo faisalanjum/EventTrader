@@ -270,7 +270,7 @@ That does **not** mean it is safe to remove immediately, because:
 
 Treat this change as the beginning of the shim sunset, not the end of it.
 
-## Change 3: Remove or archive the dead legacy guidance + news thinking stack
+## Change 3: Delete the dead legacy guidance + news thinking stack
 
 ### Files
 
@@ -292,14 +292,18 @@ The `build-news-thinking` pair is same-era as the `build-guidance-thinking` pair
 
 ### Required change
 
-Remove or archive these files together in the same cleanup.
+**Delete all 5 files** in the same cleanup. Do not archive in-tree.
 
-Preferred approach:
+### Why delete, not archive
 
-- if you want the leanest repo surface: **delete them**
-- if you want maximum conservatism: **move them into an archive location**
+Archiving in-tree was considered and **rejected**:
 
-Either is acceptable. What matters is that they are no longer left looking live.
+- whole-repo grep/search would still return hits inside `archive/`, so every future bot has to re-reason "is this live?" — exactly the fake complexity this revamp removes
+- git history already is the audit trail (`git log --follow -- <path>`, `git show <sha>:<path>`); an in-tree archive adds no recovery capability that git doesn't already provide
+- these files target a retired layout (`Companies/{TICKER}/thinking/{QUARTER}/...`), not a paused feature — there is no plausible resurrection path without a rewrite
+- the revamp's stated goal is "the codebase reflects the real architecture instead of mixed old/new paths"; archiving violates that goal, deleting satisfies it
+
+Archiving is therefore not an acceptable alternative for this cleanup.
 
 ### Why this is good
 
@@ -489,7 +493,7 @@ Apply in this exact order:
 
 1. simplify `_first_user_matches_skill_prefix()` in `thinking_harvester.py`
 2. switch `earnings_orchestrator.py` to import from `validate_learning`
-3. remove or archive the dead legacy guidance + news thinking stack
+3. delete the dead legacy guidance + news thinking stack
 
 ## Commit Strategy
 
