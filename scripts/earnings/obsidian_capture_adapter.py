@@ -39,6 +39,24 @@ class HookBlocks(NamedTuple):
     total_thinking_chars: int
 
 
+def _truncate_safe_fence(text: str, limit: int) -> str:
+    """Truncate ``text`` to ``limit`` chars, closing an unbalanced ``\u0060\u0060\u0060``
+    code fence if the cut landed inside one.
+
+    Mirrors scripts/earnings/thinking_harvester.py::_truncate_safe_fence; kept
+    local to the adapter to avoid coupling the two modules. Without this,
+    the hook's 2000-char truncation on tool_result content could leak an
+    unclosed ``\u0060\u0060\u0060`` that confuses the outer ``\u0060\u0060\u0060``
+    wrapping the hook renders around each tool call.
+    """
+    if len(text) <= limit:
+        return text
+    truncated = text[:limit]
+    if truncated.count("```") % 2 == 1:
+        truncated = truncated + "\n```"
+    return truncated
+
+
 def clean_tool_result(text: str) -> str:
     """Strip MCP envelope, replace <persisted-output>, mark <tool_use_error>.
 
@@ -114,7 +132,9 @@ def parse_transcript_for_hook(jsonl_path: str | Path | None) -> HookBlocks:
                 pending[call_id] = len(tool) - 1
         elif kind == "tool_result":
             call_id = b["meta"].get("tool_use_id", "")
-            cleaned = clean_tool_result(b["content"])[:2000]
+            # clean → truncate-safe-fence (closes ``` if the 2000-char cut
+            # landed mid-code-block so the hook's outer ```-wrap stays sane)
+            cleaned = _truncate_safe_fence(clean_tool_result(b["content"]), 2000)
             if call_id and call_id in pending:
                 tool[pending[call_id]]["result"] = cleaned
             elif cleaned.strip():

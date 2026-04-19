@@ -179,6 +179,63 @@ def test_empty_string_path_returns_empty_never_raises():
     assert hb == HookBlocks([], [], [], 0)
 
 
+# ── Fence-safe 2000-char tool_result truncation ───────────────────────────
+
+def test_tool_result_2000_truncation_closes_unbalanced_fence(tmp_path):
+    """Tool_result content is truncated at 2000 chars. If truncation cuts
+    mid-code-fence, the hook's outer ```/``` wrapping would otherwise break.
+    The adapter must close any unbalanced ``` within the truncated result."""
+    import json
+    from obsidian_capture_adapter import parse_transcript_for_hook
+    p = tmp_path / "s.jsonl"
+    # Tool_result content: opens ```python near char 1000, doesn't close in 2000
+    long_code = "x = 1\n" * 500  # ~3000 chars of code
+    fence_content = "prelude text " * 50 + "\n```python\n" + long_code + "\n```\ntail"
+    p.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{
+                "type": "tool_use", "id": "tu_fence", "name": "Read",
+                "input": {"file_path": "/tmp/x.py"},
+            }]},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "user",
+            "message": {"content": [{
+                "type": "tool_result", "tool_use_id": "tu_fence",
+                "content": fence_content,
+            }]},
+            "timestamp": "2026-01-01T00:00:01Z",
+        }) + "\n"
+    )
+    hb = parse_transcript_for_hook(p)
+    assert len(hb.tool) == 1
+    result = hb.tool[0]["result"]
+    assert result is not None
+    # The 2000-char truncation must close unbalanced fences
+    assert result.count("```") % 2 == 0, (
+        f"unbalanced fences after 2000-char truncation: count={result.count('```')}"
+    )
+
+
+def test_truncate_safe_fence_helper_balanced_input_untouched(tmp_path):
+    from obsidian_capture_adapter import _truncate_safe_fence
+    src = "abc\n```\ny\n```\nend"
+    # Shorter than limit → untouched
+    assert _truncate_safe_fence(src, 100) == src
+    # Cut at exactly end → no change needed
+    assert _truncate_safe_fence(src, len(src)) == src
+
+
+def test_truncate_safe_fence_helper_closes_open_fence():
+    from obsidian_capture_adapter import _truncate_safe_fence
+    src = "before\n```python\n" + "y" * 2000
+    out = _truncate_safe_fence(src, 50)
+    assert out.count("```") % 2 == 0
+    assert out.endswith("\n```")
+
+
 # ── File-order invariant (clock-skew regression guard) ───────────────────
 # Belt-and-suspenders: the learner fixture's 2-orphan baseline already proves
 # file-order pairing indirectly, but this synthetic case makes the invariant
