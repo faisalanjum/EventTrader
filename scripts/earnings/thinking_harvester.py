@@ -875,7 +875,7 @@ def _render_subagent_trace(
         elif kind == "tool_use":
             lines.append(f"- {_tool_use_annotation(b)}")
         elif kind == "tool_result":
-            preview = b["content"][:300]
+            preview = _truncate_safe_fence(b["content"], 300)
             lines.append(f"  ↳ _result:_ {preview}" + (" …" if len(b["content"]) > 300 else ""))
         elif kind == "thinking":
             text = b["content"].strip()

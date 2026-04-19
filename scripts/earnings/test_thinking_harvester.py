@@ -1101,3 +1101,74 @@ def test_subagent_trace_truncation_preserves_fence_balance(tmp_path):
     assert out.count("```") % 2 == 0, (
         f"unbalanced fences after truncation — got count={out.count('```')}"
     )
+
+
+def test_tool_result_preview_closes_unbalanced_fence(tmp_path):
+    """Tool_result content is truncated at 300 chars in render_subagent_trace.
+    If the preview opens a ``` code fence but is cut before close, the fix
+    must append a trailing ```.
+    Real bug case (AVGO primary subagent trace): a Read tool_result previewed
+    file content that opened ```cypher at char ~100 and never closed within
+    300 chars — broke all downstream rendering."""
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    projects_root.mkdir()
+    session_id = "cccc1111-2222-3333-4444-555555555555"
+
+    primary = projects_root / f"{session_id}.jsonl"
+    primary.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{
+                "type": "tool_use", "id": "tu_preview", "name": "Agent",
+                "input": {"subagent_type": "test-sub", "description": "x"},
+            }], "stop_reason": "tool_use"},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "user",
+            "message": {"content": [{"type": "tool_result", "tool_use_id": "tu_preview", "content": "ok"}]},
+            "timestamp": "2026-01-01T00:00:01Z",
+            "toolUseResult": {"agentId": "cd9876543210cdefg"},
+        }) + "\n"
+    )
+
+    sub_dir = projects_root / session_id / "subagents"
+    sub_dir.mkdir(parents=True)
+    sub_jsonl = sub_dir / "agent-cd9876543210cdefg.jsonl"
+    # Tool_result content: opens ```cypher near char 100, never closes within 300
+    fence_content = "header text here " * 5 + "\n```cypher\n" + "MATCH (n) RETURN n\n" * 50
+    sub_jsonl.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{"type": "tool_use", "id": "inner_tu", "name": "Read", "input": {}}], "stop_reason": "tool_use"},
+            "timestamp": "2026-01-01T00:00:00.100Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "user",
+            "message": {"content": [{"type": "tool_result", "tool_use_id": "inner_tu", "content": fence_content}]},
+            "timestamp": "2026-01-01T00:00:00.200Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "assistant",
+            "message": {"content": [{"type": "text", "text": "done"}], "stop_reason": "end_turn"},
+            "timestamp": "2026-01-01T00:00:00.300Z",
+        }) + "\n"
+    )
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="guidance", ticker="TEST", quarter="Q1_FY2025",
+        session_id=session_id, source_asset="transcript",
+        source_id="TEST_preview",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    files = list((vault_root / "TEST" / "events" / "Q1_FY2025" / "guidance"
+                  / "subagents_transcript").glob("*.md"))
+    assert len(files) == 1
+    out = files[0].read_text(encoding="utf-8")
+    assert out.count("```") % 2 == 0, (
+        f"tool_result preview leaked unclosed ``` — count={out.count('```')}"
+    )
