@@ -78,24 +78,6 @@ text_blocks = _hb.text
 tool_blocks = _hb.tool
 total_thinking_chars = _hb.total_thinking_chars
 
-# Fiscal quarter extraction — scans output + full transcript (text blocks + tool results).
-# Primary agents have "Q2 FY2026" in output. Enrichment agents have "fiscal_quarter": 2 in Neo4j results.
-_all_text = msg
-_all_text += ' '.join(b['text'] for b in text_blocks)
-_all_text += ' '.join(b['text'] for b in tool_blocks)
-_all_text += ' '.join(b.get('result', '') or '' for b in tool_blocks)
-fiscal_quarter = None
-_fq_match = re.search(r'Q([1-4])\s*FY(\d{4})', _all_text)
-if _fq_match:
-    fiscal_quarter = f'Q{_fq_match.group(1)}FY{_fq_match.group(2)}'
-else:
-    # Fallback: Neo4j results — handles JSON ("gu.fiscal_year": 2026),
-    # escaped JSON (\"gu.fiscal_year\": 2026), and plain text (fiscal_year: 2026)
-    _fy = re.search(r'\\?"?(?:gu\.)?fiscal_year\\?"?\s*:\s*(\d{4})', _all_text)
-    _fqn = re.search(r'\\?"?(?:gu\.)?fiscal_quarter\\?"?\s*:\s*(\d)', _all_text)
-    if _fy and _fqn:
-        fiscal_quarter = f'Q{_fqn.group(1)}FY{_fy.group(1)}'
-
 # --- Pre-compute extraction metadata ---
 _extract_source_id = None
 _extract_result_file = None
@@ -149,8 +131,6 @@ if not _is_enrichment:
     lines.append(f'timestamp: {timestamp}')
     if tickers_str:
         lines.append(f'tickers: [{tickers_str}]')
-    if fiscal_quarter:
-        lines.append(f'fiscal_quarter: {fiscal_quarter}')
     if _extract_source_id:
         lines.append(f'source_id: "{_extract_source_id}"')
     lines.append(f'thinking_blocks: {len(thinking_blocks)}')

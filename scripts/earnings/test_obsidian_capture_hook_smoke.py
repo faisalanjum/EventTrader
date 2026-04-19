@@ -136,3 +136,47 @@ def test_hook_sh_wrapper_creates_note_with_predictor_fork_fixture(tmp_path):
     assert "thinking_chars: 177" in content
     assert "text_blocks: 1" in content
     assert "tool_blocks: 1" in content
+
+
+def test_hook_note_never_emits_fiscal_quarter_field(tmp_path):
+    """Regression guard (2026-04-19 fiscal_quarter bug).
+
+    The hook previously derived a ``fiscal_quarter:`` field via a regex over
+    agent text (``Q[1-4]\\s*FY\\d{4}``), which picked up the first mention —
+    for BURL Q3 FY2025 8-K that was *forward* Q4 FY2025 guidance content, so
+    the hook note frontmatter falsely claimed Q4FY2025 for a Q3_FY2025 source.
+
+    Root-cause fix: drop the derivation entirely (the hook has no reliable
+    way to know source-vs-content quarter without Neo4j; harvester's
+    ``quarter:`` under Companies/ is authoritative). This test locks in the
+    invariant by using a ``last_assistant_message`` that deliberately
+    mentions multiple quarters — the hook MUST NOT emit a
+    ``fiscal_quarter:`` frontmatter line regardless of content."""
+    import json as _json
+    hook_input = _json.dumps({
+        "agent_type": "smoke-test-agent-generic",
+        "agent_id": "fqsmoke01",
+        "agent_transcript_path": str(FIXTURES / "learner_session.jsonl"),
+        # Content contains MULTIPLE quarter mentions — pre-fix regex would have
+        # picked "Q4 FY2025" as fiscal_quarter, which would have been wrong
+        # if this were (e.g.) a Q3 FY2025 source.
+        "last_assistant_message": (
+            "Analysis references Q4 FY2025 forward guidance, Q3 FY2025 "
+            "results, and Q2 FY2025 comparisons."
+        ),
+    })
+    result, fake_home = _run_hook(tmp_path, hook_input)
+    assert result.returncode == 0, f"Hook crashed: {result.stderr!r}"
+
+    notes = list(
+        (fake_home / "Obsidian/EventTrader/Earnings/earnings-analysis/agents").glob("*.md")
+    )
+    assert len(notes) == 1
+    content = notes[0].read_text(encoding="utf-8")
+    # Frontmatter must NEVER contain a fiscal_quarter: line (anywhere in the
+    # file — using a line-anchored regex in case future changes re-introduce
+    # it deeper in the note body).
+    import re as _re
+    assert _re.search(r"^fiscal_quarter:", content, _re.MULTILINE) is None, (
+        f"hook emitted fiscal_quarter field (regression): {content[:1000]}"
+    )
