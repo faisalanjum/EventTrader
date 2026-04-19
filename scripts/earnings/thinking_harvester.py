@@ -682,10 +682,17 @@ def _tool_use_annotation(block: dict[str, Any]) -> str:
         # `.split()` + `" ".join` collapses internal whitespace / newlines
         # so the bullet never breaks across lines. Truncation: up to 80 chars
         # of description body + a 1-char ellipsis on overflow (81 visible max).
+        # Wrap the rendered description in a backtick code span so free-text
+        # markdown control chars (``*``, ``_``, ``[...](...)``) in future
+        # descriptions render as literals instead of unintended formatting.
+        # If the description itself contains a backtick, escalate to a
+        # double-backtick fence (CommonMark allows the inner char when the
+        # fence is wider than it).
         desc = " ".join((inp.get("description") or "").split())
         if desc:
             desc = desc[:80] + ("…" if len(desc) > 80 else "")
-            return f"{emoji} Agent({sub}): {desc}"
+            fence = "``" if "`" in desc else "`"
+            return f"{emoji} Agent({sub}): {fence}{desc}{fence}"
         return f"{emoji} Agent({sub})"
     if name == "Skill":
         skill = inp.get("skill", "?")

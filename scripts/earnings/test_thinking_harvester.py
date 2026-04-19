@@ -1693,7 +1693,9 @@ def test_agent_bullet_without_description_falls_back_to_subagent_type():
 
 
 def test_agent_bullet_includes_short_description():
-    """Agent.input.description is appended as ``: <desc>``."""
+    """Agent.input.description is appended as ``: `<desc>` `` — wrapped in
+    a single-backtick code span so free-text markdown control chars in the
+    description render as literals."""
     from thinking_harvester import _tool_use_annotation
     block = {"kind": "tool_use", "ts": "", "meta": {
         "name": "Agent", "id": "tu1",
@@ -1701,13 +1703,12 @@ def test_agent_bullet_includes_short_description():
                   "description": "BURL post-earnings news 2025-11-25"},
     }}
     ann = _tool_use_annotation(block)
-    assert ann == "🤖 Agent(neo4j-news): BURL post-earnings news 2025-11-25"
+    assert ann == "🤖 Agent(neo4j-news): `BURL post-earnings news 2025-11-25`"
 
 
 def test_agent_description_truncated_to_80_body_plus_ellipsis():
     """Truncation: description body capped at 80 chars; 1-char ``…`` suffix on
-    overflow; total visible = up to 81 chars. Protects against pathological
-    long descriptions leaking into the bullet."""
+    overflow; total visible inside the code span = up to 81 chars."""
     from thinking_harvester import _tool_use_annotation
     long_desc = "X" * 200
     block = {"kind": "tool_use", "ts": "", "meta": {
@@ -1715,12 +1716,14 @@ def test_agent_description_truncated_to_80_body_plus_ellipsis():
         "input": {"subagent_type": "test-sub", "description": long_desc},
     }}
     ann = _tool_use_annotation(block)
-    prefix = "🤖 Agent(test-sub): "
+    prefix = "🤖 Agent(test-sub): `"
+    suffix = "`"
     assert ann.startswith(prefix)
-    assert ann.endswith("…")
-    body = ann[len(prefix):-1]  # strip prefix + trailing ellipsis
-    assert len(body) == 80, f"body should be 80 chars, got {len(body)}"
-    assert body == "X" * 80
+    assert ann.endswith(suffix)
+    body = ann[len(prefix):-len(suffix)]
+    assert body.endswith("…")
+    assert len(body) == 81, f"body+ellipsis should be 81 chars, got {len(body)}"
+    assert body[:-1] == "X" * 80
 
 
 def test_agent_description_internal_newlines_collapsed():
@@ -1732,7 +1735,36 @@ def test_agent_description_internal_newlines_collapsed():
         "input": {"subagent_type": "x", "description": "first\nsecond\t\tthird"},
     }}
     ann = _tool_use_annotation(block)
-    assert ann == "🤖 Agent(x): first second third"
+    assert ann == "🤖 Agent(x): `first second third`"
+
+
+def test_agent_description_with_markdown_chars_rendered_as_literal():
+    """Description containing markdown control chars (``*``, ``_``, link
+    syntax) is wrapped in a code span so Obsidian renders the chars as
+    literals rather than applying italic / bold / link formatting."""
+    from thinking_harvester import _tool_use_annotation
+    block = {"kind": "tool_use", "ts": "", "meta": {
+        "name": "Agent", "id": "tu1",
+        "input": {"subagent_type": "x",
+                  "description": "fetch *BURL* data [see](url) _q3_"},
+    }}
+    ann = _tool_use_annotation(block)
+    # Single-backtick fence suffices — no backtick in desc.
+    assert ann == "🤖 Agent(x): `fetch *BURL* data [see](url) _q3_`"
+
+
+def test_agent_description_containing_backtick_uses_double_fence():
+    """When description itself contains a ``\u0060`` (rare), single-backtick
+    fence would break the code span. Escalate to a double-backtick fence —
+    CommonMark allows the inner single backtick when the fence is wider."""
+    from thinking_harvester import _tool_use_annotation
+    block = {"kind": "tool_use", "ts": "", "meta": {
+        "name": "Agent", "id": "tu1",
+        "input": {"subagent_type": "x",
+                  "description": "refs `foo` in code"},
+    }}
+    ann = _tool_use_annotation(block)
+    assert ann == "🤖 Agent(x): ``refs `foo` in code``"
 
 
 def test_repeat_subagent_types_now_distinguishable_end_to_end(tmp_path):
@@ -1782,6 +1814,7 @@ def test_repeat_subagent_types_now_distinguishable_end_to_end(tmp_path):
     )
     out = (vault_root / "TEST" / "events" / "Q1_FY2025" / "learning"
            / "thinking.md").read_text(encoding="utf-8")
-    # Both descriptions must appear, disambiguating the repeat subagent type.
-    assert "🤖 Agent(neo4j-news): BURL post-earnings news 2025-11-25" in out
-    assert "🤖 Agent(neo4j-news): Off-price peer comp prints pre-BURL" in out
+    # Both descriptions must appear (wrapped in a code span), disambiguating
+    # the repeat subagent type.
+    assert "🤖 Agent(neo4j-news): `BURL post-earnings news 2025-11-25`" in out
+    assert "🤖 Agent(neo4j-news): `Off-price peer comp prints pre-BURL`" in out
