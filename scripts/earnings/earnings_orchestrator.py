@@ -1828,6 +1828,44 @@ def fetch_actual_return(ticker: str, accession: str) -> dict | None:
 # ── Learner Orchestration (post-prediction sequential flow) ─────────
 
 
+class LearnerOutcome:
+    """Centralized taxonomy of every exit condition from ``run_learner_for_quarter``.
+
+    Each of the function's 12 return sites maps to exactly one of these string
+    constants. Callers that need to distinguish *skipped* (environmental, not
+    a failure) from *failed* (pipeline defect) use the ``SKIPPED``/``FAILED``
+    sets below instead of parsing the constants individually.
+
+    Adding a new outcome: define a constant here, add it to the matching set,
+    and ensure ``ALL`` contains it. The test in ``test_learner_outcomes.py``
+    asserts ``len(ALL) == 12`` and that the sets are pairwise disjoint so a
+    future addition that forgets to categorize is caught automatically.
+    """
+
+    SUCCEEDED                 = "succeeded"
+    RECOVERED                 = "recovered"
+    SKIPPED_NO_PREDICTION     = "skipped_no_prediction"
+    SKIPPED_NO_DAILY_STOCK    = "skipped_no_daily_stock"
+    FAILED_NO_RESULT          = "failed_no_result"
+    FAILED_INVALID_JSON       = "failed_invalid_json"
+    FAILED_NO_RESULT_RETRY    = "failed_no_result_retry"
+    FAILED_INVALID_JSON_RETRY = "failed_invalid_json_retry"
+    FAILED_VALIDATION         = "failed_validation"
+    FAILED_RECOVERY_APPEND    = "failed_recovery_append"
+    FAILED_TICKER_APPEND      = "failed_ticker_append"
+    FAILED_GLOBAL_APPEND      = "failed_global_append"
+
+    SUCCESS = frozenset({SUCCEEDED, RECOVERED})
+    SKIPPED = frozenset({SKIPPED_NO_PREDICTION, SKIPPED_NO_DAILY_STOCK})
+    FAILED  = frozenset({
+        FAILED_NO_RESULT, FAILED_INVALID_JSON,
+        FAILED_NO_RESULT_RETRY, FAILED_INVALID_JSON_RETRY,
+        FAILED_VALIDATION, FAILED_RECOVERY_APPEND,
+        FAILED_TICKER_APPEND, FAILED_GLOBAL_APPEND,
+    })
+    ALL = SUCCESS | SKIPPED | FAILED  # 12 members
+
+
 def run_learner_for_quarter(
     ticker: str,
     quarter_info: dict,
@@ -1835,17 +1873,27 @@ def run_learner_for_quarter(
     current_index: int,
     pit_mode: str = "historical",
     live_state_path: Path | None = None,
-) -> dict | None:
+) -> tuple[dict | None, str]:
     """Run the full learner pipeline for one quarter.
 
-    1. Check hard gates (prediction/result.json + daily_stock)
-    2. Derive PIT cutoff
-    3. Fetch actual_return from Neo4j
-    4. Invoke learner via SDK
-    5. Validate learning/result.json (post-return; renamed from attribution/ per obsidian_thinking.md)
-    6. Append ticker + global lessons
+    Returns a 2-tuple ``(attribution, outcome)`` where ``outcome`` is a
+    :class:`LearnerOutcome` string constant. The payload is a dict on
+    ``SUCCEEDED`` / ``RECOVERED``, else ``None``.
 
-    Returns the validated attribution result dict, or None on failure.
+    This contract lets callers distinguish three terminal dispositions:
+      * **success** — ``outcome in LearnerOutcome.SUCCESS`` (``payload`` is the attribution dict)
+      * **skip** — environmental, not a defect (``outcome in LearnerOutcome.SKIPPED``)
+      * **fail** — pipeline-level error (``outcome in LearnerOutcome.FAILED``)
+
+    Steps:
+      1. Hard gate 1 — ``prediction/result.json`` must exist
+      2. Derived-write recovery if ``learning/result.json`` already exists
+      3. Hard gate 2 — ``daily_stock`` actual_return must be fetchable from Neo4j
+      4. Derive PIT cutoff
+      5. Invoke learner via SDK (up to 2 attempts: original + informed retry on validation errors)
+      6. Validate learning/result.json
+      7. Stamp authoritative model_version + sdk_session_id
+      8. Append ticker + global lessons
     """
     ticker = ticker.upper()
     attr_paths = get_learning_paths(ticker, quarter_info)
@@ -1856,7 +1904,7 @@ def run_learner_for_quarter(
     if not attr_paths["prediction_result_path"].exists():
         log.warning("Learner skip %s %s: prediction/result.json does not exist",
                      ticker, quarter_info.get("quarter_label"))
-        return None
+        return None, LearnerOutcome.SKIPPED_NO_PREDICTION
 
     # ── If attribution already exists, run derived-write recovery FIRST ──
     # Runs before fetch_actual_return() so recovery works even if Neo4j is down.
@@ -1886,15 +1934,15 @@ def run_learner_for_quarter(
                     log.info("Derived-write recovery complete for %s %s", ticker, quarter_info.get("quarter_label"))
                 except Exception as e:
                     log.error("Derived-write recovery failed for %s %s: %s", ticker, quarter_info.get("quarter_label"), e)
-                    return None
-                return existing
+                    return None, LearnerOutcome.FAILED_RECOVERY_APPEND
+                return existing, LearnerOutcome.RECOVERED
 
     # ── Hard gate 2: actual returns (daily_stock must exist) ──
     actual_return = fetch_actual_return(ticker, accession)
     if actual_return is None:
         log.warning("Learner skip %s %s: daily_stock not available (hard gate)",
                      ticker, quarter_info.get("quarter_label"))
-        return None
+        return None, LearnerOutcome.SKIPPED_NO_DAILY_STOCK
 
     # ── PIT cutoff derivation ──
     if pit_mode == "historical":
@@ -1928,14 +1976,14 @@ def run_learner_for_quarter(
     if not result_path.exists():
         log.error("Learner failed %s %s: learning/result.json not written",
                    ticker, quarter_info.get("quarter_label"))
-        return None
+        return None, LearnerOutcome.FAILED_NO_RESULT
 
     try:
         payload = json.loads(result_path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as e:
         log.error("Learner failed %s %s: result.json not valid JSON: %s",
                    ticker, quarter_info.get("quarter_label"), e)
-        return None
+        return None, LearnerOutcome.FAILED_INVALID_JSON
 
     errors = validate_attribution_result(
         payload, ticker, quarter_info.get("quarter_label", "")
@@ -1967,20 +2015,20 @@ def run_learner_for_quarter(
         if not result_path.exists():
             log.error("Learner retry failed %s %s: no result.json after retry",
                        ticker, quarter_info.get("quarter_label"))
-            return None
+            return None, LearnerOutcome.FAILED_NO_RESULT_RETRY
         try:
             payload = json.loads(result_path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             log.error("Learner retry failed %s %s: result.json still invalid JSON",
                        ticker, quarter_info.get("quarter_label"))
-            return None
+            return None, LearnerOutcome.FAILED_INVALID_JSON_RETRY
         errors = validate_attribution_result(
             payload, ticker, quarter_info.get("quarter_label", "")
         )
         if errors:
             log.error("Learner retry failed %s %s: still invalid after retry: %s",
                        ticker, quarter_info.get("quarter_label"), "; ".join(errors[:3]))
-            return None
+            return None, LearnerOutcome.FAILED_VALIDATION
 
     # Stamp authoritative model_version + sdk_session_id; side-effect render + harvest.
     payload = finalize_learning_result(
@@ -1998,7 +2046,7 @@ def run_learner_for_quarter(
     except Exception as e:
         log.error("Ticker lesson append failed for %s %s: %s",
                    ticker, quarter_info.get("quarter_label"), e)
-        return None
+        return None, LearnerOutcome.FAILED_TICKER_APPEND
 
     try:
         append_global_lessons(payload)
@@ -2006,10 +2054,10 @@ def run_learner_for_quarter(
     except Exception as e:
         log.error("Global lesson append failed for %s %s: %s",
                    ticker, quarter_info.get("quarter_label"), e)
-        return None
+        return None, LearnerOutcome.FAILED_GLOBAL_APPEND
 
     log.info("Learner complete for %s %s", ticker, quarter_info.get("quarter_label"))
-    return payload
+    return payload, LearnerOutcome.SUCCEEDED
 
 
 # ── Lesson File Operations (Python owns all derived writes) ─────────
@@ -3178,45 +3226,76 @@ def main():
         print(f"Saved: {paths['bundle_path']}")
         print(f"Saved: {paths['rendered_path']}")
 
+    # Run ledger — hoisted so both predict and learn blocks can use it.
+    # Wrap covers: predict = SDK + finalize + validate (close on "succeeded"
+    # only after validate passes); learn = the whole run_learner_for_quarter()
+    # so derived-write recovery, retries, and lesson appends are all inside.
+    # See .claude/plans/run_ledger.md §7.
+    from run_ledger import open_run as _open_run, close_run as _close_run
+
     if args.predict:
         if paths["result_path"].exists():
             paths["result_path"].unlink()
 
-        print("Running predictor via SDK ...", flush=True)
-        t1 = datetime.now()
-        _pred_result, predictor_session_id = run_predictor_via_sdk(
-            paths["bundle_path"], paths["rendered_path"], paths["result_path"]
-        )
-        pred_elapsed = (datetime.now() - t1).total_seconds()
-
-        if not paths["result_path"].exists():
-            raise RuntimeError("Predictor finished without writing prediction/result.json")
-
-        # Canonicalize: LLM wrote 7 analytic fields; Python adds 8 metadata/derived + sdk_session_id.
-        # Side-effects (best-effort): result.md sidecar + thinking.md harvest.
-        finalize_prediction_result(
-            result_path=paths["result_path"],
+        _pred_run_id = _open_run(
+            "prediction",
             ticker=args.ticker,
-            quarter_info=quarter_info,
-            model=PREDICTOR_MODEL_ID,
-            sdk_session_id=predictor_session_id,
+            quarter_label=quarter_info.get("quarter_label"),
+            accession_8k=quarter_info.get("accession_8k"),
+            artifact_dir=str(paths["result_path"].parent),
         )
+        try:
+            print("Running predictor via SDK ...", flush=True)
+            t1 = datetime.now()
+            _pred_result, predictor_session_id = run_predictor_via_sdk(
+                paths["bundle_path"], paths["rendered_path"], paths["result_path"]
+            )
+            pred_elapsed = (datetime.now() - t1).total_seconds()
 
-        with open(paths["result_path"], encoding="utf-8") as f:
-            prediction = json.load(f)
+            if not paths["result_path"].exists():
+                raise RuntimeError("Predictor finished without writing prediction/result.json")
 
-        validate_prediction_result(
-            prediction,
-            expected_ticker=args.ticker,
-            expected_quarter=quarter_info["quarter_label"],
-        )
+            # Canonicalize: LLM wrote 7 analytic fields; Python adds 8 metadata/derived + sdk_session_id.
+            # Side-effects (best-effort): result.md sidecar + thinking.md harvest.
+            finalize_prediction_result(
+                result_path=paths["result_path"],
+                ticker=args.ticker,
+                quarter_info=quarter_info,
+                model=PREDICTOR_MODEL_ID,
+                sdk_session_id=predictor_session_id,
+            )
 
-        print(f"Prediction written in {pred_elapsed:.1f}s: {paths['result_path']}")
-        print(
-            f"  direction: {prediction['direction']} | "
-            f"confidence: {prediction['confidence_score']} ({prediction['confidence_bucket']}) | "
-            f"magnitude: {prediction['magnitude_bucket']}"
-        )
+            with open(paths["result_path"], encoding="utf-8") as f:
+                prediction = json.load(f)
+
+            validate_prediction_result(
+                prediction,
+                expected_ticker=args.ticker,
+                expected_quarter=quarter_info["quarter_label"],
+            )
+
+            print(f"Prediction written in {pred_elapsed:.1f}s: {paths['result_path']}")
+            print(
+                f"  direction: {prediction['direction']} | "
+                f"confidence: {prediction['confidence_score']} ({prediction['confidence_bucket']}) | "
+                f"magnitude: {prediction['magnitude_bucket']}"
+            )
+            _close_run(
+                _pred_run_id, "succeeded",
+                sdk_session_id=predictor_session_id,
+                result_path=str(paths["result_path"]),
+                thinking_path=str(paths["result_path"].parent / "thinking.md"),
+                summary={
+                    "direction": prediction.get("direction"),
+                    "confidence_score": prediction.get("confidence_score"),
+                    "confidence_bucket": prediction.get("confidence_bucket"),
+                    "magnitude_bucket": prediction.get("magnitude_bucket"),
+                    "expected_move_range_pct": prediction.get("expected_move_range_pct"),
+                },
+            )
+        except Exception as _e:
+            _close_run(_pred_run_id, "failed", error=str(_e)[:500])
+            raise
 
     if args.learn:
         # Load event.json for PIT derivation (needs chronological quarter list).
@@ -3244,26 +3323,62 @@ def main():
 
         print(f"\nRunning learner for {args.ticker} {target_ql} ...", flush=True)
         t2 = datetime.now()
-        attribution = run_learner_for_quarter(
+        _learn_dir = COMPANIES_DIR / args.ticker.upper() / "events" / target_ql / "learning"
+        _learn_run_id = _open_run(
+            "learning",
             ticker=args.ticker,
-            quarter_info=quarter_info,
-            events=events,
-            current_index=current_index,
-            pit_mode="historical",
-            live_state_path=live_state_path,
+            quarter_label=target_ql,
+            accession_8k=target_acc,
+            artifact_dir=str(_learn_dir),
         )
-        learn_elapsed = (datetime.now() - t2).total_seconds()
+        try:
+            attribution, _outcome = run_learner_for_quarter(
+                ticker=args.ticker,
+                quarter_info=quarter_info,
+                events=events,
+                current_index=current_index,
+                pit_mode="historical",
+                live_state_path=live_state_path,
+            )
+            learn_elapsed = (datetime.now() - t2).total_seconds()
 
-        if attribution:
-            print(f"Learner complete in {learn_elapsed:.1f}s")
-            pd = attribution.get("primary_driver", {})
-            fb = attribution.get("feedback", {})
-            pc = fb.get("prediction_comparison", {})
-            print(f"  primary_driver: {pd.get('category', '?')} — {pd.get('summary', '?')[:80]}")
-            print(f"  direction_correct: {pc.get('direction_correct')}")
-            print(f"  predictor_lessons: {len(fb.get('predictor_lessons', []))}")
-        else:
-            print(f"Learner failed or skipped for {args.ticker} {target_ql} after {learn_elapsed:.1f}s")
+            if _outcome in LearnerOutcome.SUCCESS:
+                # SUCCEEDED or RECOVERED — both produce a valid attribution dict.
+                assert attribution is not None  # by LearnerOutcome contract
+                print(f"Learner complete ({_outcome}) in {learn_elapsed:.1f}s")
+                pd = attribution.get("primary_driver", {}) or {}
+                fb = attribution.get("feedback", {}) or {}
+                pc = fb.get("prediction_comparison", {}) or {}
+                ar = attribution.get("actual_return", {}) or {}
+                print(f"  primary_driver: {pd.get('category', '?')} — {pd.get('summary', '?')[:80]}")
+                print(f"  direction_correct: {pc.get('direction_correct')}")
+                print(f"  predictor_lessons: {len(fb.get('predictor_lessons', []))}")
+                _close_run(
+                    _learn_run_id, "succeeded",
+                    sdk_session_id=attribution.get("sdk_session_id"),
+                    result_path=str(_learn_dir / "result.json"),
+                    thinking_path=str(_learn_dir / "thinking.md"),
+                    summary={
+                        "direction_correct":       pc.get("direction_correct"),
+                        "magnitude_error_pct":     pc.get("magnitude_error_pct"),
+                        "primary_driver_category": pd.get("category"),
+                        "actual_daily_stock_pct":  ar.get("daily_stock_pct"),
+                    },
+                )
+            elif _outcome in LearnerOutcome.SKIPPED:
+                # Environmental — no prediction yet, or daily_stock unavailable.
+                # NOT a failure; the event genuinely isn't ready to learn from.
+                print(f"Learner skipped ({_outcome}) for {args.ticker} {target_ql} after {learn_elapsed:.1f}s")
+                _close_run(_learn_run_id, "skipped", error=_outcome)
+            else:
+                # Pipeline-level failure: SDK didn't write, validator rejected,
+                # lesson-append raised, etc. Outcome string IS the diagnostic.
+                assert _outcome in LearnerOutcome.FAILED, f"unclassified outcome: {_outcome!r}"
+                print(f"Learner failed ({_outcome}) for {args.ticker} {target_ql} after {learn_elapsed:.1f}s")
+                _close_run(_learn_run_id, "failed", error=_outcome)
+        except Exception as _e:
+            _close_run(_learn_run_id, "failed", error=str(_e)[:500])
+            raise
 
 
 def _run_v2_regression_tests():

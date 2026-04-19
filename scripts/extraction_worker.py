@@ -52,6 +52,14 @@ from claude_agent_sdk import ClaudeAgentOptions, query
 
 from neograph.Neo4jConnection import get_manager
 
+# Run-lifecycle ledger (one row per open/close per attempt).
+sys.path.insert(0, str(Path(PROJECT_DIR) / "scripts" / "earnings"))
+from run_ledger import (  # noqa: E402
+    VALID_COMPONENTS as _LEDGER_COMPONENTS,
+    close_run as _ledger_close,
+    open_run as _ledger_open,
+)
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
@@ -329,6 +337,75 @@ def read_result_file(result_path: str, type_name: str, source_id: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Guidance ledger summary — pure, testable
+# ---------------------------------------------------------------------------
+# Valid values for the ``enrichment_status`` field in the guidance ledger
+# summary. Used by tests (and future renderers) to constrain the enum.
+ENRICHMENT_STATUSES: frozenset[str] = frozenset({
+    "enriched", "no_enrichment", "no_primary",
+})
+
+
+def _build_guidance_summary(
+    *,
+    source_id: str,
+    result_data: dict | None,
+    result_msg,  # ResultMessage | None — SDK type; structural typing for test friendliness
+) -> dict:
+    """Shape the ledger ``summary`` dict for a successful guidance extraction.
+
+    Renderer-required keys (``run_ledger.py::_render_extractions_section``):
+      * ``items_extracted`` — primary-pass extraction count
+      * ``items_written``   — actual Neo4j write count (authoritative)
+      * ``enrichment_status`` — enum in :data:`ENRICHMENT_STATUSES` or ``None``
+
+    Audit-only keys (renderer ignores — present for ops diagnostics):
+      * ``items_enriched``, ``items_new_secondary`` — raw counts from the
+        combined result file per `.claude/skills/extract/SKILL.md` §55-59
+
+    ``items_written`` reads the write-CLI sidecar ``/tmp/gu_written_{source_id}
+    .json``. The stale-guard in ``process_one`` entry has already removed any
+    prior-attempt residue, so a present file is guaranteed to be from THIS
+    attempt; absence means no writes happened (dry_run, hook-only mode, or a
+    failure before the write CLI ran).
+    """
+    rd = result_data or {}
+    primary_items = rd.get("primary_items")
+    enriched_items = rd.get("enriched_items")
+    new_secondary_items = rd.get("new_secondary_items")
+
+    # items_written from the sidecar (authoritative, freshness guaranteed by entry-unlink)
+    items_written: int | None = None
+    gw = Path(f"/tmp/gu_written_{source_id}.json")
+    if gw.exists():
+        try:
+            items_written = len(json.loads(gw.read_text()))
+        except Exception:
+            items_written = None  # malformed sidecar — don't fabricate
+
+    # enum enrichment_status — 3 concrete values + None when counts are absent
+    enrichment_status: str | None
+    if primary_items is None and enriched_items is None and new_secondary_items is None:
+        enrichment_status = None
+    elif primary_items == 0:
+        enrichment_status = "no_primary"
+    elif (enriched_items or 0) + (new_secondary_items or 0) == 0:
+        enrichment_status = "no_enrichment"
+    else:
+        enrichment_status = "enriched"
+
+    return {
+        # renderer fields
+        "items_extracted":       primary_items,
+        "items_written":         items_written,
+        "enrichment_status":     enrichment_status,
+        # audit-only (renderer ignores)
+        "items_enriched":        enriched_items,
+        "items_new_secondary":   new_secondary_items,
+    }
+
+
+# ---------------------------------------------------------------------------
 # Core processing — single extraction job
 # ---------------------------------------------------------------------------
 async def process_one(
@@ -341,6 +418,46 @@ async def process_one(
 ) -> bool | str:
     """Run /extract for a single job. Returns True on success, False on failure, 'rate_limited' on rate limit."""
     is_write = mode == "write"
+
+    # Open a ledger run when the extraction type maps to a ledger component
+    # (currently just "guidance"). Retries of the same work each get their
+    # own run_id — process_one is the per-attempt boundary.
+    ledger_run_id: str | None = None
+    if type_name in _LEDGER_COMPONENTS:
+        try:
+            ledger_run_id = _ledger_open(
+                type_name,
+                ticker=ticker,
+                source_id=source_id,
+                source_asset=asset,
+            )
+        except Exception as e:
+            log.warning("Ledger open failed for %s/%s/%s: %s",
+                        type_name, asset, source_id, e)
+            ledger_run_id = None
+
+    def _close_ledger(status: str, *, error: str | None = None,
+                      summary: dict | None = None) -> None:
+        if not ledger_run_id:
+            return
+        try:
+            _ledger_close(ledger_run_id, status, error=error, summary=summary)
+        except Exception as e:
+            log.warning("Ledger close(%s) failed for %s/%s/%s: %s",
+                        status, type_name, asset, source_id, e)
+
+    # Stale-sidecar guard: /tmp/gu_written_{source_id}.json is written by
+    # guidance_write_cli.py (.claude/skills/earnings-orchestrator/scripts/
+    # guidance_write_cli.py:647) and NEVER cleaned up by the write CLI, the
+    # obsidian hook, or any prior code. If an earlier attempt wrote it and
+    # this attempt is dry_run (or errors before the write CLI runs), the
+    # stale file would poison items_written in the ledger summary. Unlink
+    # at entry so the success-path peek only sees items this attempt wrote.
+    if type_name == "guidance":
+        try:
+            Path(f"/tmp/gu_written_{source_id}.json").unlink(missing_ok=True)
+        except Exception as _e:
+            log.warning("Stale gu_written unlink failed for %s: %s", source_id, _e)
 
     if is_write and mgr:
         try:
@@ -425,6 +542,7 @@ async def process_one(
                 Path(result_path).unlink(missing_ok=True)
             except Exception:
                 pass
+            _close_ledger("rate_limited")
             return "rate_limited"
 
         if result_msg:
@@ -450,9 +568,11 @@ async def process_one(
                                 error="No result returned from SDK")
                 except Exception:
                     pass
+            _close_ledger("failed", error="No result returned from SDK")
             return False
 
         # --- File-based result protocol ---
+        result_data: dict | None = None
         try:
             result_data = read_result_file(result_path, type_name, source_id)
             result_status = result_data.get("status", "unknown")
@@ -466,6 +586,7 @@ async def process_one(
                     result_error = result_data.get("error", f"Result status: {result_status}")
                     mark_status(mgr, asset, source_id, type_name, "failed", error=result_error)
                     log.warning("%s_status=failed for %s: %s", type_name, source_id, result_error)
+                    _close_ledger("failed", error=result_error)
                     return False
 
         except (FileNotFoundError, ValueError) as e:
@@ -476,6 +597,7 @@ async def process_one(
                                 error=str(e))
                 except Exception:
                     pass
+            _close_ledger("failed", error=str(e))
             return False
 
         finally:
@@ -487,6 +609,17 @@ async def process_one(
 
         log.info("Completed %s/%s/%s in %.0fs", type_name, asset, source_id, elapsed)
         log.info("Result: %s", result_text[:2000])
+        # Build summary defensively — never let a summary-builder bug demote a
+        # genuinely successful extraction to "failed" in the outer handler.
+        try:
+            _summary = _build_guidance_summary(
+                source_id=source_id, result_data=result_data, result_msg=result_msg,
+            )
+        except Exception as _sum_exc:
+            log.warning("Summary build failed for %s/%s/%s (non-fatal): %s",
+                        type_name, asset, source_id, _sum_exc)
+            _summary = {}
+        _close_ledger("succeeded", summary=_summary)
         return True
 
     except Exception as e:
@@ -500,6 +633,7 @@ async def process_one(
                 Path(result_path).unlink(missing_ok=True)
             except Exception:
                 pass
+            _close_ledger("rate_limited")
             return "rate_limited"
 
         log.error("Failed %s/%s/%s after %.0fs", type_name, asset, source_id, elapsed, exc_info=True)
@@ -515,6 +649,7 @@ async def process_one(
             Path(result_path).unlink(missing_ok=True)
         except Exception:
             pass
+        _close_ledger("failed", error=str(e))
         return False
 
 
