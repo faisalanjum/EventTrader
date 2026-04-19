@@ -1297,3 +1297,118 @@ def test_subagent_trace_zero_thinking_still_reports_counts(tmp_path):
     assert "thinking_blocks: 0" in out
     assert "thinking_chars: 0" in out
     assert "redacted_thinking_blocks: 0" in out
+
+
+# ── First-user prompt rendering in primary thinking.md ─────────────────────
+
+def test_primary_thinking_md_renders_first_user_prompt(tmp_path):
+    """Primary thinking.md must include a '## Prompt' section containing the
+    original user-invoked command (e.g., '/extract AVGO transcript ...') so
+    reviewers can see what was asked. Prior behaviour dropped the prompt
+    entirely from the thinking.md output."""
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    projects_root.mkdir()
+    session_id = "11112222-3333-4444-5555-666666666666"
+    primary = projects_root / f"{session_id}.jsonl"
+    prompt_text = "/extract AVGO transcript AVGO_2023-03-02T17.00 TYPE=guidance MODE=write"
+    primary.write_text(
+        json.dumps({
+            "type": "user",
+            "message": {"content": prompt_text},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "assistant",
+            "message": {"content": [{"type": "text", "text": "done"}], "stop_reason": "end_turn"},
+            "timestamp": "2026-01-01T00:00:01Z",
+        }) + "\n"
+    )
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="guidance", ticker="AVGO", quarter="Q1_FY2023",
+        session_id=session_id, source_asset="transcript",
+        source_id="AVGO_2023-03-02T17.00",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "AVGO" / "events" / "Q1_FY2023" / "guidance"
+           / "thinking_transcript.md").read_text(encoding="utf-8")
+    import re as _re
+    assert _re.search(r"^## Prompt$", out, _re.MULTILINE), (
+        "primary thinking.md missing structural '## Prompt' section"
+    )
+    assert prompt_text in out, (
+        "primary thinking.md did not render the original user command"
+    )
+
+
+def test_primary_thinking_md_list_form_user_content_rendered(tmp_path):
+    """First-user message may be list-form with text blocks (some Agent tool
+    inputs). Helper must extract the first text item as the prompt."""
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    projects_root.mkdir()
+    session_id = "22223333-4444-5555-6666-777777777777"
+    primary = projects_root / f"{session_id}.jsonl"
+    primary.write_text(
+        json.dumps({
+            "type": "user",
+            "message": {"content": [
+                {"type": "text", "text": "listform prompt inside"},
+                {"type": "text", "text": "trailing ignored"},
+            ]},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "assistant",
+            "message": {"content": [{"type": "text", "text": "done"}], "stop_reason": "end_turn"},
+            "timestamp": "2026-01-01T00:00:01Z",
+        }) + "\n"
+    )
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="guidance", ticker="TEST", quarter="Q1_FY2025",
+        session_id=session_id, source_asset="transcript",
+        source_id="TEST_listform",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "TEST" / "events" / "Q1_FY2025" / "guidance"
+           / "thinking_transcript.md").read_text(encoding="utf-8")
+    assert "listform prompt inside" in out
+
+
+def test_primary_thinking_md_no_user_prompt_section_omitted(tmp_path):
+    """If the primary has no user entry (edge case), no Prompt section should
+    be emitted — avoids printing an empty block."""
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    projects_root.mkdir()
+    session_id = "33334444-5555-6666-7777-888888888888"
+    primary = projects_root / f"{session_id}.jsonl"
+    primary.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{"type": "text", "text": "solo assistant"}], "stop_reason": "end_turn"},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }) + "\n"
+    )
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="guidance", ticker="TEST", quarter="Q1_FY2025",
+        session_id=session_id, source_asset="transcript",
+        source_id="TEST_nouser",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "TEST" / "events" / "Q1_FY2025" / "guidance"
+           / "thinking_transcript.md").read_text(encoding="utf-8")
+    import re as _re
+    assert _re.search(r"^## Prompt$", out, _re.MULTILINE) is None

@@ -386,6 +386,10 @@ def _harvest_inner(
         for filename, content in subagent_outputs:
             (subagents_dir / filename).write_text(content, encoding="utf-8")
 
+    # Read the PRIMARY session's first user message (e.g., the /extract or
+    # /earnings-orchestrator command) so the reviewer can see what was asked.
+    first_user_prompt = _read_first_user_content(primary_jsonl)
+
     # Render thinking.md
     thinking_md = _render_thinking_md(
         thinking_type=thinking_type,
@@ -400,6 +404,7 @@ def _harvest_inner(
         skill_fork_blocks=skill_fork_blocks,
         orphan_warnings=orphan_warnings,
         subagents_count=len(subagent_outputs),
+        first_user_prompt=first_user_prompt,
     )
     (component_dir / thinking_filename).write_text(thinking_md, encoding="utf-8")
 
@@ -557,6 +562,41 @@ def _is_skill_fork(sub_jsonl: Path, *, context_label: str) -> bool:
     return signal_a and signal_b
 
 
+def _read_first_user_content(jsonl_path: Path) -> str:
+    """Extract the first-user message content from an SDK session JSONL.
+
+    Handles both string-form (top-level ``/command ...`` prompt) and
+    list-form (list of text blocks — used by some Agent tool prompts).
+    Returns empty string if no user entry found, unparseable, or empty.
+    Never raises.
+    """
+    try:
+        with open(jsonl_path, "r", encoding="utf-8") as f:
+            for raw in f:
+                raw = raw.strip()
+                if not raw:
+                    continue
+                try:
+                    entry = json.loads(raw)
+                except json.JSONDecodeError:
+                    continue
+                if entry.get("type") != "user":
+                    continue
+                content = (entry.get("message") or {}).get("content", "")
+                if isinstance(content, str):
+                    return content
+                if isinstance(content, list):
+                    for item in content:
+                        if isinstance(item, dict) and item.get("type") == "text":
+                            return str(item.get("text", ""))
+                        if isinstance(item, str):
+                            return item
+                return ""
+    except (FileNotFoundError, OSError):
+        return ""
+    return ""
+
+
 def _first_user_matches_skill_prefix(sub_jsonl: Path) -> bool:
     try:
         with open(sub_jsonl, "r", encoding="utf-8") as f:
@@ -659,6 +699,7 @@ def _render_thinking_md(
     skill_fork_blocks: list[dict[str, Any]],
     orphan_warnings: list[str],
     subagents_count: int,
+    first_user_prompt: str = "",
 ) -> str:
     # Metrics — combine primary + skill_fork where applicable
     if session_pattern == "FORK" and skill_fork_blocks:
@@ -722,6 +763,16 @@ def _render_thinking_md(
         body.append("")
         for w in orphan_warnings:
             body.append(f"- {w}")
+        body.append("")
+
+    # Prompt — show the original user-invoked command (e.g., /extract AVGO ...)
+    # so the reviewer knows what was asked. Truncated + fence-closed for safety.
+    if first_user_prompt:
+        body.append("## Prompt")
+        body.append("")
+        body.append(_downgrade_headings(_truncate_safe_fence(first_user_prompt, 4000)))
+        if len(first_user_prompt) > 4000:
+            body.append(f"\n*[truncated — {len(first_user_prompt)-4000:,} more chars]*")
         body.append("")
 
     # Primary reasoning content (thinking + text), merged in timestamp order
@@ -839,27 +890,8 @@ def _render_subagent_trace(
     lines.append(f"# Subagent trace — {subagent_type} ({agent_id[:8]})")
     lines.append("")
 
-    # First-user prompt (if string)
-    first_user_content = ""
-    for b in blocks:
-        # parse_session_blocks ignores string-form user messages; read first line manually.
-        pass
-    try:
-        with open(sub_jsonl, "r", encoding="utf-8") as f:
-            for raw in f:
-                entry = json.loads(raw)
-                if entry.get("type") == "user":
-                    c = entry.get("message", {}).get("content", "")
-                    if isinstance(c, str):
-                        first_user_content = c
-                    elif isinstance(c, list):
-                        for item in c:
-                            if isinstance(item, dict) and item.get("type") == "text":
-                                first_user_content = str(item.get("text", ""))
-                                break
-                    break
-    except Exception:
-        pass
+    # First-user prompt (the Agent tool's input prompt to this subagent)
+    first_user_content = _read_first_user_content(sub_jsonl)
     if first_user_content:
         lines.append("## Prompt")
         lines.append("")
