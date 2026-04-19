@@ -20,6 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent / "earnings"))
 
 from earnings_orchestrator import (
     COMPANIES_DIR,
+    LearnerOutcome,
     run_learner_for_quarter,
 )
 
@@ -87,7 +88,7 @@ def main():
         }
 
         t0 = datetime.now()
-        attribution, _outcome = run_learner_for_quarter(
+        attribution, outcome = run_learner_for_quarter(
             ticker=ticker,
             quarter_info=quarter_info,
             events=events,
@@ -104,6 +105,7 @@ def main():
             results.append({
                 "quarter": ql,
                 "status": "ok",
+                "outcome": outcome,  # "succeeded" | "recovered"
                 "elapsed_s": round(elapsed, 1),
                 "direction_correct": pc.get("direction_correct"),
                 "primary_driver": pd.get("summary", "?")[:60],
@@ -111,10 +113,23 @@ def main():
                 "predictor_lessons": len(fb.get("predictor_lessons", [])),
                 "data_lessons": len(fb.get("data_lessons", [])),
             })
-            log.info("OK (%.1fs) — %s | correct=%s", elapsed, pd.get("category"), pc.get("direction_correct"))
+            log.info("OK [%s] (%.1fs) — %s | correct=%s", outcome, elapsed,
+                     pd.get("category"), pc.get("direction_correct"))
+        elif outcome in LearnerOutcome.SKIPPED:
+            # Environmental skip (no prediction / no daily_stock). Not a
+            # failure — label it correctly and stop per the sequential
+            # policy (subsequent quarters likely have the same gap).
+            results.append({"quarter": ql, "status": "skipped",
+                            "outcome": outcome, "elapsed_s": round(elapsed, 1)})
+            log.warning("SKIPPED for %s %s [%s] (%.1fs) — stopping sequential scan",
+                        ticker, ql, outcome, elapsed)
+            break
         else:
-            results.append({"quarter": ql, "status": "failed", "elapsed_s": round(elapsed, 1)})
-            log.error("FAILED for %s %s (%.1fs) — stopping per historical failure policy", ticker, ql, elapsed)
+            # Pipeline-level failure. Outcome string IS the diagnostic.
+            results.append({"quarter": ql, "status": "failed",
+                            "outcome": outcome, "elapsed_s": round(elapsed, 1)})
+            log.error("FAILED for %s %s [%s] (%.1fs) — stopping per historical failure policy",
+                      ticker, ql, outcome, elapsed)
             break  # Historical failure policy: stop ticker's sequence
 
     # Summary
@@ -123,11 +138,15 @@ def main():
     print(f"{'='*60}")
     for r in results:
         if r["status"] == "ok":
-            print(f"  {r['quarter']}: OK ({r['elapsed_s']}s) — {r['category']} | correct={r['direction_correct']} | lessons={r['predictor_lessons']}+{r['data_lessons']}")
+            print(f"  {r['quarter']}: OK [{r.get('outcome','?')}] ({r['elapsed_s']}s) — {r['category']} | correct={r['direction_correct']} | lessons={r['predictor_lessons']}+{r['data_lessons']}")
+        elif r["status"] == "skipped":
+            print(f"  {r['quarter']}: SKIPPED [{r.get('outcome','?')}] ({r['elapsed_s']}s)")
         else:
-            print(f"  {r['quarter']}: FAILED ({r['elapsed_s']}s)")
+            print(f"  {r['quarter']}: FAILED [{r.get('outcome','?')}] ({r['elapsed_s']}s)")
     ok = sum(1 for r in results if r["status"] == "ok")
-    print(f"\n{ok}/{len(results)} quarters completed")
+    skipped = sum(1 for r in results if r["status"] == "skipped")
+    failed = sum(1 for r in results if r["status"] == "failed")
+    print(f"\n{ok} ok / {skipped} skipped / {failed} failed (total={len(results)})")
 
     # Write summary
     summary_path = Path(f"earnings-analysis/test-outputs/calibration_{ticker}.json")

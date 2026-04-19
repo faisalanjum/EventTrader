@@ -446,10 +446,23 @@ def refresh_index(
     dst = index_path or INDEX_PATH
     state = current_state(ledger_path=src)
 
+    # Partition state — "In Flight" is a disjoint view from the per-component
+    # "Recent *" tables. A running row belongs ONLY in the In Flight section;
+    # it must not double-appear in the per-component list, or the user sees
+    # the same run_id in two places and the row-counts lie.
     running = [r for r in state if r.get("status") == "running"]
-    predictions = [r for r in state if r.get("component") == "prediction"][:50]
-    learners = [r for r in state if r.get("component") == "learning"][:50]
-    extractions = [r for r in state if r.get("component") == "guidance"][:50]
+    predictions = [
+        r for r in state
+        if r.get("component") == "prediction" and r.get("status") != "running"
+    ][:50]
+    learners = [
+        r for r in state
+        if r.get("component") == "learning" and r.get("status") != "running"
+    ][:50]
+    extractions = [
+        r for r in state
+        if r.get("component") == "guidance" and r.get("status") != "running"
+    ][:50]
 
     now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     parts = [

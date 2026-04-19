@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent / "earnings"))
 
 from earnings_orchestrator import (
     COMPANIES_DIR,
+    LearnerOutcome,
     finalize_prediction_result,
     get_attribution_paths,
     get_prediction_paths,
@@ -77,7 +78,7 @@ def finalize_and_learn(accession, quarter_label):
     log.info("[%s] Running learner ...", quarter_label)
     live_state = COMPANIES_DIR / TICKER / "events" / "live_state.json"
     t0 = datetime.now()
-    result, _outcome = run_learner_for_quarter(
+    result, outcome = run_learner_for_quarter(
         ticker=TICKER,
         quarter_info=qi,
         events=events,
@@ -86,8 +87,10 @@ def finalize_and_learn(accession, quarter_label):
         live_state_path=live_state,
     )
     log.info("[%s] Learner done in %.1fs", quarter_label, (datetime.now() - t0).total_seconds())
-    if not result:
-        raise RuntimeError(f"Learner failed for {quarter_label}")
+    if outcome in LearnerOutcome.SKIPPED:
+        raise RuntimeError(f"Learner skipped for {quarter_label}: {outcome}")
+    if result is None:
+        raise RuntimeError(f"Learner failed for {quarter_label}: {outcome}")
     pc = result["feedback"]["prediction_comparison"]
     log.info("[%s] Attribution: category=%s | correct=%s | mag_err=%s",
              quarter_label, result["primary_driver"]["category"],

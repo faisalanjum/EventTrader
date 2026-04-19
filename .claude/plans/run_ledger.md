@@ -619,7 +619,7 @@ Plus three trims from the second-round review:
 | `scripts/earnings/test_run_ledger.py` | **NEW** — 15 tests | ~220 |
 | `scripts/earnings/earnings_orchestrator.py` | wrap prediction SDK call (~line 3044) + wrap learner SDK call | +~25 |
 | `scripts/extraction_worker.py::process_one` | wrap execution + rate_limited branch | +~15 |
-| `earnings-analysis/operations/` | **NEW DIR** with empty `run_ledger.jsonl` + seed `Run Index.md` | — |
+| `earnings-analysis/operations/` | **NEW DIR**. `Run Index.md` seeded as an empty 4-section stub. `run_ledger.jsonl` is lazy-created on the first `_append_row` call — empty files are noise and the open/close primitives already `mkdir(parents=True, exist_ok=True)`. | — |
 
 **Net**: ~140 lines of new code + ~40 lines modifications + 15 tests + 2 new vault files.
 

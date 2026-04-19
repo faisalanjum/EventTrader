@@ -287,6 +287,19 @@ def test_15_in_flight_populated_on_open_cleared_on_close(tmp_path):
     in_flight_block = text[in_flight_start:next_section]
     assert rid[:8] in in_flight_block, "rid should be in the In Flight section"
     assert "No runs in flight" not in in_flight_block
+    # Critical: In Flight is DISJOINT from per-component tables. A running
+    # row must NOT also appear in "Recent Learners" — otherwise the same
+    # run_id is rendered in two places and row counts lie.
+    learners_start = text.index("## Recent Learners")
+    learners_end_open = text.index("## Recent Extractions")
+    learners_block_open = text[learners_start:learners_end_open]
+    assert rid[:8] not in learners_block_open, (
+        "running learner leaked into Recent Learners table"
+    )
+    assert text.count(rid[:8]) == 1, (
+        f"run_id should appear exactly once while running; saw "
+        f"{text.count(rid[:8])}"
+    )
 
     close_run(rid, "failed", error="Simulated failure",
               ledger_path=ledger, index_path=index)
@@ -438,6 +451,38 @@ def test_21_guidance_summary_no_primary_enum(tmp_path):
 
 
 # ── Drift guard: every fixture in this file must use a valid enum value ──
+
+@pytest.mark.parametrize("component,section_header,next_header", [
+    ("prediction", "## Recent Predictions", "## Recent Learners"),
+    ("learning",   "## Recent Learners",    "## Recent Extractions"),
+    ("guidance",   "## Recent Extractions", None),  # last section
+])
+def test_23_running_runs_excluded_from_per_component_tables(
+    tmp_path, component, section_header, next_header,
+):
+    """Regression test for the "running row double-listed" bug. A run that
+    is still ``running`` must appear ONLY in the In Flight section — never
+    in its per-component Recent table. Covers all 3 components."""
+    from run_ledger import open_run
+    ledger = tmp_path / "ledger.jsonl"
+    index = tmp_path / "Run Index.md"
+    open_kwargs = {"ticker": "T", "ledger_path": ledger, "index_path": index}
+    if component in ("prediction", "learning"):
+        open_kwargs["quarter_label"] = "Q1_FY2025"
+    else:
+        open_kwargs["source_id"] = "T_1"; open_kwargs["source_asset"] = "8k"
+    rid = open_run(component, **open_kwargs)
+    text = index.read_text()
+    start = text.index(section_header)
+    end = text.index(next_header) if next_header else len(text)
+    component_block = text[start:end]
+    assert rid[:8] not in component_block, (
+        f"Running {component} run leaked into {section_header} table"
+    )
+    assert text.count(rid[:8]) == 1, (
+        f"run_id appears {text.count(rid[:8])} times; expected exactly 1"
+    )
+
 
 def test_22_all_enrichment_status_fixtures_use_valid_enum_values():
     """Catches future test-fixture drift. If someone writes a new test with

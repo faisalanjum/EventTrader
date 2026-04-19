@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent / "earnings"))
 
 from earnings_orchestrator import (
     COMPANIES_DIR,
+    LearnerOutcome,
     finalize_prediction_result,
     get_attribution_paths,
     get_prediction_paths,
@@ -89,7 +90,7 @@ def main():
     log.info("Running learner via SDK ...")
     live_state_path = COMPANIES_DIR / TICKER / "events" / "live_state.json"
     t1 = datetime.now()
-    attribution, _outcome = run_learner_for_quarter(
+    attribution, outcome = run_learner_for_quarter(
         ticker=TICKER,
         quarter_info=quarter_info,
         events=events,
@@ -103,10 +104,14 @@ def main():
         pd = attribution.get("primary_driver", {})
         fb = attribution.get("feedback", {})
         pc = fb.get("prediction_comparison", {})
-        log.info("Attribution: primary_driver=%s | correct=%s | mag_error=%s",
-                 pd.get("category"), pc.get("direction_correct"), pc.get("magnitude_error_pct"))
+        log.info("Attribution (%s): primary_driver=%s | correct=%s | mag_error=%s",
+                 outcome, pd.get("category"), pc.get("direction_correct"),
+                 pc.get("magnitude_error_pct"))
+    elif outcome in LearnerOutcome.SKIPPED:
+        log.warning("Learner skipped: %s", outcome)
+        sys.exit(2)  # distinct exit code for environmental skip vs pipeline failure
     else:
-        log.error("Learner failed")
+        log.error("Learner failed: %s", outcome)
         sys.exit(1)
 
 

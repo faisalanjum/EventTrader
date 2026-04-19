@@ -22,7 +22,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent / "earnings"))
 
-from earnings_orchestrator import COMPANIES_DIR, run_learner_for_quarter
+from earnings_orchestrator import COMPANIES_DIR, LearnerOutcome, run_learner_for_quarter
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 log = logging.getLogger("phase4")
@@ -59,7 +59,7 @@ def learner_only(accession, label):
     qi = _qi(events, i)
     log.info("[%s] Running learner-only (prediction already finalized)", label)
     t0 = datetime.now()
-    result, _outcome = run_learner_for_quarter(
+    result, outcome = run_learner_for_quarter(
         ticker=TICKER,
         quarter_info=qi,
         events=events,
@@ -68,8 +68,10 @@ def learner_only(accession, label):
         live_state_path=COMPANIES_DIR / TICKER / "events" / "live_state.json",
     )
     dt = (datetime.now() - t0).total_seconds()
-    if not result:
-        raise RuntimeError(f"[{label}] Learner failed")
+    if outcome in LearnerOutcome.SKIPPED:
+        raise RuntimeError(f"[{label}] Learner skipped: {outcome}")
+    if result is None:  # outcome in FAILED (excludes SUCCESS which yields a dict)
+        raise RuntimeError(f"[{label}] Learner failed: {outcome}")
     pc = result["feedback"]["prediction_comparison"]
     log.info(
         "[%s] DONE in %.1fs | model=%s | category=%s | correct=%s | mag_err=%s",
