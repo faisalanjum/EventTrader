@@ -1172,3 +1172,128 @@ def test_tool_result_preview_closes_unbalanced_fence(tmp_path):
     assert out.count("```") % 2 == 0, (
         f"tool_result preview leaked unclosed ``` — count={out.count('```')}"
     )
+
+
+# ── Subagent trace thinking coverage (frontmatter + redacted rendering) ───
+
+def test_subagent_trace_frontmatter_reports_thinking_metrics(tmp_path):
+    """Subagent frontmatter must include thinking_blocks, thinking_chars, and
+    redacted_thinking_blocks. Prior version only reported text_chars + tool_use_count
+    even though ~51% of real subagent JSONLs contain thinking content
+    (measured 2026-04-18 across 10k subagent sessions)."""
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    projects_root.mkdir()
+    session_id = "dddd1111-2222-3333-4444-555555555555"
+
+    # Primary session: one Agent spawn
+    primary = projects_root / f"{session_id}.jsonl"
+    primary.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{
+                "type": "tool_use", "id": "tu1", "name": "Agent",
+                "input": {"subagent_type": "test-sub", "description": "x"},
+            }], "stop_reason": "tool_use"},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "user",
+            "message": {"content": [{"type": "tool_result", "tool_use_id": "tu1", "content": "ok"}]},
+            "timestamp": "2026-01-01T00:00:01Z",
+            "toolUseResult": {"agentId": "e1234567890abcdef"},
+        }) + "\n"
+    )
+
+    # Subagent session: 2 visible thinking blocks (total 123 chars) + 1 redacted
+    sub_dir = projects_root / session_id / "subagents"
+    sub_dir.mkdir(parents=True)
+    sub_jsonl = sub_dir / "agent-e1234567890abcdef.jsonl"
+    sub_jsonl.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [
+                {"type": "thinking", "thinking": "first block " + "x" * 50},  # 62 chars
+                {"type": "thinking", "thinking": "", "signature": "sig123"},   # redacted
+                {"type": "thinking", "thinking": "second block " + "y" * 48}, # 61 chars
+            ], "stop_reason": "end_turn"},
+            "timestamp": "2026-01-01T00:00:00.100Z",
+        }) + "\n"
+    )
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="guidance", ticker="TEST", quarter="Q1_FY2025",
+        session_id=session_id, source_asset="transcript",
+        source_id="TEST_thinking",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    files = list((vault_root / "TEST" / "events" / "Q1_FY2025" / "guidance"
+                  / "subagents_transcript").glob("*.md"))
+    assert len(files) == 1
+    out = files[0].read_text(encoding="utf-8")
+    # Frontmatter must include thinking metrics
+    assert "thinking_blocks: 2" in out, f"frontmatter missing/wrong: {out[:500]}"
+    assert "thinking_chars: 123" in out
+    assert "redacted_thinking_blocks: 1" in out
+    # Body must include both visible thinking blocks and the redacted marker
+    assert out.count("💭 Thinking") == 2
+    assert "🔒" in out
+    assert "content redacted (signed)" in out
+
+
+def test_subagent_trace_zero_thinking_still_reports_counts(tmp_path):
+    """Subagents with NO thinking (typical for data sub-agents) still get
+    thinking_blocks: 0 / thinking_chars: 0 fields — never missing."""
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    projects_root.mkdir()
+    session_id = "eeee1111-2222-3333-4444-555555555555"
+
+    primary = projects_root / f"{session_id}.jsonl"
+    primary.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{
+                "type": "tool_use", "id": "tu1", "name": "Agent",
+                "input": {"subagent_type": "tool-only", "description": "x"},
+            }], "stop_reason": "tool_use"},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "user",
+            "message": {"content": [{"type": "tool_result", "tool_use_id": "tu1", "content": "ok"}]},
+            "timestamp": "2026-01-01T00:00:01Z",
+            "toolUseResult": {"agentId": "ff111111111111111"},
+        }) + "\n"
+    )
+
+    sub_dir = projects_root / session_id / "subagents"
+    sub_dir.mkdir(parents=True)
+    sub_jsonl = sub_dir / "agent-ff111111111111111.jsonl"
+    sub_jsonl.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{"type": "text", "text": "just text, no thinking"}], "stop_reason": "end_turn"},
+            "timestamp": "2026-01-01T00:00:00.100Z",
+        }) + "\n"
+    )
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="guidance", ticker="TEST", quarter="Q1_FY2025",
+        session_id=session_id, source_asset="transcript",
+        source_id="TEST_empty",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    files = list((vault_root / "TEST" / "events" / "Q1_FY2025" / "guidance"
+                  / "subagents_transcript").glob("*.md"))
+    assert len(files) == 1
+    out = files[0].read_text(encoding="utf-8")
+    assert "thinking_blocks: 0" in out
+    assert "thinking_chars: 0" in out
+    assert "redacted_thinking_blocks: 0" in out
