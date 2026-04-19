@@ -1,5 +1,18 @@
 # Obsidian Thinking Revamp — Implementation Guide
 
+> **STATUS: ✅ SHIPPED (2026-04-19)** — all 3 approved changes are executed on `main`; 184/184 pytest lock green; 2 orphaned `.pyc` files swept.
+>
+> | Change | Commit | Notes |
+> |---|---|---|
+> | 1. Harvester dedupe (`_first_user_matches_skill_prefix` → delegation) | `a3f2cf7` | bundled in the unified-layout feature commit |
+> | 2. Orchestrator → canonical validator import | `cd33014` (T5) | **alias sunset happened earlier than this plan's text describes** — `validate_attribution.py` was DELETED (not "kept for 1 release"); orchestrator at `earnings_orchestrator.py:1812` now imports from `validate_learning` directly |
+> | 3. Delete 5 dead legacy `build-*-thinking` files | `3802113` | guidance + news pairs + `build-thinking-on-complete.sh` |
+> | Orphaned `.pyc` sweep | post-ship | `build-guidance-thinking.cpython-310.pyc` + `build-news-thinking.cpython-310.pyc` removed; `build-thinking-index.cpython-310.pyc` intentionally retained (live `.py` still referenced by `earnings-attribution/SKILL.md:438`) |
+>
+> **Reader notes:**
+> - Treat body text below as HISTORICAL REFERENCE. Where Change 2 still says "keep `validate_attribution.py` in place" / "sunset after one release cycle", the shim was actually removed earlier in T5 — reality is already past the sunset point.
+> - The validation grep `rg -n "build-guidance-thinking|build-news-thinking|build-thinking-on-complete" .claude scripts` now self-matches the plan file inside `.claude/plans/` and the pre-existing `.claude/archive/skills/earnings-orchestrator-v2/SKILL.md`. These are semantic hits in documentation, not live runtime references — expected.
+
 This document is the **implementation authority for the current Obsidian thinking / extraction cleanup**.
 
 It is intentionally based on the **live implemented code and current tests**, not on older plans. If this document conflicts with an older plan, **the implemented code and tests win**.
@@ -528,13 +541,13 @@ Expected:
 For the dead-code removal step, also run:
 
 ```bash
-rg -n "build-guidance-thinking|build-news-thinking|build-thinking-on-complete" .claude scripts --glob '!**/archive/**'
+rg -n "build-guidance-thinking|build-news-thinking|build-thinking-on-complete" .claude scripts
 ```
 
 Expected after cleanup:
 
-- no active runtime references remain for `build-guidance-thinking`, `build-news-thinking`, or `build-thinking-on-complete`
-- only archive locations may contain those names
+- zero hits for `build-guidance-thinking`, `build-news-thinking`, and `build-thinking-on-complete` anywhere under `.claude/` or `scripts/`
+- the only remaining references allowed to survive are historical doc snapshots outside these trees (e.g. `docs/claude/earnings-orchestrator-review-2026-02-01.md`), which are intentionally frozen as dated reviews
 - `build-thinking-index` is intentionally NOT in this grep — it is still referenced by the active `earnings-attribution/SKILL.md` and must survive this cleanup (see non-goal)
 
 ## Success Criteria
