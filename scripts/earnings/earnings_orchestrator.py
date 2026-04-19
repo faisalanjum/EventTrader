@@ -3219,26 +3219,26 @@ def main():
         )
 
     if args.learn:
-        # Load event.json for PIT derivation (needs chronological quarter list)
+        # Load event.json for PIT derivation (needs chronological quarter list).
+        # Auto-regenerate via Neo4j when the manifest is missing, invalid, or
+        # does not contain the target quarter — semantic trigger, not age-based.
+        # The shared helper lives with the Neo4j query it uses; make sure
+        # scripts/earnings/earnings-orchestrator/scripts/ is on sys.path.
         event_json_path = COMPANIES_DIR / args.ticker.upper() / "events" / "event.json"
-        if not event_json_path.exists():
-            raise RuntimeError(f"event.json not found at {event_json_path} — run get_quarterly_filings first")
-        event_data = json.loads(event_json_path.read_text(encoding="utf-8"))
-        events = event_data.get("events", [])
-
-        # Find current quarter's index in the chronological events list
         target_ql = quarter_info["quarter_label"]
         target_acc = quarter_info["accession_8k"]
-        current_index = None
-        for i, e in enumerate(events):
-            if e.get("quarter_label") == target_ql or e.get("accession_8k") == target_acc:
-                current_index = i
-                break
-        if current_index is None:
-            raise RuntimeError(
-                f"Quarter {target_ql} ({target_acc}) not found in event.json — "
-                f"rebuild with get_quarterly_filings"
-            )
+
+        # __file__ = scripts/earnings/earnings_orchestrator.py → repo root is parents[2]
+        _eoo_scripts = str(Path(__file__).resolve().parents[2]
+                           / ".claude" / "skills" / "earnings-orchestrator" / "scripts")
+        if _eoo_scripts not in sys.path:
+            sys.path.insert(0, _eoo_scripts)
+        from event_json_manifest import ensure_event_json_for_target  # noqa: E402
+
+        event_data, current_index = ensure_event_json_for_target(
+            event_json_path, args.ticker, target_ql, target_acc,
+        )
+        events = event_data["events"]
 
         live_state_path = COMPANIES_DIR / args.ticker.upper() / "events" / "live_state.json"
 
