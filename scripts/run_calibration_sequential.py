@@ -3,6 +3,7 @@
 Uses existing bundles where available to avoid AV rate-limit."""
 import json
 import logging
+import re
 import subprocess
 import sys
 from datetime import datetime
@@ -12,7 +13,9 @@ sys.path.insert(0, str(Path(__file__).parent / "earnings"))
 
 from earnings_orchestrator import (
     COMPANIES_DIR,
+    LearnerFailed,
     LearnerOutcome,
+    LearnerSkipped,
     finalize_prediction_result,
     get_attribution_paths,
     get_prediction_paths,
@@ -88,9 +91,9 @@ def finalize_and_learn(accession, quarter_label):
     )
     log.info("[%s] Learner done in %.1fs", quarter_label, (datetime.now() - t0).total_seconds())
     if outcome in LearnerOutcome.SKIPPED:
-        raise RuntimeError(f"Learner skipped for {quarter_label}: {outcome}")
+        raise LearnerSkipped(outcome, context=quarter_label)
     if result is None:
-        raise RuntimeError(f"Learner failed for {quarter_label}: {outcome}")
+        raise LearnerFailed(outcome, context=quarter_label)
     pc = result["feedback"]["prediction_comparison"]
     log.info("[%s] Attribution: category=%s | correct=%s | mag_err=%s",
              quarter_label, result["primary_driver"]["category"],
@@ -98,7 +101,15 @@ def finalize_and_learn(accession, quarter_label):
 
 
 def full_pipeline(accession, quarter_label):
-    """Q4, Q1_FY2024 path: shell out to the CLI for full --save --predict --learn."""
+    """Q4, Q1_FY2024 path: shell out to the CLI for full --save --predict --learn.
+
+    The orchestrator exits 0 even when the learner legitimately *skipped*
+    (e.g. daily_stock not yet published), so relying on exit code alone
+    would conflate skipped with succeeded. The orchestrator now prints
+    ``Learner skipped (<outcome>) for ...`` to stdout on a SKIPPED
+    outcome; we parse that marker and raise :class:`LearnerSkipped` so
+    the outer caller can log it honestly.
+    """
     log.info("[%s] Running full CLI pipeline", quarter_label)
     t0 = datetime.now()
     result = subprocess.run(
@@ -112,9 +123,16 @@ def full_pipeline(accession, quarter_label):
     if result.returncode != 0:
         log.error("[%s] stdout tail:\n%s", quarter_label, result.stdout[-2000:])
         log.error("[%s] stderr tail:\n%s", quarter_label, result.stderr[-2000:])
-        raise RuntimeError(f"Full pipeline failed for {quarter_label}")
+        raise LearnerFailed("cli_exit_nonzero", context=quarter_label)
     # Print last lines of stdout for visibility
     log.info("[%s] stdout tail:\n%s", quarter_label, result.stdout[-1500:])
+    # Subprocess exit 0 conflates succeeded + skipped. Parse the orchestrator
+    # stdout marker to distinguish.
+    skip_match = re.search(
+        r"Learner skipped \((skipped_[a-z_]+)\)", result.stdout
+    )
+    if skip_match:
+        raise LearnerSkipped(skip_match.group(1), context=quarter_label)
 
 
 def main():
@@ -126,8 +144,16 @@ def main():
                 finalize_and_learn(accession, quarter_label)
             elif mode == "full":
                 full_pipeline(accession, quarter_label)
+        except LearnerSkipped as e:
+            log.warning("[%s] SKIPPED: %s", quarter_label, e)
+            log.warning("Stopping ticker sequence — environmental skip (subsequent quarters likely have the same gap)")
+            break
+        except LearnerFailed as e:
+            log.error("[%s] FAILED (learner pipeline): %s", quarter_label, e)
+            log.error("Stopping per historical failure policy (ticker bootstrap stops)")
+            break
         except Exception as e:
-            log.error("[%s] FAILED: %s", quarter_label, e)
+            log.error("[%s] FAILED (unexpected): %s", quarter_label, e)
             log.error("Stopping per historical failure policy (ticker bootstrap stops)")
             break
     log.info("=== Calibration done: %s ===", datetime.now().isoformat())

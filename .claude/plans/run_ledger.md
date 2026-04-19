@@ -615,20 +615,28 @@ Plus three trims from the second-round review:
 
 | File | Action | Lines |
 |---|---|---|
-| `scripts/earnings/run_ledger.py` | **NEW** — append + read + collapse + refresh_index with atomic write | ~120 |
-| `scripts/earnings/test_run_ledger.py` | **NEW** — 15 tests | ~220 |
-| `scripts/earnings/earnings_orchestrator.py` | wrap prediction SDK call (~line 3044) + wrap learner SDK call | +~25 |
-| `scripts/extraction_worker.py::process_one` | wrap execution + rate_limited branch | +~15 |
-| `earnings-analysis/operations/` | **NEW DIR**. `Run Index.md` seeded as an empty 4-section stub. `run_ledger.jsonl` is lazy-created on the first `_append_row` call — empty files are noise and the open/close primitives already `mkdir(parents=True, exist_ok=True)`. | — |
+| `scripts/earnings/run_ledger.py` | **NEW** — append + read + collapse + refresh_index (In Flight is a DISJOINT view; per-component tables filter `status != "running"`) with atomic write | ~500 |
+| `scripts/earnings/test_run_ledger.py` | **NEW** — 23 tests covering primitives, state collapse, API, renderer contracts, drift guards | ~450 |
+| `scripts/earnings/test_learner_outcomes.py` | **NEW** — 10 tests pinning the 12-member outcome taxonomy + AST-level invariant that every return site is 1:1 tagged | ~140 |
+| `scripts/earnings/earnings_orchestrator.py` | wrap prediction SDK + finalize + validate; wrap the WHOLE `run_learner_for_quarter()` (not just its SDK call) with `LearnerOutcome` → ledger status mapping | +~80 |
+| `scripts/extraction_worker.py::process_one` | stale-sidecar guard at entry; per-exit-path close; defensive `_build_guidance_summary` | +~150 |
+| `scripts/run_phase4_big.py` / `run_calibration_sequential.py` / `run_q3_from_existing_bundle.py` / `calibrate_learner.py` | unpack `(result, outcome)`; raise `LearnerSkipped`/`LearnerFailed`; outer callers log skip-vs-fail correctly | +~10 each |
+| `earnings-analysis/operations/` | **NEW DIR**. `Run Index.md` seeded as an empty 4-section stub. `run_ledger.jsonl` is lazy-created on the first `_append_row` call — empty files are noise and the primitive already calls `mkdir(parents=True, exist_ok=True)`. | — |
 
-**Net**: ~140 lines of new code + ~40 lines modifications + 15 tests + 2 new vault files.
+**Net**: ~1,400 lines of new code/tests + ~40 lines modifications + 1 new vault seed file.
 
 No frontmatter schema changes. No new runtime dependencies. No touching
 existing CSVs (deprecate after 90 days of ledger being live).
 
 ---
 
-## 11. Tests (exactly 15)
+## 11. Tests
+
+Total shipped: **33 tests** across two files (23 in `test_run_ledger.py` +
+10 in `test_learner_outcomes.py`). The 15 below are the original design
+targets; additional tests beyond the first 15 are regression guards for
+issues found during the audit rounds — renderer-contract drift, enum
+drift, and the "running row leaks into per-component table" bug.
 
 **Primitives**
 1. `append` writes a valid JSON line ending with `\n`
@@ -658,7 +666,9 @@ existing CSVs (deprecate after 90 days of ledger being live).
 ## 12. Implementation Order (TDD)
 
 1. Write plan file (this document) ✓
-2. Create empty `earnings-analysis/operations/` dir + seeded empty `run_ledger.jsonl`
+2. Create `earnings-analysis/operations/` dir + seed `Run Index.md` only.
+   `run_ledger.jsonl` is intentionally lazy-created on first `_append_row`;
+   the primitive already calls `path.parent.mkdir(parents=True, exist_ok=True)`.
 3. Create `scripts/earnings/run_ledger.py` with full API but `pass`-body stubs
 4. Write `scripts/earnings/test_run_ledger.py` with all 15 tests (they fail)
 5. Implement `append`, `read_all`, `current_state` → primitive tests green

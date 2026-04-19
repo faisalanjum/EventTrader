@@ -22,7 +22,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent / "earnings"))
 
-from earnings_orchestrator import COMPANIES_DIR, LearnerOutcome, run_learner_for_quarter
+from earnings_orchestrator import (
+    COMPANIES_DIR,
+    LearnerFailed,
+    LearnerOutcome,
+    LearnerSkipped,
+    run_learner_for_quarter,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 log = logging.getLogger("phase4")
@@ -69,9 +75,9 @@ def learner_only(accession, label):
     )
     dt = (datetime.now() - t0).total_seconds()
     if outcome in LearnerOutcome.SKIPPED:
-        raise RuntimeError(f"[{label}] Learner skipped: {outcome}")
+        raise LearnerSkipped(outcome, context=label)
     if result is None:  # outcome in FAILED (excludes SUCCESS which yields a dict)
-        raise RuntimeError(f"[{label}] Learner failed: {outcome}")
+        raise LearnerFailed(outcome, context=label)
     pc = result["feedback"]["prediction_comparison"]
     log.info(
         "[%s] DONE in %.1fs | model=%s | category=%s | correct=%s | mag_err=%s",
@@ -108,6 +114,12 @@ def main():
         learner_only("0001730168-23-000074", "Q3_FY2023")
         learner_only("0001730168-23-000093", "Q4_FY2023")
         full_pipeline("0001730168-24-000012", "Q1_FY2024")
+    except LearnerSkipped as e:
+        log.warning("STOPPED (environmental skip, not a defect): %s", e)
+        sys.exit(2)  # distinct exit code for environmental skip
+    except LearnerFailed as e:
+        log.error("STOPPED (learner pipeline failure): %s", e)
+        sys.exit(1)
     except Exception as e:
         log.error("STOPPED per historical failure policy: %s", e)
         sys.exit(1)

@@ -20,7 +20,11 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT / "scripts" / "earnings") not in sys.path:
     sys.path.insert(0, str(REPO_ROOT / "scripts" / "earnings"))
 
-from earnings_orchestrator import LearnerOutcome  # noqa: E402
+from earnings_orchestrator import (  # noqa: E402
+    LearnerFailed,
+    LearnerOutcome,
+    LearnerSkipped,
+)
 
 
 # ── Taxonomy invariants ──────────────────────────────────────────────────
@@ -99,6 +103,31 @@ def test_run_learner_for_quarter_has_twelve_return_statements():
         f"add a matching LearnerOutcome constant and update this count + "
         f"LearnerOutcome.ALL."
     )
+
+
+# ── Typed exception contract (for auxiliary-script distinguishing) ──────
+
+def test_learner_skipped_carries_outcome_and_has_structured_message():
+    e = LearnerSkipped(LearnerOutcome.SKIPPED_NO_PREDICTION, context="Q3_FY2025")
+    assert isinstance(e, RuntimeError)
+    assert e.outcome == LearnerOutcome.SKIPPED_NO_PREDICTION
+    assert "skipped_no_prediction" in str(e)
+    assert "Q3_FY2025" in str(e)
+
+
+def test_learner_failed_carries_outcome_and_has_structured_message():
+    e = LearnerFailed(LearnerOutcome.FAILED_VALIDATION, context="Q1_FY2024")
+    assert isinstance(e, RuntimeError)
+    assert e.outcome == LearnerOutcome.FAILED_VALIDATION
+    assert "failed_validation" in str(e)
+    assert "Q1_FY2024" in str(e)
+
+
+def test_skipped_and_failed_are_distinct_types():
+    """Callers must be able to write `except LearnerSkipped` and
+    `except LearnerFailed` without one catching the other."""
+    assert not issubclass(LearnerSkipped, LearnerFailed)
+    assert not issubclass(LearnerFailed, LearnerSkipped)
 
 
 def test_every_return_returns_a_two_tuple_with_a_known_outcome():

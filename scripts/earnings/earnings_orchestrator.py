@@ -1866,6 +1866,30 @@ class LearnerOutcome:
     ALL = SUCCESS | SKIPPED | FAILED  # 12 members
 
 
+class LearnerSkipped(RuntimeError):
+    """Raised by auxiliary scripts when ``run_learner_for_quarter`` returned
+    a :class:`LearnerOutcome` in ``SKIPPED`` (environmental — event not ready
+    to learn from, not a pipeline defect).
+
+    Kept distinct from :class:`LearnerFailed` so outer drivers can log the
+    two categories differently (skip = WARN, fail = ERROR) and downstream
+    callers can take different recovery actions.
+    """
+    def __init__(self, outcome: str, context: str = ""):
+        self.outcome = outcome
+        suffix = f" ({context})" if context else ""
+        super().__init__(f"Learner skipped: {outcome}{suffix}")
+
+
+class LearnerFailed(RuntimeError):
+    """Raised by auxiliary scripts when ``run_learner_for_quarter`` returned
+    a :class:`LearnerOutcome` in ``FAILED`` (pipeline-level defect)."""
+    def __init__(self, outcome: str, context: str = ""):
+        self.outcome = outcome
+        suffix = f" ({context})" if context else ""
+        super().__init__(f"Learner failed: {outcome}{suffix}")
+
+
 def run_learner_for_quarter(
     ticker: str,
     quarter_info: dict,
