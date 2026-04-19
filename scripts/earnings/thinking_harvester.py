@@ -676,6 +676,16 @@ def _tool_use_annotation(block: dict[str, Any]) -> str:
         return f"{emoji} {name}({pattern})"
     if name == "Agent":
         sub = inp.get("subagent_type", "?")
+        # Include the Agent tool's `description` field so repeat subagent
+        # types (e.g., multiple `neo4j-news` calls in one learner session)
+        # are distinguishable at a glance without opening subagent traces.
+        # `.split()` + `" ".join` collapses internal whitespace / newlines
+        # so the bullet never breaks across lines. Truncation: up to 80 chars
+        # of description body + a 1-char ellipsis on overflow (81 visible max).
+        desc = " ".join((inp.get("description") or "").split())
+        if desc:
+            desc = desc[:80] + ("…" if len(desc) > 80 else "")
+            return f"{emoji} Agent({sub}): {desc}"
         return f"{emoji} Agent({sub})"
     if name == "Skill":
         skill = inp.get("skill", "?")
@@ -712,6 +722,16 @@ def _render_thinking_md(
         len(b["content"]) for b in content_blocks if b["kind"] == "thinking"
     )
     thinking_block_count = sum(1 for b in content_blocks if b["kind"] == "thinking")
+    # text_* fields follow the SAME content_blocks scope rule as thinking_*
+    # so FORK-with-skill-fork aggregates both; EMBED / FORK-without-skill-fork
+    # are primary-only. This closes the "thinking_chars: 0" FORK misreporting
+    # where the skill-fork's ~9k-char walkthrough was invisible in the summary.
+    text_total = sum(
+        len(b["content"]) for b in content_blocks if b["kind"] == "text"
+    )
+    text_block_count = sum(1 for b in content_blocks if b["kind"] == "text")
+    # redacted stays primary-only scope (labelled "Primary redacted:" in the
+    # FORK summary so the scope is explicit in the merged-scope sentence).
     redacted_block_count = sum(1 for b in primary_blocks if b["kind"] == "thinking_redacted")
     generated_at = datetime.now(timezone.utc).isoformat()
 
@@ -734,6 +754,8 @@ def _render_thinking_md(
     fm.append(f"session_pattern: {session_pattern}")
     fm.append(f"thinking_blocks: {thinking_block_count}")
     fm.append(f"thinking_chars: {thinking_total}")
+    fm.append(f"text_blocks: {text_block_count}")
+    fm.append(f"text_chars: {text_total}")
     fm.append(f"redacted_thinking_blocks: {redacted_block_count}")
     fm.append(f"subagents_count: {subagents_count}")
     fm.append(f"generated_at: {_yaml_scalar(generated_at)}")
@@ -751,11 +773,30 @@ def _render_thinking_md(
     else:
         body.append(f"# Thinking — {thinking_type} — {label_context}")
     body.append("")
-    body.append(f"Session pattern: **{session_pattern}**. "
-                f"Primary thinking: {thinking_block_count} blocks, "
-                f"{thinking_total:,} chars. "
-                f"Redacted: {redacted_block_count}. "
-                f"Data subagents: {subagents_count}.")
+    # Summary line.
+    # * FORK + skill-fork loaded → merged-scope sentence, with explicit
+    #   "Primary redacted:" label (redacted calc stays primary-only).
+    # * Everything else (EMBED-visible, EMBED-redacted, FORK-with-missing-
+    #   skill-fork) → existing "Primary thinking: N blocks, N chars." wording
+    #   verbatim, so EMBED artifacts are byte-identical on this line modulo
+    #   the 2 additive frontmatter fields above.
+    if session_pattern == "FORK" and skill_fork_blocks:
+        body.append(
+            f"Session pattern: **FORK**. "
+            f"Reasoning (primary + skill-fork): "
+            f"{thinking_block_count} thinking ({thinking_total:,} chars), "
+            f"{text_block_count} text ({text_total:,} chars). "
+            f"Primary redacted: {redacted_block_count}. "
+            f"Data subagents: {subagents_count}."
+        )
+    else:
+        body.append(
+            f"Session pattern: **{session_pattern}**. "
+            f"Primary thinking: {thinking_block_count} blocks, "
+            f"{thinking_total:,} chars. "
+            f"Redacted: {redacted_block_count}. "
+            f"Data subagents: {subagents_count}."
+        )
     body.append("")
 
     if orphan_warnings:

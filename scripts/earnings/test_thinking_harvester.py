@@ -1412,3 +1412,376 @@ def test_primary_thinking_md_no_user_prompt_section_omitted(tmp_path):
            / "thinking_transcript.md").read_text(encoding="utf-8")
     import re as _re
     assert _re.search(r"^## Prompt$", out, _re.MULTILINE) is None
+
+
+# ── FORK-aware summary + text_chars/text_blocks frontmatter (Apr 19) ──────
+# Fixes the "Primary thinking: 0 blocks, 0 chars" top-line bug on FORK
+# predictions where the skill-fork carries the actual reasoning (~9k chars
+# of text in real BURL Q3/Q4 runs).
+#
+# Scope rules (locked):
+#   * text_chars / text_blocks — additive frontmatter on ALL patterns, scoped
+#     via the same content_blocks selector the harvester already uses for
+#     thinking_chars (primary-only for EMBED; primary + skill_fork for FORK
+#     when skill_fork_blocks was loaded).
+#   * Body summary line — only FORK-with-skill-fork-loaded rewords to
+#     "Reasoning (primary + skill-fork): …". EMBED and FORK-with-no-skill-
+#     fork keep the existing "Primary thinking: …" wording verbatim.
+#   * Redacted count semantics are UNCHANGED (primary-only). FORK summary
+#     labels it "Primary redacted:" so the scope is explicit in the
+#     otherwise merged-scope sentence.
+
+
+def test_fork_summary_reports_combined_reasoning_and_primary_redacted(tmp_path):
+    """FORK with skill-fork loaded: summary line uses
+    'Reasoning (primary + skill-fork): N thinking (X chars), N text (Y chars).
+    Primary redacted: Z. Data subagents: N.'"""
+    from thinking_harvester import harvest
+    projects_root = _stage_fixture_session(tmp_path, "predictor_session", PREDICTOR_SID)
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="prediction", ticker="BURL", quarter="Q4_FY2025",
+        session_id=PREDICTOR_SID, vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "BURL" / "events" / "Q4_FY2025" / "prediction"
+           / "thinking.md").read_text(encoding="utf-8")
+    # New FORK wording present
+    assert "Reasoning (primary + skill-fork):" in out, \
+        "FORK summary must label scope as 'primary + skill-fork'"
+    assert "Primary redacted:" in out, \
+        "FORK summary must label redacted scope explicitly (still primary-only)"
+    # Old wording must be gone for this pattern
+    assert "Primary thinking:" not in out, \
+        "FORK summary must no longer use the misleading 'Primary thinking:' label"
+
+
+def test_embed_visible_summary_wording_unchanged(tmp_path):
+    """EMBED-visible (learner) — summary line must keep the existing
+    'Primary thinking: N blocks, N chars. Redacted: N. Data subagents: N.'
+    wording. No churn on EMBED."""
+    from thinking_harvester import harvest
+    projects_root = _stage_fixture_session(tmp_path, "learner_session", LEARNER_SID)
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="learning", ticker="BURL", quarter="Q4_FY2025",
+        session_id=LEARNER_SID, vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "BURL" / "events" / "Q4_FY2025" / "learning"
+           / "thinking.md").read_text(encoding="utf-8")
+    # Existing wording preserved (line-anchored substring)
+    assert "Primary thinking: 6 blocks, 17,682 chars." in out
+    assert "Redacted: 0." in out
+    # Must NOT get the FORK wording
+    assert "Reasoning (primary + skill-fork):" not in out
+    assert "Primary redacted:" not in out
+
+
+def test_embed_redacted_summary_wording_unchanged(tmp_path):
+    """EMBED-redacted (guidance) — summary line must keep existing 'Primary
+    thinking: …' wording. Thinking count is 0 here because all thinking was
+    redacted; that's accurate, not a bug to rewrite."""
+    from thinking_harvester import harvest
+    projects_root = _stage_fixture_session(tmp_path, "guidance_session", GUIDANCE_SID)
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="guidance", ticker="BURL", quarter="Q4_FY2025",
+        session_id=GUIDANCE_SID, vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "BURL" / "events" / "Q4_FY2025" / "guidance"
+           / "thinking.md").read_text(encoding="utf-8")
+    assert "Primary thinking:" in out
+    assert "Redacted: 4." in out
+    assert "Reasoning (primary + skill-fork):" not in out
+
+
+def test_frontmatter_text_chars_and_text_blocks_present_all_patterns(tmp_path):
+    """text_blocks + text_chars must appear in the frontmatter of all 3
+    patterns — pure additive field, Dataview-queryable."""
+    from thinking_harvester import harvest
+
+    cases = [
+        ("learner_session", LEARNER_SID, "learning", "thinking.md"),
+        ("guidance_session", GUIDANCE_SID, "guidance", "thinking.md"),
+        ("predictor_session", PREDICTOR_SID, "prediction", "thinking.md"),
+    ]
+    for fixture, sid, ttype, fname in cases:
+        sub_tmp = tmp_path / ttype
+        sub_tmp.mkdir()
+        projects_root = _stage_fixture_session(sub_tmp, fixture, sid)
+        vault_root = sub_tmp / "vault"
+        harvest(
+            thinking_type=ttype, ticker="BURL", quarter="Q4_FY2025",
+            session_id=sid, vault_root=vault_root, projects_root=projects_root,
+        )
+        out = (vault_root / "BURL" / "events" / "Q4_FY2025" / ttype / fname).read_text()
+        assert "\ntext_blocks: " in out, f"{ttype}: frontmatter missing text_blocks"
+        assert "\ntext_chars: " in out, f"{ttype}: frontmatter missing text_chars"
+
+
+def test_frontmatter_text_chars_equals_content_blocks_text_sum_fork(tmp_path):
+    """text_chars for FORK equals sum of len(text) across primary + skill-fork
+    (the same content_blocks merge rule thinking_chars uses)."""
+    from thinking_harvester import harvest
+    from thinking_blocks import parse_session_blocks
+
+    projects_root = _stage_fixture_session(tmp_path, "predictor_session", PREDICTOR_SID)
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="prediction", ticker="BURL", quarter="Q4_FY2025",
+        session_id=PREDICTOR_SID, vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "BURL" / "events" / "Q4_FY2025" / "prediction"
+           / "thinking.md").read_text(encoding="utf-8")
+
+    # Compute expected: primary text + skill-fork text (the skill-fork is
+    # detected via dual-signal on the one subagent JSONL in this fixture).
+    primary = parse_session_blocks(projects_root / f"{PREDICTOR_SID}.jsonl")
+    sub_root = projects_root / PREDICTOR_SID / "subagents"
+    skill_fork_jsonl = next(sub_root.glob("agent-*.jsonl"))
+    fork = parse_session_blocks(skill_fork_jsonl)
+    expected_text_chars = sum(len(b["content"]) for b in primary + fork if b["kind"] == "text")
+    expected_text_blocks = sum(1 for b in primary + fork if b["kind"] == "text")
+
+    import re as _re
+    m_chars = _re.search(r"^text_chars: (\d+)$", out, _re.MULTILINE)
+    m_blocks = _re.search(r"^text_blocks: (\d+)$", out, _re.MULTILINE)
+    assert m_chars, f"text_chars frontmatter line missing: {out[:800]!r}"
+    assert m_blocks, f"text_blocks frontmatter line missing: {out[:800]!r}"
+    assert int(m_chars.group(1)) == expected_text_chars, (
+        f"FORK text_chars expected {expected_text_chars}, got {m_chars.group(1)}"
+    )
+    assert int(m_blocks.group(1)) == expected_text_blocks
+
+
+def test_frontmatter_text_chars_equals_primary_only_sum_embed(tmp_path):
+    """text_chars for EMBED-visible equals sum of len(text) across primary
+    only (no skill-fork to merge)."""
+    from thinking_harvester import harvest
+    from thinking_blocks import parse_session_blocks
+    projects_root = _stage_fixture_session(tmp_path, "learner_session", LEARNER_SID)
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="learning", ticker="BURL", quarter="Q4_FY2025",
+        session_id=LEARNER_SID, vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "BURL" / "events" / "Q4_FY2025" / "learning"
+           / "thinking.md").read_text(encoding="utf-8")
+    primary = parse_session_blocks(projects_root / f"{LEARNER_SID}.jsonl")
+    expected = sum(len(b["content"]) for b in primary if b["kind"] == "text")
+    import re as _re
+    m = _re.search(r"^text_chars: (\d+)$", out, _re.MULTILINE)
+    assert m and int(m.group(1)) == expected, f"expected {expected}, got {m and m.group(1)}"
+
+
+def test_frontmatter_existing_values_unchanged_scope_lock(tmp_path):
+    """REGRESSION LOCK: thinking_chars / thinking_blocks / redacted_thinking_blocks
+    must keep their existing scope rules after the text_* addition.
+      * thinking_chars uses content_blocks scope (same as before the change)
+      * redacted_thinking_blocks stays primary-only scope (unchanged)
+    Derives expected values by construction from the fixtures — no snapshot
+    dependency."""
+    from thinking_harvester import harvest
+    from thinking_blocks import parse_session_blocks
+
+    # EMBED-visible learner
+    projects_root = _stage_fixture_session(tmp_path / "a", "learner_session", LEARNER_SID)
+    vault_root = tmp_path / "a" / "v"
+    harvest(thinking_type="learning", ticker="BURL", quarter="Q4_FY2025",
+            session_id=LEARNER_SID, vault_root=vault_root, projects_root=projects_root)
+    out_a = (vault_root / "BURL" / "events" / "Q4_FY2025" / "learning" / "thinking.md").read_text()
+    primary_a = parse_session_blocks(projects_root / f"{LEARNER_SID}.jsonl")
+    exp_thinking_chars = sum(len(b["content"]) for b in primary_a if b["kind"] == "thinking")
+    exp_thinking_blocks = sum(1 for b in primary_a if b["kind"] == "thinking")
+    exp_redacted = sum(1 for b in primary_a if b["kind"] == "thinking_redacted")
+    assert f"thinking_chars: {exp_thinking_chars}" in out_a
+    assert f"thinking_blocks: {exp_thinking_blocks}" in out_a
+    assert f"redacted_thinking_blocks: {exp_redacted}" in out_a
+
+    # EMBED-redacted guidance
+    projects_root = _stage_fixture_session(tmp_path / "b", "guidance_session", GUIDANCE_SID)
+    vault_root = tmp_path / "b" / "v"
+    harvest(thinking_type="guidance", ticker="BURL", quarter="Q4_FY2025",
+            session_id=GUIDANCE_SID, vault_root=vault_root, projects_root=projects_root)
+    out_b = (vault_root / "BURL" / "events" / "Q4_FY2025" / "guidance" / "thinking.md").read_text()
+    primary_b = parse_session_blocks(projects_root / f"{GUIDANCE_SID}.jsonl")
+    exp_redacted_b = sum(1 for b in primary_b if b["kind"] == "thinking_redacted")
+    assert f"redacted_thinking_blocks: {exp_redacted_b}" in out_b, \
+        "EMBED-redacted scope-lock failed for redacted_thinking_blocks"
+
+    # FORK predictor — thinking_chars scope merges skill-fork
+    projects_root = _stage_fixture_session(tmp_path / "c", "predictor_session", PREDICTOR_SID)
+    vault_root = tmp_path / "c" / "v"
+    harvest(thinking_type="prediction", ticker="BURL", quarter="Q4_FY2025",
+            session_id=PREDICTOR_SID, vault_root=vault_root, projects_root=projects_root)
+    out_c = (vault_root / "BURL" / "events" / "Q4_FY2025" / "prediction" / "thinking.md").read_text()
+    primary_c = parse_session_blocks(projects_root / f"{PREDICTOR_SID}.jsonl")
+    sub_root = projects_root / PREDICTOR_SID / "subagents"
+    fork_c = parse_session_blocks(next(sub_root.glob("agent-*.jsonl")))
+    exp_thinking_chars_fork = sum(len(b["content"]) for b in primary_c + fork_c if b["kind"] == "thinking")
+    exp_redacted_fork = sum(1 for b in primary_c if b["kind"] == "thinking_redacted")
+    assert f"thinking_chars: {exp_thinking_chars_fork}" in out_c, \
+        "FORK thinking_chars scope drifted (must stay content_blocks-merged)"
+    assert f"redacted_thinking_blocks: {exp_redacted_fork}" in out_c, \
+        "FORK redacted_thinking_blocks scope drifted (must stay primary-only)"
+
+
+def test_fork_without_skill_fork_content_falls_back_to_embed_wording(tmp_path):
+    """Edge case: primary has a Skill tool_use but the skill-fork JSONL is
+    missing or has no content. session_pattern stays FORK (detected via
+    tool_use) but skill_fork_blocks is empty, so the summary must NOT claim
+    'primary + skill-fork' — it falls back to the existing EMBED-style
+    wording, and text_* counts are primary-only."""
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    sid = "fork-no-skill-fork-jsonl"
+    (projects_root / sid / "subagents").mkdir(parents=True)
+    primary = projects_root / f"{sid}.jsonl"
+    # Primary: Skill tool_use + matching tool_result with agentId that does
+    # NOT correspond to any subagent JSONL on disk → skill_fork_blocks stays [].
+    primary.write_text("\n".join([
+        json.dumps({
+            "type": "assistant", "timestamp": "2026-01-01T00:00:01Z",
+            "message": {"content": [
+                {"type": "text", "text": "some primary text 1234"},
+                {"type": "tool_use", "id": "tu-S", "name": "Skill",
+                 "input": {"skill": "earnings-prediction"}},
+            ]}
+        }),
+        json.dumps({
+            "type": "user", "timestamp": "2026-01-01T00:00:02Z",
+            "message": {"content": [
+                {"type": "tool_result", "tool_use_id": "tu-S",
+                 "content": [{"type": "text", "text": "ok"}]}
+            ]},
+            "toolUseResult": {"agentId": "deadbeef00000000", "agentType": None},
+        }),
+    ]) + "\n")
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="prediction", ticker="TST", quarter="QX",
+        session_id=sid, vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "TST" / "events" / "QX" / "prediction"
+           / "thinking.md").read_text(encoding="utf-8")
+    # session_pattern must still be FORK (pattern is tool-based)
+    assert "session_pattern: FORK" in out
+    # …but the body summary falls back to EMBED-style since no skill-fork content loaded
+    assert "Primary thinking:" in out
+    assert "Reasoning (primary + skill-fork):" not in out
+    # text_chars / text_blocks reflect primary only
+    # ("some primary text 1234" = 22 chars, 1 text block)
+    assert "text_blocks: 1" in out
+    assert "text_chars: 22" in out
+
+
+# ── Agent bullet description rendering (P0 "Agent spawn rationale") ────────
+
+def test_agent_bullet_without_description_falls_back_to_subagent_type():
+    """Legacy fallback: if Agent tool input has no ``description`` key, the
+    bullet renders exactly as before — ``🤖 Agent(subagent_type)`` with no
+    trailing colon. Preserves the pre-fix format for older transcripts."""
+    from thinking_harvester import _tool_use_annotation
+    block = {"kind": "tool_use", "ts": "", "meta": {
+        "name": "Agent", "id": "tu1",
+        "input": {"subagent_type": "neo4j-news"},  # no description
+    }}
+    ann = _tool_use_annotation(block)
+    assert ann == "🤖 Agent(neo4j-news)"
+
+
+def test_agent_bullet_includes_short_description():
+    """Agent.input.description is appended as ``: <desc>``."""
+    from thinking_harvester import _tool_use_annotation
+    block = {"kind": "tool_use", "ts": "", "meta": {
+        "name": "Agent", "id": "tu1",
+        "input": {"subagent_type": "neo4j-news",
+                  "description": "BURL post-earnings news 2025-11-25"},
+    }}
+    ann = _tool_use_annotation(block)
+    assert ann == "🤖 Agent(neo4j-news): BURL post-earnings news 2025-11-25"
+
+
+def test_agent_description_truncated_to_80_body_plus_ellipsis():
+    """Truncation: description body capped at 80 chars; 1-char ``…`` suffix on
+    overflow; total visible = up to 81 chars. Protects against pathological
+    long descriptions leaking into the bullet."""
+    from thinking_harvester import _tool_use_annotation
+    long_desc = "X" * 200
+    block = {"kind": "tool_use", "ts": "", "meta": {
+        "name": "Agent", "id": "tu1",
+        "input": {"subagent_type": "test-sub", "description": long_desc},
+    }}
+    ann = _tool_use_annotation(block)
+    prefix = "🤖 Agent(test-sub): "
+    assert ann.startswith(prefix)
+    assert ann.endswith("…")
+    body = ann[len(prefix):-1]  # strip prefix + trailing ellipsis
+    assert len(body) == 80, f"body should be 80 chars, got {len(body)}"
+    assert body == "X" * 80
+
+
+def test_agent_description_internal_newlines_collapsed():
+    """Descriptions with internal whitespace/newlines must render on one line
+    so the bullet doesn't break the list structure in Obsidian."""
+    from thinking_harvester import _tool_use_annotation
+    block = {"kind": "tool_use", "ts": "", "meta": {
+        "name": "Agent", "id": "tu1",
+        "input": {"subagent_type": "x", "description": "first\nsecond\t\tthird"},
+    }}
+    ann = _tool_use_annotation(block)
+    assert ann == "🤖 Agent(x): first second third"
+
+
+def test_repeat_subagent_types_now_distinguishable_end_to_end(tmp_path):
+    """End-to-end regression for the real learner pain point: BURL Q3 FY2025
+    spawned two ``neo4j-news`` agents with different descriptions; before the
+    fix both rendered as ``- 🤖 Agent(neo4j-news)`` (ambiguous). After the
+    fix, each bullet carries its distinct description and reviewers can tell
+    them apart without opening subagent traces.
+
+    Covers BOTH surfaces where ``_tool_use_annotation`` is called — primary
+    ``thinking.md`` rendering AND subagent-trace rendering (via the shared
+    helper). Here we assert on the primary note (subagent-trace coverage is
+    exercised transitively by the shared helper)."""
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    projects_root.mkdir()
+    session_id = "cafebabe-1111-2222-3333-444455556666"
+    primary = projects_root / f"{session_id}.jsonl"
+    primary.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [
+                {"type": "tool_use", "id": "tu1", "name": "Agent",
+                 "input": {"subagent_type": "neo4j-news",
+                           "description": "BURL post-earnings news 2025-11-25"}},
+                {"type": "tool_use", "id": "tu2", "name": "Agent",
+                 "input": {"subagent_type": "neo4j-news",
+                           "description": "Off-price peer comp prints pre-BURL"}},
+            ], "stop_reason": "tool_use"},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "assistant",
+            "message": {"content": [{"type": "text", "text": "done"}],
+                        "stop_reason": "end_turn"},
+            "timestamp": "2026-01-01T00:00:01Z",
+        }) + "\n"
+    )
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="learning", ticker="TEST", quarter="Q1_FY2025",
+        session_id=session_id,
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    out = (vault_root / "TEST" / "events" / "Q1_FY2025" / "learning"
+           / "thinking.md").read_text(encoding="utf-8")
+    # Both descriptions must appear, disambiguating the repeat subagent type.
+    assert "🤖 Agent(neo4j-news): BURL post-earnings news 2025-11-25" in out
+    assert "🤖 Agent(neo4j-news): Off-price peer comp prints pre-BURL" in out
