@@ -1005,3 +1005,99 @@ def test_subagent_trace_text_headings_downgraded(tmp_path):
     # Structural headings intact
     assert _re.search(r"^## Prompt$", out, _re.MULTILINE)
     assert _re.search(r"^## Transcript$", out, _re.MULTILINE)
+
+
+# ── Safe truncation — closing an open ``` fence at the cut point ──────────
+
+def test_truncate_safe_fence_closes_unbalanced_fence():
+    from thinking_harvester import _truncate_safe_fence
+    # Text opens a fence, contains content, but the cut happens before close
+    src = "before\n```python\nx = 1\n" + "y" * 5000 + "\n```\nafter"
+    out = _truncate_safe_fence(src, 100)
+    assert len(out) == 100 + len("\n```"), (
+        f"expected limit+4 bytes, got {len(out)}; out={out!r}"
+    )
+    assert out.count("```") % 2 == 0, f"fence still unbalanced: {out!r}"
+    assert out.endswith("\n```"), f"missing trailing close: {out[-10:]!r}"
+
+
+def test_truncate_safe_fence_leaves_balanced_text_alone():
+    from thinking_harvester import _truncate_safe_fence
+    src = "hello\n```\nx\n```\nworld"
+    # Truncate to a length that keeps both fences paired
+    out = _truncate_safe_fence(src, len(src))
+    assert out == src  # no truncation needed
+    out_short = _truncate_safe_fence(src, 17)  # cuts at 'world' line area
+    assert out_short.count("```") % 2 == 0
+
+
+def test_truncate_safe_fence_short_text_untouched():
+    from thinking_harvester import _truncate_safe_fence
+    assert _truncate_safe_fence("short", 1000) == "short"
+    assert _truncate_safe_fence("", 1000) == ""
+
+
+def test_subagent_trace_truncation_preserves_fence_balance(tmp_path):
+    """End-to-end: a subagent text that opens a code fence near the 4000-char
+    truncation boundary must not leak an unclosed ``` into the rendered file.
+    This was the AVGO primary subagent trace bug (line 98: ```cypher opened
+    but truncation cut mid-block → rest of note rendered as code)."""
+    import json
+    from thinking_harvester import harvest
+
+    projects_root = tmp_path / "projects"
+    projects_root.mkdir()
+    session_id = "ffff1111-2222-3333-4444-555555555555"
+
+    primary = projects_root / f"{session_id}.jsonl"
+    primary.write_text(
+        json.dumps({
+            "type": "assistant",
+            "message": {"content": [{
+                "type": "tool_use", "id": "tu_fence", "name": "Agent",
+                "input": {"subagent_type": "test-sub", "description": "x"},
+            }], "stop_reason": "tool_use"},
+            "timestamp": "2026-01-01T00:00:00Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "user",
+            "message": {"content": [{"type": "tool_result", "tool_use_id": "tu_fence", "content": "ok"}]},
+            "timestamp": "2026-01-01T00:00:01Z",
+            "toolUseResult": {"agentId": "ab1234567890abcde"},
+        }) + "\n"
+    )
+
+    sub_dir = projects_root / session_id / "subagents"
+    sub_dir.mkdir(parents=True)
+    sub_jsonl = sub_dir / "agent-ab1234567890abcde.jsonl"
+    # Build a text > 4000 chars that opens ```cypher ~3000 in, never closes
+    # within 4000 chars.
+    padding = "prose " * 500  # ~3000 chars
+    body = padding + "\n```cypher\nMATCH (n) RETURN n\n" + "x" * 5000 + "\n```\ntail"
+    sub_jsonl.write_text(
+        json.dumps({
+            "type": "user",
+            "message": {"content": "ignore"},
+            "timestamp": "2026-01-01T00:00:00.100Z",
+        }) + "\n"
+        + json.dumps({
+            "type": "assistant",
+            "message": {"content": [{"type": "text", "text": body}], "stop_reason": "end_turn"},
+            "timestamp": "2026-01-01T00:00:00.200Z",
+        }) + "\n"
+    )
+
+    vault_root = tmp_path / "vault"
+    harvest(
+        thinking_type="guidance", ticker="TEST", quarter="Q1_FY2025",
+        session_id=session_id, source_asset="transcript",
+        source_id="TEST_fence",
+        vault_root=vault_root, projects_root=projects_root,
+    )
+    files = list((vault_root / "TEST" / "events" / "Q1_FY2025" / "guidance"
+                  / "subagents_transcript").glob("*.md"))
+    assert len(files) == 1
+    out = files[0].read_text(encoding="utf-8")
+    assert out.count("```") % 2 == 0, (
+        f"unbalanced fences after truncation — got count={out.count('```')}"
+    )

@@ -54,6 +54,26 @@ def _downgrade_headings(text: str) -> str:
         flags=re.MULTILINE,
     )
 
+
+def _truncate_safe_fence(text: str, limit: int) -> str:
+    """Truncate ``text`` to at most ``limit`` chars, closing an unbalanced
+    ``\u0060\u0060\u0060`` code-fence if the cut landed inside one.
+
+    Without this, a 4000-char-truncated text that opens a code block with
+    ``\u0060\u0060\u0060cypher`` (or similar) but never closes it causes
+    everything after the truncation point in the rendered note to be
+    treated as code — breaking the Obsidian outline and polluting the
+    document. Verified empirically 2026-04-18 on the AVGO primary subagent
+    trace. Closing the fence restores prose rendering at the cost of one
+    trailing ``\u0060\u0060\u0060`` line.
+    """
+    if len(text) <= limit:
+        return text
+    truncated = text[:limit]
+    if truncated.count("```") % 2 == 1:
+        truncated = truncated + "\n```"
+    return truncated
+
 # scripts/earnings is not a package — absolute sibling imports via sys.path.
 _HERE = Path(__file__).resolve().parent
 if str(_HERE) not in sys.path:
@@ -835,7 +855,7 @@ def _render_subagent_trace(
     if first_user_content:
         lines.append("## Prompt")
         lines.append("")
-        lines.append(_downgrade_headings(first_user_content[:4000]))
+        lines.append(_downgrade_headings(_truncate_safe_fence(first_user_content, 4000)))
         if len(first_user_content) > 4000:
             lines.append(f"\n*[truncated — {len(first_user_content)-4000:,} more chars]*")
         lines.append("")
@@ -850,7 +870,7 @@ def _render_subagent_trace(
             if text:
                 lines.append(f"### 📝 Text ({len(b['content']):,} chars)")
                 lines.append("")
-                lines.append(_downgrade_headings(text[:4000]))
+                lines.append(_downgrade_headings(_truncate_safe_fence(text, 4000)))
                 lines.append("")
         elif kind == "tool_use":
             lines.append(f"- {_tool_use_annotation(b)}")
@@ -862,7 +882,7 @@ def _render_subagent_trace(
             if text:
                 lines.append(f"### 💭 Thinking ({len(b['content']):,} chars)")
                 lines.append("")
-                lines.append(_downgrade_headings(text[:4000]))
+                lines.append(_downgrade_headings(_truncate_safe_fence(text, 4000)))
                 lines.append("")
 
     return "\n".join(lines) + "\n"
