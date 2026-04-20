@@ -35,7 +35,7 @@ spec:
     metadata:
       address: redis.infrastructure.svc.cluster.local:6379
       listName: reports:queues:xbrl:medium
-      listLength: "3"             # 1 pod per 3 items (scale 1/2/3 at 3/6/9 queued) — more responsive for peak 10-Q bursts
+      listLength: "1"             # 1 pod per 1 pending item (scale 1->2 at queue=2, 2->3 at queue=3) — earnings-time 10-Qs processed in parallel ASAP
       activationListLength: "1"
       databaseIndex: "0"
 # --- DISABLED: Light worker scaler removed ---
