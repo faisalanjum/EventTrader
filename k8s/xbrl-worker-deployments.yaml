@@ -52,6 +52,10 @@ spec:
               fieldPath: spec.nodeName
         - name: XBRL_QUEUE
           value: reports:queues:xbrl:heavy
+        - name: SELF_EXIT_ENABLED
+          value: "true"
+        - name: JOB_COUNT_THRESHOLD
+          value: "10"
         envFrom:
         - secretRef:
             name: eventtrader-secrets
@@ -124,6 +128,10 @@ spec:
               fieldPath: spec.nodeName
         - name: XBRL_QUEUE
           value: reports:queues:xbrl:medium
+        - name: SELF_EXIT_ENABLED
+          value: "true"
+        - name: JOB_COUNT_THRESHOLD
+          value: "20"
         envFrom:
         - secretRef:
             name: eventtrader-secrets

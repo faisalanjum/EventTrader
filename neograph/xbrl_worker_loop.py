@@ -64,8 +64,24 @@ def main():
     neo4j_manager = get_manager()
     
     logger.info("[Kube]: XBRL Worker started, waiting for jobs...")
-    
+
+    # Self-exit config (env-var-gated; default OFF → identical to prior behavior).
+    # Purpose: recycle the process after N jobs to return accumulated Arelle caches
+    # to the OS, preventing same-CIK backfill accumulation OOMs. Kubelet restarts
+    # the pod automatically; in-flight jobs are never interrupted (check fires only
+    # at top-of-loop, before BRPOP).
+    self_exit_enabled = os.getenv("SELF_EXIT_ENABLED", "false").lower() == "true"
+    job_count_threshold = int(os.getenv("JOB_COUNT_THRESHOLD", "20"))
+    jobs_started = 0
+    if self_exit_enabled:
+        logger.info(f"[SELF-EXIT] enabled: will exit after {job_count_threshold} jobs for fresh pod")
+
     while True:
+        # Self-exit check — fires only between jobs, never mid-processing.
+        if self_exit_enabled and jobs_started >= job_count_threshold:
+            logger.info(f"[SELF-EXIT] processed {jobs_started} jobs (threshold={job_count_threshold}); exiting cleanly")
+            sys.exit(0)
+
         # Use the proper queue name from RedisKeys constants
         # queue_result = redis_client.pop_from_queue(RedisKeys.XBRL_QUEUE, timeout=3)
         queue_name = os.getenv("XBRL_QUEUE") # This is the queue name from the Kubernetes environment variable
@@ -119,7 +135,9 @@ def main():
                         id=report_id, status="PROCESSING"
                     )
                 session.execute_write(update_processing_status)
-            
+
+            jobs_started += 1  # count jobs that reached processing state (for SELF-EXIT threshold)
+
             # Process the report
             # Instead of invoking a subprocess, directly process using the class
             start_time = time.time()
