@@ -1,874 +1,845 @@
-# Earnings Trigger Daemon — Implementation Plan
+# Earnings Automation Plan — Prediction + Learner
 
-**Status**: PLAN (v13 — trade system contract alignment, 2026-04-06)
+**Status**: design locked; implementation-ready (rev. 2026-04-19, post-verification pass)
+**Goal**: production-grade automatic pipeline for `prediction` and `learner`, following the guidance extractor's outer pattern where useful, while preserving the earnings system's existing semantics for quarter identity, PIT, filesystem artifacts, and lesson recovery.
 
 ---
 
-## Current Reality vs Target Design (added v13)
+## 1. Live-Code Ground Truth
 
-### What's Running Today
+These are not proposals. These are already true in the repo today and the new pipeline should build on them rather than fight them.
 
-| Component | Status | File |
-|---|---|---|
-| `guidance_trigger_daemon.py` | **RUNNING** on K8s | `scripts/guidance_trigger_daemon.py` (354 lines) |
-| `extraction_worker.py` | **RUNNING** on K8s (KEDA 1→7) | `scripts/extraction_worker.py` (666 lines) |
-| `earnings_trigger.py` | **EXISTS but NAIVE** — simple Redis listener, no gating, no modes | `scripts/earnings_trigger.py` (139 lines) |
-| `earnings_orchestrator.py` | **EXISTS** — builds bundle + runs predictor. No sequential processing, no live_state.json, no learner. | `scripts/earnings/earnings_orchestrator.py` (1,677 lines) |
-| `earnings-prediction` skill | **EXISTS** — outputs prediction, but schema does not match trade system contract (see below) | `.claude/skills/earnings-prediction/SKILL.md` |
-| Full earnings trigger daemon (v12 plan) | **NOT CODED** — the entire two-phase architecture below is still a plan | — |
+1. **Quarter discovery is already canonicalized.**
+   - `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` is the authoritative historical quarter-discovery helper.
+   - It is deterministic off `periodOfReport`, enforces `Item 2.02`, and only returns historical 8-Ks with `pf.daily_stock IS NOT NULL`.
+   - `.claude/skills/earnings-orchestrator/scripts/event_json_manifest.py` is the shared semantic refresh layer for `events/event.json`.
 
-**The plan below (v12 target architecture) is CORRECT but NOT IMPLEMENTED.** Do not confuse plan with runtime.
+2. **Prediction and learner already have strong artifact contracts.**
+   - Prediction canonical artifact: `events/{quarter}/prediction/result.json`
+   - Learner canonical artifact: `events/{quarter}/learning/result.json`
+   - Learner is stronger than a plain file write: it also performs derived writes into `earnings-analysis/learnings/ticker/{TICKER}.json` and `earnings-analysis/learnings/global.json`, with recovery on re-entry.
+   - The daemon still needs explicit `complete.json` sentinels for both components because `result.json` alone is not safe completion truth under automatic retries/re-entry.
 
-### Minimum Upstream Contract Required for Trading
+3. **The orchestrator already owns the difficult semantics.**
+   - `scripts/earnings/earnings_orchestrator.py` already handles:
+     - quarter identity validation
+     - PIT mode resolution
+     - bundle assembly
+     - predictor invocation + validation
+     - learner PIT derivation
+     - learner retry-on-validation-error
+     - derived-write recovery
+     - run-ledger open/close for both components
+   - The daemon/worker stays thin and does not re-implement PIT or learner semantics.
 
-The Phase 1 trade execution system (`.claude/plans/trade-execution-phase1.md`) needs these from the upstream pipeline:
+4. **`live_state.json` already matters.**
+   - It is the existing bridge for live-cycle quarter identity and learner PIT Tier 2 behavior.
+   - We reuse it, not replace it.
 
-**CONTRACT BLOCKERS** (the trade daemon cannot function correctly without these):
+5. **`scripts/earnings/run_ledger.py` already exists as durable machine state.**
+   - Guidance, prediction, and learner all already fit its model.
+   - Safer to extend/reuse than to invent a second durable status system.
 
-1. **prediction/result.json** with the canonical TES producer schema (see Prediction Output Contract below)
-2. **Deterministic `signal_id`** in prediction output for idempotency
+6. **Current `scripts/earnings_trigger.py` is only a stub.**
+   - Simple Redis listener that fires `/earnings-orchestrator`.
+   - Does not implement gating, sequencing, leases, retries, or production-safe worker behavior.
+   - Good conceptual repurpose, not a foundation to keep as-is.
 
-**OPTIONAL ENHANCEMENTS** (daemon works without these, safe fallback applies):
+7. **Guidance remains the outer-architecture reference, not the inner-semantics reference.**
+   - Reuse from guidance: always-on daemon, Redis queue, KEDA-scaled worker, Redis lease-based dedup/stale recovery, centralized rate-limit guard.
+   - Do **not** blindly copy: `guidance_status` as graph truth, source-node completion semantics, extraction-worker internals.
 
-3. **`predictor_session_id`** in prediction/result.json (reserved for future reassessment; Phase 1 trade daemon ignores it)
+---
 
-**AUTOMATION / FUTURE FAST-PATH** (not required by the Phase 1 trade daemon):
+## 2. Requirements Now Captured
 
-4. **Redis `trades:pending` push** after prediction completes (future fast path only — Phase 1 trade daemon uses 30s filesystem scan)
-5. **Live 8-K detection** so predictions fire automatically (not manual)
-6. Watch keys + stale prediction recovery
-7. `live_state.json` with quarter_label
+These are the requirements understood from Faisal's answers.
 
-**QUALITY BLOCKERS** (trading works but prediction quality is degraded):
+1. There are **two modes**: `historical` and `live`.
+2. Historical is the primary seed path and must be **PIT-safe**.
+3. Historical processing is **sequential by quarter**, oldest to newest.
+4. The intended dependency chain is:
+   - guidance for quarter `Q(n)`
+   - prediction for quarter `Q(n)`
+   - learning for quarter `Q(n)`
+   - only then may the ticker advance to `Q(n+1)`
+5. Live prediction is prioritized for TradeReady tickers with upcoming earnings.
+6. Live learner is **deferred**, picked up before the next quarter's prediction cycle.
+7. Trigger surface for live uses:
+   - TradeReady as the candidate ticker universe
+   - Neo4j 8-K ingestion completion as the actual readiness barrier
+8. Queue topology: one new queue `earnings:pipeline`, one worker deployment, payload differentiates `prediction` vs `learning`.
+9. Worker topology: separate `earnings-worker`, separate KEDA scaling, separate rate-limit reserve.
+10. Historical + live share one overall system, each with its own rules.
+11. The system is minimalistic, reliable, and production-grade from the start.
 
-8. Historical-first processing for U1 feedback
-9. Deferred learner catch-up before next live cycle
+---
 
-### Prediction Output Contract (v14 — aligned with Phase 1 TES canonical contract)
+## 3. Recommended Production Design (v1)
 
-The `earnings-prediction` skill currently outputs:
+### 3.1 Trigger Surface
 
+The daemon runs two sweeps every `POLL_INTERVAL` seconds. They are composed, not alternatives.
+
+**A. Live sweep** (always on; gated only by the master `EARNINGS_AUTOMATION_ENABLED`).
+
+1. Read `trade_ready:entries` from Redis; restrict to tickers with `earnings_date >= today - ACTIVE_WINDOW_DAYS` (same active-window rule as guidance).
+2. For each active ticker, query Neo4j for the newest earnings-8-K candidate where:
+   - `formType = '8-K'` AND `items CONTAINS 'Item 2.02'`
+   - ingested and queryable (row exists)
+   - `daily_stock IS NULL` **AND** `filed_8k >= now() - 3 trading days` (hardened rule — §G2; implement "3 trading days" with the same XNYS `exchange_calendars` helper pattern already used in `scripts/trade_ready_scanner.py`, not a naive 72-hour subtraction)
+3. Resolve quarter identity via `resolve_quarter_info(ticker, accession)`.
+4. If the live prediction gate passes (§4), write/refresh `live_state.json` and enqueue **live prediction**.
+
+**B. Historical / catch-up sweep** (two sub-functions, composed — §G3).
+
+1. **Catch-up (always on):** iterate over every ticker covered by an existing `event.json` (filesystem glob under `earnings-analysis/Companies/*/events/event.json`) AND every TradeReady-active ticker. For each, run the first-incomplete-quarter walker (§3.6). Responsible for running deferred live-learners and cleaning up any chain hole on an active ticker. Runs **regardless of `HISTORICAL_BACKFILL_ENABLED`**.
+2. **Backfill (flag-gated):** only when `HISTORICAL_BACKFILL_ENABLED=true`, union the catch-up universe with the full configured universe (~796) and run the same walker against cold tickers.
+
+Mandatory code comment on the gating rule:
+```
+# HISTORICAL_BACKFILL_ENABLED gates universe-walk ONLY.
+# Deferred-learner catch-up for TradeReady and event.json-covered tickers
+# MUST run regardless of this flag, otherwise live predictions for cycle n+1
+# block on the unrun live learner from cycle n.
+```
+
+### 3.2 Queue Topology
+
+- Queue: `earnings:pipeline` (one Redis LIST)
+- Dead-letter: `earnings:pipeline:dead`
+- Consumer: `earnings-worker` pods (`BRPOP`)
+
+Payload shape:
 ```json
 {
-  "direction": "short",
-  "confidence_score": 45,
-  "expected_move_range_pct": [1.0, 3.0],
-  "key_drivers": [...],
-  "data_gaps": [...],
-  "evidence_ledger": [...],
-  "analysis": "..."
+  "component": "prediction",
+  "mode": "live",
+  "ticker": "AVGO",
+  "quarter_label": "Q2_FY2026",
+  "accession_8k": "0001...",
+  "filed_8k": "2026-05-28T16:05:00-04:00",
+  "priority": "live_prediction",
+  "trigger_origin": "trade_ready"
 }
 ```
 
-The orchestrator must normalize that predictor output into a final `prediction/result.json` whose canonical TES fields include:
+Notes:
+1. Use `component`, not generic `type`, so this queue does not semantically collide with `extract:pipeline`.
+2. Always stamp `mode` explicitly at enqueue time.
+3. Always include `quarter_label` once known; the worker never re-discovers identity unless recovery requires it.
+4. `trigger_origin` is observational only in v1.
 
-```json
-{
-  "signal_id": "AAPL_Q1_FY2026_2026-04-06T20:03:00Z",
-  "source_type": "earnings",
-  "symbol": "AAPL",
-  "event_id": "Q1_FY2026",
-  "event_time": "2026-04-06T20:03:00Z",
-  "issued_at": "2026-04-06T20:13:00Z",
-  "direction": "long",
-  "confidence": 82,
-  "expected_move_range": [5, 8],
+### 3.3 Worker Topology
 
-  "ticker": "AAPL",
-  "quarter_label": "Q1_FY2026",
-  "filed_8k": "2026-04-06T16:03:00-04:00",
-  "key_drivers": [
-    {"driver": "EPS beat 15%", "direction": "long"}
-  ],
-  "rationale_summary": "Strong beat with raised guidance in calm macro.",
-  "model_version": "claude-opus-4-6",
-  "prompt_version": "earnings-prediction-v3.2",
-  "predicted_at": "2026-04-06T16:13:00-04:00",
-  "predictor_session_id": "session_abc123"
+Use a new worker deployment:
+
+- Deployment: `earnings-worker`
+- Queue: `earnings:pipeline`
+- KEDA scaled separately from `extraction-worker`
+- Independent rate-limit reserve
+- No shared runtime path with guidance extraction
+- **`terminationGracePeriodSeconds: 7500`** — must exceed `LEARNING_SUBPROCESS_TIMEOUT` (7200s) + 300s slack so rolling updates never SIGKILL an in-flight learner. Worker code propagates SIGTERM to the subprocess (via `process.terminate()`) so the child exits gracefully before grace expires. (§G6)
+
+**Claude Code auth contract — locked**
+
+Must mirror the proven guidance extraction deployment pattern; must **not** use billable Anthropic API auth.
+
+1. Mount the local Claude Code CLI at `/home/faisal/.local`
+2. Mount `/home/faisal/.claude` so `~/.claude/.credentials.json` is available
+3. Mount `/home/faisal/.claude.json` and copy it into writable HOME on container start **for parity with `extraction-worker.yaml`**, but treat this as optional runtime hardening, not auth truth. The real auth requirement is `~/.claude/.credentials.json`; `.claude.json` is local Claude Code state/config.
+4. Set:
+   - `ANTHROPIC_API_KEY=""`
+   - `CLAUDE_CODE_OAUTH_TOKEN=""`
+5. Invoke Claude through `/home/faisal/.local/bin/claude`
+6. Preserve orchestrator's `_assert_claude_code_oauth_ready()` fail-closed behavior
+
+This guarantees the earnings pipeline uses Claude Code Max/OAuth, not API billing.
+
+**MCP wiring — locked (code change required, §G7)**
+
+**Scope of this fix**:
+
+- **Learner path (`_run_learner_via_sdk`) — MUST-FIX.** The learner's Data SubAgents explicitly call `mcp__neo4j-cypher__read_neo4j_cypher` and `mcp__neo4j-cypher__*` tools per `earnings-learner/SKILL.md` §Phase 2 source-priority table. Without the HTTP MCP override, every learner run fails inside K8s because the stdio wrapper in `.mcp.json` points at host NodePort `localhost:30687`, which does not exist inside a pod.
+- **Predictor path (`_run_predictor_via_sdk`) — SYMMETRY ONLY.** The predictor SKILL.md allows only `Read, Write, Glob`; the LLM never calls any MCP tool. Applying the same override is harmless and future-proof (if we later add an MCP-consuming predictor tool), but not strictly required for v1 correctness.
+
+Recommendation: apply the identical override to both paths so the code is symmetric and no one has to remember the asymmetry, but the true blocker is the learner.
+
+The orchestrator's `_run_learner_via_sdk` (and `_run_predictor_via_sdk`) currently do NOT pass `mcp_servers` to `ClaudeAgentOptions`, so they fall through to `.mcp.json`, whose stdio wrapper targets the host NodePort and fails inside K8s. Setting `MCP_NEO4J_URL` alone is insufficient without a code-level override.
+
+Required change (one place each in `_run_learner_via_sdk` and `_run_predictor_via_sdk`):
+
+```python
+sdk_kwargs = {
+    **LEARNER.as_sdk_kwargs(),           # or PREDICTOR.as_sdk_kwargs()
+    "setting_sources": ["project"],
+    "permission_mode": "bypassPermissions",
+    "stderr": _stderr_sink,
+    "cli_path": cli_path,
+    "env": _sdk_subprocess_env(),
 }
+mcp_url = os.environ.get("MCP_NEO4J_URL")
+if mcp_url:
+    sdk_kwargs["mcp_servers"] = {
+        "neo4j-cypher": {
+            "type": "http",
+            "url": mcp_url,
+            "headers": {"Host": "localhost:8000"},
+        },
+    }
+options = ClaudeAgentOptions(**sdk_kwargs)
 ```
 
-`ticker`, `quarter_label`, `filed_8k`, `key_drivers`, `rationale_summary`, and model metadata may remain as extra producer metadata. Phase 1 TES reads the canonical fields directly and ignores extras it does not use.
+Matches `canary_sdk.py:48-63`. When `MCP_NEO4J_URL` is unset (operator CLI), kwarg is omitted → SDK falls through to `.mcp.json` stdio → works locally. When set (K8s pod), HTTP MCP wins → works in K8s.
 
-Note: `predictor_session_id` is optional and is reserved for future reassessment. Phase 1 TES does not depend on it.
+Worker responsibility is intentionally narrow:
 
-**Field mapping (old → new):**
+1. Pop one job
+2. Acquire / verify job lease
+3. Invoke the orchestrator with the correct mode + quarter context
+4. Respect centralized usage guard / rate-limit guard
+5. Requeue or close according to outcome
 
-| Old field | New field | Change |
+Invocation mode:
+
+1. **Subprocess, not in-process SDK**
+2. Worker runs: `venv/bin/python scripts/earnings/earnings_orchestrator.py ...`
+3. Prediction timeout default: `1800s`
+4. Learner timeout default: `7200s`
+5. Worker subprocess env also blanks direct Anthropic auth variables as belt-and-suspenders
+6. Add `--mode {historical,live}` to the orchestrator CLI and pass the payload's `mode` through unchanged. This flag is **observational only** (run ledger / logs / Obsidian) and must not override quarter identity or PIT logic.
+
+The worker does **not** own:
+
+- PIT derivation rules
+- lesson-file semantics
+- quarter sequencing logic
+- quarter identity math beyond recovery assistance
+- component run-ledger lifecycle (the orchestrator opens/closes prediction/learning runs)
+
+### 3.4 Durable State / Source of Truth
+
+**Recommendation: do not introduce `prediction_status` / `learning_status` on Neo4j in v1.**
+
+Reason:
+
+1. Prediction + learner already have durable filesystem artifacts.
+2. Learner completion is not just a graph-style boolean; it includes derived lesson writes and recovery behavior.
+3. `run_ledger.py` already exists as append-only machine state and wraps the full component execution.
+4. Adding new graph statuses creates a split-brain problem between filesystem artifacts, run ledger, and graph properties.
+
+Recommended truth model:
+
+1. **Eligibility trigger truth** — Neo4j + Redis TradeReady
+2. **Dedup / in-flight truth** — Redis leases
+3. **Completion truth** — per-component completion sentinel files; `run_ledger.py` for audit, history, and Obsidian surfacing
+
+**Per-component completion and failure artifacts (locked)**:
+
+| Component | Result file (content) | Completion sentinel | Failure sentinel |
+|---|---|---|---|
+| prediction | `events/{Q}/prediction/result.json` | `events/{Q}/prediction/complete.json` | `events/{Q}/prediction/failed.json` |
+| learning   | `events/{Q}/learning/result.json`   | `events/{Q}/learning/complete.json`   | `events/{Q}/learning/failed.json`   |
+
+**Prediction completion sentinel spec (§G4b)**:
+
+- Owner: `earnings_orchestrator` — writes `prediction/complete.json` immediately AFTER `validate_prediction_result(...)` returns successfully (earnings_orchestrator.py line ~3425).
+- Never written on any failure path.
+- **Why required**: both `finalize_prediction_result` and `validate_prediction_result` can raise AFTER `result.json` is already on disk. Without a sentinel, a stale bad file would masquerade as complete.
+  - Failure mode A: LLM output missing a required analytic field → `finalize_prediction_result:3094-3096` raises `ValueError` BEFORE the atomic metadata rewrite. Raw (incomplete) LLM file sits on disk.
+  - Failure mode B: canonicalized file fails `validate_prediction_result` (e.g., lesson_labels positional mismatch, cites-wrong-label, analysis-substring violation). Canonicalized-but-invalid file sits on disk.
+- Contents:
+  ```json
+  {"completed_at": "ISO8601", "sdk_session_id": "...", "prompt_version": "...", "schema_version": 1}
+  ```
+
+**Learning completion sentinel spec (§G4)**:
+
+- Owner: `earnings_orchestrator.run_learner_for_quarter` — writes `learning/complete.json` in two places:
+  1. After `SUCCEEDED` path (line ~2185), AFTER `append_ticker_lesson` and `append_global_lessons` both return successfully.
+  2. After `RECOVERED` path (line ~2063), AFTER derived-write recovery succeeds.
+- Never written on any `FAILED_*` outcome.
+- **Why required**: `learning/result.json` is written mid-flow by the SDK, BEFORE derived lesson appends. Using it as completion truth would cause the daemon to treat an incomplete learner as complete.
+- Contents:
+  ```json
+  {"completed_at": "ISO8601", "sdk_session_id": "...", "outcome": "succeeded"|"recovered", "schema_version": 1}
+  ```
+
+**Failure sentinel spec (§G5)**:
+
+- Owner: `earnings_worker` — writes `{component}/failed.json` after:
+  - `MAX_RETRIES` exhausted for any non-rate-limit failure, OR
+  - A single fatal error the worker classifies as non-retryable (e.g., dead-letter conditions).
+- Contents:
+  ```json
+  {"failed_at": "ISO8601", "error": "...(first 500 chars)...", "outcome": "...", "retry_count": N, "schema_version": 1}
+  ```
+- **Why required**: without it, the daemon has no way to represent "halted"; it would re-enqueue the same failing quarter on every sweep.
+
+**Daemon eligibility check (three-state, AND-hardened)**:
+
+```python
+def is_eligible(component_dir: Path) -> str:
+    # Halted trumps everything — failed.json is the authoritative halt marker.
+    if (component_dir / "failed.json").exists():
+        return "halted"         # chain blocked; log [HALTED] and skip
+
+    # Completion requires BOTH the artifact AND the sentinel.
+    # Sentinel-only is unsafe: if result.json is missing/corrupt (operator rm,
+    # disk issue, buggy cleanup), downstream would still read a stale sentinel
+    # and attempt to consume a missing artifact.
+    if (component_dir / "complete.json").exists() and \
+       (component_dir / "result.json").exists():
+        return "complete"       # advance chain walker
+
+    return "eligible"           # enqueue
+```
+
+Interaction with orchestrator recovery: the learner's recovery branch triggers only when `result.json` exists (`run_learner_for_quarter:2039`). If `complete.json` is present but `result.json` is missing, the AND check returns `eligible` → re-enqueue → orchestrator runs as a first-time execution (not recovery) → writes both files fresh. Self-healing without special-casing.
+
+Operator recovery for halted quarter: `rm events/{T}/{Q}/{component}/failed.json`. Next sweep re-enqueues. Mirrors the guidance-worker manual recovery flow.
+
+### 3.4a Leases
+
+Lease schema is locked:
+
+1. `earnings_lease:prediction:{accession_8k}` — TTL `2100s`
+2. `earnings_lease:learning:{accession_8k}` — TTL `7500s`
+
+Why:
+
+1. Namespaced away from guidance leases
+2. Accession is the natural event key
+3. TTL must exceed subprocess timeout by a cleanup buffer, otherwise the daemon can see an expired lease while the worker is still terminating the subprocess and writing failure state
+4. Prediction jobs are short
+5. Learner jobs are materially longer
+
+### 3.5 Quarter Identity and PIT
+
+Quarter identity remains owned by the existing earnings stack:
+
+1. Historical quarter order comes from `event.json`
+2. `event.json` regeneration comes from `.claude/skills/earnings-orchestrator/scripts/event_json_manifest.py`
+3. Historical event discovery comes from `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py`
+4. Live quarter identity comes from resolving the live 8-K directly
+5. Learner PIT remains owned by `derive_learner_pit()` inside the orchestrator
+
+Most important anti-regression rule in the entire design:
+
+> The daemon decides **when** to run. The orchestrator decides **what quarter this is** and **what PIT means**.
+
+### 3.6 Historical Flow
+
+For a historical ticker:
+
+1. Read / refresh `event.json`
+2. Walk quarters in chronological order
+3. Find the **first incomplete quarter**
+4. For that quarter:
+   - if prediction not complete: enqueue historical prediction
+   - else if learning not complete: enqueue historical learning
+   - else continue
+5. Never enqueue more than one next-step job per ticker at a time
+
+This gives strict sequential enforcement without a heavy state machine.
+
+`event.json` refresh policy (locked, lazy semantic):
+
+1. Use lazy semantic refresh, matching the existing orchestrator pattern.
+2. Refresh when:
+   - `event.json` is missing
+   - `event.json` is invalid
+   - the daemon has concrete evidence a live quarter has **graduated** (`live_state.json` names an accession and Neo4j now reports `daily_stock IS NOT NULL` for that same accession) but `event.json` still lacks that quarter/accession
+   - the daemon expects a just-graduated live quarter to now appear historically and it does not
+3. Do **not** refresh every active ticker on every sweep.
+4. Do **not** refresh merely because `live_state.json` exists and the quarter is absent from `event.json`; that is the normal steady-state while the quarter is still live.
+
+Keeps refresh logic consistent with `event_json_manifest.py` and avoids unnecessary steady-state Neo4j load.
+
+### 3.7 Live Flow
+
+For a live TradeReady ticker:
+
+1. Detect live 8-K candidate from Neo4j after ingestion completion.
+2. Resolve current live quarter identity.
+3. Verify prerequisite chain across prior quarters (§4 — historical and live share all gates EXCEPT same-quarter guidance, which is historical-only per §8).
+4. Before enqueue, daemon writes/upserts `events/live_state.json`.
+   Locked file shape:
+   ```json
+   {
+     "schema_version": 1,
+     "ticker": "AVGO",
+     "quarter_label": "Q2_FY2026",
+     "accession_8k": "0001...",
+     "filed_8k": "2026-05-28T16:05:00-04:00",
+     "written_at": "2026-05-28T16:06:11Z"
+   }
+   ```
+   Write atomically (`tmp` + `os.replace`), ideally via the same `atomic_write_json(...)` helper used by `event_json_manifest.py`.
+5. Enqueue **live prediction**.
+6. Do **not** enqueue learner immediately.
+7. When that same quarter later becomes historical (`daily_stock` now available and quarter appears in refreshed `event.json`), historical catch-up sweep picks up the deferred learner.
+8. Daemon deletes `live_state.json` only when:
+   - **Quarter-label match required (§G14)**: daemon reads `live_state.json`, compares its stored `quarter_label` to the graduating quarter's label, and deletes only when they match. If the file contains a NEWER quarter's state (because a newer filing already overwrote it), preserve it untouched — it is still valid Tier-2 input for the graduating quarter's own deferred learner.
+   - Supersession: when writing state for a newer live quarter, overwrite atomically (write-then-replace).
+
+`live_state.json` ownership is locked: **daemon-owned for writes + deletions**, not orchestrator-owned.
+
+### 3.8 Within-Ticker Sequential Enforcement
+
+Daemon-owned.
+
+> The daemon may enqueue only the next eligible missing step for a ticker. Never multiple quarters of the same ticker at once.
+
+Specifically:
+
+1. No `Q(n+1)` prediction if `Q(n)` learner is incomplete.
+2. No learner for `Q(n)` if prediction for `Q(n)` is incomplete.
+3. No duplicate quarter jobs if a lease exists.
+4. Under daemon-managed automation, learner `SKIPPED_*` outcomes are treated as a gate bug, not a normal steady-state path. The daemon should only enqueue learner when prediction completion and `daily_stock` availability already make skip impossible.
+
+Note: because live-prediction eligibility requires "all prior chain complete" (§4), a ticker is never simultaneously eligible for both a live prediction AND a historical step — the two conditions are mutually exclusive. Cross-type within-ticker precedence is therefore a non-issue.
+
+### 3.9 Cross-Ticker Parallelism and Priority
+
+Cross-ticker parallelism comes from KEDA replicas, not from multi-job logic inside one worker.
+
+Operational priority (while keeping one queue) is intentionally **two-tier**, not a fake four-tier scheduler:
+
+1. `live_prediction` — high-priority lane
+2. all other jobs (`historical_prediction`, `deferred_learning`, `historical_learning`) — normal lane
+
+Implementation is locked as a **two-lane LIST**, not a ZSET:
+
+1. Queue is one Redis LIST: `earnings:pipeline`
+2. Worker consumes with `BRPOP`
+3. High-priority `live_prediction` jobs are inserted with `RPUSH`
+4. Normal jobs are inserted with `LPUSH`
+
+**Ordering semantics (explicitly called out)**:
+
+- Within the **live-prediction lane, jobs pop in LIFO order** (newest filing first). RPUSH appends to the tail; BRPOP pops the tail.
+- Within the **normal lane, jobs pop in FIFO order**. LPUSH prepends to the head; BRPOP drains tail-first once the live lane is empty, reaching older LPUSH'd items first.
+- The queue itself does **not** distinguish `historical_prediction` vs `deferred_learning` vs `historical_learning`. That ordering is handled by the daemon's first-incomplete-quarter walker and per-ticker sequencing rules, not by Redis priority metadata.
+- At KEDA `maxReplicas ≥ typical-concurrent-live-prediction-burst`, ordering has no observable effect — multiple pods drain in parallel.
+- If strict FIFO within the live lane later becomes a requirement, upgrade paths are (a) dual queues or (b) ZSET with arrival-time score.
+
+This v1 priority scheme is intentionally simple and gives "high before normal" behavior; it does **not** implement a strict stable four-tier scheduler inside Redis.
+
+### 3.10 Learner-Specific Rules
+
+1. **Historical learner** — runs when prediction is complete and `daily_stock` exists. PIT cutoff derived by existing `derive_learner_pit`.
+2. **Live learner** — deferred; not triggered immediately after live prediction; picked up later by historical catch-up sweep.
+3. **Deferred learner detection** — via `live_state.json` as the bridge; once the quarter graduates into `event.json`, historical catch-up resumes ownership.
+4. **Skipped learner outcomes are not a normal worker state.** If the worker ever sees a learner subprocess return without `learning/complete.json`, that is treated as missing-sentinel failure/retry territory; steady-state automation should have prevented the skip with gates before enqueue.
+
+### 3.11 Failure / Retry / Rate Limit
+
+#### Retry policy
+
+Same outer retry methodology as the proven guidance worker, slightly tighter:
+
+1. Generic non-rate-limit worker failures: **`MAX_RETRIES = 2`** (original + 2 retries max).
+2. Applies to: subprocess launch failure, subprocess timeout, missing completion sentinel, unexpected orchestrator crash / non-zero exit.
+3. Rate limit: same as `extraction_worker.py` — requeue without retry penalty; pause 300s.
+4. Dead-letter queue: `earnings:pipeline:dead`. After exhausting retries, payload is dead-lettered and the ticker chain halts via the failure sentinel.
+5. Inner component semantics may still differ: predictor has its own validation contract; learner already has one internal informed retry on validation failure.
+
+Closer to already-proven guidance-worker methodology than to a bespoke retry taxonomy.
+
+#### Dead-letter cleanup (atomic best-effort sequence, §G10)
+
+When `MAX_RETRIES` is exhausted, the worker runs atomically per job:
+
+1. Write `events/{T}/{Q}/{component}/failed.json` with error + retry_count (spec per §3.4).
+2. DEL `earnings_lease:{component}:{accession_8k}` — explicit lease cleanup (defense in depth; TTL would expire anyway).
+3. `LPUSH earnings:pipeline:dead` with payload annotated with `_error` + `_failed_at` fields.
+4. No additional worker-side `close_run(...)`. The orchestrator owns component `open_run` / `close_run`. If the subprocess never starts cleanly or dies before the orchestrator can close its run, the authoritative failure record is `failed.json` + DLQ payload + worker logs.
+
+If any step fails mid-sequence, remaining steps still run (best-effort). The `failed.json` sentinel is the authoritative halt marker; the other three are observability.
+
+#### Chain halt
+
+> If a quarter reaches terminal failure after allowed retries, halt the ticker chain. Do not advance to `Q(n+1)`.
+
+Matches the user requirement and preserves data quality. Enforced mechanically via the `failed.json` sentinel + daemon three-state eligibility check.
+
+#### Rate limits
+
+Centralize the usage/rate-limit guard currently embedded in `extraction_worker.py` into a shared helper, then reuse it for:
+
+1. guidance worker
+2. earnings worker prediction
+3. earnings worker learner
+
+See §G11 for module-path spec.
+
+### 3.12 Observability and Rollout
+
+#### Rollout
+
+Recommended rollout switches:
+
+1. `EARNINGS_AUTOMATION_ENABLED`
+2. `HISTORICAL_BACKFILL_ENABLED`
+
+Sufficient for safe rollout. No additional launch-phase flags.
+
+#### Observability
+
+Primary sources:
+
+1. `run_ledger.jsonl`
+2. `Run Index.md`
+3. daemon logs
+4. worker logs
+5. Redis lease inspection
+
+Recommended addition:
+
+- `Earnings Auto Index.md` generated from run ledger + ticker-chain scan state, with explicit `mode` display (`live` vs `historical`).
+
+---
+
+## 4. `has_historical_gates` — Recommended Shape
+
+For prediction of `Q(n)`, gates apply as follows. Historical and live modes share all gates EXCEPT same-quarter guidance (§8 lock).
+
+| # | Gate | Historical prediction | Live prediction |
+|---|---|---|---|
+| G-1 | Current-quarter 8-K exists and is queryable in Neo4j | **REQUIRED** | **REQUIRED** |
+| G-2 | 8-K `formType='8-K'` AND `items CONTAINS 'Item 2.02'` | **REQUIRED** | **REQUIRED** |
+| G-3 | Quarter identity resolvable (`quarter_label`, `period_of_report`) | **REQUIRED** | **REQUIRED** |
+| G-4 | Current-quarter `guidance_status='completed'` | **REQUIRED** | SKIPPED (§8) |
+| G-5 | All prior `Q(1..n-1)` predictions have `prediction/complete.json` | **REQUIRED** | **REQUIRED** |
+| G-6 | All prior `Q(1..n-1)` learnings have `learning/complete.json` | **REQUIRED** | **REQUIRED** |
+| G-7 | Company sector present in Neo4j | **SOFT** (warn; degrade gracefully) | **SOFT** |
+| G-8 | Company CIK present in Neo4j | **SOFT** | **SOFT** |
+
+**Critical clarifications**:
+
+1. **Prior-chain gates (G-5, G-6) apply to BOTH modes.** The user-approved asymmetry is limited to G-4 (same-quarter guidance). Any ticker with an incomplete prior quarter blocks both historical and live predictions until catch-up runs.
+2. For **brand-new live tickers** with zero prior Neo4j history, prior-chain gates are vacuously satisfied (no prior rows). First-cycle empty-lessons prediction is supported — that is what O11 means.
+3. For the **learner**, gates are separate and simpler:
+   - Current-quarter prediction complete (`prediction/complete.json` exists)
+   - `daily_stock IS NOT NULL` on the 8-K's `PRIMARY_FILER` relationship
+   - No prior-chain gate on the learner itself; only the predictor-side gate for the NEXT cycle enforces the chain.
+
+---
+
+## 5. Decision Log
+
+| ID | Decision | State |
 |---|---|---|
-| `confidence_score` | `confidence` | Rename |
-| `expected_move_range_pct` | `expected_move_range` | Rename |
-| `analysis` | `rationale_summary` | Rename + shorten |
-| `key_drivers` | `key_drivers` | Same ✓ |
-| `data_gaps` | Keep for attribution | Not used by trade daemon |
-| `evidence_ledger` | Keep for attribution | Not used by trade daemon |
-| (missing) | `signal_id` | ADD — deterministic canonical ID derived from event identity |
-| (missing) | `source_type` | ADD — `"earnings"` |
-| `ticker` | `symbol` | Canonical TES field name |
-| `quarter_label` | `event_id` | Canonical TES field name |
-| `filed_8k` | `event_time` | Normalize filing timestamp for TES |
-| `predicted_at` | `issued_at` | Canonical TES field name |
-| (optional extra) | `ticker` / `quarter_label` / `filed_8k` | May be retained for audit/debugging |
-| (missing) | `model_version` | ADD — from runtime |
-| (missing) | `prompt_version` | ADD — from skill version |
-| (missing) | `predicted_at` | ADD — timestamp when prediction completes |
-
-**Who adds the missing fields?**
-The **orchestrator** is the sole owner of canonical `prediction/result.json` normalization:
-- Renames fields at write time: `confidence_score`→`confidence`, `expected_move_range_pct`→`expected_move_range`, `analysis`→`rationale_summary`
-- Injects canonical TES fields: `signal_id`, `source_type`, `symbol`, `event_id`, `event_time`, `issued_at`
-- May also retain helpful earnings-specific metadata: `ticker`, `quarter_label`, `filed_8k`, `model_version`, `prompt_version`, `predicted_at`, `predictor_session_id`
-- The predictor skill stays unchanged — orchestrator normalizes its output
-
-The prediction skill only knows about the bundle. The orchestrator knows the event context (ticker, quarter, filing time) and owns the write to disk.
-
-### Predictor Session ID — Where It Lives
-
-For future trade reassessment (resuming the predictor session with new evidence):
-
-- **Single source**: optional `predictor_session_id` field in `prediction/result.json`
-  - Written by the orchestrator after the SDK prediction call completes (SDK returns the session/agent ID)
-  - No sibling file (no `prediction/session.json` at launch)
-  - A future reassessment layer may read it directly from prediction/result.json — no dependency on live_state.json
-- `live_state.json` may optionally mirror it, but the canonical source is always prediction/result.json
-- **If field is missing** (prediction ran before this feature, or old-format result.json): that is still safe. Reassessment is an enhancement, not a Phase 1 dependency.
-
-### trades:pending Redis Push
-
-If a future Redis fast path is added, after a LIVE prediction completes and `prediction/result.json` is written:
-
-```
-LPUSH trades:pending {"signal_id": "AAPL_Q1_FY2026_2026-04-06T20:03:00Z", "symbol": "AAPL", "event_id": "Q1_FY2026"}
-```
-Use canonical TES identifiers in the queue payload.
-
-**Who pushes?** The **orchestrator** — the component that writes and validates `prediction/result.json` is the sole pusher. It pushes immediately after confirming the prediction file is valid. NOT the prediction skill (no Redis access) and NOT the earnings trigger daemon (it doesn't know when prediction completes).
-
-Phase 1 trade daemon does **not** consume Redis. It uses filesystem scan every 30s. BRPOP is a possible future fast path only.
-
-### Guidance Gate Resolution (v13)
-
-**Resolved ambiguity**: completed AND failed both count as "ready enough" for the guidance gate.
-
-- `guidance_status IS NULL` = not ready (never attempted)
-- `guidance_status = 'in_progress'` = not ready (still running)
-- `guidance_status = 'completed'` = ready
-- `guidance_status = 'failed'` = ready (extraction was attempted; predictor handles any data gaps)
-
-A broken guidance extraction should NOT deadlock live prediction forever.
-
-**Note**: XBRL extraction readiness is a separate concern. The guidance gate checks `guidance_status`, not XBRL completeness. If XBRL is needed for guidance quality, that dependency is inside the guidance extraction pipeline, not at the earnings trigger level. See `.claude/plans/GuidanceTrigger.md` for XBRL-related TODOs.
+| A1 | Trigger source = hybrid (`trade_ready` live + historical bootstrap universe) | **Locked** |
+| A2 | New queue = `earnings:pipeline` | **Locked** |
+| A3 | New worker deployment = `earnings-worker` | **Locked** |
+| B1 | `has_historical_gates` should require prior prediction + learning chain completion | **Locked** |
+| B2 | Same-quarter guidance gate is asymmetric: historical yes, live no | **Locked** |
+| B3 | Mode stamped explicitly in payload; `daily_stock` NULL/non-NULL is an input signal, not sole truth | **Locked** |
+| B4 | Universe = TradeReady for live + bootstrap universe for historical | **Locked** |
+| C1 | Within-ticker sequencing enforced by daemon, one next-step job per ticker | **Locked** |
+| C2 | Cross-ticker parallelism via KEDA replicas | **Locked** |
+| C3 | Centralized usage guard; no per-component scheduler logic in v1 | **Locked** |
+| D1 | Historical learner immediate, live learner deferred | **Locked** |
+| D2 | Deferred learner detected through the same quarter reappearing in historical/event manifest flow | **Locked** |
+| D3 | Historical bootstrap and live catch-up share one daemon + one worker + one queue | **Locked** |
+| E1 | Worker-level retry policy shared; inner component semantics may differ | **Locked** |
+| E2 | Terminal failure halts ticker chain | **Locked** |
+| E3 | Rate-limit guard centralized and shared with guidance | **Locked** |
+| F1 | K8s env knobs supported; redundant knobs avoided | **Locked** |
+| F2 | Single stop/run flag for rollout | **Locked** |
+| M1 | Obsidian view generated from machine state, not hand-maintained | **Locked** |
+| M3 | `scripts/earnings_trigger.py` repurposed into the new earnings daemon path | **Locked** |
+| O1 | Claude auth path = Claude Code Max/OAuth only, mirroring extraction-worker deployment | **Locked** |
+| O2 | Eligibility truth = filesystem artifacts + per-component completion sentinels; ledger is observational | **Locked** |
+| O3 | `event.json` refresh = lazy semantic refresh, not every-sweep rebuild | **Locked** |
+| O4 | `live_state.json` owner = daemon | **Locked** |
+| O5 | Lease keys = `earnings_lease:*` with component-specific TTLs | **Locked** |
+| O6 | Worker invokes orchestrator via subprocess | **Locked** |
+| O7 | Priority = one LIST with dual-ended push, not ZSET | **Locked** |
+| O8 | Retry model follows proven guidance-worker methodology with tighter cap (`MAX_RETRIES=2`) | **Locked** |
+| O9 | `ACTIVE_WINDOW_DAYS` stays single, not split | **Locked** |
+| O10 | `trigger_origin` is observational only in v1 | **Locked** |
+| O11 | Brand-new live tickers (zero prior history) do not force historical backfill before first live prediction; prior-chain gates are vacuously satisfied | **Locked** |
+| O12 | `prediction/complete.json` sentinel required — symmetric with learner; protects against stale `result.json` after finalize/validate exceptions | **Locked** |
+| O13 | `{component}/failed.json` sentinel is canonical halt marker; daemon three-state eligibility check (complete / halted / eligible) | **Locked** |
+| O14 | `HISTORICAL_BACKFILL_ENABLED` gates universe-walk ONLY; catch-up sweep is always on | **Locked** |
+| O15 | Live sweep uses hardened `daily_stock IS NULL AND filed_8k >= now - 3 trading days` rule, implemented with XNYS trading-day math (same helper pattern as `trade_ready_scanner.py`) | **Locked** |
+| O16 | Orchestrator SDK code must conditionally inject `mcp_servers` HTTP override when `MCP_NEO4J_URL` is set. Learner path = MUST-FIX; predictor path = symmetry-only. Omit kwarg otherwise (local CLI path) | **Locked** |
+| O21 | Completion truth is AND of result.json + complete.json (not sentinel-only). Defense against corruption/manual-rm of artifact | **Locked** |
+| O17 | `terminationGracePeriodSeconds=7500` on earnings-worker pod; SIGTERM propagates to subprocess | **Locked** |
+| O18 | Live-prediction lane is LIFO; documented + acceptable at KEDA-max ≥ typical burst | **Locked** |
+| O19 | `live_state.json` delete requires `quarter_label` match against the graduating quarter | **Locked** |
+| O20 | DLQ cleanup is atomic best-effort: failed.json → lease DEL → LPUSH dead. Worker does NOT call `close_run` — orchestrator owns component ledger lifecycle (§3.11) | **Locked** |
 
 ---
 
-*The target architecture below (v12) remains unchanged. It is the correct design — just not yet implemented.*
+## 6. Env Knobs — Defaults
+
+| Var | Default | Where set | Purpose |
+|---|---|---|---|
+| `EARNINGS_AUTOMATION_ENABLED` | `false` | K8s env | Master stop/run flag; must flip to `true` to start |
+| `HISTORICAL_BACKFILL_ENABLED` | `false` | K8s env | Universe-walk ON/OFF. Catch-up is always on, independent of this |
+| `POLL_INTERVAL` | `30` | K8s env | Daemon sweep frequency (seconds) |
+| `ACTIVE_WINDOW_DAYS` | `45` | K8s env | Covers SEC 10-Q filing deadline; single knob |
+| `PREDICTION_LEASE_TTL` | `2100` | K8s env | 35 min — timeout + 5 min cleanup buffer |
+| `LEARNING_LEASE_TTL` | `7500` | K8s env | 2h05m — timeout + 5 min cleanup buffer |
+| `PREDICTION_SUBPROCESS_TIMEOUT` | `1800` | K8s env | 30 min subprocess ceiling; lease adds 5 min cleanup buffer |
+| `LEARNING_SUBPROCESS_TIMEOUT` | `7200` | K8s env | 2h subprocess ceiling; lease adds 5 min cleanup buffer |
+| `MAX_RETRIES` | `2` | K8s env | Original + 2 retries before DLQ + chain halt |
+| `MCP_NEO4J_URL` | `http://mcp-neo4j-cypher-http.mcp-services.svc.cluster.local:8000/mcp` | K8s env | REQUIRED in K8s for learner's subagents (§G7) |
+| `GUIDANCE_DAILY_INTERACTIVE_PCT` | `10` | K8s env (guidance-worker) | Guidance reserve (rename of current `DAILY_INTERACTIVE_PCT` for clarity) |
+| `EARNINGS_DAILY_INTERACTIVE_PCT_LIVE` | `0` | K8s env (earnings-worker) | Live predictions never pause for budget |
+| `EARNINGS_DAILY_INTERACTIVE_PCT_HISTORICAL` | `10` | K8s env (earnings-worker) | Historical prediction/learning pauses like guidance |
+| `DAILY_INTERACTIVE_PCT_SONNET` | `5` | K8s env (both workers) | Global Sonnet-specific reserve |
+
+Explicitly NOT present (considered and rejected for v1):
+
+- `MAX_CONCURRENT_LEARNERS` — redundant with KEDA `maxReplicas` + one-job-per-worker-process.
+- Split `PREDICTION_ACTIVE_WINDOW_DAYS` / `LEARNING_ACTIVE_WINDOW_DAYS` — single window is cheaper and simpler.
+- `MAX_TURNS` / `MAX_BUDGET_USD` — already on the orchestrator's `config/llm_models.py::LLMRole` profile; overriding from K8s would create two-source-of-truth.
 
 ---
 
-## Requirements
+## 7. Recommended Simplifications / Challenges
 
-For each ticker:
+These are the places where the simpler design is also the safer design.
 
-### 1. Historical Backtesting
-a. Before we run this step, we need to ensure all guidance for that ticker is already extracted. See extraction_worker.py which uses guidance_trigger_daemon.py
-b. Must run sequentially starting from oldest 8-K earnings report (except for the latest live earnings report which we need to trade). This helps to build the learner.
-c. This sequential run for all older 8-K earnings reports must already be ready before we can run the prediction on live earnings report.
-d. Can we run automatically as soon as the ticker is ingested into trade_ready but post all its guidance_status is completed.
-e. This essentially has 3 components to it — see earnings-orchestrator.md in plans — for each historical report we run planner+predictor using only data on and prior to that 8-K earnings date (and that is the reason we have PIT enabled data subagents). The learner has **no PIT gate** — it uses all available data for the richest possible causal analysis. The predictor's PIT gate is the contamination boundary: lessons only affect attention allocation, the predictor can only act on PIT-safe data. Richer learner context → better lessons → better live predictions (historical lessons carry forward into live U1). Deferred timing naturally ensures 10-Q/10-K availability. These 3 combined make one earnings cycle.
-
-### 2. Live Earnings Report
-a. As soon as a 8-k earnings report is ingested, we fire planner + predictor without using any PIT
-b. This assumes we have already built the learner component for that ticker using historical back testing above.
-c. The learner for the live quarter is deferred — it runs during the NEXT historical bootstrap when the ticker re-enters trade_ready. The orchestrator's sequential processing naturally catches the missing attribution (prediction exists but no `learning/result.json` — path renamed from `attribution/` per obsidian_thinking.md 2026-04-17). This ensures U1 feedback is available before the next quarter's prediction without competing with live predictions for Claude API tokens.
-
-Overall we need earnings_trigger.py to have the same production finesse as guidance_trigger_daemon.py or even better since its usecase is more elaborate.
+1. **Do not mirror guidance's Neo4j status pattern for prediction/learning.** Same outer pipeline pattern: yes. Same graph-status truth model: no.
+2. **Do not hard-gate prediction on sector/CIK presence.** Warn loudly; degrade gracefully; avoid blocking the entire chain on metadata quality.
+3. **Do not build a second learner scheduler for live mode.** Let the daemon own `live_state.json`; let historical catch-up naturally pick up the deferred learner later.
+4. **Do not move PIT logic into the daemon.** Keep it inside the orchestrator where it already exists and is tested by usage.
+5. **Do not overcomplicate queue topology.** One queue is fine; payloads must carry explicit component + mode + quarter identity.
+6. **Do not use Anthropic API auth anywhere in this pipeline.** Mirror the proven guidance extraction worker setup; Claude Code Max/OAuth only.
+7. **Do not force first-time live tickers through silent backfill before their first prediction.** First live prediction may legitimately have empty `learning_context`; the next cycle naturally gets lessons.
 
 ---
 
-## `earnings_trigger_daemon.py` — Complete Architecture
+## 8. Final Lock: Same-Quarter Guidance Gate
 
-### The Core Insight
+This final architectural question is resolved.
 
-The guidance daemon is flat: discover N independent items, enqueue them all. The earnings daemon is a **linear dependency chain** per ticker. But it's still simple — the daemon only decides two things: **HISTORICAL** or **LIVE**. The orchestrator handles all internal complexity (sequential quarters, PIT, U1 loop, learners). The daemon just decides **when to trigger** and **what mode**.
+Locked behavior:
 
-### Dependency Chain (per ticker, every 60s sweep)
+1. **Historical prediction** — hard-gated on same-quarter `guidance_status = completed`.
+2. **Live prediction** — **not** hard-gated on same-quarter guidance extraction; readiness barrier is ingested/queryable raw 8-K.
 
+Why:
+
+1. The prediction bundle already reads the raw 8-K / EX-99 text directly.
+2. Same-quarter structured guidance is helpful but not required for a viable live prediction.
+3. Hard-gating live prediction on guidance would add avoidable minutes of latency.
+4. Historical has no latency pressure, so the gate improves training cleanliness at near-zero cost.
+
+Empirical evidence: all 15 AVGO/NVDA/BURL calibration quarters had `guidance_history.series = []` (task T2 in `learner.md`); the predictor still produced usable predictions by inferring guide-vs-consensus from press-release prose.
+
+---
+
+## 9. Residual-Doubt Answers (Locked)
+
+These were the final operational questions raised during review; now answered.
+
+1. `RD-1` completion truth: **AND of result.json + complete.json for each component** (`prediction/result.json` AND `prediction/complete.json`; `learning/result.json` AND `learning/complete.json`). Sentinel-only is rejected — if the artifact disappears but the sentinel survives, downstream misbehaves. Ledger remains observational.
+2. `RD-2` `event.json` refresh: **Locked = lazy semantic refresh**
+3. `RD-3` `live_state.json` owner: **Locked = daemon (with quarter_label-match delete)**
+4. `RD-4` lease keys: **Locked**
+5. `RD-5` worker invocation: **Locked = subprocess**
+6. `RD-6` priority mechanism: **Locked = one LIST with dual-ended push; LIFO on live acceptable**
+7. `RD-7` retry policy: **Locked = proven guidance-worker methodology, `MAX_RETRIES=2`**
+8. `RD-8` active window: **Locked = single `ACTIVE_WINDOW_DAYS=45`**
+9. `RD-9` `trigger_origin`: **Locked = observational only**
+10. `RD-10` new TradeReady ticker behavior: **Locked = empty lessons OK for first cycle; no forced silent backfill**
+
+---
+
+## 10. Must-Fix Operational Gaps (Locked)
+
+These seven items MUST be in code before the plan is implementation-ready. They are spec precision, not architectural changes.
+
+### G2 — Hardened live-mode detection (§3.1)
+
+**Gap**: raw `daily_stock IS NULL` as sole live filter misclassifies orphan-returns 8-Ks as "live forever".
+
+**Fix**: augment with freshness:
 ```
-  ┌─ Phase A: HISTORICAL BOOTSTRAP (guidance-gated) ──────────────┐
-  │                                                                │
-  │  Historical done? ──YES──→ skip to Phase B                    │
-  │       │ NO                                                     │
-  │       ▼                                                        │
-  │  Guidance complete? ──NO──→ skip ticker (waiting)             │
-  │       │ YES                                                    │
-  │       ▼                                                        │
-  │  enqueue HISTORICAL ──→ stop (one job per ticker per sweep)   │
-  └────────────────────────────────────────────────────────────────┘
-
-  ┌─ Phase B Step 1: DETECT live 8-K (NO guidance gate) ────────────┐
-  │  (iterates fresh_8ks from Query 2)                             │
-  │                                                                │
-  │  Fresh 8-K exists?      ──NO──→ skip (waiting for earnings)   │
-  │  (hourly_stock IS NULL + 7d)                                   │
-  │       │ YES                                                    │
-  │       ▼                                                        │
-  │  Watch key matches?     ──YES──→ skip (already detected)      │
-  │       │ NO                                                     │
-  │       ▼                                                        │
-  │  set watch key + enqueue LIVE → earnings:pipeline:live        │
-  └────────────────────────────────────────────────────────────────┘
-
-  ┌─ Phase B Step 1.5: RECOVER missed live 8-Ks (Query 2b) ───────┐
-  │  (only for historical_done tickers with NO watch key)           │
-  │                                                                │
-  │  Recent 8-K 2.02 exists?  ──NO──→ skip (no missed event)      │
-  │  (daily_stock IS NULL + 7d)                                    │
-  │       │ YES                                                    │
-  │       ▼                                                        │
-  │  Within cutoff?           ──NO──→ skip + log "window expired"  │
-  │  (filed_8k + cutoff_mins)                                      │
-  │       │ YES                                                    │
-  │       ▼                                                        │
-  │  set watch key + enqueue LIVE (same as Step B1)                │
-  └────────────────────────────────────────────────────────────────┘
-
-  ┌─ Phase B Step 2: MONITOR prediction completion ────────────────┐
-  │  (iterates watched tickers from Redis)                         │
-  │                                                                │
-  │  Prediction done?       ──YES──→ delete watch key, done       │
-  │  (live_state.json exists,                                      │
-  │   accession matches)                                           │
-  │       │ NO                                                     │
-  │       ▼                                                        │
-  │  Cutoff expired?        ──YES──→ log "window expired" +       │
-  │  (filed_8k + cutoff_mins)        delete watch key              │
-  │       │ NO                                                     │
-  │       ▼                                                        │
-  │  re-enqueue LIVE (lease dedup)                                 │
-  └────────────────────────────────────────────────────────────────┘
-
-  Two queues: live → earnings:pipeline:live (predictions only, never blocked)
-              historical → earnings:pipeline:historical (batch + deferred learners)
-
-  Orchestrator prompt:
-    Historical: /earnings-orchestrator {TICKER}
-    Live:       /earnings-orchestrator {TICKER} --live --accession {ACC}
+if daily_stock IS NOT NULL                → mode = historical
+elif filed_8k >= (now - 3 trading days)   → mode = live
+else                                      → mode = historical (orphan-NULL; chain gates apply)
 ```
 
-**Key**: `stop` after enqueue means we don't advance to the next gate for this ticker this sweep. One job per ticker per sweep max. This prevents races (e.g., enqueueing live before historical worker finishes).
+Implementation note: compute the 3-trading-day cutoff with XNYS sessions (`exchange_calendars`), reusing the same helper pattern already proven in `scripts/trade_ready_scanner.py`. Do not approximate with plain calendar days.
 
-### Why This Is Correct
+### G3 — Catch-up sweep independent of backfill flag (§3.1)
 
-| Requirement | How it's handled |
-|---|---|
-| 1a. Guidance must complete first | Gate 1 — batched Neo4j query, **only for historical phase** |
-| 1b. Sequential oldest-first | The orchestrator does this internally (get_quarterly_filings → process chronologically) |
-| 1c. Historical before live | Phase A must complete before Phase B runs |
-| 1d. Auto-trigger after TradeReady + guidance | Phase A: guidance ready triggers historical automatically |
-| 1e. Predictor PIT=8K, Learner no PIT | Predictor PIT is the contamination boundary. Learner uses all available data — richer context produces better U1 lessons without leaking into PIT-gated predictions. |
-| 2a. Fire on 8-K ingestion, no PIT | Phase B — daemon detects fresh 8-K (`hourly_stock IS NULL`), enqueues live. **No guidance gate** — predictor reads raw 8-K directly |
-| 2b. Historical learner already built | Phase A → Phase B ordering enforces this |
-| 2c. Learner for live quarter | Deferred to next historical bootstrap. Orchestrator processes sequentially: finds prediction without attribution → runs learner → U1 available for next prediction. |
+**Gap**: deferred-live-learners must always run; otherwise live cycle n+1 blocks on cycle n's unrun learner.
 
-### How The Deferred Learner Works
+**Fix**: two sub-functions composed inside the daemon. Universe-walk is flag-gated; TradeReady + event.json-covered catch-up is always on (the code-comment invariant in §3.1).
 
-The daemon does NOT monitor for 10-Q/10-K arrival or fire a separate learner job. Instead:
+### G4 — Learner completion sentinel `learning/complete.json` (§3.4)
 
-```
-Q1 cycle:
-  Jan 15: Q1 8-K files → daemon enqueues LIVE → prediction runs → watch key deleted
-  Jan 15: live_state.json written (Q1_FY2026). learning/result.json does NOT exist. That's fine.
+**Fix**: orchestrator writes it after BOTH `SUCCEEDED` and `RECOVERED` paths, AFTER lesson appends succeed. Never on `FAILED_*`.
 
-Q2 cycle (3 months later):
-  Apr 10: Ticker re-enters trade_ready
-  Apr 10: is_historical_done() checks:
-          1. event.json (stale — Q1 not in it yet) → all old quarters done ✅
-          2. live_state.json → Q1 → prediction exists ✅, attribution missing ❌ → returns FALSE
-  Apr 10: Daemon enqueues HISTORICAL
-  Apr 10: Orchestrator runs get_quarterly_filings → rebuilds event.json (Q1 now in it)
-          Processes sequentially:
-          Q1: prediction exists (skip). Attribution missing → RUN LEARNER → U1 written
-          All done → is_historical_done() → TRUE (both checks pass)
-  Apr 15: Q2 8-K files → daemon enqueues LIVE
-          Orchestrator has Q1 U1 feedback → better Q2 prediction ✅
-```
+### G4b — Prediction completion sentinel `prediction/complete.json` (§3.4)
 
-**Key**: The trigger is `is_historical_done()` checking `live_state.json` for the deferred learner — NOT event.json (which is stale between cycles). The orchestrator rebuilds event.json only after being enqueued.
+**Fix**: orchestrator writes it AFTER `validate_prediction_result` returns successfully (line ~3425). Protects against stale bad `result.json` left by `finalize_prediction_result` (missing-field raise) or `validate_prediction_result` (schema/T1 rejection) exceptions. Symmetric with G4.
 
-**Why this is better than same-cycle learner monitoring:**
-1. **No token competition**: Learners run on the HISTORICAL queue. Live predictions have the live queue entirely to themselves.
-2. **Simpler daemon**: No Query 3 (10-Q detection), no LEARNER_MIN_DAYS, no 10-Q/10-K monitoring, no learn dead-letter. Step B2 is 3 checks instead of 7.
-3. **Same U1 outcome**: Feedback is available before the next prediction (just-in-time during historical bootstrap).
-4. **Q4/10-K works correctly**: No special handling for annual filings. The 10-K will have been filed by the time the next historical bootstrap runs. Assumes `MAX_LAG_HOURS=90` in `get_quarterly_filings.py` (now in place; see note below).
+### G5 — Failure sentinel `{component}/failed.json` (§3.4 + §3.11)
 
-**Implemented prerequisite**: `get_quarterly_filings.py` now uses `MAX_LAG_HOURS=90` so Q4 quarters (where the 10-K files 60-90 days after the 8-K) are properly matched. This preserves Q1-Q3 behavior while covering slow annual-file timing.
+**Fix**: worker writes it after `MAX_RETRIES` exhausted. Daemon eligibility is a three-state check (halted / complete / eligible). Operator recovery = delete the file.
 
-### Key Design Decisions
+### G6 — Pod grace period + SIGTERM propagation (§3.3)
 
-**Fix 1 — Live detection via `hourly_stock IS NULL` (was: "latest 8-K" query)**
+**Fix**: `terminationGracePeriodSeconds: 7500` in `earnings-worker.yaml`. Worker code propagates SIGTERM to the orchestrator subprocess via `process.terminate()` so the subprocess exits before K8s SIGKILLs.
 
-The original Query 2 found the "latest 8-K 2.02 per ticker." Before a new live 8-K arrives, this returns the previous quarter's historical 8-K — causing a fake live enqueue. Fixed: use `hourly_stock IS NULL` as the live signal. `hourly_stock` is computed ~77 minutes after filing (`event_time + 60min + 17min Polygon delay`). This gives a tight freshness window = "this 8-K literally just arrived," aligning with the time-sensitive trading use case. Historical uses `daily_stock IS NOT NULL` in the canonical orchestrator discovery script [`get_quarterly_filings.py`](/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py#L328). The gap between hourly and daily computed (~1-24h) is bridged by the watch key. Daemon HA (2 replicas, pod anti-affinity) minimizes the risk of missing the ~77-minute detection window. Step B1.5 (recovery query) detects any that slip through (processes if within cutoff, logs skip if expired).
+### G7 — MCP code-level override in orchestrator SDK path (§3.3)
 
-**Fix 2 — Guidance gate scoped to historical only (was: gates everything)**
+**Fix — scope matters**:
 
-The original design gated ALL phases on guidance. Problem: the fresh live 8-K has `guidance_status IS NULL`, blocking live prediction even though historical is already done. The predictor reads the raw 8-K directly (EX-99.1 in the context bundle) — it doesn't need guidance *extracted from* the live 8-K. Fixed: guidance gate only applies to Phase A (historical bootstrap). Phase B (live) fires immediately on 8-K detection regardless of guidance status.
+- **Learner path (`_run_learner_via_sdk`) — MUST-FIX.** The learner's Data SubAgents call `mcp__neo4j-cypher__*` tools directly; without the HTTP override, every K8s run fails.
+- **Predictor path (`_run_predictor_via_sdk`) — SYMMETRY ONLY.** Predictor SKILL.md allows only `Read/Write/Glob`; no MCP tool invocations. Applying the override is safe + future-proof, not strictly required for v1.
 
-**Fix 3 — Filesystem for completion truth, Redis for coordination only (was: permanent Redis done markers)**
+Both get a ~10-line conditional injection when `MCP_NEO4J_URL` env var is set, matching `canary_sdk.py:48-63`. Apply both for code symmetry and to avoid one-sided asymmetry that a future editor could miss.
 
-The master plan (earnings-orchestrator.md §2a, line 194) says: *"durable progress and resume are derived from filesystem outputs."* Fixed: historical done = filesystem check (event.json quarters + live_state.json deferred learner — see `is_historical_done()` pseudocode). Live prediction done = filesystem check (live_state.json + prediction/result.json). Redis is only for leases and the live watch registry — never completion truth.
+---
 
-**Fix 4 — Live watch registry for prediction tracking**
+## 11. Should-Fix Operational Details (Locked)
 
-The daemon needs to track which 8-K was detected for prediction re-enqueue and cutoff checking. `earnings:watch:live:{TICKER}` Redis key captures the live 8-K info at detection time. Watch key is deleted once prediction completes (live_state.json written) or cutoff expires. Short lifecycle — prediction tracking only, not learner monitoring.
+Six items for operational polish. Not production-breaking, but close every hole.
 
-### Natural Historical/Live Separation
+### G8 — `POLL_INTERVAL` default = 30s (§6)
 
-Returns are computed at different times (verified: `utils/market_session.py:281,311`):
-- **`hourly_stock`**: event_time + 60min + 17min Polygon delay = **~77 minutes** after filing
-- **`daily_stock`**: 5-24 hours after filing (depends on market session)
+Balanced: 2 sweeps/min, negligible Neo4j load (2 batched Cyphers/sweep + ticker-stat cost).
 
-The daemon uses the tighter signal:
+### G10 — DLQ cleanup is an atomic best-effort sequence (§3.11)
 
-- **Historical** (`get_quarterly_filings.py`): `daily_stock IS NOT NULL` — all filings with fully settled returns
-- **Live detection — fast path** (daemon Query 2): `hourly_stock IS NULL` — truly fresh, filed within ~77 minutes
-- **Live detection — recovery** (daemon Query 2b): `daily_stock IS NULL` — wider 5-24h window, for tickers with no watch key (catches daemon outages beyond the hourly window, including after a prior cycle completed). Results filtered by accession to skip already-processed 8-Ks. Staleness cutoff (`LIVE_PREDICTION_CUTOFF_MINS`) prevents stale predictions.
-- **No overlap with historical**: historical requires `daily_stock IS NOT NULL`, live queries require some stock field IS NULL. No 8-K matches both.
+Order: `failed.json` → lease DEL → LPUSH dead. If any step fails, log and continue; the sentinel is the authoritative halt marker. Worker does NOT call `close_run` — component ledger lifecycle is owned by the orchestrator (§3.11 invariant).
 
-### Completion Truth
+### G11 — Budget gate centralization
 
-| Check | Source | Why |
-|---|---|---|
-| Historical done? | **Filesystem**: `event.json` quarters all have both result files + `live_state.json` deferred learner check (if prediction exists without attribution → not done) | File-authoritative. Two checks: event.json for known quarters, live_state.json for deferred learner from prior live cycle. See `is_historical_done()` pseudocode. |
-| Live prediction done? | **Filesystem**: `live_state.json` exists + `prediction/result.json` in the quarter dir it names | Orchestrator writes both. No stall: if `live_state.json` missing, prediction hasn't completed → lease expires → re-enqueue. |
-| Which accession is live? | **Redis**: `earnings:watch:live:{TICKER}` | Pure detection bookkeeping (accession, filed_8k, detected_at). Short-lived — deleted on prediction completion or cutoff. |
-| Live quarter_label? | **Filesystem**: `live_state.json` → `quarter_label` (written by orchestrator) | Orchestrator owns quarter identity — it has full context. Daemon never derives fiscal quarter. |
-| Dedup enqueue? | **Redis**: leases (`earnings:lease:*`) | Coordination only, TTL'd. |
+Factor `extraction_worker.is_over_usage_threshold` into `scripts/shared/budget_gate.py`. Both workers import. Env-var split:
 
-If Redis loses watch keys, daemon re-detects via Query 2 (`hourly_stock IS NULL`, ~77min window) or Step B1.5 recovery (`daily_stock IS NULL`). If event.json is missing, historical is "not done" (orchestrator creates it on first run).
+- `GUIDANCE_DAILY_INTERACTIVE_PCT` (default 10)
+- `EARNINGS_DAILY_INTERACTIVE_PCT_LIVE` (default 0 — live never pauses)
+- `EARNINGS_DAILY_INTERACTIVE_PCT_HISTORICAL` (default 10)
+- `DAILY_INTERACTIVE_PCT_SONNET` (default 5, shared)
 
-### Redis Keys
+### G12 — KEDA ScaledObject for `earnings-worker` (§3.3)
 
-```
-# ── Leases (TTL'd, prevent duplicate enqueue) ──
-earnings:lease:historical:{TICKER}       → "1"  (ex=43200, 12h)
-earnings:lease:live:{TICKER}             → "1"  (ex=3600, 1h)
-
-# ── Live watch registry (set by daemon on detection, deleted on prediction completion) ──
-earnings:watch:live:{TICKER}             → JSON {
-    "accession_8k": "0001234-26-000123",
-    "filed_8k": "2026-03-18T16:30:00-05:00",
-    "detected_at": "2026-03-18T16:31:00-04:00"
-}
+```yaml
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: earnings-worker-scaler
+  namespace: processing
+spec:
+  scaleTargetRef:
+    name: earnings-worker
+  minReplicaCount: 1      # keeps one worker warm; grace period handles in-flight jobs during scale-down
+  maxReplicaCount: 3      # conservative; learner is expensive
+  cooldownPeriod: 600     # 10 min
+  pollingInterval: 30
+  triggers:
+    - type: redis
+      metadata:
+        address: redis.infrastructure.svc.cluster.local:6379
+        listName: earnings:pipeline
+        listLength: "1"
+        databaseIndex: "0"
 ```
 
-No permanent completion markers. Completion is filesystem-authoritative. Watch keys are short-lived (prediction tracking only).
+### G13 — Complete env var defaults table (§6) — filled in table above
 
-### Queue Payload (earnings:pipeline)
+### G14 — `live_state.json` quarter-label-match check on delete (§3.7)
 
-```json
-{"ticker": "LULU", "mode": "historical", "enqueued_at": "2026-03-18T10:00:00-04:00"}
+Daemon reads `quarter_label` from file before deleting; deletes only on match. Prevents destroying a newer quarter's state that legitimately overwrote the prior one.
 
-{"ticker": "LULU", "mode": "live", "accession_8k": "0001234-26-000123",
- "enqueued_at": "2026-03-18T16:31:00-04:00"}
-```
+---
 
-Two modes only. No `learn` mode — learners run inside historical orchestrator jobs.
+## 12. File / Manifest Implementation Checklist
 
-### Neo4j Queries (3 total, batched where possible)
+Implementation order (dependencies first; each step independently deployable):
 
-**Query 1 — Guidance gate** (batched, 2 round-trips, **only for tickers needing historical**):
+| # | Action | Path | LOC | Depends on |
+|---|---|---|---|---|
+| 1 | CREATE | `scripts/shared/__init__.py` | 1 | — |
+| 2 | CREATE | `scripts/shared/budget_gate.py` (factor from `extraction_worker.is_over_usage_threshold`) | ~120 | 1 |
+| 3 | MODIFY | `scripts/extraction_worker.py` (import shared module; drop local duplicate) | −40 / +5 | 2 |
+| 4 | MODIFY | `scripts/earnings/earnings_orchestrator.py` — add MCP override to `_run_learner_via_sdk` + `_run_predictor_via_sdk` (G7); add `prediction/complete.json` write (G4b); add `learning/complete.json` write in both SUCCEEDED + RECOVERED paths (G4); add optional `--mode {historical,live}` plumbing for run-ledger/observability only | ~80 | — |
+| 5 | CREATE | `scripts/earnings_trigger_daemon.py` (new daemon, mirrors `guidance_trigger_daemon.py` + earnings-specific gates/walker) | ~400 | 2, 4 |
+| 6 | CREATE | `scripts/earnings_worker.py` (new worker: subprocess dispatcher + lease + DLQ + sentinel writes G5/G10) | ~450 | 2, 4 |
+| 7 | DELETE | `scripts/earnings_trigger.py` (legacy naive listener; no shared code with new daemon) | −139 | 5, 6 |
+| 8 | MODIFY | `scripts/earnings/run_ledger.py` — add nullable `mode` field to `open_run`/`close_run` + Obsidian renderer column (`guidance` may leave it null; `prediction`/`learning` set it from the orchestrator's `--mode` arg, which is sourced from worker payload) | +40 | — |
+| 9 | CREATE | `k8s/processing/earnings-trigger.yaml` (Deployment) | ~70 | 5 |
+| 10 | CREATE | `k8s/processing/earnings-worker.yaml` (Deployment + KEDA ScaledObject; G6/G12 specs) | ~170 | 6 |
+| 11 | UPDATE | This plan file → mark all Opens resolved | — | all |
 
-```cypher
--- Reports with pending guidance (same filter as guidance daemon ASSET_CONFIGS)
-MATCH (r:Report)-[:PRIMARY_FILER]->(c:Company)
-WHERE c.ticker IN $tickers
-  AND (r.guidance_status IS NULL OR r.guidance_status = 'in_progress')
-  AND (
-    r.formType IN ['10-Q', '10-K'] OR
-    (r.formType = '8-K' AND (
-      r.items CONTAINS 'Item 2.02' OR
-      r.items CONTAINS 'Item 7.01' OR
-      r.items CONTAINS 'Item 8.01'))
-  )
-WITH c.ticker AS ticker, count(r) AS pending WHERE pending > 0
-RETURN ticker, pending
-```
-```cypher
--- Transcripts with pending guidance
-MATCH (t:Transcript)
-WHERE t.symbol IN $tickers
-  AND (t.guidance_status IS NULL OR t.guidance_status = 'in_progress')
-WITH t.symbol AS ticker, count(t) AS pending WHERE pending > 0
-RETURN ticker, pending
-```
+**Net**: 4 new modules, 2 K8s manifests, 3 modified files, 1 deleted, ~1,300 lines net new code. Zero changes to:
 
-Tickers appearing in either result → guidance not ready. `completed` and `failed` both count as done (extraction tried; predictor handles gaps).
+- `earnings-prediction` / `earnings-learner` SKILL.md
+- `prediction_result.v1` / `attribution_result.v2` validators
+- `earnings_orchestrator.py` core flow (only adds sentinel writes + MCP override)
+- Guidance pipeline behavior (only factors out the shared budget module)
 
-**Query 2 — Fresh 8-K detection** (batched, for live detection — **`hourly_stock IS NULL`**):
+### Implementation ordering (safe rollout)
 
-```cypher
--- Find fresh 8-K 2.02 filings where hourly return not yet computed (~77min window), one per ticker (oldest first)
-MATCH (r:Report)-[pf:PRIMARY_FILER]->(c:Company)
-WHERE c.ticker IN $tickers
-  AND r.formType = '8-K' AND r.items CONTAINS 'Item 2.02'
-  AND pf.hourly_stock IS NULL
-  AND r.created > datetime() - duration('P7D')
-WITH c.ticker AS ticker, r ORDER BY r.created ASC
-WITH ticker, collect({accession: r.accessionNo, filed: toString(r.created)})[0] AS first
-RETURN ticker, first.accession AS accession, first.filed AS filed
-```
+1. **Steps 1-3 first**: shared budget gate lands on main; extraction-worker rollout verifies no regression.
+2. **Step 4**: orchestrator sentinel writes + MCP override. Safe because the orchestrator's CLI is idempotent; sentinels are additive; MCP override is only active when env var is set.
+3. **Steps 5-6 in parallel**: daemon and worker code development. They talk via Redis only, so either can be tested in isolation.
+4. **Step 7**: delete old `earnings_trigger.py` only after 5-6 are merged.
+5. **Steps 8-10**: observability + K8s manifests. Apply the two K8s manifests with `replicas: 0` first; verify they deploy cleanly; then scale up.
+6. **Step 11**: mark plan implementation-complete.
 
-**Why `hourly_stock IS NULL`**: Tight ~77-minute freshness window for trading speed. Daemon HA (2 replicas) minimizes missed-window risk; Step B1.5 detects any that slip through.
-
-**Historical boundary stays `daily_stock IS NOT NULL`** in the canonical orchestrator discovery script [`get_quarterly_filings.py`](/home/faisal/EventMarketDB/.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py#L328). Daemon HA minimizes the risk of missing the ~77min window; Step B1.5 detects any that slip through.
-
-**7-day recency filter is correctness**: Prevents false live detection of legacy NULL-return 8-Ks in the database.
-
-**Query 2b — Missed-window recovery** (batched, for historical-done tickers with no watch key; results filtered by accession):
-
-```cypher
--- Recovery: recent 8-K 2.02 with daily return not yet computed (wider window than hourly)
-MATCH (r:Report)-[pf:PRIMARY_FILER]->(c:Company)
-WHERE c.ticker IN $tickers
-  AND r.formType = '8-K' AND r.items CONTAINS 'Item 2.02'
-  AND pf.daily_stock IS NULL
-  AND r.created > datetime() - duration('P7D')
-WITH c.ticker AS ticker, r ORDER BY r.created ASC
-WITH ticker, collect({accession: r.accessionNo, filed: toString(r.created)})[0] AS first
-RETURN ticker, first.accession AS accession, first.filed AS filed
-```
-
-**Why `daily_stock IS NULL`**: Catches 8-Ks where the hourly detection window (~77min) passed but daily returns haven't been computed yet (5-24h). Staleness cutoff (`LIVE_PREDICTION_CUTOFF_MINS`, default 60min) prevents stale predictions.
-
-### Live Quarter Identity — `live_state.json` (orchestrator output contract)
-
-**The gap**: The existing discovery path (`get_quarterly_filings.py` → `event.json`) requires `daily_stock IS NOT NULL`. A fresh live 8-K has `daily_stock IS NULL`, so it never appears in event.json. Someone needs to derive the quarter_label for the live 8-K.
-
-**Why the daemon should NOT do this**: 43.2% of matched 10-Q/10-Ks are filed >24h after the 8-K. FYE-based fallback is only 73.8% accurate (COST and TSLA fail completely due to 52-week calendars).
-
-**The solution**: The **orchestrator** derives the quarter_label and **persists the mapping as a file**. The daemon just reads it.
-
-**Contract**: After processing a live 8-K, the orchestrator writes:
-
-```
-earnings-analysis/Companies/{TICKER}/events/live_state.json
-{
-    "accession_8k": "0001234-26-000123",
-    "quarter_label": "Q1_FY2026",
-    "filed_8k": "2026-03-18T16:30:00-05:00",
-    "predicted_at": "2026-03-18T16:45:00Z",
-    "accession_10q": "0001234-26-000100"  // filled if 10-Q already exists at prediction time, null if not
-}
-```
-
-**Daemon reads `live_state.json` for prediction completion check:**
-
-```python
-def get_live_state(ticker):
-    """Read orchestrator's live_state.json. Returns None if not yet written or corrupt."""
-    p = COMPANIES_DIR / ticker / "events" / "live_state.json"
-    if not p.exists():
-        return None
-    try:
-        return json.loads(p.read_text())
-    except (json.JSONDecodeError, OSError):
-        return None
-
-def has_live_prediction(ticker, current_accession=None):
-    state = get_live_state(ticker)
-    if not state: return False
-    if current_accession and state.get("accession_8k") != current_accession:
-        return False  # stale live_state.json from prior cycle
-    ql = state["quarter_label"]
-    return (COMPANIES_DIR / ticker / "events" / ql / "prediction" / "result.json").exists()
-```
-
-**If `live_state.json` doesn't exist**: prediction hasn't completed yet → daemon waits (lease blocks re-enqueue). After lease expires, daemon re-enqueues. Orchestrator re-runs (idempotent). Eventually completes, writes `live_state.json`. No stall possible.
-
-### Sweep Pseudocode
-
-```python
-COMPANIES_DIR = Path("earnings-analysis/Companies")
-
-def get_watched_tickers(r):
-    """Scan earnings:watch:live:* keys. Returns dict of ticker → watch_data."""
-    watched = {}
-    for key in r.scan_iter("earnings:watch:live:*"):
-        ticker = key.split(":")[-1]
-        raw = r.get(key)
-        if raw:
-            watched[ticker] = json.loads(raw)
-    return watched
-
-def is_historical_done(ticker):
-    """File-authoritative: event.json + live_state.json checked for completeness.
-    Two checks:
-    1. All resolvable quarters in event.json have both prediction + attribution result files.
-    2. If live_state.json exists, its quarter also has attribution (deferred learner check).
-    The deferred learner check is critical: event.json is stale between live cycles (only
-    rebuilt when orchestrator runs get_quarterly_filings). Without this check, a prior live
-    quarter's missing attribution would never trigger a historical catch-up."""
-    event_path = COMPANIES_DIR / ticker / "events" / "event.json"
-    if not event_path.exists():
-        return False
-    try:
-        events = json.loads(event_path.read_text())["events"]
-    except (json.JSONDecodeError, KeyError):
-        return False
-    if not events:
-        return False
-    resolvable = 0
-    for e in events:
-        q = e["quarter_label"]
-        if q.startswith("8K_") or not e.get("fiscal_year") or not e.get("fiscal_quarter"):
-            continue  # unmatched 8-K (no 10-Q/10-K) — skip
-        resolvable += 1
-        base = COMPANIES_DIR / ticker / "events" / q
-        if not (base / "prediction" / "result.json").exists():
-            return False
-        if not (base / "attribution" / "result.json").exists():
-            return False
-    if resolvable == 0:
-        return False
-    # Deferred learner check: if a prior live cycle left prediction without attribution,
-    # historical is NOT done — orchestrator needs to run learner for that quarter.
-    # This catches the case where event.json is stale (doesn't include the live quarter yet).
-    ls = get_live_state(ticker)
-    if ls:
-        ql = ls.get("quarter_label")
-        if ql:
-            attr = COMPANIES_DIR / ticker / "events" / ql / "attribution" / "result.json"
-            pred = COMPANIES_DIR / ticker / "events" / ql / "prediction" / "result.json"
-            if pred.exists() and not attr.exists():
-                return False  # deferred learner pending
-    return True
-
-
-def get_live_state(ticker):
-    """Read orchestrator's live_state.json. Returns None if not yet written or corrupt."""
-    p = COMPANIES_DIR / ticker / "events" / "live_state.json"
-    if not p.exists():
-        return None
-    try:
-        return json.loads(p.read_text())
-    except (json.JSONDecodeError, OSError):
-        return None
-
-
-def has_live_prediction(ticker, current_accession=None):
-    state = get_live_state(ticker)
-    if not state: return False
-    if current_accession and state.get("accession_8k") != current_accession:
-        return False  # stale live_state.json from prior cycle
-    ql = state["quarter_label"]
-    return (COMPANIES_DIR / ticker / "events" / ql / "prediction" / "result.json").exists()
-
-
-def is_dead_lettered(r, mode, ticker, accession_8k=None):
-    """Check if ticker+mode (optionally + specific 8-K cycle) is in dead-letter queue."""
-    dl_queue = f"{QUEUE_MAP[mode]}:dead"
-    for raw in r.lrange(dl_queue, 0, -1):
-        try:
-            entry = json.loads(raw)
-            if entry.get("ticker") == ticker and entry.get("mode") == mode:
-                if accession_8k and entry.get("accession_8k") != accession_8k:
-                    continue  # different 8-K cycle — not a match
-                return True
-        except (json.JSONDecodeError, TypeError):
-            continue
-    return False
-
-
-def enqueue(r, mode, ticker, ttl, extra=None, dry_run=False):
-    """Lease-based dedup + LPUSH to mode-specific queue. Returns True if enqueued."""
-    lease_key = f"earnings:lease:{mode}:{ticker}"
-    if dry_run:
-        return not r.exists(lease_key)
-    if not r.set(lease_key, "1", ex=ttl, nx=True):
-        return False
-    payload = {"ticker": ticker, "mode": mode,
-               "enqueued_at": datetime.now(timezone.utc).isoformat()}
-    if extra:
-        payload.update(extra)
-    r.lpush(QUEUE_MAP[mode], json.dumps(payload))
-    return True
-
-
-def sweep_once(r, mgr, tickers, dry_run=False):
-    total = 0
-
-    # ── Phase A: Historical bootstrap (guidance-gated) ──
-    need_historical = {t for t in tickers if not is_historical_done(t)}
-
-    if need_historical:
-        guidance_pending = check_guidance_pending(mgr, list(need_historical))
-        guidance_ready = need_historical - guidance_pending
-
-        if guidance_pending:
-            log.debug(f"Guidance pending ({len(guidance_pending)}): {sorted(guidance_pending)}")
-
-        # Enqueue historical (priority: nearest earnings first)
-        for t in sorted(guidance_ready, key=lambda t: tickers[t]):
-            if is_dead_lettered(r, "historical", t):
-                continue  # terminal failure — skip until --force
-            if enqueue(r, "historical", t, ttl=LEASE_TTL_HISTORICAL, dry_run=dry_run):
-                total += 1
-            # Don't check live gates — historical must finish first
-
-    # ── Phase B: Live detection + prediction monitoring (NO guidance gate) ──
-    historical_done = {t for t in tickers if t not in need_historical}
-    watched = get_watched_tickers(r)
-
-    # ── Step B1: Detect new live 8-Ks ──
-    detect_tickers = historical_done | set(watched.keys())
-    if detect_tickers:
-        fresh_8ks = find_fresh_8ks(mgr, list(detect_tickers))  # hourly_stock IS NULL + 7d
-
-        for t, info in fresh_8ks.items():
-            acc, filed = info["accession"], info["filed"]
-            watch_key = f"earnings:watch:live:{t}"
-            watch_raw = r.get(watch_key)
-            watch = json.loads(watch_raw) if watch_raw else None
-
-            if not watch or watch.get("accession_8k") != acc:
-                if is_dead_lettered(r, "live", t, accession_8k=acc):
-                    continue  # terminal failure — skip until --force
-                if not dry_run:
-                    r.set(watch_key, json.dumps({
-                        "accession_8k": acc, "filed_8k": filed,
-                        "detected_at": datetime.now(timezone.utc).isoformat(),
-                    }))
-                if enqueue(r, "live", t, ttl=LEASE_TTL_LIVE,
-                           extra={"accession_8k": acc}, dry_run=dry_run):
-                    total += 1
-
-    # ── Step B1.5: Recover missed live events (daemon outage > hourly window) ──
-    recovery_tickers = {t for t in historical_done if t not in watched}
-    if recovery_tickers:
-        missed_8ks = find_missed_8ks(mgr, list(recovery_tickers))  # daily_stock IS NULL + 7d
-        for t, info in missed_8ks.items():
-            acc, filed = info["accession"], info["filed"]
-            ls = get_live_state(t)
-            if ls and ls.get("accession_8k") == acc:
-                continue  # already processed
-            filed_dt = datetime.fromisoformat(filed)
-            mins_since = (datetime.now(timezone.utc) - filed_dt).total_seconds() / 60
-            if mins_since > LIVE_PREDICTION_CUTOFF_MINS:
-                log.warning(f"Skipping {t}: live prediction window expired "
-                            f"(filed {filed}, {mins_since:.0f}min ago, "
-                            f"cutoff={LIVE_PREDICTION_CUTOFF_MINS}min)")
-                continue
-            if is_dead_lettered(r, "live", t, accession_8k=acc):
-                continue
-            if not dry_run:
-                r.set(f"earnings:watch:live:{t}", json.dumps({
-                    "accession_8k": acc, "filed_8k": filed,
-                    "detected_at": datetime.now(timezone.utc).isoformat(),
-                }))
-            if enqueue(r, "live", t, ttl=LEASE_TTL_LIVE,
-                       extra={"accession_8k": acc}, dry_run=dry_run):
-                log.info(f"Recovery: detected missed live 8-K for {t} ({mins_since:.0f}min old)")
-                total += 1
-
-    # ── Step B2: Monitor prediction completion ──
-    # Simple: check if prediction completed, re-enqueue if not, respect cutoff.
-    # No learner monitoring — learner deferred to next historical bootstrap.
-    for t, watch in watched.items():
-        current_acc = watch.get("accession_8k")
-
-        if has_live_prediction(t, current_acc):
-            # Prediction done — delete watch key, daemon's job is complete for this cycle.
-            # Learner will run during next historical bootstrap (orchestrator catches
-            # missing attribution when processing event.json sequentially).
-            r.delete(f"earnings:watch:live:{t}")
-            continue
-
-        # Prediction not done — check cutoff
-        filed_8k_str = watch.get("filed_8k")
-        if filed_8k_str:
-            filed_dt = datetime.fromisoformat(filed_8k_str)
-            mins_since = (datetime.now(timezone.utc) - filed_dt).total_seconds() / 60
-            if mins_since > LIVE_PREDICTION_CUTOFF_MINS:
-                log.warning(f"Skipping {t}: live prediction window expired "
-                            f"(filed {filed_8k_str}, {mins_since:.0f}min ago, "
-                            f"cutoff={LIVE_PREDICTION_CUTOFF_MINS}min)")
-                r.delete(f"earnings:watch:live:{t}")
-                continue
-
-        # Re-enqueue LIVE (lease dedup prevents flooding)
-        if not is_dead_lettered(r, "live", t, accession_8k=current_acc):
-            enqueue(r, "live", t, ttl=LEASE_TTL_LIVE,
-                    extra={"accession_8k": current_acc}, dry_run=dry_run)
-
-    return total
-```
-
-### Worker Routing
-
-```python
-# In earnings_orchestrator_worker.py
-PROMPTS = {
-    "historical": "/earnings-orchestrator {ticker}",
-    "live":       "/earnings-orchestrator {ticker} --live --accession {accession_8k}",
-}
-```
-
-Worker: BRPOP → format prompt → Claude SDK query. Pattern mirrors extraction_worker.py (usage-aware throttling, MCP server config, retry logic, dead-letter queue).
-
-**No post-completion bookkeeping needed**: the orchestrator writes `live_state.json` + result files directly. The daemon reads those files. The worker just runs the SDK and confirms it returned successfully.
-
-### Configuration
-
-```python
-POLL_INTERVAL = 60                              # seconds between sweeps
-LEASE_TTL_HISTORICAL = 43200                    # 12h (may process 10+ quarters + deferred learners)
-LEASE_TTL_LIVE = 3600                           # 1h (single quarter prediction)
-ACTIVE_WINDOW_DAYS = int(os.environ.get(        # 90 days: covers earnings +
-    "ACTIVE_WINDOW_DAYS", "90"))                # re-entry for next quarter's historical bootstrap
-MAX_RETRIES = int(os.environ.get("MAX_RETRIES", "3"))  # worker retries before dead-letter
-LIVE_PREDICTION_CUTOFF_MINS = int(os.environ.get(     # max minutes after 8-K filing to attempt
-    "LIVE_PREDICTION_CUTOFF_MINS", "60"))              # live prediction — after this, skip with reason
-
-# Two queues — live is never blocked by slow historical runs
-QUEUE_LIVE = "earnings:pipeline:live"           # live predictions only (urgent)
-QUEUE_HISTORICAL = "earnings:pipeline:historical"  # historical backfill + deferred learners (batch)
-DEAD_LETTER_LIVE = f"{QUEUE_LIVE}:dead"
-DEAD_LETTER_HISTORICAL = f"{QUEUE_HISTORICAL}:dead"
-QUEUE_MAP = {
-    "historical": QUEUE_HISTORICAL,
-    "live": QUEUE_LIVE,
-}
-```
-
-**Two separate queues**: Historical (hours, includes deferred learners) must never block live predictions (minutes). Same worker image, different `QUEUE_NAME` env var.
-
-**KEDA scaling rule** (carried from existing workers — `claude-code-worker.yaml:140-142`, `extraction-worker.yaml:146`):
-- `minReplicaCount: 1` — prevents KEDA killing pods mid-processing.
-- `maxReplicaCount: 2` — parallel tickers in historical, parallel live predictions on heavy earnings days.
-- `cooldownPeriod: 300` — only governs scale-down above minReplicas.
-
-**Daemon high availability**: 2 replicas with pod anti-affinity (prefer different nodes). Stateless — Redis leases prevent duplicate enqueues. Minimizes risk of missing the ~77-minute detection window. Step B1.5 provides a safety net for any that slip through.
-
-**Cross-pipeline throttling**: All workers share the same Claude API quota via `is_over_usage_threshold()` (`extraction_worker.py:99`). Priority via **differential `DAILY_INTERACTIVE_PCT` env vars**:
-
-```
-extraction-worker (guidance):      DAILY_INTERACTIVE_PCT=10    ← unchanged (0% regression)
-earnings-worker-historical:        DAILY_INTERACTIVE_PCT=7.5   ← slightly aggressive (has deadline)
-earnings-worker-live:              DAILY_INTERACTIVE_PCT=2     ← most aggressive (trade signal)
-```
-
-Live predictions almost always run. Historical/learners get more room than guidance (deadline pressure). Within each pipeline, daemons sort by nearest earnings date.
-
-**Dead-letter queue**: Worker retries up to `MAX_RETRIES` (3), then dead-letters. Daemon checks dead-letter before enqueueing both modes — skips tickers with terminal failures. Live dead-letter is cycle-scoped (matches `accession_8k`). `--force` flag overrides. Mirrors `extraction_worker.py:61-62,621-630`.
-
-### Risk: Failed Guidance Due to Rate Limits
-
-The extraction worker has rate limit detection (`extraction_worker.py:86`: `RATE_LIMIT_PATTERN = "hit your limit"`) and pauses on rate limits — NOT marks as failed. Only genuine extraction failures get `guidance_status = 'failed'`. The `--force` flag on the guidance daemon can re-process manually if a failure was misclassified.
-
-### Edge Cases Addressed
-
-| Edge Case | Handling |
-|---|---|
-| **Guidance stuck in_progress** | Guidance daemon's stale recovery (lease expiry → re-enqueue). If genuinely stuck: `--skip-guidance` flag |
-| **Historical too slow for live** | Start early — TradeReady gives 1-3 day warning. `daily_stock IS NOT NULL` provides natural ~24h separation |
-| **Worker crashes mid-historical** | Lease expires → re-enqueue → orchestrator re-runs → file-authoritative skips done quarters |
-| **Multiple 8-K 2.02 same quarter** | Deduped by get_quarterly_filings (USE_FIRST_TICKERS). For live: Query 2 collapses to oldest fresh 8-K per ticker. |
-| **8-K/A amendments** | Ignored (query: `formType = '8-K'`, not `'8-K/A'`) |
-| **Redis data loss** | Within ~77min: daemon re-detects via Query 2. After: Step B1.5 recovery. Watch keys are short-lived (prediction only), so loss is bounded. |
-| **Daemon restarts** | No in-memory state. Redis watch keys + filesystem results persist. Picks up exactly where it left off |
-| **Same 8-K in historical AND live** | Impossible: historical uses `daily_stock IS NOT NULL`, live uses `hourly_stock IS NULL`. Cannot match both. |
-| **N/A quarters stall is_historical_done()** | Quarters with `quarter_label.startswith("8K_")` or missing fiscal data are skipped. `resolvable > 0` required. |
-| **Guidance gate blocks live prediction** | Guidance gate only applies to Phase A. Phase B has no guidance gate. |
-| **event.json missing on first run** | `is_historical_done()` returns False → enqueue historical → orchestrator creates event.json on first run |
-| **Terminal failure — infinite retry** | Worker dead-letters after MAX_RETRIES (3). Daemon checks dead-letter before enqueueing (cycle-scoped for live). `--force` overrides. |
-| **Daemon down >77min during live 8-K** | Step B1.5 recovery: Query 2b catches 8-Ks missed during hourly window. Staleness cutoff applies. Daemon HA minimizes this. |
-| **Live prediction cutoff expired** | Step B2 logs "prediction window expired", deletes watch key. No silent miss — always logged. |
-| **Deferred learner for Q1-Q3** | 10-Q files within 45 days. By next historical bootstrap (~90 days), 10-Q is available. Orchestrator runs learner with full post-event data. |
-| **Deferred learner for Q4 (10-K)** | 10-K files within 90 days. `get_quarterly_filings.py` uses `MAX_LAG_HOURS=90`, so by next historical bootstrap the 10-K is available. |
-| **Cross-cycle stale live_state.json** | `has_live_prediction()` compares `current_accession` with `live_state.json.accession_8k`. Prior cycle's data doesn't confuse current cycle. |
-| **Cross-cycle stale dead-letter** | `is_dead_lettered()` for live mode matches on `accession_8k`. Prior cycle's dead-letter doesn't block current cycle. |
-| **Learner fails during historical** | Orchestrator's attribution failure policy: "warn + write" for incomplete output. Partial attribution with `missing_inputs` is written → `is_historical_done()` sees the file → proceeds. |
-
-### CLI Parity with Guidance Daemon
+### Verification runbook (mirrors guidance §2)
 
 ```bash
-python3 scripts/earnings_trigger_daemon.py                    # Daemon mode (60s loop)
-python3 scripts/earnings_trigger_daemon.py --list             # Dry run: show what would queue
-python3 scripts/earnings_trigger_daemon.py --once             # Single sweep, exit
-python3 scripts/earnings_trigger_daemon.py --ticker LULU MU   # Scope to specific tickers
-python3 scripts/earnings_trigger_daemon.py --skip-guidance    # Bypass guidance gate
-python3 scripts/earnings_trigger_daemon.py --force            # Re-enqueue even if filesystem says done
+# A. Dry run (no enqueue)
+python3 scripts/earnings_trigger_daemon.py --list
+
+# B. Single sweep, specific tickers
+python3 scripts/earnings_trigger_daemon.py --once --ticker AVGO NVDA
+
+# C. Queue inspection
+redis-cli -h 192.168.40.72 -p 31379 LLEN earnings:pipeline
+redis-cli -h 192.168.40.72 -p 31379 KEYS "earnings_lease:*"
+
+# D. Idempotency (re-run should enqueue 0)
+python3 scripts/earnings_trigger_daemon.py --once --ticker AVGO
+
+# E. Deploy
+kubectl apply -f k8s/processing/earnings-trigger.yaml
+kubectl apply -f k8s/processing/earnings-worker.yaml
+kubectl set env deployment/earnings-trigger -n processing EARNINGS_AUTOMATION_ENABLED=true
+kubectl set env deployment/earnings-worker  -n processing EARNINGS_AUTOMATION_ENABLED=true
+
+# F. Enable historical backfill (after catch-up has drained)
+kubectl set env deployment/earnings-trigger -n processing HISTORICAL_BACKFILL_ENABLED=true
+
+# G. Monitor
+kubectl logs -f -l app=earnings-trigger -n processing
+kubectl logs -f -l app=earnings-worker  -n processing
+
+# H. DLQ inspection
+redis-cli -h 192.168.40.72 -p 31379 LLEN earnings:pipeline:dead
+redis-cli -h 192.168.40.72 -p 31379 LRANGE earnings:pipeline:dead 0 -1
+
+# I. Operator recovery (halted quarter)
+rm earnings-analysis/Companies/AVGO/events/Q3_FY2023/learning/failed.json
+# Next sweep re-enqueues; log shows the HALTED state has cleared.
+
+# J. Scale-down procedure (pause KEDA first — same dance as guidance)
+kubectl annotate scaledobject earnings-worker-scaler -n processing \
+    autoscaling.keda.sh/paused-replicas="0" --overwrite
+kubectl scale deployment earnings-trigger -n processing --replicas=0
+kubectl scale deployment earnings-worker  -n processing --replicas=0
+
+# K. Resume
+kubectl annotate scaledobject earnings-worker-scaler -n processing \
+    autoscaling.keda.sh/paused-replicas-
+kubectl scale deployment earnings-trigger -n processing --replicas=1
+kubectl scale deployment earnings-worker  -n processing --replicas=1
 ```
 
-### Files to Create (5 new)
-
-| File | Lines (est) | Purpose |
-|---|---|---|
-| `scripts/earnings_trigger_daemon.py` | ~220 | Polling daemon (mirrors guidance_trigger_daemon.py structure) |
-| `scripts/earnings_orchestrator_worker.py` | ~180 | Queue consumer → Claude SDK (mirrors extraction_worker.py, parameterized by QUEUE_NAME) |
-| `k8s/processing/earnings-trigger-daemon.yaml` | ~50 | Always-on Deployment, 2 replicas with pod anti-affinity |
-| `k8s/processing/earnings-worker-live.yaml` | ~80 | Deployment + KEDA ScaledObject on `earnings:pipeline:live` (maxReplicas: 2) |
-| `k8s/processing/earnings-worker-historical.yaml` | ~80 | Deployment + KEDA ScaledObject on `earnings:pipeline:historical` (maxReplicas: 2) |
-
-### Files NOT Modified by Daemon Implementation
-
-- `scripts/guidance_trigger_daemon.py` — untouched
-- `scripts/extraction_worker.py` — untouched
-- `.claude/skills/earnings-orchestrator/scripts/get_quarterly_filings.py` — already updated separately (`MAX_LAG_HOURS=90`); daemon assumes current behavior
-- `.claude/hooks/build_orchestrator_event_json.py` — untouched
-- Any Neo4j schema — no new properties
-
-### Prerequisite: Orchestrator Implementation
-
-The current `.claude/skills/earnings-orchestrator/SKILL.md` is v1.0 (2026-02-04) with placeholder steps and no live mode. The daemon design assumes the orchestrator will support:
-- **Historical**: `"/earnings-orchestrator {TICKER}"` → processes all pending quarters with PIT, including deferred learners (prediction exists but no attribution → run learner)
-- **Live**: `"/earnings-orchestrator {TICKER} --live --accession {ACC}"` → runs prediction if missing, no-op if already done
-
-Additionally, the orchestrator must write `live_state.json` after live prediction with the derived `quarter_label`. This is the contract between orchestrator and daemon.
-
-**Note**: Non-earnings 8-Ks (e.g., leadership changes filed shortly before earnings) are NOT detected by this daemon — it only triggers on Item 2.02. These filings reach the predictor through the orchestrator's unified inter-quarter timeline (`inter_quarter_context`, pre-assembled by `build_inter_quarter_context()` — see `plannerStep5.md` and `earnings-orchestrator.md` §2b).
-
-**Cutoff clarification**: The daemon's `LIVE_PREDICTION_CUTOFF_MINS` is only an enqueue staleness window — it controls how long after an 8-K filing the daemon will still attempt to enqueue a live prediction. It is NOT the LLM context cutoff. The orchestrator computes `context_cutoff_ts` independently (see `plannerStep5.md` "Context Cutoff" section).
-
-This is a prerequisite tracked separately in `earnings-orchestrator.md` (Phase B). The daemon design is correct regardless — when the orchestrator is built to spec, the daemon will drive it.
-
-**Sync note**: `earnings-orchestrator.md` has been updated to reflect the deferred learner design (2026-03-20). Both plans are aligned.
-
-### What I Deliberately Did NOT Include
-
-| Temptation | Why not |
-|---|---|
-| Same-cycle live learner monitoring | Competes with live predictions for Claude tokens. Learner runs during next historical bootstrap instead — same U1 outcome, zero token competition. |
-| Per-quarter state tracking in daemon | Orchestrator handles this (file-authoritative + internal sequential loop) |
-| NATS event-driven live detection | 60s polling is simple and adequate (97.7% of earnings are pre/post market) |
-| Neo4j `earnings_status` property | Would require schema changes; filesystem + Redis is sufficient |
-| Unified daemon with guidance | Different sweep logic (flat vs. dependency chain); coupling risks regressions |
-| Complex retry/backoff in daemon | Worker handles retries; daemon just re-enqueues after lease expiry |
-| Permanent Redis completion markers | Filesystem is completion truth; Redis is coordination only |
-| Daemon-side quarter_label derivation | Unreliable at detection time (43.2% of 10-Qs filed >24h after 8-K, FYE fallback only 73.8%). Orchestrator owns this. |
-
 ---
 
-## Summary: What Makes This Work
-
-The entire design rests on **5 properties**:
-
-1. **Orchestrator idempotency** (file-authoritative): re-running any command is always safe — it skips completed work
-2. **Two-tier live detection**: fast path `hourly_stock IS NULL` (~77min, trading speed) + recovery `daily_stock IS NULL` (5-24h, catches daemon outages). Staleness cutoff prevents stale predictions. Historical boundary `daily_stock IS NOT NULL` (shared with `get_quarterly_filings.py`).
-3. **Everything on disk, nothing in Redis except disposable coordination**: `event.json` + `result.json` for historical. `live_state.json` + `result.json` for live. Redis has only leases (TTL'd) and short-lived watch keys (prediction tracking).
-4. **Daemon never derives fiscal quarter identity**: historical quarter_labels from `event.json`. Live quarter_label from `live_state.json`. Zero fiscal math in daemon.
-5. **Deferred learner, zero token competition**: Live predictions have the live queue entirely to themselves. Learners run during the next historical bootstrap on the historical queue. Same U1 outcome (feedback available before next prediction), simpler daemon, no cross-pipeline contention.
-
-The daemon is ~220 lines. Two modes: HISTORICAL and LIVE. Phase A checks guidance + filesystem. Phase B checks Neo4j (`hourly_stock IS NULL` + 7d) + filesystem + Redis watch. The orchestrator does all the hard work — including learners. The daemon just decides **when to trigger** and **what mode**.
-
----
-
-## Design History
-
-This plan evolved through 12 rounds of review (Claude + ChatGPT + user). Key milestones:
-- v1-v4: Core architecture established (dependency chain, file-authoritative, watch keys)
-- v5-v8: Live detection refined (hourly_stock IS NULL, two-tier detection, staleness cutoff)
-- v9-v11: Cycle-scoping, dead-letter for all modes, cross-pipeline throttling, daemon HA
-- v12: Simplified from 3-mode to 2-mode design (deferred learner via historical bootstrap)
-
-Full review log with 28 fixes preserved in git history (`74ada65`).
+_End of plan. All decisions locked. Implementation-ready._
