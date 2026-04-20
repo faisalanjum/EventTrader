@@ -208,7 +208,7 @@ Notes:
 2. Always stamp `mode` explicitly at enqueue time.
 3. Always include `quarter_label` once known; the worker never re-discovers identity unless recovery requires it.
 4. `trigger_origin` is observational only in v1.
-5. Deferred live learner catch-up uses `mode="historical"` and `trigger_origin="deferred_live_catchup"` **iff** the learning quarter matches the current `live_state.json` contents at the moment graduation is detected (same `accession_8k` or `quarter_label`). Otherwise ordinary historical jobs use `trigger_origin="historical_catchup"`. Reason: execution happens only after `daily_stock` exists and the quarter has graduated into historical/event-manifest flow; the prior live provenance is observational only.
+5. **All learner payloads use `mode="historical"`. No special tagging for deferred-live catch-up.** Rationale: by the time any learner fires, the quarter is historical (daily_stock populated, event graduated). Distinguishing "this started as a live prediction" from "this was a cold backfill" adds walker branching and a `live_state.json` read per decision for no behavioral benefit — both branches execute identically. Simpler to have one learner payload shape.
 
 ### 3.3 Worker Topology
 
@@ -968,7 +968,7 @@ Add at least one focused test module for the daemon gating logic:
 
 - malformed `trade_ready:entries` row is skipped
 - historical quarter blocked on missing same-quarter guidance logs `WAIT_GUIDANCE`
-- live deferred learner catch-up produces `mode="historical"` + `trigger_origin="deferred_live_catchup"`
+- deferred learner (fired from a quarter originally predicted live) produces the same payload as any historical learner: `mode="historical"`, no special `trigger_origin`
 - lease-active candidate is not enqueued twice
 - graduation refresh triggers only when `daily_stock` becomes non-null for the live accession
 
