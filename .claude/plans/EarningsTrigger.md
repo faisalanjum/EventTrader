@@ -219,7 +219,7 @@ Use a new worker deployment:
 - KEDA scaled separately from `extraction-worker`
 - Independent rate-limit reserve
 - No shared runtime path with guidance extraction
-- **`terminationGracePeriodSeconds: 7500`** — must exceed `LEARNING_SUBPROCESS_TIMEOUT` (7200s) + 300s slack so rolling updates never SIGKILL an in-flight learner. Worker code propagates SIGTERM to the subprocess (via `process.terminate()`) so the child exits gracefully before grace expires. (§G6)
+- **`terminationGracePeriodSeconds: 7500`** — must exceed `LEARNING_SUBPROCESS_TIMEOUT` (7200s) + 300s slack so rolling updates never SIGKILL an in-flight learner. Worker code propagates SIGTERM to the subprocess (via `process.terminate()`) so the child exits gracefully before grace expires. (§G6) Follow the signal-handler skeleton already in `scripts/extraction_worker.py:249-255` (install `signal.signal(SIGTERM, handler)`, track the active subprocess via a module-level ref, call `.terminate()` inside the handler, `.wait(timeout=...)` for reap).
 
 ### 3.3a K8s Deployment Templates (locked)
 
@@ -871,7 +871,7 @@ elif filed_8k >= (now - 3 trading days)   → mode = live
 else                                      → mode = historical (orphan-NULL; chain gates apply)
 ```
 
-Implementation note: compute the 3-trading-day cutoff with XNYS sessions (`exchange_calendars`), reusing the same helper pattern already proven in `scripts/trade_ready_scanner.py`. Do not approximate with plain calendar days.
+Implementation note: compute the 3-trading-day cutoff with XNYS sessions (`exchange_calendars`), reusing the same helper pattern already proven in `scripts/trade_ready_scanner.py`. Do not approximate with plain calendar days. **Note**: the existing `next_trading_day(cal, from_date)` helper is forward-only; this daemon needs a backward-offset variant (e.g., `n_trading_days_ago(cal, N)` using `cal.previous_session(...)` iteratively). Add it in the daemon module, or lift into a shared helper if a second caller appears.
 
 ### G3 — Catch-up sweep independent of backfill flag (§3.1)
 
@@ -964,7 +964,7 @@ Daemon reads `quarter_label` from file before deleting; deletes only on match. P
 
 ### G15 — Daemon test coverage
 
-Add at least one focused test module for the daemon gating logic:
+Add at least one focused test module for the daemon gating logic. Location: `scripts/earnings/test_earnings_trigger_daemon.py` (pytest, matching the existing earnings test convention — e.g., `scripts/earnings/test_event_json_manifest.py`).
 
 - malformed `trade_ready:entries` row is skipped
 - historical quarter blocked on missing same-quarter guidance logs `WAIT_GUIDANCE`
