@@ -1288,7 +1288,7 @@ def build_prior_financials(ticker: str, quarter_info: dict,
     except Exception as e:
         gaps.append({"type": "connection_failure", "source": "neo4j",
                      "reason": f"Neo4j connection failed: {e}"})
-        return _assemble_packet(ticker, current_period, as_of_ts, mode, [], {}, gaps, None, out_path)
+        return _assemble_packet(ticker, current_period, as_of_ts, mode, [], {}, gaps, None, None, out_path)
 
     # Get FYE month for fiscal labeling
     fye_month = _get_fye_month(ticker, gaps)
@@ -1481,14 +1481,23 @@ def build_prior_financials(ticker: str, quarter_info: dict,
             if seg_inv:
                 seg_inv["source_quarter"] = most_recent["period"]
 
+    # ── Step 11: Revenue split percentages (lean additive section) ──
+    revenue_splits = _build_revenue_splits_section(
+        ticker=ticker,
+        current_period=current_period,
+        as_of_ts=as_of_ts,
+        quarters=quarters,
+        gaps=gaps,
+    )
+
     # ── Assemble output ──
     return _assemble_packet(ticker, current_period, as_of_ts, mode,
-                            quarters, fiscal_labels, gaps, seg_inv, out_path)
+                            quarters, fiscal_labels, gaps, seg_inv, revenue_splits, out_path)
 
 
 def _assemble_packet(ticker: str, current_period: str, as_of_ts: str | None,
                       mode: str, quarters: list[dict], fiscal_labels: dict,
-                      gaps: list, seg_inv: dict | None,
+                      gaps: list, seg_inv: dict | None, revenue_splits: dict | None,
                       out_path: str | None = None) -> dict:
     """Assemble the final prior_financials.v1 packet and write to disk."""
     # Build output quarter rows
@@ -1547,6 +1556,7 @@ def _assemble_packet(ticker: str, current_period: str, as_of_ts: str | None,
         "summary": summary,
         "gaps": gaps,
         "segment_inventory": seg_inv,
+        "revenue_splits": revenue_splits,
         "assembled_at": _now_iso(),
     }
 
@@ -1561,6 +1571,43 @@ def _assemble_packet(ticker: str, current_period: str, as_of_ts: str | None,
     os.replace(tmp, out_path)
 
     return packet
+
+
+def _build_revenue_splits_section(
+    ticker: str,
+    current_period: str,
+    as_of_ts: str | None,
+    quarters: list[dict],
+    gaps: list[dict],
+) -> dict | None:
+    """Build a lean 4-quarter revenue mix section from the sidecar extractor.
+
+    This is intentionally additive and minimal:
+      - 4 quarter columns aligned to the builder's fiscal labels
+      - percentage tables only
+      - no provenance / derivation / raw-value noise in the packet
+    """
+    if not quarters:
+        return None
+    try:
+        from xbrl_exact_splits import extract_segment_splits, build_revenue_splits_section as _summarize
+
+        pkt = extract_segment_splits(
+            ticker=ticker,
+            period=current_period,
+            pit_cutoff=as_of_ts,
+            history_quarters=_HISTORY_QUARTERS,
+            metric="revenue",
+            allow_discovery_fallback=False,
+            write_packets=False,
+        )
+        return _summarize(pkt, quarters[:4], max_quarters=4)
+    except Exception as e:
+        gaps.append({
+            "type": "revenue_splits_error",
+            "reason": f"xbrl_exact_splits sidecar failed: {str(e)[:200]}",
+        })
+        return None
 
 
 # ── Yahoo Fallback ───────────────────────────────────────────────────────

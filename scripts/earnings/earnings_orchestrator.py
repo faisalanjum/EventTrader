@@ -787,6 +787,39 @@ def _fmt_financial_cell(value, fmt_type: str) -> str:
     return str(value)
 
 
+def _fmt_split_pct(value) -> str:
+    if value is None:
+        return "—"
+    return f"{float(value):.1f}%"
+
+
+def _render_revenue_splits(pf: dict) -> list[str]:
+    rs = pf.get("revenue_splits")
+    if not rs or not isinstance(rs, dict):
+        return []
+
+    quarter_headers = [q.get("fiscal_label", q.get("period", "?")) for q in rs.get("quarters", [])]
+    if not quarter_headers:
+        return []
+
+    parts: list[str] = []
+    for key, heading in (
+        ("business_segment", "Revenue Mix — Business Segments"),
+        ("geography", "Revenue Mix — Geography"),
+        ("product_service", "Revenue Mix — Product / Service"),
+    ):
+        rows = rs.get(key) or []
+        if not rows:
+            continue
+        tbl_rows = []
+        for row in rows:
+            tbl_rows.append([row.get("label") or row.get("member") or "—"] +
+                            [_fmt_split_pct(v) for v in row.get("pct", [])])
+        parts.append(f"\n### {heading}")
+        parts.append(_md_table(["Row"] + quarter_headers, tbl_rows))
+    return parts
+
+
 def _render_prior_financials(bundle: dict) -> str:
     """Section 5: Prior Financial Trends — multi-quarter trend tables."""
     errors = bundle.get("builder_errors") or {}
@@ -836,6 +869,8 @@ def _render_prior_financials(bundle: dict) -> str:
 
         parts.append(f"\n### {section_name}")
         parts.append(_md_table(["Metric"] + q_labels, tbl_rows))
+
+    parts.extend(_render_revenue_splits(pf))
 
     if gaps:
         parts.append(f"\nData notes: {len(gaps)} gaps in packet")
@@ -1825,6 +1860,19 @@ def derive_learner_pit(events: list[dict], current_index: int,
       2. No Q(n+1), but a live cycle exists → use live quarter's filed_8k
       3. No Q(n+1) and no live cycle → use current invocation time
 
+    Rationale: the learner cutoff deliberately trails the predictor's
+    bundle cutoff (``Q_n.filed_8k``) by roughly one quarter. In production
+    a lesson cannot be written until the next cycle's data arrives, so
+    ``Q_{n+1}.filed_8k`` is the tightest honest bound on when the lesson
+    could have been produced. Stamping that value into each lesson's
+    ``source_pit_cutoff`` keeps the T1.5b visibility predicate honest:
+    ``lesson visible iff source_pit_cutoff <= predictor.pit_cutoff``.
+    See :func:`run_learner_for_quarter` "PIT boundary" section and
+    ``.claude/plans/learner.md`` §T1.5 for the full rationale.
+
+    Sole caller: :func:`run_learner_for_quarter` (pit_mode=="historical"
+    branch). This function is NEVER fed ``args.pit`` from the CLI.
+
     Returns (pit_cutoff, pit_boundary_source).
     For live mode (caller decides), returns (None, "").
     ⚠️ HUMAN REVIEW GATE — verify correctness across all tickers.
@@ -2010,6 +2058,38 @@ def run_learner_for_quarter(
       * **success** — ``outcome in LearnerOutcome.SUCCESS`` (``payload`` is the attribution dict)
       * **skip** — environmental, not a defect (``outcome in LearnerOutcome.SKIPPED``)
       * **fail** — pipeline-level error (``outcome in LearnerOutcome.FAILED``)
+
+    PIT boundary (asymmetric vs. the predictor — important):
+        This function takes **no ``pit_cutoff`` argument**. When
+        ``pit_mode == "historical"`` (the caller default, and what ``main()``
+        always passes at the ``--learn`` site) the learner cutoff is
+        re-derived internally via :func:`derive_learner_pit` using the
+        ``events`` list + ``live_state_path``. When ``pit_mode`` is anything
+        else the cutoff is ``None`` (live).
+
+        The learner PIT is deliberately **DIFFERENT** from the predictor's
+        bundle PIT for the same quarter Q_n:
+
+        * Predictor bundle PIT = ``Q_n.filed_8k`` (the event horizon — must
+          be blind to anything after the release). Produced by
+          :func:`_resolve_pit_mode` and written into ``bundle["pit_cutoff"]``.
+        * Learner PIT          = ``Q_{n+1}.filed_8k`` via tier 1 of
+          :func:`derive_learner_pit`, with tier-2 (live cycle) / tier-3
+          (invocation time) fallbacks when no next quarter exists.
+
+        Rationale: in production a lesson cannot be written until the next
+        cycle's data arrives. Stamping ``source_pit_cutoff = Q_{n+1}.filed_8k``
+        on each lesson makes the T1.5b visibility predicate honest —
+        ``lesson visible at predictor.pit_cutoff iff
+        lesson.source_pit_cutoff <= predictor.pit_cutoff`` — so a lesson
+        cannot be consumed by any predictor that fires before the moment
+        the lesson could plausibly have been produced.
+
+        Consequence for callers: ``--pit X`` on the CLI sets the predictor's
+        bundle PIT but has **no effect** on the learner; and ``--live``
+        likewise does not propagate (``main()`` hardcodes
+        ``pit_mode="historical"`` at this call site by design). See
+        ``.claude/plans/learner.md`` §T1.5 for the full rationale.
 
     Steps:
       1. Hard gate 1 — ``prediction/result.json`` must exist
@@ -3270,6 +3350,15 @@ def _resolve_pit_mode(args, quarter_info):
     Raises ``ValueError`` if the default branch would fire but
     ``quarter_info`` is missing ``filed_8k`` — the caller must then pass
     ``--pit`` or ``--live`` explicitly.
+
+    Scope: the cutoff returned here is the **predictor's bundle PIT** only.
+    It flows into :func:`run_core_flow` → :func:`build_prediction_bundle`
+    (``bundle["pit_cutoff"]``) and is consumed by the predictor via the
+    bundle JSON file. It does **NOT** reach the learner.
+    :func:`run_learner_for_quarter` has no ``pit_cutoff`` parameter and
+    re-derives a later cutoff via :func:`derive_learner_pit`
+    (typically ``Q_{n+1}.filed_8k``). That asymmetry is intentional —
+    see :func:`run_learner_for_quarter` "PIT boundary" section.
     """
     if args.live and args.pit:
         raise ValueError(
@@ -3481,6 +3570,12 @@ def main():
             accession_8k=target_acc,
             artifact_dir=str(_learn_dir),
         )
+        # Note: no pit_cutoff passed — run_learner_for_quarter re-derives its
+        # own (Q_{n+1}.filed_8k via derive_learner_pit). pit_mode hardcoded
+        # "historical" so --live on a historical accession still produces a
+        # lesson stamped with a principled source_pit_cutoff rather than now().
+        # See run_learner_for_quarter "PIT boundary" section for why this
+        # differs from the predictor's bundle PIT.
         try:
             attribution, _outcome = run_learner_for_quarter(
                 ticker=args.ticker,

@@ -1,0 +1,21 @@
+{
+  "schema_version": "xbrl_exact_splits_sweep.v1",
+  "metric": "revenue",
+  "mode": "live",
+  "pit_cutoff": null,
+  "started_at": "2026-04-22T16:10:07.596383+00:00",
+  "finished_at": "2026-04-22T16:16:02.297424+00:00",
+  "workers": 4,
+  "mapped_ticker_count": 744,
+  "success_count": 744,
+  "failure_count": 0,
+  "view_capability_counts": {
+    "segments": 386,
+    "geography": 374,
+    "product_service": 394
+  },
+  "q4_derived_ticker_count": 740,
+  "manifest_path": "/tmp/xbrl_exact_splits_sweep_20260422/manifest.json",
+  "failures_path": "/tmp/xbrl_exact_splits_sweep_20260422/failures.json",
+  "packets_dir": "/tmp/xbrl_exact_splits_sweep_20260422/packets"
+}
