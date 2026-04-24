@@ -189,58 +189,79 @@ class TranscriptProcessor(BaseProcessor):
                 self.logger.error(f"Invalid event key format: {event_key}")
                 self.live_client.client.zrem(self.schedule_key, event_key)
                 return
-            
+
             symbol, conference_datetime = parts
             self.logger.info(f"Fetching transcript for {symbol} at {conference_datetime}")
 
-            # First check if transcript already exists in processed queue
-            transcript_found = self._transcript_exists(symbol, conference_datetime)
-            if transcript_found:
-                self.logger.info(f"Transcript {event_key} for {symbol} at {conference_datetime} already exists in processed queue, sending to _handle_transcript_found")
-                self._handle_transcript_found(event_key, symbol, conference_datetime)                
+            # STEP 1 — Canonical-aware processed-queue check.
+            # Handles: restart catchup, timestamp-mismatch resolution, and
+            # confirmation after a prior tick's fetch+store.
+            canonical_processed = self._find_processed_for_symbol_date(symbol, conference_datetime)
+            if len(canonical_processed) == 1:
+                self._mark_transcript_schedule_satisfied(event_key, canonical_processed)
                 return
+            elif len(canonical_processed) > 1:
+                # Ambiguity guard: one earnings call per symbol per day is expected.
+                # Log and fall through to a fresh fetch to be safe.
+                self.logger.warning(
+                    f"Ambiguous processed match for {symbol} on {conference_datetime[:10]}: "
+                    f"{canonical_processed}; falling through to fresh fetch."
+                )
 
-            # Get our universe of companies
+            # STEP 2 — Universe check.
             universe_symbols = set(s.upper() for s in self.event_trader_redis.get_symbols())
             if symbol.upper() not in universe_symbols:
                 self.logger.info(f"Symbol {symbol} not in universe, removing from schedule")
                 self.live_client.client.zrem(self.schedule_key, event_key)
                 return
-            
-            # Initialize API client
-            
+
+            # STEP 3 — Raw-queue check + orphan recovery.
+            # If a raw key for this symbol+date exists, downstream owns processing.
+            # Re-LPUSH if orphaned (exists but not in queue). Skip fetch either way.
+            if self._ensure_raw_queued_for_symbol_date(symbol, conference_datetime):
+                self.logger.info(
+                    f"Raw key for {symbol} on {conference_datetime[:10]} already queued "
+                    f"(or re-queued from orphan); awaiting downstream confirmation"
+                )
+                self._schedule_transcript_retry(event_key, symbol, conference_datetime, now_ts)
+                return
+
+            # STEP 3.5 — Race guard: re-check processed queue immediately before fetch.
+            # Closes the tiny window where downstream completes between STEP 1 and STEP 3.
+            canonical_processed = self._find_processed_for_symbol_date(symbol, conference_datetime)
+            if len(canonical_processed) == 1:
+                self._mark_transcript_schedule_satisfied(event_key, canonical_processed)
+                return
+            elif len(canonical_processed) > 1:
+                self.logger.warning(
+                    f"Ambiguous processed match (race guard) for {symbol} on {conference_datetime[:10]}: "
+                    f"{canonical_processed}; falling through to fresh fetch."
+                )
+
+            # STEP 4 — Fetch (symbol-filtered, no date-wide fan-out, no fallback-to-today).
+            # Parse conf_date BEFORE constructing EarningsCallProcessor so a malformed
+            # event_key doesn't pay the client-construction cost (load_companies).
+            # Parse errors and calendar-fetch errors propagate to outer except → 30-min retry.
+            from dateutil import parser as dateutil_parser
+            conf_date = dateutil_parser.parse(conference_datetime.replace('.', ':')).date()
+
             earnings_call_client = EarningsCallProcessor(
                 api_key=EARNINGS_CALL_API_KEY,
                 redis_client=self.event_trader_redis,
                 ttl=self.ttl
             )
-            
-            # Fetch transcript using today's date
-            # today = datetime.now(self.ny_tz).date()
-            # transcripts = earnings_call_client.get_transcripts_for_single_date(today)
+            transcripts = earnings_call_client.get_single_transcript(symbol, conf_date)
 
-            from dateutil import parser as dateutil_parser
-
-            try:
-                conf_date = dateutil_parser.parse(conference_datetime.replace('.', ':')).date()
-                transcripts = earnings_call_client.get_transcripts_for_single_date(conf_date)
-                if not transcripts:
-                    transcripts = earnings_call_client.get_transcripts_for_single_date(datetime.now(self.ny_tz).date())
-            except Exception:
-                transcripts = earnings_call_client.get_transcripts_for_single_date(datetime.now(self.ny_tz).date())
-
-            # Store each transcript in historical Redis immediately
+            # STEP 5 — Store (does not mark processed_set; downstream confirms next tick).
             if transcripts:
                 for transcript in transcripts:
                     earnings_call_client.store_transcript_in_redis(transcript, is_live=True)
 
-            transcript_found = self._transcript_exists(symbol, conference_datetime)
+            # STEP 6 — Reschedule 5 min. Next tick's STEP 1 confirms via processed queue.
+            # If downstream fails, raw disappears without processed entry → next tick
+            # re-enters fetch path (preserves "wait for downstream confirmation" invariant).
+            self._schedule_transcript_retry(event_key, symbol, conference_datetime, now_ts)
 
-            if transcript_found:
-                self._handle_transcript_found(event_key, symbol, conference_datetime)
-            else:
-                self._schedule_transcript_retry(event_key, symbol, conference_datetime, now_ts)
-                
         except Exception as e:
             self.logger.error(f"Error fetching transcript {event_key}: {e}", exc_info=True)
             # Reschedule with 30-min delay on error
@@ -292,6 +313,97 @@ class TranscriptProcessor(BaseProcessor):
         # Publish notification
         self.live_client.client.publish(self.notification_channel, f"processed:{event_key}")
 
+
+    def _find_processed_for_symbol_date(self, symbol, conference_datetime):
+        """Return canonical key_ids in processed queues matching symbol + date.
+
+        Prefix-matches on symbol + YYYY-MM-DD (ignoring time-of-day). Returns []
+        on no match or Redis error. Caller handles the ambiguous >1 case.
+        """
+        if " " in conference_datetime and "T" not in conference_datetime:
+            conference_datetime = conference_datetime.replace(" ", "T")
+        date_portion = conference_datetime[:10]
+        match_prefix = f"{symbol.upper()}_{date_portion}T"
+
+        try:
+            live_processed = self.live_client.client.lrange(self.live_client.PROCESSED_QUEUE, 0, -1)
+            hist_processed = self.event_trader_redis.history_client.client.lrange(
+                self.event_trader_redis.history_client.PROCESSED_QUEUE, 0, -1
+            )
+            matched = set()
+            for k in list(live_processed) + list(hist_processed):
+                tail = k.rsplit(':', 1)[-1]
+                if tail.startswith(match_prefix):
+                    matched.add(tail)
+            return list(matched)
+        except Exception as e:
+            self.logger.error(
+                f"Error finding processed transcripts for {symbol} on {date_portion}: {e}",
+                exc_info=True,
+            )
+            return []
+
+    def _ensure_raw_queued_for_symbol_date(self, symbol, conference_datetime):
+        """Return True if a raw key for this symbol+date exists (re-queue orphans).
+
+        An orphaned raw key (exists in Redis SET but missing from RAW_QUEUE) can
+        occur if downstream BRPOPs but crashes before completing processing.
+        Detects orphans and re-LPUSHes them so downstream retries within 5 min.
+
+        Returns True if any matching raw key was found (caller should skip fetch
+        to avoid redundant OpenAI cost — downstream will handle the in-queue raw).
+        """
+        if " " in conference_datetime and "T" not in conference_datetime:
+            conference_datetime = conference_datetime.replace(" ", "T")
+        date_portion = conference_datetime[:10]
+        symbol_upper = symbol.upper()
+
+        raw_ns = RedisKeys.get_key(
+            source_type=RedisKeys.SOURCE_TRANSCRIPTS,
+            key_type=RedisKeys.SUFFIX_RAW,
+            prefix_type=RedisKeys.PREFIX_LIVE,
+        )
+        pattern = f"{raw_ns}:{symbol_upper}_{date_portion}T*"
+
+        try:
+            matching_raw_keys = list(self.live_client.client.scan_iter(match=pattern, count=10))
+            if not matching_raw_keys:
+                return False
+
+            queue_items = set(self.live_client.client.lrange(self.live_client.RAW_QUEUE, 0, -1))
+            for raw_key in matching_raw_keys:
+                if raw_key not in queue_items:
+                    # TOCTOU defense: re-check raw still exists before LPUSH.
+                    if self.live_client.client.exists(raw_key):
+                        self.live_client.client.lpush(self.live_client.RAW_QUEUE, raw_key)
+                        self.logger.warning(f"Re-queued orphaned raw key: {raw_key}")
+            return True
+        except Exception as e:
+            self.logger.error(
+                f"Error ensuring raw queued for {symbol} on {date_portion}: {e}",
+                exc_info=True,
+            )
+            return False
+
+    def _mark_transcript_schedule_satisfied(self, event_key, canonical_event_keys=None):
+        """Mark scheduled event_key (and canonical variants) as satisfied.
+
+        Unlike _handle_transcript_found, does NOT delete raw keys. Only called
+        after downstream processed-queue confirmation, so raw cleanup has already
+        happened on the downstream side.
+        """
+        canonical_event_keys = canonical_event_keys or []
+        keys_to_mark = list({event_key, *canonical_event_keys})
+        self.logger.info(
+            f"Transcript schedule satisfied for {event_key}"
+            + (f" (canonical keys: {canonical_event_keys})" if canonical_event_keys else "")
+        )
+        pipe = self.live_client.client.pipeline()
+        pipe.zrem(self.schedule_key, *keys_to_mark)
+        pipe.sadd(self.processed_set, *keys_to_mark)
+        pipe.expire(self.processed_set, self.ttl)
+        pipe.publish(self.notification_channel, f"processed:{event_key}")
+        pipe.execute()
 
 
     def _schedule_transcript_retry(self, event_key, symbol, conference_datetime, now_ts):

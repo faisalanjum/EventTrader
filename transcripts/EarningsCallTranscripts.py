@@ -125,9 +125,60 @@ class EarningsCallProcessor:
                     self.logger.error(f"Error processing transcript for {calendar_event.symbol}: {e}", exc_info=True)
             else:
                 self.logger.info(f"Transcript not ready for {calendar_event.symbol}")
-        
+
         return final_events
 
+
+    # Symbol-filtered variant of get_transcripts_for_single_date.
+    # Used by live scheduler to avoid re-processing sibling transcripts on every retry.
+    # Semantically identical per-event to get_transcripts_for_single_date (same
+    # calendar source, company_dict filter, transcript_ready check, get_single_event,
+    # per-event try/except), only filtered to one symbol.
+    def get_single_transcript(self, symbol, target_date):
+        """Get transcript for a single symbol on a given date.
+
+        Returns list with at most one transcript dict. Returns empty list if:
+          - symbol not on the target_date calendar
+          - symbol not in self.company_dict
+          - transcript_ready is False
+          - get_single_event raises an exception
+
+        Per-event exceptions are caught and logged (same as the date-wide variant).
+        Top-level exceptions (e.g. get_calendar failure) propagate to the caller.
+        """
+        target_date = self._parse_dates_fn(target_date)
+        target_date_events = get_calendar(target_date)
+        symbol_upper = symbol.upper()
+
+        final_events = []
+        for calendar_event in target_date_events:
+            if calendar_event.symbol.upper() != symbol_upper:
+                continue
+            if symbol_upper not in self.company_dict:
+                self.logger.info(f"{calendar_event.symbol} Not in the database")
+                continue
+            company_obj = self.company_dict[symbol_upper].company_obj
+            if calendar_event.transcript_ready:
+                from earningscall.event import EarningsEvent
+                earnings_event = EarningsEvent(
+                    year=calendar_event.year,
+                    quarter=calendar_event.quarter,
+                    conference_date=calendar_event.conference_date,
+                )
+                try:
+                    result = self.get_single_event(company_obj, earnings_event)
+                    if result:
+                        final_events.extend(result)
+                    else:
+                        self.logger.info(f"No transcript returned for {calendar_event.symbol}")
+                except Exception as e:
+                    self.logger.error(
+                        f"Error processing transcript for {calendar_event.symbol}: {e}",
+                        exc_info=True,
+                    )
+            else:
+                self.logger.info(f"Transcript not ready for {calendar_event.symbol}")
+        return final_events
 
 
 
