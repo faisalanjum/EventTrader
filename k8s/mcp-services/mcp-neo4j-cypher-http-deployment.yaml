@@ -107,6 +107,9 @@ metadata:
   labels:
     app: mcp-neo4j-cypher-http
 spec:
+  # Pinned ClusterIP so this Service survives a delete+apply without picking a new IP.
+  # Matches live assignment at 2026-04-24. Host-side .mcp.json depends on stability.
+  clusterIP: 10.97.161.242
   selector:
     app: mcp-neo4j-cypher-http
   ports:

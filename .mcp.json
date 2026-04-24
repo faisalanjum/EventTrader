@@ -1,9 +1,11 @@
 {
   "mcpServers": {
     "neo4j-cypher": {
-      "type": "stdio",
-      "command": "/home/faisal/EventMarketDB/mcp_servers/local-cypher-server.sh",
-      "args": []
+      "type": "http",
+      "url": "http://10.97.161.242:8000/mcp",
+      "headers": {
+        "Host": "localhost:8000"
+      }
     },
     "neo4j-memory": {
       "type": "stdio",
