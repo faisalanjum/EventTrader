@@ -42,7 +42,7 @@ get_neo4j_credentials() {
         
         # Direct detection of credentials without any formatting - hardcoded for your specific format
         if [ "$found_credentials" = false ]; then
-            # Handle the specific format in your .env file: NEO4J_USERNAME=neo4jNEO4J_PASSWORD=Next2020
+            # Handle the specific format in your .env file: NEO4J_USERNAME=neo4jNEO4J_PASSWORD=<pw>
             SPECIFIC_USER=$(grep -o 'NEO4J_USERNAME=[a-zA-Z0-9]*' "$PROJECT_ROOT/.env" | sed 's/NEO4J_USERNAME=//')
             SPECIFIC_PASSWORD=$(grep -o 'NEO4J_PASSWORD=[a-zA-Z0-9]*' "$PROJECT_ROOT/.env" | sed 's/NEO4J_PASSWORD=//')
             
@@ -55,12 +55,10 @@ get_neo4j_credentials() {
         fi
     fi
     
-    # Hard-coded fallback if all else fails
+    # .env parsing failed — fail fast (no hardcoded literal)
     if [ "$found_credentials" = false ]; then
-        echo "Using hardcoded fallback credentials"
-        NEO4J_USER="neo4j"
-        NEO4J_PASSWORD="Next2020#"
-        found_credentials=true
+        echo "ERROR: could not parse Neo4j credentials from .env (source it or export NEO4J_USERNAME/NEO4J_PASSWORD)" >&2
+        exit 1
     fi
     
     # Final fallback to defaults

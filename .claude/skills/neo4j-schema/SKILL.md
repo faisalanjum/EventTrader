@@ -6,7 +6,7 @@ description: Core Neo4j schema reference with all labels, relationships, data ty
 # Neo4j Schema Reference
 
 ## Scope and Validation
-- Validated on 2026-01-04 against bolt://localhost:30687 (Neo4j 5.26.4).
+- Validated on 2026-01-04 against bolt://10.102.222.120:7687 (Neo4j 5.26.4).
 - Counts from: `CALL db.stats.retrieve('GRAPH COUNTS')`.
 - Types from: `CALL apoc.meta.nodeTypeProperties` and `CALL apoc.meta.relTypeProperties`.
 - Counts are for orientation only (data coverage), not for logic.

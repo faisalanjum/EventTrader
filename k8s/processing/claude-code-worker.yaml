@@ -60,7 +60,7 @@ spec:
           value: redis.infrastructure.svc.cluster.local
         - name: REDIS_PORT
           value: "6379"
-        # guidance_write.sh uses GUIDANCE_NEO4J_URI (falls back to bolt://localhost:30687)
+        # guidance_write.sh uses GUIDANCE_NEO4J_URI (falls back to bolt://10.102.222.120:7687 ClusterIP)
         - name: GUIDANCE_NEO4J_URI
           value: bolt://neo4j-bolt.neo4j.svc.cluster.local:7687
         # MCP HTTP endpoint (overrides .mcp.json stdio server)

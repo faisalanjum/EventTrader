@@ -31,10 +31,11 @@ logger = logging.getLogger(__name__)
 class SectorReturnsFixProcessor:
     def __init__(self, dry_run: bool = False):
         self.dry_run = dry_run
-        # Use direct connection for script running outside cluster
-        uri = "bolt://localhost:30687"
-        username = "neo4j"
-        password = "Next2020#"
+        # Use direct connection for script running outside cluster (ClusterIP via kube-proxy)
+        import os
+        uri = os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687")
+        username = os.getenv("NEO4J_USERNAME", "neo4j")
+        password = os.getenv("NEO4J_PASSWORD", "")
         self.neo4j_manager = Neo4jManager(uri=uri, username=username, password=password)
         self.polygon = Polygon(api_key=POLYGON_API_KEY, polygon_subscription_delay=0)
         self.market_session = MarketSessionClassifier()

@@ -165,7 +165,7 @@ def resolve_from_matched(period_of_report_str: str, form_type: str,
 # ── Main validation ──────────────────────────────────────────────────
 
 def run_validation(ticker: str | None = None, mismatches_only: bool = False):
-    uri = os.getenv("NEO4J_URI", "bolt://localhost:30687")
+    uri = os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687")
     user = os.getenv("NEO4J_USERNAME", "neo4j")
     password = os.getenv("NEO4J_PASSWORD")
     if not password:

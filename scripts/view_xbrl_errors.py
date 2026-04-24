@@ -160,12 +160,16 @@ def check_queue_health():
 
 def main():
     """View XBRL error summary"""
-    
-    # Set environment variables
-    os.environ['NEO4J_URI'] = 'bolt://localhost:30687'
-    os.environ['NEO4J_USERNAME'] = 'neo4j'
-    os.environ['NEO4J_PASSWORD'] = 'Next2020#'
-    
+
+    # Read env from .env if not already present in shell env; do not hardcode creds.
+    from dotenv import load_dotenv
+    load_dotenv(override=False)
+    if not os.environ.get("NEO4J_PASSWORD"):
+        logger.error("NEO4J_PASSWORD not set (source .env or export it)")
+        sys.exit(1)
+    os.environ.setdefault("NEO4J_URI", "bolt://10.102.222.120:7687")
+    os.environ.setdefault("NEO4J_USERNAME", "neo4j")
+
     logger.info("XBRL Processing Error Analysis")
     logger.info("=" * 50)
     

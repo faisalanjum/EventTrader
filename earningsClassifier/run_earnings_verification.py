@@ -344,7 +344,7 @@ def main():
         
     except Exception as e:
         print(f"Error: {e}")
-        print("Make sure Neo4j is accessible at bolt://localhost:30687")
+        print(f"Make sure Neo4j is accessible at {os.getenv('NEO4J_URI', 'bolt://10.102.222.120:7687')}")
 
 
 if __name__ == "__main__":

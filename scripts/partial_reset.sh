@@ -102,15 +102,18 @@ if [ -f "$WORKSPACE_DIR/.env" ]; then
     NEO4J_PASSWORD="$NEO4J_PASSWORD_ENV"
     echo "Using Neo4j credentials from .env file: user=$NEO4J_USER, password=***"
   else
-    # Hardcoded fallback
-    echo "Using hardcoded fallback credentials"
-    NEO4J_USER="neo4j"
-    NEO4J_PASSWORD="Next2020#"
+    # .env file present but credentials not found — fail fast (no hardcoded literal)
+    echo "ERROR: NEO4J_USERNAME/NEO4J_PASSWORD not in .env" >&2
+    exit 1
   fi
 else
-  # Fallback to environment variables or defaults
-  NEO4J_USER="${NEO4J_USER:-neo4j}"
-  NEO4J_PASSWORD="${NEO4J_PASSWORD:-Next2020#}"
+  # No .env file — require env vars to be set externally
+  NEO4J_USER="${NEO4J_USERNAME:-${NEO4J_USER:-neo4j}}"
+  NEO4J_PASSWORD="${NEO4J_PASSWORD:-}"
+  if [ -z "$NEO4J_PASSWORD" ]; then
+    echo "ERROR: NEO4J_PASSWORD not set (no .env file and no env var)" >&2
+    exit 1
+  fi
   echo "Using Neo4j credentials from environment: user=$NEO4J_USER, password=***"
 fi
 
@@ -133,7 +136,7 @@ if [[ "$CONNECTION_TEST" == *"Failure to establish connection"* ]] || [[ "$CONNE
     echo "Connection error: $CONNECTION_TEST"
     echo ""
     echo "You can manually specify credentials with:"
-    echo "NEO4J_USER=neo4j NEO4J_PASSWORD='Next2020#' $0"
+    echo "NEO4J_USERNAME=neo4j NEO4J_PASSWORD='<your-password>' $0"
     exit 1
 else
     echo "Neo4j connection successful!"
