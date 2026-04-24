@@ -7,8 +7,12 @@
 LOG_DIR="/home/faisal/EventMarketDB/logs/ChunkHist_2025-04-30_to_2025-05-19_20250725_003835"
 STATS_FILE="/tmp/transcript_cleanup_stats.csv"
 LOG_FILE="/tmp/transcript_cleanup.log"
-NEO4J_USER="neo4j"
-NEO4J_PASS="Next2020#"
+NEO4J_USER="${NEO4J_USERNAME:-neo4j}"
+NEO4J_PASS="${NEO4J_PASSWORD:-}"
+if [[ -z "$NEO4J_PASS" ]]; then
+  echo "ERROR: NEO4J_PASSWORD not set (source .env or export it)" >&2
+  exit 1
+fi
 
 # Configuration
 MAX_WAIT_FOR_COMPLETION=7200  # 2 hours max wait for chunk completion

@@ -19,7 +19,10 @@ def analyze_false_negatives():
     """Deep dive into potential false negatives"""
     
     # Connect to Neo4j
-    graph = Graph("bolt://localhost:30687", auth=("neo4j", "Next2020#"))
+    graph = Graph(
+        os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687"),
+        auth=(os.getenv("NEO4J_USERNAME", "neo4j"), os.getenv("NEO4J_PASSWORD", "")),
+    )
     
     # Query for news that might be earnings but could be missed
     # These queries look for specific patterns that suggest earnings
@@ -135,7 +138,10 @@ def analyze_false_negatives():
 def verify_high_confidence_accuracy():
     """Check if high-confidence classifications are truly accurate"""
     
-    graph = Graph("bolt://localhost:30687", auth=("neo4j", "Next2020#"))
+    graph = Graph(
+        os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687"),
+        auth=(os.getenv("NEO4J_USERNAME", "neo4j"), os.getenv("NEO4J_PASSWORD", "")),
+    )
     classifier = EarningsClassifier()
     
     # Get a sample of news items
@@ -263,7 +269,10 @@ def calculate_actual_accuracy():
     """
     Calculate what our ACTUAL accuracy is based on different confidence thresholds
     """
-    graph = Graph("bolt://localhost:30687", auth=("neo4j", "Next2020#"))
+    graph = Graph(
+        os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687"),
+        auth=(os.getenv("NEO4J_USERNAME", "neo4j"), os.getenv("NEO4J_PASSWORD", "")),
+    )
     
     # Get 10% random sample
     print("Getting 10% random sample from Neo4j...")

@@ -17,7 +17,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
 # it to bolt://neo4j-bolt.neo4j.svc.cluster.local:7687).
 export NEO4J_URI="${GUIDANCE_NEO4J_URI:-bolt://10.102.222.120:7687}"
 export NEO4J_USERNAME="${GUIDANCE_NEO4J_USERNAME:-neo4j}"
-export NEO4J_PASSWORD="${GUIDANCE_NEO4J_PASSWORD:-Next2020#}"
+export NEO4J_PASSWORD="${GUIDANCE_NEO4J_PASSWORD:-${NEO4J_PASSWORD:-}}"
 export NEO4J_DATABASE="${GUIDANCE_NEO4J_DATABASE:-neo4j}"
 
 # Activate venv

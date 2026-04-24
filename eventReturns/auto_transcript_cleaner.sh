@@ -7,8 +7,12 @@
 LOG_DIR="/home/faisal/EventMarketDB/logs/ChunkHist_2025-04-30_to_2025-05-19_20250725_003835"
 REDIS_POD=$(kubectl get pods -n infrastructure -l app=redis -o jsonpath='{.items[0].metadata.name}')
 NEO4J_POD=$(kubectl get pods -n neo4j -l app=neo4j -o jsonpath='{.items[0].metadata.name}')
-NEO4J_USER="neo4j"
-NEO4J_PASS="Next2020#"
+NEO4J_USER="${NEO4J_USERNAME:-neo4j}"
+NEO4J_PASS="${NEO4J_PASSWORD:-}"
+if [[ -z "$NEO4J_PASS" ]]; then
+  echo "ERROR: NEO4J_PASSWORD not set (source .env or export it)" >&2
+  exit 1
+fi
 STATS_FILE="/tmp/transcript_cleanup_stats.csv"
 LOG_FILE="/tmp/transcript_cleanup.log"
 

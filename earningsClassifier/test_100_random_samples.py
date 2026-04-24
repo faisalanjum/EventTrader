@@ -257,7 +257,10 @@ def main():
             raise ImportError("py2neo not available")
         
         print("Connecting to Neo4j...")
-        graph = Graph("bolt://localhost:30687", auth=("neo4j", "Next2020#"))
+        graph = Graph(
+            os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687"),
+            auth=(os.getenv("NEO4J_USERNAME", "neo4j"), os.getenv("NEO4J_PASSWORD", "")),
+        )
         
         # Get random sample (we'll get 150 to ensure we have enough after filtering)
         news_items = get_random_news_sample(graph, sample_size=150)
