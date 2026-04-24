@@ -50,9 +50,13 @@ print(f"Reason: {result.reason}")
 ```python
 from earnings_classifier_final import EarningsClassificationService
 from py2neo import Graph
+import os
 
 # Initialize with your connections
-neo4j_driver = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
+neo4j_driver = Graph(
+    os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687"),
+    auth=(os.getenv("NEO4J_USERNAME", "neo4j"), os.getenv("NEO4J_PASSWORD", "")),
+)
 service = EarningsClassificationService(neo4j_driver=neo4j_driver)
 
 # Classify and store in Neo4j
