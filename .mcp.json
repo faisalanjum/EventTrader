@@ -7,11 +7,6 @@
         "Host": "localhost:8000"
       }
     },
-    "neo4j-memory": {
-      "type": "stdio",
-      "command": "/home/faisal/EventMarketDB/mcp_servers/local-memory-server.sh",
-      "args": []
-    },
     "perplexity": {
       "type": "stdio",
       "command": "/home/faisal/EventMarketDB/mcp_servers/local-perplexity-server.sh",
