@@ -1938,7 +1938,7 @@ def fetch_actual_return(ticker: str, accession: str) -> dict | None:
         log.error("neo4j driver not available — cannot fetch actual_return")
         return None
 
-    uri = os.environ.get("NEO4J_URI", "bolt://minisforum3:30687")
+    uri = os.environ.get("NEO4J_URI", "bolt://10.102.222.120:7687")
     user = os.environ.get("NEO4J_USER", "neo4j")
     password = os.environ.get("NEO4J_PASSWORD", "")
 

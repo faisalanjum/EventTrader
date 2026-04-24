@@ -16,7 +16,7 @@ def load_env():
 
 def get_neo4j_config():
     return (
-        os.getenv("NEO4J_URI", "bolt://localhost:30687"),
+        os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687"),
         os.getenv("NEO4J_USERNAME", "neo4j"),
         os.getenv("NEO4J_PASSWORD")
     )

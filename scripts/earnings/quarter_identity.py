@@ -162,7 +162,7 @@ def resolve_quarter_info(ticker: str, accession_8k: str, *,
         from dotenv import load_dotenv
         from neo4j import GraphDatabase
         load_dotenv(str(_PROJECT_ROOT / ".env"), override=True)
-        uri = os.getenv("NEO4J_URI", "bolt://localhost:30687")
+        uri = os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687")
         user = os.getenv("NEO4J_USERNAME", "neo4j")
         password = os.getenv("NEO4J_PASSWORD")
         if not password:

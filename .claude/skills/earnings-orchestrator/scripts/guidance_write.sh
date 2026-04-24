@@ -7,10 +7,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
 
-# Neo4j connection — MUST match MCP server (mcp_servers/local-cypher-server.sh)
-# Force-set to known-good values. Shell env may have stale/wrong URI.
-# Override with GUIDANCE_NEO4J_URI etc. if you need a different target.
-export NEO4J_URI="${GUIDANCE_NEO4J_URI:-bolt://localhost:30687}"
+# Neo4j connection default: kube-proxy routes ClusterIP 10.102.222.120:7687
+# to the in-cluster neo4j-bolt Service (NodePort 30687 was the old flaky path).
+# Override with GUIDANCE_NEO4J_URI if you need a different target (pods set
+# it to bolt://neo4j-bolt.neo4j.svc.cluster.local:7687).
+export NEO4J_URI="${GUIDANCE_NEO4J_URI:-bolt://10.102.222.120:7687}"
 export NEO4J_USERNAME="${GUIDANCE_NEO4J_USERNAME:-neo4j}"
 export NEO4J_PASSWORD="${GUIDANCE_NEO4J_PASSWORD:-Next2020#}"
 export NEO4J_DATABASE="${GUIDANCE_NEO4J_DATABASE:-neo4j}"
