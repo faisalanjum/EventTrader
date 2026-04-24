@@ -1,0 +1,40 @@
+# mcp-neo4j-cypher HTTP runtime, fully pinned build.
+# Tag scheme: faisalanjum/mcp-neo4j-cypher:http-v0.2.1-mcp1.26.0-YYYY-MM-DD-<shortSHA>
+# The 'http-' prefix disambiguates this HTTP-variant tag from the old
+# sleep-infinity stdio image that still occupies :latest in the same repo.
+# NEVER overwrite :latest during Phase H.
+
+# Pinned to the python:3.11-slim digest captured 2026-04-24.
+# USE THIS DIGEST VERBATIM for reproducibility. Do not "refresh" it just
+# because Docker Hub moved the python:3.11-slim tag. Changing this digest
+# invalidates the Phase H reproducibility claim.
+# Only change it if:
+#   (a) this exact digest has been removed/revoked upstream, OR
+#   (b) a base-image CVE/security advisory forces an upgrade.
+# In either case: STOP and ask the user before editing this line.
+FROM python:3.11-slim@sha256:6d85378d88a19cd4d76079817532d62232be95757cb45945a99fec8e8084b9c2
+
+# Full lock-file install: the requirements.lock is generated from
+# `kubectl exec -n mcp-services deploy/mcp-neo4j-cypher-http -- pip freeze`
+# (see H.3 test section) and checked into k8s/mcp-services/requirements.lock.
+# This freezes ALL transitive dependencies, not just top-level pins.
+COPY requirements.lock /tmp/req.lock
+RUN pip install --no-cache-dir -r /tmp/req.lock
+
+# Bake only the package + pyproject.toml + a minimal README.
+# Deliberately does NOT copy the fork's README/Dockerfile/inspector.sh/run_*.py
+# to avoid leaking the literal Neo4j password into the final image (see Risk 7).
+# --no-deps because every dep is already satisfied by requirements.lock above;
+# omitting --no-deps could re-resolve and drift from the lock file.
+WORKDIR /tmp/pkg
+COPY pyproject.toml /tmp/pkg/pyproject.toml
+COPY src            /tmp/pkg/src
+RUN echo "# mcp-neo4j-cypher (HTTP runtime baked for faisalanjum/EventMarketDB)" > /tmp/pkg/README.md \
+ && pip install --no-cache-dir --no-deps /tmp/pkg \
+ && rm -rf /tmp/pkg
+
+# The runtime harness
+COPY run_http.py /app/run_http.py
+ENV PYTHONUNBUFFERED=1
+WORKDIR /app
+CMD ["python", "/app/run_http.py"]

@@ -371,11 +371,17 @@ Enables MCP (Model Context Protocol) tools to be used with LangGraph/LangChain v
 ```python
 from langchain_mcp_adapters.client import MultiServerMCPClient
 
-# For code on minisforum (no port-forward needed)
+# For code on minisforum (no port-forward needed).
+# NOTE: the MCP pod's Starlette transport-security middleware rejects
+# requests whose Host header is the raw ClusterIP with HTTP 421 Misdirected.
+# Clients MUST send `Host: localhost:8000`. If your MCP client library does
+# not accept a `headers` field, set the Host header at the transport layer
+# or use a reverse proxy that rewrites it.
 client = MultiServerMCPClient({
     "neo4j": {
-        "url": "http://localhost:31380/mcp",
+        "url": "http://10.97.161.242:8000/mcp",
         "transport": "streamable_http",
+        "headers": {"Host": "localhost:8000"},
     }
 })
 

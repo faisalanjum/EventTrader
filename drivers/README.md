@@ -73,7 +73,7 @@ This directory contains all Neo4j database query tools, patterns, and agent impl
 
 - **Neo4j Browser**: http://localhost:30474
 - **Redis**: localhost:31379
-- **MCP HTTP**: http://localhost:31380/mcp
+- **MCP HTTP**: http://10.97.161.242:8000/mcp &nbsp;*(clients must send `Host: localhost:8000` header — the pod's Starlette middleware rejects raw-ClusterIP Host values with HTTP 421)*
 
 ---
 
@@ -246,8 +246,10 @@ result = await query_neo4j("""
 - Namespace: `admin:neo4j_patterns`
 
 ### MCP HTTP Service
-- URL: http://localhost:31380/mcp
+- URL: http://10.97.161.242:8000/mcp
 - Transport: streamable_http
+- Required header: `Host: localhost:8000` &nbsp;*(Starlette transport-security middleware rejects raw-ClusterIP Host values with HTTP 421 Misdirected)*
+- Current `drivers/*.py` code still points at the stale `http://localhost:31380/mcp` NodePort (never served) — migration to this ClusterIP + Host header is deferred post-Phase-H and tracked separately.
 
 ## Testing
 

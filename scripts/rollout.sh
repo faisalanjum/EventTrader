@@ -20,7 +20,13 @@ elif [[ $1 == "event-trader" ]]; then
 elif [[ $1 == "report-enricher" ]]; then
   kubectl rollout restart deployment/report-enricher -n processing
 elif [[ $1 == "mcp-http" ]]; then
-  kubectl rollout restart deployment/mcp-neo4j-cypher-http -n mcp-services
+  # Pinned-image flow (Phase H): the image tag in the YAML must already be
+  # updated + pushed (use `scripts/build_push.sh mcp-http-pinned`).
+  # `kubectl apply` picks up the new image; we then wait for the rollout.
+  # Do NOT `kubectl rollout restart` here — that would re-pull the same tag
+  # without exercising any actual image change and would be idempotent-noisy.
+  kubectl apply -f k8s/mcp-services/mcp-neo4j-cypher-http-deployment.yaml
+  kubectl rollout status deployment/mcp-neo4j-cypher-http -n mcp-services --timeout=600s
 else
   echo "Usage: $0 {xbrl-worker|event-trader|report-enricher|mcp-http}"; exit 1
 fi

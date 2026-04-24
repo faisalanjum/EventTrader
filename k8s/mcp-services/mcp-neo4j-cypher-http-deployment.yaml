@@ -10,6 +10,13 @@ spec:
   selector:
     matchLabels:
       app: mcp-neo4j-cypher-http
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
   template:
     metadata:
       labels:
@@ -25,44 +32,14 @@ spec:
         key: dedicated
         operator: Equal
         value: graph
+      terminationGracePeriodSeconds: 30
       containers:
       - name: mcp-neo4j-cypher-http
-        image: python:3.11-slim
-        command: ["/bin/bash", "-c"]
-        args:
-        - |
-          set -e
-          cd /source
-          echo "Installing dependencies..."
-          pip install --no-cache-dir 'neo4j>=5.26.0' 'mcp[cli]>=1.6.0' 'uvicorn>=0.35.0'
-          pip install -e .
-          
-          echo "Starting MCP Neo4j Cypher server in HTTP mode..."
-          # Create minimal HTTP runner script
-          cat > /tmp/run_http.py << 'EOF'
-          from mcp_neo4j_cypher.server import create_mcp_server, healthcheck
-          from neo4j import AsyncGraphDatabase
-          import os
-          import uvicorn
-          
-          # Get connection details
-          db_url = os.getenv("NEO4J_URI")
-          username = os.getenv("NEO4J_USERNAME")
-          password = os.getenv("NEO4J_PASSWORD")
-          database = os.getenv("NEO4J_DATABASE", "neo4j")
-          
-          # Create driver and server (reusing existing code)
-          driver = AsyncGraphDatabase.driver(db_url, auth=(username, password))
-          mcp = create_mcp_server(driver, database)
-          healthcheck(db_url, username, password, database)
-          
-          # Get the HTTP app and run with uvicorn
-          app = mcp.streamable_http_app()
-          print("Starting HTTP server on port 8000...", flush=True)
-          uvicorn.run(app, host="0.0.0.0", port=8000)
-          EOF
-          
-          python /tmp/run_http.py
+        # IMPORTANT: update this tag for each rebuild. Reuses the existing
+        # faisalanjum/mcp-neo4j-cypher public repo (do NOT switch to :latest —
+        # that still points at the 9-month-old sleep-infinity image).
+        image: faisalanjum/mcp-neo4j-cypher:http-v0.2.1-mcp1.26.0-2026-04-24-0123113
+        imagePullPolicy: IfNotPresent
         env:
         - name: NEO4J_URI
           value: bolt://neo4j-bolt.neo4j:7687
@@ -81,8 +58,8 @@ spec:
         - name: PYTHONUNBUFFERED
           value: "1"
         ports:
-        - containerPort: 8000
-          name: http
+        - name: http
+          containerPort: 8000
         resources:
           requests:
             cpu: 100m
@@ -90,14 +67,27 @@ spec:
           limits:
             cpu: 250m
             memory: 512Mi
-        volumeMounts:
-        - mountPath: /source
-          name: source-code
-      volumes:
-      - name: source-code
-        hostPath:
-          path: /home/faisal/neo4j-mcp-server/servers/mcp-neo4j-cypher
-          type: Directory
+        # Readiness checks Neo4j reachability via /health → stops routing traffic
+        # to the pod while Neo4j is unreachable, but does NOT kill the pod
+        # (self-healing when Neo4j returns).
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        # Liveness is process-level ONLY — do NOT couple to Neo4j, otherwise a
+        # Neo4j maintenance restart would cascade-kill this pod and trigger
+        # CrashLoopBackOff until Neo4j recovers.
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
 ---
 apiVersion: v1
 kind: Service
