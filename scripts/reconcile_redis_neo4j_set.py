@@ -38,7 +38,7 @@ def get_redis_client() -> redis.Redis:
 
 def get_neo4j_driver():
     """Connect to Neo4j using env vars."""
-    uri = os.getenv("NEO4J_URI", "bolt://192.168.40.73:30687")
+    uri = os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687")
     user = os.getenv("NEO4J_USERNAME", "neo4j")
     password = os.getenv("NEO4J_PASSWORD")
     if not password:

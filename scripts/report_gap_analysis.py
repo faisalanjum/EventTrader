@@ -27,7 +27,7 @@ import requests
 from neo4j import GraphDatabase
 
 # --- Config ---
-NEO4J_URI = os.getenv("NEO4J_URI", "bolt://192.168.40.73:30687")
+NEO4J_URI = os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687")
 NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "eventmarket")
 

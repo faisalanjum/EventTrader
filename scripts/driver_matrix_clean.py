@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 print = functools.partial(print, flush=True)
 
-driver = GraphDatabase.driver(os.getenv("NEO4J_URI","bolt://192.168.40.73:30687"),
+driver = GraphDatabase.driver(os.getenv("NEO4J_URI","bolt://10.102.222.120:7687"),
     auth=(os.getenv("NEO4J_USERNAME","neo4j"), os.getenv("NEO4J_PASSWORD")))
 
 NEO4J_SIM = 0.75                          # threshold in Neo4j score space
