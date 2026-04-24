@@ -45,9 +45,9 @@ else:
     sys.exit(1)
 
 # Neo4j connection settings
-NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
+NEO4J_URI = os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687")
 NEO4J_USER = os.getenv("NEO4J_USERNAME", "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 
 def connect_to_neo4j():
     """Connect to Neo4j database"""

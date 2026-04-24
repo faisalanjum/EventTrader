@@ -1939,7 +1939,7 @@ def fetch_actual_return(ticker: str, accession: str) -> dict | None:
         return None
 
     uri = os.environ.get("NEO4J_URI", "bolt://10.102.222.120:7687")
-    user = os.environ.get("NEO4J_USER", "neo4j")
+    user = os.environ.get("NEO4J_USERNAME", "neo4j")
     password = os.environ.get("NEO4J_PASSWORD", "")
 
     query_str = """

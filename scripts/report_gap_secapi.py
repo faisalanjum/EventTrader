@@ -29,8 +29,8 @@ from ratelimit import limits, sleep_and_retry
 
 # --- Config ---
 NEO4J_URI = os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687")
-NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "eventmarket")
+NEO4J_USER = os.getenv("NEO4J_USERNAME", "neo4j")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 SEC_API_KEY = os.getenv("SEC_API_KEY")
 
 PRIMARY_FORM_TYPES = ['8-K', '10-K', '10-Q', '8-K/A', '10-K/A', '10-Q/A']

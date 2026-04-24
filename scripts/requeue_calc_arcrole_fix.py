@@ -60,9 +60,9 @@ log = logging.getLogger(__name__)
 
 DRY_RUN = "--execute" not in sys.argv
 
-NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
+NEO4J_URI = os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687")
 NEO4J_USER = os.getenv("NEO4J_USERNAME", "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 
 HEAVY = RedisKeys.XBRL_QUEUE_HEAVY   # reports:queues:xbrl:heavy
 MEDIUM = RedisKeys.XBRL_QUEUE_MEDIUM  # reports:queues:xbrl:medium

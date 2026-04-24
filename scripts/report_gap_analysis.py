@@ -28,8 +28,8 @@ from neo4j import GraphDatabase
 
 # --- Config ---
 NEO4J_URI = os.getenv("NEO4J_URI", "bolt://10.102.222.120:7687")
-NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "eventmarket")
+NEO4J_USER = os.getenv("NEO4J_USERNAME", "neo4j")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 
 EDGAR_BASE = "https://data.sec.gov/submissions"
 USER_AGENT = "EventMarketDB gap-analysis admin@eventmarketdb.com"
