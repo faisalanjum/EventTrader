@@ -176,7 +176,7 @@ class Calculation:
             raise ValueError(f"Failed to build calculation hierarchy: {e}")
 
     def _build_hierarchy(self) -> None:
-        rel_set = self.model_xbrl.relationshipSet(XbrlConst.summationItem, self.network_uri)
+        rel_set = self.model_xbrl.relationshipSet(XbrlConst.summationItems, self.network_uri)
         if not rel_set:
             return
                 
@@ -304,8 +304,8 @@ class Network(ValidationMixin):
 
     @property
     def isCalculation(self) -> bool:
-        """Indicates if network contains calculation relationships"""
-        return XbrlConst.summationItem in self.relationship_sets
+        """Indicates if network contains calculation relationships (legacy 2003 or Calc 1.1)"""
+        return any(arc in self.relationship_sets for arc in XbrlConst.summationItems)
 
     @property 
     def isDefinition(self) -> bool:

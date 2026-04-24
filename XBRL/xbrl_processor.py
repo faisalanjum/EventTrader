@@ -429,7 +429,7 @@ class process_report:
                 debug_counts['missing_fact_lookup'] += 1
                 continue
                 
-            calc_rel_set = network.model_xbrl.relationshipSet(XbrlConst.summationItem, network.network_uri)
+            calc_rel_set = network.model_xbrl.relationshipSet(XbrlConst.summationItems, network.network_uri)
             if not calc_rel_set:
                 logger.debug(f"No calculation relationships in network: {network.name} for report {self.accessionNo}")
                 debug_counts['no_calc_relationships'] += 1
@@ -1662,7 +1662,7 @@ class process_report:
         # Define relationship types to check
         relationship_sets = [
             XbrlConst.parentChild,       # parent-child relationships - presentation
-            XbrlConst.summationItem,     # calculation relationships  - calculation
+            *XbrlConst.summationItems,   # calculation relationships  - calculation (2003 + Calc 1.1)
             XbrlConst.all,               # all relationships (primary item requires dimension members) - definition
             XbrlConst.notAll,            # notAll relationships (primary item excludes dimension members) - definition
             XbrlConst.dimensionDefault,  # dimension-default relationships - definition
