@@ -7,7 +7,6 @@ Appendix A.5).
 from __future__ import annotations
 
 import math
-from typing import Any
 
 from ._formatters import _md_table, _fmt_num, _fmt_money
 
