@@ -1,0 +1,36 @@
+# TEST Q4_FY2025
+Filed: 2026-01-01T16:00:00-05:00 | Session: post_market | Period ending: 2025-12-31
+Mode: historical | PIT cutoff: 2026-01-01T16:00:00-05:00
+
+## 2. Results & Expectations
+
+### Consensus Bar
+[BUILDER ERROR: synthetic error: consensus failed]
+
+### Reported Results
+[BUILDER ERROR: synthetic error: 8k_packet failed]
+
+## 3. Forward Guidance
+[BUILDER ERROR: synthetic error: guidance_history failed]
+
+## 4. Consensus History
+[BUILDER ERROR: synthetic error: consensus failed]
+
+## 5. Prior Financial Trends
+[BUILDER ERROR: synthetic error: prior_financials failed]
+
+## 6. Inter-Quarter Events
+
+[BUILDER ERROR: synthetic error: inter_quarter_context failed]
+
+## 7. Sector Peer Earnings & Reactions
+
+[BUILDER ERROR: synthetic error: peer_earnings_snapshot failed]
+
+## 8. Macro Environment
+
+[BUILDER ERROR: synthetic error: macro_snapshot failed]
+
+## 9. Reference
+
+[NO 8-K DATA]
