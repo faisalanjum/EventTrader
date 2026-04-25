@@ -13,10 +13,7 @@ import pytest
 THIS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(THIS_DIR))
 
-# Module-level skip — applies to every test in this file. Remove this line
-# in commit 19 to enable. The skip reason is shown in pytest output so you
-# can confirm the test was correctly skipped (not silently absent).
-pytestmark = pytest.mark.skip(reason="enabled after migration in commit 19")
+# pytestmark removed in commit 19 — shim contract is now testable.
 
 # (symbol, old_module, new_module) — covers ALL 37 moved symbols
 SHIM_TABLE = [
