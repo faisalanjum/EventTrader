@@ -261,28 +261,6 @@ SECTION_TITLES = {
 }
 
 
-def _render_header(bundle: dict) -> str:
-    """Section 1: Header — ticker, quarter, filing context, mode."""
-    qi = bundle.get("quarter_info", {})
-    ticker = str(bundle.get("ticker") or "UNKNOWN").upper()
-    quarter = str(qi.get("quarter_label") or "UNKNOWN")
-    filed = str(qi.get("filed_8k") or "UNKNOWN")
-    session = str(qi.get("market_session") or "UNKNOWN")
-    period = str(qi.get("period_of_report") or "UNKNOWN")
-    pit = bundle.get("pit_cutoff")
-    mode = "historical" if pit else "live"
-
-    lines = [
-        f"# {ticker} {quarter}",
-        f"Filed: {filed} | Session: {session} | Period ending: {period}",
-    ]
-    if pit:
-        lines.append(f"Mode: {mode} | PIT cutoff: {pit}")
-    else:
-        lines.append(f"Mode: {mode}")
-    return "\n".join(lines)
-
-
 # ════════════════════════════════════════════════════════════════════════════════
 # RENDERER EXTRACTION SHIM BLOCK (seeded commit 8/20, populated commits 8-18)
 # All bundle-renderer code is being moved to scripts/earnings/renderer/.
@@ -294,6 +272,7 @@ def _render_header(bundle: dict) -> str:
 from scripts.earnings.renderer._formatters import (  # noqa: F401
     _md_table, _fmt_num, _fmt_money, _fmt_pct,
 )
+from scripts.earnings.renderer.header import _render_header  # noqa: F401
 
 
 def _fmt_guidance_value(update: dict, resolved_unit: str) -> str:
