@@ -117,4 +117,3 @@ def _render_reference(bundle: dict) -> str:
         parts.append(ft.strip())
 
     return "\n".join(parts)
-

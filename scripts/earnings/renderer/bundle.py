@@ -55,4 +55,3 @@ def render_bundle_text(bundle: dict) -> str:
         sections.append(_text)
 
     return "\n\n".join(sections)
-

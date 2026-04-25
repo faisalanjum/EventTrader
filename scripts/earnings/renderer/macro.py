@@ -149,4 +149,3 @@ def _render_macro(bundle: dict) -> str:
             parts.append("| " + " | ".join(row) + " |")
 
     return "\n".join(parts)
-

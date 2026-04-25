@@ -329,5 +329,3 @@ def _render_forward_guidance(bundle: dict) -> str:
                 parts.append(f"| {label} | {target_label} | {day} | {val} |")
 
     return "\n".join(parts)
-
-

@@ -298,29 +298,17 @@ from scripts.earnings.renderer.peers import _render_peer_earnings  # noqa: F401
 from scripts.earnings.renderer.macro import _render_macro  # noqa: F401
 from scripts.earnings.renderer.lessons import _render_learning_context  # noqa: F401
 from scripts.earnings.renderer.bundle import render_bundle_text  # noqa: F401
+# Sibling utility (not in renderer package — shared between renderer + validator)
+from scripts.earnings._text_utils import _normalize_lesson_text  # noqa: F401
 
 
-
-
-
-# ── Section 6: Inter-Quarter Events renderer ────────────────────────
-
+# Dead constant from pre-renderer-extract baseline (line 990). Verified zero
+# external usages but kept here per migration plan §2.2 — deletion deferred
+# to a follow-up PR.
 _IQ_ANALYST_CHANNELS = frozenset({
     "Analyst Ratings", "Upgrades", "Downgrades", "Reiteration",
     "Initiation", "Price Target",
 })
-
-
-
-
-# ── Section 7: Peer Earnings renderer ────────────────────────────────
-
-
-
-
-# ── Section 8: Macro Snapshot renderer ────────────────────────────────
-
-
 
 
 def run_core_flow(ticker: str, quarter_info: dict,
@@ -1442,14 +1430,6 @@ def build_learning_context(ticker: str, sector: str | None = None,
     )
 
     return result
-
-
-# ── Learning Context Renderer (for prediction bundle text) ──────────
-
-
-# Moved to scripts/earnings/_text_utils.py (commit 7/20). Shim preserves
-# `from earnings_orchestrator import _normalize_lesson_text` for legacy callers.
-from scripts.earnings._text_utils import _normalize_lesson_text  # noqa: F401
 
 
 

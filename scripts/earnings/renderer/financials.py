@@ -161,4 +161,3 @@ def _render_prior_financials(bundle: dict) -> str:
         parts.append(f"\nData notes: {len(gaps)} gaps in packet")
 
     return "\n".join(parts)
-
