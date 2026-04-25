@@ -58,3 +58,24 @@ def _fmt_pct(val) -> str:
         return "—"
     sign = "+" if v > 0 else ""
     return f"{sign}{v:.1f}%"
+
+
+def _fmt_financial_cell(value, fmt_type: str) -> str:
+    """Format a single financial metric cell."""
+    if value is None:
+        return "—"
+    v = float(value)
+    if not math.isfinite(v):
+        return "—"
+    if fmt_type == "money":
+        return _fmt_money(v)
+    if fmt_type == "usd":
+        sign = "-" if v < 0 else ""
+        return f"{sign}${abs(v):.2f}"
+    if fmt_type == "pct":
+        return f"{v:.1f}%"
+    if fmt_type == "count":
+        return _fmt_num(v)
+    if fmt_type == "ratio":
+        return f"{v:.2f}"
+    return str(value)
