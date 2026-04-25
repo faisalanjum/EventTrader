@@ -1,0 +1,117 @@
+## 6. Inter-Quarter Events
+
+Ticker: CHRW | Sector: Industrials | Industry: IntegratedFreightAndLogistics
+Window: 2025-10-29T16:26:21-04:00 → 2026-01-28T16:16:58-05:00 (pit_cutoff)
+Dates: 2025-10-29 → 2026-01-28 | PIT: 2026-01-28T16:16:58-05:00 | Mode: historical
+Schema: inter_quarter_context.v1 | Assembled: 2026-04-22T18:21:35.367826+00:00
+Summary: 60 trading days, 7 significant, 3 gap | 27 news, 2 filings, 0 dividends, 0 splits
+
+### Trading Days
+
+| Date | Trd | Bnd | Close | Ret% | SPY% | Sect% | Adj% | Sig | Gap |
+|---|---|---|---|---|---|---|---|---|---|
+| 2025-10-29 | Y | prev | 129.38 | 1.02 | 0.05 | 0.26 | 0.97 | — | — |
+| 2025-10-30 | Y | — | 154.88 | 19.71 | -1.1 | -0.25 | 20.81 | Y | N |
+| 2025-10-31 | Y | — | 153.99 | -0.57 | 0.33 | 0.24 | -0.9 | N | N |
+| 2025-11-03 | Y | — | 152.15 | -1.19 | 0.19 | -0.43 | -1.38 | N | N |
+| 2025-11-04 | Y | — | 152.91 | 0.5 | -1.19 | -1.16 | 1.69 | N | N |
+| 2025-11-05 | Y | — | 153.13 | 0.14 | 0.35 | 0.39 | -0.21 | N | N |
+| 2025-11-06 | Y | — | 148.23 | -3.2 | -1.07 | -0.4 | -2.13 | Y | N |
+| 2025-11-07 | Y | — | 149.44 | 0.82 | 0.1 | 0.48 | 0.72 | N | N |
+| 2025-11-10 | Y | — | 151.72 | 1.53 | 1.56 | 0.57 | -0.03 | N | N |
+| 2025-11-11 | Y | — | 150.7 | -0.67 | 0.23 | 0.03 | -0.9 | N | N |
+| 2025-11-12 | Y | — | 152.99 | 1.52 | 0.06 | 0.1 | 1.46 | N | N |
+| 2025-11-13 | Y | — | 151.66 | -0.87 | -1.66 | -1.55 | 0.79 | N | N |
+| 2025-11-14 | Y | — | 152.8 | 0.75 | -0.02 | 0.01 | 0.77 | N | N |
+| 2025-11-17 | Y | — | 152.64 | -0.1 | -0.93 | -0.98 | 0.83 | N | N |
+| 2025-11-18 | Y | — | 151.69 | -0.62 | -0.84 | -0.45 | 0.22 | N | N |
+| 2025-11-19 | Y | — | 151.36 | -0.22 | 0.39 | 0.33 | -0.61 | N | N |
+| 2025-11-20 | Y | — | 148.57 | -1.84 | -1.52 | -1.68 | -0.32 | N | N |
+| 2025-11-21 | Y | — | 151.68 | 2.09 | 1.0 | 1.22 | 1.09 | N | N |
+| 2025-11-24 | Y | — | 154.565 | 1.9 | 1.47 | 0.25 | 0.43 | N | N |
+| 2025-11-25 | Y | — | 157.35 | 1.8 | 0.94 | 1.28 | 0.86 | N | N |
+| 2025-11-26 | Y | — | 159.54 | 1.39 | 0.69 | 0.58 | 0.7 | N | N |
+| 2025-11-28 | Y | — | 158.87 | -0.42 | 0.55 | 0.58 | -0.97 | N | N |
+| 2025-12-01 | Y | — | 160.32 | 0.91 | -0.46 | -1.46 | 1.37 | N | N |
+| 2025-12-02 | Y | — | 159.63 | -0.43 | 0.19 | 0.87 | -0.62 | N | N |
+| 2025-12-03 | Y | — | 159.54 | -0.06 | 0.35 | 0.95 | -0.41 | N | N |
+| 2025-12-04 | Y | — | 158.05 | -0.93 | 0.07 | 0.52 | -1.0 | N | N |
+| 2025-12-05 | Y | — | 157.22 | -0.53 | 0.19 | -0.28 | -0.72 | N | N |
+| 2025-12-08 | Y | — | 153.41 | -2.42 | -0.3 | -0.12 | -2.12 | Y | N |
+| 2025-12-09 | Y | — | 152.52 | -0.58 | -0.09 | -0.73 | -0.49 | N | N |
+| 2025-12-10 | Y | — | 158.34 | 3.82 | 0.66 | 1.83 | 3.16 | Y | Y |
+| 2025-12-11 | Y | — | 159.8 | 0.92 | 0.23 | 1.07 | 0.69 | N | N |
+| 2025-12-12 | Y | — | 157.09 | -1.7 | -1.08 | -0.63 | -0.62 | N | N |
+| 2025-12-15 | Y | — | 157.61 | 0.33 | -0.15 | 0.16 | 0.48 | N | N |
+| 2025-12-16 | Y | — | 159.04 | 0.91 | -0.27 | -0.59 | 1.18 | N | N |
+| 2025-12-17 | Y | — | 160.1 | 0.67 | -1.1 | -1.62 | 1.77 | N | N |
+| 2025-12-18 | Y | — | 165.03 | 3.08 | 0.76 | 0.65 | 2.32 | Y | Y |
+| 2025-12-19 | Y | — | 166.46 | 0.87 | 0.61 | 0.86 | 0.26 | N | N |
+| 2025-12-22 | Y | — | 164.99 | -0.88 | 0.62 | 0.76 | -1.5 | N | N |
+| 2025-12-23 | Y | — | 164.59 | -0.24 | 0.46 | -0.04 | -0.7 | N | N |
+| 2025-12-24 | Y | — | 164.95 | 0.22 | 0.35 | 0.32 | -0.13 | N | N |
+| 2025-12-26 | Y | — | 164.625 | -0.2 | -0.01 | -0.18 | -0.19 | N | N |
+| 2025-12-29 | Y | — | 163.94 | -0.42 | -0.36 | -0.22 | -0.06 | N | N |
+| 2025-12-30 | Y | — | 161.96 | -1.21 | -0.12 | -0.29 | -1.09 | N | N |
+| 2025-12-31 | Y | — | 160.76 | -0.74 | -0.74 | -0.83 | 0.0 | N | N |
+| 2026-01-02 | Y | — | 163.72 | 1.84 | 0.18 | 1.84 | 1.66 | N | N |
+| 2026-01-05 | Y | — | 167.21 | 2.13 | 0.67 | 1.18 | 1.46 | N | N |
+| 2026-01-06 | Y | — | 167.66 | 0.27 | 0.59 | 1.36 | -0.32 | N | N |
+| 2026-01-07 | Y | — | 166.73 | -0.55 | -0.32 | -1.88 | -0.23 | N | N |
+| 2026-01-08 | Y | — | 166.01 | -0.43 | -0.01 | 0.75 | -0.42 | N | N |
+| 2026-01-09 | Y | — | 170.77 | 2.87 | 0.66 | 1.1 | 2.21 | Y | N |
+| 2026-01-12 | Y | — | 172.54 | 1.04 | 0.16 | 0.77 | 0.88 | N | N |
+| 2026-01-13 | Y | — | 173.42 | 0.51 | -0.2 | 0.51 | 0.71 | N | N |
+| 2026-01-14 | Y | — | 172.31 | -0.64 | -0.49 | 0.16 | -0.15 | N | N |
+| 2026-01-15 | Y | — | 175.33 | 1.75 | 0.27 | 0.92 | 1.48 | N | N |
+| 2026-01-16 | Y | — | 175.77 | 0.25 | -0.08 | 0.68 | 0.33 | N | N |
+| 2026-01-20 | Y | — | 175.1 | -0.38 | -2.04 | -2.02 | 1.66 | N | N |
+| 2026-01-21 | Y | — | 179.38 | 2.44 | 1.15 | 1.73 | 1.29 | N | N |
+| 2026-01-22 | Y | — | 177.9 | -0.83 | 0.52 | -0.52 | -1.35 | N | N |
+| 2026-01-23 | Y | — | 176.66 | -0.7 | 0.04 | -0.77 | -0.74 | N | N |
+| 2026-01-26 | Y | — | 178.11 | 0.82 | 0.51 | 0.1 | 0.31 | N | N |
+| 2026-01-27 | Y | — | 180.425 | 1.3 | 0.4 | 0.41 | 0.9 | N | N |
+| 2026-01-28 | Y | cutoff | 184.28 | 2.14 | -0.01 | -0.56 | 2.15 | Y | Y |
+
+### News Events (27)
+
+Adjusted returns = stock − macro for each window (hourly / session / daily)
+
+| Ref | Date | Sess | Title | Channels | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|
+| N1 | 2025-10-30 | pre_market | Truist Securities Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $165 | News ; Price Target ; Analyst Ratings | 4.35 | 4.9 | 20.74 |
+| N2 | 2025-10-30 | in_market | Raymond James Maintains Outperform on C.H. Robinson Worldwide, Raises Price Target to $161 | News ; Price Target ; Analyst Ratings | -0.9 | 0.3 | 20.74 |
+| N3 | 2025-10-30 | in_market | Wells Fargo Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $170 | News ; Price Target ; Analyst Ratings | 0.18 | 0.94 | 20.74 |
+| N4 | 2025-10-30 | in_market | Goldman Sachs Maintains Neutral on C.H. Robinson Worldwide, Raises Price Target to $131 | News ; Price Target ; Analyst Ratings | 0.3 | 0.38 | 20.74 |
+| N5 | 2025-10-30 | in_market | Evercore ISI Group Maintains Outperform on C.H. Robinson Worldwide, Raises Price Target to $175 | News ; Price Target ; Analyst Ratings | -0.61 | -0.22 | 20.74 |
+| N6 | 2025-10-30 | in_market | Morgan Stanley Maintains Underweight on C.H. Robinson Worldwide, Raises Price Target to $77 | News ; Price Target ; Analyst Ratings | 0.32 | 0.69 | 20.74 |
+| N7 | 2025-10-30 | in_market | UBS Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $177 | News ; Price Target ; Analyst Ratings | -0.07 | 0.21 | 20.74 |
+| N8 | 2025-10-30 | in_market | TD Cowen Maintains Hold on C.H. Robinson Worldwide, Raises Price Target to $138 | News ; Price Target ; Analyst Ratings | -0.37 | 0.22 | 20.74 |
+| N9 | 2025-10-30 | post_market | JP Morgan Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $166 | News ; Price Target ; Analyst Ratings | 0.0 | 0.39 | -0.83 |
+| N10 | 2025-10-31 | in_market | Barclays Maintains Equal-Weight on C.H. Robinson Worldwide, Raises Price Target to $145 | News ; Price Target ; Analyst Ratings | 0.6 | 0.19 | -0.83 |
+| N11 | 2025-11-06 | post_market | C.H. Robinson Increases Dividend From $0.62 To $0.63/Share | News ; Dividends | 0.03 | 1.02 | 0.72 |
+| N12 | 2025-12-08 | in_market | Morgan Stanley Maintains Underweight on C.H. Robinson Worldwide, Raises Price Target to $85 | News ; Price Target ; Analyst Ratings | -0.44 | -0.96 | -2.13 |
+| N13 | 2025-12-16 | pre_market | Barclays Upgrades C.H. Robinson Worldwide to Overweight, Raises Price Target to $200 | News ; Upgrades ; Price Target ; Analyst Ratings | 0.29 | 0.07 | 1.19 |
+| N14 | 2025-12-16 | in_market | Stifel Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $184 | News ; Price Target ; Analyst Ratings | -0.24 | 0.35 | 1.19 |
+| N15 | 2025-12-24 | in_market | B of A Securities Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $182 | News ; Price Target ; Analyst Ratings | 0.27 | -0.3 | -0.13 |
+| N16 | 2026-01-06 | in_market | Wells Fargo Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $185 | News ; Price Target ; Analyst Ratings | -0.18 | 0.19 | -0.32 |
+| N17 | 2026-01-08 | pre_market | Susquehanna Maintains Positive on C.H. Robinson Worldwide, Raises Price Target to $210 | News ; Price Target ; Analyst Ratings | 0.45 | 0.24 | -0.42 |
+| N18 | 2026-01-08 | in_market | Citigroup Maintains Neutral on C.H. Robinson Worldwide, Raises Price Target to $177 | News ; Price Target ; Analyst Ratings | -0.26 | -0.23 | -0.42 |
+| N19 | 2026-01-09 | in_market | Bernstein Maintains Market Perform on C.H. Robinson Worldwide, Raises Price Target to $153 | News ; Price Target ; Analyst Ratings | 0.11 | 1.41 | 2.2 |
+| N20 | 2026-01-09 | in_market | TD Cowen Maintains Hold on C.H. Robinson Worldwide, Raises Price Target to $165 | News ; Price Target ; Analyst Ratings | 1.09 | 1.35 | 2.2 |
+| N21 | 2026-01-12 | in_market | JP Morgan Maintains Overweight on C.H. Robinson Worldwide, Raises Price Target to $178 | News ; Price Target ; Analyst Ratings | -0.49 | -0.01 | 0.88 |
+| N22 | 2026-01-13 | in_market | Evercore ISI Group Maintains Outperform on C.H. Robinson Worldwide, Raises Price Target to $196 | News ; Price Target ; Analyst Ratings | 1.51 | 1.04 | 0.71 |
+| N23 | 2026-01-13 | post_market | Deep Dive Into C.H. Robinson Worldwide Stock: Analyst Perspectives (21 Ratings) | Analyst Ratings | -0.01 | 0.16 | -0.15 |
+| N24 | 2026-01-15 | pre_market | Truist Securities Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $190 | News ; Price Target ; Analyst Ratings | 0.13 | 0.05 | 1.45 |
+| N25 | 2026-01-23 | in_market | UBS Maintains Buy on C.H. Robinson Worldwide, Raises Price Target to $224 | News ; Price Target ; Analyst Ratings | 0.42 | 0.28 | -0.73 |
+| N26 | 2026-01-26 | pre_market | CH Robinson Uses AI To Cut Missed Truck Pickups And Speed Up Freight | News | -0.07 | -0.48 | 0.3 |
+| N27 | 2026-01-27 | in_market | Exploring C.H. Robinson Worldwide's Earnings Expectations | Earnings | 0.41 | 1.07 | 0.89 |
+
+### Filing Events (2)
+
+Adjusted returns = stock − macro for each window (hourly / session / daily)
+
+| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| F1 | 2025-10-31 | in_market | 10-Q | 0001043277-25-000052 | — | — | 2025-09-30 | N | -0.68 | -0.7 | -0.83 |
+| F2 | 2025-11-07 | post_market | 8-K/A | 0001043277-25-000058 | Item 5.02: Departure of Directors or Certain Officers; Election of Directors; Appointment of Certain Officers: Compensatory Arrangements of Certain Officers || Item 9.01: Financial Statements and Exhibits | — | 2025-11-06 | Y | -0.06 | -0.72 | -0.04 |

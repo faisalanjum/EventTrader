@@ -1,0 +1,25 @@
+## Prior Lessons (from learner)
+
+### Ticker Lessons (1 most recent quarters)
+
+**Q3_FY2023** — prediction correct (short), actual -5.38%, driver: ex_ai_segment_deterioration
+  - Predictor: When a stock belongs to an established same-sector sell-the-news cluster (≥3 peers within ~8 weeks post-earnings at -5 to -8% on comparable beat-with-soft-guide setups), anchor the magnitude range on the peer median/lower-quartile rather than the dollar size of the headline guide delta.
+  - Predictor: A 'headline beat + slight guide miss' is a trap when segment composition shows a long-running growth segment inflecting negative YoY for the first time — weight segment mix changes and prior-trend-breaks heavier than the aggregate guide delta when sizing downside.
+  - Predictor: Extend the expected downside range when the stock has rallied ≥8% in the 2 weeks into print AND a peer sell-the-news precedent exists — extended positioning compresses the upside and expands the tail on any blemish, so confidence in the direction should translate into a wider, lower range (not just a wider range).
+  - Data: Fetch the earnings call transcript (or a rapid Q&A readout) before predicting, not just the press release / 8-K exhibit. Management refusal-to-guide phrasing, customer-concentration admissions, and regulatory-approval deflections are the qualitative amplifiers that explain the gap between headline-driven moves and actual reactions.
+  - Data: Weight peer-cluster post-earnings returns (same industry, similar print shape, prior 6-8 weeks) as a primary magnitude anchor — bucket them into the context bundle directly alongside the guide math, not as a secondary 'pattern' note.
+  - Data: Pull segment-level YoY deltas for the guided quarter as a stand-alone structured signal. Flag any segment that (a) represents >10% of revenue AND (b) is guided negative YoY for the first time in ≥4 quarters as a high-impact inflection — this is the structural information the press release hides inside prose.
+  - Why: The press release headline (beat + slight guide miss) understated the actual information content of the event. The call exposed that ex-AI semi revenue had flatlined with broadband turning outright negative for the first time in over 2 years, and management declined to reassure on forward stabilization or VMware regulatory path. With the stock up ~11% in 2 weeks and a flat-to-positive semiconductor tape on Sept 1, positioning unwound to match the magnitude of the narrative shift, not the magnitude of the headline miss.
+
+
+### Sector Lessons (1 entries)
+
+- [sector:Technology] (AVGO) In the 2023+ hyperscaler-AI-capex regime, semiconductor prints are graded on the composition of forward revenue, not the headline guide delta. When AI-exposed lines are guided strong but ex-AI semis (broadband/storage/wireless/industrial) are flat-to-negative YoY, the AI narrative is already priced and the marginal information is the ex-AI deterioration — expect multiple compression on names where AI does not yet dominate the mix.
+
+### Macro Lessons (1 entries)
+
+- [macro] (AVGO) When a single-stock drawdown of ≥5% occurs on a flat-to-positive sector tape with zero sell-side downgrades and broadly raised price targets (as on AVGO Sept 1, 2023), the move is positioning-driven (crowded-long unwind / profit-taking on a pre-print run-up), not a fundamental re-rating — slow or bullish sell-side reaction is NOT a leading indicator of next-session mean-reversion support and should not be used to narrow downside ranges.
+
+### Cross-Ticker Lessons (1 entries)
+
+- [cross:AVGO,QCOM,AMD,TXN] (AVGO) These four large-cap semis formed a summer-2023 sell-the-news cluster (all -5 to -8% day-of-print on beats with incrementally soft guides). When predicting any of the four going forward, explicitly consult the other three's most recent prints in the same earnings cycle as a magnitude anchor — the cluster grades each name against the same AI-vs-ex-AI composition template.

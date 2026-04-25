@@ -1,0 +1,6 @@
+## Prior Lessons (from learner)
+
+### Macro Lessons (2 entries)
+
+- [macro] (AVGO) When VIX is below 13 and SPY is within 3% of a rolling 52-week high on the session following an earnings catalyst, the tape ASYMMETRICALLY amplifies positive surprises (bullish tape compounds the fundamental signal by ~30-50bps vs a neutral tape) but does NOT compound negative surprises to the same degree — factor this tape asymmetry into magnitude ranges rather than treating low-VIX as uniformly supportive.
+- [macro] (AVGO) When a single-stock drawdown of ≥5% occurs on a flat-to-positive sector tape with zero sell-side downgrades and broadly raised price targets (as on AVGO Sept 1, 2023), the move is positioning-driven (crowded-long unwind / profit-taking on a pre-print run-up), not a fundamental re-rating — slow or bullish sell-side reaction is NOT a leading indicator of next-session mean-reversion support and should not be used to narrow downside ranges.

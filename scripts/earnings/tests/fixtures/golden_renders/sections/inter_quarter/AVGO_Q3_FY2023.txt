@@ -1,0 +1,160 @@
+## 6. Inter-Quarter Events
+
+Ticker: AVGO | Sector: Technology | Industry: Semiconductors
+Window: 2023-06-01T16:17:30-04:00 → 2023-08-31T17:18:57-04:00 (pit_cutoff)
+Dates: 2023-06-01 → 2023-08-31 | PIT: 2023-08-31T17:18:57-04:00 | Mode: historical
+Schema: inter_quarter_context.v1 | Assembled: 2026-04-19T17:34:51.581685+00:00
+Summary: 62 trading days, 11 significant, 8 gap | 68 news, 2 filings, 0 dividends, 0 splits
+
+### Trading Days
+
+| Date | Trd | Bnd | Close | Ret% | SPY% | Sect% | Adj% | Sig | Gap |
+|---|---|---|---|---|---|---|---|---|---|
+| 2023-06-01 | Y | prev | 78.995 | -2.23 | 0.95 | 1.02 | -3.18 | — | — |
+| 2023-06-02 | Y | — | 81.2 | 2.79 | 1.45 | 0.57 | 1.34 | N | N |
+| 2023-06-05 | Y | — | 80.23 | -1.19 | -0.19 | -0.58 | -1.0 | N | N |
+| 2023-06-06 | Y | — | 79.0 | -1.53 | 0.22 | -0.02 | -1.75 | N | N |
+| 2023-06-07 | Y | — | 79.263 | 0.33 | -0.35 | -1.49 | 0.68 | N | N |
+| 2023-06-08 | Y | — | 80.42 | 1.46 | 0.6 | 1.08 | 0.86 | N | N |
+| 2023-06-09 | Y | — | 80.462 | 0.05 | 0.18 | 0.5 | -0.13 | N | N |
+| 2023-06-12 | Y | — | 85.536 | 6.31 | 0.91 | 2.17 | 5.4 | Y | Y |
+| 2023-06-13 | Y | — | 85.112 | -0.5 | 0.66 | 0.61 | -1.16 | N | N |
+| 2023-06-14 | Y | — | 88.618 | 4.12 | 0.12 | 1.03 | 4.0 | Y | Y |
+| 2023-06-15 | Y | — | 88.343 | -0.31 | 1.24 | 1.29 | -1.55 | N | N |
+| 2023-06-16 | Y | — | 86.811 | -1.73 | -0.71 | -0.82 | -1.02 | N | N |
+| 2023-06-20 | Y | — | 86.803 | -0.01 | -0.52 | -0.88 | 0.51 | N | N |
+| 2023-06-21 | Y | — | 84.766 | -2.35 | -0.51 | -1.48 | -1.84 | N | N |
+| 2023-06-22 | Y | — | 84.243 | -0.62 | 0.36 | 0.82 | -0.98 | N | N |
+| 2023-06-23 | Y | — | 82.215 | -2.41 | -0.76 | -1.09 | -1.65 | N | N |
+| 2023-06-26 | Y | — | 82.163 | -0.06 | -0.41 | -0.72 | 0.35 | N | N |
+| 2023-06-27 | Y | — | 84.84 | 3.26 | 1.1 | 1.97 | 2.16 | Y | Y |
+| 2023-06-28 | Y | — | 84.794 | -0.05 | 0.05 | 0.06 | -0.1 | N | N |
+| 2023-06-29 | Y | — | 86.257 | 1.73 | 0.39 | 0.18 | 1.34 | N | N |
+| 2023-06-30 | Y | — | 86.743 | 0.56 | 1.18 | 1.59 | -0.62 | N | N |
+| 2023-07-03 | Y | — | 87.644 | 1.04 | 0.12 | -0.21 | 0.92 | N | N |
+| 2023-07-05 | Y | — | 86.186 | -1.66 | -0.15 | -0.62 | -1.51 | N | N |
+| 2023-07-06 | Y | — | 84.8 | -1.61 | -0.78 | -0.27 | -0.83 | N | N |
+| 2023-07-07 | Y | — | 84.675 | -0.15 | -0.25 | -0.44 | 0.1 | N | N |
+| 2023-07-10 | Y | — | 87.773 | 3.66 | 0.25 | 0.26 | 3.41 | Y | Y |
+| 2023-07-11 | Y | — | 88.205 | 0.49 | 0.64 | 0.22 | -0.15 | N | N |
+| 2023-07-12 | Y | — | 88.995 | 0.9 | 0.8 | 1.13 | 0.1 | N | N |
+| 2023-07-13 | Y | — | 89.036 | 0.05 | 0.79 | 1.3 | -0.74 | N | N |
+| 2023-07-14 | Y | — | 88.858 | -0.2 | -0.06 | -0.15 | -0.14 | N | N |
+| 2023-07-17 | Y | — | 91.035 | 2.45 | 0.35 | 1.28 | 2.1 | Y | Y |
+| 2023-07-18 | Y | — | 90.343 | -0.76 | 0.74 | 1.13 | -1.5 | N | N |
+| 2023-07-19 | Y | — | 90.137 | -0.23 | 0.22 | -0.25 | -0.45 | N | N |
+| 2023-07-20 | Y | — | 88.834 | -1.45 | -0.66 | -2.0 | -0.79 | N | N |
+| 2023-07-21 | Y | — | 89.675 | 0.95 | 0.0 | -0.05 | 0.95 | N | N |
+| 2023-07-24 | Y | — | 90.159 | 0.54 | 0.45 | 0.18 | 0.09 | N | N |
+| 2023-07-25 | Y | — | 91.799 | 1.82 | 0.27 | 1.14 | 1.55 | N | N |
+| 2023-07-26 | Y | — | 89.309 | -2.71 | 0.02 | -1.34 | -2.73 | Y | Y |
+| 2023-07-27 | Y | — | 89.353 | 0.05 | -0.66 | -0.29 | 0.71 | N | N |
+| 2023-07-28 | Y | — | 89.979 | 0.7 | 0.98 | 1.36 | -0.28 | N | N |
+| 2023-07-31 | Y | — | 89.865 | -0.13 | 0.19 | 0.23 | -0.32 | N | N |
+| 2023-08-01 | Y | — | 92.0 | 2.38 | -0.29 | 0.17 | 2.67 | Y | N |
+| 2023-08-02 | Y | — | 89.23 | -3.01 | -1.39 | -2.47 | -1.62 | N | N |
+| 2023-08-03 | Y | — | 88.498 | -0.82 | -0.29 | -0.41 | -0.53 | N | N |
+| 2023-08-04 | Y | — | 88.165 | -0.38 | -0.45 | -1.36 | 0.07 | N | N |
+| 2023-08-07 | Y | — | 89.706 | 1.75 | 0.87 | 0.28 | 0.88 | N | N |
+| 2023-08-08 | Y | — | 88.316 | -1.55 | -0.43 | -0.77 | -1.12 | N | N |
+| 2023-08-09 | Y | — | 85.073 | -3.67 | -0.67 | -1.29 | -3.0 | Y | N |
+| 2023-08-10 | Y | — | 84.29 | -0.92 | 0.04 | 0.01 | -0.96 | N | N |
+| 2023-08-11 | Y | — | 82.976 | -1.56 | -0.06 | -0.74 | -1.5 | N | N |
+| 2023-08-14 | Y | — | 85.41 | 2.93 | 0.55 | 1.59 | 2.38 | Y | Y |
+| 2023-08-15 | Y | — | 84.252 | -1.36 | -1.16 | -0.98 | -0.2 | N | N |
+| 2023-08-16 | Y | — | 83.299 | -1.13 | -0.73 | -0.95 | -0.4 | N | N |
+| 2023-08-17 | Y | — | 82.71 | -0.71 | -0.76 | -0.95 | 0.05 | N | N |
+| 2023-08-18 | Y | — | 82.584 | -0.15 | 0.05 | 0.15 | -0.2 | N | N |
+| 2023-08-21 | Y | — | 86.514 | 4.76 | 0.65 | 1.91 | 4.11 | Y | Y |
+| 2023-08-22 | Y | — | 85.579 | -1.08 | -0.27 | -0.11 | -0.81 | N | N |
+| 2023-08-23 | Y | — | 87.658 | 2.43 | 1.11 | 1.8 | 1.32 | N | N |
+| 2023-08-24 | Y | — | 85.446 | -2.52 | -1.39 | -2.3 | -1.13 | N | N |
+| 2023-08-25 | Y | — | 85.182 | -0.31 | 0.7 | 1.02 | -1.01 | N | N |
+| 2023-08-28 | Y | — | 86.108 | 1.09 | 0.63 | 0.82 | 0.46 | N | N |
+| 2023-08-29 | Y | — | 88.993 | 3.35 | 1.45 | 2.0 | 1.9 | N | N |
+| 2023-08-30 | Y | — | 89.228 | 0.26 | 0.41 | 0.76 | -0.15 | N | N |
+| 2023-08-31 | Y | cutoff | 92.289 | 3.43 | -0.15 | 0.49 | 3.58 | Y | N |
+
+### News Events (68)
+
+Adjusted returns = stock − macro for each window (hourly / session / daily)
+
+| Ref | Date | Sess | Title | Channels | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|
+| N1 | 2023-06-01 | post_market | Broadcom Sees Q3 Revenue ~$8.85B vs $8.72B Est. | News ; Guidance | 3.23 | 2.8 | 1.43 |
+| N2 | 2023-06-01 | post_market | Broadcom Stock Is Moving Lower After Hours: What's Going On? | Earnings ; News ; After-Hours Center ; Movers | 1.98 | 3.74 | 1.43 |
+| N3 | 2023-06-01 | post_market | Broadcom Said In Q3, It Expects Networking Revenue To Maintain Its Growth Year-on-year Of Around 20%- Conf Call | Earnings ; News ; Guidance | -4.4 | -0.43 | 1.43 |
+| N4 | 2023-06-01 | post_market | Broadcom Said In Q3, It Expects Semiconductor Revenue Growth Of Mid-Single-Digit Year-on-Year Growth - Conf Call | Earnings ; News ; Guidance | -3.46 | 0.55 | 1.43 |
+| N5 | 2023-06-02 | pre_market | Keybanc Maintains Overweight on Broadcom, Raises Price Target to $940 | News ; Price Target ; Analyst Ratings | 0.34 | 4.74 | 1.43 |
+| N6 | 2023-06-02 | pre_market | Oppenheimer Maintains Outperform on Broadcom, Raises Price Target to $900 | News ; Price Target ; Analyst Ratings | 1.39 | 4.07 | 1.43 |
+| N7 | 2023-06-02 | pre_market | B of A Securities Maintains Buy on Broadcom, Raises Price Target to $950 | News ; Price Target ; Analyst Ratings | 0.67 | 2.59 | 1.43 |
+| N8 | 2023-06-02 | pre_market | Rosenblatt Maintains Buy on Broadcom, Raises Price Target to $900 | News ; Price Target ; Analyst Ratings | 1.34 | 3.25 | 1.43 |
+| N9 | 2023-06-02 | pre_market | Baird Maintains Outperform on Broadcom, Raises Price Target to $900 | News ; Price Target ; Analyst Ratings | 1.01 | 2.77 | 1.43 |
+| N10 | 2023-06-02 | pre_market | Mizuho Maintains Buy on Broadcom, Raises Price Target to $840 | News ; Price Target ; Analyst Ratings | 0.61 | 2.77 | 1.43 |
+| N11 | 2023-06-02 | pre_market | Broadcom Analysts Raise Their Forecasts After Strong Q2 Results | Earnings ; News ; Price Target ; Pre-Market Outlook ; Markets ; Analyst Ratings ; Trading Ideas | 1.11 | 2.98 | 1.43 |
+| N12 | 2023-06-02 | pre_market | Susquehanna Maintains Positive on Broadcom, Raises Price Target to $910 | News ; Price Target ; Analyst Ratings | 0.24 | 2.62 | 1.43 |
+| N13 | 2023-06-02 | pre_market | Truist Securities Maintains Buy on Broadcom, Raises Price Target to $890 | News ; Price Target ; Analyst Ratings | -0.75 | 2.0 | 1.43 |
+| N14 | 2023-06-02 | pre_market | Wells Fargo Maintains Equal-Weight on Broadcom, Raises Price Target to $800 | News ; Price Target ; Analyst Ratings | 1.45 | 1.89 | 1.43 |
+| N15 | 2023-06-02 | pre_market | Piper Sandler Maintains Overweight on Broadcom, Raises Price Target to $830 | News ; Price Target ; Analyst Ratings | 5.33 | 3.79 | 1.43 |
+| N16 | 2023-06-02 | pre_market | Evercore ISI Group Maintains Outperform on Broadcom, Raises Price Target to $875 | News ; Price Target ; Analyst Ratings | 4.18 | 3.34 | 1.43 |
+| N17 | 2023-06-02 | pre_market | Deutsche Bank Maintains Buy on Broadcom, Raises Price Target to $870 | News ; Price Target ; Analyst Ratings | 3.16 | 2.55 | 1.43 |
+| N18 | 2023-06-02 | in_market | Broadcom Unusual Options Activity | Options ; Markets | -1.98 | -1.34 | 1.43 |
+| N19 | 2023-06-02 | in_market | Broadcom Earnings Beat: Unanimous Price Target Hike By 4 Analysts | Analyst Color ; Earnings ; Earnings Beats ; Large Cap ; News ; Upgrades ; Price Target ; Reiteration ; Markets ; Analyst Ratings ; Tech ; Trading Ideas ; General | 0.41 | 0.68 | 1.43 |
+| N20 | 2023-06-05 | pre_market | Wells Fargo Maintains Equal-Weight on Broadcom, Raises Price Target to $800 | News ; Price Target ; Analyst Ratings | -0.21 | -1.24 | -1.01 |
+| N21 | 2023-06-05 | in_market | $100 Invested In Broadcom 5 Years Ago Would Be Worth This Much Today | Earnings ; News ; Dividends | -0.17 | 0.33 | -1.01 |
+| N22 | 2023-06-06 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | -0.21 | 0.11 | -1.78 |
+| N23 | 2023-06-20 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | -0.21 | -0.27 | 0.51 |
+| N24 | 2023-06-21 | in_market | A Look Into Broadcom's Debt | News ; Intraday Update ; Markets | 0.35 | -0.16 | -1.85 |
+| N25 | 2023-06-21 | in_market | If You Invested $100 In This Stock 10 Years Ago, You Would Have $2,300 Today | Earnings ; News ; Dividends | -0.06 | -0.42 | -1.85 |
+| N26 | 2023-06-22 | in_market | Mizuho Reiterates Buy on Broadcom, Maintains $840 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | -0.26 | -0.55 | -0.96 |
+| N27 | 2023-06-22 | in_market | What 22 Analyst Ratings Have To Say About Broadcom | Analyst Ratings | -0.26 | -0.03 | -0.96 |
+| N28 | 2023-06-22 | in_market | Live On CNBC Bill Baruch Announces Sold Broadcom | News ; Analyst Ratings ; Trading Ideas | -0.01 | 0.17 | -0.96 |
+| N29 | 2023-06-26 | in_market | Broadcom Unusual Options Activity | Options ; Markets | -0.02 | -0.56 | 0.6 |
+| N30 | 2023-06-26 | post_market | P/E Ratio Insights for Broadcom | News ; Intraday Update ; Markets | 0.01 | 0.14 | 2.2 |
+| N31 | 2023-06-29 | in_market | (AVGO) - Analyzing Broadcom's Short Interest | Short Sellers ; Short Ideas ; Trading Ideas | -0.31 | 0.54 | 1.28 |
+| N32 | 2023-06-30 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | -0.32 | -0.34 | -0.62 |
+| N33 | 2023-07-05 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | 0.07 | -0.22 | -1.51 |
+| N34 | 2023-07-07 | in_market | If You Invested $1000 In This Stock 5 Years Ago, You Would Have $3,500 Today | Earnings ; News ; Dividends | 0.12 | -0.28 | 0.13 |
+| N35 | 2023-07-07 | in_market | Broadcom's Debt Overview | News ; Intraday Update ; Markets | -0.45 | -0.42 | 0.13 |
+| N36 | 2023-07-11 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | -0.7 | 0.56 | -0.14 |
+| N37 | 2023-07-12 | pre_market | Deutsche Bank Maintains Buy on Broadcom, Raises Price Target to $905 | News ; Price Target ; Analyst Ratings | 0.73 | -0.12 | 0.1 |
+| N38 | 2023-07-14 | in_market | Truist Securities Maintains Buy on Broadcom, Raises Price Target to $942 | News ; Price Target ; Analyst Ratings | 0.37 | 0.14 | 0.0 |
+| N39 | 2023-07-14 | in_market | Broadcom Unusual Options Activity For July 14 | Options ; Markets | -0.19 | -0.71 | 0.0 |
+| N40 | 2023-07-14 | post_market | The Latest Analyst Ratings for Broadcom | Analyst Ratings | 0.17 | 0.73 | 2.0 |
+| N41 | 2023-07-18 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | -0.16 | -0.15 | -1.49 |
+| N42 | 2023-07-20 | pre_market | Wolfe Research Initiates Coverage On Broadcom with Peer Perform Rating | News ; Initiation ; Analyst Ratings | 0.04 | -0.92 | -0.8 |
+| N43 | 2023-07-24 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | 0.27 | 0.17 | 0.37 |
+| N44 | 2023-07-27 | in_market | Peering Into Broadcom's Recent Short Interest | Short Sellers ; Short Ideas ; Trading Ideas | -0.3 | 0.07 | 0.71 |
+| N45 | 2023-07-28 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | 0.13 | 0.27 | -0.28 |
+| N46 | 2023-07-31 | post_market | Here's How Much You Would Have Made Owning Broadcom Stock In The Last 10 Years | Earnings ; News ; Dividends | 0.14 | 1.19 | 2.57 |
+| N47 | 2023-08-01 | in_market | Broadcom Unusual Options Activity | Options ; Markets | 0.55 | 1.63 | 2.57 |
+| N48 | 2023-08-07 | in_market | Broadcom Unusual Options Activity For August 07 | Options ; Markets | -0.16 | 0.41 | 0.9 |
+| N49 | 2023-08-09 | in_market | What's Going On With Broadcom (AVGO) Shares | News | 0.37 | 0.04 | -3.07 |
+| N50 | 2023-08-11 | in_market | Check Out What Whales Are Doing With AVGO | Options ; Markets | -0.69 | -0.44 | -1.46 |
+| N51 | 2023-08-15 | pre_market | Broadcom Enables The Most Secure And Efficient SANs With The Industry's Highest Density 64G Director | News | -0.26 | -0.51 | -0.24 |
+| N52 | 2023-08-16 | in_market | If You Invested $100 In This Stock 10 Years Ago, You Would Have $2,300 Today | Earnings ; News ; Dividends | -0.56 | -1.21 | -0.44 |
+| N53 | 2023-08-16 | post_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | 0.81 | 0.27 | 0.1 |
+| N54 | 2023-08-22 | post_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | -0.08 | -0.66 | 1.33 |
+| N55 | 2023-08-24 | in_market | Susquehanna Maintains Positive on Broadcom, Raises Price Target to $1010 | News ; Price Target ; Analyst Ratings | -0.13 | -0.33 | -1.12 |
+| N56 | 2023-08-24 | in_market | What 21 Analyst Ratings Have To Say About Broadcom | Analyst Ratings | -0.45 | -0.76 | -1.12 |
+| N57 | 2023-08-25 | in_market | Looking At Broadcom's Recent Unusual Options Activity | Options ; Markets | 0.32 | 0.71 | -1.06 |
+| N58 | 2023-08-28 | in_market | Price Over Earnings Overview: Broadcom | News ; Intraday Update ; Markets | 0.62 | 1.42 | 0.53 |
+| N59 | 2023-08-29 | pre_market | Rosenblatt Reiterates Buy on Broadcom, Maintains $900 Price Target | News ; Price Target ; Reiteration ; Analyst Ratings | 0.06 | -0.36 | 1.91 |
+| N60 | 2023-08-29 | in_market | $1000 Invested In Broadcom 5 Years Ago Would Be Worth This Much Today | Earnings ; News ; Dividends | 1.1 | 1.92 | 1.91 |
+| N61 | 2023-08-29 | in_market | Piper Sandler Maintains Overweight on Broadcom, Raises Price Target to $925 | News ; Price Target ; Analyst Ratings | 0.64 | 1.37 | 1.91 |
+| N62 | 2023-08-30 | in_market | Earnings Preview For Broadcom | Earnings | 0.22 | 0.66 | -0.18 |
+| N63 | 2023-08-30 | in_market | This Is What Whales Are Betting On Broadcom | Options ; Markets | -0.24 | -0.24 | -0.18 |
+| N64 | 2023-08-31 | in_market | Why Broadcom Shares Are Moving | News ; Movers | 0.1 | 0.5 | 3.47 |
+| N65 | 2023-08-31 | post_market | Broadcom Q3 EPS $10.54 Beats $10.42 Estimate, Sales $8.88B Beat $8.86B Estimate | Earnings ; News ; Hot | -1.15 | — | — |
+| N66 | 2023-08-31 | post_market | Broadcom Sees Q4 Revenue ~$9.27B vs $9.28B Est. | News ; Guidance | -1.17 | — | — |
+| N67 | 2023-08-31 | post_market | Broadcom Stock Drops On Q3 Earnings: The Details | Earnings ; News ; After-Hours Center ; Movers | — | — | — |
+| N68 | 2023-08-31 | post_market | Broadcom CEO: Q3 Networking Revenue Was $2.8B And Was Up 20% Year On Year - Conf. Call | News | — | — | — |
+
+### Filing Events (2)
+
+Adjusted returns = stock − macro for each window (hourly / session / daily)
+
+| Ref | Date | Sess | Form | Accession | Items | Exhibits | Period | Amend | AdjH% | AdjS% | AdjD% |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| F1 | 2023-06-07 | post_market | 10-Q | 0001730168-23-000064 | — | EX-10.1 | 2023-04-30 | N | -0.01 | 0.09 | 0.88 |
+| F2 | 2023-08-16 | post_market | 8-K | 0001140361-23-040084 | Item 1.01: Entry into a Material Definitive Agreement || Item 2.03: Creation of a Direct Financial Obligation or an Obligation under an Off-Balance Sheet Arrangement of a Registrant || Item 8.01: Other Events || Item 9.01: Financial Statements and Exhibits | EX-10.1 | 2023-08-15 | N | 0.49 | -0.06 | 0.1 |

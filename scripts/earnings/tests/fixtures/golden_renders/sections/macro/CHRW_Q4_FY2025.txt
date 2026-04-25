@@ -1,0 +1,48 @@
+## 8. Macro Environment
+
+Session: post_market | Source: polygon | PIT: 2026-01-28
+SPY 695.61 | VIX 16.35 (last settled close)
+
+### SPY Trend
+
+| Level | Open→PIT | Last60m | Gap | Today | Yest | 5D | 20D | YTD | MA50 | MA200 | Vs50D | Vs200D | VolRatio |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 695.61 | -0.27 | -0.02 | 0.29 | -0.01 | 0.4 | 1.46 | 1.1 | 1.79 | 682.84 | 639.53 | 1.87 | 8.77 | 0.83 |
+
+### Sector Context
+
+| Sector | ETF | LastRet | Label | Open→PIT | 5D | VsSPY5D |
+|---|---|---|---|---|---|---|
+| Industrials | XLI | -0.56 | today | — | -1.34 | -2.8 |
+
+### Cross-Asset Indicators
+
+| Indicator | Level | LastRet | Label | 5D | YTD |
+|---|---|---|---|---|---|
+| Volatility (VIXY) | 26.09 | 0.0 | today | 0.97 | 3.49 |
+| Rates long (TLT) | 87.6 | -0.23 | today | 0.33 | 0.65 |
+| Rates short (SHY) | 82.89 | 0.0 | today | 0.06 | 0.04 |
+| Credit (HYG) | 81.04 | -0.16 | today | -0.1 | 0.46 |
+| Small Cap (IWM) | 263.3 | -0.54 | today | -1.68 | 5.84 |
+| Breadth (RSP) | 198.26 | -0.34 | today | -0.57 | 2.8 |
+| Oil (USO) | 76.62 | 1.27 | today | 4.47 | 11.11 |
+| Dollar (UUP) | 26.63 | 0.6 | today | -2.35 | -1.77 |
+| Gold (GLD) | 494.56 | 3.88 | today | 11.49 | 24.17 |
+
+### Macro Catalysts
+
+| Bucket | Date | Time | Title | Channels |
+|---|---|---|---|---|
+| Today | 2026-01-28 | 10:30 | USA Gasoline Inventories 0.223M Barrel Build Vs 1.300M Barrel Build Est. | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2026-01-28 | 10:31 | EIA Weekly Distillates Stocks 0.329M Barrel Build Vs 0.550M Barrel Draw Est. | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2026-01-28 | 14:00 | USA Fed Interest Rate Decision 3.75% Vs 3.75% Est. (Unchanged) | Macro Economic Events ; Macro Notification ; News ; Econ #s ; Economics ; Federal Reserve ; Hot ; General |
+| Today | 2026-01-28 | 14:00 | Federal Reserve Issues FOMC Statement January 28, 2026 (Link In Body) | Macro Economic Events ; Macro Notification ; News ; Econ #s ; Economics ; Federal Reserve ; Hot ; General |
+| Today | 2026-01-28 | 14:02 | Federal Reserve Says Inflation Remains Somewhat Elevated; Federal Reserve Leaves Key Overnight Interest Rate Unchanged In 3.50%-3.75% Range, No Longer Judges Downside Risks To Employment As Rising; Unemployment Rate Has Shown Some Signs Of Stabilization, Job Gains Have Remained Low; Uncertainty About The Economic Outlook Remains Elevated; Fed Upgrades Assessment Of Economic Activity, Says It Has Been Expanding At A 'Solid' Pace | Macro Economic Events ; News ; Econ #s ; Economics ; Federal Reserve ; Hot |
+| Yesterday | 2026-01-27 | 02:05 | Government Shutdown Odds Rise From 10% To 79%: Prediction Markets Confirm Jeremy Siegel's Warning Of A Sudden Closure Threat | Analyst Color ; Equities ; Government ; Macro Economic Events ; Macro Notification ; Market Summary ; News ; Prediction Markets ; Regulations ; Broad U.S. Equity ETFs ; Futures ; Econ #s ; Economics ; Markets ; ETFs ; General |
+| Yesterday | 2026-01-27 | 08:16 | ADP Employment Change Weekly  +7,750 | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2026-01-27 | 08:39 | Stock Market Today: Dow Futures Slip, Nasdaq Gains Amid Trump's Fresh South Korea Tariffs— General Motors, UnitedHealth, Cloudflare In Focus (UPDATED) | Analyst Color ; Asia ; Earnings ; Earnings Beats ; Earnings Misses ; Equities ; Government ; Macro Economic Events ; Macro Notification ; Market Summary ; News ; Regulations ; Bonds ; Broad U.S. Equity ETFs ; Emerging Markets ; Eurozone ; Futures ; Commodities ; Forex ; Treasuries ; Econ #s ; Top Stories ; Economics ; Federal Reserve ; Pre-Market Outlook ; Markets ; ETFs ; General |
+| Yesterday | 2026-01-27 | 08:56 | USA Redbook (YoY) 7.1% Vs 5.5% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2026-01-27 | 09:00 | USA House Price Index For November 439.3	Vs 436.8 Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2026-01-26 | 08:30 | USA Durables Excluding Defense (MoM) For November 6.6% Vs -1.3% Prior. | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2026-01-26 | 08:30 | USA Durable Goods Orders (MoM) For November Prior Revised From -2.2% To -2.1% | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2026-01-26 | 08:30 | USA Core Durable Goods Orders (MoM) For November 0.5% Vs 0.3% Est. | Macro Economic Events ; News ; Econ #s ; Economics |

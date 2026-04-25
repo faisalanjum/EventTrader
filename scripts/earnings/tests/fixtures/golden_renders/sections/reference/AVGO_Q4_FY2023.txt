@@ -1,0 +1,41 @@
+## 9. Reference
+
+### Filing Metadata
+Accession: 0001730168-23-000093 | Form: 8-K | Items: 2.02, 2.05, 8.01, 9.01
+Sections: 4 | Exhibits: EX-99.1
+
+### 8-K Section Text
+
+**CostsAssociatedwithExitorDisposalActivities**
+Item 2.05 Costs Associated with Exit or Disposal Activities. 
+
+In connection with the completion of the Company ’ s acquisition of VMware, Inc. (“VMware”) on November 22, 2023, the Company expects to take charges of approximately $1.3 billion through fiscal year 2025 for the implementation of cost reduction activities. The Company does not plan to further update these estimates but will provide details of VMware acquisition-related restructuring costs as part of its quarterly financial reporting. 
+
+The statements above include forward-looking statements based on current expectations and beliefs of the Company’s management and current market trends and conditions. These forward-looking statements involve risks and uncertainties that are outside the Company’s control and may cause actual results to differ materially from those contained in forward-looking statements. For information about factors that could cause actual results to differ materially from those described in the forward-looking statements, please refer to the Company’s periodic reports and other filings with the Securities and Exchange Commission, including the risk factors in the Company’s most recent Quarterly Report on Form 10-Q and Annual Report on Form 10-K.
+
+**FinancialStatementsandExhibits**
+Item 9.01 Financial Statements and Exhibits. 
+
+(d) Exhibits 
+
+Exhibit No. Description 
+
+99.1 
+
+Press release issued by Broadcom Inc. dated December 7 , 2023 . 
+
+104 Cover Page Interactive Data File (formatted as Inline XBRL).
+
+**OtherEvents**
+Item 8.01   Other Events. 
+
+On December 7, 2023 , the Company announced that the Board of Directors has declared a quarterly cash dividend on the Company’s common stock of $5.25 per share. This dividend is payable on December 29, 2023 to common stockholders of record at the close of business (5:00 p.m., Eastern Time) on December 20, 2023.
+
+**ResultsofOperationsandFinancialCondition**
+Item 2.02 Results of Operations and Financial Condition. 
+
+On December 7, 2023, Broadcom Inc. (the “Company”) issued a press release announcing its unaudited financial results for the fourth quarter and fiscal year ended October 29, 2023. 
+
+A copy of the press release is attached hereto as Exhibit 99.1 and is incorporated herein by reference. 
+
+The information in Item 2.02 of this Report and the press release attached hereto as Exhibit 99.1 are furnished and shall not be treated as filed for purposes of the Securities Exchange Act of 1934, as amended.

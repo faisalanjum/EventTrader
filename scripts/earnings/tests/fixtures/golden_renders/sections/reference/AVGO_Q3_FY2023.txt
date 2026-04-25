@@ -1,0 +1,34 @@
+## 9. Reference
+
+### Filing Metadata
+Accession: 0001730168-23-000074 | Form: 8-K | Items: 2.02, 8.01, 9.01
+Sections: 3 | Exhibits: EX-99.1
+
+### 8-K Section Text
+
+**FinancialStatementsandExhibits**
+Item 9.01 Financial Statements and Exhibits. 
+
+(d) Exhibits 
+
+Exhibit No. Description 
+
+99.1 
+
+Press release issued by Broadcom Inc. dated August 31, 2023 . 
+
+104 Cover Page Interactive Data File (formatted as Inline XBRL).
+
+**OtherEvents**
+Item 8.01   Other Events. 
+
+On August 31, 2023 , the Company announced that the Board of Directors has declared a quarterly cash dividend on the Company’s common stock of $4.60 per share. This dividend is payable on September 29, 2023 to common stockholders of record at the close of business (5:00 p.m., Eastern Time) on September 21, 2023.
+
+**ResultsofOperationsandFinancialCondition**
+Item 2.02 Results of Operations and Financial Condition. 
+
+On August 31, 2023, Broadcom Inc. (the “Company”) issued a press release announcing its unaudited financial results for the third fiscal quarter ended July 30, 2023. 
+
+A copy of the press release is attached hereto as Exhibit 99.1 and is incorporated herein by reference. 
+
+The information in Item 2.02 of this Report and the press release attached hereto as Exhibit 99.1 are furnished and shall not be treated as filed for purposes of the Securities Exchange Act of 1934, as amended.

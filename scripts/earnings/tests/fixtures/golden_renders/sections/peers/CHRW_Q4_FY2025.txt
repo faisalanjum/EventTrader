@@ -1,0 +1,21 @@
+## 7. Sector Peer Earnings & Reactions
+
+Industry: IntegratedFreightAndLogistics | Window: 2025-12-14 → 2026-01-28 | Peers: 4
+
+| Ticker | Name | MktCap | Filed | Accession | Period | Sess | DayStk% | AdjH% | SessStk% | AdjD% | Horizon |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| UPS | UNITED PARCEL SERVICE INC | 96,524,630,705 | 2026-01-27 | 0001628280-26-003510 | 2026-01-27 | pre_market | 0.25 | -0.76 | -4.5 | -0.16 | daily |
+| FDX | FEDEX CORP | 61,677,022,416 | 2025-12-18 | 0001048911-25-000076 | 2025-12-18 | post_market | 0.52 | 0.7 | -5.01 | -0.09 | daily |
+| JBHT | HUNT J B TRANSPORT SERVICES INC | 16,707,213,250 | 2026-01-15 | 0001437749-26-001357 | 2026-01-15 | post_market | -1.04 | 0.85 | 2.78 | -0.96 | daily |
+| LSTR | LANDSTAR SYSTEM INC | 5,700,826,478 | 2026-01-21 | 0001193125-26-018078 | 2026-01-21 | post_market | 0.5 | -4.03 | 0.42 | 0.0 | daily |
+
+### Peer Headlines
+
+| Peer | Time | Title | Channels |
+|---|---|---|---|
+| UPS | 2026-01-27T06:01:37-05:00 | United Parcel Service Q4 Adj. EPS $2.38 Beats $2.20 Estimate, Sales $24.500B Beat $24.003B Estimate | Earnings ; Earnings Beats |
+| UPS | 2026-01-27T06:02:29-05:00 | United Parcel Service Sees FY2026 Sales $89.700B vs $87.938B Est | Guidance |
+| FDX | 2025-12-18T16:07:31-05:00 | FedEx Q2 Adj. EPS $4.82 Beats $4.11 Estimate, Sales $23.500B Beat $22.791B Estimate | Earnings ; Earnings Beats |
+| FDX | 2025-12-18T16:08:27-05:00 | FedEx Raises FY2026 Sales Guidance from $91.443B-$93.202B to $92.360B-$93.202B vs $91.643B Est | Guidance |
+| JBHT | 2026-01-15T16:06:38-05:00 | JB Hunt Transport Servs Q4 EPS $1.90 Beats $1.77 Estimate, Sales $3.097B Miss $3.099B Estimate | Earnings ; Earnings Beats ; Earnings Misses |
+| LSTR | 2026-01-28T16:12:11-05:00 | Landstar System Q4 EPS $0.70, Sales $1.174B Miss $1.186B Estimate | Earnings ; Earnings Misses |

@@ -1,0 +1,38 @@
+## 9. Reference
+
+### Filing Metadata
+Accession: 0001569345-26-000011 | Form: 8-K | Items: 2.02, 8.01, 9.01
+Sections: 3 | Exhibits: EX-99.1
+
+### 8-K Section Text
+
+**FinancialStatementsandExhibits**
+Item 9.01 Financial Statements and Exhibits. 
+
+(d) Exhibits. 
+
+Exhibit No.   Description of Exhibits 99.1   
+
+Press Release dated March 11 , 202 6 . 
+
+104 Cover Page Interactive Data File (embedded within the Inline XBRL document)
+
+**OtherEvents**
+Item 8.01 Other Events. 
+
+On March 8, 2026, the Board of Directors of the Company (the “Board”) authorized and approved a plan to repurchase up to $200 million of shares of the Company’s outstanding Class A common stock (the “Stock Repurchase Program”). The Company expects to enter into an accelerated share repurchase transaction for approximately $125 million in the near term under the Stock Repurchase Program, with the remaining authorization to be utilized at the Company’s discretion over the next year, subject to market conditions and other factors. 
+
+Under the Stock Repurchase Program, the Company intends to repurchase shares through open market purchases at prevailing market prices or in negotiated transactions off the market, including, without limitation, pursuant to 10b5-1 trading plans, accelerated share repurchase transactions, collared accelerated share repurchase transactions, volume weighted average purchase prepaid share forward transactions and similar arrangements, in accordance with applicable federal securities laws, including Rule 10b-18 of the Exchange Act. The Company intends to complete the Stock Repurchase Program by March 15, 2027, dependent on market conditions. 
+
+Repurchases of the Company’s outstanding Class A common stock under the Stock Repurchase Program may be effected pursuant to a written trading plan under Rule 10b5-1 of the Exchange Act. If adopted, a trading plan that satisfies the conditions of Rule 10b5-1 would allow the Company to repurchase its shares at times when it might otherwise be prevented from doing so due to self-imposed trading blackout periods or pursuant to insider trading laws. Under any Rule 10b5-1 trading plan, the Company’s third-party broker would have authority to purchase the Company's Class A common stock in accordance with the terms of the plan, subject to SEC regulations regarding certain price, market, volume and timing constraints. 
+
+Although the Board has authorized the Stock Repurchase Program, it does not obligate the Company to repurchase any specific dollar amount or to acquire any specific number of shares, and the Stock Repurchase Program may be modified, suspended or terminated at any time. The Company cannot predict when or if it will repurchase any shares of its outstanding Class A common stock, as its use of the Stock Repurchase Program will depend on a number of factors, including constraints specified in any Rule 10b5-1 trading plans, price, general business and market conditions, and alternative investment opportunities. Information regarding share repurchases will be available in the Company’s future periodic reports on Forms 10-Q and 10-K filed with the SEC as required by the applicable rules of the Exchange Act. 
+
+This report contains forward-looking information, as that term is defined under the Exchange Act, including information regarding purchases by the Company of its Class A common stock pursuant to any Rule 10b5-1 trading plans. By their nature, forward-looking information and statements are subject to risks, uncertainties, and contingencies, including changes in price and volume and the volatility of the Company’s Class A common stock; adverse developments affecting either or both of prices and trading of exchange-traded securities, including securities listed on the New York Stock Exchange; and unexpected or otherwise unplanned or alternative requirements with respect to the capital investments of the Company. The Company does not undertake to update any forward-looking statements or information, including those contained in this report.
+
+**ResultsofOperationsandFinancialCondition**
+Item 2.02 Results of Operations and Financial Condition. 
+
+On March 11, 2026, Sprinklr, Inc. (the “Company”) issued a press release announcing, among other things, its financial results for the fourth quarter and year ended January 31, 2026. A copy of the press release is furnished herewith as Exhibit 99.1 and incorporated herein by reference. 
+
+The information set forth under Item 2.02 of this Current Report, including Exhibit 99.1 attached hereto, is furnished and shall not be deemed “filed” for purposes of Section 18 of the Securities Exchange Act of 1934, as amended (the “Exchange Act”), or subject to the liabilities of that section. The information shall not be deemed incorporated by reference into any other filing with the Securities and Exchange Commission (the “SEC”) made by the Company regardless of any general incorporation language in such filing, except as shall be expressly set forth by specific reference in such filing.

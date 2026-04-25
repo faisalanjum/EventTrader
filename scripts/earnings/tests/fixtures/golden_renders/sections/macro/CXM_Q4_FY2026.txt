@@ -1,0 +1,44 @@
+## 8. Macro Environment
+
+Session: pre_market | Source: polygon | PIT: 2026-03-11
+SPY 678.57 | VIX 24.93 (last settled close)
+
+### SPY Trend
+
+| Level | Open→PIT | Last60m | Gap | Today | Yest | 5D | 20D | YTD | MA50 | MA200 | Vs50D | Vs200D | VolRatio |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 678.57 | 0.11 | 0.23 | 0.09 | — | -0.16 | -0.46 | -2.42 | -0.88 | 687.59 | 657.34 | -1.31 | 3.23 | 1.1 |
+
+### Sector Context
+
+| Sector | ETF | LastRet | Label | Open→PIT | 5D | VsSPY5D |
+|---|---|---|---|---|---|---|
+| Technology | XLK | 0.0 | last close | — | 1.68 | 2.14 |
+
+### Cross-Asset Indicators
+
+| Indicator | Level | LastRet | Label | 5D | YTD |
+|---|---|---|---|---|---|
+| Volatility (VIXY) | 32.68 | 4.84 | last close | 10.67 | 29.63 |
+| Rates long (TLT) | 88.28 | -1.06 | last close | -1.29 | 1.44 |
+| Rates short (SHY) | 82.72 | -0.06 | last close | -0.1 | -0.17 |
+| Credit (HYG) | 80.04 | -0.16 | last close | -0.1 | -0.78 |
+| Small Cap (IWM) | 253.36 | -0.1 | last close | -2.27 | 1.84 |
+| Breadth (RSP) | 197.22 | -0.75 | last close | -2.4 | 2.26 |
+| Oil (USO) | 105.86 | 1.47 | last close | 17.36 | 53.51 |
+| Dollar (UUP) | 27.45 | -0.04 | last close | -0.04 | 1.25 |
+| Gold (GLD) | 477.86 | 1.13 | last close | 2.08 | 19.98 |
+
+### Macro Catalysts
+
+| Bucket | Date | Time | Title | Channels |
+|---|---|---|---|---|
+| Today | 2026-03-11 | 05:04 | The Wall Street Journal Reported International Energy Agency Announced Proposed 400M Barrel Oil Reserve Release, Largest In History, To Curb Crude Prices Surging During U.S.-Israel War With Iran | Macro Economic Events ; News ; Commodities ; Economics ; Markets |
+| Yesterday | 2026-03-10 | 09:04 | Trump's Hormuz Gamble Is Minting A Fortune For Black-Market Oil Shippers | Analyst Color ; Broad U.S. Equity ETFs ; Commodities ; Econ #s ; Top Stories ; Economics ; Analyst Ratings ; ETFs |
+| Yesterday | 2026-03-10 | 10:00 | USA Existing Home Sales (MoM) For February 1.7% Vs -5.9% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2026-03-10 | 10:00 | USA Existing Home Sales For February 4.09M Vs 3.89M Est. | Macro Economic Events ; Macro Notification ; News ; Econ #s ; Economics ; Hot ; General |
+| Yesterday | 2026-03-10 | 17:16 | API Weekly Crude Oil Stock 1.7M Barrel Draw Vs 1.4M Barrel Build Est. | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2026-03-10 | 08:43 | Redbook Retail Sales Index Up 6.2% YoY For Week Ended 03/07/26 | Macro Notification ; News ; General |
+| Earlier | 2026-03-09 | 10:15 | The Diesel Crisis Crushing America Is A Goldmine For These 3 Refiners | Analyst Color ; Macro Economic Events ; Commodities ; Econ #s ; Top Stories ; Economics ; Exclusives ; Analyst Ratings |
+| Earlier | 2026-03-09 | 10:58 | CB Employment Trends Index For February 105.37 Vs 105.18 Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2026-03-09 | 13:57 | Oil Shock Could Revive 1970s-Style Stagflation, Ed Yardeni Warns | Analyst Color ; Macro Economic Events ; Broad U.S. Equity ETFs ; Commodities ; Econ #s ; Top Stories ; Economics ; Analyst Ratings ; ETFs |

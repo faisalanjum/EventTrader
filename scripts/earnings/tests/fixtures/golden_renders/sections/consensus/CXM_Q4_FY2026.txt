@@ -1,0 +1,3 @@
+## 4. Consensus History
+
+Data notes: AV EARNINGS failed for CXM; AV EARNINGS_ESTIMATES failed for CXM; AV INCOME_STATEMENT failed for CXM; Forward estimates not PIT-safe in historical mode

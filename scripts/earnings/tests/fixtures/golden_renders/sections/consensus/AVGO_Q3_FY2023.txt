@@ -1,0 +1,3 @@
+## 4. Consensus History
+
+Data notes: AV EARNINGS failed for AVGO; AV EARNINGS_ESTIMATES failed for AVGO; AV INCOME_STATEMENT failed for AVGO; Forward estimates not PIT-safe in historical mode

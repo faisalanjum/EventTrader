@@ -1,0 +1,41 @@
+## 5. Prior Financial Trends
+Coverage: 3 quarters | Sources: xbrl=3
+
+### Income Statement Trend
+| Metric           | Q3_FY2023 | Q2_FY2023 | Q1_FY2023 |
+|------------------|-----------|-----------|-----------|
+| Revenue          | $8.88B    | $8.73B    | $8.91B    |
+| Cost of Revenue  | $2.71B    | $2.62B    | $2.91B    |
+| Gross Profit     | $6.16B    | $6.12B    | $6.00B    |
+| SG&A             | $388M     | $438M     | $348M     |
+| R&D              | $1.36B    | $1.31B    | $1.20B    |
+| Interest Expense | $406M     | $405M     | $406M     |
+| Income Tax       | $271M     | $235M     | $66M      |
+| Operating Income | $3.86B    | $4.01B    | $4.10B    |
+| Net Income       | $3.30B    | $3.48B    | $3.77B    |
+| EPS Diluted      | $7.74     | $8.15     | $8.80     |
+
+### Margins and Efficiency
+| Metric             | Q3_FY2023 | Q2_FY2023 | Q1_FY2023 |
+|--------------------|-----------|-----------|-----------|
+| Gross Margin %     | 69.4%     | 70.0%     | 67.3%     |
+| Operating Margin % | 43.4%     | 45.9%     | 46.0%     |
+| Net Margin %       | 37.2%     | 39.9%     | 42.3%     |
+| R&D % Revenue      | 15.3%     | 15.0%     | 13.4%     |
+| Effective Tax Rate | 7.6%      | 6.3%      | 1.7%      |
+| Diluted Shares     | 427M      | 427M      | 429M      |
+
+### Cash Flow and Capital
+| Metric              | Q3_FY2023 | Q2_FY2023 | Q1_FY2023 |
+|---------------------|-----------|-----------|-----------|
+| Operating Cash Flow | $4.72B    | $4.50B    | $4.04B    |
+| Capex               | $122M     | $122M     | $103M     |
+| Free Cash Flow      | $4.60B    | $4.38B    | $3.93B    |
+| Buybacks            | $1.71B    | $2.81B    | $1.19B    |
+
+### Balance Sheet
+| Metric             | Q3_FY2023 | Q2_FY2023 | Q1_FY2023 |
+|--------------------|-----------|-----------|-----------|
+| Cash & Equivalents | $12.05B   | $11.55B   | $12.65B   |
+| Total Assets       | $71.59B   | $71.67B   | $72.98B   |
+| Long-Term Debt     | $38.22B   | $38.19B   | $38.17B   |

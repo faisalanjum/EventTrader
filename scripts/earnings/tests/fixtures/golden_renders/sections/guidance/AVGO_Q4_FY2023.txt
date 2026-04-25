@@ -1,0 +1,60 @@
+## 3. Forward Guidance
+Guidance packet: 30 series | 45 updates | 2023-03-02 to 2023-09-06
+
+### Full Year Guidance
+
+#### FY2023
+| Metric | Current | Prior | Change |
+|--------|---------|-------|--------|
+| AI Revenue | ~$3.80B | — | new |
+| CapEx | "higher than fiscal year 2022" | — | new |
+| Revenue — AI Networking | ≥$800M "could grow to well over $800 million in 2023" | — | new |
+| Revenue — Compute Offload | ≥$3B "on track to exceed $3 billion" | — | new |
+
+#### FY2024
+| Metric | Current | Prior | Change |
+|--------|---------|-------|--------|
+| AI Revenue as Percent of Semiconductor Revenue | ≥25% "over 25% of semiconductor revenue" (AI revenue has been on an accelerating trajectory through end of FY23, with a similar accelerating trend expected for FY24) | ≤25% "could be over 25% of semiconductor revenue in fiscal 24" | revised |
+| Revenue — Infrastructure Software | "high single-digit year-on-year growth" (contingent on Brocade cycle recovering) | — | new |
+
+### Other Horizons
+| Metric | Horizon | Current | Prior | Change |
+|--------|---------|---------|-------|--------|
+| Gross Margin — Semiconductor Solutions | Long Term | 50bps-150bps "50 to 150 basis points of annual gross margin expansion on a long-term basis" | — | new |
+| Revenue — Infrastructure Software | Long Term | "mid-single-digit year-on-year growth rate" (core software only; excludes Brocade) | — | new |
+| Adjusted EBITDA Margin (Non-GAAP) | Q2 FY2023 | ~64.5% | — | new |
+| Diluted Share Count (Non-GAAP) | Q2 FY2023 | ~438M (excluding the potential impact of any share repurchases) | — | new |
+| Gross Margin (Non-GAAP) | Q2 FY2023 | ~150bps "up approximately 150 basis points sequentially" (sequential increase vs Q1 FY2023) | — | new |
+| Revenue | Q2 FY2023 | ~$8.70B | — | new |
+| Revenue — Broadband | Q2 FY2023 | ~10% "grow a solid 10% year on year" | — | new |
+| Revenue — Industrial | Q2 FY2023 | "down low single-digit percentage year on year" (continuing softness in China) | — | new |
+| Revenue — Infrastructure Software | Q2 FY2023 | "up low to mid-single-digit percentage year-on-year" (stable core software growth partially offset by weakness in Brocade) | — | new |
+| Revenue — Networking | Q2 FY2023 | ~20% YoY "about 20% year over year growth" | — | new |
+| Revenue — Semiconductor Solutions | Q2 FY2023 | "high single-digit percentage year-on-year growth" | — | new |
+| Revenue — Server Storage Connectivity | Q2 FY2023 | ≤20% "moderate towards 20% year-on-year growth" | — | new |
+| Revenue — Wireless | Q2 FY2023 | "down high single digit percentage year on year; down sequentially" | — | new |
+| AI Revenue | Q3 FY2023 | ≥$1B "exceed $1 billion in the quarter" | — | new |
+| Adjusted EBITDA Margin (Non-GAAP) | Q3 FY2023 | ~65% | — | new |
+| Diluted Share Count (Non-GAAP) | Q3 FY2023 | ~438M (excluding potential impact of any share repurchases in Q3) | — | new |
+| Gross Margin | Q3 FY2023 | ~-60bps "down approximately 60 basis points sequentially on product mix" (sequential change versus Q2 FY2023) | — | new |
+| Revenue | Q3 FY2023 | ~$8.85B | — | new |
+| Revenue — Broadband | Q3 FY2023 | "low single-digit percent year-on-year" | — | new |
+| Revenue — Industrial | Q3 FY2023 | "flattish year-on-year" (continuing softness in Asia offset by strength in Europe) | — | new |
+| Revenue — Infrastructure Software | Q3 FY2023 | "up low single digits percentage year on year" (core software growth continues to be offset by weakness in Brocade) | — | new |
+| Revenue — Networking | Q3 FY2023 | "around 20% year-on-year growth" | — | new |
+| Revenue — Semiconductor Solutions | Q3 FY2023 | "mid-single-digit year-on-year growth" | — | new |
+| Revenue — Server Storage Connectivity | Q3 FY2023 | "up low single digits year-on-year" (transition to next-generation mega-rate largely completed; enterprise demand moderating) | — | new |
+| Revenue — Wireless | Q3 FY2023 | "up low single digits sequentially; flattish year-on-year" (beginning of seasonal ramp of next generation phone platform) | — | new |
+| Adjusted EBITDA Margin (Non-GAAP) | Q4 FY2023 | ~65% (approximately 65 percent of projected revenue) | — | new |
+| Diluted Share Count (GAAP) | Q4 FY2023 | ~427M | — | new |
+| Diluted Share Count (Non-GAAP) | Q4 FY2023 | ~435M (Excludes impact of stock-based compensation expense expected to be incurred in future periods not yet recognized, which would otherwise be assumed to be used to repurchase shares under the GAAP treasu...) | — | new |
+| Gross Margin | Q4 FY2023 | "down 80 basis points sequentially" (driven by product mix) | — | new |
+| Revenue | Q4 FY2023 | ~$9.27B | — | new |
+| Revenue — AI | Q4 FY2023 | "approximately 50% sequential growth, almost 2x year-on-year" (driven by strength in generative AI) | — | new |
+| Revenue — Broadband | Q4 FY2023 | "decline high single digits year-on-year" | — | new |
+| Revenue — Industrial | Q4 FY2023 | "up low single-digit percentage year-on-year" (reflecting largely seasonality) | — | new |
+| Revenue — Infrastructure Software | Q4 FY2023 | "up mid-single-digit year-on-year" | — | new |
+| Revenue — Networking | Q4 FY2023 | "in excess of 20% year-on-year growth" (driven by generative AI deployments) | — | new |
+| Revenue — Semiconductor Solutions | Q4 FY2023 | "low to mid single-digit percentage year-on-year growth" (excluding generative AI, semiconductor revenue will be flat) | — | new |
+| Revenue — Server Storage Connectivity | Q4 FY2023 | "down mid-teens percent year-on-year" (difficult year-on-year compare) | — | new |
+| Revenue — Wireless | Q4 FY2023 | "grow over 20% sequentially, down low single-digit percent year-on-year" (consistent with seasonal launch) | — | new |

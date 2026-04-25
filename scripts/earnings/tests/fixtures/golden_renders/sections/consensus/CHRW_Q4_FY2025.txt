@@ -1,0 +1,3 @@
+## 4. Consensus History
+
+Data notes: AV EARNINGS failed for CHRW; AV EARNINGS_ESTIMATES failed for CHRW; AV INCOME_STATEMENT failed for CHRW; Forward estimates not PIT-safe in historical mode

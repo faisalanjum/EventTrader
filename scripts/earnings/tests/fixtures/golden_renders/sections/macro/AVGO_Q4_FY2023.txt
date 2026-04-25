@@ -1,0 +1,48 @@
+## 8. Macro Environment
+
+Session: post_market | Source: polygon | PIT: 2023-12-07
+SPY 458.04 | VIX 12.97 (last settled close)
+
+### SPY Trend
+
+| Level | Open→PIT | Last60m | Gap | Today | Yest | 5D | 20D | YTD | MA50 | MA200 | Vs50D | Vs200D | VolRatio |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 458.04 | 0.79 | -0.08 | -0.06 | 0.76 | -0.4 | 0.4 | 4.8 | 20.33 | 437.12 | 428.7 | 4.79 | 6.84 | 1.06 |
+
+### Sector Context
+
+| Sector | ETF | LastRet | Label | Open→PIT | 5D | VsSPY5D |
+|---|---|---|---|---|---|---|
+| Technology | XLK | 1.21 | today | — | -0.03 | -0.43 |
+
+### Cross-Asset Indicators
+
+| Indicator | Level | LastRet | Label | 5D | YTD |
+|---|---|---|---|---|---|
+| Volatility (VIXY) | 68.8 | 0.0 | today | -0.35 | -69.64 |
+| Rates long (TLT) | 95.32 | -0.57 | today | 4.11 | -6.05 |
+| Rates short (SHY) | 81.66 | 0.07 | today | 0.01 | 0.52 |
+| Credit (HYG) | 76.01 | 0.17 | today | 0.4 | 3.04 |
+| Small Cap (IWM) | 185.39 | 0.72 | today | 3.19 | 6.91 |
+| Breadth (RSP) | 150.1 | 0.53 | today | 1.21 | 6.36 |
+| Oil (USO) | 65.11 | 0.54 | today | -7.17 | -3.74 |
+| Dollar (UUP) | 29.35 | -0.54 | today | 0.2 | 4.41 |
+| Gold (GLD) | 188.15 | 0.17 | today | -0.32 | 9.99 |
+
+### Macro Catalysts
+
+| Bucket | Date | Time | Title | Channels |
+|---|---|---|---|---|
+| Today | 2023-12-07 | 07:30 | Nov Challenger Job Cuts 45.510K; Prior 36.836K | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2023-12-07 | 08:30 | USA Continuing Jobless Claims 1,861K Vs 1,910K Est.; 1,925K Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2023-12-07 | 08:30 | Initial Jobless Claims 220K vs 222K Est. | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
+| Today | 2023-12-07 | 10:00 | USA Wholesale Inventories (MoM) For October -0.4% Vs -0.2% Est.; 0.2% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2023-12-07 | 10:01 | USA Wholesale Trade Sales (MoM) For October -1.3% Vs 2.0% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2023-12-06 | 08:15 | ADP Nonfarm Employment Change (Nov) +103K vs 130K Est. | News ; Econ #s |
+| Yesterday | 2023-12-06 | 08:30 | USA Trade Balance For October -64.30B Vs -64.20B Est.; -61.20B Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2023-12-06 | 08:30 | Nonfarm Productivity (QoQ) (Q3) 5.2% vs 4.9% Est. | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2023-12-06 | 08:32 | USA Imports $323.00B; $322.70B Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2023-12-06 | 08:32 | US Oct. Exports $258.80B, $261.10B Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2023-12-05 | 08:55 | USA Redbook (YoY) 3.0% Vs 6.3% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2023-12-05 | 09:45 | S&P Global Services PMI For November 50.8 Vs 50.8 Est.; 50.6 Prior | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
+| Earlier | 2023-12-05 | 09:45 | S&P Global Composite PMI For November 50.7 Vs 50.7 Est.; 50.7 Prior | Macro Economic Events ; News ; Econ #s ; Economics |

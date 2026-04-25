@@ -1,0 +1,48 @@
+## 8. Macro Environment
+
+Session: post_market | Source: polygon | PIT: 2023-08-31
+SPY 450.5 | VIX 13.88 (last settled close)
+
+### SPY Trend
+
+| Level | Open→PIT | Last60m | Gap | Today | Yest | 5D | 20D | YTD | MA50 | MA200 | Vs50D | Vs200D | VolRatio |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 450.5 | -0.32 | -0.02 | 0.2 | -0.15 | 0.41 | 3.08 | 0.34 | 18.26 | 445.55 | 414.77 | 1.11 | 8.61 | 0.99 |
+
+### Sector Context
+
+| Sector | ETF | LastRet | Label | Open→PIT | 5D | VsSPY5D |
+|---|---|---|---|---|---|---|
+| Technology | XLK | 0.49 | today | — | 5.09 | 2.01 |
+
+### Cross-Asset Indicators
+
+| Indicator | Level | LastRet | Label | 5D | YTD |
+|---|---|---|---|---|---|
+| Volatility (VIXY) | 86.08 | -1.74 | today | -14.94 | -62.01 |
+| Rates long (TLT) | 96.64 | 0.45 | today | 1.82 | -4.75 |
+| Rates short (SHY) | 81.24 | 0.1 | today | 0.32 | 0.0 |
+| Credit (HYG) | 75.28 | -0.07 | today | 1.32 | 2.05 |
+| Small Cap (IWM) | 188.61 | -0.17 | today | 2.94 | 8.77 |
+| Breadth (RSP) | 149.92 | -0.35 | today | 2.36 | 6.24 |
+| Oil (USO) | 75.06 | 1.9 | today | 5.11 | 10.97 |
+| Dollar (UUP) | 28.89 | 0.49 | today | -0.28 | 2.77 |
+| Gold (GLD) | 180.02 | -0.17 | today | 1.22 | 5.24 |
+
+### Macro Catalysts
+
+| Bucket | Date | Time | Title | Channels |
+|---|---|---|---|---|
+| Today | 2023-08-31 | 07:33 | US Challenger Job Cuts (Aug) 75.151K | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2023-08-31 | 08:30 | Core PCE Price Index (MoM) (Jul) 0.2% vs 0.2% Est. | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
+| Today | 2023-08-31 | 08:30 | USA Initial Jobless Claims 228K Vs 235K Est.; 232K Prior | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
+| Today | 2023-08-31 | 08:30 | USA PCE Price Index (YoY) For July 3.3% Vs 3.3% Est.; 3.0% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Today | 2023-08-31 | 08:30 | USA PCE Price Index (MoM) For July 0.2% Vs 0.2% Est.; 0.2% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2023-08-30 | 08:15 | ADP Nonfarm Employment Change For August 177K Vs 195K Est.; 312K Prior | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
+| Yesterday | 2023-08-30 | 08:30 | USA Retail Inventories Ex Auto For July 0.1% Vs 0.2% Prior | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
+| Yesterday | 2023-08-30 | 08:30 | USA Core PCE Prices For Q2 3.70% Vs 3.80% Est.; 4.90% Prior | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
+| Yesterday | 2023-08-30 | 08:31 | USA PCE Prices For Q2 2.5% Vs 2.6% Est.; 4.1% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Yesterday | 2023-08-30 | 08:31 | USA GDP (QoQ) For Q2 2.1% Vs 2.4% Est.; 2.0% Prior | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
+| Earlier | 2023-08-29 | 08:55 | Redbook (YoY) 4.2% Vs 2.9% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2023-08-29 | 09:00 | S&P/CS HPI Composite - 20 n.s.a. (YoY) For June -1.2% Vs -1.3% Est.; -1.7% Prior | Macro Economic Events ; News ; Econ #s ; Economics |
+| Earlier | 2023-08-29 | 10:00 | USA CB Consumer Confidence For August 106.1 vs 116 Est | Macro Economic Events ; News ; Econ #s ; Economics ; Hot |
