@@ -343,36 +343,3 @@ def test_guidance_target_label_annual():
 def test_guidance_target_label_unspecified_fallback():
     label = _guidance_target_label("", None, None, None, None)
     assert label  # non-empty
-
-
-# ── TEMPORARY (removed in stage 2) — equivalence between two copies ──
-# During stage 1, _fmt_financial_cell exists in BOTH financials.py and
-# _formatters.py. This test asserts they produce identical output for every
-# supported fmt_type before stage 2's cutover collapses them into ONE object.
-# Removed in stage 2 because the cutover makes them the same object (identity
-# becomes the stronger guarantee than functional equivalence).
-
-import importlib
-
-def test_TEMP_fmt_financial_cell_equivalence_both_copies():
-    """STAGE-1 ONLY: assert financials._fmt_financial_cell and
-    _formatters._fmt_financial_cell produce identical output for every
-    supported fmt_type and edge case. REMOVE in stage 2."""
-    fin = importlib.import_module("scripts.earnings.renderer.financials")._fmt_financial_cell
-    fmt = importlib.import_module("scripts.earnings.renderer._formatters")._fmt_financial_cell
-    cases = [
-        # (value, fmt_type)
-        (None, "money"), (None, "usd"), (None, "pct"), (None, "count"), (None, "ratio"),
-        (float("nan"), "money"), (float("inf"), "usd"), (float("-inf"), "pct"),
-        (0, "money"), (0, "usd"), (0, "pct"), (0, "count"), (0, "ratio"),
-        (1.25, "usd"), (-1.25, "usd"), (1.25, "money"), (-1e9, "money"),
-        (45.0, "pct"), (-12.5, "pct"),
-        (1e6, "count"), (1e9, "count"),
-        (2.5, "ratio"), (-0.75, "ratio"),
-        (1.0, "unknown_type"),  # falls through to str(value)
-    ]
-    for value, fmt_type in cases:
-        assert fin(value, fmt_type) == fmt(value, fmt_type), (
-            f"divergence at ({value!r}, {fmt_type!r}): "
-            f"financials={fin(value, fmt_type)!r}, _formatters={fmt(value, fmt_type)!r}"
-        )

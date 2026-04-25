@@ -6,9 +6,14 @@ Appendix A.5).
 """
 from __future__ import annotations
 
-import math
-
-from ._formatters import _md_table, _fmt_num, _fmt_money
+from ._formatters import (
+    _md_table, _fmt_num, _fmt_money,
+    # PERMANENT back-compat re-export — _fmt_financial_cell was relocated
+    # to _formatters.py (stage 2 of the _fmt_financial_cell move). This
+    # preserves `from scripts.earnings.renderer.financials import
+    # _fmt_financial_cell` for any unaudited caller. Do not remove.
+    _fmt_financial_cell,  # noqa: F401
+)
 
 
 _FINANCIAL_SECTIONS = [
@@ -48,27 +53,6 @@ _FINANCIAL_SECTIONS = [
         ("debt_to_equity", "Debt / Equity", "ratio"),
     ]),
 ]
-
-
-def _fmt_financial_cell(value, fmt_type: str) -> str:
-    """Format a single financial metric cell."""
-    if value is None:
-        return "—"
-    v = float(value)
-    if not math.isfinite(v):
-        return "—"
-    if fmt_type == "money":
-        return _fmt_money(v)
-    if fmt_type == "usd":
-        sign = "-" if v < 0 else ""
-        return f"{sign}${abs(v):.2f}"
-    if fmt_type == "pct":
-        return f"{v:.1f}%"
-    if fmt_type == "count":
-        return _fmt_num(v)
-    if fmt_type == "ratio":
-        return f"{v:.2f}"
-    return str(value)
 
 
 def _fmt_split_pct(value) -> str:
