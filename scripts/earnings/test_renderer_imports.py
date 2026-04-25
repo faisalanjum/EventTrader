@@ -89,3 +89,27 @@ def test_renderer_package_public_surface():
     }
     for name in expected_public:
         assert hasattr(r, name), f"renderer package missing public symbol: {name}"
+
+
+def test_fmt_financial_cell_identity_all_four_paths():
+    """All four import paths for _fmt_financial_cell resolve to the SAME
+    function object. This is the load-bearing invariant of the
+    _fmt_financial_cell relocation (see .claude/plans/_formatters.md).
+
+    The 4 paths:
+      1. earnings_orchestrator._fmt_financial_cell        (legacy top-level)
+      2. scripts.earnings.renderer._fmt_financial_cell    (package public surface, via __init__.py)
+      3. scripts.earnings.renderer.financials._fmt_financial_cell  (back-compat re-export)
+      4. scripts.earnings.renderer._formatters._fmt_financial_cell (canonical home)
+
+    If this test fails, identity has been broken — likely someone added a
+    parallel definition or wrapped the function. Revert immediately and
+    investigate; the back-compat contract has been violated.
+    """
+    obj_orch = importlib.import_module("earnings_orchestrator")._fmt_financial_cell
+    obj_pkg  = importlib.import_module("scripts.earnings.renderer")._fmt_financial_cell
+    obj_fin  = importlib.import_module("scripts.earnings.renderer.financials")._fmt_financial_cell
+    obj_fmt  = importlib.import_module("scripts.earnings.renderer._formatters")._fmt_financial_cell
+    assert obj_orch is obj_pkg, "earnings_orchestrator vs renderer package: NOT same object"
+    assert obj_orch is obj_fin, "earnings_orchestrator vs renderer.financials: NOT same object"
+    assert obj_orch is obj_fmt, "earnings_orchestrator vs renderer._formatters: NOT same object"
