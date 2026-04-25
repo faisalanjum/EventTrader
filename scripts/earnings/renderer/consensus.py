@@ -3,14 +3,11 @@
 Extracted from earnings_orchestrator.py (commit 12/20) — body copied verbatim
 from the pre-renderer-extract baseline at line 656.
 
-Imports `_fmt_financial_cell` from the sibling `financials` module
-(used at line 697 for EPS estimate/actual cells); `_md_table`, `_fmt_money`,
-`_fmt_pct` from `_formatters`.
+All formatter imports come from `_formatters` (single canonical source).
 """
 from __future__ import annotations
 
-from ._formatters import _md_table, _fmt_money, _fmt_pct
-from .financials import _fmt_financial_cell
+from ._formatters import _md_table, _fmt_money, _fmt_pct, _fmt_financial_cell
 
 
 def _render_consensus_history(bundle: dict) -> str:

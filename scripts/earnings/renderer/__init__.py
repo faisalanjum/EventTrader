@@ -14,7 +14,10 @@ them directly from their submodule when needed.
 from __future__ import annotations
 
 from .bundle import render_bundle_text
-from ._formatters import _md_table, _fmt_num, _fmt_money, _fmt_pct
+from ._formatters import (
+    _md_table, _fmt_num, _fmt_money, _fmt_pct,
+    _fmt_financial_cell,  # canonical home (financials.py keeps a re-export for back-compat)
+)
 from .header import _render_header
 from .results import _render_results_and_expectations, _render_reference
 from .guidance import (
@@ -24,7 +27,7 @@ from .guidance import (
 )
 from .consensus import _render_consensus_history
 from .financials import (
-    _fmt_financial_cell, _fmt_split_pct,
+    _fmt_split_pct,
     _render_revenue_splits, _render_prior_financials,
 )
 from .inter_quarter import _render_inter_quarter

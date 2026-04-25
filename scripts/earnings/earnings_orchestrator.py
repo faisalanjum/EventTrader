@@ -271,6 +271,7 @@ SECTION_TITLES = {
 # ════════════════════════════════════════════════════════════════════════════════
 from scripts.earnings.renderer._formatters import (  # noqa: F401
     _md_table, _fmt_num, _fmt_money, _fmt_pct,
+    _fmt_financial_cell,  # canonical home (financials.py keeps a re-export for back-compat)
 )
 from scripts.earnings.renderer.header import _render_header  # noqa: F401
 from scripts.earnings.renderer.guidance import (  # noqa: F401
@@ -280,7 +281,7 @@ from scripts.earnings.renderer.guidance import (  # noqa: F401
 )
 from scripts.earnings.renderer.financials import (  # noqa: F401
     _FINANCIAL_SECTIONS,
-    _fmt_financial_cell, _fmt_split_pct,
+    _fmt_split_pct,
     _render_revenue_splits, _render_prior_financials,
 )
 from scripts.earnings.renderer.consensus import _render_consensus_history  # noqa: F401
