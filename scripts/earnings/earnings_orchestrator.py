@@ -2664,20 +2664,9 @@ def build_learning_context(ticker: str, sector: str | None = None,
 # ── Learning Context Renderer (for prediction bundle text) ──────────
 
 
-def _normalize_lesson_text(s: str) -> str:
-    """Whitespace-collapse + strip + case-fold for stable comparison.
-
-    Used by T1 labeled-lesson-consumption contract for:
-      (a) positional equality between LLM-emitted lesson_text and the
-          renderer's expected list,
-      (b) the analysis-field substring floor (rejects verbatim quotes of
-          non-confirmed lessons in the predictor's free-text analysis).
-
-    Case-folding absorbs harmless capitalization drift — LLMs do not
-    reliably preserve case, and an intentional verbatim quote survives
-    .lower(). See .claude/plans/learner.md Appendix B §5.3.
-    """
-    return " ".join((s or "").strip().split()).lower()
+# Moved to scripts/earnings/_text_utils.py (commit 7/20). Shim preserves
+# `from earnings_orchestrator import _normalize_lesson_text` for legacy callers.
+from scripts.earnings._text_utils import _normalize_lesson_text  # noqa: F401
 
 
 def _render_learning_context(learning_ctx: dict) -> tuple[str, list[str]]:
